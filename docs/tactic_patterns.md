@@ -1,5 +1,26 @@
 # Tactic Pattern Ledger
 
+### Matrix positivity on the Euclidean operator space — promoted (2026-10-29)
+
+- **Seen:** `MPS/AreaLaw/AKLV/HighEnergyMass.lean`, `ProjectionEnergy.lean`,
+  `LowSpectrumGap.lean`, and `Robustness.lean`.
+- **Pattern:** Combine `Matrix.isPositive_toEuclideanLin_iff` and
+  `ContinuousLinearMap.isPositive_toLinearMap_iff` to transport a matrix order bound.
+- **Abstraction:** `Matrix.PosSemidef.isPositive_toEuclideanCLM` in
+  `MPS/AreaLaw/AKLV/Truncation.lean`; all four repeated positivity proofs use it.
+- **Decision:** A mathematical transport lemma removes the repeated coercion proof.
+
+### Exponential weights and energy windows — candidate (2026-10-29)
+
+- **Seen:** `MPS/AreaLaw/AKLV/SpectralTail.lean` and `GroundStateTail.lean`.
+- **Pattern:** Express a Hermitian exponential and a threshold projection in
+  the scalar functional calculus, multiply there, and apply `norm_cfc_le`.
+- **Abstraction:** `Matrix.IsHermitian.exp_real_smul_eq_cfc` centralizes the
+  exponential identity. The high and low weight bounds are public lemmas in
+  `SpectralTail.lean`; a future ownership cleanup can move these general
+  matrix results to QICLean together with the adjacent weighted-projection API.
+- **Decision:** Mathematical lemmas suffice; no new tactic is needed.
+
 Living registry of repeated proof patterns, maintained under the process in
 [`docs/tactic_development.md`](tactic_development.md). Agents and contributors:
 **consult the promoted section before writing proofs; append candidates when
@@ -4949,6 +4970,18 @@ three-plaquette output measurement, and the routed reunion measurement.
   `isReordering_comp_iff`; apply `IsReordering.comp` as a term instead.
 
 ## Candidates
+
+### Recovering letters by an identity contraction — candidate (2026-10-29)
+
+- **Seen:** `isInjective_uncleTensor_of_isInjective_perturbation` in
+  `MPS/ParentHamiltonian/UncleInjectivity.lean`.
+- **Pattern:** Full one-site span gives coefficients of the identity.
+  Contracting one physical leg of a bilinear two-site family with those
+  coefficients recovers every one-site letter, so its span is full too.
+- **Reuse:** `Submodule.mem_span_range_iff_exists_fun`, block-matrix
+  injectivity and finite-sum scalar/matrix distribution.
+- **Decision:** Use one full-identity contraction in place of four separate
+  block witnesses. One occurrence does not justify a new tactic.
 
 ### Counting nearest-neighbour bonds that meet a region — candidate (2026-10-28)
 

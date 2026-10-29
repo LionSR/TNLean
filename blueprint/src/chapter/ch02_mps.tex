@@ -225,13 +225,13 @@ volume~\cite[``Positive map'' and ``Quantum channel'']{QICLean2026Blueprint}.
     volume~\cite[``Positive map'']{QICLean2026Blueprint}.
 \end{remark}
 
-\begin{theorem}[Transfer map is CP]\label{thm:transfer_cp}
+\begin{lemma}[Transfer map is CP]\label{thm:transfer_cp}
     \lean{Kraus.transferMap_isCPMap}
     \leanok
     \uses{def:transfer_map}
     The transfer map $\E_A(X)=\sum_i A^iX(A^i)^\dagger$
     is completely positive.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     It is already written in the Kraus form
@@ -239,7 +239,7 @@ volume~\cite[``Positive map'' and ``Quantum channel'']{QICLean2026Blueprint}.
     $\{A^i\}$.
 \end{proof}
 
-\begin{theorem}[Transfer matrix of an MPS transfer map]
+\begin{lemma}[Transfer matrix of an MPS transfer map]
     \label{thm:mps_transfer_matrix_kraus_sum}
     \lean{MPSTensor.transferMatrix_eq}
     \leanok
@@ -250,7 +250,7 @@ volume~\cite[``Positive map'' and ``Quantum channel'']{QICLean2026Blueprint}.
         K_A & =\sum_{i=0}^{d-1}\overline{A^i}\otimes A^i.
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Applying the standard vectorization identity
@@ -327,7 +327,7 @@ volume~\cite[``Positive map'' and ``Quantum channel'']{QICLean2026Blueprint}.
 \end{theorem}
 
 \begin{proof}\leanok\uses{thm:transfer_cp}
-    Complete positivity is Theorem~\ref{thm:transfer_cp}. Trace preservation
+    Complete positivity is Lemma~\ref{thm:transfer_cp}. Trace preservation
     follows by cyclicity and the normalization hypothesis:
     \begin{align}
         \tr(\E_A(X))
@@ -338,7 +338,7 @@ volume~\cite[``Positive map'' and ``Quantum channel'']{QICLean2026Blueprint}.
     \end{align}
 \end{proof}
 
-\begin{theorem}[Preservation of positive definiteness by a coisometry]
+\begin{lemma}[Preservation of positive definiteness by a coisometry]
     \label{thm:matrix_posdef_coisometric_transport}
     \lean{Matrix.PosDef.mul_mul_conjTranspose_of_mul_conjTranspose_eq_one}
     \leanok
@@ -347,7 +347,7 @@ volume~\cite[``Positive map'' and ``Quantum channel'']{QICLean2026Blueprint}.
     \begin{align}
         VAV^\dagger & >0.
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     For a row vector $x$, one has
@@ -479,7 +479,7 @@ volume~\cite[``Positive map'' and ``Quantum channel'']{QICLean2026Blueprint}.
     for every word $\mathbf a$, including the empty word.
 \end{definition}
 
-\begin{theorem}[Basic rectangular reduction identities]
+\begin{lemma}[Basic rectangular reduction identities]
     \label{thm:mps_rectangular_reduction_identities}
     \lean{MPSTensor.IsReduction.mul_eq_one,
         MPSTensor.IsReduction.evalWord,
@@ -494,7 +494,7 @@ volume~\cite[``Positive map'' and ``Quantum channel'']{QICLean2026Blueprint}.
     identity alone implies $VW=1_{D_A}$ by taking the empty word.  In addition,
     the target bond dimension cannot exceed the source bond dimension:
     $D_A\leq D_B$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -717,14 +717,14 @@ volume~\cite[``Positive map'' and ``Quantum channel'']{QICLean2026Blueprint}.
     by cyclicity of the trace.
 \end{proof}
 
-\begin{theorem}[Gauge-phase scaling of MPVs]\label{thm:gauge_phase_mpv_scaling}
+\begin{lemma}[Gauge-phase scaling of MPVs]\label{thm:gauge_phase_mpv_scaling}
     \lean{MPSTensor.mpv_eq_pow_mul_of_gaugePhase}
     \leanok
     \uses{def:gauge_phase_equiv, def:mpv}
     If $B^i = \zeta X A^i X^{-1}$ for every physical index~$i$, then for
     every system size~$N$ and configuration~$\sigma$ one has
     $V^{(N)}(B)_\sigma = \zeta^N V^{(N)}(A)_\sigma$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok\uses{lem:eval_word_smul, lem:eval_word_gauge}
     Combining gauge covariance of word evaluation with scalar scaling and
@@ -743,13 +743,13 @@ volume~\cite[``Positive map'' and ``Quantum channel'']{QICLean2026Blueprint}.
 \end{definition}
 
 
-\begin{theorem}[Injectivity implies irreducibility]\label{thm:injective_irreducible}
+\begin{lemma}[Injectivity implies irreducibility]\label{thm:injective_irreducible}
     \lean{Kraus.injective_implies_irreducibleCP}
     \leanok
     \uses{def:injective, def:transfer_map}
     If $A$ is an injective MPS tensor, then its transfer map $\E_A$
     is irreducible.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -832,13 +832,13 @@ $A^{-1}A=\Id$.
     implies fullness of the second.
 \end{proof}
 
-\begin{theorem}[Gauge invariance of normality]
+\begin{lemma}[Gauge invariance of normality]
     \label{thm:gauge_invariance_normal}
     \lean{MPSTensor.isNormal_of_gaugeEquiv}
     \leanok
     \uses{def:gauge_equiv, def:normal}
     If $A$ and $B$ are gauge equivalent and $A$ is normal, then $B$ is normal.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{lem:gauge_invariance_block_injective}
@@ -854,9 +854,9 @@ $A^{-1}A=\Id$.
     (primitivity of the trace-preserving normalized transfer map $\E_A$); see
     \cite[Proposition~3]{Sanz2010Quantum}. In this development, the equivalence
     is established by Lemma~\ref{lem:primitive_implies_irreducible},
-    Theorem~\ref{thm:normal_from_primitive_posdef},
-    Theorem~\ref{thm:algspan_to_normal}, and
-    Theorem~\ref{thm:blocking_primitivity}.
+    Lemma~\ref{thm:normal_from_primitive_posdef},
+    Lemma~\ref{thm:algspan_to_normal}, and
+    Lemma~\ref{thm:blocking_primitivity}.
 \end{remark}
 
 \section{Canonical form}
@@ -1082,14 +1082,14 @@ $A^{-1}A=\Id$.
     lemma (Lemma~\ref{lem:eval_word_block}) gives the equality.
 \end{proof}
 
-\begin{theorem}[Blocking preserves same MPV]\label{thm:blocking_same_mpv}
+\begin{lemma}[Blocking preserves same MPV]\label{thm:blocking_same_mpv}
     \lean{MPSTensor.SameMPV.blockTensor}
     \leanok
     \uses{def:same_mpv, def:blocked_tensor}
     If $A$ and $B$ generate the same MPV family, then for any
     blocking length~$L$, the blocked tensors $A^{[L]}$ and $B^{[L]}$
     also generate the same MPV family.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{lem:mpv_block}

@@ -8,7 +8,7 @@
     $z_{e_0}^{-1}z_{e_1}z_{e_0}$.
 \end{definition}
 
-\begin{theorem}[Controlled conjugation is equivariant]%
+\begin{lemma}[Controlled conjugation is equivariant]%
     \label{thm:peps_regular_two_cycle_conjugation}
     \lean{TNLean.PEPS.regularTwoCycleConjugation_apply_selected,
         TNLean.PEPS.regularTwoCycleConjugation_apply_other,
@@ -21,7 +21,7 @@
     This is the algebraic conjugation appearing in
     \cite[Section 6.6, fluxon braiding]{Schuch2010PEPS}; it is not yet an
     identification of a prescribed lattice string crossing.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The controlling coordinate is unchanged because $e_0\ne e_1$.
     The two displayed conjugations are therefore inverse maps.
@@ -30,7 +30,7 @@
     at every other coordinate equivariance is immediate.
 \end{proof}
 
-\begin{theorem}[A fixed original-spin controlled conjugation]%
+\begin{lemma}[A fixed original-spin controlled conjugation]%
     \label{thm:peps_regular_two_cycle_conjugation_physical}
     \lean{TNLean.PEPS.exists_unitary_regularTwoCyclePhysicalConjugation}
     \leanok
@@ -47,7 +47,7 @@
     All other cycle operators and all boundary data are retained. These are
     original-spin contractions; the prescribed native string crossing, inverse partner
     and surrounding measurement loop of the braid remain separate.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Controlled conjugation is equivariant under the common root conjugation.
     The general physical cycle-permutation theorem therefore applies to the

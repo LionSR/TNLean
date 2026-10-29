@@ -370,7 +370,7 @@ direct.
 
 \begin{proof}
     \leanok
-    By Theorem~\ref{thm:wordspan_propagation_unital}, the normalization
+    By Lemma~\ref{thm:wordspan_propagation_unital}, the normalization
     propagates the length-$L$ span equality to every larger homogeneous length:
     \begin{align}
         m\ge L
@@ -387,13 +387,13 @@ direct.
     block-separating equations with $S=3(L_0+1)$.
 \end{proof}
 
-\begin{theorem}[Tensor irreducibility implies transfer-map irreducibility]
+\begin{lemma}[Tensor irreducibility implies transfer-map irreducibility]
     \label{thm:irreducible_tensor_to_transfer_map}
     \leanok
     \uses{def:irreducible_tensor}
     If an MPS tensor is irreducible, then its transfer map has no nontrivial
     invariant face.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -452,7 +452,7 @@ direct.
     required gauge-phase intertwiner.
 \end{proof}
 
-\begin{theorem}[Prepared-gauge simultaneous product span]
+\begin{lemma}[Prepared-gauge simultaneous product span]
     \label{thm:pgvwc_prepared_gauge_product_span}
     \lean{MPSTensor.wordTupleSpanTop_threeBlock_mul_pred_of_blocksNotGaugePhaseEquiv_c1_of_dualFixedPoint}
     \leanok
@@ -480,7 +480,7 @@ direct.
          & =\prod_j\MN{D_j}. \notag
     \end{align}
     Diagonality of $\Lambda^j$ is not needed.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -505,11 +505,11 @@ direct.
         \spn\{(B^1_w,\ldots,B^r_w):|w|=3(r-1)(L_0+1)\}
          & =\prod_j\MN{D_j}. \notag
     \end{align}
-    Theorem~\ref{thm:word_tuple_span_gauge_invariance} carries this equality
+    Lemma~\ref{thm:word_tuple_span_gauge_invariance} carries this equality
     back to the source representatives.
 \end{proof}
 
-\begin{theorem}[Simultaneous product span at the source length]
+\begin{lemma}[Simultaneous product span at the source length]
     \label{thm:pgvwc_product_span_source_length}
     \lean{MPSTensor.wordTupleSpanTop_of_ge_of_bnt_directSum_unital_c1_pgvwc07_of_dualFixedPoint}
     \leanok
@@ -534,12 +534,12 @@ direct.
     \end{align}
     No identity $\sum_a(A^j_a)^\dagger A^j_a=\Id$ is assumed for the source
     blocks.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:wordspan_propagation_unital, lem:unital_simultaneous_product_span_propagation, thm:pgvwc_prepared_gauge_product_span}
-    Theorem~\ref{thm:wordspan_propagation_unital} first gives
+    Lemma~\ref{thm:wordspan_propagation_unital} first gives
     \begin{align}
         \spn\{A^j_w:|w|=L_0\}=\MN{D_j}
          & \Longrightarrow
@@ -548,22 +548,22 @@ direct.
          & \Longrightarrow
         \spn\{A^j_w:|w|=3(L_0+1)\}=\MN{D_j}. \notag
     \end{align}
-    Theorem~\ref{thm:pgvwc_prepared_gauge_product_span} gives the full
+    Lemma~\ref{thm:pgvwc_prepared_gauge_product_span} gives the full
     simultaneous span at $q=3(r-1)(L_0+1)$ on the source representatives.
     The source unital identity and
     Lemma~\ref{lem:unital_simultaneous_product_span_propagation} propagate
     this equality to every $n\ge q$.
 \end{proof}
 
-\begin{theorem}[Block-space independence at the source length]
+\begin{lemma}[Block-space independence at the source length]
     \label{thm:pgvwc_block_space_independence_source_length}
     \lean{MPSTensor.groundSpace_iSupIndep_of_ge_of_bnt_directSum_unital_c1_pgvwc07_of_dualFixedPoint}
     \leanok
     \uses{thm:pgvwc_product_span_source_length, def:ground_space_parent}
     Under the hypotheses of
-    Theorem~\ref{thm:pgvwc_product_span_source_length}, the spaces $G_n(A^j)$
+    Lemma~\ref{thm:pgvwc_product_span_source_length}, the spaces $G_n(A^j)$
     form an internal sum for every $n\ge3(r-1)(L_0+1)$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -580,13 +580,13 @@ direct.
     Hence every $\phi_j$ vanishes.
 \end{proof}
 
-\begin{theorem}[Direct-sum restriction intersection at the source length]
+\begin{lemma}[Direct-sum restriction intersection at the source length]
     \label{thm:pgvwc_direct_sum_intersection_source_length}
     \lean{MPSTensor.pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital_c1_pgvwc07_of_dualFixedPoint}
     \leanok
     \uses{def:ground_space_parent}
     Under the hypotheses of
-    Theorem~\ref{thm:pgvwc_product_span_source_length}, let
+    Lemma~\ref{thm:pgvwc_product_span_source_length}, let
     $m\ge3(r-1)(L_0+1)+1$. Then the direct-sum lemma in the proof of
     \cite[Theorem~12, proof lines~1346--1456]{PerezGarcia2007Matrix} holds,
     \begin{align}
@@ -596,9 +596,9 @@ direct.
          & =
         \sum_jG_{m+1}(A^j), \notag
     \end{align}
-    and Theorem~\ref{thm:pgvwc_block_space_independence_source_length} shows
+    and Lemma~\ref{thm:pgvwc_block_space_independence_source_length} shows
     that the sums at lengths $m$ and $m+1$ are internal.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -625,7 +625,7 @@ direct.
     inclusion follows by splitting a word of length $m+1$ at either endpoint.
 \end{proof}
 
-\begin{theorem}[Doubly normalized simultaneous product span]
+\begin{lemma}[Doubly normalized simultaneous product span]
     \label{thm:pgvwc_product_span_doubly_normalized}
     \lean{MPSTensor.wordTupleSpanTop_of_ge_of_bnt_directSum_unital_c1_pgvwc07}
     \leanok
@@ -642,7 +642,7 @@ direct.
     \begin{align}
         \spn\{(A^1_w,\ldots,A^r_w):|w|=n\} & =\prod_j\MN{D_j}. \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -653,16 +653,16 @@ direct.
     larger length.
 \end{proof}
 
-\begin{theorem}[Doubly normalized block-space independence]
+\begin{lemma}[Doubly normalized block-space independence]
     \label{thm:pgvwc_block_space_independence_doubly_normalized}
     \lean{MPSTensor.groundSpace_iSupIndep_of_ge_of_bnt_directSum_unital_c1_pgvwc07}
     \leanok
     \uses{thm:pgvwc_product_span_doubly_normalized, def:ground_space_parent}
     Under the hypotheses of
-    Theorem~\ref{thm:pgvwc_product_span_doubly_normalized}, the spaces
+    Lemma~\ref{thm:pgvwc_product_span_doubly_normalized}, the spaces
     $G_n(A^j)$ form an internal sum for every
     $n\ge3(r-1)(L_0+1)$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -671,7 +671,7 @@ direct.
     yields the internal sum.
 \end{proof}
 
-\begin{theorem}[Doubly normalized restriction intersection]
+\begin{lemma}[Doubly normalized restriction intersection]
     \label{thm:pgvwc_direct_sum_intersection_doubly_normalized}
     \lean{MPSTensor.pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital_c1_pgvwc07}
     \leanok
@@ -682,7 +682,7 @@ direct.
         \cap\left(\sum_jG_m(A^j)\right)\otimes\C^d
          & =\sum_jG_{m+1}(A^j). \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok

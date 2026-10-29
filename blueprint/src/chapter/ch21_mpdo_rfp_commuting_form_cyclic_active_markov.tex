@@ -1,4 +1,4 @@
-\begin{theorem}[Finite-chain normalization under nonzero proportionality]
+\begin{lemma}[Finite-chain normalization under nonzero proportionality]
     \label{thm:mpdo_finite_chain_normalized_proportionality}
     \lean{MPOTensor.normalizedMPO_eq_of_nonzeroProportionalMPV₂_at}
     \leanok
@@ -25,7 +25,7 @@
     hypothesis in \cite[Theorem~2.10]{Cirac2016MPDO_arXiv}. The conclusion is
     an auxiliary cancellation used in the comparison preceding
     \cite[Appendix~C.2, lines~1597--1619]{Cirac2016MPDO_arXiv}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Reading a doubled physical index as a ket--bra pair gives
@@ -41,13 +41,13 @@
     This identity also holds when the two proportional traces vanish.
 \end{proof}
 
-\begin{theorem}[Finite-chain reduced marginals under nonzero proportionality]
+\begin{lemma}[Finite-chain reduced marginals under nonzero proportionality]
     \label{thm:mpdo_finite_chain_reduced_proportionality}
     \lean{MPOTensor.reducedBlockState_eq_of_nonzeroProportionalMPV₂_at}
     \leanok
     \uses{thm:mpdo_finite_chain_normalized_proportionality, def:mpo_to_mps}
     Under the hypotheses of
-    Theorem~\ref{thm:mpdo_finite_chain_normalized_proportionality}, for every
+    Lemma~\ref{thm:mpdo_finite_chain_normalized_proportionality}, for every
     $L\leq N$ the reduced operators on the first $L$ sites agree:
     \begin{align}
         \tr_{N-L}\!\left[\widehat\rho^{(N)}(M)\right]
@@ -55,17 +55,17 @@
         \tr_{N-L}\!\left[\widehat\rho^{(N)}(C)\right].
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpdo_finite_chain_normalized_proportionality}
     Applying the same finite-index identification and partial trace to both
     sides of
-    Theorem~\ref{thm:mpdo_finite_chain_normalized_proportionality} yields the
+    Lemma~\ref{thm:mpdo_finite_chain_normalized_proportionality} yields the
     equality of reduced operators.
 \end{proof}
 
-\begin{theorem}[Eventual equality of normalized finite-chain operators]
+\begin{lemma}[Eventual equality of normalized finite-chain operators]
     \label{thm:mpdo_eventual_normalized_proportionality}
     \lean{MPSTensor.EventuallyNonzeroProportionalMPV₂.%
         eventually_normalizedMPO_eq}
@@ -79,16 +79,16 @@
         \widehat\rho^{(N)}(C).
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpdo_finite_chain_normalized_proportionality}
     At each sufficiently large length, applying
-    Theorem~\ref{thm:mpdo_finite_chain_normalized_proportionality} to the
+    Lemma~\ref{thm:mpdo_finite_chain_normalized_proportionality} to the
     nonzero proportionality scalar at that length gives the equality.
 \end{proof}
 
-\begin{theorem}[Eventual equality of fixed-size reduced marginals]
+\begin{lemma}[Eventual equality of fixed-size reduced marginals]
     \label{thm:mpdo_eventual_reduced_proportionality}
     \lean{MPSTensor.EventuallyNonzeroProportionalMPV₂.%
         eventually_reducedBlockState_eq}
@@ -103,12 +103,12 @@
         \tr_{N-L}\!\left[\widehat\rho^{(N)}(C)\right].
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpdo_finite_chain_reduced_proportionality}
     At each sufficiently large length,
-    Theorem~\ref{thm:mpdo_finite_chain_reduced_proportionality} gives the
+    Lemma~\ref{thm:mpdo_finite_chain_reduced_proportionality} gives the
     equality of reduced marginals.
 \end{proof}
 
@@ -141,7 +141,7 @@
 % **Local fix (additional marginal replacement):** the printed proof returns
 % to a one-step coefficient after its first replacement.  See
 % docs/paper-gaps/cpsv16_commuting_form_to_sal.tex.
-\begin{theorem}[Iterated marginal stability under zero correlation length]
+\begin{lemma}[Iterated marginal stability under zero correlation length]
     \label{thm:mpdo_source_zcl_iterated_marginal_stability}
     \lean{MPOTensor.reducedBlockState_add_three_eq_succ_of_isSourceZCL}
     \leanok
@@ -150,7 +150,7 @@
     normalized $L$-site marginal obtained by tracing three sites from
     $\sigma^{(L+3)}(M)$ equals the normalized $L$-site marginal obtained by
     tracing one site from $\sigma^{(L+1)}(M)$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Applying Lemma~\ref{lem:mpdo_source_zcl_marginal_stability} while
@@ -186,7 +186,7 @@
     $\Gamma_k^{(1)}$, $\Gamma_k^{(2)}$, and $\Gamma_k^{(3)}$.
 \end{definition}
 
-\begin{theorem}[Contraction of a sector-chain fiber]
+\begin{lemma}[Contraction of a sector-chain fiber]
     \label{thm:mpdo_sector_chain_fiber_contraction}
     \lean{MPOTensor.PhysicalSectorFactorization.%
         sum_sectorChainFiber_neighboringOperator_diag}
@@ -209,7 +209,7 @@
         \left(\prod_{i=0}^{m-1}\tr(\eta_{t_i,t_{i+1}})\right)
         \left(\sum_v b(v)\right).
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Write $z_i=(\ell_i,r_i)$. Finite distributivity separates the left and
@@ -235,7 +235,7 @@
     factorization.
 \end{proof}
 
-\begin{theorem}[Contraction of a nonempty suffix fiber]
+\begin{lemma}[Contraction of a nonempty suffix fiber]
     \label{thm:mpdo_nonempty_suffix_fiber_contraction}
     \lean{MPOTensor.PhysicalSectorFactorization.%
         sum_suffixFiber_cyclicNeighboringProduct}
@@ -258,12 +258,12 @@
         \right)(x_{\partial},y_{\partial})
         \prod_{i=0}^{m-1}\tr(\eta_{t_i,t_{i+1}}).
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Splitting the cyclic product into the retained internal edges, the two
     boundary edges, and the internal suffix edges, and applying
-    Theorem~\ref{thm:mpdo_sector_chain_fiber_contraction} to the suffix
+    Lemma~\ref{thm:mpdo_sector_chain_fiber_contraction} to the suffix
     coordinates, reduces the two boundary sums to the indicated partial traces.
 \end{proof}
 
@@ -272,7 +272,7 @@
 % **Local fix (adjacent marginal comparison):** the cases R=1 and R=2 give
 % the adjacent marginals whose boundary traces have coefficients T_C^2 and
 % T_C^3. See docs/paper-gaps/cpsv16_commuting_form_to_sal.tex.
-\begin{theorem}[Sector decomposition of a suffix marginal]
+\begin{lemma}[Sector decomposition of a suffix marginal]
     \label{thm:mpdo_suffix_marginal_block_expansion}
     \lean{MPOTensor.PhysicalSectorFactorization.%
         reindex_reducedBlockState_add_eq_suffixSectorContraction}
@@ -296,13 +296,13 @@
         \notag
     \end{align}
     In particular, this identity holds for $R=1$, $R=2$, and $R=3$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpdo_physical_sector_chain_decomposition}
     Each discarded physical configuration decomposes uniquely into a suffix
     sector word $t\in S^R$ and a fiber coordinate $z\in I_t$. By
-    Theorem~\ref{thm:mpdo_physical_sector_chain_decomposition}, matrix
+    Lemma~\ref{thm:mpdo_physical_sector_chain_decomposition}, matrix
     elements with distinct retained sector words vanish. For a fixed
     retained word $k$, summing the diagonal entries of the discarded fiber
     gives
@@ -371,7 +371,7 @@
 % decomposition, or saturation of the area law.  Source line 1616 suppresses
 % the partial traces on the two surviving boundary operators.  Documented in
 % docs/paper-gaps/cpsv16_commuting_form_to_sal.tex.
-\begin{theorem}[Conditional fourth-region boundary trace]
+\begin{lemma}[Conditional fourth-region boundary trace]
     \label{thm:mpdo_eta_fourth_region_trace_formula}
     \lean{Matrix.eta_fourth_region_trace_formula}
     \leanok
@@ -402,7 +402,7 @@
         \left(\sum_h b_hL_{h,k_0}\right).
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{lem:mpdo_eta_two_boundary_contraction_separated}
@@ -414,11 +414,11 @@
 \begin{remark}
     The theorem applies, in particular, to the positive chain-independent
     neighboring family given by
-    Theorem~\ref{thm:mpdo_eta_local_sigma_nk2}, given the rank-one trace
+    Lemma~\ref{thm:mpdo_eta_local_sigma_nk2}, given the rank-one trace
     factorization.
 \end{remark}
 
-\begin{theorem}[A nonminimal sector factorization need not be primitive]
+\begin{lemma}[A nonminimal sector factorization need not be primitive]
     \label{thm:mpdo_commuting_bond_trace_matrix_primitivity_obstruction}
     \lean{MPOTensor.CommutingBondTraceMatrixObstruction.%
         normal_sourceZCL_fixed_commutingBond_does_not_force_traceMatrix_primitive}
@@ -444,7 +444,7 @@
     factorization in \cite[Appendix~C.2, line~1613]{Cirac2016MPDO_arXiv};
     the same tensor admits a one-sector factorization whose trace matrix
     is primitive.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Let $\mathcal K^{0,0}=1$ and let all other physical entries vanish. The
@@ -548,7 +548,7 @@
 % **Local fix (cyclic-active restriction):** this theorem concerns the restricted
 % cyclic support, not the full trace matrix in CPSV16 Lemma `propSN`. See
 % docs/paper-gaps/cpsv16_commuting_form_to_sal.tex.
-\begin{theorem}[Deletion of sectors absent from cyclic products]
+\begin{lemma}[Deletion of sectors absent from cyclic products]
     \label{thm:mpdo_cyclic_active_deletion}
     \lean{MPOTensor.PhysicalSectorFactorization.isCyclicActiveSector_of_cyclic_edges}
     \lean{MPOTensor.PhysicalSectorFactorization.neighboringOperator_ne_zero_of_cyclicNeighboringProduct_ne_zero}
@@ -565,7 +565,7 @@
     neighboring product unchanged. For every linear contraction $\Phi$,
     including a composition of reindexings and partial traces,
     $\Omega_k=0$ implies $\Phi(\Omega_k)=0$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     If $\Omega_k\ne0$, each factor $\eta_{k_n,k_{n+1}}$ is nonzero; otherwise
@@ -581,7 +581,7 @@
 % auxiliary space of the original injective tensor and transfers only literal
 % zero edges from the selected factorization. See
 % docs/paper-gaps/cpsv16_commuting_form_to_sal.tex.
-\begin{theorem}[Trace-visible recurrence of selected fixed-product sectors]
+\begin{lemma}[Trace-visible recurrence of selected fixed-product sectors]
     \label{thm:mpdo_selected_fixed_product_cyclic_recurrence}
     \lean{MPOTensor.EtaLocalStructureData.%
         exists_positive_scalar_mpo_changePhysicalBasis_eq_smul_selected}
@@ -623,7 +623,7 @@
     the associated positive physical-sector factorization. Then any two sectors
     in the positive-length cyclic support of $F$ are joined by a directed path
     of nonzero neighboring operators.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:trace_pairing_injective}
@@ -649,7 +649,7 @@
     vanish. This contradicts the one-sided matrix-space obstruction.
 \end{proof}
 
-\begin{theorem}[Selected fixed-product reduced states]
+\begin{lemma}[Selected fixed-product reduced states]
     \label{thm:mpdo_selected_fixed_product_reduced_states}
     \lean{MPOTensor.EtaLocalStructureData.%
         selectedFixedProduct_reducedBlockState_eq_changePhysicalBasis}
@@ -660,7 +660,7 @@
     express $K$ in the physical coordinates of $F$. For every $N\geq2$ and
     $L\leq N$, the selected sector-coordinate tensor and the transformed
     source tensor have the same normalized $L$-site reduced state.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpdo_finite_chain_normalized_proportionality}
@@ -673,7 +673,7 @@
     partial trace preserves the equality.
 \end{proof}
 
-\begin{theorem}[Adjacent selected fixed-product marginals]
+\begin{lemma}[Adjacent selected fixed-product marginals]
     \label{thm:mpdo_selected_fixed_product_adjacent_marginals}
     \lean{MPOTensor.EtaLocalStructureData.%
         selectedFixedProduct_reducedBlockState_succ_succ_eq_succ_of_isSourceZCL}
@@ -683,28 +683,28 @@
     and let $C$ be the selected fixed-product tensor in its physical-sector
     coordinates. For every $L>0$, the normalized $L$-site reduced states of
     $C$ obtained from chain lengths $L+2$ and $L+1$ are equal.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     In the selected physical coordinates, the periodic operators of $K$ at
     both lengths are positive nonzero scalar multiples of those of $C$.
     Cancelling these scalars by
-    Theorem~\ref{thm:mpdo_selected_fixed_product_reduced_states}, passing
+    Lemma~\ref{thm:mpdo_selected_fixed_product_reduced_states}, passing
     through the physical isometry, and applying source marginal stability
     yields equality of the two reduced states.
 \end{proof}
 
-\begin{theorem}[Iterated selected fixed-product marginals]
+\begin{lemma}[Iterated selected fixed-product marginals]
     \label{thm:mpdo_selected_fixed_product_iterated_marginals}
     \lean{MPOTensor.EtaLocalStructureData.%
         selectedFixedProduct_reducedBlockState_add_three_eq_succ_of_isSourceZCL}
     \leanok
     \uses{def:mpo_source_zcl, def:mpdo_eta_local_structure_data, thm:mpdo_selected_fixed_product_reduced_states, thm:mpdo_source_zcl_iterated_marginal_stability}
     Under the hypotheses of
-    Theorem~\ref{thm:mpdo_selected_fixed_product_adjacent_marginals}, for every
+    Lemma~\ref{thm:mpdo_selected_fixed_product_adjacent_marginals}, for every
     $L>0$, the normalized $L$-site reduced states of the selected fixed-product
     tensor obtained from chain lengths $L+3$ and $L+1$ are equal.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Applying the two-step source marginal identity to $K$, passing both sides
@@ -712,7 +712,7 @@
     realization scalars gives equality of the reduced states.
 \end{proof}
 
-\begin{theorem}[Positive traces of the selected fixed product]
+\begin{lemma}[Positive traces of the selected fixed product]
     \label{thm:mpdo_selected_fixed_product_positive_traces}
     \lean{MPOTensor.EtaLocalStructureData.%
         exists_pos_trace_mpo_selectedFixedProduct_of_isSourceZCL}
@@ -721,7 +721,7 @@
     Let $K$ have an eta-local structure and source zero correlation length.
     For every $N\geq2$, the trace of the selected fixed-product periodic
     operator is a strictly positive real number.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     The selected neighboring operators are positive semidefinite, so their
@@ -731,7 +731,7 @@
     A nonzero positive semidefinite matrix has strictly positive real trace.
 \end{proof}
 
-\begin{theorem}[Stabilization of the support of an irreducible square]
+\begin{lemma}[Stabilization of the support of an irreducible square]
     \label{thm:matrix_irreducible_square_support_stabilization}
     \lean{Matrix.IsIrreducible.%
         pow_two_pos_of_pow_two_support_eq_pow_three_support}
@@ -745,7 +745,7 @@
         \notag
     \end{align}
     for every pair $i,j$. Then $(T^2)_{i,j}>0$ for every pair $i,j$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Right multiplication by $T$ propagates equality of the positive supports
@@ -761,7 +761,7 @@
 % **Scope restriction (coefficient extraction):** recurrence, adjacent
 % marginal equality, and positive finite-chain normalizations are explicit
 % hypotheses. See docs/paper-gaps/cpsv16_commuting_form_to_sal.tex.
-\begin{theorem}[Strict positivity from adjacent cyclic-sector marginals]
+\begin{lemma}[Strict positivity from adjacent cyclic-sector marginals]
     \label{thm:mpdo_cyclic_active_square_positive_adjacent_marginals}
     \lean{MPOTensor.PhysicalSectorFactorization.%
         cyclicActiveSectorTraceMatrix_pow_two_pos_of_adjacent_marginals}
@@ -775,7 +775,7 @@
     chain lengths $L+2$ and $L+1$ are equal, and that the closed operator has
     a positive real trace at every length $N\geq2$. Then
     $(T_C^2)_{q,h}>0$ for every pair of cyclic-active sectors $q,h$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:mpdo_suffix_sector_contraction, thm:mpdo_suffix_marginal_block_expansion, thm:matrix_irreducible_square_support_stabilization}
@@ -786,7 +786,7 @@
     normalized marginals and positivity of their normalizations show that
     $(T_C^2)_{q,h}$ vanishes exactly when $(T_C^3)_{q,h}$ vanishes.
     Recurrence makes $T_C$ irreducible, so
-    Theorem~\ref{thm:matrix_irreducible_square_support_stabilization} applies.
+    Lemma~\ref{thm:matrix_irreducible_square_support_stabilization} applies.
 \end{proof}
 
 % Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
@@ -794,7 +794,7 @@
 % **Scope restriction (coefficient extraction):** recurrence, adjacent
 % marginal equality, and positive finite-chain normalizations are explicit
 % hypotheses. See docs/paper-gaps/cpsv16_commuting_form_to_sal.tex.
-\begin{theorem}[Normalization from adjacent cyclic-sector marginals]
+\begin{lemma}[Normalization from adjacent cyclic-sector marginals]
     \label{thm:mpdo_cyclic_active_square_cube_adjacent_marginals}
     \lean{MPOTensor.PhysicalSectorFactorization.%
         exists_normalized_cyclicActiveSectorTraceMatrix_pow_two_eq_pow_three_of_adjacent_marginals}
@@ -813,12 +813,12 @@
          & =(\lambda^{-1}T_C)^3.
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:mpdo_suffix_sector_contraction, thm:mpdo_suffix_marginal_block_expansion, thm:mpdo_cyclic_active_square_positive_adjacent_marginals}
     By
-    Theorem~\ref{thm:mpdo_cyclic_active_square_positive_adjacent_marginals},
+    Lemma~\ref{thm:mpdo_cyclic_active_square_positive_adjacent_marginals},
     every entry of $T_C^2$ is positive. For fixed $q,h$, choose a positive
     summand $(T_C)_{h,r}(T_C)_{r,q}$ of $(T_C^2)_{h,q}$. The retained
     three-sector word $h,r,q$ has nonzero trace product. Comparing the two
@@ -837,7 +837,7 @@
 % **Scope restriction (coefficient extraction):** this proves the normalized
 % square--cube identity preceding the source's rank-one conclusion. See
 % docs/paper-gaps/cpsv16_commuting_form_to_sal.tex.
-\begin{theorem}[Selected fixed-product square--cube identity]
+\begin{lemma}[Selected fixed-product square--cube identity]
     \label{thm:mpdo_selected_fixed_product_square_cube}
     \lean{MPOTensor.EtaLocalStructureData.%
         exists_normalized_selectedFixedProduct_cyclicActiveSectorTraceMatrix_pow_two_eq_pow_three}
@@ -852,7 +852,7 @@
         (\lambda^{-1}T_C)^2=(\lambda^{-1}T_C)^3.
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{lem:mpdo_source_zcl_marginal_stability, thm:mpdo_eta_fixed_bond_product_tensor, thm:mpdo_fixed_bond_positive_physical_sector_representative, thm:mpdo_selected_fixed_product_cyclic_recurrence, thm:mpdo_selected_fixed_product_adjacent_marginals, thm:mpdo_selected_fixed_product_positive_traces, thm:mpdo_cyclic_active_square_cube_adjacent_marginals}
@@ -861,13 +861,13 @@
     selected closed operator. Source zero correlation length therefore gives
     the adjacent marginal equality for the selected tensor, and positivity
     gives positive selected traces.
-    Theorem~\ref{thm:mpdo_selected_fixed_product_cyclic_recurrence} gives
+    Lemma~\ref{thm:mpdo_selected_fixed_product_cyclic_recurrence} gives
     recurrence.
-    Theorem~\ref{thm:mpdo_cyclic_active_square_cube_adjacent_marginals} now
+    Lemma~\ref{thm:mpdo_cyclic_active_square_cube_adjacent_marginals} now
     gives the required normalization.
 \end{proof}
 
-\begin{theorem}[Markov cuts from the selected fixed product]
+\begin{lemma}[Markov cuts from the selected fixed product]
     \label{thm:mpdo_selected_fixed_product_markov_cuts}
     \lean{MPOTensor.EtaLocalStructureData.%
         exists_hayashiMarkovDecomposition_selectedPhysicalCut_of_isSourceZCL}
@@ -879,13 +879,13 @@
     For arbitrary $A,C\geq0$, the normalized marginal on consecutive regions of
     lengths $A$, $1$, and $C$, obtained from the periodic chain of length
     $A+C+2$, admits a Hayashi Markov decomposition.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpdo_selected_fixed_product_cyclic_recurrence, thm:mpdo_selected_fixed_product_adjacent_marginals, thm:mpdo_selected_fixed_product_iterated_marginals, thm:mpdo_selected_fixed_product_positive_traces, thm:mpdo_selected_fixed_product_reduced_states, thm:mpdo_selected_fixed_product_square_cube, thm:mpdo_cyclic_active_square_positive_adjacent_marginals, thm:mpdo_cyclic_active_explicit_fourth_region_blocks, thm:mpdo_cyclic_active_markov_of_fourth_region, thm:matrix_primitive_pow_two_rank_one}
     The selected trace matrix is recurrent, and its square is strictly
     positive. After the positive normalization of
-    Theorem~\ref{thm:mpdo_selected_fixed_product_square_cube}, its square and
+    Lemma~\ref{thm:mpdo_selected_fixed_product_square_cube}, its square and
     cube agree. Thus the normalized matrix is primitive, with its second
     power as a positive power, and the latter factors as
     $a b^{\mathsf T}$ for strictly positive vectors $a,b$.
@@ -904,7 +904,7 @@
 % **Local fix (cyclic-active restriction):** this is a restricted replacement for
 % the primitive-matrix step of the SAL-dependent CPSV16 Lemma `propSN`. See
 % docs/paper-gaps/cpsv16_commuting_form_to_sal.tex.
-\begin{theorem}[Primitivity on cyclic-active sectors]
+\begin{lemma}[Primitivity on cyclic-active sectors]
     \label{thm:mpdo_cyclic_active_trace_matrix_primitive}
     \lean{MPOTensor.PhysicalSectorFactorization.exists_sectorVirtualMatrix_ne_zero_of_isCyclicActiveSector}
     \lean{MPOTensor.PhysicalSectorFactorization.isCyclicActiveSector_of_sectorVirtualMatrix_ne_zero}
@@ -929,7 +929,7 @@
         (T^3)_{k,k} & >0.
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     The virtual matrices of all physical sectors span the full matrix
@@ -962,7 +962,7 @@
 % **Local fix (cyclic-active restriction):** CPSV16 line 1613 uses the one-step
 % coefficient, whereas this restricted theorem proves rank one for its square.
 % See docs/paper-gaps/cpsv16_commuting_form_to_sal.tex.
-\begin{theorem}[Rank-one cyclic-active two-step coefficient]
+\begin{lemma}[Rank-one cyclic-active two-step coefficient]
     \label{thm:mpdo_cyclic_active_zcl_rank_one}
     \lean{MPOTensor.PhysicalSectorFactorization.cyclicActiveLeftRestriction}
     \lean{MPOTensor.PhysicalSectorFactorization.cyclicActiveLeftRestriction_leftTensor}
@@ -976,7 +976,7 @@
     \leanok
     \uses{def:mpo_source_zcl, thm:mpdo_cyclic_active_trace_matrix_primitive, thm:matrix_primitive_pow_two_rank_one}
     Under the hypotheses of
-    Theorem~\ref{thm:mpdo_cyclic_active_trace_matrix_primitive}, suppose that
+    Lemma~\ref{thm:mpdo_cyclic_active_trace_matrix_primitive}, suppose that
     the physical-trace transfer has source zero correlation length. There is
     a number $\lambda>0$ such that, with $\widehat T=\lambda^{-1}T$,
     \begin{align}
@@ -988,17 +988,17 @@
     and $\tr(\widehat T^m)=\tr(\widehat T)$ for every $m\geq1$.
     By matrix multiplication, the two-step coefficient is
     $(\widehat T^2)_{k,h}=\sum_{q\in C}\widehat T_{k,q}\widehat T_{q,h}$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Set the left sector tensor equal to zero outside $C$. The span
-    argument of Theorem~\ref{thm:mpdo_cyclic_active_trace_matrix_primitive} shows
+    argument of Lemma~\ref{thm:mpdo_cyclic_active_trace_matrix_primitive} shows
     that this does not change the physical tensor, and the
     neighboring operators with both indices in $C$ are unchanged. The
     source zero-correlation-length relation, applied through this
     restricted factorization, gives
     $\widehat T^2=\widehat T^3$ on the cyclic-active indices. By
-    Theorem~\ref{thm:mpdo_cyclic_active_trace_matrix_primitive},
+    Lemma~\ref{thm:mpdo_cyclic_active_trace_matrix_primitive},
     $\widehat T$ is primitive. Its square is therefore a strictly positive
     idempotent matrix and has rank one.
 \end{proof}
@@ -1007,7 +1007,7 @@
 % **Local fix (cyclic-active restriction):** the intermediate sum is over the
 % positive-length cyclic support.  See
 % docs/paper-gaps/cpsv16_commuting_form_to_sal.tex.
-\begin{theorem}[Cyclic-active three-boundary trace coefficient]
+\begin{lemma}[Cyclic-active three-boundary trace coefficient]
     \label{thm:mpdo_cyclic_active_three_boundary_trace}
     \lean{MPOTensor.PhysicalSectorFactorization.%
         sum_cyclicActive_trace_mul_trace_eq_pow_two}
@@ -1046,7 +1046,7 @@
          & =(\widehat T_C^2)_{q,h}.
         \label{eq:mpdo_cyclic_tc_sq_normalized}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Positivity makes each $\tr(\eta_{a,b})$ real. Expanding matrix
@@ -1063,7 +1063,7 @@
     two trace factors by $\lambda^{-1}$ gives (\ref{eq:mpdo_cyclic_tc_sq_normalized}).
 \end{proof}
 
-\begin{theorem}[Fourth-region blocks from an explicit factorization]
+\begin{lemma}[Fourth-region blocks from an explicit factorization]
     \label{thm:mpdo_cyclic_active_explicit_fourth_region_blocks}
     \lean{MPOTensor.PhysicalSectorFactorization.%
         reindex_reducedBlockState_add_three_eq_cyclicActiveFourthRegionBlock}
@@ -1082,7 +1082,7 @@
     support contributes zero; every cyclic-active word contributes its
     unchanged interior neighboring product tensored with the separated
     boundary factors determined by $\lambda,a,b$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpdo_cyclic_active_three_boundary_trace, thm:mpdo_cyclic_active_deletion}
@@ -1094,7 +1094,7 @@
     factors while retaining the normalization by the length-$(n+4)$ trace.
 \end{proof}
 
-\begin{theorem}[Cyclic-active fourth-region factorization]
+\begin{lemma}[Cyclic-active fourth-region factorization]
     \label{thm:mpdo_cyclic_active_fourth_region_factorization}
     \lean{MPOTensor.PhysicalSectorFactorization.%
         exists_cyclicActiveFourthRegion_formula_of_isSourceZCL}
@@ -1113,7 +1113,7 @@
     % marginal replacement and three traced boundary sites. No equality
     % between $T_C$ and $T_C^2$ is used. This correction is recorded in
     % docs/paper-gaps/cpsv16_commuting_form_to_sal.tex.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     The additional marginal replacement leaves the retained interior product
@@ -1123,7 +1123,7 @@
     before the two outer partial traces are evaluated.
 \end{proof}
 
-\begin{theorem}[Markov decomposition from an explicit fourth-region formula]
+\begin{lemma}[Markov decomposition from an explicit fourth-region formula]
     \label{thm:mpdo_cyclic_active_markov_of_fourth_region}
     \lean{MPOTensor.PhysicalSectorFactorization.%
         exists_hayashiMarkovDecomposition_cyclicActiveCut_of_fourthRegion}
@@ -1138,7 +1138,7 @@
     $A+C+2$ has the explicit fourth-region block formula determined by
     $\lambda,a,b$. Then its tripartite form on regions of lengths
     $A$, $1$, and $C$ admits a Hayashi Markov decomposition.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Regrouping every retained fourth-region block at the distinguished middle
@@ -1150,14 +1150,14 @@
     the Hayashi decomposition in the sector-coordinate middle-site splitting.
 \end{proof}
 
-\begin{theorem}[Cyclic-active Markov decomposition at every cut]
+\begin{lemma}[Cyclic-active Markov decomposition at every cut]
     \label{thm:mpdo_cyclic_active_markov_all_cuts}
     \lean{MPOTensor.PhysicalSectorFactorization.%
         exists_hayashiMarkovDecomposition_cyclicActiveCut_of_isSourceZCL}
     \leanok
     \uses{thm:mpdo_cyclic_active_fourth_region_factorization, thm:mpdo_cyclic_active_markov_of_fourth_region}
     Under the hypotheses of
-    Theorem~\ref{thm:mpdo_cyclic_active_fourth_region_factorization}, for
+    Lemma~\ref{thm:mpdo_cyclic_active_fourth_region_factorization}, for
     arbitrary $A,C\geq 0$, the fourth-region marginal on consecutive regions
     of lengths $A$, $1$, and $C$ admits a Hayashi Markov decomposition.
     The middle site decomposes as the direct sum of its left and right sector
@@ -1169,7 +1169,7 @@
     % arise from the factorization of $(\lambda^{-1}T_C)^2$ described above.
     % This correction is recorded in
     % docs/paper-gaps/cpsv16_commuting_form_to_sal.tex.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Separating the retained chain at the distinguished middle site splits the
@@ -1181,7 +1181,7 @@
     sum to one.
 \end{proof}
 
-\begin{theorem}[Physical-sector factorization and ZCL imply SAL]
+\begin{lemma}[Physical-sector factorization and ZCL imply SAL]
     \label{thm:mpdo_physical_sector_factorization_zcl_sal}
     \lean{MPOTensor.PhysicalSectorFactorization.isSAL_of_isSourceZCL}
     \leanok
@@ -1196,21 +1196,21 @@
     % assumes the factorization F and positivity of every neighboring
     % operator, so it remains a conditional explicit-factorization result.
     % The source-faithful CPSV16 Proposition 4to2 is
-    % Theorem~\ref{thm:mpdo_translation_invariant_commuting_form_zcl_sal};
+    % Lemma~\ref{thm:mpdo_translation_invariant_commuting_form_zcl_sal};
     % see docs/paper-gaps/cpsv16_commuting_form_to_sal.tex.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Positivity of the neighboring operators makes every nonempty
     sector-coordinate chain operator positive, and source zero correlation
     length makes its trace nonzero. Applying
-    Theorem~\ref{thm:mpdo_cyclic_active_markov_all_cuts} with
+    Lemma~\ref{thm:mpdo_cyclic_active_markov_all_cuts} with
     $A=m-1$ and $C=N-m-1$ at every admissible cut and invoking the all-cut
     Markov criterion gives saturation of the area law in sector coordinates,
     which the physical isometry of $F$ carries back to $\mathcal K$.
 \end{proof}
 
-\begin{theorem}[A translation-invariant commuting bond and ZCL imply SAL]
+\begin{lemma}[A translation-invariant commuting bond and ZCL imply SAL]
     \label{thm:mpdo_translation_invariant_commuting_form_zcl_sal}
     \lean{MPOTensor.EtaLocalStructureData.isSAL_of_isSourceZCL}
     \leanok
@@ -1235,7 +1235,7 @@
     % coefficient and transports the normalized marginals from the selected
     % fixed-product tensor to the source tensor. Documented in
     % docs/paper-gaps/cpsv16_commuting_form_to_sal.tex.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpdo_selected_fixed_product_markov_cuts, thm:mpdo_all_cut_markov_implies_sal, thm:mpdo_sal_physical_isometry_transport, lem:mpdo_sitewise_physical_coordinate_congruence, thm:mpdo_source_zcl_strict_positive_length_normalization}
@@ -1245,7 +1245,7 @@
     positive length by source zero correlation length.
 
     For every $1\leq m\leq\lfloor N/2\rfloor$, applying
-    Theorem~\ref{thm:mpdo_selected_fixed_product_markov_cuts} with
+    Lemma~\ref{thm:mpdo_selected_fixed_product_markov_cuts} with
     $A=m-1$ and $C=N-m-1$ ($A+C+2=N$) gives the quantum Markov
     decomposition required at the $m$-th cut. The all-cut criterion then gives
     saturation of the area law in the selected physical coordinates, and
@@ -1253,7 +1253,7 @@
     saturation back to $\mathcal K$.
 \end{proof}
 
-\begin{theorem}[$\eta$-local structure gives the one-sector GSNNCH form]
+\begin{lemma}[$\eta$-local structure gives the one-sector GSNNCH form]
     \label{thm:mpdo_eta_local_structure_has_gsnnch_form}
     \lean{MPOTensor.EtaLocalStructureData.hasGSNNCHForm}
     \lean{MPOTensor.hasGSNNCHForm_of_etaLocalStructure}
@@ -1261,7 +1261,7 @@
     \uses{thm:mpdo_eta_local_structure_has_commuting_form, thm:mpdo_commuting_form_data_has_gsnnch_form}
     The single positive bond determined by the $\eta$-local structure gives
     the one-sector instance of the explicit GSNNCH decomposition.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     At each chain length, applying the one-sector GSNNCH construction to the
@@ -1269,7 +1269,7 @@
     explicit GSNNCH decomposition.
 \end{proof}
 
-\begin{theorem}[Injective SAL tensors generate GSNNCH states]
+\begin{lemma}[Injective SAL tensors generate GSNNCH states]
     \label{thm:mpdo_injective_sal_is_gsnnch}
     \lean{MPOTensor.isGSNNCH_of_isInjective_of_isSAL}
     \leanok
@@ -1282,14 +1282,14 @@
     \cite[Proposition~C.8]{Cirac2016MPDO_arXiv} states its conclusion for an
     injective tensor, combined here with the density normalization of
     \cite[Definition~4.8]{Cirac2016MPDO_arXiv}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
-    Corollary~\ref{cor:mpdo_eta_local_structure_of_is_sal} gives the
+    Lemma~\ref{cor:mpdo_eta_local_structure_of_is_sal} gives the
     $\eta$-local structure, whose single positive bond gives the one-sector
-    form by Theorem~\ref{thm:mpdo_eta_local_structure_has_gsnnch_form}. SAL
+    form by Lemma~\ref{thm:mpdo_eta_local_structure_has_gsnnch_form}. SAL
     includes the nonvanishing of every positive-length trace, so
-    Theorem~\ref{thm:mpdo_gsnnch_of_sector_form} applies.
+    Lemma~\ref{thm:mpdo_gsnnch_of_sector_form} applies.
 \end{proof}
 
 \begin{remark}[Positive physical-sector factorization]
@@ -1316,21 +1316,21 @@
         \notag
     \end{align}
     Under this hypothesis,
-    Theorem~\ref{thm:mpdo_eta_local_structure_of_positive_physical_sector_factorization}
+    Lemma~\ref{thm:mpdo_eta_local_structure_of_positive_physical_sector_factorization}
     gives the $\eta$-local structure and proves
     (\ref{eq:mpdo_eta_bond_assembly})--(\ref{eq:mpdo_eta_product_form}) with
-    $c_N=1$. Theorem~\ref{thm:mpdo_eta_local_structure_has_commuting_form}
+    $c_N=1$. Lemma~\ref{thm:mpdo_eta_local_structure_has_commuting_form}
     then gives the commuting-form conclusion. Adjacent translates commute on every
     periodic chain of length at least three by
-    Theorem~\ref{thm:mpdo_periodic_adjacent_physical_bonds_comm}, and the
+    Lemma~\ref{thm:mpdo_periodic_adjacent_physical_bonds_comm}, and the
     crossed two-site case is
-    Theorem~\ref{thm:mpdo_physical_two_site_crossed_bonds_comm}. Disjoint
+    Lemma~\ref{thm:mpdo_physical_two_site_crossed_bonds_comm}. Disjoint
     translates commute by
-    Theorem~\ref{thm:mpdo_periodic_disjoint_physical_bonds_comm}. These cases
+    Lemma~\ref{thm:mpdo_periodic_disjoint_physical_bonds_comm}. These cases
     give pairwise commutativity at every length $N\geq2$ by
-    Theorem~\ref{thm:mpdo_periodic_pairwise_physical_bonds_comm}. Given the
+    Lemma~\ref{thm:mpdo_periodic_pairwise_physical_bonds_comm}. Given the
     physical-sector factorization, the all-length product identity is
-    Theorem~\ref{thm:mpdo_exact_physical_sector_bond_product}.
+    Lemma~\ref{thm:mpdo_exact_physical_sector_bond_product}.
     The doubled-index transfer condition enters only in the subsequent
     renormalization fixed point and single-bond branch conclusions.
 \end{remark}

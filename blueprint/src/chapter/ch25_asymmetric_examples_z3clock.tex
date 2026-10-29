@@ -12,14 +12,14 @@
 The anomalous symmetry of Section~\ref{sec:asymex_z3anomalous} is an exact
 representation of $\Z_3$, and its condensation defect satisfies
 $A^2=3A$ at every length
-(Theorem~\ref{thm:asymex_z3anomalous_defect_square}). This section
+(Lemma~\ref{thm:asymex_z3anomalous_defect_square}). This section
 treats a second family of $\Z_3$ symmetry operators whose representatives
 multiply only up to phases depending on the length, and shows that the
 structure constants of its condensation defect then genuinely depend on the
 length. The length dependence comes from the per-site phases of the chosen
 representatives. The expected triviality of the Else--Nayak class remains
 to be established for these dressed operators;
-the trivial cocycle in Theorem~\ref{thm:asymex_z3clock_kernels} alone does
+the trivial cocycle in Lemma~\ref{thm:asymex_z3clock_kernels} alone does
 not identify that class.
 
 As in Section~\ref{sec:asymex_z3anomalous}, let
@@ -85,16 +85,16 @@ by $\omega^{f(l,i)}$, and applies $X^g$ to the input to give the output.
 \end{center}
 
 Both tensors use the ordinary trace on rings of $N>0$ sites.
-Theorem~\ref{thm:asymex_z3clock_kernels} identifies their kernels and proves
-unitarity, while Theorem~\ref{thm:asymex_z3clock_table} shows that the
+Lemma~\ref{thm:asymex_z3clock_kernels} identifies their kernels and proves
+unitarity, while Lemma~\ref{thm:asymex_z3clock_table} shows that the
 multiplication table retains its length-dependent phases.
-Theorems~\ref{thm:asymex_z3clock_defect_square}
+Lemmas~\ref{thm:asymex_z3clock_defect_square}
 and~\ref{thm:asymex_z3clock_not_fusion_algebra} then compute the square of the
 condensation defect and establish the obstruction to length-independent fusion
 constants, leaving the anomaly-class question separate from these operator
 identities.
 
-\begin{theorem}[Kernels and the trivial cocycle]
+\begin{lemma}[Kernels and the trivial cocycle]
     \label{thm:asymex_z3clock_kernels}
     \lean{Z3Clock.mpo_clockTensor, Z3Clock.mpo_uTensor_apply, Z3Clock.mpo_vTensor_apply,
         Z3Clock.clockTensor_apply_eq_cocycle, Z3Clock.mpo_clockTensor_eq_cocycle,
@@ -116,7 +116,7 @@ identities.
     so that $O_N(T_{g,f})$ is the diagonal circuit with phase
     $\omega^{\sum_k f(t_k,t_{k+1})}$ on the input configuration $t$, followed
     by the plain shift by $g$. Every clock tensor is a matrix product unitary.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -131,7 +131,7 @@ identities.
 The first relation of the next theorem, $U_N^2=\omega^NV_N$, reads as
 follows on a ring of $N$ sites.
 \begin{center}
-    % Formula: U_N^2=\omega^NV_N (Theorem~\ref{thm:asymex_z3clock_table}), as
+    % Formula: U_N^2=\omega^NV_N (Lemma~\ref{thm:asymex_z3clock_table}), as
     % the entry (s,t) of both sides.
     % Ink-to-index map: on the left, both rows are the clock tensor U, the
     % upper row with output s_k and the lower row with input t_k, and the
@@ -165,7 +165,7 @@ follows on a ring of $N$ sites.
     \end{tenkz}
 \end{center}
 
-\begin{theorem}[Multiplication with length-dependent phases]
+\begin{lemma}[Multiplication with length-dependent phases]
     \label{thm:asymex_z3clock_table}
     \lean{Z3Clock.mpo_clockTensor_mul, Z3Clock.mpo_u_mul_u, Z3Clock.mpo_u_mul_v,
         Z3Clock.mpo_v_mul_u, Z3Clock.mpo_v_mul_v, Z3Clock.mpo_u_mul_u_mul_u}
@@ -180,7 +180,7 @@ follows on a ring of $N$ sites.
     \end{align}
     When $3\mid N$ these are the relations of $\Z_3$; otherwise the
     representatives multiply only up to the phases $\omega^N$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -195,7 +195,7 @@ follows on a ring of $N$ sites.
     $ab+(a-b)$. These are checked on the nine pairs $(a,b)$.
 \end{proof}
 
-\begin{theorem}[The condensation defect of an exact group representation]
+\begin{lemma}[The condensation defect of an exact group representation]
     \label{thm:asymex_group_cocycle_defect}
     \lean{MPOTensor.GroupCocycle.isMPOFusionAlgebra, MPOTensor.GroupCocycle.sum_mpo_mul_sum_mpo,
         Z3Clock.cocycleDefect, Z3Clock.cocycleDefect_mul_self}
@@ -207,7 +207,7 @@ follows on a ring of $N$ sites.
     $N_{gh}^k=\delta_{k,gh}$, and $A_0=\sum_g U_g$ satisfies $A_0^2=\lvert G\rvert A_0$
     at every positive length. For $\Z_3$ and the trivial cocycle,
     $A_0^2=3A_0$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -227,7 +227,7 @@ follows on a ring of $N$ sites.
     $O_N(A)=\Id+U_N+V_N$.
 \end{definition}
 
-\begin{theorem}[Length-dependent fusion of the clock defect]
+\begin{lemma}[Length-dependent fusion of the clock defect]
     \label{thm:asymex_z3clock_defect_square}
     \lean{Z3Clock.mpo_defect_mul_defect, Z3Clock.eq_of_smul_add_smul_add_smul_eq,
         Z3Clock.defect_coeff_eq, Z3Clock.mpo_defect_mul_defect_eq_three_smul_iff,
@@ -244,12 +244,12 @@ follows on a ring of $N$ sites.
     $\{1,1,\omega\}$. In particular $O_N(A)^2=3\,O_N(A)$ if and only if
     $3\mid N$, and there are no coefficients independent of $N$ with
     $O_N(A)^2=a\,\Id+b\,U_N+c\,V_N$ for every $N>0$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     Expanding $(\Id+U_N+V_N)^2$ with
-    Theorem~\ref{thm:asymex_z3clock_table} gives
+    Lemma~\ref{thm:asymex_z3clock_table} gives
     $\Id+3U_N+2V_N+\omega^NV_N+2\omega^N\Id$. The three operators shift the
     constant configuration $0$ to the constant configurations $0$, $1$ and
     $2$ respectively, each with phase one, so reading a combination of them
@@ -259,7 +259,7 @@ follows on a ring of $N$ sites.
     $\omega=1$.
 \end{proof}
 
-\begin{theorem}[The clock family is not a fusion algebra]
+\begin{lemma}[The clock family is not a fusion algebra]
     \label{thm:asymex_z3clock_not_fusion_algebra}
     \lean{Z3Clock.repBondDim, Z3Clock.repTensor, Z3Clock.not_isMPOFusionAlgebra}
     \leanok
@@ -267,9 +267,9 @@ follows on a ring of $N$ sites.
     For no nonnegative integers $m_{ab}^{c}$, independent of the length, do
     the periodic operators of $\delta$, $U$ and $V$ satisfy
     $O_N(T_a)O_N(T_b)=\sum_cm_{ab}^{c}O_N(T_c)$ at every positive length.
-    In contrast, by Theorem~\ref{thm:asymex_group_cocycle_defect}, the group
+    In contrast, by Lemma~\ref{thm:asymex_group_cocycle_defect}, the group
     operators of the trivial cocycle form such an algebra.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok

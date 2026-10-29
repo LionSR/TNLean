@@ -28,7 +28,7 @@ whose range is the span of the columns of $M_i(\psi)$.
     Definition~def:viable of~\cite[lines 240--242]{Landau2015Polynomial}.
 \end{definition}
 
-\begin{theorem}[Support through the projection onto the span]
+\begin{lemma}[Support through the projection onto the span]
     \label{thm:lvv_viable_projection}
     \lean{TNLean.MPS.AreaLaw.spanProjection,
         TNLean.MPS.AreaLaw.isStarProjection_spanProjection,
@@ -48,7 +48,7 @@ whose range is the span of the columns of $M_i(\psi)$.
     $P_S\rho=\rho$ for the reduced state $\rho=M_i(\psi)M_i(\psi)^*$ of $\psi$ on
     the first $i$ sites; $(P_S\otimes I)\psi=\psi$, with $\psi$ written in the
     coordinates of the cut after the first $i$ sites.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -58,7 +58,7 @@ whose range is the span of the columns of $M_i(\psi)$.
     vector, and $(P\otimes I)\psi$ is $PM_i(\psi)$, for every matrix $P$.
 \end{proof}
 
-\begin{theorem}[Viable sets and viable subspaces]
+\begin{lemma}[Viable sets and viable subspaces]
     \label{thm:lvv_viable_closeness}
     \lean{TNLean.MPS.AreaLaw.IsViable.le_norm_starProjection,
         TNLean.MPS.AreaLaw.isViable_iff_le_norm_starProjection,
@@ -76,7 +76,7 @@ whose range is the span of the columns of $M_i(\psi)$.
     of Arad, Landau, Vazirani and
     Vidick~\cite[lines 433--440]{Arad2016RigorousRG}, with $\delta'$ in place of
     $\delta$, since $\delta$ bounds an overlap and $\delta'$ a squared overlap.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -101,7 +101,7 @@ whose range is the span of the columns of $M_i(\psi)$.
     sites~\cite{gap:lvv13_bond_dimension_zero}.
 \end{definition}
 
-\begin{theorem}[Extending a viable set by one site]
+\begin{lemma}[Extending a viable set by one site]
     \label{thm:lvv_viable_extension}
     \lean{TNLean.MPS.AreaLaw.IsOpenMPS.snoc,
         TNLean.MPS.AreaLaw.restrictLeft,
@@ -126,7 +126,7 @@ whose range is the span of the columns of $M_i(\psi)$.
     $(i,qs,b,\delta)$-viable for $\Gamma$, with the same witness. This is
     Claim~c:ext of~\cite[lines 379--400]{Landau2015Polynomial}, stated there
     for $\delta=c_\varepsilon/n$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -151,7 +151,7 @@ whose range is the span of the columns of $M_i(\psi)$.
     well; the witness $\phi$ is unchanged.
 \end{proof}
 
-\begin{theorem}[Bond dimensions in a finite span]
+\begin{lemma}[Bond dimensions in a finite span]
     \label{thm:open_mps_finite_span}
     \lean{TNLean.MPS.AreaLaw.isOpenMPS_of_mem_span}
     \leanok
@@ -163,7 +163,7 @@ whose range is the span of the columns of $M_i(\psi)$.
     open-boundary matrix product state of bond dimension at most $|S|D$.
     This is the finite-span estimate used
     in~\cite[Claim~2.7, source lines 520--527]{Landau2015Polynomial}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:chain_cut_rank_of_mps}
     Write $v=\sum_{w\in S}a_w w$. At every internal cut $j$,
@@ -176,7 +176,7 @@ whose range is the span of the columns of $M_i(\psi)$.
     including empty and one-site chains and $D=0$.
 \end{proof}
 
-\begin{theorem}[Bond dimensions in a left span]
+\begin{lemma}[Bond dimensions in a left span]
     \label{thm:left_mps_finite_span}
     \lean{TNLean.MPS.AreaLaw.isLeftOpenMPS_of_mem_span}
     \leanok
@@ -189,11 +189,11 @@ whose range is the span of the columns of $M_i(\psi)$.
     $\beta$. For every $v\in\operatorname{Span}(S)$, the vector $Rv$ is a
     matrix product state of bond dimension at most $\max\{1,|S|\beta\}$.
     When $S$ is nonempty and $b\ge1$, this bound is $|S|b$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:open_mps_finite_span,thm:chain_cut_rank_of_mps}
     The map $R$ is linear, so $Rv\in\operatorname{Span}(R(S))$ and
-    $|R(S)|\le |S|$. Theorem~\ref{thm:open_mps_finite_span} gives a bond
+    $|R(S)|\le |S|$. Lemma~\ref{thm:open_mps_finite_span} gives a bond
     bound $|R(S)|\beta\le |S|\beta\le\max\{1,|S|\beta\}$.
 \end{proof}
 
@@ -214,7 +214,7 @@ whose range is the span of the columns of $M_i(\psi)$.
     of~\cite[Claim~2.7, source lines 472--477 and 520--527]{Landau2015Polynomial}.
 \end{definition}
 
-\begin{theorem}[Number and support of the left columns]
+\begin{lemma}[Number and support of the left columns]
     \label{thm:lvv_finite_left_columns}
     \lean{TNLean.MPS.AreaLaw.card_leftColumns_le,
         TNLean.MPS.AreaLaw.leftColumns_subset_span}
@@ -224,7 +224,7 @@ whose range is the span of the columns of $M_i(\psi)$.
     Let $S\subseteq\mathcal L$, and let $P_S$ be the orthogonal projection
     onto $\operatorname{Span}(S)$. If $(P_S\otimes I_m)u_i=u_i$ for every
     $i\in I$, then $T\subseteq\operatorname{Span}(S)$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:lvv_viable_projection}
     The set $T$ is the image of $I\times\{0,\ldots,m-1\}$, so its cardinality
@@ -234,7 +234,7 @@ whose range is the span of the columns of $M_i(\psi)$.
 \end{proof}
 
 
-\begin{theorem}[Left support after extending the right factor]
+\begin{lemma}[Left support after extending the right factor]
     \label{thm:lvv_left_columns_right_extension}
     \lean{TNLean.MPS.AreaLaw.rightApply_mem_leftSupportSubmodule_leftColumns,
         TNLean.MPS.AreaLaw.rightApply_mem_leftSupportSubmodule_of_columns}
@@ -250,7 +250,7 @@ whose range is the span of the columns of $M_i(\psi)$.
     $\operatorname{Span}(T)$.
     This is the support step used
     in~\cite[Claim~2.7, source lines 520--527]{Landau2015Polynomial}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Let $C_i$ be the coefficient matrix of $u_i$. The extended vector has
     coefficient matrix $C_iW^{\mathsf T}$. Its column at a right
@@ -262,7 +262,7 @@ whose range is the span of the columns of $M_i(\psi)$.
     $\operatorname{Span}(T)$.
 \end{proof}
 
-\begin{theorem}[A finite family of minimizing boundary states]
+\begin{lemma}[A finite family of minimizing boundary states]
     \label{thm:lvv_finite_boundary_selection}
     \lean{TNLean.MPS.AreaLaw.exists_finite_boundary_minimizer_family}
     \leanok
@@ -296,7 +296,7 @@ whose range is the span of the columns of $M_i(\psi)$.
     These choices use only $S,H_L,m,\eta,N$. This is an auxiliary
     fixed-bond construction for the size-trimming step
     of~\cite[Claim~2.7, source lines 472--478 and 520--527]{Landau2015Polynomial}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:chain_gluing_left_projection,thm:lvv_finite_left_columns}
     At every $X\in F$, choose a global minimizer and a leading unit
@@ -304,12 +304,12 @@ whose range is the span of the columns of $M_i(\psi)$.
     theorem~\cite[``A minimizing density matrix and a leading eigenvector'']{QICLean2026Blueprint}.
     Its positive eigenvalue gives $Qu_X=u_X$. Joining the left coordinates
     transports this identity to $(P_S\otimes I_m)u_X=u_X$.
-    Theorem~\ref{thm:lvv_finite_left_columns} gives
+    Lemma~\ref{thm:lvv_finite_left_columns} gives
     $T\subseteq\operatorname{Span}(S)$ and $|T|\le m|F|\le m|N|$.
 \end{proof}
 
 
-\begin{theorem}[A size-trimming family chosen before the ground state]
+\begin{lemma}[A size-trimming family chosen before the ground state]
     \label{thm:lvv_size_trimmed_family}
     \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.exists_size_trimmed_family,
         TNLean.MPS.AreaLaw.ChainHamiltonian.exists_size_trimmed_column_family}
@@ -354,7 +354,7 @@ whose range is the span of the columns of $M_i(\psi)$.
     and the corrected matrix-space exponent. These qualifications are
     recorded in~\cite{gap:lvv13_constant_bond,gap:lvv13_trace_norm_net};
     the printed quantitative AKLV dependence remains separate.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:chain_gluing_hamiltonian_decomposition,thm:chain_boundary_trace_norm_net,
         thm:lvv_finite_boundary_selection,thm:lvv_uniform_leading_bounds_library_bond,
@@ -363,7 +363,7 @@ whose range is the span of the columns of $M_i(\psi)$.
     First fix a decomposition $H=H_L+B$ with the stated left and right
     supports and $\|B\|\le2L$. For every integer $0\le m\le D$, choose an
     $\eta$-net $N_m$ on the actual boundary space, with $|N_m|\le K$.
-    Theorem~\ref{thm:lvv_finite_boundary_selection} chooses a global
+    Lemma~\ref{thm:lvv_finite_boundary_selection} chooses a global
     minimizer and a leading unit eigenvector at exactly the feasible
     points of $N_m$. Let $T_m$ be their left columns, and put
     \begin{align}
@@ -372,11 +372,11 @@ whose range is the span of the columns of $M_i(\psi)$.
         \le\sum_{m=0}^{D}m|N_m|\le(D+1)DK.\notag
     \end{align}
     All these choices precede $E_0$ and $\Gamma$. Every $T_m$ lies in
-    $\operatorname{Span}(S)$, and Theorem~\ref{thm:left_mps_finite_span}
+    $\operatorname{Span}(S)$, and Lemma~\ref{thm:left_mps_finite_span}
     gives the asserted bond bound.
 
     Now fix a ground-state pair $E_0,\Gamma$ for which $S$ is
-    $(k,c/L)$-viable. Theorem~\ref{thm:lvv_uniform_leading_bounds_library_bond}
+    $(k,c/L)$-viable. Lemma~\ref{thm:lvv_uniform_leading_bounds_library_bond}
     supplies an actual bond $m\le D$, an isometry $W$ and a unit left
     state $x$ fixed by the left support projection. Write $\mathcal A$
     for the Hilbert space on $\lbrack0,\max\{k-1,0\})$, intersected with the chain. For
@@ -402,13 +402,13 @@ whose range is the span of the columns of $M_i(\psi)$.
     its norm is one and the original right extension $W$ is an isometry.
 \end{proof}
 
-\begin{theorem}[Polynomial size of the size-trimming family]
+\begin{lemma}[Polynomial size of the size-trimming family]
     \label{thm:lvv_size_trimmed_family_polynomial}
     \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.exists_size_trimmed_family_polynomial,
         TNLean.MPS.AreaLaw.ChainHamiltonian.exists_size_trimmed_column_family_polynomial}
     \leanok
     \uses{def:chain_model,def:chain_constant_bond,def:lvv_viable_set,def:lvv_viable_mps}
-    Under the assumptions of Theorem~\ref{thm:lvv_size_trimmed_family}, put
+    Under the assumptions of Lemma~\ref{thm:lvv_size_trimmed_family}, put
     \begin{align}
         c & =(\Delta/169)^2,\notag        \\
         D & =B_c,\notag                   \\
@@ -429,11 +429,11 @@ whose range is the span of the columns of $M_i(\psi)$.
     For fixed $q,\Delta$, both $C$ and $p$ are independent of $L$.
     This is the polynomial form of the auxiliary preceding theorem,
     with the same qualifications on the bond constant and net exponent.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:lvv_size_trimmed_family,thm:chain_boundary_net_polynomial_bound}
-    Take the same set $T$ as in Theorem~\ref{thm:lvv_size_trimmed_family}.
-    Theorem~\ref{thm:chain_boundary_net_polynomial_bound} gives
+    Take the same set $T$ as in Lemma~\ref{thm:lvv_size_trimmed_family}.
+    Lemma~\ref{thm:chain_boundary_net_polynomial_bound} gives
     \begin{align}
         K   & \le(2A+1)^pL^p,\notag                      \\
         |T| & \le(D+1)DK\le(D+1)D(2A+1)^pL^p=CL^p.\notag
