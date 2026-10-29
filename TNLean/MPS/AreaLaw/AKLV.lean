@@ -29,8 +29,11 @@ import TNLean.MPS.AreaLaw.AKLV.OptimizedRankBound
 import TNLean.MPS.AreaLaw.AKLV.OptimizedRankLog
 import TNLean.MPS.AreaLaw.AKLV.OptimizedRankScale
 import TNLean.MPS.AreaLaw.AKLV.OptimizedTailParameters
+import TNLean.MPS.AreaLaw.AKLV.PhysicalEntropy
 import TNLean.MPS.AreaLaw.AKLV.PhysicalRobustness
 import TNLean.MPS.AreaLaw.AKLV.PolynomialRank
+import TNLean.MPS.AreaLaw.AKLV.SequenceEntropy
+import TNLean.MPS.AreaLaw.AKLV.SequenceEntropyParameters
 import TNLean.MPS.AreaLaw.AKLV.SequenceParameters
 import TNLean.MPS.AreaLaw.AKLV.SequentialApproximation
 import TNLean.MPS.AreaLaw.AKLV.SharpMPSApproximation
