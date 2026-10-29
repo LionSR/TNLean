@@ -88,7 +88,7 @@ theorem IsMPUCanonicalFormII.isMPUSimple_of_isReduction
     (hV : IsMPUCanonicalFormII V) (hU : IsMPUSimple U)
     (h : MPSTensor.IsReduction U.toMPSTensor V.toMPSTensor A B) :
     IsMPUSimple V := by
-  letI : NeZero d := hV.neZero_phys
+  let : NeZero d := hV.neZero_phys
   exact hV.isMPU.isMPUSimple_of_simple2 _ _
     (simple2_of_normalizedDiagonal_insertion
       (hU.normalizedDiagonal_insertion_of_isReduction h) _ _
