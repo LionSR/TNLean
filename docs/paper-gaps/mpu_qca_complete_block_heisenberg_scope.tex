@@ -119,6 +119,18 @@ periodic boundary argument, such as cyclic relocation of the actual
 forward singleton windows. The finite statement alone is not the uniform
 inverse propagation or completed QCA theorem. Lean checking is pending.
 
+The exact cyclic relocation identities for both actual conjugations
+are now written in
+\leanid{MPOTensor.mpo_conjugation_submatrix_rotateConfig} and
+\leanid{MPOTensor.mpo_adjointConjugation_submatrix_rotateConfig}.
+They reuse closed-trace invariance of the periodic MPO; simultaneous
+reindexing preserves products and adjoints. Existing operator support
+therefore rotates with the input even across the seam. These identities
+are pending Lean checking. To remove the collars, the remaining step is
+to identify the standard-form window with the finite cyclic support
+algebras, apply this relocation to all boundary singleton windows, and
+then use the finite outside commutant uniformly.
+
 \bibliographystyle{alpha}
 \bibliography{references}
 \end{document}

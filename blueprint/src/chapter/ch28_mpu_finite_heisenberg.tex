@@ -338,3 +338,25 @@
     finite unitary conjugation. Its inverse is precisely conjugation
     by the adjoint finite MPU.
 \end{proof}
+
+\begin{lemma}[Cyclic relocation of the actual finite conjugations]
+    \label{lem:mpu_finite_conjugation_cyclic_relocation}
+    \lean{MPOTensor.mpo_conjugation_submatrix_rotateConfig,
+        MPOTensor.mpo_adjointConjugation_submatrix_rotateConfig,
+        MPOTensor.mpo_conjugation_mem_supportedOperators_rotate,
+        MPOTensor.mpo_adjointConjugation_mem_supportedOperators_rotate}
+    \notready
+    Let $R$ simultaneously rotate the bra and ket configurations of a
+    finite periodic chain. Both actual conjugations satisfy
+    $R(U_N A U_N^\dagger)=U_N R(A)U_N^\dagger$ and
+    $R(U_N^\dagger A U_N)=U_N^\dagger R(A)U_N$.
+    Consequently any finite support bound for either conjugation
+    rotates with the input through the periodic seam. Unitarity is
+    not required for these covariance identities.
+\end{lemma}
+\begin{proof}
+    The closed virtual trace gives $R(U_N)=U_N$. Simultaneous row and
+    column relabeling preserves products and adjoints, yielding the
+    two identities. A site permutation sends the finite supported
+    operator algebra on $S$ to that on the rotated set $R(S)$.
+\end{proof}

@@ -24,8 +24,12 @@ faithfulness of the existing algebraic-local inclusion.
 The boundary collars are part of the conclusion. No uniform periodic inverse
 propagation, inverse-family compatibility, surjectivity of the completed
 forward action, or completion of the source QCA statement is claimed.
-Periodic relocation of boundary singleton windows remains necessary for that
-step. Bare MPU-to-standard-form construction and the source bond-dimension
+`MPS/MPU/CyclicConjugation.lean` additionally derives exact cyclic covariance
+of both actual finite conjugations, reusing the existing periodic MPO
+closed-trace invariance, matrix reindexing, and finite site-permutation support.
+The remaining boundary step identifies the actual standard-form windows
+with the cyclic supported-operator algebras and uses this covariance to
+cover every outside singleton uniformly. Bare MPU-to-standard-form construction and the source bond-dimension
 radius remain separate, as recorded in
 `docs/paper-gaps/mpu_qca_complete_block_heisenberg_scope.tex`.
 
