@@ -87,7 +87,7 @@ from the virtual to the physical system
     orientations of the virtual bonds.
 \end{definition}
 
-\begin{theorem}[Left-inverse form of $G$-injectivity]%
+\begin{lemma}[Left-inverse form of $G$-injectivity]%
     \label{thm:peps_g_injective_left_inverse}
     \lean{TNLean.PEPS.apply_averageMap_of_forall_comp_eq,
         TNLean.PEPS.isGInjective_iff_exists_leftInverse}
@@ -97,7 +97,7 @@ from the virtual to the physical system
     $\mathcal{P}(A)U_g=\mathcal{P}(A)$ for every $g$ and $\mathcal{P}(A)$ has a
     left inverse $L$ with $L\,\mathcal{P}(A)=\Pi_U$
     \cite[Section~``Two dimensions: $G$-injective PEPS'']{Schuch2010PEPS}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     An invariant map satisfies $\mathcal{P}(A)\Pi_U=\mathcal{P}(A)$, since
@@ -109,7 +109,7 @@ from the virtual to the physical system
     $x=\Pi_Ux=L\,\mathcal{P}(A)x=0$.
 \end{proof}
 
-\begin{theorem}[$G$-injectivity for the trivial representation]%
+\begin{lemma}[$G$-injectivity for the trivial representation]%
     \label{thm:peps_g_injective_trivial}
     \lean{TNLean.PEPS.isGInjective_trivial_iff,
         TNLean.PEPS.siteMap_injective_iff}
@@ -119,7 +119,7 @@ from the virtual to the physical system
     $\mathcal{P}(A)$, that is, linear independence of the physical vectors
     $A^{\bullet}_{\alpha\beta\gamma\delta}$ indexed by the virtual
     configurations.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Every vector is invariant under the trivial representation, and
@@ -133,7 +133,7 @@ $U_g$'s \cite[Section~``MPS: the $G$-injective case'']{Schuch2010PEPS}.
 Throughout, $g\mapsto U_g$ is a representation of a finite group $G$ on a
 finite-dimensional complex space.
 
-\begin{theorem}[Group averaging]%
+\begin{lemma}[Group averaging]%
     \label{thm:peps_group_averaging}
     \lean{Representation.averageMap_linHom_apply,
         Representation.mem_invariants_linHom_iff,
@@ -147,7 +147,7 @@ finite-dimensional complex space.
     $\tr[Y^\dagger\sigma(X)]=\tr[\sigma(Y)^\dagger X]$, so $\sigma$ is the
     orthogonal projector onto these operators for the Hilbert--Schmidt inner
     product \cite[Section~``MPS: the $G$-injective case'']{Schuch2010PEPS}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     The map $\sigma$ is the average of the conjugation action
@@ -177,7 +177,7 @@ finite-dimensional complex space.
     \cite[Section~``MPS: the $G$-injective case'']{Schuch2010PEPS}.
 \end{definition}
 
-\begin{theorem}[Isotypic projectors from characters]%
+\begin{lemma}[Isotypic projectors from characters]%
     \label{thm:peps_isotypic_projectors}
     \lean{Representation.sum_character_inv_smul_eq,
         Representation.exists_isInternal_isAtom,
@@ -199,7 +199,7 @@ finite-dimensional complex space.
         \sum_{i=1}^{r}P_i & =\Id, & \tr[U_kP_i] & =m_i\chi_i(k)
     \end{align*}
     \cite[Section~``MPS: the $G$-injective case'']{Schuch2010PEPS}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     The operator $\sum_g\chi_i(g^{-1})D^j(g)$ commutes with every $D^j(h)$,
@@ -213,7 +213,7 @@ finite-dimensional complex space.
     $\chi_i$. Orthogonality of characters counts these summands as $m_i$.
 \end{proof}
 
-\begin{theorem}[Block form of $\Delta$]%
+\begin{lemma}[Block form of $\Delta$]%
     \label{thm:peps_delta_block_form}
     \lean{Representation.deltaOperator_apply_of_mem}
     \leanok
@@ -226,7 +226,7 @@ finite-dimensional complex space.
         \Id_{d_i}\otimes\Id_{m_i}
     \end{align*}
     \cite[Section~``MPS: the $G$-injective case'']{Schuch2010PEPS}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_isotypic_projectors}
@@ -234,7 +234,7 @@ finite-dimensional complex space.
     subrepresentation, and it acts as the identity.
 \end{proof}
 
-\begin{theorem}[Expansion in the representation]%
+\begin{lemma}[Expansion in the representation]%
     \label{thm:peps_delta_expansion}
     \lean{Representation.trace_comp_deltaOperator,
         Representation.sum_trace_comp_deltaOperator_smul,
@@ -248,7 +248,7 @@ finite-dimensional complex space.
     \end{align*}
     For a unitary representation $U_{h^{-1}}=U_h^\dagger$
     \cite[Section~``MPS: the $G$-injective case'']{Schuch2010PEPS}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_isotypic_projectors}
@@ -273,7 +273,7 @@ finite-dimensional complex space.
     left-regular representation is semi-regular.
 \end{definition}
 
-\begin{theorem}[Semi-regularity under representation equivalence]%
+\begin{lemma}[Semi-regularity under representation equivalence]%
     \label{thm:peps_semiregular_equivalence}
     \lean{Representation.IsSemiRegular.of_equiv,
         Representation.Equiv.isSemiRegular_iff}
@@ -282,7 +282,7 @@ finite-dimensional complex space.
     Equivalent representations $\rho$ and $\sigma$ are semi-regular
     simultaneously. Thus the occurrence condition of
     \cite[Definition~4.5]{Schuch2010PEPS} is independent of coordinates.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     If $e$ intertwines $\rho$ with $\sigma$ and is invertible, every
@@ -291,7 +291,7 @@ finite-dimensional complex space.
     same argument to $e^{-1}$ proves the converse.
 \end{proof}
 
-\begin{theorem}[Linear independence of a semi-regular representation]%
+\begin{lemma}[Linear independence of a semi-regular representation]%
     \label{thm:peps_semiregular_trace}
     \lean{Representation.character_leftRegular,
         Representation.deltaOperator_leftRegular,
@@ -304,7 +304,7 @@ finite-dimensional complex space.
     representation. For the left-regular representation
     $\Delta=\frac{1}{|G|}\Id$
     \cite[Section~``MPS: the $G$-injective case'']{Schuch2010PEPS}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_delta_expansion, thm:peps_isotypic_projectors}
@@ -322,7 +322,7 @@ finite-dimensional complex space.
 
 \input{chapter/ch24_peps_semiregular_group_algebra}
 
-\begin{theorem}[Tensor products of semi-regular representations]%
+\begin{lemma}[Tensor products of semi-regular representations]%
     \label{thm:peps_semiregular_tensor_product}
     \lean{Representation.isIrreducible_of_finrank_eq_one,
         Representation.IsSemiRegular.exists_mem_invariants_ne_zero,
@@ -333,7 +333,7 @@ finite-dimensional complex space.
     If $U$ and $V$ are semi-regular representations of $G$, then so is
     $U\otimes V$
     \cite[Section~``Two dimensions: $G$-injective PEPS'']{Schuch2010PEPS}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     A one-dimensional representation is irreducible, so the semi-regular
@@ -362,7 +362,7 @@ $\mathcal{P}(A)X=\sum_i\tr[A^iX]\ket{i}$
     conjugation action of $U$ on the operators on the bond space.
 \end{definition}
 
-\begin{theorem}[$G$-injective matrix product tensors]%
+\begin{lemma}[$G$-injective matrix product tensors]%
     \label{thm:peps_mps_g_injective_source_form}
     \lean{TNLean.PEPS.mpsSiteMap_comp_linHom,
         TNLean.PEPS.comp_smulRight_dual,
@@ -381,7 +381,7 @@ $\mathcal{P}(A)X=\sum_i\tr[A^iX]\ket{i}$
     For a unitary representation $U_g^{-1}=U_g^\dagger$, and this is the
     source's definition
     \cite[Section~``MPS: the $G$-injective case'']{Schuch2010PEPS}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_group_averaging}
@@ -393,7 +393,7 @@ $\mathcal{P}(A)X=\sum_i\tr[A^iX]\ket{i}$
     is injective on a subspace if and only if it has a left inverse there.
 \end{proof}
 
-\begin{theorem}[Stability under concatenation]%
+\begin{lemma}[Stability under concatenation]%
     \label{thm:peps_mps_g_injective_concatenation}
     \lean{TNLean.PEPS.concatTensor, TNLean.PEPS.concatTensor_apply,
         TNLean.PEPS.concatLeftInverse,
@@ -413,7 +413,7 @@ $\mathcal{P}(A)X=\sum_i\tr[A^iX]\ket{i}$
     \end{align*}
     satisfies $L_C\mathcal{P}(C)=\sigma$
     \cite[Section~``MPS: the $G$-injective case'']{Schuch2010PEPS}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_mps_g_injective_source_form,
@@ -441,7 +441,7 @@ $\mathcal{P}(A)X=\sum_i\tr[A^iX]\ket{i}$
     $\sum_h\tr[U_{h^{-1}}\Delta U_g]U_h=U_g$.
 \end{proof}
 
-\begin{corollary}[Blocking a $G$-injective tensor]%
+\begin{lemma}[Blocking a $G$-injective tensor]%
     \label{cor:peps_mps_g_injective_blocking}
     \lean{TNLean.PEPS.IsGInjective.mpsSiteMap_reindex,
         TNLean.PEPS.wordTensor,
@@ -452,7 +452,7 @@ $\mathcal{P}(A)X=\sum_i\tr[A^iX]\ket{i}$
     \uses{def:peps_mps_g_injective, def:blocked_tensor}
     If $A$ is $G$-injective, then the tensor obtained by blocking $L\ge1$
     sites, $(i_1,\dots,i_L)\mapsto A^{i_1}\cdots A^{i_L}$, is $G$-injective.
-\end{corollary}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_mps_g_injective_concatenation}
@@ -509,7 +509,7 @@ $M$, $N$, $U_g$ sit on a bond.
         =L_B\mathcal{P}(B)Y_k=\sigma(Y_k)$.
 \end{proof}
 
-\begin{theorem}[Intersection property for $G$-injective tensors]%
+\begin{lemma}[Intersection property for $G$-injective tensors]%
     \label{thm:peps_mps_g_injective_intersection}
     \lean{TNLean.PEPS.IsGInjective.intersection_property}
     \leanok
@@ -521,7 +521,7 @@ $M$, $N$, $U_g$ sit on a bond.
         =\Big\{\sum_{ijk}\tr[A^iB^jA^kX]\ket{ijk}\ \Big|\ X\Big\}
     \end{align*}
     \cite[Section~``Parent Hamiltonians'']{Schuch2010PEPS}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{lem:peps_mps_g_injective_twirl,
@@ -541,7 +541,7 @@ $M$, $N$, $U_g$ sit on a bond.
     $\tr[N^iB^jA^k]=\tr[B^jA^k\sigma(N^i)]=\tr[A^iB^jA^kX]$.
 \end{proof}
 
-\begin{theorem}[Closure property for $G$-injective tensors]%
+\begin{lemma}[Closure property for $G$-injective tensors]%
     \label{thm:peps_mps_g_injective_closure}
     \lean{TNLean.PEPS.IsGInjective.eq_sum_of_closure,
         TNLean.PEPS.IsGInjective.closure_property}
@@ -557,7 +557,7 @@ $M$, $N$, $U_g$ sit on a bond.
     A vector in the intersection, given by $M$ and $N$, has
     $\lambda_g=\tr[U_{g^{-1}}\sigma(N)\Delta]$
     \cite[Section~``Parent Hamiltonians'']{Schuch2010PEPS}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{lem:peps_mps_g_injective_twirl,
@@ -609,13 +609,13 @@ $G$-injective for the representation $U$.
     Fixing the last letter $k$ writes the vector as $\tr[A^iB^wM^k]$ and fixing
     the first letter $i$ as $\tr[N^iB^wA^k]$, where $B$ is the tensor of $K$
     blocked sites, which is $G$-injective by
-    Corollary~\ref{cor:peps_mps_g_injective_blocking}. The intersection
+    Lemma~\ref{cor:peps_mps_g_injective_blocking}. The intersection
     property gives the form $\tr[A^iB^wA^kX]$. Iterating along the
     non-wrapping windows of the ring gives the second claim, as in the proof of
     Theorem 3.5 of the source.
 \end{proof}
 
-\begin{theorem}[Parent Hamiltonians of $G$-injective tensors]%
+\begin{lemma}[Parent Hamiltonians of $G$-injective tensors]%
     \label{thm:peps_mps_g_injective_parent_hamiltonian}
     \lean{MPSTensor.groundSpaceMap_mem_span_closure_of_isGInjective,
         MPSTensor.groundSpaceMap_rep_mem_chainGroundSpace,
@@ -632,7 +632,7 @@ $G$-injective for the representation $U$.
     the frustration-free ground space of the parent Hamiltonian is spanned by
     the states $\ket{\mathcal M(A|U_g)}$
     \cite[Theorem~4.11]{Schuch2010PEPS}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Each $U_g$ commutes with every $A^i$, so it can be moved to any bond, and
@@ -677,7 +677,7 @@ $G$-injective for the representation $U$.
     vector of such a subrepresentation gives $\mu_i$ times the vector. For
     semi-regular $U$, the functional $X\mapsto\tr[U_{g^{-1}}X\Delta]$ takes the
     value $\delta_{g,h}$ on $U_h$ by
-    Theorem~\ref{thm:peps_semiregular_trace}; on $\sigma(U_k)$ it is
+    Lemma~\ref{thm:peps_semiregular_trace}; on $\sigma(U_k)$ it is
     $\frac{1}{|G|}$ times the number of $h$ with $hkh^{-1}=g$, which vanishes
     unless $k$ is conjugate to $g$ and is positive for $k=g$.
 \end{proof}
@@ -712,7 +712,7 @@ $G$-injective for the representation $U$.
     give the same state. By Lemma~\ref{lem:peps_twirled_representation} each
     $\ket{\mathcal M(A|U_g)}$ is a combination of the states
     $\ket{\mathcal M(A|P_i)}$, and conversely each $P_i$ is a combination of
-    the $U_g$, so Theorem~\ref{thm:peps_mps_g_injective_parent_hamiltonian}
+    the $U_g$, so Lemma~\ref{thm:peps_mps_g_injective_parent_hamiltonian}
     gives the spanning claims. The tensor of $N$ blocked sites is
     $G$-injective, so $K\mapsto\ket{\mathcal M(A|K)}$ is injective on the
     operators commuting with every $U_g$. These contain the projectors $P_i$
@@ -766,10 +766,10 @@ $\mathcal{P}$ from the virtual to the physical system.
     $(\tau^*(g)\otimes\tau(h))\,\omega$ is
     $\sum_ie_i^*\big(\tau(g^{-1})M\tau(h)e_i\big)$. For $M=\Delta$ this is
     $\tr[U_hU_{g^{-1}}\Delta]=\delta_{g,h}$ by
-    Theorem~\ref{thm:peps_semiregular_trace}.
+    Lemma~\ref{thm:peps_semiregular_trace}.
 \end{proof}
 
-\begin{theorem}[Stability of $G$-injectivity under concatenation]%
+\begin{lemma}[Stability of $G$-injectivity under concatenation]%
     \label{thm:peps_g_injective_concatenation}
     \lean{TNLean.PEPS.linkContraction, TNLean.PEPS.linkContraction_tmul,
         TNLean.PEPS.linkContraction_comp_tprod,
@@ -803,7 +803,7 @@ $\mathcal{P}$ from the virtual to the physical system.
     satisfies $L_C\mathcal{P}(C)=\Pi_{\sigma_A\otimes\sigma_B}$. If in addition
     $\sigma_A$ and $\sigma_B$ are semi-regular, then so is
     $\sigma_A\otimes\sigma_B$ \cite[Lemma~5.2]{Schuch2010PEPS}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Invariance of $A$ gives
@@ -823,12 +823,12 @@ $\mathcal{P}$ from the virtual to the physical system.
         \sigma_A(g)x\otimes\sigma_B(h)y
         =\frac{1}{|G|}\sum_g\sigma_A(g)x\otimes\sigma_B(g)y
     \end{align*}
-    by Lemma~\ref{lem:peps_link_contraction}. Theorem~\ref{thm:peps_g_injective_left_inverse}
+    by Lemma~\ref{lem:peps_link_contraction}. Lemma~\ref{thm:peps_g_injective_left_inverse}
     turns invariance and the left inverse into $G$-injectivity, and
-    Theorem~\ref{thm:peps_semiregular_tensor_product} gives the last claim.
+    Lemma~\ref{thm:peps_semiregular_tensor_product} gives the last claim.
 \end{proof}
 
-\begin{theorem}[Contracting legs of a connected block]%
+\begin{lemma}[Contracting legs of a connected block]%
     \label{thm:peps_g_injective_leg_contraction}
     \lean{TNLean.PEPS.legContraction,
         TNLean.PEPS.legContractionLeftInverse,
@@ -849,14 +849,14 @@ $\mathcal{P}$ from the virtual to the physical system.
     Consequently, if the tensor is $G$-injective and $\tau$ is semi-regular,
     the contracted map is $G$-injective for $\sigma$, with $M=\Delta$, whose
     trace is $1$ \cite[Observation~5.3]{Schuch2010PEPS}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     The group elements attached to the two contracted legs cancel, because
     $\omega$ is invariant under $\tau^*(g)\otimes\tau(g)$. Hence
     $\Pi_{\sigma\otimes\tau^*\otimes\tau}(x\otimes\omega)
         =\frac{1}{|G|}\sum_g\sigma(g)x\otimes\omega$, and pairing $\omega$
-    through $M$ gives $\tr M$. By Theorem~\ref{thm:peps_semiregular_trace}
+    through $M$ gives $\tr M$. By Lemma~\ref{thm:peps_semiregular_trace}
     with $g=h=1$, $\tr\Delta=1$ for semi-regular $\tau$.
 \end{proof}
 
@@ -886,7 +886,7 @@ $\mathcal{P}(A^\dagger)\ket{i}=(A^i)^\dagger$ under the identification above
     \cite{gap:rmp_peps_quantum_double_g_isometry}.
 \end{definition}
 
-\begin{theorem}[$G$-isometric tensors are $G$-injective]%
+\begin{lemma}[$G$-isometric tensors are $G$-injective]%
     \label{thm:peps_mps_g_isometric_injective}
     \lean{TNLean.PEPS.IsGIsometricMPS.isGInjective}
     \leanok
@@ -895,7 +895,7 @@ $\mathcal{P}(A^\dagger)\ket{i}=(A^i)^\dagger$ under the identification above
     A $G$-isometric matrix product tensor is $G$-injective for the left-regular
     representation, with left inverse $c^{-1}\mathcal{P}(A^\dagger)$
     \cite[Definition~6.1]{Schuch2010PEPS}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Invariance of $\mathcal{P}(A)$ under conjugation is equivalent to
@@ -923,12 +923,12 @@ $\mathcal{P}(A^\dagger)\ket{i}=(A^i)^\dagger$ under the identification above
 \end{lemma}
 
 \begin{proof}\leanok
-    By Theorem~\ref{thm:peps_semiregular_trace}, $\Delta=\frac{1}{|G|}\Id$ for
+    By Lemma~\ref{thm:peps_semiregular_trace}, $\Delta=\frac{1}{|G|}\Id$ for
     the left-regular representation, that is, $|G|\,\Delta=\mathbb{1}$.
     Substituting this identity into the two left inverses yields the claims.
 \end{proof}
 
-\begin{theorem}[Stability of isometry under concatenation of matrix product tensors]%
+\begin{lemma}[Stability of isometry under concatenation of matrix product tensors]%
     \label{thm:peps_mps_g_isometric_concatenation}
     \lean{TNLean.PEPS.concatLeftInverse_mpsAdjointSiteMap,
         TNLean.PEPS.IsGIsometricMPS.concatTensor}
@@ -940,22 +940,22 @@ $\mathcal{P}(A^\dagger)\ket{i}=(A^i)^\dagger$ under the identification above
     $\mathcal{P}(B^\dagger)$ is $\mathcal{P}(C^\dagger)$, and
     $\mathcal{P}(C^\dagger)\mathcal{P}(C)=c_Ac_B\,\sigma$. This is the
     one-dimensional case of the source's lemma; the two-dimensional case is
-    Theorem~\ref{thm:peps_g_isometric_link_contraction}
+    Lemma~\ref{thm:peps_g_isometric_link_contraction}
     \cite[Lemma~6.2]{Schuch2010PEPS},
     \cite{gap:rmp_peps_quantum_double_g_isometry}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     By Lemma~\ref{lem:peps_regular_left_inverse} the left inverse built from
     $c_A^{-1}\mathcal{P}(A^\dagger)$ and $c_B^{-1}\mathcal{P}(B^\dagger)$ sends
     $\ket{i,j}$ to $(c_Ac_B)^{-1}(B^j)^\dagger(A^i)^\dagger
         =(c_Ac_B)^{-1}(A^iB^j)^\dagger$, and by
-    Theorem~\ref{thm:peps_mps_g_injective_concatenation} it is a left
+    Lemma~\ref{thm:peps_mps_g_injective_concatenation} it is a left
     inverse of $\mathcal{P}(C)$. Invariance of $C$ holds as for
     $G$-injective tensors.
 \end{proof}
 
-\begin{theorem}[Adjoints and invariant inner products]%
+\begin{lemma}[Adjoints and invariant inner products]%
     \label{thm:peps_isometric_adjoint}
     \lean{TNLean.PEPS.toMatrix_basisCoordinates,
         TNLean.PEPS.basisCoordinates,
@@ -991,7 +991,7 @@ $\mathcal{P}(A^\dagger)\ket{i}=(A^i)^\dagger$ under the identification above
     $T^\dagger T=c\Pi_\rho$. Tensor products and contragredients of unitary
     representations are unitary; in particular this applies to every
     product of regular virtual legs \cite[Section~6]{Schuch2010PEPS}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_group_averaging}
@@ -1004,7 +1004,7 @@ $\mathcal{P}(A^\dagger)\ket{i}=(A^i)^\dagger$ under the identification above
     vectors, on which $\Pi_\rho$ is the identity, recovers the inner-product relation.
 \end{proof}
 
-\begin{theorem}[Regular representations in relative coordinates]%
+\begin{lemma}[Regular representations in relative coordinates]%
     \label{thm:peps_regular_blocking_coordinates}
     \lean{Matrix.permMatrixHom_prodCongr,
         RegularRepresentation.blockingEquiv, RegularRepresentation.blockingEquiv_apply,
@@ -1028,7 +1028,7 @@ $\mathcal{P}(A^\dagger)\ket{i}=(A^i)^\dagger$ under the identification above
     permutation $\ket{a,(b_i)_i}\mapsto\ket{a,(ab_i)_i}$ similarly transforms
     simultaneous left multiplication into left multiplication of $a$
     alone \cite[Section~6, ``Blocking and renormalization'']{Schuch2010PEPS}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     The inverse change of coordinates is $(a,(c_i)_i)\mapsto
@@ -1060,7 +1060,7 @@ where $L$ is the left-regular representation on $\mathbb{C}^{G}$: the
 contragredient of a permutation representation has the same matrices in the
 dual basis.
 
-\begin{theorem}[Stability of isometry under the contraction of one link]%
+\begin{lemma}[Stability of isometry under the contraction of one link]%
     \label{thm:peps_g_isometric_link_contraction}
     \lean{TNLean.PEPS.leftRegularFun, TNLean.PEPS.leftRegularFun_apply,
         TNLean.PEPS.coeff_leftRegular, TNLean.PEPS.toMatrix'_leftRegularFun,
@@ -1130,7 +1130,7 @@ dual basis.
             \tnwire{B.270}{open s}
         \end{tenkz}
     \end{center}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_g_injective_concatenation, thm:peps_isometric_adjoint,
@@ -1155,13 +1155,13 @@ dual basis.
     $\mathcal{P}(C)^{\dagger}_{(a,b),(k,l)}
         =\sum_{g}\mathcal{P}(A)^{\dagger}_{(a,g),k}\mathcal{P}(B)^{\dagger}_{(g,b),l}$,
     so $\mathcal{P}(C)^{\dagger}$ is the contraction of the adjoints. Invariance of $C$ holds because the actions on the contracted
-    link cancel, as in Theorem~\ref{thm:peps_g_injective_concatenation}.
-    Equivalently, Theorem~\ref{thm:peps_isometric_adjoint} gives the
+    link cancel, as in Lemma~\ref{thm:peps_g_injective_concatenation}.
+    Equivalently, Lemma~\ref{thm:peps_isometric_adjoint} gives the
     left inverses $c_A^{-1}\mathcal P(A)^\dagger$ and
     $c_B^{-1}\mathcal P(B)^\dagger$.
     Lemma~\ref{lem:peps_regular_left_inverse} identifies their
     contraction with $(c_Ac_B)^{-1}\mathcal P(C)^\dagger$, and
-    Theorem~\ref{thm:peps_g_injective_concatenation} gives its
+    Lemma~\ref{thm:peps_g_injective_concatenation} gives its
     left-inverse equation.
 \end{proof}
 
@@ -1171,7 +1171,7 @@ unitary. Its standing convention is that the physical system of a site is the
 range of $\mathcal{P}(A)$, which can always be arranged by a local isometry
 \cite[Sections~``MPS and PEPS'' and ``Isometric PEPS'']{Schuch2010PEPS}.
 
-\begin{theorem}[Virtual unitaries implementable on the physical level]%
+\begin{lemma}[Virtual unitaries implementable on the physical level]%
     \label{thm:peps_g_isometric_virtual_unitaries}
     \lean{TNLean.PEPS.mem_unitaryGroup_of_dotProduct,
         TNLean.PEPS.IsGInjective.leftInverse_mem_invariants_of_surjective,
@@ -1187,7 +1187,7 @@ range of $\mathcal{P}(A)$, which can always be arranged by a local isometry
     $VU_g=U_gV=V$ for every $g$, preserves the inner products of invariant
     vectors, and $\mathcal{P}(A)V=W\mathcal{P}(A)$
     \cite[Lemma~6.3]{Schuch2010PEPS}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Let $L$ be a left inverse with $L\mathcal{P}(A)=\Pi_U$. Since
@@ -1227,7 +1227,7 @@ boundary matrices, where $A^{\sigma}=A^{\sigma_{1}}\cdots A^{\sigma_{n}}$.
     the operator of \cite[Lemma~6.11]{Schuch2010PEPS}.
 \end{definition}
 
-\begin{theorem}[A multiple of the projector onto the local space]%
+\begin{lemma}[A multiple of the projector onto the local space]%
     \label{thm:peps_ground_space_frame_projector}
     \lean{MPSTensor.groundSpaceFrame_isHermitian,
         MPSTensor.isIdempotentElem_smul_groundSpaceFrame,
@@ -1240,7 +1240,7 @@ boundary matrices, where $A^{\sigma}=A^{\sigma_{1}}\cdots A^{\sigma_{n}}$.
     $c^{-1}P_{n}$ is idempotent with range $\mathcal{S}_{n}$, so it is the
     orthogonal projector onto $\mathcal{S}_{n}$ and the parent interaction is
     $h=\mathbb{1}-c^{-1}P_{n}$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     The entries satisfy
@@ -1264,7 +1264,7 @@ boundary matrices, where $A^{\sigma}=A^{\sigma_{1}}\cdots A^{\sigma_{n}}$.
     Hamiltonian of $A$ is that of these matrices.
 \end{definition}
 
-\begin{theorem}[The local terms for $G$-isometric matrix product states]%
+\begin{lemma}[The local terms for $G$-isometric matrix product states]%
     \label{thm:peps_mps_g_isometric_local_terms}
     \lean{TNLean.PEPS.sum_trace_concatTensor_mul_trace_regularAdjoint,
         TNLean.PEPS.IsGIsometricMPS.groundSpaceMap_comp_regularMPSTensor,
@@ -1282,19 +1282,19 @@ boundary matrices, where $A^{\sigma}=A^{\sigma_{1}}\cdots A^{\sigma_{n}}$.
     so $P_{2}$ is $\mathbb{1}-h$ up to the constant
     \cite[Lemma~6.11]{Schuch2010PEPS},
     \cite{gap:scp10_g_isometric_commuting_parent_hamiltonian}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
-    By Theorem~\ref{thm:peps_mps_g_isometric_concatenation} the two-site tensor
+    By Lemma~\ref{thm:peps_mps_g_isometric_concatenation} the two-site tensor
     $C^{ab}=A^{a}A^{b}$ is $G$-isometric with some constant $c$, so
     $\mathcal{P}(C^{\dagger})\mathcal{P}(C)=c\,\sigma$. Since $\mathcal{P}(C)$
     is invariant, $\mathcal{P}(C)\sigma=\mathcal{P}(C)$, and
     $\Gamma_{2}\Gamma_{2}^{\dagger}\Gamma_{2}=\mathcal{P}(C)\mathcal{P}(C^{\dagger})
-        \mathcal{P}(C)=c\,\Gamma_{2}$. Theorem~\ref{thm:peps_ground_space_frame_projector}
+        \mathcal{P}(C)=c\,\Gamma_{2}$. Lemma~\ref{thm:peps_ground_space_frame_projector}
     applies.
 \end{proof}
 
-\begin{theorem}[Commuting parent Hamiltonians for $G$-isometric matrix product states]%
+\begin{lemma}[Commuting parent Hamiltonians for $G$-isometric matrix product states]%
     \label{thm:peps_mps_g_isometric_commuting}
     \lean{TNLean.PEPS.regularAdjoint_leftRegular,
         TNLean.PEPS.commute_leftRegular_regularAdjoint,
@@ -1319,11 +1319,11 @@ boundary matrices, where $A^{\sigma}=A^{\sigma_{1}}\cdots A^{\sigma_{n}}$.
     every ring of $N\geq 3$ sites the two-site terms of the parent Hamiltonian
     commute. The source states this theorem for PEPS and writes its proof for
     matrix product states. The general finite-simple-graph PEPS result is
-    proved in Theorem~\ref{thm:peps_isometric_regional_parents_commute};
+    proved in Lemma~\ref{thm:peps_isometric_regional_parents_commute};
     this matrix product statement does not cover rings of two sites
     \cite[Theorem~6.12]{Schuch2010PEPS},
     \cite{gap:scp10_g_isometric_commuting_parent_hamiltonian}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Let $\mathcal{P}(A^{\dagger})\mathcal{P}(A)=c\,\sigma$. For an operator $N$
@@ -1346,7 +1346,7 @@ boundary matrices, where $A^{\sigma}=A^{\sigma_{1}}\cdots A^{\sigma_{n}}$.
     in the same way. The sum over $g$ in the twirl drops out because $N$
     commutes with every $L_{g}$, which is the step in which the source moves the
     group action from one bond to the other. By
-    Theorem~\ref{thm:peps_mps_g_isometric_local_terms} the local terms are
+    Lemma~\ref{thm:peps_mps_g_isometric_local_terms} the local terms are
     $\mathbb{1}-c_{2}^{-1}P_{2}$, so the two translated terms on three sites
     commute; this commutation extends by translation to every three consecutive sites of a
     ring of $N\geq 3$ sites, and terms with disjoint supports commute.
@@ -1416,7 +1416,7 @@ operators.
     Expand $(P_w O_e Q_u)_{i,j}=\sum_{k,m}(P_w)_{i,k}(O_e)_{k,m}(Q_u)_{m,j}$ in (\ref{eq:peps_torus_bond_network}), exchange the summation order of $(i,j)$ and $(k,m)$, and reindex $P_{v+(1,0)}$ and $Q_{v+(0,1)}$ by unit torus shifts.
 \end{proof}
 
-\begin{theorem}[Deformation of a string of $U_g$'s]%
+\begin{lemma}[Deformation of a string of $U_g$'s]%
     \label{thm:peps_torus_operator_string_deformation}
     \lean{TNLean.PEPS.vecMul_torusLegMatrix_of_comp_eq,
         TNLean.PEPS.torusWestSouthOperatorString,
@@ -1431,7 +1431,7 @@ operators.
         \label{eq:peps_torus_string_deformation}
     \end{align}
     \cite[Section~``Two dimensions: $G$-injective PEPS'', eq.~(2d:move-strings) and Lemma~``Deformations of the string'']{Schuch2010PEPS}. Only $U_g$-invariance is used (not completeness of irreducible sectors).
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Set $\Phi_v=g^{-1}$ for $v\in R$ and $\Phi_v=1$ for $v\notin R$, and apply Lemma~\ref{lem:peps_torus_bond_network_gauge} to $O^{\mathrm{NE}}$ with $P_v=U_{\Phi_v}$ and $Q_v=U_{\Phi_v}^{-1}$. On bonds with both endpoints in $R$ or both outside $R$, $P_w I Q_u=I$. On north/east crossing bonds, $U_g^{-1}U_g=I$ cancels $O^{\mathrm{NE}}$; on west/south crossing bonds, $P_w I Q_u$ produces $U_g^{-1}$ (vertical) and $U_g$ (horizontal), yielding $O^{\mathrm{WS}}$. Finally $\widetilde a_v=a_v$ by $U_{\Phi_v}$-invariance.
@@ -1457,7 +1457,7 @@ operators.
     \cite[Section~6, proof of Theorem~6.9]{Schuch2010PEPS}.
 \end{definition}
 
-\begin{theorem}[Exact contraction across a physical cut]%
+\begin{lemma}[Exact contraction across a physical cut]%
     \label{thm:peps_open_region_cut}
     \lean{TNLean.PEPS.regionBlockedWeight_eq_exterior_mul_openRegionWeight,
         TNLean.PEPS.regionExteriorMultiplicity_eq_prod,
@@ -1483,7 +1483,7 @@ operators.
     This is an exact finite-region contraction identity. Identifying
     its cut maps with isometries on the regular invariant boundary
     remains a separate step in \cite[Theorem~6.9]{Schuch2010PEPS}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Splitting each edge assignment into its incident and exterior parts separates
     the exterior labels, which do not occur in any tensor of $R$ and therefore sum
@@ -1512,7 +1512,7 @@ operators.
     PEPS coefficients on these two systems.
 \end{definition}
 
-\begin{theorem}[Boundary symmetry and projector insertion at the cut]%
+\begin{lemma}[Boundary symmetry and projector insertion at the cut]%
     \label{thm:peps_regular_open_region_projector}
     \lean{TNLean.PEPS.regularLabelTranslation_apply,
         TNLean.PEPS.regionIncidentBoundaryLabel_translation,
@@ -1543,7 +1543,7 @@ operators.
     with evaluation on the virtual boundary state, up to the scalar
     $\sqrt r$ in (\ref{eq:peps_open_region_projector_cut}). It does not assert isometry of $A,B$ or normalization of
     the physical vector.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_open_region_cut}
     Translating every incident-edge assignment by the same group element
@@ -1554,7 +1554,7 @@ operators.
     $C=P/\sqrt r$ yields the remaining formulas.
 \end{proof}
 
-\begin{theorem}[Independent finite choices]%
+\begin{lemma}[Independent finite choices]%
     \label{thm:peps_finite_indicator_sum}
     \lean{Fintype.prod_sum_boole}
     \leanok
@@ -1567,7 +1567,7 @@ operators.
     \end{align}
     Thus multiplying the separate numbers of admissible choices counts
     the admissible simultaneous choices.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Distributing the finite product over the finite sums reduces each summand to a product of
@@ -1608,7 +1608,7 @@ operators.
     the boundary condition.
 \end{definition}
 
-\begin{theorem}[Accessibility of a regular region]%
+\begin{lemma}[Accessibility of a regular region]%
     \label{thm:peps_regular_open_region_accessibility}
     \lean{TNLean.PEPS.IsGInjective.exists_regularProjectorCoefficients,
         TNLean.PEPS.IsGIsometric.exists_regularProjectorCoefficients,
@@ -1640,7 +1640,7 @@ operators.
     These assertions concern the contracted columns and
     do not require the physical maps to be inverse on unused
     coordinates. No region Gram identity is assumed.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_regular_site_gram, thm:peps_region_physical_maps}
@@ -1655,7 +1655,7 @@ operators.
     the translation formula~(\ref{eq:peps_projector_region}).
 \end{proof}
 
-\begin{theorem}[Physical maps commute with the open-region contraction]%
+\begin{lemma}[Physical maps commute with the open-region contraction]%
     \label{thm:peps_region_physical_maps}
     \lean{TNLean.PEPS.regionPhysicalProductMatrix_mul,
         TNLean.PEPS.regionPhysicalProductMatrix,
@@ -1686,7 +1686,7 @@ operators.
         \sum_{\eta:\eta|_{\partial R}=\mu}
         \prod_{v\in R}\sum_s F_v(\tau_v,s)A_v(s,\eta|_v).
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Expanding the matrix products and interchanging the finite sums over physical
     and virtual labels factors the sum over independent physical labels at
@@ -1721,7 +1721,7 @@ operators.
     $\sum_s\overline{a_v(\eta;s)}a_v(\theta;s)$.
 \end{definition}
 
-\begin{theorem}[Gram formula at an isometric regular site]%
+\begin{lemma}[Gram formula at an isometric regular site]%
     \label{thm:peps_regular_site_gram}
     \lean{TNLean.PEPS.IsGIsometric.exists_regularSiteGram,
         TNLean.PEPS.IsGInjective.regularSiteMap_translation}
@@ -1739,7 +1739,7 @@ operators.
     This is the group-basis form of
     \cite[Definition~6.1]{Schuch2010PEPS}, with the positive scalar
     convention of \cite{gap:rmp_peps_quantum_double_g_isometry}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The defining adjoint identity is $A_v^\dagger A_v=c_vP_v$.
     Evaluating both sides in the group basis gives
@@ -1747,7 +1747,7 @@ operators.
     The identity $A_vU_g=A_v$ gives coefficient invariance.
 \end{proof}
 
-\begin{theorem}[Expansion of the Gram matrix of a region]%
+\begin{lemma}[Expansion of the Gram matrix of a region]%
     \label{thm:peps_open_region_gram_expansion}
     \lean{TNLean.PEPS.sum_star_regionIncidentWeight_mul,
         TNLean.PEPS.openRegionCoefficientMatrix_gram_apply,
@@ -1765,14 +1765,14 @@ operators.
         \overline{a_v(\eta|_{E_v};s)}a_v(\theta|_{E_v};s).
     \end{align}
     This identity requires no isometry assumption.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Expanding both copies of the region tensor, interchanging the finite
     sums, and distributing the independent physical sums over the
     vertices turns each factor into the corresponding site Gram kernel.
 \end{proof}
 
-\begin{theorem}[Synchronization of group labels in a connected region]%
+\begin{lemma}[Synchronization of group labels in a connected region]%
     \label{thm:peps_region_group_synchronization}
     \lean{TNLean.PEPS.regionLabels_eq_of_internalEdge_eq,
         TNLean.PEPS.regionLabels_constant_iff_internalEdge_eq,
@@ -1789,7 +1789,7 @@ operators.
     $q_v=g$ at every vertex and $\eta=g\theta$, for one $g\in G$.
     Thus the sum over compatible vertex translations reduces to
     the sum over simultaneous translations.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     For an internal edge with endpoints $u,v$, the two equations give
     $q_u\theta_e=q_v\theta_e$, hence $q_u=q_v$.
@@ -1798,7 +1798,7 @@ operators.
     Nonemptiness makes the assignment $g\mapsto(q_v=g)$ injective.
 \end{proof}
 
-\begin{theorem}[Counting free internal regular bonds]%
+\begin{lemma}[Counting free internal regular bonds]%
     \label{thm:peps_region_internal_bond_count}
     \lean{TNLean.PEPS.sum_boundaryRestriction_eq_card,
         TNLean.PEPS.sum_translated_boundaryRestriction_eq_card,
@@ -1812,7 +1812,7 @@ operators.
     $\eta=g\theta$ and these prescribed boundary values number
     $|G|^{I_R}$ if $\mu=g\nu$, and zero otherwise, where $I_R$ is
     the number of edges with both endpoints in $R$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The second configuration has one free label on each internal
     edge, and fixes the first configuration by translation.
@@ -1820,7 +1820,7 @@ operators.
     in $R$, which identifies these free indices with the internal bonds.
 \end{proof}
 
-\begin{theorem}[Gram operator of a connected regular region]%
+\begin{lemma}[Gram operator of a connected regular region]%
     \label{thm:peps_connected_regular_region_gram}
     \lean{TNLean.PEPS.prod_regularSiteGram_eq_sum_compatible,
         TNLean.PEPS.sum_regularBoundary_translation_eq_card_mul_projector,
@@ -1842,7 +1842,7 @@ operators.
     dividing by $\sqrt{\kappa_R}$, also when the region contains cycles.
     This is the untwisted connected-region contraction underlying
     \cite[Lemma~6.2 and proof of Theorem~6.9]{Schuch2010PEPS}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_regular_site_gram}
     Expanding the Gram matrix into local pairings contributes
@@ -1852,7 +1852,7 @@ operators.
     translation sum is $|G|P_{\partial R}$.
 \end{proof}
 
-\begin{theorem}[Physical implementation of a supported canonical unitary]%
+\begin{lemma}[Physical implementation of a supported canonical unitary]%
     \label{thm:peps_regular_physical_unitary_transport}
     \lean{TNLean.PEPS.exists_positive_regionPhysicalProductMatrix_gram,
         TNLean.PEPS.exists_unitary_regionPhysicalProductMatrix_mul_of_projector_commute}
@@ -1872,7 +1872,7 @@ operators.
     No surjectivity of the site maps is required. This auxiliary
     form of physical accessibility extends the operation to any unused
     physical directions; compare \cite[Lemma~6.3 and \S6.2]{Schuch2010PEPS}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_regular_site_gram}
     Local isometry gives $A_v^\dagger A_v=c_vP_v$, with $c_v>0$.
@@ -1950,7 +1950,7 @@ operators.
     the same formulas recover $y$, $a$, and $z$.
 \end{proof}
 
-\begin{theorem}[Canonical regular block in spanning-tree coordinates]%
+\begin{lemma}[Canonical regular block in spanning-tree coordinates]%
     \label{thm:peps_regular_region_projector_coordinates}
     \lean{TNLean.PEPS.regularRegionCoordinates_rootLabels_of_tree_compatibility,
         TNLean.PEPS.regularProjectorOpenRegionMatrix_coordinates,
@@ -1976,7 +1976,7 @@ operators.
     and (\ref{eq:peps_region_projector_coordinates}) factors as
     $\gamma P_{\partial R}(y,\theta)\phi(a,r,z)$, where
     $\gamma=|G|^{1-|R|}\sqrt N>0$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_regular_open_region_projector}
     Expanding the original internal-bond contraction into a sum over bond
@@ -1996,7 +1996,7 @@ operators.
     $N^{-1/2}$, proving the stated normalization.
 \end{proof}
 
-\begin{theorem}[Isometry of a connected regular block]%
+\begin{lemma}[Isometry of a connected regular block]%
     \label{thm:peps_connected_regular_region_isometry}
     \lean{TNLean.PEPS.regularOpenRegionMatrix_invariant,
         TNLean.PEPS.isGIsometric_regularOpenRegionMatrix_of_connected}
@@ -2015,7 +2015,7 @@ operators.
     finite-region form of the stability and blocking argument in
     \cite[Lemma~6.2 and \S6.2]{Schuch2010PEPS}, with the positive-factor
     convention recorded in \cite{gap:rmp_peps_quantum_double_g_isometry}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_regular_open_region_projector}
     Translating all virtual labels in the contraction proves boundary
@@ -2026,7 +2026,7 @@ operators.
     identity there.
 \end{proof}
 
-\begin{theorem}[Removing bond operators on a spanning tree]%
+\begin{lemma}[Removing bond operators on a spanning tree]%
     \label{thm:peps_regular_region_tree_gauge}
     \lean{TNLean.PEPS.regularRegionTreeGauge_root,
         TNLean.PEPS.regularRegionTreeGauge,
@@ -2076,7 +2076,7 @@ operators.
         =K_v^{-1}D_u(\eta)_{v,e}$.
     These are group-coordinate identities associated with the reversible
     regular blocking operations in \cite[\S6.2--6.3]{Schuch2010PEPS}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{def:peps_regular_region_coordinates,
         def:peps_regular_twisted_region}
@@ -2093,7 +2093,7 @@ operators.
     at a tail endpoint both expressions are $K_s^{-1}\eta_{s,e}$.
 \end{proof}
 
-\begin{theorem}[Integer fibers and affine lifts of the additive circle]%
+\begin{lemma}[Integer fibers and affine lifts of the additive circle]%
     \label{thm:peps_additive_circle_lift_coordinates}
     \lean{TNLean.PEPS.exists_intCast_eq_of_addCircle_eq_zmod_val,
         TNLean.PEPS.eq_affine_of_addCircle_eq}
@@ -2110,7 +2110,7 @@ operators.
     These are auxiliary
     arithmetic and covering-space identities used for the cell and
     edge paths of the block domains in \cite[\S6.3]{Schuch2010PEPS}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The first equality means that $x-\bar z$ is an integer multiple
     of $n$, so $x$ is an integer with the stated residue. In the
@@ -2119,14 +2119,14 @@ operators.
     interval makes them equal.
 \end{proof}
 
-\begin{theorem}[Finite compact cell images]%
+\begin{lemma}[Finite compact cell images]%
     \label{thm:peps_finite_compact_cell_images}
     \lean{TNLean.PEPS.locallyPathConnectedSpace_iUnion_range}
     \leanok
     Let $K$ be compact and locally path connected, let $Y$ be Hausdorff,
     and let $f_i:K\to Y$ be a finite family of continuous maps. Then
     $\bigcup_i f_i(K)$ is locally path connected.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The finite disjoint union of copies of $K$ is compact and locally
     path connected. Its natural continuous surjection onto the stated
@@ -2134,7 +2134,7 @@ operators.
     passes through this quotient map.
 \end{proof}
 
-\begin{theorem}[Closed-cell regions and geometric coordinate lifts]%
+\begin{lemma}[Closed-cell regions and geometric coordinate lifts]%
     \label{thm:peps_torus_region_realization}
     \lean{TNLean.PEPS.torusRealProjection_apply,
         TNLean.PEPS.torusRealProjection,
@@ -2190,7 +2190,7 @@ operators.
     or entropy conclusion is introduced. Its relation to arbitrary
     disk regions in Theorem~6.9 remains recorded in
     \cite{gap:rmp_peps_quantum_double_g_isometry}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_additive_circle_lift_coordinates, thm:peps_finite_compact_cell_images}
     The quotient projection is continuous, so each projected closed
@@ -2209,7 +2209,7 @@ operators.
     thus satisfy the exact integer unit-step equations.
 \end{proof}
 
-\begin{theorem}[The planar lift of the closed-cell region]%
+\begin{lemma}[The planar lift of the closed-cell region]%
     \label{thm:peps_torus_region_planar_lift}
     \lean{TNLean.PEPS.continuousLift_torusClosedUnitCell,
         TNLean.PEPS.continuousLift_torusRegionRealization_isClosedEmbedding,
@@ -2239,7 +2239,7 @@ operators.
     supporting the block domains of \cite[\S6.3]{Schuch2010PEPS}.
     The homeomorphism transfers simple connectedness to the planar
     union, which is the domain of the exterior contour argument below.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_additive_circle_lift_coordinates}
     The radial segment from $p_v$ to $p_v+\pi(d)$ stays in the same
@@ -2254,7 +2254,7 @@ operators.
     closed embedding, giving the stated homeomorphism.
 \end{proof}
 
-\begin{theorem}[Separation of distinct period copies of a lifted region]%
+\begin{lemma}[Separation of distinct period copies of a lifted region]%
     \label{thm:peps_torus_region_period_separation}
     \lean{TNLean.PEPS.torusRealProjection_periodVector,
         TNLean.PEPS.torusPeriodVector,
@@ -2290,7 +2290,7 @@ operators.
     This is an auxiliary geometric statement for the block domains of
     \cite[\S6.3]{Schuch2010PEPS}. The exterior path-existence argument
     remains separate; see \cite{gap:rmp_peps_quantum_double_g_isometry}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The additive-circle fibers are integer multiples of the two periods.
     Comparing a point with the lift of its projection gives the stated
@@ -2299,7 +2299,7 @@ operators.
     because the lift is a section of the projection. Subtracting
     $F(p)$ then gives $\delta_j=0$. Positivity of both periods
     forces $j=0$, a contradiction. The exact image description in
-    Theorem~\ref{thm:peps_torus_region_planar_lift} gives the statement
+    Lemma~\ref{thm:peps_torus_region_planar_lift} gives the statement
     for $P_L$, and restricting to individual cells gives the last
     separation assertion. Simple connectedness yields the continuous
     lift and hence the required integer coordinates.
@@ -2318,7 +2318,7 @@ operators.
 % sides then gives a complement loop with the winding of the combined
 % boundary route, whose holonomy is m_f m_{f_0}^{-1}.
 
-\begin{theorem}[No finite holes in simply connected closed-cell regions]%
+\begin{lemma}[No finite holes in simply connected closed-cell regions]%
     \label{thm:peps_integer_cell_no_holes}
     \lean{TNLean.PEPS.sum_integerGrid_curl_eq_boundary,
         TNLean.PEPS.integerClosedCellUnion,
@@ -2339,11 +2339,11 @@ operators.
         \sum_{a\in K}\bigl(H_a+V_{a+(1,0)}-H_{a+(0,1)}-V_a\bigr)
         \label{eq:peps_integer_grid_curl}
     \end{align}
-    equals the signed sum over the exposed boundary edges of $K$. If $P_A$ is simply connected, no finite $K\subset\mathbb Z^2$ with $K\setminus A\ne\varnothing$ satisfies $a+\{\pm e_1,\pm e_2\}\subset K\cup A$ for all $a\in K$; hence every $\ell^1$-connected component of $\mathbb Z^2\setminus A$ is infinite. Consequently, if $X_R$ is simply connected and $o\in R$, there exists a unit-step integer lift $L:R\to\mathbb Z^2$ (Theorem~\ref{thm:peps_torus_region_planar_lift}) such that every missing-cell component of $P_L=P_{L(R)}$ is infinite (an auxiliary no-hole step for \cite[Theorem~6.9]{Schuch2010PEPS}).
-\end{theorem}
+    equals the signed sum over the exposed boundary edges of $K$. If $P_A$ is simply connected, no finite $K\subset\mathbb Z^2$ with $K\setminus A\ne\varnothing$ satisfies $a+\{\pm e_1,\pm e_2\}\subset K\cup A$ for all $a\in K$; hence every $\ell^1$-connected component of $\mathbb Z^2\setminus A$ is infinite. Consequently, if $X_R$ is simply connected and $o\in R$, there exists a unit-step integer lift $L:R\to\mathbb Z^2$ (Lemma~\ref{thm:peps_torus_region_planar_lift}) such that every missing-cell component of $P_L=P_{L(R)}$ is infinite (an auxiliary no-hole step for \cite[Theorem~6.9]{Schuch2010PEPS}).
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_finite_compact_cell_images}
-    Local path connectedness follows from Theorem~\ref{thm:peps_finite_compact_cell_images}. Suppose a finite $K\subset\mathbb Z^2$ satisfies $a+\{\pm e_1,\pm e_2\}\subset K\cup A$ for all $a\in K$ and contains $0\notin A$. Simple connectedness of $P_A$ yields a continuous angular lift $\theta:P_A\to\mathbb R$; subtracting $\theta/(2\pi)$ from the principal argument defines a corner potential whose horizontal increments vanish and whose vertical increment equals $\mathbf 1_{\{\text{edge crosses }(-\infty,0)\times\{0\}\}}$. Along $\partial K\subset P_A$, (\ref{eq:peps_integer_grid_curl}) vanishes by interior cancellation yet equals $-1$ from the branch cut, a contradiction. Theorem~\ref{thm:peps_torus_region_planar_lift} transfers this to $X_R\cong P_L$.
+    Local path connectedness follows from Lemma~\ref{thm:peps_finite_compact_cell_images}. Suppose a finite $K\subset\mathbb Z^2$ satisfies $a+\{\pm e_1,\pm e_2\}\subset K\cup A$ for all $a\in K$ and contains $0\notin A$. Simple connectedness of $P_A$ yields a continuous angular lift $\theta:P_A\to\mathbb R$; subtracting $\theta/(2\pi)$ from the principal argument defines a corner potential whose horizontal increments vanish and whose vertical increment equals $\mathbf 1_{\{\text{edge crosses }(-\infty,0)\times\{0\}\}}$. Along $\partial K\subset P_A$, (\ref{eq:peps_integer_grid_curl}) vanishes by interior cancellation yet equals $-1$ from the branch cut, a contradiction. Lemma~\ref{thm:peps_torus_region_planar_lift} transfers this to $X_R\cong P_L$.
 \end{proof}
 
 \begin{definition}[Safe graph of an exterior integer-cell collar]%
@@ -2370,7 +2370,7 @@ operators.
     than its endpoints alone.
 \end{definition}
 
-\begin{theorem}[Integer centers of the exterior collar]%
+\begin{lemma}[Integer centers of the exterior collar]%
     \label{thm:peps_integer_exterior_collar_centers}
     \lean{TNLean.PEPS.mem_integerClosedCell_iff,
         TNLean.PEPS.mem_integerClosedCell_add_of_abs_le_one,
@@ -2382,7 +2382,7 @@ operators.
     coordinate distances from $a$ are at most $1/2$. An integer center
     belongs to $P_A$ exactly when it belongs to $A$, and belongs to
     $E_A$ exactly when it belongs to the exterior band.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     A distinct integer center cannot be within $1/2$ in both coordinates.
     In the expanded cells the coordinate distances are at most $5/4$;
@@ -2391,7 +2391,7 @@ operators.
     and an offset of at most $1/2$ within the collar square.
 \end{proof}
 
-\begin{theorem}[Continuous collar paths from safe exterior walks]%
+\begin{lemma}[Continuous collar paths from safe exterior walks]%
     \label{thm:peps_integer_exterior_collar_paths}
     \lean{TNLean.PEPS.integerExteriorCollarGraph_segment_subset,
         TNLean.PEPS.joinedIn_integerExteriorCollar_of_reachable}
@@ -2403,7 +2403,7 @@ operators.
     This is an auxiliary geometric assertion for
     \cite[proof of Theorem~6.9]{Schuch2010PEPS}. The contour theorem below derives connectivity of the safe graph
     from simple connectedness of the occupied closed-cell union.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_integer_exterior_collar_centers}
     Both endpoint centers lie within coordinate distance one of their
@@ -2431,7 +2431,7 @@ operators.
     The sum is finite because $V$ is finitely supported.
 \end{definition}
 
-\begin{theorem}[Discrete gradients of the contour ray potential]%
+\begin{lemma}[Discrete gradients of the contour ray potential]%
     \label{thm:peps_integer_contour_ray_potential}
     \lean{TNLean.PEPS.integerContourRayPotential_east,
         TNLean.PEPS.integerContourRayPotential_north}
@@ -2452,7 +2452,7 @@ operators.
     argument associated with \cite[proof of Theorem~6.9]{Schuch2010PEPS}.
     Identification of the flow with an exposed contour and
     connectivity of that contour are separate geometric assertions.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Moving the ray one cell east removes exactly the vertical edge
     indexed by $q+e$. Conservation writes the difference between the
@@ -2463,7 +2463,7 @@ operators.
     horizontal difference to the single term $H(q+n)$.
 \end{proof}
 
-\begin{theorem}[Connected missing-cell lattice of a simply connected region]%
+\begin{lemma}[Connected missing-cell lattice of a simply connected region]%
     \label{thm:peps_integer_cell_exterior_connected}
     \lean{TNLean.PEPS.integerCellComplement_connected_of_isSimplyConnected,
         TNLean.PEPS.exists_integerLift_integerCellComplement_connected_of_isSimplyConnected}
@@ -2480,7 +2480,7 @@ operators.
     to avoid all period copies of the region. The following contour theorem restricts the walks to the genuine
     exterior collar, as required in
     \cite[proof of Theorem~6.9]{Schuch2010PEPS}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Enclosing $A$ in a finite integer box allows all vertices outside that box
     to be connected to one exterior corner by integer row and column
@@ -2494,7 +2494,7 @@ operators.
 
 \input{chapter/ch24_peps_integer_boundary_contour}
 
-\begin{theorem}[Exclusion of foreign period copies from an exterior collar]%
+\begin{lemma}[Exclusion of foreign period copies from an exterior collar]%
     \label{thm:peps_torus_region_exterior_collar}
     \lean{TNLean.PEPS.disjoint_torusRegionPlanarRealization_add_collar_periodTranslate,
         TNLean.PEPS.torusRealProjection_not_mem_of_mem_planarExteriorCollar,
@@ -2520,7 +2520,7 @@ operators.
     This is auxiliary exterior geometry for
     \cite[proof of Theorem~6.9]{Schuch2010PEPS}. Collar paths between exterior integer centers follow from the
     connected safe exterior graph established above.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Disjoint closed unit squares with integer centers differ by at
     least two in some coordinate; otherwise their midpoint belongs
@@ -2536,7 +2536,7 @@ operators.
 
 \input{chapter/ch24_peps_torus_integer_cell_lift}
 
-\begin{theorem}[Crossing numbers of projected integer steps]%
+\begin{lemma}[Crossing numbers of projected integer steps]%
     \label{thm:peps_torus_integer_unit_step_winding}
     \lean{TNLean.PEPS.torusDirectedWinding_eq_of_integerUnitStep,
         TNLean.PEPS.torusIntegerDeckCoordinate}
@@ -2552,14 +2552,14 @@ operators.
     If $a,b$ differ by one horizontal or vertical unit step, then the
     oriented crossing pair of their projected native edge is $D(b)-D(a)$.
     This applies to interior, boundary, and exterior steps alike.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     In a positive horizontal step, Euclidean division changes precisely
     when the standard residue crosses the horizontal seam. The vertical
     case is identical. Reversing a step negates its crossing pair.
 \end{proof}
 
-\begin{theorem}[Lifted exterior endpoints of a region route]%
+\begin{lemma}[Lifted exterior endpoints of a region route]%
     \label{thm:peps_torus_region_boundary_lift}
     \lean{TNLean.PEPS.torusVertexPoint_mem_torusRegionRealization_iff,
         TNLean.PEPS.exists_exterior_integerUnitStep_of_isTorusRegionIntegerLift,
@@ -2587,7 +2587,7 @@ operators.
     Concatenation is written in traversal order. This gives the
     endpoints and winding pair required in the complement argument of
     \cite[proof of Theorem~6.9]{Schuch2010PEPS}; the connected safe exterior graph gives a collar path between them.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_region_walk_winding}
     A site center in a closed cell differs from its integer center,
@@ -2602,7 +2602,7 @@ operators.
     two boundary crossings cancels the interior endpoint coordinates.
 \end{proof}
 
-\begin{theorem}[Exterior lattice walks from a given plane path]%
+\begin{lemma}[Exterior lattice walks from a given plane path]%
     \label{thm:peps_torus_exterior_path_approximation}
     \lean{TNLean.PEPS.exists_complementWalk_of_exterior_planePath}
     \leanok
@@ -2627,7 +2627,7 @@ operators.
     in \cite[proof of Theorem~6.9]{Schuch2010PEPS}. The path $\gamma$ is taken as given in this approximation theorem;
     the preceding contour construction provides such paths for the
     required exterior centers of simply connected regions.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     An exterior point belongs to an open rectangle containing one cell,
     two cells sharing a side, or four cells sharing a corner, all with
@@ -2643,7 +2643,7 @@ operators.
     endpoint difference.
 \end{proof}
 
-\begin{theorem}[Closure gauges from a given integer lift]%
+\begin{lemma}[Closure gauges from a given integer lift]%
     \label{thm:peps_torus_region_integer_lift_gauge}
     \lean{TNLean.PEPS.IsTorusRegionIntegerLift.injective,
         TNLean.PEPS.IsTorusRegionIntegerLift,
@@ -2693,7 +2693,7 @@ operators.
     geometric theorem and the removal of sector-dependent crossing
     factors remain separate, as recorded in
     \cite{gap:rmp_peps_quantum_double_g_isometry}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Euclidean division shows that the quotient of an integer coordinate
     increases by one exactly when its residue wraps through zero.
@@ -2706,7 +2706,7 @@ operators.
     identifies the normalized gauge with the spanning-tree gauge.
 \end{proof}
 
-\begin{theorem}[Twisted canonical block in spanning-tree coordinates]%
+\begin{lemma}[Twisted canonical block in spanning-tree coordinates]%
     \label{thm:peps_regular_twisted_projector_coordinates}
     \lean{TNLean.PEPS.regularProjectorTwistedRegionMatrix_coordinates}
     \leanok
@@ -2732,7 +2732,7 @@ operators.
     condition is imposed on the internal residuals or the size of the
     boundary. This is a finite-contraction form of the regular
     coordinate changes in \cite[\S6.2--6.3]{Schuch2010PEPS}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Expanding the original contraction into its internal bond labels
     $\eta$ and local translations $q$, and setting
@@ -2755,7 +2755,7 @@ operators.
     (\ref{eq:peps_twisted_projector_coordinates}).
 \end{proof}
 
-\begin{theorem}[Mixed Gram matrices of twisted canonical blocks]%
+\begin{lemma}[Mixed Gram matrices of twisted canonical blocks]%
     \label{thm:peps_twisted_projector_cross_gram_coordinates}
     \lean{TNLean.PEPS.regularProjectorTwistedRegionMatrix_crossGram_coordinates,
         TNLean.PEPS.regularProjectorTwistedRegionMatrix_crossGram_eq_zero_of_cycles_not_conjugate}
@@ -2780,7 +2780,7 @@ operators.
     flatness nor a mixed Gram identity is assumed.
     This is a finite-region comparison supporting the coherent closure
     arguments in \cite[\S6.3--6.4]{Schuch2010PEPS}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_regular_twisted_projector_coordinates}
     Reindexing the physical row sum by the reversible spanning-tree
@@ -2795,7 +2795,7 @@ operators.
     If simultaneous conjugacy fails, every summand vanishes.
 \end{proof}
 
-\begin{theorem}[Vertex gauges in a regular-region contraction]%
+\begin{lemma}[Vertex gauges in a regular-region contraction]%
     \label{thm:peps_regular_region_gauge_contraction}
     \lean{TNLean.PEPS.regularRegionGaugeIncidentLabels_boundary,
         TNLean.PEPS.regularRegionGaugeEdgeOperators,
@@ -2821,7 +2821,7 @@ operators.
     No connectedness or Gram identity is required. These identities
     implement the regular-coordinate changes in
     \cite[\S6.2--6.3]{Schuch2010PEPS} inside the original finite contraction.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_regular_region_tree_gauge}
@@ -2835,7 +2835,7 @@ operators.
     hence leaves their product and the contracted sum unchanged.
 \end{proof}
 
-\begin{theorem}[The transformed boundary projector]%
+\begin{lemma}[The transformed boundary projector]%
     \label{thm:peps_regular_region_gauge_boundary}
     \lean{TNLean.PEPS.regularRegionBoundaryGaugeEquiv_apply,
         TNLean.PEPS.regularRegionBoundaryGaugeEquiv,
@@ -2858,7 +2858,7 @@ operators.
     part of the boundary disentangling argument of
     \cite[Theorem~6.9]{Schuch2010PEPS}; it imposes no condition on
     internal twists.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Reindexing the common summation variable in the square of the matrix
@@ -2868,7 +2868,7 @@ operators.
     rank, and reindexing the diagonal sum preserves trace.
 \end{proof}
 
-\begin{theorem}[The Gram matrix with removable internal operators]%
+\begin{lemma}[The Gram matrix with removable internal operators]%
     \label{thm:peps_regular_region_gauge_gram}
     \lean{TNLean.PEPS.regularTwistedOpenRegionMatrix_regularRegionGauge,
         TNLean.PEPS.regularTwistedOpenRegionMatrix_eq_submatrix_of_regularRegionGaugeResidual_eq_one,
@@ -2895,12 +2895,12 @@ operators.
     the boundary-isometry argument in \cite[Theorem~6.9]{Schuch2010PEPS},
     not the unrestricted disk theorem
     \cite{gap:rmp_peps_quantum_double_g_isometry}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_regular_region_gauge_contraction, thm:peps_regular_region_gauge_boundary, thm:peps_connected_regular_region_isometry}
     The ordered coefficient identities follow from the contraction
-    identity in Theorem~\ref{thm:peps_regular_region_gauge_contraction}.
+    identity in Lemma~\ref{thm:peps_regular_region_gauge_contraction}.
     With identity internal residuals, the matrix is the untwisted block
     with its columns permuted by $F$. Local regular isometry and
     connectedness give $M_R^\dagger M_R=c_R\Pi_{\partial R}$ with $c_R>0$.
@@ -2910,7 +2910,7 @@ operators.
     the positive scalar does not change the rank of the boundary projector.
 \end{proof}
 
-\begin{theorem}[Closure-region Grams from an integer lift]%
+\begin{lemma}[Closure-region Grams from an integer lift]%
     \label{thm:peps_torus_region_integer_lift_gram}
     \lean{TNLean.PEPS.IsGIsometric.regularTwistedOpenRegionMatrix_torusRegionLift,
         TNLean.PEPS.IsGIsometric.exists_positive_gram_torusClosureRegionMatrix_of_integerLift,
@@ -2937,7 +2937,7 @@ operators.
     they do not establish lifts for arbitrary disk regions or identify
     boundary maps for superpositions of distinct closures
     \cite{gap:rmp_peps_quantum_double_g_isometry}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_torus_region_integer_lift_gauge, thm:peps_regular_region_gauge_gram, thm:peps_regular_torus_closure_cut_identification}
@@ -2945,11 +2945,11 @@ operators.
     preserves local regular isometry. Since the arithmetic lift gauge
     has the native closure assignment as its internal gradient,
     every internal residual equals the identity, and applying
-    Theorem~\ref{thm:peps_regular_region_gauge_gram} to the resulting
+    Lemma~\ref{thm:peps_regular_region_gauge_gram} to the resulting
     region matrix with the boundary map of this explicit gauge yields the claims.
 \end{proof}
 
-\begin{theorem}[Open-region rank from geometric simple connectedness]%
+\begin{lemma}[Open-region rank from geometric simple connectedness]%
     \label{thm:peps_torus_simply_connected_region_rank}
     \lean{TNLean.PEPS.IsGIsometric.rank_torusClosureRegionMatrix_of_isSimplyConnected}
     \leanok
@@ -2970,19 +2970,19 @@ operators.
     \cite[Theorem~6.9]{Schuch2010PEPS}, not the full disk entropy theorem
     or a coherent-superposition result
     \cite{gap:rmp_peps_quantum_double_g_isometry}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_torus_region_realization, thm:peps_torus_region_integer_lift_gram}
     Graph connectivity gives a region vertex, and simple connectedness
     of the cell realization gives an integer lift preserving
     every internal native unit step by
-    Theorem~\ref{thm:peps_torus_region_realization}. Applying the
+    Lemma~\ref{thm:peps_torus_region_realization}. Applying the
     integer-lifted region rank theorem,
-    Theorem~\ref{thm:peps_torus_region_integer_lift_gram}, to this lift completes the proof.
+    Lemma~\ref{thm:peps_torus_region_integer_lift_gram}, to this lift completes the proof.
 \end{proof}
 
-\begin{theorem}[Vertex gauges of a closed regular PEPS]%
+\begin{lemma}[Vertex gauges of a closed regular PEPS]%
     \label{thm:peps_regular_closed_gauge}
     \lean{TNLean.PEPS.sameState_regularVertexGauge,
         TNLean.PEPS.regularVertexGaugeOperators}
@@ -2994,13 +2994,13 @@ operators.
         \label{eq:peps_regular_closed_gauge}
     \end{align}
     leaves every closed physical PEPS coefficient unchanged (without requiring connectedness or isometry \cite[\S5.3]{Schuch2010PEPS}).
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Reindexing each bond label $\eta_e\mapsto k_s^{-1}\eta_e$ on $e=(s,t)$ sends the tail half-edge label to $k_s^{-1}\eta_e$ and the head half-edge label to $u_e'k_s^{-1}\eta_e=k_t^{-1}u_e\eta_e$, left-translating all incident labels at each vertex $v$ by $k_v^{-1}$.
 \end{proof}
 
-\begin{theorem}[Nonabelian holonomy along native walks]%
+\begin{lemma}[Nonabelian holonomy along native walks]%
     \label{thm:peps_regular_walk_holonomy}
     \lean{TNLean.PEPS.regularDirectedTransport_of_lt,
         TNLean.PEPS.regularDirectedTransport,
@@ -3037,7 +3037,7 @@ operators.
     accessible complement cycle calculations in
     \cite[\S5.3 and Theorem~6.9]{Schuch2010PEPS}; no boundary-word
     relation or tensor factorization is assumed.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Reversing a directed edge takes its inverse. The concatenation and
@@ -3048,7 +3048,7 @@ operators.
     telescope directly to $k_wk_v^{-1}$.
 \end{proof}
 
-\begin{theorem}[Closure holonomy from oriented seam crossing numbers]%
+\begin{lemma}[Closure holonomy from oriented seam crossing numbers]%
     \label{thm:peps_torus_walk_winding}
     \lean{TNLean.PEPS.torusDirectedWinding_right,
         TNLean.PEPS.torusEdgeWinding,
@@ -3081,7 +3081,7 @@ operators.
     This is the walk identity used in the seam deformation and
     complement construction of
     \cite[\S5.3 and proof of Theorem~6.9]{Schuch2010PEPS}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Both native seam orientations are opposite to their ordered-edge
@@ -3095,7 +3095,7 @@ operators.
     directed steps.
 \end{proof}
 
-\begin{theorem}[Region walk crossing numbers from geometric lifts]%
+\begin{lemma}[Region walk crossing numbers from geometric lifts]%
     \label{thm:peps_region_walk_winding}
     \lean{TNLean.PEPS.torusWalkWinding_of_isTorusRegionIntegerLift,
         TNLean.PEPS.torusWalkWinding_eq_of_isSimplyConnected}
@@ -3121,24 +3121,24 @@ operators.
     in \cite[proof of Theorem~6.9]{Schuch2010PEPS}, if the closed-cell realization of $R$ is simply connected,
     any two induced-region walks with the same endpoints have equal
     seam crossing numbers; no integer lift is assumed in this case.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     In the additive group $\mathbb Z^2$, written
     multiplicatively with the universal commuting closure elements
     $g=(0,-1)$ and $h=(1,0)$, the walk holonomy is $N(p)$ by
-    Theorem~\ref{thm:peps_torus_walk_winding}. The lift gauge is the pair
+    Lemma~\ref{thm:peps_torus_walk_winding}. The lift gauge is the pair
     of integer deck coordinates. Its native gradient is the
     closure assignment on every internal edge, so its walk holonomy
     is the difference of the endpoint deck coordinates. Inclusion of
     the induced walk preserves the native holonomy, giving
     (\ref{eq:peps_region_deck_winding}). In the simply connected case,
-    Theorem~\ref{thm:peps_torus_region_realization} gives the lift;
+    Lemma~\ref{thm:peps_torus_region_realization} gives the lift;
     applying (\ref{eq:peps_region_deck_winding}) to both walks gives
     equality.
 \end{proof}
 
-\begin{theorem}[Walk words in the region cycle labels]%
+\begin{lemma}[Walk words in the region cycle labels]%
     \label{thm:peps_regular_region_cycle_holonomy}
     \lean{TNLean.PEPS.regularRegionCycleWord_append,
         TNLean.PEPS.RegionCycleEdge,
@@ -3182,7 +3182,7 @@ operators.
     These are walk-word identities for the accessible complement
     cycle argument in \cite[Theorem~6.9]{Schuch2010PEPS}. They do not
     assert existence of walks representing a prescribed boundary map.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_regular_walk_holonomy, thm:peps_regular_region_tree_gauge}
@@ -3195,7 +3195,7 @@ operators.
     normalized root the endpoint gauges are both the identity.
 \end{proof}
 
-\begin{theorem}[Cycle-controlled permutation of boundary coordinates]%
+\begin{lemma}[Cycle-controlled permutation of boundary coordinates]%
     \label{thm:peps_cycle_controlled_boundary}
     \lean{TNLean.PEPS.regularCycleControlledBoundaryMatrix_mem_unitaryGroup,
         TNLean.PEPS.regularCycleControlledBoundary,
@@ -3227,7 +3227,7 @@ operators.
     In this algebraic coordinate operation associated with
     \cite[\S6.3]{Schuch2010PEPS}, the cycle constraint is retained without any assumption on the
     relation between $W$ and the crossing maps.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_regular_twisted_projector_coordinates}
     The inverse translates only $y$, so it leaves its own controlling
@@ -3239,7 +3239,7 @@ operators.
     (\ref{eq:peps_cycle_controlled_coefficients}).
 \end{proof}
 
-\begin{theorem}[Combined boundary shift removal from given complement walks]%
+\begin{lemma}[Combined boundary shift removal from given complement walks]%
     \label{thm:peps_cycle_controlled_relative_walks}
     \lean{TNLean.PEPS.regularCycleControlledBoundaryMatrix_mul_coordinates_of_combined_relative_walk_words}
     \leanok
@@ -3274,7 +3274,7 @@ operators.
     complement walks with (\ref{eq:peps_control_relative_walks}) remains
     the geometric step described in
     \cite{gap:rmp_peps_quantum_double_g_isometry}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     At the reindexed input, the complementary boundary map
     is $M(\theta)_f=m_f\theta_f$. On the cycle support, conjugation
@@ -3288,7 +3288,7 @@ operators.
     (\ref{eq:peps_cycle_controlled_coefficients}) retains the cycle indicator.
 \end{proof}
 
-\begin{theorem}[Relative boundary factor of controlled complementary blocks]%
+\begin{lemma}[Relative boundary factor of controlled complementary blocks]%
     \label{thm:peps_controlled_complement_boundary_factor}
     \lean{TNLean.PEPS.regularControlledComplementMatrix_factorization,
         TNLean.PEPS.regularControlledComplementMatrix,
@@ -3319,9 +3319,9 @@ operators.
     residual coefficient. It is an auxiliary coefficient statement,
     rather than a conclusion about the full physical bipartite state;
     for commuting torus closures, the complementary loops of
-    Theorem~\ref{thm:peps_torus_simply_connected_boundary_loops} realize
+    Lemma~\ref{thm:peps_torus_simply_connected_boundary_loops} realize
     its geometric walk condition.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_cycle_controlled_relative_walks}
     Equality under a common left translation is equivalent to equality
@@ -3332,7 +3332,7 @@ operators.
     coefficient, and linearity gives the coherent sum identity.
 \end{proof}
 
-\begin{theorem}[Common boundary factor of controlled canonical cuts]%
+\begin{lemma}[Common boundary factor of controlled canonical cuts]%
     \label{thm:peps_controlled_projector_cut_boundary_factor}
     \lean{TNLean.PEPS.regularControlledProjectorCutMatrix_eq_native_contraction,
         TNLean.PEPS.regularControlledProjectorCutMatrix,
@@ -3380,7 +3380,7 @@ operators.
     geometric conditions and transfer to the original physical
     tensors remain separate steps, as recorded in
     \cite{gap:rmp_peps_quantum_double_g_isometry}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_regular_twisted_projector_coordinates}
     Changing the common boundary summation variable by its
@@ -3396,7 +3396,7 @@ operators.
     finite sector sum.
 \end{proof}
 
-\begin{theorem}[A common canonical torus cut factor from simple connectedness and winding]%
+\begin{lemma}[A common canonical torus cut factor from simple connectedness and winding]%
     \label{thm:peps_torus_controlled_boundary_factor}
     \lean{TNLean.PEPS.exists_unitary_torusControlledBoundaryFactor_of_isSimplyConnected_and_winding}
     \leanok
@@ -3432,7 +3432,7 @@ operators.
     \end{align}
     with the same normalized maximally entangled factor and the same
     normalized region ancillary vector as in
-    Theorem~\ref{thm:peps_controlled_projector_cut_boundary_factor}.
+    Lemma~\ref{thm:peps_controlled_projector_cut_boundary_factor}.
     The remaining complementary coefficient is
     \begin{align}
         \chi_{\lambda}(z_S)
@@ -3447,7 +3447,7 @@ operators.
     complementary loops for the paper's disk geometry and transfer
     to the original physical site tensors remain separate steps;
     see \cite{gap:rmp_peps_quantum_double_g_isometry}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Simple connectedness of the realization gives an integer
     coordinate lift. For every commuting pair its normalized gauge
@@ -3475,7 +3475,7 @@ operators.
     \end{align}
 \end{definition}
 
-\begin{theorem}[Reduced matrix of a fixed boundary factor]%
+\begin{lemma}[Reduced matrix of a fixed boundary factor]%
     \label{thm:peps_fixed_boundary_factor_density}
     \lean{TNLean.PEPS.boundaryAncillaMap_conjTranspose_mul,
         TNLean.PEPS.fixedBoundaryFactorDensity_properties,
@@ -3500,7 +3500,7 @@ operators.
     unchanged. If a nonzero coefficient matrix has reduced matrix
     $a\rho_\phi$, its trace is positive and trace normalization gives
     exactly $\rho_\phi$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_flat_density_entropy}
     The Gram matrix is $J_\phi^\dagger J_\phi=\|\phi\|^2I$.
@@ -3526,11 +3526,11 @@ operators.
     internal references, normalized vertex labels, and cycle residuals.
     Pull back $\rho_{\phi_R}$ to the native half-edge physical rows, with
     the fixed normalized ancillary vector $\phi_R$ of
-    Theorem~\ref{thm:peps_controlled_projector_cut_boundary_factor}.
+    Lemma~\ref{thm:peps_controlled_projector_cut_boundary_factor}.
     Denote this density by $\rho_R^0$.
 \end{definition}
 
-\begin{theorem}[Spectrum of the fixed regular reference density]%
+\begin{lemma}[Spectrum of the fixed regular reference density]%
     \label{thm:peps_regular_reference_boundary_density}
     \lean{TNLean.PEPS.star_dotProduct_regularReferenceRegionAncilla,
         TNLean.PEPS.regularReferenceBoundaryDensity_properties,
@@ -3541,14 +3541,14 @@ operators.
     The density $\rho_R^0$ is positive, has trace one and rank $|G|^n$, and
     satisfies $(\rho_R^0)^2=|G|^{-n}\rho_R^0$. Its von Neumann entropy and
     every nonnegative finite-order R\'enyi entropy are $n\log|G|$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_fixed_boundary_factor_density, thm:peps_flat_density_renyi_entropy}
     Since the fixed ancillary vector has norm one, applying the fixed-factor density
     identities and pulling them back through the coordinate bijection yields the result.
 \end{proof}
 
-\begin{theorem}[Common reduced density of canonical closure sums]%
+\begin{lemma}[Common reduced density of canonical closure sums]%
     \label{thm:peps_torus_controlled_boundary_density}
     \lean{TNLean.PEPS.torusControlledCut_reducedMatrix_eq_trace_smul,
         TNLean.PEPS.torusControlledCut_normalized_reducedMatrix,
@@ -3557,7 +3557,7 @@ operators.
     \uses{thm:peps_torus_controlled_boundary_factor}
     Retain the simple connectedness, fixed spanning trees, crossing
     numbering, and fixed complementary winding loops of
-    Theorem~\ref{thm:peps_torus_controlled_boundary_factor}. For a finite
+    Lemma~\ref{thm:peps_torus_controlled_boundary_factor}. For a finite
     commuting closure family, let $C_\lambda$ be its coherent
     canonical cut matrix, before the complementary controlled unitary.
     Then the fixed density $\rho_R^0$, chosen before the sectors and
@@ -3576,7 +3576,7 @@ operators.
     and transfer to the original site tensors remain separate steps;
     see \cite{gap:rmp_peps_quantum_double_g_isometry}. It is not an
     unrestricted formalization of \cite[Theorem~6.9]{Schuch2010PEPS}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_regular_reference_boundary_density}
     The controlled cut is $K_{\phi_R,\chi_\lambda}$ in fixed physical
@@ -3587,7 +3587,7 @@ operators.
     stated entropies.
 \end{proof}
 
-\begin{theorem}[Boundary routes through two rooted trees]%
+\begin{lemma}[Boundary routes through two rooted trees]%
     \label{thm:peps_regular_boundary_route}
     \lean{TNLean.PEPS.regularWalkHolonomy_inducedWalk,
         TNLean.PEPS.regularRegionTreeWalk,
@@ -3632,9 +3632,9 @@ operators.
     its holonomy. This gives the routes for the cycle argument in
     \cite[Theorem~6.9]{Schuch2010PEPS}; the route passes through $R$.
     For commuting torus closures, the complementary loops of
-    Theorem~\ref{thm:peps_torus_simply_connected_boundary_loops} have
+    Lemma~\ref{thm:peps_torus_simply_connected_boundary_loops} have
     the same winding, and hence the required holonomy.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     The two boundary equivalences multiply at the region and
@@ -3647,7 +3647,7 @@ operators.
     each ordered native edge and hence each directed factor.
 \end{proof}
 
-\begin{theorem}[Complement cycle words from torus winding data]%
+\begin{lemma}[Complement cycle words from torus winding data]%
     \label{thm:peps_torus_complement_cycle_words}
     \lean{TNLean.PEPS.regularBoundaryCrossingAdj,
         TNLean.PEPS.regularBoundaryInsideVertex,
@@ -3665,7 +3665,7 @@ operators.
     membership determines its inside endpoint $v_f$, its outside endpoint
     $w_f$, and its directed step from $v_f$ to $w_f$. Choose a reference
     bond $f_0$, and form the two-tree route $q_f$ of
-    Theorem~\ref{thm:peps_regular_boundary_route} from these endpoints.
+    Lemma~\ref{thm:peps_regular_boundary_route} from these endpoints.
     For arbitrary native bond operators its holonomy is
     \begin{align}
         H(u,q_f) & =m_fm_{f_0}^{-1},
@@ -3694,7 +3694,7 @@ operators.
     asserts existence of the complementary loops with these winding numbers;
     the remaining scope is recorded in
     \cite{gap:rmp_peps_quantum_double_g_isometry}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Region membership selects the two endpoints of every crossing bond.
@@ -3707,14 +3707,14 @@ operators.
     complementary loop holonomy with the reference-route ratio.
 \end{proof}
 
-\begin{theorem}[One complementary unitary from fixed winding data]%
+\begin{lemma}[One complementary unitary from fixed winding data]%
     \label{thm:peps_torus_complement_disentangling}
     \lean{TNLean.PEPS.exists_unitary_torusComplementDisentangling_of_winding_eq}
     \leanok
     \uses{thm:peps_torus_complement_cycle_words, thm:peps_cycle_controlled_boundary}
     Choose the two rooted trees, reference crossing bond, and fixed
     complementary root loops with matching winding from
-    Theorem~\ref{thm:peps_torus_complement_cycle_words}. There exists one
+    Lemma~\ref{thm:peps_torus_complement_cycle_words}. There exists one
     unitary $U$ on the original complementary half-edge physical space,
     chosen independently of the commuting closure labels $g,h$.
     Write $S=R^c$, let $B_S^{g,h}$ be the canonical complementary
@@ -3736,9 +3736,9 @@ operators.
     cycle constraint remain explicit. This is an auxiliary form of the
     disentangling calculation in
     \cite[Theorem~6.9]{Schuch2010PEPS}, local source lines 1935--1990.
-    Theorem~\ref{thm:peps_torus_simply_connected_boundary_loops}
+    Lemma~\ref{thm:peps_torus_simply_connected_boundary_loops}
     gives these winding loops from simple connectedness.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_cycle_controlled_relative_walks}
@@ -3753,7 +3753,7 @@ operators.
     (\ref{eq:peps_complement_disentangled_coefficient}).
 \end{proof}
 
-\begin{theorem}[Local invariant support of walk-controlled operations]%
+\begin{lemma}[Local invariant support of walk-controlled operations]%
     \label{thm:peps_cycle_controlled_local_support}
     \lean{TNLean.PEPS.regularRegionCoordinatesEquiv_symm_coordinateTranslation,
         TNLean.PEPS.regularRegionCoordinateTranslation,
@@ -3804,7 +3804,7 @@ operators.
     These are auxiliary physical support identities for the accessible
     complement calculation in \cite[\S6.2--6.3]{Schuch2010PEPS},
     local source lines 1765--1920 and 1935--1990.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_regular_physical_unitary_transport}
@@ -3821,7 +3821,7 @@ operators.
     original region, including any unused physical directions.
 \end{proof}
 
-\begin{theorem}[Physical transfer of the canonical cut]%
+\begin{lemma}[Physical transfer of the canonical cut]%
     \label{thm:peps_regular_physical_cut_transfer}
     \lean{TNLean.PEPS.regionPhysicalProductMatrix_mul_regularProjectorTwistedRegionMatrix,
         TNLean.PEPS.regularProjectorTwistedCutMatrix,
@@ -3863,7 +3863,7 @@ operators.
     This is an auxiliary physical accessibility calculation for
     \cite[Theorem~6.9]{Schuch2010PEPS}, local source lines 1765--1820 and
     1935--1990; no exterior routing or canonical factorization is assumed.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_regular_physical_unitary_transport, thm:peps_regular_twisted_region_accessibility}
@@ -3877,7 +3877,7 @@ operators.
     positive product factors gives the normalized identity.
 \end{proof}
 
-\begin{theorem}[Spectrum under a supported physical map]%
+\begin{lemma}[Spectrum under a supported physical map]%
     \label{thm:peps_supported_physical_density}
     \lean{TNLean.PEPS.normalizedPhysicalImageDensity_properties,
         TNLean.PEPS.normalizedPhysicalImageDensity,
@@ -3898,7 +3898,7 @@ operators.
     accessibility on the invariant support in
     \cite[Theorem~6.9]{Schuch2010PEPS}, local source lines 1765--1820 and
     2043--2072. It makes no assertion that $T$ is surjective.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_flat_density_entropy}
@@ -3913,7 +3913,7 @@ operators.
     the flat-spectrum identity, which gives the stated entropy.
 \end{proof}
 
-\begin{theorem}[Common reduced density for original torus closures]%
+\begin{lemma}[Common reduced density for original torus closures]%
     \label{thm:peps_torus_physical_cut_density}
     \lean{TNLean.PEPS.IsGIsometric.exists_torusPhysicalCut_density_transfer,
         TNLean.PEPS.IsGIsometric.exists_torusPhysicalCut_common_density_of_isSimplyConnected_and_winding}
@@ -3947,9 +3947,9 @@ operators.
     This is an auxiliary form of \cite[Theorem~6.9]{Schuch2010PEPS},
     local source lines 1935--1990 and 2027--2072. The fixed exterior
     winding loops are explicit hypotheses here;
-    Theorem~\ref{thm:peps_torus_simply_connected_physical_density}
+    Lemma~\ref{thm:peps_torus_simply_connected_physical_density}
     derives them from the contiguous simply connected region.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_torus_controlled_boundary_density, thm:peps_flat_density_renyi_entropy}
@@ -3977,14 +3977,14 @@ operators.
 
 \input{chapter/ch24_peps_simply_connected_physical_density}
 
-\begin{theorem}[Canonical coordinates of a lifted torus region]%
+\begin{lemma}[Canonical coordinates of a lifted torus region]%
     \label{thm:peps_torus_region_integer_lift_coordinates}
     \lean{TNLean.PEPS.regularProjectorTwistedRegionMatrix_coordinates_of_torusRegionIntegerLift,
         TNLean.PEPS.regularProjectorTwistedRegionMatrix_exists_normalized_ancilla_of_torusRegionIntegerLift}
     \leanok
     \uses{thm:peps_torus_region_integer_lift_gauge}
     Suppose a native torus region has the integer lift described in
-    Theorem~\ref{thm:peps_torus_region_integer_lift_gauge}. Choose a spanning
+    Lemma~\ref{thm:peps_torus_region_integer_lift_gauge}. Choose a spanning
     tree and root, and let $k^{g,h}$ be its normalized lift gauge. For
     commuting closure labels $g,h$, the canonical tensor satisfies
     \begin{align}
@@ -4003,21 +4003,21 @@ operators.
     It retains the sector-dependent boundary map. The covering-lift
     and complementary-loop theorems provide the geometric choices for
     simply connected regions with torus periods at least three.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_regular_twisted_projector_coordinates, thm:peps_regular_region_projector_coordinates}
     Every cycle residual is the identity by
-    Theorem~\ref{thm:peps_torus_region_integer_lift_gauge}. The exact twisted
+    Lemma~\ref{thm:peps_torus_region_integer_lift_gauge}. The exact twisted
     coefficient formula therefore reduces to the untwisted coefficient
     formula at the transformed crossing configuration. Applying the
     normalized factorization of
-    Theorem~\ref{thm:peps_regular_region_projector_coordinates} to this
+    Lemma~\ref{thm:peps_regular_region_projector_coordinates} to this
     configuration yields a constant and ancillary vector depending only on
     the region, the group, and the chosen tree and root.
 \end{proof}
 
-\begin{theorem}[Injectivity of a connected regular block]%
+\begin{lemma}[Injectivity of a connected regular block]%
     \label{thm:peps_connected_regular_region_injectivity}
     \lean{TNLean.PEPS.isGInjective_regularOpenRegionMatrix_of_connected}
     \leanok
@@ -4030,13 +4030,13 @@ operators.
     This is the regular-representation connected-region consequence of
     \cite[Lemma~5.2 and the following observation]{Schuch2010PEPS};
     the argument does not assume local isometry.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_regular_region_projector_coordinates, thm:peps_regular_open_region_accessibility}
     Applying the product of the local inverses to the open tensor yields
     its canonical averaging-projector contraction.
     Choosing a spanning tree and a root, in the coordinates of
-    Theorem~\ref{thm:peps_regular_region_projector_coordinates} the row
+    Lemma~\ref{thm:peps_regular_region_projector_coordinates} the row
     with identity reference, normalized vertex, and residual cycle labels
     is $|G|^{1-|R|}\Pi_{\partial R}$. This scalar is nonzero, and
     $\Pi_{\partial R}$ fixes every invariant boundary vector. Thus a
@@ -4045,7 +4045,7 @@ operators.
     in the contraction.
 \end{proof}
 
-\begin{theorem}[Cycle exponent of a connected region]%
+\begin{lemma}[Cycle exponent of a connected region]%
     \label{thm:peps_regular_region_cycle_exponent}
     \lean{TNLean.PEPS.card_inducedRegion_edgeSet,
         TNLean.PEPS.orderedEdgeEquivEdgeSet,
@@ -4064,7 +4064,7 @@ operators.
     \end{align}
     The exponent is the cycle rank. For a tree it vanishes, so that
     the region Gram factor is just the product of the local factors.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The internal edges are exactly the edges of the induced graph.
     A connected graph with $V_R$ vertices has at least $V_R-1$ edges,
@@ -4072,7 +4072,7 @@ operators.
     nonnegative exponents gives the ratio identity.
 \end{proof}
 
-\begin{theorem}[Invariant regular boundary vectors]%
+\begin{lemma}[Invariant regular boundary vectors]%
     \label{thm:peps_regular_boundary_invariants}
     \lean{TNLean.PEPS.regularBoundaryRepresentation_apply,
         TNLean.PEPS.regularBoundaryRepresentation,
@@ -4093,7 +4093,7 @@ operators.
     \cite[Theorem~6.9]{Schuch2010PEPS}, writing $a=(a_0,\ldots,a_{b-1})$ makes the relative coordinates
     $(a_0^{-1}a_i)_{i=1}^{b-1}$ label the orbits, and the equal-weight orbit
     vectors form an orthogonal basis, each of squared norm $|G|$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The bijection $a\mapsto(a_0,(a_0^{-1}a_i)_{i>0})$ changes the action to
     left multiplication of its first coordinate alone. Invariant functions
@@ -4122,7 +4122,7 @@ operators.
     density operator is $\rho=P/r$.
 \end{definition}
 
-\begin{theorem}[Flat spectrum of the virtual regular boundary]%
+\begin{lemma}[Flat spectrum of the virtual regular boundary]%
     \label{thm:peps_regular_boundary_density}
     \lean{TNLean.PEPS.regularBoundaryProjector_mul_self,
         TNLean.PEPS.rank_regularBoundaryProjector,
@@ -4154,7 +4154,7 @@ operators.
     $CC^\dagger=\rho=P/r$. Hence $\rho$ is positive, has trace one and
     rank $r$, and satisfies $\rho^2=r^{-1}\rho$. On the invariant
     boundary subspace it acts as multiplication by $r^{-1}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     For each pair in the same orbit, exactly one translation sends one
     configuration to the other. The entry formula follows by averaging.
@@ -4165,7 +4165,7 @@ operators.
     from $P^2=P$ and from $P$ being the identity on invariant vectors.
 \end{proof}
 
-\begin{theorem}[Entropy of a flat density operator]%
+\begin{lemma}[Entropy of a flat density operator]%
     \label{thm:peps_flat_density_entropy}
     \lean{Matrix.IsHermitian.eigenvalues_eq_zero_or_inv_of_mul_self_eq_inv_smul,
         vonNeumannEntropy_of_mul_self_eq_inv_smul}
@@ -4174,7 +4174,7 @@ operators.
     trace one. As in the spectral step of the proof of
     \cite[Theorem~6.9]{Schuch2010PEPS}, if $\rho^2=r^{-1}\rho$ for a positive real number $r$, then
     $S(\rho)=\log r$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     For each eigenvalue $\lambda$, the identity gives
     $\lambda(\lambda-r^{-1})=0$. In either case
@@ -4195,7 +4195,7 @@ operators.
     and $S_0(\rho)=\log\operatorname{rank}\rho$.
 \end{definition}
 
-\begin{theorem}[All finite R\'enyi orders of a flat density]%
+\begin{lemma}[All finite R\'enyi orders of a flat density]%
     \label{thm:peps_flat_density_renyi_entropy}
     \lean{trace_cfc_rpow_of_mul_self_eq_inv_smul,
         renyiEntropy_of_mul_self_eq_inv_smul,
@@ -4207,7 +4207,7 @@ operators.
     $\operatorname{tr}(\rho^\alpha)=r^{1-\alpha}$ and
     $S_\alpha(\rho)=\log r$. If $\operatorname{rank}\rho=r$, the same
     entropy formula also holds at order zero.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_flat_density_entropy}
     Every eigenvalue is zero or $r^{-1}$. For positive order,
@@ -4216,7 +4216,7 @@ operators.
     The von Neumann and rank conventions give the remaining orders.
 \end{proof}
 
-\begin{theorem}[Entropy of the virtual regular boundary]%
+\begin{lemma}[Entropy of the virtual regular boundary]%
     \label{thm:peps_regular_boundary_entropy}
     \lean{TNLean.PEPS.vonNeumannEntropy_regularBoundaryDensity,
         TNLean.PEPS.vonNeumannEntropy_regularBoundaryDensity_eq_mul_log,
@@ -4229,7 +4229,7 @@ operators.
     \begin{align}
         S(\rho)=\log(|G|^n)=n\log|G|=b\log|G|-\log|G|.
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_regular_boundary_density, thm:peps_flat_density_entropy}
     The identity $\rho^2=r^{-1}\rho$ applied to each eigenvector gives
@@ -4239,7 +4239,7 @@ operators.
     the logarithm laws give the stated expressions.
 \end{proof}
 
-\begin{theorem}[Physical realization of a regular boundary state]%
+\begin{lemma}[Physical realization of a regular boundary state]%
     \label{thm:peps_regular_boundary_physical_realization}
     \lean{TNLean.PEPS.physicalRegularBoundaryState_eq_kronecker_mulVec,
         TNLean.PEPS.physicalRegularBoundarySchmidtMatrix,
@@ -4274,7 +4274,7 @@ operators.
     PEPS region still requires identification of these maps and this
     boundary vector with the geometric contraction in
     \cite[Theorem~6.9]{Schuch2010PEPS}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_regular_boundary_density, thm:peps_flat_density_entropy}
     The coefficient matrix transforms by $C\mapsto ACB^{\mathsf T}$.
@@ -4286,10 +4286,10 @@ operators.
     $\operatorname{ran}P$, and is therefore injective there; its image
     is $\operatorname{ran}Q$, of dimension $r$. The trace and spectrum
     follow from the projection property, and
-    Theorem~\ref{thm:peps_flat_density_entropy} gives the entropy.
+    Lemma~\ref{thm:peps_flat_density_entropy} gives the entropy.
 \end{proof}
 
-\begin{theorem}[Normalization of specified physical cut maps]%
+\begin{lemma}[Normalization of specified physical cut maps]%
     \label{thm:peps_regular_boundary_normalization}
     \lean{TNLean.PEPS.normalizedRegularBoundaryMap_conjTranspose_mul,
         TNLean.PEPS.normalizedRegularBoundaryMap,
@@ -4309,24 +4309,24 @@ operators.
     \end{align}
     has reduced von Neumann entropy $n\log|G|$.
     For the cut maps of
-    Theorem~\ref{thm:peps_regular_open_region_projector}, the numerator
+    Lemma~\ref{thm:peps_regular_open_region_projector}, the numerator
     is the physical PEPS coefficient matrix $K$.
 
     The Gram identities are explicit assumptions in this statement.
-    Theorem~\ref{thm:peps_connected_regular_region_gram} derives them
+    Lemma~\ref{thm:peps_connected_regular_region_gram} derives them
     from local $G$-isometry for connected untwisted regions, including
     regions containing cycles. The twisted torus contractions of
     \cite[Theorem~6.9]{Schuch2010PEPS} remain separate.
     The scalar convention is recorded in
     \cite{gap:rmp_peps_quantum_double_g_isometry}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Since $c_A>0$, the product of the normalization scalar and its
     conjugate is $c_A^{-1}$. Thus
     $\widehat M^\dagger\widehat M=P$, and similarly for $N$.
     Pulling the scalars out of the coefficient matrix gives
     (\ref{eq:peps_regular_boundary_normalized_matrix}), and applying
-    Theorem~\ref{thm:peps_regular_boundary_physical_realization} to the
+    Lemma~\ref{thm:peps_regular_boundary_physical_realization} to the
     normalized maps yields the entropy.
 \end{proof}
 
@@ -4359,14 +4359,14 @@ operators.
 \end{theorem}
 \begin{proof}\leanok
     Each local isometry gives a positive Gram factor. Applying
-    Theorem~\ref{thm:peps_connected_regular_region_gram} on both sides
+    Lemma~\ref{thm:peps_connected_regular_region_gram} on both sides
     of the cut and normalizing the two maps by their positive factors
     expresses the resulting coefficient matrix as a positive scalar multiple of
     the PEPS cut matrix, so the regular boundary realization gives
     its norm and reduced entropy.
 \end{proof}
 
-\begin{theorem}[A local controlled operation removing a boundary twist]%
+\begin{lemma}[A local controlled operation removing a boundary twist]%
     \label{thm:peps_regular_boundary_untwisting}
     \lean{TNLean.PEPS.regularTweezerEquiv_apply,
         TNLean.PEPS.regularTweezerEquiv,
@@ -4399,7 +4399,7 @@ operators.
     \cite{Schuch2010PEPS}, displayed at local source lines 1961--1965.
     Identifying these coordinates with a whole torus contraction is
     a further step.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Group cancellation verifies the two inverse permutations and
     $cb^{-1}=t$. A permutation of an orthonormal basis is unitary.
@@ -4480,7 +4480,7 @@ operators.
     class, so the classes of commuting pairs are well-defined.
 \end{definition}
 
-\begin{theorem}[The torus vector depends only on the pair-conjugacy class]%
+\begin{lemma}[The torus vector depends only on the pair-conjugacy class]%
     \label{thm:peps_torus_pair_conjugacy}
     \lean{TNLean.PEPS.torusBondNetwork_conjugate, TNLean.PEPS.torusGClosure_conjugate,
         TNLean.PEPS.torusGClosure_eq_of_pairConjugacyClass_eq,
@@ -4492,7 +4492,7 @@ operators.
         =\ket{\mathcal M(A\mid g,h)}$ for every $x\in G$.
     Consequently $\ket{\mathcal M(A\mid C)}$ is well-defined for each
     pair-conjugacy class $C$ \cite[Definition~5.8]{Schuch2010PEPS}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{lem:peps_torus_bond_network_gauge}
@@ -4504,7 +4504,7 @@ operators.
     (\ref{eq:peps_torus_closure_coeff}).
 \end{proof}
 
-\begin{theorem}[Displacement of commuting closure seams]%
+\begin{lemma}[Displacement of commuting closure seams]%
     \label{thm:peps_torus_commuting_closure_seams}
     \lean{TNLean.PEPS.torusHorizontalClosureAt_zero,
         TNLean.PEPS.torusHorizontalClosureAt,
@@ -4527,7 +4527,7 @@ operators.
     lines 1638--1644; neither isometry
     nor semi-regularity is needed. The identity holds on every nonempty
     rectangular torus, including dimensions equal to one.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{lem:peps_torus_bond_network_gauge}
@@ -4564,7 +4564,7 @@ operators.
     In the group basis, $L_x\ket{k}=\ket{xk}$. The coordinate map
     $\sum_k c_k[k]\mapsto(c_k)_k$ intertwines the group-algebra regular
     representation with these permutation matrices. They are therefore
-    semi-regular by Theorem~\ref{thm:peps_semiregular_equivalence}.
+    semi-regular by Lemma~\ref{thm:peps_semiregular_equivalence}.
     The oriented four-leg
     action sends $(t,r,b,l)$ to $(xt,xr,xb,xl)$; its invariant projector
     has entries
@@ -4576,7 +4576,7 @@ operators.
     action in Definition~6.1 of \cite{Schuch2010PEPS}.
 \end{definition}
 
-\begin{theorem}[The local regular Gram identity]%
+\begin{lemma}[The local regular Gram identity]%
     \label{thm:peps_torus_regular_site_gram}
     \lean{TNLean.PEPS.IsGIsometric.torusRegularSite_translation,
         TNLean.PEPS.IsGIsometric.exists_torusRegularSiteGram}
@@ -4589,14 +4589,14 @@ operators.
         =\frac{c}{|G|}\sum_{x\in G}\mathbf{1}_{\eta=x\theta}.
     \end{align}
     The factor $c$ records the normalization of the site tensor.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Expressing $A^\dagger A=c\Pi$ in the orthonormal group basis and substituting
     the matrix entries of the invariant projector yields the formula.
 \end{proof}
 
-\begin{theorem}[Access to the virtual invariant space]%
+\begin{lemma}[Access to the virtual invariant space]%
     \label{thm:peps_torus_accessible_virtual_site}
     \lean{TNLean.PEPS.IsGIsometric.exists_accessibleVirtualSite}
     \leanok
@@ -4605,7 +4605,7 @@ operators.
     $\operatorname{ran}A$. It identifies the physical support with
     the invariant virtual space, as in Observation~6.4 of
     \cite{Schuch2010PEPS}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_torus_regular_site_gram}
@@ -4613,7 +4613,7 @@ operators.
     $\langle Au,Av\rangle=c\langle\Pi u,\Pi v\rangle$.
 \end{proof}
 
-\begin{theorem}[Expansion of a torus overlap]%
+\begin{lemma}[Expansion of a torus overlap]%
     \label{thm:peps_torus_overlap_expansion}
     \lean{TNLean.PEPS.sum_star_weightedSiteProduct_mul,
         TNLean.PEPS.torusBondSiteLabels,
@@ -4637,7 +4637,7 @@ operators.
     \end{align}
     For permutation bonds, the head label is the permutation of the
     tail label. Hence one free label per bond suffices in each network.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Expanding both contractions, interchanging the finite sums, and summing each
@@ -4645,7 +4645,7 @@ operators.
     exactly when its row is the image of its column.
 \end{proof}
 
-\begin{theorem}[Counting compatible regular bonds]%
+\begin{lemma}[Counting compatible regular bonds]%
     \label{thm:peps_regular_bond_intertwining_count}
     \lean{TNLean.PEPS.regularBond_labels_iff_intertwining,
         TNLean.PEPS.sum_regularBond_labels_eq_card,
@@ -4665,7 +4665,7 @@ operators.
     If the equations hold, each bond has one independent group label;
     otherwise there are no compatible labels. For the two bond families
     on a torus with $N$ sites, the count is $|G|^{2N}$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     The tail labels satisfy $\eta_e=q_{s(e)}\theta_e$. Substituting this
@@ -4673,7 +4673,7 @@ operators.
     gives the intertwining equation. Every $\theta_e$ is then free.
 \end{proof}
 
-\begin{theorem}[Translation compatibility across the torus seams]%
+\begin{lemma}[Translation compatibility across the torus seams]%
     \label{thm:peps_torus_closure_compatibility}
     \lean{TNLean.PEPS.torusHorizontalClosure_eq_map_element,
         TNLean.PEPS.torusHorizontalClosureElement,
@@ -4695,7 +4695,7 @@ operators.
     Summing over compatible vertex translations therefore gives exactly
     the number of simultaneous intertwiners. This holds also when a
     torus circumference is one.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     The nonseam horizontal and vertical bonds identify all translations
@@ -4704,7 +4704,7 @@ operators.
     already a loop at each site, imposing the same equation.
 \end{proof}
 
-\begin{theorem}[Overlap of regular isometric torus closures]%
+\begin{lemma}[Overlap of regular isometric torus closures]%
     \label{thm:peps_regular_torus_closure_overlap}
     \lean{TNLean.PEPS.prod_torusSiteGram_eq_sum_translation,
         TNLean.PEPS.sum_star_torusBondNetwork_regularClosure_mul,
@@ -4721,7 +4721,7 @@ operators.
     \end{align}
     For a uniform tensor the prefactor is $c^N|G|^N$. Neither closure
     pair is required to commute.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_torus_regular_site_gram, thm:peps_finite_indicator_sum}
@@ -4729,11 +4729,11 @@ operators.
     sum over vertex translations with prefactor
     $(\prod_v c_v)|G|^{-N}$. For a compatible translation, the two bond
     families contribute $|G|^{2N}$, leaving the stated prefactor. By
-    Theorem~\ref{thm:peps_torus_closure_compatibility}, the remaining sum
+    Lemma~\ref{thm:peps_torus_closure_compatibility}, the remaining sum
     counts the simultaneous intertwiners.
 \end{proof}
 
-\begin{theorem}[Independent regular isometric closure vectors]%
+\begin{lemma}[Independent regular isometric closure vectors]%
     \label{thm:peps_regular_torus_closure_independence}
     \lean{TNLean.PEPS.IsGIsometric.torusGClosure_dotProduct_eq_zero_of_pairConjugacyClass_ne,
         TNLean.PEPS.IsGIsometric.exists_torusGClosure_dotProduct_self,
@@ -4756,10 +4756,10 @@ operators.
     $G$-isometric case. The all-class assertion is an auxiliary extension:
     no ground-state claim is made for noncommuting closures. Semi-regular
     $G$-injective independence is proved in
-    Theorem~\ref{thm:peps_semiregular_g_injective_closure_independence};
+    Lemma~\ref{thm:peps_semiregular_g_injective_closure_independence};
     ground-space identification remains separate
     \cite{gap:rmp_peps_quantum_double_g_isometry}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_regular_torus_closure_overlap}
@@ -4772,7 +4772,7 @@ operators.
     subfamily.
 \end{proof}
 
-\begin{theorem}[Independent simultaneous-conjugacy operator sums]%
+\begin{lemma}[Independent simultaneous-conjugacy operator sums]%
     \label{thm:peps_pair_conjugacy_operator_independence}
     \lean{TNLean.PEPS.pairConjugacyOperator_eq_of_pairConjugacyClass_eq,
         TNLean.PEPS.pairConjugacyOperator,
@@ -4819,13 +4819,13 @@ operators.
     $\otimes_{\mathrm K}$ denotes the Kronecker product.
     Restriction to commuting pair classes gives the operator-independence
     argument in \cite[Theorem~5.9]{Schuch2010PEPS}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:peps_pair_conjugacy, thm:peps_semiregular_trace}
     Replacing $(g,h)$ by $(ygy^{-1},yhy^{-1})$ in
     (\ref{eq:peps_pair_operator_sum}) and substituting $x\mapsto xy$
-    leaves the sum unchanged. By Theorem~\ref{thm:peps_semiregular_trace},
+    leaves the sum unchanged. By Lemma~\ref{thm:peps_semiregular_trace},
     each factor of (\ref{eq:peps_pair_operator_dual}) evaluates to a
     Kronecker delta on a representation operator, giving
     (\ref{eq:peps_pair_operator_count}). Its value is zero on distinct
@@ -4861,7 +4861,7 @@ operators.
     Input and output physical dimensions may differ.
 \end{definition}
 
-\begin{theorem}[Physical maps commute with torus contraction]%
+\begin{lemma}[Physical maps commute with torus contraction]%
     \label{thm:peps_torus_physical_map_contraction}
     \lean{TNLean.PEPS.siteMap_physicalMapSite,
         TNLean.PEPS.torusPhysicalMap_torusBondNetwork,
@@ -4877,7 +4877,7 @@ operators.
     As the physical inverse
     operation used in \cite[Theorem~5.9]{Schuch2010PEPS}, the identity holds for arbitrary torus bond operators, with no
     invariance or injectivity hypothesis.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Expanding the physical product map and the virtual contraction,
@@ -4886,7 +4886,7 @@ operators.
     the virtual bond coefficients unchanged.
 \end{proof}
 
-\begin{theorem}[Physical product maps and Schmidt rank]%
+\begin{lemma}[Physical product maps and Schmidt rank]%
     \label{thm:peps_physical_product_cut_rank}
     \lean{TNLean.PEPS.physicalProductMatrix_split,
         TNLean.PEPS.physicalCutMatrix,
@@ -4907,7 +4907,7 @@ operators.
     send $\psi$ to $\phi$ and $\phi$ back to $\psi$, their Schmidt
     ranks agree across every partition, even when neither product map is
     invertible on the full physical space.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Splitting a physical configuration into its restrictions to $R$ and
@@ -4917,7 +4917,7 @@ operators.
     to the forward and reverse actions proves equality.
 \end{proof}
 
-\begin{theorem}[Recovering site coefficients from physical composition]%
+\begin{lemma}[Recovering site coefficients from physical composition]%
     \label{thm:peps_site_coefficients_composition}
     \lean{TNLean.PEPS.siteMap_injective,
         TNLean.PEPS.physicalMapSite_eq_iff_siteMap_comp}
@@ -4926,7 +4926,7 @@ operators.
     The four-leg coefficients are uniquely determined by the site map.
     For a physical matrix $F$ and tensors $A,B$, the coefficient identity
     $FA=B$ is equivalent to $F\mathcal P(A)=\mathcal P(B)$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     The entry of $\mathcal P(A)$ in physical row $s$ and virtual column
@@ -4934,7 +4934,7 @@ operators.
     $\sum_sF_{q,s}A^s_{t,r,b,l}$.
 \end{proof}
 
-\begin{theorem}[Constancy of labels away from the torus seams]%
+\begin{lemma}[Constancy of labels away from the torus seams]%
     \label{thm:peps_torus_nonseam_connectivity}
     \lean{TNLean.PEPS.IsTorusNonseamCompatible.eq_origin,
         TNLean.PEPS.IsTorusNonseamCompatible}
@@ -4944,14 +4944,14 @@ operators.
     Suppose that $q_{x+1,y}=q_{x,y}$ whenever $x+1\ne0$, and
     $q_{x,y}=q_{x,y+1}$ whenever $y+1\ne0$. By the synchronization away from the closure seams used in
     \cite[Theorem~5.9]{Schuch2010PEPS}, $q_{x,y}=q_{0,0}$ at every vertex.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Inducting along the representatives $0,\ldots,w-1$ in the horizontal direction
     and then along $0,\ldots,h-1$ in the vertical direction avoids crossing
     any closure seam; the same argument includes a circumference of one.
 \end{proof}
 
-\begin{theorem}[Group-average expansion of the torus projector contraction]%
+\begin{lemma}[Group-average expansion of the torus projector contraction]%
     \label{thm:peps_torus_projector_expansion}
     \lean{TNLean.PEPS.torusBondNetwork_single,
         TNLean.PEPS.torusBondSiteLabelsEquiv,
@@ -4979,7 +4979,7 @@ operators.
     \end{align}
     As in the expansion of the projector contraction in
     \cite[Theorem~5.9]{Schuch2010PEPS}, no semi-regularity or unitarity assumption is required for this identity.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{lem:peps_torus_bond_network_gauge}
     The bond-end indices are in bijection with the four indices read at the sites.
@@ -4990,7 +4990,7 @@ operators.
     (\ref{eq:peps_torus_projector_bond_operators}).
 \end{proof}
 
-\begin{theorem}[Extracting the torus closure operators]%
+\begin{lemma}[Extracting the torus closure operators]%
     \label{thm:peps_torus_projector_extraction}
     \lean{TNLean.PEPS.matrixLinearFunctional_eq_sum,
         TNLean.PEPS.torusOutputBondPairing,
@@ -5033,7 +5033,7 @@ operators.
     horizontal factor first. The coefficient $|G|^{-|\Lambda|}$ is
     strictly positive. This is an explicit contraction realizing the
     independence argument of \cite[Theorem~5.9]{Schuch2010PEPS}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_semiregular_trace, thm:peps_torus_projector_expansion,
@@ -5062,11 +5062,11 @@ operators.
     $\delta_1(U_{q_{v+e_1}q_v^{-1}})=\delta_{q_{v+e_1},q_v}$;
     a nonseam vertical bond gives
     $\delta_1(U_{q_vq_{v+e_2}^{-1}})=\delta_{q_v,q_{v+e_2}}$.
-    Theorem~\ref{thm:peps_torus_nonseam_connectivity} forces $q_v=x$
+    Lemma~\ref{thm:peps_torus_nonseam_connectivity} forces $q_v=x$
     at every vertex. All discarded seam factors then equal one, and
     the retained factors are $U_{xhx^{-1}}$ and $U_{xgx^{-1}}$.
     The normalized projector expansion of
-    Theorem~\ref{thm:peps_torus_projector_expansion} gives the coefficient
+    Lemma~\ref{thm:peps_torus_projector_expansion} gives the coefficient
     $|G|^{-|\Lambda|}$, giving~(\ref{eq:peps_projector_extraction}).
 \end{proof}
 
@@ -5093,14 +5093,14 @@ operators.
     statements \cite[Definition~5.1]{Schuch2010PEPS}.
 \end{definition}
 
-\begin{theorem}[Isometry of the regular projector site]%
+\begin{lemma}[Isometry of the regular projector site]%
     \label{thm:peps_regular_averaging_site_isometry}
     \lean{TNLean.PEPS.isGIsometric_regularAveragingSite}
     \leanok
     \uses{def:peps_regular_averaging_site, def:peps_torus_regular_coordinates}
     For four regular virtual legs, $A_0$ is $G$-isometric with
     normalization factor one.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     The unitary group average is self-adjoint and idempotent, so
@@ -5108,7 +5108,7 @@ operators.
     Definition~\ref{def:peps_regular_averaging_site}.
 \end{proof}
 
-\begin{theorem}[Closure vectors and the local inverse]%
+\begin{lemma}[Closure vectors and the local inverse]%
     \label{thm:peps_regular_g_injective_closure_inverse}
     \lean{TNLean.PEPS.IsGInjective.exists_torusGClosure_averagingSite,
         TNLean.PEPS.torusPhysicalMap_averagingSite}
@@ -5129,19 +5129,19 @@ operators.
     These are contraction identities for the inverse argument
     of \cite[Theorem~5.9]{Schuch2010PEPS}; no unitarity or local
     isometry hypothesis is needed.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_site_coefficients_composition, thm:peps_g_injective_left_inverse, thm:peps_torus_physical_map_contraction}
     The local inverse and virtual invariance give $LT=\Pi$ and
-    $T\Pi=T$. By Theorem~\ref{thm:peps_site_coefficients_composition},
+    $T\Pi=T$. By Lemma~\ref{thm:peps_site_coefficients_composition},
     these are coefficient identities, and applying
-    Theorem~\ref{thm:peps_torus_physical_map_contraction} at every
+    Lemma~\ref{thm:peps_torus_physical_map_contraction} at every
     physical site in both directions completes the proof. No inverse on the entire
     physical space is required.
 \end{proof}
 
-\begin{theorem}[Independent closures of regular $G$-injective tensors]%
+\begin{lemma}[Independent closures of regular $G$-injective tensors]%
     \label{thm:peps_regular_g_injective_closure_independence}
     \lean{TNLean.PEPS.IsGInjective.torusGClosure_ne_zero,
         TNLean.PEPS.IsGInjective.linearIndependent_torusGClosureClass,
@@ -5157,20 +5157,20 @@ operators.
     \cite[Theorem~5.9]{Schuch2010PEPS}, with no isometry hypothesis.
     Independence for all pair classes is an auxiliary extension and
     makes no ground-space assertion. The semi-regular representation result appears in
-    Theorem~\ref{thm:peps_semiregular_g_injective_closure_independence};
+    Lemma~\ref{thm:peps_semiregular_g_injective_closure_independence};
     ground-space identification remains separate
     \cite{gap:rmp_peps_quantum_double_g_isometry}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:peps_torus_regular_coordinates,
         thm:peps_semiregular_g_injective_closure_independence}
     The native regular representation is semi-regular by its group-basis
     equivalence with the group-algebra regular representation, so
-    Theorem~\ref{thm:peps_semiregular_g_injective_closure_independence} applies directly.
+    Lemma~\ref{thm:peps_semiregular_g_injective_closure_independence} applies directly.
 \end{proof}
 
-\begin{theorem}[Schmidt ranks of regular $G$-injective closure superpositions]%
+\begin{lemma}[Schmidt ranks of regular $G$-injective closure superpositions]%
     \label{thm:peps_regular_g_injective_closure_rank_transport}
     \lean{TNLean.PEPS.IsGInjective.rank_physicalCutMatrix_torusGClosure_sum}
     \leanok
@@ -5184,18 +5184,18 @@ operators.
     have the same Schmidt rank across $R$. This is the local
     deformation step of \cite[Corollary~6.10]{Schuch2010PEPS}; no
     particular boundary-rank formula is asserted here.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_regular_g_injective_closure_inverse,
         thm:peps_physical_product_cut_rank}
     The same forward and reverse physical product maps act on every
     summand. By linearity they recover the superpositions
-    (\ref{eq:peps_closure_superposition_pair}) from each other, and Theorem~\ref{thm:peps_physical_product_cut_rank}
+    (\ref{eq:peps_closure_superposition_pair}) from each other, and Lemma~\ref{thm:peps_physical_product_cut_rank}
     gives equality of their coefficient-matrix ranks.
 \end{proof}
 
-\begin{theorem}[Independent closures of semi-regular $G$-injective tensors]%
+\begin{lemma}[Independent closures of semi-regular $G$-injective tensors]%
     \label{thm:peps_semiregular_g_injective_closure_independence}
     \lean{TNLean.PEPS.IsGInjective.linearIndependent_torusGClosureClass_of_isSemiRegular,
         TNLean.PEPS.IsGInjective.torusGClosure_ne_zero_of_isSemiRegular,
@@ -5216,7 +5216,7 @@ operators.
     tori are auxiliary extensions. No identification with the
     parent-Hamiltonian ground space is asserted
     \cite{gap:rmp_peps_quantum_double_g_isometry}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_regular_g_injective_closure_inverse, thm:peps_torus_projector_extraction, thm:peps_pair_conjugacy_operator_independence}
@@ -5229,7 +5229,7 @@ operators.
     Thus $|G|^N E L^{\otimes\Lambda}$ sends any proposed linear
     relation among the physical vectors to a relation among the
     independent operators $\Omega_C$, whose coefficients vanish by
-    Theorem~\ref{thm:peps_pair_conjugacy_operator_independence}.
+    Lemma~\ref{thm:peps_pair_conjugacy_operator_independence}.
     Each vector is therefore nonzero, and restriction to the commuting classes
     preserves independence.
 \end{proof}
@@ -5281,7 +5281,7 @@ operators.
     averaging-projector sites with the inserted regular operators.
 \end{definition}
 
-\begin{theorem}[Accessibility with arbitrary regular bond insertions]%
+\begin{lemma}[Accessibility with arbitrary regular bond insertions]%
     \label{thm:peps_regular_twisted_region_accessibility}
     \lean{TNLean.PEPS.regionPhysicalMap_eq_regularProjectorTwistedRegionMatrix,
         TNLean.PEPS.regionPhysicalMap_regularProjectorTwistedRegionMatrix,
@@ -5303,7 +5303,7 @@ operators.
     is required. These are the accessibility identities of
     \cite[Observation after Lemma~6.3]{Schuch2010PEPS}, extended
     algebraically to arbitrary bond insertions.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_regular_open_region_accessibility,
@@ -5317,7 +5317,7 @@ operators.
     (\ref{eq:peps_twisted_projector_region}) for $B_R^u$.
 \end{proof}
 
-\begin{theorem}[Expansion of a twisted-region cross Gram matrix]%
+\begin{lemma}[Expansion of a twisted-region cross Gram matrix]%
     \label{thm:peps_regular_twisted_gram_expansion}
     \lean{TNLean.PEPS.regularOpenRegionMatrix_apply_group,
         TNLean.PEPS.regularOpenRegionMatrix_crossGram_apply_group,
@@ -5334,7 +5334,7 @@ operators.
     \end{align}
     The prescribed crossing configurations are retained, and the scalar
     from the local averages is $(\prod_{v\in R}c_v)|G|^{-|R|}$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_regular_site_gram}
@@ -5343,7 +5343,7 @@ operators.
     two transformed virtual configurations gives the result.
 \end{proof}
 
-\begin{theorem}[Synchronization through common identity bonds]%
+\begin{lemma}[Synchronization through common identity bonds]%
     \label{thm:peps_regular_twisted_synchronization}
     \lean{TNLean.PEPS.regionLabels_eq_of_subgraph_internalEdge_eq,
         TNLean.PEPS.IsTwistedRegionLabelCompatible,
@@ -5364,7 +5364,7 @@ operators.
     \end{align}
     Consequently the sum over compatible vertex translations is the
     corresponding restricted sum over $x\in G$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_regular_twisted_gram_expansion}
@@ -5375,7 +5375,7 @@ operators.
     give the common translation of every crossing label.
 \end{proof}
 
-\begin{theorem}[Counting with a restricted common translation]%
+\begin{lemma}[Counting with a restricted common translation]%
     \label{thm:peps_regular_twisted_boundary_count}
     \lean{TNLean.PEPS.regionBoundaryLabel_eq_iff,
         TNLean.PEPS.sum_boundaryRestriction_filtered_translations_eq_card,
@@ -5388,7 +5388,7 @@ operators.
     \begin{align}
         |G|^{I_R}\sum_{x\in F}\mathbf{1}_{\mu=x\nu}.
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     For fixed $x$, the second assignment determines the first: its crossing
@@ -5396,7 +5396,7 @@ operators.
     agree exactly when $\mu=x\nu$.
 \end{proof}
 
-\begin{theorem}[Weighted translations on the invariant boundary]%
+\begin{lemma}[Weighted translations on the invariant boundary]%
     \label{thm:peps_regular_weighted_boundary_translation}
     \lean{TNLean.PEPS.toMatrix_regularBoundaryRepresentation_mul_projector,
         TNLean.PEPS.regularBoundaryWeightedTranslation,
@@ -5413,14 +5413,14 @@ operators.
         W_aP=\left(\sum_xa_x\right)P,
         \qquad PW_aP=\left(\sum_xa_x\right)P.
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Every common translation fixes every vector in the range of $P$;
     summing this identity with the specified weights and using $P^2=P$ yields both equalities.
 \end{proof}
 
-\begin{theorem}[Twisted-region cross Gram matrix]%
+\begin{lemma}[Twisted-region cross Gram matrix]%
     \label{thm:peps_regular_twisted_region_cross_gram}
     \lean{TNLean.PEPS.sum_regularBoundary_filtered_translation_eq_weightedTranslation,
         TNLean.PEPS.regularTwistedOpenRegionMatrix_crossGram_of_connected,
@@ -5428,7 +5428,7 @@ operators.
     \leanok
     \uses{thm:peps_regular_twisted_synchronization, thm:peps_regular_weighted_boundary_translation}
     Under the hypotheses of
-    Theorem~\ref{thm:peps_regular_twisted_synchronization}, put
+    Lemma~\ref{thm:peps_regular_twisted_synchronization}, put
     \begin{align}
         F_{u,w}=\{x\in G:u_ex=xw_e\text{ for every internal bond }e\},
         \qquad
@@ -5447,7 +5447,7 @@ operators.
     on crossing bonds. The general torus cut of
     \cite[Theorem~6.9]{Schuch2010PEPS} remains separate
     \cite{gap:rmp_peps_quantum_double_g_isometry}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_regular_twisted_boundary_count}
@@ -5457,7 +5457,7 @@ operators.
     acts identically, giving the projected formula.
 \end{proof}
 
-\begin{theorem}[Superpositions with a common boundary density]%
+\begin{lemma}[Superpositions with a common boundary density]%
     \label{thm:peps_regular_closure_superposition_density}
     \lean{TNLean.PEPS.regularClosureSuperpositionMap_conjTranspose_mul,
         TNLean.PEPS.regularClosureSuperpositionMap,
@@ -5488,7 +5488,7 @@ operators.
     satisfies $\rho_A^2=|G|^{-n}\rho_A$, and has entropy $n\log|G|$.
     This is a conditional matrix statement; identification of its Gram
     hypotheses with a PEPS contraction is separate.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Expanding the mixed Gram matrices gives
@@ -5502,7 +5502,7 @@ operators.
     and applying the physical boundary density calculation completes the proof.
 \end{proof}
 
-\begin{theorem}[Common density for PEPS with complementary twists]%
+\begin{lemma}[Common density for PEPS with complementary twists]%
     \label{thm:peps_regular_twisted_cut_entropy}
     \lean{TNLean.PEPS.regularTwistedSite_eq_of_trivial_on_incident,
         TNLean.PEPS.regularTwistedOpenRegionMatrix_eq_of_trivial_on_incident,
@@ -5532,7 +5532,7 @@ operators.
     the complement, rather than the arbitrary torus cut of
     \cite[Theorem~6.9]{Schuch2010PEPS}
     \cite{gap:rmp_peps_quantum_double_g_isometry}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_regular_twisted_region_cross_gram, thm:peps_open_region_cut}
@@ -5542,7 +5542,7 @@ operators.
     derives each projected complementary mixed Gram matrix as a scalar
     multiple of $P$. Exact contraction across the cut identifies the
     superposition with the matrix state of
-    Theorem~\ref{thm:peps_regular_closure_superposition_density}, which then yields the common reduced density, rank, and entropy without assuming a Gram identity for a whole region.
+    Lemma~\ref{thm:peps_regular_closure_superposition_density}, which then yields the common reduced density, rank, and entropy without assuming a Gram identity for a whole region.
 \end{proof}
 
 \begin{definition}[The rectangular grid obtained by cutting the torus seams]%
@@ -5558,7 +5558,7 @@ operators.
 
 \input{chapter/ch24_peps_regular_ginjective_simply_connected_entropy}
 
-\begin{theorem}[Connectivity of rectangles and their complements]%
+\begin{lemma}[Connectivity of rectangles and their complements]%
     \label{thm:peps_torus_rectangle_cut_connectivity}
     \lean{TNLean.PEPS.torusNonseamGraph_compl_rectangle_connected,
         TNLean.PEPS.torusGraph_compl_rectangle_connected,
@@ -5574,7 +5574,7 @@ operators.
     assertion also holds for coordinate intervals clipped by the bounds
     of the grid. A nonempty bounded rectangle starting at a positive
     horizontal coordinate has a crossing bond on its left side.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Inside the rectangle, consecutive coordinate changes connect any two vertices.
@@ -5588,7 +5588,7 @@ operators.
 
 \input{chapter/ch24_peps_stripe_local_equivalence}
 
-\begin{theorem}[Closure seams avoid a strictly interior rectangle]%
+\begin{lemma}[Closure seams avoid a strictly interior rectangle]%
     \label{thm:peps_torus_interior_rectangle_seam_exclusion}
     \lean{TNLean.PEPS.torusNonseamGraph_not_horizontal_wrap,
         TNLean.PEPS.torusNonseamGraph_not_vertical_wrap,
@@ -5600,7 +5600,7 @@ operators.
     from the ordinary rectangular grid. If a rectangle lies strictly
     between the first and last coordinate values in both directions,
     no wrap bond is incident to it.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_torus_rectangle_cut_connectivity}
@@ -5609,7 +5609,7 @@ operators.
     and neither endpoint can lie in the stated interior rectangle.
 \end{proof}
 
-\begin{theorem}[The torus closure as a twisted graph contraction]%
+\begin{lemma}[The torus closure as a twisted graph contraction]%
     \label{thm:peps_regular_torus_closure_cut_identification}
     \lean{TNLean.PEPS.torusClosureEdgeAssignment_right,
         TNLean.PEPS.torusIncidentSite,
@@ -5647,7 +5647,7 @@ operators.
     required for these contraction identities. The circumference
     restriction ensures that the simple graph distinguishes all four
     incident virtual legs \cite{gap:rmp_peps_quantum_double_g_isometry}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Enumerating the graph bonds by horizontal and vertical torus bonds,
@@ -5660,7 +5660,7 @@ operators.
     identity in the two sets of physical cut coordinates gives the cut statements.
 \end{proof}
 
-\begin{theorem}[Regular isometry in incident-edge coordinates]%
+\begin{lemma}[Regular isometry in incident-edge coordinates]%
     \label{thm:peps_regular_torus_incident_isometry}
     \lean{TNLean.PEPS.torusIncidentCoordinates_injective,
         TNLean.PEPS.torusIncidentCoordinates,
@@ -5675,7 +5675,7 @@ operators.
     when its virtual coordinates are indexed by incident graph edges.
     Every closure assignment is the identity on the ordinary grid and
     on every edge incident to a strictly interior rectangle.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_torus_interior_rectangle_seam_exclusion}
@@ -5685,7 +5685,7 @@ operators.
     follow from the exclusion of wrap bonds.
 \end{proof}
 
-\begin{theorem}[Entropy of closure superpositions on interior rectangles]%
+\begin{lemma}[Entropy of closure superpositions on interior rectangles]%
     \label{thm:peps_regular_torus_interior_rectangle_entropy}
     \lean{TNLean.PEPS.torusClosureSuperpositionCut_eq_twistedCutSuperposition,
         TNLean.PEPS.torusClosureSuperpositionCut,
@@ -5715,7 +5715,7 @@ operators.
     also permits noncommuting closure pairs. The source's full statement
     concerns commuting sectors and arbitrary topologically trivial
     regions \cite{gap:rmp_peps_quantum_double_g_isometry}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_torus_rectangle_cut_connectivity,
@@ -5727,12 +5727,12 @@ operators.
     to $R$. Rewriting the local regular isometry in incident-edge
     coordinates and identifying the native closure superposition with its
     twisted graph contraction allows
-    Theorem~\ref{thm:peps_regular_twisted_cut_entropy} to apply: nonvanishing gives
+    Lemma~\ref{thm:peps_regular_twisted_cut_entropy} to apply: nonvanishing gives
     the positive normalization, and the same region map and constant apply
     to every choice of coefficients.
 \end{proof}
 
-\begin{theorem}[Pair conjugacy with a fixed first element]%
+\begin{lemma}[Pair conjugacy with a fixed first element]%
     \label{thm:peps_pair_conjugacy_centralizer}
     \lean{TNLean.PEPS.pairConjugacyClass_eq_iff_centralizer}
     \leanok
@@ -5741,14 +5741,14 @@ operators.
     \cite[Theorem~5.9]{Schuch2010PEPS}, fix $g\in G$. The pairs $(g,h)$ and $(g,k)$ have the same class
     exactly when $h=xkx^{-1}$ for some $x$ in the centralizer
     $Z_G(g)=\{x\in G:xg=gx\}$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     The simultaneous-conjugacy equations are $g=xgx^{-1}$ and
     $h=xkx^{-1}$; the first is equivalent to $xg=gx$.
 \end{proof}
 
-\begin{theorem}[Closure labels for an abelian group]%
+\begin{lemma}[Closure labels for an abelian group]%
     \label{thm:peps_abelian_pair_classes}
     \lean{TNLean.PEPS.pairConjugacyClass_eq_iff_of_commGroup,
         TNLean.PEPS.pairConjugacyClassEquivOfCommGroup,
@@ -5759,7 +5759,7 @@ operators.
     If $G$ is abelian, every pair-conjugacy class is a singleton and all
     pairs commute. A finite abelian group therefore has $|G|^2$
     commuting pair-conjugacy classes.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Conjugation is trivial, so the class map identifies the classes with
@@ -5788,7 +5788,7 @@ operators.
     \cite{gap:rmp_peps_quantum_double_g_isometry}.
 \end{definition}
 
-\begin{theorem}[The dual tensor is $G$-isometric]%
+\begin{lemma}[The dual tensor is $G$-isometric]%
     \label{thm:peps_quantum_double_dual_g_isometric}
     \lean{TNLean.PEPS.quantumDoubleDualSpins_mul_colorDiag,
         TNLean.PEPS.quantumDoubleDualSpins_eq_iff,
@@ -5809,7 +5809,7 @@ operators.
     \cite[Section~``Examples'', ``The double models'']{Schuch2010PEPS}.
     In particular the toric code tensor, $G=\mathbb{Z}_2$, is
     $\mathbb{Z}_2$-isometric.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Two colorings have the same differences exactly when they differ by one
@@ -5846,8 +5846,8 @@ operators.
     On the incoming legs $R_g$ sends $x$ to $h\mapsto x(hg)$, and on the
     outgoing legs $R_g^{-1}$ acting along the edge does the same, so the
     action on the four legs is the color shift. The dual tensor is invariant
-    under it by Theorem~\ref{thm:peps_quantum_double_dual_g_isometric}, and
-    Theorem~\ref{thm:peps_torus_operator_string_deformation} applies.
+    under it by Lemma~\ref{thm:peps_quantum_double_dual_g_isometric}, and
+    Lemma~\ref{thm:peps_torus_operator_string_deformation} applies.
 \end{proof}
 
 Placed at every site of the torus, the dual tensor gives a network whose
@@ -5911,7 +5911,7 @@ around the two non-contractible cycles must be trivial.
 
 \input{chapter/ch24_peps_regular_parent_ground_space}
 
-\begin{theorem}[The dual quantum-double network is the Gauss-law superposition]%
+\begin{lemma}[The dual quantum-double network is the Gauss-law superposition]%
     \label{thm:peps_quantum_double_dual_gauss_law}
     \lean{TNLean.PEPS.quantumDoubleDualSiteTensor,
         TNLean.PEPS.quantumDoubleDualPEPS,
@@ -5932,7 +5932,7 @@ around the two non-contractible cycles must be trivial.
         \label{eq:peps_qd_dual_gauss}
     \end{align}
     at every site $v$ \cite[Section~``Examples'', ``The double models'']{Schuch2010PEPS}, and has trivial holonomy if the ordered products of $a_v=s_2(v)s_1(v)$ along row $y=0$ and of $b_v=s_4(v+(0,1))^{-1}s_1(v)$ along column $x=0$ equal $1\in G$. Then the contracted network coefficient equals $|G|$ on configurations satisfying (\ref{eq:peps_qd_dual_gauss}) with trivial holonomy, and $0$ otherwise \cite{gap:rmp_peps_quantum_double_g_isometry}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     By Lemma~\ref{lem:peps_torus_site_tensor_contraction}, the coefficient counts bond colorings $(f_v,u_v)$ (left and top colors at $v$) matching $(s_1,s_2,s_3,s_4)$:
@@ -5962,7 +5962,7 @@ around the two non-contractible cycles must be trivial.
     and $0$ otherwise \cite[Appendix~A, ``The Toric Code and quantum double models'']{Cirac2021Matrix}.
 \end{definition}
 
-\begin{theorem}[The primal virtual labels fuse to the identity]%
+\begin{lemma}[The primal virtual labels fuse to the identity]%
     \label{thm:peps_quantum_double_primal_fusion}
     \lean{TNLean.PEPS.quantumDoublePrimalTensor_ne_zero_mul_eq_one,
         TNLean.PEPS.quantumDoublePrimalTensor_ne_zero_map_mul_eq_one,
@@ -5975,14 +5975,14 @@ around the two non-contractible cycles must be trivial.
         \pi(t)\pi(r)\pi(b)^{-1}\pi(l)^{-1} & =I,
         \label{eq:peps_qd_primal_fusion}
     \end{align}
-    and for a character $\chi$, $\chi(t)\chi(r)\chi(b)^{-1}\chi(l)^{-1}A^{g_1,g_2,g_3,g_4}_{t,r,b,l}=A^{g_1,g_2,g_3,g_4}_{t,r,b,l}$ \cite[Appendix~A, ``The Toric Code and quantum double models'']{Cirac2021Matrix}. The resulting network string symmetry is Theorem~\ref{thm:peps_quantum_double_primal_network}.
-\end{theorem}
+    and for a character $\chi$, $\chi(t)\chi(r)\chi(b)^{-1}\chi(l)^{-1}A^{g_1,g_2,g_3,g_4}_{t,r,b,l}=A^{g_1,g_2,g_3,g_4}_{t,r,b,l}$ \cite[Appendix~A, ``The Toric Code and quantum double models'']{Cirac2021Matrix}. The resulting network string symmetry is Lemma~\ref{thm:peps_quantum_double_primal_network}.
+\end{lemma}
 
 \begin{proof}\leanok
     From (\ref{eq:peps_qd_primal_labels}), $t\,r\,b^{-1}l^{-1}=(g_1g_2)(g_2^{-1}g_3)(g_4g_3)^{-1}(g_1g_4^{-1})^{-1}=1$; multiplicativity of $\pi$ gives (\ref{eq:peps_qd_primal_fusion}).
 \end{proof}
 
-\begin{theorem}[Virtual symmetry of the primal quantum-double network]%
+\begin{lemma}[Virtual symmetry of the primal quantum-double network]%
     \label{thm:peps_quantum_double_primal_network}
     \lean{TNLean.PEPS.quantumDoublePrimalTensor_ne_zero_mul_eq_mul,
         TNLean.PEPS.quantumDoublePrimalSiteTensor,
@@ -5991,7 +5991,7 @@ around the two non-contractible cycles must be trivial.
     \leanok
     \uses{def:peps_quantum_double_primal, lem:peps_torus_string_pull_through}
     Place the primal tensor of Definition~\ref{def:peps_quantum_double_primal} at every site of a $w\times h$ torus ($w,h\ge2$; four distinct bonds per site for $w,h\ge3$ \cite{gap:rmp_peps_examples_small_torus}). For any representation $\pi$ of $G$, inserting $\pi(g)$ along the west and south boundary of a site rectangle yields the same contracted network as inserting $\pi(g)$ along its north and east boundary \cite[Appendix~A, ``The Toric Code and quantum double models'']{Cirac2021Matrix}; around a single site this reproduces (\ref{eq:peps_qd_primal_fusion}).
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     On the support (\ref{eq:peps_qd_primal_labels}), $tr=lb$, so $\pi(t)\pi(r)=\pi(l)\pi(b)$; apply Lemma~\ref{lem:peps_torus_string_pull_through} with $X_g=\pi(g)$.

@@ -11,7 +11,7 @@ see \cite[Section~11]{OpenAI2026AreaLaw}.
 % especially 308--316, and geometry:initial-stars, lines 352--363;
 % revision adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 
-\begin{theorem}[Nonempty interiors and closure of fan triangles]
+\begin{lemma}[Nonempty interiors and closure of fan triangles]
     \label{thm:area_law_cell_fan_regularity}
     \lean{TNLean.PEPS.AreaLaw.Geometry.cellFanPolygon_interior_nonempty_and_closure_eq}
     \leanok
@@ -21,7 +21,7 @@ see \cite[Section~11]{OpenAI2026AreaLaw}.
         \operatorname{int}(P_e)            & \ne\varnothing, \\
         \overline{\operatorname{int}(P_e)} & =P_e.
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{def:area_law_cell_fan,def:area_law_template}
     The defining determinant $\det(a_e-c,b_e-c)$ is nonzero. Thus the

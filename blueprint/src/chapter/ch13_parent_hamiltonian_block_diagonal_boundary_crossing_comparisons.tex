@@ -54,7 +54,7 @@
     before decomposition lies in $G_L(B)$.
     Lemma~\ref{lem:block_diagonal_boundary_cyclic_restriction_sum} rewrites this
     local vector as the displayed sum, and
-    Theorem~\ref{thm:block_sum_local_ground_space} identifies $G_L(B)$ with
+    Lemma~\ref{thm:block_sum_local_ground_space} identifies $G_L(B)$ with
     $\bigvee_jG_L(A_j)$.
 
     % Next source step, not proven by this membership lemma: blockwise
@@ -274,7 +274,7 @@
     the matrices $C^j_{i,\rho}$.
 \end{proof}
 
-\begin{theorem}[Fixed boundary-crossing $C^j,D^j$ comparison from the local block-sum constraint]
+\begin{lemma}[Fixed boundary-crossing $C^j,D^j$ comparison from the local block-sum constraint]
     \label{thm:block_diagonal_boundary_crossing_pgvwc_comparison}
     \lean{MPSTensor.blockDiagonal_boundary_crossing_pgvwc_comparison_of_sum_mem_iSup}
     \leanok
@@ -301,7 +301,7 @@
     % $A^j_{i_{m+1}}C^j_{i_1}=D^j_{i_{m+1}}A^j_{i_1}$ from
     % \cite[Theorem~12]{PerezGarcia2007Matrix}; this theorem does not assert
     % the full periodic-boundary ground-space statement.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -320,7 +320,7 @@
     (\ref{eq:ph_fixed_boundary_crossing_comparison}).
 \end{proof}
 
-\begin{theorem}[$C^j,D^j$ comparison for a block-diagonal boundary representation]
+\begin{lemma}[$C^j,D^j$ comparison for a block-diagonal boundary representation]
     \label{thm:block_diagonal_boundary_crossing_pgvwc_comparison_chain_ground_space}
     \lean{MPSTensor.blockDiagonal_boundary_crossing_pgvwc_comparison_of_chainGroundSpace}
     \leanok
@@ -350,7 +350,7 @@
     outside word $\rho$ of length $N-L$, every block $j$, and every word
     $\beta$ before the cut,
     $A^j_\beta C^j_{i,\rho} = ((\mu_j^NX_j)A^j_\beta)A^j_\rho$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -373,7 +373,7 @@
     $j$.
 \end{proof}
 
-\begin{theorem}[Fixed boundary-crossing component in the local block space]
+\begin{lemma}[Fixed boundary-crossing component in the local block space]
     \label{thm:block_diagonal_boundary_crossing_component_mem_ground_space}
     \lean{MPSTensor.blockDiagonal_boundary_crossing_component_mem_groundSpace_of_pgvwc_comparison_of_sum_mem_iSup}
     \leanok
@@ -395,12 +395,12 @@
         \notag
     \end{align}
     % Fixed-window local-membership consequence of the preceding comparison.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:block_diagonal_boundary_crossing_pgvwc_comparison, lem:block_diagonal_boundary_crossing_matrix_identity}
-    Theorem~\ref{thm:block_diagonal_boundary_crossing_pgvwc_comparison}
+    Lemma~\ref{thm:block_diagonal_boundary_crossing_pgvwc_comparison}
     gives matrices $C^j_{i,\tau}$ satisfying
     (\ref{eq:ph_fixed_boundary_crossing_comparison}). Thus
     $E=C^j_{i,\tau}$ satisfies the boundary matrix identity required in

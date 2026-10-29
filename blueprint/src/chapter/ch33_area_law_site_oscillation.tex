@@ -36,7 +36,7 @@ and use $[A,B]=AB-BA$.
     where every test unitary acts as the identity on the spectator.
 \end{definition}
 
-\begin{theorem}[Bounds for the oscillation supremum]
+\begin{lemma}[Bounds for the oscillation supremum]
     \label{thm:qc_site_oscillation_bounds}
     \uses{def:qc_site_oscillation}
     \lean{QuantumCircuit.siteOscillation_bddAbove,
@@ -52,7 +52,7 @@ and use $[A,B]=AB-BA$.
     satisfies $\|[\widehat U,B]\|=\|[B,\widehat U]\|\le d_y(B)$.
     If these commutator norms are all at most a real number $r$, then
     $d_y(B)\le r$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{def:qc_site_oscillation}
@@ -67,7 +67,7 @@ and use $[A,B]=AB-BA$.
     stated inequalities, since reversing a commutator changes only its sign.
 \end{proof}
 
-\begin{theorem}[Subadditivity and absolute homogeneity]
+\begin{lemma}[Subadditivity and absolute homogeneity]
     \label{thm:qc_site_oscillation_seminorm}
     \uses{def:qc_site_oscillation}
     \lean{QuantumCircuit.siteOscillation_add_le,
@@ -89,7 +89,7 @@ and use $[A,B]=AB-BA$.
     $d_y(B-C)\le d_y(B)+d_y(C)$.
     For any finite set $F$ and any family $(B_k)_{k\in F}$,
     $d_y(\sum_{k\in F}B_k)\le\sum_{k\in F}d_y(B_k)$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:qc_site_oscillation_bounds,thm:qc_site_oscillation_commutant}
@@ -112,7 +112,7 @@ and use $[A,B]=AB-BA$.
     and taking the supremum over $U$ completes the bound.
 \end{proof}
 
-\begin{theorem}[Vanishing on the physical commutant]
+\begin{lemma}[Vanishing on the physical commutant]
     \label{thm:qc_site_oscillation_commutant}
     \uses{def:qc_site_oscillation}
     \lean{QuantumCircuit.siteOscillation_eq_zero_of_commute,
@@ -122,7 +122,7 @@ and use $[A,B]=AB-BA$.
     If $[\widehat U,B]=0$ for every $U\in\mathcal A_{\{y\}}$, then
     $d_y(B)=0$. In particular, $d_y(0)=0$, and every operator $S$ on
     the spectator satisfies $d_y(\mathbb 1_{\mathcal H}\otimes S)=0$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:qc_site_oscillation_bounds}
@@ -166,7 +166,7 @@ means using $K=I\setminus Q$.
     with both spectator indices left unchanged.
 \end{definition}
 
-\begin{theorem}[Preservation of spectator factors]
+\begin{lemma}[Preservation of spectator factors]
     \label{thm:qc_spectator_factors}
     \uses{def:qc_spectator_expectation}
     \lean{QuantumCircuit.spectatorSiteExpectation_kronecker,
@@ -183,7 +183,7 @@ means using $K=I\setminus Q$.
         \label{eq:qc_spectator_fixed}
     \end{align}
     Retaining all physical sites gives $E_I^{\mathcal K}(B)=B$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{def:qc_spectator_expectation,def:qc_site_expectation,
@@ -195,14 +195,14 @@ means using $K=I\setminus Q$.
     matrix is supported on $I$, $E_I(B_{ab})=B_{ab}$ on every block.
 \end{proof}
 
-\begin{theorem}[Commutation on the averaged sites]
+\begin{lemma}[Commutation on the averaged sites]
     \label{thm:qc_spectator_commutant}
     \uses{def:qc_spectator_expectation}
     \lean{QuantumCircuit.spectatorSiteExpectation_commute}
     \leanok
     For every $U\in\mathcal A_{I\setminus K}$,
     $[E_K^{\mathcal K}(B),\widehat U]=0$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{def:qc_spectator_expectation,def:qc_site_expectation}
@@ -228,7 +228,7 @@ means using $K=I\setminus Q$.
     In particular, $P_{\varnothing}(p)=\mathbb 1$.
 \end{definition}
 
-\begin{theorem}[Unitarity and site insertion for Weyl products]
+\begin{lemma}[Unitarity and site insertion for Weyl products]
     \label{thm:qc_partial_weyl_identities}
     \uses{def:qc_partial_weyl,def:qc_local_circuit}
     \lean{QuantumCircuit.partialWeyl_mem_unitary,
@@ -245,7 +245,7 @@ means using $K=I\setminus Q$.
         P_{S\cup\{y\}}(p) & =P_{\{y\}}(p)P_S(p).
         \label{eq:qc_partial_weyl_insert}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{def:qc_partial_weyl,def:qc_local_circuit}
@@ -261,7 +261,7 @@ means using $K=I\setminus Q$.
     $P_{S\cup\{y\}}(p)$.
 \end{proof}
 
-\begin{theorem}[Commutator with a product of unitaries]
+\begin{lemma}[Commutator with a product of unitaries]
     \label{thm:qc_unitary_product_commutator}
     \lean{QuantumCircuit.norm_commutator_mul_le}
     \leanok
@@ -271,7 +271,7 @@ means using $K=I\setminus Q$.
         \|[B,UV]\| & \le\|[B,U]\|+\|[B,V]\|.
         \label{eq:qc_unitary_product_commutator}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Expanding $[B,UV]=[B,U]V+U[B,V]$ and applying the triangle inequality
@@ -280,7 +280,7 @@ means using $K=I\setminus Q$.
         =\|[B,U]\|+\|[B,V]\|$.
 \end{proof}
 
-\begin{theorem}[Amplified Weyl averaging formula]
+\begin{lemma}[Amplified Weyl averaging formula]
     \label{thm:qc_spectator_average}
     \uses{def:qc_spectator_expectation,lem:qc_site_expectation_average}
     \lean{QuantumCircuit.spectatorSiteExpectation_eq_average}
@@ -297,7 +297,7 @@ means using $K=I\setminus Q$.
     \end{align}
     Labels at retained sites are included in the sum; each choice of
     Weyl operators outside $K$ consequently occurs $q^{2|K|}$ times.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{def:qc_spectator_expectation,lem:qc_site_expectation_average}
@@ -307,24 +307,24 @@ means using $K=I\setminus Q$.
     (\ref{eq:qc_spectator_blocks}) yields the identity.
 \end{proof}
 
-\begin{theorem}[Contraction with an arbitrary spectator]
+\begin{lemma}[Contraction with an arbitrary spectator]
     \label{thm:qc_spectator_contraction}
     \uses{def:qc_spectator_expectation}
     \lean{QuantumCircuit.norm_spectatorSiteExpectation_le}
     \leanok
     If $q>0$, then $\|E_K^{\mathcal K}(B)\|\le\|B\|$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:qc_spectator_average,thm:qc_partial_weyl_identities}
-    By Theorem~\ref{thm:qc_partial_weyl_identities}, every
+    By Lemma~\ref{thm:qc_partial_weyl_identities}, every
     $\widehat{W_K(p)}$ is unitary, so each of the $q^{2|I|}$ summands in
     (\ref{eq:qc_spectator_average}) has norm $\|B\|$.
     Applying the triangle inequality with the normalization
     $q^{-2|I|}q^{2|I|}=1$ gives $\|E_K^{\mathcal K}(B)\|\le\|B\|$.
 \end{proof}
 
-\begin{theorem}[Averaging error from on-site commutator bounds]
+\begin{lemma}[Averaging error from on-site commutator bounds]
     \label{thm:qc_spectator_error}
     \uses{def:qc_spectator_expectation}
     \lean{QuantumCircuit.norm_sub_spectatorSiteExpectation_le}
@@ -337,7 +337,7 @@ means using $K=I\setminus Q$.
          & \le\sum_{y\notin K}\varepsilon_y.
         \label{eq:qc_spectator_error}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:qc_spectator_average,def:qc_partial_weyl,
@@ -345,11 +345,11 @@ means using $K=I\setminus Q$.
     For unitaries $V,W$ on $\mathcal H\otimes\mathcal K$, the identity
     $[B,VW]=[B,V]W+V[B,W]$ implies
     $\|[B,VW]\|\le\|[B,V]\|+\|[B,W]\|$ by
-    Theorem~\ref{thm:qc_unitary_product_commutator}.
+    Lemma~\ref{thm:qc_unitary_product_commutator}.
     Starting from $P_{\varnothing}(p)=\mathbb 1$, induction over the sites
     outside $K$ via the insertion identity~(\ref{eq:qc_partial_weyl_insert})
     and the single-site unitarity and support properties of
-    Theorem~\ref{thm:qc_partial_weyl_identities} (with the identity on the
+    Lemma~\ref{thm:qc_partial_weyl_identities} (with the identity on the
     spectator throughout) bounds the commutator with $\widehat{W_K(p)}$ by
     $\sum_{y\notin K}\varepsilon_y$.
     For the unitary $V=\widehat{W_K(p)}$, the identity
@@ -369,14 +369,14 @@ means using $K=I\setminus Q$.
 \end{proof}
 
 For $q>0$, setting $K=I\setminus Q$ and $\varepsilon_y=d_y(B)$ in
-Theorem~\ref{thm:qc_spectator_error} together with
-Theorem~\ref{thm:qc_site_oscillation_bounds} yields the physical-site
+Lemma~\ref{thm:qc_spectator_error} together with
+Lemma~\ref{thm:qc_site_oscillation_bounds} yields the physical-site
 averaging estimate of \cite{OpenAI2026AreaLaw}:
 \begin{align}
     \|B-E_{I\setminus Q}^{\mathcal K}(B)\|
      & \le\sum_{y\in Q}d_y(B).
     \label{eq:qc_osc_averaging_error}
 \end{align}
-By Theorem~\ref{thm:qc_spectator_commutant}, the averaged operator
+By Lemma~\ref{thm:qc_spectator_commutant}, the averaged operator
 $E_{I\setminus Q}^{\mathcal K}(B)$ commutes with $U\otimes\mathbb 1_{\mathcal K}$
 for every $U\in\mathcal A_Q$, with no factor depending on $\dim\mathcal K$.

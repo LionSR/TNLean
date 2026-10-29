@@ -11,11 +11,11 @@ absorbed into a constant at the rate $e^{-l/6\xi}$, but it can at every
 slower rate $e^{-l/\xi'}$ with $\xi'>6\xi$. At a fixed length this is all
 the argument gives. The printed rate $\xi'=6\xi$ is reached by choosing the
 length anew, with the velocity of the chain estimate raised by the factor
-$\tfrac54$ (Theorem~\ref{thm:hastings_lemma1_endpoint}); the chain estimate
+$\tfrac54$ (Lemma~\ref{thm:hastings_lemma1_endpoint}); the chain estimate
 is not shown to give a Lieb--Robinson pair in the source's sense, before or
 after the raise.
 
-\begin{theorem}[A square root against an exponential]
+\begin{lemma}[A square root against an exponential]
     \label{thm:hastings_sqrt_exp}
     \lean{TNLean.MPS.AreaLaw.Hastings.sqrt_mul_exp_neg_le}
     \leanok
@@ -24,14 +24,14 @@ after the raise.
         \sqrt l\,e^{-\delta l} & \le\frac1{\sqrt{2e\delta}},
         \label{eq:hastings_sqrt_exp}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     With $x=2\delta l$, the inequality $x\le e^{x-1}$ gives $xe^{-x}\le e^{-1}$,
     that is $2e\delta\,l\,e^{-2\delta l}\le1$, which is the square
     of~\eqref{eq:hastings_sqrt_exp}. The bound is attained at $l=1/(2\delta)$.
 \end{proof}
 
-\begin{theorem}[A power against an exponential]
+\begin{lemma}[A power against an exponential]
     \label{thm:hastings_pow_exp}
     \lean{TNLean.MPS.AreaLaw.Hastings.pow_mul_exp_neg_le,
         TNLean.MPS.AreaLaw.Hastings.pow_mul_exp_neg_add_le}
@@ -42,14 +42,14 @@ after the raise.
         l^pe^{-(r+\delta)l} & \le\Bigl(\frac{p}{e\delta}\Bigr)^pe^{-rl}.
         \label{eq:hastings_pow_exp}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     With $x=\delta l/p$ for $p\ge1$, $l^pe^{-\delta l}=(p/\delta)^p(xe^{-x})^p$ and
     $xe^{-x}\le e^{-1}$. The second bound follows from the first after
     splitting off $e^{-rl}$.
 \end{proof}
 
-\begin{theorem}[Slack in the decay length]
+\begin{lemma}[Slack in the decay length]
     \label{thm:hastings_decay_slack}
     \lean{TNLean.MPS.AreaLaw.Hastings.add_mul_sqrt_mul_exp_le_of_lt}
     \leanok
@@ -63,7 +63,7 @@ after the raise.
     approximate factorization with error $C_1e^{-l/\xi'}$ for every
     $\xi'>6\xi$, with $C_1$ depending on $\xi'-6\xi$, rather than at the
     printed $\xi'=6\xi$ of \cite[lines 141--142]{Hastings2007AreaLaw}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:hastings_sqrt_exp}
     Write $e^{-l/6\xi}=e^{-l/\xi'}e^{-\delta l}$. Then $a\,e^{-\delta l}\le a$,
@@ -71,7 +71,7 @@ after the raise.
     by~\eqref{eq:hastings_sqrt_exp}.
 \end{proof}
 
-\begin{theorem}[From the square-root bound to a decay length beyond $6\xi$]
+\begin{lemma}[From the square-root bound to a decay length beyond $6\xi$]
     \label{thm:hastings_factorization_rate}
     \lean{TNLean.MPS.AreaLaw.Hastings.exists_isFactorizationAt_of_sqrt_decay}
     \leanok
@@ -90,26 +90,26 @@ after the raise.
     their error to the form $C_1e^{-l/\xi'}$ of the conclusion of Lemma~1, for
     a decay length $\xi'>6\xi$ in place of the printed
     $\xi'=6\xi$~\cite{gap:hastings07_gaussian_average_exponent}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:hastings_decay_slack, thm:hastings_factorization_mono}
-    By Theorem~\ref{thm:hastings_decay_slack} the error
+    By Lemma~\ref{thm:hastings_decay_slack} the error
     $(a+b\sqrt l)\,e^{-l/6\xi}$ is at most~\eqref{eq:hastings_factorization_rate},
     and a factorization with a smaller error is one with a larger error.
 \end{proof}
 
-\begin{theorem}[The positive form at a decay length beyond $6\xi$]
+\begin{lemma}[The positive form at a decay length beyond $6\xi$]
     \label{thm:hastings_positive_factorization_rate}
     \lean{TNLean.MPS.AreaLaw.Hastings.exists_posSemidef_isFactorizationAt_of_sqrt_decay}
     \leanok
     \uses{def:hastings_factorization_at}
-    Under the hypotheses of Theorem~\ref{thm:hastings_factorization_rate},
+    Under the hypotheses of Lemma~\ref{thm:hastings_factorization_rate},
     with $\Omega$ a unit vector and $C_1=a+b/\sqrt{2e\delta}$, there is at the
     same $(c,l)$ an approximate factorization with $O_B$ positive
     semidefinite and error $(\sqrt2+4)\sqrt{C_1}\,e^{-l/(2\xi')}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:hastings_factorization_rate, thm:hastings_positive_factorization}
-    Apply Theorem~\ref{thm:hastings_positive_factorization} to the
-    factorizations of Theorem~\ref{thm:hastings_factorization_rate}.
+    Apply Lemma~\ref{thm:hastings_positive_factorization} to the
+    factorizations of Lemma~\ref{thm:hastings_factorization_rate}.
 \end{proof}
