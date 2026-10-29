@@ -1,0 +1,83 @@
+\section{A fixed-frequency estimate in the AKLV construction}
+
+Let $H_a,T$ be operators, indexed by a finite set $I$. For
+$\alpha:I\to\mathbb N$ and integers $t,k\ge0$, let $C_\alpha$ be the sum of
+all ordered products of length $t+k$ in which $T$ occurs $k$ times and
+$H_a$ occurs $\alpha(a)$ times. Write
+$E_t=\{\alpha:I\to\mathbb N:\sum_a\alpha(a)=t\}$.
+The following estimates concern the fixed-frequency step of
+\cite[Lemma~4.2]{Arad2013AreaLaw}. The binomial coefficient retains the
+additional $+1$ established in
+\cite{gap:aklv13_interpolation_and_word_count}.
+
+\begin{lemma}[Weighted frequencies from physical supports]
+    \label{thm:aklv_supported_frequency_rank}
+    \lean{TNLean.MPS.AreaLaw.operatorSchmidtRank_one_marker_of_chain_supports_le}
+    \leanok
+    Consider an $L$-site chain of local dimension $q\ge1$, with a cut after
+    site $c-1$, where $0<c<L$. Suppose each $H_a$ is supported entirely
+    on one side of this cut, and $T$ is supported on $\{c-1,c\}$.
+    Every scalar family $(\lambda_\alpha)_{\alpha\in E_t}$ satisfies
+    \begin{align*}
+        \operatorname{OSR}_c\!\left(
+        \sum_{\alpha\in E_t}\lambda_\alpha C_\alpha\right)
+        \le |E_t|\binom{t+2k+1}{2k+1}q^{2k}.
+    \end{align*}
+\end{lemma}
+\begin{proof}
+    \leanok
+    A term supported on the left has the form $A_a\otimes\mathbb 1$;
+    a term supported on the right has the form $\mathbb 1\otimes B_a$.
+    Thus every ordinary term has the form
+    $A_a\otimes\mathbb 1+\mathbb 1\otimes B_a$, allowing one factor to be zero.
+    The support of $T$ meets the left side at one site, so
+    $\operatorname{OSR}_c(T)\le q^2$.
+    For scalar variables $z_a$, the generating operator is
+    \begin{align*}
+        [X^k]\left(\sum_a z_aH_a+TX\right)^{t+k}
+        =\sum_{\alpha\in E_t}\left(\prod_a z_a^{\alpha(a)}\right)C_\alpha.
+    \end{align*}
+    The commuting-gap estimate bounds its rank by
+    $\binom{t+2k+1}{2k+1}q^{2k}$. Monomial recovery expresses every weighted
+    coefficient sum using the same $|E_t|$ evaluated operators. The scalar
+    and sum inequalities for operator Schmidt rank give the assertion.
+\end{proof}
+
+\begin{definition}[The interaction alphabet of a window]
+    \label{def:aklv_window_alphabet}
+    \lean{TNLean.MPS.AreaLaw.aklvWindowFamily,
+        TNLean.MPS.AreaLaw.sum_aklvWindowFamily}
+    \leanok
+    On an $L$-site chain, fix integers $a,s\ge0$ with $a+s+1\le L$.
+    Let $H_j$ be supported on $\{a+j,a+j+1\}$ for $0\le j<s$.
+    Let $H_L$ be supported on $[0,a+1)$ and $H_R$ on $[a+s,L)$.
+    The interaction alphabet consists of these $s+2$ operators; its sum is
+    $H_L+\sum_{j=0}^{s-1}H_j+H_R$.
+\end{definition}
+
+\begin{lemma}[Window frequency count and rank]
+    \label{thm:aklv_window_frequency_rank}
+    \lean{TNLean.MPS.AreaLaw.operatorSchmidtRank_aklv_window_one_marker_le}
+    \leanok
+    \uses{def:aklv_window_alphabet}
+    Suppose $q\ge1$ and fix $0\le u<s$. Distinguish $T=H_u$ and take the
+    other $s+1$ interactions as the ordinary alphabet $I$.
+    For every scalar family on $E_t$,
+    \begin{align*}
+        \operatorname{OSR}_{a+u+1}\!\left(
+        \sum_{\alpha\in E_t}\lambda_\alpha C_\alpha\right)
+        \le \binom{t+s}{s}\binom{t+2k+1}{2k+1}q^{2k}.
+    \end{align*}
+    The coefficients may vanish or be linearly dependent.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{thm:aklv_supported_frequency_rank}
+    Every ordinary middle interaction lies entirely to the left or right of
+    the cut after site $a+u$. The two exterior operators also lie on their
+    respective sides. The distinguished term crosses exactly the adjacent
+    pair at that cut. Apply Lemma~\ref{thm:aklv_supported_frequency_rank}.
+    The ordinary alphabet has $s+1$ elements, so stars and bars gives
+    $|E_t|=\binom{t+s}{s}$.
+\end{proof}
+
