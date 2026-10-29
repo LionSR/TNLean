@@ -223,6 +223,7 @@ import TNLean.MPS.MPU.TwoSiteCyclicInverse
 import TNLean.MPS.MPU.TwoSiteFiniteHeisenberg
 import TNLean.MPS.MPU.TwoSiteFiniteInverse
 import TNLean.MPS.MPU.TwoSiteLocalAction
+import TNLean.MPS.MPU.TwoSiteMiddleOutput
 import TNLean.MPS.MPU.TwoSiteOutputSupport
 import TNLean.MPS.MPU.TwoSitePropagation
 import TNLean.MPS.MPU.TwoSiteQuasiLocalAction

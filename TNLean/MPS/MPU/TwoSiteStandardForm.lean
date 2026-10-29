@@ -156,6 +156,22 @@ noncomputable def twoSiteDirectBlockEquiv (d k : ℕ) :
   (finCongr (congrArg (MPSTensor.blockPhysDim d) (Nat.mul_comm 2 k))).trans
     (twoSiteBlockedPhysicalEquiv d k)
 
+/-- Decoding the actual two-site physical identification concatenates the
+original two block words in their given order. Source: CPSV17, StandardForm,
+lines 603–617; this is the original-site blocking convention. -/
+theorem wordOfBlock_twoSiteDirectBlockEquiv_symm (d k : ℕ)
+    (i : Fin (MPSTensor.blockPhysDim d k * MPSTensor.blockPhysDim d k)) :
+    MPSTensor.wordOfBlock d (2 * k) ((twoSiteDirectBlockEquiv d k).symm i) =
+      MPSTensor.wordOfBlock d k (finProdFinEquiv.symm i).1 ++
+        MPSTensor.wordOfBlock d k (finProdFinEquiv.symm i).2 := by
+  change MPSTensor.wordOfBlock d (2 * k)
+    (Fin.cast (congrArg (MPSTensor.blockPhysDim d) (Nat.mul_comm 2 k).symm)
+      (MPSTensor.iteratedBlockIndex d k 2
+        (twoSiteBlockEquiv (MPSTensor.blockPhysDim d k) i))) = _
+  rw [MPSTensor.wordOfBlock_cast_length, MPSTensor.wordOfBlock_iteratedBlockIndex]
+  simp [twoSiteBlockEquiv, Kraus.wordOfBlock, MPSTensor.decodeBlock_decodeBlockEquiv_symm,
+    Kraus.flattenBlockedWord, List.ofFn_succ]
+
 private theorem reindexPhysical_blockTwo_blockTensor_of_eq
     {d D : ℕ} (U : MPOTensor d D) (k L : ℕ) (hL : L = k * 2) :
     reindexPhysical
