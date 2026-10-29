@@ -778,10 +778,10 @@ that $ab=ba$ for every $a\in\mathcal A$ and $b\in\mathcal B$.
         StarSubalgebra.commutingSupEquivMatrix,
         StarSubalgebra.nonempty_equiv_sup_matrix,
         StarSubalgebra.finrank_sup_of_equiv_matrix}
-    \leanok
+    \notready
     \uses{def:qca_commuting_factor_multiplication}
-    Suppose that $\mathcal C=M_I(\mathbb C)$ for a finite nonempty set
-    $I$, that $p,q>0$, and that
+    Suppose that $\mathcal C$ is a nontrivial complex star-algebra,
+    that $p,q>0$, and that
     \begin{align}
         \mathcal A & \cong M_p(\mathbb C), \notag \\
         \mathcal B & \cong M_q(\mathbb C)
@@ -801,7 +801,7 @@ that $ab=ba$ for every $a\in\mathcal A$ and $b\in\mathcal B$.
     algebras.
 \end{lemma}
 
-\begin{proof}\leanok
+\begin{proof}
     \uses{def:qca_commuting_factor_multiplication,
         thm:qca_commuting_factor_product}
     The source of the multiplication homomorphism is
@@ -5305,3 +5305,7 @@ completion from compatible forward and inverse finite-local actions.
     \uses{def:qca_blocking_functional,thm:qca_state_purity_star_equivalence}
     The star-algebra equivalence theorem applied to $\mathcal B_L$ gives all stated properties.
 \end{proof}
+
+\input{chapter/ch28_qca_support_factors}
+
+\input{chapter/ch28_qca_index}

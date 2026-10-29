@@ -24,6 +24,25 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Faithful bipartite matrix embeddings — promoted (2026-10-29)
+
+- **Pattern:** Convert a left or right Kronecker embedding through ordered
+  bipartite finite-region coordinates and then into the quasi-local algebra.
+  Previously the local-inclusion identity and inverse-equivalence cancellation
+  were written separately for both factors at each use.
+- **Defined in:** `QCA/BipartiteQuasiLocalEmbedding.lean`, the canonical
+  `bipartiteMatrixToQuasiLocalObservable`, its injectivity and left/right
+  evaluation and full-factor range theorems.
+- **Refactored occurrences:** `QCA/SupportAlgebraGeneration.lean`,
+  `QCA/CanonicalAdjacentSupportGeneration.lean`, and the direct shift-image
+  calculations in `QCA/GNVWShift.lean`. The actual finite-image range identity
+  is exposed once as
+  `evenPairLocalImage_map_bipartiteMatrixToQuasiLocalObservable`.
+- **Status:** Source-written helper promotion, with hosted elaboration pending;
+  no local Lean invocation. No new support predicate or alternate local image
+  is introduced.
+
+
 ### Matrices of submodule orthogonal projections — promoted (2026-10-26)
 
 - **Pattern:** Form `Matrix.toEuclideanLin.symm W.starProjection.toLinearMap`
@@ -9646,3 +9665,17 @@ there is no need for a new tactic.
 - **Refactored consumer:** The forward buffered-action equalizer argument consumes this
   public helper in place of its private repeated finite-region induction.
 - **Validation:** Source-only; hosted Lean checking pending.
+
+### Dense local image inside a closed commutant — candidate (2026-10-29)
+
+- **Seen:** `QCA/SupportAlgebraGeneration.lean`, the support-family generation
+  theorem and the even-pair-image commutant theorem.
+- **Pattern:** Pull back a closed ambient subset under an automorphism;
+  include the dense algebraic local image; use closure minimality and
+  surjectivity to obtain the global containment.
+- **Reuse:** The new commutant theorem exposes the source's intermediate
+  even-pair argument, avoiding the stronger premise of commutation with
+  each separate support factor.
+- **Decision:** Two proof occurrences in one file; keep the concrete source
+  statements and consolidate the closed-containment argument before a third
+  copy, rather than adding another notion of local generation.
