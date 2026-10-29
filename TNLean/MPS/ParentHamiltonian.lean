@@ -304,10 +304,7 @@ import TNLean.MPS.ParentHamiltonian.UncleTensor
 import TNLean.MPS.ParentHamiltonian.UncleTrialEnergy
 import TNLean.MPS.ParentHamiltonian.UncleTrialLocalization
 import TNLean.MPS.ParentHamiltonian.UncleTrialPinnedWalls
-<<<<<<< HEAD
 import TNLean.MPS.ParentHamiltonian.UncleTrialTransferNorm
-=======
->>>>>>> feat/uncle-two-wall-cancellation
 import TNLean.MPS.ParentHamiltonian.UncleTwoWallTrial
 import TNLean.MPS.ParentHamiltonian.UncleVirtualRescaling
 import TNLean.MPS.ParentHamiltonian.UncleWallGram
