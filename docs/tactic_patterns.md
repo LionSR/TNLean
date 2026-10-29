@@ -24,6 +24,21 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Eventual equality of scalar cocycle classes — promoted (2026-10-29)
+
+- **Pattern:** transport eventual equality of `H2π` classes to eventual coboundary
+  ratios using the same pointwise equivalence.
+- **Defined in:** `TNLean/Algebra/CocycleCohomology.lean`,
+  `eventually_H2π_eq_iff_isMulCoboundary₂_div`, a direct application of Mathlib's
+  `Filter.eventually_congr` to the existing scalar-cocycle equivalence.
+- **Refactored occurrences:** nine conversions in `CompactMinimalClassStability`,
+  `ExactGroundPathTransferClass`, `LocalInvariantCompression`,
+  `StationarySupportedDensityPhaseInvariance`, `UnitalSupportedPathInvariance`,
+  and `SupportedDensityPhaseInvariance`. Both directions use the same theorem;
+  public hypotheses and conclusions are unchanged.
+- **Validation status:** written without local Lean builds at the user's request;
+  compilation and integration remain pending; tracked in issue #10258.
+
 ### Matrices of submodule orthogonal projections — promoted (2026-10-26)
 
 - **Pattern:** Form `Matrix.toEuclideanLin.symm W.starProjection.toLinearMap`
