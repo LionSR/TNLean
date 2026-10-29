@@ -84,7 +84,7 @@
 \end{proof}
 
 % Source-written proper-arc assembly; compilation and declaration checks remain pending.
-\begin{theorem}[Regional slices and cyclic restrictions]
+\begin{lemma}[Regional slices and cyclic restrictions]
     \label{thm:peps_cycle_slice_restriction}
     \lean{TNLean.PEPS.assembleRegion_cycleArc_eq_cyclicCfg,
         TNLean.PEPS.cycleArcPhysical_regionSliceMap,
@@ -96,7 +96,7 @@
     the restriction of a full background agrees with cyclic-window
     assembly. Thus ordering a regional slice gives the cyclic restriction.
     Every complementary assignment extends to a full background.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     Membership in the arc is the condition that the cyclic offset from
@@ -107,7 +107,7 @@
     alphabet is empty, since a complementary assignment then cannot exist.
 \end{proof}
 
-\begin{theorem}[The common parent space of proper cycle arcs]
+\begin{lemma}[The common parent space of proper cycle arcs]
     \label{thm:peps_cycle_parent_ground_space}
     \lean{TNLean.PEPS.regionParentGroundSpace_cycleTensorOfMPS}
     \notready
@@ -117,7 +117,7 @@
     family $A$, the common regional parent ground space over all
     length-$L$ arcs is exactly the periodic chain ground space of $A$.
     No injectivity or positive physical or bond dimension is required.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \uses{thm:peps_cycle_slice_restriction,
@@ -129,7 +129,7 @@
     pair of local conditions.
 \end{proof}
 
-\begin{theorem}[Physical maps in the cycle coordinates]
+\begin{lemma}[Physical maps in the cycle coordinates]
     \label{thm:peps_cycle_physical_coordinates}
     \lean{TNLean.PEPS.physicalDeform_cycleTensorOfMPS,
         TNLean.PEPS.globalPhysicalMap_const_eq_onSiteTensorPow}
@@ -138,7 +138,7 @@
     Applying the same physical matrix $\Lambda$ at each vertex of the
     cycle gives the cycle tensor of $\Lambda A$. On the full physical
     space the constant graph product map is exactly $\Lambda^{\otimes n}$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     Both tensor entries are
@@ -147,7 +147,7 @@
     configurations $\tau$ and $\sigma$.
 \end{proof}
 
-\begin{theorem}[Chain deformation as a graph specialization]
+\begin{lemma}[Chain deformation as a graph specialization]
     \label{thm:peps_cycle_physical_parent_specialization}
     \lean{TNLean.PEPS.map_chainGroundSpace_physicalEquiv_of_cycle,
         TNLean.PEPS.chainGroundSpace_rotatePhysical_of_cycle,
@@ -160,7 +160,7 @@
     $\mathcal G_{L,n}(\Lambda A)=\Lambda^{\otimes n}\mathcal G_{L,n}(A)$
     and $\ker H_n(\Lambda A)=\Lambda^{\otimes n}\ker H_n(A)$
     for the actual periodic-chain spaces and parent Hamiltonians.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \uses{thm:peps_region_parent_ground_space_physical_transport,
