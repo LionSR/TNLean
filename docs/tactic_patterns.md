@@ -9689,3 +9689,16 @@ removed after the dependency audit exposed it.
 - **Abstraction:** The public `exists_twoSiteStandardFormData_sourceFactors`
   supplies the actual data; no SVD or standard-form witness is added downstream.
   The converse uses the existing periodic gauge cancellation theorem.
+
+### Kernel vectors in an open unitary contraction — candidate (2026-10-29)
+
+- **Pattern:** Tensor a kernel vector of one half factor with a fixed
+  coordinate of the other intermediate space; the isometric contraction
+  forces the vector to vanish. Apply the same argument to the adjoint
+  four-spin contraction for full row rank of the cut factors.
+- **Seen:** `MPS/MPU/SuppliedHalfFactorMinimality.lean`, original half factors
+  and both adjointed actual cut factors.
+- **Abstraction:** One private finite-coordinate kernel lemma and its
+  exchanged-leg form serve all four applications. Mathlib's existing
+  linear left-inverse and range-dimension APIs supply inverse matrices and
+  ranks; no parallel factorization structure or normalization predicate.

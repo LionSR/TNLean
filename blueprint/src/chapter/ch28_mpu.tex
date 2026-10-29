@@ -9780,6 +9780,49 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     $r(U)=\ell(U)$. Simplicity gives $r(U)\ell(U)=d^2$, hence both equal $d$.
 \end{proof}
 
+\begin{lemma}[Minimality of the supplied standard-form cuts]
+    \label{lem:mpu_supplied_half_factor_minimality}
+    \lean{MPOTensor.TwoSiteStandardFormData.X₁_mulVec_injective, MPOTensor.TwoSiteStandardFormData.X₂_mulVec_injective, MPOTensor.TwoSiteStandardFormData.exists_left_inverses, MPOTensor.TwoSiteStandardFormData.cutX₁_mulVec_injective, MPOTensor.TwoSiteStandardFormData.cutX₂_mulVec_injective, MPOTensor.TwoSiteStandardFormData.exists_cutY_right_inverses, MPOTensor.TwoSiteStandardFormData.cut_factor_ranks, MPOTensor.TwoSiteStandardFormData.sourceRanks_eq}
+    \notready
+    Let $W$ have any supplied standard form as in
+    Lemma~\ref{lem:mpu_supplied_standard_form_source_cuts}, with both gates
+    unitary and positive physical, bond, and intermediate dimensions.
+    The half factors $X_1,X_2$ have independent columns and left inverses.
+    The displayed cut factors satisfy
+    \begin{align}
+        \operatorname{rank}\widehat X_1
+        =\operatorname{rank}\widehat Y_1 & =dr,     \\
+        \operatorname{rank}\widehat X_2
+        =\operatorname{rank}\widehat Y_2 & =\ell d.
+    \end{align}
+    There are matrices $Z_1,Z_2$ with
+    $\widehat Y_1Z_1=\Id_{dr}$ and $\widehat Y_2Z_2=\Id_{\ell d}$.
+    Consequently the actual source ranks are $r(W)=dr$ and
+    $\ell(W)=\ell d$. Neither a canonical presentation nor a normalization
+    of the half factors is required. These are consequences of the supplied
+    contraction in \cite[lines~532--543, 603--617 and
+        1237--1244]{Cirac2017MPU}.
+\end{lemma}
+
+\begin{proof}
+    \uses{lem:mpu_supplied_standard_form_source_cuts}
+    A vector in the kernel of $X_1$, tensored with a fixed coordinate of
+    the left intermediate space, would give a kernel vector of $v$.
+    The isometry of $v$ therefore makes $X_1$ injective. Exchanging the
+    two physical and intermediate legs proves the same assertion for $X_2$.
+    The spectator identity factors preserve this injectivity in
+    $\widehat X_1$ and $\widehat X_2$.
+
+    The four-spin matrix $v_{23}(u_{12}\otimes u_{34})$ is unitary, and
+    its open contraction consists of $\widehat Y_2$ and $\widehat Y_1$.
+    Applying the same kernel argument to its adjoint makes
+    $\widehat Y_1^\dagger$ and $\widehat Y_2^\dagger$ injective.
+    Their left inverses, after taking adjoints, give the asserted right
+    inverses. All four factor ranks follow. Multiplying each source cut
+    by its right-factor inverse recovers its left factor, so the source
+    cut and its left factor have equal rank.
+\end{proof}
+
 \begin{lemma}[Normalized physical-adjoint source factors]
     \label{lem:mpu_normalized_physical_adjoint_source_factors}
     \lean{MPOTensor.IsMPUCanonicalFormII.reindexPhysical, MPOTensor.IsMPUCanonicalFormII.isMPUSimple_physicalAdjointTensor, MPOTensor.IsMPUCanonicalFormII.sourceFactors_sourceU_isUnitaryBetween, MPOTensor.IsMPUCanonicalFormII.sourceFactors_Y₁_mul_conjTranspose, MPOTensor.IsMPUCanonicalFormII.sourceFactors_Y₂_weighted_mul_conjTranspose, MPOTensor.SourceFactors.physicalAdjoint, MPOTensor.SourceFactors.sourceU_physicalAdjoint, MPOTensor.SourceFactors.sourceV_physicalAdjoint, MPOTensor.IsMPUCanonicalFormII.twoSiteSourceFactors_physicalAdjoint}
