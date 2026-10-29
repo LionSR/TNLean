@@ -138,6 +138,28 @@ link $(N,1)$ remains uncontrolled. The eigenvectors of $QM_{N,1}Q$ are linear
 combinations of the $\alpha^h$, so the matrix product form of the kept states,
 and any bound on their bond dimension, is not claimed here. The open-chain
 statements remain as the case without the closing link.
+\section{Using the original physical gap}
+
+The physical periodic construction does not assume a gap for the sum
+of truncated terms. If $T$ approximates $H$ with $\|H-T\|\le\delta$,
+then the two energy comparisons give
+$\langle\phi,H\phi\rangle\le E_0+2\delta+\nu$ whenever
+$\langle\phi,T\phi\rangle\le\langle\psi,T\psi\rangle+\nu$ and
+$\psi$ is a unit ground vector of $H$. Thus the original inequality
+$H\ge E_0I+\Delta(I-P_0)$ and $2\delta+\nu\le\Delta/2$ suffice
+for the final bound $2\operatorname{tr}P_0$ on an orthonormal retained
+family. This is proved by
+\leanid{TNLean.MPS.AreaLaw.LocalSolution.card_le_two_mul_re_trace_of_approximation}.
+
+The actual finite-metric Gaussian localization derives $\delta$ from
+the physical interactions. The constructed adaptive windows, including
+the closing window, derive $\nu$. Their explicit quadratic logarithmic
+radius is used in
+\leanid{TNLean.MPS.AreaLaw.LocalSolution.exists_periodicPhysicalHierarchy}.
+Its nonzero-space and approximation assertions retain the source's
+local residual hypothesis (low); they do not resolve the separate
+choice of a basis in a general degenerate ground space.
+
 \bibliographystyle{unsrt}
 \bibliography{references}
 \end{document}

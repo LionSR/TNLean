@@ -44,6 +44,14 @@ weight printed in eq. `mid` as `exp[-(tΔE)²/2]` is read as the weight `exp[-(t
 eq. `thd`. Documented in
 `docs/paper-gaps/hastings05_filtered_term_approximation.tex`.
 
+**Scope restriction (geometric growth):** the partial-trace localization and supported
+approximation theorems assume polynomial sphere growth with size-independent constants.
+Source lines 169–190 assume only a metric and finite-range local bounds, which do not
+imply this condition. The one-site commutator and abstract ground-vector inequalities
+are unrestricted. The source's actual truncated filter is treated on general finite
+metric spaces in `GaussianFilteredMetricTruncation`, without polynomial growth; see
+`docs/paper-gaps/hastings05_geometric_growth_scope.tex`.
+
 The constants of the Lieb–Robinson bound are those of
 `QuantumCircuit.norm_heisenberg_commutator_le_graphDistance_finset` and
 `QuantumCircuit.norm_heisenberg_sub_siteExpectation_graphNeighborhood_le`. These provide

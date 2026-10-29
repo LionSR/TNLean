@@ -269,6 +269,32 @@ their expectations.\footnote{Declarations:
     \leanid{TNLean.MPS.AreaLaw.LocalSolution.mem_supportedOperators_hierarchy}, and
     \leanid{TNLean.MPS.AreaLaw.LocalSolution.norm_toEuclideanLin_sum_sub_le}.}
 
+\section{A constructed hierarchy from the periodic physical interactions}
+
+For an arbitrary nonempty physical cycle, the actual truncated Gaussian
+filters can be assigned to consecutive supersite pairs, with the
+remainder included in the final supersite. Each pair contains at most
+$4\ell$ interaction centres. Extending the finite pair family by zero
+allows a binary hierarchy at depth
+$h=\max(2,\lceil\log_2N\rceil)$ without adding physical sites.
+All spectral projections and adaptive radii are then constructed.
+The original Hamiltonian determines the Gaussian filters, and a radius
+of order $\log(M)^2$ suffices for the displayed bounds.
+
+This construction still assumes eq.~(low) for the chosen ground vector,
+as the source explicitly does at lines 493--507 before its hierarchical
+argument. Under that assumption,
+\leanid{TNLean.MPS.AreaLaw.LocalSolution.exists_periodicPhysicalHierarchy}
+constructs a unit vector retained by the final projection and by the
+retained subspace at every node, within
+$2(3^{h+1}-1)e^{-\eta\ell/8}$ of the original vector.
+The nesting is proved by
+\leanid{TNLean.MPS.AreaLaw.LocalSolution.isRetainedHierarchy_of_hierarchyClosingProjection}.
+It does not by itself construct tensor coefficients or bound the
+intermediate retained dimensions. A ground-space basis satisfying the
+needed local residuals remains a separate issue; see
+\path{hastings05_two_dim_ground_basis.tex}.
+
 \bibliographystyle{plain}
 \bibliography{references}
 

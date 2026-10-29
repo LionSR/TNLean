@@ -1,0 +1,90 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb,xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+\input{command}
+\providecommand{\leanid}[1]{\nolinkurl{#1}}
+\providecommand{\gapnote}[2]{\par\noindent\textbf{Verdict:} #1 (#2).\par}
+\title{Metric Growth and the Local Gaussian Filters in Hastings' Construction}
+\author{}
+\date{2026-10-29}
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{resolved}
+
+\section{The source assumptions}
+
+Hastings, \emph{Solving gapped Hamiltonians locally},
+arXiv:cond-mat/0508554v3~\cite{Hastings2006Solving}, assumes a finite metric
+space of sites, interaction range $R$, interaction norm bound $J$, and a
+uniform bound $S$ for the number of sites within distance $R$ of a site
+(\path{proj3new.tex}, lines 169--190). These assumptions do not imply
+polynomial growth of larger balls. For example, finite balls in a
+bounded-degree binary tree have uniformly bounded radius-one balls but
+exponentially many vertices at intermediate distances from their root.
+The qubit Hamiltonian $\sum_i |1\rangle\langle1|_i$ on such a tree is a
+nonzero local Hamiltonian with a unique ground state and gap one.
+
+\section{The restricted partial-trace estimate}
+
+The partial-trace localization estimate in
+\path{TNLean/Lattice/GaussianFilteredTermLocalization.lean} assumes a
+polynomial bound $K_g(k+1)^{k_g}$ for the cardinality of every graph sphere
+of radius $k$. Its approximation is the normalized partial trace of a
+full Gaussian-filtered interaction onto a graph neighbourhood. Both the
+growth hypothesis and the construction differ from the source's
+truncated local evolution in eq.~(mid), lines 285--307. This estimate
+remains a valid specialization, with its growth hypothesis explicit; it
+is not the general finite-metric theorem.
+
+\section{The actual truncated filter without polynomial growth}
+
+The weighted comparison in
+\path{TNLean/Lattice/GaussianFilteredTruncationWeighted.lean} instead
+sums the omitted interactions before replacing their individual spatial
+decays by a common bound. Join two sites whenever their metric distance
+is at most $R$. This graph has degree at most $S$. For any
+$\mu>\log(S+1)$ its exponential distance kernel is summable, since a
+radius-$k$ graph ball has at most $(S+1)^k$ vertices. A bound on the
+interaction norm at each anchor therefore bounds the entire omitted
+tail. Choosing this decay rate before applying the Lieb--Robinson
+estimate yields exponential localization without a polynomial sphere
+bound.
+
+For $R>0$, there are $c_1,\eta>0$ and $C\ge0$, depending only on
+$R,S,J,\Delta$, such that, for every $\ell\ge R$, the actual source
+construction with the normalized Gaussian weight is
+\begin{align}
+ M_i&=\frac{\Delta}{\sqrt{2\pi q}}
+       \int_{\mathbb R}e^{-(t\Delta)^2/(2q)}
+          e^{itH_i^{\rm loc}}h_i e^{-itH_i^{\rm loc}}\,dt,
+ &q&=c_1\ell\Delta,
+ &H_i^{\rm loc}&=\sum_{d(i,j)\le\ell-R}h_j.
+ \label{eq:hastings05_growth_filter}
+\end{align}
+It is Hermitian, supported within distance $\ell$ of $i$, has norm at
+most $J$, and satisfies
+\begin{align}
+ \|h_i\|e^{-q/2}+\|\widetilde h_i-M_i\|
+     &\le \|h_i\|C e^{-\eta\ell},
+ &\Big\|H-\sum_iM_i\Big\|&\le |\Lambda|JC e^{-\eta\ell}.
+ \label{eq:hastings05_growth_error}
+\end{align}
+Here $\widetilde h_i$ is the filter using the full Hamiltonian.
+The constants are chosen before the finite metric space and the
+Hamiltonian. These statements are proved by
+\leanid{TNLean.Lattice.exists_metric_truncated_filter_localization} and
+\leanid{TNLean.Lattice.exists_metric_truncated_filter_sum_bound}.
+For $R=0$, distinct-site interactions commute and the full and truncated
+filters equal the original interaction exactly; see
+\leanid{TNLean.Lattice.gaussianFilteredTerm_full_and_sum_eq_of_zero_range}.
+
+The missing $q$ in the printed Gaussian exponent and the choice of decay
+length are addressed in the existing notes
+\path{hastings05_filtered_term_approximation.tex} and
+\path{hastings05_truncated_dynamics.tex}. No assertion about a basis in
+a degenerate ground space follows from this metric-growth argument.
+
+\bibliographystyle{plain}
+\bibliography{references}
+\end{document}
