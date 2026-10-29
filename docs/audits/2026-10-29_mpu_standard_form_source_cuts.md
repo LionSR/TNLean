@@ -265,3 +265,12 @@ changes the entry goal directly to its fully scalar two-factor sum before
 extracting the common scalar. No source statement changes. The subsequent
 phase/local/converse modules still await hosted verification; no local Lean
 command was run.
+
+## Hosted diagnostics on `f3d8d96a2`
+
+Job `123470118050` compiled `SourceFactorsScalar`, including both gate
+transport identities. The next diagnostic is field notation on the explicitly
+quantified eventual cross/self-overlap equality. The proof now invokes
+`Filter.EventuallyEq.symm` explicitly, with the same mathematical limit
+argument. The subsequent local/converse closure remains pending. No local
+Lean build, elaboration, compilation or cache mutation was run.

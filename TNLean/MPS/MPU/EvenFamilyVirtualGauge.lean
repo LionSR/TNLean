@@ -68,7 +68,8 @@ theorem IsMPUCanonicalFormII.exists_unitary_virtual_sign_gauge_of_mpo_eq_even
       apply Finset.sum_congr rfl
       intro w _
       rw [← hMPV (2 * n) (by omega) (even_two_mul n) w]
-    have hone := (hA.selfOverlap_tendsto_one.comp hEvenTop).congr' hCrossSelf.symm
+    have hone := (hA.selfOverlap_tendsto_one.comp hEvenTop).congr'
+      (Filter.EventuallyEq.symm hCrossSelf)
     exact zero_ne_one (tendsto_nhds_unique (hzero.comp hEvenTop) hone)
   · have hη0 : η ≠ 0 := Complex.ne_zero_of_norm_eq_one hη
     have hηsq : η ^ 2 = 1 := by
