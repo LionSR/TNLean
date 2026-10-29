@@ -8,7 +8,7 @@ The contradiction argument of Section~\ref{sec:hastings_main_stage} takes the
 window inequalities and the strengthened doubling bound as hypotheses. Here we
 discharge them from the approximate projector factorization of
 \cite[Lemma~1]{Hastings2007AreaLaw}, combining the window bounds of
-Chapter~\ref{ch:hastings_window} with the entropy gain of
+Section~\ref{sec:hastings_window} with the entropy gain of
 Section~\ref{sec:hastings_relent}. Whereas
 \cite[lines 483--486]{Hastings2007AreaLaw} absorbs the bootstrap remainder
 $F(\xi',q)$ (Definition~\ref{def:hastings_bootstrap_remainder}) into the
@@ -213,69 +213,6 @@ prefactor $c_0$ of $S_{\max}$, we lengthen the window $l_0\ge\lceil\xi_0\rceil_+
     (\ref{eq:hastings_polynomial_constant_entropy}) gives
     (\ref{eq:hastings_enlarged_entropy_bound}) with $c_0=B(a)$. For $q=1$
     both entropies and $\ln q$ vanish.
-\end{proof}
-
-\begin{lemma}[An interaction-proportional Lieb--Robinson velocity]
-    \label{thm:hastings_source_pair}
-    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.norm_heisenberg_commutator_le_hastings_source}
-    \leanok
-    \uses{thm:hastings_chain_lieb_robinson}
-    Let $H$ be a range-$R$ chain Hamiltonian with interaction norms at most
-    $J>0$, and put $c_R=2(R+1)2^{2R+1}e^{2R}$. Then $v=40c_RJ$ and
-    $\xi_C=80$ form a Lieb--Robinson pair: for operators $A,B$ supported on
-    finite sets $X,Y$ whose mutual distances are at least the integer
-    $d\ge0$, and for $|t|\le d/v$,
-    \begin{align}
-        \|[e^{itH}Ae^{-itH},B]\|
-        \le4|X|\,\|A\|\,\|B\|e^{-d/80}.
-        \label{eq:hastings_interaction_proportional_pair}
-    \end{align}
-\end{lemma}
-\begin{proof}\leanok
-    \uses{thm:hastings_chain_lieb_robinson}
-    The coefficient $c_RJ$ is positive. Apply
-    Lemma~\ref{thm:hastings_chain_lieb_robinson} with $v=40c_RJ\ge8c_RJ$
-    and $\xi_C=80\ge8$.
-\end{proof}
-
-\begin{lemma}[Positive factorization at the source length]
-    \label{thm:hastings_source_factorization}
-    \lean{TNLean.MPS.AreaLaw.exists_projectorFactorization_posSemidef_source,
-        TNLean.MPS.AreaLaw.exists_projectorFactorization_source}
-    \leanok
-    \uses{thm:hastings_lemma1_endpoint,thm:hastings_source_pair}
-    For each range $R$ there is a constant $K\ge0$, depending only on $R$,
-    with the following property. Let $H$ be a range-$R$ chain Hamiltonian
-    with interaction norms at most $J\ge0$ and a unit ground vector
-    $\Omega$ separated from the remaining spectrum by $\Delta E>0$.
-    Set $v=40c_RJ$, $s=\max\{2v/\Delta E,80\}$ and $\xi'=6s$. At every
-    cut $j$ and length $l$ there are operators $O_B,O_L,O_R$ satisfying
-    the support conditions of Lemma~\ref{lem:hastings_lemma1}, such that
-    $O_B$ is a positive semidefinite contraction, $O_L,O_R$ are commuting
-    orthogonal projections, and
-    \begin{align}
-        \|O_BO_LO_R-|\Omega\rangle\langle\Omega|\|
-        \le Ks^3e^{-l/\xi'}.
-        \label{eq:hastings_positive_source_factorization}
-    \end{align}
-    Thus the positive and contraction forms have the same source rate
-    at this choice of length. The fixed-length correction and the
-    distinction between positive semidefinite and positive definite
-    operators remain as recorded in
-    \cite{gap:hastings07_lemma1_positivity_rate}.
-\end{lemma}
-\begin{proof}\leanok
-    \uses{thm:hastings_lemma1_endpoint,thm:hastings_factorization_mono}
-    The source length satisfies $s\ge2\zeta$, where
-    $\zeta=20(1+c_RJ/\Delta E)$. The positive form of
-    Lemma~\ref{thm:hastings_lemma1_endpoint} supplies the required
-    operators with error at most $K\zeta^3e^{-l/(12\zeta)}$. Since
-    $\zeta\le s$ and $12\zeta\le6s$,
-    \begin{align}
-        K\zeta^3e^{-l/(12\zeta)}\le Ks^3e^{-l/(6s)}.
-        \label{eq:hastings_positive_source_comparison}
-    \end{align}
-    Increase the error bound without changing any of the operators.
 \end{proof}
 
 \begin{theorem}[Hastings' area law with an interaction-proportional velocity]
