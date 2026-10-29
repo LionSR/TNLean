@@ -139,6 +139,17 @@ noncomputable def obcParentHamiltonian (b : ℕ → ℕ)
     ∑ u : Fin s.val.1.val → Fin d, ∑ w : Fin s.val.2.val → Fin d,
       obcPairCompression b A s.property u w
 
+/-- The actual varying-bond open parent Hamiltonian is positive.
+Source: PGVWC07, Theorem 9 proof, lines 1213–1217. -/
+theorem obcParentHamiltonian_isPositive (b : ℕ → ℕ)
+    (A : ∀ k, Fin d → Matrix (Fin (b k)) (Fin (b (k + 1))) ℂ) (N : ℕ) :
+    (obcParentHamiltonian b A N).IsPositive := by
+  classical
+  exact LinearMap.isPositive_sum Finset.univ fun s _ ↦
+    LinearMap.isPositive_sum Finset.univ fun u _ ↦
+      LinearMap.isPositive_sum Finset.univ fun w _ ↦
+        obcPairCompression_isPositive b A s.property u w
+
 /-- The actual Hamiltonian vanishes exactly when every fixed-outside pair
 section belongs to the actual two-site boundary range. Source: PGVWC07,
 equation unique-OBC, lines 1213–1220. -/

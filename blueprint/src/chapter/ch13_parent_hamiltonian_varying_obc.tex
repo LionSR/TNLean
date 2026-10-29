@@ -221,13 +221,15 @@ the adjacent-pair conditions with the kernel of the actual open parent Hamiltoni
 
 \begin{lemma}[Hamiltonian kernel and adjacent coefficient sections]
     \label{lem:varying_obc_parent_kernel_sections}
-    \lean{Matrix.obcParentHamiltonian_apply_eq_zero_iff,
+    \lean{Matrix.obcParentHamiltonian_isPositive,
+        Matrix.obcParentHamiltonian_apply_eq_zero_iff,
         Matrix.obcParentHamiltonian_pair_sections_of_apply_eq_zero,
         Matrix.obcParentHamiltonian_apply_eq_zero_iff_pair_sections}
     \notready
     \uses{def:varying_obc_parent_projectors,
         lem:varying_obc_pair_projector_kernel}
-    A vector $\phi$ satisfies $H_N\phi=0$ if and only if, for every adjacent
+    The Hamiltonian $H_N$ is positive. A vector $\phi$ satisfies $H_N\phi=0$
+    if and only if, for every adjacent
     pair and every fixed outside configuration, there is an actual
     rectangular boundary matrix $X$ such that
     \begin{align}
