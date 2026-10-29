@@ -36,6 +36,11 @@ buffered interval and all N>1. No CFII, supplied standard form, adjoint data,
 inverse-support, compatibility, covariance, output-support or divisibility
 premise is added.
 
+The named bare action is also proved equal to the completed action from any
+concrete standard form of any positive block, by actual finite evaluation on
+one common buffer and density. This supplies an operator-only bridge for
+index comparisons without identifying reduced source factors.
+
 The canonical intermediate result has a scope marker; the final bare result
 eliminates that restriction through the existing representative theorem.
 The historical gap note is updated to state that the source-faithful proof

@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.MPU.CanonicalQuasiLocalAction
 import TNLean.MPS.MPU.ReducedCanonicalRepresentative
 import TNLean.MPS.MPU.TransferStabilizationConverse
+import Mathlib.Analysis.CStarAlgebra.Spectrum
 
 /-!
 # The actual quasi-local QCA of a matrix product unitary
@@ -102,5 +103,44 @@ theorem mpuQuasiLocalEquiv_finiteChainConjugation {d D : ℕ} [NeZero d]
       quasiLocalObservable d (finiteChainRegion b N)
         (finiteChainConjugation hU hN b (localInclusion hΛ A)) :=
   (Classical.choose_spec (exists_isQCA_of_isMPU hU)).2.2 Λ b N hN hΛ hbuffer A
+
+/-- The named bare-MPU QCA is the actual completed action obtained from
+any concrete standard form of any positive block. The comparison uses
+only actual finite conjugation on a common buffer and completion density;
+no source-factor or gauge identification is required.
+Source: arXiv:1703.09188, uniqueness of the stabilized finite-chain
+expression in eq:appendix-1, lines 2300--2306. -/
+theorem mpuQuasiLocalEquiv_apply_eq_bufferedMPUQuasiLocalAction
+    {d D ℓ r : ℕ} [NeZero d] {U : MPOTensor d D}
+    (hU : U.IsMPU) (k : ℕ) (hk : 0 < k)
+    {u : Matrix (Fin ℓ × Fin r)
+      (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k)) ℂ}
+    {v : Matrix (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k))
+      (Fin r × Fin ℓ) ℂ}
+    (S : MPOTensor.TwoSiteStandardFormData (MPOTensor.blockTwo (MPOTensor.blockTensor U k)) u v)
+    (X : QuasiLocalAlgebra d) :
+    mpuQuasiLocalEquiv hU X = bufferedMPUQuasiLocalAction hU k hk S X := by
+  classical
+  have hlocal : ∀ (Λ : Finset ℤ) (A : LocalAlgebra d Λ),
+      mpuQuasiLocalEquiv hU (quasiLocalObservable d Λ A) =
+        bufferedMPUQuasiLocalAction hU k hk S (quasiLocalObservable d Λ A) := by
+    intro Λ A
+    let Γ := regionSumset Λ (Finset.Icc (-(4 * (D : ℤ) ^ 4)) (4 * (D : ℤ) ^ 4))
+    obtain ⟨b, N, hN, hΓ, hbuffer, _⟩ :=
+      exists_finiteChainLocalObservable_bufferedMPULocalAction hU k (Λ ∪ Γ)
+    let hΛ := Finset.subset_union_left.trans hΓ
+    have hfull : Γ ⊆ finiteChainRegion b N := Finset.subset_union_right.trans hΓ
+    have hb : ∀ x ∈ Λ, b ≤ x - (2 * k : ℕ) ∧ x + (4 * k : ℕ) ≤ b + N := by
+      intro x hx
+      exact hbuffer x (Finset.mem_union_left Γ hx)
+    exact (mpuQuasiLocalEquiv_finiteChainConjugation hU Λ b N hN hΛ hfull A).trans
+      (bufferedMPUQuasiLocalAction_finiteChainConjugation hU k hk S Λ b N hN hΛ hb A).symm
+  induction X using UniformSpace.Completion.induction_on with
+  | hp =>
+      exact isClosed_eq (mpuQuasiLocalEquiv hU).isometry.continuous
+        (bufferedMPUQuasiLocalAction_isometry hU k hk S).continuous
+  | ih A =>
+      induction A using DirectLimit.induction with
+      | _ Λ A => exact hlocal Λ A
 
 end SpinChain

@@ -64,7 +64,8 @@
         SpinChain.mpuQuasiLocalEquiv,
         SpinChain.isQCA_mpuQuasiLocalEquiv,
         SpinChain.mpuQuasiLocalEquiv_propagatesWithin,
-        SpinChain.mpuQuasiLocalEquiv_finiteChainConjugation}
+        SpinChain.mpuQuasiLocalEquiv_finiteChainConjugation,
+        SpinChain.mpuQuasiLocalEquiv_apply_eq_bufferedMPUQuasiLocalAction}
     \notready
     \uses{lem:mpu_actual_qca_canonical}
     Let $d>0$ and let $U$ be an MPU of bond dimension $D$.
@@ -83,7 +84,9 @@
     \]
     as a quasi-local observable. Thus the finite-chain expression is
     independent of the sufficiently buffered anchor and length,
-    with no divisibility condition. The only data are positive physical
+    with no divisibility condition. The same action is obtained from
+    any concrete standard form of a positive block, by comparing the
+    actual finite conjugations on a common buffer. The only data are positive physical
     dimension and the actual MPU property; bond positivity is derived.
     This is the original-site construction and finite-chain formula of
     \cite[lines~2292--2306]{Cirac2017MPU}. The historical scope record
