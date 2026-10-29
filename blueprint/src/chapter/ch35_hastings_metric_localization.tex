@@ -1,0 +1,338 @@
+\section{Exponential localization on a finite metric lattice}
+\label{sec:hastings05_metric_localization}
+
+The local assumptions of\cite[lines 169--190]{Hastings2006Solving}
+impose no bound on the growth of large metric balls. The estimate below
+retains the distance of every omitted interaction in the Duhamel formula.
+A sufficiently strong spatial weight then controls the exponential growth
+of balls in the interaction graph. This proves the exponential order in
+(facld) for the actual physical metric truncation, without a polynomial
+sphere or shell bound\cite{gap:hastings05_geometric_growth_scope}.
+
+Write $\mathcal F_{q,\Delta}^{H}(W)$ for the normalized Gaussian filter of
+$W$ under $H$, as in Definition~\ref{def:hastings_gaussian_filtered_term}.
+In the estimates below $q,\Delta>0$ and $T\ge0$; the proofs also cover the
+degenerate variance by interpreting the Gaussian tail bound as one.
+For a retained set of interactions $s$, put $H_s=\sum_{j\in s}h_j$ and
+$\tau_t^s(W)=e^{iH_st}We^{-iH_st}$.
+
+\begin{theorem}[Termwise commutator control of Gaussian truncation]
+    \label{thm:hastings05_termwise_gaussian_truncation}
+    \lean{TNLean.Lattice.norm_gaussianFilteredTerm_sub_truncated_le_of_commutator_bounds}
+    \leanok
+    Let $H=\sum_jh_j$, with every $h_j$ Hermitian. Suppose $C_j\ge0$ and
+    $\|[h_j,\tau_t^s(W)]\|\le C_j$ whenever $j\notin s$ and $|t|\le T$.
+    Then
+    \begin{align}
+        \|\mathcal F_{q,\Delta}^{H}(W)-\mathcal F_{q,\Delta}^{H_s}(W)\|
+         & \le T\sum_{j\notin s}C_j
+        +2\|W\|e^{-(T\Delta)^2/(2q)}.
+        \label{eq:hastings05_termwise_gaussian_truncation}
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:hastings_truncated_evolution_comparison,
+        thm:hastings_truncated_filter_comparison}
+    The finite-sum triangle inequality gives
+    $\|[H-H_s,\tau_t^s(W)]\|\le\sum_{j\notin s}C_j$.
+    The Duhamel formula therefore bounds the difference of the two
+    evolutions by $T\sum_{j\notin s}C_j$ on $[-T,T]$.
+    Gaussian integration adds the tail in
+    (\ref{eq:hastings05_termwise_gaussian_truncation}).
+\end{proof}
+
+For the next three statements, let $G$ be a finite graph. Each Hermitian
+$h_j$ acts on $X_j$, which contains a chosen anchor $a_j$, has graph
+diameter at most $r$ and has at most $v_r\ge1$ sites. Suppose
+$\sum_{j:\,x\in X_j}\|h_j\|\le b_0$ at each site. Let $W$ act on $S$,
+with $d_G(z,x)\le r$ for $x\in S$. Define
+\begin{align}
+    k_\mu(x,y) & =
+    \begin{cases}e^{-\mu d_G(x,y)}, & d_G(x,y)<\infty, \\
+             0,                 & d_G(x,y)=\infty,\end{cases}
+               & v_\mu    & =4v_r|b_0|e^{2\mu r},
+               & A_\mu(S) & =4(|S|+1)e^{\mu(2r+1)}.
+    \label{eq:hastings05_anchor_lr_constants}
+\end{align}
+
+\begin{theorem}[Propagation between anchored supports]
+    \label{thm:hastings05_anchor_lr}
+    \lean{TNLean.Lattice.norm_commutator_heisenbergEvolution_le_anchor_kernel}
+    \leanok
+    Suppose $B$ acts on $Y$, with $d_G(y,b)\le r$ for $y\in Y$.
+    For every $\mu>0$ and $t\in\mathbb R$,
+    \begin{align}
+        \|[B,e^{iHt}We^{-iHt}]\|
+         & \le A_\mu(S)\|W\|\|B\|e^{v_\mu|t|}k_\mu(z,b).
+        \label{eq:hastings05_anchor_lr}
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:qc_lr_finsets_numeric,
+        thm:hastings05_observable_commutator_decay}
+    If $d_G(z,b)>2r+l$, the triangle inequality separates $S$ and $Y$
+    by at least $l$. The finite-support propagation bound gives
+    $4|S|\|W\|\|B\|e^{v_\mu|t|-\mu l}$. Combine this with
+    $\|[B,e^{iHt}We^{-iHt}]\|\le2\|W\|\|B\|$ and absorb the integer
+    shift $2r+1$. At infinite anchor distance, let $l$ tend to infinity.
+\end{proof}
+
+\begin{theorem}[Gaussian truncation with weighted omitted interactions]
+    \label{thm:hastings05_weighted_gaussian_truncation}
+    \lean{TNLean.Lattice.norm_gaussianFilteredTerm_sub_truncated_le_anchor_sum}
+    \leanok
+    The retained family $s$ may be arbitrary. For every $\mu>0$,
+    \begin{align}
+        \|\mathcal F_{q,\Delta}^{H}(W)-\mathcal F_{q,\Delta}^{H_s}(W)\|
+         & \le A_\mu(S)\|W\|T e^{v_\mu T}
+        \sum_{j\notin s}\|h_j\|k_\mu(z,a_j)
+        +2\|W\|e^{-(T\Delta)^2/(2q)}.
+        \label{eq:hastings05_weighted_gaussian_truncation}
+    \end{align}
+    No cardinality bound is imposed on a region containing the retained
+    interactions.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:hastings05_anchor_lr,
+        thm:hastings05_termwise_gaussian_truncation}
+    The retained Hamiltonian satisfies the original local norm budget.
+    Apply (\ref{eq:hastings05_anchor_lr}) to its evolution and each omitted
+    $h_j$, with $b=a_j$ and $Y=X_j$. Bound $e^{v_\mu|t|}$ by
+    $e^{v_\mu T}$ and use
+    (\ref{eq:hastings05_termwise_gaussian_truncation}).
+\end{proof}
+
+\begin{theorem}[A bounded-degree tail controls truncation]
+    \label{thm:hastings05_degree_gaussian_truncation}
+    \lean{TNLean.Lattice.norm_gaussianFilteredTerm_sub_truncated_le_degree_tail}
+    \leanok
+    Suppose the graph degree is at most $D$, $B\ge0$ and
+    $\sum_{j:\,a_j=x}\|h_j\|\le B$ at each anchor $x$.
+    If $d_G(z,a_j)\ge m$ for every omitted $j$, choose
+    $\mu>\log(D+1)$ and put $\beta=(\mu-\log(D+1))/2$.
+    Then
+    \begin{align}
+        \|\mathcal F_{q,\Delta}^{H}(W)-\mathcal F_{q,\Delta}^{H_s}(W)\|
+         & \le A_\mu(S)\|W\|T e^{v_\mu T}
+        \frac{B e^{-\beta m}}{1-e^{-\beta}}
+        +2\|W\|e^{-(T\Delta)^2/(2q)}.
+        \label{eq:hastings05_degree_gaussian_truncation}
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:hastings05_weighted_gaussian_truncation,
+        thm:hastings05_degree_weighted_tail}
+    Substitute the weighted tail estimate into
+    (\ref{eq:hastings05_weighted_gaussian_truncation}).
+\end{proof}
+
+\subsection{The physical metric cutoff}
+
+Let $\Lambda$ be a finite metric space, and suppose each Hermitian $h_i$
+acts inside $B_R(i)$, with $\|h_i\|\le J$ and $|B_R(i)|\le S$.
+These are the local assumptions of
+\cite[lines 169--190]{Hastings2006Solving}. Define the actual truncated
+operator by
+\begin{align}
+    M_i(q,\Delta,\ell)
+     & =\mathcal F_{q,\Delta}^{H_{i,\ell}}(h_i),
+     & H_{i,\ell}                                & =\sum_{j:\,d(i,j)\le\ell-R}h_j.
+    \label{eq:hastings05_metric_truncated_operator}
+\end{align}
+
+\begin{theorem}[Support and norm of the physical metric truncation]
+    \label{thm:hastings05_metric_filter_properties}
+    \lean{TNLean.Lattice.metric_truncated_filter_properties}
+    \leanok
+    If $\ell\ge R$, then $M_i(q,\Delta,\ell)$ is Hermitian, acts inside
+    $B_\ell(i)$ and has norm at most $J$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:hastings05_metric_retained_support,
+        thm:hastings_truncated_support,thm:hastings_gaussian_filtered_spectral}
+    Every retained interaction and the initial $h_i$ act inside
+    $B_\ell(i)$. Their evolution, and hence its Gaussian average, has the
+    same support. Gaussian filtering preserves Hermitian operators and
+    contracts the operator norm.
+\end{proof}
+
+\begin{theorem}[Uniform metric truncation and leakage budget]
+    \label{thm:hastings05_metric_filter_budget}
+    \lean{TNLean.Lattice.exists_metric_truncated_filter_budget}
+    \leanok
+    Fix $R>0$, $S\in\mathbb N$, $J\ge0$ and $\Delta>0$. There are
+    $c_1,\lambda>0$ and $C\ge0$, chosen before $\Lambda$ and its
+    Hamiltonian, such that every family satisfying the local metric
+    assumptions and every $\ell\ge R$ obeys
+    \begin{align}
+        \|h_i\|e^{-q/2}
+        +\|\mathcal F_{q,\Delta}^{H}(h_i)-M_i(q,\Delta,\ell)\|
+         & \le\|h_i\|C e^{-\lambda\ell},
+         & q                             & =c_1\ell\Delta.
+        \label{eq:hastings05_metric_filter_budget}
+    \end{align}
+    One choice of constants is
+    \begin{align}
+        \mu    & =\log(S+1)+1,                                  & v                          & =4S^2Je^{4\mu},
+               & c_1                                            & =\frac1{4R(v+1)},\nonumber                           \\
+        \gamma & =\frac1{2R}-vc_1>0,                            &
+        \delta & =\min(c_1\Delta,\gamma),                       & \lambda                    & =\frac\delta2,\nonumber \\
+        A      & =\frac{4(S+1)e^{5\mu}Jc_1e^{1/2}}{1-e^{-1/2}}, &
+        C      & =3+\frac{2A}{e\delta}.
+        \label{eq:hastings05_metric_filter_constants}
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:hastings05_degree_gaussian_truncation,
+        thm:hastings05_metric_interaction_data,
+        thm:hastings05_metric_graph_separation,
+        lem:hastings05_gaussian_decay_absorption}
+    The metric interaction graph has degree at most $S$, support diameter
+    at most two and local norm budget $SJ$. Take anchors $a_j=j$, whose
+    norm budget is $J$. Omitted anchors have graph distance at least
+    $m=\lceil(\ell-R)/R\rceil$. With $\beta=1/2$,
+    $e^{-\beta m}\le e^{1/2}e^{-\ell/(2R)}$.
+    In (\ref{eq:hastings05_degree_gaussian_truncation}) take
+    $T=c_1\ell$ and $q=c_1\ell\Delta$; its Gaussian tail becomes
+    $2\|h_i\|e^{-q/2}$. Adding the spectral term gives
+    $3\|h_i\|e^{-c_1\Delta\ell/2}+A\|h_i\|\ell e^{-\gamma\ell}$.
+    The time-prefactor estimate bounds this by
+    $\|h_i\|C e^{-\delta\ell/2}$.
+\end{proof}
+
+\begin{theorem}[Exponential localization of actual truncated terms]
+    \label{thm:hastings05_metric_facld}
+    \lean{TNLean.Lattice.exists_metric_truncated_filter_localization}
+    \leanok
+    Under the metric assumptions of
+    Theorem~\ref{thm:hastings05_metric_filter_budget}, constants
+    $c_1,\lambda>0$ and $C\ge0$, independent of the finite site set and
+    Hamiltonian, give the following statements. Put $q=c_1\ell\Delta$
+    and $M_i=M_i(q,\Delta,\ell)$ for $\ell\ge R$.
+    Each $M_i$ is Hermitian, acts on $B_\ell(i)$ and has norm at most $J$,
+    and
+    \begin{align}
+        \|\mathcal F_{q,\Delta}^{H}(h_i)-M_i\| & \le JC e^{-\lambda\ell}.
+        \label{eq:hastings05_metric_filter_error}
+    \end{align}
+    If every eigenvalue of $H$ equals $E_0$ or is at least $E_0+\Delta$,
+    let $P_0$ be the orthogonal projection onto the $E_0$-eigenspace.
+    Every vector $\psi$ in that eigenspace satisfies
+    \begin{align}
+        \|(1-P_0)M_i\psi\| & \le JC e^{-\lambda\ell}\|\psi\|.
+        \label{eq:hastings05_metric_facld}
+    \end{align}
+    In particular, if $\Omega$ is a normalized unique ground state with
+    gap $\Delta$, then
+    $\|M_i\Omega-\langle\Omega,M_i\Omega\rangle\Omega\|
+        \le JC e^{-\lambda\ell}$.
+    This is the exponential order asserted in (facld) of
+    \cite[lines 322--348]{Hastings2006Solving}. The printed minimum of
+    decay lengths is read as a minimum of decay rates, as explained in
+    \cite{gap:hastings05_truncated_dynamics}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:hastings05_metric_filter_budget,
+        thm:hastings05_metric_filter_properties,thm:hastings05_facld}
+    The spectral leakage and approximation inequalities bound
+    $\|(1-P_0)M_i\psi\|$ by the left side of
+    (\ref{eq:hastings05_metric_filter_budget}) times $\|\psi\|$.
+    Use $\|h_i\|\le J$. For a unique ground state,
+    $P_0\phi=\langle\Omega,\phi\rangle\Omega$.
+\end{proof}
+
+\begin{theorem}[The sum of the physical metric approximations]
+    \label{thm:hastings05_metric_filter_sum}
+    \lean{TNLean.Lattice.exists_metric_truncated_filter_sum_bound}
+    \leanok
+    Fix $R,S,J,\Delta$ as in
+    Theorem~\ref{thm:hastings05_metric_filter_budget}. Uniform constants
+    $c_1,\lambda>0$ and $C\ge0$ give, for every admissible Hamiltonian and
+    $\ell\ge R$,
+    \begin{align}
+        \Bigl\|\sum_iM_i(c_1\ell\Delta,\Delta,\ell)-H\Bigr\|
+         & \le|\Lambda|JC e^{-\lambda\ell}.
+        \label{eq:hastings05_metric_filter_sum}
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:hastings05_metric_facld,thm:hastings05_sum_approximation}
+    The full filtered terms sum to $H$. The finite-sum triangle
+    inequality bounds the error by the sum of
+    (\ref{eq:hastings05_metric_filter_error}).
+\end{proof}
+
+\begin{theorem}[Low-energy decay without a growth assumption]
+    \label{thm:hastings05_growth_free_blecm_separation}
+    \lean{TNLean.Lattice.norm_groundCompression_commutator_le_graphSeparation,
+        TNLean.Lattice.norm_groundCompression_commutator_le_metricSeparation}
+    \leanok
+    \uses{thm:hastings05_low_energy_commutator}
+    Let $H=\sum_kh_k$ have ground energy $E_0$ and a positive gap $\Delta$.
+    On a finite graph, suppose the interaction supports have diameter at
+    most $r$, cardinality at most $v_r\ge1$, and site norm budget $b_0$.
+    Set $v=4v_r|b_0|e^{2r}+1$ and
+    $\gamma=\min(1/4,\Delta/(8v))$. If $W,B$ act on finite supports $X,Y$
+    separated by graph distance at least $m$, then
+    \begin{align}
+        \|[P_0WP_0,P_0BP_0]\|
+        \le(4|X|+4)\|W\|\|B\|e^{-\gamma m}.
+        \label{eq:hastings05_growth_free_blecm_graph}
+    \end{align}
+    For the source's finite metric model with radius $R>0$, local
+    cardinality bound $S$ and term norms at most $J\ge0$, put
+    \begin{align}
+        v_* & =4(S+1)|SJ|e^4+1,
+            & \lambda           & =\frac1R\min\left(\frac14,\frac{\Delta}{8v_*}\right)>0.
+        \label{eq:hastings05_growth_free_blecm_rate}
+    \end{align}
+    If every physical distance between $X$ and $Y$ is at least $l$, then
+    (\ref{eq:hastings05_growth_free_blecm_graph}) holds with
+    $e^{-\gamma m}$ replaced by $e^{-\lambda l}$.
+    No sphere or volume growth hypothesis is required.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:hastings05_low_energy_commutator}
+    Use the numerical finite-support propagation estimate on the time
+    window $T=m/(4v)$ and choose the second Gaussian parameter $q=T\Delta$.
+    The three exponential errors are bounded by $e^{-\gamma m}$;
+    their coefficients sum to $4|X|+4$. For physical support separation,
+    the interaction graph has support diameter at most two, cardinality
+    bound $S+1$, and site budget $SJ$. Physical separation $l$ gives graph
+    separation at least $\lceil l/R\rceil$.
+\end{proof}
+
+\begin{theorem}[The source's low-energy commutator for the actual truncated terms]
+    \label{thm:hastings05_growth_free_metric_blecm}
+    \lean{TNLean.Lattice.norm_groundCompression_commutator_le_metricBalls,
+        TNLean.Lattice.norm_groundCompression_metric_truncated_commutator_le}
+    \leanok
+    \uses{thm:hastings05_growth_free_blecm_separation,
+        thm:hastings05_metric_filter_properties}
+    Under the source's metric, local interaction and original-gap
+    hypotheses, let $W,B$ act within metric radius $\rho$ of sites $i,j$.
+    With $\lambda$ from (\ref{eq:hastings05_growth_free_blecm_rate}) and
+    $N_j=|B(j,\rho)|$, one has
+    \begin{align}
+        \|[P_0WP_0,P_0BP_0]\|
+         & \le(4N_j+4)\|W\|\|B\|e^{2\lambda\rho}e^{-\lambda d(i,j)}.
+        \label{eq:hastings05_growth_free_metric_blecm}
+    \end{align}
+    In particular, for every initial Gaussian parameter $q$, the actual
+    truncated terms at radius $\rho\ge R$ satisfy this bound with
+    $\|W\|\|B\|$ replaced by $J^2$. The second Gaussian filter is under
+    the original Hamiltonian and is chosen independently of $q$.
+    The explicit cardinality is the support factor of
+    \cite[eqs.~(lc), (blecm), lines 1548--1601]{Hastings2006Solving}; it is
+    retained when no uniform bound on the physical ball volume is available.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:hastings05_growth_free_blecm_separation,
+        thm:hastings05_metric_filter_properties}
+    Physical support separation is at least $d(i,j)-2\rho$.
+    Interchange $W,B$ in
+    Theorem~\ref{thm:hastings05_growth_free_blecm_separation} so that the
+    prefactor uses the second observable's support, and factor
+    $e^{-\lambda(d(i,j)-2\rho)}=e^{2\lambda\rho}e^{-\lambda d(i,j)}$.
+    The actual truncated terms have the stated support and norm at most $J$.
+\end{proof}

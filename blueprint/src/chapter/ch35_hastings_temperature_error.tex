@@ -95,3 +95,25 @@ of~\cite[lines 1334--1341]{Hastings2006Solving}.
     Theorem~\ref{thm:hastings_percolation}. Insert this into
     Theorem~\ref{thm:hastings_temperature_error}.
 \end{proof}
+
+\begin{corollary}[The corrected temperature-ratio bound]
+    \label{cor:hastings_temperature_error_add_two}
+    \lean{TNLean.Lattice.ClusterExpansion.norm_trace_mul_exp_sub_truncatedExp_pow_le_percolation_add_two}
+    \leanok
+    \uses{thm:hastings_temperature_error_percolation,
+        thm:hastings_even_temperature_factors}
+    In Theorem~\ref{thm:hastings_temperature_error_percolation}, take
+    $\beta>0$, $\beta_0>0$ and
+    $n=2\lceil\beta/(2\beta_0)\rceil$. Then
+    \begin{align*}
+        \bigl|\operatorname{tr}\bigl(O(e^{-\beta H}-\rho(\beta/n,l)^n)\bigr)\bigr|
+        \le\|O\|\bigl(\exp[(\beta/\beta_0+2)Ne^{-l/\xi}]-1\bigr)Z.
+    \end{align*}
+    This is the explicit correction to the printed temperature factor
+    in \cite[lines 1342--1347]{Hastings2006Solving}
+    recorded in \cite{gap:hastings05_temperature_factor_count}.
+\end{corollary}
+\begin{proof}\leanok
+    Apply $n<\beta/\beta_0+2$ in the percolation bound; the other
+    factors and $Ne^{-l/\xi}$ are nonnegative.
+\end{proof}

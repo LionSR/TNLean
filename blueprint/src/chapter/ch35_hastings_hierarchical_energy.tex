@@ -214,3 +214,231 @@ the closing link $(N,1)$ \cite{gap:hastings05_hierarchical_energy}.
     Combine (\ref{eq:hastings05_hchy_periodic}) with
     Theorem~\ref{thm:hastings_final_state_count}.
 \end{proof}
+
+\subsection*{Constructing the projections and using the physical gap}
+
+\begin{definition}[The projections determined by the pair operators]
+    \label{def:hastings05_constructed_hierarchy}
+    \lean{TNLean.MPS.AreaLaw.LocalSolution.hierarchyProjection,
+        TNLean.MPS.AreaLaw.LocalSolution.hierarchyProjection_zero,
+        TNLean.MPS.AreaLaw.LocalSolution.hierarchyProjection_succ,
+        TNLean.MPS.AreaLaw.LocalSolution.hierarchyClosingProjection}
+    \leanok
+    \uses{def:hastings05_compressed_window}
+    Given Hermitian operators $M_k^m$, real centres $c_k^m$ and radii $x_m$,
+    set $P_k^0=1$. Define $P_k^{m+1}$ as the spectral window of
+    $M_k^m$ at $c_k^m$ and radius $x_m$, inside the range of
+    $P_{2k}^mP_{2k+1}^m$. For a closing operator $W$, let $R$ be its
+    window at $c_W$ and radius $x_h$ inside the range of $P_0^h$.
+\end{definition}
+
+\begin{theorem}[Deficiency of the constructed projections]
+    \label{thm:hastings05_constructed_deficiency}
+    \lean{TNLean.MPS.AreaLaw.LocalSolution.norm_sub_hierarchyProjection_le,
+        TNLean.MPS.AreaLaw.LocalSolution.exists_unit_mem_hierarchyProjection,
+        TNLean.MPS.AreaLaw.LocalSolution.norm_sub_hierarchyClosingProjection_le,
+        TNLean.MPS.AreaLaw.LocalSolution.exists_unit_mem_hierarchyClosingProjection}
+    \leanok
+    \uses{def:hastings05_constructed_hierarchy, thm:hastings05_supersite_hierarchy,
+        thm:hastings05_closing_link_window, thm:hastings05_hchy}
+    Suppose $M_k^m$ acts on its block of $2^{m+1}$ supersites, all radii are
+    positive, and $\psi$ is a unit vector with
+    $\|(M_k^m-c_k^m)\psi\|\le\epsilon$ and $\|M_k^m-c_k^m\|\le K$.
+    Then $P_k^m$ is an orthogonal projection and
+    $\|\psi-P_k^m\psi\|\le D_m$. If $W$ satisfies the same two estimates,
+    $R$ is an orthogonal projection and $\|\psi-R\psi\|\le D_{h+1}$.
+    Whenever the relevant deficiency $D$ is less than one, that projection
+    retains a unit vector $\phi$ with $\|\phi-\psi\|\le2D$.
+\end{theorem}
+\begin{proof}\leanok
+    The projections of disjoint blocks commute. Apply the deficiency
+    recurrence to the recursively defined windows, and normalize the image
+    of $\psi$ under the final projection.
+\end{proof}
+
+\begin{definition}[A state retained throughout a tree of blocks]
+    \label{def:hastings05_retained_tree}
+    \lean{TNLean.MPS.AreaLaw.LocalSolution.IsRetainedHierarchy}
+    \leanok
+    A vector is retained throughout a block of level zero if its projection
+    keeps it. It is retained throughout a block of level $m+1$ if its
+    projection keeps it and it is retained throughout both child blocks.
+    This describes membership in the nested local spectral spaces of the
+    hierarchical construction in~\cite[lines 668--704]{Hastings2006Solving}.
+\end{definition}
+
+\begin{theorem}[The closing window preserves the hierarchy]
+    \label{thm:hastings05_retained_tree}
+    \lean{TNLean.MPS.AreaLaw.LocalSolution.toEuclideanLin_eq_of_mul_eq,
+        TNLean.MPS.AreaLaw.LocalSolution.hierarchyProjection_children,
+        TNLean.MPS.AreaLaw.LocalSolution.isRetainedHierarchy_of_hierarchyProjection,
+        TNLean.MPS.AreaLaw.LocalSolution.isRetainedHierarchy_of_hierarchyClosingProjection}
+    \leanok
+    \uses{def:hastings05_retained_tree, def:hastings05_constructed_hierarchy,
+        thm:hastings05_supersite_hierarchy}
+    For the constructed hierarchy, a vector kept by a block projection is
+    retained throughout that block. Every vector kept by the additional
+    closing window is retained throughout the original tree.
+    Thus the periodic correction changes the retained space at the root
+    while preserving all retained spaces below it. It has the tree-shaped
+    representation called a generalized matrix product state in
+    \cite[lines 596--607 and 732--743]{Hastings2006Solving}. No bound on the
+    dimensions of the intermediate retained spaces is asserted there.
+\end{theorem}
+\begin{proof}\leanok
+    If $PQ=Q$ and $Q\phi=\phi$, then $P\phi=PQ\phi=\phi$.
+    The parent window is contained in the range of the product of its
+    commuting child projections, so both children keep the vector.
+    Induction gives every node below the parent. The closing window is
+    contained in the final root projection, so the same induction applies.
+\end{proof}
+
+\begin{definition}[The joining edge of a block]
+    \label{def:hastings05_hierarchy_edge}
+    \lean{TNLean.MPS.AreaLaw.LocalSolution.hierarchyEdge}
+    \leanok
+    For edge operators $a_j$, where $a_j$ joins supersites $j-1$ and $j$,
+    set $M_k^m=a_{(2k+1)2^m}$. Edge zero is reserved for the closing link.
+\end{definition}
+
+\begin{theorem}[Each internal edge occurs once]
+    \label{thm:hastings05_hierarchy_edges}
+    \lean{TNLean.MPS.AreaLaw.LocalSolution.hierarchySum_hierarchyEdge,
+        TNLean.MPS.AreaLaw.LocalSolution.hierarchySum_hierarchyEdge_add_zero,
+        TNLean.MPS.AreaLaw.LocalSolution.hierarchyEdge_mem_supportedOperators}
+    \leanok
+    \uses{def:hastings05_hierarchy_edge, def:hastings05_hierarchy_sum}
+    The sum below block $k$ of level $m$ is
+    $T_k^m(M)=\sum_{k2^m<j<(k+1)2^m}a_j$. In particular,
+    $T_0^h(M)+a_0=\sum_{0\le j<2^h}a_j$.
+    If each positive-index edge acts on its two adjacent supersites,
+    $M_k^m$ acts on block $k$ of level $m+1$.
+\end{theorem}
+\begin{proof}\leanok
+    Split the interval of internal edges into its two halves and their
+    joining edge. Both endpoints of that edge belong to the parent block.
+\end{proof}
+
+\begin{theorem}[The physical Hamiltonian controls the count]
+    \label{thm:hastings05_physical_gap_count}
+    \lean{TNLean.MPS.AreaLaw.LocalSolution.abs_re_inner_sub_le_norm_sub,
+        TNLean.MPS.AreaLaw.LocalSolution.abs_re_inner_sub_le_of_norm_sub_le,
+        TNLean.MPS.AreaLaw.LocalSolution.card_le_two_mul_re_trace_of_approximation}
+    \leanok
+    \uses{thm:hastings_final_state_count}
+    Let $H-E_0\ge\Delta(1-P_0)$ with $\Delta>0$ and $P_0$ an orthogonal
+    projection. Let $\psi$ be a unit vector of energy $E_0$ under $H$.
+    Suppose $\|H-T\|\le\delta$ and an orthonormal family $\phi_j$ satisfies
+    $\operatorname{Re}\langle\phi_j,T\phi_j\rangle
+        \le\operatorname{Re}\langle\psi,T\psi\rangle+\eta$.
+    If $2\delta+\eta\le\Delta/2$, the family has at most
+    $2\operatorname{Re}\operatorname{tr}P_0$ members.
+\end{theorem}
+\begin{proof}\leanok
+    For every vector $v$,
+    $|\operatorname{Re}\langle v,(H-T)v\rangle|
+        \le\|H-T\|\|v\|^2$. Apply this to $\psi$ and each $\phi_j$ to obtain
+    $\operatorname{Re}\langle\phi_j,H\phi_j\rangle
+        \le E_0+2\delta+\eta\le E_0+\Delta/2$.
+    Theorem~\ref{thm:hastings_final_state_count} gives the count.
+\end{proof}
+
+\begin{definition}[The quantitative periodic projection]
+    \label{def:hastings05_periodic_projection}
+    \lean{TNLean.MPS.AreaLaw.LocalSolution.periodicHierarchyProjection}
+    \leanok
+    \uses{def:hastings05_constructed_hierarchy, def:hastings05_hierarchy_edge}
+    Use the pair operators $M_k^m=a_{(2k+1)2^m}$, their expectations in
+    $\psi$ as centres, and the adaptive radii $x_m$ of
+    Section~\ref{sec:hastings05_hierarchical_projection}. Let $R$ be the
+    closing window for $a_0$, centred at its expectation in $\psi$.
+\end{definition}
+
+\begin{definition}[Extending a finite edge family by zero]
+    \label{def:hastings05_finite_edges}
+    \lean{TNLean.MPS.AreaLaw.LocalSolution.extendFiniteEdges,
+        TNLean.MPS.AreaLaw.LocalSolution.extendFiniteEdges_apply_fin,
+        TNLean.MPS.AreaLaw.LocalSolution.extendFiniteEdges_eq_zero}
+    \leanok
+    For $a_0,\ldots,a_{N-1}$, set $a_j=0$ when $j\ge N$.
+\end{definition}
+
+\begin{theorem}[The finite family and its padded hierarchy]
+    \label{thm:hastings05_finite_edges}
+    \lean{TNLean.MPS.AreaLaw.LocalSolution.sum_extendFiniteEdges,
+        TNLean.MPS.AreaLaw.LocalSolution.sum_extendFiniteEdges_of_le,
+        TNLean.MPS.AreaLaw.LocalSolution.hierarchySum_hierarchyEdge_extend_add_zero,
+        TNLean.MPS.AreaLaw.LocalSolution.isHermitian_extendFiniteEdges,
+        TNLean.MPS.AreaLaw.LocalSolution.residual_extendFiniteEdges_le,
+        TNLean.MPS.AreaLaw.LocalSolution.centeredNorm_extendFiniteEdges_le,
+        TNLean.MPS.AreaLaw.LocalSolution.extendFiniteEdges_mem_supportedOperators,
+        TNLean.MPS.AreaLaw.LocalSolution.hierarchyEdge_extendFiniteEdges_mem_supportedOperators}
+    \leanok
+    \uses{def:hastings05_finite_edges, thm:hastings05_hierarchy_edges}
+    Extending by zero preserves Hermiticity, support, and nonnegative bounds
+    on local residuals and centred norms. For $N\le2^h$, the sum of the
+    extended family over $0\le j<2^h$ equals $\sum_{j<N}a_j$.
+\end{theorem}
+\begin{proof}\leanok
+    Inside the original interval the operator is unchanged; outside it the
+    operator and its centred residual vanish. Split the sum at $N$.
+\end{proof}
+
+\begin{definition}[Depth for an arbitrary finite chain]
+    \label{def:hastings05_finite_depth}
+    \lean{TNLean.MPS.AreaLaw.LocalSolution.finiteHierarchyDepth,
+        TNLean.MPS.AreaLaw.LocalSolution.two_le_finiteHierarchyDepth,
+        TNLean.MPS.AreaLaw.LocalSolution.le_two_pow_finiteHierarchyDepth,
+        TNLean.MPS.AreaLaw.LocalSolution.finiteHierarchyDepth_le_clog_add_two}
+    \leanok
+    Set $h_N=\max\{2,\lceil\log_2N\rceil\}$, with the upper binary logarithm
+    of zero taken to be zero. Then $2\le h_N$, $N\le2^{h_N}$, and
+    $h_N\le\lceil\log_2N\rceil+2$.
+\end{definition}
+
+\begin{theorem}[The projection length for a finite chain]
+    \label{thm:hastings05_finite_length}
+    \lean{TNLean.MPS.AreaLaw.LocalSolution.hierarchyProjectionLength_finiteHierarchyDepth_le}
+    \leanok
+    \uses{def:hastings05_finite_depth, thm:hastings05_explicit_projection_length}
+    The chosen projection length at depth $h_N$ is at most
+    $512(\lceil\log_2N\rceil+2)^2(1+\max\{0,\log(J/\Delta)\})$.
+\end{theorem}
+\begin{proof}\leanok
+    Substitute the bound on $h_N$ into the explicit length.
+\end{proof}
+
+\begin{theorem}[The quantitative periodic construction]
+    \label{thm:hastings05_quantitative_periodic}
+    \lean{TNLean.MPS.AreaLaw.LocalSolution.exists_unit_mem_periodicHierarchyProjection,
+        TNLean.MPS.AreaLaw.LocalSolution.card_le_two_mul_re_trace_of_periodicHierarchyProjection,
+        TNLean.MPS.AreaLaw.LocalSolution.exists_unit_mem_periodicHierarchyProjection_of_finite,
+        TNLean.MPS.AreaLaw.LocalSolution.card_le_two_mul_re_trace_of_periodicHierarchyProjection_of_finite}
+    \leanok
+    \uses{def:hastings05_periodic_projection,
+        thm:hastings05_constructed_deficiency, thm:hastings05_physical_gap_count,
+        thm:hastings05_supersite_final_states, thm:hastings05_explicit_projection_length}
+    Let $h\ge2$, $J,\Delta,K>0$, and
+    $r\ge512h^2(1+\max\{0,\log(J/\Delta)\})$.
+    Suppose the positive-index Hermitian edges satisfy the two-supersite support condition,
+    $\psi$ is a unit vector, and, with
+    $c_j=\operatorname{Re}\langle\psi,a_j\psi\rangle$,
+    $\|(a_j-c_j)\psi\|\le K e^{-r}$ and $\|a_j-c_j\|\le K$.
+    Then $R$ retains a unit vector $\phi$ satisfying
+    $\|\phi-\psi\|\le2(3^{h+1}-1)e^{-r/8}$.
+    A finite family of $N\le2^h$ edges satisfies the same assertion after
+    extension by zero.
+    If in addition $K\le Jr$,
+    $\|H-\sum_{0\le j<2^h}a_j\|\le2^hJe^{-r}$,
+    $\psi$ has ground energy $E_0$ under $H$, and
+    $H-E_0\ge\Delta(1-P_0)$ for an orthogonal projection $P_0$,
+    every orthonormal family in the range of $R$
+    has at most $2\operatorname{Re}\operatorname{tr}P_0$ members.
+\end{theorem}
+\begin{proof}\leanok
+    The chosen length makes $D_{h+1}<1$ and bounds it by
+    $(3^{h+1}-1)e^{-r/8}$. Normalize $R\psi$ for the first assertion.
+    The total radius is at most $\Delta/4$, and the truncation error is at
+    most $\Delta/8$. Apply Theorem~\ref{thm:hastings05_physical_gap_count}
+    to the energy estimate for every vector kept by $R$.
+\end{proof}

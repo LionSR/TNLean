@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Lattice.LowEnergyCommutator
 import TNLean.Lattice.LowEnergyBasisIteration
+import TNLean.Lattice.GraphDegreeGrowth
 
 /-!
 # The sum of the low-energy commutators over all terms
@@ -29,6 +30,15 @@ norm budget `b₀` of each site and the polynomial growth of the graph spheres b
 **Local fix (constant of eq. `oibu`):** the size independence of eq. `oibu` is proved with the
 explicit constant above; the printed dependence `O(J²/(c₁ l ΔE δλ_j))` is not established.
 Documented in `docs/paper-gaps/hastings05_two_dim_ground_basis.tex`.
+
+**Scope restriction (geometric growth):** the physical exponential-decay and summed
+estimates assume polynomial graph-sphere growth with size-independent constants.
+This is additional to source lines 169–190 and does not follow from bounded degree.
+The unrestricted metric-lattice assertion of eq. `oibu` is false; see the mathematical
+counterexample in `docs/paper-gaps/hastings05_tree_basis_counterexample.tex` and the
+growth distinction in `docs/paper-gaps/hastings05_geometric_growth_scope.tex`.
+The scalar shell estimates
+are stated under their displayed hypotheses.
 
 ## Main results
 
@@ -481,21 +491,11 @@ theorem sum_norm_groundCompression_commutator_le [NeZero d] (Kg : ℝ) (kg : ℕ
     ring
   -- Group the terms by their anchor and use the norm budget of each site.
   have hgroup : ∑ i, ‖h i‖ * w (a i) ≤ ∑ x, |b₀| * w x := by
-    calc ∑ i, ‖h i‖ * w (a i)
-        = ∑ x, ∑ i ∈ Finset.univ.filter (fun i => a i = x), ‖h i‖ * w (a i) :=
-          (Finset.sum_fiberwise_of_maps_to (fun i _ => Finset.mem_univ (a i)) _).symm
-      _ = ∑ x, (∑ i ∈ Finset.univ.filter (fun i => a i = x), ‖h i‖) * w x := by
-          refine Finset.sum_congr rfl fun x _ => ?_
-          rw [Finset.sum_mul]
-          exact Finset.sum_congr rfl fun i hi => by rw [(Finset.mem_filter.mp hi).2]
-      _ ≤ ∑ x, |b₀| * w x := by
-          refine Finset.sum_le_sum fun x _ => mul_le_mul_of_nonneg_right ?_ (hw0 x)
-          refine le_trans ?_ ((hBudget x).trans (le_abs_self b₀))
-          exact Finset.sum_le_sum_of_subset_of_nonneg
-            (fun i hi => by
-              simp only [Finset.mem_filter, Finset.mem_univ, true_and] at hi ⊢
-              rw [← hi]; exact ha i)
-            fun i _ _ => norm_nonneg _
+    rw [← Finset.mul_sum]
+    apply sum_weight_mul_comp_le_budget_mul_sum a (fun i ↦ ‖h i‖) |b₀| _ w hw0
+    intro x
+    exact (sum_weight_anchor_le_of_support_budget X a ha (fun i ↦ ‖h i‖)
+      (fun i ↦ norm_nonneg _) b₀ hBudget x).trans (le_abs_self b₀)
   have hsites : ∑ x, w x ≤ Kg * shellSumConst γ kg := by
     have hsplit : ∑ x, w x = ∑ x ∈ Finset.univ.filter (fun x => G.edist (a j) x ≠ ⊤),
         Real.exp (-(γ * ((G.edist (a j) x).toNat : ℝ))) := by
@@ -547,8 +547,11 @@ vectors being separated below level `L` and every `j ℓ` being one of `j 0, …
 terms have norm at most `J`, then the off-diagonal parts of the compressions of all filtered terms
 satisfy `∑_i o(i) ≤ (m - 1) β_{L-1} ∑_{ℓ < L} C' ‖h_{j ℓ}‖`, where `β_{L-1} = levelBoundB` with
 `K = 2 J²` and `K_B = 1`, and `C'` is the constant of `sum_norm_groundCompression_commutator_le`.
-The bound does not depend on the number of sites or terms. Hastings, arXiv:cond-mat/0508554v3,
-`proj3new.tex`, eq. `oibu` (lines 1689–1694) and the iteration of lines 1695–1708. -/
+There is no factor counting the number of sites or terms; uniformity also requires uniform
+control of the displayed spectral constants and the number of levels. The basis and separation
+are hypotheses here. `LowEnergyBasisConstruction.lean` constructs a basis without them and
+displays the corresponding commutator conditioning. Hastings, arXiv:cond-mat/0508554v3,
+`proj3new.tex`, eq. `oibu` (lines 1689–1694) and lines 1695–1708. -/
 theorem sum_norm_offDiagonalPartFamily_le_oibu_levels [NeZero d] (Kg : ℝ) (kg : ℕ)
     (hGrowth : ∀ x (r : ℕ),
       ((Finset.univ.filter fun y => G.edist x y = r).card : ℝ) ≤ Kg * ((r : ℝ) + 1) ^ kg)

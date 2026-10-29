@@ -1,0 +1,77 @@
+\section{The zero-range case of the truncated approximation}
+\label{sec:hastings_zero_range}
+
+The zero-range case of eqs.~(mid), (apb), and (facld) of
+\cite[lines 285--348]{Hastings2006Solving} follows directly from commutativity.
+Throughout this section the Gaussian filter is normalized as in
+Definition~\ref{def:hastings_gaussian_filtered_term}, with the correction to
+the printed weight in (mid) recorded in
+\cite{gap:hastings05_truncated_dynamics}.
+
+\begin{theorem}[Filtering an observable that commutes with the Hamiltonian]
+    \label{thm:hastings_commuting_filter_exact}
+    \lean{TNLean.Lattice.gaussianFilteredTerm_eq_of_commute,
+        TNLean.Lattice.mem_groundEigenspace_apply_of_commute,
+        TNLean.Lattice.starProjection_apply_eq_of_commute}
+    \leanok
+    \uses{def:hastings_gaussian_filtered_term}
+    If $HW=WH$, then the Gaussian filter of $W$ under $H$ equals $W$ for
+    every nonnegative variance. Moreover, if $H\psi=E_0\psi$, then
+    $H(W\psi)=E_0W\psi$. Thus the orthogonal projection $P_0$ onto the
+    $E_0$-eigenspace satisfies $P_0W\psi=W\psi$.
+\end{theorem}
+\begin{proof}\leanok
+    Commutativity gives $e^{iHt}W=We^{iHt}$, so
+    $e^{iHt}We^{-iHt}=W$. Its average against a Gaussian probability
+    measure is $W$. Also $HW\psi=WH\psi=E_0W\psi$.
+\end{proof}
+
+\begin{theorem}[Commutativity of terms acting on individual sites]
+    \label{thm:hastings_single_site_terms_commute}
+    \lean{TNLean.Lattice.commute_of_singleton_support,
+        TNLean.Lattice.commute_sum_of_singleton_support,
+        TNLean.Lattice.gaussianFilteredTerm_sum_eq_of_singleton_support}
+    \leanok
+    Let $\Lambda$ be a finite set of sites, with a $d$-dimensional Hilbert
+    space at each site. Suppose $H_i$ acts only at $i$ for every $i\in\Lambda$.
+    Then $[H_i,H_j]=0$ for all $i,j$. Consequently, for every subset
+    $s\subseteq\Lambda$, the sum $H_s=\sum_{j\in s}H_j$ commutes with every
+    $H_i$, and the Gaussian filter of $H_i$ under $H_s$ equals $H_i$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:hastings_commuting_filter_exact}
+    If $i\ne j$, the singleton supports are disjoint, so the terms commute.
+    If $i=j$, the commutator also vanishes. Summing the commutation
+    identities gives $[H_s,H_i]=0$, and
+    Theorem~\ref{thm:hastings_commuting_filter_exact} evaluates the filter.
+\end{proof}
+
+\begin{theorem}[Exact truncation at zero interaction range]
+    \label{thm:hastings_zero_range_exact}
+    \lean{TNLean.Lattice.singleton_support_of_zero_range,
+        TNLean.Lattice.gaussianFilteredTerm_sum_eq_of_zero_range,
+        TNLean.Lattice.gaussianFilteredTerm_full_and_sum_eq_of_zero_range,
+        TNLean.Lattice.starProjection_term_eq_of_zero_range,
+        TNLean.Lattice.sub_starProjection_gaussianFilteredTerm_sum_eq_zero_of_zero_range}
+    \leanok
+    Let $\Lambda$ be a finite metric space, and suppose $H_i$ acts inside
+    the closed ball of radius zero about $i$. Put $H=\sum_iH_i$ and let
+    $s\subseteq\Lambda$ be arbitrary. For $q\ge0$ and $\Delta E\in\mathbb R$,
+    both the full Gaussian filter $\widetilde H_i$ and the filter $M_i$
+    under $H_s$ equal $H_i$. If $H\psi=E_0\psi$, then
+    \begin{align*}
+        \widetilde H_i & =M_i=H_i, \\
+        (1-P_0)M_i\psi & =0.
+    \end{align*}
+    In particular, the approximation error in (apb) and the excited
+    component in (facld) both vanish, without a spectral-gap assumption.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:hastings_single_site_terms_commute,
+        thm:hastings_commuting_filter_exact}
+    A closed ball of radius zero in a metric space is the singleton of its
+    centre. Apply Theorem~\ref{thm:hastings_single_site_terms_commute} to
+    $s$ and $\Lambda$. The eigenspace statement in
+    Theorem~\ref{thm:hastings_commuting_filter_exact} gives
+    $P_0H_i\psi=H_i\psi$, hence the last identity.
+\end{proof}

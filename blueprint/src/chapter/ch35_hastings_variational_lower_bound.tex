@@ -95,5 +95,33 @@ The Gaussian expansion discussed at lines 1005--1009 of
 $a_k=0$ for odd $k$ and
 $a_k=[(k-1)!!/k!](q/\Delta E^2)^{k/2}$ for even $k$. The printed variance
 power requires correction, and $i^k$ already supplies the alternating sign
-\cite{gap:hastings05_gaussian_series_coefficients}. This infinite-series
-identity is separate from the finite-polynomial theorem above.
+\cite{gap:hastings05_gaussian_series_coefficients}. The norm-convergent Gaussian
+identity is proved in QICLean; the finite-polynomial theorem above allows
+arbitrary real coefficients.
+
+\begin{theorem}[The Gaussian-filtered variational lower bound]
+    \label{thm:hastings_gaussian_variational_lower_bound}
+    \lean{TNLean.Lattice.sum_conj_gaussianFilteredTerm,
+        TNLean.Lattice.card_mul_sInf_spectrum_gaussianFilteredTerm_le_of_conj,
+        TNLean.Lattice.card_mul_sInf_spectrum_gaussianFilteredTerm_le_of_sitePerm}
+    \leanok
+    \uses{thm:hastings_variational_lower_bound, def:hastings_gaussian_filtered_term}
+    Let $H_0$ be Hermitian, let $U_1,\ldots,U_N$ be unitaries, and suppose
+    each $U_i$ commutes with $H=\sum_i U_iH_0U_i^\dagger$.
+    Let $K$ be the Gaussian average of $e^{itH}H_0e^{-itH}$, with variance
+    $q/\Delta E^2$, where $q\ge0$ and $\Delta E>0$. Then
+    $H=\sum_iU_iKU_i^\dagger$, and every eigenvalue $E$ of $H$ satisfies
+    $E\ge N\lambda_{\min}(K)$. For a simply transitive translation action,
+    $N$ is the number of sites, so $E_0/N\ge\lambda_{\min}(K)$.
+    This is the filtered choice discussed in \cite{Hastings2006Solving},
+    source lines 1005--1009, in the variational bound (varnum).
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:hastings_variational_lower_bound, thm:hastings_gaussian_filtered_spectral,
+        thm:hastings_filtered_term_translate}
+    Covariance of the Gaussian average gives
+    $U_iKU_i^\dagger=\widetilde{U_iH_0U_i^\dagger}$, because $U_i$ fixes $H$.
+    The filtered terms sum to $H$. Apply
+    Theorem~\ref{thm:hastings_variational_lower_bound} with local term $K$
+    and all commutator coefficients zero.
+\end{proof}
