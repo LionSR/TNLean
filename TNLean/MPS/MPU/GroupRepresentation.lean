@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import Mathlib.LinearAlgebra.UnitaryGroup
 import TNLean.MPS.MPU.SimpleBlocking
 
 /-!
@@ -145,8 +146,8 @@ are not needed to construct the operator representation.
 Source: arXiv:2502.20257, lines 1403–1407. -/
 noncomputable def IsRawRepresentation.rep [Group G] (F : GroupFamily G d)
     (hF : F.IsRawRepresentation) (N : ℕ) (hN : 0 < N) :
-    G →* GeneralLinearGroup ℂ ((Fin N → Fin d) → ℂ) :=
-  Matrix.unitaryGroup.embeddingGL.comp
+    G →* LinearMap.GeneralLinearGroup ℂ ((Fin N → Fin d) → ℂ) :=
+  Matrix.UnitaryGroup.embeddingGL.comp
     (F.operatorRepresentation hF.isMPUPos hF.operator_one hF.operator_mul N hN)
 
 /-- The represented linear automorphism acts by the actual periodic operator.

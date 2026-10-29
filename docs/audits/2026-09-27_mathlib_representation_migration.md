@@ -31,7 +31,7 @@ blueprint `\lean{...}` tag cites a removed name.
 The group-family operators already form the unitary-valued monoid homomorphism
 `GroupFamily.operatorRepresentation`, from the operator laws alone. The new
 `IsRawRepresentation.rep` composes this map with Mathlib's
-`Matrix.unitaryGroup.embeddingGL`. Its action is the actual periodic MPO, and
+`Matrix.UnitaryGroup.embeddingGL`. Its action is the actual periodic MPO, and
 the existing natural-power theorem now follows from `MonoidHom.map_pow`
 instead of a second induction. The tensor-level predicates remain because
 they also specify injectivity, simplicity, and the dependent bond dimensions;
