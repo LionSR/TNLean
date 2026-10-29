@@ -58,8 +58,9 @@ private theorem norm_linearMap_trace_le_entry_bound
         _ ≤ ‖T (Matrix.single i j 1)‖ := Matrix.norm_apply_le_l2_opNorm _ i j
         _ ≤ C * ‖(Matrix.single i j 1 : Matrix (Fin a) (Fin a) ℂ)‖ := hT _
         _ = C := by rw [Matrix.l2_opNorm_single_one, mul_one]
-    _ = _ := by simp only [Finset.sum_const, Finset.card_univ, Fintype.card_fin,
-      nsmul_eq_mul]; ring
+    _ = _ := by
+      simp only [Finset.sum_const, Finset.card_univ, Fintype.card_fin, nsmul_eq_mul]
+      ring
 
 /-- An actual one-site R interval and one moving L interval have a uniform
 linear squared-norm bound, independently of every uniform padding length.

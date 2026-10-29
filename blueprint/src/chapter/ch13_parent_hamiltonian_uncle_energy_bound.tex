@@ -1,0 +1,31 @@
+\section{A linear norm bound for one pinned wall}
+\label{sec:uncle_pinned_trial_linear_norm}
+
+\begin{lemma}[Actual pinned-trial norm bound]
+    \label{lem:uncle_pinned_trial_linear_norm}
+    \lean{MPSTensor.norm_uncleTwoWallTrial_one_wall_sq_le_mul}
+    \notready
+    \uses{def:uncle_two_wall_trial,lem:uncle_wall_gram_linear_bounds}
+    Suppose the A and B transfer operators are unital. Suppose B has a
+    faithful stationary dual density and the mixed B/A transfer spectral
+    radius is below one. For arbitrary rectangular walls R and L, there
+    is $C>0$ such that the actual five-segment trial with lengths
+    $p,1,q,s,t$ has squared norm at most $Cs$, uniformly in all
+    nonnegative padding lengths $p,q,t$ and wall length $s$.
+    The first wall is pinned to its unique physical site.
+\end{lemma}
+\begin{proof}
+    The actual second wall map has an operator-norm bound linear in $s$.
+    The first wall map at length one has a finite Gram-trace bound.
+    Unital complete positivity contracts matrix operator norms, so the
+    intervening powers of the A and B transfers do not enlarge that bound.
+    The exact finite norm identity is the real operator trace of the
+    resulting five-map contraction. Expand that trace on the $a^2$ matrix
+    units of the A block. Each unit has norm one and each output entry is
+    bounded by its matrix operator norm, giving the stated bound.
+\end{proof}
+
+The identification of these globally pinned trials with the four actual
+endpoint residuals, together with the cyclic restriction norm partition,
+is the remaining step toward the source linear trial-energy estimate.
+The present lemma assumes no state-norm or energy rate.
