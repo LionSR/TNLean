@@ -72,9 +72,16 @@ not an assumed genericity condition. A full perturbation witness for the
 fixed A/B blocks is used only to derive the dimension bound and nonidentity.
 The explicit positive witness itself need not retain perturbation span.
 
-Remaining norm work is the actual two-wall Gram factorization error bound.
-Combining this with the two separately derived generic wall coefficients
-still requires the product-space bookkeeping. These identities do not assert Theta(N^2), an energy
+The pair-space theorem uses one additive Haar measure on the space of
+(R,L), with no independence or product-measure premise. Its exceptional
+set lies in the union of the first radical times the whole second wall
+space and the whole first wall space times the second radical. Both are
+proper real submodules and therefore Haar-null. The single full
+perturbation witness supplies both physical-dimension bounds. The strict
+mixed-transfer conditions are stated in both orientations, as supplied by
+the source off-diagonal damping lemma for distinct normalized blocks.
+
+Remaining norm work is the actual two-wall Gram factorization error bound. These identities do not assert Theta(N^2), an energy
 bound, genericity, or gaplessness. Finite nonnegativity alone does not
 supply a strictly positive asymptotic coefficient.
 

@@ -202,3 +202,26 @@ of a positive value of the quadratic coefficient. The exceptional set is
 derived for the actual wall coefficient, rather than supplied as a
 hypothesis. The separating-transfer estimate relating both coefficients
 to the norm of the actual two-wall trial remains a further step.
+
+\begin{corollary}[Simultaneous positivity for a pair of walls]
+    \label{cor:uncle_wall_gram_pair_generic_positive}
+    \lean{MPSTensor.uncleWallSlopeQuadratic_ne_zero_of_bond_sq_lt,
+        MPSTensor.uncleWallNormSlope_pair_ae_pos}
+    \notready
+    \uses{thm:uncle_wall_gram_generic_positive}
+    Suppose both diagonal blocks have unital transfers and faithful
+    stationary dual densities, the mixed transfer spectral radius is
+    strictly below one in both orientations, and a full perturbation
+    span is possible. Then almost every pair $(R,L)$ has
+    $\kappa_R>0$ and $\kappa_L>0$, with respect to every additive Haar
+    measure on the real space of both walls. No independence condition
+    on component measures is needed.
+\end{corollary}
+\begin{proof}
+    Full perturbation span implies that the physical dimension exceeds
+    each separate block's matrix dimension. The two zero-slope radicals
+    are therefore proper. Inside the pair space the exceptional set is
+    the union of the first radical times the whole second wall space,
+    and the whole first wall space times the second radical. These are
+    two proper real linear subspaces, each of zero additive Haar measure.
+\end{proof}
