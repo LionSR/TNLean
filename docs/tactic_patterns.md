@@ -9731,10 +9731,12 @@ there is no need for a new tactic.
   count, and extend the family by zero before improving all viable subspaces.
 - **Seen:** The fixed-accuracy proof in
   `TNLean/MPS/AreaLaw/PhysicalDGViability.lean` and the general proof in
-  `TNLean/MPS/AreaLaw/IndependentPhysicalDGViability.lean`.
-- **Abstraction:** `exists_independent_long_middle_actual_dg_family` now
-  supplies the variable-accuracy construction. The former accuracy-family
-  proof calls it rather than repeating the construction.
+  `TNLean/MPS/AreaLaw/IndependentPhysicalDGPower.lean`.
+- **Abstraction:** `exists_independent_long_middle_actual_dg_word_family`
+  supplies the actual construction before every operator power and input
+  space. `exists_independent_long_middle_actual_dg_family` is its one-word
+  consequence and retains its prior signature. The variable-accuracy proof
+  calls this consequence rather than repeating the construction.
 - **Notes:** Two remaining proofs across two files. The fixed-accuracy
   specialization may also be derived from the general theorem in a later
   cleanup; the new sharp-rank argument already uses the general family.
@@ -10079,3 +10081,15 @@ there is no need for a new tactic.
 - **Scope:** The exterior is retained, so the prefix-cut bound `D` cannot
   replace `D^2`. Existing closeness transitivity supplies both transfers
   around the collective trim; no new tactic or closeness predicate is used.
+
+### Recovering a one-step family from actual words — candidate (2026-10-29)
+
+- **Seen:** `MPS/AreaLaw/IndependentPhysicalDGViability.lean`.
+- **Reuse:** Mathlib's `Function.Surjective.iSup_comp` identifies the image
+  sum indexed by one-letter words with the original image sum. The
+  existing zero-extension theorem then restores the prescribed family
+  index without changing the actual subspace.
+- **Scope:** The original theorem signature is unchanged. The stronger
+  actual powered construction is proved once in
+  `MPS/AreaLaw/IndependentPhysicalDGPower.lean`; no spectral assumption or
+  final viable-space witness is added to the physical inputs.

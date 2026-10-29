@@ -51,6 +51,7 @@ import TNLean.MPS.AreaLaw.Hamiltonian
 import TNLean.MPS.AreaLaw.Hastings
 import TNLean.MPS.AreaLaw.Huang
 import TNLean.MPS.AreaLaw.IndependentPhysicalDGCluster
+import TNLean.MPS.AreaLaw.IndependentPhysicalDGPower
 import TNLean.MPS.AreaLaw.IndependentPhysicalDGViability
 import TNLean.MPS.AreaLaw.IndependentTruncationParameters
 import TNLean.MPS.AreaLaw.InformationReset

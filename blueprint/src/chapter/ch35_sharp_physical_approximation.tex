@@ -1,5 +1,46 @@
 \section{Normalized approximation with independent scales}
 
+\begin{theorem}[One physical family and all its ordered powers]
+    \label{thm:independent_physical_dg_word_family}
+    \lean{TNLean.MPS.AreaLaw.exists_independent_long_middle_actual_dg_word_family}
+    \leanok
+    Let $m\ge q\ge2$, $\ell\ge1$, $t\ge21$, $0<g\le1$ and
+    $0<\varepsilon\le1$. Assume (\ref{eq:independent_family_tail}) and
+    suppose $\Delta$ bounds
+    $(2e^{-2\ell^2\sqrt{(4g/5)/R}})^2$ for every $0<R\le3t+4\ell$.
+    Put $D=(m\ell^2)^{22\ell}$.
+    Let $J=[p,r)\subseteq[0,N)$ have length greater than $4\ell$, and
+    let the original positive unit nearest-neighbour Hamiltonian have
+    full ground space $G$ at energy $\mu$ and spectrum in
+    $\{\mu\}\cup[\mu+g,\infty)$.
+    There are a target $T$, an integer $n_0\le D^2$, and actual operators
+    $F_1,\ldots,F_{n_0}$ on $\mathcal H_J$, chosen before every power
+    and input subspace, such that $\dim T=\dim G$ and $T,G$ are mutually
+    $\varepsilon/200$-close.
+    For every integer $a\ge0$, let
+    $F_w=F_{w_1}\cdots F_{w_a}$ for words of length $a$.
+    If $S$ is $\delta$-viable for $T$ and $\delta<1$, then the actual
+    subspace $V_a=\sum_w F_wS$ has dimension at most
+    $(D^2)^a\dim S$ and is $\Delta^a/(1-\delta)^2$-viable for the same $T$.
+    The interval/exterior coordinates are those of the original chain.
+    This is the long-interval auxiliary with independently supplied
+    scalar tail and filter bounds, supporting
+    \cite[Lemma on error reduction and Theorem on improving families,
+        lines 597--622 and 1010--1024]{Arad2016RigorousRG}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:inward_effective_cuts,thm:five_region_scaled_low_cluster,
+        thm:actual_clipped_polynomial_family}
+    Move the cuts inward, derive the actual clipped low cluster and
+    construct its common polynomial family. The collar count is absorbed
+    into $D^2$. Choose the actual Chebyshev operator and complementary
+    tensor factors once. Its powers have the same spectral target,
+    squared suppression at most $\Delta^a$, and the actual ordered words
+    $F_w$ as retained factors. Apply error reduction once to that powered
+    decomposition. No identity action of the unsquared filter on the
+    target is used.
+\end{proof}
+
 \begin{theorem}[An improving family at independent scales]
     \label{thm:independent_long_middle_actual_dg_family}
     \lean{TNLean.MPS.AreaLaw.exists_independent_long_middle_actual_dg_family}
@@ -29,17 +70,10 @@
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:inward_effective_cuts,thm:five_region_scaled_low_cluster,
-        thm:actual_clipped_polynomial_family}
-    Move the cuts inward to a retained interval whose omitted collar has
-    at most $2\ell$ sites. The physical clipping theorem gives the actual
-    low cluster and norm budget $3t+4\ell$.
-    Construct the common polynomial family at degree $\ell^2$, transport
-    it to $J$, and absorb the collar count into $D^2$.
-    The actual-cluster Chebyshev estimate gives
-    (\ref{eq:independent_family_improvement}); the displayed numerical
-    hypothesis bounds its squared error. Extend by zero to exactly $D^2$
-    operators without changing their image span.
+    \uses{thm:independent_physical_dg_word_family}
+    Take words of length one in the preceding theorem. Their image sum
+    is the original family image sum. Extend this family by zero to
+    exactly $D^2$ operators, preserving the image subspace.
 \end{proof}
 
 \begin{theorem}[The squared filter error]
