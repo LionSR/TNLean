@@ -30,7 +30,7 @@ its scanner scale and birth template as follows.
     $\bigcup_{z\in J_j}(F_{j,z}\cap\mathbb Z^2)$.
 \end{definition}
 
-\begin{theorem}[Points and pieces of a primary birth template]
+\begin{lemma}[Points and pieces of a primary birth template]
     \label{thm:area_law_primary_birth_template_points}
     \lean{TNLean.PEPS.AreaLaw.Geometry.primaryBirthTemplate_points,
         TNLean.PEPS.AreaLaw.Geometry.primaryBirthTemplate_pieceCount,
@@ -45,7 +45,7 @@ its scanner scale and birth template as follows.
         N_0 & \le 9r^{2\delta_0}.
         \label{eq:area_law_primary_birth_points_count}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{def:area_law_primary_birth_template,
         thm:area_law_primary_fragment_union,
@@ -55,19 +55,19 @@ its scanner scale and birth template as follows.
         thm:area_law_fine_belt_scales}
     Each $F_{j,z}$ ($z\in J_j$) has endpoints of the form $o_i+m$ ($m\in\mathbb Z$)
     with strict inequality, so $F_{j,z}\cap\mathbb Z^2\ne\varnothing$; since
-    $R_j=\bigcup_{z\in J_j}F_{j,z}$ (Theorem~\ref{thm:area_law_primary_fragment_union}),
-    $T=R_j\cap\mathbb Z^2$, and Theorems~\ref{thm:area_law_primary_fragment_rectangles}
+    $R_j=\bigcup_{z\in J_j}F_{j,z}$ (Lemma~\ref{thm:area_law_primary_fragment_union}),
+    $T=R_j\cap\mathbb Z^2$, and Lemmas~\ref{thm:area_law_primary_fragment_rectangles}
     and~\ref{thm:area_law_primary_diameter_separation} give the diameter bounds.
     With $m=p_k-k\ge0$, $p_k\le(1+\delta_0)k$
-    (Theorem~\ref{thm:area_law_fine_belt_scales}) gives $1\le 2^m\le r^{\delta_0}$,
-    so Theorem~\ref{thm:area_law_primary_fragment_count} yields
+    (Lemma~\ref{thm:area_law_fine_belt_scales}) gives $1\le 2^m\le r^{\delta_0}$,
+    so Lemma~\ref{thm:area_law_primary_fragment_count} yields
     \begin{align}
         N_0 & \le(2^m+2)^2\le9\cdot4^m\le9r^{2\delta_0}.
         \notag
     \end{align}
 \end{proof}
 
-\begin{theorem}[Choice of the primary scale constant]
+\begin{lemma}[Choice of the primary scale constant]
     \label{thm:area_law_primary_scanner_constant}
     \lean{TNLean.PEPS.AreaLaw.Geometry.primaryBirthTemplate_scale,
         TNLean.PEPS.AreaLaw.Geometry.two_pow_pitchScaleIndex_le_primaryScannerScale,
@@ -82,7 +82,7 @@ its scanner scale and birth template as follows.
     \end{align}
     so $T$ is a template of Definition~\ref{def:area_law_template} with
     parameters $(n_k,r)$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_primary_birth_template_points,
         def:area_law_primary_birth_template}
@@ -97,7 +97,7 @@ its scanner scale and birth template as follows.
     and $C_P\ge1$ gives $s_k=2^{p_k}\le r^{1+\delta_0}\le r^{1+2\delta_0}\le n_k$.
 \end{proof}
 
-\begin{theorem}[Cut clearance of a primary birth template]
+\begin{lemma}[Cut clearance of a primary birth template]
     \label{thm:area_law_primary_birth_template_clearance}
     \lean{TNLean.PEPS.AreaLaw.Geometry.primaryBirthTemplate_isSeparated}
     \leanok
@@ -108,17 +108,17 @@ its scanner scale and birth template as follows.
         \operatorname{dist}_\infty(T,Z) & >4D_0s_0.
         \label{eq:area_law_primary_birth_clearance}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_primary_birth_template_points,
         thm:area_law_dyadic_layer_distance}
     Since $T\subseteq R_j\subseteq\overline{D_k}$
-    (Theorem~\ref{thm:area_law_primary_birth_template_points}),
-    Theorem~\ref{thm:area_law_dyadic_layer_distance} gives
+    (Lemma~\ref{thm:area_law_primary_birth_template_points}),
+    Lemma~\ref{thm:area_law_dyadic_layer_distance} gives
     $\operatorname{dist}_\infty(T,Z)\ge C_0r>4D_0r=4D_0s_0$.
 \end{proof}
 
-\begin{theorem}[Primary scale limits]
+\begin{lemma}[Primary scale limits]
     \label{thm:area_law_primary_scale_limits}
     \lean{TNLean.PEPS.AreaLaw.Geometry.eventually_primaryScaleLimits,
         TNLean.PEPS.AreaLaw.Geometry.le_primaryScannerScale}
@@ -133,12 +133,12 @@ its scanner scale and birth template as follows.
     \end{align}
     and if $C_P>0$, then for every $n_*$, $n_k\ge n_*$ for all sufficiently
     large $k$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{def:area_law_primary_birth_template,thm:area_law_exponent_gaps}
     With $e=1+2\delta_0$ and $C=\max\{C_P,0\}+1$,~(\ref{eq:area_law_primary_scanner_scale})
     gives $n_k\le Cr^e$. Since $e(1-\ell)<1$, $e\beta<\zeta$
-    (Theorem~\ref{thm:area_law_exponent_gaps}), and $r^\zeta/2\le t_k\le r$,
+    (Lemma~\ref{thm:area_law_exponent_gaps}), and $r^\zeta/2\le t_k\le r$,
     $Cr^{-(b-a)}\to0$ ($a<b$) yields~(\ref{eq:area_law_primary_scale_limits});
     for $C_P>0$, $n_k\ge C_P r\to\infty$.
 \end{proof}

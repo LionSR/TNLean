@@ -15,7 +15,7 @@ nearest-neighbour threshold $l_{\rm proj}+1$ of
 \cite[line 1240]{Hastings2006Solving}; see
 \cite{gap:hastings05_percolation_cluster_size}.
 
-\begin{theorem}[Families of a given number of clusters]
+\begin{lemma}[Families of a given number of clusters]
     \label{thm:hastings_percolation_families}
     \lean{TNLean.Lattice.sum_powersetCard_prod_le}
     \leanok
@@ -26,14 +26,14 @@ nearest-neighbour threshold $l_{\rm proj}+1$ of
         \label{eq:hastings_percolation_families}
     \end{align}
     \cite[line 1210]{Hastings2006Solving}.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Induct on $|T|$: for $b\notin T$ and $s=\sum_{C\in T}a_C$,
     $s^{m+1}/(m+1)!+a_bs^m/m!\le(s+a_b)^{m+1}/(m+1)!$.
 \end{proof}
 
-\begin{theorem}[All nonempty families of clusters]
+\begin{lemma}[All nonempty families of clusters]
     \label{thm:hastings_percolation_exp}
     \lean{TNLean.Lattice.sum_nonempty_powerset_prod_eq,
         TNLean.Lattice.sum_nonempty_powerset_prod_le_exp}
@@ -46,13 +46,13 @@ nearest-neighbour threshold $l_{\rm proj}+1$ of
         \label{eq:hastings_percolation_exp}
     \end{align}
     \cite[lines 1238--1241]{Hastings2006Solving}.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Expand $\prod_{C\in T}(1+a_C)$ and use $1+a_C\le e^{a_C}$.
 \end{proof}
 
-\begin{theorem}[The sum over large clusters]
+\begin{lemma}[The sum over large clusters]
     \label{thm:hastings_percolation_cluster_sum}
     \lean{TNLean.Lattice.sum_pow_le_of_forall_lt,
         TNLean.Lattice.sum_pow_le_of_card_le}
@@ -65,7 +65,7 @@ nearest-neighbour threshold $l_{\rm proj}+1$ of
         \label{eq:hastings_percolation_cluster_sum}
     \end{align}
     \cite[lines 1238--1241]{Hastings2006Solving}.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Group by $k=n_C\ge l+1$ and bound
@@ -75,14 +75,14 @@ nearest-neighbour threshold $l_{\rm proj}+1$ of
     \end{align}
 \end{proof}
 
-\begin{theorem}[The percolation bound]
+\begin{lemma}[The percolation bound]
     \label{thm:hastings_percolation}
     \lean{TNLean.Lattice.sum_nonempty_powerset_prod_le_percolation,
         TNLean.Lattice.pow_succ_div_one_sub_le,
         TNLean.Lattice.pow_eq_exp_neg_div}
     \leanok
     \uses{thm:hastings_percolation_exp, thm:hastings_percolation_cluster_sum}
-    In the setting of Theorem~\ref{thm:hastings_percolation_cluster_sum}, if
+    In the setting of Lemma~\ref{thm:hastings_percolation_cluster_sum}, if
     $0\le a_C\le y^{n_C}$, $0<xy\le1/2$, and $\xi=1/\ln(1/(xy))$, then
     \begin{align}
         \sum_{\emptyset\ne U\subseteq T}\ \prod_{C\in U}a_C
@@ -91,7 +91,7 @@ nearest-neighbour threshold $l_{\rm proj}+1$ of
     \end{align}
     \cite[eq.~(perc2), lines 1227--1254]{Hastings2006Solving},
     \cite{gap:hastings05_percolation_cluster_size}.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:hastings_percolation_exp, thm:hastings_percolation_cluster_sum}
@@ -100,7 +100,7 @@ nearest-neighbour threshold $l_{\rm proj}+1$ of
     $(xy)^{l+1}/(1-xy)\le(xy)^l=e^{-l/\xi}$ for $0<xy\le1/2$.
 \end{proof}
 
-\begin{theorem}[The percolation bound for connected clusters]
+\begin{lemma}[The percolation bound for connected clusters]
     \label{thm:hastings_percolation_connected}
     \lean{TNLean.Lattice.sum_nonempty_powerset_prod_le_percolation_connected}
     \leanok
@@ -109,22 +109,22 @@ nearest-neighbour threshold $l_{\rm proj}+1$ of
     $x=\max(1,\Delta^2)$, and $T$ be a family of connected vertex sets $C$ with
     $|C|\ge l+1$ and weights $0\le a_C\le y^{|C|}$. If $0<xy\le1/2$, then
     (\ref{eq:hastings_percolation}) holds with $\xi=1/\ln(1/(xy))$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:hastings_percolation, thm:hastings_connected_set_count}
-    Combine Theorem~\ref{thm:hastings_connected_set_count}
-    ($|\{C\in T:|C|=k\}|\le Nx^k$) with Theorem~\ref{thm:hastings_percolation}.
+    Combine Lemma~\ref{thm:hastings_connected_set_count}
+    ($|\{C\in T:|C|=k\}|\le Nx^k$) with Lemma~\ref{thm:hastings_percolation}.
 \end{proof}
 
-\begin{theorem}[A percolation temperature]
+\begin{lemma}[A percolation temperature]
     \label{thm:hastings_percolation_temperature}
     \lean{TNLean.Lattice.exists_percolation_temperature}
     \leanok
     For any $J,S,x\in\mathbb R$ there exists $\beta_0>0$ such that
     $x(e^{J\beta}-1)e^{SJ\beta}\le1/2$ for all $0\le\beta\le\beta_0$
     \cite[lines 1242--1245]{Hastings2006Solving}.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     The function $\beta\mapsto x(e^{J\beta}-1)e^{SJ\beta}$ is continuous and
@@ -141,7 +141,7 @@ nearest-neighbour threshold $l_{\rm proj}+1$ of
     $>l_{\mathrm{proj}}$ \cite[lines 1104--1107]{Hastings2006Solving}.
 \end{definition}
 
-\begin{theorem}[Size and number of clusters of large diameter]
+\begin{lemma}[Size and number of clusters of large diameter]
     \label{thm:hastings_large_diameter_count}
     \lean{TNLean.Lattice.ClusterExpansion.dist_le_of_walk,
         TNLean.Lattice.ClusterExpansion.dist_le_of_mem_biUnion_of_connected,
@@ -156,7 +156,7 @@ nearest-neighbour threshold $l_{\rm proj}+1$ of
     $n_C+n_{\partial C}\le(\Delta+1)n_C$
     \cite[line 1235]{Hastings2006Solving},
     \cite{gap:hastings05_percolation_cluster_size}.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Any two sites in the support of $C$ are connected by an overlap walk of at
@@ -164,7 +164,7 @@ nearest-neighbour threshold $l_{\rm proj}+1$ of
     $k\in\partial C$ overlaps some $c\in C$.
 \end{proof}
 
-\begin{theorem}[The percolation bound for clusters of large diameter]
+\begin{lemma}[The percolation bound for clusters of large diameter]
     \label{thm:hastings_percolation_large_diameter}
     \lean{TNLean.Lattice.ClusterExpansion.norm_trace_mul_exp_sub_truncatedExp_le_isLargeDiam,
         TNLean.Lattice.ClusterExpansion.exp_neg_floor_div_le,
@@ -172,7 +172,7 @@ nearest-neighbour threshold $l_{\rm proj}+1$ of
     \leanok
     \uses{thm:hastings_large_diameter_count, thm:hastings_truncation_trace_bound,
         thm:hastings_percolation_connected}
-    In the setting of Theorem~\ref{thm:hastings_large_diameter_count}, let
+    In the setting of Lemma~\ref{thm:hastings_large_diameter_count}, let
     $H=\sum_kH_k$ have $N$ Hermitian terms with $\|H_k\|\le J$, $\beta\ge0$,
     $x=\max(1,\Delta^2)$, $y=(e^{J\beta}-1)e^{(\Delta+1)J\beta}$, and
     $0<xy\le1/2$. With $Z=\operatorname{tr}e^{-\beta H}$,
@@ -187,13 +187,13 @@ nearest-neighbour threshold $l_{\rm proj}+1$ of
     \end{align}
     \cite[eq.~(perc2), lines 1227--1254]{Hastings2006Solving},
     \cite{gap:hastings05_percolation_cluster_size,gap:hastings05_cluster_boundary}.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:hastings_large_diameter_count, thm:hastings_truncation_trace_bound,
         thm:hastings_percolation_connected}
-    Combine Theorem~\ref{thm:hastings_truncation_trace_bound} ($S=\Delta+1$),
-    Theorem~\ref{thm:hastings_large_diameter_count}, and
-    Theorem~\ref{thm:hastings_percolation_connected}, using
+    Combine Lemma~\ref{thm:hastings_truncation_trace_bound} ($S=\Delta+1$),
+    Lemma~\ref{thm:hastings_large_diameter_count}, and
+    Lemma~\ref{thm:hastings_percolation_connected}, using
     $l\ge l_{\mathrm{proj}}/(2R)-1$.
 \end{proof}

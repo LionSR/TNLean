@@ -31,7 +31,7 @@ elementary segments select each other; see
     The dummy neighborhood carries a single index.
 \end{definition}
 
-\begin{theorem}[Selection is equivalent to contact with a fine cell]
+\begin{lemma}[Selection is equivalent to contact with a fine cell]
     \label{thm:area_law_selected_opponent_contact}
     \lean{TNLean.PEPS.AreaLaw.Geometry.elementarySideOpponent_eq_some_iff_contact}
     \leanok
@@ -47,7 +47,7 @@ elementary segments select each other; see
         e_i\cap\overline{Q_{\ell_h}(w)}
         \text{ contains two distinct points}.
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_unique_elementary_side_opponent,
         thm:area_law_elementary_side_boundary_geometry,
@@ -67,7 +67,7 @@ elementary segments select each other; see
     selected opponent.
 \end{proof}
 
-\begin{theorem}[Reciprocal selection along matching elementary sides]
+\begin{lemma}[Reciprocal selection along matching elementary sides]
     \label{thm:area_law_reciprocal_elementary_opponents}
     \lean{TNLean.PEPS.AreaLaw.Geometry.elementarySideOpponent_reciprocal_iff}
     \leanok
@@ -87,7 +87,7 @@ elementary segments select each other; see
     \end{align}
     Here $s(i)$ and $s(j)$ are the counterclockwise side indices,
     and both subdivisions use the same lower index $k_0$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_selected_opponent_contact,
         thm:area_law_actual_elementary_side_matching,

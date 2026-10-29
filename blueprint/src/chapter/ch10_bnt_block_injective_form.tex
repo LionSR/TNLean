@@ -31,7 +31,7 @@ span after blocking.
     \end{align}
 \end{definition}
 
-\begin{theorem}[Gauge invariance of simultaneous fixed-length product spans]
+\begin{lemma}[Gauge invariance of simultaneous fixed-length product spans]
     \label{thm:word_tuple_span_gauge_invariance}
     \lean{MPSTensor.wordTupleSpanTop_of_family_gaugeEquiv}
     \lean{MPSTensor.wordTupleSpanTop_of_family_gaugeEquiv_symm}
@@ -58,7 +58,7 @@ span after blocking.
     Both directions hold for general invertible gauges without unitarity
     constraints, allowing span certificates in left-canonical form to be
     carried over to unital gauges.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -110,7 +110,7 @@ span after blocking.
     $3(g-1)(L_0+1)$.
 \end{proof}
 
-\begin{theorem}[Simultaneous one-letter span after blocking a BNT]
+\begin{lemma}[Simultaneous one-letter span after blocking a BNT]
     \label{thm:cpsv_bnt_blocked_simultaneous_span}
     \lean{MPSTensor.IsCPSVBasisOfNormalTensors.%
         exists_positive_wordTupleSpanTop}
@@ -138,7 +138,7 @@ span after blocking.
          & =\prod_{j=1}^g\MN{D_j}.
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{lem:cpsv_bnt_block_dimensions_positive, thm:cpsv_bnt_blocks_not_gaugePhaseEquiv, thm:cpsv_normal_tp_gauge, thm:normal_tp_primitive_irred, thm:common_exact_block_injectivity_normal_left_canonical, thm:wordspan_blk_inj_succ, lem:bnt_direct_sum_block_separation_word_span, lem:gauge_invariance_block_injective}
@@ -172,7 +172,7 @@ span after blocking.
 \end{proof}
 
 % Source anchors: CPSV16 lines 317--345.
-\begin{theorem}[Sharp simultaneous span under a total-dimension bound]
+\begin{lemma}[Sharp simultaneous span under a total-dimension bound]
     \label{thm:cpsv_bnt_sharp_span_ambient_cap}
     \lean{MPSTensor.IsCPSVBasisOfNormalTensors.%
         exists_positive_wordTupleSpanTop_succ_le_three_cap_pow_five,
@@ -190,7 +190,7 @@ span after blocking.
          & =\prod_{j=1}^{g}\MN{D_j}.
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -216,7 +216,7 @@ span after blocking.
 \end{proof}
 
 % Source anchors: CPSV16 lines 219--225 and 265--301.
-\begin{theorem}[Total dimension of the BNT representatives]
+\begin{lemma}[Total dimension of the BNT representatives]
     \label{thm:cpsv_bnt_dimension_bound}
     \lean{MPSTensor.CPSVCanonicalFormData.sum_representative_dim_le}
     \leanok
@@ -227,7 +227,7 @@ span after blocking.
         \sum_jD_j & \leq D.
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -240,7 +240,7 @@ span after blocking.
 \end{proof}
 
 % Source anchor: CPSV16 Proposition propblockinj, lines 342--345.
-\begin{theorem}[Sharp block-injective form for CPSV canonical form]
+\begin{lemma}[Sharp block-injective form for CPSV canonical form]
     \label{thm:cpsv_literal_propblockinj}
     \lean{MPSTensor.IsCPSVCanonicalForm.%
         exists_bnt_biCF_after_blocking_le_three_bondDim_pow_five}
@@ -258,15 +258,15 @@ span after blocking.
     \end{align}
     so $A$ is in block-injective canonical form after blocking at most $3D^5$
     sites.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:cpsv_canonical_form_bnt_refinement, thm:cpsv_bnt_dimension_bound, thm:cpsv_bnt_sharp_span_ambient_cap, thm:cpsv_bnt_blocked_simultaneous_span}
     Selecting one representative from every matrix-product-vector phase class
     produces a basis of normal tensors whose total bond dimension is at most
-    $D$ by Theorem~\ref{thm:cpsv_bnt_dimension_bound}. Applying
-    Theorem~\ref{thm:cpsv_bnt_sharp_span_ambient_cap} with $K=D$ and noting
+    $D$ by Lemma~\ref{thm:cpsv_bnt_dimension_bound}. Applying
+    Lemma~\ref{thm:cpsv_bnt_sharp_span_ambient_cap} with $K=D$ and noting
     that a word of length $L$ in $A_j$ is a one-letter evaluation of
     $A_j^{[L]}$ yields the asserted one-letter span.
 \end{proof}

@@ -31,14 +31,14 @@
     block MPVs $\{\ket{V^{(N)}(A_j)}\}$ are eventually linearly independent.
 \end{definition}
 
-\begin{theorem}[Distinct BNT members are not gauge-phase equivalent]
+\begin{lemma}[Distinct BNT members are not gauge-phase equivalent]
     \label{thm:cpsv_bnt_blocks_not_gaugePhaseEquiv}
     \lean{MPSTensor.IsCPSVBasisOfNormalTensors.blocks_not_gaugePhaseEquiv}
     \leanok
     \uses{def:bnt_cpsv, def:blocks_not_gauge_phase_equiv}
     Distinct members of a basis of normal tensors are not gauge-phase
     equivalent after identifying equal bond dimensions.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     At every sufficiently large length the matrix product vectors of the basis
@@ -90,7 +90,7 @@
     Grouping the summands into the MPV phase classes of
     Definition~\ref{def:mpv_phase_class_data} and selecting one representative
     from each class,
-    Theorem~\ref{thm:cpsv_bnt_blocks_not_gaugePhaseEquiv} shows that eventual
+    Lemma~\ref{thm:cpsv_bnt_blocks_not_gaugePhaseEquiv} shows that eventual
     linear independence of a BNT excludes gauge-phase equivalence between two
     distinct $A_j$.
 
