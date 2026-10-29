@@ -29,15 +29,16 @@ The count retains `exp (2 * E0 * log (8 / δ) / Δ)`. This is an existence theor
 for specified ground energy, not a construction uniform in an unknown ground
 energy or a polynomial bound with energy-independent degree. The source-version
 boundary is recorded in `docs/paper-gaps/lvv13_sampling_ground_energy.tex`.
-An energy-selection argument is required before using it in an algorithm that
-has no ground-energy input.
+Selection of the word length and relative-error sample budget without an exact
+energy input remains separate. The overall scalar itself is immaterial after
+normalizing the output vectors, as the published Methods observes.
 
 The normalization uses the proved overlap-loss factor `4` by sampling to error
 `δ / 4`; the correction to the printed witness-normalization step is recorded
 in `docs/paper-gaps/lvv13_error_reduction_witness_norm.tex`.
 
 Source: Landau, Vazirani and Vidick, arXiv:1307.5143v1, Claim `c:errorreduction`,
-lines 580--592 of `algo53.tex`, and the published supplement to Proposition 1,
+lines 580--592 of `algo53.tex`, and the published Methods, Proposition 1,
 p. 6, https://people.eecs.berkeley.edu/~vazirani/pubs/1dalg.pdf,
 DOI 10.1038/nphys3345.
 -/
@@ -49,7 +50,7 @@ namespace TNLean.MPS.AreaLaw
 
 /-- The sampled normalized power constructs a left-factor family that improves every
 half-viable input family at a chosen cut. Ground energy is specified before sampling.
-LVV13, Claim c:errorreduction, lines 580--592; published supplement, Proposition 1, p. 6. -/
+LVV13, Claim c:errorreduction, lines 580--592; published Methods, Proposition 1, p. 6. -/
 theorem exists_sampled_nn_errorReduction
     {L q : ℕ} (hq : 1 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)

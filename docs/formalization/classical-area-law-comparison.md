@@ -86,8 +86,14 @@ phase-aligned unit ground vector with squared error at most $e^{-t/16}/100$.
 The original gap bound $g\le1$ is derived from the physical hypotheses.
 The local support and middle-normalization corrections, and the finite-window
 restriction, are recorded in `docs/paper-gaps/aklv13_two_block_robustness.tex`.
+For the actual clipped Hamiltonian, its positivity and ceiling $2t+s$ are derived
+from the original terms and reference minima. At the same original central cut,
+the actual degree-$\ell$ Chebyshev polynomial has amplitude at most
+$2\exp[-2\ell\sqrt{(9g/10)/(2t+s)}]$ and rank at most
+$[q(\ell+1)]^{32(\lfloor\ell/s\rfloor+\lfloor\sqrt\ell\rfloor+1)}$.
+No spectral ceiling, projector gap or spatial decomposition is supplied.
 The favorable approximate-projector parameter choice, entropy argument, and
-approximation sequence remain distinct steps.
+moving-ground-state approximation sequence remain distinct steps.
 
 For a unique ground vector on an open chain with $q\ge2$ and $0\le h_j\le I$,
 the gap is at most one. An endpoint unitary with zero expectation in that vector
@@ -122,9 +128,15 @@ conclusions. This supplies the physical sampling step with its stated cost; it
 does not imply a polynomial bound uniform in the unknown ground energy. At a specified
 ground energy, the actual sampled operator supplies cut factors chosen before all
 input viable families. They improve half-viability to prescribed error with
-cardinality and internal bond bounds derived from the same sample. The stated
-ground vector currently precedes sampling in this theorem; an assertion with the
-family before all ground vectors requires the corresponding quantifier order.
+cardinality and internal bond bounds derived from the same sample. A strengthened statement chooses the sample and each cut's factors before every
+normalized vector in the unique ground line, using one internally chosen reference
+and equality of their rank-one projections. This still specifies the ground energy
+before sampling. The [published Methods](https://people.eecs.berkeley.edu/~vazirani/pubs/1dalg.pdf)
+states an energy-dependent complexity
+exponent and advertises the uniform polynomial case for bounded ground energy.
+Its proof explicitly removes the unknown overall scalar by normalization.
+The remaining issue is selecting word lengths and relative-error budgets without
+an exact energy input, rather than computing that scalar.
 
 For low-energy targets, one actual clipped Hamiltonian now supplies both buffered
 spectral comparisons and a common polynomial improving family. The family and its
@@ -134,8 +146,14 @@ $\Delta/(1-\delta)^2$ between the clipped targets. Composing the two actual
 spectral comparisons gives improvement between the original windows, with loss
 $2(\Delta/[1-2(\delta+\varepsilon)]^2+\varepsilon)$ when
 $\delta\ge0$ and $2(\delta+\varepsilon)<1$.
-The result retains interior geometry and a strict buffer $3w<\eta$. The source parameter bounds, low-density induction, short regions,
-and sampled tree still require further arguments. The soft-truncation argument
+The result retains interior geometry and a strict buffer $3w<\eta$. The interior parameter substitution now chooses its constant at fixed density
+bandwidth before the chain and Hamiltonian. It proves the strict clipped-filter
+tradeoff $D^{12}\Delta<10^{-5}$ with an explicit count retaining
+$g=\min(\mu/(3\log L),1)$. This tradeoff and the original-window error remain
+separate; the fixed comparison error contributes $1/100$ before the positive
+filter term, so a final $1/100$ claim would require retuning it. The low-density
+induction, short and boundary regions, and sampled tree still require further
+arguments. The soft-truncation argument
 also requires a correct replacement for the false printed cluster estimate.
 Neither the degenerate area law nor a single global MPS approximation supplies
 these steps.

@@ -31,7 +31,7 @@ printed decomposition is recorded in QICLean:
 https://sirui-lu.com/QICLean/docs/paper-gaps/lvv13_paired_matrix_decomposition.html.
 
 Source: Landau, Vazirani and Vidick, arXiv:1307.5143v1, Section 2.3.1,
-equation `e:decomp`, lines 584--588, and the published supplement to Proposition 1,
+equation `e:decomp`, lines 584--588, and the published Methods, Proposition 1,
 p. 6, https://people.eecs.berkeley.edu/~vazirani/pubs/1dalg.pdf,
 DOI 10.1038/nphys3345. The distinction between the source versions is recorded
 in `docs/paper-gaps/lvv13_sampling_ground_energy.tex`.
@@ -269,7 +269,7 @@ theorem operatorSchmidtRank_sampled_nn_complements_le
 /-- The published energy-dependent normalized-power sampler admits a simultaneous
 operator Schmidt-rank bound at every chain cut. The exact sampled operator, word
 counts and projection approximation are constructed together. LVV, published
-supplement to Proposition 1, p. 6; arXiv:1307.5143v1, equation e:decomp. -/
+Methods, Proposition 1, p. 6; arXiv:1307.5143v1, equation e:decomp. -/
 theorem exists_sampled_nn_power_approximation_with_rank
     {L q : ℕ} (hq : 1 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)

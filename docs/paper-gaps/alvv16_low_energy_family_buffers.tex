@@ -121,19 +121,62 @@ factorization hypothesis is introduced. This corollary does not remove
 the geometric or buffer restrictions and does not identify
 (\ref{eq:ld_original_window_error}) with the clipped-target error.
 
+\section{The interior parameter substitution}
+
+Fix $\eta_{\mathrm{LD}}>0$ and set $\varepsilon=1/200$. Define
+\begin{align}
+    g&=\min\{w,1\},& u&=1+\log q+\log(1/g),\notag\\
+    T&=21+\eta_{\mathrm{LD}}+
+      8\log\bigl(400C_*(6+\eta_{\mathrm{LD}})\bigr).
+    \label{eq:ld_parameter_cap}
+\end{align}
+For $\eta_1\le\eta_{\mathrm{LD}}$, the actual threshold obeys
+$t\le T+16\log(1/g)$. Indeed,
+$g^2/[400(6+\eta_{\mathrm{LD}})]$ is a positive lower bound for both
+members of the minimum in its denominator.
+
+One constant $A\ge21$, depending only on the fixed density bandwidth,
+can be chosen before the chain, local dimension, $\mu$, target bandwidth
+and Hamiltonian. Set $\ell=\lceil Au^2/g\rceil$ and
+$D=(q\ell^2)^{20\ell}$. Then
+\begin{align}
+    \log D&\le
+      \frac{22(A+1)[6+2\log(A+1)]}{g}\,u^3,\notag\\
+    D^{12}\Delta&<10^{-5}.
+    \label{eq:ld_interior_tradeoff}
+\end{align}
+The proof uses $\ell\ge\log(1/g)$ to bound the physical norm denominator
+by $(3T+52)\ell$. The existing scalar filter estimate allows the larger
+count $(q\ell^2)^{22\ell}$ and the smaller width $4g/5$. The actual
+width is at least $g$, and the strictly smaller actual count gives the
+strict inequality in (\ref{eq:ld_interior_tradeoff}).
+
+With $w=\mu/(3\log L)$, the source inequality gives $\eta_1\ge6w$ for
+$L\ge2$. Thus this choice produces the actual family in every eligible
+interior geometry. The exact logarithmic estimate retains the cap in
+(\ref{eq:ld_parameter_cap}); it is not replaced by an uncapped expression
+at finite lengths. For fixed $\mu$, the cap disappears when
+$\log L\ge\mu/3$.
+
+The bound (\ref{eq:ld_interior_tradeoff}) concerns the clipped-filter
+parameter. For the original windows, the error remains
+(\ref{eq:ld_original_window_error}) with $\varepsilon=1/200$.
+Its additive term is already $1/100$, before the positive filter
+contribution. No final original-window error of $1/100$ is asserted.
+Such a target requires a smaller comparison error.
+
 \section{What remains for the full source theorem}
 
-The full source theorem must retain its separate uncompleted status until
-all of the following are derived: the substitution
-(\ref{eq:ld_source_buffer}) with its length hypotheses, the desired
-$D^{12}\Delta$ estimate and printed asymptotic parameters, placement at
-arbitrary prescribed middle blocks including short and boundary blocks,
-and the finite exceptional chain lengths. In particular, $n=2,3,4$ have
-positive logarithm but do not satisfy (\ref{eq:ld_five_region_geometry})
-for $\ell\ge1$. Direct short-region constructions are required there.
-The low-density bootstrap and the sampled merge-tree induction are
-additional results. The false soft-cluster estimate is not used in this
-hard-truncation argument.
+The interior substitution and finite tradeoff above do not complete the
+full source theorem. Placement at arbitrary prescribed middle blocks,
+including short and boundary blocks, remains to be constructed. The exact
+capped logarithmic estimate has not been restated as the printed soft
+asymptotic formula. The cases $L=0,1$ lack the positive-log substitution;
+lengths 2--4 have positive logarithm but fail the five-region geometry for
+$\ell\ge1$. More generally, the geometry may fail at the selected scale
+and requires a short-region construction. The low-density bootstrap and
+the sampled merge-tree induction are additional results. The false
+soft-cluster estimate is not used.
 
 \bibliographystyle{unsrt}
 \bibliography{references}

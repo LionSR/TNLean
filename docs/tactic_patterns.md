@@ -24,6 +24,23 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Rank-one density under scalar multiplication — promoted (2026-10-29)
+
+- **Pattern:** Move a scalar through both factors of a rank-one matrix and
+  identify its product with its conjugate as its squared modulus.
+- **Abstraction:** The existing `Matrix.vecMulVec_ofLp_smul_self` in QICLean
+  `Analysis/OptimizedPureStateTraceError.lean`, now public with its original
+  statement and proof. No new module or parallel helper is introduced.
+- **Refactored occurrences:** The original pure-state normalization in QICLean,
+  the canonical-to-aligned ground projection in `AKLV/ClippedFilter.lean`, and
+  the representative-independent projection in `ViableSet/SampledGroundLine.lean`.
+  The TNLean private copy is deleted. Scalars of norm one cancel by the same
+  general identity.
+- **Scouting:** The relevant Mathlib matrix and inner-product sources and the
+  companion library had no equivalent public lemma. The existing private
+  identity is exposed rather than reproved a third time.
+
+
 ### Euclidean action on a Hermitian eigenbasis — promoted (2026-10-29)
 
 - **Pattern:** Transport Mathlib's `mulVec_eigenvectorBasis` equation through
@@ -9744,3 +9761,15 @@ there is no need for a new tactic.
   `LawfulBEq`, preserving the list's equality instance. The actual-module
   imported audit uses Lean's `--setup` and a single explicit `importArts`
   entry, so no provider namespace or compiled dependency is copied.
+
+### Ceilings of the logarithmic filter scale — candidate (2026-10-29)
+
+- **Seen:** The lower scale estimate in
+  `MPS/AreaLaw/PolynomialFilterParameters.lean` (`ceil_scale_bounds`) and
+  `MPS/AreaLaw/InteriorLowEnergyFamily.lean`.
+- **Pattern:** From `A ≥ 1`, `u ≥ 1` and `0 < g ≤ 1`, use
+  `1 ≤ u²/g`, scalar multiplication and `Nat.le_ceil` to obtain
+  `A ≤ ceil(A u²/g)`.
+- **Reuse:** The new occurrence uses the existing Mathlib order and ceiling
+  lemmas directly. The earlier full two-sided estimate remains private;
+  two occurrences do not yet require a new public helper.

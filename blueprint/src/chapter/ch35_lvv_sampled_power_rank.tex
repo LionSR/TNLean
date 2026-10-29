@@ -95,7 +95,7 @@ $\operatorname{SR}_k$.
         \label{eq:lvv_sampled_nn_power_conclusions}
     \end{align}
     The ground-energy dependence agrees with the published sampling
-    argument~\cite[supplement, Proposition~1, p.~6]{Landau2015Published}.
+    argument~\cite[Methods, Proposition~1, p.~6]{Landau2015Published}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:lvv_padded_nn_sample_rank}
@@ -168,5 +168,53 @@ normalization accompanying this development.
 The sample count still contains
 $\exp(2E_0\log(8/\delta)/\Delta)$. This theorem does not give a construction
 uniform in an unknown ground energy or an energy-independent polynomial
-sample count. An energy-selection argument or a different approximate
-projection is required for that further conclusion.
+sample count. Choosing the word length and relative-error budget without
+an exact energy input remains separate; an unknown overall scalar is
+immaterial after output normalization.
+
+\begin{theorem}[One sampled family for every unit ground vector]
+    \label{thm:lvv_sampled_ground_line_error_reduction}
+    \lean{TNLean.MPS.AreaLaw.exists_sampled_nn_errorReduction_forall_ground_vectors}
+    \leanok
+    \uses{thm:lvv_sampled_left_error_reduction}
+    Retain the interaction, gap, accuracy and sampling parameters of
+    Theorem~\ref{thm:lvv_sampled_left_error_reduction}, with the actual energy
+    $E_0$ specified before sampling. Suppose that there exists a unit vector
+    $\Omega_0$ satisfying
+    $H\Omega_0=E_0\Omega_0$ and
+    $H-E_0\,1\ge\Delta(1-|\Omega_0\rangle\langle\Omega_0|)$.
+
+    One sample family, its operator $K$, and one family of cut factors at
+    each cut may be chosen so that all conclusions of
+    Theorem~\ref{thm:lvv_sampled_left_error_reduction} hold simultaneously
+    for every normalized vector $\Omega$ with $H\Omega=E_0\Omega$.
+    Thus neither the sample nor its factors depend on the choice of a unit
+    representative of the ground line. The factors also precede the choice
+    of every half-viable input family.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:lvv_sampled_left_error_reduction}
+    Choose $\Omega_0$ internally and apply the preceding construction once.
+    The strictly positive lower gap implies that every vector at energy
+    $E_0$ equals its projection onto $\Omega_0$:
+    \begin{align}
+        \Omega=\langle\Omega_0,\Omega\rangle\Omega_0.
+        \label{eq:lvv_sampled_ground_line_uniqueness}
+    \end{align}
+    If $\Omega$ is normalized, the scalar in this identity has modulus one.
+    Consequently
+    $|\Omega\rangle\langle\Omega|=|\Omega_0\rangle\langle\Omega_0|$,
+    so the same sampled operator has projection error below $\delta/4$
+    for every such $\Omega$.
+
+    The cut decomposition and the internal ranks of its left factors depend
+    only on $K$. Apply the deterministic error-reduction estimate to those
+    same factors and each normalized ground vector. This gives the same
+    cardinality, MPS bond and error bounds for every corresponding viable
+    input family.
+\end{proof}
+
+The sample count retains its dependence on the specified energy $E_0$.
+The simultaneous conclusion for all unit ground vectors does not select
+the word length or relative-error sample budget without that energy input.
+An overall nonzero scalar is immaterial after normalizing the output vectors.
