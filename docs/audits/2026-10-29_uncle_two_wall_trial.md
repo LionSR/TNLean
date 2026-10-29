@@ -70,8 +70,20 @@ four for N positive. Every cyclic local projector outside this set kills the
 actual source trial. Expanding the actual uncle Hamiltonian and deleting
 these zero summands proves H phi is exactly the sum of its four endpoint
 contributions. No support condition is supplied as a hypothesis. The four
-endpoint contributions still require actual estimates; this exact reduction
-alone does not bound their total energy. Norm growth, small ground-sector overlaps,
+endpoint contributions still require asymptotic estimates.
+
+`UncleTrialEnergy.lean` derives the actual local operator's contraction directly
+from its isometric conjugation of an orthogonal projector. It proves pointwise
+norm contraction, operator norm at most one, and
+Re inner(hv,v)=norm(hv)^2 in [0,norm(v)^2]. The latter uses the existing Mathlib
+projection quadratic-form theorem, not a supplied positivity premise.
+
+Combining this with the derived global localization gives the exact actual
+trial energy d^(-2) times the sum, over the four endpoint bonds and exterior
+configurations, of norm(h R phi)^2. Contraction bounds it by the same sum of
+norm(R phi)^2. These are finite identities and inequalities with no supplied
+energy/support/gap hypothesis. They do not yet prove the source O(N) rate;
+that requires actual pinned-wall endpoint-state estimates. Norm growth, small ground-sector overlaps,
 generic nonzero leading coefficients, removal of the complete ground
 projection and the finite-dimensional variational spectral conclusion
 remain open in this slice. The one-wall transfer recursion is parallel work.

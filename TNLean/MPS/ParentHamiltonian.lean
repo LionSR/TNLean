@@ -301,6 +301,7 @@ import TNLean.MPS.ParentHamiltonian.UncleKernelConditions
 import TNLean.MPS.ParentHamiltonian.UncleParentLimit
 import TNLean.MPS.ParentHamiltonian.UnclePeriodicClosure
 import TNLean.MPS.ParentHamiltonian.UncleTensor
+import TNLean.MPS.ParentHamiltonian.UncleTrialEnergy
 import TNLean.MPS.ParentHamiltonian.UncleTrialLocalization
 import TNLean.MPS.ParentHamiltonian.UncleTwoWallTrial
 import TNLean.MPS.ParentHamiltonian.UncleVirtualRescaling
