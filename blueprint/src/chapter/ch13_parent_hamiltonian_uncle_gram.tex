@@ -111,3 +111,44 @@ supply the required positive quadratic growth.
     converge to $\kappa_R$. Their Ces\`aro averages equal
     $\eta_n/n$ and converge to the same limit.
 \end{proof}
+
+\begin{lemma}[Nonnegative slope and a positive wall witness]
+    \label{lem:uncle_wall_gram_positive_witness}
+    \lean{MPSTensor.uncleWallNormSlope_nonneg,
+        MPSTensor.uncleWallNormSlope_of_seed_eq_zero,
+        MPSTensor.uncleWallNormSlope_pos_of_seed_eq_zero,
+        MPSTensor.uncleWallSeed_smul_of_annihilator,
+        MPSTensor.exists_uncleWall_adjoint_annihilator,
+        MPSTensor.exists_uncleWallNormSlope_pos,
+        MPSTensor.exists_uncleWallNormSlope_pos_of_injective_perturbation}
+    \notready
+    \uses{thm:uncle_wall_gram_linear_limit}
+    For a positive semidefinite stationary density, the limiting wall
+    slope is nonnegative. If $C=0$, $R\ne0$, and $\rho$ is positive
+    definite, then
+    \[
+        \kappa_R=c_0=\operatorname{tr}\!\left(\rho\sum_iR_iR_i^*\right)>0.
+    \]
+    When the physical dimension $d$ exceeds $b^2$ and both bond dimensions
+    are positive, there exists such a nonzero wall with $C=0$. The
+    dimension condition follows, in particular, from the full
+    perturbation span condition on matrices of size $a+b$.
+\end{lemma}
+\begin{proof}
+    Nonnegativity passes from the finite normalized Gram weights to their
+    limit, using the real and imaginary parts. If the seed vanishes,
+    every term of its mixed-transfer series vanishes. A nonzero wall has
+    nonzero positive semidefinite one-site Gram matrix, whose pairing
+    with a positive definite density is strictly positive.
+
+    There is a nonzero physical coefficient vector $c$ with
+    $\sum_i c_iB_i^*=0$ when $d>b^2$. For any nonzero rectangular matrix
+    $M$, set $R_i=c_iM$. Its seed is zero and its Gram weight is positive.
+    Full perturbation span implies $d\ge(a+b)^2>b^2$ when $a>0$.
+    This witness need not itself preserve the full perturbation span;
+    it establishes a positive value somewhere in the space of walls.
+\end{proof}
+
+Identifying the slope as a quadratic polynomial and proving the proper
+algebraic exceptional-set assertion are still separate steps. The positive
+witness alone does not constitute an almost-everywhere statement.

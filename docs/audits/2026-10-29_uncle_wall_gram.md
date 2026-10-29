@@ -44,9 +44,21 @@ eta_n / n tending to that coefficient. This uses the source spectral
 radius condition, not the stronger operator-norm-below-one condition.
 No positivity or nonvanishing of the limiting coefficient is assumed.
 
+`UncleWallGramSlopePositive.lean` derives nonnegative slope from the actual
+normalized Gram limit for a positive stationary density. It also gives a
+genuine positive case: when C = sum R_i B_i* vanishes and R is nonzero,
+the slope equals tr(rho sum R_i R_i*) and is strictly positive for a
+positive definite density. A physical coefficient c annihilating the
+adjoint B letters constructs R_i = c_i M for a nonzero rectangular M.
+Such a c exists by a dimension argument whenever d > b^2. Full source
+perturbation span gives d >= (a+b)^2 > b^2 for a > 0, so this dimension
+condition is available in the source setting. The resulting positive
+witness is a value somewhere in wall space; it is not asserted to retain
+the full perturbation span. There is no assumed positive-slope premise.
+
 Remaining source steps are the two-wall Gram factorization error bound
-and strict positivity of the limiting coefficients outside proper algebraic
-exceptional sets. These identities do not assert Theta(N^2), an energy
+and polynomial dependence and strict positivity of the limiting coefficients
+outside proper algebraic exceptional sets. These identities do not assert Theta(N^2), an energy
 bound, genericity, or gaplessness. Finite nonnegativity alone does not
 supply a strictly positive asymptotic coefficient.
 
