@@ -165,8 +165,8 @@ theorem orthogonalLinearIsometry_sq
   have h := congrArg
     (fun M : Matrix ι ι ℝ ↦ Matrix.toEuclideanCLM (n := ι) (𝕜 := ℝ) M x)
     (mul_self_eq_neg_one_of_orthogonal_of_transpose_eq_neg hA hskew)
-  simpa only [map_mul, map_neg, map_one, ContinuousLinearMap.mul_apply,
-    ContinuousLinearMap.neg_apply, ContinuousLinearMap.one_apply] using h
+  simpa only [map_mul, map_neg, map_one, mul_apply_eq_comp,
+    _root_.neg_apply, one_apply_eq_self] using h
 
 /-- One copy of the source's `Y` for every finite index, in paired coordinates. -/
 def interleavedSkewForm (ι : Type*) [DecidableEq ι] :

@@ -56,7 +56,7 @@ theorem exists_paired_orthonormalBasis (m : ℕ) :
       exact Fin.elim0 i
   | succ m ih =>
       intro E _ _ _ J hJ hdim
-      haveI : Nontrivial E := Module.nontrivial_of_finrank_pos (R := ℝ) (by omega)
+      letI : Nontrivial E := Module.nontrivial_of_finrank_pos (R := ℝ) (by omega)
       obtain ⟨x, hx⟩ := exists_norm_eq E (show (0 : ℝ) ≤ 1 by norm_num)
       let w : Fin 2 → E := ![x, -J x]
       have hw : Orthonormal ℝ w := J.orthonormal_pair_of_sq_eq_neg hJ hx
@@ -83,7 +83,8 @@ theorem exists_paired_orthonormalBasis (m : ℕ) :
           · simpa [v] using (orthonormal_iff_ite.mp hw a b)
           · change ⟪w a, (B (j, b) : E)⟫_ℝ =
               if ((0 : Fin (m + 1)), a) = (j.succ, b) then 1 else 0
-            simpa only [Prod.mk.injEq, Fin.zero_ne_succ, false_and, ↓reduceIte] using
+            have hzero : (0 : Fin (m + 1)) ≠ j.succ := (Fin.succ_ne_zero j).symm
+            simpa only [Prod.mk.injEq, hzero, false_and, ↓reduceIte] using
               W.inner_right_of_mem_orthogonal (hwmem a) (B (j, b)).property
         · refine Fin.cases ?_ (fun j ↦ ?_) j
           · change ⟪(B (i, a) : E), w b⟫_ℝ =
