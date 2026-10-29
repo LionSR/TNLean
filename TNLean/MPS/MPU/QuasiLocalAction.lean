@@ -38,7 +38,7 @@ theorem exists_isQCA_of_isMPU {d D : ℕ} [NeZero d] {U : MPOTensor d D}
       PropagatesWithin ω (Finset.Icc (-(4 * (D : ℤ) ^ 4)) (4 * (D : ℤ) ^ 4)) ∧
       ∀ (Λ : Finset ℤ) (b : ℤ) (N : ℕ) (hN : 1 < N)
         (hΛ : Λ ⊆ finiteChainRegion b N)
-        (hbuffer : regionSumset Λ
+        (_hbuffer : regionSumset Λ
           (Finset.Icc (-(4 * (D : ℤ) ^ 4)) (4 * (D : ℤ) ^ 4)) ⊆ finiteChainRegion b N)
         (A : LocalAlgebra d Λ),
         ω (quasiLocalObservable d Λ A) =
@@ -137,7 +137,7 @@ theorem mpuQuasiLocalEquiv_apply_eq_bufferedMPUQuasiLocalAction
       (bufferedMPUQuasiLocalAction_finiteChainConjugation hU k hk S Λ b N hN hΛ hb A).symm
   induction X using UniformSpace.Completion.induction_on with
   | hp =>
-      exact isClosed_eq (mpuQuasiLocalEquiv hU).isometry.continuous
+      exact isClosed_eq (StarAlgEquiv.isometry (mpuQuasiLocalEquiv hU)).continuous
         (bufferedMPUQuasiLocalAction_isometry hU k hk S).continuous
   | ih A =>
       induction A using DirectLimit.induction with

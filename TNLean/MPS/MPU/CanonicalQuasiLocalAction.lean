@@ -108,7 +108,7 @@ theorem exists_isQCA_of_isMPUCanonicalFormII {d D : ℕ} {U : MPOTensor d D}
       PropagatesWithin ω (Finset.Icc (-(4 * (D : ℤ) ^ 4)) (4 * (D : ℤ) ^ 4)) ∧
       ∀ (Λ : Finset ℤ) (b : ℤ) (N : ℕ) (hN : 1 < N)
         (hΛ : Λ ⊆ finiteChainRegion b N)
-        (hbuffer : regionSumset Λ
+        (_hbuffer : regionSumset Λ
           (Finset.Icc (-(4 * (D : ℤ) ^ 4)) (4 * (D : ℤ) ^ 4)) ⊆ finiteChainRegion b N)
         (A : LocalAlgebra d Λ),
         ω (quasiLocalObservable d Λ A) =
