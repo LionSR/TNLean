@@ -280,3 +280,65 @@ boundary the identity fails~\cite{gap:hastings05_cluster_boundary}.
     Each $H_D$ with $D\subseteq C$ acts on that union, and so do its
     exponential and the sum $E_C$.
 \end{proof}
+
+
+\subsection{Required labels with an empty forbidden set}
+
+For a finite set $U$ of required interaction labels, let
+\begin{align}
+    R_U^H(\beta)
+    &=\sum_{D\subseteq U}(-1)^{|D|}
+      e^{-\beta(H-H_D)},
+    &H_D&=\sum_{i\in D}H_i.
+    \label{eq:mandatory_cluster_part}
+\end{align}
+This is the cluster part~(\ref{eq:hastings_cluster_part}) with the forbidden
+set equal to $\varnothing$. The normalization below is an auxiliary
+estimate for the interaction-label expansion related to the argument
+of~\cite[lines 1270--1291 and 1935--1968]{Arad2016RigorousRG}.
+It is distinct from the printed spatial approximation estimate, whose
+obstructions are recorded in~\cite{gap:alvv16_cluster_approximation}.
+
+\begin{theorem}[Normalized norm of the empty-boundary cluster part]
+    \label{thm:mandatory_cluster_part_norm}
+    \lean{TNLean.Lattice.ClusterExpansion.norm_clusterPart_empty_boundary_le_of_lower_bound}
+    \leanok
+    Let $H$ and $H_i$, $i\in U$, be Hermitian complex matrices of the same
+    size. Suppose $\|H_i\|\leq1$, $H\geq\lambda I$, and $\beta\geq0$.
+    Then
+    \begin{align}
+        e^{\beta\lambda}\|R_U^H(\beta)\|
+        \leq(e^\beta-1)^{|U|}.
+        \label{eq:mandatory_cluster_part_norm}
+    \end{align}
+    The real number $\lambda$ is any supplied lower energy. The background
+    $H$ need not be the sum of the selected terms.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:hastings_cluster_part}
+    The defining finite sum~(\ref{eq:mandatory_cluster_part}) is the
+    alternating sum to which the normalized mandatory-label estimate
+    applies, with no forbidden labels.
+\end{proof}
+
+\begin{theorem}[The mandatory-label part as a sum over exact supports]
+    \label{thm:mandatory_cluster_part_support_sum}
+    \lean{TNLean.Lattice.ClusterExpansion.clusterPart_empty_boundary_eq_sum_clusterOp}
+    \leanok
+    Let $K$ be a finite label set, let $H_i$, $i\in K$, be complex square
+    matrices, and put $H=\sum_{i\in K}H_i$. For $U\subseteq K$ and every
+    real $\beta$, the operators $E_A$ of
+    Definition~\ref{def:hastings_cluster_operator} satisfy
+    \begin{align}
+        R_U^H(\beta)=\sum_{\substack{A\subseteq K\\U\subseteq A}}E_A.
+        \label{eq:mandatory_cluster_part_support_sum}
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:hastings_cluster_part_words, def:hastings_cluster_operator}
+    At each word length, partition the words containing $U$ according to
+    their exact letter set $A$. The possible sets $A$ form a finite
+    family. Summing their convergent word series gives
+    (\ref{eq:mandatory_cluster_part_support_sum}). Word order and repeated
+    occurrences of a label are retained in this partition.
+\end{proof}
