@@ -1,0 +1,465 @@
+\chapter{Finite-site swaps, information reset, and product ground states}
+\label{ch:finite_site_reset}
+
+The arguments in this chapter hold on arbitrary finite tensor products.
+They will be used for both chains and two-dimensional lattices. Let
+$\Lambda$ be a finite set of sites of local dimension $q$, with
+$\mathcal H_\Lambda=(\C^q)^{\otimes\Lambda}$. A sheet is one copy of
+this tensor product. Write $\mathcal X_D=[q]^D$ for configurations on a
+region $D$ and $F_R$ for the swap of the two sheets on $R$.
+The information reset follows \cite{OpenAI2026PolynomialPEPS}; the product
+ground-state result is Lemma~2.2 of \cite{OpenAI2026AreaLaw}.
+
+\section{Sheet swaps and supported operators}
+
+\begin{lemma}[Operators on parts of a sheet]
+    \label{lem:peps_frame_split_forms}
+    \lean{TNLean.Lattice.sheetSplit,
+        TNLean.Lattice.Sheet.threeSplit,
+        TNLean.Lattice.Sheet.threeSplit_fst,
+        TNLean.Lattice.Sheet.threeSplit_snd,
+        TNLean.Lattice.rectKronecker_submatrix_sheetSplit,
+        TNLean.Lattice.Sheet.rectKronecker_submatrix_threeSplit,
+        TNLean.Lattice.exists_kronecker_one_of_mem_supportedOperators,
+        TNLean.Lattice.exists_one_kronecker_of_mem_supportedOperators,
+        TNLean.Lattice.Sheet.exists_threeSplit_eq_kronecker_one,
+        TNLean.Lattice.Sheet.exists_threeSplit_eq_one_kronecker_kronecker_one,
+        TNLean.Lattice.Sheet.exists_threeSplit_eq_reindex_one_kronecker,
+        TNLean.Lattice.Sheet.exists_threeSplit_eq_kronecker_one_kronecker_one,
+        TNLean.Lattice.Sheet.exists_threeSplit_eq_one_kronecker}
+    \leanok
+    Let $\Lambda$ be a finite site set and $q\in\mathbb N$. For
+    $S\subseteq\Lambda$, identify $\mathcal H_\Lambda\cong\mathcal H_S\otimes\mathcal H_{\Lambda\setminus S}$
+    and, for disjoint $T,E\subseteq\Lambda$ with
+    $U=\Lambda\setminus(T\cup E)$, identify $\mathcal H_\Lambda\cong(\mathcal H_T\otimes\mathcal H_E)\otimes
+        \mathcal H_U$ via $c\mapsto((c|_T,c|_E),c|_U)$. In these coordinates
+    (including $q=0$ and empty regions):
+    \begin{enumerate}
+        \item $\operatorname{supp}(A)\subseteq S\implies A=A'\otimes\id$, and
+              $\operatorname{supp}(A)\cap S=\emptyset\implies A=\id\otimes A'$;
+        \item $\operatorname{supp}(A)\subseteq T\cup E\implies A=A'\otimes\id_U$,
+              and $\operatorname{supp}(A)\subseteq E\implies A=\id_T\otimes A'\otimes\id_U$;
+        \item $\operatorname{supp}(A)\subseteq T\implies A=(A_T\otimes\id_E)\otimes\id_U$,
+              $\operatorname{supp}(A)\subseteq U\implies A=\id_{TE}\otimes A_U$, and
+              $\operatorname{supp}(A)\cap T=\emptyset\implies A\simeq\id_T\otimes V$
+              ($V\in\operatorname{End}(\mathcal H_E\otimes\mathcal H_U)$).
+    \end{enumerate}
+\end{lemma}
+
+\begin{proof}\leanok
+    By linearity, it suffices to check product operators $\bigotimes_xm_x$ with
+    $m_x=\id$ off the support. When $\operatorname{supp}(A)\cap T=\emptyset$,
+    splitting off $T$ gives $\id_T\otimes B$ on
+    $\mathcal H_T\otimes\mathcal H_{\Lambda\setminus T}$; expressing $B$ on
+    $\mathcal H_E\otimes\mathcal H_U$ as $V$ yields
+    $A_{((t,e),u),((t',e'),u')}=\delta_{t,t'}V_{(e,u),(e',u')}$, i.e.\
+    $\id_T\otimes V$ after reassociation.
+\end{proof}
+
+\begin{definition}[Swapping two sheets]
+    \label{def:peps_frame_sheet_swap}
+    \lean{TNLean.Lattice.sheetSwap,
+        TNLean.Lattice.sheetSwapOp}
+    \leanok
+    For $S\subseteq\Lambda$, let $F_S$ be the unitary swapping the two sheets
+    at the sites in $S$ (\texttt{05-frames.tex}, lines 476--477).
+\end{definition}
+
+\begin{theorem}[Permutation matrices are unitary]
+    \label{thm:permutation_matrix_unitary}
+    \lean{Equiv.Perm.permMatrix_mem_unitaryGroup}
+    \leanok
+    For a permutation $\sigma$ of a finite set, its complex permutation matrix
+    $P_\sigma$ satisfies $P_\sigma P_\sigma^\dagger=P_\sigma^\dagger P_\sigma=I$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Since $P_\sigma^\dagger=P_{\sigma^{-1}}$,
+    $P_\sigma P_{\sigma^{-1}}=P_{\sigma\sigma^{-1}}=I$.
+\end{proof}
+
+\begin{theorem}[Sheet swaps are contractions]
+    \label{thm:peps_frame_sheet_swap_norm}
+    \lean{TNLean.Lattice.norm_sheetSwapOp_le_one}
+    \leanok
+    \uses{def:peps_frame_sheet_swap}
+    $\|F_S\|\leq1$.
+\end{theorem}
+
+\begin{proof}\leanok
+    By Definition~\ref{def:peps_frame_sheet_swap} and
+    Theorem~\ref{thm:permutation_matrix_unitary}, $F_S$ is unitary, hence
+    $\|F_S\|\le 1$.
+\end{proof}
+
+\begin{lemma}[Composing and commuting sheet swaps]
+    \label{lem:peps_frame_sheet_swap_compose}
+    \lean{TNLean.Lattice.sheetSwapOp_mul_sheetSwapOp,
+        TNLean.Lattice.commute_sheetSwapOp_kronecker}
+    \leanok
+    \uses{def:peps_frame_sheet_swap}
+    If $Y=T\sqcup A$, then $F_AF_Y=F_T$. Moreover, $[F_S,R_1\otimes R_2]=0$
+    whenever $R_1,R_2$ are supported in $\Lambda\setminus S$
+    (\texttt{05-frames.tex}, lines 512--520).
+\end{lemma}
+
+\begin{proof}\leanok
+    Swapping at $Y$ and then at $A\subseteq Y$ swaps on $Y\setminus A=T$, so
+    $F_AF_Y=F_T$. When $R_1,R_2$ are supported in $\Lambda\setminus S$,
+    $F_S$ and $R_1\otimes R_2$ act on disjoint tensor factors.
+\end{proof}
+
+\begin{lemma}[Swapping two sheets on a set in split coordinates]
+    \label{lem:lattice_sheet_split_swap}
+    \lean{TNLean.Lattice.sheetSplit_sheetSwap_fst,
+        TNLean.Lattice.sheetSplit_sheetSwap_snd,
+        TNLean.Lattice.mul_submatrix_sheetSplit}
+    \leanok
+    For a set $S$ of sites, in the coordinates $\mathcal H_S\otimes\mathcal
+        H_{S^c}$ of both sheets, swapping the two sheets at $S$ exchanges the
+    $S$-parts and keeps the others. The product of an operator acting off $S$ and
+    an operator acting on $S$ is, in these coordinates, the tensor product of the
+    two restricted operators.
+\end{lemma}
+
+\begin{proof}\leanok
+    Both statements are checked on product basis vectors.
+\end{proof}
+
+\begin{theorem}[Exchanging supported operators]
+    \label{thm:peps_sheet_swap_supported_exchange}
+    \lean{TNLean.Lattice.sheetSwapOp_mul_kronecker_of_mem_supportedOperators}
+    \leanok
+    \uses{def:peps_frame_sheet_swap}
+    For $R\subseteq\Lambda$ and operators $A,B$ on $\mathcal H_\Lambda$
+    supported on $R$, the replica-term exchange identity of
+    \cite{OpenAI2026PolynomialPEPS} (\texttt{02-information.tex}, lines 416--424)
+    is
+    \begin{align}
+        F_R(A\otimes B)=(B\otimes A)F_R.
+        \label{eq:peps_sheet_swap_supported_exchange}
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:peps_frame_split_forms,lem:lattice_sheet_split_swap}
+    By Lemma~\ref{lem:peps_frame_split_forms}, $A=A_R\otimes I_{R^c}$ and
+    $B=B_R\otimes I_{R^c}$, while $F_R$ swaps the two copies of $\mathcal H_R$
+    and acts as $I$ on $\mathcal H_{R^c}^{\otimes 2}$, giving~(\ref{eq:peps_sheet_swap_supported_exchange}).
+\end{proof}
+
+\begin{theorem}[Cancellation of a noncrossing doubled interaction]
+    \label{thm:peps_sheet_swap_doubled_cancellation}
+    \lean{TNLean.Lattice.sheetSwapOp_conj_doubledHamiltonian_eq_of_mem_supportedOperators}
+    \leanok
+    \uses{def:peps_frame_sheet_swap}
+    For $R,S\subseteq\Lambda$ and an operator $A$ supported on $S$, if
+    $S\subseteq R$ or $S\cap R=\varnothing$, then
+    \begin{align}
+        F_R(A\otimes I+I\otimes A)F_R^\dagger
+        =A\otimes I+I\otimes A
+        \label{eq:peps_sheet_swap_doubled_cancellation}
+    \end{align}
+    (\cite{OpenAI2026PolynomialPEPS}).
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_sheet_swap_supported_exchange,lem:peps_frame_sheet_swap_compose,
+        thm:permutation_matrix_unitary}
+    If $S\subseteq R$, Theorem~\ref{thm:peps_sheet_swap_supported_exchange}
+    gives $F_R(A\otimes I)=(I\otimes A)F_R$ and $F_R(I\otimes A)=(A\otimes I)F_R$;
+    if $S\cap R=\varnothing$, Lemma~\ref{lem:peps_frame_sheet_swap_compose}
+    gives $[F_R,A\otimes I]=[F_R,I\otimes A]=0$. Multiplying on the right by
+    $F_R^\dagger=F_R^{-1}$ (Theorem~\ref{thm:permutation_matrix_unitary})
+    yields~(\ref{eq:peps_sheet_swap_doubled_cancellation}).
+\end{proof}
+
+\begin{theorem}[Restricting a swap to an interaction support]
+    \label{thm:peps_sheet_swap_interaction_restriction}
+    \lean{TNLean.Lattice.sheetSwapOp_conj_kronecker_eq_inter,
+        TNLean.Lattice.sheetSwapOp_conj_doubledHamiltonian_eq_inter}
+    \leanok
+    \uses{def:peps_frame_sheet_swap}
+    Let $q$ be a natural local dimension, let $\Lambda$ be a finite set of
+    sites, and let $R,S\subseteq\Lambda$. Suppose that $A$ and $B$ are
+    operators supported on $S$. If $F_R$ exchanges the two copies at the
+    sites in $R$, then
+    \begin{align}
+        F_R(A\otimes B)F_R^\dagger
+        =F_{R\cap S}^\dagger(A\otimes B)F_{R\cap S}.
+    \end{align}
+    In particular, writing $T(A)=A\otimes I+I\otimes A$, one has
+    \begin{align}
+        F_R T(A) F_R^\dagger = F_{R\cap S}^\dagger T(A) F_{R\cap S}.
+        \label{eq:peps_swap_interaction_restriction}
+    \end{align}
+    This is the support reduction used in the boundary perturbation argument
+    of \cite{OpenAI2026PolynomialPEPS}. Neither Hermiticity nor a positive
+    local dimension is required.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{lem:peps_frame_sheet_swap_compose,thm:permutation_matrix_unitary}
+    Put $K=R\cap S$, $O=R\setminus S$, and $M=A\otimes B$. Composition
+    of the swaps gives $F_K F_R=F_O$, hence $F_R=F_K^\dagger F_O$ by
+    unitarity. Since $O$ is disjoint from $S$, the swap $F_O$ commutes
+    with $M$, and $F_O M F_O^\dagger=M$. Consequently,
+    \begin{align}
+        F_R M F_R^\dagger
+        =F_K^\dagger(F_O M F_O^\dagger)F_K
+        =F_K^\dagger M F_K.
+    \end{align}
+    Apply this identity to $(A,I)$ and $(I,A)$ and add the two equations
+    to obtain the assertion for $T(A)$.
+\end{proof}
+
+\begin{theorem}[Support of the swap in paired coordinates]
+    \label{thm:peps_sheet_swap_paired_site_support}
+    \lean{TNLean.Lattice.reindex_sheetSwapOp_mem_supportedOperators}
+    \leanok
+    \uses{def:qc_site_pair_coordinates,def:peps_frame_sheet_swap}
+    In the paired-site coordinates of Definition~\ref{def:qc_site_pair_coordinates}
+    (local dimension $q^2$), the sheet swap $F_R$
+    (Definition~\ref{def:peps_frame_sheet_swap}) is supported on $R$
+    (\cite{OpenAI2026PolynomialPEPS}).
+\end{theorem}
+\begin{proof}\leanok
+    \uses{lem:qc_permutation_layers}
+    In paired coordinates $x_i=(a_i,b_i)$, $F_R$ is the permutation matrix of
+    $\sigma(x)_i=(b_i,a_i)$ for $i\in R$ and $(a_i,b_i)$ for $i\notin R$, which
+    is supported on $R$ by Lemma~\ref{lem:qc_permutation_layers}.
+\end{proof}
+
+\begin{theorem}[Support of a swapped tensor product]
+    \label{thm:peps_sheet_swap_conjugate_support}
+    \lean{TNLean.Lattice.reindex_sheetSwapOp_conj_kronecker_mem_supportedOperators,
+        TNLean.Lattice.reindex_sheetSwapOp_conj_doubledHamiltonian_mem_supportedOperators}
+    \leanok
+    \uses{def:qc_site_pair_coordinates,def:peps_frame_sheet_swap}
+    Let $\Lambda$ be a finite site set, let $q$ be a natural local dimension,
+    and let $R,S\subseteq\Lambda$. Suppose that $A$ and $B$ are supported
+    on $S$. Express the two-copy operators in paired-site coordinates,
+    and write $\widetilde F_R$ and $\widetilde M$ for the matrices of
+    $F_R$ and $A\otimes B$ in these coordinates. Then
+    $\widetilde F_R\widetilde M\widetilde F_R^\dagger$ is supported on $S$.
+    In particular this holds for the paired matrix of
+    $T(A)=A\otimes I+I\otimes A$, as used in the boundary perturbation
+    argument of \cite{OpenAI2026PolynomialPEPS}. Zero local dimension
+    and empty site sets are included.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_sheet_swap_interaction_restriction,
+        thm:peps_sheet_swap_paired_site_support,thm:qc_site_pair_tensor_support}
+    Put $K=R\cap S$. Restricting the swap gives
+    $F_R(A\otimes B)F_R^\dagger=F_K^\dagger(A\otimes B)F_K$.
+    In paired-site coordinates, $F_K$ is supported on $K\subseteq S$,
+    and $A\otimes B$ is supported on $S$. The operators supported on
+    $S$ are closed under adjoints and products, which proves the first
+    assertion. Apply it to $(A,I)$ and $(I,A)$ and use closure under
+    sums to obtain the assertion for $T(A)$.
+\end{proof}
+
+\section{The information reset on a finite site set}
+
+\begin{theorem}[A unitary polar factor on the same support]
+    \label{thm:peps_supported_polar_unitary}
+    \lean{QuantumCircuit.exists_supported_unitary_polar_correction}
+    \leanok
+    For any operator $D$ supported on a site set $S$, there exists a unitary $U$ supported on $S$ such that for all vectors $x,y$,
+    \begin{align}
+        \|Ux-y\| & \le\|Dx-y\|+\|D^*y-x\|. \notag
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \leanok
+    Write $D=D_S\otimes\id$, take a unitary polar factor $D_S=U_S|D_S|$ on $S$, and set $U=U_S\otimes\id$ so $D=U|D|$ with $|D|\ge0$. With $w=U^*y$, since $\id+|D|\ge\id$,
+    \begin{align}
+        \|Ux-y\| = \|x-w\| \le \|(\id+|D|)(x-w)\| \le \||D|x-w\|+\||D|w-x\| = \|Dx-y\|+\|D^*y-x\|. \notag
+    \end{align}
+\end{proof}
+
+\begin{theorem}[Regional coordinates of the replica exchange]
+    \label{thm:peps_reset_regional_coordinates}
+    \lean{TNLean.Lattice.splitTwoRegions_sheetSwap,
+        TNLean.Lattice.submatrix_partialSwap_kronecker_one_eq_sheetSwapOp,
+        TNLean.Lattice.quantumRelativeEntropy_splitTwoRegionsState_eq_mutualInformation}
+    \leanok
+    For disjoint regions $R,C$ and $Q=(R\cup C)^c$, in replica coordinates $\mathcal X_R\times\mathcal X_C\times\mathcal X_Q$, the operator $F_R$ swaps the two $\mathcal X_R$ registers and fixes the other four registers, and any unit vector $\Omega$ satisfies $D(\rho_{RC}\,\|\,\rho_R\otimes\rho_C)=I_\Omega(R:C)$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    The action of $F_R$ follows from $R\cap C=R\cap Q=\varnothing$, and $D(\rho_{RC}\,\|\,\rho_R\otimes\rho_C)=S(\rho_R)+S(\rho_C)-S(\rho_{RC})=I_\Omega(R:C)$.
+\end{proof}
+
+\begin{definition}[The variance and cutoff of the information reset]
+    \label{def:lattice_reset_constants}
+    \lean{TNLean.Lattice.resetVariance,
+        TNLean.Lattice.resetCutoff,
+        TNLean.Lattice.resetVariance_pos,
+        TNLean.Lattice.resetCutoff_pos,
+        TNLean.Lattice.resetVariance_mul_sq_div_two,
+        TNLean.Lattice.resetCutoff_sq_div}
+    \leanok
+    For $\Delta,r\in\mathbb R$, define
+    \begin{align}
+        A(\Delta,r) & =\frac{2(30+r)}{\Delta^2}, & T_0(\Delta,r) & =\frac{2(30+r)}{\Delta}.
+        \label{eq:lattice_reset_constants}
+    \end{align}
+    For $\Delta\neq0$ and $r\neq-30$, $A\Delta^2/2=T_0^2/(2A)=30+r$; for $\Delta>0$ and $r\ge0$, $A,T_0>0$.
+\end{definition}
+
+\begin{proof}\leanok
+    Direct computation from (\ref{eq:lattice_reset_constants}).
+\end{proof}
+
+\begin{theorem}[The two-sided Gaussian filter, with explicit constants]
+    \label{thm:peps_reset_regional_filter_explicit}
+    \lean{TNLean.Lattice.regional_physicalBuffer_filter}
+    \leanok
+    \uses{def:lattice_reset_constants}
+    Fix $\Delta>0$ and $r\geq0$, with $A,T_0$ from (\ref{eq:lattice_reset_constants}). Let $H$ have unit ground vector $\Omega$ ($H\Omega=E_0\Omega$, $H-E_0\geq\Delta(\id-|\Omega\rangle\langle\Omega|)$), let $R,C$ be disjoint with $I_\Omega(R:C)\leq b$ ($b\geq0$), and put $Q=(R\cup C)^c$, $\Psi=\Omega\otimes\Omega$, $\Phi=F_R\Psi$, $\mathbb H=H\otimes\id+\id\otimes H$, and $\mathbb H'=F_R\mathbb HF_R^*$. Then $\|\Psi\|=\|\Phi\|=1$, and there exist a contraction $W$ on the two copies of $\mathcal X_Q$ and $z\geq e^{-2b}$ such that for every $L\geq1$, with $B_*=1+b+\log L$, $h=AB_*$, $T=T_0B_*$, and Gaussian density $g_h$,
+    \begin{align}
+        M                                   & =\int_{[-T,T]}g_h(t)e^{it\mathbb H'}(\id\otimes W)e^{-it\mathbb H}\,dt, \label{eq:peps_reset_regional_filter} \\
+        \|M\Psi-z\Phi\|,\ \|M^*\Phi-z\Psi\| & \le3e^{-10b}L^{-r}. \label{eq:peps_reset_regional_filter_err}
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_reset_regional_coordinates,def:lattice_reset_constants}
+    By Theorem~\ref{thm:peps_reset_regional_coordinates}, $D(\rho_{RC}\,\|\,\rho_R\otimes\rho_C)=I_\Omega(R:C)\le b$, so the purified relative-entropy overlap bound gives a Hermitian contraction $W$ on the buffer with $z=\langle\Phi,(\id\otimes W)\Psi\rangle\ge e^{-2b}$. Since $\mathbb H,\mathbb H'$ have ground vectors $\Psi,\Phi$ at $2E_0$ with gap $\Delta$ and $A\Delta^2/2=T_0^2/(2A)=30+r$ (Definition~\ref{def:lattice_reset_constants}), the full Gaussian filter residual is at most $e^{-h\Delta^2/2}\le e^{-10b}L^{-r}$ and truncation at $T$ adds at most $2e^{-T^2/(2h)}\le 2e^{-10b}L^{-r}$, giving (\ref{eq:peps_reset_regional_filter_err}).
+\end{proof}
+
+\begin{theorem}[The two-sided Gaussian filter of the physical buffer]
+    \label{thm:peps_reset_regional_filter}
+    \lean{TNLean.Lattice.exists_regional_physicalBuffer_filter}
+    \leanok
+    For every $\Delta>0$ and $r\ge0$, there exist $A,T_0>0$ such that under the hypotheses of Theorem~\ref{thm:peps_reset_regional_filter_explicit}, some buffer contraction $W$ and $z\ge e^{-2b}$ make $M$ in (\ref{eq:peps_reset_regional_filter}) satisfy (\ref{eq:peps_reset_regional_filter_err}) for all $L\ge1$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_reset_regional_filter_explicit,def:lattice_reset_constants}
+    Take $A=A(\Delta,r)>0$ and $T_0=T_0(\Delta,r)>0$ from Definition~\ref{def:lattice_reset_constants} in Theorem~\ref{thm:peps_reset_regional_filter_explicit}.
+\end{proof}
+
+\begin{theorem}[The polar step of the information reset]
+    \label{thm:peps_reset_polar_step}
+    \lean{TNLean.Lattice.exists_supported_unitary_of_two_sided}
+    \leanok
+    If $M$ is supported on $S$, $b,C,\varepsilon\ge0$, and $z\ge e^{-2b}$ satisfies $\|M\psi-z\varphi\|,\|M^*\varphi-z\psi\|\le Ce^{-10b}\varepsilon$, then there exists a unitary $U$ supported on $S$ with $\|U\psi-\varphi\|\le2C\varepsilon$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_supported_polar_unitary}
+    Apply Theorem~\ref{thm:peps_supported_polar_unitary} to $D=M/z$, noting $z^{-1}Ce^{-10b}\varepsilon\le Ce^{-8b}\varepsilon\le C\varepsilon$.
+\end{proof}
+
+\section{Support and entropy after the reset}
+
+\begin{lemma}[A supported unitary and the mutual information of untouched sets]
+    \label{lem:lattice_supported_unitary_entropy}
+    \lean{TNLean.Lattice.mutualInformation_le_of_supported_unitary,
+        TNLean.Lattice.exists_one_kronecker_unitary_of_mem_supportedOperators}
+    \leanok
+    Let $X,J\subseteq\Lambda$ be disjoint on a finite lattice $\Lambda$ with local space $\C^q$, and let $\varphi,\eta$ be unit vectors with $I_\eta(X:J)=0$. If $U$ is a unitary supported on $S\subseteq\Lambda\setminus(X\cup J)$, then $U=\id_X\otimes U_2$ on $\mathcal H_X\otimes\mathcal H_{\Lambda\setminus X}$ and
+    \begin{align}
+        I_\varphi(X:J) & \le8\sqrt{\lVert U\varphi-\eta\rVert}\,\log(e\,q^{|X|}).
+        \label{eq:lattice_supported_unitary_entropy}
+    \end{align}
+\end{lemma}
+\begin{proof}\leanok
+    Since $S\cap(X\cup J)=\varnothing$, $U=\id_{X\cup J}\otimes U'$ preserves the $(X,J)$ marginal, so $I_\varphi(X:J)=I_{U\varphi}(X:J)$, and continuity of mutual information against $\eta$ (with $I_\eta(X:J)=0$ and $\dim\mathcal H_X=q^{|X|}$) yields (\ref{eq:lattice_supported_unitary_entropy}).
+\end{proof}
+
+\begin{theorem}[Operators on paired sites act on both replicas]
+    \label{thm:peps_reset_paired_support}
+    \lean{QuantumCircuit.reindex_sumArrow_sitePair_embedOp,
+        QuantumCircuit.reindex_sumArrow_sitePair_mem_supportedOperators}
+    \leanok
+    \uses{def:qc_site_pair_coordinates}
+    Under the identification of two $q$-dimensional replicas on a finite site set $V$ with a single $q^2$-dimensional system on $V$, any operator supported on $S\subseteq V$ is supported on both replicas of $S$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    An operator $X_S\otimes\id_{V\setminus S}$ acts trivially on paired configurations agreeing on $V\setminus S$, which holds if and only if both replicas agree on $V\setminus S$.
+\end{proof}
+
+\begin{theorem}[The exchanged cores are uncorrelated]
+    \label{thm:peps_reset_exchanged_cores}
+    \lean{TNLean.Lattice.doubledVector_comp_sumArrow,
+        TNLean.Lattice.sheetSwapOp_mulVec_comp_sumArrow,
+        TNLean.Lattice.mutualInformation_relabelSites_replicaSwap_eq_zero}
+    \leanok
+    For any unit vector $\Omega$, $R_0\subseteq R$, and $C_0\subseteq R^c$, the first-replica cores $R_0$ and $C_0$ in $\Phi=F_R(\Omega\otimes\Omega)$ satisfy $I_\Phi(R_0:C_0)=0$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    The sheet swap $F_R$ maps the first-replica core $R_0$ to the second replica while fixing $C_0\subseteq R^c$ in the first replica, and the two replicas in $\Omega\otimes\Omega$ are in a product state.
+\end{proof}
+
+\begin{theorem}[The entropy cost of the reset]
+    \label{thm:peps_reset_entropy_scalar}
+    \lean{TNLean.Lattice.reset_entropy_scalar}
+    \leanok
+    If $C\ge0$, $p\in\mathbb R$, $L\ge\max(1,8\sqrt C(1+\lambda))$, $\delta\le CL^{-(2p+10)}$, and $0\le N\le1+L^2\lambda$, then $8\sqrt\delta\,N\le L^{-p}$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Since $\sqrt\delta\le\sqrt CL^{-p-5}$ and $N\le L^2(1+\lambda)$, we have $8\sqrt\delta\,N\le8\sqrt C(1+\lambda)L^{-p-3}\le L^{-p}$.
+\end{proof}
+
+\section{Product ground states}
+
+\begin{theorem}[Gapped ground vectors of a sum of factor Hamiltonians]
+    \label{thm:area_law_product_ground_state}
+    \lean{TNLean.Lattice.exists_isGappedGroundState_factors_of_kronecker_sum, TNLean.Lattice.exists_eq_mul_of_gap, TNLean.Lattice.vonNeumannEntropy_partialTraceRight_eq_zero_of_gap}
+    \leanok
+    Let $H=H_A\otimes I+I\otimes H_B$ with $H_A,H_B$ Hermitian. If a unit
+    vector $\omega$ satisfies $H\omega=E_0\omega$ and
+    $H-E_0I\ge\Delta(I-|\omega\rangle\langle\omega|)$ with $\Delta>0$, then
+    $\omega$ is a product vector, and its reduced state on the first factor has
+    zero entropy.
+
+    More precisely, there are real numbers $a,b$ and normalized factor
+    vectors $u,v$ such that
+    \begin{align}
+        \omega & =u\otimes v,                            & E_0   & =a+b,\notag \\
+        \|u\|  & =1,                                     & \|v\| & =1,\notag   \\
+        H_Au   & =au,                                    & H_Bv  & =bv,\notag  \\
+        H_A-aI & \ge\Delta(I-|u\rangle\langle u|),       &
+        H_B-bI & \ge\Delta(I-|v\rangle\langle v|).\notag
+    \end{align}
+    The phase is included in the chosen factors, so the product equality
+    is exact. Both factors retain the same lower gap bound $\Delta$.
+    These factor gap inequalities are the spectral step in the reduction
+    to connected domains in \cite[Part~I]{TNLean2026OneDimensional}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Let $a,b$ be the least eigenvalues of $H_A,H_B$ with unit eigenvectors
+    $u,v$. Then $H\ge a+b$, so $E_0=\langle\omega,H\omega\rangle\ge a+b$, while
+    $H(u\otimes v)=(H_Au)\otimes v+u\otimes(H_Bv)=(a+b)(u\otimes v)$. The gap inequality on $u\otimes v$ gives
+    $\Delta(1-|\langle\omega,u\otimes v\rangle|^2)\le a+b-E_0\le0$, hence
+    $|\langle\omega,u\otimes v\rangle|=1$ and $\omega$ is a multiple of
+    $u\otimes v$. The reduced state is then a rank-one projection.
+
+    The equality $|\langle\omega,u\otimes v\rangle|=1$, together with
+    the two energy comparisons, also gives $E_0=a+b$.
+    Write $z=\langle\omega,u\otimes v\rangle$.
+    The exact relation is $\omega=\overline z\,u\otimes v$ with $|z|=1$.
+    Replacing $u$ by $\overline z\,u$ preserves its norm, eigenvalue
+    equation and rank-one projection and makes $\omega=u\otimes v$.
+    For the isometric inclusion $B_v\xi=\xi\otimes v$, direct compression
+    of the gap defect gives
+    \begin{align}
+         & B_v^*\bigl(H-E_0I-\Delta(I-|\omega\rangle\langle\omega|)\bigr)B_v
+        \notag                                                               \\
+         & \qquad=H_A-(E_0-b)I-\Delta(I-|u\rangle\langle u|)
+        =H_A-aI-\Delta(I-|u\rangle\langle u|).\notag
+    \end{align}
+    Positivity is preserved under rectangular compression, so the last
+    operator is positive semidefinite. Compressing instead along
+    $B_u\eta=u\otimes\eta$ gives the second factor inequality.
+    No factor is lost in $\Delta$, since both inclusions are isometries.
+\end{proof}
+

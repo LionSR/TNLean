@@ -2,19 +2,6 @@
 
 The unitary of Theorem~\ref{thm:peps_reset_unitary} acts away from two regional cores; since the exchanged state carries zero mutual information between those cores, continuity of mutual information yields the $L^{-p}$ reset of \cite[Lemma~3.3]{OpenAI2026PolynomialPEPS}.
 
-\begin{theorem}[Operators on paired sites act on both replicas]
-    \label{thm:peps_reset_paired_support}
-    \lean{QuantumCircuit.reindex_sumArrow_sitePair_embedOp,
-        QuantumCircuit.reindex_sumArrow_sitePair_mem_supportedOperators}
-    \leanok
-    \uses{def:qc_site_pair_coordinates}
-    Under the identification of two $q$-dimensional replicas on a finite site set $V$ with a single $q^2$-dimensional system on $V$, any operator supported on $S\subseteq V$ is supported on both replicas of $S$.
-\end{theorem}
-\begin{proof}
-    \leanok
-    An operator $X_S\otimes\id_{V\setminus S}$ acts trivially on paired configurations agreeing on $V\setminus S$, which holds if and only if both replicas agree on $V\setminus S$.
-\end{proof}
-
 \begin{theorem}[The reset support avoids the cores]
     \label{thm:peps_reset_support_cores}
     \lean{TNLean.PEPS.Approximation.notMem_resetSupport}
@@ -26,33 +13,7 @@ The unitary of Theorem~\ref{thm:peps_reset_unitary} acts away from two regional 
     A graph walk of length $\le\ell$ changes $\ell_\infty$-distance by $\le\ell$. Every site in $(R\cup C)^c$ is at $\ell_\infty$-distance $>w$ from $R_0\cup C_0$, and every endpoint of an edge crossing $R$ is within $\ell_\infty$-distance $1$ of both $R^c$ and $R\subseteq C^c$, hence at $\ell_\infty$-distance $>w-1\ge\ell$ from $R_0\cup C_0$.
 \end{proof}
 
-\begin{theorem}[The exchanged cores are uncorrelated]
-    \label{thm:peps_reset_exchanged_cores}
-    \lean{TNLean.Lattice.doubledVector_comp_sumArrow,
-        TNLean.Lattice.sheetSwapOp_mulVec_comp_sumArrow,
-        TNLean.Lattice.mutualInformation_relabelSites_replicaSwap_eq_zero}
-    \leanok
-    For any unit vector $\Omega$, $R_0\subseteq R$, and $C_0\subseteq R^c$, the first-replica cores $R_0$ and $C_0$ in $\Phi=F_R(\Omega\otimes\Omega)$ satisfy $I_\Phi(R_0:C_0)=0$.
-\end{theorem}
-\begin{proof}
-    \leanok
-    The sheet swap $F_R$ maps the first-replica core $R_0$ to the second replica while fixing $C_0\subseteq R^c$ in the first replica, and the two replicas in $\Omega\otimes\Omega$ are in a product state.
-\end{proof}
 
-\begin{lemma}[A supported unitary and the mutual information of untouched sets]
-    \label{lem:lattice_supported_unitary_entropy}
-    \lean{TNLean.Lattice.mutualInformation_le_of_supported_unitary,
-        TNLean.Lattice.exists_one_kronecker_unitary_of_mem_supportedOperators}
-    \leanok
-    Let $X,J\subseteq\Lambda$ be disjoint on a finite lattice $\Lambda$ with local space $\C^q$, and let $\varphi,\eta$ be unit vectors with $I_\eta(X:J)=0$. If $U$ is a unitary supported on $S\subseteq\Lambda\setminus(X\cup J)$, then $U=\id_X\otimes U_2$ on $\mathcal H_X\otimes\mathcal H_{\Lambda\setminus X}$ and
-    \begin{align}
-        I_\varphi(X:J) & \le8\sqrt{\lVert U\varphi-\eta\rVert}\,\log(e\,q^{|X|}).
-        \label{eq:lattice_supported_unitary_entropy}
-    \end{align}
-\end{lemma}
-\begin{proof}\leanok
-    Since $S\cap(X\cup J)=\varnothing$, $U=\id_{X\cup J}\otimes U'$ preserves the $(X,J)$ marginal, so $I_\varphi(X:J)=I_{U\varphi}(X:J)$, and continuity of mutual information against $\eta$ (with $I_\eta(X:J)=0$ and $\dim\mathcal H_X=q^{|X|}$) yields (\ref{eq:lattice_supported_unitary_entropy}).
-\end{proof}
 
 \begin{theorem}[The entropy comparison of the reset on any finite set of sites]
     \label{thm:peps_reset_cores_entropy_sites}
@@ -87,17 +48,6 @@ The unitary of Theorem~\ref{thm:peps_reset_unitary} acts away from two regional 
     \leanok
     \uses{thm:peps_reset_cores_entropy_sites}
     Pulling $\Omega$, $U$, and $F_R$ back along the site bijection $e$ from the square domain to the open square preserves norms, supports, cardinalities, and mutual information, reducing (\ref{eq:peps_reset_cores_entropy}) to Theorem~\ref{thm:peps_reset_cores_entropy_sites}.
-\end{proof}
-
-\begin{theorem}[The entropy cost of the reset]
-    \label{thm:peps_reset_entropy_scalar}
-    \lean{TNLean.Lattice.reset_entropy_scalar}
-    \leanok
-    If $C\ge0$, $p\in\mathbb R$, $L\ge\max(1,8\sqrt C(1+\lambda))$, $\delta\le CL^{-(2p+10)}$, and $0\le N\le1+L^2\lambda$, then $8\sqrt\delta\,N\le L^{-p}$.
-\end{theorem}
-\begin{proof}
-    \leanok
-    Since $\sqrt\delta\le\sqrt CL^{-p-5}$ and $N\le L^2(1+\lambda)$, we have $8\sqrt\delta\,N\le8\sqrt C(1+\lambda)L^{-p-3}\le L^{-p}$.
 \end{proof}
 
 \begin{definition}[Reset width and size threshold]
