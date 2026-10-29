@@ -72,7 +72,7 @@ theorem exists_orthogonal_congruence_interleavedSkewForm
     calc
       e.toBasis.toMatrix b.toBasis =
           e.toBasis.toMatrix b.toBasis * (O * Oᵀ) := by
-            rw [mem_orthogonalGroup_iff.mp hO, mul_one]
+            rw [(mem_orthogonalGroup_iff _ _).mp hO, mul_one]
       _ = (e.toBasis.toMatrix b.toBasis * O) * Oᵀ := (mul_assoc _ _ _).symm
       _ = Oᵀ := by rw [hCO, one_mul]
   have hmat : LinearMap.toMatrix b.toBasis b.toBasis J.toLinearMap =

@@ -7,7 +7,7 @@ import TNLean.Algebra.OrthogonalComplexStructure
 import Mathlib.Analysis.InnerProductSpace.PiL2
 import Mathlib.Analysis.InnerProductSpace.Projection.FiniteDimensional
 import Mathlib.Analysis.Normed.Module.RCLike.Real
-import Mathlib.Tactic.Omega
+import Lean.Elab.Tactic.Omega
 
 /-!
 # Paired orthonormal bases for real orthogonal complex structures

@@ -70,7 +70,7 @@ theorem exists_unitary_congruence_interleavedSkewForm
     exists_orthogonal_congruence_interleavedSkewForm m A hA hAskew
   have hOc : f O ∈ unitaryGroup (Fin (2 * m)) ℂ := by
     rw [mem_unitaryGroup_iff]
-    rw [← hfstar, ← map_mul, mem_orthogonalGroup_iff.mp hO, map_one]
+    rw [← hfstar, ← map_mul, (mem_orthogonalGroup_iff _ _).mp hO, map_one]
   have hΛ : Λ = (f O)ᵀ * complexInterleavedSkewFormFin m * f O := by
     have h := congrArg f hnormal
     simpa only [map_mul, hftranspose, hreal] using h.symm

@@ -52,7 +52,7 @@ theorem inner_self_apply_eq_zero_of_sq_eq_neg
     (J : E →ₗᵢ[ℝ] E) (hJ : ∀ x, J (J x) = -x) (x : E) :
     ⟪x, J x⟫_ℝ = 0 := by
   have h := J.inner_right_eq_neg_inner_left_of_sq_eq_neg hJ x x
-  rw [real_inner_comm (J x) x] at h
+  rw [real_inner_comm x (J x)] at h
   linarith
 
 /-- The ordered pair `x, -J x` has the orientation of the source matrix
@@ -61,7 +61,7 @@ theorem orthonormal_pair_of_sq_eq_neg
     (J : E →ₗᵢ[ℝ] E) (hJ : ∀ x, J (J x) = -x) {x : E} (hx : ‖x‖ = 1) :
     Orthonormal ℝ ![x, -J x] := by
   have horth := J.inner_self_apply_eq_zero_of_sq_eq_neg hJ x
-  have horth' : ⟪J x, x⟫_ℝ = 0 := (real_inner_comm (J x) x).trans horth
+  have horth' : ⟪J x, x⟫_ℝ = 0 := (real_inner_comm x (J x)).trans horth
   rw [orthonormal_iff_ite]
   intro i j
   fin_cases i <;> fin_cases j <;>
@@ -112,9 +112,9 @@ def restrictInvariantOrthogonal
     (J : E →ₗᵢ[ℝ] E) (hJ : ∀ x, J (J x) = -x)
     (W : Submodule ℝ E) (hW : Set.MapsTo J W W) : Wᗮ →ₗᵢ[ℝ] Wᗮ where
   toFun x := ⟨J x, J.mapsTo_orthogonal_of_sq_eq_neg hJ W hW x.property⟩
-  map_add' x y := Subtype.ext (map_add J x y)
-  map_smul' c x := Subtype.ext (map_smul J c x)
-  norm_map' x := J.norm_map x
+  map_add' x y := Subtype.ext (map_add J (x : E) (y : E))
+  map_smul' c x := Subtype.ext (map_smul J c (x : E))
+  norm_map' x := J.norm_map (x : E)
 
 /-- The restricted isometry retains the square-minus-one identity. -/
 theorem restrictInvariantOrthogonal_sq
@@ -135,7 +135,7 @@ variable {ι : Type*} [Fintype ι] [DecidableEq ι]
 theorem mul_self_eq_neg_one_of_orthogonal_of_transpose_eq_neg
     {A : Matrix ι ι ℝ} (hA : A ∈ orthogonalGroup ι ℝ) (hskew : Aᵀ = -A) :
     A * A = -1 := by
-  have h := mem_orthogonalGroup_iff.mp hA
+  have h := (mem_orthogonalGroup_iff _ _).mp hA
   rw [hskew, mul_neg] at h
   exact neg_eq_iff_eq_neg.mp h
 
@@ -145,8 +145,8 @@ noncomputable def orthogonalLinearIsometry
     (A : Matrix ι ι ℝ) (hA : A ∈ orthogonalGroup ι ℝ) :
     EuclideanSpace ℝ ι →ₗᵢ[ℝ] EuclideanSpace ℝ ι :=
   (Matrix.toEuclideanLin A).isometryOfInner fun x y ↦
-    (Matrix.toEuclideanCLM A).inner_map_map_of_mem_unitary
-      (Unitary.map_mem Matrix.toEuclideanCLM hA) x y
+    ContinuousLinearMap.inner_map_map_of_mem_unitary
+      (Unitary.map_mem (Matrix.toEuclideanCLM (n := ι) (𝕜 := ℝ)) hA) x y
 
 /-- The bundled isometry is the original matrix action, not a separate model. -/
 @[simp] theorem orthogonalLinearIsometry_apply
@@ -160,8 +160,10 @@ theorem orthogonalLinearIsometry_sq
     {A : Matrix ι ι ℝ} (hA : A ∈ orthogonalGroup ι ℝ) (hskew : Aᵀ = -A)
     (x : EuclideanSpace ℝ ι) :
     orthogonalLinearIsometry A hA (orthogonalLinearIsometry A hA x) = -x := by
-  change (Matrix.toEuclideanCLM A) ((Matrix.toEuclideanCLM A) x) = -x
-  have h := congrArg (fun M : Matrix ι ι ℝ ↦ Matrix.toEuclideanCLM M x)
+  change (Matrix.toEuclideanCLM (n := ι) (𝕜 := ℝ) A)
+    ((Matrix.toEuclideanCLM (n := ι) (𝕜 := ℝ) A) x) = -x
+  have h := congrArg
+    (fun M : Matrix ι ι ℝ ↦ Matrix.toEuclideanCLM (n := ι) (𝕜 := ℝ) M x)
     (mul_self_eq_neg_one_of_orthogonal_of_transpose_eq_neg hA hskew)
   simpa only [map_mul, map_neg, map_one, ContinuousLinearMap.mul_apply,
     ContinuousLinearMap.neg_apply, ContinuousLinearMap.one_apply] using h
@@ -181,6 +183,7 @@ def pairedSkewIndexEquiv (ι : Type*) : ι × Fin 2 ≃ ι ⊕ ι where
   left_inv p := by rcases p with ⟨i, a⟩; fin_cases a <;> rfl
   right_inv p := by cases p <;> rfl
 
+omit [Fintype ι] in
 /-- The paper's interleaved `Y` form is the reindexing of **minus** Mathlib's
 `J`. The minus sign fixes the opposite orientation of the two conventions. -/
 theorem interleavedSkewForm_eq_neg_J_submatrix :
@@ -188,7 +191,7 @@ theorem interleavedSkewForm_eq_neg_J_submatrix :
       (-J ι ℝ).submatrix (pairedSkewIndexEquiv ι) (pairedSkewIndexEquiv ι) := by
   ext ⟨i, a⟩ ⟨j, b⟩
   fin_cases a <;> fin_cases b <;>
-    simp [interleavedSkewForm, pairedSkewIndexEquiv, J, Matrix.kronecker_apply]
+    simp [interleavedSkewForm, pairedSkewIndexEquiv, J]
 
 /-- The paired-coordinate order transported to the paper's `Fin (2*m)` index. -/
 def interleavedSkewFinEquiv (m : ℕ) : Fin m × Fin 2 ≃ Fin (2 * m) :=
