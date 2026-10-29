@@ -1,7 +1,7 @@
 \subsection{Complements and staircase comparisons for positive windows}
 \label{subsec:peps_positive_window_comparison}
 
-\begin{theorem}[Complement of a horizontal consecutive-window union]%
+\begin{lemma}[Complement of a horizontal consecutive-window union]%
     \label{thm:peps_positive_window_complements}
     \lean{TNLean.PEPS.NormalTorusArcWindowInjectivityHypotheses.horizontalUnionComplement_injective}
     \lean{TNLean.PEPS.NormalTorusArcWindowInjectivityHypotheses.regionBlockedTensorInjective_horizontalUnionComplement}
@@ -11,7 +11,7 @@
     $2L+1\leq w$ and $2K+1\leq h$. Then
     $\mathcal R(s;L+1,K)^c\in\mathcal I$ for every starting vertex $s$.
     In particular, this conclusion applies to blocked-tensor injectivity.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_arc_rectangle_complement, thm:peps_arc_rectangle_injective}
     The complement is the union of a full-height band with
@@ -20,7 +20,7 @@
     windows, so each belongs to $\mathcal I$, and union closure places the complement in $\mathcal I$.
 \end{proof}
 
-\begin{theorem}[Complement of a vertical consecutive-window union]%
+\begin{lemma}[Complement of a vertical consecutive-window union]%
     \label{thm:peps_positive_vertical_window_complement}
     \lean{TNLean.PEPS.NormalTorusArcWindowInjectivityHypotheses.verticalUnionComplement_injective}
     \lean{TNLean.PEPS.NormalTorusArcWindowInjectivityHypotheses.regionBlockedTensorInjective_verticalUnionComplement}
@@ -28,7 +28,7 @@
     Under the same hypotheses,
     $\mathcal R(s;L,K+1)^c\in\mathcal I$ for every $s$.
     In particular, this conclusion applies to blocked-tensor injectivity.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_arc_rectangle_complement, thm:peps_arc_rectangle_injective}
     The complement is the union of a full-height band with
@@ -36,7 +36,7 @@
     $h-K-1\geq K$ rows. Both bands are unions of injective windows.
 \end{proof}
 
-\begin{theorem}[Horizontal consecutive staircase windows]%
+\begin{lemma}[Horizontal consecutive staircase windows]%
     \label{thm:peps_positive_staircase_comparison}
     \lean{TNLean.PEPS.horizontalStaircaseConsecutiveWindow_extend_eq}
     \leanok
@@ -53,7 +53,7 @@
     \end{align}
     The equality of deformed states is an equality at every physical
     configuration on the torus.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_positive_window_complements,
         thm:peps_corner_extension_state_preserves}
@@ -64,14 +64,14 @@
     injective and hence gives~(\ref{eq:peps_positive_union_comparison}).
 \end{proof}
 
-\begin{theorem}[Vertical consecutive staircase windows]%
+\begin{lemma}[Vertical consecutive staircase windows]%
     \label{thm:peps_positive_vertical_staircase_comparison}
     \lean{TNLean.PEPS.verticalConsecutiveWindow_extend_eq}
     \leanok
     Under the same tensor and size hypotheses, if $L\leq j$ and
     $j+1<L+K$, equality of the deformed states of $C_j,C_{j+1}$
     again implies~(\ref{eq:peps_positive_union_comparison}).
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_positive_vertical_window_complement,
         thm:peps_corner_extension_state_preserves}
@@ -79,7 +79,7 @@
     is injective, and the same contraction argument applies.
 \end{proof}
 
-\begin{theorem}[One staircase comparison on the full patch]%
+\begin{lemma}[One staircase comparison on the full patch]%
     \label{thm:peps_positive_staircase_patch_step}
     \lean{TNLean.PEPS.staircaseStep_patch_extend_eq}
     \leanok
@@ -91,7 +91,7 @@
          & =\Ext_{W_{j+1}\subseteq P}(C_{j+1}).
         \label{eq:peps_positive_patch_step}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_positive_staircase_comparison,
         thm:peps_positive_vertical_staircase_comparison,
@@ -102,7 +102,7 @@
     (\ref{eq:peps_positive_patch_step}).
 \end{proof}
 
-\begin{theorem}[Chaining the staircase comparisons]%
+\begin{lemma}[Chaining the staircase comparisons]%
     \label{thm:peps_positive_staircase_patch_chain}
     \lean{TNLean.PEPS.staircasePatch_insert_eq_aux}
     \lean{TNLean.PEPS.staircasePatch_insert_eq}
@@ -118,7 +118,7 @@
     In particular, taking $n=L+K-1$ equates the extensions of the two end-window inserts,
     implementing the overlapping-window argument
     of~\cite{Molnar2018NormalPEPS} for every positive pair $L,K$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_positive_staircase_patch_step}
     By induction on $n$, the case $n=0$ is immediate, and at the induction step

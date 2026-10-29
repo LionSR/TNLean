@@ -11,7 +11,7 @@
 In the tree circuit (\ref{eq:ldp_tree_factorization}) a register above the
 lowest level carries $\C^{D^2}$, which is a group of sites once $D^2>d$. This
 section groups the sites into registers of $s$ consecutive sites.
-Theorem~\ref{thm:qc_register_layer} teleports registers site by site and
+Lemma~\ref{thm:qc_register_layer} teleports registers site by site and
 applies a layer of unitaries on pairs of distant registers in a depth
 depending only on $s$ and on the number of nearest-neighbour gates of each
 unitary. With $s$ a length at which the blocked
@@ -29,7 +29,7 @@ $\ket{\phi_N(A)}\neq0$, which holds for all large $N$
 Throughout, the sites of the ring are $\{0,\dots,N-1\}$ with addition modulo
 $N$, the local labels are $\mathbb Z_d$ with $d\ge1$, and $s\ge1$.
 
-\begin{theorem}[Trees of register gates on the blocks]
+\begin{lemma}[Trees of register gates on the blocks]
     \label{thm:ldp_register_tree_rounds}
     \lean{MPSPreparation.blockSite_add_natCast,
         MPSPreparation.blockLayerOp_mul, MPSPreparation.blockLayerOp_one,
@@ -74,12 +74,12 @@ $N$, the local labels are $\mathbb Z_d$ with $d\ge1$, and $s\ge1$.
     neighbouring sites, measurement rounds of total depth $(k+1)(4s+K+2)$
     implement $T$ on every block, $T^{\otimes M}$, on the vectors with $\ket0$
     at every site of every block other than its first and its last $s$ sites.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     The unitaries of depth $j$ of all the blocks are register gates whose
     stretches are their sub-blocks, which are pairwise disjoint, so
-    Theorem~\ref{thm:qc_register_layer} applies the depth $j$ in depth
+    Lemma~\ref{thm:qc_register_layer} applies the depth $j$ in depth
     $4s+K+2$ on the vectors with $\ket0$ at the sites strictly inside the
     sub-blocks of depth $j$ between their first and last registers. A unitary
     of depth $j'<j$ acts on the first and the last register of a sub-block of
@@ -110,7 +110,7 @@ $N$, the local labels are $\mathbb Z_d$ with $d\ge1$, and $s\ge1$.
     of a matrix product gives the claimed expression.
 \end{proof}
 
-\begin{theorem}[The tree of registers implements the isometry of a block]
+\begin{lemma}[The tree of registers implements the isometry of a block]
     \label{thm:ldp_register_tree_isometry}
     \lean{Matrix.polarIso_submatrix_equiv,
         MPSPreparation.exists_unitary_apply_eq_extend,
@@ -151,7 +151,7 @@ $N$, the local labels are $\mathbb Z_d$ with $d\ge1$, and $s\ge1$.
     injective map of $\{0,\dots,D^2-1\}$ into them. Every layer of the tree
     circuit (\ref{eq:ldp_tree_factorization}) of $\mathcal B$ is an isometry
     from one register to two, and extends to a unitary on the two registers of
-    each sub-block of Theorem~\ref{thm:ldp_register_tree_rounds}. The tree $T$
+    each sub-block of Lemma~\ref{thm:ldp_register_tree_rounds}. The tree $T$
     of these unitaries satisfies
     \begin{align*}
         \bra\tau T\ket{l,0,\dots,0,r}=\bra\tau V\ket{l,r}
@@ -159,12 +159,12 @@ $N$, the local labels are $\mathbb Z_d$ with $d\ge1$, and $s\ge1$.
     for every configuration $\tau$ of the block and all bond indices $l,r$,
     where $\ket{l,0,\dots,0,r}$ carries $l$ on the first and $r$ on the last
     register.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     By Lemma~\ref{lem:ldp_tree_layers_isometries} the layers of the tree circuit
     of $\mathcal B$ are isometries, and they extend to unitaries
-    (Theorem~\ref{thm:ldp_unitary_implementing_isometry}) from their input
+    (Lemma~\ref{thm:ldp_unitary_implementing_isometry}) from their input
     register, the other register in $\ket0$, to their two output registers.
     The unitary of the root reads $l$ and $r$. After the depths $0,\dots,j$ the
     registers of the sub-blocks of depth $j+1$ carry the outputs of these
@@ -174,12 +174,12 @@ $N$, the local labels are $\mathbb Z_d$ with $d\ge1$, and $s\ge1$.
     halves of its sub-block, on which the two unitaries below it act. At the
     finest depth the block carries the leaves, with the amplitude of the whole
     tree map, which by Lemma~\ref{lem:ldp_tree_amplitudes} and
-    Theorem~\ref{thm:ldp_tree_factorization} is the isometry of the polar
+    Lemma~\ref{thm:ldp_tree_factorization} is the isometry of the polar
     decomposition of $\mathcal B$ blocked over $2^{k+1}$ sites, that is, of
     $A$ blocked over $q$ sites.
 \end{proof}
 
-\begin{theorem}[The approximating state with measurements in depth $O(k)$]
+\begin{lemma}[The approximating state with measurements in depth $O(k)$]
     \label{thm:ldp_register_tree_approximating_state}
     \lean{MPSPreparation.isZeroOn_regCentralSites_pairLayerOp_mulVec,
         MPSPreparation.exists_isPreparedWithMeasurementRoundsInDepth_approximatingMPVState}
@@ -195,7 +195,7 @@ $N$, the local labels are $\mathbb Z_d$ with $d\ge1$, and $s\ge1$.
     Definition~\ref{def:ldp_approximating_state} with blocks of $q=s2^{k+1}$
     sites, on $N=Mq$ sites, is prepared with measurement rounds in depth at most
     $C(k+1)$. No outcome is post-selected.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Injectivity gives $D^2\le d^s$, so a register of $s$ sites carries
@@ -207,15 +207,15 @@ $N$, the local labels are $\mathbb Z_d$ with $d\ge1$, and $s\ge1$.
     depth $K$, applied in one round of depth $K+2$, prepares the pairs
     $\ket\omega$ of the fixed point on the last register of every block and the
     first of the next, from the all-$\ket0$ product state; the other sites keep
-    $\ket0$. Theorem~\ref{thm:ldp_register_tree_rounds}, with the unitaries of
-    Theorem~\ref{thm:ldp_register_tree_isometry}, then applies the trees of all
+    $\ket0$. Lemma~\ref{thm:ldp_register_tree_rounds}, with the unitaries of
+    Lemma~\ref{thm:ldp_register_tree_isometry}, then applies the trees of all
     the blocks in depth $(k+1)(4s+K+2)$. The output is
     $T^{\otimes M}\bigotimes\ket\omega=V^{\otimes M}\bigotimes\ket\omega$, the
-    approximating state, as in Theorem~\ref{thm:ldp_approximating_state_depth};
+    approximating state, as in Lemma~\ref{thm:ldp_approximating_state_depth};
     the total depth is at most $(2K+4s+4)(k+1)$.
 \end{proof}
 
-\begin{theorem}[Preparation with measurements in depth $O(\log\log(N/\varepsilon))$]
+\begin{lemma}[Preparation with measurements in depth $O(\log\log(N/\varepsilon))$]
     \label{thm:ldp_loglog_depth}
     \lean{MPSPreparation.exists_isPreparedWithMeasurementRoundsInDepth_approximationError_le,
         MPSPreparation.exists_isPreparedWithMeasurementRoundsInDepth_le_logb_log}
@@ -238,12 +238,12 @@ $N$, the local labels are $\mathbb Z_d$ with $d\ge1$, and $s\ge1$.
     measurements'' of~\cite{Malz2024Preparation} at chain lengths divisible by
     $s2^{k+1}$ for some $k$ in this window, for instance $N=Ms2^K$ with $K$
     large; the remaining chain lengths are treated in
-    Theorem~\ref{thm:ldp_loglog_depth_every_length}.
-\end{theorem}
+    Lemma~\ref{thm:ldp_loglog_depth_every_length}.
+\end{lemma}
 \begin{proof}
     \leanok
     Bringing $A$ into the gauge~(\ref{eq:ldp_normal_gauge}) as in the proof of
-    Theorem~\ref{thm:ldp_depth_upper_bound_divisible} multiplies
+    Lemma~\ref{thm:ldp_depth_upper_bound_divisible} multiplies
     $\ket{\phi_N}$ by a nonzero scalar; let $\xi$ be the correlation length of a
     bound $t<1$ on the moduli of the subleading eigenvalues, and let $s$ be a
     length at which the blocked tensor in this gauge is injective. With $a=\xi$
@@ -251,7 +251,7 @@ $N$, the local labels are $\mathbb Z_d$ with $d\ge1$, and $s\ge1$.
     Lemma~\ref{lem:ldp_approximation_error_slope_threshold}, and with $N=Mq$ and
     $q=s2^{k+1}$, the approximating state with blocks of $q$ sites is a unit
     vector with error at most $\varepsilon$, prepared in depth at most
-    $C(k+1)$ by Theorem~\ref{thm:ldp_register_tree_approximating_state}. If
+    $C(k+1)$ by Lemma~\ref{thm:ldp_register_tree_approximating_state}. If
     $s2^{k+1}\le2(a\log(N/\varepsilon)+b)$ then $2^k\le
         a\log(N/\varepsilon)+b$ since $s\ge1$.
 \end{proof}

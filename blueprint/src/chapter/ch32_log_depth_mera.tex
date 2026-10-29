@@ -2,18 +2,18 @@
 \label{sec:ldp_tree_mera}
 
 The paragraph ``Connection to MERA'' of~\cite{Malz2024Preparation} reads the
-tree circuit of Theorem~\ref{thm:ldp_tree_factorization} as a finite-range
+tree circuit of Lemma~\ref{thm:ldp_tree_factorization} as a finite-range
 multiscale entanglement renormalization ansatz with $O(\log\log N)$ layers: the
 isometries $V^{(j)}$ are the isometries of the network, and all disentanglers
 are the identity except those of the first layer, which prepare the
 fixed-point state. This section states the network, identifies the
 approximating state with its state, and counts the layers. Up to
-Theorem~\ref{thm:ldp_tree_mera_error} the two-site blocked tensor of $A$ is
+Lemma~\ref{thm:ldp_tree_mera_error} the two-site blocked tensor of $A$ is
 injective and the chain length is $N=M2^{k+1}$. From
 Definition~\ref{def:ldp_register_mera} on, the finest isometries write
 registers of $s$ sites, where $A$ blocked over $s$ sites is injective; this
 removes the first restriction, and every normal tensor is covered for the
-chain lengths $N=Ms2^{k+1}$ (Theorem~\ref{thm:ldp_normal_mps_mera}). The
+chain lengths $N=Ms2^{k+1}$ (Lemma~\ref{thm:ldp_normal_mps_mera}). The
 equal-register construction keeps this restriction on the chain length.
 Section~\ref{sec:ldp_unequal_mera} removes it with unequal bounded physical
 leaves, as detailed in the resolved note~\cite{gap:mswc24_tree_mera_scope}.
@@ -81,7 +81,7 @@ leaves, as detailed in the resolved note~\cite{gap:mswc24_tree_mera_scope}.
     $\mathcal W^\dagger\mathcal W=1$.
     The pair $u\ket0\ket0$ is a unit vector because $u$ is unitary, so the
     product of pairs is a unit vector
-    (Theorem~\ref{thm:prep_pair_product_norm}), and $\mathcal W^{\otimes M}$
+    (Lemma~\ref{thm:prep_pair_product_norm}), and $\mathcal W^{\otimes M}$
     preserves its norm.
 \end{proof}
 
@@ -98,7 +98,7 @@ leaves, as detailed in the resolved note~\cite{gap:mswc24_tree_mera_scope}.
     \uses{thm:ldp_tree_factorization, thm:ldpolar_tensor_injective,
         thm:block_tensor_rotate_physical}
     Let the two-site blocked tensor of $A$ be injective, and let $V^{(j)}$ and
-    $T_j$ be as in Theorem~\ref{thm:ldp_tree_factorization}. Then for every
+    $T_j$ be as in Lemma~\ref{thm:ldp_tree_factorization}. Then for every
     $j\ge1$ the two-site blocked tensor of $T_{j-1}$ is injective, so each
     $V^{(j)}$ is an isometry, and the tree map (\ref{eq:ldp_binary_mera_tree})
     with $W=V^{(1)}$ and $W_i=V^{(i+2)}$ is the product of the layers in
@@ -114,10 +114,10 @@ leaves, as detailed in the resolved note~\cite{gap:mswc24_tree_mera_scope}.
     \end{align*} The two-site blocked tensor of an injective tensor is injective.
     Blocking $\mathcal B^{(1)}=V^{(1)}P_1$ twice gives $(V^{(1)})^{\otimes2}$
     applied to $T_1$ blocked twice
-    (Theorem~\ref{thm:block_tensor_rotate_physical}), so the two-site blocked
+    (Lemma~\ref{thm:block_tensor_rotate_physical}), so the two-site blocked
     tensor of $T_1$ is injective, and induction on $j$ gives the claim for
     every $T_{j-1}$. Its isometric factor is an isometry by
-    Theorem~\ref{thm:ldpolar_tensor_injective}. The identification of the
+    Lemma~\ref{thm:ldpolar_tensor_injective}. The identification of the
     tree map with the product of the layers is the recursion defining both.
 \end{proof}
 
@@ -146,15 +146,15 @@ leaves, as detailed in the resolved note~\cite{gap:mswc24_tree_mera_scope}.
     \leanok
     The map $V\colon\C\to\C^D\otimes\C^D$, $1\mapsto\ket\omega$, satisfies
     $V^\dagger V=\langle\omega|\omega\rangle=\tr\rho=1$
-    (Theorem~\ref{thm:prep_pair_norm}), so it is an isometry. An isometry
+    (Lemma~\ref{thm:prep_pair_norm}), so it is an isometry. An isometry
     defined on the span of some computational basis vectors extends to a
     unitary, as in the proof of
-    Theorem~\ref{thm:ldp_unitary_implementing_isometry}; applied to the basis
+    Lemma~\ref{thm:ldp_unitary_implementing_isometry}; applied to the basis
     vector $\ket0\ket0$, this gives a unitary $u$ with
     $u\ket0\ket0=V1=\ket\omega$.
 \end{proof}
 
-\begin{theorem}[The approximating state is a network state]
+\begin{lemma}[The approximating state is a network state]
     \label{thm:ldp_approximating_state_tree_mera}
     \lean{MPSPreparation.approximatingMPVState_eq_state_treeMERA}
     \leanok
@@ -167,13 +167,13 @@ leaves, as detailed in the resolved note~\cite{gap:mswc24_tree_mera_scope}.
     $\ket{\widetilde\phi_N}=V^{\otimes M}\ket\Omega$ on $N=Mq$ sites
     (Definition~\ref{def:ldp_approximating_state}) is the state of the tree
     network of $A$ with $k+1$ isometry layers and unitary $u$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     The blocked tensor over $q=2^{k+1}$ sites is injective, so the
     approximating state is the unnormalized one
     (Lemma~\ref{lem:ldp_approximating_state_unit_norm}). Its isometry $V$ is
-    the product of the layers by Theorem~\ref{thm:ldp_tree_factorization},
+    the product of the layers by Lemma~\ref{thm:ldp_tree_factorization},
     hence the tree map by Lemma~\ref{lem:ldp_tree_layers_isometries}, and the
     pairs $u\ket0\ket0$ are the pairs $\ket\omega$ of $\ket\Omega$.
 \end{proof}
@@ -210,7 +210,7 @@ leaves, as detailed in the resolved note~\cite{gap:mswc24_tree_mera_scope}.
     $k=0$, the bound holds since $\log_2\max(1,x_0)\ge0$.
 \end{proof}
 
-\begin{theorem}[Networks with $O(\log\log(N/\varepsilon))$ layers, two-site injectivity]
+\begin{lemma}[Networks with $O(\log\log(N/\varepsilon))$ layers, two-site injectivity]
     \label{thm:ldp_tree_mera_error}
     \lean{MPSPreparation.exists_state_treeMERA_approximationError_le,
         MPSPreparation.exists_state_treeMERA_approximationError_le_and_le_logb}
@@ -233,22 +233,22 @@ leaves, as detailed in the resolved note~\cite{gap:mswc24_tree_mera_scope}.
     such $u$, every $\varepsilon>0$ and every $M\ge1$ there is $k\ge0$
     satisfying (\ref{eq:ldp_tree_mera_threshold}) with
     $k\le\log_2\max(1,x)$, so the network has at most
-    $\log_2\max(1,\xi\log(CN/\varepsilon))+1$ isometry layers. Theorem~\ref{thm:ldp_register_mera_error} removes the
+    $\log_2\max(1,\xi\log(CN/\varepsilon))+1$ isometry layers. Lemma~\ref{thm:ldp_register_mera_error} removes the
     injectivity hypothesis with registers of $s$ sites. As recorded
     in~\cite{gap:mswc24_tree_mera_scope}, neither covers every
     fixed $N$ and $\varepsilon$: for $N=2p$ with $p$ odd only $k=0$ is
     available, and (\ref{eq:ldp_tree_mera_threshold}) fails for small
     $\varepsilon$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
-    By Theorem~\ref{thm:ldp_approximating_state_tree_mera} the network state
-    is the approximating state, and Theorem~\ref{thm:ldp_approximation_error_normal}
+    By Lemma~\ref{thm:ldp_approximating_state_tree_mera} the network state
+    is the approximating state, and Lemma~\ref{thm:ldp_approximation_error_normal}
     at $\gamma=1/2$ gives $C>0$ with
     $\varepsilon(\widetilde\phi_N,\phi_N)\le CMe^{-q/\xi}$. This rate is
     the strengthening of the first bound of Lemma~1$'$
     of~\cite{Malz2024Preparation} proved in
-    Theorem~\ref{thm:ldp_approximation_error_normal}; the bound as printed
+    Lemma~\ref{thm:ldp_approximation_error_normal}; the bound as printed
     in the source, for $0<\gamma<1/2$ with rate $e^{-\gamma q/\xi}$, gives the
     threshold $(\xi/\gamma)\log(CN/\varepsilon)$ instead, with the same
     count of layers up to a constant. From
@@ -288,7 +288,7 @@ leaves, as detailed in the resolved note~\cite{gap:mswc24_tree_mera_scope}.
     Lemma~\ref{lem:ldp_binary_mera_norm}.
 \end{proof}
 
-\begin{theorem}[The approximating state is a network state on registers]
+\begin{lemma}[The approximating state is a network state on registers]
     \label{thm:ldp_approximating_state_register_mera}
     \lean{MPSPreparation.approximatingMPVState_eq_registerState_treeMERA}
     \leanok
@@ -303,7 +303,7 @@ leaves, as detailed in the resolved note~\cite{gap:mswc24_tree_mera_scope}.
     (Definition~\ref{def:ldp_approximating_state}) is the state on registers
     of the tree network, with $k+1$ isometry layers and unitary $u$, of the
     tensor $B$ obtained by blocking $A$ over $s$ sites.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     The two-site blocked tensor of $B$ is $A$ blocked over $2s$ sites, which
@@ -313,14 +313,14 @@ leaves, as detailed in the resolved note~\cite{gap:mswc24_tree_mera_scope}.
     the network of $B$ is the product of the layers by
     Lemma~\ref{lem:ldp_tree_layers_isometries}, hence the isometric factor of
     $B$ blocked over $2^{k+1}$ sites by
-    Theorem~\ref{thm:ldp_tree_factorization}. Blocking $B$ over $2^{k+1}$ sites is blocking $A$ over $q$ sites,
+    Lemma~\ref{thm:ldp_tree_factorization}. Blocking $B$ over $2^{k+1}$ sites is blocking $A$ over $q$ sites,
     read through the grouping of the $q$ sites into registers, so the
     isometric factors agree after the splitting of the registers
-    (Theorem~\ref{thm:ldp_register_tree_isometry}), and the pairs
+    (Lemma~\ref{thm:ldp_register_tree_isometry}), and the pairs
     $u\ket0\ket0$ are the pairs $\ket\omega$ of $\ket\Omega$.
 \end{proof}
 
-\begin{theorem}[Network states on registers within $\varepsilon$]
+\begin{lemma}[Network states on registers within $\varepsilon$]
     \label{thm:ldp_register_mera_error}
     \lean{MPSPreparation.exists_registerState_treeMERA_approximationError_le,
         MPSPreparation.exists_registerState_treeMERA_approximationError_le_and_le_logb}
@@ -344,20 +344,20 @@ leaves, as detailed in the resolved note~\cite{gap:mswc24_tree_mera_scope}.
     and $u$, every $\varepsilon>0$ and every $M\ge1$ there is $k\ge0$
     satisfying (\ref{eq:ldp_register_mera_threshold}) with
     $k\le\log_2\max(1,x)$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
-    By Theorem~\ref{thm:ldp_approximating_state_register_mera} the network
+    By Lemma~\ref{thm:ldp_approximating_state_register_mera} the network
     state is the approximating state with $q=s2^{k+1}$, and the proof of
-    Theorem~\ref{thm:ldp_tree_mera_error} applies with $2^{k+1}$ replaced by
-    $q$: Theorem~\ref{thm:ldp_approximation_error_normal} at $\gamma=1/2$
+    Lemma~\ref{thm:ldp_tree_mera_error} applies with $2^{k+1}$ replaced by
+    $q$: Lemma~\ref{thm:ldp_approximation_error_normal} at $\gamma=1/2$
     gives $C$, which does not depend on $s$, with
     $\varepsilon(\widetilde\phi_N,\phi_N)\le CMe^{-q/\xi}\le\varepsilon$ by
     Lemma~\ref{lem:ldp_mera_threshold_error}. The count is
     Lemma~\ref{lem:ldp_mera_least_layers}.
 \end{proof}
 
-\begin{theorem}[Normal states as networks, restricted chain lengths]
+\begin{lemma}[Normal states as networks, restricted chain lengths]
     \label{thm:ldp_normal_mps_mera}
     \lean{MPSPreparation.exists_binaryMERA_registerState_approximationError_le}
     \leanok
@@ -377,10 +377,10 @@ leaves, as detailed in the resolved note~\cite{gap:mswc24_tree_mera_scope}.
         MERA'']{Malz2024Preparation}, this is a scope restriction to the chain
     lengths $N=Ms2^{k+1}$ with $k$ as above.
     As recorded in the resolved note~\cite{gap:mswc24_tree_mera_scope},
-    Theorem~\ref{thm:ldp_every_length_mera} gives an unequal-block network
+    Lemma~\ref{thm:ldp_every_length_mera} gives an unequal-block network
     for every positive length with nonzero periodic state, with a physical
     leaf bound fixed before $N$ and $\varepsilon$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     The normal tensor $A$ has a gauge-equivalent rescaling $B$ in the
@@ -388,10 +388,10 @@ leaves, as detailed in the resolved note~\cite{gap:mswc24_tree_mera_scope}.
     $\ket{\phi_N(B)}=\zeta^N\ket{\phi_N(A)}$, a bound $t<1$ on the subleading
     eigenvalues of $\E_B$, and a length $L$ from which on the blocked
     tensors of $B$ are injective
-    (Theorem~\ref{thm:ldp_depth_upper_bound_divisible}). With $s_0=L+1$ and
+    (Lemma~\ref{thm:ldp_depth_upper_bound_divisible}). With $s_0=L+1$ and
     a unitary $u$ preparing the pair of the fixed point of $\E_B$
     (Lemma~\ref{lem:ldp_tree_mera_disentangler}), for $s\ge s_0$,
-    Theorem~\ref{thm:ldp_register_mera_error} applied to $B$ gives $k$ and
+    Lemma~\ref{thm:ldp_register_mera_error} applied to $B$ gives $k$ and
     the tree network of $B$ blocked over $s$ sites, and the error against
     the normalized state of $B$ equals the error against that of $A$
     (Lemma~\ref{lem:ldp_normalized_state_rescaling}).

@@ -24,7 +24,7 @@
     $\E_A\circ\E_A=\E_A$.
 \end{definition}
 
-\begin{theorem}[Eigenvalues of an idempotent transfer map]
+\begin{lemma}[Eigenvalues of an idempotent transfer map]
     \label{thm:transfer_idempotent_eigenvalue_eq_one}
     \lean{MPSTensor.eq_one_of_hasEigenvalue_of_isTransferIdempotent}
     \leanok
@@ -32,14 +32,14 @@
     If $\E_A\circ\E_A=\E_A$, then every nonzero eigenvalue of $\E_A$ equals
     $1$, matching the spectral fixed-point condition of
     \cite[Section~III.A]{Cirac2021Matrix}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     If $\E_A(X)=\mu X$ with $X\neq0$, then $\mu^2X=\E_A^2(X)=\E_A(X)=\mu X$,
     so $\mu^2=\mu$ and hence $\mu=1$.
 \end{proof}
 
-\begin{theorem}[A physical blocking isometry gives transfer idempotence]
+\begin{lemma}[A physical blocking isometry gives transfer idempotence]
     \label{thm:physical_blocking_implies_transfer_idempotence}
     \lean{MPSTensor.isTransferIdempotent_of_kraus_isometry}
     \leanok
@@ -54,7 +54,7 @@
     \end{align}
     for all $i_1,i_2\in\{0,\ldots,d-1\}$.
     Then $\E_A^2=\E_A$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Substituting the decomposition (\ref{eq:corr_kraus_isometry_decomp}) into
     the double Kraus sum gives, for every bond matrix $X$,
@@ -74,7 +74,7 @@
     \end{align}
 \end{proof}
 
-\begin{theorem}[Kraus-isometry criterion for transfer idempotence]%
+\begin{lemma}[Kraus-isometry criterion for transfer idempotence]%
     \label{thm:kraus_isometry_iff_transfer_idempotence}
     \lean{MPSTensor.isTransferIdempotent_iff_kraus_isometry}
     \leanok
@@ -88,10 +88,10 @@
         \label{eq:corr_AA_isometry}
     \end{align}
     for all $i_1,i_2\in\{0,\ldots,d-1\}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:physical_blocking_implies_transfer_idempotence}
-    Theorem~\ref{thm:physical_blocking_implies_transfer_idempotence} proves the
+    Lemma~\ref{thm:physical_blocking_implies_transfer_idempotence} proves the
     backward implication. Conversely, expanding $\E_A^2=\E_A$ as a Kraus sum
     gives, for every $X$,
     \begin{align}
@@ -116,7 +116,7 @@
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:kraus_isometry_iff_transfer_idempotence}
-    Theorem~\ref{thm:kraus_isometry_iff_transfer_idempotence} and
+    Lemma~\ref{thm:kraus_isometry_iff_transfer_idempotence} and
     Definition~\ref{def:physical_blocking_isometry} yield the equivalence
     directly.
 \end{proof}
@@ -143,13 +143,13 @@
     dimension $D$.
 \end{definition}
 
-\begin{theorem}[A dyadic power limit is idempotent]
+\begin{lemma}[A dyadic power limit is idempotent]
     \label{thm:dyadic_power_limit_idempotent}
     \lean{isIdempotentElem_of_tendsto_pow_two_pow}
     \leanok
     Let $R$ be a Hausdorff topological monoid with continuous multiplication.
     If $E^{2^n}\to P$, then $P^2=P$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Continuity of multiplication gives
     $E^{2^n}E^{2^n}\to P^2$, while $E^{2^n}E^{2^n}=E^{2^{n+1}}\to P$, so
@@ -185,7 +185,7 @@
 \begin{proof}\leanok
     \uses{thm:dyadic_power_limit_idempotent, thm:physical_blocking_isometry_iff_transfer_idempotence}
     If $\widehat{\E}_B^{\,2^n}\to\widehat{\E}_A$, then
-    Theorem~\ref{thm:dyadic_power_limit_idempotent} gives
+    Lemma~\ref{thm:dyadic_power_limit_idempotent} gives
     $\widehat{\E}_A^2=\widehat{\E}_A$. Injectivity of the transfer-matrix
     representation then implies $\E_A^2=\E_A$, and
     Theorem~\ref{thm:physical_blocking_isometry_iff_transfer_idempotence}

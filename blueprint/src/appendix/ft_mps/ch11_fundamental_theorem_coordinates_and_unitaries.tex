@@ -66,7 +66,7 @@ identification. The block gauge repeats $X_k$ on every copy $q$.
     equivalence.
 \end{proof}
 
-\begin{theorem}[Equal-MPV gauge with all matched data]
+\begin{lemma}[Equal-MPV gauge with all matched data]
     \label{thm:sector_bnt_equal_mps_gaugeEquiv_witnesses}
     \lean{MPSTensor.ft_sector_bnt_equal_mps_gaugeEquiv_witnesses}
     \leanok
@@ -75,12 +75,12 @@ identification. The block gauge repeats $X_k$ on every copy $q$.
     simultaneously the sector bijection, bond-dimension equalities, copy
     bijections, phases, block gauges, total-dimension equality, and the
     flattened global gauge. They satisfy the matched block and weight
-    identities of Theorem~\ref{thm:sector_bnt_equal_global_gauge}, together
+    identities of Lemma~\ref{thm:sector_bnt_equal_global_gauge}, together
     with the conjugation of $Q$ by the matched-coordinate $P$-tensor.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
-    Theorem~\ref{thm:sector_bnt_equal_global_gauge} gives all data except the
+    Lemma~\ref{thm:sector_bnt_equal_global_gauge} gives all data except the
     displayed equality of total dimensions; applying
     Lemma~\ref{lem:ft_total_dim_eq_of_match} to its sector and copy bijections
     identifies the total bond spaces while leaving the global conjugation
@@ -91,7 +91,7 @@ identification. The block gauge repeats $X_k$ on every copy $q$.
 \label{sec:app_ft_permutation_gauges}
 
 A permutation matrix relates the matched-coordinate ordering to the original
-block ordering of $P$ in Theorem~\ref{thm:sector_bnt_equal_mps_gaugeEquiv_literal}.
+block ordering of $P$ in Lemma~\ref{thm:sector_bnt_equal_mps_gaugeEquiv_literal}.
 
 \begin{definition}[Invertible permutation gauge]
     \label{def:ft_perm_gl}
@@ -163,7 +163,7 @@ the permutation $\rho$ on the total bond space. Applying
 (\ref{eq:app_ft_perm_conjugation}) to $P_{\mathrm{tot}}^i$ produces the
 matched-coordinate tensor, and composing $G_\rho$ with the block-diagonal gauge
 yields the direct gauge transformation of
-Theorem~\ref{thm:sector_bnt_equal_mps_gaugeEquiv_literal}.
+Lemma~\ref{thm:sector_bnt_equal_mps_gaugeEquiv_literal}.
 
 \section{Unitary gauge refinements}
 \label{sec:app_ft_unitary_witnesses}

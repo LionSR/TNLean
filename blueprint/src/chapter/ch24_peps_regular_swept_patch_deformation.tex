@@ -24,7 +24,7 @@
     % Source label: eq:anyons:fluxon-braiding-lazy.
 \end{definition}
 
-\begin{theorem}[Ordered and traversed swept-bond operators]%
+\begin{lemma}[Ordered and traversed swept-bond operators]%
     \label{thm:peps_regular_swept_patch_transport}
     \lean{TNLean.PEPS.regularSweptPatchOperators_eq_vertexGauge,
         TNLean.PEPS.regularDirectedTransport_regularSweptPatchOperators}
@@ -44,7 +44,7 @@
         \label{eq:peps_swept_directed_cases}
     \end{align}
     The traversal need not agree with the ordered orientation.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_regular_walk_holonomy}
@@ -53,7 +53,7 @@
     $D_{u^{R,g}}(v,w)=k_w^{-1}D_u(v,w)k_v$ and hence the four cases.
 \end{proof}
 
-\begin{theorem}[Equality of the closed swept contractions]%
+\begin{lemma}[Equality of the closed swept contractions]%
     \label{thm:peps_regular_swept_patch_state}
     \lean{TNLean.PEPS.stateCoeff_regularSweptPatchOperators}
     \leanok
@@ -66,7 +66,7 @@
     Then $\Psi_a(u)=\Psi_a(u^{R,g})$ for every $R,g,u$.
     No isometry or connectedness is required, and crossing bonds are
     included in the replacement.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_regular_swept_patch_transport,thm:peps_regular_closed_gauge}
