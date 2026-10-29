@@ -100,3 +100,13 @@ The following are not consequences asserted by this contribution:
 
 In particular, the contraction corollary does not justify applying a
 unique-ground-state upper-gap bound to a truncated or degenerate region.
+
+## Ordinary combined verification
+
+The contribution is included in mathematical revision
+`e46d137d7784b6b4abf6155f68d1cb8e6dbc2cd1`. The full 15,099-job build,
+strict changed-source checks, imported public-foundation audit and all
+blueprint, prose, integrity and timing checks passed. No Mathlib source
+was compiled. The combined audit is
+`2026-10-29_verified_physical_detectability_and_periodic_pairs.md`.
+The complete local record is `/tmp/tnlean-detectability-periodic-gates.json`.

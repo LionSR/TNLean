@@ -58,3 +58,13 @@ chapter compiled as standalone LaTeX documents without overfull boxes, and
 the chapter was visually inspected. The separate ordinary Lake build and
 compiled common-blueprint checks remain required after integration; these
 private checks do not claim that the combined repository has been verified.
+
+## Ordinary combined verification
+
+The contribution is included in mathematical revision
+`e46d137d7784b6b4abf6155f68d1cb8e6dbc2cd1`. The full 15,099-job build,
+strict changed-source checks, imported public-foundation audit and all
+blueprint, prose, integrity and timing checks passed. No Mathlib source
+was compiled. The combined audit is
+`2026-10-29_verified_physical_detectability_and_periodic_pairs.md`.
+The complete local record is `/tmp/tnlean-detectability-periodic-gates.json`.
