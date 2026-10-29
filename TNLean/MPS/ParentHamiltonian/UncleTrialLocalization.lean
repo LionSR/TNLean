@@ -34,7 +34,9 @@ theorem uncleConfigSegment_contiguous_outside {T : ℕ}
   apply congrArg List.ofFn
   funext j
   change contiguousCfg i 2 σ τ ⟨s + j.val, by omega⟩ = _
-  rw [contiguousCfg, dif_neg (by rcases h with h | h <;> omega)]
+  rw [contiguousCfg, dite_eq_right (by
+    change ¬(i ≤ s + j.val ∧ s + j.val < i + 2)
+    rcases h with h | h <;> omega)]
 
 private theorem uncleConfigSegment_contiguous_inside {T : ℕ}
     (τ : Cfg d T) (s n i : ℕ) (hs : s + n ≤ T) (σ : Cfg d 2)
@@ -49,11 +51,21 @@ private theorem uncleConfigSegment_contiguous_inside {T : ℕ}
     (congrArg₂ (· ++ ·) (List.ofFn_inj.mpr (funext fun j ↦ ?_))
       (List.ofFn_inj.mpr (funext fun j ↦ ?_)))
     (List.ofFn_inj.mpr (funext fun j ↦ ?_))
-  · rw [contiguousCfg, dif_neg (by omega)]
-  · rw [contiguousCfg, dif_pos (by omega)]
+  · change contiguousCfg i 2 σ τ ⟨s + j.val, by omega⟩ = τ ⟨s + j.val, by omega⟩
+    rw [contiguousCfg, dite_eq_right (by
+      change ¬(i ≤ s + j.val ∧ s + j.val < i + 2)
+      omega)]
+  · change contiguousCfg i 2 σ τ ⟨s + (i - s + j.val), by omega⟩ = σ j
+    rw [contiguousCfg, dite_eq_left (by
+      change i ≤ s + (i - s + j.val) ∧ s + (i - s + j.val) < i + 2
+      omega)]
     apply congrArg σ
     exact Fin.ext (by change s + (i - s + j.val) - i = j.val; omega)
-  · rw [contiguousCfg, dif_neg (by omega)]
+  · change contiguousCfg i 2 σ τ ⟨s + (i - s + 2 + j.val), by omega⟩ =
+      τ ⟨i + 2 + j.val, by omega⟩
+    rw [contiguousCfg, dite_eq_right (by
+      change ¬(i ≤ s + (i - s + 2 + j.val) ∧ s + (i - s + 2 + j.val) < i + 2)
+      omega)]
     apply congrArg τ
     exact Fin.ext (by change s + (i - s + 2 + j.val) = i + 2 + j.val; omega)
 
@@ -106,7 +118,8 @@ private theorem uncle_uniform_middle
         (uncleDomainWallWord B A L x * Kraus.evalWord A y *
           Kraus.evalWord A p * uncleDomainWallWord A B R r))) := by
     funext σ
-    exact uncleTwoWallCoefficient_rotate A B R L p r (u ++ List.ofFn σ ++ v) x y
+    simpa only [Matrix.mul_assoc] using
+      uncleTwoWallCoefficient_rotate A B R L p r (u ++ List.ofFn σ ++ v) x y
   rw [hfun]
   simpa only [Matrix.one_mul] using uncleInteractionES_uniform_slice_right_eq_zero A B R L 1
     (uncleDomainWallWord B A L x * Kraus.evalWord A y *
@@ -277,12 +290,16 @@ private theorem uncleConfigSegment_last_prefix
   apply congrArg₂ (· ++ ·)
   · simp only [List.ofFn_succ, List.ofFn_zero, Nat.zero_add]
     congr 1
-    exact cyclicCfg_window_site (by omega) (by omega) (by omega) σ τ (by omega)
+    change cyclicCfg (by omega) 2 (⟨6 * N, by omega⟩ : Fin (6 * N + 1)) σ τ
+      ⟨0, by omega⟩ = σ 1
+    exact cyclicCfg_window_site (by omega) (by omega) (by omega) σ τ
+      (k := 0) (by omega)
   · apply congrArg List.ofFn
     funext j
-    simpa only [Nat.zero_add] using
-      cyclicCfg_complement_site (by omega) (by omega) (by omega) σ τ
-        (show 2 - 1 ≤ 1 + j.val by omega) (show 1 + j.val < 6 * N + 1 - 1 by omega)
+    change cyclicCfg (by omega) 2 (⟨6 * N, by omega⟩ : Fin (6 * N + 1)) σ τ
+      ⟨1 + j.val, by omega⟩ = τ ⟨1 + j.val, by omega⟩
+    exact cyclicCfg_complement_site (by omega) (by omega) (by omega) σ τ
+      (show 2 - 1 ≤ 1 + j.val by omega) (show 1 + j.val < 6 * N + 1 - 1 by omega)
 
 private theorem uncleConfigSegment_last_suffix
     (N : ℕ) (hN : 0 < N) (τ : Cfg d (6 * N + 1)) (σ : Cfg d 2) :
@@ -295,6 +312,8 @@ private theorem uncleConfigSegment_last_suffix
   apply congrArg₂ (· ++ ·)
   · apply congrArg List.ofFn
     funext j
+    change cyclicCfg (by omega) 2 (⟨6 * N, by omega⟩ : Fin (6 * N + 1)) σ τ
+      ⟨5 * N + 1 + j.val, by omega⟩ = τ ⟨5 * N + 1 + j.val, by omega⟩
     exact cyclicCfg_complement_site (by omega) (by omega) (by omega) σ τ
       (show 2 - 1 ≤ 5 * N + 1 + j.val by omega)
       (show 5 * N + 1 + j.val < 6 * N + 1 - 1 by omega)
@@ -303,7 +322,9 @@ private theorem uncleConfigSegment_last_suffix
     change cyclicCfg (by omega) 2 (⟨6 * N, by omega⟩ : Fin (6 * N + 1)) σ τ
       ⟨5 * N + 1 + (N - 1), by omega⟩ = σ 0
     have hsite : (⟨5 * N + 1 + (N - 1), by omega⟩ : Fin (6 * N + 1)) =
-        ⟨6 * N, by omega⟩ := Fin.ext (by omega)
+        ⟨6 * N, by omega⟩ := Fin.ext (by
+          change 5 * N + 1 + (N - 1) = 6 * N
+          omega)
     rw [hsite]
     exact cyclicCfg_last_eq (by omega) (by omega) (by omega) σ τ
 
@@ -332,7 +353,7 @@ private theorem uncleTrial_wrap_cancel
       uncleConfigSegment_last_outside N hN τ σ (4 * N) (N + 1) (by omega) (by omega)]
     simpa only [uncleTwoWallCoefficient, groundSpaceMap_apply, Kraus.evalWord_append,
       Kraus.evalWord_cons, Kraus.evalWord_nil, Matrix.mul_one, List.ofFn_succ,
-      List.ofFn_zero, M, Matrix.mul_assoc] using
+      List.ofFn_zero, Fin.succ_zero_eq_one, M, Matrix.mul_assoc] using
         Matrix.trace_mul_comm (A (σ 1) * M) (A (σ 0))
   apply uncleInteractionES_apply_eq_zero_left
   rw [mem_groundSpaceES_iff, LinearEquiv.apply_symm_apply, hfun]
@@ -361,7 +382,7 @@ theorem uncleInteractionES_trial_cyclicRestrict_eq_zero
       (cyclicRestrictₗ (Fin.pos i) 2 i τ (uncleTwoWallTrialSource A B R L N))) = 0
   by_cases hlast : i.val = 6 * N
   · have heq : i = ⟨6 * N, by omega⟩ := Fin.ext hlast
-    subst i
+    rw [heq]
     exact uncleTrial_wrap_cancel A B R L N hN τ
   · have hbound : i.val + 2 ≤ 6 * N + 1 := by omega
     rw [cyclicRestrictₗ_eq_contiguousRestrictₗ (Fin.pos i) (by omega) hbound]
