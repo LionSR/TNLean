@@ -12,7 +12,7 @@ import Mathlib.LinearAlgebra.Finsupp.LinearCombination
 
 The boundary words contain diagonal all-A and all-B products, together with
 exactly one R or L wall summed over its possible positions. Their trace
-boundary-map range is the source space S_n. These words use the explicit
+boundary-map range is the source space \(S_n\). These words use the explicit
 single-wall coefficient product, not ordinary products of the two-site
 uncle tensor.
 
@@ -66,6 +66,27 @@ theorem uncleBoundaryWord_append (A : MPSTensor d a) (B : MPSTensor d b)
   | cons i u ih =>
       simp only [List.cons_append, uncleBoundaryWord, ih, uncleBoundaryMul_assoc]
 
+/-- Appending a physical site is right multiplication by its source letter. -/
+theorem uncleBoundaryWord_ofFn_snoc (A : MPSTensor d a) (B : MPSTensor d b)
+    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
+    (L : Fin d → Matrix (Fin b) (Fin a) ℂ) {n : ℕ}
+    (w : Fin n → Fin d) (i : Fin d) :
+    uncleBoundaryWord A B R L (List.ofFn (Fin.snoc w i)) =
+      uncleBoundaryMul (uncleBoundaryWord A B R L (List.ofFn w))
+        (uncleBoundaryLetter A B R L i) := by
+  rw [List.ofFn_snoc, uncleBoundaryWord_append, uncleBoundaryWord_singleton]
+
+/-- Prepending a physical site is left multiplication by its source letter. -/
+theorem uncleBoundaryWord_ofFn_cons (A : MPSTensor d a) (B : MPSTensor d b)
+    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
+    (L : Fin d → Matrix (Fin b) (Fin a) ℂ) {n : ℕ}
+    (i : Fin d) (w : Fin n → Fin d) :
+    uncleBoundaryWord A B R L (List.ofFn (Fin.cons i w)) =
+      uncleBoundaryMul (uncleBoundaryLetter A B R L i)
+        (uncleBoundaryWord A B R L (List.ofFn w)) := by
+  rw [List.ofFn_cons]
+  rfl
+
 /-- The explicit rectangular sum with one wall, padded by A on the left
 and B on the right; source equation (Sn-def), arXiv:1210.6613. -/
 noncomputable def uncleDomainWallWord (A : MPSTensor d a) (B : MPSTensor d b)
@@ -108,6 +129,19 @@ theorem uncleBoundaryWord_two (A : MPSTensor d a) (B : MPSTensor d b)
       uncleTensor A B R L ((decodeBlockEquiv d 2).symm ![i, j]) := by
   simp [uncleBoundaryWord, uncleBoundaryLetter, uncleBoundaryMul_block, uncleTensor,
     decodeBlock_decodeBlockEquiv_symm, uncleBoundaryMul_one]
+
+/-- The coefficient on any original two-site configuration is the existing
+uncle-tensor letter with that blocked physical index. -/
+theorem uncleBoundaryWord_ofFn_two (A : MPSTensor d a) (B : MPSTensor d b)
+    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
+    (L : Fin d → Matrix (Fin b) (Fin a) ℂ) (σ : Fin 2 → Fin d) :
+    uncleBoundaryWord A B R L (List.ofFn σ) =
+      uncleTensor A B R L ((decodeBlockEquiv d 2).symm σ) := by
+  have hσ : σ = ![σ 0, σ 1] := by
+    ext i
+    fin_cases i <;> rfl
+  rw [hσ]
+  simpa [List.ofFn_succ] using uncleBoundaryWord_two A B R L (σ 0) (σ 1)
 
 /-- The full perturbation span supplies coefficients for the identity. -/
 theorem exists_uncleBoundary_identity_coefficients
@@ -165,7 +199,7 @@ theorem uncleBoundary_span_eq_top_succ
       refine Submodule.sum_mem _ fun i _ ↦ Submodule.smul_mem _ (c i) ?_
       exact Submodule.subset_span ⟨Fin.cons i σ, by rw [List.ofFn_cons]⟩
 
-/-- The trace boundary map for the four source sectors S_n. -/
+/-- The trace boundary map for the four source sectors \(S_n\). -/
 noncomputable def uncleBoundaryMap (A : MPSTensor d a) (B : MPSTensor d b)
     (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
     (L : Fin d → Matrix (Fin b) (Fin a) ℂ) (n : ℕ) :
@@ -175,7 +209,7 @@ noncomputable def uncleBoundaryMap (A : MPSTensor d a) (B : MPSTensor d b)
   map_smul' c X := by ext σ; simp [Matrix.mul_smul, Matrix.trace_smul]
 
 /-- The actual four-sector source boundary space, equation (Sn-def) of
-arXiv:1210.6613. Its word-block formula separates A_n, B_n, R_n and L_n. -/
+arXiv:1210.6613. Its word-block formula separates \(A_n,B_n,R_n,L_n\). -/
 noncomputable def uncleBoundarySpace (A : MPSTensor d a) (B : MPSTensor d b)
     (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
     (L : Fin d → Matrix (Fin b) (Fin a) ℂ) (n : ℕ) : Submodule ℂ (NSiteSpace d n) :=
@@ -187,5 +221,17 @@ noncomputable def uncleBoundarySpace (A : MPSTensor d a) (B : MPSTensor d b)
     (X : Matrix (Fin (a + b)) (Fin (a + b)) ℂ) (σ : Fin n → Fin d) :
     uncleBoundaryMap A B R L n X σ =
       Matrix.trace (uncleBoundaryWord A B R L (List.ofFn σ) * X) := rfl
+
+/-- The length-two source boundary map is exactly the blocked uncle map,
+written on the original pair of physical indices. -/
+theorem uncleBoundaryMap_two (A : MPSTensor d a) (B : MPSTensor d b)
+    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
+    (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
+    (X : Matrix (Fin (a + b)) (Fin (a + b)) ℂ) (σ : Fin 2 → Fin d) :
+    uncleBoundaryMap A B R L 2 X σ =
+      groundSpaceMap (uncleTensor A B R L) 1 X
+        (fun _ ↦ (decodeBlockEquiv d 2).symm σ) := by
+  simp only [uncleBoundaryMap_apply, uncleBoundaryWord_ofFn_two, groundSpaceMap_apply,
+    List.ofFn_succ, List.ofFn_zero, Kraus.evalWord_cons, Kraus.evalWord_nil, Matrix.mul_one]
 
 end MPSTensor
