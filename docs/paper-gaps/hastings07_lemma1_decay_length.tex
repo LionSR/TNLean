@@ -6,10 +6,10 @@
 \setlength{\emergencystretch}{2em}
 \title{The Decay Length of Lemma~1 in Hastings' Area Law}
 \author{}
-\date{October 23, 2026}
+\date{October 28, 2026}
 \begin{document}
 \maketitle
-\gapnote{scope-restriction}{open}
+\gapnote{local-correction}{resolved}
 
 \section{The source statement}
 
@@ -40,100 +40,122 @@ the use of $2v/\Delta E$ as a competing length is that the commutator decays
 as $e^{-\operatorname{dist}(X,Y)/\xi_C}$ for $|t|\le\operatorname{dist}(X,Y)/v$.
 Any pair $(v,\xi_C)$ for which this holds may be used.
 
-\section{The estimate used on the chain}
+\section{The numerical chain estimate}
 
-For range-$R$ Hamiltonians with terms of norm at most $J$, the chain
-commutator bound for $A$ supported on $X$ and $B$ supported on a single
-site $y$ is
+For range-$R$ interactions of norm at most $J\ge0$, put
+$c_R=2(R+1)2^{2R+1}e^{2R}$ and $v_0=1+c_RJ$.
+The numerical finite-support propagation estimate gives
 \begin{align}
-    \|[A(t),B]\|\le C|X|\,\|A\|\,\|B\|\,e^{v_0|t|-\operatorname{dist}(X,y)/2},
+    \|[A(t),B]\|\le4|X|\,\|A\|\,\|B\|
+        e^{2c_RJ|t|-d},
     \label{eq:hastings07_lemma1_decay_length_chain}
 \end{align}
-with $C=2+4|b_0|e^{2R}$, $v_0=2(R+1)|b_0|e^{2R}+1$ and $b_0=2^{2R+1}J$.%
-\footnote{\leanid{TNLean.MPS.AreaLaw.norm_heisenberg_commutator_le_chainDistance}
-    in \doclink{TNLean/MPS/AreaLaw/LiebRobinson}.}
-Its support factor is linear in $|X|$, as in
-(\ref{eq:hastings07_lemma1_decay_length_lrb}). The factorization uses it
-through a partial-trace localization onto the $k$-neighbourhood of $X$,
-whose error carries $|X|^2$. In the localization of the parts, $X$ is the
-support of a commutator $[H,W]$ with at most $6R$ sites. In the boundary
-localization, $X$ is the support of $H'-H_0$, with $O(R+l)$ sites, and
-$|X|^2$ contributes a polynomial factor in $l$, which the faster decay
-$e^{-\ell'/4}$ of that term absorbs. In both places the square changes the
-constant, not the length or the rate. The estimate
-(\ref{eq:hastings07_lemma1_decay_length_chain}) still differs from
-(\ref{eq:hastings07_lemma1_decay_length_lrb}) in two ways:
-\begin{itemize}
-    \item its prefactor $C$ grows with $J$, whereas the source's $c$ is a
-          numerical constant;
-    \item $B$ acts on a single site rather than on an arbitrary set $Y$.
-\end{itemize}
-For these reasons $(v_0,2)$, or any pair derived from it, is not shown to
-be a Lieb--Robinson pair in the sense of
-(\ref{eq:hastings07_lemma1_decay_length_lrb}).
-
-The factorization uses the length
+whenever every distance between a site of $X$ and a site of $Y$ is at least
+$d$. Both supports are arbitrary finite sets; there is no factor $|Y|$.
+The prefactor is independent of the interaction strength, local dimension
+and chain length.\footnote{\leanid{TNLean.MPS.AreaLaw.ChainHamiltonian.norm_heisenberg_commutator_le_numeric}
+    in \doclink{TNLean/MPS/AreaLaw/Hastings/LiebRobinson}.}
+If $v>0$, $v\ge8c_RJ$, $\xi_C\ge8$ and $|t|\le d/v$, then
+$2c_RJ|t|\le d/4$ and $d/\xi_C\le d/8$. Thus
 \begin{align}
-    \xi=\max(16v_0/\Delta E,8)=8\max(2v_0/\Delta E,1).
+    \|[A(t),B]\|\le4|X|\,\|A\|\,\|B\|e^{-d/\xi_C}.
+    \label{eq:hastings07_lemma1_decay_length_cone}
+\end{align}
+This proves the source's time-cone bound in the reciprocal-length
+convention, including monotonicity under increasing the positive velocity
+or the length scale.\footnote{\leanid{TNLean.MPS.AreaLaw.ChainHamiltonian.norm_heisenberg_commutator_le_hastings}.}
+The distance lower-bound formulation includes empty supports without
+assigning a finite distance to the empty set.
+
+The localization proof used to construct the factors still uses its
+conditional-expectation estimate. That estimate carries $|X|^2$, but the
+support has at most $6R$ sites for the filtered parts. For the boundary
+operator its size is $O(R+l)$, and the faster decay of that term absorbs
+the resulting polynomial in $l$. This affects the constant rather than the
+admissibility of the velocity and length pair.
+
+\section{Energy units and the two factorization lengths}
+
+The unscaled construction uses
+\begin{align}
+    \xi=8\max(2v_0/\Delta E,1)=\max(16v_0/\Delta E,8).
     \label{eq:hastings07_lemma1_decay_length_value}
 \end{align}
-It has the algebraic form of
-(\ref{eq:hastings07_lemma1_decay_length_source}), but its justification here
-is the chain estimate and the explicit error bounds of the
-construction.\footnote{\leanid{TNLean.MPS.AreaLaw.lemmaOneLength}
-    and \leanid{TNLean.MPS.AreaLaw.exists_projectorFactorization} in
-    \doclink{TNLean/MPS/AreaLaw/Hastings/ProjectorFactorization}.}
-Because of the constant term of $v_0$, the length
-(\ref{eq:hastings07_lemma1_decay_length_value}) is not homogeneous in
-$(J,\Delta E)$. Lemma~1 concerns only the ground state, so it may be
-applied to $H/\Delta E$, whose gap is $1$ and whose terms have norm at most
-$J/\Delta E$. With $v_0=1+c_RJ$ and $c_R=2(R+1)2^{2R+1}e^{2R}$, this gives
-Lemma~1 with the length
+Its velocity and length pair is $(8v_0,8)$, which satisfies
+(\ref{eq:hastings07_lemma1_decay_length_cone}).
+For the construction in units of the gap, let
+$u_0=1+c_RJ/\Delta E$. Then
 \begin{align}
-    \hat\xi=16\bigl(1+c_RJ/\Delta E\bigr)\le2\max(2v/\Delta E,16),
-    \qquad v=8c_RJ,
+    \hat\xi=16u_0=16(1+c_RJ/\Delta E).
     \label{eq:hastings07_lemma1_decay_length_scaled}
 \end{align}
-which depends on $J$ and $\Delta E$ only through $J/\Delta E$, with $v$
-proportional to $J$, as in the source.\footnote{\leanid{TNLean.MPS.AreaLaw.lemmaOneLength_div}
-    and \leanid{TNLean.MPS.AreaLaw.exists_projectorFactorization_div} in
-    \doclink{TNLean/MPS/AreaLaw/Hastings/ProjectorFactorizationScaling}.}
-
-For either length, the construction gives a contraction $O_B$ without a
-positivity assertion and error $C_1e^{-l/\xi'}$ for every $\xi'>6\xi$.
-At a fixed length the endpoint $\xi'=6\xi$ is not established by this
-argument, because of the factor $\sqrt{l/\xi}$ recorded in
-\path{hastings07_gaussian_average_exponent.tex}; no counterexample to the
-endpoint factorization is asserted.
-
-The endpoint is nevertheless reached by re-choosing the length. The source
-fixes $\xi=\max(2v/\Delta E,\xi_C)$ only through some pair $(v,\xi_C)$
-satisfying (\ref{eq:hastings07_lemma1_decay_length_lrb}).\footnote{\path{References/0705.2024/law16.tex},
-    lines~96--112 and~139--142.}
-That bound holds for $|t|\le l/v$, so it also holds for $|t|\le l/v'$ with
-$v'\ge v$, and raising the velocity gives another admissible length. The
-same is true of the chain estimate
-(\ref{eq:hastings07_lemma1_decay_length_chain}), whose bound only grows
-with the velocity. In units of the gap the chain velocity is
-$v_0=1+c_RJ/\Delta E$, and replacing it by $v'=\tfrac54v_0$ in
-(\ref{eq:hastings07_lemma1_decay_length_value}) gives
-$\tilde\xi=8\max(2v',1)=\tfrac54\hat\xi$. Since $6\tilde\xi=\tfrac{15}2\hat\xi$, the
-polynomial bound below at $\kappa=15/2$ gives
+The physical velocity is $8\Delta E\,u_0$, so
+$\hat\xi=\max(2(8\Delta E\,u_0)/\Delta E,8)$.
+The factor $\Delta E$ is necessary: evolution under $H/\Delta E$ at time
+$\tau=\Delta E\,t$ agrees with evolution under $H$ at time $t$.%
+\footnote{\leanid{QuantumCircuit.heisenbergEvolution_inv_smul_mul}
+    in \doclink{TNLean/Circuit/LiebRobinson/TimeScaling}, and
+    \leanid{TNLean.MPS.AreaLaw.lemmaOneLength_eq_sourceLength}
+    in \doclink{TNLean/MPS/AreaLaw/Hastings/LiebRobinson}.}
+The same argument gives an admissible physical pair
+$(10\Delta E\,u_0,8)$ for the enlarged length
+$\tilde\xi=20u_0=\tfrac54\hat\xi$.%
+\footnote{\leanid{TNLean.MPS.AreaLaw.ChainHamiltonian.norm_heisenberg_commutator_le_hastings_rescaled}
+    and \leanid{TNLean.MPS.AreaLaw.lemmaOneEndpointLength_eq_sourceLength}.}
+Since $6\tilde\xi=\tfrac{15}2\hat\xi$, the polynomial bound at
+$\kappa=15/2$ gives
 \begin{align}
     \|O_BO_LO_R-P_0\|\le K\tilde\xi^3e^{-l/(6\tilde\xi)},
     \label{eq:hastings07_lemma1_decay_length_endpoint}
 \end{align}
-the printed rate $\xi'=6\xi$ for $\xi=\tilde\xi$, with $K$ depending only
-on $R$.\footnote{\leanid{TNLean.MPS.AreaLaw.exists_projectorFactorization_endpoint}
+with $K$ depending only on $R$. The endpoint is reached at
+$\tilde\xi$, rather than at the original fixed length $\hat\xi$.%
+\footnote{\leanid{TNLean.MPS.AreaLaw.exists_projectorFactorization_endpoint}
     in \doclink{TNLean/MPS/AreaLaw/Hastings/LemmaOneConstant}.}
-It is reached at $\tilde\xi$, not at $\hat\xi$ itself. Raising the velocity
-adds no restriction, and removes none: $\tilde\xi$, like $\hat\xi$, is a
-length of the source's form only once the chain estimate is shown to give a
-pair satisfying (\ref{eq:hastings07_lemma1_decay_length_lrb}), the item under
-Remaining work.
-Replacing $O_B$ by $O_B^\dagger O_B$ gives a positive semidefinite contraction
-with error of order $e^{-l/(2\xi')}$, as in the source's note added and
-\path{hastings07_lemma1_positivity_rate.tex}.
+At fixed $\hat\xi$, the factor $\sqrt{l/\hat\xi}$ in the appendix still
+requires a strict increase of the decay length; the enlarged pair does
+not invalidate that observation.
+
+There is also a pair with velocity proportional to $J$ independently of
+the gap. For $J>0$, take $v_*=40c_RJ$ and $\xi_{C,*}=80$. Its source
+length is
+\begin{align}
+    s=\max(2v_*/\Delta E,80)
+      =80\max(c_RJ/\Delta E,1)\ge2\tilde\xi.
+    \label{eq:hastings07_lemma1_decay_length_source_enlarged}
+\end{align}
+Indeed, the maximum is at least each of $80c_RJ/\Delta E$ and $80$,
+so it is at least their average $40(1+c_RJ/\Delta E)=2\tilde\xi$.%
+\footnote{\leanid{TNLean.MPS.AreaLaw.two_mul_lemmaOneEndpointLength_le_sourceLength}.}
+This pair allows the entropy argument to use an enlarged source length
+while retaining a velocity of order $J$ and a numerical length scale.
+The auxiliary velocities $8\Delta E u_0$ and $10\Delta E u_0$ contain
+terms proportional to the gap. Although their time-cone estimates are
+valid, their formulas are not fixed multiples of $J$. The estimates at
+$\hat\xi$ and $\tilde\xi$ therefore do not directly establish the source's
+stated velocity dependence; a separate bound relating the gap to $J$
+would be needed to use these pairs for that purpose.
+
+At the length $s$ in
+(\ref{eq:hastings07_lemma1_decay_length_source_enlarged}), every conclusion
+can use the same pair $(40c_RJ,80)$. Both contraction and positive
+semidefinite factorizations have error at most
+$Ks^3e^{-l/(6s)}$. The bootstrap inequalities, their Rényi forms, and the
+entropy gain follow at $\xi'=6s$ with $C_1=Ks^3$, after increasing $K$
+when necessary. For the matrix product state approximation, the entropy
+maximum is the printed bound
+$c_0\xi'\ln\xi'\ln q\,2^{\xi'\ln q}$, and the common integer threshold is
+$\lceil e^{2S_{\max}}/2\rceil$. Thus the same source parameters enter the
+factorization, entropy bound and approximation.
+\footnote{The five source-parameter consequences are proved in
+    \doclink{TNLean/MPS/AreaLaw/Hastings/SourceConsequences}.}
+
+
+Replacing the window factor by $O_B^\dagger O_B$ gives a positive
+semidefinite contraction at half the exponential rate. This is the
+separate positivity correction in
+\path{hastings07_lemma1_positivity_rate.tex}; the numerical propagation
+bound does not remove it.
 
 \section{The polynomial bound}
 
@@ -161,18 +183,16 @@ only on $\kappa$. The bound holds at the rate $\xi'=\kappa\hat\xi$ for
 every $\kappa>6$, not at $\kappa=6$; the printed rate is reached at the
 inflated length $\tilde\xi$ of (\ref{eq:hastings07_lemma1_decay_length_endpoint}).
 
-\section{Remaining work}
+\section{Conclusion}
 
-\begin{itemize}
-    \item Establish a Lieb--Robinson estimate in the form
-          (\ref{eq:hastings07_lemma1_decay_length_lrb}): a numerical
-          prefactor, the factor $|X|$, and $B$ on an arbitrary set. Only then
-          is $(v,\xi_C)$ identified as a source pair.
-\end{itemize}
-These tasks remain part of \ghissue{9811}. The separate blueprint entry for
-the printed Lemma~1 remains unmarked as proved. The established
-factorization with the stated restrictions does not complete the source's
-full quantitative result.
+The numerical prefactor, arbitrary second support, time-cone estimate,
+physical-time rescaling and identification of the factorization lengths
+are proved. The former quantitative restriction from \ghissue{9811} is
+therefore removed. The reading of the printed Lieb--Robinson formula is
+an explicit local correction. The Gaussian parameter correction, the
+strict-rate issue at a fixed length and the positivity rate remain
+recorded separately; no assertion is made that the literal printed
+positive factorization follows at its original fixed length.
 
 \bibliographystyle{alpha}
 \bibliography{references}
