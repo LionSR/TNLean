@@ -50,8 +50,15 @@ protocols with the source relation. Issue #8640 remains open.
 
 ## Verification
 
-No local Lean invocation, compilation, build or persistent Lean fixture.
-New proof text is a draft candidate with Blueprint notready; source/API,
-import, prose, deterministic LaTeX formatting, tactic-pattern, width,
-integrity and diff checks do not establish Lean acceptance. Hosted checks
-must validate the result. No placeholders, axioms or parallel predicates.
+Hosted build job 123535458127 at exact code head
+`087d337e4b8538e222d19ec3ff7944d14d011104` compiled the new module in
+2.4 seconds, completed the full 14994-job repository build and passed all
+strict Lean checks on the new file. Module-policy, inline-diagram and
+changed-compilation-time checks also passed. Blueprint PDF job 123535458140
+passed; the web check was still running at this status update. Both new
+mathematical Blueprint nodes and proofs now carry `leanok`.
+
+No local Lean invocation, build, elaboration or persistent proof fixture
+was used. The issue remains open for the explicit remaining resource-model
+and approximation obligations. No placeholders, axioms or parallel
+predicates were introduced.
