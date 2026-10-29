@@ -202,6 +202,7 @@ import TNLean.MPS.MPU.StandardForm
 import TNLean.MPS.MPU.StandardFormParityCounterexample
 import TNLean.MPS.MPU.SuccessAttenuationCircuit
 import TNLean.MPS.MPU.SuppliedFixedWitnesses
+import TNLean.MPS.MPU.SuppliedFourSpinSourceComparison
 import TNLean.MPS.MPU.SuppliedHalfFactorMinimality
 import TNLean.MPS.MPU.SupportedAmplification
 import TNLean.MPS.MPU.SupportedChildColumns

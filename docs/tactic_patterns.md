@@ -9702,3 +9702,17 @@ removed after the dependency audit exposed it.
   exchanged-leg form serve all four applications. Mathlib's existing
   linear left-inverse and range-dimension APIs supply inverse matrices and
   ranks; no parallel factorization structure or normalization predicate.
+
+### Reciprocal raw source factors at the four-spin gates — candidate (2026-10-29)
+
+- **Pattern:** Transport minimal raw cut factors to their actual source-rank
+  coordinates, apply existing reciprocal-unitary uniqueness, and cancel
+  the reciprocal scalars only in the two literal gate contractions.
+- **Seen:** `MPS/MPU/SuppliedFourSpinSourceComparison.lean`.
+- **Abstraction:** Reuse `sourceU_contraction_transport`; its mirror right
+  multiplication of the two left factors is one private finite-sum lemma.
+  The existing four-spin unitarity argument is extracted at its original
+  owner and reused by the adjoint-cut and comparison proofs.
+- **Scope:** Factor minimality does not imply ambient canonicality. The
+  canonical comparison takes that presentation explicitly and derives its
+  simplicity, selected normalized factors and gate unitarity internally.

@@ -171,8 +171,10 @@ theorem cutX₂_mulVec_injective (S : TwoSiteStandardFormData W u v) :
       zero_mul, mul_one, Finset.sum_ite_eq, Finset.mem_univ, ↓reduceIte] using h
   exact congrFun hslice tb.1
 
-private theorem cutY_adjoint_mulVec_injective (S : TwoSiteStandardFormData W u v) :
-    Function.Injective S.cutY₁ᴴ.mulVec ∧ Function.Injective S.cutY₂ᴴ.mulVec := by
+/-- The literal four-spin contraction of supplied unitary gates is unitary.
+Source: CPSV17, `eq:block-twosites`, lines 1237–1244. -/
+theorem fourSpinGate_isUnitaryBetween (S : TwoSiteStandardFormData W u v) :
+    (staircaseMiddle (A := Fin ℓ) (E := Fin r) v * (u ⊗ₖ u)).IsUnitaryBetween := by
   classical
   let A := staircaseMiddle (A := Fin ℓ) (E := Fin r) v * (u ⊗ₖ u)
   have hAi : A.IsIsometry := (staircaseMiddle_isIsometry v S.v_unitary.1).mul _ _
@@ -186,8 +188,13 @@ private theorem cutY_adjoint_mulVec_injective (S : TwoSiteStandardFormData W u v
     calc
       ℓ * d * (d * r) = (ℓ * r) * (d * d) := by ring
       _ = (d * d) * (d * d) := by rw [hcard]
-  have hAh : Aᴴ.IsIsometry :=
-    (hAi.isUnitaryBetween_of_card_eq A hcardA).2.conjTranspose A
+  exact hAi.isUnitaryBetween_of_card_eq A hcardA
+
+private theorem cutY_adjoint_mulVec_injective (S : TwoSiteStandardFormData W u v) :
+    Function.Injective S.cutY₁ᴴ.mulVec ∧ Function.Injective S.cutY₂ᴴ.mulVec := by
+  classical
+  let A := staircaseMiddle (A := Fin ℓ) (E := Fin r) v * (u ⊗ₖ u)
+  have hAh : Aᴴ.IsIsometry := S.fourSpinGate_isUnitaryBetween.2.conjTranspose A
   let Y₂h : Matrix ((Fin d × Fin d) × Fin D) (Fin ℓ × Fin d) ℂ :=
     fun p tb ↦ star (S.cutY₂ tb (finProdFinEquiv p.1, p.2))
   let Y₁h : Matrix (Fin D × (Fin d × Fin d)) (Fin d × Fin r) ℂ :=
