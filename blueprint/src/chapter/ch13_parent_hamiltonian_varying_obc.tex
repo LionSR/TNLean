@@ -12,8 +12,8 @@ The virtual coordinate spaces may differ at every cut. The following
 identities are the local reconstruction step of the open-boundary
 uniqueness proof in \cite[Theorem~9, lines~1212--1237]{PerezGarcia2007Matrix}.
 The first identities concern rectangular trace representations on three sites.
-The subsequent induction treats the entire chain; comparison with a
-Hamiltonian kernel is a separate step.
+The subsequent induction treats the entire chain. The final section identifies
+the adjacent-pair conditions with the kernel of the actual open parent Hamiltonian.
 
 \begin{lemma}[Matching the boundary products on an overlap]
     \label{lem:varying_obc_overlap_boundary_products}
@@ -173,4 +173,78 @@ Hamiltonian kernel is a separate step.
     Iterating gives one boundary for the full chain. Singleton endpoint
     spaces make this boundary a scalar. This proves the representation
     conclusion without identifying normalized vectors of different phases.
+\end{proof}
+
+\subsection{The actual open parent Hamiltonian}
+
+\begin{definition}[Pair boundary ranges and open local terms]
+    \label{def:varying_obc_parent_projectors}
+    \lean{Matrix.obcPairBoundary, Matrix.obcPairProjector,
+        Matrix.obcPairSection, Matrix.obcParentHamiltonian}
+    \notready
+    Let $B^{[j]}_i\in M_{D_j,D_{j+1}}(\mathbb C)$. The actual two-site
+    boundary range at $j$ is
+    \begin{align}
+        G_j & =\left\{\left(\operatorname{tr}
+        (XB^{[j]}_iB^{[j+1]}_k)\right)_{i,k}:
+        X\in M_{D_{j+2},D_j}(\mathbb C)\right\}.
+    \end{align}
+    Write $P_j$ for the orthogonal projection onto $G_j^\perp$.
+    If $u,v$ are fixed prefix and suffix configurations of lengths $j$ and
+    $N-j-2$, let $(R_{j,u,v}\phi)(i,k)=\phi(u,i,k,v)$. The open parent
+    Hamiltonian is
+    \begin{align}
+        H_N & =\sum_{j=0}^{N-2}\sum_{u,v}R_{j,u,v}^*P_jR_{j,u,v}.
+    \end{align}
+    Summing over each outside configuration once extends $P_j$ by the identity
+    outside its adjacent pair. There is no interaction across the endpoints.
+    This is the local Hamiltonian of
+    \cite[Theorem~9, lines~1201--1217]{PerezGarcia2007Matrix}.
+\end{definition}
+
+\begin{lemma}[Kernel of an actual pair projector]
+    \label{lem:varying_obc_pair_projector_kernel}
+    \lean{Matrix.obcPairProjector_isPositive,
+        Matrix.obcPairProjector_apply_eq_zero_iff}
+    \notready
+    \uses{def:varying_obc_parent_projectors}
+    Each $P_j$ is positive. Moreover $P_j\xi=0$ if and only if there is a
+    rectangular matrix $X$ with
+    $\xi(i,k)=\operatorname{tr}(XB^{[j]}_iB^{[j+1]}_k)$ for every $i,k$.
+\end{lemma}
+\begin{proof}
+    \notready
+    An orthogonal projection is positive, and the kernel of the projection
+    onto $G_j^\perp$ is $G_j$. Membership in this range is exactly the
+    displayed boundary representation.
+\end{proof}
+
+\begin{lemma}[Hamiltonian kernel and adjacent coefficient sections]
+    \label{lem:varying_obc_parent_kernel_sections}
+    \lean{Matrix.obcParentHamiltonian_apply_eq_zero_iff,
+        Matrix.obcParentHamiltonian_pair_sections_of_apply_eq_zero,
+        Matrix.obcParentHamiltonian_apply_eq_zero_iff_pair_sections}
+    \notready
+    \uses{def:varying_obc_parent_projectors,
+        lem:varying_obc_pair_projector_kernel}
+    A vector $\phi$ satisfies $H_N\phi=0$ if and only if, for every adjacent
+    pair and every fixed outside configuration, there is an actual
+    rectangular boundary matrix $X$ such that
+    \begin{align}
+        \phi(u,i,k,v) & =\operatorname{tr}(XB^{[j]}_iB^{[j+1]}_k)
+    \end{align}
+    for every $i,k$. Neither a spanning condition nor canonical
+    normalization is required for this equivalence.
+\end{lemma}
+\begin{proof}
+    \notready
+    Every compression $R^*P_jR$ is positive, so a vector lies in the kernel
+    of their sum exactly when each compression annihilates it. The quadratic
+    form identity
+    $\langle R^*P_jR\phi,\phi\rangle=\langle P_jR\phi,R\phi\rangle$
+    and positivity identify this with $P_jR\phi=0$. The pair-projector kernel
+    characterization gives the boundary matrix for each outside configuration.
+    In the reverse direction these boundary representations make all the
+    compressions vanish. Ordered prefix, pair and suffix concatenation
+    identifies the same physical configurations in either description.
 \end{proof}
