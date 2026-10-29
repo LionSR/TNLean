@@ -34,8 +34,9 @@ private theorem blockedConfigEquiv_one_two (σ : Cfg (blockPhysDim d 2) 1) :
     blockedConfigEquiv d 1 2 σ = decodeBlock d 2 (σ 0) := by
   apply List.ofFn_injective
   rw [ofFn_blockedConfigEquiv]
-  simp only [List.ofFn_succ, List.ofFn_zero, flattenBlockedWord_cons,
-    flattenBlockedWord_nil, List.append_nil]
+  simp only [flattenBlockedWord_cons,
+    flattenBlockedWord_nil, List.append_nil, wordOfBlock, Kraus.wordOfBlock, List.ofFn_succ,
+    List.ofFn_zero]
 
 /-- The actual two-site uncle boundary space is exactly the local projector
 kernel in the original physical coordinates. Source: arXiv:1210.6613,
@@ -64,8 +65,14 @@ theorem mem_uncleBoundarySpace_two_iff
       exact (decodeBlockEquiv d 2).symm_apply_apply (σ 0)
     rw [hcfg]
   rw [uncleInteractionES_apply_eq_zero_iff, mem_groundSpaceES_iff]
-  change ψ ∈ uncleBoundarySpace A B R L 2 ↔
-    f ψ ∈ groundSpace (uncleTensor A B R L) 1
+  have hcoords :
+      (WithLp.linearEquiv 2 ℂ (NSiteSpace (blockPhysDim d 2) 1))
+          ((blockedConfigLinearIsometryEquiv d 1 2).symm
+            ((WithLp.linearEquiv 2 ℂ (NSiteSpace d 2)).symm ψ)) = f ψ := by
+    funext σ
+    exact blockedConfigLinearIsometryEquiv_symm_apply_apply d 1 2
+      ((WithLp.linearEquiv 2 ℂ (NSiteSpace d 2)).symm ψ) σ
+  rw [hcoords]
   constructor
   · rintro ⟨X, rfl⟩
     exact ⟨X, (hmap X).symm⟩
@@ -109,13 +116,12 @@ theorem mem_uncleBoundarySpace_of_cyclic_windows
       exact Fin.elim0 (σ ⟨0, by omega⟩)
     rw [hψ]
     exact Submodule.zero_mem _
-  letI : NeZero d := ⟨hd⟩
+  let : NeZero d := ⟨hd⟩
   apply contiguous_mem_of_restriction_intersection_submodules
     (uncleBoundarySpace A B R L) (by omega : 0 < 2) hN
   · intro M hM
-    simpa only [show M - 2 + 2 = M by omega,
-      show M - 2 + 3 = M + 1 by omega] using
-      uncleBoundarySpace_intersection A B R L hPert (M - 2)
+    obtain ⟨k, rfl⟩ : ∃ k, M = k + 2 := ⟨M - 2, by omega⟩
+    exact uncleBoundarySpace_intersection A B R L hPert k
   · intro s hs τ
     let i : Fin N := ⟨s, by omega⟩
     have h := hwindow i τ
@@ -159,12 +165,21 @@ theorem ker_uncleHamiltonianES_eq_span_mpv
         (uncleBoundarySpace A B R L (n + 2)).map (cyclicTranslateState t) := by
       refine ⟨hleft, cyclicTranslateState (-t) ψ, hright, ?_⟩
       rw [cyclicTranslateState_add, add_neg_cancel]
-      simp [cyclicTranslateState, cyclicTranslateCfg]
+      change (fun σ ↦ ψ (cyclicTranslateCfg 0 σ)) = ψ
+      funext σ
+      congr 1
+      funext i
+      simp only [cyclicTranslateCfg, add_zero]
     rw [uncleBoundarySpace_inf_cyclicTranslate A B R L hPert n] at hclose
     have hm := Submodule.mem_map_of_mem
       (f := (WithLp.linearEquiv 2 ℂ (NSiteSpace d (n + 2))).symm.toLinearMap) hclose
     rw [Submodule.map_span] at hm
-    simpa only [Set.image_insert_eq, Set.image_singleton, hψ] using hm
+    simp only [Set.image_insert_eq, Set.image_singleton] at hm
+    change (WithLp.linearEquiv 2 ℂ (NSiteSpace d (n + 2))).symm ψ ∈
+      Submodule.span ℂ
+        {(WithLp.linearEquiv 2 ℂ (NSiteSpace d (n + 2))).symm (mpv A),
+          (WithLp.linearEquiv 2 ℂ (NSiteSpace d (n + 2))).symm (mpv B)} at hm
+    rwa [hψ] at hm
   · exact span_mpv_le_ker_uncleHamiltonianES A B R L (by omega)
 
 end MPSTensor
