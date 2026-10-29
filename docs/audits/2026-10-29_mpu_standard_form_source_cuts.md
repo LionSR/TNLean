@@ -354,5 +354,5 @@ errors. Its two remaining errors are confined to transporting the literal
 four-spin equation through the finite-index equivalence: one opaque
 linear-equivalence coercion and a product rewrite that reached only the
 first side. The proof now expands that coercion explicitly and transports
-all products before identifying the Kronecker factor. No statement changes;
+the right-hand product before identifying the Kronecker factor. No statement changes;
 no local Lean command was run.

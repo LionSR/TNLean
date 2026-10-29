@@ -187,8 +187,8 @@ theorem IsMPUCanonicalFormII.mpo_standardForm_even_eq_adjoint_of_local_certifica
     obtain ⟨hA, hB⟩ := coarse_gates_eq_four_spin_gates hU hsimple hrU hlU hr hl
     rw [hA, hB]
     have h := congrArg E hlocal
-    simp only [Matrix.smul_mul, map_smul,
-      ← Matrix.reindexLinearEquiv_mul ℂ ℂ p p p] at h
+    rw [Matrix.smul_mul, map_smul] at h
+    conv_rhs at h => rw [← Matrix.reindexLinearEquiv_mul ℂ ℂ p p p]
     have hK : E ((x : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ) ⊗ₖ
         (x : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ)ᴴ) =
         (x' : Matrix (Fin (d * d)) (Fin (d * d)) ℂ) ⊗ₖ
