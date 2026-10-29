@@ -35,7 +35,8 @@ private theorem wallQuadratic_polar_eq_zero {V : Type*} [AddCommGroup V] [Module
   let t := -p / (Q y + 1)
   have hd : 0 < Q y + 1 := by linarith [hQ y]
   have heq : Q (x + t • y) = -(p * p) / (Q y + 1) ^ 2 := by
-    rw [QuadraticMap.map_add, Q.map_smul, QuadraticMap.polar_smul_right, hx]
+    rw [QuadraticMap.map_add (Q : V → ℝ) x (t • y), Q.map_smul,
+      QuadraticMap.polar_smul_right, hx]
     simp only [zero_add, smul_eq_mul]
     change (t * t) * Q y + t * p = _
     dsimp [t]
@@ -102,7 +103,8 @@ private theorem wallQuadratic_positive_set_eq_compl_radical {V : Type*}
     [AddCommGroup V] [Module ℝ V] (Q : QuadraticForm ℝ V) (hQ : ∀ x, 0 ≤ Q x) :
     {x | 0 < Q x} = (Q.radical : Set V)ᶜ := by
   ext x
-  rw [Set.mem_setOf_eq, Set.mem_compl_iff, wallQuadratic_mem_radical_iff Q hQ]
+  change 0 < Q x ↔ ¬ x ∈ Q.radical
+  rw [wallQuadratic_mem_radical_iff Q hQ x]
   exact ⟨ne_of_gt, fun hx ↦ lt_of_le_of_ne (hQ x) (Ne.symm hx)⟩
 
 /-- Positive actual wall slopes form an open dense set under the source
@@ -140,7 +142,7 @@ theorem uncleWallSlopeQuadratic_zero_measure [NeZero a] [NeZero b]
     (ρ : Matrix (Fin a) (Fin a) ℂ) (hρ : ρ.PosDef)
     (hA : Kraus.adjointMap A ρ = ρ) (hB : Kraus.mapLM B 1 = 1)
     (hSpect : Kraus.mixedMapSpectralRadius A B < 1)
-    (μ : Measure (Fin d → Matrix (Fin a) (Fin b) ℂ)) [IsAddHaarMeasure μ] :
+    (μ : Measure (Fin d → Matrix (Fin a) (Fin b) ℂ)) [Measure.IsAddHaarMeasure μ] :
     μ {R | uncleWallSlopeQuadratic A B ρ hSpect R = 0} = 0 := by
   have hset : {R | uncleWallSlopeQuadratic A B ρ hSpect R = 0} =
       ((uncleWallSlopeQuadratic A B ρ hSpect).radical :
@@ -164,13 +166,13 @@ theorem uncleWallNormSlope_ae_pos [NeZero a] [NeZero b]
     (ρ : Matrix (Fin a) (Fin a) ℂ) (hρ : ρ.PosDef)
     (hA : Kraus.adjointMap A ρ = ρ) (hB : Kraus.mapLM B 1 = 1)
     (hSpect : Kraus.mixedMapSpectralRadius A B < 1)
-    (μ : Measure (Fin d → Matrix (Fin a) (Fin b) ℂ)) [IsAddHaarMeasure μ] :
+    (μ : Measure (Fin d → Matrix (Fin a) (Fin b) ℂ)) [Measure.IsAddHaarMeasure μ] :
     ∀ᵐ R ∂μ, 0 < uncleWallNormSlope A B R ρ := by
   have hq : ∀ᵐ R ∂μ, 0 < uncleWallSlopeQuadratic A B ρ hSpect R := by
     have hset : {R | ¬ 0 < uncleWallSlopeQuadratic A B ρ hSpect R} =
         {R | uncleWallSlopeQuadratic A B ρ hSpect R = 0} := by
       ext R
-      simp only [Set.mem_setOf_eq, not_lt]
+      simp only [Set.mem_ofPred_eq, not_lt]
       exact ⟨fun h ↦ le_antisymm h
         (uncleWallSlopeQuadratic_nonneg A B ρ hρ.posSemidef hA hB hSpect R), fun h ↦ h.le⟩
     rw [ae_iff, hset]
@@ -198,7 +200,7 @@ theorem uncleWallNormSlope_pair_ae_pos [NeZero a] [NeZero b]
     (hAB : Kraus.mixedMapSpectralRadius A B < 1)
     (hBA : Kraus.mixedMapSpectralRadius B A < 1)
     (μ : Measure ((Fin d → Matrix (Fin a) (Fin b) ℂ) ×
-      (Fin d → Matrix (Fin b) (Fin a) ℂ))) [IsAddHaarMeasure μ] :
+      (Fin d → Matrix (Fin b) (Fin a) ℂ))) [Measure.IsAddHaarMeasure μ] :
     ∀ᵐ P ∂μ, 0 < uncleWallNormSlope A B P.1 ρA ∧
       0 < uncleWallNormSlope B A P.2 ρB := by
   have hdim : (a + b) * (a + b) ≤ d := by
