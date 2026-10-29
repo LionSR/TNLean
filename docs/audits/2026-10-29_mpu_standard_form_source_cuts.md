@@ -71,3 +71,34 @@ per user instruction. These proofs remain uncompiled. Pinned source APIs,
 generated imports, changed-declaration Blueprint coverage, tactic-pattern
 scan, TeX formatting, whitespace/100-column and placeholder scans are
 source-only checks. The promoted `Finset.sum_congr₂` helper is reused.
+
+## Actual adjoint-factor extension
+
+`SourceFactorsPhysicalAdjoint.lean` transports both source Y Gram formulas
+from the selected factors to every normalized supplied record at the same
+canonical boundary. The private cut-cancellation proof uses the actual
+right inverse to identify the left-factor ranges. The common normalization
+then makes the comparison coisometric, so scalar Y Gram matrices agree.
+No gauge or physical-closure witness is assumed. Canonical simplicity of
+the physical adjoint is derived by the rank-product criterion and cut
+exchange, and its two previous duplicated proofs are replaced.
+
+At zero index the scalar constants are one. Swapping cuts and taking
+adjoints constructs the actual physical-adjoint record from Y†/X†; its
+right inverses are the old X isometry/weighted-isometry identities. Both
+gate adjoint identities are written explicitly. Canonical physical
+reindexing preserves the recorded boundary, so the actual `blockTwo` datum
+and its adjoint coarse record are now constructed with no extra canonical,
+normalization, rank or simplicity witness. The exact local gauge/sign
+consequence still needs the final Fundamental Theorem contraction.
+
+## Hosted diagnostics on `3951cb53f`
+
+Job `123429251031` reported namespace shadowing of raw tensor operations,
+partially unfolded four-leg matrix expressions, spectator identity entries,
+cardinality normalization and an existential elimination into the source
+record's Type. The repair qualifies raw MPO operations, uses explicit
+matrix entry formulas, resolves spectator cases and actual rank equivalences,
+and uses `Classical.choose` for the right inverses. These are source repairs;
+new extension proofs and the repaired head remain uncompiled pending hosted
+validation. No local Lean command was run.

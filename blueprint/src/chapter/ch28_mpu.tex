@@ -9722,7 +9722,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 
 \begin{lemma}[Source cuts of a supplied square standard form]
     \label{lem:mpu_supplied_standard_form_source_cuts}
-    \lean{MPOTensor.TwoSiteStandardFormData.cutX₁, MPOTensor.TwoSiteStandardFormData.cutY₁, MPOTensor.TwoSiteStandardFormData.cutX₂, MPOTensor.TwoSiteStandardFormData.cutY₂, MPOTensor.TwoSiteStandardFormData.sourceCutM₁_eq_cutX₁_mul_cutY₁, MPOTensor.TwoSiteStandardFormData.sourceCutM₂_eq_cutX₂_mul_cutY₂, MPOTensor.TwoSiteStandardFormData.cutY₂_cutY₁_eq_staircaseMiddle_mul_kronecker, MPOTensor.TwoSiteStandardFormData.cutX₁_cutX₂_eq_staircaseMiddle, MPOTensor.IsMPUCanonicalFormII.twoSite_cutX₁_weighted_isometry, MPOTensor.IsMPUCanonicalFormII.twoSite_cutX₂_isIsometry, MPOTensor.IsMPUCanonicalFormII.twoSite_sourceRanks, MPOTensor.IsMPUCanonicalFormII.twoSiteSourceFactors, MPOTensor.IsMPUCanonicalFormII.sourceRanks_eq_phys_of_even_mpo_eq_adjoint}
+    \lean{MPOTensor.TwoSiteStandardFormData.cutX₁, MPOTensor.TwoSiteStandardFormData.cutY₁, MPOTensor.TwoSiteStandardFormData.cutX₂, MPOTensor.TwoSiteStandardFormData.cutY₂, MPOTensor.TwoSiteStandardFormData.sourceCutM₁_eq_cutX₁_mul_cutY₁, MPOTensor.TwoSiteStandardFormData.sourceCutM₂_eq_cutX₂_mul_cutY₂, MPOTensor.TwoSiteStandardFormData.cutY₂_cutY₁_eq_staircaseMiddle_mul_kronecker, MPOTensor.TwoSiteStandardFormData.cutX₁_cutX₂_eq_staircaseMiddle, MPOTensor.IsMPUCanonicalFormII.twoSite_cutX₁_weighted_isometry, MPOTensor.IsMPUCanonicalFormII.twoSite_cutX₂_isIsometry, MPOTensor.IsMPUCanonicalFormII.twoSite_sourceRanks, MPOTensor.IsMPUCanonicalFormII.twoSiteSourceFactors, MPOTensor.IsMPUCanonicalFormII.sourceRanks_eq_phys_of_even_mpo_eq_adjoint, MPOTensor.IsMPUCanonicalFormII.blockTwo, MPOTensor.IsMPUCanonicalFormII.isMPUSimple_blockTwo}
     \notready
     Let $W$ have a supplied two-site standard form with unitary gates
     $u:\mathbb C^d\otimes\mathbb C^d\to\mathbb C^\ell\otimes\mathbb C^r$ and
@@ -9775,6 +9775,49 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     adjoint. Their cut ranks agree by the Fundamental Theorem, while
     adjunction exchanges the two cuts. Thus $dr(U)=\ell(U)d$, so
     $r(U)=\ell(U)$. Simplicity gives $r(U)\ell(U)=d^2$, hence both equal $d$.
+\end{proof}
+
+\begin{lemma}[Normalized physical-adjoint source factors]
+    \label{lem:mpu_normalized_physical_adjoint_source_factors}
+    \lean{MPOTensor.IsMPUCanonicalFormII.reindexPhysical, MPOTensor.IsMPUCanonicalFormII.isMPUSimple_physicalAdjointTensor, MPOTensor.IsMPUCanonicalFormII.sourceFactors_sourceU_isUnitaryBetween, MPOTensor.IsMPUCanonicalFormII.sourceFactors_Y₁_mul_conjTranspose, MPOTensor.IsMPUCanonicalFormII.sourceFactors_Y₂_weighted_mul_conjTranspose, MPOTensor.SourceFactors.physicalAdjoint, MPOTensor.SourceFactors.sourceU_physicalAdjoint, MPOTensor.SourceFactors.sourceV_physicalAdjoint, MPOTensor.IsMPUCanonicalFormII.twoSiteSourceFactors_physicalAdjoint}
+    \notready
+    Let $U$ be simple and in reduced canonical form II, with recorded positive
+    diagonal boundary $\rho$. Bijective physical relabeling preserves this
+    presentation and boundary. Physical adjunction preserves simplicity.
+    For every normalized source factorization at this same boundary,
+    \begin{align}
+        Y_1Y_1^\dagger                   & =(d/r)\Id,    &
+        Y_2(\Id_d\otimes\rho)Y_2^\dagger & =(d/\ell)\Id.
+    \end{align}
+    Its unshifted gate is unitary. If $r=\ell=d$, source factors for the
+    physical adjoint at the same boundary are
+    \begin{align}
+        (X_1',Y_1',Z_1') & =(Y_2^\dagger,X_2^\dagger,X_2), \\
+        (X_2',Y_2',Z_2') & =(Y_1^\dagger,X_1^\dagger,
+        (\Id_d\otimes\rho)X_1),
+    \end{align}
+    after the canonical identifications of the exchanged cut ranks.
+    Their gates are exactly $u'=v^\dagger$ and $v'=u^\dagger$ in these
+    coordinates. For the actual coarse record of
+    Lemma~\ref{lem:mpu_supplied_standard_form_source_cuts}, adjoint symmetry
+    at even original lengths derives all these prerequisites, giving an
+    actual adjoint coarse record without extra normalization witnesses.
+    These are the normalized cut constructions underlying
+    \cite[lines~1237--1252]{Cirac2017MPU}; the Gram formulas are
+    \cite[equation~\texttt{eq:MPUnice3}]{FrancoRubio2025MPUGauging}.
+\end{lemma}
+
+\begin{proof}
+    \uses{lem:mpu_supplied_standard_form_source_cuts}
+    Simplicity is the equality $r\ell=d^2$ and adjunction exchanges $r,\ell$.
+    For the Gram formulas, compare a supplied cut factorization $XY$ with
+    the selected normalized one. The right inverse makes their left-factor
+    ranges equal. Their common weighted normalization gives a coisometry
+    $A$ with $Y'=AY$, so each scalar Gram matrix is unchanged.
+    At $r=\ell=d$ both Grams are identities. Taking adjoints exchanges the
+    two cut factorizations. The displayed old left-factor normalizations
+    give the new right inverses, and their old Gram identities give the new
+    left-factor normalizations. Direct contraction gives the two adjoint gates.
 \end{proof}
 
 \begin{proposition}[Admissible local characterization of time reversal]

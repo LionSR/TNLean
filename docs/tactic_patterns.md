@@ -38,6 +38,20 @@ abstracted — record why, so it is not re-proposed).
 - **Notes:** No new matrix predicate or parallel standard-form structure was
   introduced. The supplied half factors and gates are conjugated directly.
 
+### Adjoint simplicity from the canonical rank product — promoted (2026-10-29)
+
+- **Pattern:** Convert simplicity to `r*ℓ=d*d`, exchange the ranks under
+  physical adjunction and convert back using canonical form II.
+- **Defined in:** `MPS/MPU/SourceFactorsPhysicalAdjoint.lean`,
+  `IsMPUCanonicalFormII.isMPUSimple_physicalAdjointTensor`.
+- **Refactored occurrences:** the private helper in
+  `InverseCompatibleFamilyProperties.lean` and the inline proof in
+  `Index.lean`; both now use the theorem. The supplied Y-Gram and adjoint
+  factor constructions also use it, eliminating an adjoint-simplicity premise.
+- **Notes:** The theorem derives the premise from actual canonical data;
+  it does not introduce a new admissibility predicate or a witness supplier.
+
+
 ### Matrices of submodule orthogonal projections — promoted (2026-10-26)
 
 - **Pattern:** Form `Matrix.toEuclideanLin.symm W.starProjection.toLinearMap`
