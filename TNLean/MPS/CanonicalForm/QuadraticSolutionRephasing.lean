@@ -40,7 +40,7 @@ noncomputable def rephase (s : QuadraticReconstructionSolution H)
       rw [hz, norm_zero] at hξ
       exact zero_ne_one hξ
     have hratio : (ξ⁻¹) ^ j.val * ξ ^ (j.val + 1) = ξ := by
-      rw [pow_succ, ← mul_assoc, ← mul_pow, inv_mul_cancel₀ hξ0, one_pow, one_mul]
+      rw [pow_succ, inv_pow, inv_mul_cancel_left₀ (pow_ne_zero j.val hξ0)]
     rw [Matrix.smul_kronecker, s.kronecker_eq]
     simp only [Matrix.smul_mul, Matrix.mul_smul, smul_smul, hratio]
   leftGauge_mul_rightGauge j hj := by

@@ -9725,3 +9725,14 @@ there is no need for a new tactic.
   weight construction and `QuadraticPerronNormalization.lean`.
 - **Decision:** compare the actual physical bases once, before normalization;
   no duplicate window-comparison proof or parallel solution predicate.
+
+
+### Reciprocal powers at adjacent window cuts — reused Mathlib (2026-10-29)
+
+- **Seen:** `CanonicalForm/QuadraticSolutionRephasing.lean`,
+  `QuadraticPhysicalCutWindow.lean` and the Perron-normalization child.
+- **Pattern:** cancel the common powers in a product with exponents n and n+1.
+- **Reuse:** `pow_succ`, `inv_pow`, `inv_mul_cancel_left₀` and
+  `mul_inv_cancel_left₀` give the identity directly from `pow_ne_zero`.
+- **Decision:** use the existing group-with-zero cancellation lemmas at all
+  three sites rather than copying a power-distribution proof or adding a tactic.

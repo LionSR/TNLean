@@ -103,7 +103,7 @@ theorem exists_quadraticSolution_physicalCutWindow [NeZero D] {A : MPSTensor d D
   obtain ⟨λ, hλ, _, hsum⟩ := K.exists_weight_sum_mul_conjTranspose_eq_of_isNBlkInjective hC1
   have hλ0 : (λ : ℂ) ≠ 0 := by exact_mod_cast hλ.ne'
   have hratio (n : ℕ) : (λ : ℂ) ^ n * ((λ : ℂ)⁻¹) ^ (n + 1) = (λ : ℂ)⁻¹ := by
-    rw [pow_succ, ← mul_assoc, ← mul_pow, mul_inv_cancel₀ hλ0, one_pow, one_mul]
+    rw [pow_succ, inv_pow, mul_inv_cancel_left₀ (pow_ne_zero n hλ0)]
   refine ⟨{
     leftGauge := fun j ↦ (λ : ℂ) ^ j.val • Y j
     rightGauge := fun j ↦ ((λ : ℂ)⁻¹) ^ (j.val + 1) • Z j
