@@ -1,4 +1,28 @@
-# Actual standard-form source cuts for #7020
+# Actual standard-form source cuts and local time reversal for #7020
+
+## Current written scope (supersedes the earlier staged notes below)
+
+The local-certificate theorem now assumes symmetry only at even lengths of
+`W=blockTwo U`, exactly the source's two-original-spins-per-site convention.
+The earlier stronger even-original-length premise is removed, without adding
+another physical block. `EvenFamilySourceGauges.lean` derives the unblocked
+sign gauge, preserves cut ranks under that sign, constructs the actual scaled
+source record, applies the existing normalized factor comparison, and
+transports the resulting unitaries back. Since the source U gate contracts
+two right factors, the sign contributes its square and cancels. Source V is
+unchanged. The zero-index derivation and all three literal certificate/supplier
+theorems now use this actual even-family comparison. No local certificate,
+gauge, rank, normalization or inverse witness is assumed.
+
+Remaining: arbitrary supplied standard-form presentations, converse,
+transposition, and exact-head hosted validation. The chosen simple reduced
+canonical construction remains a load-bearing restriction. The exact source
+proposition and auxiliary Blueprint entries all remain `notready`; #7020 stays
+open. The new phase/factor/assembly proofs are source-written and uncompiled.
+No local Lean build, elaboration, compilation or cache mutation was run.
+
+## Earlier staged source audit
+
 
 Source: `Papers/1703.09188/paper_v2.tex:1237–1252`, proof of `PropChiral`,
 particularly the blocked standard-form comparison `eq:block-twosites`.

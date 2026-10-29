@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.MPS.MPU.EvenFamilySourceGauges
 import TNLean.MPS.MPU.TwoSiteStandardForm
 import TNLean.MPS.MPU.StaircaseGates
 import QICLean.Algebra.MatrixIsometryKronecker
@@ -484,33 +485,28 @@ theorem IsMPUCanonicalFormII.twoSiteSourceFactors_sourceV
         S.cutX₂ (β, finProdFinEquiv (finProdFinEquiv.symm j)) (el.symm l)
   simp only [Equiv.apply_symm_apply]
 
-/-- Actual adjoint invariance at the even original chain lengths forces
-both source ranks of the original simple canonical tensor to equal its
-physical dimension. Only a single two-site blocking is used. Source:
-arXiv:1703.09188, `PropChiral`, lines 1201–1252, including the zero-index
-observation preceding the proposition. The hypothesis is on original
-lengths, not on a further blocking of the supplied standard form. -/
-theorem IsMPUCanonicalFormII.sourceRanks_eq_phys_of_even_mpo_eq_adjoint
+/-- Adjoint symmetry at the even lengths of the actual standard-form tensor
+forces the original source ranks to equal the original physical dimension.
+The virtual sign from the even-family comparison does not change cut ranks;
+no further blocking is used. Source: arXiv:1703.09188, the zero-index
+observation and `PropChiral`, lines 1201–1252. -/
+theorem IsMPUCanonicalFormII.sourceRanks_eq_phys_of_standardForm_even_mpo_eq_adjoint
     {d D : ℕ} {U : MPOTensor d D} (hU : IsMPUCanonicalFormII U)
     (hsimple : IsMPUSimple U)
-    (hTR : ∀ N : ℕ, 1 < N → Even N → mpo U N = (mpo U N)ᴴ) :
+    (hTR : ∀ N : ℕ, 1 < N → Even N →
+      mpo (MPOTensor.blockTwo U) N = (mpo (MPOTensor.blockTwo U) N)ᴴ) :
     r[U] = d ∧ ℓ[U] = d := by
-  have hEq : ∀ N : ℕ, 1 < N →
-      mpo (MPOTensor.blockTensor U 2) N =
-        mpo (physicalAdjointTensor (MPOTensor.blockTensor U 2)) N := by
-    intro N hN
-    ext σ τ
+  let W := MPOTensor.blockTwo U
+  have hEq : ∀ N : ℕ, 1 < N → Even N →
+      mpo W N = mpo (MPOTensor.physicalAdjointTensor W) N := by
+    intro N hN heven
     rw [mpo_physicalAdjointTensor]
-    have h := congrArg (fun M ↦ M
-        ((MPSTensor.blockedConfigEquiv d N 2) σ)
-        ((MPSTensor.blockedConfigEquiv d N 2) τ))
-      (hTR (N * 2) (by omega) ⟨N, by omega⟩)
-    simpa only [mpo_blockTensor_eq_reindex, Matrix.reindex_apply,
-      Equiv.symm_symm, Matrix.conjTranspose_apply] using h
-  let hB := hU.blockTensor 2 (by decide)
-  have hsame := hB.sourceRanks_eq_of_mpo_eq hB.physicalAdjointTensor hEq
+    exact hTR N hN heven
+  have hsame := hU.blockTwo.source_ranks_eq_of_mpo_eq_even
+    hU.blockTwo.physicalAdjointTensor hEq
   have hbalanced : ℓ[MPOTensor.blockTensor U 2] = r[MPOTensor.blockTensor U 2] := by
-    simpa only [rightRank_physicalAdjointTensor] using hsame.1
+    simpa only [W, rightRank_physicalAdjointTensor, blockTwo_eq_blockTensor_reindex,
+      rightRank_reindexPhysical, leftRank_reindexPhysical] using hsame.1
   obtain ⟨hr, hl⟩ := hU.twoSite_sourceRanks hsimple
   simp only [blockTwo_eq_blockTensor_reindex, rightRank_reindexPhysical,
     leftRank_reindexPhysical] at hr hl
@@ -528,15 +524,16 @@ theorem IsMPUCanonicalFormII.sourceRanks_eq_phys_of_even_mpo_eq_adjoint
 
 /-- The actual adjoint coarse record, with every normalization, simplicity
 and square-rank condition derived from the simple canonical source and its
-adjoint invariance at even original lengths. No local certificate or
+adjoint invariance at even standard-form lengths. No local certificate or
 normalization supplier is an input. Source: arXiv:1703.09188,
 `eq:block-twosites` in the proof of `PropChiral`, lines 1237–1252. -/
 noncomputable def IsMPUCanonicalFormII.twoSiteSourceFactors_physicalAdjoint
     {d D : ℕ} {U : MPOTensor d D} (hU : IsMPUCanonicalFormII U)
     (hsimple : IsMPUSimple U)
-    (hTR : ∀ N : ℕ, 1 < N → Even N → mpo U N = (mpo U N)ᴴ) :
+    (hTR : ∀ N : ℕ, 1 < N → Even N →
+      mpo (MPOTensor.blockTwo U) N = (mpo (MPOTensor.blockTwo U) N)ᴴ) :
     SourceFactors (physicalAdjointTensor (MPOTensor.blockTwo U)) hU.ρ := by
-  obtain ⟨hr, hl⟩ := hU.sourceRanks_eq_phys_of_even_mpo_eq_adjoint hsimple hTR
+  obtain ⟨hr, hl⟩ := hU.sourceRanks_eq_phys_of_standardForm_even_mpo_eq_adjoint hsimple hTR
   obtain ⟨hrB, hlB⟩ := hU.twoSite_sourceRanks hsimple
   have hrank : r[MPOTensor.blockTwo U] = d * d := hrB.trans (congrArg (d * ·) hr)
   have hlank : ℓ[MPOTensor.blockTwo U] = d * d := hlB.trans (congrArg (· * d) hl)

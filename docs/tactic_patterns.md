@@ -9660,3 +9660,16 @@ there is no need for a new tactic.
 - **Seen:** `MPS/MPU/EvenFamilyVirtualGauge.lean` (even-family virtual descent).
 - **Abstraction:** Reuse the existing normal overlap dichotomy and
   `Filter.tendsto_atTop_mono`; no separate blocked-family predicate is needed.
+
+### Retaining and cancelling the even-family sign — candidate (2026-10-29)
+
+- **Pattern:** Keep the virtual sign from an even-family comparison, construct
+  the actual scalar-transformed source factors, and cancel its square only
+  at the two-right-factor gate contraction.
+- **Seen:** `MPS/MPU/EvenFamilySourceGauges.lean`; the derived rank and gate
+  comparisons replace the stronger all-standard-form-length hypothesis in
+  `TwoSiteStandardFormSourceCuts.lean` and `TimeReversalLocalNecessity.lean`.
+- **Abstraction:** `eq_sign_virtualSandwich_of_mpo_eq_even` packages the shared
+  actual virtual comparison. The existing normalized factor and gate
+  contractions are reused; no parallel source or admissibility predicate is
+  introduced. Reindex cancellation uses the existing linear equivalence.

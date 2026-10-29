@@ -9,25 +9,22 @@ import TNLean.MPS.MPU.ConjugationSourceFactors
 /-!
 # Deriving the local time-reversal certificate from the actual coarse factors
 
-The coarse source factors and their physical-adjoint counterparts are the
-actual normalized records, not assumed comparison data. The finite-chain
-hypothesis is at even original lengths; only one two-site block is taken.
-The supplied-factor Fundamental Theorem gives the two unitary gauges.
-Their two equations force a common sign by cancellation and the scalar
-Kronecker-product lemma. An explicit coordinate dictionary then gives the
-literal four-original-spin equation for the actual source gates.
+The coarse source factors and their physical-adjoint counterparts are actual
+normalized records. The finite-chain hypothesis is exactly at even lengths
+of the standard-form tensor, whose site contains two original spins. The
+even-family Fundamental Theorem retains an unblocked sign, which cancels in
+the two-letter source gate. Its two unitary equations then force a common
+local sign. An explicit coordinate dictionary gives the literal
+four-original-spin equation without another physical block.
 
-**Scope restriction (lengths and canonical source construction):** The public
-certificate theorems require adjoint symmetry at every even original length.
-Thus the constructed standard-form tensor has symmetry at all its lengths,
-which is stronger than symmetry only at even standard-form lengths in
-`PropChiral`. The missing even-family comparison must retain a possible sign
-phase before passing to the two-letter source gates; see
-`docs/paper-gaps/mpu_standard_form_parity_gap.tex`. The certificate concerns the
-actual standard form constructed from the chosen simple reduced canonical
-source tensor. Arbitrary supplied standard forms and the converse are separate
-obligations; see `docs/paper-gaps/mpu_canonical_form_full_support.tex`.
-The original-leg rank dictionary is proved explicitly here.
+**Scope restriction (canonical source construction):** The public certificate
+theorems concern the actual standard form constructed from the chosen simple
+reduced canonical source tensor. Arbitrary supplied standard forms and the
+converse are separate obligations; see
+`docs/paper-gaps/mpu_canonical_form_full_support.tex`. The original-leg rank
+dictionary is proved explicitly. The even-length convention and the need to
+retain the intermediate sign are recorded in
+`docs/paper-gaps/mpu_standard_form_parity_gap.tex`.
 
 Source: arXiv:1703.09188, `PropChiral`, `eq:block-twosites`, and
 `UUdaggertrick`, lines 1201–1252.
@@ -204,14 +201,15 @@ private theorem coarse_gates_eq_four_spin_gates
       Matrix.reindex p (G.trans p) _
     rw [hcols]
 
-/-- Global adjoint symmetry at even original lengths yields an actual local
+/-- Global adjoint symmetry at even standard-form lengths yields an actual local
 sign certificate for the normalized coarse source gates, in physical-block
 coordinates. The rank equalities, adjoint factors and comparison gauges are
 all derived. Source: arXiv:1703.09188, proof of `PropChiral`, lines 1237–1252. -/
 theorem IsMPUCanonicalFormII.exists_coarse_timeReversal_certificate
     {d D : ℕ} {U : MPOTensor d D} (hU : IsMPUCanonicalFormII U)
     (hsimple : IsMPUSimple U)
-    (hTR : ∀ N : ℕ, 1 < N → Even N → mpo U N = (mpo U N)ᴴ) :
+    (hTR : ∀ N : ℕ, 1 < N → Even N →
+      mpo (MPOTensor.blockTwo U) N = (mpo (MPOTensor.blockTwo U) N)ᴴ) :
     ∃ (hr : r[MPOTensor.blockTwo U] = d * d)
       (hl : ℓ[MPOTensor.blockTwo U] = d * d)
       (σ : ℂ) (x : Matrix.unitaryGroup (Fin (d * d)) ℂ),
@@ -229,29 +227,21 @@ theorem IsMPUCanonicalFormII.exists_coarse_timeReversal_certificate
   let hW := hU.blockTwo
   let S := hU.twoSiteSourceFactors hsimple
   have hSW := hU.isMPUSimple_blockTwo hsimple
-  obtain ⟨hrU, hlU⟩ := hU.sourceRanks_eq_phys_of_even_mpo_eq_adjoint hsimple hTR
+  obtain ⟨hrU, hlU⟩ := hU.sourceRanks_eq_phys_of_standardForm_even_mpo_eq_adjoint hsimple hTR
   obtain ⟨hrB, hlB⟩ := hU.twoSite_sourceRanks hsimple
   have hr : r[W] = d * d := hrB.trans (congrArg (d * ·) hrU)
   have hl : ℓ[W] = d * d := hlB.trans (congrArg (· * d) hlU)
   let T := SourceFactors.physicalAdjoint hW hSW S hr hl
-  have hEq : ∀ N : ℕ, 1 < N → mpo W N = mpo (physicalAdjointTensor W) N := by
-    intro N hN
-    ext σ τ
+  have hEq : ∀ N : ℕ, 1 < N → Even N →
+      mpo W N = mpo (MPOTensor.physicalAdjointTensor W) N := by
+    intro N hN heven
     rw [mpo_physicalAdjointTensor]
-    have h := congrArg (fun M : Matrix (Fin (N * 2) → Fin d) (Fin (N * 2) → Fin d) ℂ ↦
-        M ((MPSTensor.blockedConfigEquiv d N 2)
-          ((reindexPhysicalConfigEquiv N (twoSiteBlockEquiv d)) σ))
-        ((MPSTensor.blockedConfigEquiv d N 2)
-          ((reindexPhysicalConfigEquiv N (twoSiteBlockEquiv d)) τ)))
-      (hTR (N * 2) (by omega) ⟨N, by omega⟩)
-    simpa only [W, blockTwo_eq_blockTensor_reindex, mpo_reindexPhysical,
-      mpo_blockTensor_eq_reindex, Matrix.reindex_apply, Equiv.symm_symm,
-      Matrix.conjTranspose_apply] using h
+    exact hTR N hN heven
   have huS := hW.sourceFactors_sourceU_isUnitaryBetween hSW S
   have huT := hW.physicalAdjointTensor.sourceFactors_sourceU_isUnitaryBetween
     (hW.isMPUSimple_physicalAdjointTensor hSW) T
   obtain ⟨hrFT, hlFT, X, Y, hu, hv⟩ :=
-    hW.exists_supplied_source_gate_unitary_gauges_of_mpo_eq
+    hW.exists_supplied_source_gate_unitary_gauges_of_mpo_eq_even
       hW.physicalAdjointTensor S T huS huT hEq
   let L := finCongr hl
   let R := finCongr hr
@@ -286,12 +276,13 @@ canonical source standard form. The source ranks are proved to equal d;
 the supplied gates are then transported only along these canonical rank
 identifications. No local certificate or gauge-existence premise is assumed.
 Source: arXiv:1703.09188, `PropChiral`, `eq:block-twosites` and
-`UUdaggertrick`, lines 1201–1252. The original finite-chain hypothesis is
-only at even lengths, and no additional blocking is used. -/
+`UUdaggertrick`, lines 1201–1252. The finite-chain hypothesis is at even
+standard-form lengths, and no additional blocking is used. -/
 theorem IsMPUCanonicalFormII.exists_local_timeReversal_certificate
     {d D : ℕ} {U : MPOTensor d D} (hU : IsMPUCanonicalFormII U)
     (hsimple : IsMPUSimple U)
-    (hTR : ∀ N : ℕ, 1 < N → Even N → mpo U N = (mpo U N)ᴴ) :
+    (hTR : ∀ N : ℕ, 1 < N → Even N →
+      mpo (MPOTensor.blockTwo U) N = (mpo (MPOTensor.blockTwo U) N)ᴴ) :
     ∃ (hrU : r[U] = d) (hlU : ℓ[U] = d) (σ : ℂ)
       (x : Matrix.unitaryGroup (Fin d × Fin d) ℂ),
       let u₀ := Matrix.reindex (Equiv.prodCongr (finCongr hlU) (finCongr hrU))
@@ -302,7 +293,7 @@ theorem IsMPUCanonicalFormII.exists_local_timeReversal_certificate
       staircaseMiddle (A := Fin d) (E := Fin d) v₀ * (u₀ ⊗ₖ u₀) =
         σ • ((x : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ) ⊗ₖ
           (x : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ)ᴴ) * (staircaseMiddle v₀)ᴴ := by
-  obtain ⟨hrU, hlU⟩ := hU.sourceRanks_eq_phys_of_even_mpo_eq_adjoint hsimple hTR
+  obtain ⟨hrU, hlU⟩ := hU.sourceRanks_eq_phys_of_standardForm_even_mpo_eq_adjoint hsimple hTR
   obtain ⟨hr, hl, σ, x, hσ, h⟩ := hU.exists_coarse_timeReversal_certificate hsimple hTR
   let u₀ := Matrix.reindex (Equiv.prodCongr (finCongr hlU) (finCongr hrU))
     (Equiv.refl _) (sourceU U hU.ρ hU.ρ_posDef)
@@ -359,7 +350,8 @@ certificate or continuity of any factor choice. Source: arXiv:1703.09188,
 theorem IsMPUCanonicalFormII.exists_twoSiteStandardFormData_timeReversal_certificate
     {d D : ℕ} {U : MPOTensor d D} (hU : IsMPUCanonicalFormII U)
     (hsimple : IsMPUSimple U)
-    (hTR : ∀ N : ℕ, 1 < N → Even N → mpo U N = (mpo U N)ᴴ) :
+    (hTR : ∀ N : ℕ, 1 < N → Even N →
+      mpo (MPOTensor.blockTwo U) N = (mpo (MPOTensor.blockTwo U) N)ᴴ) :
     ∃ u v : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ,
       ∃ _S : TwoSiteStandardFormData (MPOTensor.blockTwo U) u v,
       ∃ (σ : ℂ) (x : Matrix.unitaryGroup (Fin d × Fin d) ℂ),
