@@ -61,3 +61,13 @@ The ground-space overlap estimates, projection away from the complete
 finite ground space, and the final variational spectral argument remain
 separate. No gaplessness or infinite-volume spectrum theorem is claimed.
 Hosted Lean acceptance of these new modules remains pending.
+
+`UncleGroundGram.lean` now also derives the actual periodic ground-state
+Gram limits from the same data. The two squared norms tend to one via
+canonical pure-transfer convergence and the existing exact overlap/trace
+identity. The actual cross inner product tends to zero by the derived
+mixed gap and the existing rectangular mixed-transfer overlap decay theorem.
+No state normalization, orthogonality, Gram bound, or rate is supplied as
+an additional premise. The finite-dimensional transfer-to-continuous-map
+algebra equivalences reduce spectral comparisons to the same algebraic
+quasispectrum across the existing norm conventions.

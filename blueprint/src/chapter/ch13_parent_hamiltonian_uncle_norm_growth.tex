@@ -128,3 +128,27 @@ limit and its generic quadratic growth.
     product has positive real part. Convergence then bounds the normalized
     squared norm above and below by positive constants.
 \end{proof}
+
+\begin{lemma}[Gram limits of the two periodic ground vectors]
+    \label{lem:uncle_ground_gram_limits}
+    \lean{MPSTensor.uncleMPV_norm_sq_tendsto_one,MPSTensor.uncleGroundGram_tendsto}
+    \notready
+    \uses{lem:uncle_injective_transfer_decay,lem:uncle_diagonal_injectivity,
+        lem:uncle_mixed_damping_from_span}
+    Under the same normalized canonical data and full perturbation span,
+    the actual periodic ground vectors satisfy
+    \[
+        \lVert\psi_A^N\rVert^2\longrightarrow1,\qquad
+        \lVert\psi_B^N\rVert^2\longrightarrow1,\qquad
+        \langle\psi_A^N,\psi_B^N\rangle\longrightarrow0.
+    \]
+\end{lemma}
+\begin{proof}
+    The actual pure transfer powers converge in operator norm to their
+    canonical rank-one contractions. Their operator traces therefore tend
+    to the trace of the canonical contraction, which is the density trace,
+    namely one. The exact transfer trace identity identifies these with
+    the periodic squared norms. Strict mixed damping makes the mixed power
+    trace tend to zero, and hence the actual periodic inner product does
+    also. All transfer conditions were derived from the stated source data.
+\end{proof}

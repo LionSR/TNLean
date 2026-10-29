@@ -19,6 +19,7 @@ the two periodic sectors in Lemma lowenergystates, lines 1165–1295.
 -/
 
 open scoped Matrix BigOperators ComplexOrder MatrixOrder Matrix.Norms.L2Operator Topology
+open scoped InnerProductSpace
 open Filter
 
 namespace MPSTensor
@@ -71,6 +72,7 @@ theorem uncleMPV_norm_sq_tendsto_one
     tendsto_sub_nhds_zero_iff.mp (htrace0.congr htrace_eq)
   have hnorm (N : ℕ) : (LinearMap.trace ℂ V (E ^ N)).re = ‖mpvState A N‖ ^ 2 := by
     have htraceN : LinearMap.trace ℂ V (E ^ N) = mpvOverlap A A N := by
+      change LinearMap.trace ℂ (Matrix (Fin a) (Fin a) ℂ) ((Kraus.mapLM A) ^ N) = _
       simpa only [Kraus.mixedMapLM_self] using
         trace_mixedMapLM_rect_pow_eq_mpvOverlap A A N
     rw [htraceN]
