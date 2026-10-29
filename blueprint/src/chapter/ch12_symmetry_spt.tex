@@ -5031,6 +5031,24 @@ argument below.
     endpoint representatives of the actual path.
 \end{proof}
 
+\begin{theorem}[Classification for injective endpoints with exact virtual covariance]
+    \label{thm:spt_exact_phase_injective_classification}
+    \lean{MPSTensor.isSameExactMPSGappedPhase_iff_cohomologous}
+    \notready
+    \uses{cor:spt_exact_phase_cohomology_obstruction, thm:spt_exact_phase_forward}
+    Let $A_0,A_1$ be one-site injective tensors of positive bond dimensions,
+    with prescribed virtual projective representations implementing their
+    exact on-site symmetries. They satisfy the independent exact MPS gapped
+    phase condition if and only if the prescribed factor systems determine
+    the same cohomology class. This is the injective, exact-symmetry scope
+    of the construction in \cite[Section~II.F.2]{Schuch2011Phases}.
+\end{theorem}
+\begin{proof}
+    The forward construction for cohomologous virtual actions gives the
+    physical phase condition. The converse is
+    Corollary~\ref{cor:spt_exact_phase_cohomology_obstruction}.
+\end{proof}
+
 \begin{theorem}[The virtual class of an exact ground-state path under a transfer bound]
     \label{thm:spc_aux_exact_ground_uniform_transfer_class}
     \lean{MPSTensor.ExactMPSGroundPath.exists_constant_virtual_class_of_uniform_transfer_bound}

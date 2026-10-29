@@ -22,7 +22,9 @@ the physical phase predicate or supplied as an intermediate premise.
    virtual factor system. Each recorded physical isometry preserves
    injectivity; its physical intertwining identity gives covariance after
    the endpoint character is removed. The previous endpoint comparison
-   yields equality of the prescribed original virtual classes.
+   yields equality of the prescribed original virtual classes. The final
+   biconditional combines this implication with the existing forward
+   construction on exactly the same endpoint domain.
 
 The final theorem concerns one-site injective original endpoints with
 prescribed exact virtual covariance, the domain of the existing forward
@@ -35,6 +37,6 @@ symmetry characters. Those scopes remain recorded in
 Validation is source-only: declaration and dependency inspection, proof-integrity
 scan, generated import check, tactic-pattern scan, prose checks, whitespace and
 line-width checks, and Blueprint formatting. No local Lean command was run.
-All three new Blueprint entries remain `notready`; hosted elaboration and
+All four new Blueprint entries remain `notready`; hosted elaboration and
 strict linters must accept the full dependent stack before proof completion
 or source-theorem acceptance is claimed.

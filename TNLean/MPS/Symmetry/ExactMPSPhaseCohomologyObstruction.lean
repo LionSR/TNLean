@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Symmetry.ExactGroundPathEndpointClass
+import TNLean.MPS.Symmetry.CommonPhysicalExactPhase
 import TNLean.MPS.Core.PhysicalIndexMixing
 import TNLean.MPS.Symmetry.EntanglementSpectrum
 import TNLean.Wielandt.SpanGrowth.CumulativeSpan
@@ -107,5 +108,36 @@ theorem IsSameExactMPSGappedPhase.cohomologousTo
     (isInjective_kraus_isometry _ E₁ hE₁ hBlock₁) hQ₀ hQ₁ χ₀ χ₁ hχ₀ hχ₁ ρ₀ ρ₁
     (included_blockTensor_character_covariance A₀ U₀ U χ₀ hχ₀ E₀ hCov₀ ρ₀ hρ₀)
     (included_blockTensor_character_covariance A₁ U₁ U χ₁ hχ₁ E₁ hCov₁ ρ₁ hρ₁)
+
+/-- On the one-site injective endpoint domain with prescribed exact virtual
+covariance, the independent exact physical phase relation is equivalent to
+equality of the virtual cohomology classes. Source: arXiv:1010.3732,
+Sections II.C.1–2 and II.F.2; the scope is specified in the module docstring. -/
+theorem isSameExactMPSGappedPhase_iff_cohomologous
+    {G : Type} [Group G] {d₀ d₁ D₀ D₁ : ℕ} [NeZero D₀] [NeZero D₁]
+    {A₀ : MPSTensor d₀ D₀} {A₁ : MPSTensor d₁ D₁}
+    {U₀ : G →* Matrix.unitaryGroup (Fin d₀) ℂ}
+    {U₁ : G →* Matrix.unitaryGroup (Fin d₁) ℂ}
+    (hA₀ : Kraus.IsInjective A₀) (hA₁ : Kraus.IsInjective A₁)
+    {ω₀ ω₁ : ScalarCocycle G}
+    (ρ₀ : ProjectiveRepresentation (D := D₀) ω₀)
+    (ρ₁ : ProjectiveRepresentation (D := D₁) ω₁)
+    (hρ₀ : ∀ g i, twistedTensor A₀ ((Matrix.unitaryGroup (Fin d₀) ℂ).subtype.comp U₀) g i =
+      (ρ₀.X (g⁻¹) : Matrix (Fin D₀) (Fin D₀) ℂ) * A₀ i *
+        (((ρ₀.X (g⁻¹))⁻¹ : GL (Fin D₀) ℂ) : Matrix (Fin D₀) (Fin D₀) ℂ))
+    (hρ₁ : ∀ g i, twistedTensor A₁ ((Matrix.unitaryGroup (Fin d₁) ℂ).subtype.comp U₁) g i =
+      (ρ₁.X (g⁻¹) : Matrix (Fin D₁) (Fin D₁) ℂ) * A₁ i *
+        (((ρ₁.X (g⁻¹))⁻¹ : GL (Fin D₁) ℂ) : Matrix (Fin D₁) (Fin D₁) ℂ)) :
+    IsSameExactMPSGappedPhase A₀ A₁ U₀ U₁ ↔
+    groupCohomology.H2π _ (groupCohomology.cocyclesOfIsMulCocycle₂
+      (ScalarCocycle.isMulCocycle₂_of_projRep ρ₁ (NeZero.pos D₁))) =
+    groupCohomology.H2π _ (groupCohomology.cocyclesOfIsMulCocycle₂
+      (ScalarCocycle.isMulCocycle₂_of_projRep ρ₀ (NeZero.pos D₀))) := by
+  constructor
+  · intro hPhase
+    exact hPhase.cohomologousTo hA₀ hA₁ ρ₀ ρ₁ hρ₀ hρ₁
+  · intro hClass
+    exact isSameExactMPSGappedPhase_of_isInjective_cohomologous
+      ρ₀ ρ₁ U₀ U₁ A₀ hA₀ A₁ hA₁ hρ₀ hρ₁ hClass
 
 end MPSTensor
