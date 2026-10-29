@@ -62,6 +62,7 @@ import TNLean.MPS.MPU.FinalCircuitRegisters
 import TNLean.MPS.MPU.FiniteAlphabetRows
 import TNLean.MPS.MPU.FiniteChainConjugation
 import TNLean.MPS.MPU.FiniteGroupSourceRanks
+import TNLean.MPS.MPU.FiniteWindowSupport
 import TNLean.MPS.MPU.FundamentalTheorem
 import TNLean.MPS.MPU.FundamentalTheoremGates
 import TNLean.MPS.MPU.FundamentalTheoremGatesBlocked
