@@ -252,8 +252,16 @@ $A=1+\log r+\log D+\log(1/\beta)$ and
 $s=\lceil4096rA\rceil\le4097rA$.
 For every merged dimension $Q\le D^{12}s^6$, the failure estimate is at most
 $e^{-s/64}\le\beta$; if $Q\le s$, the sample is the entire merged space
-and the failure is zero. The recursive tree and an adaptive joint probability
-law remain separate obligations.
+and the failure is zero. A balanced recursion now selects actual samples and
+trims at every long parent, with full-space leaves of width at most $4\ell$.
+For the same original ground space, every constructed interval space has
+viability error at most $3/200$ and dimension at most $M=D^6s^3$.
+It is spanned by at most $M$ recorded vectors, each with internal-cut rank at
+most $10^6D_{\rm ref}^2(L+1)M$. This rank bound is for those recorded
+vectors; an arbitrary linear combination can require an additional factor.
+The physical recursion still displays its scalar filter hypotheses explicitly.
+Instantiating them, constructing an adaptive joint probability law and completing
+the final spectral extraction remain separate obligations.
 
 The power-filter application constructs one actual sample with both norm estimates,
 all letter-count bounds, and every spatial rank bound $\ell q^{2u}$.
