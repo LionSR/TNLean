@@ -406,3 +406,44 @@ In this section $P_t=\mathbf1_{(-\infty,t)}(B)$ and $Q_t=I-P_t$.
     \end{align}
     Thus the last squared-distance bound is at most $e^{-t/16}$.
 \end{proof}
+
+
+\begin{lemma}[Exact preservation under frustration-free exterior clipping]
+    \label{lem:aklv_frustration_free_clipping}
+    \lean{TNLean.MPS.AreaLaw.AKLV.frustrationFree_twoSidedEnergyTruncation_ground_gap}
+    \notready
+    \uses{def:aklv_normalized_cut_blocks}
+    Let $h_i$ be positive contractions supported on the consecutive site pairs
+    $\{i,i+1\}$ of a finite chain. Choose two boundary bonds $a<b$ and put
+    $H=\sum_i h_i$. Let $\Omega$ be a unit vector satisfying $H\Omega=0$
+    and $H\ge g(I-|\Omega\rangle\langle\Omega|)$, where $0<g\le1$.
+    With zero scalar shifts in Definition~\ref{def:aklv_normalized_cut_blocks},
+    the actual exterior clipping at every $t\ge1024/g$ satisfies
+    \begin{align}
+        0\le K & \le H,                                       & K\Omega & =0, &
+        K      & \ge\frac g2(I-|\Omega\rangle\langle\Omega|).
+        \label{eq:aklv_ff_clipping_gap}
+    \end{align}
+    In particular the original ground vector is preserved exactly.
+    This is the frustration-free clipping step preceding
+    \cite[Theorem~4.3]{Arad2013AreaLaw}, with an explicit cutoff.
+\end{lemma}
+\begin{proof}
+    \uses{def:aklv_two_sided_truncation,lem:aklv_projected_energy,
+        lem:aklv_clipped_gap}
+    Each unshifted regional sum is positive, its two boundary bonds sum
+    to an operator at most $2I$, and the original supports give the
+    regional commutations and reconstruction of $H$.
+    The clipped order bounds give $0\le K\le H$, hence $H\Omega=0$
+    implies $K\Omega=0$.
+    Apply Lemma~\ref{lem:aklv_clipped_gap} at $e=0$:
+    the condition $tg^2\ge1024g$ follows from $t\ge1024/g$.
+    Every $w\perp\Omega$ therefore satisfies
+    $\langle w,Kw\rangle\ge(g/2)\|w\|^2$.
+    Split an arbitrary vector as
+    $v=\langle\Omega,v\rangle\Omega+w$.
+    Since $K\Omega=0$, its energy is $\langle w,Kw\rangle$ and
+    $\|w\|^2=\|v\|^2-|\langle\Omega,v\rangle|^2$.
+    This proves the final operator inequality in
+    (\ref{eq:aklv_ff_clipping_gap}).
+\end{proof}

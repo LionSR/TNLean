@@ -9908,3 +9908,15 @@ there is no need for a new tactic.
   and the repeated block is not copied. The existing actual-gap helper is
   exposed and reused for the physical entropy theorem, without a second
   endpoint-unitary or dimension argument.
+
+### Converting the shortened AKLV window quotient — candidate (2026-10-29)
+
+- **Seen:** private `shorter_window_div_le` in `AKLV/ClippedFilter.lean` and
+  the same arithmetic in `AKLV/FrustrationFreeFilter.lean`.
+- **Pattern:** The remainder bound for division by `s` and `s<=2(s-2)` give
+  `ell/(s-2)<=2(ell/s)+1`, preserving the original central cut and a uniform
+  polynomial rank exponent.
+- **Decision:** Two uses across two files, below the three-occurrence
+  threshold. The existing implementation is private to its separately owned
+  draft; its proof bytes are preserved. Prefer a shared natural-number lemma
+  when another consumer requires the same conversion.
