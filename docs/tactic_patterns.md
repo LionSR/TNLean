@@ -9827,3 +9827,19 @@ there is no need for a new tactic.
   in one private lemma. If a third independent occurrence is needed, expose
   the generic domain-restriction inequality in QICLean and refactor these
   two occurrences; no tactic is needed.
+
+### Dimension and gap bounds from two physical spectral values — candidate (2026-10-29)
+
+- **Pattern:** A unit ground eigenvector and an attained excited energy give
+  real spectral membership, then local dimension at least two; the endpoint
+  trial-vector theorem then gives a gap at most one for positive-contraction
+  nearest-neighbour chains.
+- **Seen:** `MPS/AreaLaw/AKLV/PhysicalRobustness.lean` and
+  `MPS/AreaLaw/AKLV/FavorableFilter.lean`.
+- **Abstraction:** Both applications already use the shared real-spectrum
+  identity and endpoint gap theorem. If a third physical application needs
+  this pair of conclusions before choosing its window, expose their combined
+  consequence in `MPS/AreaLaw/BoundaryGap.lean` rather than repeat the argument.
+- **Notes:** The favorable scale requires the conclusions before its width is
+  selected. This argument is specific to a rank-one ground-space gap; the
+  degenerate case does not have the same endpoint bound.

@@ -111,7 +111,7 @@ above a logarithmic threshold independently of $E_0$.
 The actual clipped Chebyshev filter, its spectral ceiling and sharp rank
 bound are available at the same threshold. Since $T(g)\le1024/g$, the earlier
 polynomial-threshold conclusions follow as corollaries without changing
-their physical hypotheses. The later favorable-parameter and entropy
+their physical hypotheses. The later changing-target and entropy
 construction remains separate.
 
 \section{The remaining finite-window restriction}
@@ -120,12 +120,44 @@ The proved geometry assumes $s\ge6$, so the six boundary labels are
 distinct; at $s=6$ the middle reference sum is empty and is normalized by
 its genuine minimum zero. The source does not state a numerical minimum
 for $s$ beside Theorem~6.1. Its application at line 1023 chooses
-$s=O(\log^2 d/g)$ with a sufficiently large constant; that choice can be
-made at least six, but its numerical lower bound has not been extracted
-from the source asymptotic notation in this development.
+$s=O(\log^2 d/g)$ with a sufficiently large constant. The actual uniform
+choice in \doclink{TNLean/MPS/AreaLaw/AKLV/FavorableFilter} proves $s\ge21$,
+so this application satisfies the six-interaction restriction.
 Windows with fewer than six interactions remain separate. The blueprint
 states this restriction explicitly and does not identify the large-window
 statement with an unrestricted all-window formulation of the printed theorem.
-The subsequent approximate-projector parameter choices, entropy argument,
-and approximation sequence remain further tasks.
+The actual favorable square-degree filter and initial product approximation
+are constructed for every window selected by the universal scalar choice
+that fits in the chain. The subsequent approximation sequence, finite small
+windows, and entropy argument remain further tasks.
+\section{The initial product overlap}
+
+At source line 1023, the product-overlap inequality is printed with
+$\le$; the cited Lemma~2.2 gives $\ge1/\sqrt{2D}$.
+For the initial application to the clipped filter, its fixed vector is the
+actual clipped ground vector $\phi^{t_0}$.
+The construction in \doclink{TNLean/MPS/AreaLaw/AKLV/Initialization}
+therefore chooses a product vector $\chi$ satisfying
+\begin{align*}
+ |\langle\phi^{t_0},\chi\rangle|\ge1/\sqrt{2D}.
+\end{align*}
+This makes the target explicit where the printed line writes $\Gamma$.
+The robustness estimate alone does not transfer this lower bound to
+$|\langle\Gamma,\chi\rangle|$: its error need not be small relative to
+$D^{-1/2}$. No such transfer is used.
+Instead, apply the actual clipped filter to $\chi$, normalize, and choose a
+unit scalar phase. With squared perpendicular shrinking coefficient $\delta$,
+the resulting unit vector $\psi_0$ satisfies
+\begin{align*}
+ \operatorname{SR}(\psi_0)&\le D,&
+ \|\psi_0-\phi^{t_0}\|^2&\le4D\delta.
+\end{align*}
+The uniform parameter choice gives $D\delta\le10^{-5}$, so the same filter
+already suffices for this initial approximation. The triangle inequality
+then compares $\psi_0$ with $\Gamma$. The weaker bounds retained in the
+statement are $\|\psi_0-\phi^{t_0}\|^2\le1/64$ and
+$\|\psi_0-\Gamma\|^2\le1/16$.
+This is the initial step of the changing-target construction, with the
+available-window restriction stated separately; it is not the full
+sequence or entropy theorem.
 \end{document}
