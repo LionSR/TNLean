@@ -57,69 +57,6 @@ theorem exists_tensor_of_hasKrausRankLE
   ext X i j
   simpa [Kraus.transferMap_apply] using congrArg (fun M => M i j) (hK X).symm
 
-/-- **Channel-root formulation of blocked-to-root reconstruction.**
-
-This Prop isolates the channel-theoretic core of
-`PeripheralEqualCaseRootFromZGauge`: from a blocked `Z`-gauge witness between
-`C` and `blockTensor A p`, extract a CPTP root `E'` of `Kraus.transferMap C` whose
-Kraus rank is at most the ambient physical dimension `d`. Once such a root is
-available, the tensor-level reconstruction follows by choosing a Kraus family
-with `d` operators.
-
-This hypothesis is refuted by the rescaling counterexample of
-`docs/paper-gaps/dccsp17_thm41_forward_trace_preservation.tex`: for \(p \ge 1\) at physical
-and bond dimension one the tensors \(C = A^{[p]} = (\lambda)\) with
-\(\lambda > 1\) are related by the trivial \(Z\)-gauge with \(m = 1\), and
-\(C\) is in irreducible form II, while \(\mathcal E_C(x) = \lambda^2 x\) is
-not trace preserving and so is not a \(p\)-th power of a channel. -/
-def PeripheralEqualCaseRootChannelOfZGauge (d D p : ℕ) : Prop :=
-  ∀ {A : MPSTensor d D} {C : MPSTensor (blockPhysDim d p) D} {m : ℕ},
-    IsIrreducibleForm C →
-    0 < m →
-    ZGaugeEquiv m C (blockTensor A p) →
-      ∃ E' : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ,
-        IsChannel E' ∧
-        Kraus.transferMap C = E' ^ p ∧
-        Channel.HasKrausRankLE E' d
-
-/-- **Tensor-level blocked-to-root reconstruction from a bounded channel root.**
-
-If a blocked `Z`-gauge witness yields a CPTP root channel of `Kraus.transferMap C`
-with Kraus rank at most `d`, then one can choose a tensor `A' : MPSTensor d D`
-realizing that root. The channel property forces `A'` to be left-canonical,
-and blocking recovers the transfer map of `C`.
-
-**Unfaithful:** This proof relies on the hypothesis
-`PeripheralEqualCaseRootChannelOfZGauge` and produces
-`PeripheralEqualCaseRootFromZGauge`; both deviate from arXiv:1708.00029,
-lines 765--810, and both are refuted for \(p \ge 1\) at physical and bond dimension one by
-\(C = A^{[p]} = (\lambda)\), \(\lambda > 1\), with the trivial \(Z\)-gauge,
-because the printed forward implication of Theorem 4.1, lines 728--731, omits
-the trace preservation of \(\mathcal E_B\) presupposed by its definition of
-\(p\)-divisibility at lines 717--718. Documented in
-`docs/paper-gaps/dccsp17_thm41_forward_trace_preservation.tex`. Elimination:
-restate both hypotheses over a block-form tensor with every multiplicity equal
-to one, as described in the marker of `thm_4_1_p_refinement_forward`; tracked
-in the follow-up issue cited by the paper-gap note. -/
-theorem peripheralEqualCaseRootFromZGauge_of_rootChannel
-    (hRoot : PeripheralEqualCaseRootChannelOfZGauge d D p) :
-    PeripheralEqualCaseRootFromZGauge d D p := by
-  intro A C m hC hm hZ
-  obtain ⟨E', hE'chan, hpow, hRank⟩ :=
-    hRoot (A := A) (C := C) (m := m) hC hm hZ
-  obtain ⟨A', hA'⟩ := exists_tensor_of_hasKrausRankLE (d := d) (D := D) hRank
-  refine ⟨A', ?_, ?_⟩
-  · have hK :
-        ∀ X : Matrix (Fin D) (Fin D) ℂ,
-          E' X = ∑ i : Fin d, A' i * X * (A' i)ᴴ := by
-        intro X
-        simpa [Kraus.transferMap_apply] using (congrArg (fun T => T X) hA').symm
-    simpa using kraus_sum_conjTranspose_mul_of_tp A' E' hK hE'chan.tp
-  · calc
-      Kraus.transferMap C = E' ^ p := hpow
-      _ = (Kraus.transferMap A') ^ p := by rw [← hA']
-      _ = Kraus.transferMap (blockTensor A' p) := by rw [transferMap_blockTensor]
-
 /-- A clean root-cardinality hypothesis that isolates the remaining Kraus-rank
 step in the reverse direction of Theorem 4.1. -/
 def PRefinementInverseRootKrausRankBound (d D p : ℕ) : Prop :=

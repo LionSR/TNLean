@@ -695,10 +695,12 @@ note.
   $p$-refinable while its transfer map is no longer trace preserving. The
   corrected statement adds trace preservation of the transfer map, which the
   source's definition of $p$-divisibility presupposes. The note also records
-  why the formal forward canonicalization hypothesis, stated over the
+  why the former forward canonicalization hypothesis, stated over the
   generated-family reading of irreducible form, is refuted rather than
-  dischargeable, and lists the unformalized ingredients of the printed
-  argument.
+  dischargeable. The corrected block-form theorem is proved without an
+  extra canonicalization premise, and the refuted premises and their
+  conditional forward/bundled theorems are retired. This forward gap is
+  resolved; the converse root-selection gap below remains open.
 - `dccsp17_root_kraus_rank_thm41.tex` records the Kraus-rank step that the
   converse implication of Theorem 4.1 uses without proof.
 - `dccsp17_orbit_phase_wraparound.tex` (local correction) records that the
