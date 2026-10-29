@@ -9917,3 +9917,31 @@ there is no need for a new tactic.
   the chosen support is removed pointwise.
 - **Decision:** The existing finite-sum and convergence lemmas provide the
   common mechanism. No new selector or cluster operator is introduced.
+
+
+### Tensor-sum action through matrix vectorization — existing Mathlib identity (2026-10-29)
+
+- **Pattern:** Applying a Kronecker sum to a product vector often leads to
+  two repeated finite double-sum calculations.
+- **Reuse:** `Matrix.kronecker_mulVec_vec`, followed by
+  `Matrix.mul_vecMulVec`, `Matrix.vecMulVec_mul`, and
+  `Matrix.vecMul_transpose`, reduces both actions to the factor eigen-equations.
+  `ChainPaddingGroundState.isGappedGroundState_paddedInteraction` uses these
+  identities instead of copying the raw calculations in the doubled-system
+  and replica arguments.
+- **Scope:** The existing Mathlib identities suffice; no additional local
+  tensor-vector definition or tactic is introduced.
+
+### Extracting a normalized retained prefix — helper theorems (2026-10-29)
+
+- **Pattern:** An original target extended by one fixed right basis
+  configuration pairs with one column of the actual viable witness.
+- **Abstraction:** `sum_norm_cutColumn_sq`, `norm_cutColumn_le`,
+  `inner_rightBasisExtension`, and
+  `IsViable.exists_prefix_of_rightBasisExtension` separate the coordinate
+  calculation from support in the retained span and normalization.
+  `IsViable.exists_prefix_mps_of_paddedGroundVector` combines this with the
+  existing phase-distance and finite-span MPS bounds.
+- **Reuse:** The uniform accuracy theorem uses the actual retained stage of
+  the padded successive run; it does not repeat column normalization or
+  reconstruct an independent family.
