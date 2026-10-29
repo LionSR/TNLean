@@ -9713,3 +9713,15 @@ removed after the dependency audit exposed it.
   multiply by the adjoint explicitly; they can use the same upstream theorem
   when their owned dependency stacks are next integrated. No local matrix
   cancellation wrapper or new tactic is introduced.
+
+### Actual periodic closure of an involutive local phase — candidate (2026-10-29)
+
+- **Pattern:** Derive both unitary gauge equations from a local phase, obtain
+  actual standard-form data for the source and transformed factor records,
+  and close them using `TwoSiteStandardFormData.mpo_eq_of_gate_gauges`.
+- **Seen:** `TimeReversalLocalSufficiency.lean` and
+  `TranspositionLocalSufficiency.lean`; both reuse the existing actual-record
+  supplier instead of adding a transform or standard-form witness.
+- **Abstraction:** The mathematical periodic cancellation is already shared.
+  The sign/phase algebra differs under adjunction and transposition; no
+  duplicate symmetry-predicate family or new closure axiom is introduced.

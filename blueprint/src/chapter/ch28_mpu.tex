@@ -10136,6 +10136,43 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     is asserted.
 \end{proof}
 
+\begin{lemma}[Even-ring converse for the canonical transposition phase]
+    \label{lem:mpu_canonical_even_transposition_iff}
+    \lean{MPOTensor.IsMPUCanonicalFormII.mpo_even_eq_transpose_of_source_local_certificate, MPOTensor.IsMPUCanonicalFormII.mpo_standardForm_even_eq_transpose_of_local_certificate, MPOTensor.IsMPUCanonicalFormII.standardForm_even_transposition_iff_exists_local_certificate}
+    \notready
+    Let $U$ be a simple reduced canonical tensor, and construct its actual
+    standard form $W$ with gates $u,v$. Then $W^{(N)}=(W^{(N)})^T$ at every
+    even length $N>1$ if and only if $r(U)=\ell(U)=d$ and, in the canonical
+    rank identifications, there are a unitary $x$ on
+    $\mathbb C^d\otimes\mathbb C^d$ and a phase $c$, $|c|=1$, satisfying
+    \begin{align}
+        v_{23}(u\otimes u) & =c(x\otimes x^T)v_{23}^T.
+    \end{align}
+    A phase is equivalently $e^{i\phi}$ with real $\phi$. More generally,
+    the corresponding local phase equation for any normalized source
+    factorization of a simple reduced canonical tensor, with square source
+    ranks, implies transpose symmetry on its even periodic rings.
+    These are the two implications in \cite[lines~1266--1288]{Cirac2017MPU}
+    for the constructed canonical source form. Arbitrary supplied standard
+    forms and phase deformation remain separate; see
+    \cite{gap:mpu_canonical_form_full_support}.
+\end{lemma}
+
+\begin{proof}
+    \uses{lem:mpu_canonical_source_transposition_phase,
+        lem:mpu_standard_form_from_normalized_source_factors,
+        lem:mpu_physical_transpose_source_factors, FundamentalMPU}
+    For the converse write $A=c(x\otimes x^T)B^T$ and put
+    $X=x^\dagger$, $Y=\overline c\,\overline x$. Since $|c|=1$, both
+    matrices are unitary and satisfy $B^T=(X\otimes Y)A$ and
+    $A^T=B(Y^\dagger\otimes X^\dagger)$. Use the actual source and transpose
+    factor normalizations to construct standard forms with gates $A,B$ and
+    $B^T,A^T$, respectively. Closing the two gauge relations cancels each
+    internal unitary and gives equality on the even rings of the original
+    tensor. The four-spin dictionary transports the given local equation
+    without enlarging its antecedent.
+\end{proof}
+
 \begin{proposition}[Local characterization of transposition]
     \label{prop:local-char-transposition}
     \notready

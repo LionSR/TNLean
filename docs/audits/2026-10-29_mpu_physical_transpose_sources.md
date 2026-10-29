@@ -1,4 +1,10 @@
-# Actual physical-transpose transport for #7020
+# Actual physical transpose and canonical local phase criterion for #7020
+
+Current source state: actual factor transport, forward local phase and even-ring
+converse for the chosen simple reduced canonical standard form are written.
+The explicit phase deformation, unrestricted presentations and exact-head
+hosted acceptance remain. Earlier stage-specific scope notes below describe
+the transport and forward/converse pieces separately.
 
 Source: `Papers/1703.09188/paper_v2.tex:1258–1288`, transposition subsection,
 `prop:local-char-transposition` and `UUtransposetrick`.
@@ -87,3 +93,22 @@ not continuity of the argument choice.
 The four new phase declarations remain source-written and uncompiled.
 The actual even-ring converse and the explicit phase deformation are still
 open. The full source proposition remains `notready` and #7020 remains open.
+
+## Written actual even-ring converse
+
+`TranspositionLocalSufficiency.lean` now derives both gauge relations from a
+unit-modulus local phase with `X=x†` and `Y=conj(c)*conj(x)`. The scalar and
+matrix unitarities are proved, not assumed as extra witnesses. The actual
+normalized source/transpose records supply their own standard forms; the
+existing periodic gauge cancellation then proves transposition symmetry on
+every even ring. The literal four-original-spin converse transports only
+that original antecedent through the existing rank/physical dictionary.
+
+The final `standardForm_even_transposition_iff_exists_local_certificate`
+combines this actual converse with the forward criterion for the chosen
+simple reduced canonical source. Its RHS includes the rank identifications,
+which are derived in the forward implication; no zero-index hypothesis is
+added to the global side. This equivalence is source-written and uncompiled.
+The unrestricted supplied-standard-form scope, explicit phase deformation
+and exact-head hosted validation remain open; source and auxiliary Blueprint
+nodes stay `notready` and #7020 stays open.
