@@ -1,0 +1,26 @@
+\chapter{Hastings' area law for gapped chains}
+\label{ch:hastings_window}
+
+Hastings~\cite{Hastings2007AreaLaw} proved that the ground state of a gapped
+chain with finite-range interactions obeys an area law: the entropy of every
+block of sites is bounded by a constant independent of the length of the
+chain. The argument is by contradiction. A cut of large entropy produces a
+window of sites on which every cut also has large entropy. On such a window
+the approximate factorization of the previous chapter, through the bootstrap
+lemma and a lower bound on the mutual information across a cut, shows that
+the largest entropy of an interval of $2l$ sites falls short of twice that of
+$l$ sites by an amount growing linearly in $l$. Iterating this strengthened
+doubling inequality bounds the length of the window, and hence the entropy.
+The chapter ends with two further consequences drawn in the source: the
+approximation of the ground state by matrix product states, and the decay of
+correlations of operators that are diagonal in the Schmidt basis of a cut.
+
+\input{chapter/ch35_hastings_window}
+\input{chapter/ch35_hastings_doubling}
+\input{chapter/ch35_hastings_main_stage}
+\input{chapter/ch35_hastings_bootstrap}
+\input{chapter/ch35_hastings_renyi_tail_entropy}
+\input{chapter/ch35_hastings_relent}
+\input{chapter/ch35_hastings_area_law}
+\input{chapter/ch35_hastings_schmidt_tail}
+\input{chapter/ch35_hastings_schmidt_diagonal}

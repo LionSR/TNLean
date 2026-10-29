@@ -1,0 +1,27 @@
+\chapter{Hastings' approximate factorization of the ground-state projector}
+\label{ch:hastings_factorization}
+
+Hastings' proof of the one-dimensional area law~\cite{Hastings2007AreaLaw}
+rests on one approximation, Lemma~1 of the source. The projector onto the
+unique ground state of a gapped chain with finite-range interactions is
+close, in operator norm, to a product $O_BO_LO_R$ of three contractions:
+$O_L$ acts on the sites to the left of a cut, $O_R$ on the sites to its
+right, and $O_B$ on the $2l$ sites around it, and the error decays
+exponentially in $l$. The construction splits the Hamiltonian into a left
+part, a buffer and a right part, each centred at the ground state. The
+cut-offs $O_L$ and $O_R$ are spectral projections of the localized left and
+right parts, and $O_B$ is a Gaussian time average, taken in the interaction
+picture and localized near the cut. This chapter proves the steps in that
+order, replaces $O_B$ by the positive operator $O_B^\dagger O_B$ as in the
+note added to the source, fixes the decay length, and assembles the
+factorization. The next chapter uses it to prove the area law.
+
+\input{chapter/ch35_hastings_three_way_splitting}
+\input{chapter/ch35_hastings_spectral_cutoff}
+\input{chapter/ch35_hastings_gaussian_time_average}
+\input{chapter/ch35_hastings_moved_estimate}
+\input{chapter/ch35_hastings_interaction_picture}
+\input{chapter/ch35_hastings_boundary_factorization}
+\input{chapter/ch35_hastings_positive_factorization}
+\input{chapter/ch35_hastings_decay_slack}
+\input{chapter/ch35_hastings_lemma1}
