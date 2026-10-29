@@ -10483,7 +10483,82 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     $\sigma=\pm1$ is independent of the gauge and is constant under continuous
     deformations that preserve time-reversal symmetry.
     % Source lines: paper_v2.tex 1613--1631.
+    % The auxiliary results below use supplied zero-index coordinates and
+    % actual continuous gates with the displayed local symmetry certificate.
+    % A bare globally symmetric path does not yet supply those data.
 \end{proposition}
+
+\begin{lemma}[Extraction of the sign from a supplied local equation]
+    \label{lem:mpu_supplied_time_reversal_sign}
+    \lean{MPOTensor.timeReversalSign, MPOTensor.TwoSiteStandardFormData.timeReversalSign_eq_of_local_relation}
+    \notready
+    Let $d>0$ and let $W$ have a supplied two-site standard form with square
+    gates $u,v$ on $\mathbb C^d\otimes\mathbb C^d$. Define
+    $s(u,v)=d^{-2}\tr[\mathbb S_{12,34}v_{23}(u_{12}\otimes u_{34})v_{23}]$.
+    If a unitary $x$ and a scalar $\sigma$ satisfy
+    \begin{align}
+        v_{23}(u_{12}\otimes u_{34})
+         & =\sigma(x\otimes x^\dagger)v_{23}^\dagger,
+    \end{align}
+    then $s(u,v)=\sigma$. This is the local-equation extraction in
+    \cite[lines~1595--1610]{Cirac2017MPU} for the supplied standard form.
+\end{lemma}
+
+\begin{proof}
+    \uses{thm:matrix_trace_swap_scaled_kronecker}
+    Multiply the local equation by $v_{23}$ and cancel
+    $v_{23}^\dagger v_{23}=\Id$. Exchange of the two physical pairs gives
+    $\tr[\mathbb S(x\otimes x^\dagger)]=\tr[xx^\dagger]=d^2$.
+    Division by the nonzero scalar $d^2$ gives the result.
+\end{proof}
+
+\begin{lemma}[Independence from supplied canonical source representatives]
+    \label{lem:mpu_source_time_reversal_sign_independent}
+    \lean{MPOTensor.SourceFactors.timeReversalSign, MPOTensor.IsMPUCanonicalFormII.source_timeReversalSign_eq_of_mpo_eq}
+    \notready
+    Let $\mathcal U,\mathcal V$ be reduced canonical-form-II tensors in the
+    same bond dimension, with equal periodic operators at every length $N>1$.
+    Give each actual tensor supplied source factors with unitary unshifted
+    gate. Suppose both source ranks of each tensor equal its physical
+    dimension $d$. In the canonical identifications with $\mathbb C^d$,
+    the normalized trace expressions $s(u_U,v_U)$ and $s(u_V,v_V)$ agree.
+    This is the representative-independence deduction in
+    \cite[lines~1613--1627]{Cirac2017MPU} for reduced source data; the
+    full-support restriction is recorded in
+    \cite{gap:mpu_canonical_form_full_support}.
+\end{lemma}
+
+\begin{proof}
+    \uses{FundamentalMPU, lem:mpu_sigma_gauge_invariant}
+    The supplied-factor Fundamental Theorem gives two unitary gate gauges.
+    Carry these gauges through the canonical rank identifications to the
+    physical coordinates. The two gates then have the form
+    $u_V=(x\otimes y)u_U$ and $v_V=v_U(y^\dagger\otimes x^\dagger)$.
+    The trace-gauge identity gives equality of the normalized expressions.
+\end{proof}
+
+\begin{lemma}[Constancy along supplied local time-reversal paths]
+    \label{lem:mpu_supplied_time_reversal_sign_constant}
+    \lean{MPOTensor.continuous_timeReversalSign, MPOTensor.timeReversalSign_eq_on_supplied_path}
+    \notready
+    Let $W(t)$ have supplied two-site standard forms with continuous square
+    gates $u(t),v(t)$ on $\mathbb C^d\otimes\mathbb C^d$, where $d>0$ and
+    $t\in[0,1]$. At every $t$, suppose the local equation of
+    Lemma~\ref{lem:mpu_supplied_time_reversal_sign} holds for a unitary
+    $x(t)$ and a sign $\sigma(t)\in\{1,-1\}$. No continuity of these
+    witnesses is required. Then $s(u(t),v(t))=s(u(0),v(0))$ throughout the interval.
+    This is the continuous-supplied-gate argument of
+    \cite[lines~1628--1630]{Cirac2017MPU}, with its data requirements
+    recorded in \cite{gap:mpu_canonical_form_full_support}.
+\end{lemma}
+
+\begin{proof}
+    \uses{lem:mpu_supplied_time_reversal_sign}
+    The trace expression is a polynomial in the entries of $u,v$, divided
+    by the fixed nonzero scalar $d^2$, hence continuous. The local equation
+    makes its square equal to one. A continuous function from the connected
+    interval to $\{1,-1\}$ is constant.
+\end{proof}
 
 \begin{proposition}[Admissible well-definedness of the time-reversal sign]
     \label{prop:mpu_admissible_sigma_well_defined}

@@ -4950,6 +4950,20 @@ three-plaquette output measurement, and the routed reunion measurement.
 
 ## Candidates
 
+### Constancy of a continuous trace sign — candidate (2026-10-29)
+
+- **Pattern:** A finite matrix-product/trace expression is continuous by
+  `Continuous.matrix_mul`, `Continuous.matrix_kronecker` and
+  `Continuous.matrix_trace`. A local identity puts its value in `{1,-1}`.
+- **Seen:** `MPS/MPU/TimeReversalSign.lean`,
+  `timeReversalSign_eq_on_supplied_path`.
+- **Abstraction:** Mathlib's
+  `IsPreconnected.eq_one_or_eq_neg_one_of_sq_eq` already supplies the
+  topological step; no local connectedness tactic or parallel sign predicate
+  is needed.
+- **Notes:** Continuity of the sign witnesses is unnecessary. Only continuity
+  of the actual supplied gates and a pointwise local equation are used.
+
 ### Counting nearest-neighbour bonds that meet a region — candidate (2026-10-28)
 
 - **Pattern:** Bound the number of nearest-neighbour bonds meeting a finite
