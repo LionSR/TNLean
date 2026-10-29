@@ -31,7 +31,10 @@ open scoped BigOperators InnerProductSpace ComplexOrder MatrixOrder
 
 namespace TNLean.MPS.AreaLaw
 
-private theorem aklv_chain_dimension_and_gap_bounds {L q : ℕ}
+/-- Two distinct spectral values force a nontrivial local dimension, and
+positive-contraction endpoint perturbations bound the actual unique-ground
+gap by one. The conclusion is independent of a fitting physical window. -/
+theorem aklv_chain_dimension_and_gap_bounds {L q : ℕ}
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hsupp : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
       (h j) (interval L j.val (j.val + 2)))

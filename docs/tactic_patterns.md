@@ -10138,3 +10138,18 @@ there is no need for a new tactic.
 - **Decision:** Reuse these mathematical equalities directly. The interval rank,
   total cut rank and constructed MPO all call the same support bound and rank
   identities; no duplicated coordinate argument or new tactic is needed.
+
+### Finite entropy cost from the actual AKLV rank product — promoted (2026-10-29)
+
+- **Pattern:** Sum dyadic weights times a quadratic bound on the logarithm
+  of the actual next rank multiplier.
+- **Abstraction:** QICLean's existing `Real.sum_quadratic_div_dyadic_le` is
+  exposed without changing its statement or proof. The actual product
+  recurrence supplies the logarithmic ratio, so no artificial rank family
+  or infinite summability proof is introduced.
+- **Scout and cleanup:** The scoped scanner found a third four-line
+  derivation of `1/2 ≤ log 2`. Mathlib already supplies
+  `Real.log_two_gt_d9`; the new call site now applies that result directly,
+  and the repeated block is not copied. The existing actual-gap helper is
+  exposed and reused for the physical entropy theorem, without a second
+  endpoint-unitary or dimension argument.

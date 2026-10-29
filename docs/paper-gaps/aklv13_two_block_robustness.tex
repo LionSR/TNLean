@@ -131,7 +131,8 @@ The actual favorable square-degree filter and initial product approximation
 are constructed for every window selected by the universal scalar choice
 that fits in the chain. The fixed-window changing-target sequence is now constructed by actual
 normalized polynomial images with an exact product rank budget. Finite
-small windows and the entropy argument remain further tasks. The
+small windows remain a separate robustness statement. The entropy
+argument from the actual coherent sequence is completed below. The
 accuracy-dependent enlarged-window optimization is completed below,
 including exact boundary alternatives for chains too short for that window.
 \section{The initial product overlap}
@@ -188,8 +189,8 @@ The printed summary at source line 1053 writes the rank itself as an
 initial term plus a sum of logarithmic rank costs. The multiplicative
 rank bound, or its logarithm, is the correct reading, consistent with
 item 2 of the stated lemma. The current result retains the exact product
-and the proved initial logarithmic budget; the source's further summed
-logarithmic estimate and final entropy summation remain separate tasks.
+and the proved initial logarithmic budget. The finite entropy summation
+from these actual ranks is completed below.
 The accuracy-dependent enlarged-window argument at lines 1503--1517 is
 also separate and is not replaced by this fixed-window recursion.
 
@@ -251,6 +252,42 @@ the same bond bound and
 $z=\log(2048(L+1)/\epsilon^2)$. The returned vector is that normalized
 ordered product. The proof uses no independent area-law or matrix
 product approximation existence theorem. This completes this sharp
-approximation route; the entropy summation from the separate coherent
-changing-target sequence remains a further task.
+approximation route. The entropy summation from the separate coherent
+changing-target sequence is also completed below.
+\section{Entropy from the actual coherent sequence}
+
+The module \doclink{TNLean/MPS/AreaLaw/AKLV/SequenceEntropyParameters}
+proves, for the actual selected degrees and filter ranks,
+\begin{align*}
+ 1\le\ell_j&\le240s(j+1),&
+ \log F_j&\le200000(j+1)^2\log D_0.
+\end{align*}
+These are coarse estimates for entropy summation only; the separate
+accuracy-dependent fourth-root rank comparison is unchanged.
+The actual rank products satisfy $R_i\ge2^{i+1}$ and
+$\log(R_{i+1}/R_i)=\log F_{i+1}$. The generic finite rank-tail entropy
+inequality can therefore be applied with cutoff equal to the finite
+marginal dimension. The existing finite dyadic quadratic moment gives
+\begin{align*}
+ \sum_{i<M}2^{-i}&\le2,&
+ \sum_{i<M}2^{-i}(i+2)^2&\le22.
+\end{align*}
+The actual marginal tails $2^{-i}/16$ supplied by the coherent sequence
+imply entropy at most $300000\log D_0$.
+
+The module \doclink{TNLean/MPS/AreaLaw/AKLV/PhysicalEntropy} combines
+this estimate with the actual initial-width bound. If the prescribed
+initial window fails to fit, the exact smaller-side dimension estimate
+$S_k\le\min\{k,L-k\}\log q\le s\log q$ suffices. The resulting theorem
+holds at every cut, including the endpoints and chains shorter than the
+initial window, with a universal constant chosen before the physical data:
+\begin{align*}
+ S_k(\Omega)\le\frac{C}{g}(1+\log q+\log(1/g))^3.
+\end{align*}
+It retains the actual first excited spectral value $\mu+g$. The local
+dimension and upper-gap bounds are derived from the original physical
+interaction independently of window fit. No supplied spectral tail,
+approximant, filter, or independent area-law theorem is used. The displayed
+logarithmic gap dependence is retained explicitly; no sharper dependence
+with all inverse-gap logarithms removed is asserted.
 \end{document}
