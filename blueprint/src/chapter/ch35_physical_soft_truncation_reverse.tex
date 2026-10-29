@@ -1,0 +1,80 @@
+\section{The physical soft residual on the soft spectral window}
+
+\begin{theorem}[A residual on the actual soft low-energy space]
+    \label{thm:interval_physical_soft_reverse_residual}
+    \lean{TNLean.MPS.AreaLaw.exists_interval_physical_soft_reverse_residual}
+    \leanok
+    Let $H=\sum_i h_i$ be a finite open chain of local dimension $q\ge1$,
+    with supported positive unit nearest-neighbour terms. Fix any interval
+    $J=[p,r)\subseteq[0,L)$, and write $A_J$ for its internal sum.
+    The attained regional minima, their common minimizing vector, and the
+    centered original ground data can be chosen before all approximate
+    regional energies and orders. Write $S$ for the sum of the regional
+    minima and $E_0\in[0,2]$ for the attained minimum of $H-S\Id$.
+
+    Let $e_J-10\le\varepsilon'_J\le e_J$, let $m\ge1$ be an integer, and
+    suppose $m/2\ge10$. Define
+    \begin{align*}
+        \alpha&=(m/2)2^{-m},&
+        \widetilde H&=H-A_J+\varepsilon'_J\Id
+                         +h_{m,m}(A_J-\varepsilon'_J\Id).
+    \end{align*}
+    Before choosing a bandwidth, one can choose an attained ground energy
+    $E_s$ and a unit ground vector of $\widetilde H-S\Id$, with
+    \begin{align*}
+        \widetilde H\le H,&\qquad -\alpha\le E_s\le E_0.
+    \end{align*}
+    For every $\eta\ge0$ satisfying
+    \begin{align}
+        m/2\ge17+\eta+\alpha,
+        \label{eq:physical_soft_reverse_scale}
+    \end{align}
+    the actual soft spectral space
+    $\widetilde G_\eta=\mathbf1_{(-\infty,E_s+\eta]}
+       (\widetilde H-S\Id)\mathcal H$ satisfies
+    \begin{align}
+        \left\|(H-\widetilde H)|_{\widetilde G_\eta}\right\|
+          \le80\exp\left(\frac{17+\eta+\alpha}{8}-\frac m{16}\right).
+        \label{eq:physical_soft_reverse_residual}
+    \end{align}
+    Empty and endpoint intervals are included. No gap or ground-space
+    dimension is assumed. This equal-order-and-scale auxiliary retains
+    the explicit scale restriction and does not assert a spectral-subspace
+    comparison or the printed uniform energy estimate of
+    \cite{Arad2016RigorousRG}; see
+    \cite{gap:alvv16_soft_truncation_energy_estimate}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:interval_physical_soft_truncation_residual,
+        thm:nearest_neighbour_weighted_low_restriction}
+    Write $\widetilde H-S\Id=X_s+Y$, where $Y$ contains the actual
+    crossing bonds. There are at most two such bonds. The shifted soft/hard
+    comparison of \cite{QICLean2026Blueprint} gives
+    \begin{align*}
+        X_s+\alpha\Id&\ge0,&
+        u\,\mathbf1_{[e_J+u,\infty)}(A_J)&\le X_s+\alpha\Id
+            \qquad(0\le u\le m/2-10).
+    \end{align*}
+    Positivity of $Y$ gives $E_s\ge-\alpha$. The variational principle
+    and $\widetilde H\le H$ give $E_s\le E_0$.
+
+    Put $C=2|\partial J|\le4$ and
+    $u=E_s+\alpha+\eta+C+1$. Then
+    $0\le u\le7+\eta+\alpha\le m/2-10$ and
+    $u-(E_s+\alpha+\eta)-C=1$. The actual disconnected regional terms
+    commute with $A_J$, including the soft function of $A_J$. Apply the
+    weighted restriction estimate to $X_s+\alpha\Id$, using the eigenbasis
+    of $\widetilde H-S\Id$ and shifting its eigenvalues by $\alpha$.
+    Its low spectral space is exactly $\widetilde G_\eta$.
+    The high-energy weighted map has norm at most $C$; the complementary
+    part has norm at most one. Changing the origin by
+    $e_J-\varepsilon'_J\le10$ gives
+    \begin{align*}
+        \left\|e^{(A_J-\varepsilon'_J\Id)/8}|_{\widetilde G_\eta}\right\|
+          \le5e^{(17+\eta+\alpha)/8}.
+    \end{align*}
+    The functional-calculus remainder estimate of \cite{QICLean2026Blueprint}
+    now gives~(\ref{eq:physical_soft_reverse_residual}). The scalar
+    $\alpha$ corrects the order comparison; the residual itself is the
+    actual difference $H-\widetilde H$.
+\end{proof}

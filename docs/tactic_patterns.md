@@ -9872,3 +9872,20 @@ there is no need for a new tactic.
 - **Refactored occurrences:** All three comparisons now reuse `add_sq_le`;
   the additional hand-written squared-difference nonnegativity argument is
   removed from the initialization proof. No new generic theorem is needed.
+
+
+### Exponential-weight and soft-remainder restrictions — promoted (2026-10-29)
+
+- **Pattern:** Split a matrix exponential into high- and low-energy restrictions,
+  change its scalar origin, and factor the soft remainder through the same
+  exponential.
+- **Abstraction:** QICLean analysis owns
+  `Matrix.norm_exp_domRestrict_le_of_high_restriction`,
+  `Matrix.norm_shifted_exp_domRestrict_le`, and
+  `Matrix.norm_softTruncation_remainder_domRestrict_le_exp_weight`.
+- **Refactored occurrences:** The original-window construction in
+  `RegionalExponentialMoment.lean` and `PhysicalSoftTruncationResidual.lean`,
+  and the soft-window construction in `PhysicalSoftTruncationReverse.lean`,
+  use these shared matrix estimates. Their former private proofs were moved
+  to the companion library without compatibility aliases. Physical coercivity
+  and the high-energy weighted maps are still derived from the actual chain.
