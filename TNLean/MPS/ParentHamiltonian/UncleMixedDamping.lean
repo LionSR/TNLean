@@ -24,7 +24,7 @@ Source: arXiv:1210.6613, Lemma exptransferoperator and the normalized
 two-block setting of Lemma lowenergystates, lines 1165–1265.
 -/
 
-open scoped Matrix BigOperators ComplexOrder MatrixOrder Matrix.Norms.L2Operator
+open scoped Matrix BigOperators ComplexOrder MatrixOrder Matrix.Norms.L2Operator ENNReal
 
 namespace MPSTensor
 
@@ -100,8 +100,13 @@ theorem uncleBoundaryLetter_mixedMapSpectralRadius_lt_one [NeZero a] [NeZero b]
     rw [hsum, hFA, hFB]
   have hCP := Matrix.rectangularKrausMap_isKrausCP K
   have hOne : Matrix.rectangularKrausMap K 1 = 1 := by
-    simpa only [Matrix.rectangularKrausMap, Kraus.IsUnital, Matrix.mul_one] using hKU
-  unfold Kraus.mixedMapSpectralRadius
+    change (∑ i, K i * 1 * (K i)ᴴ) = 1
+    simpa only [Kraus.IsUnital, Matrix.mul_one] using hKU
+  suffices hLocal : spectralRadius ℂ
+      ((Module.End.toContinuousLinearMap (Matrix (Fin a) (Fin b) ℂ))
+        (Kraus.mixedMapLM A B)) < 1 by
+    simpa only [Kraus.mixedMapSpectralRadius, spectralRadius,
+      AlgEquiv.quasispectrum_eq] using hLocal
   apply spectralRadius_lt_one_of_eigenvalues_lt_one
   intro μ hμ
   obtain ⟨X, hX⟩ := hμ.exists_hasEigenvector
@@ -165,7 +170,11 @@ theorem uncleBoundaryLetter_mixedMapSpectralRadius_reverse_lt_one [NeZero a] [Ne
     Kraus.mixedMapSpectralRadius B A < 1 := by
   have hgap := uncleBoundaryLetter_mixedMapSpectralRadius_lt_one
     A B R L hPert hUA hUB ρA hρA ρB hρB hFA hFB
-  unfold Kraus.mixedMapSpectralRadius
+  suffices hLocal : spectralRadius ℂ
+      ((Module.End.toContinuousLinearMap (Matrix (Fin b) (Fin a) ℂ))
+        (Kraus.mixedMapLM B A)) < 1 by
+    simpa only [Kraus.mixedMapSpectralRadius, spectralRadius,
+      AlgEquiv.quasispectrum_eq] using hLocal
   apply spectralRadius_lt_one_of_eigenvalues_lt_one
   intro μ hμ
   obtain ⟨X, hX⟩ := hμ.exists_hasEigenvector

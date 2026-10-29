@@ -78,7 +78,7 @@ noncomputable def uncleWallSlopeBilin
     ring
   · intro c R S
     simp [map_smul, Matrix.smul_mul, Matrix.mul_smul, ← Finset.smul_sum,
-      Matrix.trace_smul, RCLike.smul_re, smul_eq_mul]
+      Matrix.trace_smul, smul_eq_mul]
     ring
   · intro R S S'
     simp [Matrix.conjTranspose_add, Matrix.mul_add, Matrix.mul_sum,
@@ -86,7 +86,7 @@ noncomputable def uncleWallSlopeBilin
     ring
   · intro c R S
     simp [Matrix.conjTranspose_smul, Matrix.mul_smul, ← Finset.smul_sum,
-      Matrix.trace_smul, RCLike.smul_re, smul_eq_mul]
+      Matrix.trace_smul, smul_eq_mul]
     ring
 
 /-- The actual source norm coefficient as a real quadratic form on the
@@ -97,7 +97,7 @@ noncomputable def uncleWallSlopeQuadratic
     (ρ : Matrix (Fin a) (Fin a) ℂ)
     (hSpect : Kraus.mixedMapSpectralRadius A B < 1) :
     QuadraticForm ℝ (Fin d → Matrix (Fin a) (Fin b) ℂ) :=
-  (uncleWallSlopeBilin A B ρ hSpect).toQuadraticMap
+  LinearMap.BilinMap.toQuadraticMap (uncleWallSlopeBilin A B ρ hSpect)
 
 /-- Evaluating the real quadratic form gives exactly the real part of the
 actual mixed-series slope, not a replacement coefficient;
