@@ -7,6 +7,7 @@ import TNLean.MPS.ParentHamiltonian.UncleWallGramQuadratic
 import Mathlib.LinearAlgebra.QuadraticForm.Radical
 import Mathlib.LinearAlgebra.Prod
 import Mathlib.MeasureTheory.Measure.Lebesgue.EqHaar
+import Mathlib.Analysis.Matrix.MeasurableSpace
 
 /-!
 # Generic positivity of the actual one-wall norm coefficient
@@ -35,7 +36,8 @@ private theorem wallQuadratic_polar_eq_zero {V : Type*} [AddCommGroup V] [Module
   let t := -p / (Q y + 1)
   have hd : 0 < Q y + 1 := by linarith [hQ y]
   have heq : Q (x + t • y) = -(p * p) / (Q y + 1) ^ 2 := by
-    rw [QuadraticMap.map_add, Q.map_smul, QuadraticMap.polar_smul_right, hx]
+    rw [QuadraticMap.map_add (Q : V → ℝ) x (t • y), Q.map_smul,
+      QuadraticMap.polar_smul_right, hx]
     simp only [zero_add, smul_eq_mul]
     change (t * t) * Q y + t * p = _
     dsimp [t]
@@ -102,7 +104,8 @@ private theorem wallQuadratic_positive_set_eq_compl_radical {V : Type*}
     [AddCommGroup V] [Module ℝ V] (Q : QuadraticForm ℝ V) (hQ : ∀ x, 0 ≤ Q x) :
     {x | 0 < Q x} = (Q.radical : Set V)ᶜ := by
   ext x
-  rw [Set.mem_setOf_eq, Set.mem_compl_iff, wallQuadratic_mem_radical_iff Q hQ]
+  change 0 < Q x ↔ ¬ x ∈ Q.radical
+  rw [wallQuadratic_mem_radical_iff Q hQ x]
   exact ⟨ne_of_gt, fun hx ↦ lt_of_le_of_ne (hQ x) (Ne.symm hx)⟩
 
 /-- Positive actual wall slopes form an open dense set under the source
@@ -140,7 +143,7 @@ theorem uncleWallSlopeQuadratic_zero_measure [NeZero a] [NeZero b]
     (ρ : Matrix (Fin a) (Fin a) ℂ) (hρ : ρ.PosDef)
     (hA : Kraus.adjointMap A ρ = ρ) (hB : Kraus.mapLM B 1 = 1)
     (hSpect : Kraus.mixedMapSpectralRadius A B < 1)
-    (μ : Measure (Fin d → Matrix (Fin a) (Fin b) ℂ)) [IsAddHaarMeasure μ] :
+    (μ : Measure (Fin d → Matrix (Fin a) (Fin b) ℂ)) [Measure.IsAddHaarMeasure μ] :
     μ {R | uncleWallSlopeQuadratic A B ρ hSpect R = 0} = 0 := by
   have hset : {R | uncleWallSlopeQuadratic A B ρ hSpect R = 0} =
       ((uncleWallSlopeQuadratic A B ρ hSpect).radical :
@@ -148,7 +151,7 @@ theorem uncleWallSlopeQuadratic_zero_measure [NeZero a] [NeZero b]
     ext R
     exact (uncleWallSlopeQuadratic_mem_radical_iff A B ρ hρ.posSemidef hA hB hSpect R).symm
   rw [hset]
-  exact addHaar_submodule μ _
+  exact Measure.addHaar_submodule μ _
     (uncleWallSlopeQuadratic_radical_ne_top A B R₀ L₀ hPert ρ hρ hSpect)
 
 /-- Almost every wall has strictly positive actual limiting Gram slope
@@ -164,13 +167,13 @@ theorem uncleWallNormSlope_ae_pos [NeZero a] [NeZero b]
     (ρ : Matrix (Fin a) (Fin a) ℂ) (hρ : ρ.PosDef)
     (hA : Kraus.adjointMap A ρ = ρ) (hB : Kraus.mapLM B 1 = 1)
     (hSpect : Kraus.mixedMapSpectralRadius A B < 1)
-    (μ : Measure (Fin d → Matrix (Fin a) (Fin b) ℂ)) [IsAddHaarMeasure μ] :
+    (μ : Measure (Fin d → Matrix (Fin a) (Fin b) ℂ)) [Measure.IsAddHaarMeasure μ] :
     ∀ᵐ R ∂μ, 0 < uncleWallNormSlope A B R ρ := by
   have hq : ∀ᵐ R ∂μ, 0 < uncleWallSlopeQuadratic A B ρ hSpect R := by
     have hset : {R | ¬ 0 < uncleWallSlopeQuadratic A B ρ hSpect R} =
         {R | uncleWallSlopeQuadratic A B ρ hSpect R = 0} := by
       ext R
-      simp only [Set.mem_setOf_eq, not_lt]
+      simp only [Set.mem_ofPred_eq, not_lt]
       exact ⟨fun h ↦ le_antisymm h
         (uncleWallSlopeQuadratic_nonneg A B ρ hρ.posSemidef hA hB hSpect R), fun h ↦ h.le⟩
     rw [ae_iff, hset]
@@ -198,7 +201,7 @@ theorem uncleWallNormSlope_pair_ae_pos [NeZero a] [NeZero b]
     (hAB : Kraus.mixedMapSpectralRadius A B < 1)
     (hBA : Kraus.mixedMapSpectralRadius B A < 1)
     (μ : Measure ((Fin d → Matrix (Fin a) (Fin b) ℂ) ×
-      (Fin d → Matrix (Fin b) (Fin a) ℂ))) [IsAddHaarMeasure μ] :
+      (Fin d → Matrix (Fin b) (Fin a) ℂ))) [Measure.IsAddHaarMeasure μ] :
     ∀ᵐ P ∂μ, 0 < uncleWallNormSlope A B P.1 ρA ∧
       0 < uncleWallNormSlope B A P.2 ρB := by
   have hdim : (a + b) * (a + b) ≤ d := by
@@ -222,10 +225,34 @@ theorem uncleWallNormSlope_pair_ae_pos [NeZero a] [NeZero b]
     (uncleWallSlopeQuadratic_ne_zero_of_bond_sq_lt A B ρA hρA hdB hAB)
   have hS₂ : S₂ ≠ ⊤ := wallQuadratic_radical_ne_top Q₂
     (uncleWallSlopeQuadratic_ne_zero_of_bond_sq_lt B A ρB hρB hdA hBA)
-  have hnull₁ : μ (S₁.prod ⊤) = 0 := addHaar_submodule μ _
-    (fun h ↦ hS₁ (Submodule.prod_eq_top_iff.mp h).1)
-  have hnull₂ : μ ((⊤ : Submodule ℝ (Fin d → Matrix (Fin a) (Fin b) ℂ)).prod S₂) = 0 :=
-    addHaar_submodule μ _ (fun h ↦ hS₂ (Submodule.prod_eq_top_iff.mp h).2)
+  have hprod₁ : S₁.prod (⊤ : Submodule ℝ (Fin d → Matrix (Fin b) (Fin a) ℂ)) ≠ ⊤ := by
+    intro h
+    apply hS₁
+    apply eq_top_iff.mpr
+    intro R _
+    have hmem : (R, (0 : Fin d → Matrix (Fin b) (Fin a) ℂ)) ∈
+        S₁.prod (⊤ : Submodule ℝ (Fin d → Matrix (Fin b) (Fin a) ℂ)) := by
+      rw [h]
+      trivial
+    exact hmem.1
+  have hprod₂ : (⊤ : Submodule ℝ (Fin d → Matrix (Fin a) (Fin b) ℂ)).prod S₂ ≠ ⊤ := by
+    intro h
+    apply hS₂
+    apply eq_top_iff.mpr
+    intro L _
+    have hmem : ((0 : Fin d → Matrix (Fin a) (Fin b) ℂ), L) ∈
+        (⊤ : Submodule ℝ (Fin d → Matrix (Fin a) (Fin b) ℂ)).prod S₂ := by
+      rw [h]
+      trivial
+    exact hmem.2
+  have hnull₁ : μ (S₁.prod (⊤ : Submodule ℝ (Fin d → Matrix (Fin b) (Fin a) ℂ)) :
+      Set ((Fin d → Matrix (Fin a) (Fin b) ℂ) ×
+        (Fin d → Matrix (Fin b) (Fin a) ℂ))) = 0 :=
+    Measure.addHaar_submodule μ _ hprod₁
+  have hnull₂ : μ ((⊤ : Submodule ℝ (Fin d → Matrix (Fin a) (Fin b) ℂ)).prod S₂ :
+      Set ((Fin d → Matrix (Fin a) (Fin b) ℂ) ×
+        (Fin d → Matrix (Fin b) (Fin a) ℂ))) = 0 :=
+    Measure.addHaar_submodule μ _ hprod₂
   have hae₁ : ∀ᵐ P ∂μ, P.1 ∉ S₁ := by
     have hset : {P : (Fin d → Matrix (Fin a) (Fin b) ℂ) ×
         (Fin d → Matrix (Fin b) (Fin a) ℂ) | P.1 ∈ S₁} = (S₁.prod (⊤ :
