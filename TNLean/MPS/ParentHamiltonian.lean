@@ -307,6 +307,7 @@ import TNLean.MPS.ParentHamiltonian.VaryingOBCProjectorKernel
 import TNLean.MPS.ParentHamiltonian.VaryingOBCReconstruction
 import TNLean.MPS.ParentHamiltonian.VaryingPhysicalKernelSupport
 import TNLean.MPS.ParentHamiltonian.VaryingPhysicalParentHamiltonian
+import TNLean.MPS.ParentHamiltonian.VaryingPhysicalParentUniqueness
 import TNLean.MPS.ParentHamiltonian.WeightedVirtualHilbert
 import TNLean.MPS.ParentHamiltonian.WrappingWindow
 import TNLean.MPS.ParentHamiltonian.WrappingWindowLastSiteFactorization

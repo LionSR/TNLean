@@ -9828,3 +9828,15 @@ there is no need for a new tactic.
   parent comparison both consume it, without copied projection arguments.
 - **Notes:** Mathlib's projection-zero and double-orthogonal identities supply
   the generic projection step; no new subspace or positivity predicate.
+
+### Recovering an actual varying-physical state line — reuse (2026-10-29)
+
+- **Seen:** `MPS/ParentHamiltonian/VaryingPhysicalParentUniqueness.lean`.
+- **Pattern:** Transfer the actual canonical state and kernel through physical
+  extension, while deriving state-image membership from the actual parent.
+- **Reuse:** The private `extend_varyingPhysicalScalarState` identity is shared
+  by normalization and kernel uniqueness. The proof uses the existing support
+  extraction, actual Hamiltonian intertwining, uniform kernel comparison and
+  full-chain reconstruction rather than copying their coordinate proofs.
+- **Decision:** Existing mathematical transport lemmas suffice; no new chain
+  record, product recursion, predicate family or tactic is introduced.
