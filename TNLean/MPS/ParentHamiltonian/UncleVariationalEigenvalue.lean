@@ -43,7 +43,7 @@ private theorem exists_small_pos_eigenvalue_of_rayleigh
       change (lam i : ℂ) • b i = 0
       rw [hi, Complex.ofReal_zero, zero_smul]
     rw [b.repr_apply_apply]
-    exact (Submodule.mem_orthogonal v).mp hv (b i) hker
+    exact ((LinearMap.ker T).mem_orthogonal v).mp hv (b i) hker
   have hnorm : ‖v‖ ^ 2 = ∑ i, ‖b.repr v i‖ ^ 2 := by
     rw [← b.repr.norm_map v, PiLp.norm_sq_eq_of_L2]
   have henergy : (⟪T v, v⟫_ℂ).re = ∑ i, lam i * ‖b.repr v i‖ ^ 2 := by
@@ -94,5 +94,46 @@ theorem exists_pos_eigenvalue_uncleHamiltonianES_lt_of_rayleigh
       Module.End.HasEigenvalue (uncleHamiltonianES A B R L N).toLinearMap (μ : ℂ) :=
   exists_small_pos_eigenvalue_of_rayleigh _ (uncleHamiltonianES_isPositive A B R L N)
     v hv ε hRayleigh
+
+/-- The actual variational spectral step for an arbitrary trial vector.
+Subtracting its actual kernel projection preserves energy and removes
+exactly the projected squared norm. This derives the kernel-complement
+vector rather than requiring orthogonality of the supplied trial.
+Source: arXiv:1210.6613, proof of thm:gapless, lines 1302–1314. -/
+theorem exists_pos_eigenvalue_uncleHamiltonianES_lt_of_projection_bound
+    {d a b : ℕ} (A : MPSTensor d a) (B : MPSTensor d b)
+    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
+    (L : Fin d → Matrix (Fin b) (Fin a) ℂ) (N : ℕ)
+    (v : EuclideanSpace ℂ (Cfg d N)) (ε : ℝ)
+    (hRayleigh : (⟪uncleHamiltonianES A B R L N v, v⟫_ℂ).re <
+      ε * (‖v‖ ^ 2 -
+        ‖(LinearMap.ker (uncleHamiltonianES A B R L N).toLinearMap).starProjection v‖ ^ 2)) :
+    ∃ μ : ℝ, 0 < μ ∧ μ < ε ∧
+      Module.End.HasEigenvalue (uncleHamiltonianES A B R L N).toLinearMap (μ : ℂ) := by
+  let T := (uncleHamiltonianES A B R L N).toLinearMap
+  let K := LinearMap.ker T
+  let w := v - K.starProjection v
+  have hT : T.IsPositive := uncleHamiltonianES_isPositive A B R L N
+  have hw : w ∈ Kᗮ := Submodule.sub_starProjection_mem_orthogonal (K := K) v
+  have hkill : T (K.starProjection v) = 0 :=
+    LinearMap.mem_ker.mp (K.starProjection_apply_mem v)
+  have hTw : T w = T v := by
+    change T (v - K.starProjection v) = T v
+    rw [map_sub, hkill, sub_zero]
+  have hcross : inner ℂ (T v) (K.starProjection v) = 0 := by
+    rw [hT.isSymmetric v (K.starProjection v), hkill, inner_zero_right]
+  have henergy : (⟪T w, w⟫_ℂ).re = (⟪T v, v⟫_ℂ).re := by
+    rw [hTw]
+    change (inner ℂ (T v) (v - K.starProjection v)).re = _
+    rw [inner_sub_right, hcross, sub_zero]
+  have hnorm : ‖w‖ ^ 2 = ‖v‖ ^ 2 - ‖K.starProjection v‖ ^ 2 := by
+    have hpyth := Submodule.norm_sq_eq_add_norm_sq_starProjection v K
+    have horth : Kᗮ.starProjection v = w :=
+      Submodule.starProjection_orthogonal_val (K := K) v
+    rw [horth] at hpyth
+    linarith
+  apply exists_small_pos_eigenvalue_of_rayleigh T hT w hw ε
+  rw [henergy, hnorm]
+  exact hRayleigh
 
 end MPSTensor
