@@ -9606,3 +9606,12 @@ there is no need for a new tactic.
   add unrelated dependencies. If a shared one-step statement is needed, move that existing
   mathematical lemma to a lower matrix-analysis module and reuse it; do not duplicate its
   statement or introduce a new tactic.
+
+### Cancellation from a spanning matrix family — promoted
+- **Pattern:** express the identity as a finite linear combination of a
+  spanning family, distribute multiplication, and cancel two factors.
+- **Seen:** the two orientations in `PEPS/CycleMPSChainArc.lean`; its
+  trace-pairing cancellation already uses the same extension mechanism.
+- **Abstraction:** use Mathlib's `LinearMap.ext_on_range` on `mulLeft` or
+  `mulRight`, then evaluate at the identity. Both multiplication proofs now
+  work for an arbitrary `Sort` of generators without a finite-index instance.

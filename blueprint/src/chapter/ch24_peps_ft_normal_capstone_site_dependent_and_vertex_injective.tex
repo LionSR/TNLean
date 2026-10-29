@@ -66,11 +66,34 @@ standing regime of at least three sites, whereas Lemma~\ref{thm:peps_cycle_two_s
     $\{A_{(s)}^z:|z|=m+1\}$.
 \end{proof}
 
+\begin{lemma}[Cancellation against a spanning matrix family]
+    \label{lem:chain_spanning_matrix_cancellation}
+    \lean{MPSChainTensor.eq_of_span_mul_left,
+        MPSChainTensor.eq_of_mul_span_right}
+    \notready
+    Let $\iota$ be an arbitrary index set, and let
+    $W_i\in\MN{D}$, $i\in\iota$, span $\MN{D}$ over $\C$.
+    For $X,Y\in\MN{D}$, either of the identities
+    \begin{align}
+        W_iX=W_iY\quad(\forall i\in\iota),
+        \qquad\text{or}\qquad
+        XW_i=YW_i\quad(\forall i\in\iota)
+        \label{eq:chain_spanning_matrix_cancellation}
+    \end{align}
+    implies $X=Y$. This is the uniqueness argument for virtual insertions
+    in \cite[Lemma~5]{Molnar2018NormalPEPS}; no finiteness condition on
+    $\iota$ is needed.
+\end{lemma}
+\begin{proof}
+    The two multiplication maps are linear and agree on a spanning family,
+    hence agree on every matrix. Evaluating their equality at the identity
+    gives $X=Y$.
+\end{proof}
+
 \begin{lemma}[Bond-operator extraction from overlapping windows,
         site-dependent form]%
     \label{lem:chain_overlapWindow_exists_bondOperator}
     \lean{MPSChainTensor.overlapWindow_exists_bondOperator}
-    \lean{MPSChainTensor.eq_of_span_mul_left}
     \leanok
     \uses{def:chain_arc_window_injective}
     Let $0<L$, $2L+1\le n$, let $A=(A_0,\ldots,A_{n-1})$ with $A_s\in\MN{D}^d$
@@ -97,15 +120,16 @@ standing regime of at least three sites, whereas Lemma~\ref{thm:peps_cycle_two_s
     (with constant specialization Lemma~\ref{lem:overlapWindow_exists_bondOperator}).
 \end{lemma}
 \begin{proof}\leanok
-    \uses{lem:isWindowInjective_arc_span, def:chain_arc_window_injective}
+    \uses{lem:isWindowInjective_arc_span, def:chain_arc_window_injective,
+        lem:chain_spanning_matrix_cancellation}
     Since $n-L-1\ge L$, Lemma~\ref{lem:isWindowInjective_arc_span} and trace
     nondegeneracy strip the complementary arc to give
     $C_j(u_1\cdots u_L)A_{r+j+L}^{u_{L+1}}=A_{r+j}^{u_1}C_{j+1}(u_2\cdots u_{L+1})$
     for $0\le j<L$. Chaining $j=0,\ldots,L-1$ yields
     $C_0(a)A_{(r+L)}^b=A_{(r)}^aC_L(b)$ for all $|a|=|b|=L$. Choosing $\alpha_b$
     with $\sum_b\alpha_bA_{(r+L)}^b=\Id$ and setting $X:=\sum_b\alpha_bC_L(b)$
-    gives $A_{(r)}^a X=C_0(a)$ and $X A_{(r+L)}^b=C_L(b)$; spanning of
-    $\{A_{(r)}^a\}$ makes $X$ unique.
+    gives $A_{(r)}^a X=C_0(a)$ and $X A_{(r+L)}^b=C_L(b)$;
+    Lemma~\ref{lem:chain_spanning_matrix_cancellation} makes $X$ unique.
 \end{proof}
 
 \begin{lemma}[Arc transfer between same-state chains]%
