@@ -9775,3 +9775,16 @@ there is no need for a new tactic.
   coefficient extension.
 - **Decision:** The existing function-extension API supplies the extension;
   no new coefficient predicate or compatibility witness is introduced.
+
+### Euclidean physical extension by zero — promoted (2026-10-29)
+
+- **Pattern:** Extend finite physical coefficients by zero along an injection,
+  transport the linear map through `WithLp`, and prove the norm identity by
+  `Fintype.sum_of_injective`.
+- **Defined in:** `Algebra/EuclideanExtendByZero.lean`,
+  `Function.Embedding.euclideanExtendByZero` and its coordinate identities.
+- **Seen:** dependent full configurations and pair-boundary range transport in
+  `ParentHamiltonian/PhysicalAlphabetEmbedding.lean`, and actual local-term
+  transport in `ParentHamiltonian/PhysicalAlphabetLocalTerms.lean`.
+- **Notes:** Reuses Mathlib's extension-by-zero linear map and dependent product
+  embedding. No separate physical configuration record or isometry predicate.
