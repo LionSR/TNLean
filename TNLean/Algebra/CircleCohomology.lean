@@ -239,14 +239,6 @@ theorem circleToComplexUnits_map_surjective (G : Type) [Group G] [Finite G] :
   refine ⟨groupCohomology.H2π (Rep.ofMulDistribMulAction G Circle)
     (ScalarCocycle.circlePhaseMathlibCocycle
       (groupCohomology.cocyclesOfIsMulCocycle₂ hω)), ?_⟩
-  change groupCohomology.map (A := Rep.ofMulDistribMulAction G Circle)
-        (B := Rep.ofMulDistribMulAction G ℂˣ) (MonoidHom.id G)
-        (circleToComplexUnitsRepHom G) 2
-        (groupCohomology.H2π (Rep.ofMulDistribMulAction G Circle)
-          (ScalarCocycle.circlePhaseMathlibCocycle
-            (groupCohomology.cocyclesOfIsMulCocycle₂ hω))) =
-    groupCohomology.H2π (Rep.ofMulDistribMulAction G ℂˣ)
-      (groupCohomology.cocyclesOfIsMulCocycle₂ hω)
   rw [groupCohomology.H2π_comp_map_apply]
   exact ScalarCocycle.H2π_map_circlePhaseMathlibCocycle hω
 
