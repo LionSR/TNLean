@@ -9,5 +9,6 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.MPS.AreaLaw.AKLV
 
 import TNLean.MPS.AreaLaw.AKLV.GroundStateTail
+import TNLean.MPS.AreaLaw.AKLV.HighEnergyMass
 import TNLean.MPS.AreaLaw.AKLV.SpectralTail
 import TNLean.MPS.AreaLaw.AKLV.Truncation

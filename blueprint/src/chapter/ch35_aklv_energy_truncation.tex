@@ -136,5 +136,46 @@ In this section $P_t=\mathbf1_{(-\infty,t)}(B)$ and $Q_t=I-P_t$.
     Repeat for $R$ and add the unchanged middle term.
 \end{proof}
 
+\begin{lemma}[High-energy mass and the boundary cross term]
+    \label{lem:aklv_clipped_high_mass}
+    \lean{TNLean.MPS.AreaLaw.AKLV.cutoff_smul_highProjection_le_twoSidedEnergyTruncation,
+        TNLean.MPS.AreaLaw.AKLV.cutoff_mul_sq_norm_highProjection_le_energy,
+        TNLean.MPS.AreaLaw.AKLV.norm_highProjection_le_sqrt_clipped_energy,
+        TNLean.MPS.AreaLaw.AKLV.norm_low_high_boundary_inner_le_sqrt_clipped_energy}
+    \leanok
+    \uses{def:aklv_two_sided_truncation}
+    Let $L,N,R$ be pairwise commuting positive operators, $A\ge0$,
+    $B=L+N+R$, and $K=\min(L,tI)+N+A+\min(R,tI)$.
+    For $t\ge0$ and every vector $v$,
+    \begin{align}
+        tQ_t&\le\min(L,tI)+N+\min(R,tI)\le K,\notag\\
+        t\|Q_tv\|^2&\le\langle v,Kv\rangle.
+    \end{align}
+    For $t>0$, $\|Q_tv\|\le\sqrt{\langle v,Kv\rangle/t}$.
+    If additionally $A\le2I$ and $\|v\|=1$, then
+    \begin{align}
+        |\langle P_tv,AQ_tv\rangle|
+        \le2\sqrt{\langle v,Kv\rangle/t}.
+    \end{align}
+    This gives \cite[Lemma~6.5(1)]{Arad2013AreaLaw} and the unsquared
+    cross-term estimate in the proof of its second assertion.
+\end{lemma}
+\begin{proof}\leanok
+    The commuting spectral resolutions of the three regional operators
+    have a common product resolution. For nonnegative scalar energies
+    $\ell,n,r$ and $t\ge0$,
+    \begin{align}
+        t\mathbf1_{[t,\infty)}(\ell+n+r)
+        \le\min(\ell,t)+n+\min(r,t).
+    \end{align}
+    Indeed, if either exterior energy exceeds $t$, its clipped value
+    already supplies $t$; otherwise both exterior energies are unchanged.
+    Apply this scalar inequality to the common resolution and add $A\ge0$.
+    The quadratic form of an orthogonal projection is its squared applied
+    norm, giving the mass bound. Cauchy--Schwarz and $\|A\|\le2$ give
+    $|\langle P_tv,AQ_tv\rangle|\le2\|P_tv\|\|Q_tv\|$, and
+    $\|P_tv\|\le1$ gives the cross-term estimate.
+\end{proof}
+
 % Theorem 6.1 remains open: no completion mark asserts the low-spectrum
 % gap or the final phase-aligned squared-distance estimate.

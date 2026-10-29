@@ -34,6 +34,11 @@ for a unit vector and positive $t$, using the first assertion of that lemma.
 The last expression bounds the unsquared modulus in this calculation.
 Squaring gives the different estimate
 $|\langle P_tv,AQ_tv\rangle|^2\le4\langle v,H^{(t)}v\rangle/t$.
+The unsquared estimate is proved by
+\leanid{TNLean.MPS.AreaLaw.AKLV.norm_low_high_boundary_inner_le_sqrt_clipped_energy}.
+The actual mass estimate is proved from positivity and pairwise commutation
+of the three disconnected regional blocks by
+\leanid{TNLean.MPS.AreaLaw.AKLV.norm_highProjection_le_sqrt_clipped_energy}.
 The proof of Lemma~6.6(1) uses $\epsilon_0$, where the printed expansion
 has $\epsilon$. Positivity of $A$ gives
 $\langle Q_t\Gamma,HQ_t\Gamma\rangle\ge
@@ -81,9 +86,8 @@ are proved using QICLean's energy truncation. The full Hamiltonian is not
 clipped in place of the exterior blocks, and the ALVV regional approximation
 theorem is not substituted for this construction.
 
-Theorem~6.1 remains unformalized here. Still needed are the high-energy
-mass estimate for low-energy vectors of the actual two-sided truncation,
-the quantitative low-spectrum gap argument, and the closing phase-aligned
+Theorem~6.1 remains unformalized here. Still needed are the projected-energy
+comparison, the quantitative low-spectrum gap argument, and the closing phase-aligned
 squared-distance estimate. No completion mark in this contribution asserts
 these remaining conclusions.
 \end{document}
