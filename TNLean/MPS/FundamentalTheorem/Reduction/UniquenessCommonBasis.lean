@@ -13,7 +13,7 @@ Let `P` and `Q` be two multi-block compressions of the same tensor `B` onto two 
 blocks of positive bond dimension (possibly the same family), with flags `M_k` and `M'_{k'}`, and
 let `π` be the matching of their positions. For every position `k` put
 $$U_k = M_k ∩ M'_{π(k)},\qquad K_k = M_{k-1} ∩ M'_{π(k)},$$
-and choose a complex-linear complement `L_k` of `K_k` in `U_k`. Then
+and supply any complex-linear complement `L_k` of `K_k` in `U_k`. Then
 $$\mathcal B = L_1 ⊕ ⋯ ⊕ L_r,\qquad M_k = \bigoplus_{j ≤ k} L_j,\qquad
 M'_{k'} = \bigoplus_{π(j) ≤ k'} L_j,$$
 so the union of bases of the `L_j` is adapted to both flags. The change of coordinates `Γ` reading
@@ -35,6 +35,8 @@ theorem of matrix product states*, Theorem 6.5).
 * `MPSTensor.MultiBlockCompression.matchedInter`, `MPSTensor.MultiBlockCompression.matchedKer`,
   `MPSTensor.MultiBlockCompression.matchedCompl`: the subspaces `U_k`, `K_k` and the chosen
   complement `L_k`.
+* `MPSTensor.MultiBlockCompression.MatchedComplements`: an arbitrary supplied family `L_k`;
+  the default is the chosen family `matchedCompl`.
 * `MPSTensor.MultiBlockCompression.commonCoord`, `MPSTensor.MultiBlockCompression.commonCoord'`: the
   coordinates `Γ` and `P_X Γ` adapted to both flags.
 * `MPSTensor.MultiBlockCompression.unipotentFactor`,
@@ -342,26 +344,51 @@ theorem matchedCompl_congr {P₁ : MultiBlockCompression B S C} {Q₁ : MultiBlo
   exact key (congrArg (Submodule.restrictScalars ℂ) hK) (congrArg (Submodule.restrictScalars ℂ) hU)
     _ _
 
+/-- A supplied family of complex-linear complements of the matched kernels in the
+matched intersections. Only disjointness and the sum identity are required, as in
+Theorem 6.5 of *The asymmetric fundamental theorem of matrix product states*. -/
+structure MatchedComplements where
+  /-- The complement at each matched position. -/
+  space : Fin (S.card + P.z) → Submodule ℂ B.WordModule
+  /-- Each complement meets the matched kernel trivially. -/
+  disjoint : ∀ k, Disjoint ((P.matchedKer Q hC hD hC' hD' k).restrictScalars ℂ) (space k)
+  /-- Each complement and kernel span the matched intersection. -/
+  sup_eq : ∀ k, (P.matchedKer Q hC hD hC' hD' k).restrictScalars ℂ ⊔ space k =
+    (P.matchedInter Q hC hD hC' hD' k).restrictScalars ℂ
+
+/-- The original chosen complements provide a default family; every subsequent
+construction also accepts any supplied family of complements. -/
+noncomputable instance : Inhabited (P.MatchedComplements Q hC hD hC' hD') where
+  default := ⟨P.matchedCompl Q hC hD hC' hD', P.disjoint_matchedCompl Q hC hD hC' hD',
+    P.sup_matchedCompl Q hC hD hC' hD'⟩
+
+variable (L : P.MatchedComplements Q hC hD hC' hD' := default)
+
+/-- Every supplied complement lies in its matched intersection. -/
+theorem matchedComplements_le (k : Fin (S.card + P.z)) :
+    L.space k ≤ (P.matchedInter Q hC hD hC' hD' k).restrictScalars ℂ :=
+  L.sup_eq k ▸ le_sup_right
+
 /-- The reading map of the slot at position `k` of `P` identifies `L_k` with the coordinates of that
 slot (proof of blueprint `thm:asym_uniq_common_basis`, *A basis adapted to both flags*). -/
 theorem bijective_leftRow_matchedCompl (b : BlockIndex S P.z) :
     Function.Bijective (((P.leftRow b).mulVecLin ∘ₗ (WordModule.toVec B).toLinearMap).domRestrict
-      (P.matchedCompl Q hC hD hC' hD' (P.ord b))) :=
+      (L.space (P.ord b))) :=
   P.bijective_leftRow_domRestrict (U := P.matchedInter Q hC hD hC' hD' (P.ord b))
     (P.flag_sup_inf_eq Q hC hD hC' hD' (P.ord b))
     (fun x => by
       rw [Submodule.restrictScalars_mem, matchedInter, matchedKer,
         P.flag_inf_inf_eq Q hC hD hC' hD' (P.ord b)])
-    (P.disjoint_matchedCompl Q hC hD hC' hD' _) (P.sup_matchedCompl Q hC hD hC' hD' _)
+    (L.disjoint _) (L.sup_eq _)
 
 /-- The reading map of the slot at position `π(j)` of `Q` identifies `L_j` with the coordinates of
 that slot (proof of blueprint `thm:asym_uniq_common_basis`, *A basis adapted to both flags*). -/
 theorem bijective_leftRow_matchedCompl' {j : Fin (S.card + P.z)} {b' : BlockIndex S' Q.z}
     (hj : P.matching Q hC hD hC' hD' j = Q.ord b') :
     Function.Bijective (((Q.leftRow b').mulVecLin ∘ₗ (WordModule.toVec B).toLinearMap).domRestrict
-      (P.matchedCompl Q hC hD hC' hD' j)) := by
+      (L.space j)) := by
   refine Q.bijective_leftRow_domRestrict (U := P.matchedInter Q hC hD hC' hD' j) ?_ (fun x => ?_)
-    (P.disjoint_matchedCompl Q hC hD hC' hD' j) (P.sup_matchedCompl Q hC hD hC' hD' j)
+    (L.disjoint j) (L.sup_eq j)
   · rw [← hj]
     exact P.flag_sup_inf_eq' Q hC hD hC' hD' j
   · rw [Submodule.restrictScalars_mem, ← hj, matchedInter, matchedKer,
@@ -370,11 +397,12 @@ theorem bijective_leftRow_matchedCompl' {j : Fin (S.card + P.z)} {b' : BlockInde
 /-- **The dimension of `L_k`** (proof of blueprint `thm:asym_uniq_common_basis`, *A basis adapted to
 both flags*: `U_k / K_k ≅ M_k / M_{k-1}`, so `dim L_k = n_k`). -/
 theorem finrank_matchedCompl (k : Fin (S.card + P.z)) :
-    Module.finrank ℂ (P.matchedCompl Q hC hD hC' hD' k) = slotSize D (P.ord.symm k) := by
+    Module.finrank ℂ (L.space k) = slotSize D (P.ord.symm k) := by
   obtain ⟨b, rfl⟩ := P.ord.surjective k
   rw [P.ord.symm_apply_apply]
   simpa using
-    (LinearEquiv.ofBijective _ (P.bijective_leftRow_matchedCompl Q hC hD hC' hD' b)).finrank_eq
+    (LinearEquiv.ofBijective _
+      (P.bijective_leftRow_matchedCompl Q hC hD hC' hD' (L := L) b)).finrank_eq
 
 /-! ### The two decompositions -/
 
@@ -382,15 +410,16 @@ theorem finrank_matchedCompl (k : Fin (S.card + P.z)) :
 flags*). -/
 theorem flag_succ_eq_sup_matchedCompl (k : Fin (S.card + P.z)) :
     (P.flag k.succ).restrictScalars ℂ =
-      (P.flag k.castSucc).restrictScalars ℂ ⊔ P.matchedCompl Q hC hD hC' hD' k := by
+      (P.flag k.castSucc).restrictScalars ℂ ⊔ L.space k := by
   refine le_antisymm (fun x hx => ?_) (sup_le
     (Submodule.restrictScalars_mono ℂ (P.flag_mono (Fin.castSucc_le_succ k)))
-    ((P.matchedCompl_le Q hC hD hC' hD' k).trans (Submodule.restrictScalars_mono ℂ inf_le_left)))
+    ((P.matchedComplements_le Q hC hD hC' hD' (L := L) k).trans
+      (Submodule.restrictScalars_mono ℂ inf_le_left)))
   rw [Submodule.restrictScalars_mem, ← P.flag_sup_inf_eq Q hC hD hC' hD' k] at hx
   obtain ⟨a, ha, u, hu, rfl⟩ := Submodule.mem_sup.1 hx
   have hu' : u ∈ (P.matchedKer Q hC hD hC' hD' k).restrictScalars ℂ ⊔
-      P.matchedCompl Q hC hD hC' hD' k := by
-    rw [P.sup_matchedCompl Q hC hD hC' hD' k]
+      L.space k := by
+    rw [L.sup_eq k]
     exact hu
   obtain ⟨c, hc, l, hl, rfl⟩ := Submodule.mem_sup.1 hu'
   have hc' : c ∈ P.flag k.castSucc := (Submodule.mem_inf.1 hc).1
@@ -402,15 +431,16 @@ adapted to both flags*). -/
 theorem flag_matching_succ_eq_sup_matchedCompl (j : Fin (S.card + P.z)) :
     (Q.flag (P.matching Q hC hD hC' hD' j).succ).restrictScalars ℂ =
       (Q.flag (P.matching Q hC hD hC' hD' j).castSucc).restrictScalars ℂ ⊔
-        P.matchedCompl Q hC hD hC' hD' j := by
+        L.space j := by
   refine le_antisymm (fun x hx => ?_) (sup_le
     (Submodule.restrictScalars_mono ℂ (Q.flag_mono (Fin.castSucc_le_succ _)))
-    ((P.matchedCompl_le Q hC hD hC' hD' j).trans (Submodule.restrictScalars_mono ℂ inf_le_right)))
+    ((P.matchedComplements_le Q hC hD hC' hD' (L := L) j).trans
+      (Submodule.restrictScalars_mono ℂ inf_le_right)))
   rw [Submodule.restrictScalars_mem, ← P.flag_sup_inf_eq' Q hC hD hC' hD' j] at hx
   obtain ⟨a, ha, u, hu, rfl⟩ := Submodule.mem_sup.1 hx
   have hu' : u ∈ (P.matchedKer Q hC hD hC' hD' j).restrictScalars ℂ ⊔
-      P.matchedCompl Q hC hD hC' hD' j := by
-    rw [P.sup_matchedCompl Q hC hD hC' hD' j]
+      L.space j := by
+    rw [L.sup_eq j]
     exact hu
   obtain ⟨c, hc, l, hl, rfl⟩ := Submodule.mem_sup.1 hu'
   have hc'' : c ∈ P.flag j.succ ⊓ Q.flag (P.matching Q hC hD hC' hD' j).castSucc := by
@@ -423,8 +453,8 @@ theorem flag_matching_succ_eq_sup_matchedCompl (j : Fin (S.card + P.z)) :
 adapted to both flags*). -/
 theorem flag_succ_eq_sup_matchedCompl' (m : Fin (S'.card + Q.z)) :
     (Q.flag m.succ).restrictScalars ℂ = (Q.flag m.castSucc).restrictScalars ℂ ⊔
-      P.matchedCompl Q hC hD hC' hD' ((P.matching Q hC hD hC' hD').symm m) := by
-  have := P.flag_matching_succ_eq_sup_matchedCompl Q hC hD hC' hD'
+      L.space ((P.matching Q hC hD hC' hD').symm m) := by
+  have := P.flag_matching_succ_eq_sup_matchedCompl Q hC hD hC' hD' (L := L)
     ((P.matching Q hC hD hC' hD').symm m)
   rwa [Equiv.apply_symm_apply] at this
 
@@ -432,20 +462,20 @@ theorem flag_succ_eq_sup_matchedCompl' (m : Fin (S'.card + Q.z)) :
 adapted to both flags*): `M_k = ⨁_{j < k} L_j`, positions counted from `0`. -/
 theorem flag_eq_iSup_matchedCompl (k : Fin (S.card + P.z + 1)) :
     (P.flag k).restrictScalars ℂ =
-      ⨆ (j : Fin (S.card + P.z)) (_ : j.castSucc < k), P.matchedCompl Q hC hD hC' hD' j :=
+      ⨆ (j : Fin (S.card + P.z)) (_ : j.castSucc < k), L.space j :=
   eq_iSup_castSucc_lt_of_eq_sup (F := fun k => (P.flag k).restrictScalars ℂ)
-    (by simp [P.flag_zero]) (P.flag_succ_eq_sup_matchedCompl Q hC hD hC' hD') k
+    (by simp [P.flag_zero]) (P.flag_succ_eq_sup_matchedCompl Q hC hD hC' hD' (L := L)) k
 
 /-- **The second flag is a sum of complements** (blueprint `thm:asym_uniq_common_basis`, *A basis
 adapted to both flags*): `M'_{k'} = ⨁_{π(j) < k'} L_j`, positions counted from `0`. -/
 theorem flag_eq_iSup_matchedCompl' (k' : Fin (S'.card + Q.z + 1)) :
     (Q.flag k').restrictScalars ℂ =
       ⨆ (j : Fin (S.card + P.z)) (_ : (P.matching Q hC hD hC' hD' j).castSucc < k'),
-        P.matchedCompl Q hC hD hC' hD' j := by
+        L.space j := by
   have h : (Q.flag k').restrictScalars ℂ = ⨆ (m : Fin (S'.card + Q.z)) (_ : m.castSucc < k'),
-      P.matchedCompl Q hC hD hC' hD' ((P.matching Q hC hD hC' hD').symm m) :=
+      L.space ((P.matching Q hC hD hC' hD').symm m) :=
     eq_iSup_castSucc_lt_of_eq_sup (F := fun k => (Q.flag k).restrictScalars ℂ)
-      (by simp [Q.flag_zero]) (P.flag_succ_eq_sup_matchedCompl' Q hC hD hC' hD') k'
+      (by simp [Q.flag_zero]) (P.flag_succ_eq_sup_matchedCompl' Q hC hD hC' hD' (L := L)) k'
   rw [h]
   apply le_antisymm
   · refine iSup₂_le fun m hm => le_iSup₂_of_le ((P.matching Q hC hD hC' hD').symm m) ?_ le_rfl
@@ -455,12 +485,12 @@ theorem flag_eq_iSup_matchedCompl' (k' : Fin (S'.card + Q.z + 1)) :
 
 /-- **The complements span the bond space** (blueprint `thm:asym_uniq_common_basis`, *A basis
 adapted to both flags*). -/
-theorem iSup_matchedCompl : ⨆ j, P.matchedCompl Q hC hD hC' hD' j = ⊤ := by
-  have h := P.flag_eq_iSup_matchedCompl Q hC hD hC' hD' (Fin.last _)
+theorem iSup_matchedCompl : ⨆ j, L.space j = ⊤ := by
+  have h := P.flag_eq_iSup_matchedCompl Q hC hD hC' hD' (L := L) (Fin.last _)
   rw [P.flag_last, Submodule.restrictScalars_top] at h
   rw [h]
   exact iSup_congr fun j =>
-    (iSup_pos (f := fun _ => P.matchedCompl Q hC hD hC' hD' j) (Fin.castSucc_lt_last j)).symm
+    (iSup_pos (f := fun _ => L.space j) (Fin.castSucc_lt_last j)).symm
 
 /-! ### The coordinates adapted to both flags -/
 
@@ -468,42 +498,45 @@ theorem iSup_matchedCompl : ⨆ j, P.matchedCompl Q hC hD hC' hD' j = ⊤ := by
 flags*): the vector `x = ∑_j x_j`, `x_j ∈ L_j`, goes to the vector whose block at the slot `b` of
 position `j` is `W_b x_j`. -/
 noncomputable def commonCoord : B.WordModule ≃ₗ[ℂ] (BlockSpace D S P.z → ℂ) :=
-  (slotAssembleEquiv (P.matchedCompl Q hC hD hC' hD') P.ord
+  (slotAssembleEquiv (L.space) P.ord
     (fun b => (P.leftRow b).mulVecLin ∘ₗ (WordModule.toVec B).toLinearMap)
-    (P.bijective_leftRow_matchedCompl Q hC hD hC' hD') (P.iSup_matchedCompl Q hC hD hC' hD')
+    (P.bijective_leftRow_matchedCompl Q hC hD hC' hD' (L := L))
+    (P.iSup_matchedCompl Q hC hD hC' hD' (L := L))
     P.coord.finrank_eq.symm).symm
 
 /-- **The change of basis `P_X Γ`** (blueprint `thm:asym_uniq_common_basis`, *A basis adapted to
 both flags*): the vector `x = ∑_j x_j`, `x_j ∈ L_j`, goes to the vector whose block at the slot `b'`
 of position `π(j)` of `Q` is `W'_{b'} x_j`. -/
 noncomputable def commonCoord' : B.WordModule ≃ₗ[ℂ] (BlockSpace D' S' Q.z → ℂ) :=
-  (slotAssembleEquiv (P.matchedCompl Q hC hD hC' hD')
+  (slotAssembleEquiv (L.space)
     (Q.ord.trans (P.matching Q hC hD hC' hD').symm)
     (fun b' => (Q.leftRow b').mulVecLin ∘ₗ (WordModule.toVec B).toLinearMap)
-    (fun _ => P.bijective_leftRow_matchedCompl' Q hC hD hC' hD' (Equiv.apply_symm_apply _ _))
-    (P.iSup_matchedCompl Q hC hD hC' hD') Q.coord.finrank_eq.symm).symm
+    (fun _ => P.bijective_leftRow_matchedCompl' Q hC hD hC' hD' (L := L)
+      (Equiv.apply_symm_apply _ _))
+    (P.iSup_matchedCompl Q hC hD hC' hD' (L := L)) Q.coord.finrank_eq.symm).symm
 
 theorem commonCoord_of_mem {b : BlockIndex S P.z} {x : B.WordModule}
-    (hx : x ∈ P.matchedCompl Q hC hD hC' hD' (P.ord b)) :
-    P.commonCoord Q hC hD hC' hD' x =
+    (hx : x ∈ L.space (P.ord b)) :
+    P.commonCoord Q hC hD hC' hD' (L := L) x =
       Matrix.blockEmbed (slotSize D) b *ᵥ (P.leftRow b *ᵥ WordModule.toVec B x) :=
   slotAssembleEquiv_symm_apply_of_mem _ _ _ _ _ _ hx
 
 theorem commonCoord'_of_mem {b' : BlockIndex S' Q.z} {x : B.WordModule}
-    (hx : x ∈ P.matchedCompl Q hC hD hC' hD' ((P.matching Q hC hD hC' hD').symm (Q.ord b'))) :
-    P.commonCoord' Q hC hD hC' hD' x =
+    (hx : x ∈ L.space ((P.matching Q hC hD hC' hD').symm (Q.ord b'))) :
+    P.commonCoord' Q hC hD hC' hD' (L := L) x =
       Matrix.blockEmbed (slotSize D') b' *ᵥ (Q.leftRow b' *ᵥ WordModule.toVec B x) :=
   slotAssembleEquiv_symm_apply_of_mem _ _ _ _ _ _ hx
 
 /-- **`Γ` is adapted to the first flag** (blueprint `thm:asym_uniq_common_basis`, *A basis adapted
 to both flags*): `Γ` maps `M_k` onto the leading coordinate subspace `E_k`. -/
 theorem mem_flag_iff_commonCoord (k : Fin (S.card + P.z + 1)) (x : B.WordModule) :
-    x ∈ P.flag k ↔ P.commonCoord Q hC hD hC' hD' x ∈ P.leadingSpace k := by
+    x ∈ P.flag k ↔ P.commonCoord Q hC hD hC' hD' (L := L) x ∈ P.leadingSpace k := by
   change x ∈ (P.flag k).restrictScalars ℂ ↔ _
-  rw [mem_iff_slotAssembleEquiv_symm_apply (P.matchedCompl Q hC hD hC' hD') P.ord
+  rw [mem_iff_slotAssembleEquiv_symm_apply (L.space) P.ord
     (fun b => (P.leftRow b).mulVecLin ∘ₗ (WordModule.toVec B).toLinearMap)
-    (P.bijective_leftRow_matchedCompl Q hC hD hC' hD') (P.iSup_matchedCompl Q hC hD hC' hD')
-    P.coord.finrank_eq.symm (P.flag_eq_iSup_matchedCompl Q hC hD hC' hD' k) x,
+    (P.bijective_leftRow_matchedCompl Q hC hD hC' hD' (L := L))
+    (P.iSup_matchedCompl Q hC hD hC' hD' (L := L))
+    P.coord.finrank_eq.symm (P.flag_eq_iSup_matchedCompl Q hC hD hC' hD' (L := L) k) x,
     P.mem_leadingSpace]
   simp only [not_lt]
   rfl
@@ -511,53 +544,55 @@ theorem mem_flag_iff_commonCoord (k : Fin (S.card + P.z + 1)) (x : B.WordModule)
 /-- **`P_X Γ` is adapted to the second flag** (blueprint `thm:asym_uniq_common_basis`, *A basis
 adapted to both flags*): `P_X Γ` maps `M'_{k'}` onto the leading coordinate subspace `E'_{k'}`. -/
 theorem mem_flag_iff_commonCoord' (k' : Fin (S'.card + Q.z + 1)) (x : B.WordModule) :
-    x ∈ Q.flag k' ↔ P.commonCoord' Q hC hD hC' hD' x ∈ Q.leadingSpace k' := by
+    x ∈ Q.flag k' ↔ P.commonCoord' Q hC hD hC' hD' (L := L) x ∈ Q.leadingSpace k' := by
   change x ∈ (Q.flag k').restrictScalars ℂ ↔ _
-  rw [mem_iff_slotAssembleEquiv_symm_apply (P.matchedCompl Q hC hD hC' hD')
+  rw [mem_iff_slotAssembleEquiv_symm_apply (L.space)
     (Q.ord.trans (P.matching Q hC hD hC' hD').symm)
     (fun b' => (Q.leftRow b').mulVecLin ∘ₗ (WordModule.toVec B).toLinearMap)
-    (fun _ => P.bijective_leftRow_matchedCompl' Q hC hD hC' hD' (Equiv.apply_symm_apply _ _))
-    (P.iSup_matchedCompl Q hC hD hC' hD') Q.coord.finrank_eq.symm
-    (P.flag_eq_iSup_matchedCompl' Q hC hD hC' hD' k') x, Q.mem_leadingSpace]
+    (fun _ => P.bijective_leftRow_matchedCompl' Q hC hD hC' hD' (L := L)
+      (Equiv.apply_symm_apply _ _))
+    (P.iSup_matchedCompl Q hC hD hC' hD' (L := L)) Q.coord.finrank_eq.symm
+    (P.flag_eq_iSup_matchedCompl' Q hC hD hC' hD' (L := L) k') x, Q.mem_leadingSpace]
   simp only [Equiv.trans_apply, Equiv.apply_symm_apply, not_lt]
   rfl
 
 /-- **The complements are independent** (blueprint `thm:asym_uniq_common_basis`, *A basis adapted to
 both flags*, `𝓑 = L_1 ⊕ ⋯ ⊕ L_r`). -/
-theorem iSupIndep_matchedCompl : iSupIndep (P.matchedCompl Q hC hD hC' hD') :=
-  iSupIndep_of_slotAssemble (P.matchedCompl Q hC hD hC' hD') P.ord
+theorem iSupIndep_matchedCompl : iSupIndep (L.space) :=
+  iSupIndep_of_slotAssemble (L.space) P.ord
     (fun b => (P.leftRow b).mulVecLin ∘ₗ (WordModule.toVec B).toLinearMap)
-    (P.bijective_leftRow_matchedCompl Q hC hD hC' hD') (P.iSup_matchedCompl Q hC hD hC' hD')
+    (P.bijective_leftRow_matchedCompl Q hC hD hC' hD' (L := L))
+    (P.iSup_matchedCompl Q hC hD hC' hD' (L := L))
     P.coord.finrank_eq.symm
 
 /-! ### The factorization -/
 
 /-- `Γ` as a change of coordinates of the bond space. -/
 noncomputable def commonGauge : (Fin DB → ℂ) ≃ₗ[ℂ] (BlockSpace D S P.z → ℂ) :=
-  (WordModule.toVec B).symm.trans (P.commonCoord Q hC hD hC' hD')
+  (WordModule.toVec B).symm.trans (P.commonCoord Q hC hD hC' hD' (L := L))
 
 /-- `P_X Γ` as a change of coordinates of the bond space. -/
 noncomputable def commonGauge' : (Fin DB → ℂ) ≃ₗ[ℂ] (BlockSpace D' S' Q.z → ℂ) :=
-  (WordModule.toVec B).symm.trans (P.commonCoord' Q hC hD hC' hD')
+  (WordModule.toVec B).symm.trans (P.commonCoord' Q hC hD hC' hD' (L := L))
 
 /-- **The unipotent factor `𝔄 = g Γ⁻¹`** (blueprint `thm:asym_uniq_common_basis`, *A basis adapted
 to both flags*). -/
 noncomputable def unipotentFactor : Matrix (BlockSpace D S P.z) (BlockSpace D S P.z) ℂ :=
-  coordChange (P.commonGauge Q hC hD hC' hD') P.gauge
+  coordChange (P.commonGauge Q hC hD hC' hD' (L := L)) P.gauge
 
 /-- **The unipotent factor `𝔄_tilde = g_tilde (P_X Γ)⁻¹`** (blueprint `thm:asym_uniq_common_basis`,
 *A basis adapted to both flags*). -/
 noncomputable def unipotentFactor' : Matrix (BlockSpace D' S' Q.z) (BlockSpace D' S' Q.z) ℂ :=
-  coordChange (P.commonGauge' Q hC hD hC' hD') Q.gauge
+  coordChange (P.commonGauge' Q hC hD hC' hD' (L := L)) Q.gauge
 
 /-- **`𝔄` is block upper triangular** in the order of `P` (blueprint `thm:asym_uniq_common_basis`,
 *A basis adapted to both flags*): `g` and `Γ` both map `M_k` onto `E_k`. -/
 theorem blockTriangular_unipotentFactor :
-    (P.unipotentFactor Q hC hD hC' hD').BlockTriangular fun x => P.ord x.1 := by
+    (P.unipotentFactor Q hC hD hC' hD' (L := L)).BlockTriangular fun x => P.ord x.1 := by
   refine P.blockTriangular_coordChange fun k => ?_
   ext v
   simp only [Submodule.mem_comap, LinearEquiv.coe_coe]
-  have h1 := P.mem_flag_iff_commonCoord Q hC hD hC' hD' k ((WordModule.toVec B).symm v)
+  have h1 := P.mem_flag_iff_commonCoord Q hC hD hC' hD' (L := L) k ((WordModule.toVec B).symm v)
   have h2 : (WordModule.toVec B).symm v ∈ P.flag k ↔ P.gauge v ∈ P.leadingSpace k := by
     rw [P.mem_flag_iff_toVec_mem_comap, LinearEquiv.apply_symm_apply]
     rfl
@@ -566,16 +601,17 @@ theorem blockTriangular_unipotentFactor :
 /-- **The diagonal blocks of `𝔄` are identities** (blueprint `thm:asym_uniq_common_basis`, *A basis
 adapted to both flags*): on `L_k` both `g` and `Γ` read the block of position `k` by `W_{σ(k)}`. -/
 theorem blockDiag'_unipotentFactor (b : BlockIndex S P.z) :
-    (P.unipotentFactor Q hC hD hC' hD').blockDiag' b = 1 := by
+    (P.unipotentFactor Q hC hD hC' hD' (L := L)).blockDiag' b = 1 := by
   rw [← Matrix.blockProj_mul_mul_blockEmbed]
   refine Matrix.ext_iff_mulVec.2 fun v => ?_
-  obtain ⟨⟨x, hx⟩, hxv⟩ := (P.bijective_leftRow_matchedCompl Q hC hD hC' hD' b).2 v
+  obtain ⟨⟨x, hx⟩, hxv⟩ := (P.bijective_leftRow_matchedCompl Q hC hD hC' hD' (L := L) b).2 v
   have hxv' : P.leftRow b *ᵥ WordModule.toVec B x = v := hxv
-  have hΓ : (P.commonGauge Q hC hD hC' hD').symm (Matrix.blockEmbed (slotSize D) b *ᵥ v) =
+  have hΓ : (P.commonGauge Q hC hD hC' hD' (L := L)).symm (Matrix.blockEmbed (slotSize D) b *ᵥ v) =
       WordModule.toVec B x := by
     rw [LinearEquiv.symm_apply_eq]
-    change _ = P.commonCoord Q hC hD hC' hD' ((WordModule.toVec B).symm (WordModule.toVec B x))
-    rw [LinearEquiv.symm_apply_apply, P.commonCoord_of_mem Q hC hD hC' hD' hx, hxv']
+    change _ = P.commonCoord Q hC hD hC' hD' (L := L)
+      ((WordModule.toVec B).symm (WordModule.toVec B x))
+    rw [LinearEquiv.symm_apply_apply, P.commonCoord_of_mem Q hC hD hC' hD' (L := L) hx, hxv']
   rw [← Matrix.mulVec_mulVec, ← Matrix.mulVec_mulVec, unipotentFactor, coordChange_mulVec, hΓ,
     Matrix.one_mulVec, blockProj_mulVec, ← hxv', P.leftRow_mulVec]
 
@@ -583,11 +619,11 @@ theorem blockDiag'_unipotentFactor (b : BlockIndex S P.z) :
 `thm:asym_uniq_common_basis`, *A basis adapted to both flags*): `g_tilde` and `P_X Γ` both map
 `M'_{k'}` onto `E'_{k'}`. -/
 theorem blockTriangular_unipotentFactor' :
-    (P.unipotentFactor' Q hC hD hC' hD').BlockTriangular fun x => Q.ord x.1 := by
+    (P.unipotentFactor' Q hC hD hC' hD' (L := L)).BlockTriangular fun x => Q.ord x.1 := by
   refine Q.blockTriangular_coordChange fun k => ?_
   ext v
   simp only [Submodule.mem_comap, LinearEquiv.coe_coe]
-  have h1 := P.mem_flag_iff_commonCoord' Q hC hD hC' hD' k ((WordModule.toVec B).symm v)
+  have h1 := P.mem_flag_iff_commonCoord' Q hC hD hC' hD' (L := L) k ((WordModule.toVec B).symm v)
   have h2 : (WordModule.toVec B).symm v ∈ Q.flag k ↔ Q.gauge v ∈ Q.leadingSpace k := by
     rw [Q.mem_flag_iff_toVec_mem_comap, LinearEquiv.apply_symm_apply]
     rfl
@@ -596,18 +632,20 @@ theorem blockTriangular_unipotentFactor' :
 /-- **The diagonal blocks of `𝔄_tilde` are identities** (blueprint `thm:asym_uniq_common_basis`, *A
 basis adapted to both flags*). -/
 theorem blockDiag'_unipotentFactor' (b' : BlockIndex S' Q.z) :
-    (P.unipotentFactor' Q hC hD hC' hD').blockDiag' b' = 1 := by
+    (P.unipotentFactor' Q hC hD hC' hD' (L := L)).blockDiag' b' = 1 := by
   rw [← Matrix.blockProj_mul_mul_blockEmbed]
   refine Matrix.ext_iff_mulVec.2 fun v => ?_
   obtain ⟨⟨x, hx⟩, hxv⟩ :=
-    (P.bijective_leftRow_matchedCompl' Q hC hD hC' hD' (Equiv.apply_symm_apply _ (Q.ord b'))).2 v
+    (P.bijective_leftRow_matchedCompl' Q hC hD hC' hD' (L := L)
+      (Equiv.apply_symm_apply _ (Q.ord b'))).2 v
   have hxv' : Q.leftRow b' *ᵥ WordModule.toVec B x = v := hxv
-  have hΓ : (P.commonGauge' Q hC hD hC' hD').symm (Matrix.blockEmbed (slotSize D') b' *ᵥ v) =
+  have hΓ : (P.commonGauge' Q hC hD hC' hD' (L := L)).symm
+      (Matrix.blockEmbed (slotSize D') b' *ᵥ v) =
       WordModule.toVec B x := by
     rw [LinearEquiv.symm_apply_eq]
     change _ =
-      P.commonCoord' Q hC hD hC' hD' ((WordModule.toVec B).symm (WordModule.toVec B x))
-    rw [LinearEquiv.symm_apply_apply, P.commonCoord'_of_mem Q hC hD hC' hD' hx, hxv']
+      P.commonCoord' Q hC hD hC' hD' (L := L) ((WordModule.toVec B).symm (WordModule.toVec B x))
+    rw [LinearEquiv.symm_apply_apply, P.commonCoord'_of_mem Q hC hD hC' hD' (L := L) hx, hxv']
   rw [← Matrix.mulVec_mulVec, ← Matrix.mulVec_mulVec, unipotentFactor', coordChange_mulVec, hΓ,
     Matrix.one_mulVec, blockProj_mulVec, ← hxv', Q.leftRow_mulVec]
 
@@ -671,52 +709,56 @@ theorem matchingPermMatrix_mul_blockEmbed (b : BlockIndex S P.z) :
 adapted to both flags*: on `L_j ⊆ U_j` the reading of the matched slot is `X_j W_{σ(j)}` by *Two
 compressions with different flags* (blueprint `thm:asym_uniq_different_flags`)). -/
 theorem commonCoord'_eq_mulVec (x : B.WordModule) :
-    P.commonCoord' Q hC hD hC' hD' x =
-      P.matchingPermMatrix Q hC hD hC' hD' *ᵥ P.commonCoord Q hC hD hC' hD' x := by
-  have h : ⨆ j, P.matchedCompl Q hC hD hC' hD' j ≤
-      LinearMap.eqLocus (P.commonCoord' Q hC hD hC' hD').toLinearMap
+    P.commonCoord' Q hC hD hC' hD' (L := L) x =
+      P.matchingPermMatrix Q hC hD hC' hD' *ᵥ P.commonCoord Q hC hD hC' hD' (L := L) x := by
+  have h : ⨆ j, L.space j ≤
+      LinearMap.eqLocus (P.commonCoord' Q hC hD hC' hD' (L := L)).toLinearMap
         ((P.matchingPermMatrix Q hC hD hC' hD').mulVecLin ∘ₗ
-          (P.commonCoord Q hC hD hC' hD').toLinearMap) := by
+          (P.commonCoord Q hC hD hC' hD' (L := L)).toLinearMap) := by
     refine iSup_le fun j y hy => ?_
     obtain ⟨b, rfl⟩ := P.ord.surjective j
-    have hy' : y ∈ P.matchedCompl Q hC hD hC' hD'
+    have hy' : y ∈ L.space
         ((P.matching Q hC hD hC' hD').symm (Q.ord (P.slotMatching Q hC hD hC' hD' b))) := by
       rw [P.ord_slotMatching Q hC hD hC' hD', Equiv.symm_apply_apply]
       exact hy
     rw [LinearMap.mem_eqLocus]
     simp only [LinearEquiv.coe_coe, LinearMap.comp_apply, Matrix.mulVecLin_apply]
-    rw [P.commonCoord'_of_mem Q hC hD hC' hD' hy', P.commonCoord_of_mem Q hC hD hC' hD' hy,
-      P.leftRow_slotMatching_mulVec Q hC hD hC' hD' b (P.matchedCompl_le Q hC hD hC' hD' _ hy),
+    rw [P.commonCoord'_of_mem Q hC hD hC' hD' (L := L) hy',
+      P.commonCoord_of_mem Q hC hD hC' hD' (L := L) hy,
+      P.leftRow_slotMatching_mulVec Q hC hD hC' hD' b
+        (P.matchedComplements_le Q hC hD hC' hD' (L := L) _ hy),
       Matrix.mulVec_mulVec _ (P.matchingPermMatrix Q hC hD hC' hD'),
       P.matchingPermMatrix_mul_blockEmbed, ← Matrix.mulVec_mulVec]
-  exact h (show x ∈ ⨆ j, P.matchedCompl Q hC hD hC' hD' j by
-    rw [P.iSup_matchedCompl Q hC hD hC' hD']
+  exact h (show x ∈ ⨆ j, L.space j by
+    rw [P.iSup_matchedCompl Q hC hD hC' hD' (L := L)]
     exact Submodule.mem_top)
 
 /-- `P_X Γ = P_X · Γ` as matrices (blueprint `thm:asym_uniq_common_basis`, *A basis adapted to both
 flags*). -/
 theorem gaugeMatrix_commonGauge' :
-    gaugeMatrix (P.commonGauge' Q hC hD hC' hD') =
-      P.matchingPermMatrix Q hC hD hC' hD' * gaugeMatrix (P.commonGauge Q hC hD hC' hD') := by
+    gaugeMatrix (P.commonGauge' Q hC hD hC' hD' (L := L)) =
+      P.matchingPermMatrix Q hC hD hC' hD' *
+        gaugeMatrix (P.commonGauge Q hC hD hC' hD' (L := L)) := by
   refine Matrix.ext_iff_mulVec.2 fun v => ?_
   rw [← Matrix.mulVec_mulVec, gaugeMatrix, gaugeMatrix, LinearMap.toMatrix'_mulVec,
     LinearMap.toMatrix'_mulVec, LinearEquiv.coe_coe, LinearEquiv.coe_coe]
-  exact P.commonCoord'_eq_mulVec Q hC hD hC' hD' _
+  exact P.commonCoord'_eq_mulVec Q hC hD hC' hD' (L := L) _
 
 /-- **A basis adapted to both flags, the first factorization** (blueprint
 `thm:asym_uniq_common_basis`, *A basis adapted to both flags*, `g = 𝔄 Γ`). -/
 theorem gaugeMatrix_eq_unipotentFactor_mul :
     gaugeMatrix P.gauge =
-      P.unipotentFactor Q hC hD hC' hD' * gaugeMatrix (P.commonGauge Q hC hD hC' hD') :=
+      P.unipotentFactor Q hC hD hC' hD' (L := L) *
+        gaugeMatrix (P.commonGauge Q hC hD hC' hD' (L := L)) :=
   gaugeMatrix_eq_coordChange_mul _ _
 
 /-- **A basis adapted to both flags, the second factorization** (blueprint
 `thm:asym_uniq_common_basis`, *A basis adapted to both flags*, `g_tilde = 𝔄_tilde P_X Γ`). -/
 theorem gaugeMatrix_eq_unipotentFactor'_mul :
     gaugeMatrix Q.gauge =
-      P.unipotentFactor' Q hC hD hC' hD' * P.matchingPermMatrix Q hC hD hC' hD' *
-        gaugeMatrix (P.commonGauge Q hC hD hC' hD') := by
-  rw [Matrix.mul_assoc, ← P.gaugeMatrix_commonGauge']
+      P.unipotentFactor' Q hC hD hC' hD' (L := L) * P.matchingPermMatrix Q hC hD hC' hD' *
+        gaugeMatrix (P.commonGauge Q hC hD hC' hD' (L := L)) := by
+  rw [Matrix.mul_assoc, ← P.gaugeMatrix_commonGauge' Q hC hD hC' hD' (L := L)]
   exact gaugeMatrix_eq_coordChange_mul _ _
 
 /-- **A basis adapted to both flags** (blueprint `thm:asym_uniq_common_basis`, *A basis adapted to
@@ -730,20 +772,21 @@ the blocks of the first family to the matched blocks of the second (*The asymmet
 theorem of matrix product states*, Theorem 6.5). -/
 theorem gaugeMatrix_mul_gaugeMatrixInv_eq :
     gaugeMatrix Q.gauge * gaugeMatrixInv P.gauge =
-      P.unipotentFactor' Q hC hD hC' hD' * P.matchingPermMatrix Q hC hD hC' hD' *
-        (P.unipotentFactor Q hC hD hC' hD')⁻¹ := by
+      P.unipotentFactor' Q hC hD hC' hD' (L := L) * P.matchingPermMatrix Q hC hD hC' hD' *
+        (P.unipotentFactor Q hC hD hC' hD' (L := L))⁻¹ := by
   rw [unipotentFactor, coordChange_inv, unipotentFactor', coordChange, coordChange,
     Matrix.mul_assoc, Matrix.mul_assoc, ← Matrix.mul_assoc (P.matchingPermMatrix Q hC hD hC' hD'),
-    ← P.gaugeMatrix_commonGauge', ← Matrix.mul_assoc (gaugeMatrixInv _),
+    ← P.gaugeMatrix_commonGauge' Q hC hD hC' hD' (L := L), ← Matrix.mul_assoc (gaugeMatrixInv _),
     gaugeMatrixInv_mul_gaugeMatrix, Matrix.one_mul]
 
 /-- `P_X = (P_X Γ) Γ⁻¹`: the block permutation matrix is determined by the two changes of basis
 (*The asymmetric fundamental theorem of matrix product states*, Theorem 6.5). -/
 theorem matchingPermMatrix_eq_mul :
     P.matchingPermMatrix Q hC hD hC' hD' =
-      gaugeMatrix (P.commonGauge' Q hC hD hC' hD') *
-        gaugeMatrixInv (P.commonGauge Q hC hD hC' hD') := by
-  rw [gaugeMatrix_commonGauge', Matrix.mul_assoc, gaugeMatrix_mul_gaugeMatrixInv, Matrix.mul_one]
+      gaugeMatrix (P.commonGauge' Q hC hD hC' hD' (L := L)) *
+        gaugeMatrixInv (P.commonGauge Q hC hD hC' hD' (L := L)) := by
+  rw [P.gaugeMatrix_commonGauge' Q hC hD hC' hD' (L := L), Matrix.mul_assoc,
+    gaugeMatrix_mul_gaugeMatrixInv, Matrix.mul_one]
 
 end Matched
 

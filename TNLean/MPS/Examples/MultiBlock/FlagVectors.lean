@@ -214,8 +214,8 @@ complements** (*The asymmetric fundamental theorem of matrix product states*, Th
 the matching read on slots, `L j` a complement of `K_j = M_{j-1} ∩ M'_{π(j)}` in
 `U_j = M_j ∩ M'_{π(j)}`, `Γ` reads `x ∈ L_j` by the slot of position `j`, `X b` the intertwiner of
 *Two compressions with different flags*, `𝔄`, `𝔄'` unipotent in the two orders, and `g = 𝔄 Γ`,
-`g_tilde = 𝔄' P_X Γ`. The examples choose the complements explicitly, which the library's
-`unipotentFactor` (a choice of complements) does not allow. -/
+`g_tilde = 𝔄' P_X Γ`. The examples record their supplied complements and explicit matrix factors;
+the general `unipotentFactor` construction also accepts these complements. -/
 def IsAdaptedFactorization (P : MultiBlockCompression B S C) (Q : MultiBlockCompression B S' C')
     (hC : ∀ s ∈ S, Kraus.IsNormal (C s)) (hD : ∀ s ∈ S, 0 < D s)
     (hC' : ∀ t ∈ S', Kraus.IsNormal (C' t)) (hD' : ∀ t ∈ S', 0 < D' t)
