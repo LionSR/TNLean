@@ -31,9 +31,12 @@ theorem leftSupportAlgebra_range_leftKroneckerEmbed [Nonempty n] :
   intro A _
   have hcoeff : bipartiteSlice (leftKroneckerEmbed (n := n) A) j j = A := by
     ext i k
-    simp [bipartiteSlice_apply, leftKroneckerEmbed_apply, kroneckerMap_apply, one_apply]
+    simp [bipartiteSlice_apply, leftKroneckerEmbed_apply, kroneckerMap_apply]
   rw [← hcoeff]
-  exact bipartite_slice_mem_left_support_algebra _ ⟨A, rfl⟩ j j
+  have hA : leftKroneckerEmbed (n := n) A ∈
+      (leftKroneckerEmbed (m := m) (n := n)).range := ⟨A, rfl⟩
+  exact bipartite_slice_mem_left_support_algebra
+    (leftKroneckerEmbed (m := m) (n := n)).range hA j j
 
 /-- The right support of the full left tensor factor consists of scalars;
 GNVW, arXiv:0910.3675v2, shift example after RR2x. -/
@@ -43,7 +46,7 @@ theorem rightSupportAlgebra_range_leftKroneckerEmbed :
   apply (right_support_algebra_le_iff _ _).mpr
   intro X hX i j
   obtain ⟨A, rfl⟩ := hX
-  rw [Algebra.mem_bot]
+  rw [StarSubalgebra.mem_bot]
   refine ⟨A i j, ?_⟩
   ext k l
   simp [Algebra.algebraMap_eq_smul_one, operatorBlock_apply, leftKroneckerEmbed_apply,
@@ -57,7 +60,7 @@ theorem leftSupportAlgebra_range_rightKroneckerEmbed :
   apply (left_support_algebra_le_iff _ _).mpr
   intro X hX i j
   obtain ⟨A, rfl⟩ := hX
-  rw [Algebra.mem_bot]
+  rw [StarSubalgebra.mem_bot]
   refine ⟨A i j, ?_⟩
   ext k l
   simp [Algebra.algebraMap_eq_smul_one, bipartiteSlice_apply, rightKroneckerEmbed_apply,
@@ -73,8 +76,11 @@ theorem rightSupportAlgebra_range_rightKroneckerEmbed [Nonempty m] :
   intro A _
   have hcoeff : operatorBlock (rightKroneckerEmbed (m := m) A) i i = A := by
     ext j k
-    simp [operatorBlock_apply, rightKroneckerEmbed_apply, kroneckerMap_apply, one_apply]
+    simp [operatorBlock_apply, rightKroneckerEmbed_apply, kroneckerMap_apply]
   rw [← hcoeff]
-  exact operator_block_mem_right_support_algebra _ ⟨A, rfl⟩ i i
+  have hA : rightKroneckerEmbed (m := m) A ∈
+      (rightKroneckerEmbed (m := m) (n := n)).range := ⟨A, rfl⟩
+  exact operator_block_mem_right_support_algebra
+    (rightKroneckerEmbed (m := m) (n := n)).range hA i i
 
 end Matrix
