@@ -130,7 +130,12 @@ projection and the finite-dimensional variational spectral conclusion
 remain open in this slice. The one-wall transfer recursion is parallel work.
 
 No local Lean invocation, compilation or build was run, as requested.
-Source/API inspection, import generation, formatting, prose and integrity
-checks do not establish Lean acceptance. This remains a draft proof
-candidate with Blueprint notready; #10286 stays open. No placeholders,
+Hosted CI checked exact Lean head `eabb087703ecf9389c6c018b9a5a9d4729d18d4c`:
+job `123488428555` completed the full 14,995-job build and all strict checks
+on eight changed source files successfully. The six finite trial Blueprint
+entries are therefore marked Lean-checked. This validates the finite trial,
+localization, cyclic norm partition, quadratic energy and pinned residuals;
+it does not validate a subsequent asymptotic draft or complete gaplessness.
+The PR remains draft pending integration, and #10286 stays open. Source/API,
+import, formatting, prose, integrity and diff checks also pass. No placeholders,
 axioms or persistent Lean fixtures are added.
