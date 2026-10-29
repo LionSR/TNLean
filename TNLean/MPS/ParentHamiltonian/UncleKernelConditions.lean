@@ -107,7 +107,8 @@ theorem uncleHamiltonianES_apply_eq_zero_iff
     ext ψ
     simp [uncleHamiltonianES, K, c, Fintype.sum_prod_type, Finset.smul_sum]
   change (uncleHamiltonianES A B R L N).toLinearMap v = 0 ↔ _
-  rw [hsum, WeightedPositiveKernel.apply_weighted_sum_eq_zero_iff (fun _ ↦ hc) hK]
+  rw [hsum, WeightedPositiveKernel.apply_weighted_sum_eq_zero_iff
+    (w := fun _ : Fin N × Cfg d N ↦ c) (P := K) (fun _ ↦ hc) hK v]
   constructor
   · intro h i τ
     have hz : Complex.re ⟪K (i, τ) v, v⟫_ℂ = 0 := by rw [h (i, τ)]; simp
