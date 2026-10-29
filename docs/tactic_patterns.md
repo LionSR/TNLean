@@ -9433,22 +9433,19 @@ spectral split → block extraction → MPV calculation → strict bounds
   threshold. The qutrit proof reuses the existing Ky Fan overlap theorem and
   the actual MPS cut-rank bound rather than repeating their proofs.
 
-### Linear bounds for regional-entropy suprema — candidate (2026-10-17)
+### Linear bounds for regional-entropy suprema — retired (2026-10-29)
 
-- **Pattern:** apply `Real.sSup_le` with a nonnegative linear target, unpack
-  a physical entropy witness, and use its rectangle-size bound to increase
-  the scale to the scale of the supremum.
-- **Seen:** `exists_initialBuffer_and_real_boxEntropy_recurrence` in
-  `PEPS/AreaLaw/SafeRectangleAreaLaw.lean` and
-  `exists_uniform_boxEntropy_improvement_real` in
-  `PEPS/AreaLaw/Scan/RealBoxEntropyImprovement.lean`.
-- **Abstraction:** both uses apply Mathlib's `Real.sSup_le` directly and
-  share the pointwise theorem
-  `exists_regionalEntropy_safe_rect_le_linear`. A further helper is
-  deferred until another proof repeats this physical collection.
-- **Notes:** the nonnegative target also covers the empty collection.
-  The earlier monotonicity candidate uses the same Mathlib theorem with
-  inclusion of collections in place of a pointwise linear estimate.
+- **Former pattern:** apply `Real.sSup_le` to a collection of safe-rectangle
+  entropies, then increase the rectangle size to the scale of the supremum.
+- **Surviving occurrence:** `exists_initialBuffer_and_real_boxEntropy_recurrence`
+  in `PEPS/AreaLaw/SafeRectangleAreaLaw.lean`, using
+  `exists_regionalEntropy_safe_rect_le_linear`.
+- **Disposition:** the second occurrence was the unused post-area-law theorem
+  `exists_uniform_boxEntropy_improvement_real`. Its hypothesis-free linear
+  input already implies every output exponent it states. The theorem and its
+  isolated Blueprint entry were removed rather than abstracting that duplicate
+  proof. The independent integer-clearance bootstrap is retained. See
+  `docs/audits/2026-10-29_real_clearance_corollary_removal.md` and issue #10152.
 
 ### Candidate: logarithms of zero-padded integer rank budgets (2026-10-23)
 

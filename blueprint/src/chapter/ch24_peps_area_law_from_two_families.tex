@@ -98,23 +98,3 @@ The uniform area law implies a linear entropy bound for safe rectangles, which t
         F_d(Mr)\le KMr\le bM^2r \le\alpha F_d(r)+bM^2r.\notag
     \end{align}
 \end{proof}
-
-\begin{theorem}[Improvement of the exponent at fixed real clearance]
-    \label{thm:area_law_real_box_improvement_after_area_law}
-    \lean{TNLean.PEPS.AreaLaw.Scan.exists_uniform_boxEntropy_improvement_real}
-    \leanok
-    \uses{thm:area_law_real_box_recurrence_after_area_law,
-        def:area_law_bootstrap_parameters}
-    Fix integers $q\ge1$, $R\ge0$, reals $J\ge0$, $\Delta>0$, $C_{\rm box}\ge0$, and $e_0\in(e_*,1)$ with $e_*=2\cdot10^{-6}$ and $\ell=\ell(e_0)$ from Definition~\ref{def:area_law_bootstrap_parameters}.
-    There exists $C>0$ (chosen before $e,d$ and all instances) such that for all $e\in(e_*,e_0]$ and $d>2R+10$, if $F_d(r)$ in (\ref{eq:Fd_def}) satisfies $F_d(r)\le C_{\rm box}r^{1+e}$ for all $r\ge1$, then $F_d(r)\le Cr^{1+(1-\ell)e}$ for all $r\ge1$ (\cite[Proposition~9.5]{OpenAI2026AreaLaw}).
-\end{theorem}
-\begin{proof}
-    \leanok
-    \uses{thm:area_law_safe_rectangle_linear_entropy,
-        thm:area_law_bootstrap_margins}
-    Take $K\ge0$ from Theorem~\ref{thm:area_law_safe_rectangle_linear_entropy} and set $C=\max\{K,1\}>0$, so (\ref{eq:safe_rect_linear_entropy}) implies $F_d(r)\le Kr$.
-    By Theorem~\ref{thm:area_law_bootstrap_margins}, $0<\ell<1$, so $e'=(1-\ell)e>0$ and for all $r\ge1$,
-    \begin{align}
-        F_d(r)\le Kr\le Cr\le Cr^{1+e'}.\notag
-    \end{align}
-\end{proof}
