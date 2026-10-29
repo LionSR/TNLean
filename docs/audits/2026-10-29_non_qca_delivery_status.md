@@ -36,22 +36,51 @@ heterogeneous construction does not discharge it.
 | OBC canonical form and representation freedom, [#6086](https://github.com/LionSR/TNLean/issues/6086) | [#10370](https://github.com/LionSR/TNLean/pull/10370) constructs actual canonical OBC data and rectangular representation freedom. | Reconciled with the snapshot main at `2b3c3006c`. Proof bytes are unchanged; fresh exact-head hosted acceptance and integration remain. |
 | Prescribed-window quadratic TI reconstruction, [#6089](https://github.com/LionSR/TNLean/issues/6089) | [#10381](https://github.com/LionSR/TNLean/pull/10381) → [#10388](https://github.com/LionSR/TNLean/pull/10388). The latter constructs the actual quadratic solution on the original prescribed canonical window, deriving the bond bound, nonzero state, Perron normalization and cut gauges. | Reconciled heads `02c27b8ec` and `3beaa71ec` preserve the proof bytes and actual parent stack. Fresh hosted acceptance and integration remain. Preserve the source's full size regime and actual unchanged OBC coefficient state. |
 | Half-chain fixed point and spectrum, [#6088](https://github.com/LionSR/TNLean/issues/6088) | [#10342](https://github.com/LionSR/TNLean/pull/10342) → [#10345](https://github.com/LionSR/TNLean/pull/10345). Concrete earlier diagnostics were repaired in `dfe9984f8`. | Current-main reconciliation preserves the repaired proof bytes; new hosted heads need their own acceptance. |
-| Uncle limiting tensor, [#10284](https://github.com/LionSR/TNLean/issues/10284) | [#10317](https://github.com/LionSR/TNLean/pull/10317). | Exact-head hosted acceptance and integration of the actual perturbation/injectivity construction. |
-| Uncle periodic ground space, [#10285](https://github.com/LionSR/TNLean/issues/10285) | [#10320](https://github.com/LionSR/TNLean/pull/10320). | Exact-head acceptance and integration of the actual full periodic kernel, including the inherited repaired Haar-class arguments. |
-| Uncle finite-volume gaplessness, [#10286](https://github.com/LionSR/TNLean/issues/10286) | [#10324](https://github.com/LionSR/TNLean/pull/10324) → [#10325](https://github.com/LionSR/TNLean/pull/10325) → [#10326](https://github.com/LionSR/TNLean/pull/10326). | Fresh acceptance after the explicit existing-Haar-instance repair. A small energy expectation alone is not the delivered result; the final statement concerns actual positive excitation eigenvalues relative to the full ground space. |
+| Uncle limiting tensor, [#10284](https://github.com/LionSR/TNLean/issues/10284) | [#10317](https://github.com/LionSR/TNLean/pull/10317). | Reconciled head `941178794` preserves the actual perturbation/injectivity construction. Fresh hosted acceptance and integration remain. |
+| Uncle periodic ground space, [#10285](https://github.com/LionSR/TNLean/issues/10285) | [#10320](https://github.com/LionSR/TNLean/pull/10320). | Reconciled head `621fcf9ba` preserves the full periodic kernel and repaired Haar-class arguments. Fresh hosted acceptance and integration remain. |
+| Uncle finite-volume gaplessness, [#10286](https://github.com/LionSR/TNLean/issues/10286) | [#10324](https://github.com/LionSR/TNLean/pull/10324) → [#10325](https://github.com/LionSR/TNLean/pull/10325) → [#10326](https://github.com/LionSR/TNLean/pull/10326). | Reconciled heads `09629b8bf` / `400c79b06` / `beee2464f` include the existing-Haar-instance repair and concrete exact-head Gram-limit diagnostics fixed in `51d4f483e` (composition, rank-one trace and scalar-field inference). Fresh hosted acceptance remains. A small energy expectation alone is not the delivered result; the final statement concerns actual positive excitation eigenvalues relative to the full ground space. |
 | Original-chain AKLV normalization, [#9837](https://github.com/LionSR/TNLean/issues/9837) | [#10371](https://github.com/LionSR/TNLean/pull/10371), above the integrated normalized robustness theorem. | Exact-head diagnostics were repaired in `5974e0c79`: the reserved identifier, associated matrix-product rewrites and interval-TeX lint. Reconciled head `0d91a2bd3` preserves the original unit bonds and derived regional common ground vector; fresh hosted acceptance and integration remain. |
 | Hastings infinite Gaussian series adoption, [#10397](https://github.com/LionSR/TNLean/issues/10397), under [#9828](https://github.com/LionSR/TNLean/issues/9828) | [#10399](https://github.com/LionSR/TNLean/pull/10399) specializes the actual filter to the corrected operator-norm series at a concrete candidate dependency revision. | QICLean [#985](https://github.com/LionSR/QICLean/pull/985) acceptance and correction-note publication, accepted pin, TNLean hosted acceptance and integration. The finite-polynomial and actual Gaussian-integral bounds already integrated on main remain complete. |
 | Redundant real-clearance corollary, [#10152](https://github.com/LionSR/TNLean/issues/10152) | [#10295](https://github.com/LionSR/TNLean/pull/10295) removes an unused specialization already implied by the stronger uniform linear bound. | Reconciled head `9832cebd0` preserves both retained source results byte-for-byte. Historical exact head `25b8b26cb` passed hosted full/strict and Blueprint web/PDF checks. Fresh combined-head acceptance and integration remain. |
+
+The pure proof-reuse drafts [#10290](https://github.com/LionSR/TNLean/pull/10290)
+(`f0a804558`, issue [#10258](https://github.com/LionSR/TNLean/issues/10258)) and
+[#10304](https://github.com/LionSR/TNLean/pull/10304) (`45360f7ec`) now include
+current main. Their historical exact heads passed hosted full/strict checks
+for seven and two changed modules respectively; proof bytes are unchanged.
+The generic cancellation owner [#10355](https://github.com/LionSR/TNLean/pull/10355)
+is reconciled at `924f06d6a` with unchanged verified source. Fresh combined-head
+acceptance and integration remain for each; the broader hypothesis audit is
+not closed by one corrected anchor.
+
+The SPT stack [#10333](https://github.com/LionSR/TNLean/pull/10333) →
+[#10338](https://github.com/LionSR/TNLean/pull/10338) →
+[#10341](https://github.com/LionSR/TNLean/pull/10341) is reconciled at
+`52fb7d0c3` / `cec3907a1` / `f26255d0c`. Two missing Blueprint dependencies
+now name the actual existing Lieb–Robinson entry. Proof bytes are preserved;
+the endpoint module's scope documentation now states its exact-covariance
+domain against the correct note. Current-head hosted acceptance is pending,
+and [#2147](https://github.com/LionSR/TNLean/issues/2147) records that precise
+classification boundary rather than claiming realizability is absent.
+
+The nonabelian local physical renormalization draft
+[#10364](https://github.com/LionSR/TNLean/pull/10364) is reconciled at
+`0b9f106a0`, with its two verified Lean files unchanged. Its exact hosted
+combined-diagram failure is repaired by including the actual new lemma in the
+fragment. Two XeLaTeX passes give all 11 expected boundary signatures with no
+unresolved reference, overflow or audit finding. The new local block proof
+addresses [#8947](https://github.com/LionSR/TNLean/issues/8947) at that explicit
+scope; full-lattice commutation, topology and parent transport remain open.
 
 New source in these chains remains `notready` until its appropriate proof
 acceptance. Native checks do not substitute for Lean. The current user
 instruction is to write without local Lean/Lake/build/elaboration/checkdecls.
 
-## Exact-head hosted evidence: four Wielandt leaves
+## Exact-head hosted evidence: five Wielandt leaves
 
 The issue bodies were refreshed from the individual strict production-module
 checks in the actual job logs, including the exact `PR_HEAD_SHA`, successful
-full build and final strict-check success. All four issues remain open.
+full build and final strict-check success. All five issues remain open.
 
 | Issue | Draft and verified source head | Individual changed Lean checks | Remaining gate |
 |---|---|---:|---|
@@ -59,6 +88,7 @@ full build and final strict-check success. All four issues remain open.
 | [#10276](https://github.com/LionSR/TNLean/issues/10276) | [#10294](https://github.com/LionSR/TNLean/pull/10294), `6ec6e186` | 2/2 | Reconciled head `83e2e92c2` on actual #10289 base; fresh acceptance and stack integration remain. |
 | [#10277](https://github.com/LionSR/TNLean/issues/10277) | [#10302](https://github.com/LionSR/TNLean/pull/10302), `f3e72c028` | 2/2 | QICLean [#987](https://github.com/LionSR/QICLean/pull/987) acceptance, coherent accepted repin across all three dependency files, fresh acceptance and integration. Reconciled head `73ebff776` preserves the existing draft pin. |
 | [#10279](https://github.com/LionSR/TNLean/issues/10279) | [#10307](https://github.com/LionSR/TNLean/pull/10307), `3a087f5c7` | 7/7 | Reconciled head `3c4b0a6de` needs fresh acceptance and integration; preserve the resolved missing-diagonal correction and the printed CP family without adding trace preservation. |
+| [#10278](https://github.com/LionSR/TNLean/issues/10278) | [#10297](https://github.com/LionSR/TNLean/pull/10297), historical exact head `bebf891d8` | 2/2 | Reconciled head `47d921d10` preserves the three-Pauli source. Fresh exact-head acceptance and integration remain. |
 
 The stochastic upstream PR remains draft/open. Its newer verified head is
 `c4cbc544f7`, while the verified downstream snapshot explicitly pins `7a1bc092`.
