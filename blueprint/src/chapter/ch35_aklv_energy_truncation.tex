@@ -1,0 +1,408 @@
+\section{Energy tails and two-sided truncation}
+
+The off-diagonal estimate and the eigenvector tail of
+\cite[Lemmas~6.6--6.7]{Arad2013AreaLaw} have explicit constants.
+In this section $P_t=\mathbf1_{(-\infty,t)}(B)$ and $Q_t=I-P_t$.
+
+\begin{lemma}[Spectral separation by imaginary time]
+    \label{lem:aklv_spectral_separation}
+    \lean{Matrix.IsHermitian.exp_real_smul_eq_cfc,
+        Matrix.IsHermitian.norm_spectral_offDiagonal_le_exp_conjugation,
+        Matrix.IsHermitian.spectralProjectionGE_mul_one_sub_eq_zero,
+        Matrix.IsHermitian.spectral_offDiagonal_add_eq,
+        Matrix.IsHermitian.norm_highProjection_mul_exp_neg_le,
+        Matrix.IsHermitian.norm_exp_mul_lowProjection_le}
+    \leanok
+    For Hermitian $B$, any operator $O$, real $t,u$ and $r\ge0$,
+    \begin{align}
+        \|Q_tOP_u\|    & \le e^{-r(t-u)}\|e^{rB}Oe^{-rB}\|,\notag \\
+        \|Q_te^{-rB}\| & \le e^{-rt},\qquad
+        \|e^{rB}P_u\|\le e^{ru}.
+    \end{align}
+    If $u\le t$, then $Q_tP_u=0$.
+    In that case $Q_t(B+O)P_u=Q_tOP_u$ as well.
+\end{lemma}
+\begin{proof}\leanok
+    Functional calculus gives $e^{rB}=\exp(r\,\cdot)(B)$ and the last
+    two estimates by bounding the scalar function on the spectral intervals.
+    Insert the inverse exponentials in $Q_tOP_u$ for the first estimate.
+    The two spectral indicators have disjoint support when $u\le t$.
+\end{proof}
+
+\begin{theorem}[Boundary energy off-diagonal decay]
+    \label{thm:aklv_boundary_energy_tail}
+    \lean{TNLean.MPS.AreaLaw.AKLV.norm_boundary_spectral_offDiagonal_le,
+        TNLean.MPS.AreaLaw.AKLV.norm_two_boundary_spectral_offDiagonal_le,
+        TNLean.MPS.AreaLaw.AKLV.norm_exp_conjugation_two_boundary_le_four}
+    \leanok
+    \uses{def:chain_model}
+    Let $0\le h_i\le I$ be nearest-neighbour terms on a chain, let $I_0$
+    be any bond set, and put $B=\sum_{i\in I_0}h_i-zI$ for real $z$.
+    For any bonds $a,b$ and $u\le t$,
+    \begin{align}
+        \|Q_th_aP_u\|                & \le e^{-(t-u)/8},\notag \\
+        \|Q_t(h_a+h_b)P_u\|          & \le2e^{-(t-u)/8},\notag \\
+        \|e^{B/8}(h_a+h_b)e^{-B/8}\| & \le4.
+    \end{align}
+    The second inequality is the estimate of
+    \cite[Lemma~6.6(2)]{Arad2013AreaLaw}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:chain_local_imaginary_time,lem:aklv_spectral_separation}
+    Center each boundary term as $O_j=h_j-I/2$. Then $\|O_j\|\le1/2$,
+    so Theorem~\ref{thm:chain_local_imaginary_time} gives
+    $\|e^{B/8}O_je^{-B/8}\|\le1$. Since $Q_tP_u=0$, centering preserves
+    the off-diagonal block. Apply Lemma~\ref{lem:aklv_spectral_separation}
+    and add the two estimates. Applying the imaginary-time estimate directly
+    to $h_a,h_b$, whose norms are at most one, gives the bound $4$.
+\end{proof}
+
+\begin{lemma}[Exponential moment of an eigenvector]
+    \label{lem:aklv_eigenvector_moment}
+    \lean{Matrix.IsHermitian.norm_highProjection_apply_le,
+        Matrix.IsHermitian.norm_exp_apply_eigenvector_le,
+        Matrix.IsHermitian.norm_highProjection_eigenvector_le_exp}
+    \leanok
+    Let $B$ be Hermitian and $(B+A)x=ex$ for real $e$.
+    Suppose $r\ge0$, $c>0$, $\|e^{rB}Ae^{-rB}\|\le C$, and
+    $|e|+C\le c/2$. Then
+    \begin{align}
+        \|e^{rB}x\| & \le2e^{rc}\|x\|,\notag \\
+        \|Q_tx\|    & \le2e^{-r(t-c)}\|x\|.
+    \end{align}
+    Also $\|Q_cy\|\le c^{-1}\|By\|$ for every vector $y$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:aklv_spectral_separation}
+    The function $\mathbf1_{[c,\infty)}(\lambda)/\lambda$ has norm at most
+    $c^{-1}$ and its product with $\lambda$ is the high spectral indicator.
+    For $y=e^{rB}x$, $By=ey-e^{rB}Ae^{-rB}y$, so
+    $\|Q_cy\|\le c^{-1}(|e|+C)\|y\|\le\|y\|/2$.
+    Since $\|P_cy\|\le e^{rc}\|x\|$, the triangle inequality bounds
+    $\|y\|$ by $2e^{rc}\|x\|$. Multiply by $Q_te^{-rB}$ for the tail.
+\end{proof}
+
+\begin{theorem}[Explicit eigenvector energy tail on a chain]
+    \label{thm:aklv_ground_energy_tail}
+    \lean{TNLean.MPS.AreaLaw.AKLV.norm_groundState_highProjection_le_exp}
+    \leanok
+    \uses{def:chain_model}
+    Under the assumptions of Theorem~\ref{thm:aklv_boundary_energy_tail},
+    let $(B+h_a+h_b)x=ex$ with $0\le e\le6$. For every real $t$,
+    \begin{align}
+        \|Q_tx\|\le2e^{-(t-20)/8}\|x\|.
+    \end{align}
+    This applies to the ground vector after the regional energy shifts of
+    \cite[Section~6.1]{Arad2013AreaLaw} and proves its Lemma~6.7.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:aklv_boundary_energy_tail,lem:aklv_eigenvector_moment}
+    Take $r=1/8$, $C=4$ and $c=20$ in
+    Lemma~\ref{lem:aklv_eigenvector_moment}, using $|e|+4\le10$.
+\end{proof}
+
+\begin{definition}[Separate truncation of the exterior blocks]
+    \label{def:aklv_two_sided_truncation}
+    \lean{TNLean.MPS.AreaLaw.AKLV.twoSidedEnergyTruncation}
+    \leanok
+    For exterior operators $L,R$ and a middle operator $M$, put
+    \begin{align}
+        H^{(t)}=\min(L,tI)+M+\min(R,tI).
+    \end{align}
+    In \cite[Section~6.1]{Arad2013AreaLaw}, $L=H_L+H_1$,
+    $R=H_s+H_R$, and $M=H_2+\cdots+H_{s-1}$.
+\end{definition}
+
+\begin{lemma}[Order bounds and agreement below the cutoff]
+    \label{lem:aklv_truncation_low_agreement}
+    \lean{Matrix.IsHermitian.energyTruncation_mul_lowProjection_eq,
+        Matrix.PosSemidef.isPositive_toEuclideanCLM,
+        TNLean.MPS.AreaLaw.AKLV.twoSidedEnergyTruncation_bounds,
+        TNLean.MPS.AreaLaw.AKLV.twoSidedEnergyTruncation_mul_lowProjection_eq}
+    \leanok
+    \uses{def:aklv_two_sided_truncation}
+    If $L,M,R\ge0$, $t\ge0$ and $M\le mI$, then
+    $0\le H^{(t)}\le L+M+R$ and $H^{(t)}\le(2t+m)I$.
+    If $B,L,R$ are Hermitian, $L\le B$, $R\le B$, and both exterior
+    blocks commute with $B$, then
+    \begin{align}
+        H^{(t)}P_t=(L+M+R)P_t.
+    \end{align}
+    The middle term need not commute with $B$.
+\end{lemma}
+\begin{proof}\leanok
+    Sum the scalar clipping order inequalities. Diagonalize $L,B$
+    simultaneously. Their eigenvalues obey $\ell_j\le b_j$, and whenever
+    $b_j<t$, $\min(\ell_j,t)=\ell_j$. Thus $\min(L,tI)P_t=LP_t$.
+    Repeat for $R$ and add the unchanged middle term.
+\end{proof}
+
+\begin{lemma}[High-energy mass and the boundary cross term]
+    \label{lem:aklv_clipped_high_mass}
+    \lean{TNLean.MPS.AreaLaw.AKLV.cutoff_smul_highProjection_le_twoSidedEnergyTruncation,
+        TNLean.MPS.AreaLaw.AKLV.cutoff_mul_sq_norm_highProjection_le_energy,
+        TNLean.MPS.AreaLaw.AKLV.norm_highProjection_le_sqrt_clipped_energy,
+        TNLean.MPS.AreaLaw.AKLV.norm_low_high_boundary_inner_le_sqrt_clipped_energy}
+    \leanok
+    \uses{def:aklv_two_sided_truncation}
+    Let $L,N,R$ be pairwise commuting positive operators, $A\ge0$,
+    $B=L+N+R$, and $K=\min(L,tI)+N+A+\min(R,tI)$.
+    For $t\ge0$ and every vector $v$,
+    \begin{align}
+        tQ_t        & \le\min(L,tI)+N+\min(R,tI)\le K,\notag \\
+        t\|Q_tv\|^2 & \le\langle v,Kv\rangle.
+    \end{align}
+    For $t>0$, $\|Q_tv\|\le\sqrt{\langle v,Kv\rangle/t}$.
+    If additionally $A\le2I$ and $\|v\|=1$, then
+    \begin{align}
+        |\langle P_tv,AQ_tv\rangle|
+        \le2\sqrt{\langle v,Kv\rangle/t}.
+    \end{align}
+    This gives \cite[Lemma~6.5(1)]{Arad2013AreaLaw} and the unsquared
+    cross-term estimate in the proof of its second assertion.
+\end{lemma}
+\begin{proof}\leanok
+    The commuting spectral resolutions of the three regional operators
+    have a common product resolution. For nonnegative scalar energies
+    $\ell,n,r$ and $t\ge0$,
+    \begin{align}
+        t\mathbf1_{[t,\infty)}(\ell+n+r)
+        \le\min(\ell,t)+n+\min(r,t).
+    \end{align}
+    Indeed, if either exterior energy exceeds $t$, its clipped value
+    already supplies $t$; otherwise both exterior energies are unchanged.
+    Apply this scalar inequality to the common resolution and add $A\ge0$.
+    The quadratic form of an orthogonal projection is its squared applied
+    norm, giving the mass bound. Cauchy--Schwarz and $\|A\|\le2$ give
+    $|\langle P_tv,AQ_tv\rangle|\le2\|P_tv\|\|Q_tv\|$, and
+    $\|P_tv\|\le1$ gives the cross-term estimate.
+\end{proof}
+
+\begin{lemma}[Energy after projection onto the disconnected low spectrum]
+    \label{lem:aklv_projected_energy}
+    \lean{ContinuousLinearMap.re_inner_left_le_energy_add_cross,
+        TNLean.MPS.AreaLaw.AKLV.twoSidedEnergyTruncation_posSemidef_le,
+        TNLean.MPS.AreaLaw.AKLV.commute_twoSidedEnergyTruncation_disconnected,
+        TNLean.MPS.AreaLaw.AKLV.twoSidedEnergyTruncation_mul_lowProjection_eq_of_commuting,
+        TNLean.MPS.AreaLaw.AKLV.lowProjection_mul_clipped_mul_highProjection_eq,
+        TNLean.MPS.AreaLaw.AKLV.projected_energy_le_clipped_energy_add_tail,
+        TNLean.MPS.AreaLaw.AKLV.projected_energy_le_clipped_energy_add_sqrt}
+    \leanok
+    \uses{def:aklv_two_sided_truncation}
+    Let $L,N,R$ be pairwise commuting positive operators and $0\le A\le2I$.
+    Put $B=L+N+R$, $H=B+A$ and
+    $K=\min(L,tI)+N+A+\min(R,tI)$. Then $K\ge0$, $K\le H$,
+    $K-A$ commutes with $B$, $KP_t=HP_t$, and $P_tKQ_t=P_tAQ_t$.
+    For $t>0$ and $\|v\|=1$,
+    \begin{align}
+        \langle P_tv,HP_tv\rangle
+         & \le\langle v,Kv\rangle+4\|Q_tv\|\notag                \\
+         & \le\langle v,Kv\rangle+4\sqrt{\langle v,Kv\rangle/t}.
+    \end{align}
+    This is the corrected explicit comparison used in
+    \cite[Lemma~6.5(2)]{Arad2013AreaLaw}.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:aklv_truncation_low_agreement,lem:aklv_clipped_high_mass}
+    Functional calculus preserves the original regional commutations.
+    Positivity gives $L,R\le B$, so
+    Lemma~\ref{lem:aklv_truncation_low_agreement} gives $KP_t=HP_t$.
+    The commuting part has zero low-high block. For any positive $K$ and
+    vectors $p,q$,
+    \begin{align}
+        \langle p,Kp\rangle
+        \le\langle p+q,K(p+q)\rangle+2|\langle p,Kq\rangle|.
+    \end{align}
+    Apply this with $p=P_tv$, $q=Q_tv$, use $\|A\|\le2$, and then
+    Lemma~\ref{lem:aklv_clipped_high_mass}.
+\end{proof}
+
+\begin{lemma}[A ground gap from one orthogonal complement]
+    \label{lem:aklv_codimension_one_gap}
+    \lean{re_inner_lower_of_unit_orthogonal_lower,exists_ground_gap_of_orthogonal_lower}
+    \leanok
+    Let $K\ge0$ act on a finite-dimensional complex Hilbert space.
+    Suppose $\|\Omega\|=1$, $e<a$, $\langle\Omega,K\Omega\rangle\le e$,
+    and $\langle v,Kv\rangle\ge a\|v\|^2$ whenever $v\perp\Omega$.
+    It suffices to check this homogeneous lower bound on unit vectors.
+    There are $e'\in[0,e]$ and a unit ground vector $\phi$ such that
+    \begin{align}
+        K\phi=e'\phi,\qquad
+        K-e'I\ge(a-e')(I-|\phi\rangle\langle\phi|).
+    \end{align}
+    Every vector orthogonal to $\phi$ has energy at least $a$ times its
+    squared norm.
+\end{lemma}
+\begin{proof}\leanok
+    Minimize the quadratic form of $K$ on the unit sphere to obtain
+    $\phi$ and $e'\le e<a$. Thus $\beta=\langle\Omega,\phi\rangle\ne0$.
+    If $v\perp\phi$, put $\alpha=\langle\Omega,v\rangle$ and
+    $w=-\alpha\phi+\beta v$. Then $w\perp\Omega$ and
+    \begin{align}
+        a\bigl(|\alpha|^2+|\beta|^2\|v\|^2\bigr)
+         & \le\langle w,Kw\rangle
+        =|\alpha|^2e'+|\beta|^2\langle v,Kv\rangle.
+    \end{align}
+    Since $e'<a$ and $\beta\ne0$, this proves the lower bound on
+    $\phi^\perp$. Split an arbitrary vector along $\phi$ to obtain the
+    operator gap.
+\end{proof}
+
+\begin{lemma}[The constant-fraction gap after exterior clipping]
+    \label{lem:aklv_clipped_gap}
+    \lean{TNLean.MPS.AreaLaw.AKLV.orthogonal_clipped_energy_ge,
+        TNLean.MPS.AreaLaw.AKLV.exists_ground_gap_twoSidedEnergyTruncation}
+    \leanok
+    Under the assumptions of Lemma~\ref{lem:aklv_projected_energy}, suppose
+    $H\Omega=e\Omega$, $\|\Omega\|=1$, $0\le e\le6$, $0<g\le1$, and
+    $H-eI\ge g(I-|\Omega\rangle\langle\Omega|)$.
+    If $tg^2\ge1024(e+g)$, then the energy of every vector in
+    $\Omega^\perp$ under $K$ is at least $(e+g/2)$ times its squared norm.
+    The operator $K$ has a unit ground vector $\phi$, energy
+    $e'\in[0,e]$, and
+    \begin{align}
+        K-e'I\ge(e+g/2-e')(I-|\phi\rangle\langle\phi|).
+    \end{align}
+    In particular its spectral gap is at least $g/2$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:aklv_projected_energy,lem:aklv_clipped_high_mass,
+        lem:aklv_codimension_one_gap}
+    Suppose a unit $v\perp\Omega$ has clipped energy $E\le e+g/2$.
+    Write $q=\|Q_tv\|$. The mass estimate and cutoff condition imply
+    $q\le g/32$. Since
+    $\langle\Omega,P_tv\rangle=-\langle\Omega,Q_tv\rangle$, the original
+    gap and the projected-energy comparison give
+    \begin{align}
+        g & \le g/2+4q+(e+2g)q^2.
+    \end{align}
+    But $q^2\le g/1024$ and $e+2g\le8$, so the right side is at most
+    $81g/128<g$, a contradiction. Rescaling proves the homogeneous
+    lower bound. Since $K\le H$, the original ground vector has clipped
+    energy at most $e$. Apply Lemma~\ref{lem:aklv_codimension_one_gap} with
+    $a=e+g/2$.
+\end{proof}
+
+\begin{lemma}[Residual of the projected original ground vector]
+    \label{lem:aklv_projected_residual}
+    \lean{Matrix.IsHermitian.norm_lowProjection_residual_le,
+        TNLean.MPS.AreaLaw.AKLV.norm_clipped_lowProjection_residual_le_exp}
+    \leanok
+    Let $B$ be Hermitian, $\|A\|\le2$, $(B+A)\Omega=e\Omega$, and
+    $KP_t=(B+A)P_t$. For $u\le t$, if $\|Q_tAP_u\|\le\delta$, then
+    \begin{align}
+        \|(K-eI)P_t\Omega\|
+        \le\delta\|\Omega\|+2\|Q_u\Omega\|+2\|Q_t\Omega\|.
+    \end{align}
+    For a normalized chain ground vector with $0\le e\le6$, the actual
+    separate clipping and every $t\ge0$ satisfy
+    \begin{align}
+        \|(K-eI)P_t\Omega\|\le10e^{-(t-40)/16}.
+    \end{align}
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:aklv_boundary_energy_tail,thm:aklv_ground_energy_tail,
+        lem:aklv_projected_energy}
+    The residual is $(Q_tAP_t-P_tAQ_t)\Omega$. Use
+    $P_t=P_u+P_tQ_u$, the contraction of the spectral projections, and
+    the cross-block estimate. In the chain case take $u=t/2$.
+    Each of the two ground-vector tails is at most
+    $2e^{-(t-40)/16}$, and the off-diagonal bound is at most the same
+    quantity. Their coefficients sum to ten.
+\end{proof}
+
+\begin{lemma}[Phase distance from a residual below the excited spectrum]
+    \label{lem:aklv_residual_phase}
+    \lean{norm_orthogonal_component_le_residual,exists_phase_sq_distance_le_residual}
+    \leanok
+    Let $K$ be self-adjoint, $K\phi=e'\phi$, $\|\phi\|=1$, and suppose
+    $\langle w,Kw\rangle\ge a\|w\|^2$ for $w\perp\phi$.
+    If $e<a$, then every vector $z$ satisfies
+    \begin{align}
+        \|z-\langle\phi,z\rangle\phi\|
+        \le\frac{\|(K-eI)z\|}{a-e}.
+    \end{align}
+    For every unit target $\Omega$ there is a phase $\theta$ with
+    \begin{align}
+        \|\Omega-e^{i\theta}\phi\|^2
+        \le2\left(\frac{\|(K-eI)z\|}{a-e}+\|\Omega-z\|\right)^2.
+    \end{align}
+\end{lemma}
+\begin{proof}\leanok
+    The projection $P=I-|\phi\rangle\langle\phi|$ commutes with $K$.
+    For $w=Pz$, coercivity and Cauchy--Schwarz give
+    \begin{align}
+        (a-e)\|w\|^2
+        \le\operatorname{Re}\langle w,(K-eI)w\rangle
+        \le\|w\|\,\|(K-eI)z\|.
+    \end{align}
+    Also $\|P\Omega\|\le\|Pz\|+\|\Omega-z\|$. For unit vectors, a
+    minimizing phase has squared distance at most
+    $2(1-|\langle\phi,\Omega\rangle|^2)=2\|P\Omega\|^2$.
+\end{proof}
+
+\begin{definition}[The normalized three-region decomposition]
+    \label{def:aklv_normalized_cut_blocks}
+    \lean{TNLean.MPS.AreaLaw.AKLV.leftCutBlock,
+        TNLean.MPS.AreaLaw.AKLV.middleCutBlock,
+        TNLean.MPS.AreaLaw.AKLV.rightCutBlock,
+        TNLean.MPS.AreaLaw.AKLV.normalizedCutBlock_commutations,
+        TNLean.MPS.AreaLaw.AKLV.normalizedCutBlock_sum}
+    \leanok
+    \uses{def:chain_model}
+    For boundary bonds $a<b$ and scalar shifts $x,m,y$, put
+    \begin{align}
+        L & =\sum_{i<a}h_i-xI,\qquad
+        N=\sum_{a<i<b}h_i-mI,\qquad
+        R=\sum_{i>b}h_i-yI,\notag      \\
+        A & =h_a+h_b,\qquad H=L+N+R+A.
+    \end{align}
+    The three regional operators commute by their disjoint supports, and
+    $H=\sum_i h_i-(x+m+y)I$.
+    The normalization in \cite[Section~6.1]{Arad2013AreaLaw} makes
+    $L,N,R\ge0$ and puts the ground energy in $[0,6]$.
+\end{definition}
+
+\begin{theorem}[Ground-vector and gap robustness under exterior truncation]
+    \label{thm:aklv_robustness}
+    \lean{TNLean.MPS.AreaLaw.AKLV.exists_robust_ground_twoSidedEnergyTruncation,
+        TNLean.MPS.AreaLaw.AKLV.normalized_chain_robustness}
+    \leanok
+    \uses{def:aklv_normalized_cut_blocks}
+    Let $0\le h_i\le I$ act on consecutive pairs of sites of a finite
+    chain, with the normalized regional decomposition of
+    Definition~\ref{def:aklv_normalized_cut_blocks}. Suppose $L,N,R\ge0$,
+    $H\Omega=e\Omega$, $\|\Omega\|=1$, $0\le e\le6$, $0<g\le1$, and
+    \begin{align}
+        H-eI\ge g(I-|\Omega\rangle\langle\Omega|).
+    \end{align}
+    For every $t\ge32768(e+g)/g^2$, the actual separately clipped operator
+    $K=\min(L,tI)+N+A+\min(R,tI)$ has a unit ground vector $\phi$ and
+    ground energy $e'\in[0,e]$ with
+    \begin{align}
+        K-e'I                        & \ge\frac g2(I-|\phi\rangle\langle\phi|),\notag \\
+        \|\Omega-e^{i\theta}\phi\|^2 & \le e^{-t/16}
+    \end{align}
+    for some real $\theta$. These are explicit universal constants in
+    \cite[Theorem~6.1]{Arad2013AreaLaw}, in its normalized setting.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{lem:aklv_clipped_gap,lem:aklv_projected_residual,lem:aklv_residual_phase}
+    The original supports give the regional commutations and decomposition,
+    so Lemma~\ref{lem:aklv_clipped_gap} supplies $\phi,e'$ and the absolute
+    excited-energy threshold $e+g/2$. Put $\eta=e^{-(t-40)/16}$ and
+    $z=P_t\Omega$. The residual and tail bounds give
+    $\|(K-eI)z\|\le10\eta$ and $\|\Omega-z\|\le2\eta$.
+    Lemma~\ref{lem:aklv_residual_phase} yields
+    \begin{align}
+        \|\Omega-e^{i\theta}\phi\|^2
+         & \le2(20\eta/g+2\eta)^2
+        \le968g^{-2}e^{-(t-40)/8}.
+    \end{align}
+    The cutoff implies $tg\ge32768$. Since
+    $\log968\le967$, $g\log g\ge g-1$ and $g\le1$,
+    \begin{align}
+        g(\log968-2\log g+5)\le972\le tg/16.
+    \end{align}
+    Thus the last squared-distance bound is at most $e^{-t/16}$.
+\end{proof}
