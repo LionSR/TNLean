@@ -51,7 +51,10 @@ norms. Both continuous endomorphism algebras identify algebraically with
 the same finite-dimensional linear endomorphism algebra. The existing
 `AlgEquiv.quasispectrum_eq` theorem identifies their spectral radii without
 an additional norm-equivalence premise. Independent API/source inspection
-confirmed this normalization route; compilation remains necessary.
+confirmed this normalization route. A separate read-only mathematical review
+confirmed the mixed-map dimensions and trace orientation, both wall recurrences,
+the exact separating lengths and absorption of the polynomial prefactor.
+Compilation remains necessary.
 
 The quadratic norm lower bound, the use of source genericity to make its
 leading coefficient positive, and removal of the full ground projection
