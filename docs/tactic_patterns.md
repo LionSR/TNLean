@@ -9651,3 +9651,14 @@ there is no need for a new tactic.
   The periodic seam, circuit unitarity and basis-change cancellation reuse the
   existing supplied standard-form and fundamental-theorem APIs. No fourth copy
   of the circuit contraction or custom tactic is introduced.
+
+
+### Coordinate transport of a rectangular conjugation (2026-10-29)
+
+- **Seen:** `Algebra/MatrixStarEquivSpatial.lean`.
+- **Pattern:** A square unitary becomes a rectangular unitary by reindexing its columns;
+  conjugation then transports the input matrix along the same coordinate equivalence.
+- **Reuse:** `Matrix.reindexLinearEquiv_mul` receives all three equivalences explicitly,
+  and `Matrix.conjTranspose_reindex` transports the adjoint. The existing QICLean
+  Skolem–Noether theorem supplies the square implementer. No entrywise double sum
+  or duplicate Skolem–Noether argument is introduced.
