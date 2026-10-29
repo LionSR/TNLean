@@ -17,11 +17,11 @@ low-energy spaces, are derived from those bonds at `t ≥ η + 7`.
 Source: ALVV, arXiv:1602.08828v2, Definition 4.3 and Proposition 4.4(1),
 `local_alg_arxiv_v2.tex`, lines 873–921. The sufficient cutoff is explicit;
 the unrestricted truncated-side claim under merely `t > η` is not asserted.
-That source boundary is recorded in QICLean's
-https://sirui-lu.com/QICLean/paper-gaps/alvv16_hard_truncation_windows.pdf;
-the added cutoff qualification is pending in QICLean draft #1012, rather than
-already published in that note. The supporting physical constructions are
-provided by the separate TNLean draft #10404 and require its acceptance.
+The companion spectral-window note is
+https://sirui-lu.com/QICLean/paper-gaps/alvv16_hard_truncation_windows.pdf.
+Its pending cutoff revision, the separate source counterexample and the
+acceptance gates for the physical prerequisites are recorded in
+`docs/audits/2026-10-29_single_region_hard_truncation.md`.
 -/
 
 open Matrix
@@ -155,8 +155,8 @@ the original and clipped ground vectors are constructed. The sufficient cutoff
 is `t ≥ η+7`; no clipped gap, perturbation bound or decomposition is assumed.
 
 Source: ALVV, arXiv:1602.08828v2, Definition 4.3 and Proposition 4.4(1),
-lines 873–921, with the explicit cutoff qualification recorded in QICLean draft
-#1012 for `docs/paper-gaps/alvv16_hard_truncation_windows.tex`.
+lines 873–921, with the explicit sufficient cutoff and pending companion-note
+revision recorded in `docs/audits/2026-10-29_single_region_hard_truncation.md`.
 Empty regions and coincident or endpoint cuts are included. -/
 theorem exists_single_region_hard_truncation_residuals {L q l r : ℕ}
     (hq : 0 < q) (hlr : l ≤ r) (hrL : r ≤ L)
