@@ -67,7 +67,9 @@ coefficients. Source: PGVWC07, MPSarchive.tex lines 921--931. -/
     (hleft : Kraus.IsNBlkInjective A k) (hright : Kraus.IsNBlkInjective A (N - k))
     (a : Fin D × Fin D) (u : CutPrefixConfig d N k) :
     (physicalPeriodicCutBasis hk hleft hright a).val u =
-      leftCutVector A k a ((cutPrefixConfigEquiv hk).symm u) := rfl
+      leftCutVector A k a ((cutPrefixConfigEquiv hk).symm u) := by
+  simp only [physicalPeriodicCutBasis, Module.Basis.map_apply,
+    physicalCutCoordinates_apply, periodicCutBasis_apply]
 
 private theorem cutPrefixConfigEquiv_extend (hk : k + 1 ≤ N)
     (u : CutPrefixConfig d N k) (i : Fin d) :
