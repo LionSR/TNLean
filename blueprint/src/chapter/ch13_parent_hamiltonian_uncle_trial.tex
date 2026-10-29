@@ -98,6 +98,33 @@ perturbation span condition in Theorem~\ref{thm:uncle_periodic_ground_space}.
     the four displayed summands.
 \end{proof}
 
+\begin{lemma}[Norm partition through cyclic restrictions]
+    \label{lem:cyclic_restriction_norm_partition}
+    \lean{MPSTensor.cyclicWindowCfgEquiv,
+        MPSTensor.cyclicWindowCfgEquiv_apply_window,
+        MPSTensor.cyclicCfg_cyclicWindowCfgEquiv,
+        MPSTensor.sum_norm_sq_cyclicRestrictES,
+        MPSTensor.inv_pow_mul_sum_norm_sq_cyclicRestrictES}
+    \notready
+    \uses{def:parent_hamiltonian}
+    On a chain of length $T$, let $L\le T$ and choose a cyclic starting
+    site $i$. Splitting a physical configuration into its ordered window
+    and complement is a bijection. Consequently, for every full-chain vector $v$,
+    \[
+        \sum_\tau\|R_{i,\tau}v\|^2=d^L\|v\|^2.
+    \]
+    When $d>0$, multiplication by $d^{-L}$ gives an exact norm partition.
+    The unnormalized identity also includes zero physical dimension and
+    empty windows.
+\end{lemma}
+\begin{proof}
+    Write each full exterior configuration as its old window label and
+    complement label. Replacing the window by a new local configuration
+    discards the old window label and preserves the complement. Summing
+    coefficient norms first over the new window and complement gives
+    the full norm; the redundant old window has exactly $d^L$ choices.
+\end{proof}
+
 \begin{lemma}[The actual endpoint quadratic energy]
     \label{lem:uncle_trial_endpoint_quadratic_energy}
     \lean{MPSTensor.norm_uncleInteractionES_apply_le,
