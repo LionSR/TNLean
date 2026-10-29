@@ -4950,6 +4950,18 @@ three-plaquette output measurement, and the routed reunion measurement.
 
 ## Candidates
 
+### Identifying the ground energy of two physical conditions — candidate (2026-10-29)
+
+- **Seen:** `ExactMPSGroundPath.exists_uniform_ground_line_spectral_gap` in
+  `MPS/Symmetry/ExactGroundPathGaussianFilter.lean`.
+- **Pattern:** The path gap and the exact ground-line condition each supply
+  a least spectral value. Apply each minimality inequality to the other's
+  spectral witness, identify the energies by antisymmetry, and transport the
+  spectral dichotomy to the actual MPS ground line.
+- **Decision:** One use. Keep the mathematical extraction in its named helper
+  and reuse the existing Gaussian spectral and ground-space estimates; no
+  new tactic or duplicate eigenbasis calculation is needed.
+
 ### Counting nearest-neighbour bonds that meet a region — candidate (2026-10-28)
 
 - **Pattern:** Bound the number of nearest-neighbour bonds meeting a finite
