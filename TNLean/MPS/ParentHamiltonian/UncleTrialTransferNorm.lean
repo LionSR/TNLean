@@ -184,4 +184,43 @@ theorem norm_uncleTwoWallTrialSource_sq_eq_trace_transfer
   exact congrArg Complex.re (by simpa only [two_mul] using
     trace_uncleTwoWallTransfer_join_exterior A B R L N (N + 1) (2 * N - 1) (N + 1) N)
 
+/-- Replacing the two separated transfer powers by their actual canonical
+rank-one trace contractions gives exactly the product of the two finite
+one-wall weights. This identifies the leading term without assuming that
+the transfer powers have already converged. Source: arXiv:1210.6613,
+proof of Lemma lowenergystates, lines 1230–1265. -/
+theorem trace_uncleWallGram_rankOne_factorization
+    (A : MPSTensor d a) (B : MPSTensor d b)
+    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
+    (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
+    (ρA : Matrix (Fin a) (Fin a) ℂ) (ρB : Matrix (Fin b) (Fin b) ℂ)
+    (r s : ℕ) :
+    let fA := (Matrix.traceLinearMap (Fin a) ℂ ℂ).comp
+      (mulLeftLinearMap (n := Fin a) ℂ ρA)
+    let fB := (Matrix.traceLinearMap (Fin b) ℂ ℂ).comp
+      (mulLeftLinearMap (n := Fin b) ℂ ρB)
+    LinearMap.trace ℂ (Matrix (Fin a) (Fin a) ℂ)
+        ((fA.smulRight 1).comp ((uncleWallGramMap A B R r).comp
+          ((fB.smulRight 1).comp (uncleWallGramMap B A L s)))) =
+      uncleWallGramWeight A B R ρA r * uncleWallGramWeight B A L ρB s := by
+  dsimp only
+  let fA := (Matrix.traceLinearMap (Fin a) ℂ ℂ).comp
+    (mulLeftLinearMap (n := Fin a) ℂ ρA)
+  let fB := (Matrix.traceLinearMap (Fin b) ℂ ℂ).comp
+    (mulLeftLinearMap (n := Fin b) ℂ ρB)
+  change LinearMap.trace ℂ (Matrix (Fin a) (Fin a) ℂ)
+    ((fA.smulRight 1).comp ((uncleWallGramMap A B R r).comp
+      ((fB.smulRight 1).comp (uncleWallGramMap B A L s)))) = _
+  have hmap : (fA.smulRight 1).comp ((uncleWallGramMap A B R r).comp
+        ((fB.smulRight 1).comp (uncleWallGramMap B A L s))) =
+      (fB.comp (uncleWallGramMap B A L s)).smulRight
+        (uncleWallGramWeight A B R ρA r • (1 : Matrix (Fin a) (Fin a) ℂ)) := by
+    apply LinearMap.ext
+    intro X
+    simp [fA, fB, uncleWallGramWeight, LinearMap.smulRight_apply, map_smul,
+      uncleWallGramMap_one, smul_smul, mul_comm]
+  rw [hmap, LinearMap.trace_smulRight]
+  simp only [LinearMap.comp_apply, map_smul, uncleWallGramMap_one]
+  rfl
+
 end MPSTensor
