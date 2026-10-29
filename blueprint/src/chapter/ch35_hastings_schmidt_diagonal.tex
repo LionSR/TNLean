@@ -92,35 +92,40 @@ Lemma~1.
     \label{thm:hastings_fwdback}
     \lean{TNLean.MPS.AreaLaw.exists_norm_inner_mul_sub_le}
     \leanok
-    \uses{def:chain_model, thm:hastings_lemma1_endpoint}
-    For every range $R\in\N$ there is a constant $K\ge0$ depending only on $R$
-    with the following property. Let $H$ be a range-$R$ Hamiltonian on a chain
-    of $L$ sites with term norms at most $J\ge0$, unique ground state
-    $\Psi_0=\sum_\alpha a_\alpha\,\psi_L(\alpha)\otimes\psi_R(\alpha)$ across
-    cut $j$, and gap $\Delta E>0$, and let $\tilde\xi$ be the length of
-    Theorem~\ref{thm:hastings_lemma1_endpoint}. For
-    $B_L=\sum_\alpha O(\alpha)\,|\psi_L(\alpha)\rangle\langle\psi_L(\alpha)|\otimes1$
-    with $|O(\alpha)|\le1$ and $A$ with $\|A\|\le1$ supported outside
-    $[j-l,j+l)$,
+    \uses{def:chain_model,thm:hastings_source_factorization}
+    Let $R$ be a range. There is a constant $K\ge0$, depending only on $R$,
+    with the following property. Let $H$ be a Hamiltonian on a chain of $L$
+    sites, a sum of terms of range $R$ and norm at most $J\ge0$, whose ground
+    state $\Psi_0$ is unique with gap $\Delta E>0$. Put
+    $c_R=2(R+1)2^{2R+1}e^{2R}$, $v=40c_RJ$,
+    $s=\max\{2v/\Delta E,80\}$ and $\xi'=6s$.
+    Let $\Psi_0=\sum_\alpha a_\alpha\,\psi_L(\alpha)\otimes\psi_R(\alpha)$
+    be a Schmidt decomposition at the cut after site $j$, with orthonormal
+    families on each side. Let
+    $B_L=\sum_\alpha O(\alpha)|\psi_L(\alpha)\rangle\langle\psi_L(\alpha)|
+        \otimes1$, where $|O(\alpha)|\le1$, and let $A$ be a contraction
+    supported away from the sites $j-l,\dots,j+l-1$. Then
     \begin{align}
-        \bigl|\langle\Psi_0,AB_L\Psi_0\rangle-\langle\Psi_0,A\Psi_0\rangle
-        \langle\Psi_0,B_L\Psi_0\rangle\bigr|
-         & \le3\sqrt{2\epsilon(l)}+\epsilon(l),
-         & \epsilon(l)                          & =K\tilde\xi^3e^{-l/(12\tilde\xi)}.
-        \notag
+        \bigl|\langle\Psi_0,AB_L\Psi_0\rangle
+        -\langle\Psi_0,A\Psi_0\rangle\langle\Psi_0,B_L\Psi_0\rangle\bigr|
+        &\le3\sqrt{2\epsilon(l)}+\epsilon(l),
+        \label{eq:hastings_source_correlation}\\
+        \epsilon(l)&=K s^3e^{-l/\xi'}.
+        \label{eq:hastings_source_correlation_error}
     \end{align}
-    This is \cite[Lemma~3, eq.~(fwdback), lines 627--646]{Hastings2007AreaLaw}
-    with rate $12\tilde\xi$ (twice $\xi'=6\tilde\xi$) from the positive repair
-    of Lemma~1~\cite{gap:hastings07_lemma1_positivity_rate}, polynomial
-    prefactor $K\tilde\xi^3$, and $\tilde\xi$ from the chain Lieb--Robinson
-    estimate with raised velocity~\cite{gap:hastings07_lemma1_decay_length,
-        gap:hastings07_gaussian_average_exponent}.
+    This proves the bound of \cite[Lemma~3]{Hastings2007AreaLaw},
+    equation (fwdback), lines 627--646, at the admissible source length of
+    Theorem~\ref{thm:hastings_source_pair}. The absolute-value estimate
+    strengthens the printed one-sided bound. The positive repair at a fixed
+    length remains as recorded in
+    \cite{gap:hastings07_lemma1_positivity_rate}; the choice $s\ge2\zeta$
+    absorbs its rate loss.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:hastings_lemma1_endpoint,
+    \uses{thm:hastings_source_factorization,
         thm:hastings_schmidt_diagonal_chain}
-    Theorem~\ref{thm:hastings_lemma1_endpoint} supplies $0\le O_B,O_L,O_R\le1$
-    at $(j,l)$ with $\|O_BO_LO_R-P_0\|\le\epsilon(l)$, so
-    Theorem~\ref{thm:hastings_schmidt_diagonal_chain} applies with
-    $\varepsilon=\epsilon(l)$.
+    Theorem~\ref{thm:hastings_source_factorization} gives positive
+    semidefinite contractions $O_B,O_L,O_R$ with the required supports and
+    $\|O_BO_LO_R-P_0\|\le\epsilon(l)$. Apply
+    Theorem~\ref{thm:hastings_schmidt_diagonal_chain} with this factorization.
 \end{proof}

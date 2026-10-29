@@ -1,0 +1,77 @@
+\section{The interaction graph of a finite metric lattice}
+\label{sec:hastings05_metric_interaction_graph}
+
+Hastings' local assumptions in~\cite[lines 169--190]{Hastings2006Solving}
+refer to a metric and a bound on the number of sites within the interaction
+range. They imply bounded degree for the graph of interacting sites, without
+implying polynomial growth of large metric balls.
+
+\begin{definition}[The metric interaction graph]
+    \label{def:hastings05_metric_interaction_graph}
+    \lean{TNLean.Lattice.metricRangeGraph, TNLean.Lattice.metricRangeBall,
+        TNLean.Lattice.mem_metricRangeBall, TNLean.Lattice.coe_metricRangeBall,
+        TNLean.Lattice.self_mem_metricRangeBall}
+    \leanok
+    Let $V$ be a finite metric space and $R\ge0$. Write $B_R(x)$ for its
+    closed metric ball. Join distinct sites $x,y$ when $d(x,y)\le R$, obtaining
+    a simple graph $G_R$. Every site belongs to its own interaction ball.
+\end{definition}
+
+\begin{theorem}[Local metric data give graph interaction bounds]
+    \label{thm:hastings05_metric_interaction_data}
+    \lean{TNLean.Lattice.metricRangeGraph_edist_le_one,
+        TNLean.Lattice.metricRangeGraph_edist_le_two,
+        TNLean.Lattice.metricRangeGraph_neighbor_card_le,
+        TNLean.Lattice.metricRangeBall_graph_diameter_le_two,
+        TNLean.Lattice.sum_norm_metricRangeBall_le,
+        TNLean.Lattice.metricRangeBall_norm_budget_le}
+    \leanok
+    \uses{def:hastings05_metric_interaction_graph}
+    Suppose $|B_R(x)|\le S$ for every site. The degree of $G_R$ is at most
+    $S$, and every interaction ball has graph diameter at most two. If
+    $\|h_i\|\le J$ with $J\ge0$, then
+    $\sum_{i:\,x\in B_R(i)}\|h_i\|\le SJ$ at every site $x$.
+\end{theorem}
+\begin{proof}\leanok
+    A graph neighbour lies in the metric ball. Two sites in one interaction
+    ball are joined through its centre by at most two graph edges.
+    By symmetry of the metric, the centres whose interaction balls contain
+    $x$ lie in $B_R(x)$. Sum their norm bounds.
+\end{proof}
+
+\begin{theorem}[Physical separation and intrinsic graph distance]
+    \label{thm:hastings05_metric_graph_separation}
+    \lean{TNLean.Lattice.dist_le_range_mul_walkLength,
+        TNLean.Lattice.dist_le_range_mul_graphDist,
+        TNLean.Lattice.metricRangeGraph_edist_lower_ceil,
+        TNLean.Lattice.metricRangeGraph_zero_edist_eq_top,
+        TNLean.Lattice.metricRangeGraph_omitted_threshold}
+    \leanok
+    \uses{def:hastings05_metric_interaction_graph}
+    Every graph walk of length $n$ has endpoints at physical distance at
+    most $Rn$. Thus, on a connected component,
+    $d(x,y)\le R d_{G_R}(x,y)$. For $R>0$, a site omitted by the source
+    truncation $d(i,j)\le\ell-R$ has extended graph distance at least
+    $\lceil(\ell-R)/R\rceil$ from $i$. At range zero, sites at positive
+    physical distance lie in different graph components.
+\end{theorem}
+\begin{proof}\leanok
+    Sum the edge-length bounds along a shortest walk. Graph distance is an
+    integer, giving the ceiling bound; disconnected sites have infinite
+    extended graph distance. At range zero, every reachable pair has
+    physical distance zero.
+\end{proof}
+
+\begin{theorem}[The source's metric truncation preserves local support]
+    \label{thm:hastings05_metric_retained_support}
+    \lean{TNLean.Lattice.metricRangeBall_retained_support,
+        TNLean.Lattice.metricRangeBall_initial_support}
+    \leanok
+    \uses{def:hastings05_metric_interaction_graph}
+    If $d(i,j)\le\ell-R$, then $B_R(j)\subseteq B_\ell(i)$.
+    If $\ell\ge R$, then $B_R(i)\subseteq B_\ell(i)$ as well.
+\end{theorem}
+\begin{proof}\leanok
+    For $x\in B_R(j)$, the triangle inequality gives
+    $d(i,x)\le d(i,j)+d(j,x)\le\ell-R+R=\ell$.
+\end{proof}

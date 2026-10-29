@@ -140,17 +140,24 @@ prefactor $c_0$ of $S_{\max}$, we lengthen the window $l_0\ge\lceil\xi_0\rceil_+
     $C_1=\max\{K\tilde\xi^3,1\}$. Thus $S_{\max}$ depends only on $R$,
     $J/\Delta E$, and $q$, and is independent of $L$, $H$, and $\Omega$.
 
-    This is the main theorem of~\cite{Hastings2007AreaLaw}, eq.~(entbd), at the
-    printed rate $\xi'=6\tilde\xi$ with polynomial prefactor
-    $C_1=\max\{K\tilde\xi^3,1\}$ (lines 258--262). Here $\tilde\xi$ comes from
-    the chain Lieb--Robinson estimate with $J$-dependent prefactor, single-site
-    second operator, and velocity raised by $5/4$ rather than a Lieb--Robinson
-    pair $(v,\xi_C)$ in the sense of lines
-    96--112~\cite{gap:hastings07_lemma1_decay_length,
-        gap:hastings07_gaussian_average_exponent}, and $S_{\max}$ grows as
-    $4^{\xi'\ln q}$ rather than the printed
-    $c_0\xi'\ln(\xi')\ln(D)2^{\xi'\ln D}$~\cite{gap:hastings07_doubling_constants,
-        gap:hastings07_relent_constants}.
+    This is the main theorem of~\cite{Hastings2007AreaLaw}, equation (entbd),
+    at the printed rate $\xi'=6\xi$ for $\xi=\tilde\xi$. The length
+    $\tilde\xi$ may stand in for the source's $\xi$ because the source fixes
+    $\xi=\max(2v/\Delta E,\xi_C)$ only through some Lieb--Robinson pair
+    $(v,\xi_C)$ (lines 96--112), and raising $v$ keeps a pair
+    valid~\cite{gap:hastings07_lemma1_decay_length}. The physical pair
+    $(v,\xi_C)=(10\Delta E\,v_0,8)$, with
+    $v_0=1+c_RJ/\Delta E$, gives this length by
+    Theorem~\ref{thm:hastings_source_lengths}. Its commutator estimate has
+    numerical prefactor $4$ and permits arbitrary finite supports.
+    As in the source, the constant $C_1$ is bounded by a polynomial in
+    the length (lines 258--262). At this fixed length $S_{\max}$
+    grows as $4^{\xi'\ln q}$, not $2^{\xi'\ln q}$, as recorded
+    in~\cite{gap:hastings07_doubling_constants}, and the entropy gain enters
+    with the constants of~\cite{gap:hastings07_relent_constants}. The printed
+    value of $S_{\max}$ is therefore not claimed at this fixed length.
+    Theorem~\ref{thm:hastings_area_law_printed} obtains its printed form
+    after enlarging the length.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:hastings_lemma1_endpoint,
@@ -161,4 +168,141 @@ prefactor $c_0$ of $S_{\max}$, we lengthen the window $l_0\ge\lceil\xi_0\rceil_+
     (Theorem~\ref{thm:hastings_factorization_mono}), so
     Theorem~\ref{thm:hastings_area_law_from_factorization} yields
     (\ref{eq:hastings_area_law_entbd}).
+\end{proof}
+
+\begin{theorem}[The entropy bound for an enlarged length]
+    \label{thm:hastings_area_law_printed}
+    \lean{TNLean.MPS.AreaLaw.Hastings.exists_regionEntropy_prefix_le_printed}
+    \leanok
+    \uses{thm:hastings_area_law,thm:hastings_lemma1_endpoint}
+    For each range $R$ there is a constant $c_0>0$, depending only on $R$,
+    with the following property. Let $H$ be a range-$R$ chain Hamiltonian
+    with interaction norms bounded by $J\ge0$, and let its unit ground
+    vector $\Omega$ be separated from the rest of the spectrum by
+    $\Delta E>0$. Put $\zeta=\tilde\xi$, where $\tilde\xi$ is the length of
+    Theorem~\ref{thm:hastings_lemma1_endpoint}. For every $s\ge2\zeta$, put
+    $\xi'=6s$. Then every initial segment of the chain satisfies
+    \begin{align}
+        S_\Omega([0,i))
+        \le c_0\xi'\ln\xi'\ln q\,2^{\xi'\ln q}.
+        \label{eq:hastings_enlarged_entropy_bound}
+    \end{align}
+    In particular $c_0$ is numerical for nearest-neighbour interactions.
+    This is the form of the entropy bound in
+    \cite[lines 124--144]{Hastings2007AreaLaw}, with a larger choice of the
+    Lieb--Robinson length. It does not change the fixed-length correction
+    in~\cite{gap:hastings07_doubling_constants}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:hastings_area_law,thm:hastings_area_law_bound_le,
+        thm:hastings_max_entropy_bound_le}
+    Write $x=6\zeta$ and $C_1=\max\{K\zeta^3,1\}$, where $K$ is the
+    constant in Theorem~\ref{thm:hastings_area_law}. Since $\zeta\ge20$,
+    $\ln C_1\le a\ln x$ with $a=\ln(K+1)+3$. The starting length of the
+    doubling argument is at most $(2a+5)x\ln x$, and the remainder of the
+    bootstrap entropy bound is at most $8x\ln x\ln q$ for $q\ge2$.
+    Consequently
+    \begin{align}
+        S_\Omega([0,i))&\le B(a)x\ln x\ln q\,2^{2x\ln q},
+        \label{eq:hastings_polynomial_constant_entropy}
+        \\
+        B(a)&=6(2a+5)2^{9/\ln2+1}+2a+20.
+        \label{eq:hastings_entropy_numeric_constant}
+    \end{align}
+    Now $\xi'=6s\ge2x$, so increasing the positive factors in
+    (\ref{eq:hastings_polynomial_constant_entropy}) gives
+    (\ref{eq:hastings_enlarged_entropy_bound}) with $c_0=B(a)$. For $q=1$
+    both entropies and $\ln q$ vanish.
+\end{proof}
+
+\begin{theorem}[An interaction-proportional Lieb--Robinson velocity]
+    \label{thm:hastings_source_pair}
+    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.norm_heisenberg_commutator_le_hastings_source}
+    \leanok
+    \uses{thm:hastings_chain_lieb_robinson}
+    Let $H$ be a range-$R$ chain Hamiltonian with interaction norms at most
+    $J>0$, and put $c_R=2(R+1)2^{2R+1}e^{2R}$. Then $v=40c_RJ$ and
+    $\xi_C=80$ form a Lieb--Robinson pair: for operators $A,B$ supported on
+    finite sets $X,Y$ whose mutual distances are at least the integer
+    $d\ge0$, and for $|t|\le d/v$,
+    \begin{align}
+        \|[e^{itH}Ae^{-itH},B]\|
+        \le4|X|\,\|A\|\,\|B\|e^{-d/80}.
+        \label{eq:hastings_interaction_proportional_pair}
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:hastings_chain_lieb_robinson}
+    The coefficient $c_RJ$ is positive. Apply
+    Theorem~\ref{thm:hastings_chain_lieb_robinson} with $v=40c_RJ\ge8c_RJ$
+    and $\xi_C=80\ge8$.
+\end{proof}
+
+\begin{theorem}[Positive factorization at the source length]
+    \label{thm:hastings_source_factorization}
+    \lean{TNLean.MPS.AreaLaw.exists_projectorFactorization_posSemidef_source,
+        TNLean.MPS.AreaLaw.exists_projectorFactorization_source}
+    \leanok
+    \uses{thm:hastings_lemma1_endpoint,thm:hastings_source_pair}
+    For each range $R$ there is a constant $K\ge0$, depending only on $R$,
+    with the following property. Let $H$ be a range-$R$ chain Hamiltonian
+    with interaction norms at most $J\ge0$ and a unit ground vector
+    $\Omega$ separated from the remaining spectrum by $\Delta E>0$.
+    Set $v=40c_RJ$, $s=\max\{2v/\Delta E,80\}$ and $\xi'=6s$. At every
+    cut $j$ and length $l$ there are operators $O_B,O_L,O_R$ satisfying
+    the support conditions of Lemma~\ref{lem:hastings_lemma1}, such that
+    $O_B$ is a positive semidefinite contraction, $O_L,O_R$ are commuting
+    orthogonal projections, and
+    \begin{align}
+        \|O_BO_LO_R-|\Omega\rangle\langle\Omega|\|
+        \le Ks^3e^{-l/\xi'}.
+        \label{eq:hastings_positive_source_factorization}
+    \end{align}
+    Thus the positive and contraction forms have the same source rate
+    at this choice of length. The fixed-length correction and the
+    distinction between positive semidefinite and positive definite
+    operators remain as recorded in
+    \cite{gap:hastings07_lemma1_positivity_rate}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:hastings_lemma1_endpoint,thm:hastings_factorization_mono}
+    The source length satisfies $s\ge2\zeta$, where
+    $\zeta=20(1+c_RJ/\Delta E)$. The positive form of
+    Theorem~\ref{thm:hastings_lemma1_endpoint} supplies the required
+    operators with error at most $K\zeta^3e^{-l/(12\zeta)}$. Since
+    $\zeta\le s$ and $12\zeta\le6s$,
+    \begin{align}
+        K\zeta^3e^{-l/(12\zeta)}\le Ks^3e^{-l/(6s)}.
+        \label{eq:hastings_positive_source_comparison}
+    \end{align}
+    Increase the error bound without changing any of the operators.
+\end{proof}
+
+\begin{theorem}[Hastings' area law with an interaction-proportional velocity]
+    \label{thm:hastings_area_law_source}
+    \lean{TNLean.MPS.AreaLaw.Hastings.exists_regionEntropy_prefix_le_source}
+    \leanok
+    \uses{thm:hastings_area_law_printed,thm:hastings_source_pair}
+    For each range $R$ there is $c_0>0$, depending only on $R$, such that
+    every Hamiltonian and ground vector satisfying the hypotheses of
+    Theorem~\ref{thm:hastings_area_law_printed} obey
+    \begin{align}
+        S_\Omega([0,i))&\le c_0\xi'\ln\xi'\ln q\,2^{\xi'\ln q},
+        \label{eq:hastings_source_entropy_bound}
+        \\
+        \xi'&=6\max\{2v/\Delta E,80\},\qquad v=40c_RJ.
+        \label{eq:hastings_source_entropy_length}
+    \end{align}
+    For nearest-neighbour interactions $c_0$ is numerical. Thus this is the
+    entropy bound of~\cite[lines 124--144]{Hastings2007AreaLaw} for a choice
+    of the velocity and length scale in its Lieb--Robinson estimate, with
+    the reciprocal-length convention of
+    \cite{gap:hastings07_lemma1_decay_length}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:hastings_area_law_printed}
+    Put $u=c_RJ/\Delta E\ge0$. The factorization length is
+    $\zeta=20(1+u)$, and the source length is
+    $s=80\max\{u,1\}$. Since $1+u\le2\max\{u,1\}$, one has
+    $2\zeta\le s$. Apply Theorem~\ref{thm:hastings_area_law_printed}.
 \end{proof}

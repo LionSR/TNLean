@@ -329,3 +329,125 @@ in Section~\ref{sec:hastings05_hierarchy_levels}.
     Combine Theorems~\ref{thm:hastings05_recursion}
     and~\ref{thm:hastings05_exponent}.
 \end{proof}
+
+\begin{theorem}[Uniform radii through the hierarchy]
+    \label{thm:hastings05_uniform_hierarchy_radii}
+    \lean{TNLean.MPS.AreaLaw.LocalSolution.hierarchyWindowRadius,
+        TNLean.MPS.AreaLaw.LocalSolution.hierarchyDeficiency_window_le,
+        TNLean.MPS.AreaLaw.LocalSolution.monotone_hierarchyMajorant,
+        TNLean.MPS.AreaLaw.LocalSolution.hierarchyWindowRadius_pos,
+        TNLean.MPS.AreaLaw.LocalSolution.hierarchyMajorant_exp_le,
+        TNLean.MPS.AreaLaw.LocalSolution.hierarchyDeficiency_window_lt_one,
+        TNLean.MPS.AreaLaw.LocalSolution.hierarchyWindowRadius_le,
+        TNLean.MPS.AreaLaw.LocalSolution.eighth_le_one_sub_inv_pow_succ,
+        TNLean.MPS.AreaLaw.LocalSolution.hierarchyDeficiency_window_succ_le,
+        TNLean.MPS.AreaLaw.LocalSolution.hierarchyDeficiency_window_succ_lt_one}
+    \leanok
+    \uses{def:hastings05_hierarchy_majorant,thm:hastings05_hierarchy_source_radii,
+        thm:hastings05_hierarchy_closed_form}
+    Let $h\ge2$, $K>0$, $r\ge0$, $e=e^{-r}$ and $s=1-1/h$. Let
+    $\beta_0=0$, $\beta_{m+1}^2=2\beta_m^2+(e+2\beta_m)^{2s}$, and set
+    $x_m=K(e+2\beta_m)^{1/h}$. Then $x_m>0$ for every $m$, and
+    \begin{align*}
+        x_m\le9K\exp\bigl(-r/(4h)\bigr)\qquad(0\le m\le h).
+    \end{align*}
+    The deficiency at level $h$ is at most $(3^h-1)e^{-r/4}$,
+    and its bound is less than one if $r>4h\log3$.
+    After one further window its bound is at most
+    $(3^{h+1}-1)e^{-r/8}$, and is less than one if
+    $r>8(h+1)\log3$. The latter window controls the periodic closing link.
+    These are quantitative consequences of the corrected deficiency
+    recurrence~\cite{gap:hastings05_hierarchical_projection}.
+\end{theorem}
+\begin{proof}\leanok
+    The sequence $\beta_m$ is increasing. For $m\le h$,
+    $\beta_m\le(3^h-1)e^{-r/4}$, so
+    \begin{align*}
+        e+2\beta_m\le(2\cdot3^h-1)e^{-r/4}
+           \le9^h e^{-r/4}.
+    \end{align*}
+    Taking the $h$-th root gives the stated radius bound. For the extra
+    window, $(1-1/h)^{h+1}\ge(1/4)(1/2)=1/8$; apply the closed majorant
+    at $h+1$. The strict thresholds follow by comparing $3^m e^{-r/a}$
+    with one, for $(m,a)=(h,4)$ and $(h+1,8)$.
+\end{proof}
+
+\begin{theorem}[An explicit logarithmic projection length]
+    \label{thm:hastings05_explicit_projection_length}
+    \lean{TNLean.MPS.AreaLaw.LocalSolution.hierarchyProjectionLength,
+        TNLean.MPS.AreaLaw.LocalSolution.hierarchyProjectionLength_ge_square,
+        TNLean.MPS.AreaLaw.LocalSolution.closing_threshold_lt_hierarchyProjectionLength,
+        TNLean.MPS.AreaLaw.LocalSolution.hierarchyDeficiency_window_succ_lt_one_of_length,
+        TNLean.MPS.AreaLaw.LocalSolution.hierarchyWindowEnergy_le_quarter_gap,
+        TNLean.MPS.AreaLaw.LocalSolution.hierarchyWindowRadius_le_quarter_gap_div,
+        TNLean.MPS.AreaLaw.LocalSolution.hierarchySum_le_const,
+        TNLean.MPS.AreaLaw.LocalSolution.hierarchySum_windowRadius_add_le,
+        TNLean.MPS.AreaLaw.LocalSolution.hierarchySum_windowRadius_add_le_quarter_gap,
+        TNLean.MPS.AreaLaw.LocalSolution.hierarchyTruncationError_le_eighth_gap}
+    \leanok
+    \uses{thm:hastings05_uniform_hierarchy_radii}
+    Let $h\ge2$, $J_{\mathrm{eff}}>0$, $\Delta>0$, and put
+    \begin{align*}
+        r_* =512h^2\bigl(1+\max\{0,\log(J_{\mathrm{eff}}/\Delta)\}\bigr).
+    \end{align*}
+    Suppose $r\ge r_*$ and $0<K\le J_{\mathrm{eff}}r$. Then the hierarchy
+    and closing window have deficiency bound less than one, and their
+    radius sum satisfies
+    \begin{align*}
+        \sum_{m=0}^{h-1}2^{h-1-m}x_m+x_h
+           &\le9\cdot2^hK e^{-r/(4h)}\le\Delta/4,\\
+        2^hJ_{\mathrm{eff}}e^{-r}&\le\Delta/8.
+    \end{align*}
+    In particular $x_m\le\Delta/(4\cdot2^h)$ for every $m\le h$.
+    The effective coupling bound includes the fixed constants in the
+    local operator and residual estimates. This gives the explicit
+    order $h^2(1+\max\{0,\log(J_{\mathrm{eff}}/\Delta)\})$ asserted in
+    \cite[lines 709--720]{Hastings2006Solving}, with the deficiency correction
+    recorded above.
+\end{theorem}
+\begin{proof}\leanok
+    There are $2^h-1$ tree windows and one closing window. Apply the
+    uniform radius bound to each. Write
+    $A=1+\max\{0,\log(J_{\mathrm{eff}}/\Delta)\}$.
+    The inequality $t e^{-t}\le1$ gives
+    \begin{align*}
+        r e^{-r/(4h)}\le8h e^{-r/(8h)}.
+    \end{align*}
+    Use $2^h\le e^h$, $h\le e^h$, $72\le e^{36h}$ and
+    $J_{\mathrm{eff}}\le\Delta e^A$. The resulting bound is
+    $\Delta\exp(A+38h-r/(8h))\le\Delta e^{-2}\le\Delta/4$.
+    The chosen length also exceeds $8(h+1)\log3$.
+    The last truncation-error bound follows from the same scalar estimate
+    with coupling bound $2J_{\mathrm{eff}}/9$, using $r\ge2$ and
+    $e^{-r}\le e^{-r/(4h)}$.
+\end{proof}
+
+\begin{corollary}[A size-dependent effective coupling]
+    \label{cor:hastings05_cubic_log_projection_length}
+    \lean{TNLean.MPS.AreaLaw.LocalSolution.hierarchyProjectionLength_finiteHierarchyDepth_mul_le}
+    \leanok
+    \uses{thm:hastings05_explicit_projection_length}
+    Let $N\ge1$, $C,J,\Delta>0$, and choose
+    $h=\max\{2,\lceil\log_2N\rceil\}$. For an effective coupling
+    $J_{\mathrm{eff}}=NCJ$, the preceding projection length satisfies
+    \begin{align*}
+        r_*\le512(\lceil\log_2N\rceil+2)^3
+           \bigl(1+\max\{0,\log(CJ/\Delta)\}\bigr).
+    \end{align*}
+    Thus a coupling bound growing linearly in the number of physical
+    terms still gives a length polynomial in the logarithm of that number.
+    This is the scalar estimate relevant to the higher-dimensional
+    discussion in \cite[lines 745--756]{Hastings2006Solving}; its use for
+    a particular grouping also requires the support and residual estimates
+    of that grouping.
+\end{corollary}
+\begin{proof}\leanok
+    Write $L=\lceil\log_2N\rceil$ and
+    $A=1+\max\{0,\log(CJ/\Delta)\}$. Since
+    $0\le\log N\le L$ and $A\ge1$,
+    \begin{align*}
+        1+\max\{0,\log(NCJ/\Delta)\}
+           \le\log N+A\le(L+2)A.
+    \end{align*}
+    Combine this with $h\le L+2$ in the explicit length formula.
+\end{proof}

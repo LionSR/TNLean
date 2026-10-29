@@ -187,11 +187,27 @@
     Theorem~\ref{thm:hastings_area_law_from_factorization} and
     $k_0=\lceil\exp(2S_{\max})/2\rceil$, for every $k'\ge k_0$ sequential
     truncation gives an open-boundary MPS $\Phi$ of bond dimension at most $k'$
-    satisfying (\ref{eq:hastings_mps_from_entropy})
-    \cite{gap:hastings07_lemma1_decay_length,
-        gap:hastings07_gaussian_average_exponent,
-        gap:hastings07_mps_error_measure,
-        gap:hastings07_schmidt_tail_constant}.
+    satisfying (\ref{eq:hastings_mps_from_entropy}).
+    For $D=1$ the exponent is read as $0$; the bound then holds because
+    $\Phi=\Omega$, as in Theorem~\ref{thm:hastings_mps_from_entropy}.
+    Lemma~1 is a hypothesis here, as in
+    Theorem~\ref{thm:hastings_area_law_from_factorization}. With Lemma~1
+    supplied for the gapped ground state, this is the conclusion of the section
+    on matrix product states of \cite{Hastings2007AreaLaw}.
+    Theorem~\ref{thm:hastings_mps_gapped_chain} gives this approximation at the
+    printed rate $\xi'=6\zeta$ for the enlarged length
+    $\zeta=\tfrac54\hat\xi$, with $C_1$ polynomial in $\zeta$. The length
+    $\zeta$ is the length of the admissible physical pair in
+    Theorem~\ref{thm:hastings_source_lengths}; its velocity contains a
+    gap-dependent term. Theorem~\ref{thm:hastings_mps_source} uses instead
+    a velocity proportional to the interaction strength and the printed
+    entropy maximum at the common source length. The auxiliary threshold
+    here retains the corrected fixed-length entropy bound
+    \cite{gap:hastings07_lemma1_decay_length,gap:hastings07_doubling_constants}.
+    The error is measured in
+    the squared norm~\cite{gap:hastings07_mps_error_measure}, and the constant
+    is that of Theorem~\ref{thm:hastings_schmidt_tail_rpow}
+    \cite{gap:hastings07_schmidt_tail_constant}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:hastings_mps_from_entropy_lemma1, thm:hastings_area_law_from_factorization}
@@ -213,12 +229,19 @@
     Theorem~\ref{thm:hastings_area_law}, every gapped ground vector $\Omega$ on
     $L$ sites of local dimension $D\ge1$ and every $k'\ge k_0$ admit an
     open-boundary MPS $\Phi$ of bond dimension at most $k'$ satisfying
-    (\ref{eq:hastings_mps_from_entropy}), with constants depending only on
-    $(R,J/\Delta E,D)$
-    \cite{gap:hastings07_lemma1_decay_length,
-        gap:hastings07_gaussian_average_exponent,
-        gap:hastings07_mps_error_measure,
-        gap:hastings07_schmidt_tail_constant}.
+    (\ref{eq:hastings_mps_from_entropy}).
+    For $D=1$ the exponent is read as $0$; the bound then holds because
+    $\Phi=\Omega$, as in Theorem~\ref{thm:hastings_mps_from_entropy}.
+    The constants depend only on $R$, $J/\Delta E$ and $D$, not on $L$.
+    This is an auxiliary approximation estimate. Its physical propagation
+    velocity includes a gap-dependent term, and its entropy threshold is
+    the corrected auxiliary bound at $\zeta$.
+    Theorem~\ref{thm:hastings_mps_source} instead uses an
+    interaction-proportional velocity and the printed entropy maximum at
+    one common source length. The error here is the squared
+    norm~\cite{gap:hastings07_mps_error_measure}, with the constant of
+    Theorem~\ref{thm:hastings_schmidt_tail_rpow}
+    \cite{gap:hastings07_schmidt_tail_constant}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:hastings_lemma1_endpoint, thm:hastings_mps_ground_state,
@@ -240,11 +263,19 @@
     $k_0=\lceil\exp(2S_{\max})/2\rceil$, every gapped ground vector $\Omega$ on
     $L$ sites of local dimension $D\ge1$ and every $k'\ge k_0$ admit an
     open-boundary MPS $\Phi$ of bond dimension at most $k'$ satisfying
-    (\ref{eq:hastings_mps_from_entropy})
-    \cite{gap:hastings07_lemma1_decay_length,
-        gap:hastings07_gaussian_average_exponent,
-        gap:hastings07_mps_error_measure,
-        gap:hastings07_schmidt_tail_constant}.
+    (\ref{eq:hastings_mps_from_entropy}).
+    For $D=1$ the exponent is read as $0$; the bound then holds because
+    $\Phi=\Omega$, as in Theorem~\ref{thm:hastings_mps_from_entropy}.
+    The constants depend only on $R$, $\kappa$, $J/\Delta E$ and $D$, not on
+    $L$, and $C_1$ is polynomial in $\hat\xi$. This is the form at the length
+    $\hat\xi$, at any rate $\xi'=\kappa\hat\xi$ with $\kappa>6$; the printed
+    rate is Theorem~\ref{thm:hastings_mps_gapped_chain}. The physical pair giving $\hat\xi$ is identified in
+    Theorem~\ref{thm:hastings_source_lengths}; the fixed-length strict rate is
+    recorded in~\cite{gap:hastings07_gaussian_average_exponent}.
+    The error is measured in the squared
+    norm~\cite{gap:hastings07_mps_error_measure}, and the constant is that of
+    Theorem~\ref{thm:hastings_schmidt_tail_rpow}
+    \cite{gap:hastings07_schmidt_tail_constant}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:hastings_lemma1_polynomial_constant, thm:hastings_mps_ground_state,
@@ -253,4 +284,49 @@
     $C_1=\max(K\hat\xi^3,1)$ via Theorem~\ref{thm:hastings_factorization_mono})
     and Theorem~\ref{thm:hastings_mps_ground_state}
     \cite{gap:hastings07_mps_entropy_stage}.
+\end{proof}
+
+
+\begin{theorem}[Matrix product state approximation at the source length]
+    \label{thm:hastings_mps_source}
+    \lean{TNLean.MPS.AreaLaw.Hastings.exists_isOpenMPS_norm_sub_sq_le_of_isGappedGroundState_source}
+    \leanok
+    \uses{thm:hastings_source_factorization,thm:hastings_area_law_source,
+        thm:hastings_mps_from_entropy}
+    For each range $R$ there are constants $c_0>0$ and $K\ge0$, depending
+    only on $R$, with the following property. Let $H$ be a chain Hamiltonian
+    of range $R$, term norms at most $J\ge0$, unique unit ground vector
+    $\Omega$ and gap $\Delta E>0$. Set
+    \begin{align}
+        s&=\max(80c_RJ/\Delta E,80),\qquad \xi'=6s,
+        \qquad C_1=\max(Ks^3,1),
+        \label{eq:hastings_mps_source_parameters}\\
+        S_{\max}&=c_0\xi'\ln\xi'\ln q\,2^{\xi'\ln q},
+        \qquad k_0=\left\lceil e^{2S_{\max}}/2\right\rceil.
+        \label{eq:hastings_mps_source_threshold}
+    \end{align}
+    For every $k'\ge k_0$, sequential truncation to the $k'$ leading
+    Schmidt vectors at each cut gives an open-boundary matrix product
+    state $\Phi$ of bond dimension at most $k'$ such that
+    \begin{align}
+        \|\Phi-\Omega\|^2\le (L-1)4C_1^2 e^{2/\xi'}
+          (k'/k_0)^{-1/(\xi'\ln q)}.
+        \label{eq:hastings_mps_source_error}
+    \end{align}
+    For $q=1$ the truncation is exact and the exponent is read as zero.
+    The threshold is independent of the chain length and uses the printed
+    entropy maximum of~\cite[lines 130--144 and 505--557]{Hastings2007AreaLaw}.
+    The squared error and the numerical constant have the corrections
+    recorded in~\cite{gap:hastings07_mps_error_measure,
+        gap:hastings07_schmidt_tail_constant}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:hastings_source_factorization,thm:hastings_area_law_source,
+        thm:hastings_mps_from_entropy}
+    Theorem~\ref{thm:hastings_area_law_source} gives
+    $e^{2S_\Omega([0,j))}/2\le e^{2S_{\max}}/2\le k_0$ at every cut.
+    Theorem~\ref{thm:hastings_source_factorization} gives factorization at
+    the same $\xi'$ with constant at most $C_1$.
+    Theorem~\ref{thm:hastings_mps_from_entropy} now gives
+    (\ref{eq:hastings_mps_source_error}).
 \end{proof}

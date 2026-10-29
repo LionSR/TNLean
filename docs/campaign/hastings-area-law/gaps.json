@@ -1,5 +1,5 @@
 {
- "reviewedAt": "2026-10-28T17:36:29Z",
+ "reviewedAt": "2026-10-28T17:54:32Z",
  "checked": [],
  "entries": [
   {
@@ -17,12 +17,12 @@
     ]
    },
    "title": "Two factors of two in the doubling iteration",
-   "summary": "The argument stands; the iteration needs twice as many doublings as printed, which changes the constant of the area law but not its form.",
+   "summary": "The corrected iteration loses a factor of two in the exponent at a fixed length; the verified common Lieb–Robinson parameters recover the exact printed entropy bound.",
    "context": "The main theorem is proved by contradiction: the largest entropy <i>S<sub>l</sub></i> of an interval of length <i>l</i> in a long window satisfies a strict doubling inequality, and iterating it from a starting length ξ<sub>0</sub> = 2ξ′ ln(2<i>C</i><sub>1</sub>) forces the entropy per site below zero after finitely many doublings.",
    "claims": "Each doubling lowers the entropy per site <i>S<sub>l</sub></i>/<i>l</i> by 1/ξ′, and the contradiction bounds the window length <i>l</i><sub>0</sub> by ξ′ ln(2<i>C</i><sub>1</sub>) times a power of two, giving the factor 2<sup>ξ′ ln <i>D</i></sup> in <i>S</i><sub>max</sub>.",
    "found": "Dividing the doubling inequality by 2<i>l</i> lowers <i>S<sub>l</sub></i>/<i>l</i> by 1/(2ξ′) per doubling, so twice as many doublings are needed; and the printed prefactor ξ′ ln(2<i>C</i><sub>1</sub>) is ξ<sub>0</sub>/2, while the contradiction only gives <i>l</i><sub>0</sub> &lt; ξ<sub>0</sub> times the power of two. Three facts used implicitly (2<i>C</i><sub>1</sub> &gt; 1, ln <i>C</i><sub>1</sub> + <i>C</i><sub>2</sub> ≥ 0, and the inequality only where both intervals fit in the window) are stated as hypotheses; none restricts the theorem.",
-   "impact": "No. The area law holds with 4<sup>ξ′ ln <i>D</i></sup> in place of 2<sup>ξ′ ln <i>D</i></sup>, still a constant independent of the chain length.",
-   "plan": "The corrected doubling iteration is proved and assembled into the area law for gapped chains. The restriction that remains concerns the length entering ξ′, recorded in the entry on the length used by the factorization.",
+   "impact": "At the original fixed length the corrected argument gives 4 raised to ξ′ ln D. With the admissible pair (v, ξ<sub>C</sub>) = (40c<sub>R</sub>J, 80), set s = max(80c<sub>R</sub>J/ΔE, 80) and ξ′ = 6s. The bound is then c<sub>0</sub> ξ′ ln ξ′ ln D · 2<sup>ξ′ ln D</sup>, with c<sub>0</sub> depending only on the interaction range.",
+   "plan": "The fixed-length correction and the printed-form comparison at the common source length have passed local proof and source verification. The new comparison awaits submission and review; earlier pieces of the doubling argument are merged.",
    "stage": "area:4"
   },
   {
@@ -65,13 +65,13 @@
    "claims": "The weight beyond <i>k</i>′ is at most 4<i>C</i><sub>1</sub><sup>2</sup> e<sup>1/ξ′</sup> (<i>k</i>′/<i>k</i><sub>0</sub>)<sup>1/(ξ′ ln <i>D</i>)</sup>.",
    "found": "The constraint holds only at even powers <i>D</i><sup>2<i>m</i></sup>, so when the integer part of log<sub><i>D</i></sub>(<i>k</i>′/<i>k</i><sub>0</sub>) is odd one more factor e<sup>1/ξ′</sup> is lost; and the exponent must be negative for the bound to decay.",
    "impact": "No. The decay is the same power law with a slightly larger constant.",
-   "plan": "The corrected tail-to-MPS bound is proved, and its geometric-tail hypotheses are supplied from the Hamiltonian at every cut in the matrix product state approximation of the gapped ground state.",
+   "plan": "The corrected tail estimate and its Hamiltonian-level matrix product state consequence are proved, using the endpoint factorization at every cut.",
    "stage": "mps:1"
   },
   {
    "id": "docs/paper-gaps/hastings07_gaussian_average_exponent.tex",
    "kind": "error",
-   "status": "open",
+   "status": "resolved",
    "paper": "hastings",
    "result": "Lemma 1, the Gaussian filter and decay constants",
    "issue": 9811,
@@ -82,12 +82,12 @@
     ]
    },
    "title": "Gaussian filtering and the endpoint decay rate",
-   "summary": "The printed Gaussian estimate is off by a factor of two in the exponent; with the corrected width, a fixed length gives every ξ′ &gt; 6ξ, and the printed rate ξ′ = 6ξ is reached by enlarging the length.",
+   "summary": "Doubling the Gaussian parameter and enlarging an admissible Lieb–Robinson length gives the endpoint rate with a polynomial prefactor.",
    "context": "The approximate ground-state projector is constructed by averaging time evolution against a Gaussian of variance q/ΔE², where ΔE is the gap. Its error is then bounded as the window length l grows.",
    "claims": "The paper chooses q = lΔE/(6v), asserts a filtered-vector error of order e<sup>−l/(3ξ)</sup>, and states a final bound C<sub>1</sub>(ξ)e<sup>−l/(6ξ)</sup> with C<sub>1</sub> polynomial in ξ.",
-   "found": "The Gaussian suppression is e<sup>−q/2</sup>, so the printed choice of q gives only e<sup>−l/(6ξ)</sup> for the filtered vectors. Doubling q restores the intermediate rate, but the final estimate retains a √l prefactor: (a + b√l)e<sup>−l/(6ξ)</sup>. At a fixed length this can be absorbed into a constant for any ξ′ &gt; 6ξ, not at ξ′ = 6ξ, and the constant depends on the excess decay length. The paper fixes ξ only through some Lieb–Robinson pair, and raising the velocity keeps a pair valid; at the length enlarged by a factor 5/4 the bound holds at the printed rate with a constant polynomial in the length. That enlarged length carries the same restriction as the original one; see the entry on the length used by the factorization.",
-   "impact": "The printed intermediate estimate is false for the printed width, but the corrected statement follows from the paper's own estimates. No counterexample to the endpoint factorization is claimed.",
-   "plan": "Nothing further is needed for the Gaussian step. The note stays open until the enlarged length is identified with a Lieb–Robinson pair in the paper's sense.",
+   "found": "The suppression is exp(−q/2), so doubling the printed q restores the intermediate rate. At a fixed length the final estimate retains a square-root prefactor and gives only strictly slower exponential rates. An auxiliary enlarged length ζ gives a contraction bound Kζ³ exp(−l/(6ζ)). The common pair (40c<sub>R</sub>J, 80) has source length s ≥ 2ζ, so both contraction and positive semidefinite factorizations satisfy Ks³ exp(−l/(6s)).",
+   "impact": "The printed Gaussian intermediate estimate needs correction. The corrected factorization reaches the stated endpoint form after choosing an enlarged admissible length, uniformly in chain length and local dimension.",
+   "plan": "The Gaussian correction is already proved. The interaction-proportional source pair and both common-length factorization statements have also passed local verification and await submission and review.",
    "stage": "area:1"
   },
   {
@@ -99,12 +99,12 @@
    "issue": 9811,
    "prs": {},
    "title": "Positive factors and the square-root loss",
-   "summary": "The constructed window factor is a contraction; making it positive halves the exponential decay rate.",
+   "summary": "The repair is positive semidefinite and halves the rate at a fixed length; enlarging the admissible source length restores the stated rate for positive factors as well.",
    "context": "The left and right factors of the approximate projector are orthogonal projections. The middle factor B acts on the window and need not be positive.",
    "claims": "The printed lemma asks for all three factors to be positive with error ε(l) = C<sub>1</sub>e<sup>−l/ξ′</sup>.",
-   "found": "The note added replaces B by B†B. Lemma 4 bounds the repaired error by √(1 − (1 − ε)²) + 3ε + ε² for small ε, giving a bound of order √ε and decay e<sup>−l/(2ξ′)</sup>.",
-   "impact": "The positive-factor version has the slower rate. The separate measurement repair E = B†B preserves the original rate in the entropy argument.",
-   "plan": "The repair is proved. State explicitly which version is used in each application, in particular the positive-factor hypothesis of the correlation bound.",
+   "found": "The note added replaces B by B†B. Lemma 4 bounds the repaired error by √(1 − (1 − ε)²) + 3ε + ε² for small ε, giving a bound of order √ε and decay e<sup>−l/(2ξ′)</sup>. Positive means positive semidefinite here: a projection can have a kernel, so positive definiteness is not available in general.",
+   "impact": "The positive-factor estimate has the slower rate at a fixed auxiliary length ζ. For the common source length s ≥ 2ζ it instead has error Ks³ exp(−l/(6s)), just as the contraction estimate. The correlation lemma therefore uses the same ξ′ = 6s as the area law and matrix product state approximation.",
+   "plan": "The Hermitian repair is merged. Its common-source-length application and the correlation consequence have passed local verification and await submission and review.",
    "stage": "area:1"
   },
   {
@@ -155,7 +155,7 @@
    "claims": "The printed estimate makes ‖M − W‖ exponentially small.",
    "found": "The required small quantity is ‖M − W̃‖. The local increment M − W need not be small. Conditional expectation and the Duhamel formula give the corrected estimate in terms of ‖[H,W]‖.",
    "impact": "The corrected quantity is exactly the one needed to transfer the small ground-state residual of W̃ to M.",
-   "plan": "The corrected localization estimate is proved and used in Lemma 1. The identification of the length with a Lieb–Robinson pair in the paper's sense remains open separately.",
+   "plan": "The corrected localization estimate is proved and used in Lemma 1. The former identification problem for the Lieb–Robinson parameters has now been discharged in the locally verified common-source-length theorem.",
    "stage": "area:1"
   },
   {
@@ -177,8 +177,8 @@
   },
   {
    "id": "docs/paper-gaps/hastings07_lemma1_decay_length.tex",
-   "kind": "narrower",
-   "status": "open",
+   "kind": "local-correction",
+   "status": "resolved",
    "paper": "hastings",
    "result": "Lemma 1, the chain localization constants",
    "issue": 9811,
@@ -192,13 +192,13 @@
      10147
     ]
    },
-   "title": "The length used by the restricted factorization",
-   "summary": "Lemma 1 is proved at the printed rate with a constant polynomial in the length, for a length taken from the chain Lieb–Robinson estimate; that this length comes from a Lieb–Robinson pair with all the paper's properties is not yet shown.",
-   "context": "The source sets ξ = max(2<i>v</i>/Δ<i>E</i>, ξ<sub><i>C</i></sub>) from a Lieb–Robinson bound ‖[<i>A</i>(<i>t</i>), <i>B</i>]‖ ≤ <i>c</i>|<i>X</i>| ‖<i>A</i>‖ ‖<i>B</i>‖ e<sup>−dist(<i>X</i>, <i>Y</i>)/ξ<sub><i>C</i></sub></sup>, with a numerical constant <i>c</i>, <i>v</i> of order <i>J</i> and ξ<sub><i>C</i></sub> of order one. The chain estimate used here, <i>C</i>|<i>X</i>| ‖<i>A</i>‖ ‖<i>B</i>‖ e<sup><i>v</i><sub>0</sub>|<i>t</i>| − dist(<i>X</i>, <i>y</i>)/2</sup>, is also linear in |<i>X</i>|.",
+   "title": "A common Lieb–Robinson pair for every consequence",
+   "summary": "A numerical finite-support bound proves the common pair (40c<sub>R</sub>J, 80), so all factorization, entropy, approximation and correlation statements use the source length ξ′ = 6s.",
+   "context": "The source sets ξ = max(2v/ΔE, ξ<sub>C</sub>) from a Lieb–Robinson estimate with numerical prefactor, velocity proportional to the interaction strength J, and a numerical decay length ξ<sub>C</sub>. Its second observable may act on any finite support. These same parameters must enter the later lemmas and the main theorem.",
    "claims": "The source requires a controlled prefactor, velocity v of order J, length ξ<sub>C</sub> of order one, and a factorization constant polynomial in ξ.",
-   "found": "The factorization uses the chain estimate through a partial-trace localization whose error carries |<i>X</i>|<sup>2</sup>; in the boundary step this is a factor of order <i>l</i><sup>2</sup>, absorbed by the faster decay of that term. The estimate differs from the paper's in two ways: its prefactor <i>C</i> grows with <i>J</i>, whereas the paper's is numerical, and the second operator acts on a single site rather than on an arbitrary set. Applied to <i>H</i>/Δ<i>E</i>, the construction gives the length ξ<sub>ch</sub> = 16(1 + <i>c<sub>R</sub>J</i>/Δ<i>E</i>), with <i>c<sub>R</sub></i> depending only on the range, and the constant obeys <i>C</i><sub>1</sub> ≤ <i>K</i>ξ<sub>ch</sub><sup>3</sup> at ξ′ = κξ<sub>ch</sub> for each fixed κ &gt; 6. Raising the velocity by 5/4, which the paper allows, gives the length ζ = (5/4)ξ<sub>ch</sub> and the bound <i>K</i>ζ<sup>3</sup>e<sup>−<i>l</i>/(6ζ)</sup>: the printed rate ξ′ = 6ζ with a polynomial constant, <i>K</i> depending only on the range.",
-   "impact": "The constants are uniform in the chain length and polynomial in the length, but ζ is not shown to be max(2<i>v</i>/Δ<i>E</i>, ξ<sub><i>C</i></sub>) for a pair satisfying the paper's Lieb–Robinson bound, so this is not yet the printed Lemma 1. Every consequence on this page inherits the restriction. No counterexample is claimed.",
-   "plan": "A Lieb–Robinson bound of the paper's form, with a numerical prefactor, the factor |<i>X</i>| and a second operator on an arbitrary set, is proved for finite-range Hamiltonians on general graphs. Specialize it to the chain, transport it through the rescaling by the gap, and identify ξ<sub>ch</sub> and ζ as lengths max(2<i>v</i>/Δ<i>E</i>, ξ<sub><i>C</i></sub>) of such a pair.",
+   "found": "The chain commutator estimate has numerical prefactor 4 times the first-support size and no second-support cardinality factor. Its time-cone form holds for every positive v ≥ 8c<sub>R</sub>J and ξ<sub>C</sub> ≥ 8. Taking (v, ξ<sub>C</sub>) = (40c<sub>R</sub>J, 80) gives s = max(80c<sub>R</sub>J/ΔE, 80). The positive factorization, bootstrap and Rényi bounds, mutual-information step, printed entropy bound, matrix product state threshold and correlation lemma all use ξ′ = 6s.",
+   "impact": "The former restriction on matching the source parameters is removed. The gap-dependent auxiliary velocities remain valid intermediate estimates, while the final common velocity is proportional to J. The reciprocal-length convention and the fixed-length corrections remain explicit.",
+   "plan": "All common-parameter statements have passed the full local build, strict checks, standard-axiom and blueprint declaration checks, and mathematical source review. They await submission and review.",
    "stage": "area:1"
   },
   {
@@ -217,12 +217,12 @@
     ]
    },
    "title": "The conditional entropy premise and the Hamiltonian application",
-   "summary": "Both premises of the conditional construction are now derived from the Hamiltonian, so the approximation holds under the paper's hypotheses, with the restriction of Lemma 1 on its length.",
+   "summary": "The Hamiltonian supplies both premises at the common source length: the printed entropy bound fixes a chain-length-independent truncation threshold, and the factorization controls the discarded Schmidt weight.",
    "context": "The source’s matrix product state section explicitly assumes a uniform entropy bound. A common integer k<sub>0</sub> ≥ exp(2S<sub>j</sub>)/2 at every internal cut turns its cut-dependent real threshold into a single truncation parameter.",
    "claims": "For ground states of gapped chains, the preceding area law and factorization provide constants uniform in the cut and chain length.",
-   "found": "The conditional theorem takes the entropy and factorization bounds as hypotheses, just as the paper's construction does, and gives an unnormalized matrix product vector Φ. For N &lt; 2, Φ = Ψ<sub>0</sub>; for N ≥ 2, ‖Φ − Ψ<sub>0</sub>‖² ≤ (N − 1)4C<sub>1</sub>²e<sup>2/ξ′</sup>(k′/k<sub>0</sub>)<sup>−1/(ξ′ ln D)</sup>, with k′ ≥ k<sub>0</sub>. For a gapped chain the area law supplies k<sub>0</sub> = ⌈exp(2S<sub>max</sub>)/2⌉ and Lemma 1 supplies the factorization, both independent of the chain length.",
-   "impact": "The entropy premise is not an added premise absent from the paper's argument, and it is now discharged. The constants inherit the restriction of Lemma 1 on its length.",
-   "plan": "Nothing further for this step; the remaining restriction is the one recorded for Lemma 1.",
+   "found": "The conditional theorem takes the entropy and factorization bounds as hypotheses, just as the paper's construction does, and gives an unnormalized matrix product vector Φ. For N &lt; 2, Φ = Ψ<sub>0</sub>; for N ≥ 2, ‖Φ − Ψ<sub>0</sub>‖² ≤ (N − 1)4C<sub>1</sub>²e<sup>2/ξ′</sup>(k′/k<sub>0</sub>)<sup>−1/(ξ′ ln D)</sup>, with k′ ≥ k<sub>0</sub>. For a gapped chain the area law supplies k<sub>0</sub> = ⌈exp(2S<sub>max</sub>)/2⌉ and Lemma 1 supplies the factorization, both independent of the chain length. The source-length theorem uses ξ′ = 6s and the printed S<sub>max</sub> = c<sub>0</sub> ξ′ ln ξ′ ln D · 2<sup>ξ′ ln D</sup>.",
+   "impact": "The conditional entropy premise is discharged from the Hamiltonian, and no restriction on matching the source length remains. The squared-norm and normalization conventions remain explicit.",
+   "plan": "The conditional construction and earlier Hamiltonian applications are merged. The common-source-length application, with its threshold from the printed entropy maximum, has passed local verification and awaits submission and review.",
    "stage": "mps:1"
   },
   {
@@ -244,7 +244,7 @@
    "claims": "For sufficiently large α, maximizing the Rényi entropy under the tail constraints gives a series that converges whenever e<sup>−2α/ξ′</sup>(D<sup>2</sup>)<sup>1−α</sup> &lt; 1, and the bound differs from the von Neumann bound only in the function replacing F(ξ′, D).",
    "found": "The paper's maximization uses concavity of t ↦ t<sup>α</sup> and so covers 0 &lt; α &lt; 1 with the convergence condition, with 4 ln D − ln(1 − (D<sup>2</sup>)<sup>1−α</sup>e<sup>−2α/ξ′</sup>)/(1 − α) in place of F(ξ′, D). For α &gt; 1, where the condition always holds, concavity of the logarithm gives S<sub>α</sub> ≤ S, so the von Neumann bound applies with F(ξ′, D) itself.",
    "impact": "No. Every order is covered, so the restriction to orders below one is removed.",
-   "plan": "Both ranges are proved for gapped chains. They inherit only the restriction of Lemma 1 on the length entering ξ′.",
+   "plan": "Both order ranges are already proved. Their common-source-length forms at ξ′ = 6s have passed local verification and await submission and review; they carry no inherited restriction on the Lieb–Robinson parameters.",
    "stage": "area:2"
   },
   {

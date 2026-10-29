@@ -6,20 +6,46 @@
 % state), proofs in the appendix at lines 1419--1533.
 
 The approximate local projective form of~\cite{Hastings2006Solving} replaces
-each term $H_i$ of a gapped Hamiltonian $H=\sum_kh_k$ by its Gaussian-filtered
-operator $\widetilde H_i$ (Definition~\ref{def:hastings_gaussian_filtered_term})
-and then by a finite-range approximation $M_i$. Under the finite-range graph
-assumptions of Theorem~\ref{thm:qc_graph_lieb_robinson_finset} (each
-$h_k=h_k^\dagger$ supported on $X_k$ with $\operatorname{diam}X_k\le R$,
-$|X_k|\le v_R$, and $\sum_{k:\,x\in X_k}\|h_k\|\le b_0$), we define $M_i$ by
-the normalized partial trace of $\widetilde H_i$ onto the $l$-neighbourhood of
-the support of $H_i$, rather than by truncated local evolution
-\cite[lines 285--307]{Hastings2006Solving}, and read the Gaussian weight of
-eq.~(mid) as $e^{-(t\Delta E)^2/(2q)}$
-\cite{gap:hastings05_filtered_term_approximation}. For $q\ge0$ and
-$\Delta E\in\mathbb R$, $\widetilde W$ denotes the Gaussian average of
-$e^{iHt}We^{-iHt}$ of variance $q/(\Delta E)^2$ when $q>0$ and $\Delta E\ne0$,
-and $\widetilde W=W$ when $q=0$ or $\Delta E=0$.
+each term $H_i$ of a gapped Hamiltonian by its Gaussian-filtered version
+$\widetilde H_i$ (Definition~\ref{def:hastings_gaussian_filtered_term}), and
+then by an operator $M_i$ of finite range. This section proves the locality
+of the filtered terms on a finite graph and an analogous approximation
+constructed by partial trace. The Hamiltonian is $H=\sum_kh_k$, with the finite-range
+interaction assumptions of Theorem~\ref{thm:qc_graph_lieb_robinson_finset}:
+each $h_k$ is Hermitian and acts on a set $X_k$ of diameter at most $R$ and
+at most $v_R$ sites, and the norms of the terms containing any one site sum
+to at most $b_0$. The source's $M_i$ evolves $H_i$ under the terms near $i$
+only~\cite[lines 285--307]{Hastings2006Solving}. Here $M_i$ is the normalized
+partial trace of $\widetilde H_i$ onto a neighbourhood of the support of
+$H_i$, which gives a support bound, the norm bound
+$\|M_i\|\le J$, and an analogous localization estimate. The radius of this
+neighbourhood is measured from the support of $H_i$, rather than from $i$. The Gaussian weight printed in
+eq.~(mid) as $e^{-(t\Delta E)^2/2}$ is read as $e^{-(t\Delta E)^2/(2q)}$. Both
+changes are recorded in~\cite{gap:hastings05_filtered_term_approximation}.
+
+The physical estimates using partial-trace localization, and the summed
+ground-space bounds below, impose the additional condition
+\begin{equation}
+    |\{y:d_G(x,y)=r\}|\le K_g(r+1)^k
+    \quad(x\in V,\ r\in\mathbb N),
+    \label{eq:hastings05_polynomial_sphere_scope}
+\end{equation}
+with constants independent of system size. This condition is absent from
+the metric and finite-range assumptions of
+\cite[lines 169--190]{Hastings2006Solving}. Bounded degree does not imply
+it. The general metric version of (facld) follows instead from the weighted
+omitted-interaction estimate in Theorem~\ref{thm:hastings05_metric_facld}
+\cite{gap:hastings05_geometric_growth_scope}. The unrestricted assertion
+(oibu) is false, as the tree counterexample below shows. The
+polynomial-growth basis bounds are corrected statements
+\cite{gap:hastings05_tree_basis_counterexample}.
+
+For the locality estimates below, the parameter $\Delta E$ may be any real
+number. For $q\ge0$ and $\Delta E\ne0$, define $\widetilde W$ by averaging
+$e^{iHt}We^{-iHt}$ against the centered Gaussian of variance $q/(\Delta E)^2$.
+If $q=0$ or $\Delta E=0$, set $\widetilde W=W$. The Gaussian tail factor in
+the estimates is then $1$. For $q>0$ and $\Delta E>0$, this is precisely the
+filter of Definition~\ref{def:hastings_gaussian_filtered_term}.
 
 \begin{theorem}[Locality of a filtered term on a graph]
     \label{thm:hastings05_filtered_locality_graph}
@@ -67,6 +93,9 @@ and $\widetilde W=W$ when $q=0$ or $\Delta E=0$.
     $l_{\mathrm{proj}}$ of $i$ with $\|M_i\|\le J$
     \cite[lines 285--320]{Hastings2006Solving},
     \cite{gap:hastings05_filtered_term_approximation}.
+    Every finite graph satisfies this assumption with $K_g$ equal to its
+    number of vertices and $k=0$, but that choice does not give a constant
+    uniform in system size\cite{gap:hastings05_geometric_growth_scope}.
 \end{theorem}
 \begin{proof}\leanok
     Combine Theorem~\ref{thm:qc_graph_neighborhood_localization} for $|t|\le T$
@@ -89,7 +118,13 @@ and $\widetilde W=W$ when $q=0$ or $\Delta E=0$.
         \le\|W\|e^{-q/2}+\|\widetilde W-M\|
         \label{eq:hastings05_filtered_ground_vector}
     \end{align}
-    \cite[eq.~(facld), lines 322--348 and 375--387]{Hastings2006Solving}.
+    With $M=M_i$ as in
+    Theorem~\ref{thm:hastings05_filtered_approximation_graph} and
+    $q=c_1l_{\mathrm{proj}}\Delta E$, these give the form of eq.~(facld)
+    and the unique-ground-state bound of
+    \cite[lines 322--348 and 375--387]{Hastings2006Solving} under the
+    additional growth assumption. They do not establish those statements
+    on every source metric lattice\cite{gap:hastings05_geometric_growth_scope}.
 \end{theorem}
 \begin{proof}\leanok
     Since $(1-P)M\psi=(1-P)\widetilde W\psi+(1-P)(M-\widetilde W)\psi$,
@@ -103,9 +138,13 @@ and $\widetilde W=W$ when $q=0$ or $\Delta E=0$.
     \lean{TNLean.Lattice.norm_sum_sub_le_of_sum_eq}
     \leanok
     \uses{thm:hastings_gaussian_filtered_spectral}
-    If $H=H^\dagger=\sum_iW_i$, then any $M_i$ satisfy
-    $\|\sum_iM_i-H\|\le\sum_i\|\widetilde W_i-M_i\|$
-    \cite[lines 359--374]{Hastings2006Solving}.
+    If $H$ is Hermitian and $\sum_iW_i=H$, then any operators $M_i$ satisfy
+    $\|\sum_iM_i-H\|\le\sum_i\|\widetilde W_i-M_i\|$. This is the comparison of
+    $H$ with $M=\sum_iM_i$ in~\cite[lines 359--374]{Hastings2006Solving}. The
+    consequence drawn there, that an actual ground state of $M$ has nonzero
+    projection onto the ground eigenspace of $H$ at a radius of order
+    $\log N$, is quantified in
+    Theorem~\ref{thm:hastings05_metric_ground_overlap}.
 \end{theorem}
 \begin{proof}\leanok
     By Theorem~\ref{thm:hastings_gaussian_filtered_spectral},
@@ -117,16 +156,27 @@ and $\widetilde W=W$ when $q=0$ or $\Delta E=0$.
 % Hastings, arXiv:cond-mat/0508554v3, proj3new.tex, lines 395--491 (degenerate
 % ground space), Appendix B at lines 1535--1708 (eqs. lc, blecm, oibu).
 
-For a degenerate ground space with orthogonal projection $P$, ground states are
-approximate eigenvectors of $M_i$ in a basis that approximately diagonalizes
-the compressions $PM_iP$ \cite[lines 395--491]{Hastings2006Solving}. Throughout
-this subsection, $H$ has ground energy $E_0$ and gap $\Delta E>0$, and $q\ge0$.
-Separated-operator commutators are bounded via
-Theorem~\ref{thm:hastings05_filtered_approximation_graph}
-\cite{gap:hastings05_filtered_term_approximation}; the translation-invariant
-case and low-energy example are in
-Sections~\ref{sec:hastings_translation_supercell}
-and~\ref{sec:hastings_low_energy_example}.
+When the ground space is degenerate, the ground states are approximate
+eigenvectors of the $M_i$ only in a basis that diagonalizes the compressions
+$PM_iP$ together, where $P$ is the orthogonal projection onto the ground
+space~\cite[lines 395--491]{Hastings2006Solving}. Such a basis exists
+approximately when these compressions nearly commute. In this subsection every
+eigenvalue of $H$ equals $E_0$ or is at least $E_0+\Delta E$, with $\Delta E>0$,
+and $q\ge0$. The commutator of $\widetilde W$ with a separated operator is
+bounded through the partial trace of
+Theorem~\ref{thm:hastings05_filtered_approximation_graph}, so the term
+$N_Mg(c_1l,l)$ of eq.~(lc) is replaced by the localization term of that
+theorem~\cite{gap:hastings05_filtered_term_approximation}. The translation
+invariant case~\cite[lines 1603--1654]{Hastings2006Solving} is treated in
+Sections~\ref{sec:hastings_translation_supercell} and
+\ref{sec:hastings_finite_translation_orbit}, and the example at
+lines 1655--1676 in Section~\ref{sec:hastings_low_energy_example}.
+The unrestricted summed assertion (oibu) is false on general metric lattices
+(Remark~\ref{rem:hastings05_unrestricted_basis_counterexample}). The corrected
+uniform bounds for every finite ground-space dimension and for the actual
+truncated terms are Theorems~\ref{thm:hastings05_uniform_ground_basis} and
+\ref{thm:hastings05_uniform_truncated_basis}, with polynomial sphere growth
+stated explicitly.
 
 \begin{theorem}[Low-energy commutators]
     \label{thm:hastings05_low_energy_commutator}
@@ -456,12 +506,15 @@ pair exists) \cite[lines 1695--1705]{Hastings2006Solving}.
         TNLean.Lattice.norm_groundCompression_commutator_le_exp_edist}
     \leanok
     \uses{thm:hastings05_blecm, thm:hastings05_low_energy_commutator}
-    In the setting of Theorem~\ref{thm:hastings05_blecm}, set
-    $v=2v_R|b_0|e^{2R}+1$ and $\gamma=\min(1/4,\Delta E/(8v))$. There is an
-    explicit constant $C$ such that $\|[Ph_jP,Ph_iP]\|\le C\|h_j\|\,\|h_i\|e^{-\gamma l}$
-    whenever $X_i\cap N_l(X_j)=\emptyset$, and
-    $\|[Ph_jP,Ph_iP]\|\le Ce^{\gamma(2R+1)}\|h_j\|\,\|h_i\|e^{-\gamma d_G(a_j,a_i)}$
-    for anchors $a_j\in X_j$, $a_i\in X_i$.
+    In the setting of Theorem~\ref{thm:hastings05_blecm}, assume also the
+    polynomial sphere bound~\eqref{eq:hastings05_polynomial_sphere_scope}, and let
+    $v=2v_R|b_0|e^{2R}+1$ and $\gamma=\min(1/4,\Delta E/(8v))$. If $X_i$ is
+    disjoint from the sites within graph distance $l$ of $X_j$, then
+    $\|[Ph_jP,Ph_iP]\|\le C\|h_j\|\,\|h_i\|\,e^{-\gamma l}$ with an explicit
+    constant $C$. In particular, if the anchors $a_j$, $a_i$ are at graph
+    distance $D$, the commutator is at most
+    $Ce^{\gamma(2R+1)}\|h_j\|\,\|h_i\|\,e^{-\gamma D}$, and it vanishes at
+    infinite distance.
 \end{theorem}
 \begin{proof}\leanok
     Apply Theorem~\ref{thm:hastings05_blecm} with $T=l/(4v)$ and $q=T\Delta E$,
@@ -470,7 +523,29 @@ pair exists) \cite[lines 1695--1705]{Hastings2006Solving}.
     $\|[Ph_jP,Ph_iP]\|\le2\|h_j\|\,\|h_i\|$.
 \end{proof}
 
-\begin{theorem}[The sum over all terms, eq.~(oibu)]
+\begin{remark}[The unrestricted assertion (oibu)]
+    \label{rem:hastings05_unrestricted_basis_counterexample}
+    The general metric assertion of
+    \cite[lines 1678--1694]{Hastings2006Solving} is false. On the rooted
+    $256$-ary tree of depth $L\ge2$ there are qubit Hamiltonians with
+    Hermitian radius-one terms of norm at most $769$, at most $258$ sites
+    in any radius-one ball, ground-space dimension two and gap at least
+    $735/2048$, such that the actual terms of (mid) at
+    $l_{\mathrm{proj}}=R=1$ satisfy
+    \[
+      \sum_i o(M_i)\ge2^{L-2}
+    \]
+    in every orthonormal ground-space basis. The maximal compressed
+    spectral spread lies between three and four, so a small denominator
+    does not account for this divergence. The number of sites is of order
+    $256^L$, and the lower bound is of order $N^{1/8}$.
+    A self-contained mathematical proof is given in
+    \cite{gap:hastings05_tree_basis_counterexample}. No failure along a
+    size-dependent localization radius is asserted. The following
+    polynomial-growth theorem is a corrected statement.
+\end{remark}
+
+\begin{theorem}[A summed bound under polynomial sphere growth]
     \label{thm:hastings05_oibu}
     \lean{TNLean.Lattice.add_one_pow_mul_exp_neg_le,
         TNLean.Lattice.shellSumConst,
@@ -489,10 +564,16 @@ pair exists) \cite[lines 1695--1705]{Hastings2006Solving}.
         S_{\gamma,k}=\frac{k!\,(2/\gamma)^ke^{\gamma/2}}{1-e^{-\gamma/2}},
         \label{eq:hastings05_oibu}
     \end{align}
-    and in an eigenbasis of $PM_jP=Ph_jP$ with eigenvalue gap $\delta>0$,
-    $\sum_i\|o_{Ph_iP}\|$ is at most $(n-1)/\delta$ times (\ref{eq:hastings05_oibu}),
-    uniformly in system size \cite[eq.~(oibu), lines 1689--1694]{Hastings2006Solving},
-    \cite{gap:hastings05_two_dim_ground_basis}.
+    independently of the number of sites and terms. Consequently, in an
+    eigenbasis of $PM_jP$ with eigenvalues pairwise at least $\delta>0$ apart,
+    $\sum_io(i)$ is at most $(n-1)/\delta$ times this bound. This proves the
+    size independence of eq.~(oibu) under the additional growth assumption,
+    with an explicit constant. The unrestricted claim of
+    \cite[lines 1689--1694]{Hastings2006Solving} is false
+    \cite{gap:hastings05_tree_basis_counterexample}; the printed dependence
+    $O(J^2/(c_1l\Delta E\,\delta\lambda_j))$ is not established, since the
+    constant contains neither $c_1$ nor $l$ and grows like $(v/\Delta E)^{k+1}$
+    for small gaps~\cite{gap:hastings05_two_dim_ground_basis}.
 \end{theorem}
 \begin{proof}\leanok
     Group $h_i$ by anchor $x$: $\sum_{a_i=x}\|h_i\|\le b_0$, and
@@ -500,7 +581,7 @@ pair exists) \cite[lines 1695--1705]{Hastings2006Solving}.
     Apply Theorem~\ref{thm:hastings05_simple_spectrum_basis}.
 \end{proof}
 
-\begin{theorem}[Eq.~(oibu) for a degenerate ground space]
+\begin{theorem}[A summed bound from given spectral refinements]
     \label{thm:hastings05_oibu_levels}
     \lean{TNLean.Lattice.levelBoundB_eq_mul,
         TNLean.Lattice.sum_norm_offDiagonalPartFamily_le_levelBoundB,
@@ -508,20 +589,589 @@ pair exists) \cite[lines 1695--1705]{Hastings2006Solving}.
         TNLean.Lattice.sum_norm_offDiagonalPartFamily_le_oibu_levels}
     \leanok
     \uses{thm:hastings05_basis_levels, thm:hastings05_oibu}
-    In the setting of Theorem~\ref{thm:hastings05_basis_levels} with
-    $A_\ell=Ph_{j_\ell}P$ ($\ell<L$) separating all basis pairs and
-    $\|h_i\|\le J$, let $\beta_{L-1}$ be defined by
-    (\ref{eq:hastings05_basis_levels_recurrence}) at $K=2J^2$ and $K_B=1$. Then
+    In the setting of Theorem~\ref{thm:hastings05_basis_levels}, let $v_0,\dots,v_{n-1}$
+    be an orthonormal basis of the ground space, let the operator of level
+    $\ell$ be $A_\ell=Ph_{j_\ell}P$, with every $j_\ell$ among
+    $j_0,\dots,j_{L-1}$ and every pair of basis vectors separated below level
+    $L$, and let all terms have norm at most $J$. Then
     \begin{align}
-        \sum_i\|o_{Ph_iP}\| & \le(n-1)\,\beta_{L-1}\sum_{\ell<L}Ce^{\gamma(2R+1)}\,|b_0|\,K_g\,
-        S_{\gamma,k}\,\|h_{j_\ell}\|
+        \sum_io(i)\le(n-1)\,\beta_{L-1}\sum_{\ell<L}Ce^{\gamma(2R+1)}\,|b_0|\,K_g\,
+        S_{\gamma,k}\,\|h_{j_\ell}\|,
         \label{eq:hastings05_oibu_levels}
     \end{align}
-    \cite[lines 1689--1708]{Hastings2006Solving}.
+    where $\beta_{L-1}$ is the bound of
+    Theorem~\ref{thm:hastings05_basis_levels} with $K=2J^2$ and $K_B=1$,
+    with no factor counting the number of sites or terms. Uniformity in the system
+    size also requires uniform control of $L$ and the displayed spectral constants.
+    Separation of every pair is a hypothesis here; it need not hold on a terminal
+    subspace where all compressions are scalar~\cite{gap:hastings05_two_dim_ground_basis}.
 \end{theorem}
 \begin{proof}\leanok
     By homogeneity of $\beta_{L-1}$ in $K_B$, apply
     Theorem~\ref{thm:hastings05_basis_levels} with
     $K_B(i)=\sum_{\ell<L}\|[A_\ell,Ph_iP]\|$ and sum over $i$ via
     Theorem~\ref{thm:hastings05_oibu}.
+\end{proof}
+
+
+\begin{definition}[Conditioning of the commutator map]
+    \label{def:hastings05_commutator_conditioning}
+    \lean{TNLean.Lattice.quotientConditionNumber,
+        TNLean.Lattice.compressionCommutatorMap,
+        TNLean.Lattice.compressionConditionNumber,
+        TNLean.Lattice.realCompressionSpan}
+    \leanok
+    Let $V$ be the real span of Hermitian operators $A_i$ on an
+    $n$-dimensional complex inner product space, and choose original operators
+    $A_{j_1},\dots,A_{j_m}$ spanning $V$. Give $V$ the operator norm and the
+    product of endomorphism spaces the maximum norm. Define
+    \begin{align*}
+        T(B)=([A_{j_r},B])_{r=1}^m,
+        \qquad Z=\ker T,
+        \qquad \kappa(T)=\|\overline T^{-1}\|,
+    \end{align*}
+    where $\overline T:V/Z\longrightarrow\operatorname{ran}T$ is the induced
+    isomorphism and $V/Z$ has the quotient norm.
+\end{definition}
+
+\begin{theorem}[Construction of a basis controlling the off-diagonal entries]
+    \label{thm:hastings05_constructed_ground_basis}
+    \lean{TNLean.Lattice.norm_le_quotientConditionNumber_mul,
+        TNLean.Lattice.exists_orthonormalBasis_joint_eigenvectors,
+        TNLean.Lattice.finrank_selfAdjoint_continuousLinearMap,
+        TNLean.Lattice.exists_orthonormalBasis_norm_inner_le_compressionCommutatorMap,
+        TNLean.Lattice.exists_orthonormalBasis_norm_inner_le_commutators}
+    \leanok
+    \uses{def:hastings05_commutator_conditioning}
+    There are $m\le n^2$ original operators spanning $V$ and an orthonormal
+    basis $v_1,\dots,v_n$ such that, for $a\ne b$, every $A_i$ satisfies
+    \begin{align*}
+        |\langle v_a,A_iv_b\rangle|
+        \le\kappa(T)\sum_{r=1}^m\|[A_{j_r},A_i]\|.
+    \end{align*}
+    No simplicity or separation of eigenvalues is required. This is an
+    alternative construction for the qualitative basis choice
+    of~\cite[lines 1695--1708]{Hastings2006Solving}, with its conditioning
+    displayed explicitly~\cite{gap:hastings05_two_dim_ground_basis}.
+\end{theorem}
+\begin{proof}\leanok
+    The real dimension of the Hermitian endomorphisms is $n^2$, so $m\le n^2$
+    original operators span $V$. Every member of $Z$ commutes with every member
+    of $V$; the Hermitian operators in $Z$ therefore have a common orthonormal
+    eigenbasis. For $a\ne b$, $B\mapsto\langle v_a,Bv_b\rangle$ is a contraction
+    on $V$ vanishing on $Z$. It descends to a contraction on $V/Z$, giving
+    $|\langle v_a,Bv_b\rangle|\le\|B+Z\|\le\kappa(T)\|T(B)\|$.
+\end{proof}
+
+\begin{theorem}[The summed bound in a constructed ground-space basis]
+    \label{thm:hastings05_constructed_oibu}
+    \lean{TNLean.Lattice.groundSpaceCompression,
+        TNLean.Lattice.coe_groundSpaceCompression_apply,
+        TNLean.Lattice.isSelfAdjoint_groundSpaceCompression,
+        TNLean.Lattice.norm_groundSpaceCompression_commutator_le,
+        TNLean.Lattice.exists_groundSpaceBasis_sum_norm_offDiagonalPartFamily_le}
+    \leanok
+    \uses{thm:hastings05_constructed_ground_basis, thm:hastings05_oibu}
+    In the setting of Theorem~\ref{thm:hastings05_oibu}, suppose the ground
+    space has dimension $n>0$. There are $m\le n^2$ original terms and an
+    orthonormal basis of the ground space in which
+    \begin{align*}
+        \sum_i o(i)\le(n-1)\kappa(T)\sum_{r=1}^m
+        Ce^{\gamma(2R+1)}|b_0|K_gS_{\gamma,k}\|h_{j_r}\|,
+    \end{align*}
+    where $T$ is formed from the compressions restricted to the ground space.
+    If every term has norm at most $J$, the right side is at most
+    $n^2(n-1)\kappa(T)Ce^{\gamma(2R+1)}|b_0|K_gS_{\gamma,k}J$.
+    Uniformity along a sequence of systems requires uniform control of the
+    displayed conditioning as well as the geometric parameters.
+\end{theorem}
+\begin{proof}\leanok
+    Each off-diagonal part is at most $n-1$ times its largest matrix entry.
+    Apply Theorem~\ref{thm:hastings05_constructed_ground_basis}, exchange the
+    sums over $i$ and $r$, and apply the commutator row sum of
+    Theorem~\ref{thm:hastings05_oibu}. Restriction to the ground space does not
+    increase a commutator norm, and filtering leaves the ground-space
+    compression unchanged.
+\end{proof}
+
+
+\begin{theorem}[Choosing a basis in dimension two]
+    \label{thm:hastings05_two_dim_basis_construction}
+    \lean{TNLean.Lattice.twoDimensionalSpectralSpread,
+        TNLean.Lattice.eq_smul_one_of_twoDimensionalSpectralSpread_eq_zero,
+        TNLean.Lattice.exists_norm_sub_smul_one_eq_twoDimensionalSpectralSpread,
+        TNLean.Lattice.norm_inner_le_twoDimensionalSpectralSpread,
+        TNLean.Lattice.norm_offDiagonalPartFamily_le_twoDimensionalSpectralSpread,
+        TNLean.Lattice.exists_orthonormalBasis_maximal_twoDimensionalSpectralSpread}
+    \leanok
+    A finite Hermitian family on a two-dimensional space is either scalar, or
+    has an original member of maximal positive spectral spread $\delta$.
+    Its orthonormal eigenbasis satisfies $o(i)\le\|[A_j,A_i]\|/\delta$.
+    In every orthonormal basis, an off-diagonal entry of $A_i$ is at most its
+    spectral spread. This constructs the basis used
+    in~\cite[lines 1678--1694]{Hastings2006Solving}.
+\end{theorem}
+\begin{proof}\leanok
+    The finite family of spectral spreads has a maximum. Zero spread makes a
+    Hermitian operator scalar. In the eigenbasis of an operator with eigenvalues
+    $r_0,r_1$, subtracting $r_0I$ leaves
+    $(r_1-r_0)|v_1\rangle\langle v_1|$, of norm $|r_1-r_0|$.
+    The commutator identity bounds the entries in the chosen eigenbasis.
+\end{proof}
+
+\begin{theorem}[A uniform sum in dimension two]
+    \label{thm:hastings05_two_dim_uniform_sum}
+    \lean{TNLean.Lattice.exists_orthonormalBasis_norm_inner_le_sqrt_commutator_decay,
+        TNLean.Lattice.sum_weight_mul_exp_neg_edist_le,
+        TNLean.Lattice.exists_twoDimensional_groundSpaceBasis_sum_norm_offDiagonalPartFamily_le}
+    \leanok
+    \uses{thm:hastings05_two_dim_basis_construction, thm:hastings05_oibu}
+    Under the local Hamiltonian hypotheses of Theorem~\ref{thm:hastings05_oibu},
+    suppose the ground space has dimension two. There is an orthonormal basis
+    of the ground space such that
+    \begin{align*}
+        \sum_i o(i)\le
+        \sqrt{Ce^{\gamma(2R+1)}}\,|b_0|\,|K_g|\,S_{\gamma/2,k},
+    \end{align*}
+    where $C$ is the commutator constant evaluated at $|K_g|$.
+    The constant is uniform in the number of sites and terms and requires no
+    lower bound on a compressed spectral gap. This proves the qualitative
+    two-dimensional assertion under polynomial sphere growth, with a corrected
+    explicit constant\cite{gap:hastings05_two_dim_ground_basis}.
+    The general metric claim of~\cite[lines 1678--1694]{Hastings2006Solving}
+    is false\cite{gap:hastings05_tree_basis_counterexample}.
+\end{theorem}
+\begin{proof}\leanok
+    Set $w_i=\|h_i\|$ and $D_i=w_i^{-1}A_i$, with $D_i=0$ for zero terms.
+    Choose $D_j$ with maximal spectral spread $\rho$ and diagonalize it.
+    If $\rho=0$, all off-diagonal parts vanish. Otherwise, for an off-diagonal
+    entry of magnitude $z_i$, the spectral-spread and commutator bounds give
+    $z_i\le w_i\rho$ and
+    $\rho z_i\le Ce^{\gamma(2R+1)}w_i e^{-\gamma d(a_j,a_i)}$.
+    Multiplying yields
+    $z_i\le\sqrt{Ce^{\gamma(2R+1)}}w_i e^{-\gamma d(a_j,a_i)/2}$.
+    Group the terms by their anchors, use the norm budget, and sum the graph
+    spheres at rate $\gamma/2$.
+\end{proof}
+
+
+\subsection{Uniform spectral splits}
+
+\begin{definition}[Projection onto selected basis vectors]
+    \label{def:hastings05_basis_split_projection}
+    \lean{TNLean.Lattice.basisSplitProjection,
+        TNLean.Lattice.basisSplitProjection_eq_starProjection,
+        TNLean.Lattice.basisSplitProjection_apply_basis,
+        TNLean.Lattice.isStarProjection_basisSplitProjection,
+        TNLean.Lattice.norm_basisSplitProjection_le,
+        TNLean.Lattice.basisSplitProjection_compl,
+        TNLean.Lattice.basisSplitProjection_mul_mul_compl,
+        TNLean.Lattice.norm_basisSplitProjection_mul_mul_compl_le}
+    \leanok
+    For an orthonormal basis $(v_a)$ and a subset $S$ of its indices, put
+    $P_S=\sum_{a\in S}|v_a\rangle\langle v_a|$. This is the orthogonal
+    projection onto their span, $P_{S^c}=1-P_S$, and $\|P_S\|\le1$.
+    The operator $P_SBP_{S^c}$ has coefficients
+    $\langle v_a,Bv_c\rangle$ for $a\in S$, $c\notin S$, and its norm is
+    at most $|S||S^c|M$ whenever every cross coefficient has modulus at most $M$.
+\end{definition}
+
+\begin{theorem}[A spectral cut with a controlled gap]
+    \label{thm:hastings05_spectral_split}
+    \lean{TNLean.Lattice.exists_spread_div_le_adjacent_gap,
+        TNLean.Lattice.exists_adjacent_gap_fin,
+        TNLean.Lattice.exists_antitone_spectral_split,
+        TNLean.Lattice.norm_le_of_diagonal_basis,
+        TNLean.Lattice.norm_sub_min_eigenvalue_le_spread,
+        TNLean.Lattice.norm_basisSplitProjection_cross_le_commutator,
+        TNLean.Lattice.exists_selfAdjoint_spectral_split}
+    \leanok
+    \uses{def:hastings05_basis_split_projection}
+    Let $A$ be a nonscalar Hermitian operator on a space of dimension
+    $m\ge2$, with spectral spread $\rho>0$. There is a proper nonzero
+    orthogonal spectral projection $P$ such that
+    $\|PB(1-P)\|\le m^2(m-1)\|[A,B]\|/\rho$ for every $B$.
+    Also, $\|A-\lambda_{\min}(A)1\|\le\rho$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:hastings05_offdiagonal_commutator,def:hastings05_basis_split_projection}
+    The sum of the $m-1$ adjacent gaps of the ordered spectrum is $\rho$,
+    so one gap is at least $\rho/(m-1)$. Split the eigenbasis across this
+    gap. The identity
+    $\langle v_a,[A,B]v_c\rangle=(\lambda_a-\lambda_c)\langle v_a,Bv_c\rangle$
+    bounds each cross coefficient; there are at most $m^2$ such coefficients.
+    In the same eigenbasis every eigenvalue of
+    $A-\lambda_{\min}(A)1$ lies in $[0,\rho]$.
+\end{proof}
+
+\begin{theorem}[A uniform split of a Hermitian family]
+    \label{thm:hastings05_uniform_family_split}
+    \lean{TNLean.Lattice.le_sqrt_mul_of_le_spread,
+        TNLean.Lattice.norm_crossBlock_le_of_center,
+        TNLean.Lattice.exists_family_spectral_split}
+    \leanok
+    \uses{thm:hastings05_spectral_split}
+    Let $(D_i)$ be a finite Hermitian family on a space of dimension
+    $m\ge2$, and suppose $\|[D_i,D_j]\|\le C f(i,j)$, where $C\ge0$
+    and $f$ is symmetric and nonnegative. Either all terms are scalar,
+    or there are an original index $j$ and a proper nonzero orthogonal
+    projection $P$ with
+    $\|PD_i(1-P)\|,\|(1-P)D_iP\|\le\sqrt{m^3C}\sqrt{f(i,j)}$ for every $i$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:hastings05_spectral_split}
+    Choose a term of maximal spectral spread $\rho$. If $\rho=0$, every
+    term is scalar. Otherwise the selected spectral projection satisfies
+    $\|PD_i(1-P)\|\le\rho$ and
+    $\rho\|PD_i(1-P)\|\le m^3Cf(i,j)$. Multiplying these estimates and
+    taking square roots proves the result. The reverse block is the adjoint.
+\end{proof}
+
+\begin{theorem}[Commutators after a spectral split]
+    \label{thm:hastings05_split_compression_decay}
+    \lean{TNLean.Lattice.commutator_compression_eq,
+        TNLean.Lattice.norm_compression_le,
+        TNLean.Lattice.norm_commutator_compression_le,
+        TNLean.Lattice.exp_dist_half_mul_le,
+        TNLean.Lattice.norm_commutator_compression_le_exp,
+        TNLean.Lattice.norm_commutator_compression_le_kernel}
+    \leanok
+    Let $P$ be an idempotent contraction and put $Q=1-P$.
+    Then $[PD_iP,PD_kP]=P[D_i,D_k]P-PD_iQD_kP+PD_kQD_iP$.
+    Suppose $C,D\ge0$, $0\le f\le1$, $f$ is symmetric,
+    $f(i,j)f(j,k)\le f(i,k)$, and $\|[D_i,D_k]\|\le Cf(i,k)$.
+    If both cross blocks of $D_i$ have norm at most $D\sqrt{f(i,j)}$,
+    then $\|[PD_iP,PD_kP]\|\le(C+2D^2)\sqrt{f(i,k)}$.
+    In particular an exponential kernel retains half its rate.
+\end{theorem}
+\begin{proof}\leanok
+    Apply the triangle inequality to the exact compression identity.
+    Each cross product is bounded by
+    $D^2\sqrt{f(i,j)f(j,k)}\le D^2\sqrt{f(i,k)}$, and
+    $f(i,k)\le\sqrt{f(i,k)}$.
+\end{proof}
+
+
+\begin{theorem}[Combining bases after an orthogonal split]
+    \label{thm:hastings05_orthogonal_basis_refinement}
+    \lean{TNLean.Lattice.subspaceCompression,
+        TNLean.Lattice.subspaceExtension,
+        TNLean.Lattice.coe_subspaceCompression_apply,
+        TNLean.Lattice.subspaceExtension_coe_apply,
+        TNLean.Lattice.inner_subspaceCompression_right,
+        TNLean.Lattice.inner_subspaceCompression_left,
+        TNLean.Lattice.norm_subspaceCompression_le,
+        TNLean.Lattice.norm_subspaceExtension,
+        TNLean.Lattice.subspaceExtension_compression,
+        TNLean.Lattice.subspaceExtension_mul,
+        TNLean.Lattice.subspaceExtension_sub,
+        TNLean.Lattice.isSymmetric_subspaceCompression,
+        TNLean.Lattice.isSelfAdjoint_subspaceCompression,
+        TNLean.Lattice.norm_subspaceCompression_commutator,
+        TNLean.Lattice.exists_orthonormalBasis_orthogonal_sum,
+        TNLean.Lattice.exists_orthonormalBasis_orthogonal_sum_fin,
+        TNLean.Lattice.norm_inner_subspace_cross_le,
+        TNLean.Lattice.norm_inner_le_of_orthogonal_sum}
+    \leanok
+    Let $K$ be a subspace of a finite-dimensional complex inner product space.
+    Orthonormal bases $u$ of $K$ and $v$ of $K^\perp$ combine to an orthonormal
+    basis $b$ of the full space, with $b_{(0,a)}=u_a$ and $b_{(1,c)}=v_c$.
+    Suppose $A$ is Hermitian. If the off-diagonal entries of its two compressions
+    are bounded by $L$ and $R$, and $\|P_KAP_{K^\perp}\|\le X$, with
+    $L,R,X\ge0$, then every off-diagonal entry in $b$ is bounded by $L+R+X$.
+    Compression does not increase the operator norm; extension by zero preserves it.
+\end{theorem}
+\begin{proof}\leanok
+    The product of the two bases maps to the full space by $(x,y)\mapsto x+y$.
+    Orthogonality makes the resulting basis orthonormal. Within either subspace
+    its matrix entries equal those of the corresponding compression. Between the
+    two subspaces, $|\langle x,Ay\rangle|\le\|P_KAP_{K^\perp}\|\|x\|\|y\|$;
+    symmetry gives the reversed bound.
+\end{proof}
+
+\begin{definition}[Successive square-root decay kernels]
+    \label{def:hastings05_sqrt_decay_kernel}
+    \lean{TNLean.Lattice.sqrtKernel,
+        TNLean.Lattice.graphDecayKernel,
+        TNLean.Lattice.listKernelSum}
+    \leanok
+    For a nonnegative kernel $k$ define $k_0=k$ and $k_{t+1}=\sqrt{k_t}$
+    pointwise. For graph distance, take $k(i,j)=e^{-\gamma d(i,j)}$, with value
+    zero between disconnected components. For a list of anchors $s$, write
+    $K_s(i)=\sum_{j\in s}k(i,j)$, counting repeated entries in the list.
+\end{definition}
+
+\begin{theorem}[Preservation of the decay kernel]
+    \label{thm:hastings05_sqrt_decay_kernel}
+    \lean{TNLean.Lattice.sqrtKernel_zero,
+        TNLean.Lattice.sqrtKernel_succ,
+        TNLean.Lattice.sqrtKernel_nonneg,
+        TNLean.Lattice.sqrtKernel_le_one,
+        TNLean.Lattice.sqrtKernel_symm,
+        TNLean.Lattice.sqrtKernel_succ_sq,
+        TNLean.Lattice.sqrtKernel_mono,
+        TNLean.Lattice.sqrtKernel_mul_le,
+        TNLean.Lattice.listKernelSum_nil,
+        TNLean.Lattice.listKernelSum_cons,
+        TNLean.Lattice.listKernelSum_append,
+        TNLean.Lattice.listKernelSum_nonneg,
+        TNLean.Lattice.graphDecayKernel_nonneg,
+        TNLean.Lattice.graphDecayKernel_le_one,
+        TNLean.Lattice.graphDecayKernel_symm,
+        TNLean.Lattice.graphDecayKernel_mul_le,
+        TNLean.Lattice.sqrtKernel_graphDecayKernel}
+    \leanok
+    \uses{def:hastings05_sqrt_decay_kernel}
+    If $0\le k\le1$, $k(i,j)=k(j,i)$ and $k(i,j)k(j,l)\le k(i,l)$, the same
+    properties hold for every $k_t$. Moreover $k_t\le k_{t+1}$.
+    The graph kernel has these properties, and
+    $k_t(i,j)=e^{-\gamma d(i,j)/2^t}$, with value zero at infinite distance.
+\end{theorem}
+\begin{proof}\leanok
+    Positivity, symmetry and the upper bound by one persist under square roots.
+    The multiplicative triangle inequality persists because
+    $\sqrt{x}\sqrt{y}=\sqrt{xy}$ for $x,y\ge0$.
+    On $[0,1]$, $x\le\sqrt{x}$. The graph triangle inequality gives the initial
+    multiplicative inequality, including infinite distances, and
+    $\sqrt{e^x}=e^{x/2}$ gives the rate at each level.
+\end{proof}
+
+\begin{definition}[Coefficients of the uniform basis construction]
+    \label{def:hastings05_recursive_basis_coeff}
+    \lean{TNLean.Lattice.recursiveCommutatorCoeff,
+        TNLean.Lattice.recursiveBasisCoeff}
+    \leanok
+    For a total dimension bound $N$ and commutator coefficient $C\ge0$, put
+    \begin{align*}
+        M_N=1+2N^3,\qquad C_t=CM_N^t,\qquad
+        D_N(C)=\sqrt{N^3CM_N^N}.
+    \end{align*}
+\end{definition}
+
+\begin{theorem}[A uniform basis in every finite dimension]
+    \label{thm:hastings05_recursive_uniform_basis}
+    \lean{TNLean.Lattice.recursiveCommutatorCoeff_nonneg,
+        TNLean.Lattice.recursiveBasisCoeff_nonneg,
+        TNLean.Lattice.sqrt_recursiveCommutatorCoeff_le,
+        TNLean.Lattice.recursiveCommutatorCoeff_step,
+        TNLean.Lattice.exists_orthonormalBasis_uniform_kernel_aux,
+        TNLean.Lattice.exists_orthonormalBasis_uniform_kernel}
+    \leanok
+    \uses{thm:hastings05_orthogonal_basis_refinement,
+        thm:hastings05_sqrt_decay_kernel,
+        def:hastings05_recursive_basis_coeff,
+        thm:hastings05_uniform_family_split}
+    Let $A_i$ be a finite Hermitian family on a complex inner product space of
+    dimension $n$, and let $k$ satisfy Theorem~\ref{thm:hastings05_sqrt_decay_kernel}.
+    Suppose $\|[A_i,A_j]\|\le Ck(i,j)$ with $C\ge0$.
+    There are an orthonormal basis $v_1,\ldots,v_n$ and a list $s$ of at most
+    $n-1$ original anchors such that, for $a\ne b$,
+    \begin{align*}
+        |\langle v_a,A_iv_b\rangle|\le D_n(C)\sum_{j\in s}k_n(i,j).
+    \end{align*}
+    No inverse spectral gap or separation of scalar eigenspaces is assumed.
+    This constructs the basis in~\cite[lines 1695--1708]{Hastings2006Solving}
+    while retaining the compression cross terms~\cite{gap:hastings05_two_dim_ground_basis}.
+\end{theorem}
+\begin{proof}\leanok
+    Fix the total dimension $N=n$. At depth $t$ and current dimension $m$, maintain
+    $t+m\le N$ and commutator coefficient $C_t$ with kernel $k_t$.
+    A non-scalar family admits a proper binary spectral split with cross-block
+    coefficient $\sqrt{m^3C_t}$ and kernel $k_{t+1}$.
+    Both compression cross terms give the child coefficient
+    $C_t+2m^3C_t\le C_{t+1}$. The child dimensions $p,q$ are positive and satisfy
+    $p+q=m$, so both strictly decrease. At every allowed depth,
+    $\sqrt{m^3C_t}\le D_N(C)$ and $k_{t+1}\le k_N$.
+    Apply induction on each child, combine their bases, and concatenate their
+    lists with the new anchor. The length is at most
+    $(p-1)+(q-1)+1=m-1$, and the three matrix-element bounds add by
+    Theorem~\ref{thm:hastings05_orthogonal_basis_refinement}.
+    A scalar family terminates in any orthonormal basis, even when its subspace
+    has dimension greater than one.
+\end{proof}
+
+
+\begin{theorem}[A uniform summed ground-space basis bound]
+    \label{thm:hastings05_uniform_ground_basis}
+    \lean{TNLean.Lattice.smul_inv_smul_eq_of_norm_le,
+        TNLean.Lattice.sum_weight_anchor_le_of_support_budget,
+        TNLean.Lattice.norm_commutator_inv_smul_le,
+        TNLean.Lattice.exists_orthonormalBasis_uniform_weighted_kernel,
+        TNLean.Lattice.sum_weight_list_graphDecayKernel_le,
+        TNLean.Lattice.sqrtKernel_comp,
+        TNLean.Lattice.norm_groundSpaceCompression_le,
+        TNLean.Lattice.exists_groundSpaceBasis_sum_norm_offDiagonalPartFamily_le_uniform}
+    \leanok
+    \uses{thm:hastings05_recursive_uniform_basis,thm:hastings05_blecm_exp}
+    Let $h_i$ be the original Hermitian interaction terms, with the local
+    norm budget and polynomial sphere-growth hypotheses of
+    Theorem~\ref{thm:hastings05_blecm_exp}. Suppose $H=\sum_i h_i$ has a gap
+    $\Delta E>0$ above a nonzero ground space of dimension $n$. Let $C,\gamma$
+    be its anchor-distance commutator constant and rate. There is an
+    orthonormal ground-space basis for which
+    \begin{align}
+      \sum_i o(h_i)
+      &\le(n-1)^2D_n(C)\,|b_0||K_g|S_{\gamma/2^n,k_g}.
+      \label{eq:hastings05_uniform_ground_basis}
+    \end{align}
+    The same basis and bound apply to their Gaussian filters for every
+    nonnegative variance. All displayed constants are independent of the
+    number of sites when the sphere-growth constants are fixed; no
+    spectral-separation or conditioning hypothesis is used. Polynomial
+    sphere growth is additional to the source setting, so this is a
+    restricted form of (oibu)\cite{gap:hastings05_geometric_growth_scope}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:hastings05_recursive_uniform_basis,thm:hastings05_blecm_exp,
+        thm:hastings_gaussian_filtered_spectral}
+    Normalize the ground-space compressions by $\|h_i\|$, assigning zero to
+    zero terms. Apply the recursive basis theorem, then restore the weights.
+    Its anchor list has at most $n-1$ entries. Each matrix element is bounded
+    by $D_n(C)\|h_i\|$ times the sum of the corresponding graph kernels at
+    rate $\gamma/2^n$. The norm of the off-diagonal part is at most $n-1$
+    times its largest matrix element. Sum each anchor row using the local
+    norm budget and polynomial sphere growth. Gaussian filtering preserves
+    every ground-space compression.
+\end{proof}
+
+
+\begin{theorem}[Ground-space commutator decay for local observables]
+    \label{thm:hastings05_observable_commutator_decay}
+    \lean{TNLean.Lattice.commutator_time_window_exp_bounds,
+        TNLean.Lattice.le_anchorDecay_of_separated_exp,
+        TNLean.Lattice.norm_groundCompression_observables_commutator_le_exp,
+        TNLean.Lattice.norm_groundCompression_observables_commutator_le_exp_edist}
+    \leanok
+    \uses{thm:hastings05_blecm_exp,thm:hastings_gaussian_filtered_spectral}
+    Suppose the original Hamiltonian satisfies the gap and local geometric
+    hypotheses of Theorem~\ref{thm:hastings05_blecm_exp}, including the
+    additional polynomial sphere bound
+    \eqref{eq:hastings05_polynomial_sphere_scope}. Let $W_i$ be local
+    observables, with chosen centres $c_i$ in their supports, support diameter
+    at most $R_W$ and support cardinality at most $v_W$. No Hermiticity
+    assumption on the observables is needed. Put
+    $\gamma=\gamma(R,v_R,b_0,\Delta E)$ and
+    $C_W=C(R,v_W,b_0,|K_g|,k_g)e^{\gamma(2R_W+1)}$.
+    Their ground-space compressions satisfy
+    \[
+      \|[PW_iP,PW_jP]\|
+      \le C_W\|W_i\|\|W_j\|e^{-\gamma d(c_i,c_j)},
+    \]
+    where the last factor is zero when the centres lie in different
+    connected components. The propagation rate uses the original interaction
+    parameters; the larger observable supports enter only $C_W$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:hastings05_blecm_exp,thm:hastings_gaussian_filtered_spectral}
+    Gaussian filter the observables under the original Hamiltonian. This
+    preserves their ground-space compressions. Apply the separated-support
+    low-energy commutator estimate, choosing the Gaussian variance and time
+    window from the original propagation velocity. Each support lies within
+    distance $R_W$ of its chosen centre. Absorbing the two support radii and
+    the integer-distance rounding into the exponential gives the factor
+    $e^{\gamma(2R_W+1)}$. At shorter separations use the elementary norm
+    bound $\|[A,B]\|\le2\|A\|\|B\|$.
+\end{proof}
+
+
+\begin{theorem}[A uniform basis bound for the actual truncated terms]
+    \label{thm:hastings05_uniform_truncated_basis}
+    \lean{TNLean.Lattice.exists_groundSpaceBasis_sum_norm_offDiagonalPartFamily_truncated_le}
+    \leanok
+    \uses{thm:hastings05_recursive_uniform_basis,thm:hastings05_uniform_ground_basis,
+        thm:hastings05_observable_commutator_decay}
+    Let $M_i$ be the actual operators of (mid), obtained by Gaussian
+    filtering $h_i$ under the Hamiltonian truncated to its chosen local
+    region. Suppose these regions have diameter at most $R_M$ and
+    cardinality at most $v_M$, contain the support of $h_i$ and all terms
+    retained in its generator, and contain the centre $i$.
+    Under the original Hamiltonian gap and local geometric hypotheses,
+    including the additional sphere bound
+    \eqref{eq:hastings05_polynomial_sphere_scope},
+    put $\gamma$ equal to the original interaction's commutator decay rate
+    and $C_M=C(R,v_M,b_0,|K_g|,k_g)e^{\gamma(2R_M+1)}$.
+    There is an actual orthonormal ground-space basis satisfying
+    \begin{align}
+      \sum_i o(M_i)
+      &\le(n-1)^2D_n(C_M)\,|b_0||K_g|S_{\gamma/2^n,k_g}.
+      \label{eq:hastings05_uniform_truncated_basis}
+    \end{align}
+    For fixed local data and ground-space dimension the bound is
+    independent of the number of sites. No inverse spectral spread,
+    conditioning assumption or accumulated truncation error occurs. This
+    proves a restricted form of (oibu), not its general metric version
+    \cite{gap:hastings05_geometric_growth_scope}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:hastings05_recursive_uniform_basis,thm:hastings05_observable_commutator_decay}
+    Each $M_i$ is Hermitian, has norm at most $\|h_i\|$ and acts on its
+    prescribed local region. Apply the low-energy commutator estimate to
+    these observables by filtering them again under the original
+    Hamiltonian. Its velocity uses the original interaction range and
+    norm budget; only the observable support size and separation correction
+    use $v_M,R_M$. Normalize the ground-space compressions by $\|h_i\|$,
+    construct the recursive basis, and sum its anchor rows as in
+    Theorem~\ref{thm:hastings05_uniform_ground_basis}.
+\end{proof}
+
+
+\begin{theorem}[Stability of the summed off-diagonal bound]
+    \label{thm:hastings05_basis_perturbation}
+    \lean{TNLean.Lattice.offDiagonalPartFamily_sub,
+        TNLean.Lattice.norm_offDiagonalPartFamily_le_mul_norm,
+        TNLean.Lattice.norm_offDiagonalPartFamily_le_add,
+        TNLean.Lattice.norm_groundCompression_sub_le,
+        TNLean.Lattice.sum_norm_offDiagonalPartFamily_groundCompression_le}
+    \leanok
+    \uses{thm:hastings05_simple_spectrum_basis}
+    For an orthonormal family $v$ of length $n>0$, let
+    $o_v(A)=\|\operatorname{off}_v(A)\|$. Then
+    \begin{align*}
+        o_v(A)\le o_v(B)+(n-1)\|A-B\|.
+    \end{align*}
+    Consequently any two finite operator families $M_i,F_i$ satisfy
+    \begin{align*}
+        \sum_i o_v(PM_iP)\le\sum_i o_v(PF_iP)
+            +(n-1)\sum_i\|M_i-F_i\|.
+    \end{align*}
+    This transfers the error in (apb) to the summed bound in (oibu)
+    of~\cite[lines 300--320 and 1678--1708]{Hastings2006Solving}.
+\end{theorem}
+\begin{proof}\leanok
+    Taking the off-diagonal part is linear and has operator norm at most
+    $n-1$, by the matrix-element estimate. Apply the triangle inequality to
+    $\operatorname{off}_v(B)+\operatorname{off}_v(A-B)$.
+    Compression by an orthogonal projection is contractive on differences;
+    sum the resulting inequalities over the family.
+\end{proof}
+
+\begin{theorem}[The basis bound with a growing localization radius]
+    \label{thm:hastings05_basis_coupled_radius}
+    \lean{TNLean.Lattice.exists_groundSpaceBasis_sum_norm_offDiagonalPartFamily_truncated_perturbation_le}
+    \leanok
+    \uses{thm:hastings05_uniform_ground_basis,thm:hastings05_basis_perturbation,
+        thm:hastings_truncated_approximation}
+    Under the original Hamiltonian hypotheses of
+    Theorem~\ref{thm:hastings05_uniform_ground_basis}, let $B_{\rm orig}$ denote
+    its uniform summed bound. There is one orthonormal ground-space basis such
+    that, for every $r\ge0$ and every truncation family $s_i$, the actual terms
+    $M_i=\operatorname{Filter}_{r,\Delta E}(H_{s_i},h_i)$ satisfy
+    \begin{align*}
+        \sum_i o(M_i)\le B_{\rm orig}+(n-1)\sum_i
+        \|\operatorname{Filter}_{r,\Delta E}(H,h_i)-M_i\|.
+    \end{align*}
+    In particular a size-dependent localization choice with total error at most
+    $\varepsilon$ has bound $B_{\rm orig}+(n-1)\varepsilon$. The total-error
+    estimate must be supplied by the quantitative truncation theorem; it is
+    not inferred from the fixed-radius bound of
+    Theorem~\ref{thm:hastings05_uniform_truncated_basis}. The original-term
+    basis still requires polynomial sphere growth with size-independent
+    constants; the perturbation argument does not remove this source
+    restriction\cite{gap:hastings05_geometric_growth_scope}.
+\end{theorem}
+\begin{proof}\leanok
+    Choose the basis from the original terms, and use
+    $P\operatorname{Filter}_{r,\Delta E}(H,h_i)P=Ph_iP$ for every $r\ge0$.
+    Apply Theorem~\ref{thm:hastings05_basis_perturbation} to the actual truncated
+    terms and these first filters under the full Hamiltonian.
 \end{proof}

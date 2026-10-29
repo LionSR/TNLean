@@ -1,0 +1,154 @@
+\section{Coordinate slices in arbitrary dimension}
+\label{sec:hastings05_coordinate_slices}
+
+Hastings proposes treating a higher-dimensional system as a chain by grouping
+sites according to one coordinate \cite[lines 745--756]{Hastings2006Solving}.
+The construction below carries this out for finite coordinate boxes. It
+constructs the pair operators from the physical local terms and gives an
+explicit projection length polynomial in the logarithm of the physical number
+of sites. Its coordinate setting and the corrected closing window are recorded
+in \cite{gap:hastings05_coordinate_slices,gap:hastings05_hierarchical_energy}.
+
+\begin{definition}[The operators assigned to coarse edges]
+    \label{def:hastings05_edge_partition}
+    \lean{TNLean.MPS.AreaLaw.LocalSolution.edgePartition,
+        TNLean.MPS.AreaLaw.LocalSolution.sum_edgePartition,
+        TNLean.MPS.AreaLaw.LocalSolution.norm_edgePartition_le,
+        TNLean.MPS.AreaLaw.LocalSolution.isHermitian_edgePartition,
+        TNLean.MPS.AreaLaw.LocalSolution.centered_edgePartition,
+        TNLean.MPS.AreaLaw.LocalSolution.residual_edgePartition_le,
+        TNLean.MPS.AreaLaw.LocalSolution.centeredNorm_edgePartition_le,
+        TNLean.MPS.AreaLaw.LocalSolution.centeredNorm_edgePartition_le_two_mul,
+        TNLean.MPS.AreaLaw.LocalSolution.edgePartition_mem_supportedOperators}
+    \leanok
+    Let $M_i$ be a finite family of physical terms and assign each index $i$
+    to one coarse edge $f(i)$. Define $A_j=\sum_{f(i)=j}M_i$.
+    Then $\sum_jA_j=\sum_iM_i$, and Hermiticity is preserved.
+    If there are $n$ physical terms with $\|M_i\|\le J$, then
+    $\|A_j\|\le nJ$. For a unit reference state $\psi$, write
+    $c_i=\operatorname{Re}\langle\psi,M_i\psi\rangle$ and
+    $c_j'=\operatorname{Re}\langle\psi,A_j\psi\rangle$.
+    Local residuals at most $\epsilon$ give
+    $\|(A_j-c_j')\psi\|\le n\epsilon$, and
+    $\|A_j-c_j'\|\le2nJ$.
+    If every term assigned to edge $j$ acts on $S_j$, so does $A_j$.
+\end{definition}
+\begin{proof}\leanok
+    The fibres of $f$ partition the physical terms, and expectation is
+    additive. Apply the triangle inequality to each fibre sum. Finally
+    $|c_j'|\le\|A_j\|$, so centring costs at most a factor of two.
+\end{proof}
+
+\begin{theorem}[The geometry of coordinate slices]
+    \label{thm:hastings05_coordinate_slice_geometry}
+    \lean{TNLean.MPS.AreaLaw.LocalSolution.coordinateSlice,
+        TNLean.MPS.AreaLaw.LocalSolution.coordinateSliceLower,
+        TNLean.MPS.AreaLaw.LocalSolution.coordinateSlice_eq_lower_or_succ,
+        TNLean.MPS.AreaLaw.LocalSolution.coordinateSliceEdge,
+        TNLean.MPS.AreaLaw.LocalSolution.coordinateSliceEdge_support,
+        TNLean.MPS.AreaLaw.LocalSolution.coordinateSlice_lt,
+        TNLean.MPS.AreaLaw.LocalSolution.coordinateSliceEdge_closing_support,
+        TNLean.MPS.AreaLaw.LocalSolution.natDist_coordinate_le_of_dist_le,
+        TNLean.MPS.AreaLaw.LocalSolution.coordinateSliceOperator,
+        TNLean.MPS.AreaLaw.LocalSolution.sum_coordinateSliceOperator,
+        TNLean.MPS.AreaLaw.LocalSolution.coordinateSliceOperator_mem_supportedOperators,
+        TNLean.MPS.AreaLaw.LocalSolution.coordinateSliceOperator_mem_supportedOperators_of_metric,
+        TNLean.MPS.AreaLaw.LocalSolution.isHermitian_coordinateSliceOperator,
+        TNLean.MPS.AreaLaw.LocalSolution.residual_coordinateSliceOperator_le,
+        TNLean.MPS.AreaLaw.LocalSolution.centeredNorm_coordinateSliceOperator_le,
+        TNLean.MPS.AreaLaw.LocalSolution.centeredNorm_coordinateSliceOperator_le_two_mul,
+        TNLean.MPS.AreaLaw.LocalSolution.coordinateSliceOperator_closing_mem_supportedOperators}
+    \leanok
+    \uses{def:hastings05_edge_partition}
+    Give each physical site a nonnegative integer coordinate $z(i)$ and
+    assume $M_i$ acts only where $|z(v)-z(i)|\le\ell$, with $\ell\ge1$.
+    Put $b(v)=\lfloor z(v)/(2\ell)\rfloor$ and
+    $b_i=\lfloor\max\{0,z(i)-\ell\}/(2\ell)\rfloor$.
+    The support of $M_i$ meets only slices $b_i$ and $b_i+1$.
+    For $B$ coarse slices, assign $M_i$ to edge $b_i+1$ when $b_i+1<B$,
+    and to edge zero otherwise. Every internal $A_j$ then acts only on
+    slices $j-1,j$. If $z(v)<2\ell B$ for all sites, edge zero acts only
+    on the last and first slices. The sum and estimates of the preceding
+    definition hold for these actual edge operators.
+
+    On a finite coordinate box with the coordinate maximum metric,
+    metric-ball locality implies the required coordinate-strip locality.
+    The implication also holds for physical metrics dominating that metric.
+\end{theorem}
+\begin{proof}\leanok
+    The coordinate interval of a term lies between
+    $\max\{0,z(i)-\ell\}$ and this lower endpoint plus $2\ell$.
+    Division by $2\ell$ gives precisely the two stated slices.
+    The coordinate extent excludes a slice numbered $B$, which gives the
+    boundary assertion. Projection to one coordinate does not increase
+    maximum-metric distance.
+\end{proof}
+
+\begin{theorem}[The complete coordinate-slice construction]
+    \label{thm:hastings05_coordinate_slice_approximation}
+    \lean{TNLean.MPS.AreaLaw.LocalSolution.coordinateSliceProjection,
+        TNLean.MPS.AreaLaw.LocalSolution.exists_unit_mem_coordinateSliceProjection,
+        TNLean.MPS.AreaLaw.LocalSolution.card_le_two_mul_re_trace_of_coordinateSliceProjection,
+        TNLean.MPS.AreaLaw.LocalSolution.hierarchyProjectionLength_coordinateSlices_le}
+    \leanok
+    \uses{thm:hastings05_coordinate_slice_geometry,
+        thm:hastings05_quantitative_periodic, thm:hastings05_retained_tree,
+        thm:hastings05_explicit_projection_length}
+    Let the physical site set be nonempty, of cardinality $n$, and let
+    $J,\Delta>0$. In the preceding coordinate setting, let the terms be
+    Hermitian with $\|M_i\|\le J$, and suppose the unit reference state
+    $\psi$ satisfies $\|(M_i-c_i)\psi\|\le Je^{-r}$.
+    Set $K=J_{\mathrm{eff}}=2nJ$, $h=\max\{2,\lceil\log_2q\rceil\}$,
+    and take
+    \begin{align*}
+        r\ge512h^2\bigl(1+\max\{0,\log(2nJ/\Delta)\}\bigr).
+    \end{align*}
+    The constructed hierarchy, with its closing window, retains a unit
+    vector $\phi$ satisfying
+    \begin{align*}
+        \|\phi-\psi\|\le2(3^{h+1}-1)e^{-r/8}.
+    \end{align*}
+    This vector belongs to every retained block space below the root,
+    and the finite slice family covers every physical site.
+
+    Suppose moreover that $H$ has ground projection $P_0$, ground energy
+    $E_0$, and gap $\Delta$, that $\psi$ is a ground state of $H$, and that
+    $\|H-\sum_iM_i\|\le nJe^{-r}$. Then every orthonormal family retained
+    by the constructed projection has at most $2\operatorname{rank}P_0$
+    members. If $B\le n$, the sufficient projection length is at most
+    \begin{align*}
+        512(\lceil\log_2n\rceil+2)^3
+        \bigl(1+\max\{0,\log(2J/\Delta)\}\bigr).
+    \end{align*}
+\end{theorem}
+\begin{proof}\leanok
+    The edge residual is at most $nJe^{-r}\le Ke^{-r}$ and its centred
+    norm is at most $K$. Apply the explicit finite hierarchy to these
+    constructed edges. The closing window retains all descendant spaces.
+    The physical gap gives the count after the approximation error and
+    the radius sum are included. The cubic logarithmic bound follows from
+    $B\le n$ and the effective coupling $J_{\mathrm{eff}}=2nJ$.
+\end{proof}
+
+\begin{corollary}[Full boxes in arbitrary dimension]
+    \label{cor:hastings05_coordinate_slice_boxes}
+    \lean{TNLean.MPS.AreaLaw.LocalSolution.coordinateSide_le_card_box,
+        TNLean.MPS.AreaLaw.LocalSolution.coordinateBox_slice_extent,
+        TNLean.MPS.AreaLaw.LocalSolution.coordinateBox_ball_subset_strip,
+        TNLean.MPS.AreaLaw.LocalSolution.hierarchyProjectionLength_coordinateBox_le,
+        TNLean.MPS.AreaLaw.LocalSolution.exists_unit_mem_coordinateSliceProjection_of_box,
+        TNLean.MPS.AreaLaw.LocalSolution.card_le_two_mul_re_trace_of_coordinateSliceProjection_of_box}
+    \leanok
+    \uses{thm:hastings05_coordinate_slice_approximation}
+    Let $\Lambda=\prod_{k=1}^D\{0,\ldots,L_k-1\}$, where $D\ge1$ and
+    every $L_k\ge1$. Choose any coordinate axis $a$ and take $B=L_a$.
+    Then $B\le|\Lambda|$, the slices of width $2\ell$ cover the box, and
+    maximum-metric locality implies strip locality. Hence all conclusions
+    of the preceding theorem hold, including the cubic logarithmic length
+    bound in the physical number of sites, in every dimension.
+\end{corollary}
+\begin{proof}\leanok
+    Vary coordinate $a$ while fixing the other coordinates at zero to
+    inject its side into the full box. Also $z(v)<L_a\le2\ell L_a$.
+    The coordinate projection decreases maximum-metric distance.
+\end{proof}
