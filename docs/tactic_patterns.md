@@ -10105,3 +10105,36 @@ there is no need for a new tactic.
   bounds the residual of a product by its two separate residuals without
   a triangle-inequality loss. The regional gap argument applies it to both
   parity products. No commutativity between the two parities is required.
+
+
+### Separating finite retained cluster sums — candidate (2026-10-29)
+
+- **Pattern:** A finite support splits into disjoint separated pieces. Prove
+  the component selector splits, then use the intersection/union inverse
+  maps in `Finset.sum_nbij'` to distribute the actual retained sum.
+- **Seen:** `SeparatedClusterSums.lean` and `CrossingComponentSum.lean`
+  in `Lattice/ClusterExpansion/`, alongside the existing `clusterOp_union`.
+- **Reuse:** `isCluster_union_iff_of_no_adj` centralizes the component
+  argument; `noLargeCluster_union_iff_of_no_adj` centralizes the selector.
+  `Finset.sum_nbij'`, `Finset.sum_sigma'`, and the existing `clusterOp_union`
+  carry the two distinct finite correspondences.
+- **Decision:** Keep the shared mathematical separation lemmas. The
+  correspondence selecting a component through a fixed label has different
+  inverse data from the intersection/union correspondence and does not need
+  a new tactic or a second cluster operator.
+
+
+### Support symmetry and operator-to-vector cut ranks — candidate (2026-10-29)
+
+- **Pattern:** Exchange the two sides of a finite cut, or pair the two physical
+  indices at each site, then identify matrix ranks through explicit coordinate
+  equivalences.
+- **Seen:** QICLean `SupportedOperatorSchmidtRank.lean` and TNLean
+  `OperatorMPOFromCutRank.lean`.
+- **Reuse:** `Matrix.rank_transpose`, `Matrix.rank_reindex`, the existing
+  realignment theorem and `MPOTensor.pairCfgEquiv` carry the rank identities.
+  The generic factor-exchange theorem and the two-sided support theorem belong
+  to QICLean. The actual paired-site cut identity belongs to the tensor layer.
+- **Decision:** Reuse these mathematical equalities directly. The interval rank,
+  total cut rank and constructed MPO all call the same support bound and rank
+  identities; no duplicated coordinate argument or new tactic is needed.

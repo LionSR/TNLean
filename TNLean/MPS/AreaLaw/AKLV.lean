@@ -8,9 +8,14 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.MPS.AreaLaw.AKLV
 
+import TNLean.MPS.AreaLaw.AKLV.AccuracyWindow
+import TNLean.MPS.AreaLaw.AKLV.CenteredWindow
+import TNLean.MPS.AreaLaw.AKLV.ChangingTargetStep
+import TNLean.MPS.AreaLaw.AKLV.ChangingTargets
 import TNLean.MPS.AreaLaw.AKLV.ChebyshevFilter
 import TNLean.MPS.AreaLaw.AKLV.ClippedFilter
 import TNLean.MPS.AreaLaw.AKLV.ClippedHamiltonian
+import TNLean.MPS.AreaLaw.AKLV.CutApproximationTail
 import TNLean.MPS.AreaLaw.AKLV.CutTransport
 import TNLean.MPS.AreaLaw.AKLV.FavorableFilter
 import TNLean.MPS.AreaLaw.AKLV.FavorableParameters
@@ -19,8 +24,17 @@ import TNLean.MPS.AreaLaw.AKLV.Initialization
 import TNLean.MPS.AreaLaw.AKLV.LowFrequencyPower
 import TNLean.MPS.AreaLaw.AKLV.Normalization
 import TNLean.MPS.AreaLaw.AKLV.OneMarkerRank
+import TNLean.MPS.AreaLaw.AKLV.OptimizedInitialScale
+import TNLean.MPS.AreaLaw.AKLV.OptimizedRankBound
+import TNLean.MPS.AreaLaw.AKLV.OptimizedRankLog
+import TNLean.MPS.AreaLaw.AKLV.OptimizedRankScale
+import TNLean.MPS.AreaLaw.AKLV.OptimizedTailParameters
 import TNLean.MPS.AreaLaw.AKLV.PhysicalRobustness
 import TNLean.MPS.AreaLaw.AKLV.PolynomialRank
+import TNLean.MPS.AreaLaw.AKLV.SequenceParameters
+import TNLean.MPS.AreaLaw.AKLV.SequentialApproximation
+import TNLean.MPS.AreaLaw.AKLV.SharpMPSApproximation
+import TNLean.MPS.AreaLaw.AKLV.SharpPerCutApproximation
 import TNLean.MPS.AreaLaw.AKLV.ShortWindow
 import TNLean.MPS.AreaLaw.AKLV.SpectralCluster
 import TNLean.MPS.AreaLaw.AKLV.TwoBlockTruncation

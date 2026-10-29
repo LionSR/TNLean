@@ -39,6 +39,7 @@ import TNLean.MPS.AreaLaw.ViableSet.PrefixMPS
 import TNLean.MPS.AreaLaw.ViableSet.SampledErrorReduction
 import TNLean.MPS.AreaLaw.ViableSet.SampledGroundLine
 import TNLean.MPS.AreaLaw.ViableSet.SampledPowerRank
+import TNLean.MPS.AreaLaw.ViableSet.SampledProjector
 import TNLean.MPS.AreaLaw.ViableSet.SizeBondTrimming
 import TNLean.MPS.AreaLaw.ViableSet.SizeTrimming
 import TNLean.MPS.AreaLaw.ViableSet.Span

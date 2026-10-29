@@ -20,6 +20,8 @@ import TNLean.MPS.AreaLaw.BoundaryGap
 import TNLean.MPS.AreaLaw.BufferDiscount
 import TNLean.MPS.AreaLaw.ChainNeighborhood
 import TNLean.MPS.AreaLaw.ChainStageIncidence
+import TNLean.MPS.AreaLaw.ClusterTruncationCutRank
+import TNLean.MPS.AreaLaw.ClusterTruncationMPO
 import TNLean.MPS.AreaLaw.CommonMiddleMPOFamily
 import TNLean.MPS.AreaLaw.ComponentReduction
 import TNLean.MPS.AreaLaw.CompressedBlockColumn
@@ -80,6 +82,7 @@ import TNLean.MPS.AreaLaw.OpenMPSOperatorAction
 import TNLean.MPS.AreaLaw.OpenMPSProduct
 import TNLean.MPS.AreaLaw.OpenMPSRank
 import TNLean.MPS.AreaLaw.OpenMPSSpan
+import TNLean.MPS.AreaLaw.OperatorMPOFromCutRank
 import TNLean.MPS.AreaLaw.OriginalLowEnergyFamily
 import TNLean.MPS.AreaLaw.OverlapEnergy
 import TNLean.MPS.AreaLaw.PartialSwap

@@ -138,8 +138,23 @@ and its phase-normalized image of a unit input close to $\Omega$. It retains
 the variable-window rank bound and the contraction
 $\|\psi-\phi_t\|^2\le8\Delta\|x-\phi_t\|^2$, with
 $\|\psi-\Omega\|^2\le16\Delta+e^{-t/16}/50$.
-The coherent moving-ground-state recursion, boundary cases, entropy conclusion
-and optimized approximation rates remain to be proved.
+The coherent moving-ground-state recursion is now constructed from the actual
+successive filtered states, with the initial product-overlap cost retained.
+Accuracy-dependent windows also include exact boundary and short-chain
+alternatives. Their original square-root polynomial degree gives a uniform
+rank bound and actual Schmidt tails at every cut. With
+$u=1+\log q+\log(1/g)$ and
+$z=\log(2048(L+1)/\epsilon^2)$, the actual normalized ordered product of
+leading regional spectral projections is an MPS at distance at most
+$\epsilon$, with
+\[
+ \log D\le C\left[\frac{u^3}{g}
+  +\left(\frac{z^3}{g}\right)^{1/4}(u+\log(z+1))\right].
+\]
+The universal constants precede the chain, gap and accuracy. The physical
+hypotheses derive $q\ge2$ and $g\le1$, independently of a fitting window.
+The actual first-excited-energy hypothesis remains explicit. No independent
+MPS-existence theorem is used. The sharper entropy summation remains open.
 
 For a unique ground vector on an open chain with $q\ge2$ and $0\le h_j\le I$,
 the gap is at most one. An endpoint unitary with zero expectation in that vector
@@ -172,7 +187,10 @@ and increases the Hamiltonian in operator order. The same contraction follows
 with the original gap. The regional truncated Hamiltonian is now constructed
 from the actual outside bonds and internal parity products. It is positive,
 has exactly the full original kernel, and its internal replacement has norm
-at most two. Its spectral gap and spatial rank conclusions remain open.
+at most two. Its nonzero spectrum is now bounded below by
+$\gamma/[3(4+\gamma)]$, using the original physical detectability product
+on the common full-kernel complement. No uniqueness or upper-gap assumption
+is added. A formal proof of the corrected spatial rank bound remains open.
 The printed regional rank bound
 $d^2+2$ also needs an additive correction: an eight-qubit example with unique
 ground and gap one has rank seven at the middle cut. The corrected general
@@ -183,8 +201,18 @@ mathematical counterexample is not a Lean theorem.
 The global approximation also gives one $r$-dimensional reference space,
 mutually $\varepsilon$-close to the full physical ground space, whose every
 vector has bond bound $r^2B$. This reference is chosen before the viable space
-to be trimmed. It supports collective trimming; it does not supply a sampled
-merge construction.
+to be trimmed. Collective trimming now treats arbitrary intervals in their
+actual tensor coordinates, with the entire exterior retained. At an internal
+cut of a region, the common reference gives the two-boundary bound
+$D_{\mathrm{ref}}^2$, where $D_{\mathrm{ref}}=r^2B$.
+The trimmed space has dimension at most the original dimension $s$ and
+internal cut rank at most $s/\xi^2$; its error is
+$4\delta+6\varepsilon+4\xi\sqrt{(\ell-1)D_{\mathrm{ref}}^2}$.
+Adjacent child spaces merge in the actual coordinates of their union, with
+dimension at most the product of their dimensions and viability error
+at most the sum of their errors. The target remains the same possibly
+entangled full global ground space. These results supply individual
+operations needed by the sampled tree; the tree induction remains open.
 
 The power-filter application constructs one actual sample with both norm estimates,
 all letter-count bounds, and every spatial rank bound $\ell q^{2u}$.
@@ -196,8 +224,11 @@ plus one, it uses $m=\lceil(n-a)\log Q/\Delta\rceil$ and retains the cost
 $n^2\exp(4(a+1)\log Q/\Delta)$. The actual unscaled sample $T$ approximates
 $\beta P_0$ to relative error $\eta+1/Q$, with
 $\beta=(1-E_0/n)^m>0$; its same cut factors give the size, bond and viability
-bounds. Choosing the bracket, formalizing the source success probability, and
-the complete running-time argument remain separate.
+bounds. A separate theorem retains the actual two-level product-uniform
+sampling law and proves simultaneous success probability at least
+$1-1/(2L^3)$, hence at least $1-1/L^3$, for its explicit sample counts.
+This probability theorem fixes the ground energy first. Choosing the bracket
+without that energy and completing the running-time argument remain separate.
 
 The [published Methods section](https://people.eecs.berkeley.edu/~vazirani/pubs/1dalg.pdf)
 states the energy-dependent complexity exponent and permits omission of the
@@ -225,8 +256,16 @@ With comparison error $1/200$, its additive contribution is already $1/100$;
 a final $1/100$ claim requires retuning that precision.
 The low-density induction requires sampling between distinct nested targets
 and a dyadic rank estimate; the fixed-ground-space induction does not provide
-it. The sampled tree and the physical cluster/MPO rank construction also
-remain open.
+it. The actual improving family can now be powered: the same target and
+retained operators precede every integer power and viable input space.
+Ordered words of length $k$ have cardinality at most $D_0^{2k}$ and
+suppression $\Delta_0^k$. The logarithmic choice
+$k=\lceil\log_{D_0}(D_0^2s)\rceil$ gives a polynomial output dimension
+$D_0^6s^3$. When $D_0^{12}\Delta_0\le b<1$, the sampling-scale estimate
+cancels the powers of $D_0$ and yields
+$\Delta_0^k/c^2\le(1024/9)b/s^2$.
+These are estimates for actual operator words. The sampled-node probability
+and the recursive tree construction remain open.
 
 The scalar soft truncation is formalized with the corrected cap $t(1+\log m)$,
 its polynomial and geometric remainders, and an exponential-weight estimate.
@@ -281,8 +320,15 @@ than $r$ labels. Inclusion--exclusion, interval-window geometry, the injective
 minimum-label marker and the weighted component count are derived explicitly.
 No commutation premise is needed for this norm estimate. The cutoff counts
 interaction labels, and the energy normalization and factor two are essential
-qualifications. The physical spatial factorization, MPO construction and its
-cut-rank estimate remain separate obligations.
+qualifications. For an actual nearest-neighbour chain, the support-overlap
+graph is derived to be the path graph, and the truncated operator is
+factored by its crossing interval component. The two-sided support estimate
+and the interval count give operator Schmidt rank at most $r^2q^r$ at every
+cut. Actual site-dependent MPO tensors with that uniform bond dimension
+are constructed for the same truncated operator. The same MPO satisfies
+the displayed normalized error estimate; a rank or decomposition hypothesis
+is not supplied by the caller. This does not assert efficient numerical
+computation of the tensors.
 
 The first printed uniform energy estimate for soft truncation has
 a separate three-qubit counterexample with fixed gap $1/2$, recorded in
@@ -290,8 +336,9 @@ a separate three-qubit counterexample with fixed gap $1/2$, recorded in
 mathematical calculation, not a Lean counterexample theorem; its conclusion is
 confined to that uniform energy estimate. The corrected equal-scale-and-order
 physical spectral comparisons are established as described above. Independent
-scale and order, the source gap prescription, and efficient cluster/MPO
-representations remain separate obligations.
+scale and order, the source gap prescription, and a soft-truncation MPO
+with the required polynomial parameter bounds remain separate obligations.
+The actual cluster MPO above supplies one ingredient for that final task.
 
 The exact formal statements, their source passages, and their verification evidence
 are recorded in the blueprint and the dated audit reports. A statement identified as a formalization of a source theorem must carry the
