@@ -39,6 +39,20 @@ def uncleTwoWallCoefficient (A : MPSTensor d a) (B : MPSTensor d b)
   Matrix.trace (Kraus.evalWord A u * uncleDomainWallWord A B R v *
     Kraus.evalWord B w * uncleDomainWallWord B A L x * Kraus.evalWord A y)
 
+/-- Concatenating a one-wall word separates walls in its left and right
+pieces. Source: arXiv:1210.6613, the one-wall sums in phiN-def. -/
+theorem uncleDomainWallWord_append (A : MPSTensor d a) (B : MPSTensor d b)
+    (R : Fin d → Matrix (Fin a) (Fin b) ℂ) (u v : List (Fin d)) :
+    uncleDomainWallWord A B R (u ++ v) =
+      Kraus.evalWord A u * uncleDomainWallWord A B R v +
+        uncleDomainWallWord A B R u * Kraus.evalWord B v := by
+  induction u with
+  | nil => simp [uncleDomainWallWord]
+  | cons i u ih =>
+      simp only [List.cons_append, uncleDomainWallWord, ih, Kraus.evalWord_cons,
+        Kraus.evalWord_append, Matrix.mul_add, Matrix.add_mul, Matrix.mul_assoc]
+      abel
+
 /-- Both wall positions are summed independently and occur exactly once.
 Source: arXiv:1210.6613, phiN-def, lines 1196–1224. -/
 theorem uncleTwoWallCoefficient_eq_sum (A : MPSTensor d a) (B : MPSTensor d b)

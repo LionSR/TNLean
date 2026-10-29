@@ -25,7 +25,7 @@ namespace MPSTensor
 
 variable {d a b : ℕ}
 
-private theorem uncleConfigSegment_contiguous_outside {T : ℕ}
+theorem uncleConfigSegment_contiguous_outside {T : ℕ}
     (τ : Cfg d T) (s n i : ℕ) (hs : s + n ≤ T) (σ : Cfg d 2)
     (h : s + n ≤ i ∨ i + 2 ≤ s) :
     uncleConfigSegment (contiguousCfg i 2 σ τ) s n hs =
@@ -65,7 +65,7 @@ private theorem trace_evalWord_pair_mem_groundSpace {c : ℕ} (C : MPSTensor d c
   simpa only [groundSpaceMap_apply, Matrix.mul_assoc] using
     Matrix.trace_mul_comm (Kraus.evalWord C (List.ofFn σ) * Q) P
 
-private theorem uncle_uniform_slice_left
+theorem uncleInteractionES_uniform_slice_left_eq_zero
     (A : MPSTensor d a) (B : MPSTensor d b)
     (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
     (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
@@ -77,7 +77,7 @@ private theorem uncle_uniform_slice_left
   simpa only [LinearEquiv.apply_symm_apply, Kraus.evalWord_append, Matrix.mul_assoc] using
     trace_evalWord_pair_mem_groundSpace A (P * Kraus.evalWord A u) (Kraus.evalWord A v * Q)
 
-private theorem uncle_uniform_slice_right
+theorem uncleInteractionES_uniform_slice_right_eq_zero
     (A : MPSTensor d a) (B : MPSTensor d b)
     (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
     (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
@@ -108,7 +108,7 @@ private theorem uncle_uniform_middle
         (Kraus.evalWord B (u ++ List.ofFn σ ++ v) *
           uncleDomainWallWord B A L x * Kraus.evalWord A y)
   rw [hfun]
-  simpa only [Matrix.one_mul] using uncle_uniform_slice_right A B R L 1
+  simpa only [Matrix.one_mul] using uncleInteractionES_uniform_slice_right_eq_zero A B R L 1
     (uncleDomainWallWord B A L x * Kraus.evalWord A y *
       Kraus.evalWord A p * uncleDomainWallWord A B R r) u v
 
@@ -160,7 +160,7 @@ private theorem uncleTrial_contiguous_cancel
         uncleConfigSegment_contiguous_outside τ (5 * N + 1) N i _ σ (by omega)]
     rw [hfun]
     simpa only [uncleTwoWallCoefficient, Matrix.one_mul, Matrix.mul_assoc] using
-      uncle_uniform_slice_left A B R L 1
+      uncleInteractionES_uniform_slice_left_eq_zero A B R L 1
         (uncleDomainWallWord A B R (uncleConfigSegment τ N (N + 1) (by omega)) *
           Kraus.evalWord B (uncleConfigSegment τ (2 * N + 1) (2 * N - 1) (by omega)) *
           uncleDomainWallWord B A L (uncleConfigSegment τ (4 * N) (N + 1) (by omega)) *
@@ -240,7 +240,7 @@ private theorem uncleTrial_contiguous_cancel
       simp only [show 5 * N + 1 + N = 6 * N + 1 by omega]
     rw [hfun]
     simpa only [uncleTwoWallCoefficient, Matrix.mul_one, Matrix.mul_assoc] using
-      uncle_uniform_slice_left A B R L
+      uncleInteractionES_uniform_slice_left_eq_zero A B R L
         (Kraus.evalWord A (uncleConfigSegment τ 0 N (by omega)) *
           uncleDomainWallWord A B R (uncleConfigSegment τ N (N + 1) (by omega)) *
           Kraus.evalWord B (uncleConfigSegment τ (2 * N + 1) (2 * N - 1) (by omega)) *
