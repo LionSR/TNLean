@@ -146,6 +146,7 @@ import TNLean.MPS.MPU.PhaseSelectorRows
 import TNLean.MPS.MPU.PhysicalAdjointCanonicalForm
 import TNLean.MPS.MPU.PhysicalAncilla
 import TNLean.MPS.MPU.PhysicalCutConfigurations
+import TNLean.MPS.MPU.PhysicalTransposeSourceFactors
 import TNLean.MPS.MPU.PolynomialOverheadBounds
 import TNLean.MPS.MPU.PositiveCanonicalGauge
 import TNLean.MPS.MPU.PrefixGramNormalizer
@@ -220,6 +221,9 @@ import TNLean.MPS.MPU.TransferMatrix
 import TNLean.MPS.MPU.TransferMultiplicity
 import TNLean.MPS.MPU.TransferStabilization
 import TNLean.MPS.MPU.TransferStabilizationConverse
+import TNLean.MPS.MPU.TranspositionLocalNecessity
+import TNLean.MPS.MPU.TranspositionLocalSufficiency
+import TNLean.MPS.MPU.TranspositionPhaseDeformation
 import TNLean.MPS.MPU.TreeAmplificationGateBounds
 import TNLean.MPS.MPU.TreeDepthBounds
 import TNLean.MPS.MPU.TruncatedSymmetryGrowth
