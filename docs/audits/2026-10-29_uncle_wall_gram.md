@@ -81,6 +81,14 @@ perturbation witness supplies both physical-dimension bounds. The strict
 mixed-transfer conditions are stated in both orientations, as supplied by
 the source off-diagonal damping lemma for distinct normalized blocks.
 
+`UncleWallGramBounds.lean` derives a uniform bound on the actual weighted
+Gram norm by C*n from the normalized limit, absorbing the finite initial
+segment. For a faithful density, the existing QICLean positive lower bound
+rho >= c*I gives tr(Y_n).re <= K*eta_n.re. This yields uniform linear
+bounds on the actual unweighted Gram trace and its Euclidean operator
+norm, suitable for the pinned endpoint estimates. No growth estimate is
+introduced as a hypothesis.
+
 Remaining norm work is the actual two-wall Gram factorization error bound. These identities do not assert Theta(N^2), an energy
 bound, genericity, or gaplessness. Finite nonnegativity alone does not
 supply a strictly positive asymptotic coefficient.

@@ -9714,6 +9714,7 @@ there is no need for a new tactic.
 - **Notes:** This establishes the one-wall coefficient's exceptional set,
   independently of the unresolved actual two-wall norm factorization.
 
+
 ### Removing the unpinned contribution at a wall endpoint — candidate (2026-10-29)
 
 - **Seen:** `MPS/ParentHamiltonian/UncleTrialPinnedWalls.lean`, four endpoint orientations.
