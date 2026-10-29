@@ -27,7 +27,7 @@
     operator, not an orthogonal projection.
     The tensor $A$ is the vertical tensor of the physical model in
     Definition~\ref{def:mpdo_bond_two_singleton_base_mpo}.
-    Theorem~\ref{thm:mpdo_bond_two_singleton_bell_identity} identifies $P$
+    Lemma~\ref{thm:mpdo_bond_two_singleton_bell_identity} identifies $P$
     with its two-site operator after reindexing.
     For $X=\frac12\begin{pmatrix}3&1\\1&3\end{pmatrix}$, set
     $B^v=XA^vX^{-1}$ and define
@@ -70,7 +70,7 @@
         \notag
     \end{align}
     Nevertheless, $P$ is positive semidefinite while $P_X$ is not Hermitian.
-    Theorem~\ref{thm:mpdo_bond_two_singleton_bell_identity} identifies $P$
+    Lemma~\ref{thm:mpdo_bond_two_singleton_bell_identity} identifies $P$
     with the reindexed two-site operator of the physical model. Equality
     of the vertical matrix product vectors does not imply that the
     corresponding physical deformation generates MPDOs.
@@ -86,7 +86,7 @@
     Hermitian.
 \end{proof}
 
-\begin{theorem}[Physical-trace and Bell Hermiticity force a scalar Gram matrix]%
+\begin{lemma}[Physical-trace and Bell Hermiticity force a scalar Gram matrix]%
     \label{thm:mpdo_bond_two_singleton_scalar_gram}
     \lean{MPOTensor.BondTwoSingletonGramBoundary.%
         posDef_eq_pos_smul_one_of_commutes_terminalJ_of_bellCross}
@@ -105,9 +105,9 @@
     \cite[Appendix~C.4, lines~2048--2057]{Cirac2016MPDO_arXiv} and
     \cite[Proposition~4.13]{Cirac2016MPDO_arXiv} motivate this
     finite-dimensional criterion; neither source states this model-specific
-    theorem. Theorem~\ref{thm:mpdo_bond_two_singleton_bell_identity} identifies
+    theorem. Lemma~\ref{thm:mpdo_bond_two_singleton_bell_identity} identifies
     $P$ with the two-site operator of the undeformed physical model.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:mpdo_bond_two_singleton_deformation}
@@ -136,20 +136,20 @@
     tensor stated there.
 \end{definition}
 
-\begin{theorem}[Vertical tensor identity]%
+\begin{lemma}[Vertical tensor identity]%
     \label{thm:mpdo_bond_two_singleton_vertical_identity}
     \lean{MPOTensor.BondTwoSingletonBaseModel.verticalTensor_baseMPO}
     \leanok
     \uses{def:mpdo_bond_two_singleton_base_mpo, def:mpdo_bond_two_singleton_deformation}
     The vertical tensor of $M$ is exactly the matrix-unit tensor $A$ from
     Definition~\ref{def:mpdo_bond_two_singleton_deformation}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     A doubled bond coordinate $(a,b)$ selects $E_{a,b}$ when the two physical
     pair labels agree, and gives zero otherwise.
 \end{proof}
 
-\begin{theorem}[Positive-length GHZ formula in the physical direction]%
+\begin{lemma}[Positive-length GHZ formula in the physical direction]%
     \label{thm:mpdo_bond_two_singleton_ambient_ghz}
     \lean{MPOTensor.BondTwoSingletonBaseModel.constantPairWeight}
     \lean{MPOTensor.BondTwoSingletonBaseModel.ghzAmplitude}
@@ -177,14 +177,14 @@
     operators, not orthogonal projections. At $N=0$, the closed MPO
     contraction instead gives $4\Id$, whereas the empty-word outer product
     is defined to be $\Id$. Thus the positive-length restriction is necessary.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The cyclic equality weights force the ket and bra words to be independently
     constant. The result is an outer product and is therefore positive
     semidefinite.
 \end{proof}
 
-\begin{theorem}[Two-site Bell identity under reindexing]%
+\begin{lemma}[Two-site Bell identity under reindexing]%
     \label{thm:mpdo_bond_two_singleton_bell_identity}
     \lean{MPOTensor.BondTwoSingletonBaseModel.%
         twoSite_baseMPO_eq_bellProjector}
@@ -200,9 +200,9 @@
     \end{align}
     Thus $P$ is exactly the two-site physical operator in ordered-pair
     coordinates.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
-    Specializing Theorem~\ref{thm:mpdo_bond_two_singleton_ambient_ghz} to
+    Specializing Lemma~\ref{thm:mpdo_bond_two_singleton_ambient_ghz} to
     $N=2$ and evaluating the coordinate identification gives the Bell state
     outer product.
 \end{proof}
@@ -249,7 +249,7 @@
     Neither passage states this deformation or the results below.
 \end{definition}
 
-\begin{theorem}[Vertical tensor under physical similarity]%
+\begin{lemma}[Vertical tensor under physical similarity]%
     \label{thm:mpdo_bond_two_singleton_physical_vertical}
     \lean{MPOTensor.BondTwoSingletonBaseModel.%
         verticalTensor_gaugeDeformedBaseMPO}
@@ -279,16 +279,16 @@
             \tn[skin=ring]{X^{-1}}
         \end{tenkz}
     \end{center}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{def:mpdo_vertical_one_site_actions, thm:mpdo_bond_two_singleton_vertical_identity}
     Left and right multiplication on the physical indices become matrix
     multiplication on the vertically viewed tensor, and
-    Theorem~\ref{thm:mpdo_bond_two_singleton_vertical_identity} identifies
+    Lemma~\ref{thm:mpdo_bond_two_singleton_vertical_identity} identifies
     that tensor with $A$.
 \end{proof}
 
-\begin{theorem}[One-site physical-similarity identity]%
+\begin{lemma}[One-site physical-similarity identity]%
     \label{thm:mpdo_bond_two_singleton_physical_one_site}
     \lean{MPOTensor.BondTwoSingletonBaseModel.%
         oneSite_gaugeDeformedBaseMPO_eq_terminalJ}
@@ -300,34 +300,34 @@
         \reindex(\rho^{(1)}(M_X)) & =XJX^{-1}.
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     In the one-site contraction, the four diagonal physical letters sum to
     $J$, and the two physical multiplications give conjugation by $X$.
 \end{proof}
 
-\begin{theorem}[Two-site physical-similarity identity]%
+\begin{lemma}[Two-site physical-similarity identity]%
     \label{thm:mpdo_bond_two_singleton_physical_two_site}
     \lean{MPOTensor.BondTwoSingletonBaseModel.%
         twoSite_gaugeDeformedBaseMPO_eq_bellProjector}
     \leanok
     \uses{def:mpdo_bond_two_singleton_physical_deformation, thm:mpdo_bond_two_singleton_bell_identity}
     Under the ordered-pair identification $\varepsilon$ from
-    Theorem~\ref{thm:mpdo_bond_two_singleton_bell_identity},
+    Lemma~\ref{thm:mpdo_bond_two_singleton_bell_identity},
     \begin{align}
         \reindex_{\varepsilon,\varepsilon}
         (\rho^{(2)}(M_X))
          & =(X\otimes X)P(X^{-1}\otimes X^{-1}).
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Evaluating the two-site contraction in ordered-pair coordinates, each ket
     index contributes $X$, each bra index contributes $X^{-1}$, and the
     undeformed contraction is $P$.
 \end{proof}
 
-\begin{theorem}[MPDO positivity forces a scalar physical Gram matrix]%
+\begin{lemma}[MPDO positivity forces a scalar physical Gram matrix]%
     \label{thm:mpdo_bond_two_singleton_physical_scalar_gram}
     \lean{MPOTensor.BondTwoSingletonBaseModel.%
         gaugeGram_eq_pos_smul_one_of_gaugeDeformedBaseMPO_isMPDO}
@@ -336,12 +336,12 @@
     If $M_X$ generates MPDOs, then there is a real number $\omega>0$ such
     that $X^\dagger X=\omega\Id$. Thus a physical similarity with
     nonscalar $X^\dagger X$ does not preserve MPDO positivity in this family.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:mpdo_bond_two_singleton_physical_one_site, thm:mpdo_bond_two_singleton_physical_two_site, thm:mpdo_bond_two_singleton_scalar_gram}
     Positivity of the one- and two-site operators implies Hermiticity, so the
     two exact reindexing identities and
-    Theorem~\ref{thm:mpdo_bond_two_singleton_scalar_gram} force
+    Lemma~\ref{thm:mpdo_bond_two_singleton_scalar_gram} force
     $X^\dagger X=\omega\Id$.
 \end{proof}
 
@@ -358,7 +358,7 @@
     matrix has vanishing $(0,1)$ entry.
 \end{proof}
 
-\begin{theorem}[The concrete physical similarity does not generate MPDOs]%
+\begin{lemma}[The concrete physical similarity does not generate MPDOs]%
     \label{thm:mpdo_bond_two_singleton_physical_not_mpdo}
     \lean{MPOTensor.BondTwoSingletonBaseModel.%
         gaugeDeformedBaseMPO_gauge_not_isMPDO}
@@ -366,15 +366,15 @@
     \uses{thm:mpdo_bond_two_singleton_physical_scalar_gram, lem:mpdo_bond_two_singleton_physical_nonscalar_gram}
     For $X=\frac12\begin{pmatrix}3&1\\1&3\end{pmatrix}$, the physical
     deformation $M_X$ does not generate MPDOs.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:mpdo_bond_two_singleton_physical_scalar_gram, lem:mpdo_bond_two_singleton_physical_nonscalar_gram}
-    Otherwise Theorem~\ref{thm:mpdo_bond_two_singleton_physical_scalar_gram}
+    Otherwise Lemma~\ref{thm:mpdo_bond_two_singleton_physical_scalar_gram}
     would make $X^\dagger X$ scalar, contrary to
     Lemma~\ref{lem:mpdo_bond_two_singleton_physical_nonscalar_gram}.
 \end{proof}
 
-\begin{theorem}[Canonical form in the original physical direction]%
+\begin{lemma}[Canonical form in the original physical direction]%
     \label{thm:mpdo_bond_two_singleton_cpsv_form}
     \lean{MPOTensor.BondTwoSingletonBaseModel.baseSymbolTensor}
     \lean{MPOTensor.BondTwoSingletonBaseModel.baseSymbolTensor_isNormalTensor}
@@ -388,13 +388,13 @@
     As an MPS with four doubled physical symbols, $M$ is the direct sum of
     four bond-one normal tensors, one supported on each symbol, all with weight one.
     Hence $M$ itself is in canonical form, without a change of basis or blocking.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Each block has identity transfer map, and their direct sum is the diagonal
     matrix-unit tensor $M$.
 \end{proof}
 
-\begin{theorem}[Cyclic-edge projection in the vertical direction]%
+\begin{lemma}[Cyclic-edge projection in the vertical direction]%
     \label{thm:mpdo_bond_two_singleton_retained_projection}
     \lean{MPOTensor.BondTwoSingletonBaseModel.edgeSource}
     \lean{MPOTensor.BondTwoSingletonBaseModel.edgeTarget}
@@ -427,18 +427,18 @@
     Thus $O_L(A)$ is an orthogonal projection and satisfies an algebra law
     with one label and structure coefficient one. It is distinct from the
     unnormalized GHZ rank-one operator in the original physical direction
-    in Theorem~\ref{thm:mpdo_bond_two_singleton_ambient_ghz}.
+    in Lemma~\ref{thm:mpdo_bond_two_singleton_ambient_ghz}.
     At $L=0$, the vertical contraction is $O_0(A)=2\Id$, whereas the empty
     cyclic indicator gives $\Id$. In particular, this contraction is not
     idempotent at length zero, so neither the projection identity nor the
     coefficient-one algebra law extends to $L=0$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The cyclic indicator takes only the values zero and one, so its diagonal
     matrix is Hermitian and idempotent.
 \end{proof}
 
-\begin{theorem}[Normalized one-element vertical BNT and its algebra]%
+\begin{lemma}[Normalized one-element vertical BNT and its algebra]%
     \label{thm:mpdo_bond_two_singleton_normalized_algebra}
     \lean{MPOTensor.BondTwoSingletonBaseModel.singletonScale}
     \lean{MPOTensor.BondTwoSingletonBaseModel.normalizedSingletonTensor}
@@ -527,14 +527,14 @@
     At $L=0$, however, $O_0(M_0)=2\Id$, so
     $O_0(M_0)^2=4\Id\ne2\Id$; the algebra identity therefore requires
     positive length.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The identity $s^2=1/2$ gives left-canonical normalization. Scaling every
     local tensor contributes $s^L$ to a length-$L$ contraction, and $s^{-1}$
     cancels the one-site scaling in the weighted reconstruction.
 \end{proof}
 
-\begin{theorem}[Coisometry identifying the vertical sector coordinates]%
+\begin{lemma}[Coisometry identifying the vertical sector coordinates]%
     \label{thm:mpdo_bond_two_singleton_coisometry}
     \lean{MPOTensor.BondTwoSingletonBaseModel.singletonSectorCoordinateEquiv}
     \lean{MPOTensor.BondTwoSingletonBaseModel.singletonRetainedCoordinateEquiv}
@@ -557,12 +557,12 @@
         W^\dagger\reindex(Z)W & =Z.
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Each row and column of $W$ contains one nonzero entry, equal to one.
 \end{proof}
 
-\begin{theorem}[One-element vertical BNT algebra for the physical tensor]%
+\begin{lemma}[One-element vertical BNT algebra for the physical tensor]%
     \label{thm:mpdo_bond_two_singleton_tensor_clause}
     \lean{MPOTensor.BondTwoSingletonBaseModel.baseMPOBNTAlgebraTensorClause}
     \lean{MPOTensor.BondTwoSingletonBaseModel.baseMPO_hasBNTAlgebraTensorClause}
@@ -576,4 +576,4 @@
     The coisometry $W$ identifies the vertical sector coordinates with the
     original physical coordinates. Both the decomposition and its
     reconstruction hold exactly for every vertical letter.
-\end{theorem}
+\end{lemma}

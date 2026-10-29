@@ -29,7 +29,7 @@
     $(\iota_qu)_q=u$ and $(\iota_qu)_r=0$ for $r\ne q$.
 \end{definition}
 
-\begin{theorem}[Inner products and norms in a finite direct sum]
+\begin{lemma}[Inner products and norms in a finite direct sum]
     \label{thm:mpo_sigma_fiber_inner_norm}
     \lean{ContinuousLinearMap.inner_eq_sum_inner_sigmaFiber,
         ContinuousLinearMap.norm_sq_eq_sum_norm_sq_sigmaFiber}
@@ -40,14 +40,14 @@
         \langle v,w\rangle & =\sum_{q\in Q}\langle v_q,w_q\rangle,
                            & \|v\|^2                               & =\sum_{q\in Q}\|v_q\|^2.
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Expanding each inner product as the sum of its scalar coordinates and
     grouping the coordinates with the same label $q$ gives both identities.
 \end{proof}
 
-\begin{theorem}[Extension identities]
+\begin{lemma}[Extension identities]
     \label{thm:mpo_single_sigma_fiber_identities}
     \lean{ContinuousLinearMap.norm_singleSigmaFiber,
         ContinuousLinearMap.inner_singleSigmaFiber,
@@ -61,7 +61,7 @@
         \langle\iota_qu,v\rangle & =\langle u,v_q\rangle, &
         F_\Sigma\iota_qu         & =\iota_qF_qu.
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{def:mpo_single_sigma_fiber, thm:mpo_sigma_fiber_inner_norm}
@@ -70,20 +70,20 @@
     identity follows from $F_r0=0$ at every $r\ne q$.
 \end{proof}
 
-\begin{theorem}[Kernels in a finite direct sum]
+\begin{lemma}[Kernels in a finite direct sum]
     \label{thm:mpo_sigma_fiber_kernel}
     \lean{ContinuousLinearMap.mem_ker_sigmaFiberwiseMap_iff}
     \leanok
     \uses{def:mpo_sigma_fiber_operator}
     For finite $Q$, finite $J_q$, and a complex linear family $(F_q)$,
     $v\in\ker F_\Sigma$ if and only if $v_q\in\ker F_q$ for every $q\in Q$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     The equation $F_\Sigma v=0$ is equivalent to $F_qv_q=0$ at every label.
 \end{proof}
 
-\begin{theorem}[Orthogonal kernels in a finite direct sum]
+\begin{lemma}[Orthogonal kernels in a finite direct sum]
     \label{thm:mpo_sigma_fiber_orthogonal}
     \lean{ContinuousLinearMap.mem_orthogonal_ker_sigmaFiberwiseMap_iff}
     \leanok
@@ -91,7 +91,7 @@
     For finite $Q$, finite $J_q$, and a complex linear family $(F_q)$,
     $v\in(\ker F_\Sigma)^\perp$ if and only if
     $v_q\in(\ker F_q)^\perp$ for every $q\in Q$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:mpo_sigma_fiber_kernel, thm:mpo_sigma_fiber_inner_norm,
@@ -102,7 +102,7 @@
     $\langle w,v\rangle=\sum_q\langle w_q,v_q\rangle$ vanishes.
 \end{proof}
 
-\begin{theorem}[Extension of norm gaps to a finite direct sum]
+\begin{lemma}[Extension of norm gaps to a finite direct sum]
     \label{thm:mpo_sigma_fiber_gap_forward}
     \lean{ContinuousLinearMap.norm_gap_sigmaFiberwiseMap}
     \leanok
@@ -112,7 +112,7 @@
     and $u\in(\ker F_q)^\perp$, then
     $\delta\|v\|\leq\|F_\Sigma v\|$ for every
     $v\in(\ker F_\Sigma)^\perp$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:mpo_sigma_fiber_orthogonal, thm:mpo_sigma_fiber_inner_norm}
@@ -120,7 +120,7 @@
     taking nonnegative square roots gives the bound.
 \end{proof}
 
-\begin{theorem}[Norm gaps in a finite direct sum]
+\begin{lemma}[Norm gaps in a finite direct sum]
     \label{thm:mpo_sigma_fiber_gap_iff}
     \lean{ContinuousLinearMap.norm_gap_sigmaFiberwiseMap_iff}
     \leanok
@@ -135,12 +135,12 @@
             \delta\|u\|\leq\|F_qu\|\bigr].
     \end{align}
     No nonemptiness, positivity, or symmetry assumption is imposed.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:mpo_sigma_fiber_gap_forward, thm:mpo_sigma_fiber_orthogonal,
         thm:mpo_single_sigma_fiber_identities}
-    Theorem~\ref{thm:mpo_sigma_fiber_gap_forward} gives the reverse
+    Lemma~\ref{thm:mpo_sigma_fiber_gap_forward} gives the reverse
     implication, while applying the bound to $\iota_qu$ with
     $\|\iota_qu\|=\|u\|$ and $\|F_\Sigma\iota_qu\|=\|F_qu\|$ gives the
     forward implication.
@@ -166,7 +166,7 @@
     No set in this definition is required to be nonempty.
 \end{definition}
 
-\begin{theorem}[Kernel decomposition]
+\begin{lemma}[Kernel decomposition]
     \label{thm:mpo_dependent_spectator_kernel}
     \lean{ContinuousLinearMap.mem_ker_dependentRightFiberwiseMap_iff}
     \leanok
@@ -179,14 +179,14 @@
          & \quad\Longleftrightarrow\quad
         \forall q\in Q\;\forall s\in S_q,\quad v_{q,s}\in\ker G_q.
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     By~(\ref{eq:mpo_dependent_spectator_action}), $H_Sv=0$ if and only if
     $G_qv_{q,s}=0$ for every $q$ and $s$.
 \end{proof}
 
-\begin{theorem}[Orthogonal kernel decomposition]
+\begin{lemma}[Orthogonal kernel decomposition]
     \label{thm:mpo_dependent_spectator_orthogonal}
     \lean{ContinuousLinearMap.mem_orthogonal_ker_dependentRightFiberwiseMap_iff}
     \leanok
@@ -199,7 +199,7 @@
          & \quad\Longleftrightarrow\quad
         \forall q\in Q\;\forall s\in S_q,\quad v_{q,s}\in(\ker G_q)^\perp.
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:mpo_dependent_spectator_kernel}
@@ -212,7 +212,7 @@
         \langle u_{q,s},v_{q,s}\rangle=0$ vanishes.
 \end{proof}
 
-\begin{theorem}[Squared norm decomposition]
+\begin{lemma}[Squared norm decomposition]
     \label{thm:mpo_dependent_spectator_norm}
     \lean{ContinuousLinearMap.norm_sq_eq_sum_norm_sq_dependentRightFiber}
     \leanok
@@ -222,14 +222,14 @@
         \|v\|^2 & =\sum_{q\in Q}\sum_{s\in S_q}\|v_{q,s}\|^2.
         \label{eq:mpo_dependent_spectator_norm}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Expanding $\|v\|^2=\sum_{q,i,s}|v(q,i,s)|^2$ and exchanging the
     finite sums over $i\in I_q$ and $s\in S_q$ gives the identity.
 \end{proof}
 
-\begin{theorem}[Extension of a common norm gap]
+\begin{lemma}[Extension of a common norm gap]
     \label{thm:mpo_dependent_spectator_gap_forward}
     \lean{ContinuousLinearMap.norm_gap_dependentRightFiberwiseMap}
     \leanok
@@ -240,7 +240,7 @@
     $u\in(\ker G_q)^\perp$.  Then
     $\delta\|v\|\leq\|H_Sv\|$ for every $v\in(\ker H_S)^\perp$.
     The sets $Q$, $I_q$, and $S_q$ may be empty.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:mpo_dependent_spectator_orthogonal, thm:mpo_dependent_spectator_norm}
@@ -255,7 +255,7 @@
     Taking nonnegative square roots proves the claim.
 \end{proof}
 
-\begin{theorem}[Equivalence of common norm gaps]
+\begin{lemma}[Equivalence of common norm gaps]
     \label{thm:mpo_dependent_spectator_gap_iff}
     \lean{ContinuousLinearMap.norm_gap_dependentRightFiberwiseMap_iff}
     \leanok
@@ -270,18 +270,18 @@
             \delta\|u\|\leq\|G_qu\|\bigr].
     \end{align}
     The label set $Q$ may be empty; no positivity or symmetry is assumed.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:mpo_dependent_spectator_gap_forward, thm:mpo_dependent_spectator_orthogonal}
-    Theorem~\ref{thm:mpo_dependent_spectator_gap_forward} gives the
+    Lemma~\ref{thm:mpo_dependent_spectator_gap_forward} gives the
     reverse implication. For the forward implication, fixing $q\in Q$ and
     $s\in S_q$ and extending $u\in(\ker G_q)^\perp$ by zero outside
     $(q,s)$ produces $v\in(\ker H_S)^\perp$ with $\|v\|=\|u\|$ and
     $\|H_Sv\|=\|G_qu\|$.
 \end{proof}
 
-\begin{theorem}[Changing dependent spectator multiplicities]
+\begin{lemma}[Changing dependent spectator multiplicities]
     \label{thm:mpo_dependent_spectator_replacement}
     \lean{ContinuousLinearMap.norm_gap_dependentRightFiberwiseMap_iff_dependentRightFiberwiseMap}
     \leanok
@@ -299,7 +299,7 @@
     \end{align}
     There is no restriction on the relative cardinalities of $S_q$ and $T_q$,
     and no positivity, symmetry, or nonemptiness of $Q$ is assumed.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:mpo_dependent_spectator_gap_iff}
@@ -308,7 +308,7 @@
     $u\in(\ker G_q)^\perp$.
 \end{proof}
 
-\begin{theorem}[Ordered-pair boundary multiplicities]
+\begin{lemma}[Ordered-pair boundary multiplicities]
     \label{thm:mpo_joint_boundary_spectator_gap}
     \lean{MPSTensor.MPOSymmetry.jointMixedEndpoint_spectatorGap_iff}
     \leanok
@@ -333,14 +333,14 @@
     \end{align}
     Every ordered pair is retained, including $x\ne y$.  The case $r=0$ is
     allowed, and no positivity of $D_x^1$ or of $G_{x,y}$ is required.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:mpo_dependent_spectator_replacement}
     Each $S_{x,y}$ is nonempty because $D_x^0,D_y^0>0$.
     The inequalities $D_x^0+D_x^1\geq D_x^0>0$ and
     $D_y^0+D_y^1\geq D_y^0>0$ imply that $T_{x,y}$ is nonempty, so
-    Theorem~\ref{thm:mpo_dependent_spectator_replacement} applies with
+    Lemma~\ref{thm:mpo_dependent_spectator_replacement} applies with
     label set $\{0,\ldots,r-1\}^2$.
 \end{proof}
 

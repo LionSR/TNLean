@@ -1,4 +1,4 @@
-\chapter{The Single-Block Fundamental Theorem}\label{ch:single}
+\chapter{The Fundamental Theorem for injective tensors}\label{ch:single}
 
 An injective MPS tensor that generates the same matrix-product vectors as a
 second tensor of equal bond dimension is conjugate to
@@ -51,14 +51,14 @@ algebra structure of $\MN{D}$.
     \end{align}
 \end{definition}
 
-\begin{theorem}[The trace pairing map is injective for injective tensors]%
+\begin{lemma}[The trace pairing map is injective for injective tensors]%
     \label{thm:trace_pairing_injective}
     \lean{MPSTensor.traceMulRightPi_ker_eq_bot}
     \lean{MPSTensor.eq_zero_of_forall_trace_mul_right_eq_zero}
     \leanok
     \uses{def:trace_pairing_map, def:injective}
     If $A$ is injective, then $\ker \Phi_A = \{0\}$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -88,14 +88,14 @@ algebra structure of $\MN{D}$.
     so $\dim \range \Psi = \dim V$ and $\ker \Psi = \{0\}$.
 \end{proof}
 
-\begin{theorem}[The linear extension exists and is unique]\label{thm:linear_ext}
+\begin{lemma}[The linear extension exists and is unique]\label{thm:linear_ext}
     \lean{MPSTensor.linearExtension_exists_unique}
     \leanok
     \uses{def:injective, def:same_mpv}
     If $A$ is injective and $A$, $B$ generate the same matrix-product vectors,
     then there is a unique linear map $T : \MN{D} \to \MN{D}$ with
     $T(A^i) = B^i$ for all~$i$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -103,7 +103,7 @@ algebra structure of $\MN{D}$.
     Length-two trace agreement gives $\Phi_A(A^i) = \Phi_B(B^i)$ for every~$i$.
     The $\{A^i\}$ span $\MN{D}$, so $\range \Phi_A \subseteq
         \range \Phi_B$. With $\ker \Phi_A = \{0\}$
-    (Theorem~\ref{thm:trace_pairing_injective}),
+    (Lemma~\ref{thm:trace_pairing_injective}),
     Lemma~\ref{lem:injectivity_transfer} gives $\ker \Phi_B = \{0\}$. Choosing a
     left inverse $g$ of~$\Phi_B$ and setting $T = g \circ \Phi_A$ gives
     \begin{align}
@@ -113,13 +113,13 @@ algebra structure of $\MN{D}$.
     Uniqueness holds because the $\{A^i\}$ span $\MN{D}$.
 \end{proof}
 
-\begin{theorem}[The linear extension is multiplicative]\label{thm:linear_ext_mul}
+\begin{lemma}[The linear extension is multiplicative]\label{thm:linear_ext_mul}
     \lean{MPSTensor.linearExtension_mul}
     \leanok
     \uses{def:injective, def:same_mpv}
-    Under the hypotheses of Theorem~\ref{thm:linear_ext}, the map~$T$ satisfies
+    Under the hypotheses of Lemma~\ref{thm:linear_ext}, the map~$T$ satisfies
     $T(MN) = T(M) T(N)$ for all $M, N \in \MN{D}$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -128,7 +128,7 @@ algebra structure of $\MN{D}$.
     $\Phi_B(T(A^i)) = \Phi_B(B^i) = \Phi_A(A^i)$; since the $\{A^i\}$ span
     $\MN{D}$, this extends to $\Phi_B \circ T = \Phi_A$, so
     $\range \Phi_A = \range(\Phi_B \circ T) \subseteq \range \Phi_B$. With
-    $\ker \Phi_A = \{0\}$ (Theorem~\ref{thm:trace_pairing_injective}),
+    $\ker \Phi_A = \{0\}$ (Lemma~\ref{thm:trace_pairing_injective}),
     Lemma~\ref{lem:injectivity_transfer} makes $\Phi_B$ injective. Length-three
     trace agreement gives, for all $i$, $j$, and $k$,
     \begin{align}
@@ -153,12 +153,12 @@ A nonzero multiplicative linear map on $\MN{D}$ is bijective by simplicity,
 preserves the unit by surjectivity, and is given by conjugation by an
 invertible matrix by the Skolem--Noether theorem.
 
-\begin{theorem}[A nonzero multiplicative endomorphism of $\MN{D}$ is bijective]%
+\begin{lemma}[A nonzero multiplicative endomorphism of $\MN{D}$ is bijective]%
     \label{thm:simplicity}
     \lean{Matrix.linear_mul_endomorphism_bijective}
     \leanok
     A nonzero multiplicative $\C$-linear endomorphism of $\MN{D}$ is bijective.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -233,10 +233,10 @@ invertible matrix by the Skolem--Noether theorem.
 \begin{proof}
     \leanok
     \uses{thm:linear_ext, thm:linear_ext_mul, thm:simplicity, lem:trace_ne_zero, lem:linear_map_to_alg}
-    Theorem~\ref{thm:linear_ext} gives the unique linear~$T$ with
-    $T(A^i) = B^i$, and Theorem~\ref{thm:linear_ext_mul} makes it
+    Lemma~\ref{thm:linear_ext} gives the unique linear~$T$ with
+    $T(A^i) = B^i$, and Lemma~\ref{thm:linear_ext_mul} makes it
     multiplicative. It is nonzero: otherwise $B^i = 0$ for all~$i$, against
-    Lemma~\ref{lem:trace_ne_zero}. By Theorem~\ref{thm:simplicity}, $T$ is
+    Lemma~\ref{lem:trace_ne_zero}. By Lemma~\ref{thm:simplicity}, $T$ is
     bijective, and by Lemma~\ref{lem:linear_map_to_alg} it fixes~$\Id$, so $T$
     is a $\C$-algebra automorphism. The Skolem--Noether theorem
     \cite[``Skolem--Noether'']{QICLean2026Blueprint} gives
@@ -271,11 +271,11 @@ invertible matrix by the Skolem--Noether theorem.
         the same matrix product vectors, and Theorem~\ref{thm:ft_single} gives
         $\lambda^{-1}B^i=XA^iX^{-1}$.
     \else
-        Theorem~\ref{thm:asym_unblocked_coefficients}, applied to $B$ and the single
+        Lemma~\ref{thm:asym_unblocked_coefficients}, applied to $B$ and the single
         normal target $A$, gives nonzero $\mu_1,\ldots,\mu_n$ with
         $\ket{V^{(N)}(B)}=\left(\sum_k\mu_k^N\right)\ket{V^{(N)}(A)}$ for every
         $N\ge1$. Since $\ket{V^{(N)}(A)}\neq0$, $c_N=\sum_k\mu_k^N$, and
-        Theorem~\ref{thm:mpoalg_unimodular_power_sum} gives $c_N=\lambda^N$ with
+        Lemma~\ref{thm:mpoalg_unimodular_power_sum} gives $c_N=\lambda^N$ with
         $|\lambda|=1$. Then $\lambda^{-1}B$ and $A$ generate the same matrix
         product vectors, and Theorem~\ref{thm:ft_single} gives
         $\lambda^{-1}B^i=XA^iX^{-1}$.

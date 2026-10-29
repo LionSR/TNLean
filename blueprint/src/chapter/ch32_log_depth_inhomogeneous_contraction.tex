@@ -9,7 +9,7 @@ inhomogeneous finite-correlation definition of~\cite{Malz2024Preparation}.
 In particular, separate spectral gaps of the microscopic site maps do not
 control ordered products of different maps.
 
-\begin{theorem}[Transfer map of an inhomogeneous block]
+\begin{lemma}[Transfer map of an inhomogeneous block]
     \label{thm:ldp_chain_transfer_product}
     \lean{MPSChainTensor.prod_transferMap_apply,
         MPSChainTensor.transferMap_blockTensor,
@@ -28,7 +28,7 @@ control ordered products of different maps.
     \end{align}
     The first site's map is outermost. If every site map preserves trace,
     so does $E_B$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Expanding the Kraus sum, splitting off the first physical index, and
     proceeding by induction on $n$ shows that the two adjacent matrix products
@@ -37,7 +37,7 @@ control ordered products of different maps.
     map at each step.
 \end{proof}
 
-\begin{theorem}[Uniform Doeblin contraction along a chain]
+\begin{lemma}[Uniform Doeblin contraction along a chain]
     \label{thm:ldp_chain_doeblin}
     \lean{MPSChainTensor.traceNorm_transferMap_blockTensor_sub_le_of_choi_domination}
     \leanok
@@ -52,14 +52,14 @@ control ordered products of different maps.
     \end{align}
     The sites may themselves be contiguous blocks, provided the hypothesis
     is imposed on their transfer maps.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Applying the Choi-dominated quantum Doeblin theorem to the first map and
     the two density matrices produced by the remaining maps, and inducting on
     $n$, gives one factor $1-\eta$ for each map in the ordered product.
 \end{proof}
 
-\begin{theorem}[Uniform Gram and positive-part bounds]
+\begin{lemma}[Uniform Gram and positive-part bounds]
     \label{thm:ldp_chain_positive_part_rate}
     \lean{MPSPreparation.gram_eq_smul_choi_transpose,
         MPSPreparation.exists_norm_polarPos_chainBlockTensor_sub_le_of_choi_domination}
@@ -82,7 +82,7 @@ control ordered products of different maps.
     The constants are independent of the site tensors, the physical
     dimension, the chain length, and the partition. For fixed $s$ and
     $0<\eta<1$, these are uniform exponential bounds in physical length.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     With $P_\sigma(X)=\operatorname{Tr}(X)\sigma$ and
     $R_j=F_j-\eta P_\sigma$, Choi domination makes every $R_j$ completely

@@ -10,7 +10,7 @@ direction constraint from the mesh argument of \cite[Section~11]{OpenAI2026AreaL
 % especially 352--359; prop:two-families, lines 154--177, 212--218
 % and 299--323; revision adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 
-\begin{theorem}[Nearby initial boundary points lie on allowed lines]
+\begin{lemma}[Nearby initial boundary points lie on allowed lines]
     \label{thm:area_law_initial_frontier_near_mark}
     \lean{TNLean.PEPS.AreaLaw.Geometry.initialBirthRegion_frontier_near_mark_allowed}
     \leanok
@@ -22,7 +22,7 @@ direction constraint from the mesh argument of \cite[Section~11]{OpenAI2026AreaL
     $x\in\partial X_i^0$ satisfying $\|x-v\|_\infty<t/32$, the vector
     $x-v$ has one of the four allowed slopes, so $x$ lies on one
     of the four allowed lines through $v$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_primary_fine_cell_cover,def:area_law_fan_runs,
         thm:area_law_belt_marks_quarter_mesh,thm:area_law_square_frontier_side,

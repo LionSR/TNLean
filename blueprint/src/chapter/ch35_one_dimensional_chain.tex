@@ -832,7 +832,7 @@ Theorem~B a second way, by a sequential preparation protocol.
         thm:qc_supported_gaussian_projection_bounds}
     Let $a,v$ be the localization constants, put
     $d=4|J|a(R+1)^2N_R$ and $C=a+d>0$.
-    Apply Theorem~\ref{thm:qc_supported_gaussian_projection_bounds} with
+    Apply Lemma~\ref{thm:qc_supported_gaussian_projection_bounds} with
     $B_g=N(Z)$, $B_o=N(Q)$ and output region $B=N(Q\cup Z)$.
     The path is chosen from $K,K',N(Z)$ before $Q,W,\eta,T$.
     The physical generator and observable estimates, with $|Q|\le L$, give
@@ -937,7 +937,7 @@ Theorem~B a second way, by a sequential preparation protocol.
         thm:peps_reset_polar_step,lem:chain_reset_support_separation,
         thm:regional_reset_cores_entropy,thm:peps_reset_entropy_scalar}
     Set $r=2p+10$. Choose the Gaussian constants $A,T_0>0$ from
-    Theorem~\ref{thm:peps_reset_regional_filter} once, and choose the locality
+    Lemma~\ref{thm:peps_reset_regional_filter} once, and choose the locality
     constants $C,v>0$ from Lemma~\ref{thm:chain_supported_gaussian_integral}.
     Put
     \begin{align}
@@ -976,7 +976,7 @@ Theorem~B a second way, by a sequential preparation protocol.
     The two normalized ground vectors therefore have residuals at most
     $4\varepsilon$ for $M_{\mathrm{loc}}$.
     The same-support polar correction of
-    Theorem~\ref{thm:peps_reset_polar_step} constructs a unitary $V$ on $S$
+    Lemma~\ref{thm:peps_reset_polar_step} constructs a unitary $V$ on $S$
     satisfying
     \begin{align}
         \delta:=\|V\Psi-\Phi\|\le8L^{-r}.
@@ -994,7 +994,7 @@ Theorem~B a second way, by a sequential preparation protocol.
          & \le8\sqrt\delta\,\log(e q^{|R_0|})\notag \\
          & \le8\sqrt\delta\,(1+L\log q).
     \end{align}
-    Since $L\ge L_0$, Theorem~\ref{thm:peps_reset_entropy_scalar}, with
+    Since $L\ge L_0$, Lemma~\ref{thm:peps_reset_entropy_scalar}, with
     $r=2p+10$, bounds the last expression by $L^{-p}$.
     Empty cores cause no exception: their mutual information is zero.
 \end{proof}
@@ -1727,7 +1727,7 @@ Theorem~B a second way, by a sequential preparation protocol.
     $a|X|^2\|A_{X,b}\|e^{v|t|-m/2}$ for each evolved replica perturbation
     at its own neighborhood $N_m(X)$.
     Since $X\subseteq Z$, that approximant is supported on $B$.
-    Theorem~\ref{thm:qc_site_expectation_supported_approximant},
+    Lemma~\ref{thm:qc_site_expectation_supported_approximant},
     $|X|\le R+1$ and $\|A_{X,b}\|\le2J\le2|J|$ bound its projection error by
     $4|J|a(R+1)^2e^{v|t|-m/2}$.
     Linearity of evolution and expectation permits summing over the exact
@@ -1775,7 +1775,7 @@ Theorem~B a second way, by a sequential preparation protocol.
     Use the constants $a,v$ from the domain generator estimate and put
     $d=4|J|a(R+1)^2N_R$, $C=a+d$. The actual doubled and swapped operators
     are Hermitian because their terms are Hermitian.
-    Theorem~\ref{thm:qc_supported_gaussian_projection_bounds} constructs $U$
+    Lemma~\ref{thm:qc_supported_gaussian_projection_bounds} constructs $U$
     before the observable and averaging data.
     Put
     \begin{align*}
@@ -1819,7 +1819,7 @@ Theorem~B a second way, by a sequential preparation protocol.
         thm:peps_reset_paired_support}
     Both replicas are normalized, and $F_D$ is unitary. The first-replica
     marginal of $\Phi$ on $R_0\cup C_0$ is a product, by
-    Theorem~\ref{thm:peps_reset_exchanged_cores}.
+    Lemma~\ref{thm:peps_reset_exchanged_cores}.
     Put $E=\{0,\ldots,q-1\}$. Let
     $P:E^V\times E^V\to(E\times E)^V$ be the pairing bijection
     $P(c_1,c_2)(v)=(c_1(v),c_2(v))$. Write $\psi$ and $F$ for the
@@ -1899,10 +1899,10 @@ Theorem~B a second way, by a sequential preparation protocol.
     $\ell+R$ about a core site therefore lies in its outer region, by
     Lemma~\ref{lem:qc_graph_ball_strict_margin}.
     Every interaction support has intrinsic diameter at most $R$, so
-    Theorem~\ref{thm:qc_graph_support_separation} gives
+    Lemma~\ref{thm:qc_graph_support_separation} gives
     $S\cap(R_0\cup C_0)=\varnothing$.
     Apply Lemma~\ref{thm:regional_reset_cores_entropy} and then
-    Theorem~\ref{thm:peps_reset_entropy_scalar}. The choice of $L_0$ and
+    Lemma~\ref{thm:peps_reset_entropy_scalar}. The choice of $L_0$ and
     $r=2p+10$ bounds the resulting entropy error by $L^{-p}$.
 \end{proof}
 
@@ -2119,7 +2119,7 @@ Theorem~B a second way, by a sequential preparation protocol.
     its connected component. This component is a finite path by
     Lemma~\ref{thm:chain_integer_domain_components}, and both its inclusion
     and its path isomorphism preserve extended distance by
-    Theorem~\ref{thm:qc_graph_edist_transport}. Its sphere therefore has at
+    Lemma~\ref{thm:qc_graph_edist_transport}. Its sphere therefore has at
     most two vertices. At distance zero there is just $x$; vertices in
     other components have infinite distance and are not counted.
 \end{proof}
@@ -2159,7 +2159,7 @@ Theorem~B a second way, by a sequential preparation protocol.
     gives the stronger decay $e^{-\delta}$, which is at most
     $e^{-\delta/2}$. For infinite $\delta$, every $x\in S$ has
     $d_\Lambda(x,y)=\infty$, so $[\tau_t(A),B]=0$ by
-    Theorem~\ref{thm:qc_graph_lieb_robinson_zero_finset} and the left side
+    Lemma~\ref{thm:qc_graph_lieb_robinson_zero_finset} and the left side
     vanishes. All distances are those of the
     induced graph; sites separated by a hole are not identified with
     consecutive sites of a longer chain.
@@ -2234,7 +2234,7 @@ Theorem~B a second way, by a sequential preparation protocol.
     $u\otimes v$ gives $\Delta(1-|\langle\Omega,u\otimes v\rangle|^2)\le
         a+b-E_0\le0$. Hence $\Omega$ is a multiple of $u\otimes v$, and its
     reduced state on $B$ is pure; this is
-    Theorem~\ref{thm:area_law_product_ground_state}.
+    Lemma~\ref{thm:area_law_product_ground_state}.
 \end{proof}
 
 \begin{lemma}[Zero entropy for on-site interactions]

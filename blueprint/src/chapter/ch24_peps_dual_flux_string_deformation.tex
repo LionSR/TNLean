@@ -123,7 +123,7 @@
 The two routes in (\ref{eq:peps_dual_square_move}) cross opposite pairs
 of bonds incident to $s=(x+1,y+1)$.
 
-\begin{theorem}[A potential derived from the deformation]%
+\begin{lemma}[A potential derived from the deformation]%
     \label{thm:peps_dual_flux_potential}
     \lean{TNLean.PEPS.torusDualSquare_crossings,
         TNLean.PEPS.TorusDualHomotopy.exists_potential,
@@ -136,7 +136,7 @@ of bonds incident to $s=(x+1,y+1)$.
     move~(\ref{eq:peps_dual_square_move})). Moreover, $pp^{-1}\sim_\varnothing\mathrm{nil}$
     and the four-sided square loop around $s=(x+1,y+1)\in R$ satisfies
     $\ell_s\sim_R\mathrm{nil}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Substituting~(\ref{eq:peps_dual_step_counts}) into~(\ref{eq:peps_dual_gradient})
     gives $n(\mathrm{NE})-n(\mathrm{EN})=\nabla\delta_{(x+1,y+1)}$. Inducting on
@@ -164,14 +164,14 @@ of bonds incident to $s=(x+1,y+1)$.
     $(d(p)\bmod(w,h))=b-a\in X$.
 \end{definition}
 
-\begin{theorem}[Winding is preserved]%
+\begin{lemma}[Winding is preserved]%
     \label{thm:peps_dual_flux_displacement}
     \lean{TNLean.PEPS.TorusDualHomotopy.displacement_eq}
     \leanok
     \uses{def:peps_dual_flux_homotopy,def:peps_dual_flux_displacement}
     If $p\sim_R q$, then $d(p)=d(q)$ (so equal endpoints in $X$ do not imply
     $p\sim_R q$).
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Since $d(ee^{-1})=(0,0)$ and both sides of~(\ref{eq:peps_dual_square_move})
     have $d=(1,1)$, induction on $p\sim_R q$ using $d(pq)=d(p)+d(q)$ and
@@ -194,7 +194,7 @@ of bonds incident to $s=(x+1,y+1)$.
     $(A_v)$ and configuration $\sigma$ by $\Psi_p^E(\sigma)$.
 \end{definition}
 
-\begin{theorem}[Absorption of a supported vertex gauge]%
+\begin{lemma}[Absorption of a supported vertex gauge]%
     \label{thm:peps_dual_flux_gauge_absorption}
     \lean{TNLean.PEPS.torusBondNetwork_groupGauge_of_vecMul_eq,
         TNLean.PEPS.torusBondNetwork_groupGauge_of_invariant_on,
@@ -215,14 +215,14 @@ of bonds incident to $s=(x+1,y+1)$.
     If every $A_v$ with $k(v)\ne1$ is virtually $G$-invariant, the closed
     contraction is unchanged under $(O_h,O_v)\mapsto(O'_h,O'_v)$; if $k=1$ on
     $R^c$, all bonds and site tensors in $R^c$ are unchanged.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Expanding~(\ref{eq:peps_dual_matrix_gauge}) in the bond sum and grouping the
     four adjacent factors at each vertex $v$ absorbs them into $A_v$ when
     $k(v)\ne1$, while $U_{k(v)}=I$ when $k(v)=1$.
 \end{proof}
 
-\begin{theorem}[Physical invariance under finite dual-path deformation]%
+\begin{lemma}[Physical invariance under finite dual-path deformation]%
     \label{thm:peps_dual_flux_deformation}
     \lean{TNLean.PEPS.torusFluxPowerLabels_add_gradient,
         TNLean.PEPS.TorusDualHomotopy.exists_fluxGauge,
@@ -236,17 +236,17 @@ of bonds incident to $s=(x+1,y+1)$.
     is virtually $G$-invariant (for arbitrary $w,h\ge1$, nonabelian $G$, and
     site-dependent $A_v$), then $\Psi_p^E(\sigma)=\Psi_q^E(\sigma)$ for all
     $\sigma$ and exterior data $E$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_dual_flux_potential,thm:peps_dual_flux_gauge_absorption}
-    With $f$ from Theorem~\ref{thm:peps_dual_flux_potential} and $k(v)=g^{f(v)}$,
+    With $f$ from Lemma~\ref{thm:peps_dual_flux_potential} and $k(v)=g^{f(v)}$,
     single-generator exponentiation gives
     \begin{align}
         u_h^q(v) & =k(v+(1,0))u_h^p(v)k(v)^{-1}, &
         u_v^q(v) & =k(v)u_v^p(v)k(v+(0,1))^{-1},
         \label{eq:peps_dual_label_gauge}
     \end{align}
-    with $k=1$ on $R^c$, so Theorem~\ref{thm:peps_dual_flux_gauge_absorption}
+    with $k=1$ on $R^c$, so Lemma~\ref{thm:peps_dual_flux_gauge_absorption}
     gives $\Psi_p^E(\sigma)=\Psi_q^E(\sigma)$.
 \end{proof}
 
@@ -270,7 +270,7 @@ of bonds incident to $s=(x+1,y+1)$.
     $H_{(g^{n_h},g^{n_v})}(z)=g^{(\operatorname{curl}n)(z)}$.
 \end{definition}
 
-\begin{theorem}[Flux is supported at the two path endpoints]%
+\begin{lemma}[Flux is supported at the two path endpoints]%
     \label{thm:peps_dual_flux_endpoints}
     \lean{TNLean.PEPS.TorusDualStep.fluxCurl,
         TNLean.PEPS.TorusDualPath.fluxCurl,
@@ -289,14 +289,14 @@ of bonds incident to $s=(x+1,y+1)$.
         \label{eq:peps_dual_endpoint_flux}
     \end{align}
     In particular, $H_{u^p}\equiv1$ whenever $a=b$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     By~(\ref{eq:peps_dual_step_counts}) and~(\ref{eq:peps_dual_native_curl}), each
     step $s\to t$ has $\operatorname{curl}n=\delta_s-\delta_t$; telescoping
     along $p$ and exponentiating gives~(\ref{eq:peps_dual_endpoint_flux}).
 \end{proof}
 
-\begin{theorem}[Clockwise and counterclockwise flux conventions]%
+\begin{lemma}[Clockwise and counterclockwise flux conventions]%
     \label{thm:peps_dual_flux_orientation}
     \lean{TNLean.PEPS.torusNativeRightTransport_torusGraphRegularLabels,
         TNLean.PEPS.torusNativeUpTransport_torusGraphRegularLabels,
@@ -313,7 +313,7 @@ of bonds incident to $s=(x+1,y+1)$.
     so the counterclockwise plaquette walk at $z$ has holonomy $H_u(z)^{-1}$
     (exponent $\delta_b(z)-\delta_a(z)$ for $p:a\to b$) and its reverse has
     holonomy $H_u(z)$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Comparing ordered-edge and native orientations cancels the double inverse on
     vertical steps, so the four-step walk products reproduce~(\ref{eq:peps_dual_native_holonomy})
@@ -339,7 +339,7 @@ of bonds incident to $s=(x+1,y+1)$.
     giving entrywise agreement across $(S,S^c)$.
 \end{proof}
 
-\begin{theorem}[Nonvanishing of native regular flux strings]%
+\begin{lemma}[Nonvanishing of native regular flux strings]%
     \label{thm:peps_dual_flux_nonzero}
     \lean{TNLean.PEPS.IsGIsometric.torusDualFlux_state_ne_zero,
         TNLean.PEPS.IsGIsometric.torusDualFlux_cutMatrix_ne_zero}
@@ -347,15 +347,15 @@ of bonds incident to $s=(x+1,y+1)$.
     \uses{def:peps_dual_flux_cut}
     If $A$ is regular $G$-isometric, then $\Psi_p\ne0$ and $M_{u^p,S}\ne0$ for
     every dual path $p$ and cut $S\subseteq X$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{def:peps_dual_flux_cut,thm:peps_regular_twisted_state_nonzero}
     By Definition~\ref{def:peps_dual_flux_cut} and
-    Theorem~\ref{thm:peps_regular_twisted_state_nonzero}, $\Psi_p\ne0$; since
+    Lemma~\ref{thm:peps_regular_twisted_state_nonzero}, $\Psi_p\ne0$; since
     $\Psi_p(\sigma)=M_{u^p,S}(\sigma_S,\sigma_{S^c})$, $M_{u^p,S}\ne0$.
 \end{proof}
 
-\begin{theorem}[Four-spin detection of native flux labels]%
+\begin{lemma}[Four-spin detection of native flux labels]%
     \label{thm:peps_dual_flux_detection}
     \lean{TNLean.PEPS.IsGIsometric.exists_torusNative_plaquette_cutMeasurement,
         TNLean.PEPS.IsGIsometric.exists_torusNativePower_plaquette_cutMeasurement,
@@ -386,19 +386,19 @@ of bonds incident to $s=(x+1,y+1)$.
         \label{eq:peps_dual_cw_measurement}
     \end{align}
     detecting $[g]$ at $a$ and $[g^{-1}]$ at $b$ when $a\ne b$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_torus_plaquette_holonomy_measurement,
         def:peps_dual_flux_cut,thm:peps_dual_flux_orientation,
         thm:peps_dual_flux_endpoints}
-    Theorem~\ref{thm:peps_torus_plaquette_holonomy_measurement},
+    Lemma~\ref{thm:peps_torus_plaquette_holonomy_measurement},
     Definition~\ref{def:peps_dual_flux_cut}, and
-    Theorem~\ref{thm:peps_dual_flux_orientation} yield~(\ref{eq:peps_dual_ccw_measurement});
+    Lemma~\ref{thm:peps_dual_flux_orientation} yield~(\ref{eq:peps_dual_ccw_measurement});
     since $\iota$ is an involution on conjugacy classes, substituting~(\ref{eq:peps_dual_endpoint_flux})
     into~(\ref{eq:peps_dual_ccw_measurement}) gives~(\ref{eq:peps_dual_cw_measurement}).
 \end{proof}
 
-\begin{theorem}[Local parent constraints at identity-flux plaquettes]%
+\begin{lemma}[Local parent constraints at identity-flux plaquettes]%
     \label{thm:peps_dual_flux_local_parent}
     \lean{TNLean.PEPS.exists_torusBondGauge_plaquette_internal_eq_one,
         TNLean.PEPS.torusBondNetwork_slice_mem_plaquetteGroundSpace_of_holonomy_eq_one,
@@ -416,32 +416,32 @@ of bonds incident to $s=(x+1,y+1)$.
         (P_z\otimes I_{S_z^c})\Psi_u & =0.
         \label{eq:peps_dual_parent_constraint}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_dual_flux_gauge_absorption}
     For $z=(x,y)$, setting $k(z)=1$, $k(x+1,y)=u_h(z)^{-1}$,
     $k(x,y+1)=u_v(z)$, $k(x+1,y+1)=u_v(z)u_h(x,y+1)^{-1}$, and $k=1$ elsewhere
     trivializes all four internal bonds of $S_z$ when $H_u(z)=1$;
-    Theorem~\ref{thm:peps_dual_flux_gauge_absorption} then places every
+    Lemma~\ref{thm:peps_dual_flux_gauge_absorption} then places every
     $S_z^c$-slice of $\Psi_u$ in $\mathcal G_{S_z}=\ker P_z$.
 \end{proof}
 
-\begin{theorem}[Parent interactions away from dual-string endpoints]%
+\begin{lemma}[Parent interactions away from dual-string endpoints]%
     \label{thm:peps_dual_flux_endpoint_parent}
     \lean{TNLean.PEPS.torusDualFluxState_parent_annihilates_of_ne,
         TNLean.PEPS.torusDualFluxState_canonicalParent_annihilates_of_ne,
         TNLean.PEPS.torusDualFluxState_canonicalParent_annihilates_loop}
     \leanok
     \uses{thm:peps_dual_flux_endpoints,thm:peps_dual_flux_local_parent}
-    Under the hypotheses of Theorem~\ref{thm:peps_dual_flux_local_parent}, for
+    Under the hypotheses of Lemma~\ref{thm:peps_dual_flux_local_parent}, for
     any finite dual path $p:a\to b$ and $z\notin\{a,b\}$ (or every $z\in X$
     when $a=b$), every $P_z\ge0$ with $\ker P_z=\mathcal G_{S_z}$ satisfies
     $(P_z\otimes I_{S_z^c})\Psi_p=0$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_dual_flux_endpoints,thm:peps_dual_flux_local_parent}
     By~(\ref{eq:peps_dual_endpoint_flux}), $H_{u^p}(z)=1$, so
-    Theorem~\ref{thm:peps_dual_flux_local_parent} gives~(\ref{eq:peps_dual_parent_constraint}).
+    Lemma~\ref{thm:peps_dual_flux_local_parent} gives~(\ref{eq:peps_dual_parent_constraint}).
 \end{proof}
 
 \input{chapter/ch24_peps_dual_rectangle}

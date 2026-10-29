@@ -13,13 +13,13 @@
 \section{Lieb--Robinson propagation on finite graphs}
 \label{sec:qc_lieb_robinson}
 
-\begin{theorem}[Extended distance under graph maps]
+\begin{lemma}[Extended distance under graph maps]
     \label{thm:qc_graph_edist_transport}
     \lean{SimpleGraph.Hom.edist_le, SimpleGraph.Iso.edist_eq,
         SimpleGraph.ConnectedComponent.edist_eq}
     \leanok
     Let $G,H$ be simple graphs on arbitrary vertex sets with extended path metrics $d_G,d_H\in\mathbb N\cup\{\infty\}$. Every graph homomorphism $f\colon G\to H$ satisfies $d_H(f(x),f(y))\le d_G(x,y)$, with equality when $f$ is an isomorphism. For any connected component $C$ of $G$ and $x,y\in C$, $d_{G[C]}(x,y)=d_G(x,y)$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     A homomorphism maps walks of length $\ell$ to walks of length $\ell$, so taking infima (with $\inf\varnothing=\infty$) gives $d_H(f(x),f(y))\le d_G(x,y)$, and applying this to $f$ and $f^{-1}$ gives equality for isomorphisms. Every walk in $G$ starting at $x\in C$ stays in $C$, so walks between $x,y\in C$ in $G$ and $G[C]$ coincide.
@@ -135,7 +135,7 @@ commutator vanishes exactly.
 \paragraph{Finite-range interactions on a graph.}
 Let $G$ be a simple graph on $I$ with path metric $d_G\in\mathbb N\cup\{\infty\}$. Let $H=\sum_kh_k$ with $h_k=h_k^\dagger\in\mathcal A_{X_k}$ and anchors $a_k\in X_k$ such that $\operatorname{diam}_{d_G}(X_k)\le R$, $|X_k|\le v_R$, and $\sum_{k:x\in X_k}\|h_k\|\le b_0$ for all $x\in I$.
 
-\begin{theorem}[Graph-distance propagation]
+\begin{lemma}[Graph-distance propagation]
     \label{thm:qc_graph_lieb_robinson}
     \lean{QuantumCircuit.heisenbergCommutatorNorm_le_graphDistance,
         QuantumCircuit.norm_heisenberg_commutator_le_graphDistance,
@@ -153,9 +153,9 @@ Let $G$ be a simple graph on $I$ with path metric $d_G\in\mathbb N\cup\{\infty\}
         \exp\bigl(2v_Rb_0e^{2\mu R}|t|-\mu n\bigr).\notag
     \end{align}
     Consequently, with $C=2e^R$, $v=2v_Rb_0e^{2R}$, and $c=1$, $\|[\tau_t(A),B]\|\leq C\|A\|\|B\|e^{v|t|-cd_G(a_i,y)}$ when $d_G(a_i,y)<\infty$, and $[\tau_t(A),B]=0$ when $d_G(a_i,y)=\infty$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
-    For $t\ge0$, $F_k(t)=C_B(X_k,t)$ satisfies Lemma~\ref{aux:restricted-commutator-recursion} with $a_{kj}=2\|h_j\|\mathbf 1_{X_j\cap X_k\ne\varnothing}$. With $D(x)=\min\{n,d_G(x,y)\}$ and $w_k=e^{-\mu D(a_k)}$, $X_j\cap X_k\ne\varnothing\implies d_G(a_k,a_j)\le2R\implies w_j\le e^{2\mu R}w_k$, and $\sum_{X_j\cap X_k\ne\varnothing}\|h_j\|\le|X_k|b_0\le v_Rb_0$, so $\sum_j a_{kj}w_j\le 2v_Rb_0e^{2\mu R}w_k$. By Lemmas~\ref{aux:restricted-initial-commutator-bound} and~\ref{aux:restricted-initial-commutator-vanishing}, $F_k(0)\le 2\|B\|e^{\mu R}w_k$, so Lemma~\ref{aux:weighted-volterra-comparison} gives the bound at $k=i$ ($w_i=e^{-\mu n}$). Lemma~\ref{aux:restricted-commutator-negative-time} covers $t<0$, Lemma~\ref{aux:restricted-commutator-evaluation} bounds $\|[\tau_t(A),B]\|$, $\mu=1$ gives $(C,v,c)$, and Theorem~\ref{thm:qc_graph_lieb_robinson_zero} handles $d_G(a_i,y)=\infty$.
+    For $t\ge0$, $F_k(t)=C_B(X_k,t)$ satisfies Lemma~\ref{aux:restricted-commutator-recursion} with $a_{kj}=2\|h_j\|\mathbf 1_{X_j\cap X_k\ne\varnothing}$. With $D(x)=\min\{n,d_G(x,y)\}$ and $w_k=e^{-\mu D(a_k)}$, $X_j\cap X_k\ne\varnothing\implies d_G(a_k,a_j)\le2R\implies w_j\le e^{2\mu R}w_k$, and $\sum_{X_j\cap X_k\ne\varnothing}\|h_j\|\le|X_k|b_0\le v_Rb_0$, so $\sum_j a_{kj}w_j\le 2v_Rb_0e^{2\mu R}w_k$. By Lemmas~\ref{aux:restricted-initial-commutator-bound} and~\ref{aux:restricted-initial-commutator-vanishing}, $F_k(0)\le 2\|B\|e^{\mu R}w_k$, so Lemma~\ref{aux:weighted-volterra-comparison} gives the bound at $k=i$ ($w_i=e^{-\mu n}$). Lemma~\ref{aux:restricted-commutator-negative-time} covers $t<0$, Lemma~\ref{aux:restricted-commutator-evaluation} bounds $\|[\tau_t(A),B]\|$, $\mu=1$ gives $(C,v,c)$, and Lemma~\ref{thm:qc_graph_lieb_robinson_zero} handles $d_G(a_i,y)=\infty$.
 \end{proof}
 
 % Source: TNLean2026OneDimensional, lemma labelled lem:LR,
@@ -182,7 +182,7 @@ Let $G$ be a simple graph on $I$ with path metric $d_G\in\mathbb N\cup\{\infty\}
         aux:restricted-commutator-continuity,
         aux:restricted-commutator-evaluation,
         aux:restricted-commutator-negative-time}
-    Write $b=|b_0|$ and $\lambda=2v_Rbe^{2\mu R}$, and take $t\geq0$. We have $\sum_{X_k\cap S\ne\varnothing}\|h_k\|\leq |S|b$, and for $x\in S\cap X_k$, $d_G(x,a_k)\le R\implies\max(0,n-R)\le d_G(a_k,y)$, so Theorem~\ref{thm:qc_graph_lieb_robinson} gives $C_B(X_k,s)\le 2\|B\|e^{2\mu R-\mu n}e^{\lambda s}$ for $s\ge0$. Since $C_B(S,0)\le 2|S|\|B\|e^{-\mu n}$, Lemma~\ref{aux:restricted-commutator-recursion} and $1,t\le e^t$ give
+    Write $b=|b_0|$ and $\lambda=2v_Rbe^{2\mu R}$, and take $t\geq0$. We have $\sum_{X_k\cap S\ne\varnothing}\|h_k\|\leq |S|b$, and for $x\in S\cap X_k$, $d_G(x,a_k)\le R\implies\max(0,n-R)\le d_G(a_k,y)$, so Lemma~\ref{thm:qc_graph_lieb_robinson} gives $C_B(X_k,s)\le 2\|B\|e^{2\mu R-\mu n}e^{\lambda s}$ for $s\ge0$. Since $C_B(S,0)\le 2|S|\|B\|e^{-\mu n}$, Lemma~\ref{aux:restricted-commutator-recursion} and $1,t\le e^t$ give
     \begin{align}
         C_B(S,t)
          & \leq |S|\|B\|e^{-\mu n}
@@ -195,7 +195,7 @@ Let $G$ be a simple graph on $I$ with path metric $d_G\in\mathbb N\cup\{\infty\}
 
 % Finite-second-support graph ingredient for Hastings' eq. lrb, not the chain
 % velocity/length-pair identification or the source's printed time-cone formula.
-\begin{theorem}[Propagation between finite supports]
+\begin{lemma}[Propagation between finite supports]
     \label{thm:qc_lr_finsets_numeric}
     \lean{QuantumCircuit.heisenbergCommutatorNorm_le_graphDistance_finsets_numeric,
         QuantumCircuit.norm_heisenberg_commutator_le_graphDistance_finsets_numeric}\leanok
@@ -206,7 +206,7 @@ Let $G$ be a simple graph on $I$ with path metric $d_G\in\mathbb N\cup\{\infty\}
         \|[\tau_t(A),B]\| & \leq4|S|\|A\|\|B\|e^{u|t|-\mu n}.\notag
     \end{align}
     This captures the $|S|$-linear, $|Y|$-independent support dependence of~\cite[eq.~(1)]{Hastings2007AreaLaw}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{aux:weighted-volterra-comparison,aux:restricted-commutator-recursion,
         aux:restricted-initial-commutator-bound,
@@ -217,27 +217,27 @@ Let $G$ be a simple graph on $I$ with path metric $d_G\in\mathbb N\cup\{\infty\}
     Put $\delta_Y(x)=\min_{y\in Y}d_G(x,y)$ ($\infty$ if $Y=\varnothing$) and $w_k=e^{-\mu\min(n,\delta_Y(a_k))}$. By the triangle inequality, $X_j\cap X_k\ne\varnothing\implies w_j\le e^{2\mu R}w_k$, and $X_k\cap Y=\varnothing\implies C_B(X_k,0)=0$, so Lemma~\ref{aux:weighted-volterra-comparison} gives $C_B(X_k,s)\le 2\|B\|e^{\mu R}w_k e^{\lambda s}$ ($\lambda=2v_R|b_0|e^{2\mu R}$). Applying Lemma~\ref{aux:restricted-commutator-recursion} on $S$ and $4|b_0|e^{2\mu R}t\le 2\lambda t\le 2e^{\lambda t}$ (since $v_R\ge1$) gives $C_B(S,t)\le |S|\|B\|e^{-\mu n}(2+2e^{2\lambda t})\le 4|S|\|B\|e^{ut-\mu n}$ for $t\ge0$; Lemmas~\ref{aux:restricted-commutator-negative-time} and~\ref{aux:restricted-commutator-evaluation} complete the proof.
 \end{proof}
 
-\begin{theorem}[Exact commutation across disconnected components]
+\begin{lemma}[Exact commutation across disconnected components]
     \label{thm:qc_graph_lieb_robinson_zero_finset}
     \lean{QuantumCircuit.heisenberg_commutator_eq_zero_of_forall_edist_eq_top}
     \leanok
     \uses{aux:restricted-commutator-norm}
     Let $H=\sum_k h_k$ with $h_k\in\mathcal A_{X_k}$ and $\operatorname{diam}_{d_G}(X_k)\le R<\infty$. If $A\in\mathcal A_S$, $B\in\mathcal A_{\{y\}}$, and $d_G(x,y)=\infty$ for all $x\in S$, then $[\tau_t(A),B]=0$ for all $t\in\mathbb R$~\cite[Lemma~4.1]{OpenAI2026AreaLaw}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{lem:qc_lr_closed_region}
     The set $C=\{x\in I:d_G(x,y)=\infty\}$ contains $S$, excludes $y$, and satisfies $X_k\subseteq C$ or $X_k\cap C=\varnothing$ since $\operatorname{diam}_{d_G}(X_k)<\infty$, so Lemma~\ref{lem:qc_lr_closed_region} gives $[\tau_t(A),B]=0$.
 \end{proof}
 
-\begin{theorem}[Vanishing between connected components]
+\begin{lemma}[Vanishing between connected components]
     \label{thm:qc_graph_lieb_robinson_zero}
     \lean{QuantumCircuit.heisenberg_commutator_eq_zero_of_edist_eq_top}\leanok
     \uses{thm:qc_graph_lieb_robinson_zero_finset}
     If $H=\sum_kh_k$ with $\operatorname{diam}_{d_G}(X_k)\le R$, $a_k\in X_k$, $A\in\mathcal A_{X_i}$, $B\in\mathcal A_{\{y\}}$, and $d_G(a_i,y)=\infty$, then $[\tau_t(A),B]=0$ for all $t\in\mathbb R$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:qc_graph_lieb_robinson_zero_finset}
-    Since $\operatorname{diam}_{d_G}(X_i)\le R$, $d_G(a_i,y)=\infty\implies d_G(x,y)=\infty$ for all $x\in X_i$, so Theorem~\ref{thm:qc_graph_lieb_robinson_zero_finset} applies with $S=X_i$.
+    Since $\operatorname{diam}_{d_G}(X_i)\le R$, $d_G(a_i,y)=\infty\implies d_G(x,y)=\infty$ for all $x\in X_i$, so Lemma~\ref{thm:qc_graph_lieb_robinson_zero_finset} applies with $S=X_i$.
 \end{proof}
 
 \begin{lemma}[Exponential kernel outside a graph ball]
@@ -299,7 +299,7 @@ with every tensor factor at its original site.
     By Definition~\ref{def:qc_site_expectation}, $\operatorname{im}E_K\subseteq\mathcal A_K$. By Lemma~\ref{lem:qc_site_expectation_average}, $E_K$ is a uniform average of unitary conjugations $W_p\cdot W_p^\dagger$ with $W_p\in\mathcal A_{K^c}$, so it is unital, CPTP, contractive, and fixes $\mathcal A_K$.
 \end{proof}
 
-\begin{theorem}[Comparison with a supported approximant]
+\begin{lemma}[Comparison with a supported approximant]
     \label{thm:qc_site_expectation_supported_approximant}
     \lean{QuantumCircuit.norm_sub_siteExpectation_le_two_mul_norm_sub_of_mem_supportedOperators}
     \leanok
@@ -308,7 +308,7 @@ with every tensor factor at its original site.
     \begin{align}
         \|A-E_B(A)\| & \le2\|A-A_0\|.\notag
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{lem:qc_site_expectation_properties}
     By Lemma~\ref{lem:qc_site_expectation_properties}, $\|A-E_B(A)\|=\|(A-A_0)-E_B(A-A_0)\|\le\|A-A_0\|+\|E_B(A-A_0)\|\le2\|A-A_0\|$.
@@ -328,7 +328,7 @@ with every tensor factor at its original site.
 % part2a_mps_information.tex, lines 267--309. The linked result has a natural
 % radius and general-graph interaction/growth premises; chain conversion and
 % the real-radius observation below receive no completion credit here.
-\begin{theorem}[Localization near an arbitrary finite support]
+\begin{lemma}[Localization near an arbitrary finite support]
     \label{thm:qc_graph_neighborhood_localization}
     \lean{QuantumCircuit.norm_heisenberg_sub_siteExpectation_graphNeighborhood_le}
     \leanok
@@ -340,7 +340,7 @@ with every tensor factor at its original site.
         \label{eq:qc_neighborhood_localization}
     \end{align}
     This is the natural-radius graph form of the localization estimate in ``Lieb--Robinson bound on a chain'' of~\cite{TNLean2026OneDimensional}.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:qc_graph_lieb_robinson_finset,lem:qc_graph_kernel_tail,
@@ -365,22 +365,22 @@ an additional factor $e^{1/2}$ in the constant. This radius comparison is
 separate from identifying a physical chain Hamiltonian and its doubled local
 space with the graph interaction hypotheses.
 
-\begin{theorem}[Localization onto graph balls]
+\begin{lemma}[Localization onto graph balls]
     \label{thm:qc_graph_ball_localization}
     \lean{QuantumCircuit.norm_heisenberg_sub_siteExpectation_graphBall_le,
         QuantumCircuit.graphBall, QuantumCircuit.sum_pow_mul_exp_neg_le}\leanok
     \uses{thm:qc_graph_lieb_robinson,thm:qc_graph_lieb_robinson_zero,
         lem:qc_site_expectation_commutator,lem:qc_site_expectation_properties}
-    In the setting of Theorem~\ref{thm:qc_graph_lieb_robinson} with $q\geq1$ and $|\{y:d_G(x,y)=d\}|\le K_g(d+1)^k$, for $N_l(a)=\{x:d_G(a,x)\leq l\}$,
+    In the setting of Lemma~\ref{thm:qc_graph_lieb_robinson} with $q\geq1$ and $|\{y:d_G(x,y)=d\}|\le K_g(d+1)^k$, for $N_l(a)=\{x:d_G(a,x)\leq l\}$,
     \begin{align}
         \|\tau_t(A)-E_{N_l(a_i)}(\tau_t(A))\|
          & \leq\|A\|\min\bigl\{2,\;Ce^{v|t|-l/2}\bigr\},\notag
     \end{align}
     with $v=2v_Rb_0e^{2R}$ and $C=2e^RK_g\,2^kk!\,e^{1/2}/(1-e^{-1/2})$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{lem:qc_graph_kernel_tail}
-    Contractivity of $E_{N_l(a_i)}$ (Lemma~\ref{lem:qc_site_expectation_properties}) gives $2\|A\|$, while Theorems~\ref{thm:qc_graph_lieb_robinson} ($\mu=1$) and~\ref{thm:qc_graph_lieb_robinson_zero} together with Lemmas~\ref{lem:qc_site_expectation_commutator} and~\ref{lem:qc_graph_kernel_tail} give $Ce^{v|t|-l/2}\|A\|$.
+    Contractivity of $E_{N_l(a_i)}$ (Lemma~\ref{lem:qc_site_expectation_properties}) gives $2\|A\|$, while Lemmas~\ref{thm:qc_graph_lieb_robinson} ($\mu=1$) and~\ref{thm:qc_graph_lieb_robinson_zero} together with Lemmas~\ref{lem:qc_site_expectation_commutator} and~\ref{lem:qc_graph_kernel_tail} give $Ce^{v|t|-l/2}\|A\|$.
 \end{proof}
 
 \begin{lemma}[Strict margins contain closed graph balls]
@@ -392,7 +392,7 @@ space with the graph interaction hypotheses.
     If $d_G(x,y)\le m$ and $y\notin D$, then $d_G(x,y)<\infty$, giving the contradiction $w<d_G(x,y)\le m\le w$.
 \end{proof}
 
-\begin{theorem}[Crossing supports avoid interior cores]
+\begin{lemma}[Crossing supports avoid interior cores]
     \label{thm:qc_graph_support_separation}
     \lean{QuantumCircuit.reset_graphNeighborhood_disjoint_cores}\leanok
     Let $(X_j)_{j\in J}$ be subsets of $I$ with $\operatorname{diam}_{d_G}(X_j)\le R$, let $D\cap C=\varnothing$, and suppose $N_{\ell+R}(R_0)\subseteq D$ and $N_{\ell+R}(C_0)\subseteq C$. With $Q=(D\cup C)^c$, $\mathcal C=\{j\in J:X_j\cap D\ne\varnothing,\ X_j\setminus D\ne\varnothing\}$, and $Z=\bigcup_{j\in\mathcal C}X_j$, one has
@@ -400,7 +400,7 @@ space with the graph interaction hypotheses.
         N_\ell(Q\cup Z)\cap(R_0\cup C_0) & =\varnothing,\notag
     \end{align}
     realizing the support separation in the information-reset lemma of~\cite[Part~II]{TNLean2026OneDimensional}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Suppose $a\in R_0\cup C_0$ and $d_G(a,z)\le\ell$ for $z\in Q\cup Z$. If $z\in Q$, then $z\in N_{\ell+R}(\{a\})\subseteq D\cup C$, a contradiction. If $z\in X_j$ ($j\in\mathcal C$), pick $x\in X_j\cap D$ and $y\in X_j\setminus D$; then $d_G(a,x),d_G(a,y)\le\ell+R$, forcing $y\in D$ if $a\in R_0$ and $x\in C$ if $a\in C_0$, contradicting $y\notin D$ and $D\cap C=\varnothing$.
 \end{proof}
