@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.QCA.SupportAlgebraFactors
 import TNLean.Algebra.CommutingStarSubalgebraProduct
 import QICLean.Algebra.MatrixAlgHomCentralizer
+import Mathlib.Data.Fintype.BigOperators
 
 /-!
 # Both adjacent-generation equalities and matrix-size identities
@@ -63,6 +64,8 @@ private noncomputable def adjacentSupportJoinMatrixEquiv
     (eS : ↥(oddSupportAlgebra hω x) ≃⋆ₐ[ℂ] Matrix (Fin s) (Fin s) ℂ) :
     ↥(embeddedEvenSupportAlgebra hω x ⊔ embeddedOddSupportAlgebra hω x)
       ≃⋆ₐ[ℂ] Matrix (Fin (r * s)) (Fin (r * s)) ℂ := by
+  let : Nontrivial (QuasiLocalAlgebra d) :=
+    (quasiLocalObservable_injective d ∅).nontrivial
   let eE : ↥(embeddedEvenSupportAlgebra hω x) ≃⋆ₐ[ℂ] Matrix (Fin r) (Fin r) ℂ :=
     (supportEmbeddingEquiv (leftPair x) (evenSupportAlgebra hω x)).symm.trans eR
   let eO : ↥(embeddedOddSupportAlgebra hω x) ≃⋆ₐ[ℂ] Matrix (Fin s) (Fin s) ℂ :=
@@ -119,13 +122,17 @@ theorem range_image_evenPair_eq_adjacentSupportJoin
         Commute (z : QuasiLocalAlgebra d)
           (ω (quasiLocalObservable d (evenPair x) A)) := by
       have hΦA : Φ (eA A) = eJ (f A) := by
-        simp only [Φ, StarAlgHom.comp_apply, StarAlgEquiv.symm_apply_apply]
+        change eJ (f (eA.symm (eA A))) = eJ (f A)
+        rw [StarAlgEquiv.symm_apply_apply]
       have hc := ((Subalgebra.mem_centralizer_iff ℂ).mp hT
         (Φ (eA A)) ⟨eA A, rfl⟩).symm
       rw [hΦA] at hc
       have hsub : z * f A = f A * z := by
         apply eJ.injective
-        simpa only [map_mul, z, StarAlgEquiv.apply_symm_apply] using hc
+        rw [map_mul, map_mul]
+        change eJ (eJ.symm T) * eJ (f A) = eJ (f A) * eJ (eJ.symm T)
+        rw [StarAlgEquiv.apply_symm_apply]
+        exact hc
       exact congrArg Subtype.val hsub
     obtain ⟨c, hc, _⟩ :=
       existsUnique_eq_smul_one_of_mem_adjacentSupportJoin_commute_image hω x z z.2 hcomm
@@ -172,6 +179,7 @@ theorem evenSupportAlgebra_matrixSize_mul_odd
     Matrix.matrixAlgEquiv_fin_eq (eA.symm.trans (eImage.trans eJ)).toAlgEquiv
   have hcard : Fintype.card (Config d (evenPair x)) = d * d := by
     change Fintype.card (↥(evenPair x) → Fin d) = d * d
+    rw [Fintype.card_fun]
     have hne : 2 * x ≠ 2 * x + 1 := by omega
     simp [evenPair, hne, pow_two]
   exact hsize.symm.trans hcard
@@ -203,6 +211,8 @@ private noncomputable def physicalPairSupportJoinMatrixEquiv
     (eS : ↥(evenSupportAlgebra hω (x + 1)) ≃⋆ₐ[ℂ] Matrix (Fin s) (Fin s) ℂ) :
     ↥(embeddedOddSupportAlgebra hω x ⊔ embeddedEvenSupportAlgebra hω (x + 1))
       ≃⋆ₐ[ℂ] Matrix (Fin (r * s)) (Fin (r * s)) ℂ := by
+  let : Nontrivial (QuasiLocalAlgebra d) :=
+    (quasiLocalObservable_injective d ∅).nontrivial
   let eO := (supportEmbeddingEquiv (rightPair x) (oddSupportAlgebra hω x)).symm.trans eR
   let eE := (supportEmbeddingEquiv (leftPair (x + 1))
     (evenSupportAlgebra hω (x + 1))).symm.trans eS
@@ -286,13 +296,18 @@ theorem adjacentSupportJoin_eq_range_rightPair
     let z : P := eAmbient.symm T
     have hcomm (w : J) : Commute (z : QuasiLocalAlgebra d) (w : QuasiLocalAlgebra d) := by
       have hΦw : Φ (eJ w) = eAmbient (j w) := by
-        simp only [Φ, StarAlgHom.comp_apply, StarAlgEquiv.symm_apply_apply]
+        change eAmbient (j (eJ.symm (eJ w))) = eAmbient (j w)
+        rw [StarAlgEquiv.symm_apply_apply]
       have hc := ((Subalgebra.mem_centralizer_iff ℂ).mp hT
         (Φ (eJ w)) ⟨eJ w, rfl⟩).symm
       rw [hΦw] at hc
       have hsub : z * j w = j w * z := by
         apply eAmbient.injective
-        simpa only [map_mul, z, StarAlgEquiv.apply_symm_apply] using hc
+        rw [map_mul, map_mul]
+        change eAmbient (eAmbient.symm T) * eAmbient (j w) =
+          eAmbient (j w) * eAmbient (eAmbient.symm T)
+        rw [StarAlgEquiv.apply_symm_apply]
+        exact hc
       exact congrArg Subtype.val hsub
     obtain ⟨c, hc, _⟩ :=
       existsUnique_eq_smul_one_of_supported_rightPair_commute_supports hω x z z.2
@@ -337,6 +352,7 @@ theorem oddSupportAlgebra_matrixSize_mul_even_add_one
       ((localAlgebraMatrixEquiv (rightPair x)).symm.trans (eImage.trans eJ)).toAlgEquiv
   have hcard : Fintype.card (Config d (rightPair x)) = d * d := by
     change Fintype.card (↥(rightPair x) → Fin d) = d * d
+    rw [Fintype.card_fun]
     have hne : 2 * x + 1 ≠ 2 * x + 2 := by omega
     simp [rightPair, hne, pow_two]
   exact hsize.symm.trans hcard
