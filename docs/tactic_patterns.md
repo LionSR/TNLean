@@ -9675,3 +9675,27 @@ there is no need for a new tactic.
   needs this conversion, promote the rectangular matrix fact in QICLean and
   consume its published dependency revision rather than duplicating a new
   channel-independent matrix API in TNLean.
+### Adjacent physical cut Gram identities — promoted helpers (2026-10-29)
+
+- **Pattern:** reindex a physical configuration sum by restriction and the
+  letter at one cut site, then apply the actual adjacent-factor recursion.
+- **Occurrences:** both density and suffix-Gram recurrences in
+  `MPS/Preparation/OBCCanonicalRecurrences.lean`, and the two endpoint Gram
+  identifications in `OBCCanonicalEndpoints.lean`.
+- **Abstraction:** the explicit `extendCutPrefixEquiv`, `extendCutSuffixEquiv`,
+  `initialCutSuffixEquiv`, and `finalCutPrefixEquiv` in
+  `OBCCanonicalConfigurations.lean` centralize the configuration geometry.
+- **Decision:** the existing `Equiv.sum_comp` suffices after these mathematical
+  bijections; no tactic or parallel sum API is needed.
+
+### Rectangular cut comparison by actual physical prefix factors — promoted helper (2026-10-29)
+
+- **Pattern:** lift each physical cut-basis vector through the original prefix,
+  choose a left inverse of the minimal prefix, and use actual adjacent-prefix
+  recurrences to derive local rectangular maps with a one-sided inverse.
+- **Abstraction:** `OBCChainTensor.exists_rectangular_maps_to_cutBasis` in
+  `MPS/Preparation/OBCRectangularCutMaps.lean`; the simultaneous canonical
+  freedom theorem uses this helper without repeating the cut comparison.
+- **Decision:** a matrix-factor comparison lemma suffices; the common-bound
+  padding remains only in the actual boundary contractions, not in the
+  rectangular local formula.
