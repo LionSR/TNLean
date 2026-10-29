@@ -238,7 +238,7 @@ theorem IsMPUCanonicalFormII.exists_coarse_timeReversal_certificate
   have hEq : ∀ N : ℕ, 1 < N → Even N →
       mpo W N = mpo (MPOTensor.physicalAdjointTensor W) N := by
     intro N hN heven
-    rw [mpo_physicalAdjointTensor]
+    rw [mpo_physicalAdjointTensor_eq_conjTranspose]
     exact hTR N hN heven
   have huS := hW.sourceFactors_sourceU_isUnitaryBetween hSW S
   have huT := hW.physicalAdjointTensor.sourceFactors_sourceU_isUnitaryBetween

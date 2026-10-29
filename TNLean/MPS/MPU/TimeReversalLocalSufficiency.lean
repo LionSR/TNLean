@@ -105,8 +105,9 @@ theorem IsMPUCanonicalFormII.mpo_even_eq_adjoint_of_source_local_certificate
   obtain ⟨dataS⟩ := hU.exists_twoSiteStandardFormData_sourceFactors hsimple S
   obtain ⟨dataT⟩ := hU.physicalAdjointTensor.exists_twoSiteStandardFormData_sourceFactors
     (hU.isMPUSimple_physicalAdjointTensor hsimple) T
-  have dataA : TwoSiteStandardFormData (blockTwo U) A B := dataS.reindexRanks L R
-  have dataB : TwoSiteStandardFormData (blockTwo (MPOTensor.physicalAdjointTensor U)) Bᴴ Aᴴ := by
+  have dataA : TwoSiteStandardFormData (MPOTensor.blockTwo U) A B := dataS.reindexRanks L R
+  have dataB : TwoSiteStandardFormData
+      (MPOTensor.blockTwo (MPOTensor.physicalAdjointTensor U)) Bᴴ Aᴴ := by
     have data := dataT.reindexRanks LA RA
     dsimp only [T] at data
     rw [SourceFactors.sourceU_physicalAdjoint, SourceFactors.sourceV_physicalAdjoint] at data
@@ -120,7 +121,7 @@ theorem IsMPUCanonicalFormII.mpo_even_eq_adjoint_of_source_local_certificate
   have h' := (Matrix.reindex _ _).injective h
   rw [mpo_blockTensor_eq_reindex, mpo_blockTensor_eq_reindex] at h'
   have h'' := (Matrix.reindex _ _).injective h'
-  rw [mpo_physicalAdjointTensor] at h''
+  rw [mpo_physicalAdjointTensor_eq_conjTranspose] at h''
   simpa only [mul_two] using h''
 
 /-- The original four-spin equation for the chosen source gates implies
@@ -141,11 +142,11 @@ theorem IsMPUCanonicalFormII.mpo_standardForm_even_eq_adjoint_of_local_certifica
         σ • ((x : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ) ⊗ₖ
           (x : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ)ᴴ) * (staircaseMiddle v₀)ᴴ)
     (N : ℕ) (hN : 1 < N) (heven : Even N) :
-    mpo (blockTwo U) N = (mpo (blockTwo U) N)ᴴ := by
+    mpo (MPOTensor.blockTwo U) N = (mpo (MPOTensor.blockTwo U) N)ᴴ := by
   classical
   obtain ⟨hrB, hlB⟩ := hU.twoSite_sourceRanks hsimple
-  have hr : r[blockTwo U] = d * d := hrB.trans (congrArg (d * ·) hrU)
-  have hl : ℓ[blockTwo U] = d * d := hlB.trans (congrArg (· * d) hlU)
+  have hr : r[MPOTensor.blockTwo U] = d * d := hrB.trans (congrArg (d * ·) hrU)
+  have hl : ℓ[MPOTensor.blockTwo U] = d * d := hlB.trans (congrArg (· * d) hlU)
   let e : (Fin d × Fin d) ≃ Fin (d * d) := finProdFinEquiv
   let p := Equiv.prodCongr e e
   let E := Matrix.reindexLinearEquiv ℂ ℂ p p
@@ -182,7 +183,7 @@ implication. Source: CPSV17, `PropChiral`, lines 1201–1252. -/
 theorem IsMPUCanonicalFormII.standardForm_even_timeReversal_iff_exists_local_certificate
     {d D : ℕ} {U : MPOTensor d D} (hU : IsMPUCanonicalFormII U)
     (hsimple : IsMPUSimple U) :
-    (∀ N : ℕ, 1 < N → Even N → mpo (blockTwo U) N = (mpo (blockTwo U) N)ᴴ) ↔
+    (∀ N : ℕ, 1 < N → Even N → mpo (MPOTensor.blockTwo U) N = (mpo (MPOTensor.blockTwo U) N)ᴴ) ↔
       ∃ (hrU : r[U] = d) (hlU : ℓ[U] = d) (σ : ℂ)
         (x : Matrix.unitaryGroup (Fin d × Fin d) ℂ),
         let u₀ := Matrix.reindex (Equiv.prodCongr (finCongr hlU) (finCongr hrU))

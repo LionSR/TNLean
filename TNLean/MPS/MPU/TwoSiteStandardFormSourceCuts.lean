@@ -88,7 +88,7 @@ theorem sourceCutM₁_eq_cutX₁_mul_cutY₁ (S : TwoSiteStandardFormData W u v)
   rw [sourceCutM₁_apply, S.W_apply]
   simp only [Matrix.mul_apply, Fintype.sum_prod_type, cutX₁, cutY₁,
     Matrix.one_apply, ite_mul, zero_mul, Finset.mul_sum,
-    Finset.sum_ite_eq, Finset.sum_ite_eq', Finset.sum_ite_irrel, Finset.sum_const_zero,
+    Finset.sum_ite_eq, Finset.sum_ite_irrel, Finset.sum_const_zero,
     Finset.mem_univ, ↓reduceIte, one_mul]
   rw [Finset.sum_comm]
   apply Finset.sum_congr₂
@@ -104,8 +104,7 @@ theorem sourceCutM₂_eq_cutX₂_mul_cutY₂ (S : TwoSiteStandardFormData W u v)
   rw [sourceCutM₂_apply, S.W_apply]
   simp only [Matrix.mul_apply, Fintype.sum_prod_type, cutX₂, cutY₂,
     Matrix.one_apply, mul_ite, ite_mul, mul_zero, zero_mul,
-    Finset.sum_ite_eq, Finset.sum_ite_eq', Finset.sum_ite_irrel, Finset.sum_const_zero,
-    Finset.mem_univ, ↓reduceIte, mul_one]
+    Finset.sum_ite_eq, Finset.mem_univ, ↓reduceIte, mul_one]
   apply Finset.sum_congr rfl
   intro t _
   rw [Finset.mul_sum]
@@ -132,12 +131,11 @@ theorem cutY₂_cutY₁_eq_staircaseMiddle_mul_kronecker
       v (b, c) (k.1.2, k.2.1) * (1 : Matrix (Fin r) (Fin r) ℂ) e k.2.2) *
         (u k.1 i * u k.2 j)
   simp only [Fintype.sum_prod_type, Matrix.one_apply, ite_mul, mul_ite,
-    zero_mul, mul_zero, Finset.sum_ite_eq, Finset.sum_ite_eq',
-    Finset.sum_ite_irrel, Finset.sum_const_zero, Finset.mem_univ,
-    ↓reduceIte, one_mul, mul_one]
+    zero_mul, mul_zero, Finset.sum_ite_eq, Finset.sum_ite_irrel,
+    Finset.sum_const_zero, Finset.mem_univ, ↓reduceIte, one_mul, mul_one]
   simp_rw [S.v_apply]
   simp only [Finset.sum_mul, Finset.mul_sum]
-  rw [Finset.sum_comm]
+  rw [Finset.sum_comm_cycle]
   apply Finset.sum_congr rfl
   intro s _
   rw [Finset.sum_comm]
@@ -205,7 +203,7 @@ private theorem cutX₁_weighted_isometry_of_normalized_half_factor
     obtain ⟨⟨a', b'⟩, rfl⟩ := finProdFinEquiv.surjective j
     by_cases haa : a = a' <;> by_cases hbb : b = b' <;>
       simp [sourceWeight, e, I, Matrix.reindex_apply, Matrix.kroneckerMap_apply,
-        Matrix.one_apply, Prod.mk.injEq, haa, hbb]
+        Prod.mk.injEq, haa, hbb]
   have hprod : (I ⊗ₖ S.X₁)ᴴ * (I ⊗ₖ sourceWeight (d := d) ρ) * (I ⊗ₖ S.X₁) = 1 := by
     rw [Matrix.conjTranspose_kronecker]
     change ((1 : Matrix (Fin d) (Fin d) ℂ)ᴴ ⊗ₖ S.X₁ᴴ) *
@@ -297,8 +295,11 @@ theorem IsMPUCanonicalFormII.twoSite_sourceRanks
     (hU.rightRank_mul_leftRank_blockTensor (by decide) hStwo)
   simp only [hone, rightRank_reindexPhysical, leftRank_reindexPhysical] at hranks
   simp only [Nat.reduceSub, pow_one] at hranks
-  simp only [blockTwo_eq_blockTensor_reindex, rightRank_reindexPhysical,
-    leftRank_reindexPhysical]
+  simp only [blockTwo_eq_blockTensor_reindex]
+  change r[MPOTensor.reindexPhysical (twoSiteBlockEquiv d) (MPOTensor.blockTensor U 2)] =
+      d * r[U] ∧
+    ℓ[MPOTensor.reindexPhysical (twoSiteBlockEquiv d) (MPOTensor.blockTensor U 2)] = ℓ[U] * d
+  rw [rightRank_reindexPhysical, leftRank_reindexPhysical]
   exact ⟨hranks.1, hranks.2.trans (Nat.mul_comm _ _)⟩
 
 /-- Simplicity of the actual two-site block follows from the derived
@@ -469,21 +470,18 @@ theorem IsMPUCanonicalFormII.sourceRanks_eq_phys_of_standardForm_even_mpo_eq_adj
   have hEq : ∀ N : ℕ, 1 < N → Even N →
       mpo W N = mpo (MPOTensor.physicalAdjointTensor W) N := by
     intro N hN heven
-    rw [mpo_physicalAdjointTensor]
+    rw [mpo_physicalAdjointTensor_eq_conjTranspose]
     exact hTR N hN heven
   have hsame := hU.blockTwo.source_ranks_eq_of_mpo_eq_even
     hU.blockTwo.physicalAdjointTensor hEq
-  have hbalanced : ℓ[MPOTensor.blockTensor U 2] = r[MPOTensor.blockTensor U 2] := by
-    simpa only [W, rightRank_physicalAdjointTensor, blockTwo_eq_blockTensor_reindex,
-      rightRank_reindexPhysical, leftRank_reindexPhysical] using hsame.1
+  have hbalanced : ℓ[W] = r[W] := by
+    simpa only [rightRank_physicalAdjointTensor] using hsame.1
   obtain ⟨hr, hl⟩ := hU.twoSite_sourceRanks hsimple
-  simp only [blockTwo_eq_blockTensor_reindex, rightRank_reindexPhysical,
-    leftRank_reindexPhysical] at hr hl
   have hrℓ : r[U] = ℓ[U] := by
     apply mul_left_cancel₀ hU.neZero_phys.out
     calc
-      d * r[U] = r[MPOTensor.blockTensor U 2] := hr.symm
-      _ = ℓ[MPOTensor.blockTensor U 2] := hbalanced.symm
+      d * r[U] = r[W] := hr.symm
+      _ = ℓ[W] := hbalanced.symm
       _ = d * ℓ[U] := hl.trans (Nat.mul_comm _ _)
   have hprod := (hU.isMPUSimple_tfae.out 1 2).mp hsimple
   rw [hrℓ] at hprod
@@ -501,7 +499,7 @@ noncomputable def IsMPUCanonicalFormII.twoSiteSourceFactors_physicalAdjoint
     (hsimple : IsMPUSimple U)
     (hTR : ∀ N : ℕ, 1 < N → Even N →
       mpo (MPOTensor.blockTwo U) N = (mpo (MPOTensor.blockTwo U) N)ᴴ) :
-    SourceFactors (physicalAdjointTensor (MPOTensor.blockTwo U)) hU.ρ := by
+    SourceFactors (MPOTensor.physicalAdjointTensor (MPOTensor.blockTwo U)) hU.ρ := by
   obtain ⟨hr, hl⟩ := hU.sourceRanks_eq_phys_of_standardForm_even_mpo_eq_adjoint hsimple hTR
   obtain ⟨hrB, hlB⟩ := hU.twoSite_sourceRanks hsimple
   have hrank : r[MPOTensor.blockTwo U] = d * d := hrB.trans (congrArg (d * ·) hr)
@@ -509,5 +507,4 @@ noncomputable def IsMPUCanonicalFormII.twoSiteSourceFactors_physicalAdjoint
   exact SourceFactors.physicalAdjoint hU.blockTwo (hU.isMPUSimple_blockTwo hsimple)
     (hU.twoSiteSourceFactors hsimple) hrank hlank
 
-end MPOTensor
 end MPOTensor

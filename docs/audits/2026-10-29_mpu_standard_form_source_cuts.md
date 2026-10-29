@@ -274,3 +274,16 @@ quantified eventual cross/self-overlap equality. The proof now invokes
 `Filter.EventuallyEq.symm` explicitly, with the same mathematical limit
 argument. The subsequent local/converse closure remains pending. No local
 Lean build, elaboration, compilation or cache mutation was run.
+
+## Hosted diagnostics on `6a7636710`
+
+Job `123474427200` compiled the actual even-family virtual theorem, normalized
+physical-adjoint factors, arbitrary normalized-record standard-form supplier,
+and even-family supplied-gate comparison. The remaining failure reached the
+actual source cuts: a triple sum was reordered by a transposition instead of
+a cycle; the block/rank proof exposed a raw lambda instead of the physical
+reindex operation; matrix equality used a pointwise adjoint rewrite; and the
+file had an extra namespace terminator. These source issues are repaired,
+reported unused simp arguments removed, and the same matrix-level adjoint
+rewrite/qualified raw tensor operations are applied at the dependent local
+sites. No hypothesis or conclusion changes; no local Lean commands.
