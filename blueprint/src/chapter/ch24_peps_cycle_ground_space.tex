@@ -82,3 +82,92 @@
     space, while the matrix boundary space has only the zero matrix.
     Both ground spaces are therefore zero.
 \end{proof}
+
+% Source-written proper-arc assembly; compilation and declaration checks remain pending.
+\begin{theorem}[Regional slices and cyclic restrictions]
+    \label{thm:peps_cycle_slice_restriction}
+    \lean{TNLean.PEPS.assembleRegion_cycleArc_eq_cyclicCfg,
+        TNLean.PEPS.cycleArcPhysical_regionSliceMap,
+        TNLean.PEPS.exists_cycleArc_complement_extension,
+        TNLean.PEPS.mem_regionGroundSpace_cycleTensorOfMPS_iff}
+    \notready
+    \uses{def:peps_cycle_arc_coordinates, thm:peps_cycle_region_ground_space}
+    For an arc $R$ of length $0<L<n$, assembly of its ordered word with
+    the restriction of a full background agrees with cyclic-window
+    assembly. Thus ordering a regional slice gives the cyclic restriction.
+    Every complementary assignment extends to a full background.
+\end{theorem}
+
+\begin{proof}
+    Membership in the arc is the condition that the cyclic offset from
+    its starting site is less than $L$. The two assemblies use the same
+    word coordinate inside and the same background outside. To extend
+    a complementary assignment, fill the arc with its value at the
+    exterior site of offset $L$. This also applies when a physical
+    alphabet is empty, since a complementary assignment then cannot exist.
+\end{proof}
+
+\begin{theorem}[The common parent space of proper cycle arcs]
+    \label{thm:peps_cycle_parent_ground_space}
+    \lean{TNLean.PEPS.regionParentGroundSpace_cycleTensorOfMPS}
+    \notready
+    \uses{def:peps_region_parent_hamiltonian, def:chain_ground_space,
+        def:cycleTensorOfMPS}
+    Let $n\ge3$ and $0<L<n$. For the cycle tensor of any matrix product
+    family $A$, the common regional parent ground space over all
+    length-$L$ arcs is exactly the periodic chain ground space of $A$.
+    No injectivity or positive physical or bond dimension is required.
+\end{theorem}
+
+\begin{proof}
+    \uses{thm:peps_cycle_slice_restriction,
+        thm:peps_cycle_region_ground_space}
+    Both spaces require the same local ground-space membership for every
+    starting site and every complementary assignment. A full background
+    restricts to such an assignment; every complementary assignment
+    extends to a full background. The slice identity identifies each
+    pair of local conditions.
+\end{proof}
+
+\begin{theorem}[Physical maps in the cycle coordinates]
+    \label{thm:peps_cycle_physical_coordinates}
+    \lean{TNLean.PEPS.physicalDeform_cycleTensorOfMPS,
+        TNLean.PEPS.globalPhysicalMap_const_eq_onSiteTensorPow}
+    \notready
+    \uses{def:cycleTensorOfMPS, def:peps_global_physical_map}
+    Applying the same physical matrix $\Lambda$ at each vertex of the
+    cycle gives the cycle tensor of $\Lambda A$. On the full physical
+    space the constant graph product map is exactly $\Lambda^{\otimes n}$.
+\end{theorem}
+
+\begin{proof}
+    Both tensor entries are
+    $\sum_j\Lambda_{ij}(A^j)_{ab}$. Both full physical maps have
+    coefficient $\prod_v\Lambda_{\sigma_v\tau_v}$ between
+    configurations $\tau$ and $\sigma$.
+\end{proof}
+
+\begin{theorem}[Chain deformation as a graph specialization]
+    \label{thm:peps_cycle_physical_parent_specialization}
+    \lean{TNLean.PEPS.map_chainGroundSpace_physicalEquiv_of_cycle,
+        TNLean.PEPS.chainGroundSpace_rotatePhysical_of_cycle,
+        TNLean.PEPS.ker_parentHamiltonian_rotatePhysical_of_cycle}
+    \notready
+    \uses{thm:peps_cycle_parent_ground_space,
+        thm:peps_cycle_physical_coordinates}
+    Let $n\ge3$, $0<L<n$, and let $\Lambda$ be invertible. Then
+    the graph parent-space correspondence specializes to
+    $\mathcal G_{L,n}(\Lambda A)=\Lambda^{\otimes n}\mathcal G_{L,n}(A)$
+    and $\ker H_n(\Lambda A)=\Lambda^{\otimes n}\ker H_n(A)$
+    for the actual periodic-chain spaces and parent Hamiltonians.
+\end{theorem}
+
+\begin{proof}
+    \uses{thm:peps_region_parent_ground_space_physical_transport,
+        thm:peps_cycle_parent_ground_space,
+        thm:peps_cycle_physical_coordinates}
+    Apply the graph correspondence to the constant physical isomorphism.
+    Identify the two common parent spaces and the physical product map
+    using the cycle coordinates. The periodic parent kernels are the
+    same common local-constraint spaces.
+\end{proof}
