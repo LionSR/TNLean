@@ -113,6 +113,28 @@ no local Lean build or elaboration was run. The full source theorem
 remains open in issue \#10280 until the finite-prefix zero-momentum
 obligation, validation and integration are complete.
 
+\section{The product-state branch}
+
+The normal bond-one case now has a source-written finite-prefix
+construction. The actual amplitude is the product of the one-site scalar
+entries. Normality supplies a nonzero letter, so a constant physical
+configuration gives a nonzero amplitude at every positive length, not
+merely eventually. The actual local-kernel inclusion derived in the
+prime-length argument then makes this explicit vector a zero-energy,
+zero-momentum vector at every permitted short length. Global uniqueness
+identifies its line with the full kernel.
+
+These are
+\leanid{MPSTensor.exists_cyclic_ground_of_normal_bondOne_local_kernel}
+and
+\leanid{MPSTensor.uniform_bondOne_ground_family_of_normal_local_kernel}.
+They use the actual normal tensor and local-kernel inclusion of the derived
+standing data; they do not assume short representations or nonvanishing.
+The restriction is explicit: the normal tensor has bond dimension one.
+Issue \#10386 remains open for the general higher-dimensional case and
+for hosted acceptance and integration. No full-hypothesis counterexample
+is asserted.
+
 \section{Verdict}
 
 \textbf{Verdict: scope restriction.} The quantified eventual dichotomy

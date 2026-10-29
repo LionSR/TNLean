@@ -9688,3 +9688,14 @@ there is no need for a new tactic.
   comparison used at both short and long lengths in the uniform-bound proof.
 - **Decision:** the existing matrix-padding multiplication identity suffices;
   the empty word remains excluded because its trace is the matrix dimension.
+
+
+### A unique virtual path for a bond-one periodic vector — reused helper (2026-10-29)
+
+- **Seen:** `Core/BondOneVector.lean`; the periodic-operator counterpart is
+  `MPDO/BondOneOperator.lean`.
+- **Reuse:** the existing `mpv_eq_prod_of_forced_bond` specializes to the
+  unique virtual configuration; `Finset.prod_ne_zero_iff` proves actual
+  nonvanishing from one nonzero physical letter.
+- **Decision:** reuse the common cyclic contraction helper instead of a new
+  entrywise word induction or a separately supplied finite-volume hypothesis.
