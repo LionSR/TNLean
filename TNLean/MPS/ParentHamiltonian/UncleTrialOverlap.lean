@@ -50,15 +50,19 @@ private theorem familyMixedMap_comp {ι κ : Type*} [Fintype ι] [Fintype κ]
     (familyMixedMap U V).comp (familyMixedMap S T) =
       familyMixedMap (fun z : ι × κ ↦ U z.1 * S z.2)
         (fun z : ι × κ ↦ V z.1 * T z.2) := by
-  ext X
-  simp [familyMixedMap_apply, LinearMap.comp_apply, Fintype.sum_prod_type,
-    Matrix.mul_sum, Matrix.sum_mul, Matrix.conjTranspose_mul, Matrix.mul_assoc]
+  apply LinearMap.ext
+  intro X
+  change (∑ i, U i * (∑ j, S j * X * (T j)ᴴ) * (V i)ᴴ) =
+    ∑ z : ι × κ, (U z.1 * S z.2) * X * (V z.1 * T z.2)ᴴ
+  simp only [Matrix.mul_sum, Matrix.sum_mul, Fintype.sum_prod_type,
+    Matrix.conjTranspose_mul, Matrix.mul_assoc]
 
 private theorem wordMixedMap_eq_pow (A : MPSTensor d a) (C : MPSTensor d c) (n : ℕ) :
     familyMixedMap (fun σ : Cfg d n ↦ Kraus.evalWord A (List.ofFn σ))
         (fun σ : Cfg d n ↦ Kraus.evalWord C (List.ofFn σ)) =
       Kraus.mixedMapLM A C ^ n := by
-  ext X
+  apply LinearMap.ext
+  intro X
   simpa only [familyMixedMap_apply] using (Kraus.mixedMapLM_pow_apply A C n X).symm
 
 private theorem trace_familyMixedMap {ι : Type*} [Fintype ι]
@@ -71,7 +75,9 @@ private theorem trace_familyMixedMap {ι : Type*} [Fintype ι]
   rw [Finset.sum_comm_cycle]
   apply Finset.sum_congr rfl
   intro z _
-  simp [Matrix.trace, Matrix.conjTranspose_apply, Finset.sum_mul, Finset.mul_sum]
+  simp only [Matrix.trace, Matrix.diag_apply, Matrix.conjTranspose_apply,
+    star_sum, Finset.sum_mul, Finset.mul_sum]
+  exact Finset.sum_comm
 
 /-- The actual wall-word map paired with a pure sector of the same physical
 alphabet. Its two rectangular endpoint spaces are retained. Source:
@@ -94,7 +100,8 @@ theorem uncleWallMixedMap_apply (A : MPSTensor d a) (B : MPSTensor d b)
 private theorem uncleWallMixedMap_zero (A : MPSTensor d a) (B : MPSTensor d b)
     (R : Fin d → Matrix (Fin a) (Fin b) ℂ) (C : MPSTensor d c) :
     uncleWallMixedMap A B R C 0 = 0 := by
-  ext X
+  apply LinearMap.ext
+  intro X
   simp [uncleWallMixedMap_apply, uncleDomainWallWord]
 
 private theorem uncleWallMixedMap_succ_left
@@ -104,13 +111,15 @@ private theorem uncleWallMixedMap_succ_left
       (Kraus.mixedMapLM A C).comp (uncleWallMixedMap A B R C n) +
         (familyMixedMap R C).comp (Kraus.mixedMapLM B C ^ n) := by
   classical
-  ext X
-  rw [uncleWallMixedMap_apply,
-    ← (Fin.consEquiv (fun _ : Fin (n + 1) ↦ Fin d)).sum_comp]
-  simp [Fintype.sum_prod_type, uncleWallMixedMap_apply, familyMixedMap_apply,
-    uncleDomainWallWord, Kraus.mixedMapLM_apply, Kraus.mixedMapLM_pow_apply,
-    Matrix.conjTranspose_mul, Matrix.mul_add, Matrix.add_mul, Matrix.mul_sum,
-    Matrix.sum_mul, Matrix.mul_assoc, Finset.sum_add_distrib]
+  apply LinearMap.ext
+  intro X
+  simp only [LinearMap.add_apply, LinearMap.comp_apply, uncleWallMixedMap_apply,
+    familyMixedMap_apply, Kraus.mixedMapLM_apply, Kraus.mixedMapLM_pow_apply]
+  rw [← (Fin.consEquiv (fun _ : Fin (n + 1) ↦ Fin d)).sum_comp]
+  simp only [Fintype.sum_prod_type, Fin.consEquiv_apply, List.ofFn_cons,
+    uncleDomainWallWord, Kraus.evalWord_cons, Matrix.conjTranspose_mul,
+    Matrix.add_mul, Matrix.mul_sum, Matrix.sum_mul, Matrix.mul_assoc,
+    Finset.sum_add_distrib]
 
 private theorem uncleWallMixedMap_succ_right
     (A : MPSTensor d a) (B : MPSTensor d b)
@@ -119,16 +128,23 @@ private theorem uncleWallMixedMap_succ_right
       (uncleWallMixedMap A B R C n).comp (Kraus.mixedMapLM B C) +
         (Kraus.mixedMapLM A C ^ n).comp (familyMixedMap R C) := by
   classical
-  ext X
-  rw [uncleWallMixedMap_apply,
-    ← (Fin.snocEquiv (fun _ : Fin (n + 1) ↦ Fin d)).sum_comp]
+  apply LinearMap.ext
+  intro X
+  simp only [LinearMap.add_apply, LinearMap.comp_apply, uncleWallMixedMap_apply,
+    familyMixedMap_apply, Kraus.mixedMapLM_apply, Kraus.mixedMapLM_pow_apply]
+  rw [← (Fin.snocEquiv (fun _ : Fin (n + 1) ↦ Fin d)).sum_comp]
   simp only [Fintype.sum_prod_type]
   rw [Finset.sum_comm]
-  simp [Fin.snoc_eq_append, uncleWallMixedMap_apply,
-    familyMixedMap_apply, uncleDomainWallWord_append, uncleDomainWallWord, Kraus.mixedMapLM_apply,
-    Kraus.mixedMapLM_pow_apply, Matrix.conjTranspose_mul, Matrix.mul_add,
-    Matrix.add_mul, Matrix.mul_sum, Matrix.sum_mul, Matrix.mul_assoc,
-    Finset.sum_add_distrib, add_comm]
+  have hsnoc (i : Fin d) (τ : Cfg d n) :
+      List.ofFn (Fin.snoc τ i) = List.ofFn τ ++ [i] := by
+    rw [List.ofFn_succ']
+    simp only [Fin.snoc_castSucc, Fin.snoc_last, List.concat_eq_append]
+  simp only [Fin.snocEquiv_apply, hsnoc, uncleDomainWallWord_append,
+    uncleDomainWallWord, Kraus.evalWord_append, Kraus.evalWord_cons,
+    Kraus.evalWord_nil, Matrix.mul_zero, Matrix.zero_mul, Matrix.zero_add,
+    Matrix.mul_one, Matrix.conjTranspose_mul, Matrix.add_mul, Matrix.mul_sum,
+    Matrix.sum_mul, Matrix.mul_assoc, Finset.sum_add_distrib]
+  exact add_comm _ _
 
 /-- The ordered mixed-transfer contraction for the actual five-segment
 trial against one pure periodic sector. Source: arXiv:1210.6613,
@@ -203,7 +219,8 @@ theorem trace_uncleTwoWallMixedTransfer_join_exterior
   change LinearMap.trace ℂ (Matrix (Fin a) (Fin c) ℂ) (E ^ p * (M * E ^ t)) =
     LinearMap.trace ℂ (Matrix (Fin a) (Fin c) ℂ) (E ^ (p + t) * (M * E ^ 0))
   rw [pow_zero, mul_one, ← mul_assoc,
-    LinearMap.trace_mul_comm (E ^ p * M) (E ^ t), ← mul_assoc, ← pow_add, Nat.add_comm t p]
+    LinearMap.trace_mul_comm (R := ℂ) (M := Matrix (Fin a) (Fin c) ℂ)
+      (E ^ p * M) (E ^ t), ← mul_assoc, ← pow_add, Nat.add_comm t p]
 
 private theorem inner_mpvState_config_cast {n m : ℕ} (h : n = m)
     (C : MPSTensor d c) (f : NSiteSpace d n) :
@@ -237,6 +254,13 @@ theorem inner_mpvState_uncleTwoWallTrialSource_eq_trace
     trace_uncleTwoWallMixedTransfer_join_exterior A B R L C N (N + 1)
       (2 * N - 1) (N + 1) N
 
+open scoped TNOperatorSpace in
+private theorem mixedMapSpectralRadius_eq_end (A : MPSTensor d a) (B : MPSTensor d b) :
+    Kraus.mixedMapSpectralRadius A B = spectralRadius ℂ (Kraus.mixedMapLM A B) := by
+  unfold Kraus.mixedMapSpectralRadius spectralRadius
+  rw [AlgEquiv.quasispectrum_eq
+    (Module.End.toContinuousLinearMap (Matrix (Fin a) (Fin b) ℂ))]
+
 section OperatorNorm
 
 open scoped Matrix.Norms.L2Operator
@@ -246,20 +270,28 @@ private theorem mixed_pow_norm_le_geometric (A : MPSTensor d a) (B : MPSTensor d
     ∃ K r : ℝ, 0 < K ∧ 0 < r ∧ r < 1 ∧ ∀ (n : ℕ)
       (X : Matrix (Fin a) (Fin b) ℂ),
       ‖((Kraus.mixedMapLM A B) ^ n) X‖ ≤ K * r ^ n * ‖X‖ := by
-  let F := Module.End.toContinuousLinearMap (Matrix (Fin a) (Fin b) ℂ)
-    (Kraus.mixedMapLM A B)
+  let e : Module.End ℂ (Matrix (Fin a) (Fin b) ℂ) ≃ₐ[ℂ]
+      (Matrix (Fin a) (Fin b) ℂ →L[ℂ] Matrix (Fin a) (Fin b) ℂ) :=
+    Module.End.toContinuousLinearMap (Matrix (Fin a) (Fin b) ℂ)
+  let F : Matrix (Fin a) (Fin b) ℂ →L[ℂ] Matrix (Fin a) (Fin b) ℂ :=
+    e (Kraus.mixedMapLM A B)
   have hF : spectralRadius ℂ F < 1 := by
-    simpa only [Kraus.mixedMapSpectralRadius, F, spectralRadius,
-      AlgEquiv.quasispectrum_eq] using hSpect
+    rw [F, spectralRadius, AlgEquiv.quasispectrum_eq e]
+    rw [mixedMapSpectralRadius_eq_end] at hSpect
+    exact hSpect
   obtain ⟨K, r, hK, hr, hr1, hbound⟩ :=
     geometric_apply_bound_of_spectralRadius_lt_one F hF
   refine ⟨K, r, hK, hr, hr1, fun n X ↦ ?_⟩
-  simpa only [F, ← map_pow] using hbound n X
+  have hApply : (F ^ n) X = ((Kraus.mixedMapLM A B) ^ n) X := by
+    rw [show F = e (Kraus.mixedMapLM A B) from rfl, ← map_pow]
+    rfl
+  simpa only [hApply] using hbound n X
 
 private theorem unital_transfer_norm_le (A : MPSTensor d a)
     (hA : Kraus.mapLM A 1 = 1) (X : Matrix (Fin a) (Fin a) ℂ) :
-    ‖Kraus.mapLM A X‖ ≤ ‖X‖ :=
-  (Kraus.isCPMap_mapLM A).norm_apply_le_of_map_one_eq_one hA X
+    ‖Kraus.mapLM A X‖ ≤ ‖X‖ := by
+  have hCP : IsKrausCP (Kraus.mapLM A) := Kraus.isCPMap_mapLM A
+  exact hCP.norm_apply_le_of_map_one_eq_one hA X
 
 private theorem unital_transfer_pow_norm_le (A : MPSTensor d a)
     (hA : Kraus.mapLM A 1 = 1) (n : ℕ) (X : Matrix (Fin a) (Fin a) ℂ) :
@@ -356,8 +388,11 @@ private theorem exists_trace_norm_bound (u v : ℕ) :
     ∃ K : ℝ, 0 < K ∧ ∀ (T : Module.End ℂ (Matrix (Fin u) (Fin v) ℂ))
       (D : ℝ), 0 ≤ D → (∀ X, ‖T X‖ ≤ D * ‖X‖) →
         ‖LinearMap.trace ℂ (Matrix (Fin u) (Fin v) ℂ) T‖ ≤ K * D := by
-  let e := Module.End.toContinuousLinearMap (Matrix (Fin u) (Fin v) ℂ)
-  let tr := LinearMap.toContinuousLinearMap
+  let e : Module.End ℂ (Matrix (Fin u) (Fin v) ℂ) ≃ₐ[ℂ]
+      (Matrix (Fin u) (Fin v) ℂ →L[ℂ] Matrix (Fin u) (Fin v) ℂ) :=
+    Module.End.toContinuousLinearMap (Matrix (Fin u) (Fin v) ℂ)
+  let tr : (Matrix (Fin u) (Fin v) ℂ →L[ℂ] Matrix (Fin u) (Fin v) ℂ) →L[ℂ] ℂ :=
+    LinearMap.toContinuousLinearMap
     ((LinearMap.trace ℂ (Matrix (Fin u) (Fin v) ℂ)).comp e.symm.toLinearMap)
   refine ⟨‖tr‖ + 1, by positivity, fun T D hD hT ↦ ?_⟩
   have hnorm : ‖e T‖ ≤ D := ContinuousLinearMap.opNorm_le_bound _ hD hT
@@ -499,7 +534,7 @@ private theorem absorb_quadratic_geometric {r : ℝ} (hr : 0 < r) (hr1 : r < 1) 
     exact add_pos_of_nonneg_of_pos (tsum_nonneg fun _ ↦ norm_nonneg _) zero_lt_one
   refine ⟨D, z, hD, hz, hz1, fun n ↦ ?_⟩
   have hterm : (n : ℝ) ^ 2 * (r / z) ^ n ≤ D := by
-    have hle := hsum.le_tsum n (fun _ _ ↦ norm_nonneg _)
+    have hle := hsum.le_tsum n (fun _ _ ↦ abs_nonneg _)
     have hn : 0 ≤ (n : ℝ) ^ 2 * (r / z) ^ n := by positivity
     rw [Real.norm_eq_abs, abs_of_nonneg hn] at hle
     exact hle.trans (by dsimp [D]; linarith)

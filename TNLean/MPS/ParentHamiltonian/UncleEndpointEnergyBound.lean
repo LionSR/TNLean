@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.UnclePinnedTrialNorm
+import TNLean.MPS.ParentHamiltonian.UncleTrialPinnedWalls
 import TNLean.MPS.ParentHamiltonian.CyclicRestrictionNorm
 
 /-!
@@ -22,7 +23,7 @@ Source: arXiv:1210.6613, proof of Lemma lowenergystates, lines 1289–1296.
 
 noncomputable section
 
-open scoped Matrix BigOperators InnerProductSpace
+open scoped Matrix BigOperators InnerProductSpace ComplexOrder MatrixOrder
 
 namespace MPSTensor
 
@@ -259,7 +260,8 @@ theorem re_inner_uncleHamiltonianES_trial_le_mul
     have hzero : uncleTwoWallTrialSource A B R L N = 0 := by
       funext σ
       exact Fin.elim0 (σ ⟨0, by omega⟩)
-    simp [hzero]
+    simp only [hzero, map_zero, inner_zero_left, Complex.zero_re]
+    positivity
   calc
     _ ≤ (((d ^ 2 : ℕ) : ℝ)⁻¹) * ∑ i ∈ uncleTrialEndpointBonds N hN,
         ∑ τ : Cfg d (6 * N + 1), ‖uncleTrialPinnedEndpointState A B R L N hN i τ‖ ^ 2 :=
