@@ -362,7 +362,16 @@ theorem IsMPUCanonicalFormII.exists_local_conjugation_gauges
       (x : Matrix (Fin ℓ[MPOTensor.mapStar U]) (Fin ℓ[MPOTensor.mapStar U]) ℂ)
       (y : Matrix (Fin r[MPOTensor.mapStar U]) (Fin r[MPOTensor.mapStar U]) ℂ)
       (SourceFactors.sourceU U S)] at h
-    simpa [x', y', Matrix.reindex_apply, Prod.map] using h
+    have hcancel : Matrix.reindex (Equiv.prodCongr el.symm er.symm) (Equiv.refl _)
+        (Matrix.reindex (Equiv.prodCongr el er) (Equiv.refl _)
+          ((SourceFactors.sourceU U S).map (starRingEnd ℂ))) =
+        (SourceFactors.sourceU U S).map (starRingEnd ℂ) := by
+      let E := Matrix.reindexLinearEquiv ℂ ℂ (Equiv.prodCongr el er)
+        (Equiv.refl (Fin d × Fin d))
+      change E.symm (E ((SourceFactors.sourceU U S).map (starRingEnd ℂ))) = _
+      exact E.symm_apply_apply _
+    rw [hcancel] at h
+    simpa only [x', y'] using h
   · have h := congrArg
       (Matrix.reindex (Equiv.refl _) (Equiv.prodCongr er.symm el.symm)) hv
     rw [S.sourceV_mapStar] at h
@@ -377,7 +386,16 @@ theorem IsMPUCanonicalFormII.exists_local_conjugation_gauges
       (x : Matrix (Fin ℓ[MPOTensor.mapStar U]) (Fin ℓ[MPOTensor.mapStar U]) ℂ)
       (y : Matrix (Fin r[MPOTensor.mapStar U]) (Fin r[MPOTensor.mapStar U]) ℂ)
       (SourceFactors.sourceV U S)] at h
-    simpa [x', y', Matrix.reindex_apply, Prod.map, Matrix.star_eq_conjTranspose] using h
+    have hcancel : Matrix.reindex (Equiv.refl _) (Equiv.prodCongr er.symm el.symm)
+        (Matrix.reindex (Equiv.refl _) (Equiv.prodCongr er el)
+          ((SourceFactors.sourceV U S).map (starRingEnd ℂ))) =
+        (SourceFactors.sourceV U S).map (starRingEnd ℂ) := by
+      let E := Matrix.reindexLinearEquiv ℂ ℂ (Equiv.refl (Fin d × Fin d))
+        (Equiv.prodCongr er el)
+      change E.symm (E ((SourceFactors.sourceV U S).map (starRingEnd ℂ))) = _
+      exact E.symm_apply_apply _
+    rw [hcancel] at h
+    simpa only [x', y', Matrix.star_eq_conjTranspose] using h
 
 /-- The forward local conjugation equations have one common symmetric or
 skew-symmetric case for the actual supplied source gates. This completes

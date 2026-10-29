@@ -129,3 +129,12 @@ indices. Its generic matrix types are restored, and both theorem calls now
 supply every equivalence, matrix and gate argument explicitly to resolve
 the reported stuck finite-instance inference. The repair awaits hosted
 validation; no local Lean command was run.
+
+## Hosted follow-up on `a3eb63da3`
+
+Job `123442474247` cleared all earlier errors and reached only the two final
+rank-cancellation simplifications. The residual expressions were inverse
+product maps under partially applied submatrices. They now cancel explicitly
+by the existing linear equivalence's `symm_apply_apply`, before unfolding
+the two output unitaries. No new matrix theorem or alias is introduced.
+No local Lean command was run; hosted validation remains pending.
