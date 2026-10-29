@@ -519,3 +519,41 @@
     characterization places its inverse image in the retained
     neighbourhood algebra.
 \end{proof}
+
+
+\begin{lemma}[Actual completed automorphism from one supplied standard form]
+    \label{lem:mpu_supplied_standard_form_actual_qca}
+    \lean{SpinChain.finiteRingNeighbourhood_subset_regionSumset,
+        SpinChain.exists_local_preimage_bufferedMPUQuasiLocalAction,
+        SpinChain.bufferedMPUQuasiLocalAction_surjective,
+        SpinChain.bufferedMPUQuasiLocalAut,
+        SpinChain.bufferedMPUQuasiLocalAut_apply,
+        SpinChain.bufferedMPUQuasiLocalAut_propagatesWithin,
+        SpinChain.bufferedMPUQuasiLocalAut_isQCA}
+    \notready
+    \uses{lem:mpu_finite_cyclic_inverse_propagation,
+        lem:mpu_finite_heisenberg_forward_propagation,
+        lem:mpu_finite_heisenberg_translation_covariance,
+        thm:mpu_finite_heisenberg_completed_forward_action}
+    Under the supplied positive-block standard-form hypotheses, every
+    observable on a finite target $J$ has a preimage under the actual
+    completed forward action, supported in $J+[-4k,4k]$. Consequently
+    that action is a star-automorphism of the quasi-local algebra,
+    is translation covariant, and propagates by at most $4k$ sites.
+    This is the supplied-standard-form specialization of the
+    source QCA construction; it requires no inverse standard form.
+\end{lemma}
+\begin{proof}
+    Choose one actual periodic chain buffering $J\cup\{0\}$ by six
+    blocks on the left and twelve on the right. Its length is at
+    least $6k$. The actual finite inverse of the target is supported
+    in its ring neighbourhood of radius $4k$. The buffer prevents
+    wraparound, so this neighbourhood lies in the ordinary integer
+    neighbourhood $J+[-4k,4k]$, which itself has the buffers needed
+    for actual forward evaluation. Finite unitarity makes that
+    evaluation equal to the original target. Thus the range of the
+    completed forward isometry contains every local observable.
+    The range is closed by completeness and dense by the local
+    observables, hence is the whole quasi-local algebra. The already
+    derived forward covariance and propagation give the QCA properties.
+\end{proof}
