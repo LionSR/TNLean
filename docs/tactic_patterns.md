@@ -45,6 +45,19 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Diameter of a chain support in graph distance — promoted (2026-10-28)
+
+- **Pattern:** Convert the range condition of `ChainSupport L R` to an upper
+  bound on the path-graph distance between two sites of the support.
+- **Defined in:** `TNLean/MPS/AreaLaw/LiebRobinson.lean`,
+  `ChainSupport.edist_le`.
+- **Refactored occurrences:** the existing propagation and localization proofs
+  in that file and the finite-support numerical propagation proof in
+  `MPS/AreaLaw/Hastings/LiebRobinson.lean`.
+- **Notes:** The existing private proof is now a public theorem; the new
+  propagation estimate uses it instead of repeating the conversion to natural
+  distance. The mathematical range condition is unchanged.
+
 ### Matrices of submodule orthogonal projections — promoted (2026-10-26)
 
 - **Pattern:** Form `Matrix.toEuclideanLin.symm W.starProjection.toLinearMap`
