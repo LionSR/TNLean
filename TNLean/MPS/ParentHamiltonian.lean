@@ -98,6 +98,7 @@ import TNLean.MPS.ParentHamiltonian.CyclicBlockedWordSpan
 import TNLean.MPS.ParentHamiltonian.CyclicBoundaryIntersection
 import TNLean.MPS.ParentHamiltonian.CyclicBoundaryIntertwining
 import TNLean.MPS.ParentHamiltonian.CyclicPrimitiveSectorDecomposition
+import TNLean.MPS.ParentHamiltonian.CyclicRestrictionNorm
 import TNLean.MPS.ParentHamiltonian.CyclicSubmoduleIteration
 import TNLean.MPS.ParentHamiltonian.CyclicTranslation
 import TNLean.MPS.ParentHamiltonian.CyclicWindow
