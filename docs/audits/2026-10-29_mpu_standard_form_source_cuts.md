@@ -14,17 +14,34 @@ unchanged. The zero-index derivation and all three literal certificate/supplier
 theorems now use this actual even-family comparison. No local certificate,
 gauge, rank, normalization or inverse witness is assumed.
 
-Remaining: arbitrary supplied standard-form presentations, converse,
-transposition, and exact-head hosted validation. The chosen simple reduced
+The actual even-ring converse is now written as well. Arbitrary normalized
+records at the canonical weight supply standard-form data with their own
+gates by comparison with the selected record of the same tensor. The local
+sign equation gives both adjoint gauge equations with `X=x†`, `Y=σx`.
+The actual source/adjoint records then contract on every even ring through
+`TwoSiteStandardFormData.mpo_eq_of_gate_gauges`. The literal four-spin
+converse transports its antecedent with the existing explicit dictionary.
+A final equivalence combines this with the forward theorem; the forward
+implication derives the rank identifications appearing on its right side.
+
+Remaining: arbitrary supplied standard-form presentations, transposition,
+and exact-head hosted validation. The chosen simple reduced
 canonical construction remains a load-bearing restriction. The exact source
 proposition and auxiliary Blueprint entries all remain `notready`; #7020 stays
-open. The new phase/factor/assembly proofs are source-written and uncompiled.
+open. The new phase/factor/assembly/converse proofs are source-written and uncompiled.
 No local Lean build, elaboration, compilation or cache mutation was run.
 
 Source review also found that rank relabeling already belongs to
 `FundamentalTheoremGatesBlocked.lean`. The redundant definition from the new
 source-cut module is removed; the final pointwise supplier reuses the existing
 `TwoSiteStandardFormData.reindexRanks`. No compatibility alias is introduced.
+
+The converse is written in `TimeReversalLocalSufficiency.lean`. It does not
+require a supplied standard-form transform or opaque decomposition witness.
+The local antecedent still acts on exactly four original spins. The two-site
+block used while closing the conclusion only identifies the even periodic
+ring; it is not a new eight-spin local hypothesis. The arbitrary-record
+standard-form supplier lives in `SourceFactorsStandardForm.lean`.
 
 ## Earlier staged source audit
 

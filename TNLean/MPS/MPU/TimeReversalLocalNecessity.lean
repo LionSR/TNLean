@@ -139,7 +139,10 @@ private theorem four_spin_gate_reindex
     rintro ⟨⟨a, b⟩, c, e⟩ ⟨⟨a', b'⟩, c', e'⟩
     rfl
 
-private theorem coarse_gates_eq_four_spin_gates
+/-- The normalized coarse source gates are exactly the literal four-spin
+matrices, after the explicit physical-pair and source-rank identifications.
+Source: CPSV17, `eq:block-twosites`, lines 1237–1249. -/
+theorem coarse_gates_eq_four_spin_gates
     {d D : ℕ} {U : MPOTensor d D} (hU : IsMPUCanonicalFormII U)
     (hsimple : IsMPUSimple U) (hrU : r[U] = d) (hlU : ℓ[U] = d)
     (hr : r[MPOTensor.blockTwo U] = d * d) (hl : ℓ[MPOTensor.blockTwo U] = d * d) :

@@ -9899,7 +9899,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 
 \begin{lemma}[Forward local time reversal for the constructed canonical standard form]
     \label{lem:mpu_canonical_forward_local_time_reversal}
-    \lean{MPOTensor.IsMPUCanonicalFormII.exists_coarse_timeReversal_certificate, MPOTensor.IsMPUCanonicalFormII.exists_local_timeReversal_certificate, MPOTensor.IsMPUCanonicalFormII.exists_twoSiteStandardFormData_timeReversal_certificate}
+    \lean{MPOTensor.IsMPUCanonicalFormII.exists_coarse_timeReversal_certificate, MPOTensor.IsMPUCanonicalFormII.exists_local_timeReversal_certificate, MPOTensor.IsMPUCanonicalFormII.exists_twoSiteStandardFormData_timeReversal_certificate, MPOTensor.coarse_gates_eq_four_spin_gates}
     \notready
     Let $U$ be a simple reduced canonical-form-II tensor. Construct its actual
     source standard form $W$ with gates $u,v$, and suppose that
@@ -9945,6 +9945,67 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     The explicit physical-pair and rank identifications transport this
     relation back to the displayed four-spin equation, with $x=X^\dagger$.
     Only one two-site blocking has been used; no odd-length symmetry follows.
+\end{proof}
+
+\begin{lemma}[Standard forms from supplied normalized factors]
+    \label{lem:mpu_standard_form_from_normalized_source_factors}
+    \lean{MPOTensor.IsMPUCanonicalFormII.exists_twoSiteStandardFormData_sourceFactors}
+    \notready
+    Let $U$ be a simple reduced canonical-form-II MPU with recorded weight
+    $\rho$. Every normalized supplied source factorization at this weight
+    provides actual standard-form data for its own gates on the two-site
+    block of $U$. No new compact decomposition is assumed. These are the
+    standard forms of \cite[lines~603--648]{Cirac2017MPU}.
+\end{lemma}
+
+\begin{proof}
+    \uses{SF, FundamentalMPU}
+    Compare the supplied factors with the selected factors of the same tensor.
+    The normalized factor comparison gives two unitary rank transformations.
+    Apply them to the existing open standard-form contraction. Its gates are
+    exactly those of the supplied factors.
+\end{proof}
+
+\begin{lemma}[Even-ring converse for the constructed canonical standard form]
+    \label{lem:mpu_canonical_even_local_time_reversal_iff}
+    \lean{MPOTensor.IsMPUCanonicalFormII.mpo_even_eq_adjoint_of_source_local_certificate, MPOTensor.IsMPUCanonicalFormII.mpo_standardForm_even_eq_adjoint_of_local_certificate, MPOTensor.IsMPUCanonicalFormII.standardForm_even_timeReversal_iff_exists_local_certificate}
+    \notready
+    Let $U$ be a simple reduced canonical-form-II tensor, and construct its
+    actual standard form $W$ with gates $u,v$. Then $W^{(N)}$ is self-adjoint
+    at every even length $N>1$ if and only if $r(U)=\ell(U)=d$ and, in
+    these canonical rank identifications, there are a unitary $x$ on
+    $\mathbb C^d\otimes\mathbb C^d$ and a sign $\sigma$ satisfying
+    \begin{align}
+        v_{23}(u\otimes u)
+         & =\sigma(x\otimes x^\dagger)v_{23}^\dagger.
+    \end{align}
+    More generally, a normalized supplied source record of a simple reduced
+    canonical tensor, with both source ranks equal to its physical dimension,
+    gives self-adjoint periodic operators on even rings whenever its two
+    gates satisfy the corresponding sign equation. No extra gate, factor,
+    or transform witness is assumed in this implication. This is the
+    even-ring contraction in \cite[lines~1214--1236]{Cirac2017MPU}.
+    Arbitrary supplied standard-form presentations and transposition remain
+    separate; the reduced presentation restriction is recorded in
+    \cite{gap:mpu_canonical_form_full_support}.
+\end{lemma}
+
+\begin{proof}
+    \uses{lem:mpu_canonical_forward_local_time_reversal,
+        lem:mpu_standard_form_from_normalized_source_factors,
+        lem:mpu_normalized_physical_adjoint_source_factors, FundamentalMPU}
+    The forward implication is the preceding construction. For the converse,
+    write $A=v_{23}(u\otimes u)$ and $B=v_{23}$. The local equation
+    $A=\sigma(x\otimes x^\dagger)B^\dagger$ gives
+    $B^\dagger=(X\otimes Y)A$ and
+    $A^\dagger=B(Y^\dagger\otimes X^\dagger)$ with
+    $X=x^\dagger$ and $Y=\sigma x$. Both are unitary since $\sigma^2=1$.
+    The actual normalized source and adjoint factors provide standard forms
+    with gates $A,B$ and $B^\dagger,A^\dagger$, respectively. Close the two
+    gate relations on each positive blocked ring by cancelling the internal
+    unitaries. These are precisely the even rings of $W$. The explicit
+    coordinate dictionary transports the given four-original-spin equation
+    to these gate relations without enlarging its local antecedent.
 \end{proof}
 
 \begin{proposition}[Admissible local characterization of time reversal]

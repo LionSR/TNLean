@@ -9678,3 +9678,14 @@ The even-family assembly reuses the existing
 `TwoSiteStandardFormData.reindexRanks` in
 `FundamentalTheoremGatesBlocked.lean`; the duplicate source-cut definition is
 removed after the dependency audit exposed it.
+
+### Standard forms with arbitrary normalized source gates — candidate (2026-10-29)
+
+- **Pattern:** Compare a normalized source record with the selected record
+  of the same tensor, then apply the resulting rank unitaries to the existing
+  open standard form.
+- **Seen:** `MPS/MPU/SourceFactorsStandardForm.lean`, reused for both the
+  source and actual physical-adjoint records in `TimeReversalLocalSufficiency.lean`.
+- **Abstraction:** The public `exists_twoSiteStandardFormData_sourceFactors`
+  supplies the actual data; no SVD or standard-form witness is added downstream.
+  The converse uses the existing periodic gauge cancellation theorem.
