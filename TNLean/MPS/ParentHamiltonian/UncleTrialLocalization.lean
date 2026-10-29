@@ -296,6 +296,7 @@ private theorem uncleConfigSegment_last_prefix
       (k := 0) (by omega)
   · apply congrArg List.ofFn
     funext j
+    simp only [Fin.val_cast, Fin.val_natAdd, Nat.zero_add]
     change cyclicCfg (by omega) 2 (⟨6 * N, by omega⟩ : Fin (6 * N + 1)) σ τ
       ⟨1 + j.val, by omega⟩ = τ ⟨1 + j.val, by omega⟩
     exact cyclicCfg_complement_site (by omega) (by omega) (by omega) σ τ
