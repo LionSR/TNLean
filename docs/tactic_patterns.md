@@ -9673,3 +9673,8 @@ there is no need for a new tactic.
   actual virtual comparison. The existing normalized factor and gate
   contractions are reused; no parallel source or admissibility predicate is
   introduced. Reindex cancellation uses the existing linear equivalence.
+
+The even-family assembly reuses the existing
+`TwoSiteStandardFormData.reindexRanks` in
+`FundamentalTheoremGatesBlocked.lean`; the duplicate source-cut definition is
+removed after the dependency audit exposed it.

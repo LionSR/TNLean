@@ -21,6 +21,11 @@ proposition and auxiliary Blueprint entries all remain `notready`; #7020 stays
 open. The new phase/factor/assembly proofs are source-written and uncompiled.
 No local Lean build, elaboration, compilation or cache mutation was run.
 
+Source review also found that rank relabeling already belongs to
+`FundamentalTheoremGatesBlocked.lean`. The redundant definition from the new
+source-cut module is removed; the final pointwise supplier reuses the existing
+`TwoSiteStandardFormData.reindexRanks`. No compatibility alias is introduced.
+
 ## Earlier staged source audit
 
 

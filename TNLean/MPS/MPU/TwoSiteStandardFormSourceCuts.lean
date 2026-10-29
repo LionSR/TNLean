@@ -46,37 +46,6 @@ variable {d D ℓ r : ℕ} {W : MPOTensor (d * d) D}
   {u : Matrix (Fin ℓ × Fin r) (Fin d × Fin d) ℂ}
   {v : Matrix (Fin d × Fin d) (Fin r × Fin ℓ) ℂ}
 
-/-- Transport the actual supplied standard form along identifications of
-its two source spaces. The gates and half factors are relabeled directly;
-no new standard-form witness is assumed. Source: arXiv:1703.09188,
-`StandardForm`, lines 603–617, and the rank identifications in `PropChiral`,
-lines 1237–1252. -/
-noncomputable def reindexRanks {ℓ' r' : ℕ}
-    (S : TwoSiteStandardFormData W u v) (el : Fin ℓ ≃ Fin ℓ') (er : Fin r ≃ Fin r') :
-    TwoSiteStandardFormData W
-      (Matrix.reindex (Equiv.prodCongr el er) (Equiv.refl _) u)
-      (Matrix.reindex (Equiv.refl _) (Equiv.prodCongr er el) v) := by
-  have hl : ℓ = ℓ' := by simpa only [Fintype.card_fin] using Fintype.card_congr el
-  have hr : r = r' := by simpa only [Fintype.card_fin] using Fintype.card_congr er
-  refine {
-    phys_pos := S.phys_pos
-    bond_pos := S.bond_pos
-    left_pos := hl ▸ S.left_pos
-    right_pos := hr ▸ S.right_pos
-    X₁ := Matrix.reindex (Equiv.refl _) er S.X₁
-    X₂ := Matrix.reindex (Equiv.refl _) el S.X₂
-    u_unitary := S.u_unitary.reindex _ (Equiv.prodCongr el er) (Equiv.refl _)
-    v_unitary := S.v_unitary.reindex _ (Equiv.refl _) (Equiv.prodCongr er el)
-    v_apply := ?_
-    W_apply := ?_ }
-  · intro i₁ i₂ s t
-    exact S.v_apply i₁ i₂ (er.symm s) (el.symm t)
-  · intro i j α γ
-    rw [S.W_apply]
-    refine Fintype.sum_equiv el _ _ (fun t ↦ ?_)
-    refine Fintype.sum_equiv er _ _ (fun s ↦ ?_)
-    simp [Matrix.reindex_apply]
-
 /-- Left factor of the first cut of the supplied tensor: retain its first
 output spin and the original right half factor. Source: arXiv:1703.09188,
 `eq:block-twosites`, lines 1237–1244, and `eq:sf-svd`, lines 479–506. -/
