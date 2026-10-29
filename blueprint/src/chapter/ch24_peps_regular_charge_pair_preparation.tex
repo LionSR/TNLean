@@ -16,7 +16,7 @@
     A comparison with the original six-spin contraction remains separate.
 \end{definition}
 
-\begin{theorem}[The diagonal embedding preserves the charge-pair inner product]
+\begin{lemma}[The diagonal embedding preserves the charge-pair inner product]
     \label{thm:peps_regular_charge_four_register_inner}
     \lean{TNLean.PEPS.normalizedRegularChargeFourRegister_inner,
         TNLean.PEPS.normalizedRegularChargeFourRegister_normSq}
@@ -31,13 +31,13 @@
     In particular, a unitary irreducible character gives
     $\|\Phi_{\chi,p}\|=1$. A nontrivial irreducible character gives
     $\langle\Omega,\Phi_{\chi,p}\rangle=0$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Only the diagonal configurations $a=c$ and $b=d$ contribute.
     The remaining sum is the proved two-register inner product.
 \end{proof}
 
-\begin{theorem}[Unitary preparation in the four accessible registers]
+\begin{lemma}[Unitary preparation in the four accessible registers]
     \label{thm:peps_regular_charge_pair_preparation}
     \lean{TNLean.PEPS.exists_unitary_regularChargePairPreparation}
     \leanok
@@ -49,7 +49,7 @@
     This is an auxiliary accessible-register preparation for
     \cite[charge-pair creation]{Schuch2010PEPS}, lines 2534--2558;
     it does not assert an original six-spin creation operation.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     For the trivial character, the target is $\Omega$ and $Q=I$ suffices.
     Otherwise $\Omega$ and $\Phi_{\chi,p}$ are orthogonal unit vectors, and the

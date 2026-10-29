@@ -45,7 +45,7 @@ Write the group additively as $G=\mathbb Z_2$.
     matrices implies semi-regularity.
 \end{proof}
 
-\begin{theorem}[Four independent primal toric-code states]
+\begin{lemma}[Four independent primal toric-code states]
     \label{thm:toric_code_four_torus_sectors}
     \lean{TNLean.PEPS.linearIndependent_toricCodeTorusState,
         TNLean.PEPS.finrank_span_toricCodeTorusState}
@@ -58,7 +58,7 @@ Write the group additively as $G=\mathbb Z_2$.
         \dim_{\mathbb C}\operatorname{span}
         \{\Psi_{g,h}:g,h\in\mathbb Z_2\}=4.
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{lem:toric_code_bond_semiregular,thm:peps_toric_code_primal_g_isometric,
         thm:peps_semiregular_g_injective_closure_independence,thm:peps_abelian_pair_classes}
@@ -89,7 +89,7 @@ Write the group additively as $G=\mathbb Z_2$.
     on the indicated seam.
 \end{definition}
 
-\begin{theorem}[Exact physical amplitudes]
+\begin{lemma}[Exact physical amplitudes]
     \label{thm:toric_code_torus_amplitudes}
     \lean{TNLean.PEPS.toricCodeTorusState_apply,
         TNLean.PEPS.toricCodeTorusState_one_one_apply,
@@ -104,7 +104,7 @@ Write the group additively as $G=\mathbb Z_2$.
     Thus all four vectors have the same physical support and differ by
     relative seam signs. The untwisted coefficient is exactly the
     compatibility indicator; no scalar normalization is suppressed.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Each physical tensor fixes its four bond-end indices uniquely.
     Hence exactly one assignment of bond ends survives the site-tensor

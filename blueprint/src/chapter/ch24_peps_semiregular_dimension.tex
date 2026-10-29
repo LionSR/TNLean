@@ -1,4 +1,4 @@
-\begin{theorem}[Dimension bound for distinct irreducibles]
+\begin{lemma}[Dimension bound for distinct irreducibles]
     \label{thm:peps_semiregular_dimension_bound}
     \lean{Representation.sum_finrank_le_of_distinct_irreducibles_of_isSemiRegular}
     \lean{TNLean.PEPS.finrank_blockMatrixRepresentation_le_of_isSemiRegular}
@@ -11,7 +11,7 @@
     This dimension comparison, which underlies the smallest representation
     in \cite[Section~7]{Schuch2010PEPS}, requires no unitarity assumption on
     $\sigma$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Decomposing $\sigma=\bigoplus_{T\in\mathcal A}T$ as a finite internal sum
     of irreducible subrepresentations, semi-regularity ensures that for each
@@ -24,7 +24,7 @@
         \sum_{T\in\mathcal A}\dim T=\dim\sigma$.
 \end{proof}
 
-\begin{theorem}[Smallest semi-regular representation]
+\begin{lemma}[Smallest semi-regular representation]
     \label{thm:peps_smallest_semiregular_representation}
     \lean{TNLean.PEPS.exists_smallestSemiRegular_matrixRepresentation}
     \leanok
@@ -37,7 +37,7 @@
     Thus the representation in \cite[Section~7]{Schuch2010PEPS} is
     smallest in dimension, including among representations without
     a specified invariant inner product.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     For the multiplicity-one representation from the regular Fourier
     decomposition, the dimension bound on its distinct irreducible

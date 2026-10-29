@@ -25,18 +25,18 @@ the subsequent separation and second-moment arguments.
     evaluates the aggregate operator at each nonprivate gate.
 \end{definition}
 
-\begin{theorem}[Norm of the complete composition]
+\begin{lemma}[Norm of the complete composition]
     \label{thm:peps_source_circuit_norm}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.norm_eval_le_one}
     \leanok
     \uses{def:peps_source_circuit}
     Every allowed chronological composition satisfies $\|W\|\leq1$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:peps_prepared_gate_grouped}
-    By Theorem~\ref{thm:peps_prepared_gate_grouped} each gate is a contraction,
+    By Lemma~\ref{thm:peps_prepared_gate_grouped} each gate is a contraction,
     and composition, identity extension, and register swaps preserve
     $\|\cdot\|\le1$.
 \end{proof}
@@ -62,14 +62,14 @@ the subsequent separation and second-moment arguments.
     from $e$ along $C_g\hookrightarrow P$.
 \end{definition}
 
-\begin{theorem}[Incidence of the original source positions]
+\begin{lemma}[Incidence of the original source positions]
     \label{thm:peps_source_circuit_incidence}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.endpoints_mem_participants}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.endpoints_ne}
     \leanok
     \uses{def:peps_source_circuit_positions}
     Each $(g,e)\in\mathcal E$ has two distinct endpoints in $C_g$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -101,7 +101,7 @@ the subsequent separation and second-moment arguments.
     weighted sum $\sum_{\xi\in\Xi_{\mathcal A}}c_\xi W_\xi$.
 \end{definition}
 
-\begin{theorem}[Allowed partial branches and their retained sources]
+\begin{lemma}[Allowed partial branches and their retained sources]
     \label{thm:peps_partial_source_inventory}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.isAllowed_partialWord}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.expandedSources}
@@ -114,19 +114,19 @@ the subsequent separation and second-moment arguments.
     precisely the sources of $g\in\mathcal G_{\mathcal A}$ having an endpoint in
     $\mathcal A$ (with exterior owners grouped and original endpoint spaces and
     vectors preserved).
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:peps_affected_source_occurrences,thm:peps_prepared_gate_properties,thm:peps_grouped_block_map,thm:peps_prepared_gate_grouped}
-    Induct on the composition using Theorems~\ref{thm:peps_prepared_gate_properties},
+    Induct on the composition using Lemmas~\ref{thm:peps_prepared_gate_properties},
     \ref{thm:peps_prepared_gate_grouped}, \ref{thm:peps_grouped_block_map}, and
     \ref{thm:peps_affected_source_occurrences}: untouched gates are contractions
     on exterior memory, and exterior-endpoint pairs become local normalized
     preparations under owner grouping.
 \end{proof}
 
-\begin{theorem}[Exact chronological operator identity]
+\begin{lemma}[Exact chronological operator identity]
     \label{thm:peps_partial_source_evaluation}
     \lean{TNLean.Lattice.PartyCircuit.Word.eval_sum_appendTail}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.eval_partial_gate}
@@ -142,19 +142,19 @@ the subsequent separation and second-moment arguments.
          & = I_bW.
         \label{eq:peps_partial_source_evaluation}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:peps_grouped_gate_sum,thm:peps_prepared_gate_grouped,thm:peps_grouped_block_map,def:peps_source_circuit}
-    By Theorem~\ref{thm:peps_grouped_gate_sum}, summing $\xi_g\in\Xi_g$ at
+    By Lemma~\ref{thm:peps_grouped_gate_sum}, summing $\xi_g\in\Xi_g$ at
     $g\in\mathcal G_{\mathcal A}$ recovers the gate operator, while
     $g\notin\mathcal G_{\mathcal A}$ already carries its aggregate operator;
     inducting over consecutive compositions and idle-register extensions gives
     (\ref{eq:peps_partial_source_evaluation}).
 \end{proof}
 
-\begin{theorem}[Local contributions to the scalar cost]
+\begin{lemma}[Local contributions to the scalar cost]
     \label{thm:peps_partial_source_local_cost}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sum_norm_coefficient_gate_of_touches}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sum_norm_coefficient_gate_of_exterior}
@@ -169,7 +169,7 @@ the subsequent separation and second-moment arguments.
     contributes $\sum_{\xi\in\Xi_g}|c_{g,\xi}|$, untouched gates, identities,
     private operations, and swaps contribute $1$, consecutive compositions
     multiply these sums, and idle-register extensions preserve them.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -178,7 +178,7 @@ the subsequent separation and second-moment arguments.
     multiplicativity of $|\cdot|$ over Cartesian products of choice sets.
 \end{proof}
 
-\begin{theorem}[The exact product of the gate costs]
+\begin{lemma}[The exact product of the gate costs]
     \label{thm:peps_partial_source_product_cost}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sum_norm_coefficient_eq_prod}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sum_norm_coefficient_le_pow_card}
@@ -197,17 +197,17 @@ the subsequent separation and second-moment arguments.
     \end{align}
     which are bounded by $B^t$ and $B^{2t}$ when
     $\sum_{\eta\in\Xi_g}|c_{g,\eta}|\le B$ for all $g\in\mathcal G_{\mathcal A}$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:peps_partial_source_local_cost,def:peps_partial_source_choices}
-    Induction via Theorem~\ref{thm:peps_partial_source_local_cost} yields
+    Induction via Lemma~\ref{thm:peps_partial_source_local_cost} yields
     (\ref{eq:peps_partial_source_product_cost}), and bounding each of the $t$
     factors by $B$ gives $B^t$ and $B^{2t}$.
 \end{proof}
 
-\begin{theorem}[The density expansion in orthonormal coordinates]
+\begin{lemma}[The density expansion in orthonormal coordinates]
     \label{thm:peps_partial_source_density}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.expandedEval_eq_mapOwner}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.toMatrix_eval_eq_sum_partialWord}
@@ -226,7 +226,7 @@ the subsequent separation and second-moment arguments.
         K_\xi\rho K_\zeta^\dagger.
         \label{eq:peps_partial_source_density}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -236,7 +236,7 @@ the subsequent separation and second-moment arguments.
     gives (\ref{eq:peps_partial_source_density}).
 \end{proof}
 
-\begin{theorem}[Fixed positions for every partial source inventory]
+\begin{lemma}[Fixed positions for every partial source inventory]
     \label{thm:peps_partial_source_order}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sourceOrder}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.mem_sourceOrder}
@@ -259,12 +259,12 @@ the subsequent separation and second-moment arguments.
     positions $e\in\mathcal E$ meeting $\mathcal A$, each carrying its grouped
     endpoints, fixed halfspaces $\C^{u_e},\C^{v_e}$, and normalized branch
     vector; hence the surviving source-register layout is independent of $\xi$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:peps_partial_source_inventory,thm:peps_affected_source_occurrences}
-    Induct on the composition using Theorems~\ref{thm:peps_partial_source_inventory}
+    Induct on the composition using Lemmas~\ref{thm:peps_partial_source_inventory}
     and \ref{thm:peps_affected_source_occurrences}: disjoint occurrence sets
     preserve duplicate-freeness under concatenation, and owner grouping drops a
     slot $e\in\mathcal E$ precisely when both endpoints lie outside $\mathcal A$.

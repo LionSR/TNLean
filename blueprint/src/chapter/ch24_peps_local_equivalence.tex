@@ -12,7 +12,7 @@
     $\widehat M$ represents a normalized pure state.
 \end{definition}
 
-\begin{theorem}[Complementary unitary from equal reduced densities]%
+\begin{lemma}[Complementary unitary from equal reduced densities]%
     \label{thm:peps_pure_cut_local_equivalence}
     \lean{TNLean.PEPS.normalizedPureCutMatrix_mul_conjTranspose,
         TNLean.PEPS.exists_unitary_normalizedPureCutMatrix_eq_of_reducedMatrix_eq}
@@ -32,7 +32,7 @@
     \cite[Theorem~6.7 and Corollary~6.8]{Schuch2010PEPS} (local source
     lines 1995--2025), the corresponding pure states differ by the unitary $U$
     on $S$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     The square of the inverse real square root gives
@@ -43,7 +43,7 @@
     $\widehat B=\widehat A V^\dagger$, so $U=(V^\dagger)^{\mathsf T}$ suffices.
 \end{proof}
 
-\begin{theorem}[Local equivalence of coherent physical torus closures]%
+\begin{lemma}[Local equivalence of coherent physical torus closures]%
     \label{thm:peps_torus_physical_local_equivalence}
     \lean{TNLean.PEPS.IsGIsometric.torusPhysicalCut_local_equivalence_of_isSimplyConnected_and_winding}
     \leanok
@@ -65,10 +65,10 @@
     This auxiliary statement has the fixed complementary winding
     loops as explicit hypotheses. It does not assert the width-one
     stripe construction of \cite[Theorem~6.7]{Schuch2010PEPS}.
-    Theorem~\ref{thm:peps_torus_simply_connected_boundary_loops}
+    Lemma~\ref{thm:peps_torus_simply_connected_boundary_loops}
     derives the exterior walks for the simply connected regions
     on tori with periods at least three.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_torus_physical_cut_density,
@@ -78,5 +78,5 @@
     $\widehat A\widehat A^\dagger=\widehat B\widehat B^\dagger$.
     Multiplying by $O$ and taking traces proves
     (\ref{eq:peps_torus_local_expectation}), and applying
-    Theorem~\ref{thm:peps_pure_cut_local_equivalence} yields the complementary unitary.
+    Lemma~\ref{thm:peps_pure_cut_local_equivalence} yields the complementary unitary.
 \end{proof}
