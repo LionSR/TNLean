@@ -178,11 +178,17 @@ increases to $1/e$, this is the limiting order of magnitude and not an upper
 bound. The formalization proves $(1-1/h)^h\ge1/4$ for $h\ge2$, so
 $b_h\le(2^h-1)\epsilon^{1/4}$.
 
-\section{What is not formalized}
+\section{The energy estimate and higher-dimensional grouping}
 
 The energy bound eq.~(hchy) and the count of at most $2n$ final states
-(lines 709--730), which the source states only with ``one may show'', and the
-extensions to higher dimensions (lines 745--756) are not part of this note.
+(lines 709--730) are proved for the corrected periodic construction in the
+\href{hastings05_hierarchical_energy.pdf}{hierarchical-energy note}.
+That construction now starts from the original physical interactions and
+uses an explicit integer quadratic logarithmic radius at every physical
+chain length. The coordinate-slice option in higher dimensions
+(lines 745--756) is constructed on full finite rectangular boxes in the
+\href{hastings05_coordinate_slices.pdf}{coordinate-slices note}; its
+scope and polynomial logarithmic range are stated there.
 
 \section{All levels against the ground state}
 \label{sec:hastings05_hierarchical_projection_all_levels}
@@ -228,6 +234,169 @@ replaces the printed recurrence and its coefficient $2^h-1$ by
 (\ref{eq:hastings05_hierarchical_projection_ground_recurrence}) and $3^h-1$,
 which is still polynomial in $N=2^h$. With $s=1-1/h$ and $h\ge2$ the final
 deficiency is at most $(3^h-1)e^{1/4}$.
+
+\section{Uniform radii and an explicit projection length}
+
+Put $r=l_{\mathrm{proj}}/l_{\mathrm{fac}}$, $e=e^{-r}$ and
+$s=1-1/h$, with $h\ge2$. The nonnegative sequence $\beta_m$ is
+increasing, since its squared recurrence dominates $2\beta_m^2$.
+Consequently, for $m\le h$,
+\[
+ \beta_m\le(3^h-1)e^{-r/4}.
+\]
+The adaptive radius therefore satisfies
+\[
+ x_m=K(e+2\beta_m)^{1/h}
+ \le K\bigl[(2\cdot3^h-1)e^{-r/4}\bigr]^{1/h}
+ \le9K e^{-r/(4h)}.
+\]
+Every radius is strictly positive for $K>0$. The deficiency after the
+$h$ tree levels is less than one if $r>4h\log3$.
+
+To control the periodic closing link, add its spectral window inside
+the last retained space, as explained in
+\href{hastings05_hierarchical_energy.pdf}{the hierarchical-energy note}.
+The same deficiency majorant bounds this extra step. Since
+$(1-1/h)^{h+1}\ge(1/4)(1/2)=1/8$, its deficiency is at most
+\[
+ (3^{h+1}-1)e^{-r/8},
+\]
+and hence is less than one if $r>8(h+1)\log3$.
+These statements concern the explicitly corrected norm deficiency,
+not the printed expectation-deficiency recurrence.\footnote{Declarations:
+\leanid{TNLean.MPS.AreaLaw.LocalSolution.hierarchyWindowRadius_le},
+\leanid{TNLean.MPS.AreaLaw.LocalSolution.hierarchyDeficiency_window_lt_one},
+\leanid{TNLean.MPS.AreaLaw.LocalSolution.hierarchyDeficiency_window_succ_le}, and
+\leanid{TNLean.MPS.AreaLaw.LocalSolution.hierarchyDeficiency_window_succ_lt_one}.}
+
+For the scalar estimate, let $J_{\mathrm{eff}}>0$ and suppose
+$K\le J_{\mathrm{eff}}r$. In the actual one-dimensional periodic construction
+this inequality is derived, with $K=8\ell J$, $r=\eta\ell$ and
+$J_{\mathrm{eff}}=8J/\eta$, as detailed below. Let
+$\Delta>0$ be the physical spectral gap. Define
+\[
+ A=1+\max\{0,\log(J_{\mathrm{eff}}/\Delta)\},\qquad
+ r_*=512h^2 A.
+\]
+For every $r\ge r_*$, all $2^h-1$ tree windows and the closing window
+obey
+\begin{align*}
+ \sum_{m=0}^{h-1}2^{h-1-m}x_m+x_h
+   &\le9\cdot2^hK e^{-r/(4h)}\le\Delta/4,\\
+ 2^hJ_{\mathrm{eff}}r e^{-r}&\le\Delta/8.
+\end{align*}
+The length $r_*$ also exceeds the strict closing-window threshold above.
+In particular the retained space is nonzero, and each radius is at most
+$\Delta/(4\cdot2^h)$. This proves an explicit version of the source's
+quadratic dependence on $h=\log_2N$ in lines~709--720; the fixed local
+constants are included transparently in $J_{\mathrm{eff}}$.
+
+For a chain with an arbitrary finite number $N$ of supersites, set
+$h=\max\{2,\lceil\log_2 N\rceil\}$, with the upper integer logarithm
+read as zero for $N\le1$. Extend the finite edge family by zero up to
+$2^h$ edges. This changes neither its physical sum nor the local
+residual and centred-norm estimates. The chosen depth satisfies
+$N\le2^h$ and $h\le\lceil\log_2N\rceil+2$, so the explicit projection
+length is bounded by
+\[
+ 512(\lceil\log_2N\rceil+2)^2
+ \bigl(1+\max\{0,\log(J_{\mathrm{eff}}/\Delta)\}\bigr).
+\]
+No assumption that the physical chain length is a power of two is
+needed.\footnote{Declarations:
+\leanid{TNLean.MPS.AreaLaw.LocalSolution.finiteHierarchyDepth},
+\leanid{TNLean.MPS.AreaLaw.LocalSolution.le_two_pow_finiteHierarchyDepth},
+\leanid{TNLean.MPS.AreaLaw.LocalSolution.finiteHierarchyDepth_le_clog_add_two}, and
+\leanid{TNLean.MPS.AreaLaw.LocalSolution.hierarchyProjectionLength_finiteHierarchyDepth_le}.}
+
+For completeness, the scalar estimate uses $t e^{-t}\le1$ to absorb
+the linear factor in $K$:
+\[
+ r e^{-r/(4h)}\le8h e^{-r/(8h)}.
+\]
+Since $2^h\le e^h$, $h\le e^h$, $72\le e^{36h}$ for $h\ge2$, and
+$J_{\mathrm{eff}}\le\Delta e^A$, the energy envelope is at most
+\[
+ \Delta\exp\bigl(A+38h-r/(8h)\bigr)
+ \le\Delta e^{-2}\le\Delta/4.
+\]
+The exponential truncation estimate follows from the same scalar result
+with coupling bound $2J_{\mathrm{eff}}r/9$, which is at most
+$J_{\mathrm{eff}}r$, and $e^{-r}\le e^{-r/(4h)}$.
+Thus no final energy-smallness assumption has been inserted.\footnote{Declarations:
+\leanid{TNLean.MPS.AreaLaw.LocalSolution.hierarchyProjectionLength},
+\leanid{TNLean.MPS.AreaLaw.LocalSolution.hierarchyWindowEnergy_le_quarter_gap},
+\leanid{TNLean.MPS.AreaLaw.LocalSolution.hierarchyDeficiency_window_succ_lt_one_of_length},
+\leanid{TNLean.MPS.AreaLaw.LocalSolution.hierarchySum_windowRadius_add_le_quarter_gap}, and
+\leanid{TNLean.MPS.AreaLaw.LocalSolution.hierarchyTruncationError_le_eighth_gap}, in
+\doclink{TNLean/MPS/AreaLaw/LocalSolution/HierarchyRadius}, and
+\leanid{TNLean.MPS.AreaLaw.LocalSolution.hierarchyTruncationError_mul_length_le_eighth_gap}.}
+
+\subsection{The actual one-dimensional periodic bounds}
+
+For a physical cycle of $M\ge1$ sites, take
+$N=\max\{1,\lfloor M/(2\ell)\rfloor\}$ contiguous blocks, putting the
+remainder in the last block. Every cyclic radius-$\ell$ term belongs to
+an adjacent pair, and at most $4\ell$ terms are assigned to a pair.
+Consequently local norm $J$ and residual $Je^{-\eta\ell}$ give the actual
+centred pair bound $K=8\ell J$ and residual at most $Ke^{-\eta\ell}$.
+Writing $r=\eta\ell$, the effective coupling is $J_{\rm eff}=8J/\eta$,
+independent of physical chain length. Equal blocks improve the constant
+$8$ to $4$; they are not required.
+
+The integer choice
+\begin{align*}
+ \ell=\left\lceil\frac{512}{\eta}(\lceil\log_2M\rceil+2)^2
+      \bigl(1+\max\{0,\log((8J/\eta)/\Delta)\}\bigr)\right\rceil
+\end{align*}
+is positive and satisfies the hierarchy length inequality for the block
+count determined by this very $\ell$. It is less than one plus the
+quantity inside the ceiling. This proves the quadratic logarithmic
+physical range without a divisibility condition or a supplied pair-norm
+hypothesis. For a physical interaction range $R$, take the maximum of
+this integer with $\lceil R\rceil$; the explicit upper bound increases
+by at most $\lceil R\rceil$, and the sufficient hierarchy length still
+holds. The actual cyclic metric has ball count at most $2\lceil R\rceil+1$;
+its localization theorem constructs the required truncated operators,
+including the exact zero-range case. The physical approximation uses
+$\sum_i\widetilde H_i=H$ and the small differences
+$\widetilde H_i-M_i$, where $\widetilde H_i$ denotes the full Gaussian
+filter, as explained in the
+\href{hastings05_hierarchical_energy.pdf}{hierarchical-energy note}.
+The local residual condition (low) is retained, and the closing-window
+correction preserves every lower retained space.\footnote{Declarations:
+\leanid{TNLean.MPS.AreaLaw.LocalSolution.centeredNorm_roundedPeriodicOperator_le},
+\leanid{TNLean.MPS.AreaLaw.LocalSolution.residual_roundedPeriodicOperator_le},
+\leanid{TNLean.MPS.AreaLaw.LocalSolution.roundedPeriodicProjectionRadius},
+\leanid{TNLean.MPS.AreaLaw.LocalSolution.hierarchyProjectionLength_le_chosen_roundedPeriodicRadius},
+\leanid{TNLean.MPS.AreaLaw.LocalSolution.exists_unit_mem_roundedPeriodicProjection_of_chosen_radius}, and
+\leanid{TNLean.MPS.AreaLaw.LocalSolution.card_le_two_mul_re_trace_of_roundedPeriodicProjection_of_chosen_radius},
+\leanid{TNLean.MPS.AreaLaw.LocalSolution.physicalPeriodicProjectionRadius_lt}, and
+\leanid{TNLean.MPS.AreaLaw.LocalSolution.exists_periodicPhysicalHierarchy}.}
+
+\subsection{An effective coupling depending on the system size}
+
+A coarse pair-operator norm bound may make the effective coupling
+proportional to the total number of physical terms. This still preserves
+polynomial logarithmic growth of the projection length. Precisely, for
+$N\ge1$, $C,J,\Delta>0$ and $J_{\mathrm{eff}}=NCJ$, put
+$L=\lceil\log_2N\rceil$ and $A=1+\max\{0,\log(CJ/\Delta)\}$. Then
+\[
+ 1+\max\{0,\log(J_{\mathrm{eff}}/\Delta)\}
+ \le\log N+A\le(L+2)A.
+\]
+With the chosen depth $h=\max\{2,L\}$ this gives the proved bound
+\[
+ r_*\le512(L+2)^3 A.
+\]
+Thus a linear-in-size effective coupling gives a cubic logarithmic
+scalar length at fixed local coupling and gap. This is relevant to the
+higher-dimensional extension in lines~745--756; applying it to a
+particular grouping requires its physical support and residual estimates.
+These are constructed for the coordinate-slice option on full finite
+rectangular boxes in every dimension; see
+\href{hastings05_coordinate_slices.pdf}{the coordinate-slices note}.\footnote{Declaration:
+\leanid{TNLean.MPS.AreaLaw.LocalSolution.hierarchyProjectionLength_finiteHierarchyDepth_mul_le}.}
 
 \section{Formalization}
 
