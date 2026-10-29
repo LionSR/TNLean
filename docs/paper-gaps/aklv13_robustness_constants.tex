@@ -35,13 +35,15 @@ rather than the stated zero. To obtain zero, the uniform shift would
 be $d/(s-6)$; equivalently, subtract $dI$ from the interior sum once.
 This correction follows by counting the displayed range. The normalized
 robustness theorem takes the regional positivity and $0\le e\le6$ as
-data and does not use the printed distribution of scalar shifts.
+data. The original-chain construction subtracts each actual regional
+minimum once, which implements the corrected total shift without
+introducing individual shifted middle bonds.
 
 \section{The cross term and two typographical slips}
 The Cauchy--Schwarz calculation in the proof of Lemma~6.5 gives
 \begin{align}
     |\langle P_tv,AQ_tv\rangle|
-    &\le \|A\|\,\|P_tv\|\,\|Q_tv\|
+     & \le \|A\|\,\|P_tv\|\,\|Q_tv\|
     \le 2\sqrt{\langle v,H^{(t)}v\rangle/t}
 \end{align}
 for a unit vector and positive $t$, using the first assertion of that lemma.
@@ -56,7 +58,7 @@ of the three disconnected regional blocks by
 The proof of Lemma~6.6(1) uses $\epsilon_0$, where the printed expansion
 has $\epsilon$. Positivity of $A$ gives
 $\langle Q_t\Gamma,HQ_t\Gamma\rangle\ge
-\langle Q_t\Gamma,BQ_t\Gamma\rangle$; the comparison printed in the prose
+    \langle Q_t\Gamma,BQ_t\Gamma\rangle$; the comparison printed in the prose
 after that expansion has the opposite sign.
 
 \section{Recovering the off-diagonal constant}
@@ -67,9 +69,9 @@ Then $\|O_j\|\le1/2$, and the local Hadamard bound gives
 $\|e^{B/8}O_je^{-B/8}\|\le1$.
 For $t\ge u$, $Q_tP_u=0$, so the scalar shifts disappear and
 \begin{align}
-    \|Q_tAP_u\|&\le e^{-(t-u)/8}
-      \sum_{j\in\{2,s-1\}}\|e^{B/8}O_je^{-B/8}\|
-      \le2e^{-(t-u)/8}.
+    \|Q_tAP_u\| & \le e^{-(t-u)/8}
+    \sum_{j\in\{2,s-1\}}\|e^{B/8}O_je^{-B/8}\|
+    \le2e^{-(t-u)/8}.
 \end{align}
 The proved statement is
 \leanid{TNLean.MPS.AreaLaw.AKLV.norm_two_boundary_spectral_offDiagonal_le}.
@@ -85,8 +87,8 @@ $\|Q_{20}y\|\le\|By\|/20\le\|y\|/2$.
 The low part satisfies $\|P_{20}y\|\le e^{20/8}\|x\|$, so
 $\|y\|\le2e^{20/8}\|x\|$. For every real $t$,
 \begin{align}
-    \|Q_tx\|&\le\|Q_te^{-B/8}\|\,\|y\|
-      \le2e^{-(t-20)/8}\|x\|.
+    \|Q_tx\| & \le\|Q_te^{-B/8}\|\,\|y\|
+    \le2e^{-(t-20)/8}\|x\|.
 \end{align}
 This alternative to the shell induction of Lemma~6.7 is proved by
 \leanid{TNLean.MPS.AreaLaw.AKLV.norm_groundState_highProjection_le_exp}.
@@ -126,7 +128,18 @@ spectral tail, commutator-growth bound, clipped gap, residual estimate
 or closeness of the ground vectors is supplied as an assumption.
 The conclusion uses the actual separate clipping, an actual ground
 eigenvector, the operator gap inequality, and an explicit complex phase.
-Constructing the normalization from an unshifted Hamiltonian is the
-source's preceding reduction; this theorem is stated on the normalized
-data of Theorem~6.1.
+The original-chain construction is now written in
+\leanid{TNLean.MPS.AreaLaw.AKLV.original_chain_robustness}.
+It derives the three regional shifts from the actual core spectra.
+Ground spectral cutoffs on disjoint site sets have a nonzero product
+by trace factorization, giving an actual common core ground vector.
+At most six positive unit bonds remain outside the cores, so the
+variational principle gives $0\le e\le6$ after normalization.
+The actual clipped blocks are positive because they add only original
+positive boundary bonds to shifted positive cores. The original gap
+and ground vector survive the scalar shift. A universal sufficient
+cutoff is $32768(6+g)/g^2$.
+These additional declarations remain awaiting exact-head hosted
+verification and integration; they are not inferred from the earlier
+normalized theorem's acceptance.
 \end{document}

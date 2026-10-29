@@ -9640,3 +9640,15 @@ there is no need for a new tactic.
   add unrelated dependencies. If a shared one-step statement is needed, move that existing
   mathematical lemma to a lower matrix-analysis module and reuse it; do not duplicate its
   statement or introduce a new tactic.
+
+
+### A common ground vector from disjoint supported spectra (2026-10-29)
+
+- **Seen:** `Circuit/SupportedGroundSpace.lean` and AKLV regional normalization.
+- **Pattern:** Produce regional ground cutoffs by real functional calculus, factor
+  their product trace on disjoint supports, and extract a nonzero common ground column.
+- **Reuse:** Promoted the existing Hastings functional-calculus support theorem to
+  `QuantumCircuit.cfc_mem_supportedOperators`; the Hastings consumer now uses that owner.
+  `exists_normalized_common_ground_of_disjoint` performs normalization once for the
+  actual ground-energy bound consumer. The annihilator equations use three distinct
+  reassociations within one file; no custom tactic is warranted.

@@ -406,3 +406,135 @@ In this section $P_t=\mathbf1_{(-\infty,t)}(B)$ and $Q_t=I-P_t$.
     \end{align}
     Thus the last squared-distance bound is at most $e^{-t/16}$.
 \end{proof}
+
+
+\begin{lemma}[Ground cutoffs on disjoint regions]
+    \label{lem:aklv_disjoint_regional_ground}
+    \lean{QuantumCircuit.exists_supported_ground_cutoff,
+        QuantumCircuit.trace_mul_ne_zero_of_disjoint,
+        QuantumCircuit.exists_common_ground_of_disjoint,
+        QuantumCircuit.exists_normalized_common_ground_of_disjoint}
+    \notready
+    Let $C_0,C_1,C_2$ be Hermitian operators supported on pairwise
+    disjoint sets of sites, with positive on-site dimension. Write
+    $z_j=\min\operatorname{spec}(C_j)$ and
+    $P_j=\mathbf{1}_{\{z_j\}}(C_j)$. Each $P_j$ has the same support
+    as $C_j$, has nonzero trace, and satisfies $(C_j-z_jI)P_j=0$.
+    For operators on disjoint regions, nonzero individual traces imply
+    a nonzero trace of their product. Consequently there is a unit vector
+    $w$ such that $(C_j-z_jI)w=0$ for all three $j$.
+\end{lemma}
+\begin{proof}
+    \notready
+    Functional calculus preserves the supported algebra. The trace of a
+    ground cutoff is the positive multiplicity of the minimum eigenvalue.
+    The tensor product trace identity gives
+    $\operatorname{tr}(AB)\operatorname{tr}(I)
+        =\operatorname{tr}(A)\operatorname{tr}(B)$ on disjoint supports.
+    Applying it twice shows $P_0P_1P_2\ne0$. The shifted cores commute
+    past the other cutoffs and kill the product. Normalize a nonzero
+    column of that product.
+\end{proof}
+
+\begin{definition}[The three normalization cores and boundary bonds]
+    \label{def:aklv_original_normalization_cores}
+    \lean{TNLean.MPS.AreaLaw.AKLV.normalizationCoreBonds,
+        TNLean.MPS.AreaLaw.AKLV.normalizationCoreSites,
+        TNLean.MPS.AreaLaw.AKLV.normalizationBoundaryBonds}
+    \notready
+    Number original bonds from zero and choose cut bonds $a,b$ with
+    $a+2<b$. The core bond sets are
+    \begin{align}
+        I_0 & =\{i:i+1<a\},         &
+        I_1 & =\{i:a+1<i,\ i+1<b\}, &
+        I_2 & =\{i:b+1<i\}.
+    \end{align}
+    They are supported on the disjoint site intervals
+    $[0,a)$, $[a+2,b)$, and $[b+2,L)$, respectively. Let $J$ be the
+    complement of their union in the set of original bonds and put
+    $C_j=\sum_{i\in I_j}h_i$ and $B=\sum_{i\in J}h_i$.
+    These are the three regional cores of
+    \cite[Section~6.1]{Arad2013AreaLaw}, with the boundary terms unchanged.
+\end{definition}
+
+\begin{lemma}[Constructed regional shifts and the six-bond bound]
+    \label{lem:aklv_constructed_regional_shifts}
+    \lean{TNLean.MPS.AreaLaw.AKLV.exists_regional_minimum_shifts,
+        TNLean.MPS.AreaLaw.AKLV.normalizationBoundaryBonds_card_le_six,
+        TNLean.MPS.AreaLaw.AKLV.normalizationCoreBonds_sum}
+    \notready
+    \uses{def:aklv_original_normalization_cores,lem:aklv_disjoint_regional_ground}
+    For original positive bonds, the actual regional minima $z_j$ make
+    $C_j-z_jI\ge0$, and those three matrices have a common unit zero vector.
+    Moreover $|J|\le6$ and
+    \begin{align}
+        \sum_i h_i=\sum_{j=0}^2 C_j+B.
+    \end{align}
+\end{lemma}
+\begin{proof}
+    \notready
+    Apply Lemma~\ref{lem:aklv_disjoint_regional_ground} to the three core
+    intervals. Every remaining bond lies in
+    $[a-1,a+1]\cup[b-1,b+1]$, so at most six remain, including when an
+    exterior is short. The core bond sets and their complement partition
+    all the original bonds.
+\end{proof}
+
+\begin{lemma}[Derived positivity and normalized ground energy]
+    \label{lem:aklv_original_normalization_data}
+    \lean{TNLean.MPS.AreaLaw.AKLV.normalizedCutBlocks_posSemidef_of_core_shifts,
+        TNLean.MPS.AreaLaw.AKLV.exists_normalized_chain_data}
+    \notready
+    \uses{lem:aklv_constructed_regional_shifts,def:aklv_normalized_cut_blocks}
+    Suppose $0\le h_i\le I$ and a unit vector $\Omega$ is a ground vector
+    of $H_0=\sum_i h_i$ at energy $E$. The constructed shifts give
+    $L,N,R\ge0$ in Definition~\ref{def:aklv_normalized_cut_blocks} and
+    the shifted ground energy
+    \begin{align}
+        e=E-z_0-z_1-z_2\in[0,6].
+    \end{align}
+\end{lemma}
+\begin{proof}
+    \notready
+    Each clipped block is its positive shifted core plus original
+    positive boundary terms. The shifted full Hamiltonian is
+    $\sum_j(C_j-z_jI)+B\ge0$. A common unit zero vector of the three
+    shifted cores has energy at most six because $0\le B\le6I$.
+    The ground variational inequality gives $e\le6$.
+\end{proof}
+
+\begin{theorem}[Exterior truncation from the original chain]
+    \label{thm:aklv_original_chain_robustness}
+    \lean{TNLean.MPS.AreaLaw.AKLV.original_chain_robustness}
+    \notready
+    \uses{lem:aklv_original_normalization_data,thm:aklv_robustness}
+    Let $0\le h_i\le I$ be original nearest-neighbour interactions on a
+    chain of positive on-site dimension. Let $H_0\Omega=E\Omega$,
+    $\|\Omega\|=1$, and
+    \begin{align}
+        H_0-EI\ge g(I-|\Omega\rangle\langle\Omega|),\qquad 0<g\le1.
+    \end{align}
+    For cut bonds $a+2<b$, the regional shifts are constructed from
+    the original interactions. Write $e=E-z_0-z_1-z_2$ and form the
+    actual exterior clipping
+    $K=\min(L,tI)+N+h_a+h_b+\min(R,tI)$.
+    If $t\ge32768(6+g)/g^2$, then $0\le e\le6$ and there are a unit
+    ground vector $\phi$, an energy $e'\in[0,e]$, and $\theta\in\mathbb R$
+    with
+    \begin{align}
+        K-e'I                        & \ge\frac g2(I-|\phi\rangle\langle\phi|), &
+        \|\Omega-e^{i\theta}\phi\|^2 & \le e^{-t/16}.
+    \end{align}
+    The positivity of $L,N,R$ and the bound on $e$ are conclusions of
+    normalization, rather than extra assumptions. The middle-core
+    subtraction uses the bond-count correction recorded in
+    \cite{gap:aklv13_robustness_constants}.
+\end{theorem}
+\begin{proof}
+    \notready
+    Lemma~\ref{lem:aklv_original_normalization_data} constructs the shifts
+    and derives their required bounds. Scalar subtraction preserves
+    the ground vector and the gap inequality. Since $e\le6$, the cutoff
+    implies $t\ge32768(e+g)/g^2$. Apply
+    Theorem~\ref{thm:aklv_robustness} to the resulting normalized chain.
+\end{proof}
