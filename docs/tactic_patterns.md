@@ -9754,3 +9754,16 @@ there is no need for a new tactic.
   window evaluation and support theorems.
 - **Notes:** The actual middle output is [k,5k) inside its existing 6k-site
   window; no support conclusion or new factor predicate is a premise.
+
+### Common buffered chain for completed local inverse identities — candidate (2026-10-29)
+
+- **Pattern:** use derived finite output support, choose one finite chain containing
+  both input and output with their buffers, reflect equality through the faithful
+  local observable embedding, cancel the actual finite conjugations, and extend
+  by completion density.
+- **Occurrences:** the two inverse directions in
+  `SpinChain.exists_isQCA_of_isMPUCanonicalFormII` use the single private helper
+  `leftInverse_of_finiteChainConjugation` in `MPS/MPU/CanonicalQuasiLocalAction.lean`.
+- **Abstraction:** the helper already removes the repeated common-buffer and
+  completion proof. No tactic is needed; a public generalization should wait for
+  an independent caller.
