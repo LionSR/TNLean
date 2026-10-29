@@ -57,8 +57,9 @@ private theorem exists_small_pos_eigenvalue_of_rayleigh
       hT.isSymmetric.eigenvectorBasis_apply_self_apply rfl v i
     rw [hdia]
     change (inner ℂ ((lam i : ℂ) • b.repr v i) (b.repr v i)).re = _
-    rw [inner_smul_left, RCLike.conj_ofReal, RCLike.re_ofReal_mul,
-      inner_self_eq_norm_sq]
+    rw [inner_smul_left, Complex.conj_ofReal]
+    simp only [Complex.mul_re, Complex.ofReal_re, Complex.ofReal_im, zero_mul, sub_zero]
+    exact congrArg (lam i * ·) (inner_self_eq_norm_sq (𝕜 := ℂ) (b.repr v i))
   suffices ∃ i, 0 < lam i ∧ lam i < ε by
     obtain ⟨i, hi, hε⟩ := this
     exact ⟨lam i, hi, hε, heig i⟩
@@ -92,10 +93,11 @@ private theorem norm_span_pair_projection_sq_le
     calc
       _ ≤ ‖inner ℂ (α • u) (β • v)‖ := Complex.abs_re_le_norm _
       _ = ‖α‖ * ‖β‖ * ‖inner ℂ u v‖ := by
-        rw [inner_smul_left, inner_smul_right, norm_mul, norm_mul, norm_star]
+        simp only [inner_smul_left, inner_smul_right, norm_mul, starRingEnd_apply, norm_star]
         ring
-      _ ≤ _ := by nlinarith [mul_le_mul_of_nonneg_left huv
-        (mul_nonneg (norm_nonneg α) (norm_nonneg β))]
+      _ ≤ ‖α‖ * ‖β‖ * (1 / 4) :=
+        mul_le_mul_of_nonneg_left huv (mul_nonneg (norm_nonneg α) (norm_nonneg β))
+      _ = _ := by ring
   have hexpand : ‖w‖ ^ 2 = ‖α‖ ^ 2 * ‖u‖ ^ 2 +
       2 * (inner ℂ (α • u) (β • v)).re + ‖β‖ ^ 2 * ‖v‖ ^ 2 := by
     rw [hw', norm_add_sq (𝕜 := ℂ), norm_smul, norm_smul, mul_pow, mul_pow]
@@ -111,7 +113,7 @@ private theorem norm_span_pair_projection_sq_le
       _ ≤ ‖inner ℂ w φ‖ := Complex.re_le_norm _
       _ ≤ _ := by
         rw [hw', inner_add_left, inner_smul_left, inner_smul_left]
-        simpa only [norm_mul, norm_star] using
+        simpa only [norm_mul, starRingEnd_apply, norm_star] using
           norm_add_le (star α * inner ℂ u φ) (star β * inner ℂ v φ)
   have hCS : (‖α‖ * ‖inner ℂ u φ‖ + ‖β‖ * ‖inner ℂ v φ‖) ^ 2 ≤
       (‖α‖ ^ 2 + ‖β‖ ^ 2) * (‖inner ℂ u φ‖ ^ 2 + ‖inner ℂ v φ‖ ^ 2) := by
