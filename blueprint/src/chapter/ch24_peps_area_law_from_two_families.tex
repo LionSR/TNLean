@@ -16,14 +16,14 @@
     \leanok
     \uses{thm:area_law_sublinear_collar,
         thm:area_law_conditional_collar_two_families}
-    Choosing $D_0>2R+10$ and $C_{\rm tpl}\ge24$ for $R$, Theorem~\ref{thm:area_law_sublinear_collar} establishes the sublinear collar bound at $(D_0,C_{\rm tpl})$, and Theorem~\ref{thm:area_law_conditional_collar_two_families} yields $S_\Omega(A)\le C|\partial_\Lambda A|$.
+    Choosing $D_0>2R+10$ and $C_{\rm tpl}\ge24$ for $R$, Lemma~\ref{thm:area_law_sublinear_collar} establishes the sublinear collar bound at $(D_0,C_{\rm tpl})$, and Lemma~\ref{thm:area_law_conditional_collar_two_families} yields $S_\Omega(A)\le C|\partial_\Lambda A|$.
 \end{proof}
 
 \subsection{Safe rectangles as consequences of the area law}
 
 The uniform area law implies a linear entropy bound for safe rectangles, which together with the buffered-rectangle estimate yields the recurrence of~\cite[Proposition~3.3]{OpenAI2026AreaLaw} uniformly in the real clearance $d$.
 
-\begin{theorem}[Boundary of a rectangle avoiding cut endpoints]
+\begin{lemma}[Boundary of a rectangle avoiding cut endpoints]
     \label{thm:area_law_safe_rectangle_boundary}
     \lean{TNLean.PEPS.AreaLaw.card_edgeBoundary_rectRegion_le_of_disjoint}
     \leanok
@@ -32,11 +32,11 @@ The uniform area law implies a linear entropy bound for safe rectangles, which t
     \begin{align}
         |\partial_\Lambda(A\cap Q)| \le 48\operatorname{size}(Q). \label{eq:safe_rect_boundary}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_physical_ambient_boundary,
         lem:area_law_ambient_boundary_layers,thm:area_law_buffer_contours}
-    By Theorem~\ref{thm:area_law_physical_ambient_boundary}, Lemma~\ref{lem:area_law_ambient_boundary_layers}, and Theorem~\ref{thm:area_law_buffer_contours} (\cite[Lemma~9.4]{OpenAI2026AreaLaw}) with $\operatorname{size}(Q)\ge1$,
+    By Lemma~\ref{thm:area_law_physical_ambient_boundary}, Lemma~\ref{lem:area_law_ambient_boundary_layers}, and Lemma~\ref{thm:area_law_buffer_contours} (\cite[Lemma~9.4]{OpenAI2026AreaLaw}) with $\operatorname{size}(Q)\ge1$,
     \begin{align}
         |\partial_\Lambda(A\cap Q)|
          & \le |\partial Q|
@@ -46,7 +46,7 @@ The uniform area law implies a linear entropy bound for safe rectangles, which t
     \end{align}
 \end{proof}
 
-\begin{theorem}[Linear entropy for rectangles with real clearance]
+\begin{lemma}[Linear entropy for rectangles with real clearance]
     \label{thm:area_law_safe_rectangle_linear_entropy}
     \lean{TNLean.PEPS.AreaLaw.exists_regionalEntropy_safe_rect_le_linear}
     \leanok
@@ -55,21 +55,21 @@ The uniform area law implies a linear entropy bound for safe rectangles, which t
     \begin{align}
         S_\Omega(A\cap Q)\le K\operatorname{size}(Q). \label{eq:safe_rect_linear_entropy}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:openai_uniform_area_law,thm:area_law_safe_rectangle_boundary}
     Let $C\ge0$ be the constant of Theorem~\ref{thm:openai_uniform_area_law} at interaction bound $J+1>0$, and set $K=48C$.
     Since $d\ge0$ and $d\operatorname{size}(Q)<\|t-z\|_\infty$ force $Q\cap Z_A=\varnothing$, Theorem~\ref{thm:openai_uniform_area_law} and (\ref{eq:safe_rect_boundary}) give $S_\Omega(A\cap Q)\le C|\partial_\Lambda(A\cap Q)|\le48C\operatorname{size}(Q)$.
 \end{proof}
 
-\begin{theorem}[Joint buffer and fixed-clearance entropy recurrence]
+\begin{lemma}[Joint buffer and fixed-clearance entropy recurrence]
     \label{thm:area_law_real_box_recurrence_after_area_law}
     \lean{TNLean.PEPS.AreaLaw.exists_initialBuffer_and_real_boxEntropy_recurrence}
     \leanok
     \uses{def:area_law_safe_rectangle,def:area_law_ground_entropy}
     For integers $q\ge1$, $R\ge0$ and reals $J\ge0$, $\Delta>0$, there exist an integer $c\ge1$ and real $b\ge0$ such that for every $d>2R+10$:
     \begin{enumerate}
-        \item For any instance $(\Lambda,H,\Omega,A,Q)$ as in Theorem~\ref{thm:area_law_safe_rectangle_linear_entropy}, integer $r\ge1$, and rectangle $Q_0$ with $\operatorname{size}(Q_0)\le r$ and $Q_0^{+cr}\subseteq Q$, setting $X=A\cap Q_0$ and $T=(A\cap Q_0^{+cr})\setminus X$ (\cite[Lemma~3.2]{OpenAI2026AreaLaw}),
+        \item For any instance $(\Lambda,H,\Omega,A,Q)$ as in Lemma~\ref{thm:area_law_safe_rectangle_linear_entropy}, integer $r\ge1$, and rectangle $Q_0$ with $\operatorname{size}(Q_0)\le r$ and $Q_0^{+cr}\subseteq Q$, setting $X=A\cap Q_0$ and $T=(A\cap Q_0^{+cr})\setminus X$ (\cite[Lemma~3.2]{OpenAI2026AreaLaw}),
               \begin{align}
                   S_\Omega(X\cup T)-S_\Omega(T)
                   \le\tfrac12S_\Omega(X)+br.\notag
@@ -87,13 +87,13 @@ The uniform area law implies a linear entropy bound for safe rectangles, which t
                   +bM^2r.\notag
               \end{align}
     \end{enumerate}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_initial_buffer,
         thm:area_law_safe_rectangle_linear_entropy,
         thm:area_law_regional_state_identities}
-    Choose $(c,b_0)$ from Theorem~\ref{thm:area_law_initial_buffer} and $K$ from Theorem~\ref{thm:area_law_safe_rectangle_linear_entropy}, and set $b=\max\{b_0,K\}$.
-    By (\ref{eq:safe_rect_linear_entropy}) and Theorem~\ref{thm:area_law_regional_state_identities}, $0\le F_d(t)\le Kt$ for all $t\ge0$; since $\alpha=(1-p_0/2)M^2+2p_0(c+2)M\ge0$ and $M\le M^2$,
+    Choose $(c,b_0)$ from Lemma~\ref{thm:area_law_initial_buffer} and $K$ from Lemma~\ref{thm:area_law_safe_rectangle_linear_entropy}, and set $b=\max\{b_0,K\}$.
+    By (\ref{eq:safe_rect_linear_entropy}) and Lemma~\ref{thm:area_law_regional_state_identities}, $0\le F_d(t)\le Kt$ for all $t\ge0$; since $\alpha=(1-p_0/2)M^2+2p_0(c+2)M\ge0$ and $M\le M^2$,
     \begin{align}
         F_d(Mr)\le KMr\le bM^2r \le\alpha F_d(r)+bM^2r.\notag
     \end{align}

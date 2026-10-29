@@ -40,7 +40,7 @@ adding edges to the induced graph.
     For $x\in\mathbb Z^2$, set $\rho(x):=\max\{|x_1-c_1|,|x_2-c_2|\}$, so that $K(c,r)=\{x\in\Lambda:\rho(x)\le r\}$.
 \end{definition}
 
-\begin{theorem}[Nearest neighbours and closed-square crossing]
+\begin{lemma}[Nearest neighbours and closed-square crossing]
     \label{thm:peps_square_crossing_interval}
     \lean{
         TNLean.PEPS.AreaLaw.Geometry.abs_coordinate_sub_le_one_of_adj,
@@ -58,12 +58,12 @@ adding edges to the induced graph.
         \min\{\rho(x),\rho(y)\}\le r<\max\{\rho(x),\rho(y)\}.
         \label{eq:peps_square_crossing_interval}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Since $x\sim y$ implies $|x_1-y_1|+|x_2-y_2|=1$, the triangle inequality gives $|y_a-c_a|\le|x_a-c_a|+|x_a-y_a|\le\rho(x)+1$, so $|\rho(x)-\rho(y)|\le1$ by symmetry. Moreover, $\{x,y\}\in\partial_\Lambda K(c,r)$ holds if and only if $(\rho(x)\le r<\rho(y))\vee(\rho(y)\le r<\rho(x))$, which is (\ref{eq:peps_square_crossing_interval}).
 \end{proof}
 
-\begin{theorem}[Number of sites in a sampled square]
+\begin{lemma}[Number of sites in a sampled square]
     \label{thm:peps_closed_square_card}
     \lean{
         TNLean.PEPS.AreaLaw.Geometry.card_closedSquareSample_le,
@@ -72,18 +72,18 @@ adding edges to the induced graph.
     \leanok
     \uses{def:peps_closed_square_sample}
     For $r\ge0$, $|K(c,r)|\le(2r+1)^2$; if $0\le r\le4$, then $|K(c,r)|\le81$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Each interval $[c_a-r,c_a+r]$ contains at most $2r+1$ integers, so $|K(c,r)|\le(2r+1)^2\le 9^2=81$ when $r\le4$.
 \end{proof}
 
-\begin{theorem}[Crossing edges of a sampled square]
+\begin{lemma}[Crossing edges of a sampled square]
     \label{thm:peps_closed_square_boundary}
     \lean{TNLean.PEPS.AreaLaw.Geometry.card_edgeBoundary_closedSquareSample_le}
     \leanok
     \uses{def:peps_closed_square_sample,def:area_law_hamiltonian}
     For every $r\ge0$, $|\partial_\Lambda K(c,r)|\le8r+4$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Each of the at most $2r+1$ integer rows (resp.\ columns) meeting $[c_2-r,c_2+r]$ (resp.\ $[c_1-r,c_1+r]$) contributes at most $2$ horizontal (resp.\ vertical) crossing edges, giving $|\partial_\Lambda K(c,r)|\le 2(2r+1)+2(2r+1)=8r+4$.
 \end{proof}
@@ -104,7 +104,7 @@ adding edges to the induced graph.
     \end{align}
 \end{definition}
 
-\begin{theorem}[Number, radii, and boundary size of the patches]
+\begin{lemma}[Number, radii, and boundary size of the patches]
     \label{thm:peps_nested_patch_sizes}
     \lean{
         TNLean.PEPS.AreaLaw.Geometry.nestedPatchCount_pos,
@@ -124,13 +124,13 @@ adding edges to the induced graph.
         i<j \implies r_i+2     & \le r_j,              &
         i\le j \implies K_i    & \subseteq K_j. \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_closed_square_boundary}
-    Since $0\le j\le\lfloor u/2\rfloor\le u/2<m$, we have $u\le r_j\le 2u$, so Theorem~\ref{thm:peps_closed_square_boundary} gives $|\partial_\Lambda K_j|\le 8r_j+4\le 16u+4$; $r_i+2\le r_j$ for $i<j$ and $K_i\subseteq K_j$ for $i\le j$ follow from (\ref{eq:peps_nested_patches}).
+    Since $0\le j\le\lfloor u/2\rfloor\le u/2<m$, we have $u\le r_j\le 2u$, so Lemma~\ref{thm:peps_closed_square_boundary} gives $|\partial_\Lambda K_j|\le 8r_j+4\le 16u+4$; $r_i+2\le r_j$ for $i<j$ and $K_i\subseteq K_j$ for $i\le j$ follow from (\ref{eq:peps_nested_patches}).
 \end{proof}
 
-\begin{theorem}[Supports of crossing edges under radius separation]
+\begin{lemma}[Supports of crossing edges under radius separation]
     \label{thm:peps_square_crossing_support}
     \lean{
         TNLean.PEPS.AreaLaw.Geometry.edgeBoundary_support_disjoint_of_add_one_le,
@@ -139,13 +139,13 @@ adding edges to the induced graph.
     \leanok
     \uses{def:peps_closed_square_sample,def:area_law_hamiltonian}
     If $e=\{x,y\}\in\partial_\Lambda K(c,r)$, then $e\cap K(c,s)=\varnothing$ whenever $s+1\le r$, and $e\subseteq K(c,t)$ whenever $r+1\le t$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_square_crossing_interval}
-    By (\ref{eq:peps_square_crossing_interval}) and $|\rho(x)-\rho(y)|\le1$ (Theorem~\ref{thm:peps_square_crossing_interval}), $\max\{\rho(x),\rho(y)\}>r\ge s+1$ implies $\min\{\rho(x),\rho(y)\}>s$, while $\min\{\rho(x),\rho(y)\}\le r$ implies $\max\{\rho(x),\rho(y)\}\le r+1\le t$.
+    By (\ref{eq:peps_square_crossing_interval}) and $|\rho(x)-\rho(y)|\le1$ (Lemma~\ref{thm:peps_square_crossing_interval}), $\max\{\rho(x),\rho(y)\}>r\ge s+1$ implies $\min\{\rho(x),\rho(y)\}>s$, while $\min\{\rho(x),\rho(y)\}\le r$ implies $\max\{\rho(x),\rho(y)\}\le r+1\le t$.
 \end{proof}
 
-\begin{theorem}[A single crossing among nested patches]
+\begin{lemma}[A single crossing among nested patches]
     \label{thm:peps_nested_patch_crossing}
     \lean{
         TNLean.PEPS.AreaLaw.Geometry.nestedPatch_crossing_disjoint_earlier,
@@ -156,10 +156,10 @@ adding edges to the induced graph.
     \leanok
     \uses{def:peps_nested_patches,def:area_law_hamiltonian}
     If $e=\{x,y\}\in\partial_\Lambda K_j$, then $e\cap K_i=\varnothing$ for all $i<j$ and $e\subseteq K_k$ for all $k>j$; consequently, $\partial_\Lambda K_i\cap\partial_\Lambda K_k=\varnothing$ for $i\ne k$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_nested_patch_sizes,thm:peps_square_crossing_support}
-    Since $r_i+2\le r_j$ for $i<j$ and $r_j+2\le r_k$ for $j<k$ by Theorem~\ref{thm:peps_nested_patch_sizes}, Theorem~\ref{thm:peps_square_crossing_support} gives $e\cap K_i=\varnothing$ and $e\subseteq K_k$ (so $e\notin\partial_\Lambda K_k$).
+    Since $r_i+2\le r_j$ for $i<j$ and $r_j+2\le r_k$ for $j<k$ by Lemma~\ref{thm:peps_nested_patch_sizes}, Lemma~\ref{thm:peps_square_crossing_support} gives $e\cap K_i=\varnothing$ and $e\subseteq K_k$ (so $e\notin\partial_\Lambda K_k$).
 \end{proof}
 
 The following example on $\Lambda=\{0,\ldots,10\}\times\{0,1,2\}$ with
@@ -172,7 +172,7 @@ and $e\subseteq K_2$ (the rounded outlines enclose the clipped sets of physical 
 \input{figures/peps_nested_patch_crossing}
 
 
-\begin{theorem}[Uniform quadratic boundary sum]
+\begin{lemma}[Uniform quadratic boundary sum]
     \label{thm:peps_nested_patch_quadratic_sum}
     \lean{
         TNLean.PEPS.AreaLaw.Geometry.nestedPatch_quadratic_budget,
@@ -187,10 +187,10 @@ and $e\subseteq K_2$ (the rounded outlines enclose the clipped sets of physical 
         \sum_{j=0}^{m-1}|\partial_\Lambda K_j|t_j^2 & \le36\kappa^2.
         \label{eq:peps_nested_patch_quadratic_sum}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_nested_patch_sizes}
-    By Theorem~\ref{thm:peps_nested_patch_sizes}, $m>u/2$ and $u\ge4$ give $16u+4\le 18u\le 36m$, so $(16u+4)\sum_{j=0}^{m-1}t_j^2=(16u+4)\kappa^2/m\le 36\kappa^2$, and $|\partial_\Lambda K_j|\le 16u+4$ yields (\ref{eq:peps_nested_patch_quadratic_sum}) from (\ref{eq:peps_nested_patch_uniform_budget}).
+    By Lemma~\ref{thm:peps_nested_patch_sizes}, $m>u/2$ and $u\ge4$ give $16u+4\le 18u\le 36m$, so $(16u+4)\sum_{j=0}^{m-1}t_j^2=(16u+4)\kappa^2/m\le 36\kappa^2$, and $|\partial_\Lambda K_j|\le 16u+4$ yields (\ref{eq:peps_nested_patch_quadratic_sum}) from (\ref{eq:peps_nested_patch_uniform_budget}).
 \end{proof}
 % The uniform quadratic sum establishes a geometric coefficient only. It
 % does not identify this sum with a Hamiltonian energy increment.
@@ -217,7 +217,7 @@ The following statements extend the patch geometry of \cite{OpenAI2026Polynomial
     \end{align}
 \end{definition}
 
-\begin{theorem}[Spacing, number and radii of the range-$R$ patches]
+\begin{lemma}[Spacing, number and radii of the range-$R$ patches]
     \label{thm:peps_range_nested_patch_sizes}
     \lean{
         TNLean.PEPS.AreaLaw.Geometry.le_rangePatchSpacing,
@@ -243,12 +243,12 @@ The following statements extend the patch geometry of \cite{OpenAI2026Polynomial
         i<j \implies r_i+s_R & \le r_j,              &
         i\le j \implies K_i  & \subseteq K_j. \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     From $s_R=2\lceil R/2\rceil$ and $m_R=\lfloor u/s_R\rfloor+1$, one has $u/s_R<m_R$ and $0\le s_Rj\le s_R\lfloor u/s_R\rfloor\le u$ for $0\le j<m_R$.
 \end{proof}
 
-\begin{theorem}[A range-$R$ support is split by at most one patch]
+\begin{lemma}[A range-$R$ support is split by at most one patch]
     \label{thm:peps_range_nested_patch_split}
     \lean{
         TNLean.PEPS.AreaLaw.Geometry.abs_squareRadius_sub_le_length,
@@ -259,10 +259,10 @@ The following statements extend the patch geometry of \cite{OpenAI2026Polynomial
     \uses{def:peps_range_nested_patches,def:peps_square_radius,
         def:area_law_hamiltonian}
     Endpoints $x,y$ of a graph walk of length $\ell$ satisfy $|\rho(x)-\rho(y)|\le\ell$, so $|\rho(x)-\rho(y)|\le R$ on any support $X$ of graph diameter at most $R$. For any $X\subseteq\Lambda$ with $\sup_{x,y\in X}|\rho(x)-\rho(y)|\le R$, at most one patch $K_j$ of Definition~\ref{def:peps_range_nested_patches} satisfies both $X\cap K_j\ne\varnothing$ and $X\setminus K_j\ne\varnothing$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_square_crossing_interval,thm:peps_range_nested_patch_sizes}
-    By Theorem~\ref{thm:peps_square_crossing_interval}, $|\rho(x)-\rho(y)|\le1$ along each edge, hence $|\rho(x)-\rho(y)|\le\ell$ along a walk of length $\ell$. If $i<j$ and $z\in X\cap K_i$, $y\in X\setminus K_j$, then Theorem~\ref{thm:peps_range_nested_patch_sizes} gives $\rho(y)>r_j\ge r_i+s_R\ge\rho(z)+R$, contradicting $|\rho(y)-\rho(z)|\le R$.
+    By Lemma~\ref{thm:peps_square_crossing_interval}, $|\rho(x)-\rho(y)|\le1$ along each edge, hence $|\rho(x)-\rho(y)|\le\ell$ along a walk of length $\ell$. If $i<j$ and $z\in X\cap K_i$, $y\in X\setminus K_j$, then Lemma~\ref{thm:peps_range_nested_patch_sizes} gives $\rho(y)>r_j\ge r_i+s_R\ge\rho(z)+R$, contradicting $|\rho(y)-\rho(z)|\le R$.
 \end{proof}
 
 \begin{definition}[Inner layer of a square]
@@ -276,7 +276,7 @@ The following statements extend the patch geometry of \cite{OpenAI2026Polynomial
     For $r\in\mathbb R$ and $R\in\mathbb N$, define the inner layer $\mathcal N(c,r,R):=\{x\in\Lambda:r-R<\rho(x)\le r\}$.
 \end{definition}
 
-\begin{theorem}[Size of the inner layer]
+\begin{lemma}[Size of the inner layer]
     \label{thm:peps_square_layer}
     \lean{
         TNLean.PEPS.AreaLaw.Geometry.mem_squareLayer_of_split,
@@ -292,13 +292,13 @@ The following statements extend the patch geometry of \cite{OpenAI2026Polynomial
         |\mathcal N(c,r,R)|   & \le R(8r+4),         &
         |\mathcal N(c,r_j,R)| & \le R(16u+4). \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_range_nested_patch_sizes}
-    If $y\in X\setminus K(c,r)$ and $x\in X\cap K(c,r)$, then $r\ge\rho(x)\ge\rho(y)-R>r-R$, so $x\in\mathcal N(c,r,R)$. Covering $\mathcal N(c,r,R)$ by four strips of width $R$ (containing $R$ integers) and length $2r$ (containing at most $2r+1$ integers) gives $|\mathcal N(c,r,R)|\le 4R(2r+1)=R(8r+4)$, and $r_j\le 2u$ (Theorem~\ref{thm:peps_range_nested_patch_sizes}) gives $R(8r_j+4)\le R(16u+4)$.
+    If $y\in X\setminus K(c,r)$ and $x\in X\cap K(c,r)$, then $r\ge\rho(x)\ge\rho(y)-R>r-R$, so $x\in\mathcal N(c,r,R)$. Covering $\mathcal N(c,r,R)$ by four strips of width $R$ (containing $R$ integers) and length $2r$ (containing at most $2r+1$ integers) gives $|\mathcal N(c,r,R)|\le 4R(2r+1)=R(8r+4)$, and $r_j\le 2u$ (Lemma~\ref{thm:peps_range_nested_patch_sizes}) gives $R(8r_j+4)\le R(16u+4)$.
 \end{proof}
 
-\begin{theorem}[Quadratic coefficient at range $R$]
+\begin{lemma}[Quadratic coefficient at range $R$]
     \label{thm:peps_range_nested_patch_quadratic_sum}
     \lean{TNLean.PEPS.AreaLaw.Geometry.rangeNestedPatch_quadratic_budget}
     \leanok
@@ -308,10 +308,10 @@ The following statements extend the patch geometry of \cite{OpenAI2026Polynomial
         (16u+4)\sum_{j=0}^{m_R-1}t_j^2 & \le18s_R\kappa^2.
         \label{eq:peps_range_nested_patch_budget}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_range_nested_patch_sizes}
-    By Theorem~\ref{thm:peps_range_nested_patch_sizes}, $u<s_Rm_R$ and $s_Rm_R\ge2$ give $16u+4\le 18s_Rm_R$, while $\sum_{j=0}^{m_R-1}t_j^2=\kappa^2/m_R$.
+    By Lemma~\ref{thm:peps_range_nested_patch_sizes}, $u<s_Rm_R$ and $s_Rm_R\ge2$ give $16u+4\le 18s_Rm_R$, while $\sum_{j=0}^{m_R-1}t_j^2=\kappa^2/m_R$.
 \end{proof}
 
 \begin{lemma}[Entropy of a sampled square at a given area-law constant]
@@ -329,10 +329,10 @@ The following statements extend the patch geometry of \cite{OpenAI2026Polynomial
     \leanok
     \uses{thm:finite_product_entropy_relabel,thm:square_edge_boundary_card,
         thm:peps_closed_square_boundary}
-    By Theorems~\ref{thm:finite_product_entropy_relabel}, \ref{thm:square_edge_boundary_card}, and~\ref{thm:peps_closed_square_boundary}, $S_{U\Omega}(K(c,r))\le C_A|\partial_\Lambda K(c,r)|\le C_A(8r+4)\le C_A(16u+4)\le C_S(1+u)$.
+    By Lemmas~\ref{thm:finite_product_entropy_relabel}, \ref{thm:square_edge_boundary_card}, and~\ref{thm:peps_closed_square_boundary}, $S_{U\Omega}(K(c,r))\le C_A|\partial_\Lambda K(c,r)|\le C_A(8r+4)\le C_A(16u+4)\le C_S(1+u)$.
 \end{proof}
 
-\begin{theorem}[Entropy of the selected squares at a given area-law constant]
+\begin{lemma}[Entropy of the selected squares at a given area-law constant]
     \label{thm:peps_nested_patch_entropy_explicit}
     \lean{TNLean.PEPS.Approximation.SquareEntropyAreaLawAt.nestedPatch_entropy_le}
     \leanok
@@ -341,14 +341,14 @@ The following statements extend the patch geometry of \cite{OpenAI2026Polynomial
         def:peps_nested_patches}
     Under the square-grid entropy area law with constant $C_A$ and $C_S=\max\{1,16C_A\}$, every $L$, family state $\Omega$, centre $c$, $u\ge0$, and nested patch $K_j$ ($0\le j<m$) of Definition~\ref{def:peps_nested_patches} satisfy $S_{U\Omega}(K_j)\le C_S(1+u)$ (as in the
     \href{https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex\#L362-L368}{proof of Proposition 4.1}).
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{lem:peps_closed_square_entropy_explicit,thm:peps_nested_patch_sizes}
-    Since $0\le u\le r_j\le2u$ by Theorem~\ref{thm:peps_nested_patch_sizes}, Lemma~\ref{lem:peps_closed_square_entropy_explicit} applies.
+    Since $0\le u\le r_j\le2u$ by Lemma~\ref{thm:peps_nested_patch_sizes}, Lemma~\ref{lem:peps_closed_square_entropy_explicit} applies.
 \end{proof}
 
-\begin{theorem}[Entropy of the selected squares under the square area law]
+\begin{lemma}[Entropy of the selected squares under the square area law]
     \label{thm:peps_nested_patch_entropy}
     \lean{TNLean.PEPS.Approximation.SquareEntropyAreaLaw.exists_nestedPatch_entropy_le}
     \leanok
@@ -362,9 +362,9 @@ The following statements extend the patch geometry of \cite{OpenAI2026Polynomial
     \end{align}
     as in the
     \href{https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex\#L362-L374}{proof of Proposition 4.1}.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{def:square_entropy_area_law_at,thm:peps_nested_patch_entropy_explicit}
-    Choose $C_A\ge0$ from Definition~\ref{def:square_entropy_area_law_at} at $(q,J,\Delta)$, set $C_S=\max\{1,16C_A\}$, and apply Theorem~\ref{thm:peps_nested_patch_entropy_explicit}.
+    Choose $C_A\ge0$ from Definition~\ref{def:square_entropy_area_law_at} at $(q,J,\Delta)$, set $C_S=\max\{1,16C_A\}$, and apply Lemma~\ref{thm:peps_nested_patch_entropy_explicit}.
 \end{proof}

@@ -13,7 +13,7 @@
     of \cite[Theorem~4.1]{Schuch2010PEPS}.
 \end{definition}
 
-\begin{theorem}[Matrix units from signed permutations]%
+\begin{lemma}[Matrix units from signed permutations]%
     \label{thm:peps_signed_permutation_span}
     \lean{TNLean.exists_signedPermutationRepresentation_sub_eq_single,
         TNLean.span_signedPermutationRepresentation}
@@ -22,7 +22,7 @@
     Every matrix unit $E_{ij}$ is of the form $(P-Q)/2$ for two signed
     permutation matrices $P,Q\in G_I$. Consequently,
     $\operatorname{span}_{\mathbb C}G_I=M_I(\mathbb C)$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     For any permutation taking $j$ to $i$ with permutation matrix $P$,
@@ -43,7 +43,7 @@
     $\bigoplus_k\mathbb C^{m_k}\otimes\mathbb C^{d_k}$.
 \end{definition}
 
-\begin{theorem}[Commutant of independent multiplicity actions]%
+\begin{lemma}[Commutant of independent multiplicity actions]%
     \label{thm:peps_block_signed_permutation_commutant}
     \lean{TNLean.commutes_blockSignedPermutationRepresentation_iff}
     \leanok
@@ -51,7 +51,7 @@
         thm:peps_signed_permutation_span}
     A matrix commutes with every $U(g)$ if and only if it is of the form
     $\bigoplus_k I_{m_k}\otimes B_k$, with $B_k\in M_{d_k}(\mathbb C)$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Two group elements which agree on all factors except $k$ produce,
@@ -63,7 +63,7 @@
     conversely, $I_{m_k}\otimes B_k$ commutes with $g_k\otimes I_{d_k}$.
 \end{proof}
 
-\begin{theorem}[Unital matrix algebras as finite-group commutants]%
+\begin{lemma}[Unital matrix algebras as finite-group commutants]%
     \label{thm:peps_finite_group_commutant_unital}
     \lean{StarSubalgebra.exists_finite_unitary_group_commutant}
     \leanok
@@ -75,7 +75,7 @@
     Although the source's definition of C*-algebra does not require the identity,
     the printed nonunital assertion fails because every commutant contains
     the identity \cite{gap:scp10_finite_group_commutant_unital}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     The unitary block-decomposition theorem for matrix C*-algebras
@@ -88,7 +88,7 @@
 \end{proof}
 
 
-\begin{theorem}[C*-algebra tensors have a finite group symmetry]%
+\begin{lemma}[C*-algebra tensors have a finite group symmetry]%
     \label{thm:peps_cstar_span_g_injective_mps}
     \lean{StarSubalgebra.exists_isGInjective_mpsSiteMap_of_span}
     \leanok
@@ -100,7 +100,7 @@
     \cite{gap:scp10_finite_group_commutant_unital} to its Definition~4.2,
     there exist a finite group $G$ and a unitary representation $U$ whose
     commutant is $S$, such that the tensor $A$ is $G$-injective.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     For the finite unitary representation with commutant $S$,

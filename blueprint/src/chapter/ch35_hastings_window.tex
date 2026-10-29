@@ -1,5 +1,5 @@
-\chapter{The entropy window of Hastings' area-law proof}
-\label{ch:hastings_window}
+\section{The window of large cut entropy}
+\label{sec:hastings_window}
 
 Hastings' proof of the one-dimensional area law \cite{Hastings2007AreaLaw}
 argues by contradiction from a cut of large entropy. For any unit vector
@@ -9,7 +9,7 @@ $S(\lbrack 0,i))>S_{\max}$ produces a window $[i,i+l_0)$ on which
 $S(\lbrack 0,k))\ge 2S_{\max}/3$ and the maximal $l$-site interval entropy
 $S_l$ satisfies $0\le S_l\le l\log q$ and $S_{2l}\le 2S_l$.
 
-\begin{theorem}[The cut entropy moves slowly]
+\begin{lemma}[The cut entropy moves slowly]
     \label{thm:hastings_cut_entropy_slow}
     \lean{
         TNLean.MPS.AreaLaw.disjoint_interval_interval,
@@ -22,7 +22,7 @@ $S_l$ satisfies $0\le S_l\le l\log q$ and $S_{2l}\le 2S_l$.
         S(\lbrack 0,k))\ \ge\ S(\lbrack 0,i))-(k-i)\log q .
         \label{eq:hastings_cut_entropy_slow}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -32,7 +32,7 @@ $S_l$ satisfies $0\le S_l\le l\log q$ and $S_{2l}\le 2S_l$.
     $S(\lbrack 0,i))\le S(\lbrack 0,k))+S(\lbrack i,k))\le S(\lbrack 0,k))+(k-i)\log q$.
 \end{proof}
 
-\begin{theorem}[The window of large cut entropy]
+\begin{lemma}[The window of large cut entropy]
     \label{thm:hastings_window_cut_entropy}
     \lean{
         TNLean.MPS.AreaLaw.Hastings.windowLength,
@@ -48,7 +48,7 @@ $S_l$ satisfies $0\le S_l\le l\log q$ and $S_{2l}\le 2S_l$.
         S(\lbrack 0,k))\ \ge\ \tfrac23\, S_{\max}.
         \label{eq:hastings_window_cut_entropy}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -83,7 +83,7 @@ $S_l$ satisfies $0\le S_l\le l\log q$ and $S_{2l}\le 2S_l$.
     site $i-1$ of~\cite{Hastings2007AreaLaw}).
 \end{definition}
 
-\begin{theorem}[Bounds on the window entropy]
+\begin{lemma}[Bounds on the window entropy]
     \label{thm:hastings_window_entropy_bounds}
     \lean{
         TNLean.MPS.AreaLaw.Hastings.regionEntropy_nonneg,
@@ -100,7 +100,7 @@ $S_l$ satisfies $0\le S_l\le l\log q$ and $S_{2l}\le 2S_l$.
         S_{2l}\ \le\ 2S_l .
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -113,7 +113,7 @@ $S_l$ satisfies $0\le S_l\le l\log q$ and $S_{2l}\le 2S_l$.
     $S_{2l}=0\le 2S_l$.
 \end{proof}
 
-\begin{theorem}[The entropy gain on the window gives the strengthened doubling, stage form]
+\begin{lemma}[The entropy gain on the window gives the strengthened doubling, stage form]
     \label{thm:hastings_window_claim_of_relent}
     \lean{TNLean.MPS.AreaLaw.Hastings.windowEntropy_two_mul_le_of_relent}
     \leanok
@@ -132,7 +132,7 @@ $S_l$ satisfies $0\le S_l\le l\log q$ and $S_{2l}\le 2S_l$.
     \end{align}
     This is the step from eq.~(relent) to eq.~(claim) in
     \cite[lines 201--204 and 234--242]{Hastings2007AreaLaw}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok

@@ -45,7 +45,7 @@ the normalized partial trace of Definition~\ref{def:qc_site_expectation}.
     $J\ge0$.
 \end{proof}
 
-\begin{lemma}[Graph-distance propagation]
+\begin{theorem}[Graph-distance propagation]
     \label{lem:quasilocal-lr}
     \lean{TNLean.PEPS.AreaLaw.exists_quasilocal_lieb_robinson,
         TNLean.Lattice.LocalHamiltonian.norm_commutator_le_graphDistance,
@@ -76,19 +76,19 @@ the normalized partial trace of Definition~\ref{def:qc_site_expectation}.
     $n\le d_\Lambda(a,y)$,
     $\|[\tau_t(A),B_y]\|\le2e^{\mu R}\|A\|\|B_y\|
         \exp(2v_R\mu_RJe^{2\mu R}|t|-\mu n)$.
-\end{lemma}
+\end{theorem}
 \begin{proof}
     \leanok
     \uses{lem:area_domain_graph_counts,thm:qc_graph_lieb_robinson,
         thm:qc_graph_lieb_robinson_zero,thm:qc_graph_ball_localization}
-    Instantiating Theorem~\ref{thm:qc_graph_lieb_robinson} and
+    Instantiating Lemma~\ref{thm:qc_graph_lieb_robinson} and
     Lemma~\ref{thm:qc_graph_lieb_robinson_zero} on the induced graph of
     $\Lambda$ with an anchor family assigning $a$ to $X$, together with
     the support diameter $R$, support size $v_R$, and site-norm bound
     $b_0=\mu_RJ$ from Lemma~\ref{lem:area_domain_graph_counts},
     establishes the commutator bounds and the explicit exponential
     estimate. Combining these with
-    Theorem~\ref{thm:qc_graph_ball_localization} for the sphere-growth
+    Lemma~\ref{thm:qc_graph_ball_localization} for the sphere-growth
     bound $2(d+1)^2$ yields the localization estimate, where both sets of
     constants depend only on $R$ and $J$; taking the larger of the two
     prefactors and of the two velocities, together with the smaller of

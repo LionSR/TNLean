@@ -26,7 +26,7 @@ The following family is the state introduced in~\cite{Schuch2008EntropyScaling}
     $p=p_N=1/N$.
 \end{definition}
 
-\begin{theorem}[Orthonormal Schmidt vectors]
+\begin{lemma}[Orthonormal Schmidt vectors]
     \label{thm:qutrit_entropy_scaling_orthonormal}
     \lean{TNLean.MPS.AreaLaw.EntropyScaling.orthonormal_qutritWord,
         TNLean.MPS.AreaLaw.EntropyScaling.qutritWord_injective,
@@ -39,13 +39,13 @@ The following family is the state introduced in~\cite{Schuch2008EntropyScaling}
     The vectors $e_i=\ket{w_i}$ (and $\ket{w_i}\ket{w_i}$) are real and
     orthonormal, so the matrix $B$ with columns $e_i$ satisfies
     $B^\dagger B=1$ and $B^\dagger=B^{\mathsf T}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Since $N\ge1$, $w_\star\notin\{0,1\}^N$, so $i\mapsto w_i$ is injective into
     the computational basis.
 \end{proof}
 
-\begin{theorem}[Normalization]
+\begin{lemma}[Normalization]
     \label{thm:qutrit_entropy_scaling_normalization}
     \lean{TNLean.MPS.AreaLaw.EntropyScaling.norm_qutritState,
         TNLean.MPS.AreaLaw.EntropyScaling.qutritWeight_nonneg,
@@ -55,10 +55,10 @@ The following family is the state introduced in~\cite{Schuch2008EntropyScaling}
     \uses{def:qutrit_entropy_scaling_state}
     For $0\le p\le1$, $\lambda_i\ge0$, $\sum_i\lambda_i=1$, and
     $\|\psi_{2N}(p)\|=1$; in particular, $\|\psi_{2N}(1/N)\|=1$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:qutrit_entropy_scaling_orthonormal}
-    By Theorem~\ref{thm:qutrit_entropy_scaling_orthonormal} and
+    By Lemma~\ref{thm:qutrit_entropy_scaling_orthonormal} and
     (\ref{eq:qutrit_entropy_scaling_state}),
     $\|\psi_{2N}(p)\|^2=\sum_i\lambda_i=(1-p)+2^N(p/2^N)=1$.
 \end{proof}
@@ -75,7 +75,7 @@ The following family is the state introduced in~\cite{Schuch2008EntropyScaling}
     $\rho=\operatorname{Tr}_{\mathrm{right}}\ket{\psi_{2N}(p)}\!\bra{\psi_{2N}(p)}=CC^\dagger$.
 \end{definition}
 
-\begin{theorem}[Identification with the chain marginal]
+\begin{lemma}[Identification with the chain marginal]
     \label{thm:qutrit_entropy_scaling_native_marginal}
     \lean{TNLean.MPS.AreaLaw.EntropyScaling.qutritLeftConfigurationEquiv,
         TNLean.MPS.AreaLaw.EntropyScaling.qutritRightConfigurationEquiv,
@@ -87,44 +87,44 @@ The following family is the state introduced in~\cite{Schuch2008EntropyScaling}
     Identifying $\lbrack0,2N)\simeq\lbrack0,N)\sqcup\lbrack0,N)$ via $j\mapsto j-N$ on $\lbrack N,2N)$
     identifies $C$ with the chain cut matrix at $N$ and $\rho=CC^\dagger$ with
     the regional state $\rho_{\lbrack0,N)}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Restricting configurations to $\lbrack0,N)$ and $\lbrack N,2N)$ matches the half-chain
     product coordinates in Definition~\ref{def:qutrit_entropy_scaling_middle}.
 \end{proof}
 
-\begin{theorem}[Middle-cut Schmidt factorization]
+\begin{lemma}[Middle-cut Schmidt factorization]
     \label{thm:qutrit_entropy_scaling_schmidt}
     \lean{TNLean.MPS.AreaLaw.EntropyScaling.qutritMiddleMatrix_factorization,
         TNLean.MPS.AreaLaw.EntropyScaling.qutritMiddleVector_eq}
     \leanok
     \uses{def:qutrit_entropy_scaling_middle,
         thm:qutrit_entropy_scaling_orthonormal}
-    With $B$ from Theorem~\ref{thm:qutrit_entropy_scaling_orthonormal},
+    With $B$ from Lemma~\ref{thm:qutrit_entropy_scaling_orthonormal},
     $C=B\operatorname{diag}(\sqrt{\lambda_i})B^\dagger$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     By~(\ref{eq:qutrit_entropy_scaling_state}) and $B^{\mathsf T}=B^\dagger$,
     $C=\sum_i\sqrt{\lambda_i}\,e_ie_i^{\mathsf T}=B\operatorname{diag}(\sqrt{\lambda_i})B^\dagger$.
 \end{proof}
 
-\begin{theorem}[Diagonalization of the middle marginal]
+\begin{lemma}[Diagonalization of the middle marginal]
     \label{thm:qutrit_entropy_scaling_marginal}
     \lean{TNLean.MPS.AreaLaw.EntropyScaling.qutritMiddleMarginal_factorization}
     \leanok
     \uses{def:qutrit_entropy_scaling_middle,
         thm:qutrit_entropy_scaling_orthonormal}
     The left marginal satisfies $\rho=B\operatorname{diag}(\lambda_i)B^\dagger$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:qutrit_entropy_scaling_schmidt,
         thm:qutrit_entropy_scaling_orthonormal}
-    By Theorems~\ref{thm:qutrit_entropy_scaling_schmidt}
+    By Lemmas~\ref{thm:qutrit_entropy_scaling_schmidt}
     and~\ref{thm:qutrit_entropy_scaling_orthonormal},
     $\rho=CC^\dagger=B\operatorname{diag}(\sqrt{\lambda_i})B^\dagger B\operatorname{diag}(\sqrt{\lambda_i})B^\dagger=B\operatorname{diag}(\lambda_i)B^\dagger$.
 \end{proof}
 
-\begin{theorem}[Complete middle-cut spectrum]
+\begin{lemma}[Complete middle-cut spectrum]
     \label{thm:qutrit_entropy_scaling_spectrum}
     \lean{TNLean.MPS.AreaLaw.EntropyScaling.charpoly_qutritMiddleMarginal,
         TNLean.MPS.AreaLaw.EntropyScaling.charpoly_qutritFamily_middle,
@@ -140,16 +140,16 @@ The following family is the state introduced in~\cite{Schuch2008EntropyScaling}
     \end{align}
     so the eigenvalues of $\rho$ are $1-p$, $p/2^N$ (with multiplicity $2^N$),
     and $0$ (with multiplicity $3^N-1-2^N$).
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:qutrit_entropy_scaling_marginal,
         thm:qutrit_entropy_scaling_native_marginal,
         thm:qutrit_entropy_scaling_orthonormal}
-    By Theorems~\ref{thm:qutrit_entropy_scaling_marginal}
+    By Lemmas~\ref{thm:qutrit_entropy_scaling_marginal}
     and~\ref{thm:qutrit_entropy_scaling_orthonormal},
     $\rho=B\operatorname{diag}(\lambda_i)B^\dagger$ with $B^\dagger B=1_{1+2^N}$,
     and $\det(tI-XY)=t^{3^N-(1+2^N)}\det(tI-YX)$ gives
     (\ref{eq:qutrit_entropy_scaling_charpoly});
-    Theorem~\ref{thm:qutrit_entropy_scaling_native_marginal} transfers this to
+    Lemma~\ref{thm:qutrit_entropy_scaling_native_marginal} transfers this to
     $\rho_{[0,N)}$.
 \end{proof}

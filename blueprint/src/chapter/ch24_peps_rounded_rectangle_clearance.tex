@@ -1,6 +1,6 @@
 \section{Rounded scales in a safe rectangle}
 
-\begin{theorem}[Eventual rounded clearance]
+\begin{lemma}[Eventual rounded clearance]
     \label{thm:area_law_rounded_clearance}
     \lean{TNLean.PEPS.AreaLaw.Scan.exists_rounded_clearance_threshold,
         TNLean.PEPS.AreaLaw.Scan.ScannerExponents.exists_rounded_clearance_threshold}
@@ -17,7 +17,7 @@
     The threshold depends only on $C_2,C_r,\ell$, yielding the rounded
     clearance estimates of
     \cite[proof of Proposition~9.5, lines~707--729]{OpenAI2026AreaLaw}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Since $\ell>0$, both $n^{-\ell}\to0$ and $(\log n)^2/n\to0$, so
     \begin{align}
@@ -30,27 +30,27 @@
     both stated bounds for every $D_0\ge1$.
 \end{proof}
 
-\begin{theorem}[Safe selected shell cells]
+\begin{lemma}[Safe selected shell cells]
     \label{thm:area_law_rounded_safe_shell_cells}
     \lean{TNLean.PEPS.AreaLaw.Scan.exists_safe_shell_cells_of_rounded_scales}
     \leanok
     \uses{def:area_law_safe_rectangle,def:area_law_capped_dyadic_partition,
         def:area_template_dyadic_rectangle}
     For the rounded scales of
-    Theorem~\ref{thm:area_law_rounded_clearance} and all parent sizes
+    Lemma~\ref{thm:area_law_rounded_clearance} and all parent sizes
     $s\ge S$, whenever $j\le L$ and $2^{K_{\rm cap}}\le L$, every square selected
     by the capped dyadic partition of $Q^{+j}\setminus Q$ is safe, and
     every parent site has sup-norm distance strictly greater than
     $2L+10r_0$ from every crossing-edge endpoint.
     The dyadic cap exponent $K_{\rm cap}$ is independent of the scanner band count.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_rounded_clearance,thm:area_law_rectangle_shell_safe_cells}
     For $s\ge S$, the rounded-clearance bound gives
     \begin{align}
         D_0L+L & =(D_0+1)L\le D_0s,
     \end{align}
-    so Theorem~\ref{thm:area_law_rectangle_shell_safe_cells} makes every
+    so Lemma~\ref{thm:area_law_rectangle_shell_safe_cells} makes every
     selected square safe. Because safety of $Q$ gives strict distance
     $>D_0s$, the second bound $2L+10r_0\le D_0s$ yields the asserted
     strict endpoint clearance.
