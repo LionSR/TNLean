@@ -112,10 +112,16 @@ A universal scalar choice now sets $s=\lceil Au^2/g\rceil$, degree $s^2$ and
 $t_0=1024+16\log(1/g)$, where $u=1+\log q+\log(1/g)$.
 Its actual rank budget and squared shrinking coefficient satisfy
 $D\delta\le10^{-5}<1/256$, and $\log D\le C u^3/g$ with an explicit
-constant. An exact normalization theorem now constructs the phase-aligned output of a
-filter with nonzero target overlap, with its residual-to-overlap error and actual
-Schmidt-rank growth. The physical favorable filter, product-overlap initialization,
-moving-ground-state recursion, and entropy conclusion still need to be assembled.
+constant. An exact normalization theorem constructs the phase-aligned output of a filter
+with nonzero target overlap, with its residual-to-overlap error and actual
+Schmidt-rank growth. For an available selected window, the physical favorable
+filter and its initialization are now constructed. The product vector targets
+the actual clipped ground vector $\phi_{t_0}$, with overlap at least
+$1/\sqrt{2D}$. The phase-normalized filtered product has cut rank at most $D$,
+squared distance at most $1/64$ from $\phi_{t_0}$ and at most $1/16$ from
+$\Omega$. The small product overlap is not transferred directly to $\Omega$.
+The moving-ground-state recursion, boundary cases, entropy conclusion and sharper
+approximation rates remain to be proved.
 
 For a unique ground vector on an open chain with $q\ge2$ and $0\le h_j\le I$,
 the gap is at most one. An endpoint unitary with zero expectation in that vector
@@ -139,9 +145,10 @@ hypothesis imposed by a formalization.
 For frustration-free projection chains, the actual even/odd detectability operator
 is now constructed. Its noncommutation count is derived from the physical bonds.
 It fixes the full ground kernel and preserves its orthogonal complement, and the
-converse estimate holds for every unit vector with constant three. Under a unique
-ground-state gap, the squared contraction is $4/(4+\gamma)$ without a gap cap.
-Reduction from arbitrary positive contractions to range projections, the regional
+converse estimate holds for every unit vector with constant three. An actual
+spectral gap above the entire zero-energy kernel gives the homogeneous squared
+contraction factor $4/(4+\gamma)$, for arbitrary kernel dimension and without
+a gap cap. Reduction from arbitrary positive contractions to range projections, the regional
 truncated Hamiltonian and its spectral and spatial rank conclusions remain open.
 
 The global approximation also gives one $r$-dimensional reference space,
@@ -196,8 +203,21 @@ The scalar soft truncation is formalized with the corrected cap $t(1+\log m)$,
 its polynomial and geometric remainders, and an exponential-weight estimate.
 For $m\ge1$, $x\ge0$ and $0<\theta\le1/2$,
 $x-h_{m,m}(x)\le(2/\theta)e^{\theta x-\theta m/2}$.
-Applying this estimate to a regional Hamiltonian requires a physical exponential
-moment bound. The first printed uniform energy estimate for soft truncation has
+For every prescribed interval, the physical exponential moment on the whole
+original closed window is now derived from the original nearest-neighbour terms:
+$\|e^{(A_J-\varepsilon'_J I)/8}|_{G_\eta}\|\le5e^{(17+\eta)/8}$.
+The regional minima and centered original ground energy are constructed before
+$\varepsilon'_J$, $\eta$ and the vectors; the boundary count is at most two
+and the centered ground energy is at most two. No gap or ground-space-rank
+hypothesis is imposed. The soft residual and reverse spectral comparison still
+need to be obtained from these estimates.
+
+The same-matrix soft/hard inequalities also retain the source's approximate
+minimum: if $A-\varepsilon'_J I\ge0$ and $r-10\le\varepsilon'_J$, then
+$\min(A,(r+t/2-10)I)-(t/2)2^{-m}I
+ \le\varepsilon'_J I+h_{m,t}(A-\varepsilon'_J I)\le A$.
+This order statement is separate from closeness of physical spectral subspaces.
+The first printed uniform energy estimate for soft truncation has
 a separate three-qubit counterexample with fixed gap $1/2$, recorded in
 `docs/paper-gaps/alvv16_soft_truncation_energy_estimate.tex`. This is an exact
 mathematical calculation, not a Lean counterexample theorem; its conclusion is

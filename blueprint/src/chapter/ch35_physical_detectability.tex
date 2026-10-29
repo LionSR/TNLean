@@ -106,3 +106,29 @@
     Rearranging gives the claimed squared-norm bound, without any upper
     bound on $\gamma$.
 \end{proof}
+
+\begin{theorem}[Contraction above the full zero-energy kernel]
+    \label{thm:physical_detectability_spectral_gap}
+    \lean{TNLean.MPS.AreaLaw.norm_sq_physicalDetectability_le_of_spectral_gap}
+    \leanok
+    Suppose $\gamma>0$ and
+    $\operatorname{spec}(H)\subseteq\{0\}\cup[\gamma,\infty)$.
+    Every $\psi\perp\ker H$ satisfies
+    \begin{align}
+        \|\operatorname{DL}(H)\psi\|^2
+          \leq\frac4{4+\gamma}\|\psi\|^2.
+        \label{eq:physical_detectability_spectral_gap}
+    \end{align}
+    The kernel may have arbitrary dimension, and no upper bound on
+    $\gamma$ is imposed.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:physical_detectability_energy,thm:physical_detectability_kernel}
+    Put $\phi=\operatorname{DL}(H)\psi$. Kernel invariance gives
+    $\phi\perp\ker H$. The spectral decomposition and the energy estimate give
+    \begin{align}
+        \gamma\|\phi\|^2\leq\langle\phi,H\phi\rangle
+          \leq4(\|\psi\|^2-\|\phi\|^2).
+    \end{align}
+    Rearranging proves~(\ref{eq:physical_detectability_spectral_gap}).
+\end{proof}
