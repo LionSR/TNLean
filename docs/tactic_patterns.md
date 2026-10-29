@@ -10183,3 +10183,25 @@ there is no need for a new tactic.
   unrelated repeated proofs and incidental three-line branch scaffolding;
   no new abstraction is needed for `omega` followed by a right disjointness
   branch. The actual interval-side geometry is already stated once.
+
+
+### Independent soft scale and actual heat sums — promoted (2026-10-29)
+
+- **Pattern:** Transfer the equal-scale scalar remainder by exact rescaling,
+  factor the same-matrix remainder through one exponential, and apply it to
+  actual original and soft spectral windows.
+- **Abstraction:** QICLean `SoftTruncationScaling.lean` and the generalized
+  weighted factorization in `SoftTruncationRemainder.lean` provide the common
+  estimates. The existing equal-scale matrix theorem now specializes the
+  independent-scale result.
+- **Refactored occurrences:** The three equal-scale physical residual proofs
+  specialize the independent-scale constructions. Their public statements
+  and existing consumers are unchanged. The new scale-three window theorem
+  uses the same physical moments and finite-window perturbation theorem.
+- **Actual tensor sum:** `TraceChainLinearCombination.lean` proves the
+  varying-dimension block sum once through the existing block-diagonal ring
+  homomorphism. The common-dimension and binary-sum results specialize it.
+  Actual heat and exterior tensors use these lemmas directly.
+- **Check:** The tactic scan reports no repeated blocks at its default
+  thresholds after combining the redundant nested witness constructors.
+  No new custom tactic is needed.

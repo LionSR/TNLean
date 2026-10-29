@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.AreaLaw.PhysicalSoftTruncationReverse
+import TNLean.MPS.AreaLaw.PhysicalScaledSoftTruncationResiduals
 
 /-!
 # Two residuals with the same regional and ground energies
@@ -65,38 +65,12 @@ theorem exists_interval_physical_soft_residuals
                 (H - Hsoft)).domRestrict (Submodule.spectralSpanLE hHsc.eigenvectorBasis
                   hHsc.eigenvalues (Es + eta))‖ ≤
                     80 * Real.exp ((17 + eta + alpha) / 8 - (m : ℝ) / 16) := by
-  classical
   intro _inst k A
-  obtain ⟨e, E0, x, z, hO, hxunit, hx, he, hzunit, hz, hElow, hE0, hE2, hforward⟩ :=
-    exists_interval_physical_soft_truncation_residual L q p r hq hpr hrL h hs h0 h1
-  obtain ⟨er, Er, xr, zr, hOr, hxrunit, hxr, her, hzrunit, hzr, hErlow,
-    _hEr0, _hEr2, hreverse⟩ :=
-    exists_interval_physical_soft_reverse_residual L q p r hq hpr hrL h hs h0 h1
-  have heq : er = e := by
-    funext j
-    exact Matrix.groundEnergy_eq_of_normalized_eigenvectors (A j) (er j) (e j)
-      xr x (hxr j) hxrunit (hx j) hxunit (her j) (he j)
-  subst er
-  have hEq : Er = E0 := Matrix.groundEnergy_eq_of_normalized_eigenvectors
-    ((∑ i, h i) - (((∑ j, e j) : ℝ) : ℂ) • 1) Er E0 zr z
-      hzr hzrunit hz hzunit hErlow hElow
-  subst Er
-  refine ⟨e, E0, x, ?_⟩
-  intro H Hc
-  refine ⟨hO, hxunit, hx, he, ?_, hE0, hE2, ?_⟩
-  · have hc := hO.minEigenvalue_eq_add_of_centered_ground 0 E0 z hzunit
-      (by simpa only [Complex.ofReal_zero, zero_smul, sub_zero] using hz)
-      (by simpa only [Complex.ofReal_zero, zero_smul, sub_zero] using hElow)
-    simpa only [add_zero] using hc.symm
-  intro eps m hepslo hepshi hm htau alpha Hsoft Hsc
-  obtain ⟨Es, zs, hS, hsoftH, hzsunit, hzs, hEslow, hElowsoft, hEs0, hres⟩ :=
-    hreverse eps m hepslo hepshi hm htau
-  refine ⟨Es, hS, ?_, hsoftH, hElowsoft, hEs0, ?_⟩
-  · have hc := hS.minEigenvalue_eq_add_of_centered_ground 0 Es zs hzsunit
-      (by simpa only [Complex.ofReal_zero, zero_smul, sub_zero] using hzs)
-      (by simpa only [Complex.ofReal_zero, zero_smul, sub_zero] using hEslow)
-    simpa only [add_zero] using hc.symm
-  intro eta heta hscale
-  exact ⟨(hforward eps eta m hepslo hepshi heta hm).2.2, hres eta heta hscale⟩
+  obtain ⟨e, E0, x, hHc, hxunit, hx, he, hEcan, hE0, hE2, hres⟩ :=
+    exists_interval_physical_scaled_soft_residuals L q p r hq hpr hrL h hs h0 h1
+  refine ⟨e, E0, x, hHc, hxunit, hx, he, hEcan, hE0, hE2, ?_⟩
+  intro eps m hepslo hepshi hm htau
+  exact hres eps m (m : ℝ) hepslo hepshi hm (Nat.cast_pos.mpr hm)
+    (le_mul_of_one_le_left (Nat.cast_nonneg m) (by norm_num)) htau
 
 end TNLean.MPS.AreaLaw

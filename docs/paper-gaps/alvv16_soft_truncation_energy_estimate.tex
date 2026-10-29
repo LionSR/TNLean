@@ -201,8 +201,48 @@ below $E_0+\eta$, and the original space below $E_0+\eta+w$ is
 $\delta$-close to the soft space below $E_s+\eta$. These corrected
 comparisons use the same original minima and the actual eigenbases. They
 concern one interval, equal scale and order, and positive bandwidth and
-enlargement. Independent order and scale, the printed gap prescription,
-and efficient tensor representations remain separate.
+enlargement. The equal-scale conclusions are instances of the bounded independent-scale
+extension below. The printed gap prescription and the complete efficient
+multi-region construction remain separate.
+
+
+\subsection{A compatible independent-scale construction}
+
+The exact identity
+\begin{align*}
+    h_{m,t}(x)=\frac tm h_{m,m}\left(\frac mt x\right)
+\end{align*}
+and the weighted scalar remainder imply, for $m\geq1$, $0<t\leq4m$ and
+$x\geq0$,
+\begin{align*}
+    0\leq x-h_{m,t}(x)\leq16e^{x/8-t/16}.
+\end{align*}
+The same physical moment therefore proves the original and soft-window
+residuals at independent scale, with decay $e^{-t/16}$, correction
+$\alpha=(t/2)2^{-m}$, and actual hard comparator cutoff $t/2-10$.
+No printed power estimate is used.
+
+For $\eta,w,\delta>0$ and the same $\rho$ as above, choose
+\begin{align*}
+    m=\left\lceil12+\frac23\eta+
+                     \frac{16}{3}\log(80/\rho)\right\rceil,
+    \qquad t=3m.
+\end{align*}
+Then $\alpha\leq3/4$, the reverse cutoff condition holds, and both
+residuals are at most $\rho$. The resulting actual soft Hamiltonian has
+both directed window comparisons and actual operator tensors at any
+prescribed norm accuracy. The heat times $a/t$, $0\leq a\leq m$, are
+all at most $1/3$ and hence lie strictly within the corrected cluster
+regime. The construction represents the exterior terms and scalar exactly,
+and uses direct heat approximants for the regional term. Its explicit
+bond budget is stated in the cluster-gap note linked below.
+
+The order is selected before the physical chain and Hamiltonian; the
+attained original minima precede the approximate interval energy, and the
+actual soft minimum precedes the bandwidth. These conclusions concern one
+prescribed interval. Simultaneous replacements on several regions, the
+complete improving polynomial family and its algorithmic running time
+are not supplied by this one-interval result.
 
 This obstruction is distinct from the incorrect cluster-approximation
 estimate, recorded in the separate note

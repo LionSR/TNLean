@@ -240,6 +240,72 @@ the factor two are explicit changes from the printed assertion. Thus
 (\ref{eq:alvv_cluster_printed}). It also supplies no bond-dimension
 bound or exact matrix product operator factorization.
 
+
+\section{The soft interval at compatible heat times}
+
+The corrected label estimate also yields an actual matrix product
+operator approximation for one soft-truncated interval. This is a
+restricted corrected version of the soft-truncation MPO lemma in ALVV, source lines 1262--1268. It does not replace
+the false printed physical-support assertion.
+
+For $t>0$, the defining finite sum has the exact heat expansion
+\begin{align*}
+    h_{m,t}(x)&=\sum_{a=0}^m c_a e^{-ax/t},&
+    c_a&=t(-1)^a\sum_{j=1}^m\frac{\binom ja}{j},&
+    \sum_{a=0}^m|c_a|&\leq t2^{m+1}.
+\end{align*}
+The constant term is included. The scale factor $t$ is retained in the
+coefficient budget.
+Let $A=H_J$, and let $e$ be its actual minimum eigenvalue, with
+$e-10\leq\epsilon\leq e$. The positive matrix to be truncated is
+$U=A-\epsilon I$. For each $\beta=a/t$, set
+$Q_a=e^{\beta\epsilon}M_\ell^{\mathrm{lab}}(A;\beta)$.
+The normalized estimate at $e$ gives
+\begin{align*}
+    \|e^{-\beta U}-Q_a\|
+       &\leq e^{-\beta(e-\epsilon)}
+                   (e^{N^2[2(e^\beta-1)]^\ell}-1)\\
+       &\leq e^{N^2[2(e^\beta-1)]^\ell}-1.
+\end{align*}
+Thus the large scalar in the shifted exponential cancels the
+normalization. It is not distributed among the original positive local
+terms.
+
+Choose $t=3m$ and $m\geq1$. Then
+$b=2(e^{1/3}-1)\in(0,1)$ and every required heat time is at most $1/3$.
+Writing $W=3m2^{m+1}$, choose the explicit order
+\begin{align*}
+    \ell=\max\left\{1,\left\lceil
+       \frac{\log\max\{1,N^2\}-\log\log(1+\xi/W)}{-\log b}
+    \right\rceil\right\}.
+\end{align*}
+Then $W(e^{N^2b^\ell}-1)\leq\xi$. Each heat operator is approximated
+directly by its actual cluster tensors. Diagonal blocks combine these
+heat tensors with dimension $(m+1)\ell^2q^\ell$; an approximate heat MPO
+is never raised to the power $m$. The exterior local sum and scalar
+identity have an exact representation of dimension $1+Nq^2$.
+Consequently the full actual replacement
+\begin{align*}
+    \widetilde H=H-A+\epsilon I+h_{m,3m}(A-\epsilon I)
+\end{align*}
+has actual site-dependent operator tensors $T$ with
+\begin{align*}
+    \|\widetilde H-T\|\leq\xi,\qquad
+    D\leq1+Nq^2+(m+1)\ell^2q^\ell.
+\end{align*}
+For each fixed local dimension this is a polynomial bond budget through
+the logarithmic order. The formal result constructs the tensors and the
+norm estimate; it does not establish a computational running time or the
+full multi-region algorithm.
+
+The same scale $t=3m$ also permits the corrected physical residual/window
+comparisons: the exact scaling identity gives a remainder bounded by
+$16e^{x/8-t/16}$ when $0<t\leq4m$, using the already constructed
+physical exponential moment of $U/8$. Thus the approximation and both
+directed comparisons can be obtained for one literal physical soft
+Hamiltonian. This does not prove the false printed uniform energy
+estimate or its claimed gap prescription.
+
 \bibliographystyle{unsrt}
 \bibliography{references}
 \end{document}

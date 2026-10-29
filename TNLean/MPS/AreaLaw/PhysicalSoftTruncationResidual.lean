@@ -3,8 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.AreaLaw.RegionalExponentialMoment
-import QICLean.Analysis.SoftTruncationRemainder
+import TNLean.MPS.AreaLaw.PhysicalScaledSoftTruncationResidual
 
 /-!
 # The physical soft-truncation residual on the original spectral window
@@ -61,46 +60,11 @@ theorem exists_interval_physical_soft_truncation_residual
               (H - Hsoft)).domRestrict G‖ ≤
               80 * Real.exp ((17 + eta) / 8 - (m : ℝ) / 16) := by
   intro k A
-  obtain ⟨e, E0, x, z, hHc, hxunit, hx, he, hzunit, hz, hElow, hE0, hE2, hmoment⟩ :=
-    exists_interval_regional_exponential_moment L q p r hq hpr hrL h hs h0 h1
-  refine ⟨e, E0, x, z, ?_⟩
-  intro H Hc
-  refine ⟨hHc, hxunit, hx, he, hzunit, hz, hElow, hE0, hE2, ?_⟩
-  intro eps eta m hepslo hepshi heta hm G Hsoft
-  let U := A 1 - (eps : ℂ) • (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-  have hmin : (e 1 : ℝ) • (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) ≤ A 1 := by
-    simpa only [Complex.coe_smul] using Matrix.le_iff.mpr (he 1)
-  have heps : eps • (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) ≤ (e 1 : ℝ) • 1 :=
-    smul_le_smul_of_nonneg_right hepshi zero_le_one
-  have hU : U.PosSemidef := by
-    apply Matrix.le_iff.mp
-    simpa only [Complex.coe_smul] using heps.trans hmin
-  have hdiff : H - Hsoft = U - cfc (Real.softTruncation (m : ℝ) m) U := by
-    dsimp only [Hsoft, U]
-    abel
-  have hdpos : (H - Hsoft).PosSemidef := by
-    rw [hdiff]
-    exact Matrix.le_iff.mp
-      (hU.softTruncation_hard_bounds (m : ℝ) m (Nat.cast_pos.mpr hm) hm).2
-  have hH : H.IsHermitian :=
-    (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
-  have hsoft : Hsoft.IsHermitian := by
-    have heq : H - (H - Hsoft) = Hsoft := by abel
-    exact heq ▸ hH.sub hdpos.isHermitian
-  refine ⟨hsoft, Matrix.le_iff.mpr hdpos, ?_⟩
-  rw [hdiff]
-  have hweight : ‖(Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)
-      (NormedSpace.exp ((1 / 8 : ℝ) • U))).domRestrict G‖ ≤
-      5 * Real.exp ((17 + eta) / 8) := by
-    simpa only [U, Complex.coe_smul] using hmoment eps eta hepslo hepshi heta
-  refine (Matrix.norm_softTruncation_remainder_domRestrict_le_exp_weight U hU m hm G).trans ?_
-  calc
-    _ ≤ (16 * Real.exp (-(m : ℝ) / 16)) * (5 * Real.exp ((17 + eta) / 8)) :=
-      mul_le_mul_of_nonneg_left hweight (by positivity)
-    _ = 80 * (Real.exp (-(m : ℝ) / 16) * Real.exp ((17 + eta) / 8)) := by ring
-    _ = 80 * Real.exp ((17 + eta) / 8 - (m : ℝ) / 16) := by
-      rw [← Real.exp_add]
-      congr 2
-      ring
+  obtain ⟨e, E0, x, z, hHc, hxunit, hx, he, hzunit, hz, hElow, hE0, hE2, hres⟩ :=
+    exists_interval_physical_scaled_soft_truncation_residual L q p r hq hpr hrL h hs h0 h1
+  refine ⟨e, E0, x, z, hHc, hxunit, hx, he, hzunit, hz, hElow, hE0, hE2, ?_⟩
+  intro eps eta m hepslo hepshi heta hm
+  exact hres eps eta m (m : ℝ) hepslo hepshi heta hm (Nat.cast_pos.mpr hm)
+    (le_mul_of_one_le_left (Nat.cast_nonneg m) (by norm_num))
 
 end TNLean.MPS.AreaLaw
