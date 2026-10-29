@@ -10483,9 +10483,9 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     $\sigma=\pm1$ is independent of the gauge and is constant under continuous
     deformations that preserve time-reversal symmetry.
     % Source lines: paper_v2.tex 1613--1631.
-    % The auxiliary results below use supplied zero-index coordinates and
-    % actual continuous gates with the displayed local symmetry certificate.
-    % A bare globally symmetric path does not yet supply those data.
+    % The intrinsic auxiliary results below need pointwise supplied standard
+    % forms and the local certificate; no continuous gate choices are needed.
+    % Deducing that certificate from global symmetry remains separate.
 \end{proposition}
 
 \begin{lemma}[Extraction of the sign from a supplied local equation]
@@ -10512,52 +10512,56 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     Division by the nonzero scalar $d^2$ gives the result.
 \end{proof}
 
-\begin{lemma}[Independence from supplied canonical source representatives]
+\begin{lemma}[Intrinsic trace and independence of standard-form representatives]
     \label{lem:mpu_source_time_reversal_sign_independent}
-    \lean{MPOTensor.SourceFactors.timeReversalSign, MPOTensor.IsMPUCanonicalFormII.source_timeReversalSign_eq_of_mpo_eq}
+    \lean{MPOTensor.timeReversalPeriodicTrace, MPOTensor.intrinsicTimeReversalSign, MPOTensor.TwoSiteStandardFormData.timeReversalTrace_eq_periodicTrace, MPOTensor.TwoSiteStandardFormData.timeReversalSign_eq_intrinsic, MPOTensor.TwoSiteStandardFormData.timeReversalSign_eq_of_mpo_two_eq}
     \notready
-    Let $\mathcal U,\mathcal V$ be reduced canonical-form-II tensors in the
-    same bond dimension, with equal periodic operators at every length $N>1$.
-    Give each actual tensor supplied source factors with unitary unshifted
-    gate. Suppose both source ranks of each tensor equal its physical
-    dimension $d$. In the canonical identifications with $\mathbb C^d$,
-    the normalized trace expressions $s(u_U,v_U)$ and $s(u_V,v_V)$ agree.
-    This is the representative-independence deduction in
-    \cite[lines~1613--1627]{Cirac2017MPU} for reduced source data; the
-    full-support restriction is recorded in
-    \cite{gap:mpu_canonical_form_full_support}.
+    Let $W$ have a supplied two-site standard form with square gates $u,v$
+    on $\mathbb C^d\otimes\mathbb C^d$. For exchange $P$ of the two physical
+    blocks, define $s(W)=d^{-2}\tr[P U_W^{(2)}]$. Then $s(u,v)=s(W)$.
+    Consequently two supplied standard forms whose actual two-block
+    periodic operators agree have the same normalized sign expression,
+    including representatives in different bond dimensions. No canonical
+    source-factor comparison is required. This gives the independence
+    assertion of \cite[lines~1613--1627]{Cirac2017MPU} for the supplied
+    square standard forms.
 \end{lemma}
 
 \begin{proof}
-    \uses{FundamentalMPU, lem:mpu_sigma_gauge_invariant}
-    The supplied-factor Fundamental Theorem gives two unitary gate gauges.
-    Carry these gauges through the canonical rank identifications to the
-    physical coordinates. The two gates then have the form
-    $u_V=(x\otimes y)u_U$ and $v_V=v_U(y^\dagger\otimes x^\dagger)$.
-    The trace-gauge identity gives equality of the normalized expressions.
+    The shifted layer on two blocks is $P v_{23}P v_{23}$, so
+    $U_W^{(2)}=P v_{23}P v_{23}(u\otimes u)$. Since $P^2=\Id$,
+    cyclicity gives
+    \begin{align}
+        \tr[P U_W^{(2)}]
+         & =\tr[v_{23}P v_{23}(u\otimes u)]  \\
+         & =\tr[P v_{23}(u\otimes u)v_{23}].
+    \end{align}
+    Division by $d^2$ gives the identity and independence.
 \end{proof}
 
-\begin{lemma}[Constancy along supplied local time-reversal paths]
+\begin{lemma}[Constancy along actual tensor paths with pointwise local certificates]
     \label{lem:mpu_supplied_time_reversal_sign_constant}
-    \lean{MPOTensor.continuous_timeReversalSign, MPOTensor.timeReversalSign_eq_on_supplied_path}
+    \lean{MPOTensor.continuous_intrinsicTimeReversalSign, MPOTensor.intrinsicTimeReversalSign_eq_on_path}
     \notready
-    Let $W(t)$ have supplied two-site standard forms with continuous square
-    gates $u(t),v(t)$ on $\mathbb C^d\otimes\mathbb C^d$, where $d>0$ and
-    $t\in[0,1]$. At every $t$, suppose the local equation of
-    Lemma~\ref{lem:mpu_supplied_time_reversal_sign} holds for a unitary
-    $x(t)$ and a sign $\sigma(t)\in\{1,-1\}$. No continuity of these
-    witnesses is required. Then $s(u(t),v(t))=s(u(0),v(0))$ throughout the interval.
-    This is the continuous-supplied-gate argument of
-    \cite[lines~1628--1630]{Cirac2017MPU}, with its data requirements
-    recorded in \cite{gap:mpu_canonical_form_full_support}.
+    Let $W(t)$ be a continuous path of actual tensors for $t\in[0,1]$.
+    At each $t$, suppose there is a supplied square two-site standard form
+    and a local time-reversal certificate as in
+    Lemma~\ref{lem:mpu_supplied_time_reversal_sign}, with
+    $\sigma(t)\in\{1,-1\}$. These choices are pointwise; no continuity
+    of the gates, source factors, unitary or sign witnesses is required.
+    Then $s(W(t))=s(W(0))$ throughout the interval.
+    This is the intrinsic-trace argument for
+    \cite[lines~1628--1630]{Cirac2017MPU}. Deducing the pointwise local
+    certificate from global time reversal remains the separate local
+    characterization.
 \end{lemma}
 
 \begin{proof}
-    \uses{lem:mpu_supplied_time_reversal_sign}
-    The trace expression is a polynomial in the entries of $u,v$, divided
-    by the fixed nonzero scalar $d^2$, hence continuous. The local equation
-    makes its square equal to one. A continuous function from the connected
-    interval to $\{1,-1\}$ is constant.
+    \uses{lem:mpu_supplied_time_reversal_sign, lem:mpu_source_time_reversal_sign_independent}
+    The actual finite-chain operator is polynomial in the tensor entries,
+    so $s(W(t))$ is continuous. At each point the local equation and
+    intrinsic identity give $s(W(t))\in\{1,-1\}$. A continuous function
+    from the connected interval to this two-point set is constant.
 \end{proof}
 
 \begin{proposition}[Admissible well-definedness of the time-reversal sign]
