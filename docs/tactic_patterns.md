@@ -9988,3 +9988,28 @@ there is no need for a new tactic.
   removed. Both existing physical constructions and the new directed
   comparison use the same scalar estimates. Their physical statements and
   constants are unchanged. No tactic or compatibility alias is introduced.
+
+### Squared triangle inequality — promoted helper (2026-10-29)
+
+- **Pattern:** The AKLV initialization and variable-window refinement
+  repeated the triangle inequality, monotonicity of squaring and
+  `add_sq_le` three times across two files.
+- **Abstraction:** QICLean's Mathlib-only
+  `Analysis/NormSquaredTriangle.lean` exposes
+  `norm_sub_sq_le_two_mul_add` for a seminormed additive commutative group.
+  All three prior calculations now use it. `ChangingTargetStep` uses the
+  same helper for both comparisons with the moving target.
+- **Mechanism:** One mathematical inequality, without a tactic or a new
+  phase convention.
+
+### Coherent dependent sequences of normalized images — candidate (2026-10-29)
+
+- **Pattern:** A successor theorem returns a normalized image of its actual
+  input together with invariants whose bounds depend on the sequence index.
+- **Reuse:** In `AKLV/ChangingTargets.lean`, `State i` is the subtype carrying
+  the unit, error and product-rank invariant. The existence of a successor
+  is proved for each actual state, and `Nat.rec` iterates its chosen value.
+  The choice specification records the polynomial-image relation on each edge.
+- **Scope:** This is the first such moving-target sequence in this argument.
+  The existing LVV recursion retains its own mathematical invariant; no
+  generic recursion framework or tactic is introduced.

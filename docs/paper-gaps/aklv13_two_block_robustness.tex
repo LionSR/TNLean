@@ -128,8 +128,10 @@ states this restriction explicitly and does not identify the large-window
 statement with an unrestricted all-window formulation of the printed theorem.
 The actual favorable square-degree filter and initial product approximation
 are constructed for every window selected by the universal scalar choice
-that fits in the chain. The subsequent approximation sequence, finite small
-windows, and entropy argument remain further tasks.
+that fits in the chain. The fixed-window changing-target sequence is now constructed by actual
+normalized polynomial images with an exact product rank budget. Finite
+small windows, the summed logarithmic rank estimate, the accuracy-dependent
+enlarged-window optimization, and the entropy argument remain further tasks.
 \section{The initial product overlap}
 
 At source line 1023, the product-overlap inequality is printed with
@@ -161,3 +163,31 @@ This is the initial step of the changing-target construction, with the
 available-window restriction stated separately; it is not the full
 sequence or entropy theorem.
 \end{document}
+
+\section{The coherent changing-target sequence}
+
+The construction in \doclink{TNLean/MPS/AreaLaw/AKLV/ChangingTargets}
+uses one dependent recursion on the actual preceding unit vector. Its
+fixed regional minima come from the physical initialization; the minimizing
+energies returned by later refinements agree with them by uniqueness of
+the minimum. Thus all thresholds truncate the same normalized physical
+Hamiltonian at the same cut. The available-window and actual-first-excited-
+energy restrictions remain explicit.
+
+With $\beta_i=2^{-i}$ and
+$t_i=1024+16\log(1/g)+16i\log2$, choose
+$\ell_i=\lceil5\sqrt{(2t_i+s)/g}\rceil$ for $i\ge1$.
+The proved sequence has $\|\psi_i-\Omega\|^2\le\beta_i/16$ and
+rank at most the initial rank times the product of the sharp individual
+filter bounds. Every edge retains its actual polynomial, phase and
+normalized filtered image. This establishes a concrete sequence, rather
+than independently selected approximants at different indices.
+
+The printed summary at source line 1053 writes the rank itself as an
+initial term plus a sum of logarithmic rank costs. The multiplicative
+rank bound, or its logarithm, is the correct reading, consistent with
+item 2 of the stated lemma. The current result retains the exact product
+and the proved initial logarithmic budget; the source's further summed
+logarithmic estimate and final entropy summation remain separate tasks.
+The accuracy-dependent enlarged-window argument at lines 1503--1517 is
+also separate and is not replaced by this fixed-window recursion.

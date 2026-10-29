@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.AKLV.FavorableFilter
+import QICLean.Analysis.NormSquaredTriangle
 import QICLean.Channel.FilterNormalization
 import QICLean.Entropy.FilterPrefix
 import Mathlib.Analysis.InnerProductSpace.Projection.FiniteDimensional
@@ -224,8 +225,7 @@ theorem exists_aklv_physical_product_initialization :
     exact hclose.trans (div_le_div_of_nonneg_right
       (Real.exp_le_one_iff.mpr (by linarith)) (by norm_num))
   have hψΩ : ‖ψ - Ω‖ ^ 2 ≤ 1 / 16 := by
-    have htri := norm_sub_le_norm_sub_add_norm_sub ψ φ Ω
-    have hsquare := (pow_le_pow_left₀ (norm_nonneg _) htri 2).trans add_sq_le
+    have hsquare := norm_sub_sq_le_two_mul_add ψ φ Ω
     nlinarith
   exact ⟨hq, hg1, hs, hlogD, e, E0, E, φ, p, hregional, hEeq, hE0, hE6,
     hBpos, hBnorm, hE, hφ, heigen, hprojector, hclose, hdegree, hpE, hfix, hrank,
