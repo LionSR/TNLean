@@ -9725,7 +9725,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \begin{lemma}[Source cuts of a supplied square standard form]
     \label{lem:mpu_supplied_standard_form_source_cuts}
     \lean{MPOTensor.TwoSiteStandardFormData.cutX₁, MPOTensor.TwoSiteStandardFormData.cutY₁, MPOTensor.TwoSiteStandardFormData.cutX₂, MPOTensor.TwoSiteStandardFormData.cutY₂, MPOTensor.TwoSiteStandardFormData.sourceCutM₁_eq_cutX₁_mul_cutY₁, MPOTensor.TwoSiteStandardFormData.sourceCutM₂_eq_cutX₂_mul_cutY₂, MPOTensor.TwoSiteStandardFormData.cutY₂_cutY₁_eq_staircaseMiddle_mul_kronecker, MPOTensor.TwoSiteStandardFormData.cutX₁_cutX₂_eq_staircaseMiddle, MPOTensor.IsMPUCanonicalFormII.twoSite_cutX₁_weighted_isometry, MPOTensor.IsMPUCanonicalFormII.twoSite_cutX₂_isIsometry, MPOTensor.IsMPUCanonicalFormII.twoSite_sourceRanks, MPOTensor.IsMPUCanonicalFormII.twoSiteSourceFactors, MPOTensor.IsMPUCanonicalFormII.sourceRanks_eq_phys_of_standardForm_even_mpo_eq_adjoint, MPOTensor.IsMPUCanonicalFormII.blockTwo, MPOTensor.IsMPUCanonicalFormII.isMPUSimple_blockTwo, MPOTensor.IsMPUCanonicalFormII.twoSiteSourceFactors_sourceU, MPOTensor.IsMPUCanonicalFormII.twoSiteSourceFactors_sourceV, MPOTensor.TwoSiteStandardFormData.reindexRanks, MPOTensor.blockTensor_one_eq_reindexPhysical}
-    \notready
+    \leanok
     Let $W$ have a supplied two-site standard form with unitary gates
     $u:\mathbb C^d\otimes\mathbb C^d\to\mathbb C^\ell\otimes\mathbb C^r$ and
     $v:\mathbb C^r\otimes\mathbb C^\ell\to\mathbb C^d\otimes\mathbb C^d$,
@@ -9760,7 +9760,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     $r(U)=\ell(U)=d$.
 \end{lemma}
 
-\begin{proof}
+\begin{proof}\leanok
     \uses{SF}
     Substitute the open standard-form contraction in each source cut.
     Sum the two spectator Kronecker deltas. In the right-factor contraction,
@@ -9783,7 +9783,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \begin{lemma}[Normalized physical-adjoint source factors]
     \label{lem:mpu_normalized_physical_adjoint_source_factors}
     \lean{MPOTensor.IsMPUCanonicalFormII.reindexPhysical, MPOTensor.IsMPUCanonicalFormII.isMPUSimple_physicalAdjointTensor, MPOTensor.IsMPUCanonicalFormII.sourceFactors_sourceU_isUnitaryBetween, MPOTensor.IsMPUCanonicalFormII.sourceFactors_Y₁_mul_conjTranspose, MPOTensor.IsMPUCanonicalFormII.sourceFactors_Y₂_weighted_mul_conjTranspose, MPOTensor.SourceFactors.physicalAdjoint, MPOTensor.SourceFactors.sourceU_physicalAdjoint, MPOTensor.SourceFactors.sourceV_physicalAdjoint, MPOTensor.IsMPUCanonicalFormII.twoSiteSourceFactors_physicalAdjoint}
-    \notready
+    \leanok
     Let $U$ be simple and in reduced canonical form II, with recorded positive
     diagonal boundary $\rho$. Bijective physical relabeling preserves this
     presentation and boundary. Physical adjunction preserves simplicity.
@@ -9810,7 +9810,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \cite[lines~1326--1398]{FrancoRubio2025MPUGauging}.
 \end{lemma}
 
-\begin{proof}
+\begin{proof}\leanok
     \uses{lem:mpu_supplied_standard_form_source_cuts}
     Simplicity is the equality $r\ell=d^2$ and adjunction exchanges $r,\ell$.
     For the Gram formulas, compare a supplied cut factorization $XY$ with
@@ -9826,7 +9826,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \begin{lemma}[Scalar transport of normalized source factors]
     \label{lem:mpu_source_factors_scalar_transport}
     \lean{MPOTensor.source_ranks_smul, MPOTensor.SourceFactors.smul, MPOTensor.SourceFactors.sourceU_smul, MPOTensor.SourceFactors.sourceV_smul}
-    \notready
+    \leanok
     For a nonzero scalar $c$, the two source ranks of $cU$ equal those of $U$.
     Any normalized source factorization of $U$ transports to one of $cU$
     with the same weight, by keeping both left factors, multiplying both
@@ -9837,7 +9837,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \cite[lines~479--524]{Cirac2017MPU} used in the even-family comparison.
 \end{lemma}
 
-\begin{proof}
+\begin{proof}\leanok
     A nonzero scalar does not change matrix rank. The two cut products acquire
     the scalar, the two left-factor normalizations stay unchanged, and the
     right-inverse products acquire $cc^{-1}=1$. The unshifted gate contracts
@@ -9848,7 +9848,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \begin{lemma}[Even-family virtual rigidity up to a sign]
     \label{lem:mpu_even_family_virtual_sign_gauge}
     \lean{MPOTensor.IsMPUCanonicalFormII.exists_unitary_virtual_sign_gauge_of_mpo_eq_even}
-    \notready
+    \leanok
     Let $U,V$ be reduced canonical-form-II MPU tensors with equal periodic
     operators at every even length greater than one. Their bond dimensions
     agree, and there are a virtual unitary $z$ and a sign $\eta\in\{1,-1\}$
@@ -9860,7 +9860,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     in \cite{gap:mpu_canonical_form_full_support}.
 \end{lemma}
 
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:cpsv_normal_overlap_dichotomy}
     Equality along the even subsequence makes the cross-overlap equal the
     self-overlap there, whose limit is one. The normal-tensor overlap
@@ -9874,7 +9874,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \begin{lemma}[Supplied source gates from even-family equality]
     \label{lem:mpu_even_family_supplied_source_gauges}
     \lean{MPOTensor.IsMPUCanonicalFormII.eq_sign_virtualSandwich_of_mpo_eq_even, MPOTensor.IsMPUCanonicalFormII.source_ranks_eq_of_mpo_eq_even, MPOTensor.IsMPUCanonicalFormII.exists_supplied_source_gate_unitary_gauges_of_mpo_eq_even}
-    \notready
+    \leanok
     Let $U,V$ be reduced canonical-form-II MPU tensors with the same bond
     dimension and equal periodic operators at every even length greater than
     one. For any supplied normalized source factors whose unshifted gates
@@ -9886,7 +9886,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     comparison used in \cite[lines~1237--1252]{Cirac2017MPU}.
 \end{lemma}
 
-\begin{proof}
+\begin{proof}\leanok
     \uses{lem:mpu_even_family_virtual_sign_gauge,
         lem:mpu_source_factors_scalar_transport, FundamentalMPU}
     Write $\eta V=zUz^\dagger$ with $\eta^2=1$. Transport the supplied
@@ -9900,7 +9900,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \begin{lemma}[Forward local time reversal for the constructed canonical standard form]
     \label{lem:mpu_canonical_forward_local_time_reversal}
     \lean{MPOTensor.IsMPUCanonicalFormII.exists_coarse_timeReversal_certificate, MPOTensor.IsMPUCanonicalFormII.exists_local_timeReversal_certificate, MPOTensor.IsMPUCanonicalFormII.exists_twoSiteStandardFormData_timeReversal_certificate, MPOTensor.coarse_gates_eq_four_spin_gates}
-    \notready
+    \leanok
     Let $U$ be a simple reduced canonical-form-II tensor. Construct its actual
     source standard form $W$ with gates $u,v$, and suppose that
     $W^{(N)}=W^{(N)\dagger}$ at every even length $N>1$. Its source
@@ -9926,7 +9926,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     restriction is recorded in \cite{gap:mpu_canonical_form_full_support}.
 \end{lemma}
 
-\begin{proof}
+\begin{proof}\leanok
     \uses{lem:mpu_supplied_standard_form_source_cuts,
         lem:mpu_normalized_physical_adjoint_source_factors,
         lem:mpu_even_family_supplied_source_gauges}
@@ -9950,7 +9950,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \begin{lemma}[Standard forms from supplied normalized factors]
     \label{lem:mpu_standard_form_from_normalized_source_factors}
     \lean{MPOTensor.IsMPUCanonicalFormII.exists_twoSiteStandardFormData_sourceFactors}
-    \notready
+    \leanok
     Let $U$ be a simple reduced canonical-form-II MPU with recorded weight
     $\rho$. Every normalized supplied source factorization at this weight
     provides actual standard-form data for its own gates on the two-site
@@ -9958,7 +9958,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     standard forms of \cite[lines~603--648]{Cirac2017MPU}.
 \end{lemma}
 
-\begin{proof}
+\begin{proof}\leanok
     \uses{SF, FundamentalMPU}
     Compare the supplied factors with the selected factors of the same tensor.
     The normalized factor comparison gives two unitary rank transformations.
@@ -9969,7 +9969,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \begin{lemma}[Even-ring converse for the constructed canonical standard form]
     \label{lem:mpu_canonical_even_local_time_reversal_iff}
     \lean{MPOTensor.IsMPUCanonicalFormII.mpo_even_eq_adjoint_of_source_local_certificate, MPOTensor.IsMPUCanonicalFormII.mpo_standardForm_even_eq_adjoint_of_local_certificate, MPOTensor.IsMPUCanonicalFormII.standardForm_even_timeReversal_iff_exists_local_certificate}
-    \notready
+    \leanok
     Let $U$ be a simple reduced canonical-form-II tensor, and construct its
     actual standard form $W$ with gates $u,v$. Then $W^{(N)}$ is self-adjoint
     at every even length $N>1$ if and only if $r(U)=\ell(U)=d$ and, in
@@ -9990,7 +9990,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \cite{gap:mpu_canonical_form_full_support}.
 \end{lemma}
 
-\begin{proof}
+\begin{proof}\leanok
     \uses{lem:mpu_canonical_forward_local_time_reversal,
         lem:mpu_standard_form_from_normalized_source_factors,
         lem:mpu_normalized_physical_adjoint_source_factors, FundamentalMPU}
