@@ -165,7 +165,8 @@
 
 \begin{definition}[The parent Hamiltonian on the true dependent chain space]
     \label{def:varying_physical_parent_hamiltonian}
-    \lean{Matrix.physicalPairParentTerm, Matrix.varyingPhysicalParentHamiltonian}
+    \lean{Matrix.physicalPairParentTerm, Matrix.physicalPairParentTerm_in_coordinates,
+        Matrix.varyingPhysicalParentHamiltonian}
     \notready
     \uses{def:dependent_physical_pair_coordinates}
     Let $A^{[j]}_i\in M_{D_j,D_{j+1}}(\mathbb C)$ have an arbitrary finite
@@ -211,4 +212,99 @@
     $\widetilde h_j E=E h_j$ at each bond. Summing these derived identities
     gives $\widetilde H E=EH$. Injectivity of the isometry gives the kernel
     equivalence.
+\end{proof}
+
+\begin{lemma}[Actual local equations are actual boundary sections]
+    \label{lem:varying_physical_local_boundary_sections}
+    \lean{Matrix.physicalPairParentTerm_boundary_of_apply_eq_zero,
+        Matrix.physicalPairParentTerm_apply_eq_zero_iff_boundary}
+    \notready
+    \uses{def:varying_physical_parent_hamiltonian}
+    An actual local term annihilates a vector if and only if, at every
+    fixed outside configuration $\eta$, its pair coefficients have an actual
+    rectangular trace boundary:
+    \begin{align}
+        \phi\bigl(Q^{-1}((x,y),\eta)\bigr) & =\operatorname{tr}(XA_xB_y).
+    \end{align}
+    The matrix $X$ may depend on $\eta$.
+\end{lemma}
+\begin{proof}
+    \notready
+    In pair/outside coordinates the local term applies the complementary
+    pair projection independently on every outside vector. Its kernel is
+    exactly the actual pair trace range. Membership in that range supplies
+    $X$. Conversely the displayed representation places every outside
+    vector in that kernel, so the identity-extended term vanishes.
+\end{proof}
+
+\begin{lemma}[Unused physical letters are excluded by the actual kernel]
+    \label{lem:varying_physical_kernel_forces_support}
+    \lean{Matrix.physicalPairParentTerm_coeff_eq_zero_of_not_mem_range,
+        Matrix.varyingPhysicalParentHamiltonian_apply_eq_zero_iff_terms,
+        Matrix.varyingPhysicalParentHamiltonian_pair_apply_eq_zero,
+        Matrix.varyingPhysicalParentHamiltonian_coeff_eq_zero_of_not_mem_range}
+    \notready
+    \uses{lem:varying_physical_local_boundary_sections,
+        lem:varying_physical_parent_embedding_transport}
+    Extend site matrices by zero along arbitrary sitewise physical
+    injections $e_k:I_k\hookrightarrow J_k$. Suppose $N\ge2$ and the actual
+    extended parent satisfies $\widetilde H\phi=0$. Then $\phi(\sigma)=0$
+    whenever some physical letter $\sigma_k$ is outside $e_k(I_k)$.
+    Every actual adjacent local term annihilates $\phi$.
+\end{lemma}
+\begin{proof}
+    \notready
+    Positivity of the actual local terms derives each local equation from
+    the equation for their sum. At a letter outside the original alphabet,
+    its extended site matrix is zero, so every actual pair trace coefficient
+    at that letter is zero. Every site of a chain with $N\ge2$ belongs to an
+    adjacent pair, including the final site, which belongs to the final pair.
+    The local boundary sections therefore give the claimed vanishing at
+    every configuration containing an unused letter.
+\end{proof}
+
+\begin{lemma}[The actual kernel lies in the original physical image]
+    \label{lem:varying_physical_kernel_actual_pullback}
+    \lean{Matrix.varyingPhysicalParentHamiltonian_eq_extendByZero_pullback_of_eq_zero}
+    \notready
+    \uses{lem:varying_physical_kernel_forces_support}
+    Under the same hypotheses, every actual extended-kernel vector is the
+    extension of its literal coefficient pullback:
+    \begin{align}
+        \phi & =E\bigl(\tau\mapsto\phi((e_k(\tau_k))_k)\bigr).
+    \end{align}
+    Membership in this embedded state space is a conclusion, not a hypothesis.
+\end{lemma}
+\begin{proof}
+    \notready
+    At a configuration in the embedding image, extension by zero recovers
+    exactly its original coefficient. A configuration outside that image has
+    a letter outside one of the site images, since sitewise preimages would
+    assemble a full dependent preimage. Its coefficient vanishes by the
+    actual kernel support statement, and the extended coefficient is zero too.
+\end{proof}
+
+\begin{lemma}[The two actual common-alphabet parent descriptions have the same kernel]
+    \label{lem:uniform_physical_parent_kernel_comparison}
+    \lean{Matrix.varyingPhysicalParentHamiltonian_uniform_apply_eq_zero_iff}
+    \notready
+    \uses{lem:varying_physical_local_boundary_sections,
+        lem:varying_obc_parent_kernel_sections}
+    On a common nonempty physical alphabet, the actual dependent-coordinate
+    open parent and the actual prefix/pair/suffix open parent have exactly
+    the same kernel at every length.
+\end{lemma}
+\begin{proof}
+    \notready
+    Both local equations say that every fixed-outside pair section has an
+    actual rectangular trace boundary. To compare the coordinate descriptions,
+    concatenate a prefix, the active pair, and a suffix. Changing only the
+    pair leaves all outside coordinates unchanged. Conversely, split a full
+    configuration into its actual prefix, pair, and suffix; concatenating
+    them recovers the configuration. A reference pair from the nonempty
+    alphabet fixes the outside section. These two coordinate identifications
+    transport the boundary representations in both directions. Positivity
+    and the actual local-kernel characterizations give the full kernel
+    equivalence. Canonical normalization derives alphabet nonemptiness in
+    the subsequent uniqueness application.
 \end{proof}

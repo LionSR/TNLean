@@ -9815,3 +9815,16 @@ there is no need for a new tactic.
   coordinate proof from the actual local-term and full-Hamiltonian transport.
 - **Notes:** The outside coordinates are the original dependent site spaces.
   No equal-size physical assumption or new chain structure is introduced.
+
+### Actual local projection kernels give physical boundary sections — candidate (2026-10-29)
+
+- **Seen:** `ParentHamiltonian/VaryingOBCProjectorKernel.lean` and
+  `ParentHamiltonian/VaryingPhysicalKernelSupport.lean`.
+- **Pattern:** Apply the existing fiberwise kernel theorem, identify the
+  complementary projection kernel with the actual trace range, and extract
+  the rectangular boundary matrix by range membership.
+- **Abstraction:** `physicalPairParentTerm_apply_eq_zero_iff_boundary` is the
+  actual dependent-site section theorem. Added-letter support and uniform
+  parent comparison both consume it, without copied projection arguments.
+- **Notes:** Mathlib's projection-zero and double-orthogonal identities supply
+  the generic projection step; no new subspace or positivity predicate.

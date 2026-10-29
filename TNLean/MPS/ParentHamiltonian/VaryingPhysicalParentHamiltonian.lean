@@ -36,7 +36,8 @@ noncomputable def physicalPairParentTerm (β : ι → Type*) [∀ k, Fintype (β
       (LinearMap.range (rectangularPairBoundary A B))ᗮ.starProjection).toLinearMap
 
 /-- Reading the actual local term in pair/outside coordinates gives the
-complementary pair projection extended by identity. -/
+complementary pair projection extended by identity.
+Source: PGVWC07, equation unique-OBC, lines 1213–1220. -/
 theorem physicalPairParentTerm_in_coordinates
     (β : ι → Type*) [∀ k, Fintype (β k)] (i j : ι) (hji : j ≠ i)
     (A : β i → Matrix a b ℂ) (B : β j → Matrix b c ℂ)
