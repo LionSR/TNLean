@@ -1,7 +1,7 @@
 \subsection{Periodic closure of the single-wall spaces}
 
 % Source-written declarations; hosted elaboration and declaration checks are pending.
-\begin{theorem}[Cyclic boundary trace coefficients]
+\begin{lemma}[Cyclic boundary trace coefficients]
     \label{thm:uncle_cyclic_boundary_coefficients}
     \lean{MPSTensor.trace_uncleBlockMatrix_mul,
         MPSTensor.eq_of_uncleBoundary_cyclic_pairing,
@@ -19,7 +19,7 @@
     for every $M,N$, then $X=Y$. If the pairing with $X$ is cyclic,
     then $X=\operatorname{diag}(\alpha I,\beta I)$ for some scalars
     $\alpha,\beta$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     Taking $M=I$ gives $X=Y$ by nondegeneracy of the ordinary trace
@@ -32,7 +32,7 @@
     diagonal block is scalar.
 \end{proof}
 
-\begin{theorem}[Scalar boundaries are the periodic sector vectors]
+\begin{lemma}[Scalar boundaries are the periodic sector vectors]
     \label{thm:uncle_scalar_boundaries}
     \lean{MPSTensor.uncleBoundaryMap_scalar_blocks}
     \notready
@@ -41,7 +41,7 @@
     $\operatorname{diag}(\alpha I,\beta I)$ gives
     $\Gamma_N(\operatorname{diag}(\alpha I,\beta I))
         =\alpha\ket{M(A)}+\beta\ket{M(B)}$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     The diagonal blocks of the single-wall coefficient word are the
@@ -49,7 +49,7 @@
     off-diagonal contributions, leaving their two traces.
 \end{proof}
 
-\begin{theorem}[Periodic uncle boundary closure]
+\begin{lemma}[Periodic uncle boundary closure]
     \label{thm:uncle_periodic_boundary_closure}
     \lean{MPSTensor.uncleBoundarySpace_inf_cyclicTranslate}
     \notready
@@ -62,7 +62,7 @@
     $S_N\cap T(S_N)=\operatorname{span}\{\ket{M(A)},\ket{M(B)}\}$.
     This is the closure lemma in~\cite{FernandezGonzalez2015Uncle},
     used after the two-site uncle interaction.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \uses{thm:uncle_cyclic_boundary_coefficients,
