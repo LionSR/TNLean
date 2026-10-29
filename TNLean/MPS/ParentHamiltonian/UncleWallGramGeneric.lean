@@ -167,14 +167,16 @@ theorem uncleWallSlopeQuadratic_zero_measure [NeZero a] [NeZero b]
     μ {R | uncleWallSlopeQuadratic A B ρ hSpect R = 0} = 0 := by
   let : SecondCountableTopology (Fin d → Matrix (Fin a) (Fin b) ℂ) :=
     wallFamily_secondCountableTopology d a b
-  let : BorelSpace (Fin d → Matrix (Fin a) (Fin b) ℂ) := wallFamily_borelSpace d a b
+  let hBorel : BorelSpace (Fin d → Matrix (Fin a) (Fin b) ℂ) :=
+    wallFamily_borelSpace d a b
   have hset : {R | uncleWallSlopeQuadratic A B ρ hSpect R = 0} =
       ((uncleWallSlopeQuadratic A B ρ hSpect).radical :
         Set (Fin d → Matrix (Fin a) (Fin b) ℂ)) := by
     ext R
     exact (uncleWallSlopeQuadratic_mem_radical_iff A B ρ hρ.posSemidef hA hB hSpect R).symm
   rw [hset]
-  exact Measure.addHaar_submodule μ _
+  exact @Measure.addHaar_submodule (Fin d → Matrix (Fin a) (Fin b) ℂ)
+    _ _ _ hBorel _ μ _ _
     (uncleWallSlopeQuadratic_radical_ne_top A B R₀ L₀ hPert ρ hρ hSpect)
 
 /-- Almost every wall has strictly positive actual limiting Gram slope
@@ -233,7 +235,7 @@ theorem uncleWallNormSlope_pair_ae_pos [NeZero a] [NeZero b]
   let : SecondCountableTopology (Fin d → Matrix (Fin b) (Fin a) ℂ) :=
     wallFamily_secondCountableTopology d b a
   let : BorelSpace (Fin d → Matrix (Fin b) (Fin a) ℂ) := wallFamily_borelSpace d b a
-  let : BorelSpace ((Fin d → Matrix (Fin a) (Fin b) ℂ) ×
+  let hBorel : BorelSpace ((Fin d → Matrix (Fin a) (Fin b) ℂ) ×
       (Fin d → Matrix (Fin b) (Fin a) ℂ)) := Prod.borelSpace
   have hdim : (a + b) * (a + b) ≤ d := by
     have h := finrank_le_of_span_eq_top hPert.span_eq_top
@@ -279,11 +281,13 @@ theorem uncleWallNormSlope_pair_ae_pos [NeZero a] [NeZero b]
   have hnull₁ : μ (S₁.prod (⊤ : Submodule ℝ (Fin d → Matrix (Fin b) (Fin a) ℂ)) :
       Set ((Fin d → Matrix (Fin a) (Fin b) ℂ) ×
         (Fin d → Matrix (Fin b) (Fin a) ℂ))) = 0 :=
-    Measure.addHaar_submodule μ _ hprod₁
+    @Measure.addHaar_submodule ((Fin d → Matrix (Fin a) (Fin b) ℂ) ×
+      (Fin d → Matrix (Fin b) (Fin a) ℂ)) _ _ _ hBorel _ μ _ _ hprod₁
   have hnull₂ : μ ((⊤ : Submodule ℝ (Fin d → Matrix (Fin a) (Fin b) ℂ)).prod S₂ :
       Set ((Fin d → Matrix (Fin a) (Fin b) ℂ) ×
         (Fin d → Matrix (Fin b) (Fin a) ℂ))) = 0 :=
-    Measure.addHaar_submodule μ _ hprod₂
+    @Measure.addHaar_submodule ((Fin d → Matrix (Fin a) (Fin b) ℂ) ×
+      (Fin d → Matrix (Fin b) (Fin a) ℂ)) _ _ _ hBorel _ μ _ _ hprod₂
   have hae₁ : ∀ᵐ P ∂μ, P.1 ∉ S₁ := by
     have hset : {P : (Fin d → Matrix (Fin a) (Fin b) ℂ) ×
         (Fin d → Matrix (Fin b) (Fin a) ℂ) | P.1 ∈ S₁} = (S₁.prod (⊤ :
