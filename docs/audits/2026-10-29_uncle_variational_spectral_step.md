@@ -29,3 +29,13 @@ actual ground-state overlaps whenever the two state norms and cross overlap
 satisfy the stated finite inequalities. These pointwise scalar conditions
 remain visible and must be derived from the source transfer limits in the
 final asymptotic application.
+
+Hosted verification now passes at exact Lean source head
+`c2d563f33a9479b1da1c52ad93f59089478e266b`:
+https://github.com/LionSR/TNLean/actions/runs/40884785708/job/123487144987.
+The full 14985-job repository build and all strict Lean checks passed;
+Blueprint web/PDF, module policies, diagrams and changed-module timing also
+passed. The three finite spectral/projection ingredient nodes and their
+proofs are now leanok. The actual variational norm/energy/overlap assembly
+and generic gaplessness remain the separate draft #10326; its acceptance
+is not implied by these finite spectral helpers. No local Lean was run.
