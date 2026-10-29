@@ -111,7 +111,7 @@ theorem uncleWallSlopeQuadratic_apply
   change (Matrix.trace (ρ * ∑ i, R i * (R i)ᴴ)).re +
     2 * (uncleWallCrossWeight A R ρ (uncleWallCorrelationLimit A B R)).re =
       (uncleWallNormSlope A B R ρ).re
-  rw [uncleWallNormSlope, Complex.add_re, Complex.add_re, Complex.star_re]
+  rw [uncleWallNormSlope, Complex.add_re, Complex.add_re, Complex.star_def, Complex.conj_re]
   ring
 
 /-- The source normalized wall quadratic form is nonnegative at every wall;
