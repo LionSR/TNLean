@@ -37,7 +37,7 @@ lines 1129–1140. No paired basis or invariant decomposition is assumed. -/
 theorem exists_paired_orthonormalBasis (m : ℕ) :
     ∀ (E : Type u) [NormedAddCommGroup E] [InnerProductSpace ℝ E]
       [FiniteDimensional ℝ E] (J : E →ₗᵢ[ℝ] E)
-      (hJ : ∀ x, J (J x) = -x) (hdim : Module.finrank ℝ E = 2 * m),
+      (_hJ : ∀ x, J (J x) = -x) (_hdim : Module.finrank ℝ E = 2 * m),
       ∃ B : OrthonormalBasis (Fin m × Fin 2) ℝ E,
         ∀ i, J (B (i, 0)) = -B (i, 1) ∧ J (B (i, 1)) = B (i, 0) := by
   classical
