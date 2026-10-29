@@ -1,0 +1,29 @@
+\section{The finite variational spectral step}
+\label{sec:uncle_variational_spectral_step}
+
+\begin{lemma}[A small positive eigenvalue from a trial vector]
+    \label{lem:uncle_variational_positive_eigenvalue}
+    \lean{MPSTensor.exists_pos_eigenvalue_uncleHamiltonianES_lt_of_rayleigh}
+    \notready
+    \uses{thm:uncle_kernel_local_conditions}
+    Let $H'_P$ be the actual finite periodic uncle Hamiltonian. If
+    $v\in(\ker H'_P)^\perp$ and
+    \[
+        \operatorname{Re}\langle H'_Pv,v\rangle<\varepsilon\|v\|^2,
+    \]
+    then $H'_P$ has a real eigenvalue $\mu$ with
+    $0<\mu<\varepsilon$.
+\end{lemma}
+\begin{proof}
+    The actual Hamiltonian is positive. Expand $v$ in an orthonormal
+    eigenbasis, with nonnegative eigenvalues $\lambda_j$. A zero
+    eigenvalue has zero coefficient because $v$ is orthogonal to the
+    kernel. If every positive $\lambda_j$ were at least $\varepsilon$,
+    the quadratic energy would be at least
+    $\varepsilon\sum_j|v_j|^2$, contradicting the strict bound.
+\end{proof}
+
+The norm, energy, and ground-state overlap estimates must still construct
+such a vector in the kernel complement. This lemma supplies only the final
+finite spectral argument of
+\cite[proof of the gaplessness theorem]{FernandezGonzalez2015Uncle}.
