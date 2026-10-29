@@ -732,3 +732,34 @@ start, and is discarded only after the circuit has finished.
     \uses{thm:qc_bounded_physical_port_io, thm:qc_physical_port_unitary_dilation}
     Apply Theorem~\ref{thm:qc_physical_port_unitary_dilation} to the protocol $\Gamma_{\mathrm{port}}$ of Theorem~\ref{thm:qc_bounded_physical_port_io} and compose~(\ref{eq:qc_physical_port_dilation}) with $J_{\mathrm{port}}$; the source's QCcc block/control and pure-output system--ancilla conditions remain separate (see~\cite{gap:psc21_physical_port_simulation_scope}).
 \end{proof}
+
+
+\begin{theorem}[Pure output and environment decoupling]
+    \label{thm:qc_physical_port_pure_output}
+    \uses{thm:qc_physical_port_unitary_dilation}
+    \lean{QuantumCircuit.IsPhysicalPortProtocol.exists_appended_unitary_dilation_pure_output}
+    \notready
+    Suppose a physical-port channel $\Phi$ of intersite depth at most $T$
+    satisfies $\Phi(\ketbra{\psi}{\psi})=\ketbra{\phi}{\phi}$, where
+    $\langle\phi,\phi\rangle=1$. Its same-depth unitary realization can
+    be chosen with the existing product-zero environment initializer so that
+    \[
+        U(\psi\otimes\ket{0_A})=\phi\otimes\eta,
+        \qquad \langle\eta,\eta\rangle=1.
+    \]
+    The unitary retains the same physical ports and the full channel
+    identity of Theorem~\ref{thm:qc_physical_port_unitary_dilation}.
+    The environment vector $\eta$ need not factor over spatial sites or
+    equal its initial zero state.
+\end{theorem}
+\begin{proof}
+    In system/environment coordinates write the actual joint output as
+    the coefficient matrix $C$. Its first marginal is
+    $CC^\dagger=P=\ketbra{\phi}{\phi}$, with $P^2=P$. Thus
+    $(I-P)CC^\dagger=0$. Positivity of a matrix Gram product gives
+    $(I-P)C=0$, hence $C=PC$. Set
+    $\eta=\phi^\dagger C$. Then each coefficient is $\phi_s\eta_e$.
+    Taking the trace of the actual marginal and using
+    $\langle\phi,\phi\rangle=1$ gives
+    $\langle\eta,\eta\rangle=1$. No factorization assumption is used.
+\end{proof}
