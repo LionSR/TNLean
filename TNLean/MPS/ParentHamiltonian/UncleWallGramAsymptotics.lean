@@ -50,8 +50,10 @@ private theorem mixedContinuous_pow_apply (A : MPSTensor d a) (B : MPSTensor d b
     (n : ℕ) (X : Matrix (Fin a) (Fin b) ℂ) :
     ((Module.End.toContinuousLinearMap (Matrix (Fin a) (Fin b) ℂ)
         (Kraus.mixedMapLM A B)) ^ n) X = ((Kraus.mixedMapLM A B) ^ n) X := by
-  rw [← map_pow]
-  rfl
+  exact congrArg (fun F : Matrix (Fin a) (Fin b) ℂ →L[ℂ]
+      Matrix (Fin a) (Fin b) ℂ ↦ F X)
+    (map_pow (Module.End.toContinuousLinearMap (Matrix (Fin a) (Fin b) ℂ))
+      (Kraus.mixedMapLM A B) n).symm
 
 /-- The actual mixed correlation series is summable under spectral radius
 strictly below one. The proof uses geometric power decay from Gelfand's
