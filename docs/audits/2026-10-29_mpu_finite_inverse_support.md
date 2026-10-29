@@ -38,10 +38,18 @@ embedding. Existing finite support reconstruction therefore recovers a
 window matrix from support membership; the actual forward bound applies
 to every supported central operator, not only a separately supplied
 placement matrix.
-The remaining boundary step expresses arbitrary outside single-site
-observables in these placed window algebras, uses cyclic covariance to
-cover every site, and then reflects the resulting commutators uniformly. Bare MPU-to-standard-form construction and the source bond-dimension
-radius remain separate, as recorded in
+`MPS/MPU/CyclicFinitePropagation.lean` now derives an actual forward bound
+at every singleton of every ring N≥6k, with uniform ring radius 4k.
+The central singleton is included in its complete central 2k interval;
+its actual output 6k window lies in the stated ring neighbourhood.
+Finite cyclic induction transports this one-site conclusion to every
+site. The existing circuit neighbourhood is reused, with its rotation
+identity proved at its existing owner.
+
+The remaining boundary step converts these uniform finite-ring bounds
+back into the finite local inclusion ranges and reflects their outside
+commutators uniformly. Bare MPU-to-standard-form construction and the
+source bond-dimension radius remain separate, as recorded in
 `docs/paper-gaps/mpu_qca_complete_block_heisenberg_scope.tex`.
 
 Validation: source/API/math inspection, generated imports, proof-integrity

@@ -44,6 +44,7 @@ import TNLean.MPS.MPU.CompositionIndex
 import TNLean.MPS.MPU.CompositionRanks
 import TNLean.MPS.MPU.ConstantBranchingBounds
 import TNLean.MPS.MPU.CyclicConjugation
+import TNLean.MPS.MPU.CyclicFinitePropagation
 import TNLean.MPS.MPU.DaggerInverse
 import TNLean.MPS.MPU.DaggerInverseGauge
 import TNLean.MPS.MPU.DeterminantStationarity

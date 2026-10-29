@@ -389,3 +389,28 @@
     placements. Apply the actual standard-form conjugation formula;
     its fixed output window acts only on the indicated $6k$ sites.
 \end{proof}
+
+
+\begin{lemma}[Uniform actual finite-ring singleton propagation]
+    \label{lem:mpu_finite_cyclic_singleton_propagation}
+    \lean{QuantumCircuit.neighbourhood_finRotate,
+        MPOTensor.mpo_conjugation_singleton_propagation_of_one,
+        MPOTensor.mpo_conjugation_mem_supportedOperators_singleton}
+    \notready
+    \uses{lem:mpu_finite_window_operator_support,
+        lem:mpu_finite_conjugation_cyclic_relocation}
+    Let an MPU have a supplied two-site standard form after a positive
+    blocking length $k$. On every periodic ring of length $N\geq 6k$,
+    the actual forward conjugate of an observable supported at a single
+    site $x$ is supported in the ring neighbourhood of $x$ of radius $4k$.
+    The same radius applies at every site, including the periodic seam.
+\end{lemma}
+\begin{proof}
+    First place $x=2k$ in the complete central interval of a $6k$-site
+    window. The actual finite-window bound gives output support in
+    that window, which lies within ring distance $4k$ of $x$.
+    Rotating the input and output simultaneously preserves the actual
+    finite conjugation and rotates the neighbourhood by the same
+    amount. Finite cyclic induction therefore gives the assertion
+    at every site.
+\end{proof}
