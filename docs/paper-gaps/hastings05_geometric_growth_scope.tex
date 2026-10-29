@@ -1,0 +1,197 @@
+\documentclass{article}
+\usepackage[margin=28mm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\input{./command}
+\providecommand{\gapnote}[2]{\par\noindent\textbf{Verdict:} #1 (#2).\par}
+\title{Geometric Growth in Hastings' Local Approximation and Ground-Space Basis}
+\author{}
+\date{October 28, 2026}
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{resolved}
+
+\section{The hypotheses in the source}
+
+Hastings, \emph{Solving gapped Hamiltonians locally}~\cite{Hastings2006Solving},
+\href{https://arxiv.org/abs/cond-mat/0508554v3}{arXiv:cond-mat/0508554v3},
+source \path{proj3new.tex}, lines 169--190, assumes a metric on the sites,
+interaction range $R$, term norms at most $J$, and at most $S$ sites within
+distance $R$ of each site. It does not assume polynomial growth of balls or
+spheres. A spectral gap and a bounded ground-space dimension do not imply
+such geometric growth either.
+
+Two distinct uses of growth must be separated. The earlier proof of the
+exponential form of the truncated approximation, eq.~(facld), assumes a
+polynomial bound on the omitted shell. A weighted-tail argument now removes
+that assumption and proves this conclusion on the source's arbitrary finite
+metric spaces. In contrast, the summed basis estimate,
+eq.~(oibu), is proved under the uniform sphere bound
+\begin{equation}
+ \#\{y:d_G(x,y)=r\}\le K_g(r+1)^k.
+ \label{eq:hastings05_geometric_growth_scope_spheres}
+\end{equation}
+Here the constants must be independent of the member of a family of finite
+systems. Choosing $K_g$ separately as the total number of sites in each
+finite graph does not prove a size-independent estimate.
+
+Polynomial growth is an additional hypothesis. The source's use of the word
+``lattice'' does not supply it: it introduces an arbitrary metric at lines 184--187,
+and explicitly specializes to a translation-invariant, $d$-dimensional
+system when needed at lines 1603--1642. The polynomial-volume interpretation
+of the thermal index count is separately discussed in
+\path{hastings05_planar_domain_scope.tex}.
+
+\section{A bounded-degree example}
+
+Let $T_L$ be the complete rooted binary tree of depth $L$, with graph
+distance. Every radius-one ball has at most four vertices, whereas the
+sphere of radius $r\le L$ about the root has $2^r$ vertices. Consequently
+no constants $K_g,k$ independent of $L$ satisfy
+\eqref{eq:hastings05_geometric_growth_scope_spheres}.
+
+This example is compatible with the other physical hypotheses. Put a qubit
+at every vertex and take
+\[
+ H_L=\sum_{v\ne\mathrm{root}}|1\rangle\langle1|_v,
+ \qquad H_{\mathrm{root}}=0.
+\]
+The terms have norm at most one and range at most one. The ground space has
+dimension two and the gap is one, uniformly in $L$. Thus all the source
+hypotheses still fail to imply polynomial growth. In this particular
+Hamiltonian every ground-space compression of a term is zero. The example
+therefore refutes the missing implication about geometry; it is \emph{not}
+a counterexample to the source's conclusions.
+
+\section{Why pointwise commutator decay alone is insufficient}
+
+Even in dimension two, an abstract Hermitian family with exponential
+commutator decay need not admit a uniformly bounded sum of off-diagonal
+norms on these trees. Fix $0<\gamma<\log2$ and $L\ge1$, and split the
+$2^L$ leaves into two equal classes. On a
+fixed two-dimensional space put
+\[
+ B_i=e^{-\gamma L}\sigma_x\quad\hbox{on the first class},\qquad
+ B_i=e^{-\gamma L}\sigma_z\quad\hbox{on the second class},
+\]
+and put $B_i=0$ at internal vertices. Since the tree diameter is $2L$,
+\[
+ \|B_i\|\le1,\qquad
+ \|[B_i,B_j]\|\le2e^{-2\gamma L}
+       \le2e^{-\gamma d_G(i,j)}.
+\]
+In a qubit basis with Bloch axis $u$, the off-diagonal norms of $\sigma_x$
+and $\sigma_z$ are $\sqrt{1-u_x^2}$ and $\sqrt{1-u_z^2}$.
+Their sum is at least one, because the sum of their squares is at least
+one. Thus every basis has
+\[
+ \sum_i o(B_i)\ge2^{L-1}e^{-\gamma L},
+\]
+which is unbounded when $0<\gamma<\log2$.
+This abstract family shows that
+pointwise decay, finite ground-space dimension and a local norm budget do
+not by themselves remove the growth hypothesis from the present basis
+argument. A separate physical construction on a $256$-ary tree now
+disproves the unrestricted source claim: it has a two-dimensional ground
+space, a uniform positive gap and bounded radius-one interaction terms,
+but every basis has $\sum_i o(M_i)\ge2^{L-2}$. The actual localized terms
+equal the interaction terms at $l_{\rm proj}=R=1$. Its complete mathematical
+proof is in
+\href{https://sirui-lu.com/TNLean/paper-gaps/hastings05_tree_basis_counterexample.pdf}
+{the tree counterexample note}. That family and its gap proof have not
+been formalized in Lean.
+
+\section{Current scope and elimination plan}
+
+The finite-dimensional spectral splitting and recursive construction of an
+orthonormal basis are proved without geometric hypotheses. The physical
+summed estimates in ground-space dimension two and in arbitrary fixed
+dimension use \eqref{eq:hastings05_geometric_growth_scope_spheres}. The
+direct estimate for the actual truncated terms also fixes their support
+parameters. The perturbative estimate permits growing supports when the
+total truncation error stays bounded; its original-term basis estimate
+still assumes \eqref{eq:hastings05_geometric_growth_scope_spheres}.
+The earlier pairwise observable-decay estimate carries the same growth
+hypothesis because it uses partial-trace localization. The direct numerical
+finite-support propagation estimate removes that hypothesis for individual
+pairs: \path{LowEnergyMetricCommutator.lean} proves eq.~(blecm) for the
+actual truncated operators on every finite metric space, with the explicit
+support cardinality prescribed in the source. This pointwise conclusion
+does not justify a uniform sum over all sites. None of the summed estimates
+is a formalization of eq.~(oibu) on every metric lattice of lines 169--190. The counterexample
+shows that the extra growth assumption is a correction of a false
+unrestricted assertion, not merely a hypothesis awaiting removal.
+
+\subsection{The general metric truncation estimate}
+
+The general metric form of eq.~(facld) is now proved in
+\path{GaussianFilteredMetricTruncation.lean}. The constants are chosen before
+the finite metric space and Hamiltonian. Here is the argument and one explicit
+choice of constants. Let $R>0$, $J\ge0$ and $\Delta>0$. Join two distinct sites
+when their physical distance is at most $R$. The resulting graph $G$ has degree
+at most $S$, every interaction support has graph diameter at most two, and the
+sum of norms of terms meeting a site is at most $SJ$. Set
+\[
+ \mu=\log(S+1)+1,\qquad
+ v=4S^2J e^{4\mu},\qquad
+ c_1=\frac{1}{4R(v+1)}.
+\]
+In particular $c_1$ is independent of the spectral gap. For projection radius
+$\ell\ge R$, retain the source's actual set
+$\{j:d(i,j)\le\ell-R\}$ and let $m=\lceil(\ell-R)/R\rceil$.
+Every omitted anchor has graph distance at least $m$ from $i$.
+The weighted omitted-term estimate is
+\[
+ \sum_{j\text{ omitted}}\|H_j\|e^{-\mu d_G(i,j)}
+ \le \frac{J e^{-m/2}}{1-e^{-1/2}}
+ \le \frac{J e^{1/2}}{1-e^{-1/2}}e^{-\ell/(2R)}.
+\]
+A disconnected anchor contributes zero to this sum. This estimate follows by
+counting graph balls by $(S+1)^r$ and summing a geometric series. It does not
+bound the cardinality of a physical metric ball.
+
+Apply the Lieb--Robinson estimate separately to each omitted term in the
+Duhamel formula and choose $T=c_1\ell$, $q=c_1\ell\Delta$. Write
+\[
+ \gamma=\frac1{2R}-vc_1>0,\qquad
+ A=\frac{4(S+1)e^{5\mu}Jc_1e^{1/2}}{1-e^{-1/2}},\qquad
+ \delta=\min(c_1\Delta,\gamma),\qquad
+ C=3+\frac{2A}{e\delta}.
+\]
+Gaussian integration and the spectral leakage estimate give
+\begin{align*}
+ \|H_i\|e^{-q/2}+\|\widetilde H_i^0-M_i\|
+ &\le 3\|H_i\|e^{-c_1\Delta\ell/2}
+       +A\|H_i\|\ell e^{-\gamma\ell}\\
+ &\le \|H_i\|C e^{-\delta\ell/2}.
+\end{align*}
+Consequently, for every ground vector $\psi$,
+\[
+ \|P_{\rm high}M_i\psi\|
+ \le JC e^{-\delta\ell/2}\|\psi\|.
+\]
+The actual $M_i$ is Hermitian, is supported in the physical $\ell$-ball and
+has norm at most $J$. Their sum satisfies
+\[
+ \Bigl\|\sum_iM_i-H\Bigr\|\le |\Lambda|JC e^{-\delta\ell/2}.
+\]
+All these statements, including the unique-ground-vector specialization,
+are proved without polynomial growth. For $R=0$, the separate zero-range
+theorem proves that both filters fix $H_i$ exactly and the ground-space
+leakage is zero.
+
+The same adjustment does not establish the uniform basis sum. The spectral
+filtering rate depends on the gap and velocity and can be smaller than the
+exponential volume-growth rate; repeated spectral splits weaken it further.
+The preceding matrix family excludes an argument based only on the present
+pointwise decay estimate, and the physical construction cited above shows
+that the general metric version of eq.~(oibu) is false. The polynomial-growth
+basis theorem is the proved corrected statement. The resolved verdict records
+two separate outcomes: eq.~(facld) now holds with the source's general metric
+hypotheses, while the unrestricted basis assertion is false and its
+polynomial-growth correction is proved.
+
+\bibliographystyle{unsrt}
+\bibliography{references}
+\end{document}
