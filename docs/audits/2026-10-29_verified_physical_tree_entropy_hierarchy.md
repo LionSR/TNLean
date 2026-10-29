@@ -133,6 +133,47 @@ failed documentation check; the final record records the corrected check
 and the unchanged-source coverage. Temporary inspection-command corrections
 are also retained separately from the successful final checks.
 
+## Compatible companion extension
+
+A subsequent checked revision is TNLean
+`1e60304ea1c23c01eac21ebfef80ba992504cc73` with QICLean
+`e51354163d2dd9cf2a15d65722c544c6b4736182`. It adds two shared coordinate
+results and a nested-target sampling result. The TNLean mathematical sources
+are byte-identical to the earlier checked revision; the companion changes
+add mathematical modules and their generated imports.
+
+For projections \(P,Q,R\) with \((Q\otimes R)P=P\), the new coordinate theorem
+chooses their actual range isometries \(U,V,W\) and constructs
+\(C=(V\otimes W)^*U\). It proves that \(C\) is isometric,
+\(U=(V\otimes W)C\), and \(\operatorname{rank}P\le
+\operatorname{rank}Q\operatorname{rank}R\), including zero dimensions.
+The fixed-coordinate lemma permits one choice of bases at all hierarchy
+vertices. Physical local-projection extraction and recursive amplitude
+contraction remain separate.
+
+For two nearby pairs of upper and lower targets, the sampling theorem
+retains the actual successful Haar unitary, its sample and its image under
+a fixed family of \(D^2\) operators. With \(4D^2\le p\le Q\), it uses
+\(s=\lfloor p/(2D^2)\rfloor\), gives sample dimension exactly \(s\),
+and bounds the image dimension by \(\lfloor p/2\rfloor\).
+Here \(\alpha=3s/(25Q)\). The fixed-input sampling failure estimate is
+required to be below one, and \(\Delta/\alpha^2\le1/400\) is explicit.
+The final lower-target error is exactly
+\(2(\Delta/\alpha^2+1/200)\), hence at most \(3/200\).
+This auxiliary does not supply the physical dyadic calibration.
+
+The companion full build has 10,400 jobs; four changed source files pass
+strict verification, and all three new public declarations have only the
+standard three foundations. The compatible TNLean build has 15,261 jobs;
+its five existing regression files pass, and the combined imported
+inspection covers 425 declarations with the same foundations. Blueprint,
+prose, proof-integrity, timing and paper-gap checks pass. The records are
+`/tmp/qiclean-coordinate-nested-20261029-gates.json`,
+`/tmp/tnlean-coordinate-nested-20261029-gates.json` and
+`/tmp/tnlean-coordinate-nested-pin-20261029.json`.
+All five revision entries agree, the preserved documentation hashes agree,
+and the Mathlib artifact remains unchanged with zero source-build jobs.
+
 ## Preserved working-tree documentation and remaining work
 
 The three pre-existing LVV documentation edits remain as their original
