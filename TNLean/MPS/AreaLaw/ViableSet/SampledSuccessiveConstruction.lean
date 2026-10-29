@@ -51,7 +51,7 @@ private theorem lvvViabilityPrecision_pos {Δ η : ℝ} (hΔ : 0 < Δ) (hη : 0 
 /-- One complete LVV step has polynomial size and bond bounds independent of the
 input size and bond. All constants precede the length and ground energy.
 LVV13, `algo53.tex`, the four steps, lines 379–592. -/
-theorem exists_sampled_viable_successor_polynomial {q : ℕ} (hq : 2 ≤ q)
+theorem exists_sampled_viable_successor_polynomial {q : ℕ} (hq : 2 ≤ q) (a : ℕ) (ha : 1 ≤ a)
     {Δ B η : ℝ} (hΔ : 0 < Δ) (hη : 0 < η) :
     ∃ C p D r : ℕ, 1 ≤ C ∧ 1 ≤ D ∧ ∀ (L : ℕ), 1 ≤ L →
       ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ),
@@ -62,30 +62,30 @@ theorem exists_sampled_viable_successor_polynomial {q : ℕ} (hq : 2 ≤ q)
       IsGappedGroundState (∑ j, h j) E₀ Γ Δ → E₀ / Δ ≤ B →
       ∀ (i b : ℕ), 0 < i → i ≤ L → ∀ S : Finset (LeftBlockVector L q (i - 1)),
       (∀ v ∈ S, IsLeftOpenMPS b v) →
-      IsViable Γ (lvvViabilityPrecision Δ η / L) (S : Set (LeftBlockVector L q (i - 1))) →
+      IsViable Γ (lvvViabilityPrecision Δ η / (L : ℝ) ^ a) (S : Set (LeftBlockVector L q (i - 1))) →
       ∃ T : Finset (LeftBlockVector L q i),
-        IsViableMPS Γ (C * L ^ p) (D * L ^ r) (lvvViabilityPrecision Δ η / L) T := by
+        IsViableMPS Γ (C * L ^ p) (D * L ^ r) (lvvViabilityPrecision Δ η / (L : ℝ) ^ a) T := by
   classical
   let α := lvvViabilityPrecision Δ η
   have hα : 0 < α := lvvViabilityPrecision_pos hΔ hη
   have hα1 : α ≤ 1 := (min_le_left _ _).trans (min_le_left 1 η)
   obtain ⟨P, t, hP, hsample⟩ := exists_sampledProjector_uniform_polynomial (B := B)
-    (show 1 ≤ q by omega) (div_pos hα (by norm_num))
+    (show 1 ≤ q by omega) a (div_pos hα (by norm_num))
     (show α / 8 ≤ 1 by linarith) hΔ
   obtain ⟨M, u, hM, hradius⟩ := exists_bondTrimmingRadius_lvvReferenceBond_polynomial q Δ
   let c := (Δ / 169) ^ 2
   let d := constantCutBond q 1 1 Δ c
   let k := 2 * (q * d) ^ 2
-  let a := ⌈2 * ((q * d : ℕ) : ℝ) ^ 2 / c⌉₊
-  let F := (d + 1) * d * (2 * a + 1) ^ k
+  let netRadius := ⌈2 * ((q * d : ℕ) : ℝ) ^ 2 / c⌉₊
+  let F := (d + 1) * d * (2 * netRadius + 1) ^ k
   refine ⟨max 1 (P * F), t + k, P * max 1 ⌈M⌉₊, t + u, le_max_left _ _, ?_, ?_⟩
   · simpa only [one_mul] using Nat.mul_le_mul hP (le_max_left 1 ⌈M⌉₊)
   · intro L hL h hs h0 h1 E₀ Γ hgs hEB i b hi0 hiL S hS hviable
     let : NeZero L := ⟨by omega⟩
     have hLp : (0 : ℝ) < L := by exact_mod_cast (show 0 < L by omega)
-    have hδ : 0 < α / L := div_pos hα hLp
-    have hδ1 : α / (L : ℝ) ≤ 1 := (div_le_one hLp).mpr
-      (hα1.trans (by exact_mod_cast hL))
+    have hδ : 0 < α / (L : ℝ) ^ a := div_pos hα (pow_pos hLp a)
+    have hδ1 : α / (L : ℝ) ^ a ≤ 1 := (div_le_one (pow_pos hLp a)).mpr
+      (hα1.trans (one_le_pow₀ (by exact_mod_cast hL)))
     let chain := ChainHamiltonian.ofBonds h hs h0 h1
     have hgs' : IsGappedGroundState chain.operator E₀ Γ Δ := by
       simpa only [chain, ChainHamiltonian.ofBonds_operator] using hgs
@@ -100,8 +100,12 @@ theorem exists_sampled_viable_successor_polynomial {q : ℕ} (hq : 2 ≤ q)
         (AreaLaw.extend i S : Set (LeftBlockVector L q i)) := by
       obtain ⟨v, hv, hoverlap, hsupport⟩ := hviable.extend hi0 hiL
       refine ⟨v, hv, ?_, hsupport⟩
-      have hprec : α / (L : ℝ) ≤ c / L :=
-        div_le_div_of_nonneg_right (min_le_right (min 1 η) c) hLp.le
+      have hLpow : (L : ℝ) ≤ (L : ℝ) ^ a := le_self_pow₀ (by exact_mod_cast hL) (by omega)
+      have hprec : α / (L : ℝ) ^ a ≤ c / L := by
+        calc
+          _ ≤ c / (L : ℝ) ^ a := div_le_div_of_nonneg_right
+            (min_le_right (min 1 η) c) (pow_nonneg hLp.le a)
+          _ ≤ _ := div_le_div_of_nonneg_left (sq_nonneg _) hLp hLpow
       linarith only [hoverlap, hprec]
     have hT₀ : IsViableMPS Γ (F * L ^ k)
         (bondTrimmingRadius L (lvvReferenceBond q Δ L)) (1 / 2) T₀ :=
@@ -112,7 +116,7 @@ theorem exists_sampled_viable_successor_polynomial {q : ℕ} (hq : 2 ≤ q)
     have hout := hgood _ _ T₀ hT₀
     obtain ⟨hE₀, hE₀L⟩ := groundEnergy_nonneg_and_le h h0 h1 hgs
     have hbudgets := hsample L E₀ hL hE₀ hE₀L hEB
-    have hηeq : α / (L : ℝ) / 8 = (α / 8) / L := by ring
+    have hηeq : α / (L : ℝ) ^ a / 8 = (α / 8) / (L : ℝ) ^ a := by ring
     simp only [hηeq] at hout
     have hradiusNat : bondTrimmingRadius L (lvvReferenceBond q Δ L) ≤ ⌈M⌉₊ * L ^ u := by
       have hreal := (hradius L hL).trans
@@ -142,7 +146,7 @@ theorem exists_sampled_viable_successor_polynomial {q : ℕ} (hq : 2 ≤ q)
 /-- Starting from the scalar singleton, the four successive operations construct
 viable families at every cut with fixed polynomial size and bond bounds.
 LVV13, `algo53.tex`, induction, lines 652–678, in the documented quantitative scope. -/
-theorem exists_sampled_successive_viable_sets_polynomial {q : ℕ} (hq : 2 ≤ q)
+theorem exists_sampled_successive_viable_sets_polynomial {q : ℕ} (hq : 2 ≤ q) (a : ℕ) (ha : 1 ≤ a)
     {Δ B η : ℝ} (hΔ : 0 < Δ) (hη : 0 < η) :
     ∃ C p D r : ℕ, 1 ≤ C ∧ 1 ≤ D ∧ ∀ (L : ℕ), 1 ≤ L →
       ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ),
@@ -153,14 +157,15 @@ theorem exists_sampled_successive_viable_sets_polynomial {q : ℕ} (hq : 2 ≤ q
       IsGappedGroundState (∑ j, h j) E₀ Γ Δ → E₀ / Δ ≤ B →
       ∃ S : (i : ℕ) → Finset (LeftBlockVector L q i), S 0 = {emptyLeftVector L q} ∧
         ∀ i : ℕ, i ≤ L →
-          IsViableMPS Γ (C * L ^ p) (D * L ^ r) (lvvViabilityPrecision Δ η / L) (S i) := by
+          IsViableMPS Γ (C * L ^ p) (D * L ^ r)
+            (lvvViabilityPrecision Δ η / (L : ℝ) ^ a) (S i) := by
   classical
   obtain ⟨C, p, D, r, hC, hD, hstep⟩ :=
-    exists_sampled_viable_successor_polynomial (B := B) hq hΔ hη
+    exists_sampled_viable_successor_polynomial (B := B) hq a ha hΔ hη
   refine ⟨C, p, D, r, hC, hD, ?_⟩
   intro L hL h hs h0 h1 E₀ Γ hgs hEB
   let P := fun i (S : Finset (LeftBlockVector L q i)) ↦
-    IsViableMPS Γ (C * L ^ p) (D * L ^ r) (lvvViabilityPrecision Δ η / L) S
+    IsViableMPS Γ (C * L ^ p) (D * L ^ r) (lvvViabilityPrecision Δ η / (L : ℝ) ^ a) S
   have hbase : P 0 {emptyLeftVector L q} := by
     obtain ⟨hcard, hbond, v, hv, hoverlap, hsupport⟩ := isViableMPS_emptyLeftVector hgs.1
     refine ⟨hcard.trans ?_, ?_, v, hv, ?_, hsupport⟩
@@ -168,8 +173,8 @@ theorem exists_sampled_successive_viable_sets_polynomial {q : ℕ} (hq : 2 ≤ q
     · intro w hw
       exact isOpenMPS_of_internal_cutMatrix_rank_le
         (WithLp.toLp 2 fun x ↦ w (leftConfigOfFin x)) (fun j hj0 hjL ↦ by omega)
-    · have hδ : 0 ≤ lvvViabilityPrecision Δ η / (L : ℝ) :=
-        div_nonneg (lvvViabilityPrecision_pos hΔ hη).le (Nat.cast_nonneg L)
+    · have hδ : 0 ≤ lvvViabilityPrecision Δ η / (L : ℝ) ^ a :=
+        div_nonneg (lvvViabilityPrecision_pos hΔ hη).le (pow_nonneg (Nat.cast_nonneg L) a)
       linarith only [hoverlap, hδ]
   let State := fun i : ℕ ↦ {S : Finset (LeftBlockVector L q i) // i ≤ L → P i S}
   let initial : State 0 := ⟨{emptyLeftVector L q}, fun _ ↦ hbase⟩
@@ -187,7 +192,7 @@ theorem exists_sampled_successive_viable_sets_polynomial {q : ℕ} (hq : 2 ≤ q
 polynomial bond bound at any prescribed positive overlap error. The polynomial constants
 precede the length, Hamiltonian and ground energy.
 LVV13, `algo53.tex`, final induction, lines 652–678. -/
-theorem exists_sampled_groundState_openMPS_polynomial {q : ℕ} (hq : 2 ≤ q)
+theorem exists_sampled_groundState_openMPS_polynomial {q : ℕ} (hq : 2 ≤ q) (a : ℕ) (ha : 1 ≤ a)
     {Δ B η : ℝ} (hΔ : 0 < Δ) (hη : 0 < η) :
     ∃ C p : ℕ, 1 ≤ C ∧ ∀ (L : ℕ), 1 ≤ L →
       ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ),
@@ -197,10 +202,10 @@ theorem exists_sampled_groundState_openMPS_polynomial {q : ℕ} (hq : 2 ≤ q)
       ∀ (E₀ : ℝ) (Γ : EuclideanSpace ℂ (Fin L → Fin q)),
       IsGappedGroundState (∑ j, h j) E₀ Γ Δ → E₀ / Δ ≤ B →
       ∃ ψ : EuclideanSpace ℂ (Fin L → Fin q), ‖ψ‖ = 1 ∧
-        1 - η ≤ ‖⟪ψ, Γ⟫_ℂ‖ ∧
+        1 - η / (L : ℝ) ^ a ≤ ‖⟪ψ, Γ⟫_ℂ‖ ∧
         IsOpenMPS L q (C * L ^ p) (fun x ↦ ψ x) := by
   obtain ⟨C, p, D, r, hC, hD, hsets⟩ :=
-    exists_sampled_successive_viable_sets_polynomial (B := B) hq hΔ hη
+    exists_sampled_successive_viable_sets_polynomial (B := B) hq a ha hΔ hη
   refine ⟨C * D, p + r, by simpa only [one_mul] using Nat.mul_le_mul hC hD, ?_⟩
   intro L hL h hs h0 h1 E₀ Γ hgs hEB
   obtain ⟨S, _, hS⟩ := hsets L hL h hs h0 h1 E₀ Γ hgs hEB
@@ -208,9 +213,9 @@ theorem exists_sampled_groundState_openMPS_polynomial {q : ℕ} (hq : 2 ≤ q)
   refine ⟨ψ, hψ, ?_, ?_⟩
   · have hprec : lvvViabilityPrecision Δ η ≤ η :=
       (min_le_left _ _).trans (min_le_right 1 η)
-    have hdiv : lvvViabilityPrecision Δ η / (L : ℝ) ≤ lvvViabilityPrecision Δ η :=
-      div_le_self (lvvViabilityPrecision_pos hΔ hη).le (by exact_mod_cast hL)
-    linarith only [hoverlap, hprec, hdiv]
+    have hdiv : lvvViabilityPrecision Δ η / (L : ℝ) ^ a ≤ η / (L : ℝ) ^ a :=
+      div_le_div_of_nonneg_right hprec (pow_nonneg (Nat.cast_nonneg L) a)
+    linarith only [hoverlap, hdiv]
   · have hbond : 1 ≤ D * L ^ r := by simpa only [one_mul] using Nat.mul_le_mul hD (one_le_pow₀ hL)
     have heq : C * L ^ p * max 1 (D * L ^ r) = (C * D) * L ^ (p + r) := by
       rw [max_eq_right hbond, pow_add]
