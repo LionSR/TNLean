@@ -47,7 +47,8 @@ theorem oddSupportAlgebra_sup_evenSupportAlgebra_eq_top
     (quasiLocalObservable_injective d (rightPair x)).comp
       CStarMatrix.ofMatrixStarAlgEquiv.injective
   apply StarSubalgebra.map_injective hf
-  rw [StarSubalgebra.map_sup, map_transport_matrixSubalgebra]
+  rw [StarSubalgebra.map_sup,
+    map_transport_matrixSubalgebra (rightPair_eq_leftPair_add_one x)]
   change embeddedOddSupportAlgebra hω x ⊔ embeddedEvenSupportAlgebra hω (x + 1) =
     (⊤ : StarSubalgebra ℂ (Matrix (Config d (rightPair x)) (Config d (rightPair x)) ℂ)).map f
   rw [adjacentSupportJoin_eq_range_rightPair hω x, ← StarAlgHom.range_eq_map_top]
@@ -57,7 +58,8 @@ theorem oddSupportAlgebra_sup_evenSupportAlgebra_eq_top
     exact ⟨CStarMatrix.ofMatrixStarAlgEquiv.symm A, by
       change quasiLocalObservable d (rightPair x)
         (CStarMatrix.ofMatrixStarAlgEquiv (CStarMatrix.ofMatrixStarAlgEquiv.symm A)) = _
-      rw [StarAlgEquiv.apply_symm_apply]⟩
+      rw [StarAlgEquiv.apply_symm_apply]
+      rfl⟩
   · rintro ⟨A, rfl⟩
     exact ⟨CStarMatrix.ofMatrixStarAlgEquiv A, rfl⟩
 
