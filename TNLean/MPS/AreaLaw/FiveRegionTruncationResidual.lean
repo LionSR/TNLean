@@ -14,6 +14,7 @@ import QICLean.Analysis.GroundEnergyBounds
 import QICLean.Analysis.LowEnergyCluster
 import QICLean.Analysis.LowEnergyPerturbation
 import TNLean.Lattice.DisjointRegionalGround
+import TNLean.Algebra.ExpMulSubMonotone
 import TNLean.MPS.AreaLaw.FiveRegionHamiltonian
 import TNLean.MPS.AreaLaw.PolynomialFilterParameters
 import TNLean.MPS.AreaLaw.RegionalTruncationResidual
