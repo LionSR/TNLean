@@ -9724,3 +9724,15 @@ there is no need for a new tactic.
   the translated even-factor coordinates use them directly.
 - **Notes:** The matrix-specific support-map presentation in the index
   comparison uses this shared owner; its duplicate private helper is removed.
+
+### Even-pair values determine the completed homomorphism — promoted (2026-10-29)
+
+- **Seen:** the actual alternating-rule extension and the common finite-window
+  comparison needed by the matrix product unitary construction.
+- **Promotion:** `SpinChain.quasiLocalStarAlgHom_ext_evenPair` belongs to the
+  existing support-generation owner. It pulls back an equalizer, consumes the
+  established algebraic even-pair generation, then uses completion density.
+- **Reuse:** The Margolus extension proof now supplies only the pair values;
+  it no longer carries a private copy of the global equalizer/density proof.
+- **Notes:** The public statement uses canonical physical even pairs and
+  continuous homomorphisms. No new local-generation predicate is introduced.
