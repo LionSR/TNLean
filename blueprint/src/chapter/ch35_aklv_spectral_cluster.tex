@@ -1,0 +1,92 @@
+\section{A physical gap and ground-vector comparison}
+
+The inclusive middle range has $s-6$ interactions. Distributing its lowest
+energy $d$ equally therefore subtracts $d/(s-6)$ per term when the range
+is nonempty; see \cite{gap:aklv13_two_block_robustness}.
+
+\begin{definition}[A two-block truncation threshold]
+    \label{def:aklv_two_block_threshold}
+    \lean{TNLean.MPS.AreaLaw.aklvTwoBlockThreshold}
+    \leanok
+    For $g,\tau>0$ put
+    \begin{align}
+        \Theta(g,\tau)=\max\left\{g+11,\,
+            g+8\log\frac{10^6\cdot64e^{3/4}}{\tau g}\right\}.
+        \label{eq:aklv_cluster_threshold}
+    \end{align}
+\end{definition}
+
+\begin{lemma}[Gap preservation and a phased ground vector for the actual truncation]
+    \label{thm:aklv_two_block_scaled_low_cluster}
+    \lean{TNLean.MPS.AreaLaw.exists_aklv_two_block_scaled_low_cluster}
+    \leanok
+    \uses{def:aklv_two_block_threshold,def:aklv_normalization_regions,
+        def:aklv_two_block_truncation}
+    Let $q\ge1$, $s\ge6$, $a+s+1\le L$, and let $0\le h_i\le\Id$
+    be supported on $\{i,i+1\}$. Suppose $\Omega$ is a unit eigenvector of
+    $H'=\sum_i h_i$ with energy $\mu$, and suppose $g>0$ satisfies
+    \begin{align}
+        H'-\mu\Id\ge g(\Id-|\Omega\rangle\langle\Omega|).
+        \label{eq:aklv_original_rank_one_gap}
+    \end{align}
+    The three genuine reference minima $e_j$ and a real number $E_0$ can be
+    chosen with $E_0+\sum_j e_j=\mu$ and $0\le E_0\le6$.
+    They are fixed before $\tau,t$. For $0<\tau\le1$ and
+    $t\ge\Theta(g,\tau)$, form the actual two-exterior family $B_T$
+    with cuts $a+2,a+s-1$ and those same minima.
+    Write $(v_j)$ for an orthonormal eigenbasis of $B_{\{0,1\}}$,
+    with eigenvalues $\lambda_j$, and put
+    $U=\operatorname{span}\{v_j:\lambda_j\le E_0+g/20\}$.
+    Then $\dim U=1$, and every cutoff in
+    $[E_0+g/20,E_0+19g/20]$ gives this same subspace.
+    Both squared projection losses between $U$ and $\mathbb C\Omega$ are
+    at most $\tau/200$.
+
+    There is an index $j_0$ with $\lambda_{j_0}\le E_0+g/20$ such that
+    every other eigenvalue satisfies
+    $\lambda_j\ge\lambda_{j_0}+9g/10$.
+    Thus $v_{j_0}$ is an actual unit ground vector and the truncated gap is
+    at least $9g/10$. There is a real phase $\theta$ satisfying
+    \begin{align}
+        \|v_{j_0}-e^{i\theta}\Omega\|^2\le\frac{\tau}{100}.
+        \label{eq:aklv_truncated_vector_error}
+    \end{align}
+    Every eigenvalue also lies in
+    $(-\infty,E_0+g/10]\cup[E_0+9g/10,\infty)$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{thm:aklv_normalized_two_block_residual,def:aklv_two_block_threshold}
+    The three original reference minima give the centered Hamiltonian
+    $H=H'-\sum_j e_j\Id$. Its constructed ground energy equals
+    $E_0=\mu-\sum_j e_j$, since both energies are attained lower bounds.
+    The original global gap therefore applies to $H$ at $E_0$.
+    Set $\xi=64e^{3/4}e^{-(t-g)/8}$.
+    The threshold (\ref{eq:aklv_cluster_threshold}) gives
+    $t\ge g+11$ and $\xi\le\tau g/10^6$.
+    Lemma~\ref{thm:aklv_normalized_two_block_residual} bounds the actual
+    residual on each partially clipped space below $E_0+g$ by $\xi$.
+    Restrict further to the original cutoff $E_0+g/40$ and the truncated
+    cutoff $E_0+19g/20$.
+
+    Using the corrected finite-window count of
+    \cite{gap:alvv16_hard_truncation_windows}, the scaled low-cluster comparison
+    gives equality throughout the stated
+    cutoff band, preservation of its dimension, and projection losses
+    $\tau/200$ in both directions. The original gap identifies its original
+    low subspace with $\mathbb C\Omega$, so the new subspace has dimension one.
+    Choose an eigenvector $v_{j_0}$ in it. It spans $U$; orthogonality forces
+    every other eigenvector above $E_0+19g/20$. Together with
+    $\lambda_{j_0}\le E_0+g/20$, this gives the gap $9g/10$.
+    The projection estimate gives
+    $|\langle\Omega,v_{j_0}\rangle|^2\ge1-\tau/200$.
+    Choosing a minimizing relative phase yields
+    (\ref{eq:aklv_truncated_vector_error}).
+\end{proof}
+
+% This is a quantitative physical consequence towards AKLV Theorem 6.1.
+% It starts from original nearest-neighbour interactions, not arbitrary exterior
+% operators. The source's middle shift is corrected at aggregate level, as recorded
+% in docs/paper-gaps/aklv13_two_block_robustness.tex. Comparison with the printed
+% sufficient threshold and elimination of tau in favor of a single t-error bound
+% remain separate; the unrestricted source label is not marked complete here.

@@ -1,0 +1,190 @@
+\section{One changing-target sequence at a fixed cut}
+
+The following construction keeps one physical window fixed. Its clipping
+threshold increases with the index, and each state is obtained by filtering
+the actual preceding state. The accuracy-dependent enlarged-window choice
+is a separate argument.
+
+\begin{definition}[Dyadic weights, thresholds and degrees]
+    \label{def:aklv_sequence_parameters}
+    \lean{TNLean.MPS.AreaLaw.aklvSequenceWeight,
+        TNLean.MPS.AreaLaw.aklvSequenceThreshold,
+        TNLean.MPS.AreaLaw.aklvSequenceDegree}
+    \leanok
+    \uses{def:aklv_logarithmic_threshold}
+    For gap parameter $g$, fixed window width $s$, and $i\ge0$, set
+    \begin{align*}
+        \beta_i&=2^{-i},& t_i&=T(g)+16i\log2,\notag\\
+        \ell_i&=\left\lceil5\sqrt{(2t_i+s)/g}\right\rceil.
+    \end{align*}
+    Here $T(g)=1024+16\log(1/g)$. The rounded degrees are used at indices
+    $i\ge1$; initialization uses degree $s^2$.
+\end{definition}
+
+\begin{lemma}[Dyadic threshold and degree estimates]
+    \label{thm:aklv_sequence_parameter_bounds}
+    \lean{TNLean.MPS.AreaLaw.aklvSequenceWeight_zero_succ,
+        TNLean.MPS.AreaLaw.aklvSequenceWeight_pos_le_one,
+        TNLean.MPS.AreaLaw.aklvLogarithmicThreshold_le_sequenceThreshold,
+        TNLean.MPS.AreaLaw.aklvSequenceThreshold_pos,
+        TNLean.MPS.AreaLaw.exp_neg_sequenceThreshold_div_le,
+        TNLean.MPS.AreaLaw.aklvSequenceDegree_bounds,
+        TNLean.MPS.AreaLaw.aklvSequenceDegree_shrink_le}
+    \leanok
+    \uses{def:aklv_sequence_parameters}
+    The weights satisfy $\beta_0=1$, $\beta_i=2\beta_{i+1}$ and
+    $0<\beta_i\le1$. For $0<g\le1$, one has $t_i\ge T(g)>0$,
+    $e^{-t_i/16}\le\beta_i$, and
+    \begin{align*}
+        5\sqrt{(2t_i+s)/g}&\le\ell_i<5\sqrt{(2t_i+s)/g}+1,\notag\\
+        \delta_i:=\left(2e^{-2\ell_i\sqrt{(9g/10)/(2t_i+s)}}\right)^2
+            &\le\frac1{256}.
+    \end{align*}
+\end{lemma}
+\begin{proof}
+    \leanok
+    The threshold identity gives
+    $e^{-t_i/16}=e^{-T(g)/16}2^{-i}\le\beta_i$.
+    The degree estimate is the defining ceiling inequality. Put $W=2t_i+s$.
+    Since
+    $\sqrt{W/g}\sqrt{(9g/10)/W}=\sqrt{9/10}\ge1/2$,
+    one has $4\ell_i\sqrt{(9g/10)/W}\ge10$.
+    Thus $\delta_i\le4e^{-10}\le4\cdot2^{-10}=1/256$, using $e\ge2$.
+\end{proof}
+
+\begin{definition}[The exact rank product]
+    \label{def:aklv_sequence_rank_product}
+    \lean{TNLean.MPS.AreaLaw.aklvSequenceFilterRank,
+        TNLean.MPS.AreaLaw.aklvSequenceRankBound}
+    \leanok
+    \uses{def:aklv_sequence_parameters}
+    Define
+    \begin{align*}
+        D_i&=[q(\ell_i+1)]^{32(\lfloor\ell_i/s\rfloor+
+                 \lfloor\sqrt{\ell_i}\rfloor+1)},\notag\\
+        R_i&=[q(s^2+1)]^{32(2s+1)}\prod_{j=1}^iD_j.
+    \end{align*}
+\end{definition}
+
+\begin{lemma}[Successive rank budgets]
+    \label{thm:aklv_sequence_rank_product}
+    \lean{TNLean.MPS.AreaLaw.aklvSequenceRankBound_zero_succ}
+    \leanok
+    \uses{def:aklv_sequence_rank_product}
+    One has $R_0=[q(s^2+1)]^{32(2s+1)}$ and $R_{i+1}=D_{i+1}R_i$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Separate the final factor from the finite product.
+\end{proof}
+
+\begin{definition}[One actual normalized refinement]
+    \label{def:aklv_sequence_step}
+    \lean{TNLean.MPS.AreaLaw.IsAKLVSequenceStep}
+    \leanok
+    \uses{def:aklv_sequence_parameters}
+    Fix the original interaction, its three regional minima $e$, a window
+    with central cut $k=a+\lfloor s/2\rfloor$, and its normalized ground
+    vector $\Omega$. Let $B_{i+1}$ be the actual two-exterior truncation
+    at threshold $t_{i+1}$, with these same minima.
+    A refinement from $x$ to $y$ consists of an energy $E$, unit vector
+    $\phi$, real polynomial $p$ of degree $\ell_{i+1}$ and scalar $c$ of
+    modulus one, with
+    \begin{align*}
+        B_{i+1}\phi&=E\phi,&
+        B_{i+1}-EI&\ge\tfrac9{10}g(I-|\phi\rangle\langle\phi|),\notag\\
+        \|\phi-\Omega\|^2&\le\beta_{i+1}/100,& p(E)&=1,\notag\\
+        K&=p(B_{i+1}),& K\phi&=\phi,\notag\\
+        Kx&\ne0,& y&=cKx/\|Kx\|.
+    \end{align*}
+\end{definition}
+
+\begin{lemma}[A physical dyadic refinement]
+    \label{thm:aklv_dyadic_refinement}
+    \lean{TNLean.MPS.AreaLaw.exists_aklv_dyadic_filtered_output}
+    \leanok
+    \uses{thm:aklv_variable_window_refinement,
+        thm:aklv_sequence_parameter_bounds,def:aklv_sequence_step,
+        def:aklv_sequence_rank_product}
+    Suppose the original supported nearest-neighbour terms are positive
+    contractions, $\Omega$ is a unit ground vector at energy $\mu$ with
+    positive projector gap $g$, and $\mu+g$ is a spectral value.
+    Let $s\ge6$ and $a+s+1\le L$. Fix actual minimizing energies $e$ of
+    the three original normalization Hamiltonians.
+    If $\|x\|=1$ and $\|x-\Omega\|^2\le\beta_i/16$, there is an actual
+    refinement $y$ with
+    \begin{align*}
+        \|y\|&=1,& \|y-\Omega\|^2&\le\beta_{i+1}/16,\notag\\
+        \operatorname{SR}_k(y)&\le D_{i+1}\operatorname{SR}_k(x).
+    \end{align*}
+\end{lemma}
+\begin{proof}
+    \leanok
+    The physical refinement returns minimizing energies for the same three
+    reference Hamiltonians. Uniqueness of each minimum identifies them with
+    the fixed $e$. Its actual clipped target satisfies
+    $\|\phi-\Omega\|^2\le\beta_{i+1}/100$.
+    With $\beta=\beta_{i+1}$, the squared triangle inequality gives
+    $\|x-\phi\|^2\le2(2\beta/16+\beta/100)=27\beta/100$.
+    The stronger target contraction and $\delta_{i+1}\le1/256$ give
+    $\|y-\phi\|^2\le8\delta_{i+1}\|x-\phi\|^2\le\beta/64$.
+    Hence $\|y-\Omega\|^2\le2(\beta/64+\beta/100)\le\beta/16$.
+    The physical polynomial's operator-Schmidt bound multiplies the rank
+    of the actual input; normalization and the unit phase preserve it.
+\end{proof}
+
+\begin{definition}[Actual product-filter initialization]
+    \label{def:aklv_sequence_initialization}
+    \lean{TNLean.MPS.AreaLaw.IsAKLVSequenceInitialization}
+    \leanok
+    \uses{thm:aklv_physical_product_initialization}
+    At threshold $T(g)$, let $B_0$ be the actual clipped Hamiltonian.
+    Initialization consists of its actual unit ground vector $\phi_0$,
+    a real polynomial $p_0$ of degree $s^2$ with $p_0(E^{(0)})=1$, where $B_0\phi_0=E^{(0)}\phi_0$, and
+    $p_0(B_0)\phi_0=\phi_0$, a unit product vector $\chi$ across the
+    central cut, and a scalar $c_0$ of modulus one, with
+    $p_0(B_0)\chi\ne0$ and
+    $\psi_0=c_0p_0(B_0)\chi/\|p_0(B_0)\chi\|$.
+    The target satisfies $\|\phi_0-\Omega\|^2\le e^{-T(g)/16}/100$.
+\end{definition}
+
+\begin{lemma}[A coherent physical changing-target sequence]
+    \label{thm:aklv_coherent_changing_targets}
+    \lean{TNLean.MPS.AreaLaw.exists_aklv_physical_changing_target_sequence}
+    \leanok
+    \uses{thm:aklv_physical_product_initialization,
+        thm:aklv_dyadic_refinement,thm:aklv_sequence_rank_product,
+        def:aklv_sequence_initialization,def:aklv_sequence_step}
+    There is a universal real $A\ge21$ with the following property.
+    Let the supported nearest-neighbour terms be positive contractions, and
+    let $\Omega$ be a unit ground vector at energy $\mu$ with positive
+    projector gap $g$ and actual excited spectral value $\mu+g$.
+    Set $u=1+\log q+\log(1/g)$ and $s=\lceil Au^2/g\rceil$.
+    Suppose this window fits: $a+s+1\le L$.
+    Then $q\ge2$, $g\le1$, $s\ge21$, and one fixed family of three
+    actual regional minima $e$ gives a normalized ground energy
+    $0\le E_0\le6$ with $E_0+\sum_j e_j=\mu$.
+    There is one sequence $(\psi_i)_{i\ge0}$ at the same central cut with
+    actual product-filter initialization and actual refinement
+    $\psi_i\mapsto\psi_{i+1}$ at every step, satisfying
+    \begin{align*}
+        \|\psi_i\|&=1,& \|\psi_i-\Omega\|^2&\le2^{-i}/16,\notag\\
+        \operatorname{SR}_k(\psi_i)&\le R_i,&
+        \log R_0&\le\frac{198(A+1)(6+2\log(A+1))}{g}\,u^3.
+    \end{align*}
+    The rank budget here is the exact product in
+    Definition~\ref{def:aklv_sequence_rank_product}.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Obtain the fixed minima and the actual initial state from
+    Lemma~\ref{thm:aklv_physical_product_initialization}.
+    At index $i$, consider unit vectors satisfying the asserted error and
+    rank bounds. Lemma~\ref{thm:aklv_dyadic_refinement} constructs a next
+    vector from the actual current vector, with its actual refinement
+    relation, while preserving these bounds. Choose this next vector and
+    iterate the resulting dependent successor map recursively on $i$.
+    The recursion starts at the actual initial product-filter image.
+    The successor rank identity gives the product bound, and the choice
+    specification preserves the normalized-image relation on every edge.
+\end{proof}

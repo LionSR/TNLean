@@ -1,0 +1,103 @@
+\section{A favorable physical filter and the initial vector}
+
+\begin{lemma}[A favorable filter for the clipped ground vector]
+    \label{thm:aklv_favorable_physical_filter}
+    \lean{TNLean.MPS.AreaLaw.exists_aklv_physical_favorable_filter}
+    \leanok
+    \uses{thm:aklv_favorable_scalar_parameters,cor:aklv_logarithmic_clipped_filter}
+    There is a universal constant $A\ge21$ with the following property.
+    Let $H=\sum_{i=0}^{L-2}h_i$, where $0\le h_i\le\Id$ acts on
+    $\{i,i+1\}$. Suppose $\Omega$ is a unit eigenvector of energy $\mu$,
+    $g>0$, $\mu+g\in\operatorname{spec}(H)$, and
+    \begin{align*}
+        H-\mu\Id\ge g(\Id-|\Omega\rangle\langle\Omega|).
+    \end{align*}
+    Set
+    \begin{align*}
+        u&=1+\log q+\log(1/g),&
+        s&=\lceil Au^2/g\rceil,&\ell&=s^2,\\
+        t_0&=1024+16\log(1/g),&R&=2t_0+s,\\
+        D&=\bigl(q(s^2+1)\bigr)^{32(2s+1)},&
+        \Delta&=4\exp\left(-4\ell\sqrt{\frac{9g}{10R}}\right).
+    \end{align*}
+    Suppose the window fits: $a+s+1\le L$.
+    Then $q\ge2$, $g\le1$, $s\ge21$, $\Delta>0$,
+    $D\Delta\le10^{-5}$, and
+    \begin{align*}
+        \log D\le198(A+1)\bigl(6+2\log(A+1)\bigr)u^3/g.
+    \end{align*}
+    Choose the three actual reference minima and the centered ground energy
+    $E_0\in[0,6]$ as in Lemma~\ref{cor:aklv_logarithmic_clipped_filter}.
+    The actual two-exterior truncation $B$ at $t_0$ has a unit ground vector
+    $\phi$, with energy $E\ge0$, such that
+    \begin{align*}
+        0\le B&\le R\Id,&
+        B-E\Id&\ge\frac{9g}{10}(\Id-|\phi\rangle\langle\phi|),\\
+        \|\phi-\Omega\|^2&\le e^{-t_0/16}/100.
+    \end{align*}
+    There is a real polynomial $p$ of degree $\ell$, with $p(E)=1$,
+    such that $K=p(B)$ fixes $\phi$, preserves $\phi^\perp$, and satisfies
+    \begin{align*}
+        \operatorname{OSR}_{a+\lfloor s/2\rfloor}(K)&\le D,&
+        \|K-|\phi\rangle\langle\phi|\|&\le\sqrt\Delta.
+    \end{align*}
+    Every unit $x\perp\phi$ satisfies $\|Kx\|^2\le\Delta$.
+    This is the favorable initial filter used in the construction following
+    \cite[Theorem~6.1]{Arad2013AreaLaw}, for the stated available-window range.
+\end{lemma}
+\begin{proof}
+    \leanok
+    The two distinct spectral values give $q\ge2$. The endpoint trial-vector
+    argument for the original chain gives $g\le1$.
+    Apply Lemma~\ref{thm:aklv_favorable_scalar_parameters} and then
+    Lemma~\ref{cor:aklv_logarithmic_clipped_filter} at $t_0$ and
+    $\ell=s^2$. The identities $\lfloor\ell/s\rfloor=s$ and
+    $\lfloor\sqrt\ell\rfloor=s$ give the displayed rank bound.
+    Squaring the amplitude estimate gives the stated $\Delta$.
+\end{proof}
+
+\begin{lemma}[The initial filtered product vector]
+    \label{thm:aklv_physical_product_initialization}
+    \lean{TNLean.MPS.AreaLaw.exists_aklv_physical_product_initialization}
+    \leanok
+    \uses{thm:aklv_favorable_physical_filter}
+    Under the hypotheses and with the parameters of
+    Lemma~\ref{thm:aklv_favorable_physical_filter}, the regional minima,
+    clipped ground vector $\phi$, and polynomial filter $K$ can be chosen
+    together with a unit product vector $\chi=v_L\otimes v_R$ across
+    the cut $a+\lfloor s/2\rfloor$ and a scalar $c$, $|c|=1$, such that
+    \begin{align*}
+        |\langle\phi,\chi\rangle|&\ge(2D)^{-1/2},&K\chi&\ne0.
+    \end{align*}
+    The actual normalized output $\psi_0=cK\chi/\|K\chi\|$ satisfies
+    \begin{align*}
+        \|\psi_0\|&=1,&\operatorname{SR}(\psi_0)&\le D,\\
+        \|\psi_0-\phi\|^2&\le1/64,&
+        \|\psi_0-\Omega\|^2&\le1/16.
+    \end{align*}
+    The overlap estimate concerns the clipped target $\phi$.
+    This proves the initial step of \cite[Lemma~6.3]{Arad2013AreaLaw}
+    for the stated available-window range.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Apply the product-overlap argument of
+    \cite[Lemma~2.2]{Arad2013AreaLaw} to the fixed vector $\phi$ of $K$;
+    the required inequality $D\Delta\le1/2$ follows from
+    $D\Delta\le10^{-5}$. Write $b=\langle\phi,\chi\rangle$ and
+    $z=\chi-b\phi$. Orthogonal projection gives $\|z\|\le1$.
+    Choosing the phase of the normalized output gives
+    \begin{align*}
+        \|\psi_0-\phi\|^2
+        &\le\frac{2\Delta\|z\|^2}{|b|^2}
+          \le4D\Delta\le1/64.
+    \end{align*}
+    Multiplication by $K$ increases the Schmidt rank of the product vector
+    by at most its operator Schmidt rank, and multiplication by a nonzero
+    scalar preserves that rank. Finally $t_0\ge0$, so
+    \begin{align*}
+        \|\phi-\Omega\|^2&\le1/100,\\
+        \|\psi_0-\Omega\|^2
+        &\le2\|\psi_0-\phi\|^2+2\|\phi-\Omega\|^2\le1/16.
+    \end{align*}
+\end{proof}

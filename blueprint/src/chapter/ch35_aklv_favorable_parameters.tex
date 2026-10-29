@@ -1,0 +1,49 @@
+\section{Favorable scalar parameters for the AKLV filter}
+
+\begin{lemma}[A uniform square-degree tradeoff]
+    \label{thm:aklv_favorable_scalar_parameters}
+    \lean{Real.exists_aklv_favorable_scalar_parameters}
+    \leanok
+    \uses{thm:chain_polynomial_filter_parameters}
+    There is a universal real constant $A\ge21$ such that the following
+    holds for every integer $q\ge2$ and every $0<g\le1$.
+    Put
+    \begin{align*}
+        u&=1+\log q+\log(1/g),&
+        s&=\left\lceil Au^2/g\right\rceil,& \ell&=s^2,\\
+        t_0&=1024+16\log(1/g),& R&=2t_0+s,\\
+        D&=\bigl(q(s^2+1)\bigr)^{32(2s+1)},&
+        D_{\mathrm{aux}}&=(qs^2)^{22s},\\
+        \Delta&=4\exp\left(-4\ell\sqrt{\frac{9g}{10R}}\right).
+    \end{align*}
+    Then $Au^2/g\le s\le(A+1)u^2/g$, $s\ge21$, $s\ge\log(1/g)$,
+    $\ell/s=s$, $\lfloor\sqrt\ell\rfloor=s$, and
+    \begin{align*}
+        0<R&\le2081s,& D&\le D_{\mathrm{aux}}^9,& \Delta&>0,\\
+        D\Delta&\le10^{-5}<1/256,\\
+        \log D&\le
+          198(A+1)\bigl(6+2\log(A+1)\bigr)g^{-1}u^3.
+    \end{align*}
+    These are scalar estimates supporting the choice following
+    \cite[Theorem~6.1]{Arad2013AreaLaw}. They assert neither that a finite
+    chain contains the chosen window nor an entropy conclusion.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Apply Lemma~\ref{thm:chain_polynomial_filter_parameters} with
+    $C_H=2081/2$ and $M=0$. Its scale inequalities give $s\ge21$ and
+    $s\ge\log(1/g)$, hence
+    \begin{align*}
+        R=2048+32\log(1/g)+s\le2048+33s\le2081s.
+    \end{align*}
+    Since $s\ge1$ and $q\ge2$,
+    \begin{align*}
+        q(s^2+1)&\le(qs^2)^2,&64(2s+1)&\le198s.
+    \end{align*}
+    Thus $D\le D_{\mathrm{aux}}^9\le D_{\mathrm{aux}}^{12}$.
+    Replacing $9g/10$ by $4g/5$ increases the exponential shrinking
+    coefficient. The joint scalar tradeoff therefore gives
+    $D\Delta\le10^{-5}$.
+    Finally, $\log D\le9\log D_{\mathrm{aux}}$ gives the displayed
+    logarithmic estimate.
+\end{proof}

@@ -1,0 +1,84 @@
+\section{Refinement with an accuracy-dependent window}
+
+\begin{lemma}[Refinement by an actual clipped polynomial]
+    \label{thm:aklv_variable_window_refinement}
+    \lean{TNLean.MPS.AreaLaw.exists_aklv_variable_window_filtered_output}
+    \leanok
+    \uses{cor:aklv_logarithmic_clipped_filter}
+    Let $H=\sum_{i=0}^{L-2}h_i$, with $0\le h_i\le\Id$ supported on
+    $\{i,i+1\}$. Suppose $\Omega$ is a unit eigenvector of energy $\mu$,
+    $g>0$, $\mu+g\in\operatorname{spec}(H)$, and
+    \begin{align*}
+        H-\mu\Id\ge g(\Id-|\Omega\rangle\langle\Omega|).
+    \end{align*}
+    Let $x$ be any unit vector with $\|x-\Omega\|^2\le1/16$.
+    Choose any window with $s\ge6$ and $a+s+1\le L$, with central cut
+    $k=a+\lfloor s/2\rfloor$, with the regional conventions recorded in
+    \cite{gap:aklv13_two_block_robustness}. Then $q\ge2$ and $g\le1$.
+    The genuine three regional minima and centered ground energy
+    $E_0\in[0,6]$ can be chosen before $t$ so that the following holds.
+
+    For every $t\ge1024+16\log(1/g)$, the actual two-exterior clipped
+    Hamiltonian $B_t$ is positive, has norm at most $2t+s$, and has a
+    unit ground vector $\phi_t$ with energy $E_t\ge0$ such that
+    \begin{align*}
+        B_t-E_t\Id&\ge\frac{9g}{10}
+          (\Id-|\phi_t\rangle\langle\phi_t|),&
+        \|\phi_t-\Omega\|^2&\le e^{-t/16}/100,\\
+        \|x-\phi_t\|^2&\le1/4,&
+        |\langle\phi_t,x\rangle|&\ge1/2.
+    \end{align*}
+    This target is chosen before the polynomial degree.
+    For every integer $\ell\ge0$, put
+    \begin{align*}
+        D_{s,\ell}&=\bigl(q(\ell+1)\bigr)^ {
+          32(\lfloor\ell/s\rfloor+\lfloor\sqrt\ell\rfloor+1)},\\
+        \Delta_{t,\ell}&=
+          \left(2\exp\left(-2\ell\sqrt{\frac{9g}{10(2t+s)}}\right)\right)^2.
+    \end{align*}
+    There is a real polynomial $p$ of degree exactly $\ell$, with
+    $p(E_t)=1$, such that the actual operator $K=p(B_t)$ fixes $\phi_t$,
+    has $\operatorname{OSR}_k(K)\le D_{s,\ell}$ and satisfies $Kx\ne0$.
+    There is a scalar $c$ with $|c|=1$ such that
+    $\psi=cKx/\|Kx\|$ satisfies
+    \begin{align*}
+        \|\psi\|&=1,&
+        \operatorname{SR}_k(\psi)&\le D_{s,\ell}\operatorname{SR}_k(x),\\
+        \|\psi-\phi_t\|^2
+          &\le8\Delta_{t,\ell}\|x-\phi_t\|^2,\\
+        \|\psi-\Omega\|^2
+          &\le16\Delta_{t,\ell}+e^{-t/16}/50.
+    \end{align*}
+    This is a physical refinement step for
+    \cite[Lemma~6.3 and Section~7]{Arad2013AreaLaw}.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Lemma~\ref{cor:aklv_logarithmic_clipped_filter} constructs the
+    regional minima, target, spectral gap and polynomial of the same
+    clipped matrix. Since $t\ge0$, one has
+    $\|\phi_t-\Omega\|^2\le1/100$. The triangle inequality gives
+    $\|x-\phi_t\|^2\le1/4$. The identity
+    $\|\phi_t-x\|^2=2-2\operatorname{Re}\langle\phi_t,x\rangle$
+    therefore gives $|\langle\phi_t,x\rangle|\ge1/2$.
+
+    Write $b=\langle\phi_t,x\rangle$ and $z=x-b\phi_t$.
+    Projection onto $\phi_t^\perp$ is contractive, so
+    $\|z\|\le\|x-\phi_t\|$. The phase-aligned normalization estimate
+    gives
+    \begin{align*}
+        \|\psi-\phi_t\|^2
+          &\le\frac{2\Delta_{t,\ell}\|z\|^2}{|b|^2}
+            \le8\Delta_{t,\ell}\|x-\phi_t\|^2.
+    \end{align*}
+    Normalization and a unit scalar phase preserve Schmidt rank; applying
+    $K$ multiplies it by at most $\operatorname{OSR}_k(K)$.
+    The triangle inequality and the weaker estimate
+    $\|\psi-\phi_t\|^2\le8\Delta_{t,\ell}$ give the final error bound.
+\end{proof}
+
+% This entry is a single physical refinement step. The coherent changing-target
+% sequence, accumulated rank estimate and optimized MPS approximation are not
+% asserted here. For the entropy argument, the source varies t and ell at a
+% fixed window. Its separate MPS argument at lines1503--1517 chooses the window
+% as a function of accuracy and uses the sharp rank bound retained above.
