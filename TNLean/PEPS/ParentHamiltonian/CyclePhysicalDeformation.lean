@@ -42,16 +42,18 @@ theorem physicalDeform_cycleTensorOfMPS (hn : 3 ≤ n) (A : MPSTensor d D)
   unfold physicalDeform cycleTensorOfMPS
   apply congrArg (Tensor.mk (fun _ ↦ D))
   funext v η t
-  simp [MPSTensor.rotatePhysical, Matrix.smul_apply, smul_eq_mul]
+  simp only [MPSTensor.rotatePhysical, Finset.sum_apply, Matrix.smul_apply, smul_eq_mul]
 
 /-- A constant graph physical product map is exactly the chain tensor power.
 Source: arXiv:2011.12127, Section IV.C, lines 2035–2037. -/
 theorem globalPhysicalMap_const_eq_onSiteTensorPow (Λ : Matrix (Fin d) (Fin d) ℂ) :
     globalPhysicalMap (fun _ : Fin n ↦ Λ) =
       Matrix.toLin' (MPSTensor.onSiteTensorPow n Λ) := by
-  ext ψ σ
-  simp only [globalPhysicalMap_apply, Matrix.toLin'_apply, Matrix.mulVec, dotProduct,
-    MPSTensor.onSiteTensorPow_apply]
+  apply LinearMap.ext
+  intro ψ
+  funext σ
+  rw [globalPhysicalMap_apply]
+  rfl
 
 /-- The graph-generic parent-space transport specializes to the actual chain
 spaces on proper arcs. Source: arXiv:2011.12127, Section IV.C, lines

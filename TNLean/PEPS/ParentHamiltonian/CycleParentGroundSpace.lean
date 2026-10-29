@@ -28,6 +28,7 @@ namespace TNLean.PEPS
 
 variable {n d D L : ℕ} [NeZero n]
 
+omit [NeZero n] in
 private theorem cycle_offset_eq (s v : Fin n) :
     (v - s).val = (v.val + n - s.val) % n := by
   rw [val_sub_eq_ite]
