@@ -120,6 +120,24 @@ theorem hasEventuallyFullKrausRank_of_isPrimitivePaper [NeZero D]
     HasEventuallyFullKrausRank A :=
   (primitivePaper_iff_hasEventuallyFullKrausRank A hNorm).mp hPrim
 
+/-- The primitivity index of every trace-preserving channel is at most its
+full-Kraus-rank index, including the nonprimitive case, where both indices
+use the zero convention. Source: arXiv:0909.5347, Proposition 1 (`prop:iq`),
+lines 447–449. -/
+theorem qIndex_le_iIndex_of_tracePreserving [NeZero D]
+    (A : MPSTensor d D)
+    (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1) :
+    qIndex A ≤ iIndex A := by
+  by_cases hA : HasEventuallyFullKrausRank A
+  · exact qIndex_le_iIndex A hA
+  · have hq : {q : ℕ | 0 < q ∧ ∀ φ : Fin D → ℂ, φ ≠ 0 →
+        Kraus.vectorSpreadSpan A φ q = ⊤} = ∅ := by
+      apply Set.eq_empty_iff_forall_not_mem.mpr
+      intro q hq
+      exact hA ((primitivePaper_iff_hasEventuallyFullKrausRank A hNorm).mp ⟨q, hq⟩)
+    rw [qIndex, hq, Nat.sInf_empty]
+    exact Nat.zero_le _
+
 /-- Under normalization, paper primitivity implies normality. -/
 theorem isNormal_of_isPrimitivePaper [NeZero D]
     (A : MPSTensor d D)

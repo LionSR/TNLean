@@ -109,10 +109,10 @@ variable {d D : ℕ}
 
 /-! ## Part 1: q(E_A) ≤ i(A) -/
 
-/-- **Theorem 1 / equation (2)**: under paper primitivity and normalization,
+/-- **Proposition 1 / Theorem 1**: under paper primitivity and normalization,
 the primitivity index is at most the full-Kraus-rank index.
 
-Paper: arXiv:0909.5347, equation (2) after Proposition 3; Wolf, Theorem 6.9.
+Paper: arXiv:0909.5347, Proposition 1 and Theorem 1; Wolf, Theorem 6.9.
 -/
 theorem qIndex_le_iIndex_of_isPrimitivePaper [NeZero D]
     (A : MPSTensor d D)

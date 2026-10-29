@@ -310,6 +310,26 @@ matrices, and let $\E_K$ be its Kraus map.
     gives strong irreducibility.
 \end{proof}
 
+\begin{theorem}[Comparison of the two channel indices]
+    \label{thm:q_index_le_i_index_channel}
+    \lean{MPSTensor.qIndex_le_iIndex_of_tracePreserving}
+    \notready
+    \discussion{10275}
+    \uses{def:wielandt_i_index, def:wielandt_q_index, thm:wielandt_proposition_three}
+    Let $A_1,\ldots,A_d\in\MN{D}$, where $D>0$, satisfy
+    $\sum_i A_i^\dagger A_i=\Id$. With both indices set to zero when
+    their defining sets are empty, one has $q(\E_A)\le\iota(A)$.
+    This is \cite[Proposition~1]{Sanz2010Quantum}.
+\end{theorem}
+
+\begin{proof}
+    If some positive length has full matrix span, its least such length
+    sends every nonzero vector onto a spanning family, giving the inequality.
+    Otherwise, Theorem~\ref{thm:wielandt_proposition_three} excludes
+    primitivity. The defining set for $q(\E_A)$ is empty, so
+    $q(\E_A)=0\le\iota(A)$.
+\end{proof}
+
 \begin{theorem}[Primitive-channel specialization of the index bound]
     \label{thm:q_index_le_i_index}
     \lean{MPSTensor.qIndex_le_iIndex_of_isPrimitivePaper}
