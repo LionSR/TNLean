@@ -28,7 +28,7 @@ midpoint halves; see \cite[Section~11]{OpenAI2026AreaLaw}.
     $H_{\ell,z,s,1}=[(a+b)/2,b]$.
 \end{definition}
 
-\begin{theorem}[Distinct fine cells are disjoint]
+\begin{lemma}[Distinct fine cells are disjoint]
     \label{thm:area_law_fine_cells_disjoint}
     \lean{TNLean.PEPS.AreaLaw.Geometry.fineLayer_cells_disjoint}
     \leanok
@@ -36,7 +36,7 @@ midpoint halves; see \cite[Section~11]{OpenAI2026AreaLaw}.
     For arbitrary $C_0\ge0$ and layer indices $k,h$, suppose that
     $z\in F_{k,\ell_k}$, $w\in F_{h,\ell_h}$ and $(k,z)\ne(h,w)$.
     Then $Q_{k,z}\cap Q_{h,w}=\varnothing$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_dyadic_indices,thm:area_law_layer_pairwise_disjoint,
         thm:area_law_fine_cell_containment,thm:area_law_fine_belt_scales}
@@ -46,7 +46,7 @@ midpoint halves; see \cite[Section~11]{OpenAI2026AreaLaw}.
     $\ell_k\le k$ and $\ell_h\le h$.
 \end{proof}
 
-\begin{theorem}[Positive-length contact between fine cells]
+\begin{lemma}[Positive-length contact between fine cells]
     \label{thm:area_law_fine_cell_contact}
     \lean{TNLean.PEPS.AreaLaw.Geometry.fineLayer_closedCell_contact}
     \leanok
@@ -66,7 +66,7 @@ midpoint halves; see \cite[Section~11]{OpenAI2026AreaLaw}.
               $I=S_{\ell_h,w,t}=H_{\ell_k,z,s,n}$ for some $n\in\{0,1\}$.
     \end{enumerate}
     The opposing index $h$ is unrestricted.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_fine_cells_disjoint,thm:area_law_fine_cell_containment,
         thm:area_law_local_layer_indices,thm:area_law_adjacent_fine_meshes,

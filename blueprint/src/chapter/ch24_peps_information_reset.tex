@@ -1,13 +1,13 @@
 \section{The information reset}
 
-The unitary of Theorem~\ref{thm:peps_reset_unitary} acts away from two regional cores; since the exchanged state carries zero mutual information between those cores, continuity of mutual information yields the $L^{-p}$ reset of \cite[Lemma~3.3]{OpenAI2026PolynomialPEPS}.
+The unitary of Lemma~\ref{thm:peps_reset_unitary} acts away from two regional cores; since the exchanged state carries zero mutual information between those cores, continuity of mutual information yields the $L^{-p}$ reset of \cite[Lemma~3.3]{OpenAI2026PolynomialPEPS}.
 
-\begin{theorem}[The reset support avoids the cores]
+\begin{lemma}[The reset support avoids the cores]
     \label{thm:peps_reset_support_cores}
     \lean{TNLean.PEPS.Approximation.notMem_resetSupport}
     \leanok
     Let $R,C$ be disjoint subsets of the open square, and let $R_0\subseteq R$ and $C_0\subseteq C$ satisfy $\operatorname{dist}_\infty(R_0,R^c)>w$ and $\operatorname{dist}_\infty(C_0,C^c)>w$. If $\ell+1\le w$, then the radius-$\ell$ graph neighbourhood of $(R\cup C)^c$ and of the endpoints of edges crossing $R$ is disjoint from $R_0\cup C_0$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     A graph walk of length $\le\ell$ changes $\ell_\infty$-distance by $\le\ell$. Every site in $(R\cup C)^c$ is at $\ell_\infty$-distance $>w$ from $R_0\cup C_0$, and every endpoint of an edge crossing $R$ is within $\ell_\infty$-distance $1$ of both $R^c$ and $R\subseteq C^c$, hence at $\ell_\infty$-distance $>w-1\ge\ell$ from $R_0\cup C_0$.
@@ -15,7 +15,7 @@ The unitary of Theorem~\ref{thm:peps_reset_unitary} acts away from two regional 
 
 
 
-\begin{theorem}[The entropy comparison of the reset on any finite set of sites]
+\begin{lemma}[The entropy comparison of the reset on any finite set of sites]
     \label{thm:peps_reset_cores_entropy_sites}
     \lean{TNLean.PEPS.Approximation.mutualInformation_cores_le_of_sites_reset_unitary}
     \leanok
@@ -25,15 +25,15 @@ The unitary of Theorem~\ref{thm:peps_reset_unitary} acts away from two regional 
         I_\Omega(A_0:C_0) & \le8\sqrt\delta\,\log(e\,q^{|A_0|}).
         \label{eq:peps_reset_cores_entropy_sites}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_reset_paired_support,thm:peps_reset_exchanged_cores,
         lem:lattice_supported_unitary_entropy}
-    Combine Theorem~\ref{thm:peps_reset_paired_support}, Theorem~\ref{thm:peps_reset_exchanged_cores}, and Lemma~\ref{lem:lattice_supported_unitary_entropy}.
+    Combine Lemma~\ref{thm:peps_reset_paired_support}, Lemma~\ref{thm:peps_reset_exchanged_cores}, and Lemma~\ref{lem:lattice_supported_unitary_entropy}.
 \end{proof}
 
-\begin{theorem}[The entropy comparison of the reset]
+\begin{lemma}[The entropy comparison of the reset]
     \label{thm:peps_reset_cores_entropy}
     \lean{TNLean.PEPS.Approximation.mutualInformation_cores_le_of_reset_unitary}
     \leanok
@@ -43,11 +43,11 @@ The unitary of Theorem~\ref{thm:peps_reset_unitary} acts away from two regional 
         I_\Omega(R_0:C_0) & \le8\sqrt\delta\,\log(e\,q^{|R_0|}).
         \label{eq:peps_reset_cores_entropy}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_reset_cores_entropy_sites}
-    Pulling $\Omega$, $U$, and $F_R$ back along the site bijection $e$ from the square domain to the open square preserves norms, supports, cardinalities, and mutual information, reducing (\ref{eq:peps_reset_cores_entropy}) to Theorem~\ref{thm:peps_reset_cores_entropy_sites}.
+    Pulling $\Omega$, $U$, and $F_R$ back along the site bijection $e$ from the square domain to the open square preserves norms, supports, cardinalities, and mutual information, reducing (\ref{eq:peps_reset_cores_entropy}) to Lemma~\ref{thm:peps_reset_cores_entropy_sites}.
 \end{proof}
 
 \begin{definition}[Reset width and size threshold]
@@ -69,7 +69,7 @@ The unitary of Theorem~\ref{thm:peps_reset_unitary} acts away from two regional 
     When $J\ge0$, $\Delta>0$, and $p>0$, one has $C_p(J,\Delta,p)>0$.
 \end{definition}
 
-\begin{theorem}[Information reset, with explicit constants]
+\begin{lemma}[Information reset, with explicit constants]
     \label{thm:peps_information_reset_explicit}
     \lean{TNLean.PEPS.Approximation.SquareHamiltonian.information_reset_of_resetThreshold_le,
         TNLean.PEPS.Approximation.IsSquareGroundState.squareResetBound}
@@ -82,31 +82,31 @@ The unitary of Theorem~\ref{thm:peps_reset_unitary} acts away from two regional 
         \label{eq:peps_reset_core_distance}
     \end{align}
     then $I_\Omega(R_0:C_0)\le L^{-p}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_reset_unitary_explicit,thm:peps_reset_support_cores,
         thm:peps_reset_cores_entropy,thm:peps_reset_entropy_scalar,
         def:peps_reset_constants}
-    At $r=2p+10$, $K=K(J,\Delta,r)$, and $C=C_U(J,\Delta,r)$, the radius $\ell=\lceil K(1+b+\log L)\rceil$ satisfies $\ell+1\le(K+2)(1+b+\log L)=w$. Theorem~\ref{thm:peps_reset_unitary_explicit} and Theorem~\ref{thm:peps_reset_support_cores} provide $U$ supported outside $R_0\cup C_0$ with $\|U\Psi-\Phi\|\le CL^{-r}$, and Theorems~\ref{thm:peps_reset_cores_entropy} and~\ref{thm:peps_reset_entropy_scalar} (with $|R_0|\le L^2$ and $\lambda=\log q$) yield $I_\Omega(R_0:C_0)\le L^{-p}$.
+    At $r=2p+10$, $K=K(J,\Delta,r)$, and $C=C_U(J,\Delta,r)$, the radius $\ell=\lceil K(1+b+\log L)\rceil$ satisfies $\ell+1\le(K+2)(1+b+\log L)=w$. Lemma~\ref{thm:peps_reset_unitary_explicit} and Lemma~\ref{thm:peps_reset_support_cores} provide $U$ supported outside $R_0\cup C_0$ with $\|U\Psi-\Phi\|\le CL^{-r}$, and Lemmas~\ref{thm:peps_reset_cores_entropy} and~\ref{thm:peps_reset_entropy_scalar} (with $|R_0|\le L^2$ and $\lambda=\log q$) yield $I_\Omega(R_0:C_0)\le L^{-p}$.
 \end{proof}
 
-\begin{theorem}[Information reset]
+\begin{lemma}[Information reset]
     \label{thm:peps_information_reset}
     \lean{TNLean.PEPS.Approximation.SquareHamiltonian.information_reset}
     \leanok
     \uses{def:polynomial_peps_model}
     Fix $q\ge1$, $J\ge0$, $\Delta>0$, and $p>0$. There exist $C_p>0$ and $L_0$ such that for every $L\ge L_0$, any unit ground vector $\Omega$ of an open $L\times L$ square Hamiltonian with interaction bound $J$ and full-system gap $\Delta$, and any disjoint $R,C$ with $I_\Omega(R:C)\le b$ ($b\ge0$) and cores $R_0\subseteq R$, $C_0\subseteq C$ satisfying (\ref{eq:peps_reset_core_distance}), one has $I_\Omega(R_0:C_0)\le L^{-p}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_information_reset_explicit,def:peps_reset_width}
-    Take $(C_p,L_0)=(C_p(J,\Delta,p),L_0(q,J,\Delta,p))$ in Theorem~\ref{thm:peps_information_reset_explicit}.
+    Take $(C_p,L_0)=(C_p(J,\Delta,p),L_0(q,J,\Delta,p))$ in Lemma~\ref{thm:peps_information_reset_explicit}.
 \end{proof}
 
 \subsection{The information reset at interaction range $R$}
 
-This subsection extends Theorem~\ref{thm:peps_information_reset_explicit} from $R=1$ to Hamiltonians of interaction range $R$ on the $L\times L$ square.
+This subsection extends Lemma~\ref{thm:peps_information_reset_explicit} from $R=1$ to Hamiltonians of interaction range $R$ on the $L\times L$ square.
 
 \begin{definition}[Reset width and size threshold at range $R$]
     \label{def:peps_reset_width_range}
@@ -124,31 +124,31 @@ This subsection extends Theorem~\ref{thm:peps_information_reset_explicit} from $
     so that $C_{p,R}(J,\Delta,p)>0$ whenever $J\ge0$, $\Delta>0$, and $p>0$.
 \end{definition}
 
-\begin{theorem}[The number of sites of the square]
+\begin{lemma}[The number of sites of the square]
     \label{thm:peps_square_site_count}
     \lean{TNLean.PEPS.Approximation.card_rectangularDomain}
     \leanok
     The $L\times L$ square domain $\Lambda_L=\{1,\ldots,L\}^2$ has cardinality $|\Lambda_L|=L^2$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     $|\{1,\ldots,L\}^2|=|\{1,\ldots,L\}|^2=L^2$.
 \end{proof}
 
-\begin{theorem}[The reset support avoids the cores at range $R$]
+\begin{lemma}[The reset support avoids the cores at range $R$]
     \label{thm:peps_reset_support_cores_range}
     \lean{TNLean.PEPS.Approximation.notMem_rangeResetSupport}
     \leanok
     \uses{def:peps_crossing_supports}
     Let $A,C\subseteq\Lambda$ be disjoint, with $A_0\subseteq A$ and $C_0\subseteq C$ satisfying $\operatorname{dist}_\infty(A_0,A^c)>w$ and $\operatorname{dist}_\infty(C_0,C^c)>w$. If $\ell+R\le w$, then the radius-$\ell$ graph neighbourhood of $(A\cup C)^c\cup Z_R(A)$ is disjoint from $A_0\cup C_0$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{lem:peps_crossing_supports_near_and_few}
     Every site of $Z_R(A)$ lies within $\ell_\infty$-distance $R$ of both $A^c$ and $A\subseteq C^c$ by Lemma~\ref{lem:peps_crossing_supports_near_and_few}, hence at $\ell_\infty$-distance $>w-R\ge\ell$ from $A_0\cup C_0$.
 \end{proof}
 
-\begin{theorem}[Information reset at range $R$]
+\begin{lemma}[Information reset at range $R$]
     \label{thm:peps_information_reset_range}
     \lean{TNLean.Lattice.LocalHamiltonian.information_reset_of_card_le,
         TNLean.Lattice.LocalHamiltonian.information_reset_of_rangeResetThreshold_le}
@@ -159,24 +159,24 @@ This subsection extends Theorem~\ref{thm:peps_information_reset_explicit} from $
         I_\Omega(A_0:C_0) & \le L^{-p}.
         \label{eq:peps_information_reset_range}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_reset_unitary_range,thm:peps_reset_support_cores_range,
         thm:peps_reset_cores_entropy_sites,thm:peps_reset_entropy_scalar,
         thm:peps_square_site_count}
-    With $r=2p+10$ and $B=1+b+\log L\ge1$, the support radius $\ell=\lceil K_RB\rceil$ of the unitary $U$ from Theorem~\ref{thm:peps_reset_unitary_range} satisfies $\ell+R\le C_pB$. Combining Theorem~\ref{thm:peps_reset_support_cores_range}, Theorem~\ref{thm:peps_reset_cores_entropy_sites}, Theorem~\ref{thm:peps_square_site_count}, and Theorem~\ref{thm:peps_reset_entropy_scalar} yields (\ref{eq:peps_information_reset_range}).
+    With $r=2p+10$ and $B=1+b+\log L\ge1$, the support radius $\ell=\lceil K_RB\rceil$ of the unitary $U$ from Lemma~\ref{thm:peps_reset_unitary_range} satisfies $\ell+R\le C_pB$. Combining Lemma~\ref{thm:peps_reset_support_cores_range}, Lemma~\ref{thm:peps_reset_cores_entropy_sites}, Lemma~\ref{thm:peps_square_site_count}, and Lemma~\ref{thm:peps_reset_entropy_scalar} yields (\ref{eq:peps_information_reset_range}).
 \end{proof}
 
-\begin{theorem}[Information reset at range $R$, existence of the constants]
+\begin{lemma}[Information reset at range $R$, existence of the constants]
     \label{thm:peps_information_reset_range_exists}
     \lean{TNLean.Lattice.LocalHamiltonian.information_reset}
     \leanok
     \uses{def:area_law_hamiltonian}
-    Fix integers $q\ge1$, $R\ge0$ and real $J\ge0$, $\Delta>0$, $p>0$. There exist $C_p>0$ and $L_0$ such that for every $L\ge L_0$, the conclusion of Theorem~\ref{thm:peps_information_reset_range} holds on the $L\times L$ square.
-\end{theorem}
+    Fix integers $q\ge1$, $R\ge0$ and real $J\ge0$, $\Delta>0$, $p>0$. There exist $C_p>0$ and $L_0$ such that for every $L\ge L_0$, the conclusion of Lemma~\ref{thm:peps_information_reset_range} holds on the $L\times L$ square.
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_information_reset_range,def:peps_reset_width_range}
-    Take $(C_p,L_0)=(C_{p,R}(J,\Delta,p),L_{0,R}(q,J,\Delta,p))$ in Theorem~\ref{thm:peps_information_reset_range}.
+    Take $(C_p,L_0)=(C_{p,R}(J,\Delta,p),L_{0,R}(q,J,\Delta,p))$ in Lemma~\ref{thm:peps_information_reset_range}.
 \end{proof}

@@ -64,7 +64,7 @@ kernel $f(t)=O(e^{-c|t|^\alpha})$ gives
     $M_i\Omega=0$, $\sum_iM_i=H-E_0I$, and $\|M_i\|\le c_*$. Because
     $M_i\le|M_i|$ and $\ker M_i\subseteq\ker|M_i|$,~(\ref{eq:al_positive_replacement_gap})
     follows. Integrating the localization bound of
-    Theorem~\ref{thm:qc_graph_ball_localization} against $|f(t)|$ (split at
+    Lemma~\ref{thm:qc_graph_ball_localization} against $|f(t)|$ (split at
     $|t|\asymp l$) and applying
     $\||A|-|B|\|\le((\|A\|+\|B\|)\|A-B\|)^{1/2}$ with
     $E_{i,l}(|E_{i,l}M_i|)=|E_{i,l}M_i|$ (Lemma~\ref{lem:al_site_expectation_order})
@@ -95,7 +95,7 @@ kernel $f(t)=O(e^{-c|t|^\alpha})$ gives
     and satisfy $\mathcal E_{i,l}(B)=B$ (respectively
     $(\mathcal E_{i,l}\otimes\mathrm{id})(B)=B$) whenever $[B,A]=0$ (respectively
     $[B,A\otimes I]=0$) for all $A$ acting on $N_l(a_i)$
-    (Theorem~\ref{thm:al_root_channel_commutant}).
+    (Lemma~\ref{thm:al_root_channel_commutant}).
 \end{lemma}
 \begin{proof}\leanok
     The bound $\|U^{1/2}-V^{1/2}\|\le\|U-V\|^{1/2}$ and~(\ref{eq:al_positive_replacement_tail})
@@ -145,7 +145,7 @@ at most $\mu$ labels share any anchor.
     \end{align}
 \end{proof}
 
-\begin{theorem}[Truncation near a finite set]
+\begin{lemma}[Truncation near a finite set]
     \label{thm:al_truncation}
     \lean{TNLean.PEPS.AreaLaw.half_le_two_rpow,
         TNLean.PEPS.AreaLaw.exists_truncationConstant,
@@ -173,7 +173,7 @@ at most $\mu$ labels share any anchor.
         \le(2\epsilon_n/g)^{1/2}.
         \label{eq:al_truncation_state_closeness}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     By Lemma~\ref{lem:al_truncation_error},
     $\|\widetilde H-H_F\|\le C'C_0n^2e^{-(c/2)\sqrt{r_0}}\le C'C_0n^{2-(c/2)\sqrt{C_1}}\le\epsilon_n$
@@ -181,7 +181,7 @@ at most $\mu$ labels share any anchor.
     $\widetilde\Omega$ of $\widetilde H$ has $e_0\in[0,\epsilon_n]$, orthogonal
     excitation energy at least $g-\epsilon_n\ge g/2$, and
     $g(1-|\langle\Omega,\widetilde\Omega\rangle|^2)\le2\epsilon_n$, yielding~(\ref{eq:al_truncation_state_closeness}).
-    By Theorem~\ref{thm:area_law_ground_eigenspace}, any $\psi$ with
+    By Lemma~\ref{thm:area_law_ground_eigenspace}, any $\psi$ with
     $\widetilde H\psi=e_0\psi$ satisfies, for
     $\varphi=\psi-\langle\widetilde\Omega,\psi\rangle\widetilde\Omega$,
     \begin{align}
@@ -192,7 +192,7 @@ at most $\mu$ labels share any anchor.
     so $\psi=\langle\widetilde\Omega,\psi\rangle\widetilde\Omega$.
 \end{proof}
 
-\begin{theorem}[A common auxiliary label in physical coordinates]
+\begin{lemma}[A common auxiliary label in physical coordinates]
     \label{thm:al_global_schmidt_bell_prevector}
     \lean{TNLean.PEPS.AreaLaw.exists_global_schmidtBellPrevector}
     \leanok
@@ -232,7 +232,7 @@ at most $\mu$ labels share any anchor.
         \log\dim\lambda_k-kS(\rho)=o(k).
         \label{eq:al_schmidt_bell_asymptotics}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Since $z>0$, $\|\psi\|=1$, and common-label selection for $\rho$ gives~(\ref{eq:al_schmidt_bell_asymptotics}).
     In replica coordinates, $u_k=(I\otimes I\otimes L_k)(\Omega^{\otimes k}\otimes\omega_d^{\otimes k})$
@@ -247,15 +247,15 @@ at most $\mu$ labels share any anchor.
     which transports these four identities to~(\ref{eq:al_schmidt_bell_energy})--(\ref{eq:al_schmidt_bell_invariance}).
 \end{proof}
 
-\begin{theorem}[One physical label sequence for the rough lower comparison]
+\begin{lemma}[One physical label sequence for the rough lower comparison]
     \label{thm:al_global_schmidt_bell_rough_lower}
     \lean{TNLean.PEPS.AreaLaw.exists_global_schmidtBellPrevector_rough_lower}
     \leanok
     \uses{thm:al_global_schmidt_bell_prevector}
-    In the setting of Theorem~\ref{thm:al_global_schmidt_bell_prevector},
+    In the setting of Lemma~\ref{thm:al_global_schmidt_bell_prevector},
     suppose $H-EI\ge\gamma(I-|\Omega\rangle\langle\Omega|)$ with $\gamma>0$, and
     let $\lambda_k,\xi_k$ be given by
-    Theorem~\ref{thm:al_global_schmidt_bell_prevector}. With $S'=S(\rho)$ and
+    Lemma~\ref{thm:al_global_schmidt_bell_prevector}. With $S'=S(\rho)$ and
     $\varepsilon_k=-2(\log\dim\lambda_k-kS')$, we have
     $2kS'-\varepsilon_k=2\log\dim\lambda_k$ and $\varepsilon_k/k\to0$.
 
@@ -289,10 +289,10 @@ at most $\mu$ labels share any anchor.
     \end{align}
     \cite[Section~8]{OpenAI2026AreaLaw}. Choosing a scan point and identifying
     its regions and geometric mean remain separate assertions.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Take $\lambda_k$ and $\xi_k$ from
-    Theorem~\ref{thm:al_global_schmidt_bell_prevector}. Since $z>0$, $d>0$. The
+    Lemma~\ref{thm:al_global_schmidt_bell_prevector}. Since $z>0$, $d>0$. The
     identities~(\ref{eq:al_schmidt_bell_invariance}) verify the rough lower
     comparison hypotheses at $t=2/K$ and exponent $1/4$, and the coefficient-$3$
     estimate applied to $v_k$ and $\delta_k$ gives~(\ref{eq:al_rough_lower_bound}).
@@ -300,22 +300,22 @@ at most $\mu$ labels share any anchor.
     $R_k\to0$ by~(\ref{eq:al_rough_lower_remainder}).
 \end{proof}
 
-\begin{theorem}[The initial vector for the truncated Hamiltonian]
+\begin{lemma}[The initial vector for the truncated Hamiltonian]
     \label{thm:al_truncation_schmidt_bell_prevector}
     \lean{TNLean.PEPS.AreaLaw.exists_finiteSetTruncation_schmidtBellPrevector_of_gap}
     \leanok
     \uses{thm:al_truncation, thm:al_global_schmidt_bell_prevector}
     Combining \cite[Sections~4 and~8]{OpenAI2026AreaLaw}, under the hypotheses
-    of Theorem~\ref{thm:al_truncation}, the same $C_1,\widetilde H,e_0,\widetilde\Omega$
-    satisfy Theorem~\ref{thm:al_truncation} and, for every $X\subseteq V$ and
+    of Lemma~\ref{thm:al_truncation}, the same $C_1,\widetilde H,e_0,\widetilde\Omega$
+    satisfy Lemma~\ref{thm:al_truncation} and, for every $X\subseteq V$ and
     every positive-mass spectral selection of $\widetilde\Omega$,
-    Theorem~\ref{thm:al_global_schmidt_bell_prevector} holds with
+    Lemma~\ref{thm:al_global_schmidt_bell_prevector} holds with
     $(H,E,\Omega)=(\widetilde H,e_0,\widetilde\Omega)$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Choose $(C_1,\widetilde H,e_0,\widetilde\Omega)$ by
-    Theorem~\ref{thm:al_truncation} and apply
-    Theorem~\ref{thm:al_global_schmidt_bell_prevector} to
+    Lemma~\ref{thm:al_truncation} and apply
+    Lemma~\ref{thm:al_global_schmidt_bell_prevector} to
     $\widetilde H\widetilde\Omega=e_0\widetilde\Omega$ for each spectral selection.
 \end{proof}
 
@@ -324,7 +324,7 @@ $\mathcal C_X=\{i:\widetilde X_i\cap X\ne\varnothing\text{ and }\widetilde X_i\c
 and set $d_i=q^{|\widetilde X_i|}$ and
 $\mathcal B_X=1+\sum_{i\in\mathcal C_X}\log^2(ed_i)$.
 
-\begin{theorem}[Crossing count and cut parameter]
+\begin{lemma}[Crossing count and cut parameter]
     \label{thm:al_crossing_budget}
     \lean{TNLean.PEPS.AreaLaw.cutEdges, TNLean.PEPS.AreaLaw.componentFinset,
         TNLean.PEPS.AreaLaw.designatedSupport, TNLean.PEPS.AreaLaw.crossingLabels,
@@ -347,7 +347,7 @@ $\mathcal B_X=1+\sum_{i\in\mathcal C_X}\log^2(ed_i)$.
     $\mathcal B_X\le C'nD(\log n)^{12}$. If $S_0=\varnothing$, then
     $\widetilde h_i=k_i$ and $\mathcal C_X=\varnothing$; if $d_i^0=\infty$, then
     $\widetilde h_i=k_i$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     If $\widetilde X_i$ meets $X\subseteq S_0$, then $d_i^0<\infty$ and
     $r_i=r_0$ (since $r_i>r_0\implies r_i=\lfloor d_i^0/2\rfloor<d_i^0$, so
@@ -359,7 +359,7 @@ $\mathcal B_X=1+\sum_{i\in\mathcal C_X}\log^2(ed_i)$.
 
 % Exact-budget identities preserve the original finite label family.
 % These identities do not assert the lattice-specialized budget producer.
-\begin{theorem}[Cut parameter and complementary cuts]
+\begin{lemma}[Cut parameter and complementary cuts]
     \label{thm:al_exact_cut_budget}
     \lean{TNLean.PEPS.AreaLaw.cutBudget_eq_cutLogBudget,
         TNLean.PEPS.AreaLaw.crossingLabels_compl,
@@ -372,7 +372,7 @@ $\mathcal B_X=1+\sum_{i\in\mathcal C_X}\log^2(ed_i)$.
     \uses{thm:al_crossing_budget}
     For any finite graph on $V$, finite label set $I$ with anchors $a_i\in V$,
     $q,r_0\in\mathbb N$, $S_0\subseteq V$, and designated supports
-    $\widetilde X_i$ of Theorem~\ref{thm:al_crossing_budget}, every cut
+    $\widetilde X_i$ of Lemma~\ref{thm:al_crossing_budget}, every cut
     $X\subseteq V$ (not necessarily contained in $S_0$, retaining repeated
     supports and zero terms) satisfies \cite[Lemma~3.1]{OpenAI2026AreaLaw}:
     \begin{align}
@@ -386,7 +386,7 @@ $\mathcal B_X=1+\sum_{i\in\mathcal C_X}\log^2(ed_i)$.
     $\mathcal C_{V\setminus X}=\mathcal C_X$,
     $\mathcal B_{V\setminus X}=\mathcal B_X\ge1$, and
     $\mathcal B_\varnothing=\mathcal B_V=1$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Using $\prod_{v\in\widetilde X_i}q=q^{|\widetilde X_i|}$, invariance of
     $\mathcal C_X$ under $X\leftrightarrow V\setminus X$, nonnegativity of
@@ -407,7 +407,7 @@ $\mu_R=2^{v_R-1}$. In this setting the counting hypotheses of the previous
 sections are consequences of the lattice geometry, and the constants depend
 only on the parameters named below.
 
-\begin{theorem}[Counting on an induced lattice domain]
+\begin{lemma}[Counting on an induced lattice domain]
     \label{thm:al_lattice_counts}
     \lean{TNLean.PEPS.AreaLaw.card_graphBall_domainGraph_le,
         TNLean.PEPS.AreaLaw.card_anchor_fiber_le,
@@ -416,15 +416,15 @@ only on the parameters named below.
     \uses{def:area_law_hamiltonian, thm:area_diamond_count, thm:area_diamond_budget,
         lem:area_domain_graph_counts, thm:area_law_crossing_supports}
     In $\Lambda$, $|N_d(x)|\le2(d+1)^2$, at most $\mu_R$ supports contain a
-    given site (Theorem~\ref{thm:area_law_crossing_supports}), at most $\mu_R$
+    given site (Lemma~\ref{thm:area_law_crossing_supports}), at most $\mu_R$
     labels share an anchor, and
     $|\{(u,v):u\sim v,\,u\in X,\,v\notin X\}|\le|\partial_\Lambda X|$. The
     sphere, support-diameter, support-size, and per-site norm bounds are given
     in Lemma~\ref{lem:area_domain_graph_counts}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Since $u\sim v\implies\|u-v\|_1=1$, $N_d(x)$ lies in the $\ell^1$-ball of
-    radius $d$ (Theorem~\ref{thm:area_diamond_count}). Supports and anchors are
+    radius $d$ (Lemma~\ref{thm:area_diamond_count}). Supports and anchors are
     bounded by Theorem~\ref{thm:area_diamond_budget} since $a_i\in X_i$, and
     $(u,v)\mapsto\{u,v\}$ injects crossing pairs into $\partial_\Lambda X$.
 \end{proof}
@@ -455,7 +455,7 @@ only on the parameters named below.
     and sphere growth $2(d+1)^2$ from Lemma~\ref{lem:area_domain_graph_counts}.
 \end{proof}
 
-\begin{theorem}[Square roots and local channels on an induced lattice domain]
+\begin{lemma}[Square roots and local channels on an induced lattice domain]
     \label{thm:al_lattice_quasilocal_roots}
     \lean{TNLean.PEPS.AreaLaw.exists_latticeQuasilocalRoots}
     \leanok
@@ -473,14 +473,14 @@ only on the parameters named below.
         \notag
     \end{align}
     for every auxiliary system \cite[Lemma~4.4]{OpenAI2026AreaLaw}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Substitute~(\ref{eq:al_lattice_positive_replacement_tail}) into
     Lemma~\ref{lem:al_quasilocal_roots} using
     $(Ce^{-cl^\alpha})^{1/2}=C^{1/2}e^{-(c/2)l^\alpha}$.
 \end{proof}
 
-\begin{theorem}[Truncation near a finite set on an induced lattice domain]
+\begin{lemma}[Truncation near a finite set on an induced lattice domain]
     \label{thm:al_lattice_truncation}
     \lean{TNLean.PEPS.AreaLaw.exists_latticeFiniteSetTruncation,
         TNLean.PEPS.AreaLaw.exists_latticeFiniteSetTruncation_eigenspace_eq_span}
@@ -500,19 +500,19 @@ only on the parameters named below.
     a phase choice) the bounds~(\ref{eq:al_truncation_state_closeness}). This is
     the truncation part of \cite[Proposition~4.5]{OpenAI2026AreaLaw} (stated
     there for $S_0\ne\varnothing$ and $C_0>0$).
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
-    Apply Theorem~\ref{thm:al_truncation} with $v_R$, $b_0=\mu_RJ$, and sphere
+    Apply Lemma~\ref{thm:al_truncation} with $v_R$, $b_0=\mu_RJ$, and sphere
     growth $2(d+1)^2$ (Lemma~\ref{lem:area_domain_graph_counts}), and
-    $K_b=2,\mu=\mu_R$ (Theorem~\ref{thm:al_lattice_counts}). If
+    $K_b=2,\mu=\mu_R$ (Lemma~\ref{thm:al_lattice_counts}). If
     $\widetilde H\psi=e_0\psi$ and
     $\varphi=\psi-\langle\widetilde\Omega,\psi\rangle\widetilde\Omega$, then
     $0=\langle\varphi,(\widetilde H-e_0I)\varphi\rangle\ge(g/2)\|\varphi\|^2$,
     so $\psi\in\operatorname{span}\{\widetilde\Omega\}$ by
-    Theorem~\ref{thm:area_law_ground_eigenspace}.
+    Lemma~\ref{thm:area_law_ground_eigenspace}.
 \end{proof}
 
-\begin{theorem}[Crossing count and cut parameter on an induced lattice domain]
+\begin{lemma}[Crossing count and cut parameter on an induced lattice domain]
     \label{thm:al_lattice_crossing_budget}
     \lean{TNLean.PEPS.AreaLaw.exists_latticeCrossingBudget,
         TNLean.PEPS.AreaLaw.exists_latticeCutBudget_le_log}
@@ -532,10 +532,10 @@ only on the parameters named below.
     $r_0=\lceil C_1(\log n)^2\rceil$, $n\ge2$, $D\ge1$, and $b_X\le C_2nD$
     imply $\mathcal B_X\le C'nD(\log n)^{12}$
     \cite[Proposition~4.5]{OpenAI2026AreaLaw}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
-    Apply Theorem~\ref{thm:al_crossing_budget} with $K_b=2$, $\mu=\mu_R$, and
-    cut-edge bound $|\partial_\Lambda X|$ from Theorem~\ref{thm:al_lattice_counts};
+    Apply Lemma~\ref{thm:al_crossing_budget} with $K_b=2$, $\mu=\mu_R$, and
+    cut-edge bound $|\partial_\Lambda X|$ from Lemma~\ref{thm:al_lattice_counts};
     substituting $r_0=\lceil C_1(\log n)^2\rceil$ into~(\ref{eq:al_lattice_crossing_bounds})
     gives the second bound.
 \end{proof}

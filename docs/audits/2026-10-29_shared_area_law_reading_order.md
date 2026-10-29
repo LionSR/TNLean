@@ -33,3 +33,20 @@ multisets of labels and Lean anchors were compared before and after, allowing
 only the new shared chapter label; Blueprint declaration synchronization finds
 no missing anchors; repository ChkTeX checks and LaTeX formatting pass. No Lean
 compilation or PDF/web build was run locally.
+
+## Main integration on 2026-10-29
+
+Merged `origin/main` at `55b8f9d56d909a1d32d58dad3a2b25ed967128c6`.
+The shared finite-site chapter remains first in the area-law part, before
+both chain and two-dimensional consumers; all new main chapter inputs are
+retained. The expectation order/commutant result still follows expectation
+properties and precedes the supported-approximant comparison. The current
+role updater was applied after resolving the moved-statement conflicts.
+
+All 22 moved statement/proof blocks match current main modulo role names,
+reference words and whitespace. Global labels, Lean anchors, dependencies,
+readiness and proof counts are conserved, allowing only the new shared
+chapter label. Role checks and all eight role tests, recursive literal-input
+reading-order checks, reader prose, ChkTeX, changed-file TeX formatting and
+whitespace checks pass. The historical reference totals above retain their
+explicit original baseline. No local Lean or PDF/web build was run.

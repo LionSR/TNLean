@@ -17,7 +17,7 @@ finite correlation alone~\cite{gap:mswc24_inhomogeneous_scope}.
     $A[a,a+n)_j=A_{a+j}$, for $0\le j<n$.
 \end{definition}
 
-\begin{theorem}[Ordered interval composition]
+\begin{lemma}[Ordered interval composition]
     \label{thm:ldp_actual_interval_transfer}
     \lean{MPSChainTensor.interval_interval,MPSChainTensor.transferMap_interval}
     \leanok
@@ -25,14 +25,14 @@ finite correlation alone~\cite{gap:mswc24_inhomogeneous_scope}.
     Taking an interval inside an interval adds their starting positions.
     The blocked interval has transfer map
     $E_{[a,a+n)}=E_a\circ\cdots\circ E_{a+n-1}$, in the original order.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:ldp_chain_transfer_product}
     Expanding the restricted family and its ordered transfer product gives
     both identities.
 \end{proof}
 
-\begin{theorem}[Residual product relative to a propagated density]
+\begin{lemma}[Residual product relative to a propagated density]
     \label{thm:ldp_transported_choi_residual}
     \lean{MPSPreparation.norm_gram_blockTensor_sub_transport_le_of_choi_domination}
     \leanok
@@ -48,7 +48,7 @@ finite correlation alone~\cite{gap:mswc24_inhomogeneous_scope}.
         \left\|B^\dagger B-F(\rho)^\mathsf T\otimes I\right\|
         \le 2D\prod_j(1-\delta_j).
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:ldp_chain_transfer_product}
     For $Q_j=F_j-\delta_jR_{\tau_j}$, Choi domination makes each $Q_j$
@@ -63,7 +63,7 @@ finite correlation alone~\cite{gap:mswc24_inhomogeneous_scope}.
     two. The Gram--Choi identity gives the factor $D$.
 \end{proof}
 
-\begin{theorem}[Compatible cyclic density references]
+\begin{lemma}[Compatible cyclic density references]
     \label{thm:ldp_compatible_cyclic_densities}
     \lean{MPSPreparation.exists_compatible_density_family}
     \leanok
@@ -75,7 +75,7 @@ finite correlation alone~\cite{gap:mswc24_inhomogeneous_scope}.
         \qquad(a+n\le N).
     \end{align}
     No common or faithful stationary density is assumed.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:ldp_actual_interval_transfer}
     For a density fixed point $\theta$ of the whole-ring channel,
@@ -114,7 +114,7 @@ not identified with either window's Choi minorizer.
 \end{center}
 % TENKZ-WINDOW-MIXING-TRANSPORT-END
 
-\begin{theorem}[Mixing from fixed-width local minorization]
+\begin{lemma}[Mixing from fixed-width local minorization]
     \label{thm:ldp_window_mixing_rate}
     \lean{MPSPreparation.norm_gram_blockTensor_sub_transport_le_of_window_domination,
         MPSPreparation.exists_norm_transferMatrix_interval_sub_le_of_window_domination}
@@ -132,7 +132,7 @@ not identified with either window's Choi minorizer.
     \end{align}
     The corresponding Gram bound is
     $2D(1-\eta)^{\lfloor n/s\rfloor}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:ldp_transported_choi_residual,thm:ldp_compatible_cyclic_densities,
         thm:ldp_actual_interval_transfer}
@@ -143,7 +143,7 @@ not identified with either window's Choi minorizer.
     $E_{[a,a+n)}(\sigma_{a+n})=\sigma_a$.
 \end{proof}
 
-\begin{theorem}[Physical preparation from the local window criterion]
+\begin{lemma}[Physical preparation from the local window criterion]
     \label{thm:ldp_window_mixing_preparation}
     \lean{MPSPreparation.exists_isPreparedInDepth_inhomogeneous_le_log_eventually_of_window_domination}
     \leanok
@@ -157,7 +157,7 @@ not identified with either window's Choi minorizer.
     $\varepsilon$ against the original periodic state.
     Global mixing, a reference family, and short-ring nonvanishing are
     not hypotheses.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:ldp_window_mixing_rate,thm:ldp_varying_reference_preparation}
     The window at ring length $s$ forces $\eta\le1$. Weakening

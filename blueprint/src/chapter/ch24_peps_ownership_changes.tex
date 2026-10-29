@@ -22,7 +22,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 
 % ALVV arXiv:1602.08828v2, local_alg_arxiv_v2.tex, eq:H-mid-cut,
 % lines 810--821; this is a separate locality auxiliary, not that source theorem.
-\begin{theorem}[Support-intersection bound for an operator on two regions]
+\begin{lemma}[Support-intersection bound for an operator on two regions]
     \label{thm:peps_supported_left_factor_rank}
     \lean{TNLean.Lattice.Sheet.exists_threeSplit_eq_kronecker_one_rank_le}
     \leanok
@@ -43,13 +43,13 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     $q^2$. This support estimate applies to the local terms in the
     nearest-neighbour Hamiltonian decomposition of
     \cite[Section~4.1]{Arad2016RigorousRG}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{lem:peps_frame_split_forms,thm:area_law_supported_identity}
     If there is no global configuration, then $A=0$, and take $B=0$.
     Otherwise choose a global configuration and let $u_0$ be its restriction
     to $U$. Take $B$ from Lemma~\ref{lem:peps_frame_split_forms}.
-    The support criterion of Theorem~\ref{thm:area_law_supported_identity}
+    The support criterion of Lemma~\ref{thm:area_law_supported_identity}
     and the matrix-unit decomposition across a cut~\cite[``Matrix-unit
         decomposition across a cut'']{QICLean2026Blueprint} give
     \begin{align}
@@ -70,7 +70,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     in~(\ref{eq:peps_left_restricted_decomp}) gives the same $B$. Its operator Schmidt rank is at most $M$.
 \end{proof}
 
-\begin{theorem}[Support-intersection bound for a complementary operator]
+\begin{lemma}[Support-intersection bound for a complementary operator]
     \label{thm:peps_supported_right_factor_rank}
     \lean{TNLean.Lattice.Sheet.exists_threeSplit_eq_reindex_one_kronecker_rank_le}
     \leanok
@@ -91,13 +91,13 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     tensors in a decomposition, allowing the empty sum. The statement
     includes $q=0$ and empty regions. In particular, $|D\cap E|=1$ gives
     the bound $q^2$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{lem:peps_frame_split_forms,thm:area_law_supported_identity}
     If there is no global configuration, then $A=0$, and take $V=0$.
     Otherwise choose a global configuration and let $t_0$ be its restriction
     to $T$. The support criterion of
-    Theorem~\ref{thm:area_law_supported_identity} and the matrix-unit
+    Lemma~\ref{thm:area_law_supported_identity} and the matrix-unit
     decomposition across a cut~\cite[``Matrix-unit decomposition across a
         cut'']{QICLean2026Blueprint} give, in the coordinates
     $\mathcal H_E\otimes\mathcal H_{\Lambda\setminus E}$,
@@ -278,7 +278,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     Follows directly from~(\ref{eq:peps_frame_birth_partition}).
 \end{proof}
 
-\begin{theorem}[Homogeneous birth and death: sheet map]
+\begin{lemma}[Homogeneous birth and death: sheet map]
     \label{thm:peps_frame_birth}
     \lean{TNLean.PEPS.EncodedFrame.Frame.birth,
         TNLean.PEPS.EncodedFrame.Frame.death}
@@ -300,7 +300,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     (\cite[Lemma~6.5]{OpenAI2026PolynomialPEPS}). The death map is the same
     operator $B$ from $\mathcal F'$ to $\mathcal F$ when the hypotheses hold in
     the post-death frame $\mathcal F$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{lem:peps_frame_splitting,lem:peps_frame_birth_map,
@@ -329,7 +329,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     sources and pair effects.
 \end{definition}
 
-\begin{theorem}[Composition without additional pair effects]
+\begin{lemma}[Composition without additional pair effects]
     \label{thm:peps_monomial_composition_counts}
     \lean{TNLean.Lattice.PartyCircuit.PartyChain.precomp_props,
         TNLean.Lattice.PartyCircuit.PartyChain.postcomp_props,
@@ -351,7 +351,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
         e(M_0) & =e(M_1)=e(M).
         \label{eq:peps_monomial_composition_counts}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Absorb $W_0$ into the initial effect-free segment of $M$ and $W_1$ into its
@@ -461,7 +461,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     and the death monomial computes $K^\dagger(\bra s\otimes\id_{\mathcal B_E})(t\otimes Vu)=K^\dagger K(t\otimes u)$.
 \end{proof}
 
-\begin{theorem}[Homogeneous birth and death on grouped registers]
+\begin{lemma}[Homogeneous birth and death on grouped registers]
     \label{thm:peps_frame_birth_bounded_grouped}
     \lean{TNLean.PEPS.EncodedFrame.Frame.birth_monomial,
         TNLean.PEPS.EncodedFrame.Frame.death_monomial,
@@ -470,7 +470,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     \leanok
     \uses{thm:peps_frame_birth,lem:peps_frame_birth_partition_owners,
         lem:peps_frame_birth_monomial_operators}
-    Under the hypotheses of Theorem~\ref{thm:peps_frame_birth}, on grouped
+    Under the hypotheses of Lemma~\ref{thm:peps_frame_birth}, on grouped
     registers $\mathcal H_T,\mathcal H_U$ followed by arbitrary untouched
     registers, the birth and death monomials of
     Lemma~\ref{lem:peps_frame_birth_monomial_operators} are allowed monomials
@@ -478,12 +478,12 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     $B=\id_E\otimes K^\dagger K$ on $\mathcal H_\Lambda$), where $\mathcal H_U$
     is owned by $P_\circ$ throughout and $\mathcal H_T$ changes between
     $P_\circ$ and $Q_\circ$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_frame_birth,lem:peps_frame_birth_monomial_operators,
         lem:peps_frame_birth_partition_owners}
-    Combine Theorem~\ref{thm:peps_frame_birth},
+    Combine Lemma~\ref{thm:peps_frame_birth},
     Lemma~\ref{lem:peps_frame_birth_partition_owners}, and
     Lemma~\ref{lem:peps_frame_birth_monomial_operators}.
 \end{proof}
@@ -606,7 +606,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 
 \begin{proof}\leanok
     \uses{thm:peps_register_exchange}
-    By induction on the register lists via Theorem~\ref{thm:peps_register_exchange},
+    By induction on the register lists via Lemma~\ref{thm:peps_register_exchange},
     for site lists $A,B$, spectator list $C$, and $u=\ket{c(x)}$, $a=\ket c_A$,
     $b=\ket c_B$ with $t=J_{B,C}^{-1}(b\otimes y)$ and
     $z=J_{A,(B,C)}^{-1}(a\otimes t)$, the single-site partition steps satisfy
@@ -621,7 +621,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     commute.
 \end{proof}
 
-\begin{theorem}[Coordinates of ordered region registers]
+\begin{lemma}[Coordinates of ordered region registers]
     \label{thm:peps_region_register_coordinates}
     \lean{TNLean.Lattice.Sheet.mem_listT,
         TNLean.Lattice.Sheet.mem_listR,
@@ -651,7 +651,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
         G_U\ket c_{\ell_U} & =\ket{c|_U}.
         \label{eq:peps_region_grouping_basis}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{lem:peps_register_reorderings,lem:peps_frame_registers_coordinates}
@@ -659,7 +659,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     coordinate identification of Lemma~\ref{lem:peps_frame_registers_coordinates}.
 \end{proof}
 
-\begin{theorem}[Reconstructing a configuration from its restrictions]
+\begin{lemma}[Reconstructing a configuration from its restrictions]
     \label{thm:peps_region_configuration}
     \lean{TNLean.Lattice.Sheet.merge_restrict_T,
         TNLean.Lattice.Sheet.merge_restrict_U,
@@ -681,7 +681,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     \end{align}
     In particular, $c^u=m(c|_T,u;c)$ satisfies $c^u|_{T\cup E}=c|_{T\cup E}$
     and $c^u|_U=u$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Since $\Lambda=T\sqcup E\sqcup U$, a configuration in $[q]^\Lambda$ is
@@ -752,21 +752,21 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     unitary.
 \end{proof}
 
-\begin{theorem}[Homogeneous birth and death: bounded change]
+\begin{lemma}[Homogeneous birth and death: bounded change]
     \label{thm:peps_frame_birth_bounded}
     \lean{TNLean.PEPS.EncodedFrame.Frame.birth_bounded,
         TNLean.PEPS.EncodedFrame.Frame.death_bounded}
     \leanok
     \uses{thm:peps_frame_birth,def:peps_frame_registers,lem:peps_frame_registers_coordinates,
         def:peps_monomial_parties,lem:lattice_front_births}
-    Under the hypotheses of Theorem~\ref{thm:peps_frame_birth}, there exists an
+    Under the hypotheses of Lemma~\ref{thm:peps_frame_birth}, there exists an
     allowed monomial between the frame registers of $\mathcal F$ and
     $\mathcal F'$ (Definition~\ref{def:peps_frame_registers}) using only
     $\{P_\circ,Q_\circ\}$, with $(s,e)\le(1,0)$ for birth and $(s,e)\le(0,1)$
     for death, whose operator in product coordinates is $\id_{\rm tags}\otimes B$
     and satisfies~(\ref{eq:peps_frame_birth_bound})
     (\cite[Lemma~6.5]{OpenAI2026PolynomialPEPS}, \texttt{05-frames.tex}, lines 396--410).
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_frame_birth,lem:peps_frame_birth_partition_owners,
@@ -774,16 +774,16 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
         thm:peps_monomial_composition_counts}
     Compose the grouping word of Lemma~\ref{lem:peps_grouped_monomial_placement},
     the grouped birth/death monomial of
-    Theorem~\ref{thm:peps_frame_birth_bounded_grouped}, and the ungrouping word
-    via Theorem~\ref{thm:peps_monomial_composition_counts}; the resulting
+    Lemma~\ref{thm:peps_frame_birth_bounded_grouped}, and the ungrouping word
+    via Lemma~\ref{thm:peps_monomial_composition_counts}; the resulting
     operator is $\id_{\rm tags}\otimes(\id_E\otimes K^\dagger K)=\id_{\rm tags}\otimes B$,
     which satisfies~(\ref{eq:peps_frame_birth_bound}) by
-    Theorem~\ref{thm:peps_frame_birth}.
+    Lemma~\ref{thm:peps_frame_birth}.
 \end{proof}
 
 \subsection{Exchanging assignments between two sheets}
 
-\begin{theorem}[Crossing-edge expansion of the doubled perturbation]
+\begin{lemma}[Crossing-edge expansion of the doubled perturbation]
     \label{thm:peps_sheet_swap_boundary_expansion}
     \lean{TNLean.PEPS.Approximation.SquareHamiltonian.sheetSwapOp_conj_doubled_operator_sub_eq_sum_crossing}
     \leanok
@@ -797,15 +797,15 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
         \label{eq:peps_sheet_swap_boundary_expansion}
     \end{align}
     (\cite{OpenAI2026PolynomialPEPS}).
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_sheet_swap_doubled_cancellation}
-    By Theorem~\ref{thm:peps_sheet_swap_doubled_cancellation},
+    By Lemma~\ref{thm:peps_sheet_swap_doubled_cancellation},
     $F_RT(h_v)F_R^\dagger-T(h_v)=0$ for all $v$ and
     $F_RT(h_e)F_R^\dagger-T(h_e)=0$ for all $e\notin\partial R$, leaving~(\ref{eq:peps_sheet_swap_boundary_expansion}).
 \end{proof}
 
-\begin{theorem}[Norm of a swapped doubled interaction]
+\begin{lemma}[Norm of a swapped doubled interaction]
     \label{thm:peps_sheet_swap_doubled_term_norm}
     \lean{TNLean.PEPS.EncodedFrame.norm_sheetSwapOp_conj_doubledHamiltonian_sub_le}
     \leanok
@@ -816,18 +816,18 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
         \|F_RT(A)F_R^\dagger-T(A)\|\leq4\|A\|.
         \label{eq:peps_sheet_swap_doubled_term_norm}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:peps_frame_sheet_swap,thm:peps_frame_sheet_swap_norm,
         thm:peps_frame_identity_tensor_norm}
-    By Theorem~\ref{thm:peps_frame_identity_tensor_norm},
+    By Lemma~\ref{thm:peps_frame_identity_tensor_norm},
     $\|T(A)\|\le\|A\otimes I\|+\|I\otimes A\|\le 2\|A\|$; combining this with
-    $\|F_R\|\le 1$ (Theorem~\ref{thm:peps_frame_sheet_swap_norm}) and the
+    $\|F_R\|\le 1$ (Lemma~\ref{thm:peps_frame_sheet_swap_norm}) and the
     triangle inequality gives~(\ref{eq:peps_sheet_swap_doubled_term_norm}).
 \end{proof}
 
-\begin{theorem}[Support and norm of the doubled boundary perturbation]
+\begin{lemma}[Support and norm of the doubled boundary perturbation]
     \label{thm:peps_swapped_doubled_boundary_bound}
     \lean{TNLean.PEPS.Approximation.SquareHamiltonian.swapped_doubled_boundary_bound}
     \leanok
@@ -845,7 +845,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
         \label{eq:peps_swapped_doubled_boundary_bound}
     \end{align}
     (\cite{OpenAI2026PolynomialPEPS}).
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_sheet_swap_boundary_expansion,
@@ -853,9 +853,9 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
         thm:peps_sheet_swap_doubled_cancellation,
         thm:peps_sheet_swap_doubled_term_norm,thm:peps_square_edge_count}
     By~(\ref{eq:peps_sheet_swap_boundary_expansion}) and
-    Theorem~\ref{thm:peps_sheet_swap_conjugate_support}, $FKF^\dagger-K$ is a
+    Lemma~\ref{thm:peps_sheet_swap_conjugate_support}, $FKF^\dagger-K$ is a
     sum over $e\in\partial R$ of terms supported on $e\subseteq Z$. By~(\ref{eq:peps_sheet_swap_doubled_term_norm})
-    and $|\partial R|\le 2L^2$ (Theorem~\ref{thm:peps_square_edge_count}),
+    and $|\partial R|\le 2L^2$ (Lemma~\ref{thm:peps_square_edge_count}),
     $\|FKF^\dagger-K\|\le\sum_{e\in\partial R}4\|h_e\|\le 4J|\partial R|\le 8JL^2$.
 \end{proof}
 
@@ -1049,7 +1049,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     Definition~\ref{def:peps_frame_exchange_data}.
 \end{proof}
 
-\begin{theorem}[Two-sheet exchange: implemented map]
+\begin{lemma}[Two-sheet exchange: implemented map]
     \label{thm:peps_frame_exchange}
     \lean{TNLean.PEPS.EncodedFrame.TwoSheetExchange.exchange,
         TNLean.PEPS.EncodedFrame.TwoSheetExchange.exchangeOp_mul_encoder,
@@ -1072,7 +1072,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
         \label{eq:peps_frame_exchange_bound}
     \end{align}
     (\cite[Lemma~6.6]{OpenAI2026PolynomialPEPS}).
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{lem:peps_frame_splitting,lem:peps_frame_exchange_intertwining,
@@ -1089,7 +1089,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     with $\delta\le L^{-30}$ (Lemma~\ref{lem:peps_frame_splitting}) yield~(\ref{eq:peps_frame_exchange_bound}).
 \end{proof}
 
-\begin{theorem}[Two-sheet exchange: holes listed in any order]
+\begin{lemma}[Two-sheet exchange: holes listed in any order]
     \label{thm:peps_frame_exchange_any_order}
     \lean{TNLean.PEPS.EncodedFrame.TwoSheetExchange.exchange_ofFrames,
         TNLean.PEPS.EncodedFrame.TwoSheetExchange.tagReorder,
@@ -1109,16 +1109,16 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
         \le4L^{-30}.
         \label{eq:peps_frame_exchange_any_order}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_frame_exchange,thm:peps_frame_small_rewrite,
         lem:peps_frame_exchange_error}
-    By Theorem~\ref{thm:peps_frame_small_rewrite} (\texttt{05-frames.tex},
+    By Lemma~\ref{thm:peps_frame_small_rewrite} (\texttt{05-frames.tex},
     lines 84--85), reordering holes with disjoint outer footprints yields a tag
     relabelling unitary $G$ satisfying
     $G(K_{\mathcal F_1}\otimes K_{\mathcal F_2})=K_{\rm in}$; composing with
-    $C$ from Theorem~\ref{thm:peps_frame_exchange} gives~(\ref{eq:peps_frame_exchange_any_order}).
+    $C$ from Lemma~\ref{thm:peps_frame_exchange} gives~(\ref{eq:peps_frame_exchange_any_order}).
 \end{proof}
 
 \begin{lemma}[The corrections of an exchange on the two copies of the remainder]
@@ -1238,7 +1238,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     blocks between the two sheets, and merge back.
 \end{proof}
 
-\begin{theorem}[Coordinates on two copies of a region]
+\begin{lemma}[Coordinates on two copies of a region]
     \label{thm:peps_two_region_coordinates}
     \lean{TNLean.Lattice.Sheet.pairUIso_siteVec,
         TNLean.Lattice.Sheet.pairUIso_symm_single,
@@ -1260,19 +1260,19 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
         \label{eq:peps_two_region_basis}
     \end{align}
     and if $T\cap E=\varnothing$, then for $c_j^{u_j}=m(c_j|_T,u_j;c_j)$
-    (Theorem~\ref{thm:peps_region_configuration}),
+    (Lemma~\ref{thm:peps_region_configuration}),
     \begin{align}
         Q_U^{-1}\ket{u_1,u_2}
          & =\iota_U(\ket{c_1^{u_1}}_{U,1}\otimes\ket{c_2^{u_2}}_{U,2}).
         \label{eq:peps_two_region_inverse}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_region_register_coordinates,thm:peps_region_configuration,
         lem:peps_frame_registers_coordinates}
     Apply~(\ref{eq:peps_region_grouping_basis}) of
-    Theorem~\ref{thm:peps_region_register_coordinates} on each copy of $U$ to
+    Lemma~\ref{thm:peps_region_register_coordinates} on each copy of $U$ to
     obtain~(\ref{eq:peps_two_region_basis}), and use $c_j^{u_j}|_U=u_j$
     from~(\ref{eq:peps_region_reconstruction}) for~(\ref{eq:peps_two_region_inverse}).
 \end{proof}
@@ -1325,11 +1325,11 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     \uses{thm:peps_two_region_coordinates,thm:peps_region_configuration}
     Combine Lemma~\ref{lem:peps_register_reorderings},
     Lemma~\ref{lem:peps_frame_exchange_correction_monomial}, and
-    Theorem~\ref{thm:peps_two_region_coordinates}
+    Lemma~\ref{thm:peps_two_region_coordinates}
     via~(\ref{eq:peps_two_region_basis})--(\ref{eq:peps_two_region_inverse}).
 \end{proof}
 
-\begin{theorem}[Two-sheet exchange: bounded change]
+\begin{lemma}[Two-sheet exchange: bounded change]
     \label{thm:peps_frame_exchange_bounded}
     \lean{TNLean.PEPS.EncodedFrame.TwoSheetExchange.exchange_bounded,
         TNLean.PEPS.EncodedFrame.TwoSheetExchange.exchange_ofFrames_bounded,
@@ -1337,15 +1337,15 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     \leanok
     \uses{thm:peps_frame_exchange,thm:peps_frame_exchange_any_order,
         def:peps_frame_registers,def:peps_monomial_parties}
-    Under the hypotheses of Theorem~\ref{thm:peps_frame_exchange} (or
-    Theorem~\ref{thm:peps_frame_exchange_any_order} for arbitrary hole
+    Under the hypotheses of Lemma~\ref{thm:peps_frame_exchange} (or
+    Lemma~\ref{thm:peps_frame_exchange_any_order} for arbitrary hole
     orderings), the two-sheet exchange is realized by an allowed monomial
     between the registers of $(\mathcal F_1,\mathcal F_2)$ and
     $(\mathcal F_1',\mathcal F_2')$ using only $\{P_\circ\}$ and $(s,e)=(0,0)$,
     with operator $C=D_UF_A\mathcal R$ (or $CG$) and reference-vector error
     $\le 4L^{-30}$ (\cite[Lemma~6.6 and Theorem~5.2]{OpenAI2026PolynomialPEPS},
     \texttt{05-frames.tex}, lines 460--479).
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_frame_exchange,thm:peps_frame_exchange_any_order,
@@ -1355,8 +1355,8 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     Compose the tag-reordering word of Lemma~\ref{lem:peps_register_reorderings}
     (if needed), the renaming word of Lemma~\ref{lem:peps_exchange_renaming_word},
     and the correction word of Lemma~\ref{lem:peps_exchange_correction_word};
-    the operator and error bound follow from Theorem~\ref{thm:peps_frame_exchange}
-    and Theorem~\ref{thm:peps_frame_exchange_any_order}.
+    the operator and error bound follow from Lemma~\ref{thm:peps_frame_exchange}
+    and Lemma~\ref{thm:peps_frame_exchange_any_order}.
 \end{proof}
 
 \subsection{Sheets without holes}
@@ -1420,7 +1420,7 @@ three owners meet and no encoded holes are needed.
     the site registers.
 \end{proof}
 
-\begin{theorem}[Birth and death of sheets: bounded change]
+\begin{lemma}[Birth and death of sheets: bounded change]
     \label{thm:lattice_sheet_birth_bounded}
     \lean{TNLean.Lattice.Sheet.birth_bounded,
         TNLean.Lattice.Sheet.death_bounded,
@@ -1441,7 +1441,7 @@ three owners meet and no encoded holes are needed.
     without holes of \cite[Lemma~6.5]{OpenAI2026PolynomialPEPS}
     (\texttt{05-frames.tex}, lines 396--410); in one dimension the exponent is
     a free parameter, used for instance with $2p=24$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{lem:peps_frame_splitting,lem:lattice_front_births}
@@ -1453,7 +1453,7 @@ three owners meet and no encoded holes are needed.
     $L^{-p}$ by Lemma~\ref{lem:peps_frame_splitting}.
 \end{proof}
 
-\begin{theorem}[Exchange of two sheets: bounded change]
+\begin{lemma}[Exchange of two sheets: bounded change]
     \label{thm:lattice_sheet_exchange_bounded}
     \lean{TNLean.Lattice.Sheet.exchange_bounded,
         TNLean.Lattice.Sheet.renameWord,
@@ -1474,7 +1474,7 @@ three owners meet and no encoded holes are needed.
     holes of \cite[Lemma~6.6]{OpenAI2026PolynomialPEPS} (\texttt{05-frames.tex},
     lines 460--479), where the renaming acts in product coordinates as $F_Y$;
     in one dimension the exponent is a free parameter.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{lem:peps_frame_splitting,lem:lattice_block_renaming_word,
@@ -1529,7 +1529,7 @@ three owners meet and no encoded holes are needed.
     operator of an original circuit is a composition of contractions.
 \end{proof}
 
-\begin{theorem}[Operations that preserve bounded changes of a stack]
+\begin{lemma}[Operations that preserve bounded changes of a stack]
     \label{thm:lattice_bounded_change_closure}
     \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.IsBoundedChange.mono,
         TNLean.Lattice.PartyCircuit.OriginalCircuit.IsBoundedChange.comp_right,
@@ -1609,7 +1609,7 @@ three owners meet and no encoded holes are needed.
               allowed chain using only the parties of $S$, without pair sources and with at
               most one pair effect, is a bounded change for every $r\ge1$ and $K\ge1$.
     \end{enumerate}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_original_produced_resource_bounds}
@@ -1621,7 +1621,7 @@ three owners meet and no encoded holes are needed.
     word or a chain follow from its counts of pair sources and pair effects.
 \end{proof}
 
-\begin{theorem}[The initial private maps of a stack of sheets]
+\begin{lemma}[The initial private maps of a stack of sheets]
     \label{thm:lattice_stack_initialization}
     \lean{TNLean.Lattice.splitMap,
         TNLean.Lattice.splitMap_tmul_one,
@@ -1642,7 +1642,7 @@ three owners meet and no encoded holes are needed.
     party, followed by a reordering of the sheets, carries the product of the initial
     vectors of all parties exactly to the reference vector of the list, with no
     nonprivate gate.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:lattice_bounded_change_closure}
@@ -1687,7 +1687,7 @@ three owners meet and no encoded holes are needed.
     and the norm of a tensor product of vectors is the product of their norms.
 \end{proof}
 
-\begin{theorem}[The initial step for sheets]
+\begin{lemma}[The initial step for sheets]
     \label{thm:lattice_sheet_initialization}
     \lean{TNLean.Lattice.Sheet.exists_originalCircuit_initial_of_owner}
     \leanok
@@ -1697,13 +1697,13 @@ three owners meet and no encoded holes are needed.
     party has norm one, and one private map per party followed by a reordering
     carries the product of these vectors exactly to the reference vector of the
     list, with no nonprivate gate. This is the case without holes of
-    Theorem~\ref{thm:lattice_stack_initialization}.
-\end{theorem}
+    Lemma~\ref{thm:lattice_stack_initialization}.
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{lem:lattice_sheet_stack_reference,thm:lattice_stack_initialization}
     Every register of a sheet held by one party belongs to that party, and the
     reference vector of every list of sheets has norm one by
     Lemma~\ref{lem:lattice_sheet_stack_reference}. Apply
-    Theorem~\ref{thm:lattice_stack_initialization}.
+    Lemma~\ref{thm:lattice_stack_initialization}.
 \end{proof}

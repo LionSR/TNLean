@@ -24,7 +24,7 @@ $D_{\mathrm v}$.
     by $b$.
 \end{definition}
 
-\begin{theorem}[Component formula for the local boundary tensor]
+\begin{lemma}[Component formula for the local boundary tensor]
     \label{thm:peps_local_boundary_tensor_formula}
     \lean{TNLean.PEPS.localBoundaryMPOTensor_apply,
         TNLean.PEPS.localBoundaryMPOTensor_finProdFinEquiv_apply}
@@ -42,7 +42,7 @@ $D_{\mathrm v}$.
     the bond coordinates are $(l,l')$ and $(r,r')$. Legs are ordered as
     left, right, up, down, physical, with horizontal ket--bra indices grouped
     into a single bond coordinate.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -52,7 +52,7 @@ $D_{\mathrm v}$.
     (\ref{eq:peps_local_boundary_tensor_component}).
 \end{proof}
 
-\begin{theorem}[The local PEPS boundary tensor is an LPDO]
+\begin{lemma}[The local PEPS boundary tensor is an LPDO]
     \label{thm:peps_local_boundary_tensor_is_lpdo}
     \lean{TNLean.PEPS.localBoundaryMPOTensor_isLPDO}
     \leanok
@@ -69,7 +69,7 @@ $D_{\mathrm v}$.
     this contraction represents the boundary tensor. The Gram factorization
     exhibits $E_A$ as an LPDO for every rank-five tensor $A$, independently of
     any transfer fixed point or renormalization channel.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -158,7 +158,7 @@ $D_{\mathrm v}$.
     one-site boundary algebra is completely positive and trace-preserving.
 \end{definition}
 
-\begin{theorem}[PEPS renormalization induces a boundary MPO fixed point]
+\begin{lemma}[PEPS renormalization induces a boundary MPO fixed point]
     \label{thm:peps_rfp_implies_boundary_rfp}
     \notready
     \discussion{7371}
@@ -171,7 +171,7 @@ $D_{\mathrm v}$.
     Then that boundary MPO is a renormalization fixed point in the sense of
     Definition~\ref{def:is_rfp_via_ts}; the maps $\mathcal S$ and $\mathcal T$
     are those displayed at source lines~725--729.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \notready

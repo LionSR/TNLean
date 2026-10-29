@@ -65,30 +65,30 @@ ground-state result is Lemma~2.2 of \cite{OpenAI2026AreaLaw}.
     at the sites in $S$ (\texttt{05-frames.tex}, lines 476--477).
 \end{definition}
 
-\begin{theorem}[Permutation matrices are unitary]
+\begin{lemma}[Permutation matrices are unitary]
     \label{thm:permutation_matrix_unitary}
     \lean{Equiv.Perm.permMatrix_mem_unitaryGroup}
     \leanok
     For a permutation $\sigma$ of a finite set, its complex permutation matrix
     $P_\sigma$ satisfies $P_\sigma P_\sigma^\dagger=P_\sigma^\dagger P_\sigma=I$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Since $P_\sigma^\dagger=P_{\sigma^{-1}}$,
     $P_\sigma P_{\sigma^{-1}}=P_{\sigma\sigma^{-1}}=I$.
 \end{proof}
 
-\begin{theorem}[Sheet swaps are contractions]
+\begin{lemma}[Sheet swaps are contractions]
     \label{thm:peps_frame_sheet_swap_norm}
     \lean{TNLean.Lattice.norm_sheetSwapOp_le_one}
     \leanok
     \uses{def:peps_frame_sheet_swap}
     $\|F_S\|\leq1$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     By Definition~\ref{def:peps_frame_sheet_swap} and
-    Theorem~\ref{thm:permutation_matrix_unitary}, $F_S$ is unitary, hence
+    Lemma~\ref{thm:permutation_matrix_unitary}, $F_S$ is unitary, hence
     $\|F_S\|\le 1$.
 \end{proof}
 
@@ -126,7 +126,7 @@ ground-state result is Lemma~2.2 of \cite{OpenAI2026AreaLaw}.
     Both statements are checked on product basis vectors.
 \end{proof}
 
-\begin{theorem}[Exchanging supported operators]
+\begin{lemma}[Exchanging supported operators]
     \label{thm:peps_sheet_swap_supported_exchange}
     \lean{TNLean.Lattice.sheetSwapOp_mul_kronecker_of_mem_supportedOperators}
     \leanok
@@ -139,7 +139,7 @@ ground-state result is Lemma~2.2 of \cite{OpenAI2026AreaLaw}.
         F_R(A\otimes B)=(B\otimes A)F_R.
         \label{eq:peps_sheet_swap_supported_exchange}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{lem:peps_frame_split_forms,lem:lattice_sheet_split_swap}
@@ -148,7 +148,7 @@ ground-state result is Lemma~2.2 of \cite{OpenAI2026AreaLaw}.
     and acts as $I$ on $\mathcal H_{R^c}^{\otimes 2}$, giving~(\ref{eq:peps_sheet_swap_supported_exchange}).
 \end{proof}
 
-\begin{theorem}[Cancellation of a noncrossing doubled interaction]
+\begin{lemma}[Cancellation of a noncrossing doubled interaction]
     \label{thm:peps_sheet_swap_doubled_cancellation}
     \lean{TNLean.Lattice.sheetSwapOp_conj_doubledHamiltonian_eq_of_mem_supportedOperators}
     \leanok
@@ -161,20 +161,20 @@ ground-state result is Lemma~2.2 of \cite{OpenAI2026AreaLaw}.
         \label{eq:peps_sheet_swap_doubled_cancellation}
     \end{align}
     (\cite{OpenAI2026PolynomialPEPS}).
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_sheet_swap_supported_exchange,lem:peps_frame_sheet_swap_compose,
         thm:permutation_matrix_unitary}
-    If $S\subseteq R$, Theorem~\ref{thm:peps_sheet_swap_supported_exchange}
+    If $S\subseteq R$, Lemma~\ref{thm:peps_sheet_swap_supported_exchange}
     gives $F_R(A\otimes I)=(I\otimes A)F_R$ and $F_R(I\otimes A)=(A\otimes I)F_R$;
     if $S\cap R=\varnothing$, Lemma~\ref{lem:peps_frame_sheet_swap_compose}
     gives $[F_R,A\otimes I]=[F_R,I\otimes A]=0$. Multiplying on the right by
-    $F_R^\dagger=F_R^{-1}$ (Theorem~\ref{thm:permutation_matrix_unitary})
+    $F_R^\dagger=F_R^{-1}$ (Lemma~\ref{thm:permutation_matrix_unitary})
     yields~(\ref{eq:peps_sheet_swap_doubled_cancellation}).
 \end{proof}
 
-\begin{theorem}[Restricting a swap to an interaction support]
+\begin{lemma}[Restricting a swap to an interaction support]
     \label{thm:peps_sheet_swap_interaction_restriction}
     \lean{TNLean.Lattice.sheetSwapOp_conj_kronecker_eq_inter,
         TNLean.Lattice.sheetSwapOp_conj_doubledHamiltonian_eq_inter}
@@ -196,7 +196,7 @@ ground-state result is Lemma~2.2 of \cite{OpenAI2026AreaLaw}.
     This is the support reduction used in the boundary perturbation argument
     of \cite{OpenAI2026PolynomialPEPS}. Neither Hermiticity nor a positive
     local dimension is required.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{lem:peps_frame_sheet_swap_compose,thm:permutation_matrix_unitary}
@@ -213,7 +213,7 @@ ground-state result is Lemma~2.2 of \cite{OpenAI2026AreaLaw}.
     to obtain the assertion for $T(A)$.
 \end{proof}
 
-\begin{theorem}[Support of the swap in paired coordinates]
+\begin{lemma}[Support of the swap in paired coordinates]
     \label{thm:peps_sheet_swap_paired_site_support}
     \lean{TNLean.Lattice.reindex_sheetSwapOp_mem_supportedOperators}
     \leanok
@@ -222,7 +222,7 @@ ground-state result is Lemma~2.2 of \cite{OpenAI2026AreaLaw}.
     (local dimension $q^2$), the sheet swap $F_R$
     (Definition~\ref{def:peps_frame_sheet_swap}) is supported on $R$
     (\cite{OpenAI2026PolynomialPEPS}).
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{lem:qc_permutation_layers}
     In paired coordinates $x_i=(a_i,b_i)$, $F_R$ is the permutation matrix of
@@ -230,7 +230,7 @@ ground-state result is Lemma~2.2 of \cite{OpenAI2026AreaLaw}.
     is supported on $R$ by Lemma~\ref{lem:qc_permutation_layers}.
 \end{proof}
 
-\begin{theorem}[Support of a swapped tensor product]
+\begin{lemma}[Support of a swapped tensor product]
     \label{thm:peps_sheet_swap_conjugate_support}
     \lean{TNLean.Lattice.reindex_sheetSwapOp_conj_kronecker_mem_supportedOperators,
         TNLean.Lattice.reindex_sheetSwapOp_conj_doubledHamiltonian_mem_supportedOperators}
@@ -246,7 +246,7 @@ ground-state result is Lemma~2.2 of \cite{OpenAI2026AreaLaw}.
     $T(A)=A\otimes I+I\otimes A$, as used in the boundary perturbation
     argument of \cite{OpenAI2026PolynomialPEPS}. Zero local dimension
     and empty site sets are included.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_sheet_swap_interaction_restriction,
@@ -262,7 +262,7 @@ ground-state result is Lemma~2.2 of \cite{OpenAI2026AreaLaw}.
 
 \section{The information reset on a finite site set}
 
-\begin{theorem}[A unitary polar factor on the same support]
+\begin{lemma}[A unitary polar factor on the same support]
     \label{thm:peps_supported_polar_unitary}
     \lean{QuantumCircuit.exists_supported_unitary_polar_correction}
     \leanok
@@ -270,7 +270,7 @@ ground-state result is Lemma~2.2 of \cite{OpenAI2026AreaLaw}.
     \begin{align}
         \|Ux-y\| & \le\|Dx-y\|+\|D^*y-x\|. \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Write $D=D_S\otimes\id$, take a unitary polar factor $D_S=U_S|D_S|$ on $S$, and set $U=U_S\otimes\id$ so $D=U|D|$ with $|D|\ge0$. With $w=U^*y$, since $\id+|D|\ge\id$,
@@ -279,14 +279,14 @@ ground-state result is Lemma~2.2 of \cite{OpenAI2026AreaLaw}.
     \end{align}
 \end{proof}
 
-\begin{theorem}[Regional coordinates of the replica exchange]
+\begin{lemma}[Regional coordinates of the replica exchange]
     \label{thm:peps_reset_regional_coordinates}
     \lean{TNLean.Lattice.splitTwoRegions_sheetSwap,
         TNLean.Lattice.submatrix_partialSwap_kronecker_one_eq_sheetSwapOp,
         TNLean.Lattice.quantumRelativeEntropy_splitTwoRegionsState_eq_mutualInformation}
     \leanok
     For disjoint regions $R,C$ and $Q=(R\cup C)^c$, in replica coordinates $\mathcal X_R\times\mathcal X_C\times\mathcal X_Q$, the operator $F_R$ swaps the two $\mathcal X_R$ registers and fixes the other four registers, and any unit vector $\Omega$ satisfies $D(\rho_{RC}\,\|\,\rho_R\otimes\rho_C)=I_\Omega(R:C)$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     The action of $F_R$ follows from $R\cap C=R\cap Q=\varnothing$, and $D(\rho_{RC}\,\|\,\rho_R\otimes\rho_C)=S(\rho_R)+S(\rho_C)-S(\rho_{RC})=I_\Omega(R:C)$.
@@ -313,7 +313,7 @@ ground-state result is Lemma~2.2 of \cite{OpenAI2026AreaLaw}.
     Direct computation from (\ref{eq:lattice_reset_constants}).
 \end{proof}
 
-\begin{theorem}[The two-sided Gaussian filter, with explicit constants]
+\begin{lemma}[The two-sided Gaussian filter, with explicit constants]
     \label{thm:peps_reset_regional_filter_explicit}
     \lean{TNLean.Lattice.regional_physicalBuffer_filter}
     \leanok
@@ -323,35 +323,35 @@ ground-state result is Lemma~2.2 of \cite{OpenAI2026AreaLaw}.
         M                                   & =\int_{[-T,T]}g_h(t)e^{it\mathbb H'}(\id\otimes W)e^{-it\mathbb H}\,dt, \label{eq:peps_reset_regional_filter} \\
         \|M\Psi-z\Phi\|,\ \|M^*\Phi-z\Psi\| & \le3e^{-10b}L^{-r}. \label{eq:peps_reset_regional_filter_err}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_reset_regional_coordinates,def:lattice_reset_constants}
-    By Theorem~\ref{thm:peps_reset_regional_coordinates}, $D(\rho_{RC}\,\|\,\rho_R\otimes\rho_C)=I_\Omega(R:C)\le b$, so the purified relative-entropy overlap bound gives a Hermitian contraction $W$ on the buffer with $z=\langle\Phi,(\id\otimes W)\Psi\rangle\ge e^{-2b}$. Since $\mathbb H,\mathbb H'$ have ground vectors $\Psi,\Phi$ at $2E_0$ with gap $\Delta$ and $A\Delta^2/2=T_0^2/(2A)=30+r$ (Definition~\ref{def:lattice_reset_constants}), the full Gaussian filter residual is at most $e^{-h\Delta^2/2}\le e^{-10b}L^{-r}$ and truncation at $T$ adds at most $2e^{-T^2/(2h)}\le 2e^{-10b}L^{-r}$, giving (\ref{eq:peps_reset_regional_filter_err}).
+    By Lemma~\ref{thm:peps_reset_regional_coordinates}, $D(\rho_{RC}\,\|\,\rho_R\otimes\rho_C)=I_\Omega(R:C)\le b$, so the purified relative-entropy overlap bound gives a Hermitian contraction $W$ on the buffer with $z=\langle\Phi,(\id\otimes W)\Psi\rangle\ge e^{-2b}$. Since $\mathbb H,\mathbb H'$ have ground vectors $\Psi,\Phi$ at $2E_0$ with gap $\Delta$ and $A\Delta^2/2=T_0^2/(2A)=30+r$ (Definition~\ref{def:lattice_reset_constants}), the full Gaussian filter residual is at most $e^{-h\Delta^2/2}\le e^{-10b}L^{-r}$ and truncation at $T$ adds at most $2e^{-T^2/(2h)}\le 2e^{-10b}L^{-r}$, giving (\ref{eq:peps_reset_regional_filter_err}).
 \end{proof}
 
-\begin{theorem}[The two-sided Gaussian filter of the physical buffer]
+\begin{lemma}[The two-sided Gaussian filter of the physical buffer]
     \label{thm:peps_reset_regional_filter}
     \lean{TNLean.Lattice.exists_regional_physicalBuffer_filter}
     \leanok
-    For every $\Delta>0$ and $r\ge0$, there exist $A,T_0>0$ such that under the hypotheses of Theorem~\ref{thm:peps_reset_regional_filter_explicit}, some buffer contraction $W$ and $z\ge e^{-2b}$ make $M$ in (\ref{eq:peps_reset_regional_filter}) satisfy (\ref{eq:peps_reset_regional_filter_err}) for all $L\ge1$.
-\end{theorem}
+    For every $\Delta>0$ and $r\ge0$, there exist $A,T_0>0$ such that under the hypotheses of Lemma~\ref{thm:peps_reset_regional_filter_explicit}, some buffer contraction $W$ and $z\ge e^{-2b}$ make $M$ in (\ref{eq:peps_reset_regional_filter}) satisfy (\ref{eq:peps_reset_regional_filter_err}) for all $L\ge1$.
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_reset_regional_filter_explicit,def:lattice_reset_constants}
-    Take $A=A(\Delta,r)>0$ and $T_0=T_0(\Delta,r)>0$ from Definition~\ref{def:lattice_reset_constants} in Theorem~\ref{thm:peps_reset_regional_filter_explicit}.
+    Take $A=A(\Delta,r)>0$ and $T_0=T_0(\Delta,r)>0$ from Definition~\ref{def:lattice_reset_constants} in Lemma~\ref{thm:peps_reset_regional_filter_explicit}.
 \end{proof}
 
-\begin{theorem}[The polar step of the information reset]
+\begin{lemma}[The polar step of the information reset]
     \label{thm:peps_reset_polar_step}
     \lean{TNLean.Lattice.exists_supported_unitary_of_two_sided}
     \leanok
     If $M$ is supported on $S$, $b,C,\varepsilon\ge0$, and $z\ge e^{-2b}$ satisfies $\|M\psi-z\varphi\|,\|M^*\varphi-z\psi\|\le Ce^{-10b}\varepsilon$, then there exists a unitary $U$ supported on $S$ with $\|U\psi-\varphi\|\le2C\varepsilon$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_supported_polar_unitary}
-    Apply Theorem~\ref{thm:peps_supported_polar_unitary} to $D=M/z$, noting $z^{-1}Ce^{-10b}\varepsilon\le Ce^{-8b}\varepsilon\le C\varepsilon$.
+    Apply Lemma~\ref{thm:peps_supported_polar_unitary} to $D=M/z$, noting $z^{-1}Ce^{-10b}\varepsilon\le Ce^{-8b}\varepsilon\le C\varepsilon$.
 \end{proof}
 
 \section{Support and entropy after the reset}
@@ -371,38 +371,38 @@ ground-state result is Lemma~2.2 of \cite{OpenAI2026AreaLaw}.
     Since $S\cap(X\cup J)=\varnothing$, $U=\id_{X\cup J}\otimes U'$ preserves the $(X,J)$ marginal, so $I_\varphi(X:J)=I_{U\varphi}(X:J)$, and continuity of mutual information against $\eta$ (with $I_\eta(X:J)=0$ and $\dim\mathcal H_X=q^{|X|}$) yields (\ref{eq:lattice_supported_unitary_entropy}).
 \end{proof}
 
-\begin{theorem}[Operators on paired sites act on both replicas]
+\begin{lemma}[Operators on paired sites act on both replicas]
     \label{thm:peps_reset_paired_support}
     \lean{QuantumCircuit.reindex_sumArrow_sitePair_embedOp,
         QuantumCircuit.reindex_sumArrow_sitePair_mem_supportedOperators}
     \leanok
     \uses{def:qc_site_pair_coordinates}
     Under the identification of two $q$-dimensional replicas on a finite site set $V$ with a single $q^2$-dimensional system on $V$, any operator supported on $S\subseteq V$ is supported on both replicas of $S$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     An operator $X_S\otimes\id_{V\setminus S}$ acts trivially on paired configurations agreeing on $V\setminus S$, which holds if and only if both replicas agree on $V\setminus S$.
 \end{proof}
 
-\begin{theorem}[The exchanged cores are uncorrelated]
+\begin{lemma}[The exchanged cores are uncorrelated]
     \label{thm:peps_reset_exchanged_cores}
     \lean{TNLean.Lattice.doubledVector_comp_sumArrow,
         TNLean.Lattice.sheetSwapOp_mulVec_comp_sumArrow,
         TNLean.Lattice.mutualInformation_relabelSites_replicaSwap_eq_zero}
     \leanok
     For any unit vector $\Omega$, $R_0\subseteq R$, and $C_0\subseteq R^c$, the first-replica cores $R_0$ and $C_0$ in $\Phi=F_R(\Omega\otimes\Omega)$ satisfy $I_\Phi(R_0:C_0)=0$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     The sheet swap $F_R$ maps the first-replica core $R_0$ to the second replica while fixing $C_0\subseteq R^c$ in the first replica, and the two replicas in $\Omega\otimes\Omega$ are in a product state.
 \end{proof}
 
-\begin{theorem}[The entropy cost of the reset]
+\begin{lemma}[The entropy cost of the reset]
     \label{thm:peps_reset_entropy_scalar}
     \lean{TNLean.Lattice.reset_entropy_scalar}
     \leanok
     If $C\ge0$, $p\in\mathbb R$, $L\ge\max(1,8\sqrt C(1+\lambda))$, $\delta\le CL^{-(2p+10)}$, and $0\le N\le1+L^2\lambda$, then $8\sqrt\delta\,N\le L^{-p}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Since $\sqrt\delta\le\sqrt CL^{-p-5}$ and $N\le L^2(1+\lambda)$, we have $8\sqrt\delta\,N\le8\sqrt C(1+\lambda)L^{-p-3}\le L^{-p}$.
@@ -410,7 +410,7 @@ ground-state result is Lemma~2.2 of \cite{OpenAI2026AreaLaw}.
 
 \section{Product ground states}
 
-\begin{theorem}[Gapped ground vectors of a sum of factor Hamiltonians]
+\begin{lemma}[Gapped ground vectors of a sum of factor Hamiltonians]
     \label{thm:area_law_product_ground_state}
     \lean{TNLean.Lattice.exists_isGappedGroundState_factors_of_kronecker_sum, TNLean.Lattice.exists_eq_mul_of_gap, TNLean.Lattice.vonNeumannEntropy_partialTraceRight_eq_zero_of_gap}
     \leanok
@@ -433,7 +433,7 @@ ground-state result is Lemma~2.2 of \cite{OpenAI2026AreaLaw}.
     is exact. Both factors retain the same lower gap bound $\Delta$.
     These factor gap inequalities are the spectral step in the reduction
     to connected domains in \cite[Part~I]{TNLean2026OneDimensional}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Let $a,b$ be the least eigenvalues of $H_A,H_B$ with unit eigenvectors
