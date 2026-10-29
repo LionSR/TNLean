@@ -17,7 +17,7 @@ similarity.
     $Lx=(W_sx)_s$ and $R(y_s)_s=\sum_sV_sy_s$.
 \end{definition}
 
-\begin{theorem}[Similarity from a normalized split compression]
+\begin{lemma}[Similarity from a normalized split compression]
     \label{thm:asym_normalized_split_similarity}
     \lean{MPSTensor.MultiBlockCompression.sum_right_mul_left_eq_one_of_leftCanonical,
         MPSTensor.MultiBlockCompression.assembledLeft_mul_assembledRight,
@@ -34,7 +34,7 @@ similarity.
     $\sum_sV_sW_s=\id$, the maps $L$ and $R$ satisfy $LR=\id$ and
     $RL=\id$, and $LB^iR=\bigoplus_sC_s^i$ for every physical index $i$.
     In particular, $D_B=\sum_sD_s$ and there are no unmatched zero slots.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -53,7 +53,7 @@ similarity.
     equates $D_B$ with $\sum_sD_s$, forcing $z=0$ in $D_B=\sum_sD_s+z$.
 \end{proof}
 
-\begin{theorem}[Faithful stationary asymmetric similarity]
+\begin{corollary}[Faithful stationary asymmetric similarity]
     \label{thm:asym_faithful_stationary_similarity}
     \lean{MPSTensor.exists_simultaneous_similarity_of_leftCanonical_of_posDef_fixedPoint}
     \leanok
@@ -65,7 +65,7 @@ similarity.
     $\sum_iB^i\rho(B^i)^\dagger=\rho$ for some $\rho>0$, then
     $D_B=\sum_sD_s$ and there are inverse maps $L,R$ with
     $LB^iR=\bigoplus_sC_s^i$ for every physical index $i$.
-\end{theorem}
+\end{corollary}
 
 \begin{proof}
     \leanok

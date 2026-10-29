@@ -68,7 +68,7 @@ a site-independent tensor with the global phase of
     $\partial\phi^{-1}(w)\simeq\partial w$.
 \end{definition}
 
-\begin{theorem}[State coefficient under graph isomorphism]%
+\begin{lemma}[State coefficient under graph isomorphism]%
     \label{thm:peps_stateCoeff_transport}
     \lean{TNLean.PEPS.stateCoeff_transport}
     \leanok
@@ -80,23 +80,23 @@ a site-independent tensor with the global phase of
          & =\Coeff_A(\sigma\circ\phi).
         \label{eq:peps_stateCoeff_transport}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Reindexing the virtual bond sum along $E(G)\simeq E(G')$ and the vertex
     product along $\phi:V(G)\simeq V(G')$ in Definition~\ref{def:peps_stateCoeff}
     yields~(\ref{eq:peps_stateCoeff_transport}).
 \end{proof}
 
-\begin{theorem}[Graph isomorphisms preserve equality of PEPS states]%
+\begin{lemma}[Graph isomorphisms preserve equality of PEPS states]%
     \label{thm:peps_sameState_transport}
     \lean{TNLean.PEPS.SameState.transport}
     \leanok
     \uses{def:peps_same_state, thm:peps_stateCoeff_transport}
     If $\Coeff_A=\Coeff_B$ on $G$ and $\phi:G\simeq G'$, then
     $\Coeff_{A^\phi}=\Coeff_{B^\phi}$ on $G'$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
-    By~(\ref{eq:peps_stateCoeff_transport}) of Theorem~\ref{thm:peps_stateCoeff_transport},
+    By~(\ref{eq:peps_stateCoeff_transport}) of Lemma~\ref{thm:peps_stateCoeff_transport},
     \begin{align}
         \Coeff_{A^\phi}(\sigma)
          & =\Coeff_A(\sigma\circ\phi)
@@ -115,14 +115,14 @@ a site-independent tensor with the global phase of
     all $(a,b)$ \cite[Theorem~3]{Molnar2018NormalPEPS}.
 \end{definition}
 
-\begin{theorem}[State coefficient of a translation-invariant torus tensor]%
+\begin{lemma}[State coefficient of a translation-invariant torus tensor]%
     \label{thm:peps_stateCoeff_translationInvariant}
     \lean{TNLean.PEPS.stateCoeff_translationInvariant}
     \leanok
     \uses{def:peps_torus_translation_invariant, thm:peps_stateCoeff_transport}
     If $A^{\tau_{a,b}}=A$ for all $(a,b)$, then
     $\Coeff_A(\sigma\circ\tau_{a,b})=\Coeff_A(\sigma)$ for all $(a,b)$ and $\sigma$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     By~(\ref{eq:peps_stateCoeff_transport}) and Definition~\ref{def:peps_torus_translation_invariant},
     \begin{align}
@@ -147,7 +147,7 @@ a site-independent tensor with the global phase of
     \end{align}
 \end{definition}
 
-\begin{theorem}[Tensor translation invariance implies state translation invariance]%
+\begin{lemma}[Tensor translation invariance implies state translation invariance]%
     \label{thm:peps_tensor_translation_invariant_state}
     \lean{TNLean.PEPS.IsTorusTranslationInvariant.%
         isTorusTranslationInvariantState}
@@ -156,13 +156,13 @@ a site-independent tensor with the global phase of
         def:peps_torus_state_translation_invariant}
     If $A$ is translation invariant (Definition~\ref{def:peps_torus_translation_invariant}),
     then $A$ satisfies~(\ref{eq:peps_torus_state_ti}) for all $(a,b)$ and $\sigma$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_stateCoeff_translationInvariant}
-    Immediate from Theorem~\ref{thm:peps_stateCoeff_translationInvariant}.
+    Immediate from Lemma~\ref{thm:peps_stateCoeff_translationInvariant}.
 \end{proof}
 
-\begin{theorem}[State equality with every translated tensor]%
+\begin{lemma}[State equality with every translated tensor]%
     \label{thm:peps_sameState_translate_of_state_translation_invariant}
     \lean{TNLean.PEPS.%
         sameState_transport_of_isTorusTranslationInvariantState}
@@ -171,7 +171,7 @@ a site-independent tensor with the global phase of
         def:peps_tensor_transport, def:peps_same_state}
     If $A$ satisfies~(\ref{eq:peps_torus_state_ti}), then
     $\Coeff_A(\sigma)=\Coeff_{A^{\tau_{a,b}}}(\sigma)$ for all $(a,b)$ and $\sigma$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_stateCoeff_transport}
     Combine~(\ref{eq:peps_stateCoeff_transport}) at $\phi=\tau_{a,b}$ with~(\ref{eq:peps_torus_state_ti}).
@@ -190,7 +190,7 @@ a site-independent tensor with the global phase of
     $e_h=\{(0,0),(1,0)\}$ and $e_v=\{(0,0),(0,1)\}$ for the reference edges.
 \end{definition}
 
-\begin{theorem}[Translation invariance gives orientation-uniform bond dimensions]%
+\begin{lemma}[Translation invariance gives orientation-uniform bond dimensions]%
     \label{thm:peps_torusUniformBondDim_of_translationInvariant}
     \lean{TNLean.PEPS.translateEdge_eq_map}
     \lean{TNLean.PEPS.bondDim_translateEdge_of_translationInvariant}
@@ -208,7 +208,7 @@ a site-independent tensor with the global phase of
     \uses{def:peps_torus_translation_invariant, def:peps_torus_uniform_bond_dim}
     If $A^{\tau_{a,b}}=A$ for all $(a,b)$, then $D_A$ is orientation-uniform
     with $D_h=D_{e_h}$ and $D_v=D_{e_v}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Since $A^{\tau_{a,b}}=A$ implies $D_A(\tau_{a,b}(e))=D_A(e)$ and every
     horizontal (respectively vertical) edge has the form $f_h=\tau_{a,b}(e_h)$

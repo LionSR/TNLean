@@ -31,17 +31,17 @@ sites. The coefficients $\beta_j=\mu_j^N$ of
 \cite[eq.~(S3)]{Malz2024Preparation} of $\ket{\phi_N}$, but under
 $V^{\otimes M}$ in \cite[eqs.~(S6) and (S7)]{Malz2024Preparation} they count the
 phase $u_j^N$ twice, and already for orthogonal blocks the approximating state
-does not converge (Theorem~\ref{thm:ldp_approximation_error_phase_weights}). As
+does not converge (Lemma~\ref{thm:ldp_approximation_error_phase_weights}). As
 recorded in \cite{gap:mswc24_block_form_mixed_overlap}, with
 $\beta_j=\lvert\mu_j\rvert^N$ it converges at the rate of
-Theorem~\ref{thm:ldp_approximation_error_complex_weights}.
+Lemma~\ref{thm:ldp_approximation_error_complex_weights}.
 
 % **False source result:** refutes Lemma 1'(ii) of arXiv:2307.01696 for two
 % orthogonal blocks of multiplicity one with weights 1 and -1;
 % docs/paper-gaps/mswc24_block_form_mixed_overlap.tex. As for
 % thm:ldp_approximation_error_repeated_block, the first linked declaration
 % certifies the hypotheses of Lemma 1'(ii) for the displayed tensor.
-\begin{theorem}[The approximating state for weights with a phase]
+\begin{lemma}[The approximating state for weights with a phase]
     \label{thm:ldp_approximation_error_phase_weights}
     \lean{MPSTensor.isBNTCanonicalForm_and_not_approximationError_le_phaseBlock,
         MPSTensor.phaseBlockTensor, MPSTensor.phaseBlockSector,
@@ -99,25 +99,25 @@ Theorem~\ref{thm:ldp_approximation_error_complex_weights}.
     satisfies $q=o(N)$, as recorded in \cite{gap:mswc24_block_form_mixed_overlap},
     the bound (\ref{eq:ldp_approximation_error_general}) fails for orthogonal blocks of
     multiplicity one when a weight is not a nonnegative real number.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:ldpolar_decomposition, thm:ldp_polar_uniqueness}
     The hypotheses are checked as in the proof of
-    Theorem~\ref{thm:ldp_approximation_error_overlapping_blocks}: both blocks are
+    Lemma~\ref{thm:ldp_approximation_error_overlapping_blocks}: both blocks are
     one-dimensional with $\sum_i\lvert a_i\rvert^2=1$, their states $\ket{0\cdots0}$
     and $\ket{1\cdots1}$ are linearly independent for $N\geq1$, and
     $A_1^1=0\neq A_2^1$. These checks hold for the blocks $A_1$ and $A_2$ with any
     multiplicities and any nonzero weights $\lvert\mu_{j,k}\rvert\leq1$, one of modulus
     one, and are shared with
-    Theorem~\ref{thm:ldp_approximation_error_repeated_block}.
+    Lemma~\ref{thm:ldp_approximation_error_repeated_block}.
 
     For $q\geq1$ the Gram matrix of the blocked map on the diagonal coordinates is the
     identity, since $\lvert\mu\rvert^{2q}=1$ and the off-diagonal entries are
     $0^q=0$. So $P$ and the support projector both equal $JJ^\dagger$, where $J$ places
     a coordinate $e$ on the pair $(e,e)$. As in the proof of
-    Theorem~\ref{thm:ldp_approximation_error_overlapping_blocks}, the overlap of the
+    Lemma~\ref{thm:ldp_approximation_error_overlapping_blocks}, the overlap of the
     unnormalized approximating vector with the unnormalized target is
     $\overline{\alpha_1}+\overline{\alpha_2}$, the vector has squared norm
     $\lvert\alpha_1\rvert^2+\lvert\alpha_2\rvert^2=1$, and
@@ -132,7 +132,7 @@ Theorem~\ref{thm:ldp_approximation_error_complex_weights}.
 % of the coefficients mu_j^N that eqs. (S6) and (S7) take from eq. (S4); Local
 % fix of the rate as in thm:ldp_approximation_error_overlapping_weights;
 % docs/paper-gaps/mswc24_block_form_mixed_overlap.tex.
-\begin{theorem}[Approximation error for complex weights]
+\begin{lemma}[Approximation error for complex weights]
     \label{thm:ldp_approximation_error_complex_weights}
     \lean{MPSTensor.exists_approximationError_le_overlappingBlockSum_complexWeight,
         MPSTensor.exists_approximationError_le_mul_overlappingBlockSum_complexWeight,
@@ -170,9 +170,9 @@ Theorem~\ref{thm:ldp_approximation_error_complex_weights}.
     $0<\gamma<1/2$ to $0<\gamma<1$. The constants do not depend on the weights, and the
     normalization $\lvert\mu_j\rvert\leq1$ with one weight of modulus one is not needed.
     As recorded in \cite{gap:mswc24_block_form_mixed_overlap}
-    (Theorem~\ref{thm:ldp_approximation_error_phase_weights}), with $\beta_j=\mu_j^N$
+    (Lemma~\ref{thm:ldp_approximation_error_phase_weights}), with $\beta_j=\mu_j^N$
     the bound is false.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -188,7 +188,7 @@ Theorem~\ref{thm:ldp_approximation_error_complex_weights}.
     for the pairs on the one copy are $\beta'_j=\lvert\mu_j\rvert^N$, and by
     Lemma~\ref{lem:ldp_one_copy_state}(6) the overlap of $\widetilde\phi_N$ with
     $\ket{\phi_N}$ is that of the corrected state with the coefficients $\mu_j^N$, not all
-    zero. Theorem~\ref{thm:ldp_approximation_error_repeated_overlapping} bounds it, with a
+    zero. Lemma~\ref{thm:ldp_approximation_error_repeated_overlapping} bounds it, with a
     constant independent of the weights.
 \end{proof}
 
@@ -213,11 +213,11 @@ Definition~\ref{def:ldp_repeated_block_state} the coefficients are those of
 \cite[eq.~(S4)]{Malz2024Preparation}, $\beta_j=\sum_k\mu_{j,k}^N$, because the
 isometry $L_j$ of Definition~\ref{def:ldp_repeated_block_sum} carries the phases
 $\overline{\mu_{j,k}^q}/c_j$ of the copies:
-Theorems~\ref{thm:ldp_approximation_error_repeated_orthogonal_blocks}
+Lemmas~\ref{thm:ldp_approximation_error_repeated_orthogonal_blocks}
 and~\ref{thm:ldp_approximation_error_repeated_overlapping} hold for complex weights.
 As recorded in \cite{gap:mswc24_repeated_block_corrected_state}, neither
 $\sum_k\lvert\mu_{j,k}\rvert^N$, the coefficient of
-Theorem~\ref{thm:ldp_approximation_error_complex_weights} for one copy, nor $c_j^M$
+Lemma~\ref{thm:ldp_approximation_error_complex_weights} for one copy, nor $c_j^M$
 works in their place. The
 source's construction itself, with the pairs of each block on one of its copies,
 converges once its coefficients are changed: the partial isometry $V$ sends the
@@ -237,7 +237,7 @@ pairs placed on one copy to a multiple of the pairs placed by $L_j$.
     \end{align*}
     If block $j$ has the single copy $k_j$, then
     $\beta'_j=\lvert\mu_{j,k_j}\rvert^N$, the coefficient of
-    Theorem~\ref{thm:ldp_approximation_error_complex_weights}. Since the weights are
+    Lemma~\ref{thm:ldp_approximation_error_complex_weights}. Since the weights are
     nonzero, $\beta'\neq0$ whenever $\beta\neq0$.
 \end{definition}
 
@@ -259,7 +259,7 @@ pairs placed on one copy to a multiple of the pairs placed by $L_j$.
     orthogonal.
     \begin{enumerate}
         \item If $MY=0$ for a matrix $M$ with $M=WQ$ the polar decomposition of
-              Theorem~\ref{thm:ldpolar_decomposition}, so that $W^\dagger W$ is the support
+              Lemma~\ref{thm:ldpolar_decomposition}, so that $W^\dagger W$ is the support
               projector of $Q$, then $WY=0$.
         \item $L_j^\dagger K_{j,k}=(\mu_{j,k}^q/c_j)\mathbf 1$, and
               $L_{j'}^\dagger K_{j,k}=0$ for $j'\neq j$.
@@ -288,7 +288,7 @@ pairs placed on one copy to a multiple of the pairs placed by $L_j$.
     $(WY)^\dagger WY=Y^\dagger\Pi Y=0$.
     (2) $L_{j'}^\dagger K_{j,k}=\sum_{k'}(\mu_{j',k'}^q/c_{j'})K_{j',k'}^\dagger K_{j,k}$,
     and $K_{j',k'}^\dagger K_{j,k}$ is the identity for the same copy and zero otherwise.
-    (3) By Theorem~\ref{thm:ldp_repeated_block_polar} and~(2),
+    (3) By Lemma~\ref{thm:ldp_repeated_block_polar} and~(2),
     $BK_{j,k}=\sum_{j'}c_{j'}B_{j'}L_{j'}^\dagger K_{j,k}=\mu_{j,k}^qB_j$ and
     $BL_j=c_jB_j$, so $B(K_{j,k}-(\mu_{j,k}^q/c_j)L_j)=0$, and~(1) applies.
     (4) By~(3),
@@ -306,7 +306,7 @@ pairs placed on one copy to a multiple of the pairs placed by $L_j$.
 % Scope restriction (orthogonal blocks) for the first two declarations; Local fix
 % of the rate for the last two;
 % docs/paper-gaps/mswc24_repeated_block_corrected_state.tex.
-\begin{theorem}[Approximation error with the pairs on one copy]
+\begin{lemma}[Approximation error with the pairs on one copy]
     \label{thm:ldp_approximation_error_one_copy}
     \lean{MPSTensor.exists_approximationError_le_repeatedBlockSum_oneCopy,
         MPSTensor.exists_approximationError_le_mul_repeatedBlockSum_oneCopy,
@@ -343,17 +343,17 @@ pairs placed on one copy to a multiple of the pairs placed by $L_j$.
     this replaces the coefficients $\beta_j$ that
     \cite[eq.~(S7)]{Malz2024Preparation} takes from
     \cite[eq.~(S4)]{Malz2024Preparation} by $\beta'_j$, for weights of any phase, in the
-    scopes of Theorems~\ref{thm:ldp_approximation_error_repeated_orthogonal_blocks}
+    scopes of Lemmas~\ref{thm:ldp_approximation_error_repeated_orthogonal_blocks}
     and~\ref{thm:ldp_approximation_error_repeated_overlapping}. As recorded in
     \cite{gap:mswc24_repeated_block_corrected_state}
-    (Theorems~\ref{thm:ldp_approximation_error_repeated_block}
+    (Lemmas~\ref{thm:ldp_approximation_error_repeated_block}
     and~\ref{thm:ldp_approximation_error_phase_weights}), with the coefficients
     $\beta_j$ the bound is false.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     By Lemma~\ref{lem:ldp_one_copy_state}(6) the overlap is that of the corrected state
     with the coefficients $\beta_j$, which
-    Theorems~\ref{thm:ldp_approximation_error_repeated_orthogonal_blocks}
+    Lemmas~\ref{thm:ldp_approximation_error_repeated_orthogonal_blocks}
     and~\ref{thm:ldp_approximation_error_repeated_overlapping} bound.
 \end{proof}

@@ -1,0 +1,20 @@
+\chapter{Finding ground states by hierarchical projection}
+\label{ch:hastings_hierarchy}
+
+The local operators of the previous chapter have every gapped ground state
+as an approximate eigenvector. Hastings~\cite{Hastings2006Solving} uses them
+to find the ground states of a chain. Operators on pairs of neighbouring
+blocks of sites are compressed level by level: each level keeps a spectral
+window of a pair operator around the ground-state expectation, inside the
+ranges of the projections of the two blocks below, and doubles the block
+size. After logarithmically many levels on a chain of $N$ sites a small family of final
+states remains. This chapter bounds the loss of the ground state at one
+level and over all levels, counts the final states, and shows that each of
+them has nearly the ground-state energy.
+
+\input{chapter/ch35_hastings_hierarchical_projection}
+\input{chapter/ch35_hastings_hierarchy_levels}
+\input{chapter/ch35_hastings_final_state_count}
+\input{chapter/ch35_hastings_hierarchical_energy}
+\input{chapter/ch35_hastings_periodic_coarsening}
+\input{chapter/ch35_hastings_coordinate_slices}

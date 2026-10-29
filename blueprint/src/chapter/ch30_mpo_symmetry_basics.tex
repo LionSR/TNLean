@@ -24,7 +24,7 @@
 %%   docs/paper-gaps/glm23_mpo_symmetric_mps_scope.tex.
 %% =========================================================
 
-\chapter{Matrix Product Operator Symmetries and Non-Invertible Symmetries}%
+\chapter{Matrix product operator symmetries and non-invertible symmetries}%
 \label{ch:mpo_symmetry_basics}
 
 A symmetry of a spin chain is usually a group acting site by site. In
@@ -116,17 +116,6 @@ $O_a^{(N)}\ket{V^{(N)}(A)}$. Chain lengths are positive, $N\geq1$.
 \end{center}
 
 %% ---------------------------------------------------------
-\input{chapter/ch30_mpo_boundary_transport}
-\input{chapter/ch30_mpo_boundary_reconstruction}
-\input{chapter/ch30_mpo_boundary_comparison}
-\input{chapter/ch30_mpo_boundary_parent}
-\input{chapter/ch30_mpo_normal_adjoint_boundary}
-\input{chapter/ch30_mpo_coalgebra_adjoint_boundary}
-\input{chapter/ch30_mpo_triangular_padding}
-\input{chapter/ch30_mpo_mixed_orientation}
-\input{chapter/ch30_mpo_triangular_boundary}
-\input{chapter/ch30_mpo_mixed_comparison}
-\input{chapter/ch30_mpo_mixed_pentagon}
 
 \section{Invertible symmetries}%
 \label{sec:mposym_invertible}
@@ -141,7 +130,7 @@ $O_a^{(N)}\ket{V^{(N)}(A)}$. Chain lengths are positive, $N\geq1$.
     on-site symmetries are therefore the matrix product operator symmetries
     of bond dimension one. When a normal matrix product state tensor is
     invariant under such an action (Definition~\ref{def:on_site_symmetric}),
-    Theorem~\ref{thm:virtual_symmetry_eq} carries the physical symmetry to
+    Lemma~\ref{thm:virtual_symmetry_eq} carries the physical symmetry to
     the virtual bond space, where the bond operators form a projective
     representation classified by its second-cohomology class in
     $H^2(G,\C^\times)$ (Corollary~\ref{cor:virtual_rep_cocycle}).
@@ -182,9 +171,9 @@ $O_a^{(N)}\ket{V^{(N)}(A)}$. Chain lengths are positive, $N\geq1$.
     site, decorated by a diagonal two-site phase gate built from $\omega$
     (Definition~\ref{def:asymex_group_cocycle_tensor}). They satisfy
     $U_gU_h=U_{gh}$ at every length
-    (Theorem~\ref{thm:asymex_group_cocycle_mul}). For the group of order two
+    (Lemma~\ref{thm:asymex_group_cocycle_mul}). For the group of order two
     and its nontrivial cocycle, $U_s=\prod_iCZ_{i,i+1}Z_i\prod_iX_i$
-    (Theorem~\ref{thm:asymex_group_cocycle_z2}), which is not a tensor
+    (Lemma~\ref{thm:asymex_group_cocycle_z2}), which is not a tensor
     product of one-site unitaries.
 
     The class of the associator in $H^3(G,\C^\times)$ is the
@@ -290,7 +279,7 @@ $O_a^{(N)}\ket{V^{(N)}(A)}$. Chain lengths are positive, $N\geq1$.
     entries, and the fusion tensors are nonzero scalars $v(g,h)$. The two
     fusion trees are then proportional with ratio
     $v(gh,k)v(g,h)/(v(g,hk)v(h,k))$, which is $\omega(g,h,k)$ by
-    Theorem~\ref{thm:mpug_anomaly_three_cochain_spec}; this is the
+    Lemma~\ref{thm:mpug_anomaly_three_cochain_spec}; this is the
     coboundary of $v^{-1}$. A coboundary has trivial class, so the anomaly
     class vanishes by Corollary~\ref{cor:mpug_anomaly_class}.
 \end{proof}
@@ -386,7 +375,7 @@ periodic boundary conditions~\cite[Section~3]{GarreRubio2023MPOSym}; see
     %   Papers/2203.12563/REsubmission.tex, line 1805 (r_a = d_a).
 \end{definition}
 
-\begin{theorem}[A nonnegative eigenvector for the Perron--Frobenius dimension]%
+\begin{lemma}[A nonnegative eigenvector for the Perron--Frobenius dimension]%
     \label{thm:mposym_pf_eigenvector}
     \lean{MPOTensor.exists_nonneg_eigenvector_perronFrobeniusDim,
         MPOTensor.perronFrobeniusDim_mem_spectrum,
@@ -396,7 +385,7 @@ periodic boundary conditions~\cite[Section~3]{GarreRubio2023MPOSym}; see
     For every label $a$, the Perron--Frobenius dimension $d_a$ is an
     eigenvalue of $N_a$, and there is a column vector $v\neq0$ with
     nonnegative entries such that $N_av=d_av$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -489,7 +478,7 @@ the lattice form of the non-invertible symmetries of Ising and anyon chains
     unit is the orthogonal projection onto the admissible configurations
     (Lemma~\ref{lem:asymex_fib_vacuum}), and for the Ising operators it is
     the orthogonal projection onto the closed fusion paths
-    (Theorem~\ref{thm:asymex_ising_path_operators}).
+    (Lemma~\ref{thm:asymex_ising_path_operators}).
     % Source anchor: arXiv:2203.12563, line 660 (O_e is in general a
     %   projector rather than the identity).
 \end{remark}
@@ -517,7 +506,7 @@ the lattice form of the non-invertible symmetries of Ising and anyon chains
     $\tau$ is not invertible: $\tau\times b$ contains $1$ only for
     $b=\tau$, and $\tau\times\tau$ also contains $\tau$. The operators of
     Section~\ref{sec:asymex_fibonacci} realize this rule at every length
-    (Theorem~\ref{thm:asymex_fib_anomaly_fusion_algebra}), using the
+    (Lemma~\ref{thm:asymex_fib_anomaly_fusion_algebra}), using the
     $G$-symbols $G^{abc}_{def}=(d_ed_f)^{-1/2}[F^{abc}_d]_e^f$ of
     Definition~\ref{def:asymex_fib_fsymbols}
     \cite[Appendix~D.1]{Bultinck2017Anyons} weighted by the inverse square
@@ -557,7 +546,7 @@ the lattice form of the non-invertible symmetries of Ising and anyon chains
     $d_\sigma=\sqrt2$, and $(1,1,\sqrt2)$ satisfies
     (\ref{eq:mposym_dimension_relation}). The operators of
     Section~\ref{sec:asymex_ising_tensors} realize these rules at every length
-    (Theorems~\ref{thm:asymex_ising_sigma_fusion}
+    (Lemmas~\ref{thm:asymex_ising_sigma_fusion}
     and~\ref{thm:asymex_ising_sigma_square}). The relation
     $O_\sigma O_\psi=O_\sigma$ gives $O_\sigma(O_1-O_\psi)=0$, so $O_\sigma$
     annihilates the range of $O_1-O_\psi$.
@@ -676,7 +665,7 @@ relation between word traces has nonnegative integer coefficients.
     %   multiplicities); the fusion character is not used by the source.
 \end{definition}
 
-\begin{theorem}[Word-trace relations against a normal tensor are integral]%
+\begin{lemma}[Word-trace relations against a normal tensor are integral]%
     \label{thm:asymex_fib_anomaly_trace_integral}
     \lean{MPSTensor.exists_nat_eq_of_forall_trace_evalWord_eq_mul}
     \leanok
@@ -685,7 +674,7 @@ relation between word traces has nonnegative integer coefficients.
     of positive bond dimension, over the same alphabet. If a scalar
     $c\in\C$ satisfies $\tr(B^w)=c\,\tr(A^w)$ for every nonempty word
     $w$, then $c$ is a nonnegative integer.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -706,7 +695,7 @@ relation between word traces has nonnegative integer coefficients.
     is their total multiplicity.
 \end{proof}
 
-\begin{theorem}[Rank-one actions on a normal tensor are integral]%
+\begin{lemma}[Rank-one actions on a normal tensor are integral]%
     \label{thm:asymex_fib_anomaly_integral_action}
     \lean{MPOTensor.exists_nat_eq_of_mpo_mulVec_mpv_eq_smul}
     \leanok
@@ -721,7 +710,7 @@ relation between word traces has nonnegative integer coefficients.
         \label{eq:asymex_fib_anomaly_scalar_action}
     \end{align}
     Then $c$ is a nonnegative integer.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -733,7 +722,7 @@ relation between word traces has nonnegative integer coefficients.
         \tr((T\cdot A)^w) & =c\,\tr(A^w),
         \notag
     \end{align}
-    so Theorem~\ref{thm:asymex_fib_anomaly_trace_integral} shows that $c$ is
+    so Lemma~\ref{thm:asymex_fib_anomaly_trace_integral} shows that $c$ is
     a nonnegative integer.
 \end{proof}
 
@@ -743,14 +732,14 @@ state by absorbing a phase into the image tensor. A footnote justifies this:
 a length-dependent phase of modulus one relating the two states is the
 $N$-th power of one phase.
 
-\begin{theorem}[Power sums of modulus one]%
+\begin{lemma}[Power sums of modulus one]%
     \label{thm:mpoalg_unimodular_power_sum}
     \lean{Complex.exists_norm_eq_one_sum_pow_eq_pow}
     \leanok
     Let $\mu_1,\ldots,\mu_n$ be nonzero complex numbers with
     $\left|\sum_k\mu_k^L\right|=1$ for every $L\geq1$. Then $n=1$ and
     $|\mu_1|=1$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -763,7 +752,7 @@ $N$-th power of one phase.
     gives $|\mu_1|=1$.
 \end{proof}
 
-\begin{theorem}[A unimodular length-dependent phase is a power]%
+\begin{lemma}[A unimodular length-dependent phase is a power]%
     \label{thm:mpoalg_length_dependent_phase_power}
     \lean{MPSTensor.exists_mpv_ne_zero_of_isInjective,
         MPOTensor.exists_eq_pow_of_mpo_mulVec_mpv_eq_smul}
@@ -782,14 +771,14 @@ $N$-th power of one phase.
     every $N\geq1$. In particular this holds when $T$ is a matrix product
     unitary and $A$ is injective, as
     in~\cite[Section~II.B]{GarreRubioSchuch2024DomainWall}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:mpoalg_unimodular_power_sum, thm:asym_unblocked_coefficients,
         cor:asym_action_tensors}
     By Corollary~\ref{cor:asym_action_tensors} the left-hand side is the
-    periodic vector of the tensor $T\cdot A$. Theorem~\ref{thm:asym_unblocked_coefficients},
+    periodic vector of the tensor $T\cdot A$. Lemma~\ref{thm:asym_unblocked_coefficients},
     applied to $T\cdot A$ and the single normal target $B$, gives nonzero
     $\mu_1,\ldots,\mu_n$ with
     $\ket{V^{(N)}(T\cdot A)}=\left(\sum_k\mu_k^N\right)\ket{V^{(N)}(B)}$ for
@@ -797,10 +786,10 @@ $N$-th power of one phase.
     because the letters of $B$ span the full matrix algebra and so do not all
     have trace zero, and for $N\geq2$ by the nonvanishing of the periodic
     vectors of an injective tensor. Hence $c_N=\sum_k\mu_k^N$, and
-    Theorem~\ref{thm:mpoalg_unimodular_power_sum} finishes the proof.
+    Lemma~\ref{thm:mpoalg_unimodular_power_sum} finishes the proof.
 \end{proof}
 
-\begin{theorem}[Integrality of multi-block word-trace relations]%
+\begin{lemma}[Integrality of multi-block word-trace relations]%
     \label{thm:mpoalg_multiblock_trace_integral}
     \lean{MPSTensor.exists_nat_eq_of_forall_trace_evalWord_eq_sum_mul}
     \leanok
@@ -810,7 +799,7 @@ $N$-th power of one phase.
     physical alphabet, and let $c_y\in\C$ satisfy
     $\tr(B^w)=\sum_yc_y\tr(A_y^w)$ for every nonempty word $w$. Then every
     $c_y$ is a nonnegative integer.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -837,7 +826,7 @@ $N$-th power of one phase.
     multiplicity. Since $\tr(Q^k) = \sum_i \lambda_i^k = c_{y_0}$ for all
     $k\geq1$, every $\lambda_i$ equals $1$, so $c_{y_0}$ is their total
     algebraic multiplicity and lies in $\N$. This extends the power-sum argument of
-    Theorem~\ref{thm:asymex_fib_anomaly_trace_integral} to multiple blocks.
+    Lemma~\ref{thm:asymex_fib_anomaly_trace_integral} to multiple blocks.
 \end{proof}
 
 \begin{theorem}[The action coefficients form a nonnegative integer representation]%
@@ -865,13 +854,13 @@ $N$-th power of one phase.
     of the word algebra acts on the block $y_0$ as a matrix unit and
     annihilates the other blocks; its powers have constant trace
     $M_{a,x}^{y_0}$ on $T_a\cdot A_x$, so $M_{a,x}^{y_0}$ is a nonnegative
-    integer (Theorem~\ref{thm:mpoalg_multiblock_trace_integral}). Applying
+    integer (Lemma~\ref{thm:mpoalg_multiblock_trace_integral}). Applying
     (\ref{eq:mpo_fusion_algebra}) and (\ref{eq:mpo_symmetric_family}) twice
     to $O_a^{(N_0)}O_b^{(N_0)}\ket{V^{(N_0)}(A_x)}$ and comparing
     coefficients of the independent vectors gives (\ref{eq:mpo_nimrep}).
 \end{proof}
 
-\begin{theorem}[A single symmetric normal tensor gives a fusion character]%
+\begin{lemma}[A single symmetric normal tensor gives a fusion character]%
     \label{thm:mpo_symmetric_character}
     \lean{MPOTensor.exists_isFusionCharacter_of_isMPOSymmetric}
     \leanok
@@ -879,13 +868,13 @@ $N$-th power of one phase.
     If a normal tensor of positive bond dimension is symmetric under a fusion
     algebra with eigenvalues $c_a$ and $c_e=1$, then $c_a\in\N$ for every $a$
     and $a\mapsto c_a$ is a fusion character.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:asymex_fib_anomaly_integral_action}
     Each $c_a$ is a nonnegative integer by
-    Theorem~\ref{thm:asymex_fib_anomaly_integral_action}. Applying
+    Lemma~\ref{thm:asymex_fib_anomaly_integral_action}. Applying
     (\ref{eq:mpo_fusion_algebra}) to the nonzero periodic vector at an
     injective length gives $c_ac_b=\sum_cN_{ab}^cc_c$.
 \end{proof}
@@ -905,11 +894,11 @@ $N$-th power of one phase.
 \begin{proof}
     \leanok
     \uses{thm:mpo_symmetric_character}
-    Theorem~\ref{thm:mpo_symmetric_character} produces a fusion character
+    Lemma~\ref{thm:mpo_symmetric_character} produces a fusion character
     with values in $\N$ from any such tensor.
 \end{proof}
 
-\begin{theorem}[Invertible labels]%
+\begin{lemma}[Invertible labels]%
     \label{thm:mpo_invertible_labels}
     \lean{MPOTensor.IsFusionCharacter.eq_one_of_isInvertibleLabel,
         MPOTensor.mpo_mulVec_eq_of_isInvertibleLabel,
@@ -929,7 +918,7 @@ $N$-th power of one phase.
     $O_g^{(N)}\ket{V^{(N)}(A_x)}=\ket{V^{(N)}(A_{g\cdot x})}$ for all
     $N\geq1$.
     % Source anchor: arXiv:2203.12563, line 683.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -958,11 +947,11 @@ $N$-th power of one phase.
     in $\N$, no single normal tensor $A$ satisfies
     $O_1^{(N)}\ket{V^{(N)}(A)}=\ket{V^{(N)}(A)}$ and
     $O_\tau^{(N)}\ket{V^{(N)}(A)}=c\ket{V^{(N)}(A)}$ for all $N\geq1$
-    (Theorem~\ref{thm:asymex_fib_anomaly_no_go}).
+    (Lemma~\ref{thm:asymex_fib_anomaly_no_go}).
     % Source anchor: arXiv:2203.12563, line 1993; arXiv:1511.08090, App. D.1.
 \end{example}
 
-\begin{theorem}[Fibonacci representations on at most two blocks]%
+\begin{corollary}[Fibonacci representations on at most two blocks]%
     \label{thm:mpo_symmetry_fibonacci_rank_two}
     \lean{FibonacciCompression.fibNim_entries_of_sq,
         FibonacciCompression.not_isNIMRep_fibNim_of_card_eq_one,
@@ -982,7 +971,7 @@ $N$-th power of one phase.
     summand is this regular two-block representation
     \cite[Section~6]{GarreRubio2023MPOSym}.
     % Source anchor: arXiv:2203.12563, lines 1991--1993.
-\end{theorem}
+\end{corollary}
 
 \begin{proof}
     \uses{def:asymex_fib_anomaly_nim, thm:asymex_fib_anomaly_fusion_algebra,
@@ -1055,7 +1044,7 @@ $N$-th power of one phase.
     % Source anchor: arXiv:2203.12563, lines 1891--1904 and 1934.
 \end{definition}
 
-\begin{theorem}[Units and the embedding of $\mathrm{Rep}(S_3)$ in $su(2)_4$]%
+\begin{lemma}[Units and the embedding of $\mathrm{Rep}(S_3)$ in $su(2)_4$]%
     \label{thm:mposym_su24_reps3_units}
     \lean{MPOTensor.isFusionUnit_su24Fusion, MPOTensor.isFusionUnit_repS3Fusion,
         MPOTensor.su24Fusion_repS3ToSU24,
@@ -1068,7 +1057,7 @@ $N$-th power of one phase.
     $su(2)_4$: the fusion rules agree, and products of integer labels contain
     no half-integer label \cite[Section~6]{GarreRubio2023MPOSym}.
     % Source anchor: arXiv:2203.12563, line 1934.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -1077,7 +1066,7 @@ $N$-th power of one phase.
     half-integer-output coefficients in products of integer labels.
 \end{proof}
 
-\begin{theorem}[The phases of $su(2)_4$ and $\mathrm{Rep}(S_3)$ represent the fusion rings]%
+\begin{lemma}[The phases of $su(2)_4$ and $\mathrm{Rep}(S_3)$ represent the fusion rings]%
     \label{thm:mposym_su24_reps3_nimreps}
     \lean{MPOTensor.su24TY, MPOTensor.isNIMRep_su24Fusion,
         MPOTensor.isNIMRep_su24TY, MPOTensor.repS3Fusion_eq_table,
@@ -1108,10 +1097,10 @@ $N$-th power of one phase.
     $\pi\cdot(\pi\cdot y)=x+2y+z$ while $(1+\pi+\psi)\cdot y=x+y+2z$
     \cite{gap:glm23_reps3_z3_table}. That the lists are complete is
     not treated here beyond one block
-    (Theorem~\ref{thm:mposym_su24_reps3_one_block};
+    (Lemma~\ref{thm:mposym_su24_reps3_one_block};
     \cite{gap:glm23_reps3_su24_module_list}).
     % Source anchor: arXiv:2203.12563, lines 1906--1925 and 1936--1987.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -1119,7 +1108,7 @@ $N$-th power of one phase.
     integer matrices.
 \end{proof}
 
-\begin{theorem}[The $\mathrm{Rep}(S_3)$ phases inside the $su(2)_4$ phases]%
+\begin{lemma}[The $\mathrm{Rep}(S_3)$ phases inside the $su(2)_4$ phases]%
     \label{thm:mposym_reps3_in_su24}
     \lean{MPOTensor.su24TY_repS3ToSU24_castSucc,
         MPOTensor.su24TY_repS3ToSU24_last,
@@ -1136,7 +1125,7 @@ $N$-th power of one phase.
     and act on them as in the $\Z_2$ phase
     \cite[Section~6]{GarreRubio2023MPOSym}.
     % Source anchor: arXiv:2203.12563, lines 1927, 1940, 1957 and 1972.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -1144,7 +1133,7 @@ $N$-th power of one phase.
     subset establishes both decompositions.
 \end{proof}
 
-\begin{theorem}[Actions on one block]%
+\begin{lemma}[Actions on one block]%
     \label{thm:mposym_su24_reps3_one_block}
     \lean{MPOTensor.isFusionCharacter_repS3Fusion_iff,
         MPOTensor.not_isFusionCharacter_su24Fusion}
@@ -1153,7 +1142,7 @@ $N$-th power of one phase.
     The only fusion character of $\mathrm{Rep}(S_3)$ with values in $\N$ is
     $(m_1,m_\pi,m_\psi)=(1,2,1)$, the $\Z_1$ phase; $su(2)_4$ has no fusion
     character with values in $\N$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -1206,7 +1195,7 @@ fusion ring.
     % Source anchor: arXiv:2203.12563, line 1236.
 \end{definition}
 
-\begin{theorem}[Positive regular element of a fusion ring]%
+\begin{lemma}[Positive regular element of a fusion ring]%
     \label{thm:mposym_fusion_ring_regular}
     \lean{MPOTensor.IsFusionRing.exists_pos_mul,
         MPOTensor.IsFusionRing.exists_pos_regular,
@@ -1217,7 +1206,7 @@ fusion ring.
     For a fusion ring there are positive numbers $r_b$ with
     $\sum_br_bN_{ab}^c=d_a\,r_c$ for all labels $a$ and $c$, where $d_a$ is
     the Perron--Frobenius dimension of $a$, and $d_a>0$ for every $a$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -1227,7 +1216,7 @@ fusion ring.
     of $c$ in $b\times(b^*\times c)$; so for all $b,c$ some label $a$ has
     $N_{ba}^c>0$. Hence the matrix $P_{bc}=\sum_aN_{ba}^c$ of right
     multiplication by the sum of all labels has positive entries. By
-    the Perron--Frobenius argument of Theorem~\ref{thm:mposym_pf_eigenvector}, which applies to every nonnegative square matrix, used for the transpose of $P$,
+    the Perron--Frobenius argument of Lemma~\ref{thm:mposym_pf_eigenvector}, which applies to every nonnegative square matrix, used for the transpose of $P$,
     there is a nonzero row vector $r\geq0$ with $rP=\rho r$, and positivity of
     $P$ forces every $r_c>0$. An eigenvector of a positive matrix with
     positive entries spans its eigenspace: if $wP=\rho w$ and $t=\min_c
@@ -1239,7 +1228,7 @@ fusion ring.
     $d_ar_a=\sum_br_bN_{ab}^a\geq r_eN_{ae}^a=r_e>0$.
 \end{proof}
 
-\begin{theorem}[A positive common eigenvector of a nonnegative integer representation]%
+\begin{lemma}[A positive common eigenvector of a nonnegative integer representation]%
     \label{thm:mposym_nimrep_pos_eigenvector}
     \lean{MPOTensor.IsNIMRep.exists_pos_left_eigenvector,
         MPOTensor.IsNIMRep.spectralRadius_eq_perronFrobeniusDim}
@@ -1257,12 +1246,12 @@ fusion ring.
     spectral radius of the matrix $M_a$. No indecomposability of the
     representation and no commutativity of the fusion ring is needed.
     % Source anchor: arXiv:2203.12563, lines 1801--1803.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:mposym_fusion_ring_regular, lem:mposym_pf_dimension_positive}
-    Let $r$ be as in Theorem~\ref{thm:mposym_fusion_ring_regular} and
+    Let $r$ be as in Lemma~\ref{thm:mposym_fusion_ring_regular} and
     $S=\sum_br_bM_b$. By (\ref{eq:mpo_nimrep}),
     $M_bM_a=\sum_cN_{ab}^cM_c$, so
     $SM_a=\sum_c\left(\sum_br_bN_{ab}^c\right)M_c=d_aS$. The column sums
@@ -1272,7 +1261,7 @@ fusion ring.
     the argument of Lemma~\ref{lem:mposym_pf_dimension_positive}.
 \end{proof}
 
-\begin{theorem}[Positive symmetric boundary state]%
+\begin{lemma}[Positive symmetric boundary state]%
     \label{thm:mposym_symmetric_boundary_state}
     \lean{MPOTensor.IsMPOSymmetricFamily.mpo_mulVec_sum_eq_smul,
         MPOTensor.exists_pos_symmetric_boundary_state}
@@ -1294,14 +1283,14 @@ fusion ring.
     boundary state of \cite[Section~5]{GarreRubio2023MPOSym} with eigenvalue
     $d_a$ equal to the spectral radius of $M_a$.
     % Source anchor: arXiv:2203.12563, lines 1795--1805 (symboundary).
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:mpo_symmetric_nimrep, thm:mposym_nimrep_pos_eigenvector}
     By Theorem~\ref{thm:mpo_symmetric_nimrep} the coefficients $M_{a,x}^y$
     form a nonnegative integer representation. Take $v$ from
-    Theorem~\ref{thm:mposym_nimrep_pos_eigenvector}. Then
+    Lemma~\ref{thm:mposym_nimrep_pos_eigenvector}. Then
     $O_a^{(N)}\ket{\psi^{(N)}}=\sum_xv_x\sum_yM_{a,x}^y\ket{V^{(N)}(A_y)}
         =\sum_y\left(\sum_xv_xM_{a,x}^y\right)\ket{V^{(N)}(A_y)}
         =d_a\ket{\psi^{(N)}}$. Since the periodic vectors are linearly independent at length $N_0$ and $v\neq0$, $\ket{\psi^{(N_0)}}\neq0$.
@@ -1432,7 +1421,7 @@ fusion ring.
     and~\ref{def:mpoalg_action_tensors}), and shows that fusion tensors
     with vanishing remainder, the situation of the zipper condition, are
     unique up to invertible multiplicity matrices
-    (Theorem~\ref{thm:mpoalg_zipper_fusion_uniqueness}).
+    (Lemma~\ref{thm:mpoalg_zipper_fusion_uniqueness}).
     % Source anchor: arXiv:1511.08090, AnyonsPEPS.tex, lines 159--170
     %   (fusion tensors and left inverses), 194--200 (the zipper condition),
     %   407--419 (pulling through); arXiv:2011.12127, TN-Review-main.tex,
@@ -1440,24 +1429,3 @@ fusion ring.
     %   arXiv:2203.12563, lines 2224--2243 (left zipper only for the Z_2
     %   group operator of the nontrivial cocycle).
 \end{remark}
-
-\input{chapter/ch30_mpo_mixed_endpoint_interpolation}
-\input{chapter/ch30_mpo_mixed_action}
-\input{chapter/ch30_mpo_mixed_fusion}
-\input{chapter/ch30_mpo_mixed_normality}
-\input{chapter/ch30_mpo_mixed_symbols}
-\input{chapter/ch30_mpo_mixed_endpoint_comparison}
-\input{chapter/ch30_mpo_mixed_extended_open}
-\input{chapter/ch30_mpo_joint_inserted_open}
-\input{chapter/ch30_mpo_joint_mixed_family}
-\input{chapter/ch30_mpo_joint_boundary_columns}
-\input{chapter/ch30_mpo_joint_edge_normalization}
-\input{chapter/ch30_mpo_joint_frame_reduction}
-\input{chapter/ch30_mpo_joint_core_hamiltonian}
-\input{chapter/ch30_dependent_spectator_gap}
-\input{chapter/ch30_mpo_joint_periodic_endpoint}
-\input{chapter/ch30_mpo_joint_periodic_endpoint_swap}
-\input{chapter/ch30_mpo_mixed_open_gap}
-\input{chapter/ch30_mpo_mixed_uniform_path_gap}
-\input{chapter/ch30_mpo_isometric_gap_transport}
-\input{chapter/ch30_mpo_endpoint_parent_attachment}

@@ -3,7 +3,7 @@
 
 \subsection{Comparison at the first endpoint}
 
-\begin{theorem}[Endpoint projector and local interaction comparison]
+\begin{lemma}[Endpoint projector and local interaction comparison]
     \label{thm:mpo_mixed_endpoint_projector_comparison}
     \lean{MPSTensor.MPOSymmetry.mixedEndpointRowSector_isSymmetricProjection,
         MPSTensor.MPOSymmetry.mixedEndpointColumnSector_isSymmetricProjection,
@@ -29,26 +29,26 @@
     \end{align}
     These comparisons hold for arbitrary endpoint tensors; injectivity
     is unnecessary for the local statements.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{def:mpo_mixed_physical_sectors,def:mpo_mixed_extended_support,
         thm:mpo_mixed_corner_support,thm:mpo_mixed_first_support,
         thm:mpo_mixed_reducing_sectors,thm:mpo_mixed_inner_sectors}
     The diagonal sector selectors are commuting orthogonal projections.
-    By Theorem~\ref{thm:mpo_mixed_reducing_sectors}, the outer selectors
+    By Lemma~\ref{thm:mpo_mixed_reducing_sectors}, the outer selectors
     also commute with $P'$. Their product $R_0C_1P'$ is therefore an
     orthogonal projection whose range is $G_2(B_0)$ by
-    Theorem~\ref{thm:mpo_mixed_corner_support}, giving the first identity.
+    Lemma~\ref{thm:mpo_mixed_corner_support}, giving the first identity.
     The inclusion $G_2(B_0)\subseteq\mathcal S'_0$ from
-    Theorem~\ref{thm:mpo_mixed_first_support} yields $h'\leq h$,
+    Lemma~\ref{thm:mpo_mixed_first_support} yields $h'\leq h$,
     and $h'\geq0$ because it is an orthogonal projection.
     For commuting orthogonal projections $Q,T$,
     \begin{align}
         (I-Q)+(I-T)-(I-QT)=(I-Q)(I-T)\geq0.
     \end{align}
     Applying this twice yields the upper comparison.
-    Finally, Theorem~\ref{thm:mpo_mixed_inner_sectors} gives
+    Finally, Lemma~\ref{thm:mpo_mixed_inner_sectors} gives
     $\mathcal S'_0\subseteq\operatorname{range}C_0$ and
     $\mathcal S'_0\subseteq\operatorname{range}R_1$, which imply
     (\ref{eq:mpo_mixed_endpoint_inner_penalties}) by taking
@@ -72,7 +72,7 @@
     $I_1\times I_1$ and vanishes on the other physical sectors.
 \end{definition}
 
-\begin{theorem}[Second endpoint by sector exchange]
+\begin{lemma}[Second endpoint by sector exchange]
     \label{thm:mpo_mixed_second_endpoint_comparison}
     \lean{MPSTensor.MPOSymmetry.mixedEndpointRightTensor_apply,
         MPSTensor.MPOSymmetry.isInjective_mixedEndpointRightTensor,
@@ -105,14 +105,14 @@
              & R_1                        & \leq h'_1.
         \label{eq:mpo_mixed_second_endpoint_comparison}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{def:mpo_mixed_endpoint_swap,def:mpo_mixed_extended_support,
         def:mpo_mixed_physical_sectors,thm:mpo_mixed_first_support,
         thm:mpo_mixed_endpoint_projector_comparison}
     If $A_1$ is injective, its first embedding in the reversed pair is
-    injective by Theorem~\ref{thm:mpo_mixed_first_support}. Relabeling
+    injective by Lemma~\ref{thm:mpo_mixed_first_support}. Relabeling
     its physical letters preserves their span, so $B_1$ is injective.
     If $\Phi$ denotes the simultaneous virtual basis exchange, each
     mixed letter of the reversed pair is $\Phi(A^{ij})$, and its
@@ -132,7 +132,7 @@
     (\ref{eq:mpo_mixed_second_endpoint_comparison}).
 \end{proof}
 
-\begin{theorem}[Periodic endpoint comparison, ground lines, and gaps]
+\begin{lemma}[Periodic endpoint comparison, ground lines, and gaps]
     \label{thm:mpo_mixed_periodic_endpoint_gaps}
     \lean{MPSTensor.periodicLocalInteractionES_add,
         MPSTensor.periodicLocalInteractionES_sub,
@@ -178,7 +178,7 @@
     Hamiltonians have gap at least $\delta$ on every periodic chain
     of length at least two.
     Only the two endpoint parameters are quantified in this conclusion.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{def:periodic-fixed-interaction,
@@ -194,7 +194,7 @@
     A missing outer row sector on one edge is an inner row sector of
     the previous edge; a missing outer column sector is an inner column
     sector of the next edge. Cyclic extension preserves order by
-    Theorem~\ref{thm:periodic-fixed-interaction-order}, so the local
+    Lemma~\ref{thm:periodic-fixed-interaction-order}, so the local
     comparisons give
     \begin{align}
         h'_{p,i}\leq h_{p,i}
@@ -204,7 +204,7 @@
     Positivity and Lemma~\ref{lem:positive-comparison-kernel-gap} give
     equal kernels and transfer the canonical gap with factor $1/3$.
     When $A_p$ is injective and $D_p>0$, the embedded tensor $B_p$ is
-    one-site injective. Theorems~\ref{thm:chain_ground_space_eq_mpv_blk}
+    one-site injective. Lemmas~\ref{thm:chain_ground_space_eq_mpv_blk}
     and~\ref{thm:ground_space_unique_periodic} identify its canonical
     kernel as the one-dimensional periodic MPS span. Applying
     Theorem~\ref{thm:compact_parent_gap} to the constant family $B_p$

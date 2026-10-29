@@ -17,7 +17,7 @@ generally, for $W$ supported on $S\subseteq K$ and a subset $s$ of terms
 supported inside $K$, the shell consists of omitted terms ($k\notin s$) whose
 supports meet $K$ \cite{gap:hastings05_truncated_dynamics}.
 
-\begin{theorem}[Support of the truncated filter]
+\begin{lemma}[Support of the truncated filter]
     \label{thm:hastings_truncated_support}
     \lean{TNLean.Lattice.hermitianUnitaryPath_conj_mem_supportedOperators,
         TNLean.Lattice.gaussianFilteredTerm_mem_supportedOperators}
@@ -27,14 +27,14 @@ supports meet $K$ \cite{gap:hastings05_truncated_dynamics}.
     $\widetilde W$ act on $K$; in particular, $M_i$ in
     (\ref{eq:hastings_truncated_mi}) acts within distance $l_{proj}$ of $i$
     \cite[lines 302--304]{Hastings2006Solving}.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Operators supported on $K$ form a closed subalgebra, hence contain
     $e^{iHt}We^{-iHt}$ and its Gaussian integral $\widetilde W$.
 \end{proof}
 
-\begin{theorem}[Comparison of two evolutions]
+\begin{lemma}[Comparison of two evolutions]
     \label{thm:hastings_truncated_evolution_comparison}
     \lean{TNLean.Lattice.norm_conj_sub_conj_le}
     \leanok
@@ -46,7 +46,7 @@ supports meet $K$ \cite{gap:hastings05_truncated_dynamics}.
         \label{eq:hastings_truncated_evolution_comparison}
     \end{align}
     \cite[lines 1469--1482]{Hastings2006Solving}.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     The map $f(s)=e^{iHs}\tau'_{t-s}(W)e^{-iHs}$ satisfies $f(0)=\tau'_t(W)$,
@@ -54,7 +54,7 @@ supports meet $K$ \cite{gap:hastings05_truncated_dynamics}.
     $\|f'(s)\|=\|[H-H',\tau'_{t-s}(W)]\|\le\varepsilon$.
 \end{proof}
 
-\begin{theorem}[Filtering a comparison of evolutions]
+\begin{lemma}[Filtering a comparison of evolutions]
     \label{thm:hastings_truncated_filter_comparison}
     \lean{TNLean.Lattice.norm_gaussianFilteredTerm_sub_le}
     \leanok
@@ -64,16 +64,16 @@ supports meet $K$ \cite{gap:hastings05_truncated_dynamics}.
     then the Gaussian filters $\widetilde W_H$ and $\widetilde W_{H'}$ satisfy
     $\|\widetilde W_H-\widetilde W_{H'}\|\le\varepsilon+2\|W\|e^{-(T\Delta E)^2/(2q)}$
     \cite[eq.~(dmi), lines 1524--1533]{Hastings2006Solving}.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:hastings_filtered_locality}
     Split the Gaussian integral at $|t|=T$ as in
-    Theorem~\ref{thm:hastings_filtered_locality}, using integrand bound
+    Lemma~\ref{thm:hastings_filtered_locality}, using integrand bound
     $\varepsilon$ on $[-T,T]$ and $2\|W\|$ on $\mathbb R\setminus[-T,T]$.
 \end{proof}
 
-\begin{theorem}[Lieb--Robinson bound against an operator on several sites]
+\begin{lemma}[Lieb--Robinson bound against an operator on several sites]
     \label{thm:hastings_truncated_multisite_lieb_robinson}
     \lean{TNLean.Lattice.norm_commutator_heisenbergEvolution_le_graphDistance_finset}
     \leanok
@@ -86,7 +86,7 @@ supports meet $K$ \cite{gap:hastings05_truncated_dynamics}.
         \|[B,\tau_t(A)]\|\le2|Y|\,C\,|S|\,\|A\|\,\|B\|\,e^{v|t|-\mu m}.
         \label{eq:hastings_truncated_multisite_lieb_robinson}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:qc_graph_lieb_robinson_finset, lem:qc_site_expectation_commutator}
@@ -97,7 +97,7 @@ supports meet $K$ \cite{gap:hastings05_truncated_dynamics}.
     Theorem~\ref{thm:qc_graph_lieb_robinson_finset}.
 \end{proof}
 
-\begin{theorem}[The omitted terms against the truncated evolution]
+\begin{lemma}[The omitted terms against the truncated evolution]
     \label{thm:hastings_truncated_omitted_commutator}
     \lean{TNLean.Lattice.norm_commutator_sub_truncated_le}
     \leanok
@@ -111,25 +111,25 @@ supports meet $K$ \cite{gap:hastings05_truncated_dynamics}.
         \label{eq:hastings_truncated_omitted_commutator}
     \end{align}
     \cite[lines 1469--1505]{Hastings2006Solving}.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:hastings_truncated_support,
         thm:hastings_truncated_multisite_lieb_robinson}
-    By Theorem~\ref{thm:hastings_truncated_support}, $e^{iH_su}We^{-iH_su}$ acts
+    By Lemma~\ref{thm:hastings_truncated_support}, $e^{iH_su}We^{-iH_su}$ acts
     on $K$, so omitted terms with $X_k\cap K=\emptyset$ commute with it; for
     $X_k\cap K\ne\emptyset$, apply
     (\ref{eq:hastings_truncated_multisite_lieb_robinson}) with $|X_k|\le v_R$.
 \end{proof}
 
-\begin{theorem}[Hastings' truncated approximation]
+\begin{lemma}[Hastings' truncated approximation]
     \label{thm:hastings_truncated_approximation}
     \lean{TNLean.Lattice.norm_gaussianFilteredTerm_sub_truncated_le_sum,
         TNLean.Lattice.norm_gaussianFilteredTerm_sub_truncated_le,
         TNLean.Lattice.truncated_approx_gaussianFilteredTerm}
     \leanok
     \uses{def:hastings_gaussian_filtered_term}
-    In the setting of Theorem~\ref{thm:hastings_truncated_omitted_commutator},
+    In the setting of Lemma~\ref{thm:hastings_truncated_omitted_commutator},
     if $\|h_k\|\le J$ and $N=|\{k\notin s:X_k\cap K\ne\emptyset\}|$, then the
     filter $M$ of $W$ under $H_s$ acts on $K$, satisfies $\|M\|\le\|W\|$ (and
     $M=M^\dagger$ if $W=W^\dagger$), and for all $q,T,\mu\ge0$,
@@ -140,7 +140,7 @@ supports meet $K$ \cite{gap:hastings05_truncated_dynamics}.
     \end{align}
     \cite[eq.~(apb), lines 300--320]{Hastings2006Solving},
     \cite{gap:hastings05_truncated_dynamics}.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:hastings_truncated_support,
@@ -148,20 +148,20 @@ supports meet $K$ \cite{gap:hastings05_truncated_dynamics}.
         thm:hastings_truncated_filter_comparison,
         thm:hastings_truncated_omitted_commutator,
         thm:hastings_gaussian_filtered_spectral}
-    Combine Theorems~\ref{thm:hastings_truncated_omitted_commutator},
+    Combine Lemmas~\ref{thm:hastings_truncated_omitted_commutator},
     \ref{thm:hastings_truncated_evolution_comparison}, and
     \ref{thm:hastings_truncated_filter_comparison} with
-    Theorems~\ref{thm:hastings_truncated_support}
+    Lemmas~\ref{thm:hastings_truncated_support}
     and~\ref{thm:hastings_gaussian_filtered_spectral}.
 \end{proof}
 
-\begin{theorem}[The truncated approximation at the time window $T=q/\Delta E$]
+\begin{lemma}[The truncated approximation at the time window $T=q/\Delta E$]
     \label{thm:hastings_truncated_approximation_time}
     \lean{TNLean.Lattice.exp_neg_sq_div_eq_of_time_eq,
         TNLean.Lattice.norm_gaussianFilteredTerm_sub_truncated_le_of_time}
     \leanok
     \uses{thm:hastings_truncated_approximation}
-    In the setting of Theorem~\ref{thm:hastings_truncated_approximation} with
+    In the setting of Lemma~\ref{thm:hastings_truncated_approximation} with
     $q\ge0$ and $\Delta E>0$, setting $T=q/\Delta E$ gives
     \begin{align}
         \|\widetilde W-M\|\le2v_RC\,|S|\,\|W\|\,J\,N\,\frac{q}{\Delta E}\,
@@ -169,20 +169,20 @@ supports meet $K$ \cite{gap:hastings05_truncated_dynamics}.
         \label{eq:hastings_truncated_approximation_time}
     \end{align}
     \cite[lines 337--349]{Hastings2006Solving}.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:hastings_truncated_approximation}
     Substitute $T=q/\Delta E$ into (\ref{eq:hastings_truncated_approximation}).
 \end{proof}
 
-\begin{theorem}[Ground vectors under the truncated approximation]
+\begin{lemma}[Ground vectors under the truncated approximation]
     \label{thm:hastings_truncated_facld}
     \lean{TNLean.Lattice.norm_sub_starProjection_truncated_apply_le,
         TNLean.Lattice.norm_truncated_apply_sub_inner_smul_le}
     \leanok
     \uses{thm:hastings_truncated_approximation_time, thm:hastings05_facld}
-    In the setting of Theorem~\ref{thm:hastings_truncated_approximation} with
+    In the setting of Lemma~\ref{thm:hastings_truncated_approximation} with
     $q\ge0$, ground energy $E_0$, gap $\Delta E>0$, ground projection $P$, and
     \begin{align}
         \delta=3\|W\|e^{-q/2}+2v_RC\,|S|\,\|W\|\,J\,N\,\frac{q}{\Delta E}\,
@@ -193,22 +193,22 @@ supports meet $K$ \cite{gap:hastings05_truncated_dynamics}.
     a unique unit ground state $\Omega$ satisfies
     $\|M\Omega-\langle\Omega,M\Omega\rangle\Omega\|\le\delta$
     \cite[eq.~(facld), lines 322--348 and 375--387]{Hastings2006Solving}.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:hastings_truncated_approximation_time, thm:hastings05_facld}
-    Combine Theorem~\ref{thm:hastings05_facld} with
+    Combine Lemma~\ref{thm:hastings05_facld} with
     (\ref{eq:hastings_truncated_approximation_time}).
 \end{proof}
 
-\begin{theorem}[The sum of the truncated approximations]
+\begin{lemma}[The sum of the truncated approximations]
     \label{thm:hastings_truncated_sum}
     \lean{TNLean.Lattice.norm_sum_truncated_sub_le,
         TNLean.Lattice.norm_sum_truncated_sub_le_card}
     \leanok
     \uses{thm:hastings_truncated_approximation_time,
         thm:hastings05_sum_approximation}
-    In the setting of Theorem~\ref{thm:hastings_truncated_approximation} with
+    In the setting of Lemma~\ref{thm:hastings_truncated_approximation} with
     $q,\mu\ge0$, $\Delta E>0$, and $H=\sum_ih_i=H^\dagger$, let each $h_i$
     (supported on $X_i\subseteq K_i$) be filtered under $\sum_{k\in s_i}h_k$ to
     $M_i$, where the $N_i$ omitted terms meeting $K_i$ satisfy
@@ -220,42 +220,55 @@ supports meet $K$ \cite{gap:hastings05_truncated_dynamics}.
     \end{align}
     which is at most $|\{i\}|\bigl(2v_R^2CJ^2N_0(q/\Delta E)e^{vq/\Delta E-\mu m}+2Je^{-q/2}\bigr)$
     when $N_i\le N_0$ \cite[lines 343--374]{Hastings2006Solving}.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:hastings_truncated_approximation_time,
         thm:hastings05_sum_approximation}
-    Combine Theorem~\ref{thm:hastings05_sum_approximation} with
+    Combine Lemma~\ref{thm:hastings05_sum_approximation} with
     (\ref{eq:hastings_truncated_approximation_time}) for each $W=h_i$, and use
     $|X_i|\le v_R$, $\|h_i\|\le J$, $N_i\le N_0$.
 \end{proof}
 
 \begin{remark}
-    For $\mu>0$, $m=l_{proj}-3R$, $q=c_1l_{proj}\Delta E$ with $0<c_1<\mu/v$,
-    and $N$ subexponential in $l_{proj}$, $\delta$ in
-    (\ref{eq:hastings_truncated_facld_delta}) decays as
-    $JO(e^{-l_{proj}/l_{fac}})$ \cite{gap:hastings05_truncated_dynamics}.
+    Take $\mu>0$ fixed, $m=l_{proj}-3R$ and $q=c_1l_{proj}\Delta E$ with
+    $0<c_1<\mu/v$, and suppose the number $N$ of omitted terms meeting $K$
+    grows subexponentially in $l_{proj}$, for instance polynomially when spheres
+    in the graph have polynomial size. Then both terms of $\delta$ in
+    Lemma~\ref{thm:hastings_truncated_facld} decay exponentially in
+    $l_{proj}$, which is the form $JO(e^{-l_{proj}/l_{fac}})$ of
+    eq.~(facld) under this additional growth assumption
+    \cite{gap:hastings05_truncated_dynamics,gap:hastings05_geometric_growth_scope}.
 \end{remark}
 
-\begin{theorem}[The exponential decay of eq.~(facld)]
+\begin{lemma}[Exponential decay under polynomial shell growth]
     \label{thm:hastings_truncated_facld_decay}
     \lean{TNLean.Lattice.exists_norm_sub_starProjection_truncated_apply_le_exp,
         TNLean.Lattice.exists_norm_truncated_apply_sub_inner_smul_le_exp,
         Real.add_one_pow_mul_le_mul_exp}
     \leanok
     \uses{thm:hastings_truncated_facld}
-    In the setting of Theorem~\ref{thm:hastings_truncated_facld}, let $J\ge0$,
-    $0<c_1v<\mu$, and $l_{fac}=2/\min(c_1\Delta E,\mu-c_1v)$. For each
-    $l\in\mathbb N$, let $M_l$ be the truncated filter of $W$ at
-    $q=c_1l\Delta E$ with separation $m=l-3R$ and shell count
-    $N_l\le K_g(l+1)^k$. Then there exist $C_1',C_2'\ge0$ independent of $l$
-    such that $\|(1-P)M_l\psi\|\le\|W\|(3+C_1'J)e^{-l/l_{fac}}\|\psi\|$ for
-    every ground vector $\psi$, and
-    $\|M_l\Omega-\langle\Omega,M_l\Omega\rangle\Omega\|\le\|W\|(3+C_2'J)e^{-l/l_{fac}}$
-    for a unique ground state $\Omega$
-    \cite[eq.~(facld), lines 322--349]{Hastings2006Solving},
-    \cite{gap:hastings05_truncated_dynamics}.
-\end{theorem}
+    In the setting of Lemma~\ref{thm:hastings_truncated_facld}, let $J\ge0$,
+    fix $\mu>0$ and $c_1>0$ with $c_1v<\mu$, and set
+    $l_{fac}=2/\min(c_1\Delta E,\ \mu-c_1v)$. For each projection radius
+    $l\in\mathbb{N}$ let $M_l$ be the truncated filter of $W$ at
+    $q=c_1l\Delta E$, built from the terms of a set $s_l$ acting inside a
+    region $K_l\supseteq S$, such that every omitted term meeting $K_l$ lies at
+    distance at least $m=l-3R$ from $S$. Suppose the number $N_l$ of omitted
+    terms meeting $K_l$ satisfies $N_l\le K_g(l+1)^k$. Then there is a constant
+    $C_1'\ge0$, independent of $l$, such that for every $l$ and every ground
+    vector $\psi$ the component of $M_l\psi$ orthogonal to the ground space
+    has norm at most $\|W\|(3+C_1'J)e^{-l/l_{fac}}\|\psi\|$.
+    If $\Omega$ is a unique ground state with gap $\Delta E$, there is also a
+    constant $C_2'\ge0$, independent of $l$, such that for every $l$,
+    $\|M_l\Omega-\langle\Omega,M_l\Omega\rangle\Omega\|\le
+        \|W\|(3+C_2'J)e^{-l/l_{fac}}$. This is the form $JO(e^{-l_{proj}/l_{fac}})$
+    of eq.~(facld) of \cite[lines 322--349]{Hastings2006Solving}, with the
+    polynomial growth of the shell as an additional hypothesis absent from
+    source lines 169--190. Lemma~\ref{thm:hastings05_metric_facld} proves
+    the actual physical metric cutoff without this extra growth condition
+    \cite{gap:hastings05_truncated_dynamics,gap:hastings05_geometric_growth_scope}.
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:hastings_truncated_facld}
@@ -264,4 +277,277 @@ supports meet $K$ \cite{gap:hastings05_truncated_dynamics}.
     $e^{vq/\Delta E-\mu m}\le e^{3\mu R}e^{-\delta_0l}$, and
     $N_ll\le K_g(l+1)^kl\le K_g(k+1)!e^{\delta_0/2}(\delta_0/2)^{-(k+1)}e^{\delta_0l/2}$;
     substitute into (\ref{eq:hastings_truncated_facld_delta}).
+\end{proof}
+
+\begin{definition}[Closed graph balls]
+    \label{def:hastings05_graph_closed_ball}
+    \lean{TNLean.Lattice.graphClosedBall,TNLean.Lattice.mem_graphClosedBall}
+    \leanok
+    For a finite graph $G$, write $B_G(x,r)=\{y:d_G(x,y)\le r\}$,
+    where $d_G$ is the extended graph distance. A vertex in a different
+    connected component has distance $\infty$ and belongs to no finite ball.
+\end{definition}
+
+\begin{lemma}[Degree bounds and graph-ball separation]
+    \label{thm:hastings05_degree_ball}
+    \lean{TNLean.Lattice.card_graphClosedBall_le,
+        TNLean.Lattice.graphClosedBall_subset_of_mem,
+        TNLean.Lattice.graphClosedBall_separation}
+    \leanok
+    \uses{def:hastings05_graph_closed_ball}
+    If every vertex has degree at most $D$, then
+    $|B_G(x,r)|\le(D+1)^r$. Furthermore, $i\in B_G(x,l)$ implies
+    $B_G(i,R)\subseteq B_G(x,l+R)$. If $k\notin B_G(x,l)$,
+    $z\in B_G(x,R)$ and $y\in B_G(k,R)$, then
+    $d_G(z,y)\ge\max(l-2R,0)$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{def:hastings05_graph_closed_ball}
+    A shortest path shows that every vertex of $B_G(x,r+1)$ is either
+    a vertex of $B_G(x,r)$ or a neighbour of one. Hence its cardinality
+    is at most $(D+1)|B_G(x,r)|$, and induction proves the bound.
+    The remaining assertions follow from the graph triangle inequality;
+    for separation, the reverse inequality would place $k$ in $B_G(x,l)$.
+\end{proof}
+
+\begin{lemma}[Weighted local budgets]
+    \label{thm:hastings05_weighted_region_budget}
+    \lean{TNLean.Lattice.sum_weight_mul_comp_le_budget_mul_sum,
+        TNLean.Lattice.sum_weight_meeting_le_card_mul_budget,
+        TNLean.Lattice.sum_weight_meeting_graphClosedBall_le}
+    \leanok
+    \uses{thm:hastings05_degree_ball}
+    Let $w_k\ge0$ be weights on finitely many supports $X_k$ and assume
+    $\sum_{k:y\in X_k}w_k\le B$ at every site $y$. For any family $T$
+    of terms whose supports meet a region $K$,
+    \begin{align}
+        \sum_{k\in T}w_k & \le B|K|.
+        \label{eq:hastings05_weighted_region_budget}
+    \end{align}
+    In particular, if the graph degree is at most $D$ and
+    $K\subseteq B_G(x,l+C)$, then this sum is at most
+    $B(D+1)^C e^{\nu l}$, where $\nu=\ln(D+1)$.
+    More generally, for any anchors $a_k$, any real weights $w_k$,
+    and $f\ge0$, the bound $\sum_{k:a_k=y}w_k\le B$ implies
+    $\sum_kw_kf(a_k)\le B\sum_yf(y)$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:hastings05_degree_ball}
+    Each term meeting $K$ contributes its weight to at least one site
+    budget in $K$. Summing those budgets proves
+    (\ref{eq:hastings05_weighted_region_budget}); apply the ball bound
+    for its exponential form. The last assertion follows by grouping
+    the sum according to the anchor and applying the fibre bound.
+\end{proof}
+
+\begin{lemma}[Exponentially weighted graph tails]
+    \label{thm:hastings05_degree_weighted_tail}
+    \lean{TNLean.Lattice.sum_exp_neg_edist_le_degree,
+        TNLean.Lattice.sum_weight_exp_neg_edist_tail_le_degree}
+    \leanok
+    \uses{thm:hastings05_degree_ball,thm:hastings05_weighted_region_budget}
+    Suppose the degree is at most $D$. Put $\nu=\ln(D+1)$, let
+    $\mu>\nu$, and define $k_\mu(x,y)=e^{-\mu d_G(x,y)}$ at finite
+    distance and $k_\mu(x,y)=0$ at infinite distance. Then
+    \begin{align}
+        \sum_y k_\mu(x,y) & \le\frac1{1-e^{-(\mu-\nu)}}.
+        \label{eq:hastings05_degree_exponential_row}
+    \end{align}
+    If $w_k\ge0$, $B\ge0$ and $\sum_{k:a_k=y}w_k\le B$,
+    then every family $T$ with $d_G(x,a_k)\ge m$ for $k\in T$ satisfies
+    \begin{align}
+        \sum_{k\in T}w_k k_\mu(x,a_k)
+         & \le\frac{B e^{-\beta m}}{1-e^{-\beta}},
+        \qquad \beta=\frac{\mu-\nu}{2}>0.
+        \label{eq:hastings05_degree_exponential_tail}
+    \end{align}
+    Thus summation over omitted terms requires only bounded local geometry
+    when the spatial decay rate is chosen above the graph growth rate.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:hastings05_degree_ball,thm:hastings05_weighted_region_budget}
+    Group vertices by their finite distance $r$ from $x$. Each sphere has
+    at most $(D+1)^r$ vertices, so the sum is bounded by the geometric
+    series $\sum_{r\ge0}e^{-(\mu-\nu)r}$, proving
+    (\ref{eq:hastings05_degree_exponential_row}). On the omitted family,
+    $k_\mu(x,a_k)\le e^{-\beta m}k_{\mu-\beta}(x,a_k)$.
+    Grouping by anchors and applying
+    (\ref{eq:hastings05_degree_exponential_row}) at rate $\mu-\beta$
+    proves (\ref{eq:hastings05_degree_exponential_tail}).
+\end{proof}
+
+\begin{lemma}[Absorbing the time prefactor]
+    \label{lem:hastings05_gaussian_decay_absorption}
+    \lean{TNLean.Lattice.gaussian_truncation_bound_le_exp}
+    \leanok
+    Let $a,\gamma>0$ and $A,w,l\ge0$, and put $\delta=\min(a,\gamma)$.
+    Then
+    \begin{align}
+        3we^{-al/2}+Awl e^{-\gamma l}
+        \le w\left(3+\frac{A}{e\delta/2}\right)e^{-\delta l/2}.
+        \label{eq:hastings05_gaussian_decay_absorption}
+    \end{align}
+    In the truncated Gaussian approximation, $a=c_1\Delta E$ and
+    $\gamma$ is the spatial decay rate after subtracting $c_1v$.
+\end{lemma}
+\begin{proof}\leanok
+    The Gaussian term is at most $3we^{-\delta l/2}$. For the second term,
+    $le^{-\gamma l}\le le^{-\delta l}$ and
+    $le^{-\delta l}\le(e\delta/2)^{-1}e^{-\delta l/2}$, by maximizing
+    $u e^{-u}$ at $u=1$ with $u=\delta l/2$.
+\end{proof}
+
+\begin{lemma}[The spectral gap above the actual ground eigenspace]
+    \label{thm:hastings05_ground_space_quadratic_gap}
+    \lean{TNLean.Lattice.groundEigenspace_gap_le_of_eigenvalues}
+    \leanok
+    Let $H$ be Hermitian and suppose every eigenvalue equals $E_0$ or is
+    at least $E_0+\Delta$. Let $P_0$ be the orthogonal projection onto
+    $\ker(H-E_0)$. Then every vector $\psi$ satisfies
+    \begin{align}
+        \Delta\bigl(\|\psi\|^2-\|P_0\psi\|^2\bigr)
+        \le \operatorname{Re}\langle\psi,H\psi\rangle-E_0\|\psi\|^2.
+        \label{eq:hastings05_ground_space_quadratic_gap}
+    \end{align}
+\end{lemma}
+\begin{proof}\leanok
+    In an orthonormal eigenbasis $b_k$, the excess energy is
+    $\sum_k(\lambda_k-E_0)|\langle b_k,\psi\rangle|^2$.
+    The coefficients of $(1-P_0)\psi$ vanish when $\lambda_k=E_0$ and
+    otherwise equal those of $\psi$. Each remaining coefficient has
+    weight at least $\Delta$. Parseval and the orthogonal decomposition
+    $\psi=P_0\psi+(1-P_0)\psi$ give the inequality.
+\end{proof}
+
+\begin{lemma}[An actual ground vector of the approximate Hamiltonian]
+    \label{thm:hastings05_approximate_ground_vector_energy}
+    \lean{TNLean.Lattice.exists_groundVector_energy_le_of_norm_sub_le}
+    \leanok
+    Let $M$ be Hermitian, $\|H-M\|\le\epsilon$, and let $\Omega$ be a unit
+    eigenvector of $H$ of real energy $E_0$. There exist a real number $e$
+    and a unit vector $\phi$ such that $M\phi=e\phi$,
+    $e\|\psi\|^2\le\operatorname{Re}\langle\psi,M\psi\rangle$ for every
+    $\psi$, and
+    \begin{align}
+        \operatorname{Re}\langle\phi,H\phi\rangle-E_0\le2\epsilon.
+        \label{eq:hastings05_approximate_ground_vector_energy}
+    \end{align}
+    No spectral-gap hypothesis on $M$ is needed.
+\end{lemma}
+\begin{proof}\leanok
+    Minimize the Rayleigh quotient of $M$ on the unit sphere. A minimizer
+    is an eigenvector. The variational principle and the two norm-error
+    estimates give
+    $\langle\phi,H\phi\rangle
+        \le\langle\phi,M\phi\rangle+\epsilon
+        \le\langle\Omega,M\Omega\rangle+\epsilon
+        \le E_0+2\epsilon$, after taking real parts.
+\end{proof}
+
+\begin{lemma}[Ground-space overlap and phase accuracy]
+    \label{thm:hastings05_ground_overlap_norm_error}
+    \lean{TNLean.Lattice.exists_groundVector_projected_mass_of_norm_sub_le,
+        TNLean.Lattice.exists_groundVector_overlap_of_norm_sub_le}
+    \leanok
+    \uses{thm:hastings05_approximate_ground_vector_energy,
+        thm:hastings05_ground_space_quadratic_gap}
+    Under the quadratic gap (\ref{eq:hastings05_ground_space_quadratic_gap})
+    and the hypotheses of
+    Lemma~\ref{thm:hastings05_approximate_ground_vector_energy}, an actual
+    unit ground vector of $M$ can be chosen with
+    \begin{align}
+        \Delta(1-\|P_0\phi\|^2)\le2\epsilon.
+        \label{eq:hastings05_ground_overlap_norm_error}
+    \end{align}
+    Consequently $P_0\phi\ne0$ whenever $2\epsilon<\Delta$.
+    If the original ground state is unique, with unit vector $\Omega$
+    and gap $\Delta>0$, a unit ground vector of $M$ also satisfies
+    \begin{align}
+        \Delta(1-|\langle\Omega,\phi\rangle|^2) & \le2\epsilon,        \\
+        \min_{\theta\in\mathbb R}
+        \|\phi-e^{i\theta}\Omega\|^2            & \le4\epsilon/\Delta.
+        \label{eq:hastings05_ground_phase_norm_error}
+    \end{align}
+    The minimum is attained. These are quantitative forms of the overlap
+    assertion of~\cite[lines 362--367]{Hastings2006Solving}.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:hastings05_approximate_ground_vector_energy,
+        thm:hastings05_ground_space_quadratic_gap}
+    Apply the gap inequality to the minimizing vector. In the unique case,
+    $P_0\phi=\langle\Omega,\phi\rangle\Omega$ and the minimum squared
+    phase distance is $2(1-|\langle\Omega,\phi\rangle|)$, which is at most
+    $2(1-|\langle\Omega,\phi\rangle|^2)$.
+\end{proof}
+
+\begin{lemma}[The logarithmic overlap radius]
+    \label{thm:hastings05_logarithmic_overlap_radius}
+    \lean{TNLean.Lattice.exp_error_le_of_log_radius,
+        TNLean.Lattice.exists_groundVector_projection_of_exp_norm_bound,
+        TNLean.Lattice.exists_groundVector_overlap_of_exp_norm_bound}
+    \leanok
+    \uses{thm:hastings05_ground_overlap_norm_error}
+    Let $\beta,\Delta,\eta>0$, and suppose the Hermitian approximation
+    satisfies $\|H-M_\ell\|\le B e^{-\beta\ell}$. Put
+    $\tau=\min(\eta,1)$ and $Q=\max(B,1)$. If
+    \begin{align}
+        \ell\ge\frac1\beta\ln\frac{4Q}{\Delta\tau},
+        \label{eq:hastings05_logarithmic_overlap_radius}
+    \end{align}
+    then $B e^{-\beta\ell}\le\Delta\tau/4$. Under the original ground-space
+    gap, there is an actual unit ground vector $\phi$ of $M_\ell$ with
+    $P_0\phi\ne0$ and $1-\|P_0\phi\|^2\le\eta$. In the unique-ground-state
+    case there is an actual unit ground vector of nonzero overlap with
+    $\Omega$ whose attained minimum squared phase error is at most $\eta$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:hastings05_ground_overlap_norm_error}
+    Exponentiating (\ref{eq:hastings05_logarithmic_overlap_radius}) gives
+    $e^{-\beta\ell}\le\Delta\tau/(4Q)$. Since $B\le Q$, the norm error is
+    at most $\Delta\tau/4$. Apply
+    Lemma~\ref{thm:hastings05_ground_overlap_norm_error}; its projection
+    cannot vanish because $2\epsilon\le\Delta/2<\Delta$.
+\end{proof}
+
+\begin{lemma}[Ground-state overlap for the actual metric truncation]
+    \label{thm:hastings05_metric_ground_overlap}
+    \lean{TNLean.Lattice.exists_metric_truncated_groundVector_projection,
+        TNLean.Lattice.exists_metric_truncated_groundVector_overlap}
+    \leanok
+    \uses{thm:hastings05_metric_filter_sum,
+        thm:hastings05_ground_space_quadratic_gap,
+        thm:hastings05_logarithmic_overlap_radius}
+    Fix the local parameters $R>0,S,J\ge0,\Delta>0$. There are
+    $c_1,\beta>0$ and $C\ge0$, independent of the finite metric space and
+    Hamiltonian, with the following property. Let $H=\sum_i h_i$ satisfy
+    the support, norm and local-cardinality assumptions of
+    Lemma~\ref{thm:hastings05_metric_filter_sum}, and suppose its spectrum
+    consists of $E_0$ and eigenvalues at least $E_0+\Delta$. Assume a unit
+    ground vector exists, and let $N$ be the number of sites. For every
+    $\eta>0$ and every
+    \begin{align}
+        \ell\ge\max\left\{R,\frac1\beta
+        \ln\frac{4\max(NJC,1)}{\Delta\min(\eta,1)}\right\},
+        \label{eq:hastings05_metric_ground_overlap_radius}
+    \end{align}
+    the actual truncated sum
+    $M_\ell=\sum_i M_i(c_1\ell\Delta,\Delta,\ell)$ has a unit ground vector
+    $\phi$ with nonzero projection onto the actual ground eigenspace of
+    $H$, and $1-\|P_0\phi\|^2\le\eta$. If the original ground state is
+    unique, an actual unit ground vector of $M_\ell$ has nonzero overlap
+    with it and attained minimum squared phase error at most $\eta$.
+    For fixed local parameters and accuracy, the required radius grows
+    as $O(\log N)$, as asserted in
+    \cite[lines 362--367]{Hastings2006Solving}.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:hastings05_metric_filter_sum,
+        thm:hastings05_ground_space_quadratic_gap,
+        thm:hastings05_logarithmic_overlap_radius}
+    Each truncated term, hence their sum, is Hermitian.
+    Lemma~\ref{thm:hastings05_metric_filter_sum} bounds the norm error by
+    $NJC e^{-\beta\ell}$. The source's eigenvalue gap gives the quadratic
+    gap above the canonical ground eigenspace by
+    Lemma~\ref{thm:hastings05_ground_space_quadratic_gap}. Apply
+    Lemma~\ref{thm:hastings05_logarithmic_overlap_radius} with $B=NJC$.
 \end{proof}

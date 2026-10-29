@@ -2,7 +2,7 @@
 \section{The finite-size approximation conclusion}
 \label{sec:peps_exact_small_size_approximation}
 
-\begin{theorem}[Approximation on all smaller positive squares]
+\begin{lemma}[Approximation on all smaller positive squares]
     \label{thm:peps_exact_small_size_approximation}
     \lean{TNLean.PEPS.Approximation.hasPEPSApproximation_of_small_size}
     \leanok
@@ -15,17 +15,17 @@
     PEPS $\Phi$ on that square with $1\le D_e\le C'L^c$ on every edge and a
     real phase $\theta$ such that
     $\|\|\Phi\|^{-1}\Phi-e^{i\theta}\Omega\|\le L^{-1}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_exact_small_sizes}
-    The exact representation from Theorem~\ref{thm:peps_exact_small_sizes}
+    The exact representation from Lemma~\ref{thm:peps_exact_small_sizes}
     has the same coefficients as $\Omega$, so $\Phi=\Omega$.
     Consequently $\|\Phi\|=1$ and $\Phi\ne0$, and setting $\theta=0$ gives
     zero error, which is at most $L^{-1}$.
 \end{proof}
 
-\begin{theorem}[A uniform positive prefactor for a finite range]
+\begin{lemma}[A uniform positive prefactor for a finite range]
     \label{thm:peps_uniform_small_size_approximation}
     \lean{TNLean.PEPS.Approximation.exists_uniform_small_size_approximation}
     \leanok
@@ -40,12 +40,12 @@
     there is a nonzero PEPS $\Phi$ on that square with
     $1\le D_e\le C'L^c$ on every edge and a real phase $\theta$ satisfying
     $\|\|\Phi\|^{-1}\Phi-e^{i\theta}\Omega\|\le L^{-1}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_exact_small_size_approximation}
     Setting $C'=\max\{C,q^{L_0^2}\}$ gives $C'>0$ and $C'\ge C$ because
     $q\ge1$ makes the second entry of the maximum positive;
-    Theorem~\ref{thm:peps_exact_small_size_approximation} then applies at
+    Lemma~\ref{thm:peps_exact_small_size_approximation} then applies at
     each $L$.
 \end{proof}

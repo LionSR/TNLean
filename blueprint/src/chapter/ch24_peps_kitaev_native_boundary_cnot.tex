@@ -14,7 +14,7 @@
     \cite[Section~7, ``Kitaev's code state'']{Schuch2010PEPS}.
 \end{definition}
 
-\begin{theorem}[The native boundary enumeration and its label reads]%
+\begin{lemma}[The native boundary enumeration and its label reads]%
     \label{thm:peps_kitaev_native_boundary_registers}
     \lean{TNLean.PEPS.kitaevNativeBoundaryEdge_val,
         TNLean.PEPS.kitaevNativeBoundaryEquiv_apply}
@@ -32,7 +32,7 @@
     The equivalence $\mathcal E_v$ reads precisely the eight labels used
     in the native coefficient identity. Every native boundary assignment
     therefore occurs exactly once among these four pairs.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Each bond is determined by its label read in the native block.
@@ -63,7 +63,7 @@
     registers by setting the four second registers to zero.
 \end{definition}
 
-\begin{theorem}[The exact native tensor-map identity after boundary CNOTs]%
+\begin{lemma}[The exact native tensor-map identity after boundary CNOTs]%
     \label{thm:peps_kitaev_native_boundary_cnot}
     \lean{TNLean.PEPS.kitaevNativeBoundaryCNOT_pairs,
         TNLean.PEPS.kitaevNativeBoundaryCNOT_permMatrix_mem_unitaryGroup,
@@ -83,7 +83,7 @@
     This is a local native tensor-map equality for periods at least three,
     including seam-crossing blocks. It does not assert a physical
     renormalization operation or a globally tiled checkerboard state.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     The derived boundary equivalence conjugates the pair CNOTs to a

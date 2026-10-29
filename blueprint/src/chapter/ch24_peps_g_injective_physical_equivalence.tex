@@ -1,7 +1,7 @@
 \section{Invertible physical comparison of G-injective tensors}%
 \label{sec:peps_g_injective_physical_equivalence}
 
-\begin{theorem}[Ambient physical comparison]%
+\begin{lemma}[Ambient physical comparison]%
     \label{thm:peps_g_injective_ambient_physical_comparison}
     \lean{TNLean.PEPS.IsGInjective.exists_physicalEquiv}
     \leanok
@@ -12,7 +12,7 @@
     finite-dimensional. Then, as a local consequence of
     \cite[Definition~5.1]{Schuch2010PEPS}, an invertible physical map
     $F:\mathcal P\to\mathcal P$ satisfies $FT=S$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_g_injective_physical_range_equivalence}
@@ -22,7 +22,7 @@
     complementary subspaces yields a map whose restriction satisfies $FT=S$.
 \end{proof}
 
-\begin{theorem}[Comparison between physical spaces of equal dimension]%
+\begin{lemma}[Comparison between physical spaces of equal dimension]%
     \label{thm:peps_g_injective_equal_dim_physical_comparison}
     \lean{TNLean.PEPS.IsGInjective.exists_physicalEquiv_of_finrank_eq}
     \leanok
@@ -33,7 +33,7 @@
     $\mathcal Q$ are finite-dimensional and have equal dimensions,
     there is a linear isomorphism $F:\mathcal P\to\mathcal Q$
     satisfying $FT=S$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_g_injective_ambient_physical_comparison,
