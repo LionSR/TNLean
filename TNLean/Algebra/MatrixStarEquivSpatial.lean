@@ -75,7 +75,8 @@ theorem exists_unitary_conj_of_starAlgEquiv_matrix_between [Nonempty m] [Nonempt
   obtain ⟨V, hV⟩ := Matrix.exists_unitary_conj_of_starAlgEquiv_matrix g
   let W : Matrix n m ℂ := Matrix.reindex (Equiv.refl n) e.symm (V : Matrix n n ℂ)
   have hW : W.IsUnitaryBetween :=
-    (Matrix.isUnitaryBetween_coe_unitaryGroup V).reindex _ (Equiv.refl n) e.symm
+    ((Matrix.isUnitaryBetween_iff_mem_unitaryGroup _).mpr V.prop).reindex _
+      (Equiv.refl n) e.symm
   refine ⟨W, hW, ?_⟩
   intro A
   calc
