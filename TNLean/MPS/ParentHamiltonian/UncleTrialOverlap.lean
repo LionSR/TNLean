@@ -122,11 +122,13 @@ private theorem uncleWallMixedMap_succ_right
   ext X
   rw [uncleWallMixedMap_apply,
     ← (Fin.snocEquiv (fun _ : Fin (n + 1) ↦ Fin d)).sum_comp]
-  simp [Fintype.sum_prod_type, Fin.snoc_eq_append, uncleWallMixedMap_apply,
+  simp only [Fintype.sum_prod_type]
+  rw [Finset.sum_comm]
+  simp [Fin.snoc_eq_append, uncleWallMixedMap_apply,
     familyMixedMap_apply, uncleDomainWallWord_append, uncleDomainWallWord, Kraus.mixedMapLM_apply,
     Kraus.mixedMapLM_pow_apply, Matrix.conjTranspose_mul, Matrix.mul_add,
     Matrix.add_mul, Matrix.mul_sum, Matrix.sum_mul, Matrix.mul_assoc,
-    Finset.sum_add_distrib, Finset.sum_comm, add_comm]
+    Finset.sum_add_distrib, add_comm]
 
 /-- The ordered mixed-transfer contraction for the actual five-segment
 trial against one pure periodic sector. Source: arXiv:1210.6613,
