@@ -231,6 +231,7 @@ import TNLean.MPS.ParentHamiltonian.PhysicalResidualCoverLimit
 import TNLean.MPS.ParentHamiltonian.PositiveFunctionalCommutator
 import TNLean.MPS.ParentHamiltonian.PositivePhysicalDeformationGap
 import TNLean.MPS.ParentHamiltonian.PoweredCyclicPrimitiveResolution
+import TNLean.MPS.ParentHamiltonian.PrimeLengthBondDimensionDichotomy
 import TNLean.MPS.ParentHamiltonian.PrimitiveBlockIntervalDefectDecay
 import TNLean.MPS.ParentHamiltonian.PrimitiveBlockOpenGroundSpace
 import TNLean.MPS.ParentHamiltonian.PrimitiveBlockSharpOpenGroundSpace

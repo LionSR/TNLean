@@ -1,0 +1,72 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\input{command}
+\title{Quantifiers in the Frustration-Free Ground-State Bond-Dimension Dichotomy}
+\author{}
+\date{2026-10-29}
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+\section{Source and quantified asymptotic result}
+
+Theorem~5 of \cite{Sanz2010Quantum}, lines~850--880 of
+\path{Papers/0909.5347/main.tex}, asserts a length-independent matrix size or
+an order-$N^{1/5}$ obstruction at prime lengths for the unique ground states of
+one fixed frustration-free local interaction.
+
+The source-written quantified version takes a positive $L$-site interaction
+$h$ and assumes that the zero-energy space of $H_M=\sum_i\tau^i(h)$ has
+dimension one at every permitted volume $M\ge L$. It proves the alternative
+\begin{align}
+     & \exists B,M_0\quad
+    \ker H_M=\C V^{(M)}(B),\quad V^{(M)}(B)\ne0
+    \quad\text{for every }M\ge M_0; \label{eq:spwc10_eventual_uniform_branch} \\
+     & \text{or}\quad
+    N<L+\max\{q(D),3(D-1)(q(D)+1)\},\qquad
+    q(D)=(D^2+1)^2, \label{eq:spwc10_prime_obstruction}
+\end{align}
+where (\ref{eq:spwc10_prime_obstruction}) quantifies over every prime $N$ and
+every bond-$D$ tensor whose nonzero periodic vector is in $\ker H_N$.
+The interaction and its range are fixed before those quantifiers. The
+polynomial bound is an explicit fifth-degree obstruction; it is not a
+statement only about the W state or a chosen sequence of representations.
+
+\section{Derived data and the remaining boundary}
+
+When the threshold in (\ref{eq:spwc10_prime_obstruction}) fails, primality and
+$D<N$ remove every nonprimitive periodic block at length $N$. Grouping phase
+classes and discarding zero combined coefficients produces an actual
+expansion into separated blocks, with common injectivity length $q(D)$.
+Complementary simultaneous spanning then gives $G_L(B_j)\subseteq\ker h$.
+Consequently each block gives zero energy at every permitted volume. Its
+injectivity ensures a nonzero periodic vector for $M\ge q(D)+1$, and the
+one-dimensional ground-space hypothesis identifies the entire kernel with
+that line. This derives (\ref{eq:spwc10_eventual_uniform_branch}) with
+$M_0=\max\{L,q(D)+1\}$ and a block of bond dimension at most $D$.
+
+The fixed-tensor conclusion is explicitly eventual. It does not identify the
+finitely many shorter ground spaces with the same tensor, nor supply their
+periodic trace-MPS representations at one common padded bond dimension.
+A literal all-volume uniform-dimension formulation needs that finite-prefix
+argument separately. The asymptotic alternative and its exact quantifiers
+are therefore stated separately from an unrestricted source-labelled theorem.
+No original canonical, phase-separation, transfer-gap, local-kernel or
+future-volume equation is assumed.
+
+The proof scripts and their Blueprint entries are pending hosted acceptance;
+no local Lean build or elaboration was run. The full source theorem remains
+open in issue \#10280 until the scope decision, validation and integration are
+complete.
+
+\section{Verdict}
+
+\textbf{Verdict: scope restriction.} The source-written result gives the
+quantified asymptotic dichotomy and an explicit fifth-degree obstruction.
+The all-volume finite-prefix completion is not part of that result.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+\end{document}
