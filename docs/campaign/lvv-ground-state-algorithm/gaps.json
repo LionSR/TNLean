@@ -33,7 +33,9 @@
    "issue": 9822,
    "stage": "alg:5",
    "prs": {
-    "TNLean": []
+    "TNLean": [
+     10271
+    ]
    },
    "title": "Ground energy in the exponent of the running time",
    "summary": "Theorem 1 gives an exponent independent of the ground energy, but the normalization of the sampled projector is polynomial in <i>n</i> only when ε<sub>0</sub>/ε is bounded. The sampled projector is formalized with the number of words explicit in <i>C</i><sup><i>m</i></sup>; the running time is not formalized.",
