@@ -100,7 +100,8 @@ private theorem norm_span_pair_projection_sq_le
       _ = _ := by ring
   have hexpand : ‖w‖ ^ 2 = ‖α‖ ^ 2 * ‖u‖ ^ 2 +
       2 * (inner ℂ (α • u) (β • v)).re + ‖β‖ ^ 2 * ‖v‖ ^ 2 := by
-    rw [hw', norm_add_sq (𝕜 := ℂ), norm_smul, norm_smul, mul_pow, mul_pow]
+    rw [hw', norm_add_sq (𝕜 := ℂ), RCLike.re_eq_complex_re,
+      norm_smul, norm_smul, mul_pow, mul_pow]
   have hcoefs : ‖α‖ ^ 2 + ‖β‖ ^ 2 ≤ 4 * ‖w‖ ^ 2 := by
     have hα := mul_le_mul_of_nonneg_left hu (sq_nonneg ‖α‖)
     have hβ := mul_le_mul_of_nonneg_left hv (sq_nonneg ‖β‖)
