@@ -9132,7 +9132,61 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     In \cite[Proposition~V.1]{Cirac2017MPU}, this equivalence is the unrestricted conjugation
     characterization.
     % Source lines: paper_v2.tex 1008--1039.
+    % The forward local-gauge construction still needs conjugation transport of
+    % the chosen source cuts and their canonical data. The proved contraction
+    % in lem:mpu_local_conjugation_contract is on positive blocked rings.
 \end{proposition}
+
+\begin{lemma}[Transpose signs from the unshifted conjugation equation]
+    \label{lem:mpu_local_conjugation_sign}
+    \lean{Matrix.kronecker_map_star_mul_eq_one_of_gate_conjugation, Matrix.transpose_eq_self_or_transpose_eq_neg_of_gate_conjugation}
+    \notready
+    Let $L,R,P$ be finite coordinate sets with $L,R$ nonempty, let
+    $u:\mathbb C^P\to\mathbb C^L\otimes\mathbb C^R$ satisfy
+    $uu^\dagger=\Id$, and let $x,y$ be unitaries on $L,R$. If
+    $\overline u=(x\otimes y)u$, then
+    \begin{align}
+        (\overline xx)\otimes(\overline yy) & =\Id.
+    \end{align}
+    Consequently either $x^T=x$ and $y^T=y$, or $x^T=-x$ and $y^T=-y$.
+    This is the step in \cite[lines~1033--1038]{Cirac2017MPU} starting from
+    the local gate equation.
+\end{lemma}
+
+\begin{proof}
+    \uses{thm:mpu_conjugation_common_transpose_sign}
+    Conjugating the gate equation gives
+    $u=(\overline x\otimes\overline y)(x\otimes y)u$.
+    Multiplication by $u^\dagger$ cancels $uu^\dagger=\Id$ and yields the
+    Kronecker identity. Its two factors have one common transpose sign.
+\end{proof}
+
+\begin{lemma}[Contraction of the local conjugation equations]
+    \label{lem:mpu_local_conjugation_contract}
+    \lean{MPOTensor.mpo_map_star, MPOTensor.TwoSiteStandardFormData.mapStar, MPOTensor.twoSiteUnshiftedLayer_map_star, MPOTensor.twoSiteShiftedLayer_map_star, MPOTensor.TwoSiteStandardFormData.map_star_mpo_eq_of_gate_conjugation}
+    \notready
+    Let $W$ have a supplied two-site standard form with unitary gates $u,v$,
+    and let $x,y$ be unitaries satisfying
+    \begin{align}
+        \overline u & =(x\otimes y)u,                 &
+        \overline v & =v(y^\dagger\otimes x^\dagger).
+    \end{align}
+    Conjugation of all coefficients gives a standard form of $\overline W$
+    with gates $\overline u,\overline v$, and
+    $\overline{W^{(N)}}=W^{(N)}$ at every positive blocked length $N$.
+    This is the contraction direction of
+    \cite[Proposition~V.1, lines~1029--1030]{Cirac2017MPU}, on blocked rings.
+\end{lemma}
+
+\begin{proof}
+    \uses{thm:mpu_supplied_two_site_periodic_circuit}
+    Conjugation preserves the two open contractions and their unitary
+    identities. It also conjugates every factor of each circuit layer.
+    Substitute the two local equations into the conjugated circuit. At every
+    internal leg, the inserted $x$ or $y$ meets its adjoint, and the circuit
+    product is unchanged. Taking the trace of a product commutes with
+    conjugation, so the same equality holds for the periodic operators.
+\end{proof}
 
 \begin{proposition}[Admissible conjugation symmetry]
     \label{prop:mpu_admissible_conjugation_symmetry}

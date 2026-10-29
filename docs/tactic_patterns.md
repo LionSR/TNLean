@@ -4950,6 +4950,22 @@ three-plaquette output measurement, and the routed reunion measurement.
 
 ## Candidates
 
+### Conjugating a rectangular unitary identity — candidate (2026-10-29)
+
+- **Pattern:** Commute entrywise complex conjugation with the adjoint and
+  matrix multiplication, then transport the two identities `Aᴴ * A = 1`
+  and `A * Aᴴ = 1` through conjugation.
+- **Seen:** The two one-sided identities in the local `hunitary` proof of
+  `TwoSiteStandardFormData.mapStar`,
+  `MPS/MPU/ConjugationSymmetry.lean`; related left-canonical transport in
+  `MPS/CanonicalForm/Conjugation.lean`.
+- **Abstraction:** Mathlib's `Matrix.conjTranspose_map` and `Matrix.map_mul`
+  already remove the entrywise calculations. A reusable conjugation theorem
+  for QICLean's `Matrix.IsUnitaryBetween` is a candidate if another consumer
+  requires the same pair of identities.
+- **Notes:** No new matrix predicate or parallel standard-form structure was
+  introduced. The supplied half factors and gates are conjugated directly.
+
 ### Counting nearest-neighbour bonds that meet a region — candidate (2026-10-28)
 
 - **Pattern:** Bound the number of nearest-neighbour bonds meeting a finite
