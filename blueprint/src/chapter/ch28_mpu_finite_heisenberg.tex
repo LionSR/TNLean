@@ -490,3 +490,32 @@
     evaluation formula gives the same support statement for every
     finite supported quasi-local observable.
 \end{proof}
+
+
+\begin{lemma}[Actual inverse propagation through the periodic seam]
+    \label{lem:mpu_finite_cyclic_inverse_propagation}
+    \lean{SpinChain.intervalCoordinates_localInclusion_eq_embedOp,
+        SpinChain.intervalCoordinates_localInclusion_mem_supportedOperators,
+        SpinChain.finiteRingNeighbourhood,
+        SpinChain.finiteRingNeighbourhood_subset,
+        SpinChain.finiteChainConjugation_symm_mem_range_ringNeighbourhood}
+    \notready
+    \uses{lem:mpu_finite_cyclic_singleton_propagation,
+        lem:mpu_singleton_generation_and_inverse_reflection}
+    Under the supplied positive-block standard-form hypotheses, let
+    $N\geq 6k$ and let $B$ be supported on an arbitrary finite target
+    $J$ in the actual periodic chain of length $N$. Then the actual
+    inverse conjugate $U_N^\dagger B U_N$ is supported in the ring
+    neighbourhood of $J$ of radius $4k$. No boundary collar is needed.
+\end{lemma}
+\begin{proof}
+    Consecutive site numbering sends a canonical local inclusion to
+    its finite identity-tensor site embedding, with precisely the
+    same support. Every singleton outside the indicated neighbourhood
+    has forward image disjoint from the target by the uniform
+    finite-ring singleton bound. Its forward image therefore commutes
+    with $B$. Reflect these commutators through the actual finite
+    unitary conjugation. The outside-singleton commutant
+    characterization places its inverse image in the retained
+    neighbourhood algebra.
+\end{proof}
