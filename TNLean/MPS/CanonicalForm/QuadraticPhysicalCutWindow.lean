@@ -41,26 +41,21 @@ noncomputable def quadraticPhysicalCutWindow (ψ : (Fin N → Fin d) → ℂ)
     Fin m → Fin d → Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ :=
   fun j i ↦ LinearMap.toMatrix (C j.succ) (C j.castSucc) (cutSlice ψ (L + j.val) i)
 
-/-- Every actual interior physical cut-basis window of a canonical C1
-tensor has a solution of system (S). The gauges are constructed by changes
-between physical bases, and its row-normalized tensor is the canonical
-tensor with its positive block weight removed.
-Source: PGVWC07, Theorem 8, first clause, lines 1139--1169. -/
-theorem exists_quadraticSolution_physicalCutWindow [NeZero D] {A : MPSTensor d D}
-    (hA : IsPGVWC07CanonicalForm A) (hC1 : Kraus.IsNBlkInjective A L)
-    (hN : 2 * L + m ≤ N)
+/-- Actual physical cut bases determine both comparison gauges before
+any tensor normalization is imposed. Their equations follow from changes
+of basis and the original physical slicing maps.
+Source: PGVWC07, MPSarchive.tex lines 1080--1086 and 1139--1152. -/
+theorem exists_physicalCutWindow_gauges {A : MPSTensor d D}
+    (hcut : ∀ j : Fin (m + 1), L + j.val ≤ N)
+    (hleft : ∀ j : Fin (m + 1), Kraus.IsNBlkInjective A (L + j.val))
+    (hright : ∀ j : Fin (m + 1), Kraus.IsNBlkInjective A (N - (L + j.val)))
     (C : (j : Fin (m + 1)) → Module.Basis (Fin D × Fin D) ℂ
       (cutColumnSpace (mpv A (N := N)) (L + j.val))) :
-    Nonempty (QuadraticReconstructionSolution (quadraticPhysicalCutWindow (mpv A) C)) := by
+    ∃ Y Z : Fin m → Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ,
+      (∀ (j : Fin m) (i : Fin d), Y j * quadraticPhysicalCutWindow (mpv A) C j i * Z j =
+        A i ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ)) ∧
+      ∀ (j : Fin m) (hj : j.val + 1 < m), Y ⟨j.val + 1, hj⟩ * Z j = 1 := by
   classical
-  have hleft (j : Fin (m + 1)) : Kraus.IsNBlkInjective A (L + j.val) :=
-    isNBlkInjective_of_le_of_canonical hA hC1 (by omega)
-  have hright (j : Fin (m + 1)) : Kraus.IsNBlkInjective A (N - (L + j.val)) := by
-    have hj := j.isLt
-    exact isNBlkInjective_of_le_of_canonical hA hC1 (by omega)
-  have hcut (j : Fin (m + 1)) : L + j.val ≤ N := by
-    have hj := j.isLt
-    omega
   let Q (j : Fin (m + 1)) := physicalPeriodicCutBasis (hcut j) (hleft j) (hright j)
   let Y (j : Fin m) := LinearMap.toMatrix (C j.castSucc) (Q j.castSucc) LinearMap.id
   let Z (j : Fin m) := LinearMap.toMatrix (Q j.succ) (C j.succ) LinearMap.id
@@ -81,6 +76,29 @@ theorem exists_quadraticSolution_physicalCutWindow [NeZero D] {A : MPSTensor d D
       LinearMap.toMatrix (Q j.succ) (C j.succ) LinearMap.id = 1
     rw [← LinearMap.toMatrix_comp (Q j.succ) (C j.succ) (Q j.succ)]
     simp only [LinearMap.id_comp, LinearMap.toMatrix_id]
+  exact ⟨Y, Z, hlocal, hinverse⟩
+
+/-- Every actual interior physical cut-basis window of a canonical C1
+tensor has a solution of system (S). The gauges are constructed by changes
+between physical bases, and its row-normalized tensor is the canonical
+tensor with its positive block weight removed.
+Source: PGVWC07, Theorem 8, first clause, lines 1139--1169. -/
+theorem exists_quadraticSolution_physicalCutWindow [NeZero D] {A : MPSTensor d D}
+    (hA : IsPGVWC07CanonicalForm A) (hC1 : Kraus.IsNBlkInjective A L)
+    (hN : 2 * L + m ≤ N)
+    (C : (j : Fin (m + 1)) → Module.Basis (Fin D × Fin D) ℂ
+      (cutColumnSpace (mpv A (N := N)) (L + j.val))) :
+    Nonempty (QuadraticReconstructionSolution (quadraticPhysicalCutWindow (mpv A) C)) := by
+  classical
+  have hleft (j : Fin (m + 1)) : Kraus.IsNBlkInjective A (L + j.val) :=
+    isNBlkInjective_of_le_of_canonical hA hC1 (by omega)
+  have hright (j : Fin (m + 1)) : Kraus.IsNBlkInjective A (N - (L + j.val)) := by
+    have hj := j.isLt
+    exact isNBlkInjective_of_le_of_canonical hA hC1 (by omega)
+  have hcut (j : Fin (m + 1)) : L + j.val ≤ N := by
+    have hj := j.isLt
+    omega
+  obtain ⟨Y, Z, hlocal, hinverse⟩ := exists_physicalCutWindow_gauges hcut hleft hright C
   obtain ⟨K⟩ := hA
   obtain ⟨λ, hλ, _, hsum⟩ := K.exists_weight_sum_mul_conjTranspose_eq_of_isNBlkInjective hC1
   have hλ0 : (λ : ℂ) ≠ 0 := by exact_mod_cast hλ.ne'
