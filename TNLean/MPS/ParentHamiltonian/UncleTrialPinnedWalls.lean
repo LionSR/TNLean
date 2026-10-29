@@ -462,7 +462,7 @@ theorem uncleInteractionES_trial_eq_pinnedEndpointState
   have h23 : 4 * N - 1 < 5 * N := by omega
   have hcases : i = ⟨N - 1, by omega⟩ ∨ i = ⟨2 * N, by omega⟩ ∨
       i = ⟨4 * N - 1, by omega⟩ ∨ i = ⟨5 * N, by omega⟩ := by
-    simpa only [uncleTrialEndpointBonds, Finset.mem_insert, Finset.mem_singleton] using hi
+    exact (mem_uncleTrialEndpointBonds_iff N hN i).mp hi
   rcases hcases with rfl | rfl | rfl | rfl
   · simpa [uncleTrialPinnedEndpointState] using
       uncleInteractionES_trial_pin_first_endpoint A B R L N hN τ

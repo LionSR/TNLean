@@ -117,6 +117,14 @@ Source: arXiv:1210.6613, proof of Lemma lowenergystates, lines 1289–1296. -/
 def uncleTrialEndpointBonds (N : ℕ) (hN : 0 < N) : Finset (Fin (6 * N + 1)) :=
   {⟨N - 1, by omega⟩, ⟨2 * N, by omega⟩, ⟨4 * N - 1, by omega⟩, ⟨5 * N, by omega⟩}
 
+/-- Membership in the actual four endpoint bonds is the corresponding
+four-way coordinate equality. -/
+theorem mem_uncleTrialEndpointBonds_iff (N : ℕ) (hN : 0 < N) (i : Fin (6 * N + 1)) :
+    i ∈ uncleTrialEndpointBonds N hN ↔
+      i = ⟨N - 1, by omega⟩ ∨ i = ⟨2 * N, by omega⟩ ∨
+        i = ⟨4 * N - 1, by omega⟩ ∨ i = ⟨5 * N, by omega⟩ := by
+  simp only [uncleTrialEndpointBonds, Finset.mem_insert, Finset.mem_singleton]
+
 /-- The four endpoint bonds are distinct for every positive source size. -/
 theorem uncleTrialEndpointBonds_card (N : ℕ) (hN : 0 < N) :
     (uncleTrialEndpointBonds N hN).card = 4 := by
