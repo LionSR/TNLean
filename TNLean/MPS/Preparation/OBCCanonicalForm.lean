@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.Preparation.OBCCanonicalBasisFamily
 import TNLean.MPS.Preparation.OBCCanonicalRecurrences
 import TNLean.MPS.Preparation.CutCoefficientRank
+import TNLean.MPS.Preparation.OBCRectangularCutMaps
 
 /-!
 # Simultaneous Schmidt canonical form of an open-boundary MPS
@@ -39,7 +40,7 @@ simultaneous OBC canonical representation. Bond dimensions are the actual
 Schmidt cut ranks, and the densities are derived positive diagonal Grams.
 No canonical or density hypothesis is supplied.
 Source: PGVWC07, Theorem thm:OBC-Vidal, lines 431--458, conditions 1--3. -/
-theorem exists_canonical_coeff_eq {d N : ℕ} (hN : 0 < N)
+private theorem exists_canonical_coeff_eq_with_cutBasis {d N : ℕ} (hN : 0 < N)
     (ψ : (Fin N → Fin d) → ℂ) (hnorm : ∑ σ, star (ψ σ) * ψ σ = 1) :
     ∃ A : OBCChainTensor d (d ^ (N / 2)) N,
     ∃ Λ : (k : Fin (N + 1)) → Matrix (Fin (A.bondDim k)) (Fin (A.bondDim k)) ℂ,
@@ -48,10 +49,15 @@ theorem exists_canonical_coeff_eq {d N : ℕ} (hN : 0 < N)
       (∀ p, ∑ i, A.tensor p i * (A.tensor p i)ᴴ = 1) ∧
       (∀ p, ∑ i, (A.tensor p i)ᴴ * Λ p.castSucc * A.tensor p i = Λ p.succ) ∧
       Λ 0 = 1 ∧ Λ (Fin.last N) = 1 ∧
-      ∀ k, (Λ k).PosDef ∧
+      (∀ k, (Λ k).PosDef ∧
         (∃ λ : Fin (A.bondDim k) → ℝ,
           (∀ q, 0 < λ q) ∧ Λ k = Matrix.diagonal (fun q ↦ (λ q : ℂ))) ∧
-        Matrix.trace (Λ k) = 1 := by
+        Matrix.trace (Λ k) = 1) ∧
+      ∃ (hψ : ψ ≠ 0)
+        (C : ∀ k, Module.Basis (Fin (cutCoefficientRank ψ k)) ℂ (cutColumnSpace ψ k)),
+        (∀ q, (C 0 q).val = 1) ∧ (∀ q, (C N q).val = fullCutVector ψ) ∧
+        ∃ hbound : ∀ k : Fin (N + 1), cutCoefficientRank ψ k.val ≤ d ^ (N / 2),
+          A = minimalCutChain ψ hψ C hbound := by
   classical
   have hψ : ψ ≠ 0 := by
     intro hzero
@@ -82,7 +88,7 @@ theorem exists_canonical_coeff_eq {d N : ℕ} (hN : 0 < N)
         simp only [Fintype.card_fin, cutCoefficientRank_zero ψ hψ, Nat.cast_one]
     | succ k ih =>
         rw [trace_cutBondDensity_step ψ B (by omega) (hiso k (by omega)), ih (by omega)]
-  refine ⟨A, Λ, funext (minimalCutChain_coeff ψ hψ B hB0 hBN hbound), ?_, ?_, ?_, ?_, ?_, ?_⟩
+  refine ⟨A, Λ, funext (minimalCutChain_coeff ψ hψ B hB0 hBN hbound), ?_, ?_, ?_, ?_, ?_, ?_, ?_⟩
   · intro k
     exact cutCoefficientRank_eq_cutRank ψ (Nat.lt_succ_iff.mp k.isLt)
   · intro p
@@ -98,5 +104,61 @@ theorem exists_canonical_coeff_eq {d N : ℕ} (hN : 0 < N)
     rw [hdiag, Matrix.posDef_diagonal_iff]
     intro q
     exact_mod_cast hλ q
+
+  · exact ⟨hψ, B, hB0, hBN, hbound, rfl⟩
+
+/-- Every normalized physical state of positive length has an actual
+simultaneous OBC canonical representation. Bond dimensions are the actual
+Schmidt cut ranks, and the densities are derived positive diagonal Grams.
+No canonical or density hypothesis is supplied.
+Source: PGVWC07, Theorem thm:OBC-Vidal, lines 431--458, conditions 1--3. -/
+theorem exists_canonical_coeff_eq {d N : ℕ} (hN : 0 < N)
+    (ψ : (Fin N → Fin d) → ℂ) (hnorm : ∑ σ, star (ψ σ) * ψ σ = 1) :
+    ∃ A : OBCChainTensor d (d ^ (N / 2)) N,
+    ∃ Λ : (k : Fin (N + 1)) → Matrix (Fin (A.bondDim k)) (Fin (A.bondDim k)) ℂ,
+      A.coeff = ψ ∧
+      (∀ k, A.bondDim k = cutRank ψ k.val) ∧
+      (∀ p, ∑ i, A.tensor p i * (A.tensor p i)ᴴ = 1) ∧
+      (∀ p, ∑ i, (A.tensor p i)ᴴ * Λ p.castSucc * A.tensor p i = Λ p.succ) ∧
+      Λ 0 = 1 ∧ Λ (Fin.last N) = 1 ∧
+      ∀ k, (Λ k).PosDef ∧
+        (∃ λ : Fin (A.bondDim k) → ℝ,
+          (∀ q, 0 < λ q) ∧ Λ k = Matrix.diagonal (fun q ↦ (λ q : ℂ))) ∧
+        Matrix.trace (Λ k) = 1 := by
+  obtain ⟨A, Λ, hcoeff, hbond, hiso, hdensity, hleft, hright, hΛ, _⟩ :=
+    exists_canonical_coeff_eq_with_cutBasis hN ψ hnorm
+  exact ⟨A, Λ, hcoeff, hbond, hiso, hdensity, hleft, hright, hΛ⟩
+
+/-- Every normalized OBC representation admits the simultaneous Schmidt
+canonical form by actual local rectangular maps. Their product is the
+identity on each retained minimal bond, and the endpoint identifications
+are scalar identities. No square invertible gauge is assumed.
+Source: PGVWC07, Theorem free-OBC and Eq. eq.lem.II.9, lines 461--486;
+canonical conditions 1--3 in Theorem thm:OBC-Vidal, lines 431--458. -/
+theorem exists_canonical_coeff_eq_rectangular_maps {d D N : ℕ} (hN : 0 < N)
+    (B : OBCChainTensor d D N) (hnorm : ∑ σ, star (B.coeff σ) * B.coeff σ = 1) :
+    ∃ A : OBCChainTensor d (d ^ (N / 2)) N,
+    ∃ Λ : (k : Fin (N + 1)) → Matrix (Fin (A.bondDim k)) (Fin (A.bondDim k)) ℂ,
+    ∃ Y : (k : Fin (N + 1)) → Matrix (Fin (A.bondDim k)) (Fin (B.bondDim k)) ℂ,
+    ∃ Z : (k : Fin (N + 1)) → Matrix (Fin (B.bondDim k)) (Fin (A.bondDim k)) ℂ,
+      A.coeff = B.coeff ∧
+      (∀ k, A.bondDim k = cutRank B.coeff k.val) ∧
+      (∀ p, ∑ i, A.tensor p i * (A.tensor p i)ᴴ = 1) ∧
+      (∀ p, ∑ i, (A.tensor p i)ᴴ * Λ p.castSucc * A.tensor p i = Λ p.succ) ∧
+      Λ 0 = 1 ∧ Λ (Fin.last N) = 1 ∧
+      (∀ k, (Λ k).PosDef ∧
+        (∃ λ : Fin (A.bondDim k) → ℝ,
+          (∀ q, 0 < λ q) ∧ Λ k = Matrix.diagonal (fun q ↦ (λ q : ℂ))) ∧
+        Matrix.trace (Λ k) = 1) ∧
+      (∀ k, Y k * Z k = 1) ∧
+      (∀ q r, Y 0 q r = 1) ∧ (∀ q r, Z (Fin.last N) q r = 1) ∧
+      ∀ (p : Fin N) (i : Fin d), A.tensor p i = Y p.castSucc * B.tensor p i * Z p.succ := by
+  obtain ⟨A, Λ, hcoeff, hbond, hiso, hdensity, hleft, hright, hΛ,
+    hψ, C, hC0, hCN, hbound, hA⟩ := exists_canonical_coeff_eq_with_cutBasis hN B.coeff hnorm
+  subst A
+  obtain ⟨Y, Z, hYZ, hY0, hZN, hsite⟩ :=
+    exists_rectangular_maps_to_cutBasis B B.coeff rfl C hC0 hCN
+  exact ⟨minimalCutChain B.coeff hψ C hbound, Λ, Y, Z, hcoeff, hbond,
+    hiso, hdensity, hleft, hright, hΛ, hYZ, hY0, hZN, hsite⟩
 
 end OBCChainTensor

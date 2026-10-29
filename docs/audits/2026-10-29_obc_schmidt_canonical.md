@@ -30,11 +30,24 @@ is an input. Normalization is the source's state convention, also necessary
 for its printed endpoint and trace conditions; the open chain has positive
 length.
 
-The rectangular Y_j, Z_j freedom assertion of Theorem 2 is separate. The
-simultaneous canonical existence theorem alone does not claim that every
-pre-existing representation is connected to the constructed one by those
-rectangular local maps. Actual boundary-factor comparison is the remaining
-step for that assertion.
+The rectangular freedom theorem is also source-written. Actual original
+prefix and suffix products factor the physical cut matrix through the
+original virtual bond. Therefore the physical cut basis columns lift through
+the original prefix P_k: choose Z_k with P_k Z_k = F_k. Basis independence
+supplies a left inverse T_k F_k = I. Defining Y_k = T_k P_k gives Y_k Z_k = I;
+the actual adjacent-prefix recurrences prove A_k^i = Y_k B_k^i Z_(k+1).
+The initial Y and final Z are the scalar endpoint identifications. The
+canonical construction retains its chosen physical cut bases internally,
+so this comparison applies to that very same canonical chain, without
+assuming density, rank equality, or an invertible square gauge.
+
+The additional public theorem
+OBCChainTensor.exists_canonical_coeff_eq_rectangular_maps takes only an
+original representation of positive length and normalization of its actual
+coefficient state. It returns the actual simultaneous canonical chain and
+all its densities together with these rectangular maps. Thus both source
+Theorem 1 and Theorem 2 now have complete written proof bodies; this is
+not a hosted-verification or integration claim.
 
 All proof bodies are source-written without placeholders or bypasses.
 Independent mathematical review found the weighted-basis orientation and
@@ -42,5 +55,5 @@ both Gram equations consistent. Native source synchronization, generated
 imports, mathematical-role checks, prose, formatting, tactic scan, module-size
 and whitespace checks are used. No local Lean invocation, build, checkdecls
 or cache mutation. Every new Blueprint entry remains notready pending hosted
-verification; the issue remains open for verification, integration and the
-rectangular freedom theorem.
+verification; the issue remains open for verification and integration of both
+source theorems.

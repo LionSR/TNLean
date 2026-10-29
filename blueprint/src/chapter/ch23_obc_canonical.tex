@@ -119,3 +119,93 @@
     The initial trace is one and is preserved at every site. The physical
     cut-rank bound gives the stated common bond bound.
 \end{proof}
+
+\begin{lemma}[Original OBC prefix and suffix factors]
+    \label{lem:obc_original_boundary_factors}
+    \lean{OBCChainTensor.physicalPrefixMatrix,
+        OBCChainTensor.physicalSuffixMatrix,
+        OBCChainTensor.physicalPrefixMatrix_step,
+        OBCChainTensor.physicalPrefixMatrix_zero,
+        OBCChainTensor.physicalPrefixMatrix_last,
+        OBCChainTensor.cutCoefficientMatrix_eq_physicalPrefix_mul_suffix,
+        OBCChainTensor.cutColumnSpace_le_range_physicalPrefixMatrix}
+    \notready
+    \uses{def:varying_bond_obc_coeff}
+    For any OBC representation $B$, let $P_k$ and $H_k$ be its actual
+    prefix and suffix contractions through the original $k$th bond.
+    The physical coefficient matrix factors as $M_k=P_kH_k$, so its
+    column space lies in the range of $P_k$. The adjacent prefix
+    factors satisfy
+    \[
+        P_{k+1}(\sigma i,\beta)
+        =\bigl(P_kB_k^i\bigr)(\sigma,\beta).
+    \]
+    The initial prefix is the scalar identity, and the final prefix is
+    the actual physical state, with its complete complex amplitude.
+\end{lemma}
+\begin{proof}
+    Split the actual ordered site product at the cut. Its prefix has
+    zero columns outside the current original bond, including the
+    scalar left endpoint case. Restricting the contraction to that bond
+    gives the factorization. Splitting off the last prefix site gives
+    the adjacent recurrence.
+\end{proof}
+
+\begin{lemma}[Local rectangular maps to any physical cut bases]
+    \label{lem:obc_rectangular_cut_maps}
+    \lean{MPSPreparation.exists_cutPrefixMatrix_leftInverse,
+        OBCChainTensor.exists_rectangular_maps_to_cutBasis}
+    \notready
+    \uses{lem:obc_original_boundary_factors,
+        lem:obc_weighted_schmidt_cut_bases}
+    Choose bases of the physical cut column spaces, with prefix matrices
+    $F_k$, initial basis vector $1$ and final basis vector $\psi$. For
+    every OBC representation $B$ of the same state there are rectangular
+    matrices $Y_k,Z_k$ such that
+    \[
+        Y_kZ_k=I,\qquad
+        A_k^i=Y_kB_k^iZ_{k+1}.
+    \]
+    The initial $Y_0$ and final $Z_N$ are the scalar endpoint
+    identifications. These conclusions require no square invertibility
+    or additional full-rank assumption on the original representation.
+\end{lemma}
+\begin{proof}
+    The physical cut-space inclusion supplies $Z_k$ with $P_kZ_k=F_k$.
+    Basis independence gives a left inverse $T_kF_k=I$. Set $Y_k=T_kP_k$;
+    then $Y_kZ_k=I$. The two actual prefix recurrences give
+    $F_kA_k^i=P_kB_k^iZ_{k+1}$, and multiplying by $T_k$ gives the
+    site formula. Fix $Z_N$ to the scalar identity; the initial prefix
+    equation forces $Y_0$ to be the scalar identity as well.
+\end{proof}
+
+\begin{theorem}[Rectangular freedom of OBC representations]
+    \label{thm:obc_rectangular_canonical_freedom}
+    \lean{OBCChainTensor.exists_canonical_coeff_eq_rectangular_maps}
+    \notready
+    \uses{thm:obc_schmidt_canonical, lem:obc_rectangular_cut_maps}
+    Let $N>0$, and let $B$ be any OBC representation of a normalized
+    state. There is a simultaneous Schmidt canonical representation $A$
+    of the same state, with the minimal physical cut ranks, the bound
+    $d^{\lfloor N/2\rfloor}$ and all the density conditions of
+    Theorem~\ref{thm:obc_schmidt_canonical}, together with rectangular
+    matrices
+    \[
+        Y_k:\mathbb C^{D_k^B}\longrightarrow\mathbb C^{D_k^A},
+        \qquad
+        Z_k:\mathbb C^{D_k^A}\longrightarrow\mathbb C^{D_k^B},
+        \qquad Y_kZ_k=I_{D_k^A},
+    \]
+    such that $A_k^i=Y_kB_k^iZ_{k+1}$ for every site and letter.
+    The initial and final endpoint maps are the scalar identities,
+    giving precisely the first-site, interior-site and last-site
+    formulas of \cite[Theorem~2]{PerezGarcia2007Matrix}.
+\end{theorem}
+\begin{proof}
+    Use the weighted Schmidt cut bases in the construction of
+    Theorem~\ref{thm:obc_schmidt_canonical}. Apply the preceding lemma to
+    the actual original representation and these same physical bases.
+    The resulting local rectangular maps act on the actual constructed
+    canonical chain, so both its coefficient identity and its simultaneous
+    density conditions hold without additional hypotheses.
+\end{proof}
