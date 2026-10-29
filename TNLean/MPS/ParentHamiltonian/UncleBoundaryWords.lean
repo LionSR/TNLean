@@ -197,7 +197,9 @@ theorem uncleBoundary_span_eq_top_succ
       change uncleBoundaryWord A B R L (List.ofFn σ) ∈ _
       rw [← sum_smul_uncleBoundaryWord_cons A B R L c hc (List.ofFn σ)]
       refine Submodule.sum_mem _ fun i _ ↦ Submodule.smul_mem _ (c i) ?_
-      exact Submodule.subset_span ⟨Fin.cons i σ, by rw [List.ofFn_cons]⟩
+      exact Submodule.subset_span ⟨Fin.cons i σ, by
+        change uncleBoundaryWord A B R L (List.ofFn (Fin.cons i σ)) = _
+        rw [List.ofFn_cons]⟩
 
 /-- The trace boundary map for the four source sectors \(S_n\). -/
 noncomputable def uncleBoundaryMap (A : MPSTensor d a) (B : MPSTensor d b)
@@ -206,7 +208,7 @@ noncomputable def uncleBoundaryMap (A : MPSTensor d a) (B : MPSTensor d b)
     Matrix (Fin (a + b)) (Fin (a + b)) ℂ →ₗ[ℂ] NSiteSpace d n where
   toFun X σ := Matrix.trace (uncleBoundaryWord A B R L (List.ofFn σ) * X)
   map_add' X Y := by ext σ; simp [Matrix.mul_add, Matrix.trace_add]
-  map_smul' c X := by ext σ; simp [Matrix.mul_smul, Matrix.trace_smul]
+  map_smul' c X := by ext σ; simp [Matrix.trace_smul]
 
 /-- The actual four-sector source boundary space, equation (Sn-def) of
 arXiv:1210.6613. Its word-block formula separates \(A_n,B_n,R_n,L_n\). -/
@@ -231,7 +233,8 @@ theorem uncleBoundaryMap_two (A : MPSTensor d a) (B : MPSTensor d b)
     uncleBoundaryMap A B R L 2 X σ =
       groundSpaceMap (uncleTensor A B R L) 1 X
         (fun _ ↦ (decodeBlockEquiv d 2).symm σ) := by
-  simp only [uncleBoundaryMap_apply, uncleBoundaryWord_ofFn_two, groundSpaceMap_apply,
-    List.ofFn_succ, List.ofFn_zero, Kraus.evalWord_cons, Kraus.evalWord_nil, Matrix.mul_one]
+  rw [uncleBoundaryMap_apply, uncleBoundaryWord_ofFn_two]
+  simp only [groundSpaceMap_apply, List.ofFn_succ, List.ofFn_zero, Kraus.evalWord_cons,
+    Kraus.evalWord_nil, Matrix.mul_one]
 
 end MPSTensor
