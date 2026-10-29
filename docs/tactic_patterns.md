@@ -9679,3 +9679,19 @@ there is no need for a new tactic.
 - **Decision:** Two proof occurrences in one file; keep the concrete source
   statements and consolidate the closed-containment argument before a third
   copy, rather than adding another notion of local generation.
+
+
+### Reading original half-block output coordinates — candidate (2026-10-29)
+
+- **Pattern:** Decode the actual paired physical identification into its two
+  original block words, read the six half-block coordinates through the
+  existing three-pair decoder, and compare the actual middle/outside words
+  with the existing consecutive-window inclusion.
+- **Seen:** `MPS/MPU/TwoSiteFiniteHeisenberg.lean` and
+  `MPS/MPU/TwoSiteMiddleOutput.lean`.
+- **Abstraction:** One private half-block reading lemma serves every middle
+  and exterior case. The two-site decoded-word identity is at the existing
+  physical standard-form owner. The final matrix proof reuses the existing
+  window evaluation and support theorems.
+- **Notes:** The actual middle output is [k,5k) inside its existing 6k-site
+  window; no support conclusion or new factor predicate is a premise.

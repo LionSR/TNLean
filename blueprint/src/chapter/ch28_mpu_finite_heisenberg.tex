@@ -114,6 +114,44 @@
 \end{proof}
 
 
+\begin{lemma}[The four consecutive middle output blocks]
+    \label{lem:mpu_finite_heisenberg_middle_output_window}
+    \lean{MPOTensor.wordOfBlock_twoSiteDirectBlockEquiv_symm,
+        MPOTensor.originalSiteHeisenbergOutputWindowEquiv,
+        MPOTensor.originalSiteHeisenbergOutputCentreEquiv,
+        MPOTensor.originalSiteHeisenbergOutputWindowEquiv_middle,
+        MPOTensor.originalSiteHeisenbergOutputWindowEquiv_outside_eq_iff,
+        MPOTensor.originalSiteHeisenbergOutputWindow_eq_chainWindowOperator,
+        MPOTensor.originalSiteHeisenbergOutputWindow_mem_supportedOperators}
+    \notready
+    Let $k>0$. For arbitrary matrices $u,v,A$ of the standard-form gate
+    dimensions, write $B_{u,v}(A)$ for the actual four-half-block output.
+    The six-half-block output window is exactly
+    \[
+        O_k(A)=I_k\otimes B_{u,v}(A)\otimes I_k,
+    \]
+    where the middle four half blocks are decoded to their $4k$
+    original sites in their given order. Thus $O_k(A)$ is the actual
+    placement of that decoded matrix on the interval $[k,5k)$ of the
+    $6k$-site window and is supported there. No output-support or
+    factor-presentation condition is assumed. This is the literal
+    four-half-block geometry of
+    \cite[lines~603--622 and~2300--2334]{Cirac2017MPU}.
+\end{lemma}
+\begin{proof}
+    \uses{thm:mpu_finite_heisenberg_fixed_window}
+    The actual two-site physical identification decodes to the
+    concatenation of its two original block words. The output coordinate
+    order is therefore
+    $(e_1,c_1,c_2,c_3,c_4,e_2)$, with $e_1,e_2$ the two exterior
+    half blocks. Reading the interval $[k,5k)$ gives exactly the four
+    middle coordinates. Equality outside it is equivalent to equality
+    of the two exterior coordinates. In matrix entries, the exterior
+    Kronecker identity is precisely the corresponding equality indicator.
+    The resulting formula is the ordinary consecutive-window inclusion,
+    which has the stated support.
+\end{proof}
+
 \begin{lemma}[Canonical local-observable buffering for one window]
     \label{thm:mpu_finite_heisenberg_canonical_window}
     \lean{SpinChain.intervalCoordinates_localInclusion_eq_bufferedWindowMatrix,
