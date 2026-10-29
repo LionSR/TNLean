@@ -225,3 +225,30 @@ to the norm of the actual two-wall trial remains a further step.
     and the whole first wall space times the second radical. These are
     two proper real linear subspaces, each of zero additive Haar measure.
 \end{proof}
+
+\begin{lemma}[Uniform linear wall Gram bounds]
+    \label{lem:uncle_wall_gram_linear_bounds}
+    \lean{MPSTensor.uncleWallGramWeight_norm_le_mul,
+        MPSTensor.uncleWallGram_trace_re_le_weight,
+        MPSTensor.uncleWallGram_trace_re_le_mul,
+        MPSTensor.uncleWallGram_l2_opNorm_le_mul}
+    \notready
+    \uses{thm:uncle_wall_gram_linear_limit,lem:uncle_wall_gram_recurrence}
+    Under the stationary Hermitian left density, unital right block and
+    strict mixed-transfer damping, there is $C>0$ such that
+    $|\eta_n|\le Cn$ for every $n\ge0$. If the density is positive
+    definite, there is also $K>0$ such that
+    \[
+        \operatorname{Re}\operatorname{tr}(Y_n)\le K\eta_n.
+    \]
+    Consequently both the unweighted Gram trace and the Euclidean operator
+    norm of $Y_n$ are bounded by a constant times $n$ for every $n\ge0$.
+\end{lemma}
+\begin{proof}
+    Convergence of $\eta_n/n$ bounds the tail; increasing the constant
+    handles the finite initial segment, and $\eta_0=0$. A faithful
+    density satisfies $\rho\ge cI$ for some $c>0$. Positivity of $Y_n$
+    gives $\eta_n\ge c\operatorname{Re}\operatorname{tr}(Y_n)$.
+    Finally, the operator norm of a positive semidefinite matrix is at
+    most its real trace.
+\end{proof}
