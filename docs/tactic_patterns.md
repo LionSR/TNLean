@@ -9689,3 +9689,14 @@ removed after the dependency audit exposed it.
 - **Abstraction:** The public `exists_twoSiteStandardFormData_sourceFactors`
   supplies the actual data; no SVD or standard-form witness is added downstream.
   The converse uses the existing periodic gauge cancellation theorem.
+
+### Transposition via actual adjunction and conjugation — candidate (2026-10-29)
+
+- **Pattern:** Compose the existing physical-adjoint construction with entrywise
+  conjugation and retain a real diagonal weight by its proved conjugation identity.
+- **Seen:** `MPS/MPU/PhysicalTransposeSourceFactors.lean`, canonical presentation,
+  actual factors and both gate identities.
+- **Abstraction:** Reuse `IsMPUCanonicalFormII.physicalAdjointTensor.mapStar`,
+  `SourceFactors.physicalAdjoint`, and `SourceFactors.mapStar`. No parallel
+  admissibility or transpose-source predicate is introduced. The square-rank
+  supplier derives its ranks from actual even-family symmetry.

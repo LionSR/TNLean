@@ -10057,6 +10057,46 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     % Source lines: paper_v2.tex 1201--1252.
 \end{proof}
 
+\begin{lemma}[Physical transposition of normalized source factors]
+    \label{lem:mpu_physical_transpose_source_factors}
+    \lean{MPOTensor.physicalTransposeTensor, MPOTensor.physicalTransposeTensor_apply, MPOTensor.physicalTransposeTensor_physicalTransposeTensor, MPOTensor.mpo_physicalTransposeTensor, MPOTensor.source_ranks_physicalTransposeTensor, MPOTensor.IsMPUCanonicalFormII.physicalTransposeTensor, MPOTensor.IsMPUCanonicalFormII.isMPUSimple_physicalTransposeTensor, MPOTensor.IsMPUCanonicalFormII.sourceRanks_eq_phys_of_even_mpo_eq_transpose, MPOTensor.SourceFactors.physicalTranspose, MPOTensor.SourceFactors.sourceU_physicalTranspose, MPOTensor.SourceFactors.sourceV_physicalTranspose, MPOTensor.IsMPUCanonicalFormII.sourceFactors_physicalTranspose_of_even_mpo_eq_transpose}
+    \notready
+    Physical transposition replaces $U^{ij}$ by $U^{ji}$ without reflecting
+    its virtual indices. It is an involution, and its periodic operators are
+    $(U^{(N)})^T$ at every length. It exchanges the two source ranks and
+    preserves simplicity and a reduced canonical-form-II presentation with
+    its real diagonal weight $\rho$.
+
+    For a simple tensor in this presentation, take any normalized source
+    factorization at $\rho$. If $r=\ell=d$, normalized factors for the
+    physical transpose are
+    \begin{align}
+        (X_1',Y_1',Z_1') & =(Y_2^T,X_2^T,\overline{X_2}), \\
+        (X_2',Y_2',Z_2') & =(Y_1^T,X_1^T,
+        (\Id_d\otimes\rho)\overline{X_1}),
+    \end{align}
+    in the canonical exchanged-rank coordinates. Their actual gates are
+    $u'=v^T$ and $v'=u^T$. Moreover, symmetry
+    $U^{(N)}=(U^{(N)})^T$ at every even length $N>1$ forces $r=\ell=d$,
+    so under this symmetry no square-rank or normalization hypothesis is added
+    to the factor construction. These are the physical and factor
+    comparisons in \cite[lines~1258--1288]{Cirac2017MPU}.
+    This does not establish the local equivalence criterion below. The reduced
+    presentation restriction is recorded in
+    \cite{gap:mpu_canonical_form_full_support}.
+\end{lemma}
+
+\begin{proof}
+    \uses{lem:mpu_normalized_physical_adjoint_source_factors,
+        lem:mpu_even_family_supplied_source_gauges}
+    Compose physical adjunction with entrywise conjugation. The real diagonal
+    weight is fixed under conjugation, so the actual adjoint factor
+    normalizations give the displayed transpose factors and gates. Under
+    even-chain symmetry the even-family virtual comparison preserves the
+    source ranks. Since transposition exchanges them, they agree. Simplicity
+    gives $r\ell=d^2$, hence both equal $d$.
+\end{proof}
+
 \begin{proposition}[Local characterization of transposition]
     \label{prop:local-char-transposition}
     \notready

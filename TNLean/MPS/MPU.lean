@@ -146,6 +146,7 @@ import TNLean.MPS.MPU.PhaseSelectorRows
 import TNLean.MPS.MPU.PhysicalAdjointCanonicalForm
 import TNLean.MPS.MPU.PhysicalAncilla
 import TNLean.MPS.MPU.PhysicalCutConfigurations
+import TNLean.MPS.MPU.PhysicalTransposeSourceFactors
 import TNLean.MPS.MPU.PolynomialOverheadBounds
 import TNLean.MPS.MPU.PositiveCanonicalGauge
 import TNLean.MPS.MPU.PrefixGramNormalizer
