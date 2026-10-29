@@ -26,7 +26,7 @@ coefficient decomposition, lines 970–993.
 noncomputable section
 
 open Filter Matrix
-open scoped Matrix.Norms.L2Operator InnerProductSpace Topology
+open scoped Matrix.Norms.L2Operator InnerProductSpace Topology BigOperators
 
 namespace MPSTensor
 
