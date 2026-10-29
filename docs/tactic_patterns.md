@@ -24,6 +24,20 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Fixed vectors of complementary projection products — promoted (2026-10-29)
+
+- **Pattern:** Induct on the product length to show every complementary factor
+  fixes a common-kernel vector. The converse follows from the existing sum
+  of squared removed norms.
+- **Abstraction:** `ContinuousLinearMap.complementProd_apply_eq_self_iff` in
+  QICLean `Analysis/ComplementProdKernel.lean`.
+- **Refactored occurrence:** The original prefix induction in TNLean
+  `MPS/AreaLaw/PhysicalDetectability.lean` now uses the shared equivalence
+  through `physicalParityProduct_apply_eq_self_iff`. The implication from a fixed vector
+  uses the existing removed-mass identity; the implication from a common-kernel vector
+  follows by induction on the product length. No new
+  tactic, projection definition or kernel structure is introduced.
+
 ### Spectral support as an indicator — promoted (2026-10-29)
 
 - **Pattern:** Expand the eigenvector-unitary definition of the support
