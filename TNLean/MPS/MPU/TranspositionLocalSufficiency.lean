@@ -114,7 +114,22 @@ theorem IsMPUCanonicalFormII.mpo_even_eq_transpose_of_source_local_certificate
     have data := dataT.reindexRanks LA RA
     dsimp only [T] at data
     rw [SourceFactors.sourceU_physicalTranspose, SourceFactors.sourceV_physicalTranspose] at data
-    simpa only [A, B, L, R, LA, RA, Matrix.transpose_reindex] using data
+    have hu : Matrix.reindex (Equiv.prodCongr LA RA) (Equiv.refl _)
+        (Matrix.reindex
+          (Equiv.prodCongr (finCongr (source_ranks_physicalTransposeTensor U).2.symm)
+            (finCongr (source_ranks_physicalTransposeTensor U).1.symm))
+          (Equiv.refl _) (SourceFactors.sourceV U S)ᵀ) = Bᵀ := by
+      ext ⟨i, j⟩ ⟨k, l⟩
+      rfl
+    have hv : Matrix.reindex (Equiv.refl _) (Equiv.prodCongr RA LA)
+        (Matrix.reindex (Equiv.refl _)
+          (Equiv.prodCongr (finCongr (source_ranks_physicalTransposeTensor U).1.symm)
+            (finCongr (source_ranks_physicalTransposeTensor U).2.symm))
+          (SourceFactors.sourceU U S)ᵀ) = Aᵀ := by
+      ext ⟨i, j⟩ ⟨k, l⟩
+      rfl
+    rw [hu, hv] at data
+    exact data
   obtain ⟨X, Y, hfirst, hsecond⟩ := transpose_gate_gauges_of_local_phase A B c hc x hlocal
   rw [hfirst, hsecond] at dataB
   rcases heven with ⟨m, rfl⟩

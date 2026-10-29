@@ -135,3 +135,13 @@ The child stack is refreshed onto parent #10315 head `e960a6cb9`. The four
 rank transports in its transpose necessity proof use explicit entry
 identities, matching the concrete canonical reindex defect diagnosed in the
 adjoint parent. No statement or hypothesis changes, and no local Lean was run.
+
+## Refreshed parent kernel-checking repair
+
+Parent #10315 head `e960a6cb9` cleared the prior elaboration errors and
+reached a deterministic kernel timeout on the coarse local certificate.
+The parent splits its abstract normalized-source comparison from the large
+coarse constructor. This child is refreshed onto the repair and uses explicit
+canonical entry identities in both converse gate transports as well. No
+mathematical statement or hypothesis changes. Hosted acceptance remains
+pending and no local Lean was run.
