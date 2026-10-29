@@ -111,7 +111,22 @@ theorem IsMPUCanonicalFormII.mpo_even_eq_adjoint_of_source_local_certificate
     have data := dataT.reindexRanks LA RA
     dsimp only [T] at data
     rw [SourceFactors.sourceU_physicalAdjoint, SourceFactors.sourceV_physicalAdjoint] at data
-    simpa only [A, B, L, R, LA, RA, Matrix.conjTranspose_reindex] using data
+    have hu : Matrix.reindex (Equiv.prodCongr LA RA) (Equiv.refl _)
+        (Matrix.reindex
+          (Equiv.prodCongr (finCongr (leftRank_physicalAdjointTensor U).symm)
+            (finCongr (rightRank_physicalAdjointTensor U).symm))
+          (Equiv.refl _) (SourceFactors.sourceV U S)ᴴ) = Bᴴ := by
+      ext ⟨i, j⟩ ⟨k, l⟩
+      rfl
+    have hv : Matrix.reindex (Equiv.refl _) (Equiv.prodCongr RA LA)
+        (Matrix.reindex (Equiv.refl _)
+          (Equiv.prodCongr (finCongr (rightRank_physicalAdjointTensor U).symm)
+            (finCongr (leftRank_physicalAdjointTensor U).symm))
+          (SourceFactors.sourceU U S)ᴴ) = Aᴴ := by
+      ext ⟨i, j⟩ ⟨k, l⟩
+      rfl
+    rw [hu, hv] at data
+    exact data
   obtain ⟨X, Y, hfirst, hsecond⟩ := adjoint_gate_gauges_of_local_sign A B σ hσ x hlocal
   rw [hfirst, hsecond] at dataB
   rcases heven with ⟨m, rfl⟩

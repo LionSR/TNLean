@@ -329,3 +329,8 @@ theorem over an abstract source record. The public coarse wrapper derives
 its actual ranks and applies that theorem, so the large coarse constructor
 is no longer unfolded throughout the generic comparison proof. Statements
 and hypotheses are unchanged; no local Lean command was run.
+
+The converse's actual adjoint standard-form data has the same nested
+canonical rank transports as the necessity equations. Its two gate
+identifications now use explicit entry identities as well, removing reliance
+on the opaque nested reindex simplification that failed in the forward proof.
