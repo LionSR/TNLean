@@ -239,9 +239,13 @@ theorem uncleBoundaryWord_slice_mem
     (u v : List (Fin d)) :
     (fun σ : Fin 2 → Fin d ↦ f (uncleBoundaryWord A B R L (u ++ List.ofFn σ ++ v))) ∈
       uncleBoundarySpace A B R L 2 := by
-  obtain ⟨X, hX⟩ := Matrix.exists_trace_representation
-    (f.comp ((uncleBoundaryMulLeft (uncleBoundaryWord A B R L u)).comp
-      (uncleBoundaryMulRight (uncleBoundaryWord A B R L v))))
+  let f' := f.comp ((uncleBoundaryMulLeft (uncleBoundaryWord A B R L u)).comp
+    (uncleBoundaryMulRight (uncleBoundaryWord A B R L v)))
+  let X := ((Matrix.traceBilinForm (Fin (a + b))).toDual
+    Matrix.traceBilinForm_nondegenerate).symm f'
+  have hX (M : Matrix (Fin (a + b)) (Fin (a + b)) ℂ) :
+      f' M = Matrix.trace (X * M) := by
+    rw [← Matrix.traceBilinForm_apply, LinearMap.BilinForm.apply_toDual_symm_apply]
   refine ⟨X, ?_⟩
   ext σ
   change Matrix.trace (uncleBoundaryWord A B R L (List.ofFn σ) * X) =
