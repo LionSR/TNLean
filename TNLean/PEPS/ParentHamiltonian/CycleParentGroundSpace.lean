@@ -32,10 +32,10 @@ private theorem cycle_offset_eq (s v : Fin n) :
     (v - s).val = (v.val + n - s.val) % n := by
   rw [val_sub_eq_ite]
   by_cases h : s.val ≤ v.val
-  · rw [if_pos h]
+  · rw [ite_eq_left h]
     have hsum : v.val + n - s.val = v.val - s.val + n := by omega
     rw [hsum, Nat.add_mod_right, Nat.mod_eq_of_lt (by omega)]
-  · rw [if_neg h, Nat.mod_eq_of_lt (by omega)]
+  · rw [ite_eq_right h, Nat.mod_eq_of_lt (by omega)]
 
 /-- The regional assembly and cyclic-window assembly give the same full
 configuration on a proper arc. Source: arXiv:2011.12127, local and graph
@@ -50,7 +50,7 @@ theorem assembleRegion_cycleArc_eq_cyclicCfg (hLn : L < n) (s : Fin n)
   · have hoff : (v.val + n - s.val) % n < L := by
       rw [← cycle_offset_eq s v]
       exact mem_cycleArcFrom.mp hv
-    simp only [assembleRegionσ, dif_pos hv, MPSTensor.cyclicCfg, dif_pos hoff]
+    simp only [assembleRegionσ, dite_eq_left hv, MPSTensor.cyclicCfg, dite_eq_left hoff]
     change σ ((arcSiteEquiv hLn s).symm ⟨v, hv⟩) = σ ⟨_, hoff⟩
     congr 1
     apply Fin.ext
@@ -117,7 +117,7 @@ theorem regionParentGroundSpace_cycleTensorOfMPS (hn : 3 ≤ n) (hL : 0 < L)
       MPSTensor.chainGroundSpace A L n := by
   ext ψ
   rw [mem_regionParentGroundSpace_iff, MPSTensor.chainGroundSpace,
-    dif_pos ⟨NeZero.pos n, Nat.le_of_lt hLn⟩]
+    dite_eq_left ⟨NeZero.pos n, Nat.le_of_lt hLn⟩]
   simp only [Submodule.mem_iInf, Submodule.mem_comap]
   constructor
   · intro hψ s τ
