@@ -341,3 +341,63 @@ spectral-gap assertion.
     Its first two length-$R$ terms kill that section, which therefore
     vanishes. Every such section vanishes, so the original vector is zero.
 \end{proof}
+
+
+\begin{lemma}[The root-of-unity particle line is cyclically invariant]
+    \label{lem:pvbs_matching_volume_line_invariance}
+    \lean{MPSTensor.cyclicTranslateState_pvbsEdge_mem_span}
+    \notready
+    \uses{lem:pvbs_geometric_cyclic_phase}
+    Let $R\ge1$ and $q^R=1$. Every cyclic translate of $\Psi_R(q)$ belongs
+    to $\mathbb C\Psi_R(q)$. This preserves the line without asserting
+    that the coefficient vector is fixed by translation.
+\end{lemma}
+\begin{proof}
+    \notready
+    The one-step coefficient identity gives translation by the scalar
+    $q^{-1}$. Cyclic induction and composition of translations preserve
+    the same line at every offset.
+\end{proof}
+
+\begin{lemma}[Exact kernel at the matching periodic volume]
+    \label{lem:pvbs_matching_volume_kernel}
+    \lean{MPSTensor.pvbsPureWindowHamiltonian_apply_pvbsEdge,
+        MPSTensor.ker_pvbsPureWindowHamiltonian_matching_volume,
+        MPSTensor.pvbsPureWindowHamiltonian_matching_volume_nonzero_ground}
+    \notready
+    \uses{lem:pvbs_matching_volume_line_invariance,
+        lem:pvbs_pure_window_kernel,lem:periodic_interaction_sections}
+    Let $R\ge1$ and $q^R=1$. At the matching periodic volume $R$, let
+    $H_R(q)$ be the sum of all cyclic translates of the complementary
+    pure particle projection $p_R(q)$. Then
+    \begin{align}
+        H_R(q)\Psi_R(q) & =0,   & \ker H_R(q) & =\mathbb C\Psi_R(q), &
+        \Psi_R(q)       & \ne0.
+    \end{align}
+    These conclusions concern this matching volume, without asserting
+    a ground state for the same interaction at every other volume.
+\end{lemma}
+\begin{proof}
+    \notready
+    A full-window coefficient section is the original coefficient vector
+    translated by the negative starting offset. Every section of the
+    one-particle vector therefore lies in its line, so every local term
+    kills it. Conversely, positivity and the section at the zero offset
+    place every kernel vector in the original particle line. Its first
+    excitation has coefficient one, proving nonvanishing.
+\end{proof}
+
+\begin{lemma}[No fixed vector in a nontrivial-phase matching kernel]
+    \label{lem:pvbs_matching_volume_no_fixed_ground_vector}
+    \lean{MPSTensor.eq_zero_of_pvbsPureWindow_matching_volume_fixed}
+    \notready
+    \uses{lem:pvbs_matching_volume_kernel,lem:pvbs_geometric_cyclic_phase}
+    Suppose also $q\ne1$. If $\phi\in\ker H_R(q)$ is fixed by every cyclic
+    translation as a coefficient vector, then $\phi=0$.
+\end{lemma}
+\begin{proof}
+    \notready
+    Write $\phi=c\Psi_R(q)$ by the exact kernel identity. If $c\ne0$,
+    translation invariance cancels this scalar and makes $\Psi_R(q)$
+    itself invariant, contradicting its nontrivial one-step phase.
+\end{proof}
