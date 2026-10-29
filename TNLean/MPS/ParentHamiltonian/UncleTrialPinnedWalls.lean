@@ -403,4 +403,99 @@ theorem uncleInteractionES_trial_pin_fourth_endpoint
         uncleDomainWallWord A B R (uncleConfigSegment τ N (N + 1) (by omega)))
       (uncleConfigSegment τ (4 * N) N (by omega))
 
+/-- The four explicit pinned-wall local vectors. Outside the endpoint set
+this vector is zero. Each endpoint contains only the opposite moving-wall
+sum, with all its actual exterior physical coordinates retained.
+Source: arXiv:1210.6613, proof of Lemma lowenergystates, lines 1289–1296. -/
+def uncleTrialPinnedEndpointState
+    (A : MPSTensor d a) (B : MPSTensor d b)
+    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
+    (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
+    (N : ℕ) (hN : 0 < N) (i : Fin (6 * N + 1)) (τ : Cfg d (6 * N + 1)) :
+    EuclideanSpace ℂ (Cfg d 2) :=
+  (WithLp.linearEquiv 2 ℂ (NSiteSpace d 2)).symm fun σ ↦
+    if i.val = N - 1 then
+      Matrix.trace (Kraus.evalWord A (uncleConfigSegment τ 0 (N - 1) (by omega)) *
+        A (σ 0) * R (σ 1) *
+        Kraus.evalWord B (uncleConfigSegment τ (N + 1) N (by omega)) *
+        Kraus.evalWord B (uncleConfigSegment τ (2 * N + 1) (2 * N - 1) (by omega)) *
+        uncleDomainWallWord B A L (uncleConfigSegment τ (4 * N) (N + 1) (by omega)) *
+        Kraus.evalWord A (uncleConfigSegment τ (5 * N + 1) N (by omega)))
+    else if i.val = 2 * N then
+      Matrix.trace (Kraus.evalWord A (uncleConfigSegment τ 0 N (by omega)) *
+        Kraus.evalWord A (uncleConfigSegment τ N N (by omega)) * R (σ 0) * B (σ 1) *
+        Kraus.evalWord B (uncleConfigSegment τ (2 * N + 2) (2 * N - 2) (by omega)) *
+        uncleDomainWallWord B A L (uncleConfigSegment τ (4 * N) (N + 1) (by omega)) *
+        Kraus.evalWord A (uncleConfigSegment τ (5 * N + 1) N (by omega)))
+    else if i.val = 4 * N - 1 then
+      Matrix.trace (Kraus.evalWord B (uncleConfigSegment τ (2 * N + 1) (2 * N - 2) (by omega)) *
+        B (σ 0) * L (σ 1) *
+        Kraus.evalWord A (uncleConfigSegment τ (4 * N + 1) N (by omega)) *
+        Kraus.evalWord A (uncleConfigSegment τ (5 * N + 1) N (by omega)) *
+        Kraus.evalWord A (uncleConfigSegment τ 0 N (by omega)) *
+        uncleDomainWallWord A B R (uncleConfigSegment τ N (N + 1) (by omega)))
+    else if i.val = 5 * N then
+      Matrix.trace (Kraus.evalWord B (uncleConfigSegment τ (2 * N + 1) (2 * N - 1) (by omega)) *
+        Kraus.evalWord B (uncleConfigSegment τ (4 * N) N (by omega)) * L (σ 0) * A (σ 1) *
+        Kraus.evalWord A (uncleConfigSegment τ (5 * N + 2) (N - 1) (by omega)) *
+        Kraus.evalWord A (uncleConfigSegment τ 0 N (by omega)) *
+        uncleDomainWallWord A B R (uncleConfigSegment τ N (N + 1) (by omega)))
+    else 0
+
+/-- The actual endpoint restriction has exactly the projected pinned-wall
+residual, with no supplied endpoint-support condition. Source:
+arXiv:1210.6613, proof of Lemma lowenergystates, lines 1289–1296. -/
+theorem uncleInteractionES_trial_eq_pinnedEndpointState
+    (A : MPSTensor d a) (B : MPSTensor d b)
+    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
+    (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
+    (N : ℕ) (hN : 0 < N) (i : Fin (6 * N + 1))
+    (hi : i ∈ uncleTrialEndpointBonds N hN) (τ : Cfg d (6 * N + 1)) :
+    let φ := (WithLp.linearEquiv 2 ℂ (NSiteSpace d (6 * N + 1))).symm
+      (uncleTwoWallTrialSource A B R L N)
+    uncleInteractionES A B R L (cyclicRestrictES (Fin.pos i) 2 i τ φ) =
+      uncleInteractionES A B R L (uncleTrialPinnedEndpointState A B R L N hN i τ) := by
+  have h01 : N - 1 < 2 * N := by omega
+  have h12 : 2 * N < 4 * N - 1 := by omega
+  have h23 : 4 * N - 1 < 5 * N := by omega
+  have hcases : i = ⟨N - 1, by omega⟩ ∨ i = ⟨2 * N, by omega⟩ ∨
+      i = ⟨4 * N - 1, by omega⟩ ∨ i = ⟨5 * N, by omega⟩ := by
+    simpa only [uncleTrialEndpointBonds, Finset.mem_insert, Finset.mem_singleton] using hi
+  rcases hcases with rfl | rfl | rfl | rfl
+  · simpa only [uncleTrialPinnedEndpointState, if_pos rfl] using
+      uncleInteractionES_trial_pin_first_endpoint A B R L N hN τ
+  · simpa [uncleTrialPinnedEndpointState, ne_of_gt h01] using
+      uncleInteractionES_trial_pin_second_endpoint A B R L N hN τ
+  · simpa [uncleTrialPinnedEndpointState, ne_of_gt h12, ne_of_gt (h01.trans h12)] using
+      uncleInteractionES_trial_pin_third_endpoint A B R L N hN τ
+  · simpa [uncleTrialPinnedEndpointState, ne_of_gt h23, ne_of_gt (h12.trans h23),
+      ne_of_gt (h01.trans (h12.trans h23))] using
+      uncleInteractionES_trial_pin_fourth_endpoint A B R L N hN τ
+
+/-- The actual trial energy is bounded by the four explicit one-moving-wall
+endpoint norms, after deriving the removal of the other wall sum.
+Estimating these actual finite norms is the remaining source asymptotic step;
+no norm-growth or energy-rate premise is supplied here.
+Source: arXiv:1210.6613, proof of Lemma lowenergystates, lines 1289–1296. -/
+theorem re_inner_uncleHamiltonianES_trial_le_pinnedEndpoint_norms
+    (A : MPSTensor d a) (B : MPSTensor d b)
+    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
+    (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
+    (N : ℕ) (hN : 0 < N) :
+    let φ := (WithLp.linearEquiv 2 ℂ (NSiteSpace d (6 * N + 1))).symm
+      (uncleTwoWallTrialSource A B R L N)
+    (⟪uncleHamiltonianES A B R L (6 * N + 1) φ, φ⟫_ℂ).re ≤
+      (((d ^ 2 : ℕ) : ℝ)⁻¹) * ∑ i ∈ uncleTrialEndpointBonds N hN,
+        ∑ τ : Cfg d (6 * N + 1), ‖uncleTrialPinnedEndpointState A B R L N hN i τ‖ ^ 2 := by
+  dsimp only
+  rw [re_inner_uncleHamiltonianES_trial_eq_sum_endpoints A B R L N hN]
+  apply mul_le_mul_of_nonneg_left _ (by positivity)
+  apply Finset.sum_le_sum
+  intro i hi
+  apply Finset.sum_le_sum
+  intro τ _
+  rw [uncleInteractionES_trial_eq_pinnedEndpointState A B R L N hN i hi τ]
+  exact (sq_le_sq₀ (norm_nonneg _) (norm_nonneg _)).mpr
+    (norm_uncleInteractionES_apply_le A B R L _)
+
 end MPSTensor
