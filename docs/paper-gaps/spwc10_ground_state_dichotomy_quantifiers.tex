@@ -47,25 +47,74 @@ one-dimensional ground-space hypothesis identifies the entire kernel with
 that line. This derives (\ref{eq:spwc10_eventual_uniform_branch}) with
 $M_0=\max\{L,q(D)+1\}$ and a block of bond dimension at most $D$.
 
-The fixed-tensor conclusion is explicitly eventual. It does not identify the
-finitely many shorter ground spaces with the same tensor, nor supply their
-periodic trace-MPS representations at one common padded bond dimension.
-A literal all-volume uniform-dimension formulation needs that finite-prefix
-argument separately. The asymptotic alternative and its exact quantifiers
-are therefore stated separately from an unrestricted source-labelled theorem.
-No original canonical, phase-separation, transfer-gap, local-kernel or
-future-volume equation is assumed.
+The fixed-tensor conclusion is explicitly eventual. The finitely many
+shorter volumes require a length-dependent family at one common matrix
+size, rather than equality with that same tensor at every length.
 
-The proof scripts and their Blueprint entries are pending hosted acceptance;
-no local Lean build or elaboration was run. The full source theorem remains
-open in issue \#10280 until the scope decision, validation and integration are
-complete.
+\section{The actual finite-prefix construction}
+
+Every nonzero vector on a positive-length ring which is fixed exactly by
+cyclic translation now has an actual periodic trace-MPS representation
+with matrix size $M d^{\lfloor M/2\rfloor}$. The open-boundary
+representation is constructed from the existing finite cut-rank theorem,
+and the existing cyclic-block averaging makes the matrices site
+independent. This is stated in
+\leanid{MPSTensor.exists_mpvState_eq_of_cyclic_invariant}.
+Unused bond coordinates preserve every positive-length periodic vector,
+as proved in \leanid{MPSTensor.mpvState_padBond}.
+
+Consequently the eventual tensor of bond dimension $D$ and threshold
+$M_0$ gives one common size
+\begin{align}
+    K & = D+M_0d^{M_0}+1
+    \label{eq:spwc10_finite_prefix_common_size}
+\end{align}
+for all permitted positive-volume ground lines containing nonzero
+exactly cyclic-invariant vectors. Short representations are derived,
+not supplied as hypotheses. The theorem
+\leanid{MPSTensor.exists_uniform_bond_on_cyclic_ground_sector}
+states this result. Its tensors may depend on the volume; it does not
+force a false same-tensor conclusion at the finitely many short lengths.
+
+\section{The exact remaining momentum condition}
+
+A periodic trace vector is fixed by every cyclic translation, as follows
+from cyclicity of the trace. Conversely the finite representation above
+shows that every nonzero exactly cyclic-invariant vector is representable.
+The equivalence is
+\leanid{MPSTensor.exists_mpvState_eq_iff_cyclic_invariant}.
+Therefore the literal all-positive-volume common-size family is equivalent
+to the following precise finite condition: for each permitted positive
+$M<M_0$, there exists a nonzero ground vector on which every cyclic
+translation acts as the identity. This is proved in
+\leanid{MPSTensor.uniform_bond_family_iff_short_cyclic_ground}.
+
+Uniqueness of a translation-invariant Hamiltonian's ground space gives an
+invariant line. On a one-dimensional line a cyclic translation may act by
+a root of unity; line invariance does not itself identify that eigenvalue
+with one. The source proof supplies the eventual zero-momentum branch,
+but no derivation of this additional finite-prefix zero-momentum condition
+from its complete global frustration-free hypotheses is supplied here.
+This is an identified remaining obligation, not a counterexample to the
+source's full hypothesis set.
+
+The original asymptotic dichotomy and its hypotheses are unchanged. No
+canonical decomposition, phase separation, transfer gap, local-kernel
+inclusion, future-volume equation, finite-volume periodic representation,
+or short zero-momentum conclusion is assumed in its proof.
+
+All new proofs and Blueprint entries remain pending hosted acceptance;
+no local Lean build or elaboration was run. The full source theorem
+remains open in issue \#10280 until the finite-prefix zero-momentum
+obligation, validation and integration are complete.
 
 \section{Verdict}
 
-\textbf{Verdict: scope restriction.} The source-written result gives the
-quantified asymptotic dichotomy and an explicit fifth-degree obstruction.
-The all-volume finite-prefix completion is not part of that result.
+\textbf{Verdict: scope restriction.} The quantified eventual dichotomy
+and the actual common-bond finite-prefix construction on the exact
+zero-momentum sector are source-written. The literal all-volume family
+has been reduced to an explicit finite zero-momentum condition; that
+condition is not inferred from uniqueness alone.
 
 \bibliographystyle{alpha}
 \bibliography{references}

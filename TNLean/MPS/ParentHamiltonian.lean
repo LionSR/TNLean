@@ -132,6 +132,7 @@ import TNLean.MPS.ParentHamiltonian.FaithfulParentGroundStates
 import TNLean.MPS.ParentHamiltonian.FaithfulParentInteractionGap
 import TNLean.MPS.ParentHamiltonian.FaithfulPeriodicGroundSpace
 import TNLean.MPS.ParentHamiltonian.FaithfulQuasiLocalGap
+import TNLean.MPS.ParentHamiltonian.FinitePrefixUniformBond
 import TNLean.MPS.ParentHamiltonian.FiniteVolumeConstraintPropagation
 import TNLean.MPS.ParentHamiltonian.FrameOperator
 import TNLean.MPS.ParentHamiltonian.GaugePhaseSeparationTransport

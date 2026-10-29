@@ -9,7 +9,7 @@
 
 \title{Scope of the Formal Site-Independent Construction Relative to PGVWC07}
 \author{}
-\date{2026-08-12}
+\date{2026-10-29}
 
 \begin{document}
 \maketitle
@@ -27,7 +27,7 @@ padded chain over cyclic translations. If $D$ bounds the intermediate bond
 dimensions, the resulting site-independent tensor has bond dimension
 \begin{align}
     D_{\mathrm{site}}
-        &= ND.
+     & = ND.
     \label{eq:pgvwc07_site_independent_scope_site_independent_bond_dimension}
 \end{align}
 
@@ -40,38 +40,40 @@ averaging of the zero-padded representation preserves its coefficients when
 those coefficients are translation invariant. Its existential form is
 \leanid{OBCChainTensor.exists_pgvwc07_site_independent_tensor}.
 
-These declarations formalize the square-padding and cyclic-averaging part of
-Theorem~3 of Ref.~\cite{PerezGarcia2007MPSReps}. They do not construct an
-\leanid{OBCChainTensor} from an arbitrary pure state. Purity is therefore not
-a hypothesis of the formal theorem: the varying-bond representation whose
-existence purity supplies in the source is already an input.
+These declarations prove the square-padding and cyclic-averaging part
+with a supplied OBC representation. The raw arbitrary-state OBC existence
+step is already available through
+\leanid{OBCChainTensor.exists_coeff_eq_of_cutRank_le}, with the actual
+physical cut ranks and the bound $d^{\lfloor N/2\rfloor}$.
 
-\section{Elimination plan}
+\section{The composed construction now written}
 
-Closing the scope restriction requires a finite-chain Schmidt-decomposition
-theorem. Given an arbitrary pure state, that theorem must construct a
-varying-bond open-boundary MPS whose endpoint bond dimensions are one. It must
-also bound every intermediate bond dimension by a common value $D$, instantiate
-\leanid{OBCChainTensor}, and show that translation invariance of the state
-implies
-\leanid{OBCChainTensor.IsTranslationInvariantState}.
+The theorem \leanid{MPSTensor.exists_mpv_eq_of_cyclic_invariant}
+composes these existing constructions. Given a nonzero physical vector
+on $N>0$ sites, fixed exactly by every cyclic translation, it constructs
+an OBC chain with bound $d^{\lfloor N/2\rfloor}$, derives translation
+invariance of its coefficient function, and constructs site-independent
+matrices of size $N d^{\lfloor N/2\rfloor}$. No OBC representation is a
+premise. The Hilbert-space version is
+\leanid{MPSTensor.exists_mpvState_eq_of_cyclic_invariant}.
 
-Composing this missing existence theorem with the formal cyclic-averaging
-existence theorem identified in the preceding section would give the
-source-facing statement for every translation-invariant pure state, including
-the bond-dimension bound
-(\ref{eq:pgvwc07_site_independent_scope_site_independent_bond_dimension}).
-Issue \href{https://github.com/LionSR/TNLean/issues/6086}{\#6086} tracks the
-missing existence theorem.
+The tensor still depends on $N$ and agrees with the original vector at
+that length; no other-length equality is asserted. Exact vector
+translation invariance is used, as in the source's cyclic averaging.
+Invariance of a density matrix or a one-dimensional state line alone
+allows a nontrivial cyclic eigenphase and does not imply this vector
+identity. The exact representability criterion is
+\leanid{MPSTensor.exists_mpvState_eq_iff_cyclic_invariant}.
 
 \section{Verdict}
 
-\textbf{Verdict: scope restriction.} The formal declarations prove the
-fixed-length zero-padding and cyclic-averaging construction conditional on a
-supplied varying-bond open-boundary representation. The Schmidt-decomposition
-argument that produces this representation from an arbitrary pure state
-remains open. The current result is therefore not the full statement of
-Theorem~3 of Ref.~\cite{PerezGarcia2007MPSReps}.
+\textbf{Verdict: composed proof written; verification pending.}
+The previously documented supplied-OBC boundary is removed in the new
+source-facing composed theorem. The original scoped lemma is retained
+as the useful finite cyclic-block calculation. The new declaration and
+Blueprint entry remain pending hosted Lean verification and integration;
+no local Lean invocation was run. The historical note stays open until
+that acceptance is complete.
 
 \bibliographystyle{alpha}
 \bibliography{references}

@@ -1,0 +1,96 @@
+\subsection{Finite prefixes and exact cyclic momentum}
+\label{sec:ground_state_finite_prefix}
+
+\begin{lemma}[Periodic representation of an exactly invariant finite vector]
+    \label{lem:periodic_finite_cyclic_representation}
+    \lean{MPSTensor.exists_mpv_eq_of_cyclic_invariant,
+        MPSTensor.exists_mpvState_eq_of_cyclic_invariant,
+        MPSTensor.mpvState_cyclic_invariant,
+        MPSTensor.exists_mpvState_eq_iff_cyclic_invariant}
+    \notready
+    \uses{thm:seqanc_cut_rank_attained, thm:seqanc_cut_rank_bounds,
+        thm:pgvwc07_site_independent_matrices}
+    Let $N>0$ and let $\psi\ne0$ be a finite vector satisfying
+    $\psi(\sigma\circ\tau_s)=\psi(\sigma)$ for every cyclic translation
+    $\tau_s$. There is a periodic trace-MPS representation of $\psi$
+    with matrix size $N d^{\lfloor N/2\rfloor}$. Conversely every
+    periodic trace-MPS vector has this exact cyclic invariance.
+    Thus a nonzero positive-length vector is representable precisely
+    when its cyclic momentum is zero.
+\end{lemma}
+\begin{proof}
+    The actual finite OBC construction supplies a chain with bond bound
+    $d^{\lfloor N/2\rfloor}$. Apply the cyclic block averaging of
+    \cite[Theorem~3]{PerezGarcia2007Matrix}; exact invariance makes the
+    average equal to the original vector. The converse is cyclicity
+    of the matrix trace, including every power of the basic cyclic shift.
+\end{proof}
+
+\begin{lemma}[Unused periodic bond coordinates]
+    \label{lem:periodic_uniform_bond_padding}
+    \lean{MPSTensor.padBond, MPSTensor.mpv_padBond, MPSTensor.mpvState_padBond}
+    \notready
+    \uses{def:mps_tensor}
+    Extending all site matrices by zero from dimension $D$ to any
+    dimension $K\ge D$ preserves every periodic vector of positive
+    length. The assertion excludes the empty word, whose trace is the
+    bond dimension.
+\end{lemma}
+\begin{proof}
+    Zero extension preserves products through a retained intermediate
+    bond. Induct on nonempty words and take the trace; all added
+    diagonal entries are zero.
+\end{proof}
+
+\begin{lemma}[One common bond size on the exact cyclic ground sector]
+    \label{lem:uniform_bond_cyclic_ground_sector}
+    \lean{MPSTensor.exists_uniform_bond_on_cyclic_ground_sector}
+    \notready
+    \uses{thm:eventual_mps_prime_length_dichotomy,
+        lem:periodic_finite_cyclic_representation, lem:periodic_uniform_bond_padding}
+    Suppose the permitted ground spaces $\ker H_M$, $M\ge L$, are
+    one-dimensional, and a bond-$D$ tensor $B$ generates their nonzero
+    ground lines for every $M\ge M_0$. Then the single matrix size
+    \[
+        K=D+M_0d^{M_0}+1
+    \]
+    suffices to generate each permitted positive-length ground line
+    containing a nonzero exactly cyclic-invariant vector, including
+    every such line at $M<M_0$. The representing tensor may depend
+    on $M$.
+\end{lemma}
+\begin{proof}
+    At long lengths extend $B$ by unused bond coordinates. At a short
+    length use the preceding finite representation, whose dimension is
+    $M d^{\lfloor M/2\rfloor}\le M_0d^{M_0}<K$, and then extend it.
+    The actual nonzero ground vector and uniqueness identify the whole
+    ground line.
+\end{proof}
+
+\begin{lemma}[Exact finite-prefix criterion for an all-volume family]
+    \label{lem:uniform_bond_finite_prefix_criterion}
+    \lean{MPSTensor.uniform_bond_family_iff_short_cyclic_ground}
+    \notready
+    \uses{lem:uniform_bond_cyclic_ground_sector}
+    Under the preceding assumptions, the following are equivalent:
+    \begin{enumerate}
+        \item There is one positive matrix size $K$ such that, at
+              every permitted positive volume $M$, some bond-$K$ tensor
+              has a nonzero periodic vector generating $\ker H_M$.
+        \item At each permitted short positive volume $M<M_0$, the
+              ground space contains a nonzero vector fixed exactly by
+              every cyclic translation.
+    \end{enumerate}
+    An invariant ground line alone does not state the second condition:
+    translation can act on a line by a nontrivial root of unity.
+    No derivation of the second condition from the complete hypotheses
+    of \cite[Theorem~5]{Sanz2010Quantum} is asserted here; this remaining
+    boundary is recorded in
+    \cite{gap:spwc10_ground_state_dichotomy_quantifiers}.
+\end{lemma}
+\begin{proof}
+    The first condition supplies nonzero periodic trace vectors, and
+    trace cyclicity proves the second. Conversely use the preceding
+    common-size construction at the short volumes and the already
+    supplied eventual tensor at the long volumes.
+\end{proof}
