@@ -12904,3 +12904,73 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     needed to remove transient terms in a subsequent use of
     Lemma~\ref{lem:mpu_intrinsic_blocked_twisted_trace}.
 \end{lemma}
+
+\subsection{Intrinsic canonical blocking parity}
+
+\begin{lemma}[Actual signed comparison of the twisted transfer]
+    \label{lem:mpu_canonical_twisted_transfer_comparison}
+    \lean{MPOTensor.IsMPUCanonicalFormII.exists_twistedTransfer_signed_unitary_comparison}
+    \notready
+    \uses{lem:mpu_even_family_virtual_sign_gauge,
+        def:mpu_time_reversal_twisted_transfer}
+    Let $U$ be a canonical-form-II MPU tensor and suppose that
+    $U^{(N)}=U^{(N)\dagger}$ for every even $N>1$.
+    There are a sign $\eta\in\{1,-1\}$ and a virtual unitary $z$ such that,
+    in the actual product bond coordinates,
+    \[
+        T_U=\eta(z^\dagger\otimes\Id)E_U(z\otimes\Id),
+    \]
+    where $E_U$ is the normalized completely positive transfer matrix.
+    Indeed, the actual even-family virtual comparison gives
+    $(U^\sharp)^{ij}=\eta zU^{ij}z^\dagger$, hence
+    $U^{ij}=\eta z^\dagger(U^\sharp)^{ij}z$.
+    Substitution into the normalized diagonal of the product tensor gives
+    the displayed equality. The physical-adjoint double layer determines the
+    stated product order; no exchange of bond factors is inserted.
+\end{lemma}
+
+\begin{lemma}[Derived intrinsic phase formula]
+    \label{lem:mpu_canonical_intrinsic_blocking_phase_formula}
+    \lean{MPOTensor.IsMPUCanonicalFormII.exists_intrinsic_blocking_phase_formula}
+    \notready
+    \uses{lem:mpu_canonical_twisted_transfer_comparison,
+        lem:mpu_stabilized_commuting_weighted_trace,
+        lem:mpu_intrinsic_blocked_twisted_trace}
+    Under the same canonical and even-chain adjoint-symmetry assumptions,
+    there are $\eta\in\{1,-1\}$ and $C\in\mathbb C$ such that
+    \begin{align}
+        \sigma_{\mathrm{int}}(U)   & =\eta C,              \\
+        \sigma_{\mathrm{int}}(U_k) & =\eta^k C\qquad(k>0).
+    \end{align}
+    The normalized MPU transfer stabilizes at a positive power to a
+    normalized rank-one projector. Conjugating the bond-exchange weight
+    through the preceding comparison gives a weight commuting with this
+    actual transfer. Its nilpotent transient therefore has zero weighted
+    trace at every positive power. Neither the comparison nor stabilization
+    is an additional premise. The constant $C$ is retained, and $\eta$ is not
+    identified with the first intrinsic value.
+\end{lemma}
+
+\begin{lemma}[Odd and even intrinsic blocking parity for canonical MPUs]
+    \label{lem:mpu_canonical_intrinsic_blocking_parity}
+    \lean{MPOTensor.IsMPUCanonicalFormII.intrinsic_blocking_trace_eq_of_odd,
+        MPOTensor.IsMPUCanonicalFormII.intrinsic_blocking_trace_eq_of_even}
+    \notready
+    \uses{lem:mpu_canonical_intrinsic_blocking_phase_formula}
+    Let $U$ be a canonical-form-II MPU tensor with
+    $U^{(N)}=U^{(N)\dagger}$ at all even $N>1$. For every $k>0$,
+    \[
+        \sigma_{\mathrm{int}}(U_k)=
+        \begin{cases}
+            \sigma_{\mathrm{int}}(U),   & k\text{ odd},  \\
+            \sigma_{\mathrm{int}}(U_2), & k\text{ even}.
+        \end{cases}
+    \]
+    This follows from $\eta^2=1$ in the preceding formula, with the two
+    initial values retained separately. It does not assert that those
+    values are equal or that the virtual sign equals the first value.
+    This is intrinsic parity under explicit canonical assumptions; it does
+    not construct the particular blocked gates or their sequential
+    unwinding in \cite[lines~1643--1733]{Cirac2017MPU}. The unrestricted
+    source proposition remains separate.
+\end{lemma}
