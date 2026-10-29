@@ -6,19 +6,19 @@
     Let $q\ge2,r\ge1$ be integers, let $0<g\le1$ and $K\ge0$, and let
     $D_i\ge1$ be integers indexed by $i\ge0$. Suppose that
     \begin{align}
-        \log D_i&\le K\bigl(1+\log(q2^i)+\log(1/g)\bigr)^3.
+        \log D_i & \le K\bigl(1+\log(q2^i)+\log(1/g)\bigr)^3.
         \label{eq:dg_entropy_log_ranks}
     \end{align}
     Let $(p_a)_{0\le a<N}$ be a probability distribution, in any order.
     Suppose that for every $0\le i<N$,
     \begin{align}
-        \sum_{\substack{0\le a<N\\rD_0^{24}D_i^2\le a}}p_a
-        &\le2^{-(i+1)}.
+        \sum_{\substack{0\le a<N \\rD_0^{24}D_i^2\le a}}p_a
+         & \le2^{-(i+1)}.
         \label{eq:dg_entropy_rank_tails}
     \end{align}
     Set $u=1+\log q+\log(1/g)$. Then
     \begin{align}
-        H(p)&\le\log r+676Ku^3+54\log2.
+        H(p) & \le\log r+676Ku^3+54\log2.
         \label{eq:dg_entropy_logarithmic_bound}
     \end{align}
     This is a scalar estimate for the entropy sum in
@@ -30,9 +30,9 @@
     $1+\log(q2^i)+\log(1/g)\le u(i+1)$.
     Therefore
     \begin{align*}
-        24\log D_0+2\log D_i&\le26Ku^3(i+1)^3\le B(i+1)^3\log2,\\
-        rD_0^{24}D_i^2&\le r2^{B(i+1)^3}, &
-        1\le B&\le\frac{26Ku^3}{\log2}+2.
+        24\log D_0+2\log D_i & \le26Ku^3(i+1)^3\le B(i+1)^3\log2,   \\
+        rD_0^{24}D_i^2       & \le r2^{B(i+1)^3},                 &
+        1\le B               & \le\frac{26Ku^3}{\log2}+2.
     \end{align*}
     Nonnegativity transfers (\ref{eq:dg_entropy_rank_tails}) to these larger
     thresholds. The cubic dyadic entropy estimate gives
@@ -46,13 +46,13 @@
     Let $A,S,u$ be real numbers, let $r\ge0$ be an integer, and let $0<g\le1$.
     Suppose that $u\ge1$ and
     \begin{align*}
-        S&\le\log r+
+        S & \le\log r+
         \frac{14872(A+1)(6+2\log|A+1|)}{g}u^3+54\log2.
     \end{align*}
     Here $\log|0|=0$; thus the coefficient is defined for every real $A$.
     Then, with $\log0=0$,
     \begin{align}
-        S&\le\log r+
+        S & \le\log r+
         \frac{14872(A+1)(6+2\log|A+1|)+54}{g}u^3.
         \label{eq:dg_entropy_uniform_coefficient}
     \end{align}

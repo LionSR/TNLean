@@ -18,7 +18,7 @@
     $\rho_J=\tr_{J^c}\ketbra{\psi}{\psi}$ satisfies
     \begin{align}
         S(\rho_J)
-        &\le \log r+\frac{C}{g}
+         & \le \log r+\frac{C}{g}
         \bigl(1+\log d+\log(1/g)\bigr)^3.
         \label{eq:physical_dg_interval_entropy}
     \end{align}
@@ -37,9 +37,9 @@
     Choose the universal constant $A>0$ in the simultaneous accuracy and
     bootstrap construction, and set
     \begin{align*}
-        u&=1+\log d+\log(1/g),
-        &c_A&=6+2\log(A+1),
-        &K&=\frac{22(A+1)c_A}{g}.
+        u & =1+\log d+\log(1/g),
+          & c_A                  & =6+2\log(A+1),
+          & K                    & =\frac{22(A+1)c_A}{g}.
     \end{align*}
     For $i\ge0$, put $m_i=d2^i$,
     $u_i=1+\log m_i+\log(1/g)$,
@@ -60,8 +60,8 @@
     Applying this family to $W_0$ and taking the span gives a subspace $V_i$.
     The two closeness transfers and the improving estimate give
     \begin{align*}
-        \dim_{\C}V_i&\le rD_0^{24}D_i^2,
-        &V_i&\text{ is }\frac{1}{2m_i}\text{-viable for }G.
+        \dim_{\C}V_i & \le rD_0^{24}D_i^2,
+                     & V_i                 & \text{ is }\frac{1}{2m_i}\text{-viable for }G.
     \end{align*}
     Indeed, $W_0$ is $0.04$-viable for $T_i$,
     $\Delta_i/(1-0.04)^2\le1/(8m_i)$, and the transfer back to $G$ has error
@@ -73,22 +73,22 @@
     The Schmidt approximation obtained from $V_i$ gives
     \begin{align}
         \sum_{a\ge rD_0^{24}D_i^2}p_a
-        &\le\frac{1}{2m_i}\le2^{-(i+1)}.
+         & \le\frac{1}{2m_i}\le2^{-(i+1)}.
         \label{eq:physical_dg_entropy_tails}
     \end{align}
     There is an integer $B\ge1$ such that
     \begin{align*}
-        rD_0^{24}D_i^2&\le r2^{B(i+1)^3},
-        &B&\le\frac{26Ku^3}{\log2}+2.
+        rD_0^{24}D_i^2 & \le r2^{B(i+1)^3},
+                       & B                  & \le\frac{26Ku^3}{\log2}+2.
     \end{align*}
     Nonnegativity of the $p_a$ transfers
     (\ref{eq:physical_dg_entropy_tails}) to these larger thresholds.
     The cubic dyadic tail estimate therefore yields
     \begin{align*}
         S(\rho_J)
-        &=-\sum_{a=0}^{M-1}p_a\log p_a\\
-        &\le\log r+26B\log2+2\log2\\
-        &\le\log r+676Ku^3+54\log2.
+         & =-\sum_{a=0}^{M-1}p_a\log p_a \\
+         & \le\log r+26B\log2+2\log2     \\
+         & \le\log r+676Ku^3+54\log2.
     \end{align*}
     Since $u\ge1$ and $0<g\le1$, the choice
     $C=14872(A+1)c_A+54$ absorbs the last term and proves
