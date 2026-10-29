@@ -296,6 +296,7 @@ import TNLean.MPS.ParentHamiltonian.UncleBoundaryIntersection
 import TNLean.MPS.ParentHamiltonian.UncleBoundaryProduct
 import TNLean.MPS.ParentHamiltonian.UncleBoundaryTraceClosure
 import TNLean.MPS.ParentHamiltonian.UncleBoundaryWords
+import TNLean.MPS.ParentHamiltonian.UncleEndpointEnergyBound
 import TNLean.MPS.ParentHamiltonian.UncleGroundSpace
 import TNLean.MPS.ParentHamiltonian.UncleGroundSpaceInclusion
 import TNLean.MPS.ParentHamiltonian.UncleKernelConditions

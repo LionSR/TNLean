@@ -9751,3 +9751,15 @@ there is no need for a new tactic.
   unital CP contraction also bounds every normalized transfer power.
 - **Decision:** Keep the thin local trace calculation and reuse the generic
   library APIs; no supplied trace-rate or state-rate hypothesis.
+
+
+### Actual endpoint norm averages — coordinate and partition reuse (2026-10-29)
+
+- **Seen:** `MPS/ParentHamiltonian/UncleEndpointEnergyBound.lean`, four endpoints.
+- **Pattern:** Identify a pinned local residual as the actual cyclic restriction
+  of a globally pinned trial, then remove the redundant exterior-window sum.
+- **Reuse:** Public segment addition, boundary-segment and length-cast identities
+  handle all four coordinates. The exact cyclic restriction norm partition
+  gives the global squared norm with its actual physical normalization.
+- **Decision:** Derive the four-state energy bound from those identities; do not
+  introduce an assumed energy-support or norm-rate condition.
