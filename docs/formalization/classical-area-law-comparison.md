@@ -58,7 +58,8 @@ or intermediate bond bounds.
 The ground-space basis argument now constructs the spectral refinements in
 arbitrary finite dimension. A non-scalar compression gives a proper spectral
 split; scalar terminal spaces need no further separation. Both cross terms
-are retained, giving decay rate $\gamma/2^n$ for ground-space dimension $n$.
+are retained. If $\gamma$ is the local commutator decay rate, refinement gives
+rate $\gamma/2^n$ for ground-space dimension $n$.
 For both the full-Hamiltonian filtered terms and the actual locally truncated
 terms, summation gives a bound independent of the number of sites when the
 ground-space dimension, local norm budget, gap, localization support and
