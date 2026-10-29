@@ -21,8 +21,8 @@ all positive lengths, with no short-vector representation premise.
 step when the normal tensor derived in the eventual branch has bond one.
 For larger bond dimension, full all-volume frustration-free uniqueness
 has not yet been shown to supply every short zero-momentum vector. See
-`docs/paper-gaps/spwc10_ground_state_dichotomy_quantifiers.tex` and issue
-#10386. The local-kernel inclusion here is the actual one derived by the
+`docs/paper-gaps/spwc10_ground_state_dichotomy_quantifiers.tex`.
+The local-kernel inclusion here is the actual one derived by the
 prime-length construction; it is not inferred from an arbitrary invariant
 line or supplied as an all-volume nonvanishing condition.
 
