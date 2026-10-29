@@ -1,0 +1,139 @@
+\section{Shared intermediate coordinates and fixed Margolus gates}
+\label{sec:qca_constant_margolus}
+
+Let $d>0$ and let $\omega$ be a translation-covariant nearest-neighbour
+star-automorphism of the homogeneous chain. Put $\ell=n(0)>0$ and
+$r=n(1)>0$, so that $\ell r=d^2$. Write $E_0=\{0,1\}$,
+$L_0=\{-1,0\}$ and $P_0=\{1,2\}$. The order of the shifted intermediate
+factors is odd then even, namely $\mathbb C^r\otimes\mathbb C^\ell$.
+
+\begin{lemma}[Faithful image and equality coordinates]
+    \label{lem:qca_support_coordinate_equivalences}
+    \lean{StarSubalgebra.equivMapOfInjective,
+        StarSubalgebra.equivMapOfInjective_coe,
+        StarSubalgebra.equivOfEq,StarSubalgebra.equivOfEq_coe,
+        SpinChain.PropagatesWithin.supportEmbeddingEquiv,
+        SpinChain.PropagatesWithin.outputPairEquiv,
+        SpinChain.PropagatesWithin.outputPairEquiv_coe}
+    \notready
+    \uses{thm:qca_physical_pair_adjacent_generation}
+    An injective star-algebra homomorphism identifies a star-subalgebra
+    with its actual image and evaluates as the original ambient map.
+    Equality of two star-subalgebras identifies them without changing
+    ambient values. In particular, finite support algebras are identified
+    with their faithful quasi-local images, and the shifted physical-pair
+    inclusion identifies its algebra with the actual adjacent support join.
+\end{lemma}
+\begin{proof}
+    \notready
+    The corresponding algebra isomorphisms preserve star because the
+    original homomorphism does, and the equality identification preserves
+    the ambient element. Faithfulness of finite-region inclusion and the
+    actual shifted adjacent-generation equality give the stated cases.
+\end{proof}
+
+\begin{lemma}[Transported coordinates of the next even factor]
+    \label{lem:qca_margolus_coherent_even_coordinates}
+    \lean{SpinChain.PropagatesWithin.coherentEvenOneMatrixEquiv,
+        SpinChain.PropagatesWithin.coherentEvenOneMatrixEquiv_symm_embed}
+    \notready
+    \uses{lem:qca_support_coordinate_equivalences,
+        thm:qca_site_indexed_support_algebras_two_site_covariance,
+        lem:qca_margolus_matrix_rules}
+    Fix the matrix coordinates $e_0$ on $\mathcal R_0$. The actual
+    two-site translation gives an isomorphism
+    $\tau_2:\widehat{\mathcal R}_0\to\widehat{\mathcal R}_2$.
+    Define the coordinates $e_2^{\rm coh}$ by transport through its
+    inverse. Then for every $A\in M_\ell(\mathbb C)$,
+    \begin{align}
+        \iota_{L_1}((e_2^{\rm coh})^{-1}(A))
+         & =\tau_2\bigl(\iota_{L_0}(e_0^{-1}(A))\bigr).
+    \end{align}
+    This uses a transported presentation rather than an independent
+    choice at the next even factor, as in
+    \cite[definition~defBBq, lines~1199--1226]{SchumacherWerner2004QCA}.
+\end{lemma}
+\begin{proof}
+    \notready
+    Restrict actual translation to the even support factor and use the
+    already proved two-site support covariance for its range. Compose
+    its inverse with the fixed cut-zero matrix presentation. Evaluation
+    of the two inverse equivalences gives the displayed ambient identity.
+\end{proof}
+
+\begin{lemma}[One shifted output rule for both neighbours]
+    \label{lem:qca_margolus_coherent_output_rule}
+    \lean{SpinChain.PropagatesWithin.coherentMargolusOutputRule,
+        SpinChain.PropagatesWithin.coherentMargolusOutputRule_kronecker,
+        SpinChain.PropagatesWithin.coherentMargolusOutputRule_left,
+        SpinChain.PropagatesWithin.coherentMargolusOutputRule_right,
+        SpinChain.PropagatesWithin.coherentMargolus_alternating_kronecker}
+    \notready
+    \uses{lem:qca_margolus_coherent_even_coordinates,
+        lem:qca_commuting_product_coordinates,lem:qca_margolus_matrix_rules}
+    In the shared coordinates there is a star-isomorphism
+    $G:M_r\otimes M_\ell\to M_{d^2}$ satisfying
+    \begin{align}
+        \iota_{P_0}(G(B\otimes A))
+         & =\iota_{P_0}(e_1^{-1}(B))\,
+        \tau_2\bigl(\iota_{L_0}(e_0^{-1}(A))\bigr).
+    \end{align}
+    Consequently the actual input rule at cut zero satisfies
+    \begin{align}
+        \omega\bigl(\iota_{E_0}(F_0^{-1}(A\otimes B))\bigr)
+         & =\tau_{-2}\bigl(\iota_{P_0}(G(I\otimes A))\bigr)
+        \iota_{P_0}(G(B\otimes I)).
+    \end{align}
+    Thus the same shifted rule serves both neighbouring output pairs.
+\end{lemma}
+\begin{proof}
+    \notready
+    Present the actual odd and next-even join using the fixed odd
+    coordinates and transported even coordinates. The product-coordinate
+    identity gives the first formula. Setting one input to the identity
+    recovers the odd factor directly and the even factor after applying
+    $\tau_{-2}$. Their product is the actual input-pair image.
+\end{proof}
+
+\begin{lemma}[Fixed physical gates realize the QCA on every translated pair]
+    \label{lem:qca_fixed_margolus_gates}
+    \lean{SpinChain.PropagatesWithin.constantMargolusGateRule,
+        SpinChain.PropagatesWithin.exists_fixed_margolus_unitary_gates}
+    \notready
+    \uses{lem:qca_margolus_coherent_output_rule,
+        lem:qca_full_matrix_spatial_implementer,def:qca_consecutive_pair_coordinates}
+    There are unitary maps
+    \begin{align}
+        U & : \mathbb C^d\otimes\mathbb C^d\longrightarrow
+        \mathbb C^\ell\otimes\mathbb C^r,\notag               \\
+        V & : \mathbb C^r\otimes\mathbb C^\ell\longrightarrow
+        \mathbb C^d\otimes\mathbb C^d
+    \end{align}
+    implementing $F_0$ and $G$ in increasing physical-site order. For
+    intermediate matrices $K$, define the literal alternating gate rule
+    \begin{align}
+        H_V(K)=\sum_{a,b,c,d}K_{(a,b),(c,d)}\,
+        \tau_{-2}\bigl(\iota_{P_0}(V(I\otimes e_{ac})V^*)\bigr)
+        \iota_{P_0}(V(f_{bd}\otimes I)V^*).
+    \end{align}
+    For every two-site physical matrix $A$ and every integer $t$,
+    \begin{align}
+        \omega\bigl(\tau_t(\iota_{E_0}(A))\bigr)
+         & =\tau_t\bigl(H_V(UAU^*)\bigr).
+    \end{align}
+    The physical-pair inclusions in these formulas use the ordered
+    two-site coordinates. The matrices $U,V$ are fixed; their translates
+    use the same intermediate bases. This is the one-dimensional
+    generalized Margolus rule of
+    \cite[equations~bruleU and bruleV, lines~980--1001 and~1033--1041]{SchumacherWerner2004QCA}.
+\end{lemma}
+\begin{proof}
+    \notready
+    Apply spatial implementation to the input rule after the ordered
+    physical-coordinate identification, and to the shifted output rule
+    before the inverse physical-coordinate identification. Expand the
+    intermediate input matrix into matrix units. Each product matrix
+    unit satisfies the preceding coherent alternating formula, giving
+    the displayed finite sum. Substitute $F_0(A)=UAU^*$ and use original
+    translation covariance to obtain the formula at every integer shift.
+\end{proof}

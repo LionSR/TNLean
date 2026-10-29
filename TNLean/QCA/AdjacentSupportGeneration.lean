@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.QCA.SupportAlgebraFactors
 import TNLean.Algebra.CommutingStarSubalgebraProduct
+import TNLean.Algebra.StarSubalgebraEquiv
 import QICLean.Algebra.MatrixAlgHomCentralizer
 import Mathlib.Data.Fintype.BigOperators
 
@@ -43,21 +44,14 @@ private noncomputable def localAlgebraMatrixEquiv (Λ : Finset ℤ) :
   CStarMatrix.ofMatrixStarAlgEquiv.symm.trans
     (Matrix.matrixReindexStarAlgEquiv (Fintype.equivFin (Config d Λ)))
 
-private noncomputable def supportEmbeddingEquiv (Λ : Finset ℤ)
+/-- The actual finite support algebra is identified with its faithful
+quasi-local image without changing prescribed matrix coordinates.
+Source: GNVW RR2x, lines 1251–1274. -/
+noncomputable def supportEmbeddingEquiv (Λ : Finset ℤ)
     (S : StarSubalgebra ℂ (Matrix (Config d Λ) (Config d Λ) ℂ)) :
-    ↥S ≃⋆ₐ[ℂ] ↥(S.map (matrixToQuasiLocalObservable d Λ)) := by
-  let f := matrixToQuasiLocalObservable d Λ
-  let g := (f.comp S.subtype).codRestrict (S.map f)
-    (fun x ↦ StarSubalgebra.mem_map.mpr ⟨x, x.2, rfl⟩)
-  apply StarAlgEquiv.ofBijective g
-  constructor
-  · intro x y h
-    apply Subtype.ext
-    exact ((quasiLocalObservable_injective d Λ).comp
-      CStarMatrix.ofMatrixStarAlgEquiv.injective) (congrArg Subtype.val h)
-  · rintro ⟨z, hz⟩
-    obtain ⟨a, ha, rfl⟩ := StarSubalgebra.mem_map.mp hz
-    exact ⟨⟨a, ha⟩, rfl⟩
+    ↥S ≃⋆ₐ[ℂ] ↥(S.map (matrixToQuasiLocalObservable d Λ)) :=
+  S.equivMapOfInjective (matrixToQuasiLocalObservable d Λ)
+    ((quasiLocalObservable_injective d Λ).comp CStarMatrix.ofMatrixStarAlgEquiv.injective)
 
 /-- The prescribed presentations of the actual even and odd support
 factors present their join, in that order. Source: GNVW AARReven,

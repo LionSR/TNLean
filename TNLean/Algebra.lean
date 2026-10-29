@@ -197,6 +197,7 @@ import TNLean.Algebra.StabilizerCocycleReconstruction
 import TNLean.Algebra.StabilizerTransition
 import TNLean.Algebra.StackedIsometryCard
 import TNLean.Algebra.StarClosedSemisimple
+import TNLean.Algebra.StarSubalgebraEquiv
 import TNLean.Algebra.SubmoduleStarProjectionMatrix
 import TNLean.Algebra.Subquotient
 import TNLean.Algebra.SupportedIsometricCompression
