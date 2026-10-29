@@ -20,3 +20,12 @@ Validation: source inspection of the Mathlib eigenbasis, nonnegative
 eigenvalue, orthogonality and coordinate-norm APIs; import/declaration,
 prose, formatting and branch diff checks. No local Lean compilation or
 elaboration was run. The new Blueprint lemma remains pending validation.
+
+The trial need not initially be orthogonal to the kernel: subtracting its
+actual kernel projection preserves energy, and Pythagoras removes exactly
+the projected squared norm. A separate two-sector Gram estimate bounds the
+actual periodic-state span projection by four times the sum of squared
+actual ground-state overlaps whenever the two state norms and cross overlap
+satisfy the stated finite inequalities. These pointwise scalar conditions
+remain visible and must be derived from the source transfer limits in the
+final asymptotic application.

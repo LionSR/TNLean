@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.UncleKernelConditions
+import TNLean.MPS.Overlap.Basic
 import Mathlib.Analysis.InnerProductSpace.Spectrum
 
 /-!
@@ -75,6 +76,75 @@ private theorem exists_small_pos_eigenvalue_of_rayleigh
     rw [hnorm, henergy, Finset.mul_sum]
     exact Finset.sum_le_sum fun i _ ↦ hweight i
   exact (not_lt_of_ge hlower) hRayleigh
+
+private theorem norm_span_pair_projection_sq_le
+    {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E] [FiniteDimensional ℂ E]
+    (u v φ : E) (hu : (1 / 2 : ℝ) ≤ ‖u‖ ^ 2) (hv : (1 / 2 : ℝ) ≤ ‖v‖ ^ 2)
+    (huv : ‖inner ℂ u v‖ ≤ 1 / 4) :
+    ‖(Submodule.span ℂ ({u, v} : Set E)).starProjection φ‖ ^ 2 ≤
+      4 * (‖inner ℂ u φ‖ ^ 2 + ‖inner ℂ v φ‖ ^ 2) := by
+  classical
+  let K := Submodule.span ℂ ({u, v} : Set E)
+  let w := K.starProjection φ
+  obtain ⟨α, β, hw⟩ := Submodule.mem_span_pair.mp (K.starProjection_apply_mem φ)
+  have hw' : w = α • u + β • v := hw.symm
+  have hcross : |(inner ℂ (α • u) (β • v)).re| ≤ ‖α‖ * ‖β‖ / 4 := by
+    calc
+      _ ≤ ‖inner ℂ (α • u) (β • v)‖ := Complex.abs_re_le_norm _
+      _ = ‖α‖ * ‖β‖ * ‖inner ℂ u v‖ := by
+        rw [inner_smul_left, inner_smul_right, norm_mul, norm_mul, norm_star]
+        ring
+      _ ≤ _ := by nlinarith [mul_le_mul_of_nonneg_left huv
+        (mul_nonneg (norm_nonneg α) (norm_nonneg β))]
+  have hexpand : ‖w‖ ^ 2 = ‖α‖ ^ 2 * ‖u‖ ^ 2 +
+      2 * (inner ℂ (α • u) (β • v)).re + ‖β‖ ^ 2 * ‖v‖ ^ 2 := by
+    rw [hw', norm_add_sq, norm_smul, norm_smul, mul_pow, mul_pow]
+  have hcoefs : ‖α‖ ^ 2 + ‖β‖ ^ 2 ≤ 4 * ‖w‖ ^ 2 := by
+    have hα := mul_le_mul_of_nonneg_left hu (sq_nonneg ‖α‖)
+    have hβ := mul_le_mul_of_nonneg_left hv (sq_nonneg ‖β‖)
+    have hlow := (abs_le.mp hcross).1
+    nlinarith [sq_nonneg (‖α‖ - ‖β‖)]
+  have hinner : ‖w‖ ^ 2 ≤
+      ‖α‖ * ‖inner ℂ u φ‖ + ‖β‖ * ‖inner ℂ v φ‖ := by
+    calc
+      _ = (inner ℂ w φ).re := (K.re_inner_starProjection_eq_normSq φ).symm
+      _ ≤ ‖inner ℂ w φ‖ := Complex.re_le_norm _
+      _ ≤ _ := by
+        rw [hw', inner_add_left, inner_smul_left, inner_smul_left]
+        simpa only [norm_mul, norm_star] using
+          norm_add_le (star α * inner ℂ u φ) (star β * inner ℂ v φ)
+  have hCS : (‖α‖ * ‖inner ℂ u φ‖ + ‖β‖ * ‖inner ℂ v φ‖) ^ 2 ≤
+      (‖α‖ ^ 2 + ‖β‖ ^ 2) * (‖inner ℂ u φ‖ ^ 2 + ‖inner ℂ v φ‖ ^ 2) := by
+    nlinarith [sq_nonneg (‖α‖ * ‖inner ℂ v φ‖ - ‖β‖ * ‖inner ℂ u φ‖)]
+  have hsquare : (‖w‖ ^ 2) ^ 2 ≤
+      4 * ‖w‖ ^ 2 * (‖inner ℂ u φ‖ ^ 2 + ‖inner ℂ v φ‖ ^ 2) := by
+    calc
+      _ ≤ (‖α‖ * ‖inner ℂ u φ‖ + ‖β‖ * ‖inner ℂ v φ‖) ^ 2 :=
+        (sq_le_sq₀ (sq_nonneg ‖w‖) (by positivity)).mpr hinner
+      _ ≤ _ := hCS.trans (mul_le_mul_of_nonneg_right hcoefs (by positivity))
+  change ‖w‖ ^ 2 ≤ _
+  by_cases hwzero : ‖w‖ ^ 2 = 0
+  · rw [hwzero]
+    positivity
+  have hwpos : 0 < ‖w‖ ^ 2 := lt_of_le_of_ne (sq_nonneg _) (Ne.symm hwzero)
+  apply (mul_le_mul_iff_left₀ hwpos).mp
+  nlinarith only [hsquare]
+
+/-- The actual two periodic MPS sectors give a controlled ground-space
+projection once their Gram matrix is close to the identity. The hypotheses
+are finite scalar inequalities, to be supplied by the canonical transfer
+limits and the actual mixed-overlap decay. Source application:
+arXiv:1210.6613, proof of thm:gapless, lines 1302–1314. -/
+theorem norm_mpv_span_projection_sq_le
+    {d a b : ℕ} (A : MPSTensor d a) (B : MPSTensor d b) (N : ℕ)
+    (φ : EuclideanSpace ℂ (Cfg d N))
+    (hA : (1 / 2 : ℝ) ≤ ‖mpvState A N‖ ^ 2)
+    (hB : (1 / 2 : ℝ) ≤ ‖mpvState B N‖ ^ 2)
+    (hAB : ‖inner ℂ (mpvState A N) (mpvState B N)‖ ≤ 1 / 4) :
+    ‖(Submodule.span ℂ ({mpvState A N, mpvState B N} :
+        Set (EuclideanSpace ℂ (Cfg d N)))).starProjection φ‖ ^ 2 ≤
+      4 * (‖inner ℂ (mpvState A N) φ‖ ^ 2 + ‖inner ℂ (mpvState B N) φ‖ ^ 2) :=
+  norm_span_pair_projection_sq_le _ _ _ hA hB hAB
 
 /-- The actual finite uncle Hamiltonian has a positive eigenvalue below a
 strict Rayleigh bound from its kernel complement. Positivity is derived from
