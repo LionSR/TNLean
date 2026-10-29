@@ -86,6 +86,9 @@ theorem evenPairLocalImage_eq_sup_supportAlgebra
     apply StarAlgHom.ext
     intro A
     have hi := bipartiteLocalAlgebraEquiv_localInclusion_left hdisj (CStarMatrix.ofMatrix A)
+    change (bipartiteLocalAlgebraEquiv hdisj)
+      (localInclusion _ (CStarMatrix.ofMatrix A)) =
+        Matrix.leftKroneckerEmbed A at hi
     change quasiLocalObservable d (leftPair x ∪ rightPair x)
       (e.symm (Matrix.leftKroneckerEmbed A)) = _
     rw [← hi, StarAlgEquiv.symm_apply_apply, quasiLocalObservable_localInclusion]
@@ -95,6 +98,9 @@ theorem evenPairLocalImage_eq_sup_supportAlgebra
     apply StarAlgHom.ext
     intro A
     have hi := bipartiteLocalAlgebraEquiv_localInclusion_right hdisj (CStarMatrix.ofMatrix A)
+    change (bipartiteLocalAlgebraEquiv hdisj)
+      (localInclusion _ (CStarMatrix.ofMatrix A)) =
+        Matrix.rightKroneckerEmbed A at hi
     change quasiLocalObservable d (leftPair x ∪ rightPair x)
       (e.symm (Matrix.rightKroneckerEmbed A)) = _
     rw [← hi, StarAlgEquiv.symm_apply_apply, quasiLocalObservable_localInclusion]
