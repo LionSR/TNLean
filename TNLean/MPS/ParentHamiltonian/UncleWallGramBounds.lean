@@ -91,7 +91,8 @@ theorem uncleWallGram_trace_re_le_weight
   have htr := (Complex.nonneg_iff.mp
     (hdiff.trace_mul_nonneg (uncleWallGram_posSemidef A B R n))).1
   simp only [Matrix.sub_mul, Matrix.smul_mul, Matrix.one_mul, Matrix.trace_sub,
-    Matrix.trace_smul, Complex.sub_re, RCLike.smul_re] at htr
+    Matrix.trace_smul, Complex.sub_re, Complex.real_smul, Complex.mul_re,
+    Complex.ofReal_re, Complex.ofReal_im, zero_mul, sub_zero] at htr
   have hle : c * (Matrix.trace (uncleWallGram A B R n)).re ≤
       (uncleWallGramWeight A B R ρ n).re := by
     change 0 ≤ (uncleWallGramWeight A B R ρ n).re -
