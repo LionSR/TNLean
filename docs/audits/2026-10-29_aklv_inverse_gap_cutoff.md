@@ -90,7 +90,7 @@ Blueprint section. Final verdict: **PASS**. The reviewer checked the retained
 high diagonal, cross absorption, min–max construction, residual argument and
 physical reconstruction. It found no circularity, hidden improved-gap
 hypothesis or unjustified zero-energy normalization. It made no edits and ran
-no builds; compilation and axiom checks were performed separately by the owner.
+no builds; compilation and `#print axioms` audits were performed separately by the owner.
 
 ## Verification and remaining limits
 
@@ -120,8 +120,9 @@ no builds; compilation and axiom checks were performed separately by the owner.
 - The appended Blueprint section compiled as a one-page standalone PDF using
   a temporary minimal preamble. This does not establish canonical Blueprint
   rendering or cross-reference resolution.
-- Canonical `leanblueprint checkdecls`, web/PDF builds, ChkTeX and the pinned
-  `latexindent` check were not run: those tools/artifacts are absent locally.
+- At initial validation, canonical `leanblueprint checkdecls`, web/PDF builds,
+  ChkTeX and the pinned `latexindent` check were not run: the required
+  tools/artifacts were absent locally.
   No additional tool download was attempted. The required shared
   `lean-conventions` skill was also absent; its GitHub API retrieval returned
   HTTP 403, so the available local convention documents were followed.
@@ -133,3 +134,30 @@ starting-cutoff term `log d * √((t₀+s)/g)` no longer inherits `g⁻³ᐟ²` 
 independent rank logarithm, scalar schedules, entropy assembly and sequential
 MPS conversion remain with their respective workers. No publication, CI run
 or merge is performed by this refinement task.
+
+## Integration with the current prerequisite
+
+The published refinement head `420ebf9a4e8f958c692c2072a27adb40006ce821`
+and original local commits are preserved. The prerequisite was freshly fetched
+at `9279b8ecb1b9f2a6495de699c1c285dd3b6595ec`; its delta from the original
+base changes only the paper-gap source-key registry and the note's verdict
+marker. These accepted changes were merged without rewriting either history.
+The stacked diff against that prerequisite contains only the original five
+refinement paths and does not revert either prerequisite change.
+
+The Lean proofs and all accepted AKLV modules are unchanged. The pinned
+`latexindent 3.24.7` formatter adjusted two alignment lines in the new
+Blueprint section; its deterministic temporary-copy check passed, and the
+accepted chapter prefix remains byte-identical. The explicitly requested
+Blueprint tools were installed in a temporary virtual environment; no project
+pin was changed. `texra-blueprint v0.3.8 paper-gaps check` passed with 275
+resolved referenced slugs and registered source keys.
+
+After integration, `lake build TNLean.MPS.AreaLaw.AKLV` passed (3261 jobs),
+and strict warnings-as-errors elaboration passed again. All four declarations
+were checked through the public AKLV aggregator, and their transitive dependency
+closures again contain only `propext`, `Classical.choice`, and `Quot.sound`.
+Canonical `leanblueprint checkdecls` was attempted: its executable built, then
+failed because the unbuilt repository-wide `TNLean.olean` is absent. This is
+not a canonical declaration-check pass. The targeted declaration/export checks
+passed; full-root declaration, web/PDF and ChkTeX gates remain for hosted CI.
