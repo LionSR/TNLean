@@ -1,3 +1,42 @@
+\begin{lemma}[Sections of a positive periodic interaction]
+    \label{lem:periodic_interaction_sections}
+    \lean{MPSTensor.cyclicRestrictES_periodicLocalInteractionES}
+    \lean{MPSTensor.periodicLocalInteractionES_eq_zero_iff_sections}
+    \lean{MPSTensor.periodicInteractionHamiltonianES_eq_zero_iff_sections}
+    \notready
+    For $1\le R\le M$, let $h$ be an operator on $R$ consecutive sites,
+    let $h_i$ be its cyclic translate extended by the identity, and write
+    $R_{i,\tau}\psi$ for the coefficient section with the outside letters
+    fixed to $\tau$. Then $R_{i,\tau}h_i\psi=hR_{i,\tau}\psi$.
+    In particular, $h_i\psi=0$ precisely when $hR_{i,\tau}\psi=0$ for every
+    $\tau$. If $h\ge0$, then
+    $(\sum_i h_i)\psi=0$ precisely when every $hR_{i,\tau}\psi=0$.
+\end{lemma}
+\begin{proof}
+    \notready
+    Extending $h$ by the identity applies it independently to each outside
+    coefficient section. A sum of positive operators kills a vector precisely
+    when every summand kills it.
+\end{proof}
+
+\begin{lemma}[Restriction of an interaction inside an interval]
+    \label{lem:periodic_interaction_interval_section}
+    \lean{MPSTensor.periodicLocalInteractionES_rightFiber_eq_zero_of_eq_zero}
+    \notready
+    Let $h$ have range $R\ge1$, let $W\le M$, and let a translated copy of
+    $h$ lie wholly inside a cyclic interval of $W$ sites. If that translated
+    operator kills $\psi$, then its corresponding translate on $W$ sites
+    kills every coefficient section of $\psi$ obtained by fixing the
+    complement of the interval.
+\end{lemma}
+\begin{proof}
+    \notready
+    Regroup the sites as the interval and its complement. The translated
+    operator becomes the same $W$-site operator acting independently at
+    each fixed outside configuration. Taking any such section preserves
+    its zero equation.
+\end{proof}
+
 \section{Embeddings of physical coordinate spaces}
 
 \begin{definition}[Euclidean extension by zero]
@@ -24,4 +63,66 @@
     The sum of $|(E_e\xi)(j)|^2$ over $j\in J$ equals the sum of
     $|\xi(i)|^2$ over $i\in I$, since every coefficient outside $e(I)$ is
     zero and each coefficient in $e(I)$ occurs once.
+\end{proof}
+
+\begin{lemma}[Coefficients outside a single physical sector]
+    \label{lem:physical_sector_embedded_coefficients}
+    \lean{MPSTensor.embedded_physical_vector_apply_eq_zero_of_labels_ne}
+    \lean{MPSTensor.coeff_eq_zero_of_mem_two_embedded_physical_sectors}
+    \notready
+    Let each physical letter have a sector label. Extend a vector from an
+    alphabet on which this label is constant by zero to the larger alphabet,
+    site by site. Its coefficient on any word containing two different
+    labels is zero. The same assertion holds for a sum of two local subspaces
+    embedded from alphabets on each of which the label is constant.
+\end{lemma}
+\begin{proof}
+    \notready
+    A word in the image of either alphabet has constant label. A word with
+    two different labels is outside that image, where extension by zero
+    has zero coefficient. Addition preserves these zero equations.
+\end{proof}
+
+\begin{lemma}[Sector labels in a periodic projector kernel]
+    \label{lem:physical_sector_projector_kernel_support}
+    \lean{MPSTensor.physical_label_eq_of_projectorHamiltonian_coeff_ne_zero}
+    \lean{MPSTensor.coeff_eq_zero_of_projectorHamiltonian_of_physical_labels_ne}
+    \notready
+    \uses{lem:periodic_interaction_sections}
+    Let $2\le R\le M$ and let $S$ be a subspace on $R$ sites. Suppose
+    every vector in $S$ has zero coefficient on words whose first two
+    letters have different sector labels. Form the periodic Hamiltonian
+    on $M$ sites from the orthogonal projection onto $S^{\perp}$.
+    Every nonzero coefficient of a kernel vector has the same label at
+    every site. Equivalently, a word with two different labels has zero
+    coefficient in every kernel vector.
+\end{lemma}
+\begin{proof}
+    \notready
+    Positivity makes every local projection vanish on a Hamiltonian kernel
+    vector, so each fixed-outside section belongs to $S$. If a coefficient
+    is nonzero, taking the window beginning at any site shows that the
+    labels at that site and its cyclic successor agree. Induction around
+    the cycle makes all labels equal.
+\end{proof}
+
+\begin{lemma}[No mixed physical sectors in the periodic kernel]
+    \label{lem:two_physical_sector_projector_kernel}
+    \lean{MPSTensor.coeff_eq_zero_of_two_sector_projectorHamiltonian}
+    \lean{MPSTensor.coeff_eq_zero_of_physical_sum_projectorHamiltonian}
+    \notready
+    \uses{lem:physical_sector_embedded_coefficients,lem:physical_sector_projector_kernel_support}
+    Let $2\le R\le M$. Embed two local spaces $S$ and $T$ from alphabets
+    on which the sector label is constant, and let $U$ be the sum of their
+    images on $R$ sites. The periodic Hamiltonian formed from the
+    orthogonal projection onto $U^{\perp}$ has zero ground-state coefficient
+    on every word containing different labels. In particular, split an
+    alphabet of $a+b$ letters into its first $a$ and last $b$ letters:
+    every word using letters from both parts has zero coefficient.
+\end{lemma}
+\begin{proof}
+    \notready
+    The two embedded spaces each vanish on words with different labels,
+    so their sum does also. Apply the periodic projector-kernel statement
+    to this actual sum of embedded spaces.
 \end{proof}

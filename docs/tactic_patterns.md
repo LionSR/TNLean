@@ -9752,3 +9752,14 @@ there is no need for a new tactic.
   transport in `ParentHamiltonian/PhysicalAlphabetLocalTerms.lean`.
 - **Notes:** Reuses Mathlib's extension-by-zero linear map and dependent product
   embedding. No separate physical configuration record or isometry predicate.
+
+### Physical sector labels around a periodic chain — reused cyclic induction (2026-10-29)
+
+- **Seen:** `MPS/ParentHamiltonian/PhysicalSectorKernelSupport.lean`.
+- **Pattern:** An actual positive Hamiltonian equation forces every local
+  section into the prescribed subspace. A nonzero global coefficient then
+  gives equality of each site's sector label with its successor's label.
+- **Reuse:** The promoted `Fin.cyclic_induction` propagates that equality;
+  no new finite-cycle induction or configuration predicate is introduced.
+- **Decision:** Keep the local-support derivation in mathematical lemmas,
+  using shared Euclidean extension by zero and ordinary submodule sums.
