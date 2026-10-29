@@ -25,8 +25,8 @@ with `𝔄` block upper triangular with identity diagonal blocks in the order of
 likewise in the order of `Q`, and `P_X` the block permutation matrix that sends the block of
 position `j` to the block of position `π(j)` through the intertwiner `X_j` of *Two compressions with
 different flags* (blueprint `thm:asym_uniq_different_flags`). This is *A basis adapted to both
-flags* (blueprint `thm:asym_uniq_common_basis`; for two families, *The asymmetric fundamental
-theorem of matrix product states*, Theorem 6.5).
+flags* (blueprint `thm:asym_uniq_common_basis`; for two families, Theorem 6.5 of
+*The asymmetric fundamental theorem of matrix product states*).
 
 ## Main definitions
 

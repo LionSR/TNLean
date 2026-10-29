@@ -62,7 +62,7 @@ Passed local validation:
   The unipotent converse accepts that same raw family. Both acceptance
   theorems and the two main unipotent theorems have only `propext`,
   `Classical.choice`, and `Quot.sound` as axioms.
-- All 112 declaration references in the new example entries and the two
+- All 141 declaration references in the new example entries and the two
   amended uniqueness entries resolve against the compiled targeted imports.
   This includes every one of the new chapter's 93 references.
 - Blueprint source synchronization, its scanner tests, pinned LaTeX
