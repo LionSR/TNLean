@@ -9639,3 +9639,14 @@ there is no need for a new tactic.
 - **Decision:** Two proof occurrences in one file; keep the concrete source
   statements and consolidate the closed-containment argument before a third
   copy, rather than adding another notion of local generation.
+
+
+### Coordinate transport of a rectangular conjugation (2026-10-29)
+
+- **Seen:** `Algebra/MatrixStarEquivSpatial.lean`.
+- **Pattern:** A square unitary becomes a rectangular unitary by reindexing its columns;
+  conjugation then transports the input matrix along the same coordinate equivalence.
+- **Reuse:** `Matrix.reindexLinearEquiv_mul` receives all three equivalences explicitly,
+  and `Matrix.conjTranspose_reindex` transports the adjoint. The existing QICLean
+  Skolem–Noether theorem supplies the square implementer. No entrywise double sum
+  or duplicate Skolem–Noether argument is introduced.
