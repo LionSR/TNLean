@@ -4970,6 +4970,67 @@ argument below.
     apply the compact-limit class-invariance theorem below.
 \end{proof}
 
+\begin{lemma}[Virtual class of an injective periodic ray]
+    \label{lem:spt_periodic_ray_virtual_class}
+    \lean{MPSTensor.bondDimension_eq_of_samePositiveMpvRay,
+        MPSTensor.cohomologousTo_of_samePositiveMpvRay,
+        MPSTensor.cohomologousTo_of_samePositiveMpvRay_character_covariance}
+    \notready
+    \uses{thm:spt_positive_ray_finite_traces}
+    Let $A$ and $B$ be injective tensors of positive bond dimensions with
+    the same positive-length periodic rays. Their bond dimensions agree.
+    Prescribed virtual actions for the same physical representation have
+    equal cohomology classes, including when the actions remove separately
+    chosen unit-modulus physical characters.
+\end{lemma}
+\begin{proof}
+    The nonzero two- and three-site trace normalizations determine the
+    common bond dimension and a scalar bond gauge. Transport the first
+    virtual action through this gauge. On the second tensor, injective
+    gauge-phase uniqueness forces the ratio of the physical characters
+    to be one. Gauge independence then identifies the factor systems.
+\end{proof}
+
+\begin{corollary}[Prescribed classes at the endpoints of a physical path]
+    \label{cor:spt_exact_ground_endpoint_class}
+    \lean{MPSTensor.ExactMPSGroundPath.cohomologousTo_endpoints}
+    \notready
+    \uses{thm:spt_exact_ground_physical_class, lem:spt_periodic_ray_virtual_class}
+    Let $Q$ realize the unique finite-chain ground lines of a symmetric
+    gapped interaction path. Suppose injective positive-dimensional
+    tensors $A_0,A_1$ represent its endpoint periodic rays. Any prescribed
+    virtual actions of $A_0,A_1$ for the common physical representation,
+    after independent unit-modulus character changes, have equal
+    cohomology classes.
+\end{corollary}
+\begin{proof}
+    Compare each endpoint action with the corresponding action in the
+    common class supplied by Theorem~\ref{thm:spt_exact_ground_physical_class}.
+    Lemma~\ref{lem:spt_periodic_ray_virtual_class} identifies each pair.
+\end{proof}
+
+\begin{corollary}[Cohomology obstruction to an exact MPS gapped phase]
+    \label{cor:spt_exact_phase_cohomology_obstruction}
+    \lean{MPSTensor.IsSameExactMPSGappedPhase.cohomologousTo}
+    \notready
+    \uses{def:spt_exact_mps_gapped_phase, cor:spt_exact_ground_endpoint_class}
+    Let $A_0,A_1$ be one-site injective tensors of positive bond dimensions
+    with prescribed virtual projective actions implementing their exact
+    on-site symmetries. If they satisfy the independent exact MPS gapped
+    phase condition, their virtual factor systems have equal cohomology
+    classes. The common blocking, endpoint physical character changes,
+    and orthogonal physical inclusions are those permitted by the phase
+    condition.
+\end{corollary}
+\begin{proof}
+    Blocking preserves each virtual factor system and injectivity.
+    Each physical isometry also preserves injectivity. The physical
+    intertwining relation transports the blocked virtual action to its
+    included tensor after removing the endpoint character. Apply
+    Corollary~\ref{cor:spt_exact_ground_endpoint_class} to the resulting
+    endpoint representatives of the actual path.
+\end{proof}
+
 \begin{theorem}[The virtual class of an exact ground-state path under a transfer bound]
     \label{thm:spc_aux_exact_ground_uniform_transfer_class}
     \lean{MPSTensor.ExactMPSGroundPath.exists_constant_virtual_class_of_uniform_transfer_bound}

@@ -60,6 +60,7 @@ import TNLean.MPS.Symmetry.EmbeddedFixedPointTensor
 import TNLean.MPS.Symmetry.EmbeddedInjectiveGappedPath
 import TNLean.MPS.Symmetry.EntanglementSpectrum
 import TNLean.MPS.Symmetry.ExactGroundPathClustering
+import TNLean.MPS.Symmetry.ExactGroundPathEndpointClass
 import TNLean.MPS.Symmetry.ExactGroundPathFrequencySeparation
 import TNLean.MPS.Symmetry.ExactGroundPathGaussianCorrelation
 import TNLean.MPS.Symmetry.ExactGroundPathGaussianFilter
@@ -69,6 +70,7 @@ import TNLean.MPS.Symmetry.ExactGroundPathTransferClass
 import TNLean.MPS.Symmetry.ExactGroundPathWindowClustering
 import TNLean.MPS.Symmetry.ExactMPSGappedPhase
 import TNLean.MPS.Symmetry.ExactMPSGroundPathComposition
+import TNLean.MPS.Symmetry.ExactMPSPhaseCohomologyObstruction
 import TNLean.MPS.Symmetry.ExactMPSPhaseGaugeInvariance
 import TNLean.MPS.Symmetry.FiniteRingReconstruction
 import TNLean.MPS.Symmetry.FixedBondPhysicalPathInvariance
@@ -136,6 +138,7 @@ import TNLean.MPS.Symmetry.PolarVirtualCohomology
 import TNLean.MPS.Symmetry.PositiveLengthSymmetryCharacter
 import TNLean.MPS.Symmetry.PositiveRayExpectations
 import TNLean.MPS.Symmetry.PositiveRayFiniteTraceData
+import TNLean.MPS.Symmetry.PositiveRayVirtualCohomology
 import TNLean.MPS.Symmetry.PreparedPolarGappedPath
 import TNLean.MPS.Symmetry.ProjectiveDirectSum
 import TNLean.MPS.Symmetry.ProjectiveDirectSumInclusions
