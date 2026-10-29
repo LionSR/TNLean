@@ -287,3 +287,13 @@ file had an extra namespace terminator. These source issues are repaired,
 reported unused simp arguments removed, and the same matrix-level adjoint
 rewrite/qualified raw tensor operations are applied at the dependent local
 sites. No hypothesis or conclusion changes; no local Lean commands.
+
+## Hosted diagnostics on `1e269afe1`
+
+Job `123481504409` compiled the entire actual source-cut/rank/normalized-record
+module. The next failure reached the final necessity module: an unnecessary
+`dsimp`, an untyped second finite-pair equivalence, and an opaque local adjoint
+factor alias before the two gate rewrites. The source now removes the empty
+simplification, specifies both pair dimensions, and unfolds exactly that
+factor alias before applying the existing gate identities. The converse has
+not yet been accepted; no local Lean command was run.

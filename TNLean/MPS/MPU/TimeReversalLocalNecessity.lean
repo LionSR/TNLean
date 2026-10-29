@@ -132,8 +132,7 @@ private theorem four_spin_gate_reindex
       (Equiv.prodCongr el er) (Equiv.refl _)
       (Equiv.prodCongr el er) (Equiv.refl _) u u
   constructor
-  · dsimp only
-    rw [hmiddle, hkronecker]
+  · rw [hmiddle, hkronecker]
     exact Matrix.reindexLinearEquiv_mul ℂ ℂ F E (Equiv.refl _) _ _
   · apply Matrix.ext
     rintro ⟨⟨a, b⟩, c, e⟩ ⟨⟨a', b'⟩, c', e'⟩
@@ -150,7 +149,8 @@ theorem coarse_gates_eq_four_spin_gates
       (Equiv.refl _) (sourceU U hU.ρ hU.ρ_posDef)
     let v₀ := Matrix.reindex (Equiv.refl _)
       (Equiv.prodCongr (finCongr hrU) (finCongr hlU)) (sourceV U hU.ρ hU.ρ_posDef)
-    let p := Equiv.prodCongr (finProdFinEquiv (m := d) (n := d)) finProdFinEquiv
+    let p := Equiv.prodCongr (finProdFinEquiv (m := d) (n := d))
+      (finProdFinEquiv (m := d) (n := d))
     Matrix.reindex (Equiv.prodCongr (finCongr hl) (finCongr hr)) (Equiv.refl _)
         (SourceFactors.sourceU (MPOTensor.blockTwo U) (hU.twoSiteSourceFactors hsimple)) =
       Matrix.reindex p p (staircaseMiddle (A := Fin d) (E := Fin d) v₀ * (u₀ ⊗ₖ u₀)) ∧
@@ -163,7 +163,8 @@ theorem coarse_gates_eq_four_spin_gates
   let L := finCongr hl
   let er₀ := finCongr hrU
   let el₀ := finCongr hlU
-  let p := Equiv.prodCongr (finProdFinEquiv (m := d) (n := d)) finProdFinEquiv
+  let p := Equiv.prodCongr (finProdFinEquiv (m := d) (n := d))
+      (finProdFinEquiv (m := d) (n := d))
   let F := Equiv.prodCongr (Equiv.prodCongr el₀ (Equiv.refl (Fin d)))
     (Equiv.prodCongr (Equiv.refl (Fin d)) er₀)
   let G := Equiv.prodCongr (Equiv.prodCongr (Equiv.refl (Fin d)) er₀)
@@ -259,12 +260,14 @@ theorem IsMPUCanonicalFormII.exists_coarse_timeReversal_certificate
   have hfirst : Bᴴ = ((X' : Matrix (Fin (d * d)) (Fin (d * d)) ℂ) ⊗ₖ
       (Y' : Matrix (Fin (d * d)) (Fin (d * d)) ℂ)) * A := by
     have h := congrArg (Matrix.reindex (Equiv.prodCongr LA RA) (Equiv.refl _)) hu
+    dsimp only [T] at h
     rw [SourceFactors.sourceU_physicalAdjoint] at h
     rw [Matrix.reindex_kronecker_mul] at h
     simpa only [A, B, X', Y', L, R, LA, RA, Matrix.conjTranspose_reindex] using h
   have hsecond : Aᴴ = B * ((Y' : Matrix (Fin (d * d)) (Fin (d * d)) ℂ)ᴴ ⊗ₖ
       (X' : Matrix (Fin (d * d)) (Fin (d * d)) ℂ)ᴴ) := by
     have h := congrArg (Matrix.reindex (Equiv.refl _) (Equiv.prodCongr RA LA)) hv
+    dsimp only [T] at h
     rw [SourceFactors.sourceV_physicalAdjoint] at h
     rw [Matrix.reindex_mul_kronecker] at h
     simpa only [A, B, X', Y', L, R, LA, RA, Matrix.conjTranspose_reindex,
