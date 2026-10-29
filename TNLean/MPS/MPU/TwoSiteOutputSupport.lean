@@ -19,9 +19,13 @@ are derived from the actual two-link output observable, rather than
 supplied as presentations of a selected support algebra.
 
 Source: arXiv:1703.09188, StandardForm/SF and Appendix index comparison,
-lines 603–622 and 2313–2334. The source's printed shifted gate is the
-adjoint of the forward gate convention used here, so conjugation is
-written v(1⊗X)v† here; the left intermediate factor is still ℓ.
+lines 603–622 and 2313–2334.
+
+**Local fix (Appendix gate orientation):** Main-text line 543 directs v
+from the intermediate space to the physical pair, so actual forward
+conjugation gives v(1⊗X)v†. Appendix line 2333 prints the adjoints in
+the reverse order. The left intermediate factor still has size ℓ;
+see `docs/paper-gaps/mpu_qca_index_normalization.tex`.
 -/
 
 open scoped Matrix Kronecker

@@ -1,0 +1,73 @@
+\section{Finite support factors in the MPU--QCA index comparison}
+
+\begin{lemma}[Least left support of the actual two-link output family]
+    \label{lem:mpu_actual_two_link_left_support}
+    \lean{Matrix.IsUnitaryBetween.conjStarAlgEquiv,
+        Matrix.IsUnitaryBetween.conjStarAlgEquiv_apply,
+        MPOTensor.twoLinkMiddleLift,
+        MPOTensor.twoLinkOutputMap,
+        MPOTensor.twoLinkOutputMap_apply,
+        MPOTensor.twoLinkLeftOutputMap,
+        MPOTensor.twoLinkRightOutputMap,
+        MPOTensor.twoLinkOutputMap_inverse_conj_kronecker,
+        MPOTensor.leftSupportAlgebra_twoLinkOutputMap,
+        MPOTensor.twoLinkLeftSupportEquiv}
+    \notready
+    Let $d,r,\ell$ be positive and let
+    $u:\mathbb C^d\otimes\mathbb C^d\to\mathbb C^\ell\otimes\mathbb C^r$
+    and $v:\mathbb C^r\otimes\mathbb C^\ell\to\mathbb C^d\otimes\mathbb C^d$
+    be unitary. The actual output family
+    \[
+        A\longmapsto(v\otimes v)
+        (I_r\otimes uAu^\dagger\otimes I_\ell)(v\otimes v)^\dagger
+    \]
+    is a star-homomorphism. Its least left support algebra is
+    $v(I_r\otimes M_\ell)v^\dagger$, and hence has matrix size $\ell$.
+    This is the finite output-family step in
+    \cite[Appendix, lines~2322--2334]{Cirac2017MPU}.
+    The adjoint order follows the main-text direction of $v$; the
+    Appendix correction and its distinct logarithmic factor-of-two
+    correction are recorded in \cite{gap:mpu_qca_index_normalization}.
+\end{lemma}
+\begin{proof}
+    Change the arbitrary input by the inverse of $u$. An intermediate
+    product $A_\ell\otimes B_r$ then gives exactly
+    $v(I_r\otimes A_\ell)v^\dagger\otimes
+        v(B_r\otimes I_\ell)v^\dagger$. Matrix units span the intermediate
+    algebra, so every left coefficient belongs to the first factor.
+    Conversely choose $B_r=I_r$; a diagonal right coefficient recovers
+    every element of the first factor. Leastness gives equality.
+    Conjugation by $v$ and the faithful identity-tensor embedding
+    identify it with $M_\ell$.
+\end{proof}
+
+\begin{lemma}[Coordinate transport of least finite left support]
+    \label{lem:mpu_qca_left_support_coordinate_transport}
+    \lean{Matrix.bipartiteSlice_reindex_prod,
+        Matrix.leftSupportAlgebra_map_matrixReindexStarAlgEquiv}
+    \notready
+    Independent coordinate bijections on the two factors transport the
+    least left support algebra by the first-factor bijection.
+\end{lemma}
+\begin{proof}
+    A left coefficient in the new coordinates is exactly the
+    first-factor coordinate transport of the old coefficient, with
+    its two right indices relabelled. Apply the least-support
+    characterization in both directions.
+\end{proof}
+
+\begin{lemma}[Intersection of finite quasi-local supports]
+    \label{lem:mpu_qca_support_intersection}
+    \lean{SpinChain.commute_map_localObservable_of_singletons,
+        SpinChain.QuasiLocalSupportedIn.inter}
+    \notready
+    An observable supported on two finite regions $\Lambda$ and $\Gamma$
+    is supported on $\Lambda\cap\Gamma$.
+\end{lemma}
+\begin{proof}
+    Any site outside the intersection lies outside at least one
+    of the two supports. The observable therefore commutes with
+    its one-site algebra. Finite one-site generation gives commutation
+    with every algebra disjoint from the intersection, and the
+    outside-commutant characterization recovers exact support.
+\end{proof}

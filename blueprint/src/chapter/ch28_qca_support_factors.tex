@@ -27,7 +27,7 @@ recorded in \cite{gap:gnvw12_site_dependent_adjacent_generation_scope}.
     coordinates.
 \end{proof}
 
-\begin{corollary}[Positive matrix presentations]
+\begin{lemma}[Positive matrix presentations]
     \label{cor:qca_support_factor_presentations}
     \lean{SpinChain.PropagatesWithin.exists_evenSupportAlgebra_matrix,
         SpinChain.PropagatesWithin.exists_oddSupportAlgebra_matrix,
@@ -43,7 +43,7 @@ recorded in \cite{gap:gnvw12_site_dependent_adjacent_generation_scope}.
     \end{align}
     The integer $r(y)$ is the matrix size; the complex dimension of
     $\mathcal R_y$ is $r(y)^2$.
-\end{corollary}
+\end{lemma}
 \begin{proof}
     Apply the full-matrix scalar-center consequence of the finite-dimensional
     star-algebra classification to each finite support algebra. This is the
@@ -104,7 +104,7 @@ recorded in \cite{gap:gnvw12_site_dependent_adjacent_generation_scope}.
     consists exactly of scalars.
 \end{proof}
 
-\begin{theorem}[Generation of each image pair by its support factors]
+\begin{lemma}[Generation of each image pair by its support factors]
     \label{thm:qca_image_pair_adjacent_generation}
     \lean{SpinChain.PropagatesWithin.exists_adjacentSupportJoin_matrix,
         SpinChain.PropagatesWithin.range_image_evenPair_eq_adjacentSupportJoin,
@@ -124,7 +124,7 @@ recorded in \cite{gap:gnvw12_site_dependent_adjacent_generation_scope}.
     of the finite local image with the join of the left and right
     Kronecker embeddings. This is equation~AARReven of
     \cite[lines~1276--1287]{Gross2012IndexTheory}, in the homogeneous domain.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     Both support factors are full matrix algebras of positive size. Their
     commuting join is therefore a full matrix algebra. The image-pair
@@ -134,7 +134,7 @@ recorded in \cite{gap:gnvw12_site_dependent_adjacent_generation_scope}.
     so the support containment is an equality.
 \end{proof}
 
-\begin{corollary}[Matrix sizes of the image-pair factors]
+\begin{lemma}[Matrix sizes of the image-pair factors]
     \label{cor:qca_image_pair_matrix_sizes}
     \lean{SpinChain.PropagatesWithin.evenSupportAlgebra_matrixSize_mul_odd,
         SpinChain.PropagatesWithin.exists_supportAlgebra_matrixSizes_even_mul}
@@ -148,7 +148,7 @@ recorded in \cite{gap:gnvw12_site_dependent_adjacent_generation_scope}.
     \end{align}
     for every $x\in\mathbb Z$. This is the first size identity following
     equation~AARReven in \cite[lines~1287--1290]{Gross2012IndexTheory}.
-\end{corollary}
+\end{lemma}
 \begin{proof}
     The commuting product presentation identifies the adjacent join with
     $M_{r(2x)r(2x+1)}(\mathbb C)$. Its equality with the actual image pair
@@ -156,7 +156,7 @@ recorded in \cite{gap:gnvw12_site_dependent_adjacent_generation_scope}.
     algebras which are algebra-isomorphic have equal matrix sizes.
 \end{proof}
 
-\begin{theorem}[Generation of the physical pair and both size identities]
+\begin{lemma}[Generation of the physical pair and both size identities]
     \label{thm:qca_physical_pair_adjacent_generation}
     \lean{SpinChain.PropagatesWithin.existsUnique_eq_smul_one_of_supported_rightPair_commute_supports,
         SpinChain.PropagatesWithin.adjacentSupportJoin_eq_range_rightPair,
@@ -181,7 +181,7 @@ recorded in \cite{gap:gnvw12_site_dependent_adjacent_generation_scope}.
     \end{align}
     This is equation~AARRodd and the two size consequences in
     \cite[lines~1276--1318]{Gross2012IndexTheory}, in the homogeneous domain.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     Both support factors lie on $P_x$. If an observable on $P_x$ commutes
     with both, it commutes with every other support factor by disjoint

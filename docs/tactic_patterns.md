@@ -9679,3 +9679,28 @@ there is no need for a new tactic.
 - **Decision:** Two proof occurrences in one file; keep the concrete source
   statements and consolidate the closed-containment argument before a third
   copy, rather than adding another notion of local generation.
+
+
+### Supplied unitary gate dimension product — promoted (2026-10-29)
+
+- **Pattern:** Apply both cardinal inequalities of a supplied rectangular
+  unitary and simplify the product/finite-index cardinalities to ℓ*r=d*d.
+- **Defined in:** `MPS/MPU/TwoSiteStandardForm.lean`,
+  `TwoSiteStandardFormData.left_mul_right`.
+- **Refactored occurrences:** four-spin unitarity in
+  `SuppliedHalfFactorMinimality.lean`, and both the simplicity and
+  zero-index consequences in `SuppliedFourSpinSourceComparison.lean`.
+- **Notes:** The theorem is at the existing supplied-standard-form owner;
+  no normalization or ambient canonicality premise is introduced.
+
+
+### Commutation after a finite-local star homomorphism — promoted helper (2026-10-29)
+
+- **Seen:** `QCA/SingletonGeneration.lean` and `QCA/SupportIntersection.lean`.
+- **Pattern:** Pull back the target's star centralizer through a star
+  homomorphism, include every finite single-site image, and use the existing
+  finite local generation theorem to obtain whole-region commutation.
+- **Promoted:** `commute_map_localObservable_of_singletons` retains this
+  argument once. The original algebraic-local commutation helper and finite
+  quasi-local support intersection both use it.
+- **Validation:** Independent source/API review; local Lean was not run.
