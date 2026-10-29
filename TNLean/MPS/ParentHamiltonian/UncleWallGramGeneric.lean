@@ -150,7 +150,7 @@ theorem uncleWallSlopeQuadratic_zero_measure [NeZero a] [NeZero b]
     ext R
     exact (uncleWallSlopeQuadratic_mem_radical_iff A B ρ hρ.posSemidef hA hB hSpect R).symm
   rw [hset]
-  exact addHaar_submodule μ _
+  exact Measure.addHaar_submodule μ _
     (uncleWallSlopeQuadratic_radical_ne_top A B R₀ L₀ hPert ρ hρ hSpect)
 
 /-- Almost every wall has strictly positive actual limiting Gram slope
@@ -224,10 +224,10 @@ theorem uncleWallNormSlope_pair_ae_pos [NeZero a] [NeZero b]
     (uncleWallSlopeQuadratic_ne_zero_of_bond_sq_lt A B ρA hρA hdB hAB)
   have hS₂ : S₂ ≠ ⊤ := wallQuadratic_radical_ne_top Q₂
     (uncleWallSlopeQuadratic_ne_zero_of_bond_sq_lt B A ρB hρB hdA hBA)
-  have hnull₁ : μ (S₁.prod ⊤) = 0 := addHaar_submodule μ _
+  have hnull₁ : μ (S₁.prod ⊤) = 0 := Measure.addHaar_submodule μ _
     (fun h ↦ hS₁ (Submodule.prod_eq_top_iff.mp h).1)
   have hnull₂ : μ ((⊤ : Submodule ℝ (Fin d → Matrix (Fin a) (Fin b) ℂ)).prod S₂) = 0 :=
-    addHaar_submodule μ _ (fun h ↦ hS₂ (Submodule.prod_eq_top_iff.mp h).2)
+    Measure.addHaar_submodule μ _ (fun h ↦ hS₂ (Submodule.prod_eq_top_iff.mp h).2)
   have hae₁ : ∀ᵐ P ∂μ, P.1 ∉ S₁ := by
     have hset : {P : (Fin d → Matrix (Fin a) (Fin b) ℂ) ×
         (Fin d → Matrix (Fin b) (Fin a) ℂ) | P.1 ∈ S₁} = (S₁.prod (⊤ :
