@@ -14,7 +14,10 @@ perturbation span condition in Theorem~\ref{thm:uncle_periodic_ground_space}.
     \label{def:uncle_two_wall_trial}
     \lean{MPSTensor.uncleTwoWallCoefficient,
         MPSTensor.uncleTwoWallCoefficient_eq_sum,
-        MPSTensor.uncleTwoWallTrial,MPSTensor.uncleTwoWallTrialSource}
+        MPSTensor.uncleTwoWallTrial,MPSTensor.uncleTwoWallTrialSource,
+        MPSTensor.uncleTwoWallTrial_append_apply,
+        MPSTensor.uncleTwoWallTrialSource_cast_apply,
+        MPSTensor.norm_uncleTwoWallTrialSource_eq}
     \notready
     \uses{def:uncle_boundary_space}
     For five consecutive words $u,v,w,x,y$, define the coefficient
@@ -27,7 +30,12 @@ perturbation span condition in Theorem~\ref{thm:uncle_periodic_ground_space}.
     length $6N+1$ with $N\ge1$, choose consecutive segment lengths
     $N,N+1,2N-1,N+1,N$. In coordinates numbered from zero, the first wall
     ranges from $N$ through $2N$, and the second from $4N$ through $5N$.
-    Denote the resulting vector by $\phi_N$.
+    Denote the resulting vector by $\phi_N$. Concatenating five physical
+    configurations evaluates the coefficient on precisely their five words.
+    For $N\ge1$, the length identity
+    $N+(N+1)+(2N-1)+(N+1)+N=6N+1$ identifies the source trial with this
+    five-segment trial by a finite coordinate bijection, preserving its norm
+    exactly.
 \end{definition}
 
 \begin{lemma}[Interior moving-wall cancellation]
