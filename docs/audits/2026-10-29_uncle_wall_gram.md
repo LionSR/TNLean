@@ -1,4 +1,4 @@
-# Moving-wall finite Gram calculation
+# Moving-wall Gram and generic slope calculation
 
 Source: arXiv:1210.6613, `Papers/1210.6613/UncleHMPS.tex`, proof of
 Lemma `lemma:lowenergystates`, especially lines 1230–1265. This is one
