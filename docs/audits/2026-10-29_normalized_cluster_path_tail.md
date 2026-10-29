@@ -47,3 +47,10 @@ actual Hamiltonian sum, actual path and cutoff, component reconstruction, decrea
 and the cases of zero inverse temperature, an empty chain and a cutoff longer than the chain.
 No additional geometric event or factorization is supplied in the headline theorem. The
 review found no material mathematical defect. The original counterexamples are retained.
+
+## Completed combined verification
+
+TNLean `da3ab8dcc9` and QICLean `4276de2e` passed full builds, strict
+checks, imported foundation audits and compiled blueprint checks. The
+complete phase records, timing qualifications and remaining scope are
+recorded in [the integration audit](2026-10-29_verified_soft_residual_refinement_range.md).

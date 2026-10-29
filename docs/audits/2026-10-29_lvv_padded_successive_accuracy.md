@@ -103,3 +103,10 @@ registration are deliberately left to integration.
 | `TNLean/MPS/AreaLaw/ViableSet/ChainPaddingGroundState.lean` | `997aff9f9b0dfedc9bb7f1e4b7bf450f2a67d6010a94288591edc8cab7bbcaad` |
 | `TNLean/MPS/AreaLaw/ViableSet/PrefixMPS.lean` | `00064f02146030af590b602f2637a3c2a0c5cad4abbc9c286bbb6bac9718d08b` |
 | `TNLean/MPS/AreaLaw/ViableSet/SuccessiveAccuracy.lean` | `3a130b520222ab675defbfe4c0ef37f171e48735756a6d5dc8e902ae6fb0ca8e` |
+
+## Completed combined verification
+
+TNLean `da3ab8dcc9` and QICLean `4276de2e` passed full builds, strict
+checks, imported foundation audits and compiled blueprint checks. The
+complete phase records, timing qualifications and remaining scope are
+recorded in [the integration audit](2026-10-29_verified_soft_residual_refinement_range.md).

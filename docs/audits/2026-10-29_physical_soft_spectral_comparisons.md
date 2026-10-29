@@ -63,3 +63,10 @@ The imported-object foundation audit checked the two new public declarations and
 The source worktrees have no local Lake environment. No provider source, dependency artifact or cache was modified or copied, and no Mathlib source was compiled. Aggregator, prose, proof-integrity and tactic-pattern checks passed locally. Common ordinary builds and compiled blueprint checks remain integration gates.
 
 The revised standalone paper-gap note rendered to three pages under `/tmp/tnlean-alvv-soft-comparison-note-render-20261029/`. All pages were visually inspected; equations, text, links and bibliography are legible and unclipped. Its final LaTeX log contains no warnings.
+
+## Completed combined verification
+
+TNLean `da3ab8dcc9` and QICLean `4276de2e` passed full builds, strict
+checks, imported foundation audits and compiled blueprint checks. The
+complete phase records, timing qualifications and remaining scope are
+recorded in [the integration audit](2026-10-29_verified_soft_residual_refinement_range.md).

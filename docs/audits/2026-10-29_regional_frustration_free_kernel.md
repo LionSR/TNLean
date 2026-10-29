@@ -41,3 +41,10 @@ pin or ordinary build artifact was changed, and Mathlib was not rebuilt.
 Ordinary combined verification and the compiled blueprint declaration
 check remain for coordinated integration. The spectral gap, same-parity
 regrouping, and corrected tensor-rank bound remain subsequent work.
+
+## Completed combined verification
+
+TNLean `da3ab8dcc9` and QICLean `4276de2e` passed full builds, strict
+checks, imported foundation audits and compiled blueprint checks. The
+complete phase records, timing qualifications and remaining scope are
+recorded in [the integration audit](2026-10-29_verified_soft_residual_refinement_range.md).

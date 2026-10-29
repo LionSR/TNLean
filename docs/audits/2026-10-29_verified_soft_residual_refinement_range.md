@@ -158,3 +158,51 @@ actual spectral windows, the spatial cluster tail and MPO construction,
 and the regional frustration-free truncation with corrected rank bound
 remain subsequent work. The proved tensor-gap and cluster identities are
 ingredients in those constructions and do not assert their completion.
+
+## Constructive accuracy and corrected spectral and cluster estimates
+
+The next verified mathematical revisions are TNLean
+`da3ab8dcc9f9149cbbdcc56cae817ff783825f24` and QICLean
+`4276de2eeb5c4122f4482ef5e4fa205be5b71bd9`.
+They include arbitrary LVV accuracy obtained from one actual padded
+successive construction; both directed soft-window comparisons with a
+uniform logarithmic order; the corrected, energy-normalized cluster tail
+on an actual interaction-label path; the actual regional frustration-free
+Hamiltonian's positivity, full kernel and internal norm bound; and the
+partition identity for commuting complementary products.
+
+QICLean passed its 10,365-job build in 66.591 seconds, strict checks of seven
+changed sources and three existing regressions, imported foundation audits
+of 13 public declarations, source synchronization, compiled blueprint
+checks, prose and integrity checks, and changed-module timing checks.
+TNLean passed its 15,140-job build in 147.466 seconds, strict checks of 22
+changed sources and five existing regressions in 159.879 seconds, imported
+foundation audits of 61 public declarations, source synchronization,
+compiled blueprint checks, prose and integrity checks, changed-module
+timing checks, the paper-gap registry check and the tactic-pattern scan.
+Both foundation audits found only `propext`, `Classical.choice` and
+`Quot.sound`. No changed module reached the 25-second build warning
+threshold; an unchanged dependent clipped-polynomial module took 27 seconds.
+The earlier private strict check of the touched low-energy-family consumer
+took 42.828 seconds, below the 50-second limit; its combined build took
+20 seconds. These are local timings under different loads.
+
+The exact records are `/tmp/qiclean-accuracy-window-tail-gates.json` and
+`/tmp/tnlean-accuracy-window-tail-gates.json`. The pin record
+`/tmp/tnlean-accuracy-window-tail-pin.json` confirms five coordinated entries,
+the matching private package checkout and an unchanged Mathlib artifact.
+No Mathlib module was compiled from source and no modified-worktree
+artifacts were copied.
+
+The [six-paper comparison](../formalization/classical-area-law-comparison.md)
+records the mathematical scope. The LVV result gives a polynomial whose
+coefficient and degree precede both length and requested accuracy; it
+retains the corrected trimming and Gaussian-filter qualifications and
+asserts no running time. The soft comparison covers one interval, equal
+scale and order, and positive bandwidth and enlargement. The corrected
+cluster tail uses interaction labels and an explicit lower-energy
+normalization, and supplies no MPO representation. The regional
+frustration-free spectral gap and corrected rank bound remain open.
+The AKLV changing-target iteration and optimized tails, ALVV sampled tree
+and low-density extension, and the remaining Hastings constructions
+also require further proofs.
