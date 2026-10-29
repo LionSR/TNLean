@@ -22,19 +22,19 @@
     Hamiltonian $B_t$ is positive, has norm at most $2t+s$, and has a
     unit ground vector $\phi_t$ with energy $E_t\ge0$ such that
     \begin{align*}
-        B_t-E_t\Id&\ge\frac{9g}{10}
-          (\Id-|\phi_t\rangle\langle\phi_t|),&
-        \|\phi_t-\Omega\|^2&\le e^{-t/16}/100,\\
-        \|x-\phi_t\|^2&\le1/4,&
-        |\langle\phi_t,x\rangle|&\ge1/2.
+        B_t-E_t\Id                          & \ge\frac{9g}{10}
+        (\Id-|\phi_t\rangle\langle\phi_t|), &
+        \|\phi_t-\Omega\|^2                 & \le e^{-t/16}/100,   \\
+        \|x-\phi_t\|^2                      & \le1/4,            &
+        |\langle\phi_t,x\rangle|            & \ge1/2.
     \end{align*}
     This target is chosen before the polynomial degree.
     For every integer $\ell\ge0$, put
     \begin{align*}
-        D_{s,\ell}&=\bigl(q(\ell+1)\bigr)^ {
-          32(\lfloor\ell/s\rfloor+\lfloor\sqrt\ell\rfloor+1)},\\
-        \Delta_{t,\ell}&=
-          \left(2\exp\left(-2\ell\sqrt{\frac{9g}{10(2t+s)}}\right)\right)^2.
+        D_{s,\ell}      & =\bigl(q(\ell+1)\bigr)^ {
+        32(\lfloor\ell/s\rfloor+\lfloor\sqrt\ell\rfloor+1)}, \\
+        \Delta_{t,\ell} & =
+        \left(2\exp\left(-2\ell\sqrt{\frac{9g}{10(2t+s)}}\right)\right)^2.
     \end{align*}
     There is a real polynomial $p$ of degree exactly $\ell$, with
     $p(E_t)=1$, such that the actual operator $K=p(B_t)$ fixes $\phi_t$,
@@ -42,12 +42,12 @@
     There is a scalar $c$ with $|c|=1$ such that
     $\psi=cKx/\|Kx\|$ satisfies
     \begin{align*}
-        \|\psi\|&=1,&
-        \operatorname{SR}_k(\psi)&\le D_{s,\ell}\operatorname{SR}_k(x),\\
+        \|\psi\|                  & =1,                                   &
+        \operatorname{SR}_k(\psi) & \le D_{s,\ell}\operatorname{SR}_k(x),   \\
         \|\psi-\phi_t\|^2
-          &\le8\Delta_{t,\ell}\|x-\phi_t\|^2,\\
+                                  & \le8\Delta_{t,\ell}\|x-\phi_t\|^2,      \\
         \|\psi-\Omega\|^2
-          &\le16\Delta_{t,\ell}+e^{-t/16}/50.
+                                  & \le16\Delta_{t,\ell}+e^{-t/16}/50.
     \end{align*}
     This is a physical refinement step for
     \cite[Lemma~6.3 and Section~7]{Arad2013AreaLaw}.
@@ -68,8 +68,8 @@
     gives
     \begin{align*}
         \|\psi-\phi_t\|^2
-          &\le\frac{2\Delta_{t,\ell}\|z\|^2}{|b|^2}
-            \le8\Delta_{t,\ell}\|x-\phi_t\|^2.
+         & \le\frac{2\Delta_{t,\ell}\|z\|^2}{|b|^2}
+        \le8\Delta_{t,\ell}\|x-\phi_t\|^2.
     \end{align*}
     Normalization and a unit scalar phase preserve Schmidt rank; applying
     $K$ multiplies it by at most $\operatorname{OSR}_k(K)$.

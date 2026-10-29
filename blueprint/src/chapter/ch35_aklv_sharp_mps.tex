@@ -7,8 +7,8 @@
     \leanok
     For $A\ge1$, put
     \begin{align*}
-        C_0(A)&=100(A+1)(8+2\log(A+1)),\notag\\
-        C(A)&=10001C_0(A)+800000.
+        C_0(A) & =100(A+1)(8+2\log(A+1)),\notag \\
+        C(A)   & =10001C_0(A)+800000.
     \end{align*}
 \end{definition}
 
@@ -22,8 +22,8 @@
     Then $u,s_0\ge1$, $1/g,\log(1/g)\le s_0$,
     $T(g)\le1040s_0$, and
     \begin{align*}
-        s_0&\le(A+1)u^2/g,&
-        \log D_0&\le C_0(A)u^3/g.
+        s_0      & \le(A+1)u^2/g,   &
+        \log D_0 & \le C_0(A)u^3/g.
     \end{align*}
 \end{lemma}
 \begin{proof}
@@ -46,8 +46,8 @@
     $T(g)\le1040s_0$. For the accuracy parameters $z,m,s,t,\ell$,
     one has $m\ge1$ and
     \begin{align*}
-        z\le s_0&\implies \ell\le66s_0^2,\notag\\
-        s_0\le z&\implies m<z+1\ \text{ and }\ \ell\le66m^2.
+        z\le s_0 & \implies \ell\le66s_0^2,\notag              \\
+        s_0\le z & \implies m<z+1\ \text{ and }\ \ell\le66m^2.
     \end{align*}
 \end{lemma}
 \begin{proof}
@@ -70,8 +70,8 @@
     Put $F=[q(\ell+1)]^{32(\lfloor\ell/s\rfloor+\lfloor\sqrt\ell\rfloor+1)}$.
     Then
     \begin{align*}
-        \lfloor\ell/s\rfloor+\lfloor\sqrt\ell\rfloor+1&\le76n,\notag\\
-        \log F&\le10000\log\bigl([q(n^2+1)]^{32(2n+1)}\bigr).
+        \lfloor\ell/s\rfloor+\lfloor\sqrt\ell\rfloor+1 & \le76n,\notag                                  \\
+        \log F                                         & \le10000\log\bigl([q(n^2+1)]^{32(2n+1)}\bigr).
     \end{align*}
     If also $z\ge1$ and $n\le z+1$, then
     $\log F\le400000n(1+\log q+\log(z+1))$.
@@ -96,11 +96,11 @@
     $s_0=\lceil Au^2/g\rceil$ and the actual common rank budget $B$.
     Then
     \begin{align*}
-        \log B&\le10001\log D_0+
-            400000m(1+\log q+\log(z+1)),\notag\\
-        \log B&\le C(A)\left[\frac{u^3}{g}+
+        \log B & \le10001\log D_0+
+        400000m(1+\log q+\log(z+1)),\notag    \\
+        \log B & \le C(A)\left[\frac{u^3}{g}+
             \left(\frac{z^3}{g}\right)^{1/4}
-                (u+\log(z+1))\right].
+            (u+\log(z+1))\right].
     \end{align*}
 \end{lemma}
 \begin{proof}
@@ -175,8 +175,8 @@
         thm:chain_sequential_truncation_eigen,thm:chain_sequential_truncation_sq}
     For the preceding physical data and $0<\epsilon\le1$, choose
     \begin{align*}
-        \rho&=\frac{\epsilon^2}{16(L+1)},&
-        z&=\log\frac{2048(L+1)}{\epsilon^2},&D&=B.
+        \rho & =\frac{\epsilon^2}{16(L+1)},       &
+        z    & =\log\frac{2048(L+1)}{\epsilon^2}, & D & =B.
     \end{align*}
     The actual vector $\Phi_0$ is nonzero, and its normalization is an
     open-boundary matrix product state of bond dimension at most $D$,

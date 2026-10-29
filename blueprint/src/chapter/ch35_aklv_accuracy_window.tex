@@ -11,9 +11,9 @@
     \uses{def:aklv_logarithmic_threshold}
     For squared accuracy $\rho>0$, initial width $s_0$ and gap $g$, set
     \begin{align*}
-        z&=\log(128/\rho),& m&=\left\lceil\sqrt{\sqrt{z^3/g}}\right\rceil,\notag\\
-        s&=s_0+2m,& t&=T(g)+16z,\notag\\
-        \ell&=\left\lceil z\sqrt{(2t+s)/g}\right\rceil.
+        z    & =\log(128/\rho),                           & m & =\left\lceil\sqrt{\sqrt{z^3/g}}\right\rceil,\notag \\
+        s    & =s_0+2m,                                   & t & =T(g)+16z,\notag                                   \\
+        \ell & =\left\lceil z\sqrt{(2t+s)/g}\right\rceil.
     \end{align*}
 \end{definition}
 
@@ -29,10 +29,10 @@
     For $0<\rho\le1$ and $0<g\le1$, one has $z\ge1$,
     $e^{-z}=\rho/128$, $t\ge T(g)>0$, and
     \begin{align*}
-        e^{-t/16}&\le\rho/128,\notag\\
+        e^{-t/16}             & \le\rho/128,\notag    \\
         \delta:=\left(2e^{-2\ell\sqrt{(9g/10)/(2t+s)}}\right)^2
-            &\le\rho^2/4096,\notag\\
-        16\delta+e^{-t/16}/50&\le\rho.
+                              & \le\rho^2/4096,\notag \\
+        16\delta+e^{-t/16}/50 & \le\rho.
     \end{align*}
     Also $\sqrt{\sqrt{z^3/g}}\le m<\sqrt{\sqrt{z^3/g}}+1$.
 \end{lemma}
@@ -58,8 +58,8 @@
     Let $0\le k\le L$ be a cut and $s$ a natural width. A window
     $a+\lfloor s/2\rfloor=k$, $a+s+1\le L$ exists exactly when
     \begin{align*}
-        \lfloor s/2\rfloor&\le k,&
-        s-\lfloor s/2\rfloor+1&\le L-k.
+        \lfloor s/2\rfloor     & \le k,   &
+        s-\lfloor s/2\rfloor+1 & \le L-k.
     \end{align*}
     If $s=s_0+2m$ and this window fits, the initial window starting at
     $a_0=a+m$ fits at the same cut.
@@ -115,7 +115,7 @@
     For $q\ge1$, the budget has exactly the logarithmic expression
     \begin{align*}
         \log B=\max\{\log D_0+E\log(q(\ell+1)),\
-            (s-\lfloor s/2\rfloor)\log q\}.
+        (s-\lfloor s/2\rfloor)\log q\}.
     \end{align*}
 \end{lemma}
 \begin{proof}
