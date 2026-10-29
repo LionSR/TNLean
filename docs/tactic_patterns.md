@@ -9774,3 +9774,18 @@ removed after the dependency audit exposed it.
   using the existing reduced representative.
 - **Decision:** Promote the existing physical-matrix argument, preserving
   positive-length scope and avoiding source-factor transport across bonds.
+
+### Raw cut reconstruction of a two-letter standard form — promoted (2026-10-29)
+
+- **Pattern:** Expand one tensor letter through its second cut, the next
+  through its first cut, and contract their common virtual index to the
+  ordered product of the two right factors.
+- **Defined in:** `MPS/MPU/StandardForm.lean`,
+  `mul_apply_eq_sum_of_sourceCut_factorizations`.
+- **Refactored consumer:** The old normalized `SourceFactors` contraction
+  calls the raw theorem, so the finite-sum proof stays at its original owner.
+- **Second consumer:** `MPS/MPU/SuppliedTwoBlockStandardForm.lean` uses the
+  existing actual cuts of any supplied square standard form to construct
+  its literal paper two-block gates and open standard-form data.
+- **Decision:** No normalized source record is introduced merely to access
+  an algebraic contraction which does not use its normalization fields.

@@ -76,3 +76,32 @@ in this child. All seven have scope-matching `notready` anchors. The old
 supplied trace-independence proof is refactored to reuse the promoted
 physical-matrix argument; its changed proof bytes are not covered by the
 historical green parent job. The same source-only validation boundary applies.
+
+## The literal printed blocking by two
+
+`SuppliedTwoBlockStandardForm.lean` now constructs the paper's actual
+`u^(2)=v23(u⊗u)` and `v^(2)=v23`, with the four physical sites grouped as
+`(12,34)`. Its `TwoSiteStandardFormData.blockTwo` starts from any supplied
+square standard form and returns standard-form data for the actual
+`MPOTensor.blockTwo W`, with those literal gates. It requires no canonical,
+normalization, minimality, rank, compact-SVD or gauge supplier.
+
+The left half factors are the existing actual raw cut factors, with only
+pair-coordinate enumeration. Existing cut-Y contraction identifies the new
+unshifted gate, and existing cut-X contraction identifies the shifted gate.
+Unitary gates follow from the original supplied unitarity, Kronecker products
+and the existing middle-layer isometry theorem. The source physical ordering
+is `(1,2,3,4)` throughout.
+
+At the existing `StandardForm.lean` owner, the two-letter reconstruction proof
+is extracted to `mul_apply_eq_sum_of_sourceCut_factorizations` for arbitrary
+finite raw intermediate spaces. Its only assumptions are the two exact cut
+factorizations. The old normalized `SourceFactors` theorem now calls this raw
+result, and the actual two-block constructor is its second consumer. No finite
+sum proof or normalized predicate is copied.
+
+This adds four public declarations, for eleven new declarations in the child.
+All have matching `notready` mathematical statements. Arbitrary printed
+blocking and sequential unwinding remain open; the source proposition is not
+marked ready. The source-width/integrity, import/anchor/role/prose, TeX and tactic
+checks retain the same source-only validation boundary, with no local Lean/Lake.

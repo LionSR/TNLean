@@ -13017,3 +13017,60 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     blocked gates in \cite[lines~1657--1729]{Cirac2017MPU} and their
     sequential unwinding remain a separate construction.
 \end{lemma}
+
+\begin{lemma}[Two-letter contraction from raw source cuts]
+    \label{lem:mpu_raw_cut_two_letter_contraction}
+    \lean{MPOTensor.mul_apply_eq_sum_of_sourceCut_factorizations}
+    \notready
+    \uses{def:mpu_source_matrix_one, def:mpu_source_matrix_two}
+    Suppose the two source cuts of $U$ factor as $M_1=X_1Y_1$ and
+    $M_2=X_2Y_2$, with arbitrary finite intermediate spaces. Put
+    \[
+        A_{(l,r),(j_1,j_2)}
+        =\sum_\beta (Y_2)_{l,(j_1,\beta)}(Y_1)_{r,(\beta,j_2)}.
+    \]
+    Then
+    \[
+        (U^{i_1j_1}U^{i_2j_2})_{\alpha\gamma}
+        =\sum_{l,r}(X_2)_{(\alpha,i_1),l}
+        A_{(l,r),(j_1,j_2)}(X_1)_{(i_2,\gamma),r}.
+    \]
+    This is a finite contraction identity. It needs no normalization,
+    minimal cut dimensions, inverse matrices or canonical presentation.
+\end{lemma}
+
+\begin{definition}[The printed two-block gates]
+    \label{def:mpu_printed_two_block_gates}
+    \lean{MPOTensor.twoBlockInputGate, MPOTensor.twoBlockOutputGate}
+    \notready
+    Let $u,v$ be square gates on $\mathbb C^d\otimes\mathbb C^d$.
+    Grouping the four physical coordinates in the order $(12,34)$, define
+    \[
+        u^{(2)}=v_{23}(u\otimes u),\qquad
+        v^{(2)}=v_{23}.
+    \]
+    Identity spectators occupy the first and fourth coordinates of the
+    second expression. These are the gates chosen in
+    \cite[lines~1657--1674]{Cirac2017MPU}.
+\end{definition}
+
+\begin{lemma}[Actual standard form with the printed two-block gates]
+    \label{lem:mpu_supplied_printed_two_block_standard_form}
+    \lean{MPOTensor.TwoSiteStandardFormData.blockTwo}
+    \notready
+    \uses{def:mpu_printed_two_block_gates,
+        lem:mpu_raw_cut_two_letter_contraction,
+        lem:mpu_supplied_standard_form_source_cuts,
+        def:mpu_supplied_two_site_standard_form}
+    Let $W$ have a supplied standard form with square gates $u,v$ and
+    positive physical and bond dimensions. Its actual two-site block has
+    a supplied standard form with exactly the preceding gates $u^{(2)},v^{(2)}$.
+    The half factors are the explicit left factors of the two raw cuts of
+    $W$, with the canonical enumeration of their pair indices.
+    The raw cut identities give its open tensor contraction; the two
+    existing cut-contraction identities give $u^{(2)}$ and $v^{(2)}$.
+    Their unitarity follows from that of $u,v$. No canonical presentation,
+    normalized source datum, minimality or new compact decomposition is
+    assumed. This constructs the blocking by two; arbitrary blocking and
+    sequential unwinding remain separate.
+\end{lemma}
