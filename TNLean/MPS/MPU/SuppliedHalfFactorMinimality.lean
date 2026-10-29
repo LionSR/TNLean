@@ -179,9 +179,7 @@ theorem fourSpinGate_isUnitaryBetween (S : TwoSiteStandardFormData W u v) :
   let A := staircaseMiddle (A := Fin ℓ) (E := Fin r) v * (u ⊗ₖ u)
   have hAi : A.IsIsometry := (staircaseMiddle_isIsometry v S.v_unitary.1).mul _ _
     (S.u_unitary.1.kronecker u u S.u_unitary.1)
-  have hcard : ℓ * r = d * d := by
-    simpa only [Fintype.card_prod, Fintype.card_fin] using
-      le_antisymm (S.u_unitary.2.card_le u) (S.u_unitary.1.card_le u)
+  have hcard : ℓ * r = d * d := S.left_mul_right
   have hcardA : Fintype.card ((Fin ℓ × Fin d) × (Fin d × Fin r)) =
       Fintype.card ((Fin d × Fin d) × (Fin d × Fin d)) := by
     simp only [Fintype.card_prod, Fintype.card_fin]

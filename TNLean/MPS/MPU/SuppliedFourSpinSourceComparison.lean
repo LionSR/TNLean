@@ -68,9 +68,7 @@ itself remains an input. Source: CPSV17, `ThmFund1` and `StandardForm`,
 lines 563–622. -/
 theorem isMPUSimple (S : TwoSiteStandardFormData W u v) (hW : IsMPUCanonicalFormII W) :
     IsMPUSimple W := by
-  have hcard : ℓ * r = d * d := by
-    simpa only [Fintype.card_prod, Fintype.card_fin] using
-      le_antisymm (S.u_unitary.2.card_le u) (S.u_unitary.1.card_le u)
+  have hcard : ℓ * r = d * d := S.left_mul_right
   apply (hW.isMPUSimple_tfae.out 1 2).mpr
   rw [S.sourceRanks_eq.1, S.sourceRanks_eq.2]
   calc
@@ -230,9 +228,7 @@ theorem intermediateRanks_eq_phys_of_even_mpo_eq_adjoint
       _ = r[W] := hbalanced
       _ = d * r := S.sourceRanks_eq.1
       _ = r * d := Nat.mul_comm _ _
-  have hprod : ℓ * r = d * d := by
-    simpa only [Fintype.card_prod, Fintype.card_fin] using
-      le_antisymm (S.u_unitary.2.card_le u) (S.u_unitary.1.card_le u)
+  have hprod : ℓ * r = d * d := S.left_mul_right
   rw [← hℓr] at hprod
   have hℓ : ℓ = d := (mul_self_inj (Nat.zero_le _) (Nat.zero_le _)).mp hprod
   exact ⟨hℓr.symm.trans hℓ, hℓ⟩

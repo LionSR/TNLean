@@ -98,3 +98,11 @@ the original chosen-source sufficiency proof and the new supplied-source
 converse both use it. This removes their duplicated coordinate proof. The
 new equivalence, transport and callers remain uncompiled pending hosted CI;
 the source nodes remain notready and #7020 remains open.
+
+
+The shared supplied-gate dimension identity `TwoSiteStandardFormData.left_mul_right`
+is reused at the three existing card-inequality proofs: four-spin unitarity,
+ambient-canonical simplicity and the zero-index square-rank consequence.
+Its source-only helper was coordinated with the actual output-support/index
+work and added at the existing supplied-standard-form owner. It does not
+strengthen the supplied record or infer ambient minimality.
