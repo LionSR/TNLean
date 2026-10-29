@@ -9643,6 +9643,6 @@ there is no need for a new tactic.
 - **Abstraction:** `range_localObservable_empty_le` and
   `range_localObservable_le_of_singletons` retain this finite generation once.
   The single-site commutant and finite inverse reflection reuse it.
-- **Known consumer:** The forward buffered-action equalizer argument can consume this
+- **Refactored consumer:** The forward buffered-action equalizer argument consumes this
   public helper in place of its private repeated finite-region induction.
 - **Validation:** Source-only; hosted Lean checking pending.

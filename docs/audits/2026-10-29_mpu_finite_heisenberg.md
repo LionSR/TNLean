@@ -91,6 +91,14 @@ on the canonical dense image. The resulting
 endomorphism, with exact algebraic-local and finite-observable evaluation
 formulas. No inverse or surjectivity premise is introduced.
 
+The finite one-site generation proof is now shared with the inverse
+work in QCA/SingletonGeneration. The forward equalizer argument consumes
+`range_localObservable_le_of_singletons`, rather than maintaining a second
+empty-region/finite-generation proof. The same shared source supplies
+outside-singleton commutant characterization and generic finite inverse
+support reflection in FiniteInverseLocality. These algebraic ingredients
+do not assert an actual MPU inverse family or a completed automorphism.
+
 This is still not the full bare-MPU source theorem. It does not yet
 construct the supplied standard form from bare MPU data or the complete
 inverse family. No compatible-local-automorphism datum, induced QCA,
@@ -106,5 +114,5 @@ The present proof reuses the supplied rectangular open contraction and
 therefore does not assume a homogeneous-intermediate circuit presentation.
 
 Native source/import/prose/format/whitespace/integrity checks only.
-No local Lean invocation/build/checkdecls or cache mutation. All eight scoped Blueprint
+No local Lean invocation/build/checkdecls or cache mutation. All nine scoped Blueprint
 entries remain notready pending hosted verification and integration.
