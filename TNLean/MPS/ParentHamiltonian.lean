@@ -300,6 +300,7 @@ import TNLean.MPS.ParentHamiltonian.UncleGroundSpace
 import TNLean.MPS.ParentHamiltonian.UncleGroundSpaceInclusion
 import TNLean.MPS.ParentHamiltonian.UncleKernelConditions
 import TNLean.MPS.ParentHamiltonian.UncleNormFactorization
+import TNLean.MPS.ParentHamiltonian.UncleNormGrowth
 import TNLean.MPS.ParentHamiltonian.UncleParentLimit
 import TNLean.MPS.ParentHamiltonian.UnclePeriodicClosure
 import TNLean.MPS.ParentHamiltonian.UnclePrimitiveTransfer
