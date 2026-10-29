@@ -25,12 +25,12 @@ This result does not assert a source QCcc block decomposition or control order.
 noncomputable section
 
 open Matrix
-open scoped BigOperators
+open scoped BigOperators ComplexOrder
 
 namespace QuantumCircuit
 
 private theorem exists_product_of_pure_marginal
-    {S E : Type*} [Fintype S] [Fintype E] [DecidableEq S] [DecidableEq E]
+    {S E : Type*} [Fintype S] [Fintype E]
     (Ω : S × E → ℂ) (φ : S → ℂ) (hφ : star φ ⬝ᵥ φ = 1)
     (hMarginal : partialTraceRight (vecMulVec Ω (star Ω)) = vecMulVec φ (star φ)) :
     ∃ η : E → ℂ, star η ⬝ᵥ η = 1 ∧ ∀ s e, Ω (s, e) = φ s * η e := by
