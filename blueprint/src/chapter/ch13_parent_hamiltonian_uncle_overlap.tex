@@ -64,7 +64,9 @@
     \lean{MPSTensor.norm_inner_mpvState_left_uncleTwoWallTrialSource_le_geometric_mul,
         MPSTensor.norm_inner_mpvState_right_uncleTwoWallTrialSource_le_geometric_mul,
         MPSTensor.norm_inner_mpvState_left_uncleTwoWallTrialSource_le_geometric,
-        MPSTensor.norm_inner_mpvState_right_uncleTwoWallTrialSource_le_geometric}
+        MPSTensor.norm_inner_mpvState_right_uncleTwoWallTrialSource_le_geometric,
+        MPSTensor.inner_mpvState_left_uncleTwoWallTrialSource_tendsto_zero,
+        MPSTensor.inner_mpvState_right_uncleTwoWallTrialSource_tendsto_zero}
     \notready
     \uses{lem:uncle_trial_overlap_trace,lem:uncle_wall_mixed_linear_bounds}
     Suppose both diagonal transfers are unital and both mixed transfer
@@ -77,6 +79,7 @@
     \]
     No perturbation injectivity, faithful-density, genericity or
     overlap-rate premise is required for these upper bounds alone.
+    In particular, both actual overlaps tend to zero as $N\to\infty$.
 \end{theorem}
 \begin{proof}
     For the $A$ comparison, the pure $B$ interval supplies a mixed power

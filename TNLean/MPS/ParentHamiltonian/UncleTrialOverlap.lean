@@ -554,6 +554,42 @@ theorem norm_inner_mpvState_right_uncleTwoWallTrialSource_le_geometric
     _ ≤ C * (D * z ^ N) := mul_le_mul_of_nonneg_left (habsorb N) hC.le
     _ = (C * D) * z ^ N := (mul_assoc _ _ _).symm
 
+/-- The actual A-sector overlap tends to zero along the numbered source
+trial, as a consequence of the derived geometric estimate.
+Source: arXiv:1210.6613, Lemma lowenergystates, item 2. -/
+theorem inner_mpvState_left_uncleTwoWallTrialSource_tendsto_zero
+    (A : MPSTensor d a) (B : MPSTensor d b)
+    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
+    (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
+    (hA : Kraus.mapLM A 1 = 1) (hSpect : Kraus.mixedMapSpectralRadius B A < 1) :
+    Filter.Tendsto (fun N : ℕ ↦ ⟪mpvState A (6 * N + 1),
+      (WithLp.linearEquiv 2 ℂ (NSiteSpace d (6 * N + 1))).symm
+        (uncleTwoWallTrialSource A B R L N)⟫_ℂ) Filter.atTop (nhds 0) := by
+  obtain ⟨C, z, _, hz, hz1, hbound⟩ :=
+    norm_inner_mpvState_left_uncleTwoWallTrialSource_le_geometric A B R L hA hSpect
+  apply squeeze_zero_norm' (a := fun N : ℕ ↦ C * z ^ N)
+  · exact Filter.eventually_atTop.mpr ⟨1, fun N hN ↦ hbound N (by omega)⟩
+  · simpa only [mul_zero] using tendsto_const_nhds.mul
+      (tendsto_pow_atTop_nhds_zero_of_lt_one hz.le hz1)
+
+/-- The actual B-sector overlap tends to zero along the numbered source
+trial, without supplying an orthogonality hypothesis.
+Source: arXiv:1210.6613, Lemma lowenergystates, item 2. -/
+theorem inner_mpvState_right_uncleTwoWallTrialSource_tendsto_zero
+    (A : MPSTensor d a) (B : MPSTensor d b)
+    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
+    (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
+    (hB : Kraus.mapLM B 1 = 1) (hSpect : Kraus.mixedMapSpectralRadius A B < 1) :
+    Filter.Tendsto (fun N : ℕ ↦ ⟪mpvState B (6 * N + 1),
+      (WithLp.linearEquiv 2 ℂ (NSiteSpace d (6 * N + 1))).symm
+        (uncleTwoWallTrialSource A B R L N)⟫_ℂ) Filter.atTop (nhds 0) := by
+  obtain ⟨C, z, _, hz, hz1, hbound⟩ :=
+    norm_inner_mpvState_right_uncleTwoWallTrialSource_le_geometric A B R L hB hSpect
+  apply squeeze_zero_norm' (a := fun N : ℕ ↦ C * z ^ N)
+  · exact Filter.eventually_atTop.mpr ⟨1, fun N hN ↦ hbound N (by omega)⟩
+  · simpa only [mul_zero] using tendsto_const_nhds.mul
+      (tendsto_pow_atTop_nhds_zero_of_lt_one hz.le hz1)
+
 end OperatorNorm
 
 end MPSTensor
