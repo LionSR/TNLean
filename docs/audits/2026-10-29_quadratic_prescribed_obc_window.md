@@ -6,7 +6,7 @@ the physical cut-window construction from draft #10381. The unpublished
 dependencies are actual Git ancestry, not imports presented as main APIs.
 
 The supplied tensor B is an actual OBC representation of the prescribed
-length-N vector of a canonical C1 TI tensor A. Its common bond bound is D²,
+length-N vector of a C1 TI tensor A. Its common bond bound is D²,
 as in the source's bounded OBC window. C1 proves physical window rank D²;
 the universal rank lower bound and B's type bound force every endpoint and
 internal window bond to be exactly D². No bond equality is assumed.
@@ -25,12 +25,23 @@ gauge, quadratic solution or endpoint identity is substituted as a premise.
 Canonicality/uniqueness of B is unnecessary, so the theorem applies in
 particular to any prescribed canonical B satisfying the source bound.
 
-The TI tensor A remains explicitly canonical and C1. The source's printed
-first clause assumes existence of a C1 TI representation; composition with
-canonical normalization of that representation remains necessary before
-claiming exactly that unrestricted input statement. The known false claim
-that every algebraic solution represents the prescribed state is unchanged
-and remains corrected by the same-state/root-phase converse in #10381.
+The canonical-TI restriction has now been eliminated. Existing QIC full
+vector spreading gives irreducibility from C1 at any length, including zero.
+The existing PerronGauge API supplies an actual unital tensor B0, nonzero
+scalar ζ and invertible X with B0_i = ζ X A_i X^-1. C1 propagates to every
+longer length by transporting to the unital tensor and back. Amplified X
+and geometric ζ factors normalize the derived window solution while
+retaining the original window and coefficient spaces. No spectral,
+canonical or normalization premise is added to the final theorem.
+
+The actual nonzero length-N state derives a nonzero letter, and the actual
+OBC representation derives positive virtual dimension. The final actual
+state corollary therefore needs only the supplied C1 representation, source
+size regime, actual bounded OBC tensor, coefficient equality and nonzero
+physical state. There is no extra positive-C1-length condition. This writes
+the prescribed-window existence direction. The known false claim that every
+algebraic solution represents the prescribed state is unchanged and remains
+corrected by the same-state/root-phase converse in #10381.
 
 All new Blueprint entries are notready. Source synchronization, imports,
 mathematical roles, reader-facing prose, TeX formatting, file-size, tactic

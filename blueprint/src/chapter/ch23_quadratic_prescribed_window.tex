@@ -24,6 +24,39 @@
     then identifies each supplied site matrix with physical slicing.
 \end{proof}
 
+\begin{lemma}[Derived Perron normalization inside the same physical window]
+    \label{lem:quadratic_perron_normalization}
+    \lean{MPSTensor.exists_unital_gauge_of_isNBlkInjective,
+        MPSTensor.exists_apply_ne_zero_of_mpv_ne_zero,
+        MPSTensor.quadraticWindow_cutCoefficientRank_eq_of_isNBlkInjective,
+        MPSTensor.exists_quadraticSolution_physicalCutWindow_of_isNBlkInjective}
+    \notready
+    \uses{lem:quadratic_virtual_cut_slicing,
+        lem:quadratic_actual_physical_window_solution}
+    Let $A$ satisfy C1 at length $L_0$ and have a nonzero letter.
+    There are an invertible $X$ and a scalar $\zeta\ne0$ such that
+    $B_i=\zeta X A_iX^{-1}$ is row normalized. C1 holds for the
+    original tensor at every length at least $L_0$. Every actual
+    physical cut-basis window therefore admits a normalized quadratic
+    solution, retaining its original physical coefficient spaces and
+    local matrices. A nonzero actual vector of positive length
+    supplies the required nonzero letter.
+\end{lemma}
+\begin{proof}
+    C1 gives full vector spreading, hence irreducibility, including
+    at zero C1 length. Perron normalization gives $B$, $X$ and
+    $\zeta$. Transport C1 to $B$, extend it by row normalization,
+    and transport it back to $A$. If $Y_j,Z_j$ are the derived
+    physical basis comparison matrices, use
+    \[
+        \widehat Y_j=\zeta^{-j}(X\otimes I)Y_j,\qquad
+        \widehat Z_j=\zeta^{j+1}Z_j(X^{-1}\otimes I).
+    \]
+    The scalar factor at a site is $\zeta$ and the amplified
+    conjugation gives $B_i\otimes I$; at an internal inverse equation
+    both cancel. No canonical form of $A$ is assumed.
+\end{proof}
+
 \begin{lemma}[A quadratic solution over the prescribed OBC window]
     \label{lem:quadratic_prescribed_obc_window_solution}
     \lean{MPSTensor.prescribedOBC_window_bondDim_eq,
@@ -31,13 +64,14 @@
         MPSTensor.quadraticPrescribedOBCWindow,
         MPSTensor.prescribedOBCWindowCutBases,
         MPSTensor.quadraticPrescribedOBCWindow_eq_physicalCutWindow,
-        MPSTensor.exists_quadraticSolution_prescribedOBCWindow}
+        MPSTensor.exists_quadraticSolution_prescribedOBCWindow,
+        MPSTensor.exists_quadraticSolution_prescribedOBCWindow_of_mpv_ne_zero}
     \notready
     \uses{lem:quadratic_prescribed_prefix_basis,
         lem:quadratic_injective_physical_cut,
-        lem:quadratic_actual_physical_window_solution}
-    Let $A$ be a canonical TI tensor of positive bond dimension $D$
-    satisfying C1 at length $L_0$, with $N>2L_0+D^4$. Let $B$ be any
+        lem:quadratic_perron_normalization}
+    Let $A$ be a TI tensor satisfying C1 at length $L_0$, with
+    $N>2L_0+D^4$ and a nonzero actual length-$N$ vector. Let $B$ be any
     prescribed OBC representation of its actual length-$N$ state,
     with all bonds bounded by $D^2$. Then every bond at the
     $D^4+1$ cuts of the reconstruction window has dimension exactly
@@ -53,7 +87,8 @@
     Hence the bond is minimal. The preceding lemma derives physical
     cut bases from the original prefix columns and identifies the
     original sites with physical slicing. The solution construction
-    for any physical cut-basis window therefore applies to this very
+    for any physical cut-basis window, with internally derived
+    Perron normalization, therefore applies to this very
     prescribed representation. Only the forced coordinate
     identification is made; the representation is not replaced.
 \end{proof}

@@ -308,13 +308,25 @@ choose a different canonical representation, and it assumes no window gauge,
 solution or bond equality. Canonicality or uniqueness of the supplied OBC
 tensor is unnecessary for this stronger bounded-representation comparison.
 
-The TI input of this construction is explicitly canonical and satisfies C1.
-The printed existence clause starts instead from existence of a C1 TI
-representation; composing its canonical normalization with this supplier
-is required before claiming the source's complete hypothesis set. All new
-results remain pending hosted verification and integration. The original
-full source entry remains unaccepted, and the unrestricted converse
-remains false.
+The canonical TI input has now been eliminated from the prescribed-window
+supplier. The source-written theorem
+\leanid{MPSTensor.exists_unital_gauge_of_isNBlkInjective}
+derives irreducibility directly from C1, applies the existing Perron gauge,
+and propagates C1 by normalizing and transferring back. It applies even
+when the supplied C1 length is zero, provided some letter is nonzero.
+The actual nonzero physical state supplies this last condition.
+
+The amplified Perron gauge and geometric rescaling of the derived window
+matrices construct a normalized solution without changing the original
+physical window. In particular
+\leanid{MPSTensor.exists_quadraticSolution_prescribedOBCWindow_of_mpv_ne_zero}
+consumes the actual nonzero state, its C1 TI representation, the full
+window size regime, the original bounded OBC representation and their
+actual coefficient equality. It assumes no canonical TI form, window
+gauge, solution or bond equality. This writes the prescribed-window
+existence direction; all new proofs remain pending hosted verification
+and integration. The original combined source theorem is not accepted,
+and its unrestricted converse remains false.
 
 \section{Open classification gap and verdict}
 

@@ -9713,3 +9713,15 @@ there is no need for a new tactic.
   window by the shared basis/slicing helper.
 - **Decision:** no new gauge predicate or repeated matrix-entry comparison;
   use the actual physical prefix recursion and existing finite-rank lemmas.
+
+
+### Normalization after actual cut-basis comparison — promoted helper (2026-10-29)
+
+- **Pattern:** construct both comparison matrices as identity-map matrices
+  between the physical cut bases and virtual cut bases, then normalize the
+  tensor by scalar powers and an amplified virtual gauge.
+- **Abstraction:** `exists_physicalCutWindow_gauges` in
+  `CanonicalForm/QuadraticPhysicalCutWindow.lean` is shared by the canonical
+  weight construction and `QuadraticPerronNormalization.lean`.
+- **Decision:** compare the actual physical bases once, before normalization;
+  no duplicate window-comparison proof or parallel solution predicate.
