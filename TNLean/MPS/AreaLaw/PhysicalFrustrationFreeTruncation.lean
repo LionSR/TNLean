@@ -51,7 +51,10 @@ private theorem intervalBondRestriction_isStarProjection
   unfold intervalBondRestriction
   split_ifs <;> first | exact hp i | exact IsStarProjection.zero _
 
-private theorem intervalBondRestriction_supported
+/-- Restricting a bond family to the internal bonds of a site interval
+preserves each designated nearest-neighbour support. ALVV,
+arXiv:1602.08828v2, `def:FF-tH`, lines 1467--1487. -/
+theorem intervalBondRestriction_supported
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
       (h i) (interval L i.val (i.val + 2))) (a b : ℕ) (i : Fin (L - 1)) :

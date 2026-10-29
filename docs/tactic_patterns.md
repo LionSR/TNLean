@@ -10153,3 +10153,33 @@ there is no need for a new tactic.
   and the repeated block is not copied. The existing actual-gap helper is
   exposed and reused for the physical entropy theorem, without a second
   endpoint-unitary or dimension argument.
+
+### Elementary operator Schmidt products — promoted (2026-10-29)
+
+- **Pattern:** Bound an elementary Kronecker product by one term in its
+  operator Schmidt decomposition, then use the same fact for the identity
+  and one-marker factors.
+- **Abstraction:** The existing private proof is relocated unchanged to
+  QICLean's small `Algebra/OperatorSchmidtProducts.lean` leaf as
+  `Matrix.operatorSchmidtRank_kronecker_le_one`; its identity specialization
+  is `Matrix.operatorSchmidtRank_one_le`. The old private duplicate is
+  deleted and the existing one-marker consumer imports the leaf. The
+  widely imported `OperatorSchmidtBounds.lean` core is unchanged.
+- **Uses:** The actual parity-prefix rank induction reuses these results
+  and the existing multiplication and designated-support bounds. No
+  singleton-complement or assumed rank family is introduced.
+
+### Finite complements before coercion to sets — candidate (2026-10-29)
+
+- **Pattern:** A supported-operator submodule indexed by a finite
+  complement must use `((Aᶜ : Finset ι) : Set ι)` when an equality of
+  predicates is not definitionally the same as the complement of the
+  coerced set.
+- **Seen:** The two right-side support memberships in
+  `MPS/AreaLaw/PhysicalFrustrationFreeRank.lean`.
+- **Notes:** Explicit support parameters and this finite-complement type
+  remove expensive failed unification. This is a type-annotation issue,
+  not a new theorem or tactic. The broader scoped scan also finds old
+  unrelated repeated proofs and incidental three-line branch scaffolding;
+  no new abstraction is needed for `omega` followed by a right disjointness
+  branch. The actual interval-side geometry is already stated once.

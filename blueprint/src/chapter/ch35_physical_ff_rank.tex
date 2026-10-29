@@ -1,0 +1,96 @@
+\section{The corrected rank of the regional frustration-free truncation}
+
+\begin{theorem}[Support of complementary products]
+    \label{thm:physical_complementary_product_support}
+    \lean{QuantumCircuit.mem_supportedOperators_complementProd}
+    \leanok
+    Let $A_0,\ldots,A_{n-1}$ be operators supported on a common set
+    of sites $S$. Then $(I-A_{n-1})\cdots(I-A_0)$ is supported on $S$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    The identity belongs to the supported-operator algebra, which is
+    closed under subtraction and multiplication. Induct on $n$.
+\end{proof}
+
+\begin{theorem}[Support of the actual interval parity products]
+    \label{thm:physical_regional_parity_support}
+    \lean{TNLean.MPS.AreaLaw.intervalBondRestriction_supported,
+        TNLean.MPS.AreaLaw.isSupportedOn_physicalParityProduct,
+        TNLean.MPS.AreaLaw.isSupportedOn_regionalParityProduct}
+    \leanok
+    \uses{def:physical_ff_regional_truncation,thm:physical_complementary_product_support}
+    Restriction to the bonds internal to $J=[a,b)$ preserves each
+    designated bond support. The corresponding actual parity products
+    $Q_0,Q_1$ are supported on $J$. More generally, a parity product is
+    supported on any common support of its selected terms.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Every retained bond $\{i,i+1\}$ is contained in $J$; omitted terms
+    vanish. Apply the preceding product-support theorem. No projection,
+    commutation or positivity assumption is needed.
+\end{proof}
+
+\begin{theorem}[Ranks of the two actual parity products]
+    \label{thm:physical_parity_product_cut_rank}
+    \lean{TNLean.MPS.AreaLaw.operatorSchmidtRank_physicalParityProduct_le_sq,
+        TNLean.MPS.AreaLaw.operatorSchmidtRank_physicalParityProduct_le_one,
+        TNLean.MPS.AreaLaw.sum_operatorSchmidtRank_physicalParityProduct_le}
+    \leanok
+    \uses{thm:physical_regional_parity_support}
+    Let $q\ge1$ and let $h_i$ be arbitrary nearest-neighbour supported
+    operators. At any site cut, each actual parity product has operator
+    Schmidt rank at most $q^2$. The parity not containing the possible
+    crossing bond has rank at most one. Consequently
+    \begin{align*}
+        \operatorname{OSR}(Q_0)+\operatorname{OSR}(Q_1)\le q^2+1.
+    \end{align*}
+\end{theorem}
+\begin{proof}
+    \leanok
+    Follow the actual ordered product up to the cut. Every noncrossing
+    complementary factor has rank at most one. Before the unique possible
+    crossing bond, their product therefore has rank at most one. The
+    crossing complementary factor has rank at most $q^2$, by its two-site
+    support. Every later factor again has rank at most one. The other
+    parity contains no crossing factor. Apply the product inequality
+    at each step. Cuts at the endpoints contain no crossing bond.
+\end{proof}
+
+\begin{theorem}[Corrected cut rank of the actual regional truncation]
+    \label{thm:physical_ff_regional_corrected_rank}
+    \lean{TNLean.MPS.AreaLaw.operatorSchmidtRank_physicalFrustrationFreeTruncation_le}
+    \leanok
+    \uses{def:physical_ff_regional_truncation,thm:physical_regional_parity_support,
+        thm:physical_parity_product_cut_rank}
+    For arbitrary nearest-neighbour supported operators, the actual
+    regional truncated operator satisfies, at every cut,
+    \begin{align*}
+        \operatorname{OSR}(\widetilde H_J)\le q^2+3.
+    \end{align*}
+    This includes empty intervals, endpoint cuts, zero local dimension
+    and the empty chain. It corrects the false additive constant in
+    \cite[Section~6.1]{Arad2016RigorousRG}; the printed $q^2+2$ assertion
+    and its nondegenerate counterexample are recorded in
+    \cite{gap:alvv16_frustration_free_truncation_rank}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Split the actual exterior bond sum into its left, right and possible
+    crossing terms. If no exterior term crosses the cut, combine $2I$
+    with the left sum. These two one-sided terms have total rank at most
+    two. The two actual parity products contribute at most $q^2+1$.
+    Hence their sum has rank at most $q^2+3$.
+
+    If an exterior bond crosses, $J$ lies entirely on one side of that
+    cut. Both actual parity complements can be combined with that side's
+    exterior sum. The two one-sided sums contribute at most two and the
+    crossing bond at most $q^2$, giving the stronger $q^2+2$ bound in this
+    case. No decomposition or rank estimate is assumed: each piece is
+    the corresponding actual bond sum or parity product.
+
+    For $q=0$ on a nonempty chain the configuration space is empty and
+    every matrix vanishes. On the empty chain the original sum vanishes
+    and both parity products are the identity, so $\widetilde H_J=0$.
+\end{proof}
