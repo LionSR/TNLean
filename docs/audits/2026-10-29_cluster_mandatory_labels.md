@@ -99,3 +99,11 @@ no Mathlib source was rebuilt.
 Ordinary common-library compilation and the compiled blueprint declaration
 check remain integration checks. No temporary audit command or per-theorem
 fixture is included in the source patch.
+
+## Combined verification
+
+The coordinated TNLean revision `8ace1dccea` and QICLean revision
+`34cb0c3a` passed the full builds, strict checks, imported foundation
+audits and compiled blueprint checks. The complete phase records and
+remaining scope are recorded in
+[the integration audit](2026-10-29_verified_soft_residual_refinement_range.md).

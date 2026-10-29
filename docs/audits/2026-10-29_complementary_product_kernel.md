@@ -50,3 +50,11 @@ characterization. Its public statements are unchanged except for the new
 explicit fixed-space equivalence. Ordinary combined-library and compiled
 blueprint checks remain for coordinated integration. The source-only
 worktrees have no local Lake cache, and no ordinary build is queued there.
+
+## Combined verification
+
+The coordinated TNLean revision `8ace1dccea` and QICLean revision
+`34cb0c3a` passed the full builds, strict checks, imported foundation
+audits and compiled blueprint checks. The complete phase records and
+remaining scope are recorded in
+[the integration audit](2026-10-29_verified_soft_residual_refinement_range.md).

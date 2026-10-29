@@ -60,3 +60,11 @@ All three modules passed strict package-equivalent Lean options, including warni
 The source worktree has no local Lake environment. Dependency artifacts were read without copying them; every new object was written under a temporary directory. No Mathlib source was compiled. Aggregator, reader-facing prose, proof-integrity and tactic-pattern checks were run locally. Common ordinary build and compiled blueprint checks remain integration gates.
 
 The updated standalone paper-gap note rendered to three pages under `/tmp/tnlean-alvv-soft-reverse-note-render-20261029/`. All three final page images were visually inspected: text, equations, links and bibliography are unclipped, and the bibliography remains on the third page. Its final LaTeX log has no warnings.
+
+## Combined verification
+
+The coordinated TNLean revision `8ace1dccea` and QICLean revision
+`34cb0c3a` passed the full builds, strict checks, imported foundation
+audits and compiled blueprint checks. The complete phase records and
+remaining scope are recorded in
+[the integration audit](2026-10-29_verified_soft_residual_refinement_range.md).
