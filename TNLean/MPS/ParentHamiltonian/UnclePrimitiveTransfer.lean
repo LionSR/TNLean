@@ -9,6 +9,7 @@ import QICLean.Channel.Peripheral.SpectralRadius
 import QICLean.Channel.Peripheral.AdjointSpectrum
 import QICLean.Channel.Irreducible.CollatzWielandt
 import QICLean.Kraus.Injectivity
+import QICLean.Kraus.CPPrimitive
 import QICLean.Kraus.Wielandt.Primitivity.EasyDirections
 import QICLean.Kraus.Wielandt.Primitivity.VectorSpreadToPrimitive
 
@@ -127,7 +128,8 @@ theorem uncleTransfer_complement_spectralRadius_lt_one [NeZero D]
     rw [hν1, one_smul] at hEX
     obtain ⟨c, hc⟩ := eigenvector_eq_smul_of_irreducible_positive E hPos hIrr zero_le_one
       (Matrix.PosDef.one (n := Fin D) (R := ℂ))
-      (by simpa using hU) (by simpa using hEX)
+      (by simpa only [Complex.ofReal_one, one_smul] using hU)
+      (by simpa only [Complex.ofReal_one, one_smul] using hEX)
     have hc0 : c = 0 := by simpa [hc, hf1] using hfX
     exact hX.2 (by rw [hc, hc0, zero_smul])
   · have heq := congrArg f hNX
@@ -151,8 +153,9 @@ private theorem uncleTransfer_pow_decomposition
     simp [P, uncleDensityProjection, Module.End.mul_apply, hf1]
   have hPE : P * E = P := by
     ext X
-    simp [P, E, uncleDensityProjection, Module.End.mul_apply,
-      uncleDensityFunctional_map A ρ hfix]
+    change uncleDensityFunctional ρ (Kraus.mapLM A X) • 1 =
+      uncleDensityFunctional ρ X • 1
+    rw [uncleDensityFunctional_map A ρ hfix]
   have hEP : E * P = P := by
     ext X
     simp [P, E, uncleDensityProjection, Module.End.mul_apply, hU]
