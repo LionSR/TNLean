@@ -186,7 +186,7 @@ theorem exists_aklv_frustrationFree_chebyshev_filter {L q a s : ℕ}
       hq (by omega : 0 < s - 2)
       (by omega : a + 1 + (s - 2) + 1 ≤ L) H hmiddle HL HR
       (by simpa only [Nat.add_assoc] using hL) hR'
-      (by rwa [← hdecomp]) hΩ
+      (by simpa only [← hdecomp] using hBpos.isHermitian) hΩ
       (by simpa only [← hdecomp, Complex.ofReal_zero, zero_smul] using hBΩ)
       (by simpa only [← hdecomp, Complex.ofReal_zero, zero_smul, sub_zero] using hBgap)
       (by positivity : 0 < g / 2) hgu (by rwa [← hdecomp]) ell

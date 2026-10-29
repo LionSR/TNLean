@@ -1,9 +1,11 @@
 # Same-vector physical filter for a frustration-free chain
 
-This is an isolated child of TNLean draft #10433 at
-`a2c707dd22476dd85028bc9c8f24e45399e23eff`. The later scalar branch is a
-parallel child of that exact head; the filter will be based on its published
-head before submission. No broad main merge or owner proof rewrite is used.
+This is an isolated child of scalar draft TNLean #10434 at exact
+`7be9879d23f3cdeca03fe2c746a1af959dfcd93c`, itself a child of #10433 at
+`a2c707dd22476dd85028bc9c8f24e45399e23eff`. The parallel scalar branch was
+integrated by a normal local merge; only the generated import and appended
+proof-pattern ledger required resolution, retaining both entries. No broad
+main merge or owner proof rewrite is used.
 
 ## Missing result and actual construction
 
