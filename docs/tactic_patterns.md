@@ -24,6 +24,20 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Conjugating a rectangular unitary identity — promoted (2026-10-29)
+
+- **Pattern:** Commute entrywise complex conjugation with the adjoint and
+  matrix multiplication, then transport the two identities `Aᴴ * A = 1`
+  and `A * Aᴴ = 1` through conjugation.
+- **Seen:** The two gates in `TwoSiteStandardFormData.mapStar` in
+  `MPS/MPU/ConjugationSymmetry.lean`, and the supplied source gate in
+  `IsMPUCanonicalFormII.exists_local_conjugation_gauges` in
+  `MPS/MPU/ConjugationSourceFactors.lean`.
+- **Abstraction:** `Matrix.IsUnitaryBetween.map_star` in
+  `MPS/MPU/ConjugationSymmetry.lean` transports both identities at once.
+- **Notes:** No new matrix predicate or parallel standard-form structure was
+  introduced. The supplied half factors and gates are conjugated directly.
+
 ### Matrices of submodule orthogonal projections — promoted (2026-10-26)
 
 - **Pattern:** Form `Matrix.toEuclideanLin.symm W.starProjection.toLinearMap`
@@ -4949,22 +4963,6 @@ three-plaquette output measurement, and the routed reunion measurement.
   `isReordering_comp_iff`; apply `IsReordering.comp` as a term instead.
 
 ## Candidates
-
-### Conjugating a rectangular unitary identity — candidate (2026-10-29)
-
-- **Pattern:** Commute entrywise complex conjugation with the adjoint and
-  matrix multiplication, then transport the two identities `Aᴴ * A = 1`
-  and `A * Aᴴ = 1` through conjugation.
-- **Seen:** The two one-sided identities in the local `hunitary` proof of
-  `TwoSiteStandardFormData.mapStar`,
-  `MPS/MPU/ConjugationSymmetry.lean`; related left-canonical transport in
-  `MPS/CanonicalForm/Conjugation.lean`.
-- **Abstraction:** Mathlib's `Matrix.conjTranspose_map` and `Matrix.map_mul`
-  already remove the entrywise calculations. A reusable conjugation theorem
-  for QICLean's `Matrix.IsUnitaryBetween` is a candidate if another consumer
-  requires the same pair of identities.
-- **Notes:** No new matrix predicate or parallel standard-form structure was
-  introduced. The supplied half factors and gates are conjugated directly.
 
 ### Counting nearest-neighbour bonds that meet a region — candidate (2026-10-28)
 

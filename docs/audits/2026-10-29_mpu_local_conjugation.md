@@ -1,94 +1,89 @@
-# Local conjugation equations: delivered steps and remaining #7017 obligations
+# Actual source factors and local conjugation equations for #7017
 
-Base: `origin/main` at `3af48c184`, including the merged #8808 gate
-Fundamental Theorem. Source: `Papers/1703.09188/paper_v2.tex`, Proposition
-`prop1conj`, lines 1006–1039; equations `uconjugation`, `vconjugation`.
+Base: origin/main at `3af48c184`, including merged #8808. Source:
+`Papers/1703.09188/paper_v2.tex`, Proposition `prop1conj`, lines 1006–1039,
+equations `uconjugation` and `vconjugation`.
 
-## Delivered proof text
+## Forward argument now written
 
-`TNLean/MPS/MPU/ConjugationSymmetry.lean` adds nine declarations:
+`IsMPUCanonicalFormII.exists_local_conjugation_gauges_common_transpose_case`
+derives both literal local equations and one common symmetric/skew-symmetric
+case from finite-chain conjugation invariance at every applicable length
+`N > 1`. The gates come from the actual supplied source factors. No premise
+asserts the existence of the missing gauges.
 
-1. `Matrix.kronecker_map_star_mul_eq_one_of_gate_conjugation` derives
-   `(conj(x)*x) ⊗ (conj(y)*y) = 1` from the literal local equation
-   `conj(u) = (x ⊗ y)*u` and `u*uᴴ = 1`. It conjugates the equation twice
-   and cancels the actual gate with its adjoint; the identity is not assumed.
-2. `Matrix.transpose_eq_self_or_transpose_eq_neg_of_gate_conjugation` uses
-   the existing common-sign theorem from #7711 to obtain the common
-   symmetric or skew-symmetric case directly from that local gate equation.
-3. `MPOTensor.mapStar` names coefficientwise conjugation without any index
-   exchange. `MPOTensor.mpo_map_star` identifies the periodic operator of the
-   coefficientwise conjugate tensor with the coefficientwise conjugate
-   periodic operator, including length zero. It uses products and traces.
-4. `Matrix.IsUnitaryBetween.map_star` transports both rectangular unitary
-   identities. `MPOTensor.TwoSiteStandardFormData.mapStar` conjugates the supplied
-   standard form, including its actual half factors, into a standard form
-   of the conjugate tensor with exactly the conjugate supplied gates.
-5. `MPOTensor.twoSiteUnshiftedLayer_map_star` and
-   `MPOTensor.twoSiteShiftedLayer_map_star` conjugate the two circuit layers.
-6. `MPOTensor.TwoSiteStandardFormData.map_star_mpo_eq_of_gate_conjugation`
-   contracts both displayed local equations to conjugation invariance at
-   every positive length of the supplied blocked tensor. The proof uses
-   the exact two-layer circuit and cancellation of the internal unitaries.
+The forward theorem concerns a reduced canonical-form-II presentation and
+supplied source factors whose unshifted gate is unitary. Its same-tensor
+full-support restriction is explicit in the docstring and Blueprint and
+recorded in `docs/paper-gaps/mpu_canonical_form_full_support.tex`. This is an
+auxiliary forward result, not the unrestricted source-labelled equivalence.
 
-The hypotheses are the actual supplied standard-form data and the local
-equations in the direction being proved. There is no hypothesis asserting
-existence of the missing gauges, no new symmetry predicate, and no parallel
-source/admissible family. The common sign is obtained from the first local
-equation alone. The second local equation is used in the circuit contraction.
+`ConjugationSourceFactors.lean` supplies the actual comparison:
 
-## Exact current Fundamental Theorem boundary
+- Both source cuts conjugate coefficientwise and retain their ranks.
+  Normalized flattening commutes with conjugation.
+- `SourceCutSVD.mapStar` conjugates the supplied compact decomposition
+  itself, retaining the positive diagonal singular-value and inverse matrices.
+- `IsMPUCanonicalFormII.mapStar` reuses physical-adjoint canonical transport
+  followed by the inverse physical swap. It preserves block dimensions,
+  ambient full support and the same real diagonal fixed matrix.
+- `SourceFactors.mapStar` conjugates all six supplied factors and their
+  weight, reindexing only through canonical equalities of source-rank
+  dimensions. `sourceU_mapStar` and `sourceV_mapStar` identify its gates
+  with exactly the conjugates of the supplied gates.
+- `exists_supplied_source_gate_unitary_gauges_of_mpo_eq` uses the existing
+  letter Fundamental Theorem and normalized comparison of arbitrary supplied
+  factors. The existing factor-to-gate contraction in
+  `SelectedSourceGateVirtualGauge.lean` is made public with a source
+  docstring, so its proof is reused.
+- `exists_local_conjugation_gauges` compares with the actual conjugated
+  factors and transports the two resulting unitaries back through the rank
+  identifications, removing both reindexings.
+- The literal unshifted gate equation, applied twice and cancelled against
+  the adjoint gate, gives the Kronecker identity needed by #7711's common
+  transpose-sign theorem. Rank nonemptiness follows from gate unitarity and
+  positive physical dimension.
 
-`IsMPUCanonicalFormII.exists_source_gate_unitary_gauges_of_mpo_eq` now
-provides the two unitary gauges from equal periodic operators at every
-length greater than one. Its arbitrary-decomposition version,
-`exists_source_gate_unitary_gauges_of_mpo_eq_sourceFactorsOf`, accepts both
-compact decompositions for each comparison tensor and gives the same gate
-equations after the explicit source-rank reindexings. These results are
-present and must not be replaced by a supplied gauge-existence hypothesis.
+The normalized-factor comparison uses the conjugated factors directly; no
+additional matrix-square-root conjugation theorem or new SVD choice is needed.
 
-To finish #7017's forward direction, one must transport the chosen compact
-decompositions and canonical-form-II data under entrywise conjugation,
-identify the resulting source factors with the conjugates of the supplied
-factors, and remove the rank reindexings in the comparison equations.
-The new `TwoSiteStandardFormData.mapStar` transports a supplied open
-standard form; it does not by itself prove those chosen source-cut and
-canonical-data identifications. The Fundamental Theorem is currently stated
-for gates from the source factors, rather than arbitrary supplied open data.
-Thus the exact forward local equations remain unproved here.
+## Contraction and remaining scope
 
-The existing gate converse in `FundamentalTheoremGates.lean` gives equality
-at every positive blocked length. For the standard form of `blockTwo U`,
-these are the original lengths `2*N`. The parity issue in
-`docs/paper-gaps/mpu_standard_form_parity_gap.tex` prevents inferring the
-unblocked all-length gate converse from this API. This audit does not claim
-that the parity counterexample by itself refutes the conjugation proposition.
-Any all-length conclusion must be justified separately or the exact theorem
-must be stated on blocked families.
+`ConjugationSymmetry.lean` identifies coefficientwise conjugate periodic
+operators by products and traces, conjugates the actual supplied open
+standard form, and contracts both local equations through the two actual
+circuit layers. Internal unitaries cancel their adjoints. No generic MPS
+symmetry theorem is used. `Matrix.IsUnitaryBetween.map_star` handles both
+rectangular unitary identities and is reused at three sites in two modules.
 
-The source Blueprint node `prop1conj` stays `\notready`, with no new
-`\leanok`. The two new auxiliary entries also stay `\notready` pending
-compilation. Issue #7017 stays open.
+The contraction holds at every positive length of the supplied blocked
+tensor. For a standard form of `blockTwo U`, these are original lengths
+`2*N`. The parity issue in
+`docs/paper-gaps/mpu_standard_form_parity_gap.tex` prevents inferring an
+unblocked all-length converse from that API. This audit does not claim that
+its parity witness alone refutes the conjugation proposition.
 
-## Source-only validation
+The source node `prop1conj` and all new auxiliary nodes stay `notready`.
+No unrestricted all-length equivalence, removal of the reduced-presentation
+restriction, or kernel-checked proof is claimed. No parallel symmetry or
+source/admissible predicate family, compatibility alias, sorry or axiom is
+introduced. Issue #7017 remains open.
 
-No Lean build, elaboration, cache mutation, or compilation is run, as the
-user explicitly requested. Checks inspect the pinned Mathlib signatures
-for rectangular `Matrix.map_mul`, `Matrix.conjTranspose_map`,
-`Matrix.mul_kronecker_mul`, list-product transport and trace transport, and
-the exact circuit equality and unitary-gauge cancellation already in TNLean.
-The generated import check, tactic-pattern scan, declaration/tag source
-check, TeX formatter, whitespace/line-length check, and proof-integrity
-placeholder scan are run. The source-only Blueprint scanner reports all
-nine new declarations covered; its repository-wide scan also reports 547
-unresolved references outside this addition, so full Blueprint synchronization
-is not claimed. No compiled `checkdecls` is run. These checks do not establish
-kernel acceptance.
+## Validation and hosted diagnostic repair
 
-## Hosted diagnostic repair
+No local Lean build, elaboration, cache mutation or compilation is run, per
+the user's instruction. The proof text remains uncompiled locally. Source
+checks inspect the pinned Mathlib/QICLean rectangular map, adjoint,
+reindex-multiplication, Kronecker-reindex, rank, isometry and trace APIs,
+as well as the existing TNLean canonical-data and factor-comparison signatures.
+Generated imports, tactic-pattern scan, TeX formatting, new-declaration tag
+coverage, whitespace/line-length and proof-integrity scans are checked.
+The repository-wide source Blueprint scan has 547 unresolved references
+outside this addition; full synchronization and compiled checkdecls are not
+claimed.
 
-Hosted job `123398370707` found three elaboration errors in the first draft:
-composition under `List.ofFn` was not unfolded, the local polymorphic
-unitarity helper had a universe inference mismatch, and the circuit equality
-was invoked without the ring length. The repair uses `Function.comp_def`, a
-shared theorem with explicit gate arguments, and `(N := N)`. This repair is
-source-checked against those existing logs; no local Lean command was run.
+Hosted job `123398370707` found three errors in the initial contraction
+draft. Repair `16f7fe07f` unfolds function composition under List.ofFn, uses
+a shared universe-polymorphic unitary helper with explicit gate arguments,
+and supplies the ring length to the circuit equality. Existing hosted logs
+were used for that source repair. No new local Lean command was run.

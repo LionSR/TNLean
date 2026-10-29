@@ -9132,10 +9132,68 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     In \cite[Proposition~V.1]{Cirac2017MPU}, this equivalence is the unrestricted conjugation
     characterization.
     % Source lines: paper_v2.tex 1008--1039.
-    % The forward local-gauge construction still needs conjugation transport of
-    % the chosen source cuts and their canonical data. The proved contraction
-    % in lem:mpu_local_conjugation_contract is on positive blocked rings.
+    % The forward result below concerns supplied reduced canonical data.
+    % The contraction in lem:mpu_local_conjugation_contract is on positive
+    % blocked rings; no unblocked all-length converse has been established.
 \end{proposition}
+
+\begin{lemma}[Conjugation of supplied source decompositions]
+    \label{lem:mpu_source_conjugation_transport}
+    \lean{MPOTensor.sourceCutM₁_mapStar, MPOTensor.sourceCutM₂_mapStar, MPOTensor.source_ranks_mapStar, MPOTensor.normalizedFlattening_mapStar, MPOTensor.IsMPUCanonicalFormII.mapStar, MPOTensor.SourceCutSVD.mapStar, MPOTensor.SourceFactors.mapStar, MPOTensor.SourceFactors.sourceU_mapStar, MPOTensor.SourceFactors.sourceV_mapStar}
+    \notready
+    Both source cuts satisfy
+    $M_i(\overline{\mathcal U})=\overline{M_i(\mathcal U)}$, and their ranks
+    are unchanged. A supplied compact decomposition
+    $M_i=V_i^\dagger D_i G_i$ conjugates to
+    $\overline{M_i}=\overline{V_i}^\dagger D_i\overline{G_i}$, retaining
+    the positive diagonal matrices $D_i,D_i^{-1}$.
+    Supplied source factors $X_i,Y_i,Z_i$ at weight $\rho$ conjugate to
+    source factors of $\overline{\mathcal U}$ at weight $\overline\rho$,
+    in the canonical identifications of the equal rank dimensions. Their
+    gates are exactly $\overline u,\overline v$ in those coordinates.
+    Normalized flattening commutes with conjugation. Reduced canonical form II
+    is preserved, with the same real diagonal fixed matrix.
+    These are the source-data identifications in
+    \cite[Proposition~V.1, lines~1030--1033]{Cirac2017MPU}.
+\end{lemma}
+
+\begin{proof}
+    Conjugate both factorizations, both normalization identities and both
+    right-inverse identities. Products, sums, adjoints and traces commute
+    with conjugation. The singular-value matrices and the diagonal positive
+    fixed matrix are real. Conjugating the gate contractions therefore gives
+    exactly the conjugate gates. The canonical blocks and ambient coisometry
+    conjugate coefficient by coefficient, retaining dimensions and full support.
+\end{proof}
+
+\begin{lemma}[Forward conjugation equations in a reduced canonical presentation]
+    \label{lem:mpu_source_local_conjugation_forward}
+    \lean{MPOTensor.supplied_source_factor_gate_relations, MPOTensor.IsMPUCanonicalFormII.exists_supplied_source_gate_unitary_gauges_of_mpo_eq, MPOTensor.IsMPUCanonicalFormII.exists_local_conjugation_gauges, MPOTensor.IsMPUCanonicalFormII.exists_local_conjugation_gauges_common_transpose_case}
+    \notready
+    Let $\mathcal U$ be in reduced canonical form II, with supplied source
+    factors whose unshifted gate $u$ is unitary. If
+    $U^{(N)}=\overline{U^{(N)}}$ at every length $N>1$, there are unitaries
+    $x,y$ such that either both are symmetric or both are skew-symmetric, and
+    \begin{align}
+        \overline u & =(x\otimes y)u,                 &
+        \overline v & =v(y^\dagger\otimes x^\dagger).
+    \end{align}
+    The gates $u,v$ are the supplied gates. This is the forward argument of
+    \cite[Proposition~V.1, lines~1030--1038]{Cirac2017MPU} for a reduced
+    canonical presentation, with the full-support restriction recorded in
+    \cite{gap:mpu_canonical_form_full_support}.
+\end{lemma}
+
+\begin{proof}
+    \uses{lem:mpu_source_conjugation_transport, FundamentalMPU, lem:mpu_local_conjugation_sign}
+    Apply the letter-level Fundamental Theorem to $\mathcal U$ and
+    $\overline{\mathcal U}$. Compare the actual conjugated source factors
+    with those transported by the resulting bond unitary. Normalized factor
+    comparison gives two unitary changes of source-rank coordinates.
+    Contract their four half-factor relations to the two gate relations,
+    then transport the unitaries back through the canonical rank
+    identifications. The unshifted equation gives the common transpose sign.
+\end{proof}
 
 \begin{lemma}[Transpose signs from the unshifted conjugation equation]
     \label{lem:mpu_local_conjugation_sign}
