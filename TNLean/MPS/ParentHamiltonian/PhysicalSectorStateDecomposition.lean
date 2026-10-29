@@ -81,12 +81,18 @@ theorem physical_sum_state_decomposition (hM : 0 < M) (ψ : MPVSpace (a + b) M)
       change a + (v ⟨0, hM⟩).val = (w ⟨0, hM⟩).val at hval
       have hw := (w ⟨0, hM⟩).isLt
       omega
-    rw [E.euclideanExtendByZero_apply_image, F.euclideanExtendByZero_apply_not_mem_range y _ hF, add_zero]
-    rfl
+    calc
+      ψ (E w) = x w := rfl
+      _ = E.euclideanExtendByZero x (E w) + F.euclideanExtendByZero y (E w) := by
+        rw [E.euclideanExtendByZero_apply_image,
+          F.euclideanExtendByZero_apply_not_mem_range y _ hF, add_zero]
   · by_cases hF : σ ∈ Set.range F
     · obtain ⟨w, rfl⟩ := hF
-      rw [E.euclideanExtendByZero_apply_not_mem_range x _ hE, F.euclideanExtendByZero_apply_image, zero_add]
-      rfl
+      calc
+        ψ (F w) = y w := rfl
+        _ = E.euclideanExtendByZero x (F w) + F.euclideanExtendByZero y (F w) := by
+          rw [E.euclideanExtendByZero_apply_not_mem_range x _ hE,
+            F.euclideanExtendByZero_apply_image, zero_add]
     · have hnot_left : ¬ ∀ i, (σ i).val < a := by
         intro h
         exact hE ((mem_castAdd_word_range_iff σ).mpr h)
