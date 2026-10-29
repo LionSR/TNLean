@@ -197,3 +197,52 @@ condition is a separate question
 \cite{gap:hastings05_two_dim_ground_basis}. The nesting conclusion
 describes retained subspaces; no bound for intermediate tensor dimensions
 is asserted here.
+
+\begin{corollary}[The hierarchy for a specified unique ground state]
+    \label{cor:hastings05_unique_physical_hierarchy}
+    \lean{TNLean.MPS.AreaLaw.LocalSolution.exists_periodicPhysicalHierarchy_of_isGappedGroundState}
+    \leanok
+    \uses{thm:hastings05_metric_filter,lem:hastings05_zero_range,
+        lem:hastings05_rounded_pairs,lem:hastings05_constructed_windows,
+        lem:hastings05_physical_energy_comparison}
+    Fix $R\ge0$, $J>0$ and $\Delta>0$. There are $c_1,\eta>0$ and
+    $C\ge0$, chosen before the physical chain and all ground-state data,
+    with the following property. Let $H=\sum_i g_i$ on a nonempty
+    periodic chain, with Hermitian terms of norm at most $J$ supported
+    within cyclic distance $R$ of their centres. Let $\Omega$ be a
+    specified unit vector such that
+    $H\Omega=E_0\Omega$ and
+    $H\ge E_0I+\Delta(I-|\Omega\rangle\langle\Omega|)$.
+    Put $J_b=2\max(J,JC)$ and choose the radius by
+    (\ref{eq:hastings05_physical_radius}). The actual filters, rounded
+    pair family and spectral windows for this ground vector retain a
+    unit vector $\phi$ satisfying
+    $\|\phi-\Omega\|\le2(3^{h+1}-1)e^{-\eta\ell/8}$.
+    This vector belongs to every descendant retained space, and the
+    final retained space has dimension at most two. No local residual
+    estimate is assumed.
+\end{corollary}
+\begin{proof}\leanok
+    Start with the localization constants $c_1,\eta_{\rm loc},C$ and
+    replace the rate by $\eta=\min(\eta_{\rm loc},c_1\Delta/2)$.
+    The unique-ground Gaussian estimate gives one spectral leakage
+    term and one localization error. Consequently
+    \begin{align}
+        \|(a_i-\langle\Omega,a_i\Omega\rangle)\Omega\|
+        &\le J e^{-c_1\ell\Delta/2}+JC e^{-\eta_{\rm loc}\ell}
+         \le (J+JC)e^{-\eta\ell}
+         \le J_b e^{-\eta\ell}.
+        \label{eq:hastings05_unique_physical_low}
+    \end{align}
+    The same constants bound the localization error and the term norm.
+    Apply the constructed-window estimate at the chosen radius. The
+    rank-one ground projection has trace one, so
+    Lemma~\ref{lem:hastings05_physical_energy_comparison} bounds the
+    retained dimension by two.
+\end{proof}
+
+The filters and the assignment of their centres to pairs are determined
+by the local interactions and the chosen parameters. The spectral-window
+centres are expectations in the specified vector $\Omega$. This is a
+representation argument for that ground state, rather than an algorithm
+that constructs the windows without ground-state data.
