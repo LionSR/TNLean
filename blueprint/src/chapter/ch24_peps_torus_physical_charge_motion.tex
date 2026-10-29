@@ -8,7 +8,7 @@
     On a finite torus with periods $L_x,L_y\ge 3$, the four-site plaquette square $R_v=\{(x,y),(x+1,y),(x+1,y+1),(x,y+1)\}$ at $v=(x,y)$ (\cite{Schuch2010PEPS}, lines 2489--2507) has distinct upper and lower internal horizontal bonds $e_{\mathrm{up}}\neq e_{\mathrm{low}}$ based at $(x,y+1)$ and $(x,y)$ (including across either periodic seam).
 \end{definition}
 
-\begin{theorem}[Charge motion on the four original spins]
+\begin{lemma}[Charge motion on the four original spins]
     \label{thm:peps_torus_physical_charge_motion}
     \lean{TNLean.PEPS.IsGIsometric.exists_unitary_torusPhysicalChargeMotion}
     \leanok
@@ -19,8 +19,8 @@
         W_v\Psi_{R_v}^{e_{\mathrm{up}},\chi,p}(\theta)=\Psi_{R_v}^{e_{\mathrm{low}},\chi,p}(\theta). \notag
     \end{align}
     This is the four-spin finite-torus specialization of \cite{Schuch2010PEPS}, lines 2489--2507 (without asserting the two-column factorization, parent-Hamiltonian energies, or the unrestricted lattice scope of \cite{gap:rmp_peps_quantum_double_g_isometry}).
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The plaquette walk of Definition~\ref{def:peps_torus_plaquette_flux_geometry} connects $R_v$ and contains $e_{\mathrm{up}}\neq e_{\mathrm{low}}$ of Definition~\ref{def:peps_torus_charge_motion_bonds} (with seam sorting preserving the shared bond label).
-    Passing the four-leg $G$-isometry to incident-edge coordinates and applying Theorem~\ref{thm:peps_regular_untwisted_physical_charge_motion} yields $W_v$.
+    Passing the four-leg $G$-isometry to incident-edge coordinates and applying Lemma~\ref{thm:peps_regular_untwisted_physical_charge_motion} yields $W_v$.
 \end{proof}

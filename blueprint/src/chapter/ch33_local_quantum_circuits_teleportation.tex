@@ -112,7 +112,7 @@ $N$, and the local labels are $\mathbb Z_d=\{0,\dots,d-1\}$ with $d\ge1$.
     On $\ket v$ with $\ket0_e\ket0_f$, $G_{1,h}$ prepares $d^{-1/2}\sum_{j\in\mathbb Z_d}\ket j_e\ket j_f$. Applying $G_{2,h}$ and $\Pi_{c,z_c}\Pi_{e,z_e}$ gives amplitude $d^{-1/2}F_{z_c,\,x_f-z_e}=d^{-1}\zeta^{z_c(x_f-z_e)}$ for the input value $x_f-z_e$ transferred from $c$ to $f$ when $(x_c,x_e)=(z_c,z_e)$, and $0$ otherwise, matching the right-hand side.
 \end{proof}
 
-\begin{theorem}[Teleportation along chains of hops in one round]
+\begin{lemma}[Teleportation along chains of hops in one round]
     \label{thm:qc_teleportation_round}
     \lean{QuantumCircuit.TeleportHop.sites,
         QuantumCircuit.TeleportHop.allSites,
@@ -146,7 +146,7 @@ $N$, and the local labels are $\mathbb Z_d=\{0,\dots,d-1\}$ with $d\ge1$.
     \uses{lem:qc_teleport_hop, def:qc_round_implementation,
         lem:qc_site_permutations}
     A hop list $\mathcal H=(h_1,\dots,h_H)$ is \emph{valid} if for every $j<k$, $\{e_j,f_j\}\cap\{c_k,e_k,f_k\}=\varnothing$ and $c_j\notin\{c_k,e_k\}$ (allowing $c_j=f_k$, so hops chain as $c_k\to f_k=c_j\to f_j$). For a valid list $\mathcal H$ and a depth-$T$ circuit $U$, the \emph{teleportation round} applies $U$, the layer $\prod_j G_{1,h_j}$, and the layer $\prod_j G_{2,h_j}$, measures $\bigcup_j\{c_j,e_j\}$, and applies the inverse Pauli frame correction. It has depth $T+2$ and implements $P_{(c_1\,f_1)}\cdots P_{(c_H\,f_H)}U$ (with scalar $d^{-H}$ for every outcome) on $\{\ket v:U\ket v\text{ has }\ket0\text{ on }\bigcup_j\{e_j,f_j\}\}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Validity ensures $\{e_j,f_j\}$ are pairwise disjoint and $\{c_j,e_j\}$ are pairwise disjoint, forming two layers, and $[G_{1,h_1},\prod_{k>1}G_{2,h_k}]=0$. By induction on $\mathcal H$ using Lemma~\ref{lem:qc_teleport_hop} and Lemma~\ref{lem:qc_site_permutations}, $h_H,\dots,h_1$ act sequentially, conjugating earlier Pauli frames from $c_j=f_k$ to $f_j$ via $P_{(c_j\,f_j)}$, so the total frame after $d^{-H}P_{(c_1\,f_1)}\cdots P_{(c_H\,f_H)}U\ket v$ is a product of single-site unitaries cancelled by its inverse.
@@ -185,7 +185,7 @@ $N$, and the local labels are $\mathbb Z_d=\{0,\dots,d-1\}$ with $d\ge1$.
 \end{lemma}
 \begin{proof}
     \leanok
-    Item (1) composes Theorem~\ref{thm:qc_teleportation_round} via Lemma~\ref{lem:qc_round_implementation_compose}. For (2), $a+j$ ($0\le j\le 2L$) are distinct modulo $N$, and the transpositions $(a+2j\;\;a+2j+2)$ for $j=0,\dots,L-1$ move $a\mapsto a+2L$ while shifting $\{a+1,\dots,a+2L\}$ onto $\{a,\dots,a+2L-1\}$.
+    Item (1) composes Lemma~\ref{thm:qc_teleportation_round} via Lemma~\ref{lem:qc_round_implementation_compose}. For (2), $a+j$ ($0\le j\le 2L$) are distinct modulo $N$, and the transpositions $(a+2j\;\;a+2j+2)$ for $j=0,\dots,L-1$ move $a\mapsto a+2L$ while shifting $\{a+1,\dots,a+2L\}$ onto $\{a,\dots,a+2L-1\}$.
 \end{proof}
 
 \begin{lemma}[Parallel chains]
@@ -326,10 +326,10 @@ $N$, and the local labels are $\mathbb Z_d=\{0,\dots,d-1\}$ with $d\ge1$.
 \end{lemma}
 \begin{proof}
     \leanok
-    By Lemmas~\ref{lem:qc_teleportation_chains} and~\ref{lem:qc_parallel_chains}, each $\mathcal F^{(t)}$ is valid, requires $\ket0$ on $\bigcup_r\{a_r+t+1,\dots,a_r+t+2L_r\}=\bigcup_r Z_{r,t+1}$, and maps $Z_{r,t+1}\cup\{a_r+t\}$ bijectively onto $Z_{r,t}\cup\{a_r+t+2L_r\}$, leaving $\ket0$ on $\bigcup_r Z_{r,t}$. Theorem~\ref{thm:qc_teleportation_round} and Lemma~\ref{lem:qc_round_implementation_compose} compose the $s$ forward and $s$ backward rounds of depth $2$ each.
+    By Lemmas~\ref{lem:qc_teleportation_chains} and~\ref{lem:qc_parallel_chains}, each $\mathcal F^{(t)}$ is valid, requires $\ket0$ on $\bigcup_r\{a_r+t+1,\dots,a_r+t+2L_r\}=\bigcup_r Z_{r,t+1}$, and maps $Z_{r,t+1}\cup\{a_r+t\}$ bijectively onto $Z_{r,t}\cup\{a_r+t+2L_r\}$, leaving $\ket0$ on $\bigcup_r Z_{r,t}$. Lemma~\ref{thm:qc_teleportation_round} and Lemma~\ref{lem:qc_round_implementation_compose} compose the $s$ forward and $s$ backward rounds of depth $2$ each.
 \end{proof}
 
-\begin{theorem}[A layer of register gates in constant depth with measurements]
+\begin{lemma}[A layer of register gates in constant depth with measurements]
     \label{thm:qc_register_layer}
     \lean{List.mul_prod_mul_of_mul_eq_one,
         QuantumCircuit.RegisterGate.rounds,
@@ -344,7 +344,7 @@ $N$, and the local labels are $\mathbb Z_d=\{0,\dots,d-1\}$ with $d\ge1$.
     \leanok
     \uses{lem:qc_register_chains, lem:qc_round_implementation_compose}
     Let $g_1,\dots,g_n$ be register gates with pairwise disjoint stretches, where each $X_r$ is a product of at most $K$ nearest-neighbour unitaries on $\{1,\dots,2s\}$. Then $2s+1$ measurement rounds of total depth $4s+K+2$ implement $\prod_{r=1}^n g_r$ on $\{\ket v:\ket v\text{ has }\ket0\text{ on }\bigcup_r I_r\}$ without postselection.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     By Lemma~\ref{lem:qc_parallel_circuits}, the colocated product $G=\prod_r\operatorname{embed}_{\{a_r+2L_r,\dots,a_r+2L_r+2s-1\}}(X_r)$ is a local circuit of depth $K$ supported outside $\bigcup_r Z_{r,0}$, hence preserves $\ket0$ on $\bigcup_r Z_{r,0}$ and runs in a single empty-hop round of depth $K+2$. Composing the $s$ forward rounds, this local round, and the $s$ backward rounds via Lemmas~\ref{lem:qc_register_chains} and~\ref{lem:qc_round_implementation_compose} implements $P^{-1}GP=\prod_{r=1}^n g_r$ in depth $2s+(K+2)+2s=4s+K+2$.

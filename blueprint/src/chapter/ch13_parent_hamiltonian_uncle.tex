@@ -102,7 +102,7 @@ one scalar need not be a similarity transformation.
     polynomials in $\varepsilon$.
 \end{proof}
 
-\begin{theorem}[Canonical two-block uncle interaction and Hamiltonian]
+\begin{lemma}[Canonical two-block uncle interaction and Hamiltonian]
     \label{thm:two_block_uncle_parent_limit}
     \lean{MPSTensor.uncleInteractionES}
     \lean{MPSTensor.uncleHamiltonianES}
@@ -119,7 +119,7 @@ one scalar need not be a similarity transformation.
     length $N\ge2$, the canonical parent Hamiltonians converge in operator norm
     to $H'_P=\sum_{i=1}^N(h'_P)_{i,i+1}$. The Hamiltonian limit also holds along real
     perturbation parameters.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{lem:uncle_local_projector_continuity,lem:uncle_virtual_rescaling,

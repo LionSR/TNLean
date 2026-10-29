@@ -22,7 +22,7 @@ coefficients on two windows.
 
 \section{Operator Schmidt rank of polynomials of a two-window family}
 
-\begin{theorem}[The operator Schmidt rank of a polynomial]
+\begin{lemma}[The operator Schmidt rank of a polynomial]
     \label{thm:chain_two_window_polynomial_rank}
     \lean{TNLean.MPS.AreaLaw.operatorSchmidtRank_aeval_two_window_le_pow}
     \leanok
@@ -60,7 +60,7 @@ coefficients on two windows.
     This is an explicit rank bound for that proposition.
     Matrix product operator representations and its algorithmic conclusions
     are separate assertions.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:chain_two_window_factors,thm:chain_fixed_frequency_uniform_bound,
         thm:chain_two_window_count_sum,thm:chain_two_window_count_power}
@@ -148,7 +148,7 @@ coefficients on two windows.
 \input{chapter/ch35_two_marker_middle_factors}
 \input{chapter/ch35_two_marker_middle_index_cardinality}
 
-\begin{theorem}[A square bound for the middle-family cardinality]
+\begin{lemma}[A square bound for the middle-family cardinality]
     \label{thm:chain_two_window_family_cardinality}
     \lean{TNLean.MPS.AreaLaw.crossing_grid_cardinality_le_square}
     \leanok
@@ -162,7 +162,7 @@ coefficients on two windows.
     Then $N\le D^2$, where $D=(qk)^{18\ell+2m}$.
     This is a numerical estimate for the counting argument supporting
     \cite[Proposition~5.7]{Arad2016RigorousRG}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The inequalities $2\ell\le2^\ell\le(qk)^\ell$ and
     $r+1\le k+1\le qk\le(qk)^\ell$ give

@@ -2,7 +2,7 @@
 % InsertSplit: the one-site quotient of the blocked-region weight
 %======================================================================
 
-\begin{theorem}[Region vertex product across an inserted site]%
+\begin{lemma}[Region vertex product across an inserted site]%
     \label{thm:peps_prod_region_insert_split}
     \lean{TNLean.PEPS.prod_region_insert_split}
     \leanok
@@ -14,12 +14,12 @@
         \prod_{w\in R}A_w(\zeta|_{\inc(w)},\sigma|_R{}_w).
         \label{eq:peps_prod_region_insert_split}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Split off the factor at $v\notin R$ and reindex the remaining product over $R$.
 \end{proof}
 
-\begin{theorem}[One-site split of the blocked-region weight]%
+\begin{lemma}[One-site split of the blocked-region weight]%
     \label{thm:peps_regionBlockedWeight_insert_eq_sum_split}
     \lean{TNLean.PEPS.regionBlockedWeight_insert_eq_sum_split}
     \leanok
@@ -33,17 +33,17 @@
         \prod_{w\in R}A_w(\zeta|_{\inc(w)},\sigma|_R{}_w).
         \label{eq:peps_region_blocked_weight_insert}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
-    Apply (\ref{eq:peps_prod_region_insert_split}) of Theorem~\ref{thm:peps_prod_region_insert_split} to each summand of $T_{A,R\cup\{v\}}^{\mu}(\sigma)$.
+    Apply (\ref{eq:peps_prod_region_insert_split}) of Lemma~\ref{thm:peps_prod_region_insert_split} to each summand of $T_{A,R\cup\{v\}}^{\mu}(\sigma)$.
 \end{proof}
 
-\begin{theorem}[A non-incident crossing edge survives the insertion]%
+\begin{lemma}[A non-incident crossing edge survives the insertion]%
     \label{thm:peps_isRegionBoundaryEdge_insert_of_not_incident}
     \lean{TNLean.PEPS.isRegionBoundaryEdge_insert_of_not_incident}
     \leanok
     If $v\notin R$ and $e\in\partial R$ is not incident to $v$, then $e\in\partial(R\cup\{v\})$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Since $v\notin e$, adjoining $v$ to $R$ leaves the membership of both endpoints of $e$ in $R\cup\{v\}$ unchanged.
 \end{proof}
@@ -64,13 +64,13 @@
     \end{align}
 \end{definition}
 
-\begin{theorem}[Boundary-label fiber identity across an inserted site]%
+\begin{lemma}[Boundary-label fiber identity across an inserted site]%
     \label{thm:peps_regionBoundaryLabel_eq_boundaryLabelOfInsert}
     \lean{TNLean.PEPS.regionBoundaryLabel_eq_boundaryLabelOfInsert}
     \leanok
     \uses{def:peps_boundaryLabelOfInsert}
     For $v\notin R$, if $\zeta|_{\partial(R\cup\{v\})}=\mu$ and $\zeta|_{\inc(v)}=\eta$, then $\zeta|_{\partial R}=\beta(\mu,\eta)$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Compare $\zeta|_{\partial R}$ and (\ref{eq:peps_boundary_label_of_insert}) edge by edge on $\partial R\cap\inc(v)$ and $\partial R\setminus\inc(v)$.
 \end{proof}
@@ -79,7 +79,7 @@
 % Gauge absorption at region granularity
 %======================================================================
 
-\begin{theorem}[Region gauge absorption]%
+\begin{lemma}[Region gauge absorption]%
     \label{thm:peps_regionInsertedCoeff_applyGauge}
     \lean{TNLean.PEPS.regionInsertedCoeff_applyGauge}
     \leanok
@@ -94,16 +94,16 @@
         \sigma,\tau\bigr).
         \label{eq:peps_region_inserted_coeff_apply_gauge}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
-    With $p_B(R)=\prod_{g\notin\partial R}D_B(g)$ and $N=\mathcal O_{R,f}(M)$, Theorem~\ref{thm:peps_regionInsertedCoeff_eq_smul_edgeInsertedCoeff} and Theorem~\ref{thm:peps_edge_gauge_absorption} give
+    With $p_B(R)=\prod_{g\notin\partial R}D_B(g)$ and $N=\mathcal O_{R,f}(M)$, Lemma~\ref{thm:peps_regionInsertedCoeff_eq_smul_edgeInsertedCoeff} and Lemma~\ref{thm:peps_edge_gauge_absorption} give
     \begin{align}
         C_{B^X}(R,f,M;\sigma,\tau)
          & =p_B(R)\,E_{B^X}(f,\omega_{R,\sigma,\tau},N)
         =p_B(R)\,E_B\bigl(f,\omega_{R,\sigma,\tau},X_f^{\mathsf T}\,N\,(X_f^{-1})^{\mathsf T}\bigr),
         \notag
     \end{align}
-    and applying Theorem~\ref{thm:peps_regionInsertedCoeff_eq_smul_edgeInsertedCoeff} on $B$ with $\mathcal O_{R,f}\circ\mathcal O_{R,f}=\id$ yields (\ref{eq:peps_region_inserted_coeff_apply_gauge}).
+    and applying Lemma~\ref{thm:peps_regionInsertedCoeff_eq_smul_edgeInsertedCoeff} on $B$ with $\mathcal O_{R,f}\circ\mathcal O_{R,f}=\id$ yields (\ref{eq:peps_region_inserted_coeff_apply_gauge}).
 \end{proof}
 
 \subsection{From the conjugation identity to the absorbed equality}%
@@ -128,7 +128,7 @@ At $f\in\partial R$, the per-edge gauge identity takes the conjugation form $C_A
     \end{align}
 \end{definition}
 
-\begin{theorem}[Matrix reconciliation for the absorbing gauge]%
+\begin{lemma}[Matrix reconciliation for the absorbing gauge]%
     \label{thm:peps_regionEdgeOrient_absorbedBoundaryGauge}
     \lean{TNLean.PEPS.regionEdgeOrient_absorbedBoundaryGauge}
     \leanok
@@ -141,12 +141,12 @@ At $f\in\partial R$, the per-edge gauge identity takes the conjugation form $C_A
         Z\,N\,Z^{-1}.
         \label{eq:peps_region_edge_orient_absorbed}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     If the left endpoint of $f$ lies in $R$, then $\mathcal O_{R,f}=\id$ and $X_f^{\mathsf T}=Z$. Otherwise $\mathcal O_{R,f}(N)=N^{\mathsf T}$ and $X_f=Z^{-1}$, so $X_f^{\mathsf T}\mathcal O_{R,f}(N)(X_f^{-1})^{\mathsf T}=(ZNZ^{-1})^{\mathsf T}$, and applying $\mathcal O_{R,f}$ again gives $ZNZ^{-1}$.
 \end{proof}
 
-\begin{theorem}[Region absorbed equality from the conjugation identity]%
+\begin{lemma}[Region absorbed equality from the conjugation identity]%
     \label{thm:peps_regionInsertedCoeff_eq_applyGauge_of_conjIdentity}
     \lean{TNLean.PEPS.regionInsertedCoeff_eq_applyGauge_of_conjIdentity}
     \leanok
@@ -158,13 +158,13 @@ At $f\in\partial R$, the per-edge gauge identity takes the conjugation form $C_A
         C_{B^X}(R,f,\phi_{h_f}(M);\sigma,\tau)
         \label{eq:peps_region_absorbed_equality}
     \end{align}
-    (the region analog of Theorem~\ref{thm:peps_postAbsorptionEdgeInsertionEquality}).
-\end{theorem}
+    (the region analog of Lemma~\ref{thm:peps_postAbsorptionEdgeInsertionEquality}).
+\end{lemma}
 \begin{proof}\leanok
     Combine (\ref{eq:peps_region_inserted_coeff_apply_gauge}) at $\phi_{h_f}(M)$ with (\ref{eq:peps_region_edge_orient_absorbed}) and the conjugation hypothesis.
 \end{proof}
 
-\begin{theorem}[Edge absorbed equality from the region absorbed equality]%
+\begin{lemma}[Edge absorbed equality from the region absorbed equality]%
     \label{thm:peps_edgeInsertedCoeff_eq_applyGauge_of_region}
     \lean{TNLean.PEPS.edgeInsertedCoeff_eq_applyGauge_of_region}
     \leanok
@@ -176,9 +176,9 @@ At $f\in\partial R$, the per-edge gauge identity takes the conjugation form $C_A
         E_{B^X}(f,\sigma,\phi_{h_f}(N)).
         \label{eq:peps_edge_absorbed_equality}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
-    With $p_A(R)=\prod_{g\notin\partial R}D_A(g)>0$, Theorem~\ref{thm:peps_regionInsertedCoeff_eq_smul_edgeInsertedCoeff} and $\mathcal O_{R,f}\circ\mathcal O_{R,f}=\id$ give
+    With $p_A(R)=\prod_{g\notin\partial R}D_A(g)>0$, Lemma~\ref{thm:peps_regionInsertedCoeff_eq_smul_edgeInsertedCoeff} and $\mathcal O_{R,f}\circ\mathcal O_{R,f}=\id$ give
     \begin{align}
         p_A(R)\,E_A(f,\sigma,N)
          & =C_A\bigl(R,f,\mathcal O_{R,f}(N);\sigma|_R,\sigma|_{V\setminus R}\bigr) \notag          \\
@@ -189,13 +189,13 @@ At $f\in\partial R$, the per-edge gauge identity takes the conjugation form $C_A
     and cancelling $p_A(R)>0$ yields (\ref{eq:peps_edge_absorbed_equality}).
 \end{proof}
 
-\begin{theorem}[Region absorbed equality from the edge absorbed equality]%
+\begin{lemma}[Region absorbed equality from the edge absorbed equality]%
     \label{thm:peps_regionInsertedCoeff_eq_applyGauge_of_edge}
     \lean{TNLean.PEPS.regionInsertedCoeff_eq_applyGauge_of_edge}
     \leanok
     \uses{def:peps_regionInsertedCoeff, def:peps_edgeInsertedCoeff, def:applyGauge, thm:peps_regionInsertedCoeff_eq_smul_edgeInsertedCoeff}
     Assume $h:D_A=D_B$. If (\ref{eq:peps_edge_absorbed_equality}) holds at an edge $e$ for all $\sigma$ and $N$, then (\ref{eq:peps_region_absorbed_equality}) holds at every region $R$ with $e\in\partial R$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
-    By Theorem~\ref{thm:peps_regionInsertedCoeff_eq_smul_edgeInsertedCoeff} and $\mathcal O_{R,e}\circ\phi_{h_e}=\phi_{h_e}\circ\mathcal O_{R,e}$, both sides of (\ref{eq:peps_region_absorbed_equality}) equal $p_A(R)\,E_A(e,\omega_{R,\sigma,\tau},\mathcal O_{R,e}(M))=p_A(R)\,E_{B^X}(e,\omega_{R,\sigma,\tau},\phi_{h_e}(\mathcal O_{R,e}(M)))$.
+    By Lemma~\ref{thm:peps_regionInsertedCoeff_eq_smul_edgeInsertedCoeff} and $\mathcal O_{R,e}\circ\phi_{h_e}=\phi_{h_e}\circ\mathcal O_{R,e}$, both sides of (\ref{eq:peps_region_absorbed_equality}) equal $p_A(R)\,E_A(e,\omega_{R,\sigma,\tau},\mathcal O_{R,e}(M))=p_A(R)\,E_{B^X}(e,\omega_{R,\sigma,\tau},\phi_{h_e}(\mathcal O_{R,e}(M)))$.
 \end{proof}

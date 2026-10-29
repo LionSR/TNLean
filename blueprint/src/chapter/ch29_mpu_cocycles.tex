@@ -14,7 +14,7 @@ for the scalar functions $\beta$, $\omega$, $\gamma$, $L$, $\sigma$, and $\Xi$,
 with representation-level data as in
 Definition~\ref{def:mpug_group_representation}.
 
-\begin{theorem}[Scalar factors of an identity Kronecker product]
+\begin{lemma}[Scalar factors of an identity Kronecker product]
     \label{thm:mpug_kronecker_identity_factors}
     \lean{Matrix.exists_eq_smul_one_of_kronecker_eq_one}
     \leanok
@@ -25,7 +25,7 @@ Definition~\ref{def:mpug_group_representation}.
         A & =c\mathbf 1, & B & =c^{-1}\mathbf 1.
         \label{eq:mpug_kronecker_identity_factors}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     For any $i_0\in M$ and $j_0\in N$, the
@@ -36,7 +36,7 @@ Definition~\ref{def:mpug_group_representation}.
     $((i_0,j),(i_0,j'))$ entry gives $B_{jj'}=c^{-1}\delta_{jj'}$.
 \end{proof}
 
-\begin{theorem}[Unitarity from an adjoint Kronecker product]
+\begin{lemma}[Unitarity from an adjoint Kronecker product]
     \label{thm:matrix_unitary_adjoint_kronecker}
     \lean{Matrix.isUnitaryBetween_of_conjTranspose_kronecker}
     \leanok
@@ -52,7 +52,7 @@ Definition~\ref{def:mpug_group_representation}.
     \cite[lines~5444--5487]{FrancoRubio2025MPUGauging}, no equality of
     $|M|$ and $|N|$ is assumed; the tensor-network identity to which it is
     applied is a separate result.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpug_kronecker_identity_factors}
@@ -60,7 +60,7 @@ Definition~\ref{def:mpug_group_representation}.
     \begin{align}
         (KK^\dagger)\otimes(K^\dagger K) & =I_{M\times N}.
     \end{align}
-    By Theorem~\ref{thm:mpug_kronecker_identity_factors}, there is a
+    By Lemma~\ref{thm:mpug_kronecker_identity_factors}, there is a
     nonzero $c\in\C$ with $KK^\dagger=cI_M$ and
     $K^\dagger K=c^{-1}I_N$. Consequently,
     \begin{align}
@@ -73,7 +73,7 @@ Definition~\ref{def:mpug_group_representation}.
     Thus $c=1$, and the two scalar Gram identities become
     $K^\dagger K=I_N$ and $KK^\dagger=I_M$.
 \end{proof}
-\begin{theorem}[Unitary factors of a unitary Kronecker product]
+\begin{lemma}[Unitary factors of a unitary Kronecker product]
     \label{thm:mpug_unitary_kronecker_factors}
     \lean{Matrix.exists_pos_real_rescaling_mem_unitaryGroup_of_kronecker_mem_unitaryGroup,
         Matrix.exists_pos_real_smul_unitary_factors_of_kronecker_mem_unitaryGroup}
@@ -92,7 +92,7 @@ Definition~\ref{def:mpug_group_representation}.
     This is only the tensor-factor step in the decomposition result
     of~\cite{FrancoRubio2025MPUGauging}; it does not construct or compare the
     three-legged decompositions occurring there.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpug_kronecker_identity_factors}
@@ -100,7 +100,7 @@ Definition~\ref{def:mpug_group_representation}.
     \begin{align}
         (K_1^\dagger K_1)\otimes(K_2^\dagger K_2)=\mathbf 1.
     \end{align}
-    Theorem~\ref{thm:mpug_kronecker_identity_factors} gives a nonzero
+    Lemma~\ref{thm:mpug_kronecker_identity_factors} gives a nonzero
     $c\in\C$ such that
     $K_1^\dagger K_1=c\mathbf 1$ and
     $K_2^\dagger K_2=c^{-1}\mathbf 1$. Positivity of the first Gram matrix
@@ -110,7 +110,7 @@ Definition~\ref{def:mpug_group_representation}.
     (\ref{eq:mpug_unitary_kronecker_factors}).
 \end{proof}
 
-\begin{theorem}[Cross-product rigidity]
+\begin{lemma}[Cross-product rigidity]
     \label{thm:mpug_cross_product_rigidity}
     \lean{Kraus.IsNormal.eq_smul_of_cross_mul_eq,
         Kraus.IsInjective.eq_smul_of_cross_mul_eq}
@@ -128,7 +128,7 @@ Definition~\ref{def:mpug_group_representation}.
     in~\cite[lines~1255--1325]{FrancoRubio2025MPUGauging}, this
     commuting-tensor step shows that the tensor commuting with a normal
     matrix product unitary tensor is a multiple of it.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:decomposition_map, thm:normal_tensor_gram_rigidity}
@@ -192,7 +192,7 @@ Definition~\ref{def:mpug_group_representation}.
     conjugated data share the same fixed matrix.
 \end{proof}
 
-\begin{theorem}[Canonical boundary contractions]
+\begin{lemma}[Canonical boundary contractions]
     \label{thm:mpug_simple_canonical_boundary_contractions}
     \lean{MPOTensor.IsMPUCanonicalFormII.simple2_recorded_fixed_pair,
         MPOTensor.IsMPUCanonicalFormII.doubleLayer_boundary_contractions}
@@ -213,7 +213,7 @@ Definition~\ref{def:mpug_group_representation}.
         W^{ij}W^{kl}|\rho) & =\delta_{kl}W^{ij}|\rho).
         \label{eq:mpug_simple_canonical_bdry_right}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpu_canonical_form_ii_transfer_stabilization,
@@ -225,7 +225,7 @@ Definition~\ref{def:mpug_group_representation}.
     the left with $(\Phi|$ yields~(\ref{eq:mpug_simple_canonical_bdry_left}); contracting on the right with $|\rho)$ yields~(\ref{eq:mpug_simple_canonical_bdry_right}).
 \end{proof}
 
-\begin{theorem}[Canonical boundary contractions for a simple physical adjoint]
+\begin{lemma}[Canonical boundary contractions for a simple physical adjoint]
     \label{thm:mpug_adjoint_canonical_boundary_contractions}
     \lean{MPOTensor.IsMPUCanonicalFormII.physicalAdjoint_doubleLayer_boundary_contractions}
     \leanok
@@ -245,14 +245,14 @@ Definition~\ref{def:mpug_group_representation}.
     The simplicity assumption is precisely the additional hypothesis used
     for the reflected reduction in
     \cite[lines~1221--1254]{FrancoRubio2025MPUGauging}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:mpug_adjoint_canonical_boundaries,
         thm:mpug_simple_canonical_boundary_contractions}
     Passing the canonical presentation to $\mathcal U^\dagger$ with
     the same $\rho$ and applying
-    Theorem~\ref{thm:mpug_simple_canonical_boundary_contractions}
+    Lemma~\ref{thm:mpug_simple_canonical_boundary_contractions}
     to the simple tensor $\mathcal U^\dagger$ yields both boundary
     contractions.
 \end{proof}
@@ -279,7 +279,7 @@ Definition~\ref{def:mpug_group_representation}.
     occurs because the letters in this contraction are unnormalized.
 \end{definition}
 
-\begin{theorem}[The two reductions of the six-tensor network]
+\begin{lemma}[The two reductions of the six-tensor network]
     \label{thm:mpug_adjoint_simple_cross_product}
     \lean{MPOTensor.IsMPUCanonicalFormII.adjointSimpleContraction_cross_mul}
     \leanok
@@ -296,7 +296,7 @@ Definition~\ref{def:mpug_group_representation}.
         s^{ij}\mathcal U^{kl} & =\mathcal U^{ij}s^{kl}.
         \label{eq:mpug_adjoint_simple_cross_product}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpug_simple_canonical_boundary_contractions,
@@ -319,7 +319,7 @@ Definition~\ref{def:mpug_group_representation}.
     Both expressions are therefore equal.
 \end{proof}
 
-\begin{theorem}[The contraction $s$ is a scalar multiple of the MPU tensor]
+\begin{lemma}[The contraction $s$ is a scalar multiple of the MPU tensor]
     \label{thm:mpug_adjoint_simple_scalar}
     \lean{MPOTensor.IsMPUCanonicalFormII.adjointSimpleContraction_eq_smul}
     \leanok
@@ -338,7 +338,7 @@ Definition~\ref{def:mpug_group_representation}.
     % This theorem proves only proportionality. Normalization requires
     % the separate source-factor and trace arguments below; the raw
     % proportionality theorem itself does not evaluate its scalar.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpug_adjoint_simple_cross_product,
@@ -420,7 +420,7 @@ space of $(MN)P$.
 \end{lemma}
 
 \begin{proof}\leanok
-    Existence is Theorem~\ref{thm:mps_reduction_boundary_dressed_uniqueness}.
+    Existence is Lemma~\ref{thm:mps_reduction_boundary_dressed_uniqueness}.
     Uniqueness holds because $VB^{\mathbf w}W=A^{\mathbf w}$ and a normal
     tensor has nonzero words of every multiple of its injectivity length.
     For the last claim, once both exterior parts of a long word
@@ -544,7 +544,7 @@ space of $(MN)P$.
     three steps follow from Lemma~\ref{thm:mpug_reduction_composition}.
 \end{proof}
 
-\begin{theorem}[Characterization of the anomaly three-cochain]
+\begin{lemma}[Characterization of the anomaly three-cochain]
     \label{thm:mpug_anomaly_three_cochain_spec}
     \lean{MPOTensor.GroupFamily.FusionData.isAssociator_omega,
         MPOTensor.GroupFamily.FusionData.eq_omega_of_isAssociator}
@@ -554,7 +554,7 @@ space of $(MN)P$.
     The scalar $\omega(g,h,k)$ exists, is nonzero, and is the only scalar
     with the dressed identity of
     Definition~\ref{def:mpug_anomaly_three_cochain}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     By Lemma~\ref{thm:mpug_fusion_trees_reductions} both fusion trees are
@@ -614,7 +614,7 @@ space of $(MN)P$.
     nonvanishing word gives (\ref{eq:mpug_anomaly_three_cocycle}).
 \end{proof}
 
-\begin{theorem}[Independence of the fusion tensors]
+\begin{lemma}[Independence of the fusion tensors]
     \label{thm:mpug_anomaly_three_cocycle_gauge}
     \lean{MPOTensor.GroupFamily.FusionData.relativeScalar,
         MPOTensor.GroupFamily.FusionData.isDressedProportional_relativeScalar,
@@ -634,7 +634,7 @@ space of $(MN)P$.
     \end{align}
     so the cohomology class of $\omega$ does not depend on the fusion
     tensors, as in (\ref{eq:mpug_fusion_gauge}).
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpug_anomaly_three_cochain_spec,
@@ -643,7 +643,7 @@ space of $(MN)P$.
     left boundaries of the two choices of the tree fusing $g$ with $h$
     first differ by $\beta_{g,h}\beta_{gh,k}$, and those of the tree fusing
     $h$ with $k$ first differ by $\beta_{h,k}\beta_{g,hk}$; comparing with
-    Theorem~\ref{thm:mpug_anomaly_three_cochain_spec} gives the ratio for
+    Lemma~\ref{thm:mpug_anomaly_three_cochain_spec} gives the ratio for
     $\omega'$.
 \end{proof}
 
@@ -674,7 +674,7 @@ space of $(MN)P$.
     \uses{thm:mpug_anomaly_three_cocycle, thm:mpug_anomaly_three_cocycle_gauge,
         thm:mpug_h3_group_cohomology}
     Two choices of fusion tensors give cohomologous three-cocycles by
-    Theorem~\ref{thm:mpug_anomaly_three_cocycle_gauge}, hence equal classes
+    Lemma~\ref{thm:mpug_anomaly_three_cocycle_gauge}, hence equal classes
     by (\ref{eq:mpug_h3_cohomologous}). The second statement is
     (\ref{eq:mpug_h3_trivial}).
 \end{proof}
@@ -699,7 +699,7 @@ space of $(MN)P$.
     \cite[``Periodic boundary condition case'']{GarreRubio2023MPOSym}.
 \end{definition}
 
-\begin{theorem}[The action tensor generates the acted state]
+\begin{lemma}[The action tensor generates the acted state]
     \label{thm:mpug_action_tensor_periodic}
     \lean{MPOTensor.evalWord_actTensor, MPOTensor.mpv_actTensor,
         MPOTensor.mpo_mulVec_mpv}
@@ -713,7 +713,7 @@ space of $(MN)P$.
     \end{align}
     the sum running over words $\tau$ of length $N$. Consequently
     $\ket{V^{(N)}(T\cdot B)}=\rho^{(N)}(T)\ket{V^{(N)}(B)}$ for every $N$.
-\end{theorem}
+\end{lemma}
 
 \begin{center}
     % Formula: \ket{V^{(N)}(T\cdot B)}=\rho^{(N)}(T)\ket{V^{(N)}(B)}, the
@@ -796,7 +796,7 @@ space of $(MN)P$.
 
 \begin{proof}\leanok
     \uses{thm:mpug_action_tensor_periodic, thm:mpug_reduction_composition}
-    By Theorem~\ref{thm:mpug_action_tensor_periodic}, every word of
+    By Lemma~\ref{thm:mpug_action_tensor_periodic}, every word of
     $T\cdot B$ is the sum~(\ref{eq:mpug_action_tensor_word}) of Kronecker
     products of a word of $T$ and a word of $B$ of the same length. A
     boundary of the form $\mathbf 1\otimes V$ passes through the first
@@ -926,7 +926,7 @@ space of $(MN)P$.
     \end{tenkz}
 \end{center}
 
-\begin{theorem}[Characterization of the single-block L-symbol]
+\begin{lemma}[Characterization of the single-block L-symbol]
     \label{thm:mpug_single_block_l_symbol_spec}
     \lean{MPOTensor.GroupFamily.nonempty_actionData,
         MPOTensor.GroupFamily.ActionData.isDressedProportional_lSymbol}
@@ -937,7 +937,7 @@ space of $(MN)P$.
     \cite[lines~1064--1090]{GarreRubio2023MPOSym}, and for every choice of
     them $\alpha_{g,h}B^{\mathbf w}=L_{g,h}\,\varphi_{g,h}B^{\mathbf w}$ for
     all long words $\mathbf w$ of $B=(O_gO_h)\cdot A$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{cor:asym_action_tensors, thm:mpug_action_tensor_reductions,
@@ -951,20 +951,20 @@ space of $(MN)P$.
     relating them against long words.
 \end{proof}
 
-\begin{theorem}[Compatibility of the L-symbol with the anomaly]
+\begin{lemma}[Compatibility of the L-symbol with the anomaly]
     \label{thm:mpug_single_block_l_compatibility}
     \lean{MPOTensor.GroupFamily.ActionData.isCompatible_lSymbol}
     \leanok
     \uses{def:mpug_single_block_l_symbol, thm:mpug_single_block_l_symbol_spec,
         def:mpug_anomaly_three_cochain, def:mpug_l_symbols}
-    In the setting of Theorem~\ref{thm:mpug_single_block_l_symbol_spec},
+    In the setting of Lemma~\ref{thm:mpug_single_block_l_symbol_spec},
     (\ref{eq:mpug_l_compatibility}) for a one-point set of blocks holds for
     all $g,h,k\in G$:
     \begin{align}
         L_{g,hk}L_{h,k}
          & =\omega(g,h,k)\,L_{g,h}L_{gh,k}.
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpug_single_block_l_symbol_spec,
@@ -1004,7 +1004,7 @@ space of $(MN)P$.
     $\alpha_{h,k}$ by $L_{h,k}\varphi_{h,k}$ inside the action of $g$ and
     $\alpha_{g,hk}$ by $L_{g,hk}\varphi_{g,hk}$ along the other, uses only
     replacements that hold against long words by
-    Theorem~\ref{thm:mpug_single_block_l_symbol_spec}, lifted through the
+    Lemma~\ref{thm:mpug_single_block_l_symbol_spec}, lifted through the
     action tensors by Lemma~\ref{thm:mpug_action_tensor_reductions} and
     pulled back along the reductions by
     Lemma~\ref{thm:mpug_dressed_proportionality}. For all long words,
@@ -1043,8 +1043,8 @@ space of $(MN)P$.
         thm:mpug_single_block_l_compatibility,
         thm:mpug_fixed_block_trivializes}
     Action tensors exist by
-    Theorem~\ref{thm:mpug_single_block_l_symbol_spec}, so
-    Theorem~\ref{thm:mpug_single_block_l_compatibility} applies, and Theorem~\ref{thm:mpug_fixed_block_trivializes} for the
+    Lemma~\ref{thm:mpug_single_block_l_symbol_spec}, so
+    Lemma~\ref{thm:mpug_single_block_l_compatibility} applies, and Lemma~\ref{thm:mpug_fixed_block_trivializes} for the
     single block gives $\omega=dL$.
 \end{proof}
 
@@ -1083,7 +1083,7 @@ $N\geq1$.
     Definition~\ref{def:mpug_single_block_l_symbol}.
 \end{definition}
 
-\begin{theorem}[Characterization of the L-symbols of permuted blocks]
+\begin{lemma}[Characterization of the L-symbols of permuted blocks]
     \label{thm:mpug_permuted_block_l_symbol_spec}
     \lean{MPOTensor.GroupFamily.nonempty_blockActionData,
         MPOTensor.GroupFamily.BlockActionData.isDressedProportional_lSymbol,
@@ -1096,12 +1096,12 @@ $N\geq1$.
     identity tensor they are the identification of the bond spaces. For
     every choice of them, $L^x_{g,h}$ relates the two left boundaries against
     all long words of $(O_gO_h)\cdot A_x$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{cor:asym_action_tensors, thm:mpug_action_tensor_reductions,
         thm:mpug_reduction_composition, thm:mpug_dressed_proportionality}
-    As in Theorem~\ref{thm:mpug_single_block_l_symbol_spec}: existence is
+    As in Lemma~\ref{thm:mpug_single_block_l_symbol_spec}: existence is
     Corollary~\ref{cor:asym_action_tensors} applied to $O_g\cdot A_x$ and
     $A_{gx}$, which generate the same vectors. By
     Lemmas~\ref{thm:mpug_action_tensor_reductions}
@@ -1111,7 +1111,7 @@ $N\geq1$.
     nonzero scalar relating them against long words.
 \end{proof}
 
-\begin{theorem}[Compatibility for permuted blocks]
+\begin{lemma}[Compatibility for permuted blocks]
     \label{thm:mpug_permuted_block_l_compatibility}
     \lean{MPOTensor.GroupFamily.BlockActionData.isCompatible_lSymbol,
         MPOTensor.GroupFamily.IsNormalRepresentation.isTrivialGaugeClass_comap_omega_of_fixed}
@@ -1127,7 +1127,7 @@ $N\geq1$.
     which is (\ref{eq:mpug_l_compatibility}). Consequently, as in
     \cite[lines~740--745]{GarreRubio2023MPOSym}, the restriction of
     $\omega$ to any subgroup fixing one block has trivial gauge class.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpug_permuted_block_l_symbol_spec,
@@ -1141,7 +1141,7 @@ $N\geq1$.
     \end{align}
     for the two left boundaries of Definition~\ref{def:mpug_permuted_block_l_symbol},
     so that $\alpha^x_{g,h}=L^x_{g,h}\varphi^x_{g,h}$ against long words of
-    $(O_gO_h)\cdot A_x$ by Theorem~\ref{thm:mpug_permuted_block_l_symbol_spec}.
+    $(O_gO_h)\cdot A_x$ by Lemma~\ref{thm:mpug_permuted_block_l_symbol_spec}.
     The block labels $h(kx)$ and $(hk)x$ are equal, and so are $g(h(kx))$ and
     $(ghk)x$, and the bond spaces of blocks with equal labels are identified,
     so that $V_{g,h(kx)}=V_{g,(hk)x}$. With this identification, the
@@ -1172,7 +1172,7 @@ $N\geq1$.
     \end{align}
     The first factor $\alpha^{kx}_{g,h}$ acts on the block $kx$ reached by
     $O_k$, which is why $L^{kx}_{g,h}$ appears. Replacing, as in the proof of
-    Theorem~\ref{thm:mpug_single_block_l_compatibility}, $\alpha^{kx}_{g,h}$,
+    Lemma~\ref{thm:mpug_single_block_l_compatibility}, $\alpha^{kx}_{g,h}$,
     $\alpha^x_{gh,k}$ and $V^L$ along one route, and
     (\ref{eq:mpug_permuted_l_compat_first_boundary}), $\alpha^x_{h,k}$ and
     $\alpha^x_{g,hk}$ along the other, gives for all long words
@@ -1187,10 +1187,10 @@ $N\geq1$.
     The boundary $V_{ghk,x}(V^R\otimes\mathbf 1)$ belongs to a reduction onto
     the normal tensor $A_{(ghk)x}$, so it is nonzero against arbitrarily long
     words, and the two scalars agree. The second statement is
-    Theorem~\ref{thm:mpug_fixed_block_trivializes}.
+    Lemma~\ref{thm:mpug_fixed_block_trivializes}.
 \end{proof}
 
-\begin{theorem}[The anomaly at an involution]
+\begin{lemma}[The anomaly at an involution]
     \label{thm:mpug_involution_anomaly_ratio}
     \lean{TNLean.Algebra.LSymbol.eq_div_of_isCompatible_of_mul_self_eq_one}
     \leanok
@@ -1202,14 +1202,14 @@ $N\geq1$.
         \omega(g,g,g)
          & =\frac{L^x_{g,g}L^x_{g,e}}{L^{gx}_{g,g}L^x_{e,g}}.
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Setting $h=k=g$ in (\ref{eq:mpug_l_compatibility}) and using $gg=e$
     gives the ratio.
 \end{proof}
 
-\begin{theorem}[The involution ratio from the self-pair and identity L-symbols]
+\begin{lemma}[The involution ratio from the self-pair and identity L-symbols]
     \label{thm:mpug_involution_anomaly_identity_ratio}
     \lean{TNLean.Algebra.LSymbol.div_eq_mul_of_isCompatible_of_mul_self_eq_one}
     \leanok
@@ -1225,14 +1225,14 @@ $N\geq1$.
     identity, this recovers the relation $L_A/L_B=\omega$ of
     \cite[Section~III.C]{GarreRubioSchuch2024DomainWall} in the form
     $L^x_{g,g}/L^{gx}_{g,g}=\omega(g,g,g)$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpug_involution_anomaly_ratio}
     Compatibility at $(g,e,g)$ gives $L^x_{e,g}=\omega(g,e,g)L^{gx}_{g,e}$,
     and at $(g,e,e)$ it gives $L^z_{e,e}=\omega(g,e,e)L^z_{g,e}$ for $z=x$ and
     $z=gx$. Substituting into the formula of
-    Theorem~\ref{thm:mpug_involution_anomaly_ratio} gives the claim.
+    Lemma~\ref{thm:mpug_involution_anomaly_ratio} gives the claim.
 \end{proof}
 
 \subsection{Domain walls between permuted blocks}
@@ -1268,7 +1268,7 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
     from the fixed point \cite{gap:gs24_domain_wall_nondegenerate}.
 \end{definition}
 
-\begin{theorem}[Fractionalization of the symmetry on domain walls]
+\begin{lemma}[Fractionalization of the symmetry on domain walls]
     \label{thm:mpug_domain_wall_pentagon}
     \lean{MPOTensor.GroupFamily.BlockActionData.IsDomainWallAction.mul,
         MPOTensor.GroupFamily.BlockActionData.IsDomainWallAction.mul_eq,
@@ -1293,7 +1293,7 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
          & =\frac{L^x_{g,h}}{L^y_{g,h}}\,B^{gh}_{x,y}.
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpug_permuted_block_l_symbol_spec, thm:mpug_dressed_proportionality}
@@ -1322,7 +1322,7 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
     $gh$ agree.
 \end{proof}
 
-\begin{theorem}[The symmetry on states with two domain walls]
+\begin{lemma}[The symmetry on states with two domain walls]
     \label{thm:mpug_domain_wall_state}
     \lean{MPOTensor.twoWallChain,
         MPOTensor.twoWallMPV,
@@ -1343,7 +1343,7 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
     For $\Z_2$, as in \cite[Section~III.B]{GarreRubioSchuch2024DomainWall},
     this reduces to $U\ket{\psi(A\text{-}B\text{-}A)}
         =c_{AB}c_{BA}\ket{\psi(B\text{-}A\text{-}B)}$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mps_reduction_residual_dimension_bound,
@@ -1357,7 +1357,7 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
     $\ket{\psi(gx\text{-}gy\text{-}gx)}$.
 \end{proof}
 
-\begin{theorem}[A symmetry string over a pair of domain walls]
+\begin{lemma}[A symmetry string over a pair of domain walls]
     \label{thm:mpug_domain_wall_pair}
     \lean{MPOTensor.GroupFamily.BlockActionData.IsDomainWallAction.pair}
     \leanok
@@ -1378,7 +1378,7 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
     \cite[Section~III.F]{GarreRubioSchuch2024DomainWall}, this is the
     tensor-level phase acquired by a symmetry string passing over a pair of
     domain walls.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mps_reduction_residual_dimension_bound,
@@ -1434,7 +1434,7 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
     $j$, and by the tensor of $O_g$ on the sites between them.
 \end{definition}
 
-\begin{theorem}[Domain-wall strings create pairs of domain walls]
+\begin{lemma}[Domain-wall strings create pairs of domain walls]
     \label{thm:mpug_domain_wall_string_creation}
     \lean{MPOTensor.stringOperator_mulVec_wallConfig,
         MPOTensor.stringOperator_mulVec_trace,
@@ -1460,7 +1460,7 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
     with, as in \cite[Section~III.E]{GarreRubioSchuch2024DomainWall}, the
     domain walls $e_{AB}$ at $i$ and $e_{BA}$ at $j$ in the first state and
     $e_{BA}$ at $i$ and $e_{AB}$ at $j$ in the second.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     On a state given by the trace of a chain, the string operator acts by
@@ -1472,7 +1472,7 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
     On $B$ the terms with $\hat B$ act in the same way.
 \end{proof}
 
-\begin{theorem}[Exchange of two domain-wall strings]
+\begin{lemma}[Exchange of two domain-wall strings]
     \label{thm:mpug_domain_wall_string_exchange}
     \lean{MPOTensor.wallConfig_resplit,
         MPOTensor.twoWallChain_append,
@@ -1497,15 +1497,15 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
     in \cite[Section~III.F]{GarreRubioSchuch2024DomainWall} has it on the
     other side. The buffer is the blocked form of the local action
     \cite{gap:gs24_domain_wall_nondegenerate}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Both sides are multiples of the state with the domain walls $e_{AB}$,
     $e_{BA}$, $e_{AB}$, $e_{BA}$ at $i_2,i_1,j_1,j_2$. If the inner string
     acts first, the outer string passes over its two domain walls, and
-    Theorem~\ref{thm:mpug_domain_wall_pair} gives the phase $c_{AB}c_{BA}$.
+    Lemma~\ref{thm:mpug_domain_wall_pair} gives the phase $c_{AB}c_{BA}$.
     If the outer string acts first, the inner string acts on the $B$ region
-    it created, and Theorem~\ref{thm:mpug_domain_wall_string_creation} gives
+    it created, and Lemma~\ref{thm:mpug_domain_wall_string_creation} gives
     no phase.
 \end{proof}
 
@@ -1523,7 +1523,7 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
 \end{lemma}
 
 \begin{proof}\leanok
-    By Theorem~\ref{thm:mpug_domain_wall_state},
+    By Lemma~\ref{thm:mpug_domain_wall_state},
     $U\ket{\psi(A\text{-}B\text{-}A)}=c_{AB}c_{BA}\ket{\psi(B\text{-}A\text{-}B)}$
     and $U\ket{\psi(B\text{-}A\text{-}B)}=c_{BA}c_{AB}\ket{\psi(A\text{-}B\text{-}A)}$
     whenever the regions are long, so $U^2=\mathbf 1$ gives
@@ -1542,7 +1542,7 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
     \leanok
     \uses{thm:mpug_domain_wall_string_exchange,
         lem:mpug_domain_wall_exchange_phase_square}
-    In the setting of Theorem~\ref{thm:mpug_domain_wall_string_exchange},
+    In the setting of Lemma~\ref{thm:mpug_domain_wall_string_exchange},
     suppose that $U=O_g$ satisfies $U^2=\mathbf 1$ on the periodic chain of
     every length. Then the relation of
     \cite[Section~III.F]{GarreRubioSchuch2024DomainWall} holds:
@@ -1557,11 +1557,11 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
     The tensors $A$ and $B$ have left inverses, so their matrices span the
     full matrix algebras and they are normal. Lemma~\ref{lem:mpug_domain_wall_exchange_phase_square}
     gives $(c_{AB}c_{BA})^2=1$. Multiplying the identity of
-    Theorem~\ref{thm:mpug_domain_wall_string_exchange} by $c_{AB}c_{BA}$
+    Lemma~\ref{thm:mpug_domain_wall_string_exchange} by $c_{AB}c_{BA}$
     gives the result.
 \end{proof}
 
-\begin{theorem}[Exchange of two left endpoints of domain-wall strings]
+\begin{lemma}[Exchange of two left endpoints of domain-wall strings]
     \label{thm:mpug_domain_wall_endpoint_exchange}
     \lean{MPOTensor.GroupFamily.BlockActionData.wallString_cross_over_right_mulVec_mpv_apply,
         MPOTensor.GroupFamily.BlockActionData.wallString_cross_over_left_mulVec_mpv_apply,
@@ -1569,7 +1569,7 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
         MPOTensor.GroupFamily.BlockActionData.wallString_mul_wallString_mulVec_mpv_swap_left_near}
     \leanok
     \uses{thm:mpug_domain_wall_string_exchange}
-    In the setting of Theorem~\ref{thm:mpug_domain_wall_string_exchange},
+    In the setting of Lemma~\ref{thm:mpug_domain_wall_string_exchange},
     let $j<i$ and let $r_1\neq r_2$ be two sites to the right of $i$. If the
     regions between the four sites $j,i,r_1,r_2$ are longer than a fixed
     buffer, then
@@ -1584,14 +1584,14 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
     half-chain operators glued with the right endpoints of their strings at
     $r_1$ and $r_2$; the identity of half-chain objects with open legs is not
     formalized \cite{gap:gs24_domain_wall_half_string_gluing}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Every side is a multiple of the state with the domain walls $e_{AB}$,
     $e_{BA}$, $e_{AB}$, $e_{BA}$ at the four sites in increasing order. For
     $r_2<r_1$ the left side is a nested pair whose outer string acts second,
     with phase $c_{AB}c_{BA}$ by
-    Theorem~\ref{thm:mpug_domain_wall_string_exchange}; on the right side the
+    Lemma~\ref{thm:mpug_domain_wall_string_exchange}; on the right side the
     string on $[i,r_1]$ starts in the $B$ region, passes over the domain wall
     $e_{BA}$ at $r_2$ and ends in the $A$ region, so the local action gives
     $c_{BA}$. For $r_1<r_2$ the string on $[j,r_1]$ on the left side passes
@@ -1599,7 +1599,7 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
     side is a nested pair whose inner string acts second, with no phase.
 \end{proof}
 
-\begin{theorem}[Rescaling domain walls]
+\begin{lemma}[Rescaling domain walls]
     \label{thm:mpug_domain_wall_rescaling}
     \lean{MPOTensor.actRect_smul,
         MPOTensor.GroupFamily.BlockActionData.IsDomainWallAction.smul_source,
@@ -1614,7 +1614,7 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
     and $c_{BA}$, then for every $s$ with $s^2=c_{AB}c_{BA}$ the walls
     $e_{AB}$ and $(c_{AB}/s)\,e_{BA}$ are exchanged with both phases equal
     to $s$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     The rectangular action is linear in the domain wall, and rescaling
@@ -1636,7 +1636,7 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
     phase $B^g_{y,z}$.
 \end{definition}
 
-\begin{theorem}[The interchange phase of a family of domain walls]
+\begin{lemma}[The interchange phase of a family of domain walls]
     \label{thm:mpug_domain_wall_interchange}
     \lean{MPOTensor.GroupFamily.BlockActionData.IsDomainWallFamily.mul_eq,
         MPOTensor.GroupFamily.BlockActionData.IsDomainWallFamily.prod_eq_prod_lSymbol,
@@ -1660,12 +1660,12 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
     which is one for normalized L-symbols; the source's middle product runs
     over $1\leq k<n$, and for normalized L-symbols that product is again
     $\bigl(\prod_{k=0}^{n-1}\omega(g,g^k,g)\bigr)^{-1}$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpug_domain_wall_pentagon, thm:mpug_permuted_block_l_compatibility}
     With $\beta_k=B^{g^k}_{gx,x}$,
-    Theorem~\ref{thm:mpug_domain_wall_pentagon} for $(g,g^k)$ gives
+    Lemma~\ref{thm:mpug_domain_wall_pentagon} for $(g,g^k)$ gives
     $B^g_{g^k(gx),g^kx}\,\beta_k=(L^{gx}_{g,g^k}/L^x_{g,g^k})\,\beta_{k+1}$.
     Multiplying over $k<n$ and using $\beta_n=\beta_0$ gives the first
     equality. Compatibility at $(g,g^k,g)$ gives
@@ -1674,7 +1674,7 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
     and both quotients telescope to one over $k<n$.
 \end{proof}
 
-\begin{theorem}[The stabilizer of two blocks acts projectively]
+\begin{lemma}[The stabilizer of two blocks acts projectively]
     \label{thm:mpug_domain_wall_projective}
     \lean{TNLean.Algebra.LSymbol.ratioCocycle,
         TNLean.Algebra.LSymbol.ratioCocycle_isMulCocycle₂,
@@ -1696,17 +1696,17 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
     linear representation. The source states this for the subgroup fixing
     every block \cite[Section~IV.C]{GarreRubioSchuch2024DomainWall}, which is
     contained in $H_{y,z}$; see \cite{gap:gs24_unbroken_subgroup_stabilizer}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpug_domain_wall_pentagon, thm:mpug_permuted_block_l_compatibility}
-    The first identity is Theorem~\ref{thm:mpug_domain_wall_pentagon} with
+    The first identity is Lemma~\ref{thm:mpug_domain_wall_pentagon} with
     $by=y$ and $bz=z$. Dividing the compatibility relations at $y$ and at $z$
     for $(a,b,c)$ with $c\in H_{y,z}$ cancels $\omega(a,b,c)$ and gives the
     two-cocycle equation.
 \end{proof}
 
-\begin{theorem}[Domain walls of an involution detect the anomaly]
+\begin{lemma}[Domain walls of an involution detect the anomaly]
     \label{thm:mpug_domain_wall_involution}
     \lean{MPOTensor.GroupFamily.BlockActionData.IsDomainWallAction.mul_eq_lSymbol_of_mul_self_eq_one,
         MPOTensor.GroupFamily.BlockActionData.IsDomainWallAction.mul_eq_omega_of_mul_self_eq_one,
@@ -1732,22 +1732,22 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
     trivial, as in \cite[Section~III.C]{GarreRubioSchuch2024DomainWall},
     $L_{e,e}=1$ and $\omega(g,e,g)=1$, which yields
     $c_{AB}c_{BA}=L_A/L_B=\omega$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpug_domain_wall_pentagon, thm:mpug_domain_wall_state,
         thm:mpug_permuted_block_l_compatibility,
         thm:mpug_involution_anomaly_identity_ratio}
-    Applying $g$ twice, Theorem~\ref{thm:mpug_domain_wall_pentagon} shows that
+    Applying $g$ twice, Lemma~\ref{thm:mpug_domain_wall_pentagon} shows that
     $g^2=e$ carries $e_{AB}$ to itself with phase
     $b=(L^y_{g,g}/L^x_{g,g})\,c_{BA}c_{AB}\neq0$. The same theorem for $(e,e)$
     gives $b^2=(L^x_{e,e}/L^y_{e,e})\,b$, so $b=L^x_{e,e}/L^y_{e,e}$, which is
     the first equality. The second equality is
-    Theorem~\ref{thm:mpug_involution_anomaly_identity_ratio} for the compatible
-    L-symbols of Theorem~\ref{thm:mpug_permuted_block_l_compatibility}. Its
+    Lemma~\ref{thm:mpug_involution_anomaly_identity_ratio} for the compatible
+    L-symbols of Lemma~\ref{thm:mpug_permuted_block_l_compatibility}. Its
     right-hand side involves only the fusion tensors, and it is invariant
     under their gauge action, so the product is independent of all choices.
-    Finally, by Theorem~\ref{thm:mpug_domain_wall_state},
+    Finally, by Lemma~\ref{thm:mpug_domain_wall_state},
     $U\ket{\psi(A\text{-}B\text{-}A)}=c_{AB}c_{BA}\ket{\psi(B\text{-}A\text{-}B)}
         =\omega(g,g,g)\,\omega(g,e,g)\ket{\psi(B\text{-}A\text{-}B)}$.
 \end{proof}
@@ -1782,7 +1782,7 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
     $U_2^\dagger U_2$ gives both identities.
 \end{proof}
 
-\begin{theorem}[Truncations of an on-site symmetry]
+\begin{lemma}[Truncations of an on-site symmetry]
     \label{thm:mpug_onsite_truncation_commutator}
     \lean{Matrix.onSiteTruncation,
         Matrix.onSiteTruncation_univ,
@@ -1801,7 +1801,7 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
     so, as in \cite[Section~V]{GarreRubioSchuch2024DomainWall} for the
     trivial anomaly of on-site symmetries, the expectation value of the
     commutator on every normalized state is $1$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     The four operators are tensor products over the sites. On a site in both
@@ -1811,7 +1811,7 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
     identity.
 \end{proof}
 
-\begin{theorem}[The detector depends on the endpoints of the truncations]
+\begin{lemma}[The detector depends on the endpoints of the truncations]
     \label{thm:mpug_truncation_detector_endpoint_dependence}
     \lean{Matrix.finKronecker_ite_smul_one,
         Matrix.dressed_onSiteTruncation_conjTranspose_mul_self,
@@ -1829,7 +1829,7 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
     \end{align}
     so the expectation value of the commutator on every normalized state is
     $-1$, although the on-site symmetry $X^{\otimes N}$ has trivial anomaly.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     The four operators are tensor products over the sites. At $j_1$ the
@@ -1849,7 +1849,7 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
     gates not contained in $[i,j]$ leaves both factors on every odd site of
     $[i,j]$ except $j$, which keeps only $ZX$, so the truncation is
     $Z_jX^{\otimes[i,j]}$. For $i_2<i_1<j_1<j_2$ of these parities,
-    Theorem~\ref{thm:mpug_truncation_detector_endpoint_dependence} applies.
+    Lemma~\ref{thm:mpug_truncation_detector_endpoint_dependence} applies.
     The expectation value of the commutator of two circuit truncations on a
     symmetry-broken ground state is therefore not determined by the anomaly,
     and the detection asserted in
@@ -1859,14 +1859,14 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
     is not formalized.
 \end{remark}
 
-\begin{theorem}[Detection for truncations acting as domain-wall strings]
+\begin{lemma}[Detection for truncations acting as domain-wall strings]
     \label{thm:mpug_truncation_detector_wall_strings}
     \lean{MPOTensor.GroupFamily.BlockActionData.star_dotProduct_groupCommutator_mulVec_mpv_of_wallString,
         MPOTensor.GroupFamily.BlockActionData.star_dotProduct_groupCommutator_mulVec_mpv_eq_omega}
     \leanok
     \uses{lem:mpug_truncation_commutator, thm:mpug_domain_wall_string_exchange,
         thm:mpug_domain_wall_involution}
-    In the setting of Theorem~\ref{thm:mpug_domain_wall_string_exchange}, let
+    In the setting of Lemma~\ref{thm:mpug_domain_wall_string_exchange}, let
     $O_1=O^{[i_1,j_1]}$ and $O_2=O^{[i_2,j_2]}$ be domain-wall strings on
     sites $i_2<i_1<j_1<j_2$ whose three inner regions are longer than a fixed
     buffer, and let $U_1$ and $U_2$ be unitary operators with
@@ -1889,23 +1889,23 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
     expected for truncations whose walls on $\ket{\psi_B}$ are the images under
     $U$ of their walls on $\ket{\psi_A}$, the property the source's argument
     uses; that implication is not formalized. By
-    Theorem~\ref{thm:mpug_truncation_detector_endpoint_dependence} some
+    Lemma~\ref{thm:mpug_truncation_detector_endpoint_dependence} some
     restriction of this kind is needed
     \cite{gap:gs24_truncation_detector_endpoint_dependence}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{lem:mpug_truncation_commutator, thm:mpug_domain_wall_string_exchange,
         thm:mpug_domain_wall_involution}
-    By Theorem~\ref{thm:mpug_domain_wall_string_exchange} and the hypotheses,
+    By Lemma~\ref{thm:mpug_domain_wall_string_exchange} and the hypotheses,
     $U_2U_1\ket{\psi_A}=c_{AB}c_{BA}\,U_1U_2\ket{\psi_A}$, and
     Lemma~\ref{lem:mpug_truncation_commutator} gives the first identity. The
-    second is Theorem~\ref{thm:mpug_domain_wall_involution}.
+    second is Lemma~\ref{thm:mpug_domain_wall_involution}.
 \end{proof}
 
 \subsection{Normalization of the first source factor}
 
-\begin{theorem}[The unsimplified first-cut contraction]
+\begin{lemma}[The unsimplified first-cut contraction]
     \label{thm:mpug_raw_first_cut_contraction}
     \lean{MPOTensor.sourceCutM₁_adjointSimpleContraction_raw}
     \leanok
@@ -1919,7 +1919,7 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
         \label{eq:mpug_raw_first_cut_contraction}
     \end{align}
     No positivity, canonical-form, or simplicity hypothesis is needed.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{def:mpu_source_matrix_one, def:mpu_source_weight,
         def:mpug_adjoint_simple_contraction}
@@ -1936,7 +1936,7 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
     defining contraction.
 \end{proof}
 
-\begin{theorem}[The first cut of the adjoint-simple contraction]
+\begin{lemma}[The first cut of the adjoint-simple contraction]
     \label{thm:mpug_first_cut_adjoint_contraction}
     \lean{MPOTensor.IsMPUCanonicalFormII.sourceCutM₁_adjointSimpleContraction}
     \leanok
@@ -1955,7 +1955,7 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
     In the source-factor expansion of
     \cite[lines~1326--1374]{FrancoRubio2025MPUGauging}, this factorization
     requires no simplicity assumption.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpug_raw_first_cut_contraction,
@@ -1971,7 +1971,7 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
     \end{align}
 \end{proof}
 
-\begin{theorem}[The first source Gram matrix is scalar]
+\begin{lemma}[The first source Gram matrix is scalar]
     \label{thm:mpug_source_y_one_scalar_gram}
     \lean{MPOTensor.IsMPUCanonicalFormII.sourceY₁_mul_conjTranspose_eq_smul}
     \leanok
@@ -1986,7 +1986,7 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
     \begin{align}
         Y_1Y_1^\dagger & =\delta I_{d_r}.
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpug_adjoint_simple_scalar,
@@ -1994,9 +1994,9 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
         thm:mpu_source_factor_normalizations,
         thm:mpu_source_factor_right_inverses,
         thm:mpu_source_factorizations}
-    By Theorem~\ref{thm:mpug_adjoint_simple_scalar}, $s=\delta\mathcal U$.
+    By Lemma~\ref{thm:mpug_adjoint_simple_scalar}, $s=\delta\mathcal U$.
     Applying the first cut and
-    Theorem~\ref{thm:mpug_first_cut_adjoint_contraction} gives
+    Lemma~\ref{thm:mpug_first_cut_adjoint_contraction} gives
     \begin{align}
         X_1(Y_1Y_1^\dagger)Y_1 & =\delta X_1Y_1.
     \end{align}
@@ -2005,7 +2005,7 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
     $X_1^\dagger(I_d\otimes\rho)X_1=I_{d_r}$ and $Y_1Z_1=I_{d_r}$.
 \end{proof}
 
-\begin{theorem}[Trace of the first source Gram matrix]
+\begin{lemma}[Trace of the first source Gram matrix]
     \label{thm:mpug_source_y_one_gram_trace}
     \lean{MPOTensor.IsMPUCanonicalFormII.trace_sourceY₁_mul_conjTranspose}
     \leanok
@@ -2020,7 +2020,7 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
     \begin{align}
         \operatorname{tr}(Y_1Y_1^\dagger) & =d.
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpug_source_y_physical_contractions}
@@ -2033,10 +2033,10 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
         \overline{(Y_1)_{r,(\alpha,p)}}(Y_1)_{r,(\alpha,p)}
         =\sum_{p=0}^{d-1}1=d
     \end{align}
-    by Theorem~\ref{thm:mpug_source_y_physical_contractions}.
+    by Lemma~\ref{thm:mpug_source_y_physical_contractions}.
 \end{proof}
 
-\begin{theorem}[Normalization of the first source Gram matrix]
+\begin{lemma}[Normalization of the first source Gram matrix]
     \label{thm:mpug_source_y_one_normalization}
     \lean{MPOTensor.IsMPUCanonicalFormII.sourceY₁_mul_conjTranspose}
     \leanok
@@ -2054,21 +2054,21 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
     \end{align}
     % Source: first identity of eq:MPUnice3. The other three constants
     % and the full prop:MPUsplus are not established by this entry.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpug_source_y_one_scalar_gram,
         thm:mpug_source_y_one_gram_trace}
     Writing $Y_1Y_1^\dagger=\delta I_{d_r}$ by
-    Theorem~\ref{thm:mpug_source_y_one_scalar_gram} and taking traces via
-    Theorem~\ref{thm:mpug_source_y_one_gram_trace} gives $\delta d_r=d$.
+    Lemma~\ref{thm:mpug_source_y_one_scalar_gram} and taking traces via
+    Lemma~\ref{thm:mpug_source_y_one_gram_trace} gives $\delta d_r=d$.
     Since canonical form II gives $d>0$ and hence $d_r\ne0$, dividing as in
     \cite[line~1398]{FrancoRubio2025MPUGauging} yields $\delta=d/d_r$.
 \end{proof}
 
 \subsection{Normalization of the weighted second source factor}
 
-\begin{theorem}[The first cut of the reflected contraction]
+\begin{lemma}[The first cut of the reflected contraction]
     \label{thm:mpug_adjoint_cut_second_gram}
     \lean{MPOTensor.IsMPUCanonicalFormII.sourceCutM₁_adjointSimpleContraction_physicalAdjoint}
     \leanok
@@ -2087,14 +2087,14 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
         M_1(s_\dagger) & =Y_2^\dagger(Y_2WY_2^\dagger)X_2^\dagger,
     \end{align}
     without any simplicity hypothesis.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpug_raw_first_cut_contraction,
         thm:mpu_physical_adjoint_source_cuts,
         thm:mpu_source_factorizations, thm:mpu_source_factor_normalizations,
         def:mpu_weighted_source_factors, def:mpu_source_weight}
-    Theorem~\ref{thm:mpug_raw_first_cut_contraction} gives
+    Lemma~\ref{thm:mpug_raw_first_cut_contraction} gives
     \begin{align}
         M_1(s(A,\rho)) & =M_1(A)M_1(A)^\dagger W^{\mathsf T}M_1(A).
     \end{align}
@@ -2105,7 +2105,7 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
     are those of $\mathcal U$, not newly chosen factors of its adjoint.
 \end{proof}
 
-\begin{theorem}[The weighted second source Gram matrix is scalar]
+\begin{lemma}[The weighted second source Gram matrix is scalar]
     \label{thm:mpug_source_y_two_scalar_gram}
     \lean{MPOTensor.IsMPUCanonicalFormII.sourceY₂_weighted_mul_conjTranspose_eq_smul}
     \leanok
@@ -2120,7 +2120,7 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
     \begin{align}
         Y_2(I_d\otimes\rho)Y_2^\dagger & =\varepsilon I_{d_l}.
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:mpug_adjoint_canonical_boundaries,
@@ -2130,11 +2130,11 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
         thm:mpu_source_factorizations, thm:mpu_source_factor_normalizations,
         thm:mpu_source_factor_right_inverses}
     Passing canonical form II to $\mathcal U^\dagger$ with the same
-    $\rho$, Theorem~\ref{thm:mpug_adjoint_simple_scalar} gives
+    $\rho$, Lemma~\ref{thm:mpug_adjoint_simple_scalar} gives
     $s_\dagger=\varepsilon\mathcal U^\dagger$, since physical adjunction
     is involutive and both required simplicity hypotheses hold.
     Taking the first cut and applying
-    Theorem~\ref{thm:mpug_adjoint_cut_second_gram} gives
+    Lemma~\ref{thm:mpug_adjoint_cut_second_gram} gives
     \begin{align}
         Y_2^\dagger(Y_2(I_d\otimes\rho)Y_2^\dagger)X_2^\dagger
          & =\varepsilon Y_2^\dagger X_2^\dagger.
@@ -2145,7 +2145,7 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
     has not been identified with the scalar for the original tensor.
 \end{proof}
 
-\begin{theorem}[Trace of the weighted second source Gram matrix]
+\begin{lemma}[Trace of the weighted second source Gram matrix]
     \label{thm:mpug_source_y_two_gram_trace}
     \lean{MPOTensor.IsMPUCanonicalFormII.trace_sourceY₂_weighted_mul_conjTranspose}
     \leanok
@@ -2159,7 +2159,7 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
     \begin{align}
         \operatorname{tr}\bigl(Y_2(I_d\otimes\rho)Y_2^\dagger\bigr) & =d.
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpug_source_y_physical_contractions, def:mpu_source_weight}
@@ -2170,10 +2170,10 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
         \overline{(Y_2)_{l,(p,y)}}(Y_2)_{l,(p,x)}\rho_{xy}
         =\sum_{p=0}^{d-1}1=d
     \end{align}
-    by Theorem~\ref{thm:mpug_source_y_physical_contractions} at $q=p$.
+    by Lemma~\ref{thm:mpug_source_y_physical_contractions} at $q=p$.
 \end{proof}
 
-\begin{theorem}[Normalization of the weighted second source Gram matrix]
+\begin{lemma}[Normalization of the weighted second source Gram matrix]
     \label{thm:mpug_source_y_two_normalization}
     \lean{MPOTensor.IsMPUCanonicalFormII.sourceY₂_weighted_mul_conjTranspose}
     \leanok
@@ -2192,21 +2192,21 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
     \end{align}
     % Source: second identity of eq:MPUnice3. Neither physical X
     % normalization nor the full prop:MPUsplus follows from this entry alone.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpug_source_y_two_scalar_gram,
         thm:mpug_source_y_two_gram_trace}
     Writing the Gram matrix as $\varepsilon I_{d_l}$ by
-    Theorem~\ref{thm:mpug_source_y_two_scalar_gram}, its trace is $d$ by
-    Theorem~\ref{thm:mpug_source_y_two_gram_trace}, so $\varepsilon d_l=d$.
+    Lemma~\ref{thm:mpug_source_y_two_scalar_gram}, its trace is $d$ by
+    Lemma~\ref{thm:mpug_source_y_two_gram_trace}, so $\varepsilon d_l=d$.
     As $d>0$, the rank $d_l$ is nonzero, and the trace argument of
     \cite[line~1398]{FrancoRubio2025MPUGauging} gives $\varepsilon=d/d_l$.
 \end{proof}
 
 \subsection{Physical normalizations of the two source X factors}
 
-\begin{theorem}[The canonical one-letter output contraction]
+\begin{lemma}[The canonical one-letter output contraction]
     \label{thm:mpug_one_letter_output_contraction}
     \lean{MPOTensor.IsMPUCanonicalFormII.oneLetter_output_contraction}
     \leanok
@@ -2227,19 +2227,19 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
     \cite[lines~1120--1162 and 1398]{FrancoRubio2025MPUGauging}, the open
     indices are the physical output indices and simplicity of $\mathcal U$
     is not required.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:mpug_adjoint_canonical_boundaries,
         thm:mpug_one_letter_physical_contraction, def:mpdo_physical_adjoint}
-    Applying Theorem~\ref{thm:mpug_one_letter_physical_contraction} to
+    Applying Lemma~\ref{thm:mpug_one_letter_physical_contraction} to
     $\mathcal U^\dagger$ with its canonical presentation carrying the
     same $\rho$, where
     $(\mathcal U^\dagger)^{p,i}_{x\alpha}=\overline{\mathcal U^{i,p}_{x\alpha}}$,
     and taking double conjugates gives the displayed sum.
 \end{proof}
 
-\begin{theorem}[Physical normalization of the first source X factor]
+\begin{lemma}[Physical normalization of the first source X factor]
     \label{thm:mpug_source_x_one_physical_normalization}
     \lean{MPOTensor.IsMPUCanonicalFormII.sourceX₁_physical_contraction}
     \leanok
@@ -2260,27 +2260,27 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
     In this first physical source-factor normalization of
     \cite[lines~1120--1162]{FrancoRubio2025MPUGauging}, the matrix $\rho$
     acts on the virtual legs and the identity acts on the physical space.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpug_source_y_one_normalization,
         thm:mpug_source_y_one_gram_trace, thm:mpug_one_letter_output_contraction,
         thm:mpu_source_factorizations, def:mpu_source_matrix_one}
     Factoring $M_1(\mathcal U)=X_1Y_1$ and applying
-    Theorem~\ref{thm:mpug_source_y_one_normalization} yields
+    Lemma~\ref{thm:mpug_source_y_one_normalization} yields
     \begin{align}
         M_1(\mathcal U)M_1(\mathcal U)^\dagger
          & =\frac{d}{d_r}X_1X_1^\dagger.
     \end{align}
     Multiplying the $((i,\alpha),(j,\beta))$ entry by
     $\rho_{\beta\alpha}$ and summing over $\alpha,\beta$ makes the left-hand
-    side $\delta_{i,j}$ by Theorem~\ref{thm:mpug_one_letter_output_contraction}.
-    The trace identity in Theorem~\ref{thm:mpug_source_y_one_gram_trace}
+    side $\delta_{i,j}$ by Lemma~\ref{thm:mpug_one_letter_output_contraction}.
+    The trace identity in Lemma~\ref{thm:mpug_source_y_one_gram_trace}
     gives $d_r\ne0$, and canonical form II gives $d>0$. Multiplication by
     $d_r/d$ gives the required physical contraction.
 \end{proof}
 
-\begin{theorem}[Physical normalization of the second source X factor]
+\begin{lemma}[Physical normalization of the second source X factor]
     \label{thm:mpug_source_x_two_physical_normalization}
     \lean{MPOTensor.IsMPUCanonicalFormII.sourceX₂_physical_contraction}
     \leanok
@@ -2298,7 +2298,7 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
         (X_2)_{(x,i),l}\overline{(X_2)_{(x,j),l}}
          & =\frac{d_l}{d}\delta_{i,j}.
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpug_source_y_two_normalization,
@@ -2306,19 +2306,19 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
         thm:mpu_source_factorizations, def:mpu_source_matrix_two,
         def:mpu_source_weight}
     With $W=I_d\otimes\rho$, the factorization $M_2(\mathcal U)=X_2Y_2$
-    and Theorem~\ref{thm:mpug_source_y_two_normalization} give
+    and Lemma~\ref{thm:mpug_source_y_two_normalization} give
     \begin{align}
         M_2(\mathcal U)WM_2(\mathcal U)^\dagger
          & =\frac{d}{d_l}X_2X_2^\dagger.
     \end{align}
     Summing the $((x,i),(x,j))$ entry over $x$ and expanding the left-hand
     side with $\rho_{\alpha\beta}=\rho_{\beta\alpha}$ gives
-    $\delta_{i,j}$ by Theorem~\ref{thm:mpug_one_letter_output_contraction}.
-    The trace identity in Theorem~\ref{thm:mpug_source_y_two_gram_trace}
+    $\delta_{i,j}$ by Lemma~\ref{thm:mpug_one_letter_output_contraction}.
+    The trace identity in Lemma~\ref{thm:mpug_source_y_two_gram_trace}
     gives $d_l\ne0$ with $d>0$, so multiplying by $d_l/d$ yields the result.
 \end{proof}
 
-Theorems~\ref{thm:mpug_source_y_one_normalization},
+Lemmas~\ref{thm:mpug_source_y_one_normalization},
 \ref{thm:mpug_source_y_two_normalization},
 \ref{thm:mpug_source_x_one_physical_normalization}, and
 \ref{thm:mpug_source_x_two_physical_normalization} establish all four
@@ -2330,7 +2330,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
 % It does not identify arbitrary separately supplied factors or modify
 % the scope of the earlier raw proportionality theorem.
 
-\begin{theorem}[Comparison of factorizations from one-sided inverses]
+\begin{lemma}[Comparison of factorizations from one-sided inverses]
     \label{thm:mpug_factorization_comparison}
     \lean{Matrix.factorization_comparison_of_one_sided_inverses}
     \leanok
@@ -2357,7 +2357,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     \cite[lines~1052--1066]{FrancoRubio2025MPUGauging}, the intermediate
     index sets $B$ and $\widetilde B$ are independent, and no equality of
     their cardinalities is assumed or concluded.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Associativity and the two inverse identities give
     \begin{align}
@@ -2369,7 +2369,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     $\widetilde Y=KY$.
 \end{proof}
 
-\begin{theorem}[Reciprocal unitary gauges from a Kronecker comparison]
+\begin{lemma}[Reciprocal unitary gauges from a Kronecker comparison]
     \label{thm:mpug_reciprocal_unitary_gauges}
     \lean{Matrix.exists_reciprocal_unitary_gauges_of_comparison}
     \leanok
@@ -2393,11 +2393,11 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     $\delta_1=\delta^{-1}$ and $\delta_2=\delta$, and hence
     $\delta_1\delta_2=1$.
     % Source anchor: arXiv:2502.20257, Lemma lem:deco, lines 1052--1066.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpug_unitary_kronecker_factors}
-    Applying Theorem~\ref{thm:mpug_unitary_kronecker_factors} to
+    Applying Lemma~\ref{thm:mpug_unitary_kronecker_factors} to
     $K_1\otimes K_2$ gives $\delta>0$ and unitary matrices $U_1,U_2$ with
     $K_1=\delta U_1$ and $K_2=\delta^{-1}U_2$. Setting
     $W_i=U_i^\dagger$ and substituting into
@@ -2408,7 +2408,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
 
 \subsection{Uniqueness of the source decompositions}
 
-\begin{theorem}[Transformation of the source contraction]
+\begin{lemma}[Transformation of the source contraction]
     \label{thm:mpug_source_contraction_transport}
     \lean{MPOTensor.sourceU_contraction_transport}
     \leanok
@@ -2432,7 +2432,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     \end{align}
     Here $0\leq l<\ell$, $0\leq r'<r$, and $0\leq p,q<d$.
     Then $\widetilde u=(K_2\otimes K_1)u$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Substituting $\widetilde Y_i=K_iY_i$ into
@@ -2441,7 +2441,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     $(K_2)_{l,l'}(K_1)_{r',r''}$, the corresponding entry of $K_2\otimes K_1$.
 \end{proof}
 
-\begin{theorem}[Reciprocal unitary gauges for the source decompositions]
+\begin{lemma}[Reciprocal unitary gauges for the source decompositions]
     \label{thm:mpug_source_decomposition_gauges}
     \lean{MPOTensor.exists_reciprocal_unitary_source_gauges}
     \leanok
@@ -2486,7 +2486,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     % Source lem:deco, issue #7315. No clause (c), weighted normalization,
     % canonical-form-II, density, or physical-adjoint hypothesis is used.
     % This result does not assert completion of the separate #7313 assembly.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpug_factorization_comparison,
@@ -2496,14 +2496,14 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     equalities, and $\delta^{-1}\delta=1$.
     Suppose now that $d>0$. Since $u$ is an isometry,
     $\ell r\geq d^2>0$; hence both
-    source ranks are positive. Theorem~\ref{thm:mpug_factorization_comparison}
+    source ranks are positive. Lemma~\ref{thm:mpug_factorization_comparison}
     gives $K_i=L_iX_i=\widetilde Y_iR_i$ with
     $X_i=\widetilde X_iK_i$ and $\widetilde Y_i=K_iY_i$.
-    Theorem~\ref{thm:mpug_source_contraction_transport} yields
+    Lemma~\ref{thm:mpug_source_contraction_transport} yields
     $\widetilde u=(K_2\otimes K_1)u$. Therefore
     $K_2\otimes K_1=\widetilde u u^\dagger$ is unitary.
     Interchanging the two tensor factors makes $K_1\otimes K_2$ unitary, and
-    Theorem~\ref{thm:mpug_reciprocal_unitary_gauges} then gives
+    Lemma~\ref{thm:mpug_reciprocal_unitary_gauges} then gives
     (\ref{eq:mpug_source_decomposition_gauges}). In particular, if
     $K_1=\delta V_1$ and $K_2=\delta^{-1}V_2$ with $V_i$ unitary,
     the required orientation is $W_i=V_i^\dagger$.
@@ -2514,7 +2514,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     \lean{MPOTensor.exists_unitary_source_gauges_of_isometric_second_factors}
     \leanok
     \uses{thm:mpug_source_decomposition_gauges}
-    Under the hypotheses of Theorem~\ref{thm:mpug_source_decomposition_gauges},
+    Under the hypotheses of Lemma~\ref{thm:mpug_source_decomposition_gauges},
     suppose in addition that
     \begin{align}
         X_2^\dagger X_2 & =I_\ell,
@@ -2535,7 +2535,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     \uses{thm:mpug_source_decomposition_gauges}
     If $d=0$, all four equalities have an empty physical index and hold
     with identity gauges. If $d>0$, unitarity of $u$ gives $r\ell=d^2>0$,
-    so $\ell>0$. Theorem~\ref{thm:mpug_source_decomposition_gauges} gives
+    so $\ell>0$. Lemma~\ref{thm:mpug_source_decomposition_gauges} gives
     $\widetilde X_2=\delta X_2W_2$ with $\delta>0$. The two isometry
     identities and unitarity of $W_2$ imply
     $I_\ell=\delta^2I_\ell$. Since $\ell>0$, a diagonal entry gives
@@ -2566,7 +2566,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     calculation.
 \end{definition}
 
-\begin{theorem}[Identity, inverse, composition, and right-reference laws]
+\begin{lemma}[Identity, inverse, composition, and right-reference laws]
     \label{thm:mpug_unitary_factorization_comparison_laws}
     \lean{Matrix.unitaryFactorizationComparison_self,
         Matrix.unitaryFactorizationComparison_inv,
@@ -2600,7 +2600,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     \end{align}
     % Source anchor: arXiv:2502.20257, Corollary after Proposition 3,
     % line 2817 (right reference and composition).
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:mpug_unitary_factorization_comparison}
@@ -2629,7 +2629,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     \end{align}
 \end{definition}
 
-\begin{theorem}[Composition of the Gauss leg action]
+\begin{lemma}[Composition of the Gauss leg action]
     \label{thm:mpug_gauss_leg_action_mul}
     \lean{TNLean.Algebra.gaussLegAction_one,
         TNLean.Algebra.gaussLegAction_mul}
@@ -2642,7 +2642,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
         T_g\circ T_h & =T_{gh}.
         \label{eq:mpug_gauss_leg_action_mul}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:mpug_gauss_leg_action}
@@ -2679,7 +2679,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     vanishes.
 \end{definition}
 
-\begin{theorem}[Gauss operators form a unitary representation]
+\begin{lemma}[Gauss operators form a unitary representation]
     \label{thm:mpug_gauss_representation}
     \lean{TNLean.Algebra.gaussOperator_one,
         TNLean.Algebra.gaussOperator_mul,
@@ -2707,7 +2707,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     representation part of the local Gauss-law proposition in
     \cite[lines~3380--3387]{FrancoRubio2025MPUGauging}; invariance of the
     gauged tensor is a separate assertion and is not included here.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpug_unitary_factorization_comparison_laws,
@@ -2749,7 +2749,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     $(j,j+1)$ nor asserts invariance of the gauged matrix product state.
 \end{definition}
 
-\begin{theorem}[The local Gauss average is a projection]
+\begin{lemma}[The local Gauss average is a projection]
     \label{thm:mpug_gauss_projector_projection}
     \lean{TNLean.Algebra.isStarProjection_gaussProjector}
     \leanok
@@ -2760,7 +2760,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
         P_G(R)^2       & =P_G(R), \\
         P_G(R)^\dagger & =P_G(R).
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpug_finite_group_unitary_average_projection,
@@ -2807,7 +2807,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     % Source anchor: arXiv:2502.20257, eq:gauge_projs.
 \end{definition}
 
-\begin{theorem}[The placed Gauss projector is a projection]
+\begin{lemma}[The placed Gauss projector is a projection]
     \label{thm:mpug_placed_gauss_projector_projection}
     \lean{MPOTensor.isStarProjection_gaussWindowProjector,
         MPOTensor.isStarProjection_placedGaussProjector}
@@ -2820,7 +2820,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
         P_j(R)^2       & =P_j(R), \\
         P_j(R)^\dagger & =P_j(R).
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpug_gauss_projector_projection,
@@ -2839,7 +2839,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
          & =U_\kappa P_G(R)U_\kappa^{-1}.
         \label{eq:mpug_gauss_reindex_conjugation}
     \end{align}
-    Since $U_\kappa^{-1}=U_\kappa^\dagger$, Theorem~\ref{thm:mpug_gauss_projector_projection}
+    Since $U_\kappa^{-1}=U_\kappa^\dagger$, Lemma~\ref{thm:mpug_gauss_projector_projection}
     and~(\ref{eq:mpug_gauss_reindex_conjugation}) give
     \begin{align}
         \widetilde P_G(R)^2
@@ -2853,7 +2853,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     \end{align}
     Let $V_j$ be the permutation unitary that sends a chain configuration to
     its restriction to the cyclic window $(j,j+1)$ followed by its restriction
-    to the complement. By Theorem~\ref{thm:mpdo_cyclic_local_embedding_reindex},
+    to the complement. By Lemma~\ref{thm:mpdo_cyclic_local_embedding_reindex},
     \begin{align}
         V_jP_j(R)V_j^{-1}
          & =\widetilde P_G(R)\otimes\Id_{\mathrm{comp}}.
@@ -2896,14 +2896,14 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     % Source anchors: arXiv:2502.20257, lines 4327--4335 and line 5198.
 \end{definition}
 
-\begin{theorem}[Membership in the common fixed subspace]
+\begin{lemma}[Membership in the common fixed subspace]
     \label{thm:mpug_mem_common_fixed_subspace}
     \lean{LinearMap.mem_commonFixedSubmodule_iff}
     \leanok
     \uses{def:mpug_common_fixed_subspace}
     A vector $\psi\in\mathcal H$ belongs to $\mathcal V(P)$ if and only if
     $P_j\psi=\psi$ for every $j\in J$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:mpug_common_fixed_subspace}
@@ -2912,14 +2912,14 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     to $P_j\psi=\psi$.
 \end{proof}
 
-\begin{theorem}[Nonzero-vector lower bound]
+\begin{lemma}[Nonzero-vector lower bound]
     \label{thm:mpug_common_fixed_subspace_finrank}
     \lean{LinearMap.one_le_finrank_commonFixedSubmodule}
     \leanok
     \uses{def:mpug_common_fixed_subspace}
     If $\mathcal H$ is finite-dimensional, $\psi\in\mathcal V(P)$, and
     $\psi\neq0$, then $1\leq\dim_{\C}\mathcal V(P)$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     The common fixed subspace is nonzero because it contains $\psi$, so its
@@ -2973,7 +2973,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     extension of $D_{a,b}$ is non-unique.
 \end{definition}
 
-\begin{theorem}[Existence of full unitary completions]
+\begin{lemma}[Existence of full unitary completions]
     \label{thm:mpug_completion_class_nonempty}
     \lean{TNLean.Algebra.DefectMaps.completionClass_nonempty,
         TNLean.Algebra.DefectMaps.exists_completion}
@@ -3003,7 +3003,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     % lines 4215--4326. The theorem does not assert that the defect data arise
     % from locally orthogonal MPS blocks or action tensors; their construction
     % remains in issues #7349, #7350, and #7569.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:mpug_defect_maps, def:mpug_completion_class}
@@ -3014,7 +3014,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     (\ref{eq:mpug_completion_exists}), hence a member of $\mathfrak C(D)$.
 \end{proof}
 
-\begin{theorem}[Comparison identity for a completion]
+\begin{lemma}[Comparison identity for a completion]
     \label{thm:mpug_completion_transport}
     \lean{TNLean.Algebra.DefectMaps.IsCompletion.mulVec_eq_prescribed,
         TNLean.Algebra.DefectMaps.IsCompletion.mulVec_eq_mulVec,
@@ -3042,7 +3042,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
         \lambda_{a,b}^{c,d}\ket{\xi} & =\ket{\eta}.
         \label{eq:mpug_completion_transport}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:mpug_completion_class,
@@ -3081,7 +3081,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     on that window and agrees with $\alpha$ at every other site.
 \end{definition}
 
-\begin{theorem}[Composition of the label action]
+\begin{lemma}[Composition of the label action]
     \label{thm:mpug_chain_label_action_mul}
     \lean{MPOTensor.chainLabelAction_one,
         MPOTensor.chainLabelAction_chainLabelAction,
@@ -3098,7 +3098,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     \end{align}
     In particular $T_{j,g}$ is a bijection of gauge-label configurations with
     inverse $T_{j,g^{-1}}$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:mpug_chain_label_action}
@@ -3138,7 +3138,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     $(a,b)$ to $T_g(a,b)$ is $U_{T_g(a,b)}^\dagger U_{a,b}$.
 \end{definition}
 
-\begin{theorem}[The placed projector is the average of the placed Gauss operators]
+\begin{lemma}[The placed projector is the average of the placed Gauss operators]
     \label{thm:mpug_placed_gauss_projector_average}
     \lean{MPOTensor.placedGaussProjector_eq_average}
     \leanok
@@ -3150,7 +3150,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
          & =\frac{1}{|G|}\sum_{g\in G}\widetilde{\mathcal G}^{j,j+1}_g(R).
         \label{eq:mpug_placed_gauss_projector_average}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:mpug_gauss_projector, def:mpug_placed_gauss_operator}
@@ -3208,7 +3208,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     for every $\alpha$, every window $(j,j+1)$, and every $g\in G$.
 \end{definition}
 
-\begin{theorem}[Universal invariant vector]
+\begin{lemma}[Universal invariant vector]
     \label{thm:mpug_universal_invariant_vector}
     \lean{MPOTensor.embedLocalOperator_mulVec_replaceWindow,
         MPOTensor.placedGaussOperator_mulVec_gaugedVector,
@@ -3233,7 +3233,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
          & =\ket{\Psi_{\mathrm{gauged}}}.
         \label{eq:mpug_universal_invariant_proj}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{center}
     % Formula: \widetilde{\mathcal G}^{j,j+1}_g(R)\ket{\Psi_{\mathrm{gauged}}}
@@ -3314,7 +3314,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     modified projectors on neighbouring windows need not commute.
 \end{definition}
 
-\begin{theorem}[The gauged vector spans at least one dimension]
+\begin{lemma}[The gauged vector spans at least one dimension]
     \label{thm:mpug_gauge_invariant_subspace_finrank}
     \lean{MPOTensor.gaugedVector_mem_gaugeInvariantSubspace,
         MPOTensor.one_le_finrank_gaugeInvariantSubspace}
@@ -3337,14 +3337,14 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     $\dim_{\C}\mathcal V_N(R)$ grows with $N$, neither the minimum nor the
     maximum of $\dim_{\C}\mathcal V_N(R)$ over $\mathfrak C(D)$ is asserted
     here.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpug_universal_invariant_vector,
         thm:mpug_mem_common_fixed_subspace,
         thm:mpug_common_fixed_subspace_finrank}
     Membership is the projector identity in
-    Theorem~\ref{thm:mpug_universal_invariant_vector} at every window. A
+    Lemma~\ref{thm:mpug_universal_invariant_vector} at every window. A
     nonzero member of a subspace forces its dimension to be at least one.
 \end{proof}
 
@@ -3415,7 +3415,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     is the change of $\omega$ induced by (\ref{eq:mpug_fusion_gauge}).
 \end{definition}
 
-\begin{theorem}[Identity and composition of fusion gauges]
+\begin{lemma}[Identity and composition of fusion gauges]
     \label{thm:mpug_gauge_action}
     \lean{TNLean.Algebra.ScalarThreeCochain.fusionGauge_one,
         TNLean.Algebra.ScalarThreeCochain.fusionGauge_comp}
@@ -3431,7 +3431,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
                                         & =(\beta\gamma)\mathbin{\triangleright}\omega.
         \label{eq:mpug_gauge_composition}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:mpug_fusion_gauge}
@@ -3442,14 +3442,14 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     (\ref{eq:mpug_gauge_composition}).
 \end{proof}
 
-\begin{theorem}[A three-coboundary is a three-cocycle]
+\begin{lemma}[A three-coboundary is a three-cocycle]
     \label{thm:mpug_coboundary_cocycle}
     \lean{TNLean.Algebra.ScalarThreeCochain.isCocycle_coboundary}
     \leanok
     \uses{def:mpug_three_cocycle, def:mpug_fusion_gauge}
     For every scalar $2$-cochain $\beta$, the cochain $d\beta$ satisfies
     (\ref{eq:mpug_three_cocycle}).
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:mpug_three_cocycle, def:mpug_fusion_gauge}
@@ -3464,7 +3464,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     \end{align}
 \end{proof}
 
-\begin{theorem}[Products and fusion gauges preserve three-cocycles]
+\begin{lemma}[Products and fusion gauges preserve three-cocycles]
     \label{thm:mpug_gauge_preserves_cocycle}
     \lean{TNLean.Algebra.ScalarThreeCochain.IsCocycle.mul,
         TNLean.Algebra.ScalarThreeCochain.IsCocycle.fusionGauge}
@@ -3474,18 +3474,18 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     $3$-cocycle. Consequently, if $\omega$ satisfies
     (\ref{eq:mpug_three_cocycle}), then so does
     $\beta\mathbin{\triangleright}\omega$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:mpug_three_cocycle, thm:mpug_coboundary_cocycle}
     Multiplying the two instances of (\ref{eq:mpug_three_cocycle}) and
     reordering their factors in $\C^\times$ shows that the pointwise product of
     two $3$-cocycles is a $3$-cocycle. Applying this product identity to
-    $(d\beta)\omega$, together with Theorem~\ref{thm:mpug_coboundary_cocycle}
+    $(d\beta)\omega$, together with Lemma~\ref{thm:mpug_coboundary_cocycle}
     for $d\beta$, yields the second claim.
 \end{proof}
 
-\begin{theorem}[Normalization under a fusion gauge]
+\begin{lemma}[Normalization under a fusion gauge]
     \label{thm:mpug_gauge_preserves_normalization}
     \lean{TNLean.Algebra.ScalarThreeCochain.isNormalized_coboundary_iff,
         TNLean.Algebra.ScalarThreeCochain.isNormalized_coboundary,
@@ -3502,7 +3502,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     In particular, a normalized scalar $2$-cochain has normalized
     $3$-coboundary. Hence $\beta\mathbin{\triangleright}\omega$ is normalized
     whenever both $\beta$ and $\omega$ are normalized.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:mpug_scalar_cochains, def:mpug_fusion_gauge}
@@ -3534,7 +3534,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     $2$-cochain $\beta$.
 \end{definition}
 
-\begin{theorem}[Cohomologous-to is an equivalence relation]
+\begin{lemma}[Cohomologous-to is an equivalence relation]
     \label{thm:mpug_cohomologous_to_equivalence}
     \lean{TNLean.Algebra.ScalarThreeCochain.CohomologousTo.refl,
         TNLean.Algebra.ScalarThreeCochain.CohomologousTo.symm,
@@ -3543,7 +3543,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     \leanok
     \uses{def:mpug_cohomologous_to, thm:mpug_gauge_action}
     Cohomologous-to is reflexive, symmetric, and transitive.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpug_gauge_action}
@@ -3581,7 +3581,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     \leanok
     \uses{def:mpug_three_cocycle, thm:mpug_h2_group_cohomology_comparison}
     Giving $\C^\times$ the trivial $G$-action and writing it additively as in
-    Theorem~\ref{thm:mpug_h2_group_cohomology_comparison}, a scalar
+    Lemma~\ref{thm:mpug_h2_group_cohomology_comparison}, a scalar
     $n$-cochain for $n=2,3$ is an inhomogeneous $n$-cochain
     $G^n\to\C^\times$ of this representation, and conversely. Under this
     identification a scalar $3$-cocycle is an inhomogeneous $3$-cocycle, and
@@ -3670,7 +3670,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     \end{align}
 \end{definition}
 
-\begin{theorem}[Gauge invariance of the cyclic invariant]
+\begin{lemma}[Gauge invariance of the cyclic invariant]
     \label{thm:mpug_cyclic_invariant_gauge}
     \lean{TNLean.Algebra.ScalarThreeCochain.cyclicInvariant_coboundary,
         TNLean.Algebra.ScalarThreeCochain.cyclicInvariant_fusionGauge,
@@ -3690,7 +3690,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     cyclic invariant different from $1$ shows that the gauge class of
     $\omega$ is nontrivial. No normalization of $\beta$ or $\omega$ is
     assumed.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:mpug_cyclic_invariant, def:mpug_fusion_gauge,
@@ -3720,7 +3720,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     $(f^*\omega)(a,b,c)=\omega(f(a),f(b),f(c))$.
 \end{definition}
 
-\begin{theorem}[Restriction preserves cocycles and gauge classes]
+\begin{lemma}[Restriction preserves cocycles and gauge classes]
     \label{thm:mpug_cochain_restriction}
     \lean{TNLean.Algebra.ScalarThreeCochain.IsCocycle.comap,
         TNLean.Algebra.ScalarThreeCochain.comap_fusionGauge,
@@ -3736,7 +3736,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     $(f^*\beta)(a,b)=\beta(f(a),f(b))$. Hence it preserves the relation of
     being cohomologous and sends cochains with trivial gauge class to
     cochains with trivial gauge class.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:mpug_cochain_restriction, def:mpug_three_cocycle,
@@ -3780,7 +3780,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     $O_{f(ab)}$ through the equality $f(a)f(b)=f(ab)$.
 \end{definition}
 
-\begin{theorem}[Anomaly three-cochains of restrictions]
+\begin{lemma}[Anomaly three-cochains of restrictions]
     \label{thm:mpug_family_restriction_omega}
     \lean{MPOTensor.GroupFamily.IsNormalRepresentation.comap,
         MPOTensor.GroupFamily.castMat_comap,
@@ -3802,7 +3802,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     \begin{align}
         I_{f(a),n}(\omega) & =I_{a,n}(\omega_H).
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:mpug_family_restriction, thm:mpug_anomaly_three_cochain_spec,
@@ -3813,17 +3813,17 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     $(f(a),f(b),f(c))$, followed by one identification of the bond space of
     $O_{f(a)f(b)f(c)}$ with that of $O_{f(abc)}$. Left multiplication by this
     permutation matrix preserves the dressed identity, so
-    Theorem~\ref{thm:mpug_anomaly_three_cochain_spec} gives
+    Lemma~\ref{thm:mpug_anomaly_three_cochain_spec} gives
     $\omega_H(a,b,c)=\omega(f(a),f(b),f(c))$ for the restricted fusion
     tensors. For any other choice of fusion tensors of the restricted family,
-    Theorem~\ref{thm:mpug_anomaly_three_cocycle_gauge} makes the two
+    Lemma~\ref{thm:mpug_anomaly_three_cocycle_gauge} makes the two
     three-cochains cohomologous, and
-    Theorem~\ref{thm:mpug_cyclic_invariant_gauge} makes their cyclic
+    Lemma~\ref{thm:mpug_cyclic_invariant_gauge} makes their cyclic
     invariants at $a$ equal. Finally $I_{a,n}(f^*\omega)=I_{f(a),n}(\omega)$
     because $f(a^k)=f(a)^k$.
 \end{proof}
 
-\begin{theorem}[Values of the anomaly three-cochain from finitely many identities]%
+\begin{lemma}[Values of the anomaly three-cochain from finitely many identities]%
     \label{thm:mpug_omega_integer_certificate}
     \lean{MPSTensor.isDressedProportional_complexOfInt,
         MPSTensor.isDressedProportional_complexOfInt_of_mem,
@@ -3844,7 +3844,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     that triple; and a family of bond-one tensors whose stacked products
     $O_gO_h$ equal $O_{gh}$ has, with all fusion tensors equal to one, the
     constant three-cochain one.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:mpug_anomaly_three_cochain, thm:mpug_anomaly_three_cochain_spec}
@@ -3852,7 +3852,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     $RT^aT^b=zA^aLT^b=A^aRT^b$. Induction on the word gives the dressed
     identity, and the entrywise image in $\C$ preserves all products. When
     the two fusion trees coincide, the scalar $1$ satisfies the dressed
-    identity, so Theorem~\ref{thm:mpug_anomaly_three_cochain_spec} gives
+    identity, so Lemma~\ref{thm:mpug_anomaly_three_cochain_spec} gives
     $\omega=1$. For bond dimension one, both fusion trees are products of
     one-by-one identity matrices and identifications of one-dimensional
     spaces, so they coincide.
@@ -3905,7 +3905,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     %   the paper's own at lines 5908 and 5988--5990.
 \end{definition}
 
-\begin{theorem}[Identity and composition of joint scalar gauges]
+\begin{lemma}[Identity and composition of joint scalar gauges]
     \label{thm:mpug_l_gauge_composition}
     \lean{TNLean.Algebra.LSymbol.gauge_one,
         TNLean.Algebra.LSymbol.gauge_comp}
@@ -3920,7 +3920,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
         \mathbin{\triangleright}L.
         \label{eq:mpug_l_gauge_composition}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:mpug_l_gauge}
@@ -3990,7 +3990,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     % immediately after eq:zetas_in_gauge.
 \end{definition}
 
-\begin{theorem}[Joint scalar gauges preserve L-symbol compatibility]
+\begin{lemma}[Joint scalar gauges preserve L-symbol compatibility]
     \label{thm:mpug_l_gauge_preservation}
     \lean{TNLean.Algebra.LSymbol.IsCompatible.gauge,
         TNLean.Algebra.LSymbol.gauge_apply_right_one,
@@ -4018,7 +4018,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     $\beta_{g,e}L^x_{g,e}=\gamma^x_e$ and
     $\beta_{e,g}L^x_{e,g}=\gamma^{g x}_e$ for all $x$ and $g$. In particular,
     normalized $\beta$, $\gamma$, and $L$ give a normalized gauged $L$-symbol.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:mpug_fusion_gauge, def:mpug_l_symbols, def:mpug_l_gauge,
@@ -4074,7 +4074,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     of the phase of $u$, with $|u|$ viewed as an element of $\C^\times$.
 \end{definition}
 
-\begin{theorem}[Unimodular square roots of phases]
+\begin{lemma}[Unimodular square roots of phases]
     \label{thm:mpug_phase_root}
     \lean{TNLean.Algebra.star_phaseRoot,
         TNLean.Algebra.phaseRoot_mul_phaseRoot_mul_modulusUnit,
@@ -4084,7 +4084,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     For $u\in\C^\times$, $\overline{s_u}=s_u^{-1}$ and $u=s_u^2\,|u|$. If
     $w\in\C^\times$ and $\overline w=p\,w$ for a positive real number $p$,
     then $p=1$ and $w$ is real.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     The first two claims are $\overline{e^{i\theta}}=e^{-i\theta}$ and the
@@ -4092,7 +4092,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     $\overline w=p\,w$ gives $p=1$.
 \end{proof}
 
-\begin{theorem}[Time reversal makes the anomaly real]
+\begin{lemma}[Time reversal makes the anomaly real]
     \label{thm:mpug_time_reversal_real_anomaly}
     \lean{TNLean.Algebra.ScalarThreeCochain.coboundary_mul,
         TNLean.Algebra.ScalarThreeCochain.star_fusionGauge,
@@ -4114,7 +4114,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     can be gauge transformed to a real number; no finiteness of $G$ is
     needed.
     % Source anchor: arXiv:2203.12563, lines 873--891.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:mpug_fusion_gauge, thm:mpug_phase_root}
@@ -4128,7 +4128,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
         =N\mathbin{\triangleright}(s\mathbin{\triangleright}\omega).
     \end{align}
     The values of $dN$ are positive real numbers, so
-    Theorem~\ref{thm:mpug_phase_root} gives $dN=1$ and
+    Lemma~\ref{thm:mpug_phase_root} gives $dN=1$ and
     $\overline{s\mathbin{\triangleright}\omega}
         =s\mathbin{\triangleright}\omega$. If
     $\omega=\beta\mathbin{\triangleright}\overline\omega$, conjugating gives
@@ -4136,7 +4136,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     first part applies.
 \end{proof}
 
-\begin{theorem}[Time reversal makes the anomaly and the L-symbols jointly real]
+\begin{lemma}[Time reversal makes the anomaly and the L-symbols jointly real]
     \label{thm:mpug_time_reversal_real_l_symbols}
     \lean{TNLean.Algebra.LSymbol.star_gauge,
         TNLean.Algebra.LSymbol.gauge_modulusUnit_pos,
@@ -4158,22 +4158,22 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     with the same $\beta$ in both relations, is the gauge-consistent pair
     and is assumed rather than derived from time reversal.
     % Source anchor: arXiv:2203.12563, lines 873--891 and 935--957.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:mpug_l_gauge, thm:mpug_l_gauge_composition,
         thm:mpug_time_reversal_real_anomaly, thm:mpug_phase_root}
-    The claim for $\omega$ is Theorem~\ref{thm:mpug_time_reversal_real_anomaly}.
+    The claim for $\omega$ is Lemma~\ref{thm:mpug_time_reversal_real_anomaly}.
     For $L$, writing $\beta=s^2N$ and $\gamma=t^2M$ with
     $N_{g,h}=|\beta_{g,h}|$ and $M^x_g=|\gamma^x_g|$ gives, as in that proof,
     $\overline{(s,t)\mathbin{\triangleright}L}
         =(N,M)\mathbin{\triangleright}((s,t)\mathbin{\triangleright}L)$, whose
     prefactor
     $M^x_{gh}N_{g,h}/(M^{h x}_gM^x_h)$ is a positive real number, hence
-    equal to one by Theorem~\ref{thm:mpug_phase_root}.
+    equal to one by Lemma~\ref{thm:mpug_phase_root}.
 \end{proof}
 
-\begin{theorem}[The L-symbol relation imposed by time reversal]
+\begin{lemma}[The L-symbol relation imposed by time reversal]
     \label{thm:mpug_time_reversal_l_symbol_relation}
     \lean{TNLean.Algebra.LSymbol.star_apply_eq_gauge_one_apply,
         TNLean.Algebra.LSymbol.phase_sq_eq_of_gauge_eq_star}
@@ -4209,7 +4209,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     % Source anchor: arXiv:2203.12563, lines 935--957 (TRSF1group at
     %   line 954).
     % Local fix: docs/paper-gaps/glm23_time_reversal_l_symbol.tex.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:mpug_l_gauge}
@@ -4222,7 +4222,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     $|L|^2=\overline LL=cL^2$ and $(L/|L|)^2=c^{-1}$.
 \end{proof}
 
-\begin{theorem}[A block fixed by a subgroup trivializes the restricted three-cocycle]
+\begin{lemma}[A block fixed by a subgroup trivializes the restricted three-cocycle]
     \label{thm:mpug_fixed_block_trivializes}
     \lean{TNLean.Algebra.LSymbol.isTrivialGaugeClass_comap_of_isCompatible,
         TNLean.Algebra.LSymbol.isTrivialGaugeClass_of_isCompatible_of_forall_smul_eq}
@@ -4239,7 +4239,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     invariant trivializes the three-cocycle and for the statement of
     \cite[line~1925]{FrancoRubio2025MPUGauging} that a single invariant block
     reduces (\ref{eq:mpug_l_compatibility}) to the three-coboundary condition.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:mpug_l_symbols, def:mpug_fusion_gauge,
@@ -4256,7 +4256,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     of $G$, taking $f$ to be the identity completes the proof.
 \end{proof}
 
-\begin{theorem}[Action of the restricted scalar gauge group]
+\begin{lemma}[Action of the restricted scalar gauge group]
     \label{thm:mpug_restricted_scalar_gauge_action}
     \lean{TNLean.Algebra.ScalarCocycle.isInverseNormalized_one,
         TNLean.Algebra.ScalarCocycle.IsInverseNormalized.mul,
@@ -4299,7 +4299,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     % The theorem does not choose fusion tensors, action tensors, or
     % tensor-level gauges satisfying the same normalization. Tensor-level
     % restricted gauge choices remain issue #7325.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:mpug_restricted_scalar_gauge,
@@ -4314,7 +4314,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     give the identity, composition, and inverse assertions.
 \end{proof}
 
-\begin{theorem}[Cocycles and classes for trivial coefficients]
+\begin{lemma}[Cocycles and classes for trivial coefficients]
     \label{thm:mpug_h2_trivial_coefficients}
     \lean{TNLean.Algebra.isMulCocycle₂_iff,
         TNLean.Algebra.H2π_eq_iff_isMulCoboundary₂_div}
@@ -4339,7 +4339,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
         \label{eq:mpug_h2_class_comparison}
     \end{align}
     % Source anchor: arXiv:2502.20257, lines 1927--1931.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:is_coboundary, def:cohomologous_to, def:is_cocycle,
@@ -4354,7 +4354,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     (\ref{eq:mpug_h2_class_comparison}).
 \end{proof}
 
-\begin{theorem}[Every class has a scalar cocycle representative]
+\begin{lemma}[Every class has a scalar cocycle representative]
     \label{thm:mpug_h2_group_cohomology_comparison}
     \lean{TNLean.Algebra.ScalarCocycle.exists_H2π_eq}
     \leanok
@@ -4371,7 +4371,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
          & \simeq H^2\bigl(G,\C^\times_{\mathrm{triv}}\bigr).
         \label{eq:mpug_h2_equivalence}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpug_h2_trivial_coefficients}
@@ -4398,7 +4398,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     $f^*[\omega]=[f^*\omega]$ for every $2$-cocycle $\omega$.
 \end{definition}
 
-\begin{theorem}[Pullback preserves cocycles and cohomology]
+\begin{lemma}[Pullback preserves cocycles and cohomology]
     \label{thm:mpug_h2_pullback_preserves}
     \lean{TNLean.Algebra.ScalarCocycle.isMulCocycle₂_comap,
         TNLean.Algebra.isMulCoboundary₂_div_comap}
@@ -4408,7 +4408,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     $2$-cocycle on $G$, then $f^*\omega$ is a scalar $2$-cocycle on $K$.
     If $\omega_1$ and $\omega_2$ are cohomologous scalar $2$-cochains on $G$,
     then $f^*\omega_1$ and $f^*\omega_2$ are cohomologous on $K$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:mpug_h2_pullback, def:cohomologous_to, def:is_cocycle}
@@ -4445,7 +4445,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
 
 % Partial support for #7361 (child #7754), not the full prop:BI_psi criterion.
 % No U(1) restriction naturality or tensor-level block-independence claim.
-\begin{theorem}[Exact extension of a subgroup cocycle]
+\begin{lemma}[Exact extension of a subgroup cocycle]
     \label{thm:mpug_h2_exact_extension}
     \lean{TNLean.Algebra.ScalarCocycle.H2π_mem_range_map_subtype_iff,
         TNLean.Algebra.ScalarCocycle.isMulCocycle₂_coboundary_mul}
@@ -4461,7 +4461,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     condition of \cite[lines~7042--7064]{FrancoRubio2025MPUGauging},
     here stated with $\C^\times$ coefficients.
     % Source: Papers/2502.20257/main.tex:7042--7064.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:mpug_h2_pullback, def:cohomologous_to, def:is_cocycle}
@@ -4479,7 +4479,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     $\iota^*[\Psi]=[\psi]$.
 \end{proof}
 
-\begin{theorem}[Circle and nonzero-complex coefficients in degree two]
+\begin{lemma}[Circle and nonzero-complex coefficients in degree two]
     \label{thm:mpug_circle_complex_units_h2}
     \lean{TNLean.Algebra.Complex.div_toUnits_unitsPhase,
         TNLean.Algebra.ScalarCocycle.circlePhase_isMulCocycle₂,
@@ -4520,7 +4520,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     the comparison of sheaf cohomology with topological coefficient groups
     invoked in the footnote at
     \cite[line~1931]{FrancoRubio2025MPUGauging}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpug_positive_generalized_cocycle}
@@ -4529,7 +4529,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     retracts inclusion.  The polar identity in
     (\ref{eq:mpug_circle_phase_residual}) identifies the residual $r$ with a
     positive cocycle.  Applying
-    Theorem~\ref{thm:mpug_positive_generalized_cocycle} to the one-point block
+    Lemma~\ref{thm:mpug_positive_generalized_cocycle} to the one-point block
     space writes $r=d\chi$.  Therefore $\omega\sim u$, which proves
     surjectivity of coefficient inclusion on degree-two classes.  Its left
     inverse induced by $q$ proves injectivity.
@@ -4580,7 +4580,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     the cocycle equation.
 \end{proof}
 
-\begin{theorem}[Action of the twisted regular matrices]
+\begin{lemma}[Action of the twisted regular matrices]
     \label{thm:mpug_twisted_regular_action}
     \lean{TNLean.Algebra.ScalarCocycle.twistedLeftRegular_mulVec_apply,
         TNLean.Algebra.ScalarCocycle.twistedRightRegular_mulVec_apply}
@@ -4595,7 +4595,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
          & =\phi(h,g^{-1})^{-1}v(h).
     \end{align}
     % Source anchor: arXiv:2502.20257, lines 412--418.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:mpug_twisted_regular_matrices}
@@ -4603,7 +4603,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     indexed by $h$.
 \end{proof}
 
-\begin{theorem}[Multiplication laws for twisted regular matrices]
+\begin{lemma}[Multiplication laws for twisted regular matrices]
     \label{thm:mpug_twisted_regular_multiplication}
     \lean{TNLean.Algebra.ScalarCocycle.twistedLeftRegular_mul,
         TNLean.Algebra.ScalarCocycle.twistedRightRegular_mul}
@@ -4620,7 +4620,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     \end{align}
     % Source anchor: arXiv:2502.20257, lines 406--418; the laws follow from
     % the displayed twisted regular matrices and the cocycle equation.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{lem:mpug_circle_phase_cocycle}
@@ -4628,7 +4628,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     to the cocycle equation at $(g,h,k)$ and $(k,h^{-1},g^{-1})$, respectively.
 \end{proof}
 
-\begin{theorem}[Commutation of twisted left and right actions]
+\begin{lemma}[Commutation of twisted left and right actions]
     \label{thm:mpug_twisted_regular_commutation}
     \lean{TNLean.Algebra.ScalarCocycle.twistedLeftRegular_commute}
     \leanok
@@ -4642,7 +4642,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     % Source anchor: arXiv:2502.20257, lines 406--418 and 457; the latter
     % explicitly attributes commuting local symmetries to commutativity of the
     % left and right group actions.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{lem:mpug_circle_phase_cocycle}
@@ -4650,7 +4650,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     at $(g,k,h^{-1})$ yields the equality.
 \end{proof}
 
-\begin{theorem}[Unitarity of twisted regular matrices]
+\begin{lemma}[Unitarity of twisted regular matrices]
     \label{thm:mpug_twisted_regular_unitary}
     \lean{TNLean.Algebra.ScalarCocycle.twistedLeftRegular_mem_unitaryGroup,
         TNLean.Algebra.ScalarCocycle.twistedRightRegular_mem_unitaryGroup}
@@ -4660,7 +4660,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     every $g\in G$.
     % Source anchor: arXiv:2502.20257, lines 406--418, where these matrices
     % form the two gauge legs of the local unitary representation.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:mpug_twisted_regular_matrices}
@@ -4669,7 +4669,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     has squared norm one.
 \end{proof}
 
-\begin{theorem}[Onsite Gauss coefficient identity]
+\begin{lemma}[Onsite Gauss coefficient identity]
     \label{thm:mpug_onsite_gauss_phase}
     \lean{TNLean.Algebra.ScalarCocycle.onsiteGauss_phase_div}
     \leanok
@@ -4689,7 +4689,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     \cite[line~238]{FrancoRubio2025MPUGauging}, and the coefficient rewrite is
     at lines 3763--3766. The displayed normalization remains an explicit
     assumption here; it is not a consequence of cocyclicity.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{lem:mpug_circle_phase_cocycle}
@@ -4752,7 +4752,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     % Source anchor: arXiv:2502.20257, prop:technical01, lines 6975--6989.
 \end{definition}
 
-\begin{theorem}[Corrected block factorization]
+\begin{lemma}[Corrected block factorization]
     \label{thm:mpug_block_factorization}
     \lean{TNLean.Algebra.LSymbol.IsCompatible.apply_right_one,
         TNLean.Algebra.LSymbol.blockFactor,
@@ -4777,7 +4777,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     % Local correction:
     % docs/paper-gaps/fbc25_block_independence_reciprocal_errors.tex.
     % Source anchor: arXiv:2502.20257, eq:Lfact, lines 6994--7002.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:mpug_block_independence_factor}
@@ -4793,7 +4793,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     (\ref{eq:mpug_corrected_block_factorization}).
 \end{proof}
 
-\begin{theorem}[Relative block character]
+\begin{lemma}[Relative block character]
     \label{thm:mpug_relative_block_character}
     \lean{TNLean.Algebra.LSymbol.IsCompatible.apply_left_one,
         TNLean.Algebra.LSymbol.relativeCharacter,
@@ -4801,7 +4801,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
         TNLean.Algebra.LSymbol.relativeCharacter_mul}
     \leanok
     \uses{thm:mpug_block_factorization}
-    Under the hypotheses of Theorem~\ref{thm:mpug_block_factorization}, define
+    Under the hypotheses of Lemma~\ref{thm:mpug_block_factorization}, define
     \begin{align}
         \rho(g)
          & =\bigl(\ell^{x_0}_{e,g;g}\omega(g,e,e)
@@ -4824,7 +4824,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     % Local correction:
     % docs/paper-gaps/fbc25_block_independence_reciprocal_errors.tex.
     % Source anchor: arXiv:2502.20257, eq:defrho, lines 7003--7018.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpug_block_factorization}
@@ -4836,7 +4836,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     (\ref{eq:mpug_relative_block_multiplicative}) by cancellation.
 \end{proof}
 
-\begin{theorem}[Explicit inverse gauge]
+\begin{lemma}[Explicit inverse gauge]
     \label{thm:mpug_block_independence_inverse_gauge}
     \lean{TNLean.Algebra.LSymbol.factorFusionGauge,
         TNLean.Algebra.LSymbol.factorActionGauge,
@@ -4877,7 +4877,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     % Local correction:
     % docs/paper-gaps/fbc25_block_independence_reciprocal_errors.tex.
     % Source anchor: arXiv:2502.20257, eq:Lgauge and lines 7019--7027.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpug_l_gauge_composition, thm:mpug_block_factorization,
@@ -4892,7 +4892,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     (\ref{eq:mpug_inverse_gauge_trivialization}).
 \end{proof}
 
-\begin{theorem}[Trivial and block-constant gauges]
+\begin{lemma}[Trivial and block-constant gauges]
     \label{thm:mpug_trivial_iff_block_constant}
     \lean{TNLean.Algebra.LSymbol.IsTrivial.isBlockConstant,
         TNLean.Algebra.LSymbol.IsBlockConstant.isBlockIndependentEll,
@@ -4908,18 +4908,18 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     $L$ if and only if a joint scalar gauge makes $L^x_{g,h}$ independent of
     $x$.
     % Source anchor: arXiv:2502.20257, prop:technical01, items 1 and 2.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpug_l_gauge_composition, thm:mpug_l_gauge_preservation,
         thm:mpug_block_independence_inverse_gauge}
     A trivial $L$-symbol is block-constant. Conversely, a block-constant
     representative has block-independent $\ell$, so applying
-    Theorem~\ref{thm:mpug_block_independence_inverse_gauge} to that
+    Lemma~\ref{thm:mpug_block_independence_inverse_gauge} to that
     representative and composing the two joint gauges trivializes $L$.
 \end{proof}
 
-\begin{theorem}[Trivial gauges and trivial block scalars]
+\begin{lemma}[Trivial gauges and trivial block scalars]
     \label{thm:mpug_trivial_iff_trivial_ell}
     \lean{TNLean.Algebra.LSymbol.IsTrivial.isTrivialEll,
         TNLean.Algebra.LSymbol.IsTrivialEll.isBlockIndependentEll,
@@ -4935,18 +4935,18 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     $L$ if and only if a joint scalar gauge makes every
     $\ell^x_{a,b;r}$ equal to $1$.
     % Source anchor: arXiv:2502.20257, prop:technical01, items 1 and 3.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpug_l_gauge_composition, thm:mpug_l_gauge_preservation,
         thm:mpug_block_independence_inverse_gauge}
     A trivial $L$-symbol has $\ell=1$. Conversely, the identity $\ell=1$
     implies block independence, so applying
-    Theorem~\ref{thm:mpug_block_independence_inverse_gauge} and composing the
+    Lemma~\ref{thm:mpug_block_independence_inverse_gauge} and composing the
     gauges trivializes $L$.
 \end{proof}
 
-\begin{theorem}[Scalar gauge triviality and block independence]
+\begin{lemma}[Scalar gauge triviality and block independence]
     \label{thm:mpug_trivial_iff_block_independent}
     \lean{TNLean.Algebra.LSymbol.IsBlockIndependent.hasTrivialGauge,
         TNLean.Algebra.LSymbol.hasTrivialGauge_iff_isBlockIndependent}
@@ -4959,19 +4959,19 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     $L$ if and only if a joint scalar gauge makes $\ell^x_{a,b;r}$ independent
     of $x$.
     % Source anchor: arXiv:2502.20257, prop:technical01, items 1 and 4.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpug_l_gauge_composition, thm:mpug_l_gauge_preservation,
         thm:mpug_block_independence_inverse_gauge}
     Gauge triviality implies block constancy and hence block independence.
     For the converse, apply
-    Theorem~\ref{thm:mpug_block_independence_inverse_gauge} to the
+    Lemma~\ref{thm:mpug_block_independence_inverse_gauge} to the
     block-independent representative and compose its trivializing gauge with
     the original gauge.
 \end{proof}
 
-\begin{theorem}[Four scalar gauge formulations of block independence]
+\begin{lemma}[Four scalar gauge formulations of block independence]
     \label{thm:mpug_block_independence_four_forms}
     \lean{TNLean.Algebra.LSymbol.hasTrivialGauge_tfae}
     \leanok
@@ -4989,26 +4989,26 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     \cite{FrancoRubio2025MPUGauging}, whose fourth condition is stated for an
     MPS--MPU pair.
     % Source anchor: arXiv:2502.20257, prop:technical01, lines 6975--6989.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpug_trivial_iff_block_constant,
         thm:mpug_trivial_iff_trivial_ell,
         thm:mpug_trivial_iff_block_independent}
-    Theorems~\ref{thm:mpug_trivial_iff_block_constant},
+    Lemmas~\ref{thm:mpug_trivial_iff_block_constant},
     \ref{thm:mpug_trivial_iff_trivial_ell}, and
     \ref{thm:mpug_trivial_iff_block_independent} identify each of the last
     three properties with the first.
 \end{proof}
 
 For a compatible scalar $L$-symbol,
-Theorem~\ref{thm:mpug_block_independence_four_forms} establishes the
+Lemma~\ref{thm:mpug_block_independence_four_forms} establishes the
 algebraic equivalence among its four scalar gauge properties; the corresponding
 tensor-level bridge to an underlying MPS--MPU pair is not asserted here.
 % Scope boundary: the tensor-facing bridge for arXiv:2502.20257,
 % prop:technical01 is not contained in the scalar L-symbol declarations.
 
-\begin{theorem}[Stabilizer transition elements]
+\begin{lemma}[Stabilizer transition elements]
     \label{thm:mpug_stabilizer_transition}
     \lean{TNLean.Algebra.StabilizerRepresentatives.transitionElement_mul,
         TNLean.Algebra.StabilizerRepresentatives,
@@ -5048,7 +5048,7 @@ tensor-level bridge to an underlying MPS--MPU pair is not asserted here.
     % docs/paper-gaps/fbc25_stabilizer_transition_index_typo.tex.
     % Source anchor: arXiv:2502.20257, lemma:h1h2 and eq:h1h2,
     % lines 7028--7042.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Transitivity gives one element carrying $x_0$ to each $x$, with the
@@ -5061,7 +5061,7 @@ tensor-level bridge to an underlying MPS--MPU pair is not asserted here.
     $h_1$ and $h_2$ are the corresponding specializations.
 \end{proof}
 
-\begin{theorem}[L-symbol induced by a stabilizer cocycle]
+\begin{lemma}[L-symbol induced by a stabilizer cocycle]
     \label{thm:mpug_stabilizer_cocycle_l_symbol}
     \lean{TNLean.Algebra.StabilizerRepresentatives.inducedLSymbol_isCompatible,
         TNLean.Algebra.StabilizerRepresentatives.inducedLSymbol,
@@ -5120,7 +5120,7 @@ tensor-level bridge to an underlying MPS--MPU pair is not asserted here.
     representation-theoretic claim for a tensor-derived $L$-symbol is not
     asserted here.
     % Source anchor: arXiv:2203.12563, Eq. (20).
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:mpug_l_gauge, thm:mpug_stabilizer_transition}
@@ -5159,7 +5159,7 @@ tensor-level bridge to an underlying MPS--MPU pair is not asserted here.
     (\ref{eq:mpug_induced_cohomology_iff}).
 \end{proof}
 
-\begin{theorem}[Explicit gauge from a stabilizer cocycle extension]
+\begin{lemma}[Explicit gauge from a stabilizer cocycle extension]
     \label{thm:mpug_stabilizer_extension_gauge}
     \lean{TNLean.Algebra.StabilizerRepresentatives.extensionActionGauge,
         TNLean.Algebra.StabilizerRepresentatives.inducedLSymbol_eq_extensionActionGauge,
@@ -5196,7 +5196,7 @@ tensor-level bridge to an underlying MPS--MPU pair is not asserted here.
     See \cite{gap:fbc25_mpu_action_stabilizer_source_audit} for the
     relationship between cocycle representatives, cohomology classes, and
     tensor data.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     With $a=k_{g_1g_2x}$, $b=k_{g_2x}$, $c=k_x$, $u=g_1$, and $v=g_2$,
@@ -5214,7 +5214,7 @@ tensor-level bridge to an underlying MPS--MPU pair is not asserted here.
     (\ref{eq:mpug_l_gauge}) cancels the multiplier under the inverse gauges.
 \end{proof}
 
-\begin{theorem}[Reconstruction of stabilizer L-symbols]
+\begin{lemma}[Reconstruction of stabilizer L-symbols]
     \label{thm:mpug_stabilizer_reconstruction}
     \lean{TNLean.Algebra.StabilizerRepresentatives.reconstructedLSymbol,
         TNLean.Algebra.StabilizerRepresentatives.reconstructedLSymbol_isCompatible,
@@ -5230,7 +5230,7 @@ tensor-level bridge to an underlying MPS--MPU pair is not asserted here.
         thm:mpug_stabilizer_transition}
     Let $G$ act on $\mathsf X$ with basepoint $x_0$, stabilizer
     $H=\operatorname{Stab}_G(x_0)$, and representatives $k_x$ as in
-    Theorem~\ref{thm:mpug_stabilizer_transition}. Let $\omega$ be a scalar
+    Lemma~\ref{thm:mpug_stabilizer_transition}. Let $\omega$ be a scalar
     $3$-cocycle on $G$ with $\omega(a,b,c)=1$ for all $a,b,c\in H$, and let
     $\psi$ be a scalar $2$-cocycle on $H$. With $h_2=t_k(g_2,x)$ and
     $h_1=t_k(g_1,g_2x)$, define
@@ -5257,14 +5257,14 @@ tensor-level bridge to an underlying MPS--MPU pair is not asserted here.
     No normalization of $\omega$ is required.
     % Local fix: docs/paper-gaps/glm23_eq20_fusion_gauge.tex.
     % Source anchor: arXiv:2203.12563, REsubmission.tex lines 740--761.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpug_stabilizer_transition, thm:mpug_stabilizer_cocycle_l_symbol}
     The formula factors as its value at $\psi=1$ times the induced
     $L$-symbol (\ref{eq:mpug_induced_stabilizer_l_symbol}), and pointwise
     products of compatible $L$-symbols are compatible with the product of
-    the $3$-cochains. By Theorem~\ref{thm:mpug_stabilizer_cocycle_l_symbol}
+    the $3$-cochains. By Lemma~\ref{thm:mpug_stabilizer_cocycle_l_symbol}
     it suffices to treat $\psi=1$. For fixed $x$ and $g,h,k$, with $p=k_x$,
     $a=t_k(k,x)$, $b=t_k(h,kx)$, and $c=t_k(g,hkx)$, we have $k_{kx}=kpa^{-1}$
     and, by (\ref{eq:mpug_stabilizer_transition_product}),
@@ -5283,7 +5283,7 @@ tensor-level bridge to an underlying MPS--MPU pair is not asserted here.
     $\beta\mathbin{\triangleright}\omega$ back to $\omega$.
 \end{proof}
 
-\begin{theorem}[Classification and torsor of stabilizer L-symbols]
+\begin{lemma}[Classification and torsor of stabilizer L-symbols]
     \label{thm:mpug_stabilizer_torsor}
     \lean{TNLean.Algebra.StabilizerRepresentatives.exists_actionGauge_eq_inducedLSymbol,
         TNLean.Algebra.StabilizerRepresentatives.exists_actionGauge_eq_reconstructedLSymbol,
@@ -5306,7 +5306,7 @@ tensor-level bridge to an underlying MPS--MPU pair is not asserted here.
     \leanok
     \uses{thm:mpug_stabilizer_reconstruction, def:mpug_l_gauge,
         thm:mpug_h2_group_cohomology_comparison, def:cohomologous_to}
-    Keep the setting of Theorem~\ref{thm:mpug_stabilizer_reconstruction},
+    Keep the setting of Lemma~\ref{thm:mpug_stabilizer_reconstruction},
     and call two $L$-symbols action-gauge equivalent when they differ by
     $(1,\gamma)\mathbin{\triangleright}$ for some action-tensor gauge
     $\gamma$.
@@ -5346,7 +5346,7 @@ tensor-level bridge to an underlying MPS--MPU pair is not asserted here.
     in which the group cohomology $H^2(H,\C^\times)$ is formed. In the last
     two items the set $\mathsf X$ lies in the same universe.
     % Source anchor: arXiv:2203.12563, REsubmission.tex lines 749--761.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpug_stabilizer_reconstruction,
@@ -5367,7 +5367,7 @@ tensor-level bridge to an underlying MPS--MPU pair is not asserted here.
     commutes with multiplication by $L_0$. Cancelling $L_0$ reduces the
     freeness statement to (\ref{eq:mpug_induced_cohomology_iff}). The second
     item is the third with $L_0$ the formula at $\psi=1$, which is
-    compatible by Theorem~\ref{thm:mpug_stabilizer_reconstruction}.
+    compatible by Lemma~\ref{thm:mpug_stabilizer_reconstruction}.
     For the last item, cocycles modulo cohomology form the second group
     cohomology of $H$ with coefficients in $\C^\times$, and
     \begin{align}
@@ -5437,7 +5437,7 @@ tensor-level bridge to an underlying MPS--MPU pair is not asserted here.
     % Source anchor: arXiv:2502.20257, lines 5914--5922 and lemma:G_cocycle.
 \end{definition}
 
-\begin{theorem}[Generalized coboundaries square to one]
+\begin{lemma}[Generalized coboundaries square to one]
     \label{thm:mpug_generalized_coboundary_squared}
     \lean{TNLean.Algebra.ActionTensorGauge.isGeneralizedCocycle_coboundary,
         TNLean.Algebra.GeneralizedThreeCochain.coboundary_coboundary}
@@ -5452,7 +5452,7 @@ tensor-level bridge to an underlying MPS--MPU pair is not asserted here.
         d(df) & =1.
         \label{eq:mpug_generalized_coboundary_squared}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:mpug_generalized_cocycle}
@@ -5510,7 +5510,7 @@ tensor-level bridge to an underlying MPS--MPU pair is not asserted here.
     \end{align}
 \end{definition}
 
-\begin{theorem}[Hat involution and generalized coboundaries]
+\begin{lemma}[Hat involution and generalized coboundaries]
     \label{thm:mpug_generalized_hat_coboundary}
     \lean{TNLean.Algebra.ActionTensorGauge.hat_hat,
         TNLean.Algebra.LSymbol.hat_hat,
@@ -5532,7 +5532,7 @@ tensor-level bridge to an underlying MPS--MPU pair is not asserted here.
         \widehat{d\chi} & =d\widehat\chi.
         \label{eq:mpug_generalized_hat_coboundary}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:mpug_generalized_cocycle, def:mpug_generalized_hat}
@@ -5572,7 +5572,7 @@ tensor-level bridge to an underlying MPS--MPU pair is not asserted here.
     % Source anchor: arXiv:2502.20257, lines 5938--5942.
 \end{definition}
 
-\begin{theorem}[Generalized projective multiplication law]
+\begin{lemma}[Generalized projective multiplication law]
     \label{thm:mpug_generalized_regular_multiplication}
     \lean{TNLean.Algebra.LSymbol.regularMatrix_mul}
     \leanok
@@ -5589,7 +5589,7 @@ tensor-level bridge to an underlying MPS--MPU pair is not asserted here.
     %   which states this multiplication law "for G being a finite group".
     %   The blueprint statement previously omitted that hypothesis, which the
     %   formal statement carries.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:mpug_generalized_cocycle,
@@ -5606,7 +5606,7 @@ tensor-level bridge to an underlying MPS--MPU pair is not asserted here.
     (\ref{eq:mpug_generalized_regular_multiplication}).
 \end{proof}
 
-\begin{theorem}[Finite-group power trivialization]
+\begin{lemma}[Finite-group power trivialization]
     \label{thm:mpug_generalized_cocycle_power}
     \lean{TNLean.Algebra.LSymbol.regularMatrix_eq_permutation_mul_diagonal,
         TNLean.Algebra.LSymbol.regularDeterminant_ne_zero,
@@ -5639,7 +5639,7 @@ tensor-level bridge to an underlying MPS--MPU pair is not asserted here.
 
     % Local fix: docs/paper-gaps/fbc25_generalized_cocycle_determinant_typo.tex.
     % Source anchor: arXiv:2502.20257, lemma:G_cocycle, lines 5931--5948.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:mpug_generalized_regular_matrices,
@@ -5670,7 +5670,7 @@ tensor-level bridge to an underlying MPS--MPU pair is not asserted here.
     (\ref{eq:mpug_generalized_power_coboundary}).
 \end{proof}
 
-\begin{theorem}[Positive generalized cocycles are coboundaries]
+\begin{lemma}[Positive generalized cocycles are coboundaries]
     \label{thm:mpug_positive_generalized_cocycle}
     \lean{TNLean.Algebra.PositiveUnits.positiveRpow,
         TNLean.Algebra.PositiveUnits.positiveRpow_inv_natCast_pow,
@@ -5697,19 +5697,19 @@ tensor-level bridge to an underlying MPS--MPU pair is not asserted here.
     \cite[Corollary at lines~5950--5960]{FrancoRubio2025MPUGauging}; as
     recorded in \cite{gap:fbc25_positive_generalized_cocycle_block_index},
     whereas the source writes $\chi_g$,
-    Theorem~\ref{thm:mpug_generalized_cocycle_power} constructs $\chi^x_g$
+    Lemma~\ref{thm:mpug_generalized_cocycle_power} constructs $\chi^x_g$
     through (\ref{eq:mpug_generalized_determinant_cochain}) and the block label
     $x$ is therefore retained.
     % Local correction:
     % docs/paper-gaps/fbc25_positive_generalized_cocycle_block_index.tex.
     % Source anchor: arXiv:2502.20257, cor:positive_trivial, lines 5950--5956.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:mpug_positive_generalized_cochains,
         thm:mpug_generalized_cocycle_power}
     With $\delta^x_g=\det X^x_g$ denoting the determinant cochain from
-    Theorem~\ref{thm:mpug_generalized_cocycle_power}, set
+    Lemma~\ref{thm:mpug_generalized_cocycle_power}, set
     \begin{align}
         \chi^x_{0,g}
          & =\lvert\delta^x_g\rvert^{1/\lvert G\rvert}.
@@ -5739,7 +5739,7 @@ tensor-level bridge to an underlying MPS--MPU pair is not asserted here.
     % docs/paper-gaps/fbc25_positive_generalized_cocycle_determinant_sign.tex.
 \end{proof}
 
-\begin{theorem}[Hat-compatible positive primitive]
+\begin{lemma}[Hat-compatible positive primitive]
     \label{thm:mpug_positive_generalized_cocycle_hat}
     \lean{TNLean.Algebra.ActionTensorGauge.coboundary_div,
         TNLean.Algebra.ActionTensorGauge.coboundary_positiveRpow,
@@ -5750,7 +5750,7 @@ tensor-level bridge to an underlying MPS--MPU pair is not asserted here.
         thm:mpug_generalized_hat_coboundary,
         thm:mpug_positive_generalized_cocycle}
     Under the hypotheses of
-    Theorem~\ref{thm:mpug_positive_generalized_cocycle}, suppose additionally
+    Lemma~\ref{thm:mpug_positive_generalized_cocycle}, suppose additionally
     that
     \begin{align}
         \Omega^x_{g,h}\widehat\Omega^{\,x}_{g,h}
@@ -5771,13 +5771,13 @@ tensor-level bridge to an underlying MPS--MPU pair is not asserted here.
         \label{eq:mpug_positive_hat_witness_identity}
     \end{align}
     % Source anchor: arXiv:2502.20257, cor:positive_trivial, lines 5955--5960.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpug_generalized_hat_coboundary,
         thm:mpug_positive_generalized_cocycle}
     Let $\chi_0$ satisfy $d\chi_0=\Omega$ as in
-    Theorem~\ref{thm:mpug_positive_generalized_cocycle}. Define
+    Lemma~\ref{thm:mpug_positive_generalized_cocycle}. Define
     \begin{align}
         \chi^x_g
          & =\sqrt{\frac{\chi^x_{0,g}}
@@ -5848,7 +5848,7 @@ tensor-level bridge to an underlying MPS--MPU pair is not asserted here.
     % Source anchors: arXiv:2502.20257, lines 5910--5916 and eq:introXi.
 \end{definition}
 
-\begin{theorem}[The hat operation is an involution]
+\begin{lemma}[The hat operation is an involution]
     \label{thm:mpug_scalar_hat_involution}
     \lean{TNLean.Algebra.ScalarCocycle.hat_hat,
         TNLean.Algebra.ScalarThreeCochain.hat_hat}
@@ -5866,7 +5866,7 @@ tensor-level bridge to an underlying MPS--MPU pair is not asserted here.
     \end{align}
     % Source anchor: arXiv:2502.20257, line 5912, where the hat operation is
     %   introduced as an involution for cochains of any arity.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:mpug_inversion_cochains}
@@ -5875,7 +5875,7 @@ tensor-level bridge to an underlying MPS--MPU pair is not asserted here.
     (\ref{eq:mpug_three_hat}).
 \end{proof}
 
-\begin{theorem}[Two inversion-cochain formulas]
+\begin{lemma}[Two inversion-cochain formulas]
     \label{thm:mpug_inversion_cochain_formulas}
     \lean{TNLean.Algebra.ScalarThreeCochain.Xi_eq_second_formula,
         TNLean.Algebra.ScalarThreeCochain.sigma_inv}
@@ -5901,7 +5901,7 @@ tensor-level bridge to an underlying MPS--MPU pair is not asserted here.
         \label{eq:mpug_sigma_inverse}
     \end{align}
     % Source anchor: arXiv:2502.20257, eq:introXi and lemma:omegaXi.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:mpug_scalar_cochains, def:mpug_three_cocycle,
@@ -5915,7 +5915,7 @@ tensor-level bridge to an underlying MPS--MPU pair is not asserted here.
     (\ref{eq:mpug_sigma_inverse}).
 \end{proof}
 
-\begin{theorem}[Inversion identities for a normalized three-cocycle]
+\begin{lemma}[Inversion identities for a normalized three-cocycle]
     \label{thm:mpug_omega_Xi}
     \lean{TNLean.Algebra.ScalarThreeCochain.hat_eq_mul_coboundary_Xi,
         TNLean.Algebra.ScalarThreeCochain.Xi_eq_hat_mul_coboundary_sigma}
@@ -5935,7 +5935,7 @@ tensor-level bridge to an underlying MPS--MPU pair is not asserted here.
         \label{eq:mpug_Xi_hat_sigma}
     \end{align}
     % Source anchor: arXiv:2502.20257, lemma:omegaXi, lines 5967--5979.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:mpug_three_cocycle, def:mpug_fusion_gauge,
@@ -5962,7 +5962,7 @@ tensor-level bridge to an underlying MPS--MPU pair is not asserted here.
 
 Let $\Z_2=\{e,s\}$ with $s^2=e$.
 
-\begin{theorem}[Normalized $L$-symbol ratio]
+\begin{lemma}[Normalized $L$-symbol ratio]
     \label{thm:mpug_sigma_l_ratio}
     \lean{TNLean.Algebra.LSymbol.sigma_eq_div}
     \leanok
@@ -5978,7 +5978,7 @@ Let $\Z_2=\{e,s\}$ with $s^2=e$.
         \label{eq:mpug_sigma_l_ratio}
     \end{align}
     % Source anchor: arXiv:2502.20257, lines 5327--5329.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:mpug_l_symbols, def:mpug_l_normalized,
@@ -5989,7 +5989,7 @@ Let $\Z_2=\{e,s\}$ with $s^2=e$.
     (\ref{eq:mpug_sigma_l_ratio}).
 \end{proof}
 
-\begin{theorem}[Trivial scalar gauge class for $\Z_2$]
+\begin{lemma}[Trivial scalar gauge class for $\Z_2$]
     \label{thm:mpug_z2_trivial_scalar_class}
     \lean{TNLean.Algebra.ScalarThreeCochain.isTrivialGaugeClass_iff_sigma_generator_eq_one}
     \leanok
@@ -6004,7 +6004,7 @@ Let $\Z_2=\{e,s\}$ with $s^2=e$.
     This strengthens the scalar step in
     \cite[lines~5339--5341]{FrancoRubio2025MPUGauging}: only normalization,
     rather than the cocycle identity, is needed for this equivalence.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:mpug_fusion_gauge,
@@ -6028,7 +6028,7 @@ Let $\Z_2=\{e,s\}$ with $s^2=e$.
     (\ref{eq:mpug_z2_trivial_sigma}) makes $\omega$ the constant cochain $1$.
 \end{proof}
 
-\begin{theorem}[Sign dichotomy for the $\Z_2$ inversion scalar]
+\begin{lemma}[Sign dichotomy for the $\Z_2$ inversion scalar]
     \label{thm:mpug_z2_sigma_sign}
     \lean{TNLean.Algebra.ScalarThreeCochain.sigma_generator_eq_one_or_eq_neg_one}
     \leanok
@@ -6038,7 +6038,7 @@ Let $\Z_2=\{e,s\}$ with $s^2=e$.
         \sigma(s) & \in\{1,-1\}.
         \label{eq:mpug_z2_sigma_sign}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpug_inversion_cochain_formulas}
@@ -6072,7 +6072,7 @@ $\xi_g(x)\xi_g(g\mathbin{\cdot}x)=-1$ because $g^{-1}=g$.
     % eq:defects_Z2b, lines 2979--2981.
 \end{definition}
 
-\begin{theorem}[Anomalous signs and fixed points]
+\begin{lemma}[Anomalous signs and fixed points]
     \label{thm:mpug_anomalous_involution_sign_iff}
     \lean{TNLean.Algebra.hasAnomalousInvolutionSign_of_fixedPointFree,
         TNLean.Algebra.not_hasAnomalousInvolutionSign_of_fixedPoint,
@@ -6090,7 +6090,7 @@ $\xi_g(x)\xi_g(g\mathbin{\cdot}x)=-1$ because $g^{-1}=g$.
     $g\mathbin{\cdot}x\neq x$ for every $x\in\mathsf X$.
     % Source anchor: arXiv:2502.20257, prop:def_tens_anomalous,
     % eq:defects_Z2b, lines 2979--2981.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:mpug_anomalous_involution_sign}
@@ -6102,7 +6102,7 @@ $\xi_g(x)\xi_g(g\mathbin{\cdot}x)=-1$ because $g^{-1}=g$.
     $g\mathbin{\cdot}(g\mathbin{\cdot}x)=(g^2)\mathbin{\cdot}x=x$.
 \end{proof}
 
-\begin{theorem}[Nontrivial scalar gauge class for $\Z_2$]
+\begin{lemma}[Nontrivial scalar gauge class for $\Z_2$]
     \label{thm:mpug_z2_nontrivial_scalar_class}
     \lean{TNLean.Algebra.ScalarThreeCochain.not_isTrivialGaugeClass_iff_sigma_generator_eq_neg_one}
     \leanok
@@ -6117,11 +6117,11 @@ $\xi_g(x)\xi_g(g\mathbin{\cdot}x)=-1$ because $g^{-1}=g$.
         \label{eq:mpug_z2_nontrivial_sigma}
     \end{align}
     % Source anchor: arXiv:2502.20257, lines 5339--5341.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpug_z2_trivial_scalar_class, thm:mpug_z2_sigma_sign}
-    By Theorem~\ref{thm:mpug_z2_trivial_scalar_class}, a nontrivial class has
+    By Lemma~\ref{thm:mpug_z2_trivial_scalar_class}, a nontrivial class has
     $\sigma(s)\neq1$. The dichotomy
     (\ref{eq:mpug_z2_sigma_sign}) then forces $\sigma(s)=-1$, and the converse
     follows from the same two statements.
@@ -6169,7 +6169,7 @@ $\sigma(s)$ in the setting of \cite[lines~5207--5338]{FrancoRubio2025MPUGauging}
     % lines 4427--4479.
 \end{definition}
 
-\begin{theorem}[Injective and locally orthogonal GHZ--cluster blocks]
+\begin{lemma}[Injective and locally orthogonal GHZ--cluster blocks]
     \label{thm:mpug_ghz_blocked_cluster_blocks}
     \lean{MPSTensor.ghzSectorTensor_isInjective,
         MPSTensor.z4z2GHZClusterBlock_isInjective,
@@ -6199,7 +6199,7 @@ $\sigma(s)$ in the setting of \cite[lines~5207--5338]{FrancoRubio2025MPUGauging}
     % The theorem does not construct the Z4 x Z2 action, its virtual action
     % tensors, its L-symbols, or its gauging data. The group action and gauging
     % of this example remain issue #7352.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:mpug_ghz_blocked_cluster_tensor, def:injective,
@@ -6222,7 +6222,7 @@ $\sigma(s)$ in the setting of \cite[lines~5207--5338]{FrancoRubio2025MPUGauging}
     (\ref{eq:mpug_ghz_blocked_cluster_direct_sum}).
 \end{proof}
 
-\begin{theorem}[GHZ--cluster physical representation and virtual action table]
+\begin{lemma}[GHZ--cluster physical representation and virtual action table]
     \label{thm:mpug_ghz_cluster_action_table}
     % Principal declaration: MPSTensor.z4z2GHZClusterBlock_covariance.
     \lean{MPSTensor.z4z2GHZClusterBlock_covariance,
@@ -6272,7 +6272,7 @@ $\sigma(s)$ in the setting of \cite[lines~5207--5338]{FrancoRubio2025MPUGauging}
     % Scoped calculation only: no defect normalization, L-symbols,
     % cocycle nonextension, block independence, or gauging is asserted.
     % Those remaining parts of example:z4z2 stay open in #7352.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:mpug_ghz_blocked_cluster_tensor, thm:mpug_monomial_matrix_laws}
@@ -6327,7 +6327,7 @@ three defect domains and maps, which the displayed matrices do not specify.
     other entry vanishes.
 \end{definition}
 
-\begin{theorem}[Calculus of monomial matrices]
+\begin{lemma}[Calculus of monomial matrices]
     \label{thm:mpug_monomial_matrix_laws}
     \lean{Matrix.monomial_mulVec,
         Matrix.monomial_mulVec_eq_self_iff,
@@ -6358,7 +6358,7 @@ three defect domains and maps, which the displayed matrices do not specify.
     $|\varphi(s)|=1$ for every $s$. The trace is
     $\tr M(\sigma,\varphi)=\sum_{s:\,\sigma(s)=s}\varphi(s)$, which vanishes
     when $\sigma$ has no fixed point.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:mpug_monomial_matrix}
@@ -6375,7 +6375,7 @@ three defect domains and maps, which the displayed matrices do not specify.
     otherwise, which gives the trace.
 \end{proof}
 
-\begin{theorem}[Flat phases on the hypercube have a potential]
+\begin{lemma}[Flat phases on the hypercube have a potential]
     \label{thm:mpug_hypercube_potential}
     \lean{TNLean.Algebra.hypercube_induction,
         TNLean.Algebra.exists_potential_of_flat}
@@ -6396,7 +6396,7 @@ three defect domains and maps, which the displayed matrices do not specify.
     every $j$ and $\gamma$. In addition, a property of vectors of
     $\mathbb F_2^r$ that holds at $0$ and is preserved by every coordinate
     flip holds everywhere.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     For the connectivity claim, every $\gamma$ is the sum of the $e_j$ over
@@ -6444,7 +6444,7 @@ three defect domains and maps, which the displayed matrices do not specify.
     for all $j,k$ and $\gamma\in\mathbb F_2^r$.
 \end{definition}
 
-\begin{theorem}[Monomial fixed-space criterion]
+\begin{lemma}[Monomial fixed-space criterion]
     \label{thm:mpug_monomial_fixed_space_criterion}
     \lean{TNLean.Algebra.reindex_mulVec,
         TNLean.Algebra.commonFixedSubmodule_reindex,
@@ -6466,12 +6466,12 @@ three defect domains and maps, which the displayed matrices do not specify.
     \end{align}
     The dimension of a common fixed subspace is also unchanged by a
     simultaneous relabelling of the basis.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpug_monomial_matrix_laws, thm:mpug_hypercube_potential,
         thm:mpug_mem_common_fixed_subspace}
-    By Theorem~\ref{thm:mpug_monomial_matrix_laws}, a vector $v$ lies in
+    By Lemma~\ref{thm:mpug_monomial_matrix_laws}, a vector $v$ lies in
     $\mathcal V(T)$ exactly when
     $v_{(x,\gamma+e_j)}=\varphi_j(x,\gamma)v_{(x,\gamma)}$ for all $j$, $x$,
     and $\gamma$. Let $X_0$ be the set of fibers with trivial holonomy and
@@ -6480,7 +6480,7 @@ three defect domains and maps, which the displayed matrices do not specify.
 
     The map $E$ is injective: if $v\in\mathcal V(T)$ vanishes at one point
     of a fiber, the edge relation and the connectivity statement of
-    Theorem~\ref{thm:mpug_hypercube_potential} make it vanish on the whole
+    Lemma~\ref{thm:mpug_hypercube_potential} make it vanish on the whole
     fiber. On a fiber with trivial holonomy, $v$ therefore vanishes as soon
     as $v_{(x,0)}=0$. On a fiber where (\ref{eq:mpug_trivial_holonomy})
     fails at some $(j,k,\gamma_0)$, the two paths from $(x,\gamma_0)$ to
@@ -6493,7 +6493,7 @@ three defect domains and maps, which the displayed matrices do not specify.
     vanishes on the fiber.
 
     The map $E$ is also surjective: given $w\in\C^{X_0}$,
-    Theorem~\ref{thm:mpug_hypercube_potential} provides a potential $\Phi_x$
+    Lemma~\ref{thm:mpug_hypercube_potential} provides a potential $\Phi_x$
     on each fiber with trivial holonomy for the invertible phases
     $\gamma\mapsto\varphi_j(x,\gamma)$, and setting
     $v_{(x,\gamma)}=w_x\Phi_x(\gamma)$ there and $v=0$ on the other fibers
@@ -6506,7 +6506,7 @@ three defect domains and maps, which the displayed matrices do not specify.
     original one under the coordinate relabelling.
 \end{proof}
 
-\begin{theorem}[Local Gauss operator of monomial matter unitaries]
+\begin{lemma}[Local Gauss operator of monomial matter unitaries]
     \label{thm:mpug_gauss_operator_monomial}
     \lean{TNLean.Algebra.gaussMonomialPerm,
         TNLean.Algebra.gaussMonomialPerm_apply,
@@ -6524,7 +6524,7 @@ three defect domains and maps, which the displayed matrices do not specify.
         \ket{\sigma_{T_g(a,b)}^{-1}\sigma_{a,b}(i),\ T_g(a,b)}.
         \label{eq:mpug_gauss_operator_monomial}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpug_monomial_matrix_laws, def:mpug_gauss_operator}
@@ -6534,7 +6534,7 @@ three defect domains and maps, which the displayed matrices do not specify.
     other blocks vanish.
 \end{proof}
 
-\begin{theorem}[Periodic placement of monomial operators]
+\begin{lemma}[Periodic placement of monomial operators]
     \label{thm:mpug_embed_monomial}
     \lean{MPOTensor.windowPerm,
         MPOTensor.windowPerm_apply,
@@ -6550,7 +6550,7 @@ three defect domains and maps, which the displayed matrices do not specify.
     $\varphi$ evaluated on the window of $s$. For $L=2$ and $N\geq2$ the
     window at $j$ is $(s_j,s_{j+1})$, and replacing it changes exactly the
     sites $j$ and $j+1$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:mpug_monomial_matrix}
@@ -6598,7 +6598,7 @@ three defect domains and maps, which the displayed matrices do not specify.
     are integers.
 \end{definition}
 
-\begin{theorem}[Coordinates and unitarity of the exact CZX tensor]
+\begin{lemma}[Coordinates and unitarity of the exact CZX tensor]
     \label{thm:mpug_czx_exact_tensor_unitary}
     % Principal declaration: MPOTensor.CZX.tensor_isMPU.
     \lean{MPOTensor.CZX.tensor_apply, MPOTensor.CZX.tensor_apply_bits,
@@ -6620,7 +6620,7 @@ three defect domains and maps, which the displayed matrices do not specify.
     \end{align}
     In particular, $B$ is a matrix product unitary. This assertion does
     not include its phase classification, GHZ action, or defect data.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:trace_eval_word_eq_sum_cyclic, thm:mpug_monomial_matrix_laws}
@@ -6654,10 +6654,10 @@ three defect domains and maps, which the displayed matrices do not specify.
     \end{align}
     Thus the operator is the monomial matrix for complementation, with
     column phase $(-1)^{E(\kappa_N(t))}$. Each phase has absolute value one,
-    so Theorem~\ref{thm:mpug_monomial_matrix_laws} proves unitarity.
+    so Lemma~\ref{thm:mpug_monomial_matrix_laws} proves unitarity.
 \end{proof}
 
-\begin{theorem}[Injectivity of the once-blocked CZX tensor]
+\begin{lemma}[Injectivity of the once-blocked CZX tensor]
     \label{thm:mpug_czx_exact_tensor_injective}
     \lean{MPOTensor.CZX.tensor_isInjective}
     \leanok
@@ -6674,13 +6674,13 @@ three defect domains and maps, which the displayed matrices do not specify.
     \end{align}
     % Source: eq:MPU_CZX. This proves only injectivity of the shared tensor;
     % it does not complete the GHZ, fusion, or action-data scope of #7354.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpug_czx_exact_tensor_unitary}
     Let $E_{ab}$ be the bond matrix units, with $a,b\in\{0,1\}$.
     The coordinate formula in
-    Theorem~\ref{thm:mpug_czx_exact_tensor_unitary} gives
+    Lemma~\ref{thm:mpug_czx_exact_tensor_unitary} gives
     \begin{align}
         E_{00}
          & =\tfrac12(B^{0,3}-B^{1,2}),  \\
@@ -6711,7 +6711,7 @@ three defect domains and maps, which the displayed matrices do not specify.
     \end{align}
 \end{definition}
 
-\begin{theorem}[Elementary identities for the Pauli adjoint gauge]
+\begin{lemma}[Elementary identities for the Pauli adjoint gauge]
     \label{thm:mpug_czx_dagger_gauge_laws}
     \lean{MPOTensor.CZX.daggerGauge_conjTranspose,
         MPOTensor.CZX.daggerGauge_mul_self,
@@ -6726,7 +6726,7 @@ three defect domains and maps, which the displayed matrices do not specify.
         Y^2       & =I_2,
     \end{align}
     and in particular $Y\in\mathrm{U}(2)$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:mpug_czx_dagger_gauge}
@@ -6734,7 +6734,7 @@ three defect domains and maps, which the displayed matrices do not specify.
     the Pauli multiplication rule $Y^2=I_2$ then yields $YY^\dagger=I_2$.
 \end{proof}
 
-\begin{theorem}[The physical adjoint of the exact CZX tensor]
+\begin{lemma}[The physical adjoint of the exact CZX tensor]
     \label{thm:mpug_czx_physical_adjoint}
     \lean{MPOTensor.CZX.physicalAdjointTensor_tensor}
     \leanok
@@ -6750,18 +6750,18 @@ three defect domains and maps, which the displayed matrices do not specify.
     \begin{align}
         (B^\dagger)^{u,v} & =YB^{u,v}Y.
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpug_czx_exact_tensor_unitary,
         def:mpug_czx_dagger_gauge, def:mpdo_physical_adjoint}
     Inserting the coordinate formula from
-    Theorem~\ref{thm:mpug_czx_exact_tensor_unitary} on both sides, expanding
+    Lemma~\ref{thm:mpug_czx_exact_tensor_unitary} on both sides, expanding
     the two matrix products over the binary bond indices, and substituting
     the four physical values and the two bond values verifies each entry.
 \end{proof}
 
-\begin{theorem}[An explicit unitary adjoint gauge for CZX]
+\begin{lemma}[An explicit unitary adjoint gauge for CZX]
     \label{thm:mpug_czx_unitary_dagger_gauge}
     \lean{MPOTensor.CZX.daggerGaugeUnitary,
         MPOTensor.CZX.physicalAdjointTensor_tensor_eq_unitaryGauge}
@@ -6777,16 +6777,16 @@ three defect domains and maps, which the displayed matrices do not specify.
     \end{align}
     % This exhibits the explicit witness, not an identification with the
     % choice-selected generic dagger-inverse gauge.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpug_czx_dagger_gauge_laws, thm:mpug_czx_physical_adjoint}
-    Theorem~\ref{thm:mpug_czx_dagger_gauge_laws} gives $Y\in\mathrm{U}(2)$
+    Lemma~\ref{thm:mpug_czx_dagger_gauge_laws} gives $Y\in\mathrm{U}(2)$
     and $Y^\dagger=Y$, and substituting these identities into
-    Theorem~\ref{thm:mpug_czx_physical_adjoint} yields the claim.
+    Lemma~\ref{thm:mpug_czx_physical_adjoint} yields the claim.
 \end{proof}
 
-\begin{theorem}[The CZX adjoint-gauge sign]
+\begin{lemma}[The CZX adjoint-gauge sign]
     \label{thm:mpug_czx_dagger_sign}
     \lean{MPOTensor.CZX.daggerGauge_map_star,
         MPOTensor.CZX.daggerGauge_mul_map_star}
@@ -6802,13 +6802,13 @@ three defect domains and maps, which the displayed matrices do not specify.
     the sign in $Y\overline{Y}=\sigma_g I_2$ is $\sigma_g=-1$.
     % These entries do not determine fusion tensors, local action tensors,
     % L-symbols, or a gauge selected by the generic existence theorem.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:mpug_czx_dagger_gauge, thm:mpug_czx_dagger_gauge_laws}
     Conjugating each entry of the displayed Pauli matrix gives
     $\overline{Y}=-Y$. Then $Y\overline{Y}=-Y^2=-I_2$ by
-    Theorem~\ref{thm:mpug_czx_dagger_gauge_laws}.
+    Lemma~\ref{thm:mpug_czx_dagger_gauge_laws}.
 \end{proof}
 
 \subsection{The displayed CZX source factors}
@@ -6848,7 +6848,7 @@ three defect domains and maps, which the displayed matrices do not specify.
     $X_1$ is $Y_{\beta t}$ rather than $Y_{t\beta}$.
 \end{definition}
 
-\begin{theorem}[The displayed factors recover both CZX cuts]
+\begin{lemma}[The displayed factors recover both CZX cuts]
     \label{thm:mpug_czx_displayed_cuts}
     \lean{MPOTensor.CZX.displayed_cuts}
     \leanok
@@ -6864,7 +6864,7 @@ three defect domains and maps, which the displayed matrices do not specify.
         X_1Y_1 & =M_1(B), \\
         X_2Y_2 & =M_2(B).
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:mpug_czx_displayed_factors, def:mpug_czx_dagger_gauge,
@@ -6872,12 +6872,12 @@ three defect domains and maps, which the displayed matrices do not specify.
         def:mpu_source_matrix_one, def:mpu_source_matrix_two}
     Expanding each matrix product over its four-dimensional factor index,
     substituting the displayed formulas and the coordinate formula from
-    Theorem~\ref{thm:mpug_czx_exact_tensor_unitary}, and evaluating the
+    Lemma~\ref{thm:mpug_czx_exact_tensor_unitary}, and evaluating the
     binary bond indices and the four physical values proves both entry
     identities.
 \end{proof}
 
-\begin{theorem}[Four Gram matrices of the displayed CZX factors]
+\begin{lemma}[Four Gram matrices of the displayed CZX factors]
     \label{thm:mpug_czx_displayed_grams}
     \lean{MPOTensor.CZX.displayed_grams}
     \leanok
@@ -6893,13 +6893,13 @@ three defect domains and maps, which the displayed matrices do not specify.
         Y_1Y_1^\dagger  & =I_4,               \\
         Y_2Y_2^\dagger  & =2I_4.
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:mpug_czx_displayed_factors, thm:mpug_czx_dagger_gauge_laws}
     The empty factors are Pauli-gauge contractions of the filled factors,
     $X_1=(I_4\otimes Y)Y_2^\dagger$ and $Y_1=X_2^\dagger(Y\otimes I_4)$.
-    By Theorem~\ref{thm:mpug_czx_dagger_gauge_laws}, $Y$ is unitary, hence so
+    By Lemma~\ref{thm:mpug_czx_dagger_gauge_laws}, $Y$ is unitary, hence so
     are $I_4\otimes Y$ and $Y\otimes I_4$; composing a unitary matrix with
     $Y_2^\dagger$, respectively with $X_2^\dagger$, leaves the Gram matrix
     unchanged, so $X_1^\dagger X_1=Y_2Y_2^\dagger$ and
@@ -6923,7 +6923,7 @@ three defect domains and maps, which the displayed matrices do not specify.
     \end{align}
 \end{definition}
 
-\begin{theorem}[Right inverses and weighted normalization]
+\begin{lemma}[Right inverses and weighted normalization]
     \label{thm:mpug_czx_displayed_normalizations}
     \lean{MPOTensor.CZX.displayed_normalizations}
     \leanok
@@ -6937,18 +6937,18 @@ three defect domains and maps, which the displayed matrices do not specify.
         \label{eq:mpug_czx_displayed_right_inverse_y2} \\
         X_1^\dagger(I_4\otimes\rho)X_1 & =I_4.
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpug_czx_displayed_grams,
         def:mpug_czx_displayed_right_inverses, def:mpu_source_weight}
     The two inverse identities follow directly from
-    Theorem~\ref{thm:mpug_czx_displayed_grams}. Since
+    Lemma~\ref{thm:mpug_czx_displayed_grams}. Since
     $I_4\otimes\rho=I_8/2$, the weighted identity is
     $\tfrac12X_1^\dagger X_1=I_4$.
 \end{proof}
 
-\begin{theorem}[Both CZX source-cut ranks are four]
+\begin{lemma}[Both CZX source-cut ranks are four]
     \label{thm:mpug_czx_displayed_ranks}
     \lean{MPOTensor.CZX.displayed_ranks}
     \leanok
@@ -6962,7 +6962,7 @@ three defect domains and maps, which the displayed matrices do not specify.
     Thus the four-dimensional legs in
     \cite[lines~4559--4659]{FrancoRubio2025MPUGauging} have the
     source-cut dimensions.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpug_czx_displayed_cuts, thm:mpug_czx_displayed_grams,
@@ -6989,7 +6989,7 @@ three defect domains and maps, which the displayed matrices do not specify.
         def:mpug_czx_exact_tensor, def:mpu_weighted_source_factors,
         def:mpug_czx_dagger_gauge}
     Let $d_r,d_l$ be the two source-cut ranks of the exact CZX tensor $B$.
-    By Theorem~\ref{thm:mpug_czx_displayed_ranks}, both are four. Let
+    By Lemma~\ref{thm:mpug_czx_displayed_ranks}, both are four. Let
     \begin{align}
         e_r & :\{0,\ldots,d_r-1\}\longrightarrow\{0,1,2,3\}, \\
         e_l & :\{0,\ldots,d_l-1\}\longrightarrow\{0,1,2,3\}
@@ -7078,7 +7078,7 @@ three defect domains and maps, which the displayed matrices do not specify.
     \end{align}
 \end{definition}
 
-\begin{theorem}[The reflected candidates are the negatives of the displayed factors]
+\begin{lemma}[The reflected candidates are the negatives of the displayed factors]
     \label{thm:mpug_czx_reflected_neg}
     \lean{MPOTensor.CZX.displayedReflected_eq_neg}
     \leanok
@@ -7088,17 +7088,17 @@ three defect domains and maps, which the displayed matrices do not specify.
         \widehat X_1 & =-X_1, \\
         \widehat Y_1 & =-Y_1.
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:mpug_czx_dagger_gauge_laws, thm:mpug_czx_dagger_sign,
         def:mpug_czx_displayed_factors, def:mpug_czx_displayed_comparison}
-    Theorem~\ref{thm:mpug_czx_dagger_sign} gives $\overline Y=-Y$, and
+    Lemma~\ref{thm:mpug_czx_dagger_sign} gives $\overline Y=-Y$, and
     $Y^{\mathsf T}=\overline{Y^\dagger}=\overline Y=-Y$ by
-    Theorem~\ref{thm:mpug_czx_dagger_gauge_laws}. Expanding both entries
+    Lemma~\ref{thm:mpug_czx_dagger_gauge_laws}. Expanding both entries
     of the displayed factors against these two gauges gives the sign.
 \end{proof}
 
-\begin{theorem}[Coordinates of the two comparisons and the right overlap]
+\begin{lemma}[Coordinates of the two comparisons and the right overlap]
     \label{thm:mpug_czx_comparison_coordinates}
     \lean{MPOTensor.CZX.displayedComparison_coordinates,
         MPOTensor.CZX.displayedRawComparison_gram,
@@ -7121,18 +7121,18 @@ three defect domains and maps, which the displayed matrices do not specify.
     overlap and the right overlap of
     \cite[lines~5438--5441]{FrancoRubio2025MPUGauging} disagree on these
     factors.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:mpug_czx_reflected_neg, thm:mpug_czx_displayed_grams,
         thm:mpug_czx_displayed_normalizations,
         def:mpug_czx_displayed_comparison}
-    Substituting Theorem~\ref{thm:mpug_czx_reflected_neg} turns each
+    Substituting Lemma~\ref{thm:mpug_czx_reflected_neg} turns each
     overlap into the negative of a Gram matrix of the displayed factors.
     The unweighted Gram $X_1^\dagger X_1=2I_4$ of
-    Theorem~\ref{thm:mpug_czx_displayed_grams} gives
+    Lemma~\ref{thm:mpug_czx_displayed_grams} gives
     (\ref{eq:mpug_czx_raw_comparison}); the weighted normalization
     $X_1^\dagger(I_4\otimes\rho)X_1=I_4$ of
-    Theorem~\ref{thm:mpug_czx_displayed_normalizations} gives
+    Lemma~\ref{thm:mpug_czx_displayed_normalizations} gives
     (\ref{eq:mpug_czx_weighted_comparison}); and $Y_1Y_1^\dagger=I_4$ gives
     (\ref{eq:mpug_czx_right_overlap}). Squaring
     (\ref{eq:mpug_czx_raw_comparison}) gives the Gram matrix $4I_4$, whose
@@ -7141,7 +7141,7 @@ three defect domains and maps, which the displayed matrices do not specify.
     (\ref{eq:mpug_czx_right_overlap}) separates the two overlaps.
 \end{proof}
 
-\begin{theorem}[The weighted comparison is unitary and recovers both factors]
+\begin{lemma}[The weighted comparison is unitary and recovers both factors]
     \label{thm:mpug_czx_weighted_comparison_spec}
     \lean{MPOTensor.CZX.displayedWeightedComparison_spec}
     \leanok
@@ -7155,18 +7155,18 @@ three defect domains and maps, which the displayed matrices do not specify.
     factor. This calculation concerns the explicit displayed factors of
     Definition~\ref{def:mpug_czx_displayed_factors}, not choice-selected
     factors, so the unequal overlaps of
-    Theorem~\ref{thm:mpug_czx_comparison_coordinates} diagnose the
+    Lemma~\ref{thm:mpug_czx_comparison_coordinates} diagnose the
     intermediate formula of
     \cite[lines~5438--5441]{FrancoRubio2025MPUGauging} on these factors
     rather than contradicting the proposition being proved there. The
     weighted comparison is the one retained in
     \cite{gap:fbc25_inverse_compatible_tilde_omission}; no gauge phase is
     changed.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:mpug_czx_comparison_coordinates, thm:mpug_czx_reflected_neg}
     By (\ref{eq:mpug_czx_weighted_comparison}), $K_\rho=-I_4$, which is
-    unitary. Theorem~\ref{thm:mpug_czx_reflected_neg} then gives
+    unitary. Lemma~\ref{thm:mpug_czx_reflected_neg} then gives
     $\widehat X_1K_\rho^\dagger=(-X_1)(-I_4)=X_1$ and
     $K_\rho\widehat Y_1=(-I_4)(-Y_1)=Y_1$.
 \end{proof}
@@ -7190,7 +7190,7 @@ three defect domains and maps, which the displayed matrices do not specify.
     \end{align}
 \end{definition}
 
-\begin{theorem}[The two blocked GHZ sectors]
+\begin{lemma}[The two blocked GHZ sectors]
     \label{thm:mpug_czx_blocked_ghz_sectors}
     \lean{MPOTensor.CZX.blockTensor_ghzSectorTensor_apply}
     \leanok
@@ -7203,7 +7203,7 @@ three defect domains and maps, which the displayed matrices do not specify.
     \end{align}
     Thus, as in \cite[lines~4660--4670]{FrancoRubio2025MPUGauging}, the
     blocked sector vectors are $\ket{00}$ and $\ket{11}$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     For $i=2a+b$, the block coefficient is
@@ -7211,7 +7211,7 @@ three defect domains and maps, which the displayed matrices do not specify.
     $a=b=x$, or equivalently $i=3x$.
 \end{proof}
 
-\begin{theorem}[The matrix product vector of the blocked GHZ tensor]
+\begin{lemma}[The matrix product vector of the blocked GHZ tensor]
     \label{thm:mpug_czx_blocked_ghz_mpv}
     \lean{MPOTensor.CZX.mpv_blockedGHZTensor}
     \leanok
@@ -7227,7 +7227,7 @@ three defect domains and maps, which the displayed matrices do not specify.
     $\ket{00}^{\otimes N}$ and $\ket{11}^{\otimes N}$.
     At $N=0$ they are the same empty configuration, with total coefficient
     two.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     The blocked letters are diagonal, with
@@ -7242,7 +7242,7 @@ three defect domains and maps, which the displayed matrices do not specify.
     These are the coefficients of the two constant configurations.
 \end{proof}
 
-\begin{theorem}[CZX invariance of the blocked GHZ state]
+\begin{lemma}[CZX invariance of the blocked GHZ state]
     \label{thm:mpug_czx_blocked_ghz_invariant}
     \lean{MPOTensor.CZX.mpo_tensor_mulVec_blockedGHZ}
     \leanok
@@ -7264,7 +7264,7 @@ three defect domains and maps, which the displayed matrices do not specify.
     \end{align}
     % Only the actual blocked GHZ MPV and its positive-length invariance
     % are asserted. Fusion, action tensors, and classification remain open.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpug_czx_blocked_ghz_mpv, thm:mpug_czx_exact_tensor_unitary}
@@ -7315,7 +7315,7 @@ unbuffered defect formulas.
     is $A_{1-x}$.
 \end{definition}
 
-\begin{theorem}[Coordinates of the acted sectors]
+\begin{lemma}[Coordinates of the acted sectors]
     \label{thm:mpug_czx_acted_sector_coordinates}
     \lean{MPOTensor.CZX.actedSector_apply, MPOTensor.CZX.actionTarget_apply,
         MPOTensor.CZX.actionMatrix_coordinates}
@@ -7329,7 +7329,7 @@ unbuffered defect formulas.
         C_1       & =\begin{pmatrix}1&1\\0&0\end{pmatrix}.
         \label{eq:mpug_czx_action_matrices}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{def:mpug_czx_acted_sectors, thm:mpug_czx_blocked_ghz_sectors,
         def:mpug_czx_exact_tensor}
@@ -7366,7 +7366,7 @@ unbuffered defect formulas.
     see \cite{gap:fbc25_czx_action_empty_word}.
 \end{definition}
 
-\begin{theorem}[Finite contractions of the printed action pair]
+\begin{lemma}[Finite contractions of the printed action pair]
     \label{thm:mpug_czx_printed_action_contractions}
     \lean{MPOTensor.CZX.printedAction_finite_identities}
     \leanok
@@ -7379,14 +7379,14 @@ unbuffered defect formulas.
         C_xq_xp_xC_x & =C_x.
         \label{eq:mpug_czx_printed_action_contractions}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:mpug_czx_acted_sector_coordinates, def:mpug_czx_printed_action_pair}
     Multiplying the two-by-two matrices and the printed rows and columns
     yields the four identities.
 \end{proof}
 
-\begin{theorem}[Nonempty acted and target words]
+\begin{lemma}[Nonempty acted and target words]
     \label{thm:mpug_czx_action_words}
     \lean{MPOTensor.CZX.evalWord_actedSector, MPOTensor.CZX.evalWord_actionTarget}
     \leanok
@@ -7401,14 +7401,14 @@ unbuffered defect formulas.
         \begin{cases}1&\text{if every letter is }k_x,\\0&\text{otherwise}.\end{cases}
         \label{eq:mpug_czx_action_words}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:mpug_czx_acted_sector_coordinates, thm:mpug_czx_printed_action_contractions}
     An unsupported letter makes the product zero. Otherwise every acted
     letter is $C_x$, whose positive powers equal $C_x$ by idempotency.
 \end{proof}
 
-\begin{theorem}[Printed interior and buffered exterior identities]
+\begin{lemma}[Printed interior and buffered exterior identities]
     \label{thm:mpug_czx_printed_action_words}
     \lean{MPOTensor.CZX.printedAction_interior, MPOTensor.CZX.printedAction_exterior}
     \leanok
@@ -7429,14 +7429,14 @@ unbuffered defect formulas.
     \cite[lines~1788--1838]{FrancoRubio2025MPUGauging}, the interior
     equation covers only the nonempty part of that source assertion; see
     \cite{gap:fbc25_czx_action_empty_word}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:mpug_czx_action_words, thm:mpug_czx_printed_action_contractions}
     If an unsupported letter occurs, both sides vanish. Otherwise the
     interior is $p_xC_xq_x=1$ and the exterior is $C_xq_xp_xC_x=C_x$.
 \end{proof}
 
-\begin{theorem}[The printed pair is not an all-word reduction]
+\begin{lemma}[The printed pair is not an all-word reduction]
     \label{thm:mpug_czx_printed_action_empty}
     \lean{MPOTensor.CZX.printedAction_empty_ne, MPOTensor.CZX.printedAction_not_isReduction}
     \leanok
@@ -7450,7 +7450,7 @@ unbuffered defect formulas.
         p_xB_x^{\varepsilon}q_x & =\tfrac12\ne1=A_{1-x}^{\varepsilon}.
         \label{eq:mpug_czx_printed_action_empty}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:mpug_czx_printed_action_contractions}
     Empty products are identities, whereas $p_xq_x=1/2$.
@@ -7468,7 +7468,7 @@ unbuffered defect formulas.
     printed row. No replacement in an unbuffered defect formula is asserted.
 \end{definition}
 
-\begin{theorem}[Dressing is absorbed by a nonempty buffer]
+\begin{lemma}[Dressing is absorbed by a nonempty buffer]
     \label{thm:mpug_czx_dressed_action_absorption}
     \lean{MPOTensor.CZX.dressedActionBra_absorption}
     \leanok
@@ -7478,7 +7478,7 @@ unbuffered defect formulas.
         V_xB_x^{\mathbf b} & =p_xB_x^{\mathbf b}.
         \label{eq:mpug_czx_dressed_action_absorption}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:mpug_czx_action_words, thm:mpug_czx_printed_action_contractions,
         def:mpug_czx_dressed_action}
@@ -7486,7 +7486,7 @@ unbuffered defect formulas.
     $C_x^2=C_x$ gives the equality.
 \end{proof}
 
-\begin{theorem}[An all-word reduction with exterior buffer length one]
+\begin{lemma}[An all-word reduction with exterior buffer length one]
     \label{thm:mpug_czx_dressed_action_reduction}
     \lean{MPOTensor.CZX.dressedAction_isReduction,
         MPOTensor.CZX.dressedAction_isReductionExteriorBufferLength}
@@ -7507,7 +7507,7 @@ unbuffered defect formulas.
     \end{align}
     This proves the all-word relation for the separately dressed pair,
     not the empty-word claim for the printed pair.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:mpug_czx_printed_action_contractions,
         thm:mpug_czx_printed_action_words, thm:mpug_czx_dressed_action_absorption,
@@ -7539,7 +7539,7 @@ unbuffered defect formulas.
     % Only the concrete g,g slice of #7354 is covered here.
 \end{definition}
 
-\begin{theorem}[Product coordinates of the CZX fusion caps]
+\begin{lemma}[Product coordinates of the CZX fusion caps]
     \label{thm:mpug_czx_fusion_caps_apply}
     \lean{MPOTensor.CZX.fusion_caps_apply}
     \leanok
@@ -7558,7 +7558,7 @@ unbuffered defect formulas.
     Thus, as in the printed diagram of
     \cite[lines~4671--4689]{FrancoRubio2025MPUGauging}, both caps vanish at
     the diagonal bond coordinates and carry $Y$ in opposite orientations.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{def:mpug_czx_fusion_caps, def:mpug_czx_dagger_gauge}
     Evaluating both caps at $2a+b$ for the four pairs $(a,b)$ and comparing
@@ -7567,7 +7567,7 @@ unbuffered defect formulas.
     (\ref{eq:mpug_czx_fusion_caps_apply_right}).
 \end{proof}
 
-\begin{theorem}[The CZX fusion reduction]
+\begin{lemma}[The CZX fusion reduction]
     \label{thm:mpug_czx_fusion_reduction}
     \lean{MPOTensor.CZX.fusion_isReduction,
         MPOTensor.CZX.fusion_isReductionExteriorBufferLength_one}
@@ -7600,7 +7600,7 @@ unbuffered defect formulas.
          & =B^{\mathbf p\mathbf c\mathbf q}.
         \label{eq:mpug_czx_fusion_reduction}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{def:mpug_czx_fusion_caps, def:mpug_czx_exact_tensor,
         def:mpdo_operator_product, def:mpo_to_mps, threeMPU}
@@ -7719,7 +7719,7 @@ block label, or physical gate is changed.
     The physical index $3x$ encodes the two bits $(x,x)$.
 \end{definition}
 
-\begin{theorem}[Coordinates of the supported product letters]
+\begin{lemma}[Coordinates of the supported product letters]
     \label{thm:mpug_czx_supported_letter_coordinates}
     \lean{MPOTensor.CZX.mulTensor_diagonal_letter_coordinates}
     \leanok
@@ -7734,7 +7734,7 @@ block label, or physical gate is changed.
                \end{pmatrix}.
         \label{eq:mpug_czx_supported_letters}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{def:mpug_czx_exact_tensor, def:mpdo_operator_product}
     The letter of $T\mathbin{\cdot}T$ at a physical pair $(i,i')$ vanishes
@@ -7763,13 +7763,13 @@ block label, or physical gate is changed.
     The one-by-one matrix on the right is identified with its sole entry.
 \end{definition}
 
-\begin{theorem}[Values of the printed coefficient]
+\begin{lemma}[Values of the printed coefficient]
     \label{thm:mpug_czx_fusion_action_coefficient_coordinates}
     \lean{MPOTensor.CZX.fusionActionCoefficient_coordinates}
     \leanok
     \uses{def:mpug_czx_fusion_action_coefficient}
     The printed coefficients satisfy $c_0=1$ and $c_1=-1$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:mpug_czx_supported_letter_coordinates,
         def:mpug_czx_sequential_action_bra, def:mpug_czx_printed_action_pair,
@@ -7790,7 +7790,7 @@ block label, or physical gate is changed.
     \end{align}
 \end{proof}
 
-\begin{theorem}[Normalization, proportionality, and idempotence]
+\begin{lemma}[Normalization, proportionality, and idempotence]
     \label{thm:mpug_czx_fusion_action_finite_identities}
     \lean{MPOTensor.CZX.fusionAction_finite_identities}
     \leanok
@@ -7802,7 +7802,7 @@ block label, or physical gate is changed.
     \begin{align}
         P_xB_xQ_x & =1, & B_xW & =c_xB_xQ_x, & B_x^2 & =B_x.
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:mpug_czx_supported_letter_coordinates,
         def:mpug_czx_fusion_action_letter,
@@ -7830,7 +7830,7 @@ block label, or physical gate is changed.
     whose entry in the supporting column is $1$, so $B_x^2=B_x$.
 \end{proof}
 
-\begin{theorem}[Positive repetitions of the supported letter]
+\begin{lemma}[Positive repetitions of the supported letter]
     \label{thm:mpug_czx_fusion_action_positive_power}
     \lean{MPOTensor.CZX.fusionAction_positive_power}
     \leanok
@@ -7844,7 +7844,7 @@ block label, or physical gate is changed.
     \end{align}
     These statements concern repetitions of this single supported letter,
     not arbitrary words or an identification with the source $L$-symbol.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:mpug_czx_fusion_action_finite_identities,
         def:mpug_czx_fusion_action_coefficient}
@@ -7853,7 +7853,7 @@ block label, or physical gate is changed.
     Substituting $B_x^{n+1}=B_x$ into the remaining three identities and
     applying the definition of $c_x$ along with the normalization and
     proportionality of
-    Theorem~\ref{thm:mpug_czx_fusion_action_finite_identities} completes
+    Lemma~\ref{thm:mpug_czx_fusion_action_finite_identities} completes
     the proof.
 \end{proof}
 \subsection{The displayed CZX circuit tuple}
@@ -7921,7 +7921,7 @@ block label, or physical gate is changed.
     % fusion operator).
 \end{definition}
 
-\begin{theorem}[Phase tables of the CZX fusion operators]
+\begin{lemma}[Phase tables of the CZX fusion operators]
     \label{thm:mpug_czx_phase_tables}
     \lean{MPOTensor.CZX.barFlip,
         MPOTensor.CZX.barFlip_apply,
@@ -7962,7 +7962,7 @@ block label, or physical gate is changed.
     the exponents satisfy $f(\overline x)=e(x)+1$ and
     $e(\overline x)=f(x)+1$. After reindexing to the two-site matter coordinates,
     $w$ and $\tilde\lambda$ are unitary.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpug_monomial_matrix_laws, def:mpug_czx_circuit_tuple}
@@ -7977,11 +7977,11 @@ block label, or physical gate is changed.
     (\ref{eq:mpug_czx_tilde_lambda}) adds $x_0$ to the exponent. The
     identities between $e$ and $f$ are checked on the sixteen bit strings.
     After relabelling the computational basis as two four-level matter sites,
-    unitarity follows from Theorem~\ref{thm:mpug_monomial_matrix_laws} because
+    unitarity follows from Lemma~\ref{thm:mpug_monomial_matrix_laws} because
     all phases are unimodular.
 \end{proof}
 
-\begin{theorem}[Right movement coordinates of the displayed CZX factors]
+\begin{lemma}[Right movement coordinates of the displayed CZX factors]
     \label{thm:mpug_czx_displayed_right_movement_coordinates}
     \lean{MPOTensor.CZX.displayedSourceFactors_sourceWR_coordinates}
     \leanok
@@ -8000,7 +8000,7 @@ block label, or physical gate is changed.
         (w_R)_{(i,e_r^{-1}(r)),(e_r^{-1}(a),j)}
          & =W_{(i,r),(a,j)}.
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:mpug_czx_displayed_source_factors, def:mpug_staircase_gates,
@@ -8024,7 +8024,7 @@ block label, or physical gate is changed.
     phases agree.
 \end{proof}
 
-\begin{theorem}[Left movement coordinates of the displayed CZX factors]
+\begin{lemma}[Left movement coordinates of the displayed CZX factors]
     \label{thm:mpug_czx_displayed_left_movement_coordinates}
     \lean{MPOTensor.CZX.displayedSourceFactors_sourceWL_coordinates}
     \leanok
@@ -8044,7 +8044,7 @@ block label, or physical gate is changed.
         (w_L)_{(e_l^{-1}(l),i),(j,e_l^{-1}(k))}
          & =(W^\dagger)_{(l,i),(j,k)}.
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:mpug_czx_displayed_source_factors, def:mpug_staircase_gates,
@@ -8067,7 +8067,7 @@ block label, or physical gate is changed.
 % No full truncated-symmetry formula, associator, sign, or parent issue
 % completion is asserted.
 
-\begin{theorem}[Local monomial action of the CZX Gauss operator]
+\begin{lemma}[Local monomial action of the CZX Gauss operator]
     \label{thm:mpug_czx_local_monomial_action}
     \lean{MPOTensor.CZX.iPow,
         MPOTensor.CZX.iPow_add,
@@ -8109,12 +8109,12 @@ block label, or physical gate is changed.
         \label{eq:mpug_czx_phase_table}
     \end{align}
     modulo $4$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpug_gauss_operator_monomial, thm:mpug_czx_phase_tables}
-    By Theorem~\ref{thm:mpug_gauss_operator_monomial} applied to the monomial
-    unitaries of Theorem~\ref{thm:mpug_czx_phase_tables}, the operator
+    By Lemma~\ref{thm:mpug_gauss_operator_monomial} applied to the monomial
+    unitaries of Lemma~\ref{thm:mpug_czx_phase_tables}, the operator
     $\mathcal G_g$ is monomial. The permutation part is
     $\overline{\,\cdot\,}$ on the matter bits in all four gauge sectors,
     since $\overline{\,\cdot\,}$ is an involution, and $T_g$ flips both
@@ -8169,7 +8169,7 @@ block label, or physical gate is changed.
     \end{align}
 \end{definition}
 
-\begin{theorem}[Permutation-orbit classification]
+\begin{lemma}[Permutation-orbit classification]
     \label{thm:mpug_czx_orbit_classification}
     \lean{MPOTensor.CZX.fiberEquiv,
         MPOTensor.CZX.fiberEquiv_apply,
@@ -8190,7 +8190,7 @@ block label, or physical gate is changed.
     whose inverse reads off $p(s)$, $b(s)$, and $\gamma=m^{(1)}$. In these
     coordinates $\sigma_j$ is $\gamma\mapsto\gamma+e_j$ and leaves $(p,b)$
     unchanged.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:mpug_czx_chain_labels}
@@ -8201,7 +8201,7 @@ block label, or physical gate is changed.
     because $k-1=j$ exactly when $k=j+1$.
 \end{proof}
 
-\begin{theorem}[Involution and neighboring holonomy]
+\begin{lemma}[Involution and neighboring holonomy]
     \label{thm:mpug_czx_holonomy}
     \lean{MPOTensor.CZX.bondExponent_add_bondExponent_chainFlip,
         MPOTensor.CZX.bondExponent_holonomy,
@@ -8228,7 +8228,7 @@ block label, or physical gate is changed.
     $\varphi_j(s)\varphi_j(\sigma_js)=1$, while
     (\ref{eq:mpug_czx_holonomy}) gives the neighboring square relation with
     factor $(-1)^{b_{j+1}(s)}$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:mpug_czx_chain_labels}
@@ -8244,7 +8244,7 @@ block label, or physical gate is changed.
     the nine bits at the three sites.
 \end{proof}
 
-\begin{theorem}[Fixed spaces on the orbit fibers]
+\begin{lemma}[Fixed spaces on the orbit fibers]
     \label{thm:mpug_czx_good_fibers}
     \lean{MPOTensor.CZX.isTrivialHolonomy_fiberPhase_iff}
     \leanok
@@ -8252,7 +8252,7 @@ block label, or physical gate is changed.
     Let $N\geq3$. In the fiber coordinates
     (\ref{eq:mpug_czx_fiber_coordinates}), the phases $i^{q_j}$ have trivial
     holonomy on the fiber over $(p,b)$ if and only if $b=0$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpug_czx_holonomy, thm:mpug_czx_orbit_classification}
@@ -8264,7 +8264,7 @@ block label, or physical gate is changed.
     phases are nonzero, hence $b_k=0$ for every $k$.
 \end{proof}
 
-\begin{theorem}[The placed CZX Gauss operators]
+\begin{lemma}[The placed CZX Gauss operators]
     \label{thm:mpug_czx_placed_operators}
     \lean{MPOTensor.CZX.windowCoordinates,
         MPOTensor.CZX.placedGaussOperator,
@@ -8307,7 +8307,7 @@ block label, or physical gate is changed.
     coordinates (\ref{eq:mpug_czx_fiber_coordinates}) it is the monomial
     operator with permutation $\gamma\mapsto\gamma+e_j$ and phase
     $i^{q_j}$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:mpug_gauss_projector, thm:mpug_gauss_representation,
@@ -8317,16 +8317,16 @@ block label, or physical gate is changed.
     with $\mathcal G_e=\Id$, and relabelling and placement are linear and
     unital, which gives (\ref{eq:mpug_czx_placed_projector}). A vector $v$
     satisfies $\frac12(v+G_jv)=v$ exactly when $G_jv=v$.
-    Theorem~\ref{thm:mpug_czx_local_monomial_action} and
-    Theorem~\ref{thm:mpug_embed_monomial} express $G_j$ as a monomial
+    Lemma~\ref{thm:mpug_czx_local_monomial_action} and
+    Lemma~\ref{thm:mpug_embed_monomial} express $G_j$ as a monomial
     operator; decoding the two-site window at $j$ into the bits of the sites
     $j$ and $j+1$ identifies its permutation with $\sigma_j$ and its phase
     with $i^{q_j(s)}$. Finally
-    Theorem~\ref{thm:mpug_czx_orbit_classification} reindexes both to the
+    Lemma~\ref{thm:mpug_czx_orbit_classification} reindexes both to the
     fiber coordinates.
 \end{proof}
 
-\begin{theorem}[Exact dimension for the displayed CZX circuit tuple]
+\begin{lemma}[Exact dimension for the displayed CZX circuit tuple]
     \label{thm:mpug_czx_dimension}
     \lean{MPOTensor.CZX.finrank_commonFixedSubmodule_placedGaussProjector_circuitTuple}
     \leanok
@@ -8339,13 +8339,13 @@ block label, or physical gate is changed.
         \dim\mathcal V_N(R^{\mathrm{CZX}}) & =2^N.
         \label{eq:mpug_czx_dimension}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpug_czx_placed_operators,
         thm:mpug_monomial_fixed_space_criterion,
         thm:mpug_czx_holonomy, thm:mpug_czx_good_fibers}
-    By Theorem~\ref{thm:mpug_czx_placed_operators},
+    By Lemma~\ref{thm:mpug_czx_placed_operators},
     $\mathcal V_N(R^{\mathrm{CZX}})$ is the common fixed subspace of monomial
     operators which, in fiber coordinates, have permutations
     $\gamma\mapsto\gamma+e_j$ on the fibers over
@@ -8353,7 +8353,7 @@ block label, or physical gate is changed.
     (\ref{eq:mpug_czx_involution}) these operators are involutions. The
     monomial fixed-space criterion
     (\ref{eq:mpug_monomial_fixed_space_count}) counts the fibers with trivial
-    holonomy, which by Theorem~\ref{thm:mpug_czx_good_fibers} are exactly
+    holonomy, which by Lemma~\ref{thm:mpug_czx_good_fibers} are exactly
     the fibers with $b=0$. There is one such $b$ and there are $2^N$ values
     of $p$, so
     \begin{align}
@@ -8362,7 +8362,7 @@ block label, or physical gate is changed.
     \end{align}
 \end{proof}
 
-\begin{theorem}[The CZX dimension in the gauge-invariant subspace of the displayed tuple]
+\begin{lemma}[The CZX dimension in the gauge-invariant subspace of the displayed tuple]
     \label{thm:mpug_czx_dimension_of_completion}
     \lean{MPOTensor.CZX.finrank_gaugeInvariantSubspace_circuitTuple}
     \leanok
@@ -8376,11 +8376,11 @@ block label, or physical gate is changed.
     defect maps with matter defect states satisfying local defect support,
     exact defect covariance, and nonvanishing of the gauged vector would put
     the exact value beside the lower bound $\dim_{\C}\mathcal V_N(R)\geq1$ of
-    Theorem~\ref{thm:mpug_gauge_invariant_subspace_finrank}. None of those
+    Lemma~\ref{thm:mpug_gauge_invariant_subspace_finrank}. None of those
     hypotheses is established here. The statement is about the displayed
     circuit tuple and asserts no membership in the full physical completion
     class of the CZX defect data.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpug_czx_dimension, def:mpug_placed_gauss_projector}
@@ -8388,7 +8388,7 @@ block label, or physical gate is changed.
     projectors $\widetilde P_j(R^{\mathrm{CZX}})$ of
     Definition~\ref{def:mpug_placed_gauss_projector} acting on the
     configuration space of the chain, so
-    Theorem~\ref{thm:mpug_czx_dimension} gives the value.
+    Lemma~\ref{thm:mpug_czx_dimension} gives the value.
 \end{proof}
 
 \subsection{A second displayed circuit tuple at three and four sites}
@@ -8441,15 +8441,15 @@ eigenspace dimension differs at three and four blocked sites.
     domains and prescribed maps of
     Definition~\ref{def:mpug_czx_defect_maps} determine a four-sector
     completion class, and both tuples extend all four prescribed maps: the
-    first by Theorem~\ref{thm:mpug_czx_tuple_completion} and the second by
-    Theorem~\ref{thm:mpug_czx_star_tuple_completion}, because $R_\star$ fixes
+    first by Lemma~\ref{thm:mpug_czx_tuple_completion} and the second by
+    Lemma~\ref{thm:mpug_czx_star_tuple_completion}, because $R_\star$ fixes
     the defect domain of the pair $(g,g)$ pointwise and the other three
     operators are those of $R^{\mathrm{CZX}}$.
     % Source anchor: arXiv:2502.20257, lines 4503--5183 (CZX model, defect and
     % fusion data, modified Gauss law).
 \end{definition}
 
-\begin{theorem}[Local monomial action of the second tuple's Gauss operator]
+\begin{lemma}[Local monomial action of the second tuple's Gauss operator]
     \label{thm:mpug_czx_star_local_monomial_action}
     \lean{MPOTensor.CZX.rStarExponent_barFlip,
         MPOTensor.CZX.starDefect,
@@ -8479,12 +8479,12 @@ eigenspace dimension differs at three and four blocked sites.
         r_\star(\overline x) & =r_\star(x)+x_0+x_1+x_2+x_3.
         \label{eq:mpug_czx_star_bar}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpug_gauss_operator_monomial, thm:mpug_czx_phase_tables,
         def:mpug_czx_star_tuple}
-    By Theorem~\ref{thm:mpug_gauss_operator_monomial} the operator is monomial,
+    By Lemma~\ref{thm:mpug_gauss_operator_monomial} the operator is monomial,
     and the two blocks $U^\star_{0,1}=\Id$ and $U^\star_{1,0}=w$ agree with
     those of (\ref{eq:mpug_czx_tuple}), so the $(0,1)$ and $(1,0)$ rows of the
     phase table are unchanged. In the $(1,1)$ sector the phase acquires the
@@ -8500,7 +8500,7 @@ eigenspace dimension differs at three and four blocked sites.
     strings.
 \end{proof}
 
-\begin{theorem}[Involution and neighboring holonomy for the second tuple]
+\begin{lemma}[Involution and neighboring holonomy for the second tuple]
     \label{thm:mpug_czx_star_holonomy}
     \lean{MPOTensor.CZX.bondExponentStar,
         MPOTensor.CZX.starHolonomyLabel,
@@ -8539,7 +8539,7 @@ eigenspace dimension differs at three and four blocked sites.
     orbit labels, $c_j(p,b)=b_{j+1}(1+p_j+p_{j+1})+b_{j+2}(p_{j+1}+p_{j+2})$,
     and the phases $\varphi^\star_j=i^{q^\star_j}$ are involutive and satisfy
     the neighboring square relation with factor $(-1)^{c_j(p,b)}$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpug_czx_star_local_monomial_action,
@@ -8552,11 +8552,11 @@ eigenspace dimension differs at three and four blocked sites.
     $j+1$, $j+2$ are distinct because $N\geq3$, and the identity is verified on
     the $512$ values of the nine bits at those three sites. In fiber
     coordinates $p$ and $b$ are read off by
-    Theorem~\ref{thm:mpug_czx_orbit_classification}, which turns $c_j$ into the
+    Lemma~\ref{thm:mpug_czx_orbit_classification}, which turns $c_j$ into the
     displayed polynomial in the orbit labels alone.
 \end{proof}
 
-\begin{theorem}[Fixed spaces on the orbit fibers for the second tuple]
+\begin{lemma}[Fixed spaces on the orbit fibers for the second tuple]
     \label{thm:mpug_czx_star_good_fibers}
     \lean{MPOTensor.CZX.isTrivialHolonomy_fiberPhaseStar_iff}
     \leanok
@@ -8566,7 +8566,7 @@ eigenspace dimension differs at three and four blocked sites.
     (\ref{eq:mpug_czx_fiber_coordinates}), the phases $i^{q^\star_j}$ have
     trivial holonomy on the fiber over $(p,b)$ if and only if $c_j(p,b)=0$ for
     every $j\in\Z/N\Z$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpug_czx_star_holonomy, thm:mpug_czx_orbit_classification}
@@ -8579,7 +8579,7 @@ eigenspace dimension differs at three and four blocked sites.
     $c_j(p,b)=0$.
 \end{proof}
 
-\begin{theorem}[The placed Gauss operators of the second tuple]
+\begin{lemma}[The placed Gauss operators of the second tuple]
     \label{thm:mpug_czx_star_placed_operators}
     \lean{MPOTensor.CZX.placedGaussOperatorStar,
         MPOTensor.CZX.gaussProjector_circuitTupleStar,
@@ -8592,7 +8592,7 @@ eigenspace dimension differs at three and four blocked sites.
     \uses{def:mpug_placed_gauss_projector, def:mpug_czx_star_tuple,
         def:mpug_czx_chain_labels, def:mpug_common_fixed_subspace}
     Let $N\geq2$ and let $G^\star_j$ be the local Gauss operator of
-    Theorem~\ref{thm:mpug_czx_star_local_monomial_action} placed on the bond
+    Lemma~\ref{thm:mpug_czx_star_local_monomial_action} placed on the bond
     $(j,j+1)$. The placed Gauss projector of
     Definition~\ref{def:mpug_placed_gauss_projector} is
     $\widetilde P^\star_j=\tfrac12(\Id+G^\star_j)$, so the common fixed subspace
@@ -8603,7 +8603,7 @@ eigenspace dimension differs at three and four blocked sites.
     coordinates (\ref{eq:mpug_czx_fiber_coordinates}) it is the monomial
     operator with permutation $\gamma\mapsto\gamma+e_j$ and phase
     $i^{q^\star_j}$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:mpug_gauss_projector, thm:mpug_czx_star_local_monomial_action,
@@ -8612,16 +8612,16 @@ eigenspace dimension differs at three and four blocked sites.
     The average over $\Z_2=\{e,g\}$ is $\frac12(\mathcal G_e+\mathcal G_g)$ with
     $\mathcal G_e=\Id$, and relabelling and placement are linear and unital. A
     vector $v$ satisfies $\frac12(v+G^\star_jv)=v$ exactly when
-    $G^\star_jv=v$. Theorem~\ref{thm:mpug_czx_star_local_monomial_action} and
-    Theorem~\ref{thm:mpug_embed_monomial} express $G^\star_j$ as a monomial
+    $G^\star_jv=v$. Lemma~\ref{thm:mpug_czx_star_local_monomial_action} and
+    Lemma~\ref{thm:mpug_embed_monomial} express $G^\star_j$ as a monomial
     operator; the permutation part is that of
-    Theorem~\ref{thm:mpug_czx_placed_operators}, and decoding the two-site
+    Lemma~\ref{thm:mpug_czx_placed_operators}, and decoding the two-site
     window at $j$ identifies the phase with $i^{q^\star_j(s)}$. Finally
-    Theorem~\ref{thm:mpug_czx_orbit_classification} reindexes both to the
+    Lemma~\ref{thm:mpug_czx_orbit_classification} reindexes both to the
     fiber coordinates.
 \end{proof}
 
-\begin{theorem}[Reduction of the dimension to a finite count]
+\begin{lemma}[Reduction of the dimension to a finite count]
     \label{thm:mpug_czx_star_reduction}
     \lean{MPOTensor.CZX.finrank_commonFixedSubmodule_placedGaussProjector_circuitTupleStar}
     \leanok
@@ -8634,23 +8634,23 @@ eigenspace dimension differs at three and four blocked sites.
         c_j(p,b)=0\text{ for all }j\in\Z/N\Z\bigr\}.
         \label{eq:mpug_czx_star_count}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpug_czx_star_placed_operators,
         thm:mpug_monomial_fixed_space_criterion,
         thm:mpug_czx_star_holonomy, thm:mpug_czx_star_good_fibers}
-    By Theorem~\ref{thm:mpug_czx_star_placed_operators},
+    By Lemma~\ref{thm:mpug_czx_star_placed_operators},
     $\mathcal V_N(R^\star)$ is the common fixed subspace of monomial operators
     which, in fiber coordinates, have permutations $\gamma\mapsto\gamma+e_j$ on
     the fibers over $(p,b)$, and by (\ref{eq:mpug_czx_star_involution}) these
     operators are involutions. The monomial fixed-space criterion
     (\ref{eq:mpug_monomial_fixed_space_count}) counts the fibers with trivial
-    holonomy, which by Theorem~\ref{thm:mpug_czx_star_good_fibers} are exactly
+    holonomy, which by Lemma~\ref{thm:mpug_czx_star_good_fibers} are exactly
     the fibers whose labels satisfy the $N$ equations $c_j(p,b)=0$.
 \end{proof}
 
-\begin{theorem}[Dimensions for the second displayed tuple at three and four sites]
+\begin{lemma}[Dimensions for the second displayed tuple at three and four sites]
     \label{thm:mpug_czx_star_dimension}
     \lean{MPOTensor.CZX.finrank_commonFixedSubmodule_placedGaussProjector_circuitTupleStar_three,
         MPOTensor.CZX.finrank_commonFixedSubmodule_placedGaussProjector_circuitTupleStar_four}
@@ -8668,15 +8668,15 @@ eigenspace dimension differs at three and four blocked sites.
     asymptotic content, and no growth law for $\dim\mathcal V_N(R^\star)$
     follows from them. Since $R^\star$ extends the four prescribed maps of
     Definition~\ref{def:mpug_czx_defect_maps} by
-    Theorem~\ref{thm:mpug_czx_star_tuple_completion}, these are two values of
+    Lemma~\ref{thm:mpug_czx_star_tuple_completion}, these are two values of
     the dimension on that completion class, recorded as lower bounds on its
-    supremum in Theorem~\ref{thm:mpug_czx_star_class_values}; they give no
+    supremum in Lemma~\ref{thm:mpug_czx_star_class_values}; they give no
     value for the minimum or the maximum of the dimension over completions.
     Compared with
     (\ref{eq:mpug_czx_dimension}), which gives $8$ and $16$ at the same two
     sizes, they exhibit dependence of the dimension on the displayed circuit
     data at those two sizes.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpug_czx_star_reduction}
@@ -8753,7 +8753,7 @@ subspaces and prescribed maps are evaluated by finite contraction in
     sixteen-dimensional two-site matter space is written $\ket{x_0x_1x_2x_3}$.
 \end{definition}
 
-\begin{theorem}[The eight CZX defect vectors]
+\begin{lemma}[The eight CZX defect vectors]
     \label{thm:mpug_czx_defect_vector_values}
     \lean{MPOTensor.CZX.defectVector_one_one_zero,
         MPOTensor.CZX.defectVector_one_one_one,
@@ -8779,7 +8779,7 @@ subspaces and prescribed maps are evaluated by finite contraction in
     \end{align}
     For every label pair the two vectors $v(a,b,0)$ and $v(a,b,1)$ are
     orthonormal.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:mpug_czx_site_defects, def:mpug_czx_defect_vectors}
@@ -8819,7 +8819,7 @@ subspaces and prescribed maps are evaluated by finite contraction in
     gives (\ref{eq:mpug_czx_matter_monomial_action}).
 \end{proof}
 
-\begin{theorem}[Unmodified CZX fusion contractions]
+\begin{lemma}[Unmodified CZX fusion contractions]
     \label{thm:mpug_czx_unmodified_fusion}
     \lean{MPOTensor.CZX.matterMatrix_lambda_mulVec_defectVector_zero,
         MPOTensor.CZX.matterMatrix_lambda_mulVec_defectVector_one}
@@ -8841,7 +8841,7 @@ subspaces and prescribed maps are evaluated by finite contraction in
         \lambda\,v(g,g,0) & =-v(e,e,0), \\
         \lambda\,v(g,g,1) & =v(e,e,1).
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpug_czx_phase_tables, thm:mpug_czx_defect_vector_values,
@@ -8855,7 +8855,7 @@ subspaces and prescribed maps are evaluated by finite contraction in
         \label{eq:mpug_czx_lambda_ket_odd}
     \end{align}
     since $h(1100)=0$ and $h(0011)=1$.
-    By Theorem~\ref{thm:mpug_czx_defect_vector_values}, the input defect
+    By Lemma~\ref{thm:mpug_czx_defect_vector_values}, the input defect
     vectors are $-i\ket{1100}$ and $-i\ket{0011}$, while the target
     vectors are $\ket{0000}$ and $\ket{1111}$. Multiplying
     (\ref{eq:mpug_czx_lambda_ket_even}) and
@@ -8880,7 +8880,7 @@ subspaces and prescribed maps are evaluated by finite contraction in
     \end{align}
 \end{definition}
 
-\begin{theorem}[The four CZX defect domains]
+\begin{lemma}[The four CZX defect domains]
     \label{thm:mpug_czx_defect_domains}
     \lean{MPOTensor.CZX.defectDomain_one_one,
         MPOTensor.CZX.defectDomain_gen_one,
@@ -8902,7 +8902,7 @@ subspaces and prescribed maps are evaluated by finite contraction in
     \end{align}
     so the domain depends only on the right label. The two planes are
     orthogonal, $\mathcal L_0\perp\mathcal L_1$, and each has dimension two.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpug_czx_defect_vector_values, def:mpug_czx_defect_domains}
@@ -8936,7 +8936,7 @@ subspaces and prescribed maps are evaluated by finite contraction in
     Definition~\ref{def:mpug_czx_circuit_tuple}.
 \end{definition}
 
-\begin{theorem}[Action of the prescribed CZX defect maps]
+\begin{lemma}[Action of the prescribed CZX defect maps]
     \label{thm:mpug_czx_prescribed_action}
     \lean{MPOTensor.CZX.prescribedMap_mulVec_defectVector,
         MPOTensor.CZX.prescribedMap_mem_defectDomain,
@@ -8970,13 +8970,13 @@ subspaces and prescribed maps are evaluated by finite contraction in
                 & \quad D_{g,g}\ket{0011}=i\ket{1111}.
         \label{eq:mpug_czx_map_gg}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpug_czx_defect_vector_values, def:mpug_czx_prescribed_maps}
     Applying (\ref{eq:mpug_czx_prescribed_map}) to $v(a,b,x)$ and using the
     orthonormality of $v(a,b,0)$ and $v(a,b,1)$ of
-    Theorem~\ref{thm:mpug_czx_defect_vector_values} leaves the single term
+    Lemma~\ref{thm:mpug_czx_defect_vector_values} leaves the single term
     $v(e,ab,x)$, which is (\ref{eq:mpug_czx_prescription}). The same
     computation for the adjoint gives
     $D_{a,b}^{\dagger}v(e,ab,x)=v(a,b,x)$, and composing the two identities on
@@ -9001,10 +9001,10 @@ subspaces and prescribed maps are evaluated by finite contraction in
     of Definition~\ref{def:mpug_defect_maps} for the group $\Z_2$ and the
     two-site matter space of the CZX model, the isometry condition
     (\ref{eq:mpug_defect_isometry}) being
-    Theorem~\ref{thm:mpug_czx_prescribed_action}. That the circuit tuple
+    Lemma~\ref{thm:mpug_czx_prescribed_action}. That the circuit tuple
     $R^{\mathrm{CZX}}$ lies in the resulting completion class
     (\ref{eq:mpug_completion_class}) is proved unconditionally in
-    Theorem~\ref{thm:mpug_czx_tuple_completion} below.
+    Lemma~\ref{thm:mpug_czx_tuple_completion} below.
 \end{definition}
 
 \section{The displayed CZX tuple as a completion}
@@ -9019,7 +9019,7 @@ class of the CZX prescribed defect maps $D^{\mathrm{CZX}}$, and
 (\ref{eq:mpug_czx_dimension}) lower-bounds the supremum of the gauge-invariant
 dimension over the full class.
 
-\begin{theorem}[The displayed CZX tuple is a completion]
+\begin{lemma}[The displayed CZX tuple is a completion]
     \label{thm:mpug_czx_tuple_completion}
     \lean{MPOTensor.CZX.circuitTuple_one_mulVec_defectVector,
         MPOTensor.CZX.circuitTuple_gen_one_mulVec_defectVector_zero,
@@ -9055,7 +9055,7 @@ dimension over the full class.
         R^{\mathrm{CZX}} & \in\mathfrak C(D^{\mathrm{CZX}}).
         \label{eq:mpug_czx_tuple_completion}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpug_czx_phase_tables, thm:mpug_czx_defect_vector_values,
@@ -9063,7 +9063,7 @@ dimension over the full class.
     The phase tables (\ref{eq:mpug_czx_w_action}) and
     (\ref{eq:mpug_czx_tilde_lambda_action}), evaluated at the four
     computational basis states carrying the defect vectors of
-    Theorem~\ref{thm:mpug_czx_defect_vector_values}, give
+    Lemma~\ref{thm:mpug_czx_defect_vector_values}, give
     \begin{align}
         w\ket{0000}             & =\ket{1100},
                                 & w\ket{1111}
@@ -9087,7 +9087,7 @@ dimension over the full class.
     (\ref{eq:mpug_czx_tuple_completion}).
 \end{proof}
 
-\begin{theorem}[Lower bound on the supremum over the CZX completion class]
+\begin{lemma}[Lower bound on the supremum over the CZX completion class]
     \label{thm:mpug_czx_class_maximum}
     \lean{MPOTensor.CZX.bddAbove_range_finrank_gaugeInvariantSubspace,
         MPOTensor.CZX.two_pow_le_iSup_finrank_gaugeInvariantSubspace_completionClass}
@@ -9110,20 +9110,20 @@ dimension over the full class.
     \cite[lines~5198--5204]{FrancoRubio2025MPUGauging} asks only whether the
     gauge-invariant subspace of the state-level gauging stays bounded or grows
     with the system size, and nothing is asserted about that growth either.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpug_czx_tuple_completion, thm:mpug_czx_dimension_of_completion}
     Every gauge-invariant subspace (\ref{eq:mpug_gauge_invariant_subspace}) is
     a subspace of the chain space, so the dimensions of the members of the
     class are bounded above by the dimension of that space and their supremum
-    is finite. By Theorem~\ref{thm:mpug_czx_tuple_completion} the displayed
+    is finite. By Lemma~\ref{thm:mpug_czx_tuple_completion} the displayed
     tuple lies in the class, and by
-    Theorem~\ref{thm:mpug_czx_dimension_of_completion} its gauge-invariant
+    Lemma~\ref{thm:mpug_czx_dimension_of_completion} its gauge-invariant
     subspace has dimension $2^N$, which is therefore at most the supremum.
 \end{proof}
 
-\begin{theorem}[The second displayed CZX tuple is a completion]
+\begin{lemma}[The second displayed CZX tuple is a completion]
     \label{thm:mpug_czx_star_tuple_completion}
     \lean{MPOTensor.CZX.matterMatrix_tildeLambdaStar_mulVec_matterKet_zero,
         MPOTensor.CZX.matterMatrix_tildeLambdaStar_mulVec_matterKet_one,
@@ -9146,14 +9146,14 @@ dimension over the full class.
         R^\star & \in\mathfrak C(D^{\mathrm{CZX}}).
         \label{eq:mpug_czx_star_tuple_completion}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpug_czx_tuple_completion, thm:mpug_czx_defect_domains,
         def:mpug_czx_star_tuple}
     The pairs $(e,e)$, $(e,g)$, and $(g,e)$ carry the same operators in
     $R^\star$ as in $R^{\mathrm{CZX}}$, so
-    Theorem~\ref{thm:mpug_czx_tuple_completion} gives
+    Lemma~\ref{thm:mpug_czx_tuple_completion} gives
     (\ref{eq:mpug_czx_star_tuple_fusion}) there. For the pair $(g,g)$ the
     operator is $\tilde\lambda R_\star$, and the defect domain is
     $\mathcal K_{g,g}=\mathcal L_1=\spn_{\C}\{\ket{1100},\ket{0011}\}$ by
@@ -9165,7 +9165,7 @@ dimension over the full class.
     (\ref{eq:mpug_czx_star_tuple_completion}).
 \end{proof}
 
-\begin{theorem}[Two further values of the dimension on the CZX completion
+\begin{lemma}[Two further values of the dimension on the CZX completion
         class]
     \label{thm:mpug_czx_star_class_values}
     \lean{MPOTensor.CZX.finrank_gaugeInvariantSubspace_circuitTupleStar_three,
@@ -9189,15 +9189,15 @@ dimension over the full class.
     class at each of those lengths. Nothing follows about the minimum, the
     exact supremum, which completion attains it, or the behaviour of any of
     these as $N$ grows.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpug_czx_star_tuple_completion, thm:mpug_czx_star_dimension}
-    By Theorem~\ref{thm:mpug_czx_star_tuple_completion} the second displayed
+    By Lemma~\ref{thm:mpug_czx_star_tuple_completion} the second displayed
     tuple lies in the class, and by
-    Theorem~\ref{thm:mpug_czx_star_dimension} its gauge-invariant subspace has
+    Lemma~\ref{thm:mpug_czx_star_dimension} its gauge-invariant subspace has
     dimensions $14$ and $36$ at three and four sites. Each value is therefore
     at most the supremum over the class at that chain length, by the same
     boundedness argument as in
-    Theorem~\ref{thm:mpug_czx_class_maximum}.
+    Lemma~\ref{thm:mpug_czx_class_maximum}.
 \end{proof}
