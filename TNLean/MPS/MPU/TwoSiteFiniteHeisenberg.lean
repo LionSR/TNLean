@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.MPU.TwoSiteStandardFormCircuit
+import TNLean.MPS.MPU.FiniteChainConjugation
 import TNLean.MPS.MPU.TwoSiteStandardFormOpenWord
 import TNLean.MPS.MPU.TwoSiteStandardFormResidualWord
 import QICLean.Algebra.MatrixKroneckerEmbed
@@ -26,8 +27,9 @@ and the finite conjugation underlying eq:appendix-1, lines 2300--2306.
 supplied blocked tensor at every length at least three. The original-site
 results also retain arbitrary original residual prefixes and suffixes,
 without a whole-chain divisibility premise. Arbitrary supported regions,
-buffered interval compatibility, and the quasi-local automorphism remain
-separate. See `docs/paper-gaps/mpu_qca_complete_block_heisenberg_scope.tex`.
+the full compatible interval family and the quasi-local automorphism
+remain separate. The final result identifies canonical buffered inclusions
+for the one-window input algebra. See `docs/paper-gaps/mpu_qca_complete_block_heisenberg_scope.tex`.
 
 -/
 
@@ -469,3 +471,129 @@ theorem mpo_bufferedWindow_conjugation {d D ℓ r : ℕ}
 
 end MPOTensor
 
+
+namespace SpinChain
+
+private theorem bufferedWindow_middle (d n p s : ℕ)
+    (pre : Fin p → Fin d) (suf : Fin s → Fin d) (mid : Fin n → Fin d) :
+    (fun i : Fin n ↦ MPOTensor.bufferedWindowConfigEquiv d n p s ((pre, suf), mid)
+      ⟨p + i.val, by omega⟩) = mid := by
+  funext i
+  change Fin.append pre (Fin.append mid suf) ((i.castAdd s).natAdd p) = mid i
+  simp only [Fin.append_right, Fin.append_left]
+
+private theorem bufferedWindow_outside_eq_iff (d n p s : ℕ)
+    (pre pre' : Fin p → Fin d) (suf suf' : Fin s → Fin d)
+    (mid mid' : Fin n → Fin d) :
+    (∀ i : Fin (p + (n + s)), ¬ (p ≤ i.val ∧ i.val < p + n) →
+      MPOTensor.bufferedWindowConfigEquiv d n p s ((pre, suf), mid) i =
+        MPOTensor.bufferedWindowConfigEquiv d n p s ((pre', suf'), mid') i) ↔
+      (pre, suf) = (pre', suf') := by
+  change (∀ i : Fin (p + (n + s)), ¬ (p ≤ i.val ∧ i.val < p + n) →
+    Fin.append pre (Fin.append mid suf) i =
+      Fin.append pre' (Fin.append mid' suf') i) ↔ _
+  constructor
+  · intro h
+    apply Prod.ext
+    · funext i
+      have hi := h (i.castAdd (n + s)) (by
+        simp only [Fin.val_castAdd]
+        omega)
+      simpa only [Fin.append_left] using hi
+    · funext i
+      have hi := h ((i.natAdd n).natAdd p) (by
+        simp only [Fin.val_natAdd]
+        omega)
+      simpa only [Fin.append_right] using hi
+  · intro h
+    have hp := congrArg Prod.fst h
+    have hs := congrArg Prod.snd h
+    cases hp
+    cases hs
+    intro i
+    refine Fin.addCases (fun j _ ↦ ?_) (fun j ↦ ?_) i
+    · simp only [Fin.append_left]
+    · refine Fin.addCases (fun j hj ↦ ?_) (fun j _ ↦ ?_) j
+      · exfalso
+        apply hj
+        simp only [Fin.val_natAdd, Fin.val_castAdd]
+        omega
+      · simp only [Fin.append_right]
+
+/-- The complete original-site buffering coordinates agree with the
+canonical local-algebra inclusion on integer intervals.
+Source: arXiv:1703.09188, Appendix, lines 2292--2295. -/
+theorem intervalCoordinates_localInclusion_eq_bufferedWindowMatrix
+    (d n p s : ℕ) (a : ℤ) (A : LocalAlgebra d (finiteChainRegion a n)) :
+    intervalCoordinates d (a - p) (p + (n + s))
+      (localInclusion (show finiteChainRegion a n ⊆
+        finiteChainRegion (a - p) (p + (n + s)) by
+          simpa only [Nat.add_assoc] using finiteChainRegion_subset_expanded a n p s) A) =
+      MPOTensor.bufferedWindowMatrix d n p s (intervalCoordinates d a n A) := by
+  classical
+  ext row col
+  obtain ⟨⟨⟨pre, suf⟩, mid⟩, rfl⟩ :=
+    (MPOTensor.bufferedWindowConfigEquiv d n p s).surjective row
+  obtain ⟨⟨⟨pre', suf'⟩, mid'⟩, rfl⟩ :=
+    (MPOTensor.bufferedWindowConfigEquiv d n p s).surjective col
+  have h := intervalCoordinates_localInclusion_apply d a n p s A
+  simp only [Nat.add_assoc] at h
+  rw [h]
+  simp only [bufferedWindow_middle, bufferedWindow_outside_eq_iff,
+    MPOTensor.bufferedWindowMatrix, Matrix.reindex_apply, Equiv.symm_apply_apply,
+    Matrix.rightKroneckerEmbed_apply, Matrix.kroneckerMap_apply, Matrix.one_apply]
+  rw [mul_comm]
+
+private theorem intervalCoordinates_finiteChainMPOMatrix {d D : ℕ}
+    (U : MPOTensor d D) (N : ℕ) (a : ℤ) :
+    intervalCoordinates d a N (finiteChainMPOMatrix U N a) = MPOTensor.mpo U N := by
+  classical
+  ext row col
+  simp [intervalCoordinates_apply, finiteChainMPOMatrix, Matrix.reindex_apply]
+
+/-- Actual finite-chain conjugation of a fixed standard-form window is
+independent of every original-site buffer and of the ambient chain length.
+The equality is in the existing algebraic local algebra, using canonical
+local inclusions, rather than an assumed compatible action.
+Source: arXiv:1703.09188, eq:appendix-1, lines 2300--2306. -/
+theorem finiteChainLocalObservable_originalSiteHeisenbergWindow
+    {d D ℓ r : ℕ} {U : MPOTensor d D} (hU : U.IsMPU) (k p s : ℕ)
+    (hN : 1 < p + (3 * (2 * k) + s)) (a : ℤ)
+    {u : Matrix (Fin ℓ × Fin r)
+      (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k)) ℂ}
+    {v : Matrix (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k))
+      (Fin r × Fin ℓ) ℂ}
+    (S : MPOTensor.TwoSiteStandardFormData (MPOTensor.blockTwo (MPOTensor.blockTensor U k)) u v)
+    (A : Matrix (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k))
+      (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k)) ℂ) :
+    finiteChainLocalObservable hU hN (a - p)
+      (show finiteChainRegion a (3 * (2 * k)) ⊆
+        finiteChainRegion (a - p) (p + (3 * (2 * k) + s)) by
+          simpa only [Nat.add_assoc] using
+            finiteChainRegion_subset_expanded a (3 * (2 * k)) p s)
+      ((intervalCoordinates d a (3 * (2 * k))).symm
+        (MPOTensor.originalSiteHeisenbergInputWindow d k A)) =
+      localObservable d (finiteChainRegion a (3 * (2 * k)))
+        ((intervalCoordinates d a (3 * (2 * k))).symm
+          (MPOTensor.originalSiteHeisenbergOutputWindow k u v A)) := by
+  classical
+  let hΛ : finiteChainRegion a (3 * (2 * k)) ⊆
+      finiteChainRegion (a - p) (p + (3 * (2 * k) + s)) := by
+    simpa only [Nat.add_assoc] using
+      finiteChainRegion_subset_expanded a (3 * (2 * k)) p s
+  have hconj : finiteChainConjugation hU hN (a - p)
+      (localInclusion hΛ ((intervalCoordinates d a (3 * (2 * k))).symm
+        (MPOTensor.originalSiteHeisenbergInputWindow d k A))) =
+      localInclusion hΛ ((intervalCoordinates d a (3 * (2 * k))).symm
+        (MPOTensor.originalSiteHeisenbergOutputWindow k u v A)) := by
+    apply (intervalCoordinates d (a - p) (p + (3 * (2 * k) + s))).injective
+    simp only [finiteChainConjugation_apply, map_mul, map_star,
+      intervalCoordinates_finiteChainMPOMatrix,
+      intervalCoordinates_localInclusion_eq_bufferedWindowMatrix,
+      StarAlgEquiv.apply_symm_apply, Matrix.star_eq_conjTranspose]
+    exact MPOTensor.mpo_bufferedWindow_conjugation hU k p s hN S A
+  change localObservable d _ (finiteChainConjugation hU hN (a - p)
+    (localInclusion hΛ _)) = _
+  rw [hconj, localObservable_localInclusion]
+
+end SpinChain

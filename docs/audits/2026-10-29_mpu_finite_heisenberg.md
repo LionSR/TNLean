@@ -44,9 +44,19 @@ and suffix. The coordinate proof splits equality of the complete exterior
 index into equality of its residual-word and within-window parts. The
 output matrix itself is independent of the ambient dimensions.
 
+The canonical integer-interval bridge is now also source-written:
+`intervalCoordinates_localInclusion_eq_bufferedWindowMatrix` identifies
+this explicit buffering with the existing canonical local-algebra inclusion.
+Its proof tests the complete configuration basis and proves that equality
+outside the middle interval is exactly equality of the prefix and suffix
+words. `finiteChainLocalObservable_originalSiteHeisenbergWindow` then
+proves equality in the existing algebraic local algebra for every anchor
+and both buffers: the actual finite-chain expression represents the same
+fixed output observable. Compatibility is concluded for this input algebra,
+rather than assumed as a new premise.
+
 This is still not the full source stabilization theorem. It does not yet
-assemble arbitrary buffered interval anchors or arbitrary supported
-observables; no compatible-local-action datum,
+assemble arbitrary supported observables; no compatible-local-action datum,
 induced QCA, radius 4D⁴, or MPU/QCA index comparison is claimed. The exact
 scope and elimination plan are in
 `docs/paper-gaps/mpu_qca_complete_block_heisenberg_scope.tex`.

@@ -112,3 +112,32 @@
     on the exterior coordinates inside the window. Reindexing the
     actual finite conjugation identity gives the claimed formula.
 \end{proof}
+
+
+\begin{theorem}[Canonical local-observable buffering for one window]
+    \label{thm:mpu_finite_heisenberg_canonical_window}
+    \lean{SpinChain.intervalCoordinates_localInclusion_eq_bufferedWindowMatrix,
+        SpinChain.finiteChainLocalObservable_originalSiteHeisenbergWindow}
+    \notready
+    \uses{thm:mpu_finite_heisenberg_fixed_window}
+    Fix an integer interval $\Lambda=[a,a+6k)$ and the preceding
+    standard-form data. Interpret $I_k(A)$ and $O_k(A)$ as matrices
+    on $\Lambda$ in consecutive site coordinates. For every $p,s\ge0$
+    with $p+6k+s>1$, the actual finite-chain conjugation on
+    $[a-p,a+6k+s)$, applied to the canonical inclusion of $I_k(A)$,
+    represents exactly the local observable $O_k(A)$ in the algebraic
+    local algebra. Consequently its value is independent of both
+    buffers, including the position and length of the ambient interval.
+    This is the one-window instance of
+    \cite[lines~2300--2306]{Cirac2017MPU}; assembly for arbitrary supported
+    observables remains separate as in
+    \cite{gap:mpu_qca_complete_block_heisenberg_scope}.
+\end{theorem}
+\begin{proof}
+    Equality of the complementary coordinates is precisely equality
+    of both exterior words, so canonical local inclusion is the same
+    identity-tensor inclusion in consecutive coordinates. Apply the
+    preceding actual finite conjugation formula, then pass through
+    the canonical inclusion into the algebraic local algebra. The
+    latter identifies all enlargements of the fixed output interval.
+\end{proof}
