@@ -9716,3 +9716,17 @@ removed after the dependency audit exposed it.
 - **Scope:** Factor minimality does not imply ambient canonicality. The
   canonical comparison takes that presentation explicitly and derives its
   simplicity, selected normalized factors and gate unitarity internally.
+
+
+### Normalized source necessity at its existing owner — promoted (2026-10-29)
+
+- **Pattern:** Construct actual physical-adjoint normalized factors, apply
+  the even-family source-gauge theorem and derive the common adjoint sign.
+- **Defined in:** `MPS/MPU/TimeReversalLocalNecessity.lean`,
+  `IsMPUCanonicalFormII.exists_supplied_source_adjoint_certificate`.
+- **Refactored occurrences:** the original coarse-source certificate and
+  the arbitrary supplied-gate forward certificate both use this single
+  source proof. The latter transports the certificate through the actual
+  raw-factor comparison with `x=X†zY`.
+- **Notes:** This promotes an existing theorem at its owner; the canonical
+  ambient presentation and exact even-length premise remain explicit.
