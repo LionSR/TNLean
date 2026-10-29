@@ -90,10 +90,10 @@ in the transposition comparison, lines 1258–1288. -/
 theorem IsMPUCanonicalFormII.isMPUSimple_physicalTransposeTensor
     {d D : ℕ} {U : MPOTensor d D} (hU : IsMPUCanonicalFormII U)
     (hsimple : IsMPUSimple U) : IsMPUSimple (MPOTensor.physicalTransposeTensor U) := by
+  have hprod : r[U] * ℓ[U] = d * d := (hU.isMPUSimple_tfae.out 1 2).mp hsimple
   apply (hU.physicalTransposeTensor.isMPUSimple_tfae.out 1 2).mpr
   simpa only [(source_ranks_physicalTransposeTensor U).1,
-    (source_ranks_physicalTransposeTensor U).2, mul_comm] using
-    (hU.isMPUSimple_tfae.out 1 2).mp hsimple
+    (source_ranks_physicalTransposeTensor U).2, mul_comm] using hprod
 
 /-- Actual even-chain transpose symmetry forces both source ranks to equal
 the physical dimension. The possible virtual sign does not change cut rank.
@@ -162,7 +162,8 @@ theorem sourceU_physicalTranspose {d D : ℕ} {U : MPOTensor d D}
   rw [SourceFactors.sourceU_mapStar, SourceFactors.sourceU_physicalAdjoint]
   ext ⟨l, r⟩ ⟨i, j⟩
   simp [Matrix.reindex_apply, Matrix.submatrix_apply, Matrix.map_apply,
-    Matrix.conjTranspose_apply, Matrix.transpose_apply]
+    Matrix.conjTranspose_apply]
+  rfl
 
 /-- The actual transposed factors' shifted gate is the original unshifted
 gate transposed. Source: CPSV17, `UUtransposetrick`, lines 1270–1283. -/
@@ -179,7 +180,8 @@ theorem sourceV_physicalTranspose {d D : ℕ} {U : MPOTensor d D}
   rw [SourceFactors.sourceV_mapStar, SourceFactors.sourceV_physicalAdjoint]
   ext ⟨i, j⟩ ⟨r, l⟩
   simp [Matrix.reindex_apply, Matrix.submatrix_apply, Matrix.map_apply,
-    Matrix.conjTranspose_apply, Matrix.transpose_apply]
+    Matrix.conjTranspose_apply]
+  rfl
 
 end SourceFactors
 

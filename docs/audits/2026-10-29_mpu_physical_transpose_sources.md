@@ -52,3 +52,13 @@ Validation is limited to pinned source APIs, generated imports, dependency
 acyclicity, whole-repository declaration names, changed-declaration Blueprint
 coverage, reader prose, tactic scan, TeX formatting, 100-column/whitespace
 and proof-integrity checks.
+
+## Hosted diagnostics on `441a34f6c`
+
+Job `123488165005` checked the actual transpose operation, canonical data,
+rank exchange and factor construction. It reported expected-type inference
+inside the simplicity TFAE specialization and two residual opaque transpose
+submatrix evaluations in the gate identities. The simplicity rank product
+now has an explicit type, and the gate proofs finish their actual entry
+identities by definitional reduction after the conjugation simplification.
+No mathematical statement changes and no local Lean command was run.
