@@ -59,6 +59,7 @@ import TNLean.MPS.Symmetry.EmbeddedFixedPointParent
 import TNLean.MPS.Symmetry.EmbeddedFixedPointTensor
 import TNLean.MPS.Symmetry.EmbeddedInjectiveGappedPath
 import TNLean.MPS.Symmetry.EntanglementSpectrum
+import TNLean.MPS.Symmetry.ExactGroundPathFrequencySeparation
 import TNLean.MPS.Symmetry.ExactGroundPathGaussianFilter
 import TNLean.MPS.Symmetry.ExactGroundPathTransferClass
 import TNLean.MPS.Symmetry.ExactMPSGappedPhase

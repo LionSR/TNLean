@@ -4327,6 +4327,78 @@ arbitrary finite set of sites in Section~\ref{sec:qc_lieb_robinson}.
     is needed.
 \end{proof}
 
+\begin{definition}[The energy-lowering part of an observable]
+    \label{def:spt_negative_frequency_part}
+    \lean{TNLean.Lattice.negativeFrequencyPart}
+    \notready
+    \discussion{9879}
+    Let $H$ be a finite Hermitian Hamiltonian with an orthonormal
+    eigenbasis $e_i$ and energies $E_i$. For an observable $A$, define
+    \[
+        A^- = \sum_{E_i<E_j}
+        \langle e_i,Ae_j\rangle\,|e_i\rangle\langle e_j|.
+    \]
+    This is the sharp negative-frequency part of the Heisenberg
+    evolution $e^{itH}Ae^{-itH}$ in
+    \cite[Section 3, equations (3.1)--(3.6)]{Hastings2006Spectral}.
+\end{definition}
+
+\begin{lemma}[Exact separation of the connected correlation]
+    \label{lem:spt_negative_frequency_ground_correlation}
+    \lean{TNLean.Lattice.negativeFrequencyPart_apply_ground_eq_zero,
+        TNLean.Lattice.inner_ground_projected_eq_negativeFrequency_commutator,
+        TNLean.Lattice.inner_ground_connected_eq_negativeFrequency_commutator}
+    \notready
+    \discussion{9879}
+    \uses{def:spt_negative_frequency_part}
+    Suppose $E_0\le E_i$ for every $i$, let $\psi$ belong to the
+    eigenspace at $E_0$, and let $P_0$ project onto that full eigenspace.
+    Then $A^-\psi=0$ and
+    \[
+        \langle\psi,A(1-P_0)B\psi\rangle
+        =\langle\psi,[A^-,B]\psi\rangle.
+    \]
+    If the ground eigenspace is $\mathbb C\psi$, this is
+    \[
+        \langle\psi,AB\psi\rangle-
+        \frac{\langle\psi,A\psi\rangle\langle\psi,B\psi\rangle}
+        {\|\psi\|^2}
+        =\langle\psi,[A^-,B]\psi\rangle.
+    \]
+\end{lemma}
+\begin{proof}
+    An energy-lowering matrix element cannot act nontrivially on a
+    ground vector. Expand an arbitrary vector orthogonal to the ground
+    eigenspace in the energy basis. Between that vector and a ground
+    bra, every nonzero matrix element of $A$ lowers energy, so it is
+    retained by $A^-$. Apply this to $(1-P_0)B\psi$.
+    The term $BA^-\psi$ vanishes. In a one-dimensional ground space,
+    the rank-one projection formula gives the last identity without
+    choosing a normalized vector.
+\end{proof}
+
+\begin{corollary}[Negative-frequency identity along the actual MPS path]
+    \label{cor:spt_exact_ground_negative_frequency_identity}
+    \lean{MPSTensor.ExactMPSGroundPath.negativeFrequency_connected_identity}
+    \notready
+    \discussion{9879}
+    \uses{lem:spt_exact_ground_gaussian_bounds,lem:spt_negative_frequency_ground_correlation}
+    At each parameter and every ring length $N\ge2$ of an exact MPS
+    ground path, the ordinary connected correlation of its actual
+    periodic vector equals the actual negative-frequency commutator
+    above. No transfer, correlation-decay or continuous-gauge input is
+    required.
+\end{corollary}
+\begin{proof}
+    The physical path supplies the least ground energy and the actual
+    full ground line. Apply the preceding lemma to its Hamiltonian
+    and periodic MPS vector.
+\end{proof}
+
+The sharp energy-lowering part need not be local. Gaussian
+regularization, control by a time integral of local commutators, and the
+resulting ordinary exponential clustering bound remain to be proved.
+
 \begin{lemma}[Transfer spectral rate from limiting correlations]
     \label{lem:spt_transfer_rate_from_correlations}
     \lean{MPSTensor.norm_transfer_spectrum_le_of_limitCorrelator_bound}

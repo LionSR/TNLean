@@ -34,6 +34,7 @@ import TNLean.Lattice.LowEnergyCommutator
 import TNLean.Lattice.LowEnergyCommutatorExample
 import TNLean.Lattice.LowEnergyCommutatorSum
 import TNLean.Lattice.MarginalTails
+import TNLean.Lattice.NegativeFrequencyGroundCorrelation
 import TNLean.Lattice.PartyCircuit
 import TNLean.Lattice.PhysicalBufferCoordinates
 import TNLean.Lattice.ProductForm
