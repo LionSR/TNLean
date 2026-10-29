@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.Preparation.OBCCanonicalConfigurations
+import TNLean.MPS.Preparation.PhysicalCutGramRecurrences
 
 /-!
 # The two OBC canonical equations from actual cut factors
@@ -37,25 +37,8 @@ matrices. Source: PGVWC07, Theorem thm:OBC-Vidal, condition 2. -/
 theorem cutBondDensity_step {k : ℕ} (hk : k < N) :
     ∑ i, (cutSiteMatrix ψ B k i)ᴴ * cutBondDensity ψ B k * cutSiteMatrix ψ B k i =
       cutBondDensity ψ B (k + 1) := by
-  classical
-  calc
-    _ = ∑ i, (cutPrefixMatrix ψ B k * cutSiteMatrix ψ B k i)ᴴ *
-        (cutPrefixMatrix ψ B k * cutSiteMatrix ψ B k i) := by
-      apply Finset.sum_congr rfl
-      intro i _
-      simp only [cutBondDensity, Matrix.conjTranspose_mul, Matrix.mul_assoc]
-    _ = _ := by
-      ext q r
-      simp only [cutBondDensity, Matrix.sum_apply, Matrix.mul_apply, Matrix.conjTranspose_apply]
-      rw [Finset.sum_comm]
-      symm
-      rw [← (extendCutPrefixEquiv (d := d) hk).sum_comp, Fintype.sum_prod_type]
-      apply Finset.sum_congr rfl
-      intro u _
-      apply Finset.sum_congr rfl
-      intro i _
-      rw [cutPrefixMatrix_step, cutPrefixMatrix_step]
-      rfl
+  exact prefixGram_eq_sum_of_extendCutPrefix hk (cutPrefixMatrix ψ B k)
+    (cutPrefixMatrix ψ B (k + 1)) (cutSiteMatrix ψ B k) (cutPrefixMatrix_step ψ B k)
 
 /-- Suffix propagation gives the exact backward Gram recursion.
 Source: PGVWC07, Theorem thm:OBC-Vidal, condition 1. -/
@@ -64,28 +47,9 @@ theorem cutSuffixMatrix_gram_step {k : ℕ} (hk : k < N) :
       ∑ i, cutSiteMatrix ψ B k i *
         (cutSuffixMatrix ψ B (k + 1) * (cutSuffixMatrix ψ B (k + 1))ᴴ) *
           (cutSiteMatrix ψ B k i)ᴴ := by
-  classical
-  have hstep : ∀ i v q,
-      cutSuffixMatrix ψ B k q (extendCutSuffix k i v) =
-        (cutSiteMatrix ψ B k i * cutSuffixMatrix ψ B (k + 1)) q v := by
-    intro i v q
-    exact congrFun (cutSuffixMatrix_step ψ B k i v) q
-  calc
-    _ = ∑ i, (cutSiteMatrix ψ B k i * cutSuffixMatrix ψ B (k + 1)) *
-        (cutSiteMatrix ψ B k i * cutSuffixMatrix ψ B (k + 1))ᴴ := by
-      ext q r
-      simp only [Matrix.sum_apply, Matrix.mul_apply, Matrix.conjTranspose_apply]
-      rw [← (extendCutSuffixEquiv (d := d) hk).sum_comp, Fintype.sum_prod_type]
-      apply Finset.sum_congr rfl
-      intro i _
-      apply Finset.sum_congr rfl
-      intro v _
-      rw [hstep, hstep]
-      rfl
-    _ = _ := by
-      apply Finset.sum_congr rfl
-      intro i _
-      simp only [Matrix.conjTranspose_mul, Matrix.mul_assoc]
+  exact suffixGram_eq_sum_of_extendCutSuffix hk (cutSuffixMatrix ψ B k)
+    (cutSuffixMatrix ψ B (k + 1)) (cutSiteMatrix ψ B k)
+    (fun i v q ↦ congrFun (cutSuffixMatrix_step ψ B k i v) q)
 
 /-- Row-coisometry of the two physical suffix factors proves the
 right-canonical site equation. Source: PGVWC07, Theorem thm:OBC-Vidal,

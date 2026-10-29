@@ -119,6 +119,7 @@ import TNLean.MPS.Preparation.PaddedBondState
 import TNLean.MPS.Preparation.PairLayer
 import TNLean.MPS.Preparation.PartialIsometryPreparation
 import TNLean.MPS.Preparation.PhaseWeightCounterexample
+import TNLean.MPS.Preparation.PhysicalCutGramRecurrences
 import TNLean.MPS.Preparation.PolarCompression
 import TNLean.MPS.Preparation.PolarFrame
 import TNLean.MPS.Preparation.PolarIsometryTree
