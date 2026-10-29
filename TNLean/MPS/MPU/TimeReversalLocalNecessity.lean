@@ -17,11 +17,17 @@ Their two equations force a common sign by cancellation and the scalar
 Kronecker-product lemma. An explicit coordinate dictionary then gives the
 literal four-original-spin equation for the actual source gates.
 
-**Scope restriction (canonical source construction):** The public certificate
-theorems concern the actual standard form constructed from the chosen simple
-reduced canonical source tensor. Arbitrary supplied standard forms and the
-converse are separate obligations. The original-leg rank dictionary is
-proved explicitly here. See `docs/paper-gaps/mpu_canonical_form_full_support.tex`.
+**Scope restriction (lengths and canonical source construction):** The public
+certificate theorems require adjoint symmetry at every even original length.
+Thus the constructed standard-form tensor has symmetry at all its lengths,
+which is stronger than symmetry only at even standard-form lengths in
+`PropChiral`. The missing even-family comparison must retain a possible sign
+phase before passing to the two-letter source gates; see
+`docs/paper-gaps/mpu_standard_form_parity_gap.tex`. The certificate concerns the
+actual standard form constructed from the chosen simple reduced canonical
+source tensor. Arbitrary supplied standard forms and the converse are separate
+obligations; see `docs/paper-gaps/mpu_canonical_form_full_support.tex`.
+The original-leg rank dictionary is proved explicitly here.
 
 Source: arXiv:1703.09188, `PropChiral`, `eq:block-twosites`, and
 `UUdaggertrick`, lines 1201–1252.

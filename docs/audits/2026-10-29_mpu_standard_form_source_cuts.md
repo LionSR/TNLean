@@ -51,18 +51,18 @@ inferred.
 
 ## Remaining source steps
 
-The physical-adjoint coarse factors must be constructed in the same actual
-cut coordinates and their gates related to these literal four-spin matrices.
-Then the existing arbitrary supplied-factor Fundamental Theorem can produce
-the local gauges. Its operator-family hypothesis must be obtained while
-retaining the paper's even-chain convention. No extra eight-spin blocking
-may replace the required four-spin equation.
+The forward certificate below is restricted to symmetry at every even
+original length. The source proposition only assumes symmetry at even
+standard-form lengths, corresponding to original multiples of four. Removing
+this load-bearing restriction requires a phase-sensitive even-family FT
+and descent before constructing gates. The mathematical scalar witness and
+elimination plan are recorded in
+`docs/paper-gaps/mpu_standard_form_parity_gap.tex`.
 
-No literal forward local time-reversal certificate, converse or transposition
-criterion is claimed here. The exact and admissible
-Blueprint propositions remain `notready`; #7020 remains open. The full-support
-restriction is already documented in
-`docs/paper-gaps/mpu_canonical_form_full_support.tex`.
+Arbitrary supplied standard forms, the converse and the transposition
+criterion also remain. The exact and admissible Blueprint propositions
+remain `notready`; #7020 stays open. The full-support restriction is recorded
+in `docs/paper-gaps/mpu_canonical_form_full_support.tex`.
 
 ## Validation
 
@@ -133,8 +133,9 @@ the middle and unshifted layers identifies the actual coarse gates with
 the derived canonical rank equalities. Transporting the actual coarse sign
 certificate back therefore gives the literal four-original-spin equation.
 
-This completes the written forward argument for the constructed simple
-reduced canonical source standard form. It does not establish unrestricted
+This completes the written restricted forward argument for the constructed
+simple reduced canonical source standard form under symmetry at every even
+original length. It does not establish unrestricted
 arbitrary supplied standard forms, the converse, transposition or kernel
 acceptance. All source and auxiliary Blueprint nodes remain `notready`, and
 #7020 stays open. The whole extension is source-only and awaits hosted
@@ -162,3 +163,15 @@ promoted at its existing `PhysicalBlocking` owner and both identical private
 helpers are removed. The final dictionary's finite-pair arithmetic uses the
 pinned encoding literally as `s + r*a`, then the derived rank equality;
 no alternate index convention is introduced.
+
+## Length-scope audit and prerequisite repair
+
+The module scope marker, Blueprint statement, and parity paper-gap note now
+explicitly distinguish even original lengths from even standard-form lengths.
+The scalar example `U=exp(i*pi/4)`, `W=U₂=i`, `u=i`, `v=1` has the latter
+symmetry and a negative local sign, while violating our stronger input.
+The remaining descent must retain an unblocked phase `η` with `η²=1`;
+its square cancels in the two-letter source gate. Another gate-level block
+would change the required four-spin equation and does not resolve this step.
+The stack also incorporates #10303's explicit inverse-reindex cancellation
+repair from `0d5a17aee`; exact-head hosted verification is still pending.
