@@ -24,6 +24,21 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Gaussian time-window exponents — promoted (2026-10-29)
+
+- **Pattern:** Set `T = l / (4*v)` and `q = T*Delta`, then compare the
+  propagation, Gaussian-tail and spectral-compression exponentials with
+  `exp (-(min (1/4) (Delta/(8*v)) * l))`.
+- **Abstraction:** The existing `commutator_time_window_exp_bounds` in
+  `Lattice/GaussianTruncationDecayBound.lean` proves the three inequalities
+  together, including zero separation.
+- **Uses:** `LowEnergyCommutatorSum.lean`, `LowEnergyObservableDecay.lean`
+  and `LowEnergyMetricCommutator.lean` use this one estimate. Their velocities
+  and geometric prefactors differ; the shared scalar argument is unchanged.
+- **Decision:** Reuse the mathematical estimate directly. No additional
+  tactic or duplicate exponential proof is needed.
+
+
 ### Cubic dimension of actual sampled word images — promoted (2026-10-29)
 
 - **Pattern:** Bound the actual word-image dimension by the alphabet size

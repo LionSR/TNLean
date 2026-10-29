@@ -1,4 +1,5 @@
 \documentclass{article}
+\usepackage[margin=25mm]{geometry}
 \usepackage{amsmath,amssymb,xurl}
 \usepackage[hidelinks]{hyperref}
 \setlength{\emergencystretch}{2em}
@@ -78,6 +79,43 @@ Hamiltonian. These statements are proved by
 For $R=0$, distinct-site interactions commute and the full and truncated
 filters equal the original interaction exactly; see
 \leanid{TNLean.Lattice.gaussianFilteredTerm_full_and_sum_eq_of_zero_range}.
+
+\section{Local commutators and the separate volume sum}
+
+The local commutator estimate also needs no polynomial sphere bound.
+Let $P_0$ project onto the original ground eigenspace, with gap lower bound
+$\Delta>0$. For positive interaction radius $R$, put
+\begin{align}
+ v&=4(S+1)|SJ|e^4+1,&
+ \gamma&=\min\{1/4,\Delta/(8v)\},&
+ \lambda&=\gamma/R.
+ \label{eq:hastings05_metric_commutator_rate}
+\end{align}
+For supported observables $W$ and $B$ in radius-$\rho$ balls about $i,j$,
+the estimate is
+\begin{align}
+ \|[P_0WP_0,P_0BP_0]\|
+ &\le \bigl(4|B(j,\rho)|+4\bigr)\|W\|\,\|B\|
+       e^{2\lambda\rho}e^{-\lambda d(i,j)}.
+ \label{eq:hastings05_metric_commutator}
+\end{align}
+Finite-support propagation at a fixed rate, followed by a second Gaussian
+filter under the original Hamiltonian, proves this bound. The filter
+parameter is chosen from the separation and the original gap. The actual
+locally truncated operators have the required supports and norms at most
+$J$, so their compressions satisfy (\ref{eq:hastings05_metric_commutator})
+with the product of norms replaced by $J^2$. No gap for a local truncated
+Hamiltonian is assumed. These statements are proved by
+\leanid{TNLean.Lattice.norm_groundCompression_commutator_le_metricBalls}
+and
+\leanid{TNLean.Lattice.norm_groundCompression_metric_truncated_commutator_le}.
+
+The displayed rate uses $R>0$; the exact zero-radius filter identities are
+separate. The estimate retains the source's local support-cardinality
+factor. It does not sum the distance kernel over all sites. Uniform
+volume sums therefore still require their stated geometric hypotheses;
+the unrestricted basis-sum claim is addressed in
+\path{hastings05_tree_basis_counterexample.tex}.
 
 The missing $q$ in the printed Gaussian exponent and the choice of decay
 length are addressed in the existing notes

@@ -1,0 +1,140 @@
+\section{Low-energy commutators on a finite metric space}
+\label{sec:hastings05_metric_commutator}
+
+Let $P_0$ be the orthogonal projection onto the $E_0$ eigenspace of a
+self-adjoint Hamiltonian $H$. Throughout this section, $\Delta>0$ and
+$\operatorname{spec}(H)\subseteq\{E_0\}\cup[E_0+\Delta,\infty)$.
+The estimates below give the local commutator bound of
+\cite[eqs.~(lc) and (blecm), lines 1548--1601]{Hastings2006Solving}.
+
+\begin{theorem}[Separated supports in an interaction graph]
+    \label{thm:hastings05_graph_commutator}
+    \lean{TNLean.Lattice.norm_groundCompression_commutator_le_graphSeparation}
+    \leanok
+    \uses{thm:qc_lr_finsets_numeric,thm:hastings05_low_energy_commutator}
+    Let $G$ be a finite graph and $H=\sum_a h_a$, where $h_a=h_a^*$ is
+    supported on $X_a$. Choose an anchor $x_a\in X_a$. Suppose the graph
+    diameter of each $X_a$ is at most $R_0$, its cardinality is at most
+    $s\ge1$, and $\sum_{a:x\in X_a}\|h_a\|\le b$ at every vertex.
+    Put
+    \begin{align}
+        v&=4s|b|e^{2R_0}+1,&
+        \gamma&=\min\{1/4,\Delta/(8v)\}.
+        \label{eq:hastings05_graph_commutator_rate}
+    \end{align}
+    Let $W\in\mathcal A_X$ and $B\in\mathcal A_Y$, where $X,Y$ are
+    finite. If the integer $m\ge0$ satisfies $d_G(x,y)\ge m$ for every
+    $x\in X$ and $y\in Y$, then
+    \begin{align}
+        \|[P_0WP_0,P_0BP_0]\|
+        &\le(4|X|+4)\|W\|\,\|B\|e^{-\gamma m}.
+        \label{eq:hastings05_graph_commutator}
+    \end{align}
+    Graph distances between different components are infinite.
+\end{theorem}
+\begin{proof}\leanok
+    For $m>0$, set $T=m/(4v)$ and $a=T\Delta$.
+    For every real $t$ with $|t|\le T$, the finite-support propagation
+    estimate at rate one gives
+    \begin{align}
+        \|[e^{itH}We^{-itH},B]\|
+        &\le4|X|\|W\|\,\|B\|e^{-\gamma m}.
+        \label{eq:hastings05_graph_time}
+    \end{align}
+    Indeed, $\gamma\le1/4$ and $vT=m/4$.
+    The Gaussian tail and the ground-space compression error are bounded
+    using $a/2=T\Delta/2\ge\gamma m$. Thus filtering contributes at most
+    $(4|X|+2)\|W\|\,\|B\|e^{-\gamma m}$ to the commutator, and the
+    remaining compression contributes at most
+    $2\|W\|\,\|B\|e^{-\gamma m}$.
+    For $m=0$, the elementary commutator bound and $\|P_0\|\le1$ suffice.
+\end{proof}
+
+\begin{theorem}[Metric separation of arbitrary finite supports]
+    \label{thm:hastings05_metric_commutator}
+    \lean{TNLean.Lattice.norm_groundCompression_commutator_le_metricSeparation}
+    \leanok
+    \uses{thm:hastings05_graph_commutator}
+    Let the sites form a finite metric space. Suppose $R>0$,
+    $H=\sum_i h_i$, $h_i=h_i^*\in\mathcal A_{B(i,R)}$, and
+    $\|h_i\|\le J$ with $J\ge0$. Suppose every closed ball $B(i,R)$
+    has at most $S$ sites. Define
+    \begin{align}
+        v&=4(S+1)|SJ|e^4+1,&
+        \gamma&=\min\{1/4,\Delta/(8v)\},&
+        \lambda&=\gamma/R.
+        \label{eq:hastings05_metric_commutator_rate}
+    \end{align}
+    Let $W\in\mathcal A_X$ and $B\in\mathcal A_Y$.
+    If $\ell\le d(x,y)$ for every $x\in X$ and $y\in Y$, then
+    \begin{align}
+        \|[P_0WP_0,P_0BP_0]\|
+        &\le(4|X|+4)\|W\|\,\|B\|e^{-\lambda\ell}.
+        \label{eq:hastings05_metric_commutator}
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    Join two sites whose metric distance is at most $R$.
+    Each interaction support has graph diameter at most two, cardinality
+    at most $S+1$, and local interaction norm budget at most $SJ$.
+    Metric separation by $\ell$ gives graph separation by
+    $m=\lceil\ell/R\rceil_{\mathbb N}$. Apply
+    Theorem~\ref{thm:hastings05_graph_commutator} and use
+    $\gamma m\ge\lambda\ell$.
+\end{proof}
+
+\begin{theorem}[Observables in metric balls]
+    \label{thm:hastings05_metric_ball_commutator}
+    \lean{TNLean.Lattice.norm_groundCompression_commutator_le_metricBalls}
+    \leanok
+    \uses{thm:hastings05_metric_commutator}
+    Under the metric assumptions and constants of
+    Theorem~\ref{thm:hastings05_metric_commutator}, let
+    $W\in\mathcal A_{B(i,\rho)}$ and $B\in\mathcal A_{B(j,\rho)}$.
+    Write $N_j=|B(j,\rho)|$. Then
+    \begin{align}
+        \|[P_0WP_0,P_0BP_0]\|
+        &\le(4N_j+4)\|W\|\,\|B\|
+            e^{2\lambda\rho}e^{-\lambda d(i,j)}.
+        \label{eq:hastings05_metric_ball_commutator}
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    The triangle inequality separates the two supports by
+    $d(i,j)-2\rho$. Apply
+    Theorem~\ref{thm:hastings05_metric_commutator} with the two
+    observables interchanged, and use
+    $e^{-\lambda(d(i,j)-2\rho)}=e^{2\lambda\rho}e^{-\lambda d(i,j)}$.
+\end{proof}
+
+\begin{theorem}[The actual truncated Gaussian terms]
+    \label{thm:hastings05_actual_metric_commutator}
+    \lean{TNLean.Lattice.norm_groundCompression_metric_truncated_commutator_le}
+    \leanok
+    \uses{thm:hastings05_metric_ball_commutator,thm:hastings05_metric_filter}
+    Under the metric assumptions and constants of
+    Theorem~\ref{thm:hastings05_metric_commutator}, fix $\rho\ge R$
+    and an initial Gaussian parameter $a\ge0$. Define
+    \begin{align}
+        H_i^{\mathrm{loc}}&=\sum_{d(i,k)\le\rho-R}h_k,&
+        M_i&=\mathcal F^{H_i^{\mathrm{loc}}}_{a,\Delta}(h_i).
+        \label{eq:hastings05_actual_metric_terms}
+    \end{align}
+    Write $N_j=|B(j,\rho)|$. The compressions of these operators satisfy
+    \begin{align}
+        \|[P_0M_iP_0,P_0M_jP_0]\|
+        &\le(4N_j+4)J^2e^{2\lambda\rho}e^{-\lambda d(i,j)}.
+        \label{eq:hastings05_actual_metric_commutator}
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    The metric-ball filter construction gives
+    $M_i\in\mathcal A_{B(i,\rho)}$ and $\|M_i\|\le J$.
+    Substitute these supported operators in
+    Theorem~\ref{thm:hastings05_metric_ball_commutator}.
+    Its second filter uses the original Hamiltonian and its gap.
+\end{proof}
+
+The local estimates require no polynomial bound on larger metric spheres.
+Uniform sums over all sites require a separate geometric summation
+argument; see \cite{gap:hastings05_geometric_growth_scope}.

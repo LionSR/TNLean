@@ -42,6 +42,7 @@ import TNLean.Lattice.LowEnergyCommutator
 import TNLean.Lattice.LowEnergyCommutatorExample
 import TNLean.Lattice.LowEnergyCommutatorSum
 import TNLean.Lattice.LowEnergyDecayKernel
+import TNLean.Lattice.LowEnergyMetricCommutator
 import TNLean.Lattice.LowEnergyObservableDecay
 import TNLean.Lattice.LowEnergyWeightedRowSum
 import TNLean.Lattice.MarginalTails
