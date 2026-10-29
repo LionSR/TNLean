@@ -45,7 +45,8 @@ def tensor (D : ℕ) [NeZero D] : MPSTensor 2 D := ![shift D, jump D]
 Source: arXiv:0909.5347, source lines 691–700. -/
 theorem shift_mul_apply (X : Matrix (Fin D) (Fin D) ℂ) (i j : Fin D) :
     (shift D * X) i j = X (i - 1) j := by
-  simp [shift, Matrix.mul_apply, ite_mul, eq_add_iff_sub_eq, eq_comm]
+  have hoff (k : Fin D) : i = k + 1 ↔ i - 1 = k := (sub_eq_iff_eq_add).symm
+  simp [shift, Matrix.mul_apply, ite_mul, hoff]
 
 /-- The entries of every shift power. Source: arXiv:0909.5347, lines 691–700. -/
 theorem shift_pow_apply (n : ℕ) (i j : Fin D) :
@@ -86,16 +87,19 @@ Source: arXiv:0909.5347, source lines 697–700. -/
 theorem shift_pow_mul_single (n : ℕ) (i j : Fin D) (c : ℂ) :
     shift D ^ n * Matrix.single i j c = Matrix.single (i + (n : Fin D)) j c := by
   ext a b
-  simp [Matrix.mul_apply, Matrix.single_apply, shift_pow_apply, ite_and,
-    mul_ite, ite_mul, eq_comm]
+  by_cases hjb : j = b <;>
+    simp [Matrix.mul_apply, Matrix.single_apply, shift_pow_apply, ite_and,
+      mul_ite, ite_mul, eq_comm, hjb]
 
 /-- Shift powers translate the column of a matrix unit in the opposite direction.
 Source: arXiv:0909.5347, source lines 697–700. -/
 theorem single_mul_shift_pow (n : ℕ) (i j : Fin D) (c : ℂ) :
     Matrix.single i j c * shift D ^ n = Matrix.single i (j - (n : Fin D)) c := by
   ext a b
-  simp [Matrix.mul_apply, Matrix.single_apply, shift_pow_apply, ite_and,
-    mul_ite, ite_mul, sub_eq_iff_eq_add, eq_comm]
+  have hcol : j = b + (n : Fin D) ↔ j - (n : Fin D) = b := (sub_eq_iff_eq_add).symm
+  by_cases hia : i = a <;>
+    simp [Matrix.mul_apply, Matrix.single_apply, shift_pow_apply, ite_and,
+      mul_ite, hcol, eq_comm, hia]
 
 /-- The shift-jump-shift words are concrete matrix units.
 Source: arXiv:0909.5347, source lines 697–700. -/
@@ -108,9 +112,11 @@ theorem sandwich_eq_single (k l : ℕ) :
 Source: arXiv:0909.5347, source lines 697–700. -/
 theorem return_coordinate_iff (hD : 2 ≤ D) (k : ℕ) (hk : k < D) :
     (1 : Fin D) + (k : Fin D) = ((D - 1 : ℕ) : Fin D) ↔ k = D - 2 := by
+  have h1 : (1 : Fin D).val = 1 := by
+    change 1 % D = 1
+    exact Nat.mod_eq_of_lt (by omega)
   rw [Fin.ext_iff, Fin.val_add_eq_ite]
-  simp only [Fin.val_natCast, Nat.mod_eq_of_lt hk,
-    Nat.mod_eq_of_lt (show 1 < D by omega),
+  simp only [h1, Fin.val_natCast, Nat.mod_eq_of_lt hk,
     Nat.mod_eq_of_lt (show D - 1 < D by omega)]
   split_ifs <;> omega
 
@@ -130,12 +136,12 @@ theorem jump_shift_pow_jump (hD : 2 ≤ D) (k : ℕ) (hk : k < D) :
   simp only [jump]
   rw [single_mul_shift_pow]
   by_cases h : k = D - 2
-  · rw [if_pos h]
+  · rw [ite_eq_left h]
     have hcoord : ((D - 1 : ℕ) : Fin D) - (k : Fin D) = 1 := by
       apply (sub_eq_iff_eq_add).2
       exact ((return_coordinate_iff hD k hk).2 h).symm
     rw [hcoord, Matrix.single_mul_single_same, one_mul]
-  · rw [if_neg h]
+  · rw [ite_eq_right h]
     apply Matrix.single_mul_single_of_ne
     intro hcoord
     apply h
