@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.QCA.ConsecutivePairCoordinates
 import TNLean.MPS.MPU.TwoSiteBlockedLocalAction
 import TNLean.MPS.MPU.TwoSiteOutputSupport
 import TNLean.QCA.GNVWIndex
@@ -26,23 +27,6 @@ adjoint order; see `docs/paper-gaps/mpu_qca_index_normalization.tex`.
 open scoped Matrix
 
 namespace SpinChain
-
-private def consecutivePairConfigEquiv (b : ℕ) (a : ℤ) :
-    (Fin b × Fin b) ≃ Config b ({a, a + 1} : Finset ℤ) where
-  toFun c x := if x.val = a then c.1 else c.2
-  invFun f := (f ⟨a, by simp⟩, f ⟨a + 1, by simp⟩)
-  left_inv c := by
-    apply Prod.ext
-    · exact if_pos rfl
-    · exact if_neg (by omega : a + 1 ≠ a)
-  right_inv f := by
-    funext x
-    rcases x with ⟨x, hx⟩
-    have hx' : x = a ∨ x = a + 1 := by
-      simpa only [Finset.mem_insert, Finset.mem_singleton] using hx
-    rcases hx' with rfl | rfl
-    · exact if_pos rfl
-    · exact if_neg (by omega : a + 1 ≠ a)
 
 private def leftPairZeroConfigEquiv (b : ℕ) :
     (Fin b × Fin b) ≃ Config b (leftPair 0) := consecutivePairConfigEquiv b (-1)
