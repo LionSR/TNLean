@@ -50,3 +50,15 @@ pin or ordinary build cache was changed. Mathlib was not rebuilt, no altered
 cache artifacts were copied, and no permanent test fixture was added.
 Canonical combined-library and compiled-blueprint checks remain for common
 integration.
+
+## Completed common verification
+
+The integrated mathematical revision
+`f5e011c2e551b318e6df7f7d6e5e81725dedea7a`, with the module-docstring-only
+successor `4bdda88ad1455106fd05ba6d874ecd1aca53aadb` and exact QICLean pin
+`4175de302e6b580d1bbb4a022f57424ab9f05e73`, passed the full 15,112-job
+build, strict checks, imported foundations and compiled blueprint checks.
+Only the standard three axioms occur. Prose, integrity, paper-gap and
+changed-module timing checks passed; Mathlib was not rebuilt. Detailed
+scope and timing qualifications are recorded in
+`docs/audits/2026-10-29_verified_soft_residual_refinement_range.md`.
