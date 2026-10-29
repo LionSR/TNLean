@@ -9773,3 +9773,16 @@ there is no need for a new tactic.
 - **Abstraction:** the helper already removes the repeated common-buffer and
   completion proof. No tactic is needed; a public generalization should wait for
   an independent caller.
+
+### Finite gate conjugation in matrix units — candidate (2026-10-29)
+
+- **Seen:** `MPS/MPU/TwoSiteStandardFormOpenWord.lean` and
+  `QCA/MargolusTensorLocalRule.lean`.
+- **Pattern:** Expand the middle observable once as a finite matrix-unit
+  sum, distribute the two shifted gate factors, and embed each Kronecker
+  product using the existing bipartite observable homomorphism.
+- **Reuse:** `twoLinkOutputObservable_eq_sum_kronecker` owns the finite
+  identity; `bipartiteMatrixToQuasiLocalObservable_kronecker` owns its
+  product evaluation. Neither the periodic contraction nor the support
+  factor presentation is repeated.
+- **Decision:** Use mathematical helper lemmas; no custom tactic is needed.
