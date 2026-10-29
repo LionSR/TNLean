@@ -82,14 +82,14 @@ theorem threePauliTensor_vectorSpreadSpan_one (φ : Fin 2 → ℂ) (hφ : φ ≠
     convert W.add_mem (hPauli 0) (W.smul_mem Complex.I (hPauli 1)) using 1
     ext i
     fin_cases i <;>
-      simp [SpinCover.pauli, Matrix.mulVec, Matrix.vecHead, Matrix.vecTail,
-        Fin.sum_univ_two, smul_eq_mul, ← mul_assoc] <;> ring
+      simp [SpinCover.pauli, Matrix.vecHead, Matrix.vecTail,
+        smul_eq_mul, ← mul_assoc] <;> ring
   have hsecond : (2 * φ 0) • ![(0 : ℂ), 1] ∈ W := by
     convert W.sub_mem (hPauli 0) (W.smul_mem Complex.I (hPauli 1)) using 1
     ext i
     fin_cases i <;>
-      simp [SpinCover.pauli, Matrix.mulVec, Matrix.vecHead, Matrix.vecTail,
-        Fin.sum_univ_two, smul_eq_mul, ← mul_assoc] <;> ring
+      simp [SpinCover.pauli, Matrix.vecHead, Matrix.vecTail,
+        smul_eq_mul, ← mul_assoc] <;> ring
   have haxes : ![(1 : ℂ), 0] ∈ W ∧ ![(0 : ℂ), 1] ∈ W := by
     by_cases hzero : φ 0 = 0
     · have hone : φ 1 ≠ 0 := by
@@ -103,16 +103,16 @@ theorem threePauliTensor_vectorSpreadSpan_one (φ : Fin 2 → ℂ) (hφ : φ ≠
       convert W.sub_mem (W.smul_mem (φ 0) he₀) (hPauli 2) using 1
       ext i
       fin_cases i <;>
-        simp [SpinCover.pauli, Matrix.mulVec, Matrix.vecHead, Matrix.vecTail,
-          Fin.sum_univ_two, smul_eq_mul]
+        simp [SpinCover.pauli, Matrix.vecHead, Matrix.vecTail,
+          smul_eq_mul]
     · have he₁ := (W.smul_mem_iff (mul_ne_zero two_ne_zero hzero)).mp hsecond
       refine ⟨?_, he₁⟩
       apply (W.smul_mem_iff hzero).mp
       convert W.add_mem (hPauli 2) (W.smul_mem (φ 1) he₁) using 1
       ext i
       fin_cases i <;>
-        simp [SpinCover.pauli, Matrix.mulVec, Matrix.vecHead, Matrix.vecTail,
-          Fin.sum_univ_two, smul_eq_mul]
+        simp [SpinCover.pauli, Matrix.vecHead, Matrix.vecTail,
+          smul_eq_mul]
   apply top_unique
   intro v _
   have hv : v = v 0 • ![(1 : ℂ), 0] + v 1 • ![(0 : ℂ), 1] := by
@@ -138,7 +138,7 @@ theorem threePauliTensor_wordSpan_one_ne_top : Kraus.wordSpan threePauliTensor 1
 private theorem pauli_cycle_mul (k : Fin 3) :
     SpinCover.pauli (k + 1) * SpinCover.pauli (k + 2) = Complex.I • SpinCover.pauli k := by
   fin_cases k <;> ext i j <;> fin_cases i <;> fin_cases j <;>
-    simp [SpinCover.pauli_mul_eq, SpinCover.pauli, smul_eq_mul]
+    simp [SpinCover.pauli, smul_eq_mul]
 
 /-- Two-letter products span the whole qubit matrix algebra. This is the upper
 bound `i ≤ 2` in arXiv:0909.5347, lines 496–499. -/
