@@ -109,8 +109,14 @@ theorem IsMPUCanonicalFormII.mpo_even_eq_adjoint_of_source_local_certificate
   have dataB : TwoSiteStandardFormData
       (MPOTensor.blockTwo (MPOTensor.physicalAdjointTensor U)) Bᴴ Aᴴ := by
     have data := dataT.reindexRanks LA RA
+    change TwoSiteStandardFormData (MPOTensor.blockTwo (MPOTensor.physicalAdjointTensor U))
+      (Matrix.reindex (Equiv.prodCongr LA RA) (Equiv.refl _)
+        (SourceFactors.sourceU (ρ := hU.ρ) (MPOTensor.physicalAdjointTensor U) T))
+      (Matrix.reindex (Equiv.refl _) (Equiv.prodCongr RA LA)
+        (SourceFactors.sourceV (ρ := hU.ρ) (MPOTensor.physicalAdjointTensor U) T)) at data
     dsimp only [T] at data
-    rw [SourceFactors.sourceU_physicalAdjoint, SourceFactors.sourceV_physicalAdjoint] at data
+    rw [SourceFactors.sourceU_physicalAdjoint hU hsimple S hr hl,
+      SourceFactors.sourceV_physicalAdjoint hU hsimple S hr hl] at data
     have hu : Matrix.reindex (Equiv.prodCongr LA RA) (Equiv.refl _)
         (Matrix.reindex
           (Equiv.prodCongr (finCongr (leftRank_physicalAdjointTensor U).symm)
@@ -130,14 +136,15 @@ theorem IsMPUCanonicalFormII.mpo_even_eq_adjoint_of_source_local_certificate
   obtain ⟨X, Y, hfirst, hsecond⟩ := adjoint_gate_gauges_of_local_sign A B σ hσ x hlocal
   rw [hfirst, hsecond] at dataB
   rcases heven with ⟨m, rfl⟩
-  letI : NeZero m := ⟨by omega⟩
+  let : NeZero m := ⟨by omega⟩
   have h := dataA.mpo_eq_of_gate_gauges (N := m) X Y dataB
   rw [mpo_blockTwo_eq_reindex_blockTensor, mpo_blockTwo_eq_reindex_blockTensor] at h
   have h' := (Matrix.reindex _ _).injective h
   rw [mpo_blockTensor_eq_reindex, mpo_blockTensor_eq_reindex] at h'
   have h'' := (Matrix.reindex _ _).injective h'
   rw [mpo_physicalAdjointTensor_eq_conjTranspose] at h''
-  simpa only [mul_two] using h''
+  rw [Nat.mul_two] at h''
+  exact h''
 
 /-- The original four-spin equation for the chosen source gates implies
 adjoint symmetry at every even length of their actual standard-form tensor.
@@ -168,28 +175,37 @@ theorem IsMPUCanonicalFormII.mpo_standardForm_even_eq_adjoint_of_local_certifica
   let x' : Matrix.unitaryGroup (Fin (d * d)) ℂ :=
     ⟨Matrix.reindex e e (x : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ),
       Matrix.reindex_mem_unitaryGroup _ _ x.property⟩
-  apply hU.blockTwo.mpo_even_eq_adjoint_of_source_local_certificate
+  have hsource :
+      Matrix.reindex (Equiv.prodCongr (finCongr hl) (finCongr hr)) (Equiv.refl _)
+          (SourceFactors.sourceU (ρ := hU.ρ) (MPOTensor.blockTwo U)
+            (hU.twoSiteSourceFactors hsimple)) =
+        σ • ((x' : Matrix (Fin (d * d)) (Fin (d * d)) ℂ) ⊗ₖ
+          (x' : Matrix (Fin (d * d)) (Fin (d * d)) ℂ)ᴴ) *
+          (Matrix.reindex (Equiv.refl _) (Equiv.prodCongr (finCongr hr) (finCongr hl))
+            (SourceFactors.sourceV (ρ := hU.ρ) (MPOTensor.blockTwo U)
+              (hU.twoSiteSourceFactors hsimple)))ᴴ := by
+    obtain ⟨hA, hB⟩ := coarse_gates_eq_four_spin_gates hU hsimple hrU hlU hr hl
+    rw [hA, hB]
+    have h := congrArg E hlocal
+    rw [Matrix.smul_mul, map_smul,
+      ← Matrix.reindexLinearEquiv_mul ℂ ℂ p p p] at h
+    have hK : E ((x : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ) ⊗ₖ
+        (x : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ)ᴴ) =
+        (x' : Matrix (Fin (d * d)) (Fin (d * d)) ℂ) ⊗ₖ
+          (x' : Matrix (Fin (d * d)) (Fin (d * d)) ℂ)ᴴ := by
+      change Matrix.reindex (Equiv.prodCongr e e) (Equiv.prodCongr e e) _ = _
+      dsimp only [x']
+      rw [Matrix.conjTranspose_reindex]
+      exact (Matrix.kroneckerMap_reindex (fun a b : ℂ ↦ a * b) e e e e
+        (x : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ)
+        (x : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ)ᴴ).symm
+    rw [hK] at h
+    simp only [Matrix.conjTranspose_reindex] at ⊢
+    rw [Matrix.smul_mul]
+    exact h
+  exact hU.blockTwo.mpo_even_eq_adjoint_of_source_local_certificate
     (hU.isMPUSimple_blockTwo hsimple) (hU.twoSiteSourceFactors hsimple)
-    hr hl σ hσ x' ?_ N hN heven
-  obtain ⟨hA, hB⟩ := coarse_gates_eq_four_spin_gates hU hsimple hrU hlU hr hl
-  rw [hA, hB]
-  have h := congrArg E hlocal
-  rw [Matrix.smul_mul, map_smul,
-    ← Matrix.reindexLinearEquiv_mul ℂ ℂ p p p] at h
-  have hK : E ((x : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ) ⊗ₖ
-      (x : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ)ᴴ) =
-      (x' : Matrix (Fin (d * d)) (Fin (d * d)) ℂ) ⊗ₖ
-        (x' : Matrix (Fin (d * d)) (Fin (d * d)) ℂ)ᴴ := by
-    change Matrix.reindex (Equiv.prodCongr e e) (Equiv.prodCongr e e) _ = _
-    dsimp only [x']
-    rw [Matrix.conjTranspose_reindex]
-    exact (Matrix.kroneckerMap_reindex (fun a b : ℂ ↦ a * b) e e e e
-      (x : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ)
-      (x : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ)ᴴ).symm
-  rw [hK] at h
-  simp only [Matrix.conjTranspose_reindex] at ⊢
-  rw [Matrix.smul_mul]
-  exact h
+    hr hl σ hσ x' hsource N hN heven
 
 /-- The chosen canonical source standard form obeys the literal local
 criterion with exactly the source's even-standard-form-length convention.

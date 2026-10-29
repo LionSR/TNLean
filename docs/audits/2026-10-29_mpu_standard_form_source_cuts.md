@@ -334,3 +334,15 @@ The converse's actual adjoint standard-form data has the same nested
 canonical rank transports as the necessity equations. Its two gate
 identifications now use explicit entry identities as well, removing reliance
 on the opaque nested reindex simplification that failed in the forward proof.
+
+## Hosted necessity milestone and converse diagnostics on `0c20aa1ee`
+
+Job `123542394010` compiled `TimeReversalLocalNecessity`, including its
+actual four-spin forward certificate. The private comparison split resolved
+the kernel timeout. Its next failures were confined to the converse:
+semireducible recorded-boundary projections prevented source-gate rewriting,
+and a dependent ring index retained `m*2` instead of `m+m`. The converse now
+checks its local source equation before instantiating the block canonical
+record, explicitly names the preserved boundary in gate types, supplies the
+adjoint gate theorem arguments, and rewrites the ring length with
+`Nat.mul_two`. No statement or hypothesis changes; no local Lean was run.
