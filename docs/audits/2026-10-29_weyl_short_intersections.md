@@ -42,3 +42,8 @@ No local Lean, Lake, build, elaboration or checkdecls is run, as requested.
 All six new public declarations and both Blueprint statements/proofs remain
 notready. Native and independent source checks are recorded in the PR;
 they do not establish hosted kernel acceptance. No persistent Lean fixtures.
+
+Two independent bounded source/API reviews found no concrete mismatch in the
+actual middle-word charge, phase cancellation, finite bridge orientation,
+active endpoint restriction, seven-letter tail exclusion, list packaging,
+or final common-charge reconstruction. Native checks pass.
