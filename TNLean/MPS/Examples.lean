@@ -29,6 +29,7 @@ import TNLean.MPS.Examples.ClusterPhysicalStringOrder
 import TNLean.MPS.Examples.ClusterReview
 import TNLean.MPS.Examples.ClusterSPTFixedPoint
 import TNLean.MPS.Examples.ClusterSourceGroundState
+import TNLean.MPS.Examples.CyclicWielandt
 import TNLean.MPS.Examples.EvenParity
 import TNLean.MPS.Examples.Fibonacci
 import TNLean.MPS.Examples.GHZ
