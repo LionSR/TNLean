@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import QICLean.Analysis.EuclideanEigenvectorBasis
 import TNLean.MPS.AreaLaw.AKLV.SpectralCluster
 import TNLean.MPS.AreaLaw.BoundaryGap
 import QICLean.Analysis.LowEnergyCoordinates
@@ -151,9 +152,7 @@ theorem exists_aklv_physical_robustness {L q a s : ℕ}
         ((hBall Finset.univ).eigenvectorBasis j0) =
           ((hBall Finset.univ).eigenvalues j0 : ℂ) •
             (hBall Finset.univ).eigenvectorBasis j0 := by
-      apply WithLp.ofLp_injective 2
-      simpa only [Matrix.ofLp_toEuclideanCLM, WithLp.ofLp_smul, Complex.coe_smul]
-        using (hBall Finset.univ).mulVec_eigenvectorBasis j0
+      exact (hBall Finset.univ).toEuclideanCLM_eigenvectorBasis j0
     dsimp only [φ]
     rw [map_smul, heigen, smul_smul, smul_smul, mul_comm]
   · have hdiff : φ - Ω = ζ • ((hBall Finset.univ).eigenvectorBasis j0 -

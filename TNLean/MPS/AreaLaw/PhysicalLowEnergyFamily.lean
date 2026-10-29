@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Analysis.ChebyshevViability
+import QICLean.Analysis.EuclideanEigenvectorBasis
 import TNLean.MPS.AreaLaw.ActualClippedPolynomialFamily
 import TNLean.MPS.AreaLaw.PhysicalLowEnergyCloseness
 
@@ -259,9 +260,7 @@ private theorem exists_five_region_physical_buffered_targets
           ((hpos T).isHermitian.eigenvectorBasis j) =
         ((hpos T).isHermitian.eigenvalues j : ℂ) •
           (hpos T).isHermitian.eigenvectorBasis j :=
-    (WithLp.ofLp_injective 2) (by
-      simpa only [Matrix.ofLp_toEuclideanCLM, WithLp.ofLp_smul, Complex.coe_smul]
-        using (hpos T).isHermitian.mulVec_eigenvectorBasis j)
+    (hpos T).isHermitian.toEuclideanCLM_eigenvectorBasis j
   have hresBound (T : Finset (Fin 5)) (c : ℝ) (hc : 0 < c) (hce : c ≤ eta) :
       ‖(Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)
           (B t e ∅ - B t e K)).domRestrict
@@ -435,9 +434,7 @@ theorem exists_five_region_physical_low_energy_filter_family
       Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)
           (B t e K) (hC.eigenvectorBasis j) =
         (hC.eigenvalues j : ℂ) • hC.eigenvectorBasis j :=
-    (WithLp.ofLp_injective 2) (by
-      simpa only [Matrix.ofLp_toEuclideanCLM, WithLp.ofLp_smul, Complex.coe_smul]
-        using hC.mulVec_eigenvectorBasis j)
+    hC.toEuclideanCLM_eigenvectorBasis j
   refine ⟨hnest, hupperClose, hlowerClose, ?_⟩
   have hdegree : 1 ≤ ell ^ 2 := by
     rw [pow_two]

@@ -13,6 +13,7 @@ import QICLean.Analysis.EnergyTruncation
 import QICLean.Analysis.GroundEnergyBounds
 import QICLean.Analysis.LowEnergyCluster
 import QICLean.Analysis.LowEnergyPerturbation
+import QICLean.Analysis.EuclideanEigenvectorBasis
 import TNLean.Lattice.DisjointRegionalGround
 import TNLean.Algebra.ExpMulSubMonotone
 import TNLean.MPS.AreaLaw.FiveRegionHamiltonian
@@ -315,9 +316,7 @@ private theorem exists_five_region_physical_low_cluster
   let v := hB.eigenvectorBasis
   let lam := hB.eigenvalues
   have hBEigen (j : Fin L → Fin q) : ι B (v j) = (lam j : ℂ) • v j := by
-    apply (WithLp.ofLp_injective 2)
-    simpa only [ι, v, lam, ofLp_toEuclideanCLM, WithLp.ofLp_smul,
-      Complex.coe_smul] using hB.mulVec_eigenvectorBasis j
+    exact hB.toEuclideanCLM_eigenvectorBasis j
   have hC : 0 ≤ (288 : ℝ) * Real.exp (11 / 8) :=
     mul_nonneg (by norm_num) (Real.exp_nonneg _)
   have hxi0 : 0 ≤ xi :=
@@ -601,9 +600,7 @@ theorem exists_five_region_physical_scaled_low_cluster
   let v := hB.eigenvectorBasis
   let lam := hB.eigenvalues
   have hBEigen (j : Fin L → Fin q) : ι B (v j) = (lam j : ℂ) • v j := by
-    apply (WithLp.ofLp_injective 2)
-    simpa only [ι, v, lam, ofLp_toEuclideanCLM, WithLp.ofLp_smul,
-      Complex.coe_smul] using hB.mulVec_eigenvectorBasis j
+    exact hB.toEuclideanCLM_eigenvectorBasis j
   have hC : 0 ≤ (288 : ℝ) * Real.exp (11 / 8) :=
     mul_nonneg (by norm_num) (Real.exp_nonneg _)
   have hxi0 : 0 ≤ xi :=

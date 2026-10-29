@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import QICLean.Analysis.EuclideanEigenvectorBasis
 import TNLean.MPS.AreaLaw.AKLV.Normalization
 import QICLean.Analysis.GaussianFilter.SpectralGap
 import QICLean.Analysis.LowEnergyCluster
@@ -146,9 +147,7 @@ theorem exists_aklv_two_block_scaled_low_cluster {L q a s : ℕ} (hq : 0 < q)
   have hEigen (T : Finset (Fin 2)) (j : Fin L → Fin q) :
       ι (B T) ((hB T).eigenvectorBasis j) =
         ((hB T).eigenvalues j : ℂ) • (hB T).eigenvectorBasis j := by
-    apply WithLp.ofLp_injective 2
-    simpa only [ι, Matrix.ofLp_toEuclideanCLM, WithLp.ofLp_smul,
-      Complex.coe_smul] using (hB T).mulVec_eigenvectorBasis j
+    exact (hB T).toEuclideanCLM_eigenvectorBasis j
   have hBΩ : B ∅ *ᵥ WithLp.ofLp Ω = (E0 : ℂ) • WithLp.ofLp Ω := by
     rw [hcenter]
     exact hNΩ'

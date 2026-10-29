@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import QICLean.Analysis.EuclideanEigenvectorBasis
 import TNLean.MPS.AreaLaw.RegionalTruncationResidual
 import Mathlib.Tactic.FinCases
 
@@ -166,11 +167,7 @@ theorem norm_aklv_two_block_truncation_low_le {L q l r : ℕ}
       Matrix.toEuclideanCLM (n := Fin L → Fin q) (𝕜 := ℂ)
         (X T + Y) ((hB T).eigenvectorBasis v) =
           ((hB T).eigenvalues v : ℂ) • (hB T).eigenvectorBasis v := by
-    change Matrix.toEuclideanCLM (n := Fin L → Fin q) (𝕜 := ℂ)
-      (B T) ((hB T).eigenvectorBasis v) = _
-    apply WithLp.ofLp_injective 2
-    simpa only [Matrix.ofLp_toEuclideanCLM, WithLp.ofLp_smul,
-      Complex.coe_smul] using (hB T).mulVec_eigenvectorBasis v
+    exact (hB T).toEuclideanCLM_eigenvectorBasis v
   have hsingle (j : Fin 3) :
       ‖((Matrix.toEuclideanCLM (n := Fin L → Fin q) (𝕜 := ℂ)
         (A j - cfc (fun x : ℝ ↦ min x (e j + t)) (A j))).domRestrict G)‖ ≤

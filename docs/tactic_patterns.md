@@ -24,6 +24,25 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Euclidean action on a Hermitian eigenbasis — promoted (2026-10-29)
+
+- **Pattern:** Transport Mathlib's `mulVec_eigenvectorBasis` equation through
+  `WithLp.ofLp` and convert real scalar multiplication to the complex field.
+- **Abstraction:** `Matrix.IsHermitian.toEuclideanCLM_eigenvectorBasis` in
+  `QICLean/Analysis/EuclideanEigenvectorBasis.lean`, valid over any `RCLike`
+  field and any finite index type.
+- **Refactored occurrences:** Seven calculations in
+  `MPS/AreaLaw/FiveRegionTruncationResidual.lean` (two),
+  `MPS/AreaLaw/PhysicalLowEnergyFamily.lean` (two),
+  `MPS/AreaLaw/AKLV/TwoBlockTruncation.lean`,
+  `MPS/AreaLaw/AKLV/SpectralCluster.lean`, and
+  `MPS/AreaLaw/AKLV/PhysicalRobustness.lean`.
+- **Notes:** This is the existing spectral theorem in Euclidean coordinates;
+  no new spectral or nonempty-index hypothesis is introduced. The underlying
+  linear-map application is definitionally the same, so no parallel helper is
+  needed. Each replacement was checked before the next proof was changed.
+
+
 ### Support of an internal-bond sum — promoted (2026-10-29)
 
 - **Pattern:** Apply support under finite sums, then enlarge the two-site support
@@ -9725,15 +9744,3 @@ there is no need for a new tactic.
   `LawfulBEq`, preserving the list's equality instance. The actual-module
   imported audit uses Lean's `--setup` and a single explicit `importArts`
   entry, so no provider namespace or compiled dependency is copied.
-
-### Canonical eigenvectors in Euclidean coordinates — candidate (2026-10-29)
-
-- **Seen:** The canonical-eigenvector identities in
-  `MPS/AreaLaw/FiveRegionTruncationResidual.lean` and
-  `MPS/AreaLaw/AKLV/TwoBlockTruncation.lean`.
-- **Reuse:** Each identity uses `Matrix.IsHermitian.mulVec_eigenvectorBasis`;
-  `WithLp.ofLp_injective`, `Matrix.ofLp_toEuclideanCLM` and the existing scalar
-  conversion transport that theorem to Euclidean coordinates.
-- **Candidate:** A QICLean lemma stating the Euclidean-coordinate version would
-  remove this recurring coordinate conversion. The eigenvector theorem itself
-  is already reused; no new spectral argument or tactic is introduced here.
