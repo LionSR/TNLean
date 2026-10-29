@@ -90,3 +90,14 @@ First hosted diagnostics exposed elementary name, set-membership and
 coercion-normalization issues in the foundations; these are source-repaired.
 Native source/import/prose/format/integrity checks do not replace Lean
 verification of the new clustering assembly.
+
+## Hosted diagnostics on `7a2b4f351`
+
+Job `123583214172` compiled the repaired Gaussian frequency rate and sharp
+negative-frequency ground-covariance modules. Its remaining failures were
+the generic real-to-complex integral rewrite and the two additive-bound
+orientations in observable centering. Normalization now applies the
+specialized complex integral identity directly after changing the endpoint.
+The centering estimates use explicit two-term addition monotonicity. The
+rate module's reported unnecessary tactic sequencing is also removed.
+No mathematical statements changed and no local Lean command was run.

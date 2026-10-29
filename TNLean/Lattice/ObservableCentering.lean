@@ -87,9 +87,9 @@ theorem norm_centeredObservable_le
     _ ≤ ‖A‖ + ‖normalizedVectorExpectation ψ A • (1 : Matrix n n ℂ)‖ :=
       norm_sub_le _ _
     _ ≤ ‖A‖ + ‖normalizedVectorExpectation ψ A‖ :=
-      add_le_add_left
-        (SpectralFilter.norm_smul_one_le (n := n) (normalizedVectorExpectation ψ A)) ‖A‖
-    _ ≤ ‖A‖ + ‖A‖ := add_le_add_left (norm_normalizedVectorExpectation_le hψ A) _
+      add_le_add le_rfl
+        (SpectralFilter.norm_smul_one_le (n := n) (normalizedVectorExpectation ψ A))
+    _ ≤ ‖A‖ + ‖A‖ := add_le_add le_rfl (norm_normalizedVectorExpectation_le hψ A)
     _ = _ := by ring
 
 /-- Centering only the first observable gives the actual covariance.
