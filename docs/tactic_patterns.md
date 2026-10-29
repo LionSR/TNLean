@@ -9684,3 +9684,16 @@ there is no need for a new tactic.
   and `Matrix.conjTranspose_reindex` transports the adjoint. The existing QICLean
   Skolem–Noether theorem supplies the square implementer. No entrywise double sum
   or duplicate Skolem–Noether argument is introduced.
+
+### Prescribed coordinates of a commuting-factor product — promoted (2026-10-29)
+
+- **Seen:** the two actual adjacent support-factor presentations and the
+  corresponding unshifted/shifted matrix rules.
+- **Promotion:** `StarSubalgebra.commutingMulEquivSup` exposes the actual
+  multiplication equivalence, and
+  `StarSubalgebra.commutingSupEquivMatrix_apply_mul` evaluates its prescribed
+  matrix coordinates on a factor product.
+- **Reuse:** Both adjacent-generation presentations use this one evaluation
+  theorem. The two QCA matrix rules then reuse their owner evaluations,
+  rather than reconstructing the tensor-product map or a Kronecker expansion.
+- **Notes:** This is a helper theorem, not a new algebra structure or tactic.
