@@ -77,7 +77,9 @@ theorem cyclicRestrictES_pinnedGlobalState_eq
     change uncleTwoWallTrial A B R L N 1 (3 * N - 1) (N + 1) N
       ((cyclicCfg (by omega) 2 (⟨N - 1, by omega⟩ : Fin (6 * N + 1)) σ τ) ∘
         Fin.cast (by omega)) = _
-    rw [cyclicCfg_eq_contiguousCfg (by omega) (by omega) (by omega),
+    rw [cyclicCfg_eq_contiguousCfg
+      (i := (⟨N - 1, by omega⟩ : Fin (6 * N + 1))) (L := 2)
+      (by omega) (by omega) (by change N - 1 + 2 ≤ 6 * N + 1; omega),
       uncleTwoWallTrial_cast_apply_segments]
     simp only [show N + 1 + (3 * N - 1) = 4 * N by omega,
       show 4 * N + (N + 1) = 5 * N + 1 by omega]
@@ -101,7 +103,9 @@ theorem cyclicRestrictES_pinnedGlobalState_eq
     change uncleTwoWallTrial A B R L (2 * N) 1 (2 * N - 1) (N + 1) N
       ((cyclicCfg (by omega) 2 (⟨2 * N, by omega⟩ : Fin (6 * N + 1)) σ τ) ∘
         Fin.cast (by omega)) = _
-    rw [cyclicCfg_eq_contiguousCfg (by omega) (by omega) (by omega),
+    rw [cyclicCfg_eq_contiguousCfg
+      (i := (⟨2 * N, by omega⟩ : Fin (6 * N + 1))) (L := 2)
+      (by omega) (by omega) (by change 2 * N + 2 ≤ 6 * N + 1; omega),
       uncleTwoWallTrial_cast_apply_segments]
     simp only [show 2 * N + 1 + (2 * N - 1) = 4 * N by omega,
       show 4 * N + (N + 1) = 5 * N + 1 by omega]
@@ -124,7 +128,9 @@ theorem cyclicRestrictES_pinnedGlobalState_eq
     change uncleTwoWallTrial A B R L N (N + 1) (2 * N - 1) 1 (2 * N)
       ((cyclicCfg (by omega) 2 (⟨4 * N - 1, by omega⟩ : Fin (6 * N + 1)) σ τ) ∘
         Fin.cast (by omega)) = _
-    rw [cyclicCfg_eq_contiguousCfg (by omega) (by omega) (by omega),
+    rw [cyclicCfg_eq_contiguousCfg
+      (i := (⟨4 * N - 1, by omega⟩ : Fin (6 * N + 1))) (L := 2)
+      (by omega) (by omega) (by change 4 * N - 1 + 2 ≤ 6 * N + 1; omega),
       uncleTwoWallTrial_cast_apply_segments]
     simp only [show N + (N + 1) = 2 * N + 1 by omega,
       show 2 * N + 1 + (2 * N - 1) = 4 * N by omega]
@@ -153,7 +159,9 @@ theorem cyclicRestrictES_pinnedGlobalState_eq
     change uncleTwoWallTrial A B R L N (N + 1) (3 * N - 1) 1 N
       ((cyclicCfg (by omega) 2 (⟨5 * N, by omega⟩ : Fin (6 * N + 1)) σ τ) ∘
         Fin.cast (by omega)) = _
-    rw [cyclicCfg_eq_contiguousCfg (by omega) (by omega) (by omega),
+    rw [cyclicCfg_eq_contiguousCfg
+      (i := (⟨5 * N, by omega⟩ : Fin (6 * N + 1))) (L := 2)
+      (by omega) (by omega) (by change 5 * N + 2 ≤ 6 * N + 1; omega),
       uncleTwoWallTrial_cast_apply_segments]
     simp only [show N + (N + 1) = 2 * N + 1 by omega,
       show 2 * N + 1 + (3 * N - 1) = 5 * N by omega]
