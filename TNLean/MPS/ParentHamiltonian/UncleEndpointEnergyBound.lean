@@ -72,8 +72,7 @@ theorem cyclicRestrictES_pinnedGlobalState_eq
   have h12 : 2 * N < 4 * N - 1 := by omega
   have h23 : 4 * N - 1 < 5 * N := by omega
   rcases (mem_uncleTrialEndpointBonds_iff N hN i).mp hi with rfl | rfl | rfl | rfl
-  · simp only [uncleTrialPinnedGlobalState, uncleTrialPinnedEndpointState,
-      Fin.val_mk, if_pos rfl]
+  · simp only [uncleTrialPinnedGlobalState, uncleTrialPinnedEndpointState]
     ext σ
     change uncleTwoWallTrial A B R L N 1 (3 * N - 1) (N + 1) N
       ((cyclicCfg (by omega) 2 (⟨N - 1, by omega⟩ : Fin (6 * N + 1)) σ τ) ∘
@@ -98,8 +97,8 @@ theorem cyclicRestrictES_pinnedGlobalState_eq
     rw [hB]
     simp [uncleTwoWallCoefficient, uncleConfigSegment, uncleDomainWallWord,
       Kraus.evalWord_append, Matrix.mul_assoc]
-  · simp only [uncleTrialPinnedGlobalState, uncleTrialPinnedEndpointState, Fin.val_mk,
-      if_neg (ne_of_gt h01), if_pos rfl]
+  · simp only [uncleTrialPinnedGlobalState, uncleTrialPinnedEndpointState,
+      ite_eq_right (ne_of_gt h01)]
     ext σ
     change uncleTwoWallTrial A B R L (2 * N) 1 (2 * N - 1) (N + 1) N
       ((cyclicCfg (by omega) 2 (⟨2 * N, by omega⟩ : Fin (6 * N + 1)) σ τ) ∘
@@ -123,8 +122,8 @@ theorem cyclicRestrictES_pinnedGlobalState_eq
     rw [hA]
     simp [uncleTwoWallCoefficient, uncleConfigSegment, uncleDomainWallWord,
       Kraus.evalWord_append, show (2 * N - 1) - 1 = 2 * N - 2 by omega, Matrix.mul_assoc]
-  · simp only [uncleTrialPinnedGlobalState, uncleTrialPinnedEndpointState, Fin.val_mk,
-      if_neg (ne_of_gt (h01.trans h12)), if_neg (ne_of_gt h12), if_pos rfl]
+  · simp only [uncleTrialPinnedGlobalState, uncleTrialPinnedEndpointState,
+      ite_eq_right (ne_of_gt (h01.trans h12)), ite_eq_right (ne_of_gt h12)]
     ext σ
     change uncleTwoWallTrial A B R L N (N + 1) (2 * N - 1) 1 (2 * N)
       ((cyclicCfg (by omega) 2 (⟨4 * N - 1, by omega⟩ : Fin (6 * N + 1)) σ τ) ∘
@@ -153,9 +152,9 @@ theorem cyclicRestrictES_pinnedGlobalState_eq
     simp only [uncleTwoWallCoefficient_rotate]
     simp [uncleConfigSegment, uncleDomainWallWord, Kraus.evalWord_append,
       show (2 * N - 1) - 1 = 2 * N - 2 by omega, Matrix.mul_assoc]
-  · simp only [uncleTrialPinnedGlobalState, uncleTrialPinnedEndpointState, Fin.val_mk,
-      if_neg (ne_of_gt (h01.trans (h12.trans h23))), if_neg (ne_of_gt (h12.trans h23)),
-      if_neg (ne_of_gt h23), if_pos rfl]
+  · simp only [uncleTrialPinnedGlobalState, uncleTrialPinnedEndpointState,
+      ite_eq_right (ne_of_gt (h01.trans (h12.trans h23))), ite_eq_right (ne_of_gt (h12.trans h23)),
+      ite_eq_right (ne_of_gt h23)]
     ext σ
     change uncleTwoWallTrial A B R L N (N + 1) (3 * N - 1) 1 N
       ((cyclicCfg (by omega) 2 (⟨5 * N, by omega⟩ : Fin (6 * N + 1)) σ τ) ∘
@@ -210,25 +209,32 @@ theorem norm_uncleTrialPinnedGlobalState_sq_le_mul
   have h23 : 4 * N - 1 < 5 * N := by omega
   have hRC : CR ≤ C := le_max_left _ _
   have hLC : CL ≤ C := le_max_right _ _
+  have hRcast (p q s t : ℕ) (hlen : p + 1 + q + s + t = 6 * N + 1) :
+      ‖(WithLp.linearEquiv 2 ℂ (NSiteSpace d (6 * N + 1))).symm
+        (fun σ ↦ uncleTwoWallTrial A B R L p 1 q s t (σ ∘ Fin.cast hlen))‖ ^ 2 ≤
+          C * s := by
+    rw [norm_uncleTwoWallTrial_cast A B R L p 1 q s t (6 * N + 1) hlen]
+    exact (hR p q s t).trans
+      (mul_le_mul_of_nonneg_right hRC (Nat.cast_nonneg s))
+  have hLcast (p r q t : ℕ) (hlen : p + r + q + 1 + t = 6 * N + 1) :
+      ‖(WithLp.linearEquiv 2 ℂ (NSiteSpace d (6 * N + 1))).symm
+        (fun σ ↦ uncleTwoWallTrial A B R L p r q 1 t (σ ∘ Fin.cast hlen))‖ ^ 2 ≤
+          C * r := by
+    rw [norm_uncleTwoWallTrial_cast A B R L p r q 1 t (6 * N + 1) hlen]
+    exact (hL p r q t).trans
+      (mul_le_mul_of_nonneg_right hLC (Nat.cast_nonneg r))
   rcases (mem_uncleTrialEndpointBonds_iff N hN i).mp hi with rfl | rfl | rfl | rfl
-  · simp only [uncleTrialPinnedGlobalState, Fin.val_mk, if_pos rfl,
-      norm_uncleTwoWallTrial_cast]
-    exact (hR N (3 * N - 1) (N + 1) N).trans
-      (mul_le_mul_of_nonneg_right hRC (by positivity))
-  · simp only [uncleTrialPinnedGlobalState, Fin.val_mk, if_neg (ne_of_gt h01), if_pos rfl,
-      norm_uncleTwoWallTrial_cast]
-    exact (hR (2 * N) (2 * N - 1) (N + 1) N).trans
-      (mul_le_mul_of_nonneg_right hRC (by positivity))
-  · simp only [uncleTrialPinnedGlobalState, Fin.val_mk,
-      if_neg (ne_of_gt (h01.trans h12)), if_neg (ne_of_gt h12), if_pos rfl,
-      norm_uncleTwoWallTrial_cast]
-    exact (hL N (N + 1) (2 * N - 1) (2 * N)).trans
-      (mul_le_mul_of_nonneg_right hLC (by positivity))
-  · simp only [uncleTrialPinnedGlobalState, Fin.val_mk,
-      if_neg (ne_of_gt (h01.trans (h12.trans h23))), if_neg (ne_of_gt (h12.trans h23)),
-      if_neg (ne_of_gt h23), if_pos rfl, norm_uncleTwoWallTrial_cast]
-    exact (hL N (N + 1) (3 * N - 1) N).trans
-      (mul_le_mul_of_nonneg_right hLC (by positivity))
+  · simpa only [uncleTrialPinnedGlobalState, ite_true] using
+      hRcast N (3 * N - 1) (N + 1) N (by omega)
+  · simpa only [uncleTrialPinnedGlobalState, ite_true, ite_eq_right (ne_of_gt h01)] using
+      hRcast (2 * N) (2 * N - 1) (N + 1) N (by omega)
+  · simpa only [uncleTrialPinnedGlobalState, ite_true,
+      ite_eq_right (ne_of_gt (h01.trans h12)), ite_eq_right (ne_of_gt h12)] using
+      hLcast N (N + 1) (2 * N - 1) (2 * N) (by omega)
+  · simpa only [uncleTrialPinnedGlobalState, ite_true,
+      ite_eq_right (ne_of_gt (h01.trans (h12.trans h23))),
+      ite_eq_right (ne_of_gt (h12.trans h23)), ite_eq_right (ne_of_gt h23)] using
+      hLcast N (N + 1) (3 * N - 1) N (by omega)
 
 /-- The energy of the actual source two-wall trial is uniformly O(N).
 The bound is derived from the actual four pinned residuals, actual Gram
@@ -276,7 +282,7 @@ theorem re_inner_uncleHamiltonianES_trial_le_mul
     _ ≤ ∑ _i ∈ uncleTrialEndpointBonds N hN, C * ((N + 1 : ℕ) : ℝ) :=
       Finset.sum_le_sum fun i hi ↦ hPinned N hN i hi
     _ = 4 * (C * ((N + 1 : ℕ) : ℝ)) := by
-      simp only [Finset.sum_const, uncleTrialEndpointBonds_card, nsmul_eq_mul]
+      simp only [Finset.sum_const, uncleTrialEndpointBonds_card, nsmul_eq_mul, Nat.cast_ofNat]
     _ ≤ 8 * C * N := by
       push_cast
       have hNreal : (1 : ℝ) ≤ N := by exact_mod_cast (Nat.succ_le_iff.mpr hN)
