@@ -23,6 +23,7 @@ import TNLean.MPS.Examples.AKLTTimeReversal
 import TNLean.MPS.Examples.AnomalousCondensation
 import TNLean.MPS.Examples.CZX
 import TNLean.MPS.Examples.CZY
+import TNLean.MPS.Examples.CanonicalBlockCancellation
 import TNLean.MPS.Examples.Cluster
 import TNLean.MPS.Examples.ClusterParentHamiltonian
 import TNLean.MPS.Examples.ClusterPhysicalStringOrder

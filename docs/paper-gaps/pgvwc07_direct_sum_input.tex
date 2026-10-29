@@ -370,6 +370,59 @@ The source-written declarations remain pending hosted verification.\footnote{%
     \leanid{MPSTensor.periodicInteractionHamiltonianES_mpvState_eq_zero_of_wordTupleSpanTop};
     \leanid{MPSTensor.PGVWC07CanonicalFormData.periodicInteractionHamiltonianES_blocks_eq_zero}.}
 
+\section{Literal weighted-vector cancellation at a nondegenerate source instance}
+
+The canonical conditions themselves do not imply separation of distinct
+blocks up to gauge and phase. Theorem~4, lines~742--762 of
+\path{Papers/quant-ph_0608197/MPSarchive.tex}, imposes three conditions on
+each individual block, with positive weights at most one. It has no
+cross-block minimality or inequivalence condition. The proof at
+lines~816--833 stops after obtaining those individual conditions.
+Theorem~3 only supplies site-independent matrices; Theorem~5 decomposes
+the peripheral period of a single block; Theorem~6 concerns the asymptotic
+Schmidt spectrum in the single-block generic case. None excludes repeated
+or phase-equivalent blocks.
+
+For an explicit instance take the three bond-one blocks
+\[
+    A^1=(1,0),\qquad A^2=(-1,0),\qquad A^3=(0,1),\qquad
+    \lambda_1=\lambda_2=\lambda_3=1.
+\]
+Every block is unital, has the faithful diagonal adjoint fixed point
+$\Lambda^j=1$, and has scalar fixed space. Each satisfies $C1$ at $L_0=1$,
+and their dimensions satisfy the required ordering. All weights and block
+dimensions are positive. At the fixed source volume $N=13$ the displayed
+weighted component vectors are
+\[
+    |0\rangle^{\otimes13},\qquad -|0\rangle^{\otimes13},\qquad
+    |1\rangle^{\otimes13}.
+\]
+They are nonzero and pairwise unequal as vectors. Their sum is the normalized
+state $\phi=|1\rangle^{\otimes13}$. With $L=1$ and
+$h=|0\rangle\langle0|$, the positive frustration-free periodic sum satisfies
+\[
+    H\phi=0,\qquad H|0\rangle^{\otimes13}=13|0\rangle^{\otimes13}\ne0,
+    \qquad N=3(b-1)(L_0+1)+L.
+\]
+Consequently the literal weighted finite-vector reading does not even imply
+the first blockwise conclusion of Theorem~11. This is not a zero-weight,
+empty-block, zero-component or unnormalized-total-state example.
+The production example
+\leanid{MPSTensor.CanonicalBlockCancellation.literal_weighted_vector_counterexample}
+constructs the canonical data and the actual positive periodic interaction;
+its proof is source-written and awaits hosted acceptance.
+
+If ``different states'' at lines~1329--1330 means different rays, the first
+two components above are the same state and the example is excluded. That
+is a coherent projective interpretation, but it is stronger than literal
+inequality of the displayed weighted vectors and must be stated explicitly.
+Under pairwise nonproportionality, the elementary trace formula for a gauge
+and a phase excludes gauge-phase equivalence and supplies the existing
+separated-block theorem. This is a source-formulation correction candidate,
+not an assertion that the authors intended literal vector inequality.
+The general corrected theorem and the unrestricted source-labelled entry
+remain distinct from the example.
+
 \section{Verdict}
 
 \textbf{Verdict: scope restriction.} The exact source length and direct-sum
