@@ -35,6 +35,24 @@ noncomputable def periodicLocalInteractionES
         (LinearMap.toContinuousLinearMap h)).toLinearMap
   else 0
 
+/-- Cyclic active-block coordinates expose the actual translated interaction
+as its right-spectator extension. Source: PGVWC07, arXiv:quant-ph/0608197,
+Theorem 11 proof, lines 1418–1422. -/
+theorem cyclicActiveBlock_periodicLocalInteractionES_apply
+    (h : EuclideanSpace ℂ (Cfg d R) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d R))
+    (hRN : R ≤ N) (i : Fin N) (ψ : EuclideanSpace ℂ (Cfg d N)) :
+    cyclicActiveBlockConfigLinearIsometryEquiv d R hRN i
+        (periodicLocalInteractionES h i ψ) =
+      ContinuousLinearMap.rightFiberwiseMap (S := Cfg d (N - R))
+        (LinearMap.toContinuousLinearMap h)
+        (cyclicActiveBlockConfigLinearIsometryEquiv d R hRN i ψ) := by
+  let U := cyclicActiveBlockConfigLinearIsometryEquiv d R hRN i
+  let G := ContinuousLinearMap.rightFiberwiseMap (S := Cfg d (N - R))
+    (LinearMap.toContinuousLinearMap h)
+  rw [periodicLocalInteractionES, dif_pos hRN]
+  change U (U.symm (G (U ψ))) = G (U ψ)
+  exact U.apply_symm_apply _
+
 /-- Sum the cyclic translates of one fixed local interaction. -/
 noncomputable def periodicInteractionHamiltonianES
     (h : EuclideanSpace ℂ (Cfg d R) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d R))
