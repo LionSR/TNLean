@@ -306,6 +306,7 @@ import TNLean.MPS.ParentHamiltonian.UnclePinnedTrialNorm
 import TNLean.MPS.ParentHamiltonian.UncleTensor
 import TNLean.MPS.ParentHamiltonian.UncleTrialEnergy
 import TNLean.MPS.ParentHamiltonian.UncleTrialLocalization
+import TNLean.MPS.ParentHamiltonian.UncleTrialOverlap
 import TNLean.MPS.ParentHamiltonian.UncleTrialPinnedWalls
 import TNLean.MPS.ParentHamiltonian.UncleTrialTransferNorm
 import TNLean.MPS.ParentHamiltonian.UncleTwoWallTrial
