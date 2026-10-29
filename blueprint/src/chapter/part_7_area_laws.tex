@@ -1,11 +1,13 @@
-\part{Area laws from a global spectral gap}
+\part{The two-dimensional area law}
 \label{part:area_laws}
 
 Ground states of gapped local Hamiltonians satisfy area laws and are
 approximated efficiently by tensor networks \cite[Section~II.C]{Cirac2021Matrix}.
-This part proves the two-dimensional area law for a gapped finite-range
-Hamiltonian and the approximation of gapped square-grid ground states by
-projected entangled pair states of polynomial bond dimension, and then the
-one-dimensional versions of both: the area law on a chain (Theorem~A) and the
-approximation by matrix product states (Theorem~B), proved by specializing the
-same arguments to a chain.
+This part proves that for every ground state of a finite-range Hamiltonian with
+a spectral gap on a finite lattice domain, the entropy of a region is bounded by
+a constant times the number of edges crossing its boundary
+\cite{OpenAI2026AreaLaw}. The proof starts from a first entropy bound on boxes,
+improves it by moving a boundary through a collar around a region, makes the
+information across a slightly wider collar smaller than any inverse power of
+the system size, and divides the region into two families of smaller regions
+whose entropies cancel.
