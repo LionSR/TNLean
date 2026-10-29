@@ -103,3 +103,29 @@ recorded in \cite{gap:gnvw12_site_dependent_adjacent_generation_scope}.
     image-pair algebra as well. Their commutant is the global center, which
     consists exactly of scalars.
 \end{proof}
+
+\begin{theorem}[Generation of each image pair by its support factors]
+    \label{thm:qca_image_pair_adjacent_generation}
+    \lean{SpinChain.PropagatesWithin.exists_adjacentSupportJoin_matrix,
+        SpinChain.PropagatesWithin.range_image_evenPair_eq_adjacentSupportJoin}
+    \notready
+    \uses{cor:qca_support_factor_presentations,
+        lem:qca_adjacent_support_relative_commutant,thm:qca_commuting_full_matrix_product}
+    The image of each even-pair algebra is the join of its two adjacent
+    support factors:
+    \begin{align}
+        \omega(\mathcal A_{E_x})
+         & =\mathcal R_{2x}\vee\mathcal R_{2x+1}.
+        \label{eq:qca_image_pair_adjacent_generation}
+    \end{align}
+    This is equation~AARReven of
+    \cite[lines~1276--1287]{Gross2012IndexTheory}, in the homogeneous domain.
+\end{theorem}
+\begin{proof}
+    Both support factors are full matrix algebras of positive size. Their
+    commuting join is therefore a full matrix algebra. The image-pair
+    algebra is another full matrix algebra and embeds unitally into this
+    join. Its relative commutant is scalar. A unital homomorphism between
+    full complex matrix algebras with scalar relative commutant is onto,
+    so the support containment is an equality.
+\end{proof}

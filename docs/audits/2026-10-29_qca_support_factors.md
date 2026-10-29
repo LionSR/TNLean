@@ -47,11 +47,20 @@ commutant theorem. This proves the actual relative-commutant assertion
 required in the first strict-inclusion argument, with no such assertion
 assumed as a premise.
 
-Remaining in #7122: AARReven, AARRodd and both homogeneous size identities.
-The first equality still needs the finite full-matrix relative-commutant
-separation theorem transported through the now-derived matrix presentations.
-The second has its own ambient-pair strict-inclusion argument. Neither
-adjacent-generation equality is claimed by the present source.
+`AdjacentSupportGeneration.lean` now derives the actual AARReven equality.
+Faithful embedding transports the two actual finite factor presentations to
+their quasi-local copies. The existing commuting-factor theorem is generalized
+from an ambient matrix algebra to an arbitrary nontrivial complex star-algebra;
+its simplicity proof is unchanged. This gives a genuine full-matrix presentation
+of the actual adjacent join. The pair-image inclusion is transported between
+full matrix algebras. The already-derived scalar relative commutant invokes
+the pinned QICLean surjectivity theorem, so no strictness or size equality is
+assumed. All public inputs remain exactly the homogeneous nearest-neighbour
+automorphism domain of the source argument.
+
+Remaining in #7122: AARRodd and both homogeneous size identities. The second
+equality has its own ambient-pair strict-inclusion argument. AARReven is
+source-written here but not claimed compiled or integrated.
 
 Validation: import-generation, source/prose/whitespace and integrity checks
 passed. No local Lean invocation, build or checkdecls was run, as requested.

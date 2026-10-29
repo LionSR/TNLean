@@ -8,6 +8,7 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.QCA
 
+import TNLean.QCA.AdjacentSupportGeneration
 import TNLean.QCA.AlgebraicBlocking
 import TNLean.QCA.AlgebraicTranslation
 import TNLean.QCA.BipartiteLocalAlgebra
