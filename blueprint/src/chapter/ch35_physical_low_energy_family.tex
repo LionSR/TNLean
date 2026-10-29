@@ -3,6 +3,7 @@
 \begin{theorem}[A common polynomial family at two cutoffs]
     \label{thm:chebyshev_nested_polynomial_family}
     \lean{TNLean.MPS.AreaLaw.exists_chebyshev_nested_viability_of_polynomial_family}
+    \leanok
     Let $B$ be Hermitian with $\|B\|\le R$, let $u<v\le R$, and fix a
     unitary identification with $\mathcal H_J\otimes\mathcal H_{J^c}$.
     Suppose fixed operators $W_1,\ldots,W_N$ on $\mathcal H_J$ span the
@@ -20,7 +21,7 @@
     The cutoffs are closed. No spectral gap between them is assumed.
 \end{theorem}
 
-\begin{proof}
+\begin{proof}\leanok
     Construct the rescaled Chebyshev polynomial from the actual Hermitian
     operator. Its absolute value is at least one below $u$ and at most
     $\sqrt\Delta$ above $v$. The common family supplies the tensor factors
@@ -32,6 +33,7 @@
 \begin{theorem}[A physical buffered low-energy improving family]
     \label{thm:physical_low_energy_filter_family}
     \lean{TNLean.MPS.AreaLaw.exists_five_region_physical_low_energy_filter_family}
+    \leanok
     Let $0\le h_i\le\Id$ be supported nearest-neighbour terms, with
     $q\ge2$, $\ell\ge1$, $a+2\ell\le b$, and $b+2\ell\le L-1$.
     Let $\varepsilon,w>0$ and $3w<\eta$. Use the threshold
@@ -63,7 +65,7 @@
     separate. See \cite{gap:alvv16_low_energy_family_buffers}.
 \end{theorem}
 
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:five_region_physical_truncation_residual,
       thm:actual_clipped_polynomial_family,
       thm:chebyshev_nested_polynomial_family}
@@ -80,6 +82,7 @@
 \begin{corollary}[Improvement between original spectral windows]
     \label{cor:original_low_energy_filter_family}
     \lean{TNLean.MPS.AreaLaw.exists_five_region_original_low_energy_filter_family}
+    \leanok
     Under the hypotheses of Theorem~\ref{thm:physical_low_energy_filter_family},
     the same family, polynomial and tensor factors may be chosen before
     every subspace $S$ and parameter $\delta$. If $\delta\ge0$,
@@ -97,7 +100,7 @@
     between the clipped targets.
 \end{corollary}
 
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:physical_low_energy_filter_family}
     Closeness composition first makes $S$ $2(\delta+\varepsilon)$-viable
     for $T_+$. Apply the same fixed family to improve viability for $T_-$.
