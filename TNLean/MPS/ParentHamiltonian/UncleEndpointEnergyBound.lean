@@ -22,7 +22,7 @@ Source: arXiv:1210.6613, proof of Lemma lowenergystates, lines 1289–1296.
 
 noncomputable section
 
-open scoped Matrix BigOperators
+open scoped Matrix BigOperators InnerProductSpace
 
 namespace MPSTensor
 
