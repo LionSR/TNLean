@@ -25,7 +25,7 @@ invariant subspace other than $0$ and $\C^D$. An element $a=\sum_wc_ww$ of the w
 acts on $C$ by $a(C)=\sum_wc_wC^w$, the empty word acting as $\Id$; $F_+$ is the ideal of the
 combinations of nonempty words.
 
-\begin{theorem}[The density theorem with targets]
+\begin{lemma}[The density theorem with targets]
     \label{thm:asym_uniq_density}
     \lean{MPSTensor.exists_eval_eq_of_pairwise_not_isGaugeRelated,
         MPSTensor.exists_aug_eq_zero_eval_eq_of_pairwise_not_isGaugeRelated}
@@ -34,14 +34,14 @@ combinations of nonempty words.
     Let $C_1,\ldots,C_m$ be irreducible tensors of bond dimensions $D_1,\ldots,D_m$, pairwise not
     gauge related, and let $Y_j\in\MN{D_j}$ for every $j$. Then there is $a\in F$ with $a(C_j)=Y_j$
     for every $j$. If moreover every $C_j$ has a nonzero letter, $a$ can be chosen in $F_+$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:asym_separation}
     By Burnside's theorem the words act on $\C^{D_j}$ as the full matrix algebra, so there is
     $b_j\in F_+$ with $b_j(C_j)=Y_j$ whenever $C_j$ has a nonzero letter. The word-algebra modules
-    of the $C_j$ are simple and pairwise non-isomorphic, and Theorem~\ref{thm:asym_separation} gives
+    of the $C_j$ are simple and pairwise non-isomorphic, and Lemma~\ref{thm:asym_separation} gives
     $p_j\in F_+$ with $p_j(C_k)=\delta_{jk}\Id$ for every $C_j$ with a nonzero letter. An
     irreducible tensor of positive bond dimension whose letters all vanish has $D=1$, and two such
     are gauge related, so there is at most one, $C_{j_0}$. Then
@@ -49,26 +49,26 @@ combinations of nonempty words.
     exists, satisfies $a(C_j)=Y_j$ for every $j$, and lies in $F_+$ when there is no $C_{j_0}$.
 \end{proof}
 
-\begin{corollary}[Independence of the word traces]
+\begin{lemma}[Independence of the word traces]
     \label{cor:asym_uniq_trace_independence}
     \lean{MPSTensor.eq_zero_of_forall_sum_mul_trace_evalWord_eq_zero}
     \leanok
     \uses{thm:asym_uniq_density}
     Let $C_1,\ldots,C_m$ be irreducible tensors, pairwise not gauge related, each with a nonzero
     letter. If $c\in\C^m$ satisfies $\sum_jc_j\tr(C_j^w)=0$ for every nonempty word $w$, then $c=0$.
-\end{corollary}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:asym_uniq_density}
     The relation extends linearly to $\sum_jc_j\tr(a(C_j))=0$ for every $a\in F_+$.
-    Theorem~\ref{thm:asym_uniq_density} gives $a_j\in F_+$ with $a_j(C_k)=\delta_{jk}\Id$, and the
+    Lemma~\ref{thm:asym_uniq_density} gives $a_j\in F_+$ with $a_j(C_k)=\delta_{jk}\Id$, and the
     relation at $a_j$ reads $c_jD_j=0$. A tensor with a nonzero letter has $D_j>0$, so $c_j=0$.
 \end{proof}
 
 \subsection{Compressions and labelled flags}
 
-\begin{proposition}[A compression is a labelled flag with an adapted basis]
+\begin{lemma}[A compression is a labelled flag with an adapted basis]
     \label{prop:asym_uniq_dictionary}
     \lean{MPSTensor.MultiBlockCompression.flag,
         MPSTensor.MultiBlockCompression.toFlagData,
@@ -82,7 +82,7 @@ combinations of nonempty words.
     of the word-algebra module of $B$ over $(S,C)$ with $z$ zero steps, the step $M_k/M_{k-1}$
     carrying the slot $\sigma(k)$. Conversely every labelled invariant flag is the flag of a
     compression whose order is the order of the labels.
-\end{proposition}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -152,7 +152,7 @@ combinations of nonempty words.
     $U$ against $P$ and against $P'$.
 \end{proof}
 
-\begin{proposition}[The matching]
+\begin{lemma}[The matching]
     \label{prop:asym_uniq_matching}
     \lean{CoveringMatching.CoveringChain,
         CoveringMatching.CoveringChain.jump,
@@ -176,7 +176,7 @@ combinations of nonempty words.
     every $k$ the letters induced on $M_k/M_{k-1}$ and on $\widetilde M_{\pi(k)}/\widetilde M_{\pi(k)-1}$
     are gauge related, both being isomorphic to the induced letters on $U/K$ with
     $U=M_k\cap\widetilde M_{\pi(k)}$ and $K=M_{k-1}\cap\widetilde M_{\pi(k)}=M_k\cap\widetilde M_{\pi(k)-1}$.
-\end{proposition}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -187,7 +187,7 @@ combinations of nonempty words.
     exchanged flags sends $k'$ back to $k$, and gives the identities and the isomorphisms.
 \end{proof}
 
-\begin{theorem}[The blocks are unique]
+\begin{lemma}[The blocks are unique]
     \label{thm:asym_uniq_blocks}
     \lean{MPSTensor.MultiBlockCompression.z_eq,
         MPSTensor.MultiBlockCompression.labelMatching,
@@ -199,7 +199,7 @@ combinations of nonempty words.
     of normal tensors of positive bond dimension, with $z$ and $\widetilde z$ zero slots. Then
     $z=\widetilde z$ and there is a bijection $\tau:S\to\widetilde S$ with $D_{\tau(s)}=D_s$ and
     $\widetilde C_{\tau(s)}$ gauge related to $C_s$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -238,12 +238,12 @@ combinations of nonempty words.
     The columns of $G^{-1}$ at the positions $1,\ldots,k$ span $G^{-1}E_k=M_k$. The two ranks agree
     exactly when $M_k\subseteq M_{k-1}+\widetilde M_{k'}$, that is, when
     $M_{k-1}+(M_k\cap\widetilde M_{k'})=M_k$ by the modular law; by
-    Proposition~\ref{prop:asym_uniq_matching} the least such $k'$ is $\pi(k)$.
+    Lemma~\ref{prop:asym_uniq_matching} the least such $k'$ is $\pi(k)$.
 \end{proof}
 
 \subsection{Uniqueness of the compression maps}
 
-\begin{theorem}[Two compressions with the same flag]
+\begin{lemma}[Two compressions with the same flag]
     \label{thm:asym_uniq_same_flag}
     \lean{MPSTensor.MultiBlockCompression.withGauge,
         MPSTensor.MultiBlockCompression.blockTriangular_coordChange_of_flag_eq,
@@ -268,7 +268,7 @@ combinations of nonempty words.
     Conversely, for every block upper triangular $h$ with nonzero scalar diagonal blocks,
     $(\sigma,hG)$ is a compression onto the same family with the same flag. The compressions with a
     given labelled flag are therefore a single orbit of the group of such matrices, acting freely.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -281,7 +281,7 @@ combinations of nonempty words.
     block upper triangular and keeps the diagonal blocks, and $(hG)^{-1}E_k=G^{-1}E_k$.
 \end{proof}
 
-\begin{theorem}[The compressions with one labelled flag form a torsor]
+\begin{lemma}[The compressions with one labelled flag form a torsor]
     \label{thm:asym_uniq_torsor}
     \lean{MPSTensor.MultiBlockCompression.bijOn_conjTriangular}
     \leanok
@@ -291,18 +291,18 @@ combinations of nonempty words.
     decomposition of $\sigma$ with nonzero scalar diagonal blocks. Then $h\mapsto(\sigma,hG)$ is a
     bijection from $T_\sigma$ onto the set of compressions of $B$ onto the same family with the same
     number of zero slots, the same order and the same flag as $(\sigma,G)$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:asym_uniq_same_flag}
-    By the converse part of Theorem~\ref{thm:asym_uniq_same_flag} the map takes values in the set;
+    By the converse part of Lemma~\ref{thm:asym_uniq_same_flag} the map takes values in the set;
     by its first part every compression $(\sigma,\widetilde G)$ of the set is $(\sigma,hG)$ with
     $h=\widetilde GG^{-1}\in T_\sigma$; and $h$ is recovered from $(\sigma,hG)$ as $(hG)G^{-1}$, so
     the map is injective.
 \end{proof}
 
-\begin{theorem}[Two compressions with different flags]
+\begin{lemma}[Two compressions with different flags]
     \label{thm:asym_uniq_different_flags}
     \lean{MPSTensor.MultiBlockCompression.exists_intertwiner_of_matching,
         MPSTensor.MultiBlockCompression.existsUnique_intertwiner_of_matching,
@@ -326,12 +326,12 @@ combinations of nonempty words.
     On two zero slots $X$ is a nonzero scalar, and so it is when $\widetilde C_{b'}=C_b$, in
     particular for two compressions onto one family at two slots carrying the same label. When the
     two labelled flags coincide, $U=M_k$ and $\mathcal N=M_{k-1}$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{prop:asym_uniq_matching, lem:asym_uniq_maps}
-    By Proposition~\ref{prop:asym_uniq_matching}, $M_{k-1}+U=M_k$, $\widetilde M_{k'-1}+U=\widetilde M_{k'}$
+    By Lemma~\ref{prop:asym_uniq_matching}, $M_{k-1}+U=M_k$, $\widetilde M_{k'-1}+U=\widetilde M_{k'}$
     and $U\cap M_{k-1}=K=U\cap\widetilde M_{k'-1}$. By Lemma~\ref{lem:asym_uniq_maps}, $W_b$
     restricted to $U$ intertwines the letters with $C_b$, is onto $\C^{n_k}$ since
     $W_b(U)=W_b(M_{k-1}+U)=W_b(M_k)$, and has kernel $K$; the same for $\widetilde W_{b'}$. Define
@@ -345,29 +345,29 @@ combinations of nonempty words.
     Lemma~\ref{lem:asym_normal_intertwiner}.
 \end{proof}
 
-\begin{corollary}[Two compressions with different flags in matrices]
+\begin{lemma}[Two compressions with different flags in matrices]
     \label{cor:asym_uniq_different_flags_matrices}
     \lean{MPSTensor.MultiBlockCompression.leftRow_mul_eq_mul_leftRow_mul,
         MPSTensor.MultiBlockCompression.exists_rightCol_sub_mul_eq_fromCols_mul}
     \leanok
     \uses{thm:asym_uniq_different_flags, lem:asym_uniq_rank_test}
-    In the setting of Theorem~\ref{thm:asym_uniq_different_flags}, with the matrices $G_{\leq k}$
+    In the setting of Lemma~\ref{thm:asym_uniq_different_flags}, with the matrices $G_{\leq k}$
     and $\widetilde G_{\leq k'}$ of Lemma~\ref{lem:asym_uniq_rank_test}: for every matrix $Y_U$ whose
     columns lie in $U$, $\widetilde W_{b'}Y_U=XW_bY_U$; and there is a matrix $R$ with
     $\widetilde V_{b'}-V_bX^{-1}=(G_{\leq k-1}\ \widetilde G_{\leq\pi(k)-1})\,R$.
-\end{corollary}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:asym_uniq_different_flags, lem:asym_uniq_rank_test}
     The first identity is the identity $\widetilde W_{b'}x=XW_bx$ of
-    Theorem~\ref{thm:asym_uniq_different_flags} applied to every column of $Y_U$. By the same
+    Lemma~\ref{thm:asym_uniq_different_flags} applied to every column of $Y_U$. By the same
     theorem every column of $\widetilde V_{b'}-V_bX^{-1}$ lies in
     $\mathcal N=M_{k-1}+\widetilde M_{\pi(k)-1}$, which is the column span of
     $(G_{\leq k-1}\ \widetilde G_{\leq\pi(k)-1})$ by Lemma~\ref{lem:asym_uniq_rank_test}.
 \end{proof}
 
-\begin{theorem}[A basis adapted to both flags]
+\begin{lemma}[A basis adapted to both flags]
     \label{thm:asym_uniq_common_basis}
     \lean{MPSTensor.MultiBlockCompression.bijective_leftRow_matchedCompl,
         MPSTensor.MultiBlockCompression.bijective_leftRow_matchedCompl',
@@ -405,7 +405,7 @@ combinations of nonempty words.
         MPSTensor.MultiBlockCompression.gaugeMatrix_mul_gaugeMatrixInv_eq}
     \leanok
     \uses{thm:asym_uniq_different_flags, prop:asym_uniq_matching}
-    In the setting of Theorem~\ref{thm:asym_uniq_different_flags}, for two compressions of $B$ onto
+    In the setting of Lemma~\ref{thm:asym_uniq_different_flags}, for two compressions of $B$ onto
     families $(C_s)_{s\in S}$ and $(\widetilde C_t)_{t\in\widetilde S}$ of normal tensors of
     positive bond dimension, let $U_k=M_k\cap\widetilde M_{\pi(k)}$,
     $K_k=M_{k-1}\cap\widetilde M_{\pi(k)}$, and let $L_k$ be a complement of $K_k$ in $U_k$. Then
@@ -415,8 +415,8 @@ combinations of nonempty words.
     $\widetilde G=\widetilde{\mathsf A}P_X\Gamma$, where $\mathsf A$ and $\widetilde{\mathsf A}$ are block
     upper triangular with identity diagonal blocks in the orders $\sigma$ and $\widetilde\sigma$ and
     $P_X$ is the block permutation $j\mapsto\pi(j)$ composed with the intertwiners of
-    Theorem~\ref{thm:asym_uniq_different_flags}; hence $\widetilde GG^{-1}=\widetilde{\mathsf A}P_X\mathsf A^{-1}$.
-\end{theorem}
+    Lemma~\ref{thm:asym_uniq_different_flags}; hence $\widetilde GG^{-1}=\widetilde{\mathsf A}P_X\mathsf A^{-1}$.
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -427,10 +427,10 @@ combinations of nonempty words.
     $W_{\sigma(j)}$ is injective on $L_j$. Both $G$ and $\Gamma$ map $M_k$ onto $E_k$, so $G\Gamma^{-1}$ is
     block upper triangular, with identity diagonal blocks because both read the step through
     $W_{\sigma(k)}$; reading the $L_j$ through $\widetilde W$ instead gives $X_j$ times the reading
-    through $W$, by Theorem~\ref{thm:asym_uniq_different_flags}, which is $P_X\Gamma$.
+    through $W$, by Lemma~\ref{thm:asym_uniq_different_flags}, which is $P_X\Gamma$.
 \end{proof}
 
-\begin{theorem}[Unipotent changes of two compressions]
+\begin{lemma}[Unipotent changes of two compressions]
     \label{thm:asym_uniq_unipotent_change}
     \lean{MPSTensor.MultiBlockCompression.matchedCompl_congr,
         MPSTensor.MultiBlockCompression.matchedKer_conjTriangular,
@@ -448,7 +448,7 @@ combinations of nonempty words.
         MPSTensor.MultiBlockCompression.exists_conjTriangular_unipotentFactor_eq}
     \leanok
     \uses{thm:asym_uniq_common_basis}
-    In the setting of Theorem~\ref{thm:asym_uniq_common_basis}, let $u$ and $\widetilde u$ be block
+    In the setting of Lemma~\ref{thm:asym_uniq_common_basis}, let $u$ and $\widetilde u$ be block
     upper triangular with identity diagonal blocks in the orders $\sigma$ and $\widetilde\sigma$.
     Then $(\sigma,uG)$ and $(\widetilde\sigma,\widetilde u\widetilde G)$ are compressions with the
     same flags, the same complements $L_k$, the same change of basis $\Gamma$ and the same block
@@ -457,12 +457,12 @@ combinations of nonempty words.
     with identity diagonal blocks in the orders $\sigma$ and $\widetilde\sigma$ there are such $u$
     and $\widetilde u$ for which the factors are $\mathsf A_1$ and $\widetilde{\mathsf A}_1$: every
     pair of unipotent factors occurs.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:asym_uniq_common_basis, thm:asym_uniq_same_flag}
-    By Theorem~\ref{thm:asym_uniq_same_flag} the two changes keep the flags, hence the matching, the
+    By Lemma~\ref{thm:asym_uniq_same_flag} the two changes keep the flags, hence the matching, the
     subspaces $U_k$ and $K_k$ and the complements $L_k$. The row of $uG$ at the slot of position $j$
     is $W_{\sigma(j)}+\sum_{c\text{ after }j}u_{jc}W_c$, and every $W_c$ with $c$ after $j$ vanishes
     on $L_j\subseteq M_j$, so $\Gamma$ is unchanged; likewise for $\widetilde u\widetilde G$, so $P_X$
@@ -486,7 +486,7 @@ combinations of nonempty words.
 \begin{proof}
     \leanok
     \uses{prop:asym_uniq_dictionary, thm:asym_uniq_same_flag}
-    Proposition~\ref{prop:asym_uniq_dictionary} and Theorem~\ref{thm:asym_uniq_same_flag}.
+    Lemma~\ref{prop:asym_uniq_dictionary} and Lemma~\ref{thm:asym_uniq_same_flag}.
 \end{proof}
 
 \begin{theorem}[The set of all reductions]
@@ -510,11 +510,11 @@ combinations of nonempty words.
 \begin{proof}
     \leanok
     \uses{prop:asym_uniq_dictionary, thm:asym_uniq_torsor}
-    The first statement is Proposition~\ref{prop:asym_uniq_dictionary} in both directions, and the
+    The first statement is Lemma~\ref{prop:asym_uniq_dictionary} in both directions, and the
     compression constructed there from a labelled flag has that labelled flag, which gives the
     choice $F\mapsto(\sigma_F,G_F)$. Given a compression, $F$ must be its labelled flag; it then has
     the number of zero slots, the order and the flag of $(\sigma_F,G_F)$, and
-    Theorem~\ref{thm:asym_uniq_torsor} gives exactly one $h$.
+    Lemma~\ref{thm:asym_uniq_torsor} gives exactly one $h$.
 \end{proof}
 
 \subsection{Long words and the one-block case}
@@ -542,7 +542,7 @@ combinations of nonempty words.
     factor is the diagonal block of a zero slot, which is zero.
 \end{proof}
 
-\begin{corollary}[Bare uniqueness at the ends of the flag; the one-block theorem]
+\begin{lemma}[Bare uniqueness at the ends of the flag; the one-block theorem]
     \label{cor:asym_uniq_one_block}
     \lean{MPSTensor.MultiBlockCompression.labelMatching_eq_of_unique,
         MPSTensor.MultiBlockCompression.exists_left_eq_smul_of_last,
@@ -566,7 +566,7 @@ combinations of nonempty words.
     ($S=\{s\}$, $z=D_B-D_s$), there is $\lambda\neq0$ with $\widetilde W_sB^w=\lambda W_sB^w$ and
     $B^w\widetilde V_s=\lambda^{-1}B^wV_s$ for every word with $|w|\geq D_B-D_s$; for every $z\geq1$
     this bound cannot be lowered for the first identity.
-\end{corollary}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -574,7 +574,7 @@ combinations of nonempty words.
     Since $C_s$ occurs once, the matching pairs the two $s$-steps. If both are last, $U$ is the
     whole space; if both are first, $\mathcal N=0$. For the identities with words attached,
     Lemma~\ref{lem:asym_uniq_long_words} gives $B^w\C^{D_B}\subseteq U$ and $B^w\mathcal N=0$ for
-    $|w|\geq z$, and Theorem~\ref{thm:asym_uniq_different_flags} applies to every $B^wx$. For the
+    $|w|\geq z$, and Lemma~\ref{thm:asym_uniq_different_flags} applies to every $B^wx$. For the
     sharpness, the tensor with one letter acting on $\C^{1+z}$ by $e_0\mapsto e_0$, $e_j\mapsto e_{j-1}$
     has the compressions with the block first (identity gauge, $W=e_0^{\mathsf T}$) and with the
     block last (basis $e_{j-1}-e_j$, $e_0$; $\widetilde W=e_0^{\mathsf T}+\cdots+e_z^{\mathsf T}$), and
@@ -584,7 +584,7 @@ combinations of nonempty words.
 
 \subsection{Split compressions}
 
-\begin{proposition}[Uniqueness of split compressions, bare form]
+\begin{lemma}[Uniqueness of split compressions, bare form]
     \label{prop:asym_uniq_split}
     \lean{MPSTensor.MultiBlockCompression.remainder_eq_zero_iff_conjMatrix_eq_blockDiagonal',
         MPSTensor.MultiBlockCompression.blockEntry_intertwines,
@@ -610,9 +610,9 @@ combinations of nonempty words.
     coefficient matrix $\mu$ indexed by the class; and the block of $h$ on the zero slots is
     invertible. If no block of the family is repeated up to gauge, then $\widetilde W_s=\lambda_sW_s$
     and $\widetilde V_s=\lambda_s^{-1}V_s$ as matrices for nonzero scalars $\lambda_s$, with no words
-    attached. This is the bare form of Theorem~\ref{thm:asym_zipper_uniqueness} for the
+    attached. This is the bare form of Lemma~\ref{thm:asym_zipper_uniqueness} for the
     compressions of Theorem~\ref{thm:asym_multiblock}.
-\end{proposition}
+\end{lemma}
 
 \begin{proof}
     \leanok

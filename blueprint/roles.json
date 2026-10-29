@@ -356,7 +356,9 @@
       "theorems": [
         "thm:asym_multiblock",
         "thm:asym_mpo_product",
-        "thm:asym_splitting"
+        "thm:asym_splitting",
+        "thm:asym_uniq_all",
+        "thm:asym_uniq_all_reductions"
       ],
       "corollaries": [
         "prop:asym_split_intertwiners",
@@ -376,7 +378,9 @@
       "notes": {
         "thm:asym_multiblock": "Multi-block asymmetric compression theorem named in the chapter title; cited 77 times from five chapters",
         "thm:asym_mpo_product": "Reduction of a product of matrix product operators; cited from two other chapters",
-        "thm:asym_splitting": "Splitting criterion, the second named result of the chapter"
+        "thm:asym_splitting": "Splitting criterion, the second named result of the chapter",
+        "thm:asym_uniq_all": "The set of all compressions of a tensor onto a family, one triangular-gauge orbit per labelled invariant flag",
+        "thm:asym_uniq_all_reductions": "The set of all reductions: existence from a labelled invariant flag and a unique torsor element for each"
       }
     },
     "ch:mpu_gauging": {
