@@ -131,7 +131,7 @@ theorem uncleTwoWallTrialSource_ae_quadratic_norm_growth
     (ρB : Matrix (Fin b) (Fin b) ℂ) (hρB : ρB.PosDef) (htrB : Matrix.trace ρB = 1)
     (hFA : Kraus.adjointMap A ρA = ρA) (hFB : Kraus.adjointMap B ρB = ρB)
     (μ : Measure ((Fin d → Matrix (Fin a) (Fin b) ℂ) ×
-      (Fin d → Matrix (Fin b) (Fin a) ℂ))) [IsAddHaarMeasure μ] :
+      (Fin d → Matrix (Fin b) (Fin a) ℂ))) [Measure.IsAddHaarMeasure μ] :
     ∀ᵐ P ∂μ, ∃ c C : ℝ, 0 < c ∧ 0 < C ∧ ∀ᶠ N : ℕ in atTop,
       c * ((N + 1 : ℕ) : ℝ) ^ 2 ≤
         ‖(WithLp.linearEquiv 2 ℂ (NSiteSpace d (6 * N + 1))).symm

@@ -152,7 +152,7 @@ theorem uncleTwoWallTransfer_factorization_bound [NeZero a] [NeZero b]
   have hnorm : ‖Φ (T N - U N)‖ ≤ K * ((N + 1 : ℕ) : ℝ) ^ 2 * z ^ N :=
     ContinuousLinearMap.opNorm_le_bound _ (by positivity) (hpoint N hN)
   have hT : uncleTwoWallTransfer A B R L (2 * N) (N + 1) (2 * N - 1) (N + 1) 0 = T N := by
-    simp [uncleTwoWallTransfer, T]
+    rfl
   have hU : LinearMap.trace ℂ V (U N) =
       uncleWallGramWeight A B R ρA (N + 1) * uncleWallGramWeight B A L ρB (N + 1) :=
     trace_uncleWallGram_rankOne_factorization A B R L ρA ρB (N + 1) (N + 1)
@@ -235,8 +235,7 @@ theorem uncleTwoWallTrialSource_normalized_norm_sq_tendsto [NeZero a] [NeZero b]
     refine Tendsto.congr (fun N ↦ ?_) hprod
     dsimp only [w, m, Function.comp_apply]
     simp only [Complex.real_smul, Complex.mul_re, Complex.mul_im, Complex.ofReal_re,
-      Complex.ofReal_im, mul_zero, zero_mul, sub_zero, zero_add, add_zero,
-      div_eq_mul_inv, inv_pow]
+      Complex.ofReal_im, zero_mul, sub_zero, add_zero, div_eq_mul_inv]
     ring
   change Tendsto (fun N : ℕ ↦ s N / (m N) ^ 2) atTop _
   simpa only [e, sub_add_cancel, zero_add] using he.add hw
