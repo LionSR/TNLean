@@ -2,11 +2,12 @@
 \label{sec:lvv_error_reduction}
 
 The error-reduction argument of Landau, Vazirani and
-Vidick~\cite[Claim 2.11]{Landau2015Polynomial} applies the left factors of an
-approximate ground projection to a viable set. The conclusions below take the
-operator approximation as a hypothesis; they do not construct the sampled
-operator. Normalizing its output requires the lower norm estimate recorded
-in~\cite{gap:lvv13_error_reduction_witness_norm}.
+Vidick~\cite[Claim~2.11, source lines 580--592]{Landau2015Polynomial} applies
+the left factors of an approximate ground projection to a viable set.
+Theorem~\ref{thm:lvv_mps_error_reduction} is the deterministic part of this
+claim: it takes the operator approximation as a hypothesis and does not
+construct the sampled operator. Normalizing its output requires the lower norm
+estimate recorded in~\cite{gap:lvv13_error_reduction_witness_norm}.
 
 \begin{definition}[The error-reduced family]
     \label{def:lvv_error_reduction_family}
@@ -20,8 +21,8 @@ in~\cite{gap:lvv13_error_reduction_witness_norm}.
     $S'=\{A_js:j\in J,\ s\in S\}$.
 \end{definition}
 
-\begin{theorem}[Support and cardinality after error reduction]
-    \label{thm:lvv_error_reduction_support}
+\begin{lemma}[Support and cardinality after error reduction]
+    \label{lem:lvv_error_reduction_support}
     \lean{TNLean.MPS.AreaLaw.cutMatrix_toEuclideanLin_eq_sum,
         TNLean.MPS.AreaLaw.card_errorReductionSet_le,
         TNLean.MPS.AreaLaw.toEuclideanLin_mem_span_errorReductionSet,
@@ -37,7 +38,7 @@ in~\cite{gap:lvv13_error_reduction_witness_norm}.
         M_i(K\psi)=\sum_{j\in J}A_jM_i(\psi)B_j^{\mathsf T}.
         \label{eq:lvv_error_reduction_cut_matrix}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     In cut coordinates, applying $A\otimes B$ sends a coefficient matrix
@@ -64,20 +65,23 @@ in~\cite{gap:lvv13_error_reduction_witness_norm}.
     $\|K-|\Gamma\rangle\langle\Gamma|\|\le\eta<1/2$.
     Then $S'=\{A_jt:j\in J,\ t\in S\}$ is
     $(i,|J|s,D\max(1,b),4\eta)$-viable.
+    This is the deterministic part
+    of~\cite[Claim~2.11, source lines 580--592]{Landau2015Polynomial}, with the
+    error $4\eta$ of~\cite{gap:lvv13_error_reduction_witness_norm}.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:lvv_error_reduction_support, thm:lvv_projection_error_reduction,
-        thm:lvv_operator_bond_growth}
-    Theorem~\ref{thm:lvv_error_reduction_support} gives at most $|J|s$ members.
-    Theorem~\ref{thm:lvv_operator_bond_growth} gives each member effective
+    \uses{lem:lvv_error_reduction_support, lem:lvv_projection_error_reduction,
+        lem:lvv_operator_bond_growth}
+    Lemma~\ref{lem:lvv_error_reduction_support} gives at most $|J|s$ members.
+    Lemma~\ref{lem:lvv_operator_bond_growth} gives each member effective
     MPS bond bound $\max(1,D\max(1,b))$.
-    Theorem~\ref{thm:lvv_projection_error_reduction} supplies a unit witness
+    Lemma~\ref{lem:lvv_projection_error_reduction} supplies a unit witness
     with overlap at least $1-4\eta$.
 \end{proof}
 
-\begin{theorem}[Overlap under a perturbation]
-    \label{thm:lvv_overlap_perturbation}
+\begin{lemma}[Overlap under a perturbation]
+    \label{lem:lvv_overlap_perturbation}
     \lean{TNLean.MPS.AreaLaw.mul_norm_le_norm_inner_of_norm_sub_le}
     \leanok
     Let $\Gamma$ be a unit vector, let $\varepsilon,\eta\ge0$ and $c>0$,
@@ -88,7 +92,7 @@ in~\cite{gap:lvv13_error_reduction_witness_norm}.
         \ge\left(1-\varepsilon-\frac{2\eta}{c}\right)\|y\|.
         \label{eq:lvv_overlap_perturbation}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Cauchy--Schwarz and the triangle inequality give
@@ -99,8 +103,8 @@ in~\cite{gap:lvv13_error_reduction_witness_norm}.
     since $\|x\|\ge c$.
 \end{proof}
 
-\begin{theorem}[A viable witness from an approximate filter]
-    \label{thm:lvv_filter_witness}
+\begin{lemma}[A viable witness from an approximate filter]
+    \label{lem:lvv_filter_witness}
     \lean{TNLean.MPS.AreaLaw.isViable_errorReductionSet_of_witness,
         TNLean.MPS.AreaLaw.norm_inner_le_norm_toEuclideanLin_of_fixed,
         TNLean.MPS.AreaLaw.IsViable.errorReduction,
@@ -121,21 +125,21 @@ in~\cite{gap:lvv13_error_reduction_witness_norm}.
     $\|K-A_0\|\le\eta<1/2$. If $S$ is $(i,s,b,1/2)$-viable and every $A_jt$, for
     $j\in J$ and $t\in S$, has MPS bond bound $\max(1,b')$, then $S'$ is
     $(i,|J|s,b',\delta+4\eta)$-viable.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:lvv_error_reduction_support, thm:lvv_overlap_perturbation}
+    \uses{lem:lvv_error_reduction_support, lem:lvv_overlap_perturbation}
     Put $x=A_0v$ and $y=Kv$. The operator bound gives $\|y-x\|\le\eta$,
     so $\|y\|\ge c-\eta>0$. Applying
     (\ref{eq:lvv_overlap_perturbation}) and dividing by $\|y\|$ gives the
     witness $Kv/\|Kv\|$. Its support follows from
-    Theorem~\ref{thm:lvv_error_reduction_support}. In the Hermitian case,
+    Lemma~\ref{lem:lvv_error_reduction_support}. In the Hermitian case,
     $|\langle v,\Gamma\rangle|=|\langle A_0v,\Gamma\rangle|
         \le\|A_0v\|$, so one may take $c=1/2$.
 \end{proof}
 
-\begin{theorem}[Viability from the ground projection error]
-    \label{thm:lvv_projection_error_reduction}
+\begin{lemma}[Viability from the ground projection error]
+    \label{lem:lvv_projection_error_reduction}
     \lean{TNLean.MPS.AreaLaw.IsViable.errorReduction_of_norm_sub_groundProjection_le}
     \leanok
     \uses{def:lvv_viable_set, def:lvv_error_reduction_family}
@@ -143,19 +147,19 @@ in~\cite{gap:lvv13_error_reduction_witness_norm}.
     $K=\sum_{j\in J}A_j\otimes B_j$. If
     $\|K-|\Gamma\rangle\langle\Gamma|\|\le\eta<1/2$, then $S'$ is
     $(i,4\eta)$-viable.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:lvv_filter_witness}
+    \uses{lem:lvv_filter_witness}
     For a half-viable unit witness $v$ and
     $P=|\Gamma\rangle\langle\Gamma|$,
     $\|Pv\|=|\langle\Gamma,v\rangle|\ge1/2$ and
     $|\langle\Gamma,Pv\rangle|=\|Pv\|$. Apply
-    Theorem~\ref{thm:lvv_filter_witness} with $A_0=P$ and $\varepsilon=0$.
+    Lemma~\ref{lem:lvv_filter_witness} with $A_0=P$ and $\varepsilon=0$.
 \end{proof}
 
-\begin{theorem}[Bond growth under a chain operator]
-    \label{thm:lvv_operator_bond_growth}
+\begin{lemma}[Bond growth under a chain operator]
+    \label{lem:lvv_operator_bond_growth}
     \lean{TNLean.MPS.AreaLaw.rank_cutMatrix_toEuclideanLin_le_operatorSchmidtRank_mul,
         TNLean.MPS.AreaLaw.IsOpenMPS.toEuclideanLin,
         TNLean.MPS.AreaLaw.leftConfigOfFin_toEuclideanLin,
@@ -169,7 +173,7 @@ in~\cite{gap:lvv13_error_reduction_witness_norm}.
     On the first $i\le L$ sites, a vector with effective bond bound
     $\max(1,b)$ therefore has effective output bound
     $\max(1,D\max(1,b))$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Factor the input coefficient matrix through its Schmidt-rank space

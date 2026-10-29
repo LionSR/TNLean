@@ -24,10 +24,10 @@ import TNLean.MPS.AreaLaw.ViableSet.GluingBounds
 import TNLean.MPS.AreaLaw.ViableSet.GluingCoordinates
 import TNLean.MPS.AreaLaw.ViableSet.GluingSupport
 import TNLean.MPS.AreaLaw.ViableSet.LeftColumns
-import TNLean.MPS.AreaLaw.ViableSet.PowerProjector
-import TNLean.MPS.AreaLaw.ViableSet.SampledProjector
 import TNLean.MPS.AreaLaw.ViableSet.LeftCoordinates
 import TNLean.MPS.AreaLaw.ViableSet.OperatorAction
+import TNLean.MPS.AreaLaw.ViableSet.PowerProjector
+import TNLean.MPS.AreaLaw.ViableSet.SampledProjector
 import TNLean.MPS.AreaLaw.ViableSet.SizeBondTrimming
 import TNLean.MPS.AreaLaw.ViableSet.SizeTrimming
 import TNLean.MPS.AreaLaw.ViableSet.Span
