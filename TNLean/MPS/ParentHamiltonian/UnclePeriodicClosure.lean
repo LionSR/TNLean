@@ -11,14 +11,15 @@ import TNLean.MPS.ParentHamiltonian.CyclicTranslation
 # Periodic closure of the actual single-domain-wall boundary space
 
 For an injective full perturbation letter, the intersection of the actual
-source space `S_N` and its one-site cyclic translate consists of the two
-periodic sector vectors, for every `N≥2`. Full coefficient spans extend
+source space \(S_N\) and its one-site cyclic translate consists of the two
+periodic sector vectors, for every \(N\ge2\), the domain starting from the
+source two-site uncle interaction. Full coefficient spans extend
 the cyclic word identity to arbitrary pairs of coefficient matrices. The
 boundary trace classification then removes both walls and makes the two
 diagonal boundaries scalar.
 
-Source: arXiv:1210.6613, Lemma `closure`, source lines 1117–1127, and
-Appendix `intersection-closure`, source lines 1943–1984.
+Source: arXiv:1210.6613, Lemma "closure", source lines 1117–1127, and
+Appendix "intersection-closure", source lines 1943–1984.
 -/
 
 noncomputable section
@@ -108,13 +109,13 @@ private theorem cyclicTranslateState_one_mpv (A : MPSTensor d a) (n : ℕ) :
   change Matrix.trace (Kraus.evalWord A
     (List.ofFn (cyclicTranslateCfg (1 : Fin (n + 2)) (Fin.cons i τ)))) =
       Matrix.trace (Kraus.evalWord A (List.ofFn (Fin.cons i τ)))
-  rw [cyclicTranslateCfg_cons_append, List.ofFn_fin_append, List.ofFn_cons]
-  simp only [List.ofFn_succ, List.ofFn_zero, List.cons_append, List.nil_append,
-    Kraus.evalWord_append, Kraus.evalWord_cons, Kraus.evalWord_nil, mul_one]
+  rw [cyclicTranslateCfg_cons_append, Fin.append_right_eq_snoc,
+    List.ofFn_snoc, List.ofFn_cons]
+  simp only [Kraus.evalWord_append, Kraus.evalWord_cons, Kraus.evalWord_nil, mul_one]
   exact Matrix.trace_mul_comm _ _
 
 /-- The source periodic closure is derived from full perturbation injectivity
-for every chain length at least two. Source: arXiv:1210.6613, Lemma `closure`,
+for every chain length at least two. Source: arXiv:1210.6613, Lemma "closure",
 lines 1117–1127 and Appendix closure proof, lines 1943–1984. -/
 theorem uncleBoundarySpace_inf_cyclicTranslate
     (A : MPSTensor d a) (B : MPSTensor d b)
@@ -137,9 +138,9 @@ theorem uncleBoundarySpace_inf_cyclicTranslate
       change Matrix.trace (uncleBoundaryWord A B R L (List.ofFn (Fin.cons i τ)) * X) =
         Matrix.trace (uncleBoundaryWord A B R L
           (List.ofFn (cyclicTranslateCfg (1 : Fin (n + 2)) (Fin.cons i τ))) * Y) at hc
-      rw [cyclicTranslateCfg_cons_append, List.ofFn_fin_append, List.ofFn_cons] at hc
-      simpa only [uncleBoundaryWord, List.ofFn_succ, List.ofFn_zero,
-        uncleBoundaryWord_append, uncleBoundaryWord_singleton] using hc
+      rw [cyclicTranslateCfg_cons_append, Fin.append_right_eq_snoc,
+        uncleBoundaryWord_ofFn_cons, uncleBoundaryWord_ofFn_snoc] at hc
+      exact hc
     have hpair := uncleBoundary_cyclic_pairing_of_word_pairing A B R L hPert n X Y hword
     have hXY := eq_of_uncleBoundary_cyclic_pairing X Y hpair
     obtain ⟨α, β, hX⟩ := exists_scalar_blocks_of_uncleBoundary_trace_cyclic X
