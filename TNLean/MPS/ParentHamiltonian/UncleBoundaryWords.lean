@@ -128,7 +128,7 @@ theorem uncleBoundaryWord_two (A : MPSTensor d a) (B : MPSTensor d b)
     uncleBoundaryWord A B R L [i, j] =
       uncleTensor A B R L ((decodeBlockEquiv d 2).symm ![i, j]) := by
   simp [uncleBoundaryWord, uncleBoundaryLetter, uncleBoundaryMul_block, uncleTensor,
-    decodeBlock_decodeBlockEquiv_symm, uncleBoundaryMul_one]
+    uncleBoundaryMul_one]
 
 /-- The coefficient on any original two-site configuration is the existing
 uncle-tensor letter with that blocked physical index. -/
