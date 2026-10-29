@@ -109,9 +109,17 @@ Its cutoff correction is pending in doc-only QICLean draft #1012 at exact
 PDF. Acceptance and note publication remain gates. No duplicate TNLean gap
 note or source-paper modification is introduced.
 
-Root and independent native mathematical/API reviews are required before
-publication. No local Lean, Lake, build, elaboration or declaration check
-is run. New Blueprint statement/proof links remain `notready` until exact
-hosted acceptance. Keep #9844 OPEN for these acceptance/integration gates
+Root and two independent full native mathematical/API reviews passed the
+149-line production source at SHA256
+`807e545b0a907a1ff753a40e7ca03b08ebf1f681bc89a60c09800243438c2de6`.
+The final documentation uses the target-first asymmetric closeness convention.
+Generated imports, full Blueprint/source synchronization and reverse public
+coverage, duplicate tags, mathematical roles, reader-facing prose, coherent
+root/docbuild manifests, paper-gap references, source integrity/width, exact
+candidate provenance, pinned TeX formatting, configured ChkTeX and whitespace
+checks passed. The scoped tactic scan found no repeated pattern above its
+threshold. No local Lean, Lake, build, elaboration or declaration check ran.
+New Blueprint statement/proof links remain `notready` until exact hosted
+acceptance. Keep #9844 OPEN for these acceptance/integration gates
 and any remaining full leaf source obligations; this bounded client does
 not erase the literal false-source record.
