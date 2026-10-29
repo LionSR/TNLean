@@ -12,7 +12,8 @@ import TNLean.MPS.ParentHamiltonian.CyclicTranslation
 
 For an injective full perturbation letter, the intersection of the actual
 source space `S_N` and its one-site cyclic translate consists of the two
-periodic sector vectors, for every `N≥2`. Full coefficient spans extend
+periodic sector vectors, for every `N≥2`, the domain starting from the
+source two-site uncle interaction. Full coefficient spans extend
 the cyclic word identity to arbitrary pairs of coefficient matrices. The
 boundary trace classification then removes both walls and makes the two
 diagonal boundaries scalar.
