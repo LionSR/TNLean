@@ -132,10 +132,8 @@ theorem abs_re_inner_sub_le_of_compressedWindowProjection {Q M : Matrix ι ι �
     (hφ : toEuclideanLin (compressedWindowProjection Q M c x) φ = φ) :
     toEuclideanLin Q φ = φ ∧ |(⟪φ, toEuclideanLin M φ⟫_ℂ).re - c * ‖φ‖ ^ 2| ≤ x * ‖φ‖ ^ 2 := by
   have hQφ : toEuclideanLin Q φ = φ := by
-    conv_lhs => rw [← hφ]
-    rw [← toEuclideanLin_mul_apply, compressedWindowProjection, ← mul_assoc,
-      hQ.isIdempotentElem.eq]
-    exact hφ
+    exact toEuclideanLin_eq_of_mul_eq
+      (by rw [compressedWindowProjection, ← mul_assoc, hQ.isIdempotentElem.eq]) hφ
   refine ⟨hQφ, ?_⟩
   have hQM : (Q * M * Q).IsHermitian := by
     simpa only [hQ.isSelfAdjoint.isHermitian.eq] using isHermitian_mul_mul_conjTranspose Q hM
@@ -174,12 +172,12 @@ theorem abs_re_inner_hierarchySum_sub_le (hP0 : ∀ k, P 0 k = 1)
       abs_re_inner_sub_le_of_compressedWindowProjection hQ (hM m k) (c m k) (hx m) hφ
     -- The vector is kept by both halves.
     have hφ1 : toEuclideanLin (P m (2 * k)) φ = φ := by
-      conv_lhs => rw [← hQφ]
-      rw [← toEuclideanLin_mul_apply, ← mul_assoc, (hproj m (2 * k)).isIdempotentElem.eq, hQφ]
+      exact toEuclideanLin_eq_of_mul_eq
+        (by rw [← mul_assoc, (hproj m (2 * k)).isIdempotentElem.eq]) hQφ
     have hφ2 : toEuclideanLin (P m (2 * k + 1)) φ = φ := by
-      conv_lhs => rw [← hQφ]
-      rw [← toEuclideanLin_mul_apply, (hcomm m k).eq, ← mul_assoc,
-        (hproj m (2 * k + 1)).isIdempotentElem.eq, ← (hcomm m k).eq, hQφ]
+      exact toEuclideanLin_eq_of_mul_eq
+        (by rw [← mul_assoc, ← (hcomm m k).eq, mul_assoc,
+          (hproj m (2 * k + 1)).isIdempotentElem.eq]) hQφ
     have h1 := ih (2 * k) hφ1
     have h2 := ih (2 * k + 1) hφ2
     simp only [hierarchySum_succ, map_add, LinearMap.add_apply, inner_add_right,
