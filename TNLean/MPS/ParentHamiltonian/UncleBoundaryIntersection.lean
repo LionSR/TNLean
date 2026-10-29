@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.UncleBoundaryWords
-import TNLean.MPS.SharedInfra.MatrixFamilyTracePairing
+import QICLean.Algebra.TraceFormDuality
 
 /-!
 # Intersection of the actual uncle boundary spaces
@@ -39,8 +39,13 @@ theorem restrictLast_mem_uncleBoundarySpace
     {ψ : NSiteSpace d (n + 1)} (hψ : ψ ∈ uncleBoundarySpace A B R L (n + 1))
     (i : Fin d) : restrictLast ψ i ∈ uncleBoundarySpace A B R L n := by
   obtain ⟨X, rfl⟩ := hψ
-  obtain ⟨Y, hY⟩ := Matrix.exists_trace_representation
-    ((uncleTraceRight X).comp (uncleBoundaryMulRight (uncleBoundaryLetter A B R L i)))
+  let f := (uncleTraceRight X).comp
+    (uncleBoundaryMulRight (uncleBoundaryLetter A B R L i))
+  let Y := ((Matrix.traceBilinForm (Fin (a + b))).toDual
+    Matrix.traceBilinForm_nondegenerate).symm f
+  have hY (M : Matrix (Fin (a + b)) (Fin (a + b)) ℂ) :
+      f M = Matrix.trace (Y * M) := by
+    rw [← Matrix.traceBilinForm_apply, LinearMap.BilinForm.apply_toDual_symm_apply]
   refine ⟨Y, ?_⟩
   ext σ
   change Matrix.trace (uncleBoundaryWord A B R L (List.ofFn σ) * Y) =
@@ -56,8 +61,13 @@ theorem restrictFirst_mem_uncleBoundarySpace
     {ψ : NSiteSpace d (n + 1)} (hψ : ψ ∈ uncleBoundarySpace A B R L (n + 1))
     (i : Fin d) : restrictFirst ψ i ∈ uncleBoundarySpace A B R L n := by
   obtain ⟨X, rfl⟩ := hψ
-  obtain ⟨Y, hY⟩ := Matrix.exists_trace_representation
-    ((uncleTraceRight X).comp (uncleBoundaryMulLeft (uncleBoundaryLetter A B R L i)))
+  let f := (uncleTraceRight X).comp
+    (uncleBoundaryMulLeft (uncleBoundaryLetter A B R L i))
+  let Y := ((Matrix.traceBilinForm (Fin (a + b))).toDual
+    Matrix.traceBilinForm_nondegenerate).symm f
+  have hY (M : Matrix (Fin (a + b)) (Fin (a + b)) ℂ) :
+      f M = Matrix.trace (Y * M) := by
+    rw [← Matrix.traceBilinForm_apply, LinearMap.BilinForm.apply_toDual_symm_apply]
   refine ⟨Y, ?_⟩
   ext σ
   change Matrix.trace (uncleBoundaryWord A B R L (List.ofFn σ) * Y) =
