@@ -80,9 +80,11 @@ private theorem suppliedWindow_matrix_eq_buffer
   ext row col
   obtain ⟨⟨⟨pre, ex, suf⟩, c⟩, rfl⟩ := full.surjective row
   obtain ⟨⟨⟨pre', ex', suf'⟩, c'⟩, rfl⟩ := full.surjective col
-  simp only [Matrix.reindex_apply, Equiv.symm_apply_apply]
+  simp only [Matrix.reindex_apply, Matrix.submatrix_apply,
+    Equiv.symm_apply_apply]
   rw [hfull, hfull]
-  simp only [bufferedWindowMatrix, Matrix.reindex_apply, Equiv.symm_apply_apply,
+  simp only [bufferedWindowMatrix, Matrix.reindex_apply, Matrix.submatrix_apply,
+    Equiv.symm_apply_apply,
     Matrix.rightKroneckerEmbed_apply, Matrix.kroneckerMap_apply, Matrix.one_apply,
     Prod.mk.injEq]
   by_cases hp : pre = pre' <;> by_cases hs : suf = suf' <;>
@@ -144,10 +146,10 @@ theorem bufferedWindowMatrix_reindexPhysical {b d n p s : ℕ}
   ext row col
   obtain ⟨⟨⟨pre, suf⟩, mid⟩, rfl⟩ := (bufferedWindowConfigEquiv b n p s).surjective row
   obtain ⟨⟨⟨pre', suf'⟩, mid'⟩, rfl⟩ := (bufferedWindowConfigEquiv b n p s).surjective col
-  simp only [Matrix.reindex_apply, Equiv.symm_symm]
+  simp only [Matrix.reindex_apply, Matrix.submatrix_apply, Equiv.symm_symm]
   rw [bufferedWindowConfig_reindexPhysical, bufferedWindowConfig_reindexPhysical]
-  simp only [bufferedWindowMatrix, Matrix.reindex_apply, Equiv.symm_apply_apply,
-    Equiv.symm_symm, Matrix.rightKroneckerEmbed_apply, Matrix.kroneckerMap_apply,
+  simp only [bufferedWindowMatrix, Matrix.reindex_apply, Matrix.submatrix_apply,
+    Equiv.symm_apply_apply, Matrix.rightKroneckerEmbed_apply, Matrix.kroneckerMap_apply,
     Matrix.one_apply, Prod.mk.injEq, Equiv.apply_eq_iff_eq]
 
 /-- Canonical supplied-window conjugation after any bijective physical
@@ -178,7 +180,9 @@ theorem mpo_reindexPhysical_suppliedBufferedWindow_conjugation
   rw [← Matrix.conjTranspose_reindex] at h
   have hM : Matrix.reindex E.symm E.symm (mpo W (p + (3 + s))) =
       mpo (reindexPhysical e W) (p + (3 + s)) := (mpo_reindexPhysical e W _).symm
-  simp only [hM, bufferedWindowMatrix_reindexPhysical] at h
+  simp only [hM] at h
+  dsimp only [E] at h
+  simp only [bufferedWindowMatrix_reindexPhysical] at h
   exact h
 
 private theorem suppliedInputWindow_buffer_config {d b : ℕ}
@@ -210,12 +214,12 @@ theorem twoSiteSuppliedInputWindow_eq_bufferedCell {d b : ℕ}
   ext row col
   obtain ⟨⟨⟨j₀, j₂⟩, c⟩, rfl⟩ := (twoSiteSuppliedInputWindowEquiv e).surjective row
   obtain ⟨⟨⟨j₀', j₂'⟩, c'⟩, rfl⟩ := (twoSiteSuppliedInputWindowEquiv e).surjective col
-  simp only [twoSiteSuppliedInputWindow, Matrix.reindex_apply, Equiv.symm_apply_apply]
+  simp only [twoSiteSuppliedInputWindow, Matrix.reindex_apply, Matrix.submatrix_apply,
+    Equiv.symm_apply_apply]
   rw [suppliedInputWindow_buffer_config, suppliedInputWindow_buffer_config]
-  simp only [bufferedWindowMatrix, Matrix.reindex_apply, Equiv.symm_apply_apply,
+  simp only [bufferedWindowMatrix, Matrix.reindex_apply, Matrix.submatrix_apply,
+    Equiv.symm_apply_apply,
     Matrix.rightKroneckerEmbed_apply, Matrix.kroneckerMap_apply, Matrix.one_apply,
     Prod.mk.injEq, const_word_eq]
 
 end MPOTensor
-
-

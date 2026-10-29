@@ -48,11 +48,10 @@ private theorem finiteChainLocalObservable_suppliedWindow
         (MPOTensor.twoSiteSuppliedInputWindow e A))) =
       localInclusion hΛ ((intervalCoordinates b a 3).symm
         (MPOTensor.twoSiteSuppliedOutputWindow e u v A)) := by
-    apply (intervalCoordinates b (a - p) (p + (3 + s))).injective
-    simp only [finiteChainConjugation_apply, map_mul, map_star,
-      intervalCoordinates_finiteChainMPOMatrix,
+    apply EquivLike.injective (intervalCoordinates b (a - p) (p + (3 + s)))
+    simp only [intervalCoordinates_finiteChainConjugation,
       intervalCoordinates_localInclusion_eq_bufferedWindowMatrix,
-      StarAlgEquiv.apply_symm_apply, Matrix.star_eq_conjTranspose]
+      StarAlgEquiv.apply_symm_apply]
     exact MPOTensor.mpo_reindexPhysical_suppliedBufferedWindow_conjugation e S p s A
   change localObservable b _ (finiteChainConjugation hW hN (a - p)
     (localInclusion hΛ _)) = _
@@ -69,14 +68,14 @@ private theorem suppliedWindow_centralInclusion {d b : ℕ}
         ((intervalCoordinates b 0 1).symm
           (Matrix.reindex (MPOTensor.twoSiteSuppliedCellEquiv e)
             (MPOTensor.twoSiteSuppliedCellEquiv e) A)) := by
-  apply (intervalCoordinates b (-1) 3).injective
+  apply EquivLike.injective (intervalCoordinates b (-1) 3)
   rw [StarAlgEquiv.apply_symm_apply,
     MPOTensor.twoSiteSuppliedInputWindow_eq_bufferedCell]
   have h := intervalCoordinates_localInclusion_eq_bufferedWindowMatrix b 1 1 1 0
     ((intervalCoordinates b 0 1).symm
       (Matrix.reindex (MPOTensor.twoSiteSuppliedCellEquiv e)
         (MPOTensor.twoSiteSuppliedCellEquiv e) A))
-  simpa only [StarAlgEquiv.apply_symm_apply] using h.symm
+  simpa only [StarAlgEquiv.apply_symm_apply] using! h.symm
 
 /-- The named actual bare-MPU automorphism, for a directly supplied
 tensor in any equivalent physical alphabet, sends its singleton input
