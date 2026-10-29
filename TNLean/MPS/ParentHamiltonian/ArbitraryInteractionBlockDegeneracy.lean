@@ -62,8 +62,8 @@ theorem periodicLocalInteractionES_smul_mpvState_eq_zero_of_wordTupleSpanTop
     have hRight : ContinuousLinearMap.rightFiberwiseMap (S := Cfg d (N - L))
         (LinearMap.toContinuousLinearMap h)
         (U (∑ j, c j • mpvState (A j) N)) = 0 := by
-      simpa only [periodicLocalInteractionES, dif_pos hLN, U, LinearEquiv.conj_apply,
-        LinearMap.comp_apply, LinearEquiv.apply_symm_apply, map_zero] using hUzero
+      simpa only [U, cyclicActiveBlock_periodicLocalInteractionES_apply, map_zero]
+        using hUzero
     have hτ := congrArg (fun v => ContinuousLinearMap.rightFiber v τ) hRight
     rw [ContinuousLinearMap.rightFiber_rightFiberwiseMap, hfiber] at hτ
     simpa only [T, LinearMap.lsum_apply, LinearMap.smul_apply, LinearMap.comp_apply,
@@ -81,8 +81,10 @@ theorem periodicLocalInteractionES_smul_mpvState_eq_zero_of_wordTupleSpanTop
   intro j
   apply U.injective
   rw [map_zero]
-  simp only [periodicLocalInteractionES, dif_pos hLN, U, LinearEquiv.conj_apply,
-    LinearMap.comp_apply, LinearEquiv.apply_symm_apply]
+  rw [show U (periodicLocalInteractionES h i (c j • mpvState (A j) N)) =
+    ContinuousLinearMap.rightFiberwiseMap (S := Cfg d (N - L))
+      (LinearMap.toContinuousLinearMap h) (U (c j • mpvState (A j) N)) from
+        cyclicActiveBlock_periodicLocalInteractionES_apply h hLN i _]
   change ContinuousLinearMap.rightFiberwiseMap (S := Cfg d (N - L))
     (LinearMap.toContinuousLinearMap h) (U (c j • mpvState (A j) N)) = 0
   apply PiLp.ext
