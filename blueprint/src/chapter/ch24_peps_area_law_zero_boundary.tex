@@ -4,7 +4,7 @@
 This section proves Lemma~2.2 of \cite{OpenAI2026AreaLaw} and the degenerate
 cases recorded before it in Section~2 of that preprint.
 
-\begin{theorem}[Gapped ground vectors of a sum of factor Hamiltonians]
+\begin{lemma}[Gapped ground vectors of a sum of factor Hamiltonians]
     \label{thm:area_law_product_ground_state}
     \lean{TNLean.Lattice.exists_isGappedGroundState_factors_of_kronecker_sum, TNLean.Lattice.exists_eq_mul_of_gap, TNLean.Lattice.vonNeumannEntropy_partialTraceRight_eq_zero_of_gap}
     \leanok
@@ -27,7 +27,7 @@ cases recorded before it in Section~2 of that preprint.
     is exact. Both factors retain the same lower gap bound $\Delta$.
     These factor gap inequalities are the spectral step in the reduction
     to connected domains in \cite[Part~I]{TNLean2026OneDimensional}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Let $a,b$ be the least eigenvalues of $H_A,H_B$ with unit eigenvectors
@@ -57,7 +57,7 @@ cases recorded before it in Section~2 of that preprint.
     No factor is lost in $\Delta$, since both inclusions are isometries.
 \end{proof}
 
-\begin{theorem}[Gapped ground vectors of a sum over finitely many factors]
+\begin{lemma}[Gapped ground vectors of a sum over finitely many factors]
     \label{thm:area_law_product_ground_state_family}
     \lean{TNLean.Lattice.factorOperator, TNLean.Lattice.exists_isGappedGroundState_factors_of_sum_factorOperator}
     \leanok
@@ -77,19 +77,19 @@ cases recorded before it in Section~2 of that preprint.
     reduction to connected domains of \cite[Part~I, Lemma~2.1]{TNLean2026OneDimensional}
     that each component Hamiltonian inherits the gap inequality with the same
     gap.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Induct on $k$. For $k=1$ there is nothing to prove. For $k\ge2$, write
     $H=H_1\otimes I+I\otimes H'$ with $H'=\sum_{i\ge2}H_i$, which is
-    Hermitian. Theorem~\ref{thm:area_law_product_ground_state} gives
+    Hermitian. Lemma~\ref{thm:area_law_product_ground_state} gives
     $\omega=\omega_1\otimes\omega'$ and $E_0=a_1+b$, with $\omega_1$ a
     gapped ground vector of $H_1$ at $a_1$ and $\omega'$ a gapped ground
     vector of $H'$ at $b$, both with gap $\Delta$. The induction hypothesis
     applied to $\omega'$ factors it over $i\ge2$ with $b=\sum_{i\ge2}a_i$.
 \end{proof}
 
-\begin{theorem}[Supports and components]
+\begin{lemma}[Supports and components]
     \label{thm:area_law_support_components}
     \lean{TNLean.Lattice.IsAdmissibleSupport.reachable, TNLean.PEPS.AreaLaw.subset_or_disjoint_of_edgeBoundary_eq_empty, TNLean.PEPS.AreaLaw.edgeBoundary_connectedComponents_eq_empty, TNLean.PEPS.AreaLaw.edgeBoundary_connectedComponent_eq_empty}
     \leanok
@@ -98,7 +98,7 @@ cases recorded before it in Section~2 of that preprint.
     component of the domain graph. If $\partial_\Lambda A=\varnothing$, every
     such support lies in $A$ or in $\Lambda\setminus A$. The set of sites of any
     union of connected components has no crossing edge.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     A walk inside the domain cannot pass from $A$ to its complement without
@@ -106,7 +106,7 @@ cases recorded before it in Section~2 of that preprint.
     are joined by such a walk. Adjacent sites lie in the same component.
 \end{proof}
 
-\begin{theorem}[A cut splitting no support]
+\begin{lemma}[A cut splitting no support]
     \label{thm:area_law_unsplit_supports}
     \lean{TNLean.PEPS.AreaLaw.regionalEntropy_eq_zero_of_forall_subset_or_disjoint}
     \leanok
@@ -114,7 +114,7 @@ cases recorded before it in Section~2 of that preprint.
     Under the hypotheses of Theorem~\ref{thm:openai_uniform_area_law}, if every
     admissible support $X$ satisfies $X\subseteq A$ or $X\cap A=\varnothing$,
     then $S_\Omega(A)=0$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{lem:zero_entropy_cut}
@@ -123,7 +123,7 @@ cases recorded before it in Section~2 of that preprint.
     set of sites $\Lambda$, which gives $S_\Omega(A)=0$.
 \end{proof}
 
-\begin{theorem}[A cut with no crossing edge]
+\begin{lemma}[A cut with no crossing edge]
     \label{thm:area_law_zero_boundary}
     \lean{TNLean.PEPS.AreaLaw.regionalEntropy_eq_zero_of_edgeBoundary_eq_empty}
     \leanok
@@ -132,16 +132,16 @@ cases recorded before it in Section~2 of that preprint.
     $\partial_\Lambda A=\varnothing$, then $S_\Omega(A)=0$. This is
     Lemma~2.2 of \cite{OpenAI2026AreaLaw}; only the eigenvector condition and the
     full-system gap with $\Delta>0$ are used.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:area_law_unsplit_supports, thm:area_law_support_components}
-    By Theorem~\ref{thm:area_law_support_components}, every admissible support
+    By Lemma~\ref{thm:area_law_support_components}, every admissible support
     lies in $A$ or in $\Lambda\setminus A$, so
-    Theorem~\ref{thm:area_law_unsplit_supports} applies.
+    Lemma~\ref{thm:area_law_unsplit_supports} applies.
 \end{proof}
 
-\begin{theorem}[Degenerate cases]
+\begin{lemma}[Degenerate cases]
     \label{thm:area_law_degenerate_cases}
     \lean{TNLean.PEPS.AreaLaw.regionalEntropy_eq_zero_of_range_eq_zero, TNLean.PEPS.AreaLaw.regionalEntropy_eq_zero_of_q_eq_one, TNLean.PEPS.AreaLaw.regionalEntropy_eq_zero_of_domain_eq_empty, TNLean.PEPS.AreaLaw.regionalEntropy_connectedComponents_eq_zero}
     \leanok
@@ -151,15 +151,15 @@ cases recorded before it in Section~2 of that preprint.
     vanishes. Every union of connected components, and in particular the empty
     region and the full domain, has zero regional entropy for the gapped ground
     vector.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:area_law_unsplit_supports, thm:area_law_zero_boundary, thm:area_law_support_components, thm:chain_entropy_dim_one}
     For $R=0$ every support is a single site and so is never split by a cut,
-    so Theorem~\ref{thm:area_law_unsplit_supports} applies.
+    so Lemma~\ref{thm:area_law_unsplit_supports} applies.
     For $q=1$ or $\Lambda=\varnothing$ the regional Hilbert space is
     one-dimensional, and a unit-trace state on it has zero entropy. A union of
     connected components has no crossing edge by
-    Theorem~\ref{thm:area_law_support_components}, so
-    Theorem~\ref{thm:area_law_zero_boundary} applies.
+    Lemma~\ref{thm:area_law_support_components}, so
+    Lemma~\ref{thm:area_law_zero_boundary} applies.
 \end{proof}

@@ -72,14 +72,14 @@
     Nontrivial $Z$-gauges can only appear when $m>1$.
 \end{remark}
 
-\begin{theorem}[Blocking a $\Z_m$-gauge gives an ordinary gauge]
+\begin{lemma}[Blocking a $\Z_m$-gauge gives an ordinary gauge]
     \label{thm:z_gauge_blockTensor_gauge_equiv}
     \lean{MPSTensor.ZGaugeEquiv.blockTensor_gaugeEquiv}
     \leanok
     \uses{def:z_gauge_equiv, def:blocked_tensor, def:gauge_equiv}
     If $A$ and $B$ are $\Z_m$-gauge equivalent, then their $m$-blocked
     tensors $A^{[m]}$ and $B^{[m]}$ are gauge equivalent in the ordinary sense.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     In the $\Z_m$-gauge relation $ZA^i=YB^iY^{-1}$ with $Z^m=\Id$ and
@@ -98,7 +98,7 @@
 \end{corollary}
 
 \begin{proof}\leanok
-    Theorem~\ref{thm:z_gauge_blockTensor_gauge_equiv} makes $A^{[m]}$ and
+    Lemma~\ref{thm:z_gauge_blockTensor_gauge_equiv} makes $A^{[m]}$ and
     $B^{[m]}$ gauge equivalent, and gauge invariance of MPV families then
     identifies their state vectors at every length.
 \end{proof}

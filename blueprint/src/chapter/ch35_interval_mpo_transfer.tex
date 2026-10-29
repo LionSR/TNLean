@@ -6,7 +6,7 @@ product of a region and its complement. In the identities below the
 complement factor is listed first. Open matrix product representations
 use the paired row and column alphabet, in increasing site order.
 
-\begin{theorem}[Transfer of a common middle family between intervals]
+\begin{lemma}[Transfer of a common middle family between intervals]
     \label{thm:interval_mpo_common_family_transfer}
     \lean{TNLean.MPS.AreaLaw.changingRegionalMiddleFamily_mpo_and_global_decomposition}
     \leanok
@@ -66,7 +66,7 @@ use the paired row and column alphabet, in increasing site order.
     length zero are allowed.
     This is supporting interval-transport algebra for
     \cite[Proposition~5.7]{Arad2016RigorousRG}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     In natural coordinates, restrict each old matrix to the interval
     $E\cap J$ by fixing its row and column configurations on $E\setminus J$.
@@ -81,7 +81,7 @@ use the paired row and column alphabet, in increasing site order.
 
     The configuration dimensions are $q^{|A|}$ and $q^{|B|}$, giving
     (\ref{eq:interval_mpo_transfer_count}). Finally expand the transferred
-    old-only and new-only coordinates in matrix units. Theorem~\ref{thm:regional_middle_exterior_transfer} then gives
+    old-only and new-only coordinates in matrix units. Lemma~\ref{thm:regional_middle_exterior_transfer} then gives
     (\ref{eq:interval_mpo_transfer_decomposition}), with the prescribed
     middle factors and the exterior coefficients chosen afterwards.
 \end{proof}

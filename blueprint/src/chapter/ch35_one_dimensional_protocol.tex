@@ -130,7 +130,7 @@ truncation instead.
     distinct even when their holders coincide. Grouping the copies
     by their holders gives a product across parties; each grouped
     vector has norm equal to the product of the copy norms, hence one.
-    Theorem~\ref{thm:lattice_sheet_initialization} splits each party's
+    Lemma~\ref{thm:lattice_sheet_initialization} splits each party's
     private memory into its labelled copies and restores their prescribed
     order. Every map is private, and its action on the product vector
     is exact.
@@ -369,7 +369,7 @@ truncation instead.
 \begin{proof}
     \leanok
     \uses{thm:lattice_sheet_birth_bounded}
-    This is Theorem~\ref{thm:lattice_sheet_birth_bounded} on the chain of
+    This is Lemma~\ref{thm:lattice_sheet_birth_bounded} on the chain of
     $L$ sites, with the real parameter $L\ge0$ and the exponent $p$. The
     environment of a sheet is exactly $E$. The reversed construction uses
     the information environment after the death.
@@ -406,7 +406,7 @@ truncation instead.
 \begin{proof}
     \leanok
     \uses{thm:lattice_sheet_exchange_bounded}
-    This is Theorem~\ref{thm:lattice_sheet_exchange_bounded} on the chain of
+    This is Lemma~\ref{thm:lattice_sheet_exchange_bounded} on the chain of
     $L$ sites, with the real parameter $L\ge0$ and the exponent $p$. Its
     splitting regions are $T,E$. The returned monomial consists of the register
     reordering and the private correction at $P$, and uses no pair resource.
@@ -1292,7 +1292,7 @@ with the retained-copy correction of
         \label{eq:chain_middle_link_congestion}
     \end{align}
     Here $3120=2\cdot40\cdot39$ is the degree bound in
-    Theorem~\ref{thm:peps_distributed_construction_compression} at $b=40$,
+    Lemma~\ref{thm:peps_distributed_construction_compression} at $b=40$,
     from \cite[Theorem~5.2]{OpenAI2026PolynomialPEPS}.
     This gives a coarse bound for the routing argument of
     \cite[Part~II, proof of Theorem~B]{TNLean2026OneDimensional}.
@@ -1570,7 +1570,7 @@ Definition~\ref{def:chain_open_mps}.
 \begin{proof}\leanok
     \uses{thm:peps_separate_arity_compression,
         thm:chain_tagged_link_congestion,thm:compression_useful_column_all_cuts}
-    Apply Theorem~\ref{thm:peps_separate_arity_compression} to the
+    Apply Lemma~\ref{thm:peps_separate_arity_compression} to the
     whole family, retaining its sampled tensors and tagged alphabets.
     Its density estimates and trace bounds give
     (\ref{eq:chain_uniform_compression_error}) and
@@ -2164,7 +2164,7 @@ The prescribed placement is $\ell(R_i)=i$ and $\ell(P_{j+1})=j$.
     \uses{def:chain_party_placement,def:peps_distributed_construction}
     Consider a family on the chain parties with the polynomial count,
     physical-dimension, monomial and coefficient-sum hypotheses of
-    Theorem~\ref{thm:peps_separate_arity_compression}. Suppose its
+    Lemma~\ref{thm:peps_separate_arity_compression}. Suppose its
     original circuits have arity at most three and lifetime at most
     forty. Let $\omega_i$ be unit physical vectors with
     $\|\rho_i-|\omega_i\rangle\langle\omega_i|\|_1\le\eta_i$.
@@ -2191,7 +2191,7 @@ The prescribed placement is $\ell(R_i)=i$ and $\ell(P_{j+1})=j$.
 \end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_separate_arity_compression,thm:chain_tagged_link_congestion}
-    Apply Theorem~\ref{thm:peps_separate_arity_compression} with
+    Apply Lemma~\ref{thm:peps_separate_arity_compression} with
     $a=3$ and $b=40$. It retains the network and gives
     $2\cdot40(3-1)=160$ incident links per party.
     Its common-original-gate witnesses and the original gate's

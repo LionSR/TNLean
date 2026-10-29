@@ -36,13 +36,13 @@ For the affine parent-Hamiltonian comparison in
 ordered attachment without imposing or establishing commutation with a
 common matrix product operator.
 
-\begin{theorem}[Local comparison]
+\begin{lemma}[Local comparison]
     \label{thm:mpo_arbitrary_endpoint_parent_order}
     \lean{MPSTensor.MPOSymmetry.arbitraryPhysicalMixedInteraction_zero_le_parent,
         MPSTensor.MPOSymmetry.arbitraryPhysicalMixedInteraction_one_le_parent}
     \leanok
     For each $p\in\{0,1\}$, $h_p\leq k_p$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:spt_isometric_parent_interaction,
@@ -73,7 +73,7 @@ common matrix product operator.
     \end{align}
 \end{definition}
 
-\begin{theorem}[Properties of the affine attachments]
+\begin{lemma}[Properties of the affine attachments]
     \label{thm:mpo_arbitrary_endpoint_attachment_properties}
     \lean{MPSTensor.MPOSymmetry.arbitraryPhysicalEndpointAttachment_zero,
         MPSTensor.MPOSymmetry.arbitraryPhysicalEndpointAttachment_one,
@@ -86,7 +86,7 @@ common matrix product operator.
     For $p\in\{0,1\}$, $c_p(0)=h_p$, $c_p(1)=k_p$, and $c_p$ is continuous.
     Every $c_p(t)$ with $0\leq t\leq1$ is positive and has operator norm at
     most one.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     The endpoint values and continuity are immediate from the affine formula.

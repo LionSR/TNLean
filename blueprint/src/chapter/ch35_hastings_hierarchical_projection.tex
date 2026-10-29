@@ -25,7 +25,7 @@ in Section~\ref{sec:hastings05_hierarchy_levels}.
     $c=\langle\Psi_a,M\Psi_a\rangle$).
 \end{definition}
 
-\begin{theorem}[The shifted operator]
+\begin{lemma}[The shifted operator]
     \label{thm:hastings05_shifted_hermitian}
     \lean{TNLean.MPS.AreaLaw.LocalSolution.isHermitian_sub_ofReal_smul_one,
         TNLean.MPS.AreaLaw.LocalSolution.ofReal_smul_one_eq_algebraMap,
@@ -34,13 +34,13 @@ in Section~\ref{sec:hastings05_hierarchy_levels}.
     \uses{def:hastings05_window_projection,thm:hastings_spectral_cutoff_projection}
     For $M=M^\dagger$ and $c,x\in\mathbb R$, $M-c$ is Hermitian and $P_x(M,c)$
     is an orthogonal projection.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
-    Apply Theorem~\ref{thm:hastings_spectral_cutoff_projection} to
+    Apply Lemma~\ref{thm:hastings_spectral_cutoff_projection} to
     $(M-c)^\dagger=M-c$.
 \end{proof}
 
-\begin{theorem}[Deficiency and expectation of a projection]
+\begin{lemma}[Deficiency and expectation of a projection]
     \label{thm:hastings05_projection_deficiency}
     \lean{TNLean.MPS.AreaLaw.LocalSolution.re_inner_toEuclideanLin_eq_norm_sq,
         TNLean.MPS.AreaLaw.LocalSolution.norm_sq_add_norm_sub_sq,
@@ -59,17 +59,17 @@ in Section~\ref{sec:hastings05_hierarchy_levels}.
          & \le\lVert\Psi-P\Psi\rVert^2+\lVert\Psi-P'\Psi\rVert^2.
         \label{eq:hastings05_two_projections_sq}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:hastings_final_state_bessel}
-    By Theorem~\ref{thm:hastings_final_state_bessel} and orthogonality of
+    By Lemma~\ref{thm:hastings_final_state_bessel} and orthogonality of
     $P\Psi$ and $(1-P)\Psi$, $\langle\Psi,P\Psi\rangle=\|P\Psi\|^2=1-d^2$ with
     $d=\|\Psi-P\Psi\|\le1$, so $d^2\le d\le\delta$; similarly
     $\Psi-PP'\Psi=(1-P)\Psi+P(1-P')\Psi$ gives
     (\ref{eq:hastings05_two_projections_sq}).
 \end{proof}
 
-\begin{theorem}[One level]
+\begin{lemma}[One level]
     \label{thm:hastings05_one_level}
     \lean{TNLean.MPS.AreaLaw.LocalSolution.norm_sub_windowProjection_le,
         TNLean.MPS.AreaLaw.LocalSolution.one_sub_div_le_re_inner_windowProjection,
@@ -86,13 +86,13 @@ in Section~\ref{sec:hastings05_hierarchy_levels}.
     and if $\|\Psi\|=1$, then
     $\langle\Psi,P\Psi\rangle\ge1-(\|(M-c)\Psi\|/x)^2\ge1-\|(M-c)\Psi\|/x$
     \cite[lines 645--657]{Hastings2006Solving}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
-    Combine Theorem~\ref{thm:hastings_spectral_cutoff_obd} for $M-c$ with
-    Theorem~\ref{thm:hastings05_projection_deficiency}.
+    Combine Lemma~\ref{thm:hastings_spectral_cutoff_obd} for $M-c$ with
+    Lemma~\ref{thm:hastings05_projection_deficiency}.
 \end{proof}
 
-\begin{theorem}[An eigenvalue in the window]
+\begin{lemma}[An eigenvalue in the window]
     \label{thm:hastings05_eigenvalue_in_window}
     \lean{TNLean.MPS.AreaLaw.LocalSolution.exists_mem_spectrum_abs_sub_le,
         TNLean.MPS.AreaLaw.LocalSolution.windowProjection_eq_zero}
@@ -101,13 +101,13 @@ in Section~\ref{sec:hastings05_hierarchy_levels}.
     If $M=M^\dagger$, $c\in\mathbb R$, $x>0$, and $0<\|\Psi\|$ with
     $\|(M-c)\Psi\|<x\|\Psi\|$, then $\operatorname{spec}(M)\cap[c-x,c+x]\ne\emptyset$
     \cite[lines 658--667]{Hastings2006Solving}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     If $P_x(M,c)=0$, (\ref{eq:hastings05_one_level}) gives the contradiction
     $\|\Psi\|\le\|(M-c)\Psi\|/x<\|\Psi\|$.
 \end{proof}
 
-\begin{theorem}[Normalization]
+\begin{lemma}[Normalization]
     \label{thm:hastings05_normalization}
     \lean{TNLean.MPS.AreaLaw.LocalSolution.norm_inv_norm_smul_sub_le,
         TNLean.MPS.AreaLaw.LocalSolution.norm_inv_norm_smul_toEuclideanLin_sub_sq_le,
@@ -124,14 +124,14 @@ in Section~\ref{sec:hastings05_hierarchy_levels}.
         \label{eq:hastings05_normalization}
     \end{align}
     \cite[lines 686--689]{Hastings2006Solving}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Use $|1-\|v\||\le\|v-\Psi\|$, $2(1-t)\le2(1-t^2)$ for
     $t=\|Q\Psi\|\in(0,1]$ ($1\le2$ if $Q\Psi=0$), and
     (\ref{eq:hastings05_two_projections_sq}) for $Q=PP'$.
 \end{proof}
 
-\begin{theorem}[Nested projections]
+\begin{lemma}[Nested projections]
     \label{thm:hastings05_nested_projections}
     \lean{TNLean.MPS.AreaLaw.LocalSolution.norm_sub_sq_le_of_mul_eq}
     \leanok
@@ -144,13 +144,13 @@ in Section~\ref{sec:hastings05_hierarchy_levels}.
         \label{eq:hastings05_nested_projections}
     \end{align}
     \cite[lines 671--676]{Hastings2006Solving}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     With $t=\|Q\Psi\|\le1$ and $s=\|P\Psi'\|\le1$, $\|P\Psi\|=ts$ and
     $1-t^2s^2=(1-t^2)+t^2(1-s^2)\le(1-t^2)+(1-s^2)$.
 \end{proof}
 
-\begin{theorem}[The residual of a nearby vector]
+\begin{lemma}[The residual of a nearby vector]
     \label{thm:hastings05_residual}
     \lean{TNLean.MPS.AreaLaw.LocalSolution.norm_toEuclideanLin_le_add,
         TNLean.MPS.AreaLaw.LocalSolution.norm_sub_ofReal_smul_one_le,
@@ -162,13 +162,13 @@ in Section~\ref{sec:hastings05_hierarchy_levels}.
     $\|M-c\|\le\|M\|+|c|$ (and $\|M-c\|\le2\|M\|$ when $|c|\le\|M\|$, which
     holds for $c=\operatorname{Re}\langle\psi,M\psi\rangle$ when $\|\psi\|=1$)
     \cite[lines 690--695]{Hastings2006Solving}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Apply the triangle inequality to $N\phi=N\psi+N(\phi-\psi)$ and $M-c$, and
     Cauchy--Schwarz to $\langle\psi,M\psi\rangle$.
 \end{proof}
 
-\begin{theorem}[One level combined]
+\begin{lemma}[One level combined]
     \label{thm:hastings05_one_level_combined}
     \lean{TNLean.MPS.AreaLaw.LocalSolution.norm_sub_windowProjection_le_of_norm_sub_le}
     \leanok
@@ -181,20 +181,20 @@ in Section~\ref{sec:hastings05_hierarchy_levels}.
         \label{eq:hastings05_one_level_combined}
     \end{align}
     \cite[lines 690--699]{Hastings2006Solving}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Combine (\ref{eq:hastings05_one_level}) for $\phi$ with
-    Theorem~\ref{thm:hastings05_residual}.
+    Lemma~\ref{thm:hastings05_residual}.
 \end{proof}
 
-\begin{theorem}[The residual under a compression]
+\begin{lemma}[The residual under a compression]
     \label{thm:hastings05_compression}
     \lean{TNLean.MPS.AreaLaw.LocalSolution.norm_toEuclideanLin_compress_sub_le}
     \leanok
     For an orthogonal projection $Q$, matrix $M$, $c\in\mathbb R$, and
     $Q\phi=\phi$, $\|(QMQ-c)\phi\|\le\|(M-c)\phi\|$
     \cite[lines 673--689]{Hastings2006Solving}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Since $Q\phi=\phi$ and $\|Q\|\le1$,
     $\|(QMQ-c)\phi\|=\|Q(M-c)\phi\|\le\|(M-c)\phi\|$.
@@ -209,7 +209,7 @@ in Section~\ref{sec:hastings05_hierarchy_levels}.
     $P=QP_x(QMQ,c)$ \cite[lines 673--685]{Hastings2006Solving}.
 \end{definition}
 
-\begin{theorem}[Restriction to the preceding subspace]
+\begin{lemma}[Restriction to the preceding subspace]
     \label{thm:hastings05_compressed_window_projection}
     \lean{TNLean.MPS.AreaLaw.LocalSolution.commute_windowProjection_compress,
         TNLean.MPS.AreaLaw.LocalSolution.isStarProjection_compressedWindowProjection,
@@ -221,13 +221,13 @@ in Section~\ref{sec:hastings05_hierarchy_levels}.
     In Definition~\ref{def:hastings05_compressed_window}, $W=P_x(QMQ,c)$
     commutes with $Q$, $P=QW$ is an orthogonal projection with $PQ=P$,
     $P\phi=W\phi$ when $Q\phi=\phi$, and $P\phi=0$ when $Q\phi=0$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Since $(QMQ)Q=Q(QMQ)$, functional calculus gives $WQ=QW$, so $P=QW$ is an
     orthogonal projection with $PQ=P$ and $P\phi=WQ\phi$.
 \end{proof}
 
-\begin{theorem}[One level inside the preceding subspace]
+\begin{lemma}[One level inside the preceding subspace]
     \label{thm:hastings05_compressed_window_bound}
     \lean{TNLean.MPS.AreaLaw.LocalSolution.norm_sub_compressedWindowProjection_le,
         TNLean.MPS.AreaLaw.LocalSolution.norm_sub_compressedWindowProjection_le_of_norm_sub_le}
@@ -248,10 +248,10 @@ in Section~\ref{sec:hastings05_hierarchy_levels}.
         \label{eq:hastings05_compressed_window_bound_2}
     \end{align}
     \cite[lines 673--699]{Hastings2006Solving}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Since $P\phi=P_x(QMQ,c)\phi$, combine (\ref{eq:hastings05_one_level}) for
-    $QMQ$ with Theorems~\ref{thm:hastings05_compression}
+    $QMQ$ with Lemmas~\ref{thm:hastings05_compression}
     and~\ref{thm:hastings05_residual}.
 \end{proof}
 
@@ -266,18 +266,18 @@ in Section~\ref{sec:hastings05_hierarchy_levels}.
     in~\cite[lines 696--704]{Hastings2006Solving}).
 \end{definition}
 
-\begin{theorem}[Nonnegativity of the recurrence]
+\begin{lemma}[Nonnegativity of the recurrence]
     \label{thm:hastings05_level_deficiency_nonneg}
     \lean{TNLean.MPS.AreaLaw.LocalSolution.levelDeficiency_nonneg}
     \leanok
     \uses{def:hastings05_level_deficiency}
     If $\epsilon,a\ge0$ and $s\in\mathbb R$, then $b_m\ge0$ for all $m$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Induct on $m$ from $b_0=0$.
 \end{proof}
 
-\begin{theorem}[The recursion]
+\begin{lemma}[The recursion]
     \label{thm:hastings05_recursion}
     \lean{TNLean.MPS.AreaLaw.LocalSolution.levelDeficiency_le,
         TNLean.MPS.AreaLaw.LocalSolution.levelDeficiency_two_le}
@@ -289,26 +289,26 @@ in Section~\ref{sec:hastings05_hierarchy_levels}.
         \label{eq:hastings05_recursion}
     \end{align}
     and $b_m\le(2^m-1)\epsilon^{s^m}$ for $a=2$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     By induction on $m$: with $C=\sum_{j<m}a^j$, $\epsilon\le\epsilon^{s^m}$ and
     $(1+aC)^s\le1+aC$ give $b_{m+1}\le(1+aC)\epsilon^{s^{m+1}}$.
 \end{proof}
 
-\begin{theorem}[The exponent]
+\begin{lemma}[The exponent]
     \label{thm:hastings05_exponent}
     \lean{TNLean.MPS.AreaLaw.LocalSolution.one_sub_inv_natCast_mem_Icc,
         TNLean.MPS.AreaLaw.LocalSolution.quarter_le_one_sub_inv_pow}
     \leanok
     For $h\in\mathbb N$ (with $1/0=0$), $0\le1-1/h\le1$, and $(1-1/h)^h\ge1/4$
     for $h\ge2$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Check $h=2,3$ directly; for $h=n+1\ge4$,
     $(1-1/h)^n\ge e^{-1}\ge1/3$ and $1-1/h\ge3/4$.
 \end{proof}
 
-\begin{theorem}[The bound after $h$ iterations]
+\begin{lemma}[The bound after $h$ iterations]
     \label{thm:hastings05_final_bound}
     \lean{TNLean.MPS.AreaLaw.LocalSolution.levelDeficiency_self_le,
         TNLean.MPS.AreaLaw.LocalSolution.levelDeficiency_exp_le,
@@ -324,8 +324,8 @@ in Section~\ref{sec:hastings05_hierarchy_levels}.
     \end{align}
     \cite[lines 705--707]{Hastings2006Solving},
     \cite{gap:hastings05_hierarchical_projection}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
-    Combine Theorems~\ref{thm:hastings05_recursion}
+    Combine Lemmas~\ref{thm:hastings05_recursion}
     and~\ref{thm:hastings05_exponent}.
 \end{proof}

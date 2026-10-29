@@ -47,7 +47,7 @@ For arbitrary fine tensors and every positive coarse period, contracting
 these blocks around the torus gives $W\Psi_f=\Psi_B$ with scalar factor one,
 where $W$ regroups the four physical registers per block. For
 regular $G$-isometric fine tensors with local factors $c_i>0$,
-Theorem~\ref{thm:peps_two_by_two_gram} gives the Gram identity
+Lemma~\ref{thm:peps_two_by_two_gram} gives the Gram identity
 $B^*B=c_BP_8$ with $c_B=|G|\prod_i c_i$ (the internal cycle contributes
 $|G|$ to $c_B$ without changing $W\Psi_f=\Psi_B$).
 
@@ -114,7 +114,7 @@ gives the target tensor $C(\eta;(s,\tau))=A(u;s)\prod_j\delta_{\tau_j,r_j}$:
             ports={90:virtual:$r_l$,270:physical:$\tau_l$}]{1}
     \end{tenkz}
 \end{tenkzequation}
-By Theorem~\ref{thm:peps_regular_graph_surplus_isometry}, the local
+By Lemma~\ref{thm:peps_regular_graph_surplus_isometry}, the local
 physical map $F_v$ preserves inner products on $\operatorname{ran}B_v$
 and satisfies $F_vB_v=\sqrt{c_{B,v}/c_{A,v}}\,C_v$ with unchanged
 isometry factor $c_{A,v}$, while each surplus virtual edge contracts two
@@ -128,7 +128,7 @@ $I=Q(\bigotimes_vF_v)W|_{S_f}$ is an isometry on $S_f$, and for
 $\Omega=\bigotimes_{e\in E(\Gamma)}\omega_e$ and
 $R=(\prod_v\sqrt{c_{B,v}/c_{A,v}})d^{|E(\Gamma)|/2}>0$, one has
 $I\Psi_f=R\Psi_c\otimes\Omega$. Normalizing via
-Theorem~\ref{thm:peps_two_by_two_original_normalized} gives
+Lemma~\ref{thm:peps_two_by_two_original_normalized} gives
 % Source: renorm-fixedpoint, global untwisted periodic specialization.
 % A state box has no virtual boundary; its entire physical alphabet is bundled.
 % Left: the one fine physical port is contracted into the support map I.

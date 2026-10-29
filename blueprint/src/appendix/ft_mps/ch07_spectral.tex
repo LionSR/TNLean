@@ -15,12 +15,12 @@ and its rectangular form $F_{AB}^{\mathrm{rect}}$ of
 Definition~\ref{def:mixed_transfer_rect} satisfy exact word expansions and trace
 identities.
 
-\begin{theorem}[Self-transfer]\label{thm:mixed_self}
+\begin{lemma}[Self-transfer]\label{thm:mixed_self}
     \lean{Kraus.mixedMapLM_self}
     \leanok
     \uses{def:mixed_transfer, def:transfer_map}
     Setting $B=A$ recovers the ordinary transfer map: $F_{AA}=\E_A$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Substituting $B=A$ into (\ref{eq:spectral_mixed_transfer}) gives
@@ -53,7 +53,7 @@ identities.
 \end{proof}
 
 
-Theorem~\ref{thm:overlap_trace_rect} combines Lemma~\ref{thm:mixed_pow} with
+Lemma~\ref{thm:overlap_trace_rect} combines Lemma~\ref{thm:mixed_pow} with
 Lemma~\cite[``Trace expansion over matrix units'']{QICLean2026Blueprint} over the
 rectangular matrix-unit basis: expanding $\Tr(T)$ for
 $T=(F_{AB}^{\mathrm{rect}})^N$ by the trace-expansion formula
@@ -69,7 +69,7 @@ over matrix-unit indices gives
     =O_{AB}(N).
     \notag
 \end{align}
-Theorem~\ref{thm:overlap_trace} is the square case $D_1=D_2=D$ of this
+Lemma~\ref{thm:overlap_trace} is the square case $D_1=D_2=D$ of this
 statement, so it needs no separate expansion.
 
 \section{Auxiliary trace positivity}
@@ -98,8 +98,8 @@ statement, so it needs no separate expansion.
 Moving a modulus-one mixed-transfer eigenvector through separate unital
 gauges produces Kraus-level intertwiners that force equal bond dimension once
 invertible, establishing the gauge rigidity of
-Theorem~\ref{thm:modulus_one_gauge_irr_tp} and
-Theorem~\ref{thm:transfer_operator_gap_rect_irr_tp}.
+Lemma~\ref{thm:modulus_one_gauge_irr_tp} and
+Lemma~\ref{thm:transfer_operator_gap_rect_irr_tp}.
 
 \begin{lemma}[Gauged peripheral eigenvector yields Kraus intertwining]%
     \label{thm:gauged_intertwining_core}
@@ -198,13 +198,13 @@ Theorem~\ref{thm:transfer_operator_gap_rect_irr_tp}.
     gauge-phase equivalence.
 \end{proof}
 
-Combining these two lemmas proves Theorem~\ref{thm:modulus_one_gauge_irr_tp}:
+Combining these two lemmas proves Lemma~\ref{thm:modulus_one_gauge_irr_tp}:
 Lemma~\ref{thm:gauged_intertwining_core} gives the intertwining relations
 (\ref{eq:spectral_gauged_intertwining}) for the separately gauged, unital
 families. The Kadison--Schwarz equality used inside its own proof makes
 $X'X'^\dagger$ and $X'^\dagger X'$ nonzero positive semidefinite fixed points
 of the gauged transfer maps; under irreducibility,
-Theorem~\ref{thm:transfer_psd_fp_pd_irred} upgrades these to positive definite
+Lemma~\ref{thm:transfer_psd_fp_pd_irred} upgrades these to positive definite
 matrices, so the transformed intertwiner $X'$ is invertible.
 Lemma~\ref{thm:gauged_intertwining_gauge_phase} then converts the invertible
 intertwiner, together with the two gauge matrices, into a single invertible
@@ -226,7 +226,7 @@ $(A^i)^\dagger$ and hence trivial, giving $D_1\leq D_2$. Combined with
 Lemma~\ref{thm:gauged_intertwining_core}, this proves
 $\rho_{\spec}(F_{AB}^{\mathrm{rect}})<1$ whenever $A$ and $B$ are injective
 tensors of unequal bond dimension, which is exactly
-Theorem~\ref{thm:transfer_operator_gap_rect}.
+Lemma~\ref{thm:transfer_operator_gap_rect}.
 
 \section{Spectral-radius decay and overlap limits}
 \label{sec:app_spectral_decay}
@@ -236,11 +236,11 @@ operator-norm decay and asymptotic orthogonality of matrix product vectors
 through standard Banach-algebra convergence.
 
 
-Theorem~\ref{thm:rectangular_transfer_pow_zero} applies
+Lemma~\ref{thm:rectangular_transfer_pow_zero} applies
 Lemma~\cite[``Powers vanish below unit spectral radius'']{QICLean2026Blueprint} to the rectangular mixed transfer
 operator and then evaluates its powers at a fixed matrix.
-Theorem~\ref{thm:transfer_pow_zero} combines the gap
-$\rho_{\spec}(F_{AB})<1$ of Theorem~\ref{thm:transfer_operator_gap} with the
+Lemma~\ref{thm:transfer_pow_zero} combines the gap
+$\rho_{\spec}(F_{AB})<1$ of Lemma~\ref{thm:transfer_operator_gap} with the
 equal-bond-dimension specialization of this rectangular decay theorem.
 Since $\Tr$ is continuous on the finite-dimensional matrix-endomorphism
 algebra, this gives $\Tr(F_{AB}^N)\to0$ term by term over the finitely many
@@ -249,22 +249,22 @@ of~\cite[``Trace expansion over matrix units'']{QICLean2026Blueprint}; combined 
 the overlap--trace identity (\ref{eq:spectral_overlap_trace}), this proves
 Theorem~\ref{thm:overlap_decay}.
 
-\begin{theorem}[Cross-correlation decay]\label{thm:cross_decay}
+\begin{lemma}[Cross-correlation decay]\label{thm:cross_decay}
     \lean{MPSTensor.cross_correlation_tendsto_zero}
     \leanok
     \uses{def:mixed_transfer, def:gauge_phase_equiv, def:injective}
     If $A$ and $B$ are injective normalized tensors that are not gauge-phase
     equivalent, then $\tr(F_{AB}^N(X))\to0$ as $N\to\infty$ for every
     $X\in\MN{D}$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:transfer_pow_zero}
-    Theorem~\ref{thm:transfer_pow_zero} gives $F_{AB}^N(X)\to0$ in operator
+    Lemma~\ref{thm:transfer_pow_zero} gives $F_{AB}^N(X)\to0$ in operator
     norm, and continuity of the trace gives the conclusion.
 \end{proof}
 
-\begin{theorem}[Self-correlation persists]\label{thm:self_persist}
+\begin{lemma}[Self-correlation persists]\label{thm:self_persist}
     \lean{Kraus.self_correlation_persists}
     \leanok
     \uses{def:transfer_map}
@@ -272,7 +272,7 @@ Theorem~\ref{thm:overlap_decay}.
     $\tr(\E_A^N(\rho))=\tr(\rho)$ for every $N\geq0$. In particular, this
     applies to the distinguished Perron--Frobenius fixed point from
     Theorem~\ref{thm:qpf}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Since $\E_A(\rho)=\rho$, one has $\E_A^N(\rho)=\rho$ for every $N$.
@@ -297,17 +297,17 @@ and $N:=E-P$ for the complementary part. The power decomposition
 $E^n=P+N^n$ for $n\geq1$.
 
 
-Under the hypothesis $\rho_{\spec}(N)<1$ of Theorem~\ref{thm:trace_pow_one},
+Under the hypothesis $\rho_{\spec}(N)<1$ of Lemma~\ref{thm:trace_pow_one},
 Lemma~\cite[``Powers vanish below unit spectral radius'']{QICLean2026Blueprint} gives $N^n\to0$, so
 $\Tr(E^n)=\Tr(P)+\Tr(N^n)\to\Tr(P)=1$ by
 Lemma~\cite[``Trace of the fixed-point projection'']{QICLean2026Blueprint}. This is exactly the mechanism recorded
-in Theorem~\ref{thm:trace_pow_one}.
+in Lemma~\ref{thm:trace_pow_one}.
 
 When $E=\E_A$ is the transfer map of a normalized MPS tensor and $\rho$ is
 its Perron--Frobenius fixed point (Theorem~\ref{thm:qpf},
 Chapter~\ref{ch:qpf}), the overlap--trace identity
 (\ref{eq:spectral_overlap_trace}) with $A=B$ gives
-$O_{AA}(N)=\Tr(\E_A^N)$, so Theorem~\ref{thm:trace_pow_one} yields the
+$O_{AA}(N)=\Tr(\E_A^N)$, so Lemma~\ref{thm:trace_pow_one} yields the
 primitive self-overlap limit of Theorem~\ref{thm:primitive_overlap}. The
 hypothesis $\rho_{\spec}(N)<1$ is the complementary transfer-map gap
 that the complementary spectral-radius theorem for primitive maps
@@ -318,7 +318,7 @@ less than $1$, and since $\MN{D}$ is finite-dimensional this bounds the
 spectral radius $\rho_{\spec}(N)$ itself.
 
 
-\begin{theorem}[Complementary spectral-radius gap for irreducible primitive tensors]%
+\begin{lemma}[Complementary spectral-radius gap for irreducible primitive tensors]%
     \label{thm:spectralRadius_compl_lt_one_peripheralPrimitive_irred}
     \lean{Kraus.spectralRadius_compl_lt_one_of_peripheralPrimitive_of_irreducible}
     \leanok
@@ -327,19 +327,19 @@ spectral radius $\rho_{\spec}(N)$ itself.
     $\E_A$ is primitive. Then there is a nonzero positive semidefinite
     fixed point $\rho$ of $\E_A$ with $\tr(\rho)\neq0$ such that, for
     $P:=P_\rho$ and $N:=\E_A-P$, $\rho_{\spec}(N)<1$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:psd_fp_exists}
     The channel fixed-point existence theorem
-    (Theorem~\ref{thm:psd_fp_exists}) gives a nonzero positive
+    (Lemma~\ref{thm:psd_fp_exists}) gives a nonzero positive
     semidefinite fixed point $\rho$, and
     Theorem~\cite[``Complementary gap at a prescribed fixed point'']{QICLean2026Blueprint}
     applied to $\E_A$ and $\rho$ then gives $\rho_{\spec}(N)<1$.
 \end{proof}
 
 This concretely instantiates the hypothesis of
-Theorem~\ref{thm:trace_pow_one} and, via Theorem~\ref{thm:primitive_overlap},
+Lemma~\ref{thm:trace_pow_one} and, via Theorem~\ref{thm:primitive_overlap},
 gives the primitive self-overlap limit for every irreducible peripherally
 primitive normalized MPS tensor.
 
@@ -395,7 +395,7 @@ blocked cyclic corners of this section, and restricted primitivity)
 underlies the period-removing blocking theorems of
 Chapter~\ref{ch:canonical}: \cite[Theorem~6.6]{Wolf2012Quantum} gives the
 cyclic peripheral spectrum of the adjoint transfer map, and
-Theorem~\ref{thm:cyclic_sector_decomp_after_blocking} (Section~\ref{sec:cyclic_sectors})
-and Theorem~\ref{thm:cyclic_sector_decomp_after_blocking_isometry} apply it
+Lemma~\ref{thm:cyclic_sector_decomp_after_blocking} (Section~\ref{sec:cyclic_sectors})
+and Lemma~\ref{thm:cyclic_sector_decomp_after_blocking_isometry} apply it
 to realize the cyclic-sector decomposition of a blocked irreducible tensor
 with rectangular support isometries.

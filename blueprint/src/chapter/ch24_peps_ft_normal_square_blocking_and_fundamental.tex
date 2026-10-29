@@ -39,14 +39,14 @@
     \end{tenkzequation}
 \end{definition}
 
-\begin{theorem}[Membership in a one-site separated region]%
+\begin{lemma}[Membership in a one-site separated region]%
     \label{thm:peps_normalOneSiteSeparation_mem_withSite_iff}
     \lean{TNLean.PEPS.NormalOneSiteSeparationHypotheses.mem_withSite_iff}
     \leanok
     \uses{def:peps_normalOneSiteSeparationHypotheses}
     Under Definition~\ref{def:peps_normalOneSiteSeparationHypotheses}, for every
     $v,w\in V$, $w\in S_v\Longleftrightarrow w=v\lor w\in R_v$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     For $w=v$ use $v\in S_v$ and $v\notin R_v$; for $w\ne v$ use
     $S_v\setminus\{v\}=R_v\setminus\{v\}$.
@@ -118,7 +118,7 @@
     \end{tenkzequation}
 \end{definition}
 
-\begin{theorem}[Normal edge blocking to a three-site injective chain]%
+\begin{lemma}[Normal edge blocking to a three-site injective chain]%
     \label{thm:peps_normalEdgeBlockingToInjectiveChain}
     \notready
     \uses{lem:peps_injectiveRegion_union, def:peps_normalSquareBlockingRegions, def:peps_normalEdgeBlockingHypotheses, thm:peps_normalEdgeBlockingHypotheses_injectiveChain, thm:peps_edgeBlockedInsertionAlgebraIsomorphism}
@@ -127,9 +127,9 @@
     $R,S,T$ of Definition~\ref{def:peps_normalSquareBlockingRegions} yield an
     edge-centred partition $(A_1,A_2,A_3)$ into injective regions
     (Definition~\ref{def:peps_normalEdgeBlockingHypotheses} and
-    Theorem~\ref{thm:peps_normalEdgeBlockingHypotheses_injectiveChain}) to which
+    Lemma~\ref{thm:peps_normalEdgeBlockingHypotheses_injectiveChain}) to which
     the three-site insertion isomorphism
-    (Theorem~\ref{thm:peps_edgeBlockedInsertionAlgebraIsomorphism}) applies
+    (Lemma~\ref{thm:peps_edgeBlockedInsertionAlgebraIsomorphism}) applies
     (the cited proof uses periodic translations and gives no separate open-boundary
     blockings):
     \begin{tenkzequation}
@@ -166,17 +166,17 @@
             \tnmark[form=enclosure, species=complement]{(1,3)}{}
         \end{tenkz}
     \end{tenkzequation}
-\end{theorem}
+\end{lemma}
 
-\begin{theorem}[Translationally invariant normal gauge absorption]%
+\begin{lemma}[Translationally invariant normal gauge absorption]%
     \label{thm:peps_tiNormalGaugeAbsorption}
     \notready
     \uses{thm:peps_normalEdgeBlockingToInjectiveChain, thm:peps_edge_gauge_absorption}
     In the translationally invariant normal square-lattice setting of
     \cite[Theorem~3]{Molnar2018NormalPEPS}, the edge gauges from
-    Theorem~\ref{thm:peps_normalEdgeBlockingToInjectiveChain} are represented by
+    Lemma~\ref{thm:peps_normalEdgeBlockingToInjectiveChain} are represented by
     one horizontal matrix $X$ and one vertical matrix $Y$, unique up to scalar;
-    absorbing them into $B$ via Theorem~\ref{thm:peps_edge_gauge_absorption}
+    absorbing them into $B$ via Lemma~\ref{thm:peps_edge_gauge_absorption}
     yields $\widetilde B$ and the local gauge relation:
     % Formula (paper_normal.tex:1451--1471):
     % B = lambda (Y on north)(Y^{-1} on south)(X on west)(X^{-1} on east) A.
@@ -215,9 +215,9 @@
         \end{tenkz}
     \end{tenkzequation}
     The torus form is established in
-    Theorem~\ref{thm:fundamentalTheorem_normalTorusPEPS_unconditional}; an open
+    Corollary~\ref{thm:fundamentalTheorem_normalTorusPEPS_unconditional}; an open
     rectangle would require additional boundary data.
-\end{theorem}
+\end{lemma}
 
 \begin{theorem}[Fundamental Theorem for normal square-lattice PEPS]%
     \label{thm:fundamentalTheorem_normalSquarePEPS}
@@ -229,15 +229,15 @@
     are related by horizontal and vertical gauges $X,Y$ up to a scalar $\lambda$
     with $\lambda^{nm}=1$ \cite[Theorem~3]{Molnar2018NormalPEPS}.
     The periodic torus theorem is
-    Theorem~\ref{thm:fundamentalTheorem_normalTorusPEPS_unconditional}, the
+    Corollary~\ref{thm:fundamentalTheorem_normalTorusPEPS_unconditional}, the
     open-rectangle interior-window theorem (without translation invariance and
     with per-vertex scalars $\lambda_v$) is
-    Theorem~\ref{thm:fundamentalTheorem_normalSquarePEPS_unconditional}, and the
+    Corollary~\ref{thm:fundamentalTheorem_normalSquarePEPS_unconditional}, and the
     connected-graph theorem is
-    Theorem~\ref{thm:fundamentalTheorem_normalPEPS_connected}.
+    Corollary~\ref{thm:fundamentalTheorem_normalPEPS_connected}.
 \end{theorem}
 
-\begin{theorem}[Fundamental Theorem for normal square-lattice PEPS,
+\begin{corollary}[Fundamental Theorem for normal square-lattice PEPS,
         interior-window form]%
     \label{thm:fundamentalTheorem_normalSquarePEPS_unconditional}
     \lean{TNLean.PEPS.fundamentalTheorem_normalSquarePEPS_unconditional}
@@ -280,4 +280,4 @@
         yields proportionality scalars $c_R,c_S\in\C^\times$ and
         $A_v=\lambda_v\widetilde B_v$ with $\lambda_v=c_S/c_R$.
     \end{proof}
-\end{theorem}
+\end{corollary}

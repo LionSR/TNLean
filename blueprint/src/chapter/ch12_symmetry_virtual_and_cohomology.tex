@@ -112,18 +112,18 @@ gauge transformations form a projective representation on the bond space.
     \uses{thm:block_tensor_rotate_physical}
     The twisted tensor $\widetilde A_g$ is the physical rotation of $A$ by
     $U(g)$, and $U^{[L]}(g)=U(g)^{\otimes L}$; specializing
-    Theorem~\ref{thm:block_tensor_rotate_physical} to $W=U(g)$ and $C=A$
+    Lemma~\ref{thm:block_tensor_rotate_physical} to $W=U(g)$ and $C=A$
     therefore gives (\ref{eq:symmetry_twist_block_comm}).
 \end{proof}
 
-\begin{theorem}[MPV-family symmetry is preserved by blocking]
+\begin{lemma}[MPV-family symmetry is preserved by blocking]
     \label{thm:on_site_symmetric_block_tensor}
     \lean{MPSTensor.isOnSiteSymmetric_blockTensor}
     \leanok
     \uses{def:on_site_symmetric, def:block_kron_action, lem:twisted_tensor_block_comm}
     If $A$ has MPV-family invariance under $U$, then $A^{[L]}$ has
     MPV-family invariance under $U^{[L]}$ for every $L$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Equation~(\ref{eq:symmetry_twist_block_comm}) identifies the twisted
@@ -175,7 +175,7 @@ gauge transformations form a projective representation on the bond space.
     Theorem~\ref{thm:virtual_rep_injective}.
 \end{remark}
 
-\begin{theorem}[Virtual symmetry equation]\label{thm:virtual_symmetry_eq}
+\begin{lemma}[Virtual symmetry equation]\label{thm:virtual_symmetry_eq}
     \lean{MPSTensor.virtual_symmetry_eq}
     \leanok
     \uses{def:injective, def:on_site_symmetric, lem:gauge_equiv_twisted}
@@ -189,7 +189,7 @@ gauge transformations form a projective representation on the bond space.
          & =\varphi(g)\,X(g)\,A^i\,X(g)^{-1}.
         \label{eq:symmetry_virtual_equation}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok\uses{lem:gauge_equiv_twisted}
     The physical action is transferred to the virtual level by the same
@@ -495,7 +495,7 @@ second cohomology group $H^2(G,\C^{\times})$ of cocycles modulo coboundaries.
     \end{align}
 \end{definition}
 
-\begin{theorem}[Gauge independence of the cocycle class]%
+\begin{lemma}[Gauge independence of the cocycle class]%
     \label{thm:cocycle_gauge_independence}
     \lean{MPSTensor.cohomologousTo_of_isInjective}
     \leanok
@@ -505,7 +505,7 @@ second cohomology group $H^2(G,\C^{\times})$ of cocycles modulo coboundaries.
     $\omega_1,\omega_2$) both arise as virtual representations of the
     same injective MPS tensor $A$ under an on-site symmetry~$U$, then
     $\omega_2\sim\omega_1$, and hence also $\omega_1\sim\omega_2$ by symmetry.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:virtual_rep_injective, lem:gauge_unique_up_to_scalar, def:cohomologous_to}
@@ -581,7 +581,7 @@ second cohomology group $H^2(G,\C^{\times})$ of cocycles modulo coboundaries.
     \end{align}
 \end{definition}
 
-\begin{theorem}[A projective factor system is a cocycle]
+\begin{lemma}[A projective factor system is a cocycle]
     \label{thm:is_cocycle_of_projective_rep}
     \lean{TNLean.Algebra.ScalarCocycle.isMulCocycle₂_of_projRep}
     \leanok
@@ -589,7 +589,7 @@ second cohomology group $H^2(G,\C^{\times})$ of cocycles modulo coboundaries.
     If $D>0$ and $\rho:G\to\GL_D(\C)$ obeys
     $\rho(g)\rho(h)=\omega(g,h)\rho(gh)$, then $\omega$ is a
     $\C^\times$-valued $2$-cocycle.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     By Lemma~\ref{lem:cocycle_of_assoc}, associativity gives the scalar
@@ -629,13 +629,13 @@ establishes non-triviality of the class.
     $\C^{\times}$-valued $2$-cochain.
 \end{definition}
 
-\begin{theorem}[The commutator phase is a class invariant]\label{thm:comm_phase_invariant}
+\begin{lemma}[The commutator phase is a class invariant]\label{thm:comm_phase_invariant}
     \lean{TNLean.Algebra.ScalarCocycle.commPhase_eq_of_isMulCoboundary₂_div}
     \leanok
     \uses{def:comm_phase, def:cohomologous_to}
     If $\omega_1\sim\omega_2$ and $gh=hg$, then
     $\beta_{\omega_1}(g,h)=\beta_{\omega_2}(g,h)$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok\uses{def:comm_phase, def:cohomologous_to}
     For a cochain $\varphi$ with
@@ -663,34 +663,34 @@ establishes non-triviality of the class.
         class} when $[\omega]\neq 0$ in $H^2(G,\C^{\times})$.
 \end{definition}
 
-\begin{theorem}[The trivial class]\label{thm:trivial_class}
+\begin{lemma}[The trivial class]\label{thm:trivial_class}
     \lean{TNLean.Algebra.ScalarCocycle.H2π_one,
         TNLean.Algebra.H2π_eq_zero_iff_isMulCoboundary₂}
     \leanok
     \uses{def:cohomologous_to, def:h2_cx}
     The class of the constant cocycle $1$ is zero, and $[\omega]=0$ exactly
     when $\omega$ is cohomologous to $1$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpug_h2_trivial_coefficients}
     The constant cocycle $1$ is the identity of the group of cocycles, so its
     class is zero. By (\ref{eq:mpug_h2_class_comparison}) of
-    Theorem~\ref{thm:mpug_h2_trivial_coefficients}, $\omega\sim1$ exactly
+    Lemma~\ref{thm:mpug_h2_trivial_coefficients}, $\omega\sim1$ exactly
     when $[\omega]=[1]=0$.
 \end{proof}
 
-\begin{theorem}[Commutator-phase non-triviality test]\label{thm:nontrivial_of_comm_phase}
+\begin{lemma}[Commutator-phase non-triviality test]\label{thm:nontrivial_of_comm_phase}
     \lean{TNLean.Algebra.ScalarCocycle.H2π_ne_zero_of_commPhase_ne_one}
     \leanok
     \uses{def:nontrivial_class, def:comm_phase, thm:comm_phase_invariant}
     If a $2$-cocycle $\omega$ has $\beta_\omega(g,h)\neq 1$ at a commuting
     pair $g,h$, then $\omega$ has a non-trivial class.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok\uses{thm:comm_phase_invariant, thm:trivial_class}
     The trivial cocycle has commutator phase $1$ at every pair, so by
-    Theorem~\ref{thm:comm_phase_invariant} and
+    Lemma~\ref{thm:comm_phase_invariant} and
     (\ref{eq:symmetry_comm_phase_invariance}), any cocycle cohomologous to it
     has $\beta=1$ at every commuting pair. Contrapositively,
     $\beta_\omega(g,h)\neq 1$ for one commuting pair forces $\omega$ to be

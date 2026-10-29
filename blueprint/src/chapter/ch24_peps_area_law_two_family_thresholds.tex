@@ -46,7 +46,7 @@ $T>1$, and $T\le2^k$ for all $k\ge\kappa(T)$).
     \end{align}
 \end{definition}
 
-\begin{theorem}[The scale inequalities above the explicit thresholds]
+\begin{lemma}[The scale inequalities above the explicit thresholds]
     \label{thm:area_law_two_family_scale_thresholds}
     \lean{TNLean.PEPS.AreaLaw.Geometry.le_two_pow_of_dyadicIndexThreshold_le,
         TNLean.PEPS.AreaLaw.Geometry.le_two_pow_fineScaleIndex_of_fineScaleIndexThreshold_le,
@@ -69,7 +69,7 @@ $T>1$, and $T\le2^k$ for all $k\ge\kappa(T)$).
         \item If $\varepsilon>0$ and $u\ge U_2(C_B,\varepsilon)$, then
               $\lfloor\lceil C_Bu\rceil_+^{1-\ell_{\rm geo}}\rfloor\le\varepsilon u$.
     \end{enumerate}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -77,7 +77,7 @@ $T>1$, and $T\le2^k$ for all $k\ge\kappa(T)$).
     By (\ref{eq:area_law_scale_thresholds}) and (\ref{eq:area_law_power_ratio_threshold}):
     (1) $k\ge\kappa(U)/\zeta\implies\lfloor\zeta k\rfloor\ge\kappa(U)\implies t_k\ge2^{\kappa(U)}\ge U$;
     (2) $n_k\le C(2^k)^e$ with $e(1-\ell_{\rm geo})<1$ and $e\beta<\zeta$ by
-    Theorem~\ref{thm:area_law_exponent_gaps}, so for $x=2^k$,
+    Lemma~\ref{thm:area_law_exponent_gaps}, so for $x=2^k$,
     $C^{1-\ell_{\rm geo}}x^{e(1-\ell_{\rm geo})}\le\varepsilon x$ and
     $C^\beta x^{e\beta}\le(\varepsilon/2)x^\zeta\le\varepsilon t_k\le\varepsilon x$;
     (3) $n_k\ge C_P2^k\ge n_*$;
@@ -119,7 +119,7 @@ $T>1$, and $T\le2^k$ for all $k\ge\kappa(T)$).
     \end{align}
 \end{definition}
 
-\begin{theorem}[Two families with a named constant]
+\begin{lemma}[Two families with a named constant]
     \label{thm:area_law_two_family_named_constant}
     \lean{TNLean.PEPS.AreaLaw.isTwoFamilyDecompositionConstant_twoFamilyConstant,
         TNLean.PEPS.AreaLaw.twoFamilyDecomposition_iff}
@@ -132,7 +132,7 @@ $T>1$, and $T\le2^k$ for all $k\ge\kappa(T)$).
     the repair construction at the prescribed origin with these data. Suppose
     that for every finite domain $\Lambda$ and cut $A\subseteq\Lambda$:
     (i) the remembered birth regions satisfy
-    Theorem~\ref{thm:area_law_repair_birth_templates} with coefficients
+    Lemma~\ref{thm:area_law_repair_birth_templates} with coefficients
     $C_P,C_B$; (ii) the metric hypotheses hold with isolation constant $1/4$ and
     both birth-separation properties hold with constant $c_1$; and (iii) the
     earlier-generation mark count, primary error sum, and positive-rank retained
@@ -141,7 +141,7 @@ $T>1$, and $T\le2^k$ for all $k\ge\kappa(T)$).
     $L_q(2C_0+1)^2|\partial_\Lambda A|$, respectively. Then $C_{\rm tf}$ in
     (\ref{eq:area_law_two_family_C_tf}) is a constant of the two-family
     decomposition at $n_*$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -150,8 +150,8 @@ $T>1$, and $T\le2^k$ for all $k\ge\kappa(T)$).
         lem:area_law_two_family_primaries,
         lem:area_law_two_family_exceptional_sites}
     By (\ref{eq:area_law_two_family_U_K}),
-    Theorem~\ref{thm:area_law_two_family_scale_thresholds}, and
-    Theorem~\ref{thm:area_law_repair_positive_rank_length_lower_bound},
+    Lemma~\ref{thm:area_law_two_family_scale_thresholds}, and
+    Lemma~\ref{thm:area_law_repair_positive_rank_length_lower_bound},
     $k_0\ge K_\zeta(U)$ and $S_*\ge U$ give characteristic lengths
     $u\ge U(c_1,C_B,n_*)\ge\max\{U_1(c_1,C_B),U_2(C_B,1)\}$ for positive birth
     rank, while $k_0\ge\max\{K_P(C_P,1/8),K_n(C_P,n_*)\}$ gives the primary
@@ -212,7 +212,7 @@ statements take as a parameter.
     \end{align}
 \end{definition}
 
-\begin{theorem}[The counting estimates with explicit coefficients]
+\begin{lemma}[The counting estimates with explicit coefficients]
     \label{thm:area_law_two_family_counting_coefficients}
     \lean{TNLean.PEPS.AreaLaw.Geometry.sum_le_polynomialDyadicBudget,
         TNLean.PEPS.AreaLaw.Geometry.iterate_depth_le,
@@ -232,7 +232,7 @@ statements take as a parameter.
     \uses{def:area_law_two_family_counting_coefficients}
     The constants in (\ref{eq:area_law_dyadic_budget})--(\ref{eq:area_law_counting_coefficients})
     instantiate the existential constants of
-    Theorems~\ref{thm:area_law_polynomial_finite_sums},
+    Lemmas~\ref{thm:area_law_polynomial_finite_sums},
     \ref{thm:area_law_power_recursion_depth},
     \ref{thm:area_law_repair_descendant_count},
     \ref{thm:area_law_repair_root_prefix_count},
@@ -250,7 +250,7 @@ statements take as a parameter.
     $(2C_0+1)^2|\partial_\Lambda A|$) for earlier-generation marks, initial
     belt tiles, positive-rank retained identifiers and their error sums, and
     primary error sums.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -304,7 +304,7 @@ statements take as a parameter.
     \end{align}
 \end{definition}
 
-\begin{theorem}[Templates, repair induction and cut clearance above the explicit thresholds]
+\begin{lemma}[Templates, repair induction and cut clearance above the explicit thresholds]
     \label{thm:area_law_two_family_repair_thresholds}
     \lean{TNLean.PEPS.AreaLaw.Geometry.primaryScannerConstant_spec,
         TNLean.PEPS.AreaLaw.Geometry.repairHalfSide_le_of_repairMarginThreshold_le,
@@ -319,31 +319,31 @@ statements take as a parameter.
     \uses{def:area_law_two_family_repair_thresholds}
     \begin{enumerate}
         \item $C_P(C_{\rm tpl})$ satisfies
-              Theorem~\ref{thm:area_law_primary_scanner_constant}, and for
+              Lemma~\ref{thm:area_law_primary_scanner_constant}, and for
               $C_{\rm tpl}\ge1$, $C_B(C_{\rm tpl})$ satisfies
-              Theorem~\ref{thm:area_law_belt_replacement_templates}.
+              Lemma~\ref{thm:area_law_belt_replacement_templates}.
         \item If $a_0>0$ and $S\ge T(a_0)$, then $d(S)\le(a_0/1000)S$.
         \item If $0<a_0\le1/4$, $S_*\ge T(a_0)$, and $k_0\ge K_\zeta(S_*)$,
               the hypotheses of
               Lemma~\ref{lem:area_law_repair_metric_invariants} hold for every
               width $C_0$.
         \item If $S_*\ge T(1/128)$ and $k_0\ge K_\zeta(S_*)$,
-              Theorem~\ref{thm:area_law_uniform_repair_induction} holds with
+              Lemma~\ref{thm:area_law_uniform_repair_induction} holds with
               isolation constant $1/128$.
         \item If $k\ge K_c(D_0,C_B)$, the late-layer inequalities of
-              Theorem~\ref{thm:area_law_descendant_clearance_scales} hold at
+              Lemma~\ref{thm:area_law_descendant_clearance_scales} hold at
               layer $k$; hence
-              Theorem~\ref{thm:area_law_belt_birth_template_clearance} holds
+              Lemma~\ref{thm:area_law_belt_birth_template_clearance} holds
               for $k_0\ge K_c(D_0,C_B)$, and
-              Theorem~\ref{thm:area_law_descendant_birth_template_clearance}
+              Lemma~\ref{thm:area_law_descendant_birth_template_clearance}
               holds for $S_*\ge T(1/128)$ and
               $k_0\ge\max\{K_\zeta(S_*),K_c(D_0,C_B)\}$.
         \item If $C_{\rm tpl}\ge1$, $S_*\ge T(1/128)$, $C_0>4D_0$, and
               $k_0\ge K_T(D_0,C_P(C_{\rm tpl}),C_B(C_{\rm tpl}),S_*)$,
-              Theorem~\ref{thm:area_law_repair_birth_templates} holds with
+              Lemma~\ref{thm:area_law_repair_birth_templates} holds with
               coefficients $C_P(C_{\rm tpl})$ and $C_B(C_{\rm tpl})$.
     \end{enumerate}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -357,20 +357,20 @@ statements take as a parameter.
         thm:area_law_repair_birth_templates,
         thm:area_law_two_family_scale_thresholds}
     Item~(1) unfolds the constants in
-    Theorems~\ref{thm:area_law_primary_scanner_constant}
+    Lemmas~\ref{thm:area_law_primary_scanner_constant}
     and~\ref{thm:area_law_belt_replacement_templates}. By
     (\ref{eq:area_law_power_ratio_threshold}) and
     (\ref{eq:area_law_repair_thresholds}), $S\ge T(a_0)$ gives
     $d(S)\le S^{\rho_0}\le(a_0/1000)S$, proving~(2). Since $t_k\ge S_*$ for
     $k\ge k_0\ge K_\zeta(S_*)$ by
-    Theorem~\ref{thm:area_law_two_family_scale_thresholds},
+    Lemma~\ref{thm:area_law_two_family_scale_thresholds},
     Lemma~\ref{lem:area_law_repair_metric_choice} gives~(3), and
-    Theorem~\ref{thm:area_law_uniform_repair_induction} at $a_0=1/128$ gives~(4).
+    Lemma~\ref{thm:area_law_uniform_repair_induction} at $a_0=1/128$ gives~(4).
     For~(5), $R=2^k\ge P(M,1/2,1-a)$ implies $MR^a\le R/2<R$, which with
     $t_k\le R^\zeta$ yields the three inequalities of
-    Theorem~\ref{thm:area_law_descendant_clearance_scales}. Finally, (6)
+    Lemma~\ref{thm:area_law_descendant_clearance_scales}. Finally, (6)
     combines (1)--(5) with $k_0\ge K_P(C_P,1/4)$ in
-    Theorem~\ref{thm:area_law_repair_birth_templates}.
+    Lemma~\ref{thm:area_law_repair_birth_templates}.
 \end{proof}
 
 % Source: 10-geometry.tex, geometry:birth-separation, lines 573--659, with
@@ -390,7 +390,7 @@ statements take as a parameter.
     of every initial belt tile of side $u$ is at distance at least
     $c_1u^{\rho_0}$ from the final actual region of every primary and every
     other same-label initial belt tile, and
-    Theorem~\ref{thm:area_law_replacement_birth_separation_local} holds with
+    Lemma~\ref{thm:area_law_replacement_birth_separation_local} holds with
     constant $c_1$. For $c_1>0$, $D_0,C_{\rm tpl}\in\mathbb R$, and
     $n_*\in\mathbb Z$, put $C_{\rm tpl}'=\max\{C_{\rm tpl},1\}$,
     $C_P=C_P(C_{\rm tpl}')$, $C_B=C_B(C_{\rm tpl}')$, $C_0=\lceil4D_0\rceil_++2$,
@@ -430,17 +430,17 @@ statements take as a parameter.
         thm:area_law_initial_belt_birth_separation,
         thm:area_law_replacement_birth_separation_local,
         thm:area_law_replacement_birth_separation_conditional}
-    Theorem~\ref{thm:area_law_initial_belt_birth_separation} gives initial-belt
+    Lemma~\ref{thm:area_law_initial_belt_birth_separation} gives initial-belt
     separation with $1/112$, and
-    Theorem~\ref{thm:area_law_replacement_birth_separation_local} gives local
+    Lemma~\ref{thm:area_law_replacement_birth_separation_local} gives local
     replacement separation with $1/28\ge1/112$, so $1/112$ is a
     birth-separation constant. By (\ref{eq:area_law_explicit_S_k0}) and
-    Theorem~\ref{thm:area_law_two_family_repair_thresholds}, $S_*\ge T(1/128)$
+    Lemma~\ref{thm:area_law_two_family_repair_thresholds}, $S_*\ge T(1/128)$
     and $k_0\ge K_\zeta(S_*)$ yield the repair induction at $a_0=1/128$, so
-    Theorem~\ref{thm:area_law_replacement_birth_separation_conditional} gives
-    replacement birth separation with $c_1$. Theorems~\ref{thm:area_law_two_family_counting_coefficients}
+    Lemma~\ref{thm:area_law_replacement_birth_separation_conditional} gives
+    replacement birth separation with $c_1$. Lemmas~\ref{thm:area_law_two_family_counting_coefficients}
     and~\ref{thm:area_law_two_family_repair_thresholds} then verify all
-    hypotheses of Theorem~\ref{thm:area_law_two_family_named_constant} at
+    hypotheses of Lemma~\ref{thm:area_law_two_family_named_constant} at
     $C_{\rm tpl}'=\max\{C_{\rm tpl},1\}$, and monotony in $C_{\rm tpl}$ via
     $C_{\rm tpl}N_0(s_0+1)\le C_{\rm tpl}'N_0(s_0+1)\le n$ extends the
     conclusion to all $C_{\rm tpl}\in\mathbb R$.

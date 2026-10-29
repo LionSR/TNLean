@@ -12,7 +12,7 @@ layer $k$. The estimates below establish the local mesh and scale bounds in
 % revision adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 % These are local numerical estimates; active rays and sectors remain separate.
 
-\begin{theorem}[A common quarter mesh in a closed neighborhood]
+\begin{lemma}[A common quarter mesh in a closed neighborhood]
     \label{thm:area_law_near_mark_quarter_mesh}
     \lean{TNLean.PEPS.AreaLaw.Geometry.fineLayer_near_mark_quarter_mesh}
     \leanok
@@ -28,7 +28,7 @@ layer $k$. The estimates below establish the local mesh and scale bounds in
         \quad\text{or}\quad\ell_h=\ell_k+1,                                            \\
         M_{k,z}\cup M_{h,w} & \subseteq o+(t/4)\mathbb Z^2.
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_local_layer_exclusion,thm:area_law_fine_cell_containment,
         thm:area_law_adjacent_fine_meshes,thm:area_law_belt_marks_quarter_mesh}
@@ -43,7 +43,7 @@ layer $k$. The estimates below establish the local mesh and scale bounds in
     nine-point sets in the same quarter mesh.
 \end{proof}
 
-\begin{theorem}[Fine-scale separation from the dummy neighborhood]
+\begin{lemma}[Fine-scale separation from the dummy neighborhood]
     \label{thm:area_law_dummy_fine_scale_separation}
     \lean{TNLean.PEPS.AreaLaw.Geometry.dyadicNeighborhood_dist_later_layer_fineScale}
     \leanok
@@ -53,7 +53,7 @@ layer $k$. The estimates below establish the local mesh and scale bounds in
     \begin{align}
         \|x-y\|_\infty & \ge 16\,2^{\ell_k}.
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_neighborhood_endpoint_distance,thm:area_law_dyadic_layer_distance,
         thm:area_law_scale_side_ratios}

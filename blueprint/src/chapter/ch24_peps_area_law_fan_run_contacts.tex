@@ -10,7 +10,7 @@ They require no assignment of labels outside the cell.
 % revision adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 % These are within-cell assertions, not the full two-family proposition.
 
-\begin{theorem}[Contact determines consecutive triangles]
+\begin{lemma}[Contact determines consecutive triangles]
     \label{thm:area_law_fan_triangle_contact}
     \lean{TNLean.PEPS.AreaLaw.Geometry.cellFanPolygons_nontrivial_inter_cases}
     \leanok
@@ -26,7 +26,7 @@ They require no assignment of labels outside the cell.
     \end{align}
     Thus geometric contact determines consecutive perimeter segments and
     identifies the complete common radial edge.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_cell_fan_intersections,thm:area_law_unsplit_side_endpoints}
     If the two perimeter segments were disjoint, the fan intersection
@@ -40,7 +40,7 @@ They require no assignment of labels outside the cell.
     intersection identity gives the asserted radial segment.
 \end{proof}
 
-\begin{theorem}[Opposite labels at contacts between distinct runs]
+\begin{lemma}[Opposite labels at contacts between distinct runs]
     \label{thm:area_law_fan_run_geometric_contact}
     \lean{TNLean.PEPS.AreaLaw.Geometry.cellFanRunRegions_contact_colors_ne}
     \leanok
@@ -49,7 +49,7 @@ They require no assignment of labels outside the cell.
     Let $R\ne T$ be two distinct runs, with regions $T_R,T_T$.
     If $T_R\cap T_T$ contains two distinct points, then every triangle
     in $R$ has a different label from every triangle in $T$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_fan_triangle_contact,thm:area_law_fan_run_opposite,
         thm:area_law_fan_run_color}

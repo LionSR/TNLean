@@ -40,7 +40,7 @@ places primaries first, initial belt regions second, and replacements by generat
 % belt and replacement scales, lines 732--740; threshold choice, lines 761--771.
 % Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 
-\begin{theorem}[A uniform lower bound on nonprimary birth lengths]
+\begin{lemma}[A uniform lower bound on nonprimary birth lengths]
     \label{thm:area_law_repair_positive_rank_length_lower_bound}
     \lean{TNLean.PEPS.AreaLaw.Geometry.exists_uniform_repairStage_positive_rank_length_lower_bound,
         TNLean.PEPS.AreaLaw.Geometry.repairStage_positive_rank_length_lower_bound}
@@ -58,7 +58,7 @@ places primaries first, initial belt regions second, and replacements by generat
     $\tau_N(i)\ge U$. The threshold $K$ depends only on $U$; one may take
     $K=K_\zeta(U)=\lceil\kappa(U)/\zeta\rceil$ of
     Definition~\ref{def:area_law_two_family_scale_thresholds}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -68,7 +68,7 @@ places primaries first, initial belt regions second, and replacements by generat
         thm:area_law_two_family_scale_thresholds}
     Take $K=K_\zeta(U)$. Whenever $k\ge K$, the fine side
     $t_k=2^{\lfloor\zeta k\rfloor}$ satisfies $t_k\ge U$ by
-    Theorem~\ref{thm:area_law_two_family_scale_thresholds}.
+    Lemma~\ref{thm:area_law_two_family_scale_thresholds}.
     Induct on $N$. Initially, positive birth rank excludes the dummy
     and primary identifiers. Every remaining identifier is a belt
     in a layer $k\ge k_0\ge K$, with length $t_k\ge U$.
@@ -81,7 +81,7 @@ places primaries first, initial belt regions second, and replacements by generat
 % Auxiliary to 10-geometry.tex, lines 709--750, with creation at
 % lines 393--417 and the birth classes at lines 565--568.
 % Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
-\begin{theorem}[Templates for the remembered birth regions]
+\begin{lemma}[Templates for the remembered birth regions]
     \label{thm:area_law_repair_birth_templates}
     \lean{TNLean.PEPS.AreaLaw.Geometry.exists_uniform_repairStage_birth_templates}
     \leanok
@@ -118,7 +118,7 @@ places primaries first, initial belt regions second, and replacements by generat
         2n^\beta & <\|y-z\|_\infty.
         \label{eq:area_law_birth_template_clearance}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:area_law_primary_scanner_constant,
@@ -132,24 +132,24 @@ places primaries first, initial belt regions second, and replacements by generat
         thm:area_law_belt_birth_template_clearance,
         thm:area_law_descendant_birth_template_clearance,
         def:area_law_repair_characteristic_length}
-    Fix $C_P$ from Theorem~\ref{thm:area_law_primary_scanner_constant}, $C_B$ from
-    Theorem~\ref{thm:area_law_belt_replacement_templates}, $T_0\ge1$ from
-    Theorem~\ref{thm:area_law_descendant_birth_template_clearance}, and $K$ dominating the
-    thresholds of Theorems~\ref{thm:area_law_primary_scale_limits},
+    Fix $C_P$ from Lemma~\ref{thm:area_law_primary_scanner_constant}, $C_B$ from
+    Lemma~\ref{thm:area_law_belt_replacement_templates}, $T_0\ge1$ from
+    Lemma~\ref{thm:area_law_descendant_birth_template_clearance}, and $K$ dominating the
+    thresholds of Lemmas~\ref{thm:area_law_primary_scale_limits},
     \ref{thm:area_law_belt_birth_template_clearance}, and
     \ref{thm:area_law_descendant_birth_template_clearance}. Induct on $N$.
     At $N=0$: for $q=0$ (primary of layer $k$), $\mathcal B\cap\mathbb Z^2\ne\varnothing$ supplies
     the template via Definition~\ref{def:area_law_primary_birth_template} and
-    Theorem~\ref{thm:area_law_primary_birth_template_points}, while $4D_0<C_0$,
-    Theorem~\ref{thm:area_law_primary_birth_template_clearance} ($\|y-z\|_\infty\ge C_0r_k$),
-    and Theorem~\ref{thm:area_law_primary_scale_limits} ($n^\beta\le r_k/4$) yield
+    Lemma~\ref{thm:area_law_primary_birth_template_points}, while $4D_0<C_0$,
+    Lemma~\ref{thm:area_law_primary_birth_template_clearance} ($\|y-z\|_\infty\ge C_0r_k$),
+    and Lemma~\ref{thm:area_law_primary_scale_limits} ($n^\beta\le r_k/4$) yield
     (\ref{eq:area_law_birth_template_clearance}); for $q=1$ (initial belt),
-    Theorems~\ref{thm:area_law_belt_replacement_templates} and
+    Lemmas~\ref{thm:area_law_belt_replacement_templates} and
     \ref{thm:area_law_belt_birth_template_clearance} give the template with $s_0=t_k$ and
     (\ref{eq:area_law_birth_template_clearance}).
     At $N+1$: old identifiers inherit their witness unchanged by (\ref{eq:area_law_repair_characteristic_length}),
     while a fresh replacement has $q=N+2\ge2$ and $u=d(S_p^{(N)})$, so
-    Theorems~\ref{thm:area_law_belt_replacement_templates} and
+    Lemmas~\ref{thm:area_law_belt_replacement_templates} and
     \ref{thm:area_law_descendant_birth_template_clearance} supply the template with $s_0=2u$,
     $n=\lceil C_Bu\rceil$, and (\ref{eq:area_law_birth_template_clearance}).
 \end{proof}
@@ -159,7 +159,7 @@ places primaries first, initial belt regions second, and replacements by generat
 % geometry:total-repairs, lines 685--692; nonprimary errors, lines 796--798.
 % Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 
-\begin{theorem}[Positive characteristic lengths]
+\begin{lemma}[Positive characteristic lengths]
     \label{thm:area_law_repair_characteristic_length_positive}
     \lean{TNLean.PEPS.AreaLaw.Geometry.repairStageCharacteristicLength_pos_of_ne_dummy}
     \leanok
@@ -171,7 +171,7 @@ places primaries first, initial belt regions second, and replacements by generat
         \tau_N(i) & >0
         \qquad(N\in\mathbb N,\ i\in I_N\setminus\{*_N\}).\notag
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok

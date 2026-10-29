@@ -8,7 +8,7 @@ not imply a shallow unitary conversion between the selected vectors.
 The following obstruction concerns this interpretation; it does not impose
 a definition of phase or exclude conversion of compatible coherent seeds.
 
-\begin{theorem}[Matrix elements outside the support]
+\begin{lemma}[Matrix elements outside the support]
     \label{thm:ldp_offsupport_matrix_elements}
     \lean{QuantumCircuit.apply_eq_zero_of_mem_supportedOperators,
         QuantumCircuit.productVector_single,
@@ -22,7 +22,7 @@ a definition of phase or exclude conversion of compatible coherent seeds.
     If $A,B$ act on disjoint sets, then
     $\langle\sigma|AB|\sigma\rangle=
         \langle\sigma|A|\sigma\rangle\langle\sigma|B|\sigma\rangle$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     A product operator with identity factors outside $S$ has an entry
@@ -32,7 +32,7 @@ a definition of phase or exclude conversion of compatible coherent seeds.
     basis vectors, disjoint expectations factor.
 \end{proof}
 
-\begin{theorem}[Stability of connected correlations]
+\begin{lemma}[Stability of connected correlations]
     \label{thm:ldp_covariance_stability}
     \lean{QuantumCircuit.expect_eq_inner,
         QuantumCircuit.norm_expect_le_one,
@@ -53,7 +53,7 @@ a definition of phase or exclude conversion of compatible coherent seeds.
     \end{align}
     Both expectations and covariances are unchanged by a unit scalar
     multiplying the state.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Expanding the expectation difference as
@@ -64,7 +64,7 @@ a definition of phase or exclude conversion of compatible coherent seeds.
     by three expectation differences, each at most $2\|\psi-\phi\|$.
 \end{proof}
 
-\begin{theorem}[Separated correlations in a weighted GHZ vector]
+\begin{lemma}[Separated correlations in a weighted GHZ vector]
     \label{thm:ldp_weighted_ghz_covariance}
     \lean{QuantumCircuit.ghzState_two_eq,
         QuantumCircuit.zero_config_ne_one,
@@ -92,7 +92,7 @@ a definition of phase or exclude conversion of compatible coherent seeds.
     \end{align}
     The same bound holds after a depth-$T$ circuit for observables whose
     backward light cones are disjoint and leave a site unobserved.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:ldp_offsupport_matrix_elements,thm:ldp_covariance_stability}
@@ -131,7 +131,7 @@ a definition of phase or exclude conversion of compatible coherent seeds.
 \end{center}
 % TENKZ-SECTOR-WEIGHT-END
 
-\begin{theorem}[Equal parent Hamiltonians with unequal periodic weights]
+\begin{lemma}[Equal parent Hamiltonians with unequal periodic weights]
     \label{thm:ldp_sector_weight_parent}
     \lean{MPSTensor.groundSpaceMap_repeatedBlockTensor_eq_ghzState,
         MPSTensor.groundSpaceMap_ghzTensor_eq_ghzState,
@@ -158,7 +158,7 @@ a definition of phase or exclude conversion of compatible coherent seeds.
     canonical parent projectors agree. Consequently their periodic-chain
     constraint spaces and canonical parent Hamiltonians agree for every
     chain length.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     A boundary matrix $X$ for $A$ contributes amplitudes
@@ -170,7 +170,7 @@ a definition of phase or exclude conversion of compatible coherent seeds.
     chain constraints and Hamiltonians.
 \end{proof}
 
-\begin{theorem}[A lower bound for changing sector probabilities]
+\begin{lemma}[A lower bound for changing sector probabilities]
     \label{thm:ldp_sector_weight_obstruction}
     \lean{MPSPreparation.ghz_sector_weight_infidelity_lower_bound,
         MPSTensor.repeatedBlockTensor_infidelity_lower_bound,
@@ -184,14 +184,14 @@ a definition of phase or exclude conversion of compatible coherent seeds.
     For the normalized periodic vectors
     $\psi_N=(2|0^N\rangle+|1^N\rangle)/\sqrt5$ and
     $\phi_N=(|0^N\rangle+|1^N\rangle)/\sqrt2$ of the tensors in
-    Theorem~\ref{thm:ldp_sector_weight_parent}, every depth-$T$
+    Lemma~\ref{thm:ldp_sector_weight_parent}, every depth-$T$
     nearest-neighbour unitary circuit $U$ on the ring with $N>4T+4$
     satisfies
     \begin{align}
         1-|\langle U\psi_N|\phi_N\rangle|\ge\frac9{5000}.
     \end{align}
     Conversely, overlap error strictly below $9/5000$ forces $N\le4T+4$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:ldp_weighted_ghz_covariance,thm:ldp_covariance_stability,

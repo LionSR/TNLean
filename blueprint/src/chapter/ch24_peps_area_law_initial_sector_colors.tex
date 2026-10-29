@@ -18,7 +18,7 @@ of these eight bases, and denote their closed triangles by
 $P_s^{\rm S}$. Write $b_s^-$ and $b_s^+$ for the initial and final
 endpoints of base $s$ in the perimeter orientation. Let
 $\sigma:\mathcal J\to\mathcal I$ be the unique assignment
-of Theorem~\ref{thm:area_law_actual_sector_assignment}, obtained
+of Lemma~\ref{thm:area_law_actual_sector_assignment}, obtained
 from the working fan of half-side $2r=t_k/32$.
 
 This assertion concerns adjacent members of the eight fixed sectors
@@ -29,7 +29,7 @@ in \cite[Section~11]{OpenAI2026AreaLaw}.
 % revision adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 % No merging of sectors or active-ray conclusion is asserted here.
 
-\begin{theorem}[Colors and identifiers on adjacent sectors]
+\begin{lemma}[Colors and identifiers on adjacent sectors]
     \label{thm:area_law_initial_sector_colors}
     \lean{TNLean.PEPS.AreaLaw.Geometry.initialRegion_sector_assignment_adjacent_colors_eq_iff}
     \leanok
@@ -43,7 +43,7 @@ in \cite[Section~11]{OpenAI2026AreaLaw}.
         \chi(\sigma(s))=\chi(\sigma(t))
          & \quad\Longleftrightarrow\quad \sigma(s)=\sigma(t).
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_actual_sector_assignment,
         thm:area_law_cell_fan_base_radius,

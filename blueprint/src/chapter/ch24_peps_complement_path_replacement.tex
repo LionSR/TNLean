@@ -1,4 +1,4 @@
-\begin{theorem}[Exterior replacement with prescribed winding]%
+\begin{lemma}[Exterior replacement with prescribed winding]%
     \label{thm:peps_torus_complement_path_replacement}
     \lean{TNLean.PEPS.exists_complementWalk_of_integerExteriorCollarGraph_connected,
         TNLean.PEPS.exists_complementBoundaryLoops_of_integerExteriorCollarGraph_connected}
@@ -18,7 +18,7 @@
     root, wholly within the induced complement, with the winding of the
     corresponding two-tree boundary route, chosen independently of all
     group-valued closure labels.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_integer_exterior_collar_paths,
         thm:peps_torus_region_boundary_lift,
@@ -34,7 +34,7 @@
     numbers add under concatenation.
 \end{proof}
 
-\begin{theorem}[Complementary boundary loops of a simply connected region]%
+\begin{lemma}[Complementary boundary loops of a simply connected region]%
     \label{thm:peps_torus_simply_connected_boundary_loops}
     \lean{TNLean.PEPS.exists_complementBoundaryLoops_of_isSimplyConnected}\leanok
     In the exterior geometric construction of
@@ -45,7 +45,7 @@
     every crossing bond with the same winding as its two-tree boundary route,
     chosen before all group-valued closure labels without any additional
     exterior-path, collar-connectivity, or winding-identity premise.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_torus_complement_path_replacement,
         thm:peps_integer_boundary_contour_connected,

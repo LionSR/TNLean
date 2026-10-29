@@ -109,7 +109,7 @@ spectral decomposition, and quantitative decay bounds.
     \end{align}
 \end{proof}
 
-\begin{theorem}[Fixed-point centering identity for connected correlators]%
+\begin{lemma}[Fixed-point centering identity for connected correlators]%
     \label{thm:connected_correlator_traceless_reduction}
     \lean{MPSTensor.connectedCorrelator_eq_trace_transfer_tracelessPart}
     \leanok
@@ -124,7 +124,7 @@ spectral decomposition, and quantitative decay bounds.
     When $\tr(\rho)=1$, the preceding lemma shows that $Z_\rho(X)$ is
     traceless, so this identity isolates the fixed-point contribution before
     the remaining transfer iterates act.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -203,7 +203,7 @@ spectral decomposition, and quantitative decay bounds.
     the nonzero positive fixed state $\rho$ satisfies $\rho_{\spec}(\E_A-P)<1$.
 \end{proof}
 
-\begin{theorem}[Physical correlation decay in trace-preserving gauge]%
+\begin{lemma}[Physical correlation decay in trace-preserving gauge]%
     \label{thm:physical_correlator_tp_bound}
     \lean{MPSTensor.exists_physicalConnectedCorrelator_le_geometric,
         MPSTensor.exists_rate_physicalConnectedCorrelator_le_geometric}
@@ -225,7 +225,7 @@ spectral decomposition, and quantitative decay bounds.
     \cite{gap:cpgsv21_correlator_diagonalizable_expansion}, the source's
     pure-exponential expansion requires a Jordan-block correction when
     $\E_A-P$ is not diagonalizable.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{lem:normal_tensor_complement_gap}
@@ -242,16 +242,16 @@ spectral decomposition, and quantitative decay bounds.
 \begin{remark}[Transfer-map spectral hypothesis]%
     \label{rem:spectral_hypothesis}
     \uses{thm:physical_correlator_tp_bound, thm:transfer_operator_gap_irr_tp, thm:transfer_map_gap_wielandt}
-    The rate $r<1$ in Theorem~\ref{thm:physical_correlator_tp_bound}
+    The rate $r<1$ in Lemma~\ref{thm:physical_correlator_tp_bound}
     expresses a transfer-map gap condition: unlike the Hamiltonian spectral gap of
     Chapter~\ref{ch:parent_hamiltonian_commuting_and_gap}, it requires all
     non-leading eigenvalues of $\E_A$ to lie strictly inside the unit disk.
     In the companion quantum-channel volume~\cite[``Complementary transfer-map gap for primitive maps'']{QICLean2026Blueprint},
     primitive channels are shown to satisfy the complementary transfer-map gap
     $\rho_{\spec}(\E_A-P)<1$.
-    Similarly, Theorem~\ref{thm:transfer_operator_gap_irr_tp} establishes the
+    Similarly, Lemma~\ref{thm:transfer_operator_gap_irr_tp} establishes the
     mixed-transfer gap separating non-equivalent canonical blocks for irreducible
-    trace-preserving tensors, and Theorem~\ref{thm:transfer_map_gap_wielandt}
+    trace-preserving tensors, and Lemma~\ref{thm:transfer_map_gap_wielandt}
     provides quantitative single-tensor transfer-map bounds for injective tensors.
 
     Together, these transfer-map gap results guarantee exponential convergence of the
@@ -295,7 +295,7 @@ The qualitative bound $\rho_{\spec}(\E_A-P)<1$ for primitive channels
 admits quantitative refinements in terms of geometric constants and decay rates
 for the transfer map $\E_A$.
 
-\begin{theorem}[Exponential convergence of injective primitive channels]%
+\begin{lemma}[Exponential convergence of injective primitive channels]%
     \label{thm:exponential_convergence_primitive}
     \lean{MPSTensor.exponential_convergence_of_primitive}
     \leanok
@@ -318,7 +318,7 @@ for the transfer map $\E_A$.
     By the complementary transfer-map gap for primitive channels in the companion
     quantum-channel volume~\cite[``Complementary transfer-map gap for primitive maps'']{QICLean2026Blueprint},
     primitivity guarantees such a transfer-map gap $\delta>0$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -362,7 +362,7 @@ for the transfer map $\E_A$.
     (\ref{eq:correlations_traceless_decay}).
 \end{proof}
 
-\begin{theorem}[Transfer-map gap from injectivity]%
+\begin{lemma}[Transfer-map gap from injectivity]%
     \label{thm:transfer_map_gap_wielandt}
     \lean{MPSTensor.transfer_map_gap_of_injective}
     \leanok
@@ -370,7 +370,7 @@ for the transfer map $\E_A$.
     For an injective trace-preserving MPS tensor, there exists
     $\delta>0$ such that every eigenvalue $\mu\ne 1$ of the
     transfer map satisfies $|\mu|\le 1-\delta$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -388,7 +388,7 @@ for the transfer map $\E_A$.
     (Definition~\ref{def:parent_hamiltonian}) with the matrix product vector as
     ground state (Lemma~\ref{lem:parent_hamiltonian_annihilates}), its
     fixed-point infinite-chain state inherits the decay bound of
-    Theorem~\ref{thm:physical_correlator_tp_bound}: for every rate
+    Lemma~\ref{thm:physical_correlator_tp_bound}: for every rate
     $r$ with $\rho_{\spec}(\E_A-P)<r<1$, the corresponding ground-state
     correlations decay as $r^n=e^{-n/\xi}$ with finite correlation length
     $\xi=-1/\log r$ (Definition~\ref{def:correlation_length}). When $\E_A-P$ is
@@ -420,7 +420,7 @@ for the transfer map $\E_A$.
     physical expectation across $n\geq0$ unobserved intermediate sites.
 \end{definition}
 
-\begin{theorem}[Gauge covariance of physical insertions]
+\begin{lemma}[Gauge covariance of physical insertions]
     \label{thm:physical_insertion_gauge}
     \lean{MPSTensor.physicalObservableTransfer_congruence_of_gauge}
     \leanok
@@ -432,7 +432,7 @@ for the transfer map $\E_A$.
         \label{eq:correlations_insertion_gauge}
     \end{align}
     This includes $L=0$; no unitarity or normalization is assumed.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{lem:eval_word_gauge, def:physical_observable_transfer}
@@ -441,7 +441,7 @@ for the transfer map $\E_A$.
     factors $U^{-1}U$ and $U^\dagger U^{-\dagger}$ yields $U\E_O^A(Z)U^\dagger$.
 \end{proof}
 
-\begin{theorem}[Gauge invariance of physical connected correlations]
+\begin{lemma}[Gauge invariance of physical connected correlations]
     \label{thm:physical_correlator_gauge}
     \lean{MPSTensor.physicalLeftRightConnectedCorrelator_eq_of_gauge}
     \leanok
@@ -457,7 +457,7 @@ for the transfer map $\E_A$.
     \end{align}
     The identity does not require stationarity or positivity of the
     boundary matrices.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:physical_insertion_gauge, lem:ldp_observable_transfer_products,
@@ -471,7 +471,7 @@ for the transfer map $\E_A$.
     the equality.
 \end{proof}
 
-\begin{theorem}[Left-right contraction in trace-preserving gauge]
+\begin{lemma}[Left-right contraction in trace-preserving gauge]
     \label{thm:physical_left_right_tp}
     \lean{MPSTensor.physicalLeftRightConnectedCorrelator_one}
     \leanok
@@ -480,7 +480,7 @@ for the transfer map $\E_A$.
     $\tr\rho=1$. For every pair of independently supported physical
     operators and every $n\geq0$,
     $C_{\Id,\rho}^{A}(X,Y;n)=C_{\mathrm{phys}}(X,Y;n)$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{lem:physical_connected_correlator_identity}
@@ -526,7 +526,7 @@ for the transfer map $\E_A$.
     transfer covariance gives $\E_A(\rho^R)=\rho^R$.
     Congruence preserves positive definiteness, and trace cyclicity gives
     $\tr(\rho^L\rho^R)=\tr\rho=1$.
-    In the gauge of $B$, Theorem~\ref{thm:physical_correlator_tp_bound} provides
+    In the gauge of $B$, Lemma~\ref{thm:physical_correlator_tp_bound} provides
     a common decay rate $r<1$; since the left-right contraction of $B$ with left
     matrix $\Id$ equals the centered fixed-point correlator,
     (\ref{eq:correlations_gauge_invariance}) carries the geometric bound to $A$

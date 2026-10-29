@@ -26,14 +26,14 @@ traces are used.
     identification $J$ maps $s\otimes t\mapsto [s]_{\rm phys}\otimes t$.
 \end{definition}
 
-\begin{theorem}[Component contraction]
+\begin{lemma}[Component contraction]
     \label{thm:peps_physical_component_contraction}
     \lean{TNLean.Lattice.PartyCircuit.Word.norm_physicalComponent_le_one}
     \lean{TNLean.Lattice.PartyCircuit.Word.norm_physicalComponentCoordinates_le_one}
     \leanok
     \uses{def:peps_physical_component}
     If $V$ is allowed, then $\|C_{x,V}\|\leq1$ and $\|A_{x,V}\|\leq1$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:peps_physical_component}
@@ -59,19 +59,19 @@ traces are used.
     \end{align}
 \end{definition}
 
-\begin{theorem}[Gram contraction]
+\begin{lemma}[Gram contraction]
     \label{thm:peps_physical_gram_contraction}
     \lean{TNLean.Lattice.PartyCircuit.Word.norm_physicalGramMap_le_one}
     \lean{TNLean.Lattice.PartyCircuit.Word.norm_physicalGramMatrix_le_one}
     \leanok
     \uses{def:peps_physical_gram,thm:peps_physical_component_contraction}
     For allowed $V,W$, the Gram operator and matrix satisfy $\|O\|\leq1$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_physical_component_contraction}
     By (\ref{eq:peps_physical_gram}), Cauchy--Schwarz, and
-    Theorem~\ref{thm:peps_physical_component_contraction},
+    Lemma~\ref{thm:peps_physical_component_contraction},
     $|\langle t,Os\rangle|\leq\|C_{y,W}t\|\,\|C_{x,V}s\|\leq\|t\|\,\|s\|$.
 \end{proof}
 
@@ -84,7 +84,7 @@ traces are used.
     product output basis on $\C^X\otimes D$ and the chosen input basis on $H$.
 \end{definition}
 
-\begin{theorem}[Partial trace and exterior contraction]
+\begin{lemma}[Partial trace and exterior contraction]
     \label{thm:peps_exterior_contraction}
     \lean{TNLean.Lattice.PartyCircuit.Word.partialTrace_physicalOutputMatrix_mul_conjTranspose}
     \lean{TNLean.Lattice.PartyCircuit.Word.norm_physicalOutputMatrix_le_one}
@@ -102,7 +102,7 @@ traces are used.
         \|\operatorname{tr}_{D}(K_V\rho K_W^\dagger)\|_1\leq\|\rho\|_1.
         \label{eq:peps_exterior_contraction_norm}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Expanding $\operatorname{tr}_D(K_V\rho K_W^\dagger)$ in the orthonormal basis
@@ -130,7 +130,7 @@ traces are used.
     \end{align}
 \end{definition}
 
-\begin{theorem}[Contraction in proper frames]
+\begin{lemma}[Contraction in proper frames]
     \label{thm:peps_physical_frame_contraction}
     \lean{TNLean.Lattice.PartyCircuit.Word.norm_physicalComponentFrameMatrix_le_one}
     \lean{TNLean.Lattice.PartyCircuit.Word.norm_physicalFrameGramMatrix_le_one}
@@ -144,11 +144,11 @@ traces are used.
         \|\operatorname{tr}_{D}(K_{V,F}ZK_{W,F'}^\dagger)\|_1\leq\|Z\|_1.
         \label{eq:peps_physical_frame_contraction}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Composing $V,W$ with the isometries $F,F'$ reduces all bounds to
-    Theorems~\ref{thm:peps_physical_component_contraction},
+    Lemmas~\ref{thm:peps_physical_component_contraction},
     \ref{thm:peps_physical_gram_contraction}, and~\ref{thm:peps_exterior_contraction}.
 \end{proof}
 
@@ -169,7 +169,7 @@ traces are used.
     weights $\tau'_u$.
 \end{definition}
 
-\begin{theorem}[Weighted source matrix from Schmidt-weighted vectors]
+\begin{lemma}[Weighted source matrix from Schmidt-weighted vectors]
     \label{thm:peps_weighted_physical_source_identity}
     \lean{TNLean.Lattice.PartyCircuit.Word.sum_schmidtPhysicalVector_outer_eq_weightedSourceError}
     \leanok
@@ -183,7 +183,7 @@ traces are used.
     \end{align}
     (equal to $\sqrt{\tau_t\tau'_u}\sum_{i,l}z_{il}O_{(l,u),(i,t)}$ when
     $\tau_t,\tau'_u\ge 0$).
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Expand $\psi_i,\phi_l$ by (\ref{eq:peps_schmidt_physical_vector}) and sum
@@ -211,7 +211,7 @@ traces are used.
     coordinates $D\times D'$.
 \end{definition}
 
-\begin{theorem}[Tracing both discarded factors]
+\begin{lemma}[Tracing both discarded factors]
     \label{thm:peps_separated_physical_density_blocks}
     \lean{TNLean.Lattice.PartyCircuit.Word.partialTrace_separatedSchmidtOutput_eq_weightedSourceError}
     \lean{TNLean.Lattice.PartyCircuit.Word.separatedPhysicalDensity_submatrix}
@@ -223,15 +223,15 @@ traces are used.
         M(z)_{xy}=\operatorname{tr}_{D'}(K_{V',G}W_{xy}(z)K_{W',G'}^\dagger).
         \label{eq:peps_separated_physical_density_block}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Tracing (\ref{eq:peps_separated_physical_density}) over $D$ at $(x,y)$ gives
-    $W_{xy}(z)$ by Theorem~\ref{thm:peps_weighted_physical_source_identity}, and
+    $W_{xy}(z)$ by Lemma~\ref{thm:peps_weighted_physical_source_identity}, and
     tracing over $D'$ yields (\ref{eq:peps_separated_physical_density_block}).
 \end{proof}
 
-\begin{theorem}[Expected exterior trace norm under diagonal covariance]
+\begin{lemma}[Expected exterior trace norm under diagonal covariance]
     \label{thm:peps_weighted_physical_source_bound}
     \lean{TNLean.Lattice.PartyCircuit.Word.integral_rectangularTraceNorm_weightedPhysicalSource_le}
     \leanok
@@ -249,11 +249,11 @@ traces are used.
         \mathbb E\|M(z)_{xy}\|_1\leq\sqrt\kappa.
         \label{eq:peps_weighted_physical_source_bound}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     By (\ref{eq:peps_separated_physical_density_block}) and
-    Theorem~\ref{thm:peps_physical_frame_contraction},
+    Lemma~\ref{thm:peps_physical_frame_contraction},
     $\|M(z)_{xy}\|_1\le\|W_{xy}(z)\|_1$ with $\|O\|\le 1$; taking expectations
     under (\ref{eq:peps_diagonal_covariance}) bounds
     $\mathbb E\|W_{xy}(z)\|_1\le\sqrt\kappa$.
@@ -268,7 +268,7 @@ traces are used.
     $\mathcal I_S=\prod_{e\in S}\{0,\ldots,r_e-1\}^2$.
 \end{definition}
 
-\begin{theorem}[Gaussian estimates for separated words]
+\begin{lemma}[Gaussian estimates for separated words]
     \label{thm:peps_gaussian_separated_physical_bound}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.integral_rectangularTraceNorm_gaussianPhysicalSource_le}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.integrable_gaussianSeparatedPhysicalDensity_and_integral_le}
@@ -283,18 +283,18 @@ traces are used.
         \mathbb E_k\|M(Z)\|_1      & \leq |X|^2 k^{-|S|/2}.
         \label{eq:peps_gaussian_separated_physical_bound}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
-    By Theorem~\ref{thm:peps_actual_gaussian_covariance}, $Z_{u,v}$ satisfies
+    By Lemma~\ref{thm:peps_actual_gaussian_covariance}, $Z_{u,v}$ satisfies
     (\ref{eq:peps_diagonal_covariance}) with $\kappa=k^{-|S|}$, so
-    Theorem~\ref{thm:peps_weighted_physical_source_bound} gives the first bound
+    Lemma~\ref{thm:peps_weighted_physical_source_bound} gives the first bound
     in (\ref{eq:peps_gaussian_separated_physical_bound}), and summing
     $\|M(Z)\|_1\le\sum_{x,y\in X}\|M(Z)_{xy}\|_1$ over $|X|^2$ blocks gives the
     second.
 \end{proof}
 
-\begin{theorem}[Prepared matrices on mixed pure inputs]
+\begin{lemma}[Prepared matrices on mixed pure inputs]
     \label{thm:peps_prepared_vector_density}
     \lean{TNLean.Lattice.PartyCircuit.Word.preparedMatrix_mulVec_repr}
     \lean{TNLean.Lattice.PartyCircuit.Word.preparedMatrix_mul_vecMulVec}
@@ -309,7 +309,7 @@ traces are used.
                   & =|T\psi\rangle\langle T'\phi|.
         \label{eq:peps_prepared_vector_density}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     From $K_T[\psi]=[T\psi]$ and $K_{T'}[\phi]=[T'\phi]$, we have
@@ -317,7 +317,7 @@ traces are used.
         =|T\psi\rangle\langle T'\phi|$.
 \end{proof}
 
-\begin{theorem}[Independence of physical output coordinates]
+\begin{lemma}[Independence of physical output coordinates]
     \label{thm:peps_physical_corrected_basis_invariance}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.rectangularTraceNorm_physicalCorrectedSourceTerm_basis_eq}
     \leanok
@@ -325,10 +325,10 @@ traces are used.
     For any mixed pure input $|\psi\rangle\langle\phi|$, the trace norm
     $\|\operatorname{tr}_{\mathrm{disc}}F_S(E;|\psi\rangle\langle\phi|)\|_1$ is
     invariant under changes of the orthonormal physical and discard output bases.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
-    By Theorem~\ref{thm:peps_prepared_vector_density}, $F_S(E;|\psi\rangle\langle\phi|)$
+    By Lemma~\ref{thm:peps_prepared_vector_density}, $F_S(E;|\psi\rangle\langle\phi|)$
     is a linear combination of outer products $|T_u\psi\rangle\langle T_v\phi|$,
     and both $\operatorname{tr}_{\mathrm{disc}}$ and $\|\cdot\|_1$ are unitarily
     invariant on orthonormal output coordinates.
@@ -345,10 +345,10 @@ traces are used.
     preparing the selected Schmidt frame columns and unselected original sources,
     adjoining the owner-relabeled input $\psi$, applying the partial residual,
     and applying the inverse owner identification, as in
-    Theorem~\ref{thm:peps_corrected_gaussian_sum}.
+    Lemma~\ref{thm:peps_corrected_gaussian_sum}.
 \end{definition}
 
-\begin{theorem}[Corrected operator on mixed pure inputs]
+\begin{lemma}[Corrected operator on mixed pure inputs]
     \label{thm:peps_gaussian_vector_density}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.correctedSourceTerm_gaussian_vecMulVec_eq_sum}
     \leanok
@@ -362,14 +362,14 @@ traces are used.
         |\Psi_{\xi,u}(\psi)\rangle\langle\Psi_{\zeta,v}(\phi)|.
         \label{eq:peps_gaussian_vector_density}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
-    Apply Theorem~\ref{thm:peps_prepared_vector_density} termwise to the matrix
-    expansion of Theorem~\ref{thm:peps_corrected_gaussian_sum}.
+    Apply Lemma~\ref{thm:peps_prepared_vector_density} termwise to the matrix
+    expansion of Lemma~\ref{thm:peps_corrected_gaussian_sum}.
 \end{proof}
 
-\begin{theorem}[Square integrability of the coefficient products]
+\begin{lemma}[Square integrability of the coefficient products]
     \label{thm:peps_gaussian_products_integrable}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sourceCorrection_product_memLp_two}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.partialSourceCorrection_product_memLp_two}
@@ -380,16 +380,16 @@ traces are used.
     $Z_{u,v}$ (and $Z^{\xi,\zeta}_{u,v}$ when $\mathcal A$ meets $S$) lies in
     $L^2$, so the trace norm of any finite linear combination of these products
     with fixed matrix coefficients is integrable.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
-    Theorem~\ref{thm:peps_actual_gaussian_covariance} gives finite second moments
+    Lemma~\ref{thm:peps_actual_gaussian_covariance} gives finite second moments
     for $Z_{u,v}$ and $Z^{\xi,\zeta}_{u,v}$ on the probability space, which
     implies $L^1$ integrability of the trace norm of any finite matrix linear
     combination.
 \end{proof}
 
-\begin{theorem}[Integrability of corrected physical operators]
+\begin{lemma}[Integrability of corrected physical operators]
     \label{thm:peps_actual_physical_integrability}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.integrable_rectangularTraceNorm_map_correctedSourceTerm_gaussian}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.integrable_rectangularTraceNorm_physicalCorrectedSourceTerm_gaussian}
@@ -405,13 +405,13 @@ traces are used.
     is integrable; in particular,
     $\|\operatorname{tr}_{\mathrm{disc}}F_S(\Delta(\omega))(\rho)\|_1$ is
     integrable.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
-    By Theorem~\ref{thm:peps_corrected_gaussian_sum},
+    By Lemma~\ref{thm:peps_corrected_gaussian_sum},
     $L(F_S(\Delta(\omega))(\rho))$ is a finite linear combination of
     $Z^{\xi,\zeta}_{u,v}(\omega)$ with fixed matrix coefficients, so
-    Theorem~\ref{thm:peps_gaussian_products_integrable} applies.
+    Lemma~\ref{thm:peps_gaussian_products_integrable} applies.
 \end{proof}
 
 \begin{definition}[A single Gaussian branch pair]
@@ -428,7 +428,7 @@ traces are used.
     \end{align}
 \end{definition}
 
-\begin{theorem}[Original-position expression and branch expectation bound]
+\begin{lemma}[Original-position expression and branch expectation bound]
     \label{thm:peps_gaussian_branch_density_bound}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.gaussianSchmidtBranchDensity_eq_sum_original}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.integrable_rectangularTraceNorm_map_gaussianSchmidtBranchDensity}
@@ -445,16 +445,16 @@ traces are used.
         \mathbb E_k\|L(B_{\xi\zeta})\|_1.
         \label{eq:peps_gaussian_branch_density_bound}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Reindexing (\ref{eq:peps_gaussian_branch_density}) over $\mathcal I_S$ gives
-    integrability by Theorem~\ref{thm:peps_gaussian_products_integrable}, and
+    integrability by Lemma~\ref{thm:peps_gaussian_products_integrable}, and
     applying $L$, the triangle inequality, and expectation to
     (\ref{eq:peps_gaussian_vector_density}) yields (\ref{eq:peps_gaussian_branch_density_bound}).
 \end{proof}
 
-\begin{theorem}[A sample bounded by the average error sum]
+\begin{lemma}[A sample bounded by the average error sum]
     \label{thm:peps_sampled_error_integral_bound}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.exists_sampledSourceMatrix_error_le_sum_integral}
     \leanok
@@ -468,13 +468,13 @@ traces are used.
         \mathbb E_k\|\operatorname{tr}_{\rm disc}F_S(\Delta)\|_1.
         \label{eq:peps_sampled_error_integral_bound}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
-    By Theorem~\ref{thm:peps_actual_physical_integrability}, the finite sum of
+    By Lemma~\ref{thm:peps_actual_physical_integrability}, the finite sum of
     nonnegative random variables $\sum_{\varnothing\ne S\subseteq\mathcal E}\|\operatorname{tr}_{\rm disc}F_S(\Delta(\omega))\|_1$
     is integrable and hence $\le$ its expectation at some $\omega$;
-    Theorem~\ref{thm:peps_sampled_physical_error} then gives (\ref{eq:peps_sampled_error_integral_bound}).
+    Lemma~\ref{thm:peps_sampled_physical_error} then gives (\ref{eq:peps_sampled_error_integral_bound}).
 \end{proof}
 
 \begin{definition}[Affected parties and retained free sources]
@@ -491,7 +491,7 @@ traces are used.
     vectors.
 \end{definition}
 
-\begin{theorem}[Lifetime and coefficient costs]
+\begin{lemma}[Lifetime and coefficient costs]
     \label{thm:peps_actual_source_lifetime_cost}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.isTouched_correctedMask_iff}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.corrected_slot_isTouched}
@@ -515,7 +515,7 @@ traces are used.
          & \leq (B^{4b}d^4)^{|S|}.
         \label{eq:peps_actual_source_lifetime_cost}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Since $|\mathcal A_S|\le 2|S|$ and each $p\in\mathcal A_S$ participates in
@@ -538,7 +538,7 @@ traces are used.
     \end{align}
 \end{definition}
 
-\begin{theorem}[Selective preparation gives two-side factors]
+\begin{lemma}[Selective preparation gives two-side factors]
     \label{thm:peps_corrected_source_partition}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.exists_corrected_source_partition}
     \leanok
@@ -549,7 +549,7 @@ traces are used.
     by the partial residual admits a tensor partition
     (\ref{eq:peps_actual_tensor_partition}) with free input spaces independent of
     the branch.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Every nonfree source is normalized with both endpoints on the same side of
@@ -561,7 +561,7 @@ traces are used.
 % The concatenation/partition-commutation pair repeats the coordinate
 % development verbatim. Retain its canonical coordinate-chapter home
 % (Definition~\ref{def:peps_basis_partition_join} and
-% Theorem~\ref{thm:peps_basis_partition_concat}) and cite that entry rather
+% Lemma~\ref{thm:peps_basis_partition_concat}) and cite that entry rather
 % than duplicate its declaration tags here.
 
 \begin{definition}[An explicit positive sample count]
@@ -579,7 +579,7 @@ traces are used.
     so that $0<k(N,Q,\epsilon)<(8\max(1,N)Q/\epsilon)^2+2$.
 \end{definition}
 
-\begin{theorem}[Finite subset summation and the sample-count estimate]
+\begin{lemma}[Finite subset summation and the sample-count estimate]
     \label{thm:peps_source_sample_count_bound}
     \lean{TNLean.Lattice.Compression.sum_nonemptyFinsets_pow_card}
     \lean{TNLean.Lattice.Compression.sum_sourceErrorWeights}
@@ -604,7 +604,7 @@ traces are used.
     \end{align}
     and if $0<\epsilon\leq1$, then
     $\sum_{\varnothing\ne S\subseteq\mathcal E}Q^{|S|}k^{-|S|/2}\le\epsilon/4$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Expanding $\prod_{e\in\mathcal E}(1+q)=1+\sum_{\varnothing\ne S\subseteq\mathcal E}q^{|S|}$

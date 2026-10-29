@@ -13,11 +13,11 @@
 \begin{proof}\leanok
     \uses{thm:peps_regular_region_range}
     Since $u_e=1$ on $\operatorname{Inc}(R)$, $A_v^u=A_v$ for all $v\in R$; by
-    Theorem~\ref{thm:peps_regular_region_range}, their open-region contraction
+    Lemma~\ref{thm:peps_regular_region_range}, their open-region contraction
     matrices and physical ranges $\mathcal G_R(A^u)=\mathcal G_R(A)$ coincide.
 \end{proof}
 
-\begin{theorem}[Torus closures satisfy interior regional parent constraints]%
+\begin{lemma}[Torus closures satisfy interior regional parent constraints]%
     \label{thm:peps_torus_closure_interior_parent_constraints}
     \lean{TNLean.PEPS.torusGClosure_slice_mem_regionGroundSpace_interior_rectangle,
         TNLean.PEPS.torusGClosure_sum_slice_mem_regionGroundSpace_interior_rectangle,
@@ -38,7 +38,7 @@
     assumed. This is an interior local constraint; it does not assert
     the full torus ground-space classification of
     \cite[Theorem~5.5]{Schuch2010PEPS}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{lem:peps_regular_complementary_twists_region_space,
@@ -47,7 +47,7 @@
     bonds, none of which is incident to the strict interior rectangle $R$.
     Lemma~\ref{lem:peps_regular_complementary_twists_region_space} gives
     $\mathcal G_R(A^{u_{g,h}})=\mathcal G_R(A)$, so
-    Theorem~\ref{thm:peps_region_ground_space_slice} places every slice
+    Lemma~\ref{thm:peps_region_ground_space_slice} places every slice
     $\Psi_{g,h}(\cdot,\tau)$ in $\mathcal G_R(A)$. By linearity,
     $\Psi(\cdot,\tau)\in\mathcal G_R(A)\subseteq\ker h_R$ for all $\tau$,
     whence $h_R^{\mathrm{global}}\Psi=0$.

@@ -109,7 +109,7 @@ allows projective weight normalization.
     Reversing the initial ordering treats $D_k<D_j$ in the same way.
 
     It remains to exclude the intersection when $D_j=D_k$. Gauge-phase
-    separation and Theorem~\ref{thm:not_gauge_phase_eventually_not_proportional}
+    separation and Lemma~\ref{thm:not_gauge_phase_eventually_not_proportional}
     give, beyond any prescribed threshold, a chain length $N>L$ for which the
     two periodic MPVs are not proportional. On the other hand, equality
     $\mathcal G_L(A^k)=\mathcal G_L(A^j)$ gives identical translated
@@ -179,7 +179,7 @@ allows projective weight normalization.
     Lemma~\ref{lem:bnt_direct_sum_block_separation_word_span}.
 \end{proof}
 
-\begin{theorem}[Common injective blocking for primitive irreducible families]%
+\begin{lemma}[Common injective blocking for primitive irreducible families]%
     \label{thm:common_injective_blocking_tp_primitive_irreducible_family}
     \lean{MPSTensor.exists_common_injective_blocking_of_tp_primitive_irr_family}
     \leanok
@@ -189,14 +189,14 @@ allows projective weight normalization.
     single $L\ge 1$ such that each $B_k^{[L]}$ is one-site injective, and this
     blocking preserves trace preservation, primitivity, and irreducibility for
     every block.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     For each block,
-    Theorem~\ref{thm:tp_primitive_irred_block_injective} gives a positive length
+    Lemma~\ref{thm:tp_primitive_irred_block_injective} gives a positive length
     at which it becomes one-site injective; the product of these lengths is a
     common length. Injectivity persists under positive further blocking, and
-    Theorem~\ref{thm:tp_primitive_irreducible_extra_blocking} preserves the other
+    Lemma~\ref{thm:tp_primitive_irreducible_extra_blocking} preserves the other
     hypotheses.
 \end{proof}
 
@@ -294,7 +294,7 @@ allows projective weight normalization.
     the original direct-sum dimension.
 \end{proof}
 
-\begin{theorem}[Projective weight normalization]%
+\begin{lemma}[Projective weight normalization]%
     \label{thm:paperbnt_weight_normalization}
     \lean{MPSTensor.exists_weight_normalization}
     \leanok
@@ -310,7 +310,7 @@ allows projective weight normalization.
     \end{align}
     and at least one normalized weight has unit modulus,
     $|\mu_{k_0}/m|=1$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     The maximum $m=\max_k|\mu_k|$ over the nonempty finite family is attained,

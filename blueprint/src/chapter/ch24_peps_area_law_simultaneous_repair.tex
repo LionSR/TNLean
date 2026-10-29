@@ -26,7 +26,7 @@ before any replacement regions are adjoined.
 \end{definition}
 
 % Source: 10-geometry.tex, geometry:trim-margins, lines 386--391.
-\begin{theorem}[Removal margins]
+\begin{lemma}[Removal margins]
     \label{thm:area_law_repair_margins}
     \lean{TNLean.PEPS.AreaLaw.Geometry.rho_pos_lt_one,
         TNLean.PEPS.AreaLaw.Geometry.repairHalfSide_le_rpow,
@@ -45,7 +45,7 @@ before any replacement regions are adjoined.
     that $d(S)\le a_0S/1000$ for all $S\ge S_0$; hence an arbitrarily large
     stopping scale $S_*$ satisfies the margin conditions of
     \cite[Section~11]{OpenAI2026AreaLaw}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -59,7 +59,7 @@ before any replacement regions are adjoined.
 % Source: 10-geometry.tex, geometry:trim-radius, lines 380--385;
 % integral recursion and supporting lines, lines 545--558.
 % Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
-\begin{theorem}[Integral removal half-sides]
+\begin{lemma}[Integral removal half-sides]
     \label{thm:area_law_repair_halfside_integral}
     \lean{TNLean.PEPS.AreaLaw.Geometry.exists_natPow_repairHalfSide,
         TNLean.PEPS.AreaLaw.Geometry.exists_natCast_repairHalfSide}
@@ -67,7 +67,7 @@ before any replacement regions are adjoined.
     \uses{def:area_law_repair_square}
     For every real parent scale $S\ge1$, there exists $e\in\mathbb N$
     such that $d(S)=2^e\in\mathbb N$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -125,7 +125,7 @@ of scale $S$ have scale $d^{j}(S)$, and generation $j$ has at most $9^j$ marks.
 
 % Source: OpenAI2026AreaLaw, Section 11, 10-geometry.tex, lines 668--686;
 % OpenAI2026PolynomialPEPS, Lemma 3.2, 02-information.tex, lines 302--311.
-\begin{theorem}[Depth of a power-contracting recursion]
+\begin{lemma}[Depth of a power-contracting recursion]
     \label{thm:area_law_power_recursion_depth}
     \lean{TNLean.PEPS.AreaLaw.Geometry.log_iterate_le_of_le_rpow,
         TNLean.PEPS.AreaLaw.Geometry.one_le_log_add_exp_one,
@@ -146,7 +146,7 @@ of scale $S$ have scale $d^{j}(S)$, and generation $j$ has at most $9^j$ marks.
     \end{align}
     If $0<f(u)\le u^{\rho}$ for all $u>0$ and $S_*\ge1$, then
     $f^{m}(S)\ge S_*$ implies $f^{i}(S)\ge S_*$ for all $0\le i\le m$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -160,7 +160,7 @@ of scale $S$ have scale $d^{j}(S)$, and generation $j$ has at most $9^j$ marks.
 \end{proof}
 
 % Source: OpenAI2026AreaLaw, Section 11, 10-geometry.tex, lines 668--675.
-\begin{theorem}[Depth of a repair branch]
+\begin{lemma}[Depth of a repair branch]
     \label{thm:area_law_repair_depth}
     \lean{TNLean.PEPS.AreaLaw.Geometry.repairHalfSide_pos,
         TNLean.PEPS.AreaLaw.Geometry.log_repairHalfSide_le,
@@ -178,14 +178,14 @@ of scale $S$ have scale $d^{j}(S)$, and generation $j$ has at most $9^j$ marks.
         j & \le C+C\log\log\bigl(e^{e}+S\bigr).
         \label{eq:area_law_repair_depth_bound}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:area_law_repair_margins, thm:area_law_power_recursion_depth}
     By (\ref{eq:area_law_repair_margins}), $0<d(u)\le u^{\rho_0}$, so
     induction on $j$ gives (\ref{eq:area_law_repair_depth_log}). If
-    $d^{j}(S)\ge S_*$, Theorem~\ref{thm:area_law_power_recursion_depth} gives
+    $d^{j}(S)\ge S_*$, Lemma~\ref{thm:area_law_power_recursion_depth} gives
     $d^{i}(S)\ge S_*$ for $0\le i\le j$ and bounds $j+1$ via
     (\ref{eq:area_law_power_recursion_depth}) by
     $C+C\log\log(S+e)\le C+C\log\log(e^{e}+S)$.
@@ -193,7 +193,7 @@ of scale $S$ have scale $d^{j}(S)$, and generation $j$ has at most $9^j$ marks.
 
 % Source: OpenAI2026AreaLaw, Section 11, 10-geometry.tex, lines 676--686,
 % geometry:descendant-count.
-\begin{theorem}[Descendant count of an initial mark]
+\begin{lemma}[Descendant count of an initial mark]
     \label{thm:area_law_repair_descendant_count}
     \lean{TNLean.PEPS.AreaLaw.Geometry.exists_repair_descendant_count_bound,
         TNLean.PEPS.AreaLaw.Geometry.exists_repair_descendant_count_layer_bound}
@@ -208,7 +208,7 @@ of scale $S$ have scale $d^{j}(S)$, and generation $j$ has at most $9^j$ marks.
     For every $M>0$ there exists $C>0$, depending only on $S_*$ and $M$, such
     that $\sum_{j=0}^{m}9^{j}\le C(k+1)^{C}$ whenever $S\le M2^{k}$ for an
     integer $k\ge0$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -222,7 +222,7 @@ of scale $S$ have scale $d^{j}(S)$, and generation $j$ has at most $9^j$ marks.
 
 % Source: OpenAI2026AreaLaw, Section 11, 10-geometry.tex, lines 761--768,
 % geometry:fine-clearance.
-\begin{theorem}[Fine clearance threshold]
+\begin{lemma}[Fine clearance threshold]
     \label{thm:area_law_fine_clearance}
     \lean{TNLean.PEPS.AreaLaw.Geometry.eventually_fine_clearance}
     \leanok
@@ -232,7 +232,7 @@ of scale $S$ have scale $d^{j}(S)$, and generation $j$ has at most $9^j$ marks.
         c_1u^{\rho_0} & >2\lceil C_Bu\rceil^{\beta}.
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok

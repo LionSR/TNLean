@@ -6,7 +6,7 @@ Lieb--Robinson localization, and a polar unitary correction.
 Throughout, $\mathcal X_D=[q]^D$ denotes the configurations on a region $D$,
 and $F_R$ denotes the replica swap on a region $R$.
 
-\begin{theorem}[A unitary polar factor on the same support]
+\begin{lemma}[A unitary polar factor on the same support]
     \label{thm:peps_supported_polar_unitary}
     \lean{QuantumCircuit.exists_supported_unitary_polar_correction}
     \leanok
@@ -14,7 +14,7 @@ and $F_R$ denotes the replica swap on a region $R$.
     \begin{align}
         \|Ux-y\| & \le\|Dx-y\|+\|D^*y-x\|. \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Write $D=D_S\otimes\id$, take a unitary polar factor $D_S=U_S|D_S|$ on $S$, and set $U=U_S\otimes\id$ so $D=U|D|$ with $|D|\ge0$. With $w=U^*y$, since $\id+|D|\ge\id$,
@@ -23,14 +23,14 @@ and $F_R$ denotes the replica swap on a region $R$.
     \end{align}
 \end{proof}
 
-\begin{theorem}[Regional coordinates of the replica exchange]
+\begin{lemma}[Regional coordinates of the replica exchange]
     \label{thm:peps_reset_regional_coordinates}
     \lean{TNLean.Lattice.splitTwoRegions_sheetSwap,
         TNLean.Lattice.submatrix_partialSwap_kronecker_one_eq_sheetSwapOp,
         TNLean.Lattice.quantumRelativeEntropy_splitTwoRegionsState_eq_mutualInformation}
     \leanok
     For disjoint regions $R,C$ and $Q=(R\cup C)^c$, in replica coordinates $\mathcal X_R\times\mathcal X_C\times\mathcal X_Q$, the operator $F_R$ swaps the two $\mathcal X_R$ registers and fixes the other four registers, and any unit vector $\Omega$ satisfies $D(\rho_{RC}\,\|\,\rho_R\otimes\rho_C)=I_\Omega(R:C)$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     The action of $F_R$ follows from $R\cap C=R\cap Q=\varnothing$, and $D(\rho_{RC}\,\|\,\rho_R\otimes\rho_C)=S(\rho_R)+S(\rho_C)-S(\rho_{RC})=I_\Omega(R:C)$.
@@ -79,7 +79,7 @@ and $F_R$ denotes the replica swap on a region $R$.
     all positive when $J\geq0$, $\Delta>0$, and $r\geq0$.
 \end{definition}
 
-\begin{theorem}[The two-sided Gaussian filter, with explicit constants]
+\begin{lemma}[The two-sided Gaussian filter, with explicit constants]
     \label{thm:peps_reset_regional_filter_explicit}
     \lean{TNLean.Lattice.regional_physicalBuffer_filter}
     \leanok
@@ -89,38 +89,38 @@ and $F_R$ denotes the replica swap on a region $R$.
         M                                   & =\int_{[-T,T]}g_h(t)e^{it\mathbb H'}(\id\otimes W)e^{-it\mathbb H}\,dt, \label{eq:peps_reset_regional_filter} \\
         \|M\Psi-z\Phi\|,\ \|M^*\Phi-z\Psi\| & \le3e^{-10b}L^{-r}. \label{eq:peps_reset_regional_filter_err}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_reset_regional_coordinates,def:lattice_reset_constants}
-    By Theorem~\ref{thm:peps_reset_regional_coordinates}, $D(\rho_{RC}\,\|\,\rho_R\otimes\rho_C)=I_\Omega(R:C)\le b$, so the purified relative-entropy overlap bound gives a Hermitian contraction $W$ on the buffer with $z=\langle\Phi,(\id\otimes W)\Psi\rangle\ge e^{-2b}$. Since $\mathbb H,\mathbb H'$ have ground vectors $\Psi,\Phi$ at $2E_0$ with gap $\Delta$ and $A\Delta^2/2=T_0^2/(2A)=30+r$ (Definition~\ref{def:lattice_reset_constants}), the full Gaussian filter residual is at most $e^{-h\Delta^2/2}\le e^{-10b}L^{-r}$ and truncation at $T$ adds at most $2e^{-T^2/(2h)}\le 2e^{-10b}L^{-r}$, giving (\ref{eq:peps_reset_regional_filter_err}).
+    By Lemma~\ref{thm:peps_reset_regional_coordinates}, $D(\rho_{RC}\,\|\,\rho_R\otimes\rho_C)=I_\Omega(R:C)\le b$, so the purified relative-entropy overlap bound gives a Hermitian contraction $W$ on the buffer with $z=\langle\Phi,(\id\otimes W)\Psi\rangle\ge e^{-2b}$. Since $\mathbb H,\mathbb H'$ have ground vectors $\Psi,\Phi$ at $2E_0$ with gap $\Delta$ and $A\Delta^2/2=T_0^2/(2A)=30+r$ (Definition~\ref{def:lattice_reset_constants}), the full Gaussian filter residual is at most $e^{-h\Delta^2/2}\le e^{-10b}L^{-r}$ and truncation at $T$ adds at most $2e^{-T^2/(2h)}\le 2e^{-10b}L^{-r}$, giving (\ref{eq:peps_reset_regional_filter_err}).
 \end{proof}
 
-\begin{theorem}[The two-sided Gaussian filter of the physical buffer]
+\begin{lemma}[The two-sided Gaussian filter of the physical buffer]
     \label{thm:peps_reset_regional_filter}
     \lean{TNLean.Lattice.exists_regional_physicalBuffer_filter}
     \leanok
-    For every $\Delta>0$ and $r\ge0$, there exist $A,T_0>0$ such that under the hypotheses of Theorem~\ref{thm:peps_reset_regional_filter_explicit}, some buffer contraction $W$ and $z\ge e^{-2b}$ make $M$ in (\ref{eq:peps_reset_regional_filter}) satisfy (\ref{eq:peps_reset_regional_filter_err}) for all $L\ge1$.
-\end{theorem}
+    For every $\Delta>0$ and $r\ge0$, there exist $A,T_0>0$ such that under the hypotheses of Lemma~\ref{thm:peps_reset_regional_filter_explicit}, some buffer contraction $W$ and $z\ge e^{-2b}$ make $M$ in (\ref{eq:peps_reset_regional_filter}) satisfy (\ref{eq:peps_reset_regional_filter_err}) for all $L\ge1$.
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_reset_regional_filter_explicit,def:lattice_reset_constants}
-    Take $A=A(\Delta,r)>0$ and $T_0=T_0(\Delta,r)>0$ from Definition~\ref{def:lattice_reset_constants} in Theorem~\ref{thm:peps_reset_regional_filter_explicit}.
+    Take $A=A(\Delta,r)>0$ and $T_0=T_0(\Delta,r)>0$ from Definition~\ref{def:lattice_reset_constants} in Lemma~\ref{thm:peps_reset_regional_filter_explicit}.
 \end{proof}
 
-\begin{theorem}[The polar step of the information reset]
+\begin{lemma}[The polar step of the information reset]
     \label{thm:peps_reset_polar_step}
     \lean{TNLean.Lattice.exists_supported_unitary_of_two_sided}
     \leanok
     If $M$ is supported on $S$, $b,C,\varepsilon\ge0$, and $z\ge e^{-2b}$ satisfies $\|M\psi-z\varphi\|,\|M^*\varphi-z\psi\|\le Ce^{-10b}\varepsilon$, then there exists a unitary $U$ supported on $S$ with $\|U\psi-\varphi\|\le2C\varepsilon$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_supported_polar_unitary}
-    Apply Theorem~\ref{thm:peps_supported_polar_unitary} to $D=M/z$, noting $z^{-1}Ce^{-10b}\varepsilon\le Ce^{-8b}\varepsilon\le C\varepsilon$.
+    Apply Lemma~\ref{thm:peps_supported_polar_unitary} to $D=M/z$, noting $z^{-1}Ce^{-10b}\varepsilon\le Ce^{-8b}\varepsilon\le C\varepsilon$.
 \end{proof}
 
-\begin{theorem}[The localized filter, with explicit constants]
+\begin{lemma}[The localized filter, with explicit constants]
     \label{thm:peps_reset_localized_filter_explicit}
     \lean{TNLean.PEPS.Approximation.SquareHamiltonian.reset_localized_filter}
     \leanok
@@ -130,13 +130,13 @@ and $F_R$ denotes the replica swap on a region $R$.
         \|M\Psi-z\Phi\|,\ \|M^*\Phi-z\Psi\| & \le Ce^{-10b}L^{-r}.
         \label{eq:peps_reset_localized_filter_err}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_reset_regional_filter_explicit,
         thm:peps_supported_physical_buffer_gaussian,def:peps_reset_constants,
         def:peps_square_localization_constants}
-    Combining Theorem~\ref{thm:peps_reset_regional_filter_explicit} with the localized filter $M$ of Theorem~\ref{thm:peps_supported_physical_buffer_gaussian} at radius $\ell=\lceil KB_*\rceil$ and $\mu=1/2$ ($\mu K=v_\square(J)T_0+15+r$) bounds the localization error by
+    Combining Lemma~\ref{thm:peps_reset_regional_filter_explicit} with the localized filter $M$ of Lemma~\ref{thm:peps_supported_physical_buffer_gaussian} at radius $\ell=\lceil KB_*\rceil$ and $\mu=1/2$ ($\mu K=v_\square(J)T_0+15+r$) bounds the localization error by
     \begin{align}
         C_\square L^2(1+8JL^2T_0B_*)e^{v_\square(J)T_0B_*-\mu\ell}
         \le C_\square(1+8J)(1+T_0)e^{-10b}L^{-r}; \notag
@@ -144,49 +144,49 @@ and $F_R$ denotes the replica swap on a region $R$.
     adding (\ref{eq:peps_reset_regional_filter_err}) gives (\ref{eq:peps_reset_localized_filter_err}) with $C=C_F(J,\Delta,r)$.
 \end{proof}
 
-\begin{theorem}[The localized filter of the information reset]
+\begin{lemma}[The localized filter of the information reset]
     \label{thm:peps_reset_localized_filter}
     \lean{TNLean.PEPS.Approximation.SquareHamiltonian.exists_reset_localized_filter}
     \leanok
     \uses{def:polynomial_peps_model,def:peps_frame_sheet_swap}
-    For every integer $q\ge1$ and $J\ge0$, $\Delta>0$, $r\ge0$, there exist $C,K>0$ such that in the setting of Theorem~\ref{thm:peps_reset_localized_filter_explicit}, some $z\ge e^{-2b}$ and contraction $M$ supported on $B$ satisfy (\ref{eq:peps_reset_localized_filter_err}).
-\end{theorem}
+    For every integer $q\ge1$ and $J\ge0$, $\Delta>0$, $r\ge0$, there exist $C,K>0$ such that in the setting of Lemma~\ref{thm:peps_reset_localized_filter_explicit}, some $z\ge e^{-2b}$ and contraction $M$ supported on $B$ satisfy (\ref{eq:peps_reset_localized_filter_err}).
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_reset_localized_filter_explicit,def:peps_reset_constants}
-    Take $C=C_F(J,\Delta,r)>0$ and $K=K(J,\Delta,r)>0$ from Definition~\ref{def:peps_reset_constants} in Theorem~\ref{thm:peps_reset_localized_filter_explicit}.
+    Take $C=C_F(J,\Delta,r)>0$ and $K=K(J,\Delta,r)>0$ from Definition~\ref{def:peps_reset_constants} in Lemma~\ref{thm:peps_reset_localized_filter_explicit}.
 \end{proof}
 
-\begin{theorem}[The unitary of the information reset, with explicit constants]
+\begin{lemma}[The unitary of the information reset, with explicit constants]
     \label{thm:peps_reset_unitary_explicit}
     \lean{TNLean.PEPS.Approximation.SquareHamiltonian.reset_unitary}
     \leanok
     \uses{def:polynomial_peps_model,def:peps_frame_sheet_swap,def:peps_reset_constants}
-    In the setting of Theorem~\ref{thm:peps_reset_localized_filter_explicit}, there exists a unitary $U$ supported on $B$ with $\|U\Psi-\Phi\|\le C_U(J,\Delta,r)L^{-r}$.
-\end{theorem}
+    In the setting of Lemma~\ref{thm:peps_reset_localized_filter_explicit}, there exists a unitary $U$ supported on $B$ with $\|U\Psi-\Phi\|\le C_U(J,\Delta,r)L^{-r}$.
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_reset_localized_filter_explicit,thm:peps_reset_polar_step,
         def:peps_reset_constants}
-    Combine Theorem~\ref{thm:peps_reset_localized_filter_explicit} with Theorem~\ref{thm:peps_reset_polar_step} for $C=C_F(J,\Delta,r)$.
+    Combine Lemma~\ref{thm:peps_reset_localized_filter_explicit} with Lemma~\ref{thm:peps_reset_polar_step} for $C=C_F(J,\Delta,r)$.
 \end{proof}
 
-\begin{theorem}[The unitary of the information reset]
+\begin{lemma}[The unitary of the information reset]
     \label{thm:peps_reset_unitary}
     \lean{TNLean.PEPS.Approximation.SquareHamiltonian.exists_reset_unitary}
     \leanok
     \uses{def:polynomial_peps_model,def:peps_frame_sheet_swap}
-    In the setting of Theorem~\ref{thm:peps_reset_localized_filter}, there exist $C,K>0$ (depending only on $q,J,\Delta,r$) and a unitary $U$ supported on $B$ with $\|U\Psi-\Phi\|\le CL^{-r}$.
-\end{theorem}
+    In the setting of Lemma~\ref{thm:peps_reset_localized_filter}, there exist $C,K>0$ (depending only on $q,J,\Delta,r$) and a unitary $U$ supported on $B$ with $\|U\Psi-\Phi\|\le CL^{-r}$.
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_reset_unitary_explicit,def:peps_reset_constants}
-    Take $C=C_U(J,\Delta,r)>0$ and $K=K(J,\Delta,r)>0$ from Definition~\ref{def:peps_reset_constants} in Theorem~\ref{thm:peps_reset_unitary_explicit}.
+    Take $C=C_U(J,\Delta,r)>0$ and $K=K(J,\Delta,r)>0$ from Definition~\ref{def:peps_reset_constants} in Lemma~\ref{thm:peps_reset_unitary_explicit}.
 \end{proof}
 
 \subsection{The supported unitary at interaction range $R$}
 
-The following statements extend Theorems~\ref{thm:peps_reset_localized_filter_explicit} and~\ref{thm:peps_reset_unitary_explicit} from $R=1$ on the open square to range-$R$ Hamiltonians on a finite domain $\Lambda$ with $|\Lambda|\le L^2$.
+The following statements extend Lemmas~\ref{thm:peps_reset_localized_filter_explicit} and~\ref{thm:peps_reset_unitary_explicit} from $R=1$ on the open square to range-$R$ Hamiltonians on a finite domain $\Lambda$ with $|\Lambda|\le L^2$.
 
 \begin{definition}[The constants of the information reset at range $R$]
     \label{def:peps_reset_constants_range}
@@ -209,7 +209,7 @@ The following statements extend Theorems~\ref{thm:peps_reset_localized_filter_ex
     all positive when $J\ge0$, $\Delta>0$, and $r\ge0$.
 \end{definition}
 
-\begin{theorem}[The localized filter and the unitary at range $R$]
+\begin{lemma}[The localized filter and the unitary at range $R$]
     \label{thm:peps_reset_unitary_range}
     \lean{TNLean.Lattice.LocalHamiltonian.reset_localized_filter,
         TNLean.Lattice.LocalHamiltonian.reset_unitary}
@@ -221,11 +221,11 @@ The following statements extend Theorems~\ref{thm:peps_reset_localized_filter_ex
         \|M\Psi-z\Phi\|,\ \|M^*\Phi-z\Psi\| & \le C_{F,R}(J,\Delta,r)e^{-10b}L^{-r}, &
         \|U\Psi-\Phi\|                      & \le C_{U,R}(J,\Delta,r)L^{-r}. \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_reset_regional_filter_explicit,
         thm:peps_supported_physical_buffer_gaussian_range,
         thm:peps_reset_polar_step,def:peps_reset_constants_range}
-    Combine Theorem~\ref{thm:peps_reset_regional_filter_explicit} with Theorem~\ref{thm:peps_supported_physical_buffer_gaussian_range} at $\ell=\lceil K_RB_*\rceil$ (using $|\Lambda|\le L^2$ and $\mu K_R=v(R,2J)T_0+15+r$ to bound the localization error by $2C_0(R)(1+c_RJ)(1+T_0)e^{-10b}L^{-r}$), and apply Theorem~\ref{thm:peps_reset_polar_step}.
+    Combine Lemma~\ref{thm:peps_reset_regional_filter_explicit} with Lemma~\ref{thm:peps_supported_physical_buffer_gaussian_range} at $\ell=\lceil K_RB_*\rceil$ (using $|\Lambda|\le L^2$ and $\mu K_R=v(R,2J)T_0+15+r$ to bound the localization error by $2C_0(R)(1+c_RJ)(1+T_0)e^{-10b}L^{-r}$), and apply Lemma~\ref{thm:peps_reset_polar_step}.
 \end{proof}

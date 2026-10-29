@@ -198,14 +198,14 @@ common trace-preserving gauge.
     the asserted properties.
 \end{proof}
 
-\begin{theorem}[Twisted eigenvalues survive the common gauge]
+\begin{lemma}[Twisted eigenvalues survive the common gauge]
     \label{thm:twisted_tp_gauge_has_eigenvalue}
     \lean{MPSTensor.twistedTPGaugeSetup_hasEigenvalue}
     \leanok
     \uses{def:twisted_tp_gauge_setup, lem:twisted_transfer_eq_mixed_transfer}
     If $V\ne0$ and $\E_u(V)=\lambda V$, then $\lambda$ is an eigenvalue of the
     mixed transfer map $F_{A',B'}$ in any common trace-preserving gauge setup.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     By Lemma~\ref{lem:twisted_transfer_eq_mixed_transfer}, the original
@@ -244,7 +244,7 @@ common trace-preserving gauge.
 For injective on-site symmetric tensors with canonical normalizations,
 virtual-boundary nondecay is invariant under symmetry-preserving equivalences.
 
-\begin{theorem}[Virtual-boundary nondecay agrees for two injective MPV-symmetric tensors]%
+\begin{lemma}[Virtual-boundary nondecay agrees for two injective MPV-symmetric tensors]%
     \label{thm:has_string_order_iff_of_symmetric_injective}
     \lean{MPSTensor.hasStringOrder_iff_of_symmetric_injective}
     \leanok
@@ -261,7 +261,7 @@ virtual-boundary nondecay is invariant under symmetry-preserving equivalences.
     for both tensors, this theorem applies to tensors in the same SPT
     phase; it applies equally to symmetric tensors in different SPT
     phases.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:has_string_order_of_symmetric_injective}

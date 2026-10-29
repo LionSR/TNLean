@@ -29,7 +29,7 @@ $\rho$ is an arbitrary input matrix.
     $\mathcal E\setminus S$.
 \end{definition}
 
-\begin{theorem}[Summing untouched gates]
+\begin{lemma}[Summing untouched gates]
     \label{thm:peps_source_substitution_partial}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.evalWithSources_original}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.partialWithSources_original}
@@ -48,13 +48,13 @@ $\rho$ is an arbitrary input matrix.
         W_{\mathcal A,\xi}(\eta)J_a.
         \label{eq:peps_substitution_partial}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \lean{TNLean.Lattice.PartyCircuit.Layout.affectedOwner_mapOwner_eq_none}
     \leanok
     \uses{thm:peps_partial_source_evaluation,thm:peps_source_circuit_incidence}
-    By induction on $W$ using Theorem~\ref{thm:peps_partial_source_evaluation}:
+    By induction on $W$ using Lemma~\ref{thm:peps_partial_source_evaluation}:
     each touched gate expands into its branch sum, while each untouched gate has
     $\eta_{e,\alpha}=\nu_{e,\alpha}$ and exterior participants, so it evaluates
     to its original aggregate operator. For $W=W''W'$ with intermediate
@@ -66,7 +66,7 @@ $\rho$ is an arbitrary input matrix.
         =\sum_{\zeta,\zeta'}c_{\mathcal A,\zeta}c_{\mathcal A,\zeta'}
         W''_{\mathcal A,\zeta}(\eta)W'_{\mathcal A,\zeta'}(\eta)J_a,\notag
     \end{align}
-    giving (\ref{eq:peps_substitution_partial}); Theorem~\ref{thm:peps_source_circuit_incidence}
+    giving (\ref{eq:peps_substitution_partial}); Lemma~\ref{thm:peps_source_circuit_incidence}
     gives the specialization to $\nu[S\leftarrow\eta]$.
 \end{proof}
 
@@ -78,14 +78,14 @@ $\rho$ is an arbitrary input matrix.
     \uses{thm:peps_source_preparation,thm:peps_partial_fixed_layout}
     Let $V$ be the residual composition obtained by extracting the prepared
     sources of a word to its initial registers
-    (Theorem~\ref{thm:peps_source_preparation}) and identifying the source
+    (Lemma~\ref{thm:peps_source_preparation}) and identifying the source
     register list with a prescribed equal list. For $W_{\mathcal A,\xi}$ with
     fixed retained positions $\mathcal E_{\mathcal A}$
-    (Theorem~\ref{thm:peps_partial_fixed_layout}), denote this residual by
+    (Lemma~\ref{thm:peps_partial_fixed_layout}), denote this residual by
     $V_{\mathcal A,\xi}$.
 \end{definition}
 
-\begin{theorem}[Recovery from the remaining operations]
+\begin{lemma}[Recovery from the remaining operations]
     \label{thm:peps_canonical_source_recovery}
     \lean{TNLean.Lattice.PartyCircuit.Word.sources_residualInSlots}
     \lean{TNLean.Lattice.PartyCircuit.Word.isAllowed_residualInSlots}
@@ -105,17 +105,17 @@ $\rho$ is an arbitrary input matrix.
          & (\nu_\xi)_i          & =\nu_{e_i,\xi_{g_i}}.
         \label{eq:peps_canonical_recovery}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:peps_source_preparation,thm:peps_partial_original_source_vector}
-    Combine Theorem~\ref{thm:peps_source_preparation} with the inventory
+    Combine Lemma~\ref{thm:peps_source_preparation} with the inventory
     identification $(\nu_\xi)_i=\nu_{e_i,\xi_{g_i}}$ of
-    Theorem~\ref{thm:peps_partial_original_source_vector}.
+    Lemma~\ref{thm:peps_partial_original_source_vector}.
 \end{proof}
 
-\begin{theorem}[Uniform recovery after source substitution]
+\begin{lemma}[Uniform recovery after source substitution]
     \label{thm:peps_canonical_substitution_recovery}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.layout_sources_partialWithSources}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.residualInSlots_partialWithSources}
@@ -133,19 +133,19 @@ $\rho$ is an arbitrary input matrix.
          & (\eta_\xi)_i               & =\eta_{e_i,\xi_{g_i}}.
         \label{eq:peps_substituted_recovery}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:peps_partial_source_order,thm:peps_canonical_source_recovery}
-    By Theorem~\ref{thm:peps_partial_source_order}, substitution preserves the
+    By Lemma~\ref{thm:peps_partial_source_order}, substitution preserves the
     retained positions $\mathcal E_{\mathcal A}$, and since exterior-only
     sources retain $\nu_{e,\alpha}$, the extracted residual equals
-    $V_{\mathcal A,\xi}$; Theorem~\ref{thm:peps_canonical_source_recovery} then
+    $V_{\mathcal A,\xi}$; Lemma~\ref{thm:peps_canonical_source_recovery} then
     gives (\ref{eq:peps_substituted_recovery}).
 \end{proof}
 
-\begin{theorem}[Weighted matrix sums]
+\begin{lemma}[Weighted matrix sums]
     \label{thm:peps_weighted_density_sum}
     \lean{Matrix.sum_smul_mul_mul_conjTranspose}
     \leanok
@@ -158,7 +158,7 @@ $\rho$ is an arbitrary input matrix.
         K_\alpha R L_\beta^\dagger.
         \label{eq:peps_weighted_density_sum}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Expand by bilinearity of matrix multiplication and conjugate linearity of
@@ -189,18 +189,18 @@ $\rho$ is an arbitrary input matrix.
     \end{align}
 \end{definition}
 
-\begin{theorem}[The empty corrected set]
+\begin{lemma}[The empty corrected set]
     \label{thm:peps_corrected_empty}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.correctedSourceTerm_empty}
     \leanok
     \uses{def:peps_original_corrected_term}
     For the original circuit matrix $M$, $F_\varnothing(E;\rho)=M\rho M^\dagger$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_source_substitution_partial}
     On $S=\varnothing$, there is a single empty choice $u$ with empty product
-    $1$ and $M_{\varnothing,u}=M$ by Theorem~\ref{thm:peps_source_substitution_partial}.
+    $1$ and $M_{\varnothing,u}=M$ by Lemma~\ref{thm:peps_source_substitution_partial}.
 \end{proof}
 
 \begin{definition}[Partially expanded basis substitutions]
@@ -219,7 +219,7 @@ $\rho$ is an arbitrary input matrix.
     matrix with the $a_e$-th basis tensor at each $e\in S$ and $\nu$ outside $S$.
 \end{definition}
 
-\begin{theorem}[Partial expansion of the same corrected term]
+\begin{lemma}[Partial expansion of the same corrected term]
     \label{thm:peps_corrected_partial}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sourceBasisMatrix_eq_sum_partial}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.correctedSourceTerm_eq_sum_partial}
@@ -244,7 +244,7 @@ $\rho$ is an arbitrary input matrix.
     where $K_{\mathcal A,\xi;S,a}$ is the prepared matrix of
     $V_{\mathcal A,\xi}$ with basis vectors $a_e$ on $S$ and $\nu_{e_i,\xi_{g_i}}$
     on $\mathcal E_{\mathcal A}\setminus S$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -253,7 +253,7 @@ $\rho$ is an arbitrary input matrix.
     Expand $M_{S,u}$ by (\ref{eq:peps_substitution_partial}) and $F_S(E;\rho)$
     by (\ref{eq:peps_weighted_density_sum}). By
     (\ref{eq:peps_substituted_recovery}) and multilinearity of source
-    preparation (Theorem~\ref{thm:peps_source_preparation_sums}),
+    preparation (Lemma~\ref{thm:peps_source_preparation_sums}),
     $M_{\mathcal A,\xi;S,(\alpha,a)}$ vanishes unless $\alpha_e=\xi_{g_e}$ for
     all $e\in S$, in which case it equals $K_{\mathcal A,\xi;S,a}$, giving
     (\ref{eq:peps_corrected_partial}).
@@ -275,7 +275,7 @@ $\rho$ is an arbitrary input matrix.
     $S_{\mathcal A}\to S$, inducing a bijection between endpoint-coordinate
     assignments on $S$ and on $S_{\mathcal A}$.
 \end{definition}
-\begin{theorem}[Changing the enumeration of selected sources]
+\begin{lemma}[Changing the enumeration of selected sources]
     \label{thm:peps_selected_retained_coordinates}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.partialCoordinateBasisMatrix_reindex}
     \leanok
@@ -284,7 +284,7 @@ $\rho$ is an arbitrary input matrix.
     $K_{\mathcal A,\xi;S,a}$ equals the prepared matrix of $V_{\mathcal A,\xi}$
     with the corresponding basis vectors on $S_{\mathcal A}$ and original source
     vectors outside $S_{\mathcal A}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     For each retained index $i$, $i\in S_{\mathcal A}\iff e_i\in S$, so both
@@ -299,7 +299,7 @@ matrices $K_V(a)$, set $H_{V,V'}(a,b)=K_V(a)\rho K_{V'}(b)^\dagger$ and define
     \label{eq:peps_source_contraction}
 \end{align}
 
-\begin{theorem}[Prepared densities as source contractions]
+\begin{lemma}[Prepared densities as source contractions]
     \label{thm:peps_prepared_source_contraction}
     \lean{TNLean.Lattice.PartyCircuit.Word.sourceContraction_preparedDensityCoefficient}
     \lean{TNLean.Lattice.PartyCircuit.Word.sourceContraction_preparedDensityCoefficient_basis}
@@ -313,12 +313,12 @@ matrices $K_V(a)$, set $H_{V,V'}(a,b)=K_V(a)\rho K_{V'}(b)^\dagger$ and define
          & =K_V(\eta)\rho K_{V'}(\zeta)^\dagger.
         \label{eq:peps_prepared_contraction}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Substituting $X_i(a_i,b_i)=r_i(a_i)\overline{s_i(b_i)}$ into
     (\ref{eq:peps_source_contraction}) and applying
-    Theorem~\ref{thm:peps_prepared_density_components} yields
+    Lemma~\ref{thm:peps_prepared_density_components} yields
     (\ref{eq:peps_prepared_contraction}).
 \end{proof}
 
@@ -335,7 +335,7 @@ matrices $K_V(a)$, set $H_{V,V'}(a,b)=K_V(a)\rho K_{V'}(b)^\dagger$ and define
         \label{eq:peps_prepared_replacement}
     \end{align}
 \end{definition}
-\begin{theorem}[The prepared corrected-subset identity]
+\begin{lemma}[The prepared corrected-subset identity]
     \label{thm:peps_prepared_subset_identity}
     \lean{TNLean.Lattice.PartyCircuit.Word.sourceOperatorDensity_sub}
     \lean{TNLean.Lattice.PartyCircuit.Word.sourceOperatorDensity_exact}
@@ -351,7 +351,7 @@ matrices $K_V(a)$, set $H_{V,V'}(a,b)=K_V(a)\rho K_{V'}(b)^\dagger$ and define
     \end{align}
     When $X_{\xi,\zeta,i}=\ketbra{\eta_{\xi,i}}{\eta_{\zeta,i}}$,
     $\mathcal R(X)=M\rho M^\dagger$ for $M=\sum_\xi c_\xi K_{V_\xi}(\eta_\xi)$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_prepared_source_contraction,thm:peps_weighted_density_sum}
@@ -361,7 +361,7 @@ matrices $K_V(a)$, set $H_{V,V'}(a,b)=K_V(a)\rho K_{V'}(b)^\dagger$ and define
     with (\ref{eq:peps_weighted_density_sum}) gives $\mathcal R(X)=M\rho M^\dagger$.
 \end{proof}
 
-\begin{theorem}[Expanding only the selected source matrices]
+\begin{lemma}[Expanding only the selected source matrices]
     \label{thm:peps_selected_source_contraction}
     \lean{TNLean.Lattice.PartyCircuit.Word.sourceContraction_preparedDensityCoefficient_selected}
     \leanok
@@ -376,14 +376,14 @@ matrices $K_V(a)$, set $H_{V,V'}(a,b)=K_V(a)\rho K_{V'}(b)^\dagger$ and define
         \label{eq:peps_selected_contraction}
     \end{align}
     summed over endpoint-coordinate assignments $a,b$ on $S$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Expand each $E_i$ ($i\in S$) in matrix units in (\ref{eq:peps_source_contraction})
     and apply (\ref{eq:peps_prepared_contraction}) to each term.
 \end{proof}
 
-\begin{theorem}[The corrected term in a partial expansion]
+\begin{lemma}[The corrected term in a partial expansion]
     \label{thm:peps_corrected_source_contraction}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.correctedSourceTerm_eq_sourceContraction}
     \leanok
@@ -405,13 +405,13 @@ matrices $K_V(a)$, set $H_{V,V'}(a,b)=K_V(a)\rho K_{V'}(b)^\dagger$ and define
         (Y_{\xi,\zeta}).
         \label{eq:peps_corrected_contraction}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_corrected_partial,thm:peps_selected_retained_coordinates,
         thm:peps_selected_source_contraction}
     Apply (\ref{eq:peps_selected_contraction}) to each $(\xi,\zeta)$ pair and
-    reindex $S_{\mathcal A}\to S$ by Theorem~\ref{thm:peps_selected_retained_coordinates}
+    reindex $S_{\mathcal A}\to S$ by Lemma~\ref{thm:peps_selected_retained_coordinates}
     to match (\ref{eq:peps_corrected_partial}).
 \end{proof}
 
@@ -425,7 +425,7 @@ matrices $K_V(a)$, set $H_{V,V'}(a,b)=K_V(a)\rho K_{V'}(b)^\dagger$ and define
     source positions, giving an enumeration bijection
     $\{0,\ldots,r-1\}\to\mathcal E$.
 \end{definition}
-\begin{theorem}[Reindexing nonempty source subsets]
+\begin{lemma}[Reindexing nonempty source subsets]
     \label{thm:peps_all_source_subsets}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sum_nonempty_allSourceSlots}
     \leanok
@@ -433,7 +433,7 @@ matrices $K_V(a)$, set $H_{V,V'}(a,b)=K_V(a)\rho K_{V'}(b)^\dagger$ and define
     The bijection of Definition~\ref{def:peps_all_original_source_slots}
     identifies sums over $\varnothing\ne S_0\subseteq\{0,\ldots,r-1\}$ with sums
     over $\varnothing\ne S\subseteq\mathcal E$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     The induced power-set bijection preserves $\varnothing$.
@@ -449,7 +449,7 @@ matrices $K_V(a)$, set $H_{V,V'}(a,b)=K_V(a)\rho K_{V'}(b)^\dagger$ and define
     $\widehat\rho(Y)$ as $\mathcal R(Y)$ in (\ref{eq:peps_prepared_replacement})
     for $\mathcal A=P$ with $Y_{e_i,\xi_{g_i},\zeta_{g_i}}$ at slot $i$.
 \end{definition}
-\begin{theorem}[The global corrected-subset identity]
+\begin{lemma}[The global corrected-subset identity]
     \label{thm:peps_global_corrected_subsets}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sourceReplacedDensity_exact}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sourceReplacedDensity_piecewise}
@@ -463,15 +463,15 @@ matrices $K_V(a)$, set $H_{V,V'}(a,b)=K_V(a)\rho K_{V'}(b)^\dagger$ and define
          & =\sum_{\varnothing\ne S\subseteq\mathcal E}F_S(E;\rho).
         \label{eq:peps_global_corrected_subsets}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_corrected_source_contraction,thm:peps_corrected_empty,
         thm:peps_prepared_subset_identity,thm:peps_all_source_subsets}
     Apply (\ref{eq:peps_corrected_contraction}) with $\mathcal A=P$ to
-    $S=\varnothing$ (using Theorem~\ref{thm:peps_corrected_empty}) and to
+    $S=\varnothing$ (using Lemma~\ref{thm:peps_corrected_empty}) and to
     general $S\subseteq\mathcal E$, then combine (\ref{eq:peps_prepared_subsets})
-    with Theorem~\ref{thm:peps_all_source_subsets}.
+    with Lemma~\ref{thm:peps_all_source_subsets}.
 \end{proof}
 
 \begin{definition}[Physical output after discarding retained registers]
@@ -490,7 +490,7 @@ matrices $K_V(a)$, set $H_{V,V'}(a,b)=K_V(a)\rho K_{V'}(b)^\dagger$ and define
         \label{eq:peps_physical_source_replacement}
     \end{align}
 \end{definition}
-\begin{theorem}[The physical corrected-subset identity]
+\begin{lemma}[The physical corrected-subset identity]
     \label{thm:peps_physical_corrected_subsets}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.physicalSourceReplacedDensity_exact}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.physicalSourceReplacedDensity_sub_exact}
@@ -506,7 +506,7 @@ matrices $K_V(a)$, set $H_{V,V'}(a,b)=K_V(a)\rho K_{V'}(b)^\dagger$ and define
          & \leq\sum_{\varnothing\ne S\subseteq\mathcal E}
         \bigl\|F_S^{\mathrm{phys}}(E;\rho)\bigr\|_1.\notag
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_global_corrected_subsets}
@@ -534,7 +534,7 @@ matrices $K_V(a)$, set $H_{V,V'}(a,b)=K_V(a)\rho K_{V'}(b)^\dagger$ and define
     (\texttt{04-compression.tex}, lines 137--139 and 246--267).
 \end{definition}
 
-\begin{theorem}[Action of the private preparation]
+\begin{lemma}[Action of the private preparation]
     \label{thm:peps_actual_private_preparation}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.eval_sourcePrivatePreparation_tmul}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.eval_partialSourceWord_tmul}
@@ -547,7 +547,7 @@ matrices $K_V(a)$, set $H_{V,V'}(a,b)=K_V(a)\rho K_{V'}(b)^\dagger$ and define
         \label{eq:peps_actual_private_preparation}      \\
         T_\xi(y\otimes1)  & =V_\xi(y\otimes\psi).\notag
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:peps_private_product_input,lem:lattice_register_reorderings,

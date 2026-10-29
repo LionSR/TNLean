@@ -4,7 +4,7 @@ The statements below formalize the last step of the proof of the second
 assertion of Lemma~6.3 of \cite{OpenAI2026PolynomialPEPS}, September 24, 2026,
 \texttt{05-frames.tex}, lines 262--273 and 306--316: every product term of the
 truncated branch expansion
-(Theorem~\ref{thm:peps_frame_small_rewrite_product_terms}) is a monomial
+(Lemma~\ref{thm:peps_frame_small_rewrite_product_terms}) is a monomial
 allowed by \cite[Theorem~5.2]{OpenAI2026PolynomialPEPS} on the registers of the
 frames, one register per site and per tag
 (Definition~\ref{def:peps_frame_registers}). The number of monomials is bounded
@@ -12,7 +12,7 @@ by the number of branches times $k^{2m}$; it is polynomial in $L$ once the
 number of cylinder terms of each patch and each affected hole is polynomial in $L$ and $m$,
 $r_{\rm old}$, $r_{\rm new}$ and the specified list of parties are bounded,
 as shown in
-Theorem~\ref{thm:peps_frame_small_rewrite_polynomial}.
+Lemma~\ref{thm:peps_frame_small_rewrite_polynomial}.
 
 Throughout, $\Lambda$ is a finite set of sites, each with a site register
 $\C^q$, and operators on $\mathcal H_\Lambda$ are written in the
@@ -53,7 +53,7 @@ coordinates of Lemma~\ref{lem:peps_frame_registers_coordinates}.
 
 \begin{proof}\leanok
     Composing two monomials appends the second to the last
-    source-only segment of the first (Theorem~\ref{thm:peps_monomial_composition_counts}). Since $\bra w(y\otimes t)=\langle w,y\rangle t$ and $\ket v(t)=v\otimes t$, their composite is $\langle w,y\rangle v\otimes t=(\ket v\bra w\,y)\otimes t$, and $\lVert v\rVert=\lVert w\rVert=1$ ensures contractive private maps when $p_A=p_B$ or $p_A'=p_B'$.
+    source-only segment of the first (Lemma~\ref{thm:peps_monomial_composition_counts}). Since $\bra w(y\otimes t)=\langle w,y\rangle t$ and $\ket v(t)=v\otimes t$, their composite is $\langle w,y\rangle v\otimes t=(\ket v\bra w\,y)\otimes t$, and $\lVert v\rVert=\lVert w\rVert=1$ ensures contractive private maps when $p_A=p_B$ or $p_A'=p_B'$.
 \end{proof}
 
 \begin{definition}[Rank-one blocks]
@@ -210,7 +210,7 @@ coordinates of Lemma~\ref{lem:peps_frame_registers_coordinates}.
     $\delta_{\tau_{\rm aff},b}\ket{\tau_{\rm unt},a}\otimes Y\ket c$.
 \end{proof}
 
-\begin{theorem}[Small-patch rewrite: product terms as allowed monomials]
+\begin{lemma}[Small-patch rewrite: product terms as allowed monomials]
     \label{thm:peps_frame_small_rewrite_term_monomial}
     \lean{TNLean.PEPS.EncodedFrame.exists_of_mem_encSteps,
         TNLean.PEPS.EncodedFrame.exists_of_mem_decSteps,
@@ -230,7 +230,7 @@ coordinates of Lemma~\ref{lem:peps_frame_registers_coordinates}.
     of $\mathcal F_{\rm old}$ to those of $\mathcal F_{\rm new}$ using only the specified parties and
     having at most $2m$ normalized pair sources and at most $2m$ normalized pair
     effects (\texttt{05-frames.tex}, lines 262--273 and 306--316).
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Factor $T=\sigma\,K_1\cdots K_n\,Z\,B_1\cdots B_n$ by
@@ -239,7 +239,7 @@ coordinates of Lemma~\ref{lem:peps_frame_registers_coordinates}.
     Lemma~\ref{lem:peps_frame_tag_change}, yields $M_{\beta,T}$.
 \end{proof}
 
-\begin{theorem}[Small-patch rewrite: expansion into allowed monomials]
+\begin{lemma}[Small-patch rewrite: expansion into allowed monomials]
     \label{thm:peps_frame_small_rewrite_monomials}
     \lean{TNLean.Lattice.Sheet.act_smul,
         TNLean.Lattice.Sheet.act_sum,
@@ -260,13 +260,13 @@ coordinates of Lemma~\ref{lem:peps_frame_registers_coordinates}.
     additional patch has at most $D$ cylinder terms, the number of monomials
     is at most $D^Ek'^{2m}$ with $E=r_{\rm new}+m+r_{\rm old}$ and
     $k'=\lceil(4D^Em/\delta)^2\rceil+1$ (\cite[Lemma~6.3]{OpenAI2026PolynomialPEPS}, \texttt{05-frames.tex},
-    lines 214--217; see Theorem~\ref{thm:peps_frame_small_rewrite_polynomial} for the polynomial bound when $D\le CL^c$).
-\end{theorem}
+    lines 214--217; see Lemma~\ref{thm:peps_frame_small_rewrite_polynomial} for the polynomial bound when $D\le CL^c$).
+\end{lemma}
 
 \begin{proof}\leanok
     Substituting $\ket a\bra b\otimes T_{\beta,i}\otimes\id_{\rm unt}=\sigma_{\beta,i}M_{\beta,i}$ from
-    Theorem~\ref{thm:peps_frame_small_rewrite_term_monomial} into $M_\delta=(1+\tfrac12\delta)^{-1}\sum_\beta\ket a\bra b\otimes
+    Lemma~\ref{thm:peps_frame_small_rewrite_term_monomial} into $M_\delta=(1+\tfrac12\delta)^{-1}\sum_\beta\ket a\bra b\otimes
         \bigl(\sum_ic_{\beta,i}T_{\beta,i}\bigr)\otimes\id_{\rm unt}$ from
-    Theorem~\ref{thm:peps_frame_small_rewrite_product_terms} gives the expansion with coefficients
+    Lemma~\ref{thm:peps_frame_small_rewrite_product_terms} gives the expansion with coefficients
     $c_t=(1+\tfrac12\delta)^{-1}c_{\beta,i}\sigma_{\beta,i}$ satisfying $\lvert c_t\rvert\le1$; Lemma~\ref{lem:peps_frame_branches} gives $N\le D^E$ and $k\le k'$.
 \end{proof}

@@ -31,14 +31,14 @@ independent of the chain length and the requested accuracy.
     layers, counting the finest layer.
 \end{definition}
 
-\begin{theorem}[Isometric contraction of a tree]
+\begin{lemma}[Isometric contraction of a tree]
     \label{thm:ldp_bounded_tree_isometry}
     \lean{MPSPreparation.IsometryTree.isIsometry_matrix,
         MPSPreparation.IsometryTree.isIsometry_joinMatrix}
     \leanok
     \uses{def:ldp_bounded_isometry_tree}
     Every tree contraction $T$ satisfies $T^\dagger T=\Id$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     By induction on the tree, at a binary vertex one has
@@ -46,7 +46,7 @@ independent of the chain length and the requested accuracy.
         =W^\dagger W=\Id$.
 \end{proof}
 
-\begin{theorem}[Polar trees for unequal block lengths]
+\begin{lemma}[Polar trees for unequal block lengths]
     \label{thm:ldp_unequal_polar_tree}
     \lean{MPSPreparation.exists_isometryTree_matrix_eq_cfgPolarIso}
     \leanok
@@ -55,7 +55,7 @@ independent of the chain length and the requested accuracy.
     is injective. If $2^h s\le n\le2^h c$, its polar isometry $V_n$
     is the contraction of a tree of coarse depth $h$ whose physical
     leaves contain at most $c$ sites.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{lem:ldp_polar_merge}
@@ -68,7 +68,7 @@ independent of the chain length and the requested accuracy.
     itself the bounded leaf.
 \end{proof}
 
-\begin{theorem}[Polar trees on a common supported space]
+\begin{lemma}[Polar trees on a common supported space]
     \label{thm:ldp_supported_polar_tree}
     \lean{MPSPreparation.supportedCfgPolarIso,
         MPSPreparation.isIsometry_supportedCfgPolarIso,
@@ -128,7 +128,7 @@ independent of the chain length and the requested accuracy.
     \end{center}
     Here $\mathcal H_m=(\C^d)^{\otimes m}$.
     The boxes $\widehat V_m$ denote entire subtrees, not free gates on $m$ sites.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:ldpolar_tensor_injective_on, lem:ldp_polar_merge}
@@ -171,7 +171,7 @@ independent of the chain length and the requested accuracy.
     dimension $D^2$; every physical leaf has dimension at most $d^R$.
 \end{definition}
 
-\begin{theorem}[Normalization and arbitrary top pairs]
+\begin{lemma}[Normalization and arbitrary top pairs]
     \label{thm:ldp_unequal_mera_norm}
     \lean{MPSPreparation.UnequalMERA.isIsometry_treeMatrix,
         MPSPreparation.UnequalMERA.sum_star_topPair_mul,
@@ -183,7 +183,7 @@ independent of the chain length and the requested accuracy.
     The state in (\ref{eq:ldp_unequal_mera_state}) has norm one.
     Conversely, for any such forest and any unit pair $\ket\omega$,
     a top unitary realizes that pair and hence the forest contraction.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:ldp_bounded_tree_isometry, thm:ldp_chain_block_iso_inner,
@@ -194,7 +194,7 @@ independent of the chain length and the requested accuracy.
     their norm.
 \end{proof}
 
-\begin{theorem}[Polar forests and the block-isometry state]
+\begin{lemma}[Polar forests and the block-isometry state]
     \label{thm:ldp_unequal_mera_polar_state}
     \lean{MPSPreparation.UnequalMERA.state_eq_blockIsometryState,
         MPSPreparation.UnequalMERA.exists_of_trees_eq_blockIsometryState}
@@ -205,7 +205,7 @@ independent of the chain length and the requested accuracy.
     $(\bigotimes_k V_{\ell_k})\bigotimes_k\ket\omega_{R_kL_{k+1}}$.
     In particular, every normalized top pair and every forest of
     these polar trees give a network representing this block-isometry state.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{def:ldp_unequal_mera, def:ldp_block_isometry_state, thm:ldp_unequal_mera_norm}
@@ -214,7 +214,7 @@ independent of the chain length and the requested accuracy.
     configurations according to the prescribed block partition.
 \end{proof}
 
-\begin{theorem}[Bounded single leaves and product states]
+\begin{lemma}[Bounded single leaves and product states]
     \label{thm:ldp_unequal_mera_caps}
     \lean{MPSPreparation.UnequalMERA.exists_single_leaf,
         MPSPreparation.UnequalMERA.nonempty_bond_one}
@@ -225,7 +225,7 @@ independent of the chain length and the requested accuracy.
     If $d,R,N\ge1$, a product-state network of coarse depth zero
     also exists, with one physical site at each leaf and virtual
     dimension one.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:ldp_unequal_mera_norm}
@@ -234,7 +234,7 @@ independent of the chain length and the requested accuracy.
     separately at every site gives the second.
 \end{proof}
 
-\begin{theorem}[Uniform finite-range networks at every positive length]
+\begin{lemma}[Uniform finite-range networks at every positive length]
     \label{thm:ldp_every_length_mera}
     \lean{MPSPreparation.exists_unequalMERA_every_length}
     \leanok
@@ -257,7 +257,7 @@ independent of the chain length and the requested accuracy.
     leaf dimensions are at most $d^R$. Thus the layer count is
     $O(\log\log(N/\varepsilon))$ in the large-size, small-error regime,
     with no divisibility restriction on $N$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:ldp_unequal_polar_tree, thm:ldp_unequal_mera_polar_state,
@@ -277,7 +277,7 @@ independent of the chain length and the requested accuracy.
     $M-1$ of length $q$ and the last of length $q+N\bmod q$,
     and choosing $h$ with $2^h s\le q<2^h(2s)$ places every block length
     between $2^h s$ and $2^h(4s)$, so
-    Theorem~\ref{thm:ldp_unequal_polar_tree} gives its bounded-leaf
+    Lemma~\ref{thm:ldp_unequal_polar_tree} gives its bounded-leaf
     tree, and the fixed-point pair at the top together with the
     unequal-block error estimate yields the stated fidelity bound.
 
@@ -286,7 +286,7 @@ independent of the chain length and the requested accuracy.
     normalized periodic state exactly; its terminal widths remain at most $4s$
     rather than forming a single leaf of accuracy-dependent width.
     If $N<s$, the bounded single leaf of
-    Theorem~\ref{thm:ldp_unequal_mera_caps} gives the state exactly,
+    Lemma~\ref{thm:ldp_unequal_mera_caps} gives the state exactly,
     with $D'=1$.
 
     In the nontrivial branches $2^h\le q\le a\log(N/\varepsilon)+b+1$.
@@ -295,7 +295,7 @@ independent of the chain length and the requested accuracy.
     also covers $N=1$ and $\varepsilon\ge1$.
 \end{proof}
 
-\begin{theorem}[Normal states at every sufficiently large length]
+\begin{lemma}[Normal states at every sufficiently large length]
     \label{thm:ldp_eventual_every_length_mera}
     \lean{MPSPreparation.exists_unequalMERA_of_normal}
     \leanok
@@ -303,10 +303,10 @@ independent of the chain length and the requested accuracy.
     For a normal tensor with $D\ge1$, the same fixed dimension and
     layer bounds hold for all $N\ge N_0$, for some fixed $N_0$,
     without a separate nonvanishing hypothesis.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:ldp_every_length_mera, lem:ldp_periodic_state_nonzero}
     Normality implies eventual nonvanishing of the periodic state, so
-    Theorem~\ref{thm:ldp_every_length_mera} applies beyond that threshold.
+    Lemma~\ref{thm:ldp_every_length_mera} applies beyond that threshold.
 \end{proof}

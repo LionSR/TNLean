@@ -13,7 +13,7 @@ block. Here these four properties are stated as hypotheses
 on an arbitrary party network, and the lemma is proved in that generality. The
 four properties are verified for the network produced by the protocol and its
 density compression in
-Theorem~\ref{thm:peps_large_size_network_from_protocol}, with constants
+Lemma~\ref{thm:peps_large_size_network_from_protocol}, with constants
 independent of the side length and the
 Hamiltonian~\cite{gap:polypeps_routing_network_bounds}.
 Although the two endpoint scales of every link in the protocol network
@@ -94,7 +94,7 @@ not assumed.
     $\ell\in\mathcal L$ a walk in $G$ between the sites of its two endpoints.
 \end{definition}
 
-\begin{theorem}[Routed contraction]
+\begin{lemma}[Routed contraction]
     \label{thm:peps_routed_contraction}
     \lean{TNLean.PEPS.Approximation.Routing.toTensor_stateCoeff, TNLean.PEPS.Approximation.Routing.toTensor_bondDim_le, TNLean.PEPS.Approximation.Routing.exists_tensor_of_congestion_le}
     \leanok
@@ -103,7 +103,7 @@ not assumed.
     times by the walks (counted with multiplicity), then there is a PEPS on $G$ with
     the exact coefficients of the party network and every bond dimension at
     most ${\max(D,1)}^\chi$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Assigning an identity wire on $\{1,\dots,D_\ell\}$ to each step of the walk of $\ell$ and contracting the tensors $T_p$ with $\iota(p)=v$ at each vertex $v\in V(G)$ groups the $m\le\chi$ traversals of an edge $e\in E(G)$ into a bond of dimension $\prod_{i=1}^m D_{\ell_i}\le {\max(D,1)}^\chi$, while the identity wires put consistent bond configurations in bijection with link labellings $\alpha$.
@@ -127,7 +127,7 @@ not assumed.
     \input{figures/peps_dyadic_hv_routing}
 \end{definition}
 
-\begin{theorem}[Constant congestion on the padded square]
+\begin{lemma}[Constant congestion on the padded square]
     \label{thm:peps_dyadic_padded_congestion}
     \lean{TNLean.PEPS.Approximation.DyadicPlacement.load_horizontal_le, TNLean.PEPS.Approximation.DyadicPlacement.load_vertical_le}
     \leanok
@@ -137,28 +137,28 @@ not assumed.
     each coordinate by at most $c\min(2^{j_1},2^{j_2})$ (or $c\max(2^{j_1},2^{j_2})$), i.e.\ at most $c$ times the side of either endpoint block. Then
     every horizontal and vertical unit edge of the padded square has load
     at most $2(2c+1)B\Delta$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{lem:peps_dyadic_anchor_valuation}
     A horizontal step along row $y$ belongs to a link whose first party sits at $(a_j(r),a_j(s))$ with $a_j(s)=y$, and each link traverses a given unit edge at most once. By Lemma~\ref{lem:peps_dyadic_anchor_valuation}, $y$ determines $(j,s)$ for $j\ge1$ (and $s=y$ for $j=0$). Since anchors of scale $j$ on row $y$ are spaced by $2^j$, at most $2c+1$ blocks of scale $j\ge1$ and at most $2c+1$ blocks of scale $0$ lie within horizontal distance $c2^j$ of the edge; each block holds at most $B$ parties, each initiating at most $\Delta$ links. Vertical steps are bounded identically via the column $x_2=a_{j'}(r')$ of the second party.
 \end{proof}
 
-\begin{theorem}[Folded congestion]
+\begin{lemma}[Folded congestion]
     \label{thm:peps_dyadic_folded_congestion}
     \lean{TNLean.PEPS.Approximation.foldedRouting, TNLean.PEPS.Approximation.foldedRouting_card_traversal_le}
     \leanok
     \uses{thm:peps_dyadic_padded_congestion, lem:peps_dyadic_fold, lem:peps_dyadic_padded_side}
     Establishing the congestion bound of~\cite[Lemma~8.2]{OpenAI2026PolynomialPEPS}, let $L\ge1$ and
     let every dyadic block lie in the padded square $[0,N]^2$.
-    Under the hypotheses of Theorem~\ref{thm:peps_dyadic_padded_congestion}, applying $(f,f)$ from Definition~\ref{def:peps_dyadic_fold} maps the padded walks to walks on $\{0,\ldots,L-1\}^2$, places each party at $(f(x_p),f(y_p))$, and traverses every edge of $\{0,\ldots,L-1\}^2$ at most $8(2c+1)B\Delta$ times (counted with multiplicity).
-\end{theorem}
+    Under the hypotheses of Lemma~\ref{thm:peps_dyadic_padded_congestion}, applying $(f,f)$ from Definition~\ref{def:peps_dyadic_fold} maps the padded walks to walks on $\{0,\ldots,L-1\}^2$, places each party at $(f(x_p),f(y_p))$, and traverses every edge of $\{0,\ldots,L-1\}^2$ at most $8(2c+1)B\Delta$ times (counted with multiplicity).
+\end{lemma}
 
 \begin{proof}\leanok
-    By Lemma~\ref{lem:peps_dyadic_padded_side}, $N<2L$, so every padded coordinate is at most $N\le 2L-2$. By Lemma~\ref{lem:peps_dyadic_fold}, $(f,f)$ maps adjacent padded vertices to adjacent vertices of $\{0,\ldots,L-1\}^2$, and each horizontal or vertical edge of $\{0,\ldots,L-1\}^2$ has at most $2\times 2=4$ padded unit-edge preimages; summing the bound $2(2c+1)B\Delta$ of Theorem~\ref{thm:peps_dyadic_padded_congestion} over these $4$ preimages gives $8(2c+1)B\Delta$.
+    By Lemma~\ref{lem:peps_dyadic_padded_side}, $N<2L$, so every padded coordinate is at most $N\le 2L-2$. By Lemma~\ref{lem:peps_dyadic_fold}, $(f,f)$ maps adjacent padded vertices to adjacent vertices of $\{0,\ldots,L-1\}^2$, and each horizontal or vertical edge of $\{0,\ldots,L-1\}^2$ has at most $2\times 2=4$ padded unit-edge preimages; summing the bound $2(2c+1)B\Delta$ of Lemma~\ref{thm:peps_dyadic_padded_congestion} over these $4$ preimages gives $8(2c+1)B\Delta$.
 \end{proof}
 
-\begin{theorem}[Dyadic routing yields a square-lattice PEPS]
+\begin{lemma}[Dyadic routing yields a square-lattice PEPS]
     \label{thm:peps_dyadic_routing_peps}
     \lean{TNLean.PEPS.Approximation.exists_squarePEPS_of_dyadicRouting}
     \leanok
@@ -168,10 +168,10 @@ not assumed.
     link separation at most $c$ times either endpoint scale, and link dimensions
     at most $D$. Then there is a PEPS on $\{0,\ldots,L-1\}^2$ whose
     coefficients equal those of the party network (with each party's physical index read at $(f(x_p),f(y_p))$) and whose bond dimensions are at most ${\max(D,1)}^{\chi}$ with $\chi=8(2c+1)B\Delta$, independent of $L$ and of the number of dyadic scales.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
-    Combining the folded routing of Theorem~\ref{thm:peps_dyadic_folded_congestion} (congestion at most $\chi$) with Theorem~\ref{thm:peps_routed_contraction} yields the PEPS; by Lemma~\ref{lem:peps_dyadic_fold}, $(f,f)$ fixes $\{0,\ldots,L-1\}^2$.
+    Combining the folded routing of Lemma~\ref{thm:peps_dyadic_folded_congestion} (congestion at most $\chi$) with Lemma~\ref{thm:peps_routed_contraction} yields the PEPS; by Lemma~\ref{lem:peps_dyadic_fold}, $(f,f)$ fixes $\{0,\ldots,L-1\}^2$.
 \end{proof}
 
 \subsection{Fixing a column before routing}
@@ -183,7 +183,7 @@ afterwards. The statements below follow this
 order. The operator network, its placement, the four routing properties, and
 the trace-norm estimate are hypotheses of the statements below; they are
 verified for the compressed protocol network in
-Theorem~\ref{thm:peps_large_size_network_from_protocol}, as recorded
+Lemma~\ref{thm:peps_large_size_network_from_protocol}, as recorded
 in~\cite{gap:polypeps_product_reference_column}.
 
 \begin{definition}[Operator party network and a fixed input]
@@ -200,7 +200,7 @@ in~\cite{gap:polypeps_product_reference_column}.
     dimensions.
 \end{definition}
 
-\begin{theorem}[A column of the party network]
+\begin{lemma}[A column of the party network]
     \label{thm:peps_party_column}
     \lean{TNLean.Lattice.Compression.PartyNetwork.dim_fixInput, TNLean.Lattice.Compression.PartyNetwork.coeff_fixInput, TNLean.Lattice.Compression.PartyNetwork.exists_fixInput_of_rectangularTraceNorm_sub_pure_le}
     \leanok
@@ -211,53 +211,53 @@ in~\cite{gap:polypeps_product_reference_column}.
     $\lVert\sigma-|\Omega\rangle\langle\Omega|\rVert_1\le\eta<1$ (without assuming $\sigma$ positive or Hermitian), then there exist
     $z$ and $\theta\in\R$ such that $\psi=\sigma|z\rangle\ne0$ and
     $\lVert\psi/\lVert\psi\rVert-e^{i\theta}\Omega\rVert\le2\eta$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_ket_column_vector}
-    By Definition~\ref{def:peps_party_operator_fix_input}, fixing the input to $z$ evaluates $\sigma|z\rangle$ without altering the links, and Theorem~\ref{thm:peps_ket_column_vector} applied to $\sigma$ supplies $z$ and $\theta$.
+    By Definition~\ref{def:peps_party_operator_fix_input}, fixing the input to $z$ evaluates $\sigma|z\rangle$ without altering the links, and Lemma~\ref{thm:peps_ket_column_vector} applied to $\sigma$ supplies $z$ and $\theta$.
 \end{proof}
 
-\begin{theorem}[A column, routed onto the square]
+\begin{lemma}[A column, routed onto the square]
     \label{thm:peps_party_column_routing}
     \lean{TNLean.PEPS.Tensor.bondDim_pos_of_pepsVector_ne_zero, TNLean.PEPS.Approximation.exists_squarePEPS_of_fixInput_dyadicRouting, TNLean.PEPS.Approximation.exists_squarePEPS_of_product_reference_dyadicRouting}
     \leanok
     \uses{thm:peps_dyadic_routing_peps, thm:peps_party_column}
     Let $L\ge1$ and let an operator party network on dyadic anchors of $[0,N]^2$
-    satisfy the hypotheses of Theorem~\ref{thm:peps_dyadic_routing_peps}
+    satisfy the hypotheses of Lemma~\ref{thm:peps_dyadic_routing_peps}
     with link dimensions at most $D$ and $\chi=8(2c+1)B\Delta$. Reading each party's physical pair at $(f(x_p),f(y_p))$, suppose
     $\lVert\sigma-|\Omega\rangle\langle\Omega|\rVert_1\le\eta<1$ for a unit vector
     $\Omega$. Then there exist a nonzero PEPS $\Phi$ on $\{0,\ldots,L-1\}^2$
     with bond dimensions in $\{1,\ldots,{\max(D,1)}^\chi\}$ and $\theta\in\R$ such that $\lVert\Phi/\lVert\Phi\rVert-e^{i\theta}\Omega\rVert\le2\eta$.
     The same holds with $\eta=\kappa+2\varepsilon+2\delta$ under the
-    hypotheses of Theorem~\ref{thm:peps_product_reference_column}.
-\end{theorem}
+    hypotheses of Lemma~\ref{thm:peps_product_reference_column}.
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_product_reference_column}
-    Selecting $z$ by Theorem~\ref{thm:peps_party_column}
+    Selecting $z$ by Lemma~\ref{thm:peps_party_column}
     and routing the input-fixed network by
-    Theorem~\ref{thm:peps_dyadic_routing_peps} gives a PEPS $\Phi=\sigma|z\rangle\ne0$; since $\Phi\ne0$, every bond dimension is at least $1$. Under the hypotheses of
-    Theorem~\ref{thm:peps_product_reference_column},
+    Lemma~\ref{thm:peps_dyadic_routing_peps} gives a PEPS $\Phi=\sigma|z\rangle\ne0$; since $\Phi\ne0$, every bond dimension is at least $1$. Under the hypotheses of
+    Lemma~\ref{thm:peps_product_reference_column},
     $\lVert\sigma-|\Omega\rangle\langle\Omega|\rVert_1\le\kappa+2\varepsilon+2\delta$.
 \end{proof}
 
-\begin{theorem}[A column with polynomial links, routed onto the square]
+\begin{lemma}[A column with polynomial links, routed onto the square]
     \label{thm:peps_party_column_routing_polynomial}
     \lean{TNLean.PEPS.Approximation.hasPEPSApproximation_of_fixInput_dyadicRouting}
     \leanok
     \uses{thm:peps_party_column_routing}
     In the final bond bound of~\cite[Section~8.3]{OpenAI2026PolynomialPEPS}
     (\texttt{07-assembly.tex}, lines 164--170), in the
-    setting of Theorem~\ref{thm:peps_party_column_routing}, if
+    setting of Lemma~\ref{thm:peps_party_column_routing}, if
     every link dimension is at most $C_1L^k$ ($C_1\ge1$, $k\ge0$) and
     $2\eta\le L^{-1}$, then the nonzero PEPS $\Phi$ has bond dimensions at most
     \begin{align}
         {(C_1L^k)}^\chi & =C_1^\chi L^{k\chi},
     \end{align}
     and satisfies $\lVert\Phi/\lVert\Phi\rVert-e^{i\theta}\Omega\rVert\le L^{-1}$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
-    Since $L\ge1$ and $k\ge0$, $D=\lfloor C_1L^k\rfloor$ satisfies $\max(D,1)\le C_1L^k$, and Theorem~\ref{thm:peps_party_column_routing} yields ${\max(D,1)}^\chi\le C_1^\chi L^{k\chi}$.
+    Since $L\ge1$ and $k\ge0$, $D=\lfloor C_1L^k\rfloor$ satisfies $\max(D,1)\le C_1L^k$, and Lemma~\ref{thm:peps_party_column_routing} yields ${\max(D,1)}^\chi\le C_1^\chi L^{k\chi}$.
 \end{proof}

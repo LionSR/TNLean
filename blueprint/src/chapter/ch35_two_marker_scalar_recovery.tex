@@ -37,7 +37,7 @@ basis in the source interpolation argument is recorded in
     sum with no words is zero.
 \end{definition}
 
-\begin{theorem}[One sample family for every degree and frequency slice]
+\begin{lemma}[One sample family for every degree and frequency slice]
     \label{thm:two_window_common_scalar_recovery}
     \lean{Polynomial.exists_twoWindow_wordCoefficient_recovery}
     \leanok
@@ -71,7 +71,7 @@ basis in the source interpolation argument is recorded in
     The points precede $i,j,\mu$, while the recovery coefficients precede $H$
     and every degree $r\le K$. Points for different selected pairs need not
     coincide. The case $K=0$ is included.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{def:two_marker_ordinary_labels,def:full_frequency_word_coefficient}
     The distinguished labels are distinct, so $\mathcal O=\mathcal O_{u,v}$

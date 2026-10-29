@@ -59,7 +59,7 @@ Its entries are equivalently the trace of this product divided by $D_p$.
 This fixes the orientation of the $L$-symbols without choosing a new
 change of basis.
 
-\begin{theorem}[Equal comparison matrices give a crossed contraction]
+\begin{lemma}[Equal comparison matrices give a crossed contraction]
     \label{thm:mpo_mixed_fusion_cross}
     \lean{MPOTensor.actionLMatrix_synthesis,
         MPOTensor.singleState_actionLMatrix_relations,
@@ -82,7 +82,7 @@ change of basis.
          & =\sum_{q\in Q_{ab}}R_{0,q}XQ_{1,q}.
         \label{eq:mpo_mix_fusion_cross}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:glm_boundary_action_comparison,thm:glm_boundary_action_l_factor}
@@ -156,7 +156,7 @@ change of basis.
     and each product with the $a$ coordinate first.
 \end{definition}
 
-\begin{theorem}[Rectangular products and four-corner sandwiches]
+\begin{lemma}[Rectangular products and four-corner sandwiches]
     \label{thm:mpo_mixed_fusion_maps}
     \lean{MPSTensor.MPOSymmetry.mixedEndpointFusionAnalysis_mul_synthesis,
         MPSTensor.MPOSymmetry.mixedEndpointMPOFusionAnalysis_mul_synthesis,
@@ -178,7 +178,7 @@ change of basis.
     $W^F_{p,ab;c\mu}M_{pq}V^F_{q,ab;d\nu}$ for all $p,q\in\{0,1\}$.
     Every corner with an unmatched incoming or outgoing pair is zero.
     In particular the mixed maps inherit biorthogonality.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Expanding over the direct-sum coordinates, a nonzero factor forces
@@ -189,7 +189,7 @@ change of basis.
     of these contractions.
 \end{proof}
 
-\begin{theorem}[Exact reconstruction of the mixed product]
+\begin{lemma}[Exact reconstruction of the mixed product]
     \label{thm:mpo_mixed_fusion_exact}
     \lean{MPSTensor.MPOSymmetry.mixedEndpointMPOLetter_fusion,
         MPSTensor.MPOSymmetry.isBiorthogonalDecomposition_mixedEndpointMPO}
@@ -198,7 +198,7 @@ change of basis.
     Let $T_a$ be the fixed mixed operator of
     Definition~\ref{def:mpo_mixed_action_tensor}, using the action maps
     for label $a$. Under the hypotheses of
-    Theorem~\ref{thm:mpo_mixed_fusion_cross}, including $L_0=L_1$ for
+    Lemma~\ref{thm:mpo_mixed_fusion_cross}, including $L_0=L_1$ for
     the selected pair $a,b$, its product has the exact decomposition
     \begin{align}
         (T_aT_b)^{\rho\sigma}
@@ -210,7 +210,7 @@ change of basis.
     Together with (\ref{eq:mpo_mix_fusion_retract}), this is a
     biorthogonal decomposition into the labelled tensors $T_c$, with
     the original multiplicities $N_{ab}^c$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:mpo_mixed_fusion_cross,thm:mpo_mixed_fusion_maps}
@@ -235,7 +235,7 @@ change of basis.
     (\ref{eq:mpo_mix_fusion_tree}) and commuting scalar factors gives
     exactly (\ref{eq:mpo_mix_fusion_entry}). Reversing the two ends covers
     $p=1,q=0$, every remaining sector is zero by the definitions, and
-    Theorem~\ref{thm:mpo_mixed_fusion_maps} gives biorthogonality.
+    Lemma~\ref{thm:mpo_mixed_fusion_maps} gives biorthogonality.
 \end{proof}
 
 % TENKZ-MIXED-FUSION-LOCAL-BEGIN
@@ -273,7 +273,7 @@ change of basis.
 \end{tenkzequation}
 % TENKZ-MIXED-FUSION-LOCAL-END
 
-\begin{theorem}[Length-independent boundaries for the labelled family]
+\begin{lemma}[Length-independent boundaries for the labelled family]
     \label{thm:mpo_mixed_fusion_boundary}
     \lean{MPSTensor.MPOSymmetry.mpoWithBoundary_mixedEndpointMPO_mul}
     \leanok
@@ -295,7 +295,7 @@ change of basis.
     \end{align}
     The sum ranges over the labelled family; it does not identify
     the target tensors for different labels.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:glm_boundary_decomposition,thm:glm_boundary_stack}
@@ -343,7 +343,7 @@ change of basis.
 \end{tenkzequation}
 % TENKZ-MIXED-FUSION-BOUNDARY-END
 
-\begin{theorem}[Periodic mixed fusion with the original multiplicities]
+\begin{lemma}[Periodic mixed fusion with the original multiplicities]
     \label{thm:mpo_mixed_fusion_periodic}
     \lean{MPSTensor.MPOSymmetry.isMPOFusionAlgebra_mixedEndpointMPO}
     \leanok
@@ -355,7 +355,7 @@ change of basis.
         \label{eq:mpo_mix_fusion_periodic}
     \end{align}
     Zero multiplicities are allowed.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:mpo_mixed_fusion_boundary,thm:mpo_mixed_fusion_maps}

@@ -5,7 +5,7 @@ the pure-exponential formula in \cite[Section~II.B.3]{Cirac2021Matrix}
 omits both polynomial Jordan factors and finite nilpotent transients, which
 the following all-separation expansion restores.
 
-\begin{theorem}[Exact binomial expansion of physical correlations]
+\begin{lemma}[Exact binomial expansion of physical correlations]
     \label{thm:physical_correlator_binomial}
     \lean{MPSTensor.physicalConnectedCorrelator_exists_binomial_expansion}
     \leanok
@@ -23,7 +23,7 @@ the following all-separation expansion restores.
     $\mu$-eigenspace stabilizes. Terms with $j>n$ have zero binomial
     coefficient; the displayed exponent uses truncated natural subtraction.
     This formula includes $n=0$ and $\mu=0$, with $0^0=1$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     The generalized-eigenspace decomposition writes the centered inner
@@ -35,7 +35,7 @@ the following all-separation expansion restores.
     $c_{\mu j}$ are the resulting fixed trace pairings with $(T-\mu I)^jv_\mu$.
 \end{proof}
 
-\begin{theorem}[Nonzero exponentials and the nilpotent transient]
+\begin{lemma}[Nonzero exponentials and the nilpotent transient]
     \label{thm:physical_correlator_jordan_transient}
     \lean{MPSTensor.physicalConnectedCorrelator_exists_jordan_expansion}
     \leanok
@@ -47,7 +47,7 @@ the following all-separation expansion restores.
         \label{eq:physical_correlator_jordan_transient}
     \end{align}
     with $\deg p_\mu<k_\mu$ and $t(n)=0$ for $n\ge k_0$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:physical_correlator_binomial}
@@ -86,7 +86,7 @@ the following all-separation expansion restores.
     decay theorem and the Jordan spectral expansion.
 \end{proof}
 
-\begin{theorem}[Jordan-aware physical spectral expansion for normal tensors]
+\begin{lemma}[Jordan-aware physical spectral expansion for normal tensors]
     \label{thm:correlator_sum_exponentials}
     \lean{MPSTensor.physicalConnectedCorrelator_exists_normal_jordan_expansion}
     \lean{MPSTensor.IsNormalTensor.exists_physicalLeftRightCorrelation_jordan_expansion}
@@ -108,7 +108,7 @@ the following all-separation expansion restores.
     $\mu$-eigenspace of its complementary transfer map. No diagonalizability,
     assumed expansion, or trace-preserving condition on the original $A$
     is required.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:physical_correlator_jordan_transient,

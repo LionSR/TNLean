@@ -18,7 +18,7 @@ normal forms with several blocks; the scope of the compact-gap conclusions
 is recorded in
 \cite{gap:spc11_uniform_gap_injective_scope}.
 
-\begin{theorem}[Gap stability under perturbation of operator and kernel projection]
+\begin{lemma}[Gap stability under perturbation of operator and kernel projection]
     \label{thm:kernel_gap_perturbation}
     \lean{ContinuousLinearMap.kernel_gap_perturbation,
         ContinuousLinearMap.eventually_norm_gap_on_orthogonal}
@@ -34,7 +34,7 @@ is recorded in
     $\delta>0$, then every $\delta'<\delta$ satisfies
     $\delta'\lVert v\rVert\leq\lVert H_xv\rVert$ on $K_x^\perp$ for all $x$
     near $x_0$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -46,7 +46,7 @@ is recorded in
     one chooses $\varepsilon=(\delta-\delta')/2$ and $r=\varepsilon/\delta$.
 \end{proof}
 
-\begin{theorem}[Open-chain gaps at every sufficient range]
+\begin{lemma}[Open-chain gaps at every sufficient range]
     \label{thm:normal_open_gap_every_sufficient_range}
     \lean{MPSTensor.exists_openParentHamiltonianES_uniform_gap_of_isNBlkInjective_all_lengths,
         MPSTensor.exists_openParentHamiltonianES_uniform_gap_of_isNBlkInjective_of_lt,
@@ -63,7 +63,7 @@ is recorded in
     \]
     In particular, for a normal tensor of bond dimension $D>0$, every
     fixed $R\geq D^4+1$ has this property. No normalization is required.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -76,7 +76,7 @@ is recorded in
     $p=D^4$ for a normal tensor.
 \end{proof}
 
-\begin{theorem}[Continuity of injective range projectors]
+\begin{lemma}[Continuity of injective range projectors]
     \label{thm:continuous_injective_range_projector}
     \lean{ContinuousLinearMap.continuous_injectiveRangeProjector}
     \leanok
@@ -84,7 +84,7 @@ is recorded in
     $T_x\colon E\to F$ a continuous family of injective bounded maps. Then the orthogonal projection
     $T_x(T_x^\dagger T_x)^{-1}T_x^\dagger$ onto the range of $T_x$ depends
     continuously on $x$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -92,7 +92,7 @@ is recorded in
     and inversion is continuous at invertible elements of a Banach algebra.
 \end{proof}
 
-\begin{theorem}[Continuity of finite-window parent Hamiltonians]
+\begin{lemma}[Continuity of finite-window parent Hamiltonians]
     \label{thm:continuous_finite_window_parent_hamiltonian}
     \lean{MPSTensor.continuous_groundSpaceMapES_family,
         MPSTensor.continuous_groundSpaceES_starProjection_family,
@@ -108,7 +108,7 @@ is recorded in
     the orthogonal projection onto the local ground space on $L$ sites is
     continuous in $x$. Hence, for $L\leq N$, the open and periodic parent
     Hamiltonians with interaction range $L$ on $N$ sites are continuous in $x$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -123,7 +123,7 @@ is recorded in
     Hamiltonians are finite sums of translates of one minus that projection.
 \end{proof}
 
-\begin{theorem}[Local stability of a finite-window gap]
+\begin{lemma}[Local stability of a finite-window gap]
     \label{thm:open_parent_gap_continuity}
     \lean{MPSTensor.eventually_openParentHamiltonianES_gap}
     \leanok
@@ -137,7 +137,7 @@ is recorded in
     $\delta'<\delta$ and every $x$ near $x_0$,
     $\delta'\lVert v\rVert\leq\lVert H^{\mathrm{open}}_{N,R}(A_x)v\rVert$ for
     all $v\perp G_N^{\mathrm{ES}}(A_x)$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -180,7 +180,7 @@ is recorded in
     operator inequality transfers the gap.
 \end{proof}
 
-\begin{theorem}[Strict Knabe windows for injective tensors]
+\begin{lemma}[Strict Knabe windows for injective tensors]
     \label{thm:injective_strict_knabe_window}
     \lean{MPSTensor.exists_openParentHamiltonianES_two_uniform_gap_of_isInjective,
         MPSTensor.exists_strict_openParentHamiltonianES_two_window_of_isInjective}
@@ -195,7 +195,7 @@ is recorded in
     particular, there are $m\geq2$ and $\gamma$ with $m\gamma>1$ such that
     $\gamma\lVert v\rVert\leq\lVert H^{\mathrm{open}}_{m+1,2}(A)v\rVert$ for all
     $v\perp G_{m+1}^{\mathrm{ES}}(A)$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -221,7 +221,7 @@ is recorded in
     (\ref{eq:injective_two_site_open_gap}) holds at $N=m+1$.
 \end{proof}
 
-\begin{theorem}[Gap in a parameter neighborhood]
+\begin{lemma}[Gap in a parameter neighborhood]
     \label{thm:knabe_gap_neighborhood}
     \lean{MPSTensor.eventually_parentHamiltonianES_gap_of_strict_openGap}
     \leanok
@@ -235,7 +235,7 @@ is recorded in
     periodic parent Hamiltonian $H_{N,2}(A_x)$ satisfies
     $\delta\lVert v\rVert\leq\lVert H_{N,2}(A_x)v\rVert$ on the orthogonal
     complement of its kernel.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -248,7 +248,7 @@ is recorded in
     $m$ and $\gamma'$.
 \end{proof}
 
-\begin{theorem}[Spectral gap along an ordered interpolation]
+\begin{lemma}[Spectral gap along an ordered interpolation]
     \label{thm:common_kernel_spectral_gap_interpolation}
     \lean{Matrix.gap_interpolation_of_le,
         Matrix.orthogonal_quadratic_gap_of_spectrum_separated,
@@ -267,7 +267,7 @@ is recorded in
     semidefinite, $\ker C_t=\ker A$, and every eigenvalue $z$ of $C_t$
     satisfies $\operatorname{Re}z=0$ or $\operatorname{Re}z\geq\delta$. If
     $\ker A\neq0$, then $0$ is an eigenvalue of every $C_t$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -297,7 +297,7 @@ is recorded in
     gives the uniform pair.
 \end{proof}
 
-\begin{theorem}[Uniform finite-dimensional kernel gap]
+\begin{lemma}[Uniform finite-dimensional kernel gap]
     \label{thm:compact_kernel_gap}
     \lean{ContinuousLinearMap.exists_uniform_norm_gap_of_compact}
     \leanok
@@ -308,7 +308,7 @@ is recorded in
     parameter set $S$, there is $\delta>0$ such that
     $\delta\lVert v\rVert\leq\lVert H_xv\rVert$ for every $x\in S$ and
     $v\perp\ker H_x$. No positivity or self-adjointness is required.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -320,7 +320,7 @@ is recorded in
     positive bound for all parameters.
 \end{proof}
 
-\begin{theorem}[Continuity of short periodic ground lines]
+\begin{lemma}[Continuity of short periodic ground lines]
     \label{thm:periodic_short_gap_continuity}
     \lean{MPSTensor.exists_uniform_parentHamiltonianES_two_gap_fixed_volume}
     \leanok
@@ -331,7 +331,7 @@ is recorded in
     $N\geq2$. Then there is $\delta>0$ such that
     $\delta\lVert v\rVert\leq\lVert H_{N,2}(A_x)v\rVert$ for all $x\in S$ and
     all $v$ orthogonal to the kernel of $H_{N,2}(A_x)$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -376,7 +376,7 @@ is recorded in
     for every $N\geq2$.
 \end{proof}
 
-\begin{theorem}[Compact normal families at a fixed interaction range]
+\begin{lemma}[Compact normal families at a fixed interaction range]
     \label{thm:compact_normal_parent_gap}
     \lean{MPSTensor.exists_openParentHamiltonianES_uniform_gap_of_isNBlkInjective,
         MPSTensor.exists_strict_openParentHamiltonianES_window_of_isNBlkInjective,
@@ -405,7 +405,7 @@ is recorded in
     If each $A_x$ is merely normal, the same assertion holds at the
     ranges $R\geq D^4+1$. No gap estimate or normalized gauge is
     assumed as a hypothesis.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -432,7 +432,7 @@ is recorded in
 \end{proof}
 
 
-\begin{theorem}[Continuity for several normal blocks]
+\begin{lemma}[Continuity for several normal blocks]
     \label{thm:block_ground_space_continuity}
     \lean{MPSTensor.blockGroundSpaceMapES,
         MPSTensor.blockGroundSpaceMapES_apply,
@@ -465,7 +465,7 @@ is recorded in
     vary arbitrarily. Thus each such fixed volume has a positive gap
     uniform on any compact parameter set. The overlaps of two local block spaces are also
     continuous at any common injectivity length.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -482,7 +482,7 @@ is recorded in
     yields a common positive finite-volume gap.
 \end{proof}
 
-\begin{theorem}[Compact families of several normal blocks]
+\begin{lemma}[Compact families of several normal blocks]
     \label{thm:compact_block_parent_gap}
     \lean{MPSTensor.eventually_parentHamiltonianES_toTensorFromBlocks_gap_of_strict_openGap,
         MPSTensor.exists_uniform_parentHamiltonianES_toTensorFromBlocks_gap_of_compact,
@@ -507,7 +507,7 @@ is recorded in
     normalized normal blocks of dimensions $D_j>0$, one may choose any
     $R\geq3\max(\sum_jD_j,1)^5$, with the simultaneous spanning length
     derived from the dimensions.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -524,7 +524,7 @@ is recorded in
     $S=3\max(\sum_jD_j,1)^5-1$.
 \end{proof}
 
-\begin{theorem}[Continuous positive parent interactions]
+\begin{lemma}[Continuous positive parent interactions]
     \label{thm:compact_positive_parent_interaction_gap}
     \lean{MPSTensor.exists_uniform_pos_parentInteractionES_le_of_compact,
         MPSTensor.exists_uniform_periodicInteractionHamiltonianES_gap_of_compact_canonical_gap,
@@ -541,7 +541,7 @@ is recorded in
     periodic gap uniform in the parameter and chain length transfers to
     the chosen interactions. This applies, in particular, to compact
     normal families at every fixed range $R\geq D^4+1$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -554,7 +554,7 @@ is recorded in
 \end{proof}
 
 
-\begin{theorem}[Invertible changes of the physical space]
+\begin{lemma}[Invertible changes of the physical space]
     \label{thm:physical_action_joint_span_compact_gap}
     \lean{MPSTensor.span_wordTuple_rotatePhysical_le,
         MPSTensor.span_wordTuple_rotatePhysical_eq_of_leftInverse,
@@ -570,7 +570,7 @@ is recorded in
     then on a compact parameter set the weighted block sums of
     $(M_xA^j)_j$ have a uniform periodic parent gap at every fixed
     $R\geq S+1$, for all $N\geq R$. All block weights are nonzero.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -581,7 +581,7 @@ is recorded in
     compact-family gap theorem give the assertion.
 \end{proof}
 
-\begin{theorem}[Uniform gap along the positive affine deformation]
+\begin{lemma}[Uniform gap along the positive affine deformation]
     \label{thm:positive_affine_physical_deformation_gap}
     \lean{MPSTensor.positivePhysicalDeformation,
         MPSTensor.positivePhysicalDeformation_posDef,
@@ -612,7 +612,7 @@ is recorded in
     where $h_0$ is the initial canonical parent projection and the positive
     factor is given on the retained physical space, have a positive gap
     uniform in $\gamma$ and every $N\geq2$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -627,7 +627,7 @@ is recorded in
     the canonical gap to the displayed interactions.
 \end{proof}
 
-\begin{theorem}[Left polar decomposition on the physical support]
+\begin{lemma}[Left polar decomposition on the physical support]
     \label{thm:parent_left_polar_support}
     \lean{Matrix.polarPosExtension, Matrix.posDef_polarPosExtension,
         Matrix.leftPolarPos, Matrix.leftPolarIso, Matrix.posDef_leftPolarPos,
@@ -642,7 +642,7 @@ is recorded in
     the orthogonal projection onto $\operatorname{ran}P$, and set
     $Q=(PP^\dagger)^{1/2}+I-E$. There is a partial isometry $W$ such
     that $Q>0$, $P=QW$, and $WW^\dagger=E$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -659,7 +659,7 @@ is recorded in
     $PV=S$ and $E=SR$ for some $R$ give the reverse inclusion.
 \end{proof}
 
-\begin{theorem}[Bounded simultaneous injective blocking of normal blocks]
+\begin{lemma}[Bounded simultaneous injective blocking of normal blocks]
     \label{thm:normal_block_injective_blocking}
     \lean{MPSTensor.exists_positive_blockTensor_wordTupleSpanTop_one_of_isNormalTensor}
     \leanok
@@ -671,7 +671,7 @@ is recorded in
     $L+1\leq3\max(\sum_jD_j,1)^5$ such that blocking $L$ physical sites gives
     a simultaneous one-site span of the direct sum of the block matrix
     algebras.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \uses{thm:cpsv_bnt_sharp_span_ambient_cap,thm:cpsv_bnt_blocked_simultaneous_span}
@@ -681,7 +681,7 @@ is recorded in
     are those length-$L$ word evaluations.
 \end{proof}
 
-\begin{theorem}[Constructed isometric deformation and its uniform gap]
+\begin{lemma}[Constructed isometric deformation and its uniform gap]
     \label{thm:constructed_isometric_deformation_gap}
     \lean{MPSTensor.blockPhysicalMatrix, MPSTensor.leftPolarBlocks,
         MPSTensor.leftPolarPhysicalFactor,
@@ -708,7 +708,7 @@ is recorded in
     Let $(A^j)_j$ be simultaneously one-site injective blocks of positive
     bond dimensions. Define the joint physical map by
     $P_{i,(j,a,b)}=A^j_i(a,b)$ and write $P=QW$ as in
-    Theorem~\ref{thm:parent_left_polar_support}. Reading the columns of
+    Lemma~\ref{thm:parent_left_polar_support}. Reading the columns of
     $W$ as block matrices $W^j_i$, set
     $A^j_i(\gamma)=\sum_l(Q_\gamma)_{il}W^j_l$, where
     $Q_\gamma=\gamma Q+(1-\gamma)I$.
@@ -728,7 +728,7 @@ is recorded in
     inequivalent normal blocks there is a positive initial blocking length $L$
     satisfying $L+1\leq3\max(\sum_jD_j,1)^5$, after which the constructed path
     has the canonical uniform gap just stated.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -740,13 +740,13 @@ is recorded in
     The left polar factorization gives $A^j=QW^j$. Since $Q$ is
     invertible, the original and polar blocks have the same joint word
     spans. The affine positive path therefore preserves those spans
-    and has the asserted endpoints. Theorem~\ref{thm:positive_affine_physical_deformation_gap}
+    and has the asserted endpoints. Lemma~\ref{thm:positive_affine_physical_deformation_gap}
     gives both uniform gaps and the interaction properties.
     For normal blocks, the simultaneous span bound yields $L$;
     length-$L$ evaluations become one-letter evaluations after blocking.
 \end{proof}
 
-\begin{theorem}[Unitary covariance of the left polar decomposition]
+\begin{lemma}[Unitary covariance of the left polar decomposition]
     \label{thm:parent_polar_unitary_covariance}
     \lean{Matrix.commute_mul_conjTranspose_of_unitary_covariance,
         Matrix.commute_leftPolarSupport_of_unitary_covariance,
@@ -758,13 +758,13 @@ is recorded in
     Let $P:\C^k\to\C^d$, and suppose that unitary matrices $U$ and
     $X$ satisfy $UP=PX$. Let $E$ project onto $\operatorname{ran}P$, and
     write $P=QW$ with $Q=(PP^\dagger)^{1/2}+I-E$ as in
-    Theorem~\ref{thm:parent_left_polar_support}. Then $U$ commutes with
+    Lemma~\ref{thm:parent_left_polar_support}. Then $U$ commutes with
     $PP^\dagger$, $E$, and $Q$, and $UW=WX$.
     For the polar step of \cite[lines~645--676]{Schuch2011Phases} with the
     virtual unitary $X$ given as a hypothesis, this applies in particular to
     the joint physical map of a block family, where physical rotation by a
     matrix $L$ replaces that map by $LP$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \uses{thm:parent_left_polar_support}
@@ -778,19 +778,19 @@ is recorded in
     The rotation identity follows by evaluating each physical coordinate.
 \end{proof}
 
-\begin{theorem}[Unitary covariance along the constructed deformation]
+\begin{lemma}[Unitary covariance along the constructed deformation]
     \label{thm:isometric_deformation_unitary_covariance}
     \lean{MPSTensor.commute_positivePhysicalDeformation,
         MPSTensor.blockPhysicalMatrix_isometricDeformationBlocks_covariance}
     \leanok
     If $U$ commutes with a physical matrix $Q$, then it commutes with
     $Q_\gamma=\gamma Q+(1-\gamma)I$ for every $\gamma\in[0,1]$.
-    In the setting of Theorem~\ref{thm:parent_polar_unitary_covariance}, as in
+    In the setting of Lemma~\ref{thm:parent_polar_unitary_covariance}, as in
     the covariance implication of \cite[lines~672--676]{Schuch2011Phases},
     the constructed physical map $P_\gamma=Q_\gamma W$ therefore obeys
     $UP_\gamma=P_\gamma X$ throughout the path, without asserting the
     existence of a virtual unitary from an arbitrary state symmetry.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \uses{thm:parent_polar_unitary_covariance,thm:constructed_isometric_deformation_gap}
@@ -799,7 +799,7 @@ is recorded in
     Thus $UP_\gamma=UQ_\gamma W=Q_\gamma UW=Q_\gamma WX=P_\gamma X$.
 \end{proof}
 
-\begin{theorem}[Invariant local spaces and commuting physical deformations]
+\begin{lemma}[Invariant local spaces and commuting physical deformations]
     \label{thm:parent_invariant_space_physical_deformation}
     \lean{MPSTensor.onSiteTensorPow_commute,
         MPSTensor.parentInteractionES_commute_onSiteTensorPow_of_invariant,
@@ -817,7 +817,7 @@ is recorded in
     commutes with $T_L(U)$. Finally, if $Q$ is invertible and Hermitian,
     every interaction $h$ commuting with $T_L(U)$ retains this symmetry
     under the deformation $T_L(Q^{-1})hT_L(Q^{-1})$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \uses{thm:ground_space_physical_rotation}
@@ -831,7 +831,7 @@ is recorded in
     so the final assertion follows by multiplication.
 \end{proof}
 
-\begin{theorem}[On-site symmetry of open and periodic interaction sums]
+\begin{lemma}[On-site symmetry of open and periodic interaction sums]
     \label{thm:parent_interaction_sum_on_site_symmetry}
     \lean{MPSTensor.periodicLocalInteractionES_eq_toEuclideanLin_embedLocalOperator,
         MPSTensor.periodicLocalInteractionES_commute_onSiteTensorPow,
@@ -845,7 +845,7 @@ is recorded in
     windows commute with $U^{\otimes N}$. In configuration coordinates,
     cyclic extension is the matrix obtained by placing $h$ on the
     window and the identity on its complement.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -856,7 +856,7 @@ is recorded in
     or only the nonwrapping ones, preserves commutation.
 \end{proof}
 
-\begin{theorem}[Parent symmetry from assumed invariance along the polar deformation]
+\begin{lemma}[Parent symmetry from assumed invariance along the polar deformation]
     \label{thm:isometric_deformation_supplied_parent_symmetry}
     \lean{MPSTensor.groundSpaceES_invariant_leftPolarBlocks,
         MPSTensor.groundSpaceES_invariant_isometricDeformationBlocks,
@@ -886,10 +886,10 @@ is recorded in
     This is the conditional parent-symmetry implication of
     \cite[lines~672--676]{Schuch2011Phases}. The original local-space
     invariance and commutation of $Q$ are explicit hypotheses here.
-    Theorem~\ref{thm:block_isometric_deformation_parent_symmetry} derives
+    Lemma~\ref{thm:block_isometric_deformation_parent_symmetry} derives
     both from symmetry up to a phase of jointly injective blocks in the
     source's standard form.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \uses{thm:parent_invariant_space_physical_deformation,thm:parent_interaction_sum_on_site_symmetry,thm:constructed_isometric_deformation_gap}
@@ -903,7 +903,7 @@ is recorded in
     the local interactions.
 \end{proof}
 
-\begin{theorem}[Derived polar covariance for one injective unital canonical block]
+\begin{lemma}[Derived polar covariance for one injective unital canonical block]
     \label{thm:injective_isometric_deformation_derived_covariance}
     \lean{MPSTensor.exists_unitary_virtual_of_isOnSiteSymmetric,
         MPSTensor.exists_blockPhysicalMatrix_unitary_covariance_of_isOnSiteSymmetric,
@@ -936,8 +936,8 @@ is recorded in
     unital orientation of the argument in
     \cite[lines~645--676]{Schuch2011Phases}, for exact invariance of
     the matrix product vectors. Several blocks are treated in
-    Theorem~\ref{thm:block_isometric_deformation_covariance}.
-\end{theorem}
+    Lemma~\ref{thm:block_isometric_deformation_covariance}.
+\end{lemma}
 
 \begin{proof}
     \uses{lem:gauge_equiv_twisted,thm:virtual_gauge_fixes_boundary_state,thm:parent_polar_unitary_covariance,thm:isometric_deformation_unitary_covariance}
@@ -947,7 +947,7 @@ is recorded in
     faithful invariant density matrix. The fundamental theorem gives
     an invertible gauge for each symmetric twist. In the stated
     normalization this gauge is a nonzero scalar multiple of a virtual
-    unitary, by Theorem~\ref{thm:virtual_gauge_fixes_boundary_state}; the
+    unitary, by Lemma~\ref{thm:virtual_gauge_fixes_boundary_state}; the
     scalar cancels in conjugation. Taking the induced action on matrix
     entries gives $X_g$, which is unitary as a tensor product of
     unitaries. The polar covariance and affine covariance theorems give
@@ -955,7 +955,7 @@ is recorded in
     the physical support.
 \end{proof}
 
-\begin{theorem}[Derived polar covariance in the trace-preserving orientation]
+\begin{lemma}[Derived polar covariance in the trace-preserving orientation]
     \label{thm:injective_isometric_deformation_tp_covariance}
     \lean{MPSTensor.exists_unitary_virtual_of_isOnSiteSymmetric_of_isTP,
         MPSTensor.exists_blockPhysicalMatrix_unitary_covariance_of_isOnSiteSymmetric_of_isTP,
@@ -979,9 +979,9 @@ is recorded in
     \cite[line~653]{Schuch2011Phases}. These conclusions cover the
     already-blocked single injective block with exact vector symmetry.
     Symmetry up to a phase, for one or several blocks, is treated in
-    Theorem~\ref{thm:block_isometric_deformation_covariance}; see
+    Lemma~\ref{thm:block_isometric_deformation_covariance}; see
     \cite{gap:spc11_isometric_symmetry_unitary_virtual}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \uses{lem:gauge_equiv_twisted,lem:left_canonical_irreducible_same_phase_unitary_gauge,thm:left_canonical_rotate_physical,thm:irreducible_tensor_rotate_physical,thm:parent_polar_unitary_covariance,thm:isometric_deformation_unitary_covariance}
@@ -997,7 +997,7 @@ is recorded in
     preserves the same intertwiner throughout the path.
 \end{proof}
 
-\begin{theorem}[Derived parent symmetry for one injective canonical block]
+\begin{lemma}[Derived parent symmetry for one injective canonical block]
     \label{thm:injective_isometric_deformation_parent_symmetry}
     \lean{MPSTensor.groundSpaceES_singletonBlocks_invariant_of_isOnSiteSymmetric,
         MPSTensor.parentInteractionES_isometricDeformationBlocks_commute_of_isOnSiteSymmetric,
@@ -1027,10 +1027,10 @@ is recorded in
     This proves the parent-symmetry conclusion of
     \cite[lines~645--676]{Schuch2011Phases} for the stated single-block
     unital case, dual to the printed partial-trace normalization as
-    explained in Theorem~\ref{thm:injective_isometric_deformation_derived_covariance}.
+    explained in Lemma~\ref{thm:injective_isometric_deformation_derived_covariance}.
     Several blocks are treated in
-    Theorem~\ref{thm:block_isometric_deformation_parent_symmetry}.
-\end{theorem}
+    Lemma~\ref{thm:block_isometric_deformation_parent_symmetry}.
+\end{lemma}
 
 \begin{proof}
     \uses{lem:gauge_equiv_twisted,thm:injective_isometric_deformation_derived_covariance,thm:isometric_deformation_supplied_parent_symmetry}
@@ -1044,7 +1044,7 @@ is recorded in
     deformation.
 \end{proof}
 
-\begin{theorem}[Derived parent symmetry in trace-preserving normalization]
+\begin{lemma}[Derived parent symmetry in trace-preserving normalization]
     \label{thm:injective_isometric_deformation_parent_symmetry_tp}
     \lean{MPSTensor.parentInteractionES_isometricDeformationBlocks_commute_of_isOnSiteSymmetric_of_isTP,
         MPSTensor.isometricDeformationInteractionES_commute_of_isOnSiteSymmetric_of_isTP,
@@ -1070,8 +1070,8 @@ is recorded in
     This is the already-blocked single-block parent-symmetry conclusion
     of \cite[lines~645--676]{Schuch2011Phases} in the printed canonical
     orientation. Several blocks are treated in
-    Theorem~\ref{thm:block_isometric_deformation_parent_symmetry}.
-\end{theorem}
+    Lemma~\ref{thm:block_isometric_deformation_parent_symmetry}.
+\end{lemma}
 
 \begin{proof}
     \uses{lem:gauge_equiv_twisted,thm:injective_isometric_deformation_tp_covariance,thm:isometric_deformation_supplied_parent_symmetry}
@@ -1183,7 +1183,7 @@ is recorded in
     $|c|=1$.
 \end{proof}
 
-\begin{theorem}[An on-site symmetry permutes normal blocks]
+\begin{lemma}[An on-site symmetry permutes normal blocks]
     \label{thm:block_isometric_deformation_symmetry_permutation}
     \lean{MPSTensor.exists_perm_gauge_rotatePhysical_of_isOnSiteSymmetricUpToPhase,
         MPSTensor.exists_perm_unitary_rotatePhysical_of_isOnSiteSymmetricUpToPhase}
@@ -1204,7 +1204,7 @@ is recorded in
     several-block virtual action of \cite[lines~652--660]{Schuch2011Phases},
     if in addition every block satisfies $\sum_iA^{k\dagger}_iA^k_i=I$, the
     matrices $X_k$ may be taken unitary.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \uses{lem:block_symmetry_phase_power,lem:block_word_trace_algebra_automorphism,thm:pi_auto_decomp,thm:physical_action_joint_span_compact_gap,lem:left_canonical_irreducible_same_phase_unitary_gauge,thm:left_canonical_rotate_physical,thm:irreducible_tensor_rotate_physical}
@@ -1217,7 +1217,7 @@ is recorded in
     because $\bar cU_g$ is invertible. Lemma~\ref{lem:block_word_trace_algebra_automorphism}
     gives an algebra automorphism sending the one-site tuples of the
     original blocks to those of the twisted blocks, and
-    Theorem~\ref{thm:pi_auto_decomp} decomposes it as a block
+    Lemma~\ref{thm:pi_auto_decomp} decomposes it as a block
     permutation preceded by blockwise conjugations. In the
     trace-preserving normalization each block is injective, hence
     irreducible, and unitary physical rotation preserves both
@@ -1226,14 +1226,14 @@ is recorded in
     to the twist by $U_g$.
 \end{proof}
 
-\begin{theorem}[Derived polar covariance for several normal blocks]
+\begin{lemma}[Derived polar covariance for several normal blocks]
     \label{thm:block_isometric_deformation_covariance}
     \lean{MPSTensor.exists_blockPhysicalMatrix_unitary_covariance_of_isOnSiteSymmetricUpToPhase,
         MPSTensor.commute_leftPolarPhysicalFactor_of_isOnSiteSymmetricUpToPhase,
         MPSTensor.exists_isometricDeformationBlocks_unitary_covariance_of_isOnSiteSymmetricUpToPhase}
     \leanok
     In the setting of
-    Theorem~\ref{thm:block_isometric_deformation_symmetry_permutation},
+    Lemma~\ref{thm:block_isometric_deformation_symmetry_permutation},
     assume $\sum_iA^{k\dagger}_iA^k_i=I$ for every block. For the joint
     physical map $P_{i,(k,a,b)}=A^k_i(a,b)$ there is a unitary $X_g$ on
     $\bigoplus_k\C^{D_k}\otimes\C^{D_k}$ with $U_gP=PX_g$. Consequently
@@ -1246,13 +1246,13 @@ is recorded in
     covariance $U_gP=PX_g$ of \cite[lines~652--660]{Schuch2011Phases}
     for several blocks, under symmetry of the matrix product vectors up to
     a phase; see \cite{gap:spc11_isometric_symmetry_unitary_virtual}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \uses{thm:block_isometric_deformation_symmetry_permutation,thm:parent_polar_unitary_covariance,thm:isometric_deformation_unitary_covariance}
     \leanok
     Let $c$, $\sigma$ and the unitaries $V_k$ be as in
-    Theorem~\ref{thm:block_isometric_deformation_symmetry_permutation}.
+    Lemma~\ref{thm:block_isometric_deformation_symmetry_permutation}.
     Sending the matrix coordinates of block $k$ through
     $V_k^T\otimes V_k^\dagger$ and then to the coordinates of block
     $\sigma(k)$ defines an operator $X'_g$ that is the product of a
@@ -1264,7 +1264,7 @@ is recorded in
     affine covariance theorems give the remaining conclusions.
 \end{proof}
 
-\begin{theorem}[Derived parent symmetry for several normal blocks]
+\begin{lemma}[Derived parent symmetry for several normal blocks]
     \label{thm:block_isometric_deformation_parent_symmetry}
     \lean{MPSTensor.groundSpaceES_toTensorFromBlocks_invariant_of_isOnSiteSymmetricUpToPhase,
         MPSTensor.parentInteractionES_isometricDeformationBlocks_commute_of_isOnSiteSymmetricUpToPhase,
@@ -1275,7 +1275,7 @@ is recorded in
         MPSTensor.isometricDeformation_openInteractionHamiltonianES_commute_of_isOnSiteSymmetricUpToPhase}
     \leanok
     In the setting of
-    Theorem~\ref{thm:block_isometric_deformation_symmetry_permutation},
+    Lemma~\ref{thm:block_isometric_deformation_symmetry_permutation},
     $U_g^{\otimes L}G_L(\bigoplus_kA^k)=G_L(\bigoplus_kA^k)$ for every
     $L$. As in the parent-symmetry conclusion of
     \cite[lines~672--676]{Schuch2011Phases} for several blocks in the printed
@@ -1289,7 +1289,7 @@ is recorded in
     \end{align*}
     commute with $U_g^{\otimes2}$, and their open and periodic sums
     commute with $U_g^{\otimes N}$ for every $N\geq2$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \uses{thm:block_isometric_deformation_symmetry_permutation,thm:block_isometric_deformation_covariance,thm:isometric_deformation_supplied_parent_symmetry}
@@ -1297,17 +1297,17 @@ is recorded in
     The local MPS space of the block-diagonal tensor is the sum of the
     local spaces of its blocks. The physical action carries it to the sum
     of the local spaces of the twisted blocks. By
-    Theorem~\ref{thm:block_isometric_deformation_symmetry_permutation},
+    Lemma~\ref{thm:block_isometric_deformation_symmetry_permutation},
     the twist of block $\sigma(k)$ by $\bar cU_g$ is gauge equivalent to
     block $k$, and gauge equivalence preserves local spaces, so the permuted
     sum is the original one. The action of $U_g^{\otimes L}$ is $c^L\neq0$
     times that of $(\bar cU_g)^{\otimes L}$ and has the same image. Together with $[U_g,Q]=0$ from
-    Theorem~\ref{thm:block_isometric_deformation_covariance}, the
+    Lemma~\ref{thm:block_isometric_deformation_covariance}, the
     assumed-invariance parent-symmetry theorem gives the remaining
     conclusions.
 \end{proof}
 
-\begin{theorem}[Uniform open-chain gap along the positive affine deformation]
+\begin{lemma}[Uniform open-chain gap along the positive affine deformation]
     \label{thm:positive_affine_physical_deformation_open_gap}
     \lean{MPSTensor.exists_uniform_openParentHamiltonianES_gap_positivePhysicalDeformation,
         MPSTensor.exists_uniform_positiveDeformedParentInteractionES_open_gap}
@@ -1325,7 +1325,7 @@ is recorded in
     \cite[lines~589--594 and~610--625, Appendix~A]{Schuch2011Phases}, in both
     assertions the gap holds on the orthogonal complement of the open
     Hamiltonian's kernel.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \uses{thm:positive_affine_physical_deformation_gap,thm:compact_block_open_gap,thm:compact_block_open_positive_gap}
@@ -1338,7 +1338,7 @@ is recorded in
     uniform open gap.
 \end{proof}
 
-\begin{theorem}[Uniform open-chain gaps for the constructed isometric deformation]
+\begin{lemma}[Uniform open-chain gaps for the constructed isometric deformation]
     \label{thm:constructed_isometric_deformation_open_gap}
     \lean{MPSTensor.exists_uniform_isometricDeformation_open_parent_gap,
         MPSTensor.exists_uniform_isometricDeformation_open_interaction_gap,
@@ -1359,19 +1359,19 @@ is recorded in
     after finite initial blocking at a positive length $L$ with
     $L+1\leq3\max(\sum_jD_j,1)^5$, where the chain length counts blocked
     sites.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \uses{thm:constructed_isometric_deformation_gap,thm:positive_affine_physical_deformation_open_gap,thm:normal_block_injective_blocking}
     \leanok
     Invertibility of $Q$ transfers the joint one-site span from $A^j$ to
-    $W^j$, so Theorem~\ref{thm:positive_affine_physical_deformation_open_gap}
+    $W^j$, so Lemma~\ref{thm:positive_affine_physical_deformation_open_gap}
     applies to these polar blocks and the constructed positive factor. For
     normal blocks, the simultaneous spanning bound yields $L$; length-$L$
     words become one-letter matrices after blocking.
 \end{proof}
 
-\begin{theorem}[Uniform norm lower bounds on a common tail]
+\begin{lemma}[Uniform norm lower bounds on a common tail]
     \label{thm:compact_norm_lower_bound_tail}
     \lean{IsCompact.exists_uniform_norm_lower_bound_on_tail}
     \leanok
@@ -1386,7 +1386,7 @@ is recorded in
     and $v\in V_N(y)$. Then there are $\delta>0$ and $N_0$ such that
     $\delta\|v\|\leq\|H_N(x)v\|$ for every $x\in S$, $N\geq N_0$,
     and $v\in V_N(x)$. Linearity of the maps is unnecessary.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     For a finite subcover of the neighborhoods $U_x$, let $\delta$ be
     the minimum of the corresponding positive constants and $N_0$ the
@@ -1418,7 +1418,7 @@ is recorded in
     product, its range is $\sum_jG_L(A^j)$.
 \end{definition}
 
-\begin{theorem}[Trace duality for a finite family of matrices]
+\begin{lemma}[Trace duality for a finite family of matrices]
     \label{thm:matrix_family_trace_duality}
     \lean{Matrix.exists_trace_representation,
         Matrix.exists_family_trace_representation,
@@ -1429,7 +1429,7 @@ is recorded in
     $\Delta$. Consequently, a linear subspace $W$ is the whole
     product algebra if the only family satisfying
     $\sum_j\tr(\Delta_jM_j)=0$ for every $M\in W$ is the zero family.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Because the matrix trace pairing is nondegenerate, its isomorphism with
@@ -1438,7 +1438,7 @@ is recorded in
     it, so the asserted separation condition excludes every proper subspace.
 \end{proof}
 
-\begin{theorem}[Simultaneous injectivity of the joint boundary map]
+\begin{lemma}[Simultaneous injectivity of the joint boundary map]
     \label{thm:block_ground_space_map_injective}
     \lean{MPSTensor.blockGroundSpaceMap_injective_of_wordTupleSpanTop,
         MPSTensor.wordTupleSpanTop_of_blockGroundSpaceMap_injective,
@@ -1448,7 +1448,7 @@ is recorded in
     The tuples of length-$L$ word products span
     $\prod_j\operatorname{Mat}_{D_j}(\mathbb C)$ if and only if
     $\Gamma_L^{\oplus}$ is injective.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:matrix_family_trace_duality}
@@ -1460,7 +1460,7 @@ is recorded in
     full product span.
 \end{proof}
 
-\begin{theorem}[Continuity of finite-window parents with several blocks]
+\begin{lemma}[Continuity of finite-window parents with several blocks]
     \label{thm:continuous_block_finite_window_parent_hamiltonian}
     \lean{MPSTensor.continuous_iSup_groundSpaceES_starProjection_of_injective_family,
         MPSTensor.continuous_groundSpaceES_toTensorFromBlocks_starProjection_of_injective_family,
@@ -1478,7 +1478,7 @@ is recorded in
     \cite[Appendix~A, lines~2575--2578]{Schuch2011Phases}, at every fixed
     volume $N\geq L$ the corresponding open and periodic parent Hamiltonians
     are continuous as well, without requiring continuity of the weights.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:block_ground_space_map_injective,
@@ -1493,7 +1493,7 @@ is recorded in
     finite-volume Hamiltonians are finite sums of its fixed embeddings.
 \end{proof}
 
-\begin{theorem}[Openness and positive-length propagation of simultaneous spanning]
+\begin{lemma}[Openness and positive-length propagation of simultaneous spanning]
     \label{thm:block_ground_space_map_injective_open_propagation}
     \lean{MPSTensor.isOpen_setOf_blockGroundSpaceMapES_injective_family,
         MPSTensor.isOpen_setOf_wordTupleSpanTop_family,
@@ -1507,7 +1507,7 @@ is recorded in
     parameters where the length-$L$ word tuples span the full product
     matrix algebra. If $L>0$, either condition implies the corresponding
     condition at every length $n\geq L$. No normalization is required.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:block_ground_space_map_injective}
@@ -1522,7 +1522,7 @@ is recorded in
     every $n\geq L$.
 \end{proof}
 
-\begin{theorem}[Common positive spanning length on a compact parameter set]
+\begin{lemma}[Common positive spanning length on a compact parameter set]
     \label{thm:compact_block_word_span}
     \lean{MPSTensor.exists_uniform_wordTupleSpanTop_of_compact}
     \leanok
@@ -1534,7 +1534,7 @@ is recorded in
     that simultaneous spanning holds for every $x\in S$ and every
     length $n\geq L$. No normalization or positivity of the block
     dimensions is required.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:block_ground_space_map_injective_open_propagation,
@@ -1547,7 +1547,7 @@ is recorded in
     \cite[Appendix~A, lines~2499--2503 and~2575--2578]{Schuch2011Phases}.
 \end{proof}
 
-\begin{theorem}[Common injectivity length on a compact parameter set]
+\begin{lemma}[Common injectivity length on a compact parameter set]
     \label{thm:compact_block_boundary_injectivity}
     \lean{MPSTensor.exists_uniform_blockGroundSpaceMapES_injective_of_compact_wordTupleSpanTop,
         MPSTensor.exists_uniform_blockGroundSpaceMapES_injective_of_compact_isPrimitiveMPS}
@@ -1564,7 +1564,7 @@ is recorded in
     that are pairwise
     inequivalent under similarity and phase. No continuity of the
     fixed-point matrices is required.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:compact_block_word_span,
@@ -1577,7 +1577,7 @@ is recorded in
     follows from inequivalence of the blocks.
 \end{proof}
 
-\begin{theorem}[Finite-volume continuity from the local projection]
+\begin{lemma}[Finite-volume continuity from the local projection]
     \label{thm:finite_window_continuity_from_ground_projection}
     \lean{MPSTensor.continuous_parentInteractionES_family_of_groundProjection,
         MPSTensor.continuous_localTermES_family_of_groundProjection,
@@ -1589,7 +1589,7 @@ is recorded in
     in $x$. Then its complementary canonical interaction is continuous.
     For each fixed $N\geq L$, every translated local term and the open
     and periodic parent Hamiltonians are continuous as well.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Subtracting the local projection from the identity gives the complementary
@@ -1597,7 +1597,7 @@ is recorded in
     remain continuous.
 \end{proof}
 
-\begin{theorem}[Continuity of fixed-window block overlaps]
+\begin{lemma}[Continuity of fixed-window block overlaps]
     \label{thm:continuous_fixed_window_block_overlap}
 
     \leanok
@@ -1605,7 +1605,7 @@ is recorded in
     Let $x\mapsto A_x^j$ be continuous and injective after blocking $L$
     sites for every $x$ and $j$. For each pair of blocks $i,j$, the norm
     $\|P_{G_L(A_x^i)}P_{G_L(A_x^j)}\|$ is continuous in $x$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:continuous_finite_window_parent_hamiltonian}
@@ -1613,7 +1613,7 @@ is recorded in
     product and its norm.
 \end{proof}
 
-\begin{theorem}[Projection continuity from simultaneous word spanning]
+\begin{lemma}[Projection continuity from simultaneous word spanning]
     \label{thm:block_ground_space_projector_continuity_span}
 
     \leanok
@@ -1623,7 +1623,7 @@ is recorded in
     algebra for every $x$. Then the projection onto $\sum_jG_L(A_x^j)$
     is continuous. The same holds for the ground space of any weighted
     block sum with nowhere-zero weights.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:block_ground_space_map_injective,

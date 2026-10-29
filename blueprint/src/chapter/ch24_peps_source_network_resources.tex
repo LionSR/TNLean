@@ -9,7 +9,7 @@ each unordered pair in $C_g$ has its source sample link with alphabet
 $[k]=\{0,\ldots,k-1\}$. For each tagged link $e$, let $g(e)\in G$ be its owner
 occurrence, $D_e$ its virtual alphabet, and $\partial e$ its incident party set.
 
-\begin{theorem}[Exact dimensions of the original density links]
+\begin{lemma}[Exact dimensions of the original density links]
     \label{thm:peps_source_density_link_card}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.card_alphabet_source_density}
     \leanok
@@ -26,17 +26,17 @@ occurrence, $D_e$ its virtual alphabet, and $\partial e$ its incident party set.
         \label{eq:peps_source_density_link_card}
     \end{align}
     % Source: 04-compression.tex, lines 565--579.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:compression_operator_alphabet_card}
-    Apply Theorem~\ref{thm:compression_operator_alphabet_card} with star
+    Apply Lemma~\ref{thm:compression_operator_alphabet_card} with star
     alphabet $\Xi_{g(e)}\times\Xi_{g(e)}$ of cardinality $|\Xi_{g(e)}|^2$ and
     sample alphabet $[k]$ of cardinality $k$.
 \end{proof}
 
-\begin{theorem}[A conditional uniform bound for the original density links]
+\begin{lemma}[A conditional uniform bound for the original density links]
     \label{thm:peps_source_density_link_card_bound}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.card_alphabet_source_density_le}
     \leanok
@@ -46,17 +46,17 @@ occurrence, $D_e$ its virtual alphabet, and $\partial e$ its incident party set.
     $|\Xi_g|\le M$ for all $g\in G$, then every constructed link $e$ satisfies
     $|D_e|\le\max\{M^2,k\}$.
     % Source: 04-compression.tex, lines 565--588.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:compression_operator_alphabet_bound}
     Since $|\Xi_g\times\Xi_g|=|\Xi_g|^2\le M^2$,
-    Theorem~\ref{thm:compression_operator_alphabet_bound} gives
+    Lemma~\ref{thm:compression_operator_alphabet_bound} gives
     $|D_e|\le\max\{M^2,k\}$.
 \end{proof}
 
-\begin{theorem}[The endpoints are original participants of the owner gate]
+\begin{lemma}[The endpoints are original participants of the owner gate]
     \label{thm:peps_source_density_link_locality}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.distributedLinkParties_source_subset}
     \leanok
@@ -65,13 +65,13 @@ occurrence, $D_e$ its virtual alphabet, and $\partial e$ its incident party set.
     In \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}, every constructed
     link $e$ satisfies $\partial e\subseteq C_{g(e)}$.
     % Source: 04-compression.tex, lines 581--588.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:peps_source_gate_root_mem,thm:compression_original_gate_locality}
-    Since $r_g\in C_g$ for all $g\in G$ by Theorem~\ref{thm:peps_source_gate_root_mem},
-    Theorem~\ref{thm:compression_original_gate_locality} yields
+    Since $r_g\in C_g$ for all $g\in G$ by Lemma~\ref{thm:peps_source_gate_root_mem},
+    Lemma~\ref{thm:compression_original_gate_locality} yields
     $\partial e\subseteq C_{g(e)}$.
 \end{proof}
 
@@ -81,7 +81,7 @@ occurrence, $D_e$ its virtual alphabet, and $\partial e$ its incident party set.
 Let $\mathcal W:a\to c$ be a chronological source circuit on $P$ with nonempty
 gate occurrences $G$, participant sets $C_g$, and roots $r_g\in C_g$.
 
-\begin{theorem}[The retained occurrences preserve participation counts]
+\begin{lemma}[The retained occurrences preserve participation counts]
     \label{thm:peps_nonempty_gate_participation}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.card_incidentNonemptyGates_eq_participationCount}
     \leanok
@@ -90,7 +90,7 @@ gate occurrences $G$, participant sets $C_g$, and roots $r_g\in C_g$.
     $|\{g\in G:p\in C_g\}|$ equals the full participation count of $p$ in
     $\mathcal W$ (Definition~\ref{def:compression_lifetime_gates}).
     % Source: 04-compression.tex, lines 140--142 and 581--588.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -98,7 +98,7 @@ gate occurrences $G$, participant sets $C_g$, and roots $r_g\in C_g$.
     filtering out $C_g=\varnothing$ preserves $\{g:p\in C_g\}$.
 \end{proof}
 
-\begin{theorem}[Constant incidence of the density links]
+\begin{lemma}[Constant incidence of the density links]
     \label{thm:peps_actual_density_link_incidence}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.card_incidentSourceDensityLinks_le}
     \leanok
@@ -109,16 +109,16 @@ gate occurrences $G$, participant sets $C_g$, and roots $r_g\in C_g$.
     gate occurrences, then at most $2b(b-1)$ density-network links are incident
     to any party $p\in P$.
     % Source: 04-compression.tex, lines 581--588.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:peps_source_gate_root_mem,thm:peps_nonempty_gate_participation,
         thm:compression_distributed_incidence_bound}
-    By Theorems~\ref{thm:peps_source_gate_root_mem}
+    By Lemmas~\ref{thm:peps_source_gate_root_mem}
     and~\ref{thm:peps_nonempty_gate_participation}, $r_g\in C_g$ and
     $|\{g\in G:p\in C_g\}|\le b$, so
-    Theorem~\ref{thm:compression_distributed_incidence_bound} gives the bound
+    Lemma~\ref{thm:compression_distributed_incidence_bound} gives the bound
     $2b(b-1)$.
 \end{proof}
 
@@ -129,7 +129,7 @@ The coordinate spaces below are the memories of the ordered registers in
 \texttt{04-compression.tex}, lines 17--19, 253--267, 409--434 and 565--588,
 with no numerical bound on private register dimensions.
 
-\begin{theorem}[Finite endpoint registers in fixed source slots]
+\begin{lemma}[Finite endpoint registers in fixed source slots]
     \label{thm:peps_finite_source_slot_registers}
     \lean{TNLean.Lattice.PartyCircuit.SourceInventory.finiteDimensional_registers_slotLayout}
     \leanok
@@ -137,7 +137,7 @@ with no numerical bound on private register dimensions.
     For a finite ordered list $R$ of pair-source occurrences with
     finite-dimensional endpoint spaces $U_i,V_i$, every register in the slot
     layout of Definition~\ref{def:peps_source_slots} is finite-dimensional.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -146,7 +146,7 @@ with no numerical bound on private register dimensions.
     prepends two registers with finite-dimensional spaces $U_i,V_i$.
 \end{proof}
 
-\begin{theorem}[Finite registers in the all-party source layout]
+\begin{lemma}[Finite registers in the all-party source layout]
     \label{thm:peps_finite_all_party_source_registers}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.finiteDimensional_allResidualSource_registers}
     \leanok
@@ -154,13 +154,13 @@ with no numerical bound on private register dimensions.
     For any chronological source composition $W$ on $P$, every register in the
     all-party source layout $R_W$ (Definition~\ref{def:peps_all_party_source_registers})
     is finite-dimensional.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{def:peps_all_party_source_registers,thm:peps_finite_source_slot_registers}
     Each source occurrence $e$ has finite-dimensional halfspaces
-    $\C^{u_e},\C^{v_e}$, so Theorem~\ref{thm:peps_finite_source_slot_registers}
+    $\C^{u_e},\C^{v_e}$, so Lemma~\ref{thm:peps_finite_source_slot_registers}
     applies.
 \end{proof}
 
@@ -172,7 +172,7 @@ with no numerical bound on private register dimensions.
         thm:peps_finite_register_memories,def:peps_party_registers}
     For $q\in Q=P\sqcup\{*\}$, let $R_W(q)$ be the sublist of $R_W$ owned by $q$
     (Definition~\ref{def:peps_party_registers}) and $H_q=\mathcal H_{R_W(q)}$.
-    By Theorems~\ref{thm:peps_finite_all_party_source_registers}
+    By Lemmas~\ref{thm:peps_finite_all_party_source_registers}
     and~\ref{thm:peps_finite_register_memories}, choose a finite orthonormal
     basis $(b_{q,i})_{0\le i<\dim_{\C}H_q}$ of $H_q$.
 \end{definition}
@@ -187,11 +187,11 @@ with no numerical bound on private register dimensions.
     Relabeling each owner $p\in P$ into $Q=P\sqcup\{*\}$
     (Definition~\ref{def:peps_affected_owner}) and restricting to $q\in Q$ gives
     sublist $G(q)$ and finite-dimensional memory $K_q=\mathcal H_{G(q)}$
-    (Theorem~\ref{thm:peps_finite_register_memories}); choose a finite
+    (Lemma~\ref{thm:peps_finite_register_memories}); choose a finite
     orthonormal basis $(c_{q,j})_{0\le j<\dim_{\C}K_q}$ of $K_q$.
 \end{definition}
 
-\begin{theorem}[Distributed physical approximation from local gate expansions]
+\begin{lemma}[Distributed physical approximation from local gate expansions]
     \label{thm:peps_approximate_sampled_distributed_error}
     \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.exists_sampled_contractedOperator_approximate_error_le}
     \leanok
@@ -224,7 +224,7 @@ with no numerical bound on private register dimensions.
     and~\ref{def:peps_all_party_local_discard_basis}, there exist normalized
     Schmidt data and a Gaussian sample $\omega$ such that the distributed
     contraction $\mathcal C_R(\omega)$ of
-    Theorem~\ref{thm:peps_actual_sampled_distributed_contraction} with weights
+    Lemma~\ref{thm:peps_actual_sampled_distributed_contraction} with weights
     $c_g(\xi,\zeta)=k^{-\binom{|C_g|}{2}}a_g(\xi)\overline{a_g(\zeta)}$ and
     zero-party scalar factor $\gamma_R=\lambda_R\overline{\lambda_R}$ satisfies,
     as in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}
@@ -237,7 +237,7 @@ with no numerical bound on private register dimensions.
     \end{align}
     where $\rho_G$ is the physical partial trace of the original circuit output
     on $\psi$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -245,13 +245,13 @@ with no numerical bound on private register dimensions.
         thm:peps_actual_sampled_distributed_contraction,
         thm:peps_finite_whole_party_input,thm:peps_auxiliary_register_finiteness,
         def:peps_all_party_local_source_basis,def:peps_all_party_local_discard_basis}
-    By Theorems~\ref{thm:peps_finite_whole_party_input}
+    By Lemmas~\ref{thm:peps_finite_whole_party_input}
     and~\ref{thm:peps_auxiliary_register_finiteness}, the initial and discarded
-    memories are finite-dimensional. Theorem~\ref{thm:peps_approximate_source_sample}
+    memories are finite-dimensional. Lemma~\ref{thm:peps_approximate_source_sample}
     provides normalized Schmidt data and a sample $\omega$ whose sampled
     physical operator $\widehat\rho$ satisfies
     $\|\widehat\rho-\rho_G\|_1\le\varepsilon$, and
-    Theorem~\ref{thm:peps_actual_sampled_distributed_contraction} identifies
+    Lemma~\ref{thm:peps_actual_sampled_distributed_contraction} identifies
     $\widehat\rho=\gamma_R\mathcal C_R(\omega)$ in the bases of
     Definitions~\ref{def:peps_all_party_local_source_basis}
     and~\ref{def:peps_all_party_local_discard_basis}.
@@ -260,10 +260,10 @@ with no numerical bound on private register dimensions.
 \section{Original resources of the sampled contraction}
 
 The network below is that of
-Theorem~\ref{thm:peps_actual_sampled_distributed_contraction}, with nonempty
+Lemma~\ref{thm:peps_actual_sampled_distributed_contraction}, with nonempty
 gate occurrences $G$, roots $r_g\in C_g$, and tagged star and sample links.
 
-\begin{theorem}[Real power bounds for the density alphabets]
+\begin{lemma}[Real power bounds for the density alphabets]
     \label{thm:peps_actual_density_alphabet_power}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.card_alphabet_source_density_le_of_power_bounds}
     \leanok
@@ -274,7 +274,7 @@ gate occurrences $G$, roots $r_g\in C_g$, and tagged star and sample links.
     \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}
     (\texttt{04-compression.tex}, lines 565--588) satisfies
     $|D_e|\leq(C_M^2+C_k)L^{\max\{2u,v\}}$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -284,7 +284,7 @@ gate occurrences $G$, roots $r_g\in C_g$, and tagged star and sample links.
     $(C_M^2+C_k)L^{\max\{2u,v\}}$ since $L\ge 1$.
 \end{proof}
 
-\begin{theorem}[Original polynomial bounds for the contraction alphabets]
+\begin{lemma}[Original polynomial bounds for the contraction alphabets]
     \label{thm:peps_actual_physicalFirst_density_polynomial}
     \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.card_physicalFirstDensityAlphabet_le_power}
     \leanok
@@ -310,21 +310,21 @@ gate occurrences $G$, roots $r_g\in C_g$, and tagged star and sample links.
     Then in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}
     (\texttt{04-compression.tex}, lines 137--175, 199--229 and 565--588), every
     link alphabet $D_e$ of $R$ satisfies $|D_e|\leq(C_b^2+C_k)L^E$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:peps_actual_density_alphabet_power,
         thm:peps_physical_first_branch_polynomial,
         thm:peps_physical_first_sample_polynomial}
-    Theorems~\ref{thm:peps_physical_first_branch_polynomial}
+    Lemmas~\ref{thm:peps_physical_first_branch_polynomial}
     and~\ref{thm:peps_physical_first_sample_polynomial} give
     $|\Xi_g|\leq C_b L^{u+2r(n+s+p)}$ and $k\leq C_k L^{2(n+4\ell s+4d+p)}$,
-    so Theorem~\ref{thm:peps_actual_density_alphabet_power} yields
+    so Lemma~\ref{thm:peps_actual_density_alphabet_power} yields
     $|D_e|\leq(C_b^2+C_k)L^E$.
 \end{proof}
 
-\begin{theorem}[Original incidence bound for the contraction]
+\begin{lemma}[Original incidence bound for the contraction]
     \label{thm:peps_actual_physicalFirst_density_incidence}
     \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.card_incidentPhysicalFirstDensityLinks_le}
     \leanok
@@ -337,7 +337,7 @@ gate occurrences $G$, roots $r_g\in C_g$, and tagged star and sample links.
     \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}
     (\texttt{04-compression.tex}, lines 140--142 and 581--588) has at most
     $2b(b-1)$ density-network links incident to any party.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -345,34 +345,34 @@ gate occurrences $G$, roots $r_g\in C_g$, and tagged star and sample links.
         def:peps_physical_first_original_locality,thm:peps_physical_first_original_locality,
         thm:peps_physical_first_occurrences,thm:peps_source_only_resources}
     By Definition~\ref{def:peps_physical_first_original_locality} and
-    Theorems~\ref{thm:peps_physical_first_original_locality},
+    Lemmas~\ref{thm:peps_physical_first_original_locality},
     \ref{thm:peps_physical_first_occurrences}, and~\ref{thm:peps_source_only_resources},
     $R$ inherits the gate arity and party participation bounds $\le b$, so
-    Theorem~\ref{thm:peps_actual_density_link_incidence} gives the bound
+    Lemma~\ref{thm:peps_actual_density_link_incidence} gives the bound
     $2b(b-1)$.
 \end{proof}
 
-\begin{theorem}[A common original gate for the contraction endpoints]
+\begin{lemma}[A common original gate for the contraction endpoints]
     \label{thm:peps_actual_physicalFirst_density_locality}
     \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.exists_original_gate_of_physicalFirst_density_link}
     \leanok
     \uses{thm:peps_source_density_link_locality,
         def:peps_physical_first_original_locality,thm:peps_physical_first_original_locality}
-    For $W,R,\delta$ as in Theorem~\ref{thm:peps_actual_physicalFirst_density_incidence},
+    For $W,R,\delta$ as in Lemma~\ref{thm:peps_actual_physicalFirst_density_incidence},
     any two parties incident to a density-network link of $R$ in
     \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}
     (\texttt{04-compression.tex}, lines 581--588) belong to the participant set
     of a common nonprivate gate occurrence of $W$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:peps_source_density_link_locality,
         def:peps_physical_first_original_locality,thm:peps_physical_first_original_locality}
-    By Theorem~\ref{thm:peps_source_density_link_locality}, $\partial e\subseteq C_{g(e)}$
+    By Lemma~\ref{thm:peps_source_density_link_locality}, $\partial e\subseteq C_{g(e)}$
     in $R$, and the occurrence bijection of
     Definition~\ref{def:peps_physical_first_original_locality} and
-    Theorem~\ref{thm:peps_physical_first_original_locality} preserves $C_{g(e)}$.
+    Lemma~\ref{thm:peps_physical_first_original_locality} preserves $C_{g(e)}$.
 \end{proof}
 
 \begin{definition}[Termwise bounds for prescribed approximate gate expansions]
@@ -384,7 +384,7 @@ gate occurrences $G$, roots $r_g\in C_g$, and tagged star and sample links.
     and scalar coefficient modulus $|c_\xi|\le C$.
 \end{definition}
 
-\begin{theorem}[A polynomial coefficient majorant for approximate gate lists]
+\begin{lemma}[A polynomial coefficient majorant for approximate gate lists]
     \label{thm:peps_effect_coefficient_majorant}
     \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.isExpansionBounded_of_isTermwiseBounded}
     \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.exists_one_le_isExpansionBounded_of_termwise_power_bounds}
@@ -395,15 +395,15 @@ gate occurrences $G$, roots $r_g\in C_g$, and tagged star and sample links.
     In particular, if $L\geq1$, $C_K,C_C\geq0$, $u,v\in\N$, $K\leq C_KL^u$, and
     $C=C_CL^v$, then every gate's coefficient sum is bounded by
     $B=(1+C_KC_C)L^{u+v}\geq1$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_gate_coefficient_sum}
-    By Theorem~\ref{thm:peps_gate_coefficient_sum},
+    By Lemma~\ref{thm:peps_gate_coefficient_sum},
     $\sum_\xi|c_\xi|\le KC\le C_KC_CL^{u+v}\le B$, and $B\ge 1$ since $L\ge 1$.
 \end{proof}
 
-\begin{theorem}[Absorbing a scalar into one distributed local matrix]
+\begin{lemma}[Absorbing a scalar into one distributed local matrix]
     \label{thm:peps_distributed_operator_scalar_absorption}
     \lean{TNLean.Lattice.Compression.DistributedOperatorContraction.contractedOperator_smul_at_party}
     \leanok
@@ -415,13 +415,13 @@ gate occurrences $G$, roots $r_g\in C_g$, and tagged star and sample links.
     \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}
     (\texttt{04-compression.tex}, lines 573--579) preserves the links and
     alphabets and satisfies $\mathcal C(T')=\mu\mathcal C(T)$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:compression_operator_matrix_sum,thm:peps_party_product_scalar}
-    By Theorem~\ref{thm:compression_operator_matrix_sum} and
-    Theorem~\ref{thm:peps_party_product_scalar}, scaling $T_{v_0}(\xi,j)$ by
+    By Lemma~\ref{thm:compression_operator_matrix_sum} and
+    Lemma~\ref{thm:peps_party_product_scalar}, scaling $T_{v_0}(\xi,j)$ by
     $\mu$ multiplies each party-product summand by $\mu$, so
     $\mathcal C(T')=\mu\mathcal C(T)$.
 \end{proof}

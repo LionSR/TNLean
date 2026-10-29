@@ -72,7 +72,7 @@
     Iterating over distinct $p_1,\ldots,p_s$ covering the owners of $\ell$ extracts each $\mathcal H_{\ell,p_j}$ once and leaves an empty remainder $\mathcal H_\emptyset=\mathbb C$.
 \end{proof}
 
-\begin{theorem}[Restriction to selected parties]
+\begin{lemma}[Restriction to selected parties]
     \label{thm:peps_party_restriction}
     \lean{TNLean.Lattice.PartyCircuit.Word.castLayouts}
     \lean{TNLean.Lattice.PartyCircuit.Word.sources_castLayouts}
@@ -95,13 +95,13 @@
     \leanok
     \uses{def:peps_party_registers,def:peps_party_partition}
     For any source-free composition $F$ and party set $A$, retaining the registers and local operations with party in $A$ yields a source-free composition $F_A$ in the same chronological order with party set $\mathcal P(F)\cap A$, and $F_A$ is allowed whenever $F$ is allowed.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Retaining a local operation precisely when its assigned party lies in $A$ and restricting exchanges and spectator registers recursively preserves the local contraction bounds and gives $\mathcal P(F_A)=\mathcal P(F)\cap A$ by structural induction on $F$.
 \end{proof}
 
-\begin{theorem}[Factorization across a partition of the parties]
+\begin{lemma}[Factorization across a partition of the parties]
     \label{thm:peps_party_binary_factorization}
     \lean{TNLean.Lattice.PartyCircuit.Word.partitionIso_eval}
     \leanok
@@ -111,7 +111,7 @@
         U_{A,\ell'}F & =(F_A\otimes F_{A^c})U_{A,\ell}.
         \label{eq:peps_party_binary_factorization}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:peps_party_partition,thm:peps_party_restriction}
@@ -146,7 +146,7 @@
     Since elementary tensors span and (\ref{eq:peps_party_binary_factorization}) is preserved under composition and tensoring with untouched registers, the result follows.
 \end{proof}
 
-\begin{theorem}[Tensor product of the local maps]
+\begin{lemma}[Tensor product of the local maps]
     \label{thm:peps_party_factorization}
     \lean{TNLean.Lattice.PartyCircuit.norm_tensorPartyMaps_le_one}
     \lean{TNLean.Lattice.PartyCircuit.Word.exists_tensorPartyMaps}
@@ -161,14 +161,14 @@
         \label{eq:peps_party_factorization}
     \end{align}
     with $\bigl\|\bigotimes_{j=1}^s B_{p_j}\bigr\|\le1$ (and $F=\operatorname{id}_{\mathbb C}$ when $\mathcal P(F)=\emptyset$, $s=0$).
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_party_binary_factorization,thm:peps_party_restriction}
-    Iterating (\ref{eq:peps_party_binary_factorization}) with $A=\{p_j\}$ ($j=1,\ldots,s$) leaves a composition with empty party set equal to $\operatorname{id}_{\mathbb C}$, and Theorem~\ref{thm:peps_party_restriction} ensures each factor $B_{p_j}=F_{\{p_j\}}$ is a contraction.
+    Iterating (\ref{eq:peps_party_binary_factorization}) with $A=\{p_j\}$ ($j=1,\ldots,s$) leaves a composition with empty party set equal to $\operatorname{id}_{\mathbb C}$, and Lemma~\ref{thm:peps_party_restriction} ensures each factor $B_{p_j}=F_{\{p_j\}}$ is a contraction.
 \end{proof}
 
-\begin{theorem}[Prepared pair sources and local contractions]
+\begin{lemma}[Prepared pair sources and local contractions]
     \label{thm:peps_prepared_party_maps}
     \lean{TNLean.Lattice.PartyCircuit.Word.exists_prepared_tensorPartyMaps}
     \leanok
@@ -181,14 +181,14 @@
         \label{eq:peps_prepared_party_maps}
     \end{align}
     where $U_{S,\rm in}$ and $U_{\rm out}$ group the prepared-source plus input registers and the output registers in the order of $P$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_grouped_sources,thm:peps_party_factorization}
-    Theorem~\ref{thm:peps_grouped_sources} factors $F=V\circ P_{S,\mathcal H_{\rm in}}$ with $V$ allowed, source-free, and $\mathcal P(V)\subseteq P$; applying (\ref{eq:peps_party_factorization}) to $V$ yields (\ref{eq:peps_prepared_party_maps}).
+    Lemma~\ref{thm:peps_grouped_sources} factors $F=V\circ P_{S,\mathcal H_{\rm in}}$ with $V$ allowed, source-free, and $\mathcal P(V)\subseteq P$; applying (\ref{eq:peps_party_factorization}) to $V$ yields (\ref{eq:peps_prepared_party_maps}).
 \end{proof}
 
-\begin{theorem}[Factorization by singleton restrictions]
+\begin{lemma}[Factorization by singleton restrictions]
     \label{thm:peps_actual_singleton_factorization}
     \lean{TNLean.Lattice.PartyCircuit.Word.groupByPartyIso_eval_eq_tensorRestrictions}
     \leanok
@@ -200,10 +200,10 @@
          & =\left(\bigotimes_{j=1}^s W|_{\{p_j\}}\right)U_\ell.
         \label{eq:peps_actual_singleton_factorization}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_party_binary_factorization,thm:peps_party_factorization,
         thm:peps_party_restriction,thm:peps_singleton_after_excluded_party}
-    We induct on $(p_1,\ldots,p_s)$. For $s=0$, $\mathcal P(W)=\emptyset$ gives $W=\operatorname{id}_{\C}$ by Theorem~\ref{thm:peps_party_factorization}. For $(p,p_2,\ldots,p_s)$, applying (\ref{eq:peps_party_binary_factorization}) with $A=\{p\}$ splits $W$ into $W|_{\{p\}}$ and $W|_{P\setminus\{p\}}$, and for each $q\in\{p_2,\ldots,p_s\}$ one has $(W|_{P\setminus\{p\}})|_{\{q\}}=W|_{\{q\}}$ by (\ref{eq:peps_singleton_after_excluded_party}), completing the induction.
+    We induct on $(p_1,\ldots,p_s)$. For $s=0$, $\mathcal P(W)=\emptyset$ gives $W=\operatorname{id}_{\C}$ by Lemma~\ref{thm:peps_party_factorization}. For $(p,p_2,\ldots,p_s)$, applying (\ref{eq:peps_party_binary_factorization}) with $A=\{p\}$ splits $W$ into $W|_{\{p\}}$ and $W|_{P\setminus\{p\}}$, and for each $q\in\{p_2,\ldots,p_s\}$ one has $(W|_{P\setminus\{p\}})|_{\{q\}}=W|_{\{q\}}$ by (\ref{eq:peps_singleton_after_excluded_party}), completing the induction.
 \end{proof}

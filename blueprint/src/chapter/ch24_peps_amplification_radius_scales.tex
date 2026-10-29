@@ -10,7 +10,7 @@
     $\gamma=(1-\varepsilon)/\alpha$.
 \end{definition}
 
-\begin{theorem}[Separation of the collar scales]
+\begin{lemma}[Separation of the collar scales]
     \label{thm:area_law_radius_exponent_gaps}
     \leanok
     \lean{TNLean.PEPS.AreaLaw.Exponents.radius_exponent_gaps,
@@ -20,7 +20,7 @@
     $1-\varepsilon<\gamma<\beta$. For every real constant $C$,
     $[L^{1-\varepsilon}+2CL^\gamma]/L^\beta\to0$
     as the positive integer $L$ tends to infinity.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Substituting the fixed parameters gives the exponent inequalities, and
@@ -28,7 +28,7 @@
     the quotient tends to zero.
 \end{proof}
 
-\begin{theorem}[Uniform control of rounded collars]
+\begin{lemma}[Uniform control of rounded collars]
     \label{thm:area_law_uniform_collar_threshold}
     \leanok
     \lean{TNLean.PEPS.AreaLaw.Exponents.exists_collar_radius_threshold,
@@ -42,7 +42,7 @@
     Consequently, for every sequence of nonnegative integer radii satisfying
     $r(L)\le CL^\gamma$ eventually,
     $\lfloor L^{1-\varepsilon}\rfloor+2r(L)=o(L^\beta)$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Combining the preceding limit with
@@ -74,7 +74,7 @@ inputs.
     $\mathcal I,w\ge0$.
 \end{definition}
 
-\begin{theorem}[Markov's inequality for three failure events]
+\begin{lemma}[Markov's inequality for three failure events]
     \label{thm:area_law_amplification_three_failures}
     \leanok
     \lean{TNLean.PEPS.AreaLaw.exists_le_of_integral_sq_le_of_integral_le}
@@ -84,7 +84,7 @@ inputs.
     $a/\varepsilon^2+b/\varepsilon+c/\varepsilon<1$ for some
     $\varepsilon>0$. Then some realization satisfies
     $X,Y,Z\le\varepsilon$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     By Markov's inequality the events $X^2\ge\varepsilon^2$,
@@ -93,13 +93,13 @@ inputs.
     probability less than one, so its complement is nonempty.
 \end{proof}
 
-\begin{theorem}[A polynomial weight under a stretched exponential]
+\begin{lemma}[A polynomial weight under a stretched exponential]
     \label{thm:area_law_amplification_poly_stretched_exp}
     \leanok
     \lean{TNLean.PEPS.AreaLaw.exists_one_add_sq_mul_exp_neg_rpow_le}
     Let $c,\alpha>0$. There is $B\ge1$, depending only on $c$ and $\alpha$,
     such that $(1+r)^2e^{-cr^\alpha}\le B$ for every $r\ge0$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     For $r\le1$ the left side is at most $4$. For $r\ge1$ and an integer
@@ -108,7 +108,7 @@ inputs.
     is at most $4m!/c^m$.
 \end{proof}
 
-\begin{theorem}[The scale choices]
+\begin{lemma}[The scale choices]
     \label{thm:area_law_amplification_scale_bounds}
     \leanok
     \lean{TNLean.PEPS.AreaLaw.amplification_scale_bounds}
@@ -126,7 +126,7 @@ inputs.
         Ct_*sM_0e^{vt_*-cr^\alpha}    & \le n^{-3K}, \\
         Ct_*s(1+r)^2M_0e^{-cr^\alpha} & \le n^{-3K}.
     \end{align*}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:area_law_amplification_poly_stretched_exp}
@@ -140,13 +140,13 @@ inputs.
     $n\ge CC_0B$ gives the remaining factor $n^{-3K}$.
 \end{proof}
 
-\begin{theorem}[A good clock realization]
+\begin{lemma}[A good clock realization]
     \label{thm:area_law_amplification_good_realization}
     \leanok
     \lean{TNLean.PEPS.AreaLaw.exists_good_realization}
     \uses{def:area_law_amplification_time_radius}
     Let $g,c,\alpha,v,C,C_0,K$ be as in
-    Theorem~\ref{thm:area_law_amplification_scale_bounds}. There are $C'>0$
+    Lemma~\ref{thm:area_law_amplification_scale_bounds}. There are $C'>0$
     and $N\ge2$ such that, for all $n\ge N$, all $\mathcal I,w\ge0$ and every
     integer $0\le s\le C_0n^2$, the following holds with $t_*,r,M_0$ as
     there. Let $X,Y,Z$ be real random variables on one probability space,
@@ -162,15 +162,15 @@ inputs.
     $\|(D-D_{\rm ret})\zeta\|$, and $M_0\|D_{\rm ret}-L'\|$,
     taking the three averaged estimates as hypotheses yields this simultaneous
     bound on a single clock realization.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:area_law_amplification_scale_bounds,
         thm:area_law_amplification_three_failures}
-    By Theorem~\ref{thm:area_law_amplification_scale_bounds} the three
+    By Lemma~\ref{thm:area_law_amplification_scale_bounds} the three
     averages are at most $n^{-6K}$, $n^{-3K}$ and $n^{-3K}$. With
     $\varepsilon=n^{-K}\le1/2$, the failure probabilities sum to at most
     $\varepsilon^4+2\varepsilon^2<1$, so
-    Theorem~\ref{thm:area_law_amplification_three_failures} gives a realization
+    Lemma~\ref{thm:area_law_amplification_three_failures} gives a realization
     where $X,Y,Z\le n^{-K}$.
 \end{proof}

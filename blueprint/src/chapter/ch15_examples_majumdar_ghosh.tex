@@ -47,26 +47,26 @@ $\ket{10}-\ket{01}$.
 
 The periodic coefficients are traces of products of these matrices.
 As recorded in \cite{gap:rmp_majumdar_ghosh_tensor_gap} and
-Theorem~\ref{thm:majumdar_ghosh_review_mpv}, the direct reading above and the
+Lemma~\ref{thm:majumdar_ghosh_review_mpv}, the direct reading above and the
 singlet-bond reading produce different periodic vectors.
-Theorem~\ref{thm:majumdar_ghosh_dimer_superposition} identifies the
-singlet-covering state, and Theorems~\ref{thm:majumdar_ghosh_left_canonical},
+Lemma~\ref{thm:majumdar_ghosh_dimer_superposition} identifies the
+singlet-covering state, and Lemmas~\ref{thm:majumdar_ghosh_left_canonical},
 \ref{thm:majumdar_ghosh_not_injective}, and \ref{thm:majumdar_ghosh_not_normal}
 show that its bond-dimension-three tensor is left-canonical, non-injective, and
-non-normal. Finally, Theorem~\ref{thm:majumdar_ghosh_ground_space} establishes
+non-normal. Finally, Lemma~\ref{thm:majumdar_ghosh_ground_space} establishes
 its two-dimensional parent ground space on even rings of at least four sites,
-and Theorem~\ref{thm:majumdar_ghosh_review_hamiltonian} compares the parent
+and Lemma~\ref{thm:majumdar_ghosh_review_hamiltonian} compares the parent
 Hamiltonian with the physical Majumdar--Ghosh Hamiltonian.
 
 
-\begin{theorem}[Coefficients of the review tensor factor]%
+\begin{lemma}[Coefficients of the review tensor factor]%
     \label{thm:majumdar_ghosh_review_coeff}
     \lean{MPSTensor.majumdarGhoshReview_coeff}
     \leanok
     \uses{def:majumdar_ghosh_review_tensor, def:eval_word}
     For every word $w$,
     $\tr\bigl(\widetilde A^{w}\bigr)=\tr\bigl(B^{w}\bigr)\,\tr\bigl(Y^{|w|}\bigr)$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -100,7 +100,7 @@ Hamiltonian with the physical Majumdar--Ghosh Hamiltonian.
     $|w|$ is odd.
 \end{definition}
 
-\begin{theorem}[Pair-covering form of periodic vectors]%
+\begin{lemma}[Pair-covering form of periodic vectors]%
     \label{thm:mps_pair_covering_form}
     \lean{MPSTensor.evalWord_apply_hub_eq_pairProduct,
         MPSTensor.coeff_cons_eq_pairProduct_add,
@@ -120,7 +120,7 @@ Hamiltonian with the physical Majumdar--Ghosh Hamiltonian.
         \label{eq:mg_pair_vector}
     \end{align}
     and for odd $N$ the periodic vector vanishes.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -150,7 +150,7 @@ Hamiltonian with the physical Majumdar--Ghosh Hamiltonian.
     through. Explicitly $C^0=E_{02}-E_{21}$ and $C^1=E_{12}+E_{20}$.
 \end{definition}
 
-\begin{theorem}[The singlet-bond tensor gives the dimer superposition]%
+\begin{lemma}[The singlet-bond tensor gives the dimer superposition]%
     \label{thm:majumdar_ghosh_bond_singlet_mpv}
     \lean{MPSTensor.majumdarGhoshBondSinglet_mpv_eq_pairCovering}
     \leanok
@@ -160,12 +160,12 @@ Hamiltonian with the physical Majumdar--Ghosh Hamiltonian.
     satisfies $\ket{V^{(N)}(C)}=P^{\mathrm{even}}_Y+P^{\mathrm{odd}}_Y$, the
     sum of the two nearest-neighbour coverings by the singlet
     $\ket{10}-\ket{01}$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     Direct multiplication gives $(C^aC^b)_{22}=Y_{ab}$, and the level $z=2$
-    satisfies the hypotheses of Theorem~\ref{thm:mps_pair_covering_form} for
+    satisfies the hypotheses of Lemma~\ref{thm:mps_pair_covering_form} for
     $C$.
 \end{proof}
 
@@ -199,7 +199,7 @@ level $0$ and the normalized singlet as pair amplitude.
     $-\tfrac1{\sqrt2}$ is the antisymmetry of the singlet.
 \end{definition}
 
-\begin{theorem}[The Majumdar--Ghosh tensor gives the dimer superposition]%
+\begin{lemma}[The Majumdar--Ghosh tensor gives the dimer superposition]%
     \label{thm:majumdar_ghosh_dimer_superposition}
     \lean{MPSTensor.majumdarGhosh_mpv_eq_pairCovering,
         MPSTensor.majumdarGhosh_mpv_eq_zero_of_odd,
@@ -209,17 +209,17 @@ level $0$ and the normalized singlet as pair amplitude.
     For every even $N>0$, $\ket{V^{(N)}(A)}=P^{\mathrm{even}}_s+P^{\mathrm{odd}}_s$,
     the sum of the two nearest-neighbour coverings by the normalized singlet
     $(\ket{10}-\ket{01})/\sqrt2$. For odd $N$ the periodic vector vanishes.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     The level $z=0$ satisfies the hypotheses of
-    Theorem~\ref{thm:mps_pair_covering_form} for $A$: rows $1,2$ of $A^0$ and $A^1$
+    Lemma~\ref{thm:mps_pair_covering_form} for $A$: rows $1,2$ of $A^0$ and $A^1$
     are supported in column $0$, and $A^i_{00}=0$. Direct multiplication gives
     $(A^aA^b)_{00}=Y_{ab}/\sqrt2$.
 \end{proof}
 
-\begin{theorem}[Relation to the singlet-bond tensor]%
+\begin{lemma}[Relation to the singlet-bond tensor]%
     \label{thm:majumdar_ghosh_bond_singlet_scaling}
     \lean{MPSTensor.majumdarGhoshBondSinglet_mpv_eq_smul}
     \leanok
@@ -227,7 +227,7 @@ level $0$ and the normalized singlet as pair amplitude.
         thm:majumdar_ghosh_dimer_superposition}
     For every even $N>0$,
     $\ket{V^{(N)}(C)}=\sqrt2^{\,N/2}\,\ket{V^{(N)}(A)}$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -235,7 +235,7 @@ level $0$ and the normalized singlet as pair amplitude.
     and $Y_{ab}/\sqrt2$; each covering is a product of $N/2$ amplitudes.
 \end{proof}
 
-\begin{theorem}[The printed review tensor does not give the dimer superposition]%
+\begin{lemma}[The printed review tensor does not give the dimer superposition]%
     \label{thm:majumdar_ghosh_review_mpv}
     \lean{MPSTensor.majumdarGhoshReview_mpv_eq,
         MPSTensor.majumdarGhoshReview_mpv_ne_smul,
@@ -254,31 +254,31 @@ level $0$ and the normalized singlet as pair amplitude.
     the sum of the two coverings by the pair state $\ket{00}+\ket{11}$, and
     $\ket{V^{(N)}(\widetilde A)}$ is not a scalar multiple of
     $\ket{V^{(N)}(A)}$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     The level $z=2$ satisfies the hypotheses of
-    Theorem~\ref{thm:mps_pair_covering_form} for $\{B^0,B^1\}$, with
+    Lemma~\ref{thm:mps_pair_covering_form} for $\{B^0,B^1\}$, with
     $(B^aB^b)_{22}=\delta_{ab}$,
-    so Theorem~\ref{thm:mps_pair_covering_form} gives
+    so Lemma~\ref{thm:mps_pair_covering_form} gives
     $\tr(B^{\sigma})=P^{\mathrm{even}}_\delta(\sigma)+P^{\mathrm{odd}}_\delta(\sigma)$.
     Since $Y^2=-I_2$, $\tr(Y^{2m})=2(-1)^m$, and
-    Theorem~\ref{thm:majumdar_ghosh_review_coeff} gives~(\ref{eq:mg_review_vector}).
+    Lemma~\ref{thm:majumdar_ghosh_review_coeff} gives~(\ref{eq:mg_review_vector}).
     On the configuration with all spins $0$ the right side
     of~(\ref{eq:mg_review_vector}) equals $4(-1)^m\neq0$, while
-    Theorem~\ref{thm:majumdar_ghosh_dimer_superposition} gives
+    Lemma~\ref{thm:majumdar_ghosh_dimer_superposition} gives
     $V^{(N)}(A)_{0\cdots0}=0$ because $s(0,0)=0$.
 \end{proof}
 
-\begin{theorem}[Majumdar--Ghosh tensor is in left-canonical form]%
+\begin{lemma}[Majumdar--Ghosh tensor is in left-canonical form]%
     \label{thm:majumdar_ghosh_left_canonical}
     \lean{MPSTensor.majumdarGhosh_left_canonical}
     \leanok
     \uses{def:majumdar_ghosh_tensor}
     The Majumdar--Ghosh tensor is isometric:
     $(A^0)^\dagger A^0 + (A^1)^\dagger A^1 = \Id$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -287,14 +287,14 @@ level $0$ and the normalized singlet as pair amplitude.
     $(A^1)^\dagger A^1=\diag(\tfrac12,0,1)$.
 \end{proof}
 
-\begin{theorem}[Transfer map of the Majumdar--Ghosh tensor]%
+\begin{lemma}[Transfer map of the Majumdar--Ghosh tensor]%
     \label{thm:majumdar_ghosh_transfer}
     \lean{MPSTensor.majumdarGhosh_transferMap_one}
     \leanok
     \uses{def:majumdar_ghosh_tensor, def:transfer_map}
     The transfer map of the Majumdar--Ghosh tensor sends the identity to the
     diagonal matrix $\E_A(\Id) = \diag(2, \tfrac12, \tfrac12)$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -302,7 +302,7 @@ level $0$ and the normalized singlet as pair amplitude.
     displayed matrices gives $\diag(2,\tfrac12,\tfrac12)$.
 \end{proof}
 
-\begin{theorem}[Majumdar--Ghosh tensor is not injective]%
+\begin{lemma}[Majumdar--Ghosh tensor is not injective]%
     \label{thm:majumdar_ghosh_not_injective}
     \lean{MPSTensor.majumdarGhosh_not_isInjective}
     \leanok
@@ -310,7 +310,7 @@ level $0$ and the normalized singlet as pair amplitude.
     The Majumdar--Ghosh tensor is not injective: every element of
     $\spn_{\C}\{A^0, A^1\}$ has vanishing $(2,2)$ entry, so the span is a proper
     subspace of~$\MN{3}$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -318,7 +318,7 @@ level $0$ and the normalized singlet as pair amplitude.
     combination of $A^0$ and $A^1$ has zero $(2,2)$ entry.
 \end{proof}
 
-\begin{theorem}[Majumdar--Ghosh tensor is not normal]%
+\begin{lemma}[Majumdar--Ghosh tensor is not normal]%
     \label{thm:majumdar_ghosh_not_normal}
     \lean{MPSTensor.majumdarGhosh_not_isNormal}
     \leanok
@@ -327,7 +327,7 @@ level $0$ and the normalized singlet as pair amplitude.
     products of that length span the full matrix algebra~$\MN{3}$. This
     non-normality is the algebraic signature expected from the two-periodic
     dimer-covering structure.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -361,7 +361,7 @@ level $0$ and the normalized singlet as pair amplitude.
     Read directly, the valence-bond formula of \cite{Cirac2021Matrix}
     specifies the six-dimensional tensor of
     Definition~\ref{def:majumdar_ghosh_review_tensor}, which by
-    Theorem~\ref{thm:majumdar_ghosh_review_mpv} gives coverings by
+    Lemma~\ref{thm:majumdar_ghosh_review_mpv} gives coverings by
     $\ket{00}+\ket{11}$ rather than by singlets. As detailed in
     \cite{gap:rmp_majumdar_ghosh_tensor_gap}, placing the singlet on the spin
     levels of a three-level bond
@@ -389,14 +389,14 @@ level $0$ and the normalized singlet as pair amplitude.
         +\mathbf S_0\cdot\mathbf S_2)$ on the sites $0,1,2$ of a window.
 \end{definition}
 
-\begin{theorem}[Exchange as a transposition]\label{thm:spin_exchange_swap}
+\begin{lemma}[Exchange as a transposition]\label{thm:spin_exchange_swap}
     \lean{MPSTensor.spinExchange_spinHalfOperator_apply, MPSTensor.spinHalfOperator_sum}
     \leanok
     \uses{def:majumdar_ghosh_hamiltonian}
     For distinct sites $j\neq k$,
     $\mathbf S_j\cdot\mathbf S_k=\tfrac12P_{jk}-\tfrac14$, where $P_{jk}$
     exchanges the spins at $j$ and $k$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -406,7 +406,7 @@ level $0$ and the normalized singlet as pair amplitude.
     the sixteen index values.
 \end{proof}
 
-\begin{theorem}[Three-site ground space of the Majumdar--Ghosh tensor]%
+\begin{lemma}[Three-site ground space of the Majumdar--Ghosh tensor]%
     \label{thm:majumdar_ghosh_local_ground_space}
     \lean{MPSTensor.majumdarGhosh_groundSpace_three_eq_eigenspace}
     \leanok
@@ -414,11 +414,11 @@ level $0$ and the normalized singlet as pair amplitude.
         def:majumdar_ghosh_hamiltonian, thm:spin_exchange_swap}
     The three-site local ground space $\mathcal G_3(A)$ equals the eigenspace
     of $h$ for the eigenvalue $-\tfrac38$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
-    By Theorem~\ref{thm:spin_exchange_swap},
+    By Lemma~\ref{thm:spin_exchange_swap},
     $h=\tfrac14(P_{01}+P_{12}+P_{02})-\tfrac38$, so the eigenspace consists of
     the vectors $v$ with $v(\sigma P_{01})+v(\sigma P_{12})+v(\sigma P_{02})=0$
     for every $\sigma$, that is,
@@ -435,7 +435,7 @@ level $0$ and the normalized singlet as pair amplitude.
     all other entries zero.
 \end{proof}
 
-\begin{theorem}[Twisted periodic vectors satisfy the window constraints]%
+\begin{lemma}[Twisted periodic vectors satisfy the window constraints]%
     \label{thm:twisted_mpv_chain_ground_space}
     \lean{MPSTensor.twistedMPV_window_mem_groundSpace,
         MPSTensor.twistedMPV_mem_chainGroundSpace}
@@ -445,7 +445,7 @@ level $0$ and the normalized singlet as pair amplitude.
     for $0<N$ and $L\le N$ the vector
     $\sigma\mapsto\tr(A^{\sigma_0}\cdots A^{\sigma_{N-1}}G)$ lies in
     $\mathcal G_{N,L}(A)$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -456,7 +456,7 @@ level $0$ and the normalized singlet as pair amplitude.
     $A^{\mathrm{out}}$ is the product over the sites outside the window.
 \end{proof}
 
-\begin{theorem}[Each dimer covering lies in the chain ground space]%
+\begin{lemma}[Each dimer covering lies in the chain ground space]%
     \label{thm:majumdar_ghosh_coverings_chain_ground_space}
     \lean{MPSTensor.majumdarGhosh_pairCoveringEven_mem_chainGroundSpace,
         MPSTensor.majumdarGhosh_pairCoveringOdd_mem_chainGroundSpace}
@@ -465,21 +465,21 @@ level $0$ and the normalized singlet as pair amplitude.
         thm:twisted_mpv_chain_ground_space, lem:mpv_mem_chain_ground_space}
     For even $N>0$ and $L\le N$, both coverings $P^{\mathrm{even}}_s$ and
     $P^{\mathrm{odd}}_s$ lie in $\mathcal G_{N,L}(A)$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     The grading $G=\diag(1,-1,-1)$ satisfies $GA^i=-A^iG$. For even $N$,
-    Theorem~\ref{thm:mps_pair_covering_form} and
-    Theorem~\ref{thm:majumdar_ghosh_dimer_superposition} give
+    Lemma~\ref{thm:mps_pair_covering_form} and
+    Lemma~\ref{thm:majumdar_ghosh_dimer_superposition} give
     $\tr(A^{\sigma}G)=2(A^{\sigma})_{00}-\tr(A^{\sigma})
         =P^{\mathrm{even}}_s(\sigma)-P^{\mathrm{odd}}_s(\sigma)$.
-    By Theorem~\ref{thm:twisted_mpv_chain_ground_space}, both this twisted
+    By Lemma~\ref{thm:twisted_mpv_chain_ground_space}, both this twisted
     vector and $\ket{V^{(N)}(A)}$ lie in $\mathcal G_{N,L}(A)$, and the two
     coverings are half their sum and half their difference.
 \end{proof}
 
-\begin{theorem}[Energy of the dimer coverings]%
+\begin{lemma}[Energy of the dimer coverings]%
     \label{thm:majumdar_ghosh_hamiltonian_eigen}
     \lean{MPSTensor.majumdarGhoshHamiltonian_apply_of_mem_chainGroundSpace,
         MPSTensor.majumdarGhoshHamiltonian_pairCoveringEven,
@@ -494,28 +494,28 @@ level $0$ and the normalized singlet as pair amplitude.
     two singlet coverings, and for $N\ge3$ the periodic vector
     $\ket{V^{(N)}(A)}$, is an eigenvector of~(\ref{eq:mg_hamiltonian}) with
     eigenvalue $-\tfrac{3N}{8}$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     Each window of three sites $i,i+1,i+2$ of $\psi$ lies in
     $\mathcal G_3(A)$, so by
-    Theorem~\ref{thm:majumdar_ghosh_local_ground_space} the three transposed
+    Lemma~\ref{thm:majumdar_ghosh_local_ground_space} the three transposed
     copies of $\psi$ in that window sum to zero. Summing over $i$ and shifting
     the index of the middle transposition gives
-    $2\sum_iP_{i,i+1}\psi+\sum_iP_{i,i+2}\psi=0$. Theorem~\ref{thm:spin_exchange_swap}
+    $2\sum_iP_{i,i+1}\psi+\sum_iP_{i,i+2}\psi=0$. Lemma~\ref{thm:spin_exchange_swap}
     then gives
     $H_N\psi=\tfrac14\bigl(2\sum_iP_{i,i+1}\psi+\sum_iP_{i,i+2}\psi\bigr)
         -\tfrac{3N}{8}\psi=-\tfrac{3N}{8}\psi$.
 \end{proof}
 
 Because the Majumdar--Ghosh tensor is non-normal
-(Theorem~\ref{thm:majumdar_ghosh_not_normal}), the intersection property of
-Theorem~\ref{thm:ground_space_intersection} does not apply to it. The bond
+(Lemma~\ref{thm:majumdar_ghosh_not_normal}), the intersection property of
+Lemma~\ref{thm:ground_space_intersection} does not apply to it. The bond
 grading $G=\diag(1,-1,-1)$, which satisfies $GA^i=-A^iG$, takes the place of
 normality in the following two theorems.
 
-\begin{theorem}[Graded injectivity of the boundary map]%
+\begin{lemma}[Graded injectivity of the boundary map]%
     \label{lem:majumdar_ghosh_graded_injectivity}
     \lean{MPSTensor.majumdarGhosh_exists_parity_rep,
         MPSTensor.majumdarGhosh_eq_zero_of_groundSpaceMap_eq_zero}
@@ -525,7 +525,7 @@ normality in the following two theorems.
     Every vector of $\mathcal G_{K}(A)$ equals $\Gamma_{K}(X)$ for a matrix $X$
     with $GX=(-1)^{K}XG$. For $K\ge3$, a matrix $X$ with $GX=(-1)^{K}XG$ and
     $\Gamma_{K}(X)=0$ is zero.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -537,11 +537,11 @@ normality in the following two theorems.
     $\tfrac1{\sqrt2}X_{10}$, $-\tfrac1{\sqrt2}X_{20}$ and $-\tfrac12X_{01}$. For the
     step from $K$ to $K+1$, fixing the last site to $a$ gives
     $\Gamma_{K}(A^aX)=0$, where $A^aX$ has parity $(-1)^{K}$; hence $A^aX=0$ for
-    both $a$, and Theorem~\ref{thm:majumdar_ghosh_left_canonical} gives
+    both $a$, and Lemma~\ref{thm:majumdar_ghosh_left_canonical} gives
     $X=\sum_a(A^a)^\dagger A^aX=0$.
 \end{proof}
 
-\begin{theorem}[Intersection property of the Majumdar--Ghosh tensor]%
+\begin{lemma}[Intersection property of the Majumdar--Ghosh tensor]%
     \label{lem:majumdar_ghosh_intersection}
     \lean{MPSTensor.majumdarGhosh_groundSpace_intersection,
         MPSTensor.majumdarGhosh_chainGroundSpace_le_groundSpace}
@@ -552,23 +552,23 @@ normality in the following two theorems.
     $(\mathcal G_{M}(A)\otimes\C^2)\cap(\C^2\otimes\mathcal G_{M}(A))
         =\mathcal G_{M+1}(A)$. Consequently, for $N\ge3$ every vector of
     $\mathcal G_{N,3}(A)$ lies in $\mathcal G_{N}(A)$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:ground_space_restriction_overlap, thm:ground_space_grow_back}
     Let $\psi$ lie in the intersection. By
-    Theorem~\ref{lem:majumdar_ghosh_graded_injectivity}, its restriction with
+    Lemma~\ref{lem:majumdar_ghosh_graded_injectivity}, its restriction with
     first letter $i$ is $\Gamma_{M}(Y_i)$ and its restriction with last letter
     $j$ is $\Gamma_{M}(Z_j)$, with $Y_i$ and $Z_j$ of parity $(-1)^{M}$. Comparing
     on the middle $M-1$ sites gives
     $\Gamma_{M-1}(A^jY_i)=\Gamma_{M-1}(Z_jA^i)$
-    (Theorem~\ref{thm:ground_space_restriction_overlap}), and both matrices have parity
+    (Lemma~\ref{thm:ground_space_restriction_overlap}), and both matrices have parity
     $(-1)^{M-1}$. For $M\ge4$ the second statement of
-    Theorem~\ref{lem:majumdar_ghosh_graded_injectivity} gives $A^jY_i=Z_jA^i$; with
+    Lemma~\ref{lem:majumdar_ghosh_graded_injectivity} gives $A^jY_i=Z_jA^i$; with
     $X=\sum_j(A^j)^\dagger Z_j$ the left-canonical equation
     $\sum_j(A^j)^\dagger A^j=1$ and
-    Theorem~\ref{thm:ground_space_grow_back} give $Y_i=XA^i$, hence
+    Lemma~\ref{thm:ground_space_grow_back} give $Y_i=XA^i$, hence
     $\psi=\Gamma_{M+1}(X)$. For $M=3$, the
     conditions~(\ref{eq:mg_spin_half_conditions}) on the four three-site
     restrictions with a fixed first or last letter give $\psi=\Gamma_{4}(X)$ for
@@ -578,7 +578,7 @@ normality in the following two theorems.
     statement follows by enlarging a window of three sites one site at a time.
 \end{proof}
 
-\begin{theorem}[Ground space of the Majumdar--Ghosh parent Hamiltonian]%
+\begin{lemma}[Ground space of the Majumdar--Ghosh parent Hamiltonian]%
     \label{thm:majumdar_ghosh_ground_space}
     \lean{MPSTensor.majumdarGhosh_chainGroundSpace_eq_span,
         MPSTensor.majumdarGhosh_ker_parentHamiltonian_eq_span,
@@ -596,49 +596,49 @@ normality in the following two theorems.
     $H_{N,\mathrm{MG}}^{(3)}$ has a two-dimensional ground space
     $\mathcal G_{N,3}(A_{\mathrm{MG}})$, spanned by the two nearest-neighbour
     singlet coverings $(1,2)(3,4)\cdots(N-1,N)$ and $(2,3)(4,5)\cdots(N,1)$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{lem:parent_cyclic_translate_preserves_chain_space,
         thm:full_ring_boundary_change_of_cut}
-    By Theorem~\ref{thm:majumdar_ghosh_coverings_chain_ground_space}, the two
+    By Lemma~\ref{thm:majumdar_ghosh_coverings_chain_ground_space}, the two
     coverings lie in $\mathcal G_{N,3}(A)$. Conversely,
     let $\psi\in\mathcal G_{N,3}(A)$. By
-    Theorem~\ref{lem:majumdar_ghosh_intersection}, $\psi=\Gamma_{N}(X)$ and its
+    Lemma~\ref{lem:majumdar_ghosh_intersection}, $\psi=\Gamma_{N}(X)$ and its
     translate by one site, which lies in $\mathcal G_{N,3}(A)$ by
     Lemma~\ref{lem:parent_cyclic_translate_preserves_chain_space}, is
     $\Gamma_{N}(Y)$, with $X$ and $Y$ commuting with $G$. Comparing the two
     cuts on the remaining $N-1$ sites via
-    Theorem~\ref{thm:full_ring_boundary_change_of_cut} gives
+    Lemma~\ref{thm:full_ring_boundary_change_of_cut} gives
     $\Gamma_{N-1}(XA^a)=\Gamma_{N-1}(A^aY)$, so
-    Theorem~\ref{lem:majumdar_ghosh_graded_injectivity} forces $XA^a=A^aY$. The
+    Lemma~\ref{lem:majumdar_ghosh_graded_injectivity} forces $XA^a=A^aY$. The
     entries of these two equations force
     $X=\diag(x,y,y)=\tfrac{x+y}2\,1+\tfrac{x-y}2\,G$, and
     $\Gamma_{N}(1)=P^{\mathrm{even}}_s+P^{\mathrm{odd}}_s$,
     $\Gamma_{N}(G)=P^{\mathrm{even}}_s-P^{\mathrm{odd}}_s$ as in the proof of
-    Theorem~\ref{thm:majumdar_ghosh_coverings_chain_ground_space}. The two
+    Lemma~\ref{thm:majumdar_ghosh_coverings_chain_ground_space}. The two
     coverings are linearly independent because $\Gamma_{N}$ is injective on the
     matrices commuting with $G$. Finally,
-    Theorem~\ref{thm:parent_hamiltonian_kernel_eq_chain_ground_space}
+    Lemma~\ref{thm:parent_hamiltonian_kernel_eq_chain_ground_space}
     identifies the kernel of $H_{N,\mathrm{MG}}^{(3)}$ with
     $\mathcal G_{N,3}(A)$.
 \end{proof}
 
-\begin{theorem}[No dimer ground state on odd rings]%
+\begin{lemma}[No dimer ground state on odd rings]%
     \label{thm:majumdar_ghosh_ground_space_odd}
     \lean{MPSTensor.majumdarGhosh_chainGroundSpace_eq_bot_of_odd}
     \leanok
     \uses{lem:majumdar_ghosh_intersection, lem:majumdar_ghosh_graded_injectivity}
     On an odd periodic chain of length $N\ge5$, the space
     $\mathcal G_{N,3}(A_{\mathrm{MG}})$ is zero.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{lem:parent_cyclic_translate_preserves_chain_space,
         thm:full_ring_boundary_change_of_cut}
-    As in the proof of Theorem~\ref{thm:majumdar_ghosh_ground_space}, a vector
+    As in the proof of Lemma~\ref{thm:majumdar_ghosh_ground_space}, a vector
     $\Gamma_{N}(X)$ of $\mathcal G_{N,3}(A)$ and its translates by one and two
     sites give $XA^a=A^aY$ and $YA^a=A^aZ$, now with $X,Y,Z$ anticommuting with
     $G$, so that $X_{00}=X_{11}=X_{12}=X_{21}=X_{22}=0$. The entries of
@@ -655,7 +655,7 @@ normality in the following two theorems.
     $X_{01}=X_{02}=0$, and $X=0$.
 \end{proof}
 
-\begin{theorem}[The three-site term as a projector]%
+\begin{lemma}[The three-site term as a projector]%
     \label{thm:majumdar_ghosh_term_projector}
     \lean{MPSTensor.majumdarGhoshTerm_apply,
         MPSTensor.majumdarGhoshTerm_shift_eq_parentInteraction}
@@ -666,24 +666,24 @@ normality in the following two theorems.
     $\tfrac43\bigl(h+\tfrac38\bigr)=\tfrac13(P_{01}+P_{12}+P_{02})$ is the
     orthogonal projector onto $\mathcal G_{3}(A)^{\perp}$, the three-site parent
     interaction of the Majumdar--Ghosh tensor.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
-    By Theorem~\ref{thm:spin_exchange_swap}, the operator
+    By Lemma~\ref{thm:spin_exchange_swap}, the operator
     $Q=\tfrac13(P_{01}+P_{12}+P_{02})$ equals $\tfrac43(h+\tfrac38)$. Each
     transposition is a permutation of the configurations, hence self-adjoint,
     so $Q$ is self-adjoint. On three spin-$\tfrac12$ sites the antisymmetric part
     vanishes, so $1+C+C^{2}=P_{01}+P_{12}+P_{02}$ for the cyclic shift $C$, and
     $(P_{01}+P_{12}+P_{02})^{2}=3+3(C+C^{2})=3(P_{01}+P_{12}+P_{02})$; this is
     checked on the eight configurations. Hence $Q^{2}=Q$. By
-    Theorem~\ref{thm:majumdar_ghosh_local_ground_space}, the kernel of $Q$,
+    Lemma~\ref{thm:majumdar_ghosh_local_ground_space}, the kernel of $Q$,
     which is the eigenspace of $h$ for $-\tfrac38$, equals $\mathcal G_{3}(A)$.
     A self-adjoint idempotent is the orthogonal projector onto the orthogonal
     complement of its kernel.
 \end{proof}
 
-\begin{theorem}[The three-site term and total spin]%
+\begin{lemma}[The three-site term and total spin]%
     \label{thm:majumdar_ghosh_term_total_spin}
     \lean{MPSTensor.siteOperator, MPSTensor.totalSpin, MPSTensor.totalSpinSq,
         MPSTensor.spinExchange_self,
@@ -699,17 +699,17 @@ normality in the following two theorems.
     and $\mathbf S^{2}=\sum_\alpha(S^\alpha)^{2}$. Then
     $\mathbf S^{2}=\tfrac94+4h=\tfrac34+3Q$ with
     $Q=\tfrac43\bigl(h+\tfrac38\bigr)$ the projector of
-    Theorem~\ref{thm:majumdar_ghosh_term_projector}. Hence $\mathcal G_{3}(A)$ is
+    Lemma~\ref{thm:majumdar_ghosh_term_projector}. Hence $\mathcal G_{3}(A)$ is
     the eigenspace of $\mathbf S^{2}$ for $\tfrac34$, the subspace of total spin
     $\tfrac12$, and $Q$ is the orthogonal projector $P^{3/2}$ onto the eigenspace of
     $\mathbf S^{2}$ for $\tfrac{15}4$, the subspace of total spin $\tfrac32$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     Expanding the squares gives $\mathbf S^{2}=\sum_{j,k}\mathbf S_j\cdot\mathbf S_k$,
     where $\sum_\alpha(S^\alpha)^{2}=\tfrac34$ on each site and
-    Theorem~\ref{thm:spin_exchange_swap} gives
+    Lemma~\ref{thm:spin_exchange_swap} gives
     $\mathbf S_j\cdot\mathbf S_k=\tfrac12P_{jk}-\tfrac14$ for $j\neq k$. On
     three sites this yields
     $\mathbf S^{2}=\tfrac94-\tfrac32+(P_{01}+P_{12}+P_{02})=\tfrac34+3Q$. Since
@@ -718,7 +718,7 @@ normality in the following two theorems.
     $\mathcal G_{3}(A)$ and its range is $\mathcal G_{3}(A)^{\perp}$.
 \end{proof}
 
-\begin{theorem}[Ground space of the Majumdar--Ghosh Hamiltonian]%
+\begin{lemma}[Ground space of the Majumdar--Ghosh Hamiltonian]%
     \label{thm:majumdar_ghosh_review_hamiltonian}
     \lean{MPSTensor.majumdarGhoshHamiltonian_apply,
         MPSTensor.majumdarGhosh_parentHamiltonian_three_apply,
@@ -745,17 +745,17 @@ normality in the following two theorems.
     $(1,2)(3,4)\cdots(N-1,N)$ and $(2,3)(4,5)\cdots(N,1)$, and the
     Majumdar--Ghosh state is a ground-state superposition of those two
     coverings.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
-    Theorem~\ref{thm:spin_exchange_swap} gives
+    Lemma~\ref{thm:spin_exchange_swap} gives
     $H_{N}=\tfrac12\sum_{i}P_{i,i+1}+\tfrac14\sum_{i}P_{i,i+2}-\tfrac{3N}{8}$.
     The cyclic shift of the summation index gives
     $\sum_{i}P_{i+1,i+2}=\sum_{i}P_{i,i+1}$, so
     $H_{N}=\tfrac14\sum_{i}\bigl(P_{i,i+1}+P_{i+1,i+2}+P_{i,i+2}\bigr)
         -\tfrac{3N}{8}$.
-    By Theorem~\ref{thm:majumdar_ghosh_term_projector},
+    By Lemma~\ref{thm:majumdar_ghosh_term_projector},
     $H_{N,\mathrm{MG}}^{(3)}
         =\tfrac13\sum_{i}\bigl(P_{i,i+1}+P_{i+1,i+2}+P_{i,i+2}\bigr)$.
     Comparing the two sums gives~(\ref{eq:mg_hamiltonian_projectors}). The parent
@@ -764,13 +764,13 @@ normality in the following two theorems.
     $0\le\langle v,(H_{N}+\tfrac{3N}{8})v\rangle
         =(\mu+\tfrac{3N}{8})\lVert v\rVert^{2}$,
     and hence $\mu+\tfrac{3N}{8}\ge0$. By
-    Theorem~\ref{thm:majumdar_ghosh_ground_space}, the eigenspace for
+    Lemma~\ref{thm:majumdar_ghosh_ground_space}, the eigenspace for
     $-\tfrac{3N}{8}$, which is the kernel of the right side
     of~(\ref{eq:mg_hamiltonian_projectors}), is spanned by the two coverings.
     The coverings are nonzero, so $-\tfrac{3N}{8}$ is an eigenvalue.
 \end{proof}
 
-\begin{theorem}[The dimer energy on odd rings]%
+\begin{lemma}[The dimer energy on odd rings]%
     \label{thm:majumdar_ghosh_review_hamiltonian_odd}
     \lean{MPSTensor.majumdarGhoshHamiltonian_not_hasEigenvalue_of_odd}
     \leanok
@@ -779,11 +779,11 @@ normality in the following two theorems.
         thm:parent_hamiltonian_kernel_eq_chain_ground_space}
     For odd $N\ge5$, $-\tfrac{3N}{8}$ is not an eigenvalue of $H_{N}$, so every
     eigenvalue of $H_{N}$ is strictly larger than $-\tfrac{3N}{8}$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
-    By Theorems~\ref{thm:majumdar_ghosh_review_hamiltonian},
+    By Lemmas~\ref{thm:majumdar_ghosh_review_hamiltonian},
     \ref{thm:parent_hamiltonian_kernel_eq_chain_ground_space},
     and~\ref{thm:majumdar_ghosh_ground_space_odd}, the eigenspace of $H_N$ for
     $-\tfrac{3N}{8}$ equals
@@ -791,7 +791,7 @@ normality in the following two theorems.
 \end{proof}
 
 \begin{remark}\label{rem:majumdar_ghosh_review_hamiltonian}
-    By Theorem~\ref{thm:majumdar_ghosh_review_hamiltonian}, on an even ring the
+    By Lemma~\ref{thm:majumdar_ghosh_review_hamiltonian}, on an even ring the
     ground space of $H_{N}$ is two-dimensional. The one-site translation
     exchanges the two singlet coverings, so this degeneracy reflects the
     spontaneous breaking of the one-site translation symmetry of the chain.

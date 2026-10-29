@@ -5,7 +5,7 @@ $S_L(A)=\MN{D}$. When $\Id\in S_1(A)$, products of shorter words pad directly to
 common length. Supporting proofs appear in
 Section~\ref{sec:app_wielandt_identity_in_span}.
 
-\begin{theorem}[Homogeneous word-span propagation under normalization]%
+\begin{lemma}[Homogeneous word-span propagation under normalization]%
     \label{thm:wordspan_propagation_unital}
     \lean{Kraus.wordSpan_succ_eq_top_of_unital_of_wordSpan_eq_top}
     \lean{Kraus.wordSpan_eq_top_of_ge_of_unital}
@@ -22,7 +22,7 @@ Section~\ref{sec:app_wielandt_identity_in_span}.
     Then $S_m(A)=\MN{D}$ for every $m\ge L$.
     Equivalently, $L$-block injectivity propagates to every larger
     homogeneous length.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok\uses{lem:word_span_mul}
     If $S_n(A)=\MN{D}$, then for every $X\in\MN{D}$,
@@ -41,18 +41,18 @@ Section~\ref{sec:app_wielandt_identity_in_span}.
     Iterating this implication gives the result for every $m\ge L$.
 \end{proof}
 
-\begin{theorem}[Algebra span plus one-step padding implies normality]%
+\begin{lemma}[Algebra span plus one-step padding implies normality]%
     \label{thm:algspan_to_normal}
     \lean{MPSTensor.isNormal_of_algSpan_eq_top_of_aperiodic}
     \leanok
     \uses{def:normal, def:alg_span, def:word_span}
     If $\algspn(A)=\MN{D}$ and $\Id\in S_1(A)$, then $A$ is normal.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok\uses{thm:cumspan_to_normal}
     Since $\algspn(A)=\MN{D}$, the ascending chain condition for
     finite-dimensional subspaces gives an $N$ such that $T_N(A)=\MN{D}$, and
-    Theorem~\ref{thm:cumspan_to_normal} then implies that $A$ is normal.
+    Lemma~\ref{thm:cumspan_to_normal} then implies that $A$ is normal.
 \end{proof}
 
 \begin{remark}[Normal canonical form and blocked primitivity]\label{rem:d1_bypasses_aperiodicity}
@@ -66,7 +66,7 @@ Section~\ref{sec:app_wielandt_identity_in_span}.
 \section{Block injectivity from TP/primitive/irreducible blocks}%
 \label{sec:ch07_block_inj_from_tp_primitive_irred}
 
-\begin{theorem}[TP-primitive irreducible tensor is injective after blocking]%
+\begin{lemma}[TP-primitive irreducible tensor is injective after blocking]%
     \label{thm:tp_primitive_irred_block_injective}
     \lean{MPSTensor.exists_pos_blockTensor_isInjective_of_tp_primitive_irreducible}
     \leanok
@@ -76,7 +76,7 @@ Section~\ref{sec:app_wielandt_identity_in_span}.
     primitive.
     Then there exists a positive blocking length~$L$ such that
     $A^{[L]}$ is one-site injective.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:normal_tp_primitive_irred, lem:one_block_injective_of_injective, cor:blk_inj_zero_dim_one}
@@ -86,9 +86,9 @@ Section~\ref{sec:app_wielandt_identity_in_span}.
     Lemma~\ref{lem:one_block_injective_of_injective} gives the positive
     blocking length $L=1$.
     Suppose now that $D\ge2$.
-    Theorem~\ref{thm:normal_tp_primitive_irred} gives a
+    Lemma~\ref{thm:normal_tp_primitive_irred} gives a
     block-injectivity length~$L$.
-    If $L=0$, Corollary~\ref{cor:blk_inj_zero_dim_one} would force $D=1$,
+    If $L=0$, Lemma~\ref{cor:blk_inj_zero_dim_one} would force $D=1$,
     a contradiction.
     Thus $L>0$, and the blocked-chain equivalence identifies this
     $L$-block injectivity with one-site injectivity of the blocked tensor
@@ -96,6 +96,6 @@ Section~\ref{sec:app_wielandt_identity_in_span}.
 \end{proof}
 
 \begin{remark}
-    Blocking preserves normality by Theorem~\ref{thm:isNormal_blockTensor},
+    Blocking preserves normality by Lemma~\ref{thm:isNormal_blockTensor},
     proved in Section~\ref{sec:app_wielandt_blocking_support}.
 \end{remark}

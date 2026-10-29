@@ -4,7 +4,7 @@ The identities below give supporting contraction algebra for
 \cite[Proposition~5.7]{Arad2016RigorousRG}. All matrix entries and scalar
 coefficients are complex. Products retain the displayed order.
 
-\begin{theorem}[Partition of an ordered product]
+\begin{lemma}[Partition of an ordered product]
     \label{thm:trace_core_product_partition}
     \lean{TNLean.MPS.AreaLaw.orderedProduct_partition_interval}
     \leanok
@@ -18,13 +18,13 @@ coefficients are complex. Products retain the displayed order.
     \end{align}
     These lists are truncated at the length of $l$, so no bound on $a+r$
     is required.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Split the list after its first $a$ entries, split the remaining list
     after its first $r$ entries, and use associativity.
 \end{proof}
 
-\begin{theorem}[An open representation of a trace-closed chain]
+\begin{lemma}[An open representation of a trace-closed chain]
     \label{thm:trace_core_open_square}
     \lean{TNLean.MPS.AreaLaw.isOpenMPS_trace_closed_chain}
     \leanok
@@ -39,7 +39,7 @@ coefficients are complex. Products retain the displayed order.
     most $D^2$. At length zero its coefficient $\operatorname{tr}C$ is
     represented by the scalar multiplying the empty tensor product.
     Zero physical or virtual dimension is allowed.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:chain_mps_of_cut_rank}
     At an internal cut, write the ordered matrix product as $P(x)Q(y)$.
@@ -87,7 +87,7 @@ coefficients are complex. Products retain the displayed order.
     This matrix depends only on $c$, $B$ and $p$.
 \end{definition}
 
-\begin{theorem}[Ordered slice words as a common stacked contraction]
+\begin{lemma}[Ordered slice words as a common stacked contraction]
     \label{thm:trace_core_slice_words}
     \lean{MPOTensor.sum_word_slices_eq_trace_stackedTensor}
     \leanok
@@ -108,7 +108,7 @@ coefficients are complex. Products retain the displayed order.
     $c$. The closing matrix is chosen independently of the interior
     tensors. All lengths and dimensions may vanish whenever the displayed
     configurations exist.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Fix endpoint words $x,y\in\{0,\ldots,B-1\}^{p}$, and write
     \begin{align*}

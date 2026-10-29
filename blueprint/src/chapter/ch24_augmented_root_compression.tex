@@ -7,7 +7,7 @@ for the unitary $(\mathcal U_k f)(x)=f(e_k^{-1}x)$.
 The physical dimension is $q$, and both auxiliary dimensions are $d$.
 All replica metrics use the dimension of the full one-copy system.
 
-\begin{theorem}[Band matrices in the original coordinates]
+\begin{lemma}[Band matrices in the original coordinates]
     \label{thm:al_augmented_band_coordinates}
     \lean{TNLean.PEPS.AreaLaw.Scan.bandMetric_submatrix_augmentedReplicaConfigurationEquiv}
     \leanok
@@ -22,7 +22,7 @@ All replica metrics use the dimension of the full one-copy system.
     \end{align*}
     Then $A_J(P,Y,F)=\mathcal U_k A_I(P_I,Y_I,F_I)\mathcal U_k^*$.
     The regions $P,Y,F$ need not partition $J$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:al_augmented_replica_metric_coordinates}
@@ -31,7 +31,7 @@ All replica metrics use the dimension of the full one-copy system.
     and multiplication, the identity follows after squaring.
 \end{proof}
 
-\begin{theorem}[Compressed root and filtered vector in original coordinates]
+\begin{lemma}[Compressed root and filtered vector in original coordinates]
     \label{thm:al_augmented_root_compression}
     \lean{TNLean.PEPS.AreaLaw.Scan.rootPath_augmented_compressed_bandProduct}
     \leanok
@@ -72,7 +72,7 @@ All replica metrics use the dimension of the full one-copy system.
     \end{align}
     Here $x/\|x\|$ denotes the zero vector when $x=0$; with this convention
     the last identity also holds for $v=0$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:al_augmented_band_coordinates}

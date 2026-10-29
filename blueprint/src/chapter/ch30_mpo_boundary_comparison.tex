@@ -3,7 +3,7 @@
 \section{Comparing exact decomposition coordinates}
 \label{sec:glm_boundary_comparison}
 
-\begin{theorem}[The reconstructed block-algebra map is unique]
+\begin{lemma}[The reconstructed block-algebra map is unique]
     \label{thm:glm_boundary_representation_unique}
     \lean{MPSTensor.IsBiorthogonalDecomposition.sum_sandwich_eq_of_wordTupleSpanTop,
         MPSTensor.IsBiorthogonalDecomposition.support_eq_of_wordTupleSpanTop}
@@ -22,7 +22,7 @@
          & =\sum_{j\in J}\widetilde W_j\widetilde V_j.
         \label{eq:glm_boundary_support_unique}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:glm_boundary_decomposition}
@@ -32,7 +32,7 @@
     tuple. Taking $M_c=I$ gives (\ref{eq:glm_boundary_support_unique}).
 \end{proof}
 
-\begin{theorem}[Coordinate changes on a common support]
+\begin{lemma}[Coordinate changes on a common support]
     \label{thm:glm_boundary_support_comparison}
     \lean{Matrix.comparison_of_common_support}
     \leanok
@@ -45,7 +45,7 @@
         \label{eq:glm_boundary_support_comparison}
     \end{align}
     The common support need not be the ambient identity or self-adjoint.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Substituting $SH=\widetilde S\widetilde H$ into
@@ -54,7 +54,7 @@
     left multiplication by $\widetilde H$ or $H$ then gives $CD=I$ and $DC=I$.
 \end{proof}
 
-\begin{theorem}[Composition and action of exact decompositions]
+\begin{lemma}[Composition and action of exact decompositions]
     \label{thm:glm_boundary_decomposition_operations}
     \lean{MPSTensor.IsBiorthogonalDecomposition.comp,
         MPSTensor.IsBiorthogonalDecomposition.sandwich,
@@ -70,7 +70,7 @@
     Acting with a fixed MPO replaces state maps by $I\otimes V_i$ and
     $I\otimes W_i$; acting on a fixed state replaces operator maps by
     $V_i\otimes I$ and $W_i\otimes I$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Cancelling the intermediate analysis-synthesis pairs in each product and
@@ -87,7 +87,7 @@
     into $H$, with coordinate space $\bigoplus_i\mathbb C^{D_i}$.
 \end{definition}
 
-\begin{theorem}[Full coordinate comparison]
+\begin{lemma}[Full coordinate comparison]
     \label{thm:glm_boundary_full_comparison}
     \lean{MPSTensor.decompositionSynthesis_mul_analysis,
         MPSTensor.IsBiorthogonalDecomposition.analysis_mul_synthesis,
@@ -100,19 +100,19 @@
     For two exact decompositions over target blocks spanning simultaneously at one positive word length,
     $\widetilde HS$ and $H\widetilde S$ are inverse full coordinate changes,
     and each carries the other synthesis matrix to its own.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:glm_boundary_representation_unique,
         thm:glm_boundary_support_comparison}
     Summing the separate biorthogonality identities gives $HS=I$ and
     $SH=\sum_iW_iV_i$, after which
-    Theorems~\ref{thm:glm_boundary_representation_unique}
+    Lemmas~\ref{thm:glm_boundary_representation_unique}
     and~\ref{thm:glm_boundary_support_comparison} show that $\widetilde HS$
     and $H\widetilde S$ are inverse coordinate changes.
 \end{proof}
 
-\begin{theorem}[Target intertwiners and reindexing]
+\begin{lemma}[Target intertwiners and reindexing]
     \label{thm:glm_boundary_target_intertwiners}
     \lean{MPSTensor.IsBiorthogonalDecomposition.analysis_mul_letter,
         MPSTensor.IsBiorthogonalDecomposition.letter_mul_synthesis,
@@ -125,7 +125,7 @@
     Consequently $V_i\widetilde W_j$ intertwines $A_i$ with
     $\widetilde A_j$. A bijective reindexing of the finite target copies
     preserves every decomposition identity.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Multiplying the reconstruction formula by the selected analysis or
@@ -160,7 +160,7 @@
     \end{align}
 \end{definition}
 
-\begin{theorem}[The two trees reconstruct the same action]
+\begin{lemma}[The two trees reconstruct the same action]
     \label{thm:glm_boundary_exact_action_trees}
     \lean{MPOTensor.fusionThenAction_isBiorthogonal,
         MPOTensor.sequentialAction_isBiorthogonal,
@@ -172,7 +172,7 @@
     both trees give exact biorthogonal decompositions of $(T_aT_b)\cdot A_x$.
     Their ambient support idempotents agree whenever the final state blocks
     have a simultaneous positive word span.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:glm_boundary_decomposition_operations,
@@ -180,7 +180,7 @@
     Lifting each first-stage decomposition through the other action factor and
     composing with the second-stage decomposition gives two exact
     decompositions that the bond associator places on the same incoming space;
-    Theorem~\ref{thm:glm_boundary_representation_unique} then equates their
+    Lemma~\ref{thm:glm_boundary_representation_unique} then equates their
     support idempotents.
 \end{proof}
 
@@ -196,7 +196,7 @@
     The printed $L$-symbol orientation is that of $C$.
 \end{definition}
 
-\begin{theorem}[Inverse full action comparisons]
+\begin{lemma}[Inverse full action comparisons]
     \label{thm:glm_boundary_action_comparison}
     \lean{MPOTensor.fullActionComparison_spec,
         MPOTensor.fusionToSequentialComparison_mul_analysis}
@@ -210,7 +210,7 @@
         CH_{\rm fus} & =H_{\rm seq}.
         \label{eq:glm_boundary_action_comparison}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:glm_boundary_exact_action_trees,
@@ -242,7 +242,7 @@
     Individual entries may vanish.
 \end{definition}
 
-\begin{theorem}[Separation of the final bond factor]
+\begin{lemma}[Separation of the final bond factor]
     \leanok
     \label{thm:glm_boundary_action_l_factor}
     \lean{MPOTensor.actionLMatrix_cross,MPOTensor.inverseActionLMatrix_cross,
@@ -259,7 +259,7 @@
         D & =\bigoplus_y(K_{abx}^y\otimes I_{D_y}).
         \label{eq:glm_boundary_action_l_factor}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:glm_boundary_exact_action_trees,
@@ -271,7 +271,7 @@
     (\ref{eq:glm_boundary_action_l_entries}).
 \end{proof}
 
-\begin{theorem}[Invertible L matrices and their defining action equation]
+\begin{lemma}[Invertible L matrices and their defining action equation]
     \leanok
     \label{thm:glm_boundary_action_l_exists}
     \lean{MPOTensor.actionLMatrix_inverse,
@@ -357,7 +357,7 @@
             \end{tenkz}
         \end{tenkzeq}
     \end{tenkzequation}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:glm_boundary_action_l_factor,

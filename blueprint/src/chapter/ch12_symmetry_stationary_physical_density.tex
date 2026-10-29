@@ -59,7 +59,7 @@
     entry $(s,t)$ of $P_NKP_N^\dagger$ equals $\tr(\Lambda A_sA_t^\dagger)$.
 \end{proof}
 
-\begin{theorem}[Stationary density expectation of a physical observable]
+\begin{lemma}[Stationary density expectation of a physical observable]
     \label{thm:stationary_density_observable}
     \lean{MPSTensor.trace_stationaryBlockDensity_mul_observable}
     \leanok
@@ -75,7 +75,7 @@
     \end{align}
     Thus the physical density represents the same block-observable
     functional as the stationary transfer contraction.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -84,7 +84,7 @@
     (\ref{eq:stationary_density_observable}) by linearity of the trace.
 \end{proof}
 
-\begin{theorem}[Normalization and consistency of stationary densities]
+\begin{lemma}[Normalization and consistency of stationary densities]
     \label{thm:stationary_density_consistency}
     \lean{MPSTensor.stationaryBlockDensity_posSemidef,
         MPSTensor.trace_stationaryBlockDensity,
@@ -105,7 +105,7 @@
          & =(\varrho_N)_{s,t}.
         \label{eq:stationary_density_marginals}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -118,7 +118,7 @@
     $\sum_iA_i^\dagger\Lambda A_i=\Lambda$.
 \end{proof}
 
-\begin{theorem}[Uniform lower bound on physical block purity]
+\begin{lemma}[Uniform lower bound on physical block purity]
     \label{thm:stationary_density_purity}
     \lean{MPSTensor.stationaryBlockDensity_eq_mul_conjTranspose,
         MPSTensor.inv_sq_le_purity_stationaryBlockDensity}
@@ -130,7 +130,7 @@
         D^{-2} & \leq\tr(\varrho_N(A,\Lambda)^2).
         \label{eq:stationary_density_purity}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -141,7 +141,7 @@
     Cauchy--Schwarz gives $(\tr G_N)^2\leq D^2\tr(G_N^2)$.
 \end{proof}
 
-\begin{theorem}[Physical overlap as a quadratic transfer contraction]
+\begin{lemma}[Physical overlap as a quadratic transfer contraction]
     \label{thm:stationary_density_overlap}
     \lean{MPSTensor.trace_stationaryBlockDensity_mul_eq,
         MPSTensor.stationaryBlockDensity_overlap_tendsto_zero}
@@ -181,7 +181,7 @@
         \end{tenkz}.
     \end{center}
     % TENKZ-STATIONARY-OVERLAP-END
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -194,7 +194,7 @@
     decay of $G_N$ forces the scalar overlap to vanish.
 \end{proof}
 
-\begin{theorem}[Physical density covariance]
+\begin{lemma}[Physical density covariance]
     \label{thm:stationary_density_covariance}
     \lean{MPSTensor.stationaryBlockDensity_rotatePhysical,
         MPSTensor.stationaryBlockDensity_eq_of_unitary_gaugePhase}
@@ -205,7 +205,7 @@
     If $B_i=\mu VA_iV^\dagger$, $V$ is unitary, $|\mu|=1$, and
     $V^\dagger\Lambda V=\Lambda$, then
     $\varrho_N(B,\Lambda)=\varrho_N(A,\Lambda)$ for every $N$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok

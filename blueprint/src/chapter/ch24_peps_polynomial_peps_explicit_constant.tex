@@ -66,7 +66,7 @@ Theorem~1.1 of \cite{OpenAI2026PolynomialPEPS} asserts that its constants exist,
         b=\max\{18,\lceil((4+8\epsilon_0+2\nu)/\nu+1)^2\rceil\}
         =5760768040000960009.
     \end{align}
-    Let $C=\max\{q^{81},1+10D\}$ and $c=c(q,J,\Delta,20D,60,C_A)$ be the constants of Definition~\ref{def:peps_adaptive_patch_constants} at $B_0=20D$, $p=60$, and $C_A$; let $G,k_K$ be as in Theorem~\ref{thm:peps_dyadic_protocol_explicit_constants} for $C'=\lceil C\rceil$, $c'=\lceil c\rceil$; and set $C_E=\max\{10080,2b+1\}$. Define the link exponent $k$ and prefactor $C_1$ (from Definitions~\ref{def:peps_sampled_network_constants} and~\ref{def:peps_compression_constants} at $2b$ pair effects, arity $b_{\rm prot}$, gate-count exponent $3$, physical-dimension exponent $0$, monomial/coefficient-sum exponent $k_K$, and accuracy $L^{-5}$), congestion $\chi$, error constant $C_{\rm net}$, size threshold $L_0$, and large-size bond constants $c_{\rm PEPS},C_{\rm large}>0$ by
+    Let $C=\max\{q^{81},1+10D\}$ and $c=c(q,J,\Delta,20D,60,C_A)$ be the constants of Definition~\ref{def:peps_adaptive_patch_constants} at $B_0=20D$, $p=60$, and $C_A$; let $G,k_K$ be as in Lemma~\ref{thm:peps_dyadic_protocol_explicit_constants} for $C'=\lceil C\rceil$, $c'=\lceil c\rceil$; and set $C_E=\max\{10080,2b+1\}$. Define the link exponent $k$ and prefactor $C_1$ (from Definitions~\ref{def:peps_sampled_network_constants} and~\ref{def:peps_compression_constants} at $2b$ pair effects, arity $b_{\rm prot}$, gate-count exponent $3$, physical-dimension exponent $0$, monomial/coefficient-sum exponent $k_K$, and accuracy $L^{-5}$), congestion $\chi$, error constant $C_{\rm net}$, size threshold $L_0$, and large-size bond constants $c_{\rm PEPS},C_{\rm large}>0$ by
     \begin{align}
         k   & =\max\bigl\{2(k_K+4b(8+k_K)),\,2(8+4b_{\rm prot}k_K)\bigr\},   &
         C_1 & =C_\Sigma(2b,b_{\rm prot},5042\,b_{\rm prot},q,\max\{G,0\},G),
@@ -87,7 +87,7 @@ Theorem~1.1 of \cite{OpenAI2026PolynomialPEPS} asserts that its constants exist,
 
 % Source: 07-assembly.tex, lines 9--206.
 % Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
-\begin{theorem}[The polynomial PEPS approximation from angular and patch bounds]
+\begin{lemma}[The polynomial PEPS approximation from angular and patch bounds]
     \label{thm:polynomial_peps_of_patch_supply}
     \lean{TNLean.PEPS.Approximation.hasPEPSApproximation_of_patchSupply}
     \leanok
@@ -98,18 +98,18 @@ Theorem~1.1 of \cite{OpenAI2026PolynomialPEPS} asserts that its constants exist,
         \min_{\theta\in\mathbb R}
         \left\|\frac{\Phi}{\|\Phi\|}-e^{i\theta}\Omega\right\| & \le L^{-1}.
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{lem:peps_dyadic_protocol_at_given_scale,
         thm:peps_large_size_network_from_protocol,
         thm:peps_ground_state_approximation_conditional}
-    For $L\ge\lceil\max\{L_{\rm ang},1\}\rceil$, Lemma~\ref{lem:peps_dyadic_protocol_at_given_scale} at $C_N=5042$, $C_K=G$, and $C_E=\max\{10080,2b+1\}$ yields the protocol; Theorem~\ref{thm:peps_large_size_network_from_protocol} at accuracy $L^{-5}$ compresses it to an operator network with error $C_{\rm net}L^{-5}$, link dimensions at most $C_1L^{k(c)}$, block size at most $b_{\rm prot}$, at most $2b_{\rm prot}(b_{\rm prot}-1)$ links per party, and separation at most $b_{\rm prot}$; and for $L\ge\lceil2C_{\rm net}\rceil$, Theorem~\ref{thm:peps_ground_state_approximation_conditional} routes this network into a PEPS with $D_e\le\max\{C_1,1\}^\chi L^{k(c)\chi+1}$ and error at most $L^{-1}$.
+    For $L\ge\lceil\max\{L_{\rm ang},1\}\rceil$, Lemma~\ref{lem:peps_dyadic_protocol_at_given_scale} at $C_N=5042$, $C_K=G$, and $C_E=\max\{10080,2b+1\}$ yields the protocol; Lemma~\ref{thm:peps_large_size_network_from_protocol} at accuracy $L^{-5}$ compresses it to an operator network with error $C_{\rm net}L^{-5}$, link dimensions at most $C_1L^{k(c)}$, block size at most $b_{\rm prot}$, at most $2b_{\rm prot}(b_{\rm prot}-1)$ links per party, and separation at most $b_{\rm prot}$; and for $L\ge\lceil2C_{\rm net}\rceil$, Theorem~\ref{thm:peps_ground_state_approximation_conditional} routes this network into a PEPS with $D_e\le\max\{C_1,1\}^\chi L^{k(c)\chi+1}$ and error at most $L^{-1}$.
 \end{proof}
 
 % Source: 07-assembly.tex, lines 9--206.
 % Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
-\begin{theorem}[The polynomial PEPS approximation at given area-law and angular constants]
+\begin{lemma}[The polynomial PEPS approximation at given area-law and angular constants]
     \label{thm:polynomial_peps_of_ratios}
     \lean{TNLean.PEPS.Approximation.polynomialPEPSApproximation_of_ratios}
     \leanok
@@ -120,12 +120,12 @@ Theorem~1.1 of \cite{OpenAI2026PolynomialPEPS} asserts that its constants exist,
         \min_{\theta\in\mathbb R}
         \left\|\frac{\Phi}{\|\Phi\|}-e^{i\theta}\Omega\right\| & \le L^{-1}.
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_adaptive_patch_supply_of_area_law_at,
         thm:polynomial_peps_of_patch_supply}
-    Theorem~\ref{thm:peps_adaptive_patch_supply_of_area_law_at} supplies adaptive patches from $C_A$ at $B_0=20D$ and power $60$ with constants $(C,c)$ on the cell-center sites, so Theorem~\ref{thm:polynomial_peps_of_patch_supply} gives the bound with $c_{\rm PEPS}(c)=c_{\rm PEPS}$.
+    Lemma~\ref{thm:peps_adaptive_patch_supply_of_area_law_at} supplies adaptive patches from $C_A$ at $B_0=20D$ and power $60$ with constants $(C,c)$ on the cell-center sites, so Lemma~\ref{thm:polynomial_peps_of_patch_supply} gives the bound with $c_{\rm PEPS}(c)=c_{\rm PEPS}$.
 \end{proof}
 
 % Status: auxiliary result. Theorem 1.1 of the source asserts only that the
@@ -158,7 +158,7 @@ Theorem~1.1 of \cite{OpenAI2026PolynomialPEPS} asserts that its constants exist,
 % Source: 00-introduction.tex, Theorem 1.1, and its proof in 07-assembly.tex,
 % lines 9--214.
 % Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
-\begin{theorem}[Polynomial PEPS approximation with explicit constants]
+\begin{corollary}[Polynomial PEPS approximation with explicit constants]
     \label{thm:polynomial_peps_explicit_constants}
     \lean{TNLean.PEPS.Approximation.polynomialPEPSApproximation_explicit}
     \leanok
@@ -168,11 +168,11 @@ Theorem~1.1 of \cite{OpenAI2026PolynomialPEPS} asserts that its constants exist,
         \min_{\theta\in\mathbb R}
         \left\|\frac{\Phi}{\|\Phi\|}-e^{i\theta}\Omega\right\| & \le L^{-1}.
     \end{align}
-\end{theorem}
+\end{corollary}
 \begin{proof}
     \leanok
     \uses{thm:square_area_law_closed_constant,
         thm:peps_information_from_gap_closed,thm:polynomial_peps_of_ratios,
         lem:peps_remove_small_sizes_named}
-    Theorems~\ref{thm:square_area_law_closed_constant} and~\ref{thm:peps_information_from_gap_closed} establish the area-law constant $C_A$ and angular constants $D\ge1,L_{\rm ang}$, so Theorem~\ref{thm:polynomial_peps_of_ratios} gives the PEPS with prefactor $C_{\rm large}$ for $L\ge L_0$, and Lemma~\ref{lem:peps_remove_small_sizes_named} extends it to all $L\ge2$ with prefactor $C_{\rm PEPS}$.
+    Lemmas~\ref{thm:square_area_law_closed_constant} and~\ref{thm:peps_information_from_gap_closed} establish the area-law constant $C_A$ and angular constants $D\ge1,L_{\rm ang}$, so Lemma~\ref{thm:polynomial_peps_of_ratios} gives the PEPS with prefactor $C_{\rm large}$ for $L\ge L_0$, and Lemma~\ref{lem:peps_remove_small_sizes_named} extends it to all $L\ge2$ with prefactor $C_{\rm PEPS}$.
 \end{proof}

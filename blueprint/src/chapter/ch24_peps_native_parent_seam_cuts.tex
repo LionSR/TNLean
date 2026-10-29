@@ -21,7 +21,7 @@ boundary tensors on the original lattice.
     Let $\Gamma=(V,E)$ be a finite simple graph with ordered vertices, where
     each $e\in E$ has tail $t(e)<h(e)$ and alphabet $X_e=\{0,\ldots,D_e-1\}$,
     and each site has tensor $A_v$ with physical codomain $\C^d$ (until
-    Theorem~\ref{thm:peps_nonuniform_parent_seam_boundary}). For $R\subseteq V$,
+    Lemma~\ref{thm:peps_nonuniform_parent_seam_boundary}). For $R\subseteq V$,
     define $C_R=\{e\in E:\{t(e),h(e)\}\not\subseteq R\}=E\setminus E_R$.
     Identifying each incident edge at $v$ with its endpoint label matches the
     original tensor coordinates with independent endpoint coordinates, so
@@ -31,7 +31,7 @@ boundary tensors on the original lattice.
     joint boundary tensor on the doubled incidences of $C$.
 \end{definition}
 
-\begin{theorem}[Parent constraints yield regional cut boundaries]%
+\begin{lemma}[Parent constraints yield regional cut boundaries]%
     \label{thm:peps_native_parent_regional_cut}
     \lean{TNLean.PEPS.regionParentGroundSpace_le_iInf_cutSpace,
         TNLean.PEPS.exists_cutBoundary_of_mem_regionParentKernel,
@@ -53,7 +53,7 @@ boundary tensors on the original lattice.
     and $H=\sum_i H_i\otimes I_{V\setminus R_i}$, one has
     $\ker H\subseteq\bigcap_i\mathcal S_{A,C_{R_i}}$, without requiring
     injectivity or uniform bond dimensions.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Since $H_i\ge 0$, every $\psi\in\ker H$ has regional slices in
     $\mathcal G_{R_i}(A)$ with virtual boundaries indexed by the exterior
@@ -67,7 +67,7 @@ boundary tensors on the original lattice.
     $\psi\in\mathcal S_{A,C_{R_i}}$.
 \end{proof}
 
-\begin{theorem}[Coherent coefficients from the physical parent]%
+\begin{lemma}[Coherent coefficients from the physical parent]%
     \label{thm:peps_native_parent_coefficients}
     \lean{TNLean.PEPS.exists_regionParent_commonInverse,
         TNLean.PEPS.exists_regionParent_bondCoefficients,
@@ -89,11 +89,11 @@ boundary tensors on the original lattice.
     where $b_p=\bigotimes_{e\in E}\operatorname{vec}(U_e(p_e))$ and $c_p$ is
     the product trace-dual functional, obtained via a single family of local
     inverses.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Semi-regularity forces $D_e>0$ for all $e\in E$. Applying one family of
     local $G$-injective inverses to the cut boundaries from
-    Theorem~\ref{thm:peps_native_parent_regional_cut} produces $\xi$ with
+    Lemma~\ref{thm:peps_native_parent_regional_cut} produces $\xi$ with
     $\psi=(\bigotimes_v A_v)\xi$ and places every internal bond $e\in E_{R_i}$
     in $\spn\{\operatorname{vec}(U_e(g)):g\in G\}$. Edge coverage and the
     product-range criterion give the expansion $\xi=\sum_p c_p(\xi)b_p$, where
@@ -112,7 +112,7 @@ boundary tensors on the original lattice.
     $(x,y)\to(x,y+1)$ with $y+1=r$.
 \end{definition}
 
-\begin{theorem}[Microscopic plaquette parents have every native seam boundary]%
+\begin{lemma}[Microscopic plaquette parents have every native seam boundary]%
     \label{thm:peps_native_parent_seam_boundary}
     \lean{TNLean.PEPS.torusPlaquetteParentGroundSpace_le_graphSeamCut,
         TNLean.PEPS.exists_graphSeamBoundary_of_mem_torusPlaquetteParentKernel,
@@ -126,7 +126,7 @@ boundary tensors on the original lattice.
     independently $G$-injective $A_v$, any positive microscopic plaquette
     parent $H$ with exact open-plaquette kernels satisfies
     $\ker H\subseteq\mathcal S_{A,C_{c,r}}$ for every $(c,r)\in V$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Elementary plaquettes cover $V$ and $E$. For each $p$ with $c_p(\xi)\ne 0$
     in~(\ref{eq:peps_native_parent_coefficients}), the local coboundary relations
@@ -138,7 +138,7 @@ boundary tensors on the original lattice.
     $\bigotimes_v A_v$ maps it to $\psi\in\mathcal S_{A,C_{c,r}}$.
 \end{proof}
 
-\begin{theorem}[Independent physical dimensions and the entire ambient kernel]%
+\begin{lemma}[Independent physical dimensions and the entire ambient kernel]%
     \label{thm:peps_nonuniform_parent_seam_boundary}
     \lean{TNLean.PEPS.exists_nonuniform_seamBoundaries_of_mem_torusPlaquetteParentKernel,
         TNLean.PEPS.physicalPaddingEmbedding,TNLean.PEPS.graphPhysicalPaddingTensor,
@@ -167,11 +167,11 @@ boundary tensors on the original lattice.
         \psi & \in\bigcap_{c,r}\mathcal S_{A,C_{c,r}}.
         \label{eq:peps_nonuniform_parent_recovery}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Since $R_vE_v=I$, each $E_v$ is injective, $B_v=E_vA_v$ remains
     $G$-injective, and cut contractions intertwine with $\bigotimes_v E_v$ and
-    $\bigotimes_v R_v$. By Theorem~\ref{thm:peps_native_parent_seam_boundary}
+    $\bigotimes_v R_v$. By Lemma~\ref{thm:peps_native_parent_seam_boundary}
     applied to $B$, every $\Psi\in\ker H_B$ lies in
     $\bigcap_{c,r}\mathcal S_{B,C_{c,r}}=(\bigotimes_v E_v)(\bigcap_{c,r}\mathcal S_{A,C_{c,r}})$,
     and $(\bigotimes_v R_v)(\bigotimes_v E_v)=I$ gives uniqueness and~(\ref{eq:peps_nonuniform_parent_recovery}).

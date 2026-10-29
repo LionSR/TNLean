@@ -14,7 +14,7 @@ finite group $G$ and a three-cocycle $\omega$, a matrix product operator
 representation of $G$ on a periodic chain whose sites carry the regular
 representation $\C[G]$. Each periodic operator acts as
 $U_g=\bigl(\bigotimes_iL_g\bigr)\prod_iW_g^{i,i+1}$
-(Theorem~\ref{thm:asymex_group_cocycle_kernel}), combining on-site left shifts
+(Lemma~\ref{thm:asymex_group_cocycle_kernel}), combining on-site left shifts
 $L_g$ with diagonal two-site phase gates $W_g$ determined by $\omega$;
 Remark~\ref{rem:mposym_group_cocycle} situates this family among matrix
 product operator symmetries and explains how the cohomology class of $\omega$
@@ -112,17 +112,17 @@ the output.
 \end{center}
 
 With the ordinary trace as boundary and no additional boundary matrix,
-Theorem~\ref{thm:asymex_group_cocycle_kernel} evaluates the periodic operator
+Lemma~\ref{thm:asymex_group_cocycle_kernel} evaluates the periodic operator
 as a monomial kernel. From this kernel,
-Theorem~\ref{thm:asymex_group_cocycle_mul} derives the multiplication law from
-the cocycle equation and Theorem~\ref{thm:asymex_group_cocycle_unitary} derives
+Lemma~\ref{thm:asymex_group_cocycle_mul} derives the multiplication law from
+the cocycle equation and Lemma~\ref{thm:asymex_group_cocycle_unitary} derives
 unitarity from unit-modulus values. For the chosen fusion tensors,
-Theorem~\ref{thm:asymex_group_cocycle_inverse_cocycle} identifies the
+Lemma~\ref{thm:asymex_group_cocycle_inverse_cocycle} identifies the
 associator with $\omega^{-1}$, whereas
-Theorem~\ref{thm:asymex_group_cocycle_identity_not_normal} shows that for a
+Lemma~\ref{thm:asymex_group_cocycle_identity_not_normal} shows that for a
 nontrivial group and a normalized cocycle the identity tensor is not normal.
 
-\begin{theorem}[The periodic operator is monomial]
+\begin{lemma}[The periodic operator is monomial]
     \label{thm:asymex_group_cocycle_kernel}
     \lean{MPOTensor.GroupCocycle.mpo_tensor_apply,
         MPOTensor.GroupCocycle.mpo_tensor,
@@ -138,7 +138,7 @@ nontrivial group and a normalized cocycle the identity tensor is not normal.
     Equivalently,
     $U_g=\bigl(\bigotimes_iL_g\bigr)\prod_iW_g^{i,i+1}$, the gates acting on
     the neighboring pairs $(t_i,t_{i+1})$ before the shifts.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -155,7 +155,7 @@ nontrivial group and a normalized cocycle the identity tensor is not normal.
 The product law is the following identity of periodic operators, with
 $U_g$ applied after $U_h$.
 \begin{center}
-    % Formula: U_gU_h=U_{gh} (Theorem~\ref{thm:asymex_group_cocycle_mul}), as
+    % Formula: U_gU_h=U_{gh} (Lemma~\ref{thm:asymex_group_cocycle_mul}), as
     % the entry (s,t) of both sides on a ring of N sites.
     % Ink-to-index map: on the left, the upper row is \hat T_g with output
     % s_i, the lower row is \hat T_h with input t_i, and the vertical wire at
@@ -189,7 +189,7 @@ $U_g$ applied after $U_h$.
     \end{tenkz}
 \end{center}
 
-\begin{theorem}[Product law]
+\begin{lemma}[Product law]
     \label{thm:asymex_group_cocycle_mul}
     \lean{MPOTensor.GroupCocycle.mpo_tensor_mul,
         MPOTensor.GroupCocycle.phase_mul,
@@ -198,7 +198,7 @@ $U_g$ applied after $U_h$.
     \uses{thm:asymex_group_cocycle_kernel, def:mpug_three_cocycle}
     If $\omega$ is a three-cocycle, then $U_gU_h=U_{gh}$ for all
     $g,h\in G$ and every $N>0$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -216,7 +216,7 @@ $U_g$ applied after $U_h$.
     the ring.
 \end{proof}
 
-\begin{theorem}[Unit law]
+\begin{lemma}[Unit law]
     \label{thm:asymex_group_cocycle_one}
     \lean{MPOTensor.GroupCocycle.mpo_tensor_one,
         MPOTensor.GroupCocycle.wGate_one,
@@ -224,7 +224,7 @@ $U_g$ applied after $U_h$.
     \leanok
     \uses{thm:asymex_group_cocycle_kernel, def:mpug_scalar_cochains}
     If $\omega$ is normalized, then $W_e=1$ and $U_e=1$ for every $N>0$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -232,7 +232,7 @@ $U_g$ applied after $U_h$.
     $\phi_e(t)$ equal to one, and the shift by $e$ is the identity.
 \end{proof}
 
-\begin{theorem}[Unitarity and the adjoint law]
+\begin{lemma}[Unitarity and the adjoint law]
     \label{thm:asymex_group_cocycle_unitary}
     \lean{MPOTensor.GroupCocycle.mpo_tensor_mem_unitaryGroup,
         MPOTensor.GroupCocycle.star_phase_mul_phase,
@@ -246,12 +246,12 @@ $U_g$ applied after $U_h$.
     every $g\in G$ and every $N>0$, so $\hat T_g$ is a matrix product
     unitary on nonempty chains. When $\omega$ is a normalized
     three-cocycle, $U_g^\dagger=U_{g^{-1}}$ for every $N>0$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     A monomial matrix whose nonzero entries have modulus one is unitary.
-    By Theorems~\ref{thm:asymex_group_cocycle_mul}
+    By Lemmas~\ref{thm:asymex_group_cocycle_mul}
     and~\ref{thm:asymex_group_cocycle_one}, the adjoint satisfies
     $U_g^\dagger=U_g^\dagger U_gU_{g^{-1}}=U_{g^{-1}}$.
 \end{proof}
@@ -281,7 +281,7 @@ $l$ of $\hat T_{gh}$ is $(hl,l)$.
     let $F^>_{g,h}$ send $l$ to $(hl,l)$ with the factor $\omega(g,h,l)$.
 \end{definition}
 
-\begin{theorem}[The fusion tensors reduce the product]
+\begin{lemma}[The fusion tensors reduce the product]
     \label{thm:asymex_group_cocycle_fusion}
     \lean{MPOTensor.GroupCocycle.pairLabel_injective,
         MPOTensor.GroupCocycle.fusionV_mul_apply,
@@ -297,7 +297,7 @@ $l$ of $\hat T_{gh}$ is $(hl,l)$.
     pair of physical indices. Hence
     $F^<_{g,h}\,(\hat T_g\hat T_h)^{\mathbf w}\,F^>_{g,h}=\hat T_{gh}^{\mathbf w}$
     for every word $\mathbf w$, including the empty word.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -306,13 +306,13 @@ $l$ of $\hat T_{gh}$ is $(hl,l)$.
     $\omega(g,h,l)^{-1}\omega(g,hj,j^{-1}l)\,\omega(h,j,j^{-1}l)$ and the right
     side is $\omega(gh,j,j^{-1}l)\,\omega(g,h,j)^{-1}$, which agree by the
     sitewise cocycle identity in the proof of
-    Theorem~\ref{thm:asymex_group_cocycle_mul}. The word identity follows by
+    Lemma~\ref{thm:asymex_group_cocycle_mul}. The word identity follows by
     moving $F^<_{g,h}$ through the word and using $F^<_{g,h}F^>_{g,h}=\mathbf 1$.
 \end{proof}
 
 \input{chapter/ch25_asymmetric_examples_pbc_projector}
 
-\begin{theorem}[The construction carries the inverse cocycle]
+\begin{lemma}[The construction carries the inverse cocycle]
     \label{thm:asymex_group_cocycle_inverse_cocycle}
     \lean{MPOTensor.GroupCocycle.fusionV_mul_kronId,
         MPOTensor.GroupCocycle.castMat_family_mul,
@@ -328,7 +328,7 @@ $l$ of $\hat T_{gh}$ is $(hl,l)$.
     boundaries of the two fusion trees of $(g,h,k)$ satisfy
     $V^L=\omega(g,h,k)^{-1}\,V^R$, and the anomaly three-cochain of these
     fusion tensors is $\omega^{-1}$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -341,7 +341,7 @@ $l$ of $\hat T_{gh}$ is $(hl,l)$.
     being a shift with nonzero phases.
 \end{proof}
 
-\begin{theorem}[The identity member is not normal]
+\begin{lemma}[The identity member is not normal]
     \label{thm:asymex_group_cocycle_identity_not_normal}
     \lean{MPOTensor.GroupCocycle.tensor_one_apply_row,
         MPOTensor.GroupCocycle.evalWord_tensor_one_apply_row,
@@ -353,9 +353,9 @@ $l$ of $\hat T_{gh}$ is $(hl,l)$.
     If $G$ is nontrivial and $\omega$ is normalized, then $\hat T_e$ is not
     normal. Hence the tensors $\hat T_g$ do not form a representation with
     normal tensors, and the three-cochain of
-    Theorem~\ref{thm:asymex_group_cocycle_inverse_cocycle} is that of the
+    Lemma~\ref{thm:asymex_group_cocycle_inverse_cocycle} is that of the
     fusion tensors of Definition~\ref{def:asymex_group_cocycle_fusion_tensors}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -373,7 +373,7 @@ $\prod_iCZ_{i,i+1}Z_i\prod_iX_i$~\cite{GarreRubio2023MPOSym}. Identify
 $e,s$ with the qubit labels $0,1$ and write $\bar t$ for the bitwise
 complement of $t\in\{0,1\}^N$ and $q(s)=\sum_is_is_{i+1}$.
 
-\begin{theorem}[The decorated CZX operator]
+\begin{lemma}[The decorated CZX operator]
     \label{thm:asymex_group_cocycle_z2}
     \lean{MPOTensor.GroupCocycle.bitEquiv,
         MPOTensor.GroupCocycle.czxDecorated,
@@ -389,12 +389,12 @@ complement of $t\in\{0,1\}^N$ and $q(s)=\sum_is_is_{i+1}$.
         \notag
     \end{align}
     so that $U_s=\prod_iCZ_{i,i+1}Z_i\prod_iX_i$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     On bits, $\omega_1(s,l,l^{-1}k)=(-1)^{kl+l}$, checked on the four
-    pairs $(k,l)$. By Theorem~\ref{thm:asymex_group_cocycle_kernel} the
+    pairs $(k,l)$. By Lemma~\ref{thm:asymex_group_cocycle_kernel} the
     kernel is supported on $u=\bar t$ with phase
     $\prod_i(-1)^{t_it_{i+1}+t_{i+1}}$. On complemented bits,
     $(-1)^{kl+l}=(-1)^{\bar k\bar l+\bar k}$, and the product becomes
@@ -409,7 +409,7 @@ $K_j=Z_{j-1}X_jZ_{j+1}$. The source records the Hamiltonian
 $H_{\mathrm R}(\mu)=\sum_iCZ_{i,i+2}X_{i+1}-\mu\sum_iZ_iZ_{i+1}$ of Roose
 et al.\ as invariant under the operator
 $U=\prod_iCZ_{i,i+1}Z_i\prod_iX_i$ of
-Theorem~\ref{thm:asymex_group_cocycle_z2}~\cite{GarreRubio2023MPOSym}. The
+Lemma~\ref{thm:asymex_group_cocycle_z2}~\cite{GarreRubio2023MPOSym}. The
 review states that the cluster Hamiltonian in a critical transverse field
 commutes with the operator of the nontrivial three-cocycle, which it writes,
 as the virtual symmetry of the CZX state, as
@@ -433,7 +433,7 @@ $H(\lambda)=-\sum_jK_j-\lambda\sum_jX_j$ be the cluster Ising Hamiltonian.
     $H_{\mathrm R}(\mu)$ above.
 \end{definition}
 
-\begin{theorem}[Hamiltonians invariant under the CZX operators]%
+\begin{lemma}[Hamiltonians invariant under the CZX operators]%
     \label{thm:asymex_group_cocycle_z2_hamiltonians}
     \lean{MPOTensor.GroupCocycle.mpo_czxTensor_mul_pauliXAt,
         MPOTensor.GroupCocycle.mpo_czxTensor_mul_clusterTerm,
@@ -464,7 +464,7 @@ $H(\lambda)=-\sum_jK_j-\lambda\sum_jX_j$ be the cluster Ising Hamiltonian.
               commutes with $H(-1)$, while $UH(1)U^\dagger=-H(1)$.
         \item $U$ commutes with $H_{\mathrm R}(\mu)$ for every $\mu$.
     \end{enumerate}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -521,7 +521,7 @@ labelling the cohomology classes.
     and let $\zeta=e^{2\pi\mathrm{i}/n}$.
 \end{definition}
 
-\begin{theorem}[The cyclic instances]
+\begin{lemma}[The cyclic instances]
     \label{thm:asymex_group_cocycle_cyclic}
     \lean{TNLean.Algebra.ScalarThreeCochain.cyclicCocycle_val,
         TNLean.Algebra.ScalarThreeCochain.cyclicCocycle_isCocycle,
@@ -545,7 +545,7 @@ labelling the cohomology classes.
     \end{align}
     Every $\hat T_g$ is a matrix product unitary on nonempty chains, and
     $U_0=1$, $U_gU_h=U_{g+h}$ and $U_g^\dagger=U_{-g}$ for every $N>0$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -562,8 +562,8 @@ labelling the cohomology classes.
     both sides counting the multiples of $n$ in $h+k+l$. An identity
     argument makes the exponent zero, and every power of $\zeta$ has
     modulus one. Evaluating
-    Theorem~\ref{thm:asymex_group_cocycle_kernel} on these values gives the
-    kernel, and Theorems~\ref{thm:asymex_group_cocycle_mul},
+    Lemma~\ref{thm:asymex_group_cocycle_kernel} on these values gives the
+    kernel, and Lemmas~\ref{thm:asymex_group_cocycle_mul},
     \ref{thm:asymex_group_cocycle_one}
     and~\ref{thm:asymex_group_cocycle_unitary} then establish the operator
     laws.
@@ -592,23 +592,23 @@ class of $\omega$.
     \end{align}
 \end{definition}
 
-\begin{theorem}[Gauge invariance of the domain-wall phase]
+\begin{lemma}[Gauge invariance of the domain-wall phase]
     \label{thm:asymex_group_cocycle_domain_wall_phase_gauge}
     \lean{TNLean.Algebra.ScalarThreeCochain.CohomologousTo.domainWallPhase_eq}
     \leanok
     \uses{def:asymex_group_cocycle_domain_wall_phase}
     Cohomologous three-cochains have the same phase $P_g$ for every $g\in G$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:mpug_cyclic_invariant_gauge}
     Because $P_g(\omega)=I_{g,o(g)}(\omega)^{-1}$,
-    Theorem~\ref{thm:mpug_cyclic_invariant_gauge} implies that cohomologous
+    Lemma~\ref{thm:mpug_cyclic_invariant_gauge} implies that cohomologous
     three-cochains share the same domain-wall phase.
 \end{proof}
 
-\begin{theorem}[Domain-wall phases of the cyclic cocycles]
+\begin{lemma}[Domain-wall phases of the cyclic cocycles]
     \label{thm:asymex_group_cocycle_cyclic_domain_wall}
     \lean{TNLean.Algebra.ScalarThreeCochain.cyclicInvariant_cyclicCocycle,
         TNLean.Algebra.ScalarThreeCochain.val_toAdd_pow,
@@ -644,12 +644,12 @@ class of $\omega$.
     in~\cite[Section~IV.D]{GarreRubioSchuch2024DomainWall}. If $n>1$ and
     $j\not\equiv j'\pmod n$, then $\omega_j$ and $\omega_{j'}$ are not
     cohomologous.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:mpug_cyclic_invariant_gauge, thm:asymex_group_cocycle_cyclic}
-    By Theorem~\ref{thm:asymex_group_cocycle_cyclic},
+    By Lemma~\ref{thm:asymex_group_cocycle_cyclic},
     $\omega_j(a,[ka],a)=\zeta^{ja\lfloor([ka]+a)/n\rfloor}$. Writing
     $[ka]+a=[(k+1)a]+n\lfloor([ka]+a)/n\rfloor$ and summing over $k<m$, the
     carries add up to $\lfloor ma/n\rfloor$, which gives $I_{a,m}(\omega_j)$.
@@ -658,10 +658,10 @@ class of $\omega$.
     $n$, with $\zeta=\mathrm{i}$ for $n=4$. At the generator $a=1$ and $m=n$
     the cyclic invariant of $\omega_j$ is $\zeta^j$, and $\zeta$ is a
     primitive $n$-th root of unity, so the gauge invariance of
-    Theorem~\ref{thm:mpug_cyclic_invariant_gauge} separates the classes.
+    Lemma~\ref{thm:mpug_cyclic_invariant_gauge} separates the classes.
 \end{proof}
 
-\begin{theorem}[The classes of the cyclic cocycles]
+\begin{lemma}[The classes of the cyclic cocycles]
     \label{thm:asymex_group_cocycle_cyclic_classes}
     \lean{TNLean.Algebra.ScalarThreeCochain.cyclicCocycleSubtype,
         TNLean.Algebra.ScalarThreeCochain.isPrimitiveRoot_rootOfUnity,
@@ -693,7 +693,7 @@ class of $\omega$.
     $0\leq j<n$. Two three-cocycles $\omega$ and $\eta$ of
     $\Z_n$ are cohomologous exactly when $P_1(\omega)=P_1(\eta)$, the
     domain-wall phases at the generator $1$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -702,7 +702,7 @@ class of $\omega$.
         thm:asymex_group_cocycle_domain_wall_phase_gauge}
     The value $\omega_j(a,b,c)=\zeta^{ja\lfloor(b+c)/n\rfloor}$ depends on $j$
     only modulo $n$, and $\omega_0=1$. By
-    Theorem~\ref{thm:asymex_group_cocycle_cyclic_domain_wall} the classes of
+    Lemma~\ref{thm:asymex_group_cocycle_cyclic_domain_wall} the classes of
     $\omega_j$ and $\omega_{j'}$ differ when $j\not\equiv j'\pmod n$, so
     $[\omega_0],\ldots,[\omega_{n-1}]$ are $n$ distinct classes. The
     periodic resolution of the finite cyclic group $\Z_n$ identifies
@@ -714,7 +714,7 @@ class of $\omega$.
     $\eta\sim\omega_{j'}$ with $P_1(\omega)=P_1(\eta)$, then
     $\zeta^{-j}=P_1(\omega_j)=P_1(\omega_{j'})=\zeta^{-j'}$, so
     $j\equiv j'\pmod n$ and $\omega\sim\eta$; conversely,
-    Theorem~\ref{thm:asymex_group_cocycle_domain_wall_phase_gauge} shows
+    Lemma~\ref{thm:asymex_group_cocycle_domain_wall_phase_gauge} shows
     that cohomologous cocycles have equal domain-wall phases.
 \end{proof}
 
@@ -738,7 +738,7 @@ $b=(0,1)$. That source does not apply the periodic construction to it.
     define $\omega(a,b,c)=(-1)^{a_1b_2c_2}$.
 \end{definition}
 
-\begin{theorem}[The instance for the group of order four]
+\begin{lemma}[The instance for the group of order four]
     \label{thm:asymex_group_cocycle_klein}
     \lean{TNLean.Algebra.ScalarThreeCochain.kleinCocycle_isCocycle,
         TNLean.Algebra.ScalarThreeCochain.kleinCocycle_isNormalized,
@@ -760,15 +760,15 @@ $b=(0,1)$. That source does not apply the periodic construction to it.
     \end{align}
     Every $\hat T_g$ is a matrix product unitary on nonempty chains, and
     $U_0=1$, $U_gU_h=U_{g+h}$ and $U_g^\dagger=U_{-g}$ for every $N>0$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     The exponent $a_1b_2c_2$ is trilinear over $\Z_2$, hence an additive
     three-cocycle, and it vanishes when any argument is zero. Evaluating
-    Theorem~\ref{thm:asymex_group_cocycle_kernel} with
+    Lemma~\ref{thm:asymex_group_cocycle_kernel} with
     $t_{i+1}^{-1}t_i=t_i-t_{i+1}$ gives the kernel, and
-    Theorems~\ref{thm:asymex_group_cocycle_mul},
+    Lemmas~\ref{thm:asymex_group_cocycle_mul},
     \ref{thm:asymex_group_cocycle_one}
     and~\ref{thm:asymex_group_cocycle_unitary} then yield the operator laws.
 \end{proof}

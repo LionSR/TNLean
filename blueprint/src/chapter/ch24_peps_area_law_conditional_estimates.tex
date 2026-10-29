@@ -11,7 +11,7 @@ semidefinite $\rho$ write $\hat\rho=\rho+\Pi_{\ker\rho}$, and let
 $\rho^{[s]}$ be the real power of $\rho$ on its support, extended by zero on
 its kernel.
 
-\begin{theorem}[Entropy exponent of a regional move]
+\begin{lemma}[Entropy exponent of a regional move]
     \label{thm:area_law_movement_eta}
     \lean{TNLean.PEPS.AreaLaw.movementEta_eq_condMutualInfo_left,
         TNLean.PEPS.AreaLaw.movementEta_eq_condMutualInfo_right,
@@ -23,7 +23,7 @@ its kernel.
         \eta_\theta=S_\theta(x|P)+S_\theta(x|Y)=I_\theta(x:F|P)=I_\theta(x:F|Y)\ge0,
     \end{align}
     where $S_\theta(x|R)=S_\theta(R\cup x)-S_\theta(R)$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Complementary regions of a pure vector have equal entropy, so
     $S_\theta(x\cup Y)=S_\theta(F\cup P)$ and
@@ -32,7 +32,7 @@ its kernel.
     subadditivity.
 \end{proof}
 
-\begin{theorem}[Conditional movement estimate on lattice regions]
+\begin{lemma}[Conditional movement estimate on lattice regions]
     \label{thm:area_law_lattice_movement}
     \lean{TNLean.PEPS.AreaLaw.exists_norm_movement_le}
     \leanok
@@ -47,7 +47,7 @@ its kernel.
         \le\exp\Bigl(-\frac a2\eta_\theta+Ca^{5/4}\ell^2\Bigr).
     \end{align}
     This is~\cite[Lemma~5.1]{OpenAI2026AreaLaw} with $U=Y$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Ordering the site configurations as $(x\times Y)\times(P\times F)$
     identifies the regional reduced states with the four-system marginals of
@@ -56,7 +56,7 @@ its kernel.
     to the sites of $\Lambda$ with local dimension $q$ gives the bound.
 \end{proof}
 
-\begin{theorem}[Conditional skew estimate on lattice regions]
+\begin{lemma}[Conditional skew estimate on lattice regions]
     \label{thm:area_law_lattice_skew}
     \lean{TNLean.PEPS.AreaLaw.skewSymbol, TNLean.PEPS.AreaLaw.skewSymbol_skew_le}
     \leanok
@@ -74,11 +74,11 @@ its kernel.
         \qquad C=18\pi^2+6144\,\mathrm e^{\pi^2+1}.
     \end{align}
     This is~\cite[Lemma~5.3]{OpenAI2026AreaLaw}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     In the product coordinates $(P_0\times P_1)\times((x\times U)\times F)$,
     $f$ coincides with the function of~\cite[Lemma~5.3]{OpenAI2026AreaLaw} for
     the reordered vector, whose conditional mutual information $I(x:F|U)$
-    equals $S_\theta(x|P)+S_\theta(x|U)$ by Theorem~\ref{thm:area_law_movement_eta}.
+    equals $S_\theta(x|P)+S_\theta(x|U)$ by Lemma~\ref{thm:area_law_movement_eta}.
     Specializing to $\Lambda$ with local dimension $q$ gives the estimate.
 \end{proof}

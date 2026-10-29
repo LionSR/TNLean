@@ -22,7 +22,7 @@ $b_i-c$ for $i\in\mathcal E$ are pairwise distinct.
 % Manuscript: preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/
 % build/sections/10-geometry.tex.
 
-\begin{theorem}[Noncentral radial incidence]
+\begin{lemma}[Noncentral radial incidence]
     \label{thm:area_law_fan_noncentral_radial_incidence}
     \lean{TNLean.PEPS.AreaLaw.Geometry.cellFanPolygon_mem_iff_of_mem_radial}
     \leanok
@@ -33,7 +33,7 @@ $b_i-c$ for $i\in\mathcal E$ are pairwise distinct.
         t=i\ \text{or}\ b_t=a_i.
         \label{eq:fan_radial_incidence}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_fan_triangle_contact,
         thm:area_law_cell_fan_end_same_ray}
@@ -56,27 +56,27 @@ $b_i-c$ for $i\in\mathcal E$ are pairwise distinct.
     contradiction. This proves~(\ref{eq:fan_radial_incidence}).
 \end{proof}
 
-\begin{theorem}[Affine basis of an elementary fan triangle]
+\begin{lemma}[Affine basis of an elementary fan triangle]
     \label{thm:area_law_fan_triangle_affine_basis}
     \lean{TNLean.PEPS.AreaLaw.Geometry.cellFanPolygon_exists_affineBasis}
     \leanok
     \uses{def:area_law_cell_fan}
     For every $i\in\mathcal E$, the triple $(c,a_i,b_i)$
     is an affine basis of $\R^2$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_cell_fan_regularity}
     Since $P_i$ has nonempty interior, its affine span is $\R^2$, so its three
     vertices $(c,a_i,b_i)$ are affinely independent and span $\R^2$.
 \end{proof}
 
-\begin{theorem}[Convexity after removing a radial segment]
+\begin{lemma}[Convexity after removing a radial segment]
     \label{thm:area_law_fan_radial_deletion_convex}
     \lean{TNLean.PEPS.AreaLaw.Geometry.cellFanPolygon_sdiff_radial_convex}
     \leanok
     \uses{def:area_law_cell_fan}
     For every $i,t\in\mathcal E$, the set $P_i\setminus R_t$ is convex.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_fan_noncentral_radial_incidence,
         thm:area_law_fan_triangle_affine_basis}
@@ -107,14 +107,14 @@ $b_i-c$ for $i\in\mathcal E$ are pairwise distinct.
     $P_i\setminus R_t$ is convex.
 \end{proof}
 
-\begin{theorem}[Convexity after removing a family of radial segments]
+\begin{lemma}[Convexity after removing a family of radial segments]
     \label{thm:area_law_fan_radial_union_deletion_convex}
     \lean{TNLean.PEPS.AreaLaw.Geometry.cellFanPolygon_sdiff_radials_convex}
     \leanok
     \uses{def:area_law_cell_fan}
     For every $i\in\mathcal E$ and every subset $A\subseteq\mathcal E$,
     the set $P_i\setminus\bigcup_{t\in A}R_t$ is convex.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_fan_radial_deletion_convex}
     Write

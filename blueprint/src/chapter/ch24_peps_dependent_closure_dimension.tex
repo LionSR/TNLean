@@ -12,7 +12,7 @@ kernel is separate).
 % It must not replace the unrestricted microscopic source-labelled theorem.
 % Source: Papers/1001.3807/paper_v3.tex:1560--1621.
 
-\begin{theorem}[Synchronization of closure gauges]%
+\begin{lemma}[Synchronization of closure gauges]%
     \label{thm:peps_dependent_closure_gauge}
     \lean{TNLean.PEPS.DependentTorus.closureLabels_conjugate,
         TNLean.PEPS.DependentTorus.nonseamCompatible_of_closureLabels_eq,
@@ -29,19 +29,19 @@ kernel is separate).
     \end{align}
     hold on all eight bonds if and only if $q_v=x=q_{(0,0)}$ for all $v$
     and $(a,b)=(xgx^{-1},xhx^{-1})$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_torus_nonseam_connectivity}
     Off the seams, $p^{a,b}_e=p^{g,h}_e=1$, so
     (\ref{eq:peps_dependent_closure_gauge}) and
-    Theorem~\ref{thm:peps_torus_nonseam_connectivity} force
+    Lemma~\ref{thm:peps_torus_nonseam_connectivity} force
     $q_v=q_{(0,0)}=x$ for all $v$; evaluating
     (\ref{eq:peps_dependent_closure_gauge}) on the seams at $(0,-1)$ and
     $(-1,0)$ then gives $(a,b)=(xgx^{-1},xhx^{-1})$, and the converse is
     immediate.
 \end{proof}
 
-\begin{theorem}[Exact trace-dual closure coefficients]%
+\begin{lemma}[Exact trace-dual closure coefficients]%
     \label{thm:peps_dependent_closure_extraction}
     \lean{TNLean.PEPS.DependentTorus.bondCoefficientExtraction_closure,
         TNLean.PEPS.DependentTorus.bondCoefficientExtraction_closure_eq_zero_of_class_ne,
@@ -64,10 +64,10 @@ kernel is separate).
     \end{align}
     where $C_G(g,h)=\{x\in G:xg=gx,\ xh=hx\}$; in particular,
     $E_{a,b}(\zeta_{A^0}(g,h))=0$ when $[(a,b)]\ne[(g,h)]$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_dependent_closure_gauge, thm:peps_dependent_canonical_bond_sum}
-    By Theorem~\ref{thm:peps_dependent_canonical_bond_sum}, expanding the
+    By Lemma~\ref{thm:peps_dependent_canonical_bond_sum}, expanding the
     four local averages and applying $E_{a,b}$ gives
     \begin{align}
         E_{a,b}\bigl(\zeta_{A^0}(g,h)\bigr)
@@ -77,13 +77,13 @@ kernel is separate).
                 q_{\operatorname{tail}(e)}^{-1}}.
         \label{eq:peps_dependent_closure_gauge_sum}
     \end{align}
-    Theorem~\ref{thm:peps_dependent_closure_gauge} reduces
+    Lemma~\ref{thm:peps_dependent_closure_gauge} reduces
     (\ref{eq:peps_dependent_closure_gauge_sum}) to constant $q_v=x$,
     giving (\ref{eq:peps_dependent_closure_extract}) and
     (\ref{eq:peps_dependent_closure_diagonal}) (since $1\in C_G(g,h)$).
 \end{proof}
 
-\begin{theorem}[Conjugacy invariance of the closures]%
+\begin{lemma}[Conjugacy invariance of the closures]%
     \label{thm:peps_dependent_closure_invariant}
     \lean{TNLean.PEPS.DependentTorus.closure_conjugate,
         TNLean.PEPS.DependentTorus.closure_eq_of_pairConjugacyClass_eq}
@@ -92,14 +92,14 @@ kernel is separate).
     For finite $G$ and locally invariant tensors $A_v$ (without assuming
     semi-regularity or injectivity),
     $\zeta_A(xgx^{-1},xhx^{-1})=\zeta_A(g,h)$ for all $x,g,h\in G$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_dependent_closure_gauge, thm:peps_dependent_vertex_gauge,
         thm:peps_full_four_cut_transport}
-    By Theorems~\ref{thm:peps_dependent_closure_gauge}
+    By Lemmas~\ref{thm:peps_dependent_closure_gauge}
     and~\ref{thm:peps_dependent_vertex_gauge}, a constant vertex gauge
     gives $\zeta_{A^0}(xgx^{-1},xhx^{-1})=\zeta_{A^0}(g,h)$. Since
-    $T_vP_v=T_v$, Theorem~\ref{thm:peps_full_four_cut_transport} gives
+    $T_vP_v=T_v$, Lemma~\ref{thm:peps_full_four_cut_transport} gives
     $\zeta_A(g,h)=(\bigotimes_vT_v)\zeta_{A^0}(g,h)$.
 \end{proof}
 
@@ -112,11 +112,11 @@ kernel is separate).
     \uses{thm:peps_dependent_closure_invariant}
     For a simultaneous conjugacy class $C=[(g,h)]$, set
     $\zeta_A(C)=\zeta_A(g,h)$ (well-defined by
-    Theorem~\ref{thm:peps_dependent_closure_invariant}); the set of
+    Lemma~\ref{thm:peps_dependent_closure_invariant}); the set of
     closures over commuting pairs equals that over commuting classes.
 \end{definition}
 
-\begin{theorem}[Independent classes for independent physical blocks]%
+\begin{lemma}[Independent classes for independent physical blocks]%
     \label{thm:peps_dependent_closure_independent}
     \lean{TNLean.PEPS.DependentTorus.linearIndependent_closureClass_canonical,
         TNLean.PEPS.DependentTorus.linearIndependent_closureClass,
@@ -128,7 +128,7 @@ kernel is separate).
     arbitrary independent physical and virtual dimensions), then
     $(\zeta_A(C))_C$ is linearly independent over all pair-conjugacy
     classes $C$, and hence over all commuting classes.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_dependent_closure_extraction, thm:peps_dependent_common_inverse,
         thm:peps_full_four_cut_transport}
@@ -138,7 +138,7 @@ kernel is separate).
     so $\lambda_C=0$. For general $A$, local inverses $L_v$ with
     $L_vT_v=P_v$ and $\mathcal L=\bigotimes_vL_v$ satisfy
     $\mathcal L\zeta_A(C)=\zeta_{A^0}(C)$ by
-    Theorems~\ref{thm:peps_dependent_common_inverse}
+    Lemmas~\ref{thm:peps_dependent_common_inverse}
     and~\ref{thm:peps_full_four_cut_transport}:
     % Formula/source: E_{a,b} (tensor_v L_v) zeta_A(g,h)
     % = E_{a,b} zeta_{A^0}(g,h), SCP10 paper_v3.tex:1590--1610,
@@ -180,19 +180,19 @@ kernel is separate).
     \end{center}
 \end{proof}
 
-\begin{theorem}[Exact dimension of the four-cut intersection]%
+\begin{lemma}[Exact dimension of the four-cut intersection]%
     \label{thm:peps_dependent_four_cut_dimension}
     \lean{TNLean.PEPS.DependentTorus.finrank_commutingClosureSpan,
         TNLean.PEPS.DependentTorus.finrank_fourCutSpace}
     \leanok
     \uses{def:peps_full_four_cut_space, def:peps_dependent_closure_class}
     Under the hypotheses of
-    Theorem~\ref{thm:peps_dependent_closure_independent}, the commuting
+    Lemma~\ref{thm:peps_dependent_closure_independent}, the commuting
     closures $\zeta_A(C)$ form a basis of $\mathcal I_A=\mathcal Z_A$, so
     $\dim_{\C}\mathcal I_A=\dim_{\C}\mathcal Z_A=K$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_four_cut_closure, thm:peps_dependent_closure_independent}
     Combine Theorem~\ref{thm:peps_four_cut_closure} with
-    Theorem~\ref{thm:peps_dependent_closure_independent}.
+    Lemma~\ref{thm:peps_dependent_closure_independent}.
 \end{proof}

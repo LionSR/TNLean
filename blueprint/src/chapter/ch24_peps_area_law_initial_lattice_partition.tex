@@ -6,7 +6,7 @@
 % revision adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 % This is the initial lattice partition before stars and recursive repairs.
 
-\begin{theorem}[Unique initial region at each lattice point]
+\begin{lemma}[Unique initial region at each lattice point]
     \label{thm:area_law_initial_lattice_partition}
     \lean{TNLean.PEPS.AreaLaw.Geometry.exists_unique_initialOpenRegion_integerPoint}
     \leanok
@@ -17,7 +17,7 @@
     $v\in\mathbb Z^2$ belongs to a unique initial open region
     $\operatorname{int}(X_i^0)$ of
     \cite[Section~11]{OpenAI2026AreaLaw}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_initial_closed_cover,
         thm:area_law_initial_lattice_membership,thm:area_law_initial_open_disjoint}

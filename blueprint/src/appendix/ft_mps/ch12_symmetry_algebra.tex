@@ -160,7 +160,7 @@ The same bookkeeping applies to a general matrix acting on the physical index.
     linearity of the trace yield (\ref{eq:symmetry_mpv_rotation}).
 \end{proof}
 
-\begin{theorem}[Blocking commutes with physical maps]
+\begin{lemma}[Blocking commutes with physical maps]
     \label{thm:block_tensor_rotate_physical}
     \lean{MPSTensor.blockTensor_rotatePhysical}
     \leanok
@@ -172,7 +172,7 @@ The same bookkeeping applies to a general matrix acting on the physical index.
         (C_W)^{[L]} & =\bigl(C^{[L]}\bigr)_{W^{\otimes L}}.
         \label{eq:app_block_tensor_rotate_physical}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     When a blocked physical index is decoded as a word $b$ of length~$L$,
@@ -253,7 +253,7 @@ target tensor differ by a scalar multiple.
     By Lemma~\ref{lem:center_scalar}, it is a scalar matrix.
 \end{proof}
 
-\begin{theorem}[Projective multiplication law for gauge matrices]%
+\begin{lemma}[Projective multiplication law for gauge matrices]%
     \label{thm:gaugeMatrix_projective_mul}
     \lean{MPSTensor.gaugeMatrix_projective_mul}
     \leanok
@@ -285,7 +285,7 @@ target tensor differ by a scalar multiple.
     \end{center}
     and both sides conjugate $A^i$ to the same twisted tensor
     $\widetilde{A}_{gh}^i$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{lem:gauge_ratio_isScalar, lem:twisted_tensor_mul}
@@ -302,7 +302,7 @@ With coboundaries and cohomology defined as in
 Definitions~\ref{def:is_coboundary} and~\ref{def:cohomologous_to}, let
 $\omega_1,\omega_2:G\times G\to\C^\times$ be arbitrary scalar $2$-cochains.
 
-\begin{theorem}[Cohomology relation is an equivalence relation]%
+\begin{lemma}[Cohomology relation is an equivalence relation]%
     \label{thm:cohomologous_equivalence}
     \lean{TNLean.Algebra.isMulCoboundary₂_div_self,
         TNLean.Algebra.isMulCoboundary₂_div_symm,
@@ -312,7 +312,7 @@ $\omega_1,\omega_2:G\times G\to\C^\times$ be arbitrary scalar $2$-cochains.
     The relation ``cohomologous to'' is reflexive, symmetric, and
     transitive on the set of $\C^\times$-valued scalar $2$-cochains, and
     therefore also on the subset of cocycles.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok\uses{def:cohomologous_to}
     The trivial cochain $\varphi=1$ establishes reflexivity, replacing $\varphi$
@@ -322,7 +322,7 @@ $\omega_1,\omega_2:G\times G\to\C^\times$ be arbitrary scalar $2$-cochains.
 \end{proof}
 
 
-\begin{theorem}[Cohomologous cochains differ by a coboundary]%
+\begin{lemma}[Cohomologous cochains differ by a coboundary]%
     \label{thm:coboundary_iff_cohomologous_one}
     \lean{TNLean.Algebra.isMulCoboundary₂_div_iff_quotient_mk_eq}
     \leanok
@@ -335,7 +335,7 @@ $\omega_1,\omega_2:G\times G\to\C^\times$ be arbitrary scalar $2$-cochains.
     $C^2(G,\C^\times)/B^2(G,\C^\times)$, where $C^2$ is the group of all
     scalar two-cochains and $B^2$ its subgroup of coboundaries. This quotient
     includes arbitrary cochains, not only cocycles.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok\uses{def:is_coboundary, def:cohomologous_to}
     Dividing both sides of (\ref{eq:symmetry_cohomologous}) by
@@ -347,14 +347,14 @@ $\omega_1,\omega_2:G\times G\to\C^\times$ be arbitrary scalar $2$-cochains.
     $\omega_1\omega_2^{-1}$ in $B^2$.
 \end{proof}
 
-\begin{theorem}[Coboundary changes preserve the cocycle equation]%
+\begin{lemma}[Coboundary changes preserve the cocycle equation]%
     \label{thm:cochain_coboundary_preserves_cocycle}
     \lean{TNLean.Algebra.isMulCocycle₂_of_isMulCoboundary₂_div}
     \leanok
     \uses{def:cohomologous_to, def:is_cocycle}
     If two scalar two-cochains $\omega_1$ and $\omega_2$ are
     cohomologous and $\omega_2$ is a cocycle, then $\omega_1$ is a cocycle.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok\uses{def:cohomologous_to, def:is_cocycle}
     Write $\omega_1(g,h)=\varphi(g)\varphi(h)\varphi(gh)^{-1}\omega_2(g,h)$.

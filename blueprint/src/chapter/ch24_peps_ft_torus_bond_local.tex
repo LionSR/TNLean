@@ -1,6 +1,6 @@
 \paragraph{Window coefficient identity from bond locality.}
 
-\begin{theorem}[Forward window coefficient transfer from bond locality]
+\begin{lemma}[Forward window coefficient transfer from bond locality]
     \label{thm:peps_windowCoeffTransferAB_of_bondLocal}
     \lean{TNLean.PEPS.windowCoeffTransferAB_of_bondLocal}
     \leanok
@@ -21,7 +21,7 @@
         =C_B(W_{\mathrm L},e,N;\sigma,\tau)$
     for every physical configuration $\sigma$ on $W_{\mathrm L}$ and $\tau$
     on $V\setminus W_{\mathrm L}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     The window hypotheses give injectivity of the blocked tensor maps on
@@ -50,13 +50,13 @@
         =C_B(W_{\mathrm L},e,N;\sigma,\tau)$.
 \end{proof}
 
-\begin{theorem}[Backward window coefficient transfer from bond locality]
+\begin{lemma}[Backward window coefficient transfer from bond locality]
     \label{thm:peps_windowCoeffTransferBA_of_bondLocal}
     \lean{TNLean.PEPS.windowCoeffTransferBA_of_bondLocal}
     \leanok
     \uses{def:peps_regionInsertedCoeff, lem:peps_horizontal_staircase_window_injectivity, thm:peps_horizontal_staircase_reference_edge_crossing, thm:peps_region_transfer_coeff_double_factorization, thm:peps_region_transfer_coeff_incident_form}
     Under the hypotheses of
-    Theorem~\ref{thm:peps_windowCoeffTransferAB_of_bondLocal}, suppose instead
+    Lemma~\ref{thm:peps_windowCoeffTransferAB_of_bondLocal}, suppose instead
     that the $B$-to-$A$ transfer kernel on $W_{\mathrm L}$ at $e$ is incident
     along the boundary leg $e$. Then for every $N\in\MN{D_B(e)}$ there is a
     matrix $M\in\MN{D_A(e)}$ such that
@@ -64,7 +64,7 @@
         =C_A(W_{\mathrm L},e,M;\sigma,\tau)$
     for every physical configuration $\sigma$ on $W_{\mathrm L}$ and $\tau$
     on $V\setminus W_{\mathrm L}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Applying the same coefficient-transfer lemma for bond-local kernels to the
@@ -90,15 +90,15 @@
         =C_A(W_{\mathrm L},e,M;\sigma,\tau)$.
 \end{proof}
 
-\begin{theorem}[Window coefficient identity from bond locality and multiplicativity]
+\begin{lemma}[Window coefficient identity from bond locality and multiplicativity]
     \label{thm:peps_windowEdgeCoeffIdentityWitness_of_bondLocal}
     \lean{TNLean.PEPS.exists_windowEdgeCoeffIdentityWitness_of_bondLocal}
     \leanok
     \uses{thm:peps_windowCoeffTransferAB_of_bondLocal, thm:peps_windowCoeffTransferBA_of_bondLocal, def:peps_coeff_transfer_map, thm:peps_region_edge_gauge_of_coeff_transfer, def:peps_window_edge_coeff_identity_witness, def:peps_window_edge_coeff_identity_witness_of_hypotheses}
     Assume the hypotheses of
-    Theorem~\ref{thm:peps_windowCoeffTransferAB_of_bondLocal} and its
+    Lemma~\ref{thm:peps_windowCoeffTransferAB_of_bondLocal} and its
     backward analog
-    Theorem~\ref{thm:peps_windowCoeffTransferBA_of_bondLocal}. Let
+    Lemma~\ref{thm:peps_windowCoeffTransferBA_of_bondLocal}. Let
     $T_e:\MN{D_A(e)}\to\MN{D_B(e)}$ be the coefficient transfer chosen from
     the forward theorem. If $T_e(MM')=T_e(M)T_e(M')$ for all
     $M,M'\in\MN{D_A(e)}$, then there exist
@@ -113,15 +113,15 @@
          & =
         C_B(R,e,Z\,\iota_e(M)\,Z^{-1};\sigma,\tau). \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     The two bond-locality hypotheses give the forward and backward coefficient
     transfers by
-    Theorems~\ref{thm:peps_windowCoeffTransferAB_of_bondLocal}
+    Lemmas~\ref{thm:peps_windowCoeffTransferAB_of_bondLocal}
     and~\ref{thm:peps_windowCoeffTransferBA_of_bondLocal}. With this
     multiplicativity,
-    Theorem~\ref{thm:peps_region_edge_gauge_of_coeff_transfer} gives a
+    Lemma~\ref{thm:peps_region_edge_gauge_of_coeff_transfer} gives a
     conjugating gauge $Z$ for the forward transfer. The window and complement
     injectivity hypotheses then yield a nonempty coefficient-identity datum
     with $Z_{\mathrm{ref}}=Z$.

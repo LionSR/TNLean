@@ -110,7 +110,7 @@ so $(K_1K_0)_{01}=-1/4\ne-1/8=(K_0K_1)_{01}$.
     $K_j$, $L_j$, $M$, and $F$ are continuous.
 \end{proof}
 
-\begin{theorem}[Bounds for every feasible tuple]
+\begin{lemma}[Bounds for every feasible tuple]
     \label{thm:peps_regularized_patch_bounds}
     \lean{
         TNLean.PEPS.regularizedPatchFilter_norm_bounds,
@@ -129,13 +129,13 @@ so $(K_1K_0)_{01}=-1/4\ne-1/8=(K_0K_1)_{01}$.
          & \le F(x)\le b^{-A/2}.
         \label{eq:peps_regularized_patch_objective_bounds}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_regional_extension_norm}
     Since $0\le x_j\le I_{X_j}$, the spectrum of $x_j+bI_{X_j}$ lies in
     $[b,1+b]$, so $\|K_j(x)\|\le b^{-a_j/2}$ and $\|K_j(x)^{-1}\|\le(1+b)^{a_j/2}$.
-    Theorem~\ref{thm:peps_regional_extension_norm} gives
+    Lemma~\ref{thm:peps_regional_extension_norm} gives
     (\ref{eq:peps_regularized_patch_filter_bounds}), and iterating across
     $L_0,\ldots,L_{m-1}$ on $\|\Omega\|=1$ gives
     (\ref{eq:peps_regularized_patch_objective_bounds}).
@@ -157,7 +157,7 @@ so $(K_1K_0)_{01}=-1/4\ne-1/8=(K_0K_1)_{01}$.
     \end{align}
 \end{definition}
 
-\begin{theorem}[Attainment and common value]
+\begin{lemma}[Attainment and common value]
     \label{thm:peps_regularized_patch_minimum}
     \lean{
         TNLean.PEPS.exists_isMinOn_regularizedPatchObjective,
@@ -176,7 +176,7 @@ so $(K_1K_0)_{01}=-1/4\ne-1/8=(K_0K_1)_{01}$.
         \|\widehat\Psi(x)\| & =1\quad(x\in\mathcal D).
         \label{eq:peps_regularized_patch_minimum_bounds}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{lem:peps_regularized_patch_compact_continuous,thm:peps_regularized_patch_bounds}
@@ -208,21 +208,21 @@ so $(K_1K_0)_{01}=-1/4\ne-1/8=(K_0K_1)_{01}$.
     $R\ge0$.
 \end{proof}
 
-\begin{theorem}[The logarithmic minimum]
+\begin{lemma}[The logarithmic minimum]
     \label{thm:peps_regularized_patch_log_minimum}
     \lean{TNLean.PEPS.isLeast_log_regularizedPatchObjective}
     \leanok
     \uses{def:peps_regularized_patch_minimum}
     If $a_j\ge0$ for all $j$, then $\log N=\min_{x\in\mathcal D}\log F(x)$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_regularized_patch_minimum}
     Apply monotonicity of $\log$ on $(0,\infty)$ to
-    Theorem~\ref{thm:peps_regularized_patch_minimum}.
+    Lemma~\ref{thm:peps_regularized_patch_minimum}.
 \end{proof}
 
-\begin{theorem}[Cylinder approximation from ordered inverse filters]
+\begin{lemma}[Cylinder approximation from ordered inverse filters]
     \label{thm:peps_patch_inverse_cylinder}
     \lean{TNLean.PEPS.exists_mem_iSup_dependentRegionCylinder_norm_sub_le}
     \leanok
@@ -238,7 +238,7 @@ so $(K_1K_0)_{01}=-1/4\ne-1/8=(K_0K_1)_{01}$.
         \|\Omega-v\| & \le F(x)\,(2b)^{A/2}.
         \label{eq:peps_patch_inverse_cylinder}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_regional_extension_algebra,

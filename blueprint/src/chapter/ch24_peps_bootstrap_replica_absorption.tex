@@ -7,7 +7,7 @@ threshold. The following auxiliary scalar statements express that order.
 The two norm comparisons and the common entropy are explicit inputs;
 their physical derivation remains separate.
 
-\begin{theorem}[Absorption after the fixed-scale replica limit]
+\begin{lemma}[Absorption after the fixed-scale replica limit]
     \label{thm:area_law_bootstrap_replica_absorption}
     \lean{TNLean.PEPS.AreaLaw.Scan.entropy_le_of_replica_comparisons}
     \leanok
@@ -31,7 +31,7 @@ their physical derivation remains separate.
     The entropy $S$ and all fixed coefficients are independent of $k$.
     The two bounds $B_u$ and $B_l$ include any substitutions of the typical entropy
     and auxiliary dimension made before these scalar comparisons.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Since $C,S\ge0$ and $\tau>0$, the defect bound gives
@@ -50,7 +50,7 @@ their physical derivation remains separate.
     $2-C(\tau+E/\tau)\ge1$ and $S\ge0$ imply the conclusion.
 \end{proof}
 
-\begin{theorem}[One threshold for the bootstrap coefficient loss]
+\begin{lemma}[One threshold for the bootstrap coefficient loss]
     \label{thm:area_law_bootstrap_comparison_loss_threshold}
     \lean{TNLean.PEPS.AreaLaw.Scan.exists_bootstrap_comparison_loss_threshold}
     \leanok
@@ -69,7 +69,7 @@ their physical derivation remains separate.
     This is the numerical threshold used after the fixed-scale
     replica limit. It does not require a replica convergence rate
     uniform in $n$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:area_law_bootstrap_margins}
@@ -86,7 +86,7 @@ their physical derivation remains separate.
 \end{proof}
 
 
-\begin{theorem}[Typical-entropy substitution after the rough comparisons]
+\begin{lemma}[Typical-entropy substitution after the rough comparisons]
     \label{thm:area_law_rough_typical_entropy_absorption}
     \lean{TNLean.PEPS.AreaLaw.Scan.regionalEntropy_le_of_rough_typical_comparisons}
     \leanok
@@ -124,7 +124,7 @@ their physical derivation remains separate.
     \end{align}
     retaining the same physical state and selected spectrum while leaving
     the physical derivation of the comparisons separate.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_bootstrap_replica_absorption,thm:area_law_selected_schmidt_entropy_bounds}
     The selected auxiliary density has nonnegative entropy, so

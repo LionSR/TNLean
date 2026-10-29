@@ -51,8 +51,8 @@
         \notag
     \end{align}
     where the two sides are identified by
-    Theorem~\ref{thm:cyclic_window_boundary_matrix_transport}. By
-    Theorem~\ref{thm:ground_space_map_injective_blk},
+    Lemma~\ref{thm:cyclic_window_boundary_matrix_transport}. By
+    Lemma~\ref{thm:ground_space_map_injective_blk},
     $Y_M(\tau^+_j(\mu))A^j = Y_{M+1-L_0}(\tau^-_j(\mu))A^j$.
     Right multiplication by $A^\sigma$ gives the asserted product equation.
 \end{proof}
@@ -288,7 +288,7 @@
     then gives the displayed boundary conditions and product equation.
 \end{proof}
 
-\begin{theorem}[Boundary-matrix product from left-multiplied equations]
+\begin{lemma}[Boundary-matrix product from left-multiplied equations]
     \label{thm:closure_property_auxiliary_boundary_product_ground_space_left_words}
     \lean{MPSTensor.closure_property_auxiliary_boundary_product_eq_of_groundSpaceMap_left_words}
     \leanok
@@ -325,7 +325,7 @@
         Y_{M+1-L_0}(\rho^-_{j,\sigma})A^jA^\sigma.
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -341,7 +341,7 @@
     % docs/paper-gaps/cpgsv21_normal_range_reduction.tex.
 \end{proof}
 
-\begin{theorem}[Boundary restrictions from the left-multiplied comparison]
+\begin{lemma}[Boundary restrictions from the left-multiplied comparison]
     \label{thm:closure_property_boundary_restrictions_ground_space_map_left_words}
     \lean{MPSTensor.closure_property_boundary_restrictions_eq_of_groundSpaceMap_left_words}
     \leanok
@@ -366,7 +366,7 @@
         \Res^{\tau^-_\eta(\mu)}_{M+1-L_0,L_0+1}(\psi).
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -391,7 +391,7 @@
     identifies the two restrictions.
 \end{proof}
 
-\begin{theorem}[Equality of the boundary-crossing restrictions]
+\begin{lemma}[Equality of the boundary-crossing restrictions]
     \label{thm:closure_property_boundary_restrictions_ground_space_map}
     \lean{MPSTensor.closure_property_boundary_restrictions_eq_of_groundSpaceMap}
     \leanok
@@ -423,7 +423,7 @@
         \Res^{\tau^-_\eta(\mu)}_{M+1-L_0,L_0+1}(\psi).
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok

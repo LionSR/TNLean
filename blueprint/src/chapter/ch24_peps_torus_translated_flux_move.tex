@@ -20,7 +20,7 @@
     realizing the tree-cycle insertions of \cite[Theorem~6.16]{Schuch2010PEPS} on the translated six-site block $R_v$ across either periodic seam.
 \end{definition}
 
-\begin{theorem}[The flux endpoint moves at every position]%
+\begin{lemma}[The flux endpoint moves at every position]%
     \label{thm:peps_torus_translated_flux_holonomy}
     \lean{TNLean.PEPS.regularWalkHolonomy_torusTranslatedFluxAssignment}
     \leanok
@@ -32,14 +32,14 @@
         (H_L(u_g^1),H_R(u_g^1)) & =(1,g^{-1}), \label{eq:translated_flux_holonomies}
     \end{align}
     moving the flux $g^{-1}$ from the left to the right plaquette as in \cite[Theorem~6.16]{Schuch2010PEPS}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     By (\ref{eq:torus_translated_flux_ky}), the upward directed value is $g$ on each selected vertical bond and $1$ on all horizontal and unselected vertical bonds (which are distinct since $L_x\ge 4,L_y\ge 3$).
     Under $u_g^1$, the left plaquette traverses the two insertions downward then upward ($g^{-1}g=1$) and the right plaquette traverses the middle bond downward ($g^{-1}$); setting the middle bond to $1$ gives $(H_L(u_g^0),H_R(u_g^0))=(g^{-1},1)$.
 \end{proof}
 
-\begin{theorem}[A six-spin flux operation at every position]%
+\begin{lemma}[A six-spin flux operation at every position]%
     \label{thm:peps_torus_translated_physical_flux_move}
     \lean{TNLean.PEPS.IsGIsometric.exists_unitary_torusTranslatedPhysicalFluxMove}
     \leanok
@@ -50,14 +50,14 @@
     \begin{align}
         W_v\Psi_{R_v}(u_g^0,\theta)=\Psi_{R_v}(u_g^1,\theta). \label{eq:translated_open_flux_move}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
-    By Theorem~\ref{thm:peps_translated_two_plaquette_geometry}, $R_v$ inherits a spanning path, root, and two distinct chords, and four-leg $G$-isometry induces incident-edge site isometries.
-    Applying Theorem~\ref{thm:peps_regular_two_cycle_physical_flux_move} with common chord insertion $k_y(g)$ from (\ref{eq:torus_translated_flux_ky}) yields (\ref{eq:translated_open_flux_move}).
+    By Lemma~\ref{thm:peps_translated_two_plaquette_geometry}, $R_v$ inherits a spanning path, root, and two distinct chords, and four-leg $G$-isometry induces incident-edge site isometries.
+    Applying Lemma~\ref{thm:peps_regular_two_cycle_physical_flux_move} with common chord insertion $k_y(g)$ from (\ref{eq:torus_translated_flux_ky}) yields (\ref{eq:translated_open_flux_move}).
 \end{proof}
 
-\begin{theorem}[A global torus flux movement at every position]%
+\begin{lemma}[A global torus flux movement at every position]%
     \label{thm:peps_torus_translated_global_flux_move}
     \lean{TNLean.PEPS.IsGIsometric.exists_unitary_torusTranslatedGlobalFluxMove}
     \leanok
@@ -65,13 +65,13 @@
         def:peps_torus_translated_flux_assignment,
         thm:peps_torus_translated_flux_holonomy,
         thm:peps_regular_two_cycle_global_flux_move}
-    Under the hypotheses of Theorem~\ref{thm:peps_torus_translated_physical_flux_move}, for every $v$ the global unitary $\widehat W_v=W_v\otimes I$ (chosen before $g\in G$ and exterior/crossing assignments $u$) satisfies
+    Under the hypotheses of Lemma~\ref{thm:peps_torus_translated_physical_flux_move}, for every $v$ the global unitary $\widehat W_v=W_v\otimes I$ (chosen before $g\in G$ and exterior/crossing assignments $u$) satisfies
     \begin{align}
         \widehat W_v\Psi(u_g^0;u)=\Psi(u_g^1;u) \label{eq:translated_global_flux_move}
     \end{align}
     on globally contracted torus states, realizing the local flux move of \cite[Theorem~6.16]{Schuch2010PEPS} across both seams (with unrestricted lattice scope recorded in \cite{gap:rmp_peps_quantum_double_g_isometry}).
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
-    Applying Theorem~\ref{thm:peps_regular_two_cycle_global_flux_move} to the translated tree-chord data of Theorem~\ref{thm:peps_translated_two_plaquette_geometry} with insertion $k_y(g)$ from (\ref{eq:torus_translated_flux_ky}) gives (\ref{eq:translated_global_flux_move}), while (\ref{eq:translated_flux_holonomies}) gives the flux transport.
+    Applying Lemma~\ref{thm:peps_regular_two_cycle_global_flux_move} to the translated tree-chord data of Lemma~\ref{thm:peps_translated_two_plaquette_geometry} with insertion $k_y(g)$ from (\ref{eq:torus_translated_flux_ky}) gives (\ref{eq:translated_global_flux_move}), while (\ref{eq:translated_flux_holonomies}) gives the flux transport.
 \end{proof}

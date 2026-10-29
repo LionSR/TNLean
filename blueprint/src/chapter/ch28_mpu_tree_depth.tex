@@ -5,7 +5,7 @@ recurrences for circuit depth. The results below concern those recurrences;
 they do not assert that an arbitrary tensor admits the required circuit
 construction or conditioning bounds.
 
-\begin{theorem}[Product of the conditioning costs]
+\begin{lemma}[Product of the conditioning costs]
     \label{thm:mpu_tree_depth_product}
     \lean{MPUCircuit.depth_le_prod_conditioning}
     \leanok
@@ -19,7 +19,7 @@ construction or conditioning bounds.
     \begin{align}
         T_L & \leq 2^L(a+CL)\prod_{j=0}^{L-1}q_j.
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     By induction on $L$, the base case $L=0$ reduces to $T_0\leq a$. At
@@ -34,17 +34,17 @@ construction or conditioning bounds.
     \end{align}
 \end{proof}
 
-\begin{theorem}[Polynomial product bound]
+\begin{lemma}[Polynomial product bound]
     \label{thm:mpu_tree_depth_polynomial}
     \lean{MPUCircuit.depth_le_polynomial_of_prod_conditioning}
     \leanok
-    Under the hypotheses of Theorem~\ref{thm:mpu_tree_depth_product}, suppose
+    Under the hypotheses of Lemma~\ref{thm:mpu_tree_depth_product}, suppose
     also $a\geq0$. Let $L,c$ be nonnegative integers. If
     $\prod_{j<L}q_j\leq (2^L)^c$, then
     \begin{align}
         T_L & \leq (a+CL)(2^L)^{c+1}.
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpu_tree_depth_product}
@@ -53,7 +53,7 @@ construction or conditioning bounds.
     polynomial estimate.
 \end{proof}
 
-\begin{theorem}[Constant conditioning]
+\begin{lemma}[Constant conditioning]
     \label{thm:mpu_tree_depth_constant}
     \lean{MPUCircuit.depth_le_constant_conditioning}
     \leanok
@@ -63,7 +63,7 @@ construction or conditioning bounds.
     \begin{align}
         T_L & \leq (a+CL)(2q)^L.
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpu_tree_depth_product}
@@ -71,7 +71,7 @@ construction or conditioning bounds.
     using $2^Lq^L=(2q)^L$ gives the bound.
 \end{proof}
 
-\begin{theorem}[Linear overhead at unit conditioning]
+\begin{lemma}[Linear overhead at unit conditioning]
     \label{thm:mpu_tree_depth_endpoint}
     \lean{MPUCircuit.linear_overhead_recurrence}
     \leanok
@@ -79,7 +79,7 @@ construction or conditioning bounds.
     \begin{align}
         C(L+1)2^{L+1} & =2(CL2^L)+C2^{L+1}.
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Expanding $2^{L+1}=2\cdot2^L$ and distributing multiplication over
@@ -111,7 +111,7 @@ admissible boundary states and the infimum defining the conditioning cost.
     the two involutions in exterior density operators.
 \end{definition}
 
-\begin{theorem}[Inverse trace of the parity Gram matrices]
+\begin{lemma}[Inverse trace of the parity Gram matrices]
     \label{thm:mpu_parity_inverse_trace}
     \lean{MPUCircuit.trace_inverse_parityGrams}
     \leanok
@@ -122,7 +122,7 @@ admissible boundary states and the infimum defining the conditioning cost.
     \end{align}
     The identity holds for arbitrary complex parameters, with the convention
     that the inverse of a singular matrix and the reciprocal of zero are zero.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:mpu_parity_boundary_grams}
@@ -155,14 +155,14 @@ operators.
     their order is the lexicographic order of the two bond labels.
 \end{definition}
 
-\begin{theorem}[Normalization of projection interval maps]
+\begin{lemma}[Normalization of projection interval maps]
     \label{thm:mpu_projection_interval_isometries}
     \lean{MPUCircuit.projectionPrefixMap_isIsometry, MPUCircuit.projectionInteriorMap_isIsometry, MPUCircuit.projectionSuffixMap_isIsometry}
     \leanok
     If $P$ is an orthogonal projection, the prefix and interior maps of
     Definition~\ref{def:mpu_projection_interval_maps} are isometries.
     If also $|z|=1$, the suffix map is an isometry.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:mpu_projection_interval_maps}
@@ -189,7 +189,7 @@ operators.
     The matrix $K$ gives the coefficients of their bilinear contraction.
 \end{definition}
 
-\begin{theorem}[Projection bond contraction]
+\begin{lemma}[Projection bond contraction]
     \label{thm:mpu_projection_bond_contraction}
     \lean{MPUCircuit.projectionMergeKernel_contract_frames, MPUCircuit.projectionMergeKernel_trace_conjTranspose_mul, MPUCircuit.projectionFrames_trace_inverse_grams, MPUCircuit.projectionFrames_isUnit}
     \leanok
@@ -201,7 +201,7 @@ operators.
         \operatorname{tr}\bigl[(C_R^\dagger C_R)^{-1}
         ((C_L^\dagger C_L)^{-1})^T\bigr] & =4.
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:mpu_projection_boundary_frames}
@@ -211,7 +211,7 @@ operators.
     determinants.
 \end{proof}
 
-The bond contraction in Theorem~\ref{thm:mpu_projection_bond_contraction}
+The bond contraction in Lemma~\ref{thm:mpu_projection_bond_contraction}
 identifies matching tensor labels. For adjacent intervals it multiplies
 $P_{jk}$ and $P_{k+1,l}$ by their tensor product, giving $P_{jl}$.
 Its norm is two and is independent of the phase $z$.
@@ -223,7 +223,7 @@ When its coefficients belong to a finite alphabet, the number of distinct
 residual coefficient functions can be bounded without a smallest-Schmidt-value
 assumption.
 
-\begin{theorem}[Columns distinguishing the rows]
+\begin{lemma}[Columns distinguishing the rows]
     \label{thm:mpu_cut_row_separator}
     \lean{Matrix.exists_row_separating_columns}
     \leanok
@@ -231,7 +231,7 @@ assumption.
     $I$ and a finite column set $J$. There is a subset $J_0\subseteq J$ of
     cardinality $\operatorname{rank}M$ such that two rows of $M$ are equal
     whenever they agree at every column in $J_0$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Selecting a basis of the column space among the columns of $M$ gives a
@@ -240,7 +240,7 @@ assumption.
     implies agreement at every column.
 \end{proof}
 
-\begin{theorem}[Number of finite-alphabet rows]
+\begin{lemma}[Number of finite-alphabet rows]
     \label{thm:mpu_cut_finite_alphabet_rows}
     \lean{Matrix.card_range_le_pow_rank, Matrix.card_range_le_pow_of_rank_le}
     \leanok
@@ -249,7 +249,7 @@ assumption.
     rows is finite and has cardinality at most $|S|^{\operatorname{rank}M}$.
     If also $S$ is nonempty and $\operatorname{rank}M\leq D$, this number
     is at most $|S|^D$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpu_cut_row_separator}
@@ -259,7 +259,7 @@ assumption.
     $\operatorname{rank}M\leq D$.
 \end{proof}
 
-\begin{theorem}[Finite-alphabet rows from a bond factorization]
+\begin{lemma}[Finite-alphabet rows from a bond factorization]
     \label{thm:mpu_cut_bond_row_count}
     \lean{Matrix.card_range_mul_le_pow, Matrix.card_range_mul_le_two_pow}
     \leanok
@@ -268,7 +268,7 @@ assumption.
     of $AB$ belongs to a nonempty finite set $S$. The set of distinct rows
     of $AB$ is finite and has cardinality at most $|S|^D$.
     In particular, zero-one entries give at most $2^D$ distinct rows.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpu_cut_finite_alphabet_rows}
@@ -282,39 +282,39 @@ assumption.
 In the diagonal circuit argument of \cite{DiagonalMPUCircuits2026}, the
 following elementary unit-circle geometry governs the rank-two step.
 
-\begin{theorem}[Three points on a vertical line]
+\begin{lemma}[Three points on a vertical line]
     \label{thm:mpu_circle_vertical}
     \lean{Complex.eq_or_eq_or_eq_of_re_eq_of_normSq_eq}
     \leanok
     Let $u,v,w\in\mathbb C$ have the same real part and the same squared
     modulus. Then $u=v$, $u=w$, or $v=w$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Equality of squared moduli gives equal squares of the imaginary parts.
     Three real numbers with the same square have at most two values.
 \end{proof}
 
-\begin{theorem}[Constant real functional on the unit circle]
+\begin{lemma}[Constant real functional on the unit circle]
     \label{thm:mpu_circle_functional}
     \lean{Complex.eq_zero_of_re_mul_eq_of_three_unit_points}
     \leanok
     Let $u,v,w$ be three distinct complex numbers of modulus one. If
     $\operatorname{Re}(zu)=\operatorname{Re}(zv)=\operatorname{Re}(zw)$,
     then $z=0$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:mpu_circle_vertical}
     The three products have the same real part and the same modulus.
     Two are equal; their factors are distinct, so $z=0$.
 \end{proof}
 
-\begin{theorem}[Three affine unit-circle values]
+\begin{lemma}[Three affine unit-circle values]
     \label{thm:mpu_circle_affine}
     \lean{Complex.eq_zero_or_eq_zero_of_three_unit_affine_values}
     \leanok
     Let $u,v,w$ be distinct complex numbers of modulus one. If
     $|a+bu|=|a+bv|=|a+bw|=1$, then $a=0$ or $b=0$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:mpu_circle_functional}
     Expanding the squared moduli shows that the real parts of
@@ -322,7 +322,7 @@ following elementary unit-circle geometry governs the rank-two step.
     $a\overline b\overline w$ agree, so $a\overline b=0$.
 \end{proof}
 
-\begin{theorem}[A unit-modulus factorization dichotomy]
+\begin{lemma}[A unit-modulus factorization dichotomy]
     \label{thm:mpu_circle_factorization}
     \lean{Complex.unitCircle_factorization_dichotomy}
     \leanok
@@ -331,7 +331,7 @@ following elementary unit-circle geometry governs the rank-two step.
     for all $i,j$. Then either $a_i=0$ or $b_i=0$ for every $i$, or
     there are $j_0,j_1\in J$ such that $t_j\in\{t_{j_0},t_{j_1}\}$
     for every $j\in J$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:mpu_circle_affine}
     If $t$ takes three distinct values, applying the preceding theorem to
@@ -348,10 +348,10 @@ uses $O(N^{\log_2 3})$ auxiliary qubits and logarithmic depth.
 For diagonal MPUs of arbitrary maximal bond dimension $D$, reversible
 phase evaluation gives operator-norm error at most $\varepsilon$ with
 resources polynomial in $N,D,\log(1/\varepsilon)$. These estimates concern diagonal operators;
-Theorem~\ref{thm:mpu_rank_two_exact_circuits} gives a separate construction
+Lemma~\ref{thm:mpu_rank_two_exact_circuits} gives a separate construction
 for arbitrary unitaries of consecutive cut rank at most two.
 
-\begin{theorem}[An affine product of bond factorizations]
+\begin{lemma}[An affine product of bond factorizations]
     \label{thm:mpu_phase_selector_factorization}
     \lean{Matrix.exists_hadamard_affine_factorization}
     \leanok
@@ -361,14 +361,14 @@ for arbitrary unitaries of consecutive cut rank at most two.
     For $s,t\in K$, the matrix
     $H_{ij}=s(AB)_{ij}(CE)_{ij}+t$ factors through the index set
     $(P\times Q)\sqcup\{*\}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Setting the left factor to have entry $sA_{ip}C_{iq}$ at $(p,q)$ and
     $t$ at $*$, and the right factor to have entry $B_{pj}E_{qj}$ at
     $(p,q)$ and $1$ at $*$, distributes their product to give $H$.
 \end{proof}
 
-\begin{theorem}[Boolean selectors from two bond factorizations]
+\begin{lemma}[Boolean selectors from two bond factorizations]
     \label{thm:mpu_phase_selector_row_count}
     \lean{Matrix.card_range_hadamard_affine_le_two_pow}
     \leanok
@@ -376,7 +376,7 @@ for arbitrary unitaries of consecutive cut rank at most two.
     entry of $H$ is zero or one. The set of distinct rows of $H$ is
     finite and has cardinality at most $2^{|P||Q|+1}$.
     In particular, $|P|=|Q|=2$ gives at most 32 rows.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:mpu_phase_selector_factorization, thm:mpu_cut_bond_row_count}
     Since the displayed factorization has middle index set of cardinality

@@ -37,7 +37,7 @@ single physical alphabet.
     the last column of $E(O)$ and every original column of $J(A)$ vanish.
 \end{definition}
 
-\begin{theorem}[Products of padded tensors]
+\begin{lemma}[Products of padded tensors]
     \leanok
     \label{thm:glm_triangular_padding_products}
     \lean{MPOTensor.mulTensor_operatorPhysicalPadding,
@@ -59,7 +59,7 @@ single physical alphabet.
     \end{align}
     Every equality retains the original ordered tensor product of virtual
     bond spaces. No positivity of physical or virtual dimensions is needed.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{def:glm_triangular_padding, def:mpdo_operator_product, def:mpug_action_tensor}
@@ -70,7 +70,7 @@ single physical alphabet.
     can contribute, and the last row of the right factor is zero.
 \end{proof}
 
-\begin{theorem}[Injectivity under physical padding]
+\begin{lemma}[Injectivity under physical padding]
     \leanok
     \label{thm:glm_triangular_padding_injectivity}
     \lean{MPOTensor.isInjective_operatorPhysicalPadding,
@@ -79,7 +79,7 @@ single physical alphabet.
     If the matrices $O^{ij}$ span the full virtual matrix algebra, then
     the matrices $E(O)^{ij}$ do so. If the matrices $A^i$ span that algebra,
     then the matrices $J(A)^{ij}$ do so.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{def:glm_triangular_padding, def:injective}
@@ -87,7 +87,7 @@ single physical alphabet.
     matrix span is contained in the padded matrix span.
 \end{proof}
 
-\begin{theorem}[Padding exact decompositions]
+\begin{lemma}[Padding exact decompositions]
     \leanok
     \label{thm:glm_triangular_padding_decomposition}
     \lean{MPSTensor.IsBiorthogonalDecomposition.operatorPhysicalPadding,
@@ -108,7 +108,7 @@ single physical alphabet.
     Thus both padded decompositions use the same target indices and the
     same analysis and synthesis matrices, with no ambient completeness
     requirement.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{def:glm_triangular_padding, def:glm_boundary_decomposition}
@@ -117,7 +117,7 @@ single physical alphabet.
     other coordinate both sides are zero.
 \end{proof}
 
-\begin{theorem}[Restriction of padded scalar gauges]
+\begin{lemma}[Restriction of padded scalar gauges]
     \leanok
     \label{thm:glm_triangular_padding_gauge_restriction}
     \lean{MPOTensor.gaugePhaseEquiv_of_operatorPhysicalPadding,
@@ -128,7 +128,7 @@ single physical alphabet.
     A gauge-phase relation between $J(A)$ and $J(B)$ implies the same
     relation between $A$ and $B$. In both cases, the invertible virtual
     matrix and nonzero scalar are unchanged.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{def:glm_triangular_padding, def:gauge_phase_equiv}
@@ -137,7 +137,7 @@ single physical alphabet.
     the original relation.
 \end{proof}
 
-\begin{theorem}[Separation of padded operators and states]
+\begin{lemma}[Separation of padded operators and states]
     \leanok
     \label{thm:glm_triangular_padding_gauge_separation}
     \lean{MPOTensor.not_gaugePhaseEquiv_operatorPhysicalPadding_statePhysicalPadding,
@@ -148,7 +148,7 @@ single physical alphabet.
     satisfy $J(A)^{ij}=\zeta X E(O)^{ij}X^{-1}$ for every physical pair.
     If $O$ is injective on its doubled physical alphabet, no such $X,\zeta$
     satisfy $E(O)^{ij}=\zeta X J(A)^{ij}X^{-1}$ for every physical pair.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{def:glm_triangular_padding, def:injective}
