@@ -35,7 +35,7 @@ The local parent interaction is $h=I-P_S$.
     the ambient column space still contains every ordered pair of labels.
 \end{definition}
 
-\begin{theorem}[The two-site support lies in the boundary frame]
+\begin{lemma}[The two-site support lies in the boundary frame]
     \label{thm:mpo_joint_full_frame_support}
     \lean{MPSTensor.MPOSymmetry.blockInsertedGroundSpaceMap_jointMixed_eq_boundaryColumns,
         MPSTensor.MPOSymmetry.jointMixedTwoSiteBoundaryColumns_eq_polarFrame_mul,
@@ -52,7 +52,7 @@ The local parent interaction is $h=I-P_S$.
         \subseteq\operatorname{ran}U.
     \end{align}
     Neither physical site is cropped, and the block columns may overlap.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:mpo_joint_boundary_original_bulk,def:mpo_joint_boundary_columns}
@@ -100,7 +100,7 @@ $D_x$, while the right contracted leg is $b\in\Fin{D_x^0}$.
     \end{tenkz}
 \end{tenkzequation}
 
-\begin{theorem}[A parent interaction supported in a frame]
+\begin{lemma}[A parent interaction supported in a frame]
     \label{thm:mpo_supported_parent_projection}
     \lean{Submodule.starProjection_comp_starProjection_eq_right_of_le,
         Submodule.starProjection_comp_starProjection_eq_left_of_le,
@@ -120,7 +120,7 @@ $D_x$, while the right contracted leg is $b\in\Fin{D_x^0}$.
     \end{align}
     Equivalently, $h-(I-Q)$ is positive, so the quadratic form of
     $I-Q$ is bounded by that of $h$ on every vector.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Projection onto $E$ fixes $S$, giving $QP_S=P_S$; taking
@@ -140,7 +140,7 @@ $D_x$, while the right contracted leg is $b\in\Fin{D_x^0}$.
     Hilbert space.
 \end{definition}
 
-\begin{theorem}[Reduction and penalty for the two-site interaction]
+\begin{lemma}[Reduction and penalty for the two-site interaction]
     \label{thm:mpo_joint_full_frame_reduction}
     \lean{MPSTensor.MPOSymmetry.jointMixedTwoSiteFrameProjection_mul_supportProjection,
         MPSTensor.MPOSymmetry.jointMixedTwoSiteFrameProjection_commute_parentInteraction,
@@ -154,7 +154,7 @@ $D_x$, while the right contracted leg is $b\in\Fin{D_x^0}$.
     the identity on $(\operatorname{ran}U)^\perp$, and every physical
     vector satisfies $\|(I-Q)v\|^2\le\operatorname{Re}\langle hv,v\rangle$.
     These conclusions require no injectivity hypothesis.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:mpo_joint_full_frame_support,thm:mpo_supported_parent_projection}
@@ -162,7 +162,7 @@ $D_x$, while the right contracted leg is $b\in\Fin{D_x^0}$.
     derived inclusion $S\subseteq\operatorname{ran}U$.
 \end{proof}
 
-\begin{theorem}[Exact compression in a supported isometric frame]
+\begin{lemma}[Exact compression in a supported isometric frame]
     \label{thm:mpo_supported_parent_compression}
     \lean{LinearIsometry.starProjection_range_eq_comp_adjoint,
         LinearIsometry.commute_rangeProjection_one_sub_starProjection_of_le_range,
@@ -184,7 +184,7 @@ $D_x$, while the right contracted leg is $b\in\Fin{D_x^0}$.
     The projection $UU^*$ commutes with $I-P_S$. Every norm-gap
     lower bound for $I-P_S$ on $S^\perp$ holds with the same constant
     for its compression on $(U^*S)^\perp$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:mpo_supported_parent_projection,thm:mpo_rectangular_compression_gap}
@@ -196,7 +196,7 @@ $D_x$, while the right contracted leg is $b\in\Fin{D_x^0}$.
     permits gap restriction through the isometry.
 \end{proof}
 
-\begin{theorem}[The compressed interaction and its kernel]
+\begin{lemma}[The compressed interaction and its kernel]
     \label{thm:mpo_joint_full_frame_compression}
     \lean{MPSTensor.MPOSymmetry.jointMixedTwoSitePolarFrame_isIsometry,
         MPSTensor.MPOSymmetry.jointMixedTwoSitePolarIsometry,
@@ -212,7 +212,7 @@ $D_x$, while the right contracted leg is $b\in\Fin{D_x^0}$.
         U^*hU & =I-P_{U^*S}, & \ker(U^*hU) & =U^*S.
     \end{align}
     At length two, this is one local term with both boundary frames.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:mpo_joint_boundary_polar,thm:mpo_joint_full_frame_support,

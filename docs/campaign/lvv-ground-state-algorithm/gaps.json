@@ -32,14 +32,18 @@
    "result": "Theorem 1, dependence of the running time on the ground energy",
    "issue": 9822,
    "stage": "alg:5",
-   "prs": {},
+   "prs": {
+    "TNLean": [
+     10271
+    ]
+   },
    "title": "Ground energy in the exponent of the running time",
-   "summary": "Theorem 1 gives an exponent independent of the ground energy, but the normalization of the sampled projector is polynomial in <i>n</i> only when ε<sub>0</sub>/ε is bounded; this page states the corrected exponent, which no formal statement depends on, and the reading has not yet been written up as a note.",
+   "summary": "Theorem 1 gives an exponent independent of the ground energy, but the normalization of the sampled projector is polynomial in <i>n</i> only when ε<sub>0</sub>/ε is bounded. The sampled projector is formalized with the number of words explicit in <i>C</i><sup><i>m</i></sup>; the running time is not formalized.",
    "context": "The algorithm uses the operator <i>A</i> = ((1 − <i>H</i>/<i>n</i>)/(1 − ε<sub>0</sub>/<i>n</i>))<sup><i>m</i></sup> with <i>m</i> of order (<i>n</i>/ε) log <i>n</i>, and samples it by an average of words in the factors 1 − <i>H<sub>i</sub></i> multiplied by <i>C</i><sup><i>m</i></sup>, <i>C</i> = (1 − ε<sub>0</sub>/<i>n</i>)<sup>−1</sup>. The size of <i>C</i><sup><i>m</i></sup> controls the variance in the matrix Bernstein bound, and hence the number of sampled words.",
    "claims": "Theorem 1 of arXiv:1307.5143v1 (lines 213–216 of the source) runs in time <i>n</i><sup><i>c</i>(<i>d</i>, ε)</sup> poly(<i>n</i>/η) with <i>c</i>(<i>d</i>, ε) = 2<sup><i>O</i>(log<sup>3</sup> <i>d</i>/ε)</sup>, with no dependence on the ground energy ε<sub>0</sub>. The proof of the sampling estimate (line 644) uses <i>C</i><sup>2<i>m</i></sup> = <i>n</i><sup><i>O</i>(1/ε)</sup>.",
    "found": "<i>C</i><sup><i>m</i></sup> = (1 − ε<sub>0</sub>/<i>n</i>)<sup>−<i>m</i></sup> is about e<sup>ε<sub>0</sub><i>m</i>/<i>n</i></sup> = <i>n</i><sup><i>O</i>(ε<sub>0</sub>/ε)</sup>. The hypotheses 0 ≤ <i>H<sub>i</sub></i> ≤ 1 allow ε<sub>0</sub> of order <i>n</i>, and then this factor, and with it the exponent of the running time, grows with <i>n</i>. Rescaling the sampled operator, which the source allows, does not change the relative accuracy that the number of samples must reach. The corrected exponent is 2<sup><i>O</i>(log<sup>3</sup> <i>d</i>/ε) + <i>O</i>(ε<sub>0</sub>/ε)</sup>.",
    "impact": "The algorithm is polynomial-time whenever ε<sub>0</sub>/ε is bounded, in particular for frustration-free chains; for an extensive ground energy the stated bound does not give polynomial time. The formalization targets existence statements, not running times, so no formal statement depends on this.",
-   "plan": "Write the paper-gap note recording the corrected exponent, and correct the statement of Theorem 1 in the result table."
+   "plan": "The note records the failure and the corrected statement. Corollary c:agsp is proved with ℓ explicit in <i>C</i><sup><i>m</i></sup> and the bound <i>C</i><sup><i>m</i></sup> ≤ <i>n</i> η<sup>−ε<sub>0</sub>/ε</sup>; the dependence of the whole algorithm on ε<sub>0</sub> stays open."
   },
   {
    "id": "docs/paper-gaps/lvv13_constant_bond.tex",
@@ -273,6 +277,27 @@
    "found": "A vector on one site has no internal bond, so its bond dimension is zero, while a nonzero product vector on two sites has a bond of dimension one. The source uses <i>b</i> = 0 only for the initial set {1} at the start of the sweep (line 372), and its later bond dimensions are positive polynomials. The formalization reads a bond dimension of at most <i>b</i> as at most max(1, <i>b</i>).",
    "impact": "None; every bound with <i>b</i> ≥ 1 is unchanged.",
    "plan": "Nothing further; the convention is part of the definition."
+  },
+  {
+   "id": "docs/paper-gaps/lvv13_error_reduction_witness_norm.tex",
+   "kind": "local-correction",
+   "status": "resolved",
+   "paper": "lvv",
+   "result": "Claim c:errorreduction, the normalized witness",
+   "issue": 9823,
+   "stage": "alg:6",
+   "prs": {
+    "TNLean": [
+     10274
+    ]
+   },
+   "title": "The error-reduction step needs a lower bound on the norm of A v",
+   "summary": "The passage from <i>A v</i> to <i>K v</i> in the proof of the error-reduction claim needs a lower bound on ‖<i>A v</i>‖; the source's <i>A</i> supplies ‖<i>A v</i>‖ ≥ 1/2, and the new error is δ + 4‖<i>K</i> − <i>A</i>‖ in place of 2δ, a change of constant that the free polynomial <i>q</i>(<i>n</i>) absorbs.",
+   "context": "Error reduction applies the left factors <i>A<sub>j</sub></i> of a decomposition <i>K</i> = Σ<sub><i>j</i></sub> <i>A<sub>j</sub></i> ⊗ <i>B<sub>j</sub></i> of the sampled projector to a half-viable set. A witness <i>v</i> of the old set is mapped to the witness <i>K v</i>/‖<i>K v</i>‖ of the new one.",
+   "claims": "From |⟨Γ, <i>A v</i>/‖<i>A v</i>‖⟩| ≥ 1 − δ and ‖<i>K</i> − <i>A</i>‖ ≤ δ it follows that |⟨Γ, <i>K v</i>/‖<i>K v</i>‖⟩| ≥ 1 − 2δ (line 589).",
+   "found": "Without a lower bound on ‖<i>A v</i>‖ the implication fails: in ℂ<sup>2</sup> with Γ = <i>v</i> = <i>e</i><sub>1</sub>, <i>A</i> = δ·1 and <i>K</i> = <i>A</i> + δ|<i>e</i><sub>2</sub>⟩⟨<i>e</i><sub>1</sub>|, the overlap of <i>K v</i>/‖<i>K v</i>‖ with Γ is 1/√2. The source's <i>A</i> is Hermitian and fixes Γ (line 602), so ‖<i>A v</i>‖ ≥ |⟨Γ, <i>v</i>⟩| ≥ 1/2, and the triangle inequality gives 1 − δ − 4‖<i>K</i> − <i>A</i>‖.",
+   "impact": "None for the claim, which is stated for an arbitrary polynomial <i>q</i>(<i>n</i>); a smaller sampling error restores the printed target error.",
+   "plan": "Nothing further; the deterministic error-reduction step is proved with the corrected constant."
   }
  ]
 }

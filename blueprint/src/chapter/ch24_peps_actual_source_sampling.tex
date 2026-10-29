@@ -7,7 +7,7 @@ This section completes the Gaussian sampling estimate for a source-only circuit 
 The circuit retains its source occurrences, local branch labels, physical registers,
 and discarded registers; its tensor-network representation is proved separately.
 
-\begin{theorem}[Finite-dimensional spaces of discarded registers]
+\begin{lemma}[Finite-dimensional spaces of discarded registers]
     \label{thm:peps_finite_register_memories}
     \lean{TNLean.Lattice.PartyCircuit.Layout.finiteDimensional_mem_of_registers,TNLean.Lattice.PartyCircuit.Layout.finiteDimensional_mem_restrict_mapOwner_mapOwner}
     \leanok
@@ -15,7 +15,7 @@ and discarded registers; its tensor-network representation is proved separately.
     Hilbert spaces, $\mathcal H_R$ is finite-dimensional, and remains so after
     relabelling register parties twice and restricting to either side of any
     party partition.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Induction on $R$ shows $\dim\mathcal H_R<\infty$; party relabelling preserves
@@ -27,7 +27,7 @@ and discarded registers; its tensor-network representation is proved separately.
     \uses{thm:peps_finite_register_memories}
     \lean{TNLean.Lattice.PartyCircuit.Layout.restrictedDiscardBasis}
     \leanok
-    Under Theorem~\ref{thm:peps_finite_register_memories}, choose a finite
+    Under Lemma~\ref{thm:peps_finite_register_memories}, choose a finite
     orthonormal basis of the restricted discarded space indexed by
     $\{0,\ldots,d-1\}$, where $d$ is its dimension.
 \end{definition}
@@ -41,17 +41,17 @@ and discarded registers; its tensor-network representation is proved separately.
     dimensions $d_p$ and $A\subseteq P$, mapping the product physical basis
     outside $A$ (indexed by $\prod_{p\notin A}\{0,\ldots,d_p-1\}$) through the
     party identifications of Definition~\ref{def:peps_family_physical_output}
-    and Theorem~\ref{thm:peps_affected_original_dimensions} gives an orthonormal
+    and Lemma~\ref{thm:peps_affected_original_dimensions} gives an orthonormal
     basis of the exterior physical space.
 \end{definition}
 
-\begin{theorem}[Exterior physical dimension]
+\begin{lemma}[Exterior physical dimension]
     \label{thm:peps_exterior_family_physical_dimension}
     \lean{TNLean.Lattice.PartyCircuit.finrank_exteriorFamilyPhysicalLayout}
     \leanok
     The dimension of the exterior physical space after the two party
     identifications is $\prod_{p\notin A}d_p$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{def:peps_exterior_family_physical_basis}
@@ -59,7 +59,7 @@ and discarded registers; its tensor-network representation is proved separately.
     has cardinality $|\prod_{p\notin A}\{0,\ldots,d_p-1\}|=\prod_{p\notin A}d_p$.
 \end{proof}
 
-\begin{theorem}[Expected norm of a partial branch]
+\begin{lemma}[Expected norm of a partial branch]
     \label{thm:peps_actual_gaussian_branch}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.integrable_actualGaussianBranch_and_integral_le}
     \leanok
@@ -78,11 +78,11 @@ and discarded registers; its tensor-network representation is proved separately.
          & \leq |X|^2 k^{-|S|/2}.
         \label{eq:peps_actual_branch_bound}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_actual_corrected_schmidt_output,thm:peps_gaussian_separated_physical_bound,thm:peps_local_schmidt_output_coordinates,def:peps_separated_physical_density,thm:peps_gaussian_branch_density_bound}
-    By Theorems~\ref{thm:peps_actual_corrected_schmidt_output}
+    By Lemmas~\ref{thm:peps_actual_corrected_schmidt_output}
     and~\ref{thm:peps_local_schmidt_output_coordinates}, $\xi$ and $\zeta$
     determine separated ket and bra outputs $\Psi_u$ and $\Phi_v$ as in
     Definition~\ref{def:peps_separated_physical_density}. With centered Schmidt
@@ -94,7 +94,7 @@ and discarded registers; its tensor-network representation is proved separately.
         \label{eq:peps_actual_branch_coefficients}
     \end{align}
     reindexing over $S$ and tracing out the discarded registers via
-    Theorem~\ref{thm:peps_gaussian_branch_density_bound} gives
+    Lemma~\ref{thm:peps_gaussian_branch_density_bound} gives
     \begin{align}
         M_{\xi,\zeta}(\omega)
          & =\operatorname{tr}_{\mathrm{disc}}
@@ -103,17 +103,17 @@ and discarded registers; its tensor-network representation is proved separately.
         =M\bigl(Z^{\xi,\zeta}(\omega)\bigr).
         \label{eq:peps_actual_branch_identification}
     \end{align}
-    Applying Theorem~\ref{thm:peps_gaussian_separated_physical_bound} to
+    Applying Lemma~\ref{thm:peps_gaussian_separated_physical_bound} to
     (\ref{eq:peps_actual_branch_identification}) with
     (\ref{eq:peps_actual_branch_coefficients}) gives integrability and
     (\ref{eq:peps_actual_branch_bound}).
 \end{proof}
 
-\begin{theorem}[Expected norm of the corrected term]
+\begin{lemma}[Expected norm of the corrected term]
     \label{thm:peps_actual_corrected_source_bound}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.integral_actualCorrectedSourceTerm_le}
     \leanok
-    Under the hypotheses of Theorem~\ref{thm:peps_actual_gaussian_branch} on input
+    Under the hypotheses of Lemma~\ref{thm:peps_actual_gaussian_branch} on input
     state $|p_0(1)\rangle\langle p_0(1)|$, for $k>0$ the physical corrected term
     $F_S$ in any orthonormal physical and discarded output bases satisfies
     \begin{align}
@@ -126,17 +126,17 @@ and discarded registers; its tensor-network representation is proved separately.
     \end{align}
     summed over partial branch choices $\xi,\zeta$ at gate occurrences meeting
     $A(S)$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_actual_gaussian_branch,thm:peps_physical_corrected_basis_invariance,thm:peps_gaussian_branch_density_bound}
-    By Theorem~\ref{thm:peps_physical_corrected_basis_invariance}, $\|F_S\|_1$ is
+    By Lemma~\ref{thm:peps_physical_corrected_basis_invariance}, $\|F_S\|_1$ is
     unchanged in the bases adapted to $A(S)$, and combining
-    Theorem~\ref{thm:peps_gaussian_branch_density_bound} with
+    Lemma~\ref{thm:peps_gaussian_branch_density_bound} with
     (\ref{eq:peps_actual_branch_bound}) gives (\ref{eq:peps_actual_corrected_bound}).
 \end{proof}
 
-\begin{theorem}[Corrected-term bound from circuit participation]
+\begin{lemma}[Corrected-term bound from circuit participation]
     \label{thm:peps_actual_source_lifetime_bound}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.integral_actualCorrectedSourceTerm_le_lifetime}
     \leanok
@@ -153,20 +153,20 @@ and discarded registers; its tensor-network representation is proved separately.
         \bigl(B^{4b}D^4\bigr)^{|S|} k^{-|S|/2}.
         \label{eq:peps_actual_lifetime_bound}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_actual_corrected_source_bound,thm:peps_actual_source_lifetime_cost,thm:peps_affected_original_dimensions,def:peps_exterior_family_physical_basis,def:peps_restricted_discard_basis}
     Using the bases of Definitions~\ref{def:peps_restricted_discard_basis}
     and~\ref{def:peps_exterior_family_physical_basis},
-    Theorem~\ref{thm:peps_affected_original_dimensions} gives
+    Lemma~\ref{thm:peps_affected_original_dimensions} gives
     $|X|^2=\prod_{p\in A(S)}d_p^2$, and combining
     (\ref{eq:peps_actual_corrected_bound}) with
-    Theorem~\ref{thm:peps_actual_source_lifetime_cost} yields
+    Lemma~\ref{thm:peps_actual_source_lifetime_cost} yields
     (\ref{eq:peps_actual_lifetime_bound}).
 \end{proof}
 
-\begin{theorem}[Choosing one sample from corrected-term bounds]
+\begin{lemma}[Choosing one sample from corrected-term bounds]
     \label{thm:peps_source_sample_choice_conditional}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.exists_sampledSourceMatrix_error_le_of_integral_bound}
     \leanok
@@ -180,11 +180,11 @@ and discarded registers; its tensor-network representation is proved separately.
     If $\mathbb E\,\|F_S\|_1\leq Q^{|S|}k^{-|S|/2}$ for every nonempty
     $S\subseteq\mathcal E$, then there exists a Gaussian sample $\omega$ with
     $\|\widehat\rho_{\mathrm{phys}}(\omega)-\rho_{\mathrm{phys}}\|_1\le\varepsilon/4$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_source_sample_count_bound,thm:peps_sampled_error_integral_bound,def:peps_source_sample_count}
-    By Theorems~\ref{thm:peps_sampled_error_integral_bound}
+    By Lemmas~\ref{thm:peps_sampled_error_integral_bound}
     and~\ref{thm:peps_source_sample_count_bound} with $k$ from
     (\ref{eq:peps_conditional_sample_count})
     (Definition~\ref{def:peps_source_sample_count}), some realization $\omega$
@@ -193,11 +193,11 @@ and discarded registers; its tensor-network representation is proved separately.
         \le\sum_{\varnothing\neq S\subseteq\mathcal E}Q^{|S|}k^{-|S|/2}\le\varepsilon/4$.
 \end{proof}
 
-\begin{theorem}[A single sample for the source circuit]
+\begin{lemma}[A single sample for the source circuit]
     \label{thm:peps_actual_source_sampling}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.exists_sourceSample_lifetime_error_le}
     \leanok
-    Under the hypotheses of Theorem~\ref{thm:peps_actual_source_lifetime_bound},
+    Under the hypotheses of Lemma~\ref{thm:peps_actual_source_lifetime_bound},
     let $N=|\mathcal E|$ and $0<\varepsilon\leq1$, and set
     \begin{align}
         Q & = B^{4b}D^4,
@@ -214,19 +214,19 @@ and discarded registers; its tensor-network representation is proved separately.
         \|\widehat\rho(\omega)-\rho\|_1 & \leq \varepsilon/4.
         \label{eq:peps_actual_sample_error}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_actual_source_lifetime_bound,thm:peps_local_schmidt_sources,thm:peps_source_sample_choice_conditional}
     Choose normalized Schmidt decompositions by
-    Theorem~\ref{thm:peps_local_schmidt_sources}; then
-    Theorem~\ref{thm:peps_actual_source_lifetime_bound} gives
+    Lemma~\ref{thm:peps_local_schmidt_sources}; then
+    Lemma~\ref{thm:peps_actual_source_lifetime_bound} gives
     $\mathbb E\,\|F_S\|_1\leq Q^{|S|}k^{-|S|/2}$ for all $S\neq\varnothing$, and
-    Theorem~\ref{thm:peps_source_sample_choice_conditional} yields $\omega$
+    Lemma~\ref{thm:peps_source_sample_choice_conditional} yields $\omega$
     satisfying (\ref{eq:peps_actual_sample_error}).
 \end{proof}
 
-\begin{theorem}[Power bounds for the sample count]
+\begin{lemma}[Power bounds for the sample count]
     \label{thm:peps_source_sampling_polynomial}
     \lean{TNLean.Lattice.Compression.sourceSamplingCount_lt_of_power_bounds,TNLean.Lattice.Compression.sourceSamplingCount_lt_inv_pow,TNLean.Lattice.Compression.sourceSamplingCount_lt_of_gate_power_bounds}
     \leanok
@@ -246,7 +246,7 @@ and discarded registers; its tensor-network representation is proved separately.
         k<\bigl[64C_N^2(C_B^{4b}C_D^4)^2+2\bigr]
         L^{2(n+4bm+4r+p)}.\notag
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{def:peps_source_sample_count}
@@ -255,11 +255,11 @@ and discarded registers; its tensor-network representation is proved separately.
     substituting $Q=B^{4b}D^4\le C_B^{4b}C_D^4L^{4bm+4r}$ gives the second bound.
 \end{proof}
 
-\begin{theorem}[Polynomial sampling for real accuracy exponents]
+\begin{lemma}[Polynomial sampling for real accuracy exponents]
     \label{thm:peps_actual_source_polynomial}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.exists_sourceSample_polynomial_error_le}
     \leanok
-    Under the hypotheses of Theorem~\ref{thm:peps_actual_source_sampling}, if
+    Under the hypotheses of Lemma~\ref{thm:peps_actual_source_sampling}, if
     $L\geq1$, $n,m,r\in\N$, $C_N\geq1$, $C_B\geq0$, and
     \begin{align}
         N & \leq C_N L^n,
@@ -276,18 +276,18 @@ and discarded registers; its tensor-network representation is proved separately.
     \end{align}
     and there exist Schmidt decompositions and a size-$k$ sample with
     $\|\widehat\rho-\rho\|_1\leq L^{-p}/4$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_actual_source_sampling,thm:peps_source_sampling_polynomial,def:peps_source_sample_count}
     Since $L\ge 1$ and $q\ge\max(0,p)$, $\varepsilon=L^{-q}\in(0,1]$ and
-    $L^{-q}\le L^{-p}$; applying Theorems~\ref{thm:peps_actual_source_sampling}
+    $L^{-q}\le L^{-p}$; applying Lemmas~\ref{thm:peps_actual_source_sampling}
     and~\ref{thm:peps_source_sampling_polynomial} with
     (\ref{eq:peps_actual_resource_powers}) yields
     (\ref{eq:peps_actual_polynomial_count}) and $\|\widehat\rho-\rho\|_1\le L^{-q}/4\le L^{-p}/4$.
 \end{proof}
 
-\begin{theorem}[Polynomial stack length at the per-gate error]
+\begin{lemma}[Polynomial stack length at the per-gate error]
     \label{thm:peps_effect_stack_polynomial}
     \lean{TNLean.Lattice.PartyCircuit.stackLength_sourceGateBudget_eq}
     \lean{TNLean.Lattice.PartyCircuit.stackLength_sourceGateBudget_lt_of_power_bounds}
@@ -304,22 +304,22 @@ and discarded registers; its tensor-network representation is proved separately.
     If $L\geq1$, $N\leq C_NL^n$, and $0\leq S\leq C_SL^s$ ($C_N\geq1$,
     $C_S\geq0$, $n,s,p\in\N$), then at $\varepsilon=L^{-p}$,
     $m<H L^{2(n+s+p)}$ with $H=64C_N^2(rC_S)^2+2$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_source_sampling_polynomial,def:peps_source_sample_count}
     By (\ref{eq:peps_effect_stack_count}), $m=k(N,rS,\varepsilon)$ in
     Definition~\ref{def:peps_source_sample_count}, so
-    Theorem~\ref{thm:peps_source_sampling_polynomial} with $Q=rS\le rC_SL^s$
+    Lemma~\ref{thm:peps_source_sampling_polynomial} with $Q=rS\le rC_SL^s$
     gives $m<HL^{2(n+s+p)}$.
 \end{proof}
 
-\begin{theorem}[Polynomial number of replacement monomials]
+\begin{lemma}[Polynomial number of replacement monomials]
     \label{thm:peps_effect_replacement_polynomial}
     \lean{TNLean.Lattice.PartyCircuit.replacementMonomialBound_le_of_power_bounds}
     \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.card_branchLabels_replacement_le_power}
     \leanok
-    Under the hypotheses of Theorem~\ref{thm:peps_effect_stack_polynomial}, if
+    Under the hypotheses of Lemma~\ref{thm:peps_effect_stack_polynomial}, if
     $K\in\N$ satisfies $K\leq C_KL^a$ ($C_K\geq0$, $a\in\N$), then
     \begin{align}
         K m^r & \leq C_K H^r L^{a+2r(n+s+p)}.
@@ -329,18 +329,18 @@ and discarded registers; its tensor-network representation is proved separately.
     at most $r$ pair effects, and coefficient sum at most $S$, then every gate
     occurrence of the source-only replacement has at most
     $C_K H^r L^{a+2r(n+s+p)}$ branch labels.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_effect_stack_polynomial,thm:peps_source_only_resources}
     Combining $m\le HL^{2(n+s+p)}$ from
-    Theorem~\ref{thm:peps_effect_stack_polynomial} with $K\le C_KL^a$ gives
+    Lemma~\ref{thm:peps_effect_stack_polynomial} with $K\le C_KL^a$ gives
     (\ref{eq:peps_effect_monomial_count}), and
-    Theorem~\ref{thm:peps_source_only_resources} bounds each replacement gate's
+    Lemma~\ref{thm:peps_source_only_resources} bounds each replacement gate's
     branch count by $Km^r$.
 \end{proof}
 
-\begin{theorem}[Sampled physical operator as a sum of party tensor products]
+\begin{lemma}[Sampled physical operator as a sum of party tensor products]
     \label{thm:peps_actual_pure_sampled_physical_sum}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.physicalSourceReplacedDensity_pure_sampled_eq_scalar_smul_physicalSum}
     \leanok
@@ -362,19 +362,19 @@ and discarded registers; its tensor-network representation is proved separately.
         \label{eq:peps_actual_pure_sampled_physical_sum}
     \end{align}
     where $M_{\xi,\zeta,j,p}$ is the local mixed physical trace of
-    Theorem~\ref{thm:peps_actual_sampled_physical_scalar} at party $p$ (with
+    Lemma~\ref{thm:peps_actual_sampled_physical_scalar} at party $p$ (with
     $0^{-1}=0$ for $k=0$).
     % Source: 04-compression.tex, lines 279--355, 409--434 and 565--588.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:peps_actual_pure_physical_source_replacement,
         thm:peps_actual_source_column_physical_trace,thm:peps_actual_sampled_physical_scalar}
     Expand $\widehat\rho_{\mathrm{phys},\psi}(\widehat X)$ over $\xi,\zeta$ by
-    Theorem~\ref{thm:peps_actual_pure_physical_source_replacement}, pass to the
+    Lemma~\ref{thm:peps_actual_pure_physical_source_replacement}, pass to the
     party-grouped private basis via
-    Theorem~\ref{thm:peps_actual_source_column_physical_trace}, and factor each
-    $(\xi,\zeta)$ term by Theorem~\ref{thm:peps_actual_sampled_physical_scalar}
+    Lemma~\ref{thm:peps_actual_source_column_physical_trace}, and factor each
+    $(\xi,\zeta)$ term by Lemma~\ref{thm:peps_actual_sampled_physical_scalar}
     to obtain (\ref{eq:peps_actual_pure_sampled_physical_sum}).
 \end{proof}

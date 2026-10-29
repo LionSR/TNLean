@@ -90,7 +90,7 @@ $\mathcal I$; the block label $x$ is fixed on both sides.
     \end{tenkz}
 \end{tenkzequation}
 
-\begin{theorem}[Preservation of simultaneous one-site spans]
+\begin{lemma}[Preservation of simultaneous one-site spans]
     \label{thm:mpo_joint_one_site_span}
     \lean{MPSTensor.wordTupleSpanTop_one_iff,
         MPSTensor.wordTupleSpanTop_one_of_rectangular_compression,
@@ -105,7 +105,7 @@ $\mathcal I$; the block label $x$ is fixed on both sides.
     $\prod_x\MN{m_x}$. If instead $R_x,W_x\in\MN{n_x}$ satisfy
     $R_xW_x=I_{n_x}$, then $(B_x^iW_x)_x$ has simultaneous one-site
     span $\prod_x\MN{n_x}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{def:blockwise_product_word_span}
@@ -125,7 +125,7 @@ $\mathcal I$; the block label $x$ is fixed on both sides.
     the asserted one-site spans.
 \end{proof}
 
-\begin{theorem}[Simultaneous spanning of the mixed family]
+\begin{lemma}[Simultaneous spanning of the mixed family]
     \label{thm:mpo_joint_mixed_span}
     \lean{MPSTensor.MPOSymmetry.span_jointMixedEndpointLetter_eq_top,
         MPSTensor.MPOSymmetry.wordTupleSpanTop_jointMixedEndpointBase,
@@ -148,7 +148,7 @@ $\mathcal I$; the block label $x$ is fixed on both sides.
     For $0<\gamma<1$, the family $(A_x(\gamma))_x$ has the same
     simultaneous one-site span. Its letters depend continuously on
     $\gamma\in\R$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{def:mpo_joint_mixed_family,thm:mpo_joint_one_site_span,
@@ -168,7 +168,7 @@ $\mathcal I$; the block label $x$ is fixed on both sides.
     proving continuity.
 \end{proof}
 
-\begin{theorem}[Recovery of the first endpoint family]
+\begin{lemma}[Recovery of the first endpoint family]
     \label{thm:mpo_joint_mixed_compression}
     \lean{MPSTensor.MPOSymmetry.jointMixedEndpointBase_first_compression,
         MPSTensor.MPOSymmetry.wordTupleSpanTop_jointMixedEndpointLeftTensor}
@@ -179,7 +179,7 @@ $\mathcal I$; the block label $x$ is fixed on both sides.
     Under~(\ref{eq:mpo_joint_mixed_endpoint_span}), the extended first
     family $(B_x)_x$ has simultaneous one-site span
     $\prod_x\MN{D_x^0}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{def:mpo_joint_mixed_family,thm:mpo_joint_mixed_span,
@@ -187,8 +187,8 @@ $\mathcal I$; the block label $x$ is fixed on both sides.
     The compression retains the $00$ virtual corner. The letters
     $(00,i)$ give $(A_x^0)^i$, while each other letter gives zero.
     Since $V_{x,0}^*V_{x,0}=I_{D_x^0}$,
-    Theorem~\ref{thm:mpo_joint_one_site_span} applies to the simultaneous
-    mixed span of Theorem~\ref{thm:mpo_joint_mixed_span}.
+    Lemma~\ref{thm:mpo_joint_one_site_span} applies to the simultaneous
+    mixed span of Lemma~\ref{thm:mpo_joint_mixed_span}.
 \end{proof}
 
 \begin{definition}[Extended supports of the mixed family]
@@ -208,7 +208,7 @@ $\mathcal I$; the block label $x$ is fixed on both sides.
     $H'^{\mathrm{open}}_{\gamma,N}=\sum_{i=0}^{N-2}h'_{\gamma,i,i+1}$.
 \end{definition}
 
-\begin{theorem}[Canonical and extended supports in the interior]
+\begin{lemma}[Canonical and extended supports in the interior]
     \label{thm:mpo_joint_mixed_interior_support}
     \lean{MPSTensor.MPOSymmetry.insertedEvalWord_mul_right,
         MPSTensor.MPOSymmetry.blockGroundSpaceMap_rightMul_eq_inserted,
@@ -235,7 +235,7 @@ $\mathcal I$; the block label $x$ is fixed on both sides.
         \label{eq:mpo_joint_mixed_interior_support}
     \end{align}
     These assertions require no simultaneous span assumption.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{def:mpo_joint_inserted_boundary,def:block_ground_space_map,
@@ -250,7 +250,7 @@ $\mathcal I$; the block label $x$ is fixed on both sides.
     joint canonical boundary range is $\sum_xG_N(A_x(\gamma))$.
 \end{proof}
 
-\begin{theorem}[Exact finite-volume support of the mixed family]
+\begin{lemma}[Exact finite-volume support of the mixed family]
     \label{thm:mpo_joint_mixed_open_kernel}
     \lean{MPSTensor.MPOSymmetry.continuous_nonzero_jointMixedEndpointInsertion,
         MPSTensor.MPOSymmetry.jointMixedEndpoint_blockInsertedBoundaryMap_injective,
@@ -282,17 +282,17 @@ $\mathcal I$; the block label $x$ is fixed on both sides.
     For fixed $N\geq2$, the orthogonal projector onto
     $\ker H'^{\mathrm{open}}_{\gamma,N}$ is continuous on $\R$,
     including at $\gamma=0,1$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:mpo_joint_mixed_span,thm:mpo_joint_inserted_injective,
         thm:mpo_joint_inserted_open_kernel,thm:spt_normalized_bond_interpolation}
-    Theorem~\ref{thm:mpo_joint_mixed_span} gives simultaneous spanning
+    Lemma~\ref{thm:mpo_joint_mixed_span} gives simultaneous spanning
     of $(C_x)_x$. Since $D_x^0,D_x^1>0$, the matrix $W_x(\gamma)$
     could vanish only if both $1-\gamma=0$ and $\gamma=0$, which is
-    impossible. Theorem~\ref{thm:mpo_joint_inserted_injective} therefore
+    impossible. Lemma~\ref{thm:mpo_joint_inserted_injective} therefore
     applies to~(\ref{eq:mpo_joint_mixed_boundary}) at every real parameter.
-    Theorem~\ref{thm:mpo_joint_inserted_open_kernel} gives
+    Lemma~\ref{thm:mpo_joint_inserted_open_kernel} gives
     (\ref{eq:mpo_joint_mixed_kernel}), its dimension, and continuity of
     the kernel projector. The tensor family $C_x$ is constant and
     $W_x(\gamma)$ is continuous, so the boundary maps are continuous.

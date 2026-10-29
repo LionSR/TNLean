@@ -1,4 +1,4 @@
-\begin{theorem}[Regular representation multiplicities]
+\begin{lemma}[Regular representation multiplicities]
     \label{thm:peps_regular_fourier_multiplicities}
     \lean{TNLean.PEPS.leftRegularEuclideanMatrixEquiv,
         TNLean.PEPS.exists_unitary_leftRegular_matrix_blocks}
@@ -9,7 +9,7 @@
     (\ref{eq:peps_unitary_irreducible_rows}), with $m_i=d_i$ for every
     irreducible sector as in the regular decomposition of
     \cite[Section~7]{Schuch2010PEPS}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The group basis identifies the group-algebra regular representation
     with the permutation matrices on the standard Hilbert space.
@@ -19,7 +19,7 @@
     multiplicity $m_i$. Thus $m_i=d_i$.
 \end{proof}
 
-\begin{theorem}[Unitary Fourier decomposition of the regular matrices]
+\begin{lemma}[Unitary Fourier decomposition of the regular matrices]
     \label{thm:peps_regular_unitary_fourier}
     \lean{TNLean.PEPS.exists_unitary_leftRegular_fourier}
     \leanok
@@ -36,7 +36,7 @@
     The matrices $D_i$ and the orthonormal change of basis are derived
     from the finite group, yielding the regular block form of
     \cite[Section~7]{Schuch2010PEPS}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Taking the matrix representation of one irreducible row in its inherited
     orthonormal basis gives a unitary irreducible homomorphism $D_i$.

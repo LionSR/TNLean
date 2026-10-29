@@ -1683,3 +1683,17 @@ and [#9847](https://github.com/LionSR/TNLean/issues/9847).
   (arXiv:1307.5143v1, lines 606–609) of the power projector sums over words in
   `n` letters while the Hamiltonian has `n - 1` terms; it is read with
   `H_n = 0`, so that the last letter is the identity and the identity is exact.
+- [`lvv13_runtime_ground_energy.tex`](lvv13_runtime_ground_energy.tex)
+  (false source, open) records that the proof of Corollary `c:agsp`
+  (arXiv:1307.5143v1, line 644) uses `C^{2m} = n^{O(1/ε)}` with
+  `C = (1 - ε₀/n)⁻¹`, which fails when the ground energy `ε₀` is of order `n`;
+  a chain of qubits with `ε₀ = (n - 1)/2` and gap `1/4` is an example. The
+  corollary is formalized with the number of sampled words explicit in `C^m`,
+  and `C^m ≤ n (1/η)^{ε₀/ε}` at the logarithmic power, which is polynomial
+  when `ε₀/ε` is bounded.
+- [`lvv13_error_reduction_witness_norm.tex`](lvv13_error_reduction_witness_norm.tex)
+  (local correction, resolved) records that the step from `A v` to `K v` in the
+  proof of Claim `c:errorreduction` (arXiv:1307.5143v1, line 589) needs a lower
+  bound on `‖A v‖`; a two-dimensional example disproves it without one. The
+  source's `A` is Hermitian and fixes `Γ`, so `‖A v‖ ≥ 1/2`, and the new error is
+  `δ + 4 ‖K - A‖` in place of `2 δ`, a constant absorbed by the choice of `q(n)`.

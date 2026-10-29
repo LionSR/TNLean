@@ -1,4 +1,4 @@
-\begin{theorem}[Commuting-closure coefficients of every parent ground vector]%
+\begin{lemma}[Commuting-closure coefficients of every parent ground vector]%
     \label{thm:peps_parent_ground_vector_coefficients}
     \lean{TNLean.PEPS.IsGInjective.exists_torusGClosure_sum_of_mem_parentKernel}
     \leanok
@@ -15,7 +15,7 @@
         \psi & =\sum_{gh=hg}\mu_{g,h}\lvert A;(g,h)\rangle.
         \label{eq:peps_parent_vector_coefficients}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_regular_torus_parent_ground_space}
     The parent kernel equals the span of the commuting closures.
@@ -23,7 +23,7 @@
     in this span gives (\ref{eq:peps_parent_vector_coefficients}).
 \end{proof}
 
-\begin{theorem}[Common local density and entropy of all parent ground states]%
+\begin{lemma}[Common local density and entropy of all parent ground states]%
     \label{thm:peps_parent_ground_state_density}
     \lean{TNLean.PEPS.IsGIsometric.exists_torusParentKernel_common_density_of_isSimplyConnected}
     \leanok
@@ -48,7 +48,7 @@
     \end{align}
     In this parent-ground-state form of \cite[Theorem~6.9]{Schuch2010PEPS},
     the R\'enyi equality holds for every finite real $\alpha\geq0$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_parent_ground_vector_coefficients,
         thm:peps_torus_simply_connected_physical_density}
@@ -59,7 +59,7 @@
     commuting-closure superpositions therefore applies.
 \end{proof}
 
-\begin{theorem}[Local indistinguishability and stripe unitaries in the parent kernel]%
+\begin{lemma}[Local indistinguishability and stripe unitaries in the parent kernel]%
     \label{thm:peps_parent_ground_state_local_equivalence}
     \lean{TNLean.PEPS.IsGIsometric.torusParentKernel_local_equivalence_of_isSimplyConnected,
         TNLean.PEPS.IsGIsometric.torusParentKernel_stripe_local_equivalence}
@@ -79,7 +79,7 @@
     with both coordinates nonzero is $\{(x,y):x=0\lor y=0\}$.
     As in \cite[Theorem~6.7 and Corollary~6.8]{Schuch2010PEPS}, a unitary on these two width-one stripes relates any two normalized
     nonzero parent ground states.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_parent_ground_vector_coefficients,
         thm:peps_torus_simply_connected_physical_local_equivalence,
@@ -90,7 +90,7 @@
     stripe-unitary theorems apply.
 \end{proof}
 
-\begin{theorem}[Boundary rank and zero-order entropy of every regular parent ground state]%
+\begin{lemma}[Boundary rank and zero-order entropy of every regular parent ground state]%
     \label{thm:peps_parent_ground_state_zero_entropy}
     \lean{TNLean.PEPS.IsGInjective.torusParentKernel_rank_zeroEntropy_of_isSimplyConnected}
     \leanok
@@ -108,7 +108,7 @@
     \end{align}
     As in \cite[Corollary~6.10]{Schuch2010PEPS} for this regular native-torus scope,
     only $G$-injectivity is required.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_parent_ground_vector_coefficients,
         thm:peps_regular_ginjective_simply_connected_entropy}
