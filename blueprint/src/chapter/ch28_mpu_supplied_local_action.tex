@@ -1,0 +1,106 @@
+\subsection{The named completed action on a directly supplied tensor cell}
+\label{sec:mpu_supplied_completed_local_action}
+
+Let $W$ have physical size $d^2$ and supplied standard-form gates $u,v$.
+Let $e:\{1,\ldots,b\}\to\{1,\ldots,d^2\}$ be a bijective relabelling,
+and let $W'=e^*W$ be the actual reindexed tensor. The datum is explicitly
+supplied, as in \cite{gap:mpu_qca_complete_block_heisenberg_scope}; no
+preimage of $W$ under tensor blocking is introduced.
+
+\begin{lemma}[Physical relabelling and complete window coordinates]
+    \label{lem:mpu_supplied_relabel_coordinates}
+    \lean{MPOTensor.IsMPU.reindexPhysical,
+        MPOTensor.windowInputHeadEquiv,MPOTensor.windowOutputHeadEquiv,
+        MPOTensor.twoSiteSuppliedCellEquiv,
+        MPOTensor.twoSiteSuppliedInputWindowEquiv,
+        MPOTensor.twoSiteSuppliedOutputWindowEquiv,
+        MPOTensor.twoSiteSuppliedInputWindow,
+        MPOTensor.twoSiteSuppliedOutputWindow}
+    \notready
+    \uses{def:mpu_supplied_window_coordinates}
+    Physical relabelling preserves the actual periodic unitaries, since
+    it simultaneously reindexes the row and column configurations.
+    The singleton coordinate associated with a half-pair $c$ is the
+    constant one-cell configuration $e^{-1}(\operatorname{pair}(c))$.
+    The input head coordinates send $((j_0,j_2),c)$ to
+    \begin{align}
+        \bigl(e^{-1}(j_0),e^{-1}(\operatorname{pair}(c)),e^{-1}(j_2)\bigr).
+    \end{align}
+    The output coordinates send exterior halves $(a_L,a_R)$ and four
+    output halves $(x_1,x_2,x_3,x_4)$ to
+    \begin{align}
+        \bigl(e^{-1}(\operatorname{pair}(a_L,x_1)),
+        e^{-1}(\operatorname{pair}(x_2,x_3)),
+        e^{-1}(\operatorname{pair}(x_4,a_R))\bigr).
+    \end{align}
+    Let $I_e(A)$ and $O_e(A)$ be the three-cell matrices obtained by
+    adjoining identity exteriors to $A$ and $\Phi_{u,v}(A)$ in these
+    complete coordinates.
+\end{lemma}
+\begin{proof}
+    \notready
+    Reindex each actual periodic matrix through the sitewise bijection;
+    simultaneous reindexing preserves unitarity. The complete head
+    equivalences already used by the finite-window calculation give the
+    displayed coordinates, followed by sitewise physical relabelling.
+\end{proof}
+
+\begin{lemma}[Canonical buffered conjugation after physical relabelling]
+    \label{lem:mpu_supplied_relabel_buffered_conjugation}
+    \lean{MPOTensor.mpo_suppliedBufferedWindow_conjugation,
+        MPOTensor.bufferedWindowMatrix_reindexPhysical,
+        MPOTensor.mpo_reindexPhysical_suppliedBufferedWindow_conjugation,
+        MPOTensor.twoSiteSuppliedInputWindow_eq_bufferedCell}
+    \notready
+    \uses{lem:mpu_supplied_relabel_coordinates,lem:mpu_direct_supplied_window_conjugation}
+    Write $B_{p,s}(X)=I_p\otimes X\otimes I_s$ for actual canonical
+    finite-window inclusion. Sitewise physical relabelling commutes with
+    $B_{p,s}$. For every $p,s\ge0$, with $N=p+3+s$,
+    \begin{align}
+        \operatorname{MPO}_{W'}(N)\,B_{p,s}(I_e(A))\,
+        \operatorname{MPO}_{W'}(N)^* & =B_{p,s}(O_e(A)).
+    \end{align}
+    Moreover $I_e(A)$ is exactly the singleton input matrix with one
+    identity cell adjoined on each side.
+\end{lemma}
+\begin{proof}
+    \notready
+    The complete supplied-window coordinate formula equals canonical
+    buffering by evaluating both matrices in the prefix/head/suffix
+    configuration bijection. Apply the sitewise physical relabelling
+    to the actual periodic conjugation identity. It commutes with
+    concatenation of finite configurations and hence with identity
+    buffering. The input head dictionary identifies its middle cell
+    with the singleton coordinate, while the two exterior cells are
+    identity factors.
+\end{proof}
+
+\begin{lemma}[Actual singleton output of the named automorphism]
+    \label{lem:mpu_supplied_named_singleton_action}
+    \lean{SpinChain.mpuQuasiLocalEquiv_supplied_singleton}
+    \notready
+    \uses{lem:mpu_supplied_relabel_buffered_conjugation,
+        thm:mpu_actual_qca}
+    Assume $b>0$. Let $\alpha_{W'}$ be the named actual bare-MPU
+    automorphism and let $C_e(A)$ be the singleton-cell input matrix in
+    the coordinates above. Then
+    \begin{align}
+        \alpha_{W'}\bigl(\iota_{[0,1)}(C_e(A))\bigr)
+         & =\iota_{[-1,2)}(O_e(A)).
+    \end{align}
+    This is the actual supplied four-half-site output on cells $-1,0,1$.
+    No compatible action, extra blocking scale or inverse-action datum
+    is assumed.
+\end{lemma}
+\begin{proof}
+    \notready
+    The supplied standard form gives the MPU property of $W$, and
+    physical reindexing gives that of $W'$. Choose exterior lengths
+    $p=s=4D^4+1$. The resulting chain contains the singleton's full
+    bare-MPU propagation buffer and the three-cell output window. The
+    actual finite evaluation of the named automorphism therefore
+    applies. Canonical local inclusions identify the singleton input
+    with the central three-cell input window; the preceding periodic
+    conjugation identity gives the stated output after faithful
+    finite-region inclusion into the quasi-local algebra.
+\end{proof}

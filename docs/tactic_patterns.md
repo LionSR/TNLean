@@ -9692,3 +9692,16 @@ there is no need for a new tactic.
 - **Notes:** Returning to the original coordinates reuses
   `Matrix.reindexLinearEquiv_mul` with all three equivalences explicit,
   together with `Matrix.conjTranspose_reindex`; no new reindex algebra is built.
+
+### Transport finite buffering before comparing completed actions — candidate (2026-10-29)
+
+- **Seen:** `MPS/MPU/SuppliedWindowCoordinates.lean` and
+  `MPS/MPU/SuppliedQuasiLocalAction.lean`.
+- **Pattern:** Prove that a sitewise physical bijection commutes with finite
+  prefix/window/suffix concatenation and identity buffering; then reindex
+  the actual periodic matrix equality before applying the named finite
+  evaluation theorem.
+- **Reuse:** Existing finite unitary reindexing and the canonical interval
+  inclusion theorem supply the algebraic steps. The complete window head
+  coordinate bijections are promoted at their existing owner and reused.
+- **Notes:** No second quasi-local relabelling or action structure is added.
