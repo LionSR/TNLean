@@ -15,6 +15,7 @@ import TNLean.Lattice.CrossingSupports
 import TNLean.Lattice.EntropyComparison
 import TNLean.Lattice.EntropyDimension
 import TNLean.Lattice.FiniteDomain
+import TNLean.Lattice.GaussianCauchyKernel
 import TNLean.Lattice.GaussianFilteredGround
 import TNLean.Lattice.GaussianFilteredIncrement
 import TNLean.Lattice.GaussianFilteredLocality
@@ -23,6 +24,7 @@ import TNLean.Lattice.GaussianFilteredTermLocalization
 import TNLean.Lattice.GaussianFilteredTruncation
 import TNLean.Lattice.GaussianFilteredTruncationDecay
 import TNLean.Lattice.GaussianFilteredTruncationGround
+import TNLean.Lattice.GaussianNegativeFrequencyCutoff
 import TNLean.Lattice.GaussianTail
 import TNLean.Lattice.GaussianTailMoment
 import TNLean.Lattice.HeisenbergDuhamel

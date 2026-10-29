@@ -4399,6 +4399,95 @@ The sharp energy-lowering part need not be local. Gaussian
 regularization, control by a time integral of local commutators, and the
 resulting ordinary exponential clustering bound remain to be proved.
 
+\begin{lemma}[The Gaussian negative-frequency selector]
+    \label{lem:spt_gaussian_negative_frequency_cutoff}
+    \lean{TNLean.Lattice.gaussianNegativeFrequencyCutoff,
+        TNLean.Lattice.gaussianNegativeFrequencyCutoff_nonneg,
+        TNLean.Lattice.gaussianNegativeFrequencyCutoff_le_one,
+        TNLean.Lattice.gaussianNegativeFrequencyCutoff_le_exp_of_gap,
+        TNLean.Lattice.abs_one_sub_gaussianNegativeFrequencyCutoff_le_exp_of_gap}
+    \notready
+    \discussion{9879}
+    For $q,\Delta>0$, let $X$ be a centered Gaussian of variance
+    $\Delta^2/q$ and put $F_{q,\Delta}(\omega)=\mathbb P(X\ge\omega)$.
+    Then $0\le F_{q,\Delta}(\omega)\le1$ and
+    \[
+        \omega\ge\Delta\ \Longrightarrow\
+        F_{q,\Delta}(\omega)\le e^{-q/2},
+        \qquad
+        \omega\le-\Delta\ \Longrightarrow\
+        |1-F_{q,\Delta}(\omega)|\le e^{-q/2}.
+    \]
+    This is the actual Gaussian selector of
+    \cite[Lemma 3.1, equation (3.7)]{Hastings2006Spectral}, with
+    $\alpha=\Delta^2/(2q)$.
+\end{lemma}
+\begin{proof}
+    The moment-generating function is
+    $\mathbb E(e^{tX})=\exp(\Delta^2t^2/(2q))$.
+    Chernoff's bound at $\Delta$ is $e^{-q/2}$. The positive-frequency
+    statement follows by inclusion of the corresponding tail events.
+    The complementary event for $\omega\le-\Delta$ is contained in
+    $\{-X\ge\Delta\}$, and $-X$ has the same sub-Gaussian bound.
+\end{proof}
+
+The scalar approximation bounds above do not yet identify the multiplier
+with the Gaussian-regularized Cauchy time integral. That identity and the
+operator locality estimates remain separate obligations.
+
+\begin{definition}[The regularized Gaussian--Cauchy kernel]
+    \label{def:spt_gaussian_cauchy_kernel}
+    \lean{TNLean.Lattice.gaussianCauchyKernel}
+    \notready
+    \discussion{9879}
+    For $\alpha,\varepsilon>0$, set
+    \[
+        K_{\alpha,\varepsilon}(t)=
+        \frac{e^{-\alpha t^2}}{2\pi(\varepsilon-it)}.
+    \]
+    This is the regularized negative-frequency time kernel of
+    \cite[Lemma 3.1, equation (3.8)]{Hastings2006Spectral}.
+\end{definition}
+
+\begin{lemma}[Laplace representation and integrability of the actual kernel]
+    \label{lem:spt_gaussian_cauchy_integrability}
+    \lean{TNLean.Lattice.inv_cauchyDenominator_eq_integral,
+        TNLean.Lattice.norm_gaussianCauchyKernel_le,
+        TNLean.Lattice.integrable_gaussianCauchyKernel_mul_exp,
+        TNLean.Lattice.norm_integral_gaussianCauchyKernel_mul_exp_le}
+    \notready
+    \discussion{9879}
+    \uses{def:spt_gaussian_cauchy_kernel}
+    For $\alpha,\varepsilon>0$ and $\omega,t\in\mathbb R$,
+    \[
+        \frac1{\varepsilon-it}
+        =\int_0^\infty e^{(-\varepsilon+it)s}\,ds,
+        \qquad
+        |K_{\alpha,\varepsilon}(t)|
+        \le\frac{e^{-\alpha t^2}}{2\pi\varepsilon}.
+    \]
+    The function $K_{\alpha,\varepsilon}(t)e^{i\omega t}$ is absolutely
+    integrable and
+    \[
+        \left|\int_{\mathbb R}
+        K_{\alpha,\varepsilon}(t)e^{i\omega t}\,dt\right|
+        \le \frac1{2\pi\varepsilon}\sqrt{\frac\pi\alpha}.
+    \]
+\end{lemma}
+\begin{proof}
+    The complex exponential integral converges since its exponent has
+    real part $-\varepsilon<0$. Its antiderivative gives the Laplace
+    identity. The denominator has norm at least $\varepsilon$, so
+    the kernel is dominated by the displayed Gaussian. The oscillatory
+    exponential has norm one; Gaussian integrability and the Gaussian
+    integral formula finish the proof.
+\end{proof}
+
+The bound retains its dependence on $\varepsilon$. It is not a uniform
+regularizer-limit estimate. Interchanging the two integrals, identifying
+the Gaussian selector, and passing to the regularizer limit still require
+proof.
+
 \begin{lemma}[Transfer spectral rate from limiting correlations]
     \label{lem:spt_transfer_rate_from_correlations}
     \lean{MPSTensor.norm_transfer_spectrum_le_of_limitCorrelator_bound}

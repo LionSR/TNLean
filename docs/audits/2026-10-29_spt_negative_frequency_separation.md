@@ -35,3 +35,21 @@ No local Lean command, build, elaboration or checkdecls was run, as
 requested. New Blueprint entries remain notready pending hosted proof
 acceptance. Source/import/prose/formatting/integrity checks and independent
 mathematical review do not replace Lean verification.
+
+The same draft now constructs the actual scalar Gaussian selector as the
+right tail of the centered Gaussian of variance Δ²/q. Mathlib's exact
+Gaussian moment-generating function supplies its sub-Gaussian parameter;
+Chernoff at ±Δ gives the explicit e^(-q/2) errors on both gap regions.
+These are derived probability bounds, with no tail-error premise. They
+match the scalar Gaussian in Hastings–Koma Lemma 3.1, equation (3.7), for
+α=Δ²/(2q). The Cauchy time-integral representation and its operator-locality
+application remain unproved by this slice.
+
+The actual Gaussian/Cauchy time kernel is also constructed. Its rational
+factor has the convergent half-line Laplace representation from the exact
+complex exponential integral. Positive regularizer ε bounds its norm by
+(2πε)^(-1)exp(-αt²); every frequency-modulated kernel is absolutely
+integrable and its integral norm is bounded by (2πε)^(-1)sqrt(π/α).
+The ε dependence is explicit. The double-integral interchange and zero-ε
+limit identifying this kernel with the actual Gaussian selector remain
+open; a finite bound growing as ε^(-1) does not discharge that limit.
