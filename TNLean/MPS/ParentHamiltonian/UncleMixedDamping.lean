@@ -191,8 +191,9 @@ theorem uncleBoundaryLetter_mixedMapSpectralRadius_reverse_lt_one [NeZero a] [Ne
   have hQspec : star μ ∈ quasispectrum ℂ
       ((Module.End.toContinuousLinearMap (Matrix (Fin a) (Fin b) ℂ))
         (Kraus.mixedMapLM A B)) := by
-    rw [AlgEquiv.quasispectrum_eq (R := ℂ)]
-    exact spectrum_subset_quasispectrum ℂ _ hSpec
+    apply spectrum_subset_quasispectrum ℂ _
+    rw [AlgEquiv.spectrum_eq (R := ℂ)]
+    exact hSpec
   have hbound : (‖star μ‖₊ : ℝ≥0∞) ≤ Kraus.mixedMapSpectralRadius A B := by
     unfold Kraus.mixedMapSpectralRadius spectralRadius
     exact le_iSup_of_le (star μ) (le_iSup_of_le hQspec le_rfl)
