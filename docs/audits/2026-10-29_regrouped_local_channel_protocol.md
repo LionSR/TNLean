@@ -81,5 +81,7 @@ Validation uses Lean `v4.35.0-rc3`, Mathlib
 No full repository-root Lean build or hosted CI is claimed here. Canonical
 Blueprint declaration checking and full Blueprint web/PDF validation remain
 pending. The available TeX installation cannot compile the complete scope
-note because `dsfont.sty` is missing; canonical Blueprint and pinned formatting
-executables are also unavailable. The PR remains a draft pending hosted checks.
+note because `dsfont.sty` is missing; the canonical Blueprint executable is
+also unavailable. The repository's pinned latexindent 3.24.7 check passes for
+the changed Blueprint chapter. ChkTeX was not run. The PR remains a draft
+pending hosted checks.
