@@ -63,3 +63,13 @@ for arbitrary gates at dimensions 1, 2 and 3 agree with the shifted-layer and
 trace identities; these are not proof verification. Generated imports,
 tactic-pattern scan, declaration Blueprint coverage, TeX formatting,
 whitespace/100-column and placeholder scans are source-only checks.
+
+## Hosted diagnostics on `4bd1b8735`
+
+Job `123420319446` reported two errors in the sign-extraction prerequisite:
+conjugating the spectator Kronecker deltas needed explicit equality cases,
+and the reindex/smul simplification needed the linear-equivalence coercion
+and Kronecker transport as a separate equality. Both are repaired in source;
+the reported unused simp arguments and proof-local `letI` warning are also
+removed. The intrinsic module was not reached by this failed job, so no
+kernel acceptance for its proof is inferred. No local Lean command was run.

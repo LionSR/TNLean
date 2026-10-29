@@ -36,8 +36,9 @@ private theorem staircaseMiddle_conjTranspose
     (v : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ) :
     (staircaseMiddle (A := Fin d) (E := Fin d) v)ᴴ = staircaseMiddle vᴴ := by
   ext ⟨⟨a, b⟩, c, e⟩ ⟨⟨a', b'⟩, c', e'⟩
-  simp [staircaseMiddle, Matrix.conjTranspose_apply, Matrix.kroneckerMap_apply,
-    Matrix.one_apply, mul_comm, mul_left_comm, mul_assoc]
+  by_cases haa : a = a' <;> by_cases hee : e = e' <;>
+    simp [staircaseMiddle, Matrix.conjTranspose_apply, Matrix.kroneckerMap_apply,
+      Matrix.one_apply, haa, hee, eq_comm]
 
 /-- The literal three-gate time-reversal equation determines the normalized
 trace sign of the actual supplied standard form. Source:
@@ -52,7 +53,7 @@ theorem TwoSiteStandardFormData.timeReversalSign_eq_of_local_relation
         (x : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ)ᴴ) * (staircaseMiddle v)ᴴ) :
     timeReversalSign u v = σ := by
   classical
-  letI : NeZero d := ⟨Nat.ne_of_gt S.phys_pos⟩
+  let : NeZero d := ⟨Nat.ne_of_gt S.phys_pos⟩
   have hmid : (staircaseMiddle (A := Fin d) (E := Fin d) v)ᴴ *
       staircaseMiddle v = 1 := by
     rw [staircaseMiddle_conjTranspose, staircaseMiddle_mul, S.v_unitary.1,
@@ -67,10 +68,18 @@ theorem TwoSiteStandardFormData.timeReversalSign_eq_of_local_relation
   let x' := Matrix.reindex e e (x : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ)
   have hx' : x' ∈ Matrix.unitaryGroup (Fin (d * d)) ℂ :=
     Matrix.reindex_mem_unitaryGroup e _ x.property
+  have hk : Matrix.reindex p p
+      ((x : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ) ⊗ₖ
+        (x : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ)ᴴ) = x' ⊗ₖ x'ᴴ := by
+    dsimp only [p, x']
+    rw [Matrix.conjTranspose_reindex]
+    exact (Matrix.kroneckerMap_reindex (fun a b : ℂ ↦ a * b) e e e e
+      (x : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ)
+      (x : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ)ᴴ).symm
   have hfour' : Matrix.reindex p p
         (staircaseMiddle (A := Fin d) (E := Fin d) v * (u ⊗ₖ u) * staircaseMiddle v) =
       σ • (x' ⊗ₖ x'ᴴ) := by
-    simpa only [map_smul, x', Matrix.conjTranspose_reindex, Matrix.kroneckerMap_reindex] using
+    simpa only [map_smul, Matrix.coe_reindexLinearEquiv, hk] using
       congrArg (Matrix.reindexLinearEquiv ℂ ℂ p p) hfour
   have htrace := Matrix.trace_swapMatrix_mul_of_eq_smul_kronecker_conjTranspose σ hx' hfour'
   rw [← Matrix.trace_reindex p.symm] at htrace
