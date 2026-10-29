@@ -92,8 +92,6 @@ theorem supportAlgebraMatrixSize_even_eq_zero
   | pred i hi =>
       have hstep := supportAlgebraMatrixSize_even_add_one hω (-(i : ℤ) - 1)
       rw [show -(i : ℤ) - 1 + 1 = -(i : ℤ) by ring] at hstep
-      have harg : -((i + 1 : ℕ) : ℤ) = -(i : ℤ) - 1 := by omega
-      rw [harg]
       exact hstep.symm.trans hi
 
 /-- The homogeneous GNVW index at the fixed cut zero, in exactly the
@@ -103,9 +101,9 @@ Source: GNVW, arXiv:0910.3675v2, equation dimtransfer, lines 1317--1329. -/
 noncomputable def gnvwIndex (hω : PropagatesWithin ω (Finset.Icc (-1) 1)) :
     {q : ℚ // 0 < q} :=
   ⟨(supportAlgebraMatrixSize hω 0 : ℚ) / (d : ℚ), by
-    exact div_pos (by exact_mod_cast Nat.pos_of_ne_zero
-      (NeZero.ne (supportAlgebraMatrixSize hω 0)))
-      (by exact_mod_cast Nat.pos_of_ne_zero (NeZero.ne d))⟩
+    exact div_pos
+      (by exact_mod_cast (NeZero.pos (supportAlgebraMatrixSize hω 0)))
+      (by exact_mod_cast (NeZero.pos d))⟩
 
 /-- The fixed-cut index has the even ratio at every integer cut;
 GNVW, arXiv:0910.3675v2, equation dimtransfer, lines 1317--1324. -/
