@@ -132,7 +132,7 @@ theorem qIndex_le_iIndex_of_tracePreserving [NeZero D]
   · exact qIndex_le_iIndex A hA
   · have hq : {q : ℕ | 0 < q ∧ ∀ φ : Fin D → ℂ, φ ≠ 0 →
         Kraus.vectorSpreadSpan A φ q = ⊤} = ∅ := by
-      apply Set.eq_empty_iff_forall_not_mem.mpr
+      apply Set.eq_empty_iff_forall_notMem.mpr
       intro q hq
       exact hA ((primitivePaper_iff_hasEventuallyFullKrausRank A hNorm).mp ⟨q, hq⟩)
     rw [qIndex, hq, Nat.sInf_empty]
