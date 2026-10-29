@@ -61,15 +61,20 @@ through the injective entrywise real-to-complex ring homomorphism. The final
 unitary is the product of the complexified real orthogonal witness and the
 existing symmetric unitary witness. No determinant assumption is introduced.
 
-These are full source-level proof candidates for the missing matrix
-normal-form obligation, not verification evidence. The separate full MPU
-classification and its standard-form hypotheses are outside this slice.
+These full normal-form proofs have now compiled in hosted CI. The separate
+full MPU classification and its standard-form hypotheses remain outside
+this matrix slice.
 
 ## Verification boundary
 
-The new source is written without local Lean builds or compilation at the
-user's request. All new Blueprint ingredients and both normal-form nodes
-remain `notready`; `corconj` is not promoted. The remaining acceptance work
-is compilation, diagnostics repair, the package linters and declaration
-checking before integration. No proof placeholders, axioms or persistent
-Lean test fixtures are introduced.
+Hosted build job 123434027875 at exact code head
+`5ac5980c6bd709812788fc8dcb2b1edd1a5eba30` compiled all four mathematical
+modules, completed the full 14986-job repository build and passed strict
+Lean checks on every new file. Blueprint web job 123434027825 and PDF job
+123434027791 both passed, as did module-policy, diagram and compilation-time
+checks. The five new mathematical Blueprint nodes and proofs now carry
+`leanok`; the full MPU `corconj` statement remains `notready`.
+
+No local Lean invocation, build or elaboration was run. The PR and source
+issue remain open pending integration. No placeholders, axioms or persistent
+Lean test fixtures were introduced.

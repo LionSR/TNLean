@@ -40,13 +40,13 @@ step is recorded in the tactic ledger.
 
 ## Validation boundary
 
-This is uncompiled proof text, written under the user's explicit instruction
-to perform no Lean builds or compilation. Source checks inspect the exact
-Mathlib signatures used, generated imports, line length, trailing whitespace,
-and absence of proof-integrity placeholders. The tactic-pattern scanner is
-also run. These checks do not establish Lean elaboration or kernel checking.
+Hosted build job 123434027875 at exact code head
+`5ac5980c6bd709812788fc8dcb2b1edd1a5eba30` compiled this basis construction,
+its foundation and both consuming matrix normal-form capstones. The full
+repository build and strict Lean checks passed, followed by Blueprint web
+and PDF checks. The basis and matrix normal-form Blueprint nodes now carry
+`leanok`. The separate MPU classification statement remains `notready`.
 
-Issue #7581 remains open: this basis construction must be compiled together
-with its foundation, and the separate real and complex matrix-congruence
-capstones must consume the constructed basis before the source theorem can
-be marked complete.
+No local Lean invocation or persistent proof fixture was used. Source/API,
+generated import, formatting, width and integrity checks were also run.
+Issue #7581 remains open pending integration of the verified matrix slice.

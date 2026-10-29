@@ -9449,7 +9449,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         LinearIsometry.mapsTo_orthogonal_of_sq_eq_neg,
         LinearIsometry.restrictInvariantOrthogonal_sq,
         Matrix.orthogonalLinearIsometry_sq}
-    \notready
+    \leanok
     \discussion{7581}
     Let $J$ be a linear isometry of a real inner-product space satisfying
     $J^2=-\Id$. For every unit vector $v$, the ordered pair $(v,-Jv)$ is
@@ -9459,7 +9459,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     $Y=\left(\begin{smallmatrix}0&1\\-1&0\end{smallmatrix}\right)$.
     Every real skew-symmetric orthogonal matrix supplies such an isometry.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     Isometry and $J^2=-\Id$ give
     $\langle x,Jy\rangle=-\langle Jx,y\rangle$. Taking $x=y=v$ shows
     $\langle v,Jv\rangle=0$. The identities $Jv=-(-Jv)$ and
@@ -9474,7 +9474,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \label{lem:mpu_standard_skew_indexing}
     \lean{Matrix.interleavedSkewForm_eq_neg_J_submatrix,
         Matrix.interleavedSkewFormFin_apply}
-    \notready
+    \leanok
     \discussion{7581}
     For a finite index set $I$, identify $(i,0),(i,1)\in I\times\{0,1\}$
     with $i$ in the first and second copies of $I\sqcup I$. Under this
@@ -9485,7 +9485,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     For $I=\{0,\ldots,m-1\}$ the interleaved enumeration gives the same
     ordered blocks on $\{0,\ldots,2m-1\}$.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     Compare the four choices of the two binary coordinates. The two diagonal
     blocks vanish, and the off-diagonal blocks are $\Id_I$ and $-\Id_I$
     in that order. Reindexing preserves these entries.
@@ -9494,7 +9494,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \begin{lemma}[Paired orthonormal basis]
     \label{lem:mpu_skew_paired_orthonormal_basis}
     \lean{LinearIsometry.exists_paired_orthonormalBasis}
-    \notready
+    \leanok
     \discussion{7581}
     \uses{lem:mpu_skew_orthogonal_plane}
     Let $E$ be a real inner-product space of dimension $2m$, and let $J$ be
@@ -9502,7 +9502,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     $(e_{i,0},e_{i,1})_{i=0}^{m-1}$ such that
     $Je_{i,0}=-e_{i,1}$ and $Je_{i,1}=e_{i,0}$.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     Induct on $m$. The empty basis covers $m=0$. Otherwise choose a unit
     vector $v$ and use the ordered orthonormal pair $(v,-Jv)$.
     Its invariant orthogonal complement has dimension $2m-2$.
@@ -9514,7 +9514,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \label{thm:mpu_real_skew_orthogonal_normal_form}
     \lean{Matrix.toMatrix_paired_orthonormalBasis,
         Matrix.exists_orthogonal_congruence_interleavedSkewForm}
-    \notready
+    \leanok
     \discussion{7581}
     \uses{lem:mpu_skew_paired_orthonormal_basis, lem:mpu_standard_skew_indexing}
     Let $A\in\operatorname{Mat}_{2m}(\mathbb R)$ be orthogonal with
@@ -9526,7 +9526,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \cite[Proposition~V.2]{Cirac2017MPU}.
     % Source lines: paper_v2.tex 1129--1140.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     The action of $A$ is an isometry squaring to $-\Id$. In the paired
     orthonormal basis of Lemma~\ref{lem:mpu_skew_paired_orthonormal_basis},
     its matrix is $\Sigma_m$. The orthogonal change of coordinates from
@@ -9536,7 +9536,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \begin{theorem}[Complex skew-unitary normal form]
     \label{thm:mpu_complex_skew_unitary_normal_form}
     \lean{Matrix.exists_unitary_congruence_interleavedSkewForm}
-    \notready
+    \leanok
     \discussion{7581}
     \uses{lem:mpu_skew_unitary_congruence, thm:mpu_real_skew_orthogonal_normal_form}
     Let $x\in\operatorname{Mat}_{2m}(\mathbb C)$ be unitary with $x^T=-x$.
@@ -9545,7 +9545,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \cite[Proposition~V.2]{Cirac2017MPU}.
     % Source lines: paper_v2.tex 1129--1140.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     The skew congruence factorization gives $x=S^T\Lambda S$ with $S$
     unitary and $\Lambda$ real, skew-symmetric and unitary.
     The real normal form gives $\Lambda=O^T\Sigma_m O$ with $O$ orthogonal.
