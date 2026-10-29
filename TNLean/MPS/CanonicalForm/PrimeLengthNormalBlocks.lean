@@ -33,7 +33,7 @@ namespace MPSTensor
 /-- At a length with no divisor between two and the original bond dimension,
 there is an actual expansion into at most that many separated, canonically
 normalized blocks. Their coefficients are nonzero, their bond dimensions
-are positive and no larger, and every block is injective at `(D²+1)²`.
+are positive and no larger, and every block is injective at \((D^2+1)^2\).
 No canonical decomposition, periodic decomposition or injectivity estimate
 is supplied as a hypothesis.
 Source: SPWC10, Theorem 5 proof, lines 858–880; PGVWC07, Theorem 5,
@@ -91,7 +91,7 @@ theorem exists_normal_blocks_of_no_small_divisor {d D N : ℕ}
     have h0 := pgvwc07_stateVector_eq_zero_of_not_dvd (Bp k) (hPer k) hndvd σ
     rw [hmpvB k N σ] at h0
     exact (mul_eq_zero.mp h0).resolve_left (pow_ne_zero _ (hζ k))
-  -- A block of period `1` satisfies condition C1 at `(D²+1)²`.
+  -- A block of period `1` satisfies condition C1 at \((D^2+1)^2\).
   have hC1 : ∀ k, m k = 1 → Kraus.IsNBlkInjective (Blk k) ((D ^ 2 + 1) ^ 2) := fun k hk => by
     have := hNZ k
     have hP1 : IsPeriodic 1 (Bp k) := hk ▸ hPer k

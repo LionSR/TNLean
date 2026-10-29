@@ -35,7 +35,7 @@ variable {d L : ℕ}
 
 /-- A small prime-length ground-state representation yields a single fixed
 MPS tensor generating the ground space at all sufficiently large volumes.
-The explicit threshold uses the general Wielandt length `(D²+1)²`.
+The explicit threshold uses the general Wielandt length \((D^2+1)^2\).
 Source: SPWC10, Theorem 5 proof, lines 858–880. -/
 theorem exists_eventually_fixed_mps_of_prime_length_bound
     (h : MPVSpace d L →ₗ[ℂ] MPVSpace d L) (hh : h.IsPositive)
@@ -98,7 +98,7 @@ theorem exists_eventually_fixed_mps_of_prime_length_bound
 
 /-- Either one fixed tensor generates the eventual ground spaces, or every
 prime-length nonzero MPS ground-state representation obeys the explicit
-fifth-degree bound `N < L + max ((D²+1)²) (3(D−1)((D²+1)²+1))`.
+fifth-degree bound \(N<L+\max\{(D^2+1)^2,3(D-1)((D^2+1)^2+1)\}\).
 The local interaction and all constants are fixed independently of the prime
 and of the representing tensor. Source: SPWC10, Theorem 5, lines 850–880. -/
 theorem eventually_fixed_mps_or_prime_length_bound
