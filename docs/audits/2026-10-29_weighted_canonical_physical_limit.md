@@ -19,15 +19,22 @@ its desired physical convergence.
   its zero limit by finite geometric convergence. It has canonical data as
   its only input; no physical remainder or convergence premise is supplied.
 
+`WeightedCanonicalSectors.lean` additionally derives the actual sector
+transfer formula, sector projection eigenvectors, and the lifting of every
+block eigenvalue with the square-weight factor. Positive-map spectral-radius
+control forces a unit weight from radius normalization. Algebraic simplicity
+at one forces its uniqueness. Under explicitly multiplicity-aware generic
+C2 this derives a unique dominant normal block and actual physical residual
+convergence, without either conclusion as a premise.
+
 The full weighted C2 half-chain spectrum theorem remains unfinished. In a
 multiblock representation, excluding peripheral eigenvalue values different
 from one does not exclude repeated unit-weight blocks. A unique dominant
 sector requires the source's intended generic multiplicity condition, not a
 silent strengthening of the existing one-block C2 premise. The new estimate
 is valid without C2 and retains the entire unit-weight physical sum.
-The next steps are that sector identification, actual finite-size density
-normalization, and transfer of ordered spectral limits with multiplicity and
-zero padding. See `docs/paper-gaps/pgvwc07_half_chain_spectrum_conventions.tex`.
+The remaining steps are actual finite-size density normalization and
+transfer of ordered spectral limits with multiplicity and zero padding. See `docs/paper-gaps/pgvwc07_half_chain_spectrum_conventions.tex`.
 
 Validation: source/API review, mathematical inspection, generated import and
 proof-integrity checks, tactic-pattern scan, prose/whitespace/width checks,

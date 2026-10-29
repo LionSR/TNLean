@@ -148,9 +148,17 @@ simplicity: repeated unit-weight blocks still admit peripheral value one
 with multiplicity. The source's generic exclusion of eigenvalues degenerate
 in magnitude must be distinguished from a statement about distinct values.
 No additional simplicity hypothesis is silently incorporated into the
-weighted disappearance estimate. Identifying the unique dominant sector
-from the intended generic condition and transferring finite normalized
-reduced spectra remain separate obligations.
+weighted disappearance estimate. The generic multiplicity condition is now used explicitly in
+\leanid{MPSTensor.PGVWC07CanonicalFormData.exists_dominantNormalBlock_physical_limit_of_c2}:
+every peripheral eigenvalue is one and has algebraic multiplicity one.
+Canonical sector projections are actual nonzero eigenvectors with eigenvalues
+$w_j^2$. Positivity gives $r(\mathcal E_A)\leq\|\mathcal E_A(I)\|$,
+so radius one forces a unit weight; simplicity excludes two such sectors.
+Every block eigenvalue lifts to $w_j^2$ times that eigenvalue in the full
+transfer map, which makes the retained block normal. Combined with the
+physical remainder estimate, this derives convergence to the unique dominant
+normal block. These statements are pending Lean checking. Transferring the
+actual finite normalized reduced spectra remains a separate obligation.
 
 \bibliographystyle{alpha}
 \bibliography{references}
