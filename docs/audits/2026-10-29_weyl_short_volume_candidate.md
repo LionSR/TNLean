@@ -53,6 +53,15 @@ times an arbitrary function of total charge. The converse constructs the
 boundary matrix from the trace-dual family. This is a local characterization,
 not a supplied global-intersection hypothesis.
 
+The cyclic exponent comparison is derived in `CyclicPhases.lean`.
+`SevenCyclicObstruction.lean` gives two explicit physical words detecting
+unequal cyclic phases at each of the 24 nonzero charges. Cancelling the
+nonzero character factors in two actual local boundary vectors proves
+that their seven-site cyclic agreement forces both vectors to vanish.
+The actual seven-site periodic main-sector parent space is therefore
+zero. This supplies the main exceptional-volume obstruction without
+asserting the long-volume classification.
+
 ## Proposed fixed-interaction construction: obligations still open
 
 The intended main local space is the actual seven-site boundary MPS
@@ -68,10 +77,10 @@ The following are still required before any full counterexample claim:
    q-commutation and transfer of five equal letters, in every surrounding
    physical configuration.
 2. Prove completeness of the homogeneous relations and classify their
-   **periodic** solutions: the main sector should have zero kernel at
-   length seven and exactly the actual nonzero trace-MPS line at every
-   length at least eight. Reachable charges or a normality witness alone
-   do not prove this assertion.
+   **periodic** solutions at all lengths at least eight: the main sector
+   should have exactly the actual nonzero trace-MPS line. The exceptional
+   length-seven zero space is now derived separately. Reachable charges
+   or a normality witness alone do not prove long-volume uniqueness.
 3. Prove that the disjoint-alphabet local direct sum forces every global
    solution into the direct sum of the two uniform global sectors.
 4. Supply the actual weighted one-particle overlap obstruction and its

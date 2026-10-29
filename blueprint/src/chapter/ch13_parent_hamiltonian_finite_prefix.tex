@@ -297,3 +297,48 @@
     Conversely every boundary matrix defines such a function by
     its trace pairing with the charged matrices.
 \end{proof}
+
+\begin{lemma}[Actual charge comparison across a cyclic cut]
+    \label{lem:short_volume_weyl_cyclic_phase}
+    \lean{MPSTensor.ShortMomentum.letterPairing,
+        MPSTensor.ShortMomentum.wordPhase_append,
+        MPSTensor.ShortMomentum.wordPhase_cons_sub_snoc,
+        MPSTensor.ShortMomentum.exists_charge_comparison_of_cyclic_agreement}
+    \notready
+    \uses{lem:short_volume_weyl_local_spaces}
+    Moving a first letter of charge $(a,b)$ to the end changes the
+    actual scalar exponent by $av-ub$, where $(u,v)$ is the total charge.
+    If two actual local boundary vectors agree across that cyclic cut,
+    their charge functions satisfy the corresponding character relation.
+    The relation is derived from their actual coefficients.
+\end{lemma}
+\begin{proof}
+    Concatenation gives the same cocycle as actual matrix multiplication.
+    The first-letter and last-letter expressions differ by the displayed
+    pairing. Cancel the nonzero character of the remaining word in the
+    two actual local-space parametrizations.
+\end{proof}
+
+\begin{lemma}[Zero main-sector periodic space at length seven]
+    \label{lem:short_volume_weyl_seven_periodic_zero}
+    \lean{MPSTensor.ShortMomentum.exists_distinct_seven_cyclic_phases,
+        MPSTensor.ShortMomentum.eq_zero_of_seven_cyclic_agreement,
+        MPSTensor.ShortMomentum.eq_zero_of_seven_cyclic_local_membership,
+        MPSTensor.ShortMomentum.chainGroundSpace_threeLetterTensor_seven_eq_bot}
+    \notready
+    \uses{lem:short_volume_weyl_cyclic_phase, lem:short_volume_weyl_charges}
+    The actual seven-site periodic parent space formed from the
+    seven-site local boundary space of the three-letter Weyl tensor
+    is zero. More precisely, two seven-site boundary vectors agreeing
+    across the cyclic cut must both vanish. This is an exceptional
+    short-volume obstruction; long-volume uniqueness remains separate.
+\end{lemma}
+\begin{proof}
+    Each of the 24 noncentral charges has two explicit degree-seven words
+    whose first letters have different pairings with that charge.
+    The preceding cyclic comparison would give two distinct character
+    values times the same charge coefficient. Thus that coefficient
+    vanishes. The central charge never occurs at this degree, so every
+    actual vector coefficient is zero. The windows starting at zero
+    and one supply the two required actual local boundary vectors.
+\end{proof}
