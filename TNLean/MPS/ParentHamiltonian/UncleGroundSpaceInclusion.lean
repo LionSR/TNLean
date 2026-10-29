@@ -163,7 +163,7 @@ private theorem uncleHamiltonianES_apply_eq_zero_of_parent_windows
     uncleHamiltonianES A B R L N
       ((WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm ψ) = 0 := by
   have hNpos : 0 < N := by omega
-  rw [chainGroundSpace, dif_pos ⟨hNpos, hN⟩] at hψ
+  rw [chainGroundSpace, dite_eq_left ⟨hNpos, hN⟩] at hψ
   simp only [Submodule.mem_iInf, Submodule.mem_comap] at hψ
   have hlocal (i : Fin N) (τ : Cfg d N) :
       uncleInteractionES A B R L
