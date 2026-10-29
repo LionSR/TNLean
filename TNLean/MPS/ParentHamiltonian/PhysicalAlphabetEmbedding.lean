@@ -28,7 +28,6 @@ assume or assert a full-chain Hamiltonian identification after embedding.
 
 open scoped BigOperators Matrix
 
-
 namespace Matrix
 
 /-- A finite family of physical alphabets embeds into the single alphabet whose
