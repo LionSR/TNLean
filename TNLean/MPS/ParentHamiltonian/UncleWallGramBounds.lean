@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.ParentHamiltonian.UncleWallGramAsymptotics
 import QICLean.Analysis.MatrixTraceInequalities
 import QICLean.Analysis.OperatorMean.PowerDerivative
+import QICLean.Channel.KrausCPTP
 
 /-!
 # Linear bounds for the actual moving-wall Gram matrix
@@ -129,6 +130,57 @@ theorem uncleWallGram_trace_re_le_mul
 section OperatorNorm
 
 open scoped Matrix.Norms.L2Operator
+
+/-- The actual rectangular wall Kraus map is bounded by the unweighted
+Gram trace times its input norm. This uses each actual wall word and the
+rectangular Hilbert--Schmidt trace bound; arXiv:1210.6613, transfer estimates
+in the proof of Lemma lowenergystates. -/
+theorem uncleWallGramMap_apply_l2_opNorm_le_trace
+    (A : MPSTensor d a) (B : MPSTensor d b)
+    (R : Fin d → Matrix (Fin a) (Fin b) ℂ) (n : ℕ)
+    (X : Matrix (Fin b) (Fin b) ℂ) :
+    ‖Matrix.rectangularKrausMap
+        (fun σ : Fin n → Fin d ↦ uncleDomainWallWord A B R (List.ofFn σ)) X‖ ≤
+      (Matrix.trace (uncleWallGram A B R n)).re * ‖X‖ := by
+  let W := fun σ : Fin n → Fin d ↦ uncleDomainWallWord A B R (List.ofFn σ)
+  have hterm (σ : Fin n → Fin d) :
+      ‖W σ * X * (W σ)ᴴ‖ ≤ (Matrix.trace (W σ * (W σ)ᴴ)).re * ‖X‖ := by
+    calc
+      ‖W σ * X * (W σ)ᴴ‖ ≤ (‖W σ‖ * ‖X‖) * ‖(W σ)ᴴ‖ :=
+        (Matrix.l2_opNorm_mul _ _).trans (mul_le_mul_of_nonneg_right
+          (Matrix.l2_opNorm_mul _ _) (norm_nonneg _))
+      _ = ‖W σ‖ ^ 2 * ‖X‖ := by rw [Matrix.l2_opNorm_conjTranspose]; ring
+      _ ≤ (Matrix.trace ((W σ)ᴴ * W σ)).re * ‖X‖ :=
+        mul_le_mul_of_nonneg_right
+          (Matrix.l2_opNorm_sq_le_trace_conjTranspose_mul_self_re (W σ)) (norm_nonneg X)
+      _ = (Matrix.trace (W σ * (W σ)ᴴ)).re * ‖X‖ := by
+        rw [Matrix.trace_mul_comm (W σ)ᴴ (W σ)]
+  change ‖∑ σ, W σ * X * (W σ)ᴴ‖ ≤ _
+  calc
+    ‖∑ σ, W σ * X * (W σ)ᴴ‖ ≤ ∑ σ, ‖W σ * X * (W σ)ᴴ‖ := norm_sum_le _ _
+    _ ≤ ∑ σ, (Matrix.trace (W σ * (W σ)ᴴ)).re * ‖X‖ :=
+      Finset.sum_le_sum fun σ _ ↦ hterm σ
+    _ = (Matrix.trace (uncleWallGram A B R n)).re * ‖X‖ := by
+      rw [← Finset.sum_mul]
+      congr 1
+      simp only [uncleWallGram, Matrix.trace_sum, Complex.re_sum, W]
+
+/-- The actual rectangular moving-wall map has a uniform linear bound in
+the Euclidean matrix operator norm, derived from its actual Gram trace.
+Source: arXiv:1210.6613, transfer estimates in Lemma lowenergystates. -/
+theorem uncleWallGramMap_apply_l2_opNorm_le_mul
+    (A : MPSTensor d a) (B : MPSTensor d b)
+    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
+    (ρ : Matrix (Fin a) (Fin a) ℂ) (hρ : ρ.PosDef)
+    (hA : Kraus.adjointMap A ρ = ρ) (hB : Kraus.mapLM B 1 = 1)
+    (hSpect : Kraus.mixedMapSpectralRadius A B < 1) :
+    ∃ C : ℝ, 0 < C ∧ ∀ n : ℕ, ∀ X : Matrix (Fin b) (Fin b) ℂ,
+      ‖Matrix.rectangularKrausMap
+          (fun σ : Fin n → Fin d ↦ uncleDomainWallWord A B R (List.ofFn σ)) X‖ ≤
+        C * n * ‖X‖ := by
+  obtain ⟨C, hC, hbound⟩ := uncleWallGram_trace_re_le_mul A B R ρ hρ hA hB hSpect
+  exact ⟨C, hC, fun n X ↦ (uncleWallGramMap_apply_l2_opNorm_le_trace A B R n X).trans
+    (mul_le_mul_of_nonneg_right (hbound n) (norm_nonneg X))⟩
 
 /-- The actual one-wall Gram matrix has a uniform linear bound in the
 Euclidean operator norm. This follows from its positive trace bound;
