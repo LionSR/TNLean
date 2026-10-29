@@ -179,7 +179,7 @@ theorem evenSupportAlgebra_matrixSize_mul_odd
     Matrix.matrixAlgEquiv_fin_eq (eA.symm.trans (eImage.trans eJ)).toAlgEquiv
   have hcard : Fintype.card (Config d (evenPair x)) = d * d := by
     change Fintype.card (↥(evenPair x) → Fin d) = d * d
-    rw [Fintype.card_fun]
+    rw [Fintype.card_fun, Fintype.card_coe]
     have hne : 2 * x ≠ 2 * x + 1 := by omega
     simp [evenPair, hne, pow_two]
   exact hsize.symm.trans hcard
@@ -352,7 +352,7 @@ theorem oddSupportAlgebra_matrixSize_mul_even_add_one
       ((localAlgebraMatrixEquiv (rightPair x)).symm.trans (eImage.trans eJ)).toAlgEquiv
   have hcard : Fintype.card (Config d (rightPair x)) = d * d := by
     change Fintype.card (↥(rightPair x) → Fin d) = d * d
-    rw [Fintype.card_fun]
+    rw [Fintype.card_fun, Fintype.card_coe]
     have hne : 2 * x + 1 ≠ 2 * x + 2 := by omega
     simp [rightPair, hne, pow_two]
   exact hsize.symm.trans hcard
