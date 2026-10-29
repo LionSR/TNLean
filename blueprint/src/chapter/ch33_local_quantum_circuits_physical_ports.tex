@@ -734,7 +734,7 @@ start, and is discarded only after the circuit has finished.
 \end{proof}
 
 
-\begin{theorem}[Pure output and environment decoupling]
+\begin{lemma}[Pure output and environment decoupling]
     \label{thm:qc_physical_port_pure_output}
     \uses{thm:qc_physical_port_unitary_dilation}
     \lean{QuantumCircuit.IsPhysicalPortProtocol.exists_appended_unitary_dilation_pure_output}
@@ -748,10 +748,10 @@ start, and is discarded only after the circuit has finished.
         \qquad \langle\eta,\eta\rangle=1.
     \]
     The unitary retains the same physical ports and the full channel
-    identity of Theorem~\ref{thm:qc_physical_port_unitary_dilation}.
+    identity of Lemma~\ref{thm:qc_physical_port_unitary_dilation}.
     The environment vector $\eta$ need not factor over spatial sites or
     equal its initial zero state.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     In system/environment coordinates write the actual joint output as
     the coefficient matrix $C$. Its first marginal is
@@ -765,18 +765,18 @@ start, and is discarded only after the circuit has finished.
 \end{proof}
 
 
-\begin{corollary}[Environment measurement branches of a pure output]
+\begin{lemma}[Environment measurement branches of a pure output]
     \label{cor:qc_physical_port_pure_output_branches}
     \uses{thm:qc_physical_port_pure_output}
     \lean{QuantumCircuit.IsPhysicalPortProtocol.exists_environmentKraus_pure_output}
     \leanok
-    Under the hypotheses of Theorem~\ref{thm:qc_physical_port_pure_output}, measuring the final environment in its standard product basis gives branch operators $K_e$ satisfying
+    Under the hypotheses of Lemma~\ref{thm:qc_physical_port_pure_output}, measuring the final environment in its standard product basis gives branch operators $K_e$ satisfying
     \[
         \Phi(X)=\sum_e K_e X K_e^*,\qquad K_e\psi=\eta_e\phi,\qquad \sum_e|\eta_e|^2=1.
     \]
     Thus every outcome of nonzero probability leaves the same pure system state. The circuit has the same physical ports and intersite depth as in that theorem. This does not impose a fixed number of source QCcc blocks or their internal control restrictions.
-\end{corollary}
+\end{lemma}
 
 \begin{proof}\leanok
-    Take the matrix blocks of the compiled unitary in the initialized environment column. Their channel is the partial trace of that unitary after pure environment initialization. Each block applied to the input vector is the corresponding environment coordinate of the product output from Theorem~\ref{thm:qc_physical_port_pure_output}.
+    Take the matrix blocks of the compiled unitary in the initialized environment column. Their channel is the partial trace of that unitary after pure environment initialization. Each block applied to the input vector is the corresponding environment coordinate of the product output from Lemma~\ref{thm:qc_physical_port_pure_output}.
 \end{proof}
