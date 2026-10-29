@@ -121,3 +121,94 @@
     zero. Apply the pair-projector intertwining on each such vector; linearity
     handles the zero vectors outside the image.
 \end{proof}
+
+\subsection{Dependent chain coordinates and the actual open sum}
+
+\begin{definition}[Pair coordinates of a dependent physical chain]
+    \label{def:dependent_physical_pair_coordinates}
+    \lean{Matrix.pairConfigurationEquiv, Matrix.pairConfigurationEquiv_apply,
+        Matrix.pairConfigurationReindex}
+    \notready
+    Let the physical alphabet at site $k$ be a finite set $I_k$. For two
+    distinct sites $i,j$, split the dependent configuration set as
+    \begin{align}
+        \prod_k I_k & \simeq (I_i\times I_j)\times
+        \prod_{k\ne i,j}I_k.
+    \end{align}
+    The bijection reads both active letters in the displayed order and
+    retains all other physical coordinates. Its Euclidean reindexing is
+    a linear isometric equivalence.
+\end{definition}
+
+\begin{lemma}[Dependent pair coordinates respect physical embeddings]
+    \label{lem:dependent_physical_pair_embedding}
+    \lean{Matrix.pairConfigurationEquiv_embedding_apply,
+        Matrix.pairConfigurationReindex_extendByZero}
+    \notready
+    \uses{def:dependent_physical_pair_coordinates,
+        def:physical_euclidean_extension_zero}
+    For sitewise injections $e_k:I_k\hookrightarrow J_k$, the dependent
+    pair/outside coordinate bijection commutes with the full configuration
+    injection. The corresponding Euclidean coordinate changes $Q_I,Q_J$
+    satisfy
+    \begin{align}
+        Q_J E_{\prod_k e_k}
+         & =E_{(e_i\times e_j)\times\prod_{k\ne i,j}e_k} Q_I.
+    \end{align}
+\end{lemma}
+\begin{proof}
+    \notready
+    The coordinate bijection reads the same sitewise embedded letters on
+    both sides. At coordinates in the image, both Euclidean maps preserve
+    the source coefficient. Outside that image, both coefficients vanish.
+\end{proof}
+
+\begin{definition}[The parent Hamiltonian on the true dependent chain space]
+    \label{def:varying_physical_parent_hamiltonian}
+    \lean{Matrix.physicalPairParentTerm, Matrix.varyingPhysicalParentHamiltonian}
+    \notready
+    \uses{def:dependent_physical_pair_coordinates}
+    Let $A^{[j]}_i\in M_{D_j,D_{j+1}}(\mathbb C)$ have an arbitrary finite
+    physical alphabet $I_j$ at each site. For the adjacent pair $j,j+1$,
+    let $G_j$ be its actual rectangular trace-boundary range. On the actual
+    chain space $\mathbb C^{\prod_k I_k}$, define
+    \begin{align}
+        h_j & =Q_j^{-1}(P_{G_j^\perp}\otimes I)Q_j,
+            & H                                     & =\sum_{j=0}^{N-2}h_j.
+    \end{align}
+    These are the actual pair projections and open Hamiltonian of
+    \cite[Theorem~9, lines~1195--1217]{PerezGarcia2007Matrix}, with no
+    common-alphabet restriction on the sites.
+\end{definition}
+
+\begin{lemma}[Actual varying-physical parent transport and kernel equivalence]
+    \label{lem:varying_physical_parent_embedding_transport}
+    \lean{Matrix.physicalPairParentTerm_isPositive,
+        Matrix.physicalPairParentTerm_extend_physical,
+        Matrix.varyingPhysicalParentHamiltonian_isPositive,
+        Matrix.varyingPhysicalParentHamiltonian_extend_physical,
+        Matrix.varyingPhysicalParentHamiltonian_extend_eq_zero_iff}
+    \notready
+    \uses{def:varying_physical_parent_hamiltonian,
+        lem:dependent_physical_pair_embedding,
+        lem:varying_physical_local_parent_transport}
+    Every actual local term $h_j$ and their sum $H$ are positive. For
+    arbitrary sitewise physical injections, extend each site matrix by
+    zero to obtain the corresponding actual parent $\widetilde H$. Then
+    \begin{align}
+        \widetilde H E & =EH,
+                       & \widetilde H(E\phi)=0 & \iff H\phi=0.
+    \end{align}
+    Here $E$ is the actual dependent configuration isometry. No canonical
+    normalization, spanning assumption, or supplied Hamiltonian relation
+    is required for these identities.
+\end{lemma}
+\begin{proof}
+    \notready
+    A complementary pair projection is positive, and identity extension
+    and isometric coordinate change preserve positivity. The pair/outside
+    coordinate intertwining and actual local-projector transport give
+    $\widetilde h_j E=E h_j$ at each bond. Summing these derived identities
+    gives $\widetilde H E=EH$. Injectivity of the isometry gives the kernel
+    equivalence.
+\end{proof}
