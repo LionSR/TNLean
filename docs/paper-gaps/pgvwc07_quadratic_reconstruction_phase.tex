@@ -275,12 +275,31 @@ therefore gives an actual solution of the same system, the same actual
 length-$N$ vector, and exact unitary gauge equivalence after rephasing.
 These new declarations remain pending hosted verification and integration.
 
-The existence clause of source Theorem 8 still needs the construction of
-this system over the actual unique OBC canonical window from the supplied
-condition-C1 TI representation. The new OBC canonical-form existence
-construction does not itself identify the required doubled-bond window or
-its endpoint gauges. No solution, OBC-window identity or missing endpoint
-condition is postulated in place of that remaining source argument.
+The actual interior cut rank and physical-window construction are now
+written separately. The source-written result
+\leanid{MPSTensor.quadraticWindow_cutCoefficientRank_eq}
+derives rank $D^2$ at every endpoint-inclusive window cut from the canonical
+tensor, condition C1 and the source size regime. Its physical column spaces
+have the actual virtual cut vectors as a basis. In those bases, actual
+physical-coordinate slicing has matrix $A_i\otimes I_D$.
+
+The result
+\leanid{MPSTensor.exists_quadraticSolution_cutSiteWindow}
+then constructs a solution over any actual physical cut-basis window.
+The accompanying equality
+\leanid{MPSTensor.quadraticPhysicalCutWindow_cutSiteMatrix}
+identifies this window with the existing minimal OBC site matrices after
+the justified coordinate reindexing. The two unknown matrices are changes
+of physical cut basis, with inverse relations given by composition of
+identity maps. A positive canonical weight is removed by geometric
+rescaling along the window. No quadratic solution, window gauge or rank
+equality is assumed.
+
+These basis-independent results do not import the separate unpublished
+canonical OBC construction. Composing its canonical physical cut-basis
+choice with the window theorem remains the final supplier step for an
+actual canonical OBC window. All new results remain pending hosted
+verification and integration; the unrestricted converse remains false.
 
 \section{Open classification gap and verdict}
 

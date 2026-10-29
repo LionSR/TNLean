@@ -30,16 +30,32 @@ also exposes the existing UnitGaugePhaseEquiv predicate before rephasing.
 Mathlib's Unitary.toUnits supplies the matrix-ring unit directly; no separate
 matrix-inverse construction is duplicated.
 
-This is a bounded partial delivery for #6089. The source theorem's existence
-clause still needs an actual supplier of the displayed doubled-bond window
-and its quadratic gauges from the unique OBC canonical form and the given
-C1 TI representation. The independent OBC canonical existence draft does not
-automatically identify that window. No window identity, endpoint chain or
-solution is assumed to replace this missing source argument. No assertion
-that every algebraic solution represents the prescribed state, or that all
-solutions have been classified, is introduced. The original full source
-Blueprint theorem remains notready; the new explicitly bounded same-state
-lemmas are separate and also notready.
+The existence direction now also has actual physical source-written ingredients.
+InjectivePeriodicCuts factors the physical cut matrix through the virtual cut
+vectors, derives a suffix right inverse, proves equality of physical and virtual
+prefix column spaces, constructs their basis, and proves exact rank D². C1
+propagates along a positively weighted canonical tensor by removing its weight
+inside the proof. Every endpoint-inclusive reconstruction-window cut therefore
+has rank D² in the source size regime.
+
+PeriodicCutBasisCoordinates transports this basis to the actual site subsets
+and proves that actual coordinate slicing has matrix A_i tensor I. In
+QuadraticPhysicalCutWindow, arbitrary actual physical cut bases define the
+window by the existing cutSlice maps. Changes of basis supply the two gauges;
+the identities of linear maps prove both the local and inverse equations.
+Geometric factors remove the positive canonical weight to normalize the
+solution tensor. The window is proved equal to the existing cutSiteMatrix
+family after its justified coordinate reindexing. No window gauges, rank
+identity or quadratic solution is an input.
+
+This remains a partial delivery for #6089 until the canonical OBC choice is
+composed with this basis-independent window theorem and hosted validation is
+complete. The separate OBC canonical existence draft exports the actual
+canonical cut-basis choice; that unpublished supplier is not imported here as
+if it were on main. No assertion that every algebraic solution represents the
+prescribed state, or that all solutions have been classified, is introduced.
+The original full source Blueprint theorem remains notready, as do the new
+explicitly stated supporting results.
 
 Native source synchronization, gap-note declaration extraction, generated
 imports, mathematical roles, reader-facing prose, TeX formatting, tactic

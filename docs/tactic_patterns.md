@@ -9651,3 +9651,27 @@ there is no need for a new tactic.
   `MPS/CanonicalForm/QuadraticReconstructionConverse.lean`.
 - **Decision:** reuse the existing unitary-to-unit construction directly;
   no project-specific conversion structure or tactic is introduced.
+
+
+### Physical cut-basis changes — reused Mathlib (2026-10-29)
+
+- **Seen:** `MPS/CanonicalForm/PeriodicCutBasisCoordinates.lean` and
+  `QuadraticPhysicalCutWindow.lean`.
+- **Pattern:** transport an actual cut basis along a configuration equivalence,
+  then multiply matrices of physical slicing and identity maps in successive bases.
+- **Reuse:** `LinearEquiv.ofSubmodules`, `Module.Basis.map`,
+  `LinearMap.toMatrix_comp` and `LinearMap.toMatrix_id` give the physical
+  coordinate change and both quadratic-system gauge equations directly.
+- **Decision:** use these existing mathematical identities rather than expanding
+  virtual matrix entries or introducing a parallel window-gauge predicate.
+
+### Left inverses of independent physical cut factors — candidate (2026-10-29)
+
+- **Seen:** `CanonicalForm/InjectivePeriodicCuts.lean` and the independent
+  `Preparation/OBCRectangularCutMaps.lean` draft.
+- **Pattern:** injective `mulVecLin` gives a linear left inverse;
+  `LinearMap.toMatrix'_comp` transports its composition identity to matrices.
+- **Decision:** two matrix-specific occurrences. If another independent caller
+  needs this conversion, promote the rectangular matrix fact in QICLean and
+  consume its published dependency revision rather than duplicating a new
+  channel-independent matrix API in TNLean.
