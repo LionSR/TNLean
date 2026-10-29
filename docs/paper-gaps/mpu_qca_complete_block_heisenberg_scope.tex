@@ -3,7 +3,7 @@
 \usepackage{xurl}
 \usepackage[hidelinks]{hyperref}
 \input{command}
-\title{Complete-Block Scope of the Finite MPU Heisenberg Identity}
+\title{One-Window Scope of the Finite MPU Heisenberg Identity}
 \author{}
 \date{2026-10-29}
 \begin{document}
@@ -50,18 +50,28 @@ introduced as a hypothesis.
 
 \section{Remaining assembly}
 
-The complete blocks in this result are sites of the supplied blocked
-tensor $W$. They do not yet cover the arbitrary original-site prefix and
-suffix of a general finite interval, arbitrary local-observable support,
-or the common-interval forward/inverse identities required for a
-quasi-local automorphism. Thus
-(\ref{eq:mpu_qca_complete_block_finite_heisenberg}) is a finite ingredient;
-it is not the unrestricted formalization of
-\texttt{eq:appendix-1}.
+The preceding formula is first obtained for the supplied blocked tensor.
+There is also an original-site version: given a standard form of the
+two-site block of a length-$k$ block of $U$, retain arbitrary original-site
+prefix and suffix lengths $p,s$. Complete coordinate bijections give the
+same identity for the actual original MPO of length
+\begin{align}
+    N & =p+6k+s>1.
+    \label{eq:mpu_qca_original_residual_window_length}
+\end{align}
+The residual products stay inside the virtual trace before multiplication
+by the actual unitary's adjoint. Thus the original-site result does not
+require the whole chain length to be divisible by $k$ or $2k$.
 
-The elimination plan is to lift the existing residual-word three-block
-intertwiner through the same complete-coordinate construction, extend
-from the middle-pair observable to arbitrary supported observables, and
+The remaining restriction is to an observable on the middle two complete
+blocks and its neighbouring output window. Arbitrary supported regions,
+arbitrary buffered interval anchors expressed in the quasi-local
+observable system, and compatibility of the resulting forward/inverse
+families remain. These finite identities are therefore ingredients;
+neither is the unrestricted formalization of \texttt{eq:appendix-1}.
+
+The elimination plan is to extend the original-site window identity to
+arbitrary supported observables by finite tensor generation, and then
 prove equality of the resulting values in every common buffered interval.
 The physical-adjoint family supplies the inverse; these proved families
 then populate the existing compatible-local-action completion. The

@@ -39,3 +39,42 @@
     by its adjoint gives the conjugation formula. No periodic seam or
     exterior word is removed in this argument.
 \end{proof}
+
+\begin{theorem}[Actual original-site conjugation with arbitrary residuals]
+    \label{thm:mpu_finite_heisenberg_original_residuals}
+    \lean{MPOTensor.originalSiteHeisenbergInputEquiv,
+        MPOTensor.originalSiteHeisenbergOutputEquiv,
+        MPOTensor.originalSiteHeisenbergMatrix,
+        MPOTensor.originalSiteHeisenbergMatrix_intertwiner,
+        MPOTensor.originalSiteHeisenbergMatrix_isUnitaryBetween,
+        MPOTensor.originalSiteHeisenbergMatrix_conjugation}
+    \notready
+    \uses{thm:mpu_original_site_buffered_three_block_locality,
+        thm:mpu_finite_heisenberg_complete_block,
+        def:mpu_supplied_two_site_standard_form}
+    Let $U$ be an MPU, and suppose that the two-site block of its length-$k$
+    block has supplied standard-form gates $u,v$. For arbitrary original
+    residual lengths $p,s\ge0$ with $N=p+6k+s>1$, complete coordinates on
+    the actual original periodic operator give
+    \begin{align}
+        M_{p,s}(I\otimes A)M_{p,s}^\dagger
+         & =I\otimes B_{u,v}(A).
+        \label{eq:mpu_finite_heisenberg_original_residuals}
+    \end{align}
+    The middle observable is on two complete length-$k$ blocks. The
+    exterior identity includes every original-site residual coordinate.
+    In particular, the local output is independent of both residual
+    lengths, and no divisibility condition on $N$ is imposed.
+    This is the one-window finite-conjugation consequence of
+    \cite[lines~2300--2306]{Cirac2017MPU}, with the remaining scope recorded
+    in \cite{gap:mpu_qca_complete_block_heisenberg_scope}.
+\end{theorem}
+\begin{proof}
+    The actual direct-block equivalence identifies the three complete
+    middle blocks with their standard-form letters. The original residual
+    products remain at the virtual ends of the established three-block
+    trace identity. Complete input and output coordinate bijections lift
+    it to an intertwiner for the actual original finite operator. The MPU
+    property at length $N>1$ gives its unitarity; multiplication by the
+    adjoint proves the formula. No residual or periodic seam is discarded.
+\end{proof}

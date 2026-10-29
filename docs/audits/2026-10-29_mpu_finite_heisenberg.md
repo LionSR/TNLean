@@ -25,9 +25,20 @@ supplied as a new premise. Every n≥0 is covered, and the periodic seam
 remains inside the trace. The output coefficient is independent of n;
 only the identity spectator's ambient dimension changes.
 
-This is not the full original-site source stabilization theorem. It does
-not yet assemble arbitrary residuals, arbitrary buffered interval anchors,
-or arbitrary supported observables; no compatible-local-action datum,
+The source now also includes actual original-site finite conjugation for
+N=p+6k+s>1 with arbitrary original prefix and suffix lengths p,s. The complete
+middle coordinates use the actual direct two-site block equivalence and
+original blocked configuration equivalence. Each full original-MPO entry
+is the existing residual three-block coefficient; its open intertwiner
+therefore lifts to the full operator. Original U.IsMPU supplies unitarity.
+There is no whole-chain divisibility or residual-compatibility premise.
+The same local output is obtained for every p,s, with identities on all
+original exterior coordinates. This removes the complete-block ambient
+length restriction for this local observable.
+
+This is still not the full source stabilization theorem. It does not yet
+assemble arbitrary buffered interval anchors or arbitrary supported
+observables; no compatible-local-action datum,
 induced QCA, radius 4D⁴, or MPU/QCA index comparison is claimed. The exact
 scope and elimination plan are in
 `docs/paper-gaps/mpu_qca_complete_block_heisenberg_scope.tex`.

@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.MPU.TwoSiteStandardFormCircuit
 import TNLean.MPS.MPU.TwoSiteStandardFormOpenWord
+import TNLean.MPS.MPU.TwoSiteStandardFormResidualWord
 import QICLean.Algebra.MatrixKroneckerEmbed
 import Mathlib.Tactic.FinCases
 
@@ -21,12 +22,13 @@ the actual MPO's unitarity. The periodic seam remains in the word trace.
 Source: arXiv:1703.09188, equations StandardForm and SF, lines 603--622,
 and the finite conjugation underlying eq:appendix-1, lines 2300--2306.
 
-**Scope restriction (complete blocks):** This result is for the supplied
-blocked tensor itself and every length at least three in that alphabet.
-It does not yet assemble arbitrary original-site residuals, arbitrary
-interval embeddings, or a compatible quasi-local automorphism. The exact
-remaining scope is recorded in
-`docs/paper-gaps/mpu_qca_complete_block_heisenberg_scope.tex`.
+**Scope restriction (one finite window):** The first results concern the
+supplied blocked tensor at every length at least three. The original-site
+results also retain arbitrary original residual prefixes and suffixes,
+without a whole-chain divisibility premise. Arbitrary supported regions,
+buffered interval compatibility, and the quasi-local automorphism remain
+separate. See `docs/paper-gaps/mpu_qca_complete_block_heisenberg_scope.tex`.
+
 -/
 
 open scoped Matrix BigOperators Kronecker
@@ -172,5 +174,165 @@ theorem twoSiteHeisenbergMatrix_conjugation {d D ℓ r : ℕ}
       Matrix.rightKroneckerEmbed (twoLinkOutputObservable u v A) := by
   rw [twoSiteHeisenbergMatrix_intertwiner S n A, Matrix.mul_assoc,
     (twoSiteHeisenbergMatrix_isUnitaryBetween S n).2, Matrix.mul_one]
+
+private abbrev OriginalExterior (d p s : ℕ) (E : Type*) :=
+  ((Fin p → Fin d) × (Fin s → Fin d)) × E
+
+private def surroundWindowEquiv (α β γ δ : Type*) :
+    (((α × δ) × β) × γ) ≃ (α × ((β × γ) × δ)) where
+  toFun z := (z.1.1.1, ((z.1.2, z.2), z.1.1.2))
+  invFun z := (((z.1, z.2.2), z.2.1.1), z.2.1.2)
+  left_inv _ := rfl
+  right_inv _ := rfl
+
+private noncomputable def originalWindowMiddleEquiv (d k : ℕ) :
+    (Fin 3 → Fin (MPSTensor.blockPhysDim d k * MPSTensor.blockPhysDim d k)) ≃
+      (Fin (3 * (2 * k)) → Fin d) :=
+  (Equiv.arrowCongr (Equiv.refl (Fin 3)) (twoSiteDirectBlockEquiv d k).symm).trans
+    (MPSTensor.blockedConfigEquiv d 3 (2 * k))
+
+private noncomputable def originalWindowConfigEquiv (d k p s : ℕ)
+    {E C : Type*}
+    (head : (E × C) ≃ (Fin 3 →
+      Fin (MPSTensor.blockPhysDim d k * MPSTensor.blockPhysDim d k))) :
+    (OriginalExterior d p s E × C) ≃ (Fin (p + (3 * (2 * k) + s)) → Fin d) :=
+  (surroundWindowEquiv _ _ _ _).trans
+    (((Equiv.refl (Fin p → Fin d)).prodCongr
+      ((((head.trans (originalWindowMiddleEquiv d k)).prodCongr
+        (Equiv.refl (Fin s → Fin d))).trans (Fin.appendEquiv (3 * (2 * k)) s)))).trans
+          (Fin.appendEquiv p (3 * (2 * k) + s)))
+
+/-- Complete original-chain input coordinates with arbitrary residual
+prefix and suffix lengths. The middle observable is on two length-k
+blocks; no divisibility condition on the whole chain is imposed.
+Source: arXiv:1703.09188, finite conjugation, lines 2300--2306. -/
+noncomputable def originalSiteHeisenbergInputEquiv (d k p s : ℕ) :
+    (OriginalExterior d p s
+      (Fin (MPSTensor.blockPhysDim d k * MPSTensor.blockPhysDim d k) ×
+        Fin (MPSTensor.blockPhysDim d k * MPSTensor.blockPhysDim d k)) ×
+          HalfPair (MPSTensor.blockPhysDim d k)) ≃
+      (Fin (p + (3 * (2 * k) + s)) → Fin d) :=
+  originalWindowConfigEquiv d k p s (windowInputHeadEquiv (MPSTensor.blockPhysDim d k))
+
+/-- Complete original-chain output coordinates separate the four output
+half-blocks from the arbitrary original residuals and exterior halves.
+Source: arXiv:1703.09188, finite conjugation, lines 2300--2306. -/
+noncomputable def originalSiteHeisenbergOutputEquiv (d k p s : ℕ) :
+    (OriginalExterior d p s (HalfPair (MPSTensor.blockPhysDim d k)) ×
+      FourHalves (MPSTensor.blockPhysDim d k)) ≃
+        (Fin (p + (3 * (2 * k) + s)) → Fin d) :=
+  originalWindowConfigEquiv d k p s (windowOutputHeadEquiv (MPSTensor.blockPhysDim d k))
+
+/-- The actual original-site MPO, in complete window coordinates with
+arbitrary original residual lengths. Source: arXiv:1703.09188,
+StandardForm and eq:appendix-1, lines 603--622 and 2300--2306. -/
+noncomputable def originalSiteHeisenbergMatrix {d D : ℕ}
+    (U : MPOTensor d D) (k p s : ℕ) :
+    Matrix (OriginalExterior d p s (HalfPair (MPSTensor.blockPhysDim d k)) ×
+      FourHalves (MPSTensor.blockPhysDim d k))
+      (OriginalExterior d p s
+        (Fin (MPSTensor.blockPhysDim d k * MPSTensor.blockPhysDim d k) ×
+          Fin (MPSTensor.blockPhysDim d k * MPSTensor.blockPhysDim d k)) ×
+            HalfPair (MPSTensor.blockPhysDim d k)) ℂ :=
+  Matrix.reindex (originalSiteHeisenbergOutputEquiv d k p s).symm
+    (originalSiteHeisenbergInputEquiv d k p s).symm
+      (mpo U (p + (3 * (2 * k) + s)))
+
+private theorem originalSiteHeisenbergMatrix_apply {d D ℓ r k p s : ℕ}
+    (U : MPOTensor d D)
+    {u : Matrix (Fin ℓ × Fin r) (HalfPair (MPSTensor.blockPhysDim d k)) ℂ}
+    {v : Matrix (HalfPair (MPSTensor.blockPhysDim d k)) (Fin r × Fin ℓ) ℂ}
+    (S : TwoSiteStandardFormData (blockTwo (blockTensor U k)) u v)
+    (e : OriginalExterior d p s (HalfPair (MPSTensor.blockPhysDim d k)))
+    (f : OriginalExterior d p s
+      (Fin (MPSTensor.blockPhysDim d k * MPSTensor.blockPhysDim d k) ×
+        Fin (MPSTensor.blockPhysDim d k * MPSTensor.blockPhysDim d k)))
+    (x : FourHalves (MPSTensor.blockPhysDim d k))
+    (j : HalfPair (MPSTensor.blockPhysDim d k)) :
+    originalSiteHeisenbergMatrix U k p s (e, x) (f, j) =
+      twoSiteThreeBlockTrace S
+        (evalWord U (List.ofFn e.1.1) (List.ofFn f.1.1))
+        (evalWord U (List.ofFn e.1.2) (List.ofFn f.1.2))
+        e.2.1 e.2.2 f.2.1 f.2.2 x j := by
+  let midI := fun t : Fin 3 ↦ (twoSiteDirectBlockEquiv d k).symm
+    (windowOutputHeadEquiv (MPSTensor.blockPhysDim d k) (e.2, x) t)
+  let midJ := fun t : Fin 3 ↦ (twoSiteDirectBlockEquiv d k).symm
+    (windowInputHeadEquiv (MPSTensor.blockPhysDim d k) (f.2, j) t)
+  change mpo U (p + (3 * (2 * k) + s))
+    (Fin.append e.1.1 (Fin.append
+      (MPSTensor.blockedConfigEquiv d 3 (2 * k) midI) e.1.2))
+    (Fin.append f.1.1 (Fin.append
+      (MPSTensor.blockedConfigEquiv d 3 (2 * k) midJ) f.1.2)) = _
+  apply originalSite_threeBlock_window_entry U k p s S
+    e.1.1 f.1.1 e.1.2 f.1.2 midI midJ e.2.1 e.2.2 f.2.1 f.2.2 x j
+  · funext t
+    change (twoSiteDirectBlockEquiv d k)
+      ((twoSiteDirectBlockEquiv d k).symm
+        (windowOutputHeadEquiv (MPSTensor.blockPhysDim d k) (e.2, x) t)) = _
+    exact (twoSiteDirectBlockEquiv d k).apply_symm_apply _
+  · funext t
+    change (twoSiteDirectBlockEquiv d k)
+      ((twoSiteDirectBlockEquiv d k).symm
+        (windowInputHeadEquiv (MPSTensor.blockPhysDim d k) (f.2, j) t)) = _
+    exact (twoSiteDirectBlockEquiv d k).apply_symm_apply _
+
+/-- Actual original-site finite MPO intertwining with arbitrary residual
+prefix and suffix lengths. The whole chain need not be a multiple of the
+simple-block length. Source: arXiv:1703.09188, StandardForm and
+finite conjugation, lines 603--622 and 2300--2306. -/
+theorem originalSiteHeisenbergMatrix_intertwiner {d D ℓ r : ℕ}
+    (U : MPOTensor d D) (k p s : ℕ)
+    {u : Matrix (Fin ℓ × Fin r) (HalfPair (MPSTensor.blockPhysDim d k)) ℂ}
+    {v : Matrix (HalfPair (MPSTensor.blockPhysDim d k)) (Fin r × Fin ℓ) ℂ}
+    (S : TwoSiteStandardFormData (blockTwo (blockTensor U k)) u v)
+    (A : Matrix (HalfPair (MPSTensor.blockPhysDim d k))
+      (HalfPair (MPSTensor.blockPhysDim d k)) ℂ) :
+    originalSiteHeisenbergMatrix U k p s * Matrix.rightKroneckerEmbed A =
+      Matrix.rightKroneckerEmbed (twoLinkOutputObservable u v A) *
+        originalSiteHeisenbergMatrix U k p s := by
+  classical
+  ext row col
+  rcases row with ⟨e, x⟩
+  rcases col with ⟨f, j⟩
+  have h := congrArg (fun M ↦ M x j)
+    (twoSite_threeBlock_trace_intertwiner_with_endpoints S
+      (evalWord U (List.ofFn e.1.1) (List.ofFn f.1.1))
+      (evalWord U (List.ofFn e.1.2) (List.ofFn f.1.2))
+      e.2.1 e.2.2 f.2.1 f.2.2 A)
+  simp only [Matrix.mul_apply] at h
+  simpa [Matrix.mul_apply, Fintype.sum_prod_type, Matrix.rightKroneckerEmbed_apply,
+    Matrix.kroneckerMap_apply, Matrix.one_apply, originalSiteHeisenbergMatrix_apply U S] using h
+
+/-- The actual original finite MPO is unitary between the complete window
+coordinate systems whenever its length is in the MPU convention.
+Source: arXiv:1703.09188, UisUnitary and eq:appendix-1, lines 327--335
+and 2300--2306. -/
+theorem originalSiteHeisenbergMatrix_isUnitaryBetween {d D : ℕ}
+    {U : MPOTensor d D} (hU : U.IsMPU) (k p s : ℕ)
+    (hN : 1 < p + (3 * (2 * k) + s)) :
+    (originalSiteHeisenbergMatrix U k p s).IsUnitaryBetween := by
+  have h := (Matrix.isUnitaryBetween_iff_mem_unitaryGroup
+    (mpo U (p + (3 * (2 * k) + s)))).mpr (hU.mpo_mem_unitaryGroup hN)
+  exact h.reindex _ (originalSiteHeisenbergOutputEquiv d k p s).symm
+    (originalSiteHeisenbergInputEquiv d k p s).symm
+
+/-- The actual original-chain finite Heisenberg action of a middle
+observable has the same local output for every residual prefix and suffix,
+without a chain-length divisibility premise. This is a finite local
+stabilization identity, not yet the arbitrary-region compatible action.
+Source: arXiv:1703.09188, eq:appendix-1, lines 2300--2306. -/
+theorem originalSiteHeisenbergMatrix_conjugation {d D ℓ r : ℕ}
+    {U : MPOTensor d D} (hU : U.IsMPU) (k p s : ℕ)
+    (hN : 1 < p + (3 * (2 * k) + s))
+    {u : Matrix (Fin ℓ × Fin r) (HalfPair (MPSTensor.blockPhysDim d k)) ℂ}
+    {v : Matrix (HalfPair (MPSTensor.blockPhysDim d k)) (Fin r × Fin ℓ) ℂ}
+    (S : TwoSiteStandardFormData (blockTwo (blockTensor U k)) u v)
+    (A : Matrix (HalfPair (MPSTensor.blockPhysDim d k))
+      (HalfPair (MPSTensor.blockPhysDim d k)) ℂ) :
+    originalSiteHeisenbergMatrix U k p s * Matrix.rightKroneckerEmbed A *
+        (originalSiteHeisenbergMatrix U k p s)ᴴ =
+      Matrix.rightKroneckerEmbed (twoLinkOutputObservable u v A) := by
+  rw [originalSiteHeisenbergMatrix_intertwiner U k p s S A, Matrix.mul_assoc,
+    (originalSiteHeisenbergMatrix_isUnitaryBetween hU k p s hN).2, Matrix.mul_one]
 
 end MPOTensor
