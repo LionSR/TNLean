@@ -42,6 +42,9 @@ theorem bipartiteMatrixToQuasiLocalObservable_leftKroneckerEmbed
     bipartiteMatrixToQuasiLocalObservable h (Matrix.leftKroneckerEmbed A) =
       matrixToQuasiLocalObservable d Λ A := by
   have hi := bipartiteLocalAlgebraEquiv_localInclusion_left h (CStarMatrix.ofMatrix A)
+  change (bipartiteLocalAlgebraEquiv h)
+    (localInclusion _ (CStarMatrix.ofMatrix A)) =
+      Matrix.leftKroneckerEmbed A at hi
   change quasiLocalObservable d (Λ ∪ Γ)
     ((bipartiteLocalAlgebraEquiv h).symm (Matrix.leftKroneckerEmbed A)) = _
   rw [← hi, StarAlgEquiv.symm_apply_apply, quasiLocalObservable_localInclusion]
@@ -54,6 +57,9 @@ theorem bipartiteMatrixToQuasiLocalObservable_rightKroneckerEmbed
     bipartiteMatrixToQuasiLocalObservable h (Matrix.rightKroneckerEmbed A) =
       matrixToQuasiLocalObservable d Γ A := by
   have hi := bipartiteLocalAlgebraEquiv_localInclusion_right h (CStarMatrix.ofMatrix A)
+  change (bipartiteLocalAlgebraEquiv h)
+    (localInclusion _ (CStarMatrix.ofMatrix A)) =
+      Matrix.rightKroneckerEmbed A at hi
   change quasiLocalObservable d (Λ ∪ Γ)
     ((bipartiteLocalAlgebraEquiv h).symm (Matrix.rightKroneckerEmbed A)) = _
   rw [← hi, StarAlgEquiv.symm_apply_apply, quasiLocalObservable_localInclusion]
@@ -74,6 +80,9 @@ theorem map_range_leftKroneckerEmbed_bipartiteMatrixToQuasiLocalObservable
   · rintro ⟨A, rfl⟩
     refine ⟨Matrix.leftKroneckerEmbed (CStarMatrix.ofMatrixStarAlgEquiv.symm A),
       ⟨_, rfl⟩, ?_⟩
+    change bipartiteMatrixToQuasiLocalObservable h
+      (Matrix.leftKroneckerEmbed (CStarMatrix.ofMatrixStarAlgEquiv.symm A)) =
+        quasiLocalObservable d Λ A
     rw [bipartiteMatrixToQuasiLocalObservable_leftKroneckerEmbed]
     change quasiLocalObservable d Λ
       (CStarMatrix.ofMatrixStarAlgEquiv (CStarMatrix.ofMatrixStarAlgEquiv.symm A)) = _
@@ -94,6 +103,9 @@ theorem map_range_rightKroneckerEmbed_bipartiteMatrixToQuasiLocalObservable
   · rintro ⟨A, rfl⟩
     refine ⟨Matrix.rightKroneckerEmbed (CStarMatrix.ofMatrixStarAlgEquiv.symm A),
       ⟨_, rfl⟩, ?_⟩
+    change bipartiteMatrixToQuasiLocalObservable h
+      (Matrix.rightKroneckerEmbed (CStarMatrix.ofMatrixStarAlgEquiv.symm A)) =
+        quasiLocalObservable d Γ A
     rw [bipartiteMatrixToQuasiLocalObservable_rightKroneckerEmbed]
     change quasiLocalObservable d Γ
       (CStarMatrix.ofMatrixStarAlgEquiv (CStarMatrix.ofMatrixStarAlgEquiv.symm A)) = _
