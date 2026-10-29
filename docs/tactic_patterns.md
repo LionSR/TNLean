@@ -9723,4 +9723,4 @@ there is no need for a new tactic.
   equality-transported range presentation now consume these adapters;
   the translated even-factor coordinates use them directly.
 - **Notes:** The matrix-specific support-map presentation in the index
-  comparison can use the same owner at the next parent propagation.
+  comparison uses this shared owner; its duplicate private helper is removed.
