@@ -72,7 +72,7 @@ theorem halfLine_gaussian_integral_eq_measureReal
     _ = ∫ t : ℝ in Set.Ioi ω, (kernel h⁻¹ t : ℂ) := htranslate
     _ = Complex.ofReal (∫ t : ℝ in Set.Ici ω, kernel h⁻¹ t) := by
       rw [← integral_Ici_eq_integral_Ioi]
-      exact MeasureTheory.integral_complex_ofReal
+      exact _root_.integral_complex_ofReal
     _ = _ := congrArg Complex.ofReal
       (integral_kernel_eq_measureReal (inv_ne_zero hh.ne') (Set.Ici ω))
 
