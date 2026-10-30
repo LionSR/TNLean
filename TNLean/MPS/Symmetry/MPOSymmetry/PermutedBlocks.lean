@@ -235,6 +235,21 @@ theorem isDressedProportional_lSymbol (hA : ∀ x, Kraus.IsNormal (A x))
         (MPSTensor.SameMPV₂Pos.refl (A x)))
   exact MPSTensor.isDressedProportional_dressedScalar hex
 
+/-- **Uniqueness of the L-symbols**: a scalar `z` with `actV g h x ~ z · fuseV g h x` against
+long words is the L-symbol `Lˣ_{g,h}`. This is how an L-symbol is read off from explicit fusion
+and action tensors.
+
+Source: arXiv:2502.20257, `eq:defL`, `main.tex` lines 1905--1913. -/
+theorem eq_lSymbol_of_isDressedProportional (hA : ∀ x, Kraus.IsNormal (A x))
+    (hD : ∀ x, 0 < D x) (hperm : ∀ g x, CarriesMPV (F.tensor g) (A x) (A (g • x)))
+    {x : X} {g h : G} {z : ℂ}
+    (hz : MPSTensor.IsDressedProportional (actTensor (mulTensor (F.tensor g) (F.tensor h)) (A x))
+      (ad.actV g h x) (ad.fuseV fd g h x) z) :
+    z = ad.lSymbol fd x g h := by
+  obtain ⟨W, hW⟩ := ad.exists_isReduction_actV g h x
+  exact hz.eq_of_forall_exists_ne_zero (isDressedProportional_lSymbol hA hperm x g h)
+    (hW.exists_mul_evalWord_ne_zero (hA _) (hD _))
+
 /-! ### The five reductions of the triple action -/
 
 section Triple
