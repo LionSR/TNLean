@@ -15,6 +15,7 @@ import TNLean.Lattice.CrossingSupports
 import TNLean.Lattice.EntropyComparison
 import TNLean.Lattice.EntropyDimension
 import TNLean.Lattice.FiniteDomain
+import TNLean.Lattice.GaussianFilteredCommutatorSeries
 import TNLean.Lattice.GaussianFilteredGround
 import TNLean.Lattice.GaussianFilteredIncrement
 import TNLean.Lattice.GaussianFilteredLocality

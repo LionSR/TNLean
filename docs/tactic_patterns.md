@@ -9903,3 +9903,16 @@ there is no need for a new tactic.
   private, so the strip argument proves its normalization step locally.
 - **Decision:** Two consumers, below the promotion threshold. A third consumer
   should extract the common finite-chain argument to a shared narrow module.
+
+### Specializing a nonnegative Gaussian variance — candidate (2026-10-29)
+
+- **Seen:** `Lattice/GaussianFilteredCommutatorSeries.lean`, the exponential
+  identity and its norm-convergent series specialization.
+- **Pattern:** Identify the actual filter variance `(q/ΔE²).toNNReal` with
+  the source's nonnegative real variance, then transport that equality
+  through the real-to-complex coercion once before applying the existing
+  QICLean theorem.
+- **Reuse:** `Real.coe_toNNReal`, `div_nonneg` and `congrArg` supply the
+  whole argument; no Gaussian integration or exponential proof is copied.
+- **Decision:** Two short occurrences in one file; no custom tactic or
+  new variance definition is needed.
