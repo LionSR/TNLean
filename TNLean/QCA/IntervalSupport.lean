@@ -40,7 +40,7 @@ theorem intervalCoordinates_localInclusion_eq_embedOp
     · intro h i hi
       have hx : (E i).val ∉ Λ := by
         intro hx
-        exact hi ⟨(E i).val, hx⟩ (by simp only [e, Equiv.symm_apply_apply])
+        exact hi ⟨(E i).val, hx⟩ (E.symm_apply_apply i)
       have h' := congrFun h ⟨(E i).val, Finset.mem_sdiff.mpr ⟨(E i).property, hx⟩⟩
       change σ (E.symm (E i)) = τ (E.symm (E i)) at h'
       simpa only [Equiv.symm_apply_apply] using h'
@@ -58,7 +58,7 @@ theorem intervalCoordinates_localInclusion_eq_embedOp
       (if (Config.splitEquiv hΛ (finiteChainConfigEquiv d N a σ)).2 =
         (Config.splitEquiv hΛ (finiteChainConfigEquiv d N a τ)).2 then 1 else 0) =
       if QuantumCircuit.AgreeOff e σ τ then A (σ ∘ e) (τ ∘ e) else 0
-  rw [hAgree]
+  simp only [hAgree]
   split_ifs <;> simp only [mul_one, mul_zero]
 
 /-- Every actual local inclusion is supported on the same numbered sites.
@@ -80,6 +80,6 @@ theorem intervalCoordinates_localInclusion_mem_supportedOperators
   apply QuantumCircuit.supportedOperators_mono ?_
     (QuantumCircuit.embedOp_mem_supportedOperators he (CStarMatrix.ofMatrix.symm A))
   rintro _ ⟨x, rfl⟩
-  simpa only [e, Equiv.apply_symm_apply] using x.property
+  simpa only [e, Set.mem_ofPred_eq, Equiv.apply_symm_apply] using x.property
 
 end SpinChain
