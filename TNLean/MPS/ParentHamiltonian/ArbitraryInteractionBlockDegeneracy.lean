@@ -5,7 +5,6 @@ Authors: TNLean contributors
 -/
 import QICLean.Analysis.WeightedPositiveKernel
 import TNLean.MPS.ParentHamiltonian.CyclicBlockState
-import TNLean.MPS.ParentHamiltonian.BlockGroundSpaceMapContinuity
 import TNLean.MPS.ParentHamiltonian.Martingale.PeriodicInteraction
 
 /-!
@@ -13,7 +12,7 @@ import TNLean.MPS.ParentHamiltonian.Martingale.PeriodicInteraction
 
 The interaction is an arbitrary linear operator, rather than the canonical
 parent projector. A simultaneous span on the complementary sites separates
-the actual weighted block vectors after the interaction acts. Positivity
+the weighted block vectors after the interaction acts. Positivity
 then passes from a periodic Hamiltonian equation to its individual local
 terms, giving the blockwise Hamiltonian equations.
 
@@ -104,7 +103,7 @@ theorem periodicLocalInteractionES_smul_mpvState_eq_zero_of_wordTupleSpanTop
     LinearMap.coe_toContinuousLinearMap'] using
     congrArg (fun v => v σ) (hEach j (Kraus.evalWord (A j) (List.ofFn τ)))
 
-/-- Every actual block vector is a zero-energy state of an arbitrary positive
+/-- Every block vector is a zero-energy state of an arbitrary positive
 periodic interaction whenever their sum with nonzero coefficients has zero
 energy and the complementary word tuples span. Positivity supplies the individual local
 annihilation equations rather than adding them as hypotheses.
@@ -129,7 +128,7 @@ theorem periodicInteractionHamiltonianES_mpvState_eq_zero_of_wordTupleSpanTop
   rw [map_smul] at hblock
   exact (smul_eq_zero.mp hblock).resolve_left (hc j)
 
-/-- A simultaneous word span makes the actual periodic block vectors linearly
+/-- A simultaneous word span makes the periodic block vectors linearly
 independent when every virtual block is nonempty. This gives the degeneracy
 conclusion in PGVWC07, Theorem 11, `2blocks.1`, lines 1407–1416. -/
 theorem linearIndependent_mpvState_of_wordTupleSpanTop

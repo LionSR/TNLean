@@ -9711,15 +9711,14 @@ there is no need for a new tactic.
   Positivity is used separately via QICLean's
   `WeightedPositiveKernel.apply_sum_eq_zero_iff`.
 
-### Cyclic local interaction in its defining coordinates — promoted
+### Cyclic local interaction in its defining coordinates — candidate
 - **Pattern:** expose a translated arbitrary interaction by applying the
   active-block isometry, then cancel the inverse isometry.
-- **Seen:** both local separation uses in
-  `MPS/ParentHamiltonian/ArbitraryInteractionBlockDegeneracy.lean`, and the
-  all-volumes consumer under development in
-  `MPS/ParentHamiltonian/FiniteVolumeConstraintPropagation.lean`.
+- **Seen:** two local separation uses in
+  `MPS/ParentHamiltonian/ArbitraryInteractionBlockDegeneracy.lean` (one file,
+  two occurrences; below the promotion threshold).
 - **Abstraction:** `cyclicActiveBlock_periodicLocalInteractionES_apply` in
-  the defining periodic-interaction module. Consumers use this actual action
+  the defining periodic-interaction module. Consumers use this action
   formula rather than repeating conjugation and isometry coercion rewrites.
 
 ### Functional calculus on a Hermitian eigenbasis — candidate (2026-10-28)
