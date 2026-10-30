@@ -1,7 +1,7 @@
 \section{Stronger density and the paper energy rate at one charge point}
 \label{sec:arealaw-source-selected-energy}
 
-\begin{theorem}[Eight-nu density margins]
+\begin{lemma}[Eight-nu density margins]
     \label{thm:arealaw-eight-nu-density-margins}
     \lean{TNLean.PEPS.AreaLaw.Scan.final_eightNuDensity_margins}
     \leanok
@@ -12,14 +12,14 @@
         -8\nu-\left(\frac{\omega-(1-\ell-\mu)}4+\nu\right)
                           & =\frac{35697}{200000}.
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Direct substitution of the exact rational final exponents gives both
     displayed values.
 \end{proof}
 
-\begin{theorem}[Principal density at the stronger rate]
+\begin{lemma}[Principal density at the stronger rate]
     \label{thm:arealaw-principal-density-eight-nu}
     \lean{TNLean.PEPS.AreaLaw.Scan.exists_final_principalDensity_le_eightNu}
     \leanok
@@ -30,7 +30,7 @@
         C\frac{n^e/m+(W/K)^{1/4}(\log n)^{C_l}}{n^{-\nu}}
          & \leq n^{-8\nu}.
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:arealaw-source-density-scale}
@@ -39,7 +39,7 @@
     the two strict margins above yield the displayed bound.
 \end{proof}
 
-\begin{theorem}[Unchanged interval and stronger selected density]
+\begin{lemma}[Unchanged interval and stronger selected density]
     \label{thm:arealaw-selected-density-eight-nu}
     \lean{TNLean.PEPS.AreaLaw.Scan.exists_final_selectedDensity_le_eightNu}
     \leanok
@@ -50,7 +50,7 @@
     threshold, eventually in replica number the unchanged selected point
     satisfies density at most $\eta=n^{-8\nu}$ and every proposition
     already attached to that point.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:arealaw-principal-density-eight-nu,
@@ -64,7 +64,7 @@
     density by $\eta=n^{-8\nu}$.
 \end{proof}
 
-\begin{theorem}[Paper-rate charge energy and sharp comparison]
+\begin{lemma}[Paper-rate charge energy and sharp comparison]
     \label{thm:arealaw-source-selected-sharp-energy}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_sourceTarget_selected_actualCharge_sharp_energy,TNLean.PEPS.AreaLaw.Scan.CollarScan.sourceSelectedSharpEnergyThreshold,TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_sourceTarget_selected_actualCharge_sharp_energy_of_threshold_le}
     \leanok
@@ -101,7 +101,7 @@
     upper bound, for every $0<\tau\leq1/2$ at the same point.
     All other entropy, mass, moment and replica-remainder terms remain
     unchanged, including the loss $37K_{\mathrm{mom}}a$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:arealaw-source-selected-sharp-comparison,

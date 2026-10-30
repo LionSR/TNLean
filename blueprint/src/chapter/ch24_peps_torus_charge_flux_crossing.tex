@@ -8,7 +8,7 @@
     For $v=(x,y)$, let $R_v$ be the translated $4\times 2$ strip with lower-left vertex $(x-1,y+1)$, charge bond $e_c$ joining $(x+1,y+1)$ to $(x+2,y+1)$, initial flux-string endpoint in its leftmost plaquette, and spanning tree consisting of all six horizontal bonds and the rightmost vertical bond (\cite{Schuch2010PEPS}, lines 2560--2581).
 \end{definition}
 
-\begin{theorem}[A physical charge crossing beside the flux endpoint]
+\begin{lemma}[A physical charge crossing beside the flux endpoint]
     \label{thm:peps_torus_charge_flux_crossing}
     \lean{TNLean.PEPS.IsGIsometric.exists_unitary_torusChargeFluxCrossing,
         TNLean.PEPS.IsGIsometric.exists_unitary_torusCorrelatedChargeFluxCrossing}
@@ -22,8 +22,8 @@
         \chi(pq^{-1}\eta_c)\longmapsto\chi(pq^{-1}k^{-1}\eta_c). \label{eq:torus_charge_flux_crossing}
     \end{align}
     This auxiliary local operation does not identify the complete braid or reunion experiment of \cite{Schuch2010PEPS}, lines 2560--2615.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
-    Under $u^{(0)}_k$ (Theorem~\ref{thm:peps_torus_swept_string_transport}), the seven tree bonds carry $1$ except the rightmost upward bond $k$, so the normalized tree gauge is $1$ on the lower row (including $t(e_c)$) and $k$ on the upper row, and the leftmost chord residual is $k^{-1}$ (or $k$ when reversed at a seam).
-    Applying Theorem~\ref{thm:peps_regular_charge_flux_physical_transport} (or its adjoint) gives the first map in (\ref{eq:torus_charge_flux_crossing}), and substituting $\chi(\cdot)\mapsto\chi(pq^{-1}\cdot)$ gives the second.
+    Under $u^{(0)}_k$ (Lemma~\ref{thm:peps_torus_swept_string_transport}), the seven tree bonds carry $1$ except the rightmost upward bond $k$, so the normalized tree gauge is $1$ on the lower row (including $t(e_c)$) and $k$ on the upper row, and the leftmost chord residual is $k^{-1}$ (or $k$ when reversed at a seam).
+    Applying Lemma~\ref{thm:peps_regular_charge_flux_physical_transport} (or its adjoint) gives the first map in (\ref{eq:torus_charge_flux_crossing}), and substituting $\chi(\cdot)\mapsto\chi(pq^{-1}\cdot)$ gives the second.
 \end{proof}

@@ -89,7 +89,7 @@
     Addition is modulo two, so $a+(a+b)=b$.
 \end{proof}
 
-\begin{theorem}[Four-site blocking of Kitaev's elementary tensor]%
+\begin{lemma}[Four-site blocking of Kitaev's elementary tensor]%
     \label{thm:peps_kitaev_checkerboard_blocking}
     \lean{TNLean.PEPS.kitaevCheckerboardBlock_apply,
         TNLean.PEPS.kitaevCheckerboardBlock_boundaryCNOT}
@@ -114,7 +114,7 @@
     and four boundary registers fixed at zero. This is a coefficient
     identity for the open block; it does not assert a physical
     renormalization operation or a globally blocked lattice identity.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     A nonzero summand forces
@@ -140,7 +140,7 @@
     \end{align}
 \end{definition}
 
-\begin{theorem}[The tensor-map identity after the boundary unitary]%
+\begin{lemma}[The tensor-map identity after the boundary unitary]%
     \label{thm:peps_kitaev_checkerboard_map_identity}
     \lean{TNLean.PEPS.kitaevBoundaryZeroEmbedding_apply,
         TNLean.PEPS.kitaevBoundaryCNOT_permMatrix_mem_unitaryGroup,
@@ -183,13 +183,13 @@
     Thus this identity connects the original checkerboard tensor to the
     existing color-difference construction, with its coefficient normalization
     unchanged.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     A permutation of an orthonormal basis is unitary, and fixing four
     registers at zero takes distinct color basis vectors to distinct boundary
     basis vectors. The coefficient formula of
-    Theorem~\ref{thm:peps_kitaev_checkerboard_blocking} gives the matrix
+    Lemma~\ref{thm:peps_kitaev_checkerboard_blocking} gives the matrix
     identity: $E^\dagger$ kills every boundary configuration with a nonzero
     second register and retains the first registers otherwise. The cyclic
     reordering follows from the four differences
