@@ -92,8 +92,12 @@ theorem adjacentSupportJoinMatrixEquiv_apply_product
       ⟨matrixToQuasiLocalObservable d (leftPair x) a *
           matrixToQuasiLocalObservable d (rightPair x) b,
         (embeddedEvenSupportAlgebra hω x ⊔ embeddedOddSupportAlgebra hω x).mul_mem
-          (le_sup_left (StarSubalgebra.mem_map.mpr ⟨a, a.2, rfl⟩))
-          (le_sup_right (StarSubalgebra.mem_map.mpr ⟨b, b.2, rfl⟩))⟩ =
+          ((le_sup_left : embeddedEvenSupportAlgebra hω x ≤
+              embeddedEvenSupportAlgebra hω x ⊔ embeddedOddSupportAlgebra hω x)
+            (StarSubalgebra.mem_map.mpr ⟨a, a.2, rfl⟩))
+          ((le_sup_right : embeddedOddSupportAlgebra hω x ≤
+              embeddedEvenSupportAlgebra hω x ⊔ embeddedOddSupportAlgebra hω x)
+            (StarSubalgebra.mem_map.mpr ⟨b, b.2, rfl⟩))⟩ =
       Matrix.reindex finProdFinEquiv finProdFinEquiv (eR a ⊗ₖ eS b) := by
   unfold adjacentSupportJoinMatrixEquiv
   rw [StarSubalgebra.commutingSupEquivMatrix_apply_mul]
@@ -261,8 +265,12 @@ theorem physicalPairSupportJoinMatrixEquiv_apply_product
       ⟨matrixToQuasiLocalObservable d (rightPair x) a *
           matrixToQuasiLocalObservable d (leftPair (x + 1)) b,
         (embeddedOddSupportAlgebra hω x ⊔ embeddedEvenSupportAlgebra hω (x + 1)).mul_mem
-          (le_sup_left (StarSubalgebra.mem_map.mpr ⟨a, a.2, rfl⟩))
-          (le_sup_right (StarSubalgebra.mem_map.mpr ⟨b, b.2, rfl⟩))⟩ =
+          ((le_sup_left : embeddedOddSupportAlgebra hω x ≤
+              embeddedOddSupportAlgebra hω x ⊔ embeddedEvenSupportAlgebra hω (x + 1))
+            (StarSubalgebra.mem_map.mpr ⟨a, a.2, rfl⟩))
+          ((le_sup_right : embeddedEvenSupportAlgebra hω (x + 1) ≤
+              embeddedOddSupportAlgebra hω x ⊔ embeddedEvenSupportAlgebra hω (x + 1))
+            (StarSubalgebra.mem_map.mpr ⟨b, b.2, rfl⟩))⟩ =
       Matrix.reindex finProdFinEquiv finProdFinEquiv (eR a ⊗ₖ eS b) := by
   unfold physicalPairSupportJoinMatrixEquiv
   rw [StarSubalgebra.commutingSupEquivMatrix_apply_mul]
