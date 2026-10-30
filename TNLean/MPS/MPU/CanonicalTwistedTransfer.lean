@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.MPS.MPU.AdjointSimpleContraction
 import TNLean.MPS.MPU.EvenFamilyVirtualGauge
 import TNLean.MPS.MPU.PhysicalAdjointCanonicalForm
 import TNLean.MPS.MPU.TimeReversalTwistedTransfer
@@ -183,7 +184,8 @@ theorem IsMPUCanonicalFormII.exists_intrinsic_blocking_phase_formula
     (hTR : ∀ N : ℕ, 1 < N → Even N → mpo U N = (mpo U N)ᴴ) :
     ∃ η C : ℂ, (η = 1 ∨ η = -1) ∧
       intrinsicTimeReversalSign U = η * C ∧
-      ∀ k : ℕ, 0 < k → intrinsicTimeReversalSign (blockTensor U k) = η ^ k * C := by
+      ∀ k : ℕ, 0 < k →
+        intrinsicTimeReversalSign (MPOTensor.blockTensor U k) = η ^ k * C := by
   classical
   let : NeZero d := hU.neZero_phys
   let : NeZero D := hU.neZero_bond
@@ -225,7 +227,7 @@ theorem IsMPUCanonicalFormII.intrinsic_blocking_trace_eq_of_odd
     {U : MPOTensor d D} (hU : IsMPUCanonicalFormII U)
     (hTR : ∀ N : ℕ, 1 < N → Even N → mpo U N = (mpo U N)ᴴ)
     (k : ℕ) (hk : 0 < k) (hodd : Odd k) :
-    intrinsicTimeReversalSign (blockTensor U k) = intrinsicTimeReversalSign U := by
+    intrinsicTimeReversalSign (MPOTensor.blockTensor U k) = intrinsicTimeReversalSign U := by
   obtain ⟨η, C, hη, hfirst, hform⟩ := hU.exists_intrinsic_blocking_phase_formula hTR
   have hηsq : η ^ 2 = 1 := sq_eq_one_iff.mpr hη
   obtain ⟨m, hm⟩ := hodd
@@ -244,8 +246,8 @@ theorem IsMPUCanonicalFormII.intrinsic_blocking_trace_eq_of_even
     {U : MPOTensor d D} (hU : IsMPUCanonicalFormII U)
     (hTR : ∀ N : ℕ, 1 < N → Even N → mpo U N = (mpo U N)ᴴ)
     (k : ℕ) (hk : 0 < k) (heven : Even k) :
-    intrinsicTimeReversalSign (blockTensor U k) =
-      intrinsicTimeReversalSign (blockTensor U 2) := by
+    intrinsicTimeReversalSign (MPOTensor.blockTensor U k) =
+      intrinsicTimeReversalSign (MPOTensor.blockTensor U 2) := by
   obtain ⟨η, C, hη, _, hform⟩ := hU.exists_intrinsic_blocking_phase_formula hTR
   have hηsq : η ^ 2 = 1 := sq_eq_one_iff.mpr hη
   obtain ⟨m, hm⟩ := heven
