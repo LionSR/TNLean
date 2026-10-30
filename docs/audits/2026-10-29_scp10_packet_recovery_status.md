@@ -16,14 +16,11 @@ This is a bounded source/provenance audit, without Lean elaboration or a build.
   `a6238a4b60f9dee3af57ef4d7d369c7b13d0e0e3`: finite rectangular path deformation.
 - [#8729](https://github.com/LionSR/TNLean/pull/8729) merged on 2026-10-08 as
   `ff0dac2d10fc74cd9d75d798d8fb3d74b8e8bd1b`: collared open-boundary deformation.
-- [#10364](https://github.com/LionSR/TNLean/pull/10364) is open, ready for review,
-  and mergeable at `0b9f106a0e91c97d641a4fb303a9a5749fdf6fb3`. It proves the
+- [#10364](https://github.com/LionSR/TNLean/pull/10364) merged on 2026-10-30 as
+  `7649f04fd106f8c85f0bad35557331d1ed9e9840`. It proves the
   actual four-site elementary-to-K contraction for every finite group, including
   physical permutation, boundary map and normalization. This is one block;
   full-lattice placement, common kernels and topology remain outside that PR.
-  Its production proof and existing regression are unchanged from the earlier
-  hosted-verified head; fresh combined-head checks remain pending. The PR records
-  the exact hosted and diagram evidence.
 
 ## What was recovered
 
