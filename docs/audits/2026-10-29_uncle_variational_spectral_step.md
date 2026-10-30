@@ -19,7 +19,7 @@ ground-overlap estimates construct the required kernel-complement vectors.
 Validation: source inspection of the Mathlib eigenbasis, nonnegative
 eigenvalue, orthogonality and coordinate-norm APIs; import/declaration,
 prose, formatting and branch diff checks. No local Lean compilation or
-elaboration was run. The new Blueprint lemma remains pending validation.
+elaboration was run.
 
 The trial need not initially be orthogonal to the kernel: subtracting its
 actual kernel projection preserves energy, and Pythagoras removes exactly
