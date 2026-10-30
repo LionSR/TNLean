@@ -62,12 +62,14 @@ import TNLean.MPS.Examples.PVBSLocalization
 import TNLean.MPS.Examples.PVBSOneParticleWindow
 import TNLean.MPS.Examples.PVBSPeriodicGroundSpace
 import TNLean.MPS.Examples.PVBSPureWindowHamiltonian
+import TNLean.MPS.Examples.PVBSPureWindowMatchingVolume
 import TNLean.MPS.Examples.PeriodicFullRingPhase
 import TNLean.MPS.Examples.PeriodicStringExamples
 import TNLean.MPS.Examples.ProductState
 import TNLean.MPS.Examples.RFP
 import TNLean.MPS.Examples.Rings
 import TNLean.MPS.Examples.SPTEntanglementSpectrum
+import TNLean.MPS.Examples.ShortMomentum
 import TNLean.MPS.Examples.SpinHalf
 import TNLean.MPS.Examples.SpinOne
 import TNLean.MPS.Examples.SpinOperator
