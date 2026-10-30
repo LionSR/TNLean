@@ -15,6 +15,7 @@ import TNLean.MPS.AreaLaw.AKLV.CutTransport
 import TNLean.MPS.AreaLaw.AKLV.FullFrequencyRank
 import TNLean.MPS.AreaLaw.AKLV.GroundStateTail
 import TNLean.MPS.AreaLaw.AKLV.HighEnergyMass
+import TNLean.MPS.AreaLaw.AKLV.InverseGapRobustness
 import TNLean.MPS.AreaLaw.AKLV.LowFrequencyPower
 import TNLean.MPS.AreaLaw.AKLV.LowSpectrumGap
 import TNLean.MPS.AreaLaw.AKLV.NormalizedChain

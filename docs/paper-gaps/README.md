@@ -225,6 +225,10 @@ For the MPU symmetry-defect gauging paper:
   coordinate spaces, while the finite-group endpoint identifications
   \(d_l=d_r=d\), the interior action condition, and the complementary
   finite-chain relation remain outside that theorem.
+- `fbc25_complementary_truncation_shared_endpoints.tex` records that the
+  complementary truncated symmetry in `eq:complementary` and `eq:UUU` shares
+  both endpoint sites with `U^L`, so its total length is two more than the
+  printed `∞-L`; the corrected relation is formally verified and resolved.
 - `fbc25_gauss_law_commuting_projector_source_audit.tex` pins the oriented
   matter--link space and multiplication convention of the local Gauss-law
   representation, the cited three-defect associator calculation, the
@@ -758,6 +762,13 @@ arXiv:2504.16985:
 
 For the MPU action on injective MPS blocks in arXiv:2502.20257:
 
+- `fbc25_boundary_dressed_l_symbols.tex` (local fix, resolved) records that
+  the scalar gauges of fusion and action tensors and the L-symbols are
+  defined by comparison against long words, since the reduction theorem gives
+  no bare-scalar uniqueness; proves the gauge law of the L-symbols in that
+  form; and shows that rescaled tensors realize every scalar gauge, so the
+  single-block, stabilizer-form and block-independence arguments hold
+  verbatim.
 - `fbc25_circle_complex_units_cohomology.tex` distinguishes the source
   footnote's sheaf-cohomology comparison from the algebraic group cohomology
   of a finite discrete group and records the direct phase-and-radial proof of

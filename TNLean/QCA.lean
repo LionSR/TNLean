@@ -8,6 +8,7 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.QCA
 
+import TNLean.QCA.AdjacentSupportGeneration
 import TNLean.QCA.AlgebraicBlocking
 import TNLean.QCA.AlgebraicTranslation
 import TNLean.QCA.BipartiteLocalAlgebra
@@ -17,14 +18,17 @@ import TNLean.QCA.BlockingIntervalCoordinates
 import TNLean.QCA.BlockingQCA
 import TNLean.QCA.BlockingStateTransport
 import TNLean.QCA.BlockingTranslation
+import TNLean.QCA.CanonicalAdjacentSupportGeneration
 import TNLean.QCA.CommutingStarSubalgebraKronecker
 import TNLean.QCA.CompatibleLocalAutomorphism
 import TNLean.QCA.CompatibleLocalState
 import TNLean.QCA.DisjointSupport
+import TNLean.QCA.FiniteInverseLocality
 import TNLean.QCA.FiniteLocalRestriction
 import TNLean.QCA.FinitePropagation
 import TNLean.QCA.FinitePureStateDecomposition
 import TNLean.QCA.IntervalCoordinates
+import TNLean.QCA.IntervalTranslation
 import TNLean.QCA.InversePropagation
 import TNLean.QCA.IsQCA
 import TNLean.QCA.LocalAlgebra
@@ -39,10 +43,12 @@ import TNLean.QCA.QuasiLocalInterval
 import TNLean.QCA.QuasiLocalTranslation
 import TNLean.QCA.RegionSumset
 import TNLean.QCA.RelativeCommutant
+import TNLean.QCA.SingletonGeneration
 import TNLean.QCA.SiteIndexedSupportAlgebra
 import TNLean.QCA.StateSpace
 import TNLean.QCA.SupportAlgebraCommutation
 import TNLean.QCA.SupportAlgebraCovariance
+import TNLean.QCA.SupportAlgebraFactors
 import TNLean.QCA.SupportAlgebraGeneration
 import TNLean.QCA.Translation
 import TNLean.QCA.TranslationCovariance

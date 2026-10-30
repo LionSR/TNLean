@@ -100,6 +100,45 @@ theorem orthogonal_clipped_energy_ge
     nlinarith [sq_nonneg (g / 32 - q)]
   nlinarith
 
+/-- A lower bound `e+g/2` on the clipped energy orthogonal to the original
+ground vector gives the clipped Hamiltonian a unit ground vector of energy at
+most `e` and gap at least `g/2`. Shared final step of AKLV, arXiv:1301.1162v1,
+Theorem 6.1(a), for every cutoff that yields the orthogonal bound. -/
+theorem exists_ground_gap_twoSidedEnergyTruncation_of_orthogonal
+    {n : Type*} [Fintype n] [DecidableEq n]
+    (L N R A : Matrix n n ℂ) (hL : L.PosSemidef) (hN : N.PosSemidef)
+    (hR : R.PosSemidef) (hA : A.PosSemidef) (Ω : EuclideanSpace ℂ n) (hΩ : ‖Ω‖ = 1)
+    (e g t : ℝ) (hg : 0 < g) (ht : 0 ≤ t)
+    (heig : Matrix.toEuclideanCLM (n := n) (𝕜 := ℂ) (L + (N + A) + R) Ω = (e : ℂ) • Ω)
+    (horth : ∀ x : EuclideanSpace ℂ n, ⟪Ω, x⟫_ℂ = 0 →
+      (e + g / 2) * ‖x‖ ^ 2 ≤ (⟪x, Matrix.toEuclideanCLM (n := n) (𝕜 := ℂ)
+        (twoSidedEnergyTruncation L (N + A) R t) x⟫_ℂ).re) :
+    let ι := Matrix.toEuclideanCLM (n := n) (𝕜 := ℂ)
+    let K := twoSidedEnergyTruncation L (N + A) R t
+    ∃ (e' : ℝ) (φ : EuclideanSpace ℂ n), ‖φ‖ = 1 ∧ ι K φ = (e' : ℂ) • φ ∧
+      0 ≤ e' ∧ e' ≤ e ∧
+      (∀ x : EuclideanSpace ℂ n,
+        (e + g / 2 - e') * (‖x‖ ^ 2 - ‖⟪φ, x⟫_ℂ‖ ^ 2) ≤
+          (⟪x, ι K x⟫_ℂ).re - e' * ‖x‖ ^ 2) ∧
+      (∀ x : EuclideanSpace ℂ n, ⟪φ, x⟫_ℂ = 0 →
+        (e + g / 2) * ‖x‖ ^ 2 ≤ (⟪x, ι K x⟫_ℂ).re) := by
+  intro ι K
+  obtain ⟨hKpos, hKle⟩ :=
+    twoSidedEnergyTruncation_posSemidef_le L (N + A) R hL (hN.add hA) hR t ht
+  have hpositive : (ι K).IsPositive := hKpos.isPositive_toEuclideanCLM
+  have htest : (⟪Ω, ι K Ω⟫_ℂ).re ≤ e := by
+    have h := (Matrix.isPositive_toEuclideanLin_iff.mpr (Matrix.le_iff.mp hKle))
+      |>.re_inner_nonneg_right Ω
+    change 0 ≤ (⟪Ω, ι (L + (N + A) + R - K) Ω⟫_ℂ).re at h
+    rw [map_sub] at h
+    change 0 ≤ (⟪Ω, ι (L + (N + A) + R) Ω - ι K Ω⟫_ℂ).re at h
+    rw [inner_sub_right, Complex.sub_re, heig, inner_smul_right,
+      Complex.re_ofReal_mul, inner_self_eq_norm_sq_to_K, hΩ] at h
+    norm_num at h
+    exact h
+  exact exists_ground_gap_of_orthogonal_lower (ι K) hpositive Ω hΩ e (e + g / 2)
+    (by linarith) htest horth
+
 /-- The actual clipped Hamiltonian has a unit ground vector, and all
 directions orthogonal to it have energy at least `e+g/2`.
 AKLV, arXiv:1301.1162v1, Theorem 6.1(a), with explicit cutoff constants.
@@ -125,24 +164,9 @@ theorem exists_ground_gap_twoSidedEnergyTruncation
         (e + g / 2 - e') * (‖x‖ ^ 2 - ‖⟪φ, x⟫_ℂ‖ ^ 2) ≤
           (⟪x, ι K x⟫_ℂ).re - e' * ‖x‖ ^ 2) ∧
       (∀ x : EuclideanSpace ℂ n, ⟪φ, x⟫_ℂ = 0 →
-        (e + g / 2) * ‖x‖ ^ 2 ≤ (⟪x, ι K x⟫_ℂ).re) := by
-  intro ι K
-  obtain ⟨hKpos, hKle⟩ :=
-    twoSidedEnergyTruncation_posSemidef_le L (N + A) R hL (hN.add hA) hR t ht.le
-  have hpositive : (ι K).IsPositive := hKpos.isPositive_toEuclideanCLM
-  have htest : (⟪Ω, ι K Ω⟫_ℂ).re ≤ e := by
-    have h := (Matrix.isPositive_toEuclideanLin_iff.mpr (Matrix.le_iff.mp hKle))
-      |>.re_inner_nonneg_right Ω
-    change 0 ≤ (⟪Ω, ι (L + (N + A) + R - K) Ω⟫_ℂ).re at h
-    rw [map_sub] at h
-    change 0 ≤ (⟪Ω, ι (L + (N + A) + R) Ω - ι K Ω⟫_ℂ).re at h
-    rw [inner_sub_right, Complex.sub_re, heig, inner_smul_right,
-      Complex.re_ofReal_mul, inner_self_eq_norm_sq_to_K, hΩ] at h
-    norm_num at h
-    exact h
-  exact exists_ground_gap_of_orthogonal_lower (ι K) hpositive Ω hΩ e (e + g / 2)
-    (by linarith) htest
-    (orthogonal_clipped_energy_ge L N R A hL hN hR hA hLN hLR hNR hAcap
+        (e + g / 2) * ‖x‖ ^ 2 ≤ (⟪x, ι K x⟫_ℂ).re) :=
+  exists_ground_gap_twoSidedEnergyTruncation_of_orthogonal L N R A hL hN hR hA Ω hΩ e g t hg
+    ht.le heig (orthogonal_clipped_energy_ge L N R A hL hN hR hA hLN hLR hNR hAcap
       Ω hΩ e g t he0 he6 hg hg1 ht hcut hgap)
 
 end TNLean.MPS.AreaLaw.AKLV
