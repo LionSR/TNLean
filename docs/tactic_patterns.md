@@ -9715,6 +9715,31 @@ there is no need for a new tactic.
   statements and consolidate the closed-containment argument before a third
   copy, rather than adding another notion of local generation.
 
+### Functional calculus on a Hermitian eigenbasis — candidate (2026-10-28)
+
+- **Pattern:** Expand the Hermitian functional calculus using its eigenvector
+  unitary, multiply by a basis vector and cancel the unitary factors. The
+  result is scalar multiplication by the function at the corresponding energy.
+- **Seen:** Two private helper proofs, in
+  `MPS/AreaLaw/Huang/ApproximateEnergyFilter.lean` and the companion module
+  `QICLean/Analysis/GroundProjection.lean`.
+- **Abstraction:** A public Mathlib or QICLean theorem for the action of a real
+  functional calculus on `IsHermitian.eigenvectorBasis` would replace both helpers.
+- **Notes:** The current spectral proof calls the helper once and then uses
+  `norm_cfc_le`; it does not repeat the full Gaussian Parseval argument.
+  The generic filtering module is intended for QICLean, where the helper can be
+  consolidated with the existing ground-projection development.
+
+
+### Increasing a matrix product bond bound — reuse (2026-10-29)
+
+- **Lemma:** `IsOpenMPS.mono` in `MPS/AreaLaw/OpenMPSCutRank.lean`
+  follows from the characterization by internal-cut matrix ranks.
+- **Use:** The uniform successive approximation and its arbitrary-accuracy
+  consequence enlarge a computed bond bound to one natural polynomial.
+  Both reuse this lemma, including the empty-chain case.
+- **Mechanism:** An ordinary monotonicity theorem suffices.
+
 
 ### Pure output Gram projection — library zero criterion (2026-10-29)
 
@@ -9750,6 +9775,18 @@ there is no need for a new tactic.
 - **Decision:** Three branch occurrences in one file, below the two-file promotion
   threshold. Before extending this pattern to another module, move the value equality
   before the case distinction or reuse `Fin.val_inj`; no new tactic is needed.
+
+
+### Exponential comparisons with a common nonnegative factor — reused Mathlib (2026-10-29)
+
+- **Pattern:** Apply monotonicity of the exponential, normalize a negative
+  quotient, and reverse the inequality under negation.
+- **Detected:** The new comparison in `LocalSolution/GappedPeriodicHierarchy.lean`
+  would repeat the initial three-line sequence already used in
+  `HierarchyRadius.lean` and `PeriodicChainApproximation.lean`.
+- **Reuse:** Normalize the exponent by `ring`, then use Mathlib's `gcongr`
+  and `min_le_right`. This removes the third copy without introducing a
+  new scalar lemma or tactic. The resulting proof passes strict elaboration.
 
 ### Complementary-product prefix and suffix — candidate (2026-10-29)
 
