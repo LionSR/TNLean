@@ -1,0 +1,168 @@
+\section{Block ground states of arbitrary positive local interactions}
+
+The block-separation argument applies to any positive local interaction,
+including interactions whose kernels are not the canonical local MPS spaces.
+We follow the cyclic-cut argument of
+\cite[Theorem~11, proof at lines~1418--1422]{PerezGarcia2007Matrix}.
+
+\begin{lemma}[The periodic state in cyclic active-block coordinates]
+    \label{lem:cyclic_mpv_active_boundary}
+    \lean{MPSTensor.mpv_cyclicActiveBlockConfigEquiv_symm,
+        MPSTensor.cyclicActiveBlock_mpvState_apply}
+    \leanok
+    \uses{def:ground_space_map, def:mpv}
+    Let $A$ be a tensor, $L\le N$, and fix a cyclic cut $i$ of an $N$-site
+    ring. If $\sigma$ is the active word of length $L$ and $\tau$ is the
+    complementary word of length $N-L$, then the periodic coefficient,
+    in these cyclic coordinates, is
+    \begin{align}
+        V^{(N)}(A)(\sigma,\tau)
+         & =\tr(A^\sigma A^\tau)=\Gamma_L^A(A^\tau)(\sigma).
+        \label{eq:cyclic_mpv_active_boundary}
+    \end{align}
+    The same identity holds for the Hilbert-space coordinate isometry.
+\end{lemma}
+\begin{proof}\leanok
+    Rotate the closed word to begin at $i$, use invariance of the trace under
+    this rotation, and split the resulting word into its two consecutive parts.
+\end{proof}
+
+\begin{lemma}[A translated interaction in active-block coordinates]
+    \label{lem:cyclic_active_local_interaction}
+    \lean{MPSTensor.cyclicActiveBlock_periodicLocalInteractionES_apply}
+    \leanok
+    \uses{def:periodic-fixed-interaction, lem:cyclic_mpv_active_boundary}
+    Let $L\le N$, let $h$ be linear on $L$ sites, and fix a cyclic cut $i$.
+    Let $U_i$ be the coordinate isometry of
+    Lemma~\ref{lem:cyclic_mpv_active_boundary}, which splits the active block
+    at $i$ from its complement. Then
+    \begin{align}
+        U_i(h_i\psi) & =(h\otimes I_{N-L})\,U_i(\psi).
+        \label{eq:cyclic_active_local_interaction}
+    \end{align}
+    Thus $h$ acts on each fixed complementary fiber separately.
+\end{lemma}
+\begin{proof}\leanok
+    Conjugate the defining translated interaction by the same coordinate
+    isometry and cancel the inverse isometry.
+\end{proof}
+
+\begin{lemma}[A local operator separates the weighted block summands]
+    \label{lem:arbitrary_local_block_separation}
+    \lean{MPSTensor.periodicLocalInteractionES_smul_mpvState_eq_zero_of_wordTupleSpanTop}
+    \leanok
+    \uses{lem:cyclic_mpv_active_boundary, lem:cyclic_active_local_interaction,
+        def:periodic-fixed-interaction}
+    Let $A_1,\ldots,A_b$ be tensors with arbitrary finite virtual dimensions,
+    let $c_j\in\C$, and let $h$ be any linear operator on $L$ sites of an
+    $N$-site ring, with $L\le N$. Assume that the complementary word tuples
+    $(A_1^\tau,\ldots,A_b^\tau)$, $|\tau|=N-L$, span the product of the
+    block matrix algebras. If the translate $h_i$ annihilates
+    $\sum_j c_jV^{(N)}(A_j)$, then it annihilates every
+    $c_jV^{(N)}(A_j)$. The coefficients may vanish, and positivity of $h$
+    is not needed for this local assertion.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:cyclic_mpv_active_boundary, lem:cyclic_active_local_interaction}
+    In the cyclic coordinates at $i$, compose the weighted joint boundary map
+    with $h$: for boundaries $X=(X_1,\ldots,X_b)$ in the product algebra put
+    \begin{align}
+        T(X) & =(h\otimes I_{N-L})\sum_jc_j\,\Gamma_L^{A_j}(X_j).
+        \label{eq:arbitrary_local_block_separation_map}
+    \end{align}
+    By (\ref{eq:cyclic_mpv_active_boundary}) and
+    (\ref{eq:cyclic_active_local_interaction}), the hypothesis
+    $h_i\sum_jc_jV^{(N)}(A_j)=0$ says $T(A_1^\tau,\ldots,A_b^\tau)=0$ for
+    every complementary word $\tau$. These tuples span the product algebra, so
+    $T=0$. Evaluating on the boundary $\delta_{jk}X$ supported in block $j$
+    gives
+    \begin{align}
+        c_j\,(h\otimes I_{N-L})\,\Gamma_L^{A_j}(X) & =0
+        \label{eq:arbitrary_local_block_separation_single}
+    \end{align}
+    for every $X$, which at $X=A_j^\tau$ is the local annihilation equation
+    $h_i\,c_jV^{(N)}(A_j)=0$ of that block.
+\end{proof}
+
+\begin{lemma}[Arbitrary positive interactions preserve all block ground states]
+    \label{lem:arbitrary_positive_block_ground_states}
+    \lean{MPSTensor.periodicInteractionHamiltonianES_mpvState_eq_zero_of_wordTupleSpanTop}
+    \leanok
+    \uses{lem:arbitrary_local_block_separation, def:periodic-fixed-interaction}
+    Under the complementary-span hypothesis of
+    Lemma~\ref{lem:arbitrary_local_block_separation}, suppose $h\ge0$ and
+    $c_j\ne0$ for every $j$. For $H=\sum_i h_i$,
+    \begin{align}
+        H\sum_j c_jV^{(N)}(A_j)=0
+        \quad\Longrightarrow\quad
+        HV^{(N)}(A_j)=0\quad\text{for every }j.
+        \label{eq:arbitrary_positive_block_ground_states}
+    \end{align}
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:arbitrary_local_block_separation}
+    Each $h_i$ is positive. A finite sum of positive operators has kernel equal
+    to the intersection of their kernels. Apply
+    Lemma~\ref{lem:arbitrary_local_block_separation} to each $h_i$, cancel
+    $c_j\ne0$, and sum the resulting equations.
+\end{proof}
+
+\begin{lemma}[Independence of the periodic block vectors]
+    \label{lem:periodic_block_linear_independence}
+    \lean{MPSTensor.linearIndependent_mpvState_of_wordTupleSpanTop}
+    \leanok
+    Let every block have positive virtual dimension. If the length-$N$ word
+    tuples span the product matrix algebra, then the vectors
+    $V^{(N)}(A_j)$ are linearly independent.
+\end{lemma}
+\begin{proof}\leanok
+    A relation with coefficients $c_j$ says that the trace pairing against
+    every word tuple vanishes for the boundary $(c_j I)_j$. The span forces
+    each $c_jI=0$, and the positive block dimensions give $c_j=0$.
+\end{proof}
+
+\begin{theorem}[Degeneracy for separated canonical blocks and arbitrary interactions]
+    \label{thm:canonical_arbitrary_interaction_degeneracy}
+    \lean{MPSTensor.PGVWC07CanonicalFormData.periodicInteractionHamiltonianES_blocks_eq_zero,
+        MPSTensor.PGVWC07CanonicalFormData.blockCount_le_finrank_ker_periodicInteractionHamiltonianES}
+    \leanok
+    \discussion{7684}
+    \uses{def:pgvwc07_ti_canonical_representation,
+        lem:pgvwc07_block_tuple_span,
+        lem:arbitrary_positive_block_ground_states,
+        lem:periodic_block_linear_independence}
+    Let $A$ have $b\ge2$ canonical blocks $A_j$ in the sense of
+    \cite[Theorem~4]{PerezGarcia2007Matrix}, with positive block weights.
+    Suppose no two distinct blocks are equivalent under a gauge and a phase,
+    and suppose their words of a common length $L_0>0$ span their respective
+    matrix algebras. For any positive operator $h$ on $L$ sites, put
+    $H=\sum_i\tau^i(h)$ on an $N$-site ring. If
+    \begin{align}
+        N & \ge3(b-1)(L_0+1)+L,
+          & HV^{(N)}(A)         & =0,
+        \label{eq:canonical_arbitrary_interaction_degeneracy_hypotheses}
+    \end{align}
+    then
+    \begin{align}
+        HV^{(N)}(A_j) & =0\quad(1\le j\le b),
+                      & \dim\ker H            & \ge b.
+        \label{eq:canonical_arbitrary_interaction_degeneracy}
+    \end{align}
+    \textbf{Scope restriction (separated canonical blocks):}
+    the gauge-phase separation premise is stronger than the pairwise
+    inequality of finite-ring component vectors in the standing assumptions
+    of \cite[Theorem~11]{PerezGarcia2007Matrix}; see
+    \cite{gap:pgvwc07_direct_sum_input}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{lem:pgvwc07_block_tuple_span,
+        lem:arbitrary_positive_block_ground_states,
+        lem:periodic_block_linear_independence}
+    Canonical normalization, its positive dual fixed points and common
+    injectivity derive the simultaneous spans at lengths $N-L$ and $N$.
+    The original vector is the sum of the block vectors with nonzero
+    coefficients $\lambda_j^N$. Apply
+    Lemma~\ref{lem:arbitrary_positive_block_ground_states}; then
+    Lemma~\ref{lem:periodic_block_linear_independence} gives $b$ independent
+    vectors in $\ker H$.
+\end{proof}
