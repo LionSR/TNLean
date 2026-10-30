@@ -10,7 +10,7 @@ import QICLean.Algebra.TraceReindex
 /-!
 # Extracting the time-reversal trace sign
 
-The normalized four-spin trace extracts the sign from the literal local
+The normalized four-spin trace extracts the sign from the local
 relation of a supplied two-site standard form. The relation is an explicit
 input here; its deduction from global symmetry is the separate local
 characterization theorem.

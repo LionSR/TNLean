@@ -2129,7 +2129,17 @@ in `MPS/Preparation/` uses it.
   `IsLocalChannelProtocol.channelCircuitMap_comp` (appending a local channel
   circuit of `n` layers adds `n` to the depth), and
   `IsLocalChannelProtocol.exists_dual` (light cone of radius `T` of the
-  Heisenberg dual).
+  Heisenberg dual). Grouping `k` consecutive sites is constructed in
+  `Circuit/Channel/RegroupedProtocol.lean`:
+  for positive block count, block size, and input local dimension,
+  `IsLocalChannelProtocol.exists_regrouped` gives depth at most `2T` for
+  even block counts and `3T` in general, with exact equality on all operators
+  and arbitrary external references. The dimension-bounded version raises
+  the budget from `B` to `B^k`. `IsLocalChannelConversion.then_blocked`
+  composes an unblocked conversion followed by a blocked conversion with
+  bound `2T+U` or `3T+U`. One block admits depth zero; the generic two-block
+  bound is `2T`. The six-site seam matching projects to a triangle after
+  grouping pairs, obstructing its direct partition into two block matchings.
 - **Caveat:** the depth `T` counts the two-site layers exactly; onsite channels
   are free. Onsite channels may enlarge the dimension, and a layer on the
   enlarged sites still costs one depth unit. No uniform intermediate-dimension
@@ -3123,9 +3133,14 @@ involve no boundary.
   `exists_bounded_matching_simulation`, `PortRegisters.dataChannelLift_word`,
   `IsDimensionBoundedLocalChannelProtocol.exists_physicalPortSimulation`,
   `.exists_appended_unitary_dilation`, and
-  `.exists_appended_unitary_dilation_reference`. The last two construct an
+  `.exists_appended_unitary_dilation_reference`. These construct an
   actual same-depth unitary on a port-preserving extension, with fresh local
   product-zero environments initialized once and discarded only at the end.
+  When the channel output of a pure input is pure,
+  `.exists_appended_unitary_dilation_pure_output` derives a normalized
+  environment vector and a system/environment product output, and
+  `.exists_environmentKraus_pure_output` identifies the environment-basis
+  branches, their normalized amplitudes and their common pure system output.
 - **Caveat:** source pure-state conditions and the fixed number of composed
   `QCcc` blocks with their internal measurement/control rules remain separate.
   The appended environments need not reset, and their total number is only
@@ -3326,6 +3341,7 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
 | `Matrix.IsGappedGroundState`, `Matrix.isGappedGroundState_iff` | Unit eigenvector `HΩ = E₀Ω` of a complex square matrix with the full-system projector-gap inequality; the characterization restates the eigen-equation as `H *ᵥ Ω = E₀ • Ω` on coordinate vectors | Shared by the area-law and polynomial-PEPS models, which specialize it. |
 | `TNLean.Lattice.IsGappedGroundState` | Unit eigenvector with a full-system positive projector-gap inequality | Area-law Theorem 1.1; the checked ground/uniqueness equivalence is tracked in #8739. |
 | `Matrix.IsSiteInvariant` | An operator `H` on the configurations of the sites `V` commuting with every site-permutation unitary `P_g` of a group `G` acting on `V`; for the translations of a lattice, a translation-invariant Hamiltonian. `isSiteInvariant_of_conj` gives it from the conjugation form `P_g H P_g† = H`. `isSiteInvariant_sum_of_covariant` gives it for a sum `∑_k h_k` of covariant terms `h_{g•k} = P_g h_k P_g†`, and `isSiteInvariant_sum_conj` for the sum of the translates of one term over a finite group | Hastings, arXiv:cond-mat/0508554v3, `proj3new.tex`, lines 862–863 and 1603–1613 ("the Hamiltonian is invariant under translation"); definition in `TNLean/Lattice/SiteSymmetry.lean`. The converse of `isSiteInvariant_of_conj` (invariance implies `P_g H P_g† = H`) holds since `P_g` is unitary, but it is not stated as a separate lemma; it is the hypothesis under which `gaussianFilteredTerm_sitePermMatrix_conj` moves a site permutation through the filter. Invariance of `H` alone does not make its terms covariant, so the supercell results in `TNLean/Lattice/TranslationSupercell.lean` take covariance as a separate hypothesis. |
+| `TNLean.Lattice.norm_groundCompression_truncated_commutator_le_finite_translation_exp` | The low-energy commutator of the actual truncated Gaussian terms is bounded by `(2^m−1)(4vObs+4)J² exp(γ(2ρ+2)) exp(−γN/[4(m+1)])`, with `m=max(1,n₀²)` for ground-space dimension at most `n₀`. | Hastings, arXiv:cond-mat/0508554v3, lines 1603–1654. Only the original Hamiltonian is invariant; graph translations preserve the geometry. There is no assumption on momentum denominators, covariance of the local decomposition or retained sets, polynomial growth, or the gap of an approximating Hamiltonian. The proof uses Cayley–Hamilton on the actual ground-space operator algebra; see `docs/paper-gaps/hastings05_translation_supercell.tex`. |
 | `TNLean.Lattice.LowEnergyExample.IsGround` | Example-specific: a configuration of the `m + 3`-site spin-1/2 chain of Hastings' Appendix B example with spin `1` up, every spin `i ≥ 2` down and spin `0` free; `energy_eq_groundEnergy_iff` and `hamiltonian_mulVec_eq_iff` identify these with the ground space of `H = −S^z_1 + ∑_{i≥2} S^z_i` | Hastings, arXiv:cond-mat/0508554v3, lines 1655–1676, with the corrected sum (`docs/paper-gaps/hastings05_low_energy_example.tex`); not a general lattice predicate, and no bridge to `IsGappedGroundState` is stated. |
 | `TNLean.PEPS.AreaLaw.relabelState` | The same physical vector in configuration coordinates transported by a site bijection | Area-law Section 2; Euclidean norm is preserved, reductions are covariant and regional entropy is invariant when the bijection preserves the cut. |
 | `TNLean.PEPS.AreaLaw.UniformAreaLaw` | A uniform boundary entropy bound over every finite induced domain and cut | Area-law Theorem 1.1; proved, with the source's hypotheses, as `TNLean.PEPS.AreaLaw.uniformAreaLaw`. |
@@ -3908,19 +3924,99 @@ The cluster expansion of Hastings, *Solving gapped Hamiltonians locally*
 formalized in `TNLean/Lattice/ClusterExpansion/`. The terms `h k` of `H = ∑_k h_k` are indexed by
 a finite type `κ`, and a graph `G` on `κ` says which terms overlap. For terms acting on sets of
 sites `acts k`, it is `overlapGraph acts` (adjacent when the supports meet). The truncation,
-the bounds and the product form take a predicate `large` on sets of terms. Two instances
-realize the source's "diameter larger than `l_proj`": one in a metric space of sites and one in
-walk distance on a planar domain.
+the bounds take a predicate `large` on sets of terms. The product form is defined on an
+arbitrary finite set of sites with a locality relation `near`; the metric case is
+`near i j ↔ dist i j ≤ l_proj`. Its largeness predicate then agrees with the diameter
+predicate used in the analytic estimates. No planar embedding is assumed.
 
 | Declaration | Mathematical meaning | Source and status |
 |---|---|---|
+| `TNLean.Lattice.IsLocalCoefficient near i f` | `f` depends only on the indices at sites `j` satisfying `near i j` | Lines 1037–1039. For a metric lattice of range `l`, use `dist i j ≤ l`; walk locality on a finite graph is another instance. Enlargement of the coefficient neighborhoods is `IsLocalCoefficient.mono`. |
+| `TNLean.Lattice.HasProductForm q near ρ` | `ρ = ∑_α (∏_i F_i(α)) ⊗_j ρ_j(α_j)` with each `F_i` local for `near i` | Eq. `mpf`, lines 1024–1039, on arbitrary finite sites. The finite index type may vary with the site. Products and powers preserve the neighborhoods. `exists_productForm_trotterProduct_card_index_of_dist_le` proves the source's metric-lattice Trotter form with at most `(q²)^(nS)` index values at each site. `exists_productForm_truncatedExp_card_index` gives at most `q²(1+2^M_i)` values, where `M_i` counts interaction centres within `l+R` of site `i`; powers raise this bound to the number of factors. Polynomial ball growth yields the source's exponential dimensional bounds, and `IntegerLatticeBallCount` derives this growth for distinct centres in the coordinate maximum metric on the integer lattice. |
 | `TNLean.Lattice.ClusterExpansion.IsCluster G A C` | `C ⊆ A` is connected in `G` and no other term of `A` is adjacent to it: a connected component of `A`, a cluster of the words with letter set `A` | Lines 1096–1102 (active bonds and clusters). The boundary is the set of overlap neighbours, not the source's `B(C)` (lines 1131–1134); see `docs/paper-gaps/hastings05_cluster_boundary.tex`. `exists_isCluster_mem`, `biUnion_clusters` and `pairwise_clusters` show the clusters of `A` partition it and are pairwise non-adjacent. |
 | `TNLean.Lattice.ClusterExpansion.IsAdmissible G U` | The union of a family `U` of sets of terms avoids the union of their boundaries, so all members can be clusters of one set | Lines 1197–1225 (inclusion and exclusion). For connected members, `pairwiseDisjoint_of_admissible` gives disjointness; the admissible families index `truncatedExp_eq_sum`. |
 | `TNLean.Lattice.ClusterExpansion.NoLargeCluster G large A` | No cluster of `A` satisfies `large` | Lines 1103–1107 (the terms kept in `ρ(β, l_proj)`); it defines `truncatedExp`. `noLargeCluster_iff_filter` shows that terms acting on no site do not affect it. |
 | `TNLean.Lattice.ClusterExpansion.IsLargeDiam acts l_proj C` | The supports of the terms of `C`, in a pseudometric space of sites, contain two sites at distance greater than `l_proj` | Lines 1103–1107; used for eq. `perc2` in source terms (`norm_trace_mul_exp_sub_truncatedExp_le_isLargeDiam`). A connected large set has at least `⌊l_proj/(2R)⌋ + 1` terms (`card_ge_of_isLargeDiam`; `docs/paper-gaps/hastings05_percolation_cluster_size.tex`). |
-| `TNLean.Lattice.ClusterExpansion.IsLargeWalk l acts C` | The supports of the terms of `C`, on a finite planar domain, contain two sites joined by no domain walk of length at most `l` | Lines 1103–1107 in the walk distance of `TNLean.Lattice.ProductForm`, the largeness for which `hasProductForm_truncatedExp` holds (lines 1256–1279). It is `IsLargeDiam` for the walk distance; no bridge between the two is stated. The planar geometry is a scope restriction (`docs/paper-gaps/hastings05_planar_domain_scope.tex`). |
-| `TNLean.Lattice.ClusterExpansion.IsValidCluster acts l C` | Every term of `C` acts on some site, `C` is connected in the overlap graph, and `C` is not `IsLargeWalk` | Internal to the product-form construction (lines 1259–1272); the clusters that a site index may record. The members of a family of valid clusters with disjoint supports are the clusters of its union (`isCluster_of_mem_validFamilies`), and `sum_clusterOp_apply` identifies the sets of terms acting on sites with no large cluster with such families. |
-| `TNLean.Lattice.ClusterExpansion.IsClusterAssignment acts l c` | Every cluster recorded at a site is valid, contains the site in its supports, and is recorded at every site of its supports | Internal to the product-form construction (lines 1259–1272); the index functions with nonzero coefficient product. `recordedClusters` and `clusterAssignment` identify consistent assignments with families of valid clusters with disjoint supports. |
+| `TNLean.Lattice.ClusterExpansion.IsLargeSupport near acts C` | The supports of the terms of `C` contain two sites `i,j` for which `near i j` fails | Lines 1103–1107. The product form `hasProductForm_truncatedExp` holds for every reflexive locality relation. For `near i j ↔ dist i j ≤ l`, the predicate is equivalent to `IsLargeDiam acts l`; `hasProductForm_truncatedExp_of_dist_le` states the metric result with the same truncation as the analytic estimates. The actual cluster index ranges are bounded locally in `LocalIndexCount`; the dimensional interpretation requires polynomial volume growth, as recorded in `docs/paper-gaps/hastings05_planar_domain_scope.tex`. |
+| `TNLean.Lattice.ClusterExpansion.IsValidCluster acts near C` | Every term of `C` acts on some site, `C` is connected in the overlap graph, and `C` is not `IsLargeSupport near acts` | Internal to the product-form construction (lines 1259–1272); the clusters that a site index may record. The members of a family of valid clusters with disjoint supports are the clusters of its union (`isCluster_of_mem_validFamilies`), and `sum_clusterOp_apply` identifies the sets of terms acting on sites with no large cluster with such families. |
+| `TNLean.Lattice.ClusterExpansion.IsClusterAssignment acts near c` | Every cluster recorded at a site is valid, contains the site in its supports, and is recorded at every site of its supports | Internal to the product-form construction (lines 1259–1272); the index functions with nonzero coefficient product. `recordedClusters` and `clusterAssignment` identify consistent assignments with families of valid clusters with disjoint supports. |
+
+## Hard-core sector certificate for the tree example
+
+The reusable ingredients in `TNLean/Lattice/TreeBasisCounterexample/` concern the tree
+example recorded in `docs/paper-gaps/hastings05_tree_basis_counterexample.tex`.
+
+| Declaration | Mathematical meaning | Scope |
+|---|---|---|
+| `quadraticLift s A` | The positive linear lifting `∑ᵤᵥ Aᵤᵥ sᵤ* sᵥ` | Positivity and the rectangular Gram identity hold for any finite operator family. No bosonic commutation relations are assumed. |
+| `lowering v`, `numberOperator` | The actual qubit matrix `\|0⟩⟨1\|` at site `v`, and the sum `∑ᵥ sᵥ* sᵥ` | The number operator is proved equal to the diagonal count of occupied qubits on `ι → Fin 2`. Each lowering is a contraction. |
+| `IsParticleSector m φ` | `numberOperator φ = m φ` on the actual physical configuration space | The sum of squared lowering norms is derived as `m‖φ‖²`; this identity is a consequence of the number eigenspace. |
+| `hardCore_sector_energy_ge` | The lifted energy is at least `(735/2048)‖φ‖²` on every particle sector with `m≥2` | Assumes a normalized collective mode with tail mass at most `1/64` and the coefficient-matrix lower bound `(49/64)(I−conj(w)wᵀ)`. It derives the multi-particle energy estimate without assuming a many-body gap. |
+
+The specific tree incidence estimate and the complete vacuum-plus-mode ground-space
+classification remain mathematical arguments in the note, rather than conclusions of these
+Lean modules.
+
+## Hastings' periodic one-dimensional hierarchy
+
+The one-dimensional construction in Hastings, *Solving gapped Hamiltonians locally*
+(arXiv:cond-mat/0508554v3, lines 609–743), acts on the original physical cycle
+`Fin M`. `RoundedPeriodicGeometry.lean` places the remainder of the division by
+`2ℓ` in the last block; `RoundedPeriodicCoarsening.lean` derives the pair estimates;
+`RoundedPeriodicApproximation.lean` chooses the integer radius and constructs the
+retained space. No divisibility condition on `M` is imposed.
+
+| Declaration | Mathematical meaning | Source and status |
+|---|---|---|
+| `roundedPeriodicBlockCount M ℓ` | `max 1 (M/(2ℓ))`, the number of coarse blocks | Lines 609–628, with the rounding made explicit. Blocks have width `2ℓ`, except that the last contains the remainder; short chains form one block. The original Hilbert space is unchanged. |
+| `roundedPeriodicEdge hN i`, `roundedPeriodicOperator ℓ a j` | Assign a physical centre to an adjacent coarse pair and sum the assigned local terms | Cyclic radius-`ℓ` locality implies the actual pair support, including the periodic closing edge. Each edge receives at most `4ℓ` terms, so local norm `J` gives centred norm `8ℓJ`, and local residual `ε` gives pair residual `4ℓε`, independently of physical chain length. |
+| `roundedPeriodicProjection ℓ a ψ J r` | The corrected periodic hierarchy constructed from those actual pair operators | The window bound is `K=8ℓJ`. For `r=ηℓ`, it equals `J_eff r` with `J_eff=8J/η`; this is derived from local norms rather than supplied as a pair-operator hypothesis. |
+| `roundedPeriodicProjectionRadius M J η Δ` | The ceiling of `(512/η)(clog₂ M+2)²(1+max(0,log((8J/η)/Δ)))` | Positive for `η>0`. Its physical range is explicitly quadratic in `log M`, and it satisfies the hierarchy length inequality for the block count determined by this same radius. |
+| `exists_unit_mem_roundedPeriodicProjection_of_chosen_radius` | A unit vector close to the reference ground state and retained at every node of the tree | Assumes the source's local residual estimate (low), local Hermiticity, support and norm bounds. The distance is at most `2(3^(h+1)−1) exp(−ηℓ/8)`. No separate length or centred pair-norm inequality is assumed. |
+| `card_le_two_mul_re_trace_of_roundedPeriodicProjection_of_chosen_radius` | Every finite orthonormal family in the final retained space has at most twice the physical ground-space dimension | Uses the original Hamiltonian's gap and the preceding Gaussian-localization estimate. The comparison is between each full Gaussian-filtered term and its truncated approximation; the full filtered terms sum exactly to the original Hamiltonian. It assumes no gap for the truncated sum and no small difference from the unfiltered local interaction. |
+
+The additional closing window and corrected deficiency are recorded in
+`docs/paper-gaps/hastings05_hierarchical_energy.tex` and
+`hastings05_hierarchical_projection.tex`. Every vector kept by that window remains
+in every lower retained space. This is the source's hierarchical tree
+representation; no bound on the dimensions of the intermediate spaces or on a
+conventional matrix product bond dimension is asserted. The regular-block
+construction in `PeriodicCoarsening.lean` and `PeriodicChainApproximation.lean`
+has the sharper constants `4ℓJ` and `J_eff=4J/η`.
+
+The source-facing construction in `PeriodicPhysicalHierarchy.lean` starts from
+the original interactions. `periodicPhysicalMetricSpace M` is the actual cyclic
+metric; `card_periodicPhysical_metricRangeBall_le` proves the uniform ball bound
+`2⌈R⌉+1`. `periodicPhysicalTruncatedTerm c₁ R Δ ℓ g i` is the normalized Gaussian
+filter with `q=c₁ℓΔ` under the terms centred within `ℓ−R` of `i`.
+`exists_periodicPhysicalTruncatedTerm_localization` derives its support,
+Hermiticity, norm and full-filter error bounds, including the exact zero-range
+case. The radius `physicalPeriodicProjectionRadius` is the maximum of `⌈R⌉`
+and the chosen quadratic logarithm, with coefficient `J_b=max(J,JC)`.
+`exists_periodicPhysicalHierarchy` then proves unit-vector existence, nearness,
+retention at every node and the original-gap count. Its local ground-vector
+premise is source (low); it assumes no separate localization, centred pair-norm,
+length, total-error or approximating-gap estimate.
+
+## Hastings' coordinate-slice hierarchy
+
+The coordinate-slice option of Hastings, *Solving gapped Hamiltonians locally*
+(arXiv:cond-mat/0508554v3, lines 609–730 and 745–756), is constructed in
+`TNLean/MPS/AreaLaw/LocalSolution/CoordinateSliceHierarchy.lean` and
+`CoordinateSliceApproximation.lean`.
+
+| Declaration | Mathematical meaning | Source and status |
+|---|---|---|
+| `edgePartition f a j` | Sum of the physical terms `a i` assigned to coarse edge `j` by `f` | Lines 628–639. The total sum is preserved; local residuals and norms give bounds for the actual coarse operators. |
+| `coordinateSliceOperator z ℓ hN a j` | Coarse operator assigned to edge `j`, for slices of width `2ℓ` in coordinate `z` | Lines 609–628 and 745–756. Coordinate locality derives its support on adjacent slices. Metric-ball locality implies this condition under a coordinate map that does not increase distances; the implication is proved for maximum-metric balls in full coordinate boxes. |
+| `coordinateSliceProjection z ℓ hN a ψ J r` | Corrected periodic hierarchy determined by the actual coarse operators, with depth `max 2 (Nat.clog 2 N)` and coupling bound `2 N_phys J` | Lines 705–743. The explicit logarithmic length gives a retained unit vector within `2(3^(h+1)-1) exp(-r/8)` of the reference state, assuming the source's local residual estimate. The physical Hamiltonian's gap and its approximation by the finite physical sum give the retained-family count. |
+| `IsRetainedHierarchy P h k φ` | `φ` belongs to every retained block space below block `k` at level `h` | Lines 668–704 and Figure 1(b). Every state retained by the corrected closing window satisfies this predicate. |
+
+For full rectangular boxes in arbitrary dimension, `CoordinateSliceBox.lean` derives the
+coverage and coarse-count assumptions. The sufficient dimensionless projection length
+is at most `512(clog₂ N_phys+2)^3(1+max(0,log(2J/Δ)))`. The coordinate scope and the
+corrected recurrence and closing window are recorded in
+`docs/paper-gaps/hastings05_coordinate_slices.tex`.
 
 ## Viable sets of Landau, Vazirani and Vidick
 

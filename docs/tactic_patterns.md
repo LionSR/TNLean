@@ -1,5 +1,26 @@
 # Tactic Pattern Ledger
 
+### Matrix positivity on the Euclidean operator space — promoted (2026-10-29)
+
+- **Seen:** `MPS/AreaLaw/AKLV/HighEnergyMass.lean`, `ProjectionEnergy.lean`,
+  `LowSpectrumGap.lean`, and `Robustness.lean`.
+- **Pattern:** Combine `Matrix.isPositive_toEuclideanLin_iff` and
+  `ContinuousLinearMap.isPositive_toLinearMap_iff` to transport a matrix order bound.
+- **Abstraction:** `Matrix.PosSemidef.isPositive_toEuclideanCLM` in
+  `MPS/AreaLaw/AKLV/Truncation.lean`; all four repeated positivity proofs use it.
+- **Decision:** A mathematical transport lemma removes the repeated coercion proof.
+
+### Exponential weights and energy windows — candidate (2026-10-29)
+
+- **Seen:** `MPS/AreaLaw/AKLV/SpectralTail.lean` and `GroundStateTail.lean`.
+- **Pattern:** Express a Hermitian exponential and a threshold projection in
+  the scalar functional calculus, multiply there, and apply `norm_cfc_le`.
+- **Abstraction:** `Matrix.IsHermitian.exp_real_smul_eq_cfc` centralizes the
+  exponential identity. The high and low weight bounds are public lemmas in
+  `SpectralTail.lean`; a future ownership cleanup can move these general
+  matrix results to QICLean together with the adjacent weighted-projection API.
+- **Decision:** Mathematical lemmas suffice; no new tactic is needed.
+
 Living registry of repeated proof patterns, maintained under the process in
 [`docs/tactic_development.md`](tactic_development.md). Agents and contributors:
 **consult the promoted section before writing proofs; append candidates when
@@ -23,6 +44,69 @@ abstracted — record why, so it is not re-proposed).
 ---
 
 ## Promoted
+
+### Identity site translation — promoted (2026-10-28)
+
+- **Pattern:** Unfold the matrix of a site permutation and rewrite the identity
+  laws of its two group homomorphisms.
+- **Helper:** `Matrix.sitePermMatrix_one` in `TNLean/Lattice/SiteSymmetry.lean`.
+- **Occurrences:** the arbitrary-observable ground-space power formula in
+  `TranslationGroundSpace.lean`, and the two translation-orbit arguments in
+  `TranslationFiniteOrbitCommutator.lean`.
+- **Decision:** The third occurrence across two files was replaced by the same
+  identity lemma. The statement records the mathematical unit law directly.
+
+### From a support budget to an anchor budget — promoted (2026-10-28)
+
+- **Pattern:** An index whose chosen anchor is a site has support containing that
+  site. Monotonicity of finite sums of nonnegative weights therefore bounds the
+  anchor sum by the support sum.
+- **Helper:** `sum_weight_anchor_le_of_support_budget` in
+  `TNLean/Lattice/GraphDegreeGrowth.lean`.
+- **Refactored occurrences:** the two-dimensional basis sum in `LowEnergyBasisUniform.lean`,
+  the arbitrary-dimensional sum in `LowEnergyBasisUniformGeneral.lean`, and
+  the actual truncated-term sum in `LowEnergyBasisTruncatedUniform.lean`.
+- **Decision:** The 2026-10-28 scan found the third occurrence. The common
+  inequality is stated for arbitrary nonnegative real weights; the applications
+  specialize it to the original interaction norms.
+
+### Norm of a ground-space compression — promoted (2026-10-28)
+
+- **Seen:** `Lattice/LowEnergyBasisConstruction.lean`,
+  `Lattice/LowEnergyBasisUniform.lean`, and the normalization of the general
+  recursive basis theorem in `Lattice/LowEnergyBasisUniformGeneral.lean`.
+- **Pattern:** Restrict a ground compression to its invariant ground eigenspace,
+  compare its operator norm with the ambient compression, and then with the
+  original term norm.
+- **Helper:** `norm_groundSpaceCompression_le` in
+  `TNLean/Lattice/LowEnergyBasisConstruction.lean`.
+- **Decision:** The normalized basis arguments use this mathematical norm bound
+  rather than repeat the subspace coercion and operator-norm calculation.
+
+
+### Retained vectors in nested operator ranges — promoted (2026-10-28)
+
+- **Pattern:** from `P * Q = Q` and `Q φ = φ`, deduce `P φ = φ`, previously
+  proved by substituting the second equality into the first matrix action.
+- **Abstraction:** `TNLean.MPS.AreaLaw.LocalSolution.toEuclideanLin_eq_of_mul_eq`
+  in `TNLean/MPS/AreaLaw/LocalSolution/HierarchicalProjection.lean`.
+- **Call sites:** the compressed-window and child-projection arguments in
+  `FinalStateEnergy.lean`, and the child and closing-window arguments in
+  `HierarchyNesting.lean`. The matrix identities still state the particular
+  nesting relation; the common argument on retained vectors is shared.
+
+### Diameter of a chain support in graph distance — promoted (2026-10-28)
+
+- **Pattern:** Convert the range condition of `ChainSupport L R` to an upper
+  bound on the path-graph distance between two sites of the support.
+- **Defined in:** `TNLean/MPS/AreaLaw/LiebRobinson.lean`,
+  `ChainSupport.edist_le`.
+- **Refactored occurrences:** the existing propagation and localization proofs
+  in that file and the finite-support numerical propagation proof in
+  `MPS/AreaLaw/Hastings/LiebRobinson.lean`.
+- **Notes:** The existing private proof is now a public theorem; the new
+  propagation estimate uses it instead of repeating the conversion to natural
+  distance. The mathematical range condition is unchanged.
 
 ### Matrices of submodule orthogonal projections — promoted (2026-10-26)
 
@@ -4995,6 +5079,16 @@ three-plaquette output measurement, and the routed reunion measurement.
 - **Notes:** Below the rule-of-three threshold. A third occurrence would
   justify the shared lemma.
 
+### Local residuals over a bounded assignment fibre — candidate (2026-10-28)
+
+- **Pattern:** centre a sum of local terms, pass its action through the sum,
+  and apply a norm bound using the actual number of assigned centres.
+- **Seen:** `residual_periodicCoarseOperator_le` in `PeriodicCoarsening.lean`
+  and `residual_roundedPeriodicOperator_le` in `RoundedPeriodicCoarsening.lean`.
+- **Abstraction:** both already use `norm_edgePartition_le_of_fibre_card`;
+  a residual version of that lemma would remove the remaining three-line
+  passage through centring and matrix action if another application appears.
+
 ### Simultaneous regional factors for a supported family — candidate (2026-10-26)
 
 - **Pattern:** Classify each ordinary term into one of three regions, choose
@@ -9621,6 +9715,148 @@ there is no need for a new tactic.
   add unrelated dependencies. If a shared one-step statement is needed, move that existing
   mathematical lemma to a lower matrix-analysis module and reuse it; do not duplicate its
   statement or introduce a new tactic.
+
+### Cancellation from a spanning matrix family — promoted
+- **Pattern:** express the identity as a finite linear combination of a
+  spanning family, distribute multiplication, and cancel two factors.
+- **Seen:** the two orientations in `PEPS/CycleMPSChainArc.lean`; its
+  trace-pairing cancellation already uses the same extension mechanism.
+- **Abstraction:** use Mathlib's `LinearMap.ext_on_range` on `mulLeft` or
+  `mulRight`, then evaluate at the identity. Both multiplication proofs now
+  work for an arbitrary `Sort` of generators without a finite-index instance.
+
+### Functional calculus on a Hermitian eigenbasis — candidate (2026-10-28)
+
+- **Pattern:** Expand the Hermitian functional calculus using its eigenvector
+  unitary, multiply by a basis vector and cancel the unitary factors. The
+  result is scalar multiplication by the function at the corresponding energy.
+- **Seen:** Two private helper proofs, in
+  `MPS/AreaLaw/Huang/ApproximateEnergyFilter.lean` and the companion module
+  `QICLean/Analysis/GroundProjection.lean`.
+- **Abstraction:** A public Mathlib or QICLean theorem for the action of a real
+  functional calculus on `IsHermitian.eigenvectorBasis` would replace both helpers.
+- **Notes:** The current spectral proof calls the helper once and then uses
+  `norm_cfc_le`; it does not repeat the full Gaussian Parseval argument.
+  The generic filtering module is intended for QICLean, where the helper can be
+  consolidated with the existing ground-projection development.
+
+
+### Increasing a matrix product bond bound — reuse (2026-10-29)
+
+- **Lemma:** `IsOpenMPS.mono` in `MPS/AreaLaw/OpenMPSCutRank.lean`
+  follows from the characterization by internal-cut matrix ranks.
+- **Use:** The uniform successive approximation and its arbitrary-accuracy
+  consequence enlarge a computed bond bound to one natural polynomial.
+  Both reuse this lemma, including the empty-chain case.
+- **Mechanism:** An ordinary monotonicity theorem suffices.
+
+
+### Pure output Gram projection — library zero criterion (2026-10-29)
+
+- **Seen:** `Circuit/Channel/PhysicalPortPureOutput.lean`.
+- **Pattern:** A pure marginal gives C*C†=P with P²=P; derive that every
+  actual output column is fixed by P before extracting its environment factor.
+- **Reuse:** Mathlib's `Matrix.mul_self_mul_conjTranspose_eq_zero` turns
+  (1-P)*(C*C†)=0 directly into (1-P)*C=0. Existing vector outer-product and
+  partial-trace identities give the factorization and its normalization.
+- **Decision:** Use the positive Gram zero criterion rather than add a parallel
+  purification structure or assume system/environment decoupling.
+
+### Weighted geometric sums grouped by their anchors — promoted (2026-10-28)
+
+- **Seen:** `Lattice/LowEnergyCommutatorSum.lean`,
+  `Lattice/LowEnergyBasisUniform.lean`, and `Lattice/GraphDegreeTail.lean`.
+- **Pattern:** Group a weighted sum by its anchor and apply a uniform bound on
+  the weight of each fibre before summing the nonnegative function on sites.
+- **Promotion:** `sum_weight_mul_comp_le_budget_mul_sum` in
+  `Lattice/GraphDegreeGrowth.lean` expresses the common inequality for any
+  nonnegative function. All three grouping proofs now use it.
+- **Reuse:** The lower module also owns the support-to-anchor budget lemma.
+  Polynomial sphere sums and bounded-degree exponential tails retain their
+  distinct summation estimates after the common grouping step.
+
+### Natural values of conditional finite edge assignments — candidate (2026-10-28)
+
+- **Seen:** `MPS/AreaLaw/LocalSolution/CoordinateSliceHierarchy.lean`, the two branches of
+  `coordinateSliceEdge_support` and the internal branch of
+  `coordinateSliceEdge_closing_support`.
+- **Pattern:** Apply `congrArg Fin.val` to an equality of finite edge labels, reduce the
+  constructor values, and conclude the natural-coordinate relation with `omega`.
+- **Decision:** Three branch occurrences in one file, below the two-file promotion
+  threshold. Before extending this pattern to another module, move the value equality
+  before the case distinction or reuse `Fin.val_inj`; no new tactic is needed.
+
+### Delta half factors for a supplied two-site circuit (2026-10-29)
+
+- **Seen:** `MPS/MPU/StandardFormFromGates.lean`.
+- **Pattern:** A virtual index records a physical/intermediate pair; a matrix-unit
+  half factor contracts the other half factor to the supplied shifted gate.
+- **Reuse:** The finite delta sum is handled by Mathlib's ordinary `simp` lemmas.
+  The periodic seam, circuit unitarity and basis-change cancellation reuse the
+  existing supplied standard-form and fundamental-theorem APIs. No fourth copy
+  of the circuit contraction or custom tactic is introduced.
+
+
+### Normalization after prefix truncation — candidate (2026-10-29)
+
+- **Pattern:** A nonzero truncation of a unit vector has normalized error at
+  most twice its vector error, by the reverse triangle inequality and
+  `‖‖v‖⁻¹ • v - v‖ = |1 - ‖v‖|`.
+- **Seen:** `MPS/AreaLaw/MPSApproximation.lean`,
+  `MPS/AreaLaw/SnakeGridApproximation.lean`.
+- **Abstraction:** The former has the public lemma
+  `norm_inv_norm_smul_sub_le_two_mul`. Move that lemma to a shared algebra
+  module if a third caller needs it, so square-grid proofs can reuse it
+  without importing the chain area-law theorem.
+- **Notes:** Two occurrences; the square proof currently keeps this short
+  calculation inside its normalization step and imports only the truncation core.
+
+### Exponential comparisons with a common nonnegative factor — reused Mathlib (2026-10-29)
+
+- **Pattern:** Apply monotonicity of the exponential, normalize a negative
+  quotient, and reverse the inequality under negation.
+- **Detected:** The new comparison in `LocalSolution/GappedPeriodicHierarchy.lean`
+  would repeat the initial three-line sequence already used in
+  `HierarchyRadius.lean` and `PeriodicChainApproximation.lean`.
+- **Reuse:** Normalize the exponent by `ring`, then use Mathlib's `gcongr`
+  and `min_le_right`. This removes the third copy without introducing a
+  new scalar lemma or tactic. The resulting proof passes strict elaboration.
+
+### Complementary-product prefix and suffix — candidate (2026-10-29)
+
+- **Pattern:** Induct on the complementary-product length, rewrite the successor
+  equation, and identify a masked or concatenated prefix before appending factors.
+- **Seen:** Three local inductions across
+  `MPS/AreaLaw/ALVV/FrustrationFree.lean` and
+  `MPS/AreaLaw/ALVV/FrustrationFreeGap.lean`.
+- **Abstraction:** Candidate for a general complementary-product congruence or
+  concatenation lemma if further consumers appear. The current inductions use
+  different ranges and factorizations, so no identical tactic block was promoted.
+- **Notes:** The repository tactic-pattern scan was run; it reported no new
+  repeated block in these modules among its twenty highest-ranked patterns.
+
+### Supported exterior sums at a cut — candidate (2026-10-29)
+
+- **Pattern:** Split retained nearest-neighbor terms into left, right and at most
+  one crossing bond; absorb identity and regional corrections into their supported
+  side, then use actual one-sided tensor decompositions.
+- **Seen:** Three rank bounds in `MPS/AreaLaw/ALVV/FrustrationFreeRank.lean`.
+- **Abstraction:** The private exterior decomposition and support lemmas are
+  shared by the interior, exterior and boundary-region cases.
+- **Notes:** No tactic macro is needed; the common mathematical statements are
+  already factored out. The repository tactic-pattern scan was rerun.
+
+### Active parity positions and adjacent bonds — candidate (2026-10-29)
+
+- **Pattern:** Recover the original bond index of a nonzero parity-ordered
+  factor, then bound its noncommuting positions by the images of its two
+  adjacent indices.
+- **Seen:** The ordered-family activity and degree-two proofs in
+  `MPS/AreaLaw/ALVV/FrustrationFreeChain.lean`.
+- **Abstraction:** The private activity lemma and public degree-two theorem
+  separate the index bookkeeping from the detectability estimate.
+- **Notes:** No tactic repetition reaches the promotion threshold. The
+  repository pattern scan was rerun after the concrete chain assembly.
 
 ### Intrinsic blocked traces from a product-tensor diagonal — candidate (2026-10-29)
 
