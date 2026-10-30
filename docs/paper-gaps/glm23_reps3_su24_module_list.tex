@@ -6,10 +6,10 @@
 \input{./command}
 \title{The $\mathrm{Rep}(S_3)$ and $su(2)_4$ Phases: Completeness of the Lists}
 \author{}
-\date{2026-09-27}
+\date{2026-09-27; updated 2026-10-30}
 \begin{document}
 \maketitle
-\gapnote{scope-restriction}{open}
+\gapnote{scope-restriction}{resolved}
 
 \section{The source claims}
 Garre-Rubio, Lootens and Moln\'ar list the phases of matrix product states
@@ -48,10 +48,10 @@ $m_2=1$, $m_1=2$ and $m_{1/2}^2=3$.\footnote{Results:
     \leanid{MPOTensor.isFusionCharacter_repS3Fusion_iff} and
     \leanid{MPOTensor.not_isFusionCharacter_su24Fusion}.}
 
-Not formalized: completeness of the lists beyond one block. The source takes
-it from the classification of module categories, which it cites. It is not a
-consequence of (\ref{eq:glm23_list_nimrep}) with trivial unit action alone:
-for $\mathrm{Rep}(S_3)$ on two blocks,
+Completeness beyond one block is not a consequence of
+(\ref{eq:glm23_list_nimrep}) with trivial unit action alone. The source takes
+it from the classification of module categories, which it cites. For
+$\mathrm{Rep}(S_3)$ on two blocks,
 \begin{align}
     M_\psi & =\begin{pmatrix}1&0\\0&1\end{pmatrix}, &
     M_\pi  & =\begin{pmatrix}0&1\\2&1\end{pmatrix}
@@ -60,12 +60,42 @@ for $\mathrm{Rep}(S_3)$ on two blocks,
 satisfies (\ref{eq:glm23_list_nimrep}), but the representation
 (\ref{eq:glm23_list_counterexample}) is neither the $\mathbb Z_2$
 phase nor a sum of two copies of the $\mathbb Z_1$ phase. It violates the
-duality $M_{a^*}=M_a^{\mathsf T}$ of a module category, as $\pi$ is self-dual.
+duality $M_{a^*}=M_a^{\mathsf T}$ of a module category, as $\pi$ is
+self-dual.\footnote{Results:
+    \leanid{MPOTensor.isNIMRep_repS3NonDual} and
+    \leanid{MPOTensor.not_isTransposeDual_repS3NonDual}.}
 
-Elimination plan: formalize the duality condition on representations; bound
-the number of blocks of an indecomposable representation of each ring
-satisfying it; and enumerate the finitely many candidates, as is done for
-the Fibonacci ring on two blocks.
+\section{Completeness among dual representations}
+Formalized: with the duality added, the lists are complete on any finite
+number of blocks. Every label of either ring is self-dual, so the duality
+says that every $M_a$ is symmetric. In a representation of
+$\mathrm{Rep}(S_3)$ satisfying (\ref{eq:glm23_list_nimrep}) with trivial unit
+action and symmetric matrices, every block lies in a direct summand
+isomorphic to the $\mathbb Z_1$, $\mathbb Z_2$, $\mathbb Z_3$ or $S_3$
+phase; for $su(2)_4$, every block lies in a direct summand isomorphic to the
+five-block phase or to $\mathcal M_{TY}$. An indecomposable representation
+is one of the listed phases.\footnote{Results:
+    \leanid{MPOTensor.exists_isNIMRepSummand_repS3},
+    \leanid{MPOTensor.exists_equiv_of_isIndecomposable_repS3},
+    \leanid{MPOTensor.exists_isNIMRepSummand_su24} and
+    \leanid{MPOTensor.exists_equiv_of_isIndecomposable_su24}.}
+
+The argument is local. The matrix $M_\psi$ (or $M_2$) squares to the
+identity and is a symmetric matrix of natural numbers, so it is the
+permutation matrix of an involution $\sigma$ of the blocks. With
+$T=M_\pi$ (or $M_1$), the relations $T=M_\psi T$ and
+$T^2=1+T+M_\psi$ give, on the diagonal,
+$\sum_z T_{xz}^2=1+T_{xx}+[\sigma x=x]$. This bounds $T_{xx}\le2$ and
+leaves a short list of local configurations around each block, each of
+which closes into one of the listed summands. For $su(2)_4$ the relations
+$\tfrac12\times\tfrac12=0+1$ and $\tfrac12\times2=\tfrac32$ then fix the
+action of $\tfrac12$ around each such configuration.
+
+The remaining restriction is in the input: the multiplicities of a module
+category are taken with their duality as hypotheses, and the module
+categories themselves (their associativity data) are not classified. The
+lists are identified at the level of the multiplicities, which is the level
+at which the source prints them.
 \bibliographystyle{alpha}
 \bibliography{references}
 \end{document}
