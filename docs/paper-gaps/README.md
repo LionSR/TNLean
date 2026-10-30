@@ -209,6 +209,16 @@ For the MPU index of arXiv:1703.09188:
   swap labels in Figure `fig:TR-ancilla` agree with $\widetilde U_3$ and differ
   from the claimed $\widetilde U_2$ endpoint when $N\geq3$ and $d\geq2$, and
   that reversing those crossed swaps gives the intended local correction.
+- `mpu_qca_complete_block_heisenberg_scope.tex` records the supplied
+  two-site standard-form scope of the finite MPU Heisenberg identity, the
+  forward and inverse finite propagation built on it with radius measured
+  in the block length, and the canonical and bare-MPU construction of the
+  induced QCA with source radius $4D^4$.
+- `mpu_qca_index_normalization.tex` (local correction) records that the
+  Appendix relation $\operatorname{ind}_{\mathrm{MPU}}=-2\log_2(\ell/d)$
+  conflicts with the defining formula of the MPU index, corrects it to
+  $-\log_2$ of the positive rational QCA index, and records the reversed
+  adjoint order in the printed transport of the left support factor.
 
 For the MPU symmetry-defect gauging paper:
 
