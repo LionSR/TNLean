@@ -102,7 +102,7 @@ theorem pvbsEdge_snoc (q : ℂ) (N : ℕ) (σ : Cfg 2 N) (i : Fin 2) :
       if i = 0 then pvbsEdge q (N + 1) (Fin.cons a τ)
       else q ^ (N + 1) * pvbsVacuum (N + 1) (Fin.cons a τ)
     rw [← Fin.cons_snoc_eq_snoc_cons]
-    fin_cases a <;> fin_cases i <;>
+    fin_cases a <;>
       simp [pvbsEdge_cons_zero, pvbsEdge_cons_one, pvbsVacuum_cons, pvbsVacuum_snoc,
         ih, pow_succ, mul_assoc, mul_comm, mul_left_comm]
 
@@ -115,13 +115,13 @@ theorem pvbsEdge_cyclic_step (q : ℂ) (N : ℕ) (hq : q ^ (N + 1) = 1)
     (σ : Cfg 2 (N + 1)) :
     q * pvbsEdge q (N + 1) (fun j ↦ σ (finRotate (N + 1) j)) =
       pvbsEdge q (N + 1) σ := by
-  obtain ⟨⟨a, τ⟩, rfl⟩ := (Fin.consEquiv fun _ : Fin (N + 1) ↦ Fin 2).surjective σ
-  change q * pvbsEdge q (N + 1) (fun j ↦ Fin.cons a τ (finRotate (N + 1) j)) =
-    pvbsEdge q (N + 1) (Fin.cons a τ)
-  rw [← Fin.snoc_eq_cons_rotate, pvbsEdge_snoc]
-  fin_cases a
-  · simp
-  · simp only [show (1 : Fin 2) ≠ 0 by decide, ite_false, pvbsEdge_cons_one]
+  have hrot : (fun j ↦ σ (finRotate (N + 1) j)) = Fin.snoc (Fin.tail σ) (σ 0) := by
+    rw [Fin.snoc_eq_cons_rotate]
+    simp only [Fin.cons_self_tail]
+  rw [hrot, pvbsEdge_snoc]
+  rcases eq_or_ne (σ 0) 0 with h0 | h0
+  · simp only [pvbsEdge, if_pos h0]
+  · simp only [pvbsEdge, if_neg h0]
     rw [← mul_assoc, ← pow_succ', hq, one_mul]
 
 /-- A nontrivial root-of-unity weight gives a vector which is not
