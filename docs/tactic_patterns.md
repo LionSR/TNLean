@@ -9888,6 +9888,21 @@ there is no need for a new tactic.
   window evaluation and support theorems.
 - **Notes:** The actual middle output is [k,5k) inside its existing 6k-site
   window; no support conclusion or new factor predicate is a premise.
+
+### Common buffered chain for completed local inverse identities — candidate (2026-10-29)
+
+- **Pattern:** use derived finite output support, choose one finite chain containing
+  both input and output with their buffers, reflect equality through the faithful
+  local observable embedding, cancel the actual finite conjugations, and extend
+  by completion density.
+- **Occurrences:** the two inverse directions in
+  `SpinChain.exists_isQCA_of_isMPUCanonicalFormII` use the single private helper
+  `leftInverse_of_finiteChainConjugation` in `MPS/MPU/CanonicalQuasiLocalAction.lean`.
+- **Abstraction:** the helper already removes the repeated common-buffer and
+  completion proof. No tactic is needed; a public generalization should wait for
+  an independent caller.
+
+
 ### Reuse established interval-coordinate owners across consumers (2026-10-29)
 
 - **Seen:** actual MPU/QCA window and translation consumers, and parent-Hamiltonian
@@ -9898,6 +9913,16 @@ there is no need for a new tactic.
   `ParentHamiltonian/QuasiLocalWindowCoordinates`; move the established translation
   statement unchanged to `QCA/IntervalTranslation`. Reuse those owners and retain
   their existing signatures, rather than renaming the duplicates or adding aliases.
+
+### Equality of actual induced actions through a common buffer (2026-10-29)
+
+- **Seen:** `MPS/MPU/QuasiLocalActionChoice.lean`.
+- **Pattern:** Put a local region and both actual source-radius neighbourhoods in one
+  finite chain; compare its physical matrices, then use completion density.
+- **Reuse:** Existing actual finite-evaluation and buffer-existence theorems supply
+  the entire argument; no new compatible-family predicate or source-rank transport.
+  The earlier common-buffer inverse helper has different cancellation hypotheses,
+  so the equality theorem remains a separate mathematical statement.
 
 ### Weighted geometric sums grouped by their anchors — promoted (2026-10-28)
 
