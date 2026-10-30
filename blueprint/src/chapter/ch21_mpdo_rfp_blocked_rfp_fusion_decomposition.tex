@@ -1,4 +1,4 @@
-\begin{theorem}[Unitary relabelling of vertical sectors]
+\begin{lemma}[Unitary relabelling of vertical sectors]
     \label{thm:mpdo_transported_vertical_sector_unitary_relabeling}
     \lean{MPOTensor.transportedVerticalSector_exists_unitaryBlockEquiv}
     \leanok
@@ -34,14 +34,14 @@
     \cite[Appendix~C.4, line~1997]{Cirac2016MPDO_arXiv}. They make no assertion
     about the multiplicities, weights, or coefficient identity at
     lines~2001--2008.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{lem:cpsv_bnt_block_dimensions_positive, thm:mpdo_transported_vertical_sector_composites_trace_preserving, thm:mpdo_transported_vertical_sector_composites_schwarz, thm:mpdo_transported_vertical_sector_composites_identity}
     The two basis-of-normal-tensors decompositions have positive matrix
     dimensions. The vertical-sector maps are completely positive and preserve
     the total block trace, and
-    Theorem~\ref{thm:mpdo_transported_vertical_sector_composites_identity}
+    Lemma~\ref{thm:mpdo_transported_vertical_sector_composites_identity}
     gives both inverse laws.
     Applying Theorem~\cite[``Unitary action of an invertible CPTP map'']{QICLean2026Blueprint} to this
     pair, its equivalence of summands, dimension equalities, and unitary
@@ -49,7 +49,7 @@
     relabelling.
 \end{proof}
 
-\begin{theorem}[Coefficient comparison for vertical sectors]
+\begin{lemma}[Coefficient comparison for vertical sectors]
     \label{thm:mpdo_transported_vertical_sector_coefficient_comparison}
     \lean{MPOTensor.transportedVerticalSector_exists_unitaryBlockEquiv_coefficient_eq}
     \leanok
@@ -76,7 +76,7 @@
     \cite[Appendix~C.4, lines~2001--2008]{Cirac2016MPDO_arXiv}. It compares
     the traces of the multiplicity matrices; it does not assert equality of
     their dimensions or of their individual diagonal entries.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{lem:mpdo_vertical_bond_contraction_encoded_matrix_unit, lem:mpdo_vertical_sector_retraction, thm:mpdo_transported_vertical_sector_unitary_relabeling, thm:mpdo_transported_vertical_sector_maps}
@@ -95,7 +95,7 @@
     (\ref{eq:mpdo_vertical_coeff_comp_letter}).
 \end{proof}
 
-\begin{theorem}[Simultaneous representations of the blocked vertical operator]
+\begin{lemma}[Simultaneous representations of the blocked vertical operator]
     \label{thm:mpdo_blocked_vertical_operator_representations}
     \lean{MPOTensor.transportedVerticalSector_exists_blockedOperatorRepresentations}
     \lean{MPOTensor.verticalBNTMPO_verticalTensor_blockTwo}
@@ -134,7 +134,7 @@
     printed as $m_\gamma^L/n_\gamma$; the tensor scaling requires
     $(m_\gamma/n_\gamma)^L$ (see
     \cite{gap:cpsv16_blocked_operator_trace_ratio_exponent}).
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpdo_operator_product_mpo, lem:mpv_vertical_assembled, thm:mpdo_transported_vertical_sector_coefficient_comparison, thm:coisometry_reconstruction_same_mpv_pos}
@@ -142,7 +142,7 @@
     $O_L(B)=\sum_\delta\tr(\nu_\delta^L)
         O_L(A^{(2)}_\delta)$.
     Reindex this sum by $\delta=\sigma(\alpha)$. The tensor-letter identity
-    from Theorem~\ref{thm:mpdo_transported_vertical_sector_coefficient_comparison}
+    from Lemma~\ref{thm:mpdo_transported_vertical_sector_coefficient_comparison}
     multiplies every letter of $A^{(1)}_\alpha$ by
     $m_\alpha/n_{\sigma(\alpha)}$. Along a chain of length $L$ this scalar
     therefore occurs to the power $L$; unitary conjugation and the bond-index
@@ -158,7 +158,7 @@
     and distribute the product of the two finite sums.
 \end{proof}
 
-\begin{theorem}[Canonical hypotheses for the retained vertical product]
+\begin{lemma}[Canonical hypotheses for the retained vertical product]
     \label{thm:mpdo_retained_vertical_product_canonical_hypotheses}
     \lean{MPOTensor.verticalCoisometrySquare}
     \lean{MPOTensor.verticalCoisometrySquare_isCoisometry}
@@ -174,7 +174,7 @@
     positive operators, this retained product tensor has invariant-projector closure
     and has no nontrivial periodic vectors. No full-support assumption is
     imposed on the retained bond space.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     The Kronecker square of a coisometry is again a coisometry. Expanding a
@@ -186,7 +186,7 @@
     isometrically as a periodic vector of the blocked vertical tensor.
 \end{proof}
 
-\begin{theorem}[Canonical hypotheses for every retained copy pair]
+\begin{lemma}[Canonical hypotheses for every retained copy pair]
     \label{thm:mpdo_weighted_vertical_product_block_canonical_hypotheses}
     \lean{MPOTensor.productRetainedEquiv}
     \lean{MPOTensor.weightedVerticalProductBlock}
@@ -201,7 +201,7 @@
     Every such summand has invariant-projector closure and has no nontrivial
     periodic vectors. This includes zero-dimensional summands and requires
     no nonvanishing assumption on the displayed scalar.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     The canonical inclusion of a dependent direct-sum block is an isometry.
@@ -213,7 +213,7 @@
     periodic vector of the full retained product.
 \end{proof}
 
-\begin{theorem}[Normal-corner decomposition of a retained copy pair]
+\begin{lemma}[Normal-corner decomposition of a retained copy pair]
     \label{thm:mpdo_weighted_vertical_product_block_normal_decomposition}
     \lean{MPOTensor.exists_weightedVerticalProductBlock_normalDecomposition}
     \leanok
@@ -224,12 +224,12 @@
     both directions, and reconstruct every tensor letter. The active family
     is allowed to be empty; in particular, no normal block is introduced for
     a zero-dimensional or identically zero copy-pair tensor.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Apply the canonical-form sufficient condition to the invariant-projector
     closure and periodic-exclusion properties of
-    Theorem~\ref{thm:mpdo_weighted_vertical_product_block_canonical_hypotheses}. Its
+    Lemma~\ref{thm:mpdo_weighted_vertical_product_block_canonical_hypotheses}. Its
     spectral construction discards precisely the corners on which every
     letter vanishes and retains the isometry of every nonzero corner.
 \end{proof}
@@ -283,7 +283,7 @@
     hypotheses independently.
 \end{definition}
 
-\begin{theorem}[Existence and inclusions of retained-product spectral data]
+\begin{lemma}[Existence and inclusions of retained-product spectral data]
     \label{thm:mpdo_retained_product_spectral_family_exists}
     \lean{MPOTensor.verticalCopyCoordinateEquiv}
     \lean{MPOTensor.verticalCopyCoordinateEquiv_symm_apply}
@@ -326,7 +326,7 @@
     $J_j^\dagger(\widetilde{M^{(2)}})^iJ_j=\lambda_jA_j^i$.
     These explicit composite inclusions retain the range projections required
     for the sector-weight comparison.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     In copy coordinates the direct-sum tensor is block diagonal. The
@@ -349,7 +349,7 @@
     compression formula.
 \end{proof}
 
-\begin{theorem}[Flattened reconstruction of the retained product]
+\begin{lemma}[Flattened reconstruction of the retained product]
     \label{thm:mpdo_retained_product_flat_reconstruction}
     \lean{MPOTensor.retainedVerticalProductTensor_eq_sum_pairBlocks}
     \lean{MPOTensor.retainedProductBlockInclusion_orthogonal_of_ne}
@@ -393,7 +393,7 @@
     Each compression $W_j^\dagger C^iW_j$ is
     $\lambda_jA_j^i$, and $C$ has the same positive-length closed chains as
     the finite direct sum $\bigoplus_j\lambda_jA_j$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     First reconstruct the retained product as the sum of its canonical
@@ -407,7 +407,7 @@
     \cite[Appendix~C.4, lines~2020--2029]{Cirac2016MPDO_arXiv}.
 \end{proof}
 
-\begin{theorem}[Coverage of active product corners by the blocked BNT]
+\begin{lemma}[Coverage of active product corners by the blocked BNT]
     \label{thm:mpdo_active_product_corner_blocked_bnt_coverage}
     \lean{MPOTensor.RetainedProductSpectralFamily.%
         exists_blockedBNT_gaugePhase_of_flatBlock}
@@ -433,7 +433,7 @@
     Here fixed-pair support follows from exact squared reconstruction and the
     canonical direct-sum corner, with a zero pair contributing an empty active
     family \cite{gap:cpsv16_figure11_per_pair_support}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     The squared coisometric reconstruction gives equality of all
@@ -445,7 +445,7 @@
     these comparisons simultaneous.
 \end{proof}
 
-\begin{theorem}[Distinguished blocked reference corners]
+\begin{lemma}[Distinguished blocked reference corners]
     \label{thm:mpdo_blocked_reference_corners}
     \lean{MPOTensor.blockedReferenceInclusion}
     \lean{MPOTensor.blockedReferenceInclusion_isometry}
@@ -468,7 +468,7 @@
     product corner covered by $\gamma$, reindex $F_\gamma$ along the stated
     equality of bond dimensions. The reindexed map remains an isometry and
     obeys the corresponding reindexed compression identity.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     The copy inclusion is isometric and selects one diagonal block of the
@@ -477,7 +477,7 @@
     Reindexing along equality of bond dimensions preserves these equations.
 \end{proof}
 
-\begin{theorem}[Active product positivity from sector separation]
+\begin{lemma}[Active product positivity from sector separation]
     \label{thm:mpdo_active_product_coefficient_phase_pos_of_sector_separation}
     \lean{MPOTensor.RetainedProductSpectralFamily.FlatBlockedBNTComparison.%
         activeCoefficient_mul_phase_pos_of_sectorCompression_separation}
@@ -490,7 +490,7 @@
     every projection with a nonzero two-sided corner of the blocked vertical tensor
     has a nonzero finite-chain sector compression. Then every active product
     corner $j$ satisfies $0<\lambda_j\zeta_j$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Compare the active corner with the distinguished positive-weight copy of
@@ -500,7 +500,7 @@
     $\lambda_j\zeta_j>0$.
 \end{proof}
 
-\begin{theorem}[Positivity of active product coefficients]
+\begin{lemma}[Positivity of active product coefficients]
     \label{thm:mpdo_active_product_coefficient_phase_pos}
     \lean{MPOTensor.RetainedProductSpectralFamily.FlatBlockedBNTComparison.%
         activeCoefficient_mul_phase_pos}
@@ -512,23 +512,23 @@
     blocked vertical tensors, positive multiplicities and weights for the
     blocked BNT, and normality of its BNT representatives. For every active
     product corner $j$, one has $0<\lambda_j\zeta_j$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     The sector-compression separation hypothesis gives a nonzero
     finite-chain compression for each active corner, so
-    Theorem~\ref{thm:mpdo_active_product_coefficient_phase_pos_of_sector_separation}
+    Lemma~\ref{thm:mpdo_active_product_coefficient_phase_pos_of_sector_separation}
     gives $0<\lambda_j\zeta_j$.
 \end{proof}
 
-\begin{theorem}[Unitary normalization of active product gauges]
+\begin{lemma}[Unitary normalization of active product gauges]
     \label{thm:mpdo_active_product_gauge_unitary_normalization}
     \lean{MPOTensor.RetainedProductSpectralFamily.FlatBlockedBNTComparison.%
         exists_unitaryNormalization}
     \leanok
     \uses{def:mpdo, def:mpdo_grouped_vertical_product_inputs, thm:mpdo_active_product_corner_blocked_bnt_coverage, thm:mpdo_retained_product_spectral_family_exists, thm:mpdo_active_product_coefficient_phase_pos, thm:mpdo_blocked_reference_corners, thm:mpdo_pairwise_vertical_gram_conjugation, thm:normal_tensor_gram_rigidity}
     Under the hypotheses of
-    Theorem~\ref{thm:mpdo_active_product_coefficient_phase_pos}, as in the
+    Lemma~\ref{thm:mpdo_active_product_coefficient_phase_pos}, as in the
     gauge normalization of
     \cite[Appendix~C.4, lines~2025--2029]{Cirac2016MPDO_arXiv},
     every active product corner $j$ admits a real number $\omega_j>0$ such that
@@ -540,7 +540,7 @@
          & \in\mathrm{U}(D_j).
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     In the Figure~8 comparison between the active corner and the
@@ -568,7 +568,7 @@
     \cite{gap:cpsv16_figure11_per_pair_support}.
 \end{definition}
 
-\begin{theorem}[Positive original-label corner decomposition]
+\begin{lemma}[Positive original-label corner decomposition]
     \label{thm:mpdo_original_corner_family_exists}
     \lean{MPOTensor.RetainedProductSpectralFamily.exists_originalCornerFamily}
     \leanok
@@ -594,7 +594,7 @@
     For copy pairs with empty active support, exact weighted reconstruction and
     positivity of the outer copy weight imply that the corresponding unweighted
     product vanishes \cite{gap:cpsv16_figure11_per_pair_support}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Compose each local inclusion first with the normalized active comparison
@@ -610,7 +610,7 @@
     gives the unweighted reconstruction.
 \end{proof}
 
-\begin{theorem}[Fusion coisometries from original-label corners]
+\begin{lemma}[Fusion coisometries from original-label corners]
     \label{thm:mpdo_original_corner_family_to_fusion_coisometry}
     \lean{MPOTensor.RetainedProductSpectralFamily.OriginalCornerFamily.%
         toBNTFusionCoisometryFamily}
@@ -653,7 +653,7 @@
     handled by empty families \cite{gap:cpsv16_figure11_per_pair_support}
     and the retained-row map acting as a coisometry onto the active direct sum
     \cite{gap:cpsv16_figure11_fusion_coisometry}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     For each distinguished copy pair, form the block row from the adjoints of
@@ -666,7 +666,7 @@
     without separate cases when a fiber or the whole active family is empty.
 \end{proof}
 
-\begin{theorem}[Fusion coisometries from normalized product corners]
+\begin{lemma}[Fusion coisometries from normalized product corners]
     \label{thm:mpdo_normalized_product_corners_to_fusion_coisometry}
     \lean{MPOTensor.RetainedProductSpectralFamily.%
         exists_bntFusionCoisometryFamily}
@@ -685,16 +685,16 @@
     handling fixed-pair support \cite{gap:cpsv16_figure11_per_pair_support},
     and using coisometric fusion onto the active subspace
     \cite{gap:cpsv16_figure11_fusion_coisometry}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     The positive coefficients and normalized gauges give an original-label
     corner family. Apply the block-row construction of
-    Theorem~\ref{thm:mpdo_original_corner_family_to_fusion_coisometry} to its
+    Lemma~\ref{thm:mpdo_original_corner_family_to_fusion_coisometry} to its
     orthogonal isometric inclusions.
 \end{proof}
 
-\begin{theorem}[Positive fusion from vertical sectors]
+\begin{lemma}[Positive fusion from vertical sectors]
     \label{thm:mpdo_transported_vertical_product_positive_fusion_decomposition}
     \lean{MPOTensor.transportedVerticalSector_exists_positiveFusionDecomposition}
     \leanok
@@ -730,7 +730,7 @@
     active product corners \cite{gap:cpsv16_bnt_uniqueness_zero_coefficient},
     fixed-pair support \cite{gap:cpsv16_figure11_per_pair_support}, and
     coisometric fusion \cite{gap:cpsv16_figure11_fusion_coisometry}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     First decompose every retained copy-pair tensor into its active normal
@@ -745,7 +745,7 @@
     identities.
 \end{proof}
 
-\begin{theorem}[Positive fusion from grouped vertical product inputs]
+\begin{lemma}[Positive fusion from grouped vertical product inputs]
     \label{thm:mpdo_grouped_vertical_product_positive_fusion_decomposition}
     \lean{MPOTensor.HasVerticalBNTProductInputs.%
         exists_positiveFusionDecomposition_of_unitaryBlockEquiv}
@@ -785,7 +785,7 @@
     corners and coisometric fusion following
     \cite{gap:cpsv16_bnt_uniqueness_zero_coefficient,
         gap:cpsv16_figure11_per_pair_support, gap:cpsv16_figure11_fusion_coisometry}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     The grouped vertical product hypotheses give simultaneous spectra for all
@@ -797,7 +797,7 @@
     coisometries $U_{\alpha,\beta}$ and yield both displayed identities.
 \end{proof}
 
-\begin{theorem}[Idempotent trace scalars from blocked representations]
+\begin{lemma}[Idempotent trace scalars from blocked representations]
     \label{thm:mpdo_blocked_representations_idempotent_trace_scalars}
     \lean{MPOTensor.hasIdempotentCoefficientForm_of_blockedRepresentations}
     \leanok
@@ -809,7 +809,7 @@
     fusion identities. As in
     \cite[Appendix~C.4, lines~2030--2042]{Cirac2016MPDO_arXiv}, if the blocked
     operator has the two simultaneous representations of
-    Theorem~\ref{thm:mpdo_blocked_vertical_operator_representations}, then the
+    Lemma~\ref{thm:mpdo_blocked_vertical_operator_representations}, then the
     trace scalars satisfy the idempotent coefficient identity
     \begin{align}
         m_\gamma
@@ -817,7 +817,7 @@
         \tr(\chi_{\alpha,\beta,\gamma})m_\alpha m_\beta.
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     For every sufficiently large $L$, expanding the product of one-site sector
@@ -840,7 +840,7 @@
     $n_{\sigma(\gamma)}$ gives the displayed length-one identity.
 \end{proof}
 
-\begin{theorem}[Positive fusion decomposition of vertical products]
+\begin{lemma}[Positive fusion decomposition of vertical products]
     \label{thm:mpdo_vertical_product_positive_fusion_decomposition}
     \lean{MPOTensor.exists_positiveFusionDecomposition_of_isRFPViaTS}
     \leanok
@@ -874,7 +874,7 @@
     \cite[Appendix~C.4, lines~2020--2029]{Cirac2016MPDO_arXiv} on the active
     corners \cite{gap:cpsv16_bnt_uniqueness_zero_coefficient,
         gap:cpsv16_figure11_per_pair_support, gap:cpsv16_figure11_fusion_coisometry}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Applying the proved normalized BNT-refined specialization of
@@ -883,20 +883,20 @@
     matrices, and both coisometric decomposition identities.
     With the two completely positive, trace-preserving maps from the
     renormalization fixed-point condition,
-    Theorem~\ref{thm:mpdo_transported_vertical_product_positive_fusion_decomposition}
+    Lemma~\ref{thm:mpdo_transported_vertical_product_positive_fusion_decomposition}
     then gives the positive diagonal family, the row
     coisometries, the forward fusion identity, and exact reconstruction for
     the chosen one-site vertical basis.
 \end{proof}
 
-\begin{theorem}[Two-site closure of the two-site blocking]
+\begin{lemma}[Two-site closure of the two-site blocking]
     \label{thm:mpdo_two_site_closure_two_site_blocking}
     \lean{MPOTensor.physClose2_blockTwo_eq_physClose4}
     \leanok
     \uses{def:phys_close, def:mpdo_two_site_blocking, def:mpdo_four_site_physical_closure}
     After identifying two blocked physical indices with four original
     indices, one has $(K^{[2]})_2(X)=K_4(X)$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Expanding the two blocked tensor matrices and reassociating their product

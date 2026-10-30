@@ -36,7 +36,7 @@ lengths, and $Q^{+d}=Q+([-d,d]^2\cap\mathbb Z^2)$.
     an ambient rectangle $Q$ is $A\cap Q$.
 \end{definition}
 
-\begin{theorem}[Contours around a safe rectangle]
+\begin{lemma}[Contours around a safe rectangle]
     \label{thm:area_law_buffer_contours}
     \lean{TNLean.PEPS.AreaLaw.subset_of_isSafe,
         TNLean.PEPS.AreaLaw.not_splits_two_contours,
@@ -55,7 +55,7 @@ lengths, and $Q^{+d}=Q+([-d,d]^2\cap\mathbb Z^2)$.
     $d'=2$, with two admissible supports that are each split by exactly one
     contour.
     \input{figures/area_law_buffer_contours}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \lean{TNLean.PEPS.AreaLaw.latticeL1Distance_le_one_of_adj,
         TNLean.PEPS.AreaLaw.supDist_le_latticeL1Distance,
@@ -73,7 +73,7 @@ lengths, and $Q^{+d}=Q+([-d,d]^2\cap\mathbb Z^2)$.
     $4(R+1)(\operatorname{size}(Q_0)+2d')$ lattice points.
 \end{proof}
 
-\begin{theorem}[Conditional entropy in a buffered rectangle]
+\begin{lemma}[Conditional entropy in a buffered rectangle]
     \label{thm:area_law_initial_buffer}
     \lean{TNLean.PEPS.AreaLaw.exists_condEntropy_le_initialBuffer_real}
     \leanok
@@ -92,7 +92,7 @@ lengths, and $Q^{+d}=Q+([-d,d]^2\cap\mathbb Z^2)$.
         S_\Omega(X\mid T)\le\frac12S_\Omega(X)+C_{\mathrm{buf}}r.
     \end{align}
     This is~\cite[Lemma~3.2]{OpenAI2026AreaLaw}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_buffer_contours,thm:area_law_marginal_tails}
     \lean{TNLean.PEPS.AreaLaw.condEntropy_le_initialBuffer_of_constants,
@@ -113,10 +113,10 @@ lengths, and $Q^{+d}=Q+([-d,d]^2\cap\mathbb Z^2)$.
         <\operatorname{dist}_\infty(Q,Z).
     \end{align}
     Thus $Q$ is safe with integer parameter $D$, and
-    Theorem~\ref{thm:area_law_buffer_contours} applies.
+    Lemma~\ref{thm:area_law_buffer_contours} applies.
     Put $m=\lfloor(C_{\mathrm{pad}}-1)r/D\rfloor$ and
     $X_j=A\cap Q_0^{+d_j}$ with $d_j=r+jD$, $1\le j\le m$. By
-    Theorem~\ref{thm:area_law_buffer_contours} every admissible support splits
+    Lemma~\ref{thm:area_law_buffer_contours} every admissible support splits
     at most one $X_j$, and the number of split supports and the parameter
     $\mathcal B_j$ of~\cite[Lemma~3.1]{OpenAI2026AreaLaw} are at most a constant times $r+d_j$. The
     harmonic weights $a_j=2/(Z_r(r+d_j))$ with $Z_r=\sum_j1/(r+d_j)$ have total
