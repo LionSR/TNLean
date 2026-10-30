@@ -9908,6 +9908,7 @@ there is no need for a new tactic.
   it does not copy the general physical-rotation word expansion.
 - **Decision:** Existing mathematical helpers suffice; no new tactic or tensor
   construction is introduced.
+=======
 
 ### Weighted geometric sums grouped by their anchors — promoted (2026-10-28)
 
