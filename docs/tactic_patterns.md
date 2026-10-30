@@ -5057,6 +5057,7 @@ three-plaquette output measurement, and the routed reunion measurement.
 - **Decision:** One use. Keep the mathematical extraction in its named helper
   and reuse the existing Gaussian spectral and ground-space estimates; no
   new tactic or duplicate eigenbasis calculation is needed.
+
 ### Recovering letters by an identity contraction — candidate (2026-10-29)
 
 - **Seen:** `isInjective_uncleTensor_of_isInjective_perturbation` in
