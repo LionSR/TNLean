@@ -72,11 +72,41 @@ theorem IsMPUSimple.normalizedDiagonal_insertion_of_isReduction
       doubleLayerTensor V i j * doubleLayerTensor V q q * doubleLayerTensor V k l := by
     simpa [List.ofFn_succ, List.ofFn_zero, evalWord, Matrix.mul_assoc] using
       doubleLayer_evalWord_of_isReduction h ![i, q, k] ![j, q, l]
-  have hinsert := congrArg (fun M ↦ doubledBondMap A * M * doubledBondMap B)
-    (hU.letter_mul_normalizedDiagonal_mul_letter i j k l)
-  simp only [normalizedDiagonal_eq_smul_sum_diagonal, Matrix.mul_smul,
-    Matrix.smul_mul, Finset.mul_sum, Finset.sum_mul] at hinsert ⊢
-  simpa only [hthree, htwo] using hinsert
+  have hLHS : doubleLayerTensor V i j * normalizedDiagonal (doubleLayerTensor V) *
+        doubleLayerTensor V k l =
+      (d : ℂ)⁻¹ • ∑ q : Fin d,
+        doubleLayerTensor V i j * doubleLayerTensor V q q *
+          doubleLayerTensor V k l := by
+    rw [normalizedDiagonal_eq_smul_sum_diagonal, Matrix.mul_smul, Matrix.smul_mul,
+      Finset.mul_sum, Finset.sum_mul]
+  have hRHS : doubledBondMap A *
+        (doubleLayerTensor U i j * normalizedDiagonal (doubleLayerTensor U) *
+          doubleLayerTensor U k l) * doubledBondMap B =
+      (d : ℂ)⁻¹ • ∑ q : Fin d,
+        doubledBondMap A *
+          (doubleLayerTensor U i j * doubleLayerTensor U q q *
+            doubleLayerTensor U k l) * doubledBondMap B := by
+    rw [normalizedDiagonal_eq_smul_sum_diagonal, Matrix.mul_smul, Matrix.smul_mul,
+      Finset.mul_sum, Finset.sum_mul, Matrix.mul_smul, Matrix.smul_mul,
+      Finset.mul_sum, Finset.sum_mul]
+  calc doubleLayerTensor V i j * normalizedDiagonal (doubleLayerTensor V) *
+          doubleLayerTensor V k l
+      = (d : ℂ)⁻¹ • ∑ q : Fin d,
+          doubleLayerTensor V i j * doubleLayerTensor V q q *
+            doubleLayerTensor V k l := hLHS
+    _ = (d : ℂ)⁻¹ • ∑ q : Fin d,
+          doubledBondMap A *
+            (doubleLayerTensor U i j * doubleLayerTensor U q q *
+              doubleLayerTensor U k l) * doubledBondMap B := by
+          congr 1
+          exact Finset.sum_congr rfl fun q _ ↦ (hthree q).symm
+    _ = doubledBondMap A *
+          (doubleLayerTensor U i j * normalizedDiagonal (doubleLayerTensor U) *
+            doubleLayerTensor U k l) * doubledBondMap B := hRHS.symm
+    _ = doubledBondMap A *
+          (doubleLayerTensor U i j * doubleLayerTensor U k l) * doubledBondMap B := by
+          rw [hU.letter_mul_normalizedDiagonal_mul_letter]
+    _ = doubleLayerTensor V i j * doubleLayerTensor V k l := htwo
 
 /-- A canonical-form-II target of an actual rectangular reduction of a simple
 tensor is simple at the same physical scale. The target's canonical transfer
