@@ -744,11 +744,18 @@
     },
     "ch:mpo_boundaries": {
       "theorems": [
-        "thm:glm_boundary_reverse"
+        "thm:glm_boundary_reverse",
+        "thm:glm_mixed_gauge_joint",
+        "thm:glm_single_block_obstruction"
       ],
-      "corollaries": [],
+      "corollaries": [
+        "cor:glm_group_specialization",
+        "cor:glm_group_single_block_trivial"
+      ],
       "notes": {
-        "thm:glm_boundary_reverse": "Exact reconstruction of an operator from a boundary map, named in the opening"
+        "thm:glm_boundary_reverse": "Exact reconstruction of an operator from a boundary map, named in the opening",
+        "thm:glm_mixed_gauge_joint": "The L- and F-symbols are determined by the blocks up to the source's gauge equivalence",
+        "thm:glm_single_block_obstruction": "A single injective block without multiplicity forces trivial F-symbols (Garre-Rubio et al., Section 3.2), named in the opening"
       }
     },
     "ch:peps_anyons": {

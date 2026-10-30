@@ -82,6 +82,7 @@ import TNLean.MPS.MPDO.BoundaryActionComparison
 import TNLean.MPS.MPDO.BoundaryActionCrossFusionEntries
 import TNLean.MPS.MPDO.BoundaryActionCrossTransport
 import TNLean.MPS.MPDO.BoundaryActionLMatrix
+import TNLean.MPS.MPDO.BoundaryActionLMatrixGauge
 import TNLean.MPS.MPDO.BoundaryActionTreeEntries
 import TNLean.MPS.MPDO.BoundaryActionTrees
 import TNLean.MPS.MPDO.BoundaryAdjointClosed
@@ -96,10 +97,12 @@ import TNLean.MPS.MPDO.BoundaryDecompositionCoordinates
 import TNLean.MPS.MPDO.BoundaryDecompositionIntertwining
 import TNLean.MPS.MPDO.BoundaryDecompositionOperations
 import TNLean.MPS.MPDO.BoundaryFusionFMatrix
+import TNLean.MPS.MPDO.BoundaryGroupSpecialization
 import TNLean.MPS.MPDO.BoundaryMultiplicity
 import TNLean.MPS.MPDO.BoundaryRepresentation
 import TNLean.MPS.MPDO.BoundaryRepresentationClosedness
 import TNLean.MPS.MPDO.BoundaryRestriction
+import TNLean.MPS.MPDO.BoundarySingleBlockObstruction
 import TNLean.MPS.MPDO.BoundarySourceDecomposition
 import TNLean.MPS.MPDO.BoundarySourceMixedPentagon
 import TNLean.MPS.MPDO.BoundaryTransport
