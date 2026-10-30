@@ -53,6 +53,14 @@ uses the component paths of `Algebra.IntegerHasseGraph` and the extended-distanc
 comparisons in `Algebra.GraphDistanceTransport` to bound each finite-radius
 sphere by two sites. This supplies the growth bound for domain localization.
 
+The square-grid specialization `MPS.AreaLaw.SnakeGridGeometry` uses the open
+rectangle geometry of `PEPS.AreaLaw.RectangularDomain`.
+`SnakeGridApproximation` combines its cut-width bound with the lattice marginal
+tail and the chain sequential truncation. `SnakeGridAreaLaw` instantiates the
+uniform area-law premise with `PEPS.AreaLaw.AreaLawTheorem`. These square-grid
+modules depend on the chain approximation core; the chain modules do not import
+them, and the lattice layer remains independent of both tensor-network layers.
+
 `PiAlgebra` provides related algebraic formulations. `PEPS` contains the
 two-dimensional injective and normal-tensor developments. `QCA` contains the
 quasi-local and cellular-automaton layer. `Spectral` contains MPS-specific
