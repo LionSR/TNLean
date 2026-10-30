@@ -11,13 +11,13 @@ import Mathlib.Data.List.OfFn
 # Reconstruction along a varying-bond open chain
 
 Adjacent-pair coefficient sections determine a single boundary matrix for the whole
-chain. The induction enlarges an actual prefix, using its derived row-isometry and
+chain. The induction enlarges a prefix, using its derived row-isometry and
 C1 at the next site. Each enlargement is the canonical adjoint construction in the
 source's three-site argument. Physical words outside a section are lists, so no
 identification of different virtual bond spaces is needed.
 
 The conclusion is a representation-intersection theorem. Passage from the kernel of
-an actual varying-bond parent Hamiltonian to the adjacent-pair sections is a separate
+a varying-bond parent Hamiltonian to the adjacent-pair sections is a separate
 step; it is not assumed as a completed parent-Hamiltonian uniqueness theorem here.
 
 Source: PGVWC07, arXiv:quant-ph/0608197, Theorem 9 proof,
@@ -30,7 +30,17 @@ namespace Matrix
 
 variable {d : ℕ}
 
-/-- Appending one physical letter appends its actual rectangular site matrix.
+/-- Prepending one physical letter prepends its rectangular site matrix, with the
+remaining bonds shifted by one.
+Source: PGVWC07, Theorem 9 proof, lines 1233–1237. -/
+private theorem rectangularEval_cons (b : ℕ → ℕ)
+    (A : ∀ k, Fin d → Matrix (Fin (b k)) (Fin (b (k + 1))) ℂ)
+    {n : ℕ} (x : Fin d) (s : Fin n → Fin d) :
+    Kraus.rectangularEval b (fun k : Fin (n + 1) ↦ A k.val) (Fin.cons x s) =
+      A 0 x * Kraus.rectangularEval (fun k ↦ b (k + 1)) (fun k : Fin n ↦ A (k.val + 1)) s :=
+  rfl
+
+/-- Appending one physical letter appends its rectangular site matrix.
 Source: PGVWC07, Theorem 9 proof, lines 1233–1237. -/
 theorem obc_rectangularEval_snoc (b : ℕ → ℕ)
     (A : ∀ k, Fin d → Matrix (Fin (b k)) (Fin (b (k + 1))) ℂ)
@@ -38,15 +48,14 @@ theorem obc_rectangularEval_snoc (b : ℕ → ℕ)
     Kraus.rectangularEval b (fun k : Fin (n + 1) ↦ A k.val) (Fin.snoc w i) =
       Kraus.rectangularEval b (fun k : Fin n ↦ A k.val) w * A n i := by
   induction n generalizing b with
-  | zero => simp [Kraus.rectangularEval]
+  | zero => simp [Kraus.rectangularEval, Fin.snoc]
   | succ n ih =>
-    have hw : w = Fin.cons (w 0) (Fin.tail w) := (Fin.cons_self_tail w).symm
-    rw [hw, ← Fin.cons_snoc_eq_snoc_cons]
-    simp only [Kraus.rectangularEval, Fin.cons_zero, Fin.cons_succ]
-    rw [ih (fun k ↦ b (k + 1)) (fun k ↦ A (k + 1))]
-    exact (Matrix.mul_assoc _ _ _).symm
+    have h := ih (fun k ↦ b (k + 1)) (fun k ↦ A (k + 1)) (Fin.tail w)
+    rw [← Fin.cons_self_tail w, ← Fin.cons_snoc_eq_snoc_cons, rectangularEval_cons,
+      rectangularEval_cons, Matrix.mul_assoc]
+    exact congrArg (A 0 (w 0) * ·) h
 
-/-- Every actual prefix of a row-isometric varying-bond chain is row-isometric.
+/-- Every prefix of a row-isometric varying-bond chain is row-isometric.
 The identity is proved on the true endpoint spaces, without square padding.
 Source: PGVWC07, Theorem 9 proof, lines 1224–1237. -/
 theorem obc_rectangularEval_row_isometry (b : ℕ → ℕ)
@@ -67,8 +76,9 @@ theorem obc_rectangularEval_row_isometry (b : ℕ → ℕ)
           (fun k : Fin n ↦ A (k.val + 1)) w)
       (hA 0 (by omega)) htail
     rw [← (Fin.consEquiv (fun _ : Fin (n + 1) ↦ Fin d)).sum_comp]
-    simpa only [Fin.consEquiv_apply, Kraus.rectangularEval,
-      Fin.cons_zero, Fin.cons_succ] using hprod
+    refine Eq.trans (Finset.sum_congr rfl fun x _ ↦ ?_) hprod
+    simp only [Fin.consEquiv_apply, Kraus.rectangularEval, Fin.cons_succ]
+    rfl
 
 private theorem ofFn_snoc_eq {α : Type*} {n : ℕ} (w : Fin n → α) (i : α) :
     List.ofFn (Fin.snoc w i) = List.ofFn w ++ [i] := by
@@ -76,7 +86,7 @@ private theorem ofFn_snoc_eq {α : Type*} {n : ℕ} (w : Fin n → α) (i : α) 
   simp only [Fin.snoc_castSucc, Fin.snoc_last, List.concat_eq_append]
 
 /-- The source's overlap argument reconstructs one boundary matrix on the full chain
-from the actual adjacent-pair sections. Only sitewise C1 and canonical row-isometry
+from the adjacent-pair sections. Only sitewise C1 and canonical row-isometry
 are assumed. The physical length is at least two, so an adjacent interaction exists.
 Source: PGVWC07, Theorem 9 proof, equation unique-OBC and the final induction,
 lines 1212–1237. -/
@@ -124,11 +134,15 @@ theorem obc_trace_reconstruction_of_adjacent_pair_sections (b : ℕ → ℕ)
       have hRight (u : Fin (r + 1) → Fin d) :
           ∃ Y : Matrix (Fin (b (r + 3))) (Fin (b (r + 1))) ℂ,
             ∀ i j, φ u i j = Matrix.trace (Y * A (r + 1) i * A (r + 2) j) := by
-        have h := hpair (List.ofFn u) v (by simp only [List.length_ofFn]; omega)
-        simp only [List.length_ofFn] at h
-        obtain ⟨Y, hY⟩ := h
-        refine ⟨Y, ?_⟩
-        simpa only [φ] using hY
+        have key : ∀ m : ℕ, m = (List.ofFn u).length →
+            ∃ Y : Matrix (Fin (b (m + 2))) (Fin (b m)) ℂ,
+              ∀ i j, ψ (List.ofFn u ++ i :: j :: v) =
+                Matrix.trace (Y * A m i * A (m + 1) j) := by
+          intro m hm
+          subst hm
+          exact hpair (List.ofFn u) v (by simp only [List.length_ofFn]; omega)
+        obtain ⟨Y, hY⟩ := key (r + 1) (by simp)
+        exact ⟨Y, fun i j ↦ hY i j⟩
       obtain ⟨Z, hZ⟩ := obc_three_site_reconstruction_of_pair_sections P
         (A (r + 1)) (A (r + 2)) hP (hC1 (r + 1) (by omega)) φ hLeft hRight
       refine ⟨Z, fun w ↦ ?_⟩
@@ -144,10 +158,10 @@ theorem obc_trace_reconstruction_of_adjacent_pair_sections (b : ℕ → ℕ)
       have hlist := congrArg List.ofFn hw
       rw [ofFn_snoc_eq, ofFn_snoc_eq] at hlist
       rw [← heval, ← hlist]
-      simpa only [φ, P, List.append_assoc, List.singleton_append, Matrix.mul_assoc] using hz
-  have hfinal := hprefix (N - 2) (by omega) [] (by simp; omega)
-  have hlength : N - 2 + 2 = N := by omega
-  simpa only [hlength, List.append_nil] using hfinal
+      simpa only [φ, P, List.append_assoc, List.singleton_append, List.cons_append,
+        List.nil_append, Matrix.mul_assoc] using hz
+  obtain ⟨m, rfl⟩ : ∃ m, N = m + 2 := ⟨N - 2, by omega⟩
+  simpa only [List.append_nil] using hprefix m (by omega) [] (by simp)
 
 /-- Singleton endpoint bonds turn the reconstructed boundary into a scalar, so
 every coefficient family satisfying adjacent-pair conditions lies in the represented state line.

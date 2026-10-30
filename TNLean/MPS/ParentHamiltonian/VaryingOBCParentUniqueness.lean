@@ -61,11 +61,13 @@ theorem norm_obcScalarState_eq_one (b : ℕ → ℕ)
   let l : Fin (b 0) := Fin.cast hleft.symm 0
   let r : Fin (b N) := Fin.cast hright.symm 0
   have hrow := obc_rectangularEval_row_isometry b A N hA
-  have hentry := congrArg (fun M : Matrix (Fin (b 0)) (Fin (b 0)) ℂ ↦ (M l l).re) hrow
   have hd : (default : Fin (b N)) = r := Subsingleton.elim _ _
-  simp only [Finset.sum_apply, Matrix.mul_apply, Matrix.conjTranspose_apply,
-    Fintype.sum_unique, hd, Complex.re_sum, Complex.star_def, Complex.mul_conj,
-    Complex.ofReal_re, Complex.normSq_eq_norm_sq, Matrix.one_apply_eq, Complex.one_re] at hentry
+  have hentry : ∑ w : Fin N → Fin d,
+      ‖Kraus.rectangularEval b (fun k : Fin N ↦ A k.val) w l r‖ ^ 2 = 1 := by
+    have h := congrArg (fun M : Matrix (Fin (b 0)) (Fin (b 0)) ℂ ↦ (M l l).re) hrow
+    simp only [Matrix.sum_apply, Matrix.mul_apply, Matrix.conjTranspose_apply,
+      Fintype.sum_unique, hd, Complex.re_sum, Matrix.one_apply_eq, Complex.one_re] at h
+    simpa [Complex.mul_conj, Complex.normSq_eq_norm_sq, ← Complex.ofReal_pow] using h
   have hsq : ‖obcScalarState b A N hleft hright‖ ^ 2 = 1 := by
     rw [EuclideanSpace.norm_sq_eq]
     exact hentry
@@ -104,11 +106,12 @@ theorem obcBoundaryState_one_eq_obcScalarState (b : ℕ → ℕ)
   let _ : Unique (Fin (b 0)) := Equiv.unique (finCongr hleft)
   let _ : Unique (Fin (b N)) := Equiv.unique (finCongr hright)
   ext w
-  change Matrix.trace ((fun _ _ ↦ (1 : ℂ)) *
+  change Matrix.trace (Matrix.of (fun _ _ ↦ (1 : ℂ)) *
     Kraus.rectangularEval b (fun k : Fin N ↦ A k.val) w) = _
-  simp only [Matrix.trace, Matrix.diag_apply, Matrix.mul_apply, Fintype.sum_unique, one_mul,
+  simp only [Matrix.trace, Matrix.diag_apply, Matrix.mul_apply, Matrix.of_apply,
+    Fintype.sum_unique, one_mul,
     obcScalarState_apply]
-  congr 1 <;> exact Subsingleton.elim _ _
+  congr 1
 
 /-- The actual canonical open-chain state has zero energy for its actual parent
 Hamiltonian. No local annihilation equation is supplied as a hypothesis.

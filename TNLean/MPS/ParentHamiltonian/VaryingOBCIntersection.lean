@@ -54,8 +54,8 @@ private theorem eq_of_trace_mul_spanning_rectangular
   exact DFunLike.congr_fun hlin T
 
 omit [Fintype I] [Fintype J] [Fintype K] [DecidableEq a] in
-/-- The middle-site C1 condition identifies the two actual rectangular
-boundary products in overlapping two-site trace representations.
+/-- The middle-site C1 condition identifies the two rectangular boundary
+products in overlapping two-site trace representations.
 Source: PGVWC07, Theorem 9 proof, lines 1220–1224. -/
 theorem obc_overlap_boundary_mul_eq
     (A : I → Matrix a b ℂ) (B : J → Matrix b c ℂ) (C : K → Matrix c e ℂ)
@@ -69,7 +69,7 @@ theorem obc_overlap_boundary_mul_eq
   exact (hOverlap i j k).trans (Matrix.trace_mul_cycle (Y i) (B j) (C k))
 
 omit [Fintype J] [Fintype K] in
-/-- The source's canonical isometry construction produces one actual
+/-- The source's canonical isometry construction produces one
 three-site boundary. Its explicit value is the sum of the right
 boundary times the adjoint first-site tensor.
 Source: PGVWC07, Theorem 9 proof, lines 1224–1234. -/
@@ -101,7 +101,7 @@ theorem obc_three_site_boundary_reconstruction
       exact Matrix.mul_assoc (C k) (Y i) (A i)ᴴ
 
 omit [Fintype J] [Fintype K] in
-/-- The common boundary gives the actual three-site trace coefficients,
+/-- The common boundary gives the three-site trace coefficients,
 with all four virtual leg spaces allowed to differ.
 Source: PGVWC07, Theorem 9 proof, lines 1224–1234. -/
 theorem obc_three_site_trace_reconstruction
@@ -119,7 +119,7 @@ theorem obc_three_site_trace_reconstruction
     Matrix.trace_mul_comm (C k) ((∑ t, Y t * (A t)ᴴ) * A i * B j)
 
 omit [Fintype J] [Fintype K] in
-/-- Two adjacent local trace representations of an actual three-site
+/-- Two adjacent local trace representations of a three-site
 coefficient family combine into one three-site representation. The
 boundary families are obtained from the local conditions rather than
 supplied as global reconstruction data.
