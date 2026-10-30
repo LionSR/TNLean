@@ -9748,6 +9748,19 @@ there is no need for a new tactic.
   threshold. Before extending this pattern to another module, move the value equality
   before the case distinction or reuse `Fin.val_inj`; no new tactic is needed.
 
+### Exact-length membership in the cyclic example — candidate (2026-10-29)
+
+- **Seen:** Return-block insertion and padded sandwich membership in
+  `MPS/Examples/CyclicWielandt/Spanning.lean` repeatedly combine two exact
+  lengths using `Kraus.wordSpan_add` and `Submodule.mul_mem_mul`.
+- **Reuse:** A private specialization to the concrete binary family names this
+  step. The arithmetic remains explicit, including the exceptional diagonal
+  recovered from the identity. There is one mathematical consumer file, so no
+  channel-generic tactic or new theory is introduced.
+- **Finite coordinates:** Reuse `Fin.cast_val_eq_self`, `Fin.val_natCast`,
+  `Nat.mod_eq_of_lt`, and `Fin.val_add_eq_ite` in the matrix identities and the
+  entry obstruction. No custom finite-arithmetic tactic is needed.
+
 ### Complementary-product prefix and suffix — candidate (2026-10-29)
 
 - **Pattern:** Induct on the complementary-product length, rewrite the successor
