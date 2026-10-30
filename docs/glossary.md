@@ -3126,12 +3126,11 @@ involve no boundary.
   `.exists_appended_unitary_dilation_reference`. These construct an
   actual same-depth unitary on a port-preserving extension, with fresh local
   product-zero environments initialized once and discarded only at the end.
-  The hosted-verified `.exists_environmentKraus_pure_output` identifies the actual
-  environment-basis branches, their normalized amplitudes and their common
-  pure system output. The hosted-verified `.exists_appended_unitary_dilation_pure_output` additionally
-  derives an actual normalized environment vector and system/environment product
-  output when the actual channel output is pure. Both results passed hosted
-  compilation and strict checks.
+  When the channel output of a pure input is pure,
+  `.exists_appended_unitary_dilation_pure_output` derives a normalized
+  environment vector and a system/environment product output, and
+  `.exists_environmentKraus_pure_output` identifies the environment-basis
+  branches, their normalized amplitudes and their common pure system output.
 - **Caveat:** source pure-state conditions and the fixed number of composed
   `QCcc` blocks with their internal measurement/control rules remain separate.
   The appended environments need not reset, and their total number is only

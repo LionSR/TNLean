@@ -9,12 +9,12 @@ import QICLean.Channel.EnvironmentDilation
 import Mathlib.LinearAlgebra.Matrix.DotProduct
 
 /-!
-# Pure outputs of actual physical-port unitary dilations
+# Pure outputs of physical-port unitary dilations
 
-If an actual physical-port channel sends a pure input to a normalized pure
+If a physical-port channel sends a pure input to a normalized pure
 output, its compiled unitary dilation produces that output tensored with a
 normalized pure environment vector. The same physical ports and intersite
-depth are retained. The environment is derived from the actual joint output;
+depth are retained. The environment is derived from the joint output;
 no system--environment factorization is supplied as a premise.
 
 Source context: Piroli, Styliaris and Cirac, arXiv:2103.13367, main text
@@ -81,7 +81,7 @@ private theorem exists_product_of_pure_marginal
 
 variable {d N W : ℕ} [NeZero d] [NeZero N]
 
-/-- An exact pure output of a physical-port channel has an actual unitary
+/-- An exact pure output of a physical-port channel has a unitary
 realization whose complete output factors into that pure system vector and
 a derived normalized environment vector. All fresh environments start in
 the existing product-zero initializer, and the intersite depth is unchanged.
@@ -122,7 +122,7 @@ theorem IsPhysicalPortProtocol.exists_appended_unitary_dilation_pure_output
   obtain ⟨η, hη, hfactor⟩ := exists_product_of_pure_marginal Ω φ hφ hMarginal
   exact ⟨A, owner, U, η, hU, hDilation, hη, hfactor⟩
 
-/-- Measuring the actual final environment in its standard product basis
+/-- Measuring the final environment in its standard product basis
 leaves the same pure system vector in every branch with nonzero amplitude.
 The complete branch family realizes the original channel on all operators;
 its amplitudes form a derived unit vector. The physical ports and intersite
