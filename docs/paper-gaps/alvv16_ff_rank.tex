@@ -1,0 +1,145 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+\title{The regional rank bound in ALVV}
+\author{}
+\date{October 29, 2026}
+\begin{document}
+\maketitle
+\gapnote{false-source}{resolved}
+
+\paragraph{Source and disposition.}
+Arad, Landau, Vazirani and Vidick
+\cite[Definition~5.10 and Theorem~5.14(2)]{Arad2016RigorousRG} assert that the regional
+frustration-free replacement has operator Schmidt rank at most $d^2+2$
+at every cut. For an interior region, this is false even for eight qubits,
+nearest-neighbor orthogonal projections, a unique frustration-free ground
+state, and a positive spectral gap. The bound is therefore not formalized.
+Issue \#9849 must remain open for the source correction and its disposition.
+The independent kernel and gap statements are unaffected.
+
+\paragraph{Local projections and the ground state.}
+Number eight qubits $0,\ldots,7$ and put
+\begin{align}
+    z & =|00\rangle\langle00|,             &
+    v & =|01\rangle+|10\rangle+|11\rangle, &
+    Q & =z+\tfrac13|v\rangle\langle v|,    &
+    P & =I-Q,                              & P_0 & =I-z.
+    \label{eq:alvv_ff_example_local}
+\end{align}
+Let $h_0=(P_0)_{01}$ and $h_i=P_{i,i+1}$ for $1\le i\le6$.
+By (\ref{eq:alvv_ff_example_local}), all terms are orthogonal projections and annihilate $|0\rangle^{\otimes8}$.
+The kernel is one-dimensional: $h_0\psi=0$ pins qubits $0,1$ to zero.
+If qubit $i$ is already pinned, then $h_i\psi=0$ requires its two-site
+coefficient to lie in $\operatorname{span}\{|00\rangle,v\}$.
+The coefficients of $|10\rangle,|11\rangle$ are zero, so the coefficient
+of $v$ vanishes; qubit $i+1$ is pinned as well. Induction pins every qubit.
+This argument applies coefficientwise in every configuration of the other
+qubits, so it includes arbitrary entangled vectors.
+The positive operator $H=\sum_i h_i$ consequently has a unique zero-energy
+state and a strictly positive gap in finite dimension. A lower gap
+parameter can be chosen in $(0,1]$ if that normalization is required.
+
+\paragraph{The regional replacement.}
+Replace the bonds $1,\ldots,5$, corresponding to qubit region
+$J=\{1,\ldots,6\}$. Both exterior bonds are retained. In lexicographic
+qubit order, \cite[Definition~5.10]{Arad2016RigorousRG} gives exactly
+\begin{align}
+    \widetilde H
+     & =P_0\otimes I_{64}+I_{64}\otimes P+2I_{256}
+    -I_4\otimes Q\otimes Q\otimes I_4
+    -I_2\otimes Q\otimes Q\otimes Q\otimes I_2.
+    \label{eq:alvv_ff_example_replacement}
+\end{align}
+At the cut $0123\mid4567$, reshuffle the entries of
+(\ref{eq:alvv_ff_example_replacement}) into the coefficient
+matrix $R_{16a+a',16b+b'}=\widetilde H_{16a+b,16a'+b'}$,
+where $a,a',b,b'\in\{0,\ldots,15\}$.
+Operator Schmidt rank equals the rank of $R$ over $\mathbb C$.
+
+Select rows $(85,0,17,1,16,34,68)$.
+Select columns $(170,0,8,128,34,136,153)$ in that order.
+The resulting minor is $N/27$, with
+\begin{align}
+    N          & =\begin{pmatrix}
+                      95 & 69 & -3 & -3 & 89 & 75 & 93 \\
+                      60 & 0  & 0  & 0  & 36 & 36 & 54 \\
+                      66 & 36 & -9 & -9 & 60 & 42 & 60 \\
+                      -3 & 0  & 0  & -9 & 0  & -9 & -9 \\
+                      -3 & 0  & -9 & 0  & 0  & -9 & -9 \\
+                      68 & 36 & 0  & 0  & 60 & 48 & 66 \\
+                      89 & 45 & 0  & 0  & 69 & 69 & 87
+                  \end{pmatrix},     \\
+    \det N     & =-30233088,                         &
+    \det(N/27) & =-\frac{512}{177147}\ne0.
+    \label{eq:alvv_ff_example_minor}
+\end{align}
+By (\ref{eq:alvv_ff_example_minor}), this $7\times7$ minor is nonzero, so
+$\operatorname{OSR}(\widetilde H)\ge7>6=d^2+2$.
+The matching upper bound $\operatorname{OSR}(\widetilde H)\le d^2+3=7$ is the
+corrected all-cut bound proved in
+\leanid{TNLean.MPS.AreaLaw.ALVV.rank_regionalReplacementMatrix_le_sq_add_three},
+so equality holds at this cut.
+
+\paragraph{Verification and missing source step.}
+The standard-library-only script
+\path{scripts/check_alvv_ff_rank_counterexample.py} computes the
+49 selected entries directly from (\ref{eq:alvv_ff_example_replacement}),
+checks every local symmetry and idempotence equation over $\mathbb Q$,
+and evaluates both displayed determinants by the Leibniz formula over
+exact fractions. No floating-point rank tolerance is used. This is
+an exact arithmetic certificate accompanying the mathematical argument;
+a full Lean counterexample theorem is not asserted.
+The source proof counts the exterior contribution as rank one when a cut
+lies inside $J$, although there can be nontrivial exterior terms on both
+sides. It also counts a regional complement as though it were its product.
+The elementary factorization gives $d^2+3$ for interior regions, whereas
+$d^2+2$ remains consistent with one-sided or whole-chain regions.
+The corrected all-cut bound $d^2+3$ and the prefix/suffix bound $d^2+2$
+are now proved for the regional matrix replacement. These corrected
+statements are not a formalization of the unrestricted printed bound.
+
+\paragraph{Endpoint convention.}
+The source numbers qudits from one and explicitly defines
+$J=\{j_0,\ldots,j_1\}$ and
+$H_J=\sum_{i=j_0}^{j_1-1}h_i$, with $h_i$ acting on qudits $i,i+1$.
+Its subsequent description of $J_e,J_o$ as parity subsets of $J$ would
+include $j_1$, which is a qudit index but not an index of a term in this
+explicit sum. We use the parity subsets of the bond set
+$\{j_0,\ldots,j_1-1\}$ throughout. Including $h_{j_1}$ in the
+regional product while retaining it in the exterior sum would count that
+boundary bond twice and would be a different construction.
+In zero-based coordinates $a=j_0-1$, $b=j_1-1$, the site region is
+$\lbrack a,b+1)$ and the selected bond interval is $\lbrack a,b)$.
+The original even and odd color names swap under this index shift;
+their sum and all rank bounds are unchanged. In the example the site
+region is $\lbrack1,7)$ and precisely the bonds $1,\ldots,5$ are replaced.
+For $m$ original bonds, a prefix has $a=0$ and a suffix has $b\ge m$.
+
+\paragraph{Squared norms in the gap comparison.}
+The proof of \cite[Theorem~5.14]{Arad2016RigorousRG} must use squared norms on both sides.
+For commutation degree $g$, detectability and the original gap give
+$(\gamma+g^2)\|D\psi\|^2\le g^2$ on unit vectors orthogonal to the
+full original kernel. The imported converse with constant three applies
+to every unit vector, giving
+$1-3\langle\psi,\widetilde H\psi\rangle\le\|D\psi\|^2$.
+Consequently the quadratic-form gap is at least
+$\gamma/[3(\gamma+g^2)]$. For $g=2$ and $0<\gamma\le1$, it is at least
+$\gamma/15$. An eigenvector assumption is unnecessary with this converse.
+The full comparison is now assembled for the finite chain: disjoint-bond
+commutation, degree two after parity ordering, preservation of the complete
+kernel, and equality with the regional replacement are all derived
+from the original local terms. Together with the corrected rank estimates,
+this proves the corrected version of the chain theorem without supplying
+any of these intermediate conclusions as hypotheses.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}
