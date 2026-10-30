@@ -10284,3 +10284,76 @@ removed after the dependency audit exposed it.
   and `Matrix.conjTranspose_reindex` transports the adjoint. The existing QICLean
   Skolem–Noether theorem supplies the square implementer. No entrywise double sum
   or duplicate Skolem–Noether argument is introduced.
+
+### Intrinsic blocked traces from a product-tensor diagonal — candidate (2026-10-29)
+
+- **Pattern:** Expand `normalizedDiagonal (mulTensor U U)` powers with the
+  existing normalized-diagonal word formula and `evalWord_mulTensor`, then
+  contract each Kronecker summand with the existing QIC swap-trace identity.
+- **Seen:** `MPS/MPU/TimeReversalTwistedTransfer.lean`.
+- **Reuse:** `normalizedDiagonal_pow_eq_sum_evalWord`, `evalWord_mulTensor`,
+  `Matrix.trace_swapMatrix_mul_kronecker`, the existing
+  `Matrix.swapMatrix_mul_kronecker`, and the existing physical-word
+  decoding equivalence. No new tensor-product expansion induction is copied.
+- **Decision:** The resulting actual twisted-transfer power identity is a
+  mathematical lemma, shared by the exchange-commutation and blocked-trace
+  proofs. No custom tactic or new source predicate is needed.
+
+### Commuting weights on stabilized trace powers — candidate (2026-10-29)
+
+- **Pattern:** Factor a positive power minus its stabilized projector as
+  `E^k * (1 - P)`. Idempotence of the complement and eventual stabilization
+  make it nilpotent. A commuting weight preserves nilpotence, hence gives
+  zero trace for that difference.
+- **Defined in:** `Algebra/StabilizedWeightedTrace.lean`, using the existing
+  QIC `Matrix.StabilizedRankOneData`, Mathlib complementary idempotents,
+  `Commute.isNilpotent_mul_left`, and nilpotent matrix traces.
+- **Decision:** Reuse the existing stabilized-data structure; no new spectral
+  predicate or source witness is introduced. The new result eliminates
+  transient terms in commuting weighted traces rather than reproving
+  stabilization or the existing unweighted nilpotent trace theorem.
+
+### Signed unitary transfer comparisons and weighted traces — candidate (2026-10-29)
+
+- **Pattern:** Express an actual transfer as `η • A E`, where `A` is an
+  existing unitary conjugation automorphism and `η² = 1`. Pull back the
+  commuting weight by `A.symm`, use `map_pow` and conjugation-invariance of
+  matrix trace, then apply the stabilized weighted-trace lemma.
+- **Seen:** `MPS/MPU/CanonicalTwistedTransfer.lean`.
+- **Reuse:** Mathlib `Unitary.conjStarAlgAut`, QIC actual normalized-transfer
+  stabilization (including its bond-one case), and
+  `Matrix.StabilizedRankOneData.trace_mul_pow_eq_of_commute`.
+- **Decision:** The generic signed comparison is private to this proof; no
+  new spectral predicate or supplied similarity premise is added to the
+  source-facing canonical statements. The derived scalar constant remains
+  explicit, avoiding an unjustified normalization to one.
+
+### Intrinsic trace transport through actual periodic families — promoted (2026-10-29)
+
+- **Pattern:** The intrinsic trace is a fixed swap-contracted expression in
+  the length-two physical matrix. Equality of actual blocked periodic
+  operators therefore transports it without a bond-space gauge.
+- **Defined in:** `MPS/MPU/TimeReversalSignIntrinsic.lean`,
+  `intrinsicTimeReversalSign_eq_of_mpo_two_eq`; extracted from the existing
+  supplied-standard-form independence proof, which now calls it.
+- **Second consumer:** `MPS/MPU/IntrinsicBlockingParity.lean` first uses the
+  existing exact blocked-MPO reindexing to transport every positive blocked
+  trace, then removes the canonical input assumption from intrinsic parity
+  using the existing reduced representative.
+- **Decision:** Promote the existing physical-matrix argument, preserving
+  positive-length scope and avoiding source-factor transport across bonds.
+
+### Raw cut reconstruction of a two-letter standard form — promoted (2026-10-29)
+
+- **Pattern:** Expand one tensor letter through its second cut, the next
+  through its first cut, and contract their common virtual index to the
+  ordered product of the two right factors.
+- **Defined in:** `MPS/MPU/StandardForm.lean`,
+  `mul_apply_eq_sum_of_sourceCut_factorizations`.
+- **Refactored consumer:** The old normalized `SourceFactors` contraction
+  calls the raw theorem, so the finite-sum proof stays at its original owner.
+- **Second consumer:** `MPS/MPU/SuppliedTwoBlockStandardForm.lean` uses the
+  existing actual cuts of any supplied square standard form to construct
+  its literal paper two-block gates and open standard-form data.
+- **Decision:** No normalized source record is introduced merely to access
+  an algebraic contraction which does not use its normalization fields.

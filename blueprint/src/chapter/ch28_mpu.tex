@@ -13297,3 +13297,254 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{lemma}
 
 \input{chapter/ch28_mpu_finite_heisenberg}
+
+\subsection{Intrinsic blocked traces and the twisted transfer}
+
+\begin{definition}[Twisted transfer of the squared operator tensor]
+    \label{def:mpu_time_reversal_twisted_transfer}
+    \lean{MPOTensor.timeReversalTwistedTransfer}
+    \notready
+    Let $U$ be an MPO tensor with physical dimension $d$ and bond dimension
+    $D$. In product bond coordinates, define
+    \[
+        T_U=\frac{1}{d}\sum_{i,j=0}^{d-1}U^{ij}\otimes U^{ji}.
+    \]
+    Equivalently, this is the normalized physical diagonal of the product
+    tensor for $U^2$. It is not assumed positive or Hermitian. The algebraic
+    convention $0^{-1}=0$ permits zero physical dimension as well.
+\end{definition}
+
+\begin{lemma}[Opposite-word expressions for blocked exchange traces]
+    \label{lem:mpu_time_reversal_blocked_open_words}
+    \lean{MPOTensor.timeReversalPeriodicTrace_eq_sum,
+        MPOTensor.timeReversalPeriodicTrace_blockTensor,
+        MPOTensor.timeReversalTwistedTransfer_pow_eq_sum_evalWord}
+    \notready
+    \uses{def:mpu_time_reversal_twisted_transfer}
+    The exchange-contracted trace of the two-site periodic operator is
+    \[
+        \tau(U)=\sum_{i,j=0}^{d-1}\tr(U^{ij}U^{ji}).
+    \]
+    For $k\geq0$, write $U^{\sigma\tau}$ for the ordered product along
+    physical words $\sigma,\tau$ of length $k$. Then
+    \begin{align}
+        \tau(U_k)
+         & =\sum_{\sigma,\tau}\tr(U^{\sigma\tau}U^{\tau\sigma}), \\
+        T_U^k
+         & =d^{-k}\sum_{\sigma,\tau}
+        U^{\sigma\tau}\otimes U^{\tau\sigma}.
+    \end{align}
+    The products use exactly $k$ physical sites, without a further blocking.
+    These are algebraic identities for arbitrary MPO tensors, including the
+    empty words when $k=0$.
+\end{lemma}
+
+\begin{lemma}[Intrinsic blocked trace as a twisted-transfer trace]
+    \label{lem:mpu_intrinsic_blocked_twisted_trace}
+    \lean{MPOTensor.swapMatrix_commute_timeReversalTwistedTransfer,
+        MPOTensor.intrinsicTimeReversalSign_blockTensor_eq_twistedTransfer_trace}
+    \notready
+    \uses{def:mpu_time_reversal_twisted_transfer,
+        lem:mpu_time_reversal_blocked_open_words}
+    Let $F_D$ exchange the two bond factors. Then $F_DT_U=T_UF_D$, and the
+    normalized intrinsic exchange trace of each block is
+    \[
+        \sigma_{\mathrm{int}}(U_k)=\tr(F_DT_U^k),\qquad k\geq0.
+    \]
+    No canonical form, symmetry or standard-form choice is needed for these
+    identities. They give a finite-dimensional expression relevant to
+    \cite[lines~1633--1733]{Cirac2017MPU}; they do not yet prove the blocking
+    parity proposition. In particular a virtual sign from even-chain
+    comparison has not been identified with $\sigma_{\mathrm{int}}(U)$.
+\end{lemma}
+
+\begin{lemma}[Commuting weights remove stabilized nilpotent transients]
+    \label{lem:mpu_stabilized_commuting_weighted_trace}
+    \lean{Matrix.StabilizedRankOneData.isNilpotent_pow_sub_power,
+        Matrix.StabilizedRankOneData.trace_mul_pow_eq_of_commute}
+    \notready
+    Let $E$ be a finite complex matrix and suppose that, for some $J>0$,
+    every power $E^n$ with $n\geq J$ equals a normalized rank-one projector
+    $P=E^J$. Then $E^k-P$ is nilpotent for every $k>0$. If $F$ commutes
+    with $E$, then
+    \[
+        \tr(FE^k)=\tr(FP),\qquad k>0.
+    \]
+    Indeed, $E^k-P=E^k(\Id-P)$ and the complementary idempotent shows
+    that its $J$th power vanishes. Since $F$ commutes with this difference,
+    their product is nilpotent and has trace zero. The hypotheses here
+    describe a stabilized matrix; no assertion that a particular twisted
+    transfer has these properties is made. This is the linear-algebra step
+    needed to remove transient terms in a subsequent use of
+    Lemma~\ref{lem:mpu_intrinsic_blocked_twisted_trace}.
+\end{lemma}
+
+\subsection{Intrinsic canonical blocking parity}
+
+\begin{lemma}[Actual signed comparison of the twisted transfer]
+    \label{lem:mpu_canonical_twisted_transfer_comparison}
+    \lean{MPOTensor.IsMPUCanonicalFormII.exists_twistedTransfer_signed_unitary_comparison}
+    \notready
+    \uses{lem:mpu_even_family_virtual_sign_gauge,
+        def:mpu_time_reversal_twisted_transfer}
+    Let $U$ be a canonical-form-II MPU tensor and suppose that
+    $U^{(N)}=U^{(N)\dagger}$ for every even $N>1$.
+    There are a sign $\eta\in\{1,-1\}$ and a virtual unitary $z$ such that,
+    in the actual product bond coordinates,
+    \[
+        T_U=\eta(z^\dagger\otimes\Id)E_U(z\otimes\Id),
+    \]
+    where $E_U$ is the normalized completely positive transfer matrix.
+    Indeed, the actual even-family virtual comparison gives
+    $(U^\sharp)^{ij}=\eta zU^{ij}z^\dagger$, hence
+    $U^{ij}=\eta z^\dagger(U^\sharp)^{ij}z$.
+    Substitution into the normalized diagonal of the product tensor gives
+    the displayed equality. The physical-adjoint double layer determines the
+    stated product order; no exchange of bond factors is inserted.
+\end{lemma}
+
+\begin{lemma}[Derived intrinsic phase formula]
+    \label{lem:mpu_canonical_intrinsic_blocking_phase_formula}
+    \lean{MPOTensor.IsMPUCanonicalFormII.exists_intrinsic_blocking_phase_formula}
+    \notready
+    \uses{lem:mpu_canonical_twisted_transfer_comparison,
+        lem:mpu_stabilized_commuting_weighted_trace,
+        lem:mpu_intrinsic_blocked_twisted_trace}
+    Under the same canonical and even-chain adjoint-symmetry assumptions,
+    there are $\eta\in\{1,-1\}$ and $C\in\mathbb C$ such that
+    \begin{align}
+        \sigma_{\mathrm{int}}(U)   & =\eta C,              \\
+        \sigma_{\mathrm{int}}(U_k) & =\eta^k C\qquad(k>0).
+    \end{align}
+    The normalized MPU transfer stabilizes at a positive power to a
+    normalized rank-one projector. Conjugating the bond-exchange weight
+    through the preceding comparison gives a weight commuting with this
+    actual transfer. Its nilpotent transient therefore has zero weighted
+    trace at every positive power. Neither the comparison nor stabilization
+    is an additional premise. The constant $C$ is retained, and $\eta$ is not
+    identified with the first intrinsic value.
+\end{lemma}
+
+\begin{lemma}[Odd and even intrinsic blocking parity for canonical MPUs]
+    \label{lem:mpu_canonical_intrinsic_blocking_parity}
+    \lean{MPOTensor.IsMPUCanonicalFormII.intrinsic_blocking_trace_eq_of_odd,
+        MPOTensor.IsMPUCanonicalFormII.intrinsic_blocking_trace_eq_of_even}
+    \notready
+    \uses{lem:mpu_canonical_intrinsic_blocking_phase_formula}
+    Let $U$ be a canonical-form-II MPU tensor with
+    $U^{(N)}=U^{(N)\dagger}$ at all even $N>1$. For every $k>0$,
+    \[
+        \sigma_{\mathrm{int}}(U_k)=
+        \begin{cases}
+            \sigma_{\mathrm{int}}(U),   & k\text{ odd},  \\
+            \sigma_{\mathrm{int}}(U_2), & k\text{ even}.
+        \end{cases}
+    \]
+    This follows from $\eta^2=1$ in the preceding formula, with the two
+    initial values retained separately. It does not assert that those
+    values are equal or that the virtual sign equals the first value.
+    This is intrinsic parity under explicit canonical assumptions; it does
+    not construct the particular blocked gates or their sequential
+    unwinding in \cite[lines~1643--1733]{Cirac2017MPU}. The unrestricted
+    source proposition remains separate.
+\end{lemma}
+
+\begin{lemma}[Intrinsic blocked traces depend only on the physical family]
+    \label{lem:mpu_intrinsic_blocked_trace_representative}
+    \lean{MPOTensor.intrinsicTimeReversalSign_eq_of_mpo_two_eq,
+        MPOTensor.intrinsicTimeReversalSign_blockTensor_eq_of_mpo_eq}
+    \notready
+    Let $U,V$ have the same physical dimension, with possibly different bond
+    dimensions. Equality $U^{(2)}=V^{(2)}$ gives
+    $\sigma_{\mathrm{int}}(U)=\sigma_{\mathrm{int}}(V)$.
+    If $U^{(N)}=V^{(N)}$ for every $N>0$, then for every $k>0$,
+    \[
+        \sigma_{\mathrm{int}}(U_k)=\sigma_{\mathrm{int}}(V_k).
+    \]
+    Indeed, the actual two-site periodic operators of the $k$-site blocks
+    are the same coordinate reindexing of the original length-$2k$ operators.
+    Equality at length zero and an identification of bond spaces are unnecessary.
+\end{lemma}
+
+\begin{lemma}[Intrinsic time-reversal blocking parity for arbitrary MPUs]
+    \label{lem:mpu_intrinsic_blocking_parity}
+    \lean{MPOTensor.IsMPU.intrinsic_blocking_trace_parity}
+    \notready
+    \uses{lem:mpu_intrinsic_blocked_trace_representative,
+        lem:mpu_canonical_intrinsic_blocking_parity,
+        thm:mpu_reduced_cfii_representative}
+    Let $d,D>0$ and let $U$ be an MPU tensor satisfying
+    $U^{(N)}=U^{(N)\dagger}$ at every even $N>1$. For each $k>0$,
+    \[
+        \sigma_{\mathrm{int}}(U_k)=
+        \begin{cases}
+            \sigma_{\mathrm{int}}(U),   & k\text{ odd},  \\
+            \sigma_{\mathrm{int}}(U_2), & k\text{ even}.
+        \end{cases}
+    \]
+    Choose a reduced canonical representative with the same positive-length
+    physical family. That family equality preserves the actual adjoint
+    symmetry and all the intrinsic blocked traces. Apply the canonical
+    result and transfer the identities back. Thus no canonical form,
+    full-support datum or simplicity assumption is required for the input.
+    This proves the intrinsic numerical parity pattern. The particular
+    blocked gates in \cite[lines~1657--1729]{Cirac2017MPU} and their
+    sequential unwinding remain a separate construction.
+\end{lemma}
+
+\begin{lemma}[Two-letter contraction from raw source cuts]
+    \label{lem:mpu_raw_cut_two_letter_contraction}
+    \lean{MPOTensor.mul_apply_eq_sum_of_sourceCut_factorizations}
+    \notready
+    \uses{def:mpu_source_matrix_one, def:mpu_source_matrix_two}
+    Suppose the two source cuts of $U$ factor as $M_1=X_1Y_1$ and
+    $M_2=X_2Y_2$, with arbitrary finite intermediate spaces. Put
+    \[
+        A_{(l,r),(j_1,j_2)}
+        =\sum_\beta (Y_2)_{l,(j_1,\beta)}(Y_1)_{r,(\beta,j_2)}.
+    \]
+    Then
+    \[
+        (U^{i_1j_1}U^{i_2j_2})_{\alpha\gamma}
+        =\sum_{l,r}(X_2)_{(\alpha,i_1),l}
+        A_{(l,r),(j_1,j_2)}(X_1)_{(i_2,\gamma),r}.
+    \]
+    This is a finite contraction identity. It needs no normalization,
+    minimal cut dimensions, inverse matrices or canonical presentation.
+\end{lemma}
+
+\begin{definition}[The printed two-block gates]
+    \label{def:mpu_printed_two_block_gates}
+    \lean{MPOTensor.twoBlockInputGate, MPOTensor.twoBlockOutputGate}
+    \notready
+    Let $u,v$ be square gates on $\mathbb C^d\otimes\mathbb C^d$.
+    Grouping the four physical coordinates in the order $(12,34)$, define
+    \[
+        u^{(2)}=v_{23}(u\otimes u),\qquad
+        v^{(2)}=v_{23}.
+    \]
+    Identity spectators occupy the first and fourth coordinates of the
+    second expression. These are the gates chosen in
+    \cite[lines~1657--1674]{Cirac2017MPU}.
+\end{definition}
+
+\begin{lemma}[Actual standard form with the printed two-block gates]
+    \label{lem:mpu_supplied_printed_two_block_standard_form}
+    \lean{MPOTensor.TwoSiteStandardFormData.blockTwo}
+    \notready
+    \uses{def:mpu_printed_two_block_gates,
+        lem:mpu_raw_cut_two_letter_contraction,
+        lem:mpu_supplied_standard_form_source_cuts,
+        def:mpu_supplied_two_site_standard_form}
+    Let $W$ have a supplied standard form with square gates $u,v$ and
+    positive physical and bond dimensions. Its actual two-site block has
+    a supplied standard form with exactly the preceding gates $u^{(2)},v^{(2)}$.
+    The half factors are the explicit left factors of the two raw cuts of
+    $W$, with the canonical enumeration of their pair indices.
+    The raw cut identities give its open tensor contraction; the two
+    existing cut-contraction identities give $u^{(2)}$ and $v^{(2)}$.
+    Their unitarity follows from that of $u,v$. No canonical presentation,
+    normalized source datum, minimality or new compact decomposition is
+    assumed. This constructs the blocking by two; arbitrary blocking and
+    sequential unwinding remain separate.
+\end{lemma}
