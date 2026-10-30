@@ -28,6 +28,7 @@ namespace Matrix
 
 variable {m n : Type*} [Fintype m] [Fintype n] [DecidableEq m] [DecidableEq n]
 
+omit [DecidableEq m] [DecidableEq n] in
 private theorem reindexed_conjugation (e : m ≃ n) (U : Matrix n n ℂ)
     (A : Matrix m m ℂ) :
     let W := Matrix.reindex (Equiv.refl n) e.symm U

@@ -696,3 +696,266 @@ refines them into primitive irreducible blocks.
     structural properties and the nonvanishing of the weights come from the
     common-sector families.
 \end{proof}
+
+\section{Translation-invariant canonical form}
+
+\begin{definition}[Unnormalized PGVWC07 canonical decomposition at positive lengths]%
+    \label{def:pgvwc07_positive_length_witness}
+    \lean{MPSTensor.PGVWC07PositiveLengthWitness}
+    \leanok
+    Consider a decomposition of a tensor~$A$ into finitely many blocks
+    $(A_k)_{k=1}^r$ of positive bond dimensions and positive real weights
+    $(a_k)_{k=1}^r$. Each block is unital, has only scalar
+    transfer-map fixed points, and has a diagonal positive-definite fixed point
+    $\Lambda_k$ for the adjoint transfer map. In addition,
+    \begin{align}
+        V^{(N)}(A)_\sigma
+         & =
+        V^{(N)}\!\left(\bigoplus_{k=1}^r a_kA_k\right)_\sigma
+        \qquad(N>0),
+        \notag
+    \end{align}
+    and the retained bond dimensions satisfy $\sum_k\dim(A_k)\le D$.
+\end{definition}
+
+\begin{lemma}[Existence of the PGVWC07 canonical decomposition]%
+    \label{thm:pgvwc07_positive_length_witness}
+    \lean{MPSTensor.isIrreducibleTensor_smul}
+    \lean{MPSTensor.exists_pgvwc07_unital_dualDiag_data_of_irreducible}
+    \lean{MPSTensor.exists_pgvwc07_unital_dualDiag_blockwise}
+    \lean{MPSTensor.exists_pgvwc07_unital_dualDiag_from_arbitrary}
+    \lean{MPSTensor.exists_pgvwc07_positiveLengthWitness}
+    \leanok
+    \uses{def:pgvwc07_positive_length_witness, thm:nonzero_irreducible_block_decomposition, thm:unital_data_irreducible, thm:irreducible_tensor_to_action, lem:irreducible_action_to_tensor, thm:irreducible_unital_scalar_fixed_point, thm:pgvwc07_dual_diag_unital}
+    In the sense of Definition~\ref{def:pgvwc07_positive_length_witness},
+    every MPS tensor admits an unnormalized positive-length canonical
+    decomposition.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:pgvwc07_positive_length_witness, thm:nonzero_irreducible_block_decomposition, thm:unital_data_irreducible, thm:irreducible_tensor_to_action, lem:irreducible_action_to_tensor, thm:irreducible_unital_scalar_fixed_point, thm:pgvwc07_dual_diag_unital}
+    As in \cite[Theorem~4]{PerezGarcia2007Matrix}, strict dimension induction
+    produces the nonzero irreducible decomposition. On a nonzero
+    current block, Perron--Frobenius gives a positive semidefinite eigenvector
+    at a positive spectral radius. If it is singular, positivity makes its
+    support invariant: $(\Id-P)A^iP=0$. After diagonalizing $P$, every letter is
+    upper block triangular and the finite-ring trace splits as
+    \begin{align}
+        \tr(A^{i_1}\cdots A^{i_N})
+         & =\tr(A_1^{i_1}\cdots A_1^{i_N})
+        +\tr(A_2^{i_1}\cdots A_2^{i_N}).
+        \notag
+    \end{align}
+    Discarding all-zero blocks and repeating on the two strictly smaller
+    diagonal blocks gives the finite nonzero irreducible family of
+    Lemma~\ref{thm:nonzero_irreducible_block_decomposition}.
+
+    For each retained irreducible block, dividing by the square root of its
+    positive spectral radius and conjugating by the square root of its
+    positive-definite Perron eigenvector gives, by
+    Lemma~\ref{thm:unital_data_irreducible}, the unital identity
+    \begin{align}
+        \sum_i A_k^i(A_k^i)^\dagger
+         & =\Id.
+        \notag
+    \end{align}
+    Nonzero scalar rescaling preserves irreducibility. By
+    Lemma~\ref{thm:irreducible_tensor_to_action} and
+    Lemma~\ref{lem:irreducible_action_to_tensor}, passing from tensor
+    irreducibility to irreducibility of the matrix action and carrying
+    invariant subspaces through the gauge similarity preserves tensor
+    irreducibility. Hence
+    Lemma~\ref{thm:irreducible_unital_scalar_fixed_point} makes every fixed
+    point scalar. Lemma~\ref{thm:pgvwc07_dual_diag_unital} then diagonalizes a
+    positive-definite dual fixed point by a unitary without changing unitality.
+
+    Applying this single-block construction to every member of the finite family
+    turns the square roots of the block spectral radii into positive weights,
+    preserves every positive-length MPV coefficient by gauge invariance, and
+    leaves the block dimensions unchanged. Combining this blockwise result with
+    the initial decomposition yields the arbitrary-input unnormalized form and
+    its bound $\sum_k\dim(A_k)\le D$.
+\end{proof}
+
+\begin{lemma}[Normalization of a nonempty PGVWC07 decomposition]%
+    \label{thm:pgvwc07_positive_length_weight_normalization}
+    \lean{MPSTensor.PGVWC07PositiveLengthWitness.block_count_pos_of_exists_ne_zero_mpv}
+    \lean{MPSTensor.PGVWC07PositiveLengthWitness.exists_weight_normalization}
+    \leanok
+    \uses{def:pgvwc07_positive_length_witness}
+    For $A_k,a_k$ satisfying Definition~\ref{def:pgvwc07_positive_length_witness},
+    if some positive-length MPV coefficient of the original tensor is
+    nonzero, then the decomposition has at least one block. For a nonempty
+    block family, define
+    \begin{align}
+        s
+         & :=\max_{1\le k\le r}a_k,
+        \notag                      \\
+        \nu_k
+         & :=\frac{a_k}{s}.
+        \notag
+    \end{align}
+    Then $s>0$, every $\nu_k$ is positive, $|\nu_k|\le1$, and
+    $|\nu_k|=1$ for at least one~$k$. For every $N>0$,
+    \begin{align}
+        V^{(N)}(A)_\sigma
+         & =s^N
+        V^{(N)}\!\left(\bigoplus_k\nu_kA_k\right)_\sigma.
+        \label{eq:canonical_pgvwc_weight_normalization}
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:pgvwc07_positive_length_witness}
+    If the decomposition had no blocks, its weighted block tensor would have
+    zero MPV coefficients at every positive length, contrary to the assumed nonzero
+    coefficient. Thus $r>0$. Since the finite family $(a_k)$ is nonempty and
+    every $a_k>0$, its maximum $s$ is positive. The definition
+    $\nu_k=a_k/s$ gives $0<\nu_k\le1$, and any maximizing index has
+    $\nu_k=1$. Finally, $a_k=s\nu_k$ for every~$k$, so homogeneity of a
+    length-$N$ matrix product vector gives
+    (\ref{eq:canonical_pgvwc_weight_normalization}).
+\end{proof}
+
+\begin{lemma}[Normalized exact form for a nonzero MPV family]%
+    \label{thm:pgvwc07_ti_canonical_form_nonzero}
+    \lean{MPSTensor.exists_pgvwc07_normalized_exact_form_after_rescaling_of_exists_ne_zero_mpv}
+    \leanok
+    \uses{thm:pgvwc07_positive_length_witness, thm:pgvwc07_positive_length_weight_normalization}
+    Suppose that $V^{(N)}(A)_\sigma\neq0$ for some $N>0$ and some
+    word~$\sigma$. Then there are a scalar $s>0$ and a nonempty finite family
+    of positive-bond-dimension blocks $(A_k)_{k=1}^r$ with positive weights
+    $(\mu_k)_{k=1}^r$ such that $s^{-1}A$ and
+    $\bigoplus_k\mu_kA_k$ have identical MPV coefficients at every positive
+    length. The weights satisfy $|\mu_k|\le1$, with equality for at least one
+    block, and
+    \begin{align}
+        \sum_i A_k^i(A_k^i)^\dagger
+         & =\Id,
+        \notag        \\
+        \sum_i(A_k^i)^\dagger\Lambda_kA_k^i
+         & =\Lambda_k
+        \label{eq:canonical_pgvwc_nonzero_block_conditions}
+    \end{align}
+    for a diagonal positive-definite matrix $\Lambda_k$. Every fixed point of
+    $\E_{A_k}$ is a scalar multiple of $\Id$, and
+    $\sum_k\dim(A_k)\le D$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:pgvwc07_positive_length_witness, thm:pgvwc07_positive_length_weight_normalization}
+    For the blocks and weights from
+    Lemma~\ref{thm:pgvwc07_positive_length_witness}, the assumed nonzero
+    coefficient makes the block family nonempty, so
+    Lemma~\ref{thm:pgvwc07_positive_length_weight_normalization} gives
+    $s>0$ and the normalized positive weights. Equation
+    (\ref{eq:canonical_pgvwc_weight_normalization}) and homogeneity give
+    \begin{align}
+        V^{(N)}(s^{-1}A)_\sigma
+         & =s^{-N}V^{(N)}(A)_\sigma
+        =V^{(N)}\!\left(\bigoplus_k\mu_kA_k\right)_\sigma.
+        \notag
+    \end{align}
+    The decomposition satisfies all required block conditions and the
+    bond-dimension bound.
+\end{proof}
+
+\begin{lemma}[Zero/nonzero alternative for the normalized exact form]%
+    \label{thm:pgvwc07_ti_canonical_form_dichotomy}
+    \lean{MPSTensor.exists_pgvwc07_normalized_exact_form_after_rescaling_or_forall_pos_mpv_eq_zero}
+    \leanok
+    \uses{thm:pgvwc07_ti_canonical_form_nonzero}
+    For every MPS tensor~$A$, one of the following alternatives holds:
+    \begin{enumerate}
+        \item $V^{(N)}(A)_\sigma=0$ for every $N>0$ and every
+              word~$\sigma$;
+        \item there are a scalar $s>0$ and a nonempty normalized block family
+              satisfying all conclusions of
+              Lemma~\ref{thm:pgvwc07_ti_canonical_form_nonzero}.
+    \end{enumerate}
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:pgvwc07_ti_canonical_form_nonzero}
+    If there exist $N>0$ and $\sigma$ with $V^{(N)}(A)_\sigma\neq0$,
+    Lemma~\ref{thm:pgvwc07_ti_canonical_form_nonzero} gives the second
+    alternative; otherwise, every positive-length coefficient vanishes.
+\end{proof}
+
+\begin{theorem}[Translation-invariant canonical form]%
+    \label{thm:pgvwc07_ti_canonical_form}
+    \lean{MPSTensor.exists_pgvwc07_normalized_exact_form_after_rescaling_allow_empty}
+    \leanok
+    \uses{thm:pgvwc07_ti_canonical_form_dichotomy}
+    % Source: PerezGarcia2007Matrix, Theorem 4.
+    % Block decomposition, three block conditions, and bond-dimension bound.
+    % Proof order to preserve: spectral-radius normalization and full-rank
+    % fixed-point gauge; invariant support projection from a singular positive
+    % fixed point; finite-ring trace split into supported/orthogonal summands;
+    % iteration via a non-scalar fixed point; dual fixed point and final unitary
+    % diagonalization. Derive the invariant support before any abstract
+    % block-splitting lemma.
+    Let $A$ be a translation-invariant MPS representation of bond
+    dimension~$D$. There is a positive scalar $s$ and a finite family of
+    blocks $A_k$, possibly empty, such that the globally rescaled tensor
+    $s^{-1}A$ has the same MPV coefficients on every positive-length ring as
+    $\bigoplus_k \mu_k A_k^i$.
+    The weights are positive and satisfy $1\ge |\mu_k|$; if the family is
+    nonempty, then some weight has norm~$1$. For each block,
+    \begin{align}
+        \sum_i A_k^i(A_k^i)^\dagger
+         & = \Id,
+        \notag          \\
+        \sum_i (A_k^i)^\dagger \Lambda_k A_k^i
+         & = \Lambda_k.
+        \label{eq:canonical_pgvwc_block_conditions}
+    \end{align}
+    Here $\Lambda_k$ is diagonal, positive, and full-rank, and each block has
+    positive bond dimension. The only fixed points of
+    $\E_{A_k}(X)=\sum_i A_k^iX(A_k^i)^\dagger$ are the scalar multiples of
+    $\Id$: for every $X$, the identity $\E_{A_k}(X)=X$ implies that there
+    exists $c\in\C$ such that $X=c\Id$.
+    The total bond dimension of the decomposition is at most~$D$.
+
+    As the positive-length form of
+    \cite[Theorem~4]{PerezGarcia2007Matrix}, this statement makes the global
+    spectral-radius normalization step explicit.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:pgvwc07_ti_canonical_form_dichotomy}
+    By Lemma~\ref{thm:pgvwc07_ti_canonical_form_dichotomy}, if every
+    positive-length coefficient vanishes, $s=1$ and the empty retained
+    family satisfy the vacuous block conditions, bond-dimension bound, and
+    zero MPV identity; in the nonzero branch, the second alternative provides
+    the nonempty normalized family.
+\end{proof}
+
+\begin{remark}[CPSV blocked canonical form (source statement)]%
+    \label{rem:cpgsv_canonical_form_source}
+    % Maintainer source anchors:
+    % Papers/1606.00608/MPDO-22-12-17-2.tex: blocking removes periodic peripheral
+    % components; normal-tensor and canonical-form definition eq:II_CF1 with the
+    % weight normalization; any tensor becomes canonical after blocking. The
+    % phase-class quotient used by the BNT supplier is prop:char-BNT, restated in
+    % Appendix A. The two-layer expansion is eq:II_ABasicTensors/decBSV.
+    % Papers/2011.12127/TN-Review-main.tex: invariant-subspace reduction; period
+    % removal; def:4:normal-tensor-mps and eq:II_CF1; BNT
+    % definition/characterization; two-layer BNT/copy display.
+    The blocked canonical-form reduction of
+    \cite[Section~2.3]{Cirac2016MPDO_arXiv} and
+    \cite[Section~IV.A]{Cirac2021Matrix} states that an arbitrary
+    translation-invariant MPS tensor becomes, after blocking, a weighted family
+    of normal tensors, up to a summand that vanishes on every positive-length
+    ring. Four statements must be distinguished. Theorem~\ref{thm:pgvwc07_ti_canonical_form}
+    gives the unconditional PGVWC07 normalized exact form before period removal.
+    Lemma~\ref{thm:tp_primitive_blockdecomp} gives the prepared
+    trace-preserving primitive-block reduction. For a family with a nonzero
+    positive-length coefficient,
+    Lemma~\ref{thm:paperbnt_weight_normalization} normalizes the weights and
+    Lemma~\ref{thm:paperbnt_supplier_after_blocking_normalized} gives the
+    normalized BNT form, including its per-site scalar. If every
+    positive-length coefficient vanishes, there is no nonempty family from
+    which to choose a unit-modulus weight; this exceptional zero family is
+    represented by the empty retained family instead.
+\end{remark}
