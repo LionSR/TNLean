@@ -23,6 +23,8 @@ namespace Matrix
 variable {m n m' n' : Type*} [Fintype m] [Fintype n] [Fintype m'] [Fintype n']
   [DecidableEq m] [DecidableEq n] [DecidableEq m'] [DecidableEq n']
 
+omit [Fintype m] [Fintype n] [Fintype m'] [Fintype n']
+  [DecidableEq m] [DecidableEq n] [DecidableEq m'] [DecidableEq n'] in
 /-- Reindexing both factors transports a left coefficient by the first
 factor's equivalence. Source context: GNVW, support-algebra Lemma 7. -/
 theorem bipartiteSlice_reindex_prod (e : m ≃ m') (f : n ≃ n')
@@ -30,8 +32,7 @@ theorem bipartiteSlice_reindex_prod (e : m ≃ m') (f : n ≃ n')
     bipartiteSlice (Matrix.reindex (e.prodCongr f) (e.prodCongr f) X) i j =
       Matrix.reindex e e (bipartiteSlice X (f.symm i) (f.symm j)) := by
   ext p q
-  simp only [bipartiteSlice_apply, Matrix.reindex_apply,
-    Equiv.prodCongr_symm, Equiv.prodCongr_apply]
+  simp [bipartiteSlice_apply, Matrix.reindex_apply]
 
 /-- The least left support algebra is independent of independent
 coordinate choices on its two finite factors. Source context:
@@ -50,13 +51,15 @@ theorem leftSupportAlgebra_map_matrixReindexStarAlgEquiv
   · apply StarSubalgebra.map_le_iff_le_comap.mpr
     apply (left_support_algebra_le_iff _ _).mpr
     intro X hX i j
-    change (matrixReindexStarAlgEquiv e) (bipartiteSlice X i j) ∈ _
+    change (matrixReindexStarAlgEquiv e) (bipartiteSlice X i j) ∈
+      leftSupportAlgebra (A.map (matrixReindexStarAlgEquiv (e.prodCongr f)).toStarAlgHom)
     have h := bipartite_slice_mem_left_support_algebra
       (A.map (matrixReindexStarAlgEquiv (e.prodCongr f)).toStarAlgHom)
       (show (matrixReindexStarAlgEquiv (e.prodCongr f)) X ∈
         A.map (matrixReindexStarAlgEquiv (e.prodCongr f)).toStarAlgHom from ⟨X, hX, rfl⟩)
       (f i) (f j)
     change bipartiteSlice (Matrix.reindex (e.prodCongr f) (e.prodCongr f) X) (f i) (f j) ∈ _ at h
-    simpa only [bipartiteSlice_reindex_prod, Equiv.symm_apply_apply] using h
+    simp only [bipartiteSlice_reindex_prod, Equiv.symm_apply_apply] at h
+    exact h
 
 end Matrix

@@ -39,7 +39,7 @@ theorem algebraicLocalTranslation_finiteChainConjugation {d D : ℕ}
           ((intervalCoordinates d (b + t) N).symm (intervalCoordinates d b N A))) := by
   rw [algebraicLocalTranslation_intervalCoordinates]
   congr 1
-  apply (intervalCoordinates d (b + t) N).injective
+  apply EquivLike.injective (intervalCoordinates d (b + t) N)
   simp only [StarAlgEquiv.apply_symm_apply, intervalCoordinates_finiteChainConjugation]
 
 /-- Actual quasi-local translation of finite MPU conjugation shifts its
@@ -55,7 +55,7 @@ theorem quasiLocalTranslation_finiteChainConjugation {d D : ℕ} [NeZero d]
           ((intervalCoordinates d (b + t) N).symm (intervalCoordinates d b N A))) := by
   rw [quasiLocalTranslation_intervalCoordinates]
   congr 1
-  apply (intervalCoordinates d (b + t) N).injective
+  apply EquivLike.injective (intervalCoordinates d (b + t) N)
   simp only [StarAlgEquiv.apply_symm_apply, intervalCoordinates_finiteChainConjugation]
 
 
@@ -71,7 +71,7 @@ variable {d D ℓ r : ℕ} [NeZero d] {U : MPOTensor d D}
 translation on every finite observable. Both finite-chain expressions
 are derived using actual sufficiently buffered intervals.
 Source: arXiv:1703.09188, Appendix translation requirement, line 2306.
- -/
+-/
 theorem bufferedMPUQuasiLocalAction_translation_quasiLocalObservable
     (t : ℤ) (Λ : Finset ℤ) (A : LocalAlgebra d Λ) :
     bufferedMPUQuasiLocalAction hU k hk S

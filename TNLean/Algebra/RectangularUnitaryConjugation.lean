@@ -28,10 +28,12 @@ noncomputable def conjStarAlgEquiv (U : Matrix m n ℂ) (hU : U.IsUnitaryBetween
   toFun A := U * A * Uᴴ
   invFun B := Uᴴ * B * U
   left_inv A := by
+    change Uᴴ * (U * A * Uᴴ) * U = A
     have h : Uᴴ * (U * A * Uᴴ) * U = (Uᴴ * U) * A * (Uᴴ * U) := by
       simp only [Matrix.mul_assoc]
     rw [h, hU.1, Matrix.one_mul, Matrix.mul_one]
   right_inv B := by
+    change U * (Uᴴ * B * U) * Uᴴ = B
     have h : U * (Uᴴ * B * U) * Uᴴ = (U * Uᴴ) * B * (U * Uᴴ) := by
       simp only [Matrix.mul_assoc]
     rw [h, hU.2, Matrix.one_mul, Matrix.mul_one]
