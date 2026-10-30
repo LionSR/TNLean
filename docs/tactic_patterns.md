@@ -9826,3 +9826,66 @@ there is no need for a new tactic.
   predicate is introduced.
 - **Translation reuse:** `cyclicRestrictₗ_cyclicTranslateState` is promoted from private
   visibility for this second consumer; the existing proof remains unchanged.
+
+
+### Fixed exterior contractions of uncle words — reused lemmas (2026-10-29)
+
+- **Seen:** `MPS/ParentHamiltonian/UncleTwoWallTrial.lean`.
+- **Pattern:** Fix exterior words, compose their bilinear product maps with
+  a virtual functional, and represent the result by a trace boundary.
+- **Reuse:** `uncleBoundaryWord_slice_mem` states the common argument once;
+  the upper/lower moving-wall cancellations both use it. Existing matrix
+  trace representation and the actual two-site local-kernel identity supply
+  the remaining steps.
+- **Decision:** One source-specific lemma suffices; no new tactic or predicate.
+
+
+### Numbered trial segments under a local restriction — reused helpers (2026-10-29)
+
+- **Seen:** `MPS/ParentHamiltonian/UncleTrialLocalization.lean`, five physical segments.
+- **Pattern:** A local pair is either inside a numbered segment, splitting it
+  into fixed prefix, variable pair and fixed suffix, or outside the segment,
+  leaving its entire word fixed.
+- **Reuse:** Two shared segment lemmas carry all finite-index arithmetic; the
+  five segment cases reuse the existing wall and pure-parent kernel results.
+  Existing wrapping-site lemmas supply the periodic endpoint evaluations.
+- **Decision:** Keep the coordinate lemmas and direct source partition; no new
+  support predicate or assumed vanishing condition.
+
+
+### Conjugated projector contraction and quadratic form — reused Mathlib (2026-10-29)
+
+- **Seen:** `MPS/ParentHamiltonian/UncleTrialEnergy.lean`.
+- **Pattern:** The actual interaction is an isometric conjugate of a submodule
+  projection; transport norm and inner-product statements through that isometry.
+- **Reuse:** `Submodule.norm_starProjection_apply_le`,
+  `Submodule.re_inner_starProjection_eq_normSq` and the isometry's norm/inner
+  preservation give both claims directly. The endpoint quadratic sum reuses
+  the already-derived global cancellation identity and adjoint-inner identity.
+- **Decision:** No new projection structure or automation; use the library lemmas.
+
+
+### Removing the unpinned contribution at a wall endpoint — candidate (2026-10-29)
+
+- **Seen:** `MPS/ParentHamiltonian/UncleTrialPinnedWalls.lean`, four endpoint orientations.
+- **Pattern:** Split the actual wall word at its end, decompose the physical
+  vector into pinned and uniform contributions, and use linearity plus the
+  actual pure-sector local-kernel theorem to delete the uniform contribution.
+- **Reuse:** `uncleDomainWallWord_append` supplies the shared word split;
+  `uncleTwoWallCoefficient_rotate` supplies the rectangular rotation, also
+  replacing the repeated rotations in the interior and middle-region proofs.
+- **Decision:** Keep four explicit matrix orientations rather than introducing
+  a parallel wall-state structure. Their coordinate proofs reuse the same
+  inside/outside and endpoint segment lemmas.
+
+
+### Actual five-segment coordinates — reused list lemmas (2026-10-29)
+
+- **Seen:** `MPS/ParentHamiltonian/UncleTwoWallTrial.lean`.
+- **Pattern:** Evaluate a coefficient at nested Fin.append, or compare an
+  explicitly numbered source configuration with its five segment lengths.
+- **Reuse:** `List.ofFn_fin_append`, exact list take/drop rules and one
+  elementwise segment/slice identity give the coefficient comparison. The
+  length cast preserves the actual Euclidean norm by equality elimination.
+- **Decision:** Use these public coordinate identities rather than a parallel
+  configuration structure or a supplied norm-equivalence hypothesis.

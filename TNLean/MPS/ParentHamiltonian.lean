@@ -98,6 +98,7 @@ import TNLean.MPS.ParentHamiltonian.CyclicBlockedWordSpan
 import TNLean.MPS.ParentHamiltonian.CyclicBoundaryIntersection
 import TNLean.MPS.ParentHamiltonian.CyclicBoundaryIntertwining
 import TNLean.MPS.ParentHamiltonian.CyclicPrimitiveSectorDecomposition
+import TNLean.MPS.ParentHamiltonian.CyclicRestrictionNorm
 import TNLean.MPS.ParentHamiltonian.CyclicSubmoduleIteration
 import TNLean.MPS.ParentHamiltonian.CyclicTranslation
 import TNLean.MPS.ParentHamiltonian.CyclicWindow
@@ -305,6 +306,10 @@ import TNLean.MPS.ParentHamiltonian.UncleParentLimit
 import TNLean.MPS.ParentHamiltonian.UnclePeriodicClosure
 import TNLean.MPS.ParentHamiltonian.UncleTensor
 import TNLean.MPS.ParentHamiltonian.UncleVariationalEigenvalue
+import TNLean.MPS.ParentHamiltonian.UncleTrialEnergy
+import TNLean.MPS.ParentHamiltonian.UncleTrialLocalization
+import TNLean.MPS.ParentHamiltonian.UncleTrialPinnedWalls
+import TNLean.MPS.ParentHamiltonian.UncleTwoWallTrial
 import TNLean.MPS.ParentHamiltonian.UncleVirtualRescaling
 import TNLean.MPS.ParentHamiltonian.UniqueGroundState
 import TNLean.MPS.ParentHamiltonian.WeightedVirtualHilbert
