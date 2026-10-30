@@ -10174,3 +10174,15 @@ there is no need for a new tactic.
   generic transport theorem. The parent caller derives its active intertwining
   from actual rectangular boundary ranges; the physical-sector caller derives
   it from its actual orthogonal sector subspaces. No copied fiber proof remains.
+
+### Dependent pair coordinates under physical embeddings — candidate (2026-10-29)
+
+- **Seen:** `ParentHamiltonian/DependentPairCoordinates.lean` and
+  `ParentHamiltonian/VaryingPhysicalParentHamiltonian.lean`.
+- **Pattern:** Split a dependent physical product twice using `Equiv.piSplitAt`,
+  prove the coordinate diagram by reflexivity, and lift it to Euclidean
+  extension by zero by separating image and outside-image coordinates.
+- **Abstraction:** `pairConfigurationReindex_extendByZero` removes the complete
+  coordinate proof from the actual local-term and full-Hamiltonian transport.
+- **Notes:** The outside coordinates are the original dependent site spaces.
+  No equal-size physical assumption or new chain structure is introduced.

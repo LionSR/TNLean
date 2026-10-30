@@ -107,6 +107,7 @@ import TNLean.MPS.ParentHamiltonian.CyclicWindowPermutation
 import TNLean.MPS.ParentHamiltonian.CyclicWordSpan
 import TNLean.MPS.ParentHamiltonian.Decorrelation
 import TNLean.MPS.ParentHamiltonian.Defs
+import TNLean.MPS.ParentHamiltonian.DependentPairCoordinates
 import TNLean.MPS.ParentHamiltonian.EventualKernelGroundStateSupport
 import TNLean.MPS.ParentHamiltonian.ExtendRight
 import TNLean.MPS.ParentHamiltonian.FNWAggregateOrthogonality
@@ -343,6 +344,7 @@ import TNLean.MPS.ParentHamiltonian.VaryingOBCIntersection
 import TNLean.MPS.ParentHamiltonian.VaryingOBCParentUniqueness
 import TNLean.MPS.ParentHamiltonian.VaryingOBCProjectorKernel
 import TNLean.MPS.ParentHamiltonian.VaryingOBCReconstruction
+import TNLean.MPS.ParentHamiltonian.VaryingPhysicalParentHamiltonian
 import TNLean.MPS.ParentHamiltonian.WeightedVirtualHilbert
 import TNLean.MPS.ParentHamiltonian.WrappingWindow
 import TNLean.MPS.ParentHamiltonian.WrappingWindowLastSiteFactorization
