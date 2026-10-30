@@ -637,7 +637,7 @@ trace illustrates this failure.
     \label{lem:w_state_prime_divisor_bound}
     \lean{MPSTensor.mpv_wBlockCompression_of_eq_wIndicator,
         MPSTensor.prime_divisor_lt_of_mpv_eq_smul_wIndicator}
-    \notready
+    \leanok
     \discussion{2947}
     \uses{lem:w_state_isometric_blocking, lem:w_state_block_encoding,
         lem:eval_word_block, thm:w_state_prime_bound}
@@ -658,6 +658,9 @@ trace illustrates this failure.
     \cite{gap:rmp_w_state_ti_bound}.
 \end{lemma}
 \begin{proof}
+    \leanok
+    \uses{lem:w_state_isometric_blocking, lem:w_state_block_encoding,
+        lem:eval_word_block, thm:w_state_prime_bound}
     The physical action on a periodic vector is the tensor product of the
     local physical matrices. Lemma~\ref{lem:w_state_isometric_blocking}
     writes $W_{mk}$ as $\sqrt k\,U_k^{\otimes m}W_m$. Apply the adjoint of
