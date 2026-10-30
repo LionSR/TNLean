@@ -12,7 +12,7 @@ factors is odd then even, namely $\mathbb C^r\otimes\mathbb C^\ell$.
     \lean{SpinChain.PropagatesWithin.supportEmbeddingEquiv,
         SpinChain.PropagatesWithin.outputPairEquiv,
         SpinChain.PropagatesWithin.outputPairEquiv_coe}
-    \notready
+    \leanok
     \uses{lem:star_subalgebra_coordinate_equivalences,
         lem:qca_physical_pair_adjacent_generation}
     An injective star-algebra homomorphism identifies a star-subalgebra
@@ -23,7 +23,7 @@ factors is odd then even, namely $\mathbb C^r\otimes\mathbb C^\ell$.
     inclusion identifies its algebra with the actual adjacent support join.
 \end{lemma}
 \begin{proof}
-    \notready
+    \leanok
     The corresponding algebra isomorphisms preserve star because the
     original homomorphism does, and the equality identification preserves
     the ambient element. Faithfulness of finite-region inclusion and the
@@ -34,7 +34,7 @@ factors is odd then even, namely $\mathbb C^r\otimes\mathbb C^\ell$.
     \label{lem:qca_margolus_coherent_even_coordinates}
     \lean{SpinChain.PropagatesWithin.coherentEvenOneMatrixEquiv,
         SpinChain.PropagatesWithin.coherentEvenOneMatrixEquiv_symm_embed}
-    \notready
+    \leanok
     \uses{lem:qca_support_coordinate_equivalences,
         thm:qca_site_indexed_support_algebras_two_site_covariance,
         lem:qca_margolus_matrix_rules}
@@ -52,7 +52,7 @@ factors is odd then even, namely $\mathbb C^r\otimes\mathbb C^\ell$.
     \cite[definition~defBBq, lines~1199--1226]{SchumacherWerner2004QCA}.
 \end{lemma}
 \begin{proof}
-    \notready
+    \leanok
     Restrict actual translation to the even support factor and use the
     already proved two-site support covariance for its range. Compose
     its inverse with the fixed cut-zero matrix presentation. Evaluation
@@ -66,7 +66,7 @@ factors is odd then even, namely $\mathbb C^r\otimes\mathbb C^\ell$.
         SpinChain.PropagatesWithin.coherentMargolusOutputRule_left,
         SpinChain.PropagatesWithin.coherentMargolusOutputRule_right,
         SpinChain.PropagatesWithin.coherentMargolus_alternating_kronecker}
-    \notready
+    \leanok
     \uses{lem:qca_margolus_coherent_even_coordinates,
         lem:qca_commuting_product_coordinates,lem:qca_margolus_matrix_rules}
     In the shared coordinates there is a star-isomorphism
@@ -85,7 +85,7 @@ factors is odd then even, namely $\mathbb C^r\otimes\mathbb C^\ell$.
     Thus the same shifted rule serves both neighbouring output pairs.
 \end{lemma}
 \begin{proof}
-    \notready
+    \leanok
     Present the actual odd and next-even join using the fixed odd
     coordinates and transported even coordinates. The product-coordinate
     identity gives the first formula. Setting one input to the identity
@@ -97,7 +97,7 @@ factors is odd then even, namely $\mathbb C^r\otimes\mathbb C^\ell$.
     \label{lem:qca_fixed_margolus_gates}
     \lean{SpinChain.PropagatesWithin.constantMargolusGateRule,
         SpinChain.PropagatesWithin.exists_fixed_margolus_unitary_gates}
-    \notready
+    \leanok
     \uses{lem:qca_margolus_coherent_output_rule,
         lem:qca_full_matrix_spatial_implementer,def:qca_consecutive_pair_coordinates}
     There are unitary maps
@@ -126,7 +126,7 @@ factors is odd then even, namely $\mathbb C^r\otimes\mathbb C^\ell$.
     \cite[equations~bruleU and bruleV, lines~980--1001 and~1033--1041]{SchumacherWerner2004QCA}.
 \end{lemma}
 \begin{proof}
-    \notready
+    \leanok
     Apply spatial implementation to the input rule after the ordered
     physical-coordinate identification, and to the shifted output rule
     before the inverse physical-coordinate identification. Expand the

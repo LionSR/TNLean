@@ -13,7 +13,7 @@
         MPOTensor.leftSupportAlgebra_twoLinkOutputMap,
         MPOTensor.twoLinkLeftSupportEquiv,
         MPOTensor.TwoSiteStandardFormData.left_div_phys_eq_phys_div_right}
-    \notready
+    \leanok
     Let $d,r,\ell$ be positive and let
     $u:\mathbb C^d\otimes\mathbb C^d\to\mathbb C^\ell\otimes\mathbb C^r$
     and $v:\mathbb C^r\otimes\mathbb C^\ell\to\mathbb C^d\otimes\mathbb C^d$
@@ -47,7 +47,7 @@
     \label{lem:mpu_qca_left_support_coordinate_transport}
     \lean{Matrix.bipartiteSlice_reindex_prod,
         Matrix.leftSupportAlgebra_map_matrixReindexStarAlgEquiv}
-    \notready
+    \leanok
     Independent coordinate bijections on the two factors transport the
     least left support algebra by the first-factor bijection.
 \end{lemma}
@@ -62,7 +62,7 @@
     \label{lem:mpu_qca_support_intersection}
     \lean{SpinChain.commute_map_localObservable_of_singletons,
         SpinChain.QuasiLocalSupportedIn.inter}
-    \notready
+    \leanok
     An observable supported on two finite regions $\Lambda$ and $\Gamma$
     is supported on $\Lambda\cap\Gamma$.
 \end{lemma}
@@ -78,7 +78,7 @@
     \label{lem:mpu_actual_complete_interval_four_output}
     \lean{SpinChain.bufferedMPUQuasiLocalAut_central_interval,
         SpinChain.bufferedMPUQuasiLocalAut_central_interval_four_output}
-    \notready
+    \leanok
     \uses{lem:mpu_supplied_standard_form_actual_qca,thm:quasi_local_bulk_inclusion}
     Under the supplied positive-block standard-form hypotheses, the
     actual completed action sends every matrix on the complete
@@ -104,7 +104,7 @@
         SpinChain.blocked_bufferedMPUQuasiLocalAut_pair_supportedIn,
         SpinChain.blocked_bufferedMPUQuasiLocalAut_singleton_supportedIn,
         SpinChain.blocked_bufferedMPUQuasiLocalAut_propagatesWithin}
-    \notready
+    \leanok
     \uses{lem:mpu_actual_complete_interval_four_output,
         lem:mpu_qca_support_intersection}
     Let $\omega$ be the actual supplied-standard-form automorphism and
@@ -129,7 +129,7 @@
         SpinChain.blocked_bufferedMPUQuasiLocalAut_supportAlgebraMatrixSize_zero,
         SpinChain.coe_gnvwIndex_blocked_bufferedMPUQuasiLocalAut,
         SpinChain.coe_gnvwIndex_blocked_bufferedMPUQuasiLocalAut_eq_phys_div_right}
-    \notready
+    \leanok
     \uses{def:qca_consecutive_pair_coordinates,lem:star_subalgebra_coordinate_equivalences,
         lem:mpu_actual_blocked_nearest_neighbour,
         lem:mpu_actual_two_link_left_support,
@@ -167,7 +167,7 @@
     \label{lem:mpu_actual_qca_family_independence}
     \lean{SpinChain.mpuQuasiLocalEquiv_eq_of_mpo_eq,
         SpinChain.mpuQuasiLocalEquiv_eq_bufferedMPUQuasiLocalAut}
-    \notready
+    \leanok
     \uses{thm:mpu_actual_qca,lem:mpu_actual_blocked_nearest_neighbour}
     Two MPU tensors on the same positive physical alphabet, possibly
     with different bond dimensions, induce identical actual quasi-local
@@ -177,7 +177,7 @@
     positive block of that same tensor.
 \end{lemma}
 \begin{proof}
-    \notready
+    \leanok
     A common finite chain contains a given local observable and both
     source-radius buffers. The two actual finite conjugations coincide
     because their physical periodic matrices coincide. Faithfulness
@@ -190,7 +190,7 @@
     \label{lem:mpu_canonical_actual_log_index}
     \lean{SpinChain.canonicalMPU_blocked_propagatesWithin,
         SpinChain.canonicalMPU_index_eq_neg_logb_gnvwIndex}
-    \notready
+    \leanok
     \uses{lem:mpu_actual_blocked_gnvw_index,lem:mpu_actual_qca_family_independence}
     Let an MPU be in canonical form II, and let its positive-length
     $k$-block tensor be simple. Its named actual induced automorphism,
@@ -204,7 +204,7 @@
     nearest-neighbour propagation are derived.
 \end{lemma}
 \begin{proof}
-    \notready
+    \leanok
     The actual support formula gives
     $\operatorname{ind}_{\rm QCA}=\ell_k/d^k$.
     The canonical MPU index at that same simple block is
@@ -215,7 +215,7 @@
 \begin{theorem}[The actual MPU--QCA index comparison after a derived blocking]
     \label{thm:mpu_actual_log_index_comparison}
     \lean{SpinChain.exists_blocked_mpu_index_comparison}
-    \notready
+    \leanok
     \uses{lem:mpu_canonical_actual_log_index,lem:mpu_actual_qca_family_independence}
     Every MPU on positive physical and bond dimensions $d,D$ has a
     positive block length $k\le D^2$ such that its actual induced QCA,
@@ -234,7 +234,7 @@
     \cite{gap:mpu_qca_index_normalization}.
 \end{theorem}
 \begin{proof}
-    \notready
+    \leanok
     Choose a reduced canonical representative of bond dimension
     $E\le D$ with the same positive-length periodic operators.
     It has a simple block of length $k\le E^2\le D^2$.

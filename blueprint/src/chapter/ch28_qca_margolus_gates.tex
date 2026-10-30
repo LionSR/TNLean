@@ -21,7 +21,7 @@ using the adjacent-generation equalities of
         SpinChain.PropagatesWithin.adjacentSupportJoinMatrixEquiv_apply_product,
         SpinChain.PropagatesWithin.physicalPairSupportJoinMatrixEquiv,
         SpinChain.PropagatesWithin.physicalPairSupportJoinMatrixEquiv_apply_product}
-    \notready
+    \leanok
     \uses{thm:qca_commuting_full_matrix_product,
         lem:qca_support_factor_presentations}
     For commuting full matrix factors $\mathcal R$ and $\mathcal S$ with
@@ -35,7 +35,7 @@ using the adjacent-generation equalities of
     the odd and following even support factors.
 \end{lemma}
 \begin{proof}
-    \notready
+    \leanok
     Multiplication is injective by the full matrix factor theorem and
     has the join as its range. Transport the tensor product of the two
     presentations through this multiplication equivalence. A pure tensor
@@ -50,7 +50,7 @@ using the adjacent-generation equalities of
         SpinChain.PropagatesWithin.margolusOutputRule,
         SpinChain.PropagatesWithin.margolusInputRule_symm_kronecker,
         SpinChain.PropagatesWithin.margolusOutputRule_kronecker}
-    \notready
+    \leanok
     \uses{lem:qca_commuting_product_coordinates,
         lem:qca_image_pair_adjacent_generation,
         lem:qca_physical_pair_adjacent_generation}
@@ -75,7 +75,7 @@ using the adjacent-generation equalities of
     \end{align}
 \end{lemma}
 \begin{proof}
-    \notready
+    \leanok
     Restrict the injective even-pair image homomorphism to its actual
     range, which is its two-factor join. Compose with its prescribed
     matrix presentation. For the shifted rule, use the inverse of the
@@ -87,7 +87,7 @@ using the adjacent-generation equalities of
 \begin{lemma}[Spatial unitaries for both local rules]
     \label{lem:qca_margolus_spatial_unitaries}
     \lean{SpinChain.PropagatesWithin.exists_margolus_unitary_gates}
-    \notready
+    \leanok
     \uses{lem:qca_margolus_matrix_rules,lem:qca_full_matrix_spatial_implementer}
     At every integer position $x$ there are unitary maps
     \begin{align}
@@ -101,7 +101,7 @@ using the adjacent-generation equalities of
     $F_x^{-1}(B)=U_x^*BU_x$ and $G_x(B)=V_xBV_x^*$.
 \end{lemma}
 \begin{proof}
-    \notready
+    \leanok
     Apply finite full matrix spatial implementation to each actual
     matrix rule. The unitary identities give the inverse conjugation
     formula. Substitute the prescribed factor products into the two
@@ -113,7 +113,7 @@ using the adjacent-generation equalities of
     \lean{SpinChain.PropagatesWithin.margolus_basisChange_unitary,
         SpinChain.PropagatesWithin.margolus_basisChange_input,
         SpinChain.PropagatesWithin.margolus_basisChange_output}
-    \notready
+    \leanok
     \uses{lem:qca_margolus_spatial_unitaries}
     Let $P,Q$ be independent unitary basis changes on two intermediate
     factors, and write $K=P\otimes Q$. The changed input and output gates
@@ -129,7 +129,7 @@ using the adjacent-generation equalities of
     translation constraint on an arbitrary pair of gates.
 \end{lemma}
 \begin{proof}
-    \notready
+    \leanok
     Kronecker products preserve both unitary identities. Substitution of
     the changed gates gives $K^*K=I$ on both sides of the intermediate
     observable; cancellation proves the two identities.
@@ -141,7 +141,7 @@ using the adjacent-generation equalities of
         SpinChain.PropagatesWithin.margolusAlternatingPairRule,
         SpinChain.PropagatesWithin.margolusAlternatingPairRule_eq,
         SpinChain.PropagatesWithin.margolusAlternatingPairRule_input}
-    \notready
+    \leanok
     \uses{lem:qca_margolus_matrix_rules,lem:qca_margolus_spatial_unitaries}
     Write $e_{ac}$ and $f_{bd}$ for matrix units in the even and odd
     intermediate factors of $E_{x+1}$, respectively. Define
@@ -160,7 +160,7 @@ using the adjacent-generation equalities of
     equality is assumed.
 \end{lemma}
 \begin{proof}
-    \notready
+    \leanok
     For $K=C\otimes D$, the first identity reduces to the two product
     rules: $G_x(I\otimes C)$ recovers the even factor and
     $G_{x+1}(D\otimes I)$ recovers the odd factor. Expand an arbitrary
@@ -173,7 +173,7 @@ using the adjacent-generation equalities of
     \label{lem:qca_margolus_global_extension}
     \lean{SpinChain.PropagatesWithin.existsUnique_margolus_local_extension,
         SpinChain.PropagatesWithin.margolusAlternatingPairRule_translation}
-    \notready
+    \leanok
     \uses{lem:qca_margolus_alternating_pair_rule,lem:qca_even_pair_hom_ext}
     There is exactly one continuous complex star-algebra homomorphism
     $T$ on the quasi-local algebra satisfying
@@ -192,7 +192,7 @@ using the adjacent-generation equalities of
     independently chosen factor coordinates yield constant gates.
 \end{lemma}
 \begin{proof}
-    \notready
+    \leanok
     The preceding finite matrix formula supplies existence. The even-pair
     local algebras generate the algebraic local algebra. Their equality
     set for two star-algebra homomorphisms is a star-subalgebra, so
