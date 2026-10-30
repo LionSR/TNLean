@@ -11,7 +11,8 @@ The removed declaration is
 references were its declaration, the generated `Scan.lean` import, its isolated
 Blueprint anchor `thm:area_law_real_box_improvement_after_area_law`, and the
 candidate entry in `docs/tactic_patterns.md`. No production Lean theorem used it.
-The generated import and the isolated Blueprint entry are removed as well.
+The generated import, the isolated Blueprint entry and the ledger candidate,
+which falls below two occurrences, are removed as well.
 
 The retained theorem
 `TNLean.PEPS.AreaLaw.exists_regionalEntropy_safe_rect_le_linear` in
