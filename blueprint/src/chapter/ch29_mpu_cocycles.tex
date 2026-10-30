@@ -679,6 +679,289 @@ space of $(MN)P$.
     (\ref{eq:mpug_h3_trivial}).
 \end{proof}
 
+\subsection{Daggered fusion tensors}
+
+\begin{lemma}[The dagger of a reduction]
+    \label{thm:mpug_reduction_dagger}
+    \lean{MPSTensor.IsReduction.physicalAdjointTensor,
+        MPSTensor.IsReduction.mapStar,
+        MPOTensor.toMPSTensor_physicalAdjointTensor,
+        MPSTensor.IsReduction.of_target_intertwine,
+        MPSTensor.IsReduction.of_reindexBond_source,
+        MPOTensor.mulTensor_mul_idKron_of_intertwine}
+    \leanok
+    \uses{def:mps_rectangular_reduction, def:mpdo_physical_adjoint, def:mpo_to_mps}
+    Let $(V,W)$ reduce the doubled-index tensor of $K$ onto that of $M$. Then
+    the entrywise complex conjugates $(\overline V,\overline W)$ reduce the
+    physical adjoint $K^\dagger$ onto $M^\dagger$. Moreover, if $Q R=\Id$ and
+    $A'^{i}Q=QA^{i}$ for every letter, a reduction $(V,W)$ of $B$ onto $A$
+    gives the reduction $(QV,WR)$ of $B$ onto $A'$; a relabelling of the bond
+    coordinates of the source is absorbed into the two boundaries by the
+    corresponding permutation matrices.
+\end{lemma}
+
+\begin{proof}\leanok
+    The doubled-index tensor of $K^\dagger$ is the entrywise conjugate of that
+    of $K$ with the two physical coordinates exchanged. Entrywise conjugation
+    is multiplicative, so $\overline V\,\overline{B^{\mathbf w}}\,\overline W
+        =\overline{A^{\mathbf w}}$ for every word, and relabelling the physical
+    alphabet preserves a reduction. For the second statement,
+    $A'^{\mathbf w}=QA^{\mathbf w}R$ for every word, so
+    $QVB^{\mathbf w}WR=QA^{\mathbf w}R=A'^{\mathbf w}$ and $QVWR=QR=\Id$.
+\end{proof}
+
+\begin{definition}[Daggered fusion tensors]
+    \label{def:mpug_dagger_fusion_tensors}
+    \lean{MPSTensor.reindexBondMatrix,
+        MPOTensor.GroupFamily.IsRepresentation.bondDim_mul_inv_rev,
+        MPOTensor.GroupFamily.IsRepresentation.daggerLegGauge,
+        MPOTensor.GroupFamily.IsRepresentation.daggerLegGaugeInv,
+        MPOTensor.GroupFamily.IsRepresentation.daggerTargetGauge,
+        MPOTensor.GroupFamily.IsRepresentation.daggerTargetGaugeInv,
+        MPOTensor.GroupFamily.FusionData.daggerFusionV,
+        MPOTensor.GroupFamily.FusionData.daggerFusionW}
+    \leanok
+    \uses{def:mpug_anomaly_three_cochain, thm:mpug_dagger_inverse_gauge,
+        def:mpug_product_bond_swap}
+    Let $g\mapsto\mathcal U_g$ be a representation by simple injective MPU
+    tensors in canonical form, with dagger-inverse gauges $T_g$ and a choice
+    of fusion tensors $(F^<_{g,h},F^>_{g,h})$. For $g,h\in G$ the daggered
+    fusion tensors are
+    \begin{align}
+        \widetilde F^<_{g,h}                                      & =T_{(gh)^{-1}}\,
+        \bigl(F^<_{h^{-1},g^{-1}}\bigr)^\dagger
+        \bigl(T^\dagger_{g^{-1}}\otimes T^\dagger_{h^{-1}}\bigr), &
+        \widetilde F^>_{g,h}                                      & =\bigl(T_{g^{-1}}\otimes T_{h^{-1}}\bigr)
+        \bigl(F^>_{h^{-1},g^{-1}}\bigr)^\dagger T^\dagger_{(gh)^{-1}},
+    \end{align}
+    where the dagger conjugates every entry and exchanges the two bond legs
+    on the same side, and the bond spaces of $\mathcal U_x$ and
+    $\mathcal U_{x^{-1}}$, which have equal dimension, are identified by the
+    corresponding permutation matrices.
+\end{definition}
+
+\begin{lemma}[The gauges intertwine the inverse tensors]
+    \label{thm:mpug_dagger_leg_gauges}
+    \lean{MPSTensor.mul_reindexBondMatrix_mul_gauge,
+        MPSTensor.reindexBondMatrix_rfl,
+        MPSTensor.reindexBondMatrix_mul_symm,
+        MPSTensor.reindexBondMatrix_gauge_mul_inv,
+        MPSTensor.reindexBondMatrix_gauge_inv_mul,
+        MPOTensor.GroupFamily.reindex_toMPSTensor_congr,
+        MPOTensor.GroupFamily.IsRepresentation.daggerLegGauge_mul_inv,
+        MPOTensor.GroupFamily.IsRepresentation.tensor_mul_daggerLegGaugeInv,
+        MPOTensor.GroupFamily.IsRepresentation.toMPSTensor_mul_daggerTargetGauge,
+        MPOTensor.GroupFamily.IsRepresentation.daggerTargetGauge_mul_inv}
+    \leanok
+    \uses{def:mpug_dagger_fusion_tensors, thm:mpug_dagger_inverse_gauge}
+    For every $x\in G$ and every physical pair $i,j$,
+    $\mathcal U_x^{ij}\,T_{x^{-1}}=T_{x^{-1}}\,(\mathcal U^\dagger_{x^{-1}})^{ij}$,
+    and similarly
+    $\mathcal U_{gh}\,T_{(gh)^{-1}}=T_{(gh)^{-1}}\,\mathcal U^\dagger_{(gh)^{-1}}$
+    letterwise; all four gauges are unitary.
+\end{lemma}
+
+\begin{proof}\leanok
+    Apply the gauge equation of Lemma~\ref{thm:mpug_dagger_inverse_gauge}
+    at $x^{-1}$, using $(x^{-1})^{-1}=x$, and at
+    $(gh)^{-1}=h^{-1}g^{-1}$, using $(h^{-1}g^{-1})^{-1}=gh$; then cancel
+    $T T^\dagger=\Id$.
+\end{proof}
+
+\begin{theorem}[Daggered fusion tensors are fusion tensors]
+    \label{thm:mpug_dagger_fusion_reduction}
+    \lean{MPOTensor.GroupFamily.FusionData.isReduction_daggerFusion}
+    \leanok
+    \uses{def:mpug_dagger_fusion_tensors, thm:mpug_reduction_dagger,
+        thm:mpug_dagger_leg_gauges, thm:mpug_physical_adjoint_product_reversal}
+    For every $g,h\in G$ the daggered fusion tensors
+    $(\widetilde F^<_{g,h},\widetilde F^>_{g,h})$ reduce
+    $\mathcal U_g\mathcal U_h$ onto $\mathcal U_{gh}$.
+\end{theorem}
+
+\begin{proof}\leanok
+    By Lemma~\ref{thm:mpug_reduction_dagger}, the conjugates of
+    $(F^<_{h^{-1},g^{-1}},F^>_{h^{-1},g^{-1}})$ reduce the physical adjoint of
+    $\mathcal U_{h^{-1}}\mathcal U_{g^{-1}}$ onto that of
+    $\mathcal U_{h^{-1}g^{-1}}$. By
+    Lemma~\ref{thm:mpug_physical_adjoint_product_reversal} the former is
+    $\mathcal U^\dagger_{g^{-1}}\mathcal U^\dagger_{h^{-1}}$ after the
+    product-bond swap. Lemma~\ref{thm:mpug_dagger_leg_gauges} replaces the
+    target by $\mathcal U_{gh}$ and, one factor at a time, the source by
+    $\mathcal U_g\mathcal U_h$; each replacement multiplies the two boundaries
+    by a gauge and its inverse, as in Lemma~\ref{thm:mpug_reduction_dagger}.
+\end{proof}
+
+\begin{theorem}[The scalars comparing daggered and chosen fusion tensors]
+    \label{thm:mpug_dagger_zeta}
+    \lean{MPOTensor.GroupFamily.FusionData.daggerZeta,
+        MPOTensor.GroupFamily.FusionData.daggerZeta_defzeta}
+    \leanok
+    \uses{thm:mpug_dagger_fusion_reduction, thm:mpug_dressed_proportionality}
+    For every $g,h\in G$ there is a scalar $\zeta_{g,h}\in\C^\times$ such that,
+    for all sufficiently long words $\mathbf w$ of $B=\mathcal U_g\mathcal U_h$,
+    \begin{align}
+        \widetilde F^<_{g,h}B^{\mathbf w} & =\zeta_{g,h}\,F^<_{g,h}B^{\mathbf w},      &
+        B^{\mathbf w}\widetilde F^>_{g,h} & =\zeta_{g,h}^{-1}\,B^{\mathbf w}F^>_{g,h}.
+    \end{align}
+    This is the defining equation of the scalars $\zeta_{g,h}$ in
+    \cite[lines~1570--1637]{FrancoRubio2025MPUGauging}, in boundary-dressed
+    form. The relation of $\zeta_{g,h}\overline{\zeta_{h^{-1},g^{-1}}}$ to the
+    dagger-inverse signs is Theorem~\ref{thm:mpug_dagger_zeta_relation}.
+\end{theorem}
+
+\begin{proof}\leanok
+    By Theorem~\ref{thm:mpug_dagger_fusion_reduction} both pairs reduce $B$
+    onto the normal tensor $\mathcal U_{gh}$, and $B$ and $\mathcal U_{gh}$
+    have the same periodic operators on nonempty chains. The two-sided
+    comparison of reductions gives one nonzero scalar $z$ with both identities
+    for $z$ and $z^{-1}$; by the uniqueness in
+    Lemma~\ref{thm:mpug_dressed_proportionality}, $z=\zeta_{g,h}$.
+\end{proof}
+
+\begin{lemma}[The dagger of a boundary-dressed comparison]
+    \label{thm:mpug_dagger_dressed_transport}
+    \lean{MPSTensor.IsDressedProportional.mapStar,
+        MPSTensor.IsDressedProportional.reindexPhysical,
+        MPSTensor.IsDressedProportional.physicalAdjointTensor,
+        MPSTensor.IsDressedProportional.of_reindexBond_source,
+        MPOTensor.GroupFamily.IsRepresentation.daggerBoundary,
+        MPOTensor.GroupFamily.IsRepresentation.daggerLegGaugeInv_mul,
+        MPOTensor.GroupFamily.IsRepresentation.isDressedProportional_daggerBoundary,
+        MPOTensor.GroupFamily.FusionData.daggerFusionV_eq_daggerBoundary}
+    \leanok
+    \uses{thm:mpug_dagger_fusion_reduction, thm:mpug_dressed_proportionality}
+    For a left boundary $X$ of $B'=\mathcal U_{h^{-1}}\mathcal U_{g^{-1}}$ with
+    values in the bond space of $\mathcal U_{h^{-1}g^{-1}}$, write
+    \begin{align}
+        \widetilde X & =T_{(gh)^{-1}}\,X^\dagger
+        \bigl(T^\dagger_{g^{-1}}\otimes T^\dagger_{h^{-1}}\bigr),
+    \end{align}
+    a left boundary of $B=\mathcal U_g\mathcal U_h$, where the dagger
+    conjugates every entry and exchanges the two bond legs on the same side;
+    in particular $\widetilde F^<_{g,h}$ is obtained from $F^<_{h^{-1},g^{-1}}$.
+    If $XB'^{\mathbf w}=zYB'^{\mathbf w}$ for all sufficiently long words, then
+    $\widetilde XB^{\mathbf w}=\overline z\,\widetilde YB^{\mathbf w}$ for all
+    sufficiently long words.
+\end{lemma}
+
+\begin{proof}\leanok
+    Entrywise conjugation is multiplicative and the doubled-index tensor of
+    the physical adjoint of $B'$ is the conjugate of that of $B'$ with the
+    physical coordinates exchanged, so the conjugated relation holds against
+    the physical adjoint with scalar $\overline z$. The physical adjoint of
+    $B'$ is $\mathcal U^\dagger_{g^{-1}}\mathcal U^\dagger_{h^{-1}}$ after the
+    product-bond swap, and the leg gauges of
+    Lemma~\ref{thm:mpug_dagger_leg_gauges} intertwine it, one factor at a
+    time, with $B$; each step multiplies the two boundaries on the right by the
+    same invertible matrix. Multiplying on the left by $T_{(gh)^{-1}}$ gives
+    the claim.
+\end{proof}
+
+\begin{lemma}[The double dagger of a fusion tensor]
+    \label{thm:mpug_double_dagger_fusion}
+    \lean{MPSTensor.reindexBondMatrix_mul_reindexBondMatrix,
+        MPSTensor.reindexBondMatrix_mul_reindexBondMatrix_assoc,
+        MPSTensor.reindexBondMatrix_self,
+        MPSTensor.reindexBondMatrix_map_star,
+        MPSTensor.reindexBondMatrix_conjTranspose,
+        MPSTensor.reindex_finCongr_eq,
+        MPOTensor.kronId_map_star, MPOTensor.idKron_map_star,
+        MPOTensor.equiv_toMatrix_map_star, MPOTensor.kronId_smul, MPOTensor.idKron_smul,
+        MPOTensor.productBondSwap_mul_idKron_mul_kronId_mul_productBondSwap,
+        MPOTensor.productBondSwap_mul_idKron_mul_kronId_mul_productBondSwap_assoc,
+        MPOTensor.GroupFamily.castMat_eq_reindexBondMatrix,
+        MPOTensor.GroupFamily.IsRepresentation.daggerInverseGauge_congr,
+        MPOTensor.GroupFamily.IsRepresentation.transpose_daggerInverseGauge_inv_mul_conjTranspose,
+        MPOTensor.GroupFamily.IsRepresentation.daggerLegGauge_inv_map_star_mul,
+        MPOTensor.GroupFamily.IsRepresentation.daggerTargetGauge_mul_map_star_mul,
+        MPOTensor.GroupFamily.FusionData.V_congr,
+        MPOTensor.GroupFamily.FusionData.daggerLegGauge_double,
+        MPOTensor.GroupFamily.FusionData.daggerBoundary_daggerFusionV}
+    \leanok
+    \uses{thm:mpug_dagger_dressed_transport, thm:mpug_dagger_inverse_scalar}
+    Applying the operation of Lemma~\ref{thm:mpug_dagger_dressed_transport}
+    to $\widetilde F^<_{h^{-1},g^{-1}}$ gives
+    \begin{align}
+        \widetilde{\widetilde F^<_{h^{-1},g^{-1}}}
+         & =\sigma_{h^{-1}g^{-1}}\,\overline{\sigma_{g^{-1}}}\,
+        \overline{\sigma_{h^{-1}}}\,F^<_{g,h}.
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    The two entrywise conjugations cancel, and conjugating the leg gauges of
+    $(h^{-1},g^{-1})$ by the two product-bond swaps exchanges their tensor
+    factors. Equation (\ref{eq:mpug_dagger_inverse_scalar}) at $y$ gives
+    $T_y(T_{y^{-1}})^*=\sigma_y\mathbf 1$, hence, taking adjoints,
+    $T_{y^{-1}}^{\mathsf T}T_y^\dagger=\overline{\sigma_y}\,\mathbf 1$. At
+    $y=g^{-1}$ and $y=h^{-1}$ this collapses the leg gauges to
+    $\overline{\sigma_{g^{-1}}}\,\overline{\sigma_{h^{-1}}}\,\mathbf 1$, and at
+    $y=h^{-1}g^{-1}$ the first form collapses the target gauges to
+    $\sigma_{h^{-1}g^{-1}}\mathbf 1$; the bond identifications of equal group
+    elements compose to the identity.
+\end{proof}
+
+\begin{theorem}[The relation between $\zeta$ and the dagger-inverse signs]
+    \label{thm:mpug_dagger_zeta_relation}
+    \lean{MPOTensor.GroupFamily.FusionData.daggerZeta_mul_star_daggerZeta_inv}
+    \leanok
+    \uses{thm:mpug_dagger_zeta, thm:mpug_dagger_dressed_transport,
+        thm:mpug_double_dagger_fusion, thm:mpug_dagger_inverse_scalar,
+        thm:mpug_dressed_proportionality}
+    For all $g,h\in G$,
+    \begin{align}
+        \zeta_{g,h}\,\overline{\zeta_{h^{-1},g^{-1}}}
+         & =\frac{\sigma_g\sigma_h}{\sigma_{gh}}.
+    \end{align}
+    This is the first identity of the proposition on the scalars $\zeta$ in
+    \cite[lines~1570--1678]{FrancoRubio2025MPUGauging}.
+\end{theorem}
+
+\begin{proof}\leanok
+    By Theorem~\ref{thm:mpug_dagger_zeta} at $(h^{-1},g^{-1})$ and
+    Lemma~\ref{thm:mpug_dagger_dressed_transport}, the double dagger of
+    Lemma~\ref{thm:mpug_double_dagger_fusion} equals
+    $\overline{\zeta_{h^{-1},g^{-1}}}\,\widetilde F^<_{g,h}$ against long words, and
+    by Theorem~\ref{thm:mpug_dagger_zeta} at $(g,h)$ this is
+    $\overline{\zeta_{h^{-1},g^{-1}}}\,\zeta_{g,h}F^<_{g,h}$. The left boundary
+    $F^<_{g,h}$ is nonzero against arbitrarily long words, so
+    $\zeta_{g,h}\overline{\zeta_{h^{-1},g^{-1}}}
+        =\sigma_{h^{-1}g^{-1}}\overline{\sigma_{g^{-1}}}\,\overline{\sigma_{h^{-1}}}$.
+    Finally $\overline{\sigma_x}=\sigma_x^{-1}$ and
+    $\sigma_x\sigma_{x^{-1}}=1$ by Lemma~\ref{thm:mpug_dagger_inverse_scalar},
+    so $\overline{\sigma_{x^{-1}}}=\sigma_x$ and
+    $\sigma_{h^{-1}g^{-1}}=\sigma_{(gh)^{-1}}=\sigma_{gh}^{-1}$.
+\end{proof}
+
+\begin{lemma}[The three-cocycle of the daggered fusion tensors]
+    \label{thm:mpug_dagger_omega_gauge}
+    \lean{MPOTensor.GroupFamily.FusionData.dagger,
+        MPOTensor.GroupFamily.FusionData.daggerZeta_eq_relativeScalar,
+        MPOTensor.GroupFamily.FusionData.omega_eq_fusionGauge_daggerZeta}
+    \leanok
+    \uses{thm:mpug_dagger_fusion_reduction, thm:mpug_dagger_zeta,
+        thm:mpug_anomaly_three_cocycle_gauge}
+    The daggered fusion tensors are a choice of fusion tensors, and if
+    $\widetilde\omega$ denotes their three-cocycle, then
+    \begin{align}
+        \omega(g,h,k) & =\frac{\zeta_{g,hk}\zeta_{h,k}}{\zeta_{g,h}\zeta_{gh,k}}\,
+        \widetilde\omega(g,h,k).
+    \end{align}
+    The second identity of the proposition on the scalars $\zeta$ in
+    \cite[lines~1570--1678]{FrancoRubio2025MPUGauging} follows once
+    $\widetilde\omega(g,h,k)\,\overline{\omega(k^{-1},h^{-1},g^{-1})}=1$, which
+    is obtained by taking the dagger of the two fusion trees and is not part of
+    this statement.
+\end{lemma}
+
+\begin{proof}\leanok
+    By Theorem~\ref{thm:mpug_dagger_fusion_reduction} the daggered tensors are
+    reductions, and by Theorem~\ref{thm:mpug_dagger_zeta} they are compared with
+    the chosen ones by $\zeta$; Lemma~\ref{thm:mpug_anomaly_three_cocycle_gauge}
+    gives the change of the three-cocycle.
+\end{proof}
+
 \subsection{Reductions through action tensors}
 
 \begin{definition}[The action tensor]

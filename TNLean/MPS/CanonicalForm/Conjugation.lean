@@ -87,7 +87,8 @@ end Kraus
 
 namespace MPSTensor
 
-private theorem evalWord_mapStar (A : MPSTensor d D) (w : List (Fin d)) :
+/-- Word evaluation commutes with entrywise complex conjugation. -/
+theorem evalWord_mapStar (A : MPSTensor d D) (w : List (Fin d)) :
     Kraus.evalWord (mapStar A) w = (Kraus.evalWord A w).map (starRingEnd ℂ) := by
   induction w with
   | nil => simp
