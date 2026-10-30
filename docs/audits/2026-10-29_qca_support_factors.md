@@ -83,10 +83,10 @@ physical-pair matrix algebra, transporting the even factor along P_x=L_(x+1).
 No bare-submodule equality replaces either bundled equality.
 
 The mathematical conclusions requested by #7122 are source-written with
-homogeneous nearest-neighbour automorphism inputs only. Hosted Lean
-verification and integration remain outstanding; the issue stays open.
+homogeneous nearest-neighbour automorphism inputs only. The hosted full
+build of the branch passed.
 No index construction or MPU correspondence is claimed.
 
 Validation: import-generation, source/prose/whitespace and integrity checks
 passed. No local Lean invocation, build or checkdecls was run, as requested.
-All new Blueprint entries remain notready, with hosted verification pending.
+The new Blueprint entries carry `\leanok` after that hosted build.
