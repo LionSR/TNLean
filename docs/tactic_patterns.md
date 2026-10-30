@@ -9860,3 +9860,12 @@ there is no need for a new tactic.
   without importing the chain area-law theorem.
 - **Notes:** Two occurrences; the square proof currently keeps this short
   calculation inside its normalization step and imports only the truncation core.
+
+### Regional and cyclic slice membership — candidate (2026-10-29)
+
+- **Seen:** The two inclusions in `PEPS/ParentHamiltonian/CycleParentGroundSpace.lean`
+  transport local membership through the existing arc physical equivalence, then
+  rewrite the proved regional-slice/cyclic-restriction identity.
+- **Reuse:** One named slice identity handles both directions. A complementary
+  assignment extends using its own exterior value, avoiding positive-dimension
+  assumptions or separate empty-alphabet proof branches. No new tactic is needed.
