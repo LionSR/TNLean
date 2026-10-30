@@ -155,6 +155,7 @@ import TNLean.Algebra.PiTensorProductPhase
 import TNLean.Algebra.PositiveGeneralizedCocycle
 import TNLean.Algebra.PositivePowerSumMoments
 import TNLean.Algebra.PowerExponential
+import TNLean.Algebra.PreBialgebra
 import TNLean.Algebra.PrimitiveMatrixIdealDimension
 import TNLean.Algebra.ProductFactorUniqueness
 import TNLean.Algebra.ProjectionDefectIsometry
@@ -192,6 +193,7 @@ import TNLean.Algebra.SemisimpleTracePowers
 import TNLean.Algebra.SignedPermutationSpan
 import TNLean.Algebra.SingletMatrix
 import TNLean.Algebra.StabilizerBlockIndependence
+import TNLean.Algebra.StabilizerBlockIndependenceCircle
 import TNLean.Algebra.StabilizerCocycleExtension
 import TNLean.Algebra.StabilizerCocycleLSymbol
 import TNLean.Algebra.StabilizerCocycleReconstruction

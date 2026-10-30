@@ -84,7 +84,7 @@ algebras, so irreducibility and primitivity may be transferred through the
 corner representation.  The underlying linear maps are isometries for the
 canonical inner products; the support isometries record this property where
 needed. -/
-def IsCyclicSectorDecompWith [NeZero D] {m : ℕ} [NeZero m] (A : MPSTensor d D)
+def IsCyclicSectorDecompWith {m : ℕ} [NeZero m] (A : MPSTensor d D)
     {dim : Fin m → ℕ}
     (blocks : (k : Fin m) → MPSTensor (blockPhysDim d m) (dim k))
     (P : Fin m → Matrix (Fin D) (Fin D) ℂ)
@@ -110,7 +110,7 @@ def IsCyclicSectorDecompWith [NeZero D] {m : ℕ} [NeZero m] (A : MPSTensor d D)
 /-- A cyclic-sector decomposition with existentially quantified projectors and
 corner identifications. Use `IsCyclicSectorDecompWith` when the particular
 projectors and corner maps are part of the surrounding statement. -/
-def IsCyclicSectorDecomp [NeZero D] {m : ℕ} [NeZero m] (A : MPSTensor d D)
+def IsCyclicSectorDecomp {m : ℕ} [NeZero m] (A : MPSTensor d D)
     {dim : Fin m → ℕ}
     (blocks : (k : Fin m) → MPSTensor (blockPhysDim d m) (dim k)) : Prop :=
   ∃ (P : Fin m → Matrix (Fin D) (Fin D) ℂ)
@@ -124,7 +124,7 @@ P_{k+1} · A^i = A^i · P_k.  This is the single-site shift for tensor matrices 
 arXiv:1708.00029, eq:Aoffdiag, in inverse-indexed form; the later eq:Auprop only defines the
 sector letters \(A_u^i = P_u A^i P_{u+1}\).  The relation used here is obtained
 from the cyclic relation 𝓔^*(P_{k+1}) = P_k stored in `IsCyclicSectorDecomp`. -/
-theorem IsCyclicSectorDecomp.offDiag_shift [NeZero D] {m : ℕ} [NeZero m]
+theorem IsCyclicSectorDecomp.offDiag_shift {m : ℕ} [NeZero m]
     {A : MPSTensor d D} (hP : IsPeriodic m A) {dim : Fin m → ℕ}
     {blocks : (k : Fin m) → MPSTensor (blockPhysDim d m) (dim k)}
     (hCyclic : IsCyclicSectorDecomp A blocks)
@@ -139,7 +139,7 @@ theorem IsCyclicSectorDecomp.offDiag_shift [NeZero D] {m : ℕ} [NeZero m]
 /-- The off-diagonal reconstruction A^i = ∑_u P_{u+1} · A^i · P_u carried by a
 cyclic sector decomposition (arXiv:1708.00029, eq:Aoffdiag), graded by the cyclic
 projections stored in `IsCyclicSectorDecomp`. -/
-theorem IsCyclicSectorDecomp.eq_sum_offDiag [NeZero D] {m : ℕ} [NeZero m]
+theorem IsCyclicSectorDecomp.eq_sum_offDiag {m : ℕ} [NeZero m]
     {A : MPSTensor d D} (hP : IsPeriodic m A) {dim : Fin m → ℕ}
     {blocks : (k : Fin m) → MPSTensor (blockPhysDim d m) (dim k)}
     (hCyclic : IsCyclicSectorDecomp A blocks)
@@ -326,7 +326,6 @@ theorem exists_cyclic_sector_decomp_with_letter_after_blocking_of_isPeriodic
       (∀ k, dim k ≠ 0) ∧
       ∀ k (i : Fin (blockPhysDim d m)),
         (φ k (blocks k i)).1 = P k * (blockTensor A m) i * P k := by
-  have : NeZero D := ⟨hP.bondDim_ne_zero⟩
   obtain ⟨dim, blocks, P, φ, _V, hLC, hMPV, hPproj, hPsum, hCyclic, hComm, hTrace,
     hIntertwine, hMul, hStar, hNondeg, hLetter, _hV_iso, _hV_range, _hEmbed⟩ :=
     exists_cyclic_sector_decomp_with_letter_and_isometry_after_blocking_of_isPeriodic A hP
@@ -341,7 +340,7 @@ projection of
 `exists_cyclic_sector_decomp_with_letter_after_blocking_of_isPeriodic` that
 forgets the explicit corner-letter identity. -/
 theorem exists_cyclic_sector_decomp_after_blocking_of_isPeriodic
-    [NeZero D] (A : MPSTensor d D) {m : ℕ} [NeZero m]
+    (A : MPSTensor d D) {m : ℕ} [NeZero m]
     (hP : IsPeriodic m A) :
     ∃ (dim : Fin m → ℕ) (blocks : (k : Fin m) → MPSTensor (blockPhysDim d m) (dim k)),
       (∀ k, ∑ i : Fin (blockPhysDim d m), (blocks k i)ᴴ * blocks k i = 1) ∧
@@ -367,7 +366,7 @@ the `m`-step adjoint transfer map is primitive and irreducible. The later
 compression identification converts these corner statements into the
 corresponding statements for the compressed sector tensor. -/
 private lemma cornerRestriction_primitive_and_irreducible_of_cyclicDecomp
-    [NeZero D] (A : MPSTensor d D) {m : ℕ} [NeZero m]
+    (A : MPSTensor d D) {m : ℕ} [NeZero m]
     (hP : IsPeriodic m A)
     {dim : Fin m → ℕ}
     (blocks :
@@ -398,6 +397,7 @@ private lemma cornerRestriction_primitive_and_irreducible_of_cyclicDecomp
           ((Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) ^ m) hInv) ∧
       IsIrreducibleOnCorner (P u)
         ((Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) ^ m) := by
+  have : NeZero D := ⟨hP.bondDim_ne_zero⟩
   let T : MatrixEnd D := Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ)
   have hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1 := hP.leftCanonical
   have hMulLeft := cyclic_projection_mul_left (A := A) (m := m) hTP P hPproj hCyclic
@@ -499,7 +499,7 @@ to that corner: primitivity and irreducibility on the corner of P u for the
 ambient m-step adjoint transfer map transport along φ u to primitivity and
 irreducibility of the compressed block `blocks u`. -/
 private lemma compressedSector_adjointTransferMap_cornerBridge_of_cyclicDecomp
-    [NeZero D] (A : MPSTensor d D) {m : ℕ} [NeZero m]
+    (A : MPSTensor d D) {m : ℕ} [NeZero m]
     {dim : Fin m → ℕ}
     (blocks :
       (k : Fin m) → MPSTensor (blockPhysDim d m) (dim k))
@@ -552,7 +552,7 @@ private lemma compressedSector_adjointTransferMap_cornerBridge_of_cyclicDecomp
       hInv hCornerPrim hCornerIrr
 
 private lemma adjointTransferMap_primitive_and_irreducible_sectorBlock_of_cyclicDecomp
-    [NeZero D] (A : MPSTensor d D) {m : ℕ} [NeZero m]
+    (A : MPSTensor d D) {m : ℕ} [NeZero m]
     (hP : IsPeriodic m A)
     {dim : Fin m → ℕ}
     (blocks :
@@ -596,7 +596,7 @@ irreducibility of the ordinary transfer map.
 This lemma is invoked by the Case 2 and Case 3 arguments of the periodic
 overlap dichotomy. -/
 lemma primitive_and_irreducible_sectorBlocks_of_cyclicDecomp
-    [NeZero D] (A : MPSTensor d D) {m : ℕ} [NeZero m]
+    (A : MPSTensor d D) {m : ℕ} [NeZero m]
     (hP : IsPeriodic m A)
     {dim : Fin m → ℕ}
     (blocks :
@@ -665,7 +665,7 @@ a positive fixed point of the first compressed transfer map and X is the gauge
 matrix.  The rectangular support isometries then embed this coordinate
 eigenvector into the two ambient corners. -/
 private lemma exists_offDiag_eigenvector_of_gaugePhase_same_dim
-    [NeZero D] {d₀ D₀ : ℕ} [NeZero D₀]
+    {d₀ D₀ : ℕ} [NeZero D₀]
     (C : MPSTensor d₀ D) (Au Av : MPSTensor d₀ D₀)
     (hAu_left : IsLeftCanonical Au) (hAv_left : IsLeftCanonical Av)
     (hAv_irr : Kraus.IsIrreducibleFamily Av)
@@ -809,7 +809,7 @@ bond dimension need not equal the left a priori.
 Source: arXiv:1708.00029, Lemma bdcf, lines 409--421.  The equality of compressed
 bond dimensions is eliminated here, where the right dimension is a variable. -/
 lemma exists_offDiag_eigenvector_of_gaugePhase_cast_left
-    [NeZero D] {d₀ Du Dv : ℕ} [NeZero Du]
+    {d₀ Du Dv : ℕ} [NeZero Du]
     (hdim : Dv = Du)
     (C : MPSTensor d₀ D) (Au : MPSTensor d₀ Du) (Av : MPSTensor d₀ Dv)
     (hAu_left : IsLeftCanonical Au) (hAv_left : IsLeftCanonical Av)
