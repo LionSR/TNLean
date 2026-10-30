@@ -73,8 +73,8 @@ private theorem transpose_gate_gauges_of_local_phase
   refine ⟨X, Y, ?_, ?_⟩
   · rw [hXY, hlocal]
     change Bᵀ = (star c • Kᴴ) * ((c • K) * Bᵀ)
-    simp only [Matrix.smul_mul, Matrix.mul_smul, smul_smul, hcc', one_smul]
-    rw [← Matrix.mul_assoc, hK, Matrix.one_mul]
+    rw [Matrix.smul_mul, Matrix.smul_mul, Matrix.mul_smul, smul_smul,
+      ← Matrix.mul_assoc, hK, Matrix.one_mul, hcc', one_smul]
   · have h := congrArg Matrix.transpose hlocal
     simp only [Matrix.transpose_mul, Matrix.transpose_smul, Matrix.transpose_transpose,
       ← Matrix.kroneckerMap_transpose] at h
