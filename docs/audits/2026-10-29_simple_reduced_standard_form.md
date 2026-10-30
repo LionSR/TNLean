@@ -34,6 +34,7 @@ argument. No compatibility aliases or parallel source predicates are introduced.
 
 Validation: source and diff checks, generated import checks, blueprint declaration
 coverage, reader-facing prose checks, theorem-role checks, and the tactic scan.
-No local Lean/Lake command was run. All new blueprint entries remain `notready`;
-source-written proofs are not compilation evidence. #7127 stays open pending
-hosted verification and integration.
+No local Lean/Lake command was run. The hosted full build passed at
+`fcb226eebcb26fe78ab8c510d5304c971a1bdc7c` (job 123906082233), with no `sorry`
+in the new declarations, so the six new blueprint entries are `\leanok`.
+#7127 stays open pending integration.
