@@ -13,5 +13,6 @@ import TNLean.Wielandt.Primitivity.EasyDirections
 import TNLean.Wielandt.Primitivity.Equivalence
 import TNLean.Wielandt.Primitivity.ImpliesStronglyIrreducible
 import TNLean.Wielandt.Primitivity.Normal
+import TNLean.Wielandt.Primitivity.PeripheralCriterion
 import TNLean.Wielandt.Primitivity.PrimitiveBridge
 import TNLean.Wielandt.Primitivity.StronglyIrreducibleToFullRank

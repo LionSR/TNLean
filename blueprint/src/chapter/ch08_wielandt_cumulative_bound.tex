@@ -287,6 +287,43 @@ matrices, and let $\E_K$ be its Kraus map.
     large $m$.
 \end{proof}
 
+\begin{lemma}[The simple peripheral eigenspace criterion]
+    \label{thm:wielandt_literal_peripheral_criterion}
+    \lean{MPSTensor.isStronglyIrreduciblePaper_of_simple_peripheral_fixedPoint,
+        MPSTensor.primitivePaper_iff_exists_simple_peripheral_fixedPoint,
+        MPSTensor.hasEventuallyFullKrausRank_iff_exists_simple_peripheral_fixedPoint}
+    \leanok
+    \uses{def:paper_primitive, def:eventually_full_kraus_rank,
+        def:strongly_irreducible_paper, thm:wielandt_proposition_three}
+    Let $D>0$ and suppose $\sum_i(A^i)^\dagger A^i=\Id$.
+    The following conditions are equivalent:
+    \begin{enumerate}
+        \item $\E_A$ is primitive.
+        \item The exact-length word spaces eventually equal $\MN{D}$.
+        \item There is $\rho>0$ such that $\E_A(\rho)=\rho$, the fixed
+              eigenspace is $\mathbb C\rho$, and $1$ is the only peripheral
+              eigenvalue.
+    \end{enumerate}
+    In the third condition, irreducibility is a conclusion rather than
+    an additional hypothesis. This is \cite[Proposition~3]{Sanz2010Quantum}.
+\end{lemma}
+\begin{proof}\leanok
+    For a primitive channel, the positive-definite fixed point and the
+    complementary spectral gap give the third condition. Conversely, assume
+    the third condition and let $P\neq0,\Id$ be an orthogonal projection with
+    $\E_A(P\MN{D}P)\subseteq P\MN{D}P$. The restriction of $\E_A$ to this
+    corner is positive and trace preserving, so it fixes a density matrix
+    $\sigma=P\sigma P$. Simplicity of the fixed eigenspace gives
+    $\sigma=c\rho$ with $c\neq0$, hence
+    \begin{align}
+        (\Id-P)\rho(\Id-P) & =c^{-1}(\Id-P)\sigma(\Id-P)=0,
+        \notag
+    \end{align}
+    contradicting $\rho>0$. Thus $\E_A$ is irreducible, and together with
+    peripheral primitivity this gives eventual full Kraus rank and hence
+    primitivity.
+\end{proof}
+
 \begin{lemma}[Normalized normal tensors are strongly irreducible]
     \label{thm:normalized_normal_strongly_irreducible}
     \lean{MPSTensor.isStronglyIrreduciblePaper_of_hasEventuallyFullKrausRank,
