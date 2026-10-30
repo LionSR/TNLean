@@ -441,12 +441,16 @@
     "ch:one_dimensional_preliminaries": {
       "theorems": [
         "thm:factorial_commutator_conjugation",
-        "thm:chain_local_imaginary_time"
+        "thm:chain_local_imaginary_time",
+        "thm:aklv_robustness",
+        "thm:aklv_inverse_gap_robustness"
       ],
       "corollaries": [],
       "notes": {
         "thm:factorial_commutator_conjugation": "Kept as converted by hand in #10267",
-        "thm:chain_local_imaginary_time": "Kept as converted by hand in #10267"
+        "thm:chain_local_imaginary_time": "Kept as converted by hand in #10267",
+        "thm:aklv_robustness": "AKLV Theorem 6.1: ground-vector and spectral-gap robustness of the normalized chain under exterior clipping",
+        "thm:aklv_inverse_gap_robustness": "Refinement of AKLV Theorem 6.1 at the inverse-gap cutoff 32768/g, used by the downstream area-law arguments"
       }
     },
     "ch:one_dimensional_open_mps": {
@@ -464,7 +468,9 @@
       "theorems": [
         "thm:chain_area_law",
         "thm:domain_area_law",
-        "thm:chain_mps_approximation"
+        "thm:chain_mps_approximation",
+        "thm:strip_area_law",
+        "thm:strip_mps_approximation"
       ],
       "corollaries": [
         "thm:chain_area_log_cube",
@@ -481,7 +487,9 @@
       "notes": {
         "thm:chain_area_law": "Chain case of Theorem A, named in the main-results paragraph",
         "thm:domain_area_law": "Theorem A, named in the chapter's main-results paragraph",
-        "thm:chain_mps_approximation": "Theorem B, named in the main-results paragraph"
+        "thm:chain_mps_approximation": "Theorem B, named in the main-results paragraph",
+        "thm:strip_area_law": "The bounded-width strip extension with a quadratic width and linear inverse-gap entropy bound",
+        "thm:strip_mps_approximation": "Normalized physical-site snake approximation with explicit width and length dependence"
       }
     },
     "ch:one_dimensional_protocol": {

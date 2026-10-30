@@ -157,13 +157,34 @@ Ref.~\cite{Gross2012IndexTheory}; it does not use translation covariance.%
     in \doclink{TNLean/QCA/SiteIndexedSupportAlgebra}, and
     \leanid{SpinChain.PropagatesWithin.embeddedSupportAlgebra_pairwise_commute}
     in \doclink{TNLean/QCA/SupportAlgebraCommutation}.}
-The fixed-$d$ development does not classify the support algebras as full
-matrix factors, prove the adjacent-generation equalities or their dimension
-consequences
-(\ref{eq:gnvw12_site_dependent_adjacent_generation_scope_homogeneous_even})--%
-(\ref{eq:gnvw12_site_dependent_adjacent_generation_scope_homogeneous_ratio}),
-or construct the GNVW index. Extending the construction and the commutation
-theorem to site-dependent cell sizes also remains outside the present scope.
+The fixed-$d$ development also classifies every support algebra as a full
+matrix factor of positive size, proves both adjacent-generation equalities
+at lines 1276--1290 of Ref.~\cite{Gross2012IndexTheory}, and proves the
+dimension identities
+(\ref{eq:gnvw12_site_dependent_adjacent_generation_scope_homogeneous_even})
+and
+(\ref{eq:gnvw12_site_dependent_adjacent_generation_scope_homogeneous_odd}).
+The ratio identity
+(\ref{eq:gnvw12_site_dependent_adjacent_generation_scope_homogeneous_ratio})
+is their algebraic consequence.%
+\footnote{Formal declarations:
+    \leanid{SpinChain.PropagatesWithin.exists_evenSupportAlgebra_matrix} and
+    \leanid{SpinChain.PropagatesWithin.exists_oddSupportAlgebra_matrix}
+    in \doclink{TNLean/QCA/SupportAlgebraFactors};
+    \leanid{SpinChain.PropagatesWithin.range_image_evenPair_eq_adjacentSupportJoin},
+    \leanid{SpinChain.PropagatesWithin.adjacentSupportJoin_eq_range_rightPair},
+    \leanid{SpinChain.PropagatesWithin.evenSupportAlgebra_matrixSize_mul_odd},
+    \leanid{SpinChain.PropagatesWithin.oddSupportAlgebra_matrixSize_mul_even_add_one},
+    and
+    \leanid{SpinChain.PropagatesWithin.exists_supportAlgebra_matrixSizes_mul}
+    in \doclink{TNLean/QCA/AdjacentSupportGeneration}.}
+The homogeneous GNVW index is constructed from these sizes.%
+\footnote{Formal declaration:
+    \leanid{SpinChain.PropagatesWithin.gnvwIndex}
+    in \doclink{TNLean/QCA/GNVWIndex}.}
+Extending the construction, the commutation theorem, adjacent generation, the
+dimension identities and the index to site-dependent cell sizes remains outside
+the present scope.
 
 This restriction differs from the full-matrix-factor restriction recorded in
 \path{docs/paper-gaps/gnvw12_support_algebra_full_matrix_scope.tex}. That note

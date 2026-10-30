@@ -69,11 +69,22 @@ recorded in \cite{gap:gnvw12_site_dependent_adjacent_generation_scope}.
     \cite{gap:gnvw12_site_dependent_adjacent_generation_scope}.
 \end{lemma}
 \begin{proof}\leanok
-    The even-pair algebras generate the algebraic local algebra. Their
-    images lie in the closed star-algebra of elements commuting with $Z$
-    and $Z^*$. Density of the local union and continuity of $\omega$ extend
-    this containment to its entire image. Surjectivity makes that image
-    the full quasi-local algebra.
+    Put $C=\{w\in\mathcal A:[Z,w]=[Z^*,w]=0\}$, a closed star-subalgebra.
+    The hypothesis gives $\omega(\mathcal A_{E_x})\subseteq C$ for every
+    $x$, and the even-pair algebras generate the algebraic local algebra, so
+    \begin{align}
+        \mathcal A_{\mathrm{loc}}
+         & \subseteq\omega^{-1}(C).
+        \label{eq:qca_even_pair_image_commutant_local}
+    \end{align}
+    Since $\omega^{-1}(C)$ is closed and $\mathcal A_{\mathrm{loc}}$ is
+    dense, $\omega^{-1}(C)=\mathcal A$. Surjectivity of $\omega$ then gives
+    \begin{align}
+        a
+         & =\omega\bigl(\omega^{-1}(a)\bigr)\in C
+         &                                        & (a\in\mathcal A).
+        \label{eq:qca_even_pair_image_commutant_all}
+    \end{align}
 \end{proof}
 
 \begin{lemma}[Relative commutant inside an adjacent support pair]
@@ -126,12 +137,26 @@ recorded in \cite{gap:gnvw12_site_dependent_adjacent_generation_scope}.
     \cite[lines~1276--1287]{Gross2012IndexTheory}, in the homogeneous domain.
 \end{lemma}
 \begin{proof}\leanok
-    Both support factors are full matrix algebras of positive size. Their
-    commuting join is therefore a full matrix algebra. The image-pair
-    algebra is another full matrix algebra and embeds unitally into this
-    join. Its relative commutant is scalar. A unital homomorphism between
-    full complex matrix algebras with scalar relative commutant is onto,
-    so the support containment is an equality.
+    Both support factors are full matrix algebras of positive size, and
+    their commuting join is again one:
+    \begin{align}
+        \mathcal R_{2x}\vee\mathcal R_{2x+1}
+         & \cong M_{r(2x)}(\mathbb C)\otimes_{\mathbb C}M_{r(2x+1)}(\mathbb C)
+        \cong M_{r(2x)r(2x+1)}(\mathbb C).
+        \label{eq:qca_image_pair_adjacent_join_matrix}
+    \end{align}
+    The image-pair algebra is another full matrix algebra and embeds
+    unitally into this join:
+    \begin{align}
+        \omega(\mathcal A_{E_x})
+         & \cong M_{d^2}(\mathbb C)
+        \hookrightarrow\mathcal R_{2x}\vee\mathcal R_{2x+1}.
+        \label{eq:qca_image_pair_unital_embedding}
+    \end{align}
+    By (\ref{eq:qca_adjacent_support_relative_commutant}) its relative
+    commutant is scalar. A unital homomorphism between full complex matrix
+    algebras with scalar relative commutant is onto, so the support
+    containment is an equality.
 \end{proof}
 
 \begin{lemma}[Matrix sizes of the image-pair factors]
