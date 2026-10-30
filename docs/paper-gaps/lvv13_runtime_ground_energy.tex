@@ -145,6 +145,17 @@ for unbounded $\varepsilon_0$, and the running time of Theorem~1,
 are not formalized; the status stays open until the dependence of the whole
 algorithm on $\varepsilon_0$ is settled.
 
+The construction with a fixed bound $B$ on $\varepsilon_0/\Delta$ is now
+\leanid{TNLean.MPS.AreaLaw.exists_sampled_successive_viable_sets_polynomial}.
+For each fixed positive integer $a$ and accuracy constant $\eta>0$, its size
+and bond polynomials are chosen before the length, Hamiltonian and ground
+energy. The final-span theorem
+\leanid{TNLean.MPS.AreaLaw.exists_sampled_groundState_openMPS_polynomial}
+gives a normalized matrix product state with overlap at least
+$1-\eta/L^a$. This uses the library constant-cut bond and corrected trimming
+radius; it does not assert the printed sharp degree or a running time.
+The source-error status above is unchanged.
+
 \bibliographystyle{unsrt}
 \bibliography{references}
 \end{document}
