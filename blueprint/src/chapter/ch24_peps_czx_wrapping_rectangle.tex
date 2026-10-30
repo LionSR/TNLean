@@ -1,0 +1,123 @@
+\section{CZX boundaries across coordinate seams}%
+\label{sec:czx_wrapping_rectangle}
+
+Let $W,H\ge3$, $0<w<W$, $0<h<H$, and
+$s\in\mathbb Z/W\mathbb Z\times\mathbb Z/H\mathbb Z$. Put
+$R_s=\{s+(i,j):0\le i<w,\ 0\le j<h\}$ and $P=2w+2h$.
+Either or both coordinate intervals may cross their seams. The theorems below
+extend the bounded rectangle results to these cyclic coordinate rectangles.
+The tensor and printed boundary matrices are those of
+\cite[Appendix~A]{Cirac2021Matrix}, with the bond and normalization corrections
+recorded in Section~\ref{sec:peps_czx_rectangle_boundary}.
+
+\begin{lemma}[Translation of the actual region contraction]%
+    \label{lem:czx_wrapping_contraction}
+    \lean{TNLean.PEPS.czxWrappingRectangle_eq_map,
+        TNLean.PEPS.czxWrappingRectangleBoundaryTransport,
+        TNLean.PEPS.czxWrappingRectangleIncidentEdgeEquiv,
+        TNLean.PEPS.czxWrappingRectangleIncidentTransport,
+        TNLean.PEPS.czxWrappingRectangle_component_translate,
+        TNLean.PEPS.openRegionWeight_czxWrappingRectangle_translate,
+        TNLean.PEPS.czxWrappingRectangle_plaquetteBond_translate,
+        TNLean.PEPS.czxWrappingRectanglePhysicalEquiv,
+        TNLean.PEPS.czxWrappingRectangleBoundaryEquiv,
+        TNLean.PEPS.czxWrappingRectangleVertexEquiv,
+        TNLean.PEPS.czxWrappingRectanglePhysicalEquiv_apply,
+        TNLean.PEPS.openRegionWeight_czxWrappingRectangle}
+    \leanok
+    \uses{thm:czx_open_region_coefficients}
+    Write $R_0$ for the bounded origin rectangle. Translation by $s$ is a
+    graph isomorphism from $R_0$ onto $R_s$ and bijects their incident bonds,
+    crossing bonds, and physical configurations. If $b_s$ and $e_s$ denote
+    the inverse boundary and physical relabelings, then their actual open
+    contraction coefficients satisfy
+    \begin{align}
+        A_{R_s}(\sigma,\mu) & =A_{R_0}(e_s\sigma,b_s\mu).
+        \label{eq:czx_wrapping_contraction}
+    \end{align}
+\end{lemma}
+\begin{proof}\leanok
+    The graph translation preserves the top, right, bottom, and left edges
+    of every site. Thus each corrected site-tensor coefficient is preserved.
+    Reindex the product over region vertices and the sum over incident labels.
+    The boundary condition is preserved by the crossing-bond bijection.
+    No exterior labels occur in either sum. Plaquette labels transform by
+    the same directional-edge identities.
+\end{proof}
+
+\begin{definition}[Clockwise cyclic-rectangle boundary coordinates]%
+    \label{def:czx_wrapping_boundary}
+    \lean{TNLean.PEPS.czxWrappingRectanglePerimeterEquiv,
+        TNLean.PEPS.czxWrappingRectanglePerimeterEquiv_apply_val,
+        TNLean.PEPS.czxWrappingRectangleCoordinatesEquiv,
+        TNLean.PEPS.czxWrappingRectangleCoordinatesEquiv_apply,
+        TNLean.PEPS.czxWrappingRectangleEffectiveBoundaryConfig,
+        TNLean.PEPS.czxWrappingRectangleBoundaryMatrix,
+        TNLean.PEPS.czxWrappingRectangleBoundaryMatrix_apply}
+    \leanok
+    \uses{def:czx_rectangle_perimeter,def:czx_rectangle_boundary_labels,
+        lem:czx_wrapping_contraction}
+    Translate the clockwise origin enumeration of the $P$ crossing bonds
+    to $R_s$, keeping its cyclic index and reversing the native bottom and
+    left pairs. For effective spins $c\in\{0,1\}^P$, let $\mu_s(c)$ be
+    the native assignment whose oriented pairs are $(c_i,c_{i+1})$, and
+    define $F_s(\sigma,c)=A_{R_s}(\sigma,\mu_s(c))$.
+    By (\ref{eq:czx_wrapping_contraction}),
+    $F_s(\sigma,c)=F_0(e_s\sigma,c)$.
+\end{definition}
+
+\begin{lemma}[Faithful physical boundary symmetry of a cyclic rectangle]%
+    \label{thm:czx_wrapping_boundary}
+    \lean{TNLean.PEPS.czxWrappingRectangleEffectiveBoundaryConfig_injective,
+        TNLean.PEPS.czxWrappingRectangleBoundaryMatrix_mulVec_injective,
+        TNLean.PEPS.range_openRegionMap_czxWrappingRectangle_transport,
+        TNLean.PEPS.range_openRegionMap_czxWrappingRectangle,
+        TNLean.PEPS.finrank_range_openRegionMap_czxWrappingRectangle,
+        TNLean.PEPS.regionPhysicalProductMatrix_czxWrappingRectangleBoundaryMatrix_review}
+    \leanok
+    \uses{def:czx_wrapping_boundary}
+    The map $F_s$ is injective, its columns span $\operatorname{im}A_{R_s}$,
+    and $\dim\operatorname{im}A_{R_s}=2^P$. If
+    $U_{R_s}=\bigotimes_{v\in R_s}U_{CZX}$ and $O_P(A)$ is the printed
+    CZX matrix product operator, then
+    \begin{align}
+        U_{R_s}F_s & =F_sO_P(A).
+        \label{eq:czx_wrapping_intertwiner}
+    \end{align}
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:czx_wrapping_contraction,thm:czx_rectangle_boundary_faithful,
+        thm:czx_rectangle_physical_image,thm:czx_rectangle_review_mpo}
+    The physical relabeling is bijective, so it preserves injectivity,
+    column spans, and dimensions of the bounded rectangle map. It also
+    reindexes the identical on-site factors in $U_{R_s}$. Relabeling the
+    bounded printed-operator identity gives (\ref{eq:czx_wrapping_intertwiner}).
+    The boundary index and the even perimeter are unchanged.
+\end{proof}
+
+\begin{lemma}[Reduced-density support of a cyclic rectangle]%
+    \label{thm:czx_wrapping_density}
+    \lean{TNLean.PEPS.exists_czxWrappingRectanglePlaquetteBoundary,
+        TNLean.PEPS.range_regionReducedDensity_czxWrappingRectangle,
+        TNLean.PEPS.rank_regionReducedDensity_czxWrappingRectangle}
+    \leanok
+    \uses{def:czx_wrapping_boundary,def:peps_region_reduced_density}
+    The actual unnormalized reduced density satisfies
+    $\operatorname{ran}\rho_{R_s}=\operatorname{im}A_{R_s}$ and
+    $\operatorname{rank}\rho_{R_s}=2^P$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:czx_wrapping_contraction,thm:czx_rectangle_boundary_faithful,
+        thm:czx_wrapping_boundary,thm:czx_rectangle_density_support,
+        thm:peps_region_reduced_density_support}
+    Translate the bounded plaquette extension of each effective spin
+    assignment. Its copied complement configuration selects the corresponding
+    actual boundary column as a literal closed-state slice. Hence every
+    column of $F_s$ belongs to the reduced-density range. The general
+    reverse inclusion gives equality; the preceding dimension formula gives
+    the rank.
+\end{proof}
+
+Full-width cylinders and nonrectangular regions are outside these statements.
+No nonzero-spectrum, entropy, parent-space completeness, or anomaly-class
+conclusion follows here.
