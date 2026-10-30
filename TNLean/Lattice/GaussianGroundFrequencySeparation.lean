@@ -209,33 +209,40 @@ theorem exists_gaussianNegativeFrequency_ground_commutator_limit
     rw [← Matrix.star_eq_conjTranspose, map_star, ContinuousLinearMap.star_eq_adjoint,
       ContinuousLinearMap.adjoint_inner_left]
   refine ⟨z, ?_, ?_⟩
-  · have h := (hη.inner tendsto_const_nhds).sub (tendsto_const_nhds.inner hξ)
+  · have h := (hη.inner (𝕜 := ℂ) (tendsto_const_nhds (x := L B ψ))).sub
+      ((tendsto_const_nhds (x := L Bᴴ ψ)).inner (𝕜 := ℂ) hξ)
     apply h.congr'
     exact Eventually.of_forall fun ε ↦ by
       dsimp only
       simp only [map_sub, map_mul, _root_.sub_apply, inner_sub_right,
-        ContinuousLinearMap.mul_apply, hmove]
+        mul_apply_eq_comp, hmove]
   · have hnorm (M : Matrix n n ℂ) : ‖L M ψ‖ ≤ ‖M‖ * ‖ψ‖ :=
       Matrix.l2_opNorm_mulVec M ψ
     have hnormAdj (M : Matrix n n ℂ) : ‖L Mᴴ ψ‖ ≤ ‖M‖ * ‖ψ‖ := by
       simpa only [Matrix.l2_opNorm_conjTranspose] using hnorm Mᴴ
     have hid : ⟪ψ, L (A * B) ψ⟫_ℂ - z =
         ⟪L Aᴴ ψ - η, L B ψ⟫_ℂ + ⟪L Bᴴ ψ, ξ⟫_ℂ := by
-      rw [map_mul, ContinuousLinearMap.mul_apply, ← hmove A ψ (L B ψ), inner_sub_left]
+      rw [map_mul, mul_apply_eq_comp,
+        ← hmove A ψ (L B ψ), inner_sub_left]
       dsimp only [z]
       ring
     rw [hid]
     calc
       _ ≤ ‖⟪L Aᴴ ψ - η, L B ψ⟫_ℂ‖ + ‖⟪L Bᴴ ψ, ξ⟫_ℂ‖ := norm_add_le _ _
       _ ≤ ‖L Aᴴ ψ - η‖ * ‖L B ψ‖ + ‖L Bᴴ ψ‖ * ‖ξ‖ :=
-        add_le_add (norm_inner_le_norm _ _) (norm_inner_le_norm _ _)
+        add_le_add (norm_inner_le_norm (𝕜 := ℂ) _ _) (norm_inner_le_norm (𝕜 := ℂ) _ _)
       _ ≤ (Real.exp (-q / 2) * ‖L Aᴴ ψ‖) * ‖L B ψ‖ +
           ‖L Bᴴ ψ‖ * (Real.exp (-q / 2) * ‖L A ψ‖) :=
         add_le_add (mul_le_mul_of_nonneg_right herror (norm_nonneg _))
           (mul_le_mul_of_nonneg_left hsmall (norm_nonneg _))
       _ ≤ (Real.exp (-q / 2) * (‖A‖ * ‖ψ‖)) * (‖B‖ * ‖ψ‖) +
           (‖B‖ * ‖ψ‖) * (Real.exp (-q / 2) * (‖A‖ * ‖ψ‖)) := by
-        gcongr <;> first | exact hnormAdj _ | exact hnorm _
+        have hexp := (Real.exp_pos (-q / 2)).le
+        exact add_le_add
+          (mul_le_mul (mul_le_mul_of_nonneg_left (hnormAdj A) hexp) (hnorm B)
+            (norm_nonneg _) (mul_nonneg hexp (mul_nonneg (norm_nonneg _) (norm_nonneg _))))
+          (mul_le_mul (hnormAdj B) (mul_le_mul_of_nonneg_left (hnorm A) hexp)
+            (mul_nonneg hexp (norm_nonneg _)) (mul_nonneg (norm_nonneg _) (norm_nonneg _)))
       _ = _ := by ring
 
 end TNLean.Lattice
