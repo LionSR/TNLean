@@ -43,7 +43,7 @@ theorem originalSiteHeisenbergOutputWindow_eq_chainWindowOperator
   obtain ⟨⟨e, c⟩, rfl⟩ := (originalSiteHeisenbergOutputWindowEquiv d k).surjective row
   obtain ⟨⟨e', c'⟩, rfl⟩ := (originalSiteHeisenbergOutputWindowEquiv d k).surjective col
   rw [MPSTensor.chainWindowOperator_apply (by omega) (by omega)]
-  simp only [originalSiteHeisenbergOutputWindow, Matrix.reindex_apply,
+  simp only [originalSiteHeisenbergOutputWindow, Matrix.reindex_apply, Matrix.submatrix_apply,
     Equiv.symm_apply_apply, Matrix.rightKroneckerEmbed_apply, Matrix.kroneckerMap_apply,
     Matrix.one_apply, originalSiteHeisenbergOutputWindowEquiv_middle,
     originalSiteHeisenbergOutputWindowEquiv_outside_eq_iff]

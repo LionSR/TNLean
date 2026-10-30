@@ -59,7 +59,7 @@ theorem bufferedMPUQuasiLocalAut_central_interval
     omega
   have hinput : (intervalCoordinates d a (3 * (2 * k))).symm
       (MPOTensor.originalSiteHeisenbergInputWindow d k A) = localInclusion hcentral B := by
-    apply (intervalCoordinates d a (3 * (2 * k))).injective
+    apply EquivLike.injective (intervalCoordinates d a (3 * (2 * k)))
     rw [StarAlgEquiv.apply_symm_apply]
     exact (intervalCoordinates_centralInclusion_originalSiteHeisenbergInputWindow d k a A).symm
   have hN : 1 < 0 + (3 * (2 * k) + 2 * k) := by omega
@@ -67,18 +67,17 @@ theorem bufferedMPUQuasiLocalAut_central_interval
     hU k 0 (2 * k) hN a S A
   rw [hinput, finiteChainLocalObservable_localInclusion] at hSource
   have hSourceQ := congrArg (algebraicToQuasiLocal d) hSource
-  simp only [sub_zero, zero_add] at hSourceQ
-  let hJ : J ⊆ finiteChainRegion a (3 * (2 * k) + 2 * k) := by
+  let hJ : J ⊆ finiteChainRegion (a - (0 : ℕ)) (0 + (3 * (2 * k) + 2 * k)) := by
     intro x hx
     simp only [J, finiteChainRegion, Finset.mem_Ico] at *
     omega
-  have hb : ∀ x ∈ J, a ≤ x - (2 * k : ℕ) ∧
-      x + (4 * k : ℕ) ≤ a + (3 * (2 * k) + 2 * k) := by
+  have hb : ∀ x ∈ J, a - (0 : ℕ) ≤ x - (2 * k : ℕ) ∧
+      x + (4 * k : ℕ) ≤ a - (0 : ℕ) + (0 + (3 * (2 * k) + 2 * k)) := by
     intro x hx
     simp only [J, finiteChainRegion, Finset.mem_Ico] at hx
     omega
   have hF := bufferedMPUQuasiLocalAction_finiteChainConjugation hU k hk S
-    J a (3 * (2 * k) + 2 * k) hN hJ hb B
+    J (a - (0 : ℕ)) (0 + (3 * (2 * k) + 2 * k)) hN hJ hb B
   rw [bufferedMPUQuasiLocalAut_apply]
   change bufferedMPUQuasiLocalAction hU k hk S (quasiLocalObservable d J B) = _
   rw [hF]
@@ -151,7 +150,7 @@ theorem blocked_bufferedMPUQuasiLocalAut_pair_interval [NeZero k]
   have hStart : (a - 2) * (k : ℤ) + (2 * k : ℕ) = a * k := by push_cast; ring
   have hEnd : (a - 2) * (k : ℤ) + (k : ℕ) = (a - 1) * k := by ring
   rw [hStart, hEnd] at hF
-  apply (quasiLocalBlocking d k).injective
+  apply EquivLike.injective (quasiLocalBlocking d k)
   rw [blockedAutomorphism_apply, StarAlgEquiv.apply_symm_apply,
     quasiLocalBlocking_quasiLocalIntervalObservable,
     quasiLocalBlocking_quasiLocalIntervalObservable, hInput, hOutput]
@@ -174,7 +173,8 @@ theorem blocked_bufferedMPUQuasiLocalAut_pair_supportedIn [NeZero k]
   have hA : Matrix.reindex E E A =
       intervalCoordinates (MPSTensor.blockPhysDim d k) a 2 B := by
     ext row col
-    simp only [A, Matrix.reindex_apply, Equiv.symm_apply_apply]
+    simp only [A, Matrix.reindex_apply, Matrix.submatrix_apply, Equiv.symm_symm,
+      Equiv.apply_symm_apply]
   have hinput : quasiLocalIntervalObservable (MPSTensor.blockPhysDim d k) a 2
       (Matrix.reindex E E A) = quasiLocalObservable _ (finiteChainRegion a 2) B := by
     rw [hA, quasiLocalIntervalObservable_apply, StarAlgEquiv.symm_apply_apply]

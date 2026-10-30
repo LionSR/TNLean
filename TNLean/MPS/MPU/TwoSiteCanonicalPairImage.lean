@@ -30,10 +30,12 @@ open scoped Matrix
 namespace SpinChain
 
 private def leftPairZeroConfigEquiv (b : ℕ) :
-    (Fin b × Fin b) ≃ Config b (leftPair 0) := consecutivePairConfigEquiv b (-1)
+    (Fin b × Fin b) ≃ Config b (leftPair 0) :=
+  (consecutivePairConfigEquiv b (-1) : (Fin b × Fin b) ≃ Config b ({-1, -1 + 1} : Finset ℤ))
 
 private def rightPairZeroConfigEquiv (b : ℕ) :
-    (Fin b × Fin b) ≃ Config b (rightPair 0) := consecutivePairConfigEquiv b 1
+    (Fin b × Fin b) ≃ Config b (rightPair 0) :=
+  (consecutivePairConfigEquiv b 1 : (Fin b × Fin b) ≃ Config b ({1, 1 + 1} : Finset ℤ))
 
 private theorem intervalZeroPairRegion : finiteChainRegion 0 2 = evenPair 0 := by
   ext z
@@ -80,8 +82,8 @@ private theorem bipartite_output_eq_interval (b : ℕ) [NeZero b]
     ← quasiLocalObservable_localInclusion b intervalFourSubsetPairUnion]
   change quasiLocalObservable b (leftPair 0 ∪ rightPair 0) _ = _
   apply congrArg (quasiLocalObservable b (leftPair 0 ∪ rightPair 0))
-  apply (bipartiteLocalAlgebraEquiv (disjoint_leftPair_rightPair 0)).injective
-  rw [StarAlgEquiv.apply_symm_apply]
+  apply EquivLike.injective (bipartiteLocalAlgebraEquiv (disjoint_leftPair_rightPair 0))
+  erw [StarAlgEquiv.apply_symm_apply]
   ext row col
   have hcomp :
       (Config.splitEquiv intervalFourSubsetPairUnion
@@ -137,7 +139,9 @@ private theorem actual_evenPairLocalImage_zero :
             ((Matrix.matrixReindexStarAlgEquiv E₂).symm (intervalCoordinates b 0 2 B))) = _
         rw [StarAlgEquiv.apply_symm_apply, quasiLocalIntervalObservable_apply,
           StarAlgEquiv.symm_apply_apply]
-    simpa only [intervalZeroPairRegion] using hRaw
+        rfl
+    rw [intervalZeroPairRegion] at hRaw
+    exact hRaw
   have hAction (A : Matrix (Fin b × Fin b) (Fin b × Fin b) ℂ) :
       ω (F A) = bipartiteMatrixToQuasiLocalObservable (disjoint_leftPair_rightPair 0)
         (Matrix.reindex E E (Φ A)) := by
