@@ -1,0 +1,62 @@
+\section{A finite Gaussian sum from the physical interaction}
+\label{sec:huang_physical_gaussian}
+
+The propagation construction and positive Gaussian quadrature combine directly.
+The energy estimate enters through scalar phases, so the propagated Hamiltonian
+continues to be the sum of the original positive interactions. This supplies the
+finite operator approximation in \cite[Section 5.4, Lemma 19 and equations
+    (19)--(22)]{Huang2015GroundState}, using the propagation construction of
+\cite[Figure 2 and equations (12)--(13)]{Osborne2006Dynamics}.
+
+\begin{lemma}[Finite physical Gaussian approximation]
+    \label{thm:huang_physical_gaussian}
+    \lean{TNLean.MPS.AreaLaw.exists_positive_chain_gaussian_approximation}
+    \leanok
+    \uses{thm:huang_unitary_quadrature, thm:huang_physical_propagation,
+        thm:huang_weighted_interval_layer_ranks}
+    Let $q\ge1$ and let $H=\sum_{i=0}^{L-2}h_i$, where $h_i$ is supported on
+    sites $i,i+1$ and $0\le h_i\le I$. Let $a\ge0$, $E\in\mathbb R$, $T\ge0$
+    and $\eta,\rho>0$. Put
+    \[
+        r=\left\lceil2\left(vT+
+        \log\frac{(L+1)C(T+1)}{\min\{\rho,1\}}\right)\right\rceil_+,
+    \]
+    where $v$ and $C$ are the propagation constants. There is a single finite sum
+    $Q$ of $N\ge1$ operators such that
+    \[
+        N\le\frac{2T(L+|E|+1)}{\eta}+2,\qquad
+        \|G_a(H-EI)-Q\|
+        \le2e^{-T^2/(2a)}+\eta+\rho,
+    \]
+    and, simultaneously at every cut $k$,
+    \[
+        \operatorname{OSR}_k(Q)\le Nq^{8r+8}.
+    \]
+    Here $G_a(X)=\int e^{itX}\,d\gamma_a(t)$ for the centered Gaussian
+    measure of variance $a$. For $a=0$, the displayed error bound is read with
+    the convention $T^2/(2a)=0$; the measure itself is the point mass at zero.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Since $\|H-EI\|\le L+|E|$, use the Gaussian interval masses on a mesh
+    of width $\eta/(\|H-EI\|+1)$ in $[-T,T]$. Write these masses as
+    $w_j\ge0$ and their representatives as $t_j$. They satisfy
+    $\sum_jw_j\le1$ and the stated sample count. The quadrature error is
+    at most $2e^{-T^2/(2a)}+\eta$.
+
+    The physical construction gives one family $K(s)$ with
+    $\|e^{-isH}-K(s)\|\le\rho$ for $|s|\le T$ and all cut ranks at most
+    $q^{8r+8}$. Set
+    \[
+        Q=\sum_j w_j e^{-it_jE}K(-t_j).
+    \]
+    The identity $e^{it(H-EI)}=e^{-itE}e^{itH}$ and the unit modulus of the
+    phase give a sample error at most $\rho$. The total replacement error
+    is at most $\rho\sum_jw_j\le\rho$. Finally, scalar multiplication does
+    not increase operator-Schmidt rank, and rank is subadditive under finite
+    sums. These facts yield the simultaneous bound for the same $Q$.
+\end{proof}
+
+This theorem concerns operator approximation. Spectral suppression with an
+approximate energy estimate and improvement of a viable family are separate
+mathematical steps.
