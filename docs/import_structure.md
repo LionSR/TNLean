@@ -41,7 +41,7 @@ TNLean, the remaining source follows these conceptual layers:
 | 4 | `MPS.FundamentalTheorem`, `MPS.Symmetry` | The single-block fundamental theorem and symmetry consequences. |
 | 5 | `MPS.BNT`, `MPS.CanonicalForm`, `MPS.Irreducible`, `MPS.Periodic`, `MPS.Structure` | Multi-block canonical forms, periodicity, and structural assembly. |
 | 5b | `MPS.RFP` | Renormalization fixed-point theory. |
-| 5c | `MPS.AreaLaw` | The one-dimensional area law and polynomial matrix product state approximation for gapped finite-range chains, stated natively on the chain of `L` sites and on finite sets of integers, and proved from the QICLean tail bound and buffered discount; it imports the site-generic entropy lemmas `Lattice.RegionEntropyInequalities` and `Lattice.ZeroEntropy`. The regional-swap, paired-site, entropy-comparison and Gaussian-filter lemmas of the information reset come from the lattice layer, and no module of the chain layer imports `PEPS`. |
+| 5c | `MPS.AreaLaw` | The one-dimensional area law and polynomial matrix product state approximation for gapped finite-range chains, stated natively on the chain of `L` sites and on finite sets of integers, and proved from the QICLean tail bound and buffered discount; it imports the site-generic entropy lemmas `Lattice.RegionEntropyInequalities` and `Lattice.ZeroEntropy`. The regional-swap, paired-site, entropy-comparison and Gaussian-filter lemmas of the information reset come from the lattice layer, and no module of the chain layer imports `PEPS`. The one exception is the bounded-width strip extension: `MPS.AreaLaw.StripGeometry` imports `PEPS.AreaLaw.InitialBuffer` for the lattice support counts, the cut-budget bound and the walk-distance bound, which `StripBufferDiscount` and `StripApproximation` then use. `PEPS.AreaLaw` imports nothing from `MPS.AreaLaw`, so no cycle arises. |
 | 6 | `Wielandt` | Tensor-typed span-growth, primitivity, and quantum Wielandt consequences built on QICLean's channel-generic theory. |
 
 The finite-domain commutator and localization estimates in
@@ -52,6 +52,14 @@ components; infinite distance gives exact commutation. `DomainGraphGeometry`
 uses the component paths of `Algebra.IntegerHasseGraph` and the extended-distance
 comparisons in `Algebra.GraphDistanceTransport` to bound each finite-radius
 sphere by two sites. This supplies the growth bound for domain localization.
+
+The square-grid specialization `MPS.AreaLaw.SnakeGridGeometry` uses the open
+rectangle geometry of `PEPS.AreaLaw.RectangularDomain`.
+`SnakeGridApproximation` combines its cut-width bound with the lattice marginal
+tail and the chain sequential truncation. `SnakeGridAreaLaw` instantiates the
+uniform area-law premise with `PEPS.AreaLaw.AreaLawTheorem`. These square-grid
+modules depend on the chain approximation core; the chain modules do not import
+them, and the lattice layer remains independent of both tensor-network layers.
 
 `PiAlgebra` provides related algebraic formulations. `PEPS` contains the
 two-dimensional injective and normal-tensor developments. `QCA` contains the
