@@ -7363,6 +7363,30 @@ spectral split → block extraction → MPV calculation → strict bounds
 
 ## Rejected
 
+### A second indexed family of condensation-pair certificates — rejected (2026-10-29)
+
+- **Examined:** the twelve split and four non-split entries in
+  `MPS/Examples/AnomalousCondensation/AnomalousCondensationZ2Z2Split.lean` and
+  `AnomalousCondensationZ2Z2NonSplit.lean`, as requested in #7845.
+- **Existing abstraction:** ten split entries use `MultiBlockCompression.ofEq`,
+  two use `ofConjInt` with the shared sign gauge, and four use
+  `ofScalarFlagFour`. Word traces, reductions and remainder nilpotency already
+  follow from the common compression API. The eight intertwiner conclusions
+  instantiate the shared left/right integer-minor criteria.
+- **Data that remains:** split bond dimensions range over one and two. The
+  four non-split entries all have dimensions `4 → 1` and retain the third flag
+  coordinate; their targets are `e`, `-y`, `y`, and `-e`. Their left witnesses
+  are respectively `[0,0,0,1]`, `[0,0,1,0]`, `[-1,0,0,0]`, and `[0,1,0,0]`.
+  The gauges, inverses, conjugated letters and minor certificates vary with
+  these entries. The flag positions themselves are not irregular.
+- **Decision:** retain those explicit numerical certificates rather than add a
+  four-way table selecting the same data under another indexed interface.
+  The generic `Fin 4 × Fin 4` targets and their complete compression assembly
+  already live in `AnomalousCondensationZ2Z2Defect.lean`; no assembly proof is
+  missing from the explicit modules. Reconsider an indexed certificate family
+  if a mathematical consumer needs one, rather than merely its four instances.
+  The choice is recorded in each module's docstring. No proof body changes.
+
 ### Lower bound for a logarithmic cut budget — rejected (2026-10-19)
 
 - **Pattern:** unfold a local expression `B = 1 + t` and prove `1 ≤ B` from
