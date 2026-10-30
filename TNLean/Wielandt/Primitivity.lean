@@ -15,4 +15,5 @@ import TNLean.Wielandt.Primitivity.ImpliesStronglyIrreducible
 import TNLean.Wielandt.Primitivity.Normal
 import TNLean.Wielandt.Primitivity.PeripheralCriterion
 import TNLean.Wielandt.Primitivity.PrimitiveBridge
+import TNLean.Wielandt.Primitivity.Stochastic
 import TNLean.Wielandt.Primitivity.StronglyIrreducibleToFullRank
