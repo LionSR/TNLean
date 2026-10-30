@@ -9786,7 +9786,6 @@ there is no need for a new tactic.
   threshold. Before extending this pattern to another module, move the value equality
   before the case distinction or reuse `Fin.val_inj`; no new tactic is needed.
 
-<<<<<<< HEAD
 ### Uniform prefix truncation and normalization — candidate (2026-10-29)
 
 - **Pattern:** choose slack from a uniform surprisal-tail scale, sum the square
@@ -9799,7 +9798,7 @@ there is no need for a new tactic.
   private, so the strip argument proves its normalization step locally.
 - **Decision:** Two consumers, below the promotion threshold. A third consumer
   should extract the common finite-chain argument to a shared narrow module.
-=======
+
 ### Uncle boundary contraction and trace extension — candidate (2026-10-29)
 
 - **Seen:** `MPS/ParentHamiltonian/UncleBoundaryWords.lean` and
@@ -9812,7 +9811,6 @@ there is no need for a new tactic.
   the general extension. The existing matrix trace-representation theorem
   handles both endpoint restriction directions.
 - **Decision:** Reuse the lemmas; no new tactic or parallel dual structure.
->>>>>>> origin/main
 
 ### Delta half factors for a supplied two-site circuit (2026-10-29)
 
