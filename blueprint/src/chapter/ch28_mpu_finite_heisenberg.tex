@@ -138,7 +138,7 @@
     four-half-block geometry of
     \cite[lines~603--622 and~2300--2334]{Cirac2017MPU}.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:mpu_finite_heisenberg_fixed_window}
     The actual two-site physical identification decodes to the
     concatenation of its two original block words. The output coordinate
@@ -369,7 +369,7 @@
     \end{align}
     The finite-chain boundary collars are retained in this statement.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     For any site outside (\ref{eq:mpu_finite_inverse_collars}), its
     forward standard-form window $[x-2k,x+4k)$ lies inside the chain
     and is disjoint from the target. The actual forward window identity
@@ -394,7 +394,7 @@
     rotates with the input through the periodic seam. Unitarity is
     not required for these covariance identities.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     The closed virtual trace gives $R(U_N)=U_N$. Simultaneous row and
     column relabeling preserves products and adjoints, yielding the
     two identities. A site permutation sends the finite supported
@@ -420,14 +420,28 @@
     $[p,p+6k)$. All exterior sites carry the identity, and $C$ is an
     arbitrary matrix on the complete $2k$-site space.
 \end{lemma}
-\begin{proof}
-    Numbering an identity-tensor inclusion gives precisely the finite
-    chain-window operator. The standard-form input coordinates are a
-    bijection with all configurations of the central interval. The
-    source input-window inclusion is therefore the complete central
-    inclusion, and adjoining the exterior words composes the two
-    placements. Apply the actual standard-form conjugation formula;
-    its fixed output window acts only on the indicated $6k$ sites.
+\begin{proof}\leanok
+    For an operator $X$ on $L$ consecutive sites, write $W_{M,a}(X)$
+    for $X$ placed on the sites $a,\dots,a+L-1$ of an $M$-site chain,
+    with the identity elsewhere. Numbering an identity-tensor inclusion
+    gives precisely this window operator, and placements compose:
+    \begin{align}
+        W_{M,a}\bigl(W_{w,b}(X)\bigr) & =W_{M,a+b}(X).
+        \label{eq:mpu_finite_window_composition}
+    \end{align}
+    Let $\Phi$ be the bijection between the standard-form input
+    coordinates and the configurations of the central interval. The
+    source input window of $A$ is $I_k(A)=W_{6k,2k}(\Phi(A))$, so
+    placing it at offset $p$ gives, by
+    (\ref{eq:mpu_finite_window_composition}),
+    \begin{align}
+        W_{N,p}\bigl(I_k(A)\bigr) & =W_{N,p+2k}\bigl(\Phi(A)\bigr).
+    \end{align}
+    Every observable on $[p+2k,p+4k)$ has the form $W_{N,p+2k}(C)$, and
+    $C=\Phi(A)$ for $A=\Phi^{-1}(C)$. The fixed-window formula of
+    Theorem~\ref{thm:mpu_finite_heisenberg_fixed_window} then gives
+    $U_N W_{N,p}(I_k(A))U_N^\dagger=W_{N,p}(O_k(A))$, which acts only on
+    the $6k$ sites of $[p,p+6k)$.
 \end{proof}
 
 
@@ -445,13 +459,19 @@
     site $x$ is supported in the ring neighbourhood of $x$ of radius $4k$.
     The same radius applies at every site, including the periodic seam.
 \end{lemma}
-\begin{proof}
-    First place $x=2k$ in the complete central interval of a $6k$-site
-    window. The actual finite-window bound gives output support in
-    that window, which lies within ring distance $4k$ of $x$.
-    Rotating the input and output simultaneously preserves the actual
-    finite conjugation and rotates the neighbourhood by the same
-    amount. Finite cyclic induction therefore gives the assertion
+\begin{proof}\leanok
+    Write $\mathcal N_r(S)$ for the ring neighbourhood of radius $r$ of
+    a set of sites $S$. First place $x=2k$ in the complete central
+    interval of a $6k$-site window. The actual finite-window bound gives
+    output support in $[0,6k)\subseteq\mathcal N_{4k}(\{2k\})$. For
+    the unit rotation $R$, Lemma~\ref{lem:mpu_finite_conjugation_cyclic_relocation}
+    and the rotation of neighbourhoods give
+    \begin{align}
+        R\bigl(U_NAU_N^\dagger\bigr)        & =U_NR(A)U_N^\dagger,       &
+        R\bigl(\mathcal N_{4k}(\{x\})\bigr) & =\mathcal N_{4k}(\{x+1\}).
+    \end{align}
+    Thus the bound at $x$ gives the bound at $x+1$, with $x+1$ read
+    modulo $N$. Finite cyclic induction from $x=2k$ gives the assertion
     at every site.
 \end{proof}
 
@@ -546,16 +566,24 @@
     inverse conjugate $U_N^\dagger B U_N$ is supported in the ring
     neighbourhood of $J$ of radius $4k$. No boundary collar is needed.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     Consecutive site numbering sends a canonical local inclusion to
     its finite identity-tensor site embedding, with precisely the
-    same support. Every singleton outside the indicated neighbourhood
-    has forward image disjoint from the target by the uniform
-    finite-ring singleton bound. Its forward image therefore commutes
-    with $B$. Reflect these commutators through the actual finite
-    unitary conjugation. The outside-singleton commutant
-    characterization places its inverse image in the retained
-    neighbourhood algebra.
+    same support. Let $y\notin\mathcal N_{4k}(J)$ and let $C$ act at
+    the single site $y$. By
+    Lemma~\ref{lem:mpu_finite_cyclic_singleton_propagation},
+    $U_NCU_N^\dagger$ is supported in $\mathcal N_{4k}(\{y\})$, which
+    is disjoint from $J$. Hence
+    \begin{align}
+        \bigl[U_NCU_N^\dagger,B\bigr]=0
+         & \quad\Longrightarrow\quad
+        \bigl[C,U_N^\dagger BU_N\bigr]
+        =U_N^\dagger\bigl[U_NCU_N^\dagger,B\bigr]U_N=0.
+    \end{align}
+    Thus $U_N^\dagger BU_N$ commutes with every one-site algebra outside
+    $\mathcal N_{4k}(J)$. By
+    Lemma~\ref{lem:mpu_singleton_generation_and_inverse_reflection}, it
+    is supported in $\mathcal N_{4k}(J)$.
 \end{proof}
 
 
@@ -572,6 +600,7 @@
     \uses{lem:mpu_finite_cyclic_inverse_propagation,
         lem:mpu_finite_heisenberg_forward_propagation,
         lem:mpu_finite_heisenberg_translation_covariance,
+        thm:mpu_finite_heisenberg_forward_local_action,
         thm:mpu_finite_heisenberg_completed_forward_action}
     Under the supplied positive-block standard-form hypotheses, every
     observable on a finite target $J$ has a preimage under the actual
@@ -579,9 +608,10 @@
     that action is a star-automorphism of the quasi-local algebra,
     is translation covariant, and propagates by at most $4k$ sites.
     This is the supplied-standard-form specialization of the
-    source QCA construction; it requires no inverse standard form.
+    source construction of a quantum cellular automaton; it requires
+    no inverse standard form.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     Choose one actual periodic chain buffering $J\cup\{0\}$ by six
     blocks on the left and twelve on the right. Its length is at
     least $6k$. The actual finite inverse of the target is supported
@@ -593,5 +623,6 @@
     completed forward isometry contains every local observable.
     The range is closed by completeness and dense by the local
     observables, hence is the whole quasi-local algebra. The already
-    derived forward covariance and propagation give the QCA properties.
+    derived forward covariance and propagation make it a quantum
+    cellular automaton.
 \end{proof}

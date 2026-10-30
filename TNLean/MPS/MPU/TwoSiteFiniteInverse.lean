@@ -68,7 +68,8 @@ theorem finiteChainConjugation_symm_mem_range_of_twoSiteStandardForm_buffers
   have hd : d ≠ 0 := by
     intro hd
     have hpos := S.phys_pos
-    simp [MPSTensor.blockPhysDim_eq_pow, hd, hk.ne'] at hpos
+    simp only [MPSTensor.blockPhysDim_eq_pow, hd, zero_pow hk.ne'] at hpos
+    omega
   let : NeZero d := ⟨hd⟩
   apply inverse_mem_range_localInclusion_of_forward_support hJ hK
     (finiteChainConjugation hU hN a) B
@@ -81,7 +82,7 @@ theorem finiteChainConjugation_symm_mem_range_of_twoSiteStandardForm_buffers
     simp only [Δ, finiteChainRegion, Finset.mem_Ico] at *
     dsimp [b] at *
     omega
-  let hsingle : ({x} : Finset ℤ) ⊆ finiteChainRegion (b + (2 * k : ℕ)) (2 * k) := by
+  have hsingle : ({x} : Finset ℤ) ⊆ finiteChainRegion (b + (2 * k : ℕ)) (2 * k) := by
     intro y hy
     have hyx := Finset.mem_singleton.mp hy
     subst y

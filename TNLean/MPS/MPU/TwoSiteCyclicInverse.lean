@@ -82,9 +82,9 @@ theorem finiteChainConjugation_symm_mem_range_ringNeighbourhood
     (finiteRingNeighbourhood_subset a N J (4 * k))
     (finiteChainConjugation hU (by omega : 1 < N) a) (localInclusion hJ B)
   intro x hx C
-  let hxΓ := (Finset.mem_sdiff.mp hx).1
+  have hxΓ := (Finset.mem_sdiff.mp hx).1
   let ix := E.symm ⟨x, hxΓ⟩
-  let hsingle : ({x} : Finset ℤ) ⊆ finiteChainRegion a N :=
+  have hsingle : ({x} : Finset ℤ) ⊆ finiteChainRegion a N :=
     Finset.singleton_subset_iff.mpr hxΓ
   have hC : intervalCoordinates d a N (localInclusion hsingle C) ∈
       QuantumCircuit.supportedOperators d ({ix} : Set (Fin N)) := by

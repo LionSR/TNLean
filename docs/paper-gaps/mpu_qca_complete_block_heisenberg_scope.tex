@@ -150,7 +150,6 @@ write this step without an inverse-locality or compatibility premise.
 The two boundary collars remain explicit in this first statement.
 The subsequent cyclic argument removes them on rings of length at least
 $6k$. The finite statement alone is not a completed QCA theorem.
-Lean checking is pending.
 
 The exact cyclic relocation identities for both actual conjugations
 are now written in
@@ -173,10 +172,9 @@ finite unitary and applying its outside commutant proves boundary-free
 finite inverse support in
 \leanid{SpinChain.finiteChainConjugation_symm_mem_range_ringNeighbourhood}.
 Only the forward supplied standard form is used; inverse standard form,
-inverse locality and inverse compatibility are not hypotheses. These
-source-written results are pending Lean checking. A compatible inverse
-family, surjectivity on completion, construction of standard form from
-bare MPU data, and the source bond-dimension radius remain separate.
+inverse locality and inverse compatibility are not hypotheses.
+Surjectivity on completion, the passage to bare MPU data and the source
+bond-dimension radius are treated below.
 
 
 The completed supplied-standard-form action can now be made invertible
@@ -191,7 +189,6 @@ surjectivity. The declarations
 \leanid{SpinChain.bufferedMPUQuasiLocalAction_surjective} and
 \leanid{SpinChain.bufferedMPUQuasiLocalAut_isQCA} write this construction
 with only the forward supplied standard form and radius $4k$.
-They remain pending Lean checking.
 
 The unrestricted source reduction is distinct from this supplied-data
 proof. The repository already constructs a reduced canonical-form-II
