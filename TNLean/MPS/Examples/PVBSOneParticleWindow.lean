@@ -102,9 +102,15 @@ theorem pvbsEdge_snoc (q : ℂ) (N : ℕ) (σ : Cfg 2 N) (i : Fin 2) :
       if i = 0 then pvbsEdge q (N + 1) (Fin.cons a τ)
       else q ^ (N + 1) * pvbsVacuum (N + 1) (Fin.cons a τ)
     rw [← Fin.cons_snoc_eq_snoc_cons]
-    fin_cases a <;> fin_cases i <;>
-      simp [pvbsEdge_cons_zero, pvbsEdge_cons_one, pvbsVacuum_cons, pvbsVacuum_snoc,
-        ih, pow_succ, mul_assoc, mul_comm, mul_left_comm]
+    fin_cases a
+    · -- The leading physical index is empty, stripping a factor of `q`.
+      simp only [pvbsEdge_cons_zero, ih, pvbsVacuum_cons]
+      by_cases hi : i = 0
+      · rw [if_pos hi, if_pos hi]
+      · rw [if_neg hi, if_neg hi, pow_succ]
+        ring
+    · -- The leading physical index carries the particle, forcing an empty tail.
+      simp [pvbsEdge_cons_one, pvbsVacuum_snoc, pvbsVacuum_cons]
 
 /-- At a root-of-unity weight, the actual one-particle vector spans a
 cyclically invariant line, with its geometric phase retained.
@@ -116,7 +122,8 @@ theorem pvbsEdge_cyclic_step (q : ℂ) (N : ℕ) (hq : q ^ (N + 1) = 1)
     q * pvbsEdge q (N + 1) (fun j ↦ σ (finRotate (N + 1) j)) =
       pvbsEdge q (N + 1) σ := by
   obtain ⟨⟨a, τ⟩, rfl⟩ := (Fin.consEquiv fun _ : Fin (N + 1) ↦ Fin 2).surjective σ
-  change q * pvbsEdge q (N + 1) (fun j ↦ Fin.cons a τ (finRotate (N + 1) j)) =
+  change q * pvbsEdge q (N + 1)
+      (fun j ↦ (Fin.cons a τ : Cfg 2 (N + 1)) (finRotate (N + 1) j)) =
     pvbsEdge q (N + 1) (Fin.cons a τ)
   rw [← Fin.snoc_eq_cons_rotate, pvbsEdge_snoc]
   fin_cases a
