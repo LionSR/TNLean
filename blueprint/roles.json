@@ -475,7 +475,8 @@
         "thm:chain_window_mps_error",
         "thm:chain_polynomial_mps_accuracy",
         "thm:chain_polynomial_mps_printed_bound",
-        "thm:chain_polynomial_mps_accuracy_bound"
+        "thm:chain_polynomial_mps_accuracy_bound",
+        "cor:snake_grid_mps"
       ],
       "notes": {
         "thm:chain_area_law": "Chain case of Theorem A, named in the main-results paragraph",

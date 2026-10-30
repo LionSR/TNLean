@@ -107,6 +107,10 @@ import TNLean.MPS.AreaLaw.SelectedMiddleMPOFamily
 import TNLean.MPS.AreaLaw.SequentialTruncation
 import TNLean.MPS.AreaLaw.SharpChainCompression
 import TNLean.MPS.AreaLaw.SharpPhysicalCompression
+import TNLean.MPS.AreaLaw.SnakeGridApproximation
+import TNLean.MPS.AreaLaw.SnakeGridAreaLaw
+import TNLean.MPS.AreaLaw.SnakeGridGeometry
+import TNLean.MPS.AreaLaw.SnakeGridParameters
 import TNLean.MPS.AreaLaw.SupportedCutRank
 import TNLean.MPS.AreaLaw.SupportedGaussianIntegral
 import TNLean.MPS.AreaLaw.SwappedDoubledHamiltonian
