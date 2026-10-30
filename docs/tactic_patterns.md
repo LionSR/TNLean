@@ -52,8 +52,7 @@ abstracted — record why, so it is not re-proposed).
 - **Helper:** the instance `MPSTensor.PGVWC07CanonicalFormData.neZero_dim` in
   `TNLean/MPS/CanonicalForm/PGVWC07CanonicalForm.lean`.
 - **Occurrences:** two in `WeightedCanonicalSectors.lean` and one in
-  `WeightedCanonicalPhysicalLimit.lean`, all removed; the two local `have`s in
-  `TNLean/MPS/Examples/WStateCanonicalBound.lean` are now redundant.
+  `WeightedCanonicalPhysicalLimit.lean`, all removed.
 - **Decision:** An instance lets typeclass search supply positivity for every
   block, instead of a local assumption at each use.
 
