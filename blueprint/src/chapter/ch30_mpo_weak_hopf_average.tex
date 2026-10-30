@@ -1,0 +1,246 @@
+\section{The weak-Hopf average of the canonical parent}
+\label{sec:glm_wha_average}
+
+Let $H$ be a complex algebra with a comultiplication $\Delta$ that is
+multiplicative and star preserving, a unital star representation
+$\phi:H\to M_d(\mathbb C)$, and a faithful unital representation
+$\psi$ of the convolution dual $H^*$ on $\mathbb C^D$. These are the
+representation data of a $C^*$-weak Hopf algebra
+\cite[Section~4]{Molnar2022MPOAlgebrasI}; the tensor $T$ is that of
+Definition~\ref{def:glm_dual_representation_tensor}. Following
+\cite[Appendix~B]{GarreRubio2023MPOSym}, the average below uses a canonical
+integral $\Omega\in H$ and a linear map $T_\Omega:H\to H$ normalized by
+\begin{align}
+    \sum\Delta(\Omega_{(1)})\Delta(T_\Omega(\Omega_{(2)})) & =\Delta(1).
+    \label{eq:glm_wha_integral_normalization}
+\end{align}
+No other weak-Hopf axiom is used.
+
+\begin{definition}[Represented iterated coproduct]
+    \label{def:glm_wha_represented_coproduct}
+    \lean{MPOTensor.weakHopfCoeff,MPOTensor.weakHopfRep}
+    \leanok
+    \uses{def:glm_dual_representation_tensor}
+    For $N\geq0$ and configurations $\sigma,\tau$ of length $N$, put
+    $\rho_N(x)_{\sigma\tau}=f_{\sigma,\tau}(x)$, where
+    $f_{\sigma,\tau}=f_{\sigma_0\tau_0}\cdots f_{\sigma_{N-1}\tau_{N-1}}$
+    is the ordered convolution product of the physical coefficients. Thus
+    $\rho_N=(\phi\otimes\cdots\otimes\phi)\circ\Delta^{(N-1)}$ for $N>0$, and
+    $\rho_2=(\phi\otimes\phi)\circ\Delta$ is the map $\rho$ of
+    \cite[Appendix~B]{GarreRubio2023MPOSym}.
+\end{definition}
+
+\begin{lemma}[Boundaries realize the represented coproduct]
+    \label{thm:glm_wha_boundary_realization}
+    \lean{MPOTensor.mpoWithBoundary_ofDualRepresentation_eq_weakHopfRep,
+        MPOTensor.exists_trace_mul_eq_ofConv_apply,
+        MPOTensor.exists_mpoWithBoundary_eq_weakHopfRep,
+        MPOTensor.exists_weakHopfRep_eq_mpoWithBoundary}
+    \leanok
+    \uses{def:glm_wha_represented_coproduct,thm:glm_dual_representation_words}
+    For every $x\in H$ there is one $X\in M_D(\mathbb C)$ with
+    $O^N_{T,X}=\rho_N(x)$ for every $N\geq0$. If $H$ is finite dimensional,
+    then conversely every boundary operator $O^N_{T,X}$ equals $\rho_N(x)$
+    for one $x$ independent of $N$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{thm:glm_dual_representation_words}
+    By Lemma~\ref{thm:glm_dual_representation_words},
+    $(O^N_{T,X})_{\sigma\tau}=\operatorname{tr}(X\psi(f_{\sigma,\tau}))$.
+    Evaluation at $x$ is a functional on $H^*$; injectivity of $\psi$ extends
+    it to $M_D(\mathbb C)$, and the trace pairing gives $X$ with
+    $\operatorname{tr}(X\psi(f))=f(x)$ for all $f$. Conversely, for finite
+    dimensional $H$ the functional $f\mapsto\operatorname{tr}(X\psi(f))$ is
+    evaluation at an element of $H$.
+\end{proof}
+
+\begin{lemma}[Multiplicativity of the represented coproduct]
+    \label{thm:glm_wha_represented_coproduct_mul}
+    \lean{MPOTensor.weakHopfRep_apply,MPOTensor.weakHopfRep_one_apply,
+        MPOTensor.weakHopfRep_succ_apply,MPOTensor.weakHopfRep_mul,
+        MPOTensor.weakHopfRep_one_one}
+    \leanok
+    \uses{def:glm_wha_represented_coproduct}
+    For $N>0$ and $x,y\in H$, $\rho_N(xy)=\rho_N(x)\rho_N(y)$. Moreover
+    $\rho_1=\phi$, so $\rho_1(1)=I$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    At one site this is multiplicativity of $\phi$. For $N+1$ sites,
+    $\rho_{N+1}(x)_{(s,\sigma),(t,\tau)}
+        =\sum\phi(x_{(1)})_{st}\rho_N(x_{(2)})_{\sigma\tau}$.
+    Since $\Delta(xy)=\Delta(x)\Delta(y)$, expanding both tensors in pure
+    tensors and using the induction hypothesis gives
+    $\rho_{N+1}(xy)_{(s,\sigma),(t,\tau)}
+        =\sum_{(u,\upsilon)}\rho_{N+1}(x)_{(s,\sigma),(u,\upsilon)}
+        \rho_{N+1}(y)_{(u,\upsilon),(t,\tau)}$.
+    The empty chain gives the counit, which is not multiplicative in a weak
+    Hopf algebra, so the induction starts at one site.
+\end{proof}
+
+\begin{definition}[Weak-Hopf representation with an integral]
+    \label{def:glm_wha_representation}
+    \lean{MPOTensor.WeakHopfRepresentation,
+        MPOTensor.WeakHopfRepresentation.tensor,
+        MPOTensor.WeakHopfRepresentation.rep,
+        MPOTensor.WeakHopfRepresentation.boundary,
+        MPOTensor.WeakHopfRepresentation.mpoWithBoundary_boundary,
+        MPOTensor.WeakHopfRepresentation.rep_mul,
+        MPOTensor.WeakHopfRepresentation.rep_one_length_one}
+    \leanok
+    \uses{def:glm_wha_represented_coproduct,thm:glm_wha_boundary_realization}
+    A weak-Hopf representation consists of $\phi$, a faithful $\psi$, a
+    multiplicative and star-preserving $\Delta$, an integral $\Omega$, and a
+    linear map $T_\Omega$ satisfying
+    (\ref{eq:glm_wha_integral_normalization}). Its tensor is $T$, and each
+    $x\in H$ is assigned one boundary $X_x$ with $O^N_{T,X_x}=\rho_N(x)$.
+\end{definition}
+
+\begin{lemma}[Adjoint closure and the integral normalization]
+    \label{thm:glm_wha_integral_normalization}
+    \lean{Coalgebra.comul_injective,
+        MPOTensor.WeakHopfRepresentation.exists_conjTranspose_mpoWithBoundary_eq,
+        MPOTensor.WeakHopfRepresentation.mul'_map_integral,
+        MPOTensor.WeakHopfRepresentation.sum_rep_mul_rep_pullThrough}
+    \leanok
+    \uses{def:glm_wha_representation,thm:glm_coalgebra_adjoint_boundary,
+        thm:glm_wha_represented_coproduct_mul}
+    For a weak-Hopf representation, every boundary $X$ has one $Y$ with
+    $(O^N_{T,X})^\dagger=O^N_{T,Y}$ for all $N$. Moreover
+    $\sum\Omega_{(1)}T_\Omega(\Omega_{(2)})=1$ in $H$, and for every finite
+    expansion $\Delta(\Omega)=\sum_{j\in J}a_j\otimes b_j$ and $N>0$,
+    \begin{align}
+        \sum_{j\in J}\rho_N(a_j)\rho_N(T_\Omega(b_j)) & =\rho_N(1)=Q_N.
+        \label{eq:glm_wha_boundary_normalization}
+    \end{align}
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{thm:glm_coalgebra_adjoint_boundary}
+    Adjoint closure is Lemma~\ref{thm:glm_coalgebra_adjoint_boundary}. The
+    counit axiom $(\epsilon\otimes\mathrm{id})\Delta(x)=1\otimes x$ makes
+    $\Delta$ injective. By multiplicativity, the left-hand side of
+    (\ref{eq:glm_wha_integral_normalization}) is
+    $\Delta(\sum\Omega_{(1)}T_\Omega(\Omega_{(2)}))$, hence
+    $\sum\Omega_{(1)}T_\Omega(\Omega_{(2)})=1$. Applying the multiplicative map
+    $\rho_N$ gives (\ref{eq:glm_wha_boundary_normalization}).
+\end{proof}
+
+\begin{definition}[Weak-Hopf average]
+    \label{def:glm_wha_average}
+    \lean{MPOTensor.WeakHopfRepresentation.weakHopfAverage,
+        MPOTensor.WeakHopfRepresentation.weakHopfAverage_eq_sum}
+    \leanok
+    \uses{def:glm_wha_representation}
+    For $n\geq0$ and an operator $B$ on the $n$-site physical space, put
+    \begin{align*}
+        E_n(B) & =\sum\rho_n(\Omega_{(1)})\,B\,\rho_n(T_\Omega(\Omega_{(2)})),
+    \end{align*}
+    defined from $\Delta(\Omega)$ by the bilinear extension of
+    $a\otimes b\mapsto\rho_n(a)B\rho_n(T_\Omega(b))$; every finite expansion of
+    $\Delta(\Omega)$ computes it. This is the average of
+    \cite[Appendix~B]{GarreRubio2023MPOSym}.
+\end{definition}
+
+\begin{lemma}[Weak-Hopf average of the canonical parent]
+    \label{thm:glm_wha_parent_average}
+    \lean{MPOTensor.WeakHopfRepresentation.weakHopfAverage_one,
+        MPOTensor.WeakHopfRepresentation.weakHopfAverage_sub,
+        MPOTensor.WeakHopfRepresentation.weakHopfAverage_starProjection_of_rep_eq_one,
+        MPOTensor.WeakHopfRepresentation.weakHopfAverage_starProjection,
+        MPOTensor.WeakHopfRepresentation.toEuclideanLin_rep_one_comp_starProjection,
+        MPOTensor.WeakHopfRepresentation.isSymmetricProjection_weakHopfAverage_starProjection,
+        MPOTensor.WeakHopfRepresentation.weakHopfAverage_parentInteractionES,
+        MPOTensor.WeakHopfRepresentation.one_sub_weakHopfAverage_starProjection,
+        MPOTensor.WeakHopfRepresentation.one_sub_weakHopfAverage_starProjection_ne_zero,
+        MPOTensor.WeakHopfRepresentation.commute_one_sub_weakHopfAverage_mpoWithBoundary}
+    \leanok
+    \uses{def:glm_wha_average,thm:glm_wha_integral_normalization,
+        thm:glm_boundary_projection_average,thm:glm_boundary_average_nonzero,
+        def:glm_boundary_closedness,def:injective,def:parent_interaction}
+    Let $T$ come from a weak-Hopf representation, and let $A$ be a state
+    tensor of bond dimension $D_A$ that is injective at one site and length-independently compatible
+    with $T$. For every $n>0$, with $P_n$ the projection onto
+    $\mathcal S_A^n$ and $h_n=I-P_n$,
+    \begin{align}
+        E_n(I)     & =Q_n, \notag                                \\
+        E_n(P_n)   & =P_n, \label{eq:glm_wha_support_average}    \\
+        E_n(h_n)   & =Q_n-P_n, \notag                            \\
+        I-E_n(P_n) & =h_n. \label{eq:glm_wha_ambient_complement}
+    \end{align}
+    In particular $E_n(P_n)$ is a Hermitian projection with
+    $\operatorname{tr}E_n(P_n)=\operatorname{tr}(Q_nP_n)$, the symmetrized
+    parent $I-E_n(P_n)$ commutes with every $O^n_{T,X}$, and it is nonzero
+    when $d^n>D_A^2$. More generally, (\ref{eq:glm_wha_support_average})
+    holds when $A$ is $L$-block injective for some $L>0$ and $Q_L=I$.
+    This is the projection, trace and nonvanishing claim of
+    \cite[Appendix~B]{GarreRubio2023MPOSym} at every positive length; the
+    source's two-site term is the case $n=2$, and its injective tensor is
+    taken injective at one site \cite{gap:glm23_wha_parent_completion}.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{thm:glm_boundary_projection_average,thm:glm_boundary_average_nonzero,
+        thm:glm_boundary_parent_local}
+    Choose a finite expansion $\Delta(\Omega)=\sum_{j\in J}a_j\otimes b_j$ and
+    the boundaries $X_j=X_{a_j}$, $Y_j=X_{T_\Omega(b_j)}$ and $U=X_1$.
+    Lemma~\ref{thm:glm_wha_represented_coproduct_mul} gives $O^1_{T,U}=I$,
+    Lemma~\ref{thm:glm_wha_integral_normalization} gives adjoint closure and
+    (\ref{eq:glm_boundary_average_unit}) with $Q_n=O^n_{T,U}$, and
+    Lemma~\ref{thm:glm_boundary_projection_average} yields
+    (\ref{eq:glm_wha_support_average}). The identity $E_n(I)=Q_n$ is
+    (\ref{eq:glm_wha_boundary_normalization}), and linearity gives
+    $E_n(h_n)=Q_n-P_n$ and (\ref{eq:glm_wha_ambient_complement}).
+    Lemma~\ref{thm:glm_boundary_average_nonzero} gives the nonvanishing, and
+    Lemma~\ref{thm:glm_boundary_parent_local} the commutation.
+\end{proof}
+
+\begin{definition}[The weak Hopf algebra of a finite set]
+    \label{def:glm_wha_finite_set}
+    \lean{MPOTensor.FiniteSetWeakHopf.virt,
+        MPOTensor.FiniteSetWeakHopf.virt_apply,
+        MPOTensor.FiniteSetWeakHopf.weakHopfRepresentation,
+        MPOTensor.FiniteSetWeakHopf.integralRepr}
+    \leanok
+    \uses{def:glm_wha_representation}
+    Let $H=\mathbb C^m$ with pointwise operations and
+    $\Delta(\delta_k)=\delta_k\otimes\delta_k$ on its standard idempotents.
+    For a unital star representation $\phi$, let $\psi(f)$ be the diagonal
+    matrix with entries $f(\delta_k)$, and put $\Omega=1$ and
+    $T_\Omega=\mathrm{id}$.
+\end{definition}
+
+\begin{lemma}[The finite-set weak Hopf algebra and its average]
+    \label{thm:glm_wha_finite_set}
+    \lean{MPOTensor.FiniteSetWeakHopf.comul_single,
+        MPOTensor.FiniteSetWeakHopf.comul_eq_sum,
+        MPOTensor.FiniteSetWeakHopf.comul_mul,
+        MPOTensor.FiniteSetWeakHopf.comul_star,
+        MPOTensor.FiniteSetWeakHopf.virt_injective,
+        MPOTensor.FiniteSetWeakHopf.comul_one_ne,
+        MPOTensor.FiniteSetWeakHopf.weakHopfAverage_eq_sum,
+        MPOTensor.FiniteSetWeakHopf.sum_rep_single_mul_starProjection_mul}
+    \leanok
+    \uses{def:glm_wha_finite_set,thm:glm_wha_parent_average}
+    The data of Definition~\ref{def:glm_wha_finite_set} form a weak-Hopf
+    representation. For $m\geq2$ it is not Hopf:
+    $\Delta(1)=\sum_k\delta_k\otimes\delta_k\neq1\otimes1$. Its average is
+    the pinching $E_n(B)=\sum_k\rho_n(\delta_k)B\rho_n(\delta_k)$, and for a
+    compatible state tensor injective at one site,
+    $\sum_k\rho_n(\delta_k)P_n\rho_n(\delta_k)=P_n$ for every $n>0$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{thm:glm_wha_parent_average}
+    Writing $x=\sum_kx_k\delta_k$ gives
+    $\Delta(x)=\sum_k\delta_k\otimes x_k\delta_k$, and
+    $\delta_k\delta_l=\delta_{kl}\delta_k$ gives multiplicativity and star
+    compatibility. Convolution of functionals is pointwise on the idempotents,
+    so $\psi$ is a faithful unital representation. Since
+    $\sum_k\delta_k\delta_k=1$, the identity
+    (\ref{eq:glm_wha_integral_normalization}) holds. The functional
+    $a\otimes b\mapsto a_0b_1$ vanishes on $\Delta(1)$ and equals $1$ on
+    $1\otimes1$. The last assertion is
+    Lemma~\ref{thm:glm_wha_parent_average}.
+\end{proof}

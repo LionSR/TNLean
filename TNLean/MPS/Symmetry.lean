@@ -175,6 +175,7 @@ import TNLean.MPS.Symmetry.UnitaryVirtualGauge
 import TNLean.MPS.Symmetry.VaryingBondPhysicalCharacter
 import TNLean.MPS.Symmetry.VaryingSupportPhaseInvariance
 import TNLean.MPS.Symmetry.VirtualRepresentation
+import TNLean.MPS.Symmetry.WeakHopfParentAverage
 import TNLean.MPS.Symmetry.WeightedMatrixUnitInterpolation
 import TNLean.MPS.Symmetry.WeightedMatrixUnitParent
 import TNLean.MPS.Symmetry.WeightedMatrixUnitParentPath

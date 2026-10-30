@@ -453,4 +453,5 @@ import TNLean.MPS.MPDO.VerticalSectorTraceLoss
 import TNLean.MPS.MPDO.VerticalSectorTracePreservation
 import TNLean.MPS.MPDO.VerticalSpectral
 import TNLean.MPS.MPDO.VerticalTransportCoefficientCovariance
+import TNLean.MPS.MPDO.WeakHopfRepresentation
 import TNLean.MPS.MPDO.ZCL
