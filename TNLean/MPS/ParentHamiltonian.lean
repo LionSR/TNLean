@@ -297,8 +297,6 @@ import TNLean.MPS.ParentHamiltonian.SuppliedIsometryInsertion
 import TNLean.MPS.ParentHamiltonian.SuppliedIsometryParentGap
 import TNLean.MPS.ParentHamiltonian.TailVirtualGram
 import TNLean.MPS.ParentHamiltonian.TripartiteDecorrelation
-import TNLean.MPS.ParentHamiltonian.UncleGroundSpaceInclusion
-=======
 import TNLean.MPS.ParentHamiltonian.UncleBoundaryIntersection
 import TNLean.MPS.ParentHamiltonian.UncleBoundaryProduct
 import TNLean.MPS.ParentHamiltonian.UncleBoundaryTraceClosure
@@ -318,8 +316,6 @@ import TNLean.MPS.ParentHamiltonian.UnclePeriodicClosure
 import TNLean.MPS.ParentHamiltonian.UnclePinnedTrialNorm
 import TNLean.MPS.ParentHamiltonian.UnclePrimitiveTransfer
 import TNLean.MPS.ParentHamiltonian.UncleTensor
-import TNLean.MPS.ParentHamiltonian.UncleVariationalEigenvalue
-=======
 import TNLean.MPS.ParentHamiltonian.UncleTrialEnergy
 import TNLean.MPS.ParentHamiltonian.UncleTrialGroundProjection
 import TNLean.MPS.ParentHamiltonian.UncleTrialLocalization
@@ -338,8 +334,6 @@ import TNLean.MPS.ParentHamiltonian.UncleWallGramQuadratic
 import TNLean.MPS.ParentHamiltonian.UncleWallGramSlopePositive
 import TNLean.MPS.ParentHamiltonian.UniformPhysicalParentComparison
 import TNLean.MPS.ParentHamiltonian.UniqueGroundState
-import TNLean.MPS.ParentHamiltonian.WeightedCanonicalPhysicalLimit
-import TNLean.MPS.ParentHamiltonian.WeightedCanonicalSectors
 import TNLean.MPS.ParentHamiltonian.VaryingOBCBoundaryStates
 import TNLean.MPS.ParentHamiltonian.VaryingOBCIntersection
 import TNLean.MPS.ParentHamiltonian.VaryingOBCParentUniqueness
@@ -348,6 +342,8 @@ import TNLean.MPS.ParentHamiltonian.VaryingOBCReconstruction
 import TNLean.MPS.ParentHamiltonian.VaryingPhysicalKernelSupport
 import TNLean.MPS.ParentHamiltonian.VaryingPhysicalParentHamiltonian
 import TNLean.MPS.ParentHamiltonian.VaryingPhysicalParentUniqueness
+import TNLean.MPS.ParentHamiltonian.WeightedCanonicalPhysicalLimit
+import TNLean.MPS.ParentHamiltonian.WeightedCanonicalSectors
 import TNLean.MPS.ParentHamiltonian.WeightedVirtualHilbert
 import TNLean.MPS.ParentHamiltonian.WrappingWindow
 import TNLean.MPS.ParentHamiltonian.WrappingWindowLastSiteFactorization

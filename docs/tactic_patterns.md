@@ -9712,15 +9712,6 @@ there is no need for a new tactic.
   partial-trace identities give the factorization and its normalization.
 - **Decision:** Use the positive Gram zero criterion rather than add a parallel
   purification structure or assume system/environment decoupling.
-=======
-- **Seen:** `MPS/ParentHamiltonian/UncleGroundSpaceInclusion.lean`, the first and second
-  blocked-sector boundary maps and range inclusions.
-- **Pattern:** A boundary matrix supported on a diagonal virtual block removes every other
-  sector in the trace pairing. Range inclusion follows by supplying that boundary witness.
-- **Reuse:** `Matrix.reindexAlgEquiv`, `Matrix.fromBlocks_multiply`, and QICLean's
-  `Matrix.trace_reindex` perform the matrix algebra. One helper transports either resulting
-  inclusion through physical blocking and the actual orthogonal-complement projector.
-- **Decision:** Two sector cases in one file; no new tactic or parallel ground-space predicate.
 
 ### Weighted geometric sums grouped by their anchors — promoted (2026-10-28)
 
