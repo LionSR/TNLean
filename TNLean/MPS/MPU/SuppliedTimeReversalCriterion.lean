@@ -200,19 +200,27 @@ theorem mpo_even_eq_adjoint_of_timeReversal_certificate
     (Matrix.isUnitaryBetween_coe_unitaryGroup Y)
   have hYX := (Matrix.isUnitaryBetween_coe_unitaryGroup Y).kronecker _ _
     (Matrix.isUnitaryBetween_coe_unitaryGroup X)
-  have hAcancel : ((X : Matrix _ _ ℂ)ᴴ ⊗ₖ (Y : Matrix _ _ ℂ)ᴴ) * A = A₀ := by
-    change ((X : Matrix _ _ ℂ)ᴴ ⊗ₖ (Y : Matrix _ _ ℂ)ᴴ) *
+  have hAcancel : ((X : Matrix (Fin (d * d)) (Fin (d * d)) ℂ)ᴴ ⊗ₖ
+      (Y : Matrix (Fin (d * d)) (Fin (d * d)) ℂ)ᴴ) * A = A₀ := by
+    change ((X : Matrix (Fin (d * d)) (Fin (d * d)) ℂ)ᴴ ⊗ₖ
+        (Y : Matrix (Fin (d * d)) (Fin (d * d)) ℂ)ᴴ) *
       Matrix.reindex (Equiv.prodCongr (finCongr hl) (finCongr hr))
         (Equiv.refl _) (SourceFactors.sourceU W T) = A₀
     rw [hu, ← Matrix.mul_assoc, ← Matrix.conjTranspose_kronecker, hXY.1, Matrix.one_mul]
-  have hBcancel : B * ((Y : Matrix _ _ ℂ) ⊗ₖ (X : Matrix _ _ ℂ)) = B₀ := by
+  have hBcancel : B *
+      ((Y : Matrix (Fin (d * d)) (Fin (d * d)) ℂ) ⊗ₖ (X : Matrix (Fin (d * d)) (Fin (d * d)) ℂ)) =
+          B₀ := by
     change Matrix.reindex (Equiv.refl _)
       (Equiv.prodCongr (finCongr hr) (finCongr hl)) (SourceFactors.sourceV W T) *
-        ((Y : Matrix _ _ ℂ) ⊗ₖ (X : Matrix _ _ ℂ)) = B₀
+        ((Y : Matrix (Fin (d * d)) (Fin (d * d)) ℂ) ⊗ₖ (X : Matrix (Fin (d * d)) (Fin (d * d)) ℂ)) =
+            B₀
     rw [hv, Matrix.mul_assoc, ← Matrix.conjTranspose_kronecker, hYX.1, Matrix.mul_one]
-  have hraw' : ((X : Matrix _ _ ℂ)ᴴ ⊗ₖ (Y : Matrix _ _ ℂ)ᴴ) * A =
-      σ • ((x' : Matrix _ _ ℂ) ⊗ₖ (x' : Matrix _ _ ℂ)ᴴ) *
-        (B * ((Y : Matrix _ _ ℂ) ⊗ₖ (X : Matrix _ _ ℂ)))ᴴ := by
+  have hraw' : ((X : Matrix (Fin (d * d)) (Fin (d * d)) ℂ)ᴴ ⊗ₖ
+      (Y : Matrix (Fin (d * d)) (Fin (d * d)) ℂ)ᴴ) * A =
+      σ • ((x' : Matrix (Fin (d * d)) (Fin (d * d)) ℂ) ⊗ₖ
+          (x' : Matrix (Fin (d * d)) (Fin (d * d)) ℂ)ᴴ) *
+        (B * ((Y : Matrix (Fin (d * d)) (Fin (d * d)) ℂ) ⊗ₖ
+            (X : Matrix (Fin (d * d)) (Fin (d * d)) ℂ)))ᴴ := by
     rw [hAcancel, hBcancel]
     exact hraw
   obtain ⟨z, hz⟩ := adjoint_certificate_of_unitary_gate_transport A B

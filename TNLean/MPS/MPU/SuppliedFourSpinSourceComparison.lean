@@ -228,11 +228,12 @@ theorem exists_fourSpin_selected_source_gate_gauges_of_square_ranks
       (finProdFinEquiv (m := d) (n := d))
     ∃ X Y : Matrix.unitaryGroup (Fin (d * d)) ℂ,
       Matrix.reindex (Equiv.prodCongr L R) (Equiv.refl _) (SourceFactors.sourceU W T) =
-        ((X : Matrix _ _ ℂ) ⊗ₖ (Y : Matrix _ _ ℂ)) * Matrix.reindex p p
-          (staircaseMiddle (A := Fin d) (E := Fin d) v * (u ⊗ₖ u)) ∧
+        ((X : Matrix (Fin (d * d)) (Fin (d * d)) ℂ) ⊗ₖ (Y : Matrix (Fin (d * d)) (Fin (d * d)) ℂ)) *
+          Matrix.reindex p p (staircaseMiddle (A := Fin d) (E := Fin d) v * (u ⊗ₖ u)) ∧
       Matrix.reindex (Equiv.refl _) (Equiv.prodCongr R L) (SourceFactors.sourceV W T) =
         Matrix.reindex p p (staircaseMiddle (A := Fin d) (E := Fin d) v) *
-          ((Y : Matrix _ _ ℂ)ᴴ ⊗ₖ (X : Matrix _ _ ℂ)ᴴ) := by
+          ((Y : Matrix (Fin (d * d)) (Fin (d * d)) ℂ)ᴴ ⊗ₖ
+              (X : Matrix (Fin (d * d)) (Fin (d * d)) ℂ)ᴴ) := by
   classical
   let T := sourceFactors W hW.ρ hW.ρ_posDef
   have hr : r[W] = d * d := S.sourceRanks_eq.1
@@ -241,16 +242,17 @@ theorem exists_fourSpin_selected_source_gate_gauges_of_square_ranks
   let L := finCongr hl
   let R := finCongr hr
   let X' : Matrix.unitaryGroup (Fin (d * d)) ℂ :=
-    ⟨Matrix.reindex L L X, Matrix.reindex_mem_unitaryGroup _ _ X.property⟩
+    ⟨Matrix.reindex L L X, Matrix.reindex_mem_unitaryGroup L _ X.property⟩
   let Y' : Matrix.unitaryGroup (Fin (d * d)) ℂ :=
-    ⟨Matrix.reindex R R Y, Matrix.reindex_mem_unitaryGroup _ _ Y.property⟩
+    ⟨Matrix.reindex R R Y, Matrix.reindex_mem_unitaryGroup R _ Y.property⟩
   let e : (Fin d × Fin d) ≃ Fin (d * d) := finProdFinEquiv
   let p := Equiv.prodCongr e e
   let A := staircaseMiddle (A := Fin d) (E := Fin d) v * (u ⊗ₖ u)
   let B := staircaseMiddle (A := Fin d) (E := Fin d) v
   have hu' : Matrix.reindex (Equiv.prodCongr L R) (Equiv.refl _)
       (SourceFactors.sourceU W T) =
-      ((X' : Matrix _ _ ℂ) ⊗ₖ (Y' : Matrix _ _ ℂ)) * Matrix.reindex p p A := by
+      ((X' : Matrix (Fin (d * d)) (Fin (d * d)) ℂ) ⊗ₖ (Y' : Matrix (Fin (d * d)) (Fin (d * d)) ℂ)) *
+          Matrix.reindex p p A := by
     have h := congrArg (Matrix.reindex (Equiv.prodCongr L R) (Equiv.refl _)) hu
     rw [Matrix.reindex_kronecker_mul] at h
     have hA : Matrix.reindex (Equiv.prodCongr L R) (Equiv.refl _)
@@ -265,7 +267,8 @@ theorem exists_fourSpin_selected_source_gate_gauges_of_square_ranks
     exact h
   have hv' : Matrix.reindex (Equiv.refl _) (Equiv.prodCongr R L)
       (SourceFactors.sourceV W T) = Matrix.reindex p p B *
-      ((Y' : Matrix _ _ ℂ)ᴴ ⊗ₖ (X' : Matrix _ _ ℂ)ᴴ) := by
+      ((Y' : Matrix (Fin (d * d)) (Fin (d * d)) ℂ)ᴴ ⊗ₖ
+          (X' : Matrix (Fin (d * d)) (Fin (d * d)) ℂ)ᴴ) := by
     have h := congrArg (Matrix.reindex (Equiv.refl _) (Equiv.prodCongr R L)) hv
     rw [Matrix.reindex_mul_kronecker] at h
     have hB : Matrix.reindex (Equiv.refl _) (Equiv.prodCongr R L)

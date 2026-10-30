@@ -122,24 +122,29 @@ theorem exists_transposition_certificate_of_square_ranks
   obtain ⟨w, hw⟩ := transpose_certificate_of_unitary_gate_transport
     (Matrix.reindex p p A) (Matrix.reindex p p B) X' Y' z c hcert
   let x : Matrix.unitaryGroup (Fin d × Fin d) ℂ :=
-    ⟨Matrix.reindex e.symm e.symm w, Matrix.reindex_mem_unitaryGroup _ _ w.property⟩
+    ⟨Matrix.reindex e.symm e.symm w, Matrix.reindex_mem_unitaryGroup e.symm _ w.property⟩
   refine ⟨c, x, hc, ?_⟩
   apply (Matrix.reindexLinearEquiv ℂ ℂ p p).injective
   change Matrix.reindexLinearEquiv ℂ ℂ p p A =
     Matrix.reindexLinearEquiv ℂ ℂ p p
-      ((c • ((x : Matrix _ _ ℂ) ⊗ₖ (x : Matrix _ _ ℂ)ᵀ)) * Bᵀ)
+      ((c • ((x : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ) ⊗ₖ
+          (x : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ)ᵀ)) * Bᵀ)
   rw [Matrix.smul_mul, map_smul]
   conv_rhs => rw [← Matrix.reindexLinearEquiv_mul ℂ ℂ p p p]
   have hx : Matrix.reindexLinearEquiv ℂ ℂ p p
-      ((x : Matrix _ _ ℂ) ⊗ₖ (x : Matrix _ _ ℂ)ᵀ) =
-      (w : Matrix _ _ ℂ) ⊗ₖ (w : Matrix _ _ ℂ)ᵀ := by
+      ((x : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ) ⊗ₖ
+          (x : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ)ᵀ) =
+      (w : Matrix (Fin (d * d)) (Fin (d * d)) ℂ) ⊗ₖ
+          (w : Matrix (Fin (d * d)) (Fin (d * d)) ℂ)ᵀ := by
     change Matrix.reindex p p
-      ((x : Matrix _ _ ℂ) ⊗ₖ (x : Matrix _ _ ℂ)ᵀ) = _
+      ((x : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ) ⊗ₖ
+          (x : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ)ᵀ) = _
     rw [← Matrix.kroneckerMap_reindex]
-    have hx' : Matrix.reindex e e (x : Matrix _ _ ℂ) = (w : Matrix _ _ ℂ) := by
+    have hx' : Matrix.reindex e e (x : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ) =
+        (w : Matrix (Fin (d * d)) (Fin (d * d)) ℂ) := by
       ext i j
-      change (w : Matrix _ _ ℂ) (e (e.symm i)) (e (e.symm j)) =
-        (w : Matrix _ _ ℂ) i j
+      change (w : Matrix (Fin (d * d)) (Fin (d * d)) ℂ) (e (e.symm i)) (e (e.symm j)) =
+        (w : Matrix (Fin (d * d)) (Fin (d * d)) ℂ) i j
       rw [Equiv.apply_symm_apply, Equiv.apply_symm_apply]
     rw [hx', ← Matrix.transpose_reindex, hx']
   rw [hx]
@@ -188,7 +193,8 @@ theorem mpo_even_eq_transpose_of_transposition_certificate
     (c : ℂ) (hc : ‖c‖ = 1)
     (x : Matrix.unitaryGroup (Fin d × Fin d) ℂ)
     (hlocal : staircaseMiddle (A := Fin d) (E := Fin d) v * (u ⊗ₖ u) =
-      c • ((x : Matrix _ _ ℂ) ⊗ₖ (x : Matrix _ _ ℂ)ᵀ) *
+      c • ((x : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ) ⊗ₖ
+          (x : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ)ᵀ) *
         (staircaseMiddle (A := Fin d) (E := Fin d) v)ᵀ)
     (N : ℕ) (hN : 1 < N) (heven : Even N) : mpo W N = (mpo W N)ᵀ := by
   classical
@@ -202,30 +208,40 @@ theorem mpo_even_eq_transpose_of_transposition_certificate
   let e : (Fin d × Fin d) ≃ Fin (d * d) := finProdFinEquiv
   let p := Equiv.prodCongr e e
   let x' : Matrix.unitaryGroup (Fin (d * d)) ℂ :=
-    ⟨Matrix.reindex e e x, Matrix.reindex_mem_unitaryGroup _ _ x.property⟩
+    ⟨Matrix.reindex e e x, Matrix.reindex_mem_unitaryGroup e _ x.property⟩
   let A₀ := Matrix.reindex p p
     (staircaseMiddle (A := Fin d) (E := Fin d) v * (u ⊗ₖ u))
   let B₀ := Matrix.reindex p p (staircaseMiddle (A := Fin d) (E := Fin d) v)
-  have hraw : A₀ = c • ((x' : Matrix _ _ ℂ) ⊗ₖ (x' : Matrix _ _ ℂ)ᵀ) * B₀ᵀ := by
+  have hraw : A₀ = c •
+      ((x' : Matrix (Fin (d * d)) (Fin (d * d)) ℂ) ⊗ₖ
+          (x' : Matrix (Fin (d * d)) (Fin (d * d)) ℂ)ᵀ) * B₀ᵀ := by
     exact Matrix.reindex_transposition_certificate e hlocal
   obtain ⟨X, Y, hu, hv⟩ := S.exists_fourSpin_selected_source_gate_gauges_of_square_ranks hW
   have hXY := (Matrix.isUnitaryBetween_coe_unitaryGroup X).kronecker _ _
     (Matrix.isUnitaryBetween_coe_unitaryGroup Y)
   have hYX := (Matrix.isUnitaryBetween_coe_unitaryGroup Y).kronecker _ _
     (Matrix.isUnitaryBetween_coe_unitaryGroup X)
-  have hAcancel : ((X : Matrix _ _ ℂ)ᴴ ⊗ₖ (Y : Matrix _ _ ℂ)ᴴ) * A = A₀ := by
-    change ((X : Matrix _ _ ℂ)ᴴ ⊗ₖ (Y : Matrix _ _ ℂ)ᴴ) *
+  have hAcancel : ((X : Matrix (Fin (d * d)) (Fin (d * d)) ℂ)ᴴ ⊗ₖ
+      (Y : Matrix (Fin (d * d)) (Fin (d * d)) ℂ)ᴴ) * A = A₀ := by
+    change ((X : Matrix (Fin (d * d)) (Fin (d * d)) ℂ)ᴴ ⊗ₖ
+        (Y : Matrix (Fin (d * d)) (Fin (d * d)) ℂ)ᴴ) *
       Matrix.reindex (Equiv.prodCongr (finCongr hl) (finCongr hr))
         (Equiv.refl _) (SourceFactors.sourceU W T) = A₀
     rw [hu, ← Matrix.mul_assoc, ← Matrix.conjTranspose_kronecker, hXY.1, Matrix.one_mul]
-  have hBcancel : B * ((Y : Matrix _ _ ℂ) ⊗ₖ (X : Matrix _ _ ℂ)) = B₀ := by
+  have hBcancel : B *
+      ((Y : Matrix (Fin (d * d)) (Fin (d * d)) ℂ) ⊗ₖ (X : Matrix (Fin (d * d)) (Fin (d * d)) ℂ)) =
+          B₀ := by
     change Matrix.reindex (Equiv.refl _)
       (Equiv.prodCongr (finCongr hr) (finCongr hl)) (SourceFactors.sourceV W T) *
-        ((Y : Matrix _ _ ℂ) ⊗ₖ (X : Matrix _ _ ℂ)) = B₀
+        ((Y : Matrix (Fin (d * d)) (Fin (d * d)) ℂ) ⊗ₖ (X : Matrix (Fin (d * d)) (Fin (d * d)) ℂ)) =
+            B₀
     rw [hv, Matrix.mul_assoc, ← Matrix.conjTranspose_kronecker, hYX.1, Matrix.mul_one]
-  have hraw' : ((X : Matrix _ _ ℂ)ᴴ ⊗ₖ (Y : Matrix _ _ ℂ)ᴴ) * A =
-      c • ((x' : Matrix _ _ ℂ) ⊗ₖ (x' : Matrix _ _ ℂ)ᵀ) *
-        (B * ((Y : Matrix _ _ ℂ) ⊗ₖ (X : Matrix _ _ ℂ)))ᵀ := by
+  have hraw' : ((X : Matrix (Fin (d * d)) (Fin (d * d)) ℂ)ᴴ ⊗ₖ
+      (Y : Matrix (Fin (d * d)) (Fin (d * d)) ℂ)ᴴ) * A =
+      c • ((x' : Matrix (Fin (d * d)) (Fin (d * d)) ℂ) ⊗ₖ
+          (x' : Matrix (Fin (d * d)) (Fin (d * d)) ℂ)ᵀ) *
+        (B * ((Y : Matrix (Fin (d * d)) (Fin (d * d)) ℂ) ⊗ₖ
+            (X : Matrix (Fin (d * d)) (Fin (d * d)) ℂ)))ᵀ := by
     rw [hAcancel, hBcancel]
     exact hraw
   obtain ⟨z, hz⟩ := transpose_certificate_of_unitary_gate_transport A B
@@ -253,7 +269,8 @@ theorem even_transposition_iff_exists_certificate
           (Equiv.prodCongr (finCongr hr) (finCongr hl)) v
         ‖c‖ = 1 ∧
         staircaseMiddle (A := Fin d) (E := Fin d) v₀ * (u₀ ⊗ₖ u₀) =
-          c • ((x : Matrix _ _ ℂ) ⊗ₖ (x : Matrix _ _ ℂ)ᵀ) *
+          c • ((x : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ) ⊗ₖ
+              (x : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ)ᵀ) *
             (staircaseMiddle (A := Fin d) (E := Fin d) v₀)ᵀ := by
   constructor
   · exact S.exists_transposition_certificate hW
@@ -281,7 +298,8 @@ theorem exists_transposition_exponential_certificate
         (Equiv.prodCongr (finCongr hr) (finCongr hl)) v
       staircaseMiddle (A := Fin d) (E := Fin d) v₀ * (u₀ ⊗ₖ u₀) =
         Complex.exp ((φ : ℂ) * Complex.I) •
-          ((x : Matrix _ _ ℂ) ⊗ₖ (x : Matrix _ _ ℂ)ᵀ) *
+          ((x : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ) ⊗ₖ
+              (x : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ)ᵀ) *
             (staircaseMiddle (A := Fin d) (E := Fin d) v₀)ᵀ := by
   obtain ⟨hr, hl, c, x, hc, hlocal⟩ := S.exists_transposition_certificate hW hTR
   have hphase : Complex.exp ((Complex.arg c : ℂ) * Complex.I) = c :=
