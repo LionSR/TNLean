@@ -58,7 +58,9 @@ theorem exists_eventually_fixed_mps_of_prime_length_bound
     have h₂ := Nat.le_self_pow (by decide : 2 ≠ 0) (D ^ 2 + 1)
     dsimp [q]
     omega
-  have hDN : D < N := hDq.trans_le ((le_max_left _ _).trans (by omega))
+  have hDN : D < N := by
+    have := le_max_left q (3 * (D - 1) * (q + 1))
+    omega
   obtain ⟨r, dim, B, c, hdim, hdimD, hrD, hunital, hDual, hIrr,
       hC1, hDistinct, hc, hdecomp⟩ :=
     exists_normal_blocks_of_no_small_divisor A hPrime.two_le
@@ -74,9 +76,15 @@ theorem exists_eventually_fixed_mps_of_prime_length_bound
     exact (hA hsum).elim
   · have hSep : 3 * (r - 1) * (q + 1) ≤ 3 * (D - 1) * (q + 1) :=
       Nat.mul_le_mul_right (q + 1) (Nat.mul_le_mul_left 3 (Nat.sub_le_sub_right hrD 1))
+    have hqNL : q ≤ N - L := by
+      have := le_max_left q (3 * (D - 1) * (q + 1))
+      omega
+    have hSepNL : 3 * (r - 1) * (q + 1) ≤ N - L := by
+      have := le_max_right q (3 * (D - 1) * (q + 1))
+      omega
     have hSpan : WordTupleSpanTop B (N - L) :=
-      wordTupleSpanTop_of_ge_of_isNBlkInjective B hdim hunital hDual hIrr hq
-        hC1 hDistinct (by omega)
+      wordTupleSpanTop_of_ge_of_isNBlkInjective (L₀ := q) B hdim hunital hDual hIrr hq
+        hC1 hDistinct (max_le hqNL hSepNL)
     have hker := groundSpaceES_le_ker_of_periodicInteractionHamiltonianES_eq_zero
       B c hc h hh hPrime.pos (by omega) hSpan (by rwa [← hsum])
     let j : Fin r := ⟨0, hr⟩
@@ -89,7 +97,7 @@ theorem exists_eventually_fixed_mps_of_prime_length_bound
       intro hMzero
       apply mpv_ne_zero_of_isNBlkInjective (hC1 j) hq hqM
       funext σ
-      simpa only [mpvState_apply, PiLp.zero_apply] using
+      simpa only [mpvState_apply, PiLp.zero_apply, Pi.zero_apply] using
         congrArg (fun v : MPVSpace d M => v σ) hMzero
     have hGround := periodicInteractionHamiltonianES_mpvState_eq_zero_of_groundSpaceES_le_ker
       (B j) h (hker j) hLM
