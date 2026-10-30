@@ -9939,6 +9939,19 @@ there is no need for a new tactic.
   threshold. Before extending this pattern to another module, move the value equality
   before the case distinction or reuse `Fin.val_inj`; no new tactic is needed.
 
+### Rectangular trace agreement on a spanning family — candidate (2026-10-29)
+
+- **Seen:** `MPS/ParentHamiltonian/VaryingOBCIntersection.lean`.
+- **Pattern:** Compose `Matrix.mulLeftLinearMap` with the trace functional,
+  extend equality from the actual middle-site spanning family using
+  `LinearMap.ext_on_range`, then apply Mathlib's rectangular
+  `Matrix.ext_iff_trace_mul_right`.
+- **Reuse:** The overlap identity is proved once; both explicit-boundary
+  reconstruction and the actual coefficient-section corollary reuse it.
+- **Notes:** No new trace-duality predicate or inverse construction is needed.
+  The row-isometry blocking lemma uses ordinary finite sums and existing
+  rectangular multiplication/adjoint identities.
+
 ### Uniform prefix truncation and normalization — candidate (2026-10-29)
 
 - **Pattern:** choose slack from a uniform surprisal-tail scale, sum the square
