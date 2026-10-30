@@ -54,10 +54,11 @@ theorem physicalPairParentTerm_isPositive
     (β : ι → Type*) [∀ k, Fintype (β k)] (i j : ι) (hji : j ≠ i)
     (A : β i → Matrix a b ℂ) (B : β j → Matrix b c ℂ) :
     (physicalPairParentTerm β i j hji A B).IsPositive := by
-  apply (LinearMap.isPositive_linearIsometryEquiv_conj_iff
+  rw [physicalPairParentTerm, LinearEquiv.conj_apply, LinearMap.comp_assoc]
+  exact (LinearMap.isPositive_linearIsometryEquiv_conj_iff
     (pairConfigurationReindex β i j hji).symm).mpr
-  exact (ContinuousLinearMap.isSymmetricProjection_rightFiberwiseMap _
-    (Submodule.isSymmetricProjection_starProjection _)).isPositive
+    (ContinuousLinearMap.isSymmetricProjection_rightFiberwiseMap _
+      (Submodule.isSymmetricProjection_starProjection _)).isPositive
 
 /-- The actual local parent terms intertwine with the full dependent physical
 embedding. Their ranges, projections and outside extensions are all derived.
