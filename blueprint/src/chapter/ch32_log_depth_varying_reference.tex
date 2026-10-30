@@ -10,7 +10,7 @@ qualitative convergence definition in the inhomogeneous paragraph
 of~\cite{Malz2024Preparation} does not yield them.
 The rectangular extension is given in Section~\ref{sec:ldp_rectangular}.
 
-\begin{theorem}[Ordered perturbations of varying references]
+\begin{lemma}[Ordered perturbations of varying references]
     \label{thm:ldp_varying_reference_products}
     \lean{prod_range_sub_prod_range_eq_sum_mul_sub_mul,
         norm_prod_range_sub_prod_range_le_of_forall_norm_prod_le}
@@ -22,7 +22,7 @@ The rectangular extension is given in Section~\ref{sec:ldp_rectangular}.
         \left\|\prod_{j=0}^{M-1}X_j-\prod_{j=0}^{M-1}Y_j\right\|
         \le c\bigl((1+c\eta)^M-1\bigr).
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Telescoping the difference into an initial segment from $X$, one
     difference $X_j-Y_j$, and the remaining segment from $Y$, and bounding each
@@ -30,7 +30,7 @@ The rectangular extension is given in Section~\ref{sec:ldp_rectangular}.
     produces a geometric sum that gives the assertion.
 \end{proof}
 
-\begin{theorem}[The reference on an outgoing pair]
+\begin{lemma}[The reference on an outgoing pair]
     \label{thm:ldp_varying_reference_pairs}
     \lean{MPSPreparation.mpvFamily_fixedPointTensor,
         MPSPreparation.sum_mpvFamily_mul_star_mpvFamily}
@@ -44,7 +44,7 @@ The rectangular extension is given in Section~\ref{sec:ldp_rectangular}.
     with cyclic subscripts. In particular the pair leaving block $j$
     uses the reference of block $j+1$. The overlap of two periodic tensor
     families is the trace of their ordered mixed-transfer product.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Expanding the cyclic virtual contraction in matrix units fixes the
     incoming virtual index of the next tensor at each right index, and
@@ -92,7 +92,7 @@ $\operatorname{Tr}(\sigma_j)=1$, even when $\sigma_j$ is singular.
 \end{center}
 % TENKZ-ORDERED-MIXING-VARYING-END
 
-\begin{theorem}[Uniform error with singular varying references]
+\begin{lemma}[Uniform error with singular varying references]
     \label{thm:ldp_varying_reference_error}
     \lean{MPSPreparation.exists_norm_polarPos_sub_le_sqrt_transferMatrix,
         MPSPreparation.exists_norm_trace_prod_polarPos_sub_one_le_varying_reference}
@@ -107,7 +107,7 @@ $\operatorname{Tr}(\sigma_j)=1$, even when $\sigma_j$ is singular.
     If the whole-ring transfer matrix also differs from a density reset
     by at most $\delta$, the normalized pair error is at most
     $C'_DM\sqrt\delta$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:ldp_uniform_gram_transfer,thm:ldp_sqrt_holder,thm:ldp_varying_reference_products,thm:ldp_varying_reference_pairs,thm:ldp_inhomogeneous_normalized_pairs,thm:ldp_normalization_triangle,thm:ldp_chain_block_iso_inner,thm:ldp_rectangular_error}
     The global square-root H\"older bound applied to the reshuffled Gram
@@ -122,7 +122,7 @@ $\operatorname{Tr}(\sigma_j)=1$, even when $\sigma_j$ is singular.
     for the complementary range the normalized error is at most one.
 \end{proof}
 
-\begin{theorem}[Eventual preparation from varying-reference mixing]
+\begin{lemma}[Eventual preparation from varying-reference mixing]
     \label{thm:ldp_varying_reference_preparation}
     \lean{MPSPreparation.exists_isPreparedInDepth_inhomogeneous_le_log_eventually_of_varying_reference}
     \leanok
@@ -138,7 +138,7 @@ $\operatorname{Tr}(\sigma_j)=1$, even when $\sigma_j$ is singular.
     original state at every $N\ge N_0$ and $0<\varepsilon\le1$ has a
     physical unit-state approximation of error at most $\varepsilon$
     prepared in depth $C\log(N/\varepsilon)$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:ldp_varying_reference_error,thm:ldp_inhomogeneous_uniform_rate_from,thm:ldp_chain_transfer_product,lem:ldp_log_threshold_error}
     The whole-ring estimate bounds the squared-norm deviation from one

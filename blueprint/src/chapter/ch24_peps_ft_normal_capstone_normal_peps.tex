@@ -1,7 +1,7 @@
 For a normal PEPS, the tensors become injective after blocking around every edge,
 and each site separates two injective regions whose complements are also injective.
 With union closure in hand, these hypotheses yield the Fundamental
-Theorem for normal PEPS (Theorem~\ref{thm:fundamentalTheorem_normalPEPS_connected})
+Theorem for normal PEPS (Corollary~\ref{thm:fundamentalTheorem_normalPEPS_connected})
 on a connected graph \cite[Section~4]{Molnar2018NormalPEPS}, with gauges unique
 modulo balanced edge scalars.
 Corollaries specialize the result to closed chains, translation-invariant matrix
@@ -126,7 +126,7 @@ product states, and the square lattice.
     \end{tenkzequation}
 \end{definition}
 
-\begin{theorem}[Square-lattice normal blocking hypotheses from margin covers]%
+\begin{lemma}[Square-lattice normal blocking hypotheses from margin covers]%
     \label{thm:peps_normalSquarePEPSBlockingHypotheses_of_marginCovers}
     \lean{TNLean.PEPS.normalSquarePEPSBlockingHypotheses_of_marginCovers}
     \lean{TNLean.PEPS.normalSquarePEPSBlockingHypotheses_edgeBlocking_of_marginCovers}
@@ -152,10 +152,10 @@ product states, and the square lattice.
     $R_e\cap B_e=R_e\cap C_e=B_e\cap C_e=\varnothing$, and
     $R_e\cup B_e\cup C_e=V$; at each site $v$ the regions $R_v,S_v$ satisfy
     $w\in S_v\Longleftrightarrow w=v\lor w\in R_v$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Pair the edge-blocking hypotheses of
-    Theorem~\ref{thm:peps_normalSquareTranslatedEdgeBlockingHypotheses_of_windows}
+    Lemma~\ref{thm:peps_normalSquareTranslatedEdgeBlockingHypotheses_of_windows}
     with the given one-site separation hypotheses
     (Definition~\ref{def:peps_normalOneSiteSeparationHypotheses}).
 \end{proof}
@@ -171,12 +171,12 @@ product states, and the square lattice.
     unique up to the scalar freedom of the graph
     \cite[Section~4, following Theorem~3]{Molnar2018NormalPEPS}.
     The connected-graph form with shared blocking and single-crossing edges is
-    Theorem~\ref{thm:fundamentalTheorem_normalPEPS_connected}, with per-edge
-    uniqueness in Theorem~\ref{thm:fundamentalTheorem_normalPEPS_gauge_unique}.
+    Corollary~\ref{thm:fundamentalTheorem_normalPEPS_connected}, with per-edge
+    uniqueness in Lemma~\ref{thm:fundamentalTheorem_normalPEPS_gauge_unique}.
     The source's remark that translationally invariant systems admit
     translationally invariant gauges when the proportionality scalar $\lambda$
     is not absorbed is realized on the torus by
-    Theorem~\ref{thm:fundamentalTheorem_normalTorusPEPS_unconditional}.
+    Corollary~\ref{thm:fundamentalTheorem_normalTorusPEPS_unconditional}.
 \end{theorem}
 
 \begin{definition}[Doubly injective regions]%
@@ -206,7 +206,7 @@ product states, and the square lattice.
     \cite{gap:peps_injective_ft_section3_route}.
 \end{definition}
 
-\begin{theorem}[Equal bond dimensions from the normal blocking hypotheses]%
+\begin{lemma}[Equal bond dimensions from the normal blocking hypotheses]%
     \label{thm:peps_bondDim_eq_of_normalBlocking}
     \lean{TNLean.PEPS.bondDim_eq_of_normalBlocking}
     \lean{TNLean.PEPS.bondDim_apply_eq_of_blockingData}
@@ -228,7 +228,7 @@ product states, and the square lattice.
         \uses{thm:peps_edgeBlockedThreeSiteInjective, thm:peps_edgeBlockedInsertionAlgebraIsomorphism}
         Fix $e\in E$. Blocking $A$ and $B$ into $(R_e,B_e,C_e)$ yields two
         three-site chains on $K_3$ with injective super-sites
-        (Theorem~\ref{thm:peps_edgeBlockedThreeSiteInjective}). The coarse state
+        (Lemma~\ref{thm:peps_edgeBlockedThreeSiteInjective}). The coarse state
         coefficients satisfy
         $\Coeff_{\mathrm{coarse}}(A)=c_A\Coeff_A$ and
         $\Coeff_{\mathrm{coarse}}(B)=c_B\Coeff_B$ with positive merge-collapse
@@ -236,15 +236,15 @@ product states, and the square lattice.
         to the blocks). Rescaling one super-site of $A$ by $c_B$ and of $B$ by
         $c_A$ equates the coarse states while preserving bond dimensions and
         super-site injectivity. By
-        Theorem~\ref{thm:peps_edgeBlockedInsertionAlgebraIsomorphism}, matched
+        Lemma~\ref{thm:peps_edgeBlockedInsertionAlgebraIsomorphism}, matched
         insertions on the coarse bond between $R_e$ and $B_e$ define an algebra
         isomorphism between the full coarse bond matrix algebras, forcing equal
         coarse bond dimensions. Under $\{g\in E:g\text{ joins }R_e\text{ and }B_e\}=\{e\}$, the coarse bond dimension is $D_A(e)$ (respectively
         $D_B(e)$), so $D_A(e)=D_B(e)$.
     \end{proof}
-\end{theorem}
+\end{lemma}
 
-\begin{theorem}[Fundamental Theorem for normal PEPS on a connected graph]%
+\begin{corollary}[Fundamental Theorem for normal PEPS on a connected graph]%
     \label{thm:fundamentalTheorem_normalPEPS_connected}
     \lean{TNLean.PEPS.fundamentalTheorem_normalPEPS}
     \leanok
@@ -274,7 +274,7 @@ product states, and the square lattice.
         \label{eq:peps_normal_ft_transfer}
     \end{align}
     for an invertible $Z_e$ and every insertion $X$ on $e$, where $D_A=D_B$
-    follows from Theorem~\ref{thm:peps_bondDim_eq_of_normalBlocking}
+    follows from Lemma~\ref{thm:peps_bondDim_eq_of_normalBlocking}
     \cite[Section~4]{Molnar2018NormalPEPS} (cf.\ Theorem~\ref{thm:fundamentalTheorem_PEPS}).
     % Source-faithful reading: Section 4 of \cite{Molnar2018NormalPEPS} uses
     % one common blocking of the two states and enlarges the endpoint regions
@@ -282,10 +282,10 @@ product states, and the square lattice.
     \begin{proof}
         \leanok
         \uses{thm:peps_bondDim_eq_of_normalBlocking, lem:peps_injectiveRegion_union_pos, thm:peps_region_edge_gauge_of_coeff_transfer, thm:gaugeConsistency}
-        By Theorem~\ref{thm:peps_bondDim_eq_of_normalBlocking}, $D_A=D_B$, and
+        By Lemma~\ref{thm:peps_bondDim_eq_of_normalBlocking}, $D_A=D_B$, and
         by Lemma~\ref{lem:peps_injectiveRegion_union_pos}, injective regions of
         $A$ and $B$ are closed under unions. At each $e\in E$,
-        Theorem~\ref{thm:peps_region_edge_gauge_of_coeff_transfer} yields an
+        Lemma~\ref{thm:peps_region_edge_gauge_of_coeff_transfer} yields an
         invertible gauge $X_e$ via (\ref{eq:peps_normal_ft_transfer}) whose
         orientation-adapted absorption $\widetilde B=B^X$ satisfies
         $C_A(e,M;\sigma)=C_{\widetilde B}(e,M;\sigma)$ for all $M$ and $\sigma$.
@@ -297,11 +297,11 @@ product states, and the square lattice.
         Contracting against the nonzero closed state gives
         $\prod_{v\in V}\lambda_v=1$; a spanning-tree factorization on the
         connected graph absorbs $\lambda_v^{-1}$ into the edge gauges as in
-        Theorem~\ref{thm:gaugeConsistency}.
+        Lemma~\ref{thm:gaugeConsistency}.
     \end{proof}
-\end{theorem}
+\end{corollary}
 
-\begin{theorem}[Uniqueness of the normal-PEPS gauges up to a constant]%
+\begin{lemma}[Uniqueness of the normal-PEPS gauges up to a constant]%
     \label{thm:fundamentalTheorem_normalPEPS_gauge_unique}
     \lean{TNLean.PEPS.fundamentalTheorem_normalPEPS_gauge_unique}
     \leanok
@@ -323,13 +323,13 @@ product states, and the square lattice.
         $e\in E$. By the blocking hypotheses and
         Lemma~\ref{lem:peps_injectiveRegion_union_pos}, both $R_e$ and
         $V\setminus R_e=B_e\cup C_e$ are injective for $A$. By
-        Theorem~\ref{thm:peps_gaugeConj_eq_of_coeffIdentities}, the orientation-adapted
+        Lemma~\ref{thm:peps_gaugeConj_eq_of_coeffIdentities}, the orientation-adapted
         absorbing gauges $X_{\mathrm{abs},e}$ and $X'_{\mathrm{abs},e}$ induce
         equal conjugations on $\MN{D_A(e)}$, so
         $X'_{\mathrm{abs},e}=c_e X_{\mathrm{abs},e}$ for some $c_e\in\C^\times$;
         unwinding the orientation adaptation gives $X'_e=c_e X_e$.
     \end{proof}
-\end{theorem}
+\end{lemma}
 
 \begin{definition}[A common physical action on a tensor network]%
     \label{def:peps_physical_tensor_action}
@@ -342,7 +342,7 @@ product states, and the square lattice.
     and setting $B_v(\eta,\sigma)=\sum_\tau U_{\sigma\tau}A_v(\eta,\tau)$.
 \end{definition}
 
-\begin{theorem}[State of a physical tensor action]%
+\begin{lemma}[State of a physical tensor action]%
     \label{thm:peps_state_physical_tensor_action}
     \lean{TNLean.PEPS.stateCoeff_physicalTensorAction}
     \leanok
@@ -354,14 +354,14 @@ product states, and the square lattice.
     \begin{align}
         \Coeff_B=U^{\otimes V}\Coeff_A.
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Expand the local matrix products in the contraction and exchange the
     finite sums. The product of the physical coefficients is
     $\prod_vU_{\sigma_v\tau_v}$, giving the stated product action.
 \end{proof}
 
-\begin{theorem}[Positive physical dimension from an injective region]%
+\begin{lemma}[Positive physical dimension from an injective region]%
     \label{thm:peps_physical_dimension_pos_of_region}
     \lean{TNLean.PEPS.physicalDim_pos_of_nonempty_injectiveRegion}
     \leanok
@@ -369,7 +369,7 @@ product states, and the square lattice.
     \uses{def:peps_regionInjectivityDataOf}
     If all virtual bond spaces are nonzero and a nonempty region is
     injective, then the common physical dimension $d$ is positive.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Positive bond dimensions give the boundary configuration $\beta_e=0$
     on every boundary edge. Linear independence gives the nonzero blocked
@@ -381,7 +381,7 @@ product states, and the square lattice.
     a contradiction.
 \end{proof}
 
-\begin{theorem}[Regional injectivity from the state and bond dimensions]%
+\begin{lemma}[Regional injectivity from the state and bond dimensions]%
     \label{thm:peps_regional_injectivity_from_state}
     \lean{TNLean.PEPS.regionBlockedTensorInjective_of_sameState_of_bondDim_eq}
     \leanok
@@ -390,7 +390,7 @@ product states, and the square lattice.
     Let $A$ and $B$ have the same state and the same positive bond
     dimensions. If a region $R$ and its complement are injective for $A$,
     then $R$ is injective for $B$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{def:peps_region_partial_state, thm:peps_region_partial_state_same_state}
     Write $F_{A,R}$ and $F_{B,R}$ for the blocked maps from the common
@@ -402,7 +402,7 @@ product states, and the square lattice.
          & =\operatorname{span}\{\psi^\tau_{A,R}\}_\tau.
         \notag
     \end{align}
-    Since $A$ and $B$ have the same state, Theorem~\ref{thm:peps_region_partial_state_same_state}
+    Since $A$ and $B$ have the same state, Lemma~\ref{thm:peps_region_partial_state_same_state}
     gives
     \begin{align}
         \psi^\tau_{A,R}
@@ -442,12 +442,12 @@ product states, and the square lattice.
     For each edge blocking, the complement of each of the three regions
     is the disjoint union of the other two, hence is injective for $A$.
     The one-site comparison regions already have injective complements.
-    Theorem~\ref{thm:peps_regional_injectivity_from_state} therefore proves
+    Lemma~\ref{thm:peps_regional_injectivity_from_state} therefore proves
     injectivity of each selected region for $B$. All regions and their
     incidence properties are retained, and the bond spaces stay nonzero.
 \end{proof}
 
-\begin{theorem}[Virtual gauges for a normal on-site symmetry]%
+\begin{lemma}[Virtual gauges for a normal on-site symmetry]%
     \label{thm:peps_normal_onsite_symmetry_gauge}
     \lean{TNLean.PEPS.gaugeEquiv_physicalTensorAction_of_normal_symmetry}
     \leanok
@@ -467,7 +467,7 @@ product states, and the square lattice.
     application in~\cite[lines~1696--1713]{Molnar2018NormalPEPS}.
     Connectivity is needed to absorb the component scalars, as recorded
     in~\cite{gap:peps_gaugeConsistency_connectivity_gap}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{def:peps_physical_tensor_action, thm:peps_state_physical_tensor_action,
         def:peps_normal_pair_blockings_from_state,
@@ -478,11 +478,11 @@ product states, and the square lattice.
     gives the required shared injective regions for $A$ and $B$, retaining
     the single-crossing property of each distinguished edge.
     A one-site comparison region containing its distinguished site is
-    nonempty, so Theorem~\ref{thm:peps_physical_dimension_pos_of_region}
+    nonempty, so Lemma~\ref{thm:peps_physical_dimension_pos_of_region}
     gives $d>0$. Apply the connected normal Fundamental Theorem to this pair.
 \end{proof}
 
-\begin{theorem}[Multiplication of endpoint gauge matrices]%
+\begin{lemma}[Multiplication of endpoint gauge matrices]%
     \label{thm:peps_endpoint_gauge_mul}
     \lean{TNLean.PEPS.edgeGaugeAt_mul}
     \leanok
@@ -491,14 +491,14 @@ product states, and the square lattice.
     Let $X$ and $Y$ be invertible edge-matrix families, and write
     $M_{v,e}(X)$ for the endpoint action of $X_e$ at $v$. Then
     $M_{v,e}(XY)=M_{v,e}(X)M_{v,e}(Y)$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     At the first endpoint this is matrix multiplication. At the second,
     $(XY)^{-\mathsf T}=X^{-\mathsf T}Y^{-\mathsf T}$, where
     $X^{-\mathsf T}=(X^{-1})^{\mathsf T}$.
 \end{proof}
 
-\begin{theorem}[Composition of virtual gauge actions]%
+\begin{lemma}[Composition of virtual gauge actions]%
     \label{thm:peps_gauge_action_composition}
     \lean{TNLean.PEPS.gaugeVertex_applyGauge}
     \leanok
@@ -506,7 +506,7 @@ product states, and the square lattice.
     \uses{def:gaugeVertex, def:applyGauge}
     For invertible edge-matrix families $X$ and $Y$, the vertex tensors
     satisfy $(A^X)^Y_v=A^{YX}_v$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_endpoint_gauge_mul}
     Expand both gauge actions and exchange the finite sums. On each
@@ -514,7 +514,7 @@ product states, and the square lattice.
     $M_{v,e}(Y)M_{v,e}(X)=M_{v,e}(YX)$.
 \end{proof}
 
-\begin{theorem}[Composition of physical tensor actions]%
+\begin{lemma}[Composition of physical tensor actions]%
     \label{thm:peps_physical_action_composition}
     \lean{TNLean.PEPS.physicalTensorAction_mul_component}
     \leanok
@@ -522,13 +522,13 @@ product states, and the square lattice.
     \uses{def:peps_physical_tensor_action}
     For physical matrices $U,W\in\MN{d}$, the vertex tensors satisfy
     $(U\cdot(W\cdot A))_v=((UW)\cdot A)_v$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Exchange the finite sums over the two physical indices and use
     $(UW)_{\sigma\kappa}=\sum_\tau U_{\sigma\tau}W_{\tau\kappa}$.
 \end{proof}
 
-\begin{theorem}[Physical and virtual tensor actions commute]%
+\begin{lemma}[Physical and virtual tensor actions commute]%
     \label{thm:peps_physical_virtual_commute}
     \lean{TNLean.PEPS.physicalTensorAction_applyGauge_component}
     \leanok
@@ -536,7 +536,7 @@ product states, and the square lattice.
     \uses{def:peps_physical_tensor_action, def:gaugeVertex, def:applyGauge}
     For a physical matrix $U$ and an invertible edge-matrix family $X$,
     the vertex tensors satisfy $(U\cdot A^X)_v=(U\cdot A)^X_v$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Write $M_{v,e}=M_{v,e}(X)$ and let $\eta,\eta'$ range over the
     virtual indices of the legs incident to $v$. Exchanging the sums gives
@@ -551,14 +551,14 @@ product states, and the square lattice.
     \end{align}
 \end{proof}
 
-\begin{theorem}[Projective bond representations of a normal symmetry group]%
+\begin{lemma}[Projective bond representations of a normal symmetry group]%
     \label{thm:peps_normal_virtual_representation}
     \lean{TNLean.PEPS.exists_virtualRepresentation_of_normal_symmetry}
     \leanok
 
     \uses{def:projective_rep, thm:peps_normal_onsite_symmetry_gauge}
     Let $A$ satisfy all the graph and blocking hypotheses of
-    Theorem~\ref{thm:peps_normal_onsite_symmetry_gauge}. Let $H$ be a group
+    Lemma~\ref{thm:peps_normal_onsite_symmetry_gauge}. Let $H$ be a group
     and $U:H\to\GL_d(\C)$ a representation such that
     $U(g)^{\otimes V}\Coeff_A=\Coeff_A$ for every $g\in H$.
     Then each edge $e$ admits a homomorphism
@@ -577,7 +577,7 @@ product states, and the square lattice.
     This proves the projective-representation assertion
     in~\cite[Applications, line~1713]{Molnar2018NormalPEPS}, with the
     connectedness correction in~\cite{gap:peps_gaugeConsistency_connectivity_gap}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_normal_onsite_symmetry_gauge,
         def:peps_normal_pair_blockings_from_state,
@@ -585,7 +585,7 @@ product states, and the square lattice.
         thm:peps_gauge_action_composition,
         thm:fundamentalTheorem_normalPEPS_gauge_unique, lem:cocycle_of_assoc}
     Choose gauges $Z(g)$ from
-    Theorem~\ref{thm:peps_normal_onsite_symmetry_gauge}.
+    Lemma~\ref{thm:peps_normal_onsite_symmetry_gauge}.
     Composition and commutation give
     $(U(gh)\cdot A)_v=A^{Z(h)Z(g)}_v$.
     The same transformed tensor is also $A^{Z(gh)}_v$.

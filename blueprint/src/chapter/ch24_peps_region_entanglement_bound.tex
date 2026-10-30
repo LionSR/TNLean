@@ -1,7 +1,7 @@
 \section{Entanglement bounds on finite graphs}%
 \label{sec:peps_region_entanglement_bound}
 
-\begin{theorem}[Crossing-bond rank and entropy bounds]%
+\begin{lemma}[Crossing-bond rank and entropy bounds]%
     \label{thm:peps_region_boundary_entanglement_bound}
     \lean{TNLean.PEPS.bondDim_pos_of_stateCoeff_ne_zero,
         TNLean.PEPS.rank_regionReducedDensity_le_boundary,
@@ -28,7 +28,7 @@
     $S(\widehat\rho_R)\leq|\partial R|\log D$.
     This is the finite-graph boundary-dimension argument underlying
     the PEPS area law in \cite[Section~II.A.3]{Cirac2021Matrix}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     The reduced-density range lies in the span of the open-region
@@ -42,7 +42,7 @@
     would be an empty sum, contradicting nonvanishing.
 \end{proof}
 
-\begin{theorem}[Physical-dimension bounds and trivial cuts]%
+\begin{lemma}[Physical-dimension bounds and trivial cuts]%
     \label{thm:peps_region_physical_entanglement_bound}
     \lean{TNLean.PEPS.rank_regionReducedDensity_le_physical,
         TNLean.PEPS.entropy_normalizedRegionReducedDensity_eq_zero_of_boundary_bondOne}
@@ -56,7 +56,7 @@
     For a nonzero closed PEPS, a cut whose crossing virtual bonds
     all have dimension one has zero entanglement entropy. This
     includes cuts with no crossing edges.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     The reduced-density rank equals the rank of the physical

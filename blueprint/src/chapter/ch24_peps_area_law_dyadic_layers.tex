@@ -20,7 +20,7 @@
     \end{align}
 \end{definition}
 
-\begin{theorem}[Cell indices and parents]
+\begin{lemma}[Cell indices and parents]
     \label{thm:area_law_dyadic_indices}
     \lean{TNLean.PEPS.AreaLaw.Geometry.mem_dyadicCell_iff,
         TNLean.PEPS.AreaLaw.Geometry.dyadicCellIndex_succ,
@@ -40,7 +40,7 @@
     the $C_0$-neighborhood of any finite index set $P\subset\mathbb Z^2$ into
     the $C_0$-neighborhood of $p(P)$. An index $z$ belongs to the child set
     $\operatorname{Ch}(P)$ if and only if $p(z)\in P$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The floor inequalities give the cell-membership equivalence, and
     $\lfloor t/2\rfloor=\lfloor\lfloor t\rfloor/2\rfloor$ gives
@@ -71,7 +71,7 @@
     \input{figures/area_law_dyadic_layers}
 \end{definition}
 
-\begin{theorem}[Nested neighborhoods and layer cells]
+\begin{lemma}[Nested neighborhoods and layer cells]
     \label{thm:area_law_dyadic_nesting}
     \lean{TNLean.PEPS.AreaLaw.Geometry.occupiedCellIndices_succ,
         TNLean.PEPS.AreaLaw.Geometry.mem_dyadicNeighborhood_iff,
@@ -87,7 +87,7 @@
         N_k              & \subseteq N_{k+1},                           \\
         D_k              & =\bigcup_{z\in I_k}C_{k,z}.
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Applying $c_{k+1}(z)=p(c_k(z))$ to $z\in Z$ gives
     $\mathcal Z_{k+1}=p(\mathcal Z_k)$. Because the scale-$k$ cells partition
@@ -98,7 +98,7 @@
     removing $N_k$ removes the indices in $P_k$.
 \end{proof}
 
-\begin{theorem}[Uniform number of layer cells]
+\begin{lemma}[Uniform number of layer cells]
     \label{thm:area_law_dyadic_layer_count}
     \lean{TNLean.PEPS.AreaLaw.Geometry.card_dyadicLayerIndices_le,
         TNLean.PEPS.AreaLaw.Geometry.card_dyadicLayerIndices_boundary_le}
@@ -115,7 +115,7 @@
     \begin{align}
         |I_k| & \le8(2C_0+1)^2b.
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Since $|\mathcal Z_{k+1}|\le|Z|$, its $C_0$-neighborhood $P_{k+1}$ has at
     most $(2C_0+1)^2|Z|$ elements, and $\operatorname{Ch}(P_{k+1})$ has at most
@@ -124,7 +124,7 @@
 \end{proof}
 
 
-\begin{theorem}[Exhaustion of the plane]
+\begin{lemma}[Exhaustion of the plane]
     \label{thm:area_law_dyadic_exhaustion}
     \lean{TNLean.PEPS.AreaLaw.Geometry.exists_mem_dyadicNeighborhood,
         TNLean.PEPS.AreaLaw.Geometry.iUnion_dyadicNeighborhood_eq_univ}
@@ -136,7 +136,7 @@
     \begin{align}
         \bigcup_{k\ge0}N_k & =\mathbb R^2.
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     For any $z\in Z$ and $x\in\mathbb R^2$, choosing $k\ge0$ with
     $2^k>|x_1-o_1|+|x_2-o_2|+|z_1-o_1|+|z_2-o_2|$ places
@@ -146,7 +146,7 @@
 \end{proof}
 
 
-\begin{theorem}[Closures of cells and layers]
+\begin{lemma}[Closures of cells and layers]
     \label{thm:area_law_dyadic_closures}
     \lean{TNLean.PEPS.AreaLaw.Geometry.closure_dyadicCell,
         TNLean.PEPS.AreaLaw.Geometry.convex_closure_dyadicCell,
@@ -162,7 +162,7 @@
         \overline{D_k}     & =\bigcup_{z\in I_k}\overline{C_{k,z}},
     \end{align}
     and in particular $\overline{C_{k,z}}$ is convex.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Since $2^k>0$, the closure of each half-open coordinate interval is the
     corresponding closed interval, and closure commutes with finite products

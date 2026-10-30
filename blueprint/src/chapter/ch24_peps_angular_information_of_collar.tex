@@ -16,7 +16,7 @@
     Fix $q\in\mathbb N$, $c>0$, $C_{\rm tpl}$, $N$, $C_a$, $N_a$, and recall $\beta_0<1$. Let
     $u_0=u_0(C_{\rm tpl},66^2,1,N,C_a,N_a)$ from
     Definition~\ref{def:peps_coarse_information_constants},
-    $u_1=U(2/c,\beta_0,1)$ from Theorem~\ref{thm:peps_cell_generation_count} (so $2u^{\beta_0}\le cu$ for $u\ge u_1$), and
+    $u_1=U(2/c,\beta_0,1)$ from Lemma~\ref{thm:peps_cell_generation_count} (so $2u^{\beta_0}\le cu$ for $u\ge u_1$), and
     $u_{\rm cell}=\max\{u_0,u_1\}$. Using $C(\beta_0,u_{\rm cell})$ and $K(\beta_0,u_{\rm cell})$ from
     Definition~\ref{def:peps_cell_partition_constants}, define
     \begin{align}
@@ -27,22 +27,22 @@
     \end{align}
 \end{definition}
 
-\begin{theorem}[Positivity of the cell constants]
+\begin{lemma}[Positivity of the cell constants]
     \label{thm:peps_cell_information_constants_pos}
     \lean{TNLean.PEPS.Approximation.cellInformationConstant_pos,
         TNLean.PEPS.Approximation.cellInformationExponent_pos}
     \leanok
     \uses{def:peps_cell_information_constants}
     Always $C_{\rm cell}>0$ and $K_{\rm cell}>0$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:peps_cell_partition_constants_bounds}
-    By Theorem~\ref{thm:peps_cell_partition_constants_bounds}, $C(\beta_0,u_{\rm cell})>0$ and $K(\beta_0,u_{\rm cell})>0$, while $\max\{1,2\log q,\max\{C_a,0\}\}\ge1$.
+    By Lemma~\ref{thm:peps_cell_partition_constants_bounds}, $C(\beta_0,u_{\rm cell})>0$ and $K(\beta_0,u_{\rm cell})>0$, while $\max\{1,2\log q,\max\{C_a,0\}\}\ge1$.
 \end{proof}
 
-\begin{theorem}[Cell information with explicit constants]
+\begin{lemma}[Cell information with explicit constants]
     \label{thm:peps_cell_conditional_information_of_collar_explicit}
     \lean{TNLean.PEPS.Approximation.cell_conditionalMutualInformation_le_of_sublinearCollarBoundAt}
     \leanok
@@ -63,7 +63,7 @@
         I_\Omega(G:E\mid B) & \le C_{\rm cell}(1+\log s)^{K_{\rm cell}}.
         \label{eq:peps_cell_cmi_explicit}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{def:peps_cell_information_constants,
         thm:peps_coarse_information_of_collar_explicit,
@@ -72,7 +72,7 @@
         lem:peps_coarse_exponent_lt_one,thm:peps_cell_partition_constants_bounds,
         thm:peps_two_family_partition_inverse_image,
         cor:peps_cell_information_counting_form}
-    Theorem~\ref{thm:peps_coarse_information_of_collar_explicit} (for at most $66^2$ boxes of diameter $\le u$) bounds each tile by $C_2=\max\{C_a,0\}$ for $u\ge u_0$ and separation $u^{\beta_0}$. The partition of Theorem~\ref{thm:peps_cell_two_family_partition_explicit} at $(\beta_0,u_{\rm cell})$ has all tile scales $u\ge u_{\rm cell}$, so $u\ge u_0$ and $2u^{\beta_0}\le cu$ (giving $u^{\beta_0}<cs\le\operatorname{dist}_\infty(\overline{Q_{i_0}},E)$). Restricting to $\Lambda$ via Theorem~\ref{thm:peps_two_family_partition_inverse_image} and applying Corollary~\ref{cor:peps_cell_information_counting_form} with $N_{\rm t}$ tiles, residual $D$, and $M=\max\{1,2\log q,C_2\}$ yields
+    Lemma~\ref{thm:peps_coarse_information_of_collar_explicit} (for at most $66^2$ boxes of diameter $\le u$) bounds each tile by $C_2=\max\{C_a,0\}$ for $u\ge u_0$ and separation $u^{\beta_0}$. The partition of Lemma~\ref{thm:peps_cell_two_family_partition_explicit} at $(\beta_0,u_{\rm cell})$ has all tile scales $u\ge u_{\rm cell}$, so $u\ge u_0$ and $2u^{\beta_0}\le cu$ (giving $u^{\beta_0}<cs\le\operatorname{dist}_\infty(\overline{Q_{i_0}},E)$). Restricting to $\Lambda$ via Lemma~\ref{thm:peps_two_family_partition_inverse_image} and applying Lemma~\ref{cor:peps_cell_information_counting_form} with $N_{\rm t}$ tiles, residual $D$, and $M=\max\{1,2\log q,C_2\}$ yields
     \begin{align}
         I_\Omega(G:E\mid B)
          & \le 2|D|\log q+N_{\rm t}C_2
@@ -82,7 +82,7 @@
     \end{align}
 \end{proof}
 
-\begin{theorem}[Cell information under the sublinear collar bound]
+\begin{lemma}[Cell information under the sublinear collar bound]
     \label{thm:peps_cell_conditional_information_of_collar}
     \lean{TNLean.PEPS.Approximation.exists_cell_conditionalMutualInformation_le_of_sublinearCollarBound}
     \leanok
@@ -91,50 +91,50 @@
     (\cite{gap:polypeps_angular_annular_geometry_scope}), fix
     $q,R\in\mathbb N$, $J\in\mathbb R$, $\Delta>0$, $c>0$, and template constants
     satisfying the range-$R$ sublinear collar bound.
-    Then there exist $C_1>0$ and $K\ge0$ (preceding $s,o,\Lambda,H,\Omega$) such that under the hypotheses of Theorem~\ref{thm:peps_cell_conditional_information_of_collar_explicit},
+    Then there exist $C_1>0$ and $K\ge0$ (preceding $s,o,\Lambda,H,\Omega$) such that under the hypotheses of Lemma~\ref{thm:peps_cell_conditional_information_of_collar_explicit},
     $I_\Omega(G:E\mid B)\le C_1(1+\log s)^K$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_cell_conditional_information_of_collar_explicit,
         thm:area_law_amplification,def:peps_cell_information_constants,
         thm:peps_cell_information_constants_pos}
     Combine the collar parameters $(C,N)$ with $(C_a,N_a)$ from
     Theorem~\ref{thm:area_law_amplification} at $(\max\{C,1\},1)$, and set $C_1=C_{\rm cell}$ and $K=K_{\rm cell}$ in
-    Theorem~\ref{thm:peps_cell_conditional_information_of_collar_explicit}.
+    Lemma~\ref{thm:peps_cell_conditional_information_of_collar_explicit}.
 \end{proof}
 
-\begin{theorem}[Square-grid cell information with explicit constants]
+\begin{lemma}[Square-grid cell information with explicit constants]
     \label{thm:peps_square_cell_conditional_information_of_collar_explicit}
     \lean{TNLean.PEPS.Approximation.cell_conditionalMutualInformation_le_square_of_sublinearCollarBoundAt}
     \leanok
     \uses{def:area_law_collar_bound,def:area_law_amplification_bound,
         def:polynomial_peps_model,def:peps_cell_information_constants}
-    Under the range-$1$ hypotheses of Theorem~\ref{thm:peps_cell_conditional_information_of_collar_explicit}, the bound (\ref{eq:peps_cell_cmi_explicit}) with the same $C_{\rm cell},K_{\rm cell}$ holds on $\Lambda_L=\{1,\ldots,L\}^2$ for every original square Hamiltonian $H$ with bound $J$ and unit vector $\Omega$ satisfying (\ref{eq:polynomial_peps_projector_gap}).
-\end{theorem}
+    Under the range-$1$ hypotheses of Lemma~\ref{thm:peps_cell_conditional_information_of_collar_explicit}, the bound (\ref{eq:peps_cell_cmi_explicit}) with the same $C_{\rm cell},K_{\rm cell}$ holds on $\Lambda_L=\{1,\ldots,L\}^2$ for every original square Hamiltonian $H$ with bound $J$ and unit vector $\Omega$ satisfying (\ref{eq:polynomial_peps_projector_gap}).
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_cell_conditional_information_of_collar_explicit,
         thm:finite_product_entropy_relabel,thm:square_area_law_ground_gap}
-    Translating $\Lambda_L$ to $\{0,\ldots,L-1\}^2$ and $o$ to $o-(1,1)$ preserves $\ell_\infty$ distances, maps $H$ and $\Omega$ via Theorem~\ref{thm:square_area_law_ground_gap}, and preserves regional entropies in $I_\Omega(G:E\mid B)$ by Theorem~\ref{thm:finite_product_entropy_relabel}, reducing to Theorem~\ref{thm:peps_cell_conditional_information_of_collar_explicit}.
+    Translating $\Lambda_L$ to $\{0,\ldots,L-1\}^2$ and $o$ to $o-(1,1)$ preserves $\ell_\infty$ distances, maps $H$ and $\Omega$ via Lemma~\ref{thm:square_area_law_ground_gap}, and preserves regional entropies in $I_\Omega(G:E\mid B)$ by Lemma~\ref{thm:finite_product_entropy_relabel}, reducing to Lemma~\ref{thm:peps_cell_conditional_information_of_collar_explicit}.
 \end{proof}
 
-\begin{theorem}[Square-grid cell information under the collar bound]
+\begin{lemma}[Square-grid cell information under the collar bound]
     \label{thm:peps_square_cell_conditional_information_of_collar}
     \lean{TNLean.PEPS.Approximation.exists_cell_conditionalMutualInformation_le_square_of_sublinearCollarBound}
     \leanok
     \uses{def:area_law_collar_bound,def:polynomial_peps_model}
     Fix $q\in\mathbb N$, $J\in\mathbb R$, $\Delta>0$, $c>0$, and template constants satisfying the range-$1$ sublinear collar bound (\cite{gap:polypeps_angular_annular_geometry_scope}).
-    Then the conclusion of Theorem~\ref{thm:peps_cell_conditional_information_of_collar} holds with uniform $C_1>0$ and $K\ge0$ on $\Lambda_L=\{1,\ldots,L\}^2$ for every original square Hamiltonian $H$ and unit vector $\Omega$ satisfying (\ref{eq:polynomial_peps_projector_gap}).
-\end{theorem}
+    Then the conclusion of Lemma~\ref{thm:peps_cell_conditional_information_of_collar} holds with uniform $C_1>0$ and $K\ge0$ on $\Lambda_L=\{1,\ldots,L\}^2$ for every original square Hamiltonian $H$ and unit vector $\Omega$ satisfying (\ref{eq:polynomial_peps_projector_gap}).
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_square_cell_conditional_information_of_collar_explicit,
         thm:area_law_amplification,def:peps_cell_information_constants,
         thm:peps_cell_information_constants_pos}
     Combine the collar parameters $(C,N)$ with $(C_a,N_a)$ from
     Theorem~\ref{thm:area_law_amplification} at $(\max\{C,1\},1)$, and apply
-    Theorem~\ref{thm:peps_square_cell_conditional_information_of_collar_explicit} with $C_1=C_{\rm cell}$ and $K=K_{\rm cell}$.
+    Lemma~\ref{thm:peps_square_cell_conditional_information_of_collar_explicit} with $C_1=C_{\rm cell}$ and $K=K_{\rm cell}$.
 \end{proof}
 
-\begin{theorem}[Information gained by adjoining selected cells]
+\begin{lemma}[Information gained by adjoining selected cells]
     \label{thm:peps_selected_region_information_of_cell_bounds}
     \lean{TNLean.PEPS.Approximation.mutualInformation_selectedRegion_le_of_cell_bound}
     \leanok
@@ -147,13 +147,13 @@
         I_\Omega(R:E) & \le b_0+|S|k.
         \label{eq:peps_selected_region_information}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_selected_cell_owner,thm:peps_selected_cell_closure_clearance}
-    Here $R=R_{\rm old}\cup\bigcup_{i\in S}G_i$. By Theorems~\ref{thm:peps_selected_cell_owner} and~\ref{thm:peps_selected_cell_closure_clearance}, each intermediate conditioning set is a union of cells $G_j$ ($j\ne i$) disjoint from $E$, with $\operatorname{dist}_\infty(\overline{Q_i},E)\ge cs$. Applying the chain rule for mutual information across $i\in S$ adds at most $|S|k$.
+    Here $R=R_{\rm old}\cup\bigcup_{i\in S}G_i$. By Lemmas~\ref{thm:peps_selected_cell_owner} and~\ref{thm:peps_selected_cell_closure_clearance}, each intermediate conditioning set is a union of cells $G_j$ ($j\ne i$) disjoint from $E$, with $\operatorname{dist}_\infty(\overline{Q_i},E)\ge cs$. Applying the chain rule for mutual information across $i\in S$ adds at most $|S|k$.
 \end{proof}
 
-\begin{theorem}[Information reset for padded annular regions, with explicit constants]
+\begin{lemma}[Information reset for padded annular regions, with explicit constants]
     \label{thm:peps_angular_information_reset_explicit}
     \lean{TNLean.PEPS.Approximation.angular_information_reset_of_resetThreshold_le}
     \leanok
@@ -166,24 +166,24 @@
     $R_0=\Lambda_L\cap A^{+a's}$, and $C_0=\Lambda_L\cap E^{+a's}$.
     If $R\cap C=\varnothing$, $b\ge0$, $I_\Omega(R:C)\le b$, and $C_p(1+b+\log L)\le a's/2$,
     then $I_\Omega(R_0:C_0)\le L^{-p}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_annular_cell_clearance,thm:peps_physical_integer_sup_distance,
         thm:peps_information_reset_explicit}
-    By Theorems~\ref{thm:peps_annular_cell_clearance} and~\ref{thm:peps_physical_integer_sup_distance}, $R_0\subseteq R$ and $C_0\subseteq C$ with $\ell_\infty$-buffer $>a's/2$ from $\Lambda_L\setminus R$ and $\Lambda_L\setminus C$, so Theorem~\ref{thm:peps_information_reset_explicit} gives $I_\Omega(R_0:C_0)\le L^{-p}$.
+    By Lemmas~\ref{thm:peps_annular_cell_clearance} and~\ref{thm:peps_physical_integer_sup_distance}, $R_0\subseteq R$ and $C_0\subseteq C$ with $\ell_\infty$-buffer $>a's/2$ from $\Lambda_L\setminus R$ and $\Lambda_L\setminus C$, so Lemma~\ref{thm:peps_information_reset_explicit} gives $I_\Omega(R_0:C_0)\le L^{-p}$.
 \end{proof}
 
-\begin{theorem}[Information reset for padded annular regions]
+\begin{lemma}[Information reset for padded annular regions]
     \label{thm:peps_angular_information_reset}
     \lean{TNLean.PEPS.Approximation.exists_angular_information_reset}
     \leanok
     \uses{def:peps_angular_grid,def:area_law_ground_entropy}
-    For every $q\ge1$, $J\ge0$, $\Delta>0$, and $p>0$, there exist $C_p>0$ and $L_0$ such that under the hypotheses of Theorem~\ref{thm:peps_angular_information_reset_explicit}, $I_\Omega(R_0:C_0)\le L^{-p}$.
-\end{theorem}
+    For every $q\ge1$, $J\ge0$, $\Delta>0$, and $p>0$, there exist $C_p>0$ and $L_0$ such that under the hypotheses of Lemma~\ref{thm:peps_angular_information_reset_explicit}, $I_\Omega(R_0:C_0)\le L^{-p}$.
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_angular_information_reset_explicit,def:peps_reset_width}
     Take $C_p=C_p(J,\Delta,p)>0$ and $L_0=L_0(q,J,\Delta,p)$ in
-    Theorem~\ref{thm:peps_angular_information_reset_explicit}.
+    Lemma~\ref{thm:peps_angular_information_reset_explicit}.
 \end{proof}
 
 \begin{definition}[Slope and threshold of the cell reset]
@@ -205,7 +205,7 @@
     Then $D_{\rm cell}\ge\max\{1,12C_p/a'\}$ and $L_{\rm cell}\ge e$.
 \end{definition}
 
-\begin{theorem}[Uniform reset width for bounded cell costs, with explicit constants]
+\begin{lemma}[Uniform reset width for bounded cell costs, with explicit constants]
     \label{thm:peps_angular_reset_width_of_cell_information_explicit}
     \lean{TNLean.PEPS.Approximation.angular_reset_width_lt_of_cell_information}
     \leanok
@@ -217,46 +217,46 @@
          & <a's/3.
         \label{eq:peps_angular_reset_width_explicit}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{cor:peps_angular_reset_width_fits_explicit,
         def:peps_angular_reset_width_constants,def:peps_angular_cell_reset_constants}
     Since $L\ge e$ and $D\ge D_{\rm cell}\ge\max\{1,1/d,12C_p/a'\}$, one has $\log L\ge1$, $ds\ge1$, $L^{-p}\le1$, and $(1+\log(ds))^K\le(1+\log s)^K$. Thus the left side of (\ref{eq:peps_angular_reset_width_explicit}) is at most $C_p(2+NC_1)(1+\log s)^K+C_p\log L<a's/3$ by Corollary~\ref{cor:peps_angular_reset_width_fits_explicit}.
 \end{proof}
 
-\begin{theorem}[Uniform reset width for bounded cell costs]
+\begin{lemma}[Uniform reset width for bounded cell costs]
     \label{thm:peps_angular_reset_width_of_cell_information}
     \lean{TNLean.PEPS.Approximation.exists_angular_reset_width_lt_of_cell_information}
     \leanok
     For any $a',C_p,C_1,p>0$, $0<d\le1$, and $N,K\ge0$, there exist $D\ge1$ and $L_0\ge e$ such that $L\ge L_0$ and $s\ge D\log L$ imply $ds\ge1$ and (\ref{eq:peps_angular_reset_width_explicit}).
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_angular_reset_width_of_cell_information_explicit,
         def:peps_angular_cell_reset_constants}
     Take $D=D_{\rm cell}(C_p,a',d)$ and $L_0=L_{\rm cell}(a',d,C_p,C_1,N,K)$ in
-    Theorem~\ref{thm:peps_angular_reset_width_of_cell_information_explicit}.
+    Lemma~\ref{thm:peps_angular_reset_width_of_cell_information_explicit}.
 \end{proof}
 
-\begin{theorem}[Selected-cell information with explicit constants]
+\begin{lemma}[Selected-cell information with explicit constants]
     \label{thm:peps_selected_region_information_of_collar_explicit}
     \lean{TNLean.PEPS.Approximation.mutualInformation_selectedRegion_le_square_of_sublinearCollarBoundAt}
     \leanok
     \uses{def:area_law_collar_bound,def:area_law_amplification_bound,
         def:polynomial_peps_model,def:peps_angular_grid,def:peps_cell_information_constants}
-    Under the hypotheses of Theorem~\ref{thm:peps_square_cell_conditional_information_of_collar_explicit}, let $s\ge1$, $o\in\mathbb R^2$, $r\in\mathbb R$, $A_{\rm old}\subseteq A\subseteq\mathbb R^2$, and let $S$ be the finite set of side-$s$ cells meeting $A^{+r}$ but not $A_{\rm old}^{+r}$, with physical samples $R_{\rm old},R$.
+    Under the hypotheses of Lemma~\ref{thm:peps_square_cell_conditional_information_of_collar_explicit}, let $s\ge1$, $o\in\mathbb R^2$, $r\in\mathbb R$, $A_{\rm old}\subseteq A\subseteq\mathbb R^2$, and let $S$ be the finite set of side-$s$ cells meeting $A^{+r}$ but not $A_{\rm old}^{+r}$, with physical samples $R_{\rm old},R$.
     If $E\subseteq\Lambda_L$ satisfies $\operatorname{dist}_\infty(U_{s,r}(A),E)\ge cs$ and $I_\Omega(R_{\rm old}:E)\le b_0$, then
     \begin{align}
         I_\Omega(R:E) & \le b_0+|S|C_{\rm cell}(1+\log s)^{K_{\rm cell}}.
         \label{eq:peps_selected_region_collar_explicit}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_square_cell_conditional_information_of_collar_explicit,
         thm:peps_selected_region_information_of_cell_bounds}
-    Apply Theorem~\ref{thm:peps_selected_region_information_of_cell_bounds} with $k=C_{\rm cell}(1+\log s)^{K_{\rm cell}}$ provided by Theorem~\ref{thm:peps_square_cell_conditional_information_of_collar_explicit}.
+    Apply Lemma~\ref{thm:peps_selected_region_information_of_cell_bounds} with $k=C_{\rm cell}(1+\log s)^{K_{\rm cell}}$ provided by Lemma~\ref{thm:peps_square_cell_conditional_information_of_collar_explicit}.
 \end{proof}
 
-\begin{theorem}[Selected-cell information under the collar bound]
+\begin{lemma}[Selected-cell information under the collar bound]
     \label{thm:peps_selected_region_information_of_collar}
     \lean{TNLean.PEPS.Approximation.exists_mutualInformation_selectedRegion_le_square_of_sublinearCollarBound}
     \leanok
@@ -264,17 +264,17 @@
     In the conditional step of
     \cite[Proposition~3.4]{OpenAI2026PolynomialPEPS} (\cite{gap:polypeps_angular_annular_geometry_scope}), fix $q\in\mathbb N$,
     $J\in\mathbb R$, $\Delta>0$, $c>0$, and template constants satisfying the range-$1$ sublinear collar bound.
-    Then there exist $C_1>0$ and $K\ge0$ (preceding $s,o,r,A_{\rm old},A,L,H,\Omega,E$) such that under the hypotheses of Theorem~\ref{thm:peps_selected_region_information_of_collar_explicit}, $I_\Omega(R_{\rm old}:E)\le b_0$ implies
+    Then there exist $C_1>0$ and $K\ge0$ (preceding $s,o,r,A_{\rm old},A,L,H,\Omega,E$) such that under the hypotheses of Lemma~\ref{thm:peps_selected_region_information_of_collar_explicit}, $I_\Omega(R_{\rm old}:E)\le b_0$ implies
     $I_\Omega(R:E)\le b_0+|S|C_1(1+\log s)^K$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_selected_region_information_of_collar_explicit,
         thm:area_law_amplification,def:peps_cell_information_constants}
     Combine $(C,N)$ with $(C_a,N_a)$ from Theorem~\ref{thm:area_law_amplification} at $(\max\{C,1\},1)$, and set $C_1=C_{\rm cell}$ and $K=K_{\rm cell}$ in
-    Theorem~\ref{thm:peps_selected_region_information_of_collar_explicit}.
+    Lemma~\ref{thm:peps_selected_region_information_of_collar_explicit}.
 \end{proof}
 
-\begin{theorem}[Finite annular information induction]
+\begin{lemma}[Finite annular information induction]
     \label{thm:peps_annular_information_induction}
     \lean{TNLean.PEPS.Approximation.mutualInformation_le_of_annular_reset}
     \leanok
@@ -298,12 +298,12 @@
         \label{eq:peps_annular_reset_step}
     \end{align}
     Then $I_\Omega(X:E)\le\varepsilon$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_cumulative_layer_identities,thm:peps_annular_separation,
         thm:peps_dyadic_scale_bounds,thm:peps_annular_cell_count,
         thm:peps_annular_cell_clearance}
-    By Theorems~\ref{thm:peps_annular_separation} and~\ref{thm:peps_annular_cell_count}, the padded regions are disjoint and the new-cell count at each scale $j$ is at most $N$. At $j=0$, $A_{\mathrm{old}}=\varnothing$ gives mutual information $0\le\varepsilon$, so (\ref{eq:peps_annular_reset_step}) holds. For $j>0$, the old selected union and $\Lambda\cap E^{+3a's_j/2}$ lie in the scale-$(j-1)$ padded regions, so monotonicity and (\ref{eq:peps_annular_reset_step}) propagate the bound to $j=m$, where $X\subseteq\Lambda\cap A_m^{+a's_m}$ and $E\subseteq\Lambda\cap E^{+a's_m}$ by Theorem~\ref{thm:peps_cumulative_layer_identities}.
+    By Lemmas~\ref{thm:peps_annular_separation} and~\ref{thm:peps_annular_cell_count}, the padded regions are disjoint and the new-cell count at each scale $j$ is at most $N$. At $j=0$, $A_{\mathrm{old}}=\varnothing$ gives mutual information $0\le\varepsilon$, so (\ref{eq:peps_annular_reset_step}) holds. For $j>0$, the old selected union and $\Lambda\cap E^{+3a's_j/2}$ lie in the scale-$(j-1)$ padded regions, so monotonicity and (\ref{eq:peps_annular_reset_step}) propagate the bound to $j=m$, where $X\subseteq\Lambda\cap A_m^{+a's_m}$ and $E\subseteq\Lambda\cap E^{+a's_m}$ by Lemma~\ref{thm:peps_cumulative_layer_identities}.
 \end{proof}
 
 \begin{definition}[Clearance and threshold of the one-scale reset]
@@ -324,7 +324,7 @@
     using Definitions~\ref{def:peps_reset_width} and~\ref{def:peps_angular_cell_reset_constants}. Then $L_{\rm one}\ge e$.
 \end{definition}
 
-\begin{theorem}[Uniform information reset at one scale, with explicit constants]
+\begin{lemma}[Uniform information reset at one scale, with explicit constants]
     \label{thm:peps_angular_single_scale_reset_of_collar_explicit}
     \lean{TNLean.PEPS.Approximation.angular_single_scale_reset_of_sublinearCollarBoundAt}
     \leanok
@@ -336,8 +336,8 @@
     bound holds at $(C,N)$ and the range-$1$ amplification bound at $(\max\{C,1\},1)$ holds at $(C_a,N_a)$.
     For $p>0$, $M\in\mathbb N$, $0<a'<a/100$, $0<d<\min\{a'/4,1\}$,
     $D\ge D_{\rm cell}(C_p(J,\Delta,p),a',d)$, and $L\ge L_{\rm one}$ from (\ref{eq:peps_angular_single_scale_threshold}),
-    the conclusion of Theorem~\ref{thm:peps_angular_single_scale_reset_of_collar} (with cell budget $N=M$) holds for every unit ground vector $\Omega$ on $\Lambda_L$ satisfying (\ref{eq:polynomial_peps_projector_gap}), $s\ge D\log L$, grid origin, and $A_{\rm old}\subseteq A,E\subseteq\mathbb R^2$.
-\end{theorem}
+    the conclusion of Lemma~\ref{thm:peps_angular_single_scale_reset_of_collar} (with cell budget $N=M$) holds for every unit ground vector $\Omega$ on $\Lambda_L$ satisfying (\ref{eq:polynomial_peps_projector_gap}), $s\ge D\log L$, grid origin, and $A_{\rm old}\subseteq A,E\subseteq\mathbb R^2$.
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_scaled_cell_clearance,
         thm:peps_selected_region_information_of_collar_explicit,
@@ -345,10 +345,10 @@
         thm:peps_angular_information_reset_explicit,
         def:peps_angular_single_scale_constants,def:peps_cell_information_constants,
         def:peps_reset_width}
-    With $c=c_{\rm ang}(a,a',d)>0$, $C_1=C_{\rm cell}$, $K=K_{\rm cell}$, and $C_p=C_p(J,\Delta,p)$, $L\ge L_{\rm one}$ gives $ds\ge1$, (\ref{eq:peps_single_scale_width}) with $N=M$ (by Theorem~\ref{thm:peps_angular_reset_width_of_cell_information_explicit}), and $L\ge L_0(q,J,\Delta,p)$. By Theorem~\ref{thm:peps_scaled_cell_clearance}, $\operatorname{dist}_\infty(U_{ds,3a's/2}(A),C)\ge c\,ds>0$, so $R\cap C=\varnothing$ and (\ref{eq:peps_selected_region_collar_explicit}) gives $I_\Omega(R:C)\le b=L^{-p}+MC_1(1+\log(ds))^K$. Since $C_p(1+b+\log L)<a's/3\le a's/2$, Theorem~\ref{thm:peps_angular_information_reset_explicit} yields $I_\Omega(R_0:C_0)\le L^{-p}$.
+    With $c=c_{\rm ang}(a,a',d)>0$, $C_1=C_{\rm cell}$, $K=K_{\rm cell}$, and $C_p=C_p(J,\Delta,p)$, $L\ge L_{\rm one}$ gives $ds\ge1$, (\ref{eq:peps_single_scale_width}) with $N=M$ (by Lemma~\ref{thm:peps_angular_reset_width_of_cell_information_explicit}), and $L\ge L_0(q,J,\Delta,p)$. By Lemma~\ref{thm:peps_scaled_cell_clearance}, $\operatorname{dist}_\infty(U_{ds,3a's/2}(A),C)\ge c\,ds>0$, so $R\cap C=\varnothing$ and (\ref{eq:peps_selected_region_collar_explicit}) gives $I_\Omega(R:C)\le b=L^{-p}+MC_1(1+\log(ds))^K$. Since $C_p(1+b+\log L)<a's/3\le a's/2$, Lemma~\ref{thm:peps_angular_information_reset_explicit} yields $I_\Omega(R_0:C_0)\le L^{-p}$.
 \end{proof}
 
-\begin{theorem}[Uniform information reset at one scale]
+\begin{lemma}[Uniform information reset at one scale]
     \label{thm:peps_angular_single_scale_reset_of_collar}
     \lean{TNLean.PEPS.Approximation.exists_angular_single_scale_reset_of_sublinearCollarBound}
     \leanok
@@ -362,12 +362,12 @@
         C_0         & =\Lambda_L\cap E^{+a's}, \notag
     \end{align}
     the bound $I_\Omega(R_{\rm old}:C)\le L^{-p}$ implies $I_\Omega(R_0:C_0)\le L^{-p}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_angular_single_scale_reset_of_collar_explicit,
         thm:area_law_amplification,def:peps_angular_single_scale_constants,
         def:peps_angular_cell_reset_constants}
-    Choose $(C,N_{\rm col})$ for the collar bound and $(C_a,N_a)$ from Theorem~\ref{thm:area_law_amplification} at $(\max\{C,1\},1)$, and apply Theorem~\ref{thm:peps_angular_single_scale_reset_of_collar_explicit} with $D=D_{\rm cell}(C_p(J,\Delta,p),a',d)$ and $L_0=L_{\rm one}$ (with $M=N$), which enforces $ds\ge1$ and
+    Choose $(C,N_{\rm col})$ for the collar bound and $(C_a,N_a)$ from Theorem~\ref{thm:area_law_amplification} at $(\max\{C,1\},1)$, and apply Lemma~\ref{thm:peps_angular_single_scale_reset_of_collar_explicit} with $D=D_{\rm cell}(C_p(J,\Delta,p),a',d)$ and $L_0=L_{\rm one}$ (with $M=N$), which enforces $ds\ge1$ and
     \begin{align}
         C_p\bigl(1+L^{-p}+NC_1(1+\log(ds))^K+\log L\bigr)
          & <a's/3.
@@ -407,7 +407,7 @@
     $D_{\rm ang}(J,\Delta,a,p)=2400\,C_p(J,\Delta,p)/\min\{a,1\}$.
 \end{definition}
 
-\begin{theorem}[Angular information under the sublinear collar bound, with explicit constants]
+\begin{lemma}[Angular information under the sublinear collar bound, with explicit constants]
     \label{thm:peps_angular_information_of_collar_explicit}
     \lean{TNLean.PEPS.Approximation.angularInformationBound_of_sublinearCollarBoundAt_le,
         TNLean.PEPS.Approximation.isAngularScale_of_sublinearCollarBoundAt_le}
@@ -415,17 +415,17 @@
     \uses{def:area_law_collar_bound,def:area_law_amplification_bound,
         def:polynomial_peps_model,def:peps_angular_information_constants,
         def:peps_angular_scale}
-    Under the hypotheses of Theorem~\ref{thm:peps_angular_single_scale_reset_of_collar_explicit}, let $a,p>0$, $A_0\in\mathbb R$, $m_0\in\mathbb N$,
+    Under the hypotheses of Lemma~\ref{thm:peps_angular_single_scale_reset_of_collar_explicit}, let $a,p>0$, $A_0\in\mathbb R$, $m_0\in\mathbb N$,
     $D\ge D_{\rm ang}(J,\Delta,a,p)$, and $L_0\ge L_{\rm ang}$ from (\ref{eq:peps_angular_information_constants}).
-    Then the conclusion of Theorem~\ref{thm:peps_angular_information_of_collar} holds with $(D,L_0)$, and for integer $p>0$, $(D,L_0)$ is an angular scale and threshold at accuracy $L^{-p}$ (Definition~\ref{def:peps_angular_scale}).
-\end{theorem}
+    Then the conclusion of Lemma~\ref{thm:peps_angular_information_of_collar} holds with $(D,L_0)$, and for integer $p>0$, $(D,L_0)$ is an angular scale and threshold at accuracy $L^{-p}$ (Definition~\ref{def:peps_angular_scale}).
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_angular_information_of_bounds,
         thm:peps_square_cell_conditional_information_of_collar_explicit,
         thm:peps_information_reset_explicit,def:peps_family_cell_reset_bounds,
         lem:peps_angular_scale_of_site_position,
         def:peps_angular_information_constants}
-    With $a'=a'(a)$, $d=d(a)$, and $c=c_{\rm ang}(a,a',d)>0$, Theorems~\ref{thm:peps_square_cell_conditional_information_of_collar_explicit} and~\ref{thm:peps_information_reset_explicit} verify the cell and reset bounds of Definition~\ref{def:peps_family_cell_reset_bounds} with $C_1=C_{\rm cell}$, $K=K_{\rm cell}$, $C_p(J,\Delta,p)$, and $L_0(q,J,\Delta,p)$. Applying Theorem~\ref{thm:peps_angular_information_of_bounds} with $M=N_{\rm cell}(a,A_0,m_0)$ and Lemma~\ref{lem:peps_angular_scale_of_site_position} yields both claims.
+    With $a'=a'(a)$, $d=d(a)$, and $c=c_{\rm ang}(a,a',d)>0$, Lemmas~\ref{thm:peps_square_cell_conditional_information_of_collar_explicit} and~\ref{thm:peps_information_reset_explicit} verify the cell and reset bounds of Definition~\ref{def:peps_family_cell_reset_bounds} with $C_1=C_{\rm cell}$, $K=K_{\rm cell}$, $C_p(J,\Delta,p)$, and $L_0(q,J,\Delta,p)$. Applying Lemma~\ref{thm:peps_angular_information_of_bounds} with $M=N_{\rm cell}(a,A_0,m_0)$ and Lemma~\ref{lem:peps_angular_scale_of_site_position} yields both claims.
 \end{proof}
 
 \begin{definition}[Amplification constants at the collar constant]
@@ -439,20 +439,20 @@
     $N_a(q,R,J,\Delta,C)$ be the maximum of its threshold and the radius threshold of $C_a(q,R,J,\Delta,C)$.
 \end{definition}
 
-\begin{theorem}[Amplification bound at the collar constant]
+\begin{lemma}[Amplification bound at the collar constant]
     \label{thm:peps_collar_amplification_bound}
     \lean{TNLean.PEPS.Approximation.amplificationBoundAt_collarAmplification}
     \leanok
     \uses{def:area_law_amplification_bound,def:peps_collar_amplification_constants}
     For $q,R\in\mathbb N$, $J,C\in\mathbb R$, and $\Delta>0$,
     the amplification bound at $(\max\{C,1\},1)$ holds with $(C_a(q,R,J,\Delta,C),N_a(q,R,J,\Delta,C))$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_amplification_explicit}
-    Apply Theorem~\ref{thm:area_law_amplification_explicit} at $(\max\{C,1\},1)$.
+    Apply Lemma~\ref{thm:area_law_amplification_explicit} at $(\max\{C,1\},1)$.
 \end{proof}
 
-\begin{theorem}[Cell and angular information at the named amplification constants]
+\begin{lemma}[Cell and angular information at the named amplification constants]
     \label{thm:peps_information_of_collar_named_amplification}
     \lean{TNLean.PEPS.Approximation.cell_conditionalMutualInformation_le_square_of_sublinearCollarBoundAt_explicit,
         TNLean.PEPS.Approximation.isAngularScale_of_sublinearCollarBoundAt_le_explicit}
@@ -461,20 +461,20 @@
         def:peps_cell_information_constants,def:peps_angular_information_constants,
         def:peps_angular_scale,def:peps_collar_amplification_constants}
     Fix $q\in\mathbb N$, $J,D_0,C_{\rm tpl}\in\mathbb R$, and $\Delta>0$ satisfying the range-$1$ sublinear collar bound at $(C,N)$, and set $C_a=C_a(q,1,J,\Delta,C)$
-    and $N_a=N_a(q,1,J,\Delta,C)$. Then Theorem~\ref{thm:peps_square_cell_conditional_information_of_collar_explicit}
+    and $N_a=N_a(q,1,J,\Delta,C)$. Then Lemma~\ref{thm:peps_square_cell_conditional_information_of_collar_explicit}
     holds with $(C_a,N_a)$ for every $c>0$; if $q\ge1$, $a>0$, $A_0\in\mathbb R$, $m_0\in\mathbb N$, and $p\in\mathbb Z_{>0}$, then any
     $D\ge D_{\rm ang}(J,\Delta,a,p)$ and $L_0\ge L_{\rm ang}$ at $(C_a,N_a)$ form an angular scale and threshold at accuracy $L^{-p}$ (Definition~\ref{def:peps_angular_scale}).
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_collar_amplification_bound,
         thm:peps_square_cell_conditional_information_of_collar_explicit,
         thm:peps_angular_information_of_collar_explicit}
-    Combine Theorem~\ref{thm:peps_collar_amplification_bound} with
-    Theorems~\ref{thm:peps_square_cell_conditional_information_of_collar_explicit}
+    Combine Lemma~\ref{thm:peps_collar_amplification_bound} with
+    Lemmas~\ref{thm:peps_square_cell_conditional_information_of_collar_explicit}
     and~\ref{thm:peps_angular_information_of_collar_explicit}.
 \end{proof}
 
-\begin{theorem}[Angular information under the sublinear collar bound]
+\begin{lemma}[Angular information under the sublinear collar bound]
     \label{thm:peps_angular_information_of_collar}
     \lean{TNLean.PEPS.Approximation.angularInformationBound_of_sublinearCollarBound}
     \leanok
@@ -489,10 +489,10 @@
         \label{eq:peps_angular_separation_condition}
     \end{align}
     then $I_\Omega(X:E)\le L^{-p}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_angular_information_of_collar_explicit,
         thm:area_law_amplification,def:peps_angular_information_constants}
     Choose $(C,N_{\rm col})$ for the collar bound and $(C_a,N_a)$ from Theorem~\ref{thm:area_law_amplification} at $(\max\{C,1\},1)$, and apply
-    Theorem~\ref{thm:peps_angular_information_of_collar_explicit} with $D=D_{\rm ang}(J,\Delta,a,p)$ and $L_0=L_{\rm ang}$.
+    Lemma~\ref{thm:peps_angular_information_of_collar_explicit} with $D=D_{\rm ang}(J,\Delta,a,p)$ and $L_0=L_{\rm ang}$.
 \end{proof}

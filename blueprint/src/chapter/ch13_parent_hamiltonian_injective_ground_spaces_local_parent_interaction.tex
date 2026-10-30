@@ -93,7 +93,7 @@ $A_\mu=v(\mu)^\dagger$ and reverses the order of the physical sites.
     product.
 \end{definition}
 
-\begin{theorem}[Evaluation under physical-site reversal]
+\begin{lemma}[Evaluation under physical-site reversal]
     \label{thm:physical_site_reverse_apply}
     \lean{MPSTensor.physicalSiteReverse_apply}
     \leanok
@@ -104,7 +104,7 @@ $A_\mu=v(\mu)^\dagger$ and reverses the order of the physical sites.
          & =\psi(r_N(\sigma)).
         \label{eq:fnw_site_reverse_apply}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -128,7 +128,7 @@ $A_\mu=v(\mu)^\dagger$ and reverses the order of the physical sites.
     \end{align}
 \end{definition}
 
-\begin{theorem}[FNW boundary-map evaluation]
+\begin{lemma}[FNW boundary-map evaluation]
     \label{thm:fnw_boundary_map_apply}
     \lean{MPSTensor.fnwBoundaryMap_apply}
     \leanok
@@ -138,7 +138,7 @@ $A_\mu=v(\mu)^\dagger$ and reverses the order of the physical sites.
         F_N^v(B)(\sigma)
          & =\tr\!\left(B(v^\sigma)^\dagger\right).
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -147,7 +147,7 @@ $A_\mu=v(\mu)^\dagger$ and reverses the order of the physical sites.
     formula.
 \end{proof}
 
-\begin{theorem}[Reversed adjoint word]
+\begin{lemma}[Reversed adjoint word]
     \label{thm:fnw_boundary_map_apply_eq_trace_reverse}
     \lean{MPSTensor.fnwBoundaryMap_apply_eq_trace_reverse}
     \leanok
@@ -160,7 +160,7 @@ $A_\mu=v(\mu)^\dagger$ and reverses the order of the physical sites.
     \end{align}
     For $N>0$, the word on the right is
     $A_{\sigma(N-1)}\cdots A_{\sigma(0)}$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -174,7 +174,7 @@ $A_\mu=v(\mu)^\dagger$ and reverses the order of the physical sites.
     adjointed word itself.
 \end{proof}
 
-\begin{theorem}[FNW boundary map in the ground-space convention]
+\begin{lemma}[FNW boundary map in the ground-space convention]
     \label{thm:fnw_boundary_map_eq_physical_site_reverse_comp_ground_space_map}
     \lean{MPSTensor.fnwBoundaryMap_eq_physicalSiteReverse_comp_groundSpaceMap}
     \leanok
@@ -186,7 +186,7 @@ $A_\mu=v(\mu)^\dagger$ and reverses the order of the physical sites.
          & =R_N\circ\Gamma_N^A.
         \label{eq:fnw_boundary_ground_space_map}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -203,7 +203,7 @@ $A_\mu=v(\mu)^\dagger$ and reverses the order of the physical sites.
     The ordered list associated with $r_N(\sigma)$ is the reverse of the list
     associated with $\sigma$, as in (\ref{eq:fnw_config_reverse}).  Together
     with the adjointed word in
-    Theorem~\ref{thm:fnw_boundary_map_apply_eq_trace_reverse}, this gives the
+    Lemma~\ref{thm:fnw_boundary_map_apply_eq_trace_reverse}, this gives the
     physical-site reversal.  Trace cyclicity is used only in the third
     equality, where it moves the boundary matrix $B$ across the word.
 \end{proof}
@@ -312,7 +312,7 @@ orthogonal projector is the canonical representative used here.
     whereas the original map $\Gamma_L$ has matrix domain $\MN{D}$.
 \end{definition}
 
-\begin{theorem}[Boundary-map action under Frobenius vectorization]
+\begin{lemma}[Boundary-map action under Frobenius vectorization]
     \label{thm:ground_space_map_es_frobenius}
     \lean{MPSTensor.groundSpaceMapES_frobeniusEquivEuclidean_apply}
     \leanok
@@ -322,7 +322,7 @@ orthogonal projector is the canonical representative used here.
     $\iota_L$ be the computational-basis identification on the physical
     coefficient space.  Then, for every $X\in\MN{D}$,
     $\Gamma_L^{\mathrm{ES}}(U(X))=\iota_L(\Gamma_L(X))$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -332,7 +332,7 @@ orthogonal projector is the canonical representative used here.
     composite to $U(X)$ and cancelling $U^{-1}U$ gives the claimed identity.
 \end{proof}
 
-\begin{theorem}[Boundary map on a matrix unit]
+\begin{lemma}[Boundary map on a matrix unit]
     \label{thm:ground_space_map_es_single}
     \lean{MPSTensor.groundSpaceMapES_single}
     \leanok
@@ -340,7 +340,7 @@ orthogonal projector is the canonical representative used here.
     Let $e_{(b,a)}$ denote the Frobenius coordinate vector representing the
     virtual matrix unit $E_{ab}$.  Then
     $\Gamma_L^{\mathrm{ES}}(e_{(b,a)})=\iota_L(\Gamma_L(E_{ab}))$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -351,14 +351,14 @@ orthogonal projector is the canonical representative used here.
     gives the formula.
 \end{proof}
 
-\begin{theorem}[Exact range of the Hilbert-space boundary map]
+\begin{lemma}[Exact range of the Hilbert-space boundary map]
     \label{thm:range_ground_space_map_es}
     \lean{MPSTensor.range_groundSpaceMapES}
     \leanok
     \uses{def:ground_space_map_es, def:ground_space_es}
     The range of $\Gamma_L^{\mathrm{ES}}$ is exactly
     $G_L^{\mathrm{ES}}(A)$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -369,14 +369,14 @@ orthogonal projector is the canonical representative used here.
     inclusions.
 \end{proof}
 
-\begin{theorem}[Hilbert-space boundary-map injectivity]
+\begin{lemma}[Hilbert-space boundary-map injectivity]
     \label{thm:ground_space_map_es_injective_block}
     \lean{MPSTensor.groundSpaceMapES_injective_of_isNBlkInjective}
     \leanok
     \uses{def:ground_space_map_es, def:l_blk_injective}
     If $A$ is $L$-block injective, then
     $\Gamma_L^{\mathrm{ES}}$ is injective.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -388,20 +388,20 @@ orthogonal projector is the canonical representative used here.
     injective.
 \end{proof}
 
-\begin{theorem}[Long-length Hilbert-space boundary-map injectivity]
+\begin{lemma}[Long-length Hilbert-space boundary-map injectivity]
     \label{thm:ground_space_map_es_injective_block_of_le}
     \lean{MPSTensor.groundSpaceMapES_injective_of_isNBlkInjective_of_le}
     \leanok
     \uses{def:ground_space_map_es, def:l_blk_injective}
     Suppose that $L_0>0$, that $A$ is $L_0$-block injective, and that
     $L\ge L_0$.  Then $\Gamma_L^{\mathrm{ES}}$ is injective.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:ground_space_map_es_injective_block, thm:wordspan_blk_inj_succ}
     Positive-length propagation makes $A$ block injective at length $L$.
-    Theorem~\ref{thm:ground_space_map_es_injective_block} then gives injectivity of
+    Lemma~\ref{thm:ground_space_map_es_injective_block} then gives injectivity of
     $\Gamma_L^{\mathrm{ES}}$.
 \end{proof}
 
@@ -445,7 +445,7 @@ used in the convention identities below.
     \end{align}
 \end{definition}
 
-\begin{theorem}[FNW map as the trace-pairing adjoint]
+\begin{lemma}[FNW map as the trace-pairing adjoint]
     \label{thm:fnw_transfer_map_trace_adjoint}
     \lean{MPSTensor.fnwTransferMap_eq_traceAdjointMap}
     \leanok
@@ -464,7 +464,7 @@ used in the convention identities below.
     Frobenius adjoint is generally different from the adjoint for the
     $\rho$-weighted inner product in
     \cite[Equation~(5.6)]{Fannes1992Finitely}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -478,7 +478,7 @@ used in the convention identities below.
     The final sum is $\tr(XE_{\mathrm{FNW},A}(Y))$.
 \end{proof}
 
-\begin{theorem}[Unitality of the FNW transfer map]
+\begin{lemma}[Unitality of the FNW transfer map]
     \label{thm:fnw_transfer_map_one}
     \lean{MPSTensor.fnwTransferMap_one}
     \leanok
@@ -490,7 +490,7 @@ used in the convention identities below.
         E_{\mathrm{FNW},A}(I_D) & =I_D.
         \label{eq:fnw_transfer_map_one}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -504,7 +504,7 @@ used in the convention identities below.
     $E_{\mathrm{FNW},A}(I_D)=I_D$.
 \end{proof}
 
-\begin{theorem}[FNW transfer pairing identity]
+\begin{lemma}[FNW transfer pairing identity]
     \label{thm:trace_mul_fnw_transfer_map}
     \lean{MPSTensor.trace_mul_fnwTransferMap}
     \leanok
@@ -517,7 +517,7 @@ used in the convention identities below.
          & =\tr\!\left(\E_A(\rho)X\right).
         \label{eq:trace_mul_fnw_transfer_map}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -546,7 +546,7 @@ conventions.
     reduces to the limiting map $E_\infty^\rho(B)=\tr(\rho B)I_D$.
 \end{definition}
 
-\begin{theorem}[Limiting map as a trace-pairing adjoint]
+\begin{lemma}[Limiting map as a trace-pairing adjoint]
     \label{thm:fnw_limit_map_trace_adjoint}
     \lean{MPSTensor.fnwLimitMap_eq_traceAdjointMap_fixedPointProj}
     \leanok
@@ -563,7 +563,7 @@ conventions.
     unweighted Frobenius inner product. This Frobenius adjoint is generally
     different from the adjoint for the $\rho$-weighted inner product of
     \cite[Equation~(5.6)]{Fannes1992Finitely}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -577,7 +577,7 @@ conventions.
     Nondegeneracy of the trace pairing proves the equality of maps.
 \end{proof}
 
-\begin{theorem}[Pointwise idempotence of the limiting map]
+\begin{lemma}[Pointwise idempotence of the limiting map]
     \label{thm:fnw_limit_map_idempotent}
     \lean{MPSTensor.fnwLimitMap_idempotent}
     \leanok
@@ -588,7 +588,7 @@ conventions.
          & =E_\infty^\rho(B).
         \label{eq:fnw_limit_map_idempotent}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -597,7 +597,7 @@ conventions.
     $\tr(\rho I_D)=\tr(\rho)$ cancels the nonzero normalizing denominator.
 \end{proof}
 
-\begin{theorem}[The limiting map is a projection]
+\begin{lemma}[The limiting map is a projection]
     \label{thm:fnw_limit_map_projection}
     \lean{MPSTensor.fnwLimitMap_mul_self}
     \leanok
@@ -607,16 +607,16 @@ conventions.
         (E_\infty^\rho)^2 & =E_\infty^\rho.
         \label{eq:fnw_limit_map_projection}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:fnw_limit_map_idempotent}
-    Applying Theorem~\ref{thm:fnw_limit_map_idempotent} to every matrix $B$
+    Applying Lemma~\ref{thm:fnw_limit_map_idempotent} to every matrix $B$
     establishes the operator identity.
 \end{proof}
 
-\begin{theorem}[Unital absorption of the limiting map]
+\begin{lemma}[Unital absorption of the limiting map]
     \label{thm:fnw_transfer_absorbs_limit}
     \lean{MPSTensor.fnwTransferMap_mul_fnwLimitMap}
     \leanok
@@ -627,12 +627,12 @@ conventions.
         E_{\mathrm{FNW},A}E_\infty^\rho & =E_\infty^\rho.
         \label{eq:fnw_transfer_absorbs_limit}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{def:fnw_limit_map, def:left_canonical_tensor, thm:fnw_transfer_map_one}
-    By Theorem~\ref{thm:fnw_transfer_map_one},
+    By Lemma~\ref{thm:fnw_transfer_map_one},
     $E_{\mathrm{FNW},A}(I_D)=\sum_\mu(A^\mu)^\dagger A^\mu=I_D$.
     Hence
     \begin{align}
@@ -642,7 +642,7 @@ conventions.
     \end{align}
 \end{proof}
 
-\begin{theorem}[Stationary absorption by the limiting map]
+\begin{lemma}[Stationary absorption by the limiting map]
     \label{thm:fnw_limit_absorbs_transfer}
     \lean{MPSTensor.fnwLimitMap_mul_fnwTransferMap}
     \leanok
@@ -653,12 +653,12 @@ conventions.
         E_\infty^\rho E_{\mathrm{FNW},A} & =E_\infty^\rho.
         \label{eq:fnw_limit_absorbs_transfer}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{def:fnw_limit_map, thm:trace_mul_fnw_transfer_map}
-    Theorem~\ref{thm:trace_mul_fnw_transfer_map} and stationarity give
+    Lemma~\ref{thm:trace_mul_fnw_transfer_map} and stationarity give
     \begin{align}
         \tr\!\left(\rho E_{\mathrm{FNW},A}(B)\right)
          & =\tr\!\left(\E_A(\rho)B\right)=\tr(\rho B).
@@ -666,7 +666,7 @@ conventions.
     Substituting this equality into~(\ref{eq:fnw_limit_map}) yields the claim.
 \end{proof}
 
-\begin{theorem}[Positive powers of the FNW remainder]
+\begin{lemma}[Positive powers of the FNW remainder]
     \label{thm:fnw_remainder_power}
     \lean{MPSTensor.fnwTransferMap_sub_fnwLimitMap_pow}
     \leanok
@@ -681,15 +681,15 @@ conventions.
     The restriction $n\geq1$ is essential. At $n=0$, the two sides would be
     $I$ and $I-E_\infty^\rho$, respectively, and
     $E_\infty^\rho(I_D)=I_D$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:fnw_limit_map_projection, thm:fnw_transfer_absorbs_limit, thm:fnw_limit_absorbs_transfer}
     For $E=E_{\mathrm{FNW},A}$ and $P=E_\infty^\rho$, the identities of
-    Theorem~\ref{thm:fnw_limit_map_projection},
-    Theorem~\ref{thm:fnw_transfer_absorbs_limit}, and
-    Theorem~\ref{thm:fnw_limit_absorbs_transfer} give
+    Lemma~\ref{thm:fnw_limit_map_projection},
+    Lemma~\ref{thm:fnw_transfer_absorbs_limit}, and
+    Lemma~\ref{thm:fnw_limit_absorbs_transfer} give
     $EP=PE=P^2=P$, and hence $E^mP=P$ for every $m\geq0$. The case $n=1$ is
     immediate. If $(E-P)^n=E^n-P$, then
     \begin{align}
@@ -700,7 +700,7 @@ conventions.
     \end{align}
 \end{proof}
 
-\begin{theorem}[Primitive-MPS remainder identity]
+\begin{lemma}[Primitive-MPS remainder identity]
     \label{thm:primitive_fnw_remainder_power}
     \lean{MPSTensor.IsPrimitiveMPS.fnwTransferMap_sub_fnwLimitMap_pow}
     \leanok
@@ -711,14 +711,14 @@ conventions.
         (E_{\mathrm{FNW},A}-E_\infty^\rho)^n
          & =E_{\mathrm{FNW},A}^n-E_\infty^\rho.
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:fnw_remainder_power}
     Primitivity gives $\tr(\rho)\neq0$, left canonicity, and the stationary
     equation $\E_A(\rho)=\rho$, so
-    Theorem~\ref{thm:fnw_remainder_power} yields the power identity.
+    Lemma~\ref{thm:fnw_remainder_power} yields the power identity.
 \end{proof}
 
 These algebraic relations express the spectral projection and remainder
@@ -745,7 +745,7 @@ product.
     row--column pair $((c,e),(a,b))$.
 \end{definition}
 
-\begin{theorem}[Gram reshuffling commutes with subtraction]
+\begin{lemma}[Gram reshuffling commutes with subtraction]
     \label{thm:gram_reshuffle_sub}
     \lean{Matrix.gramReshuffle_sub}
     \leanok
@@ -757,7 +757,7 @@ product.
          & =\mathscr R(\mathcal L)-\mathscr R(\mathcal M).
         \label{eq:gram_reshuffle_sub}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -765,7 +765,7 @@ product.
     The defining matrix entries of the Choi reshuffling are linear in the map.
 \end{proof}
 
-\begin{theorem}[Matrix-unit coordinates of Gram reshuffling]
+\begin{lemma}[Matrix-unit coordinates of Gram reshuffling]
     \label{thm:gram_reshuffle_single}
     \lean{Matrix.inner_single_gramReshuffle_single}
     \leanok
@@ -782,7 +782,7 @@ product.
     This is the coordinate identity in
     (\ref{eq:gram_reshuffle_matrix_entries}); it is not a Hilbert--Schmidt pairing of
     $E_{ab}$ with $\mathcal L(E_{ce})$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -791,7 +791,7 @@ product.
     vectors gives the coordinate identity.
 \end{proof}
 
-\begin{theorem}[Euclidean operator norm bounded by Frobenius mass]
+\begin{lemma}[Euclidean operator norm bounded by Frobenius mass]
     \label{thm:euclidean_operator_norm_sq_le_frobenius}
     \lean{Matrix.toEuclideanCLM_norm_sq_le_sum_norm_sq}
     \leanok
@@ -802,7 +802,7 @@ product.
          & \leq \sum_{(i,j)\in I\times I}\lvert B_{ij}\rvert^2.
         \label{eq:euclidean_operator_norm_sq_le_frobenius}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -811,7 +811,7 @@ product.
     the bound.
 \end{proof}
 
-\begin{theorem}[Squared mass of one column]
+\begin{lemma}[Squared mass of one column]
     \label{thm:sum_column_norm_sq_le_l2_operator_norm_sq}
     \lean{Matrix.sum_column_norm_sq_le_norm_sq}
     \leanok
@@ -822,7 +822,7 @@ product.
          & \leq \lVert A\rVert_{\ell^2(I)\to\ell^2(I)}^2.
         \label{eq:sum_column_norm_sq_le_l2_operator_norm_sq}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -830,7 +830,7 @@ product.
     one, produces the $j$th column of $A$ and yields the column bound.
 \end{proof}
 
-\begin{theorem}[Entrywise mass bounded by the $L^2$ operator norm]
+\begin{lemma}[Entrywise mass bounded by the $L^2$ operator norm]
     \label{thm:sum_entry_norm_sq_le_card_mul_l2_operator_norm_sq}
     \lean{Matrix.sum_entry_norm_sq_le_card_mul_norm_sq}
     \leanok
@@ -842,16 +842,16 @@ product.
         \lVert A\rVert_{\ell^2(I)\to\ell^2(I)}^2.
         \label{eq:sum_entry_norm_sq_le_card_mul_l2_operator_norm_sq}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:sum_column_norm_sq_le_l2_operator_norm_sq}
-    Summing Theorem~\ref{thm:sum_column_norm_sq_le_l2_operator_norm_sq} over
+    Summing Lemma~\ref{thm:sum_column_norm_sq_le_l2_operator_norm_sq} over
     all $|I|$ columns yields the bound.
 \end{proof}
 
-\begin{theorem}[$L^2$ operator norm of a matrix unit]
+\begin{lemma}[$L^2$ operator norm of a matrix unit]
     \label{thm:l2_operator_norm_matrix_unit}
     \lean{Matrix.l2_opNorm_single_one}
     \leanok
@@ -861,7 +861,7 @@ product.
         \lVert E_{ij}\rVert_{\ell^2(I)\to\ell^2(I)}=1.
         \label{eq:l2_operator_norm_matrix_unit}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -869,7 +869,7 @@ product.
     sends every vector to a scalar multiple of that unit vector.
 \end{proof}
 
-\begin{theorem}[Entrywise Frobenius invariance of Gram reshuffling]
+\begin{lemma}[Entrywise Frobenius invariance of Gram reshuffling]
     \label{thm:gram_reshuffle_matrix_norm_sq}
     \lean{Matrix.gramReshuffleMatrix_norm_sq_eq_rectangularChoi_norm_sq}
     \leanok
@@ -887,7 +887,7 @@ product.
     \end{align}
     The two matrices differ only by a reshuffling of indices; the equality is
     entrywise Frobenius, not operator norm.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -897,7 +897,7 @@ product.
     involution yields the claimed equality.
 \end{proof}
 
-\begin{theorem}[Operator bound for a reshuffled Choi matrix]
+\begin{lemma}[Operator bound for a reshuffled Choi matrix]
     \label{thm:gram_reshuffle_norm_sq_le_rectangular_choi}
     \lean{Matrix.gramReshuffle_norm_sq_le_rectangularChoi_norm_sq}
     \leanok
@@ -913,18 +913,18 @@ product.
         \bigl\lvert J(\mathcal L)_{u,v}\bigr\rvert^2.
         \label{eq:gram_reshuffle_norm_sq_le_rectangular_choi}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{def:gram_reshuffle, thm:euclidean_operator_norm_sq_le_frobenius, thm:gram_reshuffle_matrix_norm_sq}
-    Applying Theorem~\ref{thm:euclidean_operator_norm_sq_le_frobenius} to
+    Applying Lemma~\ref{thm:euclidean_operator_norm_sq_le_frobenius} to
     $R(\mathcal L)$ and rewriting its entrywise Frobenius mass via
-    Theorem~\ref{thm:gram_reshuffle_matrix_norm_sq} gives the bound in terms of
+    Lemma~\ref{thm:gram_reshuffle_matrix_norm_sq} gives the bound in terms of
     $J(\mathcal L)$.
 \end{proof}
 
-\begin{theorem}[Dimension bound for Gram reshuffling]
+\begin{lemma}[Dimension bound for Gram reshuffling]
     \label{thm:gram_reshuffle_norm_sq_le_card_cube_mul_operator_norm_sq}
     \lean{Matrix.gramReshuffle_norm_sq_le_card_cube_mul_opNorm_sq}
     \leanok
@@ -941,21 +941,21 @@ product.
         \lVert\mathcal L\rVert_{\mathrm{op},L^2}^2.
         \label{eq:gram_reshuffle_norm_sq_le_card_cube_mul_operator_norm_sq}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:gram_reshuffle_norm_sq_le_rectangular_choi, thm:sum_entry_norm_sq_le_card_mul_l2_operator_norm_sq, thm:l2_operator_norm_matrix_unit}
     Expanding the Choi matrix in matrix units in
-    Theorem~\ref{thm:gram_reshuffle_norm_sq_le_rectangular_choi} produces
+    Lemma~\ref{thm:gram_reshuffle_norm_sq_le_rectangular_choi} produces
     $|I|^2$ input matrix units; for each unit,
-    Theorem~\ref{thm:sum_entry_norm_sq_le_card_mul_l2_operator_norm_sq}
+    Lemma~\ref{thm:sum_entry_norm_sq_le_card_mul_l2_operator_norm_sq}
     contributes a factor $|I|$.  The operator-norm estimate for $\mathcal L$
-    and Theorem~\ref{thm:l2_operator_norm_matrix_unit} bound the remaining
+    and Lemma~\ref{thm:l2_operator_norm_matrix_unit} bound the remaining
     matrix norm.
 \end{proof}
 
-\begin{theorem}[Geometric power bound at a prescribed rate]
+\begin{lemma}[Geometric power bound at a prescribed rate]
     \label{thm:geometric_bound_of_spectral_radius_lt}
     \lean{geometric_bound_of_spectralRadius_lt}
     \leanok
@@ -969,7 +969,7 @@ product.
         \label{eq:geometric_bound_of_spectral_radius_lt}
     \end{align}
     for every $n\in\N$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -985,7 +985,7 @@ product.
     corresponding summand in $C_\lambda$ proves it for $n<N$.
 \end{proof}
 
-\begin{theorem}[Pointwise geometric power bound at a prescribed rate]
+\begin{lemma}[Pointwise geometric power bound at a prescribed rate]
     \label{thm:geometric_apply_bound_of_spectral_radius_lt}
     \lean{geometric_apply_bound_of_spectralRadius_lt}
     \leanok
@@ -999,18 +999,18 @@ product.
         \label{eq:geometric_apply_bound_of_spectral_radius_lt}
     \end{align}
     for every $n\in\N$ and $x\in V$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:geometric_bound_of_spectral_radius_lt}
-    Applying Theorem~\ref{thm:geometric_bound_of_spectral_radius_lt} in the
+    Applying Lemma~\ref{thm:geometric_bound_of_spectral_radius_lt} in the
     Banach algebra of bounded endomorphisms of $V$ and combining the result
     with $\lVert T^n x\rVert\leq\lVert T^n\rVert\lVert x\rVert$ yields the
     pointwise bound.
 \end{proof}
 
-\begin{theorem}[FNW remainder eigenvalue gap]
+\begin{lemma}[FNW remainder eigenvalue gap]
     \label{thm:fnw_remainder_eigenvalue_gap}
     \lean{MPSTensor.IsPrimitiveMPS.fnwRemainder_eigenvalue_norm_lt_one}
     \leanok
@@ -1024,7 +1024,7 @@ product.
         |\nu| & <1.
         \label{eq:fnw_remainder_eigenvalue_gap}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -1048,13 +1048,13 @@ product.
     \end{align}
 \end{definition}
 
-\begin{theorem}[Positivity of the trace-inverse factor]
+\begin{lemma}[Positivity of the trace-inverse factor]
     \label{thm:fnw_trace_inverse_factor_pos}
     \lean{MPSTensor.fnwTraceInverseFactor_pos}
     \leanok
     \uses{def:fnw_trace_inverse_factor}
     If $\rho\in\MN{D}$ is positive definite and $D>0$, then $c_\rho>0$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -1089,7 +1089,7 @@ product.
     Hilbert space.
 \end{definition}
 
-\begin{theorem}[Weighted FNW remainder spectral gap]
+\begin{lemma}[Weighted FNW remainder spectral gap]
     \label{thm:fnw_weighted_remainder_spectral_radius_lt_one}
     \lean{MPSTensor.IsPrimitiveMPS.fnwWeightedRemainder_spectralRadius_lt_one}
     \leanok
@@ -1100,13 +1100,13 @@ product.
         r_\rho(A) & <1.
         \label{eq:fnw_weighted_remainder_spectral_radius_lt_one}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:fnw_remainder_eigenvalue_gap}
     In finite dimension the spectral radius is determined by the eigenvalues,
-    so Theorem~\ref{thm:fnw_remainder_eigenvalue_gap} in the weighted norm
+    so Lemma~\ref{thm:fnw_remainder_eigenvalue_gap} in the weighted norm
     gives $r_\rho(A)<1$.
 \end{proof}
 
@@ -1127,7 +1127,7 @@ product.
     \end{align}
 \end{definition}
 
-\begin{theorem}[Nonnegativity of the FNW mixing quantity]
+\begin{lemma}[Nonnegativity of the FNW mixing quantity]
     \label{thm:fnw_mixing_quantity_nonneg}
     \lean{MPSTensor.fnwWeightedOperatorNorm_nonneg}
     \lean{MPSTensor.fnwMixingQuantity_nonneg}
@@ -1135,7 +1135,7 @@ product.
     \uses{def:fnw_mixing_quantity, def:fnw_weighted_remainder_data, def:fnw_trace_inverse_factor}
     The weighted operator norm is nonnegative, and hence so is $a(n)$ for every
     $n\in\N$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -1143,7 +1143,7 @@ product.
     A norm is nonnegative, and the trace factor $c_\rho$ is strictly positive.
 \end{proof}
 
-\begin{theorem}[Prescribed-rate bound for the FNW mixing quantity]
+\begin{lemma}[Prescribed-rate bound for the FNW mixing quantity]
     \label{thm:fnw_mixing_quantity_geometric}
     \lean{MPSTensor.IsPrimitiveMPS.exists_fnwMixingQuantity_le_geometric}
     \leanok
@@ -1159,16 +1159,16 @@ product.
     This proves the prescribed-rate transfer-remainder estimate in
     \cite[Lemma~5.2]{Fannes1992Finitely}.  The condition $\lambda<1$ is needed
     only when one subsequently deduces decay to zero.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:geometric_bound_of_spectral_radius_lt, thm:primitive_fnw_remainder_power, thm:fnw_trace_inverse_factor_pos}
-    Applying Theorem~\ref{thm:geometric_bound_of_spectral_radius_lt} to the
+    Applying Lemma~\ref{thm:geometric_bound_of_spectral_radius_lt} to the
     weighted remainder $R_A^\rho$ gives $C_0>0$ with
     $\lVert(R_A^\rho)^n\rVert_{\mathrm{op},\rho}
         \leq C_0\lambda^n$.  When $n\geq1$,
-    Theorem~\ref{thm:primitive_fnw_remainder_power} identifies
+    Lemma~\ref{thm:primitive_fnw_remainder_power} identifies
     $(R_A^\rho)^n$ with
     $E_{\mathrm{FNW},A}^n-E_\infty^\rho$, so multiplying by $c_\rho>0$ with
     $C_\lambda=c_\rho C_0$ yields the bound.
@@ -1240,13 +1240,13 @@ $A^\mu=v(\mu)^\dagger$.
         def:physical_site_reverse_es}
     The algebraic identity
     $F_N^v=R_N\circ\Gamma_N^A$ from
-    Theorem~\ref{thm:fnw_boundary_map_eq_physical_site_reverse_comp_ground_space_map}
+    Lemma~\ref{thm:fnw_boundary_map_eq_physical_site_reverse_comp_ground_space_map}
     is unchanged after equipping the domain with the weighted norm and the
     codomain with the Euclidean norm. The reversal becomes the unitary
     operator $\mathcal R_N$.
 \end{proof}
 
-\begin{theorem}[FNW boundary scalar product]
+\begin{lemma}[FNW boundary scalar product]
     \label{thm:fnw_boundary_inner}
     \lean{MPSTensor.inner_fnwBoundaryMapCLM}
     \lean{MPSTensor.inner_fnwBoundaryMapCLM_eq_sum_fnwTransferMap}
@@ -1266,7 +1266,7 @@ $A^\mu=v(\mu)^\dagger$.
     These are the two forms of the scalar-product identity in
     \cite[Equation~(5.8)]{Fannes1992Finitely}. Identity~(\ref{eq:fnw_boundary_inner_source}) preserves
     the source orientation $B^\dagger E_{ik}C$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -1279,7 +1279,7 @@ $A^\mu=v(\mu)^\dagger$.
     (\ref{eq:fnw_boundary_inner_source}).
 \end{proof}
 
-\begin{theorem}[Exact weighted boundary defect]
+\begin{lemma}[Exact weighted boundary defect]
     \label{thm:fnw_boundary_defect}
     \lean{MPSTensor.inner_fnwBoundaryMapCLM_sub_rhoWeighted}
     \leanok
@@ -1293,7 +1293,7 @@ $A^\mu=v(\mu)^\dagger$.
         \left(B^\dagger E_{ik}C\right)\right)_{ik}.
         \label{eq:fnw_boundary_defect}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -1309,7 +1309,7 @@ $A^\mu=v(\mu)^\dagger$.
     (\ref{eq:fnw_boundary_inner_source}) yields the defect formula.
 \end{proof}
 
-\begin{theorem}[Weighted FNW boundary near-isometry]
+\begin{lemma}[Weighted FNW boundary near-isometry]
     \label{thm:fnw_boundary_near_isometry_exact}
     \lean{MPSTensor.norm_inner_fnwBoundaryMapCLM_sub_rhoWeighted_le}
     \leanok
@@ -1325,7 +1325,7 @@ $A^\mu=v(\mu)^\dagger$.
         \lVert B\rVert_\rho\lVert C\rVert_\rho.
         \label{eq:fnw_boundary_near_isometry_exact}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -1337,7 +1337,7 @@ $A^\mu=v(\mu)^\dagger$.
     remainder and the two weighted boundary norms.
 \end{proof}
 
-\begin{theorem}[Right-boundary successor recursion]
+\begin{lemma}[Right-boundary successor recursion]
     \label{thm:fnw_boundary_norm_sq_succ}
     \lean{MPSTensor.fnwBoundaryMapCLM_norm_sq_succ}
     \leanok
@@ -1352,7 +1352,7 @@ $A^\mu=v(\mu)^\dagger$.
     \cite[Equation~(5.5)]{Fannes1992Finitely} and is used in the proof of
     \cite[Lemma~5.3]{Fannes1992Finitely}. Here
     $A^\mu=v(\mu)^\dagger$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -1364,8 +1364,8 @@ $A^\mu=v(\mu)^\dagger$.
     (\ref{eq:fnw_boundary_norm_sq_succ}).
 \end{proof}
 
-Theorem~\ref{thm:fnw_boundary_near_isometry_exact} and
-Theorem~\ref{thm:fnw_boundary_norm_sq_succ} establish
+Lemma~\ref{thm:fnw_boundary_near_isometry_exact} and
+Lemma~\ref{thm:fnw_boundary_norm_sq_succ} establish
 (\ref{eq:fnw_boundary_near_isometry_exact}) and the right-boundary
 recursion (\ref{eq:fnw_boundary_norm_sq_succ}) for
 \cite[Lemma~5.3]{Fannes1992Finitely}. They do not prove Lemma~6.2. In its source
@@ -1391,7 +1391,7 @@ source mixing quantity in (\ref{eq:fnw_mixing_quantity}). This is the
 normalization used in
 \cite[Equations~(5.9)--(5.10)]{Fannes1992Finitely}.
 
-\begin{theorem}[Weighted boundary near-isometry]
+\begin{lemma}[Weighted boundary near-isometry]
     \label{thm:fnw_boundary_near_isometry}
     \lean{MPSTensor.norm_inner_fnwBoundaryMapCLM_sub_rhoWeighted_le_fnwMixingQuantity}
     \lean{MPSTensor.abs_fnwBoundaryMapCLM_norm_sq_sub_rhoWeighted_norm_sq_le}
@@ -1415,7 +1415,7 @@ normalization used in
         \label{eq:fnw_boundary_lower_estimate}
     \end{align}
     No sign assumption on $a(N)$ is needed for the last inequality.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -1459,7 +1459,7 @@ normalization used in
     \end{align}
 \end{definition}
 
-\begin{theorem}[Rayleigh characterization of the lower boundary constant]
+\begin{lemma}[Rayleigh characterization of the lower boundary constant]
     \label{thm:fnw_lower_boundary_rayleigh}
     \lean{MPSTensor.fnwBoundaryNormRatio_eq_gram_rayleighQuotient}
     \lean{MPSTensor.fnwLowerBoundaryConstant_eq_gram_rayleigh_iInf}
@@ -1480,7 +1480,7 @@ normalization used in
         {\lVert B\rVert_\rho^2}.
         \label{eq:fnw_lower_boundary_rayleigh}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -1492,7 +1492,7 @@ normalization used in
     $G_N=F_N^\dagger F_N$.
 \end{proof}
 
-\begin{theorem}[Least spectral value of the weighted Gram operator]
+\begin{lemma}[Least spectral value of the weighted Gram operator]
     \label{thm:fnw_lower_boundary_spectrum}
     \lean{MPSTensor.fnwLowerBoundaryConstant_mem_spectrum_fnwBoundaryGram}
     \lean{MPSTensor.fnwLowerBoundaryConstant_le_ratio}
@@ -1509,7 +1509,7 @@ normalization used in
     The spectrum is a subset of $\C$, where no compatible order is fixed, so
     the assertion is stated as spectral membership together with
     (\ref{eq:fnw_lower_boundary_spectrum_min}).
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -1523,7 +1523,7 @@ normalization used in
     \end{align}
 \end{proof}
 
-\begin{theorem}[Least finite-domain singular value]
+\begin{lemma}[Least finite-domain singular value]
     \label{thm:fnw_lower_boundary_singular}
     \lean{MPSTensor.fnwLowerBoundaryConstant_eq_least_sq_singularValue}
     \leanok
@@ -1538,7 +1538,7 @@ normalization used in
     $j\in\{0,\ldots,m-1\}$. The indices range only over the finite
     virtual domain dimension. No zero-padded sequence indexed by all natural
     numbers is used.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -1546,11 +1546,11 @@ normalization used in
     The squared singular values of $F_N$ are the eigenvalues of
     $F_N^\dagger F_N=G_N$, indexed by an orthonormal eigenbasis of the
     finite-dimensional domain, so
-    Theorem~\ref{thm:fnw_lower_boundary_spectrum} identifies $a_-(N)$ with the
+    Lemma~\ref{thm:fnw_lower_boundary_spectrum} identifies $a_-(N)$ with the
     least squared singular value.
 \end{proof}
 
-\begin{theorem}[Optimal quadratic lower-bound constant]
+\begin{lemma}[Optimal quadratic lower-bound constant]
     \label{thm:fnw_lower_boundary_optimal}
     \lean{MPSTensor.fnwLowerBoundaryConstant_mul_norm_sq_le}
     \lean{MPSTensor.le_fnwLowerBoundaryConstant_iff}
@@ -1571,7 +1571,7 @@ normalization used in
         \text{ for every }B\in\MN{D}.
         \label{eq:fnw_lower_boundary_optimal}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -1583,7 +1583,7 @@ normalization used in
     implication in (\ref{eq:fnw_lower_boundary_optimal}).
 \end{proof}
 
-\begin{theorem}[FNW lower estimate and positivity]
+\begin{lemma}[FNW lower estimate and positivity]
     \label{thm:fnw_lower_boundary_estimate}
     \lean{MPSTensor.one_sub_fnwMixingQuantity_le_fnwLowerBoundaryConstant}
     \lean{MPSTensor.fnwLowerBoundaryConstant_pos}
@@ -1596,7 +1596,7 @@ normalization used in
         \label{eq:fnw_lower_boundary_one_sub}
     \end{align}
     and consequently $a_-(N)>0$ whenever $a(N)<1$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -1607,7 +1607,7 @@ normalization used in
     (\ref{eq:fnw_lower_boundary_one_sub}) gives positivity.
 \end{proof}
 
-\begin{theorem}[Stationary weighted right-multiplication identity]
+\begin{lemma}[Stationary weighted right-multiplication identity]
     \label{thm:rho_weighted_right_multiplication}
     \lean{MPSTensor.sum_rhoWeighted_norm_sq_mul_eq}
     \leanok
@@ -1618,7 +1618,7 @@ normalization used in
          & =\lVert B\rVert_\rho^2.
         \label{eq:rho_weighted_right_multiplication}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -1629,7 +1629,7 @@ normalization used in
     right-hand side by stationarity.
 \end{proof}
 
-\begin{theorem}[Monotonicity of the lower boundary constant]
+\begin{lemma}[Monotonicity of the lower boundary constant]
     \label{thm:fnw_lower_boundary_mono}
     \lean{MPSTensor.fnwLowerBoundaryConstant_le_succ}
     \lean{MPSTensor.fnwLowerBoundaryConstant_mono}
@@ -1645,7 +1645,7 @@ normalization used in
     for every $N\in\N$. Hence $N\mapsto a_-(N)$ is nondecreasing. The same
     conclusion holds for every primitive MPS tensor with positive-definite
     fixed point $\rho$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -1662,7 +1662,7 @@ normalization used in
     (\ref{eq:fnw_lower_boundary_succ}), and induction gives monotonicity.
 \end{proof}
 
-\begin{theorem}[Positivity from block injectivity]
+\begin{lemma}[Positivity from block injectivity]
     \label{thm:fnw_lower_boundary_block_injective_pos}
     \lean{MPSTensor.fnwLowerBoundaryConstant_pos_of_isNBlkInjective}
     \lean{MPSTensor.fnwLowerBoundaryConstant_pos_of_isNBlkInjective_of_le}
@@ -1679,14 +1679,14 @@ normalization used in
         a_-(m) & >0.
         \label{eq:fnw_lower_boundary_block_injective_pos_mono}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:fnw_lower_boundary_singular, thm:fnw_lower_boundary_mono}
     Injectivity makes every singular value of $F_{L_0}$ positive. The least
     squared singular value is $a_-(L_0)$ by
-    Theorem~\ref{thm:fnw_lower_boundary_singular}. Monotonicity then gives
+    Lemma~\ref{thm:fnw_lower_boundary_singular}. Monotonicity then gives
     $a_-(m)\geq a_-(L_0)>0$ for $m\geq L_0$.
 \end{proof}
 
@@ -1792,7 +1792,7 @@ block. All virtual matrix families below use the $\rho$-weighted norm from
     word moves to its right.
 \end{definition}
 
-\begin{theorem}[Middle-block decomposition and FNW aggregates]
+\begin{lemma}[Middle-block decomposition and FNW aggregates]
     \label{thm:fnw_overlap_aggregate_decomposition}
     \lean{MPSTensor.inner_fnwLeftOverlapMap_fnwRightOverlapMap}
     \lean{MPSTensor.inner_conjTranspose_mul_mul_conjTranspose_eq_aggregateSummands}
@@ -1831,7 +1831,7 @@ block. All virtual matrix families below use the $\rho$-weighted norm from
     \end{align}
     Consequently, the difference of these two pairings is the sum of the
     length-$m$ boundary defects over all spectator pairs.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -1843,7 +1843,7 @@ block. All virtual matrix families below use the $\rho$-weighted norm from
     second.
 \end{proof}
 
-\begin{theorem}[Spectator-family norm identities]
+\begin{lemma}[Spectator-family norm identities]
     \label{thm:fnw_spectator_family_norm_identities}
     \lean{MPSTensor.fnwTransferMap_pow_one}
     \lean{MPSTensor.trace_mul_fnwTransferMap_pow}
@@ -1874,7 +1874,7 @@ block. All virtual matrix families below use the $\rho$-weighted norm from
          & =\lVert\Psi\rVert^2.
         \label{eq:fnw_right_middle_family_norm}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -1884,7 +1884,7 @@ block. All virtual matrix families below use the $\rho$-weighted norm from
     over the remaining spectator index yields the two displayed identities.
 \end{proof}
 
-\begin{theorem}[Full-ground spectator identities]
+\begin{lemma}[Full-ground spectator identities]
     \label{thm:fnw_full_ground_spectator_identities}
     \lean{MPSTensor.fnwLeftOverlapMap_fullGroundFamily}
     \lean{MPSTensor.fnwRightOverlapMap_fullGroundFamily}
@@ -1907,7 +1907,7 @@ block. All virtual matrix families below use the $\rho$-weighted norm from
         =\lVert\Psi_B\rVert.
         \label{eq:fnw_full_ground_family_norms}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -1920,7 +1920,7 @@ block. All virtual matrix families below use the $\rho$-weighted norm from
     right one and the two norm identities.
 \end{proof}
 
-\begin{theorem}[Termwise equation (5.9) estimate]
+\begin{lemma}[Termwise equation (5.9) estimate]
     \label{thm:fnw_overlap_linear_family_estimate}
     \lean{MPSTensor.norm_inner_overlap_sub_inner_aggregates_le}
     \lean{MPSTensor.norm_inner_overlap_sub_inner_aggregates_le_familyNorms}
@@ -1942,7 +1942,7 @@ block. All virtual matrix families below use the $\rho$-weighted norm from
          & \leq a(m)\lVert\Phi\rVert\lVert\Psi\rVert.
         \label{eq:fnw_overlap_linear_family_estimate}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -1954,7 +1954,7 @@ block. All virtual matrix families below use the $\rho$-weighted norm from
     (\ref{eq:fnw_right_middle_family_norm}) give the stated family norms.
 \end{proof}
 
-\begin{theorem}[Overlap norms and the lower boundary constant]
+\begin{lemma}[Overlap norms and the lower boundary constant]
     \label{thm:fnw_overlap_lower_boundary_control}
     \lean{MPSTensor.norm_fnwLeftOverlapMap_sq}
     \lean{MPSTensor.norm_fnwRightOverlapMap_sq}
@@ -1997,7 +1997,7 @@ block. All virtual matrix families below use the $\rho$-weighted norm from
         \lVert R_{\ell,m,r}\Psi\rVert.
         \label{eq:fnw_overlap_lower_boundary_control}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -2009,7 +2009,7 @@ block. All virtual matrix families below use the $\rho$-weighted norm from
     yields the final bound.
 \end{proof}
 
-\begin{theorem}[FNW equation (6.5), linear contribution]
+\begin{lemma}[FNW equation (6.5), linear contribution]
     \label{thm:fnw_equation_6_5_linear}
     \lean{MPSTensor.norm_inner_overlap_sub_inner_aggregates_le_div_lowerBoundary}
     \leanok
@@ -2025,7 +2025,7 @@ block. All virtual matrix families below use the $\rho$-weighted norm from
         \lVert R_{\ell,m,r}\Psi\rVert.
         \label{eq:fnw_equation_6_5_linear}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -2052,7 +2052,7 @@ block. All virtual matrix families below use the $\rho$-weighted norm from
     \end{align}
 \end{definition}
 
-\begin{theorem}[Unconverted aggregate estimates]
+\begin{lemma}[Unconverted aggregate estimates]
     \label{thm:fnw_aggregate_family_bounds}
     \lean{MPSTensor.norm_inner_fnwLeftOverlapAggregate_le_familyNorm}
     \lean{MPSTensor.norm_inner_fnwRightOverlapAggregate_le_familyNorm}
@@ -2082,7 +2082,7 @@ block. All virtual matrix families below use the $\rho$-weighted norm from
          & \leq a(m)\lVert\Psi\rVert.
         \label{eq:fnw_right_aggregate_family_bound}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -2091,7 +2091,7 @@ block. All virtual matrix families below use the $\rho$-weighted norm from
     In the estimate preceding the lower-boundary conversion in
     \cite[Equation~(6.5)]{Fannes1992Finitely}, testing each overlap vector
     against the matching full-ground spectator family from
-    Theorem~\ref{thm:fnw_full_ground_spectator_identities} and using
+    Lemma~\ref{thm:fnw_full_ground_spectator_identities} and using
     orthogonality gives the left identity
     \begin{align}
         \left\langle L_{\ell,m,r}\Phi,F_{\ell+m+r}(B)\right\rangle
@@ -2111,7 +2111,7 @@ block. All virtual matrix families below use the $\rho$-weighted norm from
     aggregate itself gives the two norm estimates.
 \end{proof}
 
-\begin{theorem}[One-sided aggregate conversion]
+\begin{lemma}[One-sided aggregate conversion]
     \label{thm:fnw_aggregate_sqrt_lower_boundary}
     \lean{MPSTensor.norm_fnwLeftOverlapAggregate_le_div_sqrt_lowerBoundary}
     \lean{MPSTensor.norm_fnwRightOverlapAggregate_le_div_sqrt_lowerBoundary}
@@ -2119,7 +2119,7 @@ block. All virtual matrix families below use the $\rho$-weighted norm from
     \uses{thm:fnw_aggregate_family_bounds,
         thm:fnw_overlap_lower_boundary_control}
     Under the hypotheses of
-    Theorem~\ref{thm:fnw_aggregate_family_bounds}, if $a_-(m)>0$, then
+    Lemma~\ref{thm:fnw_aggregate_family_bounds}, if $a_-(m)>0$, then
     \begin{align}
         \lVert A_\varphi\rVert_\rho
          & \leq\frac{a(m)}{\sqrt{a_-(m)}}
@@ -2130,7 +2130,7 @@ block. All virtual matrix families below use the $\rho$-weighted norm from
         \lVert R_{\ell,m,r}\Psi\rVert.
         \label{eq:fnw_right_aggregate_sqrt_bound}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -2142,13 +2142,13 @@ block. All virtual matrix families below use the $\rho$-weighted norm from
     yields the two estimates.
 \end{proof}
 
-\begin{theorem}[Quadratic aggregate contribution]
+\begin{lemma}[Quadratic aggregate contribution]
     \label{thm:fnw_aggregate_quadratic}
     \lean{MPSTensor.norm_inner_fnwOverlapAggregates_le_sq_div_lowerBoundary}
     \leanok
     \uses{thm:fnw_aggregate_sqrt_lower_boundary}
     Under the hypotheses of
-    Theorem~\ref{thm:fnw_aggregate_family_bounds}, if $a_-(m)>0$, then the
+    Lemma~\ref{thm:fnw_aggregate_family_bounds}, if $a_-(m)>0$, then the
     quadratic contribution in the proof of
     \cite[Lemma~6.2]{Fannes1992Finitely} satisfies
     \begin{align}
@@ -2158,7 +2158,7 @@ block. All virtual matrix families below use the $\rho$-weighted norm from
         \lVert R_{\ell,m,r}\Psi\rVert.
         \label{eq:fnw_aggregate_quadratic}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -2168,13 +2168,13 @@ block. All virtual matrix families below use the $\rho$-weighted norm from
     $\sqrt{a_-(m)}^2=a_-(m)$, the coefficient is $a(m)^2/a_-(m)$.
 \end{proof}
 
-\begin{theorem}[Linear and quadratic overlap bound]
+\begin{lemma}[Linear and quadratic overlap bound]
     \label{thm:fnw_overlap_linear_add_quadratic}
     \lean{MPSTensor.norm_inner_fnwOverlapMaps_le_linear_add_quadratic}
     \leanok
     \uses{thm:fnw_equation_6_5_linear, thm:fnw_aggregate_quadratic}
     Under the hypotheses of
-    Theorems~\ref{thm:fnw_equation_6_5_linear} and
+    Lemmas~\ref{thm:fnw_equation_6_5_linear} and
     \ref{thm:fnw_aggregate_quadratic},
     \begin{align}
         |\langle L_{\ell,m,r}\Phi,R_{\ell,m,r}\Psi\rangle|
@@ -2185,7 +2185,7 @@ block. All virtual matrix families below use the $\rho$-weighted norm from
         \label{eq:fnw_overlap_linear_add_quadratic}
     \end{align}
     The two source contributions are deliberately left unfactored.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -2193,7 +2193,7 @@ block. All virtual matrix families below use the $\rho$-weighted norm from
     Inserting the aggregate pairing and applying the triangle inequality
     separates the difference term, which is bounded by Equation~(6.5), from
     the aggregate term, which is bounded by
-    Theorem~\ref{thm:fnw_aggregate_quadratic}.
+    Lemma~\ref{thm:fnw_aggregate_quadratic}.
 \end{proof}
 
 Write $P^{\mathrm{tail}}_{r;m,\ell}$ and
@@ -2202,7 +2202,7 @@ reassociated tail-boundary range and the left-boundary range, respectively,
 and write $G_{r+m+\ell}$ for the orthogonal projector onto the full ground
 space.
 
-\begin{theorem}[FNW projector defect with separate contributions]
+\begin{lemma}[FNW projector defect with separate contributions]
     \label{thm:fnw_projector_defect_unfactored}
     \lean{MPSTensor.wholeIncrement_groundProjection_defect_le_fnw}
     \leanok
@@ -2222,7 +2222,7 @@ space.
          & \leq \frac{a(m)}{a_-(m)}+\frac{a(m)^2}{a_-(m)}.
         \label{eq:fnw_projector_defect_unfactored}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -2231,7 +2231,7 @@ space.
     In the source coordinates, let $U$ and $V$ be the two overlap ranges and
     let $W$ be the full boundary range. Then $W\subseteq U\cap V$. For
     $x\in U\cap W^\perp$ and $y\in V\cap W^\perp$,
-    Theorem~\ref{thm:fnw_overlap_linear_add_quadratic} gives
+    Lemma~\ref{thm:fnw_overlap_linear_add_quadratic} gives
     \begin{align}
         |\langle x,y\rangle|
          & \leq\left(\frac{a(m)}{a_-(m)}
@@ -2244,13 +2244,13 @@ space.
     the norm.
 \end{proof}
 
-\begin{theorem}[FNW projector-defect coefficient]
+\begin{lemma}[FNW projector-defect coefficient]
     \label{thm:fnw_projector_defect_factored}
     \lean{MPSTensor.wholeIncrement_groundProjection_defect_le_fnw_factored}
     \leanok
     \uses{thm:fnw_projector_defect_unfactored}
     Under the hypotheses of
-    Theorem~\ref{thm:fnw_projector_defect_unfactored}, factoring the
+    Lemma~\ref{thm:fnw_projector_defect_unfactored}, factoring the
     coefficient as in \cite[Lemma~6.2]{Fannes1992Finitely} gives
     \begin{align}
         \left\lVert
@@ -2260,12 +2260,12 @@ space.
          & \leq \frac{a(m)(1+a(m))}{a_-(m)}.
         \label{eq:fnw_projector_defect_factored}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:fnw_projector_defect_unfactored}
-    Combining Theorem~\ref{thm:fnw_projector_defect_unfactored}, which retains
+    Combining Lemma~\ref{thm:fnw_projector_defect_unfactored}, which retains
     the two source contributions, with the algebraic identity
     \begin{align}
         \frac{a(m)}{a_-(m)}+\frac{a(m)^2}{a_-(m)}
@@ -2274,7 +2274,7 @@ space.
     yields the factored bound.
 \end{proof}
 
-\begin{theorem}[Primitive FNW projector-defect estimate]
+\begin{lemma}[Primitive FNW projector-defect estimate]
     \label{thm:primitive_fnw_projector_defect}
     \lean{MPSTensor.IsPrimitiveMPS.exists_wholeIncrement_groundProjection_defect_le_fnw}
     \leanok
@@ -2284,7 +2284,7 @@ space.
     $\tr(\rho)=1$. Then there is an injective length $L_0\geq1$ such that
     the bound (\ref{eq:fnw_projector_defect_unfactored}) holds whenever
     $m\geq L_0$ and $\ell\geq1$, for every $r\geq0$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -2292,14 +2292,14 @@ space.
         thm:normal_from_primitive_posdef}
     Primitivity yields a positive injective length, together with left
     canonicity and the fixed-point equation, so
-    Theorem~\ref{thm:fnw_projector_defect_unfactored} gives the bound.
+    Lemma~\ref{thm:fnw_projector_defect_unfactored} gives the bound.
 \end{proof}
 
 
 \section{The geometric form of the FNW projector estimate}
 
 Nachtergaele imports the projector estimate of
-Theorem~\ref{thm:primitive_fnw_projector_defect} in the rational geometric form
+Lemma~\ref{thm:primitive_fnw_projector_defect} in the rational geometric form
 \begin{align}
     \left\lVert
     G_{\Lambda_n}G_{\Lambda_{n+1}\setminus\Lambda_{n-l}}
@@ -2315,7 +2315,7 @@ FNW coefficient $a(m)(1+a(m))/a_-(m)$, the lower-boundary inequality
 $1-a(m)\leq a_-(m)$, and the prescribed-rate estimate $a(m)\leq c\lambda^m$.
 
 The source's rate condition is now established by
-Theorem~\ref{thm:fnw-transfer-eigenvalue-rate}: every positive rate exceeding
+Lemma~\ref{thm:fnw-transfer-eigenvalue-rate}: every positive rate exceeding
 the moduli of the nonunit observable-transfer eigenvalues also exceeds the
 weighted spectral radius of the transfer remainder. In particular, the
 geometric estimate is available for every source-admissible rate
@@ -2324,20 +2324,20 @@ $0<\lambda<1$, with a positive rate-dependent prefactor.
 % Local fix (dimension-only prefactor).
 The source's simultaneous assertions that $c=k^2$, the square of the auxiliary
 dimension, and that every admissible rate may be prescribed require a correction
-at the fixed intersection threshold. Theorem~\ref{thm:fnw-dimension-only-counterexample}
+at the fixed intersection threshold. Lemma~\ref{thm:fnw-dimension-only-counterexample}
 gives a physical counterexample. The valid replacement retains the
 rate-dependent prefactor, or permits any prescribed positive prefactor after
 an additional onset depending on the state, rate, and prefactor, as proved in
-Theorem~\ref{thm:fnw-eventual-projector-prescribed-prefactor}. See
+Lemma~\ref{thm:fnw-eventual-projector-prescribed-prefactor}. See
 \cite{gap:cpgsv21_martingale_overlap}.
 
-\begin{theorem}[Geometric FNW projector defect at a fixed length]
+\begin{lemma}[Geometric FNW projector defect at a fixed length]
     \label{thm:fnw_projector_defect_geometric}
     \lean{MPSTensor.wholeIncrement_groundProjection_defect_le_fnw_geometric}
     \leanok
     \uses{thm:fnw_projector_defect_unfactored, def:fnw_mixing_quantity}
     Under the hypotheses of
-    Theorem~\ref{thm:fnw_projector_defect_unfactored}, suppose in addition that
+    Lemma~\ref{thm:fnw_projector_defect_unfactored}, suppose in addition that
     $a(m)\leq c\lambda^m<1$.  Then
     \begin{align}
         \left\lVert
@@ -2347,7 +2347,7 @@ Theorem~\ref{thm:fnw-eventual-projector-prescribed-prefactor}. See
          & \leq \frac{c\lambda^m(1+c\lambda^m)}{1-c\lambda^m}.
         \label{eq:fnw_projector_defect_geometric}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -2360,7 +2360,7 @@ Theorem~\ref{thm:fnw-eventual-projector-prescribed-prefactor}. See
     at most $c\lambda^m(1+c\lambda^m)$.
 \end{proof}
 
-\begin{theorem}[Geometric FNW projector defect for a primitive tensor]
+\begin{lemma}[Geometric FNW projector defect for a primitive tensor]
     \label{thm:primitive_fnw_projector_defect_geometric}
     \lean{MPSTensor.IsPrimitiveMPS.exists_wholeIncrement_groundProjection_defect_le_fnw_geometric}
     \leanok
@@ -2371,7 +2371,7 @@ Theorem~\ref{thm:fnw-eventual-projector-prescribed-prefactor}. See
     injective length $L_0\geq1$ such that, whenever $m\geq L_0$ and
     $c\lambda^m<1$, the bound (\ref{eq:fnw_projector_defect_geometric}) holds for
     every prefix length $r$ and every $\ell\geq1$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -2387,7 +2387,7 @@ Theorem~\ref{thm:fnw-eventual-projector-prescribed-prefactor}. See
     injective length, so the fixed-length geometric estimate gives the bound.
 \end{proof}
 
-\begin{theorem}[Open-chain form of the geometric FNW projector defect]
+\begin{lemma}[Open-chain form of the geometric FNW projector defect]
     \label{thm:primitive_fnw_openchain_defect_geometric}
     \lean{MPSTensor.openChain_groundProjection_defect_eq_wholeIncrement}
     \lean{MPSTensor.IsPrimitiveMPS.exists_openChain_groundProjection_defect_le_fnw_geometric}
@@ -2412,7 +2412,7 @@ Theorem~\ref{thm:fnw-eventual-projector-prescribed-prefactor}. See
     This establishes the projector defect bound
     (\ref{eq:nachtergaele_geometric_projector_defect}) for primitive matrix product
     states.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -2430,7 +2430,7 @@ Theorem~\ref{thm:fnw-eventual-projector-prescribed-prefactor}. See
     \end{align}
     where $\ran\widetilde\Gamma^{\mathrm{tail}}_{K;l,1}=\ran\Gamma^{\mathrm{tail}}_{K,l+1}$ follows by
     (\ref{eq:reassociated_tail_boundary_one_site}) and the remaining
-    subspace identifications hold by Theorem~\ref{thm:spectator_boundary_hilbert_factorization}.  Taking
+    subspace identifications hold by Lemma~\ref{thm:spectator_boundary_hilbert_factorization}.  Taking
     orthogonal projectors onto the three subspaces gives
     \begin{align}
         P^{\mathrm{tail}}_{K;l,1}=P^{\mathrm{tail}}_{K,l+1}(A),
@@ -2442,7 +2442,7 @@ Theorem~\ref{thm:fnw-eventual-projector-prescribed-prefactor}. See
     geometric estimate gives the display.
 \end{proof}
 
-\begin{theorem}[Geometric power bound below unit spectral radius]
+\begin{lemma}[Geometric power bound below unit spectral radius]
     \label{thm:geometric_bound_of_spectral_radius_lt_one}
     \lean{geometric_bound_of_spectralRadius_lt_one}
     \leanok
@@ -2454,17 +2454,17 @@ Theorem~\ref{thm:fnw-eventual-projector-prescribed-prefactor}. See
         \label{eq:geometric_bound_of_spectral_radius_lt_one}
     \end{align}
     for every $n\in\N$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:geometric_bound_of_spectral_radius_lt}
     Choosing $r$ strictly between the spectral radius and one and applying
-    Theorem~\ref{thm:geometric_bound_of_spectral_radius_lt} with
+    Lemma~\ref{thm:geometric_bound_of_spectral_radius_lt} with
     $\lambda=r$ yields the bound.
 \end{proof}
 
-\begin{theorem}[Pointwise geometric power bound below unit spectral radius]
+\begin{lemma}[Pointwise geometric power bound below unit spectral radius]
     \label{thm:geometric_apply_bound_of_spectral_radius_lt_one}
     \lean{geometric_apply_bound_of_spectralRadius_lt_one}
     \leanok
@@ -2477,17 +2477,17 @@ Theorem~\ref{thm:fnw-eventual-projector-prescribed-prefactor}. See
         \label{eq:geometric_apply_bound_of_spectral_radius_lt_one}
     \end{align}
     for every $n\in\N$ and $x\in V$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:geometric_bound_of_spectral_radius_lt_one}
-    Combining Theorem~\ref{thm:geometric_bound_of_spectral_radius_lt_one} with
+    Combining Lemma~\ref{thm:geometric_bound_of_spectral_radius_lt_one} with
     the defining operator-norm inequality for $T^n x$ yields the pointwise
     bound.
 \end{proof}
 
-\begin{theorem}[Transfer--Gram Choi reshuffling]
+\begin{lemma}[Transfer--Gram Choi reshuffling]
     \label{thm:ground_space_gram_choi_reshuffling}
     \lean{MPSTensor.inner_single_groundSpaceGram_single_eq_rectangularChoi}
     \leanok
@@ -2505,7 +2505,7 @@ Theorem~\ref{thm:fnw-eventual-projector-prescribed-prefactor}. See
     Thus the Gram operator is the indicated Choi reshuffling; in particular it
     is not obtained by replacing the right-hand side with
     $\langle E_{ab},\mathcal E_A^L(E_{ce})\rangle_{\mathrm{HS}}$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -2527,7 +2527,7 @@ Theorem~\ref{thm:fnw-eventual-projector-prescribed-prefactor}. See
     stated reshuffling.
 \end{proof}
 
-\begin{theorem}[Ground-space Gram operator as a reshuffled Choi matrix]
+\begin{lemma}[Ground-space Gram operator as a reshuffled Choi matrix]
     \label{thm:ground_space_gram_eq_gram_reshuffle}
     \lean{MPSTensor.groundSpaceGram_eq_gramReshuffle}
     \leanok
@@ -2543,7 +2543,7 @@ Theorem~\ref{thm:fnw-eventual-projector-prescribed-prefactor}. See
     $\ell^2(\Fin{D}\times\Fin{D})$.  Its entries are those in
     (\ref{eq:gram_reshuffle_single}), rather than Hilbert--Schmidt pairings with
     $\mathcal E_A^L$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -2552,7 +2552,7 @@ Theorem~\ref{thm:fnw-eventual-projector-prescribed-prefactor}. See
     basis vectors.  Hence they are equal.
 \end{proof}
 
-\begin{theorem}[Geometric convergence of the ground-space Gram operator]
+\begin{lemma}[Geometric convergence of the ground-space Gram operator]
     \label{thm:ground_space_gram_geometric_fixed_point}
     \lean{MPSTensor.groundSpaceGram_sub_fixedPointProj_norm_sq_le_geometric}
     \leanok
@@ -2575,22 +2575,22 @@ Theorem~\ref{thm:fnw-eventual-projector-prescribed-prefactor}. See
         \label{eq:ground_space_gram_geometric_fixed_point}
     \end{align}
     No positivity, injectivity, or uniqueness hypothesis is imposed.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:geometric_bound_of_spectral_radius_lt_one, thm:ground_space_gram_eq_gram_reshuffle, thm:gram_reshuffle_sub, thm:gram_reshuffle_norm_sq_le_card_cube_mul_operator_norm_sq}
     With $N=\mathcal E_A-P_\rho$, the power decomposition gives
     $\mathcal E_A^n=P_\rho+N^n$ for $n\geq1$, while
-    Theorem~\ref{thm:geometric_bound_of_spectral_radius_lt_one} gives
+    Lemma~\ref{thm:geometric_bound_of_spectral_radius_lt_one} gives
     $\lVert N^n\rVert\leq Cr^n$.  The exact Gram reshuffling identity and
-    Theorem~\ref{thm:gram_reshuffle_sub} rewrite the left-hand side as
+    Lemma~\ref{thm:gram_reshuffle_sub} rewrite the left-hand side as
     $\lVert\mathscr R(N^n)\rVert^2$, so
-    Theorem~\ref{thm:gram_reshuffle_norm_sq_le_card_cube_mul_operator_norm_sq}
+    Lemma~\ref{thm:gram_reshuffle_norm_sq_le_card_cube_mul_operator_norm_sq}
     completes the estimate.
 \end{proof}
 
-\begin{theorem}[Primitive-MPS geometric Gram convergence]
+\begin{lemma}[Primitive-MPS geometric Gram convergence]
     \label{thm:primitive_ground_space_gram_geometric_fixed_point}
     \lean{MPSTensor.IsPrimitiveMPS.groundSpaceGram_sub_fixedPointProj_norm_sq_le_geometric}
     \leanok
@@ -2602,7 +2602,7 @@ Theorem~\ref{thm:fnw-eventual-projector-prescribed-prefactor}. See
         \bigl\lVert\mathcal K_n-\mathscr R(P_\rho)\bigr\rVert^2
          & \leq D^3\bigl(Cr^n\bigr)^2.
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -2611,10 +2611,10 @@ Theorem~\ref{thm:fnw-eventual-projector-prescribed-prefactor}. See
     $\tr(\rho)\neq0$. The trace-preserving identity, fixed-point equation, and
     complementary spectral-radius bound are the remaining fields of the
     primitive-MPS hypothesis, so
-    Theorem~\ref{thm:ground_space_gram_geometric_fixed_point} applies.
+    Lemma~\ref{thm:ground_space_gram_geometric_fixed_point} applies.
 \end{proof}
 
-\begin{theorem}[Ground-space Gram convergence]
+\begin{lemma}[Ground-space Gram convergence]
     \label{thm:ground_space_gram_tendsto_fixed_point}
     \lean{MPSTensor.groundSpaceGram_tendsto_gramReshuffle_fixedPointProj}
     \leanok
@@ -2629,7 +2629,7 @@ Theorem~\ref{thm:fnw-eventual-projector-prescribed-prefactor}. See
         \label{eq:ground_space_gram_tendsto_fixed_point}
     \end{align}
     in operator norm as $n\to\infty$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -2639,7 +2639,7 @@ Theorem~\ref{thm:fnw-eventual-projector-prescribed-prefactor}. See
     $0<r<1$.  Taking square roots gives the asserted norm convergence.
 \end{proof}
 
-\begin{theorem}[Primitive-MPS ground-space Gram convergence]
+\begin{lemma}[Primitive-MPS ground-space Gram convergence]
     \label{thm:primitive_ground_space_gram_tendsto_fixed_point}
     \lean{MPSTensor.IsPrimitiveMPS.groundSpaceGram_tendsto_gramReshuffle_fixedPointProj}
     \leanok
@@ -2649,23 +2649,23 @@ Theorem~\ref{thm:fnw-eventual-projector-prescribed-prefactor}. See
         \mathcal K_n & \longrightarrow\mathscr R(P_\rho)
     \end{align}
     in operator norm as $n\to\infty$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:ground_space_gram_tendsto_fixed_point}
     The primitive-MPS hypotheses provide the nonzero trace, trace preservation,
     fixed-point equation, and complementary spectral-radius hypothesis of
-    Theorem~\ref{thm:ground_space_gram_tendsto_fixed_point}.
+    Lemma~\ref{thm:ground_space_gram_tendsto_fixed_point}.
 \end{proof}
 
-The limit in Theorem~\ref{thm:ground_space_gram_tendsto_fixed_point} is
+The limit in Lemma~\ref{thm:ground_space_gram_tendsto_fixed_point} is
 the reshuffled fixed-point projection $\mathscr R(P_\rho)$, so the
 limiting metric is generally nonidentity.
 Under a positive-definite fixed-point hypothesis, the inverse estimates
 below perturb around $\mathscr R(P_\rho)$ rather than around the identity.
 
-\begin{theorem}[Exact limiting Gram metric]
+\begin{lemma}[Exact limiting Gram metric]
     \label{thm:fixed_point_gram_metric_exact}
     \lean{Matrix.gramReshuffleMatrix_fixedPointProj_apply}
     \lean{Matrix.gramReshuffleMatrix_fixedPointProj}
@@ -2682,7 +2682,7 @@ below perturb around $\mathscr R(P_\rho)$ rather than around the identity.
          & =U\!\left((\tr\rho)^{-1}X\rho\right).
         \label{eq:fixed_point_gram_metric_action}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -2698,7 +2698,7 @@ below perturb around $\mathscr R(P_\rho)$ rather than around the identity.
     (\ref{eq:fixed_point_gram_metric_action}).
 \end{proof}
 
-\begin{theorem}[Invertibility of the limiting Gram metric]
+\begin{lemma}[Invertibility of the limiting Gram metric]
     \label{thm:fixed_point_gram_metric_is_unit}
     \lean{Matrix.gramReshuffleMatrix_fixedPointProj_posDef}
     \lean{Matrix.gramReshuffle_fixedPointProj_isUnit}
@@ -2708,7 +2708,7 @@ below perturb around $\mathscr R(P_\rho)$ rather than around the identity.
     If $D>0$ and $\rho\in\MN{D}$ is positive definite, then
     $R(P_\rho)$ is positive definite and $\mathscr R(P_\rho)$ is invertible,
     hence injective.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -2722,7 +2722,7 @@ below perturb around $\mathscr R(P_\rho)$ rather than around the identity.
     Hence its associated operator $\mathscr R(P_\rho)$ is invertible.
 \end{proof}
 
-\begin{theorem}[Arbitrary-base Neumann inverse bound]
+\begin{lemma}[Arbitrary-base Neumann inverse bound]
     \label{thm:arbitrary_base_neumann_inverse_bound}
     \lean{NormedRing.isUnit_and_norm_inverse_le_of_norm_inverse_mul_sub_le}
     \lean{NormedRing.isUnit_and_norm_inverse_le_of_norm_mul_norm_sub_le}
@@ -2741,7 +2741,7 @@ below perturb around $\mathscr R(P_\rho)$ rather than around the identity.
     \end{align}
     The same conclusion follows from
     $\lVert K_0^{-1}\rVert\,\lVert K-K_0\rVert\le a$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -2758,7 +2758,7 @@ below perturb around $\mathscr R(P_\rho)$ rather than around the identity.
     (\ref{eq:arbitrary_base_relative_perturbation}).
 \end{proof}
 
-\begin{theorem}[Arbitrary-base inverse-displacement bound]
+\begin{lemma}[Arbitrary-base inverse-displacement bound]
     \label{thm:arbitrary_base_neumann_inverse_displacement}
     \lean{NormedRing.norm_inverse_sub_inverse_le_of_norm_inverse_mul_sub_le}
     \lean{NormedRing.norm_inverse_sub_inverse_le_of_norm_mul_norm_sub_le}
@@ -2773,7 +2773,7 @@ below perturb around $\mathscr R(P_\rho)$ rather than around the identity.
     \end{align}
     The same estimate follows from
     $\lVert K_0^{-1}\rVert\,\lVert K-K_0\rVert\le a$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -2789,7 +2789,7 @@ below perturb around $\mathscr R(P_\rho)$ rather than around the identity.
     gives the product-form variant.
 \end{proof}
 
-\begin{theorem}[Continuity of inversion at an invertible limit]
+\begin{lemma}[Continuity of inversion at an invertible limit]
     \label{thm:inverse_tendsto_at_unit}
     \lean{NormedRing.inverse_tendsto_of_tendsto_of_isUnit}
     \leanok
@@ -2798,7 +2798,7 @@ below perturb around $\mathscr R(P_\rho)$ rather than around the identity.
     \begin{align}
         K_i^{-1} & \longrightarrow K_0^{-1}.
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -2815,7 +2815,7 @@ below perturb around $\mathscr R(P_\rho)$ rather than around the identity.
     equivalence of the Gram endomorphism $T^\dagger T$.
 \end{definition}
 
-\begin{theorem}[Inverse-Gram identities]
+\begin{lemma}[Inverse-Gram identities]
     \label{thm:inverse_gram_identities}
     \lean{ContinuousLinearMap.inverseGram_comp_adjoint_comp_self}
     \lean{ContinuousLinearMap.adjoint_comp_self_comp_inverseGram}
@@ -2842,7 +2842,7 @@ below perturb around $\mathscr R(P_\rho)$ rather than around the identity.
         \lVert TS_T\rVert         & =\sqrt{\lVert S_T\rVert}, \\
         \lVert S_TT^\dagger\rVert & =\sqrt{\lVert S_T\rVert}.
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -2858,10 +2858,10 @@ below perturb around $\mathscr R(P_\rho)$ rather than around the identity.
 \end{proof}
 
 For a positive-definite fixed point $\rho$,
-Theorem~\ref{thm:primitive_ground_space_gram_geometric_inverse_bounds} provides
+Lemma~\ref{thm:primitive_ground_space_gram_geometric_inverse_bounds} provides
 quantitative inverse bounds for the limiting metric $\mathscr R(P_\rho)$.
 
-\begin{theorem}[Pointwise geometric Gram inverse bounds]
+\begin{lemma}[Pointwise geometric Gram inverse bounds]
     \label{thm:primitive_ground_space_gram_geometric_inverse_bounds}
     \lean{MPSTensor.IsPrimitiveMPS.groundSpaceGram_geometric_inverse_bounds}
     \leanok
@@ -2889,7 +2889,7 @@ quantitative inverse bounds for the limiting metric $\mathscr R(P_\rho)$.
         \lVert\mathcal I_\infty\rVert.
         \label{eq:primitive_ground_space_gram_geometric_inverse_displacement}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -2906,13 +2906,13 @@ quantitative inverse bounds for the limiting metric $\mathscr R(P_\rho)$.
     (\ref{eq:primitive_ground_space_gram_geometric_inverse_displacement}).
 \end{proof}
 
-\begin{theorem}[Pointwise geometric inverse-Gram bounds]
+\begin{lemma}[Pointwise geometric inverse-Gram bounds]
     \label{thm:primitive_ground_space_map_geometric_inverse_gram_bounds}
     \lean{MPSTensor.IsPrimitiveMPS.groundSpaceMapES_geometric_inverseGram_bounds}
     \leanok
     \uses{def:ground_space_map_es, def:inverse_gram, thm:primitive_ground_space_gram_geometric_inverse_bounds, thm:inverse_gram_identities}
     Under the hypotheses of
-    Theorem~\ref{thm:primitive_ground_space_gram_geometric_inverse_bounds},
+    Lemma~\ref{thm:primitive_ground_space_gram_geometric_inverse_bounds},
     there are constants $g,c,r>0$ with $r<1$ and
     $c=\lVert\mathcal I_\infty\rVert g$ such that
     (\ref{eq:primitive_ground_space_gram_geometric_bound}) holds for every
@@ -2926,7 +2926,7 @@ quantitative inverse bounds for the limiting metric $\mathscr R(P_\rho)$.
          & \leq\frac{cr^n}{1-cr^n}\,
         \lVert\mathcal I_\infty\rVert.
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -2934,14 +2934,14 @@ quantitative inverse bounds for the limiting metric $\mathscr R(P_\rho)$.
     Invertibility of
     $(\Gamma_n^{\mathrm{ES}})^\dagger\Gamma_n^{\mathrm{ES}}=\mathcal K_n$
     implies injectivity of $\Gamma_n^{\mathrm{ES}}$. The inverse-Gram
-    identities of Theorem~\ref{thm:inverse_gram_identities}
+    identities of Lemma~\ref{thm:inverse_gram_identities}
     identify $S_{\Gamma_n^{\mathrm{ES}}}$ with $\mathcal K_n^{-1}$, so the
     pointwise bounds of
-    Theorem~\ref{thm:primitive_ground_space_gram_geometric_inverse_bounds} apply
+    Lemma~\ref{thm:primitive_ground_space_gram_geometric_inverse_bounds} apply
     unchanged.
 \end{proof}
 
-\begin{theorem}[Geometric smallness at the C3 correction lengths]
+\begin{lemma}[Geometric smallness at the C3 correction lengths]
     \label{thm:geometric_smallness_at_c3_lengths}
     \lean{MPSTensor.geometric_smallness_at_c3_lengths}
     \leanok
@@ -2952,7 +2952,7 @@ quantitative inverse bounds for the limiting metric $\mathscr R(P_\rho)$.
         cr^{K+l}   & <1, \\
         cr^{K+l+1} & <1.
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -2961,7 +2961,7 @@ quantitative inverse bounds for the limiting metric $\mathscr R(P_\rho)$.
     follows from $cr^l<1$.
 \end{proof}
 
-\begin{theorem}[Eventual inverse-Gram control in the limiting metric]
+\begin{lemma}[Eventual inverse-Gram control in the limiting metric]
     \label{thm:primitive_ground_space_gram_eventual_inverse_bound}
     \lean{MPSTensor.IsPrimitiveMPS.eventually_groundSpaceGram_isUnit_and_inverse_bound}
     \leanok
@@ -2978,7 +2978,7 @@ quantitative inverse bounds for the limiting metric $\mathscr R(P_\rho)$.
         \frac{a}{1-a}\,\bigl\lVert\mathcal K_\infty^{-1}\bigr\rVert.
         \label{eq:primitive_ground_space_gram_eventual_inverse_bound}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -2994,7 +2994,7 @@ quantitative inverse bounds for the limiting metric $\mathscr R(P_\rho)$.
     (\ref{eq:primitive_ground_space_gram_eventual_inverse_bound}).
 \end{proof}
 
-\begin{theorem}[Convergence of finite-volume inverse Gram operators]
+\begin{lemma}[Convergence of finite-volume inverse Gram operators]
     \label{thm:primitive_ground_space_gram_inverse_tendsto}
     \lean{MPSTensor.IsPrimitiveMPS.groundSpaceGram_ringInverse_tendsto}
     \leanok
@@ -3005,7 +3005,7 @@ quantitative inverse bounds for the limiting metric $\mathscr R(P_\rho)$.
         \label{eq:primitive_ground_space_gram_inverse_tendsto}
     \end{align}
     in operator norm.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -3015,7 +3015,7 @@ quantitative inverse bounds for the limiting metric $\mathscr R(P_\rho)$.
     $\mathcal K_n\to\mathcal K_\infty$.
 \end{proof}
 
-\begin{theorem}[Eventual injectivity and inverse-Gram control]
+\begin{lemma}[Eventual injectivity and inverse-Gram control]
     \label{thm:primitive_ground_space_map_eventual_inverse_gram_bound}
     \lean{MPSTensor.IsPrimitiveMPS.eventually_groundSpaceMapES_injective_and_inverseGram_bound}
     \leanok
@@ -3029,7 +3029,7 @@ quantitative inverse bounds for the limiting metric $\mathscr R(P_\rho)$.
          & \leq
         \frac{a}{1-a}\,\bigl\lVert\mathcal K_\infty^{-1}\bigr\rVert.
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -3037,9 +3037,9 @@ quantitative inverse bounds for the limiting metric $\mathscr R(P_\rho)$.
     Eventual invertibility of
     $(\Gamma_n^{\mathrm{ES}})^\dagger\Gamma_n^{\mathrm{ES}}$ implies eventual
     injectivity of $\Gamma_n^{\mathrm{ES}}$.  The inverse-Gram identities of
-    Theorem~\ref{thm:inverse_gram_identities} then identify
+    Lemma~\ref{thm:inverse_gram_identities} then identify
     $S_{\Gamma_n^{\mathrm{ES}}}$ with $\mathcal K_n^{-1}$, and the estimate of
-    Theorem~\ref{thm:primitive_ground_space_gram_eventual_inverse_bound} applies.
+    Lemma~\ref{thm:primitive_ground_space_gram_eventual_inverse_bound} applies.
 \end{proof}
 
 \begin{definition}[Injective range-projector candidate]
@@ -3051,7 +3051,7 @@ quantitative inverse bounds for the limiting metric $\mathscr R(P_\rho)$.
     codomain.
 \end{definition}
 
-\begin{theorem}[Injective range-projector formula]
+\begin{lemma}[Injective range-projector formula]
     \label{thm:injective_range_projector_inverse_gram}
     \lean{ContinuousLinearMap.injectiveRangeProjector_eq_starProjection}
     \leanok
@@ -3061,7 +3061,7 @@ quantitative inverse bounds for the limiting metric $\mathscr R(P_\rho)$.
     \begin{align}
         P_{\range T} & =T(T^\dagger T)^{-1}T^\dagger.
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -3076,7 +3076,7 @@ quantitative inverse bounds for the limiting metric $\mathscr R(P_\rho)$.
 % Maintainer note: this is the dependency-closed projector slice for issue #5752.
 % Its source boundary is the inverse-Gram/range-projector identity; it does not
 % include or assert the FNW overlapping-window estimate.
-\begin{theorem}[Physical ground-space range projector]
+\begin{lemma}[Physical ground-space range projector]
     \label{thm:ground_space_map_es_injective_range_projector}
     \lean{MPSTensor.injectiveRangeProjector_groundSpaceMapES_eq_starProjection}
     \leanok
@@ -3090,7 +3090,7 @@ quantitative inverse bounds for the limiting metric $\mathscr R(P_\rho)$.
     \end{align}
     In particular, this is the physical range projector on the local Hilbert
     space, not the virtual transfer fixed-point projector.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -3101,7 +3101,7 @@ quantitative inverse bounds for the limiting metric $\mathscr R(P_\rho)$.
     this range with $G_L^{\mathrm{ES}}(A)$.
 \end{proof}
 
-\begin{theorem}[Physical ground-space inverse-Gram projector formula]
+\begin{lemma}[Physical ground-space inverse-Gram projector formula]
     \label{thm:ground_space_es_projection_inverse_gram}
     \lean{MPSTensor.groundSpaceES_starProjection_eq_groundSpaceMapES_comp_inverseGram_comp_adjoint}
     \leanok
@@ -3118,7 +3118,7 @@ quantitative inverse bounds for the limiting metric $\mathscr R(P_\rho)$.
     \end{align}
     Thus the displayed operator is the physical range projector on
     $\ell^2(\Fin{d}^{L})$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -3128,7 +3128,7 @@ quantitative inverse bounds for the limiting metric $\mathscr R(P_\rho)$.
     expression give the formula.
 \end{proof}
 
-\begin{theorem}[Neumann inverse estimate]
+\begin{lemma}[Neumann inverse estimate]
     \label{thm:neumann_inverse_norm_bound}
     \lean{NormedRing.norm_inverse_one_sub_le}
     \leanok
@@ -3137,7 +3137,7 @@ quantitative inverse bounds for the limiting metric $\mathscr R(P_\rho)$.
     \begin{align}
         \lVert(1-t)^{-1}\rVert & \le(1-a)^{-1}.
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -3154,7 +3154,7 @@ quantitative inverse bounds for the limiting metric $\mathscr R(P_\rho)$.
     reals.
 \end{proof}
 
-\begin{theorem}[Quantitative inverse-Gram estimate]
+\begin{lemma}[Quantitative inverse-Gram estimate]
     \label{thm:inverse_gram_norm_bound}
     \lean{ContinuousLinearMap.norm_inverseGram_le_of_norm_one_sub_adjoint_comp_self_le}
     \leanok
@@ -3170,14 +3170,14 @@ quantitative inverse bounds for the limiting metric $\mathscr R(P_\rho)$.
     \begin{align}
         \lVert S_T\rVert & \le(1-a)^{-1}.
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:inverse_gram_identities, thm:neumann_inverse_norm_bound}
     If $E$ is trivial, then $S_T=0$ and the bound follows from $a<1$;
     otherwise, identifying $S_T$ with the ring inverse of $T^\dagger T$ and
-    applying Theorem~\ref{thm:neumann_inverse_norm_bound} to
+    applying Lemma~\ref{thm:neumann_inverse_norm_bound} to
     $t=I_E-T^\dagger T$ gives the estimate.
 \end{proof}
 

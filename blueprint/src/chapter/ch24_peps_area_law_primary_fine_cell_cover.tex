@@ -8,7 +8,7 @@ into a finite union of closed non-belt fine cells.
 % revision adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 % This is a local decomposition, not the full two-family proposition.
 
-\begin{theorem}[Primary region as a finite union of closed fine cells]
+\begin{lemma}[Primary region as a finite union of closed fine cells]
     \label{thm:area_law_primary_fine_cell_cover}
     \lean{TNLean.PEPS.AreaLaw.Geometry.primaryBirthRegion_eq_iUnion_nonbeltCell_closure}
     \leanok
@@ -26,7 +26,7 @@ into a finite union of closed non-belt fine cells.
         =\bigcup_{\substack{z\in F_{k,\ell}\setminus\mathcal B \\j(z)=J}}
         \overline{Q_\ell(z)}.
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_nonbelt_primary_containment,thm:area_law_fine_layer_count}
     Every closed non-belt fine cell $\overline{Q_\ell(z)}$ with

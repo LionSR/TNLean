@@ -25,14 +25,14 @@ identities for the examples, not a classification of length-dependent fixed
 points.
 
 The density formulas are~(\ref{eq:asymex_R_density}) and
-Theorem~\ref{thm:asymex_T_density}. The channel equations, including
+Lemma~\ref{thm:asymex_T_density}. The channel equations, including
 arbitrary boundary matrices, are proved in
-Theorem~\ref{thm:asymex_physical_rfp}; their necessary physical-trace
-identity is Theorem~\ref{thm:asymex_trace_obstruction}. The one-label
+Lemma~\ref{thm:asymex_physical_rfp}; their necessary physical-trace
+identity is Lemma~\ref{thm:asymex_trace_obstruction}. The one-label
 and dimer word-span certificates are
-Theorems~\ref{thm:asymex_one_label_normal} and~\ref{thm:asymex_dimer_normal},
+Lemmas~\ref{thm:asymex_one_label_normal} and~\ref{thm:asymex_dimer_normal},
 with compression and trace identities in
-Theorems~\ref{thm:asymex_one_label_compression},
+Lemmas~\ref{thm:asymex_one_label_compression},
 \ref{thm:asymex_one_label_trace}, \ref{thm:asymex_dimer_compression},
 and~\ref{thm:asymex_dimer_trace}.
 
@@ -172,7 +172,7 @@ An auxiliary index is $(p,p',k)$, encoded as $4p+2p'+k$. Define
 \end{align}
 Both the physical and auxiliary dimensions are eight.
 
-\begin{theorem}[Closed density of the twisted dimer]
+\begin{lemma}[Closed density of the twisted dimer]
     \label{thm:asymex_T_density}
     \leanok
     For $N>0$, write $W_N=V^{\otimes N}$ in incoming-cell coordinates.
@@ -183,7 +183,7 @@ Both the physical and auxiliary dimensions are eight.
         \label{eq:asymex_T_density}
     \end{align}
     In particular, $\rho^{(N)}(T)$ is positive and has trace one.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:mpdo_twisted_dimer_unitary_factorization,
@@ -209,7 +209,7 @@ Both the physical and auxiliary dimensions are eight.
     $\tr\sigma=x+y=1$ and $\tr\eta_N=1$. Unitary conjugation preserves trace.
 \end{proof}
 
-\begin{theorem}[The flag factor as a normalized fixed-point state]
+\begin{lemma}[The flag factor as a normalized fixed-point state]
     \label{thm:asymex_flag_rfp}
     \leanok
     The flag family is represented by the density-normalized tensor
@@ -217,7 +217,7 @@ Both the physical and auxiliary dimensions are eight.
     Example~4.12 of Ref.~\cite{Cirac2016MPDO_arXiv}.
     This tensor is an MPDO and satisfies the channel fixed-point
     equations defined below.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:mpdo_twisted_dimer_flag_factor}
@@ -258,12 +258,12 @@ The symbol $T$ denotes the physical dimer tensor, whereas $\mathcal T$
 denotes a refinement channel. Closed density factorizations alone do
 not establish these equations for arbitrary boundary matrices.
 
-\begin{theorem}[Channel fixed points of the two physical tensors]
+\begin{lemma}[Channel fixed points of the two physical tensors]
     \label{thm:asymex_physical_rfp}
     \leanok
     Both $R$ and $T$ satisfy~(\ref{eq:asymex_channel_equations}) with tpCPMs
     on the full physical matrix spaces.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:mpdo_bnt_label_rescaling_stable_is_rfp_via_ts,
@@ -314,12 +314,12 @@ not establish these equations for arbitrary boundary matrices.
     constructions for the respective tensors.
 \end{proof}
 
-\begin{theorem}[A necessary physical-trace identity]
+\begin{lemma}[A necessary physical-trace identity]
     \label{thm:asymex_trace_obstruction}
     \leanok
     If $M$ satisfies~(\ref{eq:asymex_channel_equations}), then
     $F_M=\sum_iM^{ii}$ satisfies $F_M^2=F_M$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:rfp_via_ts_physical_trace_idempotent}
@@ -364,7 +364,7 @@ treated as physical indices, then
 \end{align}
 Its $(00,00)$ entry satisfies
 $(F_K^2-F_K)_{00,00}=(337-400)/625=-63/625$.
-Theorem~\ref{thm:asymex_trace_obstruction} therefore excludes the
+Lemma~\ref{thm:asymex_trace_obstruction} therefore excludes the
 channel fixed-point property for $K$ in this physical reading.
 
 Writing $\ket{\psi_L}=\sum_{\boldsymbol a}
@@ -430,7 +430,7 @@ receives two contributions of each kind
 in~(\ref{eq:asymex_weight_idempotent}), giving
 $2(7/10+1/10)(5/8)^2=5/8$.
 
-\begin{theorem}[Fixed points and vertical multiplication]
+\begin{lemma}[Fixed points and vertical multiplication]
     \label{thm:asymex_rfp_equivalence}
     \leanok
     \uses{thm:mpdo_cpsv_bnt_rfp_equivalence}
@@ -455,7 +455,7 @@ $2(7/10+1/10)(5/8)^2=5/8$.
     discarded complements are recorded in
     \cite{gap:cpsv16_two_site_sector_unitary_gauge_gap} and
     \cite{gap:cpgsv17_vertical_isometry_zero_sector}.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:mpdo_cpsv_bnt_rfp_equivalence}
@@ -516,7 +516,7 @@ and trace scalars $m_\alpha$ of
     $0\leq k<r_{\alpha,\beta,\gamma}$.
 \end{definition}
 
-\begin{theorem}[Trace powers and positivity under rescaling]
+\begin{lemma}[Trace powers and positivity under rescaling]
     \label{thm:asymex_rescale_trace}
     \lean{MPOTensor.DiagonalChiFamily.tracePowerCoeff_rescale,
         MPOTensor.BNTLabelCoefficientFamily.ofChi_rescale,
@@ -533,7 +533,7 @@ and trace scalars $m_\alpha$ of
     \end{align}
     If the original diagonal entries are positive real numbers and
     every $s_\alpha$ is positive real, the rescaled entries are positive.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{def:asymex_rescaling}
@@ -544,7 +544,7 @@ and trace scalars $m_\alpha$ of
     preserves positivity.
 \end{proof}
 
-\begin{theorem}[Preservation of the idempotent coefficient equation]
+\begin{lemma}[Preservation of the idempotent coefficient equation]
     \label{thm:asymex_rescale_idempotent}
     \lean{MPOTensor.BNTLabelTraceScalarFamily.hasIdempotentCoefficientForm_rescale_iff,
         MPOTensor.BNTLabelTraceScalarFamily.rescale_coefficient_sum}
@@ -564,7 +564,7 @@ and trace scalars $m_\alpha$ of
         c_{\alpha,\beta,\gamma}^{(1)}m_\alpha m_\beta
     \end{align}
     are equivalent when imposed for every $\gamma\in\Lambda$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{def:asymex_rescaling,
@@ -598,7 +598,7 @@ representatives fixed above. The adapted basis of the inner bond and the
 reordering behind the factorization $B^a=\sigma\otimes M^a$ used below
 are set out in Section~\ref{sec:asymex_rfp_basis}, together with the two
 supporting results the proofs invoke,
-Theorems~\ref{thm:asymex_stacked_pair} and~\ref{thm:asymex_normal_units}.
+Lemmas~\ref{thm:asymex_stacked_pair} and~\ref{thm:asymex_normal_units}.
 
 The vertical component $K$ of $R$ has letters
 $K^{ij}=A^i\otimes A^j$, with $A$ given
@@ -639,7 +639,7 @@ $B^a$. Only the virtual legs are closed; the physical pair legs remain open.
     % every bond, whose weights are the spectrum $\{1,7/25,0,0\}$ of
     % $T=\sum_jA^j\otimes A^j$ (\S\ref{sec:asymex_rfp_basis}); this is
     % the spectral mechanism behind
-    % Theorem~\ref{thm:asymex_one_label_compression}.
+    % Lemma~\ref{thm:asymex_one_label_compression}.
     % Source: \S\ref{sec:asymex_one_label}, introductory paragraph.
     % Ink-to-index map: the two explicit dot nodes are the vertical
     % tensor $M$, each carrying its physical leg of the pair alphabet;
@@ -663,7 +663,7 @@ $B^a$. Only the virtual legs are closed; the physical pair legs remain open.
     \qquad $\sigma=\sum_b\lambda_b\,\Pi_b$
 \end{center}
 
-\begin{theorem}[Normality of the one-label target]
+\begin{lemma}[Normality of the one-label target]
     \label{thm:asymex_one_label_normal}
     \lean{P6Compression.oneLabelTarget_isNormal}
     \leanok
@@ -671,16 +671,16 @@ $B^a$. Only the virtual legs are closed; the physical pair legs remain open.
     The vertical tensor is normal at blocking length one in the sense
     of Definition~\ref{def:normal}: its sixteen matrices are scaled
     matrix units covering every position of $\MN{4}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:asymex_normal_units}
     Each position is realized by one of the sixteen letters with a
-    nonzero integer factor. Theorem~\ref{thm:asymex_normal_units}
+    nonzero integer factor. Lemma~\ref{thm:asymex_normal_units}
     gives normality.
 \end{proof}
 
-\begin{theorem}[Split compression of the one-label fixed point]
+\begin{lemma}[Split compression of the one-label fixed point]
     \label{thm:asymex_one_label_compression}
     % Principal declaration: P6Compression.oneLabel_dim_eq.
     \lean{P6Compression.oneLabelCompression, P6Compression.oneLabel_z_eq,
@@ -694,25 +694,25 @@ $B^a$. Only the virtual legs are closed; the physical pair legs remain open.
     satisfy $W_sB^wV_s=C_s^w$ for every word.
     The remainder vanishes identically, and
     $B^aV_s=V_s(\mu_sM^a)$ and $W_sB^a=(\mu_sM^a)W_s$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:asymex_stacked_pair, prop:asym_projector_weighted_sum}
     For the integer tensors, twice the stacked letter is the sum
     of the two adapted-basis blocks with coefficients $25$ and $7$.
     This is the integer identity of
-    Theorem~\ref{thm:asymex_stacked_pair}, verified over the sixteen
+    Lemma~\ref{thm:asymex_stacked_pair}, verified over the sixteen
     physical indices. The scalar identity uses weights $1,7/25$.
-    Proposition~\ref{prop:asym_projector_weighted_sum} gives the
+    Corollary~\ref{prop:asym_projector_weighted_sum} gives the
     compression maps, vanishing remainder, and one-site intertwiners,
     with zero complement of dimension $2\cdot4=8$.
 \end{proof}
 
 \begin{center}
     % Formula: B^aV_s=V_s(\mu_sM^a) and W_sB^a=(\mu_sM^a)W_s of
-    % Theorem~\ref{thm:asymex_one_label_compression}, for the weights
+    % Lemma~\ref{thm:asymex_one_label_compression}, for the weights
     % $\mu_s\in\{1,7/25\}$.
-    % Source: Theorem~\ref{thm:asymex_one_label_compression}.
+    % Source: Lemma~\ref{thm:asymex_one_label_compression}.
     % Ink-to-index map: the ring is the compression map $V_s$ or $W_s$;
     % the square node is the stacked source $B$ or the weighted target
     % $\mu_sM$.
@@ -738,7 +738,7 @@ $B^a$. Only the virtual legs are closed; the physical pair legs remain open.
     \end{tenkz}
 \end{center}
 
-\begin{theorem}[The one-label structure coefficient]
+\begin{lemma}[The one-label structure coefficient]
     \label{thm:asymex_one_label_trace}
     \lean{P6Compression.oneLabel_trace_evalWord}
     \leanok
@@ -748,12 +748,12 @@ $B^a$. Only the virtual legs are closed; the physical pair legs remain open.
         \tr(B^w) & =\left(1+(\tfrac7{25})^{|w|}\right)\tr(M^w).
         \label{eq:asymex_one_label_trace}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:asymex_one_label_compression, prop:asym_compression_trace}
-    Proposition~\ref{prop:asym_compression_trace} applied to
-    Theorem~\ref{thm:asymex_one_label_compression} gives the two
+    Lemma~\ref{prop:asym_compression_trace} applied to
+    Lemma~\ref{thm:asymex_one_label_compression} gives the two
     weighted target traces. Scalar word evaluation contributes
     $1$ and $(7/25)^{|w|}$.
 \end{proof}
@@ -861,22 +861,22 @@ Bell density $\sigma$ in~(\ref{eq:asymex_T_density}).
     the eight values of $(p,p',k)$.
 \end{proof}
 
-\begin{theorem}[Normality of the sectors]
+\begin{lemma}[Normality of the sectors]
     \label{thm:asymex_dimer_normal}
     \lean{P6Compression.dimerTarget_isNormal}
     \leanok
     \uses{def:asymex_dimer, def:normal}
     Each sector $M_f$ is normal at blocking length one in the sense of
     Definition~\ref{def:normal}.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{lem:asymex_dimer_flag_sector, thm:normality_rescaling_invariance,
         thm:mpdo_twisted_dimer_vertical_cf}
     By Lemma~\ref{lem:asymex_dimer_flag_sector}, $M_f=\frac58\widehat M_f$.
-    Theorem~\ref{thm:mpdo_twisted_dimer_vertical_cf} shows that the rescaled
+    Lemma~\ref{thm:mpdo_twisted_dimer_vertical_cf} shows that the rescaled
     flag sector $\widehat M_f$ is normal, and
-    Theorem~\ref{thm:normality_rescaling_invariance} shows that normality is
+    Lemma~\ref{thm:normality_rescaling_invariance} shows that normality is
     invariant under the nonzero rescaling by $\frac58$.
 \end{proof}
 
@@ -908,7 +908,7 @@ Bell density $\sigma$ in~(\ref{eq:asymex_T_density}).
     target tensors depend on $(f,f')$ only through $f+f'$.
 \end{proof}
 
-\begin{theorem}[Split compression of the dimer fusion]
+\begin{lemma}[Split compression of the dimer fusion]
     \label{thm:asymex_dimer_compression}
     % Principal declaration: P6Compression.dimerFusion_isReduction.
     \lean{P6Compression.dimerFusionCompression,
@@ -930,7 +930,7 @@ Bell density $\sigma$ in~(\ref{eq:asymex_T_density}).
     $W_sB^wV_s=C_s^w$ for every word. The remainder vanishes
     identically, and the compression maps intertwine the letters in
     both directions.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{lem:asymex_dimer_sign_rule, thm:asymex_stacked_pair,
@@ -938,7 +938,7 @@ Bell density $\sigma$ in~(\ref{eq:asymex_T_density}).
     Twice the integer stacked letter decomposes in the adapted basis
     with coefficients $7,1$, the integer form
     of~(\ref{eq:asymex_dimer_split}), giving the hypotheses of
-    Theorem~\ref{thm:asymex_stacked_pair}. By
+    Lemma~\ref{thm:asymex_stacked_pair}. By
     Lemma~\ref{lem:asymex_dimer_sign_rule}, the identity for the pair
     $(f,f')$ is the identity for the pair $(0,f+f')$, so it suffices to
     treat the pairs $(0,0)$ and $(0,1)$. For each of these, a stacked
@@ -947,16 +947,16 @@ Bell density $\sigma$ in~(\ref{eq:asymex_T_density}).
     over the four auxiliary indices with that label, and the identity is
     checked over the sixty-four letters. The scalar identity uses
     $7/16,1/16$.
-    Proposition~\ref{prop:asym_projector_weighted_sum} then gives the
+    Corollary~\ref{prop:asym_projector_weighted_sum} then gives the
     compression maps, vanishing remainder, and both intertwiners.
 \end{proof}
 
 \begin{center}
     % Formula: the sitewise intertwiners B^aV_s=V_s(\mu_sM_s^a) and
-    % W_sB^a=(\mu_sM_s^a)W_s of Theorem~\ref{thm:asymex_dimer_compression},
+    % W_sB^a=(\mu_sM_s^a)W_s of Lemma~\ref{thm:asymex_dimer_compression},
     % for the two weighted target sectors $s\in\{f+f',f+f'+1\}$ with
     % weights $\mu_s\in\{7/16,1/16\}$.
-    % Source: Theorem~\ref{thm:asymex_dimer_compression}.
+    % Source: Lemma~\ref{thm:asymex_dimer_compression}.
     % Ink-to-index map: the ring is the compression map $V_s$ or $W_s$;
     % the square node is the stacked source $B$ or the weighted sector
     % target $\mu_sM_s$.
@@ -983,7 +983,7 @@ Bell density $\sigma$ in~(\ref{eq:asymex_T_density}).
     \end{tenkz}
 \end{center}
 
-\begin{theorem}[The dimer structure coefficients]
+\begin{lemma}[The dimer structure coefficients]
     \label{thm:asymex_dimer_trace}
     \lean{P6Compression.dimerFusion_trace_evalWord}
     \leanok
@@ -997,12 +997,12 @@ Bell density $\sigma$ in~(\ref{eq:asymex_T_density}).
     \end{align}
     where $M_{f+f'},M_{f+f'+1}$ are the unnormalized target sectors of
     the pair and sector addition is modulo two.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:asymex_dimer_compression, prop:asym_compression_trace}
-    Proposition~\ref{prop:asym_compression_trace} applied to
-    Theorem~\ref{thm:asymex_dimer_compression} gives the two weighted
+    Lemma~\ref{prop:asym_compression_trace} applied to
+    Lemma~\ref{thm:asymex_dimer_compression} gives the two weighted
     target traces. Scalar word evaluation gives the factors
     $(7/16)^{|w|}$ and $(1/16)^{|w|}$
     in~(\ref{eq:asymex_dimer_trace}).

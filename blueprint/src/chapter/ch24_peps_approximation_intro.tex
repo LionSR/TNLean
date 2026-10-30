@@ -1,13 +1,21 @@
-%% =========================================================
-%% Chapter: Polynomial PEPS approximation of gapped ground states
-%% =========================================================
-
-\chapter{Polynomial PEPS approximation of gapped square-grid ground states}%
+\chapter{Information bounds for separated regions}
 \label{ch:peps_approximation}
 
-This chapter follows~\cite{OpenAI2026PolynomialPEPS}, September 24, 2026. The
-ground state of a gapped nearest-neighbor Hamiltonian on an $L\times L$ square
-grid is approximated by a PEPS whose bond dimension is polynomial in $L$. The
-sections below treat the geometry of the dyadic distribution protocol, the
-parties and their sources, the information estimates, the compression of the
-distributed density, and the routing of the party network.
+Chapters~\ref{ch:peps_approximation}--\ref{ch:peps_dyadic_protocol} prove the
+polynomial PEPS approximation of~\cite{OpenAI2026PolynomialPEPS}. The physical
+sites are handed out step by step to parties indexed by dyadic squares; each
+party acts privately on its own sites and takes part in boundedly many
+operations with other parties. The distributed state is then compressed and
+read off as a PEPS. This chapter proves the first analytic input
+\cite[Section~3]{OpenAI2026PolynomialPEPS}. The collar estimates of the area law
+first bound the information between a bounded union of boxes and the sites
+beyond a sublinear collar; two regions then share negligible
+information when the band between them narrows linearly toward finitely many
+points but stays wider than a large multiple of $\log L$.
+
+\input{chapter/ch24_peps_coarse_information}
+\input{chapter/ch24_peps_nested_cylinder_orthogonalization}
+\input{chapter/ch24_peps_angular_reset_width}
+\input{chapter/ch24_peps_angular_annular_geometry}
+\input{chapter/ch24_peps_angular_information_of_collar}
+\input{chapter/ch24_peps_angular_information_from_gap}

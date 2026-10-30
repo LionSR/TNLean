@@ -46,7 +46,7 @@ of a local circuit that may add product ancillas and discard them
     For a single bond channel, cyclicity of trace gives $\Tr(\sum_j K_j\rho K_j^\dagger A)=\Tr(\rho\sum_j K_j^\dagger AK_j)$, and $\sum_j K_j^\dagger K_j=\mathbb 1$ implies CPTP; both properties are preserved under composition.
 \end{proof}
 
-\begin{lemma}[Light cone of a local channel circuit]
+\begin{theorem}[Light cone of a local channel circuit]
     \label{lem:qc_channel_light_cone}
     \uses{def:qc_local_channel_circuit, def:qc_light_cone_geometry,
         lem:qc_light_cone_geometries}
@@ -56,7 +56,7 @@ of a local circuit that may add product ancillas and discard them
         QuantumCircuit.ChannelLayer.dual_mem_supportedOperators}
     \leanok
     If $\Phi$ is a local channel circuit of depth $T$ and $Z\in\mathcal A_X$, then $\Phi^\dagger(Z)\in\mathcal A_{\mathcal L_T(X)}$ (on the ring, within ring distance $T$ of $X$).
-\end{lemma}
+\end{theorem}
 \begin{proof}
     \leanok
     By induction on $T$ using Lemma~\ref{lem:qc_light_cone_geometries}, it suffices to treat one layer. For a bond $B\cap X=\varnothing$, $K_j\in\mathcal A_B$ commutes with $Z\in\mathcal A_X$, so $\sum_j K_j^\dagger ZK_j=(\sum_j K_j^\dagger K_j)Z=Z$; for bonds $B\cap X\ne\varnothing$, $B\subseteq\mathcal N_1(X)$, so $\sum_j K_j^\dagger ZK_j\in\mathcal A_{\mathcal N_1(X)}$.
@@ -77,7 +77,7 @@ of a local circuit that may add product ancillas and discard them
 \end{lemma}
 \begin{proof}
     \leanok
-    For a single layer $L$ and $Z\in\mathcal A_X$, $Z'\in\mathcal A_Y$ with $\mathcal N_1(X)\cap\mathcal N_1(Y)=\varnothing$, no bond of $L$ meets both $X$ and $Y$. Since $[K_j,B]=0\implies\Phi_B^\dagger(AB)=\Phi_B^\dagger(A)B$, splitting $L^\dagger$ into bonds meeting $X$ and the remaining bonds (and applying Lemma~\ref{lem:qc_channel_light_cone}) gives $L^\dagger(ZZ')=L^\dagger(Z)L^\dagger(Z')$. Induction on $T$ yields $\Phi^\dagger(ZZ')=\Phi^\dagger(Z)\Phi^\dagger(Z')$ with disjoint supports $\mathcal L_T(X),\mathcal L_T(X')$, and (\ref{eq:qc_channel_circuit_duality}) on $\rho=\Phi(\bigotimes_i\sigma_i)$ ($\Tr\sigma_i=1$) factors the trace.
+    For a single layer $L$ and $Z\in\mathcal A_X$, $Z'\in\mathcal A_Y$ with $\mathcal N_1(X)\cap\mathcal N_1(Y)=\varnothing$, no bond of $L$ meets both $X$ and $Y$. Since $[K_j,B]=0\implies\Phi_B^\dagger(AB)=\Phi_B^\dagger(A)B$, splitting $L^\dagger$ into bonds meeting $X$ and the remaining bonds (and applying Theorem~\ref{lem:qc_channel_light_cone}) gives $L^\dagger(ZZ')=L^\dagger(Z)L^\dagger(Z')$. Induction on $T$ yields $\Phi^\dagger(ZZ')=\Phi^\dagger(Z)\Phi^\dagger(Z')$ with disjoint supports $\mathcal L_T(X),\mathcal L_T(X')$, and (\ref{eq:qc_channel_circuit_duality}) on $\rho=\Phi(\bigotimes_i\sigma_i)$ ($\Tr\sigma_i=1$) factors the trace.
 \end{proof}
 
 Ancillas are attached and discarded site by site, so the operations that
@@ -196,7 +196,7 @@ change the local dimension act on single sites.
 \end{lemma}
 \begin{proof}
     \leanok
-    By induction on Definition~\ref{def:qc_local_channel_conversion}: onsite channels preserve supports and disjoint-support products by Lemma~\ref{lem:qc_onsite_channel_locality}, and each channel layer expands the light-cone radius by $1$ and preserves disjoint-neighborhood products by Lemmas~\ref{lem:qc_channel_light_cone} and~\ref{lem:qc_channel_light_cone_correlations}.
+    By induction on Definition~\ref{def:qc_local_channel_conversion}: onsite channels preserve supports and disjoint-support products by Lemma~\ref{lem:qc_onsite_channel_locality}, and each channel layer expands the light-cone radius by $1$ and preserves disjoint-neighborhood products by Theorem~\ref{lem:qc_channel_light_cone} and Lemma~\ref{lem:qc_channel_light_cone_correlations}.
 \end{proof}
 
 \begin{lemma}[No connected correlations after a conversion]
