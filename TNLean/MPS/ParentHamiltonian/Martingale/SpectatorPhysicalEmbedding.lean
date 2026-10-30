@@ -29,6 +29,7 @@ private theorem rightFiber_extendByZero_image (e : I ↪ J) (g : S ↪ T)
   · obtain ⟨i, rfl⟩ := hj
     change (e.prodMap g).euclideanExtendByZero v ((e.prodMap g) (i, s)) = _
     rw [euclideanExtendByZero_apply_image, euclideanExtendByZero_apply_image]
+    rfl
   · have hp : (j, g s) ∉ Set.range (e.prodMap g) := by
       rintro ⟨⟨i, t⟩, h⟩
       exact hj ⟨i, congrArg Prod.fst h⟩
