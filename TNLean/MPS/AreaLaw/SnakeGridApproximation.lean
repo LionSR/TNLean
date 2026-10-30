@@ -141,7 +141,7 @@ theorem exists_snakeGridMPS_of_uniformAreaLaw (harea : PEPS.AreaLaw.UniformAreaL
   have hQ (k : ℕ) : IsStarProjection (Q k) :=
     (reducedState_isHermitian _ q Ω (A k)).isStarProjection_spectralProjectionGE _
   have hP (k : ℕ) : IsStarProjection (P k) :=
-    (hQ k).map (Matrix.reindexStarAlgHom (f k))
+    (hQ k).map (Matrix.reindexStarAlgEquiv (f k))
   have hρ (k : ℕ) : Entropy.regionState (leftBlock (L * L) k) ψ =
       (ρ k).submatrix (f k).symm (f k).symm := by
     rw [show ρ k = Entropy.regionState (A k) Ω from reducedState_eq_regionState _ _]
