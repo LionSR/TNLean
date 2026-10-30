@@ -22,7 +22,7 @@ Thus its primitivity index is one and its full-Kraus-rank index is two.
 
 ## Main results
 
-* `MPSTensor.threePauliTensor_normalized`: trace-preserving normalization.
+* `MPSTensor.threePauliTensor_isTP`: trace-preserving normalization.
 * `MPSTensor.threePauliTensor_vectorSpreadSpan_one`: one-step spreading.
 * `MPSTensor.threePauliTensor_wordSpan_one_ne_top`: the one-letter obstruction.
 * `MPSTensor.threePauliTensor_wordSpan_two`: exact-length two-letter spanning.
@@ -59,8 +59,8 @@ def threePauliTensor : MPSTensor 3 2 := fun k ↦ pauliNormalization • SpinCov
 
 /-- The three-Pauli family is trace preserving, as required by the channel example
 in arXiv:0909.5347, lines 496–499. -/
-theorem threePauliTensor_normalized :
-    ∑ k : Fin 3, (threePauliTensor k)ᴴ * threePauliTensor k = 1 := by
+theorem threePauliTensor_isTP : Kraus.IsTP threePauliTensor := by
+  change ∑ k : Fin 3, (threePauliTensor k)ᴴ * threePauliTensor k = 1
   simp_rw [threePauliTensor, Matrix.conjTranspose_smul, star_pauliNormalization,
     PauliDissipation.pauli_conjTranspose, Matrix.smul_mul, Matrix.mul_smul,
     smul_smul, pauliNormalization_mul_self, PauliDissipation.pauli_sq]

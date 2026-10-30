@@ -5044,7 +5044,6 @@ three-plaquette output measurement, and the routed reunion measurement.
 - **Abstraction:** the existing Mathlib infimum lemmas already do the main
   work. Two occurrences in one file are below the promotion threshold;
   no specialized index tactic is introduced.
-- **Status:** source-written without local compilation at the user's request.
 
 ### Recovering letters by an identity contraction — candidate (2026-10-29)
 
