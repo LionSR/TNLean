@@ -23,8 +23,8 @@ Wolf's Theorem 6.9 in *Quantum Channels & Operations: Guided Tour*.
 
 * `qIndex_le_iIndex_of_isPrimitivePaper`: under paper primitivity and
   normalization, the primitivity index `q(E_A)` is at most the full-Kraus-rank
-  index `i(A)`. This is equation (2) of arXiv:0909.5347 and appears immediately
-  after Proposition 3 in the paper.
+  index `i(A)`. This is the primitive case of Proposition 1 of arXiv:0909.5347;
+  the comparison for every channel is `qIndex_le_iIndex_of_tracePreserving`.
 
 ### Part 2 — Case (3): noninvertible one-step element with nonzero eigenvalue
 
