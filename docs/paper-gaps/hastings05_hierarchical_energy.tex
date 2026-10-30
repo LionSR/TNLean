@@ -87,7 +87,9 @@ and the link $(N,1)$ joins the two halves of no block, so no window of the $h$
 levels controls its energy. Bound~(\ref{eq:hastings05_hierarchical_energy_every_state})
 therefore concerns $M_{\rm open}=\sum_iM_i-M_{N,1}$, not $\sum_iM_i$, and a count
 of final states drawn from it would need the gap of $M_{\rm open}$, whereas the
-source's gap is that of $\sum_iM_i$. Bounding the missing term by its norm adds
+source assumes a gap for the original Hamiltonian $H$. Neither the open
+sum nor the truncated periodic sum is given a separate gap. Bounding the
+missing term by its norm adds
 about $2\|M_{N,1}\|$, of order $Jl_{\rm proj}$, which is far larger than the
 error in (\ref{eq:hastings05_hierarchical_energy_hchy}) and than the budget
 $\Delta E/2$ of the count. The source does not address this term.
@@ -124,8 +126,9 @@ by (\ref{eq:hastings05_hierarchical_energy_window}), so adding this to
  \label{eq:hastings05_hierarchical_energy_periodic}
 \end{align}
 which is eq.~(\ref{eq:hastings05_hierarchical_energy_hchy}) for the periodic
-sum, and the count of at most $2n$ final states follows from the gap of
-$\sum_iM_i$ itself.\footnote{\leanid{TNLean.MPS.AreaLaw.LocalSolution.re_inner_hierarchySum_add_le_add}
+sum. If the periodic sum has a gap, this gives its abstract state-count
+bound; the physical application instead compares that sum with the original
+Hamiltonian $H$, as below.\footnote{\leanid{TNLean.MPS.AreaLaw.LocalSolution.re_inner_hierarchySum_add_le_add}
     and
     \leanid{TNLean.MPS.AreaLaw.LocalSolution.card_le_two_mul_re_trace_of_closingLink}
     in \doclink{TNLean/MPS/AreaLaw/LocalSolution/ClosingLink}.}
@@ -135,9 +138,193 @@ and its error has one radius more. Bound~(\ref{eq:hastings05_hierarchical_energy
 and the count of at most $2n$ states are proved for this corrected
 construction, not for the source's own states $\alpha^h$, whose energy for the
 link $(N,1)$ remains uncontrolled. The eigenvectors of $QM_{N,1}Q$ are linear
-combinations of the $\alpha^h$, so the matrix product form of the kept states,
-and any bound on their bond dimension, is not claimed here. The open-chain
-statements remain as the case without the closing link.
+combinations of the $\alpha^h$ at the root. Every vector retained by $R$ lies
+in the range of $Q$, hence in the retained spaces of both children, and
+recursively in every retained space below the root. The closing window
+therefore preserves the tree of nested local spectral projections. This is
+the generalized matrix product representation asserted in the source
+(lines 596--607 and 732--743); the source gives no bound on the dimensions
+of the intermediate retained spaces.\footnote{\leanid{TNLean.MPS.AreaLaw.LocalSolution.IsRetainedHierarchy},
+\leanid{TNLean.MPS.AreaLaw.LocalSolution.isRetainedHierarchy_of_hierarchyProjection}, and
+\leanid{TNLean.MPS.AreaLaw.LocalSolution.isRetainedHierarchy_of_hierarchyClosingProjection}.}
+The open-chain statements remain as the case without the closing link.
+\section{Explicit construction and the physical gap}
+Number the supersites from zero and let $a_j$ join supersites $j-1$ and $j$,
+with $a_0$ the closing edge. The operator joining the halves of block $k$
+at level $m+1$ is $a_{(2k+1)2^m}$. Induction by splitting the interval at its
+midpoint gives
+\begin{align}
+ T_k^m(M)=\sum_{k2^m<j<(k+1)2^m}a_j,
+ \qquad T_0^h(M)+a_0=\sum_{0\le j<2^h}a_j.
+ \label{eq:hastings05_tree_edges}
+\end{align}
+The projections are defined recursively from these operators and their
+compressed spectral windows; neither the projections nor their recursion
+are additional assumptions. Their support follows from that of the
+edges.\footnote{\leanid{TNLean.MPS.AreaLaw.LocalSolution.hierarchyProjection},
+\leanid{TNLean.MPS.AreaLaw.LocalSolution.hierarchyClosingProjection},
+\leanid{TNLean.MPS.AreaLaw.LocalSolution.hierarchySum_hierarchyEdge}, and
+\leanid{TNLean.MPS.AreaLaw.LocalSolution.hierarchyEdge_mem_supportedOperators}.}
+
+Write $T=\sum_j a_j$ and suppose $\|H-T\|\le\delta$, where $H$ is the
+physical Hamiltonian with ground energy $E_0$ and gap $\Delta>0$ above its
+ground projection $P_0$. For a unit ground vector $\psi$ and a unit vector
+$\phi$ retained by the corrected final projection, the window bound gives
+$\operatorname{Re}\langle\phi,T\phi\rangle
+\le\operatorname{Re}\langle\psi,T\psi\rangle+\eta$, where
+$\eta=T_0^h(x)+x_h$. Two uses of the operator-norm estimate give
+\begin{align}
+ \operatorname{Re}\langle\phi,H\phi\rangle
+ &\le\operatorname{Re}\langle\psi,H\psi\rangle+2\delta+\eta
+ =E_0+2\delta+\eta.
+ \label{eq:hastings05_physical_energy}
+\end{align}
+Consequently $2\delta+\eta\le\Delta/2$ suffices for the count of at most
+$2\operatorname{tr}P_0$ orthogonal retained states. No gap of $T$ is
+assumed.\footnote{\leanid{TNLean.MPS.AreaLaw.LocalSolution.card_le_two_mul_re_trace_of_approximation}.}
+
+\section{The pair bounds on an arbitrary periodic physical chain}
+
+The centred bound needed by the quantitative hierarchy is derived from
+individual local terms. Let the physical chain have $M\ge1$ sites and let
+$\ell\ge1$ be the integer projection radius. Put
+$N=\max\{1,\lfloor M/(2\ell)\rfloor\}$. If $M\ge2\ell$, take $N-1$
+blocks of width $2\ell$ and include the remainder in the last block. Its
+width is between $2\ell$ and $4\ell$. A shorter chain is a single block.
+No physical site or Hilbert-space factor is added.
+
+For a physical site with coordinate $z$, put
+\begin{align}
+ b(z)&=\min\{\lfloor z/(2\ell)\rfloor,N-1\},\qquad
+ j(z)=\begin{cases}
+ \lfloor(z+\ell)/(2\ell)\rfloor,&\lfloor(z+\ell)/(2\ell)\rfloor<N,\\
+ 0,&\text{otherwise}.
+ \end{cases}
+ \label{eq:hastings05_rounded_assignment}
+\end{align}
+A term $M_i$ supported in the physical cyclic ball of radius $\ell$ acts
+on the two blocks adjacent to $j(i)$. This includes the edge joining the
+last and first blocks. At most $4\ell$ centres are assigned to an edge.
+Writing $a_j=\sum_{i:j(i)=j}M_i$, the total sum is unchanged. Thus
+$\|M_i\|\le J$ and the source's local estimate
+$\|(M_i-\langle M_i\rangle_\psi)\psi\|\le Je^{-r}$ give
+\begin{align}
+ \|a_j-\langle a_j\rangle_\psi\|&\le8\ell J,\\
+ \|(a_j-\langle a_j\rangle_\psi)\psi\|&\le4\ell J e^{-r}.
+ \label{eq:hastings05_actual_pair_bounds}
+\end{align}
+Both bounds are independent of $M$. For equal blocks, exactly $2\ell$
+centres are assigned to an edge, improving the constants to $4\ell J$
+and $2\ell Je^{-r}$.\footnote{Declarations:
+\leanid{TNLean.MPS.AreaLaw.LocalSolution.roundedPeriodicBlockCount},
+\leanid{TNLean.MPS.AreaLaw.LocalSolution.roundedPeriodicEdge_support_of_cover},
+\leanid{TNLean.MPS.AreaLaw.LocalSolution.roundedPeriodicEdge_zero_support},
+\leanid{TNLean.MPS.AreaLaw.LocalSolution.card_roundedPeriodicEdge_fibre_le},
+\leanid{TNLean.MPS.AreaLaw.LocalSolution.sum_roundedPeriodicOperator},
+\leanid{TNLean.MPS.AreaLaw.LocalSolution.residual_roundedPeriodicOperator_le}, and
+\leanid{TNLean.MPS.AreaLaw.LocalSolution.centeredNorm_roundedPeriodicOperator_le}.}
+
+\section{The physical approximation is a sum of filtered-term errors}
+
+Let $H=\sum_iH_i$, and let $\widetilde H_i$ be the full normalized Gaussian
+filter of $H_i$ under $H$. Filtering fixes $H$ and is additive, so
+\begin{align}
+ \sum_i\widetilde H_i=H.
+ \label{eq:hastings05_full_filtered_sum}
+\end{align}
+The small local difference is $\widetilde H_i-M_i$, not $H_i-M_i$.
+In particular the preceding localization estimate
+$\|\widetilde H_i-M_i\|\le Je^{-r}$ implies
+\begin{align}
+ \Bigl\|H-\sum_j a_j\Bigr\|
+ =\Bigl\|\sum_i(\widetilde H_i-M_i)\Bigr\|
+ \le MJe^{-r}\le4\ell NJe^{-r}.
+ \label{eq:hastings05_actual_total_error}
+\end{align}
+Here $J$ absorbs the fixed factors in the local norm, residual and
+localization estimates. A Gaussian-filtered term need not be close in
+operator norm to the corresponding unfiltered interaction.\footnote{
+\leanid{TNLean.Lattice.sum_gaussianFilteredTerm} and
+\leanid{TNLean.MPS.AreaLaw.LocalSolution.card_le_two_mul_re_trace_of_roundedPeriodicProjection}.}
+
+\section{An explicit integer quadratic logarithmic radius}
+
+Let $r=\eta\ell$ for a decay rate $\eta>0$. The actual centred bound in
+(\ref{eq:hastings05_actual_pair_bounds}) is
+$K=8\ell J=J_{\rm eff}r$, with $J_{\rm eff}=8J/\eta$, independently of the
+physical chain length. Define
+\begin{align}
+ A_M&=512(\lceil\log_2M\rceil+2)^2
+       \bigl(1+\max\{0,\log(J_{\rm eff}/\Delta)\}\bigr),\\
+ \ell&=\max\{\lceil R\rceil,\lceil A_M/\eta\rceil\},\qquad r=\eta\ell.
+ \label{eq:hastings05_integer_radius}
+\end{align}
+This integer is positive, is at least the physical interaction range, and
+satisfies $\ell<\lceil R\rceil+A_M/\eta+1$.
+For the block count determined by this same radius, put
+$h=\max\{2,\lceil\log_2N\rceil\}$. Since $N\le M$, the quantitative
+hierarchy length is at most $A_M\le r$. Thus the choice is explicit;
+neither divisibility of $M$ by $2\ell$ nor an implicit equation for the
+number of blocks is required.\footnote{Declarations:
+\leanid{TNLean.MPS.AreaLaw.LocalSolution.roundedPeriodicProjectionRadius},
+\leanid{TNLean.MPS.AreaLaw.LocalSolution.roundedPeriodicProjectionRadius_pos},
+\leanid{TNLean.MPS.AreaLaw.LocalSolution.hierarchyProjectionLength_le_chosen_roundedPeriodicRadius}, and
+\leanid{TNLean.MPS.AreaLaw.LocalSolution.roundedPeriodicProjectionRadius_lt},
+\leanid{TNLean.MPS.AreaLaw.LocalSolution.physicalPeriodicProjectionRadius_spec},
+\leanid{TNLean.MPS.AreaLaw.LocalSolution.hierarchyProjectionLength_le_physicalPeriodicProjectionRadius}, and
+\leanid{TNLean.MPS.AreaLaw.LocalSolution.physicalPeriodicProjectionRadius_lt}.}
+
+At this length the sum of all tree and closing-window radii is at most
+$\Delta/4$. The scalar estimate also includes the linear prefactor:
+\begin{align}
+ 2^hJ_{\rm eff}r e^{-r}\le\Delta/8.
+ \label{eq:hastings05_linear_truncation_budget}
+\end{align}
+Together with (\ref{eq:hastings05_actual_total_error}), this gives
+$\delta\le\Delta/8$, hence $2\delta+\sum_{m<h}2^{h-1-m}x_m+x_h\le\Delta/2$.
+The local residuals construct a retained unit vector within
+$2(3^{h+1}-1)e^{-r/8}$ of $\psi$, and the original physical gap gives
+at most $2\dim\ker(H-E_0)$ orthonormal retained states.
+Every retained vector remains in the space of every node of the tree.
+The complete periodic construction therefore has range $O(\log^2M)$
+at fixed local constants, decay rate and gap, with the corrected closing
+window.\footnote{Declarations:
+\leanid{TNLean.MPS.AreaLaw.LocalSolution.hierarchyTruncationError_mul_length_le_eighth_gap},
+\leanid{TNLean.MPS.AreaLaw.LocalSolution.exists_unit_mem_roundedPeriodicProjection_of_chosen_radius}, and
+\leanid{TNLean.MPS.AreaLaw.LocalSolution.card_le_two_mul_re_trace_of_roundedPeriodicProjection_of_chosen_radius}.}
+
+The physical construction derives the localization estimate from the
+original interactions. The cyclic distance is the least absolute residue
+of a difference modulo $M$; its radius-$R$ balls have at most
+$2\lceil R\rceil+1$ sites. Thus the finite-range metric theorem supplies
+$c_1,\eta>0$ and $C\ge0$ before the physical chain length and Hamiltonian
+are chosen. With an original interaction bound $J_0$, take
+$J=\max\{J_0,J_0C\}$ in the formulas above and define
+\begin{align}
+ M_i=\mathcal G_{c_1\ell\Delta,\Delta}
+   \left(\sum_{j:\,d(i,j)\le\ell-R}H_j,\ H_i\right).
+ \label{eq:hastings05_actual_periodic_terms}
+\end{align}
+Here $\mathcal G_{q,\Delta}(H',W)$ denotes the normalized Gaussian filter
+of $W$ under $H'$. These are the actual truncated operators of (mid).
+Their support, Hermiticity, norm and full-filter approximation estimates
+are proved, not additional premises of the physical hierarchy theorem.
+At $R=0$, the local terms commute and both filters equal $H_i$ exactly.
+The uniform physical theorem therefore includes zero range and arbitrary
+physical length.\footnote{Declarations:
+\leanid{TNLean.MPS.AreaLaw.LocalSolution.periodicPhysicalMetricSpace},
+\leanid{TNLean.MPS.AreaLaw.LocalSolution.card_periodicPhysical_metricRangeBall_le},
+\leanid{TNLean.MPS.AreaLaw.LocalSolution.physicalPeriodicProjectionRadius},
+\leanid{TNLean.MPS.AreaLaw.LocalSolution.periodicPhysicalTruncatedTerm},
+\leanid{TNLean.MPS.AreaLaw.LocalSolution.exists_periodicPhysicalTruncatedTerm_localization}, and
+\leanid{TNLean.MPS.AreaLaw.LocalSolution.exists_periodicPhysicalHierarchy}.}
+
+The final physical theorem retains equation (low) as its local residual
+premise, as in Section II of the source. It does not derive equation (low) for
+an arbitrary vector in a degenerate ground space. Nor does it assert
+that the additional closing window preserves a prescribed conventional
+matrix product bond dimension; the source's representation is the tree
+of nested retained subspaces.
 \bibliographystyle{unsrt}
 \bibliography{references}
 \end{document}
