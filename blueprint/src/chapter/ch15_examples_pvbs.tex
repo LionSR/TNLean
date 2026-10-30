@@ -246,45 +246,6 @@ spectral-gap assertion.
     first-site excitation, whose amplitude is one.
 \end{proof}
 
-\begin{lemma}[Sections of a positive periodic interaction]
-    \label{lem:periodic_interaction_sections}
-    \lean{MPSTensor.cyclicRestrictES_periodicLocalInteractionES}
-    \lean{MPSTensor.periodicLocalInteractionES_eq_zero_iff_sections}
-    \lean{MPSTensor.periodicInteractionHamiltonianES_eq_zero_iff_sections}
-    \notready
-    For $1\le R\le M$, let $h$ be an operator on $R$ consecutive sites,
-    let $h_i$ be its cyclic translate extended by the identity, and write
-    $R_{i,\tau}\psi$ for the coefficient section with the outside letters
-    fixed to $\tau$. Then $R_{i,\tau}h_i\psi=hR_{i,\tau}\psi$.
-    In particular, $h_i\psi=0$ precisely when $hR_{i,\tau}\psi=0$ for every
-    $\tau$. If $h\ge0$, then
-    $(\sum_i h_i)\psi=0$ precisely when every $hR_{i,\tau}\psi=0$.
-\end{lemma}
-\begin{proof}
-    \notready
-    Extending $h$ by the identity applies it independently to each outside
-    coefficient section. A sum of positive operators kills a vector precisely
-    when every summand kills it.
-\end{proof}
-
-\begin{lemma}[Restriction of an interaction inside an interval]
-    \label{lem:periodic_interaction_interval_section}
-    \lean{MPSTensor.periodicLocalInteractionES_rightFiber_eq_zero_of_eq_zero}
-    \notready
-    Let $h$ have range $R\ge1$, let $W\le M$, and let a translated copy of
-    $h$ lie wholly inside a cyclic interval of $W$ sites. If that translated
-    operator kills $\psi$, then its corresponding translate on $W$ sites
-    kills every coefficient section of $\psi$ obtained by fixing the
-    complement of the interval.
-\end{lemma}
-\begin{proof}
-    \notready
-    Regroup the sites as the interval and its complement. The translated
-    operator becomes the same $W$-site operator acting independently at
-    each fixed outside configuration. Taking any such section preserves
-    its zero equation.
-\end{proof}
-
 \begin{definition}[Complementary pure particle projection]
     \label{def:pvbs_pure_window_interaction}
     \lean{MPSTensor.pvbsPureWindowInteraction}

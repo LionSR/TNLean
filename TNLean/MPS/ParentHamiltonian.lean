@@ -230,6 +230,7 @@ import TNLean.MPS.ParentHamiltonian.PhysicalDeformation
 import TNLean.MPS.ParentHamiltonian.PhysicalEmbedding
 import TNLean.MPS.ParentHamiltonian.PhysicalReindexProjection
 import TNLean.MPS.ParentHamiltonian.PhysicalResidualCoverLimit
+import TNLean.MPS.ParentHamiltonian.PhysicalSectorKernelSupport
 import TNLean.MPS.ParentHamiltonian.PositiveFunctionalCommutator
 import TNLean.MPS.ParentHamiltonian.PositivePhysicalDeformationGap
 import TNLean.MPS.ParentHamiltonian.PoweredCyclicPrimitiveResolution
