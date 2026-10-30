@@ -225,6 +225,10 @@ For the MPU symmetry-defect gauging paper:
   coordinate spaces, while the finite-group endpoint identifications
   \(d_l=d_r=d\), the interior action condition, and the complementary
   finite-chain relation remain outside that theorem.
+- `fbc25_complementary_truncation_shared_endpoints.tex` records that the
+  complementary truncated symmetry in `eq:complementary` and `eq:UUU` shares
+  both endpoint sites with `U^L`, so its total length is two more than the
+  printed `∞-L`; the corrected relation is formally verified and resolved.
 - `fbc25_gauss_law_commuting_projector_source_audit.tex` pins the oriented
   matter--link space and multiplication convention of the local Gauss-law
   representation, the cited three-defect associator calculation, the
