@@ -10135,3 +10135,14 @@ there is no need for a new tactic.
   general analytic steps; the local proof only supplies the actual restrictions.
 - **Notes:** No new positivity or chain predicate is introduced. Further direct
   occurrences may justify one generic compression-kernel equivalence in QICLean.
+
+
+### Extending finite-word coefficients to lists — candidate (2026-10-29)
+
+- **Seen:** `MPS/ParentHamiltonian/VaryingOBCParentUniqueness.lean`.
+- **Pattern:** Use `Function.extend List.ofFn` and
+  `List.ofFn_injective.extend_apply` to apply a list-section reconstruction
+  theorem to an actual finite-chain vector, without assuming an auxiliary
+  coefficient extension.
+- **Decision:** The existing function-extension API supplies the extension;
+  no new coefficient predicate or compatibility witness is introduced.

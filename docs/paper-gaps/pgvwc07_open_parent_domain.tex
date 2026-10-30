@@ -1,0 +1,58 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\input{command}
+\title{The Domain of the Varying-Bond Open Parent Theorem}
+\author{}
+\date{October 29, 2026}
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+\section{Source and actual conclusion}
+PGVWC07, arXiv:quant-ph/0608197, Theorem 9 and proof,
+\path{Papers/quant-ph_0608197/MPSarchive.tex}, lines 1195--1237,
+starts from a canonical open-boundary representation whose blocked site
+families satisfy C1. The local interaction is the orthogonal projector
+onto the complement of the corresponding two-site boundary range.
+
+The current candidate constructs these actual projectors and their open
+sum, derives the adjacent coefficient sections from the actual kernel,
+reconstructs the full chain by the printed canonical adjoint method,
+and closes the singleton endpoint bonds. For a common physical alphabet
+and $N\ge2$, the conclusion is
+\[
+    H\ge0,\qquad \|\Omega\|=1,\qquad
+    \ker H=\mathbb C\Omega,\qquad \dim\ker H=1.
+\]
+The unit norm and both kernel inclusions are derived from the supplied
+site matrices. There is no assumed ground state, local annihilation
+condition, larger-block boundary, or canonical-form supplier.
+
+\section{Scope still retained}
+The proof is stated for at least two sites, the domain with an adjacent
+pair. It does not assert an unrestricted conclusion for lengths without
+such a pair. The physical alphabet is common to the sites, as in the
+existing finite open-chain data. A conclusion for differently sized
+blocked physical spaces has not been claimed by this statement.
+These restrictions must remain visible in its mathematical entry. The
+unrestricted source theorem is not marked complete by this candidate.
+
+The remaining scope work is to establish the intended short-length
+convention from the full source setting and, if required, extend the
+finite-word induction and coordinate restrictions to site-dependent
+physical alphabets. No counterexample to the unrestricted source claim
+is asserted here. The current proofs also await hosted Lean validation.
+
+\section{Formalization}
+The actual local terms and their kernel characterization are in
+\path{TNLean/MPS/ParentHamiltonian/VaryingOBCProjectorKernel.lean}.
+The full-chain adjoint induction is in
+\path{TNLean/MPS/ParentHamiltonian/VaryingOBCReconstruction.lean},
+and actual boundary-state annihilation is in
+\path{TNLean/MPS/ParentHamiltonian/VaryingOBCBoundaryStates.lean}.
+The scalar-endpoint normalization and final kernel statements are in
+\path{TNLean/MPS/ParentHamiltonian/VaryingOBCParentUniqueness.lean}.
+
+\end{document}
