@@ -19,10 +19,11 @@ translations, lines 2292--2306.
 
 namespace SpinChain
 
-/-- Translation of a consecutive interval shifts its anchor.
-Source context: arXiv:1703.09188, Appendix lines 2292--2298. -/
-theorem translateRegion_finiteChainRegion (t b : ℤ) (N : ℕ) :
-    translateRegion t (finiteChainRegion b N) = finiteChainRegion (b + t) N := by
+/-- Translating a consecutive interval shifts its left endpoint and preserves
+its length. Source: Nachtergaele, arXiv:cond-mat/9410110, Section 3,
+integer interval convention. -/
+theorem translateRegion_finiteChainRegion (a b : ℤ) (N : ℕ) :
+    translateRegion b (finiteChainRegion a N) = finiteChainRegion (a + b) N := by
   ext x
   simp only [mem_translateRegion, finiteChainRegion, Finset.mem_Ico]
   omega
@@ -30,7 +31,7 @@ theorem translateRegion_finiteChainRegion (t b : ℤ) (N : ℕ) :
 private theorem translated_interval_config (d N : ℕ) (t b : ℤ)
     (x : Config d (finiteChainRegion (b + t) N)) :
     (Config.translation d t (finiteChainRegion b N)).symm
-      (Config.restrict (translateRegion_finiteChainRegion t b N).le x) =
+      (Config.restrict (translateRegion_finiteChainRegion b t N).le x) =
       finiteChainConfigEquiv d N b ((finiteChainConfigEquiv d N (b + t)).symm x) := by
   funext i
   change x _ = x _
@@ -52,7 +53,7 @@ theorem algebraicLocalTranslation_intervalCoordinates (d N : ℕ) (t b : ℤ)
       localObservable d (finiteChainRegion (b + t) N)
         ((intervalCoordinates d (b + t) N).symm (intervalCoordinates d b N A)) := by
   classical
-  let h := (translateRegion_finiteChainRegion t b N).le
+  let h := (translateRegion_finiteChainRegion b t N).le
   rw [algebraicLocalTranslation_localObservable,
     ← localObservable_localInclusion d h]
   congr 1
@@ -62,8 +63,8 @@ theorem algebraicLocalTranslation_intervalCoordinates (d N : ℕ) (t b : ℤ)
   have hcomp : (Config.splitEquiv h x).2 = (Config.splitEquiv h y).2 := by
     funext i
     exact False.elim ((Finset.mem_sdiff.mp i.2).2
-      ((translateRegion_finiteChainRegion t b N).ge (Finset.mem_sdiff.mp i.2).1))
-  rw [if_pos hcomp, mul_one, localTranslation_apply,
+      ((translateRegion_finiteChainRegion b t N).ge (Finset.mem_sdiff.mp i.2).1))
+  rw [ite_eq_left hcomp, mul_one, localTranslation_apply,
     translated_interval_config, translated_interval_config]
   rfl
 
@@ -91,7 +92,7 @@ theorem intervalCoordinates_localInclusion_localTranslation {d : ℕ} [NeZero d]
     (intervalCoordinates d (b + t) N).symm
       (intervalCoordinates d b N (localInclusion hΛ A)) =
       localInclusion ((translateRegion_mono t hΛ).trans
-        (translateRegion_finiteChainRegion t b N).le) (localTranslation d t Λ A) := by
+        (translateRegion_finiteChainRegion b t N).le) (localTranslation d t Λ A) := by
   apply localObservable_injective d (finiteChainRegion (b + t) N)
   rw [localObservable_localInclusion]
   have h := algebraicLocalTranslation_intervalCoordinates d N t b (localInclusion hΛ A)

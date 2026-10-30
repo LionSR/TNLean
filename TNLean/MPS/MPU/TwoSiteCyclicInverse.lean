@@ -107,7 +107,7 @@ theorem finiteChainConjugation_symm_mem_range_ringNeighbourhood
     simp only [ix, Equiv.apply_symm_apply]
   have hCommute := QuantumCircuit.commute_of_mem_supportedOperators hDisjoint hB hF
   rw [commute_iff_eq]
-  apply (intervalCoordinates d a N).injective
+  apply EquivLike.injective (intervalCoordinates d a N)
   simpa only [map_mul, intervalCoordinates_finiteChainConjugation] using hCommute.eq
 
 end SpinChain

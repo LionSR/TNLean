@@ -53,7 +53,7 @@ theorem bufferedWindowMatrix_eq_chainWindowOperator
     d n p s 0 B
   rw [hA] at hBuffer
   have hWindow := intervalCoordinates_localInclusion_eq_chainWindowOperator d n p s hn 0 B
-  simp only [Nat.add_assoc] at hWindow
+  rw! (castMode := .all) [Nat.add_assoc] at hWindow
   rw [hBuffer, hA] at hWindow
   exact hWindow
 

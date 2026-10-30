@@ -60,8 +60,9 @@ noncomputable def bufferedMPUQuasiLocalAction :
       ((algebraMap ℂ (AlgebraicLocalAlgebra d) c : AlgebraicLocalAlgebra d) :
         QuasiLocalAlgebra d)
     rw [UniformSpace.Completion.map_coe
-      (bufferedMPUAlgebraicAction_isometry hU k hk S).uniformContinuous,
-      (bufferedMPUAlgebraicAction hU k hk S).commutes]
+      (bufferedMPUAlgebraicAction_isometry hU k hk S).uniformContinuous]
+    exact congrArg (fun X : AlgebraicLocalAlgebra d => (X : QuasiLocalAlgebra d))
+      ((bufferedMPUAlgebraicAction hU k hk S).commutes c)
   map_star' X := by
     change UniformSpace.Completion.map (bufferedMPUAlgebraicAction hU k hk S) (star X) =
       star (UniformSpace.Completion.map (bufferedMPUAlgebraicAction hU k hk S) X)
