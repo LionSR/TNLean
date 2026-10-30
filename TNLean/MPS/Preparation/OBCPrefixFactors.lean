@@ -76,15 +76,10 @@ private theorem prefixProduct_step (p : Fin N) (u : CutPrefixConfig d N p.val) (
   · apply congrArg List.prod
     apply congrArg List.ofFn
     funext q
-    have hq : Fin.castLE (Nat.lt_succ_iff.mp p.succ.isLt) q.castSucc =
-        Fin.castLE (Nat.lt_succ_iff.mp p.castSucc.isLt) q := Fin.ext rfl
-    rw [hq]
-    simp only [extendCutPrefix, q.isLt, dite_true]
+    simp only [extendCutPrefix, Fin.val_castLE, Fin.val_castSucc, q.isLt, dite_true]
     rfl
-  · have hp : Fin.castLE (Nat.lt_succ_iff.mp p.succ.isLt) (Fin.last p.val) = p :=
-      Fin.ext rfl
-    rw [hp]
-    simp only [extendCutPrefix, Nat.lt_irrefl, dite_false]
+  · simp only [extendCutPrefix, Fin.val_castLE, Fin.val_last, Nat.lt_irrefl, dite_false]
+    rfl
 
 /-- The actual arbitrary-representation prefix factors propagate by the
 original site matrices. Source: PGVWC07, free-OBC, local maps in
@@ -102,7 +97,9 @@ theorem physicalPrefixMatrix_step (p : Fin N) (u : CutPrefixConfig d N p.val)
   apply Finset.sum_congr rfl
   intro γ _
   split_ifs with hγ
-  · rw [Matrix.zeroPad_apply_of_lt _ hγ q.isLt]
+  · change prefixProduct B p.castSucc u ⟨0, B.bondBound_pos⟩ γ *
+        Matrix.zeroPad D (B.tensor p i) γ (Fin.castLE (B.bondDim_le p.succ) q) = _
+    rw [Matrix.zeroPad_apply_of_lt (β := Fin.castLE (B.bondDim_le p.succ) q) _ hγ q.isLt]
     rfl
   · rw [prefixProduct_outside B p.castSucc u γ (not_lt.mp hγ), zero_mul]
 
@@ -111,10 +108,10 @@ one-dimensional endpoint bond coordinates.
 Source: PGVWC07, endpoint convention preceding Theorem thm:OBC-Vidal. -/
 theorem physicalPrefixMatrix_zero (u : CutPrefixConfig d N 0) (q : Fin (B.bondDim 0)) :
     physicalPrefixMatrix B 0 u q = 1 := by
-  have hq : q.val = 0 := by have := q.isLt; rw [B.left_dim] at this; omega
-  simp only [physicalPrefixMatrix, prefixProduct, List.ofFn_zero, List.prod_nil]
-  rw [Matrix.one_apply]
-  exact if_pos (Fin.ext hq.symm)
+  have hq : q.val = 0 := by have := q.isLt; have := B.left_dim; omega
+  change prefixProduct B 0 u ⟨0, B.bondBound_pos⟩ (Fin.castLE (B.bondDim_le 0) q) = 1
+  simp only [prefixProduct, Fin.val_zero, List.ofFn_zero, List.prod_nil]
+  simp [Matrix.one_apply, Fin.ext_iff, hq]
 
 /-- The right endpoint prefix factor is the actual represented physical
 state, including its complete complex amplitude.
@@ -122,7 +119,7 @@ Source: PGVWC07, the OBC contraction in free-OBC, lines 461--486. -/
 theorem physicalPrefixMatrix_last (u : CutPrefixConfig d N N)
     (q : Fin (B.bondDim (Fin.last N))) :
     physicalPrefixMatrix B (Fin.last N) u q = B.coeff (finalCutPrefixEquiv d N u) := by
-  have hq : q.val = 0 := by have := q.isLt; rw [B.right_dim] at this; omega
+  have hq : q.val = 0 := by have := q.isLt; have := B.right_dim; omega
   have hfull : prefixProduct B (Fin.last N) u =
       MPSChainTensor.eval B.zeroPad (finalCutPrefixEquiv d N u) := by
     rw [MPSChainTensor.eval_eq_prod_ofFn]

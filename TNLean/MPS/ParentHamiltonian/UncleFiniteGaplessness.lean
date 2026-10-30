@@ -43,8 +43,8 @@ private theorem ker_uncleHamiltonianES_eq_span_mpvState
       Submodule.span ℂ ({mpvState A M, mpvState B M} :
         Set (EuclideanSpace ℂ (Cfg d M))) := by
   obtain ⟨n, rfl⟩ : ∃ n : ℕ, M = n + 2 := ⟨M - 2, by omega⟩
-  simpa only [mpvState, EuclideanSpace.equiv] using
-    ker_uncleHamiltonianES_eq_span_mpv A B R L hPert n
+  rw [ker_uncleHamiltonianES_eq_span_mpv A B R L hPert n]
+  rfl
 
 /-- Generic finite-volume gaplessness for the actual two-block uncle
 Hamiltonians in the source canonical normalization. For almost every wall
@@ -65,9 +65,9 @@ theorem uncleHamiltonianES_ae_eventually_exists_pos_eigenvalue_lt
       (Fin d → Matrix (Fin b) (Fin a) ℂ))) [μ.IsAddHaarMeasure] :
     ∀ᵐ P ∂μ, Kraus.IsInjective (uncleBoundaryLetter A B P.1 P.2) →
       ∀ ε : ℝ, 0 < ε → ∀ᶠ N : ℕ in atTop,
-        ∃ λ : ℝ, 0 < λ ∧ λ < ε ∧
+        ∃ η : ℝ, 0 < η ∧ η < ε ∧
           Module.End.HasEigenvalue
-            (uncleHamiltonianES A B P.1 P.2 (6 * N + 1)).toLinearMap (λ : ℂ) := by
+            (uncleHamiltonianES A B P.1 P.2 (6 * N + 1)).toLinearMap (η : ℂ) := by
   classical
   by_cases hExists : ∃ (R₀ : Fin d → Matrix (Fin a) (Fin b) ℂ)
       (L₀ : Fin d → Matrix (Fin b) (Fin a) ℂ),
@@ -76,11 +76,11 @@ theorem uncleHamiltonianES_ae_eventually_exists_pos_eigenvalue_lt
     have ha : a ≠ 0 := by
       intro ha
       subst a
-      simpa using htrA
+      simp at htrA
     have hb : b ≠ 0 := by
       intro hb
       subst b
-      simpa using htrB
+      simp at htrB
     let : NeZero a := ⟨ha⟩
     let : NeZero b := ⟨hb⟩
     have hAB := uncleBoundaryLetter_mixedMapSpectralRadius_lt_one
@@ -107,8 +107,14 @@ theorem uncleHamiltonianES_ae_eventually_exists_pos_eigenvalue_lt
           (6 * N + 1)).toLinearMap).starProjection (v N)‖ ^ 2) atTop (nhds (0 : ℝ)) := by
       apply hSpan.congr'
       filter_upwards [eventually_gt_atTop 0] with N hN
-      rw [ker_uncleHamiltonianES_eq_span_mpvState A B P.1 P.2 hPert
-        (6 * N + 1) (by omega)]
+      have hK := ker_uncleHamiltonianES_eq_span_mpvState A B P.1 P.2 hPert
+        (6 * N + 1) (by omega)
+      have key : ∀ (K₁ K₂ : Submodule ℂ (EuclideanSpace ℂ (Cfg d (6 * N + 1))))
+          [K₁.HasOrthogonalProjection] [K₂.HasOrthogonalProjection], K₁ = K₂ →
+          ∀ x, K₁.starProjection x = K₂.starProjection x := by
+        rintro K₁ K₂ _ _ rfl x
+        rfl
+      rw [key _ _ hK]
     obtain ⟨CE, hCE, hEnergy⟩ := re_inner_uncleHamiltonianES_trial_le_mul
       A B P.1 P.2 hUA hUB ρA hρA ρB hρB hFA hFB hAB hBA
     apply eventually_exists_pos_eigenvalue_uncleHamiltonianES_lt_of_trial_bounds

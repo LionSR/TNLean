@@ -39,7 +39,7 @@ def extendCutPrefixEquiv {d N k : ℕ} (hk : k < N) :
       congr 1
       apply Subtype.ext
       apply Fin.ext
-      show k = s.val.val
+      change k = s.val.val
       have := s.property
       omega
 
@@ -63,7 +63,7 @@ def extendCutSuffixEquiv {d N k : ℕ} (hk : k < N) :
       congr 1
       apply Subtype.ext
       apply Fin.ext
-      show k = s.val.val
+      change k = s.val.val
       have := s.property
       omega
 

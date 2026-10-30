@@ -80,12 +80,14 @@ private theorem cutPrefixConfigEquiv_extend (hk : k + 1 ≤ N)
   refine Fin.addCases (fun j ↦ ?_) (fun j ↦ ?_) p
   · rw [Fin.append_left]
     change (if _h : j.val < k then u _ else i) = u _
-    rw [dif_pos j.isLt]
-    congr 1
-    exact Subtype.ext (Fin.ext rfl)
+    split_ifs with h
+    · congr 1
+    · exact absurd j.isLt h
   · rw [Fin.append_right]
     change (if _h : k + j.val < k then u _ else i) = i
-    rw [dif_neg (by omega)]
+    split_ifs with h
+    · exact absurd h (by omega)
+    · rfl
 
 /-- Actual coordinate slicing in the derived virtual bases has the
 amplified letter matrix. This is the doubled-bond local relation from
@@ -111,10 +113,9 @@ theorem toMatrix_cutSlice_physicalPeriodicCutBasis {A : MPSTensor d D}
     simp only [C', C, physicalPeriodicCutBasis_apply, cutPrefixConfigEquiv_extend hk,
       leftCutVector_append_single, Submodule.coe_sum, Submodule.coe_smul,
       Finset.sum_apply, Pi.smul_apply, smul_eq_mul]
-    simp [Matrix.kronecker_apply, Matrix.one_apply, Fintype.sum_prod_type, mul_comm]
+    simp [Matrix.one_apply, Fintype.sum_prod_type, mul_comm]
   ext b a
-  change C.repr (cutSlice (mpv A (N := N)) k i (C' a)) b = _
-  rw [hslice]
-  simp
+  rw [LinearMap.toMatrix_apply, hslice]
+  simp [C, Finsupp.single_apply]
 
 end MPSTensor
