@@ -298,6 +298,7 @@ import TNLean.MPS.ParentHamiltonian.UncleVirtualRescaling
 import TNLean.MPS.ParentHamiltonian.UniqueGroundState
 import TNLean.MPS.ParentHamiltonian.VaryingOBCBoundaryStates
 import TNLean.MPS.ParentHamiltonian.VaryingOBCIntersection
+import TNLean.MPS.ParentHamiltonian.VaryingOBCParentUniqueness
 import TNLean.MPS.ParentHamiltonian.VaryingOBCProjectorKernel
 import TNLean.MPS.ParentHamiltonian.VaryingOBCReconstruction
 import TNLean.MPS.ParentHamiltonian.WeightedVirtualHilbert
