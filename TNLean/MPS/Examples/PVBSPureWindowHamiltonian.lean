@@ -101,7 +101,7 @@ theorem eq_zero_of_pvbsPureWindow_adjacent_terms_eq_zero
       refine Fin.cases ?_ (fun j ↦ ?_) k
       · simp [contiguousCfg]
       · have hj := j.isLt
-        simp [contiguousCfg]
+        simp only [Fin.cons_succ]
         exact fun h ↦ absurd h (by omega)
     have hσ := hg σ
     change ψ (cyclicCfg (by omega) (N + 2) ⟨1, by omega⟩ σ (Fin.cons a 0)) = _ at hσ
