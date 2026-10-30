@@ -12429,7 +12429,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \begin{definition}[Twisted transfer of the squared operator tensor]
     \label{def:mpu_time_reversal_twisted_transfer}
     \lean{MPOTensor.timeReversalTwistedTransfer}
-    \notready
+    \leanok
     Let $U$ be an MPO tensor with physical dimension $d$ and bond dimension
     $D$. In product bond coordinates, define
     \[
@@ -12445,7 +12445,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \lean{MPOTensor.timeReversalPeriodicTrace_eq_sum,
         MPOTensor.timeReversalPeriodicTrace_blockTensor,
         MPOTensor.timeReversalTwistedTransfer_pow_eq_sum_evalWord}
-    \notready
+    \leanok
     \uses{def:mpu_time_reversal_twisted_transfer}
     The exchange-contracted trace of the two-site periodic operator is
     \[
@@ -12469,7 +12469,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \label{lem:mpu_intrinsic_blocked_twisted_trace}
     \lean{MPOTensor.swapMatrix_commute_timeReversalTwistedTransfer,
         MPOTensor.intrinsicTimeReversalSign_blockTensor_eq_twistedTransfer_trace}
-    \notready
+    \leanok
     \uses{def:mpu_time_reversal_twisted_transfer,
         lem:mpu_time_reversal_blocked_open_words}
     Let $F_D$ exchange the two bond factors. Then $F_DT_U=T_UF_D$, and the
@@ -12488,7 +12488,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \label{lem:mpu_stabilized_commuting_weighted_trace}
     \lean{Matrix.StabilizedRankOneData.isNilpotent_pow_sub_power,
         Matrix.StabilizedRankOneData.trace_mul_pow_eq_of_commute}
-    \notready
+    \leanok
     Let $E$ be a finite complex matrix and suppose that, for some $J>0$,
     every power $E^n$ with $n\geq J$ equals a normalized rank-one projector
     $P=E^J$. Then $E^k-P$ is nilpotent for every $k>0$. If $F$ commutes
