@@ -94,3 +94,73 @@
     common-size construction at the short volumes and the already
     supplied eventual tensor at the long volumes.
 \end{proof}
+
+\subsection{The normal product-state branch}
+\label{sec:spwc_product_finite_prefix}
+
+\begin{lemma}[Nonvanishing of every positive product-state volume]
+    \label{lem:spwc_bond_one_all_volume_nonvanishing}
+    \lean{MPSTensor.mpv_apply_of_bondOne,
+        MPSTensor.exists_mpv_ne_zero_of_bondOne,
+        MPSTensor.mpvState_ne_zero_of_normal_bondOne}
+    \notready
+    For a bond-one tensor,
+    \[
+        V^{(M)}(B)_\sigma=\prod_{j=1}^M B_{\sigma_j}.
+    \]
+    If one letter is nonzero, this vector is nonzero at every positive
+    length. In particular this holds for every normal bond-one tensor;
+    no finite-volume nonvanishing hypothesis is needed.
+\end{lemma}
+\begin{proof}
+    The unique virtual index leaves one product in the trace expansion.
+    Choose the same nonzero letter at every physical site. Its product
+    is nonzero. Normality supplies such a letter.
+\end{proof}
+
+\begin{lemma}[Actual short ground vectors in the product-state branch]
+    \label{lem:spwc_bond_one_finite_prefix_ground}
+    \lean{MPSTensor.exists_cyclic_ground_of_normal_bondOne_local_kernel,
+        MPSTensor.uniform_bondOne_ground_family_of_normal_local_kernel}
+    \notready
+    \uses{lem:spwc_bond_one_all_volume_nonvanishing}
+    Suppose the normal tensor in the eventual fixed-state construction
+    has bond dimension one. Retain the derived inclusion of its
+    length-$L$ local MPS space in $\ker h$. Then its actual periodic
+    vector is a nonzero zero-momentum ground vector at every positive
+    $M\geq L$, including the whole finite prefix. If each such
+    Hamiltonian has a one-dimensional zero-energy space, the same
+    bond-one tensor generates every one of these ground spaces.
+    No short representation or zero-momentum premise is supplied.
+    This treats the product-state branch only; the general short-volume
+    obligation remains in \cite{gap:spwc10_ground_state_dichotomy_quantifiers}.
+\end{lemma}
+\begin{proof}
+    The preceding lemma proves actual nonvanishing at every positive
+    length. The local-kernel inclusion annihilates each cyclic local
+    term on the periodic vector, so the full energy is zero. Cyclicity
+    of the trace gives exact zero momentum. Global uniqueness then
+    identifies the kernel with the line of this explicit product vector.
+\end{proof}
+
+\begin{lemma}[Product-state completion from one actual prime-length ground vector]
+    \label{lem:spwc_bond_one_prime_ground_family}
+    \lean{MPSTensor.exists_uniform_bondOne_ground_family_of_prime_length_bound}
+    \notready
+    \uses{lem:spwc_bond_one_finite_prefix_ground}
+    Let $h$ be the one fixed positive interaction of range $L$, and
+    assume every permitted periodic Hamiltonian has a one-dimensional
+    zero-energy space. If one prime $N\geq L+4$ has an actual nonzero
+    bond-one MPS ground representation, then one bond-one tensor
+    generates all permitted positive-volume ground spaces, including
+    the entire finite prefix. The normal tensor and local-kernel
+    inclusion are derived rather than supplied.
+\end{lemma}
+\begin{proof}
+    Apply the actual prime-length extraction, retaining its normality
+    and local-kernel inclusion. Its positive retained dimension is at
+    most the input dimension one, hence equals one. Apply the preceding
+    product-state construction at every positive volume. The numerical
+    threshold is the general fifth-degree threshold specialized to
+    bond dimension one.
+\end{proof}

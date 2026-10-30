@@ -9774,6 +9774,29 @@ there is no need for a new tactic.
 - **Decision:** the existing matrix-padding multiplication identity suffices;
   the empty word remains excluded because its trace is the matrix dimension.
 
+
+### A unique virtual path for a bond-one periodic vector — reused helper (2026-10-29)
+
+- **Seen:** `Core/BondOneVector.lean`; the periodic-operator counterpart is
+  `MPDO/BondOneOperator.lean`.
+- **Reuse:** the existing `mpv_eq_prod_of_forced_bond` specializes to the
+  unique virtual configuration; `Finset.prod_ne_zero_iff` proves actual
+  nonvanishing from one nonzero physical letter.
+- **Decision:** reuse the common cyclic contraction helper instead of a new
+  entrywise word induction or a separately supplied finite-volume hypothesis.
+
+### Retain derived source data for a downstream finite-prefix argument — reused extraction (2026-10-29)
+
+- **Pattern:** a prime-length reduction already derives normality and a
+  local-kernel inclusion before projecting to an eventual ground-family theorem.
+- **Abstraction:** `exists_normal_eventual_ground_data_of_prime_length_bound`
+  retains those actual witnesses from the existing single proof;
+  the eventual-only API projects them for the quantitative dichotomy.
+- **Caller:** `exists_uniform_bondOne_ground_family_of_prime_length_bound`
+  derives the retained dimension as one and fills all short volumes.
+- **Decision:** reuse one extraction proof; do not duplicate its canonical
+  reduction or add the derived standing data as hypotheses to the public caller.
+
 ### Weighted geometric sums grouped by their anchors — promoted (2026-10-28)
 
 - **Seen:** `Lattice/LowEnergyCommutatorSum.lean`,
