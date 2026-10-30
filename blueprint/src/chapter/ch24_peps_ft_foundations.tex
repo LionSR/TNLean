@@ -59,7 +59,7 @@ injectivity condition together with the local inverse it provides.
     selecting incident edges splits $\eta$ into $(\eta|_v,\eta|_{\not\ni v})$.
 \end{definition}
 
-\begin{theorem}[Evaluation laws for splitting and reindexing]
+\begin{lemma}[Evaluation laws for splitting and reindexing]
     \label{thm:peps_virtual_config_split_reindex_apply}
     \lean{TNLean.PEPS.virtualConfigSplit_fst_apply}
     \lean{TNLean.PEPS.virtualConfigSplit_snd_apply}
@@ -77,7 +77,7 @@ injectivity condition together with the local inverse it provides.
     $(\iota_h\eta)(e)=h_e(\eta(e))$,
     $\iota_h(m_p(\eta,\xi))=m_p(\iota_h\eta,\iota_h\xi)$, and
     $(m_p(\eta,\xi)|_p,m_p(\eta,\xi)|_{\neg p})=(\eta|_p,\xi|_{\neg p})$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Evaluate at $e\in E$ and split by whether $p(e)$ holds.
 \end{proof}
@@ -95,7 +95,7 @@ injectivity condition together with the local inverse it provides.
     hold iff $e$ is incident to $R$.
 \end{definition}
 
-\begin{theorem}[Readback laws for merged configurations]
+\begin{lemma}[Readback laws for merged configurations]
     \label{thm:peps_virtual_config_merge_readback}
     \lean{TNLean.PEPS.mergeVirtualConfig_of_pos}
     \lean{TNLean.PEPS.mergeVirtualConfig_of_neg}
@@ -108,12 +108,12 @@ injectivity condition together with the local inverse it provides.
     $m_p(\eta,\xi)(e)=\eta(e)$ if $p(e)$, $m_p(\eta,\xi)(e)=\xi(e)$ if
     $\neg p(e)$, and $m_p(\eta,\eta)=\eta$. In particular,
     $m_R(\eta,\xi)(e)=\eta(e)$ for $e$ incident to $R$ and $\xi(e)$ otherwise.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Evaluate $m_p(\eta,\xi)(e)$ by case distinction on $p(e)$.
 \end{proof}
 
-\begin{theorem}[Vertex products through a regionwise merge]
+\begin{lemma}[Vertex products through a regionwise merge]
     \label{thm:peps_region_merge_products}
     \lean{TNLean.PEPS.regionProd_eq_merge}
     \lean{TNLean.PEPS.regionProd_p2_eq_merge_of_incident_agree}
@@ -126,15 +126,15 @@ injectivity condition together with the local inverse it provides.
     $\Pi_S(m_R(\eta,\xi),\sigma)=\Pi_S(\xi,\sigma)$. In particular, if
     $\eta=\xi$ on $\partial R$, then
     $\Pi_{V\setminus R}(m_R(\eta,\xi),\sigma)=\Pi_{V\setminus R}(\xi,\sigma)$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
-    By Theorem~\ref{thm:peps_virtual_config_merge_readback},
+    By Lemma~\ref{thm:peps_virtual_config_merge_readback},
     $m_R(\eta,\xi)|_v=\eta|_v$ for $v\in R$, while for $v\in S$ any edge $e\ni v$
     also incident to $R$ satisfies $\eta(e)=\xi(e)$; taking $S=V\setminus R$
     specializes this to $\partial R$.
 \end{proof}
 
-\begin{theorem}[Constant-cardinality fiber sum]
+\begin{lemma}[Constant-cardinality fiber sum]
     \label{thm:peps_config_fiber_sum}
     \lean{TNLean.PEPS.sum_comp_of_config_fiber_card}
     \leanok
@@ -142,7 +142,7 @@ injectivity condition together with the local inverse it provides.
     If $m:X\to\prod_e\{0,\ldots,D_e-1\}$ has fibers $|m^{-1}(\eta)|=n$ for all
     $\eta$, then for every function $g$ into an additive commutative monoid,
     $\sum_{x\in X} g(m(x))=n\mathbin{\boldsymbol{\cdot}}\sum_{\eta}g(\eta)$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Partitioning $X$ into the fibers $m^{-1}(\eta)$ repeats each summand
     $g(\eta)$ exactly $|m^{-1}(\eta)|=n$ times.
@@ -235,19 +235,19 @@ gauge transformation preserving $\Coeff_A$.
     family is $\widetilde B=B^X$.
 \end{definition}
 
-\begin{theorem}[Absorbed gauges keep the bond spaces]%
+\begin{lemma}[Absorbed gauges keep the bond spaces]%
     \label{thm:peps_absorbEdgeGauges_bondDim}
     \lean{TNLean.PEPS.absorbEdgeGauges_bondDim}
     \leanok
     \uses{def:peps_absorbEdgeGauges}
     For every edge $e$, $D_{\widetilde B}(e)=D_B(e)$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     By Definition~\ref{def:peps_absorbEdgeGauges},
     $D_{\widetilde B}(e)=D_{B^X}(e)=D_B(e)$.
 \end{proof}
 
-\begin{theorem}[Local formula for absorbed gauges]%
+\begin{lemma}[Local formula for absorbed gauges]%
     \label{thm:peps_absorbEdgeGauges_component}
     \lean{TNLean.PEPS.absorbEdgeGauges_component}
     \leanok
@@ -256,7 +256,7 @@ gauge transformation preserving $\Coeff_A$.
     $\widetilde B_v(\eta,\sigma)
         =\sum_{\eta'}(\prod_{ie\ni v}M_{ie}(\eta(ie),\eta'(ie)))
         B_v(\eta',\sigma)$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Unfold $\widetilde B_v=(B^X)_v$ using Definition~\ref{def:gaugeVertex}.
 \end{proof}
@@ -270,7 +270,7 @@ gauge transformation preserving $\Coeff_A$.
     $B=A^X$ for some $X\in\prod_e\GL(D_e)$.
 \end{definition}
 
-\begin{theorem}[Gauge invariance of PEPS state]%
+\begin{lemma}[Gauge invariance of PEPS state]%
     \label{thm:applyGauge_stateCoeff}
     \lean{TNLean.PEPS.applyGauge_stateCoeff}
     \leanok
@@ -286,15 +286,15 @@ gauge transformation preserving $\Coeff_A$.
          & =\delta_{ik}.
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 
-\begin{theorem}[Gauge equivalence implies same state]%
+\begin{lemma}[Gauge equivalence implies same state]%
     \label{thm:GaugeEquiv_sameState}
     \lean{TNLean.PEPS.GaugeEquiv.sameState}
     \leanok
     \uses{def:GaugeEquivPEPS, def:peps_same_state, thm:applyGauge_stateCoeff}
     If $A \sim B$, then $\Coeff_A(\sigma) = \Coeff_B(\sigma)$ for all $\sigma$.
-\end{theorem}
+\end{lemma}
 
 \subsection{Vertex injectivity and the local inverse}
 
@@ -372,28 +372,28 @@ physical operators on $\C^d$.
     $O_T=\Phi_v\circ T\circ\Psi_v\in\End(\C^d)$.
 \end{definition}
 
-\begin{theorem}[Local virtual operations on the image]%
+\begin{lemma}[Local virtual operations on the image]%
     \label{thm:peps_physRealizeLocalOp_spec}
     \lean{TNLean.PEPS.physRealizeLocalOpAt_spec}
     \leanok
     \uses{def:peps_physRealizeLocalOp}
     For every $c\in\C^{\mathcal V_v}$, $O_T(\Phi_v(c))=\Phi_v(Tc)$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     By Definitions~\ref{def:peps_localLeftInverse}
     and~\ref{def:peps_physRealizeLocalOp},
     $O_T\Phi_v=\Phi_vT\Psi_v\Phi_v=\Phi_vT$.
 \end{proof}
 
-\begin{theorem}[Injectivity of local physical realization]%
+\begin{lemma}[Injectivity of local physical realization]%
     \label{thm:peps_physRealizeLocalOp_injective}
     \lean{TNLean.PEPS.physRealizeLocalOpAt_injective}
     \leanok
     \uses{def:peps_physRealizeLocalOp, thm:peps_physRealizeLocalOp_spec, def:peps_localTensorMap}
     If $\Phi_v$ is injective and $O_T=O_{T'}$, then $T=T'$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
-    By Theorem~\ref{thm:peps_physRealizeLocalOp_spec},
+    By Lemma~\ref{thm:peps_physRealizeLocalOp_spec},
     $\Phi_v(Tc)=O_T(\Phi_v(c))=O_{T'}(\Phi_v(c))=\Phi_v(T'c)$, so injectivity
     of $\Phi_v$ gives $T=T'$.
 \end{proof}
@@ -416,49 +416,49 @@ physical operators on $\C^d$.
     $T_O=\Psi_v\circ O\circ\Phi_v\in\End(\C^{\mathcal V_v})$.
 \end{definition}
 
-\begin{theorem}[Virtual pullback realizes the projected physical action]%
+\begin{lemma}[Virtual pullback realizes the projected physical action]%
     \label{thm:peps_localVirtualOpOfPhysicalOp_spec}
     \lean{TNLean.PEPS.localVirtualOpOfPhysicalOpAt_spec}
     \leanok
     \uses{def:peps_localVirtualOpOfPhysicalOp, def:peps_physRealizeLocalOp, def:peps_localProjector}
     For every $c\in\C^{\mathcal V_v}$,
     $\Phi_v(T_Oc)=P_v(O(\Phi_v(c)))$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     By Definitions~\ref{def:peps_localProjector}
     and~\ref{def:peps_localVirtualOpOfPhysicalOp},
     $\Phi_vT_O=\Phi_v\Psi_vO\Phi_v=P_vO\Phi_v$.
 \end{proof}
 
-\begin{theorem}[Virtual pullback for image-preserving physical actions]%
+\begin{lemma}[Virtual pullback for image-preserving physical actions]%
     \label{thm:peps_localVirtualOpOfPhysicalOp_realizes_of_projector}
     \lean{TNLean.PEPS.localVirtualOpOfPhysicalOpAt_realizes_of_projector}
     \leanok
     \uses{thm:peps_localVirtualOpOfPhysicalOp_spec}
     If $O(\operatorname{im}\Phi_v)\subseteq\operatorname{im}\Phi_v$, then
     $\Phi_v(T_Oc)=O(\Phi_v(c))$ for all $c\in\C^{\mathcal V_v}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Since $P_v|_{\operatorname{im}\Phi_v}=\Id$,
-    Theorem~\ref{thm:peps_localVirtualOpOfPhysicalOp_spec} gives
+    Lemma~\ref{thm:peps_localVirtualOpOfPhysicalOp_spec} gives
     $\Phi_v(T_Oc)=P_v(O(\Phi_v(c)))=O(\Phi_v(c))$.
 \end{proof}
 
-\begin{theorem}[Recovery of a virtual operation from a physical realization]%
+\begin{lemma}[Recovery of a virtual operation from a physical realization]%
     \label{thm:peps_localVirtualOpOfPhysicalOp_eq_of_realizes}
     \lean{TNLean.PEPS.localVirtualOpOfPhysicalOpAt_eq_of_realizes}
     \leanok
     \uses{def:peps_localTensorMap, thm:peps_localVirtualOpOfPhysicalOp_spec}
     Suppose $\Phi_v$ is injective. If $O(\Phi_v(c))=\Phi_v(Tc)$ for all
     $c\in\C^{\mathcal V_v}$, then $T_O=T$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
-    By Theorem~\ref{thm:peps_localVirtualOpOfPhysicalOp_spec},
+    By Lemma~\ref{thm:peps_localVirtualOpOfPhysicalOp_spec},
     $\Phi_v(T_Oc)=P_v(\Phi_v(Tc))=\Phi_v(Tc)$, and injectivity of $\Phi_v$
     gives $T_O=T$.
 \end{proof}
 
-\begin{theorem}[Extensionality of physical-to-virtual pullback]%
+\begin{lemma}[Extensionality of physical-to-virtual pullback]%
     \label{thm:peps_localVirtualOpOfPhysicalOp_eq_of_projected_action_eq}
     \lean{TNLean.PEPS.localVirtualOpOfPhysicalOpAt_eq_iff_projected_action_eq}
     \leanok
@@ -471,61 +471,61 @@ physical operators on $\C^d$.
         \forall c\in\C^{\mathcal V_v},\ P_vO\Phi_v(c)=P_vO'\Phi_v(c).
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
-    By Theorem~\ref{thm:peps_localVirtualOpOfPhysicalOp_spec},
+    By Lemma~\ref{thm:peps_localVirtualOpOfPhysicalOp_spec},
     $P_vO\Phi_v(c)=\Phi_v(T_Oc)$ and $P_vO'\Phi_v(c)=\Phi_v(T_{O'}c)$;
     injectivity of $\Phi_v$ gives the equivalence.
 \end{proof}
 
-\begin{theorem}[Pullback of the canonical physical realization]%
+\begin{lemma}[Pullback of the canonical physical realization]%
     \label{thm:peps_localVirtualOpOfPhysicalOp_physRealizeLocalOp}
     \lean{TNLean.PEPS.localVirtualOpOfPhysicalOpAt_physRealizeLocalOpAt}
     \leanok
     \uses{def:peps_physRealizeLocalOp, thm:peps_physRealizeLocalOp_spec, thm:peps_localVirtualOpOfPhysicalOp_eq_of_realizes}
     When $\Phi_v$ is injective, $T_{O_T}=T$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
-    Combine Theorem~\ref{thm:peps_physRealizeLocalOp_spec} with
-    Theorem~\ref{thm:peps_localVirtualOpOfPhysicalOp_eq_of_realizes} for
+    Combine Lemma~\ref{thm:peps_physRealizeLocalOp_spec} with
+    Lemma~\ref{thm:peps_localVirtualOpOfPhysicalOp_eq_of_realizes} for
     $O=O_T$.
 \end{proof}
 
-\begin{theorem}[Physical realization of a pulled-back physical operator]%
+\begin{lemma}[Physical realization of a pulled-back physical operator]%
     \label{thm:peps_physRealizeLocalOp_localVirtualOpOfPhysicalOp}
     \lean{TNLean.PEPS.physRealizeLocalOpAt_localVirtualOpOfPhysicalOpAt}
     \leanok
     \uses{def:peps_physRealizeLocalOp, def:peps_localVirtualOpOfPhysicalOp, def:peps_localProjector}
     With $P_v=\Phi_v\circ\Psi_v$ and $T_O=\Psi_v\circ O\circ\Phi_v$,
     $O_{T_O}=\Phi_v\circ T_O\circ\Psi_v=P_v\circ O\circ P_v$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Unfold Definitions~\ref{def:peps_physRealizeLocalOp},
     \ref{def:peps_localProjector}, and~\ref{def:peps_localVirtualOpOfPhysicalOp}.
 \end{proof}
 
-\begin{theorem}[Projected local recovery]%
+\begin{lemma}[Projected local recovery]%
     \label{thm:peps_localVirtualOpOfPhysicalOp_eq_of_projected_realization_eq}
     \lean{TNLean.PEPS.localVirtualOpOfPhysicalOpAt_eq_of_projected_realization_eq}
     \leanok
     \uses{thm:peps_physRealizeLocalOp_injective, thm:peps_physRealizeLocalOp_localVirtualOpOfPhysicalOp}
     When $\Phi_v$ is injective, $P_vOP_v=O_T$ implies $T_O=T$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
-    By Theorem~\ref{thm:peps_physRealizeLocalOp_localVirtualOpOfPhysicalOp},
-    $O_{T_O}=P_vOP_v=O_T$, so Theorem~\ref{thm:peps_physRealizeLocalOp_injective}
+    By Lemma~\ref{thm:peps_physRealizeLocalOp_localVirtualOpOfPhysicalOp},
+    $O_{T_O}=P_vOP_v=O_T$, so Lemma~\ref{thm:peps_physRealizeLocalOp_injective}
     yields $T_O=T$.
 \end{proof}
 
-\begin{theorem}[Projected local recovery equivalence]%
+\begin{lemma}[Projected local recovery equivalence]%
     \label{thm:peps_localVirtualOpOfPhysicalOp_eq_iff_projected_realization_eq}
     \lean{TNLean.PEPS.localVirtualOpOfPhysicalOpAt_eq_iff_projected_realization_eq}
     \leanok
     \uses{thm:peps_physRealizeLocalOp_localVirtualOpOfPhysicalOp, thm:peps_localVirtualOpOfPhysicalOp_eq_of_projected_realization_eq}
     When $\Phi_v$ is injective, $P_vOP_v=O_T\iff T_O=T$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
-    Combine Theorems~\ref{thm:peps_physRealizeLocalOp_localVirtualOpOfPhysicalOp}
+    Combine Lemmas~\ref{thm:peps_physRealizeLocalOp_localVirtualOpOfPhysicalOp}
     and~\ref{thm:peps_localVirtualOpOfPhysicalOp_eq_of_projected_realization_eq}.
 \end{proof}
 
@@ -540,33 +540,33 @@ physical operators on $\C^d$.
     $(T_{v,e}(M)c)(i,\eta_{\widehat e})=\sum_j M_{ij}c(j,\eta_{\widehat e})$.
 \end{definition}
 
-\begin{theorem}[One-edge matrix action on a basis configuration]%
+\begin{lemma}[One-edge matrix action on a basis configuration]%
     \label{thm:peps_localIncidentMatrixOp_single}
     \lean{TNLean.PEPS.localIncidentMatrixOp_single}
     \leanok
     \uses{def:peps_localIncidentMatrixOp, def:peps_localVirtualConfigSplitAt}
     For the basis vector $e_{(j,\lambda)}\in\C^{\mathcal V_v}$,
     $T_{v,e}(M)e_{(j,\lambda)}=\sum_i M_{ij}e_{(i,\lambda)}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Evaluate Definition~\ref{def:peps_localIncidentMatrixOp} on $(i,\eta_{\widehat e})$
     and split by whether $\eta_{\widehat e}=\lambda$.
 \end{proof}
 
-\begin{theorem}[Local tensor form of a one-edge basis action]%
+\begin{lemma}[Local tensor form of a one-edge basis action]%
     \label{thm:peps_localTensorMap_localIncidentMatrixOp_single}
     \lean{TNLean.PEPS.localTensorMap_localIncidentMatrixOp_single}
     \leanok
     \uses{thm:peps_localIncidentMatrixOp_single, def:peps_localTensorMap}
     For every $(j,\lambda)$ and physical index $\tau$,
     $\Phi_v(T_{v,e}(M)e_{(j,\lambda)})(\tau)=\sum_i M_{ij}A_v((i,\lambda),\tau)$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
-    Apply $\Phi_v$ to Theorem~\ref{thm:peps_localIncidentMatrixOp_single} by
+    Apply $\Phi_v$ to Lemma~\ref{thm:peps_localIncidentMatrixOp_single} by
     linearity.
 \end{proof}
 
-\begin{theorem}[Physical realization of one-edge virtual matrix action]%
+\begin{lemma}[Physical realization of one-edge virtual matrix action]%
     \label{thm:peps_localIncidentMatrixOp_physicalRealization}
     \lean{TNLean.PEPS.localIncidentMatrixOp_physicalRealizationAt}
     \leanok
@@ -574,9 +574,9 @@ physical operators on $\C^d$.
     If $\Phi_v$ is injective, then $O_{T_{v,e}(M)}\in\End(\C^d)$ satisfies
     $O_{T_{v,e}(M)}(\Phi_v(c))=\Phi_v(T_{v,e}(M)c)$ for all
     $c\in\C^{\mathcal V_v}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
-    Apply Theorem~\ref{thm:peps_physRealizeLocalOp_spec} to $T=T_{v,e}(M)$.
+    Apply Lemma~\ref{thm:peps_physRealizeLocalOp_spec} to $T=T_{v,e}(M)$.
 \end{proof}
 
 \begin{definition}[Split at one incident edge]%
@@ -603,29 +603,29 @@ Section~\ref{sec:peps_edge_middle}.
     For an edge $e=(u,v)$, the middle region is $M_e=V\setminus\{u,v\}$.
 \end{definition}
 
-\begin{theorem}[Edge-centered vertex partition]%
+\begin{lemma}[Edge-centered vertex partition]%
     \label{thm:peps_edgeVertices_union}
     \lean{TNLean.PEPS.edgeVertices_union}
     \leanok
     \uses{def:peps_edgeMiddleVertices}
     For an edge $e=(u,v)$, $V=\{u\}\cup(V\setminus\{u,v\})\cup\{v\}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Every $x\in V$ satisfies $x=u$, $x=v$, or $x\in V\setminus\{u,v\}$.
 \end{proof}
 
-\begin{theorem}[Nonempty middle region from a cardinal bound]%
+\begin{lemma}[Nonempty middle region from a cardinal bound]%
     \label{thm:peps_edgeMiddleVertices_nonempty_of_two_lt_card}
     \lean{TNLean.PEPS.edgeMiddleVertices_nonempty_of_two_lt_card}
     \leanok
     \uses{def:peps_edgeMiddleVertices}
     If $2<|V|$, then $V\setminus\{u,v\}\ne\varnothing$ for every edge $e=(u,v)$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Since $|V\setminus\{u,v\}|=|V|-2$, $2<|V|$ gives $|V\setminus\{u,v\}|>0$.
 \end{proof}
 
-\begin{theorem}[Product splitting at an edge]%
+\begin{lemma}[Product splitting at an edge]%
     \label{thm:peps_prod_univ_splitAtEdge}
     \lean{TNLean.PEPS.prod_univ_splitAtEdge}
     \leanok
@@ -636,12 +636,12 @@ Section~\ref{sec:peps_edge_middle}.
          & =f(u)\left(\prod_{x\in V\setminus\{u,v\}}f(x)\right)f(v).
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
-    Split the product over the partition of Theorem~\ref{thm:peps_edgeVertices_union}.
+    Split the product over the partition of Lemma~\ref{thm:peps_edgeVertices_union}.
 \end{proof}
 
-\begin{theorem}[PEPS coefficient splitting at an edge]%
+\begin{lemma}[PEPS coefficient splitting at an edge]%
     \label{thm:peps_stateCoeff_splitAtEdge}
     \lean{TNLean.PEPS.stateCoeff_splitAtEdge}
     \leanok
@@ -649,9 +649,9 @@ Section~\ref{sec:peps_edge_middle}.
     For any edge $e=(u,v)$,
     $\Coeff_A(\sigma)=\sum_{\eta}A_u(\eta|_u,\sigma_u)
         (\prod_{x\in V\setminus\{u,v\}}A_x(\eta|_x,\sigma_x))A_v(\eta|_v,\sigma_v)$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
-    Apply Theorem~\ref{thm:peps_prod_univ_splitAtEdge} to each summand in
+    Apply Lemma~\ref{thm:peps_prod_univ_splitAtEdge} to each summand in
     Definition~\ref{def:peps_stateCoeff}.
 \end{proof}
 
@@ -724,21 +724,21 @@ Section~\ref{sec:peps_edge_middle}.
     Definition~\ref{def:peps_localVirtualConfigSplitAt}.
 \end{definition}
 
-\begin{theorem}[Left endpoint reconstruction for compatible boundary data]%
+\begin{lemma}[Left endpoint reconstruction for compatible boundary data]%
     \label{thm:peps_edgeLeftLocalConfig_eq_of_boundaryMatches}
     \lean{TNLean.PEPS.edgeLeftLocalConfig_eq_of_boundaryMatches}
     \leanok
     \uses{def:peps_edgeBoundaryMatches, def:peps_edgeLeftLocalConfig}
     If $\partial_e(\eta)=\beta$, then $\eta|_u=\beta_u$.
-\end{theorem}
+\end{lemma}
 
-\begin{theorem}[Right endpoint reconstruction for compatible boundary data]%
+\begin{lemma}[Right endpoint reconstruction for compatible boundary data]%
     \label{thm:peps_edgeRightLocalConfig_eq_of_boundaryMatches}
     \lean{TNLean.PEPS.edgeRightLocalConfig_eq_of_boundaryMatches}
     \leanok
     \uses{def:peps_edgeBoundaryMatches, def:peps_edgeRightLocalConfig}
     If $\partial_e(\eta)=\beta$, then $\eta|_v=\beta_v$.
-\end{theorem}
+\end{lemma}
 
 \begin{definition}[Boundary data with an inserted edge matrix]%
     \label{def:peps_edgeInsertedBoundaryConfig}

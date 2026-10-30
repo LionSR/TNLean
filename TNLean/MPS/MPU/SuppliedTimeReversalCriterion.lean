@@ -100,24 +100,30 @@ theorem exists_timeReversal_certificate_of_square_ranks
   obtain ⟨w, hw⟩ := adjoint_certificate_of_unitary_gate_transport
     (Matrix.reindex p p A) (Matrix.reindex p p B) X' Y' z σ hcert
   let x : Matrix.unitaryGroup (Fin d × Fin d) ℂ :=
-    ⟨Matrix.reindex e.symm e.symm w, Matrix.reindex_mem_unitaryGroup _ _ w.property⟩
+    ⟨Matrix.reindex e.symm e.symm w,
+      Matrix.reindex_mem_unitaryGroup e.symm _ w.property⟩
   refine ⟨σ, x, hσ, ?_⟩
   apply (Matrix.reindexLinearEquiv ℂ ℂ p p).injective
   change Matrix.reindexLinearEquiv ℂ ℂ p p A =
     Matrix.reindexLinearEquiv ℂ ℂ p p
-      ((σ • ((x : Matrix _ _ ℂ) ⊗ₖ (x : Matrix _ _ ℂ)ᴴ)) * Bᴴ)
+      ((σ • ((x : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ) ⊗ₖ
+          (x : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ)ᴴ)) * Bᴴ)
   rw [Matrix.smul_mul, map_smul]
   conv_rhs => rw [← Matrix.reindexLinearEquiv_mul ℂ ℂ p p p]
   have hx : Matrix.reindexLinearEquiv ℂ ℂ p p
-      ((x : Matrix _ _ ℂ) ⊗ₖ (x : Matrix _ _ ℂ)ᴴ) =
-      (w : Matrix _ _ ℂ) ⊗ₖ (w : Matrix _ _ ℂ)ᴴ := by
+      ((x : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ) ⊗ₖ
+          (x : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ)ᴴ) =
+      (w : Matrix (Fin (d * d)) (Fin (d * d)) ℂ) ⊗ₖ
+          (w : Matrix (Fin (d * d)) (Fin (d * d)) ℂ)ᴴ := by
     change Matrix.reindex p p
-      ((x : Matrix _ _ ℂ) ⊗ₖ (x : Matrix _ _ ℂ)ᴴ) = _
+      ((x : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ) ⊗ₖ
+          (x : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ)ᴴ) = _
     rw [← Matrix.kroneckerMap_reindex]
-    have hx' : Matrix.reindex e e (x : Matrix _ _ ℂ) = (w : Matrix _ _ ℂ) := by
+    have hx' : Matrix.reindex e e (x : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ) =
+        (w : Matrix (Fin (d * d)) (Fin (d * d)) ℂ) := by
       ext i j
-      change (w : Matrix _ _ ℂ) (e (e.symm i)) (e (e.symm j)) =
-        (w : Matrix _ _ ℂ) i j
+      change (w : Matrix (Fin (d * d)) (Fin (d * d)) ℂ) (e (e.symm i)) (e (e.symm j)) =
+        (w : Matrix (Fin (d * d)) (Fin (d * d)) ℂ) i j
       rw [Equiv.apply_symm_apply, Equiv.apply_symm_apply]
     rw [hx', ← Matrix.conjTranspose_reindex, hx']
   rw [hx]
@@ -166,7 +172,8 @@ theorem mpo_even_eq_adjoint_of_timeReversal_certificate
     (σ : ℂ) (hσ : σ = 1 ∨ σ = -1)
     (x : Matrix.unitaryGroup (Fin d × Fin d) ℂ)
     (hlocal : staircaseMiddle (A := Fin d) (E := Fin d) v * (u ⊗ₖ u) =
-      σ • ((x : Matrix _ _ ℂ) ⊗ₖ (x : Matrix _ _ ℂ)ᴴ) *
+      σ • ((x : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ) ⊗ₖ
+          (x : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ)ᴴ) *
         (staircaseMiddle (A := Fin d) (E := Fin d) v)ᴴ)
     (N : ℕ) (hN : 1 < N) (heven : Even N) : mpo W N = (mpo W N)ᴴ := by
   classical
@@ -180,11 +187,13 @@ theorem mpo_even_eq_adjoint_of_timeReversal_certificate
   let e : (Fin d × Fin d) ≃ Fin (d * d) := finProdFinEquiv
   let p := Equiv.prodCongr e e
   let x' : Matrix.unitaryGroup (Fin (d * d)) ℂ :=
-    ⟨Matrix.reindex e e x, Matrix.reindex_mem_unitaryGroup _ _ x.property⟩
+    ⟨Matrix.reindex e e x, Matrix.reindex_mem_unitaryGroup e _ x.property⟩
   let A₀ := Matrix.reindex p p
     (staircaseMiddle (A := Fin d) (E := Fin d) v * (u ⊗ₖ u))
   let B₀ := Matrix.reindex p p (staircaseMiddle (A := Fin d) (E := Fin d) v)
-  have hraw : A₀ = σ • ((x' : Matrix _ _ ℂ) ⊗ₖ (x' : Matrix _ _ ℂ)ᴴ) * B₀ᴴ := by
+  have hraw : A₀ = σ •
+      ((x' : Matrix (Fin (d * d)) (Fin (d * d)) ℂ) ⊗ₖ
+          (x' : Matrix (Fin (d * d)) (Fin (d * d)) ℂ)ᴴ) * B₀ᴴ := by
     exact Matrix.reindex_adjoint_certificate e hlocal
   obtain ⟨X, Y, hu, hv⟩ := S.exists_fourSpin_selected_source_gate_gauges_of_square_ranks hW
   have hXY := (Matrix.isUnitaryBetween_coe_unitaryGroup X).kronecker _ _
@@ -231,7 +240,8 @@ theorem even_timeReversal_iff_exists_certificate
           (Equiv.prodCongr (finCongr hr) (finCongr hl)) v
         (σ = 1 ∨ σ = -1) ∧
         staircaseMiddle (A := Fin d) (E := Fin d) v₀ * (u₀ ⊗ₖ u₀) =
-          σ • ((x : Matrix _ _ ℂ) ⊗ₖ (x : Matrix _ _ ℂ)ᴴ) *
+          σ • ((x : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ) ⊗ₖ
+              (x : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ)ᴴ) *
             (staircaseMiddle (A := Fin d) (E := Fin d) v₀)ᴴ := by
   constructor
   · exact S.exists_timeReversal_certificate hW

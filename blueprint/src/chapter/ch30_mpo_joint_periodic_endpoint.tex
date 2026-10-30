@@ -30,7 +30,7 @@ overlaps of the original endpoint blocks.
     $S=\operatorname{ran}\Gamma'_2$ and $h'=I-\Pi_S$.
 \end{definition}
 
-\begin{theorem}[Virtual boundary actions of the phase projections]
+\begin{lemma}[Virtual boundary actions of the phase projections]
     \label{thm:mpo_joint_phase_boundary}
     \lean{MPSTensor.MPOSymmetry.jointMixedRowWeight_eq_zero_or_one,
         MPSTensor.MPOSymmetry.jointMixedColumnWeight_eq_zero_or_one,
@@ -57,7 +57,7 @@ overlaps of the original endpoint blocks.
     \end{align}
     At $W_x=P_x$, the inner phases satisfy
     $C_0\Gamma'_2(X)=R_1\Gamma'_2(X)=\Gamma'_2(X)$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{def:mpo_joint_mixed_family}
@@ -68,7 +68,7 @@ overlaps of the original endpoint blocks.
     insertion $P_x$ already fixes the first column and last row phases.
 \end{proof}
 
-\begin{theorem}[Reducing phase subspaces]
+\begin{lemma}[Reducing phase subspaces]
     \label{thm:mpo_joint_phase_reducing}
     \lean{Submodule.commute_starProjection_of_invariant,
         LinearMap.IsSymmetricProjection.mul_of_commute,
@@ -86,7 +86,7 @@ overlaps of the original endpoint blocks.
     The phase selectors are commuting orthogonal projections. Each of
     $R_0,R_1,C_0,C_1$ preserves $S$, commutes with $\Pi_S$, and commutes
     with $h'$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:mpo_joint_phase_boundary}
@@ -98,7 +98,7 @@ overlaps of the original endpoint blocks.
     invariant. Thus $T\Pi_S=\Pi_ST$.
 \end{proof}
 
-\begin{theorem}[The common canonical corner]
+\begin{lemma}[The common canonical corner]
     \label{thm:mpo_joint_canonical_corner}
     \lean{MPSTensor.MPOSymmetry.blockInsertedBoundaryMap_jointMixed_first_boundary,
         MPSTensor.MPOSymmetry.jointMixedEndpoint_extendedSupport_outerCorner_eq_groundSpaceES,
@@ -109,7 +109,7 @@ overlaps of the original endpoint blocks.
     Let $G=\sum_x\mathcal G_2(B_x)$ be the full joint canonical support.
     Then $R_0C_1S=G\subseteq S$ and
     $\Pi_G=R_0C_1\Pi_S$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:mpo_joint_phase_boundary,thm:mpo_joint_phase_reducing,
@@ -142,7 +142,7 @@ overlaps of the original endpoint blocks.
     $(00,00),(00,01),(10,00),(10,01)$.
 \end{definition}
 
-\begin{theorem}[Orthogonal decomposition of the joint support]
+\begin{lemma}[Orthogonal decomposition of the joint support]
     \label{thm:mpo_joint_outer_corners}
     \lean{MPSTensor.MPOSymmetry.jointMixedOuterCornerProjection_isSymmetricProjection,
         MPSTensor.MPOSymmetry.sum_jointMixedOuterCornerProjection,
@@ -164,7 +164,7 @@ overlaps of the original endpoint blocks.
     The $T_{ab}$ are orthogonal projections with sum $I$ and
     $T_{ab}T_{cd}=0$ for $(a,b)\ne(c,d)$. At the first endpoint,
     $S=\bigoplus_{a,b}S_{ab}$ is an orthogonal sum and $S_{00}=G$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:mpo_joint_phase_boundary,thm:mpo_joint_phase_reducing,
@@ -178,7 +178,7 @@ overlaps of the original endpoint blocks.
     orthogonal. The canonical-corner identity gives $S_{00}=G$.
 \end{proof}
 
-\begin{theorem}[Local endpoint inequalities]
+\begin{lemma}[Local endpoint inequalities]
     \label{thm:mpo_joint_local_comparison}
     \lean{LinearMap.IsSymmetricProjection.one_sub_mul_le_add_one_sub,
         LinearMap.IsSymmetricProjection.one_sub_mul_mul_le,
@@ -196,7 +196,7 @@ overlaps of the original endpoint blocks.
         I-C_0   & \le h',                      & I-R_1 & \le h'.
         \label{eq:mpo_joint_inner_penalties}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:mpo_joint_canonical_corner,thm:mpo_joint_phase_reducing}
@@ -225,7 +225,7 @@ overlaps of the original endpoint blocks.
     Thus $(Q_Nv)_\sigma=v_\sigma$ if $n(\sigma)=0$, and zero otherwise.
 \end{definition}
 
-\begin{theorem}[Cyclic counting and the inactive penalty]
+\begin{lemma}[Cyclic counting and the inactive penalty]
     \label{thm:mpo_joint_cyclic_penalty}
     \lean{MPSTensor.MPOSymmetry.periodicLocalInteractionES_jointMixedRowSector,
         MPSTensor.MPOSymmetry.periodicLocalInteractionES_jointMixedColumnSector,
@@ -253,7 +253,7 @@ overlaps of the original endpoint blocks.
         E_NQ_N                & =0,                 & I-Q_N & \le E_N\le2H'_N.
         \label{eq:mpo_joint_cyclic_penalty}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:mpo_joint_local_comparison}
@@ -266,7 +266,7 @@ overlaps of the original endpoint blocks.
     remain distinct summands in $H'_N$.
 \end{proof}
 
-\begin{theorem}[Exact active Hamiltonian and periodic kernel]
+\begin{lemma}[Exact active Hamiltonian and periodic kernel]
     \label{thm:mpo_joint_periodic_active}
     \lean{LinearMap.apply_eq_of_le_of_sub_le_of_apply_eq_zero,
         LinearMap.IsSymmetricProjection.apply_eq_self_of_one_sub_le_twice_of_mem_ker,
@@ -290,7 +290,7 @@ overlaps of the original endpoint blocks.
         H'_NQ_N & =K_NQ_N,             & \ker H'_N  & =\ker K_N.
         \label{eq:mpo_joint_periodic_active}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:mpo_joint_phase_reducing,thm:mpo_joint_cyclic_penalty,
@@ -305,7 +305,7 @@ overlaps of the original endpoint blocks.
     Conversely $H'_N\le K_N$ implies $\ker K_N\subseteq\ker H'_N$.
 \end{proof}
 
-\begin{theorem}[Joint endpoint ground space and uniform periodic gap]
+\begin{lemma}[Joint endpoint ground space and uniform periodic gap]
     \label{thm:mpo_joint_periodic_gap}
     \lean{LinearMap.re_inner_ge_half_of_one_sub_le_twice,
         LinearMap.IsPositive.norm_gap_of_reducing_projection,
@@ -328,7 +328,7 @@ overlaps of the original endpoint blocks.
         \label{eq:mpo_joint_periodic_gap}
     \end{align}
     Here $\delta$ is one gap for the full joint canonical parent.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:mpo_joint_periodic_active,thm:mpo_joint_cyclic_penalty,

@@ -22,7 +22,7 @@ finite-ring component vectors. As documented in
 \cite{gap:pgvwc07_ti_canonical_form_scope}, the doubly-normalized corollary
 additionally assumes normalized self-overlap.
 
-\begin{theorem}[Doubly-normalized PGVWC07 source-length kernel equality]
+\begin{lemma}[Doubly-normalized PGVWC07 source-length kernel equality]
     \label{thm:gs_eq_bnt_span}
     \lean{MPSTensor.ker_parentHamiltonian_toTensorFromBlocks_eq_bntMPSVectorSpan_of_global_cut_bnt_c1_pgvwc07}
     \leanok
@@ -61,7 +61,7 @@ additionally assumes normalized self-overlap.
         \spn\{V^{(N)}(A_j):j=0,\ldots,g-1\}.
         \label{eq:parent_bnt_ground_space}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -71,10 +71,10 @@ additionally assumes normalized self-overlap.
     % docs/paper-gaps/pgvwc07_direct_sum_input.tex.
     At $\Lambda_j=\Id$, positive definiteness is immediate and the assumed
     left-canonical identity is the dual fixed-point equation, so
-    Theorem~\ref{thm:gs_eq_bnt_span_source_normalization} applies directly.
+    Lemma~\ref{thm:gs_eq_bnt_span_source_normalization} applies directly.
 \end{proof}
 
-\begin{theorem}[PGVWC07 source-length kernel equality at general canonical normalization]
+\begin{lemma}[PGVWC07 source-length kernel equality at general canonical normalization]
     \label{thm:gs_eq_bnt_span_source_normalization}
     \lean{MPSTensor.ker_parentHamiltonian_toTensorFromBlocks_eq_bntMPSVectorSpan_pgvwc07_of_dualFixedPoint}
     \leanok
@@ -97,13 +97,13 @@ additionally assumes normalized self-overlap.
         \spn\{V^{(N)}(A_j):j=0,\ldots,g-1\}.
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{cor:block_diagonal_kernel_global_cut, thm:chain_ground_space_eq_mpv_normal, lem:bnt_span_le_parent_hamiltonian_kernel}
     The source length bounds imply $L_0<L$, $L\le N$, and $L_0+1<N$.
-    Theorem~\ref{thm:chain_ground_space_eq_mpv_normal} identifies each
+    Lemma~\ref{thm:chain_ground_space_eq_mpv_normal} identifies each
     single-block periodic chain space with its matrix-product-vector line.
     Corollary~\ref{cor:block_diagonal_kernel_global_cut} therefore gives the
     containment of the parent-Hamiltonian kernel in the BNT span. Conversely,

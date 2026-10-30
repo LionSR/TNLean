@@ -23,13 +23,13 @@ $\mathcal F(L)\subseteq\{\Omega\in(\mathbb C^q)^{\otimes L^2}:\|\Omega\|=1\}$;
 in particular,
 $\mathcal F_{q,J,\Delta}(L)=\{\Omega:\exists H,E_0,\,(H,E_0,\Omega)\in\mathcal G_{q,J,\Delta}(L)\}$.
 
-\begin{theorem}[Increasing the polynomial prefactor]
+\begin{lemma}[Increasing the polynomial prefactor]
     \label{thm:peps_prefactor_monotone}
     \lean{TNLean.PEPS.Approximation.HasPEPSApproximation.mono_prefactor}
     \leanok
     If $C\le C'$ and $\mathcal A_{C,c}(L,\Omega)$, then
     $\mathcal A_{C',c}(L,\Omega)$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Since $L^c\ge0$, the same $(\Phi,\theta)$ satisfies
@@ -48,13 +48,13 @@ $\mathcal F_{q,J,\Delta}(L)=\{\Omega:\exists H,E_0,\,(H,E_0,\Omega)\in\mathcal G
 \begin{proof}
     \leanok
     \uses{thm:peps_exact_small_size_approximation,thm:peps_prefactor_monotone}
-    For $L<L_0$, Theorem~\ref{thm:peps_exact_small_size_approximation} gives
+    For $L<L_0$, Lemma~\ref{thm:peps_exact_small_size_approximation} gives
     $\mathcal A_{C',c}(L,\Omega)$; for $L\ge L_0$, combine
-    $\mathcal A_{C,c}(L,\Omega)$ with Theorem~\ref{thm:peps_prefactor_monotone}
+    $\mathcal A_{C,c}(L,\Omega)$ with Lemma~\ref{thm:peps_prefactor_monotone}
     using $C\le C'$.
 \end{proof}
 
-\begin{theorem}[A uniform prefactor for every size]
+\begin{lemma}[A uniform prefactor for every size]
     \label{thm:peps_remove_finite_exceptions}
     \lean{TNLean.PEPS.Approximation.exists_uniform_approximation_of_sufficiently_large}
     \leanok
@@ -65,7 +65,7 @@ $\mathcal F_{q,J,\Delta}(L)=\{\Omega:\exists H,E_0,\,(H,E_0,\Omega)\in\mathcal G
     $\Omega\in\mathcal F(L)$, then there exists $C'\ge\max\{C,q^{L_0^2}\}>0$
     (independent of $L$ and $\Omega$) such that $\mathcal A_{C',c}(L,\Omega)$
     holds for all $L\ge2$ and $\Omega\in\mathcal F(L)$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{lem:peps_remove_small_sizes_named}
@@ -73,7 +73,7 @@ $\mathcal F_{q,J,\Delta}(L)=\{\Omega:\exists H,E_0,\,(H,E_0,\Omega)\in\mathcal G
     $C'=\max\{C,q^{L_0^2}\}>0$ to each $\Omega\in\mathcal F(L)$ for $L\ge2$.
 \end{proof}
 
-\begin{theorem}[Equivalence with the sufficiently large size statement]
+\begin{lemma}[Equivalence with the sufficiently large size statement]
     \label{thm:peps_approximation_iff_large}
     \lean{TNLean.PEPS.Approximation.polynomialPEPSApproximation_iff_sufficiently_large}
     \leanok
@@ -92,13 +92,13 @@ $\mathcal F_{q,J,\Delta}(L)=\{\Omega:\exists H,E_0,\,(H,E_0,\Omega)\in\mathcal G
         \forall(H,E_0,\Omega)\in\mathcal G_{q,J,\Delta}(L),\notag \\
          & \qquad\mathcal A_{C,c}(L,\Omega).\notag
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_remove_finite_exceptions}
     Taking $L_0=0$ gives
     (\ref{eq:peps_finite_uniform})$\implies$(\ref{eq:peps_finite_large}).
-    Conversely, applying Theorem~\ref{thm:peps_remove_finite_exceptions} to
+    Conversely, applying Lemma~\ref{thm:peps_remove_finite_exceptions} to
     $\mathcal F_{q,J,\Delta}$ converts $(C,c,L_0)$ from
     (\ref{eq:peps_finite_large}) into $(C',c)$ satisfying
     (\ref{eq:peps_finite_uniform}).
@@ -118,13 +118,13 @@ dimensions within $CL^{-5}$ of $|\Omega\rangle\langle\Omega|$ in trace norm.
 The statements below derive the large-size approximation from this network
 assumption as one step toward Theorem~\ref{thm:openai_polynomial_peps}.
 
-\begin{theorem}[Increasing the polynomial exponent]
+\begin{lemma}[Increasing the polynomial exponent]
     \label{thm:peps_exponent_monotone}
     \lean{TNLean.PEPS.Approximation.HasPEPSApproximation.mono_exponent}
     \leanok
     For $L\ge1$, $C\ge0$, and $c\le c'$,
     $\mathcal A_{C,c}(L,\Omega)\implies\mathcal A_{C,c'}(L,\Omega)$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Since $L\ge1$ and $C\ge0$, the same $(\Phi,\theta)$ satisfies
@@ -173,16 +173,16 @@ assumption as one step toward Theorem~\ref{thm:openai_polynomial_peps}.
     Replace $C_1,k$ by $\max\{C_1,1\},\max\{k,0\}$. For
     $L\ge\max\{2,L_0,\lceil2C\rceil\}$, $2C\le L\le L^4$ gives
     $2CL^{-5}\le L^{-1}\le1/2$ and $CL^{-5}<1$.
-    Theorem~\ref{thm:peps_party_column_routing_polynomial} with $\eta=CL^{-5}$
+    Lemma~\ref{thm:peps_party_column_routing_polynomial} with $\eta=CL^{-5}$
     yields $\mathcal A_{C_1^\chi,k\chi}(L,\Omega)$, and
-    Theorem~\ref{thm:peps_exponent_monotone} raises the exponent to
+    Lemma~\ref{thm:peps_exponent_monotone} raises the exponent to
     $k\chi+1>0$.
 \end{proof}
 
 The next three statements derive
 Definition~\ref{def:peps_large_size_dyadic_operator_network} from the protocol
 bounds of Definition~\ref{def:peps_dyadic_protocol}
-(supplied by Proposition~\ref{prop:peps_dyadic_protocol}) and
+(supplied by Lemma~\ref{prop:peps_dyadic_protocol}) and
 \cite[Proposition~7.1, Theorem~5.2, and Section~8.1]{OpenAI2026PolynomialPEPS}.
 
 \begin{lemma}[Operator party networks from compressed protocol densities]
@@ -215,9 +215,9 @@ bounds of Definition~\ref{def:peps_dyadic_protocol}
     \uses{thm:peps_dyadic_protocol_consequences, thm:compression_operator_finite_coordinates}
     Reading each unit-square party at its fold-fixed site anchor and every
     other party at physical dimension $1$ identifies $\sigma$ with $\tau$ by
-    Theorem~\ref{thm:compression_operator_finite_coordinates}. The triangle
+    Lemma~\ref{thm:compression_operator_finite_coordinates}. The triangle
     inequality and the density and separation bounds of
-    Theorem~\ref{thm:peps_dyadic_protocol_consequences} then yield the trace
+    Lemma~\ref{thm:peps_dyadic_protocol_consequences} then yield the trace
     norm and anchor-separation bounds.
 \end{proof}
 
@@ -247,7 +247,7 @@ bounds of Definition~\ref{def:peps_dyadic_protocol}
     from its change $W_t$.
 \end{proof}
 
-\begin{theorem}[Compressed dyadic operator networks from the protocol bounds]
+\begin{lemma}[Compressed dyadic operator networks from the protocol bounds]
     \label{thm:peps_large_size_network_from_protocol}
     \lean{TNLean.PEPS.Approximation.dyadicOperatorNetworkAt_of_dyadicProtocolBoundsAt}
     \leanok
@@ -262,7 +262,7 @@ bounds of Definition~\ref{def:peps_dyadic_protocol}
     $C_\Sigma(r,b,\max\{C_N,0\}b,q,\max\{C_K,0\},C_K)$, link exponent
     $\alpha_{\mathrm{net}}(r,b,3,0,k,k,5)$, block bound $b$, degree bound
     $2b(b-1)$, separation constant $b$, and threshold $L_0$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_distributed_construction_compression_of_le, def:peps_compression_constants,
@@ -274,7 +274,7 @@ bounds of Definition~\ref{def:peps_dyadic_protocol}
     physical dimensions $\le q$, and gate expansions with $\le C_KL^k$
     monomials, coefficient sum $\le C_KL^k$, and $\le r$ pair effects per
     monomial. Applying
-    Theorem~\ref{thm:peps_distributed_construction_compression_of_le} with
+    Lemma~\ref{thm:peps_distributed_construction_compression_of_le} with
     $p=5$ and $s=k$ produces a contraction $\tau$ within $\varepsilon=L^{-5}$
     of the physical density with link size $\le C_pL^\alpha$ and degree
     $\le 2b(b-1)$, where

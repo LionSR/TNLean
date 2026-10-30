@@ -41,20 +41,25 @@ private theorem sourceV_contraction_transport
     (hX₁ : Xt₁ = X₁ * K₁) (hX₂ : Xt₂ = X₂ * K₂) :
     (fun ((p, q) : Fin d × Fin d) ((r, l) : Fin r[U] × Fin ℓ[U]) ↦
       ∑ β : Fin D, Xt₁ (p, β) r * Xt₂ (β, q) l) =
-      (fun ((p, q) : Fin d × Fin d) ((r, l) : Fin r[U] × Fin ℓ[U]) ↦
-        ∑ β : Fin D, X₁ (p, β) r * X₂ (β, q) l) * (K₁ ⊗ₖ K₂) := by
+      (Matrix.of (fun (p, q) (r, l) ↦ ∑ β : Fin D, X₁ (p, β) r * X₂ (β, q) l) *
+        (K₁ ⊗ₖ K₂) : Matrix (Fin d × Fin d) (Fin r[U] × Fin ℓ[U]) ℂ) := by
   classical
   subst Xt₁ Xt₂
   ext ⟨p, q⟩ ⟨r, l⟩
   simp only [Matrix.mul_apply, Fintype.sum_prod_type, Matrix.kroneckerMap_apply,
-    Finset.sum_mul, Finset.mul_sum]
-  rw [Finset.sum_comm]
-  apply Finset.sum_congr rfl
-  intro s _
-  rw [Finset.sum_comm]
-  apply Finset.sum_congr₂
-  intro t _ β _
-  ring
+    Matrix.of_apply, Finset.sum_mul, Finset.mul_sum]
+  calc
+    _ = ∑ t : Fin ℓ[U], ∑ β : Fin D, ∑ s : Fin r[U],
+        X₁ (p, β) s * K₁ s r * (X₂ (β, q) t * K₂ t l) := Finset.sum_comm
+    _ = ∑ t : Fin ℓ[U], ∑ s : Fin r[U], ∑ β : Fin D,
+        X₁ (p, β) s * K₁ s r * (X₂ (β, q) t * K₂ t l) :=
+      Finset.sum_congr rfl fun _ _ ↦ Finset.sum_comm
+    _ = ∑ s : Fin r[U], ∑ t : Fin ℓ[U], ∑ β : Fin D,
+        X₁ (p, β) s * K₁ s r * (X₂ (β, q) t * K₂ t l) := Finset.sum_comm
+    _ = _ := by
+      refine Finset.sum_congr rfl fun s _ ↦ Finset.sum_congr rfl fun t _ ↦
+        Finset.sum_congr rfl fun β _ ↦ ?_
+      ring
 
 namespace TwoSiteStandardFormData
 
@@ -90,13 +95,14 @@ theorem exists_fourSpin_source_gate_gauges
       (finProdFinEquiv (m := d) (n := d))
     ∃ (x : Matrix.unitaryGroup (Fin ℓ[W]) ℂ) (y : Matrix.unitaryGroup (Fin r[W]) ℂ),
       SourceFactors.sourceU W T =
-        ((x : Matrix _ _ ℂ) ⊗ₖ (y : Matrix _ _ ℂ)) *
+        ((x : Matrix (Fin ℓ[W]) (Fin ℓ[W]) ℂ) ⊗ₖ (y : Matrix (Fin r[W]) (Fin r[W]) ℂ)) *
           Matrix.reindex (Equiv.prodCongr eL eR) p
             (staircaseMiddle (A := Fin ℓ) (E := Fin r) v * (u ⊗ₖ u)) ∧
       SourceFactors.sourceV W T =
         Matrix.reindex p (Equiv.prodCongr eR eL)
             (staircaseMiddle (A := Fin d) (E := Fin d) v) *
-          (star (y : Matrix _ _ ℂ) ⊗ₖ star (x : Matrix _ _ ℂ)) := by
+          (star (y : Matrix (Fin r[W]) (Fin r[W]) ℂ) ⊗ₖ
+            star (x : Matrix (Fin ℓ[W]) (Fin ℓ[W]) ℂ)) := by
   classical
   let eR := finProdFinEquiv.trans (finCongr S.sourceRanks_eq.1.symm)
   let eL := finProdFinEquiv.trans (finCongr S.sourceRanks_eq.2.symm)
@@ -112,24 +118,24 @@ theorem exists_fourSpin_source_gate_gauges
     fun ij rl ↦ ∑ β : Fin D, X₁ (ij.1, β) rl.1 * X₂ (β, ij.2) rl.2
   have hC : C = Matrix.reindex (Equiv.prodCongr eL eR) p
       (staircaseMiddle (A := Fin ℓ) (E := Fin r) v * (u ⊗ₖ u)) := by
-    ext ⟨l, r⟩ ⟨i, j⟩
+    ext ⟨a, b⟩ ⟨i, j⟩
     change (∑ β : Fin D,
-      S.cutY₂ (eL.symm l) (i, β) * S.cutY₁ (eR.symm r) (β, j)) =
+      S.cutY₂ (eL.symm a) (i, β) * S.cutY₁ (eR.symm b) (β, j)) =
       (staircaseMiddle (A := Fin ℓ) (E := Fin r) v * (u ⊗ₖ u))
-        (eL.symm l, eR.symm r) (finProdFinEquiv.symm i, finProdFinEquiv.symm j)
-    have h := congrArg (fun M ↦ M (eL.symm l, eR.symm r)
+        (eL.symm a, eR.symm b) (finProdFinEquiv.symm i, finProdFinEquiv.symm j)
+    have h := congrArg (fun M ↦ M (eL.symm a, eR.symm b)
       (finProdFinEquiv.symm i, finProdFinEquiv.symm j))
       S.cutY₂_cutY₁_eq_staircaseMiddle_mul_kronecker
     simpa only [Equiv.apply_symm_apply] using h
   have hB : B = Matrix.reindex p (Equiv.prodCongr eR eL)
       (staircaseMiddle (A := Fin d) (E := Fin d) v) := by
-    ext ⟨i, j⟩ ⟨r, l⟩
+    ext ⟨i, j⟩ ⟨b, a⟩
     change (∑ β : Fin D,
-      S.cutX₁ (i, β) (eR.symm r) * S.cutX₂ (β, j) (eL.symm l)) =
+      S.cutX₁ (i, β) (eR.symm b) * S.cutX₂ (β, j) (eL.symm a)) =
       (staircaseMiddle (A := Fin d) (E := Fin d) v)
-        (finProdFinEquiv.symm i, finProdFinEquiv.symm j) (eR.symm r, eL.symm l)
+        (finProdFinEquiv.symm i, finProdFinEquiv.symm j) (eR.symm b, eL.symm a)
     have h := congrArg (fun M ↦ M (finProdFinEquiv.symm i, finProdFinEquiv.symm j)
-      (eR.symm r, eL.symm l)) S.cutX₁_cutX₂_eq_staircaseMiddle
+      (eR.symm b, eL.symm a)) S.cutX₁_cutX₂_eq_staircaseMiddle
     simpa only [Equiv.apply_symm_apply] using h
   have huC : C.IsUnitaryBetween := by
     rw [hC]
@@ -155,26 +161,27 @@ theorem exists_fourSpin_source_gate_gauges
     exists_reciprocal_unitary_source_gauges
       hfac₁ T.sourceCutM₁_eq.symm hfac₂ T.sourceCutM₂_eq.symm
       T.X₁_weighted_isometry hright₁ T.X₂_isometry hright₂ huC huT
-  have hY₁ : T.Y₁ = ((δ : ℂ) • star (W₁ : Matrix _ _ ℂ)) * Y₁ := by
+  have hY₁ : T.Y₁ = ((δ : ℂ) • star (W₁ : Matrix (Fin r[W]) (Fin r[W]) ℂ)) * Y₁ := by
     rw [Matrix.smul_mul]
     exact hYt₁
-  have hY₂ : T.Y₂ = ((δ : ℂ)⁻¹ • star (W₂ : Matrix _ _ ℂ)) * Y₂ := by
+  have hY₂ : T.Y₂ = ((δ : ℂ)⁻¹ • star (W₂ : Matrix (Fin ℓ[W]) (Fin ℓ[W]) ℂ)) * Y₂ := by
     rw [Matrix.smul_mul]
     exact hYt₂
   have hU := sourceU_contraction_transport hY₁ hY₂
   change SourceFactors.sourceU W T =
-    (((δ : ℂ)⁻¹ • star (W₂ : Matrix _ _ ℂ)) ⊗ₖ
-      ((δ : ℂ) • star (W₁ : Matrix _ _ ℂ))) * C at hU
+    (((δ : ℂ)⁻¹ • star (W₂ : Matrix (Fin ℓ[W]) (Fin ℓ[W]) ℂ)) ⊗ₖ
+      ((δ : ℂ) • star (W₁ : Matrix (Fin r[W]) (Fin r[W]) ℂ))) * C at hU
   rw [Matrix.smul_kronecker, Matrix.kronecker_smul, smul_smul, hδ, one_smul, hC] at hU
-  have hX₁ : T.X₁ = X₁ * ((δ : ℂ)⁻¹ • (W₁ : Matrix _ _ ℂ)) := by
+  have hX₁ : T.X₁ = X₁ * ((δ : ℂ)⁻¹ • (W₁ : Matrix (Fin r[W]) (Fin r[W]) ℂ)) := by
     rw [Matrix.mul_smul]
     exact hXt₁
-  have hX₂ : T.X₂ = X₂ * ((δ : ℂ) • (W₂ : Matrix _ _ ℂ)) := by
+  have hX₂ : T.X₂ = X₂ * ((δ : ℂ) • (W₂ : Matrix (Fin ℓ[W]) (Fin ℓ[W]) ℂ)) := by
     rw [Matrix.mul_smul]
     exact hXt₂
   have hV := sourceV_contraction_transport hX₁ hX₂
   change SourceFactors.sourceV W T = B *
-    (((δ : ℂ)⁻¹ • (W₁ : Matrix _ _ ℂ)) ⊗ₖ ((δ : ℂ) • (W₂ : Matrix _ _ ℂ))) at hV
+    (((δ : ℂ)⁻¹ • (W₁ : Matrix (Fin r[W]) (Fin r[W]) ℂ)) ⊗ₖ
+      ((δ : ℂ) • (W₂ : Matrix (Fin ℓ[W]) (Fin ℓ[W]) ℂ))) at hV
   rw [Matrix.smul_kronecker, Matrix.kronecker_smul, smul_smul, hδ, one_smul, hB] at hV
   refine ⟨star W₂, star W₁, ?_, ?_⟩
   · simpa only [Unitary.coe_star] using hU
@@ -194,13 +201,14 @@ theorem exists_fourSpin_selected_source_gate_gauges
       (finProdFinEquiv (m := d) (n := d))
     ∃ (x : Matrix.unitaryGroup (Fin ℓ[W]) ℂ) (y : Matrix.unitaryGroup (Fin r[W]) ℂ),
       SourceFactors.sourceU W T =
-        ((x : Matrix _ _ ℂ) ⊗ₖ (y : Matrix _ _ ℂ)) *
+        ((x : Matrix (Fin ℓ[W]) (Fin ℓ[W]) ℂ) ⊗ₖ (y : Matrix (Fin r[W]) (Fin r[W]) ℂ)) *
           Matrix.reindex (Equiv.prodCongr eL eR) p
             (staircaseMiddle (A := Fin ℓ) (E := Fin r) v * (u ⊗ₖ u)) ∧
       SourceFactors.sourceV W T =
         Matrix.reindex p (Equiv.prodCongr eR eL)
             (staircaseMiddle (A := Fin d) (E := Fin d) v) *
-          (star (y : Matrix _ _ ℂ) ⊗ₖ star (x : Matrix _ _ ℂ)) := by
+          (star (y : Matrix (Fin r[W]) (Fin r[W]) ℂ) ⊗ₖ
+            star (x : Matrix (Fin ℓ[W]) (Fin ℓ[W]) ℂ)) := by
   let T := sourceFactors W hW.ρ hW.ρ_posDef
   exact S.exists_fourSpin_source_gate_gauges T
     (hW.sourceFactors_sourceU_isUnitaryBetween (S.isMPUSimple hW) T)

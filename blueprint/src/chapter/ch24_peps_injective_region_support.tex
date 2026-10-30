@@ -23,7 +23,7 @@
     factor preserves a linear range.
 \end{proof}
 
-\begin{theorem}[Support from an injective complementary region]%
+\begin{lemma}[Support from an injective complementary region]%
     \label{thm:peps_injective_complement_region_support}
     \lean{TNLean.PEPS.range_regionReducedDensity_eq_regionGroundSpace_of_injective_complement}
     \leanok
@@ -32,7 +32,7 @@
     unnormalized reduced density of the closed PEPS has support
     exactly equal to $\mathcal G_R$. Neither injectivity of $R$
     nor connectedness of either side is needed.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Write the physical coefficient matrix as $M=T_RS^\mathsf T$,
@@ -42,7 +42,7 @@
     The reduced density $MM^\dagger$ has the same range as $M$.
 \end{proof}
 
-\begin{theorem}[An injective open cut determines its physical support]%
+\begin{lemma}[An injective open cut determines its physical support]%
     \label{thm:peps_injective_open_cut_rank}
     \lean{TNLean.PEPS.rank_regionReducedDensity_of_injective_open_cut,
         TNLean.PEPS.SameState.regionGroundSpace_eq_of_injective_complements}
@@ -53,7 +53,7 @@
     If two coefficient vectors coincide and their complementary open maps
     are injective, their regional ground spaces on $R$ coincide.
     These assertions need neither site injectivity nor connectedness.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     The complementary map identifies the reduced support with
@@ -62,7 +62,7 @@
     densities, so the corresponding support spaces agree.
 \end{proof}
 
-\begin{theorem}[Exact boundary rank for ordinary injective PEPS]%
+\begin{lemma}[Exact boundary rank for ordinary injective PEPS]%
     \label{thm:peps_injective_region_boundary_rank}
     \lean{TNLean.PEPS.openRegionMap_injective_of_isInjective,
         TNLean.PEPS.finrank_regionGroundSpace_of_injective_openRegionMap,
@@ -86,7 +86,7 @@
     This is the injective Schmidt-span consequence used in
     \cite[Section 3]{Molnar2018NormalPEPS} and the virtual-pair
     argument of \cite[Section IV.C.1]{Cirac2021Matrix}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     A contraction of injective sites with nonzero virtual bonds is

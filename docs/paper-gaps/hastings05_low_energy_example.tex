@@ -10,7 +10,7 @@
 \date{}
 \begin{document}
 \maketitle
-\gapnote{scope-restriction}{open}
+\gapnote{local-correction}{resolved}
 
 \section{The source example}
 Hastings, \emph{Solving gapped Hamiltonians locally}~\cite{Hastings2006Solving},
@@ -53,17 +53,31 @@ lists $H_0$ and $H_2$ as non-commuting. The compression of $H_0$ commutes with
 that of $H_i$ exactly for $i\geq3$, where $H_i=S^z_i$ is a scalar on the ground
 space.
 
-\section{The scope of the formalized statement}
+\section{The truncated filtered terms}
 The source's claim is about the filtered local approximations: ``the $M_i$ need
 not commute in the low energy sector'' (line 1656). It reaches this from the
 terms $H_i$ through the remark that ``for large enough $q,l_{proj}$, the
 commutator of the $M_i$ in the low energy sector is close to that of the $H_i$
 in the low energy sector'' (lines 1665--1667), which is stated without
-argument. The formalized theorems concern the compressions of the $H_i$
-themselves. This is a scope restriction: the passage from the $H_i$ to the
-$M_i$ is not formalized. The source also leaves the chain unspecified beyond
-site~$0$; sites to the left of $0$ with $H_i=S^z_i$ would only add scalars on
-the ground space, and the formalized chain starts at site~$0$.
+argument. In this example the passage is exact. The Hamiltonian in
+(\ref{eq:hastings05_low_energy_example_sum}) acts only through the commuting
+operators $S^z_i$ with $i\ne0$. Each $H_i$ is a sum of an operator on spin~$0$
+and such diagonal operators, so $[H,H_i]=0$. Thus
+$e^{itH}H_ie^{-itH}=H_i$, and the normalized Gaussian average is $H_i$ for
+every variance.
+
+For the chain $0,\ldots,m+2$, all terms are within distance $m+2$ of any
+site. Take the interaction range to be $R=2$ and
+$l_{\mathrm{proj}}\ge m+4$. The generator of the source's truncated dynamics,
+$H_{\mathrm{loc}}=\sum_{|i-j|\le l_{\mathrm{proj}}-2}H_j$, is then exactly $H$.
+Consequently $M_i=H_i$ for every $i$, and all the noncommutation and
+commutation conclusions hold for the actual truncated terms. This gives an
+explicit sufficient radius for the source's ``large enough'' assertion;
+no limiting argument in the variance is needed.
+
+The source also leaves the chain unspecified beyond site~$0$; sites to the
+left of $0$ with $H_i=S^z_i$ would only add scalars on the ground space,
+and the formalized chain starts at site~$0$.
 
 \section{The formalization}
 Both corrections are local: the example is formalized with the sum
@@ -72,6 +86,12 @@ of $m+3$ sites.\footnote{\leanid{TNLean.Lattice.LowEnergyExample.hamiltonian_eq_
     \leanid{TNLean.Lattice.LowEnergyExample.not_commute_compress_term_zero_one},
     \leanid{TNLean.Lattice.LowEnergyExample.commute_compress_term_zero_of_three_le}
     in \doclink{TNLean/Lattice/LowEnergyCommutatorExample}.}
+The equalities for the filters are
+\leanid{TNLean.Lattice.LowEnergyExample.gaussianFilteredTerm_term_eq} and
+\leanid{TNLean.Lattice.LowEnergyExample.truncatedTerm_eq}; the conclusions for
+the truncated terms are
+\leanid{TNLean.Lattice.LowEnergyExample.not_commute_compress_truncatedTerm} and
+\leanid{TNLean.Lattice.LowEnergyExample.commute_compress_truncatedTerm_zero_of_three_le}.
 
 \bibliographystyle{alpha}
 \bibliography{references}

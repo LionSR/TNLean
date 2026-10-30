@@ -406,7 +406,7 @@ every finite union of injective regions.
     linearly independent.
 \end{definition}
 
-\begin{theorem}[Gauged blocked-region weight as a global sum]
+\begin{lemma}[Gauged blocked-region weight as a global sum]
     \label{thm:peps_regionBlockedWeight_applyGauge_eq_globalSum}
     \lean{TNLean.PEPS.regionBlockedWeight_applyGauge_eq_globalSum}
     \leanok
@@ -423,14 +423,14 @@ every finite union of injective regions.
     \end{align}
     where $\zeta$ ranges over global virtual configurations and $G_f^X$ is the
     boundary gauge on $f\in\partial R$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     On every edge $e$ internal to $R$, the two endpoint gauges cancel via
     $\sum_a (X_e)_{\alpha,a}(X_e^{-1})_{a,\beta}=(X_eX_e^{-1})_{\alpha,\beta}=\delta_{\alpha,\beta}$,
     leaving only the boundary factors $G_f^X(\mu_f,\zeta_f)$ for $f\in\partial R$.
 \end{proof}
 
-\begin{theorem}[Boundary-coupling form of the gauged blocked weight]
+\begin{lemma}[Boundary-coupling form of the gauged blocked weight]
     \label{thm:peps_regionBlockedWeight_applyGauge}
     \lean{TNLean.PEPS.regionBlockedWeight_applyGauge}
     \leanok
@@ -443,14 +443,14 @@ every finite union of injective regions.
         \sum_{\nu}K_R^X(\mu,\nu)\,T_{B,R}^{\nu}(\tau).
         \label{eq:peps_boundary_coupling}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Group the global sum (\ref{eq:peps_gauged_global_sum}) of
-    Theorem~\ref{thm:peps_regionBlockedWeight_applyGauge_eq_globalSum} by the
+    Lemma~\ref{thm:peps_regionBlockedWeight_applyGauge_eq_globalSum} by the
     boundary restriction $\nu=\zeta|_{\partial R}$.
 \end{proof}
 
-\begin{theorem}[The boundary coupling has a right inverse]
+\begin{lemma}[The boundary coupling has a right inverse]
     \label{thm:peps_sum_regionBoundaryCoupling_mul_inv}
     \lean{TNLean.PEPS.sum_regionBoundaryCoupling_mul_inv}
     \leanok
@@ -462,7 +462,7 @@ every finite union of injective regions.
         \delta_{\mu,\rho}.
         \label{eq:peps_boundary_coupling_inverse}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Factoring the sum over $f\in\partial R$ gives
     \begin{align}
@@ -476,14 +476,14 @@ every finite union of injective regions.
     \end{align}
 \end{proof}
 
-\begin{theorem}[Gauge preservation of blocked-region injectivity]
+\begin{lemma}[Gauge preservation of blocked-region injectivity]
     \label{thm:peps_regionBlockedTensorInjective_applyGauge}
     \lean{TNLean.PEPS.regionBlockedTensorInjective_applyGauge}
     \leanok
     \uses{def:applyGauge, thm:peps_regionBlockedWeight_applyGauge, thm:peps_sum_regionBoundaryCoupling_mul_inv}
     For $\widetilde B=\operatorname{Gauge}_X(B)$,
     $\inj(T_{B,R})\Longrightarrow\inj(T_{\widetilde B,R})$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     If $\sum_\mu c_\mu T_{\widetilde B,R}^{\mu}=0$, then (\ref{eq:peps_boundary_coupling})
     and linear independence of $\{T_{B,R}^{\nu}\}_{\nu}$ give
@@ -492,7 +492,7 @@ every finite union of injective regions.
     yields $c_\rho=0$.
 \end{proof}
 
-\begin{theorem}[Kernel descent for blocked regions]%
+\begin{lemma}[Kernel descent for blocked regions]%
     \label{thm:peps_regionBlockedTensorInjective_of_isVertexInjective}
     \lean{TNLean.PEPS.regionBlockedTensorInjective_of_isVertexInjective}
     \leanok
@@ -500,14 +500,14 @@ every finite union of injective regions.
     If $A$ is vertex-injective and $D_f>0$ for every virtual bond $f$, then
     $\inj_A(R)$ holds for every finite region $R\subseteq V$.
     % Paper-gap note: docs/paper-gaps/peps_injective_ft_section3_route.tex.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     If $\sum_{\rho} c_\rho\,T_{A,R}^{\rho}(\tau)=0$ for all $\tau$, inverting
     the vertex-injective local tensors $A_v$ ($v\in R$) one by one descends to
     the empty region and forces $c_\rho=0$ for all $\rho$.
 \end{proof}
 
-\begin{theorem}[Union closure for a vertex-injective tensor]%
+\begin{lemma}[Union closure for a vertex-injective tensor]%
     \label{thm:peps_regionInjectivityUnionClosure_of_isVertexInjective}
     \lean{TNLean.PEPS.regionInjectivityUnionClosure_of_isVertexInjective}
     \leanok
@@ -515,13 +515,13 @@ every finite union of injective regions.
     If $A$ is vertex-injective and $D_f>0$ for all $f$, then $\inj_A$ satisfies
     $\inj_A(R)\wedge\inj_A(S)\Longrightarrow\inj_A(R\cup S)$ for all $R,S\subseteq V$.
     % Paper-gap note: docs/paper-gaps/peps_injective_ft_section3_route.tex.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
-    Apply Theorem~\ref{thm:peps_regionBlockedTensorInjective_of_isVertexInjective}
+    Apply Lemma~\ref{thm:peps_regionBlockedTensorInjective_of_isVertexInjective}
     directly to $R\cup S$.
 \end{proof}
 
-\begin{theorem}[Union closure from the overlapping union lemma]%
+\begin{lemma}[Union closure from the overlapping union lemma]%
     \label{thm:peps_regionInjectivityUnionClosure_of_overlap}
     \lean{TNLean.PEPS.regionInjectivityUnionClosure_of_overlap}
     \leanok
@@ -530,7 +530,7 @@ every finite union of injective regions.
     $\inj_A(R)\wedge\inj_A(S)\Longrightarrow\inj_A(R\cup S)$ for all $R,S\subseteq V$.
     % Source-faithful scope note: this is the union-of-injective-regions
     % lemma, rather than the stronger vertex-injective specialization.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Immediate from Lemma~\ref{lem:peps_injectiveRegion_union_pos}.
 \end{proof}

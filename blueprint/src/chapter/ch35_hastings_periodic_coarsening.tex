@@ -1,0 +1,352 @@
+\section{Quadratic logarithmic range on a periodic physical chain}
+\label{sec:hastings_periodic_coarsening}
+
+The grouping into supersites in
+\cite[lines 609--639]{Hastings2006Solving} gives pair-operator bounds
+proportional to the projection radius, rather than to the total number
+of physical sites. This yields the quadratic logarithmic range in one
+dimension. The construction below retains the physical periodic boundary
+and includes arbitrary physical chain lengths. The hierarchy uses the
+corrected deficiency and the additional closing window of
+\cite{gap:hastings05_hierarchical_projection,gap:hastings05_hierarchical_energy}.
+
+\begin{definition}[Regular periodic grouping]
+    \label{def:hastings_regular_periodic_grouping}
+    \lean{TNLean.MPS.AreaLaw.LocalSolution.periodicCoarseEdge,
+        TNLean.MPS.AreaLaw.LocalSolution.periodicPhysicalCoordinate,
+        TNLean.MPS.AreaLaw.LocalSolution.periodicPhysicalDistance,
+        TNLean.MPS.AreaLaw.LocalSolution.periodicCoarseOperator,
+        TNLean.MPS.AreaLaw.LocalSolution.periodicCoarseProjection}
+    \leanok
+    Label the sites by $(k,s)$ with $0\le k<N$ and $0\le s<2\ell$.
+    Their physical coordinate is $2\ell k+s$, with cyclic distance on
+    $2\ell N$ sites. Assign $(k,s)$ to edge $k$ when $s<\ell$, and to
+    edge $k+1$ modulo $N$ otherwise. The operator $A_j$ is the sum of
+    terms assigned to edge $j$. The periodic hierarchy is formed from
+    these operators, with centred norm bound $K=4\ell J$.
+\end{definition}
+
+\begin{lemma}[Sharp regular grouping]
+    \label{thm:hastings_regular_periodic_grouping}
+    \lean{TNLean.MPS.AreaLaw.LocalSolution.card_periodicCoarseEdge_fibre,
+        TNLean.MPS.AreaLaw.LocalSolution.finRotate_val_eq_succ_or_zero,
+        TNLean.MPS.AreaLaw.LocalSolution.periodicPhysicalCoordinate_lt,
+        TNLean.MPS.AreaLaw.LocalSolution.periodicCoarseEdge_internal_centre,
+        TNLean.MPS.AreaLaw.LocalSolution.periodicCoarseEdge_support,
+        TNLean.MPS.AreaLaw.LocalSolution.periodicCoarseEdge_zero_support,
+        TNLean.MPS.AreaLaw.LocalSolution.periodicCoarseEdge_support_all,
+        TNLean.MPS.AreaLaw.LocalSolution.sum_periodicCoarseOperator,
+        TNLean.MPS.AreaLaw.LocalSolution.periodicCoarseOperator_mem_supportedOperators,
+        TNLean.MPS.AreaLaw.LocalSolution.isHermitian_periodicCoarseOperator}
+    \leanok
+    \uses{def:hastings_regular_periodic_grouping}
+    Every edge receives exactly $2\ell$ terms. A cyclic ball of radius
+    $\ell$ about a centre assigned to $j$ lies in blocks $j-1,j$,
+    including the last and first blocks when $j=0$. Thus cyclic-local
+    Hermitian terms give Hermitian adjacent-pair operators, and
+    $\sum_jA_j=\sum_iM_i$. The cyclic successor increases a natural
+    block label by one, except that the last label returns to zero.
+\end{lemma}
+\begin{proof}\leanok
+    For a fixed within-block coordinate $s$, exactly one block gives
+    assignment to $j$: it is $j$ in the first half, and $j-1$ in the
+    second half. This is a bijection between the centres assigned to
+    $j$ and the $2\ell$ possible values of $s$.
+    At an internal edge, the physical centre $z$ satisfies
+    $2\ell j\le z+\ell$ and $z<2\ell j+\ell$. Its cyclic locality ball
+    therefore lies between $2\ell(j-1)$ and $2\ell(j+1)$.
+    The closing edge has centres in the first or last half-block, so
+    the same assertion holds across the periodic cut. Summing the
+    assigned terms proves the sum and Hermiticity assertions.
+\end{proof}
+
+\begin{definition}[Grouping an arbitrary periodic chain]
+    \label{def:hastings_rounded_periodic_grouping}
+    \lean{TNLean.MPS.AreaLaw.LocalSolution.roundedPeriodicBlock,
+        TNLean.MPS.AreaLaw.LocalSolution.roundedPeriodicEdge,
+        TNLean.MPS.AreaLaw.LocalSolution.roundedPeriodicDistance,
+        TNLean.MPS.AreaLaw.LocalSolution.roundedPeriodicBlockCount,
+        TNLean.MPS.AreaLaw.LocalSolution.roundedPeriodicOperator,
+        TNLean.MPS.AreaLaw.LocalSolution.roundedPeriodicProjection}
+    \leanok
+    For $M$ physical sites and an integer $\ell\ge1$, put
+    $N=\max\{1,\lfloor M/(2\ell)\rfloor\}$. The block containing
+    $z\in\{0,\ldots,M-1\}$ has label
+    $b(z)=\min\{\lfloor z/(2\ell)\rfloor,N-1\}$. Assign $z$ to
+    edge $\lfloor(z+\ell)/(2\ell)\rfloor$ if this is less than $N$,
+    and to edge zero otherwise. Distance remains the physical cyclic
+    distance $\min\{|x-z|,M-|x-z|\}$. The pair operator $A_j$ sums the
+    assigned terms, and its hierarchy uses $K=8\ell J$.
+\end{definition}
+
+\begin{lemma}[Rounded cyclic supports and the number of terms]
+    \label{thm:hastings_rounded_periodic_grouping}
+    \lean{TNLean.MPS.AreaLaw.LocalSolution.roundedPeriodicBlock_lt,
+        TNLean.MPS.AreaLaw.LocalSolution.roundedPeriodicEdge_internal_centre,
+        TNLean.MPS.AreaLaw.LocalSolution.roundedPeriodicEdge_support,
+        TNLean.MPS.AreaLaw.LocalSolution.roundedPeriodicBlockCount_pos,
+        TNLean.MPS.AreaLaw.LocalSolution.roundedPeriodicBlockCount_cover,
+        TNLean.MPS.AreaLaw.LocalSolution.roundedPeriodicBlockCount_upper,
+        TNLean.MPS.AreaLaw.LocalSolution.roundedPeriodicBlockCount_le,
+        TNLean.MPS.AreaLaw.LocalSolution.roundedPeriodicEdge_support_of_cover,
+        TNLean.MPS.AreaLaw.LocalSolution.roundedPeriodicEdge_zero_support,
+        TNLean.MPS.AreaLaw.LocalSolution.card_roundedPeriodicEdge_fibre_le,
+        TNLean.MPS.AreaLaw.LocalSolution.sum_roundedPeriodicOperator,
+        TNLean.MPS.AreaLaw.LocalSolution.roundedPeriodicOperator_mem_supportedOperators,
+        TNLean.MPS.AreaLaw.LocalSolution.isHermitian_roundedPeriodicOperator}
+    \leanok
+    \uses{def:hastings_rounded_periodic_grouping}
+    The block count is positive, and is at most $M$ when $M\ge1$.
+    Either $2\ell N\le M<2\ell(N+1)$ or the chain consists of one
+    block. Every radius-$\ell$ cyclic ball lies in the pair assigned
+    to its centre; the closing pair is the first and last blocks.
+    Each edge receives at most $4\ell$ terms. Consequently cyclic-local
+    Hermitian terms give Hermitian pair operators supported on adjacent
+    blocks, with $\sum_jA_j=\sum_iM_i$.
+\end{lemma}
+\begin{proof}\leanok
+    Division with remainder gives the block count and the bounds on
+    $M$. The first $N-1$ blocks have width $2\ell$; the last contains
+    the remainder and has width less than $4\ell$. An internal assigned
+    centre again satisfies $2\ell j\le z+\ell$ and
+    $z<2\ell j+\ell$, giving the adjacent pair. The closing assignment
+    contains only centres in the first half-block or beyond the last
+    internal boundary plus $\ell$. Cyclic locality then gives the first
+    or last block. If $N=1$, every site already belongs to that block.
+    For the number of centres, an internal assignment lies in an interval
+    of length $2\ell$. For edge zero, the first $\ell$ centres and the
+    remaining centres of the last block together number at most $4\ell$.
+\end{proof}
+
+\begin{lemma}[Local estimates give linear pair estimates]
+    \label{thm:hastings_periodic_linear_pair_bounds}
+    \lean{TNLean.MPS.AreaLaw.LocalSolution.norm_edgePartition_le_of_fibre_card,
+        TNLean.MPS.AreaLaw.LocalSolution.residual_periodicCoarseOperator_le,
+        TNLean.MPS.AreaLaw.LocalSolution.centeredNorm_periodicCoarseOperator_le,
+        TNLean.MPS.AreaLaw.LocalSolution.residual_roundedPeriodicOperator_le,
+        TNLean.MPS.AreaLaw.LocalSolution.centeredNorm_roundedPeriodicOperator_le}
+    \leanok
+    \uses{thm:hastings_regular_periodic_grouping,
+        thm:hastings_rounded_periodic_grouping}
+    Let the $M_i$ be Hermitian, let $\psi$ be unit, let $J,\varepsilon\ge0$, and suppose
+    $\|M_i\|\le J$ and
+    $\|(M_i-\langle\psi,M_i\psi\rangle)\psi\|\le\varepsilon$.
+    In the rounded grouping,
+    \begin{align*}
+        \|A_j-\langle\psi,A_j\psi\rangle\|       & \le8\ell J,          \\
+        \|(A_j-\langle\psi,A_j\psi\rangle)\psi\| & \le4\ell\varepsilon.
+    \end{align*}
+    In the regular grouping the respective constants are $4\ell J$
+    and $2\ell\varepsilon$. More generally a sum over at most $B$ terms
+    of norm at most $J$ has norm at most $BJ$.
+\end{lemma}
+\begin{proof}\leanok
+    Sum the local residuals over the assigned centres. For the centred
+    norm, use $|\langle\psi,A_j\psi\rangle|\le\|A_j\|$ and
+    $\|A_j\|\le\sum_{i\mapsto j}\|M_i\|$, followed by the proved
+    number of assigned centres.
+\end{proof}
+
+\begin{lemma}[Absorbing a linear truncation prefactor]
+    \label{thm:hastings_periodic_linear_truncation_error}
+    \lean{TNLean.MPS.AreaLaw.LocalSolution.hierarchyTruncationError_mul_length_le_eighth_gap,
+        TNLean.MPS.AreaLaw.LocalSolution.card_le_two_mul_re_trace_of_periodicHierarchyProjection_of_error}
+    \leanok
+    \uses{thm:hastings05_explicit_projection_length,
+        thm:hastings05_physical_gap_count}
+    Let $h\ge2$, $J_*,\Delta>0$, and
+    $r\ge512h^2(1+\max\{0,\log(J_*/\Delta)\})$. Then
+    $2^hJ_*r e^{-r}\le\Delta/8$.
+    In the quantitative periodic hierarchy, a centred pair bound
+    $K\le J_*r$ and any physical approximation error
+    $\delta\le\Delta/8$ therefore suffice for the count of at most
+    twice the physical ground-space dimension.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:hastings05_explicit_projection_length,
+        thm:hastings05_physical_gap_count}
+    Apply the window-energy bound with $K=2J_*r/9$, and use
+    $e^{-r}\le e^{-r/(4h)}$. The sum of all radii is at most
+    $\Delta/4$; adding the two expectation errors costs at most
+    $2\delta\le\Delta/4$. The physical spectral gap then gives the count.
+\end{proof}
+
+\begin{lemma}[Explicit integer projection radius]
+    \label{thm:hastings_periodic_chosen_radius}
+    \lean{TNLean.MPS.AreaLaw.LocalSolution.hierarchyProjectionLength_roundedPeriodic_le,
+        TNLean.MPS.AreaLaw.LocalSolution.roundedPeriodicProjectionRadius,
+        TNLean.MPS.AreaLaw.LocalSolution.roundedPeriodicProjectionRadius_pos,
+        TNLean.MPS.AreaLaw.LocalSolution.hierarchyProjectionLength_le_chosen_roundedPeriodicRadius,
+        TNLean.MPS.AreaLaw.LocalSolution.roundedPeriodicProjectionRadius_lt}
+    \leanok
+    Let $M\ge1$, $\eta>0$, and write
+    \begin{align*}
+        A_M  & =512(\lceil\log_2 M\rceil+2)^2
+        \bigl(1+\max\{0,\log((8J/\eta)/\Delta)\}\bigr),  \\
+        \ell & =\lceil A_M/\eta\rceil,\qquad r=\eta\ell.
+    \end{align*}
+    Then $\ell\ge1$ and $\ell<A_M/\eta+1$.
+    For $N=\max\{1,\lfloor M/(2\ell)\rfloor\}$ and
+    $h=\max\{2,\lceil\log_2N\rceil\}$, the actual hierarchy length
+    $512h^2(1+\max\{0,\log((8J/\eta)/\Delta)\})$ is at most $r$.
+\end{lemma}
+\begin{proof}\leanok
+    Since $N\le M$, the hierarchy depth is at most
+    $\lceil\log_2M\rceil+2$. Thus its length is at most $A_M$.
+    The inequalities $A_M/\eta\le\lceil A_M/\eta\rceil<A_M/\eta+1$
+    give the assertions, including the length inequality for the block
+    count determined by this same choice of $\ell$.
+\end{proof}
+
+\begin{lemma}[The hierarchy from periodic Gaussian-localization estimates]
+    \label{thm:hastings_periodic_physical_log_squared}
+    \lean{TNLean.MPS.AreaLaw.LocalSolution.exists_unit_mem_roundedPeriodicProjection,
+        TNLean.MPS.AreaLaw.LocalSolution.card_le_two_mul_re_trace_of_roundedPeriodicProjection,
+        TNLean.MPS.AreaLaw.LocalSolution.exists_unit_mem_roundedPeriodicProjection_of_chosen_radius,
+        TNLean.MPS.AreaLaw.LocalSolution.card_le_two_mul_re_trace_of_roundedPeriodicProjection_of_chosen_radius}
+    \leanok
+    \uses{thm:hastings_periodic_chosen_radius,
+        thm:hastings_periodic_linear_pair_bounds,
+        thm:hastings05_quantitative_periodic}
+    Let $H=\sum_iH_i$ on a periodic chain of $M\ge1$ sites, with
+    Hermitian $H_i$, spectral gap $\Delta>0$, and a unit ground vector
+    $\psi$ of energy $E_0$. Let $J,\eta>0$ and choose $\ell,r$ as in
+    Lemma~\ref{thm:hastings_periodic_chosen_radius}.
+    Suppose Hermitian $M_i$ act in the cyclic radius-$\ell$ balls and satisfy
+    \begin{align*}
+        \|M_i\|                                  & \le J,       \\
+        \|(M_i-\langle\psi,M_i\psi\rangle)\psi\| & \le Je^{-r}, \\
+        \|\widetilde H_i-M_i\|                   & \le Je^{-r},
+    \end{align*}
+    where $\widetilde H_i$ is the full Gaussian filter of $H_i$ under $H$.
+    Then the corrected periodic hierarchy constructed from the $M_i$
+    retains a unit vector $\phi$ at every tree node, with
+    $\|\phi-\psi\|\le2(3^{h+1}-1)e^{-r/8}$.
+    Every finite orthonormal family in its final retained space has at
+    most $2\dim\ker(H-E_0)$ members. The residual hypothesis is equation
+    (low); the third hypothesis is the preceding Gaussian-localization
+    estimate, rather than an estimate comparing $H_i$ directly with $M_i$.
+    More generally, the same conclusions hold at any integer $\ell\ge1$
+    with $r=\eta\ell$ satisfying the explicit length inequality for its
+    own hierarchy depth.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:hastings_periodic_linear_pair_bounds,
+        thm:hastings_periodic_linear_truncation_error,
+        thm:hastings_periodic_chosen_radius,
+        thm:hastings05_quantitative_periodic}
+    The derived pair bound is $K=8\ell J=(8J/\eta)r$.
+    The local residuals give a pair residual at most $K e^{-r}$, so the
+    quantitative hierarchy produces the nearby retained unit vector.
+    The full filtered terms sum exactly to $H$. Hence
+    $\|H-\sum_iM_i\|\le MJe^{-r}$, and $M\le4\ell N$ bounds this by
+    $2^h(8J/\eta)r e^{-r}\le\Delta/8$. Apply the physical-gap count.
+\end{proof}
+
+\begin{lemma}[The sharper constant for regular periodic blocks]
+    \label{thm:hastings_regular_periodic_log_squared}
+    \lean{TNLean.MPS.AreaLaw.LocalSolution.exists_unit_mem_periodicCoarseProjection,
+        TNLean.MPS.AreaLaw.LocalSolution.card_le_two_mul_re_trace_of_periodicCoarseProjection,
+        TNLean.MPS.AreaLaw.LocalSolution.hierarchyProjectionLength_periodicCoarse_le}
+    \leanok
+    For $M=2\ell N$ sites in regular blocks, the same retained-vector
+    and counting assertions hold with $K=4\ell J$ and effective coupling
+    $4J/\eta$. The length threshold is at most
+    $512(\lceil\log_2M\rceil+2)^2
+        (1+\max\{0,\log((4J/\eta)/\Delta)\})$.
+    For the count, any comparison terms $G_i$ with sum $H$ and
+    $\|G_i-M_i\|\le Je^{-r}$ suffice; in the physical application these
+    are the full filtered terms.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:hastings_regular_periodic_grouping,
+        thm:hastings_periodic_linear_pair_bounds,
+        thm:hastings05_quantitative_periodic}
+    Use the exact number $2\ell$ of terms assigned to each edge in place
+    of $4\ell$. The remaining argument is unchanged.
+\end{proof}
+
+\begin{lemma}[The metric of the original physical cycle]
+    \label{thm:hastings_periodic_physical_metric}
+    \lean{TNLean.MPS.AreaLaw.LocalSolution.roundedPeriodicDistance_eq_valMinAbs,
+        TNLean.MPS.AreaLaw.LocalSolution.roundedPeriodicDistance_triangle,
+        TNLean.MPS.AreaLaw.LocalSolution.periodicPhysicalMetricSpace,
+        TNLean.MPS.AreaLaw.LocalSolution.card_periodicPhysical_metricRangeBall_le}
+    \leanok
+    On a cycle of $M\ge1$ sites, the distance
+    $d(i,j)=\min\{|i-j|,M-|i-j|\}$ is the least absolute residue of
+    $i-j$ modulo $M$. It is a metric, and every closed radius-$R$ ball
+    has at most $2\lceil R\rceil+1$ sites.
+\end{lemma}
+\begin{proof}\leanok
+    The least absolute residue of a sum has absolute value no larger
+    than the sum of the absolute values of the two representatives.
+    This proves the triangle inequality; symmetry and separation are
+    immediate. Subtract the centre of a ball and take least absolute
+    representatives. This is an injection into the integer interval
+    $[-\lceil R\rceil,\lceil R\rceil]$, which has $2\lceil R\rceil+1$
+    elements.
+\end{proof}
+
+\begin{lemma}[The hierarchy from the original periodic Hamiltonian]
+    \label{thm:hastings_periodic_physical_hierarchy}
+    \lean{TNLean.MPS.AreaLaw.LocalSolution.physicalPeriodicProjectionRadius,
+        TNLean.MPS.AreaLaw.LocalSolution.physicalPeriodicProjectionRadius_spec,
+        TNLean.MPS.AreaLaw.LocalSolution.hierarchyProjectionLength_le_physicalPeriodicProjectionRadius,
+        TNLean.MPS.AreaLaw.LocalSolution.physicalPeriodicProjectionRadius_lt,
+        TNLean.MPS.AreaLaw.LocalSolution.periodicPhysicalTruncatedTerm,
+        TNLean.MPS.AreaLaw.LocalSolution.exists_periodicPhysicalTruncatedTerm_localization,
+        TNLean.MPS.AreaLaw.LocalSolution.exists_periodicPhysicalHierarchy}
+    \leanok
+    \uses{thm:hastings_periodic_physical_metric,
+        thm:hastings_periodic_physical_log_squared,
+        thm:hastings05_metric_facld,
+        thm:hastings_zero_range_exact}
+    Fix $R\ge0$, $J>0$ and $\Delta>0$. There are constants $c_1,\eta>0$
+    and $C\ge0$, independent of physical chain length, with the following
+    property. Let $H=\sum_iH_i$ be a Hermitian local Hamiltonian on a
+    periodic chain of $M\ge1$ sites, with $\|H_i\|\le J$ and each $H_i$
+    supported in the physical radius-$R$ ball about $i$. Let $P_0$ be
+    its orthogonal ground projection, $E_0$ its ground energy, and
+    $H-E_0\ge\Delta(1-P_0)$.
+    Put $J_b=\max\{J,JC\}$ and
+    \begin{align*}
+        A_M  & =512(\lceil\log_2M\rceil+2)^2
+        \bigl(1+\max\{0,\log((8J_b/\eta)/\Delta)\}\bigr),     \\
+        \ell & =\max\{\lceil R\rceil,\lceil A_M/\eta\rceil\},
+        \qquad r=\eta\ell,\qquad q=c_1\ell\Delta,             \\
+        M_i  & =\mathcal G_{q,\Delta}
+        \left(\sum_{j:\,d(i,j)\le\ell-R}H_j,\ H_i\right),
+    \end{align*}
+    where $\mathcal G_{q,\Delta}(H',W)$ is the normalized Gaussian
+    filter of $W$ under $H'$.
+    These actual truncated terms determine every projection of the
+    corrected periodic hierarchy. If a unit ground vector $\psi$
+    satisfies the source's local condition
+    $\|(M_i-\langle\psi,M_i\psi\rangle)\psi\|\le J_b e^{-r}$,
+    the hierarchy retains a unit vector $\phi$ at every node with
+    $\|\phi-\psi\|\le2(3^{h+1}-1)e^{-r/8}$.
+    Every finite orthonormal family retained by the final projection
+    has at most $2\operatorname{tr}P_0$ members. Moreover,
+    $\ell<\lceil R\rceil+A_M/\eta+1$.
+    No localization estimate, pair-norm estimate, length inequality,
+    or gap of an approximating Hamiltonian is an additional premise.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:hastings_periodic_physical_metric,
+        thm:hastings_periodic_physical_log_squared,
+        thm:hastings_periodic_chosen_radius,
+        thm:hastings05_metric_facld,
+        thm:hastings_zero_range_exact}
+    The physical ball count gives a uniform finite-range metric
+    localization estimate for $R>0$. Thus the displayed $M_i$ are
+    Hermitian, supported in their radius-$\ell$ balls, have norm at
+    most $J$, and satisfy
+    $\|\widetilde H_i-M_i\|\le JC e^{-r}\le J_b e^{-r}$.
+    At $R=0$, all terms commute and both filters equal $H_i$ exactly.
+    The maximum with $\lceil R\rceil$ ensures $\ell\ge R$.
+    Since the block count is at most $M$, enlarging the chosen radius
+    preserves its sufficient length inequality. Apply
+    Lemma~\ref{thm:hastings_periodic_physical_log_squared} to these
+    constructed terms and the source's local residual condition.
+\end{proof}
