@@ -32,11 +32,16 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-private noncomputable def uncleDensityFunctional (ρ : Matrix (Fin D) (Fin D) ℂ) :
+/-- The functional \(X \mapsto \operatorname{tr}(\rho X)\) of a stationary density.
+Source: arXiv:1210.6613, the rank-one limit in Lemma exptransferoperator,
+lines 1165–1175. -/
+noncomputable def uncleDensityFunctional (ρ : Matrix (Fin D) (Fin D) ℂ) :
     Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] ℂ :=
   (Matrix.traceLinearMap (Fin D) ℂ ℂ).comp (mulLeftLinearMap (n := Fin D) ℂ ρ)
 
-private noncomputable def uncleDensityProjection (ρ : Matrix (Fin D) (Fin D) ℂ) :
+/-- The rank-one contraction \(X \mapsto \operatorname{tr}(\rho X)\,I\) onto the
+identity. Source: arXiv:1210.6613, Lemma exptransferoperator, lines 1165–1175. -/
+noncomputable def uncleDensityProjection (ρ : Matrix (Fin D) (Fin D) ℂ) :
     Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ :=
   (uncleDensityFunctional ρ).smulRight 1
 
@@ -97,8 +102,7 @@ theorem uncleTransfer_complement_spectralRadius_lt_one [NeZero D]
     (ρ : Matrix (Fin D) (Fin D) ℂ) (htr : Matrix.trace ρ = 1)
     (hfix : Kraus.adjointMap A ρ = ρ) :
     spectralRadius ℂ ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
-      (Kraus.mapLM A - ((Matrix.traceLinearMap (Fin D) ℂ ℂ).comp
-        (mulLeftLinearMap (n := Fin D) ℂ ρ)).smulRight 1)) < 1 := by
+      (Kraus.mapLM A - uncleDensityProjection ρ)) < 1 := by
   let E := Kraus.mapLM A
   let f := uncleDensityFunctional ρ
   let P := uncleDensityProjection ρ

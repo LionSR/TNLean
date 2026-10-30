@@ -164,7 +164,7 @@
     \lean{Matrix.physicalPairParentTerm, Matrix.physicalPairParentTerm_in_coordinates,
         Matrix.varyingPhysicalParentHamiltonian}
     \leanok
-    \uses{def:dependent_physical_pair_coordinates}
+    \uses{def:dependent_physical_pair_coordinates,lem:varying_physical_pair_projection_transport}
     Let $A^{[j]}_i\in M_{D_j,D_{j+1}}(\mathbb C)$ have an arbitrary finite
     physical alphabet $I_j$ at each site. For the adjacent pair $j,j+1$,
     let $G_j$ be its rectangular trace-boundary range. On the
@@ -280,8 +280,7 @@
     \label{lem:uniform_physical_parent_kernel_comparison}
     \lean{Matrix.varyingPhysicalParentHamiltonian_uniform_apply_eq_zero_iff}
     \leanok
-    \uses{lem:varying_physical_local_boundary_sections,
-        lem:varying_obc_parent_kernel_sections}
+    \uses{lem:varying_physical_local_boundary_sections,lem:varying_obc_parent_kernel_sections,lem:varying_physical_kernel_forces_support}
     On a common nonempty physical alphabet, the dependent-coordinate
     open parent and the prefix/pair/suffix open parent have exactly
     the same kernel at every length.

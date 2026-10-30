@@ -30,10 +30,11 @@ limit and its generic quadratic growth.
         MPSTensor.uncleBoundaryLetter_mixedMapSpectralRadius_reverse_lt_one}
     \leanok
     \uses{def:uncle_boundary_space}
-    Suppose that the one-site perturbation letters span the full block
-    algebra, the diagonal transfers are unital, and they have faithful
-    stationary dual densities. Both mixed transfers have spectral radius
-    strictly below one.
+    Suppose that both block dimensions are positive, the one-site
+    perturbation letters span the full block algebra, the diagonal
+    transfers are unital, and they have faithful stationary dual
+    densities. Both mixed transfers have spectral radius strictly below
+    one.
 \end{lemma}
 \begin{proof}
     \leanok
@@ -79,8 +80,7 @@ limit and its generic quadratic growth.
     \label{lem:uncle_trial_norm_factorization_error}
     \lean{MPSTensor.uncleTwoWallTransfer_factorization_bound}
     \leanok
-    \uses{lem:uncle_injective_transfer_decay,lem:uncle_wall_gram_linear_bounds,
-        lem:uncle_wall_rank_one_contraction,thm:uncle_trial_norm_transfer}
+    \uses{lem:uncle_injective_transfer_decay,lem:uncle_wall_gram_linear_bounds,lem:uncle_wall_rank_one_contraction}
     Under the stated canonical spectral conditions, let $T_N$ denote the
     actual source transfer contraction. There are $C>0$ and $0<z<1$ such
     that, for every positive $N$,
@@ -106,9 +106,7 @@ limit and its generic quadratic growth.
         MPSTensor.uncleTwoWallTrialSource_eventual_norm_bounds,
         MPSTensor.uncleTwoWallTrialSource_ae_quadratic_norm_growth}
     \leanok
-    \uses{lem:uncle_trial_norm_factorization_error,
-        thm:uncle_wall_gram_linear_limit,cor:uncle_wall_gram_pair_generic_positive,
-        lem:uncle_diagonal_injectivity,lem:uncle_mixed_damping_from_span}
+    \uses{lem:uncle_trial_norm_factorization_error,thm:uncle_wall_gram_linear_limit,cor:uncle_wall_gram_pair_generic_positive,lem:uncle_diagonal_injectivity,lem:uncle_mixed_damping_from_span,thm:uncle_trial_norm_transfer}
     Under the stated canonical normalization and strict mixed damping,
     the actual source trial satisfies
     \begin{align}

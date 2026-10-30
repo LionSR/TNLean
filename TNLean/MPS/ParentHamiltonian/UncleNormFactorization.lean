@@ -63,12 +63,8 @@ theorem uncleTwoWallTransfer_factorization_bound [NeZero a] [NeZero b]
   have hGL (n : ℕ) (X : Matrix (Fin a) (Fin a) ℂ) :
       ‖uncleWallGramMap B A L n X‖ ≤ cL * n * ‖X‖ := by
     simpa only [uncleWallGramMap] using hwallL n X
-  let fA := (Matrix.traceLinearMap (Fin a) ℂ ℂ).comp
-    (mulLeftLinearMap (n := Fin a) ℂ ρA)
-  let fB := (Matrix.traceLinearMap (Fin b) ℂ ℂ).comp
-    (mulLeftLinearMap (n := Fin b) ℂ ρB)
-  let PA := fA.smulRight (1 : Matrix (Fin a) (Fin a) ℂ)
-  let PB := fB.smulRight (1 : Matrix (Fin b) (Fin b) ℂ)
+  let PA := uncleDensityProjection ρA
+  let PB := uncleDensityProjection ρB
   have hPA (X : Matrix (Fin a) (Fin a) ℂ) : ‖PA X‖ ≤ ‖X‖ := by
     change ‖Matrix.trace (ρA * X) • (1 : Matrix (Fin a) (Fin a) ℂ)‖ ≤ ‖X‖
     simpa only [norm_smul, norm_one, mul_one, htrA, Complex.one_re, one_mul] using

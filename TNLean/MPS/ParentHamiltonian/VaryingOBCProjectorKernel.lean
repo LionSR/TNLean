@@ -4,7 +4,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.VaryingOBCReconstruction
-import QICLean.Analysis.ProjectionGeometry
 import QICLean.Analysis.WeightedPositiveKernel
 import Mathlib.Analysis.InnerProductSpace.PiL2
 

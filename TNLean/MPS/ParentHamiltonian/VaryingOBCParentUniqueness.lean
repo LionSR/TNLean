@@ -13,9 +13,12 @@ Canonical adjoint reconstruction along the whole chain then reduces every kernel
 vector to a scalar multiple of the actual open-chain state. The state itself has
 unit norm, derived from the sitewise canonical equations and singleton endpoints.
 
-**Scope restriction (adjacent open chains):** the chain length is at least two,
-and the physical alphabet is common to the sites. The statements concern the
-actual ground-state line and allow scalar phase freedom of normalized vectors.
+**Scope restriction (adjacent open chains):** the physical alphabet is common to
+the sites throughout this module, and the chain length is at least two in
+`exists_smul_obcScalarState_of_obcParentHamiltonian_apply_eq_zero`,
+`ker_obcParentHamiltonian_eq_span` and `finrank_ker_obcParentHamiltonian_eq_one`.
+The statements concern the actual ground-state line and allow scalar phase
+freedom of normalized vectors.
 The scope and remaining unrestricted source question are recorded in
 `docs/paper-gaps/pgvwc07_open_parent_domain.tex`.
 

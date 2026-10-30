@@ -6,7 +6,7 @@
     \lean{MPSTensor.norm_uncleTwoWallTrial_one_wall_sq_le_mul,
         MPSTensor.norm_uncleTwoWallTrial_second_wall_sq_le_mul}
     \leanok
-    \uses{def:uncle_two_wall_trial,lem:uncle_wall_gram_linear_bounds}
+    \uses{def:uncle_two_wall_trial,lem:uncle_wall_gram_linear_bounds,thm:uncle_trial_norm_transfer}
     Suppose the transfers of $A$ and $B$ are unital. If $B$ has a faithful
     stationary dual density and the mixed $B/A$ transfer spectral radius
     is below one, the actual five-segment trial with lengths $p,1,q,s,t$
@@ -55,8 +55,7 @@
     \lean{MPSTensor.norm_uncleTrialPinnedGlobalState_sq_le_mul,
         MPSTensor.re_inner_uncleHamiltonianES_trial_le_mul}
     \leanok
-    \uses{def:uncle_pinned_global_trials,lem:uncle_pinned_trial_linear_norm,
-        lem:cyclic_restriction_norm_partition}
+    \uses{def:uncle_pinned_global_trials,lem:uncle_pinned_trial_linear_norm,lem:cyclic_restriction_norm_partition,lem:uncle_trial_pinned_endpoint_residuals}
     Suppose both diagonal transfers are unital, both have faithful
     stationary dual densities, and both mixed transfer spectral radii are
     below one. For arbitrary rectangular walls there is $C>0$ such that

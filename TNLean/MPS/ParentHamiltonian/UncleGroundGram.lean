@@ -44,9 +44,7 @@ theorem uncleMPV_norm_sq_tendsto_one
   let V := Matrix (Fin a) (Fin a) ℂ
   let Φ : (V →ₗ[ℂ] V) ≃ₐ[ℂ] (V →L[ℂ] V) := Module.End.toContinuousLinearMap V
   let : FiniteDimensional ℂ (V →L[ℂ] V) := Φ.toLinearEquiv.finiteDimensional
-  let f := (Matrix.traceLinearMap (Fin a) ℂ ℂ).comp
-    (mulLeftLinearMap (n := Fin a) ℂ ρ)
-  let P := f.smulRight (1 : V)
+  let P : V →ₗ[ℂ] V := uncleDensityProjection ρ
   let E := Kraus.mapLM A
   let tr : (V →L[ℂ] V) →L[ℂ] ℂ :=
     ((LinearMap.trace ℂ V).comp (ContinuousLinearMap.coeLM ℂ)).toContinuousLinearMap
@@ -66,7 +64,8 @@ theorem uncleMPV_norm_sq_tendsto_one
   have htrace_eq (N : ℕ) : tr (Φ (E ^ N - P)) = LinearMap.trace ℂ V (E ^ N) - 1 := by
     change LinearMap.trace ℂ V (E ^ N - P) = _
     rw [map_sub]
-    change LinearMap.trace ℂ V (E ^ N) - LinearMap.trace ℂ V (f.smulRight (1 : V)) = _
+    change LinearMap.trace ℂ V (E ^ N) -
+      LinearMap.trace ℂ V ((uncleDensityFunctional ρ).smulRight (1 : V)) = _
     rw [LinearMap.trace_smulRight]
     change LinearMap.trace ℂ V (E ^ N) - Matrix.trace (ρ * (1 : V)) = _
     rw [Matrix.mul_one, htr]
