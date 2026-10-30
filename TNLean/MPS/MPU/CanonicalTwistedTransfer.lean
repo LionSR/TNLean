@@ -70,13 +70,13 @@ theorem IsMPUCanonicalFormII.exists_twistedTransfer_signed_unitary_comparison
   classical
   let : NeZero d := hU.neZero_phys
   have hEq : ∀ N : ℕ, 1 < N → Even N →
-      mpo U N = mpo (physicalAdjointTensor U) N := by
+      mpo U N = mpo (MPOTensor.physicalAdjointTensor U) N := by
     intro N hN heven
     rw [mpo_physicalAdjointTensor_eq_conjTranspose]
     exact hTR N hN heven
   obtain ⟨_, η, z, hη, hrel⟩ :=
     hU.exists_unitary_virtual_sign_gauge_of_mpo_eq_even hU.physicalAdjointTensor hEq
-  have hrel' (i j : Fin d) : physicalAdjointTensor U i j =
+  have hrel' (i j : Fin d) : MPOTensor.physicalAdjointTensor U i j =
       η • ((z : Matrix (Fin D) (Fin D) ℂ) * U i j *
         (z : Matrix (Fin D) (Fin D) ℂ)ᴴ) := by
     simpa only [cast_eq] using hrel i j
@@ -86,10 +86,10 @@ theorem IsMPUCanonicalFormII.exists_twistedTransfer_signed_unitary_comparison
   have hZ : Zᴴ * Z = 1 :=
     ((Matrix.isUnitaryBetween_iff_mem_unitaryGroup _).mpr z.property).1
   have hrecover (i j : Fin d) :
-      U i j = η • (Zᴴ * physicalAdjointTensor U i j * Z) := by
+      U i j = η • (Zᴴ * MPOTensor.physicalAdjointTensor U i j * Z) := by
     have h := congrArg (fun M ↦ Zᴴ * M * Z) (hrel' i j)
     simp only [Matrix.mul_smul, Matrix.smul_mul] at h
-    change Zᴴ * physicalAdjointTensor U i j * Z = η • (Zᴴ * (Z * U i j * Zᴴ) * Z)
+    change Zᴴ * MPOTensor.physicalAdjointTensor U i j * Z = η • (Zᴴ * (Z * U i j * Zᴴ) * Z)
       at h
     simp only [Matrix.mul_assoc, hZ, Matrix.mul_one] at h
     rw [← Matrix.mul_assoc Zᴴ Z, hZ, Matrix.one_mul] at h
@@ -99,8 +99,8 @@ theorem IsMPUCanonicalFormII.exists_twistedTransfer_signed_unitary_comparison
   let E := transferMatrix (Kraus.transferMap U.normalizedFlattening)
   let G := Z ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ)
   have hE : E = (d : ℂ)⁻¹ • ∑ i : Fin d, ∑ j : Fin d,
-      physicalAdjointTensor U i j ⊗ₖ U j i := by
-    have h := normalizedDiagonal_mulTensor_productCoordinates (physicalAdjointTensor U) U
+      MPOTensor.physicalAdjointTensor U i j ⊗ₖ U j i := by
+    have h := normalizedDiagonal_mulTensor_productCoordinates (MPOTensor.physicalAdjointTensor U) U
     change Matrix.reindex finProdFinEquiv.symm finProdFinEquiv.symm
       (normalizedDiagonal (doubleLayerTensor U)) = _ at h
     rw [normalizedDiagonal_doubleLayerTensor] at h
@@ -109,7 +109,7 @@ theorem IsMPUCanonicalFormII.exists_twistedTransfer_signed_unitary_comparison
       (Matrix.reindex finProdFinEquiv finProdFinEquiv).symm_apply_apply E
     exact hcancel.symm.trans h
   have hterm (i j : Fin d) : U i j ⊗ₖ U j i =
-      η • (Gᴴ * (physicalAdjointTensor U i j ⊗ₖ U j i) * G) := by
+      η • (Gᴴ * (MPOTensor.physicalAdjointTensor U i j ⊗ₖ U j i) * G) := by
     rw [hrecover, Matrix.smul_kronecker]
     congr 1
     simp only [G, Matrix.conjTranspose_kronecker, Matrix.conjTranspose_one,
