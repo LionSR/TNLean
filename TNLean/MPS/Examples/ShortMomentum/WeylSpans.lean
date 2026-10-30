@@ -36,7 +36,7 @@ theorem sum_rootCharacter_mul {ζ : ℂ} (hζ : IsPrimitiveRoot ζ 5) (a : ZMod 
     ∑ u : ZMod 5, rootCharacter ζ (u * a) = if a = 0 then 5 else 0 := by
   simp_rw [mul_comm _ a, rootCharacter_mul hζ.pow_eq_one]
   rw [Matrix.sum_pow_val_eq_ite (rootCharacter_pow_five hζ.pow_eq_one a)]
-  simp only [rootCharacter_eq_one_iff hζ]
+  simp only [rootCharacter_eq_one_iff hζ, Nat.cast_ofNat]
 
 /-- A finite Fourier sum of actual charged matrices is a matrix unit. -/
 theorem sum_rootCharacter_smul_chargedWeyl {ζ : ℂ} (hζ : IsPrimitiveRoot ζ 5)
@@ -53,11 +53,11 @@ theorem sum_rootCharacter_smul_chargedWeyl {ζ : ℂ} (hζ : IsPrimitiveRoot ζ 
       simp only [chargedWeyl, hindex, ite_true, ← rootCharacter_add hζ.pow_eq_one,
         show ∀ u : ZMod 5, -u * i + u * i = 0 by intro u; ring,
         rootCharacter_zero, Finset.sum_const, Finset.card_univ, ZMod.card, nsmul_eq_mul,
-        mul_one, Matrix.single_apply_same]
-    · simp [chargedWeyl, hindex, hl, Matrix.single_apply, eq_comm]
+        mul_one, Matrix.single_apply_same, Nat.cast_ofNat]
+    · simp [chargedWeyl, hindex, hl, Ne.symm hl]
   · have hki : k - i ≠ 0 := sub_ne_zero.mpr hk
     have hsingle : Matrix.single i j (1 : ℂ) k l = 0 :=
-      Matrix.single_apply_of_row_ne hk.symm _ _ _
+      Matrix.single_apply_of_row_ne (Ne.symm hk) _ _ _
     rw [hsingle, mul_zero]
     by_cases hl : l = k - (i - j)
     · simp only [chargedWeyl, hl, ite_true, ← rootCharacter_add hζ.pow_eq_one]
@@ -65,7 +65,7 @@ theorem sum_rootCharacter_smul_chargedWeyl {ζ : ℂ} (hζ : IsPrimitiveRoot ζ 
         intro u
         ring
       simp_rw [hexp]
-      rw [sum_rootCharacter_mul hζ, if_neg hki]
+      rw [sum_rootCharacter_mul hζ, ite_eq_right hki]
     · simp [chargedWeyl, hl]
 
 /-- The actual charged matrices span the entire matrix algebra. -/
@@ -91,16 +91,18 @@ theorem chargedWeyl_mem_wordSpan {ζ : ℂ} (hζ : IsPrimitiveRoot ζ 5)
   obtain ⟨w, hw, hcharge⟩ := exists_word_of_eight_le_of_charge n hn u v
   have hmem := Kraus.evalWord_mem_wordSpan (threeLetterTensor ζ) w
   rw [hw, evalWord_threeLetterTensor hζ.pow_eq_one, hcharge] at hmem
-  have hscaled := (Kraus.wordSpan (threeLetterTensor ζ) n).smul_mem
-    (rootCharacter ζ (wordPhase w))⁻¹ hmem
-  simpa only [smul_smul, inv_mul_cancel₀ (rootCharacter_ne_zero hζ _), one_smul] using hscaled
+  have heq : chargedWeyl ζ u v = (rootCharacter ζ (wordPhase w))⁻¹ •
+      (rootCharacter ζ (wordPhase w) • chargedWeyl ζ u v) := by
+    rw [smul_smul, inv_mul_cancel₀ (rootCharacter_ne_zero hζ _), one_smul]
+  rw [heq]
+  exact Submodule.smul_mem _ _ hmem
 
 /-- Every degree at least eight has the full actual matrix word span. -/
 theorem isNBlkInjective_threeLetterTensor_of_eight_le {ζ : ℂ}
     (hζ : IsPrimitiveRoot ζ 5) (n : ℕ) (hn : 8 ≤ n) :
     Kraus.IsNBlkInjective (threeLetterTensor ζ) n := by
   apply top_unique
-  rw [← span_chargedWeyl_eq_top hζ]
+  refine (span_chargedWeyl_eq_top hζ).symm.le.trans ?_
   apply Submodule.span_le.mpr
   rintro _ ⟨⟨u, v⟩, rfl⟩
   exact chargedWeyl_mem_wordSpan hζ n hn u v
@@ -120,7 +122,7 @@ theorem not_isNBlkInjective_threeLetterTensor_seven {ζ : ℂ} (hζ : IsPrimitiv
     ¬ Kraus.IsNBlkInjective (threeLetterTensor ζ) 7 := by
   refine Kraus.not_isNBlkInjective_of_linearMap (Matrix.traceLinearMap (Fin 5) ℂ ℂ) (fun σ ↦ ?_)
     (1 : Matrix (Fin 5) (Fin 5) ℂ) ?_
-  · exact trace_evalWord_threeLetterTensor_seven hζ _ (List.length_ofFn σ)
+  · exact trace_evalWord_threeLetterTensor_seven hζ _ List.length_ofFn
   · norm_num [Matrix.trace_one]
 
 /-- Every degree at least eight contains an actual word with nonzero trace. -/
@@ -133,8 +135,11 @@ theorem exists_trace_evalWord_ne_zero_of_eight_le {ζ : ℂ} (hζ : IsPrimitiveR
   have hcharge : wordCharge (sortedWord a b c) = 0 := by
     rw [wordCharge_sortedWord]
     exact (countCharge_eq_zero_iff a b c).mpr ⟨hab, hbc⟩
-  rw [evalWord_threeLetterTensor hζ.pow_eq_one, hcharge, chargedWeyl_zero, Matrix.trace_smul]
-  simp only [Matrix.trace_one, Fintype.card_fin, smul_eq_mul]
+  rw [evalWord_threeLetterTensor hζ.pow_eq_one, hcharge, Prod.fst_zero, Prod.snd_zero,
+    chargedWeyl_zero]
+  change (rootCharacter ζ (wordPhase (sortedWord a b c)) •
+    (1 : Matrix (ZMod 5) (ZMod 5) ℂ)).trace ≠ 0
+  rw [Matrix.trace_smul, Matrix.trace_one, ZMod.card, smul_eq_mul]
   exact mul_ne_zero (rootCharacter_ne_zero hζ _) (by norm_num)
 
 end MPSTensor.ShortMomentum

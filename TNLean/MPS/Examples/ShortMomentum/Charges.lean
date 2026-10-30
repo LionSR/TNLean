@@ -50,11 +50,11 @@ theorem sum_letter_counts (w : List (Fin 3)) :
     w.count 0 + w.count 1 + w.count 2 = w.length := by
   induction w with
   | nil => simp
-  | cons i w ih => fin_cases i <;> simp [List.count_cons] <;> omega
+  | cons i w ih => fin_cases i <;> simp <;> omega
 
 /-- The sorted word has precisely the prescribed total degree. -/
 @[simp] theorem length_sortedWord (a b c : ℕ) : (sortedWord a b c).length = a + b + c := by
-  simp [sortedWord]
+  simp [sortedWord, Nat.add_assoc]
 
 /-- The sorted word has the charge of its prescribed letter counts. -/
 @[simp] theorem wordCharge_sortedWord (a b c : ℕ) :
@@ -143,7 +143,7 @@ theorem exists_counts_seven_of_charge (u v : ZMod 5) (hne : (u, v) ≠ 0) :
       simpa only [b, add_sub_cancel_right, sub_self] using congrArg (fun z ↦ z - c) hbc
     exact hne (Prod.ext hu hv)
   have hpadding : ((7 - S : ℕ) : ZMod 5) = 0 := by
-    rw [Nat.cast_sub hSle, hScast, sub_self]
+    rw [Nat.cast_sub hSle, hScast, Nat.cast_ofNat, sub_self]
   refine ⟨a.val + (7 - S), b.val, c.val, ?_, ?_⟩
   · dsimp [S] at hSle ⊢
     omega
@@ -185,7 +185,7 @@ theorem exists_counts_eight_of_charge (u v : ZMod 5) :
     omega
   have hSle : S ≤ 8 := by omega
   have hpadding : ((8 - S : ℕ) : ZMod 5) = 0 := by
-    rw [Nat.cast_sub hSle, hScast, sub_self]
+    rw [Nat.cast_sub hSle, hScast, Nat.cast_ofNat, sub_self]
   refine ⟨a.val + (8 - S), b.val, c.val, ?_, ?_⟩
   · dsimp [S] at hSle ⊢
     omega
