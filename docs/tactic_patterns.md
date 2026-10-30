@@ -9959,6 +9959,16 @@ there is no need for a new tactic.
   handles both endpoint restriction directions.
 - **Decision:** Reuse the lemmas; no new tactic or parallel dual structure.
 
+### Cyclic coefficient identities from two spanning families — candidate (2026-10-29)
+
+- **Seen:** `uncleBoundary_cyclic_pairing_of_word_pairing` in
+  `MPS/ParentHamiltonian/UnclePeriodicClosure.lean` extends a cyclic identity
+  first from positive-length coefficient words and then from one-site letters.
+- **Reuse:** Compose the existing trace functional with the concrete left/right
+  coefficient linear maps, then apply `LinearMap.ext_on_range` twice. This
+  avoids duplicating scalar-sum or span-induction proofs and introduces no
+  new algebra instance or tactic.
+
 ### Delta half factors for a supplied two-site circuit (2026-10-29)
 
 - **Seen:** `MPS/MPU/StandardFormFromGates.lean`.
@@ -10041,16 +10051,6 @@ there is no need for a new tactic.
   `Matrix.trace_reindex` perform the matrix algebra. One helper transports either resulting
   inclusion through physical blocking and the actual orthogonal-complement projector.
 - **Decision:** Two sector cases in one file; no new tactic or parallel ground-space predicate.
-
-### Cyclic coefficient identities from two spanning families — candidate (2026-10-29)
-
-- **Seen:** `uncleBoundary_cyclic_pairing_of_word_pairing` in
-  `MPS/ParentHamiltonian/UnclePeriodicClosure.lean` extends a cyclic identity
-  first from positive-length coefficient words and then from one-site letters.
-- **Reuse:** Compose the existing trace functional with the concrete left/right
-  coefficient linear maps, then apply `LinearMap.ext_on_range` twice. This
-  avoids duplicating scalar-sum or span-induction proofs and introduces no
-  new algebra instance or tactic.
 
 ### Iterating derived boundary intersections — reused library theorem (2026-10-29)
 
