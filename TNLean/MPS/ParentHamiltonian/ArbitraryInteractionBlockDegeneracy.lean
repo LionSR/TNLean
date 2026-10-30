@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.Analysis.WeightedPositiveKernel
 import TNLean.MPS.ParentHamiltonian.CyclicBlockState
+import TNLean.MPS.ParentHamiltonian.BlockGroundSpaceMapContinuity
 import TNLean.MPS.ParentHamiltonian.Martingale.PeriodicInteraction
 
 /-!
