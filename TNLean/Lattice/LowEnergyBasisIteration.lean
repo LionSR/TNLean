@@ -168,10 +168,6 @@ theorem levelGap_le {r : ℕ → Fin n → ℝ} {ℓ : ℕ} {a b : Fin n} (hb : 
   · exact Finset.inf'_le (fun p => |r ℓ p.1 - r ℓ p.2|) hp
   · exact absurd ⟨_, hp⟩ h
 
-theorem mem_labelClass_symm {r : ℕ → Fin n → ℝ} {ℓ : ℕ} {a c : Fin n}
-    (h : c ∈ labelClass r ℓ a) : a ∈ labelClass r ℓ c :=
-  mem_labelClass.mpr fun m hm => (mem_labelClass.mp h m hm).symm
-
 theorem labelClass_eq_of_mem {r : ℕ → Fin n → ℝ} {ℓ : ℕ} {a b : Fin n}
     (hb : b ∈ labelClass r ℓ a) : labelClass r ℓ b = labelClass r ℓ a := by
   ext c

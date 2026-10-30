@@ -406,3 +406,87 @@ In this section $P_t=\mathbf1_{(-\infty,t)}(B)$ and $Q_t=I-P_t$.
     \end{align}
     Thus the last squared-distance bound is at most $e^{-t/16}$.
 \end{proof}
+
+\section{An inverse-gap cutoff}
+
+The high-energy diagonal in the variational comparison sharpens the cutoff
+in \cite[Theorem~6.1]{Arad2013AreaLaw} without changing the exterior
+truncation or the normalization.
+
+\begin{lemma}[Excited-energy comparison retaining the high-energy diagonal]
+    \label{lem:aklv_inverse_gap_comparison}
+    \lean{TNLean.MPS.AreaLaw.AKLV.orthogonal_clipped_energy_ge_of_inverse_gap_cutoff,
+        TNLean.MPS.AreaLaw.AKLV.exists_ground_gap_twoSidedEnergyTruncation_of_inverse_gap_cutoff}
+    \leanok
+    Let $L,N,R$ be commuting positive operators, $0\le A\le2I$, and
+    $H=L+N+R+A$. Suppose $\|\Omega\|=1$, $g>0$, and
+    $H-eI\ge g(I-|\Omega\rangle\langle\Omega|)$. Set
+    $K=\min(L,tI)+N+A+\min(R,tI)$. If $t\ge0$ and
+    $t\ge e+3g/2+8/g$, then every $x\perp\Omega$ satisfies
+    $\langle x,Kx\rangle\ge(e+g/2)\|x\|^2$.
+    If also $H\Omega=e\Omega$, then $K$ has a unit ground vector
+    $\phi$ and ground energy $e'\in[0,e]$, with
+    \begin{align}
+        K-e'I\ge(e+g/2-e')(I-|\phi\rangle\langle\phi|).
+    \end{align}
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:aklv_truncation_low_agreement,lem:aklv_clipped_high_mass,
+        lem:aklv_projected_energy,lem:aklv_codimension_one_gap}
+    Put $B=L+N+R$, $Q=\mathbf1_{[t,\infty)}(B)$, $P=I-Q$,
+    $u=Px$ and $v=Qx$. The low-energy agreement, high-energy lower bound
+    and boundary cross-block identity give
+    \begin{align}
+        \langle u,Ku\rangle
+         & \ge(e+g)\|u\|^2-g\|v\|^2,\notag         \\
+        \langle v,Kv\rangle
+         & \ge t\|v\|^2,\notag                     \\
+        |\langle u,Kv\rangle|
+         & =|\langle u,Av\rangle|\le2\|u\|\,\|v\|.
+    \end{align}
+    The first bound uses
+    $|\langle\Omega,u\rangle|=|\langle\Omega,v\rangle|\le\|v\|$.
+    Completing the square gives
+    $4\|u\|\,\|v\|\le(g/2)\|u\|^2+(8/g)\|v\|^2$, so
+    \begin{align}
+        \langle x,Kx\rangle
+         & \ge(e+g)\|u\|^2+(t-g)\|v\|^2-4\|u\|\,\|v\|\notag \\
+         & \ge(e+g/2)(\|u\|^2+\|v\|^2).
+    \end{align}
+    Finally $K\le H$ gives $e'\le e$, and
+    Lemma~\ref{lem:aklv_codimension_one_gap} transfers the absolute
+    excited-energy threshold to the minimizing eigenvector of $K$.
+\end{proof}
+
+\begin{theorem}[Ground-vector robustness at an inverse-gap cutoff]
+    \label{thm:aklv_inverse_gap_robustness}
+    \lean{TNLean.MPS.AreaLaw.AKLV.exists_robust_ground_twoSidedEnergyTruncation_of_inverse_gap_cutoff,
+        TNLean.MPS.AreaLaw.AKLV.normalized_chain_robustness_of_inverse_gap_cutoff}
+    \leanok
+    \uses{def:aklv_normalized_cut_blocks}
+    Under the normalized-chain assumptions of
+    Theorem~\ref{thm:aklv_robustness}, the same conclusions hold for every
+    $t\ge32768/g$: there are a unit ground vector $\phi$, a ground energy
+    $e'\in[0,e]$ and a real phase $\theta$ such that
+    \begin{align}
+        K-e'I                        & \ge\frac g2(I-|\phi\rangle\langle\phi|),\notag \\
+        \|\Omega-e^{i\theta}\phi\|^2 & \le e^{-t/16}.
+    \end{align}
+    The energy $e$ remains in $[0,6]$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{lem:aklv_inverse_gap_comparison,lem:aklv_projected_residual,
+        lem:aklv_residual_phase}
+    Since $e\le6$ and $0<g\le1$, the condition $tg\ge16$ implies
+    $t\ge e+3g/2+8/g$. Lemma~\ref{lem:aklv_inverse_gap_comparison}
+    therefore supplies the absolute excited-energy threshold $e+g/2$.
+    Put $\eta=e^{-(t-40)/16}$ and $z=P_t\Omega$. The existing residual
+    and tail estimates give $\|(K-eI)z\|\le10\eta$ and
+    $\|\Omega-z\|\le2\eta$. Lemma~\ref{lem:aklv_residual_phase} yields
+    \begin{align}
+        \|\Omega-e^{i\theta}\phi\|^2
+        \le968g^{-2}e^{-(t-40)/8}\le e^{-t/16},
+    \end{align}
+    where the final inequality follows from $tg\ge32768$ by the
+    logarithmic estimate in the proof of Theorem~\ref{thm:aklv_robustness}.
+\end{proof}

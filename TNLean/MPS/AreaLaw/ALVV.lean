@@ -8,4 +8,8 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.MPS.AreaLaw.ALVV
 
+import TNLean.MPS.AreaLaw.ALVV.FrustrationFree
+import TNLean.MPS.AreaLaw.ALVV.FrustrationFreeChain
+import TNLean.MPS.AreaLaw.ALVV.FrustrationFreeGap
+import TNLean.MPS.AreaLaw.ALVV.FrustrationFreeRank
 import TNLean.MPS.AreaLaw.ALVV.HardTruncationResidual

@@ -15,6 +15,7 @@ import TNLean.Circuit.CleanUnitaryImplementation
 import TNLean.Circuit.CoherentEncoder
 import TNLean.Circuit.Composition
 import TNLean.Circuit.ConfigurationLayers
+import TNLean.Circuit.DisjointRelativeEvolution
 import TNLean.Circuit.EmbeddedProduct
 import TNLean.Circuit.EntropySupport
 import TNLean.Circuit.ExactAmplificationBudget
@@ -31,6 +32,7 @@ import TNLean.Circuit.Measurement
 import TNLean.Circuit.PairProduct
 import TNLean.Circuit.PairProductPowers
 import TNLean.Circuit.PartialIsometryDilation
+import TNLean.Circuit.ProductBasisPenalty
 import TNLean.Circuit.ProductStateCircuit
 import TNLean.Circuit.ProductVector
 import TNLean.Circuit.ProjectedRelativeEvolution
@@ -41,6 +43,7 @@ import TNLean.Circuit.SelectedZeroRegisterReflection
 import TNLean.Circuit.SelectedZeroRegisterReflectionPool
 import TNLean.Circuit.SelectedZeroRegisterSupport
 import TNLean.Circuit.SiteEmbedding
+import TNLean.Circuit.SiteEmbeddingOrder
 import TNLean.Circuit.SiteExpectation
 import TNLean.Circuit.SiteExpectationOrder
 import TNLean.Circuit.SiteOscillation
