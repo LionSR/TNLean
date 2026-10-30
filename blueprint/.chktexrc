@@ -30,5 +30,7 @@ CmdLine
   -n 26  # Space-before-punctuation heuristic; false positive on tenkz range syntax `..`.
   -n 27  # Input-following ("Could not execute LaTeX command"): the chapter aggregators use `\input{chapter/...}` paths that only resolve when a parent is linted first, so linting a chapter file standalone floods this non-actionable warning depending on file order.
   -n 40  # Punctuation around inline math heuristic.
+  -n 44  # Nested-optional-argument heuristic; false positive on the half-open
+         # interval notation $[a,b)$ used throughout the blueprint prose.
   -n 45  # Display-math delimiter heuristic.
 }

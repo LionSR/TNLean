@@ -197,7 +197,12 @@ theorem exists_single_region_hard_truncation_residuals {L q l r : ℕ}
   let R := fun j : Fin 3 ↦ interval L (k j.castSucc) (k j.succ)
   let I := fun j : Fin 3 ↦ Finset.univ.filter
     (fun i : Fin (L - 1) ↦ k j.castSucc ≤ i.val ∧ i.val + 1 < k j.succ)
-  obtain ⟨hk, hR, hsA, hA, hY, hYC, hJ, hsum⟩ :=
+  obtain ⟨hk, hR, hsA, hA, hY, hYC, hJ, hsum⟩ :
+      Monotone k ∧ (Pairwise fun i j ↦ Disjoint (R i) (R j)) ∧
+        (∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (A j) (R j)) ∧
+        (∀ j, (A j).PosSemidef ∧ A j ≤ ((I j).card : ℝ) • 1) ∧
+        Y.PosSemidef ∧ Y ≤ (J.card : ℝ) • 1 ∧ J.card ≤ 2 ∧
+        (∑ i, h i) = (∑ j, A j) + Y :=
     three_region_data hlr hrL h hs h0 h1
   obtain ⟨e, x, hx, hxe, he, hclip⟩ :=
     Matrix.exists_disjoint_regional_clipping_structure hq R A (fun j ↦ (I j).card)
