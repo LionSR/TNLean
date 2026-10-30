@@ -13,7 +13,7 @@ $u$ has $(s_0,n)=(2u,\lceil C_Bu\rceil)$, with $k_0$ chosen after $D_0,C_B$.
 % lines 732--737 and the order of constants, lines 756--774.
 % Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 
-\begin{theorem}[Scale inequalities of late layers]
+\begin{lemma}[Scale inequalities of late layers]
     \label{thm:area_law_descendant_clearance_scales}
     \lean{TNLean.PEPS.AreaLaw.Geometry.two_pow_fineScaleIndex_le_rpow,
         TNLean.PEPS.AreaLaw.Geometry.eventually_descendant_cutClearance_scales}
@@ -28,18 +28,18 @@ $u$ has $(s_0,n)=(2u,\lceil C_Bu\rceil)$, with $k_0$ chosen after $D_0,C_B$.
         2\lceil C_Bt_k\rceil^\beta & <r.
         \label{eq:area_law_descendant_clearance_scales}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{def:area_law_fine_belt_scales,thm:area_law_exponent_gaps,
         thm:area_law_repair_margins}
     Since $\lfloor\zeta k\rfloor\le\zeta k$, $t_k\le r^\zeta$. For any $M$ and
     $a\in\{\zeta\rho_0,\zeta,\zeta\beta\}\subset[0,1)$
-    (Theorems~\ref{thm:area_law_exponent_gaps} and~\ref{thm:area_law_repair_margins}),
+    (Lemmas~\ref{thm:area_law_exponent_gaps} and~\ref{thm:area_law_repair_margins}),
     $Mr^a=Mr^{-(1-a)}r<r$ once $r^{-(1-a)}<(\max\{M,0\}+1)^{-1}$; using
     $\lceil C_Bt_k\rceil\le(\max\{C_B,0\}+1)t_k$ for $t_k\ge1$ gives~(\ref{eq:area_law_descendant_clearance_scales}).
 \end{proof}
 
-\begin{theorem}[Template clearances from endpoint distance]
+\begin{lemma}[Template clearances from endpoint distance]
     \label{thm:area_law_template_clearance_of_endpoint_distance}
     \lean{TNLean.PEPS.AreaLaw.Geometry.Template.cutClearance_of_endpoint_dist_ge}
     \leanok
@@ -53,14 +53,14 @@ $u$ has $(s_0,n)=(2u,\lceil C_Bu\rceil)$, with $k_0$ chosen after $D_0,C_B$.
         \operatorname{dist}_\infty(T,Z) & >2n^\beta.
         \label{eq:area_law_template_clearance}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Since $C_0\ge2$, $\operatorname{dist}_\infty(T,Z)\ge r$. By~(\ref{eq:area_law_descendant_clearance_scales})
     and $0\le u\le t_k$, $4D_0s_0\le\max\{0,4D_0\cdot2t_k\}<r$ and
     $2n^\beta\le2\lceil C_Bt_k\rceil^\beta<r$, yielding~(\ref{eq:area_law_template_clearance}).
 \end{proof}
 
-\begin{theorem}[Initial marks are far from the cut]
+\begin{lemma}[Initial marks are far from the cut]
     \label{thm:area_law_initial_mark_endpoint_distance}
     \lean{TNLean.PEPS.AreaLaw.Geometry.repairStage_zero_endpoint_dist_ge}
     \leanok
@@ -74,18 +74,18 @@ $u$ has $(s_0,n)=(2u,\lceil C_Bu\rceil)$, with $k_0$ chosen after $D_0,C_B$.
         \operatorname{dist}_\infty(v,Z) & \ge C_0r.
         \label{eq:area_law_initial_mark_dist}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_initial_repair_mark_facts,
         thm:area_law_belt_marks_closed_cell,
         thm:area_law_fine_cell_containment,
         thm:area_law_dyadic_layer_distance}
-    By Theorems~\ref{thm:area_law_initial_repair_mark_facts},~\ref{thm:area_law_belt_marks_closed_cell},
+    By Lemmas~\ref{thm:area_law_initial_repair_mark_facts},~\ref{thm:area_law_belt_marks_closed_cell},
     and~\ref{thm:area_law_fine_cell_containment}, $v\in\overline{D_k}$ with
-    $S_v=t_k$, so Theorem~\ref{thm:area_law_dyadic_layer_distance} gives~(\ref{eq:area_law_initial_mark_dist}).
+    $S_v=t_k$, so Lemma~\ref{thm:area_law_dyadic_layer_distance} gives~(\ref{eq:area_law_initial_mark_dist}).
 \end{proof}
 
-\begin{theorem}[Descendant birth regions are far from the cut]
+\begin{lemma}[Descendant birth regions are far from the cut]
     \label{thm:area_law_descendant_birth_endpoint_distance}
     \lean{TNLean.PEPS.AreaLaw.Geometry.repairStage_birth_endpoint_dist_ge}
     \leanok
@@ -100,12 +100,12 @@ $u$ has $(s_0,n)=(2u,\lceil C_Bu\rceil)$, with $k_0$ chosen after $D_0,C_B$.
         \operatorname{dist}_\infty(y,Z) & \ge C_0r-2d(t_k).
         \label{eq:area_law_descendant_birth_dist}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_initial_mark_endpoint_distance,
         def:area_law_uniform_repair_conclusion,
         thm:area_law_repair_descendant_scales,thm:area_law_repair_margins}
-    By Theorems~\ref{thm:area_law_repair_descendant_scales}
+    By Lemmas~\ref{thm:area_law_repair_descendant_scales}
     and~\ref{thm:area_law_repair_margins}, $S_m=d^{(j)}(t_k)$ and
     $1\le d(S)\le S^{\rho_0}\le S$ give $d(S_m)\le t_k$. Since $y$ lies within
     $2d(t_k)$ of the initial ancestor mark $v_0$
@@ -114,7 +114,7 @@ $u$ has $(s_0,n)=(2u,\lceil C_Bu\rceil)$, with $k_0$ chosen after $D_0,C_B$.
     the triangle inequality give~(\ref{eq:area_law_descendant_birth_dist}).
 \end{proof}
 
-\begin{theorem}[Cut clearance of belt birth templates]
+\begin{lemma}[Cut clearance of belt birth templates]
     \label{thm:area_law_belt_birth_template_clearance}
     \lean{TNLean.PEPS.AreaLaw.Geometry.initialBelt_birthTemplate_cutClearance}
     \leanok
@@ -127,22 +127,22 @@ $u$ has $(s_0,n)=(2u,\lceil C_Bu\rceil)$, with $k_0$ chosen after $D_0,C_B$.
     $\operatorname{dist}_\infty(B,Z)\ge C_0r$, and every template $T\subseteq B$
     with $s_0\le2t_k$ and $n\le\lceil C_Bt_k\rceil$ (in particular
     $(s_0,n)=(t_k,\lceil C_Bt_k\rceil)$) satisfies~(\ref{eq:area_law_template_clearance}).
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_fan_run_cover,thm:area_law_fine_cell_containment,
         thm:area_law_dyadic_layer_distance,
         thm:area_law_descendant_clearance_scales,
         thm:area_law_template_clearance_of_endpoint_distance}
     By Definition~\ref{def:area_law_initial_birth_regions} and
-    Theorems~\ref{thm:area_law_fan_run_cover},~\ref{thm:area_law_fine_cell_containment},
+    Lemmas~\ref{thm:area_law_fan_run_cover},~\ref{thm:area_law_fine_cell_containment},
     and~\ref{thm:area_law_dyadic_layer_distance}, $B\subseteq\overline{D_k}$ has
     $\operatorname{dist}_\infty(B,Z)\ge C_0r\ge(C_0-1)r$; applying
-    Theorems~\ref{thm:area_law_descendant_clearance_scales}
+    Lemmas~\ref{thm:area_law_descendant_clearance_scales}
     and~\ref{thm:area_law_template_clearance_of_endpoint_distance} with
     $u=t_k$ gives~(\ref{eq:area_law_template_clearance}).
 \end{proof}
 
-\begin{theorem}[Cut clearance of descendant birth templates]
+\begin{lemma}[Cut clearance of descendant birth templates]
     \label{thm:area_law_descendant_birth_template_clearance}
     \lean{TNLean.PEPS.AreaLaw.Geometry.descendant_birthTemplate_cutClearance}
     \leanok
@@ -158,17 +158,17 @@ $u$ has $(s_0,n)=(2u,\lceil C_Bu\rceil)$, with $k_0$ chosen after $D_0,C_B$.
     region), and every template $T\subseteq B$ with $s_0\le2u$ and
     $n\le\lceil C_Bu\rceil$ (in particular $(s_0,n)=(2u,\lceil C_Bu\rceil)$)
     satisfies~(\ref{eq:area_law_template_clearance}).
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_uniform_repair_induction,thm:area_law_repair_depth,
         thm:area_law_descendant_clearance_scales,
         thm:area_law_descendant_birth_endpoint_distance,
         thm:area_law_repair_margins,
         thm:area_law_template_clearance_of_endpoint_distance}
-    Above the thresholds of Theorems~\ref{thm:area_law_uniform_repair_induction}
+    Above the thresholds of Lemmas~\ref{thm:area_law_uniform_repair_induction}
     and~\ref{thm:area_law_descendant_clearance_scales}, combining~(\ref{eq:area_law_descendant_birth_dist})
-    with $2d(t_k)\le2t_k^{\rho_0}\le r$ (Theorem~\ref{thm:area_law_repair_margins}
+    with $2d(t_k)\le2t_k^{\rho_0}\le r$ (Lemma~\ref{thm:area_law_repair_margins}
     and~(\ref{eq:area_law_descendant_clearance_scales})) gives
     $\operatorname{dist}_\infty(B,Z)\ge(C_0-1)r$, and
-    Theorem~\ref{thm:area_law_template_clearance_of_endpoint_distance} gives~(\ref{eq:area_law_template_clearance}).
+    Lemma~\ref{thm:area_law_template_clearance_of_endpoint_distance} gives~(\ref{eq:area_law_template_clearance}).
 \end{proof}

@@ -11,7 +11,7 @@
     \end{align}
 \end{definition}
 
-\begin{theorem}[Sparse choice of residue strips]
+\begin{lemma}[Sparse choice of residue strips]
     \label{thm:area_law_sparse_belt_shift}
     \lean{TNLean.PEPS.AreaLaw.Geometry.exists_sparse_belt_shift}
     \leanok
@@ -28,7 +28,7 @@
     % build/sections/10-geometry.tex, lines 210--237, geometry:belt-count.
     % This auxiliary theorem does not establish the layer-cell count or the
     % final dyadic decay estimate in geometry:belt-count.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     For any map $f:F\to\{0,\ldots,m-1\}$, its $m$ fibres partition $F$.
     One fibre therefore has at most $\lfloor|F|/m\rfloor$ elements.
@@ -68,7 +68,7 @@
     These are the four children of each parent in a translated dyadic mesh.
 \end{definition}
 
-\begin{theorem}[Finite cell counts]
+\begin{lemma}[Finite cell counts]
     \label{thm:area_law_cell_counts}
     \lean{
         TNLean.PEPS.AreaLaw.Geometry.card_ambientDilation_le,
@@ -89,7 +89,7 @@
     \end{align}
     These cardinality estimates are ingredients in the layer count of
     \cite[Section~11]{OpenAI2026AreaLaw}; no connectedness assumption is needed.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Each point of $T$ contributes an integer square with $(2r+1)^2$ sites;
     counting their union gives the first bound. Each crossing edge contributes

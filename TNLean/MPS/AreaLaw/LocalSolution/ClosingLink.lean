@@ -27,8 +27,10 @@ the same recursion. Every unit vector `φ` it keeps is kept by `P h 0` and has
 mentioning the link `(N, 1)`, which the windows of its `h` levels do not control. Here the final
 states are those kept by one further window for that link, inside the space of the last level,
 so eq. `hchy` and the count are proved for this corrected construction rather than for the
-source's own states `α^h`. The kept states are combinations of the `α^h`, and no matrix product
-form or bond dimension is claimed for them. Documented in
+source's own states `α^h`. The kept states are combinations of the `α^h` at the root.
+`HierarchyNesting.lean` proves that they remain in every retained space below the root,
+preserving the hierarchical representation. The source gives no bound on the dimensions
+of the intermediate retained spaces. Documented in
 `docs/paper-gaps/hastings05_hierarchical_energy.tex`.
 
 ## Main results

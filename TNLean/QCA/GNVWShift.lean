@@ -81,6 +81,7 @@ theorem range_quasiLocalTranslation_comp_quasiLocalObservable (a : ℤ) (Λ : Fi
     change quasiLocalTranslation d a
       (quasiLocalObservable d Λ ((localTranslation d a Λ).symm A)) = _
     rw [quasiLocalTranslation_quasiLocalObservable, StarAlgEquiv.apply_symm_apply]
+    rfl
 
 variable {d}
 

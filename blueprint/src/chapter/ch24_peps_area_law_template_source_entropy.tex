@@ -9,7 +9,7 @@ target and prefix inputs for a separated template.  The safe-box
 estimate is needed only at the single exponent in use, without yet deriving
 the improved exponent of Proposition 9.5.
 
-\begin{theorem}[One uniform coefficient for template entropy inputs]
+\begin{lemma}[One uniform coefficient for template entropy inputs]
     \label{thm:template-source-entropy}
     \lean{TNLean.PEPS.AreaLaw.Scan.exists_template_source_entropy_bounds,TNLean.PEPS.AreaLaw.Scan.templateSourceEntropyConstant,TNLean.PEPS.AreaLaw.Scan.template_source_entropy_bounds}
     \leanok
@@ -29,7 +29,7 @@ the improved exponent of Proposition 9.5.
     \]
     The same shell bound holds after replacing a complete prefix by all
     preceding depth rows and an arbitrary subset of the final row.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -47,7 +47,7 @@ the improved exponent of Proposition 9.5.
     last row contributes at most $n\log q\leq C_en$.
 \end{proof}
 
-\begin{theorem}[Physical entropy inputs conditional on the improved safe-box bound]
+\begin{lemma}[Physical entropy inputs conditional on the improved safe-box bound]
     \label{thm:template-final-source-entropy}
     \lean{TNLean.PEPS.AreaLaw.Scan.exists_template_final_source_entropy_bounds_of_boxEntropy,TNLean.PEPS.AreaLaw.Scan.template_final_source_entropy_bounds_of_boxEntropy}
     \leanok
@@ -60,7 +60,7 @@ the improved exponent of Proposition 9.5.
     ground vector and every separated template target of a scanner whose
     depth is the ambient target distance.  In particular one may
     use $L=\lfloor n^{1-10^{-5}}\rfloor$ whenever $1\leq L\leq s_0$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok

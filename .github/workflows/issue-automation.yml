@@ -361,7 +361,7 @@ jobs:
                   });
                   await commentOnce(parent.number,
                     'ready to close',
-                    'All sub-issues in this tracking issue are complete; the mathematical scope described here is ready to close.');
+                    'All currently linked sub-issues are closed. Review the mathematical scope and remaining obligations before deciding whether this issue is ready to close.');
                 }
               } else if (hasLabel) {
                 await github.rest.issues

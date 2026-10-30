@@ -27,6 +27,7 @@ import TNLean.PEPS.Examples.QuantumDoubleBondAverage
 import TNLean.PEPS.Examples.QuantumDoubleBondParent
 import TNLean.PEPS.Examples.QuantumDoubleLocalConstraint
 import TNLean.PEPS.Examples.QuantumDoublePlaquetteConstraint
+import TNLean.PEPS.Examples.QuantumDoubleRenormalization
 import TNLean.PEPS.Examples.RVB
 import TNLean.PEPS.Examples.ToricCodePrimal
 import TNLean.PEPS.Examples.ToricCodeTorusAmplitudes

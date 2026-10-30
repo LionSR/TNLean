@@ -10,7 +10,7 @@
     holonomy is $f_{B_1}(P^{-1}f_{B_2}P)$.
 \end{definition}
 
-\begin{theorem}[Partner connector holonomies before and after the gauge sweep]
+\begin{lemma}[Partner connector holonomies before and after the gauge sweep]
     \label{thm:peps_torus_swept_patch_partner_transports}
     \lean{TNLean.PEPS.regularWalkHolonomy_torusSweptStringInitial_connectorA,
         TNLean.PEPS.regularWalkHolonomy_torusSweptStringInitial_connectorB,
@@ -25,7 +25,7 @@
     After either of the two swept vertex gauges, they are respectively
     $g^{-1}$ and $g^{-1}$ for the same native walks at every translated
     position, including either seam.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Substituting the explicit directed bond values into the connector formulas
     gives the initial holonomies. For either swept gauge, the holonomy along a
@@ -35,7 +35,7 @@
     unchanged partner.
 \end{proof}
 
-\begin{theorem}[The same-connector gauge comparison has trivial joint flux]
+\begin{lemma}[The same-connector gauge comparison has trivial joint flux]
     \label{thm:peps_torus_swept_patch_B_joint_holonomy}
     \lean{TNLean.PEPS.regularWalkHolonomy_torusSweptStringInitial_BJointLoop,
         TNLean.PEPS.regularWalkHolonomy_torusSweptStringOperators_transportedBPartner,
@@ -55,7 +55,7 @@
     in \cite[fluxon-braiding passage]{Schuch2010PEPS} does not identify
     physical reunion or string rerouting with this same connector, and is
     neither a counterexample to the source nor a physical braiding theorem.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Conjugating a loop of holonomy $f$ along a connector of holonomy $P$
     gives $P^{-1}fP$. Initially $P=1$ and the partner fluxes are $h,h^{-1}$;

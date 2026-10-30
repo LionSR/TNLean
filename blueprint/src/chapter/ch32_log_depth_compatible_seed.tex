@@ -1,6 +1,6 @@
 \section{Conversion through compatible coherent seeds}
 
-\begin{theorem}[A coherent circuit for all encoded sectors]
+\begin{lemma}[A coherent circuit for all encoded sectors]
     \label{thm:ldp_coherent_sector_circuit}
     \lean{MPSPreparation.exists_isLocalCircuitOfDepth_registerCfg_of_pairProductState_supported,
         MPSPreparation.exists_isLocalCircuitOfDepth_registerCfg_of_isInjectiveOn,
@@ -27,7 +27,7 @@
     Consequently, as in the unitary stage following seed preparation in
     \cite[Long-range MPS using measurements]{Malz2024Preparation}, the same $U$ implements every linear combination of
     (\ref{eq:ldp_coherent_sector}) with arbitrary complex coefficients.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Extending the orthonormal family $\omega_j$ on each pair window to a
@@ -38,7 +38,7 @@
     (\ref{eq:ldp_coherent_sector}), and linearity gives the superposition identity.
 \end{proof}
 
-\begin{theorem}[Conversion through compatible coherent seeds]
+\begin{lemma}[Conversion through compatible coherent seeds]
     \label{thm:ldp_compatible_seed_conversion}
     \uses{def:qc_local_circuit}
     \lean{MPSPreparation.exists_isLocalCircuitOfDepth_of_compatible_seeds,
@@ -89,7 +89,7 @@
     \end{center}
     The boxes in this diagram denote whole circuits on $N$ sites, not
     free gates on growing physical blocks.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{lem:qc_circuit_inverse_composition, lem:ldp_error_triangle}
@@ -99,24 +99,24 @@
     the error triangle bound gives (\ref{eq:ldp_seed_error}).
 \end{proof}
 
-\begin{theorem}[Uniform logarithmic-depth conversion]
+\begin{lemma}[Uniform logarithmic-depth conversion]
     \label{thm:ldp_compatible_seed_log_depth}
     \lean{MPSPreparation.exists_isLocalCircuitOfDepth_le_log_of_compatible_seeds}
     \leanok
     Fix normalized target families $a_N,b_N$, constants $c_A,c_B,c_R$,
     and $N_0$. Suppose that for every $0<\varepsilon\leq1$ and positive
     $N\geq N_0$ there are compatible coherent seeds and circuits as in
-    Theorem~\ref{thm:ldp_compatible_seed_conversion}, with endpoint errors
+    Lemma~\ref{thm:ldp_compatible_seed_conversion}, with endpoint errors
     at most $\varepsilon/4$ and respective depths bounded by
     $c_A\log(N/\varepsilon)$, $c_B\log(N/\varepsilon)$ and
     $c_R\log(N/\varepsilon)$. There is a conversion of error at most
     $\varepsilon$ and depth at most
     $(c_A+c_B+c_R)\log(N/\varepsilon)$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:ldp_compatible_seed_conversion}
-    Applying Theorem~\ref{thm:ldp_compatible_seed_conversion} and summing the
+    Applying Lemma~\ref{thm:ldp_compatible_seed_conversion} and summing the
     three depth bounds yields the conversion circuit.
 \end{proof}
 

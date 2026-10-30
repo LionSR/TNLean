@@ -1,4 +1,4 @@
-\begin{theorem}[Group action determined by the multiplicities]%
+\begin{lemma}[Group action determined by the multiplicities]%
     \label{thm:mpo_symmetry_group_action}
     \lean{MPOTensor.IsNIMRep.group_mul_apply,
         MPOTensor.IsNIMRep.groupPerm,
@@ -21,7 +21,7 @@
     permutation representation of
     \cite[Section~4]{GarreRubio2023MPOSym}, with $M_{g,x}^y=\delta_{y,g\cdot x}$.
     % Source anchor: arXiv:2203.12563v3, REsubmission.tex, line 683.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -36,7 +36,7 @@
     so no other action has the same multiplicities.
 \end{proof}
 
-\begin{theorem}[Coherent permutation of symmetric periodic vectors]%
+\begin{corollary}[Coherent permutation of symmetric periodic vectors]%
     \label{thm:mpo_symmetry_group_periodic_action}
     \lean{MPOTensor.exists_mulAction_mpo_mulVec_eq_of_isMPOSymmetricFamily}
     \leanok
@@ -61,7 +61,7 @@
     \end{align}
     % Source anchors: arXiv:2203.12563v3, REsubmission.tex,
     % line 683 and lines 1062--1064. Periodic-boundary statement only.
-\end{theorem}
+\end{corollary}
 
 \begin{proof}
     \leanok
@@ -70,7 +70,7 @@
     multiplication law by Theorem~\ref{thm:mpo_symmetric_nimrep}.
     Comparing the coefficients of the linearly independent block vectors
     under the identity operator gives $M_{e,x}^y=\delta_{y,x}$.
-    Theorem~\ref{thm:mpo_symmetry_group_action} gives the group action.
+    Lemma~\ref{thm:mpo_symmetry_group_action} gives the group action.
     Substituting its coefficient formula into
     (\ref{eq:mpo_group_periodic_coefficients}) gives
     (\ref{eq:mpo_group_periodic_action}).

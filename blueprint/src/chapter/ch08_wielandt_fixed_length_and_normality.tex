@@ -29,7 +29,7 @@ construction appears in Section~\ref{sec:app_wielandt_blocking_support}.
     The reverse inclusion $H_n\le K_n$ is immediate.
 \end{proof}
 
-\begin{theorem}[Fixed-length vector spanning implies matrix spanning]%
+\begin{lemma}[Fixed-length vector spanning implies matrix spanning]%
     \label{thm:lemma2b_assembly}
     \lean{Kraus.wordSpan_eq_top_of_vectorSpreadSpan_eq_top_of_rankOneBasis}
     \leanok
@@ -43,7 +43,7 @@ construction appears in Section~\ref{sec:app_wielandt_blocking_support}.
               $\ketbra{\varphi}{e_j}$ lies in $S_m(A)$.
     \end{enumerate}
     Then $S_{n+m}(A)=\MN{D}$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -105,7 +105,7 @@ construction appears in Section~\ref{sec:app_wielandt_blocking_support}.
     equivalence.
 \end{proof}
 
-\begin{theorem}[Bounded injective blocking for left-canonical normal tensors]%
+\begin{lemma}[Bounded injective blocking for left-canonical normal tensors]%
     \label{thm:bounded_injective_blocking_normal_left_canonical}
     \lean{MPSTensor.exists_pos_blockTensor_isInjective_le_pow_four_of_isNormal_leftCanonical}
     \leanok
@@ -116,12 +116,12 @@ construction appears in Section~\ref{sec:app_wielandt_blocking_support}.
     the canonical-form reduction), let $A$ be a left-canonical normal MPS
     tensor with bond dimension $D>0$. Then there is a positive blocking length
     $L\le D^4$ such that the blocked tensor $A^{[L]}$ is one-site injective.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     Normality is eventual full Kraus rank, so
-    Theorem~\ref{thm:wielandt_proposition_three} gives paper primitivity.
+    Lemma~\ref{thm:wielandt_proposition_three} gives paper primitivity.
     Theorem~\ref{thm:wielandt_general} then yields
     \begin{align}
         \iota(A)
@@ -153,24 +153,24 @@ construction appears in Section~\ref{sec:app_wielandt_blocking_support}.
     positive-length propagation at each step gives $S_{L+k}(A)=\MN{D}$.
 \end{proof}
 
-\begin{theorem}[Exact block injectivity at positive multiples]
+\begin{lemma}[Exact block injectivity at positive multiples]
     \label{thm:exact_block_injectivity_positive_multiple}
     \lean{MPSTensor.isNBlkInjective_mul_of_isNBlkInjective}
     \leanok
     \uses{def:l_blk_injective}
     If $A$ is $N$-block injective and $m>0$, then $A$ is
     $(mN)$-block injective.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{def:l_blk_injective, thm:word_span_add_exact}
-    By induction on $m$, Theorem~\ref{thm:word_span_add_exact} gives
+    By induction on $m$, Lemma~\ref{thm:word_span_add_exact} gives
     $S_{mN+N}(A)=S_{mN}(A)S_N(A)$, and the product of the full matrix
     algebra with itself is again the full matrix algebra.
 \end{proof}
 
-\begin{theorem}[Common exact block-injectivity length]
+\begin{lemma}[Common exact block-injectivity length]
     \label{thm:common_exact_block_injectivity_normal_left_canonical}
     \lean{MPSTensor.%
         exists_common_isNBlkInjective_of_isNormal_leftCanonical}
@@ -180,12 +180,12 @@ construction appears in Section~\ref{sec:app_wielandt_blocking_support}.
     Let $(A_j)_{j=1}^g$ be a finite family of positive-bond-dimension,
     left-canonical normal tensors. There is a positive integer $L$ such that
     every $A_j$ is $L$-block injective.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:exact_block_injectivity_positive_multiple}
     Applying
-    Theorem~\ref{thm:bounded_injective_blocking_normal_left_canonical} to each
+    Lemma~\ref{thm:bounded_injective_blocking_normal_left_canonical} to each
     block yields a positive block-injectivity length per block; the product of
     these finitely many positive lengths is a common positive multiple, and
     exact block injectivity persists under positive multiples.
@@ -209,7 +209,7 @@ construction appears in Section~\ref{sec:app_wielandt_blocking_support}.
 
 \begin{proof}
     \leanok
-    Applying Theorem~\ref{thm:bounded_injective_blocking_normal_left_canonical}
+    Applying Lemma~\ref{thm:bounded_injective_blocking_normal_left_canonical}
     to each block and taking the product of the finitely many resulting
     positive blocking lengths gives a common positive multiple, under which
     injectivity persists by positive further blocking.
@@ -218,17 +218,17 @@ construction appears in Section~\ref{sec:app_wielandt_blocking_support}.
 \begin{remark}[Rank-one extraction and fixed-length spanning]
     \label{rem:lemma2b_status}\leanok
     The quantitative rank-one result of Sanz et al.~\cite[Lemma~2(b)]{Sanz2010Quantum}
-    is Theorem~\ref{thm:rank_one_noninvertible_eigenvector_primitive}. Combined with
+    is Lemma~\ref{thm:rank_one_noninvertible_eigenvector_primitive}. Combined with
     fixed-length vector spreading, it yields matrix spanning via
-    Theorem~\ref{thm:lemma2b_assembly}. Alternatively, the blocked construction in
-    Theorem~\ref{thm:wielandt_lemma2b} extracts a rank-one operator directly from
+    Lemma~\ref{thm:lemma2b_assembly}. Alternatively, the blocked construction in
+    Lemma~\ref{thm:wielandt_lemma2b} extracts a rank-one operator directly from
     normality without tracking explicit exponents.
 \end{remark}
 
 \begin{remark}[Exact-length spanning and block injectivity]
-    The cumulative bound $T_{D^2}(A)=\MN{D}$ (Theorem~\ref{thm:wielandt_bound})
+    The cumulative bound $T_{D^2}(A)=\MN{D}$ (Lemma~\ref{thm:wielandt_bound})
     yields exact-length spanning $S_N(A)=\MN{D}$ of \cite[Theorem~1]{Sanz2010Quantum}
-    under identity padding or blocked construction (Theorem~\ref{thm:wielandt_lemma2b}).
+    under identity padding or blocked construction (Lemma~\ref{thm:wielandt_lemma2b}).
     This exact-length spanning is equivalent to injectivity of $\Gamma_N$ and
     one-site injectivity of the blocked tensor $A^{[N]}$ (Lemma~\ref{lem:blocking_transfer}).
 \end{remark}
@@ -261,10 +261,10 @@ Section~\ref{sec:app_wielandt_blocking_support}.
     positive semidefinite fixed point. When $\rho>0$, this implies strong
     irreducibility and uniform vector spreading
     (Definition~\ref{def:paper_primitive}) by
-    Theorem~\ref{thm:wielandt_proposition_three}.
+    Lemma~\ref{thm:wielandt_proposition_three}.
 \end{definition}
 
-\begin{theorem}[Normalizing the primitive fixed point to unit trace]
+\begin{lemma}[Normalizing the primitive fixed point to unit trace]
     \label{thm:primitive_fixed_point_trace_normalization}
     \lean{fixedPointProj_smul}
     \lean{Matrix.trace_inv_trace_smul}
@@ -283,7 +283,7 @@ Section~\ref{sec:app_wielandt_blocking_support}.
     trace.  Then $\tr(\sigma)=1$; if $\rho>0$ then also $\sigma>0$; and if $A$
     is primitive with positive-definite fixed point $\rho$, then $A$ is
     primitive with fixed point $\sigma$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -316,7 +316,7 @@ transfer-map gap. It is connected to normality through the following results.
     positive definite, irreducibility holds and the peripheral spectrum is
     $\{1\}$, so the tensor is strongly irreducible
     (Definition~\ref{def:strongly_irreducible_paper}). By
-    Theorem~\ref{thm:wielandt_proposition_three}, this is equivalent to uniform
+    Lemma~\ref{thm:wielandt_proposition_three}, this is equivalent to uniform
     vector spreading (Definition~\ref{def:paper_primitive}) and eventual full Kraus
     rank.
 \end{remark}
@@ -393,13 +393,13 @@ For Burnside-style arguments it is more natural to work with invariant
     $A$-invariant subspace is trivial, i.e.\ equal to $0$ or to $\C^D$.
 \end{definition}
 
-\begin{theorem}[Irreducible tensor implies irreducible action]\label{thm:irreducible_tensor_to_action}
+\begin{lemma}[Irreducible tensor implies irreducible action]\label{thm:irreducible_tensor_to_action}
     \lean{Kraus.isIrreducibleAction_of_isIrreducibleFamily}\leanok
     \uses{def:irreducible_tensor, def:irreducible_action}
     If $A$ is irreducible as a tensor (Definition~\ref{def:irreducible_tensor}),
     then the Kraus operators act irreducibly on $\C^D$
     (Definition~\ref{def:irreducible_action}).
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Let $W\le\C^D$ be an $A$-invariant subspace.
@@ -409,14 +409,14 @@ For Burnside-style arguments it is more natural to work with invariant
     $W=\C^D$, contradicting irreducibility of the tensor.
 \end{proof}
 
-\begin{theorem}[Burnside's theorem for matrix algebras]\label{thm:burnside_matrix}
+\begin{lemma}[Burnside's theorem for matrix algebras]\label{thm:burnside_matrix}
     \lean{Matrix.burnside_matrix}\leanok
     \uses{def:alg_span, def:irreducible_action}
     In the complex finite-dimensional case of Burnside's theorem (equivalently,
     Jacobson's density theorem~\cite{Jacobson2009BasicAlgebraII}), assume
     $D>0$. If $A$ acts irreducibly on $\C^D$, then the generated unital
     subalgebra is the full matrix algebra: $\algspn(A)=\MN{D}$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Under the algebra equivalence $\MN{D}\simeq_{\C}\End_{\C}(\C^D)$, the
@@ -441,7 +441,7 @@ The complementary transfer-map gap of Definition~\ref{def:primitive_mps} implies
 normality (eventual full Kraus rank) via the convergence of transfer-map iterates
 to the fixed-point projection, without requiring an identity element in $S_1(A)$.
 
-\begin{theorem}[Positive definiteness of the fixed point under map irreducibility]%
+\begin{lemma}[Positive definiteness of the fixed point under map irreducibility]%
     \label{thm:primitive_fixed_point_posdef_of_irreducible_map}
     \lean{Kraus.HasComplementaryFixedPointGap.posDef_of_isIrreducibleMap}
     \leanok
@@ -449,7 +449,7 @@ to the fixed-point projection, without requiring an identity element in $S_1(A)$
     Let $D>0$, let $(A,\rho)$ be primitive in the sense of
     Definition~\ref{def:primitive_mps}, and let $\E_A$ be irreducible.  Then
     $\rho>0$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -460,7 +460,7 @@ to the fixed-point projection, without requiring an identity element in $S_1(A)$
     $P\neq0$ because $\rho\neq0$; hence $P=\Id$ and $\rho>0$.
 \end{proof}
 
-\begin{theorem}[Strongly irreducible tensors are primitive with a positive-definite fixed point]%
+\begin{lemma}[Strongly irreducible tensors are primitive with a positive-definite fixed point]%
     \label{thm:primitive_from_strongly_irred}
     \lean{MPSTensor.isPrimitiveMPS_of_isStronglyIrreduciblePaper}
     \leanok
@@ -470,7 +470,7 @@ to the fixed-point projection, without requiring an identity element in $S_1(A)$
     Definition~\ref{def:strongly_irreducible_paper}, then there is a matrix
     $\rho>0$ such that $(A,\rho)$ is primitive in the sense of
     Definition~\ref{def:primitive_mps}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -483,7 +483,7 @@ to the fixed-point projection, without requiring an identity element in $S_1(A)$
     trace-preserving normalization, and the peripheral spectrum $\{1\}$ then
     give primitive fixed-point data $(A,\rho)$ with $\rho\ge0$ nonzero by the
     first clause of the same lemma.  Finally,
-    Theorem~\ref{thm:primitive_fixed_point_posdef_of_irreducible_map} makes
+    Lemma~\ref{thm:primitive_fixed_point_posdef_of_irreducible_map} makes
     $\rho$ positive definite because $\E_A$ is irreducible.
 \end{proof}
 
@@ -511,20 +511,20 @@ to the fixed-point projection, without requiring an identity element in $S_1(A)$
     conditions in Definition~\ref{def:strongly_irreducible_paper}.
 \end{proof}
 
-\begin{theorem}[Primitive MPS with positive-definite fixed point is normal]%
+\begin{lemma}[Primitive MPS with positive-definite fixed point is normal]%
     \label{thm:normal_from_primitive_posdef}
     \lean{MPSTensor.isNormal_of_isPrimitiveMPS_with_posDef}
     \leanok
     \uses{def:primitive_mps, def:normal}
     If $A$ is a primitive MPS tensor with positive-definite fixed point~$\rho$,
     then $A$ is normal (eventually full Kraus rank).
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{lem:strongly_irred_from_primitive}
     By Lemma~\ref{lem:strongly_irred_from_primitive},
-    $A$ is strongly irreducible. Theorem~\ref{thm:wielandt_proposition_three}
+    $A$ is strongly irreducible. Lemma~\ref{thm:wielandt_proposition_three}
     identifies strong irreducibility with eventual full Kraus rank, hence
     with normality.
 \end{proof}
