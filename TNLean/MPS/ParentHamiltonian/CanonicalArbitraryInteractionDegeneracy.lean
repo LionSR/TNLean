@@ -95,12 +95,8 @@ theorem PGVWC07CanonicalFormData.blockCount_le_finrank_ker_periodicInteractionHa
     hr hDistinct hL₀ hC1 hN h hh hzero
   let K := LinearMap.ker (periodicInteractionHamiltonianES h N)
   let states : Fin data.r → K := fun j => ⟨mpvState (data.blocks j) N, hblocks j⟩
-  have hIndependentK : LinearIndependent ℂ states := by
-    rw [Fintype.linearIndependent_iff] at hIndependent ⊢
-    intro c hc j
-    apply hIndependent c _ j
-    have heq := congrArg (Submodule.subtype K) hc
-    simpa only [map_sum, map_smul, map_zero] using heq
+  have hIndependentK : LinearIndependent ℂ states :=
+    LinearIndependent.of_comp K.subtype hIndependent
   simpa only [Fintype.card_fin] using hIndependentK.fintype_card_le_finrank
 
 end MPSTensor
