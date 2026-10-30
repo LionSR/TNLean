@@ -1,0 +1,267 @@
+\section{Moving-wall Gram coefficients}
+\label{sec:uncle_wall_gram}
+
+The norm argument in
+\cite[proof of the low-energy-state lemma]{FernandezGonzalez2015Uncle}
+contains a finite weighted mixed-transfer sum for each moving wall. The
+following identities derive that sum directly from the single-wall words.
+They require the unital and stationary normalizations used in the source,
+but require neither an asymptotic norm bound nor perturbation injectivity.
+
+\begin{definition}[Moving-wall Gram and correlation matrices]
+    \label{def:uncle_wall_gram}
+    \lean{MPSTensor.uncleWallGram,MPSTensor.uncleWallCorrelation,
+        MPSTensor.uncleWallSeed,MPSTensor.uncleWallCrossMap,
+        MPSTensor.uncleWallGramWeight,MPSTensor.uncleWallCrossWeight}
+    \notready
+    \uses{def:uncle_two_wall_trial}
+    Let $W_R(w)$ be the sum with one wall in the word $w$, with $A$ to
+    its left and $B$ to its right. Define
+    \[
+        Z_n=\sum_{|w|=n}W_R(w)B(w)^*,\qquad
+        Y_n=\sum_{|w|=n}W_R(w)W_R(w)^*.
+    \]
+    Write $F(X)=\sum_i A_iXB_i^*$,
+    $C=\sum_i R_iB_i^*$, $G=\sum_iR_iR_i^*$, and
+    $J(X)=\sum_i A_iXR_i^*$. For a left density $\rho$, put
+    $\eta_n=\operatorname{tr}(\rho Y_n)$,
+    $\ell(X)=\operatorname{tr}(\rho J(X))$, and
+    $c_0=\operatorname{tr}(\rho G)$.
+\end{definition}
+
+\begin{lemma}[Exact finite wall recurrences]
+    \label{lem:uncle_wall_gram_recurrence}
+    \lean{MPSTensor.uncleWallCorrelation_succ,MPSTensor.uncleWallGram_succ,
+        MPSTensor.uncleWallCorrelation_eq_sum,
+        MPSTensor.uncleWallGramWeight_succ,
+        MPSTensor.uncleWallGram_posSemidef,MPSTensor.uncleWallGramWeight_nonneg}
+    \notready
+    \uses{def:uncle_wall_gram}
+    Suppose $\sum_iB_iB_i^*=I$. Then $Z_0=Y_0=0$ and
+    \[
+        Z_{n+1}=F(Z_n)+C,\qquad
+        Y_{n+1}=E_A(Y_n)+J(Z_n)+J(Z_n)^*+G.
+    \]
+    In particular, $Z_n=\sum_{k=0}^{n-1}F^k(C)$ and $Y_n$ is positive
+    semidefinite. If $\rho$ is Hermitian and $E_A^*(\rho)=\rho$, then
+    \[
+        \eta_{n+1}=\eta_n+c_0+\ell(Z_n)+\overline{\ell(Z_n)}.
+    \]
+    If $\rho$ is positive semidefinite, every $\eta_n$ is nonnegative.
+\end{lemma}
+\begin{proof}
+    Split each physical word into its first letter and its tail and use
+    $W_R(iw)=A_iW_R(w)+R_iB(w)$. Unitality makes the sum of
+    $B(w)B(w)^*$ equal to the identity. Expanding the two Gram factors
+    gives the two conjugate cross terms. The stationary density removes
+    the diagonal transfer in the trace.
+\end{proof}
+
+\begin{lemma}[Finite weighted mixed-transfer formula]
+    \label{thm:uncle_wall_gram_finite_sum}
+    \lean{MPSTensor.uncleWallGramWeight_eq_weighted_sum}
+    \notready
+    \uses{lem:uncle_wall_gram_recurrence}
+    Under the same unital and Hermitian stationary normalizations,
+    \[
+        \eta_{n+1}=(n+1)c_0+
+        \sum_{k=0}^{n-1}(n-k)
+        \bigl(\ell(F^k(C))+\overline{\ell(F^k(C))}\bigr).
+    \]
+    The sum is empty at $n=0$. At $n=1$ the expression is
+    $2c_0+2\operatorname{Re}\ell(C)$.
+\end{lemma}
+\begin{proof}
+    Substitute the finite geometric expansion for $Z_n$ in the scalar
+    recurrence. Each mixed power $F^k(C)$ occurs once for every later
+    extension of the word, hence exactly $n-k$ times.
+\end{proof}
+
+The corresponding identities for the other wall follow by exchanging
+$A,B$ and replacing $R$ by $L$. Establishing the two-wall norm asymptotic
+still requires the separating-transfer error estimate, decay of the
+mixed transfer powers, and strict positivity of the limiting coefficients
+outside the source exceptional sets. Finite nonnegativity alone does not
+supply the required positive quadratic growth.
+
+\begin{lemma}[Linear limiting wall coefficient]
+    \label{thm:uncle_wall_gram_linear_limit}
+    \lean{MPSTensor.uncleWallCorrelationLimit,MPSTensor.uncleWallNormSlope,
+        MPSTensor.uncleWallCorrelation_summable,
+        MPSTensor.uncleWallCorrelation_tendsto,
+        MPSTensor.uncleWallGramWeight_normalized_tendsto}
+    \notready
+    \uses{thm:uncle_wall_gram_finite_sum}
+    Suppose also that the mixed transfer operator $F$ has spectral radius
+    strictly below one. Then the actual mixed series
+    \[
+        Z_\infty=\sum_{k=0}^{\infty}F^k(C)
+    \]
+    converges, $Z_n\to Z_\infty$, and
+    \[
+        \frac{\eta_n}{n}\longrightarrow
+        \kappa_R:=c_0+\ell(Z_\infty)+\overline{\ell(Z_\infty)}.
+    \]
+    Strict positivity of $\kappa_R$ is not part of this assertion.
+\end{lemma}
+\begin{proof}
+    The strict spectral-radius bound gives a geometric bound for all
+    mixed transfer powers, so the actual correlation series is summable.
+    Continuity of the wall contraction makes the exact Gram increments
+    converge to $\kappa_R$. Their Ces\`aro averages equal
+    $\eta_n/n$ and converge to the same limit.
+\end{proof}
+
+\begin{lemma}[Nonnegative slope and a positive wall witness]
+    \label{lem:uncle_wall_gram_positive_witness}
+    \lean{MPSTensor.uncleWallNormSlope_nonneg,
+        MPSTensor.uncleWallNormSlope_of_seed_eq_zero,
+        MPSTensor.uncleWallNormSlope_pos_of_seed_eq_zero,
+        MPSTensor.uncleWallSeed_smul_of_annihilator,
+        MPSTensor.exists_uncleWall_adjoint_annihilator,
+        MPSTensor.exists_uncleWallNormSlope_pos,
+        MPSTensor.exists_uncleWallNormSlope_pos_of_injective_perturbation}
+    \notready
+    \uses{thm:uncle_wall_gram_linear_limit}
+    For a positive semidefinite stationary density, the limiting wall
+    slope is nonnegative. If $C=0$, $R\ne0$, and $\rho$ is positive
+    definite, then
+    \[
+        \kappa_R=c_0=\operatorname{tr}\!\left(\rho\sum_iR_iR_i^*\right)>0.
+    \]
+    When the physical dimension $d$ exceeds $b^2$ and both bond dimensions
+    are positive, there exists such a nonzero wall with $C=0$. The
+    dimension condition follows, in particular, from the full
+    perturbation span condition on matrices of size $a+b$.
+\end{lemma}
+\begin{proof}
+    Nonnegativity passes from the finite normalized Gram weights to their
+    limit, using the real and imaginary parts. If the seed vanishes,
+    every term of its mixed-transfer series vanishes. A nonzero wall has
+    nonzero positive semidefinite one-site Gram matrix, whose pairing
+    with a positive definite density is strictly positive.
+
+    There is a nonzero physical coefficient vector $c$ with
+    $\sum_i c_iB_i^*=0$ when $d>b^2$. For any nonzero rectangular matrix
+    $M$, set $R_i=c_iM$. Its seed is zero and its Gram weight is positive.
+    Full perturbation span implies $d\ge(a+b)^2>b^2$ when $a>0$.
+    This witness need not itself preserve the full perturbation span;
+    it establishes a positive value somewhere in the space of walls.
+\end{proof}
+
+Quadratic dependence and the structure of the zero set give the generic
+conclusion below. The positive witness alone does not constitute an
+almost-everywhere statement.
+
+\begin{lemma}[The actual quadratic coefficient and its exceptional subspace]
+    \label{thm:uncle_wall_gram_generic_positive}
+    \lean{MPSTensor.uncleWallCorrelationLimitLinear,
+        MPSTensor.uncleWallSlopeBilin,MPSTensor.uncleWallSlopeBilin_apply,
+        MPSTensor.uncleWallSlopeQuadratic,
+        MPSTensor.uncleWallSlopeQuadratic_apply,
+        MPSTensor.uncleWallSlopeQuadratic_nonneg,
+        MPSTensor.uncleWallSlopeQuadratic_ne_zero,
+        MPSTensor.uncleWallSlopeQuadratic_mem_radical_iff,
+        MPSTensor.uncleWallSlopeQuadratic_radical_ne_top,
+        MPSTensor.uncleWallSlopeQuadratic_positive_open_dense,
+        MPSTensor.uncleWallSlopeQuadratic_zero_measure,
+        MPSTensor.uncleWallNormSlope_ae_pos}
+    \notready
+    \uses{lem:uncle_wall_gram_positive_witness,thm:uncle_wall_gram_linear_limit}
+    Fix positive bond dimensions, the unital right block, a faithful
+    stationary left density, and strict mixed-transfer damping. Suppose
+    that a full perturbation span is possible for these diagonal blocks.
+    As a function of the wall $R$, the actual limiting coefficient
+    $\kappa_R$ is a nonnegative real quadratic form. Its zero set is its
+    radical, a proper real linear subspace of the wall space. Thus positive
+    slopes form an open dense set, and the zero slopes have measure zero
+    for every additive Haar measure on that finite-dimensional real space.
+    In particular, almost every wall has strictly positive actual slope.
+\end{lemma}
+\begin{proof}
+    The convergent mixed correlation series is complex linear in $R$.
+    For two walls $R,S$, its actual slope is the diagonal of the real
+    bilinear form
+    \[
+        \operatorname{Re}\operatorname{tr}\!\left(\rho\sum_iR_iS_i^*\right)
+        +2\operatorname{Re}\operatorname{tr}\!\left(\rho\sum_iA_iZ_\infty(R)S_i^*\right).
+    \]
+    Nonnegativity follows from the actual normalized Gram limit, and the
+    preceding explicit witness proves that this form is not identically
+    zero. For any nonnegative real quadratic form $Q$, if $Q(x)=0$ and
+    $p$ is the polar pairing of $x$ with $y$, choosing
+    $t=-p/(Q(y)+1)$ gives
+    \[
+        Q(x+ty)=-\frac{p^2}{(Q(y)+1)^2}.
+    \]
+    Hence $p=0$, and the zero set is the radical. It is a proper closed
+    subspace with empty interior and zero additive Haar measure.
+\end{proof}
+
+The full perturbation span enters this statement only through the existence
+of a positive value of the quadratic coefficient. The exceptional set is
+derived for the actual wall coefficient, rather than supplied as a
+hypothesis. The separating-transfer estimate relating both coefficients
+to the norm of the actual two-wall trial remains a further step.
+
+\begin{lemma}[Simultaneous positivity for a pair of walls]
+    \label{cor:uncle_wall_gram_pair_generic_positive}
+    \lean{MPSTensor.uncleWallSlopeQuadratic_ne_zero_of_bond_sq_lt,
+        MPSTensor.uncleWallNormSlope_pair_ae_pos}
+    \notready
+    \uses{thm:uncle_wall_gram_generic_positive}
+    Suppose both diagonal blocks have unital transfers and faithful
+    stationary dual densities, the mixed transfer spectral radius is
+    strictly below one in both orientations, and a full perturbation
+    span is possible. Then almost every pair $(R,L)$ has
+    $\kappa_R>0$ and $\kappa_L>0$, with respect to every additive Haar
+    measure on the real space of both walls. No independence condition
+    on component measures is needed.
+\end{lemma}
+\begin{proof}
+    Full perturbation span implies that the physical dimension exceeds
+    each separate block's matrix dimension. The two zero-slope radicals
+    are therefore proper. Inside the pair space the exceptional set is
+    the union of the first radical times the whole second wall space,
+    and the whole first wall space times the second radical. These are
+    two proper real linear subspaces, each of zero additive Haar measure.
+\end{proof}
+
+\begin{lemma}[Uniform linear wall Gram bounds]
+    \label{lem:uncle_wall_gram_linear_bounds}
+    \lean{MPSTensor.uncleWallGramWeight_norm_le_mul,
+        MPSTensor.uncleWallGram_trace_re_le_weight,
+        MPSTensor.uncleWallGram_trace_re_le_mul,
+        MPSTensor.uncleWallGram_l2_opNorm_le_mul,
+        MPSTensor.uncleWallGramMap_apply_l2_opNorm_le_trace,
+        MPSTensor.uncleWallGramMap_apply_l2_opNorm_le_mul}
+    \notready
+    \uses{thm:uncle_wall_gram_linear_limit,lem:uncle_wall_gram_recurrence}
+    Under the stationary Hermitian left density, unital right block and
+    strict mixed-transfer damping, there is $C>0$ such that
+    $|\eta_n|\le Cn$ for every $n\ge0$. If the density is positive
+    definite, there is also $K>0$ such that
+    \[
+        \operatorname{Re}\operatorname{tr}(Y_n)\le K\eta_n.
+    \]
+    Consequently both the unweighted Gram trace and the Euclidean operator
+    norm of $Y_n$ are bounded by a constant times $n$ for every $n\ge0$.
+    The actual rectangular Gram map
+    $G_n(X)=\sum_{|w|=n}W_R(w)XW_R(w)^*$ satisfies
+    \[
+        \lVert G_n(X)\rVert\le
+        \operatorname{Re}\operatorname{tr}(Y_n)\,\lVert X\rVert
+        \le Cn\lVert X\rVert.
+    \]
+\end{lemma}
+\begin{proof}
+    Convergence of $\eta_n/n$ bounds the tail; increasing the constant
+    handles the finite initial segment, and $\eta_0=0$. A faithful
+    density satisfies $\rho\ge cI$ for some $c>0$. Positivity of $Y_n$
+    gives $\eta_n\ge c\operatorname{Re}\operatorname{tr}(Y_n)$.
+    Finally, the operator norm of a positive semidefinite matrix is at
+    most its real trace. The triangle inequality bounds the Gram map by
+    the sum of the squared word operator norms times the input norm.
+    Each squared word norm is bounded by its Gram trace, whose sum is
+    the trace of $Y_n$.
+\end{proof}
