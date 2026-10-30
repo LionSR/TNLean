@@ -16,11 +16,11 @@ multiplicity spaces. Changing every analysis map by
 `W^i ↦ ∑_{i'} X̂_{i i'} W^{i'}` changes the normalized-trace coefficients
 multilinearly:
 
-* the L matrix by `L' = ∑ X X X̂ Ŷ L`, source lines 593--605;
-* the F matrix by `F' = ∑ Y Y Ŷ Ŷ F`, source lines 415--422.
+* the L matrix by `L' = ∑ X X X̂ Ŷ L`, source lines 593--605;
+* the F matrix by `F' = ∑ Y Y Ŷ Ŷ F`, source lines 415--422.
 
 These two identities are coordinate identities and hold for arbitrary
-matrices `X, X̂, Y, Ŷ`. Conversely, any two exact biorthogonal decompositions
+matrices `X, X̂, Y, Ŷ`. Conversely, any two exact biorthogonal decompositions
 of the same tensor onto injective, positive-dimensional, scalar-gauge-separated
 blocks are related by such a change of basis, with `X̂ = (X⁻¹)ᵀ`; the
 existing zipper uniqueness gives this relation after multiplication by a
@@ -118,9 +118,9 @@ theorem fusionThenActionSynthesis_regauge
 
 /-- **Gauge transformation of the L-symbols.** Changing the action analysis
 maps by `X`, the action synthesis maps by `X̂`, and the fusion synthesis
-maps by `Ŷ` changes the L matrix by
+maps by `Ŷ` changes the L matrix by
 
-`L'^{z,ij}_{c,kμ} = ∑ X^y_{az}[i,i'] X^z_{bx}[j,j'] X̂^y_{cx}[k,k'] Ŷ^c_{ab}[μ,μ']`
+`L'^{z,ij}_{c,kμ} = ∑ X^y_{az}[i,i'] X^z_{bx}[j,j'] X̂^y_{cx}[k,k'] Ŷ^c_{ab}[μ,μ']`
 `L^{z,i'j'}_{c,k'μ'}`.
 
 The gauge matrices are arbitrary; no invertibility is used. Source:
@@ -200,9 +200,9 @@ private theorem fusionRightContraction_regauge
   ring
 
 /-- **Gauge transformation of the F-symbols.** Changing the fusion analysis
-maps by `Y` and the fusion synthesis maps by `Ŷ` changes the F matrix by
+maps by `Y` and the fusion synthesis maps by `Ŷ` changes the F matrix by
 
-`F'[(e,μ,ν),(f,λ,σ)] = ∑ Y^e_{ab}[μ,μ'] Y^d_{ec}[ν,ν'] Ŷ^f_{bc}[λ,λ'] Ŷ^d_{af}[σ,σ']`
+`F'[(e,μ,ν),(f,λ,σ)] = ∑ Y^e_{ab}[μ,μ'] Y^d_{ec}[ν,ν'] Ŷ^f_{bc}[λ,λ'] Ŷ^d_{af}[σ,σ']`
 `F[(e,μ',ν'),(f,λ',σ')]`.
 
 The gauge matrices are arbitrary. Source: GLM23, `REsubmission.tex`,
