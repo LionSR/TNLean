@@ -37,10 +37,9 @@ theorem gaussianFilteredTerm_eq_exp_commutator {q : ℝ} (hq : 0 ≤ q)
     gaussianFilteredTerm q ΔE H W =
       NormedSpace.exp ((-((q / ΔE ^ 2 : ℝ) : ℂ) / 2) •
         GaussianFilter.commutatorCLM H ^ 2) W := by
-  have hvariance : ((q / ΔE ^ 2).toNNReal : ℂ) = ((q / ΔE ^ 2 : ℝ) : ℂ) :=
-    congrArg (fun r : ℝ ↦ (r : ℂ)) (Real.coe_toNNReal _ (div_nonneg hq (sq_nonneg ΔE)))
-  simpa only [gaussianFilteredTerm, hvariance] using
-    GaussianFilter.gaussianIntertwiner_eq_exp_commutator (q / ΔE ^ 2).toNNReal hH W
+  rw [gaussianFilteredTerm,
+    GaussianFilter.gaussianIntertwiner_eq_exp_commutator (q / ΔE ^ 2).toNNReal hH W,
+    Real.coe_toNNReal _ (div_nonneg hq (sq_nonneg ΔE))]
 
 /-- The actual source Gaussian-filtered term is the operator-norm sum
 of the even commutators, with coefficient
@@ -52,9 +51,8 @@ theorem hasSum_gaussianFilteredTerm_commutator {q : ℝ} (hq : 0 ≤ q)
       ((-((q / ΔE ^ 2 : ℝ) : ℂ) / 2) ^ r / (r.factorial : ℂ)) •
         ((GaussianFilter.commutatorCLM H) ^ (2 * r)) W)
       (gaussianFilteredTerm q ΔE H W) := by
-  have hvariance : ((q / ΔE ^ 2).toNNReal : ℂ) = ((q / ΔE ^ 2 : ℝ) : ℂ) :=
-    congrArg (fun r : ℝ ↦ (r : ℂ)) (Real.coe_toNNReal _ (div_nonneg hq (sq_nonneg ΔE)))
-  simpa only [gaussianFilteredTerm, hvariance] using
+  rw [gaussianFilteredTerm]
+  simpa only [Real.coe_toNNReal _ (div_nonneg hq (sq_nonneg ΔE))] using
     GaussianFilter.hasSum_gaussianIntertwiner_commutator (q / ΔE ^ 2).toNNReal hH W
 
 end TNLean.Lattice
