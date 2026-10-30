@@ -97,10 +97,10 @@ theorem physical_sector_parent_projection_embed
     (e : Fin a ↪ Fin d) (f : Fin b ↪ Fin d) (h : ∀ i j, e i ≠ f j)
     (hR : 0 < R) (S : Submodule ℂ (MPVSpace a R)) (T : Submodule ℂ (MPVSpace b R))
     (v : MPVSpace a R) :
-    (S.map (Function.Embedding.piCongrRight (fun _ : Fin R ↦ e))
-        .euclideanExtendByZero.toLinearMap ⊔
-      T.map (Function.Embedding.piCongrRight (fun _ : Fin R ↦ f))
-        .euclideanExtendByZero.toLinearMap)ᗮ.starProjection
+    (S.map ((Function.Embedding.piCongrRight (fun _ : Fin R ↦ e))
+        |>.euclideanExtendByZero.toLinearMap) ⊔
+      T.map ((Function.Embedding.piCongrRight (fun _ : Fin R ↦ f))
+        |>.euclideanExtendByZero.toLinearMap))ᗮ.starProjection
       ((Function.Embedding.piCongrRight (fun _ : Fin R ↦ e)).euclideanExtendByZero v) =
     (Function.Embedding.piCongrRight (fun _ : Fin R ↦ e)).euclideanExtendByZero
       (Sᗮ.starProjection v) := by
@@ -113,12 +113,14 @@ theorem physical_sector_parent_projection_embed
     Function.Embedding.inner_extendByZero_eq_zero_of_disjoint _ _
       (disjoint_physical_word_ranges e f h hR) x y
   have hmem : E (S.starProjection v) ∈ K :=
-    le_sup_left (Submodule.mem_map.mpr ⟨S.starProjection v, S.starProjection_apply_mem v, rfl⟩)
+    Submodule.mem_sup_left
+      (Submodule.mem_map.mpr ⟨S.starProjection v, S.starProjection_apply_mem v, rfl⟩)
   have hres : E v - E (S.starProjection v) ∈ Kᗮ := by
     rw [← E.map_sub, ← Submodule.inf_orthogonal]
     constructor
     · apply (Submodule.mem_orthogonal _ _).mpr
       rintro _ ⟨x, hx, rfl⟩
+      change ⟪E x, E (v - S.starProjection v)⟫_ℂ = 0
       rw [E.inner_map_map]
       exact (Submodule.mem_orthogonal _ _).mp (S.sub_starProjection_mem_orthogonal v) x hx
     · apply (Submodule.mem_orthogonal _ _).mpr
@@ -147,7 +149,7 @@ private theorem periodicLocalInteractionES_extend_physical
     (G : MPVSpace a R →ₗ[ℂ] MPVSpace a R)
     (H : MPVSpace d R →ₗ[ℂ] MPVSpace d R)
     (h : ∀ v, H ((Function.Embedding.piCongrRight (fun _ : Fin R ↦ e))
-        .euclideanExtendByZero v) =
+        |>.euclideanExtendByZero v) =
       (Function.Embedding.piCongrRight (fun _ : Fin R ↦ e)).euclideanExtendByZero (G v))
     (i : Fin M) (v : MPVSpace a M) :
     periodicLocalInteractionES H i
@@ -184,10 +186,10 @@ theorem physical_sector_projectorHamiltonian_embed
     (S : Submodule ℂ (MPVSpace a R)) (T : Submodule ℂ (MPVSpace b R))
     (v : MPVSpace a M) :
     periodicInteractionHamiltonianES
-        ((S.map (Function.Embedding.piCongrRight (fun _ : Fin R ↦ e))
-            .euclideanExtendByZero.toLinearMap ⊔
-          T.map (Function.Embedding.piCongrRight (fun _ : Fin R ↦ f))
-            .euclideanExtendByZero.toLinearMap)ᗮ.starProjection.toLinearMap) M
+        ((S.map ((Function.Embedding.piCongrRight (fun _ : Fin R ↦ e))
+            |>.euclideanExtendByZero.toLinearMap) ⊔
+          T.map ((Function.Embedding.piCongrRight (fun _ : Fin R ↦ f))
+            |>.euclideanExtendByZero.toLinearMap))ᗮ.starProjection.toLinearMap) M
         ((Function.Embedding.piCongrRight (fun _ : Fin M ↦ e)).euclideanExtendByZero v) =
       (Function.Embedding.piCongrRight (fun _ : Fin M ↦ e)).euclideanExtendByZero
         (periodicInteractionHamiltonianES Sᗮ.starProjection.toLinearMap M v) := by
@@ -208,10 +210,10 @@ theorem physical_sector_projectorHamiltonian_embed_eq_zero_iff
     (S : Submodule ℂ (MPVSpace a R)) (T : Submodule ℂ (MPVSpace b R))
     (v : MPVSpace a M) :
     periodicInteractionHamiltonianES
-        ((S.map (Function.Embedding.piCongrRight (fun _ : Fin R ↦ e))
-            .euclideanExtendByZero.toLinearMap ⊔
-          T.map (Function.Embedding.piCongrRight (fun _ : Fin R ↦ f))
-            .euclideanExtendByZero.toLinearMap)ᗮ.starProjection.toLinearMap) M
+        ((S.map ((Function.Embedding.piCongrRight (fun _ : Fin R ↦ e))
+            |>.euclideanExtendByZero.toLinearMap) ⊔
+          T.map ((Function.Embedding.piCongrRight (fun _ : Fin R ↦ f))
+            |>.euclideanExtendByZero.toLinearMap))ᗮ.starProjection.toLinearMap) M
         ((Function.Embedding.piCongrRight (fun _ : Fin M ↦ e)).euclideanExtendByZero v) = 0 ↔
       periodicInteractionHamiltonianES Sᗮ.starProjection.toLinearMap M v = 0 := by
   rw [physical_sector_projectorHamiltonian_embed e f h hR hRM S T v]
@@ -229,10 +231,10 @@ theorem physical_sector_projectorHamiltonian_sum_eq_zero_iff
     (S : Submodule ℂ (MPVSpace a R)) (T : Submodule ℂ (MPVSpace b R))
     (v : MPVSpace a M) (w : MPVSpace b M) :
     periodicInteractionHamiltonianES
-        ((S.map (Function.Embedding.piCongrRight (fun _ : Fin R ↦ e))
-            .euclideanExtendByZero.toLinearMap ⊔
-          T.map (Function.Embedding.piCongrRight (fun _ : Fin R ↦ f))
-            .euclideanExtendByZero.toLinearMap)ᗮ.starProjection.toLinearMap) M
+        ((S.map ((Function.Embedding.piCongrRight (fun _ : Fin R ↦ e))
+            |>.euclideanExtendByZero.toLinearMap) ⊔
+          T.map ((Function.Embedding.piCongrRight (fun _ : Fin R ↦ f))
+            |>.euclideanExtendByZero.toLinearMap))ᗮ.starProjection.toLinearMap) M
         ((Function.Embedding.piCongrRight (fun _ : Fin M ↦ e)).euclideanExtendByZero v +
           (Function.Embedding.piCongrRight (fun _ : Fin M ↦ f)).euclideanExtendByZero w) = 0 ↔
       periodicInteractionHamiltonianES Sᗮ.starProjection.toLinearMap M v = 0 ∧
@@ -240,10 +242,10 @@ theorem physical_sector_projectorHamiltonian_sum_eq_zero_iff
   let E := (Function.Embedding.piCongrRight (fun _ : Fin M ↦ e)).euclideanExtendByZero
   let F := (Function.Embedding.piCongrRight (fun _ : Fin M ↦ f)).euclideanExtendByZero
   let H := periodicInteractionHamiltonianES
-    ((S.map (Function.Embedding.piCongrRight (fun _ : Fin R ↦ e))
-        .euclideanExtendByZero.toLinearMap ⊔
-      T.map (Function.Embedding.piCongrRight (fun _ : Fin R ↦ f))
-        .euclideanExtendByZero.toLinearMap)ᗮ.starProjection.toLinearMap) M
+    ((S.map ((Function.Embedding.piCongrRight (fun _ : Fin R ↦ e))
+        |>.euclideanExtendByZero.toLinearMap) ⊔
+      T.map ((Function.Embedding.piCongrRight (fun _ : Fin R ↦ f))
+        |>.euclideanExtendByZero.toLinearMap))ᗮ.starProjection.toLinearMap) M
   let G := periodicInteractionHamiltonianES Sᗮ.starProjection.toLinearMap M
   let K := periodicInteractionHamiltonianES Tᗮ.starProjection.toLinearMap M
   have hE : H (E v) = E (G v) := physical_sector_projectorHamiltonian_embed e f h hR hRM S T v
