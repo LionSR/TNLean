@@ -12,7 +12,7 @@ corners at or above a fixed layer index $k_0$; see
 % revision adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 % This is conditional matching, not opponent existence or a region assignment.
 
-\begin{theorem}[Every elementary segment with contact matches]
+\begin{lemma}[Every elementary segment with contact matches]
     \label{thm:area_law_actual_elementary_side_matching}
     \lean{TNLean.PEPS.AreaLaw.Geometry.fineLayer_elementary_contact_match}
     \leanok
@@ -36,7 +36,7 @@ corners at or above a fixed layer index $k_0$; see
         a_i  & =b_j,\qquad b_i=a_j,
     \end{align}
     where $s(i)$ and $s(j)$ are their counterclockwise side indices.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_fine_cell_contact,thm:area_law_elementary_side_geometry,
         def:area_law_actual_side_mask,thm:area_law_elementary_corner_endpoint,
@@ -69,9 +69,9 @@ corners at or above a fixed layer index $k_0$; see
     sides reverses the endpoints, giving $a_i=b_j$ and $b_i=a_j$.
 \end{proof}
 
-Theorem~\ref{thm:area_law_elementary_side_opponent} gives an opposing
+Lemma~\ref{thm:area_law_elementary_side_opponent} gives an opposing
 closed region for every elementary segment, and
-Theorem~\ref{thm:area_law_unique_elementary_side_opponent} proves that its
+Lemma~\ref{thm:area_law_unique_elementary_side_opponent} proves that its
 fine-cell or exterior identifier is unique. Consistent region labels
 and the isolated-star construction are established separately in the
 two-family argument.

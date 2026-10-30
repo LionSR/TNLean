@@ -11,7 +11,7 @@ writing $Q_{jg}$ and $Y_{jg}$ for the near and middle regions of terminal
 $j$ in band $g$ gives the far region $(Q_{jg}\cup Y_{jg})^c$.
 
 % The following three entries concern the arbitrary-weight auxiliary estimates.
-\begin{theorem}[Scanner-root rough lower estimate at arbitrary weight]
+\begin{lemma}[Scanner-root rough lower estimate at arbitrary weight]
     \label{thm:actual_scan_rough_lower_weight}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_actualScan_rough_lower_norm_of_weight}
     \leanok
@@ -48,13 +48,13 @@ $j$ in band $g$ gives the far region $(Q_{jg}\cup Y_{jg})^c$.
          & \leq-\frac{\log\mathcal N_k}{k}.
         \label{eq:actual_rough_weight_rate}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:al_augmented_root_compression,thm:al_scan_actual_round_global_energy}
     Here $Q_{jg}\cap Y_{jg}=\varnothing$ and $Q_{jg}\cup Y_{jg}\subseteq Q_{j'h}$
     for $g<h$. Compressing via the symmetry isometry $Z$ and forming the
-    ordered band product $M_k$ at $t=a/2$ (Theorem~\ref{thm:al_augmented_root_compression})
+    ordered band product $M_k$ at $t=a/2$ (Lemma~\ref{thm:al_augmented_root_compression})
     gives
     \begin{align}
         w_k & =M_k^{-1/4}Z^*\mathrm{pre}_k,
@@ -63,14 +63,14 @@ $j$ in band $g$ gives the far region $(Q_{jg}\cup Y_{jg})^c$.
         \label{eq:actual_rough_lower_coordinates}
     \end{align}
     with $\mu_k=\operatorname{Re}\langle v_k,\widetilde H_kv_k\rangle$
-    (Theorem~\ref{thm:al_scan_actual_round_global_energy}). Since $4t=2a\leq1$,
+    (Lemma~\ref{thm:al_scan_actual_round_global_energy}). Since $4t=2a\leq1$,
     the Section~8 rough lower comparison divided by $k$ yields $\mathcal N_k>0$,
     $\|v_k\|=1$, the remainder (\ref{eq:actual_rough_weight_remainder}), and
     (\ref{eq:actual_rough_weight_rate}) with prefactor $aK/4=W/4$, while
     (\ref{eq:actual_rough_weight_gap}) gives $\delta_k\geq0$.
 \end{proof}
 
-\begin{theorem}[Vanishing remainder at a fixed band weight]
+\begin{lemma}[Vanishing remainder at a fixed band weight]
     \label{thm:actual_rough_weight_remainder_limit}
     \lean{TNLean.PEPS.AreaLaw.Scan.roughLowerRemainderAtWeight,
         TNLean.PEPS.AreaLaw.Scan.tendsto_roughLowerRemainderAtWeight_of_label_dimension}
@@ -85,20 +85,20 @@ $j$ in band $g$ gives the far region $(Q_{jg}\cup Y_{jg})^c$.
         \label{eq:actual_rough_weight_label_remainder}
     \end{align}
     If $\log\dim\lambda_k-kS'=o(k)$, then $R_k^{(a)}\to0$ as $k\to\infty$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Here $\varepsilon_k/k\to0$ and $\log(k+1)/k,\log(k+2)/k,1/k\to0$, so
     $R_k^{(a)}\to0$.
 \end{proof}
 
-\begin{theorem}[The physical label sequence at arbitrary weight]
+\begin{lemma}[The physical label sequence at arbitrary weight]
     \label{thm:actual_supplied_rough_lower_weight}
     \lean{
         TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_actualScan_suppliedPrevector_rough_lower_of_weight}
     \leanok
     \uses{thm:actual_scan_rough_lower_weight}
-    Under the hypotheses of Theorem~\ref{thm:actual_scan_rough_lower_weight},
+    Under the hypotheses of Lemma~\ref{thm:actual_scan_rough_lower_weight},
     let $\lambda_k$ be a label sequence with $\log\dim\lambda_k-kS'=o(k)$ whose
     physical Schmidt--Bell prevector satisfies $0<\|\mathrm{pre}_k\|\leq1$ for
     all $k>0$ (with $c,C_f\geq0$ chosen before the scanner, physical vectors,
@@ -108,24 +108,24 @@ $j$ in band $g$ gives the far region $(Q_{jg}\cup Y_{jg})^c$.
     (\ref{eq:actual_rough_weight_label_remainder}), $\mathcal N_k>0$,
     $\|v_k\|=1$, $\delta_k\geq0$, and $R_k^{(a)}\to0$ uniformly over all rounds
     and interpolation parameters.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:actual_scan_rough_lower_weight,
         thm:actual_rough_weight_remainder_limit,thm:actual_rough_lower_label_defect,
         thm:al_augmented_prevector_norm}
-    By Theorems~\ref{thm:al_augmented_prevector_norm} and
+    By Lemmas~\ref{thm:al_augmented_prevector_norm} and
     \ref{thm:actual_rough_lower_label_defect},
-    Theorem~\ref{thm:actual_scan_rough_lower_weight} applies with
+    Lemma~\ref{thm:actual_scan_rough_lower_weight} applies with
     $\varepsilon_k=2|\log\dim\lambda_k-kS'|$, and
-    Theorem~\ref{thm:actual_rough_weight_remainder_limit} gives $R_k^{(a)}\to0$
+    Lemma~\ref{thm:actual_rough_weight_remainder_limit} gives $R_k^{(a)}\to0$
     independently of the round and interpolation parameter.
 \end{proof}
 
 The weight-four statements below specialize $a=4/K$ and $W=4$ (with
 $0<a\leq1/2$ for $K\geq8$).
 
-\begin{theorem}[Scanner-root rough lower estimate]
+\begin{lemma}[Scanner-root rough lower estimate]
     \label{thm:actual_scan_rough_lower_norm}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_actualScan_rough_lower_norm}
     \leanok
@@ -160,13 +160,13 @@ $0<a\leq1/2$ for $K\geq8$).
          & \leq-\frac1k\log\mathcal N_k.
         \label{eq:actual_rough_lower_rate}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:actual_scan_rough_lower_weight}
     Since $K\geq8$ gives $0<a=4/K\leq1/2$ and $W=aK=4$,
-    Theorem~\ref{thm:actual_scan_rough_lower_weight} yields
+    Lemma~\ref{thm:actual_scan_rough_lower_weight} yields
     (\ref{eq:actual_rough_lower_finite_remainder}) and
     (\ref{eq:actual_rough_lower_rate}).
 \end{proof}
@@ -180,13 +180,13 @@ $0<a\leq1/2$ for $K\geq8$).
     (\ref{eq:actual_rough_lower_finite_remainder}).
 \end{definition}
 
-\begin{theorem}[Label-defect entropy inequality]
+\begin{lemma}[Label-defect entropy inequality]
     \label{thm:actual_rough_lower_label_defect}
     \lean{TNLean.PEPS.AreaLaw.Scan.roughLowerLabelDefect_label_bound}
     \leanok
     For every $k$, $\varepsilon_k\geq0$ and
     $2kS'-\varepsilon_k\leq2\log\dim\ell_k$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{def:actual_rough_lower_remainder}
@@ -194,7 +194,7 @@ $0<a\leq1/2$ for $K\geq8$).
     Definition~\ref{def:actual_rough_lower_remainder}.
 \end{proof}
 
-\begin{theorem}[Vanishing rough remainder and a common threshold]
+\begin{lemma}[Vanishing rough remainder and a common threshold]
     \label{thm:actual_rough_lower_remainder_limit}
     \lean{TNLean.PEPS.AreaLaw.Scan.tendsto_roughLowerRemainder_of_label_dimension,TNLean.PEPS.AreaLaw.Scan.exists_roughLowerRemainder_threshold}
     \leanok
@@ -202,29 +202,29 @@ $0<a\leq1/2$ for $K\geq8$).
     for every $\epsilon_{\rm rep}>0$ there is $k_0$ (independent of the round
     and interpolation parameter) with $R_k<\epsilon_{\rm rep}$ for all
     $k\geq k_0$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:actual_rough_weight_remainder_limit,def:actual_rough_lower_remainder}
-    Specialize Theorem~\ref{thm:actual_rough_weight_remainder_limit} to
+    Specialize Lemma~\ref{thm:actual_rough_weight_remainder_limit} to
     $a=4/K$.
 \end{proof}
 
-\begin{theorem}[Rough lower rate for the physical label sequence]
+\begin{lemma}[Rough lower rate for the physical label sequence]
     \label{thm:actual_scan_supplied_prevector_rough_lower}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_actualScan_suppliedPrevector_rough_lower}
     \leanok
-    Under the hypotheses of Theorem~\ref{thm:actual_scan_rough_lower_norm}, for
+    Under the hypotheses of Lemma~\ref{thm:actual_scan_rough_lower_norm}, for
     a label sequence $\ell_k$ with $\log\dim\ell_k-kS'=o(k)$ whose physical
     prevector satisfies $0<\|\mathrm{pre}_k\|\leq1$ for all $k>0$ (with $c,C_f$
     fixed before the scanner and physical vector), every fill and charge before
     the full horizon satisfies (\ref{eq:actual_rough_lower_rate}) with
     $R_k\to0$, $\|v_k\|=1$, and $\delta_k\geq0$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:actual_supplied_rough_lower_weight,def:actual_rough_lower_remainder}
-    Specialize Theorem~\ref{thm:actual_supplied_rough_lower_weight} to
+    Specialize Lemma~\ref{thm:actual_supplied_rough_lower_weight} to
     $a=4/K\in(0,1/2]$ and $W=4$.
 \end{proof}
 

@@ -24,7 +24,7 @@ requires $d^q\ge D^2$ for its polar decompositions, which implies
 $D^2\le d^{3D}$ for blocks of $q\ge3D\ge1$ sites, and holds the two legs of a
 block, of dimension $D$ each, on its sites, but states no bound $3D$. The restriction
 is recorded in~\cite{gap:mswc24_inhomogeneous_scope}. For block lengths with
-an explicit positive logarithmic lower bound, Theorem~\ref{thm:ldp_inhomogeneous_sequence}
+an explicit positive logarithmic lower bound, Lemma~\ref{thm:ldp_inhomogeneous_sequence}
 prepares the finitely many exceptional rings exactly and absorbs their depths
 into a single constant.
 
@@ -65,7 +65,7 @@ into a single constant.
     Let $B_k=V_kP_k$ be the polar decompositions of the blocked tensors of
     Definition~\ref{def:ldp_chain_block_tensor}, with $P_k$ read as a tensor of
     physical dimension $D^2$ and bond dimension $D$ as in
-    Theorem~\ref{thm:ldpolar_tensor_decomposition}. The state of the positive
+    Lemma~\ref{thm:ldpolar_tensor_decomposition}. The state of the positive
     parts on the $M$ blocks is
     \begin{align}
         \ket{\phi_{\mathrm{pos}}}
@@ -85,7 +85,7 @@ into a single constant.
     $\ket{\psi_{\ell,\omega}}$ of Definition~\ref{def:ldp_block_isometry_state}.
 \end{definition}
 
-\begin{theorem}[The state is the isometries applied to the positive parts]
+\begin{lemma}[The state is the isometries applied to the positive parts]
     \label{thm:ldp_chain_state_eq_pos}
     \lean{MPSTensor.coeff_eq_mpvFamily_chainBlockTensor,
         MPSPreparation.chainState_eq_blockIsoVector}
@@ -93,7 +93,7 @@ into a single constant.
     \uses{def:ldp_chain_pos_state}
     For every cutting of the ring into blocks,
     $\ket{\phi_N}=(\bigotimes_{k=1}^MV_k)\ket{\phi_{\mathrm{pos}}}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     The coefficient of $\ket{\phi_N}$ at $s$ is
@@ -103,7 +103,7 @@ into a single constant.
     $\sum_\tau\prod_k\bra{s_k}V_k\ket{\tau_k}\Tr(P_1^{\tau_1}\cdots P_M^{\tau_M})$.
 \end{proof}
 
-\begin{theorem}[The isometries preserve overlaps]
+\begin{lemma}[The isometries preserve overlaps]
     \label{thm:ldp_chain_block_iso_inner}
     \lean{MPSTensor.inner_blockIsoVector, MPSTensor.norm_blockIsoVector,
         MPSTensor.inner_blockIsoVector_of_isInjectiveOn,
@@ -152,7 +152,7 @@ into a single constant.
     Here a vector $x/\lVert x\rVert$ with $x=0$ is read as $0$, so the identity
     holds for every chain, and it is an identity of overlaps with normalized
     states when $\phi_{\mathrm{pos}}\ne0$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:ldp_chain_state_eq_pos, thm:ldpolar_tensor_injective_on,
@@ -162,15 +162,15 @@ into a single constant.
     factor by factor gives (\ref{eq:ldp_chain_block_gram}), since
     $\sum_{s_k}\overline{(W_k)_{s_ka}}(W_k)_{s_kb}=(W_k^\dagger W_k)_{ab}$. For
     the norm, $\ket{\phi_N}=(\bigotimes_kV_k)\ket{\phi_{\mathrm{pos}}}$ by
-    Theorem~\ref{thm:ldp_chain_state_eq_pos}, and
-    $V_k^\dagger V_k=\Pi_k$ by Theorem~\ref{thm:ldpolar_tensor_decomposition};
+    Lemma~\ref{thm:ldp_chain_state_eq_pos}, and
+    $V_k^\dagger V_k=\Pi_k$ by Lemma~\ref{thm:ldpolar_tensor_decomposition};
     by (\ref{eq:ldp_chain_block_gram}) the squared norm of $\ket{\phi_N}$ is
     $\sum_{a,b}\overline{\phi_{\mathrm{pos}}(a)}\phi_{\mathrm{pos}}(b)
         \prod_k(\Pi_k)_{a_kb_k}$, and
     $\sum_b\prod_k(\Pi_k)_{a_kb_k}\phi_{\mathrm{pos}}(b)=\phi_{\mathrm{pos}}(a)$
     because $\sum_l(\Pi_k)_{jl}P_k^l=P_k^j$, expanding the trace as in
     Lemma~\ref{lem:ldp_block_isometry_state_overlap}.
-    By Theorem~\ref{thm:ldpolar_tensor_injective_on},
+    By Lemma~\ref{thm:ldpolar_tensor_injective_on},
     $\sum_{s_k}\overline{(V_k)_{s_ka}}(V_k)_{s_kb}$ is $1$ if $a=b\in S_k$ and
     $0$ otherwise, for the configurations $s_k$ of block $k$; for injective
     $B_k$ the set $S_k$ contains all pairs. Expanding the inner product over
@@ -186,10 +186,10 @@ into a single constant.
     \end{align}
     which is $\langle x,y\rangle$ under the hypothesis on $x$ and $y$. The
     positive part $P_k$ vanishes outside $S_k$ by
-    Theorem~\ref{thm:ldpolar_tensor_injective_on}, so
+    Lemma~\ref{thm:ldpolar_tensor_injective_on}, so
     $\ket{\phi_{\mathrm{pos}}}$ vanishes at every $a$ with some $a_k\notin S_k$,
     and the remaining identities follow from
-    Theorem~\ref{thm:ldp_chain_state_eq_pos} with $y=\phi_{\mathrm{pos}}$. For
+    Lemma~\ref{thm:ldp_chain_state_eq_pos} with $y=\phi_{\mathrm{pos}}$. For
     the overlap of the pair products, expanding
     $\prod_k\langle\omega^k,\omega'^k\rangle$ as a sum over bond
     configurations $(p_k)_k$ of $\prod_k\overline{\omega^k_{p_k}}\,\omega'^k_{p_k}$
@@ -247,7 +247,7 @@ into a single constant.
     padded pairs.
 \end{definition}
 
-\begin{theorem}[Zero padding]
+\begin{lemma}[Zero padding]
     \label{thm:ldp_zero_pad}
     \lean{VaryingBondChain.zeroPad_eq_zero,
         VaryingBondChain.zeroPad_ofChain,
@@ -277,7 +277,7 @@ into a single constant.
     products of pairs, so padded unit pairs are unit vectors, and the product
     $\ket\Omega$ of padded pairs vanishes at every bond configuration $c$ with
     some $c_k\notin R_k$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{def:ldp_chain_block_tensor, def:ldp_chain_pos_state}
@@ -317,7 +317,7 @@ into a single constant.
     see~\cite{gap:mswc24_inhomogeneous_scope}.
 \end{definition}
 
-\begin{theorem}[Sequential factorization on a set of bond pairs]
+\begin{lemma}[Sequential factorization on a set of bond pairs]
     \label{thm:ldp_sequential_factorization_on}
     \lean{MPSPreparation.exists_isometric_chain_polarIsoMatrix_of_isInjectiveOn}
     \leanok
@@ -330,21 +330,21 @@ into a single constant.
     $b_{p-1}\times b_p$ matrices $X_p^i$ with $\sum_i(X_p^i)^\dagger X_p^i=\Id_{b_p}$
     for every $p$, such that
     $\bra{i_1\cdots i_q}V\ket{\pi(x)}=(X_1^{i_1}\cdots X_q^{i_q})_{1x}$ for every
-    $x<\lvert S\rvert$, recovering Theorem~\ref{thm:ldp_sequential_factorization}
+    $x<\lvert S\rvert$, recovering Lemma~\ref{thm:ldp_sequential_factorization}
     when $S$ is the set of all pairs.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:ldpolar_tensor_injective_on,
         lem:ldp_sequential_factorization_first_inputs}
-    By Theorem~\ref{thm:ldpolar_tensor_injective_on}, $V=BG$ for a matrix $G$
+    By Lemma~\ref{thm:ldpolar_tensor_injective_on}, $V=BG$ for a matrix $G$
     on the bond pairs, and the columns $V\ket{\pi(x)}$, $x<\lvert S\rvert$, are
     orthonormal. Reordering the inputs by $\pi$ and applying
     Lemma~\ref{lem:ldp_sequential_factorization_first_inputs} with
     $r=\lvert S\rvert$ yields the chain.
 \end{proof}
 
-\begin{theorem}[Sequential factorization of the partial isometry of any blocked tensor]
+\begin{lemma}[Sequential factorization of the partial isometry of any blocked tensor]
     \label{thm:ldp_sequential_factorization_partial}
     \lean{MPSPreparation.exists_isometric_chain_polarIsoMatrix_mul_unitary}
     \leanok
@@ -365,14 +365,14 @@ into a single constant.
     states no lower bound on $q$, as recorded
     in~\cite{gap:mswc24_sequential_factorization_positive_block_length} the
     conclusion fails at $q=0$ for every $D$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:ldpolar_tensor_injective_on,
         lem:ldp_sequential_factorization_first_inputs}
     Since $V^\dagger V=\Pi$ and $T$ is unitary, $(VT)^\dagger VT=T^\dagger\Pi
         T=\Lambda$. So the first $r$ columns of $VT$ are orthonormal and the
-    others have norm zero. By Theorem~\ref{thm:ldpolar_tensor_injective_on},
+    others have norm zero. By Lemma~\ref{thm:ldpolar_tensor_injective_on},
     $V=BG$ for a matrix $G$ on the bond pairs, so $VT=B(GT)$, and
     Lemma~\ref{lem:ldp_sequential_factorization_first_inputs} factors $VT$ on
     its first $r$ inputs.
@@ -409,12 +409,12 @@ into a single constant.
     For $d\le1$ there is at most one configuration, and a product vector
     carries any amplitude on it. For $D=0$ there is no unit pair. Otherwise
     $d\ge2$, so $D\le d^D$, and each bond index is encoded in $D$ sites. The
-    circuit of the proof of Theorem~\ref{thm:ldp_approximating_state_depth}
+    circuit of the proof of Lemma~\ref{thm:ldp_approximating_state_depth}
     applies with one change: the first layer prepares the pair $\omega^k$ on
     the window joining block $k$ to block $k+1$, one unitary per window, and on
-    block $k$ the unitary of Theorem~\ref{thm:ldp_block_sum_unitary},
+    block $k$ the unitary of Lemma~\ref{thm:ldp_block_sum_unitary},
     built from the sequential factorization of
-    Theorem~\ref{thm:ldp_sequential_factorization_on} with an enumeration
+    Lemma~\ref{thm:ldp_sequential_factorization_on} with an enumeration
     listing $S_k$ first, implements $V_k$ on the inputs in $S_k$, the only ones
     $\ket\Omega$ populates. The depth of that unitary is bounded by a constant
     times $\ell_k$, the constant being the largest over the finitely many
@@ -431,7 +431,7 @@ into a single constant.
     $T$ with $ET=T\Lambda$, where $\Lambda$ is the diagonal matrix with
     $\Lambda_{yy}=1$ for $y<r$ and $\Lambda_{yy}=0$ otherwise. For the polar
     decomposition $B=VP$ of a tensor, with $V^\dagger V=\Pi$ as in
-    Theorem~\ref{thm:ldpolar_tensor_decomposition}, $V\Pi=V$.
+    Lemma~\ref{thm:ldpolar_tensor_decomposition}, $V\Pi=V$.
 \end{lemma}
 \begin{proof}
     \leanok
@@ -452,7 +452,7 @@ into a single constant.
         thm:ldp_unitary_implementing_isometry}
     Let $D\ge1$, encode the bond indices injectively in $r_1\ge1$ sites, let $\pi$
     enumerate the bond pairs, and let $Q_1,\dots,Q_q$ be an isometric chain
-    with $b_0=1$, as in Theorem~\ref{thm:ldp_block_sum_unitary}. There is $C$,
+    with $b_0=1$, as in Lemma~\ref{thm:ldp_block_sum_unitary}. There is $C$,
     independent of $q\ge3r_1$, of the chain and of $G$, such that for every
     unitary $G$ on $\C^{D^2}$ some unitary $U$ on $q$ sites, a product of at
     most $Cq$ gates on neighbouring sites, and some amplitudes $Z(\sigma,y)$
@@ -465,8 +465,8 @@ into a single constant.
     \leanok
     The encoded levels span an isometric copy of $\C^m$, so $G$ on them is an
     isometry into the window, which extends to a unitary by
-    Theorem~\ref{thm:ldp_unitary_implementing_isometry}. In the circuit of
-    Theorem~\ref{thm:ldp_block_sum_unitary}, after the SWAP gates have brought
+    Lemma~\ref{thm:ldp_unitary_implementing_isometry}. In the circuit of
+    Lemma~\ref{thm:ldp_block_sum_unitary}, after the SWAP gates have brought
     the two inputs onto the last $2r_1$ sites, this unitary for $G$ acts on
     those sites as a product of a bounded number of gates by
     Theorem~\ref{thm:qc_bounded_unitary_two_site_gates}, followed by the
@@ -474,7 +474,7 @@ into a single constant.
     input $y$.
 \end{proof}
 
-\begin{theorem}[A block unitary implementing an isometric extension]
+\begin{lemma}[A block unitary implementing an isometric extension]
     \label{thm:ldp_isometric_extension_unitary}
     \lean{MPSPreparation.exists_blockUnitary_isometricExtension}
     \leanok
@@ -487,11 +487,11 @@ into a single constant.
     on neighbouring sites, and an isometry $W$ from $\C^{D^2}$ to the $q$
     sites with $W\Pi=V$ and $U\ket{l,0,r}=W\ket{l,r}$ for all $l$ and $r$.
     No injectivity is assumed.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Let $\Pi T=T\Lambda$ as in Lemma~\ref{lem:ldp_projector_basis}. By
-    Theorem~\ref{thm:ldp_sequential_factorization_partial}, $VT$ factors into an
+    Lemma~\ref{thm:ldp_sequential_factorization_partial}, $VT$ factors into an
     isometric chain on its first $r$ inputs. Let $U$ be the unitary of
     Lemma~\ref{lem:ldp_block_unitary_gate} for this chain and $G=T^\dagger$,
     and $W\ket{l,r}=U\ket{l,0,r}$. Then $W$ is an isometry, since $U$ is unitary
@@ -500,7 +500,7 @@ into a single constant.
     has $W\Pi=Z\Lambda T^\dagger=VTT^\dagger=V$.
 \end{proof}
 
-\begin{theorem}[Isometric extensions on the blocks]
+\begin{lemma}[Isometric extensions on the blocks]
     \label{thm:ldp_isometric_extension_overlap}
     \lean{MPSTensor.blockMatVector, MPSTensor.blockMatVector_apply,
         MPSTensor.blockIsoVector_eq_blockMatVector,
@@ -526,8 +526,8 @@ into a single constant.
         \label{eq:ldp_isometric_extension_overlap}
     \end{align}
     with the reading of $x/\lVert x\rVert$ for $x=0$ as in
-    Theorem~\ref{thm:ldp_chain_block_iso_inner}.
-\end{theorem}
+    Lemma~\ref{thm:ldp_chain_block_iso_inner}.
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{lem:ldp_block_isometry_state_overlap,
@@ -537,14 +537,14 @@ into a single constant.
     gives $\langle x,y\rangle$, as in
     Lemma~\ref{lem:ldp_block_isometry_state_overlap}. If $W_k\Pi_k=V_k$, then
     $W_kP_k=W_k\Pi_kP_k=V_kP_k=B_k$, and expanding the trace as in
-    Theorem~\ref{thm:ldp_chain_state_eq_pos} gives
+    Lemma~\ref{thm:ldp_chain_state_eq_pos} gives
     $\ket{\phi_N}=(\bigotimes_kW_k)\ket{\phi_{\mathrm{pos}}}$; with
     $\lVert\phi_N\rVert=\lVert\phi_{\mathrm{pos}}\rVert$ from
-    Theorem~\ref{thm:ldp_chain_block_iso_inner} and the preservation of inner
+    Lemma~\ref{thm:ldp_chain_block_iso_inner} and the preservation of inner
     products this gives (\ref{eq:ldp_isometric_extension_overlap}).
 \end{proof}
 
-\begin{theorem}[Preparation with isometric extensions]
+\begin{lemma}[Preparation with isometric extensions]
     \label{thm:ldp_isometric_extension_depth}
     \lean{MPSPreparation.exists_isPreparedInDepth_blockMatVector,
         MPSPreparation.blockMatVector_pairFamilyVector_eq_mulVec}
@@ -559,20 +559,20 @@ into a single constant.
     $B_k=V_kP_k$ of the blocked tensors such that
     $(\bigotimes_kW_k)\ket\Omega$ is prepared in depth at most $CL$. No
     injectivity is assumed.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     For $D=0$ there is no unit pair. Otherwise $D^2\le d^{3D}$ gives $d\ge1$ and
     $D\le d^D$: for $d=1$ it forces $D=1$, and for $d\ge2$ one has $D<2^D$.
     Each bond index is encoded in $D$ sites. The circuit of
     Theorem~\ref{thm:ldp_chain_depth} applies with the unitary of
-    Theorem~\ref{thm:ldp_isometric_extension_unitary} on every block, which
+    Lemma~\ref{thm:ldp_isometric_extension_unitary} on every block, which
     implements $W_k$ on all inputs $\ket{l,0,r}$; the state of the two layers
     is $(\bigotimes_kW_k)\ket\Omega$ by the same computation, with $W_k$ in
     place of $V_k$.
 \end{proof}
 
-\begin{theorem}[Preparation of inhomogeneous short-range correlated states]
+\begin{lemma}[Preparation of inhomogeneous short-range correlated states]
     \label{thm:ldp_inhomogeneous}
     \lean{MPSPreparation.exists_isPreparedInDepth_inhomogeneous_isometricExtension,
         MPSPreparation.exists_isPreparedInDepth_of_isPairApproximable}
@@ -597,7 +597,7 @@ into a single constant.
     that is, $\varepsilon(\psi,\phi_N)=\varepsilon(\Omega,\phi_{\mathrm{pos}})$
     for the normalized states when $\phi_{\mathrm{pos}}\ne0$; with the
     reading of $x/\lVert x\rVert$ for $x=0$ as in
-    Theorem~\ref{thm:ldp_chain_block_iso_inner}, the identity of the overlaps
+    Lemma~\ref{thm:ldp_chain_block_iso_inner}, the identity of the overlaps
     holds for every chain. For every $d$, with $C$ depending only on $d$
     and $D$: if the chain is approximated by pairs with error $\delta$ on the
     given blocks, some unit vector prepared in depth at most $CL$ has error at
@@ -614,13 +614,13 @@ into a single constant.
     bound $CL$ gives the stated depth when $L=O(\log(N/\varepsilon))$; the
     source's definition fixes blocks of length $q=O(\log N)$, while the choice
     of $L$ in terms of $N$ and the error is left open here.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:ldp_zero_pad, thm:ldp_isometric_extension_overlap,
         thm:ldp_chain_depth, thm:ldp_chain_block_iso_inner}
-    The padded pairs are unit vectors by Theorem~\ref{thm:ldp_zero_pad}, and
-    Theorem~\ref{thm:ldp_isometric_extension_depth} for the padded chain gives
+    The padded pairs are unit vectors by Lemma~\ref{thm:ldp_zero_pad}, and
+    Lemma~\ref{thm:ldp_isometric_extension_depth} for the padded chain gives
     the isometries and the depth. The norm of $\ket\psi$ is
     $\lVert\Omega\rVert=1$, and the error identity is
     (\ref{eq:ldp_isometric_extension_overlap}), since the padded chain has the
@@ -628,7 +628,7 @@ into a single constant.
     gives $D^2\le d^{3D}$, the error is at most $\delta$. For $d\le1$ the ring
     has at most one configuration; $\phi_N\ne0$ because
     $\lVert\phi_N\rVert=\lVert\phi_{\mathrm{pos}}\rVert\ne0$ by
-    Theorem~\ref{thm:ldp_chain_block_iso_inner}, the normalized
+    Lemma~\ref{thm:ldp_chain_block_iso_inner}, the normalized
     state $\phi_N/\lVert\phi_N\rVert$ is prepared in depth $0$ by
     Theorem~\ref{thm:ldp_chain_depth}, and its error is $0\le\delta$ by the
     Cauchy--Schwarz inequality.
@@ -640,7 +640,7 @@ into a single constant.
     \leanok
     \uses{thm:ldp_chain_depth, thm:ldp_chain_block_iso_inner, thm:ldp_zero_pad}
     There is $C$, depending only on $d$ and $D$, such that in the setting of
-    Theorem~\ref{thm:ldp_inhomogeneous}, for any $d$, if every blocked
+    Lemma~\ref{thm:ldp_inhomogeneous}, for any $d$, if every blocked
     tensor is injective in the sense of
     Definition~\ref{def:ldp_varying_bond_chain}, the vector
     $(\bigotimes_kV_k)\ket\Omega$ is a unit vector prepared in depth at most
@@ -650,18 +650,18 @@ into a single constant.
 \begin{proof}
     \leanok
     For $D=0$ there is no unit pair. Otherwise every block has a site, and by
-    Theorem~\ref{thm:ldp_zero_pad} the padded blocked tensor $B_k$ is
+    Lemma~\ref{thm:ldp_zero_pad} the padded blocked tensor $B_k$ is
     injective on the rectangle $R_k$, the padded pairs are unit vectors, and
     $\ket\Omega$ vanishes outside $\prod_kR_k$. The depth is
     Theorem~\ref{thm:ldp_chain_depth} with $S_k=R_k$. The norm of $\ket\psi$ is
     $\lVert\Omega\rVert=\prod_k\lVert\omega^k\rVert=1$ and the error identity is
     (\ref{eq:ldp_chain_block_iso_inner}) by
-    Theorem~\ref{thm:ldp_chain_block_iso_inner}, since the padded chain has the
-    state $\ket{\phi_N}$ by Theorem~\ref{thm:ldp_zero_pad}.
+    Lemma~\ref{thm:ldp_chain_block_iso_inner}, since the padded chain has the
+    state $\ket{\phi_N}$ by Lemma~\ref{thm:ldp_zero_pad}.
 \end{proof}
 
 
-\begin{theorem}[Inhomogeneous sequences with logarithmically growing blocks]
+\begin{lemma}[Inhomogeneous sequences with logarithmically growing blocks]
     \label{thm:ldp_inhomogeneous_sequence}
     \lean{MPSPreparation.exists_threshold_three_mul_le_of_log,
         MPSPreparation.isPreparedInDepth_zero_one_site,
@@ -689,13 +689,13 @@ into a single constant.
     As recorded in~\cite{gap:mswc24_inhomogeneous_scope}, convergence of the
     errors gives no accuracy-dependent rate, so this statement does not
     establish $O(\log(N/\varepsilon))$ for arbitrary requested accuracy.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     For $N_0>\exp(3D/c)$ and $N\ge N_0$, all block lengths are at least
-    $3D$, so Theorem~\ref{thm:ldp_inhomogeneous} gives depth at most $C_0L_N$.
+    $3D$, so Lemma~\ref{thm:ldp_inhomogeneous} gives depth at most $C_0L_N$.
     On the finitely many rings $2\le N<N_0$,
-    Theorem~\ref{thm:ldp_short_chain_preparation} applied to the normalized target
+    Lemma~\ref{thm:ldp_short_chain_preparation} applied to the normalized target
     extends it to a unitary and decomposes that unitary into nearest-neighbour
     gates, giving a bound $K$ depending only on $d,N_0$. A one-site vector is a
     product vector and has depth zero. Since $N\ge1$ and the blocks cover the
@@ -705,7 +705,7 @@ into a single constant.
     between zero and $\delta_N$.
 \end{proof}
 
-\begin{theorem}[Exact linear-depth preparation of an inhomogeneous state]
+\begin{lemma}[Exact linear-depth preparation of an inhomogeneous state]
     \label{thm:ldp_inhomogeneous_exact}
     \lean{MPSPreparation.exists_isPreparedInDepth_normalizedChainState}
     \leanok
@@ -718,7 +718,7 @@ into a single constant.
     bond dimension $D$ on $N\ge1$ sites is prepared exactly by a local circuit
     of depth at most $CN$, without any injectivity or correlation-decay
     assumption.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     For $N\ge3D$ and $d\ge2$, a single block with positive-part state
@@ -731,7 +731,7 @@ into a single constant.
     One-site states and states with $d=1$ are product states and need no gates.
 \end{proof}
 
-\begin{theorem}[Accuracy-dependent preparation under a uniform decay rate]
+\begin{lemma}[Accuracy-dependent preparation under a uniform decay rate]
     \label{thm:ldp_inhomogeneous_uniform_rate}
     \lean{MPSPreparation.exists_isPreparedInDepth_inhomogeneous_le_log_of_uniform_rate}
     \leanok
@@ -752,7 +752,7 @@ into a single constant.
     in~\cite{gap:mswc24_inhomogeneous_scope}, the uniform rate is an additional
     assumption that convergence of the approximation errors alone does not
     establish.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     For $N\ge2$, setting $q=\lceil a\log(N/\varepsilon)+b\rceil$ with
@@ -760,9 +760,9 @@ into a single constant.
     $rq\ge\log K+k\log N-\log\varepsilon$, so Lemma~\ref{lem:ldp_log_threshold_error}
     gives $KN^k e^{-rq}\le\varepsilon$.
     When $q\le N$, the partition given by the approximation hypothesis has
-    block lengths at most $2q$, so Theorem~\ref{thm:ldp_inhomogeneous}
+    block lengths at most $2q$, so Lemma~\ref{thm:ldp_inhomogeneous}
     gives depth at most $2C_0q$. When $q>N$,
-    Theorem~\ref{thm:ldp_inhomogeneous_exact} yields exact preparation in
+    Lemma~\ref{thm:ldp_inhomogeneous_exact} yields exact preparation in
     depth at most $C_1N<C_1(a\log(N/\varepsilon)+b)$.
     Since $\log(N/\varepsilon)\ge\log2$, both bounds are a constant multiple
     of $\log(N/\varepsilon)$. The one-site case has depth zero.

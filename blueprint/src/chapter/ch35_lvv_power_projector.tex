@@ -45,7 +45,7 @@ $\varepsilon_1$ replaced by $\varepsilon_0+\Delta$.
     This is the operator of~\cite[lines 599--600]{Landau2015Polynomial}.
 \end{definition}
 
-\begin{theorem}[Positivity, norm and the ground state]
+\begin{lemma}[Positivity, norm and the ground state]
     \label{thm:lvv_power_projector_basic}
     \lean{TNLean.MPS.AreaLaw.posSemidef_powerProjector,
         TNLean.MPS.AreaLaw.norm_powerProjector,
@@ -55,7 +55,7 @@ $\varepsilon_1$ replaced by $\varepsilon_0+\Delta$.
     Let $L\ge1$, and let $A$ be defined by~(\ref{eq:lvv_power_projector}) with
     $n=L$. Then $A$ is positive semidefinite, $\|A\|=1$ and $A\Gamma=\Gamma$.
     This is the first assertion of~\cite[line 602]{Landau2015Polynomial}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -71,7 +71,7 @@ $\varepsilon_1$ replaced by $\varepsilon_0+\Delta$.
         =|\Gamma\rangle\langle\Gamma|$ and $\|A\|=1$.
 \end{proof}
 
-\begin{theorem}[Contraction of the excited states]
+\begin{lemma}[Contraction of the excited states]
     \label{thm:lvv_power_cutdown}
     \lean{TNLean.MPS.AreaLaw.norm_inner_powerProjector_le}
     \leanok
@@ -83,7 +83,7 @@ $\varepsilon_1$ replaced by $\varepsilon_0+\Delta$.
         \le\Bigl(\frac{1-\varepsilon_1/n}{1-\varepsilon_0/n}\Bigr)^{m}.
     \end{align*}
     This is equation e:cutdown of~\cite[line 603]{Landau2015Polynomial}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -93,7 +93,7 @@ $\varepsilon_1$ replaced by $\varepsilon_0+\Delta$.
     $\varepsilon_1\le n-1$, and the spectrum of $H$ lies in
     $\{\varepsilon_0\}\cup[\varepsilon_1,n]$. With
     $r=(n-\varepsilon_1)/(n-\varepsilon_0)$, the functional calculus of the
-    proof of Theorem~\ref{thm:lvv_power_projector_basic} gives
+    proof of Lemma~\ref{thm:lvv_power_projector_basic} gives
     $\|A-|\Gamma\rangle\langle\Gamma|\|\le r^m$. Since
     $|\Gamma\rangle\langle\Gamma|\Gamma^\perp=0$,
     $|\langle\Gamma^\perp,A\Gamma^\perp\rangle|\le\|A\Gamma^\perp\|
@@ -101,7 +101,7 @@ $\varepsilon_1$ replaced by $\varepsilon_0+\Delta$.
     $r=(1-\varepsilon_1/n)/(1-\varepsilon_0/n)$.
 \end{proof}
 
-\begin{theorem}[A logarithmic number of factors]
+\begin{lemma}[A logarithmic number of factors]
     \label{thm:lvv_power_threshold}
     \lean{TNLean.MPS.AreaLaw.norm_powerProjector_sub_le}
     \leanok
@@ -111,13 +111,13 @@ $\varepsilon_1$ replaced by $\varepsilon_0+\Delta$.
     $\|A-|\Gamma\rangle\langle\Gamma|\|\le\eta$. With $\eta=c_\varepsilon/(2q(n))$
     this gives the choice $m=\Theta(\varepsilon^{-1}n\log(q(n)/c_\varepsilon))$
     of~\cite[lines 602--603]{Landau2015Polynomial}, which makes the bound of
-    Theorem~\ref{thm:lvv_power_cutdown} at most $c_\varepsilon/(2q(n))$.
-\end{theorem}
+    Lemma~\ref{thm:lvv_power_cutdown} at most $c_\varepsilon/(2q(n))$.
+\end{lemma}
 
 \begin{proof}
     \leanok
     With $\varepsilon^*$ as in the proof of
-    Theorem~\ref{thm:lvv_power_projector_basic},
+    Lemma~\ref{thm:lvv_power_projector_basic},
     $\|A-|\Gamma\rangle\langle\Gamma|\|\le((n-\varepsilon^*)/(n-\varepsilon_0))^m$.
     If $\varepsilon^*=\varepsilon_0+\Delta$ this is
     $(1-\Delta/(n-\varepsilon_0))^m\le e^{-m\Delta/(n-\varepsilon_0)}$, and
@@ -141,7 +141,7 @@ $\varepsilon_1$ replaced by $\varepsilon_0+\Delta$.
     makes its expansion exact~\cite{gap:lvv13_power_expansion_padding}.
 \end{definition}
 
-\begin{theorem}[Expansion into words]
+\begin{lemma}[Expansion into words]
     \label{thm:lvv_power_expansion}
     \lean{TNLean.MPS.AreaLaw.powerProjector_eq_sum_bondComplementWord}
     \leanok
@@ -151,7 +151,7 @@ $\varepsilon_1$ replaced by $\varepsilon_0+\Delta$.
         A=C^m\frac{1}{n^m}\sum_{I\in\{0,\ldots,n-1\}^m}P_I.
     \end{align*}
     This is equation eq:a-exp of~\cite[lines 606--609]{Landau2015Polynomial}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -161,7 +161,7 @@ $\varepsilon_1$ replaced by $\varepsilon_0+\Delta$.
     $m$.
 \end{proof}
 
-\begin{theorem}[Rank of a word across a cut]
+\begin{lemma}[Rank of a word across a cut]
     \label{thm:lvv_power_word_rank}
     \lean{TNLean.MPS.AreaLaw.operatorSchmidtRank_cutOperator_bondComplementWord_le}
     \leanok
@@ -171,7 +171,7 @@ $\varepsilon_1$ replaced by $\varepsilon_0+\Delta$.
     $P_I$ has operator Schmidt rank at most $q^{2k}$. This is the bound behind
     equation e:decomp of~\cite[lines 584--588]{Landau2015Polynomial}, where the
     cut $(i,i+1)$ is crossed only by $P_i$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok

@@ -13,7 +13,7 @@ $\lambda=(1-p_0/4)M^2$, with $M\ge16(C_{\mathrm{pad}}+2)$;
 the numerical choices here come from the cyclic-color partition used
 in the initial recurrence.
 
-\begin{theorem}[Exact initial exponent gain]
+\begin{lemma}[Exact initial exponent gain]
     \label{thm:area_law_initial_exponent_gain}
     \lean{TNLean.PEPS.AreaLaw.one_sub_initialBoxExponent_eq}
     \leanok
@@ -25,7 +25,7 @@ in the initial recurrence.
     This is the logarithmic form of the exponent $e_0$, following the exponent
     calculation in
     \cite[proof of Proposition~3.3, lines~651--663]{OpenAI2026AreaLaw}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \lean{TNLean.PEPS.AreaLaw.initialBoxProb_pos_and_le_half,
         TNLean.PEPS.AreaLaw.sixteen_le_initialBoxScale,
@@ -35,7 +35,7 @@ in the initial recurrence.
     Substitute this identity into $e_0=\log\lambda/\log M-1$.
 \end{proof}
 
-\begin{theorem}[Two-sided initial exponent gain]
+\begin{lemma}[Two-sided initial exponent gain]
     \label{thm:area_law_initial_exponent_gain_bounds}
     \lean{TNLean.PEPS.AreaLaw.initialBoxExponent_gain_bounds}
     \leanok
@@ -44,7 +44,7 @@ in the initial recurrence.
     \begin{align}
         \frac{p}{2\log M}\le1-e_0\le\frac{p}{(2-p)\log M}.
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_initial_exponent_gain}
     Put $x=1-p/2>0$. The inequalities $\log x\le x-1$ and

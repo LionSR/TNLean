@@ -6,7 +6,7 @@
     For ordered edges $e_0,e_1$ of a finite graph and bond assignment $u$, define the correlated state $\Psi_z(u;\chi,p)$ (\cite{Schuch2010PEPS}, lines 2505--2535) by summing over $q\in G$ the closed tensor state with indicator $\mathbf1_{\eta_{e_1}=q}$ on $e_1$ and weight $\chi(pq^{-1}z\eta_{e_0})$ on $e_0$.
 \end{definition}
 
-\begin{theorem}[Correlated weights in the physical cut]
+\begin{lemma}[Correlated weights in the physical cut]
     \label{thm:peps_regular_correlated_charge_cut}
     \lean{TNLean.PEPS.openRegionWeight_regularEdgeCharacterSite_eq_weighted,
         TNLean.PEPS.regularCorrelatedChargeState_apply,
@@ -25,10 +25,10 @@
     \begin{align}
         (W_R\otimes I)\Psi_1(u;\chi,p)=\Psi_{k^{-1}}(u;\chi,p). \label{eq:correlated_charge_cut_global}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Summing $\mathbf1_{\eta_{e_1}=q}$ over $q\in G$ substitutes $q=\eta_{e_1}$ to give (\ref{eq:correlated_charge_state_coeff}).
-    Since $t(e_1)\notin R$, for each $q$ the indicator $\mathbf1_{\eta_{e_1}=q}$ lies in $R^c$, so applying Theorem~\ref{thm:peps_regular_coherent_global_transport} at each $q$ and summing over $q$ yields (\ref{eq:correlated_charge_cut_global}).
+    Since $t(e_1)\notin R$, for each $q$ the indicator $\mathbf1_{\eta_{e_1}=q}$ lies in $R^c$, so applying Lemma~\ref{thm:peps_regular_coherent_global_transport} at each $q$ and summing over $q$ yields (\ref{eq:correlated_charge_cut_global}).
 \end{proof}
 
 \begin{definition}[The native remote charge edge]
@@ -39,7 +39,7 @@
     At $v=(x,y)$, define the remote reference edge $e_1$ as the native horizontal bond joining $(x+1,y)$ to $(x+2,y)$ below the eight-site crossing strip $R_v$ of Definition~\ref{def:peps_torus_charge_flux_crossing_strip} (\cite{Schuch2010PEPS}, lines 2505--2581, retaining both seam orientations).
 \end{definition}
 
-\begin{theorem}[A physical crossing with the remote partner]
+\begin{lemma}[A physical crossing with the remote partner]
     \label{thm:peps_torus_correlated_charge_flux_crossing_global}
     \lean{TNLean.PEPS.torusChargeFluxPartnerEdge_tail_not_mem,
         TNLean.PEPS.IsGIsometric.exists_unitary_torusCorrelatedChargeFluxCrossing_global}
@@ -53,8 +53,8 @@
         =\Psi_{k^{-1}}(u^{(0)}_k;\chi,p), \label{eq:torus_correlated_crossing_global}
     \end{align}
     transforming the joint weight by $\chi(p\eta_1^{-1}\eta_0)\mapsto\chi(p\eta_1^{-1}k^{-1}\eta_0)$ (as an auxiliary local crossing step; the complete geometric braid and reunion experiment in \cite{Schuch2010PEPS}, lines 2560--2615, remain separate).
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Since $H\ge 4$, the vertical coordinate $y$ of $t(e_1)$ is distinct from the strip heights $y+1,y+2$, so $t(e_1)\notin R_v$ across either seam.
-    Combining the uniform column unitary $W_R$ of Theorem~\ref{thm:peps_torus_charge_flux_crossing} with (\ref{eq:correlated_charge_cut_global}) of Theorem~\ref{thm:peps_regular_correlated_charge_cut} gives (\ref{eq:torus_correlated_crossing_global}).
+    Combining the uniform column unitary $W_R$ of Lemma~\ref{thm:peps_torus_charge_flux_crossing} with (\ref{eq:correlated_charge_cut_global}) of Lemma~\ref{thm:peps_regular_correlated_charge_cut} gives (\ref{eq:torus_correlated_crossing_global}).
 \end{proof}

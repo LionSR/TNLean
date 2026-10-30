@@ -72,9 +72,9 @@ states reduce to finite matrix computations.
 
 In Definition~\ref{def:asymex_fib_gsymbol_tensor}, the printed
 $G$-symbol tensor includes its quantum-dimension factors;
-Theorem~\ref{thm:asymex_fib_gsymbol_similarity} conjugates its
+Lemma~\ref{thm:asymex_fib_gsymbol_similarity} conjugates its
 restriction at edge label $\tau$ by a diagonal bond similarity onto the
-two-label blocks, while Theorem~\ref{thm:asymex_fib_review_congruence}
+two-label blocks, while Lemma~\ref{thm:asymex_fib_review_congruence}
 relates the review's physical normalization to those blocks by a
 diagonal congruence.
 
@@ -82,17 +82,17 @@ For every $N>0$, the periodic operator closes the bond indices by the
 ordinary, unnormalized trace of the ordered product of local matrices,
 with the first physical index as the output and the second as the input.
 
-Theorem~\ref{thm:asymex_fib_normal} establishes normality of the two
+Lemma~\ref{thm:asymex_fib_normal} establishes normality of the two
 Fibonacci blocks via explicit length-three word-span certificates, and
 Lemma~\ref{lem:asymex_fib_vacuum} together with
-Theorem~\ref{thm:asymex_fib_unit} identifies the vacuum operator with
+Lemma~\ref{thm:asymex_fib_unit} identifies the vacuum operator with
 the orthogonal projection onto admissible configurations acting as the
-fusion unit. Theorem~\ref{thm:asymex_fib_fusion} and
-Theorem~\ref{thm:asymex_fib_stringnet_fusion} then prove the Fibonacci
+fusion unit. Lemma~\ref{thm:asymex_fib_fusion} and
+Lemma~\ref{thm:asymex_fib_stringnet_fusion} then prove the Fibonacci
 fusion relation for the two-label blocks and for the source's blocks on
-both edge labels, after which Theorem~\ref{thm:asymex_fib_golden_chain}
+both edge labels, after which Lemma~\ref{thm:asymex_fib_golden_chain}
 establishes commutation with the golden-chain Hamiltonian for $N\geq2$
-and Theorem~\ref{thm:asymex_fib_state_action} computes the regular
+and Lemma~\ref{thm:asymex_fib_state_action} computes the regular
 action on two explicit periodic state tensors.
 
 The physical space at each site is $\C^2$, with computational labels
@@ -151,7 +151,7 @@ $\varphi^{\pm1/4}$; those identities are proved over $\C$.
     $\Z[\sigma]$ use the same formulas as over $\C$.
 \end{definition}
 
-\begin{theorem}[Exact arithmetic in the ring of golden integers]
+\begin{lemma}[Exact arithmetic in the ring of golden integers]
     \label{thm:asymex_golden_ring}
     % Principal declaration: goldenMulRule.
     \lean{GoldenInt.sigma_quartic, goldenMulRule, goldenSigmaReal_quartic,
@@ -167,7 +167,7 @@ $\varphi^{\pm1/4}$; those identities are proved over $\C$.
     over $\Z[\sigma]$ into the complex matrices is multiplicative, and it
     commutes with word evaluation and with the bond-space product of
     tensors.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -253,9 +253,9 @@ arising from the normalization of the fusion basis, where $d_A$ and
 $d_D$ are the quantum dimensions of the labels on the adjacent
 bonds~\cite[Appendix~A, ``The MPO for the Fibonacci model'']{Cirac2021Matrix};
 that prefactor is omitted in the blocks defined here, and its effect on the
-periodic operators is Theorem~\ref{thm:asymex_fib_review_congruence}.
+periodic operators is Lemma~\ref{thm:asymex_fib_review_congruence}.
 
-\begin{theorem}[The one-site matrices of the $\tau$ block]
+\begin{lemma}[The one-site matrices of the $\tau$ block]
     \label{thm:asymex_fib_entries}
     \lean{FibonacciCompression.fibTauMPS_apply_one,
         FibonacciCompression.fibTauMPS_apply_three}
@@ -266,7 +266,7 @@ periodic operators is Theorem~\ref{thm:asymex_fib_review_congruence}.
     its matrix at the letter $(1,1)$ has the third row of
     (\ref{eq:asymex_fib_vertex}) as its third row and zero elsewhere, with
     $\varphi^{-1/2}=\sqrt{(\sqrt5-1)/2}$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -284,9 +284,9 @@ print in the following form. The former gives the operator tensor only
 as a diagram and prints no entries of $B_1$ or $B_\tau$; the placement of the $F$-symbols used
 here, without the closed-loop factors of the source and without the
 prefactor of the review, is recorded in~\cite{gap:bmwshv17_fibonacci_block_entries_provenance}.
-Theorem~\ref{thm:asymex_fib_gsymbol_similarity} relates these blocks to the
+Lemma~\ref{thm:asymex_fib_gsymbol_similarity} relates these blocks to the
 source's tensor built from the $G$-symbols, and
-Theorem~\ref{thm:asymex_fib_stringnet_fusion} carries their fusion rules to
+Lemma~\ref{thm:asymex_fib_stringnet_fusion} carries their fusion rules to
 that tensor on both edge labels.
 
 \begin{definition}[Fibonacci fusion data of the review]
@@ -332,7 +332,7 @@ that tensor on both edge labels.
     quantities taken in $\Z[\sigma]$.
 \end{definition}
 
-\begin{theorem}[Values of the Fibonacci fusion data]
+\begin{lemma}[Values of the Fibonacci fusion data]
     \label{thm:asymex_fib_fsymbol_values}
     % Principal declaration: FibonacciCompression.complexOfGolden_fibFTauGolden.
     \lean{FibonacciCompression.complexOfGolden_fibFTauGolden,
@@ -357,7 +357,7 @@ that tensor on both edge labels.
     golden ratio, $\sigma^2=\varphi^{-1}$, $\sigma=1/\sqrt\varphi$, and
     the block (\ref{eq:asymex_fib_ftau}) has the printed complex entries
     $1/\varphi$, $1/\sqrt\varphi$, $1/\sqrt\varphi$, $-1/\varphi$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -370,7 +370,7 @@ that tensor on both edge labels.
     nonnegative square root of $\varphi^{-1}$.
 \end{proof}
 
-\begin{theorem}[The $\tau$ block is the $F$-symbol tensor]
+\begin{lemma}[The $\tau$ block is the $F$-symbol tensor]
     \label{thm:asymex_fib_tau_fsymbol}
     % Principal declaration: FibonacciCompression.fibTau_eq_fSymbol.
     \lean{FibonacciCompression.fibTau_eq_fSymbol,
@@ -391,7 +391,7 @@ that tensor on both edge labels.
         \label{eq:asymex_fib_tau_fsymbol}
     \end{align}
     both in $\Z[\sigma]$ and, after the entrywise embedding, over $\C$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -404,7 +404,7 @@ that tensor on both edge labels.
 
 
 
-\begin{theorem}[The source's blocks on edge label $\tau$]
+\begin{lemma}[The source's blocks on edge label $\tau$]
     \label{thm:asymex_fib_gsymbol_similarity}
     % Principal declaration: FibonacciCompression.fibStringNetEdgeTau_conj.
     \lean{FibonacciCompression.fibStringNetEdgeTau_conj,
@@ -431,7 +431,7 @@ that tensor on both edge labels.
     for both labels $f$ and all $x',x$. Consequently, on the
     configurations whose edge labels are all $\tau$, the periodic operators
     of $S_1$ and $S_\tau$ equal those of $B_1$ and $B_\tau$ at every length.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -446,7 +446,7 @@ that tensor on both edge labels.
     trace defining the periodic operator, so the operators agree.
 \end{proof}
 
-\begin{theorem}[Fusion rules of the source's blocks on both edge labels]
+\begin{lemma}[Fusion rules of the source's blocks on both edge labels]
     \label{thm:asymex_fib_stringnet_fusion}
     % Principal declaration: FibonacciCompression.isMPOFusionAlgebra_fibStringNetTensor.
     \lean{FibonacciCompression.isMPOFusionAlgebra_fibStringNetTensor,
@@ -501,7 +501,7 @@ that tensor on both edge labels.
     the Fibonacci fusion rules $O_1^2=O_1$,
     $O_1O_\tau=O_\tau O_1=O_\tau$, and $O_\tau^2=O_1+O_\tau$ at every
     positive length.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -511,11 +511,11 @@ that tensor on both edge labels.
     the block $f$. So the letter of $S_f$ at $\bigl((b,1),(c,1)\bigr)$ is the
     diagonal matrix unit $E_{pp}$ at $p=(b,c)$, which the diagonal matrix $h$
     leaves unchanged; together with
-    Theorem~\ref{thm:asymex_fib_gsymbol_similarity} this gives the similarity
+    Lemma~\ref{thm:asymex_fib_gsymbol_similarity} this gives the similarity
     on all letters, and the periodic operators of $S_f$ and of the extended
     $B_f$ agree. For each product of two extended blocks, the gauge of the
     corresponding compression of
-    Theorem~\ref{thm:asymex_fib_anomaly_fusion_algebra} makes every one of the
+    Lemma~\ref{thm:asymex_fib_anomaly_fusion_algebra} makes every one of the
     sixteen letters of the stacked tensor block upper triangular: at edge
     label $\tau$ the conjugated letters are the block-diagonal ones already
     recorded, and at edge label $1$ they carry the edge-$1$ letters of the
@@ -525,7 +525,7 @@ that tensor on both edge labels.
     gives the four fusion rules.
 \end{proof}
 
-\begin{theorem}[The prefactor of the review]
+\begin{lemma}[The prefactor of the review]
     \label{thm:asymex_fib_review_congruence}
     % Principal declaration: FibonacciCompression.mpo_fibReviewTensor.
     \lean{FibonacciCompression.mpo_fibReviewTensor,
@@ -547,7 +547,7 @@ that tensor on both edge labels.
     $1/\varphi^2\neq1/\varphi$. The operators
     $O_N(\widetilde R_f)=O_N(R_f)W=W^{-1/2}O_N(B_f)W^{1/2}$
     satisfy them at every positive length.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -561,7 +561,7 @@ that tensor on both edge labels.
     $O_N(\widetilde R_f)=W^{-1/2}O_N(B_f)W^{1/2}$ is similar to
     $O_N(B_f)$ by one matrix for all labels, so products and linear
     combinations are carried along and the fusion rules of
-    Theorem~\ref{thm:asymex_fib_anomaly_fusion_algebra} transfer.
+    Lemma~\ref{thm:asymex_fib_anomaly_fusion_algebra} transfer.
 \end{proof}
 
 While the review states $O_aO_b=\sum_cN_{ab}^cO_c$ for the prefactored
@@ -569,10 +569,10 @@ review tensor $R_f$~\cite[Section~3]{Cirac2021Matrix}, that operator already
 contains the prefactor $1/\sqrt{d_{x'}d_{q''}}$ and fails the fusion rules
 in the orthonormal plaquette basis; as recorded
 in~\cite{gap:bmwshv17_fibonacci_block_entries_provenance},
-Theorem~\ref{thm:asymex_fib_review_congruence} restores the fusion rules
+Lemma~\ref{thm:asymex_fib_review_congruence} restores the fusion rules
 upon composing $O_N(R_f)$ with the diagonal weight matrix $W$.
 
-\begin{theorem}[Normality of the two Fibonacci blocks]
+\begin{lemma}[Normality of the two Fibonacci blocks]
     \label{thm:asymex_fib_normal}
     \lean{FibonacciCompression.fibOneMPS_isNormal,
         FibonacciCompression.fibTauMPS_isNormal}
@@ -581,7 +581,7 @@ upon composing $O_N(R_f)$ with the diagonal weight matrix $W$.
     Both blocks $B_1$ and $B_\tau$ are normal: their length-three words
     satisfy $\spn_{\C}\{B_1^w : |w|=3\} = \MN{2}$ and
     $\spn_{\C}\{B_\tau^w : |w|=3\} = \MN{3}$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -601,7 +601,7 @@ upon composing $O_N(R_f)$ with the diagonal weight matrix $W$.
     For the vacuum block, four length-three words suffice.
     Both families of coefficients are verified in $\Z[\sigma]$
     and mapped to complex matrices by
-    Theorem~\ref{thm:asymex_golden_ring}.
+    Lemma~\ref{thm:asymex_golden_ring}.
 \end{proof}
 
 \subsection{Admissible configurations and the vacuum operator}
@@ -664,7 +664,7 @@ cyclic neighboring pair $00$.
     with $P_1=\diag(0,1)$ at one site.
 \end{proof}
 
-\begin{theorem}[Vacuum unit laws]
+\begin{lemma}[Vacuum unit laws]
     \label{thm:asymex_fib_unit}
     \lean{FibonacciCompression.fibOne_mul_fibOne,
         FibonacciCompression.fibOne_mul_fibTau,
@@ -684,7 +684,7 @@ cyclic neighboring pair $00$.
         O_N(B_\tau)O_N(B_1) & =O_N(B_\tau).
         \label{eq:asymex_fib_unit_right}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -744,14 +744,14 @@ $w_\tau=\varphi/(1+\varphi^2)$.
     \end{align}
 \end{definition}
 
-\begin{theorem}[The weight relation]
+\begin{lemma}[The weight relation]
     \label{thm:asymex_fib_projector_weights}
     \lean{FibonacciCompression.fibWeight_fusion}
     \leanok
     \uses{def:asymex_fib_projector, def:asymex_fib_anomaly_nim}
     For each label $c\in\{1,\tau\}$,
     $\sum_{a,b\in\{1,\tau\}}N_{ab}^cw_aw_b=w_c$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -762,7 +762,7 @@ $w_\tau=\varphi/(1+\varphi^2)$.
     consequence of $\varphi^2=\varphi+1$.
 \end{proof}
 
-\begin{theorem}[The projector from the bond-dimension-five tensor]
+\begin{lemma}[The projector from the bond-dimension-five tensor]
     \label{thm:asymex_fib_projector_trace}
     % Principal declaration: FibonacciCompression.fibProjector_eq_trace_fibDelta.
     \lean{FibonacciCompression.fibProjector_eq_trace_fibDelta,
@@ -777,7 +777,7 @@ $w_\tau=\varphi/(1+\varphi^2)$.
     \end{align}
     and without the boundary matrix the periodic operator is
     $O_N(B)=O_N(B_1)+O_N(B_\tau)$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -787,28 +787,28 @@ $w_\tau=\varphi/(1+\varphi^2)$.
     block-diagonal matrix $\Delta$ scales the two blocks by $w_1$ and
     $w_\tau$, and the trace of a block-diagonal matrix is the sum of the
     traces of its blocks. Without the boundary matrix,
-    Theorem~\ref{thm:mpo_direct_sum_additive} gives
+    Lemma~\ref{thm:mpo_direct_sum_additive} gives
     $O_N(B)=O_N(B_1)+O_N(B_\tau)$.
 \end{proof}
 
-\begin{theorem}[The weighted Fibonacci projector is idempotent]
+\begin{lemma}[The weighted Fibonacci projector is idempotent]
     \label{thm:asymex_fib_projector_idempotent}
     \lean{FibonacciCompression.fibProjector_mul_self}
     \leanok
     \uses{def:asymex_fib_projector}
     For every system size $N\geq1$,
     $(\Pi_N)^2=\Pi_N$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:asymex_fib_unit, thm:asymex_fib_fusion,
         thm:asymex_fib_projector_weights}
     Expanding the square and using the unit laws of
-    Theorem~\ref{thm:asymex_fib_unit} and the fusion rule of
-    Theorem~\ref{thm:asymex_fib_fusion} gives
+    Lemma~\ref{thm:asymex_fib_unit} and the fusion rule of
+    Lemma~\ref{thm:asymex_fib_fusion} gives
     $(w_1^2+w_\tau^2)O_N(B_1)+(2w_1w_\tau+w_\tau^2)O_N(B_\tau)$.
-    Theorem~\ref{thm:asymex_fib_projector_weights} identifies the two
+    Lemma~\ref{thm:asymex_fib_projector_weights} identifies the two
     coefficients with $w_1$ and $w_\tau$.
 \end{proof}
 
@@ -852,7 +852,7 @@ operators~\cite{Cirac2021Matrix}.
     $x_n=x_{n+1}=1$, where it vanishes.
 \end{definition}
 
-\begin{theorem}[Values of the golden-chain projector]%
+\begin{lemma}[Values of the golden-chain projector]%
     \label{thm:asymex_fib_golden_term_values}
     \lean{FibonacciCompression.goldenChainTermGolden_tau_tau,
         FibonacciCompression.goldenChainTermGolden_of_ne_tau_tau}
@@ -869,7 +869,7 @@ operators~\cite{Cirac2021Matrix}.
         \notag
     \end{align}
     in the basis $1,\tau$ of~$x_i$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -878,7 +878,7 @@ operators~\cite{Cirac2021Matrix}.
     $\Z[\sigma]$, where $\varphi^{-1}=\sigma^2$.
 \end{proof}
 
-\begin{theorem}[Site operators and nearest-neighbour kernels]%
+\begin{lemma}[Site operators and nearest-neighbour kernels]%
     \label{thm:mpo_site_operator_neighbour_kernel}
     \lean{MPOTensor.neighbourKernel, MPOTensor.siteOperator,
         MPOTensor.sum_ite_agree, MPOTensor.siteOperator_mul_neighbourKernel}
@@ -893,7 +893,7 @@ operators~\cite{Cirac2021Matrix}.
         \notag
     \end{align}
     for all labels, then $p_iK=Kp_i$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -915,7 +915,7 @@ operators~\cite{Cirac2021Matrix}.
     $(a,b,c)=(t_{i-1},t_i,t_{i+1})$ equates the two sums.
 \end{proof}
 
-\begin{theorem}[The golden chain commutes with the Fibonacci operators]%
+\begin{lemma}[The golden chain commutes with the Fibonacci operators]%
     \label{thm:asymex_fib_golden_chain}
     \lean{FibonacciCompression.mpo_fibTau_eq_neighbourKernel,
         FibonacciCompression.goldenChainTerm_local_tau,
@@ -932,7 +932,7 @@ operators~\cite{Cirac2021Matrix}.
     with $O_N(B_1)$ and with the projector $\Pi_N$, and, for each label $f$,
     with the periodic operator of the operator tensor $S_f$ restricted to
     configurations with edge label $\tau$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -954,7 +954,7 @@ operators~\cite{Cirac2021Matrix}.
     exact golden arithmetic. The same identity holds for the kernel of
     $O_N(B_1)$. Summing over $i$ gives the first two statements, and the
     third follows since $\Pi_N=w_1O_N(B_1)+w_\tau O_N(B_\tau)$. Finally,
-    because Theorem~\ref{thm:asymex_fib_gsymbol_similarity} equates the
+    because Lemma~\ref{thm:asymex_fib_gsymbol_similarity} equates the
     periodic operator of $S_f$ on edge label $\tau$ with $O_N(B_f)$, the
     golden chain $H_N$ commutes with that operator as well.
 \end{proof}
@@ -1033,11 +1033,11 @@ These vectors are not normalized unless this is stated explicitly.
     Each pair $10$ contributes $1$, and each pair $11$ contributes
     $-\sigma^2$. This proves~(\ref{eq:asymex_fib_chain_amplitude}).
     The operator $P_N=O_N(B_1)$ fixes the product vector by
-    Theorem~\ref{thm:asymex_fib_state_action}. The chain vector is
+    Lemma~\ref{thm:asymex_fib_state_action}. The chain vector is
     $O_N(B_\tau)\ket{V^{(N)}(A)}$ by the same theorem, and the unit law
     $O_N(B_1)O_N(B_\tau)=O_N(B_\tau)$ of
-    Theorem~\ref{thm:asymex_fib_unit} shows that $P_N$ fixes it
-    (Theorem~\ref{thm:asymex_fib_anomaly_nim_rep}).
+    Lemma~\ref{thm:asymex_fib_unit} shows that $P_N$ fixes it
+    (Lemma~\ref{thm:asymex_fib_anomaly_nim_rep}).
     Summing squared amplitudes proves~(\ref{eq:asymex_fib_chain_norm}).
     The all-one amplitude is $(-\sigma^2)^N\neq0$.
 \end{proof}
@@ -1048,7 +1048,7 @@ $\ket{V^{(1)}(C)}=-\sigma^2\ket{1}$ and its squared norm is $\sigma^4$.
 In particular, the two periodic vectors are not independent at every
 length.
 
-\begin{theorem}[Normality of the two state tensors]
+\begin{lemma}[Normality of the two state tensors]
     \label{thm:asymex_fib_states_normal}
     \lean{FibonacciCompression.fibAllTau_isNormal,
         FibonacciCompression.fibChain_isNormal}
@@ -1056,7 +1056,7 @@ length.
     \uses{def:asymex_fib_states, def:normal}
     The length-one words of $A$ span $\MN{1}$, and the length-three
     words of $C$ span $\MN{2}$. Thus both tensors are normal.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -1082,7 +1082,7 @@ length.
     matrix algebra.
 \end{proof}
 
-\begin{theorem}[Action on the two periodic states]
+\begin{lemma}[Action on the two periodic states]
     \label{thm:asymex_fib_state_action}
     \lean{FibonacciCompression.mpo_fibOne_mulVec_allTau,
         FibonacciCompression.mpo_fibTau_mulVec_allTau,
@@ -1105,13 +1105,13 @@ length.
          & =\ket{V^{(N)}(A)}+\ket{V^{(N)}(C)}.
         \label{eq:asymex_fib_action_chain}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     For an MPO tensor $T$ and MPS tensor $D$, their action tensor
     has letters $(T\cdot D)^y=\sum_xT^{yx}\otimes D^x$.
-    As in the proof of Theorem~\ref{thm:asymex_fib_unit}, let $\sim$
+    As in the proof of Lemma~\ref{thm:asymex_fib_unit}, let $\sim$
     denote simultaneous similarity of letters and let $0_r$ denote
     a zero tensor of bond dimension $r$.
     The three action tensors have block decompositions
@@ -1192,7 +1192,7 @@ exact computation in the ring of golden integers.
 \begin{center}
     % Formula: B^{x'x}=\sum_m(B_\tau)^{x'm}\otimes(B_\tau)^{mx}, the
     % stacked product of Definition~\ref{def:asymex_fib}, realizing
-    % $\tau\otimes\tau$; Theorem~\ref{thm:asymex_fib_fusion} identifies
+    % $\tau\otimes\tau$; Lemma~\ref{thm:asymex_fib_fusion} identifies
     % its periodic trace with that of $B_1\oplus B_\tau$, the
     % realization $1\oplus\tau$.
     % Source: Definition~\ref{def:asymex_fib}.
@@ -1225,7 +1225,7 @@ exact computation in the ring of golden integers.
     \end{tenkz}
 \end{center}
 
-\begin{theorem}[Split compression of the Fibonacci square]
+\begin{lemma}[Split compression of the Fibonacci square]
     \label{thm:asymex_fib_compression}
     % Principal declaration: FibonacciCompression.fibonacci_dim_eq.
     \lean{FibonacciCompression.fibonacci_compression, FibonacciCompression.fibonacci_dim_eq,
@@ -1249,7 +1249,7 @@ exact computation in the ring of golden integers.
     \end{align}
     Every remainder word of length at least six vanishes.
     In fact, each remainder letter is zero, so the extension splits.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -1276,7 +1276,7 @@ exact computation in the ring of golden integers.
     configuration space of the chain.
 \end{proof}
 
-\begin{theorem}[The fusion rule]
+\begin{lemma}[The fusion rule]
     \label{thm:asymex_fib_fusion}
     % Principal declaration: FibonacciCompression.fibonacci_fusion_rule.
     \lean{FibonacciCompression.fibStack_trace_evalWord,
@@ -1293,13 +1293,13 @@ exact computation in the ring of golden integers.
     satisfy~(\ref{eq:asymex_fib_fusion}), and the periodic vector
     of the stacked tensor is the sum of the periodic vectors of
     the two target blocks.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:asymex_fib_compression, prop:asym_compression_trace}
-    Applying Proposition~\ref{prop:asym_compression_trace} to
-    Theorem~\ref{thm:asymex_fib_compression}
+    Applying Lemma~\ref{prop:asym_compression_trace} to
+    Lemma~\ref{thm:asymex_fib_compression}
     yields~(\ref{eq:asymex_fib_trace}).
     For output and input words $y,x$, the periodic product contracts
     as
@@ -1327,9 +1327,9 @@ reading~\cite{gap:bmwshv17_fibonacci_projector_positive_length}), at
 $N=0$ the periodic operators reduce to the scalars $O_0(B_1)=2$ and
 $O_0(B_\tau)=3$, where $O_0(B_1)^2=4\neq2$ and
 $O_0(B_1)O_0(B_\tau)=O_0(B_\tau)O_0(B_1)=6\neq3$, so the unit laws of
-Theorem~\ref{thm:asymex_fib_unit} fail at length zero as well.
+Lemma~\ref{thm:asymex_fib_unit} fail at length zero as well.
 
-\begin{theorem}[The fusion tensors]
+\begin{lemma}[The fusion tensors]
     \label{thm:asymex_fib_fusion_tensors}
     % Principal declaration: FibonacciCompression.fibStack_mul_fusionRight.
     \lean{FibonacciCompression.fibFusionRight, FibonacciCompression.fibFusionLeft,
@@ -1350,16 +1350,16 @@ Theorem~\ref{thm:asymex_fib_unit} fail at length zero as well.
         W_sB^{x'x} & =C_s^{x'x}W_s.
         \label{eq:asymex_fib_left_intertwiner}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:asymex_explicit_gauge}
-    Theorem~\ref{thm:asymex_explicit_gauge} identifies the maps with
+    Lemma~\ref{thm:asymex_explicit_gauge} identifies the maps with
     the row and column blocks of the adapted basis.
     Each intertwining relation is verified by multiplication over
     $\Z[\sigma]$ and mapped to complex matrices by
-    Theorem~\ref{thm:asymex_golden_ring}.
+    Lemma~\ref{thm:asymex_golden_ring}.
     Equivalently, taking the corresponding column or row block
     of~(\ref{eq:asymex_fib_split_letters}) gives
     (\ref{eq:asymex_fib_right_intertwiner}) or
@@ -1368,8 +1368,8 @@ Theorem~\ref{thm:asymex_fib_unit} fail at length zero as well.
 
 \begin{center}
     % Formula: B^{x'x}V_s=V_sC_s^{x'x} and W_sB^{x'x}=C_s^{x'x}W_s of
-    % Theorem~\ref{thm:asymex_fib_fusion_tensors}, for $s\in\{1,\tau\}$.
-    % Source: Theorem~\ref{thm:asymex_fib_fusion_tensors}.
+    % Lemma~\ref{thm:asymex_fib_fusion_tensors}, for $s\in\{1,\tau\}$.
+    % Source: Lemma~\ref{thm:asymex_fib_fusion_tensors}.
     % Ink-to-index map: the ring is the fusion tensor $V_s$ or $W_s$;
     % the square node is the stacked source $B$ or the target block
     % $C_s\in\{B_1,B_\tau\}$.
