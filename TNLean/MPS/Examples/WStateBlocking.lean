@@ -3,10 +3,11 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.ComplexSqrt
+import TNLean.Algebra.FinKronecker
+import TNLean.MPS.Core.Blocking
 import TNLean.MPS.Examples.PVBS
 import TNLean.MPS.Examples.WStatePrimeLengthBound
-import TNLean.MPS.Core.Blocking
-import TNLean.Algebra.ComplexSqrt
 
 /-!
 # Isometric blocking of the actual W vector
@@ -50,8 +51,15 @@ private theorem sum_norm_sq_wIndicator (N : ℕ) :
       ‖wIndicator (N + 1) (Fin.cons i σ)‖ ^ 2) = _
     rw [Fin.sum_univ_two]
     simp only [wIndicator_cons_zero, wIndicator_cons_one]
-    rw [ih]
-    simp [pvbsVacuum, Pi.single_apply]
+    have hvac : ∑ σ : Cfg 2 N, ‖pvbsVacuum N σ‖ ^ 2 = 1 := by
+      rw [Finset.sum_eq_single (0 : Cfg 2 N)]
+      · simp
+      · intro σ _ hσ
+        simp [pvbsVacuum, hσ]
+      · simp
+    rw [ih, hvac]
+    push_cast
+    ring
 
 /-- The actual unnormalized W vector has squared norm equal to its number of sites.
 Source: the single-excitation sum in arXiv:2011.12127, Appendix A, line 2350. -/
@@ -96,14 +104,14 @@ private theorem count_flatten_cons {m k : ℕ} (I : Fin (blockPhysDim 2 k))
       (List.ofFn (decodeBlock 2 k I)).count 1 +
         (List.ofFn (blockedConfigEquiv 2 m k σ)).count 1 := by
   simp only [ofFn_blockedConfigEquiv, List.ofFn_succ, flattenBlockedWord_cons,
-    List.count_append, wordOfBlock, Kraus.wordOfBlock]
+    List.count_append, wordOfBlock, Kraus.wordOfBlock, Fin.cons_zero, Fin.cons_succ]
 
 private theorem vacuum_flatten_cons {m k : ℕ} (I : Fin (blockPhysDim 2 k))
     (σ : Fin m → Fin (blockPhysDim 2 k)) :
     pvbsVacuum ((m + 1) * k) (blockedConfigEquiv 2 (m + 1) k (Fin.cons I σ)) =
       pvbsVacuum k (decodeBlock 2 k I) *
         pvbsVacuum (m * k) (blockedConfigEquiv 2 m k σ) := by
-  simp only [vacuum_eq_count_zero, count_flatten_cons, Nat.add_eq_zero]
+  simp only [vacuum_eq_count_zero, count_flatten_cons, Nat.add_eq_zero_iff]
   split_ifs <;> simp_all
 
 private theorem wIndicator_flatten_cons {m k : ℕ} (I : Fin (blockPhysDim 2 k))
@@ -115,7 +123,7 @@ private theorem wIndicator_flatten_cons {m k : ℕ} (I : Fin (blockPhysDim 2 k))
         wIndicator (m * k) (blockedConfigEquiv 2 m k σ) := by
   simp only [wIndicator_apply, vacuum_eq_count_zero, count_flatten_cons]
   rcases (List.ofFn (decodeBlock 2 k I)).count 1 with _ | _ | a <;>
-    rcases (List.ofFn (blockedConfigEquiv 2 m k σ)).count 1 with _ | _ | b <;> simp
+    rcases (List.ofFn (blockedConfigEquiv 2 m k σ)).count 1 with _ | _ | b <;> (simp; try omega)
 
 /-- Encode one qubit into the vacuum and normalized W vector of an actual physical block.
 The row alphabet is the existing blocked physical alphabet. -/
@@ -135,31 +143,66 @@ private theorem wIndicator_mass (k : ℕ) :
       rw [← Complex.ofReal_sum, sum_norm_sq_wIndicator]
       norm_cast
 
-/-- The two actual encoding columns are orthonormal at every positive block length. -/
+private theorem wBlockEncoding_zero (k : ℕ) (I : Fin (blockPhysDim 2 k)) :
+    wBlockEncoding k I 0 = pvbsVacuum k (decodeBlock 2 k I) :=
+  ite_eq_left rfl
+
+private theorem wBlockEncoding_one (k : ℕ) (I : Fin (blockPhysDim 2 k)) :
+    wBlockEncoding k I 1 = (Real.sqrt k : ℂ)⁻¹ * wIndicator k (decodeBlock 2 k I) :=
+  ite_eq_right (by decide)
+
+private theorem star_pvbsVacuum {k : ℕ} (σ : Cfg 2 k) :
+    star (pvbsVacuum k σ) = pvbsVacuum k σ := by
+  by_cases hσ : σ = 0
+  · rw [hσ, pvbsVacuum_zero, star_one]
+  · simp [pvbsVacuum, hσ]
+
+private theorem pvbsVacuum_mul_wIndicator {k : ℕ} (σ : Cfg 2 k) :
+    pvbsVacuum k σ * wIndicator k σ = 0 := by
+  by_cases hσ : σ = 0
+  · rw [hσ, wIndicator_vacuum, mul_zero]
+  · simp [pvbsVacuum, hσ]
+
+/-- The two encoding columns are orthonormal at every positive block length. -/
 theorem wBlockEncoding_conjTranspose_mul_self {k : ℕ} (hk : 0 < k) :
     (wBlockEncoding k)ᴴ * wBlockEncoding k = 1 := by
   have hkℂ : (k : ℂ) ≠ 0 := by exact_mod_cast hk.ne'
+  have hc : star ((Real.sqrt k : ℂ)⁻¹) = (Real.sqrt k : ℂ)⁻¹ := by
+    rw [star_inv₀, Complex.star_def, Complex.conj_ofReal]
+  have hwv (σ : Cfg 2 k) : star (wIndicator k σ) * pvbsVacuum k σ = 0 := by
+    have h := congrArg star (pvbsVacuum_mul_wIndicator σ)
+    rwa [star_mul, star_pvbsVacuum, star_zero] at h
   ext i j
   simp only [Matrix.mul_apply, Matrix.conjTranspose_apply]
   rw [← (decodeBlockEquiv 2 k).symm.sum_comp
     (fun I => star (wBlockEncoding k I i) * wBlockEncoding k I j)]
-  simp only [wBlockEncoding, decodeBlock_decodeBlockEquiv_symm]
-  fin_cases i <;> fin_cases j
-  · simp [pvbsVacuum, Pi.single_apply]
-  · simp [pvbsVacuum, Pi.single_apply, wIndicator_vacuum]
-  · simp [pvbsVacuum, Pi.single_apply, wIndicator_vacuum]
-  · simp only [Fin.isValue, one_ne_zero, if_false]
-    have hterm (σ : Cfg 2 k) :
+  revert i j
+  simp only [Fin.forall_fin_two, wBlockEncoding_zero, wBlockEncoding_one,
+    decodeBlock_decodeBlockEquiv_symm]
+  refine ⟨⟨?_, ?_⟩, ⟨?_, ?_⟩⟩
+  · rw [Matrix.one_apply_eq, Finset.sum_eq_single (0 : Cfg 2 k)]
+    · simp
+    · intro σ _ hσ
+      simp [pvbsVacuum, hσ]
+    · simp
+  · rw [Matrix.one_apply_ne (by decide)]
+    refine Finset.sum_eq_zero fun σ _ ↦ ?_
+    rw [star_pvbsVacuum, mul_left_comm, pvbsVacuum_mul_wIndicator, mul_zero]
+  · rw [Matrix.one_apply_ne (by decide)]
+    refine Finset.sum_eq_zero fun σ _ ↦ ?_
+    rw [star_mul, hc, mul_right_comm, hwv, zero_mul]
+  · have hterm (σ : Cfg 2 k) :
         star ((Real.sqrt k : ℂ)⁻¹ * wIndicator k σ) *
             ((Real.sqrt k : ℂ)⁻¹ * wIndicator k σ) =
           ((Real.sqrt k : ℂ)⁻¹ * (Real.sqrt k : ℂ)⁻¹) *
             (star (wIndicator k σ) * wIndicator k σ) := by
-      rw [star_mul, star_inv, Complex.star_def, Complex.conj_ofReal]
+      rw [star_mul, hc]
       ring
     simp_rw [hterm]
     rw [← Finset.mul_sum, wIndicator_mass,
-      Complex.ofReal_sqrt_inv_mul_self (k : ℝ) (Nat.cast_nonneg _)]
-    simpa using inv_mul_cancel₀ hkℂ
+      Complex.ofReal_sqrt_inv_mul_self (k : ℝ) (Nat.cast_nonneg _), Matrix.one_apply_eq,
+      Complex.ofReal_natCast]
+    exact inv_mul_cancel₀ hkℂ
 
 /-- Every tensor power of the actual W-block encoding is an isometry. -/
 theorem rectKronecker_wBlockEncoding_isometry {k : ℕ} (hk : 0 < k) (m : ℕ) :
@@ -172,10 +215,11 @@ private theorem product_vacuum_blocks {k : ℕ} (m : ℕ)
     (∏ i, pvbsVacuum k (decodeBlock 2 k (σ i))) =
       pvbsVacuum (m * k) (blockedConfigEquiv 2 m k σ) := by
   induction m with
-  | zero => simp [pvbsVacuum]
+  | zero =>
+    have h : blockedConfigEquiv 2 0 k σ = 0 := funext fun i ↦ absurd i.isLt (by simp)
+    rw [h, pvbsVacuum_zero, Fin.prod_univ_zero]
   | succ m ih =>
-    obtain ⟨⟨I, τ⟩, rfl⟩ :=
-      (Fin.consEquiv (fun _ : Fin (m + 1) => Fin (blockPhysDim 2 k))).surjective σ
+    refine Fin.consCases (fun I τ ↦ ?_) σ
     simp only [Fin.prod_univ_succ, Fin.cons_zero, Fin.cons_succ, vacuum_flatten_cons]
     rw [ih]
 
@@ -183,14 +227,13 @@ private theorem encoding_vacuum {k : ℕ} (m : ℕ)
     (σ : Fin m → Fin (blockPhysDim 2 k)) :
     (Matrix.rectKronecker (fun _ : Fin m => wBlockEncoding k) *ᵥ pvbsVacuum m) σ =
       pvbsVacuum (m * k) (blockedConfigEquiv 2 m k σ) := by
-  change (∑ x : Cfg 2 m, Matrix.rectKronecker
-    (fun _ : Fin m => wBlockEncoding k) σ x * (Pi.single 0 (1 : ℂ) x)) = _
-  simp only [Pi.single_apply]
+  change (∑ x : Cfg 2 m, Matrix.rectKronecker (fun _ : Fin m => wBlockEncoding k) σ x *
+    (Pi.single (0 : Cfg 2 m) (1 : ℂ) : Cfg 2 m → ℂ) x) = _
   rw [Finset.sum_eq_single (0 : Cfg 2 m)]
-  · simpa only [Matrix.rectKronecker_apply, wBlockEncoding, if_pos rfl, mul_one] using
-      product_vacuum_blocks m σ
+  · rw [Pi.single_eq_same, mul_one, Matrix.rectKronecker_apply, ← product_vacuum_blocks m σ]
+    exact Finset.prod_congr rfl fun i _ ↦ wBlockEncoding_zero k (σ i)
   · intro x _ hx
-    simp only [if_neg hx, mul_zero]
+    simp [hx]
   · simp
 
 /-- Actual blocking identity: the tensor power of the local W isometry sends
@@ -201,11 +244,17 @@ theorem rectKronecker_wBlockEncoding_mulVec_wIndicator (k m : ℕ) :
       (Real.sqrt k : ℂ)⁻¹ •
         fun σ => wIndicator (m * k) (blockedConfigEquiv 2 m k σ) := by
   induction m with
-  | zero => ext σ; simp [wIndicator]
+  | zero =>
+    ext σ
+    have h0 : wIndicator 0 = 0 := funext fun τ ↦ by simp [wIndicator]
+    have hz (τ : Cfg 2 (0 * k)) : wIndicator (0 * k) τ = 0 := by
+      rw [wIndicator_apply,
+        List.eq_nil_of_length_eq_zero (by simp : (List.ofFn τ).length = 0)]
+      simp
+    simp only [h0, Matrix.mulVec_zero, Pi.zero_apply, Pi.smul_apply, hz, smul_zero]
   | succ m ih =>
     ext σ
-    obtain ⟨⟨I, τ⟩, rfl⟩ :=
-      (Fin.consEquiv (fun _ : Fin (m + 1) => Fin (blockPhysDim 2 k))).surjective σ
+    refine Fin.consCases (fun I τ ↦ ?_) σ
     simp only [Matrix.mulVec, dotProduct]
     rw [← (Fin.consEquiv (fun _ : Fin (m + 1) => Fin 2)).sum_comp
       (fun x => Matrix.rectKronecker (fun _ : Fin (m + 1) => wBlockEncoding k)
@@ -223,9 +272,9 @@ theorem rectKronecker_wBlockEncoding_mulVec_wIndicator (k m : ℕ) :
         (Matrix.rectKronecker (fun _ : Fin m => wBlockEncoding k) *ᵥ wIndicator m) τ +
       wBlockEncoding k I 1 *
         (Matrix.rectKronecker (fun _ : Fin m => wBlockEncoding k) *ᵥ pvbsVacuum m) τ = _
-    rw [ih, encoding_vacuum, wIndicator_flatten_cons]
-    simp only [wBlockEncoding, if_pos rfl, one_ne_zero, if_false, Pi.smul_apply,
-      smul_eq_mul]
+    rw [ih, encoding_vacuum]
+    simp only [Pi.smul_apply, smul_eq_mul]
+    rw [wIndicator_flatten_cons, wBlockEncoding_zero, wBlockEncoding_one]
     ring
 
 /-- Normalized W vectors are related by the tensor power of the actual local
@@ -289,7 +338,7 @@ theorem prime_divisor_lt_of_mpv_eq_smul_wIndicator {D N : ℕ}
     {p : ℕ} (hp : p.Prime) (hpN : p ∣ N) :
     p < 2 * max ((D ^ 2 + 1) ^ 2) (3 * (D - 1) * ((D ^ 2 + 1) ^ 2 + 1)) := by
   obtain ⟨k, rfl⟩ := hpN
-  have hk : 0 < k := (Nat.mul_pos_iff.mp hN).2
+  have hk : 0 < k := Nat.pos_of_ne_zero (by rintro rfl; simp at hN)
   have hroot : (Real.sqrt k : ℂ) ≠ 0 :=
     Complex.ofReal_ne_zero.mpr (Real.sqrt_ne_zero'.mpr (by exact_mod_cast hk))
   exact lt_of_mpv_eq_smul_wIndicator_of_prime
