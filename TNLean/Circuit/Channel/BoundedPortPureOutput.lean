@@ -9,10 +9,10 @@ import TNLean.Circuit.Channel.PhysicalPortPureOutput
 /-!
 # Pure-state conversions on the original physical ports
 
-An actual dimension-bounded native channel taking a pure input to a normalized
+A dimension-bounded native channel taking a pure input to a normalized
 pure output has a compiled unitary realization on the original physical ports.
 The designated data and scratch registers start and end in their product zero
-state. The actual final vector factors into that encoded output and a derived
+state. The final vector factors into that encoded output and a derived
 normalized environment vector, at intersite depth `2 * Nat.clog d B * T`.
 
 **Scope restriction (bounded exact pure-state conversion):** the intermediate
@@ -36,9 +36,9 @@ namespace QuantumCircuit
 
 variable {B d N T : ℕ} [NeZero d] [NeZero N]
 
-/-- Compile an actual bounded native pure-state conversion with its original-port
+/-- Compile a bounded native pure-state conversion with its original-port
 input and output and product-zero designated memory. The environment vector is
-derived from the actual compiled output; no simulator, decoupling or environment
+derived from the compiled output; no simulator, decoupling or environment
 reset premise is supplied. The full channel identity on all logical operators
 is retained at physical depth `2 * Nat.clog d B * T`.
 
