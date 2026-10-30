@@ -19,7 +19,7 @@ on the flattened physical chain.
 
 This is elementary single-excitation algebra for the blocking device in
 PGVWC07, arXiv:quant-ph/0608197, lines 2090–2097, applied to the W vector
-of the review arXiv:2011.12127, Appendix A, lines 2348–2362. It supplies an
+of the review arXiv:2011.12127, Appendix A, lines 2348–2362. It supplies a
 vector identity, not the period or quantitative injectivity estimate
 needed for the review's general bond-dimension bound.
 -/
