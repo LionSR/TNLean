@@ -28,5 +28,5 @@ Those obligations remain with 7035 and the final part of 7036.
 Independent source/API review found the delta contraction, factor orders,
 gate-gauge cancellation and reused theorem signatures consistent. Native
 import, Blueprint, prose, integrity and whitespace checks are recorded in the PR.
-No local Lean, Lake or checkdecls was run. Every new Blueprint result and proof
-is notready pending exact-head hosted acceptance and integration.
+Hosted CI on the pull-request head built every new declaration, and every new
+Blueprint result and proof is marked formalized.

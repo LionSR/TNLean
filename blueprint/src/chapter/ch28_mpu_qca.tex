@@ -3429,7 +3429,7 @@ completion from compatible forward and inverse finite-local actions.
     \label{def:mpu_tensor_from_two_gates}
     \lean{MPOTensor.standardFormTensorOfGates,
         MPOTensor.standardFormTensorOfGatesData}
-    \notready
+    \leanok
     \uses{def:mpu_supplied_two_site_standard_form}
     Let $d,\ell,r>0$ and let
     \begin{align}
@@ -3459,7 +3459,7 @@ completion from compatible forward and inverse finite-local actions.
     \label{lem:mpu_tensor_from_gates_periodic_circuit}
     \lean{MPOTensor.isMPU_standardFormTensorOfGates,
         MPOTensor.mpo_standardFormTensorOfGates}
-    \notready
+    \leanok
     \uses{def:mpu_tensor_from_two_gates,thm:mpu_supplied_two_site_periodic_circuit}
     At every positive ring length $N$, the periodic operator of the
     constructed tensor is, in ordered pair coordinates,
@@ -3470,7 +3470,7 @@ completion from compatible forward and inverse finite-local actions.
     periodic unitarity is derived from the two gates.
 \end{lemma}
 \begin{proof}
-    \notready
+    \leanok
     Use the supplied standard form constructed in
     Definition~\ref{def:mpu_tensor_from_two_gates} in the general periodic
     circuit identity. Both layers are unitary, and their product is unitary.
@@ -3479,7 +3479,7 @@ completion from compatible forward and inverse finite-local actions.
 \begin{lemma}[Changing the intermediate bases preserves the circuit]
     \label{lem:mpu_tensor_from_gates_basis_freedom}
     \lean{MPOTensor.mpo_standardFormTensorOfGates_eq_of_gate_gauges}
-    \notready
+    \leanok
     \uses{def:mpu_tensor_from_two_gates}
     If $x\in U(\ell)$ and $y\in U(r)$, replace the supplied gates by
     \begin{align}
@@ -3490,7 +3490,7 @@ completion from compatible forward and inverse finite-local actions.
     intermediate basis changes in the generalized Margolus construction.
 \end{lemma}
 \begin{proof}
-    \notready
+    \leanok
     Apply the gate sufficiency direction of the fundamental theorem to
     the two constructed supplied standard forms. Each intermediate basis
     change cancels its adjoint in the adjacent circuit layer.
@@ -3500,7 +3500,7 @@ completion from compatible forward and inverse finite-local actions.
     \label{lem:mpu_tensor_from_margolus_gates}
     \lean{MPOTensor.margolusShiftedGate,
         MPOTensor.exists_standardFormTensor_of_margolus_gates}
-    \notready
+    \leanok
     \uses{def:mpu_tensor_from_two_gates,lem:mpu_tensor_from_gates_periodic_circuit}
     Let Schumacher--Werner's unitary gates be
     $U:(\mathbb C^d)^{\otimes2}\to\mathbb C^\ell\otimes\mathbb C^r$ and
@@ -3516,7 +3516,7 @@ completion from compatible forward and inverse finite-local actions.
     automorphism's local rule.
 \end{lemma}
 \begin{proof}
-    \notready
+    \leanok
     The explicit product-coordinate swap preserves unitarity. Use
     Definition~\ref{def:mpu_tensor_from_two_gates} with $D=dr$ and then
     Lemma~\ref{lem:mpu_tensor_from_gates_periodic_circuit}.
