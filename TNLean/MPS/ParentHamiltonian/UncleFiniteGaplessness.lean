@@ -43,8 +43,12 @@ private theorem ker_uncleHamiltonianES_eq_span_mpvState
       Submodule.span ℂ ({mpvState A M, mpvState B M} :
         Set (EuclideanSpace ℂ (Cfg d M))) := by
   obtain ⟨n, rfl⟩ : ∃ n : ℕ, M = n + 2 := ⟨M - 2, by omega⟩
-  simpa only [mpvState, EuclideanSpace.equiv] using
-    ker_uncleHamiltonianES_eq_span_mpv A B R L hPert n
+  have hA : mpvState A (n + 2) =
+      (WithLp.linearEquiv 2 ℂ (NSiteSpace d (n + 2))).symm (mpv A) := rfl
+  have hB : mpvState B (n + 2) =
+      (WithLp.linearEquiv 2 ℂ (NSiteSpace d (n + 2))).symm (mpv B) := rfl
+  rw [hA, hB]
+  exact ker_uncleHamiltonianES_eq_span_mpv A B R L hPert n
 
 /-- Generic finite-volume gaplessness for the actual two-block uncle
 Hamiltonians in the source canonical normalization. For almost every wall
@@ -65,9 +69,9 @@ theorem uncleHamiltonianES_ae_eventually_exists_pos_eigenvalue_lt
       (Fin d → Matrix (Fin b) (Fin a) ℂ))) [μ.IsAddHaarMeasure] :
     ∀ᵐ P ∂μ, Kraus.IsInjective (uncleBoundaryLetter A B P.1 P.2) →
       ∀ ε : ℝ, 0 < ε → ∀ᶠ N : ℕ in atTop,
-        ∃ λ : ℝ, 0 < λ ∧ λ < ε ∧
+        ∃ lam : ℝ, 0 < lam ∧ lam < ε ∧
           Module.End.HasEigenvalue
-            (uncleHamiltonianES A B P.1 P.2 (6 * N + 1)).toLinearMap (λ : ℂ) := by
+            (uncleHamiltonianES A B P.1 P.2 (6 * N + 1)).toLinearMap (lam : ℂ) := by
   classical
   by_cases hExists : ∃ (R₀ : Fin d → Matrix (Fin a) (Fin b) ℂ)
       (L₀ : Fin d → Matrix (Fin b) (Fin a) ℂ),
