@@ -29,6 +29,7 @@ import TNLean.Circuit.Channel.PhysicalPortEmbedding
 import TNLean.Circuit.Channel.PhysicalPortEnvironmentComposition
 import TNLean.Circuit.Channel.PhysicalPortIO
 import TNLean.Circuit.Channel.PhysicalPortLocalDilation
+import TNLean.Circuit.Channel.PhysicalPortPureOutput
 import TNLean.Circuit.Channel.PhysicalPortUnitaryCompilation
 import TNLean.Circuit.Channel.PhysicalProtocolCompilation
 import TNLean.Circuit.Channel.PhysicalRegisterEncoding

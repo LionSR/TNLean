@@ -3123,9 +3123,14 @@ involve no boundary.
   `exists_bounded_matching_simulation`, `PortRegisters.dataChannelLift_word`,
   `IsDimensionBoundedLocalChannelProtocol.exists_physicalPortSimulation`,
   `.exists_appended_unitary_dilation`, and
-  `.exists_appended_unitary_dilation_reference`. The last two construct an
+  `.exists_appended_unitary_dilation_reference`. These construct an
   actual same-depth unitary on a port-preserving extension, with fresh local
   product-zero environments initialized once and discarded only at the end.
+  When the channel output of a pure input is pure,
+  `.exists_appended_unitary_dilation_pure_output` derives a normalized
+  environment vector and a system/environment product output, and
+  `.exists_environmentKraus_pure_output` identifies the environment-basis
+  branches, their normalized amplitudes and their common pure system output.
 - **Caveat:** source pure-state conditions and the fixed number of composed
   `QCcc` blocks with their internal measurement/control rules remain separate.
   The appended environments need not reset, and their total number is only
