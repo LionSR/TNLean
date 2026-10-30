@@ -371,6 +371,32 @@ normality result is an independent sufficient input for later normal
 operator-family arguments, which must still verify all their other
 hypotheses, including physical adjoint compatibility where required.
 
+\section{The symmetric path in arbitrary physical alphabets}
+
+The interpolation of Section~5 first restricts each local Hilbert space to
+the span of its tensor (\texttt{REsubmission.tex}, lines 1584--1586). For
+tensors with arbitrary physical alphabets this restriction is the polar
+factorization $A_p=F_pB_p$, and each endpoint operator is compressed to
+$F_p^\dagger T F_p$. The compression is not an extra premise: an exact action
+decomposition of $T$ on a one-site injective $A_p$ forces
+$F_pF_p^\dagger sF_p=sF_p$ on every physical slice $s$ of $T$, because the
+letters of $B_p$ are linearly independent. Action and fusion decompositions
+therefore compress with unchanged maps, and the square-alphabet mixed operator
+of the compressed endpoints, included isometrically in the common physical
+space, acts exactly on the enlarged mixed tensor at every parameter. With
+equal chosen raw L matrices it fuses with the original multiplicities. The
+periodic ground projection of the enlarged mixed Hamiltonian is continuous on
+the closed interval and equals the ground projection of the canonical parent
+at each endpoint.\footnote{\leanid{MPSTensor.MPOSymmetry.arbitraryPhysicalMixedMPO},
+    \leanid{MPSTensor.MPOSymmetry.isMPOFusionAlgebra_arbitraryPhysicalMixedMPO},
+    and
+    \leanid{MPSTensor.MPOSymmetry.tendsto_arbitraryPhysicalMixed_groundSpace_starProjection},
+    in \doclink{TNLean/MPS/Symmetry/MPOSymmetry/ArbitraryPhysicalMixedMPO} and
+    \doclink{TNLean/MPS/Symmetry/MPOSymmetry/ArbitraryPhysicalMixedGroundProjection}.}
+Commutation of the path Hamiltonians with the common operators and the
+block-injective construction for degenerate ground spaces
+(lines 1695 onwards) remain open.
+
 \section{Elimination plan}
 
 Use the completed exact arbitrary-boundary reconstruction and the actual
