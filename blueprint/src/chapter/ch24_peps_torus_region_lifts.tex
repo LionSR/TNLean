@@ -1,0 +1,773 @@
+\section{Lifting torus regions to the plane}%
+\label{sec:peps_torus_region_lifts}
+
+This section lifts a region of the torus to a union of closed unit squares in
+the plane. For a simply connected region the lift has no holes, and walks in
+the complement can be chosen with prescribed crossing numbers of the two
+seams.
+
+\begin{lemma}[Integer fibers and affine lifts of the additive circle]%
+    \label{thm:peps_additive_circle_lift_coordinates}
+    \lean{TNLean.PEPS.exists_intCast_eq_of_addCircle_eq_zmod_val,
+        TNLean.PEPS.eq_affine_of_addCircle_eq}
+    \leanok
+    Let $n>0$ be an integer, let $z\in\mathbb Z/n\mathbb Z$, and let
+    $\bar z\in\{0,\ldots,n-1\}$ be its standard representative.
+    If $x\in\mathbb R$ has the same image as $\bar z$ in
+    $\mathbb R/n\mathbb Z$, there is an integer $j$ with $j=x$ and
+    $j\equiv z\pmod n$.
+
+    For any real period $p$, let $f:[0,1]\to\mathbb R$ be continuous.
+    If its image in the additive circle satisfies $[f(t)]=[f(0)]+[td]$
+    for every $t\in[0,1]$, then $f(t)=f(0)+td$ throughout the interval.
+    These are auxiliary
+    arithmetic and covering-space identities used for the cell and
+    edge paths of the block domains in \cite[\S6.3]{Schuch2010PEPS}.
+\end{lemma}
+\begin{proof}\leanok
+    The first equality means that $x-\bar z$ is an integer multiple
+    of $n$, so $x$ is an integer with the stated residue. In the
+    second assertion, $f$ and the affine path have identical projections
+    and agree initially; uniqueness of a covering lift on the connected
+    interval makes them equal.
+\end{proof}
+
+\begin{lemma}[Finite compact cell images]%
+    \label{thm:peps_finite_compact_cell_images}
+    \lean{TNLean.PEPS.locallyPathConnectedSpace_iUnion_range}
+    \leanok
+    Let $K$ be compact and locally path connected, let $Y$ be Hausdorff,
+    and let $f_i:K\to Y$ be a finite family of continuous maps. Then
+    $\bigcup_i f_i(K)$ is locally path connected.
+\end{lemma}
+\begin{proof}\leanok
+    The finite disjoint union of copies of $K$ is compact and locally
+    path connected. Its natural continuous surjection onto the stated
+    union is closed, hence is a quotient map. Local path connectedness
+    passes through this quotient map.
+\end{proof}
+
+\begin{lemma}[Closed-cell regions and geometric coordinate lifts]%
+    \label{thm:peps_torus_region_realization}
+    \lean{TNLean.PEPS.torusRealProjection_apply,
+        TNLean.PEPS.torusRealProjection,
+        TNLean.PEPS.continuous_torusRealProjection,
+        TNLean.PEPS.torusVertexPoint,
+        TNLean.PEPS.torusVertexPoint_eq_projection,
+        TNLean.PEPS.torusVertexPoint_intCast,
+        TNLean.PEPS.torusVertexPoint_right,
+        TNLean.PEPS.torusVertexPoint_up,
+        TNLean.PEPS.torusClosedUnitCell,
+        TNLean.PEPS.torusRegionRealization,
+        TNLean.PEPS.torusVertexPoint_mem_torusRegionRealization,
+        TNLean.PEPS.torusRightUnitPath,
+        TNLean.PEPS.torusUpUnitPath,
+        TNLean.PEPS.torusRightUnitPath_apply,
+        TNLean.PEPS.torusUpUnitPath_apply,
+        TNLean.PEPS.isCompact_torusClosedUnitCell,
+        TNLean.PEPS.isCompact_torusRegionRealization,
+        TNLean.PEPS.torusRegionRealization_locallyPathConnectedSpace,
+        TNLean.PEPS.torusRightUnitPath_mem_torusRegionRealization,
+        TNLean.PEPS.torusUpUnitPath_mem_torusRegionRealization,
+        TNLean.PEPS.exists_isTorusRegionIntegerLift_of_continuousLift,
+        TNLean.PEPS.exists_continuousLift_torusRegionRealization,
+        TNLean.PEPS.exists_isTorusRegionIntegerLift_of_isSimplyConnected}
+    \leanok
+    Let $w,H>0$, let
+    $\pi:\mathbb R^2\to(\mathbb R/w\mathbb Z)\times
+        (\mathbb R/H\mathbb Z)$ be the quotient map, and let $p_v$
+    be the image of the native vertex coordinates. Define the closed
+    cell and the realized region by
+    \begin{align}
+        Q_v & =p_v+\pi([-1/2,1/2]^2), &
+        X_R & =\bigcup_{v\in R}Q_v.
+    \end{align}
+    The cells and their finite union are compact, and $X_R$ is locally
+    path connected. Every native site in $R$ lies in $X_R$. The paths
+    $t\mapsto p_v+\pi(t,0)$ and $t\mapsto p_v+\pi(0,t)$ have the
+    native neighboring sites as their endpoints; whenever both sites
+    belong to $R$, the whole path lies in $X_R$, including across a
+    periodic seam.
+
+    Any continuous lift $F:X_R\to\mathbb R^2$ of the inclusion
+    yields integer coordinates $L:R\to\mathbb Z^2$ which project to
+    the native vertices and preserve every internal horizontal and
+    vertical unit step. In particular, if $X_R$ is simply connected
+    and a site $o\in R$ is fixed, such a continuous lift and such
+    integer coordinates exist.
+
+    This closed-cell convention is an auxiliary geometric realization
+    of the block domains drawn in \cite[\S6.3]{Schuch2010PEPS}.
+    Simple connectedness is the ordinary topological hypothesis on
+    the cell union; no disk predicate, group flatness assumption,
+    or entropy conclusion is introduced. Its relation to arbitrary
+    disk regions in Theorem~6.9 remains recorded in
+    \cite{gap:rmp_peps_quantum_double_g_isometry}.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:peps_additive_circle_lift_coordinates, thm:peps_finite_compact_cell_images}
+    The quotient projection is continuous, so each projected closed
+    square is compact. The finite coproduct of the compact convex
+    squares maps continuously and surjectively onto $X_R$. This is a
+    closed quotient map into a Hausdorff space, and local path
+    connectedness therefore passes to $X_R$. Splitting a native unit
+    path at its midpoint places its first half in the initial cell and
+    its second half in the final cell.
+
+    Applying covering-space lifting to the two coordinate maps into
+    $\mathbb R/w\mathbb Z$ and $\mathbb R/H\mathbb Z$ separately
+    assigns integer coordinates to every lift of a native site. Along an
+    internal unit path, uniqueness of the lift identifies the lifted
+    path with the corresponding affine unit segment. Its endpoints
+    thus satisfy the exact integer unit-step equations.
+\end{proof}
+
+\begin{lemma}[The planar lift of the closed-cell region]%
+    \label{thm:peps_torus_region_planar_lift}
+    \lean{TNLean.PEPS.continuousLift_torusClosedUnitCell,
+        TNLean.PEPS.continuousLift_torusRegionRealization_isClosedEmbedding,
+        TNLean.PEPS.torusRegionPlanarRealization,
+        TNLean.PEPS.range_continuousLift_torusRegionRealization,
+        TNLean.PEPS.torusRegionLiftHomeomorph,
+        TNLean.PEPS.exists_integerLift_torusRegionPlanarRealization}
+    \leanok
+    \uses{thm:peps_torus_region_realization}
+    Let $F:X_R\to\mathbb R^2$ be a continuous lift of the inclusion
+    into the real torus. On every native cell,
+    \begin{align}
+        F(p_v+\pi(d)) & =F(p_v)+d,
+                      & d          & \in[-1/2,1/2]^2.
+    \end{align}
+    The lift is a closed embedding. There are integer site coordinates
+    $L(v)=F(p_v)$ which project to the original native vertices and
+    preserve every internal unit step, and
+    \begin{align}
+        F(X_R) & =P_L:=\bigcup_{v\in R}
+        \bigl(L(v)+[-1/2,1/2]^2\bigr).
+    \end{align}
+    Thus $F$ induces a homeomorphism from the torus cell union
+    to this finite planar cell union.
+
+    This is an auxiliary geometric consequence of the covering lift,
+    supporting the block domains of \cite[\S6.3]{Schuch2010PEPS}.
+    The homeomorphism transfers simple connectedness to the planar
+    union, which is the domain of the exterior contour argument below.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:peps_additive_circle_lift_coordinates}
+    The radial segment from $p_v$ to $p_v+\pi(d)$ stays in the same
+    closed cell. Uniqueness of its covering lift identifies the lifted
+    segment with $t\mapsto F(p_v)+td$. Two neighboring cells have a
+    common side midpoint; evaluating its lift from the two cells shows
+    that their lifted centers differ by the prescribed unit step.
+    The fibers over native sites have integer coordinates. These
+    identities identify the image cell by cell. Since $\pi\circ F$
+    is the inclusion, $F$ is injective. Compactness of $X_R$ and the
+    Hausdorff property of the plane make this continuous injection a
+    closed embedding, giving the stated homeomorphism.
+\end{proof}
+
+\begin{lemma}[Separation of distinct period copies of a lifted region]%
+    \label{thm:peps_torus_region_period_separation}
+    \lean{TNLean.PEPS.torusRealProjection_periodVector,
+        TNLean.PEPS.torusPeriodVector,
+        TNLean.PEPS.torusPeriodVector_eq_zero_iff,
+        TNLean.PEPS.torusRealProjection_eq_iff_exists_periodVector,
+        TNLean.PEPS.continuousLift_torusRegionRealization_periodTranslate_disjoint,
+        TNLean.PEPS.torusRegionPlanarRealization_periodTranslate_disjoint,
+        TNLean.PEPS.preimage_torusRegionRealization_eq_iUnion_periodTranslate,
+        TNLean.PEPS.torusRegionPlanarRealization_cell_periodTranslate_disjoint,
+        TNLean.PEPS.exists_integerLift_periodTranslate_disjoint_of_isSimplyConnected}
+    \leanok
+    \uses{thm:peps_torus_region_realization,
+        thm:peps_torus_region_planar_lift}
+    Let the torus periods $w,H$ be positive, and let
+    $F:X_R\to\mathbb R^2$ be a continuous lift of the inclusion.
+    For $j=(j_1,j_2)\in\mathbb Z^2$, write
+    $\delta_j=(j_1w,j_2H)$. Two plane points have the same projection
+    exactly when their difference is some $\delta_j$, and
+    \begin{align}
+        \pi^{-1}(X_R) & =\bigcup_{j\in\mathbb Z^2}(P_L+\delta_j).
+    \end{align}
+    If $j\ne0$, then
+    \begin{align}
+        F(X_R)\cap\bigl(F(X_R)+\delta_j\bigr) & =\varnothing, \\
+        P_L\cap(P_L+\delta_j)                 & =\varnothing.
+    \end{align}
+    In particular, individual closed cells in distinct period copies
+    cannot meet, even along a side or at a corner. If the cell
+    union $X_R$ is simply connected and a site in $R$ is fixed, there
+    exists an integer unit-step lift $L$ satisfying this separation
+    for every nonzero $j$.
+
+    This is an auxiliary geometric statement for the block domains of
+    \cite[\S6.3]{Schuch2010PEPS}. The exterior path-existence argument
+    remains separate; see \cite{gap:rmp_peps_quantum_double_g_isometry}.
+\end{lemma}
+\begin{proof}\leanok
+    The additive-circle fibers are integer multiples of the two periods.
+    Comparing a point with the lift of its projection gives the stated
+    union of all period copies. The projection of $\delta_j$ is zero. If
+    $F(q)+\delta_j=F(p)$, projecting to the torus gives $q=p$,
+    because the lift is a section of the projection. Subtracting
+    $F(p)$ then gives $\delta_j=0$. Positivity of both periods
+    forces $j=0$, a contradiction. The exact image description in
+    Lemma~\ref{thm:peps_torus_region_planar_lift} gives the statement
+    for $P_L$, and restricting to individual cells gives the last
+    separation assertion. Simple connectedness yields the continuous
+    lift and hence the required integer coordinates.
+\end{proof}
+
+% Geometric follow-up target (SCP10, local source lines 1935--1990):
+% Let \Gamma be the native torus graph with both dimensions at least three,
+% let \Gamma[R] be nonempty and connected, and suppose X_R is simply connected.
+% For every crossing edge f write a_f\in R and b_f\in R^c for its endpoints.
+% Given f_0,f and an internal walk P:a_{f_0}\leadsto a_f, prove that there is
+% an exterior walk Q:b_{f_0}\leadsto b_f in \Gamma[R^c] such that
+% \operatorname{wind}(\iota Q)=
+% \operatorname{wind}([b_{f_0},a_{f_0}]*(\iota P)*[a_f,b_f]).
+% Here \iota includes an induced-graph walk into \Gamma and * concatenates
+% walks in traversal order. Appending the chosen exterior root paths on both
+% sides then gives a complement loop with the winding of the combined
+% boundary route, whose holonomy is m_f m_{f_0}^{-1}.
+
+\begin{lemma}[No finite holes in simply connected closed-cell regions]%
+    \label{thm:peps_integer_cell_no_holes}
+    \lean{TNLean.PEPS.sum_integerGrid_curl_eq_boundary,
+        TNLean.PEPS.integerClosedCellUnion,
+        TNLean.PEPS.integerClosedCellUnion_locallyPathConnectedSpace,
+        TNLean.PEPS.not_finite_integerCellHole_of_isSimplyConnected,
+        TNLean.PEPS.infinite_integerCellComplement_component_of_isSimplyConnected,
+        TNLean.PEPS.integerClosedCellUnion_image_eq_torusRegionPlanarRealization,
+        TNLean.PEPS.exists_integerLift_no_finite_cellHole_of_isSimplyConnected}
+    \leanok
+    \uses{thm:peps_torus_region_realization, thm:peps_torus_region_planar_lift}
+    For a finite set $A\subset\mathbb Z^2$, the union
+    \begin{align}
+        P_A & =\bigcup_{a\in A}\bigl(a+[-1/2,1/2]^2\bigr)
+        \label{eq:peps_integer_cell_union}
+    \end{align}
+    is locally path connected. For any real edge values $H_a,V_a$ and finite $K\subset\mathbb Z^2$,
+    \begin{align}
+        \sum_{a\in K}\bigl(H_a+V_{a+(1,0)}-H_{a+(0,1)}-V_a\bigr)
+        \label{eq:peps_integer_grid_curl}
+    \end{align}
+    equals the signed sum over the exposed boundary edges of $K$. If $P_A$ is simply connected, no finite $K\subset\mathbb Z^2$ with $K\setminus A\ne\varnothing$ satisfies $a+\{\pm e_1,\pm e_2\}\subset K\cup A$ for all $a\in K$; hence every $\ell^1$-connected component of $\mathbb Z^2\setminus A$ is infinite. Consequently, if $X_R$ is simply connected and $o\in R$, there exists a unit-step integer lift $L:R\to\mathbb Z^2$ (Lemma~\ref{thm:peps_torus_region_planar_lift}) such that every missing-cell component of $P_L=P_{L(R)}$ is infinite (an auxiliary no-hole step for \cite[Theorem~6.9]{Schuch2010PEPS}).
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:peps_finite_compact_cell_images}
+    Local path connectedness follows from Lemma~\ref{thm:peps_finite_compact_cell_images}. Suppose a finite $K\subset\mathbb Z^2$ satisfies $a+\{\pm e_1,\pm e_2\}\subset K\cup A$ for all $a\in K$ and contains $0\notin A$. Simple connectedness of $P_A$ yields a continuous angular lift $\theta:P_A\to\mathbb R$; subtracting $\theta/(2\pi)$ from the principal argument defines a corner potential whose horizontal increments vanish and whose vertical increment equals $\mathbf 1_{\{\text{edge crosses }(-\infty,0)\times\{0\}\}}$. Along $\partial K\subset P_A$, (\ref{eq:peps_integer_grid_curl}) vanishes by interior cancellation yet equals $-1$ from the branch cut, a contradiction. Lemma~\ref{thm:peps_torus_region_planar_lift} transfers this to $X_R\cong P_L$.
+\end{proof}
+
+\begin{definition}[Safe graph of an exterior integer-cell collar]%
+    \label{def:peps_integer_exterior_collar_graph}
+    \lean{TNLean.PEPS.integerCellCenter,
+        TNLean.PEPS.integerClosedCell,
+        TNLean.PEPS.integerExteriorCollar,
+        TNLean.PEPS.IsIntegerCellNear,
+        TNLean.PEPS.integerExteriorBand,
+        TNLean.PEPS.integerExteriorCollarGraph}
+    \leanok
+    \uses{thm:peps_integer_cell_no_holes}
+    Let $A\subset\mathbb Z^2$ be finite, with occupied closed-cell union
+    $P_A$. Its exterior collar is
+    \begin{align}
+        E_A=\bigl(P_A+[-3/4,3/4]^2\bigr)\setminus P_A.
+    \end{align}
+    The exterior band consists of the unoccupied integer centers $q$
+    such that $\|q-a\|_\infty\leq1$ for some $a\in A$.
+    Join two such centers by an edge precisely when they are horizontal
+    or vertical neighbors and one common occupied center $a\in A$
+    satisfies both $\|q-a\|_\infty\leq1$ and $\|r-a\|_\infty\leq1$.
+    The common-center requirement controls the whole segment, rather
+    than its endpoints alone.
+\end{definition}
+
+\begin{lemma}[Integer centers of the exterior collar]%
+    \label{thm:peps_integer_exterior_collar_centers}
+    \lean{TNLean.PEPS.mem_integerClosedCell_iff,
+        TNLean.PEPS.mem_integerClosedCell_add_of_abs_le_one,
+        TNLean.PEPS.integerCellCenter_mem_closedCellUnion_iff,
+        TNLean.PEPS.integerCellCenter_mem_exteriorCollar_iff}
+    \leanok
+    \uses{def:peps_integer_exterior_collar_graph}
+    The closed cell at $a$ consists exactly of the points whose two
+    coordinate distances from $a$ are at most $1/2$. An integer center
+    belongs to $P_A$ exactly when it belongs to $A$, and belongs to
+    $E_A$ exactly when it belongs to the exterior band.
+\end{lemma}
+\begin{proof}\leanok
+    A distinct integer center cannot be within $1/2$ in both coordinates.
+    In the expanded cells the coordinate distances are at most $5/4$;
+    integer distances are therefore at most one. Conversely, a distance
+    at most one splits into an offset of at most $1/2$ within the cell
+    and an offset of at most $1/2$ within the collar square.
+\end{proof}
+
+\begin{lemma}[Continuous collar paths from safe exterior walks]%
+    \label{thm:peps_integer_exterior_collar_paths}
+    \lean{TNLean.PEPS.integerExteriorCollarGraph_segment_subset,
+        TNLean.PEPS.joinedIn_integerExteriorCollar_of_reachable}
+    \leanok
+    \uses{def:peps_integer_exterior_collar_graph}
+    Every edge of the safe exterior graph has its entire straight
+    segment inside $E_A$. Hence any graph walk between two band centers
+    gives a continuous path between them contained in $E_A$.
+    This is an auxiliary geometric assertion for
+    \cite[proof of Theorem~6.9]{Schuch2010PEPS}. The contour theorem below derives connectivity of the safe graph
+    from simple connectedness of the occupied closed-cell union.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:peps_integer_exterior_collar_centers}
+    Both endpoint centers lie within coordinate distance one of their
+    common occupied center. Convexity preserves these bounds along the
+    segment, which is therefore inside the collar enlargement. If a
+    closed occupied cell met a horizontal or vertical unit segment,
+    integer arithmetic would force its center to be one of the two
+    endpoints. Both endpoints are unoccupied, so the segment is outside
+    $P_A$. Concatenating the edge segments proves the path assertion.
+\end{proof}
+
+\input{chapter/ch24_peps_integer_contact_connectivity}
+
+\begin{definition}[Horizontal-ray potential of a finite edge flow]%
+    \label{def:peps_integer_contour_ray_potential}
+    \lean{TNLean.PEPS.integerContourRayPotential}\leanok
+    Index each oriented lattice edge by its starting corner
+    $a-(1/2,1/2)$, with horizontal edges pointing east and vertical
+    edges pointing north. For a finitely supported signed vertical
+    flow $V:\mathbb Z^2\to\mathbb Z$, define its ray potential at the
+    cell center $q$ by
+    \begin{align}
+        W(q)=\sum_{\substack{a_2=q_2 \\q_1<a_1}}V(a).
+    \end{align}
+    The sum is finite because $V$ is finitely supported.
+\end{definition}
+
+\begin{lemma}[Discrete gradients of the contour ray potential]%
+    \label{thm:peps_integer_contour_ray_potential}
+    \lean{TNLean.PEPS.integerContourRayPotential_east,
+        TNLean.PEPS.integerContourRayPotential_north}
+    \leanok
+    \uses{def:peps_integer_contour_ray_potential}
+    Write $e=(1,0)$ and $n=(0,1)$. For any finitely supported signed
+    vertical flow,
+    \begin{align}
+        W(q+e)-W(q)=-V(q+e).
+    \end{align}
+    If a finitely supported horizontal flow $H$ satisfies conservation
+    \begin{align}
+        H(a)+V(a)-H(a-e)-V(a-n)=0
+        \qquad(a\in\mathbb Z^2),
+    \end{align}
+    then also $W(q+n)-W(q)=H(q+n)$.
+    These are auxiliary winding-potential identities for the contour
+    argument associated with \cite[proof of Theorem~6.9]{Schuch2010PEPS}.
+    Identification of the flow with an exposed contour and
+    connectivity of that contour are separate geometric assertions.
+\end{lemma}
+\begin{proof}\leanok
+    Moving the ray one cell east removes exactly the vertical edge
+    indexed by $q+e$. Conservation writes the difference between the
+    vertical flow and its north translate as the east translate of
+    the horizontal flow minus the horizontal flow itself. Applying the
+    additive finite ray sum to this equality, translating the
+    finite supports, and using the east-increment identity telescopes the
+    horizontal difference to the single term $H(q+n)$.
+\end{proof}
+
+\begin{lemma}[Connected missing-cell lattice of a simply connected region]%
+    \label{thm:peps_integer_cell_exterior_connected}
+    \lean{TNLean.PEPS.integerCellComplement_connected_of_isSimplyConnected,
+        TNLean.PEPS.exists_integerLift_integerCellComplement_connected_of_isSimplyConnected}
+    \leanok
+    \uses{thm:peps_integer_cell_no_holes}
+    Let $A\subset\mathbb Z^2$ be finite, and suppose its closed-cell union
+    $P_A=\bigcup_{a\in A}(a+[-1/2,1/2]^2)$ is simply connected. Then
+    the four-neighbor lattice on $\mathbb Z^2\setminus A$ is connected.
+    Consequently, a simply connected torus region admits an
+    integer unit-step lift whose entire missing-cell lattice is connected.
+
+    These are plane-complement walks. They need not stay in the
+    exterior collar, so their torus projections are not yet asserted
+    to avoid all period copies of the region. The following contour theorem restricts the walks to the genuine
+    exterior collar, as required in
+    \cite[proof of Theorem~6.9]{Schuch2010PEPS}.
+\end{lemma}
+\begin{proof}\leanok
+    Enclosing $A$ in a finite integer box allows all vertices outside that box
+    to be connected to one exterior corner by integer row and column
+    walks avoiding the box. Every missing-cell component is infinite
+    by the preceding no-hole theorem, and hence contains a vertex
+    outside the box. Each component therefore meets the same exterior
+    component, proving connectedness. The torus lift given
+    by the no-hole theorem has the same infinitude property, so the
+    argument applies to its integer centers as well.
+\end{proof}
+
+\input{chapter/ch24_peps_integer_boundary_contour}
+
+\begin{lemma}[Exclusion of foreign period copies from an exterior collar]%
+    \label{thm:peps_torus_region_exterior_collar}
+    \lean{TNLean.PEPS.disjoint_torusRegionPlanarRealization_add_collar_periodTranslate,
+        TNLean.PEPS.torusRealProjection_not_mem_of_mem_planarExteriorCollar,
+        TNLean.PEPS.exists_integerLift_exteriorCollar_of_isSimplyConnected}
+    \leanok
+    \uses{thm:peps_torus_region_period_separation,
+        thm:peps_torus_region_realization,
+        thm:peps_torus_region_planar_lift}
+    Let $w,H>0$, and let a continuous lift of the
+    closed-cell region $X_R$ have planar image
+    $P=\bigcup_{v\in R}(L(v)+[-1/2,1/2]^2)$ with integer centers.
+    Put $E=[-3/4,3/4]^2$, and let $P_j=P+(wj_1,Hj_2)$ be its period
+    copies. Then
+    \begin{align}
+        (P+E)\cap P_j                   & =\varnothing\qquad(j\neq0), \\
+        \pi\bigl((P+E)\setminus P\bigr) & \subseteq X_R^c.
+    \end{align}
+    Here addition of sets is Minkowski addition. If $X_R$ is simply
+    connected and contains a native site, there is an integer unit-step
+    lift $L$ with this exterior-collar property; no covering lift is
+    assumed as input in that conclusion.
+
+    This is auxiliary exterior geometry for
+    \cite[proof of Theorem~6.9]{Schuch2010PEPS}. Collar paths between exterior integer centers follow from the
+    connected safe exterior graph established above.
+\end{lemma}
+\begin{proof}\leanok
+    Disjoint closed unit squares with integer centers differ by at
+    least two in some coordinate; otherwise their midpoint belongs
+    to both. A point in an enlarged cell and in a foreign unit cell
+    would put the two center coordinates within
+    $1/2+3/4+1/2=7/4<2$ in both directions, a contradiction.
+    The full preimage of $X_R$ is the union of the period copies $P_j$.
+    A point of the exterior collar lies in neither $P$ nor any foreign
+    copy, proving the projection assertion. In the simply connected
+    case, covering-space lifting gives the genuine lift and its
+    integer centers, so the same argument applies.
+\end{proof}
+
+\input{chapter/ch24_peps_torus_integer_cell_lift}
+
+\begin{lemma}[Closure gauges from a given integer lift]%
+    \label{thm:peps_torus_region_integer_lift_gauge}
+    \lean{TNLean.PEPS.IsTorusRegionIntegerLift.injective,
+        TNLean.PEPS.IsTorusRegionIntegerLift,
+        TNLean.PEPS.int_ediv_step_eq_add_seam_indicator,
+        TNLean.PEPS.torusRegionLiftGauge,
+        TNLean.PEPS.torusRegionLiftGauge_right,
+        TNLean.PEPS.torusRegionLiftGauge_up,
+        TNLean.PEPS.torusRegionLiftGauge_gradient,
+        TNLean.PEPS.regularRegionGaugeResidual_torusRegionLiftGauge,
+        TNLean.PEPS.torusRegionLiftRootGauge,
+        TNLean.PEPS.torusRegionLiftRootGauge_gradient,
+        TNLean.PEPS.regularRegionTreeGauge_eq_torusRegionLiftRootGauge,
+        TNLean.PEPS.regularRegionTreeCycleResidual_torusClosure_eq_one}
+    \leanok
+    \uses{thm:peps_regular_region_tree_gauge,
+        thm:peps_regular_torus_closure_cut_identification}
+    Let both torus circumferences $w,H$ be at least three, and let
+    $R$ be a set of native torus vertices. Suppose a map
+    $L:R\to\mathbb Z^2$ projects modulo $(w,H)$ to the original
+    vertices and preserves every internal rightward and upward unit
+    step. In particular, $L$ is injective. The arithmetic deck coordinate
+    $\lfloor j/n\rfloor$ increases by one under $j\mapsto j+1$ precisely
+    when $j+1\equiv0\pmod n$, and otherwise stays unchanged. For commuting $g,h\in G$,
+    define
+    \begin{align}
+        k_v & =h^{\lfloor L_x(v)/w\rfloor}
+        g^{-\lfloor L_y(v)/H\rfloor}.
+    \end{align}
+    On a native rightward step the gauge changes by left multiplication
+    by $h$ precisely at the horizontal seam; on an upward step it
+    changes by left multiplication by $g^{-1}$ precisely at the vertical
+    seam. For every internal edge, ordered from $s$ to $t$,
+    \begin{align}
+        k_tk_s^{-1} & =u_e,\qquad k_t^{-1}u_ek_s=1,
+    \end{align}
+    where the native closure assignment is $h^{-1}$ on a horizontal
+    seam edge, $g$ on a vertical seam edge, and the identity elsewhere.
+    Right normalization $k_v\mapsto k_vk_o^{-1}$ preserves the gradient.
+    For finite $G$, this normalized gauge equals the gauge obtained from
+    any spanning tree rooted at $o$; hence all its cycle residuals equal
+    the identity.
+
+    This is an auxiliary consequence of the given arithmetic lift,
+    supporting the seam and disentangling arguments in
+    \cite[\S5.3 and Theorem~6.9]{Schuch2010PEPS}. It neither defines a
+    disk nor establishes lifts for arbitrary disk regions. The latter
+    geometric theorem and the removal of sector-dependent crossing
+    factors remain separate, as recorded in
+    \cite{gap:rmp_peps_quantum_double_g_isometry}.
+\end{lemma}
+\begin{proof}\leanok
+    Euclidean division shows that the quotient of an integer coordinate
+    increases by one exactly when its residue wraps through zero.
+    The unit-step hypotheses therefore give the two gauge-step
+    identities; commutativity moves the vertical factor past the
+    horizontal factor. A seam reverses the native ordered-edge
+    orientation, yielding $h^{-1}$ and $g$ in the respective gradients.
+    All other internal gradients are the identity. Right normalization
+    cancels in each gradient. Uniqueness in the tree-gradient bijection
+    identifies the normalized gauge with the spanning-tree gauge.
+\end{proof}
+
+\begin{lemma}[Crossing numbers of projected integer steps]%
+    \label{thm:peps_torus_integer_unit_step_winding}
+    \lean{TNLean.PEPS.torusDirectedWinding_eq_of_integerUnitStep,
+        TNLean.PEPS.torusIntegerDeckCoordinate}
+    \leanok
+    \uses{thm:peps_torus_walk_winding,
+        thm:peps_torus_region_integer_lift_gauge}
+    Let the torus periods $w,H$ be at least three. For $a\in\mathbb Z^2$,
+    put
+    \begin{align}
+        D(a) & =\left(\left\lfloor a_1/w\right\rfloor,
+        \left\lfloor a_2/H\right\rfloor\right).
+    \end{align}
+    If $a,b$ differ by one horizontal or vertical unit step, then the
+    oriented crossing pair of their projected native edge is $D(b)-D(a)$.
+    This applies to interior, boundary, and exterior steps alike.
+\end{lemma}
+\begin{proof}\leanok
+    In a positive horizontal step, Euclidean division changes precisely
+    when the standard residue crosses the horizontal seam. The vertical
+    case is identical. Reversing a step negates its crossing pair.
+\end{proof}
+
+\begin{lemma}[Exterior lattice walks from a given plane path]%
+    \label{thm:peps_torus_exterior_path_approximation}
+    \lean{TNLean.PEPS.exists_complementWalk_of_exterior_planePath}
+    \leanok
+    \uses{thm:peps_torus_region_realization,
+        thm:peps_torus_walk_winding}
+    Let the torus periods $w,H$ be at least three, and let $X_R$ be
+    the closed-cell realization of a finite native region $R$.
+    Let $a,b\in\mathbb Z^2$ project to exterior native vertices $v,t$.
+    Suppose a continuous plane path $\gamma$ joins $a$ to $b$ and
+    its torus projection avoids $X_R$ at every time. There is a walk
+    $Q:v\to t$ in the induced native complement with crossing numbers
+    \begin{align}
+        N(Q)=\left(
+        \left\lfloor\frac{b_1}{w}\right\rfloor
+        -\left\lfloor\frac{a_1}{w}\right\rfloor,
+        \left\lfloor\frac{b_2}{H}\right\rfloor
+        -\left\lfloor\frac{a_2}{H}\right\rfloor
+        \right).
+    \end{align}
+    Thus the lattice walk has the prescribed lifted endpoint displacement.
+    This is an auxiliary path approximation for the complement argument
+    in \cite[proof of Theorem~6.9]{Schuch2010PEPS}. The path $\gamma$ is taken as given in this approximation theorem;
+    the preceding contour construction provides such paths for the
+    required exterior centers of simply connected regions.
+\end{lemma}
+\begin{proof}\leanok
+    An exterior point belongs to an open rectangle containing one cell,
+    two cells sharing a side, or four cells sharing a corner, all with
+    exterior lattice centers. At a side or corner every touching closed
+    cell must be exterior, since the point avoids $X_R$. These rectangles
+    cover the lifted exterior. Subdividing the compact parameter interval
+    places each subpath in one rectangle, where rounded endpoints
+    can be connected through exterior lattice centers
+    by a horizontal and a vertical step. Concatenating gives an integer
+    lattice walk between $a$ and $b$. Projection gives a native
+    complement walk. The crossing pair of each unit step is the change
+    in its integer deck coordinates; summation telescopes to the stated
+    endpoint difference.
+\end{proof}
+
+\begin{lemma}[Lifted exterior endpoints of a region route]%
+    \label{thm:peps_torus_region_boundary_lift}
+    \lean{TNLean.PEPS.torusVertexPoint_mem_torusRegionRealization_iff,
+        TNLean.PEPS.exists_exterior_integerUnitStep_of_isTorusRegionIntegerLift,
+        TNLean.PEPS.exists_exterior_integerEndpoints_of_regionWalk}
+    \leanok
+    \uses{thm:peps_torus_integer_unit_step_winding, thm:peps_torus_region_planar_lift}
+    A native site center belongs to the closed-cell union $X_R$ exactly
+    when its site belongs to $R$. For the crossing and walk assertions,
+    take both torus periods at least three. Suppose $L$ is an integer lift
+    preserving the unit steps within $R$, and put
+    $P=\bigcup_{v\in R}(L(v)+[-1/2,1/2]^2)$.
+    An edge from $v\in R$ to $t\notin R$ lifts to a unit step from
+    $L(v)$ to an integer point $b$ projecting to $t$, with
+    \begin{align}
+        b        & \in (P+[-3/4,3/4]^2)\setminus P, \\
+        N([v,t]) & =D(b)-D(L(v)).
+    \end{align}
+    More generally, let $p:v_0\to v$ be any native region walk, and
+    let $t_0,t$ be exterior neighbors of its endpoints. There are lifted
+    exterior integer endpoints $b_0,b$ in the same collar, projecting
+    to $t_0,t$, such that
+    \begin{align}
+        N([t_0,v_0]*p*[v,t]) & =D(b)-D(b_0).
+    \end{align}
+    Concatenation is written in traversal order. This gives the
+    endpoints and winding pair required in the complement argument of
+    \cite[proof of Theorem~6.9]{Schuch2010PEPS}; the connected safe exterior graph gives a collar path between them.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:peps_region_walk_winding}
+    A site center in a closed cell differs from its integer center,
+    modulo a period vector, by an integer in each interval $[-1/2,1/2]$.
+    Both differences vanish, proving the center assertion. Lifting a boundary
+    edge by its horizontal or vertical unit direction places its exterior
+    endpoint at the sum of its midpoint in the interior closed cell and
+    a half-unit displacement, so it belongs to the collar. It cannot
+    belong to $P$, since projection would put its exterior native center
+    in $X_R$. The preceding theorem gives the crossing pair of this step.
+    The interior walk has crossing pair $D(L(v))-D(L(v_0))$; adding the
+    two boundary crossings cancels the interior endpoint coordinates.
+\end{proof}
+
+\input{chapter/ch24_peps_complement_path_replacement}
+
+\begin{definition}[The rectangular grid obtained by cutting the torus seams]%
+    \label{def:peps_torus_rectangular_grid}
+    \lean{TNLean.PEPS.torusNonseamGraph,
+        TNLean.PEPS.torusNonseamGraph_le_torusGraph}
+    \leanok
+    \uses{def:peps_torus_geometry_translation}
+    On the torus vertices, retain only consecutive coordinate values
+    without wraparound. The result is the ordinary rectangular grid,
+    a subgraph of the periodic square lattice.
+\end{definition}
+
+\begin{lemma}[Connectivity of rectangles and their complements]%
+    \label{thm:peps_torus_rectangle_cut_connectivity}
+    \lean{TNLean.PEPS.torusNonseamGraph_compl_rectangle_connected,
+        TNLean.PEPS.torusGraph_compl_rectangle_connected,
+        TNLean.PEPS.torusNonseamGraph_rectangle_connected,
+        TNLean.PEPS.torusGraph_rectangle_connected,
+        TNLean.PEPS.nonempty_boundaryEdge_torusRectangle}
+    \leanok
+    \uses{def:peps_torus_rectangular_grid}
+    A bounded coordinate rectangle with positive side lengths is connected
+    in the ordinary grid, hence also in the periodic lattice.
+    If both side lengths are strictly smaller than the torus dimensions,
+    its complement is connected even without the wrap bonds. This last
+    assertion also holds for coordinate intervals clipped by the bounds
+    of the grid. A nonempty bounded rectangle starting at a positive
+    horizontal coordinate has a crossing bond on its left side.
+\end{lemma}
+
+\begin{proof}\leanok
+    Inside the rectangle, consecutive coordinate changes connect any two vertices.
+    For the complement, choosing one row and one column missed by the
+    rectangle lets every outside vertex reach their intersection along
+    an outside row or column, while a vertex at the lower left corner and
+    its immediate left neighbour give the crossing bond.
+\end{proof}
+
+\input{chapter/ch24_peps_simply_connected_complement}
+
+\begin{lemma}[Closure-region Grams from an integer lift]%
+    \label{thm:peps_torus_region_integer_lift_gram}
+    \lean{TNLean.PEPS.IsGIsometric.regularTwistedOpenRegionMatrix_torusRegionLift,
+        TNLean.PEPS.IsGIsometric.exists_positive_gram_torusClosureRegionMatrix_of_integerLift,
+        TNLean.PEPS.IsGIsometric.rank_torusClosureRegionMatrix_of_integerLift}
+    \leanok
+    Let the torus circumferences be at least three, and let $A$ be a
+    native regular $G$-isometric four-leg tensor. Equip a region $R$ with
+    an integer lift preserving all internal unit steps, and let $g,h$
+    commute. For the region matrix $M_R^{g,h}$ of the native
+    closure, the explicit lift gauge $k$ gives
+    \begin{align}
+        M_R^{g,h}(\sigma,x) & =M_R(\sigma,F_{g,h}(x)).
+    \end{align}
+    If $R$ is connected, there is a positive scalar $c_R$ such that
+    \begin{align}
+        (M_R^{g,h})^\dagger M_R^{g,h}
+         & =c_R\Pi_{\partial R}^{k,u(g,h)}.
+    \end{align}
+    When the boundary has $b>0$ bonds,
+    $\operatorname{rank}M_R^{g,h}=|G|^{b-1}$.
+    These conclusions follow from the given arithmetic lift, without
+    any separate flatness or block Gram hypothesis. They support the
+    seam-deformation argument of \cite[Theorem~6.9]{Schuch2010PEPS};
+    they do not establish lifts for arbitrary disk regions or identify
+    boundary maps for superpositions of distinct closures
+    \cite{gap:rmp_peps_quantum_double_g_isometry}.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:peps_torus_region_integer_lift_gauge, thm:peps_regular_region_gauge_gram, thm:peps_regular_torus_closure_cut_identification}
+    Expressing the native four-leg tensor on its four incident graph edges
+    preserves local regular isometry. Since the arithmetic lift gauge
+    has the native closure assignment as its internal gradient,
+    every internal residual equals the identity, and applying
+    Lemma~\ref{thm:peps_regular_region_gauge_gram} to the resulting
+    region matrix with the boundary map of this explicit gauge yields the claims.
+\end{proof}
+
+\begin{lemma}[Open-region rank from geometric simple connectedness]%
+    \label{thm:peps_torus_simply_connected_region_rank}
+    \lean{TNLean.PEPS.IsGIsometric.rank_torusClosureRegionMatrix_of_isSimplyConnected}
+    \leanok
+    Let both torus circumferences be at least three and let $A$ be a
+    native regular $G$-isometric four-leg tensor. Suppose the induced
+    native graph on a finite region $R$ is connected and the
+    closed-cell realization of $R$ in the real torus is simply connected.
+    For a commuting closure pair $g,h$ and a numbering of its $b>0$
+    crossing bonds, the twisted open-region coefficient matrix satisfies
+    \begin{align}
+        \operatorname{rank}M_R^{g,h} & =|G|^{b-1}.
+    \end{align}
+    No arithmetic lift, residual-flatness condition, or block Gram
+    identity is assumed. Geometric simple connectedness and native
+    graph connectivity are separate assumptions: closed cells may
+    meet at diagonal points. This is an auxiliary open-region rank
+    consequence of the boundary calculation in
+    \cite[Theorem~6.9]{Schuch2010PEPS}, not the full disk entropy theorem
+    or a coherent-superposition result
+    \cite{gap:rmp_peps_quantum_double_g_isometry}.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:peps_torus_region_realization, thm:peps_torus_region_integer_lift_gram}
+    Graph connectivity gives a region vertex, and simple connectedness
+    of the cell realization gives an integer lift preserving
+    every internal native unit step by
+    Lemma~\ref{thm:peps_torus_region_realization}. Applying the
+    integer-lifted region rank theorem,
+    Lemma~\ref{thm:peps_torus_region_integer_lift_gram}, to this lift completes the proof.
+\end{proof}
+
+\begin{lemma}[Canonical coordinates of a lifted torus region]%
+    \label{thm:peps_torus_region_integer_lift_coordinates}
+    \lean{TNLean.PEPS.regularProjectorTwistedRegionMatrix_coordinates_of_torusRegionIntegerLift,
+        TNLean.PEPS.regularProjectorTwistedRegionMatrix_exists_normalized_ancilla_of_torusRegionIntegerLift}
+    \leanok
+    \uses{thm:peps_torus_region_integer_lift_gauge}
+    Suppose a native torus region has the integer lift described in
+    Lemma~\ref{thm:peps_torus_region_integer_lift_gauge}. Choose a spanning
+    tree and root, and let $k^{g,h}$ be its normalized lift gauge. For
+    commuting closure labels $g,h$, the canonical tensor satisfies
+    \begin{align}
+        B_R^{g,h}(y,a,r,z;\theta)
+         & =B_R(y,a,r,z;F_{g,h}(\theta)),
+    \end{align}
+    where $F_{g,h}$ is the native transformed crossing configuration.
+    In particular, there are a positive constant $\gamma$ and one
+    normalized vector $\phi(a,r,z)$, independent of $g,h$, such that
+    \begin{align}
+        B_R^{g,h}(y,a,r,z;\theta)
+         & =\gamma\Pi_{\partial R}(y,F_{g,h}(\theta))\phi(a,r,z).
+    \end{align}
+    This is an auxiliary lifted-region form of the blocking and
+    boundary-coordinate calculations in \cite[\S6.2--6.3]{Schuch2010PEPS}.
+    It retains the sector-dependent boundary map. The covering-lift
+    and complementary-loop theorems provide the geometric choices for
+    simply connected regions with torus periods at least three.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:peps_regular_twisted_projector_coordinates, thm:peps_regular_region_projector_coordinates}
+    Every cycle residual is the identity by
+    Lemma~\ref{thm:peps_torus_region_integer_lift_gauge}. The exact twisted
+    coefficient formula therefore reduces to the untwisted coefficient
+    formula at the transformed crossing configuration. Applying the
+    normalized factorization of
+    Lemma~\ref{thm:peps_regular_region_projector_coordinates} to this
+    configuration yields a constant and ancillary vector depending only on
+    the region, the group, and the chosen tree and root.
+\end{proof}
