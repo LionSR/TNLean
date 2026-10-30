@@ -51,7 +51,7 @@ Source: PGVWC07, Theorem 9, lines 1195–1201. -/
       Matrix (Fin (D k.val)) (Fin (D (k.val + 1))) ℂ) (k : Fin N) :
     commonPhysicalSiteFamily d D A k.val =
       Function.extend (commonPhysicalEmbedding (fun j : Fin N ↦ d j.val) k) (A k) 0 := by
-  simp only [commonPhysicalSiteFamily, dif_pos k.isLt]
+  simp [commonPhysicalSiteFamily, k.isLt]
 
 /-- The actual scalar-endpoint state on the original dependent physical
 configuration space: its coefficients are read at the embedded configurations
@@ -89,9 +89,7 @@ private theorem commonPhysicalAlphabet_pos (d D : ℕ → ℕ) {N : ℕ}
   have hd : (∑ j : Fin N, d j.val) = 0 := Nat.eq_zero_of_not_pos hpos
   have hzero : obcScalarState D (commonPhysicalSiteFamily d D A) N hleft hright = 0 := by
     ext σ
-    have hi := (σ ⟨0, by omega⟩).isLt
-    rw [hd] at hi
-    omega
+    exact absurd ((σ ⟨0, by omega⟩).isLt.trans_eq hd) (Nat.not_lt_zero _)
   rw [hzero, norm_zero] at hnorm
   exact zero_ne_one hnorm
 
@@ -161,6 +159,7 @@ theorem ker_varyingPhysicalParentHamiltonian_eq_span (d D : ℕ → ℕ) {N : �
     exact commonPhysicalSiteFamily_apply d D A k
   have hC1' : ∀ k < N, Submodule.span ℂ (Set.range (C k)) = ⊤ := by
     intro k hk
+    change Submodule.span ℂ (Set.range (commonPhysicalSiteFamily d D A k)) = ⊤
     rw [commonPhysicalSiteFamily_apply d D A ⟨k, hk⟩, span_range_extend_physical]
     exact hC1 ⟨k, hk⟩
   have hstate : E (varyingPhysicalScalarState d D A hleft hright) = Ω :=

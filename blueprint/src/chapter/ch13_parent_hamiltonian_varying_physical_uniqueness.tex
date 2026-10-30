@@ -4,10 +4,10 @@ The adjacent open parent has a unique normalized ground-state line even when
 its physical dimensions vary from site to site. The length condition $N\ge2$
 is retained explicitly; see \cite{gap:pgvwc07_open_parent_domain}.
 
-\begin{definition}[Common-alphabet extension of the actual site families]
+\begin{definition}[Common-alphabet extension of the site families]
     \label{def:varying_physical_actual_site_extension}
     \lean{Matrix.commonPhysicalSiteFamily, Matrix.commonPhysicalSiteFamily_apply}
-    \notready
+    \leanok
     \uses{def:varying_physical_common_alphabet}
     For $0\le j<N$, let $B^{[j]}_i$ be $D_j\times D_{j+1}$ matrices with
     $0\le i<d_j$. Put $m=\sum_{j<N}d_j$ and choose the canonical inclusions
@@ -20,12 +20,12 @@ is retained explicitly; see \cite{gap:pgvwc07_open_parent_domain}.
     Families outside the finite chain are zero.
 \end{definition}
 
-\begin{definition}[The actual state on the original physical alphabets]
+\begin{definition}[The state on the original physical alphabets]
     \label{def:varying_physical_scalar_state}
     \lean{Matrix.varyingPhysicalScalarState}
-    \notready
+    \leanok
     \uses{def:varying_physical_actual_site_extension, def:varying_obc_scalar_state}
-    Suppose $D_0=D_N=1$. Read the actual common-alphabet product at the
+    Suppose $D_0=D_N=1$. Read the common-alphabet product at the
     embedded configurations. This gives the vector $\Omega$ on the original
     physical configuration space with coefficients
     \begin{align}
@@ -39,35 +39,33 @@ is retained explicitly; see \cite{gap:pgvwc07_open_parent_domain}.
 \begin{lemma}[Normalization on the original physical space]
     \label{lem:varying_physical_scalar_state_normalized}
     \lean{Matrix.norm_varyingPhysicalScalarState_eq_one}
-    \notready
+    \leanok
     \uses{def:varying_physical_scalar_state,
         lem:varying_physical_kernel_actual_pullback,
         lem:uniform_physical_parent_kernel_comparison,
         lem:varying_obc_scalar_state_normalized}
     Let $N\ge2$, $D_0=D_N=1$, and suppose that
-    $\sum_iB^{[j]}_iB^{[j]*}_i=I_{D_j}$ at each site. Then $\|\Omega\|=1$.
+    $\sum_iB^{[j]}_iB^{[j]\dagger}_i=I_{D_j}$ at each site. Then $\|\Omega\|=1$.
 \end{lemma}
-\begin{proof}
-    \notready
-    Extension by zero preserves the canonical row equations, so the actual
-    common-alphabet state $\widetilde\Omega$ has norm one. In particular the
-    common alphabet is nonempty. Its actual parent equation forces
+\begin{proof}\leanok
+    Extension by zero preserves the canonical row equations, so the common-alphabet state $\widetilde\Omega$ has norm one. In particular the
+    common alphabet is nonempty. Its parent equation forces
     $\widetilde\Omega=E\Omega$, where $E$ is the isometric physical extension.
     Hence $\|\Omega\|=\|E\Omega\|=1$.
 \end{proof}
 
-\begin{lemma}[The actual ground line for arbitrary physical dimensions]
+\begin{lemma}[The ground line for arbitrary physical dimensions]
     \label{lem:varying_physical_actual_parent_unique_line}
     \lean{Matrix.ker_varyingPhysicalParentHamiltonian_eq_span,
         Matrix.finrank_ker_varyingPhysicalParentHamiltonian_eq_one}
-    \notready
+    \leanok
     \uses{lem:varying_physical_scalar_state_normalized,
         lem:uniform_physical_parent_kernel_comparison,
         lem:varying_obc_actual_parent_unique_line,
         lem:varying_physical_parent_embedding_transport}
     Consider $N\ge2$ sites with arbitrary physical dimensions $d_j$, singleton
     endpoint bonds, and canonical row equations. Suppose each site family
-    spans its full rectangular matrix space. Let $H$ be the actual sum of the
+    spans its full rectangular matrix space. Let $H$ be the sum of the
     adjacent complementary pair projections on the original physical space.
     Then
     \begin{align}
@@ -75,10 +73,9 @@ is retained explicitly; see \cite{gap:pgvwc07_open_parent_domain}.
     \end{align}
     Since $H\ge0$, this is its unique ground-state line.
 \end{lemma}
-\begin{proof}
-    \notready
+\begin{proof}\leanok
     The extended site families retain the canonical row equations and their
-    full rectangular spans. Actual parent transport and the common-alphabet
+    full rectangular spans. Parent transport and the common-alphabet
     comparison carry every vector $v\in\ker H$ to a vector $Ev=cE\Omega$ in
     the common-alphabet ground line. Injectivity gives $v=c\Omega$.
     Conversely $E\Omega$ is annihilated by that parent, and the derived
