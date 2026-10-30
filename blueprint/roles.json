@@ -760,7 +760,9 @@
       "theorems": [
         "lem:qc_channel_light_cone"
       ],
-      "corollaries": [],
+      "corollaries": [
+        "cor:qc_unblocked_then_blocked_conversion"
+      ],
       "notes": {
         "lem:qc_channel_light_cone": "Light cone of a local channel circuit, named in the opening"
       }

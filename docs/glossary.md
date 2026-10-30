@@ -2129,7 +2129,17 @@ in `MPS/Preparation/` uses it.
   `IsLocalChannelProtocol.channelCircuitMap_comp` (appending a local channel
   circuit of `n` layers adds `n` to the depth), and
   `IsLocalChannelProtocol.exists_dual` (light cone of radius `T` of the
-  Heisenberg dual).
+  Heisenberg dual). Grouping `k` consecutive sites is constructed in
+  `Circuit/Channel/RegroupedProtocol.lean`:
+  for positive block count, block size, and input local dimension,
+  `IsLocalChannelProtocol.exists_regrouped` gives depth at most `2T` for
+  even block counts and `3T` in general, with exact equality on all operators
+  and arbitrary external references. The dimension-bounded version raises
+  the budget from `B` to `B^k`. `IsLocalChannelConversion.then_blocked`
+  composes an unblocked conversion followed by a blocked conversion with
+  bound `2T+U` or `3T+U`. One block admits depth zero; the generic two-block
+  bound is `2T`. The six-site seam matching projects to a triangle after
+  grouping pairs, obstructing its direct partition into two block matchings.
 - **Caveat:** the depth `T` counts the two-site layers exactly; onsite channels
   are free. Onsite channels may enlarge the dimension, and a layer on the
   enlarged sites still costs one depth unit. No uniform intermediate-dimension
