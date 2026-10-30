@@ -70,24 +70,29 @@ standing regime of at least three sites, whereas Lemma~\ref{thm:peps_cycle_two_s
     \label{lem:chain_spanning_matrix_cancellation}
     \lean{MPSChainTensor.eq_of_span_mul_left,
         MPSChainTensor.eq_of_mul_span_right}
-    \notready
-    Let $\iota$ be an arbitrary index set, and let
-    $W_i\in\MN{D}$, $i\in\iota$, span $\MN{D}$ over $\C$.
+    \leanok
+    Let $I$ be an arbitrary index set, and let
+    $W_i\in\MN{D}$, $i\in I$, span $\MN{D}$ over $\C$.
     For $X,Y\in\MN{D}$, either of the identities
     \begin{align}
-        W_iX=W_iY\quad(\forall i\in\iota),
+        W_iX=W_iY\quad(\forall i\in I),
         \qquad\text{or}\qquad
-        XW_i=YW_i\quad(\forall i\in\iota)
+        XW_i=YW_i\quad(\forall i\in I)
         \label{eq:chain_spanning_matrix_cancellation}
     \end{align}
     implies $X=Y$. This is the uniqueness argument for virtual insertions
     in \cite[Lemma~5]{Molnar2018NormalPEPS}; no finiteness condition on
-    $\iota$ is needed.
+    $I$ is needed.
 \end{lemma}
-\begin{proof}
-    The two multiplication maps are linear and agree on a spanning family,
-    hence agree on every matrix. Evaluating their equality at the identity
-    gives $X=Y$.
+\begin{proof}\leanok
+    For the first identity, the linear maps $\rho_X(W)=WX$ and $\rho_Y(W)=WY$
+    on $\MN{D}$ agree on every $W_i$. Since the $W_i$ span $\MN{D}$,
+    $\rho_X=\rho_Y$, and
+    \begin{align}
+        X=\rho_X(\Id)=\rho_Y(\Id)=Y.
+    \end{align}
+    For the second identity, apply the same argument to
+    $\lambda_X(W)=XW$ and $\lambda_Y(W)=YW$.
 \end{proof}
 
 \begin{lemma}[Bond-operator extraction from overlapping windows,

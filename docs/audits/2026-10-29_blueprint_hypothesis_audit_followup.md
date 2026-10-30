@@ -33,8 +33,8 @@ multiplication maps, and evaluation at the identity equates the factors.
 This removes the unnecessary finite-index premise and works for any `Sort`
 of generators. Existing consumers retain the same conclusions.
 
-The new support node remains `notready` while integration is pending. Exact
-historical head `b930ce68ef139badc6010f56a307b527a3691f51` passed the
+The new support node carries `leanok` on statement and proof, since both
+cancellation statements are proved. Exact historical head `b930ce68ef139badc6010f56a307b527a3691f51` passed the
 [hosted build](https://github.com/LionSR/TNLean/actions/runs/40919421992/job/123629836921):
 the log records the matching `PR_HEAD_SHA`, a successful full build, and strict
 `: ok` for the complete `TNLean/PEPS/CycleMPSChainArc.lean` module followed by
