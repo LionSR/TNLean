@@ -10022,6 +10022,56 @@ there is no need for a new tactic.
   needs this conversion, promote the rectangular matrix fact in QICLean and
   consume its published dependency revision rather than duplicating a new
   channel-independent matrix API in TNLean.
+### Adjacent physical cut Gram identities — promoted helpers (2026-10-29)
+
+- **Pattern:** reindex a physical configuration sum by restriction and the
+  letter at one cut site, then apply the actual adjacent-factor recursion.
+- **Occurrences:** both density and suffix-Gram recurrences in
+  `MPS/Preparation/OBCCanonicalRecurrences.lean`, and the two endpoint Gram
+  identifications in `OBCCanonicalEndpoints.lean`.
+- **Abstraction:** the explicit `extendCutPrefixEquiv`, `extendCutSuffixEquiv`,
+  `initialCutSuffixEquiv`, and `finalCutPrefixEquiv` in
+  `OBCCanonicalConfigurations.lean` centralize the configuration geometry.
+- **Decision:** the existing `Equiv.sum_comp` suffices after these mathematical
+  bijections; no tactic or parallel sum API is needed.
+
+### Rectangular cut comparison by actual physical prefix factors — promoted helper (2026-10-29)
+
+- **Pattern:** lift each physical cut-basis vector through the original prefix,
+  choose a left inverse of the minimal prefix, and use actual adjacent-prefix
+  recurrences to derive local rectangular maps with a one-sided inverse.
+- **Abstraction:** `OBCChainTensor.exists_rectangular_maps_to_cutBasis` in
+  `MPS/Preparation/OBCRectangularCutMaps.lean`; the simultaneous canonical
+  freedom theorem uses this helper without repeating the cut comparison.
+- **Decision:** a matrix-factor comparison lemma suffices; the common-bound
+  padding remains only in the actual boundary contractions, not in the
+  rectangular local formula.
+
+
+### Prescribed minimal OBC prefix factors — promoted physical-basis helper (2026-10-29)
+
+- **Pattern:** derive independence and physical column-space equality of an
+  actual original prefix factor from the prefix-suffix factorization and
+  equality of physical rank and bond dimension.
+- **Abstraction:** `OBCChainTensor.physicalPrefixBasis` and
+  `toMatrix_cutSlice_physicalPrefixBasis` in `Preparation/OBCMinimalPrefixBasis.lean`.
+- **Caller:** `CanonicalForm/QuadraticPrescribedOBCWindow.lean` derives minimality
+  from C1 and the source bond bound, then identifies the original supplied
+  window by the shared basis/slicing helper.
+- **Decision:** no new gauge predicate or repeated matrix-entry comparison;
+  use the actual physical prefix recursion and existing finite-rank lemmas.
+
+
+### Normalization after actual cut-basis comparison — promoted helper (2026-10-29)
+
+- **Pattern:** construct both comparison matrices as identity-map matrices
+  between the physical cut bases and virtual cut bases, then normalize the
+  tensor by scalar powers and an amplified virtual gauge.
+- **Abstraction:** `exists_physicalCutWindow_gauges` in
+  `CanonicalForm/QuadraticPhysicalCutWindow.lean` is shared by the canonical
+  weight construction and `QuadraticPerronNormalization.lean`.
+- **Decision:** compare the actual physical bases once, before normalization;
+  no duplicate window-comparison proof or parallel solution predicate.
 
 
 ### Reciprocal powers at adjacent window cuts — reused Mathlib (2026-10-29)
@@ -10033,3 +10083,15 @@ there is no need for a new tactic.
   `mul_inv_cancel_left₀` give the identity directly from `pow_ne_zero`.
 - **Decision:** use the existing group-with-zero cancellation lemmas at all
   three sites rather than copying a power-distribution proof or adding a tactic.
+### Adjacent-cut Gram recurrences — promoted shared physical identities (2026-10-29)
+
+- **Pattern:** use the physical prefix/suffix extension bijections to pass
+  between a Gram sum and the sum over one additional physical letter.
+- **Abstraction:** `prefixGram_eq_sum_of_extendCutPrefix` and
+  `suffixGram_eq_sum_of_extendCutSuffix` in
+  `MPS/Preparation/PhysicalCutGramRecurrences.lean`.
+- **Occurrences:** both recurrences for constructed canonical cut factors in
+  `OBCCanonicalRecurrences.lean`, and both recurrences for the original
+  supplied OBC factors in `OBCCanonicalPhysicalRanks.lean`.
+- **Decision:** the physical cut identities are shared; callers supply their
+  actual adjacent-factor recurrence instead of copying the double-sum proof.

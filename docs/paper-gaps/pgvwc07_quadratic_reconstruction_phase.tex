@@ -295,11 +295,54 @@ identity maps. A positive canonical weight is removed by geometric
 rescaling along the window. No quadratic solution, window gauge or rank
 equality is assumed.
 
-These basis-independent results do not import the separate unpublished
-canonical OBC construction. Composing its canonical physical cut-basis
-choice with the window theorem remains the final supplier step for an
-actual canonical OBC window. All new results remain pending hosted
-verification and integration; the unrestricted converse remains false.
+The prescribed-window bridge is now also source-written in a child of the
+OBC and cut-window drafts. For any actual supplied OBC representation of
+the state with bonds bounded by $D^2$, C1 forces each original window bond
+to have dimension exactly $D^2$. Its original physical prefix columns are
+therefore actual physical cut bases. Their adjacent recursion identifies
+the original supplied site matrices with physical slicing.
+The theorem
+\leanid{MPSTensor.exists_quadraticSolution_prescribedOBCWindow}
+constructs a solution over this very prescribed window. It does not merely
+choose a different canonical representation, and it assumes no window gauge,
+solution or bond equality. Canonicality or uniqueness of the supplied OBC
+tensor is unnecessary for this stronger bounded-representation comparison.
+
+The canonical TI input has now been eliminated from the prescribed-window
+supplier. The source-written theorem
+\leanid{MPSTensor.exists_unital_gauge_of_isNBlkInjective}
+derives irreducibility directly from C1, applies the existing Perron gauge,
+and propagates C1 by normalizing and transferring back. It applies even
+when the supplied C1 length is zero, provided some letter is nonzero.
+The actual nonzero physical state supplies this last condition.
+
+The amplified Perron gauge and geometric rescaling of the derived window
+matrices construct a normalized solution without changing the original
+physical window. In particular
+\leanid{MPSTensor.exists_quadraticSolution_prescribedOBCWindow_of_mpv_ne_zero}
+consumes the actual nonzero state, its C1 TI representation, the full
+window size regime, the original bounded OBC representation and their
+actual coefficient equality. It assumes no canonical TI form, window
+gauge, solution or bond equality. This writes the prescribed-window
+existence direction.
+
+The common OBC bound is now derived for an arbitrary prescribed canonical
+OBC tensor. The source density recursion identifies its original physical
+prefix Gram with the faithful density; row normalization and the scalar
+right boundary identify its original suffix Gram with the identity. These
+identities force every original bond dimension to be the actual physical
+cut rank. The existing periodic rank bound supplies $D^2$ internally.
+Changing only the common upper bound retains the original bond spaces,
+site matrices and exact coefficient vector. Faithfulness also derives
+nonvanishing of the physical state. Thus
+\leanid{MPSTensor.exists_quadraticSolution_canonicalOBCWindow}
+uses the given canonical equations, C1 and the original coefficient equality,
+with no supplied squared-bond bound, state nonvanishing, canonical TI gauge,
+window gauge or solution. It identifies the original supplied site entries
+rather than selecting another canonical representation.
+
+All new proofs remain pending hosted verification and integration. The original combined source theorem is not accepted,
+and its unrestricted converse remains false.
 
 \section{Open classification gap and verdict}
 
