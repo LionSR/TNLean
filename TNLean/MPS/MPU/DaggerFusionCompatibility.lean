@@ -186,16 +186,6 @@ theorem toMPSTensor_physicalAdjointTensor {D : ℕ} (U : MPOTensor d D) :
     exact (finProdFinEquiv.apply_symm_apply ij).symm]
   simp [Kraus.reindexPhysical, MPSTensor.mapStar, MPOTensor.toMPSTensor, Matrix.map_apply]
 
-/-- An intertwiner of the letters of two tensors, tensored with the identity on
-the left, intertwines the letters of their products with a common factor on the
-left. -/
-theorem mulTensor_mul_idKron_of_intertwine {D₁ D₂ D₃ : ℕ} {X' : MPOTensor d D₁}
-    {X : MPOTensor d D₂} (R : MPOTensor d D₃) {P : Matrix (Fin D₁) (Fin D₂) ℂ}
-    (hX : ∀ i l, X' i l * P = P * X i l) (i l : Fin d) :
-    mulTensor R X' i l * idKron D₃ P = idKron D₃ P * mulTensor R X i l := by
-  rw [mulTensor_apply, mulTensor_apply, submatrix_sum_mul_idKron, idKron_mul_submatrix_sum]
-  simp only [hX]
-
 end MPOTensor
 
 namespace MPSTensor.IsReduction

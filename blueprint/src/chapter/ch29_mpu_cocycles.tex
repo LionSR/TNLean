@@ -4780,9 +4780,8 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
 
 \begin{lemma}[Fusion tensors along exact bond gauges]
     \label{lem:mpug_fusion_tensor_gauge_transport}
-    \lean{MPOTensor.mulTensor_mul_idKron_of_intertwine, MPOTensor.bondKron,
-        MPOTensor.bondKron_eq_idKron_mul_kronId, MPOTensor.bondKron_mul_bondKron,
-        MPOTensor.bondKron_one, MPOTensor.bondKron_mul_kronId,
+    \lean{MPOTensor.bondKron, MPOTensor.bondKron_eq_idKron_mul_kronId,
+        MPOTensor.bondKron_mul_bondKron, MPOTensor.bondKron_one, MPOTensor.bondKron_mul_kronId,
         MPOTensor.bondKron_mul_idKron, MPOTensor.bondKron_bondKron_mul_assocInv,
         MPOTensor.mulTensor_mul_bondKron_of_intertwine,
         MPOTensor.GroupFamily.withTensor, MPOTensor.GroupFamily.castMat_mul_eq,
@@ -4792,7 +4791,8 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
         MPOTensor.GroupFamily.FusionData.gaugeTransport_rightV,
         MPOTensor.GroupFamily.FusionData.isAssociator_gaugeTransport}
     \leanok
-    \uses{def:mpug_anomaly_three_cochain, lem:mpug_reduction_recombination}
+    \uses{def:mpug_anomaly_three_cochain, lem:mpug_reduction_recombination,
+        thm:mpug_reduction_dagger}
     Let $g\mapsto T_g$ be tensors with the bond dimensions of a group family
     $g\mapsto O_g$, and let $P_g,Q_g$ be mutually inverse matrices with
     $T_g^{il}Q_g=Q_gO_g^{il}$. If $(V_{g,h},W_{g,h})$ are fusion tensors of
