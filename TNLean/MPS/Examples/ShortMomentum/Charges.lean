@@ -7,6 +7,7 @@ import Mathlib.Data.List.Count
 import Mathlib.Data.ZMod.Basic
 import Mathlib.Tactic.LinearCombination
 import Mathlib.Tactic.NormNum
+import Mathlib.Tactic.Ring
 import Lean.Elab.Tactic.Omega
 
 /-!
@@ -208,7 +209,7 @@ theorem exists_word_of_eight_le_of_charge (n : ℕ) (hn : 8 ≤ n) (u v : ZMod 5
     omega
   · rw [wordCharge_append, hc]
     have hrep : wordCharge (List.replicate (n - 8) 0) =
-        ((n - 8 : ℕ), 0) := by
+        (((n - 8 : ℕ) : ZMod 5), 0) := by
       simp [wordCharge, countCharge, List.count_replicate]
     rw [hrep]
     apply Prod.ext <;> simp
@@ -238,6 +239,6 @@ theorem exists_central_counts_of_eight_le (n : ℕ) (hn : 8 ≤ n) :
     ∃ a b c : ℕ, a + b + c = n ∧ (a : ZMod 5) = b ∧ (b : ZMod 5) = c := by
   obtain ⟨t, k, htk⟩ := exists_three_five_decomposition n hn
   refine ⟨t + 5 * k, t, t, by omega, ?_, rfl⟩
-  simp
+  rw [Nat.cast_add, Nat.cast_mul, ZMod.natCast_self, zero_mul, add_zero]
 
 end MPSTensor.ShortMomentum
