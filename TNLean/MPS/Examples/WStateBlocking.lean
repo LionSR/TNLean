@@ -10,17 +10,17 @@ import TNLean.MPS.Examples.PVBS
 import TNLean.MPS.Examples.WStatePrimeLengthBound
 
 /-!
-# Isometric blocking of the actual W vector
+# Isometric blocking of the W vector
 
 A qubit is encoded into a block by sending its vacuum to the block vacuum
 and its excitation to the normalized W vector. The tensor power of this
-actual isometry sends the normalized W vector to the normalized W vector
+isometry sends the normalized W vector to the normalized W vector
 on the flattened physical chain.
 
 This is elementary single-excitation algebra for the blocking device in
 PGVWC07, arXiv:quant-ph/0608197, lines 2090–2097, applied to the W vector
 of the review arXiv:2011.12127, Appendix A, lines 2348–2362. It supplies an
-actual vector identity, not the period or quantitative injectivity estimate
+vector identity, not the period or quantitative injectivity estimate
 needed for the review's general bond-dimension bound.
 -/
 
@@ -61,19 +61,19 @@ private theorem sum_norm_sq_wIndicator (N : ℕ) :
     push_cast
     ring
 
-/-- The actual unnormalized W vector has squared norm equal to its number of sites.
+/-- The unnormalized W vector has squared norm equal to its number of sites.
 Source: the single-excitation sum in arXiv:2011.12127, Appendix A, line 2350. -/
 theorem norm_sq_wIndicator (N : ℕ) :
     ‖(WithLp.toLp 2 (wIndicator N) : MPVSpace 2 N)‖ ^ 2 = (N : ℝ) := by
   simpa only [EuclideanSpace.norm_sq_eq] using sum_norm_sq_wIndicator N
 
-/-- The square-root normalization of the actual W vector. -/
+/-- The square-root normalization of the W vector. -/
 theorem norm_wIndicator (N : ℕ) :
     ‖(WithLp.toLp 2 (wIndicator N) : MPVSpace 2 N)‖ = Real.sqrt N := by
   rw [← Real.sqrt_sq (norm_nonneg (WithLp.toLp 2 (wIndicator N) : MPVSpace 2 N)),
     norm_sq_wIndicator]
 
-/-- Dividing the actual W vector by the square root of a positive length gives a unit vector. -/
+/-- Dividing the W vector by the square root of a positive length gives a unit vector. -/
 theorem norm_normalized_wIndicator {N : ℕ} (hN : 0 < N) :
     ‖((Real.sqrt N : ℂ)⁻¹) •
       (WithLp.toLp 2 (wIndicator N) : MPVSpace 2 N)‖ = 1 := by
@@ -125,7 +125,7 @@ private theorem wIndicator_flatten_cons {m k : ℕ} (I : Fin (blockPhysDim 2 k))
   rcases (List.ofFn (decodeBlock 2 k I)).count 1 with _ | _ | a <;>
     rcases (List.ofFn (blockedConfigEquiv 2 m k σ)).count 1 with _ | _ | b <;> (simp; try omega)
 
-/-- Encode one qubit into the vacuum and normalized W vector of an actual physical block.
+/-- Encode one qubit into the vacuum and normalized W vector of a physical block.
 The row alphabet is the existing blocked physical alphabet. -/
 noncomputable def wBlockEncoding (k : ℕ) : Matrix (Fin (blockPhysDim 2 k)) (Fin 2) ℂ :=
   fun I i => if i = 0 then pvbsVacuum k (decodeBlock 2 k I)
@@ -204,7 +204,7 @@ theorem wBlockEncoding_conjTranspose_mul_self {k : ℕ} (hk : 0 < k) :
       Complex.ofReal_natCast]
     exact inv_mul_cancel₀ hkℂ
 
-/-- Every tensor power of the actual W-block encoding is an isometry. -/
+/-- Every tensor power of the W-block encoding is an isometry. -/
 theorem rectKronecker_wBlockEncoding_isometry {k : ℕ} (hk : 0 < k) (m : ℕ) :
     (Matrix.rectKronecker fun _ : Fin m => wBlockEncoding k)ᴴ *
       Matrix.rectKronecker (fun _ : Fin m => wBlockEncoding k) = 1 :=
@@ -236,7 +236,7 @@ private theorem encoding_vacuum {k : ℕ} (m : ℕ)
     simp [hx]
   · simp
 
-/-- Actual blocking identity: the tensor power of the local W isometry sends
+/-- Blocking identity: the tensor power of the local W isometry sends
 the unnormalized W vector to the flattened W vector divided by the square root
 of the block length. No blocked-vector equation is supplied as a hypothesis. -/
 theorem rectKronecker_wBlockEncoding_mulVec_wIndicator (k m : ℕ) :
@@ -277,7 +277,7 @@ theorem rectKronecker_wBlockEncoding_mulVec_wIndicator (k m : ℕ) :
     rw [wIndicator_flatten_cons, wBlockEncoding_zero, wBlockEncoding_one]
     ring
 
-/-- Normalized W vectors are related by the tensor power of the actual local
+/-- Normalized W vectors are related by the tensor power of the local
 encoding. This retains all (mk) physical sites under the existing flattening
 equivalence. Source: the blocking device of PGVWC07, lines 2090–2097,
 applied to the review's W vector, lines 2348–2362. -/
@@ -290,7 +290,7 @@ theorem rectKronecker_wBlockEncoding_mulVec_normalized (k m : ℕ) :
   congr 1
   rw [Nat.cast_mul, Real.sqrt_mul (Nat.cast_nonneg m), Complex.ofReal_mul, mul_inv]
 
-/-- Compressing the blocked physical leg of any actual periodic W representation
+/-- Compressing the blocked physical leg of any periodic W representation
 produces a shorter W representation with the same bond dimension. No canonical
 form or preservation of block injectivity is assumed. Source context: PGVWC07,
 lines 2090–2097 and 2182–2225; this is the explicit W-vector blocking calculation. -/
@@ -328,7 +328,7 @@ theorem mpv_wBlockCompression_of_eq_wIndicator {D k m : ℕ} (hk : 0 < k)
   simp only [Pi.smul_apply, smul_eq_mul, mul_assoc]
 
 /-- Every prime divisor of a positive chain length obeys the existing fifth-degree
-W bound for any actual periodic W representation. The tensor may depend on the
+W bound for any periodic W representation. The tensor may depend on the
 original length. Compression retains its bond dimension and derives the shorter
 W equation; no primitive-block hypothesis is added. This includes lengths such
 as twice a large prime, beyond the earlier no-small-divisor regime. -/

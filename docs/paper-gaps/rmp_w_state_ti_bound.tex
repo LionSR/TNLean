@@ -290,23 +290,27 @@ absorbs blocks whose states differ only by a weight or a phase power, which
 separates the source's pairwise different block states
 \cite[lines~1329--1330]{PerezGarcia2007MPSReps} from the formal hypothesis.
 
-\section{Actual W blocking and prime-divisor bounds, 2026-10-29}
+\section{W blocking and prime-divisor bounds, 2026-10-29}
 
-For $k>0$ the actual local encoding
-\[
-    U_k|0\rangle=|0\rangle^{\otimes k},\qquad
-    U_k|1\rangle=k^{-1/2}|W_k\rangle
-\]
-is an isometry. The W vector has squared norm $k$ and no vacuum component,
+For $k>0$ the local encoding
+\begin{align}
+    U_k|0\rangle & =|0\rangle^{\otimes k}, \\
+    U_k|1\rangle & =k^{-1/2}|W_k\rangle
+    \label{eq:rmp_w_state_ti_bound_block_encoding}
+\end{align}
+is an isometry, as in the blocking device of
+\cite[lines~2090--2097]{PerezGarcia2007MPSReps} applied to the W state of
+\cite[lines~2352--2361]{Cirac2021Matrix}. The W vector has squared norm $k$ and no vacuum component,
 so the two columns are orthonormal. At $m$ sites the tensor power satisfies
-\[
-    U_k^{\otimes m}|W_m\rangle=k^{-1/2}|W_{mk}\rangle,
-    \qquad
-    U_k^{\otimes m}\frac{|W_m\rangle}{\sqrt m}
-    =\frac{|W_{mk}\rangle}{\sqrt{mk}} \quad(m>0),
-\]
+\begin{align}
+    U_k^{\otimes m}|W_m\rangle                  & =k^{-1/2}|W_{mk}\rangle,
+    \label{eq:rmp_w_state_ti_bound_blocking} \\
+    U_k^{\otimes m}\frac{|W_m\rangle}{\sqrt m} & =\frac{|W_{mk}\rangle}{\sqrt{mk}}
+    \quad(m>0),
+    \label{eq:rmp_w_state_ti_bound_blocking_normalized}
+\end{align}
 with the existing flattening of consecutive physical blocks. The identities
-are derived from the actual coefficients, rather than assumed as blocking
+are derived from the coefficients, rather than assumed as blocking
 hypotheses.
 
 Consequently, any periodic tensor of bond dimension $D$ representing
@@ -316,18 +320,18 @@ No preservation of block injectivity or primitivity under this compression
 is asserted or needed: the existing prime-length theorem constructs its
 canonical reduction from the compressed tensor itself. For every positive
 $N$ represented in this way and every prime divisor $p\mid N$,
-\[
-    p<2\max\bigl\{(D^2+1)^2,3(D-1)((D^2+1)^2+1)\bigr\}.
-\]
+\begin{align}
+    p & <2\max\bigl\{(D^2+1)^2,3(D-1)((D^2+1)^2+1)\bigr\}.
+    \label{eq:rmp_w_state_ti_bound_prime_divisor}
+\end{align}
 For example, $N=2p$ is covered by a bound on $p$, although it has a small
 divisor. This is not the claimed general bound on $N$: numbers with only
 small prime factors remain uncontrolled by this estimate, and the
 Micha\l{}ek--Shitov logarithmic injectivity bound remains missing.
-The new declarations
+These are elementary consequences of the W vector, not additional source
+statements attributed to the review.\footnote{Formal declarations:
 \leanid{MPSTensor.rectKronecker_wBlockEncoding_mulVec_normalized} and
-\leanid{MPSTensor.prime_divisor_lt_of_mpv_eq_smul_wIndicator} are
-source-written and await hosted acceptance. They are elementary consequences
-of the W vector, not additional source statements attributed to the review.
+\leanid{MPSTensor.prime_divisor_lt_of_mpv_eq_smul_wIndicator}.}
 
 \section{Local fix: the single-block threshold}
 
@@ -447,7 +451,10 @@ $D=\Omega(N^{1/5})$. For an arbitrary tensor at prime length the reduction is
 formalized, which gives
 (\ref{eq:rmp_w_state_ti_bound_prime}), $D=\Omega(N^{1/5})$ along the primes.
 The same explicit inequality now holds when $N\geq2$ has no divisor between
-$2$ and $D$, including some composite lengths.
+$2$ and $D$, including some composite lengths. By isometric blocking, every
+prime divisor $p$ of a represented length satisfies
+(\ref{eq:rmp_w_state_ti_bound_prime_divisor}), which covers lengths such as
+$N=2p$.
 The review's bound
 (\ref{eq:rmp_w_state_ti_bound_asymptotic_lower_bound}) and the source's
 unconditional $D\succeq O(N^{1/3})$ remain unformalized: they need the
