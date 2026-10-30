@@ -67,8 +67,9 @@ theorem obc_rectangularEval_row_isometry (b : ℕ → ℕ)
           (fun k : Fin n ↦ A (k.val + 1)) w)
       (hA 0 (by omega)) htail
     rw [← (Fin.consEquiv (fun _ : Fin (n + 1) ↦ Fin d)).sum_comp]
-    simpa only [Fin.consEquiv_apply, Kraus.rectangularEval,
-      Fin.cons_zero, Fin.cons_succ] using hprod
+    simp only [Fin.consEquiv_apply]
+    dsimp only [Kraus.rectangularEval, Fin.cons_zero, Fin.cons_succ]
+    exact hprod
 
 private theorem ofFn_snoc_eq {α : Type*} {n : ℕ} (w : Fin n → α) (i : α) :
     List.ofFn (Fin.snoc w i) = List.ofFn w ++ [i] := by
@@ -124,8 +125,9 @@ theorem obc_trace_reconstruction_of_adjacent_pair_sections (b : ℕ → ℕ)
       have hRight (u : Fin (r + 1) → Fin d) :
           ∃ Y : Matrix (Fin (b (r + 3))) (Fin (b (r + 1))) ℂ,
             ∀ i j, φ u i j = Matrix.trace (Y * A (r + 1) i * A (r + 2) j) := by
-        have h := hpair (List.ofFn u) v (by simp only [List.length_ofFn]; omega)
-        simp only [List.length_ofFn] at h
+        have hl : (List.ofFn u).length = r + 1 := List.length_ofFn
+        have h := hpair (List.ofFn u) v (by omega)
+        rw [hl] at h
         obtain ⟨Y, hY⟩ := h
         refine ⟨Y, ?_⟩
         simpa only [φ] using hY
@@ -144,10 +146,11 @@ theorem obc_trace_reconstruction_of_adjacent_pair_sections (b : ℕ → ℕ)
       have hlist := congrArg List.ofFn hw
       rw [ofFn_snoc_eq, ofFn_snoc_eq] at hlist
       rw [← heval, ← hlist]
-      simpa only [φ, P, List.append_assoc, List.singleton_append, Matrix.mul_assoc] using hz
-  have hfinal := hprefix (N - 2) (by omega) [] (by simp; omega)
-  have hlength : N - 2 + 2 = N := by omega
-  simpa only [hlength, List.append_nil] using hfinal
+      simpa only [φ, P, List.append_assoc, List.cons_append, List.nil_append,
+        List.singleton_append, Matrix.mul_assoc] using hz
+  obtain ⟨m, rfl⟩ : ∃ m, N = m + 2 := ⟨N - 2, by omega⟩
+  have hfinal := hprefix m (le_refl _) [] (by simp)
+  simpa only [List.append_nil] using hfinal
 
 /-- Singleton endpoint bonds turn the reconstructed boundary into a scalar, so
 every coefficient family satisfying adjacent-pair conditions lies in the represented state line.
