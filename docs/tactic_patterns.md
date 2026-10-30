@@ -9908,3 +9908,15 @@ there is no need for a new tactic.
   and the repeated block is not copied. The existing actual-gap helper is
   exposed and reused for the physical entropy theorem, without a second
   endpoint-unitary or dimension argument.
+
+
+### Rescaling an existing favorable parameter theorem — existing lemma (2026-10-29)
+
+- **Consumer:** `MPS/AreaLaw/AKLV/FrustrationFreeParameters.lean` invokes the
+  existing scalar parameter theorem at `g/8192`, retaining its actual ceiling,
+  degree and rank budget. It does not repeat logarithmic absorption.
+- **Reuse:** A positive denominator comparison and `Real.sqrt_le_sqrt` give
+  monotonicity of the squared shrinking coefficient. The original ceiling
+  estimates supply the inverse-gap window scale and the cost coefficients.
+- **Decision:** One bounded scalar specialization is sufficient; no new
+  parameter predicate, numerical solver, or proof automation is introduced.
