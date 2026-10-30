@@ -9859,6 +9859,19 @@ there is no need for a new tactic.
   of the circuit contraction or custom tactic is introduced.
 
 
+=======
+- **Pattern:** A nonzero truncation of a unit vector has normalized error at
+  most twice its vector error, by the reverse triangle inequality and
+  `‖‖v‖⁻¹ • v - v‖ = |1 - ‖v‖|`.
+- **Seen:** `MPS/AreaLaw/MPSApproximation.lean`,
+  `MPS/AreaLaw/SnakeGridApproximation.lean`.
+- **Abstraction:** The former has the public lemma
+  `norm_inv_norm_smul_sub_le_two_mul`. Move that lemma to a shared algebra
+  module if a third caller needs it, so square-grid proofs can reuse it
+  without importing the chain area-law theorem.
+- **Notes:** Two occurrences; the square proof currently keeps this short
+  calculation inside its normalization step and imports only the truncation core.
+
 ### Exponential comparisons with a common nonnegative factor — reused Mathlib (2026-10-29)
 
 - **Pattern:** Apply monotonicity of the exponential, normalize a negative
