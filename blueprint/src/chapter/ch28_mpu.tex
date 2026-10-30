@@ -5778,6 +5778,50 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     $\mathcal U$ is simple.
 \end{proof}
 
+\begin{theorem}[Three-legged decomposition of a simple tensor]
+    \label{thm:mpu_three_legged_decomposition}
+    \lean{MPOTensor.SourceFactors.IsThreeLegged,
+        MPOTensor.SourceFactors.X₁_leftInverse,
+        MPOTensor.SourceFactors.X₂_leftInverse,
+        MPOTensor.IsMPUCanonicalFormII.sourceFactors_isThreeLegged,
+        MPOTensor.IsMPUCanonicalFormII.exists_threeLegged}
+    \leanok
+    \uses{ThmFund1, def:mpu_weighted_source_factors, def:mpu_source_uv,
+        def:mpu_canonical_form_ii, def:mpu_simple}
+    Let $\mathcal U$ be a simple MPU tensor of physical dimension $d$ under
+    the standing canonical-form-II convention, whose periodic operator is
+    unitary on every chain of length at least two, and let $\rho>0$ be its
+    recorded diagonal fixed point. Then the weighted source factors
+    $X_1,Y_1,X_2,Y_2$ for $\rho$ satisfy:
+    \begin{enumerate}
+        \item the two three-legged decompositions
+              $\mathcal U^{ij}_{\alpha\beta}=(X_1Y_1)_{(i,\beta),(\alpha,j)}
+                  =(X_2Y_2)_{(\alpha,i),(j,\beta)}$, joined along the curly leg of
+              dimension $d_r=r$ and the thick leg of dimension $d_l=\ell$;
+        \item the gates $u=Y_2\mathbin{-}Y_1$ and $v=X_1\mathbin{-}X_2$ are
+              unitary;
+        \item the normalized contractions $X_2^\dagger X_2=\Id_{d_l}$ and
+              $X_1^\dagger(I_d\otimes\rho)X_1=\Id_{d_r}$ hold;
+        \item $X_1$ and $X_2$ are left-invertible, with left inverses
+              $X_1^\dagger(I_d\otimes\rho)$ and $X_2^\dagger$, and $Y_1,Y_2$ are
+              right-invertible;
+        \item $d_ld_r=d^2$.
+    \end{enumerate}
+    This is the structure theorem for simple matrix product unitaries in
+    canonical form II of \cite{FrancoRubio2025MPUGauging}, which asks
+    unitarity on every nonempty chain; that convention implies the one used
+    here.
+    % Source lines: 2502.20257/main.tex 657--809.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{ThmFund1, def:mpu_weighted_source_factors}
+    Items 1, 3 and the one-sided inverses of item 4 are the defining
+    identities of the weighted source factors. Since $\mathcal U$ is simple,
+    Theorem~\ref{ThmFund1} gives $r\ell=d^2$ and unitarity of $u$ and $v$,
+    which are items 2 and 5.
+\end{proof}
+
 \begin{definition}[Standard form]
     \label{SF}
     \notready
@@ -10590,7 +10634,90 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     $\sigma=\pm1$ is independent of the gauge and is constant under continuous
     deformations that preserve time-reversal symmetry.
     % Source lines: paper_v2.tex 1613--1631.
+    % The intrinsic auxiliary results below need pointwise supplied standard
+    % forms and the local certificate; no continuous gate choices are needed.
+    % Deducing that certificate from global symmetry remains separate.
 \end{lemma}
+
+\begin{lemma}[Extraction of the sign from a supplied local equation]
+    \label{lem:mpu_supplied_time_reversal_sign}
+    \lean{MPOTensor.timeReversalSign, MPOTensor.TwoSiteStandardFormData.timeReversalSign_eq_of_local_relation}
+    \leanok
+    \uses{def:mpu_supplied_two_site_standard_form}
+    Let $d>0$ and let $W$ have a supplied two-site standard form with square
+    gates $u,v$ on $\mathbb C^d\otimes\mathbb C^d$. Define
+    $s(u,v)=d^{-2}\tr[\mathbb S_{12,34}v_{23}(u_{12}\otimes u_{34})v_{23}]$.
+    If a unitary $x$ and a scalar $\sigma$ satisfy
+    \begin{align}
+        v_{23}(u_{12}\otimes u_{34})
+         & =\sigma(x\otimes x^\dagger)v_{23}^\dagger,
+    \end{align}
+    then $s(u,v)=\sigma$. This is the local-equation extraction in
+    \cite[lines~1595--1610]{Cirac2017MPU} for the supplied standard form.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:matrix_trace_swap_scaled_kronecker}
+    Multiply the local equation by $v_{23}$ and cancel
+    $v_{23}^\dagger v_{23}=\Id$. Exchange of the two physical pairs gives
+    $\tr[\mathbb S(x\otimes x^\dagger)]=\tr[xx^\dagger]=d^2$.
+    Division by the nonzero scalar $d^2$ gives the result.
+\end{proof}
+
+\begin{lemma}[Intrinsic trace and independence of standard-form representatives]
+    \label{lem:mpu_source_time_reversal_sign_independent}
+    \lean{MPOTensor.timeReversalPeriodicTrace, MPOTensor.intrinsicTimeReversalSign, MPOTensor.TwoSiteStandardFormData.timeReversalTrace_eq_periodicTrace, MPOTensor.TwoSiteStandardFormData.timeReversalSign_eq_intrinsic, MPOTensor.TwoSiteStandardFormData.timeReversalSign_eq_of_mpo_two_eq}
+    \leanok
+    \uses{def:mpu_supplied_two_site_standard_form}
+    Let $W$ have a supplied two-site standard form with square gates $u,v$
+    on $\mathbb C^d\otimes\mathbb C^d$. For exchange $P$ of the two physical
+    blocks, define $s(W)=d^{-2}\tr[P U_W^{(2)}]$. Then $s(u,v)=s(W)$.
+    Consequently two supplied standard forms whose two-block
+    periodic operators agree have the same normalized sign expression,
+    including representatives in different bond dimensions. No canonical
+    source-factor comparison is required. This gives the independence
+    assertion of \cite[lines~1613--1627]{Cirac2017MPU} for the supplied
+    square standard forms.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_supplied_two_site_periodic_circuit}
+    The shifted layer on two blocks is $P v_{23}P v_{23}$, so
+    $U_W^{(2)}=P v_{23}P v_{23}(u\otimes u)$. Since $P^2=\Id$,
+    cyclicity gives
+    \begin{align}
+        \tr[P U_W^{(2)}]
+         & =\tr[v_{23}P v_{23}(u\otimes u)]  \\
+         & =\tr[P v_{23}(u\otimes u)v_{23}].
+    \end{align}
+    Division by $d^2$ gives the identity and independence.
+\end{proof}
+
+\begin{lemma}[Constancy along tensor paths with pointwise local certificates]
+    \label{lem:mpu_supplied_time_reversal_sign_constant}
+    \lean{MPOTensor.continuous_intrinsicTimeReversalSign, MPOTensor.intrinsicTimeReversalSign_eq_on_path}
+    \leanok
+    \uses{lem:mpu_supplied_time_reversal_sign, def:mpu_supplied_two_site_standard_form}
+    Let $W(t)$ be a continuous path of tensors for $t\in[0,1]$.
+    At each $t$, suppose there is a supplied square two-site standard form
+    and a local time-reversal certificate as in
+    Lemma~\ref{lem:mpu_supplied_time_reversal_sign}, with
+    $\sigma(t)\in\{1,-1\}$. These choices are pointwise; no continuity
+    of the gates, source factors, unitary or sign witnesses is required.
+    Then $s(W(t))=s(W(0))$ throughout the interval.
+    This is the intrinsic-trace argument for
+    \cite[lines~1628--1630]{Cirac2017MPU}. Deducing the pointwise local
+    certificate from global time reversal remains the separate local
+    characterization.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:mpu_supplied_time_reversal_sign, lem:mpu_source_time_reversal_sign_independent}
+    The finite-chain operator is polynomial in the tensor entries,
+    so $s(W(t))$ is continuous. At each point the local equation and
+    intrinsic identity give $s(W(t))\in\{1,-1\}$. A continuous function
+    from the connected interval to this two-point set is constant.
+\end{proof}
 
 \begin{lemma}[Admissible well-definedness of the time-reversal sign]
     \label{prop:mpu_admissible_sigma_well_defined}
@@ -12455,3 +12582,5 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     Definition~\ref{def:mpu_admissible_symmetry_equivalence}.
     % Source lines: paper_v2.tex 2203--2235.
 \end{lemma}
+
+\input{chapter/ch28_mpu_finite_heisenberg}

@@ -5049,6 +5049,53 @@ three-plaquette output measurement, and the routed reunion measurement.
   zero without assuming a nontrivial space. The successor case combines an
   invariant orthonormal pair with a basis of its orthogonal complement.
 
+### Robustness assembly with a sharper cutoff — resolved (2026-10-30)
+
+- **Seen:** `MPS/AreaLaw/AKLV/Robustness.lean`, `NormalizedChain.lean`,
+  and `InverseGapRobustness.lean`.
+- **Pattern:** Build the minimizing ground vector from an absolute excited-energy
+  lower bound, combine its gap with the projected residual and tail, and reconstruct
+  the normalized regional sums from the two removed bonds.
+- **Decision:** Extracted as cutoff-independent lemmas shared by both cutoffs:
+  `exists_ground_gap_twoSidedEnergyTruncation_of_orthogonal` (ground vector and gap
+  from the orthogonal energy bound), `robust_ground_of_clipped_ground_gap` (residual,
+  tail and phase assembly, with the now public `phase_budget_le_exp`), and
+  `exists_normalizedCutBlock_eq_sum_sub` (regional sums away from the removed bonds).
+  Each cutoff proves only its orthogonal energy bound. No new tactic is needed.
+
+### Boundary operator norm from its positive cap — promoted (2026-10-30)
+
+- **Seen:** `MPS/AreaLaw/AKLV/HighEnergyMass.lean`, `ProjectionEnergy.lean`,
+  and `InverseGapRobustness.lean`; the targeted pattern scan reports three uses.
+- **Pattern:** Convert `0 ≤ A ≤ 2I` to `‖A‖ ≤ 2` with
+  `CStarAlgebra.norm_le_iff_le_algebraMap` and the scalar-matrix identity.
+- **Abstraction:** `Matrix.PosSemidef.norm_le_of_le_smul_one`
+  (`0 ≤ A ≤ c • 1 → ‖A‖ ≤ c`) in `HighEnergyMass.lean`; the three call
+  sites now apply it. No tactic or alternate operator norm is introduced.
+
+### Constancy of a continuous trace sign — candidate (2026-10-29)
+
+- **Pattern:** A finite matrix-product/trace expression is continuous by
+  `Continuous.matrix_mul`, `Continuous.matrix_kronecker` and
+  `Continuous.matrix_trace`. A local identity puts its value in `{1,-1}`.
+- **Seen:** `MPS/MPU/TimeReversalSignIntrinsic.lean`,
+  `intrinsicTimeReversalSign_eq_on_path`.
+- **Abstraction:** Mathlib's
+  `IsPreconnected.eq_one_or_eq_neg_one_of_sq_eq` already supplies the
+  topological step; no local connectedness tactic or parallel sign predicate
+  is needed.
+- **Notes:** Continuity of all gate, source-factor and sign witnesses is unnecessary.
+  The trace equals an intrinsic polynomial in the actual tensor, so only
+  tensor continuity and pointwise local certificates are used.
+
+### Diagonal hard-truncation spectral values — candidate (2026-10-29)
+
+- **Pattern:** Rewrite a diagonal Hamiltonian's functional calculus with
+  `Matrix.cfc_diagonal` and finite-range continuity, then evaluate a basis state.
+- **Seen:** `MPS/Examples/HardTruncationCutoff.lean`, for the actual clipping
+  and its closed low-energy projection.
+- **Decision:** Existing diagonal functional calculus suffices; no new tactic.
+
 ### Recovering letters by an identity contraction — candidate (2026-10-29)
 
 - **Seen:** `isInjective_uncleTensor_of_isInjective_perturbation` in
@@ -9716,6 +9763,78 @@ there is no need for a new tactic.
   mathematical lemma to a lower matrix-analysis module and reuse it; do not duplicate its
   statement or introduce a new tactic.
 
+### Cancellation from a spanning matrix family — promoted
+- **Pattern:** express the identity as a finite linear combination of a
+  spanning family, distribute multiplication, and cancel two factors.
+- **Seen:** the two orientations in `PEPS/CycleMPSChainArc.lean`; its
+  trace-pairing cancellation already uses the same extension mechanism.
+- **Abstraction:** use Mathlib's `LinearMap.ext_on_range` on `mulLeft` or
+  `mulRight`, then evaluate at the identity. Both multiplication proofs now
+  work for an arbitrary `Sort` of generators without a finite-index instance.
+
+### Functional calculus on a Hermitian eigenbasis — candidate (2026-10-28)
+
+- **Pattern:** Expand the Hermitian functional calculus using its eigenvector
+  unitary, multiply by a basis vector and cancel the unitary factors. The
+  result is scalar multiplication by the function at the corresponding energy.
+- **Seen:** Two private helper proofs, in
+  `MPS/AreaLaw/Huang/ApproximateEnergyFilter.lean` and the companion module
+  `QICLean/Analysis/GroundProjection.lean`.
+- **Abstraction:** A public Mathlib or QICLean theorem for the action of a real
+  functional calculus on `IsHermitian.eigenvectorBasis` would replace both helpers.
+- **Notes:** The current spectral proof calls the helper once and then uses
+  `norm_cfc_le`; it does not repeat the full Gaussian Parseval argument.
+  The generic filtering module is intended for QICLean, where the helper can be
+  consolidated with the existing ground-projection development.
+
+
+### Increasing a matrix product bond bound — reuse (2026-10-29)
+
+- **Lemma:** `IsOpenMPS.mono` in `MPS/AreaLaw/OpenMPSCutRank.lean`
+  follows from the characterization by internal-cut matrix ranks.
+- **Use:** The uniform successive approximation and its arbitrary-accuracy
+  consequence enlarge a computed bond bound to one natural polynomial.
+  Both reuse this lemma, including the empty-chain case.
+- **Mechanism:** An ordinary monotonicity theorem suffices.
+
+
+### Complete finite operators from fixed-exterior matrix slices — candidate (2026-10-29)
+
+- **Seen:** `MPS/MPU/TwoSiteFiniteHeisenberg.lean`, the blocked-tensor and
+  original-site full-matrix intertwiners.
+- **Pattern:** A rectangular matrix is indexed by exterior/local products.
+  Multiply by the identity/right-Kronecker local operator; sum the exterior
+  delta coefficients to recover the established slice intertwiner.
+- **Reuse:** Both proofs reuse the existing actual three-block trace theorem;
+  they do not assume a full-operator identity as a hypothesis.
+- **Decision:** Two occurrences in one file. Before a third copy, promote the
+  rectangular block multiplication identity at its generic matrix owner in
+  QICLean, and retain the actual MPU source-specific wrappers here.
+
+
+### Nested finite-chain local inclusions — promoted lemma (2026-10-29)
+
+- **Seen:** The fixed-window, full-central-interval, singleton comparison,
+  and canonical forward-family proofs in `MPS/MPU/TwoSiteBufferedAction.lean`
+  and `MPS/MPU/TwoSiteLocalAction.lean`.
+- **Pattern:** Compose two canonical local inclusions inside an actual finite
+  MPU conjugation and its algebraic-local inclusion.
+- **Promoted:** `SpinChain.finiteChainLocalObservable_localInclusion` in
+  `MPS/MPU/FiniteChainConjugation.lean` applies the existing inclusion
+  composition theorem under the actual conjugation. The downstream proofs
+  reuse this lemma rather than repeat the matrix map composition.
+
+### Pure output Gram projection — library zero criterion (2026-10-29)
+
+- **Seen:** `Circuit/Channel/PhysicalPortPureOutput.lean`.
+- **Pattern:** A pure marginal gives C*C†=P with P²=P; derive that every
+  actual output column is fixed by P before extracting its environment factor.
+- **Reuse:** Mathlib's `Matrix.mul_self_mul_conjTranspose_eq_zero` turns
+  (1-P)*(C*C†)=0 directly into (1-P)*C=0. Existing vector outer-product and
+  partial-trace identities give the factorization and its normalization.
+- **Decision:** Use the positive Gram zero criterion rather than add a parallel
+  purification structure or assume system/environment decoupling.
+
 ### Weighted geometric sums grouped by their anchors — promoted (2026-10-28)
 
 - **Seen:** `Lattice/LowEnergyCommutatorSum.lean`,
@@ -9739,3 +9858,111 @@ there is no need for a new tactic.
 - **Decision:** Three branch occurrences in one file, below the two-file promotion
   threshold. Before extending this pattern to another module, move the value equality
   before the case distinction or reuse `Fin.val_inj`; no new tactic is needed.
+
+### Uniform prefix truncation and normalization — candidate (2026-10-29)
+
+- **Pattern:** choose slack from a uniform surprisal-tail scale, sum the square
+  roots of all physical prefix tails to obtain error at most half the requested
+  accuracy, and normalize the nonzero truncated vector while preserving its MPS bond.
+- **Seen:** the private prefix-bound helper in `MPS/AreaLaw/MPSApproximation.lean`
+  and `strip_approximation_of_prefix_bounds` in `MPS/AreaLaw/StripApproximation.lean`.
+- **Existing reuse:** the actual sequential truncation, norm comparison,
+  tail prefactor, and cut-rank-to-MPS theorem are shared. The former helper is
+  private, so the strip argument proves its normalization step locally.
+- **Decision:** Two consumers, below the promotion threshold. A third consumer
+  should extract the common finite-chain argument to a shared narrow module.
+
+### Uncle boundary contraction and trace extension — candidate (2026-10-29)
+
+- **Seen:** `MPS/ParentHamiltonian/UncleBoundaryWords.lean` and
+  `MPS/ParentHamiltonian/UncleBoundaryIntersection.lean`.
+- **Pattern:** Extract coefficients of the identity from a full one-letter span,
+  contract a physical endpoint, and extend a trace identity from spanning words
+  to arbitrary matrices.
+- **Reuse:** The source-specific contraction is stated once as
+  `sum_smul_uncleBoundaryWord_cons`; Mathlib's `LinearMap.ext_on_range` supplies
+  the general extension. The existing matrix trace-representation theorem
+  handles both endpoint restriction directions.
+- **Decision:** Reuse the lemmas; no new tactic or parallel dual structure.
+
+### Delta half factors for a supplied two-site circuit (2026-10-29)
+
+- **Seen:** `MPS/MPU/StandardFormFromGates.lean`.
+- **Pattern:** A virtual index records a physical/intermediate pair; a matrix-unit
+  half factor contracts the other half factor to the supplied shifted gate.
+- **Reuse:** The finite delta sum is handled by Mathlib's ordinary `simp` lemmas.
+  The periodic seam, circuit unitarity and basis-change cancellation reuse the
+  existing supplied standard-form and fundamental-theorem APIs. No fourth copy
+  of the circuit contraction or custom tactic is introduced.
+
+
+### Normalization after prefix truncation — candidate (2026-10-29)
+
+- **Pattern:** A nonzero truncation of a unit vector has normalized error at
+  most twice its vector error, by the reverse triangle inequality and
+  `‖‖v‖⁻¹ • v - v‖ = |1 - ‖v‖|`.
+- **Seen:** `MPS/AreaLaw/MPSApproximation.lean`,
+  `MPS/AreaLaw/SnakeGridApproximation.lean`.
+- **Abstraction:** The former has the public lemma
+  `norm_inv_norm_smul_sub_le_two_mul`. Move that lemma to a shared algebra
+  module if a third caller needs it, so square-grid proofs can reuse it
+  without importing the chain area-law theorem.
+- **Notes:** Two occurrences; the square proof currently keeps this short
+  calculation inside its normalization step and imports only the truncation core.
+
+### Exponential comparisons with a common nonnegative factor — reused Mathlib (2026-10-29)
+
+- **Pattern:** Apply monotonicity of the exponential, normalize a negative
+  quotient, and reverse the inequality under negation.
+- **Detected:** The new comparison in `LocalSolution/GappedPeriodicHierarchy.lean`
+  would repeat the initial three-line sequence already used in
+  `HierarchyRadius.lean` and `PeriodicChainApproximation.lean`.
+- **Reuse:** Normalize the exponent by `ring`, then use Mathlib's `gcongr`
+  and `min_le_right`. This removes the third copy without introducing a
+  new scalar lemma or tactic. The resulting proof passes strict elaboration.
+
+### Complementary-product prefix and suffix — candidate (2026-10-29)
+
+- **Pattern:** Induct on the complementary-product length, rewrite the successor
+  equation, and identify a masked or concatenated prefix before appending factors.
+- **Seen:** Three local inductions across
+  `MPS/AreaLaw/ALVV/FrustrationFree.lean` and
+  `MPS/AreaLaw/ALVV/FrustrationFreeGap.lean`.
+- **Abstraction:** Candidate for a general complementary-product congruence or
+  concatenation lemma if further consumers appear. The current inductions use
+  different ranges and factorizations, so no identical tactic block was promoted.
+- **Notes:** The repository tactic-pattern scan was run; it reported no new
+  repeated block in these modules among its twenty highest-ranked patterns.
+
+### Supported exterior sums at a cut — candidate (2026-10-29)
+
+- **Pattern:** Split retained nearest-neighbor terms into left, right and at most
+  one crossing bond; absorb identity and regional corrections into their supported
+  side, then use actual one-sided tensor decompositions.
+- **Seen:** Three rank bounds in `MPS/AreaLaw/ALVV/FrustrationFreeRank.lean`.
+- **Abstraction:** The private exterior decomposition and support lemmas are
+  shared by the interior, exterior and boundary-region cases.
+- **Notes:** No tactic macro is needed; the common mathematical statements are
+  already factored out. The repository tactic-pattern scan was rerun.
+
+### Active parity positions and adjacent bonds — candidate (2026-10-29)
+
+- **Pattern:** Recover the original bond index of a nonzero parity-ordered
+  factor, then bound its noncommuting positions by the images of its two
+  adjacent indices.
+- **Seen:** The ordered-family activity and degree-two proofs in
+  `MPS/AreaLaw/ALVV/FrustrationFreeChain.lean`.
+- **Abstraction:** The private activity lemma and public degree-two theorem
+  separate the index bookkeeping from the detectability estimate.
+- **Notes:** No tactic repetition reaches the promotion threshold. The
+  repository pattern scan was rerun after the concrete chain assembly.
+
+### Coordinate transport of a rectangular conjugation (2026-10-29)
+
+- **Seen:** `Algebra/MatrixStarEquivSpatial.lean`.
+- **Pattern:** A square unitary becomes a rectangular unitary by reindexing its columns;
+  conjugation then transports the input matrix along the same coordinate equivalence.
+- **Reuse:** `Matrix.reindexLinearEquiv_mul` receives all three equivalences explicitly,
+  and `Matrix.conjTranspose_reindex` transports the adjoint. The existing QICLean
+  Skolem–Noether theorem supplies the square implementer. No entrywise double sum
+  or duplicate Skolem–Noether argument is introduced.
