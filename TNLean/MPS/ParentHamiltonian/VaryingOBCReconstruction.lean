@@ -11,13 +11,13 @@ import Mathlib.Data.List.OfFn
 # Reconstruction along a varying-bond open chain
 
 Adjacent-pair coefficient sections determine a single boundary matrix for the whole
-chain. The induction enlarges an actual prefix, using its derived row-isometry and
+chain. The induction enlarges a prefix, using its derived row-isometry and
 C1 at the next site. Each enlargement is the canonical adjoint construction in the
 source's three-site argument. Physical words outside a section are lists, so no
 identification of different virtual bond spaces is needed.
 
 The conclusion is a representation-intersection theorem. Passage from the kernel of
-an actual varying-bond parent Hamiltonian to the adjacent-pair sections is a separate
+a varying-bond parent Hamiltonian to the adjacent-pair sections is a separate
 step; it is not assumed as a completed parent-Hamiltonian uniqueness theorem here.
 
 Source: PGVWC07, arXiv:quant-ph/0608197, Theorem 9 proof,
@@ -30,7 +30,17 @@ namespace Matrix
 
 variable {d : ℕ}
 
-/-- Appending one physical letter appends its actual rectangular site matrix.
+/-- Prepending one physical letter prepends its rectangular site matrix, with the
+remaining bonds shifted by one.
+Source: PGVWC07, Theorem 9 proof, lines 1233–1237. -/
+private theorem rectangularEval_cons (b : ℕ → ℕ)
+    (A : ∀ k, Fin d → Matrix (Fin (b k)) (Fin (b (k + 1))) ℂ)
+    {n : ℕ} (x : Fin d) (s : Fin n → Fin d) :
+    Kraus.rectangularEval b (fun k : Fin (n + 1) ↦ A k.val) (Fin.cons x s) =
+      A 0 x * Kraus.rectangularEval (fun k ↦ b (k + 1)) (fun k : Fin n ↦ A (k.val + 1)) s :=
+  rfl
+
+/-- Appending one physical letter appends its rectangular site matrix.
 Source: PGVWC07, Theorem 9 proof, lines 1233–1237. -/
 theorem obc_rectangularEval_snoc (b : ℕ → ℕ)
     (A : ∀ k, Fin d → Matrix (Fin (b k)) (Fin (b (k + 1))) ℂ)
@@ -38,15 +48,14 @@ theorem obc_rectangularEval_snoc (b : ℕ → ℕ)
     Kraus.rectangularEval b (fun k : Fin (n + 1) ↦ A k.val) (Fin.snoc w i) =
       Kraus.rectangularEval b (fun k : Fin n ↦ A k.val) w * A n i := by
   induction n generalizing b with
-  | zero => simp [Kraus.rectangularEval]
+  | zero => simp [Kraus.rectangularEval, Fin.snoc]
   | succ n ih =>
-    have hw : w = Fin.cons (w 0) (Fin.tail w) := (Fin.cons_self_tail w).symm
-    rw [hw, ← Fin.cons_snoc_eq_snoc_cons]
-    simp only [Kraus.rectangularEval, Fin.cons_succ]
-    rw [ih (fun k ↦ b (k + 1)) (fun k ↦ A (k + 1))]
-    exact (Matrix.mul_assoc _ _ _).symm
+    have h := ih (fun k ↦ b (k + 1)) (fun k ↦ A (k + 1)) (Fin.tail w)
+    rw [← Fin.cons_self_tail w, ← Fin.cons_snoc_eq_snoc_cons, rectangularEval_cons,
+      rectangularEval_cons, Matrix.mul_assoc]
+    exact congrArg (A 0 (w 0) * ·) h
 
-/-- Every actual prefix of a row-isometric varying-bond chain is row-isometric.
+/-- Every prefix of a row-isometric varying-bond chain is row-isometric.
 The identity is proved on the true endpoint spaces, without square padding.
 Source: PGVWC07, Theorem 9 proof, lines 1224–1237. -/
 theorem obc_rectangularEval_row_isometry (b : ℕ → ℕ)
@@ -77,7 +86,7 @@ private theorem ofFn_snoc_eq {α : Type*} {n : ℕ} (w : Fin n → α) (i : α) 
   simp only [Fin.snoc_castSucc, Fin.snoc_last, List.concat_eq_append]
 
 /-- The source's overlap argument reconstructs one boundary matrix on the full chain
-from the actual adjacent-pair sections. Only sitewise C1 and canonical row-isometry
+from the adjacent-pair sections. Only sitewise C1 and canonical row-isometry
 are assumed. The physical length is at least two, so an adjacent interaction exists.
 Source: PGVWC07, Theorem 9 proof, equation unique-OBC and the final induction,
 lines 1212–1237. -/

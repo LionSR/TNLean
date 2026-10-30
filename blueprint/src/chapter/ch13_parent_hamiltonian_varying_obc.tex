@@ -112,11 +112,11 @@ Hamiltonian kernel is a separate step.
 
 \subsection{Reconstruction on the whole open chain}
 
-\begin{lemma}[Products on the actual prefix bond spaces]
+\begin{lemma}[Products on the prefix bond spaces]
     \label{lem:varying_obc_prefix_product_row_isometry}
     \lean{Matrix.obc_rectangularEval_snoc,
         Matrix.obc_rectangularEval_row_isometry}
-    \notready
+    \leanok
     \uses{lem:varying_obc_block_row_isometry}
     Let $B^{[j]}_i\in M_{D_j,D_{j+1}}(\mathbb C)$ be the site matrices,
     and put $P_m(i_0,\ldots,i_{m-1})=B^{[0]}_{i_0}\cdots B^{[m-1]}_{i_{m-1}}$,
@@ -125,13 +125,12 @@ Hamiltonian kernel is a separate step.
         P_{m+1}(u,i) & =P_m(u)B^{[m]}_i.
     \end{align}
     If every site is canonically normalized by
-    $\sum_iB^{[j]}_i B^{[j]*}_i=I_{D_j}$, then
+    $\sum_iB^{[j]}_i B^{[j]\dagger}_i=I_{D_j}$, then
     \begin{align}
-        \sum_{u}P_m(u)P_m(u)^* & =I_{D_0}.
+        \sum_{u}P_m(u)P_m(u)^\dagger & =I_{D_0}.
     \end{align}
 \end{lemma}
-\begin{proof}
-    \notready
+\begin{proof}\leanok
     The first equality follows from ordered multiplication. Induction on the
     prefix length applies the two-family row-isometry identity at each step.
 \end{proof}
@@ -140,7 +139,7 @@ Hamiltonian kernel is a separate step.
     \label{lem:varying_obc_full_chain_reconstruction}
     \lean{Matrix.obc_trace_reconstruction_of_adjacent_pair_sections,
         Matrix.obc_scalar_reconstruction_of_adjacent_pair_sections}
-    \notready
+    \leanok
     \uses{lem:varying_obc_pair_sections_reconstruct,
         lem:varying_obc_prefix_product_row_isometry}
     Consider an open chain of $N\ge2$ sites, canonically normalized as above,
@@ -161,10 +160,9 @@ Hamiltonian kernel is a separate step.
     If $D_0=D_N=1$, the coefficient family is a scalar multiple of the
     represented open-chain state.
 \end{lemma}
-\begin{proof}
-    \notready
+\begin{proof}\leanok
     Inductively suppose that every fixed suffix gives a trace representation
-    on a prefix of length $m\ge2$. Separate the first $m-1$ sites as the actual
+    on a prefix of length $m\ge2$. Separate the first $m-1$ sites as the
     prefix product, followed by sites $m-1,m$. The induction hypothesis gives
     the left two-family sections, and the original adjacent-pair condition
     gives the right sections. The prefix product is row-isometric, and the
