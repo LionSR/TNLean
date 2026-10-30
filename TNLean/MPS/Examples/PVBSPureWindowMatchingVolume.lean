@@ -30,10 +30,11 @@ private theorem cyclicCfg_full_eq_neg_translate {R : ℕ} (hR : 0 < R)
   funext k
   change (if h : (k.val + R - i.val) % R < R then
     ω ⟨(k.val + R - i.val) % R, h⟩ else τ k) = ω (k + -i)
-  rw [dif_pos (Nat.mod_lt _ hR)]
+  rw [dite_eq_left (Nat.mod_lt _ hR)]
   congr 1
   apply Fin.ext
-  rw [← sub_eq_add_neg, Fin.val_sub]
+  have hi := i.isLt
+  rw [← sub_eq_add_neg, Fin.val_sub, Fin.val_mk]
   congr 1
   omega
 
@@ -61,8 +62,13 @@ theorem cyclicTranslateState_pvbsEdge_mem_span (q : ℂ) {R : ℕ} (hR : 0 < R)
       have h := congrArg (fun f : NSiteSpace 2 (N + 1) ↦ q⁻¹ • f) hphase
       simpa only [smul_smul, inv_mul_cancel₀ hqzero, one_smul] using h
     apply Fin.cyclic_induction ?_ ?_ s
-    · simpa [cyclicTranslateState, cyclicTranslateCfg] using
-        (Submodule.mem_span_singleton_self (pvbsEdge q (N + 1)))
+    · have h0 : cyclicTranslateState (0 : Fin (N + 1)) (pvbsEdge q (N + 1)) =
+          pvbsEdge q (N + 1) := by
+        ext σ
+        change pvbsEdge q (N + 1) (fun k ↦ σ (k + 0)) = pvbsEdge q (N + 1) σ
+        simp only [add_zero]
+      rw [h0]
+      exact Submodule.mem_span_singleton_self _
     · intro i hi
       rw [← cyclicTranslateState_add i 1 (pvbsEdge q (N + 1)), hone, map_smul]
       exact Submodule.smul_mem _ _ hi
