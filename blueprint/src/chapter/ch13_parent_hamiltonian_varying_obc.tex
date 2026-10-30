@@ -18,7 +18,7 @@ the adjacent-pair conditions with the kernel of the actual open parent Hamiltoni
 \begin{lemma}[Matching the boundary products on an overlap]
     \label{lem:varying_obc_overlap_boundary_products}
     \lean{Matrix.obc_overlap_boundary_mul_eq}
-    \notready
+    \leanok
     Assume that $\operatorname{span}\{B_j\}=M_{b,c}(\mathbb C)$.
     Let $X_k\in M_{c,a}(\mathbb C)$ and $Y_i\in M_{e,b}(\mathbb C)$ satisfy
     \begin{align}
@@ -26,8 +26,7 @@ the adjacent-pair conditions with the kernel of the actual open parent Hamiltoni
     \end{align}
     for every $i,j,k$. Then $X_kA_i=C_kY_i$ for every $i,k$.
 \end{lemma}
-\begin{proof}
-    \notready
+\begin{proof}\leanok
     Cyclicity gives
     $\operatorname{tr}(Y_iB_jC_k)=\operatorname{tr}(C_kY_iB_j)$.
     By the spanning assumption, equality of these trace functionals on
@@ -39,12 +38,12 @@ the adjacent-pair conditions with the kernel of the actual open parent Hamiltoni
     \label{lem:varying_obc_three_site_reconstruction}
     \lean{Matrix.obc_three_site_boundary_reconstruction,
         Matrix.obc_three_site_trace_reconstruction}
-    \notready
+    \leanok
     \uses{lem:varying_obc_overlap_boundary_products}
     In addition assume the canonical row-isometry identity
-    $\sum_iA_iA_i^*=I_a$. Define the actual common boundary
+    $\sum_iA_iA_i^\dagger=I_a$. Define the common boundary
     \begin{align}
-        Z & =\sum_iY_iA_i^*\in M_{e,a}(\mathbb C).
+        Z & =\sum_iY_iA_i^\dagger\in M_{e,a}(\mathbb C).
     \end{align}
     Then $X_k=C_kZ$ for every $k$, and
     \begin{align}
@@ -52,22 +51,25 @@ the adjacent-pair conditions with the kernel of the actual open parent Hamiltoni
     \end{align}
     for every $i,j,k$.
 \end{lemma}
-\begin{proof}
-    \notready
+\begin{proof}\leanok
     The preceding overlap identity and the canonical normalization give
     \begin{align}
-        X_k & =X_k\sum_iA_iA_i^*
-        =\sum_iC_kY_iA_i^*=C_kZ.
+        X_k & =X_k\sum_iA_iA_i^\dagger
+        =\sum_iC_kY_iA_i^\dagger=C_kZ.
     \end{align}
-    Substitute this equality in the original trace representation and
-    move $C_k$ cyclically to the right. This is precisely the adjoint
-    boundary construction in the source proof.
+    Substituting this in the original trace representation and using
+    cyclicity of the trace gives
+    \begin{align}
+        \operatorname{tr}(X_kA_iB_j) & =\operatorname{tr}(C_kZA_iB_j)
+        =\operatorname{tr}(ZA_iB_jC_k).
+    \end{align}
+    This is the adjoint boundary construction in the source proof.
 \end{proof}
 
 \begin{lemma}[Two adjacent section conditions give a three-site representation]
     \label{lem:varying_obc_pair_sections_reconstruct}
     \lean{Matrix.obc_three_site_reconstruction_of_pair_sections}
-    \notready
+    \leanok
     \uses{lem:varying_obc_three_site_reconstruction}
     Assume the same row-isometry and middle-site spanning conditions.
     Let $\phi:I\times J\times K\to\mathbb C$. Suppose that for every
@@ -81,8 +83,7 @@ the adjacent-pair conditions with the kernel of the actual open parent Hamiltoni
     \end{align}
     simultaneously for every $i,j,k$.
 \end{lemma}
-\begin{proof}
-    \notready
+\begin{proof}\leanok
     Choose boundary matrices from the two local section conditions. Their
     trace representations agree because they both give $\phi$.
     The canonical adjoint reconstruction supplies the common boundary.
@@ -91,32 +92,31 @@ the adjacent-pair conditions with the kernel of the actual open parent Hamiltoni
 \begin{lemma}[Blocking preserves the rectangular row isometry]
     \label{lem:varying_obc_block_row_isometry}
     \lean{Matrix.obc_block_row_isometry}
-    \notready
-    If $\sum_iA_iA_i^*=I_a$ and $\sum_jB_jB_j^*=I_b$, then the blocked
-    family satisfies
+    \leanok
+    If $\sum_iA_iA_i^\dagger=I_a$ and $\sum_jB_jB_j^\dagger=I_b$, then the
+    blocked family satisfies
     \begin{align}
-        \sum_{i,j}(A_iB_j)(A_iB_j)^* & =I_a.
+        \sum_{i,j}(A_iB_j)(A_iB_j)^\dagger & =I_a.
     \end{align}
 \end{lemma}
-\begin{proof}
-    \notready
+\begin{proof}\leanok
     Reverse the product under adjoints and first sum over the middle
     physical letter:
     \begin{align}
-        \sum_{i,j}A_iB_jB_j^*A_i^*
-         & =\sum_iA_i\Bigl(\sum_jB_jB_j^*\Bigr)A_i^*
-        =\sum_iA_iA_i^*=I_a.
+        \sum_{i,j}A_iB_jB_j^\dagger A_i^\dagger
+         & =\sum_iA_i\Bigl(\sum_jB_jB_j^\dagger\Bigr)A_i^\dagger
+        =\sum_iA_iA_i^\dagger=I_a.
     \end{align}
 \end{proof}
 
 
 \subsection{Reconstruction on the whole open chain}
 
-\begin{lemma}[Products on the actual prefix bond spaces]
+\begin{lemma}[Products on the prefix bond spaces]
     \label{lem:varying_obc_prefix_product_row_isometry}
     \lean{Matrix.obc_rectangularEval_snoc,
         Matrix.obc_rectangularEval_row_isometry}
-    \notready
+    \leanok
     \uses{lem:varying_obc_block_row_isometry}
     Let $B^{[j]}_i\in M_{D_j,D_{j+1}}(\mathbb C)$ be the site matrices,
     and put $P_m(i_0,\ldots,i_{m-1})=B^{[0]}_{i_0}\cdots B^{[m-1]}_{i_{m-1}}$,
@@ -125,13 +125,12 @@ the adjacent-pair conditions with the kernel of the actual open parent Hamiltoni
         P_{m+1}(u,i) & =P_m(u)B^{[m]}_i.
     \end{align}
     If every site is canonically normalized by
-    $\sum_iB^{[j]}_i B^{[j]*}_i=I_{D_j}$, then
+    $\sum_iB^{[j]}_i B^{[j]\dagger}_i=I_{D_j}$, then
     \begin{align}
-        \sum_{u}P_m(u)P_m(u)^* & =I_{D_0}.
+        \sum_{u}P_m(u)P_m(u)^\dagger & =I_{D_0}.
     \end{align}
 \end{lemma}
-\begin{proof}
-    \notready
+\begin{proof}\leanok
     The first equality follows from ordered multiplication. Induction on the
     prefix length applies the two-family row-isometry identity at each step.
 \end{proof}
@@ -140,7 +139,7 @@ the adjacent-pair conditions with the kernel of the actual open parent Hamiltoni
     \label{lem:varying_obc_full_chain_reconstruction}
     \lean{Matrix.obc_trace_reconstruction_of_adjacent_pair_sections,
         Matrix.obc_scalar_reconstruction_of_adjacent_pair_sections}
-    \notready
+    \leanok
     \uses{lem:varying_obc_pair_sections_reconstruct,
         lem:varying_obc_prefix_product_row_isometry}
     Consider an open chain of $N\ge2$ sites, canonically normalized as above,
@@ -161,10 +160,9 @@ the adjacent-pair conditions with the kernel of the actual open parent Hamiltoni
     If $D_0=D_N=1$, the coefficient family is a scalar multiple of the
     represented open-chain state.
 \end{lemma}
-\begin{proof}
-    \notready
+\begin{proof}\leanok
     Inductively suppose that every fixed suffix gives a trace representation
-    on a prefix of length $m\ge2$. Separate the first $m-1$ sites as the actual
+    on a prefix of length $m\ge2$. Separate the first $m-1$ sites as the
     prefix product, followed by sites $m-1,m$. The induction hypothesis gives
     the left two-family sections, and the original adjacent-pair condition
     gives the right sections. The prefix product is row-isometric, and the
