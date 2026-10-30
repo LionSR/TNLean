@@ -1,0 +1,126 @@
+\begin{lemma}[Blocking the action tensors]
+    \label{lem:mpug_action_blocking}
+    \lean{MPOTensor.blockTensor_actTensor,
+        MPOTensor.GroupFamily.CarriesMPV.blockTensor,
+        MPOTensor.GroupFamily.BlockActionData.block}
+    \leanok
+    \uses{def:mpug_permuted_block_l_symbol, def:mpug_action_tensor}
+    For an operator tensor $T$ and a state tensor $A$, physical blocking
+    satisfies $(T\cdot A)^{[L]}=T^{[L]}\cdot A^{[L]}$. A reduction
+    $(V,W)$ from $T\cdot A$ onto $C$ remains a reduction from
+    $T^{[L]}\cdot A^{[L]}$ onto $C^{[L]}$, with the same matrices.
+    For $L>0$, the periodic action law
+    $O_N(T)\ket{V^{(N)}(A)}=\ket{V^{(N)}(C)}$ at all positive lengths
+    is also preserved by blocking.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:mpug_action_tensor, thm:mps_reduction_exterior_buffer}
+    Decode a blocked input index as a word of length $L$. Reindexing
+    the contracted input sum gives
+    \begin{align}
+        (T\cdot A)^{[L],I}
+         & =\sum_J T^{[L],IJ}\otimes A^{[L],J}.
+        \label{eq:mpug_action_blocking}
+    \end{align}
+    A word of blocked letters is the corresponding flattened word of
+    original letters. The reduction equations and the periodic action law
+    therefore apply at the flattened lengths.
+\end{proof}
+
+\begin{definition}[A common action buffer]
+    \label{def:mpug_action_buffer}
+    \lean{MPOTensor.GroupFamily.BlockActionData.nilpotencyLength,
+        MPOTensor.GroupFamily.BlockActionData.HasExteriorBufferLength,
+        MPOTensor.GroupFamily.BlockActionData.commonBufferLength,
+        MPOTensor.GroupFamily.BlockActionData.commonBufferLength_pos,
+        MPOTensor.GroupFamily.BlockActionData.nilpotencyLength_le_commonBufferLength_add_one,
+        MPOTensor.GroupFamily.BlockActionData.commonBufferLength_of_isEmpty}
+    \leanok
+    \uses{def:mpug_permuted_block_l_symbol, thm:mps_reduction_exterior_buffer}
+    Fix action reductions $(V_{g,x},W_{g,x})$ for finite $G$ and
+    $\mathsf X$, and put $B_{g,x}=O_g\cdot A_x$. Write $N_0(g,x)$ for
+    their residual nilpotency lengths. Their common buffer length is
+    $L=\max\{1,\max_{g,x}(N_0(g,x)-1)\}$, where the inner maximum is
+    zero for the empty family. Thus $L>0$ and $N_0(g,x)\leq L+1$;
+    when $\mathsf X$ is empty, $L=1$.
+\end{definition}
+
+\begin{lemma}[Common blocking of action reductions]
+    \label{lem:mpug_action_common_blocking}
+    \lean{MPOTensor.GroupFamily.BlockActionData.interior,
+        MPOTensor.GroupFamily.BlockActionData.exterior,
+        MPOTensor.GroupFamily.BlockActionData.block_hasExteriorBufferLength_one,
+        MPOTensor.GroupFamily.BlockActionData.block_commonBufferLength_hasExteriorBufferLength_one,
+        MPOTensor.GroupFamily.exists_block_blockActionData_one,
+        MPOTensor.GroupFamily.exists_block_blockActionData_one_of_isPretransitive}
+    \leanok
+    \uses{def:mpug_action_buffer, lem:mpug_action_blocking,
+        thm:mpug_permuted_block_l_symbol_spec}
+    Suppose $G$ and $\mathsf X$ are finite, the tensors $A_x$ are normal
+    of positive, possibly different, bond dimensions, and the periodic
+    action law holds at every positive length. There is one positive
+    length $L$ for which all the blocked action tensors
+    $B_{g,x}=O_g^{[L]}\cdot A_x^{[L]}$ have reductions
+    $(V_{g,x},W_{g,x})$ onto $C_{g,x}=A_{gx}^{[L]}$ satisfying
+    \begin{align}
+        V_{g,x}B_{g,x}^{\mathbf w}W_{g,x}
+         & =C_{g,x}^{\mathbf w},
+        \label{eq:mpug_action_interior}            \\
+        B_{g,x}^{\mathbf p}W_{g,x}C_{g,x}^{\mathbf c}
+        V_{g,x}B_{g,x}^{\mathbf q}
+         & =B_{g,x}^{\mathbf p\mathbf c\mathbf q}.
+        \label{eq:mpug_action_exterior}
+    \end{align}
+    The interior word $\mathbf w$ may be empty. In the exterior identity
+    $\mathbf c$ is nonempty and $|\mathbf p|,|\mathbf q|\geq1$.
+    These are the interior and exterior equations of
+    \cite[lines~1782--1873]{FrancoRubio2025MPUGauging}, with
+    $A^\Gamma_{g,x}=V_{g,x}$ and
+    $A^{\text{\reflectbox{$\Gamma$}}}_{g,x}=W_{g,x}$.
+    The periodic action hypothesis is explicit, as in
+    \cite[line~1064]{GarreRubio2023MPOSym}; see also
+    \cite{gap:fbc25_mpu_action_stabilizer_source_audit}.
+
+    In particular, for a transitive action of finite $G$ on $\mathsf X$
+    and injective $A_x$, the label set is automatically finite. If
+    $\{O_g\}$ is a simple injective MPU representation, this same blocking
+    preserves that property, the injectivity of every $A_x$, and the
+    periodic action law.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:mpug_action_buffer, lem:mpug_action_blocking,
+        thm:mpug_permuted_block_l_symbol_spec, thm:mps_reduction_exterior_buffer}
+    Choose the action reductions and the common length of
+    Definition~\ref{def:mpug_action_buffer}. Their residual bounds follow
+    from equality of the positive-length periodic vectors. Since
+    $N_0(g,x)-1\leq L$, one exterior block supplies the required buffer
+    for every pair. The interior identity holds on all words by the
+    reduction equations. If $\mathsf X$ is nonempty and the action is
+    transitive, the map $g\mapsto gx_0$ is onto, so $\mathsf X$ is finite;
+    the empty case needs no choice of $x_0$. Positive blocking preserves
+    injectivity and the MPU representation laws.
+\end{proof}
+
+\begin{lemma}[Reciprocal scalar action gauge]
+    \label{lem:mpug_action_scalar_gauge}
+    \lean{MPOTensor.GroupFamily.BlockActionData.smul,
+        MPOTensor.GroupFamily.BlockActionData.hasExteriorBufferLength_smul,
+        MPOTensor.GroupFamily.BlockActionData.block_smul}
+    \leanok
+    \uses{lem:mpug_action_common_blocking}
+    For any nonzero scalars $\gamma_{g,x}$ the replacements
+    $W_{g,x}\mapsto\gamma_{g,x}W_{g,x}$ and
+    $V_{g,x}\mapsto\gamma_{g,x}^{-1}V_{g,x}$ preserve
+    (\ref{eq:mpug_action_interior}) and
+    (\ref{eq:mpug_action_exterior}) with the same exterior buffer length.
+    They commute with physical blocking. This is the scalar action in
+    \cite[lines~1871--1873]{FrancoRubio2025MPUGauging}.
+\end{lemma}
+
+\begin{proof}\leanok
+    The two scalars cancel inside $V_{g,x}B_{g,x}^{\mathbf w}W_{g,x}$
+    and $W_{g,x}C_{g,x}^{\mathbf c}V_{g,x}$. Blocking changes the physical
+    tensors and leaves the reduction matrices unchanged.
+\end{proof}
