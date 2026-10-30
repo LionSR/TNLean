@@ -9896,3 +9896,13 @@ there is no need for a new tactic.
   separate the index bookkeeping from the detectability estimate.
 - **Notes:** No tactic repetition reaches the promotion threshold. The
   repository pattern scan was rerun after the concrete chain assembly.
+
+### Coordinate transport of a rectangular conjugation (2026-10-29)
+
+- **Seen:** `Algebra/MatrixStarEquivSpatial.lean`.
+- **Pattern:** A square unitary becomes a rectangular unitary by reindexing its columns;
+  conjugation then transports the input matrix along the same coordinate equivalence.
+- **Reuse:** `Matrix.reindexLinearEquiv_mul` receives all three equivalences explicitly,
+  and `Matrix.conjTranspose_reindex` transports the adjoint. The existing QICLean
+  Skolem–Noether theorem supplies the square implementer. No entrywise double sum
+  or duplicate Skolem–Noether argument is introduced.
