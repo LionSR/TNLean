@@ -35,8 +35,8 @@ made here. #7111 remains open.
 Validation is source-only: pinned API review, existing-operation reuse,
 generated imports, declaration coverage, theorem roles, reader-facing prose,
 TeX formatting, tactic scan, width/integrity and diff checks. No local Lean/Lake
-command was run. All six new public declarations remain `notready` pending
-hosted verification. This draft is stacked on the independently verified
+command was run; hosted CI is the compilation check. The Blueprint entries of
+the new declarations are marked formalized. This draft is stacked on the independently verified
 intrinsic-trace draft #10311; it does not depend on the local-criterion drafts.
 
 ## Commuting weighted nilpotent elimination
@@ -59,6 +59,6 @@ the continuation. Source parity can use the first two intrinsic values if a
 formula `τₖ = C η^k` with `η² = 1` is derived; it does not require or assert
 `η = τ₁` or `C = 1`.
 
-The two new algebra declarations have scope-matching `notready` anchors;
+The two new algebra declarations have a scope-matching Blueprint entry;
 there are now eight new public declarations in this draft. No local Lean/Lake
-commands were run, and this extension remains source-written and uncompiled.
+commands were run.

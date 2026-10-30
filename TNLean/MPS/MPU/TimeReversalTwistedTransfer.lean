@@ -54,9 +54,9 @@ theorem timeReversalPeriodicTrace_eq_sum (U : MPOTensor d D) :
       Matrix.reindex_apply, finTwoArrowEquiv, mpoMatrixEntry, ite_and, ite_mul,
       List.ofFn_succ, List.ofFn_zero, evalWord]
   change (∑ x : Fin d × Fin d, _) = _
-  simp only [Fintype.sum_prod_type, Matrix.diag_apply, hentry]
-  exact Finset.sum_congr rfl fun i _ ↦
-    Finset.sum_congr rfl fun j _ ↦ Matrix.trace_mul_comm (U j i) (U i j)
+  simp only [Fintype.sum_prod_type]
+  exact Finset.sum_congr rfl fun i _ ↦ Finset.sum_congr rfl fun j _ ↦
+    (hentry i j).trans (Matrix.trace_mul_comm (U j i) (U i j))
 
 /-- The intrinsic periodic trace of a physical block is the sum of the
 oppositely contracted pairs of actual open words. The two words have exactly

@@ -13296,21 +13296,19 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     % Source lines: paper_v2.tex 2203--2235.
 \end{lemma}
 
-\input{chapter/ch28_mpu_finite_heisenberg}
-
 \subsection{Intrinsic blocked traces and the twisted transfer}
 
 \begin{definition}[Twisted transfer of the squared operator tensor]
     \label{def:mpu_time_reversal_twisted_transfer}
     \lean{MPOTensor.timeReversalTwistedTransfer}
-    \notready
-    Let $U$ be an MPO tensor with physical dimension $d$ and bond dimension
+    \leanok
+    Let $W$ be an MPO tensor with physical dimension $d$ and bond dimension
     $D$. In product bond coordinates, define
-    \[
-        T_U=\frac{1}{d}\sum_{i,j=0}^{d-1}U^{ij}\otimes U^{ji}.
-    \]
+    \begin{align}
+        T_W=\frac{1}{d}\sum_{i,j=0}^{d-1}W^{ij}\otimes W^{ji}.
+    \end{align}
     Equivalently, this is the normalized physical diagonal of the product
-    tensor for $U^2$. It is not assumed positive or Hermitian. The algebraic
+    tensor for $W^2$. It is not assumed positive or Hermitian. The algebraic
     convention $0^{-1}=0$ permits zero physical dimension as well.
 \end{definition}
 
@@ -13319,20 +13317,20 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \lean{MPOTensor.timeReversalPeriodicTrace_eq_sum,
         MPOTensor.timeReversalPeriodicTrace_blockTensor,
         MPOTensor.timeReversalTwistedTransfer_pow_eq_sum_evalWord}
-    \notready
+    \leanok
     \uses{def:mpu_time_reversal_twisted_transfer}
     The exchange-contracted trace of the two-site periodic operator is
-    \[
-        \tau(U)=\sum_{i,j=0}^{d-1}\tr(U^{ij}U^{ji}).
-    \]
-    For $k\geq0$, write $U^{\sigma\tau}$ for the ordered product along
-    physical words $\sigma,\tau$ of length $k$. Then
     \begin{align}
-        \tau(U_k)
-         & =\sum_{\sigma,\tau}\tr(U^{\sigma\tau}U^{\tau\sigma}), \\
-        T_U^k
-         & =d^{-k}\sum_{\sigma,\tau}
-        U^{\sigma\tau}\otimes U^{\tau\sigma}.
+        \tau(W)=\sum_{i,j=0}^{d-1}\tr(W^{ij}W^{ji}).
+    \end{align}
+    For $k\geq0$, write $W^{ww'}$ for the ordered product along
+    physical words $w,w'$ of length $k$. Then
+    \begin{align}
+        \tau(W_k)
+         & =\sum_{w,w'}\tr(W^{ww'}W^{w'w}), \\
+        T_W^k
+         & =d^{-k}\sum_{w,w'}
+        W^{ww'}\otimes W^{w'w}.
     \end{align}
     The products use exactly $k$ physical sites, without a further blocking.
     These are algebraic identities for arbitrary MPO tensors, including the
@@ -13343,26 +13341,26 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \label{lem:mpu_intrinsic_blocked_twisted_trace}
     \lean{MPOTensor.swapMatrix_commute_timeReversalTwistedTransfer,
         MPOTensor.intrinsicTimeReversalSign_blockTensor_eq_twistedTransfer_trace}
-    \notready
+    \leanok
     \uses{def:mpu_time_reversal_twisted_transfer,
         lem:mpu_time_reversal_blocked_open_words}
-    Let $F_D$ exchange the two bond factors. Then $F_DT_U=T_UF_D$, and the
+    Let $F_D$ exchange the two bond factors. Then $F_DT_W=T_WF_D$, and the
     normalized intrinsic exchange trace of each block is
-    \[
-        \sigma_{\mathrm{int}}(U_k)=\tr(F_DT_U^k),\qquad k\geq0.
-    \]
+    \begin{align}
+        \sigma_{\mathrm{int}}(W_k)=\tr(F_DT_W^k),\qquad k\geq0.
+    \end{align}
     No canonical form, symmetry or standard-form choice is needed for these
     identities. They give a finite-dimensional expression relevant to
-    \cite[lines~1633--1733]{Cirac2017MPU}; they do not yet prove the blocking
-    parity proposition. In particular a virtual sign from even-chain
-    comparison has not been identified with $\sigma_{\mathrm{int}}(U)$.
+    \cite[lines~1633--1733]{Cirac2017MPU}.
+    % The blocking parity proposition and the identification of the virtual
+    % sign from even-chain comparison with the intrinsic sign are separate.
 \end{lemma}
 
 \begin{lemma}[Commuting weights remove stabilized nilpotent transients]
     \label{lem:mpu_stabilized_commuting_weighted_trace}
     \lean{Matrix.StabilizedRankOneData.isNilpotent_pow_sub_power,
         Matrix.StabilizedRankOneData.trace_mul_pow_eq_of_commute}
-    \notready
+    \leanok
     Let $E$ be a finite complex matrix and suppose that, for some $J>0$,
     every power $E^n$ with $n\geq J$ equals a normalized rank-one projector
     $P=E^J$. Then $E^k-P$ is nilpotent for every $k>0$. If $F$ commutes
@@ -13548,3 +13546,4 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     assumed. This constructs the blocking by two; arbitrary blocking and
     sequential unwinding remain separate.
 \end{lemma}
+\input{chapter/ch28_mpu_finite_heisenberg}

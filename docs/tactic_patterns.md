@@ -10164,6 +10164,7 @@ removed after the dependency audit exposed it.
   threshold. Before extending this pattern to another module, move the value equality
   before the case distinction or reuse `Fin.val_inj`; no new tactic is needed.
 
+
 ### Rectangular trace agreement on a spanning family — candidate (2026-10-29)
 
 - **Seen:** `MPS/ParentHamiltonian/VaryingOBCIntersection.lean`.
@@ -10275,16 +10276,6 @@ removed after the dependency audit exposed it.
 - **Notes:** No tactic repetition reaches the promotion threshold. The
   repository pattern scan was rerun after the concrete chain assembly.
 
-### Coordinate transport of a rectangular conjugation (2026-10-29)
-
-- **Seen:** `Algebra/MatrixStarEquivSpatial.lean`.
-- **Pattern:** A square unitary becomes a rectangular unitary by reindexing its columns;
-  conjugation then transports the input matrix along the same coordinate equivalence.
-- **Reuse:** `Matrix.reindexLinearEquiv_mul` receives all three equivalences explicitly,
-  and `Matrix.conjTranspose_reindex` transports the adjoint. The existing QICLean
-  Skolem–Noether theorem supplies the square implementer. No entrywise double sum
-  or duplicate Skolem–Noether argument is introduced.
-
 ### Intrinsic blocked traces from a product-tensor diagonal — candidate (2026-10-29)
 
 - **Pattern:** Expand `normalizedDiagonal (mulTensor U U)` powers with the
@@ -10312,6 +10303,16 @@ removed after the dependency audit exposed it.
   predicate or source witness is introduced. The new result eliminates
   transient terms in commuting weighted traces rather than reproving
   stabilization or the existing unweighted nilpotent trace theorem.
+
+### Coordinate transport of a rectangular conjugation (2026-10-29)
+
+- **Seen:** `Algebra/MatrixStarEquivSpatial.lean`.
+- **Pattern:** A square unitary becomes a rectangular unitary by reindexing its columns;
+  conjugation then transports the input matrix along the same coordinate equivalence.
+- **Reuse:** `Matrix.reindexLinearEquiv_mul` receives all three equivalences explicitly,
+  and `Matrix.conjTranspose_reindex` transports the adjoint. The existing QICLean
+  Skolem–Noether theorem supplies the square implementer. No entrywise double sum
+  or duplicate Skolem–Noether argument is introduced.
 
 ### Signed unitary transfer comparisons and weighted traces — candidate (2026-10-29)
 
