@@ -138,7 +138,12 @@ theorem isDressedProportional_relativeScalar (hA : ∀ x, Kraus.IsNormal (A x))
 
 /-- **Reciprocal rescaling of action tensors** (arXiv:2502.20257, `eq:scalar_act_ten`,
 `main.tex` lines 1871--1873): `A^{refΓ}_{g,x} ↦ γ_{g,x} A^{refΓ}_{g,x}` and
-`A^Γ_{g,x} ↦ γ_{g,x}⁻¹ A^Γ_{g,x}`. -/
+`A^Γ_{g,x} ↦ γ_{g,x}⁻¹ A^Γ_{g,x}`.
+
+`BlockActionData.smul` in `TNLean/MPS/MPU/ActionCommonBlocking.lean` performs the same
+rescaling with a complex scalar and a separate nonvanishing hypothesis. It is not reused here
+because that module belongs to the matrix product unitary layer, which imports this symmetry
+layer rather than the reverse; the unit-valued gauge here is the form the gauge law uses. -/
 noncomputable def rescale (ad : BlockActionData F A) (γ : ActionTensorGauge G X) :
     BlockActionData F A where
   V g x := ((γ g x : ℂ))⁻¹ • ad.V g x

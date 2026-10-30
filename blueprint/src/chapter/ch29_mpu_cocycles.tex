@@ -1291,17 +1291,28 @@ $N\geq1$.
 \begin{proof}\leanok
     \uses{thm:mpug_permuted_block_l_symbol_spec,
         thm:mpug_dressed_proportionality}
+    As in the proof of Lemma~\ref{thm:mpug_permuted_block_l_compatibility},
+    write $\alpha^x_{g,h}$ and $\varphi^x_{g,h}$ for the two left boundaries
+    of Definition~\ref{def:mpug_permuted_block_l_symbol}, and
+    $\alpha'^x_{g,h}$, $\varphi'^x_{g,h}$ for those of the primed choice.
     Comparing the action tensors of $h$ on the block $x$ and lifting through
     the operator $O_g$, then pulling the comparison for $g$ on the block $hx$
-    back along the reduction by the primed action of $h$, shows that the
-    first boundary of Definition~\ref{def:mpug_permuted_block_l_symbol}
-    changes by $\gamma^x_h\gamma^{hx}_g$ against long words. In the same way
-    the second boundary changes by $\beta_{g,h}\gamma^x_{gh}$. Hence the
+    back along the reduction by the primed action of $h$, and comparing the
+    fusion tensors in the same way, gives for all long words of
+    $C=(O_gO_h)\cdot A_x$
+    \begin{align}
+        \alpha^x_{g,h}C^{\mathbf w}
+         & =\gamma^{hx}_g\gamma^x_h\,\alpha'^x_{g,h}C^{\mathbf w},   &
+        \varphi^x_{g,h}C^{\mathbf w}
+         & =\beta_{g,h}\gamma^x_{gh}\,\varphi'^x_{g,h}C^{\mathbf w}.
+        \label{eq:mpug_permuted_l_gauge_boundaries}
+    \end{align}
+    Since $\alpha=L\varphi$ and $\alpha'=L'\varphi'$ against long words, the
     first boundary of the original choice equals both
-    $\gamma^x_h\gamma^{hx}_gL'^x_{g,h}$ and $L^x_{g,h}\beta_{g,h}\gamma^x_{gh}$
-    times the second boundary of the primed choice against long words, and it
-    is nonzero against arbitrarily long words because it belongs to a
-    reduction onto a normal tensor. For rescaled tensors the left boundaries
+    $\gamma^{hx}_g\gamma^x_hL'^x_{g,h}\varphi'^x_{g,h}$ and
+    $L^x_{g,h}\beta_{g,h}\gamma^x_{gh}\varphi'^x_{g,h}$ against long words,
+    and $\varphi'^x_{g,h}$ is nonzero against arbitrarily long words because
+    it belongs to a reduction onto a normal tensor. For rescaled tensors the left boundaries
     differ by the rescaling factor exactly, so the comparison scalars are the
     rescaling factors, and the statement about the anomaly is
     Lemma~\ref{thm:mpug_anomaly_three_cocycle_gauge}.
@@ -5572,13 +5583,12 @@ tensor-level bridge to an underlying MPS--MPU pair is not asserted here.
         TNLean.Algebra.LSymbol.isBlockIndependent_gauge_iff,
         TNLean.Algebra.StabilizerRepresentatives.inducedLSymbol_isBlockIndependent_iff_circle}
     \leanok
-    \uses{lem:mpug_scalar_bi_restriction, thm:mpug_circle_complex_units_h2,
-        thm:mpug_l_gauge_composition}
+    \uses{lem:mpug_scalar_bi_restriction, thm:mpug_circle_complex_units_h2}
     Restriction along a group homomorphism $f\colon S\to G$ commutes with
     the maps $H^2(-,U(1))\to H^2(-,\C^\times)$ induced by inclusion of the
     unit circle. If $G$ is finite, a class $c\in H^2(S,U(1))$ is the
     restriction of a class of $G$ exactly when its image in
-    $H^2(S,\C^\times)$ is. Moreover, block independence of an $L$-symbol after
+    $H^2(S,\C^\times)$ is. Block independence of an $L$-symbol after
     a joint scalar gauge is unchanged by any further joint scalar gauge.
 
     Consequently, in the setting of Lemma~\ref{lem:mpug_scalar_bi_restriction}
