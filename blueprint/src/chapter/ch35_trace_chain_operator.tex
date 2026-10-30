@@ -18,7 +18,7 @@
     $\operatorname{tr}(C)$.
 \end{definition}
 
-\begin{theorem}[Absorption of a closing matrix on a nonempty chain]
+\begin{lemma}[Absorption of a closing matrix on a nonempty chain]
     \label{thm:trace_chain_closing_absorption}
     \lean{MPOTensor.exists_traceChainOperator_one}
     \leanok
@@ -34,7 +34,7 @@
         \label{eq:trace_chain_closing_absorption}
     \end{align}
     The dimensions $q$ and $\chi$ may vanish.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Set $A'_0(x,y)=CA_0(x,y)$ and $A'_v(x,y)=A_v(x,y)$ for $1\le v<n$.
     Associativity gives (\ref{eq:trace_chain_closing_absorption}).
