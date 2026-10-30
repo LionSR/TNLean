@@ -44,6 +44,8 @@ import TNLean.MPS.MPU.CompositionFlattening
 import TNLean.MPS.MPU.CompositionIndex
 import TNLean.MPS.MPU.CompositionRanks
 import TNLean.MPS.MPU.ConstantBranchingBounds
+import TNLean.MPS.MPU.DaggerFusionCompatibility
+import TNLean.MPS.MPU.DaggerFusionScalars
 import TNLean.MPS.MPU.DaggerInverse
 import TNLean.MPS.MPU.DaggerInverseGauge
 import TNLean.MPS.MPU.DeterminantStationarity
@@ -101,6 +103,7 @@ import TNLean.MPS.MPU.InverseCompatibleGates
 import TNLean.MPS.MPU.InverseCompatibleMovement
 import TNLean.MPS.MPU.InverseCompatiblePeriodicComposition
 import TNLean.MPS.MPU.InverseCompatiblePhysicalRanks
+import TNLean.MPS.MPU.InverseCompatiblePleasantProperties
 import TNLean.MPS.MPU.InverseCompatibleSourceFactors
 import TNLean.MPS.MPU.InverseCompatibleSourceProperties
 import TNLean.MPS.MPU.InverseCompatibleSourceTransport
@@ -205,6 +208,7 @@ import TNLean.MPS.MPU.TensorProductCanonicalForm
 import TNLean.MPS.MPU.TensorProductIndex
 import TNLean.MPS.MPU.ThreeFormInsertion
 import TNLean.MPS.MPU.ThreeFormSpan
+import TNLean.MPS.MPU.ThreeLeggedDecomposition
 import TNLean.MPS.MPU.TimeReversalSign
 import TNLean.MPS.MPU.TimeReversalSignIntrinsic
 import TNLean.MPS.MPU.TimeReversalTraceGauge
@@ -219,10 +223,16 @@ import TNLean.MPS.MPU.TruncatedSymmetryUnitarity
 import TNLean.MPS.MPU.TruncationCommutator
 import TNLean.MPS.MPU.TwoKrausPolar
 import TNLean.MPS.MPU.TwoSectorMerging
+import TNLean.MPS.MPU.TwoSiteBufferedAction
+import TNLean.MPS.MPU.TwoSiteFiniteHeisenberg
+import TNLean.MPS.MPU.TwoSiteLocalAction
+import TNLean.MPS.MPU.TwoSitePropagation
+import TNLean.MPS.MPU.TwoSiteQuasiLocalAction
 import TNLean.MPS.MPU.TwoSiteStandardForm
 import TNLean.MPS.MPU.TwoSiteStandardFormCircuit
 import TNLean.MPS.MPU.TwoSiteStandardFormOpenWord
 import TNLean.MPS.MPU.TwoSiteStandardFormResidualWord
+import TNLean.MPS.MPU.TwoSiteTranslationCovariance
 import TNLean.MPS.MPU.UniformCircuitResourceBounds
 import TNLean.MPS.MPU.UniformMergingResourceBounds
 import TNLean.MPS.MPU.UnitCircleRankTwo
