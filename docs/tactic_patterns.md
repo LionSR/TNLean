@@ -9929,6 +9929,18 @@ there is no need for a new tactic.
 - **Decision:** One file, below the two-file promotion threshold. The private recurrence
   lemmas retain the shared algebra once; no new tactic or general blocking framework.
 
+### Equality of two-element tensor families — candidate (2026-10-29)
+
+- **Seen:** `MPS/Examples/AnomalousCondensation/Z2Z2AnomalyClass.lean` and
+  `Z2Z2BlockedAnomaly.lean`, the three subgroup restrictions.
+- **Pattern:** Prove family equality by the bond dimensions and heterogeneous
+  tensor equalities at the identity and generator.
+- **Abstraction:** The blocked example uses a private `twoFamily_ext` lemma at
+  all three restrictions. The older dressed example uses its own helper for
+  the bond-two restrictions; a shared API can be considered if another example
+  needs this shape.
+- **Decision:** Mathematical extensionality suffices; no tactic is needed.
+
 ### Rectangular trace agreement on a spanning family — candidate (2026-10-29)
 
 - **Seen:** `MPS/ParentHamiltonian/VaryingOBCIntersection.lean`.
