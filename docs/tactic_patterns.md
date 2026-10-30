@@ -9737,6 +9737,15 @@ there is no need for a new tactic.
 - **Decision:** Use the positive Gram zero criterion rather than add a parallel
   purification structure or assume system/environment decoupling.
 
+### Cancellation from a spanning matrix family — promoted
+- **Pattern:** express the identity as a finite linear combination of a
+  spanning family, distribute multiplication, and cancel two factors.
+- **Seen:** the two orientations in `PEPS/CycleMPSChainArc.lean`; its
+  trace-pairing cancellation already uses the same extension mechanism.
+- **Abstraction:** use Mathlib's `LinearMap.ext_on_range` on `mulLeft` or
+  `mulRight`, then evaluate at the identity. Both multiplication proofs now
+  work for an arbitrary `Sort` of generators without a finite-index instance.
+
 ### Weighted geometric sums grouped by their anchors — promoted (2026-10-28)
 
 - **Seen:** `Lattice/LowEnergyCommutatorSum.lean`,
