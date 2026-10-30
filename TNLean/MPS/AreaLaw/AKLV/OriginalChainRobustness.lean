@@ -78,8 +78,8 @@ theorem original_chain_robustness {L q : ℕ} [NeZero q]
   have heigShift : Matrix.toEuclideanCLM (n := Fin L → Fin q) (𝕜 := ℂ)
       ((∑ i, h i) - (((z 0 + z 1 + z 2 : ℝ) : ℂ)) • 1) Ω = (e : ℂ) • Ω := by
     apply WithLp.ofLp_injective 2
-    simp only [Matrix.ofLp_toEuclideanCLM, WithLp.ofLp_smul, sub_mulVec, smul_mulVec,
-      one_mulVec, heigRaw, e, Fin.sum_univ_three, Complex.ofReal_sub, sub_smul]
+    simp only [Matrix.ofLp_toEuclideanCLM, WithLp.ofLp_sub, WithLp.ofLp_smul, sub_mulVec,
+      smul_mulVec, one_mulVec, heigRaw, e, Fin.sum_univ_three, Complex.ofReal_sub, sub_smul]
   have ht' : 32768 * (e + g) / g ^ 2 ≤ t := by
     refine le_trans ?_ ht
     apply div_le_div_of_nonneg_right _ (sq_nonneg g)

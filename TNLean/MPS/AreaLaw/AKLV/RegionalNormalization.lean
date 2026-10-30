@@ -26,7 +26,7 @@ Theorem 6.1.
 -/
 
 open Matrix QuantumCircuit
-open scoped BigOperators ComplexOrder MatrixOrder Matrix.Norms.L2Operator
+open scoped BigOperators ComplexOrder MatrixOrder
 
 noncomputable section
 
@@ -46,11 +46,6 @@ def normalizationCoreSites {L : ℕ} (a b : Fin (L - 1)) : Fin 3 → Finset (Fin
   | 1 => interval L (a.val + 2) b.val
   | 2 => interval L (b.val + 2) L
 
--- The simultaneous-support membership and the disjoint-region common-ground
--- extraction are elaborated over the pi-indexed matrix type
--- `Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ`, whose unification cost exceeds
--- the default heartbeat budget.
-set_option maxHeartbeats 1000000 in
 /-- The actual regional minimum shifts are obtained from the spectrum,
 and their three shifted cores have a common unit zero vector.
 Source: AKLV, Section 6.1, normalization preceding Theorem 6.1. -/
@@ -63,23 +58,25 @@ theorem exists_regional_minimum_shifts {L q : ℕ} [NeZero q]
       (∀ j, ((∑ i ∈ normalizationCoreBonds a b j, h i) - (z j : ℂ) • 1).PosSemidef) ∧
       ∃ v : (Fin L → Fin q) → ℂ, star v ⬝ᵥ v = 1 ∧
         ∀ j, ((∑ i ∈ normalizationCoreBonds a b j, h i) - (z j : ℂ) • 1) *ᵥ v = 0 := by
+  have hmem (i : Fin (L - 1)) := mem_supportedOperators_of_isSupportedOn (hs i)
   classical
   let C (j : Fin 3) := ∑ i ∈ normalizationCoreBonds a b j, h i
   have hC (j : Fin 3) : (C j).IsHermitian :=
     (Matrix.nonneg_iff_posSemidef.mp (Finset.sum_nonneg fun i _ => h0 i)).isHermitian
   let z (j : Fin 3) := minEigenvalue (hC j)
-  have hsC (j : Fin 3) : C j ∈ supportedOperators q (normalizationCoreSites a b j : Set _) := by
-    apply (supportedOperators q (normalizationCoreSites a b j : Set _)).sum_mem
-    intro i hi
-    apply supportedOperators_mono (S := (interval L i.val (i.val + 2) : Set _))
-      (S' := (normalizationCoreSites a b j : Set _)) _
-      (mem_supportedOperators_of_isSupportedOn (hs i))
-    intro x hx
-    fin_cases j <;>
-      simp only [normalizationCoreBonds, Finset.mem_filter, Finset.mem_univ, true_and] at hi <;>
-      simp only [normalizationCoreSites, Finset.mem_coe, mem_interval] at hx ⊢ <;> omega
+  have hsC (j : Fin 3) :
+      C j ∈ supportedOperators q (normalizationCoreSites a b j : Set (Fin L)) := by
+    refine Submodule.sum_mem _ fun i hi => ?_
+    have hsub : (interval L i.val (i.val + 2) : Set (Fin L)) ⊆
+        (normalizationCoreSites a b j : Set (Fin L)) := by
+      intro x hx
+      fin_cases j <;>
+        simp only [normalizationCoreBonds, Finset.mem_filter, Finset.mem_univ, true_and] at hi <;>
+        simp only [normalizationCoreSites, Finset.mem_coe, mem_interval] at hx ⊢ <;> omega
+    exact supportedOperators_mono hsub (hmem i)
   have hd (j k : Fin 3) (hjk : j ≠ k) :
-      Disjoint (normalizationCoreSites a b j : Set _) (normalizationCoreSites a b k : Set _) := by
+      Disjoint (normalizationCoreSites a b j : Set (Fin L))
+        (normalizationCoreSites a b k : Set (Fin L)) := by
     apply Set.disjoint_left.mpr
     intro x hx hy
     fin_cases j <;> fin_cases k <;>
@@ -168,8 +165,7 @@ the other two untouched bonds are the removed cut bonds.
 Source: AKLV, Section 6.1 and the decomposition in Section 6.3. -/
 theorem normalizedCutBlocks_posSemidef_of_core_shifts {L q : ℕ}
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (h0 : ∀ i, 0 ≤ h i) (a b : Fin (L - 1)) (hab : a.val + 2 < b.val)
-    (z : Fin 3 → ℝ)
+    (h0 : ∀ i, 0 ≤ h i) (a b : Fin (L - 1)) (z : Fin 3 → ℝ)
     (hz : ∀ j, ((∑ i ∈ normalizationCoreBonds a b j, h i) - (z j : ℂ) • 1).PosSemidef) :
     (leftCutBlock h a (z 0)).PosSemidef ∧
       (middleCutBlock h a b (z 1)).PosSemidef ∧
@@ -182,10 +178,6 @@ theorem normalizedCutBlocks_posSemidef_of_core_shifts {L q : ℕ}
     simp only [normalizationCoreBonds, Finset.mem_filter, Finset.mem_univ, true_and] at hi ⊢ <;>
     omega
 
--- The boundary positivity bound and the ground-energy assembly are elaborated
--- over the pi-indexed matrix type `Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ`,
--- whose scalar-coercion unification exceeds the default heartbeat budget.
-set_option maxHeartbeats 800000 in
 /-- Normalizing the original chain at the actual regional minima derives
 all three positive clipped blocks and the ground energy bound \(0\le e\le6\).
 The only spectral inputs describe the original chain ground vector and
@@ -222,8 +214,7 @@ theorem exists_normalized_chain_data {L q : ℕ} [NeZero q]
     (normalizationBoundaryBonds a b) h (fun i _ => h0 i) (fun i _ => h1 i)
   have hBcap' : B ≤ ((normalizationBoundaryBonds a b).card : ℂ) •
       (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) := by
-    simpa only [B, RCLike.real_smul_eq_coe_smul (K := ℂ), Complex.ofReal_natCast]
-      using hBcap
+    simpa only [B, Nat.cast_smul_eq_nsmul] using hBcap
   have hB6 : B ≤ (6 : ℂ) • (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) := by
     refine hBcap'.trans ?_
     rw [← sub_nonneg]
@@ -246,7 +237,7 @@ theorem exists_normalized_chain_data {L q : ℕ} [NeZero q]
     exact hlow
   obtain ⟨he0, he6⟩ := Matrix.groundEnergy_bounds_of_positive_boundary_and_zero_test
     C B 6 e hC hB hB6 v Ω hCv hv heig' hΩ hlow'
-  obtain ⟨hX, hN, hY⟩ := normalizedCutBlocks_posSemidef_of_core_shifts h h0 a b hab z hz
+  obtain ⟨hX, hN, hY⟩ := normalizedCutBlocks_posSemidef_of_core_shifts h h0 a b z hz
   exact ⟨z, hX, hN, hY, he0, he6⟩
 
 end TNLean.MPS.AreaLaw.AKLV
