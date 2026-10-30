@@ -34,13 +34,16 @@ def pairConfigurationEquiv (β : ι → Type*) (i j : ι) (hji : j ≠ i) :
       (Equiv.piSplitAt ⟨j, hji⟩ (fun k : {k : ι // k ≠ i} ↦ β k.val))).trans
       (Equiv.prodAssoc _ _ _).symm)
 
+omit [Fintype ι] in
 /-- The pair/outside bijection reads the original physical coordinates without
 relabeling either active site. -/
 @[simp] theorem pairConfigurationEquiv_apply (β : ι → Type*) (i j : ι) (hji : j ≠ i)
     (σ : (k : ι) → β k) :
     pairConfigurationEquiv β i j hji σ =
-      ((σ i, σ j), fun k ↦ σ k.val.val) := rfl
+      ((σ i, σ j), fun k : {k : {k : ι // k ≠ i} // k ≠ ⟨j, hji⟩} ↦ σ k.val.val) :=
+  rfl
 
+omit [Fintype ι] in
 /-- The coordinate bijection commutes with every sitewise physical embedding.
 Source: PGVWC07, arbitrary consecutive blocking and pair sections,
 lines 1195–1220. -/
@@ -70,10 +73,11 @@ theorem pairConfigurationReindex_extendByZero (β γ : ι → Type*)
     (v : EuclideanSpace ℂ ((k : ι) → β k)) :
     pairConfigurationReindex γ i j hji
         ((Function.Embedding.piCongrRight e).euclideanExtendByZero v) =
-      (((e i).prodMap (e j)).prodMap
-        (Function.Embedding.piCongrRight
-          (fun k : {k : {k : ι // k ≠ i} // k ≠ ⟨j, hji⟩} ↦ e k.val.val)))
-        .euclideanExtendByZero (pairConfigurationReindex β i j hji v) := by
+      Function.Embedding.euclideanExtendByZero
+        (((e i).prodMap (e j)).prodMap
+          (Function.Embedding.piCongrRight
+            (fun k : {k : {k : ι // k ≠ i} // k ≠ ⟨j, hji⟩} ↦ e k.val.val)))
+        (pairConfigurationReindex β i j hji v) := by
   classical
   let Q := pairConfigurationEquiv β i j hji
   let Q' := pairConfigurationEquiv γ i j hji
@@ -93,6 +97,7 @@ theorem pairConfigurationReindex_extendByZero (β γ : ι → Type*)
       rw [Q'.apply_symm_apply, hcomm, Q.apply_symm_apply]
     rw [hpre, E.euclideanExtendByZero_apply_image,
       F.euclideanExtendByZero_apply_image]
+    rfl
   · have hpre : Q'.symm c ∉ Set.range E := by
       rintro ⟨σ, hσ⟩
       apply hc
