@@ -36,11 +36,12 @@ def kwIntTensor : Fin 2 → Fin 2 → Matrix (Fin 2) (Fin 2) ℤ
   | 1, 0 => !![1, -1; 0, 0]
   | 1, 1 => !![0, 0; -1, 1]
 
-/-- The Kramers–Wannier duality kernel `W` as a matrix product operator tensor (construction note, §1.1). -/
+/-- The Kramers–Wannier duality kernel `W` as a matrix product operator tensor
+(construction note, §1.1). -/
 def kwTensor : MPOTensor 2 2 := fun i j => complexOfInt (kwIntTensor i j)
 
-/-- The integer entries of the one-site left-translation tensor `T^{s' s} = E_{s, s'}` (construction note,
-§1.2): the matrix unit with a `1` in row `s`, column `s'`. -/
+/-- The integer entries of the one-site left-translation tensor `T^{s' s} = E_{s, s'}`
+(construction note, §1.2): the matrix unit with a `1` in row `s`, column `s'`. -/
 def shiftIntTensor : Fin 2 → Fin 2 → Matrix (Fin 2) (Fin 2) ℤ
   | 0, 0 => !![1, 0; 0, 0]
   | 0, 1 => !![0, 0; 1, 0]

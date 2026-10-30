@@ -964,6 +964,28 @@ with the corresponding composite embeddings.
     $\Delta(X)\Delta(Y)=\sum_{c,\mu}X^c_{ab,\mu}X_cY_cX^{c+}_{ab,\mu}$.
 \end{proof}
 
+\begin{definition}[Pre-bialgebra]
+    \label{def:mpoalg_pre_bialgebra}
+    \lean{PreBialgebra, PreBialgebra.coassoc_apply, PreBialgebra.comul_mul,
+        Bialgebra.toPreBialgebra, Bialgebra.preBialgebra_comul_apply}
+    \leanok
+    A pre-bialgebra over a commutative ring $R$ is an $R$-algebra
+    $\mathcal A$ with a linear map
+    $\Delta\colon\mathcal A\to\mathcal A\otimes\mathcal A$ that is
+    multiplicative and coassociative:
+    \begin{align}
+        \Delta(xy)                    & =\Delta(x)\Delta(y),            &
+        (\Delta\otimes\Id)\circ\Delta & =(\Id\otimes\Delta)\circ\Delta,
+        \label{eq:mpoalg_pre_bialgebra}
+    \end{align}
+    the second after the standard identification of the two triple tensor
+    products. Neither a counit nor $\Delta(\Id)=\Id\otimes\Id$ is required.
+    Every bialgebra is a pre-bialgebra with the same comultiplication.
+    This is the pre-bialgebra of
+    \cite[Section~4]{Molnar2022MPOAlgebrasI}.
+    % Source anchor: arXiv:2204.05940, mpo.tex lines 866--875 and 1409--1419.
+\end{definition}
+
 \begin{lemma}[The fusion coproduct is a coassociative pre-bialgebra coproduct]%
     \label{thm:mpoalg_fusion_coproduct_coassoc}
     \lean{MPOTensor.CompleteZipperFusionFamily.tensorPairEquiv,
@@ -972,7 +994,7 @@ with the corresponding composite embeddings.
         MPOTensor.CompleteZipperFusionFamily.comul_coassoc,
         MPOTensor.CompleteZipperFusionFamily.toPreBialgebra}
     \leanok
-    \uses{thm:mpoalg_fusion_coproduct}
+    \uses{thm:mpoalg_fusion_coproduct, def:mpoalg_pre_bialgebra}
     Write $\mathcal B=\bigoplus_c\MN{D_c}$. Distributing the tensor product
     over the two direct sums and identifying $\MN{D_a}\otimes\MN{D_b}$ with
     $\MN{D_aD_b}$ by the Kronecker product gives an algebra isomorphism

@@ -66,7 +66,7 @@ circle representation of `S`. This is the identity on `Additive Circle`, and it 
 coefficient map of Mathlib's restriction `groupCohomology.map f` on `H²(-, U(1))`, as
 `scalarRepresentationRes` is for `ℂˣ`. -/
 def circleRepresentationRes (f : S →* G) :
-    Rep.res f (circleH2Representation G) ⟶ circleH2Representation S := by
+    Rep.res f (Rep.ofMulDistribMulAction G Circle) ⟶ Rep.ofMulDistribMulAction S Circle := by
   apply Rep.ofHom
   refine ⟨LinearMap.id, ?_⟩
   intro g
@@ -85,7 +85,7 @@ theorem circleToComplexUnits_map_comp_map_res (f : S →* G) :
 
 /-- The elementwise form of `circleToComplexUnits_map_comp_map_res`. -/
 theorem circleToComplexUnits_map_res_apply (f : S →* G)
-    (c : groupCohomology.H2 (circleH2Representation G)) :
+    (c : groupCohomology.H2 (Rep.ofMulDistribMulAction G Circle)) :
     groupCohomology.map (MonoidHom.id S) (circleToComplexUnitsRepHom S) 2
         (groupCohomology.map f (circleRepresentationRes f) 2 c) =
       groupCohomology.map f (scalarRepresentationRes f) 2
@@ -102,7 +102,7 @@ Finiteness of `G` gives surjectivity of coefficient inclusion on `G`
 `docs/paper-gaps/fbc25_circle_complex_units_cohomology.tex`); injectivity on `S` holds for
 every group. -/
 theorem mem_range_map_circleRepresentationRes_iff [Finite G] (f : S →* G)
-    (c : groupCohomology.H2 (circleH2Representation S)) :
+    (c : groupCohomology.H2 (Rep.ofMulDistribMulAction S Circle)) :
     c ∈ Set.range (groupCohomology.map f (circleRepresentationRes f) 2) ↔
       groupCohomology.map (MonoidHom.id S) (circleToComplexUnitsRepHom S) 2 c ∈
         Set.range (groupCohomology.map f (scalarRepresentationRes f) 2) := by
@@ -110,8 +110,8 @@ theorem mem_range_map_circleRepresentationRes_iff [Finite G] (f : S →* G)
   · rintro ⟨a, rfl⟩
     exact ⟨_, (circleToComplexUnits_map_res_apply f a).symm⟩
   · rintro ⟨b, hb⟩
-    obtain ⟨a, rfl⟩ := circleH2ToComplexUnitsH2_surjective G b
-    refine ⟨a, circleH2ToComplexUnitsH2_injective S ?_⟩
+    obtain ⟨a, rfl⟩ := circleToComplexUnits_map_surjective G b
+    refine ⟨a, circleToComplexUnits_map_injective S ?_⟩
     exact (circleToComplexUnits_map_res_apply f a).trans hb
 
 end Restriction
