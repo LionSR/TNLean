@@ -45,6 +45,20 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Conjugating a rectangular unitary identity — promoted (2026-10-29)
+
+- **Pattern:** Commute entrywise complex conjugation with the adjoint and
+  matrix multiplication, then transport the two identities `Aᴴ * A = 1`
+  and `A * Aᴴ = 1` through conjugation.
+- **Seen:** The two gates in `TwoSiteStandardFormData.mapStar` in
+  `MPS/MPU/ConjugationSymmetry.lean`, and the supplied source gate in
+  `IsMPUCanonicalFormII.exists_local_conjugation_gauges` in
+  `MPS/MPU/ConjugationSourceFactors.lean`.
+- **Abstraction:** `Matrix.IsUnitaryBetween.map_star` in
+  `MPS/MPU/ConjugationSymmetry.lean` transports both identities at once.
+- **Notes:** No new matrix predicate or parallel standard-form structure was
+  introduced. The supplied half factors and gates are conjugated directly.
+
 ### Identity site translation — promoted (2026-10-28)
 
 - **Pattern:** Unfold the matrix of a site permutation and rewrite the identity
@@ -5040,6 +5054,54 @@ three-plaquette output measurement, and the routed reunion measurement.
 
 ## Candidates
 
+### Eliminating a geometric prefactor from a spectral rate — reused Mathlib (2026-10-29)
+
+- **Seen:** `norm_transfer_spectrum_le_of_limitCorrelator_bound` in
+  `MPS/Preparation/TransferSpectrumFromCorrelations.lean`.
+- **Pattern:** An exact eigenvalue correlator `λ^n` and an eventual bound
+  `C r^n` imply `|λ| ≤ r`, even when `C` and the starting separation depend
+  on the observables.
+- **Reuse:** `pow_unbounded_of_one_lt` for the ratio `|λ|/r`, then
+  `pow_le_pow_right₀` to shift past the starting separation.
+- **Decision:** Reuse the existing Archimedean power lemmas and physical
+  eigenvalue-observer construction; no new asymptotic tactic is introduced.
+
+### Identifying the ground energy of two physical conditions — candidate (2026-10-29)
+
+- **Seen:** `ExactMPSGroundPath.exists_uniform_ground_line_spectral_gap` in
+  `MPS/Symmetry/ExactGroundPathGaussianFilter.lean`.
+- **Pattern:** The path gap and the exact ground-line condition each supply
+  a least spectral value. Apply each minimality inequality to the other's
+  spectral witness, identify the energies by antisymmetry, and transport the
+  spectral dichotomy to the actual MPS ground line.
+- **Decision:** One use. Keep the mathematical extraction in its named helper
+  and reuse the existing Gaussian spectral and ground-space estimates; no
+  new tactic or duplicate eigenbasis calculation is needed.
+
+### Robustness assembly with a sharper cutoff — resolved (2026-10-30)
+
+- **Seen:** `MPS/AreaLaw/AKLV/Robustness.lean`, `NormalizedChain.lean`,
+  and `InverseGapRobustness.lean`.
+- **Pattern:** Build the minimizing ground vector from an absolute excited-energy
+  lower bound, combine its gap with the projected residual and tail, and reconstruct
+  the normalized regional sums from the two removed bonds.
+- **Decision:** Extracted as cutoff-independent lemmas shared by both cutoffs:
+  `exists_ground_gap_twoSidedEnergyTruncation_of_orthogonal` (ground vector and gap
+  from the orthogonal energy bound), `robust_ground_of_clipped_ground_gap` (residual,
+  tail and phase assembly, with the now public `phase_budget_le_exp`), and
+  `exists_normalizedCutBlock_eq_sum_sub` (regional sums away from the removed bonds).
+  Each cutoff proves only its orthogonal energy bound. No new tactic is needed.
+
+### Boundary operator norm from its positive cap — promoted (2026-10-30)
+
+- **Seen:** `MPS/AreaLaw/AKLV/HighEnergyMass.lean`, `ProjectionEnergy.lean`,
+  and `InverseGapRobustness.lean`; the targeted pattern scan reports three uses.
+- **Pattern:** Convert `0 ≤ A ≤ 2I` to `‖A‖ ≤ 2` with
+  `CStarAlgebra.norm_le_iff_le_algebraMap` and the scalar-matrix identity.
+- **Abstraction:** `Matrix.PosSemidef.norm_le_of_le_smul_one`
+  (`0 ≤ A ≤ c • 1 → ‖A‖ ≤ c`) in `HighEnergyMass.lean`; the three call
+  sites now apply it. No tactic or alternate operator norm is introduced.
+
 ### Constancy of a continuous trace sign — candidate (2026-10-29)
 
 - **Pattern:** A finite matrix-product/trace expression is continuous by
@@ -5080,6 +5142,14 @@ three-plaquette output measurement, and the routed reunion measurement.
 - **Notes:** The empty-index form of the spanning lemma handles dimension
   zero without assuming a nontrivial space. The successor case combines an
   invariant orthonormal pair with a basis of its orthogonal complement.
+
+### Diagonal hard-truncation spectral values — candidate (2026-10-29)
+
+- **Pattern:** Rewrite a diagonal Hamiltonian's functional calculus with
+  `Matrix.cfc_diagonal` and finite-range continuity, then evaluate a basis state.
+- **Seen:** `MPS/Examples/HardTruncationCutoff.lean`, for the actual clipping
+  and its closed low-energy projection.
+- **Decision:** Existing diagonal functional calculus suffices; no new tactic.
 
 ### Recovering letters by an identity contraction — candidate (2026-10-29)
 
@@ -9755,6 +9825,20 @@ there is no need for a new tactic.
   mathematical lemma to a lower matrix-analysis module and reuse it; do not duplicate its
   statement or introduce a new tactic.
 
+### Dense local image inside a closed commutant — candidate (2026-10-29)
+
+- **Seen:** `QCA/SupportAlgebraGeneration.lean`, the support-family generation
+  theorem and the even-pair-image commutant theorem.
+- **Pattern:** Pull back a closed ambient subset under an automorphism;
+  include the dense algebraic local image; use closure minimality and
+  surjectivity to obtain the global containment.
+- **Reuse:** The new commutant theorem exposes the source's intermediate
+  even-pair argument, avoiding the stronger premise of commutation with
+  each separate support factor.
+- **Decision:** Two proof occurrences in one file; keep the concrete source
+  statements and consolidate the closed-containment argument before a third
+  copy, rather than adding another notion of local generation.
+
 ### Cancellation from a spanning matrix family — promoted
 - **Pattern:** express the identity as a finite linear combination of a
   spanning family, distribute multiplication, and cancel two factors.
@@ -9865,6 +9949,32 @@ there is no need for a new tactic.
   `Nat.mod_eq_of_lt`, and `Fin.val_add_eq_ite` in the matrix identities and the
   entry obstruction. No custom finite-arithmetic tactic is needed.
 
+### Rectangular trace agreement on a spanning family — candidate (2026-10-29)
+
+- **Seen:** `MPS/ParentHamiltonian/VaryingOBCIntersection.lean`.
+- **Pattern:** Compose `Matrix.mulLeftLinearMap` with the trace functional,
+  extend equality from the actual middle-site spanning family using
+  `LinearMap.ext_on_range`, then apply Mathlib's rectangular
+  `Matrix.ext_iff_trace_mul_right`.
+- **Reuse:** The overlap identity is proved once; both explicit-boundary
+  reconstruction and the actual coefficient-section corollary reuse it.
+- **Notes:** No new trace-duality predicate or inverse construction is needed.
+  The row-isometry blocking lemma uses ordinary finite sums and existing
+  rectangular multiplication/adjoint identities.
+
+### Uniform prefix truncation and normalization — candidate (2026-10-29)
+
+- **Pattern:** choose slack from a uniform surprisal-tail scale, sum the square
+  roots of all physical prefix tails to obtain error at most half the requested
+  accuracy, and normalize the nonzero truncated vector while preserving its MPS bond.
+- **Seen:** the private prefix-bound helper in `MPS/AreaLaw/MPSApproximation.lean`
+  and `strip_approximation_of_prefix_bounds` in `MPS/AreaLaw/StripApproximation.lean`.
+- **Existing reuse:** the actual sequential truncation, norm comparison,
+  tail prefactor, and cut-rank-to-MPS theorem are shared. The former helper is
+  private, so the strip argument proves its normalization step locally.
+- **Decision:** Two consumers, below the promotion threshold. A third consumer
+  should extract the common finite-chain argument to a shared narrow module.
+
 ### Uncle boundary contraction and trace extension — candidate (2026-10-29)
 
 - **Seen:** `MPS/ParentHamiltonian/UncleBoundaryWords.lean` and
@@ -9907,19 +10017,6 @@ there is no need for a new tactic.
   the bond-two restrictions; a shared API can be considered if another example
   needs this shape.
 - **Decision:** Mathematical extensionality suffices; no tactic is needed.
-
-### Uniform prefix truncation and normalization — candidate (2026-10-29)
-
-- **Pattern:** choose slack from a uniform surprisal-tail scale, sum the square
-  roots of all physical prefix tails to obtain error at most half the requested
-  accuracy, and normalize the nonzero truncated vector while preserving its MPS bond.
-- **Seen:** the private prefix-bound helper in `MPS/AreaLaw/MPSApproximation.lean`
-  and `strip_approximation_of_prefix_bounds` in `MPS/AreaLaw/StripApproximation.lean`.
-- **Existing reuse:** the actual sequential truncation, norm comparison,
-  tail prefactor, and cut-rank-to-MPS theorem are shared. The former helper is
-  private, so the strip argument proves its normalization step locally.
-- **Decision:** Two consumers, below the promotion threshold. A third consumer
-  should extract the common finite-chain argument to a shared narrow module.
 
 ### Delta half factors for a supplied two-site circuit (2026-10-29)
 
@@ -10006,3 +10103,13 @@ there is no need for a new tactic.
   whole argument; no Gaussian integration or exponential proof is copied.
 - **Decision:** Two short occurrences in one file; no custom tactic or
   new variance definition is needed.
+
+### Coordinate transport of a rectangular conjugation (2026-10-29)
+
+- **Seen:** `Algebra/MatrixStarEquivSpatial.lean`.
+- **Pattern:** A square unitary becomes a rectangular unitary by reindexing its columns;
+  conjugation then transports the input matrix along the same coordinate equivalence.
+- **Reuse:** `Matrix.reindexLinearEquiv_mul` receives all three equivalences explicitly,
+  and `Matrix.conjTranspose_reindex` transports the adjoint. The existing QICLean
+  Skolem–Noether theorem supplies the square implementer. No entrywise double sum
+  or duplicate Skolem–Noether argument is introduced.

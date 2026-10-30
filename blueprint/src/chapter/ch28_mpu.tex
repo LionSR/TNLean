@@ -5778,6 +5778,50 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     $\mathcal U$ is simple.
 \end{proof}
 
+\begin{theorem}[Three-legged decomposition of a simple tensor]
+    \label{thm:mpu_three_legged_decomposition}
+    \lean{MPOTensor.SourceFactors.IsThreeLegged,
+        MPOTensor.SourceFactors.X₁_leftInverse,
+        MPOTensor.SourceFactors.X₂_leftInverse,
+        MPOTensor.IsMPUCanonicalFormII.sourceFactors_isThreeLegged,
+        MPOTensor.IsMPUCanonicalFormII.exists_threeLegged}
+    \leanok
+    \uses{ThmFund1, def:mpu_weighted_source_factors, def:mpu_source_uv,
+        def:mpu_canonical_form_ii, def:mpu_simple}
+    Let $\mathcal U$ be a simple MPU tensor of physical dimension $d$ under
+    the standing canonical-form-II convention, whose periodic operator is
+    unitary on every chain of length at least two, and let $\rho>0$ be its
+    recorded diagonal fixed point. Then the weighted source factors
+    $X_1,Y_1,X_2,Y_2$ for $\rho$ satisfy:
+    \begin{enumerate}
+        \item the two three-legged decompositions
+              $\mathcal U^{ij}_{\alpha\beta}=(X_1Y_1)_{(i,\beta),(\alpha,j)}
+                  =(X_2Y_2)_{(\alpha,i),(j,\beta)}$, joined along the curly leg of
+              dimension $d_r=r$ and the thick leg of dimension $d_l=\ell$;
+        \item the gates $u=Y_2\mathbin{-}Y_1$ and $v=X_1\mathbin{-}X_2$ are
+              unitary;
+        \item the normalized contractions $X_2^\dagger X_2=\Id_{d_l}$ and
+              $X_1^\dagger(I_d\otimes\rho)X_1=\Id_{d_r}$ hold;
+        \item $X_1$ and $X_2$ are left-invertible, with left inverses
+              $X_1^\dagger(I_d\otimes\rho)$ and $X_2^\dagger$, and $Y_1,Y_2$ are
+              right-invertible;
+        \item $d_ld_r=d^2$.
+    \end{enumerate}
+    This is the structure theorem for simple matrix product unitaries in
+    canonical form II of \cite{FrancoRubio2025MPUGauging}, which asks
+    unitarity on every nonempty chain; that convention implies the one used
+    here.
+    % Source lines: 2502.20257/main.tex 657--809.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{ThmFund1, def:mpu_weighted_source_factors}
+    Items 1, 3 and the one-sided inverses of item 4 are the defining
+    identities of the weighted source factors. Since $\mathcal U$ is simple,
+    Theorem~\ref{ThmFund1} gives $r\ell=d^2$ and unitarity of $u$ and $v$,
+    which are items 2 and 5.
+\end{proof}
+
 \begin{definition}[Standard form]
     \label{SF}
     \notready
@@ -9128,7 +9172,155 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     In \cite[Proposition~V.1]{Cirac2017MPU}, this equivalence is the unrestricted conjugation
     characterization.
     % Source lines: paper_v2.tex 1008--1039.
+    % The forward result below concerns supplied reduced canonical data.
+    % The contraction in lem:mpu_local_conjugation_contract is on positive
+    % blocked rings; no unblocked all-length converse has been established.
 \end{lemma}
+
+\begin{lemma}[Conjugation of supplied source decompositions]
+    \label{lem:mpu_source_conjugation_transport}
+    \lean{MPOTensor.sourceCutM₁_mapStar, MPOTensor.sourceCutM₂_mapStar, MPOTensor.source_ranks_mapStar, MPOTensor.normalizedFlattening_mapStar, MPOTensor.IsMPUCanonicalFormII.mapStar, MPOTensor.SourceCutSVD.mapStar, MPOTensor.SourceFactors.mapStar, MPOTensor.SourceFactors.sourceU_mapStar, MPOTensor.SourceFactors.sourceV_mapStar}
+    \leanok
+    \uses{def:mpu_canonical_form_ii, def:mpu_weighted_source_factors,
+        def:mpu_source_svd_data}
+    Both source cuts satisfy
+    $M_i(\overline{\mathcal U})=\overline{M_i(\mathcal U)}$, and their ranks
+    are unchanged. A supplied compact decomposition
+    $M_i=V_i^\dagger D_i G_i$ conjugates to
+    $\overline{M_i}=\overline{V_i}^\dagger D_i\overline{G_i}$, retaining
+    the positive diagonal matrices $D_i,D_i^{-1}$.
+    Supplied source factors $X_i,Y_i,Z_i$ at weight $\rho$ conjugate to
+    source factors of $\overline{\mathcal U}$ at weight $\overline\rho$,
+    in the canonical identifications of the equal rank dimensions. Their
+    gates are exactly $\overline u,\overline v$ in those coordinates.
+    Normalized flattening commutes with conjugation. Reduced canonical form II
+    is preserved, with the same real diagonal fixed matrix.
+    These are the source-data identifications in
+    \cite[Proposition~V.1, lines~1030--1033]{Cirac2017MPU}.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpu_physical_adjoint_cfii, thm:mpu_physical_adjoint_full_support}
+    Conjugate both factorizations, both normalization identities and both
+    right-inverse identities. Products, sums, adjoints and traces commute
+    with conjugation. The singular-value matrices and the diagonal positive
+    fixed matrix are real. Conjugating the gate contractions therefore gives
+    exactly the conjugate gates. The canonical blocks and ambient coisometry
+    conjugate coefficient by coefficient, retaining dimensions and full support.
+\end{proof}
+
+\begin{lemma}[Forward conjugation equations in a reduced canonical presentation]
+    \label{lem:mpu_source_local_conjugation_forward}
+    \lean{MPOTensor.supplied_source_factor_gate_relations, MPOTensor.IsMPUCanonicalFormII.exists_supplied_source_gate_unitary_gauges_of_mpo_eq, MPOTensor.IsMPUCanonicalFormII.exists_local_conjugation_gauges, MPOTensor.IsMPUCanonicalFormII.exists_local_conjugation_gauges_common_transpose_case}
+    \leanok
+    \uses{def:mpu_canonical_form_ii, def:mpu_weighted_source_factors}
+    Let $\mathcal U$ be in reduced canonical form II, with supplied source
+    factors whose unshifted gate $u$ is unitary between its physical-pair and
+    source-rank coordinate spaces. If
+    $U^{(N)}=\overline{U^{(N)}}$ at every length $N>1$, there are unitaries
+    $x,y$ such that either both are symmetric or both are skew-symmetric, and
+    \begin{align}
+        \overline u & =(x\otimes y)u,                 &
+        \overline v & =v(y^\dagger\otimes x^\dagger).
+    \end{align}
+    The gates $u,v$ are the supplied gates. This is the forward argument of
+    \cite[Proposition~V.1, lines~1030--1038]{Cirac2017MPU} for a reduced
+    canonical presentation, with the full-support restriction recorded in
+    \cite{gap:mpu_canonical_form_full_support}.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:mpu_source_conjugation_transport, FundamentalMPU,
+        lem:mpu_local_conjugation_sign, thm:mpu_source_factorizations}
+    Apply the letter-level Fundamental Theorem to $\mathcal U$ and
+    $\overline{\mathcal U}$. Compare the actual conjugated source factors
+    with those transported by the resulting bond unitary. Normalized factor
+    comparison gives two unitary changes $W_1,W_2$ of source-rank
+    coordinates. With the bond unitary $z$, the source factors $X_i',Y_i'$
+    of $\overline{\mathcal U}$ satisfy
+    \begin{align}
+        X_1' & =(\Id\otimes\overline z)X_1W_1,         &
+        Y_1' & =W_1^\dagger Y_1(z^T\otimes\Id),          \\
+        X_2' & =(z\otimes\Id)X_2W_2,                   &
+        Y_2' & =W_2^\dagger Y_2(\Id\otimes z^\dagger).
+    \end{align}
+    The gate $u$ is contracted from $Y_1,Y_2$ and the gate $v$ from
+    $X_1,X_2$. In both contractions $z^T$ meets $\overline z$ and $z$ meets
+    $z^\dagger$ on the internal bond, so
+    \begin{align}
+        \overline u & =(W_2^\dagger\otimes W_1^\dagger)u, &
+        \overline v & =v(W_1\otimes W_2).
+    \end{align}
+    Thus $x=W_2^\dagger$ and $y=W_1^\dagger$, after transport back through
+    the canonical rank identifications. The unshifted equation gives the
+    common transpose sign.
+\end{proof}
+
+\begin{lemma}[Transpose signs from the unshifted conjugation equation]
+    \label{lem:mpu_local_conjugation_sign}
+    \lean{Matrix.kronecker_map_star_mul_eq_one_of_gate_conjugation, Matrix.transpose_eq_self_or_transpose_eq_neg_of_gate_conjugation}
+    \leanok
+    Let $L,R,P$ be finite coordinate sets with $L,R$ nonempty, let
+    $u:\mathbb C^P\to\mathbb C^L\otimes\mathbb C^R$ satisfy
+    $uu^\dagger=\Id$, and let $x,y$ be unitaries on $L,R$. If
+    $\overline u=(x\otimes y)u$, then
+    \begin{align}
+        (\overline xx)\otimes(\overline yy) & =\Id.
+    \end{align}
+    Consequently either $x^T=x$ and $y^T=y$, or $x^T=-x$ and $y^T=-y$.
+    This is the step in \cite[lines~1033--1038]{Cirac2017MPU} starting from
+    the local gate equation.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpu_conjugation_common_transpose_sign}
+    Conjugating the gate equation gives
+    $u=(\overline x\otimes\overline y)(x\otimes y)u$.
+    Multiplication by $u^\dagger$ cancels $uu^\dagger=\Id$ and yields the
+    Kronecker identity. Its two factors have one common transpose sign.
+\end{proof}
+
+\begin{lemma}[Contraction of the local conjugation equations]
+    \label{lem:mpu_local_conjugation_contract}
+    \lean{Matrix.IsUnitaryBetween.map_star, MPOTensor.mapStar, MPOTensor.mpo_map_star, MPOTensor.TwoSiteStandardFormData.mapStar, MPOTensor.twoSiteUnshiftedLayer_map_star, MPOTensor.twoSiteShiftedLayer_map_star, MPOTensor.TwoSiteStandardFormData.map_star_mpo_eq_of_gate_conjugation}
+    \leanok
+    \uses{def:mpu_supplied_two_site_standard_form}
+    Let $W$ have a supplied two-site standard form with unitary gates $u,v$,
+    and let $x,y$ be unitaries satisfying
+    \begin{align}
+        \overline u & =(x\otimes y)u,                 &
+        \overline v & =v(y^\dagger\otimes x^\dagger).
+    \end{align}
+    Conjugation of all coefficients gives a standard form of $\overline W$
+    with gates $\overline u,\overline v$, and
+    $\overline{W^{(N)}}=W^{(N)}$ at every positive blocked length $N$.
+    This is the contraction direction of
+    \cite[Proposition~V.1, lines~1029--1030]{Cirac2017MPU}, on blocked rings.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpu_supplied_two_site_periodic_circuit,
+        def:mpu_two_site_circuit_layers}
+    Conjugation preserves the two open contractions and their unitary
+    identities. It also conjugates every factor of each circuit layer.
+    Let $\Gamma_N$ act on the intermediate labels by $x$ on every first
+    component $h_{s,1}$ and by $y$ on every second component $h_{s,2}$.
+    The two local equations give $C_{\overline u,N}=\Gamma_NC_{u,N}$ and,
+    regrouping the same legs along the shifted pairs,
+    $C_{\overline v,N}=C_{v,N}\Gamma_N^\dagger$. Hence
+    \begin{align}
+        \overline{U^{(N)}(W)}
+         & =C_{\overline v,N}C_{\overline u,N}
+        =C_{v,N}\Gamma_N^\dagger\Gamma_NC_{u,N}
+        =C_{v,N}C_{u,N}
+        =U^{(N)}(W).
+        \label{eq:mpu_local_conjugation_contract_circuit}
+    \end{align}
+\end{proof}
 
 \begin{lemma}[Admissible conjugation symmetry]
     \label{prop:mpu_admissible_conjugation_symmetry}
