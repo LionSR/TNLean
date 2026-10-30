@@ -58,4 +58,11 @@ theorem euclideanExtendByZero_apply_not_mem_range (e : I ↪ J)
     e.euclideanExtendByZero v j = 0 :=
   Function.extend_apply' (f := e) (fun i ↦ v i) (0 : J → ℂ) j hj
 
+/-- Every coordinate of the extension by zero is the extension by zero of the
+coordinate function. -/
+theorem euclideanExtendByZero_apply (e : I ↪ J)
+    (v : EuclideanSpace ℂ I) (j : J) :
+    e.euclideanExtendByZero v j = Function.extend e (fun i ↦ v i) 0 j :=
+  rfl
+
 end Function.Embedding

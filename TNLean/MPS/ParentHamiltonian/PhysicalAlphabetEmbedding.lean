@@ -138,6 +138,11 @@ theorem range_rectangularPairBoundary_extend_physical
   rw [← LinearMap.range_comp]
   congr 1
   ext X jl
+  rw [LinearMap.comp_apply, LinearIsometry.coe_toLinearMap,
+    Function.Embedding.euclideanExtendByZero_apply]
+  simp only [rectangularPairBoundary, LinearMap.comp_apply, LinearEquiv.coe_toLinearMap,
+    WithLp.coe_symm_linearEquiv, PiLp.toLp_apply, LinearMap.pi_apply,
+    Matrix.mulRightLinearMap_apply, Matrix.traceLinearMap_apply]
   exact (extend_rectangular_pair_coefficients e f A B X jl.1 jl.2).symm
 
 /-- The actual complementary pair projectors intertwine with the physical
@@ -151,7 +156,7 @@ theorem pair_parent_projection_extend_physical
         ((e.prodMap f).euclideanExtendByZero v) =
       (e.prodMap f).euclideanExtendByZero
         ((LinearMap.range (rectangularPairBoundary A B))ᗮ.starProjection v) := by
-  rw [range_rectangularPairBoundary_extend_physical]
+  simp only [range_rectangularPairBoundary_extend_physical]
   let E := (e.prodMap f).euclideanExtendByZero
   let G := LinearMap.range (rectangularPairBoundary A B)
   change (G.map E.toLinearMap)ᗮ.starProjection (E v) = E (Gᗮ.starProjection v)
