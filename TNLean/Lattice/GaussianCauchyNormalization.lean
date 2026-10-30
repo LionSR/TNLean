@@ -43,7 +43,7 @@ theorem halfLine_gaussian_integral_eq_measureReal
     have hexponent : -t ^ 2 / (2 * ((h⁻¹ : ℝ≥0) : ℝ)) =
         -(h : ℝ) * t ^ 2 / 2 := by
       rw [NNReal.coe_inv]
-      field_simp [hhReal.ne'] <;> ring
+      field_simp [hhReal.ne']
     have hreal : kernel h⁻¹ t = kernel h⁻¹ 0 *
         Real.exp (-(h : ℝ) * t ^ 2 / 2) := by
       simp only [kernel_eq, zero_pow (by decide : 2 ≠ 0), neg_zero, zero_div,
