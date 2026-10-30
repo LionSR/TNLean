@@ -2926,11 +2926,7 @@ In particular the ground eigenspace is one-dimensional.
     The domain is $\Lambda=\{0,\ldots,L-1\}\times\{0,\ldots,w-1\}$,
     with column regions $X_{a,b}=\lbrack a,b)\times\lbrack 0,w)\cap\Lambda$.
     Put $v_R=1+2R(R+1)$, $\mu_R=2^{2R(R+1)}$, and
-    $\ell_R=\log(e q^{v_R})$. Every admissible support has at most $v_R$
-    sites, hence dimension at most $q^{v_R}$, and at most $\mu_R$
-    admissible supports contain any specified site.
-    The one-dimensional bound $q^{R+1}$ does not hold for these lattice
-    supports: a cross of diameter two already contains five sites.
+    $\ell_R=\log(e q^{v_R})$.
 \end{definition}
 
 \begin{lemma}[Crossing supports and buffers in a strip]
@@ -2945,8 +2941,13 @@ In particular the ground eigenspace is one-dimensional.
         TNLean.MPS.AreaLaw.strip_single_splitting,
         TNLean.MPS.AreaLaw.card_crossingTerms_stripPrefix_le}
     \leanok
-    \uses{def:strip_column_model}
-    Put $N_R=2R\mu_R$. At most $N_Rw$ supports cross any column interval,
+    \uses{def:strip_column_model, thm:area_diamond_count,
+        thm:area_law_crossing_supports}
+    Every admissible support has at most $v_R$ sites, hence dimension at
+    most $q^{v_R}$, and at most $\mu_R$ admissible supports contain any
+    specified site. The one-dimensional bound $q^{R+1}$ does not hold for
+    these lattice supports: a cross of diameter two already contains five
+    sites. Put $N_R=2R\mu_R$. At most $N_Rw$ supports cross any column interval,
     and its logarithmic cut budget is at most $1+N_Rw\ell_R^2$.
     Enlarging the interval by $d$ columns at each end adds at most $2dw$
     sites. No support splits two enlargements whose radii differ by at
@@ -2955,7 +2956,10 @@ In particular the ground eigenspace is one-dimensional.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{def:strip_column_model}
+    \uses{def:strip_column_model, thm:area_diamond_count,
+        thm:area_law_crossing_supports}
+    The bounds on the size of a support and on the number of supports
+    containing a site are the lattice support counts, since $v_R-1=2R(R+1)$.
     A crossing support has an inside site in the two bands
     $\lbrack a,a+R)\times\lbrack 0,w)$ and $\lbrack b-R,b)\times\lbrack 0,w)$, after clipping by
     $\Lambda$. There are at most $2Rw$ such sites, each contained in at
@@ -3065,8 +3069,16 @@ In particular the ground eigenspace is one-dimensional.
     additional region has at most $w$ sites. Subadditivity gives the entropy
     estimate, and the partial-column crossing count gives the cut budget.
     Apply the finite-site marginal tail theorem to the original Hamiltonian.
-    Under the site bijection the reduced states are simultaneously reindexed;
-    their characteristic polynomials and hence their spectral tail sums agree.
+    Under the site bijection $e$ the reduced state $\rho'_P$ along the snake
+    is the reindexed lattice reduced state $\rho_P$:
+    \begin{align}
+        \rho'_P(x,y) & =\rho_P(e(x),e(y)),
+                     & \det(\lambda I-\rho'_P)
+                     & =\det(\lambda I-\rho_P).
+        \label{eq:strip_snake_reindexed_state}
+    \end{align}
+    By \eqref{eq:strip_snake_reindexed_state} the two reduced states have the
+    same eigenvalues with multiplicity, hence the same spectral tail sums.
 \end{proof}
 
 \begin{theorem}[Normalized matrix product approximation on a strip]
@@ -3076,7 +3088,8 @@ In particular the ground eigenspace is one-dimensional.
         TNLean.MPS.AreaLaw.exists_stripMPS_norm_sub_le,
         TNLean.MPS.AreaLaw.stripMPSApproximation}
     \leanok
-    \uses{lem:strip_prefix_tails, def:strip_snake}
+    \uses{lem:strip_prefix_tails, def:strip_snake,
+        lem:chain_sequential_truncation}
     There are nonnegative constants $C(q,R),c(q,R)$, chosen before
     $L,w,J,\Delta,H,\Omega$, and a normalized matrix product vector $\Phi$
     along the physical column-snake ordering such that
@@ -3091,7 +3104,8 @@ In particular the ground eigenspace is one-dimensional.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{lem:strip_prefix_tails, def:strip_snake}
+    \uses{lem:strip_prefix_tails, def:strip_snake,
+        lem:chain_sequential_truncation}
     Sequentially truncate all $Lw-1$ internal cuts with slack
     $64s\log(2L^2wA)$. The sum of square roots of the actual discarded
     masses is at most $1/(2L)$. The truncated vector has nonzero norm;
