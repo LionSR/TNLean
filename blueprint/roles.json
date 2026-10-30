@@ -187,14 +187,16 @@
     "ch:parent_hamiltonian_block_ground_spaces": {
       "theorems": [
         "thm:ph_primitive_blocks_sharp_open_kernel",
-        "thm:block_diagonal_chain_space_global_cut"
+        "thm:block_diagonal_chain_space_global_cut",
+        "thm:canonical_arbitrary_interaction_degeneracy"
       ],
       "corollaries": [
         "cor:block_diagonal_kernel_global_cut"
       ],
       "notes": {
         "thm:ph_primitive_blocks_sharp_open_kernel": "Source theorem: the printed open-chain threshold of Perez-Garcia et al. Theorem 12",
-        "thm:block_diagonal_chain_space_global_cut": "Periodic ground space of a block-injective tensor is the span of the block vectors (Perez-Garcia et al., Theorem 12)"
+        "thm:block_diagonal_chain_space_global_cut": "Periodic ground space of a block-injective tensor is the span of the block vectors (Perez-Garcia et al., Theorem 12)",
+        "thm:canonical_arbitrary_interaction_degeneracy": "Arbitrary positive local interactions annihilate every separated canonical block and have at least as many ground states as blocks"
       }
     },
     "ch:correlations": {

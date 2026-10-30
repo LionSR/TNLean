@@ -9713,6 +9713,27 @@ there is no need for a new tactic.
 - **Decision:** Use the positive Gram zero criterion rather than add a parallel
   purification structure or assume system/environment decoupling.
 
+### Local interaction separation by a joint boundary map — candidate
+- **Pattern:** compose an arbitrary local interaction with the joint boundary
+  map, extend vanishing from a spanning word family using
+  `LinearMap.ext_on_range`, and evaluate on `Pi.single` to isolate a block.
+- **Seen:** `MPS/ParentHamiltonian/ArbitraryInteractionBlockDegeneracy.lean`.
+- **Notes:** one occurrence. The implementation reuses Mathlib `LinearMap.lsum`
+  and `lsum_piSingle`; it avoids entrywise expansion of the local interaction.
+  Positivity is used separately via QICLean's
+  `WeightedPositiveKernel.apply_sum_eq_zero_iff`.
+
+### Cyclic local interaction in its defining coordinates — promoted
+- **Pattern:** expose a translated arbitrary interaction by applying the
+  active-block isometry, then cancel the inverse isometry.
+- **Seen:** both local separation uses in
+  `MPS/ParentHamiltonian/ArbitraryInteractionBlockDegeneracy.lean`, and the
+  all-volumes consumer under development in
+  `MPS/ParentHamiltonian/FiniteVolumeConstraintPropagation.lean`.
+- **Abstraction:** `cyclicActiveBlock_periodicLocalInteractionES_apply` in
+  the defining periodic-interaction module. Consumers use this actual action
+  formula rather than repeating conjugation and isometry coercion rewrites.
+
 ### Weighted geometric sums grouped by their anchors — promoted (2026-10-28)
 
 - **Seen:** `Lattice/LowEnergyCommutatorSum.lean`,
