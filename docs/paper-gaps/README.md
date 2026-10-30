@@ -284,6 +284,9 @@ restriction are recorded separately.
 - `gnvw12_support_algebra_full_matrix_scope.tex` records the remaining open
   restriction from arbitrary finite-dimensional $C^*$-algebra factors to
   full complex matrix factors.
+- `gnvw12_shift_example_subscript.tex` records the resolved correction that
+  the scalar support factor in the printed shift example carries the odd
+  subscript, and checks both shift orientations against the index.
 - `sw04_support_covariance_scope.tex` records that the formal
   support-algebra covariance theorem treats star-automorphisms of a homogeneous
   one-dimensional nearest-neighbour chain, while Schumacher--Werner allow
