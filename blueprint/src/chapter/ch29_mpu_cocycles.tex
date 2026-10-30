@@ -4224,6 +4224,211 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     $|L|^2=\overline LL=cL^2$ and $(L/|L|)^2=c^{-1}$.
 \end{proof}
 
+\begin{definition}[The time-reversed tensor]
+    \label{def:mpug_time_reversed_tensor}
+    \lean{MPOTensor.timeReversal}
+    \leanok
+    Let $v$ be a $d\times d$ matrix and $T$ a matrix product operator tensor.
+    The time-reversed tensor $\mathcal T T$ has letters
+    $(\mathcal T T)^{ij}=\sum_{k,l}v_{ik}\,\overline{T^{kl}}\,\overline{v_{jl}}$,
+    where the bar is entrywise complex conjugation of the virtual matrices.
+    For the antiunitary time reversal $\mathcal T=v^{\otimes N}K$ of
+    \cite[Section~4.3]{GarreRubio2023MPOSym}, with $K$ complex conjugation,
+    it generates $\mathcal T O\mathcal T^{-1}$.
+    % Source anchor: arXiv:2203.12563, line 867.
+\end{definition}
+
+\begin{lemma}[Operators and products of time-reversed tensors]
+    \label{lem:mpug_time_reversed_tensor_properties}
+    \lean{MPOTensor.mpo_map_starRingEnd, MPOTensor.mpo_timeReversal,
+        MPOTensor.toMPSTensor_timeReversal, MPOTensor.mulTensor_timeReversal}
+    \leanok
+    \uses{def:mpug_time_reversed_tensor, def:mpdo_operator_product}
+    For every $N$, the periodic operator of $\mathcal T T$ is
+    $O_N(\mathcal T T)=v^{\otimes N}\,\overline{O_N(T)}\,(v^{\otimes N})^\dagger$.
+    On the doubled physical index, each letter of $\mathcal T T$ is the
+    combination $\sum_{k,l}v_{ik}\overline{v_{jl}}\,\overline{T^{kl}}$ of the
+    conjugated letters of $T$. If $v^\dagger v=1$, then time reversal
+    commutes with stacking: the time-reversed tensor of the stacked product
+    of two tensors is the stacked product of their time-reversed tensors.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The periodic operator is the trace of a product of letters, and complex
+    conjugation commutes with products and traces. The physical factors
+    $v$ and $\overline v$ act on the ket and bra legs and produce
+    $v^{\otimes N}$ and $(\overline v^{\otimes N})^T=(v^{\otimes N})^\dagger$.
+    For stacking, the contracted middle leg carries
+    $\sum_k\overline{v_{kb}}v_{kc}=(v^\dagger v)_{bc}=\delta_{bc}$.
+\end{proof}
+
+\begin{lemma}[Reductions under recombination, conjugation and gauges]
+    \label{lem:mpug_reduction_recombination}
+    \lean{MPSTensor.IsReduction.recombine, MPSTensor.IsReduction.map_starRingEnd,
+        MPSTensor.IsReduction.target_gauge,
+        MPSTensor.IsDressedProportional.recombine,
+        MPSTensor.IsDressedProportional.map_starRingEnd,
+        MPSTensor.IsReduction.timeReversal,
+        MPSTensor.IsDressedProportional.timeReversal}
+    \leanok
+    \uses{def:mps_rectangular_reduction, thm:mpug_dressed_proportionality,
+        lem:mpug_time_reversed_tensor_properties}
+    Let $(V,W)$ reduce $B$ onto $A$. Replacing the letters of both tensors by
+    the same combinations $\sum_ac_{ia}B^a$ and $\sum_ac_{ia}A^a$ gives a
+    reduction with the same $V,W$; conjugating the tensors and both
+    boundaries gives a reduction; and if $A'^iQ=QA^i$ with $PQ=1$, a
+    reduction $(V,W)$ of $B$ onto $A'$ gives the reduction $(PV,WQ)$ onto $A$.
+    If $XB^{\mathbf w}=z\,YB^{\mathbf w}$ for long words, the same holds for
+    recombined letters, and conjugation gives
+    $\overline X\,\overline B^{\mathbf w}=\overline z\,\overline Y\,\overline B^{\mathbf w}$.
+    In particular, reductions and dressed proportionalities of tensors pass
+    to their time-reversed tensors with conjugated boundaries and scalars.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    A word in the recombined letters is the combination, with the same
+    coefficients for both tensors, of words of the same length in the
+    original letters; induction on the word with an arbitrary prefix gives
+    both recombination claims. Conjugation commutes with products. For the
+    gauge, $A'^{\mathbf w}Q=QA^{\mathbf w}$ gives
+    $PVB^{\mathbf w}WQ=PA'^{\mathbf w}Q=A^{\mathbf w}$.
+\end{proof}
+
+\begin{lemma}[Fusion tensors along exact bond gauges]
+    \label{lem:mpug_fusion_tensor_gauge_transport}
+    \lean{MPOTensor.mulTensor_mul_idKron_of_intertwine, MPOTensor.bondKron,
+        MPOTensor.bondKron_eq_idKron_mul_kronId, MPOTensor.bondKron_mul_bondKron,
+        MPOTensor.bondKron_one, MPOTensor.bondKron_mul_kronId,
+        MPOTensor.bondKron_mul_idKron, MPOTensor.bondKron_bondKron_mul_assocInv,
+        MPOTensor.mulTensor_mul_bondKron_of_intertwine,
+        MPOTensor.GroupFamily.withTensor, MPOTensor.GroupFamily.castMat_mul_eq,
+        MPOTensor.GroupFamily.BondGauge, MPOTensor.GroupFamily.BondGauge.mul_P,
+        MPOTensor.GroupFamily.FusionData.gaugeTransport,
+        MPOTensor.GroupFamily.FusionData.gaugeTransport_leftV,
+        MPOTensor.GroupFamily.FusionData.gaugeTransport_rightV,
+        MPOTensor.GroupFamily.FusionData.isAssociator_gaugeTransport}
+    \leanok
+    \uses{def:mpug_anomaly_three_cochain, lem:mpug_reduction_recombination}
+    Let $g\mapsto T_g$ be tensors with the bond dimensions of a group family
+    $g\mapsto O_g$, and let $P_g,Q_g$ be mutually inverse matrices with
+    $T_g^{il}Q_g=Q_gO_g^{il}$. If $(V_{g,h},W_{g,h})$ are fusion tensors of
+    the family $T$, then
+    \begin{align}
+        V'_{g,h} & =P_{gh}V_{g,h}(Q_g\otimes Q_h), &
+        W'_{g,h} & =(P_g\otimes P_h)W_{g,h}Q_{gh}
+        \notag
+    \end{align}
+    are fusion tensors of the family $O$, and the two fusion trees of the
+    triple product compare by the same scalar for both choices.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The gauges $P_g\otimes P_h$ intertwine the stacked letters, so
+    Lemma~\ref{lem:mpug_reduction_recombination} gives the reductions. The
+    tensor products of the gauges commute with identity strands and with the
+    bond associator, which gives
+    $V'^L=P_{ghk}V^L(Q_g\otimes Q_h\otimes Q_k)$ and the same for the second
+    tree. The gauge $Q_g\otimes Q_h\otimes Q_k$ intertwines the letters of
+    the two triple products, so the dressed proportionality of the trees
+    is transported unchanged.
+\end{proof}
+
+\begin{lemma}[Conjugated fusion tensors of the time-reversed family]
+    \label{lem:mpug_conjugated_fusion_tensors}
+    \lean{MPOTensor.kronId_map_starRingEnd, MPOTensor.idKron_map_starRingEnd,
+        MPOTensor.mulTensorAssocInvMatrix_map_starRingEnd,
+        MPOTensor.GroupFamily.castMat_map_starRingEnd,
+        MPOTensor.GroupFamily.FusionData.timeReversal,
+        MPOTensor.GroupFamily.FusionData.timeReversal_leftV,
+        MPOTensor.GroupFamily.FusionData.timeReversal_rightV,
+        MPOTensor.GroupFamily.FusionData.isAssociator_timeReversal}
+    \leanok
+    \uses{def:mpug_anomaly_three_cochain,
+        lem:mpug_time_reversed_tensor_properties,
+        lem:mpug_reduction_recombination}
+    Let $v^\dagger v=1$ and let $(V_{g,h},W_{g,h})$ be fusion tensors of a
+    group family $O$. Then $(\overline{V_{g,h}},\overline{W_{g,h}})$ are
+    fusion tensors of the time-reversed family $g\mapsto\mathcal TO_g$, and
+    if the fusion trees of $O$ compare by $z$, those of the conjugated
+    fusion tensors compare by $\overline z$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Time reversal commutes with stacking, by
+    Lemma~\ref{lem:mpug_time_reversed_tensor_properties}, so the stacked
+    and triple products of the time-reversed family are the time-reversed
+    tensors of those of $O$. The identity strands, bond identifications and
+    the bond associator are real, so the fusion trees of the conjugated
+    tensors are the conjugates of the original trees, and
+    Lemma~\ref{lem:mpug_reduction_recombination} applies.
+\end{proof}
+
+\begin{lemma}[The gauges of a time-reversal symmetry]
+    \label{lem:mpug_time_reversal_bond_gauge}
+    \lean{MPOTensor.GroupFamily.CommutesWithTimeReversal,
+        MPOTensor.GroupFamily.nonempty_bondGauge_timeReversal}
+    \leanok
+    \uses{def:mpug_anomaly_three_cochain, cor:asym_single_block,
+        lem:mpug_time_reversed_tensor_properties}
+    Let $g\mapsto O_g$ be a group of matrix product operators with normal
+    tensors, let $v$ be unitary, and suppose that
+    $v^{\otimes N}\overline{O_g}=O_gv^{\otimes N}$ for every $g$ and every
+    $N\geq1$, that is, $\mathcal TO_g=O_g\mathcal T$. Then for every $g$
+    there are mutually inverse matrices $P_g,Q_g$ with
+    $(\mathcal TT_g)^{il}Q_g=Q_gT_g^{il}$, where $T_g$ is the tensor of
+    $O_g$. These are the matrices $q_g$ of
+    \cite[Section~4.3]{GarreRubio2023MPOSym}.
+    % Source anchor: arXiv:2203.12563, lines 869--870.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    By Lemma~\ref{lem:mpug_time_reversed_tensor_properties} and
+    unitarity, $\mathcal TT_g$ and $T_g$ generate the same periodic
+    operators. Corollary~\ref{cor:asym_single_block} gives a reduction
+    $(P_g,Q_g)$ of $\mathcal TT_g$ onto the normal tensor $T_g$. The bond
+    dimensions agree, so $P_gQ_g=1$ forces $Q_gP_g=1$, and the one-letter
+    words give $(\mathcal TT_g)^{il}=Q_gT_g^{il}P_g$.
+\end{proof}
+
+\begin{lemma}[Time reversal makes the anomaly of a group of operators real]
+    \label{lem:mpug_time_reversal_tensor_real_anomaly}
+    \lean{MPOTensor.GroupFamily.FusionData.omega_cohomologousTo_star_of_timeReversal,
+        MPOTensor.GroupFamily.FusionData.exists_real_cohomologousTo_omega_of_timeReversal}
+    \leanok
+    \uses{lem:mpug_time_reversal_bond_gauge,
+        lem:mpug_conjugated_fusion_tensors,
+        lem:mpug_fusion_tensor_gauge_transport,
+        thm:mpug_anomaly_three_cocycle_gauge,
+        thm:mpug_time_reversal_real_anomaly}
+    Under the hypotheses of Lemma~\ref{lem:mpug_time_reversal_bond_gauge},
+    the anomaly three-cochain $\omega$ of any choice of fusion tensors is
+    cohomologous to its complex conjugate, and hence to a real-valued
+    three-cochain. This is the conclusion
+    of~\cite[Section~4.3]{GarreRubio2023MPOSym} that
+    $\omega=\overline\omega\,\beta_{g,h}\beta_{gh,k}/(\beta_{h,k}\beta_{g,hk})$
+    and that $\omega$ can be gauge transformed to a real number.
+    % Source anchor: arXiv:2203.12563, lines 869--891.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Conjugate the fusion tensors, by
+    Lemma~\ref{lem:mpug_conjugated_fusion_tensors}, and transport them
+    along the gauges of Lemma~\ref{lem:mpug_time_reversal_bond_gauge}, by
+    Lemma~\ref{lem:mpug_fusion_tensor_gauge_transport}. This gives fusion
+    tensors of the original family whose trees compare by
+    $\overline{\omega}$, so their anomaly three-cochain is $\overline\omega$.
+    By Lemma~\ref{thm:mpug_anomaly_three_cocycle_gauge}, the two choices of
+    fusion tensors have cohomologous three-cochains; the scalars $\beta_{g,h}$
+    of the source are their relative scalars. The second claim is
+    Lemma~\ref{thm:mpug_time_reversal_real_anomaly}.
+\end{proof}
+
 \begin{lemma}[A block fixed by a subgroup trivializes the restricted three-cocycle]
     \label{thm:mpug_fixed_block_trivializes}
     \lean{TNLean.Algebra.LSymbol.isTrivialGaugeClass_comap_of_isCompatible,
