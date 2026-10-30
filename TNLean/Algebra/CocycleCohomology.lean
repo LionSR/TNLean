@@ -24,7 +24,7 @@ action of an arbitrary group on `ℂˣ`.  Open it with
 
 * `groupCohomology.IsMulCocycle₂` : the multiplicative 2-cocycle condition
 * `groupCohomology.IsMulCoboundary₂` : the multiplicative 2-coboundary condition
-* `ScalarCohomology.trivialMulDistribMulAction` : the trivial action of `G` on `ℂˣ`
+* `ScalarCohomology.trivialMulDistribMulAction` : the trivial action on a coefficient group
 * `scalarRepresentationRes` : restriction of the trivial representation on `ℂˣ`
   along a group homomorphism, the coefficient map of Mathlib's restriction
 * `ScalarCocycle.commPhase` : the commutator phase `ω(g,h) ω(h,g)⁻¹`
@@ -57,10 +57,12 @@ variable {D : ℕ}
 namespace ScalarCohomology
 
 set_option warn.classDefReducibility false in
-/-- The trivial action of `G` on the scalar coefficient group `ℂˣ`, so that
-`Rep.ofMulDistribMulAction G ℂˣ` is the coefficient module of `H²(G, ℂˣ)` and
-`H³(G, ℂˣ)`.  It is scoped: other actions of particular groups on `ℂˣ` exist. -/
-scoped instance trivialMulDistribMulAction : MulDistribMulAction G (Units ℂ) where
+/-- The trivial action on a commutative coefficient group. It supplies both
+circle-valued and complex-unit-valued scalar cohomology through Mathlib's
+`Rep.ofMulDistribMulAction`, without separate coefficient representations.
+It is scoped because the coefficient groups can also carry nontrivial actions. -/
+scoped instance trivialMulDistribMulAction {A : Type} [CommGroup A] :
+    MulDistribMulAction G A where
   smul _ z := z
   one_smul _ := rfl
   mul_smul _ _ _ := rfl
