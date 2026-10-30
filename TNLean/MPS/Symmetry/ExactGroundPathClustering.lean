@@ -43,7 +43,7 @@ SPC11, arXiv:1010.3732, Section II.F, lines 929–953. -/
 theorem ExactMPSGroundPath.exists_uniform_connected_exponential_clustering
     (Q : ExactMPSGroundPath P) :
     ∃ K κ : ℝ, 0 < K ∧ 0 < κ ∧
-      ∀ γ ∈ Set.Icc (0 : ℝ) 1, ∀ (N : ℕ) (_hN : 2 ≤ N),
+      ∀ γ ∈ Set.Icc (0 : ℝ) 1, ∀ (N : ℕ) [NeZero N] (_hN : 2 ≤ N),
       ∀ (A B : MPOTensor.ChainOperator d N) (X Y : Finset (Fin N)),
       ∀ (hX : X.Nonempty) (hY : Y.Nonempty),
       A ∈ supportedOperators d X → B ∈ supportedOperators d Y →
@@ -59,7 +59,7 @@ theorem ExactMPSGroundPath.exists_uniform_connected_exponential_clustering
   have hv : 0 < v := by dsimp only [v]; positivity
   obtain ⟨C, κ, hC, hκ, hRate⟩ := exists_gaussianFrequencyClusteringRate Δ v hΔ hv
   refine ⟨2 * C, κ, mul_pos (by norm_num) hC, hκ, ?_⟩
-  intro γ hγ N hN A B X Y hX hY hA hB hXY ℓ hℓ hDist
+  intro γ hγ N _ hN A B X Y hX hY hA hB hXY ℓ hℓ hDist
   have hℓpos : 0 < ℓ := lt_of_lt_of_le zero_lt_one hℓ
   let T := ℓ / (2 * v)
   let q := T * Δ

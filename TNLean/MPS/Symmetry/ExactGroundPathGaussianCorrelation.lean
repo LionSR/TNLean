@@ -40,7 +40,7 @@ Source: Hastings–Koma, arXiv:math-ph/0507008, Section 3;
 SPC11, arXiv:1010.3732, Section II.F, lines 929–953. -/
 theorem ExactMPSGroundPath.exists_uniform_centered_correlation_gaussian_bound
     (Q : ExactMPSGroundPath P) :
-    ∃ Δ : ℝ, 0 < Δ ∧ ∀ γ ∈ Set.Icc (0 : ℝ) 1, ∀ (N : ℕ) (_hN : 2 ≤ N),
+    ∃ Δ : ℝ, 0 < Δ ∧ ∀ γ ∈ Set.Icc (0 : ℝ) 1, ∀ (N : ℕ) [NeZero N] (_hN : 2 ≤ N),
       ∀ (A B : MPOTensor.ChainOperator d N) (X Y : Finset (Fin N)),
       ∀ (hX : X.Nonempty) (hY : Y.Nonempty),
       A ∈ supportedOperators d X → B ∈ supportedOperators d Y →
@@ -59,8 +59,7 @@ theorem ExactMPSGroundPath.exists_uniform_centered_correlation_gaussian_bound
               (2 * ‖A‖ * ‖B‖ / T) * Real.exp (-T ^ 2 / (2 * (s : ℝ))))) * ‖ψ‖ ^ 2 := by
   obtain ⟨Δ, hΔ, hdata⟩ := Q.exists_uniform_ground_line_spectral_gap
   refine ⟨Δ, hΔ, ?_⟩
-  intro γ hγ N hN A B X Y hX hY hA hB hXY hcenter q T a hq hT ha
-  let : NeZero N := ⟨by omega⟩
+  intro γ hγ N _ hN A B X Y hX hY hA hB hXY hcenter q T a hq hT ha
   obtain ⟨E₀, hH, hline, hgap⟩ := hdata γ hγ N hN
   have hψ : mpvState (Q.tensor γ) N ∈
       groundEigenspace (interactionHamiltonian (P.interaction γ) hN) E₀ := by
@@ -80,7 +79,7 @@ Source: Hastings–Koma, arXiv:math-ph/0507008, Section 3;
 SPC11, arXiv:1010.3732, Section II.F, lines 929–953. -/
 theorem ExactMPSGroundPath.exists_uniform_connected_correlation_gaussian_bound
     (Q : ExactMPSGroundPath P) :
-    ∃ Δ : ℝ, 0 < Δ ∧ ∀ γ ∈ Set.Icc (0 : ℝ) 1, ∀ (N : ℕ) (_hN : 2 ≤ N),
+    ∃ Δ : ℝ, 0 < Δ ∧ ∀ γ ∈ Set.Icc (0 : ℝ) 1, ∀ (N : ℕ) [NeZero N] (_hN : 2 ≤ N),
       ∀ (A B : MPOTensor.ChainOperator d N) (X Y : Finset (Fin N)),
       ∀ (hX : X.Nonempty) (hY : Y.Nonempty),
       A ∈ supportedOperators d X → B ∈ supportedOperators d Y →
@@ -99,7 +98,7 @@ theorem ExactMPSGroundPath.exists_uniform_connected_correlation_gaussian_bound
                 (2 / T) * Real.exp (-T ^ 2 / (2 * (s : ℝ))))) := by
   obtain ⟨Δ, hΔ, hEst⟩ := Q.exists_uniform_centered_correlation_gaussian_bound
   refine ⟨Δ, hΔ, ?_⟩
-  intro γ hγ N hN A B X Y hX hY hA hB hXY q T a hq hT ha
+  intro γ hγ N _ hN A B X Y hX hY hA hB hXY q T a hq hT ha
   let ψ := mpvState (Q.tensor γ) N
   have hψne : ψ ≠ 0 := by
     exact ((EuclideanSpace.equiv (ι := Cfg d N) (𝕜 := ℂ)).symm.map_eq_zero_iff).not.mpr
@@ -123,13 +122,18 @@ theorem ExactMPSGroundPath.exists_uniform_connected_correlation_gaussian_bound
   have hraw : ‖⟪ψ, toEuclideanCLM (𝕜 := ℂ) (A₀ * B) ψ⟫_ℂ‖ ≤
       (‖A₀‖ * ‖B‖ * B₀) * ‖ψ‖ ^ 2 := by
     have h := hEst γ hγ N hN A₀ B X Y hX hY hA₀ hB hXY hcenter q T a hq hT ha
-    convert h using 1 <;> dsimp only [B₀, s, v] <;> ring
+    convert h using 1
+    dsimp only [B₀, s, v]
+    ring
   have hcov : normalizedVectorExpectation ψ (A * B) -
       normalizedVectorExpectation ψ A * normalizedVectorExpectation ψ B =
         ⟪ψ, toEuclideanCLM (𝕜 := ℂ) (A₀ * B) ψ⟫_ℂ / ((‖ψ‖ ^ 2 : ℝ) : ℂ) := by
     dsimp only [A₀]
     rw [inner_centeredObservable_mul]
     simp only [normalizedVectorExpectation, sub_div, mul_div_assoc]
+  show ‖normalizedVectorExpectation ψ (A * B) -
+      normalizedVectorExpectation ψ A * normalizedVectorExpectation ψ B‖ ≤
+    2 * ‖A‖ * ‖B‖ * B₀
   rw [hcov, norm_div, Complex.norm_real, Real.norm_of_nonneg (sq_nonneg _)]
   apply (div_le_iff₀ (pow_pos (norm_pos_iff.mpr hψne) 2)).mpr
   apply hraw.trans
