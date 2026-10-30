@@ -45,6 +45,69 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Identity site translation — promoted (2026-10-28)
+
+- **Pattern:** Unfold the matrix of a site permutation and rewrite the identity
+  laws of its two group homomorphisms.
+- **Helper:** `Matrix.sitePermMatrix_one` in `TNLean/Lattice/SiteSymmetry.lean`.
+- **Occurrences:** the arbitrary-observable ground-space power formula in
+  `TranslationGroundSpace.lean`, and the two translation-orbit arguments in
+  `TranslationFiniteOrbitCommutator.lean`.
+- **Decision:** The third occurrence across two files was replaced by the same
+  identity lemma. The statement records the mathematical unit law directly.
+
+### From a support budget to an anchor budget — promoted (2026-10-28)
+
+- **Pattern:** An index whose chosen anchor is a site has support containing that
+  site. Monotonicity of finite sums of nonnegative weights therefore bounds the
+  anchor sum by the support sum.
+- **Helper:** `sum_weight_anchor_le_of_support_budget` in
+  `TNLean/Lattice/GraphDegreeGrowth.lean`.
+- **Refactored occurrences:** the two-dimensional basis sum in `LowEnergyBasisUniform.lean`,
+  the arbitrary-dimensional sum in `LowEnergyBasisUniformGeneral.lean`, and
+  the actual truncated-term sum in `LowEnergyBasisTruncatedUniform.lean`.
+- **Decision:** The 2026-10-28 scan found the third occurrence. The common
+  inequality is stated for arbitrary nonnegative real weights; the applications
+  specialize it to the original interaction norms.
+
+### Norm of a ground-space compression — promoted (2026-10-28)
+
+- **Seen:** `Lattice/LowEnergyBasisConstruction.lean`,
+  `Lattice/LowEnergyBasisUniform.lean`, and the normalization of the general
+  recursive basis theorem in `Lattice/LowEnergyBasisUniformGeneral.lean`.
+- **Pattern:** Restrict a ground compression to its invariant ground eigenspace,
+  compare its operator norm with the ambient compression, and then with the
+  original term norm.
+- **Helper:** `norm_groundSpaceCompression_le` in
+  `TNLean/Lattice/LowEnergyBasisConstruction.lean`.
+- **Decision:** The normalized basis arguments use this mathematical norm bound
+  rather than repeat the subspace coercion and operator-norm calculation.
+
+
+### Retained vectors in nested operator ranges — promoted (2026-10-28)
+
+- **Pattern:** from `P * Q = Q` and `Q φ = φ`, deduce `P φ = φ`, previously
+  proved by substituting the second equality into the first matrix action.
+- **Abstraction:** `TNLean.MPS.AreaLaw.LocalSolution.toEuclideanLin_eq_of_mul_eq`
+  in `TNLean/MPS/AreaLaw/LocalSolution/HierarchicalProjection.lean`.
+- **Call sites:** the compressed-window and child-projection arguments in
+  `FinalStateEnergy.lean`, and the child and closing-window arguments in
+  `HierarchyNesting.lean`. The matrix identities still state the particular
+  nesting relation; the common argument on retained vectors is shared.
+
+### Diameter of a chain support in graph distance — promoted (2026-10-28)
+
+- **Pattern:** Convert the range condition of `ChainSupport L R` to an upper
+  bound on the path-graph distance between two sites of the support.
+- **Defined in:** `TNLean/MPS/AreaLaw/LiebRobinson.lean`,
+  `ChainSupport.edist_le`.
+- **Refactored occurrences:** the existing propagation and localization proofs
+  in that file and the finite-support numerical propagation proof in
+  `MPS/AreaLaw/Hastings/LiebRobinson.lean`.
+- **Notes:** The existing private proof is now a public theorem; the new
+  propagation estimate uses it instead of repeating the conversion to natural
+  distance. The mathematical range condition is unchanged.
+
 ### Matrices of submodule orthogonal projections — promoted (2026-10-26)
 
 - **Pattern:** Form `Matrix.toEuclideanLin.symm W.starProjection.toLinearMap`
@@ -5001,6 +5064,16 @@ three-plaquette output measurement, and the routed reunion measurement.
 - **Notes:** Below the rule-of-three threshold. A third occurrence would
   justify the shared lemma.
 
+### Local residuals over a bounded assignment fibre — candidate (2026-10-28)
+
+- **Pattern:** centre a sum of local terms, pass its action through the sum,
+  and apply a norm bound using the actual number of assigned centres.
+- **Seen:** `residual_periodicCoarseOperator_le` in `PeriodicCoarsening.lean`
+  and `residual_roundedPeriodicOperator_le` in `RoundedPeriodicCoarsening.lean`.
+- **Abstraction:** both already use `norm_edgePartition_le_of_fibre_card`;
+  a residual version of that lemma would remove the remaining three-line
+  passage through centring and matrix action if another application appears.
+
 ### Simultaneous regional factors for a supported family — candidate (2026-10-26)
 
 - **Pattern:** Classify each ordinary term into one of three regions, choose
@@ -9700,7 +9773,6 @@ there is no need for a new tactic.
 - **Decision:** reuse the common cyclic contraction helper instead of a new
   entrywise word induction or a separately supplied finite-volume hypothesis.
 
-
 ### Retain derived source data for a downstream finite-prefix argument — reused extraction (2026-10-29)
 
 - **Pattern:** a prime-length reduction already derives normality and a
@@ -9750,3 +9822,27 @@ there is no need for a new tactic.
   `Submodule.smul_mem` handles arbitrary eigenvector phases.
 - **Decision:** No manual predecessor induction or new translation predicate is
   introduced. The actual vector phase remains available in the one-step equation.
+
+### Weighted geometric sums grouped by their anchors — promoted (2026-10-28)
+
+- **Seen:** `Lattice/LowEnergyCommutatorSum.lean`,
+  `Lattice/LowEnergyBasisUniform.lean`, and `Lattice/GraphDegreeTail.lean`.
+- **Pattern:** Group a weighted sum by its anchor and apply a uniform bound on
+  the weight of each fibre before summing the nonnegative function on sites.
+- **Promotion:** `sum_weight_mul_comp_le_budget_mul_sum` in
+  `Lattice/GraphDegreeGrowth.lean` expresses the common inequality for any
+  nonnegative function. All three grouping proofs now use it.
+- **Reuse:** The lower module also owns the support-to-anchor budget lemma.
+  Polynomial sphere sums and bounded-degree exponential tails retain their
+  distinct summation estimates after the common grouping step.
+
+### Natural values of conditional finite edge assignments — candidate (2026-10-28)
+
+- **Seen:** `MPS/AreaLaw/LocalSolution/CoordinateSliceHierarchy.lean`, the two branches of
+  `coordinateSliceEdge_support` and the internal branch of
+  `coordinateSliceEdge_closing_support`.
+- **Pattern:** Apply `congrArg Fin.val` to an equality of finite edge labels, reduce the
+  constructor values, and conclude the natural-coordinate relation with `omega`.
+- **Decision:** Three branch occurrences in one file, below the two-file promotion
+  threshold. Before extending this pattern to another module, move the value equality
+  before the case distinction or reuse `Fin.val_inj`; no new tactic is needed.
