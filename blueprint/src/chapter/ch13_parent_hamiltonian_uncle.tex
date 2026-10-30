@@ -259,3 +259,105 @@ infinite-volume Hamiltonian is included here.
     $\ker h'_P$. The converse is immediate. At physical dimension zero,
     the full configuration space is empty and the assertion holds directly.
 \end{proof}
+
+\subsection{Single-domain-wall boundary spaces and intersection}
+
+\begin{definition}[The four boundary sectors]
+    \label{def:uncle_boundary_space}
+    \lean{MPSTensor.uncleBoundaryWord}
+    \lean{MPSTensor.uncleDomainWallWord_eq_sum}
+    \lean{MPSTensor.uncleBoundaryWord_block}
+    \lean{MPSTensor.uncleBoundarySpace}
+    \leanok
+    \uses{def:two_block_uncle_tensor}
+    Write $T_i=\left(\begin{smallmatrix}A_i&R_i\\L_i&B_i\end{smallmatrix}\right)$.
+    For a word $w=(i_1,\ldots,i_n)$, let $F(w)$ have diagonal blocks
+    $A_{i_1}\cdots A_{i_n}$ and $B_{i_1}\cdots B_{i_n}$ and off-diagonal blocks
+    \begin{align}
+        F(w)_{12} & =\sum_{k=1}^n A_{i_1}\cdots A_{i_{k-1}}R_{i_k}B_{i_{k+1}}\cdots B_{i_n}, \\
+        F(w)_{21} & =\sum_{k=1}^n B_{i_1}\cdots B_{i_{k-1}}L_{i_k}A_{i_{k+1}}\cdots A_{i_n}.
+    \end{align}
+    Empty products are identities. Define
+    $S_n=\{(\tr(F(w)X))_w:X\in\mathcal M_{a+b}\}$.
+    This is exactly the sum of the two uniform sectors and the two sectors
+    containing one domain wall in
+    \cite[equation defining $S_n$, Appendix intersection proof]{FernandezGonzalez2015Uncle}.
+\end{definition}
+
+\begin{lemma}[Two-site boundary words]
+    \label{lem:uncle_boundary_length_two}
+    \lean{MPSTensor.uncleBoundaryMap_two}
+    \leanok
+    \uses{def:uncle_boundary_space, def:two_block_uncle_tensor}
+    For every $X\in\mathcal M_{a+b}$, the vector $(\tr(F(i,j)X))_{i,j}$ is
+    the two-site vector of $X$ built from the matrices $U_{ij}$ in
+    (\ref{eq:uncle_explicit_tensor}). Hence $S_2$ is the two-site uncle
+    boundary space.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Expanding $F(i,j)$ and $U_{ij}$ blockwise gives the same four blocks.
+\end{proof}
+
+\begin{definition}[The boundary product]
+    \label{def:uncle_boundary_product}
+    \lean{MPSTensor.uncleBoundaryMul}
+    \lean{MPSTensor.uncleBoundaryMul_block}
+    \leanok
+    \uses{def:uncle_boundary_space}
+    On block matrices in $\mathcal M_{a+b}$ define
+    \begin{align}
+        (A,R,L,B)\star(A',R',L',B')
+         & =(AA',AR'+RB',LA'+BL',BB').
+    \end{align}
+\end{definition}
+
+\begin{lemma}[The boundary product is associative and unital]
+    \label{lem:uncle_boundary_product_monoid}
+    \lean{MPSTensor.uncleBoundaryMul_assoc}
+    \lean{MPSTensor.one_uncleBoundaryMul}
+    \lean{MPSTensor.uncleBoundaryMul_one}
+    \leanok
+    \uses{def:uncle_boundary_product}
+    The product $\star$ is associative, and the identity matrix is a
+    two-sided unit.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Compare the four blocks; each is a sum of products of the original
+    blocks, associated in the same way on both sides.
+\end{proof}
+
+\begin{lemma}[Intersection of single-wall spaces]
+    \label{lem:uncle_boundary_intersection}
+    \lean{MPSTensor.uncleBoundary_span_eq_top_succ}
+    \lean{MPSTensor.mem_uncleBoundarySpace_of_overlap}
+    \lean{MPSTensor.uncleBoundarySpace_intersection}
+    \leanok
+    \uses{def:uncle_boundary_space}
+    Suppose the full matrices $T_i$ span $\mathcal M_{a+b}$. For every
+    $n\geq2$, the vectors whose restrictions at the first and last sites
+    belong to $S_n$ are exactly $S_{n+1}$. Moreover, the matrices $F(w)$ span
+    the full matrix space at every positive word length.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{lem:uncle_boundary_product_monoid}
+    Choose $c_i$ with $\sum_i c_iT_i=I$. Concatenation of the coefficient
+    words uses the associative product $\star$ of
+    Definition~\ref{def:uncle_boundary_product}.
+    Consequently, contracting the first site by $c_i$ removes that site,
+    and induction gives the full coefficient span at every positive length.
+    Given the two overlapping descriptions, write their boundary matrices
+    as $X_k$ and $Y_i$, with $i$ and $k$ the first and last physical labels.
+    Compatibility and the same contraction give, for every middle word $w$,
+    \begin{align}
+        \tr(F(w)X_k) & =\tr(F(wk)Z), & Z & =\sum_i c_iY_i.
+    \end{align}
+    The positive-length middle words span all matrices. Thus this equality
+    extends to every middle coefficient, and evaluation on each longer
+    prefix yields the single boundary $Z$ on all $n+1$ sites.
+    The forward inclusion follows by moving a fixed letter through the
+    bilinear trace pairing. This is the coefficient argument of the source
+    Appendix; it assumes neither an intersection identity nor a closure identity.
+\end{proof}
