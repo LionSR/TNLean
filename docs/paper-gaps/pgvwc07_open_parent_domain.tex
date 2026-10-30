@@ -20,8 +20,9 @@ onto the complement of the corresponding two-site boundary range.
 The current candidate constructs these actual projectors and their open
 sum, derives the adjacent coefficient sections from the actual kernel,
 reconstructs the full chain by the printed canonical adjoint method,
-and closes the singleton endpoint bonds. For a common physical alphabet
-and $N\ge2$, the conclusion is
+and closes the singleton endpoint bonds. The dependent-physical-space
+continuation allows arbitrary physical dimensions at the different sites.
+For $N\ge2$, the conclusion is
 \[
     H\ge0,\qquad \|\Omega\|=1,\qquad
     \ker H=\mathbb C\Omega,\qquad \dim\ker H=1.
@@ -33,17 +34,18 @@ condition, larger-block boundary, or canonical-form supplier.
 \section{Scope still retained}
 The proof is stated for at least two sites, the domain with an adjacent
 pair. It does not assert an unrestricted conclusion for lengths without
-such a pair. The physical alphabet is common to the sites, as in the
-existing finite open-chain data. A conclusion for differently sized
-blocked physical spaces has not been claimed by this statement.
-These restrictions must remain visible in its mathematical entry. The
-unrestricted source theorem is not marked complete by this candidate.
+such a pair. The physical dimensions may vary from site to site. They are
+embedded into a common finite alphabet internally; the canonical equations and actual
+parent equation force the represented state into the original physical
+configuration image. Thus no common-alphabet or state-image premise is
+retained. The remaining length restriction must remain visible in the
+mathematical entry. The unrestricted source theorem is not marked complete by this candidate.
 
 The remaining scope work is to establish the intended short-length
-convention from the full source setting and, if required, extend the
-finite-word induction and coordinate restrictions to site-dependent
-physical alphabets. No counterexample to the unrestricted source claim
-is asserted here. The current proofs also await hosted Lean validation.
+convention from the full source setting. The physical-alphabet restriction
+has been removed by actual operator transport, support extraction and the
+common-alphabet kernel comparison. No counterexample to the unrestricted
+source claim is asserted here. The current proofs also await hosted Lean validation.
 
 \section{Formalization}
 The actual local terms and their kernel characterization are in
@@ -54,5 +56,11 @@ and actual boundary-state annihilation is in
 \path{TNLean/MPS/ParentHamiltonian/VaryingOBCBoundaryStates.lean}.
 The scalar-endpoint normalization and final kernel statements are in
 \path{TNLean/MPS/ParentHamiltonian/VaryingOBCParentUniqueness.lean}.
+The actual dependent-physical-space parent, physical support extraction,
+common-alphabet comparison and final normalized state line are in
+\path{TNLean/MPS/ParentHamiltonian/VaryingPhysicalParentHamiltonian.lean},
+\path{TNLean/MPS/ParentHamiltonian/VaryingPhysicalKernelSupport.lean},
+\path{TNLean/MPS/ParentHamiltonian/UniformPhysicalParentComparison.lean}, and
+\path{TNLean/MPS/ParentHamiltonian/VaryingPhysicalParentUniqueness.lean}.
 
 \end{document}
