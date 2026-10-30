@@ -214,6 +214,7 @@ coefficients.
     \lean{MPSTensor.IsNormalTensor.reindexPhysical}
     \lean{MPSTensor.leftCanonical_reindexPhysical_equiv}
     \lean{MPSTensor.transferMap_reindexPhysical_equiv}
+    \lean{MPSTensor.isNormal_reindexPhysical_equiv}
     \lean{MPSTensor.CPSVCanonicalFormData.reindexPhysical}
     \lean{MPSTensor.IsCPSVCanonicalForm.reindexPhysical}
     \leanok
@@ -225,7 +226,9 @@ coefficients.
         \label{eq:cpsv_physical_reindexing_tensor}
     \end{align}
     The transfer maps of $A$ and $e^*A$ agree. In particular, physical
-    relabeling preserves left-canonical normalization and CPSV normality. If
+    relabeling preserves left-canonical normalization and CPSV normality.
+    Since $A$ and $e^*A$ have the same words of each length, $e^*A$ is
+    normal exactly when $A$ is normal. If
     $A$ has canonical-form data
     \begin{align}
         A^i
