@@ -5034,6 +5034,30 @@ three-plaquette output measurement, and the routed reunion measurement.
 
 ## Candidates
 
+### Robustness assembly with a sharper cutoff — resolved (2026-10-30)
+
+- **Seen:** `MPS/AreaLaw/AKLV/Robustness.lean`, `NormalizedChain.lean`,
+  and `InverseGapRobustness.lean`.
+- **Pattern:** Build the minimizing ground vector from an absolute excited-energy
+  lower bound, combine its gap with the projected residual and tail, and reconstruct
+  the normalized regional sums from the two removed bonds.
+- **Decision:** Extracted as cutoff-independent lemmas shared by both cutoffs:
+  `exists_ground_gap_twoSidedEnergyTruncation_of_orthogonal` (ground vector and gap
+  from the orthogonal energy bound), `robust_ground_of_clipped_ground_gap` (residual,
+  tail and phase assembly, with the now public `phase_budget_le_exp`), and
+  `exists_normalizedCutBlock_eq_sum_sub` (regional sums away from the removed bonds).
+  Each cutoff proves only its orthogonal energy bound. No new tactic is needed.
+
+### Boundary operator norm from its positive cap — promoted (2026-10-30)
+
+- **Seen:** `MPS/AreaLaw/AKLV/HighEnergyMass.lean`, `ProjectionEnergy.lean`,
+  and `InverseGapRobustness.lean`; the targeted pattern scan reports three uses.
+- **Pattern:** Convert `0 ≤ A ≤ 2I` to `‖A‖ ≤ 2` with
+  `CStarAlgebra.norm_le_iff_le_algebraMap` and the scalar-matrix identity.
+- **Abstraction:** `Matrix.PosSemidef.norm_le_of_le_smul_one`
+  (`0 ≤ A ≤ c • 1 → ‖A‖ ≤ c`) in `HighEnergyMass.lean`; the three call
+  sites now apply it. No tactic or alternate operator norm is introduced.
+
 ### Constancy of a continuous trace sign — candidate (2026-10-29)
 
 - **Pattern:** A finite matrix-product/trace expression is continuous by
