@@ -168,9 +168,9 @@ theorem wordOfBlock_twoSiteDirectBlockEquiv_symm (d k : ℕ)
     (Fin.cast (congrArg (MPSTensor.blockPhysDim d) (Nat.mul_comm 2 k).symm)
       (MPSTensor.iteratedBlockIndex d k 2
         (twoSiteBlockEquiv (MPSTensor.blockPhysDim d k) i))) = _
-  rw [MPSTensor.wordOfBlock_cast_length, MPSTensor.wordOfBlock_iteratedBlockIndex]
-  simp [twoSiteBlockEquiv, Kraus.wordOfBlock, MPSTensor.decodeBlock_decodeBlockEquiv_symm,
-    Kraus.flattenBlockedWord, List.ofFn_succ]
+  rw [MPSTensor.wordOfBlock_cast_length d (Nat.mul_comm 2 k).symm,
+    MPSTensor.wordOfBlock_iteratedBlockIndex]
+  simp [twoSiteBlockEquiv, Kraus.wordOfBlock, Kraus.flattenBlockedWord, List.ofFn_succ]
 
 private theorem reindexPhysical_blockTwo_blockTensor_of_eq
     {d D : ℕ} (U : MPOTensor d D) (k L : ℕ) (hL : L = k * 2) :

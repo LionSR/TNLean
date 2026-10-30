@@ -27,12 +27,20 @@ noncomputable def conjStarAlgEquiv (U : Matrix m n ℂ) (hU : U.IsUnitaryBetween
     Matrix n n ℂ ≃⋆ₐ[ℂ] Matrix m m ℂ where
   toFun A := U * A * Uᴴ
   invFun B := Uᴴ * B * U
-  left_inv A := by simp only [Matrix.mul_assoc, ← Matrix.mul_assoc Uᴴ U, hU.1,
-    Matrix.one_mul, Matrix.mul_one]
-  right_inv B := by simp only [Matrix.mul_assoc, ← Matrix.mul_assoc U Uᴴ, hU.2,
-    Matrix.one_mul, Matrix.mul_one]
-  map_mul' A B := by simp only [Matrix.mul_assoc, ← Matrix.mul_assoc Uᴴ U, hU.1,
-    Matrix.one_mul, Matrix.mul_one]
+  left_inv A := by
+    change Uᴴ * (U * A * Uᴴ) * U = A
+    have h : Uᴴ * (U * A * Uᴴ) * U = (Uᴴ * U) * A * (Uᴴ * U) := by
+      simp only [Matrix.mul_assoc]
+    rw [h, hU.1, Matrix.one_mul, Matrix.mul_one]
+  right_inv B := by
+    change U * (Uᴴ * B * U) * Uᴴ = B
+    have h : U * (Uᴴ * B * U) * Uᴴ = (U * Uᴴ) * B * (U * Uᴴ) := by
+      simp only [Matrix.mul_assoc]
+    rw [h, hU.2, Matrix.one_mul, Matrix.mul_one]
+  map_mul' A B := by
+    have h : U * (A * B) * Uᴴ = U * A * (Uᴴ * U) * B * Uᴴ := by
+      rw [hU.1]; simp only [Matrix.mul_assoc, Matrix.mul_one]
+    rw [h]; simp only [Matrix.mul_assoc]
   map_add' A B := by simp only [Matrix.mul_add, Matrix.add_mul]
   map_star' A := by simp only [Matrix.star_eq_conjTranspose, Matrix.conjTranspose_mul,
     Matrix.conjTranspose_conjTranspose, Matrix.mul_assoc]

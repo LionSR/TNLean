@@ -125,7 +125,8 @@ private theorem twoSiteHeisenbergMatrix_apply {d D ℓ r n : ℕ}
   rw [evalWord_append W _ _ _ _ (by simp)]
   change Matrix.trace (evalWord W _ _ * evalWord W _ _) =
     Matrix.trace (1 * evalWord W _ _ * evalWord W _ _)
-  simp only [Matrix.one_mul, List.ofFn_succ, List.ofFn_zero]
+  simp only [Matrix.one_mul, List.ofFn_succ, List.ofFn_zero,
+    Matrix.cons_val_zero, Matrix.cons_val_succ]
 
 /-- The full finite MPO intertwines the actual middle input observable
 with the neighbouring four-half-site output observable, for every tail
@@ -137,8 +138,10 @@ theorem twoSiteHeisenbergMatrix_intertwiner {d D ℓ r : ℕ}
     {v : Matrix (HalfPair d) (Fin r × Fin ℓ) ℂ}
     (S : TwoSiteStandardFormData W u v) (n : ℕ)
     (A : Matrix (HalfPair d) (HalfPair d) ℂ) :
-    Matrix.mul (twoSiteHeisenbergMatrix W n) (Matrix.rightKroneckerEmbed A) =
-      Matrix.mul (Matrix.rightKroneckerEmbed (twoLinkOutputObservable u v A))
+    Matrix.instHMulOfFintypeOfMulOfAddCommMonoid.hMul (twoSiteHeisenbergMatrix W n)
+        (Matrix.rightKroneckerEmbed A) =
+      Matrix.instHMulOfFintypeOfMulOfAddCommMonoid.hMul
+        (Matrix.rightKroneckerEmbed (twoLinkOutputObservable u v A))
         (twoSiteHeisenbergMatrix W n) := by
   classical
   ext row col
@@ -180,8 +183,9 @@ theorem twoSiteHeisenbergMatrix_conjugation {d D ℓ r : ℕ}
     {v : Matrix (HalfPair d) (Fin r × Fin ℓ) ℂ}
     (S : TwoSiteStandardFormData W u v) (n : ℕ)
     (A : Matrix (HalfPair d) (HalfPair d) ℂ) :
-    Matrix.mul (Matrix.mul (twoSiteHeisenbergMatrix W n) (Matrix.rightKroneckerEmbed A))
-        (twoSiteHeisenbergMatrix W n)ᴴ =
+    Matrix.instHMulOfFintypeOfMulOfAddCommMonoid.hMul
+        (Matrix.instHMulOfFintypeOfMulOfAddCommMonoid.hMul (twoSiteHeisenbergMatrix W n)
+          (Matrix.rightKroneckerEmbed A)) (twoSiteHeisenbergMatrix W n)ᴴ =
       Matrix.rightKroneckerEmbed (m := OutputExterior d n) (twoLinkOutputObservable u v A) := by
   rw [twoSiteHeisenbergMatrix_intertwiner S n A, Matrix.mul_assoc,
     (twoSiteHeisenbergMatrix_isUnitaryBetween S n).2, Matrix.mul_one]
@@ -298,8 +302,10 @@ theorem originalSiteHeisenbergMatrix_intertwiner {d D ℓ r : ℕ}
     (S : TwoSiteStandardFormData (blockTwo (blockTensor U k)) u v)
     (A : Matrix (HalfPair (MPSTensor.blockPhysDim d k))
       (HalfPair (MPSTensor.blockPhysDim d k)) ℂ) :
-    Matrix.mul (originalSiteHeisenbergMatrix U k p s) (Matrix.rightKroneckerEmbed A) =
-      Matrix.mul (Matrix.rightKroneckerEmbed (twoLinkOutputObservable u v A))
+    Matrix.instHMulOfFintypeOfMulOfAddCommMonoid.hMul (originalSiteHeisenbergMatrix U k p s)
+        (Matrix.rightKroneckerEmbed A) =
+      Matrix.instHMulOfFintypeOfMulOfAddCommMonoid.hMul
+        (Matrix.rightKroneckerEmbed (twoLinkOutputObservable u v A))
         (originalSiteHeisenbergMatrix U k p s) := by
   classical
   ext row col
@@ -340,8 +346,9 @@ theorem originalSiteHeisenbergMatrix_conjugation {d D ℓ r : ℕ}
     (S : TwoSiteStandardFormData (blockTwo (blockTensor U k)) u v)
     (A : Matrix (HalfPair (MPSTensor.blockPhysDim d k))
       (HalfPair (MPSTensor.blockPhysDim d k)) ℂ) :
-    Matrix.mul (Matrix.mul (originalSiteHeisenbergMatrix U k p s)
-        (Matrix.rightKroneckerEmbed A)) (originalSiteHeisenbergMatrix U k p s)ᴴ =
+    Matrix.instHMulOfFintypeOfMulOfAddCommMonoid.hMul
+        (Matrix.instHMulOfFintypeOfMulOfAddCommMonoid.hMul (originalSiteHeisenbergMatrix U k p s)
+          (Matrix.rightKroneckerEmbed A)) (originalSiteHeisenbergMatrix U k p s)ᴴ =
       Matrix.rightKroneckerEmbed
         (m := OriginalExterior d p s (HalfPair (MPSTensor.blockPhysDim d k)))
         (twoLinkOutputObservable u v A) := by
@@ -393,9 +400,10 @@ private theorem originalWindowMatrix_eq_buffer {d k p s : ℕ} {E C : Type*}
     (originalWindowConfigEquiv d k p s head).surjective row
   obtain ⟨⟨⟨ex', e'⟩, c'⟩, rfl⟩ :=
     (originalWindowConfigEquiv d k p s head).surjective col
-  simp only [Matrix.reindex_apply, Equiv.symm_apply_apply]
+  simp only [Matrix.reindex_apply, Matrix.submatrix_apply, Equiv.symm_apply_apply]
   rw [originalWindowConfigEquiv_buffer, originalWindowConfigEquiv_buffer]
-  simp only [bufferedWindowMatrix, Matrix.reindex_apply, Equiv.symm_apply_apply,
+  simp only [bufferedWindowMatrix, Matrix.reindex_apply, Matrix.submatrix_apply,
+    Equiv.symm_apply_apply,
     Matrix.rightKroneckerEmbed_apply, Matrix.kroneckerMap_apply, Matrix.one_apply,
     Prod.mk.injEq]
   by_cases he : ex = ex' <;> by_cases hh : e = e' <;> simp [he, hh]
@@ -480,7 +488,7 @@ theorem mpo_bufferedWindow_conjugation {d D ℓ r : ℕ}
   simpa only [ei, eo, originalSiteHeisenbergInputEquiv,
     originalSiteHeisenbergOutputEquiv, originalWindowMatrix_eq_buffer,
     originalSiteHeisenbergInputWindow, originalSiteHeisenbergInputWindowEquiv,
-    originalSiteHeisenbergOutputWindow] using h
+    originalSiteHeisenbergOutputWindow, originalSiteHeisenbergOutputWindowEquiv] using h
 
 
 /-- Original consecutive coordinates on the complete central two-block
@@ -537,8 +545,8 @@ theorem originalSiteHeisenbergInputWindowEquiv_outside_eq_iff (d k : ℕ)
         change ¬ (2 * k ≤ j.val + (2 * k) * 0 ∧
           j.val + (2 * k) * 0 < 2 * k + 2 * k)
         omega)
-      simpa only [originalSiteHeisenbergInputWindowEquiv, Equiv.trans_apply,
-        originalWindowMiddleEquiv_block] using hj
+      simpa [originalSiteHeisenbergInputWindowEquiv,
+        originalWindowMiddleEquiv_block, windowInputHeadEquiv] using hj
     · apply (twoSiteDirectBlockEquiv d k).symm.injective
       apply (MPSTensor.decodeBlockEquiv d (2 * k)).injective
       funext j
@@ -546,23 +554,22 @@ theorem originalSiteHeisenbergInputWindowEquiv_outside_eq_iff (d k : ℕ)
         change ¬ (2 * k ≤ j.val + (2 * k) * 2 ∧
           j.val + (2 * k) * 2 < 2 * k + 2 * k)
         omega)
-      simpa only [originalSiteHeisenbergInputWindowEquiv, Equiv.trans_apply,
-        originalWindowMiddleEquiv_block] using hj
+      simpa [originalSiteHeisenbergInputWindowEquiv,
+        originalWindowMiddleEquiv_block, windowInputHeadEquiv] using hj
   · intro h
     subst e'
     intro i hi
     obtain ⟨⟨b, j⟩, rfl⟩ := finProdFinEquiv.surjective i
     fin_cases b
-    · simp only [originalSiteHeisenbergInputWindowEquiv, Equiv.trans_apply,
-        originalWindowMiddleEquiv_block]
+    · simp [originalSiteHeisenbergInputWindowEquiv,
+        originalWindowMiddleEquiv_block, windowInputHeadEquiv]
     · exfalso
       apply hi
       change 2 * k ≤ j.val + (2 * k) * 1 ∧
         j.val + (2 * k) * 1 < 2 * k + 2 * k
       omega
-    · simp only [originalSiteHeisenbergInputWindowEquiv, Equiv.trans_apply,
-        originalWindowMiddleEquiv_block]
-
+    · simp [originalSiteHeisenbergInputWindowEquiv,
+        originalWindowMiddleEquiv_block, windowInputHeadEquiv]
 
 /-- The original central input decoder is the ordinary two-block
 configuration concatenation. Source: CPSV17, StandardForm and physical
@@ -610,11 +617,10 @@ private theorem originalSiteHeisenbergOutputWindowEquiv_half (d k : ℕ)
         (![![(e.1), c.1.1], ![c.1.2, c.2.1], ![c.2.2, (e.2)]] b t) j := by
   rw [originalSiteHeisenbergOutputWindowEquiv, Equiv.trans_apply,
     originalWindowMiddleEquiv_block]
-  change originalSiteHeisenbergCentreEquiv d k
-    (![(e.1, c.1.1), (c.1.2, c.2.1), (c.2.2, e.2)] b)
-      (finProdFinEquiv (t, j)) = _
-  rw [originalSiteHeisenbergCentreEquiv_block]
-  fin_cases b <;> rfl
+  fin_cases b
+  · exact originalSiteHeisenbergCentreEquiv_block d k (e.1, c.1.1) t j
+  · exact originalSiteHeisenbergCentreEquiv_block d k (c.1.2, c.2.1) t j
+  · exact originalSiteHeisenbergCentreEquiv_block d k (c.2.2, e.2) t j
 
 /-- The middle four-half-block interval of the actual six-half-block
 output reads precisely its four output coordinates.
@@ -638,8 +644,9 @@ theorem originalSiteHeisenbergOutputWindowEquiv_middle (d k : ℕ)
     rw [hidx, originalSiteHeisenbergOutputWindowEquiv_half]
   have hcentre : originalSiteHeisenbergOutputCentreEquiv d k c (finProdFinEquiv (t, j)) =
       MPSTensor.decodeBlock d k (![c.1.1, c.1.2, c.2.1, c.2.2] t) j := by
-    simp [originalSiteHeisenbergOutputCentreEquiv, originalSiteHeisenbergOutputBlockEquiv,
-      MPSTensor.blockedConfigEquiv, Equiv.arrowCongr, Equiv.curry, Function.comp]
+    change MPSTensor.blockedConfigEquiv d 4 k ![c.1.1, c.1.2, c.2.1, c.2.2]
+      (finProdFinEquiv (t, j)) = _
+    simp [MPSTensor.blockedConfigEquiv, Equiv.arrowCongr, Equiv.curry, Function.comp]
   rw [hcentre]
   fin_cases t
   · exact hread 0 1 (by change k + (j.val + k * 0) = j.val + k * 1 + (2 * k) * 0; omega)
@@ -664,22 +671,24 @@ theorem originalSiteHeisenbergOutputWindowEquiv_outside_eq_iff (d k : ℕ)
       have hj := h (finProdFinEquiv ((0 : Fin 3), finProdFinEquiv ((0 : Fin 2), j)))
         (by change ¬ (k ≤ j.val + k * 0 + (2 * k) * 0 ∧
           j.val + k * 0 + (2 * k) * 0 < k + 4 * k); omega)
-      simpa only [originalSiteHeisenbergOutputWindowEquiv_half,
-        Matrix.cons_val_zero] using hj
+      simpa [originalSiteHeisenbergOutputWindowEquiv_half, Kraus.decodeBlockEquiv_apply]
+        using hj
     · apply (MPSTensor.decodeBlockEquiv d k).injective
       funext j
       have hj := h (finProdFinEquiv ((2 : Fin 3), finProdFinEquiv ((1 : Fin 2), j)))
         (by change ¬ (k ≤ j.val + k * 1 + (2 * k) * 2 ∧
           j.val + k * 1 + (2 * k) * 2 < k + 4 * k); omega)
-      simpa only [originalSiteHeisenbergOutputWindowEquiv_half, Matrix.cons_val_succ,
-        Matrix.cons_val_zero] using hj
+      simpa [originalSiteHeisenbergOutputWindowEquiv_half, Kraus.decodeBlockEquiv_apply]
+        using hj
   · intro h
     subst e'
     intro i hi
     obtain ⟨⟨b, q⟩, rfl⟩ := finProdFinEquiv.surjective i
     obtain ⟨⟨t, j⟩, rfl⟩ := finProdFinEquiv.surjective q
     fin_cases b <;> fin_cases t
-    · simp only [originalSiteHeisenbergOutputWindowEquiv_half, Matrix.cons_val_zero]
+    · rw [originalSiteHeisenbergOutputWindowEquiv_half,
+        originalSiteHeisenbergOutputWindowEquiv_half]
+      rfl
     · exfalso; apply hi
       change k ≤ j.val + k * 1 + (2 * k) * 0 ∧
         j.val + k * 1 + (2 * k) * 0 < k + 4 * k
@@ -696,7 +705,8 @@ theorem originalSiteHeisenbergOutputWindowEquiv_outside_eq_iff (d k : ℕ)
       change k ≤ j.val + k * 0 + (2 * k) * 2 ∧
         j.val + k * 0 + (2 * k) * 2 < k + 4 * k
       omega
-    · simp only [originalSiteHeisenbergOutputWindowEquiv_half, Matrix.cons_val_succ,
-        Matrix.cons_val_zero]
+    · rw [originalSiteHeisenbergOutputWindowEquiv_half,
+        originalSiteHeisenbergOutputWindowEquiv_half]
+      rfl
 
 end MPOTensor

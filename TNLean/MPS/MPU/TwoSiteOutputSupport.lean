@@ -113,7 +113,7 @@ private theorem twoLinkMiddleLift_kronecker {ℓ r : ℕ}
       Matrix.rightKroneckerEmbed (m := Fin r) A ⊗ₖ
         Matrix.leftKroneckerEmbed (n := Fin ℓ) B := by
   ext x y
-  simp only [twoLinkMiddleLift, Matrix.kronecker_apply,
+  simp only [twoLinkMiddleLift, Matrix.kroneckerMap_apply,
     Matrix.rightKroneckerEmbed_apply, Matrix.leftKroneckerEmbed_apply]
   ring
 
@@ -123,12 +123,10 @@ private theorem twoLinkShiftedMap_kronecker {d ℓ r : ℕ}
     twoLinkShiftedMap v hv (A ⊗ₖ B) =
       twoLinkLeftOutputMap v hv A ⊗ₖ twoLinkRightOutputMap v hv B := by
   change (v ⊗ₖ v) * twoLinkMiddleMap ℓ r (A ⊗ₖ B) * (v ⊗ₖ v)ᴴ = _
-  rw [twoLinkMiddleMap_apply, twoLinkMiddleLift_kronecker]
-  change (v ⊗ₖ v) * _ * (v ⊗ₖ v)ᴴ =
-    (v * Matrix.rightKroneckerEmbed A * vᴴ) ⊗ₖ
-      (v * Matrix.leftKroneckerEmbed B * vᴴ)
-  rw [Matrix.conjTranspose_kronecker, ← Matrix.mul_kronecker_mul,
+  rw [twoLinkMiddleMap_apply, twoLinkMiddleLift_kronecker,
+    Matrix.conjTranspose_kronecker, ← Matrix.mul_kronecker_mul,
     ← Matrix.mul_kronecker_mul]
+  all_goals rfl
 
 /-- Product inputs in intermediate coordinates give the actual product
 of the two shifted output factors. The arbitrary physical input is
@@ -177,7 +175,7 @@ private theorem twoLinkShiftedMap_left_slice_mem {d ℓ r : ℕ}
           Matrix.smul_apply, smul_eq_mul]
         ring
       rw [hcoeff]
-      exact (twoLinkLeftOutputMap v hv).range.smul_mem _ ⟨Matrix.single t t' c, rfl⟩
+      exact (twoLinkLeftOutputMap v hv).range.smul_mem ⟨Matrix.single t t' c, rfl⟩ _
 
 /-- The least left support algebra of the actual finite output family is
 exactly the conjugated ℓ-factor, with no support-factor presentation premise.
@@ -215,11 +213,11 @@ private theorem twoLinkLeftOutputMap_injective {d ℓ r : ℕ}
     (hv : v.IsUnitaryBetween) (hr : 0 < r) :
     Function.Injective (twoLinkLeftOutputMap v hv) := by
   intro A B hAB
-  have hK := (Matrix.IsUnitaryBetween.conjStarAlgEquiv v hv).injective hAB
+  have hK : (1 : Matrix (Fin r) (Fin r) ℂ) ⊗ₖ A = 1 ⊗ₖ B :=
+    (Matrix.IsUnitaryBetween.conjStarAlgEquiv v hv).injective hAB
   ext t t'
   have h := congrArg (fun C => C (⟨0, hr⟩, t) (⟨0, hr⟩, t')) hK
-  simpa only [Matrix.rightKroneckerEmbed_apply, Matrix.kronecker_apply,
-    Matrix.one_apply_eq, one_mul] using h
+  simpa only [Matrix.kronecker_apply, Matrix.one_apply_eq, one_mul] using h
 
 /-- The actual least left support algebra has matrix size ℓ. This
 presentation is derived from the supplied gates and their actual output

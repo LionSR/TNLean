@@ -1,0 +1,181 @@
+\section{The sampled construction at successive cuts}
+\label{sec:lvv_sampled_construction}
+
+\begin{theorem}[Decomposition preserving earlier cut bounds]
+    \label{thm:lvv_cut_decomposition}
+    \lean{TNLean.MPS.AreaLaw.operatorSchmidtRank_cutOperator_leftConfigOfFin,
+        TNLean.MPS.AreaLaw.exists_cutDecomposition_of_operatorSchmidtRank_le}
+    \leanok
+    Let $K$ act on a chain of $L$ sites and have operator Schmidt rank at most
+    $D$ at every cut, including the endpoints. For every $i\le L$ there is a
+    decomposition $K=\sum_{j=1}^{N}A_j\otimes B_j$ across the cut after $i$
+    sites, with $N\le D$, such that each $A_j$ has operator Schmidt rank at
+    most $D$ at every internal cut of the first $i$ sites.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Choose a basis of the right matrix-block span of $K$ and extend its
+    coordinate functionals to the full right operator space. Applying these
+    functionals gives the left factors. A right contraction cannot increase
+    the operator Schmidt rank across an earlier cut. The coordinate
+    identification between an initial segment and a shorter chain preserves
+    these ranks.
+\end{proof}
+
+\begin{theorem}[Simultaneous bounds for sampled factors]
+    \label{thm:lvv_sampled_cut_decomposition}
+    \lean{TNLean.MPS.AreaLaw.operatorSchmidtRank_cutOperator_bondComplementWord_le_all,
+        TNLean.MPS.AreaLaw.exists_sampledProjector_cutDecomposition}
+    \leanok
+    Suppose that each letter occurs at most $\kappa$ times in each of $\ell$
+    sampled words. Put $D=q^{2\kappa}$. At any cut, the sampled operator has
+    a product decomposition with at most $\ell D$ terms. Each left factor
+    has operator Schmidt rank at most $D$ at every earlier internal cut.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:lvv_cut_decomposition}
+    Every internal cut of a word has rank at most $q^{2\kappa}$; the
+    endpoint ranks are at most one. Apply Theorem~\ref{thm:lvv_cut_decomposition}
+    to each word separately. Concatenate their decompositions and absorb
+    the common sampling scalar into the left factors. Scalar multiplication
+    does not increase operator Schmidt rank.
+\end{proof}
+
+\begin{theorem}[Sampled error reduction]
+    \label{thm:lvv_sampled_error_reduction}
+    \lean{TNLean.MPS.AreaLaw.exists_sampled_errorReduction}
+    \leanok
+    Let $H=\sum_jH_j$ satisfy the positive nearest-neighbour contraction
+    assumptions, with a unit ground vector $\Gamma$, ground energy
+    $\varepsilon_0$ and positive gap $\Delta$. For $0<\delta\le1$, choose
+    the sampling precision $\eta=\delta/8$, the power
+    $m=\lceil((L-\varepsilon_0)/\Delta)\log(1/\eta)\rceil$, and the sample
+    count $\ell$ and multiplicity bound $\kappa$ of the sampled projector.
+    There is a sample with error less than $\delta/4$ from
+    $|\Gamma\rangle\langle\Gamma|$. At every cut its left factors can be
+    chosen before the input family, so that every $(i,s,b,1/2)$-viable
+    family is sent to an $(i,\ell Ds,D\max(1,b),\delta)$-viable family,
+    where $D=q^{2\kappa}$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:lvv_sampled_cut_decomposition, thm:lvv_mps_error_reduction}
+    The power error is at most $\eta$ and the sampling error is less than
+    $\eta$. Their sum is less than $\delta/4$. The simultaneous bounds of
+    Theorem~\ref{thm:lvv_sampled_cut_decomposition} supply the hypotheses
+    of Theorem~\ref{thm:lvv_mps_error_reduction}.
+\end{proof}
+
+\begin{theorem}[Uniform polynomial sampling bounds]
+    \label{thm:lvv_sampled_polynomial_bounds}
+    \lean{TNLean.MPS.AreaLaw.exists_sampledProjectorWordCount_polynomial,
+        TNLean.MPS.AreaLaw.exists_sampledProjectorLetterBound_logarithmic,
+        TNLean.MPS.AreaLaw.exists_sampledProjector_uniform_polynomial}
+    \leanok
+    Fix $q\ge1$, $\Delta>0$, $0<c\le1$, a natural number $s$ and a real bound $B$.
+    There are constants $C\ge1$ and $p\in\mathbb N$, chosen before $L$
+    and $\varepsilon_0$, such that whenever $L\ge1$,
+    $0\le\varepsilon_0\le L-1$ and $\varepsilon_0/\Delta\le B$, sampling
+    at precision $c/L^s$ gives $\ell D\le CL^p$ and $D\le CL^p$.
+    The count $\ell$ has a polynomial bound and $\kappa$ a logarithmic bound.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Set $r=\lceil B\rceil$. The normalization obeys
+    $C_0^m\le L(L^s/c)^r$. Substitution in the sample-count formula gives
+    $\ell\le C_1L^{2sr+2s+3}$. Also
+    $m/L\le\Delta^{-1}(\log(1/c)+s\log L)+1$.
+    Substitution in $\kappa=\lceil2m/L+2\log(4\ell L^4)\rceil$ gives
+    $\kappa\le a\log L+b$. Thus
+    $q^{2\kappa}\le\exp(2b\log q)L^{\lceil2a\log q\rceil}$.
+    Multiplying these bounds and rounding the coefficient proves the claim.
+\end{proof}
+
+\begin{definition}[Successive viability precision]
+    \label{def:lvv_successive_precision}
+    \lean{TNLean.MPS.AreaLaw.lvvViabilityPrecision}
+    \leanok
+    For a positive gap $\Delta$ and target accuracy $\eta>0$, set
+    $\alpha=\min\{1,\eta,(\Delta/169)^2\}$.
+\end{definition}
+
+\begin{theorem}[A complete step with fixed polynomial bounds]
+    \label{thm:lvv_sampled_successor}
+    \lean{TNLean.MPS.AreaLaw.exists_sampled_viable_successor_polynomial}
+    \leanok
+    \uses{def:lvv_successive_precision}
+    Fix $q\ge2$, $\Delta>0$, $\eta>0$, an integer $a\ge1$, and an upper bound $B$ for
+    $\varepsilon_0/\Delta$. There are natural constants $C,D\ge1$ and
+    $p,r$ such that, for every positive chain length and every cut
+    $1\le i\le L$, any finite family of left matrix product states
+    that is $(i-1,\alpha/L^a)$-viable gives an
+    $(i,CL^p,DL^r,\alpha/L^a)$-viable family by extension, size trimming,
+    independent bond trimming and sampled error reduction.
+    The bounds are independent of the size and bond bound of the input family.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:lvv_sampled_error_reduction, thm:lvv_sampled_polynomial_bounds,
+        thm:lvv_size_bond_trimmed_family, lem:lvv_bond_trimming_radius_polynomial}
+    Extension preserves viability. Since $\alpha\le(\Delta/169)^2$ and $L^a\ge L$,
+    size and bond trimming produce a half-viable family of polynomial
+    cardinality and individual bond bound. Sampled error reduction restores
+    error $\alpha/L^a$. Multiply its polynomial factor counts and ranks by
+    the corresponding trimming bounds. All coefficients and degrees are
+    chosen before $L$.
+\end{proof}
+
+\begin{theorem}[Successive viable families]
+    \label{thm:lvv_sampled_successive_families}
+    \lean{TNLean.MPS.AreaLaw.exists_sampled_successive_viable_sets_polynomial}
+    \leanok
+    Under the hypotheses of Theorem~\ref{thm:lvv_sampled_successor}, there
+    are families $S_i$ at all cuts $0\le i\le L$, beginning with the scalar
+    singleton, such that each is $(i,CL^p,DL^r,\alpha/L^a)$-viable.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:lvv_sampled_successor, lem:lvv_initial_scalar_family}
+    The scalar singleton is exactly viable. Apply
+    Theorem~\ref{thm:lvv_sampled_successor} inductively at the successive
+    cuts. The same size and bond bounds apply at each step.
+\end{proof}
+
+\begin{theorem}[A matrix product state in the final span]
+    \label{thm:lvv_final_span_mps}
+    \lean{TNLean.MPS.AreaLaw.isOpenMPS_leftChain_of_mem_span,
+        TNLean.MPS.AreaLaw.IsViable.exists_openMPS_of_forall_isLeftOpenMPS,
+        TNLean.MPS.AreaLaw.IsViableMPS.exists_openMPS}
+    \leanok
+    A final $(L,s,b,\delta)$-viable family contains in its span a normalized
+    matrix product state of bond at most $s\max(1,b)$ and overlap at least
+    $1-\delta$ with the ground vector.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{lem:lvv_final_span_vector}
+    At the final cut the viable witness belongs to the span of the family.
+    Matrix rank is subadditive under finite sums, so its internal cut ranks
+    are at most the sum of the individual bond bounds.
+\end{proof}
+
+\begin{theorem}[Polynomial final bond at prescribed accuracy]
+    \label{thm:lvv_sampled_ground_state}
+    \lean{TNLean.MPS.AreaLaw.exists_sampled_groundState_openMPS_polynomial}
+    \leanok
+    For fixed $q\ge2$, $\Delta>0$, $\eta>0$, an integer $a\ge1$, and $B$, there are natural
+    constants $C\ge1,p$ such that every positive nearest-neighbour
+    contraction chain of length $L\ge1$, with a unique gapped ground vector
+    $\Gamma$ and $\varepsilon_0/\Delta\le B$, admits a normalized matrix
+    product state $\psi$ of bond at most $CL^p$ with
+    $|\langle\psi,\Gamma\rangle|\ge1-\eta/L^a$.
+    The construction is the successive sampled construction.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:lvv_sampled_successive_families, thm:lvv_final_span_mps}
+    Apply Theorem~\ref{thm:lvv_final_span_mps} to $S_L$.
+    Multiply the size and bond polynomials. The overlap error is at most
+    $\alpha/L^a\le\eta/L^a$.
+\end{proof}

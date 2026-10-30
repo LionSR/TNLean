@@ -1,61 +1,9 @@
 \section{Cuts with no crossing edge}
 \label{sec:area_law_zero_boundary}
 
-This section proves Lemma~2.2 of \cite{OpenAI2026AreaLaw} and the degenerate
-cases recorded before it in Section~2 of that preprint.
-
-\begin{lemma}[Gapped ground vectors of a sum of factor Hamiltonians]
-    \label{thm:area_law_product_ground_state}
-    \lean{TNLean.Lattice.exists_isGappedGroundState_factors_of_kronecker_sum, TNLean.Lattice.exists_eq_mul_of_gap, TNLean.Lattice.vonNeumannEntropy_partialTraceRight_eq_zero_of_gap}
-    \leanok
-    Let $H=H_A\otimes I+I\otimes H_B$ with $H_A,H_B$ Hermitian. If a unit
-    vector $\omega$ satisfies $H\omega=E_0\omega$ and
-    $H-E_0I\ge\Delta(I-|\omega\rangle\langle\omega|)$ with $\Delta>0$, then
-    $\omega$ is a product vector, and its reduced state on the first factor has
-    zero entropy.
-
-    More precisely, there are real numbers $a,b$ and normalized factor
-    vectors $u,v$ such that
-    \begin{align}
-        \omega & =u\otimes v,                            & E_0   & =a+b,\notag \\
-        \|u\|  & =1,                                     & \|v\| & =1,\notag   \\
-        H_Au   & =au,                                    & H_Bv  & =bv,\notag  \\
-        H_A-aI & \ge\Delta(I-|u\rangle\langle u|),       &
-        H_B-bI & \ge\Delta(I-|v\rangle\langle v|).\notag
-    \end{align}
-    The phase is included in the chosen factors, so the product equality
-    is exact. Both factors retain the same lower gap bound $\Delta$.
-    These factor gap inequalities are the spectral step in the reduction
-    to connected domains in \cite[Part~I]{TNLean2026OneDimensional}.
-\end{lemma}
-
-\begin{proof}\leanok
-    Let $a,b$ be the least eigenvalues of $H_A,H_B$ with unit eigenvectors
-    $u,v$. Then $H\ge a+b$, so $E_0=\langle\omega,H\omega\rangle\ge a+b$, while
-    $H(u\otimes v)=(H_Au)\otimes v+u\otimes(H_Bv)=(a+b)(u\otimes v)$. The gap inequality on $u\otimes v$ gives
-    $\Delta(1-|\langle\omega,u\otimes v\rangle|^2)\le a+b-E_0\le0$, hence
-    $|\langle\omega,u\otimes v\rangle|=1$ and $\omega$ is a multiple of
-    $u\otimes v$. The reduced state is then a rank-one projection.
-
-    The equality $|\langle\omega,u\otimes v\rangle|=1$, together with
-    the two energy comparisons, also gives $E_0=a+b$.
-    Write $z=\langle\omega,u\otimes v\rangle$.
-    The exact relation is $\omega=\overline z\,u\otimes v$ with $|z|=1$.
-    Replacing $u$ by $\overline z\,u$ preserves its norm, eigenvalue
-    equation and rank-one projection and makes $\omega=u\otimes v$.
-    For the isometric inclusion $B_v\xi=\xi\otimes v$, direct compression
-    of the gap defect gives
-    \begin{align}
-         & B_v^*\bigl(H-E_0I-\Delta(I-|\omega\rangle\langle\omega|)\bigr)B_v
-        \notag                                                               \\
-         & \qquad=H_A-(E_0-b)I-\Delta(I-|u\rangle\langle u|)
-        =H_A-aI-\Delta(I-|u\rangle\langle u|).\notag
-    \end{align}
-    Positivity is preserved under rectangular compression, so the last
-    operator is positive semidefinite. Compressing instead along
-    $B_u\eta=u\otimes\eta$ gives the second factor inequality.
-    No factor is lost in $\Delta$, since both inclusions are isometries.
-\end{proof}
+Lemma~\ref{thm:area_law_product_ground_state} gives the product decomposition
+of Lemma~2.2 of \cite{OpenAI2026AreaLaw}. This section applies it to cuts with
+no crossing edge and treats the degenerate cases recorded before that lemma.
 
 \begin{lemma}[Gapped ground vectors of a sum over finitely many factors]
     \label{thm:area_law_product_ground_state_family}

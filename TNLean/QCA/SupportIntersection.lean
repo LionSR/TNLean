@@ -36,16 +36,16 @@ theorem QuasiLocalSupportedIn.inter {d : ℕ} [NeZero d]
   intro x hx C
   have hout : x ∉ Λ ∨ x ∉ Γ := by
     by_contra h
-    push_neg at h
+    push Not at h
     exact Finset.disjoint_left.mp hΔ hx (Finset.mem_inter.mpr h)
   rcases hout with hxΛ | hxΓ
   · have hdisjoint : Disjoint ({x} : Finset ℤ) Λ := by simpa using hxΛ
     have h := (quasiLocalSupportedIn_iff_commute_disjoint X Λ).mp hΛ
-      {x} hdisjoint (quasiLocalObservable d {x} C) ⟨C, rfl⟩
+      {x} hdisjoint (SpinChain.quasiLocalObservable d {x} C) ⟨C, rfl⟩
     exact h
   · have hdisjoint : Disjoint ({x} : Finset ℤ) Γ := by simpa using hxΓ
     have h := (quasiLocalSupportedIn_iff_commute_disjoint X Γ).mp hΓ
-      {x} hdisjoint (quasiLocalObservable d {x} C) ⟨C, rfl⟩
+      {x} hdisjoint (SpinChain.quasiLocalObservable d {x} C) ⟨C, rfl⟩
     exact h
 
 end SpinChain
