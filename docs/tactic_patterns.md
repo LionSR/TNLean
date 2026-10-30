@@ -9716,6 +9716,15 @@ there is no need for a new tactic.
   mathematical lemma to a lower matrix-analysis module and reuse it; do not duplicate its
   statement or introduce a new tactic.
 
+### Cancellation from a spanning matrix family — promoted
+- **Pattern:** express the identity as a finite linear combination of a
+  spanning family, distribute multiplication, and cancel two factors.
+- **Seen:** the two orientations in `PEPS/CycleMPSChainArc.lean`; its
+  trace-pairing cancellation already uses the same extension mechanism.
+- **Abstraction:** use Mathlib's `LinearMap.ext_on_range` on `mulLeft` or
+  `mulRight`, then evaluate at the identity. Both multiplication proofs now
+  work for an arbitrary `Sort` of generators without a finite-index instance.
+
 ### Functional calculus on a Hermitian eigenbasis — candidate (2026-10-28)
 
 - **Pattern:** Expand the Hermitian functional calculus using its eigenvector
@@ -9777,6 +9786,19 @@ there is no need for a new tactic.
   threshold. Before extending this pattern to another module, move the value equality
   before the case distinction or reuse `Fin.val_inj`; no new tactic is needed.
 
+### Uncle boundary contraction and trace extension — candidate (2026-10-29)
+
+- **Seen:** `MPS/ParentHamiltonian/UncleBoundaryWords.lean` and
+  `MPS/ParentHamiltonian/UncleBoundaryIntersection.lean`.
+- **Pattern:** Extract coefficients of the identity from a full one-letter span,
+  contract a physical endpoint, and extend a trace identity from spanning words
+  to arbitrary matrices.
+- **Reuse:** The source-specific contraction is stated once as
+  `sum_smul_uncleBoundaryWord_cons`; Mathlib's `LinearMap.ext_on_range` supplies
+  the general extension. The existing matrix trace-representation theorem
+  handles both endpoint restriction directions.
+- **Decision:** Reuse the lemmas; no new tactic or parallel dual structure.
+
 ### Delta half factors for a supplied two-site circuit (2026-10-29)
 
 - **Seen:** `MPS/MPU/StandardFormFromGates.lean`.
@@ -9787,6 +9809,20 @@ there is no need for a new tactic.
   existing supplied standard-form and fundamental-theorem APIs. No fourth copy
   of the circuit contraction or custom tactic is introduced.
 
+
+### Normalization after prefix truncation — candidate (2026-10-29)
+
+- **Pattern:** A nonzero truncation of a unit vector has normalized error at
+  most twice its vector error, by the reverse triangle inequality and
+  `‖‖v‖⁻¹ • v - v‖ = |1 - ‖v‖|`.
+- **Seen:** `MPS/AreaLaw/MPSApproximation.lean`,
+  `MPS/AreaLaw/SnakeGridApproximation.lean`.
+- **Abstraction:** The former has the public lemma
+  `norm_inv_norm_smul_sub_le_two_mul`. Move that lemma to a shared algebra
+  module if a third caller needs it, so square-grid proofs can reuse it
+  without importing the chain area-law theorem.
+- **Notes:** Two occurrences; the square proof currently keeps this short
+  calculation inside its normalization step and imports only the truncation core.
 
 ### Exponential comparisons with a common nonnegative factor — reused Mathlib (2026-10-29)
 
