@@ -269,6 +269,7 @@ import TNLean.MPS.MPDO.PRFP
 import TNLean.MPS.MPDO.PerCopyHorizontalCF
 import TNLean.MPS.MPDO.PeriodicExclusion
 import TNLean.MPS.MPDO.PhysicalAdjoint
+import TNLean.MPS.MPDO.PhysicalBasisAction
 import TNLean.MPS.MPDO.PhysicalBlocking
 import TNLean.MPS.MPDO.PhysicalBlockingResiduals
 import TNLean.MPS.MPDO.PhysicalClosure
@@ -391,6 +392,7 @@ import TNLean.MPS.MPDO.TopologicalPhysicalGibbs
 import TNLean.MPS.MPDO.TopologicalProjectorRecursion
 import TNLean.MPS.MPDO.TopologicalProjectors
 import TNLean.MPS.MPDO.TopologicalTerminalSpectral
+import TNLean.MPS.MPDO.TraceChainOperator
 import TNLean.MPS.MPDO.TriangularActionLIdentification
 import TNLean.MPS.MPDO.TriangularBoundaryBlocked
 import TNLean.MPS.MPDO.TriangularBoundaryDecomposition
@@ -451,4 +453,5 @@ import TNLean.MPS.MPDO.VerticalSectorTraceLoss
 import TNLean.MPS.MPDO.VerticalSectorTracePreservation
 import TNLean.MPS.MPDO.VerticalSpectral
 import TNLean.MPS.MPDO.VerticalTransportCoefficientCovariance
+import TNLean.MPS.MPDO.WeakHopfRepresentation
 import TNLean.MPS.MPDO.ZCL

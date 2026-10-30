@@ -23,7 +23,7 @@ namespace MPSTensor
 
 variable {d D N L : ℕ}
 
-/-- Joining the two cyclic blocks factors the actual closed-word amplitude.
+/-- Joining the two cyclic blocks factors the closed-word amplitude.
 Source: PGVWC07, Theorem 11, `2blocks.1`, proof lines 1418–1422. -/
 theorem mpv_cyclicActiveBlockConfigEquiv_symm
     (A : MPSTensor d D) (hLN : L ≤ N) (i : Fin N)
@@ -57,7 +57,7 @@ theorem mpv_cyclicActiveBlockConfigEquiv_symm
   conv_lhs => rw [← List.take_append_drop i.val (List.ofFn ω), Kraus.evalWord_append]
   exact Matrix.trace_mul_comm _ _
 
-/-- The cyclic active-block coordinates of the actual periodic Hilbert vector
+/-- The cyclic active-block coordinates of the periodic Hilbert vector
 are the active boundary map with the complementary word as boundary matrix.
 Source: PGVWC07, Theorem 11, `2blocks.1`, proof lines 1418–1422. -/
 theorem cyclicActiveBlock_mpvState_apply
