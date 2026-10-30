@@ -121,7 +121,7 @@
         "thm:periodic_ft_equal_case_trace_preserving",
         "thm:periodic_ft_proportional",
         "thm:irreducible_form_physical_symmetry",
-        "thm:thm_4_1_p_refinement"
+        "thm:thm_4_1_p_refinement_forward_unit_weights"
       ],
       "corollaries": [
         "thm:periodic_ft_supplied_periods",
@@ -137,7 +137,7 @@
         "thm:periodic_ft_equal_case_trace_preserving": "Source theorem: De las Cuevas et al. Theorem 3.8, equal case with trace-preserving blocks",
         "thm:periodic_ft_proportional": "Proportional periodic Fundamental Theorem (De las Cuevas et al., Theorem 3.4)",
         "thm:irreducible_form_physical_symmetry": "Lifting of physical symmetries in irreducible form II to virtual gauges, named in the opening",
-        "thm:thm_4_1_p_refinement": "p-refinability iff p-divisibility of the transfer map (Theorem 4.1), named in the opening"
+        "thm:thm_4_1_p_refinement_forward_unit_weights": "Corrected forward Theorem 4.1 for explicit periodic blocks with unit-modulus weights; the reverse root-selection problem remains separate"
       }
     },
     "ch:algebraic_ft": {
@@ -519,12 +519,22 @@
     "ch:gapped_chain_algorithms": {
       "theorems": [
         "thm:chain_boundary_net_polynomial",
-        "thm:alvv_collective_trim"
+        "thm:alvv_collective_trim",
+        "thm:lvv_uniform_successive_approximation",
+        "thm:lvv_successive_arbitrary_accuracy",
+        "thm:lvv_sampled_ground_state",
+        "thm:alvv_ff_chain_replacement",
+        "thm:alvv_ff_corrected_rank"
       ],
       "corollaries": [],
       "notes": {
         "thm:chain_boundary_net_polynomial": "Boundary net of polynomial size used to glue a left state at a cut",
-        "thm:alvv_collective_trim": "Trimming a viable subspace on the chain (Arad et al.), the step the opening names"
+        "thm:alvv_collective_trim": "Trimming a viable subspace on the chain (Arad et al.), the step the opening names",
+        "thm:lvv_uniform_successive_approximation": "Uniform polynomial successive viable families and final approximation from their retained span",
+        "thm:lvv_successive_arbitrary_accuracy": "Arbitrary accuracy with polynomial size and bond bounds via product-state extension",
+        "thm:lvv_sampled_ground_state": "Polynomial final bond from sampled successive families with bounded ground-energy-to-gap ratio",
+        "thm:alvv_ff_chain_replacement": "ALVV Theorem 5.14 with the corrected rank bound: regional replacement of a frustration-free chain",
+        "thm:alvv_ff_corrected_rank": "Corrected regional rank bound d^2+3, replacing the false unrestricted claim of ALVV Theorem 5.14(2)"
       }
     },
     "ch:peps_ft": {
@@ -756,7 +766,9 @@
       "theorems": [
         "lem:qc_channel_light_cone"
       ],
-      "corollaries": [],
+      "corollaries": [
+        "cor:qc_unblocked_then_blocked_conversion"
+      ],
       "notes": {
         "lem:qc_channel_light_cone": "Light cone of a local channel circuit, named in the opening"
       }
@@ -848,6 +860,17 @@
       "corollaries": [],
       "notes": {
         "thm:peps_separate_arity_compression": "Uniform compression, Theorem 5.2 of the source"
+      }
+    },
+    "ch:aklv_polynomial_filters": {
+      "theorems": [
+        "thm:aklv_polynomial_rank",
+        "thm:aklv_physical_chebyshev_filter"
+      ],
+      "corollaries": [],
+      "notes": {
+        "thm:aklv_polynomial_rank": "AKLV Lemma 4.2 with explicit universal constants",
+        "thm:aklv_physical_chebyshev_filter": "The constructed filter has both spectral suppression and the polynomial rank bound"
       }
     },
     "ch:parent_hamiltonian_long_range_gaps": {
