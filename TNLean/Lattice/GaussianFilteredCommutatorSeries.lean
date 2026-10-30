@@ -51,8 +51,8 @@ theorem hasSum_gaussianFilteredTerm_commutator {q : ℝ} (hq : 0 ≤ q)
       ((-((q / ΔE ^ 2 : ℝ) : ℂ) / 2) ^ r / (r.factorial : ℂ)) •
         ((GaussianFilter.commutatorCLM H) ^ (2 * r)) W)
       (gaussianFilteredTerm q ΔE H W) := by
-  rw [gaussianFilteredTerm]
-  simpa only [Real.coe_toNNReal _ (div_nonneg hq (sq_nonneg ΔE))] using
-    GaussianFilter.hasSum_gaussianIntertwiner_commutator (q / ΔE ^ 2).toNNReal hH W
+  have hs := GaussianFilter.hasSum_gaussianIntertwiner_commutator (q / ΔE ^ 2).toNNReal hH W
+  rw [Real.coe_toNNReal _ (div_nonneg hq (sq_nonneg ΔE))] at hs
+  exact hs
 
 end TNLean.Lattice
