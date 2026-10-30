@@ -296,6 +296,7 @@ import TNLean.MPS.ParentHamiltonian.UncleInjectivity
 import TNLean.MPS.ParentHamiltonian.UncleKernelConditions
 import TNLean.MPS.ParentHamiltonian.UncleParentLimit
 import TNLean.MPS.ParentHamiltonian.UncleTensor
+import TNLean.MPS.ParentHamiltonian.UncleVariationalEigenvalue
 import TNLean.MPS.ParentHamiltonian.UncleVirtualRescaling
 import TNLean.MPS.ParentHamiltonian.UniqueGroundState
 import TNLean.MPS.ParentHamiltonian.WeightedVirtualHilbert
