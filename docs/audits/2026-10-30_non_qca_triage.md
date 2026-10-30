@@ -38,6 +38,25 @@ applicable **PR CI** checks, excluding unrelated issue/agent automation.
 Use the [next-work queue](https://github.com/LionSR/TNLean/issues?q=is%3Aopen%20label%3A%22priority%3A%20next%22) for the selected repairs and review gates.
 The full label meanings and update rules are in [CONTRIBUTING](../CONTRIBUTING.md#triage-status-and-priority-labels).
 
+The final blocker audit retained **53 PR blockers and 14 issue blockers**.
+Fifty PRs have an actual open base owner. Three others retain divergent
+candidate dependency pins even though the named upstream PR has merged:
+
+| TNLean owner | Merged QICLean prerequisite | Candidate pin | Candidate-only / missing accepted commits |
+|---|---|---|---:|
+| [#10399](https://github.com/LionSR/TNLean/pull/10399) | [#985](https://github.com/LionSR/QICLean/pull/985) | `8774105cf88a452a92e3c03de664733e7a15caca` | 17 / 1 |
+| [#10390](https://github.com/LionSR/TNLean/pull/10390) | [#1005](https://github.com/LionSR/QICLean/pull/1005) | `ae966f98ecaa3b9b959bed1a4afa6361d6d993ef` | 9 / 1 |
+| [#10248](https://github.com/LionSR/TNLean/pull/10248) | [#977](https://github.com/LionSR/QICLean/pull/977) | `23d79b77661607507875d4d0527eeab4e041542c` | 26 / 10 |
+
+These comparisons use accepted QICLean main
+`7fa89ad65d543d8a2eabbae4c9a53451b7b0527b`. Reconcile required candidate
+changes with accepted revisions before coherently updating the three
+dependency records and obtaining fresh TNLean acceptance. A direct pin
+replacement must preserve the required results. The three PR bodies and four
+associated issue/tracker bodies now record this gate instead of waiting for
+the already-merged upstream approval. QICLean #1009, #1010, #1011 and #1013
+remain open at their inspected heads.
+
 ## Work order
 
 | Order | Items | Concrete next action |
@@ -135,7 +154,7 @@ copying the hierarchy into a second checkbox list.
 | [#10285](https://github.com/LionSR/TNLean/issues/10285) Uncle Hamiltonians: identify the full periodic ground space | [#7685](https://github.com/LionSR/TNLean/issues/7685) | validation-pending | Review the linked implementation against the full issue acceptance criteria; preserve unproved source obligations. |
 | [#10286](https://github.com/LionSR/TNLean/issues/10286) Uncle Hamiltonians: prove generic finite-volume gaplessness | [#7685](https://github.com/LionSR/TNLean/issues/7685) | validation-pending | Review the linked implementation against the full issue acceptance criteria; preserve unproved source obligations. |
 | [#10386](https://github.com/LionSR/TNLean/issues/10386) Zero-momentum ground vectors at the short volumes in the Wielandt dichotomy | [#10280](https://github.com/LionSR/TNLean/issues/10280) | scope-decision, validation-pending | Review the linked implementation against the full issue acceptance criteria; preserve unproved source obligations. |
-| [#10397](https://github.com/LionSR/TNLean/issues/10397) Adopt the corrected Gaussian commutator expansion for the Hastings variational bound | [#9828](https://github.com/LionSR/TNLean/issues/9828) | blocked, validation-pending | Track #10399 and QIC #985 acceptance/note publication/accepted repin. |
+| [#10397](https://github.com/LionSR/TNLean/issues/10397) Adopt the corrected Gaussian commutator expansion for the Hastings variational bound | [#9828](https://github.com/LionSR/TNLean/issues/9828) | blocked, validation-pending | QICLean #985 is merged. Reconcile #10399's candidate changes with accepted revisions, verify correction-note publication, obtain fresh TNLean acceptance, and integrate the adoption owner. |
 | [#10439](https://github.com/LionSR/TNLean/issues/10439) Cite the source and the ground-energy paper gap in ch35_lvv_sampled_construction.tex | [#9832](https://github.com/LionSR/TNLean/issues/9832) | needs-work | Add source/runtime-ground-energy/trimming-radius citations only; native doc review under no-build instruction. |
 
 ## Exact-head PR queue
