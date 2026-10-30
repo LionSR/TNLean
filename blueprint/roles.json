@@ -164,7 +164,8 @@
         "thm:parent_hamiltonian_unique_gs",
         "thm:unique_gs_injective",
         "thm:unique_gs_normal",
-        "thm:uncle_periodic_ground_space"
+        "thm:uncle_periodic_ground_space",
+        "thm:uncle_generic_finite_volume_gaplessness"
       ],
       "corollaries": [],
       "notes": {
@@ -172,7 +173,8 @@
         "thm:parent_hamiltonian_unique_gs": "Source theorem: Perez-Garcia et al. Theorem 10, uniqueness throughout the interaction range",
         "thm:unique_gs_injective": "Unique ground state for injective tensors, stated in the opening",
         "thm:unique_gs_normal": "Unique ground state for normal tensors at range L_0+1, stated in the opening",
-        "thm:uncle_periodic_ground_space": "Full actual finite uncle-Hamiltonian ground-space theorem, Fernández-González et al. Theorem thm:gs-subspace-uncle"
+        "thm:uncle_periodic_ground_space": "Full actual finite uncle-Hamiltonian ground-space theorem, Fernández-González et al. Theorem thm:gs-subspace-uncle",
+        "thm:uncle_generic_finite_volume_gaplessness": "Generic finite-volume uncle gaplessness via actual two-wall trials and the full actual ground-space projection; the infinite-volume claim remains separate"
       }
     },
     "ch:parent_hamiltonian_commuting_and_gap": {
