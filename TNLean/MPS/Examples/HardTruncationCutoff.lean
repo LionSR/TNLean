@@ -101,10 +101,9 @@ private def truncatedWeight (K : ℕ) (σ : Config K) : ℝ :=
 private theorem regional_diagonal (K : ℕ) :
     regionalHamiltonian K = diagonal (fun σ ↦ (regionalWeight K σ : ℂ)) := by
   ext σ τ
-  by_cases h : σ = τ
-  · subst τ
-    simp [regionalHamiltonian, internalTerm, regionalWeight]
-  · simp [regionalHamiltonian, internalTerm, diagonal_apply_ne _ h]
+  simp only [regionalHamiltonian, internalTerm, regionalWeight, Matrix.sum_apply,
+    diagonal_apply]
+  split_ifs <;> simp
 
 /-- The region/complement decomposition is derived from the original bond sum. -/
 theorem hamiltonian_eq_region_add_boundary (K : ℕ) :
@@ -123,7 +122,7 @@ theorem regionalHamiltonian_eq_internal_bond_sum (K : ℕ) :
     dsimp
     omega
   simp only [Fin.val_zero, show ¬ (1 ≤ 0 ∧ 0 + 1 < K + 2) by omega,
-    ite_false, hsucc, ite_true, zero_add, bondTerm, Fin.cases_succ, regionalHamiltonian]
+    ite_false, hsucc, and_self, ite_true, zero_add, bondTerm, Fin.cases_succ, regionalHamiltonian]
 
 private theorem total_diagonal (K : ℕ) :
     hamiltonian K = diagonal (fun σ ↦ (totalWeight K σ : ℂ)) := by
@@ -131,7 +130,7 @@ private theorem total_diagonal (K : ℕ) :
   ext σ τ
   by_cases h : σ = τ
   · subst τ
-    simp [bondTerm, boundary, totalWeight]
+    simp [bondTerm, boundary, totalWeight, add_comm]
   · simp [bondTerm, boundary, diagonal_apply_ne _ h]
 
 private theorem truncated_diagonal (K : ℕ) :
@@ -160,19 +159,20 @@ private theorem boundary_bounds (K : ℕ) (σ : Config K) :
   dsimp only [boundaryWeight]
   constructor
   · exact mul_nonneg (by linarith) (by linarith)
-  · nlinarith [mul_nonneg (bit (0 : Fin (K + 2)) σ) (1 - bit (1 : Fin (K + 2)) σ)]
+  · nlinarith [mul_nonneg h0 (sub_nonneg.mpr h1')]
 
-private theorem diagonal_positive_contraction {ι : Type*} [Fintype ι] [DecidableEq ι]
+private theorem diagonal_positive_contraction {ι : Type*} [Finite ι] [DecidableEq ι]
     (w : ι → ℝ) (hw : ∀ i, 0 ≤ w i ∧ w i ≤ 1) :
     (0 : Matrix ι ι ℂ) ≤ diagonal (fun i ↦ (w i : ℂ)) ∧
       diagonal (fun i ↦ (w i : ℂ)) ≤ 1 := by
+  have := Fintype.ofFinite ι
   constructor
   · exact (Matrix.PosSemidef.diagonal fun i ↦ Complex.zero_le_real.mpr (hw i).1).nonneg
   · apply Matrix.le_iff.mpr
     have heq : (1 : Matrix ι ι ℂ) - diagonal (fun i ↦ (w i : ℂ)) =
         diagonal (fun i ↦ ((1 - w i : ℝ) : ℂ)) := by
       ext i j
-      by_cases h : i = j <;> simp [h, diagonal_apply, Complex.ofReal_sub]
+      by_cases h : i = j <;> simp [h, Complex.ofReal_sub]
     rw [heq]
     exact Matrix.PosSemidef.diagonal fun i ↦ Complex.zero_le_real.mpr (by linarith [(hw i).2])
 
@@ -195,7 +195,7 @@ private theorem boundary_formula (K : ℕ) :
     diagonal_mul_diagonal]
   congr 1
   funext σ
-  simp only [boundaryWeight, Pi.sub_apply, Pi.one_apply, Pi.smul_apply, smul_eq_mul]
+  simp only [boundaryWeight, Pi.smul_apply, smul_eq_mul]
   push_cast
   ring
 
@@ -204,9 +204,12 @@ private theorem internal_formula (K : ℕ) (j : Fin K) :
       (1 / 2 : ℂ) • (oneSite K ⟨K, by omega⟩ + oneSite K ⟨K + 1, by omega⟩)
     else oneSite K ⟨j.val + 1, by omega⟩ := by
   unfold internalTerm internalWeight
-  split_ifs <;> ext σ τ <;>
-    simp [oneSite, diagonal_apply, Pi.smul_apply, smul_eq_mul, Complex.ofReal_add,
-      Complex.ofReal_div] <;> ring
+  split_ifs
+  · ext σ τ
+    simp [oneSite, diagonal_apply, smul_eq_mul, Complex.ofReal_add, Complex.ofReal_div]
+    ring
+  · ext σ τ
+    simp [oneSite, diagonal_apply]
 
 /-- Actual nearest-neighbor supports are derived for all terms, including both endpoints. -/
 theorem bondTerm_supported (K : ℕ) (i : Fin (K + 1)) :
@@ -227,12 +230,12 @@ theorem bondTerm_supported (K : ℕ) (i : Fin (K + 1)) :
     split_ifs with hj
     · apply Submodule.smul_mem
       apply Submodule.add_mem
-      · exact oneSite_mem _ _ (by simp only [interval, Finset.mem_filter,
-          Finset.mem_univ, true_and]; dsimp; omega)
-      · exact oneSite_mem _ _ (by simp only [interval, Finset.mem_filter,
-          Finset.mem_univ, true_and]; dsimp; omega)
-    · exact oneSite_mem _ _ (by simp only [interval, Finset.mem_filter,
-        Finset.mem_univ, true_and]; dsimp; omega)
+      · exact oneSite_mem _ _ (by simp only [interval, Finset.coe_filter,
+          Finset.mem_univ, true_and, Set.mem_ofPred_eq, Fin.val_succ]; omega)
+      · exact oneSite_mem _ _ (by simp only [interval, Finset.coe_filter,
+          Finset.mem_univ, true_and, Set.mem_ofPred_eq, Fin.val_succ]; omega)
+    · exact oneSite_mem _ _ (by simp only [interval, Finset.coe_filter,
+        Finset.mem_univ, true_and, Set.mem_ofPred_eq, Fin.val_succ]; omega)
 
 private def groundConfig (K : ℕ) : Config K := fun i ↦ if i = 0 then 1 else 0
 private def highConfig (K : ℕ) : Config K := fun _ ↦ 1
@@ -273,16 +276,12 @@ private theorem ground_weights (K : ℕ) :
     apply Finset.sum_eq_zero
     intro j _
     have hK : K ≠ 0 := by have := j.isLt; omega
-    simp [internalWeight, bit, groundConfig, Fin.ext_iff, hK,
-      show j.val + 1 ≠ 0 by omega]
+    simp [internalWeight, bit, groundConfig, Fin.ext_iff, hK]
   have hb : boundaryWeight K (groundConfig K) = 3 / 4 := by
     norm_num [boundaryWeight, bit, groundConfig]
   refine ⟨hz, ?_, ?_⟩
-  · show boundaryWeight K (groundConfig K) + regionalWeight K (groundConfig K) = 3 / 4
-    rw [hb, hz, add_zero]
-  · show min (regionalWeight K (groundConfig K)) (3 / 2)
-        + boundaryWeight K (groundConfig K) = 3 / 4
-    rw [hz, hb, min_eq_left (show (0 : ℝ) ≤ 3 / 2 by norm_num), zero_add]
+  · rw [totalWeight, hb, hz, add_zero]
+  · rw [truncatedWeight, hz, hb, min_eq_left (show (0 : ℝ) ≤ 3 / 2 by norm_num), zero_add]
 
 /-- Both actual Hamiltonians have attained ground energy `3/4`; the regional
 Hamiltonian has attained minimum zero. No ground energy is supplied as input. -/
@@ -306,15 +305,15 @@ theorem actual_ground_energies {K : ℕ} (hK : 2 ≤ K) :
   obtain ⟨hA, hH, hF⟩ := ground_weights K
   refine ⟨by simp [Ω], ?_, ?_, ?_, ?_, ?_, ?_⟩
   · rw [regional_diagonal]
-    simp [Ω, diagonal_mulVec_single, hA]
+    simp [Ω, hA]
   · rw [regional_diagonal]
     exact Matrix.PosSemidef.diagonal fun σ ↦ Complex.zero_le_real.mpr (regional_nonneg K σ)
   · rw [total_diagonal]
-    simp [Ω, diagonal_mulVec_single, ← Pi.single_smul', hH]
+    simp [Ω, ← Pi.single_smul', hH]
   · rw [total_diagonal]
     exact hdiag_lower _ fun σ ↦ (ground_lower_bounds hK σ).1
   · rw [truncated_diagonal]
-    simp [Ω, diagonal_mulVec_single, ← Pi.single_smul', hF]
+    simp [Ω, ← Pi.single_smul', hF]
   · rw [truncated_diagonal]
     exact hdiag_lower _ fun σ ↦ (ground_lower_bounds hK σ).2
 
@@ -338,14 +337,14 @@ theorem high_vector_in_truncated_low_space {K : ℕ} (hK : 2 ≤ K) :
     linarith
   have hHt : truncatedWeight K (highConfig K) = 3 / 2 := by
     simp [truncatedWeight, hA, hB, min_eq_right hKreal]
-  refine ⟨by simp [ψ, EuclideanSpace.norm_eq], ?_, ?_, ?_⟩
+  refine ⟨by simp [ψ], ?_, ?_, ?_⟩
   · rw [total_diagonal]
-    simp [ψ, diagonal_mulVec_single, ← Pi.single_smul', totalWeight, hA, hB]
+    simp [ψ, ← Pi.single_smul', totalWeight, hA, hB]
   · rw [truncated_diagonal]
-    simp [ψ, diagonal_mulVec_single, ← Pi.single_smul', hHt]
+    simp [ψ, ← Pi.single_smul', hHt]
   · rw [truncatedLowProjection, truncated_diagonal,
       Matrix.cfc_diagonal _ _ ((Set.finite_range _).continuousOn _)]
-    norm_num [ψ, diagonal_mulVec_single, hHt]
+    norm_num [ψ, hHt]
 
 /-- The actual truncated-side restricted discrepancy grows without bound with
 the region length, at fixed `t=3/2>η=1`. Only this side of ALVV Proposition 4.4(1)
@@ -367,7 +366,7 @@ theorem truncated_low_discrepancy_lower_bound {K : ℕ} (hK : 2 ≤ K) :
   -- Bound the sup norm below by the entry at the high-energy configuration, whose
   -- discrepancy weight is exactly `K - 3/2` since `3/2 ≤ 7/4` keeps it in the window.
   refine le_trans (le_of_eq ?_) (norm_le_pi_norm _ (highConfig K))
-  simp only [htotal, hHt, if_pos (show (3 / 2 : ℝ) ≤ 7 / 4 by norm_num),
+  simp only [htotal, hHt, ite_eq_left (show (3 / 2 : ℝ) ≤ 7 / 4 by norm_num),
     Complex.ofReal_one, mul_one, ← Complex.ofReal_sub, Complex.norm_real,
     Real.norm_eq_abs, abs_of_nonneg hnonneg]
 
