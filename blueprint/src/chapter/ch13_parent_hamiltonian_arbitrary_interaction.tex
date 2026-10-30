@@ -9,7 +9,7 @@ We follow the cyclic-cut argument of
     \label{lem:cyclic_mpv_active_boundary}
     \lean{MPSTensor.mpv_cyclicActiveBlockConfigEquiv_symm,
         MPSTensor.cyclicActiveBlock_mpvState_apply}
-    \notready
+    \leanok
     \uses{def:ground_space_map, def:mpv}
     Let $A$ be a tensor, $L\le N$, and fix a cyclic cut $i$ of an $N$-site
     ring. If $\sigma$ is the active word of length $L$ and $\tau$ is the
@@ -22,7 +22,7 @@ We follow the cyclic-cut argument of
     \end{align}
     The same identity holds for the Hilbert-space coordinate isometry.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     Rotate the closed word to begin at $i$, use invariance of the trace under
     this rotation, and split the resulting word into its two consecutive parts.
 \end{proof}
@@ -30,14 +30,14 @@ We follow the cyclic-cut argument of
 \begin{lemma}[A translated interaction in active-block coordinates]
     \label{lem:cyclic_active_local_interaction}
     \lean{MPSTensor.cyclicActiveBlock_periodicLocalInteractionES_apply}
-    \notready
+    \leanok
     \uses{def:periodic-fixed-interaction}
     Let $L\le N$, let $h$ be linear on $L$ sites, and fix a cyclic cut $i$.
     The coordinate isometry splitting the active block from its complement
     sends $h_i\psi$ to $(h\otimes I)$ applied to the coordinates of $\psi$.
     Thus $h$ acts on each fixed complementary fiber separately.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     Conjugate the defining translated interaction by the same coordinate
     isometry and cancel the inverse isometry.
 \end{proof}
@@ -45,7 +45,7 @@ We follow the cyclic-cut argument of
 \begin{lemma}[A local operator separates the weighted block summands]
     \label{lem:arbitrary_local_block_separation}
     \lean{MPSTensor.periodicLocalInteractionES_smul_mpvState_eq_zero_of_wordTupleSpanTop}
-    \notready
+    \leanok
     \uses{lem:cyclic_mpv_active_boundary, def:periodic-fixed-interaction}
     Let $A_1,\ldots,A_b$ be tensors with arbitrary finite virtual dimensions,
     let $c_j\in\C$, and let $h$ be any linear operator on $L$ sites of an
@@ -56,7 +56,7 @@ We follow the cyclic-cut argument of
     $c_jV^{(N)}(A_j)$. The coefficients may vanish, and positivity of $h$
     is not needed for this local assertion.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     \uses{lem:cyclic_mpv_active_boundary}
     In the cyclic coordinates at $i$, compose the weighted joint boundary map
     with $h$. The resulting linear map vanishes on the complementary word
@@ -67,7 +67,7 @@ We follow the cyclic-cut argument of
 \begin{lemma}[Arbitrary positive interactions preserve all block ground states]
     \label{lem:arbitrary_positive_block_ground_states}
     \lean{MPSTensor.periodicInteractionHamiltonianES_mpvState_eq_zero_of_wordTupleSpanTop}
-    \notready
+    \leanok
     \uses{lem:arbitrary_local_block_separation, def:periodic-fixed-interaction}
     Under the complementary-span hypothesis of
     Lemma~\ref{lem:arbitrary_local_block_separation}, suppose $h\ge0$ and
@@ -79,7 +79,7 @@ We follow the cyclic-cut argument of
         \label{eq:arbitrary_positive_block_ground_states}
     \end{align}
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     \uses{lem:arbitrary_local_block_separation}
     Each $h_i$ is positive. A finite sum of positive operators has kernel equal
     to the intersection of their kernels. Apply
@@ -90,12 +90,12 @@ We follow the cyclic-cut argument of
 \begin{lemma}[Independence of the actual periodic block vectors]
     \label{lem:periodic_block_linear_independence}
     \lean{MPSTensor.linearIndependent_mpvState_of_wordTupleSpanTop}
-    \notready
+    \leanok
     Let every block have positive virtual dimension. If the length-$N$ word
     tuples span the product matrix algebra, then the actual vectors
     $V^{(N)}(A_j)$ are linearly independent.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     A relation with coefficients $c_j$ says that the trace pairing against
     every word tuple vanishes for the boundary $(c_j I)_j$. The span forces
     each $c_jI=0$, and the positive block dimensions give $c_j=0$.
@@ -105,7 +105,7 @@ We follow the cyclic-cut argument of
     \label{thm:canonical_arbitrary_interaction_degeneracy}
     \lean{MPSTensor.PGVWC07CanonicalFormData.periodicInteractionHamiltonianES_blocks_eq_zero,
         MPSTensor.PGVWC07CanonicalFormData.blockCount_le_finrank_ker_periodicInteractionHamiltonianES}
-    \notready
+    \leanok
     \discussion{7684}
     \uses{def:pgvwc07_ti_canonical_representation,
         lem:arbitrary_positive_block_ground_states,
@@ -133,7 +133,7 @@ We follow the cyclic-cut argument of
     of \cite[Theorem~11]{PerezGarcia2007Matrix}; see
     \cite{gap:pgvwc07_direct_sum_input}.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     \uses{lem:arbitrary_positive_block_ground_states,
         lem:periodic_block_linear_independence}
     Canonical normalization, its positive dual fixed points and common
