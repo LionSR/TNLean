@@ -1103,6 +1103,18 @@
       "notes": {
         "thm:quasi_local_interval_observable": "Quasi-local interval observables, the structure used across chapters"
       }
+
+    },
+    "ch:aklv_entropy_approximation": {
+      "theorems": [
+        "thm:aklv_physical_sequence_entropy",
+        "thm:aklv_sharp_sequential_mps"
+      ],
+      "corollaries": [],
+      "notes": {
+        "thm:aklv_physical_sequence_entropy": "Uniform physical entropy bound obtained from the coherent AKLV sequence",
+        "thm:aklv_sharp_sequential_mps": "Accuracy-dependent physical matrix product approximation with the fourth-root rank bound"
+      }
     }
   }
 }
