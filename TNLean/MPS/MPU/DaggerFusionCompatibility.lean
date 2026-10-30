@@ -201,7 +201,7 @@ end MPOTensor
 namespace MPSTensor.IsReduction
 
 /-- **The dagger of a reduction.** If `(V, W)` reduces the doubled-index tensor
-of `K` onto that of `M`, then the entrywise conjugates `(V̄, W̄)` reduce the
+of `K` onto that of `M`, then the entrywise conjugates `(V.map star, W.map star)` reduce the
 physical adjoint of `K` onto that of `M`.
 
 This is the step "taking the dagger of `eq:fusion_1`--`eq:fusion_2`" in the
