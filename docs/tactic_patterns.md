@@ -45,6 +45,20 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Conjugating a rectangular unitary identity — promoted (2026-10-29)
+
+- **Pattern:** Commute entrywise complex conjugation with the adjoint and
+  matrix multiplication, then transport the two identities `Aᴴ * A = 1`
+  and `A * Aᴴ = 1` through conjugation.
+- **Seen:** The two gates in `TwoSiteStandardFormData.mapStar` in
+  `MPS/MPU/ConjugationSymmetry.lean`, and the supplied source gate in
+  `IsMPUCanonicalFormII.exists_local_conjugation_gauges` in
+  `MPS/MPU/ConjugationSourceFactors.lean`.
+- **Abstraction:** `Matrix.IsUnitaryBetween.map_star` in
+  `MPS/MPU/ConjugationSymmetry.lean` transports both identities at once.
+- **Notes:** No new matrix predicate or parallel standard-form structure was
+  introduced. The supplied half factors and gates are conjugated directly.
+
 ### Identity site translation — promoted (2026-10-28)
 
 - **Pattern:** Unfold the matrix of a site permutation and rewrite the identity
@@ -107,6 +121,23 @@ abstracted — record why, so it is not re-proposed).
 - **Notes:** The existing private proof is now a public theorem; the new
   propagation estimate uses it instead of repeating the conversion to natural
   distance. The mathematical range condition is unchanged.
+
+### Eventual equality of scalar cocycle classes — promoted (2026-10-29)
+
+- **Pattern:** transport eventual equality of `H2π` classes to eventual coboundary
+  ratios using the same pointwise equivalence.
+- **Defined in:** `TNLean/Algebra/CocycleCohomology.lean`,
+  `eventually_H2π_eq_iff_isMulCoboundary₂_div`, a direct application of Mathlib's
+  `Filter.eventually_congr` to the existing scalar-cocycle equivalence.
+- **Refactored occurrences:** nine conversions in `CompactMinimalClassStability`,
+  `ExactGroundPathTransferClass`, `LocalInvariantCompression`,
+  `StationarySupportedDensityPhaseInvariance`, `UnitalSupportedPathInvariance`,
+  and `SupportedDensityPhaseInvariance`. Both directions use the same theorem;
+  public hypotheses and conclusions are unchanged.
+- **Validation status:** the original head `9e813c1d3` passed hosted strict
+  checks for all seven changed modules. Current-main integration is written
+  without local Lean builds; refreshed-head validation and repository integration
+  remain pending, tracked in issue #10258.
 
 ### Matrices of submodule orthogonal projections — promoted (2026-10-26)
 
@@ -5049,6 +5080,30 @@ three-plaquette output measurement, and the routed reunion measurement.
   zero without assuming a nontrivial space. The successor case combines an
   invariant orthonormal pair with a basis of its orthogonal complement.
 
+### Eliminating a geometric prefactor from a spectral rate — reused Mathlib (2026-10-29)
+
+- **Seen:** `norm_transfer_spectrum_le_of_limitCorrelator_bound` in
+  `MPS/Preparation/TransferSpectrumFromCorrelations.lean`.
+- **Pattern:** An exact eigenvalue correlator `λ^n` and an eventual bound
+  `C r^n` imply `|λ| ≤ r`, even when `C` and the starting separation depend
+  on the observables.
+- **Reuse:** `pow_unbounded_of_one_lt` for the ratio `|λ|/r`, then
+  `pow_le_pow_right₀` to shift past the starting separation.
+- **Decision:** Reuse the existing Archimedean power lemmas and physical
+  eigenvalue-observer construction; no new asymptotic tactic is introduced.
+
+### Identifying the ground energy of two physical conditions — candidate (2026-10-29)
+
+- **Seen:** `ExactMPSGroundPath.exists_uniform_ground_line_spectral_gap` in
+  `MPS/Symmetry/ExactGroundPathGaussianFilter.lean`.
+- **Pattern:** The path gap and the exact ground-line condition each supply
+  a least spectral value. Apply each minimality inequality to the other's
+  spectral witness, identify the energies by antisymmetry, and transport the
+  spectral dichotomy to the actual MPS ground line.
+- **Decision:** One use. Keep the mathematical extraction in its named helper
+  and reuse the existing Gaussian spectral and ground-space estimates; no
+  new tactic or duplicate eigenbasis calculation is needed.
+
 ### Robustness assembly with a sharper cutoff — resolved (2026-10-30)
 
 - **Seen:** `MPS/AreaLaw/AKLV/Robustness.lean`, `NormalizedChain.lean`,
@@ -7347,6 +7402,30 @@ spectral split → block extraction → MPV calculation → strict bounds
 
 ## Rejected
 
+### A second indexed family of condensation-pair certificates — rejected (2026-10-29)
+
+- **Examined:** the twelve split and four non-split entries in
+  `MPS/Examples/AnomalousCondensation/AnomalousCondensationZ2Z2Split.lean` and
+  `AnomalousCondensationZ2Z2NonSplit.lean`, as requested in #7845.
+- **Existing abstraction:** ten split entries use `MultiBlockCompression.ofEq`,
+  two use `ofConjInt` with the shared sign gauge, and four use
+  `ofScalarFlagFour`. Word traces, reductions and remainder nilpotency already
+  follow from the common compression API. The eight intertwiner conclusions
+  instantiate the shared left/right integer-minor criteria.
+- **Data that remains:** split bond dimensions range over one and two. The
+  four non-split entries all have dimensions `4 → 1` and retain the third flag
+  coordinate; their targets are `e`, `-y`, `y`, and `-e`. Their left witnesses
+  are respectively `[0,0,0,1]`, `[0,0,1,0]`, `[-1,0,0,0]`, and `[0,1,0,0]`.
+  The gauges, inverses, conjugated letters and minor certificates vary with
+  these entries. The flag positions themselves are not irregular.
+- **Decision:** retain those explicit numerical certificates rather than add a
+  four-way table selecting the same data under another indexed interface.
+  The generic `Fin 4 × Fin 4` targets and their complete compression assembly
+  already live in `AnomalousCondensationZ2Z2Defect.lean`; no assembly proof is
+  missing from the explicit modules. Reconsider an indexed certificate family
+  if a mathematical consumer needs one, rather than merely its four instances.
+  The choice is recorded in each module's docstring. No proof body changes.
+
 ### Lower bound for a logarithmic cut budget — rejected (2026-10-19)
 
 - **Pattern:** unfold a local expression `B = 1 + t` and prove `1 ≤ B` from
@@ -9601,23 +9680,6 @@ spectral split → block extraction → MPV calculation → strict bounds
   threshold. The qutrit proof reuses the existing Ky Fan overlap theorem and
   the actual MPS cut-rank bound rather than repeating their proofs.
 
-### Linear bounds for regional-entropy suprema — candidate (2026-10-17)
-
-- **Pattern:** apply `Real.sSup_le` with a nonnegative linear target, unpack
-  a physical entropy witness, and use its rectangle-size bound to increase
-  the scale to the scale of the supremum.
-- **Seen:** `exists_initialBuffer_and_real_boxEntropy_recurrence` in
-  `PEPS/AreaLaw/SafeRectangleAreaLaw.lean` and
-  `exists_uniform_boxEntropy_improvement_real` in
-  `PEPS/AreaLaw/Scan/RealBoxEntropyImprovement.lean`.
-- **Abstraction:** both uses apply Mathlib's `Real.sSup_le` directly and
-  share the pointwise theorem
-  `exists_regionalEntropy_safe_rect_le_linear`. A further helper is
-  deferred until another proof repeats this physical collection.
-- **Notes:** the nonnegative target also covers the empty collection.
-  The earlier monotonicity candidate uses the same Mathlib theorem with
-  inclusion of collections in place of a pointwise linear estimate.
-
 ### Candidate: logarithms of zero-padded integer rank budgets (2026-10-23)
 
 `EntropyScaling.RenyiApproximationLowerBound` and
@@ -9763,6 +9825,20 @@ there is no need for a new tactic.
   mathematical lemma to a lower matrix-analysis module and reuse it; do not duplicate its
   statement or introduce a new tactic.
 
+### Dense local image inside a closed commutant — candidate (2026-10-29)
+
+- **Seen:** `QCA/SupportAlgebraGeneration.lean`, the support-family generation
+  theorem and the even-pair-image commutant theorem.
+- **Pattern:** Pull back a closed ambient subset under an automorphism;
+  include the dense algebraic local image; use closure minimality and
+  surjectivity to obtain the global containment.
+- **Reuse:** The new commutant theorem exposes the source's intermediate
+  even-pair argument, avoiding the stronger premise of commutation with
+  each separate support factor.
+- **Decision:** Two proof occurrences in one file; keep the concrete source
+  statements and consolidate the closed-containment argument before a third
+  copy, rather than adding another notion of local generation.
+
 ### Cancellation from a spanning matrix family — promoted
 - **Pattern:** express the identity as a finite linear combination of a
   spanning family, distribute multiplication, and cancel two factors.
@@ -9858,6 +9934,19 @@ there is no need for a new tactic.
 - **Decision:** Three branch occurrences in one file, below the two-file promotion
   threshold. Before extending this pattern to another module, move the value equality
   before the case distinction or reuse `Fin.val_inj`; no new tactic is needed.
+
+### Rectangular trace agreement on a spanning family — candidate (2026-10-29)
+
+- **Seen:** `MPS/ParentHamiltonian/VaryingOBCIntersection.lean`.
+- **Pattern:** Compose `Matrix.mulLeftLinearMap` with the trace functional,
+  extend equality from the actual middle-site spanning family using
+  `LinearMap.ext_on_range`, then apply Mathlib's rectangular
+  `Matrix.ext_iff_trace_mul_right`.
+- **Reuse:** The overlap identity is proved once; both explicit-boundary
+  reconstruction and the actual coefficient-section corollary reuse it.
+- **Notes:** No new trace-duality predicate or inverse construction is needed.
+  The row-isometry blocking lemma uses ordinary finite sums and existing
+  rectangular multiplication/adjoint identities.
 
 ### Uniform prefix truncation and normalization — candidate (2026-10-29)
 
