@@ -17,7 +17,7 @@ Generation requires Node.js 18 or newer already on PATH. The helper uses only
 Node standard modules and the JavaScript/WASM shipped by pinned plastexdepgraph
 0.0.5. It installs nothing and fetches no remote assets. It renders the current
 decoded DOT afresh, consumes that returned SVG directly, and has no saved-SVG
-input or cross-build cache. Each helper process has a 600-second safety bound.
+input or cross-build cache. Each helper process has a 1200-second safety bound.
 Missing Node, invalid DOT/SVG, layout failure and timeout fail generation.
 
 The SVG retains its labels, colors, styles, geometry, nodes and edges. Only the
