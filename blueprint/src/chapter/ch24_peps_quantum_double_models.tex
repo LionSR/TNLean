@@ -1,0 +1,277 @@
+\section{Quantum double models}%
+\label{sec:peps_quantum_double_models}
+
+The quantum double model of $G$ has two PEPS representations
+\cite[Appendix~A, ``The Toric Code and quantum double models'']{Cirac2021Matrix}.
+After two facts on the labels of closures, this section constructs the dual
+tensor, shows that it is $G$-isometric and that its network is the
+superposition of the configurations obeying Gauss' law, and then treats the
+primal tensor and the toric code.
+
+\begin{lemma}[Pair conjugacy with a fixed first element]%
+    \label{thm:peps_pair_conjugacy_centralizer}
+    \lean{TNLean.PEPS.pairConjugacyClass_eq_iff_centralizer}
+    \leanok
+    \uses{def:peps_pair_conjugacy}
+    In the fixed-first-element classification following
+    \cite[Theorem~5.9]{Schuch2010PEPS}, fix $g\in G$. The pairs $(g,h)$ and $(g,k)$ have the same class
+    exactly when $h=xkx^{-1}$ for some $x$ in the centralizer
+    $Z_G(g)=\{x\in G:xg=gx\}$.
+\end{lemma}
+
+\begin{proof}\leanok
+    The simultaneous-conjugacy equations are $g=xgx^{-1}$ and
+    $h=xkx^{-1}$; the first is equivalent to $xg=gx$.
+\end{proof}
+
+\begin{lemma}[Closure labels for an abelian group]%
+    \label{thm:peps_abelian_pair_classes}
+    \lean{TNLean.PEPS.pairConjugacyClass_eq_iff_of_commGroup,
+        TNLean.PEPS.pairConjugacyClassEquivOfCommGroup,
+        TNLean.PEPS.commutingPairConjugacyClassEquivOfCommGroup,
+        TNLean.PEPS.card_commutingPairConjugacyClass_of_commGroup}
+    \leanok
+    \uses{def:peps_pair_conjugacy}
+    If $G$ is abelian, every pair-conjugacy class is a singleton and all
+    pairs commute. A finite abelian group therefore has $|G|^2$
+    commuting pair-conjugacy classes.
+\end{lemma}
+
+\begin{proof}\leanok
+    Conjugation is trivial, so the class map identifies the classes with
+    $G\times G$; counting pairs gives $|G|^2$.
+\end{proof}
+
+\begin{definition}[Dual quantum-double tensor]%
+    \label{def:peps_quantum_double_dual}
+    \lean{TNLean.PEPS.colorDiag, TNLean.PEPS.colorDiag_one,
+        TNLean.PEPS.colorDiag_mul, TNLean.PEPS.quantumDoubleDualSpins,
+        TNLean.PEPS.quantumDoubleDualTensor, TNLean.PEPS.colorShiftRep,
+        TNLean.PEPS.colorShiftRep_apply,
+        TNLean.PEPS.mem_invariants_colorShiftRep_iff}
+    \leanok
+    \uses{def:peps_g_injective}
+    The virtual legs carry colors $h_1$ (left), $h_2$ (top), $h_3$ (right)
+    and $h_4$ (down) in $G$, and the dual tensor is $1$ at the physical
+    configuration
+    $(h_2h_1^{-1},\,h_3h_2^{-1},\,h_3h_4^{-1},\,h_4h_1^{-1})$ of differences
+    of adjacent colors and $0$ elsewhere \cite[Appendix~A, ``The Toric Code
+        and quantum double models'']{Cirac2021Matrix}. The group acts on the
+    virtual system by shifting all four colors,
+    $(U_gx)(h_1,h_2,h_3,h_4)=x(h_1g,h_2g,h_3g,h_4g)$, the right-regular
+    representation on each leg, which the relabeling $h\mapsto h^{-1}$
+    turns into the left-regular one
+    \cite{gap:rmp_peps_quantum_double_g_isometry}.
+\end{definition}
+
+\begin{lemma}[The dual tensor is $G$-isometric]%
+    \label{thm:peps_quantum_double_dual_g_isometric}
+    \lean{TNLean.PEPS.quantumDoubleDualSpins_mul_colorDiag,
+        TNLean.PEPS.quantumDoubleDualSpins_eq_iff,
+        TNLean.PEPS.siteMap_quantumDoubleDualTensor_apply,
+        TNLean.PEPS.siteMap_quantumDoubleDualTensor_apply_spins,
+        TNLean.PEPS.siteMap_quantumDoubleDualTensor_apply_spins_of_mem_invariants,
+        TNLean.PEPS.isGInjective_quantumDoubleDualTensor,
+        TNLean.PEPS.isGIsometric_quantumDoubleDualTensor,
+        TNLean.PEPS.ToricCodeGroup,
+        TNLean.PEPS.isGIsometric_toricCodeDualTensor}
+    \leanok
+    \uses{def:peps_g_injective, def:peps_quantum_double_dual}
+    For every finite group $G$ the dual quantum-double tensor is
+    $G$-injective and $G$-isometric, with constant $c=|G|$, for the
+    color-shift representation
+    \cite[Appendix~A, ``The Toric Code and quantum double
+        models'']{Cirac2021Matrix},
+    \cite[Section~``Examples'', ``The double models'']{Schuch2010PEPS}.
+    In particular the toric code tensor, $G=\mathbb{Z}_2$, is
+    $\mathbb{Z}_2$-isometric.
+\end{lemma}
+
+\begin{proof}\leanok
+    Two colorings have the same differences exactly when they differ by one
+    global shift $h_i\mapsto h_ig$: the shift of the left color determines
+    $g$, and the other three differences then fix the remaining colors.
+    Hence $(\mathcal{P}x)(\text{differences of }h)=\sum_{g}x(hg)$. Invariance
+    follows by reindexing the sum over colorings by a shift. For an
+    invariant $x$ the sum equals $|G|\,x(h)$, so $\mathcal{P}x=0$ forces
+    $x=0$, and
+    $\langle\mathcal{P}x,\mathcal{P}y\rangle
+        =\sum_h\overline{(\mathcal{P}x)(\text{differences of }h)}\,y(h)
+        =|G|\langle x,y\rangle$.
+\end{proof}
+
+\begin{corollary}[Strings of $R_g$'s on the dual quantum-double network]%
+    \label{cor:peps_quantum_double_dual_string_deformation}
+    \lean{TNLean.PEPS.rightRegularMatrix,
+        TNLean.PEPS.colorShiftRep_eq_torusLegRep,
+        TNLean.PEPS.torusBondNetwork_quantumDoubleDual_westSouthOperatorString_eq}
+    \leanok
+    \uses{thm:peps_quantum_double_dual_g_isometric,
+        thm:peps_torus_operator_string_deformation}
+    Let $R_g$ be the permutation matrix of $h\mapsto hg$. The color shift of
+    the dual tensor is the action of $R_g$ on the incoming and $R_g^{-1}$ on
+    the outgoing legs. Hence, in the torus network of the dual tensor with
+    colors in $G$ on the bonds, a string of $R_g$'s along the left and bottom
+    sides of a rectangle of $m<w$ columns and $n<h$ rows of sites gives the
+    same network as the string along its top and right sides
+    \cite[Section~``Two dimensions: $G$-injective PEPS'',
+        eq.~(2d:move-strings)]{Schuch2010PEPS}.
+\end{corollary}
+
+\begin{proof}\leanok
+    On the incoming legs $R_g$ sends $x$ to $h\mapsto x(hg)$, and on the
+    outgoing legs $R_g^{-1}$ acting along the edge does the same, so the
+    action on the four legs is the color shift. The dual tensor is invariant
+    under it by Lemma~\ref{thm:peps_quantum_double_dual_g_isometric}, and
+    Lemma~\ref{thm:peps_torus_operator_string_deformation} applies.
+\end{proof}
+
+Placed at every site of the torus, the dual tensor gives a network whose
+bonds carry colors in $G$ and whose physical spins are the differences of the
+colors of adjacent bonds; its state is the superposition over all color
+patterns \cite[Section~``Examples'', ``The double models'']{Schuch2010PEPS}.
+The review identifies it with the equal-weight superposition of the
+configurations obeying Gauss' law \cite[Appendix~A, ``The Toric Code and
+    quantum double models'']{Cirac2021Matrix}. On the torus not every such
+configuration is a difference of colorings: the holonomies of the spins
+around the two non-contractible cycles must be trivial.
+
+\begin{lemma}[Parallel sections of edge multipliers on the torus]%
+    \label{lem:peps_torus_parallel_section}
+    \lean{TNLean.PEPS.zmodTransport, TNLean.PEPS.zmodTransport_zero,
+        TNLean.PEPS.zmodTransport_succ,
+        TNLean.PEPS.apply_natCast_eq_zmodTransport_mul,
+        TNLean.PEPS.zmodTransport_self_eq_one_of_apply_add_one,
+        TNLean.PEPS.zmodTransport_val_add_one,
+        TNLean.PEPS.IsTorusParallelSection, TNLean.PEPS.IsTorusFlat,
+        TNLean.PEPS.IsTorusParallelSection.mul_right,
+        TNLean.PEPS.IsTorusParallelSection.isTorusFlat,
+        TNLean.PEPS.IsTorusParallelSection.zmodTransport_row,
+        TNLean.PEPS.IsTorusParallelSection.zmodTransport_column,
+        TNLean.PEPS.IsTorusFlat.zmodTransport_column_mul,
+        TNLean.PEPS.IsTorusParallelSection.eq_mul_right,
+        TNLean.PEPS.IsTorusFlat.zmodTransport_column_eq_one,
+        TNLean.PEPS.exists_isTorusParallelSection_iff,
+        TNLean.PEPS.card_isTorusParallelSection}
+    \leanok
+    \uses{lem:peps_torus_shift_const}
+    Let $G$ be a finite group and assign to every site $v$ of the torus two
+    elements $a_v,b_v\in G$. Call $f$ from the sites to $G$ a parallel section
+    if $f_{v+(1,0)}=a_vf_v$ and $f_{v+(0,1)}=b_vf_v$ for every $v$. Parallel
+    sections exist if and only if
+    $b_{v+(1,0)}a_v=a_{v+(0,1)}b_v$ for every $v$ and the ordered products
+    $a_{(w-1,0)}\cdots a_{(0,0)}$ and $b_{(0,h-1)}\cdots b_{(0,0)}$ are the
+    identity. If they exist, there are exactly $|G|$ of them, and any two
+    differ by right multiplication with one group element.
+\end{lemma}
+
+\begin{proof}\leanok
+    If $f$ and $f'$ are parallel sections, $f_v^{-1}f'_v$ is invariant under
+    both unit shifts and hence constant, so $f'=fg$; conversely $fg$ is a
+    parallel section for every $g$. The two paths from $v$ to $v+(1,1)$ give
+    the flatness condition, and going once around a row or a column gives
+    the trivial products. Conversely, for flat $a,b$ with trivial products,
+    setting $f_{(x,y)}=b_{(x,y-1)}\cdots b_{(x,0)}\,a_{(x-1,0)}\cdots a_{(0,0)}$
+    for the representatives $0\le x<w$, $0\le y<h$, flatness moves the
+    product up a column one column to the right, conjugated by the
+    horizontal multipliers at its ends, so the product around every column is
+    trivial; this and the trivial product around the bottom row give the
+    two parallel-section rules also where the representatives wrap around.
+\end{proof}
+
+\input{chapter/ch24_peps_regular_invariant_state_span}
+
+\input{chapter/ch24_peps_torus_flat_connection_gauge}
+
+\input{chapter/ch24_peps_regular_parent_spanning}
+
+\input{chapter/ch24_peps_pair_centralizer_count}
+
+\input{chapter/ch24_peps_regular_parent_ground_space}
+
+\begin{lemma}[The dual quantum-double network is the Gauss-law superposition]%
+    \label{thm:peps_quantum_double_dual_gauss_law}
+    \lean{TNLean.PEPS.quantumDoubleDualSiteTensor,
+        TNLean.PEPS.quantumDoubleDualPEPS,
+        TNLean.PEPS.quantumDoubleDualRowTransport,
+        TNLean.PEPS.quantumDoubleDualColumnTransport,
+        TNLean.PEPS.IsQuantumDoubleGaussLaw,
+        TNLean.PEPS.IsQuantumDoubleTrivialHolonomy,
+        TNLean.PEPS.isTorusFlat_quantumDoubleDualTransport_iff,
+        TNLean.PEPS.forall_eq_quantumDoubleDualSpins_iff,
+        TNLean.PEPS.stateCoeff_quantumDoubleDualPEPS}
+    \leanok
+    \uses{def:peps_quantum_double_dual, lem:peps_torus_site_tensor_contraction,
+        lem:peps_torus_parallel_section}
+    Let $w,h\ge3$ and place the dual quantum-double tensor at every torus site, with plaquette spins $(s_1,s_2,s_3,s_4)$ (top-left, top-right, bottom-right, bottom-left). A spin configuration obeys Gauss's law if
+    \begin{align}
+        s_2(v)s_1(v)         & =s_3(v)s_4(v),              &
+        s_1(v+(1,0))\,s_2(v) & =s_4(v+(1,1))\,s_3(v+(0,1))
+        \label{eq:peps_qd_dual_gauss}
+    \end{align}
+    at every site $v$ \cite[Section~``Examples'', ``The double models'']{Schuch2010PEPS}, and has trivial holonomy if the ordered products of $a_v=s_2(v)s_1(v)$ along row $y=0$ and of $b_v=s_4(v+(0,1))^{-1}s_1(v)$ along column $x=0$ equal $1\in G$. Then the contracted network coefficient equals $|G|$ on configurations satisfying (\ref{eq:peps_qd_dual_gauss}) with trivial holonomy, and $0$ otherwise \cite{gap:rmp_peps_quantum_double_g_isometry}.
+\end{lemma}
+
+\begin{proof}\leanok
+    By Lemma~\ref{lem:peps_torus_site_tensor_contraction}, the coefficient counts bond colorings $(f_v,u_v)$ (left and top colors at $v$) matching $(s_1,s_2,s_3,s_4)$:
+    \begin{align}
+        u_v          & =s_1(v)f_v,    &
+        f_{v+(1,0)}  & =a_vf_v,       &
+        f_{v+(0,1)}  & =b_vf_v,       &
+        s_2(v)s_1(v) & =s_3(v)s_4(v).
+        \notag
+    \end{align}
+    When the first identity of (\ref{eq:peps_qd_dual_gauss}) holds, colorings biject with parallel sections of $(a,b)$, whose flatness is the second identity of (\ref{eq:peps_qd_dual_gauss}); Lemma~\ref{lem:peps_torus_parallel_section} then gives $|G|$ sections for trivial holonomy and $0$ otherwise.
+\end{proof}
+
+\input{chapter/ch24_peps_quantum_double_source_construction}
+
+\input{chapter/ch24_peps_quantum_double_local_terms}
+
+\begin{definition}[Primal quantum-double tensor]%
+    \label{def:peps_quantum_double_primal}
+    \lean{TNLean.PEPS.quantumDoublePrimalLabels,
+        TNLean.PEPS.quantumDoublePrimalTensor}
+    \leanok
+    The primal tensor $A^{g_1,g_2,g_3,g_4}_{t,r,b,l}$ with plaquette spins $(g_1,g_2,g_3,g_4)$ (top-left, top-right, bottom-right, bottom-left) equals $1$ when
+    \begin{align}
+        (t,r,b,l) & =(g_1g_2,\,g_2^{-1}g_3,\,g_4g_3,\,g_1g_4^{-1}),
+        \label{eq:peps_qd_primal_labels}
+    \end{align}
+    and $0$ otherwise \cite[Appendix~A, ``The Toric Code and quantum double models'']{Cirac2021Matrix}.
+\end{definition}
+
+\begin{lemma}[The primal virtual labels fuse to the identity]%
+    \label{thm:peps_quantum_double_primal_fusion}
+    \lean{TNLean.PEPS.quantumDoublePrimalTensor_ne_zero_mul_eq_one,
+        TNLean.PEPS.quantumDoublePrimalTensor_ne_zero_map_mul_eq_one,
+        TNLean.PEPS.quantumDoublePrimalTensor_smul_map_mul,
+        TNLean.PEPS.character_mul_quantumDoublePrimalTensor}
+    \leanok
+    \uses{def:peps_quantum_double_primal}
+    On the support (\ref{eq:peps_qd_primal_labels}), $t\,r\,b^{-1}l^{-1}=1$. Hence for every representation $\pi$ of $G$,
+    \begin{align}
+        \pi(t)\pi(r)\pi(b)^{-1}\pi(l)^{-1} & =I,
+        \label{eq:peps_qd_primal_fusion}
+    \end{align}
+    and for a character $\chi$, $\chi(t)\chi(r)\chi(b)^{-1}\chi(l)^{-1}A^{g_1,g_2,g_3,g_4}_{t,r,b,l}=A^{g_1,g_2,g_3,g_4}_{t,r,b,l}$ \cite[Appendix~A, ``The Toric Code and quantum double models'']{Cirac2021Matrix}. The resulting network string symmetry is Lemma~\ref{thm:peps_quantum_double_primal_network}.
+\end{lemma}
+
+\begin{proof}\leanok
+    From (\ref{eq:peps_qd_primal_labels}), $t\,r\,b^{-1}l^{-1}=(g_1g_2)(g_2^{-1}g_3)(g_4g_3)^{-1}(g_1g_4^{-1})^{-1}=1$; multiplicativity of $\pi$ gives (\ref{eq:peps_qd_primal_fusion}).
+\end{proof}
+
+\begin{lemma}[Virtual symmetry of the primal quantum-double network]%
+    \label{thm:peps_quantum_double_primal_network}
+    \lean{TNLean.PEPS.quantumDoublePrimalTensor_ne_zero_mul_eq_mul,
+        TNLean.PEPS.quantumDoublePrimalSiteTensor,
+        TNLean.PEPS.quantumDoublePrimalPEPS,
+        TNLean.PEPS.sum_smul_torusWestSouthString_quantumDoublePrimalPEPS_eq}
+    \leanok
+    \uses{def:peps_quantum_double_primal, lem:peps_torus_string_pull_through}
+    Place the primal tensor of Definition~\ref{def:peps_quantum_double_primal} at every site of a $w\times h$ torus ($w,h\ge2$; four distinct bonds per site for $w,h\ge3$ \cite{gap:rmp_peps_examples_small_torus}). For any representation $\pi$ of $G$, inserting $\pi(g)$ along the west and south boundary of a site rectangle yields the same contracted network as inserting $\pi(g)$ along its north and east boundary \cite[Appendix~A, ``The Toric Code and quantum double models'']{Cirac2021Matrix}; around a single site this reproduces (\ref{eq:peps_qd_primal_fusion}).
+\end{lemma}
+
+\begin{proof}\leanok
+    On the support (\ref{eq:peps_qd_primal_labels}), $tr=lb$, so $\pi(t)\pi(r)=\pi(l)\pi(b)$; apply Lemma~\ref{lem:peps_torus_string_pull_through} with $X_g=\pi(g)$.
+\end{proof}

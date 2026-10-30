@@ -681,7 +681,7 @@ def render(work, source, checkerboard, pics, *, only_combined=False):
         cases.append((f"qd-source-equation-{i+1}", unit, [p.signature() for p in pics[at:at+count]]))
         at += count
     # Include the real referenced definition, not a fake label or a suppressed warning.
-    chapter = (SOURCE / "chapter/ch24_peps_examples.tex").read_text()
+    chapter = (SOURCE / "chapter/ch24_peps_quantum_double_models.tex").read_text()
     definition = next(block for block in re.findall(r"\\begin\{definition\}.*?\\end\{definition\}", chapter, re.S)
                       if r"\label{def:peps_quantum_double_dual}" in block)
     # Omit only this context definition's invisible dependency annotation:
