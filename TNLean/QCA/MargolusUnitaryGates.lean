@@ -39,14 +39,14 @@ private noncomputable def equivOfRangeEq
     {A : Type*} [Ring A] [Algebra ℂ A] [StarRing A] [StarModule ℂ A]
     (f : A →⋆ₐ[ℂ] QuasiLocalAlgebra d) (hf : Function.Injective f)
     (J : StarSubalgebra ℂ (QuasiLocalAlgebra d)) (h : f.range = J) :
-    A ≃⋆ₐ[ℂ] J := h ▸ StarAlgEquiv.ofInjective f hf
+    A ≃⋆ₐ[ℂ] J :=
+  (StarAlgEquiv.ofInjective f hf).trans (StarSubalgebra.equivOfEq _ J h)
 
 private theorem equivOfRangeEq_coe
     {A : Type*} [Ring A] [Algebra ℂ A] [StarRing A] [StarModule ℂ A]
     (f : A →⋆ₐ[ℂ] QuasiLocalAlgebra d) (hf : Function.Injective f)
     (J : StarSubalgebra ℂ (QuasiLocalAlgebra d)) (h : f.range = J) (a : A) :
     (equivOfRangeEq f hf J h a : QuasiLocalAlgebra d) = f a := by
-  cases h
   rfl
 
 /-- A coherent presentation of the even support factor of the derived
@@ -74,7 +74,10 @@ private noncomputable def inputPairEquiv
     (embeddedEvenSupportAlgebra hω x ⊔ embeddedOddSupportAlgebra hω x)
     (range_image_evenPair_eq_adjacentSupportJoin hω x)
 
-private noncomputable def outputPairEquiv
+/-- Faithful physical-pair inclusion identifies the actual shifted
+support join with its physical algebra. Source: GNVW AARRodd,
+lines 1306–1318; Schumacher–Werner bruleV. -/
+noncomputable def outputPairEquiv
     (hω : PropagatesWithin ω (Finset.Icc (-1) 1)) (x : ℤ) :=
   equivOfRangeEq (quasiLocalObservable d (rightPair x))
     (quasiLocalObservable_injective d (rightPair x))
@@ -88,7 +91,9 @@ private theorem inputPairEquiv_coe
       ω (quasiLocalObservable d (evenPair x) A) :=
   equivOfRangeEq_coe _ _ _ _ A
 
-private theorem outputPairEquiv_coe
+/-- The shifted pair identification is actual finite-region inclusion.
+Source: GNVW AARRodd, lines 1306–1318. -/
+theorem outputPairEquiv_coe
     (hω : PropagatesWithin ω (Finset.Icc (-1) 1)) (x : ℤ)
     (A : LocalAlgebra d (rightPair x)) :
     (outputPairEquiv hω x A : QuasiLocalAlgebra d) =

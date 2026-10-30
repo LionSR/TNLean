@@ -1,0 +1,19 @@
+\section{Ordered coordinates of a physical pair}
+\label{sec:qca_consecutive_pair_coordinates}
+
+\begin{definition}[Consecutive-pair coordinates]
+    \label{def:qca_consecutive_pair_coordinates}
+    \lean{SpinChain.consecutivePairConfigEquiv}
+    \notready
+    For an on-site coordinate set of size $d$ and $a\in\mathbb Z$, the
+    ordered pair of values $(i,j)$ determines the configuration on
+    $\{a,a+1\}$ taking the value $i$ at $a$ and $j$ at $a+1$. Evaluation
+    at these two sites is the inverse bijection. Thus
+    \begin{align}
+        \{1,\ldots,d\}^2 & \cong
+        \operatorname{Config}_d(\{a,a+1\}).
+    \end{align}
+    The increasing order fixes the two physical tensor factors in
+    \cite[equation~RR2x, lines~1251--1266]{Gross2012IndexTheory} and in
+    \cite[equations~bruleU and bruleV, lines~980--1001]{SchumacherWerner2004QCA}.
+\end{definition}
