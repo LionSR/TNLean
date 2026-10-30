@@ -88,7 +88,7 @@ theorem IsMPUSimple.normalizedDiagonal_insertion_of_isReduction
             doubleLayerTensor U k l) * doubledBondMap B := by
     rw [normalizedDiagonal_eq_smul_sum_diagonal, Matrix.mul_smul, Matrix.smul_mul,
       Finset.mul_sum, Finset.sum_mul, Matrix.mul_smul, Matrix.smul_mul,
-      Finset.mul_sum, Finset.sum_mul]
+      Matrix.mul_sum, Matrix.sum_mul]
   calc doubleLayerTensor V i j * normalizedDiagonal (doubleLayerTensor V) *
           doubleLayerTensor V k l
       = (d : ℂ)⁻¹ • ∑ q : Fin d,
