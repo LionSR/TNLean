@@ -122,6 +122,23 @@ abstracted — record why, so it is not re-proposed).
   propagation estimate uses it instead of repeating the conversion to natural
   distance. The mathematical range condition is unchanged.
 
+### Eventual equality of scalar cocycle classes — promoted (2026-10-29)
+
+- **Pattern:** transport eventual equality of `H2π` classes to eventual coboundary
+  ratios using the same pointwise equivalence.
+- **Defined in:** `TNLean/Algebra/CocycleCohomology.lean`,
+  `eventually_H2π_eq_iff_isMulCoboundary₂_div`, a direct application of Mathlib's
+  `Filter.eventually_congr` to the existing scalar-cocycle equivalence.
+- **Refactored occurrences:** nine conversions in `CompactMinimalClassStability`,
+  `ExactGroundPathTransferClass`, `LocalInvariantCompression`,
+  `StationarySupportedDensityPhaseInvariance`, `UnitalSupportedPathInvariance`,
+  and `SupportedDensityPhaseInvariance`. Both directions use the same theorem;
+  public hypotheses and conclusions are unchanged.
+- **Validation status:** the original head `9e813c1d3` passed hosted strict
+  checks for all seven changed modules. Current-main integration is written
+  without local Lean builds; refreshed-head validation and repository integration
+  remain pending, tracked in issue #10258.
+
 ### Matrices of submodule orthogonal projections — promoted (2026-10-26)
 
 - **Pattern:** Form `Matrix.toEuclideanLin.symm W.starProjection.toLinearMap`
