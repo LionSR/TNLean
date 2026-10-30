@@ -8,6 +8,7 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.MPS.MPU
 
+import TNLean.MPS.MPU.ActionCommonBlocking
 import TNLean.MPS.MPU.AdjointSimpleContraction
 import TNLean.MPS.MPU.AffineFactorizationIsometry
 import TNLean.MPS.MPU.AffineFactorizationRank
@@ -192,6 +193,7 @@ import TNLean.MPS.MPU.SpinOneSchmidtObstruction
 import TNLean.MPS.MPU.StaircaseGates
 import TNLean.MPS.MPU.StaircaseUnitarity
 import TNLean.MPS.MPU.StandardForm
+import TNLean.MPS.MPU.StandardFormFromGates
 import TNLean.MPS.MPU.StandardFormParityCounterexample
 import TNLean.MPS.MPU.SuccessAttenuationCircuit
 import TNLean.MPS.MPU.SuppliedFixedWitnesses
