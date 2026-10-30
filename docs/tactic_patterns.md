@@ -10148,8 +10148,7 @@ there is no need for a new tactic.
   `suffixGram_eq_sum_of_extendCutSuffix` in
   `MPS/Preparation/PhysicalCutGramRecurrences.lean`.
 - **Occurrences:** both recurrences for constructed canonical cut factors in
-  `OBCCanonicalRecurrences.lean`, and both recurrences for the original
-  supplied OBC factors in `OBCCanonicalPhysicalRanks.lean`.
+  `OBCCanonicalRecurrences.lean`.
 - **Decision:** the physical cut identities are shared; callers supply their
   actual adjacent-factor recurrence instead of copying the double-sum proof.
 
