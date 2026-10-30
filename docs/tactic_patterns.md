@@ -9836,6 +9836,20 @@ there is no need for a new tactic.
 - **Decision:** Keep the local-support derivation in mathematical lemmas,
   using shared Euclidean extension by zero and ordinary submodule sums.
 
+
+### Physical embeddings commute with coordinate reindexing — candidate (2026-10-29)
+
+- **Seen:** the private reindexing lemma in
+  `MPS/ParentHamiltonian/PhysicalSectorProjectorTransport.lean`; independent
+  dependent-pair coordinates in the varying-physical-alphabet continuation.
+- **Pattern:** A commuting square of actual coordinate embeddings and bijections
+  gives a commuting square of Euclidean extension by zero and reindexing.
+  On an embedded coordinate, use inverse-coordinate naturality and
+  `euclideanExtendByZero_apply_image`; off the image, both coefficients vanish.
+- **Decision:** Two occurrences across two files, below the promotion threshold.
+  The periodic operator proof reuses the shared
+  `ContinuousLinearMap.rightFiberwiseMap_extendByZero` for spectator extension.
+
 ### Weighted geometric sums grouped by their anchors — promoted (2026-10-28)
 
 - **Seen:** `Lattice/LowEnergyCommutatorSum.lean`,
