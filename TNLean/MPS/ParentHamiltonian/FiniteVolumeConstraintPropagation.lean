@@ -82,8 +82,6 @@ theorem periodicLocalInteractionES_mpvState_eq_zero_of_groundSpaceES_le_ker
     ContinuousLinearMap.rightFiberwiseMap (S := Cfg d (M - L))
       (LinearMap.toContinuousLinearMap h) (U (mpvState A M)) from
         cyclicActiveBlock_periodicLocalInteractionES_apply h hLM i _]
-  change ContinuousLinearMap.rightFiberwiseMap (S := Cfg d (M - L))
-    (LinearMap.toContinuousLinearMap h) (U (mpvState A M)) = 0
   apply PiLp.ext
   rintro ⟨σ, τ⟩
   have hfiber : ContinuousLinearMap.rightFiber (U (mpvState A M)) τ =
