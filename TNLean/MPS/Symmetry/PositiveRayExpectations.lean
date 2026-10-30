@@ -32,10 +32,10 @@ theorem normalizedVectorExpectation_smul
     normalizedVectorExpectation (c • ψ) A = normalizedVectorExpectation ψ A := by
   have hnorm (φ : EuclideanSpace ℂ n) :
       ((‖φ‖ ^ 2 : ℝ) : ℂ) = ⟪φ, φ⟫_ℂ := by
-    simpa only [Complex.ofReal_pow] using (inner_self_eq_norm_sq_to_K φ).symm
+    rw [inner_self_eq_norm_sq_to_K, Complex.ofReal_pow]
   simp only [normalizedVectorExpectation, hnorm, map_smul, inner_smul_left,
     inner_smul_right, ← mul_assoc]
-  exact mul_div_mul_left _ _ (mul_ne_zero (star_ne_zero.mpr hc) hc)
+  exact mul_div_mul_left _ _ (mul_ne_zero hc (star_ne_zero.mpr hc))
 
 end TNLean.Lattice
 
