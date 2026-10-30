@@ -230,7 +230,7 @@ theorem commutingSupEquivMatrix_apply_mul
       Matrix.reindex finProdFinEquiv finProdFinEquiv (eA a ⊗ₖ eB b) := by
   have hprod : (⟨(a : C) * (b : C), (A ⊔ B).mul_mem
       ((show A ≤ A ⊔ B from le_sup_left) a.property)
-      ((show B ≤ A ⊔ B from le_sup_right) b.property)⟩ : A ⊔ B) =
+      ((show B ≤ A ⊔ B from le_sup_right) b.property)⟩ : ↥(A ⊔ B)) =
       commutingMulEquivSup A B hAB eA eB (a ⊗ₜ[ℂ] b) := Subtype.ext rfl
   rw [hprod]
   change tensorProductFullMatrixStarAlgEquiv eA eB
