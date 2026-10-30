@@ -39,8 +39,7 @@ private theorem transpose_gate_gauges_of_local_phase
     have h := Complex.mul_conj c
     rw [Complex.normSq_eq_norm_sq, hc] at h
     simpa only [one_pow, Complex.ofReal_one, starRingEnd_apply] using h
-  have hcc' : star c * c = 1 := by rw [mul_comm, hcc]
-  let Xbar := (x : Matrix (Fin q) (Fin q) ℂ).map (starRingEnd ℂ)
+  let Xbar :=(x : Matrix (Fin q) (Fin q) ℂ).map (starRingEnd ℂ)
   have hbar : Xbar.IsUnitaryBetween :=
     ((Matrix.isUnitaryBetween_iff_mem_unitaryGroup _).mpr x.property).map_star
   have hxt : ((x : Matrix (Fin q) (Fin q) ℂ)ᵀ).IsUnitaryBetween :=
@@ -73,7 +72,7 @@ private theorem transpose_gate_gauges_of_local_phase
   refine ⟨X, Y, ?_, ?_⟩
   · rw [hXY, hlocal]
     change Bᵀ = (star c • Kᴴ) * ((c • K) * Bᵀ)
-    simp only [Matrix.smul_mul, Matrix.mul_smul, smul_smul, hcc', one_smul]
+    simp only [Matrix.smul_mul, Matrix.mul_smul, smul_smul, hcc, one_smul]
     rw [← Matrix.mul_assoc, hK, Matrix.one_mul]
   · have h := congrArg Matrix.transpose hlocal
     simp only [Matrix.transpose_mul, Matrix.transpose_smul, Matrix.transpose_transpose,
