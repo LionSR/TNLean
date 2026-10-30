@@ -9914,16 +9914,6 @@ there is no need for a new tactic.
   purification structure or assume system/environment decoupling.
 
 
-### Coordinate transport of a rectangular conjugation (2026-10-29)
-
-- **Seen:** `Algebra/MatrixStarEquivSpatial.lean`.
-- **Pattern:** A square unitary becomes a rectangular unitary by reindexing its columns;
-  conjugation then transports the input matrix along the same coordinate equivalence.
-- **Reuse:** `Matrix.reindexLinearEquiv_mul` receives all three equivalences explicitly,
-  and `Matrix.conjTranspose_reindex` transports the adjoint. The existing QICLean
-  Skolem–Noether theorem supplies the square implementer. No entrywise double sum
-  or duplicate Skolem–Noether argument is introduced.
-
 ### Prescribed coordinates of a commuting-factor product — promoted (2026-10-29)
 
 - **Seen:** the two actual adjacent support-factor presentations and the
