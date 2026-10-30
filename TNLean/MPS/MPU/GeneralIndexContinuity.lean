@@ -72,7 +72,9 @@ positive definite and diagonal. Take `S = Uᴴ L^{1/2}` for a unitary `U`
 diagonalizing `L^{1/2} R L^{1/2}`.
 
 Source: arXiv:1703.09188, Proposition IV.5, lines 798--804 (the
-canonical-form-II gauge of the reduced representative). -/
+square-root gauge of the reduced representative). The unitary diagonalization of
+the right fixed point is implicit there; it is the step that reaches canonical form II
+as defined at lines 272--294. -/
 theorem PosDef.exists_congruence_isDiag {L R : Matrix (Fin m) (Fin m) ℂ}
     (hL : L.PosDef) (hR : R.PosDef) :
     ∃ S : Matrix (Fin m) (Fin m) ℂ, IsUnit S ∧ Sᴴ * S = L ∧

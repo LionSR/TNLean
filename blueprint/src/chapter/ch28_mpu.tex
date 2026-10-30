@@ -9011,8 +9011,15 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 
 \begin{proof}\leanok
     \uses{thm:mpu_blocked_double_layer_diagonal, thm:mpu_normalized_transfer_stabilization}
-    The first claim is the blocking identity for the normalized double-layer
-    diagonal. For $D>1$ every power of exponent at least $D^2-1$ equals the
+    Write $E_{\mathcal W}$ for the normalized transfer matrix of
+    $\mathcal W$. The normalized transfer matrix of the block is the
+    normalized physical diagonal of its double layer, so
+    Lemma~\ref{thm:mpu_blocked_double_layer_diagonal} gives
+    \begin{align}
+        E_{\mathcal W_k} & =E_{\mathcal W}^k,
+        \label{eq:mpu_blocked_transfer_power}
+    \end{align}
+    which is the first claim. For $D>1$ every power of exponent at least $D^2-1$ equals the
     stabilized rank-one projector. For $D=1$ the normalized transfer matrix is
     the identity of a one-dimensional space.
 \end{proof}
@@ -9020,6 +9027,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \begin{lemma}[Canonical source ranks from the factor-free sandwich]
     \label{lem:mpu_canonical_ranks_factor_free}
     \lean{MPOTensor.IsMPUCanonicalFormII.bondDim_le_of_mpo_eq,
+        MPOTensor.IsMPU.blockTensor_isMPUSimple_of_sq_le,
         MPOTensor.IsMPUCanonicalFormII.rightRank_mul_leftRank_blockTensor_of_mpo_eq,
         MPOTensor.IsMPU.sourceRanks_blockTensor_eq_factorFreeSandwich}
     \leanok
@@ -9087,7 +9095,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     requiring the path to be in canonical form. For each $x$, let
     $\mathcal U(x)$ be a tensor in canonical form generating the same MPU as
     $\mathcal W(x)$, and let $r(x)$ and $\ell(x)$ be the two source-cut ranks
-    of its block of $D^4$ sites, which is simple. Then $r(x)$ and $\ell(x)$ are
+    of its block of $D^4$ sites. Then $r(x)$ and $\ell(x)$ are
     constant on $[0,1]$. The same holds at every blocking length $k\geq D^2$.
     % Source lines: paper_v2.tex 733--818.
 \end{lemma}
