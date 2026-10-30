@@ -366,13 +366,14 @@ the chain bootstrap bound.
         S(\rho^0_{1,j})\le\ln k+\xi'\ln\bigl(2C_1^2/P\bigr)\ln D+F(\xi',D),
         \label{eq:hastings_bootstrap}
     \end{align}
-    where $\rho^0_{1,j}=\operatorname{tr}_{X_{j+1,N}}|\Psi_0\rangle\langle\Psi_0|$.
-    This is \cite[Lemma~2, lines 280--311]{Hastings2007AreaLaw} at
-    $\xi'=6\tilde\xi$ with $C_1$ polynomial in $\tilde\xi$, inheriting the
-    raised-velocity chain localization length $\tilde\xi$ of
-    Lemma~\ref{thm:hastings_lemma1_endpoint}
-    \cite{gap:hastings07_lemma1_decay_length,
-        gap:hastings07_gaussian_average_exponent}.
+    where $\rho^0_{1,j}$ is the reduced ground state on the first $j$ sites.
+    This is an auxiliary form of the bootstrap inequality. Its physical
+    Lieb--Robinson velocity is $10\Delta E(1+c_RJ/\Delta E)$, which includes
+    a gap-dependent term and is not expressed as a fixed multiple of $J$.
+    Lemma~\ref{thm:hastings_bootstrap_source} gives Lemma~2 of
+    \cite[lines 280--311]{Hastings2007AreaLaw} using the common
+    interaction-proportional velocity. The distinction is recorded in
+    \cite{gap:hastings07_lemma1_decay_length}.
 \end{lemma}
 \begin{proof}\leanok
     \uses{thm:hastings_lemma1_endpoint,
@@ -383,4 +384,35 @@ the chain bootstrap bound.
     $D\ge2$, Lemma~\ref{thm:hastings_bootstrap_factorization_at} gives
     (\ref{eq:hastings_bootstrap}); for $D=1$, $S(\rho^0_{1,j})=0$ and the
     right-hand side is nonnegative under $\ln0=0$.
+\end{proof}
+
+
+\begin{lemma}[The bootstrap inequality at the source length]
+    \label{thm:hastings_bootstrap_source}
+    \lean{TNLean.MPS.AreaLaw.exists_entropy_le_of_overlap_schmidtRank_mixture_source}
+    \leanok
+    \uses{thm:hastings_source_factorization,thm:hastings_bootstrap_factorization_at}
+    For each interaction range $R$ there is $K\ge1$, depending only on $R$,
+    with the following property. Let $H$ be a finite chain Hamiltonian of
+    range $R$ and term norms at most $J\ge0$, with a unique unit ground vector
+    $\Omega$ and gap $\Delta E>0$. Put
+    $s=\max(80c_RJ/\Delta E,80)$, $\xi'=6s$, and $C_1=Ks^3$,
+    where $c_R=2(R+1)2^{2R+1}e^{2R}$.
+    If $\rho$ is a unit-trace mixture of vectors of Schmidt rank at most
+    $k\ge1$ at a cut $j$, and $\langle\Omega,\rho\Omega\rangle=P>0$, then
+    \begin{align}
+        S_\Omega([0,j))\le \ln k+\xi'\ln(2C_1^2/P)\ln q+F(\xi',q).
+        \label{eq:hastings_bootstrap_source}
+    \end{align}
+    This is Lemma~2 of~\cite[lines 280--311]{Hastings2007AreaLaw}
+    with the same interaction-proportional velocity and numerical decay
+    length as Lemma~\ref{thm:hastings_source_pair}.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:hastings_source_factorization,thm:hastings_bootstrap_factorization_at}
+    Enlarge the factorization constant to $K\ge1$. Since $s\ge80$,
+    $C_1=Ks^3\ge1$. Apply
+    Lemma~\ref{thm:hastings_bootstrap_factorization_at} to the
+    factorization from Lemma~\ref{thm:hastings_source_factorization}.
+    For $q=1$ the entropy vanishes and the right side is nonnegative.
 \end{proof}

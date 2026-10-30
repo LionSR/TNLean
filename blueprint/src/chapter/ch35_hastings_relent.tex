@@ -131,16 +131,11 @@ $C_2=7$ as recorded in~\cite{gap:hastings07_relent_constants}.
     satisfies~(\ref{eq:hastings_relent_window_cond}), then~(\ref{eq:hastings_relent})
     holds with $\epsilon'=2C_1e^{-l/\xi'}$.
 
-    This is eq.~(relent) of~\cite[lines 234--242]{Hastings2007AreaLaw} under
-    the window assumption~(\ref{eq:hastings_relent_window_cond}) of line 483,
-    with the constants of~\cite{gap:hastings07_relent_constants}, the printed
-    rate $\xi'=6\tilde\xi$ (lines 141--142), and polynomial prefactor
-    $C_1=K\tilde\xi^3$ (lines 258--262). Here $\tilde\xi$ has the form
-    $\max(2v/\Delta E,\xi_C)$ from a chain Lieb--Robinson estimate with
-    $J$-dependent prefactor, single-site second operator, and raised velocity,
-    rather than a Lieb--Robinson pair $(v,\xi_C)$ in the sense of lines
-    96--112~\cite{gap:hastings07_lemma1_decay_length,
-        gap:hastings07_gaussian_average_exponent}.
+    This auxiliary estimate has the explicit constants of
+    \cite{gap:hastings07_relent_constants}. Its physical propagation
+    velocity $10\Delta E(1+c_RJ/\Delta E)$ depends on the gap as well as
+    the interaction strength. The common interaction-proportional source
+    choice is used in Lemma~\ref{thm:hastings_relent_source}.
 \end{lemma}
 \begin{proof}\leanok
     \uses{thm:hastings_relent_window, thm:hastings_lemma1_endpoint,
@@ -154,4 +149,35 @@ $C_2=7$ as recorded in~\cite{gap:hastings07_relent_constants}.
     Lemma~\ref{thm:hastings_relent_window} yields~(\ref{eq:hastings_relent});
     for $q=1$, $S_c=0<1+\ln(\xi'/2+1)=F(\xi',1)$, so
     (\ref{eq:hastings_relent_window_cond}) is vacuous.
+\end{proof}
+
+
+\begin{lemma}[The entropy gain at the source length]
+    \label{thm:hastings_relent_source}
+    \lean{TNLean.MPS.AreaLaw.Hastings.exists_relent_of_isGappedGroundState_source}
+    \leanok
+    \uses{thm:hastings_source_factorization,thm:hastings_relent_window}
+    For each range $R$ there is $K\ge0$, depending only on $R$, such that
+    the following holds under the Hamiltonian hypotheses of
+    Lemma~\ref{thm:hastings_bootstrap_source}. Put
+    $s=\max(80c_RJ/\Delta E,80)$, $\xi'=6s$ and $C_1=Ks^3$.
+    Let $c+l\le L$, $A=\lbrack c-l,c)$ and $B=\lbrack c,c+l)$, with the intervals
+    intersected with the chain. If
+    $S_\Omega([0,c))\ge(l+\xi'\ln C_1)\ln q+F(\xi',q)$, then
+    \begin{align}
+        S(A)+S(B)-S(A\cup B)
+        \ge(1-2\epsilon')l/\xi'-\ln(2C_1)-7,
+        \qquad \epsilon'=2C_1e^{-l/\xi'}.
+        \label{eq:hastings_relent_source}
+    \end{align}
+    Thus eq.~(relent) of~\cite[lines 234--242 and 413--503]{Hastings2007AreaLaw}
+    holds at the common source length, with the explicit constant
+    corrections of~\cite{gap:hastings07_relent_constants}.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:hastings_source_factorization,thm:hastings_relent_window}
+    Increase the range-dependent factorization constant so that
+    $C_1\ge1$, and apply Lemma~\ref{thm:hastings_relent_window}.
+    For $q=1$ the entropy-window hypothesis is impossible because
+    $F(\xi',1)=1+\ln(\xi'/2+1)>0$.
 \end{proof}
