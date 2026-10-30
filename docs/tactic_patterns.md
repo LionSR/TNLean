@@ -9797,6 +9797,19 @@ there is no need for a new tactic.
 - **Notes:** No tactic repetition reaches the promotion threshold. The
   repository pattern scan was rerun after the concrete chain assembly.
 
+### Virtual class of an injective periodic ray — promoted helper (2026-10-29)
+
+- **Seen:** `MPS/Symmetry/PositiveRayVirtualCohomology.lean`,
+  `ExactGroundPathEndpointClass.lean`, and `ExactMPSPhaseCohomologyObstruction.lean`.
+- **Pattern:** Comparing endpoint actions first identifies the injective bond dimension,
+  then reconstructs a scalar bond gauge from the existing two- and three-ring trace data.
+- **Abstraction:** `bondDimension_eq_of_samePositiveMpvRay` and
+  `cohomologousTo_of_samePositiveMpvRay_character_covariance` retain this comparison once.
+  Physical character compatibility is derived by the existing `gauge_phase_unique` theorem.
+- **Reuse:** The endpoint and independent phase theorems call these mathematical helpers;
+  they do not repeat finite-trace reconstruction or a virtual-gauge uniqueness proof.
+- **Validation:** Source-written only; hosted Lean checking remains pending.
+
 ### Euclidean matrix action bounds — promoted upstream reuse (2026-10-29)
 
 - **Pattern:** Bound a matrix acting on a Euclidean vector by the product

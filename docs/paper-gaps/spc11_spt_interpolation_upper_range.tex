@@ -22,8 +22,8 @@ be $D_0$ and $D_1$. The construction embeds the two bond spaces as consecutive
 direct summands of an ambient space whose dimension is
 \begin{align}
     D_{\mathrm{amb}}
-        &=
-        D_0+D_1.
+     & =
+    D_0+D_1.
     \label{eq:spc11_spt_interpolation_upper_range_ambient_dimension}
 \end{align}
 It then interpolates between maximally entangled vectors supported on the two
@@ -33,10 +33,10 @@ The source display in
 \path{Papers/1010.3732/paper_v3.tex}, lines~900--903, reads
 \begin{align}
     \ket{\omega_{\mathrm{src}}(\gamma)}
-        &=
-        (1-\gamma)\sum_{i=1}^{D_0}\ket{i,i}
-        +
-        \gamma\sum_{i=D_0+1}^{D_1}\ket{i,i}.
+     & =
+    (1-\gamma)\sum_{i=1}^{D_0}\ket{i,i}
+    +
+    \gamma\sum_{i=D_0+1}^{D_1}\ket{i,i}.
     \label{eq:spc11_spt_interpolation_upper_range_source_interpolation}
 \end{align}
 The source immediately states that this vector has bond dimension
@@ -48,39 +48,83 @@ The second summand must occupy the $D_1$ coordinates immediately following
 the first $D_0$ coordinates. Its index set is
 \begin{align}
     I_1
-        &=
-        \{D_0+1,\ldots,D_0+D_1\},
+     & =
+    \{D_0+1,\ldots,D_0+D_1\},
     \label{eq:spc11_spt_interpolation_upper_range_second_index_set}
 \end{align}
 rather than $\{D_0+1,\ldots,D_1\}$. The corrected interpolation is
 \begin{align}
     \ket{\omega(\gamma)}
-        &=
-        (1-\gamma)\sum_{i=1}^{D_0}\ket{i,i}
-        +
-        \gamma\sum_{i=D_0+1}^{D_0+D_1}\ket{i,i}.
+     & =
+    (1-\gamma)\sum_{i=1}^{D_0}\ket{i,i}
+    +
+    \gamma\sum_{i=D_0+1}^{D_0+D_1}\ket{i,i}.
     \label{eq:spc11_spt_interpolation_upper_range_corrected_interpolation}
 \end{align}
 
 At the first endpoint,
 \begin{align}
     \ket{\omega(0)}
-        &=
-        \sum_{i=1}^{D_0}\ket{i,i},
+     & =
+    \sum_{i=1}^{D_0}\ket{i,i},
     \label{eq:spc11_spt_interpolation_upper_range_first_endpoint}
 \end{align}
 which is the maximally entangled vector on the first bond summand. At the
 second endpoint,
 \begin{align}
     \ket{\omega(1)}
-        &=
-        \sum_{i=D_0+1}^{D_0+D_1}\ket{i,i},
+     & =
+    \sum_{i=D_0+1}^{D_0+D_1}\ket{i,i},
     \label{eq:spc11_spt_interpolation_upper_range_second_endpoint}
 \end{align}
 which is the maximally entangled vector on the second bond summand. The upper
 limit $D_0+D_1$ agrees with the ambient dimension in
 (\ref{eq:spc11_spt_interpolation_upper_range_ambient_dimension}). By contrast,
 the source range can be empty when $D_0\geq D_1$.
+
+\section{Source-written physical converse and endpoint domain, 2026-10-29}
+
+The source separation claim is explicitly about smooth paths of MPS, not
+arbitrary ground states: \path{Papers/1010.3732/paper_v3.tex}, lines~929--953.
+The independent phase condition in the library records a continuous exact
+MPS realization of the unique finite-ring ground lines of a uniformly gapped
+symmetric interaction path, after common blocking and orthogonal physical
+inclusions. At each parameter the periodic rays admit a one-site injective
+representative of positive dimension bounded by one ambient bond dimension.
+The minimal dimension may change. Neither a virtual action nor a common
+transfer bound is part of that physical phase condition.
+
+Drafts \#10333 and \#10338 now write the missing physical-gap implication.
+Ordinary connected clustering is derived through the actual Gaussian/Cauchy
+integral. Pointwise transfer convergence and an actual trace-preserving bond
+gauge then yield a common transfer spectral bound below one. The previously
+proved compact-sequence argument gives one virtual class along the exact MPS
+path. This construction does not require a continuous choice of minimal
+representatives or virtual matrices. It is the source-written declaration
+\leanid{MPSTensor.ExactMPSGroundPath.exists_constant_virtual_class}; its
+combined analytic dependency stack still awaits hosted acceptance.
+
+Draft \#10341 transports that class to prescribed endpoint representations
+and writes
+\leanid{MPSTensor.isSameExactMPSGappedPhase_iff_cohomologous}.
+Its original endpoint tensors are one-site injective of positive bond
+dimension, with prescribed projective representations implementing their
+\emph{exact} on-site tensor covariance. The physical phase condition still
+permits its own endpoint character changes and physical inclusions. The
+endpoint covariance hypothesis has no original scalar character; the
+biconditional therefore does not yet cover arbitrary character-covariant
+original endpoints. Nor does this statement classify several-block tensors.
+The comparison of this explicit endpoint domain and exact-path definition
+with the full source-labelled classification remains a separate task.
+
+All new nodes for these drafts remain marked \path{notready}. The older
+fixed-point character restriction and compact normal-form gap restriction
+are resolved in their own notes; those resolutions do not enlarge this
+classification statement. No conclusion about arbitrary non-MPS gapped
+Hamiltonian paths is asserted. The chronological formal-status discussion
+below records earlier stages; its claims that the physical transfer bound
+or change-of-dimension converse is unwritten are superseded by this dated
+source-written status, subject to hosted acceptance and integration.
 
 \section{Blueprint and formal status}
 
@@ -146,8 +190,8 @@ Continuity of an ambient tensor alone does not give continuity of its
 minimal canonical support. For example, let $X,Y,Z$ be the Pauli matrices
 and consider the four-letter tensor
 \[
- A_0(t)=\mathbf{1}_2,\qquad
- A_1(t)=tX,\qquad A_2(t)=tY,\qquad A_3(t)=tZ.
+    A_0(t)=\mathbf{1}_2,\qquad
+    A_1(t)=tX,\qquad A_2(t)=tY,\qquad A_3(t)=tZ.
 \]
 The on-site action of $\mathbb Z_2\times\mathbb Z_2$ is the fixed diagonal
 sign action induced by conjugation with $X$ and $Z$. For every $t>0$ the
@@ -158,8 +202,8 @@ dimension is one and whose virtual class is trivial. This example concerns
 raw tensor continuity, not a uniformly gapped path with a unique exact MPS
 ground state. Indeed, the canonical two-site local ground spaces tend to
 \[
- \operatorname{span}\{\ket{00},\;
-   \ket{0a}+\ket{a0}:a=1,2,3\};
+    \operatorname{span}\{\ket{00},\;
+    \ket{0a}+\ket{a0}:a=1,2,3\};
 \]
 the limiting two-site ring therefore has additional ground vectors.
 Thus the independent relation's uniform-gap and exact-ground-state
@@ -418,10 +462,10 @@ is now proved directly for the periodic nearest-neighbor Hamiltonian.
 For Hermitian two-site interactions of operator norm at most one,
 observables on nonempty disjoint supports $X,Y$ satisfy
 \[
- \|[e^{itH_N}Ae^{-itH_N},B]\|
- \leq 2\|A\|\|B\|\,|X|e^{-a d(X,Y)}
-                  \bigl(e^{8e^a|t|}-1\bigr)
- \qquad(a\geq0).
+    \|[e^{itH_N}Ae^{-itH_N},B]\|
+    \leq 2\|A\|\|B\|\,|X|e^{-a d(X,Y)}
+    \bigl(e^{8e^a|t|}-1\bigr)
+    \qquad(a\geq0).
 \]
 Here $d(X,Y)$ is cyclic graph distance. The constants are independent of
 chain length and physical dimension. The proof establishes the local
