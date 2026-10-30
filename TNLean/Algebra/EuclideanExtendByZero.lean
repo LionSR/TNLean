@@ -56,6 +56,6 @@ physical coordinate. -/
 theorem euclideanExtendByZero_apply_not_mem_range (e : I ↪ J)
     (v : EuclideanSpace ℂ I) (j : J) (hj : j ∉ Set.range e) :
     e.euclideanExtendByZero v j = 0 :=
-  Function.extend_apply' (fun i ↦ v i) 0 j hj
+  Function.extend_apply' (f := e) (fun i ↦ v i) 0 j hj
 
 end Function.Embedding
