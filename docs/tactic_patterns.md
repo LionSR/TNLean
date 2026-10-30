@@ -9775,6 +9775,16 @@ there is no need for a new tactic.
 - **Decision:** Two consumers, below the promotion threshold. A third consumer
   should extract the common finite-chain argument to a shared narrow module.
 
+### Delta half factors for a supplied two-site circuit (2026-10-29)
+
+- **Seen:** `MPS/MPU/StandardFormFromGates.lean`.
+- **Pattern:** A virtual index records a physical/intermediate pair; a matrix-unit
+  half factor contracts the other half factor to the supplied shifted gate.
+- **Reuse:** The finite delta sum is handled by Mathlib's ordinary `simp` lemmas.
+  The periodic seam, circuit unitarity and basis-change cancellation reuse the
+  existing supplied standard-form and fundamental-theorem APIs. No fourth copy
+  of the circuit contraction or custom tactic is introduced.
+
 
 ### Exponential comparisons with a common nonnegative factor — reused Mathlib (2026-10-29)
 
