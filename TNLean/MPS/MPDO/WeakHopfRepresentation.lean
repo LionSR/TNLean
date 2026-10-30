@@ -216,7 +216,9 @@ theorem exists_trace_mul_eq_ofConv_apply
       map_smul' := by intro c f; simp }
   obtain ⟨θ, hθ⟩ := LinearMap.dualMap_surjective_of_injective
     (f := ψ.toLinearMap) hψ ℓ
-  obtain ⟨X, hX⟩ := Matrix.exists_trace_representation θ
+  let X := ((Matrix.traceBilinForm (Fin D)).toDual Matrix.traceBilinForm_nondegenerate).symm θ
+  have hX (M : Matrix (Fin D) (Fin D) ℂ) : θ M = Matrix.trace (X * M) := by
+    rw [← Matrix.traceBilinForm_apply, LinearMap.BilinForm.apply_toDual_symm_apply]
   exact ⟨X, fun f ↦ (hX (ψ f)).symm.trans (LinearMap.congr_fun hθ f)⟩
 
 /-- Every element of `H` is represented by one boundary at all lengths:
