@@ -58,6 +58,6 @@ theorem mpvState_extend_physical {a d D : ℕ} (e : Fin a ↪ Fin d)
     change Matrix.trace (Kraus.evalWord (Function.extend e A 0) (List.ofFn σ)) = 0
     rw [hw, Kraus.evalWord_append, Kraus.evalWord_cons,
       Function.extend_apply' A (0 : Fin d → Matrix (Fin D) (Fin D) ℂ) (σ i) hi]
-    simp
+    simp only [Pi.zero_apply, Matrix.zero_mul, Matrix.mul_zero, Matrix.trace_zero]
 
 end MPSTensor

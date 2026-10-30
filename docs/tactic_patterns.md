@@ -9911,6 +9911,17 @@ there is no need for a new tactic.
 =======
 =======
 
+### Actual periodic state under physical alphabet extension — reuse (2026-10-29)
+
+- **Seen:** `MPS/Core/PhysicalEmbedding.lean` and the existing
+  `MPS/Core/PhysicalRotation.lean` physical-coordinate calculations.
+- **Pattern:** Transport periodic coefficients after changing the physical alphabet.
+- **Reuse:** The new embedding identity uses `MPSTensor.mpv_reindexPhysical` on
+  image configurations and `Kraus.evalWord_append` at a zero letter elsewhere;
+  it does not copy the general physical-rotation word expansion.
+- **Decision:** Existing mathematical helpers suffice; no new tactic or tensor
+  construction is introduced.
+
 ### Weighted geometric sums grouped by their anchors — promoted (2026-10-28)
 
 - **Seen:** `Lattice/LowEnergyCommutatorSum.lean`,
