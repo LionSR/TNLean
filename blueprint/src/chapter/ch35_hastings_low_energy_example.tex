@@ -12,8 +12,9 @@ failure without translation invariance by an example in which the local terms
 $H_i$ themselves have non-commuting compressions
 \cite[lines 1655--1676]{Hastings2006Solving}, and states that for long enough
 filtering times and projection ranges the filtered approximations inherit this.
-Only the statement about the terms $H_i$ is formalized here; the passage to the
-filtered approximations is not argued in the source and is not formalized
+In this example each $H_i$ commutes with the full Hamiltonian, so the Gaussian
+filter fixes it exactly. The truncated approximations therefore give the same
+example once the projection range contains the finite chain
 \cite{gap:hastings05_low_energy_example}.
 
 On a chain of $m+3$ spins $1/2$, with sites $0,1,\ldots,m+2$, let
@@ -54,25 +55,56 @@ $S^z_1$ is reversed there, which changes the ground configurations but not
 the dimension of the ground space or the conclusions below
 \cite{gap:hastings05_low_energy_example}.
 
+\begin{lemma}[The truncated filtered terms equal the original terms]
+    \label{thm:hastings_low_energy_example_truncated}
+    \lean{TNLean.Lattice.LowEnergyExample.hamiltonian_commute_siteOp_zero,
+        TNLean.Lattice.LowEnergyExample.hamiltonian_commute_term,
+        TNLean.Lattice.LowEnergyExample.gaussianFilteredTerm_term_eq,
+        TNLean.Lattice.LowEnergyExample.truncatedTerm,
+        TNLean.Lattice.LowEnergyExample.truncatedTerm_eq}
+    \leanok
+    \uses{thm:hastings_low_energy_example_hamiltonian}
+    Let $l_{\mathrm{proj}}\ge m+4$, and define
+    $H_{\mathrm{loc},i}=\sum_{|i-j|\le l_{\mathrm{proj}}-2}H_j$.
+    For any Gaussian filtering parameter $q\ge0$ and gap scale $\Delta E>0$,
+    let $M_i$ be the Gaussian average of
+    $e^{itH_{\mathrm{loc},i}}H_ie^{-itH_{\mathrm{loc},i}}$ with variance
+    $q/\Delta E^2$. Then $[H,H_i]=0$ and $M_i=H_i$ for every site $i$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:hastings_low_energy_example_hamiltonian}
+    The non-diagonal part of every $H_i$ acts only on spin~$0$, while $H$
+    is diagonal and independent of that spin. Thus $[H,H_i]=0$ and
+    $e^{itH}H_ie^{-itH}=H_i$. Every pair of sites is at distance at most
+    $m+2\le l_{\mathrm{proj}}-2$, so $H_{\mathrm{loc},i}=H$.
+    The Gaussian measure has total mass one, giving $M_i=H_i$.
+\end{proof}
+
 \begin{lemma}[The compressions fail to commute near site $0$]
     \label{thm:hastings_low_energy_example_commutators}
     \lean{TNLean.Lattice.LowEnergyExample.not_commute_compress_term_zero_one,
         TNLean.Lattice.LowEnergyExample.not_commute_compress_term_one_two,
         TNLean.Lattice.LowEnergyExample.not_commute_compress_term_zero_two,
-        TNLean.Lattice.LowEnergyExample.commute_compress_term_zero_of_three_le}
+        TNLean.Lattice.LowEnergyExample.commute_compress_term_zero_of_three_le,
+        TNLean.Lattice.LowEnergyExample.not_commute_compress_truncatedTerm,
+        TNLean.Lattice.LowEnergyExample.commute_compress_truncatedTerm_zero_of_three_le}
     \leanok
     \uses{thm:hastings_low_energy_example_hamiltonian}
     The compressions $PH_0P$, $PH_1P$ and $PH_2P$ to the ground space
     pairwise fail to commute, while $PH_0P$ commutes with $PH_iP$ for every
-    $i\ge3$.
+    $i\ge3$. The same statements hold for the truncated filtered terms
+    $M_i$ whenever $l_{\mathrm{proj}}\ge m+4$.
 \end{lemma}
 \begin{proof}\leanok
+    \uses{thm:hastings_low_energy_example_truncated}
     On the ground space $S^z_k$ is a scalar for every $k\neq0$, and an
     operator on site $0$ acts through its $2\times2$ matrix. So $PH_0P$,
     $PH_1P$ and $PH_2P$ are, up to scalar multiples of $P$, the
     compressions of $S^x_0+S^y_0$, $-S^x_0$ and $-S^y_0$, and their
     commutators are $\pm$ the compression of $[S^x_0,S^y_0]=iS^z_0\neq0$. For
-    $i\ge3$, $PH_iP$ is a scalar multiple of $P$.
+    $i\ge3$, $PH_iP$ is a scalar multiple of $P$. Theorem~
+    \ref{thm:hastings_low_energy_example_truncated} gives the statements
+    for $M_i$.
 \end{proof}
 
 The source states the last claim for $i\ge2$, but the pair $(0,2)$ is among

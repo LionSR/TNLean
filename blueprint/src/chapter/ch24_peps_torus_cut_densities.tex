@@ -1,0 +1,447 @@
+\section{Reduced densities of torus cuts}%
+\label{sec:peps_torus_cut_densities}
+
+This section first records the entropies of a density operator with flat
+spectrum. It then computes the reduced density of the physical cut from the
+common boundary factor, for a fixed boundary state and for the closures of the
+original tensor.
+
+\begin{lemma}[Entropy of a flat density operator]%
+    \label{thm:peps_flat_density_entropy}
+    \lean{Matrix.IsHermitian.eigenvalues_eq_zero_or_inv_of_mul_self_eq_inv_smul,
+        vonNeumannEntropy_of_mul_self_eq_inv_smul}
+    \leanok
+    Let $\rho$ be a finite-dimensional positive semidefinite matrix of
+    trace one. As in the spectral step of the proof of
+    \cite[Theorem~6.9]{Schuch2010PEPS}, if $\rho^2=r^{-1}\rho$ for a positive real number $r$, then
+    $S(\rho)=\log r$.
+\end{lemma}
+\begin{proof}\leanok
+    For each eigenvalue $\lambda$, the identity gives
+    $\lambda(\lambda-r^{-1})=0$. In either case
+    $-\lambda\log\lambda=\lambda\log r$, with the value at zero
+    interpreted continuously. Summing and using
+    $\sum\lambda=\operatorname{tr}\rho=1$ proves $S(\rho)=\log r$.
+\end{proof}
+
+\begin{definition}[Finite-order R\'enyi entropy]%
+    \label{def:peps_renyi_entropy}
+    \lean{renyiEntropy}\leanok
+    For a positive density $\rho$ and $\alpha>0$, $\alpha\ne1$, define
+    \begin{align}
+        S_\alpha(\rho)=(1-\alpha)^{-1}
+        \log\operatorname{tr}(\rho^\alpha),
+    \end{align}
+    where the real power is defined spectrally. Set $S_1(\rho)=S(\rho)$
+    and $S_0(\rho)=\log\operatorname{rank}\rho$.
+\end{definition}
+
+\begin{lemma}[All finite R\'enyi orders of a flat density]%
+    \label{thm:peps_flat_density_renyi_entropy}
+    \lean{trace_cfc_rpow_of_mul_self_eq_inv_smul,
+        renyiEntropy_of_mul_self_eq_inv_smul,
+        renyiEntropy_of_mul_self_eq_inv_smul_of_rank}
+    \leanok
+    \uses{def:peps_renyi_entropy}
+    Let $\rho\geq0$ have trace one and satisfy $\rho^2=r^{-1}\rho$, with
+    $r>0$. For every $\alpha>0$,
+    $\operatorname{tr}(\rho^\alpha)=r^{1-\alpha}$ and
+    $S_\alpha(\rho)=\log r$. If $\operatorname{rank}\rho=r$, the same
+    entropy formula also holds at order zero.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:peps_flat_density_entropy}
+    Every eigenvalue is zero or $r^{-1}$. For positive order,
+    $\lambda^\alpha=\lambda r^{1-\alpha}$. Summing uses trace one;
+    taking logarithms proves the entropy formula away from order one.
+    The von Neumann and rank conventions give the remaining orders.
+\end{proof}
+
+\begin{definition}[Fixed boundary embedding and density]%
+    \label{def:peps_fixed_boundary_factor_density}
+    \lean{TNLean.PEPS.boundaryAncillaMap,
+        TNLean.PEPS.fixedBoundaryFactorDensity,
+        TNLean.PEPS.boundaryFactorSchmidtMatrix}
+    \leanok
+    Let $D$ be a nonempty finite set and $\phi\in\mathbb C^A$.
+    Define $J_\phi:\mathbb C^D\to\mathbb C^{D\times A}$ by
+    $(J_\phi)_{(d,a),s}=\mathbf 1_{\{d=s\}}\phi(a)$, and set
+    \begin{align}
+        \rho_\phi=|D|^{-1}J_\phi J_\phi^\dagger,
+        \qquad K_{\phi,\chi}=|D|^{-1/2}J_\phi J_\chi^{\mathsf T}.
+    \end{align}
+\end{definition}
+
+\begin{lemma}[Reduced matrix of a fixed boundary factor]%
+    \label{thm:peps_fixed_boundary_factor_density}
+    \lean{TNLean.PEPS.boundaryAncillaMap_conjTranspose_mul,
+        TNLean.PEPS.fixedBoundaryFactorDensity_properties,
+        TNLean.PEPS.vonNeumannEntropy_fixedBoundaryFactorDensity,
+        TNLean.PEPS.boundaryFactorSchmidtMatrix_apply,
+        TNLean.PEPS.boundaryFactorSchmidtMatrix_mul_conjTranspose,
+        TNLean.PEPS.mul_unitary_transpose_mul_conjTranspose,
+        TNLean.PEPS.boundaryFactorSchmidtMatrix_submatrix_mul_conjTranspose,
+        TNLean.PEPS.fixedBoundaryFactorDensity_submatrix_properties,
+        TNLean.PEPS.normalized_reducedMatrix_eq_of_scalar}
+    \leanok
+    \uses{def:peps_fixed_boundary_factor_density}
+    If $\|\phi\|=1$, then $J_\phi$ is an isometry and $\rho_\phi$ is
+    a positive density of trace one and rank $|D|$, satisfying
+    $\rho_\phi^2=|D|^{-1}\rho_\phi$. In addition,
+    \begin{align}
+        K_{\phi,\chi}K_{\phi,\chi}^\dagger
+        =\|\chi\|^2\rho_\phi.
+    \end{align}
+    These identities persist under bijective changes of physical coordinates.
+    A unitary acting on the complementary indices leaves the reduced matrix
+    unchanged. If a nonzero coefficient matrix has reduced matrix
+    $a\rho_\phi$, its trace is positive and trace normalization gives
+    exactly $\rho_\phi$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:peps_flat_density_entropy}
+    The Gram matrix is $J_\phi^\dagger J_\phi=\|\phi\|^2I$.
+    Matrix multiplication gives the reduced identity. Cyclicity of trace,
+    the isometry rank identity, and one further multiplication give the
+    density properties. Complementary unitarity cancels between a matrix
+    and its adjoint; positivity and nonvanishing give positive trace.
+\end{proof}
+
+\begin{definition}[Fixed regular reference-boundary density]%
+    \label{def:peps_regular_reference_boundary_density}
+    \lean{TNLean.PEPS.RegularReferenceRegionLabels,
+        TNLean.PEPS.regularReferenceRegionLabelsFintype,
+        TNLean.PEPS.regularRegionReferenceCoordinatesEquiv,
+        TNLean.PEPS.regularReferenceBoundaryDensity}
+    \leanok
+    \uses{def:peps_regular_region_coordinates,
+        thm:peps_controlled_projector_cut_boundary_factor,
+        def:peps_fixed_boundary_factor_density}
+    Number the $n+1$ crossing bonds. The spanning-tree physical
+    coordinates identify the region rows with $(d,a)$, where $d\in G^n$
+    is the relative boundary label and $a$ consists of its reference label,
+    internal references, normalized vertex labels, and cycle residuals.
+    Pull back $\rho_{\phi_R}$ to the native half-edge physical rows, with
+    the fixed normalized ancillary vector $\phi_R$ of
+    Lemma~\ref{thm:peps_controlled_projector_cut_boundary_factor}.
+    Denote this density by $\rho_R^0$.
+\end{definition}
+
+\begin{lemma}[Spectrum of the fixed regular reference density]%
+    \label{thm:peps_regular_reference_boundary_density}
+    \lean{TNLean.PEPS.star_dotProduct_regularReferenceRegionAncilla,
+        TNLean.PEPS.regularReferenceBoundaryDensity_properties,
+        TNLean.PEPS.vonNeumannEntropy_regularReferenceBoundaryDensity,
+        TNLean.PEPS.renyiEntropy_regularReferenceBoundaryDensity}
+    \leanok
+    \uses{def:peps_regular_reference_boundary_density}
+    The density $\rho_R^0$ is positive, has trace one and rank $|G|^n$, and
+    satisfies $(\rho_R^0)^2=|G|^{-n}\rho_R^0$. Its von Neumann entropy and
+    every nonnegative finite-order R\'enyi entropy are $n\log|G|$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:peps_fixed_boundary_factor_density, thm:peps_flat_density_renyi_entropy}
+    Since the fixed ancillary vector has norm one, applying the fixed-factor density
+    identities and pulling them back through the coordinate bijection yields the result.
+\end{proof}
+
+\begin{lemma}[Common reduced density of canonical closure sums]%
+    \label{thm:peps_torus_controlled_boundary_density}
+    \lean{TNLean.PEPS.torusControlledCut_reducedMatrix_eq_trace_smul,
+        TNLean.PEPS.torusControlledCut_normalized_reducedMatrix,
+        TNLean.PEPS.torusControlledCut_normalized_renyiEntropy}
+    \leanok
+    \uses{thm:peps_torus_controlled_boundary_factor}
+    Retain the simple connectedness, fixed spanning trees, crossing
+    numbering, and fixed complementary winding loops of
+    Lemma~\ref{thm:peps_torus_controlled_boundary_factor}. For a finite
+    commuting closure family, let $C_\lambda$ be its coherent
+    canonical cut matrix, before the complementary controlled unitary.
+    Then the fixed density $\rho_R^0$, chosen before the sectors and
+    coefficients, satisfies
+    \begin{align}
+        C_\lambda C_\lambda^\dagger
+        =\operatorname{tr}(C_\lambda C_\lambda^\dagger)\rho_R^0.
+    \end{align}
+    If $C_\lambda\ne0$, its trace is positive and its normalized reduced
+    density equals $\rho_R^0$. Consequently its rank is $|G|^n$, its
+    nonzero spectrum is flat, and its von Neumann and all nonnegative
+    finite-order R\'enyi entropies are $n\log|G|$.
+
+    This is a canonical-cut consequence with given fixed complementary
+    winding loops. Their existence for the paper's arbitrary disk geometry
+    and transfer to the original site tensors remain separate steps;
+    see \cite{gap:rmp_peps_quantum_double_g_isometry}. It is not an
+    unrestricted formalization of \cite[Theorem~6.9]{Schuch2010PEPS}.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:peps_regular_reference_boundary_density}
+    The controlled cut is $K_{\phi_R,\chi_\lambda}$ in fixed physical
+    coordinates. Its reduced matrix is $\|\chi_\lambda\|^2\rho_R^0$.
+    Complementary unitarity gives the same reduced matrix before control.
+    Since $\operatorname{tr}\rho_R^0=1$, the scalar is precisely its trace.
+    Nonvanishing then permits normalization; the fixed spectrum gives all
+    stated entropies.
+\end{proof}
+
+\begin{lemma}[One complementary unitary from fixed winding data]%
+    \label{thm:peps_torus_complement_disentangling}
+    \lean{TNLean.PEPS.exists_unitary_torusComplementDisentangling_of_winding_eq}
+    \leanok
+    \uses{thm:peps_torus_complement_cycle_words, thm:peps_cycle_controlled_boundary}
+    Choose the two rooted trees, reference crossing bond, and fixed
+    complementary root loops with matching winding from
+    Lemma~\ref{thm:peps_torus_complement_cycle_words}. There exists one
+    unitary $U$ on the original complementary half-edge physical space,
+    chosen independently of the commuting closure labels $g,h$.
+    Write $S=R^c$, let $B_S^{g,h}$ be the canonical complementary
+    block, and let $F_R^{g,h},F_S^{g,h}$ be the boundary maps.
+    Reread each crossing label on $S$ under the same native edge, and put
+    $m_f^{g,h}=(F_S^{g,h}\circ(F_R^{g,h})^{-1})(\mathbf 1)_f$.
+    For every commuting pair and every complementary physical coordinate
+    $(y,a,r,z)$, the coefficient formula is
+    \begin{align}
+         & (U B_S^{g,h})\bigl(\alpha(y,a,r,z),
+        (F_R^{g,h})^{-1}\theta\bigr)           \\
+         & \qquad=|G|^{-|S|}\sum_{x\in G}
+        \mathbf 1_{\{y_f=xm_{f_0}^{g,h}\theta_f\ \text{for every }f\}}
+        \mathbf 1_{\{z=x\omega_S^{g,h}x^{-1}\}}.
+        \label{eq:peps_complement_disentangled_coefficient}
+    \end{align}
+    Thus the relative crossing multipliers are removed by one common
+    complementary operation, while the reference multiplier and
+    cycle constraint remain explicit. This is an auxiliary form of the
+    disentangling calculation in
+    \cite[Theorem~6.9]{Schuch2010PEPS}, local source lines 1935--1990.
+    Lemma~\ref{thm:peps_torus_simply_connected_boundary_loops}
+    gives these winding loops from simple connectedness.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:peps_cycle_controlled_relative_walks}
+    At cycle coordinates $z$, translating the boundary coordinate $y_f$
+    by the inverse of the evaluation of the fixed complementary word
+    associated with $f$ while leaving the other coordinates unchanged
+    defines a permutation of the original half-edge physical basis, and hence
+    a unitary independent of $g,h$. Matching winding derives the
+    relative word identity for each commuting closure pair. Applying
+    the exact controlled coefficient formula then cancels the relative
+    multipliers, retaining the reference and cycle factors of
+    (\ref{eq:peps_complement_disentangled_coefficient}).
+\end{proof}
+
+\begin{lemma}[Local invariant support of walk-controlled operations]%
+    \label{thm:peps_cycle_controlled_local_support}
+    \lean{TNLean.PEPS.regularRegionCoordinatesEquiv_symm_coordinateTranslation,
+        TNLean.PEPS.regularRegionCoordinateTranslation,
+        TNLean.PEPS.regularCycleControlledBoundary_coordinateTranslation,
+        TNLean.PEPS.regularRegionVertexTranslationMatrix,
+        TNLean.PEPS.regularCycleControlledBoundaryMatrix_commute_vertexTranslation,
+        TNLean.PEPS.regularRegionVertexTranslationMatrix_apply,
+        TNLean.PEPS.regionPhysicalProductMatrix_regularLegProjector_eq_sum_vertexTranslation,
+        TNLean.PEPS.regularCycleControlledBoundaryMatrix_commute_localProjector,
+        TNLean.PEPS.regularCycleControlledBoundaryMatrix_maps_localProjector_range,
+        TNLean.PEPS.exists_unitary_regionPhysicalProductMatrix_mul_cycleWords}
+    \leanok
+    \uses{def:peps_regular_region_coordinates, thm:peps_regular_region_cycle_holonomy, thm:peps_cycle_controlled_boundary, thm:peps_region_physical_maps}
+    Fix a rooted spanning tree in a finite region. Independent vertex
+    translations $\lambda_v$ of its physical half-edge labels
+    transform the spanning-tree coordinates by
+    \begin{align}
+        (y,a,r,z) & \longmapsto
+        \bigl(\lambda_oy,\lambda_oa,
+        (\lambda_vr_v\lambda_o^{-1})_v,
+        \lambda_oz\lambda_o^{-1}\bigr).
+        \label{eq:peps_local_translation_coordinates}
+    \end{align}
+    Reconstructing these coordinates gives precisely the original
+    half-edge labels multiplied on the left by $\lambda_v$ at vertex $v$.
+    For a fixed family of region walks, let $U$ be the native
+    boundary permutation controlled by their constructed cycle words.
+    This matrix commutes with every independent vertex translation.
+    Their finite average is the product local invariant projector
+    \begin{align}
+        P & =\bigotimes_{v\in R}P_v
+        =|G|^{-|R|}\sum_{\lambda\in G^R}L_\lambda,
+          & UP                      & =PU.
+        \label{eq:peps_controlled_local_projector}
+    \end{align}
+    In particular $U$ maps the local invariant support
+    $\operatorname{range}P$ into itself.
+
+    If the original local physical maps $A_v$ are regular $G$-isometric,
+    there exists a unitary $W$ on their physical region such that
+    \begin{align}
+        W\Bigl(\bigotimes_{v\in R}A_v\Bigr)
+         & =\Bigl(\bigotimes_{v\in R}A_v\Bigr)U.
+    \end{align}
+    The fixed words and their physical implementation are chosen without
+    closure labels. No equivariance premise on an arbitrary control
+    function or surjectivity of the canonical projector is required.
+    These are auxiliary physical support identities for the accessible
+    complement calculation in \cite[\S6.2--6.3]{Schuch2010PEPS},
+    local source lines 1765--1920 and 1935--1990.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:peps_regular_physical_unitary_transport}
+    Applying the native reconstruction formulas at the two internal endpoints
+    and the region endpoint of each crossing edge causes the vertex coordinate
+    in (\ref{eq:peps_local_translation_coordinates}) to cancel its root inverse against the transformed reference
+    or boundary label, giving the independent physical translation.
+    Simultaneous conjugation conjugates evaluation of every walk
+    word, so the controlled boundary translation commutes with this action.
+    Taking the product of the local finite averages identifies their
+    independent choices with $\lambda\in G^R$, yielding the product
+    projector and commutation (\ref{eq:peps_controlled_local_projector}). This also proves range preservation.
+    The supported physical unitary implementation theorem then gives $W$ on the
+    original region, including any unused physical directions.
+\end{proof}
+
+\begin{lemma}[Physical transfer of the canonical cut]%
+    \label{thm:peps_regular_physical_cut_transfer}
+    \lean{TNLean.PEPS.regionPhysicalProductMatrix_mul_regularProjectorTwistedRegionMatrix,
+        TNLean.PEPS.regularProjectorTwistedCutMatrix,
+        TNLean.PEPS.regionPhysicalProductMatrix_mul_regularProjectorTwistedCutMatrix,
+        TNLean.PEPS.regularProjectorTwistedCutMatrix_mul_regionPhysicalProductMatrix_transpose,
+        TNLean.PEPS.regularPhysicalCutMatrix_eq_physicalImage_regularProjectorTwistedCutMatrix,
+        TNLean.PEPS.exists_positive_regularPhysicalCut_density_transfer}
+    \leanok
+    \uses{thm:peps_region_physical_maps}
+    For arbitrary bond operators $u$, contract the two canonical
+    projector regions over their common crossing labels:
+    \begin{align}
+        C_u(\alpha,\beta)
+         & =\sum_\theta B_R^u(\alpha,\theta)
+        B_{R^c}^u(\beta,\theta).
+    \end{align}
+    Here the complement reads the same crossing edge under its native
+    boundary identification. Write $P_R=\bigotimes_{v\in R}P_v$ and
+    $T_R=\bigotimes_{v\in R}A_v$ for the original local projector and
+    physical maps. The physical coefficient matrix $M_u$ satisfies
+    \begin{align}
+        P_R C_u & =C_u,                        & C_uP_{R^c}^{\mathsf T} & =C_u, &
+        M_u     & =T_R C_uT_{R^c}^{\mathsf T}.
+    \end{align}
+    If the local maps are regular $G$-isometric, choose their derived
+    positive product Gram factors $c_R,c_{R^c}$. For every finite coherent
+    sum $C=\sum_i\mu_iC_{u_i}$ and $M=\sum_i\mu_iM_{u_i}$, put
+    $\tau_C=CC^\dagger$ and $\tau_M=MM^\dagger$. Then
+    \begin{align}
+        \tau_M & =c_{R^c}T_R\tau_CT_R^\dagger,       &
+        \operatorname{tr}\tau_M
+               & =c_Rc_{R^c}\operatorname{tr}\tau_C,   \\
+        (\operatorname{tr}\tau_M)^{-1}\tau_M
+               & =c_R^{-1}T_R
+        \bigl((\operatorname{tr}\tau_C)^{-1}\tau_C\bigr)T_R^\dagger.
+    \end{align}
+    The inverse is read as zero when its argument is zero. For a nonzero
+    state, the last identity is the transfer of normalized reduced density.
+    This is an auxiliary physical accessibility calculation for
+    \cite[Theorem~6.9]{Schuch2010PEPS}, local source lines 1765--1820 and
+    1935--1990; no exterior routing or canonical factorization is assumed.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:peps_regular_physical_unitary_transport, thm:peps_regular_twisted_region_accessibility}
+    Expanding the half-edge contraction and summing the physical row
+    against the product local projector replaces each site factor
+    $P_v$ by $P_v^2=P_v$. The two reverse accessibility identities give
+    $M_u=T_RC_uT_{R^c}^{\mathsf T}$ directly. These equalities persist
+    under finite coherent sums. Inserting
+    $T_{R^c}^\dagger T_{R^c}=c_{R^c}P_{R^c}$ gives the reduced matrix;
+    cyclicity of trace and $P_RC=C$ give its trace. Cancelling the
+    positive product factors gives the normalized identity.
+\end{proof}
+
+\begin{lemma}[Spectrum under a supported physical map]%
+    \label{thm:peps_supported_physical_density}
+    \lean{TNLean.PEPS.normalizedPhysicalImageDensity_properties,
+        TNLean.PEPS.normalizedPhysicalImageDensity,
+        TNLean.PEPS.vonNeumannEntropy_normalizedPhysicalImageDensity}
+    \leanok
+    \uses{thm:peps_regular_physical_cut_transfer}
+    Let $\rho\geq0$ have trace one, and suppose a rectangular physical map
+    $T$ and a positive scalar $c$ satisfy $T^\dagger T\rho=c\rho$.
+    Define $\widehat\rho=c^{-1}T\rho T^\dagger$. Then
+    $\widehat\rho\geq0$, $\operatorname{tr}\widehat\rho=1$, and
+    $\operatorname{rank}\widehat\rho=\operatorname{rank}\rho$.
+    If $\rho^2=r^{-1}\rho$, then
+    \begin{align}
+        \widehat\rho^2  & =r^{-1}\widehat\rho, &
+        S(\widehat\rho) & =\log r.
+    \end{align}
+    This auxiliary finite-dimensional calculation expresses physical
+    accessibility on the invariant support in
+    \cite[Theorem~6.9]{Schuch2010PEPS}, local source lines 1765--1820 and
+    2043--2072. It makes no assertion that $T$ is surjective.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:peps_flat_density_entropy}
+    Hermitian conjugation gives $\rho T^\dagger T=c\rho$.
+    Positivity follows by conjugation and positive scaling; cyclicity of
+    trace gives trace one. In addition,
+    \begin{align}
+        T^\dagger\widehat\rho T & =c\rho.
+    \end{align}
+    Applying the rank inequality to each physical image yields equality
+    of ranks. Inserting $T^\dagger T$ between the two densities proves
+    the flat-spectrum identity, which gives the stated entropy.
+\end{proof}
+
+\begin{lemma}[Common reduced density for original torus closures]%
+    \label{thm:peps_torus_physical_cut_density}
+    \lean{TNLean.PEPS.IsGIsometric.exists_torusPhysicalCut_density_transfer,
+        TNLean.PEPS.IsGIsometric.exists_torusPhysicalCut_common_density_of_isSimplyConnected_and_winding}
+    \leanok
+    \uses{thm:peps_regular_physical_cut_transfer, thm:peps_supported_physical_density}
+    Work on a native torus with both dimensions at least three, with an
+    original regular $G$-isometric site map. Assume that the
+    closed-cell realization of $R$ is simply connected. Choose rooted
+    spanning trees on $R$ and its complement, a nonempty enumeration
+    of the $b$ crossing bonds, and fixed complement-root loops whose
+    winding equals the corresponding two-tree boundary routes.
+    There exists one density $\rho_R$ on the original physical region,
+    chosen before the closure pairs and their coherent coefficients.
+    For every finite family of commuting pairs $(g_i,h_i)$ and every
+    nonzero coherent closure superposition with cut matrix $M$,
+    \begin{align}
+        \frac{MM^\dagger}{\operatorname{tr}(MM^\dagger)} & =\rho_R,             &
+        \rho_R                                           & \geq0,               & \operatorname{tr}\rho_R & =1, \\
+        \operatorname{rank}\rho_R                        & =|G|^{b-1},          &
+        \rho_R^2                                         & =|G|^{-(b-1)}\rho_R, &
+        S(\rho_R)                                        & =(b-1)\log|G|.
+    \end{align}
+    For every nonnegative finite Rényi order $\alpha$, including order
+    zero and the von Neumann value at order one,
+    $S_\alpha(\rho_R)=(b-1)\log|G|$.
+    More generally, the density of every coherent twisted cut
+    is the supported physical image of its canonical density, with
+    one positive normalization independent of the closure labels.
+    The first conclusion requires no surjectivity of the original
+    physical map, assumed block Gram, or tensor factorization.
+    This is an auxiliary form of \cite[Theorem~6.9]{Schuch2010PEPS},
+    local source lines 1935--1990 and 2027--2072. The fixed exterior
+    winding loops are explicit hypotheses here;
+    Lemma~\ref{thm:peps_torus_simply_connected_physical_density}
+    derives them from the contiguous simply connected region.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:peps_torus_controlled_boundary_density, thm:peps_flat_density_renyi_entropy}
+    Deriving the incident-coordinate local isometries from the original
+    four-leg isometry gives a physical product map with positive scalar
+    Gram $T_R^\dagger T_R=c_RP_R$. The cut image shows that a
+    nonzero original coherent cut has a nonzero canonical coherent cut.
+    Its fixed normalized density $\rho_R^0$ is supported on $P_R$, so
+    the physical density is the fixed matrix
+    \begin{align}
+        \rho_R & =c_R^{-1}T_R\rho_R^0T_R^\dagger.
+    \end{align}
+    The supported physical density theorem transfers positivity, trace,
+    rank, and the flat spectrum. The spectral entropy calculation gives
+    the stated boundary term at all nonnegative finite Rényi orders.
+    Every physical map and normalization was
+    chosen from the original site tensor before the coherent coefficients.
+\end{proof}
