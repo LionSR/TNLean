@@ -16,6 +16,8 @@ Source: GNVW, arXiv:0910.3675v2, ordered finite local coordinates in
 lines 1251--1278; Cirac et al., arXiv:1703.09188, lines 2292--2300.
 -/
 
+open scoped Kronecker
+
 namespace SpinChain
 
 variable {d : ℕ} [NeZero d] {Λ Γ : Finset ℤ}
@@ -64,6 +66,21 @@ theorem bipartiteMatrixToQuasiLocalObservable_rightKroneckerEmbed
     ((bipartiteLocalAlgebraEquiv h).symm (Matrix.rightKroneckerEmbed A)) = _
   rw [← hi, StarAlgEquiv.symm_apply_apply, quasiLocalObservable_localInclusion]
   rfl
+
+/-- A product of the two finite-region observables is the observable
+of their Kronecker product in the existing ordered bipartite coordinates.
+Source: the local tensor-product convention in GNVW, arXiv:0910.3675v2,
+lines 1251--1278, and CPSV17, Appendix lines 2292--2300. -/
+theorem bipartiteMatrixToQuasiLocalObservable_kronecker
+    (h : Disjoint Λ Γ) (A : Matrix (Config d Λ) (Config d Λ) ℂ)
+    (B : Matrix (Config d Γ) (Config d Γ) ℂ) :
+    bipartiteMatrixToQuasiLocalObservable h (A ⊗ₖ B) =
+      matrixToQuasiLocalObservable d Λ A * matrixToQuasiLocalObservable d Γ B := by
+  have hprod : A ⊗ₖ B = Matrix.leftKroneckerEmbed A * Matrix.rightKroneckerEmbed B := by
+    simp only [Matrix.leftKroneckerEmbed_apply, Matrix.rightKroneckerEmbed_apply,
+      ← Matrix.mul_kronecker_mul, Matrix.mul_one, Matrix.one_mul]
+  rw [hprod, map_mul, bipartiteMatrixToQuasiLocalObservable_leftKroneckerEmbed,
+    bipartiteMatrixToQuasiLocalObservable_rightKroneckerEmbed]
 
 /-- The full left tensor factor has exactly the first region's observable
 range after canonical embedding; GNVW, arXiv:0910.3675v2, shift example,

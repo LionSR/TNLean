@@ -24,13 +24,16 @@ import TNLean.QCA.CommutingStarSubalgebraKronecker
 import TNLean.QCA.CompatibleLocalAutomorphism
 import TNLean.QCA.CompatibleLocalState
 import TNLean.QCA.ConsecutivePairCoordinates
+import TNLean.QCA.ConsecutivePairObservables
 import TNLean.QCA.DisjointSupport
+import TNLean.QCA.FiniteInverseLocality
 import TNLean.QCA.FiniteLocalRestriction
 import TNLean.QCA.FinitePropagation
 import TNLean.QCA.FinitePureStateDecomposition
 import TNLean.QCA.GNVWIndex
 import TNLean.QCA.GNVWShift
 import TNLean.QCA.IntervalCoordinates
+import TNLean.QCA.IntervalTranslation
 import TNLean.QCA.InversePropagation
 import TNLean.QCA.IsQCA
 import TNLean.QCA.KroneckerSupportAlgebra
@@ -40,6 +43,7 @@ import TNLean.QCA.LocalNorm
 import TNLean.QCA.MargolusAlternatingLocalRule
 import TNLean.QCA.MargolusCoherentCoordinates
 import TNLean.QCA.MargolusConstantGates
+import TNLean.QCA.MargolusTensorLocalRule
 import TNLean.QCA.MargolusUnitaryGates
 import TNLean.QCA.NearestNeighborBlocking
 import TNLean.QCA.OverlappingSupportAlgebra
@@ -50,6 +54,7 @@ import TNLean.QCA.QuasiLocalInterval
 import TNLean.QCA.QuasiLocalTranslation
 import TNLean.QCA.RegionSumset
 import TNLean.QCA.RelativeCommutant
+import TNLean.QCA.SingletonGeneration
 import TNLean.QCA.SiteIndexedSupportAlgebra
 import TNLean.QCA.StateSpace
 import TNLean.QCA.SupportAlgebraCommutation

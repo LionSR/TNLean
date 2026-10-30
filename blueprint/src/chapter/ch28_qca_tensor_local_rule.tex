@@ -1,0 +1,107 @@
+\section{The standard-form tensor and the actual local rule}
+\label{sec:qca_tensor_local_rule}
+
+The same shifted unitary must occur on both neighbouring output pairs.
+The following identities put the four physical output coordinates of
+\cite[equation~\textup{StandardForm}, lines~603--622]{Cirac2017MPU}
+in the ordered pair coordinates of
+\cite[equations~\textup{locMarg}, \textup{bruleU}, \textup{bruleV},
+    lines~980--1008]{SchumacherWerner2004QCA}.
+
+\begin{lemma}[Products in disjoint bipartite coordinates]
+    \label{lem:qca_bipartite_kronecker_product}
+    \lean{SpinChain.bipartiteMatrixToQuasiLocalObservable_kronecker}
+    \notready
+    \uses{lem:qca_bipartite_observable_embedding}
+    Let $\Lambda$ and $\Gamma$ be disjoint finite regions. In the ordered
+    configuration coordinates of $\Lambda\cup\Gamma$, the observable of
+    $A\otimes B$ is the product of the observable of $A$ on $\Lambda$
+    and the observable of $B$ on $\Gamma$.
+\end{lemma}
+\begin{proof}
+    \notready
+    Factor $A\otimes B=(A\otimes 1)(1\otimes B)$ and use the two
+    canonical inclusions and preservation of multiplication.
+\end{proof}
+
+\begin{lemma}[Translation of an ordered physical pair]
+    \label{lem:qca_consecutive_pair_observable_translation}
+    \lean{SpinChain.quasiLocalTranslation_consecutivePair}
+    \notready
+    \uses{def:qca_consecutive_pair_coordinates}
+    A matrix $A$ on the ordered pair $(a,a+1)$ is carried by translation
+    through $t\in\mathbb Z$ to the same matrix on
+    $(a+t,a+t+1)$. This includes negative $a$ and $t$.
+\end{lemma}
+\begin{proof}
+    \notready
+    Translate the two site coordinates and use the canonical inclusion
+    along the equality of their finite regions.
+\end{proof}
+
+\begin{lemma}[Matrix-unit expansion of the four-site output]
+    \label{lem:mpu_two_link_output_matrix_units}
+    \lean{MPOTensor.twoLinkOutputObservable_eq_sum_kronecker}
+    \notready
+    \uses{def:mpu_two_site_open_three_block}
+    Put $K=uAu^\dagger$, with its indices ordered as $(\ell,r)$.
+    The four-site output matrix of the supplied standard form is
+    \begin{align}
+        \sum_{i,j}K_{ij}
+        \bigl[v(1_r\otimes E_{i_1j_1})v^\dagger\bigr]
+        \otimes
+        \bigl[v(E_{i_2j_2}\otimes 1_\ell)v^\dagger\bigr].
+    \end{align}
+    Both shifted gates have intermediate order $(r,\ell)$. This identity
+    uses no unitarity hypothesis.
+\end{lemma}
+\begin{proof}
+    \notready
+    Expand $K$ in matrix units inside $1_r\otimes K\otimes 1_\ell$,
+    and distribute conjugation by $v\otimes v$ across the finite sum.
+\end{proof}
+
+\begin{lemma}[The tensor output equals the fixed local rule]
+    \label{lem:qca_tensor_output_fixed_local_rule}
+    \lean{SpinChain.PropagatesWithin.twoLinkOutputObservable_eq_constantMargolusGateRule}
+    \notready
+    \uses{lem:qca_bipartite_kronecker_product,
+        lem:qca_consecutive_pair_observable_translation,
+        lem:mpu_two_link_output_matrix_units,lem:qca_fixed_margolus_gates}
+    Embed the four-site output in the ordered pairs $(-1,0)$ and $(1,2)$.
+    Its observable is exactly the fixed Margolus expression for $K=uAu^\dagger$:
+    the first shifted gate acts on $(-1,0)$ and the second on $(1,2)$.
+\end{lemma}
+\begin{proof}
+    \notready
+    Apply the preceding product and translation identities to every
+    summand of the matrix-unit expansion.
+\end{proof}
+
+\begin{lemma}[A constructed tensor for the actual translated local rule]
+    \label{lem:qca_constructed_tensor_actual_local_rule}
+    \lean{SpinChain.PropagatesWithin.exists_standardFormTensor_actual_margolus_rule}
+    \notready
+    \uses{lem:qca_fixed_margolus_gates,def:mpu_tensor_from_two_gates,
+        lem:mpu_tensor_from_gates_periodic_circuit,lem:qca_tensor_output_fixed_local_rule}
+    Let $\omega$ be a translation-covariant automorphism with
+    nearest-neighbour propagation on the homogeneous chain. There are
+    unitary gates $u,v$ and a tensor $W$ on the ordered two-site alphabet,
+    of positive bond dimension $dr$, with the supplied standard form for
+    these gates. Its periodic operators are unitary at every positive
+    length. For every $t\in\mathbb Z$ and every physical pair matrix $A$,
+    \begin{align}
+        \omega\bigl(\tau_t(A_{\{0,1\}})\bigr)
+        =\tau_t\bigl(\iota_{\{-1,0\},\{1,2\}}
+        (\mathcal O_{u,v}(A))\bigr),
+    \end{align}
+    where $\mathcal O_{u,v}(A)$ is the four-site matrix above and $\iota$
+    uses the increasing physical coordinates of each pair. Identification
+    with the completed action on the twice-blocked chain is a further step.
+\end{lemma}
+\begin{proof}
+    \notready
+    Use the fixed gates derived from the support algebras. Construct the
+    tensor and its supplied standard form from those gates, then apply
+    the preceding local-rule identity at every translate.
+\end{proof}
