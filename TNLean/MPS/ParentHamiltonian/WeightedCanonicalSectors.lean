@@ -133,7 +133,7 @@ theorem transferMap_sectorProjection (k : Fin h.r) :
     (congrArg Matrix.blockDiagonal' (funext fun j => ?_))
   by_cases hj : j = k
   · subst j
-    simp [Pi.smul_apply, Kraus.transferMap_apply, h.unital]
+    simp [Pi.smul_apply, h.unital]
   · simp [hj, Pi.smul_apply]
 
 /-- Each squared canonical weight occurs in the actual transfer spectrum.
