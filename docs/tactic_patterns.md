@@ -9955,6 +9955,7 @@ there is no need for a new tactic.
   same finite linear map is estimated under another matrix norm.
 - **Decision:** Keep one configuration equivalence and derive all rates from
   actual mixed maps; do not assume the overlap estimate being established.
+
 ### Canonical transfer replacement in the actual wall contraction — candidate (2026-10-29)
 
 - **Seen:** `MPS/ParentHamiltonian/UncleNormFactorization.lean`, two long transfer factors.
@@ -9963,10 +9964,11 @@ there is no need for a new tactic.
   positivity-preserving norm contractivity to the remaining factors.
 - **Reuse:** The primitive decay is stated once in `UnclePrimitiveTransfer`;
   existing finite-dimensional trace continuity bounds the scalar contraction.
-- **Notes:** The private unital-power contraction also appears in
-  `UnclePinnedTrialNorm.lean`. These are two proof occurrences across two
-  separately stacked branches; consolidate into a shared lemma before a third
-  proof copy, without duplicating a generic channel contractivity theory.
+- **Notes:** The unital-power contraction had three private proof copies, in
+  this file, `UnclePinnedTrialNorm.lean` and `UncleTrialOverlap.lean`. It is
+  promoted to `MPSTensor.norm_mapLM_pow_apply_le_of_mapLM_one` in
+  `UncleTrialTransferNorm.lean`, which iterates QICLean's
+  `IsKrausCP.norm_apply_le_of_map_one_eq_one`; all three consumers use it.
 
 ### Uniform periodic norm from transfer eigenvalues — reused trace bound (2026-10-29)
 
@@ -10013,6 +10015,7 @@ there is no need for a new tactic.
   needs this conversion, promote the rectangular matrix fact in QICLean and
   consume its published dependency revision rather than duplicating a new
   channel-independent matrix API in TNLean.
+
 ### Adjacent physical cut Gram identities — promoted helpers (2026-10-29)
 
 - **Pattern:** reindex a physical configuration sum by restriction and the
@@ -10074,6 +10077,7 @@ there is no need for a new tactic.
   `mul_inv_cancel_left₀` give the identity directly from `pow_ne_zero`.
 - **Decision:** use the existing group-with-zero cancellation lemmas at all
   three sites rather than copying a power-distribution proof or adding a tactic.
+
 ### Adjacent-cut Gram recurrences — promoted shared physical identities (2026-10-29)
 
 - **Pattern:** use the physical prefix/suffix extension bijections to pass

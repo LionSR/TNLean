@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.ParentHamiltonian.UncleWallGram
 import QICLean.Algebra.MatrixTracePairing
 import QICLean.Channel.KrausCPTP
+import QICLean.Channel.Peripheral.UnitalKraus
 import Mathlib.Logic.Equiv.Fin.Basic
 
 /-!
@@ -234,5 +235,20 @@ theorem trace_uncleWallGram_rankOne_factorization
   rw [hmap, LinearMap.trace_smulRight]
   simp only [LinearMap.comp_apply, map_smul, uncleWallGramMap_one]
   rfl
+
+open scoped Matrix.Norms.L2Operator in
+/-- Every power of a unital transfer map contracts the matrix operator norm.
+The trial-norm, factorization and overlap estimates of arXiv:1210.6613,
+proof of Lemma lowenergystates, bound their pure transfer powers this way. -/
+theorem norm_mapLM_pow_apply_le_of_mapLM_one (A : MPSTensor d a)
+    (hA : Kraus.mapLM A 1 = 1) (n : ℕ) (X : Matrix (Fin a) (Fin a) ℂ) :
+    ‖((Kraus.mapLM A) ^ n) X‖ ≤ ‖X‖ := by
+  have hCP : IsKrausCP (Kraus.mapLM A) := Kraus.isCPMap_mapLM A
+  induction n with
+  | zero => simp
+  | succ n ih =>
+      rw [pow_succ']
+      change ‖Kraus.mapLM A (((Kraus.mapLM A) ^ n) X)‖ ≤ ‖X‖
+      exact (hCP.norm_apply_le_of_map_one_eq_one hA _).trans ih
 
 end MPSTensor

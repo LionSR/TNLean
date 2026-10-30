@@ -295,16 +295,6 @@ private theorem unital_transfer_norm_le (A : MPSTensor d a)
   have hCP : IsKrausCP (Kraus.mapLM A) := Kraus.isCPMap_mapLM A
   exact hCP.norm_apply_le_of_map_one_eq_one hA X
 
-private theorem unital_transfer_pow_norm_le (A : MPSTensor d a)
-    (hA : Kraus.mapLM A 1 = 1) (n : ℕ) (X : Matrix (Fin a) (Fin a) ℂ) :
-    ‖((Kraus.mapLM A) ^ n) X‖ ≤ ‖X‖ := by
-  induction n with
-  | zero => simp
-  | succ n ih =>
-    rw [pow_succ']
-    change ‖Kraus.mapLM A (((Kraus.mapLM A) ^ n) X)‖ ≤ ‖X‖
-    exact (unital_transfer_norm_le A hA _).trans ih
-
 /-- The actual wall mixed map against its left pure sector is uniformly
 linear in the interval length. Strict mixed damping supplies bounded powers;
 no overlap estimate is assumed. Source: arXiv:1210.6613,
@@ -443,7 +433,7 @@ theorem norm_inner_mpvState_left_uncleTwoWallTrialSource_le_geometric_mul
       _ ≤ ‖uncleWallMixedMap A B R A (N + 1)
           (((Kraus.mixedMapLM B A) ^ (2 * N - 1))
             (uncleWallMixedMap B A L A (N + 1) X))‖ :=
-        unital_transfer_pow_norm_le A hA (2 * N) _
+        norm_mapLM_pow_apply_le_of_mapLM_one A hA (2 * N) _
       _ ≤ CR * ((N + 1 : ℕ) : ℝ) * ‖((Kraus.mixedMapLM B A) ^ (2 * N - 1))
           (uncleWallMixedMap B A L A (N + 1) X)‖ := hR _ _
       _ ≤ CR * ((N + 1 : ℕ) : ℝ) * (K * r ^ (2 * N - 1) *
@@ -504,7 +494,7 @@ theorem norm_inner_mpvState_right_uncleTwoWallTrialSource_le_geometric_mul
           (norm_nonneg _) (by positivity)
       _ ≤ K * r ^ N * (CR * ((N + 1 : ℕ) : ℝ) * ‖uncleWallMixedMap B A L B (N + 1) X‖) :=
         mul_le_mul_of_nonneg_left (mul_le_mul_of_nonneg_left
-          (unital_transfer_pow_norm_le B hB (2 * N - 1) _) (by positivity)) (by positivity)
+          (norm_mapLM_pow_apply_le_of_mapLM_one B hB (2 * N - 1) _) (by positivity)) (by positivity)
       _ ≤ K * r ^ N * (CR * ((N + 1 : ℕ) : ℝ) * (CL * ((N + 1 : ℕ) : ℝ) * ‖X‖)) :=
         mul_le_mul_of_nonneg_left (mul_le_mul_of_nonneg_left (hL _ _) (by positivity))
           (by positivity)

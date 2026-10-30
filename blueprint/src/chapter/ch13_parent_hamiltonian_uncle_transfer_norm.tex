@@ -12,17 +12,17 @@ maps. This finite identity precedes the large-separation estimates in
     \notready
     \uses{def:uncle_wall_gram,def:uncle_two_wall_trial}
     For the actual one-wall word sums $W_R(w)$, set
-    \[
+    \begin{align}
         \mathcal G_R^{(n)}(X)=\sum_{|w|=n}W_R(w)XW_R(w)^*.
-    \]
+    \end{align}
     Thus $\mathcal G_R^{(n)}(I)=Y_n$. The analogous map
     $\mathcal G_L^{(n)}$ reverses the roles of $A$ and $B$.
     For the five segment lengths $p,r,q,s,t$, define
-    \[
+    \begin{align}
         \mathcal T_{p,r,q,s,t}=
         E_A^p\circ\mathcal G_R^{(r)}\circ E_B^q
         \circ\mathcal G_L^{(s)}\circ E_A^t.
-    \]
+    \end{align}
 \end{definition}
 
 \begin{lemma}[Exact finite norm contraction]
@@ -35,21 +35,21 @@ maps. This finite identity precedes the large-separation estimates in
     \uses{def:uncle_wall_gram_maps,def:uncle_two_wall_trial}
     For arbitrary tensors and rectangular walls, the actual five-segment
     trial satisfies
-    \[
+    \begin{align}
         \|\varphi_{p,r,q,s,t}\|^2=
         \operatorname{Re}\operatorname{Tr}\mathcal T_{p,r,q,s,t}.
-    \]
+    \end{align}
     Here $\operatorname{Tr}$ denotes the trace of an endomorphism of the
     matrix space. Cyclicity joins the two exterior segments:
     $\operatorname{Tr}\mathcal T_{p,r,q,s,t}
         =\operatorname{Tr}\mathcal T_{p+t,r,q,s,0}$.
     In particular, for the source trial on $6N+1$ sites and $N>0$,
-    \[
+    \begin{align}
         \|\varphi_N\|^2=
         \operatorname{Re}\operatorname{Tr}
         \bigl(E_A^{2N}\circ\mathcal G_R^{(N+1)}
         \circ E_B^{2N-1}\circ\mathcal G_L^{(N+1)}\bigr).
-    \]
+    \end{align}
     No unitality, injectivity, or limiting norm estimate is needed for
     these finite identities.
 \end{lemma}
@@ -71,11 +71,11 @@ maps. This finite identity precedes the large-separation estimates in
     Put $P_A(X)=\operatorname{tr}(\rho_AX)I_A$ and
     $P_B(X)=\operatorname{tr}(\rho_BX)I_B$. For arbitrary densities
     and wall lengths $r,s$, the finite identity
-    \[
+    \begin{align}
         \operatorname{Tr}(P_A\circ\mathcal G_R^{(r)}
         \circ P_B\circ\mathcal G_L^{(s)})=
         \eta_R(r)\eta_L(s)
-    \]
+    \end{align}
     holds. Here each weight uses its corresponding left density.
 \end{lemma}
 \begin{proof}

@@ -29,17 +29,6 @@ namespace MPSTensor
 
 variable {d a b : ℕ}
 
-private theorem uncleUnital_pow_norm_le (A : MPSTensor d a)
-    (hU : Kraus.mapLM A 1 = 1) (n : ℕ) (X : Matrix (Fin a) (Fin a) ℂ) :
-    ‖((Kraus.mapLM A) ^ n) X‖ ≤ ‖X‖ := by
-  have hCP : IsKrausCP (Kraus.mapLM A) := Kraus.isCPMap_mapLM A
-  induction n with
-  | zero => simp
-  | succ n ih =>
-      rw [pow_succ']
-      change ‖Kraus.mapLM A (((Kraus.mapLM A) ^ n) X)‖ ≤ ‖X‖
-      exact (hCP.norm_apply_le_of_map_one_eq_one hU _).trans ih
-
 /-- Replacing the actual separated transfer powers by their canonical
 contractions gives an error bounded by a quadratic length factor times a
 geometric sequence. The leading term is the product of the two actual
@@ -104,7 +93,7 @@ theorem uncleTwoWallTransfer_factorization_bound [NeZero a] [NeZero b]
       calc
         ‖Z‖ ≤ cR * m * ‖((Kraus.mapLM B) ^ (2 * N - 1)) Y‖ := hGR (N + 1) _
         _ ≤ cR * m * ‖Y‖ := mul_le_mul_of_nonneg_left
-          (uncleUnital_pow_norm_le B hUB _ _) (by positivity)
+          (norm_mapLM_pow_apply_le_of_mapLM_one B hUB _ _) (by positivity)
         _ ≤ cR * m * (cL * m * ‖X‖) := mul_le_mul_of_nonneg_left hY (by positivity)
     have hrateA : rA ^ (2 * N) ≤ z ^ N :=
       (pow_le_pow_left₀ hrA.le (show rA ≤ z from le_max_left _ _) (2 * N)).trans

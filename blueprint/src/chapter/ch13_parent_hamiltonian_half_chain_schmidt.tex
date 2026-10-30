@@ -710,12 +710,12 @@ conjugate-transposed tensor.
     Read a ring vector $\psi$ on $2L$ sites as its coefficient matrix
     $K_\psi(\sigma,\tau)=\psi(\sigma\tau)$, and write
     $R_\psi=K_\psi K_\psi^\dagger$. Then
-    \[
+    \begin{align}
         \|K_\psi\|\le\|\psi\|,
         \qquad
         \|R_\psi-R_\phi\|
         \le(\|\psi\|+\|\phi\|)\|\psi-\phi\|.
-    \]
+    \end{align}
     Neither bound depends on the physical half-chain dimension.
 \end{lemma}
 \begin{proof}
@@ -749,10 +749,10 @@ conjugate-transposed tensor.
         MPSTensor.tendsto_normalizedMPVState_sub_of_mpvState_sub}
     \notready
     For two actual periodic vectors $\psi,\phi$ at the same length,
-    \[
+    \begin{align}
         \|\widehat\psi-\widehat\phi\|
         \le2\|\psi-\phi\|+2\bigl|\|\phi\|-1\bigr|.
-    \]
+    \end{align}
     Thus a vanishing physical difference and a norm-one limit of the
     second vector give a vanishing normalized difference, also along
     any subsequence of lengths.
@@ -773,10 +773,10 @@ conjugate-transposed tensor.
     For any two tensors of the same physical dimension and possibly
     different bond dimensions, their decreasing normalized half-chain
     spectra, extended by zeroes, satisfy
-    \[
+    \begin{align}
         |\lambda_i(A,L)-\lambda_i(B,L)|
         \le2\|\widehat\psi_{2L}(A)-\widehat\psi_{2L}(B)\|.
-    \]
+    \end{align}
     A vanishing normalized physical difference therefore transfers
     every ordered eigenvalue limit, despite the growing physical
     half-chain dimension.

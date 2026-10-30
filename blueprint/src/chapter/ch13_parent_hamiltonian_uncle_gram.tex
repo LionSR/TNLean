@@ -17,10 +17,10 @@ but require neither an asymptotic norm bound nor perturbation injectivity.
     \uses{def:uncle_two_wall_trial}
     Let $W_R(w)$ be the sum with one wall in the word $w$, with $A$ to
     its left and $B$ to its right. Define
-    \[
+    \begin{align}
         Z_n=\sum_{|w|=n}W_R(w)B(w)^*,\qquad
         Y_n=\sum_{|w|=n}W_R(w)W_R(w)^*.
-    \]
+    \end{align}
     Write $F(X)=\sum_i A_iXB_i^*$,
     $C=\sum_i R_iB_i^*$, $G=\sum_iR_iR_i^*$, and
     $J(X)=\sum_i A_iXR_i^*$. For a left density $\rho$, put
@@ -38,15 +38,15 @@ but require neither an asymptotic norm bound nor perturbation injectivity.
     \notready
     \uses{def:uncle_wall_gram}
     Suppose $\sum_iB_iB_i^*=I$. Then $Z_0=Y_0=0$ and
-    \[
+    \begin{align}
         Z_{n+1}=F(Z_n)+C,\qquad
         Y_{n+1}=E_A(Y_n)+J(Z_n)+J(Z_n)^*+G.
-    \]
+    \end{align}
     In particular, $Z_n=\sum_{k=0}^{n-1}F^k(C)$ and $Y_n$ is positive
     semidefinite. If $\rho$ is Hermitian and $E_A^*(\rho)=\rho$, then
-    \[
+    \begin{align}
         \eta_{n+1}=\eta_n+c_0+\ell(Z_n)+\overline{\ell(Z_n)}.
-    \]
+    \end{align}
     If $\rho$ is positive semidefinite, every $\eta_n$ is nonnegative.
 \end{lemma}
 \begin{proof}
@@ -63,11 +63,11 @@ but require neither an asymptotic norm bound nor perturbation injectivity.
     \notready
     \uses{lem:uncle_wall_gram_recurrence}
     Under the same unital and Hermitian stationary normalizations,
-    \[
+    \begin{align}
         \eta_{n+1}=(n+1)c_0+
         \sum_{k=0}^{n-1}(n-k)
         \bigl(\ell(F^k(C))+\overline{\ell(F^k(C))}\bigr).
-    \]
+    \end{align}
     The sum is empty at $n=0$. At $n=1$ the expression is
     $2c_0+2\operatorname{Re}\ell(C)$.
 \end{lemma}
@@ -94,14 +94,14 @@ supply the required positive quadratic growth.
     \uses{thm:uncle_wall_gram_finite_sum}
     Suppose also that the mixed transfer operator $F$ has spectral radius
     strictly below one. Then the actual mixed series
-    \[
+    \begin{align}
         Z_\infty=\sum_{k=0}^{\infty}F^k(C)
-    \]
+    \end{align}
     converges, $Z_n\to Z_\infty$, and
-    \[
+    \begin{align}
         \frac{\eta_n}{n}\longrightarrow
         \kappa_R:=c_0+\ell(Z_\infty)+\overline{\ell(Z_\infty)}.
-    \]
+    \end{align}
     Strict positivity of $\kappa_R$ is not part of this assertion.
 \end{lemma}
 \begin{proof}
@@ -126,9 +126,9 @@ supply the required positive quadratic growth.
     For a positive semidefinite stationary density, the limiting wall
     slope is nonnegative. If $C=0$, $R\ne0$, and $\rho$ is positive
     definite, then
-    \[
+    \begin{align}
         \kappa_R=c_0=\operatorname{tr}\!\left(\rho\sum_iR_iR_i^*\right)>0.
-    \]
+    \end{align}
     When the physical dimension $d$ exceeds $b^2$ and both bond dimensions
     are positive, there exists such a nonzero wall with $C=0$. The
     dimension condition follows, in particular, from the full
@@ -182,18 +182,18 @@ almost-everywhere statement.
     The convergent mixed correlation series is complex linear in $R$.
     For two walls $R,S$, its actual slope is the diagonal of the real
     bilinear form
-    \[
+    \begin{align}
         \operatorname{Re}\operatorname{tr}\!\left(\rho\sum_iR_iS_i^*\right)
         +2\operatorname{Re}\operatorname{tr}\!\left(\rho\sum_iA_iZ_\infty(R)S_i^*\right).
-    \]
+    \end{align}
     Nonnegativity follows from the actual normalized Gram limit, and the
     preceding explicit witness proves that this form is not identically
     zero. For any nonnegative real quadratic form $Q$, if $Q(x)=0$ and
     $p$ is the polar pairing of $x$ with $y$, choosing
     $t=-p/(Q(y)+1)$ gives
-    \[
+    \begin{align}
         Q(x+ty)=-\frac{p^2}{(Q(y)+1)^2}.
-    \]
+    \end{align}
     Hence $p=0$, and the zero set is the radical. It is a proper closed
     subspace with empty interior and zero additive Haar measure.
 \end{proof}
@@ -241,18 +241,18 @@ to the norm of the actual two-wall trial remains a further step.
     strict mixed-transfer damping, there is $C>0$ such that
     $|\eta_n|\le Cn$ for every $n\ge0$. If the density is positive
     definite, there is also $K>0$ such that
-    \[
+    \begin{align}
         \operatorname{Re}\operatorname{tr}(Y_n)\le K\eta_n.
-    \]
+    \end{align}
     Consequently both the unweighted Gram trace and the Euclidean operator
     norm of $Y_n$ are bounded by a constant times $n$ for every $n\ge0$.
     The actual rectangular Gram map
     $G_n(X)=\sum_{|w|=n}W_R(w)XW_R(w)^*$ satisfies
-    \[
+    \begin{align}
         \lVert G_n(X)\rVert\le
         \operatorname{Re}\operatorname{tr}(Y_n)\,\lVert X\rVert
         \le Cn\lVert X\rVert.
-    \]
+    \end{align}
 \end{lemma}
 \begin{proof}
     Convergence of $\eta_n/n$ bounds the tail; increasing the constant
