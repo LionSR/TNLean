@@ -38,6 +38,7 @@ import TNLean.MPS.MPU.CanonicalForm
 import TNLean.MPS.MPU.CanonicalFormBlocking
 import TNLean.MPS.MPU.CanonicalFormGauge
 import TNLean.MPS.MPU.CanonicalFormOfCanonicalFormII
+import TNLean.MPS.MPU.CanonicalQuasiLocalAction
 import TNLean.MPS.MPU.ColumnCoordinateTransport
 import TNLean.MPS.MPU.CompatibleBondDilationCircuit
 import TNLean.MPS.MPU.CompositionFlattening
@@ -64,6 +65,7 @@ import TNLean.MPS.MPU.Examples
 import TNLean.MPS.MPU.FactorFreeSandwich
 import TNLean.MPS.MPU.FinalCircuitRegisters
 import TNLean.MPS.MPU.FiniteAlphabetRows
+import TNLean.MPS.MPU.FiniteChainAdjoint
 import TNLean.MPS.MPU.FiniteChainConjugation
 import TNLean.MPS.MPU.FiniteGroupSourceRanks
 import TNLean.MPS.MPU.FundamentalTheorem
@@ -154,6 +156,7 @@ import TNLean.MPS.MPU.PrefixGramNormalizer
 import TNLean.MPS.MPU.PrefixGramReindex
 import TNLean.MPS.MPU.ProductBasisFactorization
 import TNLean.MPS.MPU.ProjectionPhaseIsometries
+import TNLean.MPS.MPU.QuasiLocalAction
 import TNLean.MPS.MPU.RectangularSourceRanks
 import TNLean.MPS.MPU.ReducedCanonicalRepresentative
 import TNLean.MPS.MPU.ReducedRepresentative
