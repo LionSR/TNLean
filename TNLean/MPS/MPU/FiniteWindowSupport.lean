@@ -36,8 +36,8 @@ private theorem intervalCoordinates_localInclusion_eq_chainWindowOperator
   have h := SpinChain.intervalCoordinates_localInclusion_apply d a n p s A row col
   by_cases hOutside : ∀ i : Fin ((p + n) + s),
       ¬ (p ≤ i.val ∧ i.val < p + n) → row i = col i
-  · simpa only [hOutside, ite_true, mul_one] using h
-  · simpa only [hOutside, ite_false, mul_zero] using h
+  · simpa only [eq_true hOutside, ite_true, mul_one] using h
+  · simpa only [eq_false hOutside, ite_false, mul_zero] using h
 
 /-- The actual buffered window matrix is the existing finite chain-window
 inclusion, with every exterior site carrying the identity.
@@ -109,10 +109,12 @@ theorem originalSiteHeisenbergInputWindow_eq_chainWindowOperator
     d (2 * k) (2 * k) (2 * k) (by omega) (2 * k : ℕ) B
   have hB : SpinChain.intervalCoordinates d (2 * k : ℕ) (2 * k) B = C :=
     StarAlgEquiv.apply_symm_apply _ C
-  rw [hB, sub_self, show (2 * k + 2 * k) + 2 * k = 3 * (2 * k) by omega] at hWindow
+  rw [hB] at hWindow
+  rw! (castMode := .all) [sub_self,
+    show (2 * k + 2 * k) + 2 * k = 3 * (2 * k) by omega] at hWindow
   have hSource := SpinChain.intervalCoordinates_centralInclusion_originalSiteHeisenbergInputWindow
     d k 0 A
-  simp only [zero_add] at hSource
+  rw! (castMode := .all) [zero_add] at hSource
   exact hSource.symm.trans hWindow
 
 /-- Every observable on the complete central `2k`-site interval has the

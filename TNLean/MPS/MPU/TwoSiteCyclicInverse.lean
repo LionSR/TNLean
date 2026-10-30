@@ -104,7 +104,7 @@ theorem finiteChainConjugation_symm_mem_range_ringNeighbourhood
     apply (Finset.mem_sdiff.mp hx).2
     apply Finset.mem_image.mpr
     refine ⟨ix, Set.mem_toFinset.mpr hix, ?_⟩
-    simp only [ix, Equiv.apply_symm_apply]
+    simp only [ix, E, Equiv.apply_symm_apply]
   have hCommute := QuantumCircuit.commute_of_mem_supportedOperators hDisjoint hB hF
   rw [commute_iff_eq]
   apply EquivLike.injective (intervalCoordinates d a N)
