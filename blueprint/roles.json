@@ -213,7 +213,8 @@
         "thm:spt_classification",
         "thm:has_string_order_of_symmetric_injective",
         "thm:pgwsvc08_physical_string_order",
-        "thm:virtual_rep_injective"
+        "thm:virtual_rep_injective",
+        "thm:spt_exact_ground_physical_class"
       ],
       "corollaries": [
         "cor:virtual_rep_cocycle"
@@ -222,7 +223,8 @@
         "thm:spt_classification": "Classification of SPT phases along symmetric parent-Hamiltonian paths by the cocycle class",
         "thm:has_string_order_of_symmetric_injective": "Virtual-boundary nondecay for injective symmetric tensors, named in the chapter title",
         "thm:pgwsvc08_physical_string_order": "Physical string-order criterion of Perez-Garcia et al. 2008, named in the chapter title",
-        "thm:virtual_rep_injective": "On-site symmetries of injective tensors induce projective virtual representations, the first result of the opening"
+        "thm:virtual_rep_injective": "On-site symmetries of injective tensors induce projective virtual representations, the first result of the opening",
+        "thm:spt_exact_ground_physical_class": "Physical-gap converse across changes of minimal MPS bond dimension, derived without a supplied transfer bound"
       }
     },
     "ch:examples": {
