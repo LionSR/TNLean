@@ -39,8 +39,8 @@ condition-C1 proof. No injectivity hypothesis is needed.
 Source: PGVWC07, MPSarchive.tex lines 921--931. -/
 theorem cutMatrix_mpv_eq_cutVector_mul (A : MPSTensor d D) (hk : k ≤ N) :
     cutMatrix (mpv A (N := N)) k =
-      (fun σ a ↦ leftCutVector A k a σ) *
-        (fun a τ ↦ rightCutVector A (N - k) a τ) := by
+      (fun σ a ↦ leftCutVector A k a σ : Matrix (Fin k → Fin d) (Fin D × Fin D) ℂ) *
+        (rightCutVector A (N - k) : Matrix (Fin D × Fin D) (Fin (N - k) → Fin d) ℂ) := by
   classical
   ext σ τ
   have heval := eval_cutConfig (fun _ : Fin N ↦ A) hk σ τ
@@ -65,7 +65,7 @@ Source: the independent right cut vectors in PGVWC07, lines 928--931. -/
 theorem exists_rightInverse_rightCutVector {A : MPSTensor d D} {m : ℕ}
     (hC1 : Kraus.IsNBlkInjective A m) :
     ∃ S : Matrix (Fin m → Fin d) (Fin D × Fin D) ℂ,
-      (fun a τ ↦ rightCutVector A m a τ) * S = 1 := by
+      (rightCutVector A m : Matrix (Fin D × Fin D) (Fin m → Fin d) ℂ) * S = 1 := by
   classical
   let G : Matrix (Fin D × Fin D) (Fin m → Fin d) ℂ := rightCutVector A m
   have hcols : LinearIndependent ℂ Gᵀ.col := linearIndependent_rightCutVector hC1
@@ -73,8 +73,8 @@ theorem exists_rightInverse_rightCutVector {A : MPSTensor d D} {m : ℕ}
   obtain ⟨T, hT⟩ := Gᵀ.mulVecLin.exists_leftInverse_of_injective
     (LinearMap.ker_eq_bot.mpr hinj)
   have hmatrix : LinearMap.toMatrix' T * Gᵀ = 1 := by
-    simpa only [LinearMap.toMatrix'_comp, LinearMap.toMatrix'_toLin',
-      LinearMap.toMatrix'_id] using congrArg LinearMap.toMatrix' hT
+    simpa only [LinearMap.toMatrix'_comp, ← Matrix.toLin'_apply',
+      LinearMap.toMatrix'_toLin', LinearMap.toMatrix'_id] using congrArg LinearMap.toMatrix' hT
   refine ⟨(LinearMap.toMatrix' T)ᵀ, ?_⟩
   simpa only [Matrix.transpose_mul, Matrix.transpose_transpose, Matrix.transpose_one]
     using congrArg Matrix.transpose hmatrix
@@ -133,10 +133,9 @@ theorem cutRank_mpv_eq_of_isNBlkInjective {A : MPSTensor d D} (hk : k ≤ N)
     (hleft : Kraus.IsNBlkInjective A k) (hright : Kraus.IsNBlkInjective A (N - k)) :
     cutRank (mpv A (N := N)) k = D * D := by
   classical
-  rw [cutRank, Matrix.rank_eq_finrank_span_cols, span_cutMatrix_mpv_cols_eq hk hright]
-  have hrank := (linearIndependent_leftCutVector hleft).rank_matrix
-  simpa only [Matrix.rank_eq_finrank_span_row, Fintype.card_prod, Fintype.card_fin]
-    using hrank
+  rw [cutRank, Matrix.rank_eq_finrank_span_cols, span_cutMatrix_mpv_cols_eq hk hright,
+    finrank_span_eq_card (linearIndependent_leftCutVector hleft)]
+  simp only [Fintype.card_prod, Fintype.card_fin]
 
 /-- A canonical tensor satisfying C1 at one length satisfies it at all
 longer lengths, including when its single canonical block has a positive
@@ -147,15 +146,15 @@ theorem isNBlkInjective_of_le_of_canonical [NeZero D] {A : MPSTensor d D}
     (hLm : L ≤ m) : Kraus.IsNBlkInjective A m := by
   classical
   obtain ⟨C⟩ := hA
-  obtain ⟨λ, hλ, _, hsum⟩ := C.exists_weight_sum_mul_conjTranspose_eq_of_isNBlkInjective hC1
-  have hλ0 : (λ : ℂ) ≠ 0 := by exact_mod_cast hλ.ne'
-  let B : MPSTensor d D := fun i ↦ (λ : ℂ)⁻¹ • A i
-  have hB : ∑ i, B i * (B i)ᴴ = 1 := sum_inv_smul_mul_conjTranspose_eq_one hλ hsum
+  obtain ⟨lam, hlam, _, hsum⟩ := C.exists_weight_sum_mul_conjTranspose_eq_of_isNBlkInjective hC1
+  have hlam0 : (lam : ℂ) ≠ 0 := by exact_mod_cast hlam.ne'
+  let B : MPSTensor d D := fun i ↦ (lam : ℂ)⁻¹ • A i
+  have hB : ∑ i, B i * (B i)ᴴ = 1 := sum_inv_smul_mul_conjTranspose_eq_one hlam hsum
   have hBL : Kraus.IsNBlkInjective B L :=
-    isNBlkInjective_smul _ (inv_ne_zero hλ0) hC1
+    isNBlkInjective_smul _ (inv_ne_zero hlam0) hC1
   have hBm := isNBlkInjective_of_le_of_unital hB hBL hLm
-  have hscaled := isNBlkInjective_smul (λ : ℂ) hλ0 hBm
-  simpa only [B, smul_smul, mul_inv_cancel₀ hλ0, one_smul] using hscaled
+  have hscaled := isNBlkInjective_smul (lam : ℂ) hlam0 hBm
+  simpa only [B, smul_smul, mul_inv_cancel₀ hlam0, one_smul] using hscaled
 
 /-- Every interior cut of a canonical C1 tensor has doubled virtual
 rank once both its physical sides reach the C1 length. This derives the

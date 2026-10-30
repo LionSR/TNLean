@@ -55,13 +55,13 @@ theorem exists_unitary_phase_of_same_state (s : QuadraticReconstructionSolution 
   obtain ⟨σ₀, hσ₀⟩ := hnonzero
   let : NeZero D := ⟨fun hD ↦ hσ₀ (by subst D; simp [mpv, coeff, Matrix.trace])⟩
   obtain ⟨C⟩ := hA
-  obtain ⟨λ, hλ, _, hsum⟩ := C.exists_weight_sum_mul_conjTranspose_eq_of_isNBlkInjective hC1
+  obtain ⟨lam, hlam, _, hsum⟩ := C.exists_weight_sum_mul_conjTranspose_eq_of_isNBlkInjective hC1
   have hcandidate : ∑ i, s.tensor i * (s.tensor i)ᴴ = ((1 : ℝ) : ℂ) ^ 2 • 1 := by
     simpa only [Complex.ofReal_one, one_pow, one_smul] using s.sum_mul_conjTranspose
-  obtain ⟨hλeq, U, ξ, hξ, hξN, hconj⟩ := pgvwc07_uniqueness_of_weighted
-    hλ (by norm_num : (0 : ℝ) < 1) hsum hcandidate hC1 hN hstate ⟨σ₀, hσ₀⟩
+  obtain ⟨hlameq, U, ξ, hξ, hξN, hconj⟩ := pgvwc07_uniqueness_of_weighted
+    hlam (by norm_num : (0 : ℝ) < 1) hsum hcandidate hC1 hN hstate ⟨σ₀, hσ₀⟩
   refine ⟨?_, U, ξ, hξ, hξN, hconj⟩
-  simpa only [hλeq, Complex.ofReal_one, one_pow, one_smul] using hsum
+  simpa only [hlameq, Complex.ofReal_one, one_pow, one_smul] using hsum
 
 /-- The corrected converse as the existing unit-modulus gauge-phase
 predicate, with the same explicit nonzero fixed-length state condition.

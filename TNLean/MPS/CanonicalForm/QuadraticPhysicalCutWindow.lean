@@ -100,25 +100,25 @@ theorem exists_quadraticSolution_physicalCutWindow [NeZero D] {A : MPSTensor d D
     omega
   obtain ⟨Y, Z, hlocal, hinverse⟩ := exists_physicalCutWindow_gauges hcut hleft hright C
   obtain ⟨K⟩ := hA
-  obtain ⟨λ, hλ, _, hsum⟩ := K.exists_weight_sum_mul_conjTranspose_eq_of_isNBlkInjective hC1
-  have hλ0 : (λ : ℂ) ≠ 0 := by exact_mod_cast hλ.ne'
-  have hratio (n : ℕ) : (λ : ℂ) ^ n * ((λ : ℂ)⁻¹) ^ (n + 1) = (λ : ℂ)⁻¹ := by
-    rw [pow_succ, inv_pow, mul_inv_cancel_left₀ (pow_ne_zero n hλ0)]
+  obtain ⟨lam, hlam, _, hsum⟩ := K.exists_weight_sum_mul_conjTranspose_eq_of_isNBlkInjective hC1
+  have hlam0 : (lam : ℂ) ≠ 0 := by exact_mod_cast hlam.ne'
+  have hratio (n : ℕ) : (lam : ℂ) ^ n * ((lam : ℂ)⁻¹) ^ (n + 1) = (lam : ℂ)⁻¹ := by
+    rw [pow_succ, inv_pow, mul_inv_cancel_left₀ (pow_ne_zero n hlam0)]
   refine ⟨{
-    leftGauge := fun j ↦ (λ : ℂ) ^ j.val • Y j
-    rightGauge := fun j ↦ ((λ : ℂ)⁻¹) ^ (j.val + 1) • Z j
-    tensor := fun i ↦ (λ : ℂ)⁻¹ • A i
+    leftGauge := fun j ↦ (lam : ℂ) ^ j.val • Y j
+    rightGauge := fun j ↦ ((lam : ℂ)⁻¹) ^ (j.val + 1) • Z j
+    tensor := fun i ↦ (lam : ℂ)⁻¹ • A i
     kronecker_eq := ?_
     leftGauge_mul_rightGauge := ?_
-    sum_mul_conjTranspose := sum_inv_smul_mul_conjTranspose_eq_one hλ hsum }⟩
+    sum_mul_conjTranspose := sum_inv_smul_mul_conjTranspose_eq_one hlam hsum }⟩
   · intro i j
     simp only [Matrix.smul_mul, Matrix.mul_smul, smul_smul]
     rw [hlocal, hratio, Matrix.smul_kronecker]
   · intro j hj
-    change (λ : ℂ) ^ (j.val + 1) • Y ⟨j.val + 1, hj⟩ *
-      (((λ : ℂ)⁻¹) ^ (j.val + 1) • Z j) = 1
+    change (lam : ℂ) ^ (j.val + 1) • Y ⟨j.val + 1, hj⟩ *
+      (((lam : ℂ)⁻¹) ^ (j.val + 1) • Z j) = 1
     simp only [Matrix.smul_mul, Matrix.mul_smul, smul_smul]
-    rw [hinverse j hj, ← mul_pow, mul_inv_cancel₀ hλ0, one_pow, one_smul]
+    rw [hinverse j hj, ← mul_pow, mul_inv_cancel₀ hlam0, one_pow, one_smul]
 
 /-- Reindexing any actual minimal physical cut-basis family gives the
 square bases of the reconstruction window. Their dimension equality is
