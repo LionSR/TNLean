@@ -126,3 +126,28 @@
     so their sum does also. Apply the periodic projector-kernel statement
     to this actual sum of embedded spaces.
 \end{proof}
+
+\begin{lemma}[Exact decomposition into physical sectors]
+    \label{lem:physical_sector_state_decomposition}
+    \lean{MPSTensor.physical_sum_state_decomposition}
+    \lean{MPSTensor.physical_sum_state_decomposition_of_projectorHamiltonian_eq_zero}
+    \notready
+    \uses{lem:two_physical_sector_projector_kernel}
+    Split an alphabet into $a$ and $b$ letters, and let $M\ge1$.
+    If a vector $\psi$ on $M$ sites has zero coefficient on every word
+    using both alphabets, then $\psi=E_M\psi_a+F_M\psi_b$, where $E_M$
+    and $F_M$ extend by zero from the two alphabets and $\psi_a,\psi_b$
+    are the actual coefficient restrictions of $\psi$.
+    In particular, this decomposition holds for every kernel vector of
+    the periodic complementary projector of two embedded local spaces
+    whenever $M\ge R\ge2$.
+\end{lemma}
+\begin{proof}
+    \notready
+    The two word images are disjoint because the chain is nonempty.
+    On the first image, extension recovers the first restriction and the
+    other extension is zero; the second image is analogous. A word in
+    neither image uses both alphabets, so its coefficient and both
+    extensions vanish. The projector-kernel statement supplies precisely
+    this mixed-coefficient vanishing.
+\end{proof}
