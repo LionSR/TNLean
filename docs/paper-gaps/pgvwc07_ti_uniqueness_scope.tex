@@ -21,7 +21,7 @@ Let $B=(B_i)_i$ and $C=(C_i)_i$ be two translation-invariant canonical
 $D$-dimensional MPS representations of the same state on a finite ring. This
 notation follows the uniqueness theorem of P\'erez-Garc\'ia, Verstraete, Wolf,
 and Cirac
-\cite[Theorem~\texttt{thm-uniq}, lines~1002--1015]{PerezGarcia2007MPSReps}.
+\cite[Theorem~\texttt{thm-uniq}, lines~1002--1015]{PerezGarcia2007Matrix}.
 
 For a translation-invariant tensor $A=(A_i)_i$ and a length $L$, define
 \begin{align}
@@ -39,7 +39,7 @@ Condition C1 in the source requires a finite length $L_0$ such that
     \label{eq:pgvwc07_ti_uniqueness_scope_finite_injectivity}
 \end{align}
 The source introduces this condition in lines~888--908 of
-Ref.~\cite{PerezGarcia2007MPSReps}.
+Ref.~\cite{PerezGarcia2007Matrix}.
 
 The uniqueness theorem assumes
 (\ref{eq:pgvwc07_ti_uniqueness_scope_finite_injectivity}), uniqueness of the
@@ -60,7 +60,7 @@ representations exactly:
 \end{align}
 When the Schmidt weights are nondegenerate, the source gives the usual
 permutation-and-phase interpretation
-\cite[Theorem~\texttt{thm-uniq}, lines~1002--1015]{PerezGarcia2007MPSReps}.
+\cite[Theorem~\texttt{thm-uniq}, lines~1002--1015]{PerezGarcia2007Matrix}.
 
 The exact conclusion
 (\ref{eq:pgvwc07_ti_uniqueness_scope_printed_unitary_intertwiner}) overlooks a
@@ -84,7 +84,7 @@ The counterexample and corrected reconstruction statement are recorded in
 \section{Formal boundary}
 
 The checked Chapter~9 block-separation lemmas do not formalize
-Theorem~\texttt{thm-uniq} of Ref.~\cite{PerezGarcia2007MPSReps}. They compare
+Theorem~\texttt{thm-uniq} of Ref.~\cite{PerezGarcia2007Matrix}. They compare
 block families that already share a block index set and block-dimension
 function. Their substantive hypotheses are blockwise injectivity of the first
 family and equality of the corresponding MPV families; the global and
@@ -102,7 +102,7 @@ assume that the representations have a common prepared block decomposition.
 Its proof instead uses
 uniqueness of the OBC canonical representation and the Horn--Johnson
 matrix-lemma route described after Theorem~\texttt{thm-uniq} in
-Ref.~\cite{PerezGarcia2007MPSReps}.
+Ref.~\cite{PerezGarcia2007Matrix}.
 
 The distinction is theorem-level. The same-structure results establish
 conditional consequences under stronger assumptions and must not be cited as
@@ -136,7 +136,7 @@ equality and therefore cannot replace the source theorem.
 The corrected theorem is now formalized. The declaration
 \leanid{MPSTensor.pgvwc07_uniqueness_of_canonical_form} takes two
 translation-invariant canonical representations $B$ and $C$ in the block
-form of Theorem~4 of Ref.~\cite{PerezGarcia2007MPSReps}, that is, weighted
+form of Theorem~4 of Ref.~\cite{PerezGarcia2007Matrix}, that is, weighted
 direct sums $\bigoplus_j\lambda_jA^j$ with $1\ge\lambda_j>0$ whose blocks are
 unital, carry a positive-definite diagonal dual fixed point, and have scalar
 fixed points of their transfer maps (the predicate
