@@ -3,7 +3,7 @@
 \begin{lemma}[Physical restricted errors for a regional hard truncation]
     \label{lem:alvv_single_region_residuals}
     \lean{TNLean.MPS.AreaLaw.ALVV.exists_single_region_hard_truncation_residuals}
-    \notready
+    \leanok
     \uses{def:chain_model,thm:disjoint_regional_clipping,
         thm:five_region_original_bond_bounds,thm:consecutive_regional_truncation_low}
     Let $q\ge1$, let $0\le h_i\le I$ be nearest-neighbour terms on an
@@ -34,7 +34,7 @@
     \cite[Definition~4.3 and Proposition~4.4(1)]{Arad2016RigorousRG}
     with the displayed sufficient cutoff.
 \end{lemma}
-\begin{proof}\notready
+\begin{proof}\leanok
     \uses{thm:disjoint_regional_clipping,thm:five_region_original_bond_bounds,
         thm:consecutive_regional_truncation_low}
     Apply the five-region decomposition with cuts $l,l,r,r$ and remove the
