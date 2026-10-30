@@ -5065,6 +5065,21 @@ three-plaquette output measurement, and the routed reunion measurement.
 
 ## Candidates
 
+### Completing an orthonormal family by its cardinality — candidate (2026-10-29)
+
+- **Pattern:** Use
+  `hv.linearIndependent.span_eq_top_of_card_eq_finrank' hcard`, then
+  `OrthonormalBasis.mk hv hspan.ge`, to turn an orthonormal family with as
+  many vectors as the dimension into an orthonormal basis.
+- **Seen:** The zero and successor cases of
+  `LinearIsometry.exists_paired_orthonormalBasis` in
+  `Algebra/OrthogonalComplexStructureBasis.lean`.
+- **Abstraction:** Mathlib already supplies both mathematical steps. Two
+  occurrences in one proof do not justify a local wrapper or tactic.
+- **Notes:** The empty-index form of the spanning lemma handles dimension
+  zero without assuming a nontrivial space. The successor case combines an
+  invariant orthonormal pair with a basis of its orthogonal complement.
+
 ### Eliminating a geometric prefactor from a spectral rate — reused Mathlib (2026-10-29)
 
 - **Seen:** `norm_transfer_spectrum_le_of_limitCorrelator_bound` in
@@ -9810,6 +9825,26 @@ there is no need for a new tactic.
   mathematical lemma to a lower matrix-analysis module and reuse it; do not duplicate its
   statement or introduce a new tactic.
 
+### Local interaction separation by a joint boundary map — candidate
+- **Pattern:** compose an arbitrary local interaction with the joint boundary
+  map, extend vanishing from a spanning word family using
+  `LinearMap.ext_on_range`, and evaluate on `Pi.single` to isolate a block.
+- **Seen:** `MPS/ParentHamiltonian/ArbitraryInteractionBlockDegeneracy.lean`.
+- **Notes:** one occurrence. The implementation reuses Mathlib `LinearMap.lsum`
+  and `lsum_piSingle`; it avoids entrywise expansion of the local interaction.
+  Positivity is used separately via QICLean's
+  `WeightedPositiveKernel.apply_sum_eq_zero_iff`.
+
+### Cyclic local interaction in its defining coordinates — candidate
+- **Pattern:** expose a translated arbitrary interaction by applying the
+  active-block isometry, then cancel the inverse isometry.
+- **Seen:** two local separation uses in
+  `MPS/ParentHamiltonian/ArbitraryInteractionBlockDegeneracy.lean` (one file,
+  two occurrences; below the promotion threshold).
+- **Abstraction:** `cyclicActiveBlock_periodicLocalInteractionES_apply` in
+  the defining periodic-interaction module. Consumers use this action
+  formula rather than repeating conjugation and isometry coercion rewrites.
+
 ### Dense local image inside a closed commutant — candidate (2026-10-29)
 
 - **Seen:** `QCA/SupportAlgebraGeneration.lean`, the support-family generation
@@ -9935,6 +9970,18 @@ there is no need for a new tactic.
   reduction theorem use that proof; no second induction was copied.
 - **Scope:** A one-letter sandwich alone is insufficient. The reduction must
   contract every open word, including the empty word.
+
+### Equality of two-element tensor families — candidate (2026-10-29)
+
+- **Seen:** `MPS/Examples/AnomalousCondensation/Z2Z2AnomalyClass.lean` and
+  `Z2Z2BlockedAnomaly.lean`, the three subgroup restrictions.
+- **Pattern:** Prove family equality by the bond dimensions and heterogeneous
+  tensor equalities at the identity and generator.
+- **Abstraction:** The blocked example uses a private `twoFamily_ext` lemma at
+  all three restrictions. The older dressed example uses its own helper for
+  the bond-two restrictions; a shared API can be considered if another example
+  needs this shape.
+- **Decision:** Mathematical extensionality suffices; no tactic is needed.
 
 ### Rectangular trace agreement on a spanning family — candidate (2026-10-29)
 
