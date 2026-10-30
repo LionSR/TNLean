@@ -10146,3 +10146,31 @@ there is no need for a new tactic.
   coefficient extension.
 - **Decision:** The existing function-extension API supplies the extension;
   no new coefficient predicate or compatibility witness is introduced.
+
+### Euclidean physical extension by zero — promoted (2026-10-29)
+
+- **Pattern:** Extend finite physical coefficients by zero along an injection,
+  transport the linear map through `WithLp`, and prove the norm identity by
+  `Fintype.sum_of_injective`.
+- **Defined in:** `Algebra/EuclideanExtendByZero.lean`,
+  `Function.Embedding.euclideanExtendByZero` and its coordinate identities.
+- **Seen:** dependent full configurations and pair-boundary range transport in
+  `ParentHamiltonian/PhysicalAlphabetEmbedding.lean`, and actual local-term
+  transport in `ParentHamiltonian/PhysicalAlphabetLocalTerms.lean`.
+- **Notes:** Reuses Mathlib's extension-by-zero linear map and dependent product
+  embedding. No separate physical configuration record or isometry predicate.
+
+### Pairwise physical transport with outside coordinates — promoted (2026-10-29)
+
+- **Seen:** `ParentHamiltonian/PhysicalAlphabetLocalTerms.lean`.
+- **Pattern:** At an embedded outside coordinate, identify the active vector
+  with the embedding of the original active vector; outside the image it is
+  zero. Apply the already-derived active operator intertwining pointwise.
+- **Reuse:** The operator is the canonical `rightFiberwiseMap` from
+  `ParentHamiltonian/Martingale/SpectatorMaps.lean`; physical extension is the
+  shared Euclidean isometry. No new tensor-product operator model is defined.
+- **Abstraction:** `ContinuousLinearMap.rightFiberwiseMap_extendByZero` in
+  `ParentHamiltonian/Martingale/SpectatorPhysicalEmbedding.lean` is the shared
+  generic transport theorem. The parent caller derives its active intertwining
+  from actual rectangular boundary ranges; the physical-sector caller derives
+  it from its actual orthogonal sector subspaces. No copied fiber proof remains.
