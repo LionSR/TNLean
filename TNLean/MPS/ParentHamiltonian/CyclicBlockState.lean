@@ -46,8 +46,8 @@ theorem mpv_cyclicActiveBlockConfigEquiv_symm
       · rw [List.getElem_append_right (by simp only [List.length_ofFn]; omega),
           List.getElem_ofFn]
         have hk : k - L < N - L := by omega
-        simpa only [ω, cyclicForwardSite, show L + (k - L) = k by omega,
-          Nat.add_comm] using
+        simpa only [ω, cyclicForwardSite, List.length_ofFn,
+          show L + (k - L) = k by omega, Nat.add_comm] using
           cyclicActiveBlockConfigEquiv_symm_apply_spectator hLN i σ τ ⟨k - L, hk⟩
   change Matrix.trace (Kraus.evalWord A (List.ofFn ω)) =
     Matrix.trace (Kraus.evalWord A (List.ofFn σ) * Kraus.evalWord A (List.ofFn τ))
