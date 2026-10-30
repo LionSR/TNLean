@@ -13,6 +13,11 @@ sample count and simultaneous cut ranks have polynomial bounds whenever the rati
 of ground energy to gap is bounded. The constants are chosen before the chain length
 and ground energy.
 
+**Scope restriction (ground energy):** The theorems assume a fixed bound `B` on
+`E₀ / Δ`, and the polynomial degree depends on `B`. The printed corollary states the
+bound without this ratio; the retained ground-energy dependence is recorded in
+`docs/paper-gaps/lvv13_runtime_ground_energy.tex`.
+
 Source: Landau, Vazirani and Vidick, arXiv:1307.5143v1, `algo53.tex`, Corollary
 `c:agsp`, lines 626–649. The normalization dependence is retained explicitly.
 -/
