@@ -9987,3 +9987,49 @@ there is no need for a new tactic.
   The public `norm_mpvState_le_bondDimension_of_unital` specializes it once to positive
   unital maps and is reused for every canonical block; no new spectral proof or tactic.
 - **Validation:** Source-only; hosted Lean checking is pending.
+
+### Unit matrices as exact gauges — promoted Mathlib construction (2026-10-29)
+
+- **Pattern:** convert an actual matrix unitary into the matrix-ring unit
+  used by a tensor gauge equivalence, with its adjoint as inverse.
+- **Abstraction:** Mathlib's `Unitary.toUnits`; no determinant witness or
+  nonsingular-matrix inverse proof is necessary.
+- **Occurrences:** the phase-gauge and exact rephased-gauge conclusions in
+  `MPS/CanonicalForm/QuadraticReconstructionConverse.lean`.
+- **Decision:** reuse the existing unitary-to-unit construction directly;
+  no project-specific conversion structure or tactic is introduced.
+
+
+### Physical cut-basis changes — reused Mathlib (2026-10-29)
+
+- **Seen:** `MPS/CanonicalForm/PeriodicCutBasisCoordinates.lean` and
+  `QuadraticPhysicalCutWindow.lean`.
+- **Pattern:** transport an actual cut basis along a configuration equivalence,
+  then multiply matrices of physical slicing and identity maps in successive bases.
+- **Reuse:** `LinearEquiv.ofSubmodules`, `Module.Basis.map`,
+  `LinearMap.toMatrix_comp` and `LinearMap.toMatrix_id` give the physical
+  coordinate change and both quadratic-system gauge equations directly.
+- **Decision:** use these existing mathematical identities rather than expanding
+  virtual matrix entries or introducing a parallel window-gauge predicate.
+
+### Left inverses of independent physical cut factors — candidate (2026-10-29)
+
+- **Seen:** `CanonicalForm/InjectivePeriodicCuts.lean` and the independent
+  `Preparation/OBCRectangularCutMaps.lean` draft.
+- **Pattern:** injective `mulVecLin` gives a linear left inverse;
+  `LinearMap.toMatrix'_comp` transports its composition identity to matrices.
+- **Decision:** two matrix-specific occurrences. If another independent caller
+  needs this conversion, promote the rectangular matrix fact in QICLean and
+  consume its published dependency revision rather than duplicating a new
+  channel-independent matrix API in TNLean.
+
+
+### Reciprocal powers at adjacent window cuts — reused Mathlib (2026-10-29)
+
+- **Seen:** `CanonicalForm/QuadraticSolutionRephasing.lean`,
+  `QuadraticPhysicalCutWindow.lean` and the Perron-normalization child.
+- **Pattern:** cancel the common powers in a product with exponents n and n+1.
+- **Reuse:** `pow_succ`, `inv_pow`, `inv_mul_cancel_left₀` and
+  `mul_inv_cancel_left₀` give the identity directly from `pow_ne_zero`.
+- **Decision:** use the existing group-with-zero cancellation lemmas at all
+  three sites rather than copying a power-distribution proof or adding a tactic.
