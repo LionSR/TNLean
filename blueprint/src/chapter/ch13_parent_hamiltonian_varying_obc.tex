@@ -280,54 +280,52 @@ the adjacent-pair conditions with the kernel of the open parent Hamiltonian.
 \end{proof}
 
 
-\subsection{The actual open parent ground-state line}
+\subsection{The open parent ground-state line}
 
 The following conclusions concern a common finite physical alphabet and
-$N\ge2$ sites. They identify the actual parent kernel, including its nonzero
+$N\ge2$ sites. They identify the parent kernel, including its nonzero
 normalized spanning vector. The length and physical-alphabet domain are
 retained explicitly; see \cite{gap:pgvwc07_open_parent_domain}.
 
 \begin{definition}[The scalar-endpoint open-chain state]
     \label{def:varying_obc_scalar_state}
     \lean{Matrix.obcScalarState, Matrix.obcScalarState_apply}
-    \notready
-    Suppose $D_0=D_N=1$. The actual open-chain vector $\Omega$ has coefficients
+    \leanok
+    Suppose $D_0=D_N=1$. The open-chain vector $\Omega$ has coefficients
     \begin{align}
         \Omega(i_0,\ldots,i_{N-1})
          & =\bigl(B^{[0]}_{i_0}\cdots B^{[N-1]}_{i_{N-1}}\bigr)_{0,0}.
     \end{align}
 \end{definition}
 
-\begin{lemma}[Canonical equations normalize the actual state]
+\begin{lemma}[Canonical equations normalize the state]
     \label{lem:varying_obc_scalar_state_normalized}
     \lean{Matrix.norm_obcScalarState_eq_one}
-    \notready
+    \leanok
     \uses{def:varying_obc_scalar_state,
         lem:varying_obc_prefix_product_row_isometry}
-    If $\sum_iB^{[j]}_i B^{[j]*}_i=I_{D_j}$ at every site and
+    If $\sum_iB^{[j]}_i B^{[j]\dagger}_i=I_{D_j}$ at every site and
     $D_0=D_N=1$, then $\|\Omega\|=1$.
 \end{lemma}
-\begin{proof}
-    \notready
+\begin{proof}\leanok
     The full-prefix row identity is a scalar equation. Expanding its unique
     endpoint entry gives $\sum_w|\Omega(w)|^2=1$.
 \end{proof}
 
-\begin{lemma}[The represented state is annihilated by the actual parent]
+\begin{lemma}[The represented state is annihilated by the parent]
     \label{lem:varying_obc_scalar_state_parent_kernel}
     \lean{Matrix.obcBoundaryState_one_eq_obcScalarState,
         Matrix.obcParentHamiltonian_apply_obcScalarState}
-    \notready
+    \leanok
     \uses{def:varying_obc_scalar_state,
         lem:varying_obc_boundary_states_parent_kernel}
     For singleton endpoint bonds, the boundary trace state with unit scalar
-    boundary is precisely $\Omega$. Consequently $H\Omega=0$ for the actual
+    boundary is precisely $\Omega$. Consequently $H\Omega=0$ for the
     open parent Hamiltonian, without any spanning or normalization assumption.
 \end{lemma}
-\begin{proof}
-    \notready
+\begin{proof}\leanok
     The two singleton sums in the boundary trace contain one term each.
-    The actual full-boundary state is annihilated by every local projector.
+    The full-boundary state is annihilated by every local projector.
 \end{proof}
 
 \begin{lemma}[Unique ground-state line of the varying-bond open parent]
@@ -335,7 +333,7 @@ retained explicitly; see \cite{gap:pgvwc07_open_parent_domain}.
     \lean{Matrix.exists_smul_obcScalarState_of_obcParentHamiltonian_apply_eq_zero,
         Matrix.ker_obcParentHamiltonian_eq_span,
         Matrix.finrank_ker_obcParentHamiltonian_eq_one}
-    \notready
+    \leanok
     \uses{lem:varying_obc_parent_kernel_sections,
         lem:varying_obc_full_chain_reconstruction,
         lem:varying_obc_scalar_state_normalized,
@@ -343,18 +341,17 @@ retained explicitly; see \cite{gap:pgvwc07_open_parent_domain}.
     Consider $N\ge2$ sites with a common physical alphabet. Suppose that the
     endpoint bonds are singletons, the site matrices obey the canonical row
     equations, and each site family spans its rectangular matrix space.
-    Then every vector in the kernel of the actual open parent Hamiltonian is
+    Then every vector in the kernel of the open parent Hamiltonian is
     a scalar multiple of $\Omega$, and
     \begin{align}
         \ker H & =\mathbb C\Omega, & \dim\ker H & =1.
     \end{align}
     The Hamiltonian is positive, so this is its ground-state line.
 \end{lemma}
-\begin{proof}
-    \notready
-    The actual projector kernel gives the adjacent-pair coefficient sections.
+\begin{proof}\leanok
+    The projector kernel gives the adjacent-pair coefficient sections.
     Reconstruct the entire chain and reduce its endpoint boundary to a scalar.
-    Conversely the actual represented state is annihilated by the parent.
+    Conversely the represented state is annihilated by the parent.
     Its derived unit norm proves that its span has dimension one. Positivity
     of the parent puts this kernel at the bottom of its spectrum.
 \end{proof}
