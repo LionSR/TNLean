@@ -1111,6 +1111,8 @@ $N\geq1$.
     nonzero scalar relating them against long words.
 \end{proof}
 
+\input{chapter/ch29_mpu_action_common_blocking}
+
 \begin{lemma}[Compatibility for permuted blocks]
     \label{thm:mpug_permuted_block_l_compatibility}
     \lean{MPOTensor.GroupFamily.BlockActionData.isCompatible_lSymbol,
@@ -4487,9 +4489,9 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
         TNLean.Algebra.ScalarCocycle.H2π_circlePhaseInclusion,
         TNLean.Algebra.ScalarCocycle.circlePhaseMathlibCocycle,
         TNLean.Algebra.ScalarCocycle.H2π_map_circlePhaseMathlibCocycle,
-        TNLean.Algebra.circleH2ToComplexUnitsH2_injective,
-        TNLean.Algebra.circleH2ToComplexUnitsH2_surjective,
-        TNLean.Algebra.circleH2EquivComplexUnitsH2}
+        TNLean.Algebra.circleToComplexUnits_map_injective,
+        TNLean.Algebra.circleToComplexUnits_map_surjective,
+        TNLean.Algebra.circleToComplexUnits_map_bijective}
     \leanok
     \uses{thm:mpug_h2_group_cohomology_comparison,
         thm:mpug_positive_generalized_cocycle}

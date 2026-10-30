@@ -105,4 +105,42 @@ lemma finiteChainLocalObservable_apply {d D : ℕ} {U : MPOTensor d D}
           star (finiteChainMPOMatrix U N a)) :=
   rfl
 
+
+/-- Conjugating a nested local inclusion is the same actual finite-chain
+map as including directly into that chain. Source: arXiv:1703.09188,
+Appendix identity-tensor inclusions in lines 2292--2306. -/
+theorem finiteChainLocalObservable_localInclusion {d D : ℕ} {U : MPOTensor d D}
+    (hU : U.IsMPU) {N : ℕ} (hN : 1 < N) (a : ℤ) {Λ Γ : Finset ℤ}
+    (hΛΓ : Λ ⊆ Γ) (hΓ : Γ ⊆ finiteChainRegion a N) (A : LocalAlgebra d Λ) :
+    finiteChainLocalObservable hU hN a hΓ (localInclusion hΛΓ A) =
+      finiteChainLocalObservable hU hN a (hΛΓ.trans hΓ) A := by
+  have h := DFunLike.congr_fun (localInclusion_trans hΛΓ hΓ) A
+  exact congrArg (fun X ↦ localObservable d (finiteChainRegion a N)
+    (finiteChainConjugation hU hN a X)) h
+
+
+/-- In consecutive coordinates, the actual finite-chain matrix is the
+original periodic MPO, independently of the integer anchor.
+Source: arXiv:1703.09188, eq:appendix-1, lines 2300--2306. -/
+theorem intervalCoordinates_finiteChainMPOMatrix {d D : ℕ}
+    (U : MPOTensor d D) (N : ℕ) (a : ℤ) :
+    intervalCoordinates d a N (finiteChainMPOMatrix U N a) = MPOTensor.mpo U N := by
+  classical
+  ext row col
+  change MPOTensor.mpo U N
+    ((finiteChainConfigEquiv d N a).symm (finiteChainConfigEquiv d N a row))
+    ((finiteChainConfigEquiv d N a).symm (finiteChainConfigEquiv d N a col)) = _
+  simp only [Equiv.symm_apply_apply]
+
+/-- Actual finite-chain unitary conjugation in consecutive coordinates.
+The periodic matrix and its ordering do not depend on the interval anchor.
+Source: arXiv:1703.09188, eq:appendix-1, lines 2300--2306. -/
+theorem intervalCoordinates_finiteChainConjugation {d D : ℕ} {U : MPOTensor d D}
+    (hU : U.IsMPU) {N : ℕ} (hN : 1 < N) (a : ℤ)
+    (A : LocalAlgebra d (finiteChainRegion a N)) :
+    intervalCoordinates d a N (finiteChainConjugation hU hN a A) =
+      MPOTensor.mpo U N * intervalCoordinates d a N A * (MPOTensor.mpo U N)ᴴ := by
+  rw [finiteChainConjugation_apply, map_mul, map_mul, map_star,
+    intervalCoordinates_finiteChainMPOMatrix, Matrix.star_eq_conjTranspose]
+
 end SpinChain
