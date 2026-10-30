@@ -58,12 +58,12 @@ noncomputable def canonicalData : PGVWC07CanonicalFormData tensor where
   blocks := blocks
   unital j := by
     fin_cases j <;> ext a b <;> fin_cases a <;> fin_cases b <;>
-      simp [blocks, basisTensor, Matrix.mul_apply]
+      simp [blocks, basisTensor]
   dual_fixedPoint j := by
     refine ⟨1, Matrix.PosDef.one, ?_, ?_⟩
     · exact Matrix.isDiag_one
     · fin_cases j <;> ext a b <;> fin_cases a <;> fin_cases b <;>
-        simp [blocks, basisTensor, Matrix.mul_apply]
+        simp [blocks, basisTensor]
   fixedPoint_scalar _ X _ := ⟨X 0 0, scalar_matrix X⟩
   index := finSigmaFinEquiv
   reconstruct i := by simp [tensor, toTensorFromBlocks]
@@ -110,20 +110,36 @@ private theorem basisTensor_mpv {N : ℕ} (b : Fin 2) (σ : Cfg 2 N) :
 
 private theorem neg_basisTensor_mpv {N : ℕ} (σ : Cfg 2 N) :
     mpv ((-1 : ℂ) • basisTensor 0) σ = (-1 : ℂ) ^ N * mpv (basisTensor 0) σ := by
-  simp only [mpv, coeff, Kraus.evalWord_smul, List.length_ofFn,
-    Matrix.trace_smul, smul_eq_mul]
+  simp only [mpv, coeff]
+  rw [show ((-1 : ℂ) • basisTensor 0) = fun i => (-1 : ℂ) • basisTensor 0 i from rfl,
+    Kraus.evalWord_smul, List.length_ofFn, Matrix.trace_smul, smul_eq_mul]
 
 private theorem basisTensor_state {N : ℕ} (b : Fin 2) :
     mpvState (basisTensor b) N = PiLp.single 2 (fun _ => b) (1 : ℂ) := by
   ext σ
   simp only [mpvState_apply, basisTensor_mpv, PiLp.single_apply]
 
+private theorem blocks_mpv_const (j : Fin 3) (b : Fin 2) :
+    mpv (blocks j) (fun _ : Fin 13 => b) =
+      ![if b = 0 then 1 else 0, if b = 0 then -1 else 0, if b = 1 then 1 else 0] j := by
+  fin_cases j
+  · change mpv (basisTensor 0) _ = if b = 0 then 1 else 0
+    rw [basisTensor_mpv]
+    by_cases hb : b = 0 <;> norm_num [hb, funext_iff]
+  · change mpv ((-1 : ℂ) • basisTensor 0) _ = if b = 0 then -1 else 0
+    rw [neg_basisTensor_mpv, basisTensor_mpv]
+    by_cases hb : b = 0 <;> norm_num [hb, funext_iff]
+  · change mpv (basisTensor 1) _ = if b = 1 then 1 else 0
+    rw [basisTensor_mpv]
+    by_cases hb : b = 1 <;> norm_num [hb, funext_iff]
+
 /-- The actual thirteen-site sum is the normalized all-one product vector. -/
 theorem tensor_state_thirteen :
     mpvState tensor 13 = mpvState (basisTensor 1) 13 := by
   ext σ
-  simp [mpvState_apply, tensor, mpv_toTensorFromBlocks_eq_sum,
-    blocks, Fin.sum_univ_succ, neg_basisTensor_mpv]
+  simp only [mpvState_apply]
+  rw [tensor, mpv_toTensorFromBlocks_eq_sum]
+  simp [blocks, Fin.sum_univ_succ]
 
 /-- No vanishing or unnormalized total state is used in the example. -/
 theorem norm_tensor_state_thirteen : ‖mpvState tensor 13‖ = 1 := by
@@ -133,12 +149,12 @@ theorem norm_tensor_state_thirteen : ‖mpvState tensor 13‖ = 1 := by
 /-- At the chosen source volume the three nonzero weighted block vectors are
 pairwise unequal as vectors. Opposite vectors still determine the same ray. -/
 theorem blocks_pairwise_ne_thirteen :
-    Function.Pairwise fun i j => mpvState (blocks i) 13 ≠ mpvState (blocks j) 13 := by
+    Pairwise fun i j => mpvState (blocks i) 13 ≠ mpvState (blocks j) 13 := by
   intro i j hij heq
-  have hzero := congrArg (fun ψ : MPVSpace 2 13 => ψ (fun _ => 0)) heq
-  have hone := congrArg (fun ψ : MPVSpace 2 13 => ψ (fun _ => 1)) heq
-  fin_cases i <;> fin_cases j <;>
-    simp_all [blocks, mpvState_apply, neg_basisTensor_mpv, basisTensor_mpv]
+  have h0 := congrArg (fun ψ : MPVSpace 2 13 => ψ (fun _ => 0)) heq
+  simp only [mpvState_apply, blocks_mpv_const] at h0
+  clear heq
+  fin_cases i <;> fin_cases j <;> first | exact hij rfl | norm_num at h0
 
 /-- The positive one-site projection penalizing the letter zero. -/
 noncomputable def interaction : MPVSpace 2 1 →ₗ[ℂ] MPVSpace 2 1 :=
@@ -150,7 +166,9 @@ theorem interaction_isPositive : interaction.IsPositive := by
   apply Matrix.isPositive_toEuclideanLin_iff.mpr
   apply Matrix.PosSemidef.diagonal
   intro σ
-  split_ifs <;> positivity
+  dsimp only [Pi.zero_apply]
+  split_ifs
+  exacts [zero_le_one, le_rfl]
 
 private theorem interaction_apply (ψ : MPVSpace 2 1) (σ : Cfg 2 1) :
     interaction ψ σ = (if σ 0 = 0 then (1 : ℂ) else 0) * ψ σ := by
@@ -166,9 +184,7 @@ private theorem interaction_groundSpaceMap (b : Fin 2)
           (groundSpaceMap (basisTensor b) 1 X) := by
   ext σ
   rw [interaction_apply]
-  simp only [PiLp.smul_apply, WithLp.linearEquiv_symm_apply, PiLp.toLp_apply,
-    groundSpaceMap_apply, List.ofFn_succ, List.ofFn_zero, Kraus.evalWord_cons, Kraus.evalWord_nil,
-    Matrix.mul_one]
+  simp only [PiLp.smul_apply, WithLp.linearEquiv_symm_apply]
   by_cases hσ : σ 0 = b
   · simp [basisTensor, hσ]
   · simp [basisTensor, hσ]
@@ -180,7 +196,6 @@ private theorem local_interaction_product {N : ℕ} (hN : 1 ≤ N)
   let U := cyclicActiveBlockConfigLinearIsometryEquiv 2 1 hN i
   apply U.injective
   rw [map_smul]
-  change U (periodicLocalInteractionES interaction i (mpvState (basisTensor b) N)) = _
   rw [cyclicActiveBlock_periodicLocalInteractionES_apply interaction hN i]
   apply PiLp.ext
   rintro ⟨σ, τ⟩
@@ -193,9 +208,10 @@ private theorem local_interaction_product {N : ℕ} (hN : 1 ≤ N)
     (LinearMap.toContinuousLinearMap interaction) (U (mpvState (basisTensor b) N)))
       (σ, τ) = _
   rw [ContinuousLinearMap.rightFiberwiseMap_apply_apply, hfiber,
-    interaction_groundSpaceMap]
-  simp only [PiLp.smul_apply, WithLp.linearEquiv_symm_apply, PiLp.toLp_apply]
+    LinearMap.coe_toContinuousLinearMap', interaction_groundSpaceMap]
+  simp only [PiLp.smul_apply, WithLp.linearEquiv_symm_apply]
   simp only [U, cyclicActiveBlock_mpvState_apply]
+  rfl
 
 /-- The actual normalized sum is killed by the actual positive periodic
 Hamiltonian at the exact source volume bound (13=3(3-1)(1+1)+1). -/
@@ -217,21 +233,23 @@ theorem first_block_not_ground_thirteen :
       (mpvState (blocks 0) 13)).mp hzero 0
   have hfixed : periodicLocalInteractionES interaction (0 : Fin 13)
       (mpvState (basisTensor 0) 13) = mpvState (basisTensor 0) 13 := by
-    simpa only [if_pos rfl, one_smul] using
+    simpa only [↓reduceIte, one_smul] using
       local_interaction_product (by norm_num : 1 ≤ 13) (0 : Fin 13) 0
   change periodicLocalInteractionES interaction (0 : Fin 13)
     (mpvState (basisTensor 0) 13) = 0 at hlocal
   rw [hfixed] at hlocal
   have hcoeff := congrArg (fun ψ : MPVSpace 2 13 => ψ (fun _ => 0)) hlocal
-  simpa [mpvState_apply, basisTensor_mpv] using hcoeff
+  simp only [mpvState_apply, PiLp.zero_apply] at hcoeff
+  rw [basisTensor_mpv] at hcoeff
+  simp at hcoeff
 
 /-- Every displayed component is nonzero at the chosen source volume. -/
 theorem blocks_nonzero_thirteen (j : Fin 3) : mpvState (blocks j) 13 ≠ 0 := by
   intro hzero
-  have h₀ := congrArg (fun ψ : MPVSpace 2 13 => ψ (fun _ => 0)) hzero
-  have h₁ := congrArg (fun ψ : MPVSpace 2 13 => ψ (fun _ => 1)) hzero
-  fin_cases j <;>
-    simp_all [blocks, mpvState_apply, neg_basisTensor_mpv, basisTensor_mpv]
+  have h0 := congrArg (fun ψ : MPVSpace 2 13 => ψ (fun _ => 0)) hzero
+  have h1 := congrArg (fun ψ : MPVSpace 2 13 => ψ (fun _ => 1)) hzero
+  simp only [mpvState_apply, blocks_mpv_const, PiLp.zero_apply] at h0 h1
+  fin_cases j <;> simp_all
 
 /-- An actual instance of all standing assumptions at the exact source bound
 violates the first conclusion under the literal weighted finite-vector reading.
@@ -240,17 +258,18 @@ theorem literal_weighted_vector_counterexample :
     canonicalData.r = 3 ∧
     (∀ j, Kraus.IsNBlkInjective (canonicalData.blocks j) 1) ∧
     (∀ j, mpvState (canonicalData.blocks j) 13 ≠ 0) ∧
-    Function.Pairwise (fun i j =>
+    Pairwise (fun i j =>
       (canonicalData.weight i : ℂ) ^ 13 • mpvState (canonicalData.blocks i) 13 ≠
       (canonicalData.weight j : ℂ) ^ 13 • mpvState (canonicalData.blocks j) 13) ∧
     13 = 3 * (canonicalData.r - 1) * (1 + 1) + 1 ∧
     ‖mpvState tensor 13‖ = 1 ∧ interaction.IsPositive ∧
     periodicInteractionHamiltonianES interaction 13 (mpvState tensor 13) = 0 ∧
     periodicInteractionHamiltonianES interaction 13
-      (mpvState (canonicalData.blocks 0) 13) ≠ 0 := by
+      (mpvState (canonicalData.blocks (0 : Fin 3)) 13) ≠ 0 := by
   refine ⟨rfl, blocks_c1, blocks_nonzero_thirteen, ?_, by decide,
     norm_tensor_state_thirteen, interaction_isPositive, tensor_ground_thirteen,
     first_block_not_ground_thirteen⟩
-  simpa only [canonicalData, one_pow, one_smul] using blocks_pairwise_ne_thirteen
+  simpa only [canonicalData, Complex.ofReal_one, one_pow, one_smul] using
+    blocks_pairwise_ne_thirteen
 
 end MPSTensor.CanonicalBlockCancellation
