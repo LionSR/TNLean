@@ -5065,6 +5065,30 @@ three-plaquette output measurement, and the routed reunion measurement.
 
 ## Candidates
 
+### Eliminating a geometric prefactor from a spectral rate — reused Mathlib (2026-10-29)
+
+- **Seen:** `norm_transfer_spectrum_le_of_limitCorrelator_bound` in
+  `MPS/Preparation/TransferSpectrumFromCorrelations.lean`.
+- **Pattern:** An exact eigenvalue correlator `λ^n` and an eventual bound
+  `C r^n` imply `|λ| ≤ r`, even when `C` and the starting separation depend
+  on the observables.
+- **Reuse:** `pow_unbounded_of_one_lt` for the ratio `|λ|/r`, then
+  `pow_le_pow_right₀` to shift past the starting separation.
+- **Decision:** Reuse the existing Archimedean power lemmas and physical
+  eigenvalue-observer construction; no new asymptotic tactic is introduced.
+
+### Identifying the ground energy of two physical conditions — candidate (2026-10-29)
+
+- **Seen:** `ExactMPSGroundPath.exists_uniform_ground_line_spectral_gap` in
+  `MPS/Symmetry/ExactGroundPathGaussianFilter.lean`.
+- **Pattern:** The path gap and the exact ground-line condition each supply
+  a least spectral value. Apply each minimality inequality to the other's
+  spectral witness, identify the energies by antisymmetry, and transport the
+  spectral dichotomy to the actual MPS ground line.
+- **Decision:** One use. Keep the mathematical extraction in its named helper
+  and reuse the existing Gaussian spectral and ground-space estimates; no
+  new tactic or duplicate eigenbasis calculation is needed.
+
 ### Robustness assembly with a sharper cutoff — resolved (2026-10-30)
 
 - **Seen:** `MPS/AreaLaw/AKLV/Robustness.lean`, `NormalizedChain.lean`,
@@ -9786,6 +9810,20 @@ there is no need for a new tactic.
   mathematical lemma to a lower matrix-analysis module and reuse it; do not duplicate its
   statement or introduce a new tactic.
 
+### Dense local image inside a closed commutant — candidate (2026-10-29)
+
+- **Seen:** `QCA/SupportAlgebraGeneration.lean`, the support-family generation
+  theorem and the even-pair-image commutant theorem.
+- **Pattern:** Pull back a closed ambient subset under an automorphism;
+  include the dense algebraic local image; use closure minimality and
+  surjectivity to obtain the global containment.
+- **Reuse:** The new commutant theorem exposes the source's intermediate
+  even-pair argument, avoiding the stronger premise of commutation with
+  each separate support factor.
+- **Decision:** Two proof occurrences in one file; keep the concrete source
+  statements and consolidate the closed-containment argument before a third
+  copy, rather than adding another notion of local generation.
+
 ### Cancellation from a spanning matrix family — promoted
 - **Pattern:** express the identity as a finite linear combination of a
   spanning family, distribute multiplication, and cancel two factors.
@@ -9894,6 +9932,19 @@ there is no need for a new tactic.
 - **Decision:** Three branch occurrences in one file, below the two-file promotion
   threshold. Before extending this pattern to another module, move the value equality
   before the case distinction or reuse `Fin.val_inj`; no new tactic is needed.
+
+### Rectangular trace agreement on a spanning family — candidate (2026-10-29)
+
+- **Seen:** `MPS/ParentHamiltonian/VaryingOBCIntersection.lean`.
+- **Pattern:** Compose `Matrix.mulLeftLinearMap` with the trace functional,
+  extend equality from the actual middle-site spanning family using
+  `LinearMap.ext_on_range`, then apply Mathlib's rectangular
+  `Matrix.ext_iff_trace_mul_right`.
+- **Reuse:** The overlap identity is proved once; both explicit-boundary
+  reconstruction and the actual coefficient-section corollary reuse it.
+- **Notes:** No new trace-duality predicate or inverse construction is needed.
+  The row-isometry blocking lemma uses ordinary finite sums and existing
+  rectangular multiplication/adjoint identities.
 
 ### Uniform prefix truncation and normalization — candidate (2026-10-29)
 

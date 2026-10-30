@@ -107,6 +107,7 @@ import TNLean.MPS.Symmetry.MPOSymmetry.MixedEndpointZeroSectorGap
 import TNLean.MPS.Symmetry.MPOSymmetry.NIMRep
 import TNLean.MPS.Symmetry.MPOSymmetry.PBCGroupProjector
 import TNLean.MPS.Symmetry.MPOSymmetry.PermutedBlocks
+import TNLean.MPS.Symmetry.MPOSymmetry.PermutedBlocksGauge
 import TNLean.MPS.Symmetry.MPOSymmetry.RepS3SU24NIMRep
 import TNLean.MPS.Symmetry.MPOSymmetry.RingEndpointComparison
 import TNLean.MPS.Symmetry.MPOSymmetry.RingEndpointRightComparison
