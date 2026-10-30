@@ -11,9 +11,12 @@ import TNLean.MPS.ParentHamiltonian.PhysicalDeformation
 
 On a cycle with `n≥3` and proper nonempty interaction arcs `0<L<n`,
 the graph parent-space transport theorem gives the actual periodic-chain
-ground-space and parent-kernel correspondence. The constant graph product
-map is the chain's on-site tensor power, and physical deformation of the
-cycle tensor is the cycle tensor of the physically rotated MPS family.
+ground-space correspondence. The constant graph product map is the chain's
+on-site tensor power, and physical deformation of the cycle tensor is the
+cycle tensor of the physically rotated MPS family. The resulting identity
+agrees with `MPSTensor.chainGroundSpace_rotatePhysical`, which the chain
+argument proves for all `L` and `n`; here it is derived from the graph
+theorem, so the two parent constructions are compared directly.
 
 Source: arXiv:2011.12127, Section IV.C, the parent construction at lines
 1987–2011 and physical deformation at lines 2032–2038. No injectivity or
@@ -75,36 +78,5 @@ theorem map_chainGroundSpace_physicalEquiv_of_cycle (hn : 3 ≤ n) (hL : 0 < L)
   change (MPSTensor.chainGroundSpace A L n).map
     (globalPhysicalMap (fun _ : Fin n ↦ LinearMap.toMatrix' F.toLinearMap)) = _ at h
   rwa [globalPhysicalMap_const_eq_onSiteTensorPow] at h
-
-/-- The existing matrix-form chain ground-space correspondence follows from
-the graph theorem for nonempty proper arcs. Source: arXiv:2011.12127,
-Section IV.C, lines 2032–2038. -/
-theorem chainGroundSpace_rotatePhysical_of_cycle (hn : 3 ≤ n) (hL : 0 < L)
-    (hLn : L < n) (A : MPSTensor d D) {Λ : Matrix (Fin d) (Fin d) ℂ}
-    (hΛ : IsUnit Λ) :
-    MPSTensor.chainGroundSpace (MPSTensor.rotatePhysical Λ A) L n =
-      (MPSTensor.chainGroundSpace A L n).map
-        (Matrix.toLin' (MPSTensor.onSiteTensorPow n Λ)) := by
-  have hdet := (Matrix.isUnit_iff_isUnit_det Λ).mp hΛ
-  let F : (Fin d → ℂ) ≃ₗ[ℂ] (Fin d → ℂ) :=
-    LinearEquiv.ofLinearMap (Matrix.toLin' Λ) (Matrix.toLin' Λ⁻¹)
-      (by rw [← Matrix.toLin'_mul, Matrix.mul_nonsing_inv Λ hdet, Matrix.toLin'_one])
-      (by rw [← Matrix.toLin'_mul, Matrix.nonsing_inv_mul Λ hdet, Matrix.toLin'_one])
-  have hF : LinearMap.toMatrix' F.toLinearMap = Λ := LinearMap.toMatrix'_toLin' Λ
-  simpa only [hF] using (map_chainGroundSpace_physicalEquiv_of_cycle hn hL hLn A F).symm
-
-/-- The actual periodic parent-Hamiltonian kernel correspondence is the
-proper-arc specialization of graph parent-space transport. Source:
-arXiv:2011.12127, Section IV.C, lines 2032–2038. -/
-theorem ker_parentHamiltonian_rotatePhysical_of_cycle (hn : 3 ≤ n) (hL : 0 < L)
-    (hLn : L < n) (A : MPSTensor d D) {Λ : Matrix (Fin d) (Fin d) ℂ}
-    (hΛ : IsUnit Λ) :
-    LinearMap.ker (MPSTensor.parentHamiltonian (MPSTensor.rotatePhysical Λ A) L n) =
-      (LinearMap.ker (MPSTensor.parentHamiltonian A L n)).map
-        (Matrix.toLin' (MPSTensor.onSiteTensorPow n Λ)) := by
-  rw [MPSTensor.ker_parentHamiltonian_eq_chainGroundSpace _ (NeZero.pos n)
-      (Nat.le_of_lt hLn),
-    MPSTensor.ker_parentHamiltonian_eq_chainGroundSpace _ (NeZero.pos n) (Nat.le_of_lt hLn)]
-  exact chainGroundSpace_rotatePhysical_of_cycle hn hL hLn A hΛ
 
 end TNLean.PEPS
