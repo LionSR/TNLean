@@ -32,33 +32,7 @@ kernel $f(t)=O(e^{-c|t|^\alpha})$ gives
     \label{eq:al_filtered_constraint}
 \end{align}
 
-\begin{lemma}[Order and commutant of the ball expectation]
-    \label{lem:al_site_expectation_order}
-    \lean{QuantumCircuit.heisenbergEvolution_eq_hermitianUnitaryPath,
-        QuantumCircuit.siteExpectation_conjTranspose,
-        QuantumCircuit.isHermitian_siteExpectation,
-        QuantumCircuit.siteExpectation_nonneg, QuantumCircuit.siteExpectation_mono,
-        QuantumCircuit.siteExpectation_le_one,
-        QuantumCircuit.siteExpectation_eq_self_of_forall_commute,
-        QuantumCircuit.mem_supportedOperators_of_forall_commute,
-        Commute.cfcAbs_of_isHermitian,
-        QuantumCircuit.siteExpectation_abs_of_mem_supportedOperators,
-        QuantumCircuit.sqrt_mem_supportedOperators}
-    \leanok
-    \uses{lem:qc_site_expectation_average, lem:qc_site_expectation_properties}
-    For any site set $K$, the expectation $E_K$ satisfies
-    $E_K(X^*)=E_K(X)^*$, $X\le Y\implies E_K(X)\le E_K(Y)$,
-    $E_K([0,I])\subseteq[0,I]$, and $E_K(X)=X$ (so $X$ acts on $K$) whenever
-    $[X,Z]=0$ for all $Z$ acting on $K^c$. In particular, $E_K(|Y|)=|Y|$ for
-    every $Y=Y^*$ acting on $K$, and $Y^{1/2}$ acts on $K$ for every $Y\ge0$
-    acting on $K$.
-\end{lemma}
-\begin{proof}\leanok
-    By Lemmas~\ref{lem:qc_site_expectation_average}
-    and~\ref{lem:qc_site_expectation_properties}, $E_K$ is the uniform average
-    of conjugations by products of on-site Weyl operators on $K^c$ and takes
-    values acting on $K$.
-\end{proof}
+
 
 \begin{theorem}[Positive replacement of the Hamiltonian]
     \label{thm:al_positive_replacement}
