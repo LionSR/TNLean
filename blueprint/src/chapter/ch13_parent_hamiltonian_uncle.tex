@@ -214,7 +214,7 @@ infinite-volume Hamiltonian is included here.
     annihilates every vector satisfying the two-site parent constraints of
     either sector. In particular,
     \begin{align}
-        \operatorname{span}\{\ket{M_N(A)},\ket{M_N(B)}\}
+        \operatorname{span}\{\ket{V^{(N)}(A)},\ket{V^{(N)}(B)}\}
          & \subseteq\ker H'_P.
     \end{align}
     This is the containment direction of
@@ -250,11 +250,13 @@ infinite-volume Hamiltonian is included here.
 \begin{proof}
     \leanok
     The local interaction is an orthogonal-complement projector conjugated
-    by the physical configuration isometry, hence positive. Every cyclic
-    summand has the form $R^*h'_PR$ and is positive. For positive physical
-    dimension, the averaging coefficient is strictly positive, so the
-    kernel of their sum is their common kernel. Vanishing of
-    $R^*h'_PR$ on a vector forces the nonnegative quadratic form of
+    by the physical configuration isometry, hence positive. Write
+    $\mathcal R_{i,\tau}$ for the restriction of a configuration to the
+    cyclic two-site window at $\tau$. Every cyclic summand has the form
+    $\mathcal R_{i,\tau}^*h'_P\mathcal R_{i,\tau}$ and is positive. For
+    positive physical dimension, the averaging coefficient is strictly
+    positive, so the kernel of their sum is their common kernel. Vanishing
+    of $\mathcal R_{i,\tau}^*h'_P\mathcal R_{i,\tau}$ on a vector forces the nonnegative quadratic form of
     $h'_P$ on its slice to vanish, and therefore forces the slice into
     $\ker h'_P$. The converse is immediate. At physical dimension zero,
     the full configuration space is empty and the assertion holds directly.
