@@ -111,8 +111,8 @@ one-dimensional endpoint bond coordinates.
 Source: PGVWC07, endpoint convention preceding Theorem thm:OBC-Vidal. -/
 theorem physicalPrefixMatrix_zero (u : CutPrefixConfig d N 0) (q : Fin (B.bondDim 0)) :
     physicalPrefixMatrix B 0 u q = 1 := by
-  have hq : q.val = 0 := by have := q.isLt; rw [B.left_dim] at this; omega
-  simp only [physicalPrefixMatrix, prefixProduct, List.ofFn_zero, List.prod_nil]
+  have hq : q.val = 0 := by have h := B.left_dim; have := q.isLt; omega
+  simp only [physicalPrefixMatrix, prefixProduct, Fin.val_zero, List.ofFn_zero, List.prod_nil]
   rw [Matrix.one_apply]
   exact if_pos (Fin.ext hq.symm)
 
@@ -122,7 +122,7 @@ Source: PGVWC07, the OBC contraction in free-OBC, lines 461--486. -/
 theorem physicalPrefixMatrix_last (u : CutPrefixConfig d N N)
     (q : Fin (B.bondDim (Fin.last N))) :
     physicalPrefixMatrix B (Fin.last N) u q = B.coeff (finalCutPrefixEquiv d N u) := by
-  have hq : q.val = 0 := by have := q.isLt; rw [B.right_dim] at this; omega
+  have hq : q.val = 0 := by have h := B.right_dim; have := q.isLt; omega
   have hfull : prefixProduct B (Fin.last N) u =
       MPSChainTensor.eval B.zeroPad (finalCutPrefixEquiv d N u) := by
     rw [MPSChainTensor.eval_eq_prod_ofFn]
