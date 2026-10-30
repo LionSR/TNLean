@@ -9751,6 +9751,32 @@ there is no need for a new tactic.
 - **Mechanism:** An ordinary monotonicity theorem suffices.
 
 
+### Complete finite operators from fixed-exterior matrix slices — candidate (2026-10-29)
+
+- **Seen:** `MPS/MPU/TwoSiteFiniteHeisenberg.lean`, the blocked-tensor and
+  original-site full-matrix intertwiners.
+- **Pattern:** A rectangular matrix is indexed by exterior/local products.
+  Multiply by the identity/right-Kronecker local operator; sum the exterior
+  delta coefficients to recover the established slice intertwiner.
+- **Reuse:** Both proofs reuse the existing actual three-block trace theorem;
+  they do not assume a full-operator identity as a hypothesis.
+- **Decision:** Two occurrences in one file. Before a third copy, promote the
+  rectangular block multiplication identity at its generic matrix owner in
+  QICLean, and retain the actual MPU source-specific wrappers here.
+
+
+### Nested finite-chain local inclusions — promoted lemma (2026-10-29)
+
+- **Seen:** The fixed-window, full-central-interval, singleton comparison,
+  and canonical forward-family proofs in `MPS/MPU/TwoSiteBufferedAction.lean`
+  and `MPS/MPU/TwoSiteLocalAction.lean`.
+- **Pattern:** Compose two canonical local inclusions inside an actual finite
+  MPU conjugation and its algebraic-local inclusion.
+- **Promoted:** `SpinChain.finiteChainLocalObservable_localInclusion` in
+  `MPS/MPU/FiniteChainConjugation.lean` applies the existing inclusion
+  composition theorem under the actual conjugation. The downstream proofs
+  reuse this lemma rather than repeat the matrix map composition.
+
 ### Pure output Gram projection — library zero criterion (2026-10-29)
 
 - **Seen:** `Circuit/Channel/PhysicalPortPureOutput.lean`.
@@ -9786,6 +9812,19 @@ there is no need for a new tactic.
   threshold. Before extending this pattern to another module, move the value equality
   before the case distinction or reuse `Fin.val_inj`; no new tactic is needed.
 
+### Uncle boundary contraction and trace extension — candidate (2026-10-29)
+
+- **Seen:** `MPS/ParentHamiltonian/UncleBoundaryWords.lean` and
+  `MPS/ParentHamiltonian/UncleBoundaryIntersection.lean`.
+- **Pattern:** Extract coefficients of the identity from a full one-letter span,
+  contract a physical endpoint, and extend a trace identity from spanning words
+  to arbitrary matrices.
+- **Reuse:** The source-specific contraction is stated once as
+  `sum_smul_uncleBoundaryWord_cons`; Mathlib's `LinearMap.ext_on_range` supplies
+  the general extension. The existing matrix trace-representation theorem
+  handles both endpoint restriction directions.
+- **Decision:** Reuse the lemmas; no new tactic or parallel dual structure.
+
 ### Delta half factors for a supplied two-site circuit (2026-10-29)
 
 - **Seen:** `MPS/MPU/StandardFormFromGates.lean`.
@@ -9796,6 +9835,20 @@ there is no need for a new tactic.
   existing supplied standard-form and fundamental-theorem APIs. No fourth copy
   of the circuit contraction or custom tactic is introduced.
 
+
+### Normalization after prefix truncation — candidate (2026-10-29)
+
+- **Pattern:** A nonzero truncation of a unit vector has normalized error at
+  most twice its vector error, by the reverse triangle inequality and
+  `‖‖v‖⁻¹ • v - v‖ = |1 - ‖v‖|`.
+- **Seen:** `MPS/AreaLaw/MPSApproximation.lean`,
+  `MPS/AreaLaw/SnakeGridApproximation.lean`.
+- **Abstraction:** The former has the public lemma
+  `norm_inv_norm_smul_sub_le_two_mul`. Move that lemma to a shared algebra
+  module if a third caller needs it, so square-grid proofs can reuse it
+  without importing the chain area-law theorem.
+- **Notes:** Two occurrences; the square proof currently keeps this short
+  calculation inside its normalization step and imports only the truncation core.
 
 ### Exponential comparisons with a common nonnegative factor — reused Mathlib (2026-10-29)
 
@@ -9843,6 +9896,17 @@ there is no need for a new tactic.
   separate the index bookkeeping from the detectability estimate.
 - **Notes:** No tactic repetition reaches the promotion threshold. The
   repository pattern scan was rerun after the concrete chain assembly.
+
+### Coordinate transport of a rectangular conjugation (2026-10-29)
+
+- **Seen:** `Algebra/MatrixStarEquivSpatial.lean`.
+- **Pattern:** A square unitary becomes a rectangular unitary by reindexing its columns;
+  conjugation then transports the input matrix along the same coordinate equivalence.
+- **Reuse:** `Matrix.reindexLinearEquiv_mul` receives all three equivalences explicitly,
+  and `Matrix.conjTranspose_reindex` transports the adjoint. The existing QICLean
+  Skolem–Noether theorem supplies the square implementer. No entrywise double sum
+  or duplicate Skolem–Noether argument is introduced.
+
 
 
 
