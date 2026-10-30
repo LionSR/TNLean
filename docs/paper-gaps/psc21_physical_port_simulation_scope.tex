@@ -232,25 +232,41 @@ existence theorem does not impose a uniform environment-size bound on an
 entire family.
 
 \section{Exact pure outputs of the unitary realization}
-If the actual physical-port channel sends $\ketbra{\psi}{\psi}$ to the
-normalized pure state $\ketbra{\phi}{\phi}$, the actual joint output of
-its unitary realization factors as
+Let $U$ and the appended environment $E$ be as
+in~(\ref{eq:scope_deferred_dilation}). If the physical-port channel sends
+$\ketbra{\psi}{\psi}$ to the normalized pure state $\ketbra{\phi}{\phi}$,
+the joint output of its unitary realization factors as
 \begin{align}
-    U(\psi\otimes\ket{0_A})=\phi\otimes\eta,
+    U(\psi\otimes\ket{0_E})=\phi\otimes\eta,
     \qquad \langle\eta,\eta\rangle=1.
+    \label{eq:scope_pure_output_product}
 \end{align}
-The environment vector is derived from the actual output; its decoupling
-is not an input assumption. In coefficient-matrix coordinates the marginal
-identity is $CC^\dagger=P=\ketbra{\phi}{\phi}$. Since $P^2=P$,
-$(I-P)CC^\dagger=0$ implies $(I-P)C=0$, giving the factorization.
-The theorem
-\leanid{QuantumCircuit.IsPhysicalPortProtocol.exists_appended_unitary_dilation_pure_output}
-in \doclink{TNLean/Circuit/Channel/PhysicalPortPureOutput} retains the
-existing unitary, spatial ownership, physical ports and intersite-depth
-bound. It and the environment-branch theorem have passed hosted Lean
-compilation and strict checks; both Blueprint entries record these proofs.
+The environment vector is derived from the joint output; its decoupling
+is not an input assumption. Write $C_{s,e}=(U(\psi\otimes\ket{0_E}))_{s,e}$
+for the coefficient matrix of the joint output in the explicit
+original/environment coordinates, and $P=\ketbra{\phi}{\phi}$. Then
+\begin{align}
+    CC^\dagger & =\operatorname{tr}_E\bigl(U(\ketbra{\psi}{\psi}\otimes\ketbra{0_E}{0_E})U^\dagger\bigr)
+    =\Phi(\ketbra{\psi}{\psi})=P,
+    \label{eq:scope_pure_output_marginal} \\
+    (I-P)CC^\dagger & =P-P^2=0,
+    \notag \\
+    (I-P)C & =0,
+    \label{eq:scope_pure_output_annihilation}
+\end{align}
+where~(\ref{eq:scope_pure_output_annihilation}) follows from $MM^\dagger=0$
+for $M=(I-P)C$, since $MM^\dagger=0$ forces $M=0$. Hence $C=PC$, and with
+$\eta=\phi^\dagger C$ every coefficient is $C_{s,e}=\phi_s\eta_e$. Taking
+the trace of~(\ref{eq:scope_pure_output_marginal}) gives
+$\langle\eta,\eta\rangle=\operatorname{tr}P=\langle\phi,\phi\rangle=1$.
+The unitary, spatial ownership, physical ports and intersite-depth bound
+are those of~(\ref{eq:scope_deferred_dilation}).\footnote{Formal theorems:
+    \leanid{QuantumCircuit.IsPhysicalPortProtocol.exists_appended_unitary_dilation_pure_output}
+    and
+    \leanid{QuantumCircuit.IsPhysicalPortProtocol.exists_environmentKraus_pure_output}
+    in \doclink{TNLean/Circuit/Channel/PhysicalPortPureOutput}.}
 The environment may remain internally entangled and need not reset to zero.
-The actual environment-column operators also realize the channel, and each
+The environment-column operators also realize the channel, and each
 branch sends the input vector to its environment amplitude times the target
 vector. Their amplitudes are normalized, so every branch of nonzero probability
 has the same pure system state. This does not supply a source QCcc control
