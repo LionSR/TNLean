@@ -336,6 +336,7 @@ import TNLean.MPS.ParentHamiltonian.UncleWallGramBounds
 import TNLean.MPS.ParentHamiltonian.UncleWallGramGeneric
 import TNLean.MPS.ParentHamiltonian.UncleWallGramQuadratic
 import TNLean.MPS.ParentHamiltonian.UncleWallGramSlopePositive
+import TNLean.MPS.ParentHamiltonian.UniformPhysicalParentComparison
 import TNLean.MPS.ParentHamiltonian.UniqueGroundState
 import TNLean.MPS.ParentHamiltonian.WeightedCanonicalPhysicalLimit
 import TNLean.MPS.ParentHamiltonian.WeightedCanonicalSectors
@@ -344,6 +345,7 @@ import TNLean.MPS.ParentHamiltonian.VaryingOBCIntersection
 import TNLean.MPS.ParentHamiltonian.VaryingOBCParentUniqueness
 import TNLean.MPS.ParentHamiltonian.VaryingOBCProjectorKernel
 import TNLean.MPS.ParentHamiltonian.VaryingOBCReconstruction
+import TNLean.MPS.ParentHamiltonian.VaryingPhysicalKernelSupport
 import TNLean.MPS.ParentHamiltonian.VaryingPhysicalParentHamiltonian
 import TNLean.MPS.ParentHamiltonian.WeightedVirtualHilbert
 import TNLean.MPS.ParentHamiltonian.WrappingWindow
