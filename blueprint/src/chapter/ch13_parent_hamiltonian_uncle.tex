@@ -191,8 +191,8 @@ $P,Q$ have the same limit for fixed $A,B,R,L$. No assertion about generic
 perturbations, an algebraic exceptional set, gaplessness, or an
 infinite-volume Hamiltonian is included here.
 
-\begin{theorem}[Parent sectors in the uncle kernel]
-    \label{thm:uncle_parent_sector_containment}
+\begin{lemma}[Parent sectors in the uncle kernel]
+    \label{lem:uncle_parent_sector_containment}
     \lean{MPSTensor.groundSpaceMap_uncleTensor_left,
         MPSTensor.groundSpaceMap_uncleTensor_right,
         MPSTensor.groundSpace_blockTensor_le_uncleTensor_left,
@@ -217,7 +217,7 @@ infinite-volume Hamiltonian is included here.
     \end{align}
     This is the containment direction of
     \cite[ground-space theorem]{FernandezGonzalez2015Uncle}.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     A boundary matrix supported on the first diagonal virtual block pairs
@@ -231,8 +231,8 @@ infinite-volume Hamiltonian is included here.
     properties and is not concluded from this inclusion.
 \end{proof}
 
-\begin{theorem}[Local conditions for the uncle kernel]
-    \label{thm:uncle_kernel_local_conditions}
+\begin{lemma}[Local conditions for the uncle kernel]
+    \label{lem:uncle_kernel_local_conditions}
     \lean{MPSTensor.uncleInteractionES_isPositive,
         MPSTensor.uncleHamiltonianES_isPositive,
         MPSTensor.uncleInteractionES_apply_eq_zero_iff,
@@ -244,7 +244,7 @@ infinite-volume Hamiltonian is included here.
     if every cyclic two-site slice lies in $\ker h'_P$. After grouping its
     two physical sites, this local kernel is precisely the boundary-map
     range of $U$. The statement does not require injectivity.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     The local interaction is an orthogonal-complement projector conjugated
