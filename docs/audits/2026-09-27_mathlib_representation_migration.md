@@ -47,5 +47,5 @@ presentation is required. No further word-algebra transport is warranted by
 the current consumers.
 
 Validation: source inspection, import/declaration synchronization, and prose
-checks. No local Lean compilation was run; the new definition remains pending
-validation in the Blueprint.
+checks. The new definition and its evaluation lemma are proved without `sorry`,
+CI passed, and the Blueprint entry is marked formalized.
