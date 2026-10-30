@@ -9797,18 +9797,15 @@ there is no need for a new tactic.
 - **Notes:** The matrix-specific support-map presentation in the index
   comparison uses this shared owner; its duplicate private helper is removed.
 
-### Even-pair values determine the completed homomorphism — promoted (2026-10-29)
+### Delta half factors for a supplied two-site circuit (2026-10-29)
 
-- **Seen:** the actual alternating-rule extension and the common finite-window
-  comparison needed by the matrix product unitary construction.
-- **Promotion:** `SpinChain.quasiLocalStarAlgHom_ext_evenPair` belongs to the
-  existing support-generation owner. It pulls back an equalizer, consumes the
-  established algebraic even-pair generation, then uses completion density.
-- **Reuse:** The Margolus extension proof now supplies only the pair values;
-  it no longer carries a private copy of the global equalizer/density proof.
-- **Notes:** The public statement uses canonical physical even pairs and
-  continuous homomorphisms. No new local-generation predicate is introduced.
-
+- **Seen:** `MPS/MPU/StandardFormFromGates.lean`.
+- **Pattern:** A virtual index records a physical/intermediate pair; a matrix-unit
+  half factor contracts the other half factor to the supplied shifted gate.
+- **Reuse:** The finite delta sum is handled by Mathlib's ordinary `simp` lemmas.
+  The periodic seam, circuit unitarity and basis-change cancellation reuse the
+  existing supplied standard-form and fundamental-theorem APIs. No fourth copy
+  of the circuit contraction or custom tactic is introduced.
 
 ### Complete finite operators from fixed-exterior matrix slices — candidate (2026-10-29)
 
@@ -9835,6 +9832,45 @@ there is no need for a new tactic.
   `MPS/MPU/FiniteChainConjugation.lean` applies the existing inclusion
   composition theorem under the actual conjugation. The downstream proofs
   reuse this lemma rather than repeat the matrix map composition.
+
+### Common buffered chain for completed local inverse identities — candidate (2026-10-29)
+
+- **Pattern:** use derived finite output support, choose one finite chain containing
+  both input and output with their buffers, reflect equality through the faithful
+  local observable embedding, cancel the actual finite conjugations, and extend
+  by completion density.
+- **Occurrences:** the two inverse directions in
+  `SpinChain.exists_isQCA_of_isMPUCanonicalFormII` use the single private helper
+  `leftInverse_of_finiteChainConjugation` in `MPS/MPU/CanonicalQuasiLocalAction.lean`.
+- **Abstraction:** the helper already removes the repeated common-buffer and
+  completion proof. No tactic is needed; a public generalization should wait for
+  an independent caller.
+
+### Finite gate conjugation in matrix units — candidate (2026-10-29)
+
+- **Seen:** `MPS/MPU/TwoSiteStandardFormOpenWord.lean` and
+  `QCA/MargolusTensorLocalRule.lean`.
+- **Pattern:** Expand the middle observable once as a finite matrix-unit
+  sum, distribute the two shifted gate factors, and embed each Kronecker
+  product using the existing bipartite observable homomorphism.
+- **Reuse:** `twoLinkOutputObservable_eq_sum_kronecker` owns the finite
+  identity; `bipartiteMatrixToQuasiLocalObservable_kronecker` owns its
+  product evaluation. Neither the periodic contraction nor the support
+  factor presentation is repeated.
+- **Decision:** Use mathematical helper lemmas; no custom tactic is needed.
+
+### Even-pair values determine the completed homomorphism — promoted (2026-10-29)
+
+- **Seen:** the actual alternating-rule extension and the common finite-window
+  comparison needed by the matrix product unitary construction.
+- **Promotion:** `SpinChain.quasiLocalStarAlgHom_ext_evenPair` belongs to the
+  existing support-generation owner. It pulls back an equalizer, consumes the
+  established algebraic even-pair generation, then uses completion density.
+- **Reuse:** The Margolus extension proof now supplies only the pair values;
+  it no longer carries a private copy of the global equalizer/density proof.
+- **Notes:** The public statement uses canonical physical even pairs and
+  continuous homomorphisms. No new local-generation predicate is introduced.
+
 
 ### Finite local generation by single-site algebras — promoted helper (2026-10-29)
 
@@ -9888,20 +9924,6 @@ there is no need for a new tactic.
   window evaluation and support theorems.
 - **Notes:** The actual middle output is [k,5k) inside its existing 6k-site
   window; no support conclusion or new factor predicate is a premise.
-
-### Common buffered chain for completed local inverse identities — candidate (2026-10-29)
-
-- **Pattern:** use derived finite output support, choose one finite chain containing
-  both input and output with their buffers, reflect equality through the faithful
-  local observable embedding, cancel the actual finite conjugations, and extend
-  by completion density.
-- **Occurrences:** the two inverse directions in
-  `SpinChain.exists_isQCA_of_isMPUCanonicalFormII` use the single private helper
-  `leftInverse_of_finiteChainConjugation` in `MPS/MPU/CanonicalQuasiLocalAction.lean`.
-- **Abstraction:** the helper already removes the repeated common-buffer and
-  completion proof. No tactic is needed; a public generalization should wait for
-  an independent caller.
-
 
 ### Reuse established interval-coordinate owners across consumers (2026-10-29)
 
@@ -9959,16 +9981,6 @@ there is no need for a new tactic.
 - **Decision:** Three branch occurrences in one file, below the two-file promotion
   threshold. Before extending this pattern to another module, move the value equality
   before the case distinction or reuse `Fin.val_inj`; no new tactic is needed.
-
-### Delta half factors for a supplied two-site circuit (2026-10-29)
-
-- **Seen:** `MPS/MPU/StandardFormFromGates.lean`.
-- **Pattern:** A virtual index records a physical/intermediate pair; a matrix-unit
-  half factor contracts the other half factor to the supplied shifted gate.
-- **Reuse:** The finite delta sum is handled by Mathlib's ordinary `simp` lemmas.
-  The periodic seam, circuit unitarity and basis-change cancellation reuse the
-  existing supplied standard-form and fundamental-theorem APIs. No fourth copy
-  of the circuit contraction or custom tactic is introduced.
 
 ### Rectangular reduction of doubled words — promoted (2026-10-29)
 

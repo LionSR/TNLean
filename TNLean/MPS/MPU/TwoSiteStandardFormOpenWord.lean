@@ -236,6 +236,58 @@ noncomputable def twoLinkOutputObservable
   twoLinkOutputGate v * twoLinkMiddleLift (u * A * uᴴ) *
     (twoLinkOutputGate v)ᴴ
 
+/-- The actual four-half-site output is the full matrix-unit expansion of
+its two shifted gate factors. The same shifted gate occurs on both
+neighbouring pairs, with the middle coordinates ordered left then right.
+Source: CPSV17, StandardForm, lines 603--622; Schumacher--Werner,
+bruleU/bruleV and locMarg, lines 980--1008. -/
+theorem twoLinkOutputObservable_eq_sum_kronecker
+    (u : Matrix (Fin ℓ × Fin r) (Fin d × Fin d) ℂ)
+    (v : Matrix (Fin d × Fin d) (Fin r × Fin ℓ) ℂ)
+    (A : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ) :
+    twoLinkOutputObservable u v A =
+      ∑ i : Fin ℓ × Fin r, ∑ j : Fin ℓ × Fin r, (u * A * uᴴ) i j •
+        ((v * ((1 : Matrix (Fin r) (Fin r) ℂ) ⊗ₖ
+            Matrix.single i.1 j.1 (1 : ℂ)) * vᴴ) ⊗ₖ
+          (v * (Matrix.single i.2 j.2 (1 : ℂ) ⊗ₖ
+            (1 : Matrix (Fin ℓ) (Fin ℓ) ℂ)) * vᴴ)) := by
+  classical
+  let F : Matrix (Fin ℓ × Fin r) (Fin ℓ × Fin r) ℂ →ₗ[ℂ]
+      Matrix ((Fin r × Fin ℓ) × (Fin r × Fin ℓ))
+        ((Fin r × Fin ℓ) × (Fin r × Fin ℓ)) ℂ :=
+    { toFun := twoLinkMiddleLift
+      map_add' := by
+        intro B C
+        ext x y
+        simp only [twoLinkMiddleLift, Matrix.add_apply]
+        ring
+      map_smul' := by
+        intro c B
+        ext x y
+        simp only [twoLinkMiddleLift, Matrix.smul_apply, smul_eq_mul]
+        ring }
+  have hsingle (i j : Fin ℓ × Fin r) (c : ℂ) :
+      F (Matrix.single i j c) = c •
+        (((1 : Matrix (Fin r) (Fin r) ℂ) ⊗ₖ Matrix.single i.1 j.1 (1 : ℂ)) ⊗ₖ
+          (Matrix.single i.2 j.2 (1 : ℂ) ⊗ₖ (1 : Matrix (Fin ℓ) (Fin ℓ) ℂ))) := by
+    ext x y
+    simp only [F, LinearMap.coe_mk, AddHom.coe_mk, twoLinkMiddleLift,
+      Matrix.smul_apply, smul_eq_mul, Matrix.kroneckerMap_apply,
+      Matrix.single_apply, Matrix.one_apply, Prod.mk.injEq]
+    split_ifs <;> simp_all <;> ring
+  have hmiddle (C : Matrix (Fin ℓ × Fin r) (Fin ℓ × Fin r) ℂ) :
+      twoLinkMiddleLift C =
+        ∑ i : Fin ℓ × Fin r, ∑ j : Fin ℓ × Fin r, C i j •
+          (((1 : Matrix (Fin r) (Fin r) ℂ) ⊗ₖ Matrix.single i.1 j.1 (1 : ℂ)) ⊗ₖ
+            (Matrix.single i.2 j.2 (1 : ℂ) ⊗ₖ (1 : Matrix (Fin ℓ) (Fin ℓ) ℂ))) := by
+    change F C = _
+    conv_lhs => rw [Matrix.matrix_eq_sum_single C]
+    simp only [map_sum, hsingle]
+  rw [twoLinkOutputObservable, hmiddle]
+  simp only [twoLinkOutputGate, Matrix.mul_sum, Matrix.sum_mul,
+    Matrix.mul_smul, Matrix.smul_mul, Matrix.conjTranspose_kronecker,
+    ← Matrix.mul_kronecker_mul]
+
 /-- The local middle-site pull-through is an operator identity for every
 choice of the two exposed boundary coefficients. -/
 private theorem twoLink_open_middle_intertwiner
