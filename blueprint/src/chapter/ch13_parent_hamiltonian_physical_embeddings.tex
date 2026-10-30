@@ -1,0 +1,120 @@
+\section{Embeddings of physical coordinate spaces}
+
+\begin{definition}[Euclidean extension by zero]
+    \label{def:physical_euclidean_extension_zero}
+    \lean{Function.Embedding.euclideanExtendByZero,
+        Function.Embedding.euclideanExtendByZero_apply_image,
+        Function.Embedding.euclideanExtendByZero_apply_not_mem_range}
+    \leanok
+    For an injection $e:I\hookrightarrow J$ of finite sets, let
+    $E_e:\mathbb C^I\to\mathbb C^J$ extend each coefficient family by zero:
+    \begin{align}
+        (E_e\xi)(j) & =
+        \begin{cases}
+            \xi(i), & j=e(i),       \\
+            0,      & j\notin e(I).
+        \end{cases}
+    \end{align}
+    Then $E_e$ is a linear isometry. In particular, this applies to an
+    injection of dependent configuration sets induced by a family of
+    physical embeddings.
+\end{definition}
+\begin{proof}\leanok
+    The sum of $|(E_e\xi)(j)|^2$ over $j\in J$ equals the sum of
+    $|\xi(i)|^2$ over $i\in I$, since every coefficient outside $e(I)$ is
+    zero and each coefficient in $e(I)$ occurs once.
+\end{proof}
+
+\begin{definition}[A common alphabet for differently sized physical sites]
+    \label{def:varying_physical_common_alphabet}
+    \lean{Matrix.commonPhysicalEmbedding,
+        Matrix.commonPhysicalConfigurationIsometry,
+        Matrix.commonPhysicalConfigurationIsometry_apply_image}
+    \leanok
+    \uses{def:physical_euclidean_extension_zero}
+    Let a finite family of sites have physical dimensions $d_i$, and set
+    $D=\sum_i d_i$. Each alphabet $\{0,\ldots,d_i-1\}$ embeds in
+    $\{0,\ldots,D-1\}$ by retaining its numerical label. The induced injection
+    of dependent configuration sets gives a linear isometry from
+    the physical chain space into the common-alphabet chain space.
+    Each original coefficient is preserved and all coefficients outside
+    the image vanish.
+\end{definition}
+
+\begin{lemma}[Physical extension preserves the canonical site equations]
+    \label{lem:varying_physical_extension_span_row}
+    \lean{Matrix.span_range_extend_physical,
+        Matrix.sum_mul_conjTranspose_extend_physical}
+    \leanok
+    Let $A_i\in M_{a,b}(\mathbb C)$ and $e:I\hookrightarrow J$ be an injection
+    of finite physical alphabets. Define $\widetilde A_{e(i)}=A_i$ and
+    $\widetilde A_j=0$ outside the image. Then
+    \begin{align}
+        \operatorname{span}\{\widetilde A_j:j\in J\}
+         & =\operatorname{span}\{A_i:i\in I\},
+         & \sum_{j\in J}\widetilde A_j\widetilde A_j^\dagger
+         & =\sum_{i\in I}A_iA_i^\dagger.
+    \end{align}
+    Thus both the spanning condition and canonical row normalization are
+    unchanged by physical extension.
+\end{lemma}
+\begin{proof}\leanok
+    Every original matrix occurs at its embedded label; every added matrix
+    is zero. The same observation removes the zero terms from the row sum.
+\end{proof}
+
+\begin{lemma}[Pair boundary ranges and parent projectors intertwine]
+    \label{lem:varying_physical_pair_projection_transport}
+    \lean{Matrix.rectangularPairBoundary,
+        Matrix.rectangularPairBoundary_apply,
+        Matrix.range_rectangularPairBoundary_extend_physical,
+        Matrix.pair_parent_projection_extend_physical}
+    \leanok
+    \uses{def:physical_euclidean_extension_zero}
+    Consider rectangular families $A_i\in M_{a,b}(\mathbb C)$ and
+    $B_k\in M_{b,c}(\mathbb C)$, with independent physical embeddings
+    $e:I\hookrightarrow J$ and $f:K\hookrightarrow L$. Their pair range is
+    \begin{align}
+        G & =\left\{\left(\operatorname{tr}(XA_iB_k)\right)_{i,k}:
+        X\in M_{c,a}(\mathbb C)\right\}.
+    \end{align}
+    Let $\widetilde G$ be the range of the extended families. Then
+    $\widetilde G=E_{e\times f}(G)$, and the complementary orthogonal
+    projections satisfy
+    \begin{align}
+        P_{\widetilde G^\perp}E_{e\times f}
+         & =E_{e\times f}P_{G^\perp}.
+    \end{align}
+    No spanning or normalization assumption is required.
+\end{lemma}
+\begin{proof}\leanok
+    The pair coefficients extend by zero because a matrix at any added
+    physical label is zero. This proves equality of the ranges.
+    An isometry carries the orthogonal projection onto $G$ to the projection
+    onto its image when evaluated on embedded vectors. Subtracting that
+    identity from the identity operator gives the complementary projections.
+\end{proof}
+
+\begin{lemma}[Extended local parent terms intertwine]
+    \label{lem:varying_physical_local_parent_transport}
+    \lean{Matrix.pair_parent_localTerm_extend_physical}
+    \leanok
+    \uses{lem:varying_physical_pair_projection_transport,
+        lem:physical_spectator_embedding_transport}
+    Let $S$ be the finite configuration space outside a pair, with any
+    injection $g:S\hookrightarrow T$. Extend the complementary pair
+    projectors by the identity outside the pair. Then
+    \begin{align}
+        (P_{\widetilde G^\perp}\otimes I_T)E_{(e\times f)\times g}
+         & =E_{(e\times f)\times g}(P_{G^\perp}\otimes I_S).
+    \end{align}
+    The local operators and their intertwining are derived from the
+    rectangular families and their physical embeddings.
+\end{lemma}
+\begin{proof}\leanok
+    At an outside configuration $g(s)$, the active-coordinate vector of an
+    embedded vector is the embedding of its original active-coordinate vector
+    at $s$. At outside configurations not in the image of $g$, that vector is
+    zero. Apply the pair-projector intertwining on each such vector; linearity
+    handles the zero vectors outside the image.
+\end{proof}

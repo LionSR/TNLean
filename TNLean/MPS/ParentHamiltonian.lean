@@ -220,6 +220,8 @@ import TNLean.MPS.ParentHamiltonian.PeriodicSectorExpectations
 import TNLean.MPS.ParentHamiltonian.PeriodicSectorRepresentatives
 import TNLean.MPS.ParentHamiltonian.PeriodicShortGapContinuity
 import TNLean.MPS.ParentHamiltonian.PhysicalActionWordTupleSpan
+import TNLean.MPS.ParentHamiltonian.PhysicalAlphabetEmbedding
+import TNLean.MPS.ParentHamiltonian.PhysicalAlphabetLocalTerms
 import TNLean.MPS.ParentHamiltonian.PhysicalDeformation
 import TNLean.MPS.ParentHamiltonian.PhysicalEmbedding
 import TNLean.MPS.ParentHamiltonian.PhysicalReindexProjection
