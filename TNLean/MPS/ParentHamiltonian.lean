@@ -143,6 +143,8 @@ import TNLean.MPS.ParentHamiltonian.GroundSpaceMapContinuity
 import TNLean.MPS.ParentHamiltonian.GroundSpaceSectorCompressionDecay
 import TNLean.MPS.ParentHamiltonian.GroundSpaceSpanning
 import TNLean.MPS.ParentHamiltonian.HalfChainCanonicalSpectrum
+import TNLean.MPS.ParentHamiltonian.HalfChainGeneralCanonicalSpectrum
+import TNLean.MPS.ParentHamiltonian.HalfChainPhysicalStability
 import TNLean.MPS.ParentHamiltonian.HalfChainSchmidt
 import TNLean.MPS.ParentHamiltonian.HalfChainSourceSpectrum
 import TNLean.MPS.ParentHamiltonian.HalfChainSpectralComparison
