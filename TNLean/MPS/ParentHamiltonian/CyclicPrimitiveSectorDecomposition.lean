@@ -49,7 +49,6 @@ theorem IsPeriodic.exists_cyclic_primitive_sector_resolution
         (∀ j i, blockTensor A m i * V j = V j * B j i) ∧
         (∀ j i, (V j)ᴴ * blockTensor A m i = B j i * (V j)ᴴ) := by
   classical
-  let : NeZero D := ⟨hA.bondDim_ne_zero⟩
   let : NeZero m := ⟨Nat.ne_of_gt hA.period_pos⟩
   obtain ⟨dim, B, P, φ, V, hTP, hMPV, hproj, hsum, hcycle, hComm, hTrace,
     hTransfer, hMul, hStar, hdim, hLetter, hiso, hV, hEmbed⟩ :=
