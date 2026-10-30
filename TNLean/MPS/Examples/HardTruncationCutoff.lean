@@ -272,10 +272,17 @@ private theorem ground_weights (K : ℕ) :
   have hz : regionalWeight K (groundConfig K) = 0 := by
     apply Finset.sum_eq_zero
     intro j _
-    have hK : K ≠ 0 := by omega
+    have hK : K ≠ 0 := by have := j.isLt; omega
     simp [internalWeight, bit, groundConfig, Fin.ext_iff, hK,
       show j.val + 1 ≠ 0 by omega]
-  simp [totalWeight, truncatedWeight, boundaryWeight, bit, groundConfig, hz]
+  have hb : boundaryWeight K (groundConfig K) = 3 / 4 := by
+    norm_num [boundaryWeight, bit, groundConfig]
+  refine ⟨hz, ?_, ?_⟩
+  · show boundaryWeight K (groundConfig K) + regionalWeight K (groundConfig K) = 3 / 4
+    rw [hb, hz, add_zero]
+  · show min (regionalWeight K (groundConfig K)) (3 / 2)
+        + boundaryWeight K (groundConfig K) = 3 / 4
+    rw [hz, hb, min_eq_left (show (0 : ℝ) ≤ 3 / 2 by norm_num), zero_add]
 
 /-- Both actual Hamiltonians have attained ground energy `3/4`; the regional
 Hamiltonian has attained minimum zero. No ground energy is supplied as input. -/
@@ -293,8 +300,9 @@ theorem actual_ground_energies {K : ℕ} (hK : 2 ≤ K) :
     rw [smul_one_eq_diagonal, diagonal_sub]
     apply Matrix.PosSemidef.diagonal
     intro σ
-    change 0 ≤ (w σ : ℂ) - 3 / 4
-    exact_mod_cast (sub_nonneg.mpr (hw σ) : (0 : ℝ) ≤ w σ - 3 / 4)
+    change (0 : ℂ) ≤ (w σ : ℂ) - 3 / 4
+    rw [show (w σ : ℂ) - 3 / 4 = ((w σ - 3 / 4 : ℝ) : ℂ) by push_cast; ring]
+    exact Complex.zero_le_real.mpr (sub_nonneg.mpr (hw σ))
   obtain ⟨hA, hH, hF⟩ := ground_weights K
   refine ⟨by simp [Ω], ?_, ?_, ?_, ?_, ?_, ?_⟩
   · rw [regional_diagonal]
