@@ -9773,7 +9773,6 @@ there is no need for a new tactic.
   The generic filtering module is intended for QICLean, where the helper can be
   consolidated with the existing ground-projection development.
 
-
 ### Increasing a matrix product bond bound — reuse (2026-10-29)
 
 - **Lemma:** `IsOpenMPS.mono` in `MPS/AreaLaw/OpenMPSCutRank.lean`
@@ -9783,6 +9782,17 @@ there is no need for a new tactic.
   Both reuse this lemma, including the empty-chain case.
 - **Mechanism:** An ordinary monotonicity theorem suffices.
 
+### Nested finite-chain local inclusions — promoted lemma (2026-10-29)
+
+- **Seen:** The fixed-window, full-central-interval, singleton comparison,
+  and canonical forward-family proofs in `MPS/MPU/TwoSiteBufferedAction.lean`
+  and `MPS/MPU/TwoSiteLocalAction.lean`.
+- **Pattern:** Compose two canonical local inclusions inside an actual finite
+  MPU conjugation and its algebraic-local inclusion.
+- **Promoted:** `SpinChain.finiteChainLocalObservable_localInclusion` in
+  `MPS/MPU/FiniteChainConjugation.lean` applies the existing inclusion
+  composition theorem under the actual conjugation. The downstream proofs
+  reuse this lemma rather than repeat the matrix map composition.
 
 ### Pure output Gram projection — library zero criterion (2026-10-29)
 
@@ -9869,18 +9879,6 @@ there is no need for a new tactic.
   rectangular block multiplication identity at its generic matrix owner in
   QICLean, and retain the actual MPU source-specific wrappers here.
 
-
-### Nested finite-chain local inclusions — promoted lemma (2026-10-29)
-
-- **Seen:** The fixed-window, full-central-interval, singleton comparison,
-  and canonical forward-family proofs in `MPS/MPU/TwoSiteBufferedAction.lean`
-  and `MPS/MPU/TwoSiteLocalAction.lean`.
-- **Pattern:** Compose two canonical local inclusions inside an actual finite
-  MPU conjugation and its algebraic-local inclusion.
-- **Promoted:** `SpinChain.finiteChainLocalObservable_localInclusion` in
-  `MPS/MPU/FiniteChainConjugation.lean` applies the existing inclusion
-  composition theorem under the actual conjugation. The downstream proofs
-  reuse this lemma rather than repeat the matrix map composition.
 
 ### Common buffered chain for completed local inverse identities — candidate (2026-10-29)
 
