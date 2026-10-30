@@ -9847,6 +9847,13 @@ there is no need for a new tactic.
 - **Finite coordinates:** Reuse `Fin.cast_val_eq_self`, `Fin.val_natCast`,
   `Nat.mod_eq_of_lt`, and `Fin.val_add_eq_ite` in the matrix identities and the
   entry obstruction. No custom finite-arithmetic tactic is needed.
+=======
+- **Seen:** The two inclusions in `PEPS/ParentHamiltonian/CycleParentGroundSpace.lean`
+  transport local membership through the existing arc physical equivalence, then
+  rewrite the proved regional-slice/cyclic-restriction identity.
+- **Reuse:** One named slice identity handles both directions. A complementary
+  assignment extends using its own exterior value, avoiding positive-dimension
+  assumptions or separate empty-alphabet proof branches. No new tactic is needed.
 
 ### Delta half factors for a supplied two-site circuit (2026-10-29)
 
