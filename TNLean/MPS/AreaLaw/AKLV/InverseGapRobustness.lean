@@ -110,9 +110,7 @@ theorem orthogonal_clipped_energy_ge_of_inverse_gap_cutoff
       L N R A hL.isHermitian hN.isHermitian hR.isHermitian hLN hLR hNR t]
     simp only [Matrix.mul_assoc]
     rfl
-  have hnormA : ‖A‖ ≤ 2 := by
-    apply (CStarAlgebra.norm_le_iff_le_algebraMap A (by norm_num) hA.nonneg).mpr
-    simpa [Algebra.algebraMap_eq_smul_one, ← Complex.coe_smul] using hAcap
+  have hnormA : ‖A‖ ≤ 2 := hA.norm_le_of_le_smul_one (by norm_num) (by simpa using hAcap)
   have hbound : ‖⟪p, ι K q⟫_ℂ‖ ≤ 2 * ‖p‖ * ‖q‖ := by
     rw [hcross]
     calc

@@ -5048,16 +5048,15 @@ three-plaquette output measurement, and the routed reunion measurement.
   `exists_normalizedCutBlock_eq_sum_sub` (regional sums away from the removed bonds).
   Each cutoff proves only its orthogonal energy bound. No new tactic is needed.
 
-### Boundary operator norm from its positive cap — candidate (2026-10-29)
+### Boundary operator norm from its positive cap — promoted (2026-10-30)
 
 - **Seen:** `MPS/AreaLaw/AKLV/HighEnergyMass.lean`, `ProjectionEnergy.lean`,
   and `InverseGapRobustness.lean`; the targeted pattern scan reports three uses.
 - **Pattern:** Convert `0 ≤ A ≤ 2I` to `‖A‖ ≤ 2` with
   `CStarAlgebra.norm_le_iff_le_algebraMap` and the scalar-matrix identity.
-- **Decision:** A future mathematical helper can replace the three proofs.
-  Promotion across the older call sites is deferred because this refinement
-  explicitly requires preserving all accepted AKLV proof bytes. No additional
-  tactic or alternate operator norm is introduced.
+- **Abstraction:** `Matrix.PosSemidef.norm_le_of_le_smul_one`
+  (`0 ≤ A ≤ c • 1 → ‖A‖ ≤ c`) in `HighEnergyMass.lean`; the three call
+  sites now apply it. No tactic or alternate operator norm is introduced.
 
 ### Recovering letters by an identity contraction — candidate (2026-10-29)
 
