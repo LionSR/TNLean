@@ -343,8 +343,7 @@ matrices, and let $\E_K$ be its Kraus map.
 \begin{lemma}[Comparison of the two channel indices]
     \label{thm:q_index_le_i_index_channel}
     \lean{MPSTensor.qIndex_le_iIndex_of_tracePreserving}
-    \notready
-    \discussion{10275}
+    \leanok
     \uses{def:wielandt_i_index, def:wielandt_q_index, thm:wielandt_proposition_three}
     Let $A_1,\ldots,A_d\in\MN{D}$, where $D>0$, satisfy
     $\sum_i A_i^\dagger A_i=\Id$. With both indices set to zero when
@@ -352,12 +351,14 @@ matrices, and let $\E_K$ be its Kraus map.
     This is \cite[Proposition~1]{Sanz2010Quantum}.
 \end{lemma}
 
-\begin{proof}
-    If some positive length has full matrix span, its least such length
-    sends every nonzero vector onto a spanning family, giving the inequality.
+\begin{proof}\leanok
+    If $\iota(A)$ is a positive integer with $S_{\iota(A)}(A)=\MN{D}$, then
+    $H_{\iota(A)}(A,\varphi)=\C^D$ for every $\varphi\neq0$, so $\iota(A)$
+    lies in the defining set for $q(\E_A)$ and $q(\E_A)\le\iota(A)$.
     Otherwise, Lemma~\ref{thm:wielandt_proposition_three} excludes
-    primitivity. The defining set for $q(\E_A)$ is empty, so
-    $q(\E_A)=0\le\iota(A)$.
+    primitivity, so
+    $\{q\ge1:H_q(A,\varphi)=\C^D\text{ for every }\varphi\neq0\}=\emptyset$
+    and $q(\E_A)=0\le\iota(A)$.
 \end{proof}
 
 \begin{lemma}[Primitive-channel specialization of the index bound]
