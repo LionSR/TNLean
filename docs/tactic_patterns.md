@@ -9735,7 +9735,6 @@ there is no need for a new tactic.
   existing supplied standard-form and fundamental-theorem APIs. No fourth copy
   of the circuit contraction or custom tactic is introduced.
 
-
 ### Coordinate transport of a rectangular conjugation (2026-10-29)
 
 - **Seen:** `Algebra/MatrixStarEquivSpatial.lean`.
