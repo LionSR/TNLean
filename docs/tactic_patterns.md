@@ -10046,6 +10046,7 @@ there is no need for a new tactic.
   contract every open word, including the empty word.
 
 ### Uncle boundary contraction and trace extension — candidate (2026-10-29)
+### Delta half factors for a supplied two-site circuit (2026-10-29)
 
 - **Seen:** `MPS/ParentHamiltonian/UncleBoundaryWords.lean` and
   `MPS/ParentHamiltonian/UncleBoundaryIntersection.lean`.
