@@ -96,11 +96,13 @@ theorem eq_zero_of_pvbsPureWindow_adjacent_terms_eq_zero
     refine ⟨g, fun σ ↦ ?_⟩
     have hcfg : cyclicCfg (by omega) (N + 2) (⟨1, by omega⟩ : Fin (N + 3))
         σ (Fin.cons a 0) = Fin.cons a σ := by
-      rw [cyclicCfg_eq_contiguousCfg (by omega) (by omega) (by simp)]
+      rw [cyclicCfg_eq_contiguousCfg (by omega) (by omega) (by simp; omega)]
       funext k
       refine Fin.cases ?_ (fun j ↦ ?_) k
       · simp [contiguousCfg]
-      · simp [contiguousCfg, j.isLt, Nat.add_comm]
+      · have hj := j.isLt
+        simp [contiguousCfg]
+        exact fun h ↦ absurd h (by omega)
     have hσ := hg σ
     change ψ (cyclicCfg (by omega) (N + 2) ⟨1, by omega⟩ σ (Fin.cons a 0)) = _ at hσ
     rwa [hcfg] at hσ

@@ -36,9 +36,8 @@ theorem cyclicRestrictES_periodicLocalInteractionES
       (cyclicCfg (Fin.pos i) R i ω τ) ψ = cyclicRestrictES (Fin.pos i) R i τ ψ := by
     ext ν
     exact congrFun (cyclicRestrictₗ_cyclicCfg_outside (Fin.pos i) i ω τ ψ.ofLp) ν
-  have hextract : extractWindow R i (cyclicCfg (Fin.pos i) R i ω τ) = ω := by
-    rw [cyclicCfg_eq_replaceWindow (Fin.pos i) R hRN]
-    exact extractWindow_replaceWindow R hRN i τ ω
+  have hextract : extractWindow R i (cyclicCfg (Fin.pos i) R i ω τ) = ω :=
+    extractWindow_replaceWindow R hRN i τ ω
   rw [hrestrict, hextract]
 
 /-- A translated local interaction vanishes precisely when it kills every
