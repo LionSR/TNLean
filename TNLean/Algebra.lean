@@ -143,8 +143,11 @@ import TNLean.Algebra.NormedRingTelescoping
 import TNLean.Algebra.OneMagnon
 import TNLean.Algebra.OperatorSchmidt
 import TNLean.Algebra.OrderedIdempotentTracePerturbation
+import TNLean.Algebra.OrthogonalComplexStructure
+import TNLean.Algebra.OrthogonalComplexStructureBasis
 import TNLean.Algebra.OrthogonalKernelGap
 import TNLean.Algebra.OrthogonalResolution
+import TNLean.Algebra.OrthogonalSkewNormalForm
 import TNLean.Algebra.OrthogonalSymplecticKroneckerDeterminant
 import TNLean.Algebra.PathGraphDistance
 import TNLean.Algebra.PermutationMatrixCommutation
@@ -155,6 +158,7 @@ import TNLean.Algebra.PiTensorProductPhase
 import TNLean.Algebra.PositiveGeneralizedCocycle
 import TNLean.Algebra.PositivePowerSumMoments
 import TNLean.Algebra.PowerExponential
+import TNLean.Algebra.PreBialgebra
 import TNLean.Algebra.PrimitiveMatrixIdealDimension
 import TNLean.Algebra.ProductFactorUniqueness
 import TNLean.Algebra.ProjectionDefectIsometry
@@ -191,7 +195,9 @@ import TNLean.Algebra.SemiRegularTensorFactor
 import TNLean.Algebra.SemisimpleTracePowers
 import TNLean.Algebra.SignedPermutationSpan
 import TNLean.Algebra.SingletMatrix
+import TNLean.Algebra.SkewUnitaryNormalForm
 import TNLean.Algebra.StabilizerBlockIndependence
+import TNLean.Algebra.StabilizerBlockIndependenceCircle
 import TNLean.Algebra.StabilizerCocycleExtension
 import TNLean.Algebra.StabilizerCocycleLSymbol
 import TNLean.Algebra.StabilizerCocycleReconstruction

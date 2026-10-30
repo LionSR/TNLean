@@ -10,7 +10,9 @@ Authors: TNLean contributors
 
 import TNLean.MPS.Symmetry.MPOSymmetry.AnomalyObstruction
 import TNLean.MPS.Symmetry.MPOSymmetry.ArbitraryPhysicalEndpointAttachment
+import TNLean.MPS.Symmetry.MPOSymmetry.ArbitraryPhysicalMixedGroundProjection
 import TNLean.MPS.Symmetry.MPOSymmetry.ArbitraryPhysicalMixedInterpolation
+import TNLean.MPS.Symmetry.MPOSymmetry.ArbitraryPhysicalMixedMPO
 import TNLean.MPS.Symmetry.MPOSymmetry.ArbitraryPhysicalMixedPathGap
 import TNLean.MPS.Symmetry.MPOSymmetry.Associator
 import TNLean.MPS.Symmetry.MPOSymmetry.AssociatorCohomology
@@ -105,6 +107,7 @@ import TNLean.MPS.Symmetry.MPOSymmetry.MixedEndpointZeroSectorGap
 import TNLean.MPS.Symmetry.MPOSymmetry.NIMRep
 import TNLean.MPS.Symmetry.MPOSymmetry.PBCGroupProjector
 import TNLean.MPS.Symmetry.MPOSymmetry.PermutedBlocks
+import TNLean.MPS.Symmetry.MPOSymmetry.PermutedBlocksGauge
 import TNLean.MPS.Symmetry.MPOSymmetry.RepS3SU24NIMRep
 import TNLean.MPS.Symmetry.MPOSymmetry.RingEndpointComparison
 import TNLean.MPS.Symmetry.MPOSymmetry.RingEndpointRightComparison

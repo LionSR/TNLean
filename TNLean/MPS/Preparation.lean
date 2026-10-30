@@ -49,6 +49,7 @@ import TNLean.MPS.Preparation.EmbedLocalOperatorNorm
 import TNLean.MPS.Preparation.ExactFixedPointPolar
 import TNLean.MPS.Preparation.ExactSectorEncoder
 import TNLean.MPS.Preparation.ExplicitPreparationScale
+import TNLean.MPS.Preparation.FiniteRingGaussianFilter
 import TNLean.MPS.Preparation.FiniteRingLiebRobinson
 import TNLean.MPS.Preparation.FixedPointPairState
 import TNLean.MPS.Preparation.FixedPointPairs
@@ -162,6 +163,7 @@ import TNLean.MPS.Preparation.SupportedLogLogPreparation
 import TNLean.MPS.Preparation.SupportedPolar
 import TNLean.MPS.Preparation.SupportedPolarTree
 import TNLean.MPS.Preparation.SupportedTreePreparation
+import TNLean.MPS.Preparation.TransferSpectrumFromCorrelations
 import TNLean.MPS.Preparation.TreeAmplitude
 import TNLean.MPS.Preparation.TreeFactorization
 import TNLean.MPS.Preparation.TreeMERA
