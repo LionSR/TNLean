@@ -18,9 +18,6 @@ CmdLine
   -n 13  # Intersentence-spacing heuristic.
   -n 15  # Unmatched-parenthesis heuristic; round-bracket bra-ket/valence-bond notation.
   -n 17  # Bracket-balance heuristic; noisy in blueprint macro arguments.
-  -n 44  # Nested-optional-argument regex; false positive on half-open interval
-         # notation such as `[a,b)` in math, where the unclosed `[` is a
-         # bracket delimiter, not a nested `[...]` optional argument.
   -n 18  # Quote-style heuristic.
   -n 24  # Page-reference spacing heuristic.
   -n 25  # Brace-insertion heuristic.
