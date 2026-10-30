@@ -26,7 +26,7 @@ coefficient decomposition, lines 970–993.
 noncomputable section
 
 open Filter Matrix
-open scoped Matrix.Norms.L2Operator InnerProductSpace Topology BigOperators
+open scoped Matrix.Norms.L2Operator InnerProductSpace Topology BigOperators ComplexOrder
 
 namespace MPSTensor
 
@@ -191,8 +191,8 @@ theorem abs_halfChainEigenvalues_sub_le (A : MPSTensor d D) (B : MPSTensor d E)
   have hEig : |hA.paddedEigenvalues k - hB.paddedEigenvalues k| ≤
       ‖normalizedHalfChainReducedMatrix A L - normalizedHalfChainReducedMatrix B L‖ := by
     by_cases hk : k < Fintype.card (Cfg d L)
-    · simpa [Matrix.IsHermitian.paddedEigenvalues, hk] using
-        hA.abs_eigenvalues₀_sub_le hB ⟨k, hk⟩
+    · have h := hA.abs_eigenvalues₀_sub_le hB ⟨k, hk⟩
+      rwa [← hA.paddedEigenvalues_fin ⟨k, hk⟩, ← hB.paddedEigenvalues_fin ⟨k, hk⟩] at h
     · rw [hA.paddedEigenvalues_eq_zero (Nat.le_of_not_lt hk),
         hB.paddedEigenvalues_eq_zero (Nat.le_of_not_lt hk), sub_self, abs_zero]
       exact norm_nonneg _
