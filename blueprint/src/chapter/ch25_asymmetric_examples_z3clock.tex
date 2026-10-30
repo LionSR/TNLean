@@ -21,7 +21,7 @@ representatives. The trivial cocycle in
 Lemma~\ref{thm:asymex_z3clock_kernels} alone does not identify the
 Else--Nayak class of these dressed operators; after a rescaling of every site
 that makes them an exact representation, this class is computed and shown to
-vanish in Theorem~\ref{thm:asymex_z3clock_anomaly}.
+vanish in Lemma~\ref{thm:asymex_z3clock_anomaly}.
 
 As in Section~\ref{sec:asymex_z3anomalous}, let
 $\omega=\exp(2\pi\mathrm{i}/3)$, let $X\ket{s}=\ket{s+1}$ on a qutrit, and
@@ -307,7 +307,7 @@ follows on a ring of $N$ sites.
     configuration is $\prod_k a(s_k,s_{k+1})$.
 \end{definition}
 
-\begin{theorem}[The clock symmetry is not anomalous]
+\begin{lemma}[The clock symmetry is not anomalous]
     \label{thm:asymex_z3clock_anomaly}
     \lean{Z3Clock.mpo_normU_mul_normU, Z3Clock.mpo_normU_mul_normV,
         Z3Clock.mpo_normV_mul_normU, Z3Clock.mpo_normV_mul_normV,
@@ -337,7 +337,7 @@ follows on a ring of $N$ sites.
     $\omega(g,e,g)\,\omega(g,g,g)\,\omega(g,g^2,g)=1$ at the generator $g$.
     The class is the trivial class $\omega_0$ of the classification
     of~\cite[Section~IV.D]{GarreRubioSchuch2024DomainWall}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok

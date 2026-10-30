@@ -5261,6 +5261,33 @@ tensor-level bridge to an underlying MPS--MPU pair is not asserted here.
     $\Psi(a,b)=\psi(a,b)$.
 \end{proof}
 
+\begin{lemma}[Block independence extends the stabilizer cocycle]
+    \label{lem:mpug_bi_basepoint_extension}
+    \lean{TNLean.Algebra.LSymbol.basepointExtension_apply_of_isTrivial_gauge,
+        TNLean.Algebra.LSymbol.exists_extension_of_isBlockIndependent}
+    \leanok
+    \uses{lem:mpug_trivializing_extension, thm:mpug_block_independence_four_forms,
+        def:mpug_block_independence_gauge_forms}
+    Let $G$ act on $\mathsf X$ with basepoint $x_0$ and stabilizer
+    $H=\operatorname{Stab}_G(x_0)$, and let $L$ be any $L$-symbol compatible
+    with $\omega=1$. If $L$ is block independent after a joint scalar gauge,
+    then there is a two-cocycle $\Psi:G\times G\to\C^\times$ with
+    $\Psi(a,b)=L^{x_0}_{a,b}$ for all $a,b\in H$. This is the converse
+    direction of \cite[lines~7057--7064]{FrancoRubio2025MPUGauging} for an
+    arbitrary compatible $L$-symbol, not only for one induced by
+    representatives.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:mpug_trivializing_extension, thm:mpug_block_independence_four_forms}
+    By Lemma~\ref{thm:mpug_block_independence_four_forms}, some joint scalar
+    gauge $(\beta,\gamma)$ trivializes $L$. The cochain
+    (\ref{eq:mpug_trivializing_extension}) is a two-cocycle by
+    Lemma~\ref{lem:mpug_trivializing_extension}. For $b\in H$ the trivializing
+    identity at $(x_0,a,b)$ uses only $bx_0=x_0$, and it gives
+    $\Psi(a,b)=L^{x_0}_{a,b}$.
+\end{proof}
+
 % Scalar criterion only: the tensor bridge and U(1) naturality remain open.
 \begin{lemma}[Scalar block independence and restriction of the stabilizer class]
     \label{lem:mpug_scalar_bi_restriction}
@@ -6355,11 +6382,10 @@ $\sigma(s)$ in the setting of \cite[lines~5207--5338]{FrancoRubio2025MPUGauging}
     On the subgroup $H=\{(2a,b):a,b\in\{0,1\}\}$, the comparison with the
     cluster virtual representatives $W_{(b,a)}=Z^bX^a$ is
     $V_{(2a,b),x}=(-i)^{ab}W_{(b,a)}$.
-    No claim is made about defect normalization, $L$-symbols, cocycle
-    nonextension, block independence, or gauging.
-    % Scoped calculation only: no defect normalization, L-symbols,
-    % cocycle nonextension, block independence, or gauging is asserted.
-    % Those remaining parts of example:z4z2 stay open in #7352.
+    The $L$-symbols, the nonextension of the stabilizer class and the failure
+    of block independence are treated in
+    Lemma~\ref{thm:mpug_ghz_cluster_l_symbols} and
+    Lemma~\ref{thm:mpug_ghz_cluster_not_block_independent}.
 \end{lemma}
 
 \begin{proof}\leanok
@@ -6375,6 +6401,368 @@ $\sigma(s)$ in the setting of \cite[lines~5207--5338]{FrancoRubio2025MPUGauging}
     on the physical index into the stated conjugation identity.
     Finally, $ZX=iY$, so the only phase needed to compare the restriction
     with $Z^bX^a$ is $-i$ when $a=b=1$.
+\end{proof}
+
+\begin{lemma}[L-symbols of matrix action tensors]
+    \label{thm:mpug_l_symbols_action_matrices}
+    \lean{TNLean.Algebra.LSymbol.isCompatible_one_of_mul_eq_smul,
+        TNLean.Algebra.LSymbol.isNormalized_of_mul_eq_smul}
+    \leanok
+    \uses{def:mpug_l_symbols, def:mpug_l_normalized}
+    Let $G$ act on $\mathsf X$, and let $S_{g,x}$ be nonzero square matrices
+    and $L^x_{g,h}$ nonzero scalars with
+    \begin{align}
+        S_{g,hx}S_{h,x} & =L^x_{g,h}S_{gh,x}
+        \label{eq:mpug_action_matrix_l_symbols}
+    \end{align}
+    for all $g,h\in G$ and $x\in\mathsf X$, as for an onsite symmetry moved to
+    the virtual level of each block
+    \cite[lines~4363--4368]{FrancoRubio2025MPUGauging}. Then $L$ is compatible
+    with the trivial three-cochain. If moreover $S_{e,x}=\Id$ for every $x$,
+    then $L$ is normalized.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:mpug_l_symbols}
+    Both bracketings of $S_{g,hkx}S_{h,kx}S_{k,x}$ are evaluated with
+    (\ref{eq:mpug_action_matrix_l_symbols}). One gives
+    $L^{kx}_{g,h}L^x_{gh,k}S_{ghk,x}$ and the other gives
+    $L^x_{g,hk}L^x_{h,k}S_{ghk,x}$. Since $S_{ghk,x}\neq0$, the scalars agree.
+    With $S_{e,x}=\Id$, the relation at $(g,e)$ and at $(e,g)$ reads
+    $S_{g,x}=L^x_{g,e}S_{g,x}$ and $S_{g,x}=L^x_{e,g}S_{g,x}$.
+\end{proof}
+
+\begin{lemma}[L-symbols of the GHZ--cluster state]
+    \label{thm:mpug_ghz_cluster_l_symbols}
+    \lean{MPSTensor.z4z2GHZClusterBlockMulAction,
+        MPSTensor.z4z2_smul_def,
+        MPSTensor.z4z2ActionMatrix,
+        MPSTensor.twistedTensor_z4z2GHZClusterBlock,
+        MPSTensor.z4z2ActionMatrix_one,
+        MPSTensor.z4z2ActionMatrix_mul_conjTranspose,
+        MPSTensor.z4z2ActionMatrix_ne_zero,
+        MPSTensor.z4z2PauliWord,
+        MPSTensor.z4z2XCode,
+        MPSTensor.z4z2PauliPhase,
+        MPSTensor.z4z2ActionMatrix_eq_pauliWord,
+        MPSTensor.z4z2PauliWord_mul,
+        MPSTensor.z4z2XCode_mul,
+        MPSTensor.z4z2IUnit,
+        MPSTensor.z4z2LSymbol,
+        MPSTensor.coe_z4z2LSymbol,
+        MPSTensor.z4z2ActionMatrix_mul,
+        MPSTensor.z4z2LSymbol_isCompatible,
+        MPSTensor.z4z2LSymbol_isNormalized,
+        MPSTensor.z4z2LSymbol_pow_four,
+        MPSTensor.z4z2U,
+        MPSTensor.z4z2V,
+        MPSTensor.z4z2LSymbol_zero_sq_v}
+    \leanok
+    \uses{thm:mpug_ghz_cluster_action_table, thm:mpug_l_symbols_action_matrices,
+        def:mpug_l_symbols, def:mpug_l_normalized}
+    In the setting of Lemma~\ref{thm:mpug_ghz_cluster_action_table}, put
+    $S_{g,x}=V_{g,x}$, the action tensors $A^\Gamma_{g,x}$ of
+    \cite[lines~4482--4487]{FrancoRubio2025MPUGauging}. Then
+    \begin{align}
+        \sum_j (U_g)_{i,j}A_x^j & =S_{g,x}^\dagger A_{g\cdot x}^iS_{g,x},
+        \qquad S_{e,x}=\Id,
+    \end{align}
+    each $S_{g,x}$ is unitary, and each is a Pauli word
+    $i^{\alpha\beta}X^\alpha Z^\beta$, with $\beta=b$ for $g=(a,b)$. There are
+    scalars $L^x_{g,h}$ with
+    \begin{align}
+        S_{g,h\cdot x}S_{h,x} & =L^x_{g,h}S_{gh,x},
+        \label{eq:mpug_ghz_cluster_l_symbols}
+    \end{align}
+    as at \cite[line~4366]{FrancoRubio2025MPUGauging}. They are compatible with
+    the trivial three-cochain, normalized, and fourth roots of unity, so they
+    take values in $\{\pm1,\pm i\}$ as stated at
+    \cite[line~4495]{FrancoRubio2025MPUGauging}. With $u=(1,0)$ and $v=(0,1)$,
+    \begin{align}
+        L^0_{u^2,v} & =-i, & L^0_{v,u^2} & =i.
+        \label{eq:mpug_ghz_cluster_l_values}
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_ghz_cluster_action_table, thm:mpug_l_symbols_action_matrices}
+    The conjugation identity is the covariance of
+    Lemma~\ref{thm:mpug_ghz_cluster_action_table}, since every $V_{g,x}$ is
+    Hermitian. In the table, $\Id$, $X$, $Z$ and $Y=iXZ$ are the Pauli words
+    with exponents $(0,0)$, $(1,0)$, $(0,1)$ and $(1,1)$. Using $X^2=Z^2=\Id$
+    and $ZX=-XZ$,
+    \begin{align}
+        \bigl(i^{\alpha\beta}X^\alpha Z^\beta\bigr)
+        \bigl(i^{\alpha'\beta'}X^{\alpha'}Z^{\beta'}\bigr)
+         & =i^{\alpha\beta+\alpha'\beta'+2\beta\alpha'
+            -(\alpha+\alpha')(\beta+\beta')}\,
+        i^{(\alpha+\alpha')(\beta+\beta')}X^{\alpha+\alpha'}Z^{\beta+\beta'},
+        \notag
+    \end{align}
+    with exponents of $X$ and $Z$ added modulo two. The $X$ exponent of
+    $S_{g,x}$ is additive along the action,
+    $\alpha(gh,x)=\alpha(g,h\cdot x)+\alpha(h,x)$, as one checks on the
+    sixteen pairs, and the $Z$ exponent is additive. This gives
+    (\ref{eq:mpug_ghz_cluster_l_symbols}) with $L^x_{g,h}$ the displayed power
+    of $i$. Lemma~\ref{thm:mpug_l_symbols_action_matrices} gives compatibility
+    and normalization. Finally $S_{u^2,0}=X$ and $S_{v,0}=Z$, and
+    $XZ=-iY$ while $ZX=iY$.
+\end{proof}
+
+\begin{lemma}[Block independence fails for the GHZ--cluster state]
+    \label{thm:mpug_ghz_cluster_not_block_independent}
+    \lean{MPSTensor.z4z2Unbroken,
+        MPSTensor.z4z2StabilizerCocycle,
+        MPSTensor.z4z2StabilizerCocycle_isMulCocycle₂,
+        MPSTensor.z4z2StabilizerCocycle_H2π_ne_zero,
+        MPSTensor.commPhase_z4z2U_sq_z4z2V,
+        MPSTensor.z4z2StabilizerCocycle_not_extends,
+        MPSTensor.z4z2StabilizerCocycle_H2π_not_mem_range,
+        MPSTensor.z4z2LSymbol_not_isBlockIndependent}
+    \leanok
+    \uses{thm:mpug_ghz_cluster_l_symbols, lem:mpug_bi_basepoint_extension,
+        thm:comm_phase_bicharacter, thm:nontrivial_of_comm_phase,
+        thm:mpug_h2_exact_extension, def:mpug_block_independence_gauge_forms}
+    Let $H=\{(2a,b)\}$ be the stabilizer of the block $0$, the unbroken
+    subgroup of \cite[line~4489]{FrancoRubio2025MPUGauging}, and let
+    $\psi(a,b)=L^0_{a,b}$ for $a,b\in H$. Then $\psi$ is a two-cocycle with
+    nonzero class in $H^2(H,\C^\times)$. No two-cocycle of
+    $G=\Z_4\times\Z_2$ restricts to $\psi$, so $[\psi]$ is not in the image of
+    the restriction map $H^2(G,\C^\times)\to H^2(H,\C^\times)$
+    \cite[line~4385]{FrancoRubio2025MPUGauging}. Consequently the $L$-symbols
+    of Lemma~\ref{thm:mpug_ghz_cluster_l_symbols} are not block independent
+    after any joint scalar gauge, as asserted at
+    \cite[line~4490]{FrancoRubio2025MPUGauging}. Block independence is meant
+    here as the scalar condition on these $L$-symbols, with coefficients in
+    $\C^\times$; see \cite{gap:fbc25_mpu_action_stabilizer_source_audit}. The
+    modified fusion operators and the state-level gauging are not treated.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_ghz_cluster_l_symbols, lem:mpug_bi_basepoint_extension,
+        thm:comm_phase_bicharacter, thm:nontrivial_of_comm_phase,
+        thm:mpug_h2_exact_extension}
+    Compatibility of $L$ with $\omega=1$ at the block $0$ and arguments in $H$
+    is the cocycle equation of $\psi$, because $H$ fixes the block $0$. By
+    (\ref{eq:mpug_ghz_cluster_l_values}), the commutator phase of $\psi$ at the
+    commuting pair $(u^2,v)$ is $(-i)/i=-1$, so the class of $\psi$ is
+    nonzero by Lemma~\ref{thm:nontrivial_of_comm_phase}. If a two-cocycle
+    $\Psi$ of $G$ restricted to $\psi$, then, $G$ being commutative,
+    Lemma~\ref{thm:comm_phase_bicharacter} would give
+    \begin{align}
+        \beta_\Psi(u^2,v) & =\beta_\Psi(u,v)^2=\beta_\Psi(u,v^2)
+        =\beta_\Psi(u,e)=1,
+        \notag
+    \end{align}
+    against $\beta_\Psi(u^2,v)=\beta_\psi(u^2,v)=-1$. The class statement
+    follows by Lemma~\ref{thm:mpug_h2_exact_extension}. Finally, block
+    independence would produce such a $\Psi$ by
+    Lemma~\ref{lem:mpug_bi_basepoint_extension}.
+\end{proof}
+
+\section{The controlled-\texorpdfstring{$Z$}{Z} symmetry and its gauging}
+\label{sec:mpug_controlled_z}
+
+The simplest symmetry that is not onsite is the ring of controlled-$Z$ gates
+$U=\prod_j\mathrm{CZ}_{j,j+1}$ on a chain of qubits
+\cite[lines~3794--3968]{FrancoRubio2025MPUGauging}. Write
+$s(a,b)=(-1)^{ab}$ for bits $a,b$; these are the entries of $\sqrt2H$, and
+$s(a,b)$ is the phase of $\mathrm{CZ}\ket{a,b}$.
+
+\begin{definition}[The controlled-\texorpdfstring{$Z$}{Z} matrix product unitary]
+    \label{def:mpug_controlled_z_tensor}
+    \lean{ControlledZGauging.czSign,
+        ControlledZGauging.czMPUTensor,
+        ControlledZGauging.czMPUTensor_apply,
+        ControlledZGauging.czPhase,
+        ControlledZGauging.czBondDim,
+        ControlledZGauging.czRepTensor,
+        ControlledZGauging.czFamily}
+    \leanok
+    \uses{def:mpo_tensor}
+    Following \cite[eq.~(CZ) and eq.~(deltas)]{FrancoRubio2025MPUGauging}, the
+    gate is a copy tensor $\delta_{ijr}$ on each qubit joined along the bond by
+    $\sqrt2H$. Absorbing each $\sqrt2H$ into the site on its right gives the
+    bond-two tensor
+    \begin{align}
+        M^{ij}_{lr} & =\delta_{ij}\,\delta_{rj}\,s(l,j),
+        \label{eq:mpug_controlled_z_tensor}
+    \end{align}
+    with output index $i$ and input index $j$. Together with the identity
+    tensor of bond dimension one, it gives the family $\{\Id,M\}$ over $\Z_2$.
+\end{definition}
+
+\begin{lemma}[Tensors with a forced outgoing bond]
+    \label{thm:mps_forced_column_normality}
+    \lean{MPSTensor.isNBlkInjective_two_of_forced_column,
+        MPSTensor.isNormal_of_forced_column,
+        MPSTensor.mpv_of_forced_right_bond}
+    \leanok
+    \uses{def:mps_tensor}
+    Let $A$ be a tensor of bond dimension $D$. Suppose that for every bond
+    label $j$ some letter $\ell_j$ has the single nonzero column $j$, equal to
+    a vector $v_j$ with no vanishing entry, and that $v_1,\dots,v_D$ are the
+    columns of an invertible matrix. Then the words of length two span all
+    $D\times D$ matrices, so $A$ is normal. If every entry $A^i_{lr}$ vanishes
+    unless $r=\beta(i)$, and then equals $\varphi(i,l)$, the periodic amplitude
+    on a ring is $\prod_n\varphi(\sigma_{n+1},\beta(\sigma_n))$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:mps_tensor}
+    The product $A^{\ell_j}A^{\ell_k}$ is $v_k(j)\,v_je_k^{T}$, so the matrix
+    unit $e_le_k^T$ is the combination
+    $\sum_j P_{jl}\,v_k(j)^{-1}A^{\ell_j}A^{\ell_k}$, where $P$ is the inverse
+    of the matrix with columns $v_j$. For the amplitude, only the closed bond
+    configuration with bond $\beta(\sigma_n)$ after site $n$ contributes.
+\end{proof}
+
+\begin{lemma}[The controlled-\texorpdfstring{$Z$}{Z} symmetry is not anomalous]
+    \label{thm:mpug_controlled_z_not_anomalous}
+    \lean{ControlledZGauging.mpo_czMPUTensor,
+        ControlledZGauging.mulVec_mpo_czMPUTensor,
+        ControlledZGauging.mpo_czMPUTensor_mul_self,
+        ControlledZGauging.czSign_mul_self,
+        ControlledZGauging.czSign_ne_zero,
+        ControlledZGauging.toMPSTensor_czMPUTensor,
+        ControlledZGauging.czMPUTensor_isNormal,
+        ControlledZGauging.czFamily_isNormalRepresentation,
+        ControlledZGauging.zeroState,
+        ControlledZGauging.zeroState_isNormal,
+        ControlledZGauging.mpv_zeroState,
+        ControlledZGauging.fixesMPV_zeroState,
+        ControlledZGauging.isTrivialGaugeClass_omega_czFamily,
+        ControlledZGauging.czFamily_anomalyClass_eq_zero}
+    \leanok
+    \uses{def:mpug_controlled_z_tensor, thm:mpug_anomaly_obstruction,
+        def:mpug_anomaly_class, thm:mps_forced_column_normality}
+    On every ring of $N\geq1$ qubits the periodic operator of $M$ is the
+    diagonal matrix with entries $\prod_ks(t_k,t_{k+1})$, that is,
+    $U=\prod_j\mathrm{CZ}_{j,j+1}$, and $U^2=\Id$. The tensor $M$ is normal, so
+    $\{\Id,M\}$ represents $\Z_2$ exactly by normal tensors. The product state
+    $\ket{0\cdots0}$ is normal and fixed by $U$. Hence, for every choice of
+    fusion tensors, the anomaly three-cocycle has trivial gauge class and the
+    anomaly class in $H^3(\Z_2,\C^\times)$ vanishes, as stated at
+    \cite[line~3873]{FrancoRubio2025MPUGauging}.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_anomaly_obstruction, thm:mps_forced_column_normality}
+    The outgoing bond of $M$ copies the input, so the periodic operator is the
+    product of the entries along the forced bonds, $s(t_k,t_{k+1})$ at each
+    site, and squares to the identity since $s^2=1$. The letter $(j,j)$ of $M$
+    has the single nonzero column $j$, equal to the column $j$ of $\sqrt2H$, an
+    invertible matrix with no vanishing entry, so $M$ is normal by
+    Lemma~\ref{thm:mps_forced_column_normality}. Every entry
+    $\prod_ks(0,0)=1$ fixes $\ket{0\cdots0}$, and
+    Theorem~\ref{thm:mpug_anomaly_obstruction} applies.
+\end{proof}
+
+\begin{definition}[The invariant state, its defect, and the gauged tensor]
+    \label{def:mpug_controlled_z_defect}
+    \lean{ControlledZGauging.stateInt,
+        ControlledZGauging.defectInt,
+        ControlledZGauging.stateTensor,
+        ControlledZGauging.defectTensor,
+        ControlledZGauging.gaugedLetter,
+        ControlledZGauging.gaugedTensor,
+        ControlledZGauging.gaugedTensor_finProdFinEquiv,
+        ControlledZGauging.twoSite,
+        ControlledZGauging.gaussPerm,
+        ControlledZGauging.gaussOperator}
+    \leanok
+    \uses{def:mpug_controlled_z_tensor}
+    As in \cite[lines~3874--3896]{FrancoRubio2025MPUGauging}, let
+    \begin{align}
+        A^0   & =\begin{pmatrix}1&0&0\\0&0&0\\0&1&1\end{pmatrix}, &
+        A^1   & =\begin{pmatrix}0&1&-1\\-1&0&0\\0&0&0\end{pmatrix},
+        \notag                                                    \\
+        A_g^0 & =\begin{pmatrix}0&-1&-1\\0&0&0\\-1&0&0\end{pmatrix}, &
+        A_g^1 & =\begin{pmatrix}1&0&0\\0&-1&1\\0&0&0\end{pmatrix}.
+        \notag
+    \end{align}
+    The gauged tensor has letters $C^{ie}=A^i$ and $C^{ig}=A_g^i$, with the
+    gauge label written as a bit \cite[line~3966]{FrancoRubio2025MPUGauging}.
+    The Gauss operator $\mathcal G_g=\mathrm{CZ}\otimes X\otimes X$ acts on two
+    gauged sites by $\mathrm{CZ}$ on the two matter labels and $X$ on each
+    gauge label \cite[line~3968]{FrancoRubio2025MPUGauging}.
+\end{definition}
+
+\begin{lemma}[Defect identities and the Gauss law of the controlled-\texorpdfstring{$Z$}{Z} gauging]
+    \label{thm:mpug_controlled_z_gauss_law}
+    \lean{ControlledZGauging.sign_smul_state_mul_state,
+        ControlledZGauging.sign_smul_defect_mul_state,
+        ControlledZGauging.stateTensor_isNormal,
+        ControlledZGauging.czSign_smul_gaugedLetter_mul,
+        ControlledZGauging.gaussOperator_mul_self,
+        ControlledZGauging.sum_gaussOperator_smul_twoSite}
+    \leanok
+    \uses{def:mpug_controlled_z_defect}
+    The tensor $A$ is normal \cite[line~3885]{FrancoRubio2025MPUGauging}, and
+    for all bits $i,j$ \cite[eq.~(Z2\_def)]{FrancoRubio2025MPUGauging},
+    \begin{align}
+        s(i,j)\,A^iA^j   & =A_g^iA_g^j, &
+        s(i,j)\,A_g^iA^j & =A^iA_g^j.
+        \label{eq:mpug_controlled_z_defect}
+    \end{align}
+    The Gauss operator satisfies $\mathcal G_g^2=\Id$ and fixes the two-site
+    contraction of the gauged tensor:
+    $\sum_x(\mathcal G_g)_{y,x}C^{x_1}C^{x_2}=C^{y_1}C^{y_2}$ for every pair
+    $y=(y_1,y_2)$ of gauged labels.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:mpug_controlled_z_defect}
+    The identities (\ref{eq:mpug_controlled_z_defect}) are identities of
+    integer matrices, checked on the four pairs $(i,j)$. Twice every matrix
+    unit is a signed sum of at most four words of $A$ of length four, so the
+    words of length four span all matrices and $A$ is normal. By
+    (\ref{eq:mpug_controlled_z_defect}) and $s^2=1$, flipping both gauge labels
+    multiplies $C^{ia}C^{jb}$ by $s(i,j)$, which is the Gauss law in letters.
+    The operator $\mathcal G_g$ is the monomial matrix of the double gauge
+    flip with phases $s(i,j)$, so it is an involution, and its single nonzero
+    entry in each row turns the Gauss law in letters into the stated
+    invariance.
+\end{proof}
+
+\begin{lemma}[The split-index form of the gauged tensor]
+    \label{thm:mpug_controlled_z_split_index}
+    \lean{ControlledZGauging.simpsRInt,
+        ControlledZGauging.simpsLInt,
+        ControlledZGauging.xInt,
+        ControlledZGauging.simpsR,
+        ControlledZGauging.simpsL,
+        ControlledZGauging.simpsGauge,
+        ControlledZGauging.simpsTensor,
+        ControlledZGauging.stateTensor_eq_simpsR_mul_simpsL,
+        ControlledZGauging.defectTensor_eq_simpsR_mul_mul_simpsL,
+        ControlledZGauging.gaugedLetter_eq_simps,
+        ControlledZGauging.xInt_mul_simpsTensor_mul_xInt}
+    \leanok
+    \uses{def:mpug_controlled_z_defect}
+    Let
+    \begin{align}
+        R^0 & =\begin{pmatrix}1&0\\0&0\\0&-1\end{pmatrix}, &
+        R^1 & =\begin{pmatrix}1&0\\0&-1\\0&0\end{pmatrix}, &
+        L^0 & =\begin{pmatrix}1&0&0\\0&-1&-1\end{pmatrix}, &
+        L^1 & =\begin{pmatrix}0&1&-1\\1&0&0\end{pmatrix}.
+        \notag
+    \end{align}
+    Then $A^i=R^iL^i$, $A_g^i=R^iXL^i$, and $C^{ia}=R^iX^aL^i$, the internal
+    tensor of the virtual representation $S_e=\Id$, $S_g=X$ of
+    \cite[lines~4073--4209]{FrancoRubio2025MPUGauging}. The split-index tensor
+    $S^{ab}=L^aR^b$ satisfies $XS^{ab}X=s(a,b)\,S^{ab}$, the identity of
+    \cite[lines~4002--4072]{FrancoRubio2025MPUGauging}. The source draws $L$
+    and $R$ without listing their entries; the matrices above are one choice
+    realizing the displayed identities.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:mpug_controlled_z_defect}
+    Each identity is an identity of integer matrices, checked on the finitely
+    many values of the bits. For instance $S^{00}=S^{01}=\Id$, $S^{10}=X$ and
+    $S^{11}=\left(\begin{smallmatrix}0&-1\\1&0\end{smallmatrix}\right)$, which
+    anticommutes with $X$.
 \end{proof}
 
 \section{The gauge-invariant subspace of the CZX circuit tuple}
