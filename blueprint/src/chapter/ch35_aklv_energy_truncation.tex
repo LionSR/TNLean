@@ -414,7 +414,7 @@ In this section $P_t=\mathbf1_{(-\infty,t)}(B)$ and $Q_t=I-P_t$.
         QuantumCircuit.trace_mul_ne_zero_of_disjoint,
         QuantumCircuit.exists_common_ground_of_disjoint,
         QuantumCircuit.exists_normalized_common_ground_of_disjoint}
-    \notready
+    \leanok
     Let $C_0,C_1,C_2$ be Hermitian operators supported on pairwise
     disjoint sets of sites, with positive on-site dimension. Write
     $z_j=\min\operatorname{spec}(C_j)$ and
@@ -425,7 +425,7 @@ In this section $P_t=\mathbf1_{(-\infty,t)}(B)$ and $Q_t=I-P_t$.
     $w$ such that $(C_j-z_jI)w=0$ for all three $j$.
 \end{lemma}
 \begin{proof}
-    \notready
+    \leanok
     Functional calculus preserves the supported algebra. The trace of a
     ground cutoff is the positive multiplicity of the minimum eigenvalue.
     The tensor product trace identity gives
@@ -441,7 +441,7 @@ In this section $P_t=\mathbf1_{(-\infty,t)}(B)$ and $Q_t=I-P_t$.
     \lean{TNLean.MPS.AreaLaw.AKLV.normalizationCoreBonds,
         TNLean.MPS.AreaLaw.AKLV.normalizationCoreSites,
         TNLean.MPS.AreaLaw.AKLV.normalizationBoundaryBonds}
-    \notready
+    \leanok
     Number original bonds from zero and choose cut bonds $a,b$ with
     $a+2<b$. The core bond sets are
     \begin{align}
@@ -462,7 +462,7 @@ In this section $P_t=\mathbf1_{(-\infty,t)}(B)$ and $Q_t=I-P_t$.
     \lean{TNLean.MPS.AreaLaw.AKLV.exists_regional_minimum_shifts,
         TNLean.MPS.AreaLaw.AKLV.normalizationBoundaryBonds_card_le_six,
         TNLean.MPS.AreaLaw.AKLV.normalizationCoreBonds_sum}
-    \notready
+    \leanok
     \uses{def:aklv_original_normalization_cores,lem:aklv_disjoint_regional_ground}
     For original positive bonds, the actual regional minima $z_j$ make
     $C_j-z_jI\ge0$, and those three matrices have a common unit zero vector.
@@ -472,7 +472,7 @@ In this section $P_t=\mathbf1_{(-\infty,t)}(B)$ and $Q_t=I-P_t$.
     \end{align}
 \end{lemma}
 \begin{proof}
-    \notready
+    \leanok
     Apply Lemma~\ref{lem:aklv_disjoint_regional_ground} to the three core
     intervals. Every remaining bond lies in
     $[a-1,a+1]\cup[b-1,b+1]$, so at most six remain, including when an
@@ -484,7 +484,7 @@ In this section $P_t=\mathbf1_{(-\infty,t)}(B)$ and $Q_t=I-P_t$.
     \label{lem:aklv_original_normalization_data}
     \lean{TNLean.MPS.AreaLaw.AKLV.normalizedCutBlocks_posSemidef_of_core_shifts,
         TNLean.MPS.AreaLaw.AKLV.exists_normalized_chain_data}
-    \notready
+    \leanok
     \uses{lem:aklv_constructed_regional_shifts,def:aklv_normalized_cut_blocks}
     Suppose $0\le h_i\le I$ and a unit vector $\Omega$ is a ground vector
     of $H_0=\sum_i h_i$ at energy $E$. The constructed shifts give
@@ -495,7 +495,7 @@ In this section $P_t=\mathbf1_{(-\infty,t)}(B)$ and $Q_t=I-P_t$.
     \end{align}
 \end{lemma}
 \begin{proof}
-    \notready
+    \leanok
     Each clipped block is its positive shifted core plus original
     positive boundary terms. The shifted full Hamiltonian is
     $\sum_j(C_j-z_jI)+B\ge0$. A common unit zero vector of the three
@@ -506,7 +506,7 @@ In this section $P_t=\mathbf1_{(-\infty,t)}(B)$ and $Q_t=I-P_t$.
 \begin{theorem}[Exterior truncation from the original chain]
     \label{thm:aklv_original_chain_robustness}
     \lean{TNLean.MPS.AreaLaw.AKLV.original_chain_robustness}
-    \notready
+    \leanok
     \uses{lem:aklv_original_normalization_data,thm:aklv_robustness}
     Let $0\le h_i\le I$ be original nearest-neighbour interactions on a
     chain of positive on-site dimension. Let $H_0\Omega=E\Omega$,
@@ -531,7 +531,7 @@ In this section $P_t=\mathbf1_{(-\infty,t)}(B)$ and $Q_t=I-P_t$.
     \cite{gap:aklv13_robustness_constants}.
 \end{theorem}
 \begin{proof}
-    \notready
+    \leanok
     Lemma~\ref{lem:aklv_original_normalization_data} constructs the shifts
     and derives their required bounds. Scalar subtraction preserves
     the ground vector and the gap inequality. Since $e\le6$, the cutoff
