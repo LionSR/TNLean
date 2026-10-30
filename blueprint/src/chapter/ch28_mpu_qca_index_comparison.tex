@@ -178,12 +178,23 @@
 \end{lemma}
 \begin{proof}
     \leanok
-    A common finite chain contains a given local observable and both
-    source-radius buffers. The two actual finite conjugations coincide
-    because their physical periodic matrices coincide. Faithfulness
-    gives equality on the local algebra, and continuity and completion
-    density give equality on the quasi-local algebra. The supplied
-    standard-form automorphism has the same finite evaluation formula.
+    Let $U$ and $V$ be the two tensors, with bond dimensions $D$ and
+    $D'$, and let $A\in\mathcal A_\Lambda$ for a finite region
+    $\Lambda$. Choose one anchored interval $I_{b,N}$, $N>1$, containing
+    $\Lambda+\mathcal N_D$ and $\Lambda+\mathcal N_{D'}$, and write
+    $\iota_{\Lambda,I_{b,N}}$ for the canonical inclusion. Equality of
+    the periodic physical operators gives $U_b^{(N)}=V_b^{(N)}$, hence
+    \begin{align}
+        U_b^{(N)}\,\iota_{\Lambda,I_{b,N}}(A)\,U_b^{(N)\dagger}
+         & =V_b^{(N)}\,\iota_{\Lambda,I_{b,N}}(A)\,V_b^{(N)\dagger}.
+    \end{align}
+    By the finite-chain formula of Theorem~\ref{thm:mpu_actual_qca},
+    the two sides are $\Phi_U(A)$ and $\Phi_V(A)$ in the quasi-local
+    algebra. Thus $\Phi_U$ and $\Phi_V$ agree on every local algebra,
+    and continuity and completion density give $\Phi_U=\Phi_V$. The
+    supplied standard-form automorphism has the same finite evaluation
+    formula on sufficiently buffered intervals, so the same argument
+    identifies it with $\Phi_U$.
 \end{proof}
 
 \begin{lemma}[The canonical MPU index is the logarithm of its actual QCA index]

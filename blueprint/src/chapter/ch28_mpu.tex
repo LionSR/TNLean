@@ -12649,6 +12649,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \label{lem:mpu_doubled_rectangular_bond_map}
     \lean{MPOTensor.doubledBondMap, MPOTensor.doubleLayer_rectangularSandwich}
     \leanok
+    \uses{def:mpu_double_layer}
     For a rectangular matrix $A$, write $\widehat A=\overline A\otimes A$,
     with the canonical enumeration of the product indices.
     If $V^{ij}=AU^{ij}B$, then its double-layer letters satisfy
@@ -12745,12 +12746,27 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         lem:mpu_normalized_diagonal_insertions,
         thm:mpu_canonical_form_ii_transfer_stabilization,
         thm:mpu_all_later_simple_blockings}
-    To prove the first assertion, contract the insertion identity for $U$
-    between $\widehat A$ and $\widehat B$ and use the two- and three-letter
-    word identities. For the second assertion, the canonical normalized
-    diagonal of $V$ has a rank-one power, so the converse insertion gives the
-    two-letter rank-one insertion identity for $V$. That identity makes the
-    MPU tensor $V$ simple.
+    Write $E_U$ and $E_V$ for the normalized diagonals. The three- and
+    two-letter cases of Lemma~\ref{lem:mpu_doubled_open_word_reduction},
+    averaged over the middle letter, and the insertion identity for $U$
+    give
+    \begin{align}
+        E_V^{ij}E_VE_V^{kl}
+         & =\widehat A\,E_U^{ij}E_UE_U^{kl}\,\widehat B
+        =\widehat A\,E_U^{ij}E_U^{kl}\,\widehat B
+        =E_V^{ij}E_V^{kl}.
+        \notag
+    \end{align}
+    This is the first assertion. If $V$ is in canonical form II, its
+    normalized diagonal has a rank-one power $E_V^J=\rho'\Phi'$ with
+    $J>0$. The converse part of
+    Lemma~\ref{lem:mpu_normalized_diagonal_insertions} then gives
+    \begin{align}
+        E_V^{ij}E_V^{kl} & =E_V^{ij}\rho'\Phi'E_V^{kl},
+        \notag
+    \end{align}
+    and this two-letter rank-one insertion identity makes the MPU tensor
+    $V$ simple.
     % This argument does not replace V by a further physical block.
 \end{proof}
 
