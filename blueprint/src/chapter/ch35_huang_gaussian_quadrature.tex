@@ -1,0 +1,116 @@
+\section{Finite Gaussian quadrature}
+\label{sec:huang_gaussian_quadrature}
+
+The Gaussian error-reduction construction of
+\cite[Section 5.4, Lemma 19]{Huang2015GroundState} separates truncation in time,
+finite quadrature and approximation of each propagator. The results below establish
+the quadrature step with exact Gaussian interval masses. They do not construct a
+matrix product operator approximation to the full time evolution.
+
+\begin{definition}[Time mesh and Gaussian weights]
+    \label{def:huang_time_mesh}
+    \lean{TNLean.MPS.AreaLaw.timeMeshCount,TNLean.MPS.AreaLaw.timeMeshCell,
+        TNLean.MPS.AreaLaw.timeMeshNode,TNLean.MPS.AreaLaw.timeMeshWeight}
+    \leanok
+    Let $T\ge0$, $\delta>0$, and let $\gamma_h$ be the centered Gaussian measure
+    of variance $h\ge0$. Put $N=\lceil2T/\delta\rceil+1$ and, for $0\le j<N$, define
+    \begin{align*}
+        I_j & =[-T,T]\cap[-T+j\delta,-T+(j+1)\delta),                         \\
+        t_j & =\min\{-T+j\delta,T\},                  & w_j & =\gamma_h(I_j).
+    \end{align*}
+    At $h=0$, the Gaussian is the unit mass at zero.
+\end{definition}
+
+\begin{lemma}[Mass and number of samples]
+    \label{thm:huang_time_mesh_mass}
+    \lean{TNLean.MPS.AreaLaw.timeMeshNode_mem,TNLean.MPS.AreaLaw.timeMeshCount_le,
+        TNLean.MPS.AreaLaw.exists_timeMeshNode_abs_sub_le,
+        TNLean.MPS.AreaLaw.timeMeshWeight_nonneg,TNLean.MPS.AreaLaw.sum_timeMeshWeight,
+        TNLean.MPS.AreaLaw.sum_timeMeshWeight_le_one}
+    \leanok
+    \uses{def:huang_time_mesh}
+    Every node belongs to $[-T,T]$, and every point of that interval lies
+    within $\delta$ of a node. The weights satisfy
+    \[
+        w_j\ge0,\qquad \sum_jw_j=\gamma_h([-T,T])\le1,
+        \qquad N\le2T/\delta+2.
+    \]
+\end{lemma}
+\begin{proof}
+    \leanok
+    The cells are pairwise disjoint and cover $[-T,T]$, including the right endpoint.
+    Choosing a cell containing a given point gives its nearby node.
+    Additivity gives the mass identity. The node bounds follow from their definition,
+    and the ceiling estimate gives the sample count.
+\end{proof}
+
+\begin{lemma}[Gaussian quadrature error]
+    \label{thm:huang_time_mesh_error}
+    \lean{TNLean.MPS.AreaLaw.norm_setIntegral_sub_timeMesh_sum_le,
+        TNLean.MPS.AreaLaw.norm_integral_sub_timeMesh_sum_le}
+    \leanok
+    \uses{def:huang_time_mesh}
+    Let $f$ take values in a real Banach space, be integrable for $\gamma_h$, and satisfy
+    $\|f(t)-f(s)\|\le M|t-s|$ for $s,t\in[-T,T]$, with $M\ge0$. Then
+    \[
+        \left\|\int_{-T}^T f(t)\,d\gamma_h(t)-\sum_jw_jf(t_j)\right\|
+        \le M\delta.
+    \]
+    If $\|f(t)\|\le1$ for every $t$, then
+    \[
+        \left\|\int_{\mathbb R}f(t)\,d\gamma_h(t)-\sum_jw_jf(t_j)\right\|
+        \le2e^{-T^2/(2h)}+M\delta.
+    \]
+    For the last estimate at $h=0$, the exponential term is understood as $2$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{thm:huang_time_mesh_mass}
+    For $t\in I_j$ one has $|t-t_j|\le\delta$. Integrate the Lipschitz estimate
+    on each cell and sum; the total Gaussian mass is at most one. The full integral
+    differs from the truncated integral by at most the Gaussian mass outside $[-T,T]$,
+    which is bounded by the displayed exponential term.
+\end{proof}
+
+\begin{lemma}[Quadrature at prescribed mesh error]
+    \label{thm:huang_time_mesh_accuracy}
+    \lean{TNLean.MPS.AreaLaw.timeMeshCount_accuracy_le,
+        TNLean.MPS.AreaLaw.norm_integral_sub_timeMesh_accuracy_sum_le}
+    \leanok
+    \uses{thm:huang_time_mesh_error}
+    Let $\varepsilon>0$. Taking $\delta=\varepsilon/(M+1)$ gives error at most
+    $2e^{-T^2/(2h)}+\varepsilon$, with
+    \[
+        N\le\frac{2T(M+1)}{\varepsilon}+2.
+    \]
+    The same nodes and weights work for every admissible integrand.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Since $M\delta\le\varepsilon$, the preceding theorem applies. Substitute the
+    mesh into the sample-count bound.
+\end{proof}
+
+\begin{lemma}[Quadrature of Hermitian time evolution]
+    \label{thm:huang_unitary_quadrature}
+    \lean{TNLean.MPS.AreaLaw.norm_hermitianUnitaryPath_sub_time_le,
+        TNLean.MPS.AreaLaw.norm_gaussianIntertwiner_sub_unitary_timeMesh_sum_le}
+    \leanok
+    \uses{thm:huang_time_mesh_accuracy}
+    Let $H$ be Hermitian on a nonzero finite-dimensional Hilbert space. Its unitary path
+    $U(t)=e^{itH}$ satisfies $\|U(t)-U(s)\|\le\|H\||t-s|$. Consequently
+    \[
+        \left\|\int_{\mathbb R} e^{itH}\,d\gamma_h(t)-\sum_jw_je^{it_jH}\right\|
+        \le2e^{-T^2/(2h)}+\varepsilon
+    \]
+    for the mesh $\varepsilon/(\|H\|+1)$, with at most
+    $2T(\|H\|+1)/\varepsilon+2$ samples. This estimate applies in particular to a
+    Hamiltonian shifted by an energy estimate.
+\end{lemma}
+\begin{proof}
+    \leanok
+    The group law for the unitary path gives
+    $\|U(t)-U(s)\|=\|U(t-s)-I\|$. The Duhamel estimate against the zero generator
+    bounds this by $\|H\||t-s|$. Unitarity bounds the integrand norm by one, so the
+    preceding theorem applies in operator norm.
+\end{proof}
