@@ -1,0 +1,82 @@
+\subsection{Periodic closure of the single-wall spaces}
+
+% Source-written declarations; hosted elaboration and declaration checks are pending.
+\begin{lemma}[Cyclic boundary trace coefficients]
+    \label{thm:uncle_cyclic_boundary_coefficients}
+    \lean{MPSTensor.trace_uncleBlockMatrix_mul,
+        MPSTensor.eq_of_uncleBoundary_cyclic_pairing,
+        MPSTensor.exists_scalar_blocks_of_uncleBoundary_trace_cyclic}
+    \notready
+    \uses{def:two_block_uncle_tensor}
+    On four blocks write
+    \begin{align}
+        (A,R,L,B)\star(C,S,T,E)
+        =(AC,AS+RE,LC+BT,BE).
+        \notag
+    \end{align}
+    If two boundary matrices $X,Y$ satisfy
+    $\operatorname{tr}((M\star N)X)=\operatorname{tr}((N\star M)Y)$
+    for every $M,N$, then $X=Y$. If the pairing with $X$ is cyclic,
+    then $X=\operatorname{diag}(\alpha I,\beta I)$ for some scalars
+    $\alpha,\beta$.
+\end{lemma}
+
+\begin{proof}
+    Taking $M=I$ gives $X=Y$ by nondegeneracy of the ordinary trace
+    pairing. Pair a sector identity with an off-diagonal block: one
+    product is that block and the reversed product is zero. Trace
+    nondegeneracy therefore kills both off-diagonal boundary blocks.
+    On either diagonal sector, cyclicity says
+    $\operatorname{tr}(PQX)=\operatorname{tr}(QPX)$. Trace
+    nondegeneracy makes $X$ commute with every sector matrix, so each
+    diagonal block is scalar.
+\end{proof}
+
+\begin{lemma}[Scalar boundaries are the periodic sector vectors]
+    \label{thm:uncle_scalar_boundaries}
+    \lean{MPSTensor.uncleBoundaryMap_scalar_blocks}
+    \notready
+    \uses{def:two_block_uncle_tensor}
+    For the actual single-wall boundary map $\Gamma_N$, the boundary
+    $\operatorname{diag}(\alpha I,\beta I)$ gives
+    $\Gamma_N(\operatorname{diag}(\alpha I,\beta I))
+        =\alpha\ket{M(A)}+\beta\ket{M(B)}$.
+\end{lemma}
+
+\begin{proof}
+    The diagonal blocks of the single-wall coefficient word are the
+    pure $A$ and $B$ words. Scalar diagonal boundaries remove the two
+    off-diagonal contributions, leaving their two traces.
+\end{proof}
+
+\begin{lemma}[Periodic uncle boundary closure]
+    \label{thm:uncle_periodic_boundary_closure}
+    \lean{MPSTensor.uncleBoundarySpace_inf_cyclicTranslate}
+    \notready
+    \uses{def:two_block_uncle_tensor, def:parent_cyclic_translate_state}
+    Let the full perturbation letter
+    $\left(\begin{smallmatrix}A&R\\L&B\end{smallmatrix}\right)$ be
+    injective. For every $N\ge2$, let $S_N$ be the actual sum of the
+    two pure-sector and two single-wall boundary spaces, and let $T$
+    be the one-site cyclic translation. Then
+    $S_N\cap T(S_N)=\operatorname{span}\{\ket{M(A)},\ket{M(B)}\}$.
+    This is the closure lemma in~\cite{FernandezGonzalez2015Uncle},
+    used after the two-site uncle interaction.
+\end{lemma}
+
+\begin{proof}
+    \uses{thm:uncle_cyclic_boundary_coefficients,
+        thm:uncle_scalar_boundaries}
+    Represent a vector in the intersection by boundaries $X$ and $Y$
+    at the two cuts. A word with first letter $i$ and remaining
+    coefficient $W$ gives
+    $\operatorname{tr}((C_i\star W)X)
+        =\operatorname{tr}((W\star C_i)Y)$.
+    Full perturbation injectivity makes both the one-letter
+    coefficients and the positive-length remaining words span all
+    coefficient matrices. Extend the identity linearly in each
+    variable. The cyclic boundary theorem makes $X=Y$ scalar on
+    each diagonal sector, giving the asserted span. Conversely,
+    each periodic sector vector belongs to $S_N$ and is fixed by
+    cyclic translation of its trace.
+\end{proof}

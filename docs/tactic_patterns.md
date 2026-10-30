@@ -9737,3 +9737,13 @@ there is no need for a new tactic.
   the general extension. The existing matrix trace-representation theorem
   handles both endpoint restriction directions.
 - **Decision:** Reuse the lemmas; no new tactic or parallel dual structure.
+
+### Cyclic coefficient identities from two spanning families — candidate (2026-10-29)
+
+- **Seen:** `uncleBoundary_cyclic_pairing_of_word_pairing` in
+  `MPS/ParentHamiltonian/UnclePeriodicClosure.lean` extends a cyclic identity
+  first from positive-length coefficient words and then from one-site letters.
+- **Reuse:** Compose the existing trace functional with the concrete left/right
+  coefficient linear maps, then apply `LinearMap.ext_on_range` twice. This
+  avoids duplicating scalar-sum or span-induction proofs and introduces no
+  new algebra instance or tactic.
