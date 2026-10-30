@@ -582,6 +582,40 @@ is therefore the next mathematical prerequisite.  Until it exists, the
 formal scalar $L$-symbol results must not be described as proving the
 existence or classification of MPU action tensors.
 
+\section{Block independence, representatives, and restriction}
+
+The block-independence proposition in
+Ref.~\cite[lines~7042--7064]{FrancoRubio2025MPUGauging} writes
+$\Psi\in H^2(G,U(1))$ and subsequently evaluates $\Psi(g,h)$.
+Pointwise evaluation requires a cocycle representative, whereas extension
+of a cohomology class is membership in the image of restriction.
+For trivial $\mathbb C^\times$ coefficients these conditions agree for
+every subgroup $H\leq G$, without normality or normalization assumptions.
+Indeed, if $[\psi]=\operatorname{res}^G_H[\omega]$, write
+$\psi(a,b)=\varphi(a)\varphi(b)\varphi(ab)^{-1}\omega(a,b)$ and extend
+$\varphi$ to any function $\Phi:G\to\mathbb C^\times$.
+Then $\Psi(g,h)=\Phi(g)\Phi(h)\Phi(gh)^{-1}\omega(g,h)$ is a cocycle
+restricting exactly to $\psi$.
+
+The converse calculation uses two conventions for gauges. The source
+expresses the induced symbol as a forward gauge of $1$; if instead
+$(\beta,\gamma)$ sends the induced symbol to $1$, its compatibility with
+$\omega=1$ forces $d\beta=1$. The exact extension is then
+\begin{align}
+    \Psi(g,h)
+      &=\beta(g,h)^{-1}
+        \frac{\gamma_{g,x_0}\gamma_{h,x_0}}{\gamma_{gh,x_0}}.
+    \label{eq:fbc25_action_audit_bi_extension}
+\end{align}
+It is the product of $\beta^{-1}$ with a coboundary, and the basepoint
+restriction gives $\Psi|_{H\times H}=\psi$.
+These scalar implications and the equivalence with the image of the actual
+cohomology restriction map are formalized in
+\doclink{TNLean/Algebra/StabilizerBlockIndependence}.
+They do not identify scalar gauges with tensor gauges of an MPS--MPU pair,
+or assert naturality of the comparison between $U(1)$ and
+$\mathbb C^\times$ coefficients under subgroup restriction.
+
 \section{Verdict}
 
 The cited action-tensor claim is supported by
