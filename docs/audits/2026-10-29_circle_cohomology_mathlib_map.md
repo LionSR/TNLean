@@ -27,8 +27,8 @@ The Blueprint and gap note cite the direct-map statements.
 Validation: exact pinned Mathlib source inspected, stale-name census, source
 formatting, tactic-pattern scan, Blueprint declaration-source scan and
 `git diff --check`. No new tactic pattern is introduced by this restatement.
-No Lean elaboration or build was run, as requested. The updated Blueprint
-node is explicitly pending verification; #8318 remains open until acceptance.
+The hosted build of the pull request head verifies the restated declarations;
+the Blueprint entry and its proof keep their formalized status.
 
 ## Current-main reconciliation
 
@@ -39,7 +39,6 @@ needed. The merge with main `c7d2992c89c16d85237e18557ff292979b3a67b4` retains
 both algebra source files byte-for-byte and carries the declaration tags to
 the relocated circle-coefficient entry in `ch29_mpu_cocycles.tex`. The former
 chapter retains main's contents exactly. Native import, declaration-sync,
-role, prose, formatting and whitespace checks pass. Hosted verification of
-the refreshed combined head and repository integration remain pending; the
-Blueprint entry stays pending and #8318 remains open. No local Lean command
-was run.
+role, prose, formatting and whitespace checks pass. The hosted build and
+strict checks of the refreshed combined head also pass, so the Blueprint entry
+keeps its formalized status.
