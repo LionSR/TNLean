@@ -19,10 +19,14 @@ not supply that action law.
 In arXiv:2502.20257, `main.tex` lines 1782--1873, the action tensors are
 `V = A^Γ` and `W = A^{ref Γ}`. The interior identity holds for every word,
 including the empty word; the exterior identity requires a nonempty central
-word. The common block gives an exterior buffer of one, without asserting
-vanishing of individual residual letters. See
-`docs/paper-gaps/mgsc18_nilpotency_length_one_terminology.tex` and
-`docs/paper-gaps/fbc25_mpu_action_stabilizer_source_audit.tex`.
+word. See `docs/paper-gaps/fbc25_mpu_action_stabilizer_source_audit.tex`.
+
+**Local fix (arXiv:2502.20257, `main.tex` line 1870):** the source assumes
+blocking until all nilpotency lengths of the action tensors are one.  The
+one-site exterior buffer proved below is the content of that sentence used
+here.  The blocked residual letters need not vanish, and the blocked
+nilpotency length of MGSC18 Definition 8 need not equal one; see
+`docs/paper-gaps/mgsc18_nilpotency_length_one_terminology.tex`.
 -/
 
 open scoped Matrix Kronecker
