@@ -45,6 +45,7 @@ import TNLean.MPS.AreaLaw.FixedConfigurationExtension
 import TNLean.MPS.AreaLaw.GluingHamiltonian
 import TNLean.MPS.AreaLaw.Hamiltonian
 import TNLean.MPS.AreaLaw.Hastings
+import TNLean.MPS.AreaLaw.Huang
 import TNLean.MPS.AreaLaw.InformationReset
 import TNLean.MPS.AreaLaw.InteractionBudget
 import TNLean.MPS.AreaLaw.IntervalMPOTransfer
@@ -107,6 +108,13 @@ import TNLean.MPS.AreaLaw.SelectedMiddleMPOFamily
 import TNLean.MPS.AreaLaw.SequentialTruncation
 import TNLean.MPS.AreaLaw.SharpChainCompression
 import TNLean.MPS.AreaLaw.SharpPhysicalCompression
+import TNLean.MPS.AreaLaw.SnakeGridApproximation
+import TNLean.MPS.AreaLaw.SnakeGridAreaLaw
+import TNLean.MPS.AreaLaw.SnakeGridGeometry
+import TNLean.MPS.AreaLaw.SnakeGridParameters
+import TNLean.MPS.AreaLaw.StripApproximation
+import TNLean.MPS.AreaLaw.StripBufferDiscount
+import TNLean.MPS.AreaLaw.StripGeometry
 import TNLean.MPS.AreaLaw.SupportedCutRank
 import TNLean.MPS.AreaLaw.SupportedGaussianIntegral
 import TNLean.MPS.AreaLaw.SwappedDoubledHamiltonian
