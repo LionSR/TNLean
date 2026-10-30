@@ -9027,11 +9027,11 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \begin{lemma}[Canonical source ranks from the factor-free sandwich]
     \label{lem:mpu_canonical_ranks_factor_free}
     \lean{MPOTensor.IsMPUCanonicalFormII.bondDim_le_of_mpo_eq,
-        MPOTensor.IsMPU.blockTensor_isMPUSimple_of_sq_le,
         MPOTensor.IsMPUCanonicalFormII.rightRank_mul_leftRank_blockTensor_of_mpo_eq,
         MPOTensor.IsMPU.sourceRanks_blockTensor_eq_factorFreeSandwich}
     \leanok
-    \uses{def:mpu, def:mpu_canonical_form_ii, def:mpu_factor_free_sandwich, def:mpu_right_rank, def:mpu_left_rank}
+    \uses{def:mpu, def:mpu_canonical_form_ii, def:mpu_factor_free_sandwich, def:mpu_right_rank, def:mpu_left_rank,
+        thm:mpu_bounded_simple_blocking}
     Let $\mathcal W$ generate MPU with $d>0$, let $k\geq D^2$, and let
     $\mathcal U$, of bond dimension $D'$, be in canonical form II and generate
     the same MPU as $\mathcal W$. Then $D'\leq D$, the block $\mathcal U_k$ is
