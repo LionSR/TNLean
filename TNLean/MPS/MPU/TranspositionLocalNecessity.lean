@@ -143,9 +143,11 @@ private theorem transposition_certificate_of_supplied_gate_gauges
   let A := Matrix.reindex (Equiv.prodCongr L R) (Equiv.refl _) u
   let B := Matrix.reindex (Equiv.refl _) (Equiv.prodCongr R L) v
   let X' : Matrix.unitaryGroup (Fin d) ℂ :=
-    ⟨Matrix.reindex LA LA (X : Matrix _ _ ℂ), Matrix.reindex_mem_unitaryGroup _ _ X.property⟩
+    ⟨Matrix.reindex LA LA (X : Matrix (Fin lT) (Fin lT) ℂ),
+      Matrix.reindex_mem_unitaryGroup LA _ X.property⟩
   let Y' : Matrix.unitaryGroup (Fin d) ℂ :=
-    ⟨Matrix.reindex RA RA (Y : Matrix _ _ ℂ), Matrix.reindex_mem_unitaryGroup _ _ Y.property⟩
+    ⟨Matrix.reindex RA RA (Y : Matrix (Fin rT) (Fin rT) ℂ),
+      Matrix.reindex_mem_unitaryGroup RA _ Y.property⟩
   let erA := finCongr hrSwap.symm
   let elA := finCongr hlSwap.symm
   let erFT := finCongr hrFT.symm
@@ -172,22 +174,40 @@ private theorem transposition_certificate_of_supplied_gate_gauges
     rfl
   have hfirst : Bᵀ = ((X' : Matrix (Fin d) (Fin d) ℂ) ⊗ₖ
       (Y' : Matrix (Fin d) (Fin d) ℂ)) * A := by
-    have h := congrArg (Matrix.reindex (Equiv.prodCongr LA RA) (Equiv.refl _)) hu
-    rw [hTU, Matrix.reindex_kronecker_mul] at h
-    rw [hUA, hUFT] at h
-    exact h
+    calc
+      Bᵀ = Matrix.reindex (Equiv.prodCongr LA RA) (Equiv.refl _) uT := by rw [hTU, hUA]
+      _ = Matrix.reindex (Equiv.prodCongr LA RA) (Equiv.refl _)
+          (((X : Matrix (Fin lT) (Fin lT) ℂ) ⊗ₖ (Y : Matrix (Fin rT) (Fin rT) ℂ)) *
+            Matrix.reindex (Equiv.prodCongr elFT erFT) (Equiv.refl _) u) :=
+        congrArg (Matrix.reindex (Equiv.prodCongr LA RA) (Equiv.refl _)) hu
+      _ = (Matrix.reindex LA LA (X : Matrix (Fin lT) (Fin lT) ℂ) ⊗ₖ
+            Matrix.reindex RA RA (Y : Matrix (Fin rT) (Fin rT) ℂ)) *
+          Matrix.reindex (Equiv.prodCongr LA RA) (Equiv.refl _)
+            (Matrix.reindex (Equiv.prodCongr elFT erFT) (Equiv.refl _) u) :=
+        Matrix.reindex_kronecker_mul LA RA _ _ _
+      _ = ((X' : Matrix (Fin d) (Fin d) ℂ) ⊗ₖ (Y' : Matrix (Fin d) (Fin d) ℂ)) * A := by
+        rw [hUFT]
   have hsecond : Aᵀ = B * ((Y' : Matrix (Fin d) (Fin d) ℂ)ᴴ ⊗ₖ
       (X' : Matrix (Fin d) (Fin d) ℂ)ᴴ) := by
-    have h := congrArg (Matrix.reindex (Equiv.refl _) (Equiv.prodCongr RA LA)) hv
-    rw [hTV, Matrix.reindex_mul_kronecker] at h
-    rw [hVA, hVFT] at h
-    simpa only [X', Y', Matrix.star_eq_conjTranspose, Matrix.conjTranspose_reindex] using h
+    calc
+      Aᵀ = Matrix.reindex (Equiv.refl _) (Equiv.prodCongr RA LA) vT := by rw [hTV, hVA]
+      _ = Matrix.reindex (Equiv.refl _) (Equiv.prodCongr RA LA)
+          (Matrix.reindex (Equiv.refl _) (Equiv.prodCongr erFT elFT) v *
+            (star (Y : Matrix (Fin rT) (Fin rT) ℂ) ⊗ₖ
+              star (X : Matrix (Fin lT) (Fin lT) ℂ))) :=
+        congrArg (Matrix.reindex (Equiv.refl _) (Equiv.prodCongr RA LA)) hv
+      _ = Matrix.reindex (Equiv.refl _) (Equiv.prodCongr RA LA)
+            (Matrix.reindex (Equiv.refl _) (Equiv.prodCongr erFT elFT) v) *
+          (Matrix.reindex RA RA (star (Y : Matrix (Fin rT) (Fin rT) ℂ)) ⊗ₖ
+            Matrix.reindex LA LA (star (X : Matrix (Fin lT) (Fin lT) ℂ))) :=
+        Matrix.reindex_mul_kronecker RA LA _ _ _
+      _ = B * ((Y' : Matrix (Fin d) (Fin d) ℂ)ᴴ ⊗ₖ (X' : Matrix (Fin d) (Fin d) ℂ)ᴴ) := by
+        rw [hVFT, Matrix.star_eq_conjTranspose, Matrix.star_eq_conjTranspose,
+          ← Matrix.conjTranspose_reindex, ← Matrix.conjTranspose_reindex]
   have hA : A.IsCoisometry := (huS.reindex _ (Equiv.prodCongr L R) (Equiv.refl _)).2
   let : NeZero d := ⟨Nat.ne_of_gt hd⟩
   obtain ⟨c, x, hc, hlocal⟩ := transpose_local_phase_of_gate_gauges A B hA X' Y' hfirst hsecond
   exact ⟨c, x, hc, hlocal⟩
-
-
 
 /-- Gate comparison at derived square ranks, kept abstract in the supplied factor
 record. Source: CPSV17, `UUtransposetrick`, lines 1258–1288. -/
