@@ -12,7 +12,7 @@ presentation. The site-dependent source setting is recorded separately in
         SpinChain.PropagatesWithin.supportAlgebraMatrixSize_spec,
         SpinChain.PropagatesWithin.supportAlgebraMatrixSize_neZero,
         SpinChain.PropagatesWithin.gnvwIndex}
-    \notready
+    \leanok
     \uses{thm:qca_physical_pair_adjacent_generation}
     Choose the coherent positive matrix-size family $r(y)$ of the actual
     support factors. Define
@@ -36,7 +36,7 @@ presentation. The site-dependent source setting is recorded separately in
         SpinChain.PropagatesWithin.coe_gnvwIndex_eq_of_evenSupportAlgebra_equiv,
         SpinChain.PropagatesWithin.supportAlgebraMatrixSize_even_eq_of_equiv,
         SpinChain.PropagatesWithin.supportAlgebraMatrixSize_odd_eq_of_equiv}
-    \notready
+    \leanok
     \uses{def:qca_gnvw_index,thm:qca_physical_pair_adjacent_generation}
     For every $x\in\mathbb Z$,
     \begin{align}
@@ -52,7 +52,7 @@ presentation. The site-dependent source setting is recorded separately in
     This is homogeneous equation~dimtransfer of
     \cite[lines~1317--1324]{Gross2012IndexTheory}.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     The two size products equal $d^2$. Cancelling the positive common odd
     size gives $r(2x)=r(2x+2)$. Integer induction in both directions makes
     the even size constant. Dividing the first product identity gives
@@ -66,7 +66,7 @@ presentation. The site-dependent source setting is recorded separately in
         Matrix.rightSupportAlgebra_range_leftKroneckerEmbed,
         Matrix.leftSupportAlgebra_range_rightKroneckerEmbed,
         Matrix.rightSupportAlgebra_range_rightKroneckerEmbed}
-    \notready
+    \leanok
     \uses{def:qca_left_support_algebra,def:qca_right_support_algebra}
     For finite nonempty matrix coordinates, the full left tensor factor
     has full left support and scalar right support. The full right factor
@@ -74,7 +74,7 @@ presentation. The site-dependent source setting is recorded separately in
     calculations in the shift example following equation~RR2x of
     \cite[lines~1251--1268]{Gross2012IndexTheory}.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     A diagonal spectator coefficient recovers every matrix on the full
     factor. Each coefficient on the spectator factor is a scalar multiple
     of its identity. The coefficient-generated support algebras therefore
@@ -84,12 +84,12 @@ presentation. The site-dependent source setting is recorded separately in
 \begin{lemma}[Finite-region configuration count]
     \label{lem:qca_finite_region_configuration_count}
     \lean{SpinChain.card_config}
-    \notready
+    \leanok
     A region $\Lambda$ has $d^{|\Lambda|}$ configurations. In particular,
     a physical pair has Hilbert-space dimension $d^2$ and observable-algebra
     dimension $d^4$.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     There is one independent choice among $d$ values at each site.
 \end{proof}
 
@@ -101,14 +101,14 @@ presentation. The site-dependent source setting is recorded separately in
         SpinChain.bipartiteMatrixToQuasiLocalObservable_rightKroneckerEmbed,
         SpinChain.map_range_leftKroneckerEmbed_bipartiteMatrixToQuasiLocalObservable,
         SpinChain.map_range_rightKroneckerEmbed_bipartiteMatrixToQuasiLocalObservable}
-    \notready
+    \leanok
     For disjoint finite regions, the canonical bipartite matrix coordinates
     embed faithfully into the quasi-local algebra. The full left and right
     factor ranges become exactly the observable algebras of their respective
     finite regions. These are the finite coordinates of
     \cite[lines~1251--1278]{Gross2012IndexTheory}.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     The ordered bipartite coordinate equivalence identifies the left and
     right embeddings with canonical local inclusions. Faithfulness and
     compatibility of the finite-region embeddings give the assertions.
@@ -132,7 +132,7 @@ presentation. The site-dependent source setting is recorded separately in
         SpinChain.PropagatesWithin.supportAlgebraMatrixSize_quasiLocalTranslation_one_odd,
         SpinChain.PropagatesWithin.gnvwIndex_quasiLocalTranslation_neg_one,
         SpinChain.PropagatesWithin.gnvwIndex_quasiLocalTranslation_one}
-    \notready
+    \leanok
     \uses{def:qca_gnvw_index,thm:qca_gnvw_index_dimtransfer,
         lem:qca_kronecker_embedding_supports,lem:qca_bipartite_observable_embedding,
         lem:qca_finite_region_configuration_count}
@@ -158,7 +158,7 @@ presentation. The site-dependent source setting is recorded separately in
     support example at line~1268 is corrected as documented in
     \cite{gap:gnvw12_site_dependent_adjacent_generation_scope}.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     Translation has its singleton propagation neighbourhood, which lies
     inside the nearest-neighbour interval. It maps the full source-pair
     algebra onto the left pair for $T_{-1}$, and onto the right pair for

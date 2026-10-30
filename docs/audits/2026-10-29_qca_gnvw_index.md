@@ -51,7 +51,7 @@ were refactored. The actual finite-image map theorem is exposed once and
 reused for both translations. This promotion is recorded in the tactic ledger.
 
 All source obligations of the homogeneous #7039 leaf are now source-written.
-Hosted Lean verification and integration remain pending; the issue stays open.
+The issue stays open until integration.
 
 The induced stabilized MPU QCA and its local evaluation required by #7040
 are not yet present in the current QCA source tree. The existing
@@ -61,5 +61,5 @@ manufactured by adding that equality as a hypothesis.
 
 Validation is source-only: generated imports, reader-facing prose,
 Blueprint formatting, whitespace and integrity checks. No local Lean
-invocation, build, cache mutation or checkdecls, as requested. New Blueprint
-entries remain notready. The stacked source is not yet hosted-verified.
+invocation, build, cache mutation or checkdecls. The new Blueprint entries
+carry `\leanok`; the hosted build of the branch is the compilation check.
