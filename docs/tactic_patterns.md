@@ -9736,3 +9736,16 @@ there is no need for a new tactic.
 - **Decision:** Three branch occurrences in one file, below the two-file promotion
   threshold. Before extending this pattern to another module, move the value equality
   before the case distinction or reuse `Fin.val_inj`; no new tactic is needed.
+
+
+### Pure output under an explicit product code — candidate (2026-10-29)
+
+- **Seen:** the local `hPure` facts in `Circuit/Channel/BoundedPortPureOutput.lean`
+  and `Circuit/Channel/BoundedPortApproximateOutput.lean`.
+- **Pattern:** identify the actual initialized pure projector with the projector
+  of its encoded vector using `Matrix.mul_vecMulVec`, `Matrix.vecMulVec_mul`
+  and `Matrix.star_mulVec`; normalize the target through the code isometry.
+- **Decision:** two occurrences across two files are below the rule of three.
+  Reuse the existing matrix identities and `registerEncoding_isIsometry`.
+  Before adding a third copy, expose the pure-initialization identity at the
+  existing product-code owner. No verified parent module is refactored here.

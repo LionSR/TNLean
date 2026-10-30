@@ -303,6 +303,38 @@ family.\footnote{Formal theorem:
 It does not settle the adaptive block count, measurement/control order,
 approximate pure-output estimates or unrestricted enlarged-site comparison.
 
+\section{Approximate pure outputs from the actual bounded compiler}
+For unit input and target vectors, suppose the actual native channel
+satisfies
+$\|\Psi(\ketbra{\psi}{\psi})-\ketbra{\phi}{\phi}\|_1\le\varepsilon$.
+With the same fixed $d,B$, $N\ge2$, and $k=\lceil\log_d B\rceil$, its
+actual compiled unitary admits a unit vector $\eta$ on its unchanged
+additional environment space with
+\begin{align}
+    \|U(V_{\rm port}\psi\otimes\ket{0_A})
+    -V_{\rm port}\phi\otimes\eta\|_2 & \le\sqrt{2\varepsilon},
+                                     & \operatorname{depth}_{\rm intersite}(U) & \le2kT.
+\end{align}
+The vector norm is Euclidean and the matrix error is the full trace norm.
+The actual marginal and its normalization follow from the all-operator
+compiler/dilation identity and trace preservation. Its error is transported
+exactly by the explicit port isometry. Projecting its coefficient matrix
+onto the target vector derives an environment row of squared norm at least
+$1-\varepsilon$. Normalizing that row gives the estimate; the zero-row case
+forces $\varepsilon\ge1$ and is included.
+
+The generic finite-dimensional estimate belongs to QICLean draft
+\href{https://github.com/LionSR/QICLean/pull/1009}{\#1009}; the downstream
+candidate pins its exact source commit
+\texttt{55528b03c8467c8e0508501f2e0ff697d5f4d76a}.
+The actual bounded-compiler specialization is
+\leanid{QuantumCircuit.IsDimensionBoundedLocalChannelProtocol.exists_physicalPort_approximate_output}
+in \doclink{TNLean/Circuit/Channel/BoundedPortApproximateOutput}.
+Both results are source-written without local Lean compilation. Upstream
+acceptance, repinning to the accepted dependency, hosted validation and
+integration remain explicit gates. The estimate supplies neither environment
+reset nor source adaptive measurement/control or block-count conditions.
+
 \section{Remaining comparison and source conditions}
 The finite local-unitary dilation, product-zero environment initialization,
 and one final disposal are proved by~(\ref{eq:scope_deferred_dilation}).

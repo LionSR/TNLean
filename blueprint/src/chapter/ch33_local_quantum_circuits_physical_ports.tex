@@ -841,3 +841,47 @@ start, and is discarded only after the circuit has finished.
     identity with $J_{\rm port}$ to obtain
     (\ref{eq:qc_bounded_port_pure_channel}).
 \end{proof}
+
+
+\begin{lemma}[Approximate pure-state conversion on the original ports]
+    \label{lem:qc_bounded_port_approximate_output}
+    \lean{QuantumCircuit.IsDimensionBoundedLocalChannelProtocol.exists_physicalPort_approximate_output}
+    \notready
+    \discussion{8640}
+    \uses{def:qc_dimension_bounded_protocol, thm:qc_physical_port_codes,
+        def:qc_approx_local_channel_conversion}
+    Fix $d\ge2$ and an intermediate dimension bound $B$. Let $N\ge2$ and
+    let $\Psi$ be a $B$-dimension-bounded native channel of depth $T$ with
+    physical input and output dimension $d$. For unit vectors $\psi,\phi$,
+    suppose
+    $\|\Psi(\ketbra{\psi}{\psi})-\ketbra{\phi}{\phi}\|_1\le\varepsilon$.
+    Set $k=\lceil\log_d B\rceil$, and let $V_{\rm port}$ be the explicit
+    original-port isometry with zero designated memory. There is a unitary
+    $U$ and a unit environment vector $\eta$ such that
+    \begin{align}
+        \|U(V_{\rm port}\psi\otimes\ket{0_A})
+        -V_{\rm port}\phi\otimes\eta\|_2        & \le\sqrt{2\varepsilon},
+        \label{eq:qc_bounded_port_approximate_vector}                     \\
+        \operatorname{depth}_{\rm intersite}(U) & \le2kT.
+    \end{align}
+    The same unitary satisfies the full logical channel identity
+    (\ref{eq:qc_bounded_port_pure_channel}). The estimate uses the Euclidean
+    vector norm and the full trace norm. It imposes no strict upper bound on
+    $\varepsilon$ and does not reset the additional environment or provide
+    an adaptive source protocol-block decomposition. A uniform family fixes
+    $B$ before the chain length.
+\end{lemma}
+\begin{proof}
+    \notready
+    \uses{thm:qc_bounded_physical_port_io, thm:qc_physical_port_unitary_dilation}
+    Construct the actual port channel and its unitary dilation. The full
+    dilation identity identifies the marginal of its actual output, while
+    trace preservation and normalization of $\psi$ give a unit joint vector.
+    Conjugation by $V_{\rm port}$ preserves the trace-norm error. Project
+    the actual joint coefficient matrix onto the unit vector
+    $V_{\rm port}\phi$. Its environment row has squared norm at least
+    $1-\varepsilon$; normalizing that row gives product-vector distance at
+    most $\sqrt{2\varepsilon}$. If the row is zero, then
+    $\varepsilon\ge1$ and a unit coordinate environment vector suffices.
+    This changes neither the unitary nor its physical depth.
+\end{proof}
