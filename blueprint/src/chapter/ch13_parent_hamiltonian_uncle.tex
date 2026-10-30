@@ -190,3 +190,70 @@ interpretation. Arbitrary diagonal perturbations
 $P,Q$ have the same limit for fixed $A,B,R,L$. No assertion about generic
 perturbations, an algebraic exceptional set, gaplessness, or an
 infinite-volume Hamiltonian is included here.
+
+\begin{lemma}[Parent sectors in the uncle kernel]
+    \label{lem:uncle_parent_sector_containment}
+    \lean{MPSTensor.groundSpaceMap_uncleTensor_left,
+        MPSTensor.groundSpaceMap_uncleTensor_right,
+        MPSTensor.groundSpace_blockTensor_le_uncleTensor_left,
+        MPSTensor.groundSpace_blockTensor_le_uncleTensor_right,
+        MPSTensor.uncleInteractionES_apply_eq_zero_left,
+        MPSTensor.uncleInteractionES_apply_eq_zero_right,
+        MPSTensor.uncleHamiltonianES_apply_eq_zero_of_mem_chainGroundSpace_left,
+        MPSTensor.uncleHamiltonianES_apply_eq_zero_of_mem_chainGroundSpace_right,
+        MPSTensor.span_mpv_le_ker_uncleHamiltonianES}
+    \leanok
+    \uses{def:two_block_uncle_tensor,thm:two_block_uncle_parent_limit,
+        def:ground_space_map,def:chain_ground_space}
+    Let $A,B,R,L$ have the matching block sizes in
+    (\ref{eq:uncle_explicit_tensor}), with no injectivity assumption.
+    The two-site spaces $\mathcal G_2(A)$ and $\mathcal G_2(B)$ lie in
+    $\ker h'_P$. At every periodic length $N\ge2$, the uncle Hamiltonian
+    annihilates every vector satisfying the two-site parent constraints of
+    either sector. In particular,
+    \begin{align}
+        \operatorname{span}\{\ket{M_N(A)},\ket{M_N(B)}\}
+         & \subseteq\ker H'_P.
+    \end{align}
+    This is the containment direction of
+    \cite[ground-space theorem]{FernandezGonzalez2015Uncle}.
+\end{lemma}
+\begin{proof}
+    \leanok
+    A boundary matrix supported on the first diagonal virtual block pairs
+    with $U_{ij}$ as $\operatorname{tr}(A_iA_jX)$; one on the second block
+    gives $\operatorname{tr}(B_iB_jX)$. Hence both parent spaces lie in the
+    range defining the uncle projector. Their orthogonal-complement
+    projector vanishes on these spaces. Restricting a vector satisfying
+    either sector's parent constraints to each cyclic window therefore
+    gives zero in every translated uncle term. Summation proves the claim.
+    Equality of the kernel requires the separate intersection and closure
+    properties and is not concluded from this inclusion.
+\end{proof}
+
+\begin{lemma}[Local conditions for the uncle kernel]
+    \label{lem:uncle_kernel_local_conditions}
+    \lean{MPSTensor.uncleInteractionES_isPositive,
+        MPSTensor.uncleHamiltonianES_isPositive,
+        MPSTensor.uncleInteractionES_apply_eq_zero_iff,
+        MPSTensor.uncleHamiltonianES_apply_eq_zero_iff}
+    \leanok
+    \uses{thm:two_block_uncle_parent_limit,def:two_block_uncle_tensor}
+    The local interaction and every finite periodic Hamiltonian are positive.
+    At each periodic length $N\ge2$, a vector is in $\ker H'_P$ if and only
+    if every cyclic two-site slice lies in $\ker h'_P$. After grouping its
+    two physical sites, this local kernel is precisely the boundary-map
+    range of $U$. The statement does not require injectivity.
+\end{lemma}
+\begin{proof}
+    \leanok
+    The local interaction is an orthogonal-complement projector conjugated
+    by the physical configuration isometry, hence positive. Every cyclic
+    summand has the form $R^*h'_PR$ and is positive. For positive physical
+    dimension, the averaging coefficient is strictly positive, so the
+    kernel of their sum is their common kernel. Vanishing of
+    $R^*h'_PR$ on a vector forces the nonnegative quadratic form of
+    $h'_P$ on its slice to vanish, and therefore forces the slice into
+    $\ker h'_P$. The converse is immediate. At physical dimension zero,
+    the full configuration space is empty and the assertion holds directly.
+\end{proof}
