@@ -5877,6 +5877,20 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     % to the source tensor and is not a condition on supplied gates.
 \end{definition}
 
+\begin{lemma}[Dimensions of supplied standard-form gates]
+    \label{lem:mpu_supplied_gate_dimension_identity}
+    \lean{MPOTensor.TwoSiteStandardFormData.left_mul_right}
+    \notready
+    Every supplied standard form of Definition~\ref{def:mpu_supplied_two_site_standard_form}
+    satisfies $\ell r=d^2$. This is the dimension identity of its actual
+    unitary gate in \cite[Definition~III.9]{Cirac2017MPU}.
+\end{lemma}
+
+\begin{proof}
+    \uses{def:mpu_supplied_two_site_standard_form}
+    The isometry and coisometry of $u$ give the two dimension inequalities.
+\end{proof}
+
 \begin{center}
     % Formula: W^{(i_1,i_2),(j_1,j_2)}_{\alpha,\gamma}=\sum_{l,s}
     % (X_2)_{(\alpha,i_1),l}\,u_{(l,s),(j_1,j_2)}\,(X_1)_{(i_2,\gamma),s}, the
@@ -9856,7 +9870,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 
 \begin{lemma}[Minimality of the supplied standard-form cuts]
     \label{lem:mpu_supplied_half_factor_minimality}
-    \lean{MPOTensor.TwoSiteStandardFormData.X₁_mulVec_injective, MPOTensor.TwoSiteStandardFormData.X₂_mulVec_injective, MPOTensor.TwoSiteStandardFormData.exists_left_inverses, MPOTensor.TwoSiteStandardFormData.cutX₁_mulVec_injective, MPOTensor.TwoSiteStandardFormData.cutX₂_mulVec_injective, MPOTensor.TwoSiteStandardFormData.exists_cutY_right_inverses, MPOTensor.TwoSiteStandardFormData.cut_factor_ranks, MPOTensor.TwoSiteStandardFormData.sourceRanks_eq}
+    \lean{MPOTensor.TwoSiteStandardFormData.X₁_mulVec_injective, MPOTensor.TwoSiteStandardFormData.X₂_mulVec_injective, MPOTensor.TwoSiteStandardFormData.exists_left_inverses, MPOTensor.TwoSiteStandardFormData.cutX₁_mulVec_injective, MPOTensor.TwoSiteStandardFormData.cutX₂_mulVec_injective, MPOTensor.TwoSiteStandardFormData.exists_cutY_right_inverses, MPOTensor.TwoSiteStandardFormData.cut_factor_ranks, MPOTensor.TwoSiteStandardFormData.sourceRanks_eq, MPOTensor.TwoSiteStandardFormData.fourSpinGate_isUnitaryBetween}
     \notready
     Let $W$ have any supplied standard form as in
     Lemma~\ref{lem:mpu_supplied_standard_form_source_cuts}, with both gates
@@ -9869,6 +9883,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         \operatorname{rank}\widehat X_2
         =\operatorname{rank}\widehat Y_2 & =\ell d.
     \end{align}
+    The four-spin matrix $v_{23}(u_{12}\otimes u_{34})$ is unitary.
     There are matrices $Z_1,Z_2$ with
     $\widehat Y_1Z_1=\Id_{dr}$ and $\widehat Y_2Z_2=\Id_{\ell d}$.
     Consequently the actual source ranks are $r(W)=dr$ and
@@ -9895,6 +9910,111 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     inverses. All four factor ranks follow. Multiplying each source cut
     by its right-factor inverse recovers its left factor, so the source
     cut and its left factor have equal rank.
+\end{proof}
+
+\begin{lemma}[Supplied four-spin gates and normalized source factorizations]
+    \label{lem:mpu_supplied_four_spin_source_comparison}
+    \lean{MPOTensor.TwoSiteStandardFormData.isMPUSimple, MPOTensor.TwoSiteStandardFormData.exists_fourSpin_source_gate_gauges, MPOTensor.TwoSiteStandardFormData.exists_fourSpin_selected_source_gate_gauges}
+    \notready
+    Let $W$ have any supplied two-site standard form with unitary gates
+    $u,v$ and positive dimensions. Write
+    $A=v_{23}(u_{12}\otimes u_{34})$ and $B=v_{23}$.
+    Take another compact factorization of each actual source cut, normalized
+    at a boundary matrix $\rho$ by
+    $\widetilde X_1^\dagger(I\otimes\rho)\widetilde X_1=I$ and
+    $\widetilde X_2^\dagger\widetilde X_2=I$, with right inverses of both
+    right factors. Suppose its unshifted gate $\widetilde u$ is unitary.
+    Then there are unitaries $x,y$ on the actual left and right source
+    spaces such that, under the canonical finite-dimensional coordinate
+    identifications of Lemma~\ref{lem:mpu_supplied_half_factor_minimality},
+    \begin{align}
+        \widetilde u & =(x\otimes y)A,                 &
+        \widetilde v & =B(y^\dagger\otimes x^\dagger).
+    \end{align}
+    In particular, when $W$ is explicitly given in reduced canonical
+    form II, it is simple and its selected normalized source factors
+    satisfy these equations. No normalization of the supplied half factors
+    is required. The ambient canonical presentation in this last assertion
+    is an assumption, not a consequence of the displayed cut ranks.
+    These are the actual four-spin contractions of
+    \cite[lines~1237--1252]{Cirac2017MPU}, compared by the raw factorization
+    uniqueness lemma in \cite{FrancoRubio2025MPUGauging}.
+\end{lemma}
+
+\begin{proof}
+    \uses{lem:mpu_supplied_half_factor_minimality}
+    The two supplied cut factorizations have full intermediate rank and
+    right inverses. Compare them with the normalized factors by the raw
+    decomposition uniqueness theorem. Its reciprocal positive scalars
+    cancel in both contractions. The remaining two unitary factors give
+    the displayed equations. If the ambient tensor is in canonical form II,
+    the actual cut ranks and $\ell r=d^2$ give the simplicity criterion.
+    Its selected source gates are therefore unitary and the comparison
+    applies to that normalized compact factorization.
+\end{proof}
+
+\begin{lemma}[Square intermediate dimensions for any supplied adjoint-symmetric standard form]
+    \label{lem:mpu_supplied_standard_form_adjoint_zero_index}
+    \lean{MPOTensor.TwoSiteStandardFormData.intermediateRanks_eq_phys_of_even_mpo_eq_adjoint}
+    \notready
+    Let $W$ have any supplied standard form with unitary gates on pairs
+    of $d$-dimensional sites and intermediate dimensions $\ell,r>0$.
+    Suppose the ambient tensor $W$ is explicitly in reduced canonical
+    form II and $W^{(N)}=W^{(N)\dagger}$ for every even $N>1$.
+    Then $r=\ell=d$. Only the stated even standard-form lengths are used.
+    This is the zero-index comparison of
+    \cite[lines~1201--1252]{Cirac2017MPU} in the explicit canonical ambient scope.
+\end{lemma}
+
+\begin{proof}
+    \uses{lem:mpu_supplied_half_factor_minimality}
+    The even periodic families of $W$ and its actual adjoint agree.
+    Their actual source ranks agree by the sign-sensitive virtual
+    comparison, while adjunction exchanges the cuts. Thus
+    $\ell d=\ell(W)=r(W)=dr$. Positivity of $d$ gives $\ell=r$.
+    The unitary gate $u$ also gives $\ell r=d^2$, so both intermediate
+    dimensions equal $d$.
+\end{proof}
+
+\begin{lemma}[Local time reversal for any supplied standard form in a canonical ambient tensor]
+    \label{lem:mpu_supplied_forward_local_time_reversal}
+    \lean{MPOTensor.TwoSiteStandardFormData.exists_timeReversal_certificate_of_square_ranks, MPOTensor.TwoSiteStandardFormData.exists_timeReversal_certificate, MPOTensor.TwoSiteStandardFormData.mpo_even_eq_adjoint_of_timeReversal_certificate, MPOTensor.TwoSiteStandardFormData.even_timeReversal_iff_exists_certificate}
+    \notready
+    Let $W$ be explicitly in reduced canonical form II and let $u,v$
+    be any supplied standard-form gates on pairs of $d$-dimensional sites.
+    Suppose $W^{(N)}=W^{(N)\dagger}$ for every even $N>1$.
+    Then the intermediate dimensions satisfy $r=\ell=d$.
+    Under these derived coordinate identifications there exist a unitary
+    $x$ on $\mathbb C^d\otimes\mathbb C^d$ and $\sigma\in\{1,-1\}$ such that
+    \begin{align}
+        v_{23}(u\otimes u) & =\sigma(x\otimes x^\dagger)v_{23}^\dagger.
+    \end{align}
+    Conversely, these derived-rank and local-equation conditions imply
+    $W^{(N)}=W^{(N)\dagger}$ at every even $N>1$.
+    Thus the two conditions are equivalent. No normalization of the supplied
+    half factors is assumed. The explicit ambient canonicality and
+    even-length restrictions remain;
+    this is the corresponding restricted equivalence of
+    \cite[lines~1201--1252]{Cirac2017MPU}, not the unrestricted source criterion.
+\end{lemma}
+
+\begin{proof}
+    \uses{lem:mpu_supplied_standard_form_adjoint_zero_index,
+        lem:mpu_supplied_four_spin_source_comparison,
+        lem:mpu_normalized_source_forward_adjoint_certificate}
+    Derive $r=\ell=d$ and choose the actual normalized source factors of $W$.
+    Write $A=v_{23}(u\otimes u)$ and $B=v_{23}$.
+    Their normalized gates satisfy
+    $\widetilde A=(X\otimes Y)A$ and
+    $\widetilde B=B(Y^\dagger\otimes X^\dagger)$.
+    The normalized source certificate gives
+    $\widetilde A=\sigma(z\otimes z^\dagger)\widetilde B^\dagger$.
+    Multiply by $X^\dagger\otimes Y^\dagger$ to obtain the displayed equation
+    with $x=X^\dagger zY$. All coordinate changes are the actual source-rank
+    and physical-pair identifications, and no further blocking is used.
+    For the converse, the inverse comparison gives a normalized source
+    certificate with unitary $z=XxY^\dagger$. Its actual even-ring
+    contraction yields the asserted periodic adjoint symmetry.
 \end{proof}
 
 \begin{lemma}[Normalized physical-adjoint source factors]
@@ -10014,6 +10134,30 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     scaling and unitary virtual conjugation preserve both source ranks.
 \end{proof}
 
+\begin{lemma}[Forward adjoint certificate for actual normalized source factors]
+    \label{lem:mpu_normalized_source_forward_adjoint_certificate}
+    \lean{MPOTensor.IsMPUCanonicalFormII.exists_supplied_source_adjoint_certificate, Matrix.reindex_adjoint_certificate}
+    \notready
+    Let $W$ be simple and explicitly in reduced canonical form II, with
+    $r(W)=\ell(W)=q$, where $q$ is its physical dimension.
+    Take any actual normalized source factorization at its recorded boundary.
+    If $W^{(N)}=W^{(N)\dagger}$ for every even $N>1$, then, in these rank
+    identifications, its gates obey
+    $A=\sigma(x\otimes x^\dagger)B^\dagger$ for a unitary $x$ and
+    $\sigma\in\{1,-1\}$. The equation is preserved under every common
+    coordinate relabeling of the two rank spaces and physical spaces.
+    This is the normalized-factor step of
+    \cite[lines~1237--1252]{Cirac2017MPU} in the stated canonical scope.
+\end{lemma}
+
+\begin{proof}
+    \uses{lem:mpu_normalized_physical_adjoint_source_factors,
+        lem:mpu_even_family_supplied_source_gauges}
+    Construct the actual physical-adjoint factors and compare the even
+    periodic families. The two resulting unitary gate equations imply
+    $YX\otimes XY=I$, hence $Y=\sigma X^\dagger$ with $\sigma^2=1$.
+\end{proof}
+
 \begin{lemma}[Forward local time reversal for the constructed canonical standard form]
     \label{lem:mpu_canonical_forward_local_time_reversal}
     \lean{MPOTensor.IsMPUCanonicalFormII.exists_coarse_timeReversal_certificate, MPOTensor.IsMPUCanonicalFormII.exists_local_timeReversal_certificate, MPOTensor.IsMPUCanonicalFormII.exists_twoSiteStandardFormData_timeReversal_certificate, MPOTensor.coarse_gates_eq_four_spin_gates}
@@ -10037,8 +10181,9 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     discussed in \cite{gap:mpu_standard_form_parity_gap}. No gauge or local-equation
     witness is assumed. The actual square standard-form data are supplied
     together with the certificate by relabeling the existing half factors.
-    No continuity of any such choice is needed. Arbitrary supplied standard forms, the converse and
-    the transposition criterion are separate obligations; the unrestricted
+    No continuity of any such choice is needed. Arbitrary supplied standard
+    forms in an explicitly canonical ambient tensor are handled separately in
+    Lemma~\ref{lem:mpu_supplied_forward_local_time_reversal}. The unrestricted
     source proposition remains unformalized. The reduced presentation
     restriction is recorded in \cite{gap:mpu_canonical_form_full_support}.
 \end{lemma}

@@ -10038,6 +10038,64 @@ removed after the dependency audit exposed it.
   linear left-inverse and range-dimension APIs supply inverse matrices and
   ranks; no parallel factorization structure or normalization predicate.
 
+### Reciprocal raw source factors at the four-spin gates — candidate (2026-10-29)
+
+- **Pattern:** Transport minimal raw cut factors to their actual source-rank
+  coordinates, apply existing reciprocal-unitary uniqueness, and cancel
+  the reciprocal scalars only in the two literal gate contractions.
+- **Seen:** `MPS/MPU/SuppliedFourSpinSourceComparison.lean`.
+- **Abstraction:** Reuse `sourceU_contraction_transport`; its mirror right
+  multiplication of the two left factors is one private finite-sum lemma.
+  The existing four-spin unitarity argument is extracted at its original
+  owner and reused by the adjoint-cut and comparison proofs.
+- **Scope:** Factor minimality does not imply ambient canonicality. The
+  canonical comparison takes that presentation explicitly and derives its
+  simplicity, selected normalized factors and gate unitarity internally.
+
+
+### Normalized source necessity at its existing owner — promoted (2026-10-29)
+
+- **Pattern:** Construct actual physical-adjoint normalized factors, apply
+  the even-family source-gauge theorem and derive the common adjoint sign.
+- **Defined in:** `MPS/MPU/TimeReversalLocalNecessity.lean`,
+  `IsMPUCanonicalFormII.exists_supplied_source_adjoint_certificate`.
+- **Refactored occurrences:** the original coarse-source certificate and
+  the arbitrary supplied-gate forward certificate both use this single
+  source proof. The latter transports the certificate through the actual
+  raw-factor comparison with `x=X†zY`.
+- **Notes:** This promotes an existing theorem at its owner; the canonical
+  ambient presentation and exact even-length premise remain explicit.
+
+
+### Physical-pair relabeling of adjoint certificates — promoted (2026-10-29)
+
+- **Pattern:** Apply a matrix relabeling equivalence to a local sign equation,
+  commute it with multiplication, scalar action and adjunction, and transport
+  the two Kronecker factors along the physical-pair equivalence.
+- **Defined in:** `MPS/MPU/SourceFactorChoiceGates.lean`,
+  `Matrix.reindex_adjoint_certificate`.
+- **Refactored occurrences:** the chosen-source converse in
+  `TimeReversalLocalSufficiency.lean` and the actual arbitrary supplied-gate
+  converse in `SuppliedTimeReversalCriterion.lean` use the single proof.
+  The new module also shares its actual source-coordinate comparison between
+  both directions and reuses the same unitary transport in reverse.
+- **Notes:** The helper is a coordinate identity on actual matrices, with no
+  extra gate or factor predicate. Unitarity is required only by the actual
+  local-certificate transport, not by this identity.
+
+
+### Supplied unitary gate dimension product — promoted (2026-10-29)
+
+- **Pattern:** Apply both cardinal inequalities of a supplied rectangular
+  unitary and simplify the product/finite-index cardinalities to ℓ*r=d*d.
+- **Defined in:** `MPS/MPU/TwoSiteStandardForm.lean`,
+  `TwoSiteStandardFormData.left_mul_right`.
+- **Refactored occurrences:** four-spin unitarity in
+  `SuppliedHalfFactorMinimality.lean`, and both the simplicity and
+  zero-index consequences in `SuppliedFourSpinSourceComparison.lean`.
+- **Notes:** The theorem is at the existing supplied-standard-form owner;
+  no normalization or ambient canonicality premise is introduced.
+
 ### Weighted geometric sums grouped by their anchors — promoted (2026-10-28)
 
 - **Seen:** `Lattice/LowEnergyCommutatorSum.lean`,
