@@ -59,7 +59,7 @@ same conclusion without the eigenspace-structure theorem:
   $P_u\mathcal E_A^t(U)P_v=0$ for $0<t<m$ and $P_uUP_v=U$ at $t=0$; therefore
   $U=P_uWP_v=0$. -/
 lemma offDiag_eigenvector_eq_zero_of_isPeriodic
-    [NeZero D] (A : MPSTensor d D) {m : ℕ} [NeZero m]
+    (A : MPSTensor d D) {m : ℕ} [NeZero m]
     (hP : IsPeriodic m A)
     {P : Fin m → MatrixAlg D}
     (hPproj : ∀ k, IsOrthogonalProjection (P k))
@@ -71,6 +71,7 @@ lemma offDiag_eigenvector_eq_zero_of_isPeriodic
     (hSupp : U = P u * U * P v)
     (hEig : ((Kraus.transferMap (d := d) (D := D) A) ^ m) U = ζ • U) :
     U = 0 := by
+  have : NeZero D := ⟨hP.bondDim_ne_zero⟩
   classical
   set E := Kraus.transferMap (d := d) (D := D) A with hE_def
   -- The original transfer map is irreducible and trace preserving.
