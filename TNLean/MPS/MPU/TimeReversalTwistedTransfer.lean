@@ -54,7 +54,7 @@ theorem timeReversalPeriodicTrace_eq_sum (U : MPOTensor d D) :
       Matrix.reindex_apply, finTwoArrowEquiv, mpoMatrixEntry, ite_and, ite_mul,
       List.ofFn_succ, List.ofFn_zero, evalWord]
   change (∑ x : Fin d × Fin d, _) = _
-  simp only [Fintype.sum_prod_type, hentry]
+  simp only [Fintype.sum_prod_type, Matrix.diag_apply, hentry]
   exact Finset.sum_congr rfl fun i _ ↦
     Finset.sum_congr rfl fun j _ ↦ Matrix.trace_mul_comm (U j i) (U i j)
 
@@ -134,7 +134,7 @@ theorem intrinsicTimeReversalSign_blockTensor_eq_twistedTransfer_trace
       Matrix.trace (Matrix.swapMatrix D * timeReversalTwistedTransfer U ^ k) := by
   classical
   rw [intrinsicTimeReversalSign, timeReversalPeriodicTrace_blockTensor,
-    MPSTensor.blockPhysDim_eq_pow, Nat.cast_pow, inv_pow,
+    MPSTensor.blockPhysDim_eq_pow, Nat.cast_pow, ← inv_pow,
     timeReversalTwistedTransfer_pow_eq_sum_evalWord,
     Matrix.mul_smul, Matrix.trace_smul]
   simp only [Finset.mul_sum, Matrix.trace_sum,
