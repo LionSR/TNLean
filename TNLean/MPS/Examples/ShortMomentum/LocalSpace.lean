@@ -30,8 +30,8 @@ theorem trace_chargedWeyl {ζ : ℂ} (hζ : IsPrimitiveRoot ζ 5) (u v : ZMod 5)
   by_cases h : (u, v) = 0
   · have hu : u = 0 := congrArg Prod.fst h
     have hv : v = 0 := congrArg Prod.snd h
-    simp only [hu, hv, chargedWeyl_zero, Matrix.trace_one, ZMod.card, ite_true]
-  · rw [if_neg h]
+    rw [ite_eq_left h, hu, hv, chargedWeyl_zero, Matrix.trace_one, ZMod.card, Nat.cast_ofNat]
+  · rw [ite_eq_right h]
     exact trace_chargedWeyl_eq_zero hζ u v h
 
 /-- The explicit matrix trace-dual to one charged Weyl matrix. -/
@@ -49,7 +49,7 @@ theorem trace_chargedWeyl_mul_dual {ζ : ℂ} (hζ : IsPrimitiveRoot ζ 5)
   by_cases h : p = q
   · subst q
     have hzero : (p.1 + -p.1, p.2 + -p.2) = (0 : ZMod 5 × ZMod 5) := by simp
-    rw [if_pos hzero, if_pos rfl]
+    rw [ite_eq_left hzero, ite_eq_left rfl]
     simp only [neg_neg]
     calc
       ((5 : ℂ)⁻¹ * rootCharacter ζ (-p.1 * p.2)) *
@@ -64,9 +64,11 @@ theorem trace_chargedWeyl_mul_dual {ζ : ℂ} (hζ : IsPrimitiveRoot ζ 5)
       intro hz
       apply h
       apply Prod.ext
-      · exact sub_eq_zero.mp (by simpa only [sub_eq_add_neg] using congrArg Prod.fst hz)
-      · exact sub_eq_zero.mp (by simpa only [sub_eq_add_neg] using congrArg Prod.snd hz)
-    rw [if_neg hzero, if_neg h, mul_zero, mul_zero]
+      · exact sub_eq_zero.mp
+          (by simpa only [sub_eq_add_neg, Prod.fst_zero] using congrArg Prod.fst hz)
+      · exact sub_eq_zero.mp
+          (by simpa only [sub_eq_add_neg, Prod.snd_zero] using congrArg Prod.snd hz)
+    rw [ite_eq_right hzero, ite_eq_right h, mul_zero, mul_zero]
 
 /-- An actual boundary matrix representing a prescribed function of the charge. -/
 noncomputable def chargeBoundary (ζ : ℂ) (g : ZMod 5 × ZMod 5 → ℂ) :
@@ -82,7 +84,7 @@ theorem trace_chargedWeyl_mul_chargeBoundary {ζ : ℂ} (hζ : IsPrimitiveRoot �
   rw [Finset.sum_eq_single p]
   · simp
   · intro q _ hq
-    simp only [if_neg hq.symm, mul_zero]
+    simp only [ite_eq_right (Ne.symm hq), mul_zero]
   · intro h
     exact (h (Finset.mem_univ _)).elim
 
@@ -95,15 +97,17 @@ theorem mem_groundSpace_threeLetterTensor_iff {ζ : ℂ} (hζ : IsPrimitiveRoot 
           g (wordCharge (List.ofFn σ)) := by
   constructor
   · rintro ⟨X, rfl⟩
-    refine ⟨fun p ↦ (chargedWeyl ζ p.1 p.2 * X).trace, ?_⟩
-    intro σ
-    rw [groundSpaceMap_apply, evalWord_threeLetterTensor hζ.pow_eq_one,
-      smul_mul_assoc, Matrix.trace_smul, smul_eq_mul]
+    let Y : Matrix (ZMod 5) (ZMod 5) ℂ := X
+    refine ⟨fun p ↦ (chargedWeyl ζ p.1 p.2 * Y).trace, fun σ ↦ ?_⟩
+    rw [groundSpaceMap_apply, evalWord_threeLetterTensor hζ.pow_eq_one]
+    change ((_ : Matrix (ZMod 5) (ZMod 5) ℂ) * Y).trace = _
+    rw [smul_mul_assoc, Matrix.trace_smul, smul_eq_mul]
   · rintro ⟨g, hg⟩
     refine ⟨chargeBoundary ζ g, ?_⟩
     funext σ
-    rw [groundSpaceMap_apply, evalWord_threeLetterTensor hζ.pow_eq_one,
-      smul_mul_assoc, Matrix.trace_smul, smul_eq_mul,
+    rw [groundSpaceMap_apply (X := chargeBoundary ζ g), evalWord_threeLetterTensor hζ.pow_eq_one]
+    change ((_ : Matrix (ZMod 5) (ZMod 5) ℂ) * chargeBoundary ζ g).trace = _
+    rw [smul_mul_assoc, Matrix.trace_smul, smul_eq_mul,
       trace_chargedWeyl_mul_chargeBoundary hζ]
     exact (hg σ).symm
 

@@ -85,7 +85,7 @@ theorem eq_zero_of_seven_cyclic_agreement {ζ : ℂ} (hζ : IsPrimitiveRoot ζ 5
   have hfzero : f = 0 := by
     funext σ
     change f σ = 0
-    rw [hF, hFzero _ (wordCharge_ne_zero_of_length_seven (List.length_ofFn σ)), mul_zero]
+    rw [hF, hFzero _ (wordCharge_ne_zero_of_length_seven (List.length_ofFn)), mul_zero]
   refine ⟨hfzero, ?_⟩
   funext σ
   have h := hfg (σ (Fin.last 6)) (Fin.init σ)
@@ -107,7 +107,7 @@ theorem chainGroundSpace_threeLetterTensor_seven_eq_bot {ζ : ℂ}
     (hζ : IsPrimitiveRoot ζ 5) : chainGroundSpace (threeLetterTensor ζ) 7 7 = ⊥ := by
   apply (Submodule.eq_bot_iff _).mpr
   intro f hf
-  rw [chainGroundSpace, dif_pos (by decide : 0 < 7 ∧ 7 ≤ 7)] at hf
+  rw [chainGroundSpace, dite_eq_left (by decide : 0 < 7 ∧ 7 ≤ 7)] at hf
   simp only [Submodule.mem_iInf, Submodule.mem_comap] at hf
   have hcfg₀ (σ : Cfg 3 7) : cyclicCfg (by decide : 0 < 7) 7 0 σ 0 = σ := by
     funext k

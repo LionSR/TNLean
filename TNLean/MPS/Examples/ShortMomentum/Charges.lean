@@ -50,11 +50,11 @@ theorem sum_letter_counts (w : List (Fin 3)) :
     w.count 0 + w.count 1 + w.count 2 = w.length := by
   induction w with
   | nil => simp
-  | cons i w ih => fin_cases i <;> simp [List.count_cons] <;> omega
+  | cons i w ih => fin_cases i <;> simp <;> omega
 
 /-- The sorted word has precisely the prescribed total degree. -/
 @[simp] theorem length_sortedWord (a b c : ℕ) : (sortedWord a b c).length = a + b + c := by
-  simp [sortedWord]
+  simp [sortedWord, Nat.add_assoc]
 
 /-- The sorted word has the charge of its prescribed letter counts. -/
 @[simp] theorem wordCharge_sortedWord (a b c : ℕ) :
@@ -143,13 +143,13 @@ theorem exists_counts_seven_of_charge (u v : ZMod 5) (hne : (u, v) ≠ 0) :
       simpa only [b, add_sub_cancel_right, sub_self] using congrArg (fun z ↦ z - c) hbc
     exact hne (Prod.ext hu hv)
   have hpadding : ((7 - S : ℕ) : ZMod 5) = 0 := by
-    rw [Nat.cast_sub hSle, hScast, sub_self]
+    rw [Nat.cast_sub hSle, hScast, Nat.cast_ofNat, sub_self]
   refine ⟨a.val + (7 - S), b.val, c.val, ?_, ?_⟩
   · dsimp [S] at hSle ⊢
     omega
   · simp only [countCharge, Nat.cast_add, ZMod.natCast_zmod_val, hpadding, add_zero]
     dsimp [a, b]
-    apply Prod.ext <;> ring
+    apply Prod.ext <;> dsimp only <;> ring
 
 /-- Every noncentral charge is reached by an actual word of length seven. -/
 theorem exists_word_seven_of_charge (u v : ZMod 5) (hne : (u, v) ≠ 0) :
@@ -185,13 +185,13 @@ theorem exists_counts_eight_of_charge (u v : ZMod 5) :
     omega
   have hSle : S ≤ 8 := by omega
   have hpadding : ((8 - S : ℕ) : ZMod 5) = 0 := by
-    rw [Nat.cast_sub hSle, hScast, sub_self]
+    rw [Nat.cast_sub hSle, hScast, Nat.cast_ofNat, sub_self]
   refine ⟨a.val + (8 - S), b.val, c.val, ?_, ?_⟩
   · dsimp [S] at hSle ⊢
     omega
   · simp only [countCharge, Nat.cast_add, ZMod.natCast_zmod_val, hpadding, add_zero]
     dsimp [a, b]
-    apply Prod.ext <;> ring
+    apply Prod.ext <;> dsimp only <;> ring
 
 /-- Every virtual charge is reached by an actual word of length eight. -/
 theorem exists_word_eight_of_charge (u v : ZMod 5) :
@@ -239,6 +239,7 @@ theorem exists_central_counts_of_eight_le (n : ℕ) (hn : 8 ≤ n) :
     ∃ a b c : ℕ, a + b + c = n ∧ (a : ZMod 5) = b ∧ (b : ZMod 5) = c := by
   obtain ⟨t, k, htk⟩ := exists_three_five_decomposition n hn
   refine ⟨t + 5 * k, t, t, by omega, ?_, rfl⟩
-  rw [Nat.cast_add, Nat.cast_mul, ZMod.natCast_self, zero_mul, add_zero]
+  have h5 : (5 : ZMod 5) = 0 := by decide
+  simp only [Nat.cast_add, Nat.cast_mul, Nat.cast_ofNat, h5, zero_mul, add_zero]
 
 end MPSTensor.ShortMomentum
