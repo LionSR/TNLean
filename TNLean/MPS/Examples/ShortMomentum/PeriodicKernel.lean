@@ -119,7 +119,7 @@ theorem ker_parentHamiltonianES_threeLetterTensor_eq_span {ζ : ℂ}
     parentHamiltonianGroundSpaceES,
     ker_parentHamiltonian_eq_chainGroundSpace _ (by omega) (by omega),
     chainGroundSpace_seven_threeLetterTensor_eq_mpvSubmodule hζ (by omega),
-    mpvSubmodule, Submodule.map_span, Set.image_singleton, hstate]
+    mpvSubmodule, Submodule.map_span, Set.image_singleton, LinearEquiv.coe_coe, hstate]
 
 /-- The actual main-sector parent Hamiltonian has zero kernel at length seven. -/
 theorem ker_parentHamiltonianES_threeLetterTensor_seven_eq_bot {ζ : ℂ}
@@ -136,7 +136,7 @@ theorem mpvState_threeLetterTensor_ne_zero {ζ : ℂ} (hζ : IsPrimitiveRoot ζ 
   obtain ⟨w, hw, htrace⟩ := exists_trace_evalWord_ne_zero_of_eight_le hζ N hN
   obtain ⟨m, σ, rfl⟩ := List.exists_eq_ofFn w
   have hm : m = N := by simpa only [List.length_ofFn] using hw
-  subst N
+  subst hm
   intro hzero
   apply htrace
   have hcoeff := congrArg (fun v : MPVSpace 3 m ↦ v σ) hzero
