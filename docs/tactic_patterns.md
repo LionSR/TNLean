@@ -9794,6 +9794,20 @@ there is no need for a new tactic.
   composition theorem under the actual conjugation. The downstream proofs
   reuse this lemma rather than repeat the matrix map composition.
 
+### Complete finite operators from fixed-exterior matrix slices — candidate (2026-10-29)
+
+- **Seen:** `MPS/MPU/TwoSiteFiniteHeisenberg.lean`, the blocked-tensor and
+  original-site full-matrix intertwiners.
+- **Pattern:** A rectangular matrix is indexed by exterior/local products.
+  Multiply by the identity/right-Kronecker local operator; sum the exterior
+  delta coefficients to recover the established slice intertwiner.
+- **Reuse:** Both proofs reuse the existing actual three-block trace theorem;
+  they do not assume a full-operator identity as a hypothesis.
+- **Decision:** Two occurrences in one file. Before a third copy, promote the
+  rectangular block multiplication identity at its generic matrix owner in
+  QICLean, and retain the actual MPU source-specific wrappers here.
+
+
 ### Pure output Gram projection — library zero criterion (2026-10-29)
 
 - **Seen:** `Circuit/Channel/PhysicalPortPureOutput.lean`.
@@ -9865,20 +9879,6 @@ there is no need for a new tactic.
   The periodic seam, circuit unitarity and basis-change cancellation reuse the
   existing supplied standard-form and fundamental-theorem APIs. No fourth copy
   of the circuit contraction or custom tactic is introduced.
-
-### Complete finite operators from fixed-exterior matrix slices — candidate (2026-10-29)
-
-- **Seen:** `MPS/MPU/TwoSiteFiniteHeisenberg.lean`, the blocked-tensor and
-  original-site full-matrix intertwiners.
-- **Pattern:** A rectangular matrix is indexed by exterior/local products.
-  Multiply by the identity/right-Kronecker local operator; sum the exterior
-  delta coefficients to recover the established slice intertwiner.
-- **Reuse:** Both proofs reuse the existing actual three-block trace theorem;
-  they do not assume a full-operator identity as a hypothesis.
-- **Decision:** Two occurrences in one file. Before a third copy, promote the
-  rectangular block multiplication identity at its generic matrix owner in
-  QICLean, and retain the actual MPU source-specific wrappers here.
-
 
 ### Common buffered chain for completed local inverse identities — candidate (2026-10-29)
 
