@@ -10,43 +10,21 @@ import QICLean.Entropy.Renyi.VonNeumannBound
 /-!
 # The Rényi form of Hastings' bootstrap lemma
 
-At the end of the proof of Lemma 2, Hastings, *An area law for one-dimensional quantum systems*
-(arXiv:0705.2024v4, `References/0705.2024/law16.tex`, lines 392–410), notes that the argument
-extends to the Rényi entropies `S_α(ρ⁰_{1,j}) = (1 − α)⁻¹ ln tr (ρ⁰_{1,j})^α` whenever
-`exp(−2α/ξ') (D²)^{1−α} < 1`. The bound then differs from the von Neumann bound only in the
-function replacing `F(ξ', D)`.
+Hastings (arXiv:0705.2024v4, lines 392–410) extends the bootstrap estimate
+to Rényi entropy when `exp(-2α/ξ') * (q²)^(1-α) < 1`. For `0 < α < 1`,
+the remainder is `4 log q - log(1-(q²)^(1-α)*exp(-2α/ξ'))/(1-α)`.
+For `α > 1`, the inequality `S_α ≤ S` gives the von Neumann remainder.
+This file proves these statements from approximate factorization and then
+supplies the latter from the Hamiltonian assumptions.
 
-This file proves that statement on Hastings' own hypotheses. The Schmidt-tail constraints come
-from Lemma 1 exactly as for the von Neumann entropy (`ChainBootstrap.lean`), and the Rényi
-entropy under them is bounded by `renyiEntropy_le_of_schmidtRank_mixtures`. Lemma 1 is supplied
-at the printed rate by `exists_projectorFactorization_endpoint`, with the length
-`ζ = lemmaOneEndpointLength R J ΔE`, the rate `ξ' = 6ζ` and the constant `C₁ = K ζ³`, as in
-`exists_entropy_le_of_overlap_schmidtRank_mixture`.
-
-The function replacing `F(ξ', D)` is
-`4 ln D − ln(1 − (D²)^{1−α} e^{−2α/ξ'}) / (1 − α)`.
-
-**Scope restriction (quantitative bounds):** `exists_renyiEntropy_le_of_overlap_schmidtRank_mixture`
-inherits the quantitative restriction of the formalized Lemma 1. Its length
-`ζ = (5/4) lemmaOneLength R (J/ΔE) 1` comes from the chain Lieb–Robinson estimate with the
-velocity raised by `5/4`, whose prefactor grows with `J` and whose second operator acts on one
-site, so `ζ` is not shown to be the source's `max(2v/ΔE, ξ_C)` for a Lieb–Robinson pair in the
-source's sense (lines 96–112). Documented in `docs/paper-gaps/hastings07_lemma1_decay_length.tex`
-and `docs/paper-gaps/hastings07_gaussian_average_exponent.tex`.
-
-Orders `α > 1` are covered as well: there the Rényi entropy is at most the von Neumann entropy
-(`Entropy.inv_one_sub_mul_log_sum_rpow_le_probabilityEntropy`), so the von Neumann Lemma 2
-bounds it, with `F(ξ', D)` itself as the function replacing `F(ξ', D)`. Order `1` is the von
-Neumann entropy.
-
-## Main results
-
-* `TNLean.MPS.AreaLaw.Hastings.renyiEntropy_le_of_overlap_schmidtRank_mixture_of_isFactorizationAt`:
-  the Rényi bound from Lemma 1 at one cut.
-* `TNLean.MPS.AreaLaw.exists_renyiEntropy_le_of_overlap_schmidtRank_mixture`: the Rényi form of
-  Lemma 2 for a gapped chain, for orders `0 < α < 1`.
-* `TNLean.MPS.AreaLaw.exists_renyiEntropy_le_of_overlap_schmidtRank_mixture_of_one_lt`: the same
-  for orders `α > 1`.
+**Scope restriction (auxiliary velocity):** the Hamiltonian endpoints here
+use `ζ = lemmaOneEndpointLength R J ΔE` and `ξ' = 6ζ`. The physical
+Lieb–Robinson velocity `10ΔE * chainLRVelocity R (J/ΔE)` includes a term
+proportional to the gap, rather than being expressed as a fixed multiple of `J`. These
+valid auxiliary estimates are complemented by the common order-`J`
+source-parameter conclusions in `Hastings/SourceConsequences.lean`.
+The distinction and the reciprocal-length convention are recorded in
+`docs/paper-gaps/hastings07_lemma1_decay_length.tex`.
 -/
 
 namespace TNLean.MPS.AreaLaw.Hastings
