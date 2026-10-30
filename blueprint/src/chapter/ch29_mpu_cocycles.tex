@@ -1708,6 +1708,96 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
     two-cocycle equation.
 \end{proof}
 
+\begin{definition}[Domain-wall strings of a group element]
+    \label{def:mpug_group_domain_wall_string}
+    \lean{MPOTensor.GroupFamily.IsSeparatingLeftInverseFamily,
+        MPOTensor.GroupFamily.BlockActionData.groupWallLeftEndpoint,
+        MPOTensor.GroupFamily.BlockActionData.groupWallRightEndpoint,
+        MPOTensor.GroupFamily.BlockActionData.groupWallString,
+        MPOTensor.nestedWallCoeff}
+    \leanok
+    \uses{def:mpug_domain_wall_string, def:mpug_domain_wall_family}
+    Let the blocks $A_x$ form a finite family with left inverses $\hat A_x$
+    of separated supports: $\hat A_x$ is a left inverse of $A_x$ and
+    $\sum_\sigma(\hat A_x^\sigma)_{\alpha\beta}(A_y^\sigma)_{\gamma\delta}=0$
+    for $y\neq x$. Let $e_{yz}$ be a family of domain walls permuted by the
+    group. Following \cite[Section~IV.B]{GarreRubioSchuch2024DomainWall},
+    the left endpoint tensor of $g$ is
+    $\sum_xV_{g,x}e_{x,gx}\hat A_x$, the right endpoint tensor is
+    $\sum_xW_{g,x}e_{gx,x}\hat A_x$, and the string $O_g^{[i,j]}$ acts by the
+    identity outside the sites $i,\dots,j$, by the two endpoint tensors on
+    the sites $i$ and $j$, and by the tensor of $O_g$ between them.
+\end{definition}
+
+\begin{lemma}[Strings of a group element create pairs of domain walls]
+    \label{lem:mpug_group_domain_wall_string_creation}
+    \lean{MPOTensor.leftAct_zero, MPOTensor.rightAct_zero,
+        MPOTensor.leftAct_sum, MPOTensor.rightAct_sum,
+        MPOTensor.GroupFamily.BlockActionData.leftAct_groupWallLeftEndpoint,
+        MPOTensor.GroupFamily.BlockActionData.rightAct_groupWallRightEndpoint,
+        MPOTensor.GroupFamily.BlockActionData.groupWallString_mulVec_mpv}
+    \leanok
+    \uses{def:mpug_group_domain_wall_string,
+        thm:mpug_domain_wall_string_creation}
+    On the periodic chain of every length $L\geq2$ and for all sites $i<j$,
+    $O_g^{[i,j]}\ket{\psi_{A_x}}=\ket{\psi(x,gx)}$, the state with the domain
+    wall $e_{x,gx}$ at $i$, the block $A_{gx}$ between $i$ and $j$, and the
+    domain wall $e_{gx,x}$ at $j$
+    \cite[Section~IV.B]{GarreRubioSchuch2024DomainWall}.
+\end{lemma}
+
+\begin{proof}\leanok
+    On $A_x$ only the term of $\hat A_x$ in each endpoint survives, leaving
+    $e_{x,gx}V_{g,x}$ and $W_{g,x}e_{gx,x}$; the action tensors reduce the
+    string of $O_g\cdot A_x$ between them to $A_{gx}$.
+\end{proof}
+
+\begin{lemma}[Exchange of two domain walls of a group element]
+    \label{lem:mpug_group_domain_wall_exchange}
+    \lean{MPOTensor.GroupFamily.BlockActionData.groupWallString_outer_mul_inner_mulVec_mpv_apply,
+        MPOTensor.GroupFamily.BlockActionData.groupWallString_inner_mul_outer_mulVec_mpv_apply,
+        MPOTensor.GroupFamily.BlockActionData.groupWallString_mul_groupWallString_mulVec_mpv,
+        MPOTensor.GroupFamily.BlockActionData.groupWallString_cross_mulVec_mpv_apply,
+        MPOTensor.GroupFamily.BlockActionData.groupWallString_mul_groupWallString_mulVec_mpv_swap_left}
+    \leanok
+    \uses{lem:mpug_group_domain_wall_string_creation, thm:mpug_domain_wall_pair}
+    In the setting of Definition~\ref{def:mpug_group_domain_wall_string},
+    let the regions between the sites considered below be longer than a
+    fixed buffer. For sites $i_2<i_1<j_1<j_2$,
+    \begin{align}
+        O_g^{[i_2,j_2]}O_g^{[i_1,j_1]}\ket{\psi_{A_x}}
+         & =B^g_{x,gx}B^g_{gx,x}\,O_g^{[i_1,j_1]}O_g^{[i_2,j_2]}\ket{\psi_{A_x}},
+        \notag
+    \end{align}
+    and for sites $j<i<r_2<r_1$,
+    \begin{align}
+        O_g^{[j,r_1]}O_g^{[i,r_2]}\ket{\psi_{A_x}}
+         & =B^g_{x,gx}\,O_g^{[i,r_1]}O_g^{[j,r_2]}\ket{\psi_{A_x}}.
+        \notag
+    \end{align}
+    The second identity is the exchange of two left endpoints
+    $O^{[j]}_{g,a}O^{[i]}_{g,b}\ket{\psi_x}=B^g_{x,gx}\,O^{[i]}_{g,a}O^{[j]}_{g,b}\ket{\psi_x}$
+    of \cite[Section~IV.B]{GarreRubioSchuch2024DomainWall}, with the
+    half-chain operators glued with the right endpoints of their strings
+    \cite{gap:gs24_domain_wall_half_string_gluing}; the buffer is the blocked
+    form of the local action \cite{gap:gs24_domain_wall_nondegenerate}.
+\end{lemma}
+
+\begin{proof}\leanok
+    Every side is a multiple of the state with the domain walls $e_{x,gx}$,
+    $e_{gx,g^2x}$, $e_{g^2x,gx}$, $e_{gx,x}$ at the four sites in increasing
+    order, between the regions $A_x$, $A_{gx}$, $A_{g^2x}$, $A_{gx}$, $A_x$.
+    In a nested pair whose outer string acts second, the outer string passes
+    over the domain walls $e_{x,gx}$ and $e_{gx,x}$ created by the inner one,
+    with phase $B^g_{x,gx}B^g_{gx,x}$ by
+    Lemma~\ref{thm:mpug_domain_wall_pair}. If the outer string acts first,
+    the inner string acts on the region $A_{gx}$ and creates the walls
+    $e_{gx,g^2x}$ and $e_{g^2x,gx}$ with no phase. In the crossed pair, the
+    string on $[i,r_1]$ acting second starts in the region $A_{gx}$, passes
+    over the domain wall $e_{gx,x}$ at $r_2$ and ends in the region $A_x$,
+    with phase $B^g_{gx,x}$; dividing the two phases gives $B^g_{x,gx}$.
+\end{proof}
+
 \begin{lemma}[Domain walls of an involution detect the anomaly]
     \label{thm:mpug_domain_wall_involution}
     \lean{MPOTensor.GroupFamily.BlockActionData.IsDomainWallAction.mul_eq_lSymbol_of_mul_self_eq_one,
