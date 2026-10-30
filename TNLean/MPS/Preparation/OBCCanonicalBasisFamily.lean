@@ -34,10 +34,10 @@ theorem exists_canonicalCutBasisFamily {d N : ℕ} (hN : 0 < N)
     ∃ B : ∀ k, Module.Basis (Fin (cutCoefficientRank ψ k)) ℂ (cutColumnSpace ψ k),
       (∀ q, (B 0 q).val = 1) ∧ (∀ q, (B N q).val = fullCutVector ψ) ∧
       ∀ k,
-        (∃ λ : Fin (cutCoefficientRank ψ k) → ℝ,
-          (∀ q, 0 < λ q) ∧
+        (∃ lam : Fin (cutCoefficientRank ψ k) → ℝ,
+          (∀ q, 0 < lam q) ∧
           (cutPrefixMatrix ψ B k)ᴴ * cutPrefixMatrix ψ B k =
-            Matrix.diagonal (fun q ↦ (λ q : ℂ))) ∧
+            Matrix.diagonal (fun q ↦ (lam q : ℂ))) ∧
         cutSuffixMatrix ψ B k * (cutSuffixMatrix ψ B k)ᴴ = 1 := by
   classical
   have hψ : ψ ≠ 0 := by
