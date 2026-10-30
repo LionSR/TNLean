@@ -39,8 +39,7 @@ condition-C1 proof. No injectivity hypothesis is needed.
 Source: PGVWC07, MPSarchive.tex lines 921--931. -/
 theorem cutMatrix_mpv_eq_cutVector_mul (A : MPSTensor d D) (hk : k ≤ N) :
     cutMatrix (mpv A (N := N)) k =
-      (fun σ a ↦ leftCutVector A k a σ : Matrix (Fin k → Fin d) (Fin D × Fin D) ℂ) *
-        (rightCutVector A (N - k) : Matrix (Fin D × Fin D) (Fin (N - k) → Fin d) ℂ) := by
+      Matrix.of (fun σ a ↦ leftCutVector A k a σ) * Matrix.of (rightCutVector A (N - k)) := by
   classical
   ext σ τ
   have heval := eval_cutConfig (fun _ : Fin N ↦ A) hk σ τ
@@ -65,9 +64,9 @@ Source: the independent right cut vectors in PGVWC07, lines 928--931. -/
 theorem exists_rightInverse_rightCutVector {A : MPSTensor d D} {m : ℕ}
     (hC1 : Kraus.IsNBlkInjective A m) :
     ∃ S : Matrix (Fin m → Fin d) (Fin D × Fin D) ℂ,
-      (rightCutVector A m : Matrix (Fin D × Fin D) (Fin m → Fin d) ℂ) * S = 1 := by
+      Matrix.of (rightCutVector A m) * S = 1 := by
   classical
-  let G : Matrix (Fin D × Fin D) (Fin m → Fin d) ℂ := rightCutVector A m
+  let G : Matrix (Fin D × Fin D) (Fin m → Fin d) ℂ := Matrix.of (rightCutVector A m)
   have hcols : LinearIndependent ℂ Gᵀ.col := linearIndependent_rightCutVector hC1
   have hinj := Matrix.mulVec_injective_iff.mpr hcols
   obtain ⟨T, hT⟩ := Gᵀ.mulVecLin.exists_leftInverse_of_injective
@@ -89,13 +88,14 @@ theorem span_cutMatrix_mpv_cols_eq {A : MPSTensor d D} (hk : k ≤ N)
       Submodule.span ℂ (Set.range (leftCutVector A k)) := by
   classical
   let F : Matrix (Fin k → Fin d) (Fin D × Fin D) ℂ :=
-    fun σ a ↦ leftCutVector A k a σ
+    Matrix.of fun σ a ↦ leftCutVector A k a σ
   let G : Matrix (Fin D × Fin D) (Fin (N - k) → Fin d) ℂ :=
-    rightCutVector A (N - k)
+    Matrix.of (rightCutVector A (N - k))
   obtain ⟨S, hS⟩ := exists_rightInverse_rightCutVector hC1
   have hfactor : cutMatrix (mpv A (N := N)) k = F * G :=
     cutMatrix_mpv_eq_cutVector_mul A hk
-  have hrecover : (F * G) * S = F := by rw [Matrix.mul_assoc, hS, Matrix.mul_one]
+  have hrecover : (F * G) * S = F := by
+    rw [Matrix.mul_assoc, show G * S = 1 from hS, Matrix.mul_one]
   change Submodule.span ℂ (Set.range (cutMatrix (mpv A (N := N)) k).col) =
     Submodule.span ℂ (Set.range F.col)
   simp only [← Matrix.range_mulVecLin]

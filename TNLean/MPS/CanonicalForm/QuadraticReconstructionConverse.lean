@@ -53,7 +53,7 @@ theorem exists_unitary_phase_of_same_state (s : QuadraticReconstructionSolution 
           (U : Matrix (Fin D) (Fin D) ℂ)ᴴ) := by
   classical
   obtain ⟨σ₀, hσ₀⟩ := hnonzero
-  let : NeZero D := ⟨fun hD ↦ hσ₀ (by subst D; simp [mpv, coeff, Matrix.trace])⟩
+  let : NeZero D := ⟨fun hD ↦ hσ₀ (by subst hD; simp [mpv, coeff, Matrix.trace])⟩
   obtain ⟨C⟩ := hA
   obtain ⟨lam, hlam, _, hsum⟩ := C.exists_weight_sum_mul_conjTranspose_eq_of_isNBlkInjective hC1
   have hcandidate : ∑ i, s.tensor i * (s.tensor i)ᴴ = ((1 : ℝ) : ℂ) ^ 2 • 1 := by
