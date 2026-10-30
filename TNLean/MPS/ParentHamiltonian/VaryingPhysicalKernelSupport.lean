@@ -44,7 +44,7 @@ theorem physicalPairParentTerm_boundary_of_apply_eq_zero
   have hfiber := (ContinuousLinearMap.mem_ker_rightFiberwiseMap_iff
     Gᗮ.starProjection (U ψ)).mp hprod η
   have hmem : ContinuousLinearMap.rightFiber (U ψ) η ∈ G := by
-    have horth := (Submodule.starProjection_apply_eq_zero_iff).mp hfiber
+    have horth := (Submodule.starProjection_apply_eq_zero_iff _).mp hfiber
     simpa only [Submodule.orthogonal_orthogonal] using horth
   obtain ⟨X, hX⟩ := LinearMap.mem_range.mp hmem
   refine ⟨X, fun x y ↦ ?_⟩
@@ -84,14 +84,14 @@ theorem physicalPairParentTerm_apply_eq_zero_iff_boundary
         ψ ((pairConfigurationEquiv β i j hji).symm ((x, y), η))
       rw [← Matrix.mul_assoc]
       exact (hX x y).symm
-    apply Submodule.starProjection_apply_eq_zero_iff.mpr
+    apply (Submodule.starProjection_apply_eq_zero_iff _).mpr
     simpa only [Submodule.orthogonal_orthogonal] using hmem
 
 /-- An actual embedded pair term kills no coefficient at an added physical
 letter: any vector in its kernel must vanish there.
 Source: PGVWC07, actual pair range in Theorem 9, lines 1201–1220. -/
 theorem physicalPairParentTerm_coeff_eq_zero_of_not_mem_range
-    (β γ : ι → Type*) [∀ k, Fintype (β k)] [∀ k, Fintype (γ k)]
+    (β γ : ι → Type*) [∀ k, Fintype (γ k)]
     (e : ∀ k, β k ↪ γ k) (i j : ι) (hji : j ≠ i)
     (A : β i → Matrix a b ℂ) (B : β j → Matrix b c ℂ)
     (ψ : EuclideanSpace ℂ ((k : ι) → γ k))
@@ -108,10 +108,11 @@ theorem physicalPairParentTerm_coeff_eq_zero_of_not_mem_range
     (X * Function.extend (e i) A 0 (σ i) * Function.extend (e j) B 0 (σ j)) at hc
   rw [Q.symm_apply_apply] at hc
   rcases hσ with hi | hj
-  · rw [Function.extend_apply' A 0 (σ i) hi, Matrix.mul_zero,
+  · rw [Function.extend_apply' (f := ⇑(e i)) A 0 (σ i) hi, Pi.zero_apply, Matrix.mul_zero,
       Matrix.zero_mul, Matrix.trace_zero] at hc
     exact hc
-  · rw [Function.extend_apply' B 0 (σ j) hj, Matrix.mul_zero, Matrix.trace_zero] at hc
+  · rw [Function.extend_apply' (f := ⇑(e j)) B 0 (σ j) hj, Pi.zero_apply, Matrix.mul_zero,
+      Matrix.trace_zero] at hc
     exact hc
 
 /-- Positivity derives every actual adjacent local equation from the full
@@ -149,8 +150,7 @@ parent kernel. Adjacent local equations are derived from the Hamiltonian, and
 every site is covered when the chain has at least two sites.
 Source: PGVWC07, Theorem 9 and equation unique-OBC, lines 1195–1220. -/
 theorem varyingPhysicalParentHamiltonian_coeff_eq_zero_of_not_mem_range {N : ℕ}
-    (hN : 2 ≤ N) (β γ : Fin N → Type*)
-    [∀ k, Fintype (β k)] [∀ k, Fintype (γ k)]
+    (hN : 2 ≤ N) (β γ : Fin N → Type*) [∀ k, Fintype (γ k)]
     (e : ∀ k, β k ↪ γ k) (D : ℕ → ℕ)
     (A : ∀ k : Fin N, β k → Matrix (Fin (D k.val)) (Fin (D (k.val + 1))) ℂ)
     (ψ : EuclideanSpace ℂ ((k : Fin N) → γ k))
@@ -163,14 +163,14 @@ theorem varyingPhysicalParentHamiltonian_coeff_eq_zero_of_not_mem_range {N : ℕ
   · let j : Fin (n + 1) := ⟨k.val, hleft⟩
     have hkleft : j.castSucc = k := Fin.ext rfl
     exact physicalPairParentTerm_coeff_eq_zero_of_not_mem_range β γ e _ _ _ _ _ ψ
-      (hterms j) σ (Or.inl (by simpa only [hkleft] using hk))
+      (hterms j) σ (Or.inl (by rw [hkleft]; exact hk))
   · have hkright : (Fin.last n).succ = k := by
       apply Fin.ext
       have := k.isLt
       simp only [Fin.val_succ, Fin.val_last]
       omega
     exact physicalPairParentTerm_coeff_eq_zero_of_not_mem_range β γ e _ _ _ _ _ ψ
-      (hterms (Fin.last n)) σ (Or.inr (by simpa only [hkright] using hk))
+      (hterms (Fin.last n)) σ (Or.inr (by rw [hkright]; exact hk))
 
 /-- Every actual kernel vector after physical extension is exactly the
 extension of its literal coefficient pullback. Embedded-state membership is
@@ -191,7 +191,7 @@ theorem varyingPhysicalParentHamiltonian_eq_extendByZero_pullback_of_eq_zero {N 
   intro σ
   by_cases hσ : σ ∈ Set.range E
   · obtain ⟨τ, rfl⟩ := hσ
-    exact (E.euclideanExtendByZero_apply_image _ τ).symm
+    exact (E.euclideanExtendByZero_apply_image (WithLp.toLp 2 fun σ ↦ ψ (E σ)) τ).symm
   · rw [E.euclideanExtendByZero_apply_not_mem_range _ _ hσ]
     have hinvalid : ∃ k, σ k ∉ Set.range (e k) := by
       by_contra hnone

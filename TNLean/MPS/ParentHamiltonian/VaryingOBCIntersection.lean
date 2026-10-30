@@ -44,8 +44,8 @@ private theorem eq_of_trace_mul_spanning_rectangular
     (M N : Matrix c b ℂ)
     (h : ∀ j, Matrix.trace (M * B j) = Matrix.trace (N * B j)) : M = N := by
   have hlin :
-      (Matrix.traceLinearMap c ℂ ℂ).comp (Matrix.mulLeftLinearMap c ℂ M) =
-        (Matrix.traceLinearMap c ℂ ℂ).comp (Matrix.mulLeftLinearMap c ℂ N) := by
+      (Matrix.traceLinearMap c ℂ ℂ).comp (_root_.mulLeftLinearMap c ℂ M) =
+        (Matrix.traceLinearMap c ℂ ℂ).comp (_root_.mulLeftLinearMap c ℂ N) := by
     apply LinearMap.ext_on_range hB
     intro j
     exact h j
