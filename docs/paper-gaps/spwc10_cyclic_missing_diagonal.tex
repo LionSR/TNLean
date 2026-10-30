@@ -21,7 +21,7 @@ Its full-Kraus-rank index is $D(D-1)$.
 The upper-bound proof says that at length $N=D(D-1)$ the constraint
 \begin{align}
     1+k+l+n(D-1)+mD=N
-    \label{eq:cyclic_padding}
+    \label{eq:spwc10_cyclic_missing_diagonal_padding}
 \end{align}
 allows arbitrary $0\le k,l<D$ by choosing $n,m\ge0$.
 This sentence misses $k=l=D-1$. For example, at $D=3$ that pair
@@ -33,15 +33,16 @@ The example's claimed index and dimension range remain correct.
 
 Write $s=k+l$. For $s\le D-2$, choose $n=s+1$ and $m=D-s-2$.
 For $D-1\le s\le2D-3$, choose $n=s+1-D$ and $m=2D-s-3$.
-Both choices are nonnegative and satisfy~(\ref{eq:cyclic_padding}).
+Both choices are nonnegative and satisfy~(\ref{eq:spwc10_cyclic_missing_diagonal_padding}).
 Hence every matrix unit except $|0\rangle\langle0|$ belongs to $S_N$.
 Since $S^N=I$ belongs to the same exact-length span,
 \begin{align}
     |0\rangle\langle0|
     =I-\sum_{i=1}^{D-1}|i\rangle\langle i|\in S_N.
-    \notag
+    \label{eq:spwc10_cyclic_missing_diagonal_corner}
 \end{align}
-This supplies the omitted sentence and proves $S_N=\mathcal M_D$.
+Equation~(\ref{eq:spwc10_cyclic_missing_diagonal_corner}) supplies the
+omitted sentence and proves $S_N=\mathcal M_D$.
 It also covers $D=2$.
 
 \section{The lower obstruction}
@@ -49,13 +50,34 @@ It also covers $D=2$.
 Every nonzero word containing $R$ reduces to $S^kRS^l$ with length
 $1+k+l+n(D-1)+mD$, where $0\le k,l<D$.
 At either position $(D-1,0)$ or $(0,1)$, a nonzero entry requires
-$k+l=2D-3$. At length $N-1$, the length constraint would imply
+$k+l=2D-3$. At length $N-1$, the length constraint would read
+$1+(2D-3)+n(D-1)+mD=D(D-1)-1$, that is,
 \begin{align}
-    D(D-1)=(n+m+2)(D-1)+m+1.
-    \notag
+    D(D-1)
+    &=(n+m+2)(D-1)+m+1.
+    \label{eq:spwc10_cyclic_missing_diagonal_pred_length}
 \end{align}
-This forces $m+1<D-1$ and $n+m+2<D$, so its right-hand side is
-strictly below $D(D-1)$, a contradiction.
+Since $m+1\ge1$, (\ref{eq:spwc10_cyclic_missing_diagonal_pred_length})
+gives $(n+m+2)(D-1)<D(D-1)$, and hence
+\begin{align}
+    n+m+2
+    &\le D-1,
+    \label{eq:spwc10_cyclic_missing_diagonal_coefficient}\\
+    m+1
+    &\le n+m+1
+     \le D-2.
+    \label{eq:spwc10_cyclic_missing_diagonal_remainder}
+\end{align}
+Substituting (\ref{eq:spwc10_cyclic_missing_diagonal_coefficient}) and
+(\ref{eq:spwc10_cyclic_missing_diagonal_remainder}) into the right-hand side
+of (\ref{eq:spwc10_cyclic_missing_diagonal_pred_length}) gives
+\begin{align}
+    (n+m+2)(D-1)+m+1
+    &\le(D-1)^2+D-2
+     =D(D-1)-1,
+    \label{eq:spwc10_cyclic_missing_diagonal_contradiction}
+\end{align}
+which contradicts (\ref{eq:spwc10_cyclic_missing_diagonal_pred_length}).
 The pure shift $S^{N-1}$ has equal entries at the two positions.
 Thus every matrix in $S_{N-1}$ has equal entries there, whereas
 $|D-1\rangle\langle0|$ does not. This proves $S_{N-1}\ne\mathcal M_D$.
