@@ -309,6 +309,7 @@ import TNLean.MPS.ParentHamiltonian.UncleVariationalEigenvalue
 import TNLean.MPS.ParentHamiltonian.UncleTrialEnergy
 import TNLean.MPS.ParentHamiltonian.UncleTrialLocalization
 import TNLean.MPS.ParentHamiltonian.UncleTrialPinnedWalls
+import TNLean.MPS.ParentHamiltonian.UncleTrialTransferNorm
 import TNLean.MPS.ParentHamiltonian.UncleTwoWallTrial
 import TNLean.MPS.ParentHamiltonian.UncleVirtualRescaling
 import TNLean.MPS.ParentHamiltonian.UncleWallGram
