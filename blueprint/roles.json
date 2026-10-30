@@ -121,7 +121,7 @@
         "thm:periodic_ft_equal_case_trace_preserving",
         "thm:periodic_ft_proportional",
         "thm:irreducible_form_physical_symmetry",
-        "thm:thm_4_1_p_refinement"
+        "thm:thm_4_1_p_refinement_forward_unit_weights"
       ],
       "corollaries": [
         "thm:periodic_ft_supplied_periods",
@@ -137,7 +137,7 @@
         "thm:periodic_ft_equal_case_trace_preserving": "Source theorem: De las Cuevas et al. Theorem 3.8, equal case with trace-preserving blocks",
         "thm:periodic_ft_proportional": "Proportional periodic Fundamental Theorem (De las Cuevas et al., Theorem 3.4)",
         "thm:irreducible_form_physical_symmetry": "Lifting of physical symmetries in irreducible form II to virtual gauges, named in the opening",
-        "thm:thm_4_1_p_refinement": "p-refinability iff p-divisibility of the transfer map (Theorem 4.1), named in the opening"
+        "thm:thm_4_1_p_refinement_forward_unit_weights": "Corrected forward Theorem 4.1 for explicit periodic blocks with unit-modulus weights; the reverse root-selection problem remains separate"
       }
     },
     "ch:algebraic_ft": {

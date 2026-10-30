@@ -20,50 +20,6 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 
 \subsection{Splitting a sheet}
 
-\begin{lemma}[Operators on parts of a sheet]
-    \label{lem:peps_frame_split_forms}
-    \lean{TNLean.Lattice.sheetSplit,
-        TNLean.Lattice.Sheet.threeSplit,
-        TNLean.Lattice.Sheet.threeSplit_fst,
-        TNLean.Lattice.Sheet.threeSplit_snd,
-        TNLean.Lattice.rectKronecker_submatrix_sheetSplit,
-        TNLean.Lattice.Sheet.rectKronecker_submatrix_threeSplit,
-        TNLean.Lattice.exists_kronecker_one_of_mem_supportedOperators,
-        TNLean.Lattice.exists_one_kronecker_of_mem_supportedOperators,
-        TNLean.Lattice.Sheet.exists_threeSplit_eq_kronecker_one,
-        TNLean.Lattice.Sheet.exists_threeSplit_eq_one_kronecker_kronecker_one,
-        TNLean.Lattice.Sheet.exists_threeSplit_eq_reindex_one_kronecker,
-        TNLean.Lattice.Sheet.exists_threeSplit_eq_kronecker_one_kronecker_one,
-        TNLean.Lattice.Sheet.exists_threeSplit_eq_one_kronecker}
-    \leanok
-    Let $\Lambda$ be a finite site set and $q\in\mathbb N$. For
-    $S\subseteq\Lambda$, identify $\mathcal H_\Lambda\cong\mathcal H_S\otimes\mathcal H_{\Lambda\setminus S}$
-    and, for disjoint $T,E\subseteq\Lambda$ with
-    $U=\Lambda\setminus(T\cup E)$, identify $\mathcal H_\Lambda\cong(\mathcal H_T\otimes\mathcal H_E)\otimes
-        \mathcal H_U$ via $c\mapsto((c|_T,c|_E),c|_U)$. In these coordinates
-    (including $q=0$ and empty regions):
-    \begin{enumerate}
-        \item $\operatorname{supp}(A)\subseteq S\implies A=A'\otimes\id$, and
-              $\operatorname{supp}(A)\cap S=\emptyset\implies A=\id\otimes A'$;
-        \item $\operatorname{supp}(A)\subseteq T\cup E\implies A=A'\otimes\id_U$,
-              and $\operatorname{supp}(A)\subseteq E\implies A=\id_T\otimes A'\otimes\id_U$;
-        \item $\operatorname{supp}(A)\subseteq T\implies A=(A_T\otimes\id_E)\otimes\id_U$,
-              $\operatorname{supp}(A)\subseteq U\implies A=\id_{TE}\otimes A_U$, and
-              $\operatorname{supp}(A)\cap T=\emptyset\implies A\simeq\id_T\otimes V$
-              ($V\in\operatorname{End}(\mathcal H_E\otimes\mathcal H_U)$).
-    \end{enumerate}
-\end{lemma}
-
-\begin{proof}\leanok
-    By linearity, it suffices to check product operators $\bigotimes_xm_x$ with
-    $m_x=\id$ off the support. When $\operatorname{supp}(A)\cap T=\emptyset$,
-    splitting off $T$ gives $\id_T\otimes B$ on
-    $\mathcal H_T\otimes\mathcal H_{\Lambda\setminus T}$; expressing $B$ on
-    $\mathcal H_E\otimes\mathcal H_U$ as $V$ yields
-    $A_{((t,e),u),((t',e'),u')}=\delta_{t,t'}V_{(e,u),(e',u')}$, i.e.\
-    $\id_T\otimes V$ after reassociation.
-\end{proof}
-
 % ALVV arXiv:1602.08828v2, local_alg_arxiv_v2.tex, eq:H-mid-cut,
 % lines 810--821; this is a separate locality auxiliary, not that source theorem.
 \begin{lemma}[Support-intersection bound for an operator on two regions]
@@ -827,146 +783,6 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 
 \subsection{Exchanging assignments between two sheets}
 
-\begin{definition}[Swapping two sheets]
-    \label{def:peps_frame_sheet_swap}
-    \lean{TNLean.Lattice.sheetSwap,
-        TNLean.Lattice.sheetSwapOp}
-    \leanok
-    For $S\subseteq\Lambda$, let $F_S$ be the unitary swapping the two sheets
-    at the sites in $S$ (\texttt{05-frames.tex}, lines 476--477).
-\end{definition}
-
-\begin{lemma}[Permutation matrices are unitary]
-    \label{thm:permutation_matrix_unitary}
-    \lean{Equiv.Perm.permMatrix_mem_unitaryGroup}
-    \leanok
-    For a permutation $\sigma$ of a finite set, its complex permutation matrix
-    $P_\sigma$ satisfies $P_\sigma P_\sigma^\dagger=P_\sigma^\dagger P_\sigma=I$.
-\end{lemma}
-
-\begin{proof}\leanok
-    Since $P_\sigma^\dagger=P_{\sigma^{-1}}$,
-    $P_\sigma P_{\sigma^{-1}}=P_{\sigma\sigma^{-1}}=I$.
-\end{proof}
-
-\begin{lemma}[Sheet swaps are contractions]
-    \label{thm:peps_frame_sheet_swap_norm}
-    \lean{TNLean.Lattice.norm_sheetSwapOp_le_one}
-    \leanok
-    \uses{def:peps_frame_sheet_swap}
-    $\|F_S\|\leq1$.
-\end{lemma}
-
-\begin{proof}\leanok
-    By Definition~\ref{def:peps_frame_sheet_swap} and
-    Lemma~\ref{thm:permutation_matrix_unitary}, $F_S$ is unitary, hence
-    $\|F_S\|\le 1$.
-\end{proof}
-
-\begin{lemma}[Composing and commuting sheet swaps]
-    \label{lem:peps_frame_sheet_swap_compose}
-    \lean{TNLean.Lattice.sheetSwapOp_mul_sheetSwapOp,
-        TNLean.Lattice.commute_sheetSwapOp_kronecker}
-    \leanok
-    \uses{def:peps_frame_sheet_swap}
-    If $Y=T\sqcup A$, then $F_AF_Y=F_T$. Moreover, $[F_S,R_1\otimes R_2]=0$
-    whenever $R_1,R_2$ are supported in $\Lambda\setminus S$
-    (\texttt{05-frames.tex}, lines 512--520).
-\end{lemma}
-
-\begin{proof}\leanok
-    Swapping at $Y$ and then at $A\subseteq Y$ swaps on $Y\setminus A=T$, so
-    $F_AF_Y=F_T$. When $R_1,R_2$ are supported in $\Lambda\setminus S$,
-    $F_S$ and $R_1\otimes R_2$ act on disjoint tensor factors.
-\end{proof}
-
-\begin{lemma}[Exchanging supported operators]
-    \label{thm:peps_sheet_swap_supported_exchange}
-    \lean{TNLean.Lattice.sheetSwapOp_mul_kronecker_of_mem_supportedOperators}
-    \leanok
-    \uses{def:peps_frame_sheet_swap}
-    For $R\subseteq\Lambda$ and operators $A,B$ on $\mathcal H_\Lambda$
-    supported on $R$, the replica-term exchange identity of
-    \cite{OpenAI2026PolynomialPEPS} (\texttt{02-information.tex}, lines 416--424)
-    is
-    \begin{align}
-        F_R(A\otimes B)=(B\otimes A)F_R.
-        \label{eq:peps_sheet_swap_supported_exchange}
-    \end{align}
-\end{lemma}
-
-\begin{proof}\leanok
-    \uses{lem:peps_frame_split_forms,lem:lattice_sheet_split_swap}
-    By Lemma~\ref{lem:peps_frame_split_forms}, $A=A_R\otimes I_{R^c}$ and
-    $B=B_R\otimes I_{R^c}$, while $F_R$ swaps the two copies of $\mathcal H_R$
-    and acts as $I$ on $\mathcal H_{R^c}^{\otimes 2}$, giving~(\ref{eq:peps_sheet_swap_supported_exchange}).
-\end{proof}
-
-\begin{lemma}[Cancellation of a noncrossing doubled interaction]
-    \label{thm:peps_sheet_swap_doubled_cancellation}
-    \lean{TNLean.Lattice.sheetSwapOp_conj_doubledHamiltonian_eq_of_mem_supportedOperators}
-    \leanok
-    \uses{def:peps_frame_sheet_swap}
-    For $R,S\subseteq\Lambda$ and an operator $A$ supported on $S$, if
-    $S\subseteq R$ or $S\cap R=\varnothing$, then
-    \begin{align}
-        F_R(A\otimes I+I\otimes A)F_R^\dagger
-        =A\otimes I+I\otimes A
-        \label{eq:peps_sheet_swap_doubled_cancellation}
-    \end{align}
-    (\cite{OpenAI2026PolynomialPEPS}).
-\end{lemma}
-\begin{proof}
-    \leanok
-    \uses{thm:peps_sheet_swap_supported_exchange,lem:peps_frame_sheet_swap_compose,
-        thm:permutation_matrix_unitary}
-    If $S\subseteq R$, Lemma~\ref{thm:peps_sheet_swap_supported_exchange}
-    gives $F_R(A\otimes I)=(I\otimes A)F_R$ and $F_R(I\otimes A)=(A\otimes I)F_R$;
-    if $S\cap R=\varnothing$, Lemma~\ref{lem:peps_frame_sheet_swap_compose}
-    gives $[F_R,A\otimes I]=[F_R,I\otimes A]=0$. Multiplying on the right by
-    $F_R^\dagger=F_R^{-1}$ (Lemma~\ref{thm:permutation_matrix_unitary})
-    yields~(\ref{eq:peps_sheet_swap_doubled_cancellation}).
-\end{proof}
-
-\begin{lemma}[Restricting a swap to an interaction support]
-    \label{thm:peps_sheet_swap_interaction_restriction}
-    \lean{TNLean.Lattice.sheetSwapOp_conj_kronecker_eq_inter,
-        TNLean.Lattice.sheetSwapOp_conj_doubledHamiltonian_eq_inter}
-    \leanok
-    \uses{def:peps_frame_sheet_swap}
-    Let $q$ be a natural local dimension, let $\Lambda$ be a finite set of
-    sites, and let $R,S\subseteq\Lambda$. Suppose that $A$ and $B$ are
-    operators supported on $S$. If $F_R$ exchanges the two copies at the
-    sites in $R$, then
-    \begin{align}
-        F_R(A\otimes B)F_R^\dagger
-        =F_{R\cap S}^\dagger(A\otimes B)F_{R\cap S}.
-    \end{align}
-    In particular, writing $T(A)=A\otimes I+I\otimes A$, one has
-    \begin{align}
-        F_R T(A) F_R^\dagger = F_{R\cap S}^\dagger T(A) F_{R\cap S}.
-        \label{eq:peps_swap_interaction_restriction}
-    \end{align}
-    This is the support reduction used in the boundary perturbation argument
-    of \cite{OpenAI2026PolynomialPEPS}. Neither Hermiticity nor a positive
-    local dimension is required.
-\end{lemma}
-\begin{proof}
-    \leanok
-    \uses{lem:peps_frame_sheet_swap_compose,thm:permutation_matrix_unitary}
-    Put $K=R\cap S$, $O=R\setminus S$, and $M=A\otimes B$. Composition
-    of the swaps gives $F_K F_R=F_O$, hence $F_R=F_K^\dagger F_O$ by
-    unitarity. Since $O$ is disjoint from $S$, the swap $F_O$ commutes
-    with $M$, and $F_O M F_O^\dagger=M$. Consequently,
-    \begin{align}
-        F_R M F_R^\dagger
-        =F_K^\dagger(F_O M F_O^\dagger)F_K
-        =F_K^\dagger M F_K.
-    \end{align}
-    Apply this identity to $(A,I)$ and $(I,A)$ and add the two equations
-    to obtain the assertion for $T(A)$.
-\end{proof}
-
 \begin{lemma}[Crossing-edge expansion of the doubled perturbation]
     \label{thm:peps_sheet_swap_boundary_expansion}
     \lean{TNLean.PEPS.Approximation.SquareHamiltonian.sheetSwapOp_conj_doubled_operator_sub_eq_sum_crossing}
@@ -1009,53 +825,6 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     $\|T(A)\|\le\|A\otimes I\|+\|I\otimes A\|\le 2\|A\|$; combining this with
     $\|F_R\|\le 1$ (Lemma~\ref{thm:peps_frame_sheet_swap_norm}) and the
     triangle inequality gives~(\ref{eq:peps_sheet_swap_doubled_term_norm}).
-\end{proof}
-
-\begin{lemma}[Support of the swap in paired coordinates]
-    \label{thm:peps_sheet_swap_paired_site_support}
-    \lean{TNLean.Lattice.reindex_sheetSwapOp_mem_supportedOperators}
-    \leanok
-    \uses{def:qc_site_pair_coordinates,def:peps_frame_sheet_swap}
-    In the paired-site coordinates of Definition~\ref{def:qc_site_pair_coordinates}
-    (local dimension $q^2$), the sheet swap $F_R$
-    (Definition~\ref{def:peps_frame_sheet_swap}) is supported on $R$
-    (\cite{OpenAI2026PolynomialPEPS}).
-\end{lemma}
-\begin{proof}\leanok
-    \uses{lem:qc_permutation_layers}
-    In paired coordinates $x_i=(a_i,b_i)$, $F_R$ is the permutation matrix of
-    $\sigma(x)_i=(b_i,a_i)$ for $i\in R$ and $(a_i,b_i)$ for $i\notin R$, which
-    is supported on $R$ by Lemma~\ref{lem:qc_permutation_layers}.
-\end{proof}
-
-\begin{lemma}[Support of a swapped tensor product]
-    \label{thm:peps_sheet_swap_conjugate_support}
-    \lean{TNLean.Lattice.reindex_sheetSwapOp_conj_kronecker_mem_supportedOperators,
-        TNLean.Lattice.reindex_sheetSwapOp_conj_doubledHamiltonian_mem_supportedOperators}
-    \leanok
-    \uses{def:qc_site_pair_coordinates,def:peps_frame_sheet_swap}
-    Let $\Lambda$ be a finite site set, let $q$ be a natural local dimension,
-    and let $R,S\subseteq\Lambda$. Suppose that $A$ and $B$ are supported
-    on $S$. Express the two-copy operators in paired-site coordinates,
-    and write $\widetilde F_R$ and $\widetilde M$ for the matrices of
-    $F_R$ and $A\otimes B$ in these coordinates. Then
-    $\widetilde F_R\widetilde M\widetilde F_R^\dagger$ is supported on $S$.
-    In particular this holds for the paired matrix of
-    $T(A)=A\otimes I+I\otimes A$, as used in the boundary perturbation
-    argument of \cite{OpenAI2026PolynomialPEPS}. Zero local dimension
-    and empty site sets are included.
-\end{lemma}
-\begin{proof}
-    \leanok
-    \uses{thm:peps_sheet_swap_interaction_restriction,
-        thm:peps_sheet_swap_paired_site_support,thm:qc_site_pair_tensor_support}
-    Put $K=R\cap S$. Restricting the swap gives
-    $F_R(A\otimes B)F_R^\dagger=F_K^\dagger(A\otimes B)F_K$.
-    In paired-site coordinates, $F_K$ is supported on $K\subseteq S$,
-    and $A\otimes B$ is supported on $S$. The operators supported on
-    $S$ are closed under adjoints and products, which proves the first
-    assertion. Apply it to $(A,I)$ and $(I,A)$ and use closure under
-    sums to obtain the assertion for $T(A)$.
 \end{proof}
 
 \begin{lemma}[Support and norm of the doubled boundary perturbation]
@@ -1117,23 +886,6 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     $\mathcal R$ swap the sheet labels of site registers in $Y\cap\Lambda$ and
     tag registers of holes inside $Y$ while preserving party owners.
 \end{definition}
-
-\begin{lemma}[Swapping two sheets on a set in split coordinates]
-    \label{lem:lattice_sheet_split_swap}
-    \lean{TNLean.Lattice.sheetSplit_sheetSwap_fst,
-        TNLean.Lattice.sheetSplit_sheetSwap_snd,
-        TNLean.Lattice.mul_submatrix_sheetSplit}
-    \leanok
-    For a set $S$ of sites, in the coordinates $\mathcal H_S\otimes\mathcal
-        H_{S^c}$ of both sheets, swapping the two sheets at $S$ exchanges the
-    $S$-parts and keeps the others. The product of an operator acting off $S$ and
-    an operator acting on $S$ is, in these coordinates, the tensor product of the
-    two restricted operators.
-\end{lemma}
-
-\begin{proof}\leanok
-    Both statements are checked on product basis vectors.
-\end{proof}
 
 \begin{lemma}[Exact intertwining of the renaming]
     \label{lem:peps_frame_exchange_intertwining}
