@@ -79,7 +79,7 @@ theorem commute_collapsedLayer {h : ℕ → E →L[𝕜] E}
     | exact Commute.zero_left _
 
 omit [CompleteSpace E] in
-/-- The actual complementary product is unchanged by collapsing one parity layer.
+/-- The complementary product is unchanged by collapsing one parity layer.
 ALVV, Theorem 5.14, detectability-operator identity. -/
 theorem complementProd_collapsedLayer {h : ℕ → E →L[𝕜] E}
     (hc : ∀ i j, Commute (h i) (h j)) (s : Finset ℕ) (m : ℕ) :
@@ -110,7 +110,7 @@ theorem sum_collapsedLayer (h : ℕ → E →L[𝕜] E) (s : Finset ℕ) (m : �
       simp only [collapsedLayer, Finset.mem_range.mp hi, ↓reduceIte]
   · simp [collapsedLayer]
 
-/-- The converse inequality for the actual regional replacement of two commuting parity
+/-- The converse inequality for the regional replacement of two commuting parity
 families, including all exterior terms. ALVV, Theorem 5.14, corrected squared-norm form. -/
 theorem collapsedLayer_converse {e o : ℕ → E →L[𝕜] E}
     (he : ∀ i, IsStarProjection (e i)) (hce : ∀ i j, Commute (e i) (e j))

@@ -26,7 +26,7 @@ namespace TNLean.MPS.AreaLaw.ALVV
 
 variable {L q : ℕ}
 
-/-- Matrix coordinates for the actual regional parity product, in the same order as
+/-- Matrix coordinates for the regional parity product, in the same order as
 `regionalProjection`. ALVV, Definition 5.10. -/
 noncomputable def regionalProjectionMatrix
     (h : ℕ → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (s : Finset ℕ) :
@@ -57,7 +57,7 @@ noncomputable def regionalReplacementMatrix
   (∑ i ∈ Finset.range m, if i ∈ s ∪ t then 0 else h i) +
     (1 - regionalProjectionMatrix h s m) + (1 - regionalProjectionMatrix h t m)
 
-/-- The matrix replacement is the actual replacement under the canonical star algebra
+/-- The matrix replacement is the operator replacement under the canonical star algebra
 identification, not an independent rank model. -/
 theorem toEuclideanCLM_regionalReplacementMatrix
     (h : ℕ → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
@@ -138,7 +138,7 @@ theorem regionalProjectionMatrix_supported
     · simpa [hm] using hprefix
 
 /-- A parity product with no selected bond crossing the cut has rank at most one.
-The bound follows from actual supported-factor decompositions. -/
+The bound follows from supported-factor decompositions. -/
 theorem rank_regionalProjectionMatrix_le_one
     {h : ℕ → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
     (hh : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i)
@@ -439,7 +439,7 @@ private theorem rank_outside_le
       (crossingExterior h s t m k) k
     omega
 
-/-- The corrected all-cut rank bound for the actual regional replacement is `q²+3`.
+/-- The corrected all-cut rank bound for the regional replacement is `q²+3`.
 ALVV, Theorem 5.14(2), with the interior-region correction documented in the module note.
 Only locality and positive local dimension are needed; the terms need not be projectors. -/
 private theorem rank_regionalReplacementMatrix_nat_le_sq_add_three
@@ -519,13 +519,13 @@ private theorem rank_regionalReplacementMatrix_nat_le_sq_add_two_of_boundary
   · exact rank_boundary_inside_le hq hh a b m k hin hboundary
   · exact rank_outside_le hq hh a b m k (by omega)
 
-/-- Extend the finite list of actual chain bonds by zero. This makes support assumptions
+/-- Extend the finite list of chain bonds by zero. This makes support assumptions
 refer only to the original terms, including when the chain has no bonds. -/
 noncomputable def bondTermExtension {m : ℕ}
     (h : Fin m → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (i : ℕ) :
     Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := if hi : i < m then h ⟨i, hi⟩ else 0
 
-/-- Extending by zero preserves the actual nearest-neighbor supports. -/
+/-- Extending by zero preserves the nearest-neighbor supports. -/
 theorem bondTermExtension_supported {m : ℕ}
     {h : Fin m → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
     (hh : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i)
@@ -538,7 +538,7 @@ theorem bondTermExtension_supported {m : ℕ}
   · exact hh _
   · exact ⟨fun _ _ _ ↦ rfl, fun _ _ _ _ _ _ _ _ ↦ rfl⟩
 
-/-- The corrected all-cut bound `q²+3` for a finite family of actual nearest-neighbor
+/-- The corrected all-cut bound `q²+3` for a finite family of nearest-neighbor
 terms. No hypothesis is imposed on nonexistent bonds or on a supplied decomposition.
 ALVV, Theorem 5.14(2), corrected for interior intervals. -/
 theorem rank_regionalReplacementMatrix_le_sq_add_three {m : ℕ}
@@ -551,7 +551,7 @@ theorem rank_regionalReplacementMatrix_le_sq_add_three {m : ℕ}
   rank_regionalReplacementMatrix_nat_le_sq_add_three hq (bondTermExtension_supported hh)
     a b m k
 
-/-- The source bound `q²+2` holds for every cut of the actual prefix/suffix replacement.
+/-- The source bound `q²+2` holds for every cut of the prefix/suffix replacement.
 ALVV, Theorem 5.14(2), with the boundary-region scope stated explicitly. -/
 theorem rank_regionalReplacementMatrix_le_sq_add_two_of_boundary {m : ℕ}
     (h : Fin m → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (hq : 1 ≤ q)

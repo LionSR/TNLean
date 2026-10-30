@@ -107,7 +107,7 @@ theorem sub_regionalProjection_apply_eq_zero_iff {h : ℕ → E →L[𝕜] E}
     · exact hx i hi hs
     · rfl
 
-/-- ALVV's actual regional replacement, with all exterior terms retained.
+/-- ALVV's regional replacement, with all exterior terms retained.
 The disjoint sets `even` and `odd` select the regional parity layers. -/
 noncomputable def regionalReplacement (h : ℕ → E →L[𝕜] E)
     (even odd : Finset ℕ) (m : ℕ) : E →L[𝕜] E :=

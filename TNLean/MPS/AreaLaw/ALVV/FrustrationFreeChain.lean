@@ -7,9 +7,9 @@ import TNLean.MPS.AreaLaw.ALVV.FrustrationFreeGap
 import TNLean.MPS.AreaLaw.ALVV.FrustrationFreeRank
 
 /-!
-# The regional replacement on an actual nearest-neighbor chain
+# The regional replacement on a nearest-neighbor chain
 
-The parity commutations and commutation degree two are derived from the actual local
+The parity commutations and commutation degree two are derived from the local
 supports. The gap and kernel conclusions concern the literal regional replacement.
 
 **Local fix:** The all-cut rank bound in ALVV, arXiv:1602.08828v2, Theorem 5.14(2)
@@ -27,30 +27,30 @@ section Parity
 variable {𝕜 E : Type*} [RCLike 𝕜] [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
 
 /-- A single global parity of the original bond family. -/
-noncomputable def colourTerm (h : ℕ → E →L[𝕜] E) (c i : ℕ) : E →L[𝕜] E :=
+noncomputable def colorTerm (h : ℕ → E →L[𝕜] E) (c i : ℕ) : E →L[𝕜] E :=
   if i % 2 = c then h i else 0
 
-private theorem colourTerm_projection [CompleteSpace E] {h : ℕ → E →L[𝕜] E}
-    (hh : ∀ i, IsStarProjection (h i)) (c i : ℕ) : IsStarProjection (colourTerm h c i) := by
+private theorem colorTerm_projection [CompleteSpace E] {h : ℕ → E →L[𝕜] E}
+    (hh : ∀ i, IsStarProjection (h i)) (c i : ℕ) : IsStarProjection (colorTerm h c i) := by
   classical
-  unfold colourTerm
+  unfold colorTerm
   split
   · exact hh i
   · exact IsStarProjection.zero _
 
-private theorem colourTerm_commute {h : ℕ → E →L[𝕜] E}
+private theorem colorTerm_commute {h : ℕ → E →L[𝕜] E}
     (hc : ∀ i j, i + 1 ≠ j → j + 1 ≠ i → Commute (h i) (h j)) (c i j : ℕ) :
-    Commute (colourTerm h c i) (colourTerm h c j) := by
+    Commute (colorTerm h c i) (colorTerm h c j) := by
   classical
-  unfold colourTerm
+  unfold colorTerm
   split <;> split
   · apply hc <;> omega
   · exact Commute.zero_right _
   · exact Commute.zero_left _
   · exact Commute.zero_left _
 
-private theorem sum_colourTerm (h : ℕ → E →L[𝕜] E) (m : ℕ) :
-    (∑ i ∈ Finset.range m, colourTerm h 0 i) + ∑ i ∈ Finset.range m, colourTerm h 1 i =
+private theorem sum_colorTerm (h : ℕ → E →L[𝕜] E) (m : ℕ) :
+    (∑ i ∈ Finset.range m, colorTerm h 0 i) + ∑ i ∈ Finset.range m, colorTerm h 1 i =
       ∑ i ∈ Finset.range m, h i := by
   classical
   rw [← Finset.sum_add_distrib]
@@ -58,29 +58,29 @@ private theorem sum_colourTerm (h : ℕ → E →L[𝕜] E) (m : ℕ) :
   intro i _
   have hi := Nat.mod_lt i (by norm_num : 0 < 2)
   by_cases h0 : i % 2 = 0
-  · simp [colourTerm, h0]
-  · simp [colourTerm, show i % 2 = 1 by omega]
+  · simp [colorTerm, h0]
+  · simp [colorTerm, show i % 2 = 1 by omega]
 
-private theorem ordered_colourTerm_active {h : ℕ → E →L[𝕜] E} {m j : ℕ}
+private theorem ordered_colorTerm_active {h : ℕ → E →L[𝕜] E} {m j : ℕ}
     (hj : j < m + m)
-    (hn : parityOrderedTerm (colourTerm h 0) (colourTerm h 1) m j ≠ 0) :
+    (hn : parityOrderedTerm (colorTerm h 0) (colorTerm h 1) m j ≠ 0) :
     ∃ p < m, j = (if p % 2 = 0 then m + p else p) ∧
-      parityOrderedTerm (colourTerm h 0) (colourTerm h 1) m j = h p := by
+      parityOrderedTerm (colorTerm h 0) (colorTerm h 1) m j = h p := by
   classical
   by_cases hjm : j < m
   · have hpar : j % 2 = 1 := by
       by_contra hp
-      exact hn (by simp [parityOrderedTerm, colourTerm, hjm, hp])
+      exact hn (by simp [parityOrderedTerm, colorTerm, hjm, hp])
     refine ⟨j, hjm, ?_, ?_⟩
     · simp [show j % 2 ≠ 0 by omega]
-    · simp [parityOrderedTerm, colourTerm, hjm, hpar]
+    · simp [parityOrderedTerm, colorTerm, hjm, hpar]
   · have hpar : (j - m) % 2 = 0 := by
       by_contra hp
-      exact hn (by simp [parityOrderedTerm, colourTerm, hjm, hp])
+      exact hn (by simp [parityOrderedTerm, colorTerm, hjm, hp])
     refine ⟨j - m, by omega, ?_, ?_⟩
     · simp only [hpar, ↓reduceIte]
       omega
-    · simp [parityOrderedTerm, colourTerm, hjm, hpar]
+    · simp [parityOrderedTerm, colorTerm, hjm, hpar]
 
 open Classical in
 /-- Even-then-odd ordering does not increase the nearest-neighbor commutation degree:
@@ -90,10 +90,10 @@ theorem commutationDegree_parityOrderedTerm_le_two {h : ℕ → E →L[𝕜] E}
     (hc : ∀ i j, i + 1 ≠ j → j + 1 ≠ i → Commute (h i) (h j)) (m : ℕ) :
     ∀ i < m + m,
       ((Finset.range (m + m)).filter (fun j ↦ j ≠ i ∧
-        ¬Commute (parityOrderedTerm (colourTerm h 0) (colourTerm h 1) m i)
-          (parityOrderedTerm (colourTerm h 0) (colourTerm h 1) m j))).card ≤ 2 := by
+        ¬Commute (parityOrderedTerm (colorTerm h 0) (colorTerm h 1) m i)
+          (parityOrderedTerm (colorTerm h 0) (colorTerm h 1) m j))).card ≤ 2 := by
   intro i hi
-  let T := parityOrderedTerm (colourTerm h 0) (colourTerm h 1) m
+  let T := parityOrderedTerm (colorTerm h 0) (colorTerm h 1) m
   let f : ℕ → ℕ := fun p ↦ if p % 2 = 0 then m + p else p
   change ((Finset.range (m + m)).filter (fun j ↦ j ≠ i ∧ ¬Commute (T i) (T j))).card ≤ 2
   by_cases hzero : T i = 0
@@ -103,7 +103,7 @@ theorem commutationDegree_parityOrderedTerm_le_two {h : ℕ → E →L[𝕜] E}
       intro j _ hj
       exact hj.2 (hzero ▸ Commute.zero_left _)
     simpa only [hempty, Finset.card_empty] using (show 0 ≤ 2 by omega)
-  · obtain ⟨p, _, _, hTi⟩ := ordered_colourTerm_active hi hzero
+  · obtain ⟨p, _, _, hTi⟩ := ordered_colorTerm_active hi hzero
     change T i = h p at hTi
     have hsub : ((Finset.range (m + m)).filter (fun j ↦ j ≠ i ∧ ¬Commute (T i) (T j))) ⊆
         {f (p - 1), f (p + 1)} := by
@@ -112,7 +112,7 @@ theorem commutationDegree_parityOrderedTerm_le_two {h : ℕ → E →L[𝕜] E}
       have hTj : T j ≠ 0 := by
         intro hz
         exact hnc (hz ▸ Commute.zero_right _)
-      obtain ⟨r, _, hjr, hTr⟩ := ordered_colourTerm_active (Finset.mem_range.mp hj) hTj
+      obtain ⟨r, _, hjr, hTr⟩ := ordered_colorTerm_active (Finset.mem_range.mp hj) hTj
       change T j = h r at hTr
       have hnear : p + 1 = r ∨ r + 1 = p := by
         by_contra hn
@@ -138,37 +138,37 @@ private theorem regionalProjection_congr_on {h h' : ℕ → E →L[𝕜] E}
     rw [ih (fun i hi hs ↦ heq i (by omega) hs)]
     by_cases hm : m ∈ s <;> simp [restrictedTerm, hm, heq m (by omega)]
 
-private theorem regionalProjection_colourTerm (h : ℕ → E →L[𝕜] E) (a b m : ℕ) :
-    regionalProjection (colourTerm h 0) (evenBonds a b) m =
+private theorem regionalProjection_colorTerm (h : ℕ → E →L[𝕜] E) (a b m : ℕ) :
+    regionalProjection (colorTerm h 0) (evenBonds a b) m =
         regionalProjection h (evenBonds a b) m ∧
-    regionalProjection (colourTerm h 1) (oddBonds a b) m =
+    regionalProjection (colorTerm h 1) (oddBonds a b) m =
         regionalProjection h (oddBonds a b) m := by
   classical
   constructor
   · apply regionalProjection_congr_on
     intro i _ hi
-    simp [colourTerm, (Finset.mem_filter.mp hi).2]
+    simp [colorTerm, (Finset.mem_filter.mp hi).2]
   · apply regionalProjection_congr_on
     intro i _ hi
     have hpar := (Finset.mem_filter.mp hi).2
     have : i % 2 = 1 := by omega
-    simp [colourTerm, this]
+    simp [colorTerm, this]
 
-private theorem collapsed_colourTerm_sum (h : ℕ → E →L[𝕜] E) (a b m : ℕ) :
+private theorem collapsed_colorTerm_sum (h : ℕ → E →L[𝕜] E) (a b m : ℕ) :
     (∑ i ∈ Finset.range m,
-      restrictedTerm (colourTerm h 0) (Finset.range m \ evenBonds a b) i) +
-      (1 - regionalProjection (colourTerm h 0) (evenBonds a b) m) +
+      restrictedTerm (colorTerm h 0) (Finset.range m \ evenBonds a b) i) +
+      (1 - regionalProjection (colorTerm h 0) (evenBonds a b) m) +
       ((∑ i ∈ Finset.range m,
-        restrictedTerm (colourTerm h 1) (Finset.range m \ oddBonds a b) i) +
-        (1 - regionalProjection (colourTerm h 1) (oddBonds a b) m)) =
+        restrictedTerm (colorTerm h 1) (Finset.range m \ oddBonds a b) i) +
+        (1 - regionalProjection (colorTerm h 1) (oddBonds a b) m)) =
       regionalReplacement h (evenBonds a b) (oddBonds a b) m := by
   classical
-  obtain ⟨he, ho⟩ := regionalProjection_colourTerm h a b m
+  obtain ⟨he, ho⟩ := regionalProjection_colorTerm h a b m
   rw [he, ho]
   have hsum : (∑ i ∈ Finset.range m,
-      restrictedTerm (colourTerm h 0) (Finset.range m \ evenBonds a b) i) +
+      restrictedTerm (colorTerm h 0) (Finset.range m \ evenBonds a b) i) +
       (∑ i ∈ Finset.range m,
-        restrictedTerm (colourTerm h 1) (Finset.range m \ oddBonds a b) i) =
+        restrictedTerm (colorTerm h 1) (Finset.range m \ oddBonds a b) i) =
       ∑ i ∈ Finset.range m,
         restrictedTerm h (Finset.range m \ (evenBonds a b ∪ oddBonds a b)) i := by
     rw [← Finset.sum_add_distrib]
@@ -176,9 +176,9 @@ private theorem collapsed_colourTerm_sum (h : ℕ → E →L[𝕜] E) (a b m : �
     intro i hi
     have him := Finset.mem_range.mp hi
     by_cases hpar : i % 2 = 0
-    · simp [restrictedTerm, colourTerm, evenBonds, oddBonds, him, hpar]
+    · simp [restrictedTerm, colorTerm, evenBonds, oddBonds, him, hpar]
     · have hpar' : i % 2 = 1 := by omega
-      simp [restrictedTerm, colourTerm, evenBonds, oddBonds, him, hpar']
+      simp [restrictedTerm, colorTerm, evenBonds, oddBonds, him, hpar']
   unfold regionalReplacement
   rw [← hsum]
   abel
@@ -189,7 +189,7 @@ section Chain
 
 variable {L q m : ℕ}
 
-/-- The actual finite bond family, extended by zero and acting on the Euclidean chain space. -/
+/-- The finite bond family, extended by zero and acting on the Euclidean chain space. -/
 noncomputable def chainTerm
     (h : Fin m → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (i : ℕ) :
     EuclideanSpace ℂ (Fin L → Fin q) →L[ℂ] EuclideanSpace ℂ (Fin L → Fin q) :=
@@ -201,7 +201,7 @@ noncomputable def chainOperator
     EuclideanSpace ℂ (Fin L → Fin q) →L[ℂ] EuclideanSpace ℂ (Fin L → Fin q) :=
   ∑ i ∈ Finset.range m, chainTerm h i
 
-/-- The actual regional parity-layer replacement with all exterior bonds retained. -/
+/-- The regional parity-layer replacement with all exterior bonds retained. -/
 noncomputable def chainReplacement
     (h : Fin m → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (a b : ℕ) :
     EuclideanSpace ℂ (Fin L → Fin q) →L[ℂ] EuclideanSpace ℂ (Fin L → Fin q) :=
@@ -288,7 +288,7 @@ private theorem chainOperator_apply_eq_zero_iff
     Fin.sum_univ_eq_sum_range (fun i ↦ chainTerm h i x) m] at ht
   simpa only [chainOperator, _root_.sum_apply] using ht
 
-/-- Full kernel equality for the actual finite chain, with parity commutations derived
+/-- Full kernel equality for the finite chain, with parity commutations derived
 from locality. ALVV, Theorem 5.14(1), including degenerate ground spaces. -/
 theorem ker_chainReplacement
     {h : Fin m → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ} (hq : 1 ≤ q)
@@ -305,12 +305,12 @@ private theorem ker_ordered_chainTerm
     (hh : ∀ i, IsStarProjection (h i)) :
     LinearMap.ker (chainOperator h).toLinearMap =
       ⨅ i : Fin (m + m), LinearMap.ker
-        (parityOrderedTerm (colourTerm (chainTerm h) 0)
-          (colourTerm (chainTerm h) 1) m i).toLinearMap := by
-  let T := parityOrderedTerm (colourTerm (chainTerm h) 0) (colourTerm (chainTerm h) 1) m
+        (parityOrderedTerm (colorTerm (chainTerm h) 0)
+          (colorTerm (chainTerm h) 1) m i).toLinearMap := by
+  let T := parityOrderedTerm (colorTerm (chainTerm h) 0) (colorTerm (chainTerm h) 1) m
   have hproj := isStarProjection_parityOrderedTerm
-    (colourTerm_projection (chainTerm_projection hh) 0)
-    (colourTerm_projection (chainTerm_projection hh) 1) m
+    (colorTerm_projection (chainTerm_projection hh) 0)
+    (colorTerm_projection (chainTerm_projection hh) 1) m
   have hp (i : Fin (m + m)) : (T i).toLinearMap.IsPositive :=
     (ContinuousLinearMap.IsPositive.of_isStarProjection (hproj i)).toLinearMap
   have hk := WeightedPositiveKernel.ker_sum_eq_iInf hp
@@ -321,11 +321,11 @@ private theorem ker_ordered_chainTerm
     rw [Fin.sum_univ_eq_sum_range (fun i ↦ T i x) (m + m)]
     rw [← _root_.sum_apply]
     dsimp only [T]
-    rw [sum_parityOrderedTerm, sum_colourTerm]
+    rw [sum_parityOrderedTerm, sum_colorTerm]
     rfl
   rwa [hsum] at hk
 
-/-- Explicit gap for the actual regional chain replacement. The only gap premise concerns
+/-- Explicit gap for the regional chain replacement. The only gap premise concerns
 the original chain; locality supplies degree two and every collapsed-family identity.
 ALVV, Theorem 5.14(3), with squared norms and the constant-three converse. -/
 theorem chainReplacement_gap
@@ -342,21 +342,21 @@ theorem chainReplacement_gap
   have hproj := chainTerm_projection hh
   have hk := ker_ordered_chainTerm hh
   have hgap' : ∀ y ∈ (⨅ i : Fin (m + m), LinearMap.ker
-      (parityOrderedTerm (colourTerm (chainTerm h) 0)
-        (colourTerm (chainTerm h) 1) m i).toLinearMap)ᗮ,
+      (parityOrderedTerm (colorTerm (chainTerm h) 0)
+        (colorTerm (chainTerm h) 1) m i).toLinearMap)ᗮ,
       γ * ‖y‖ ^ 2 ≤ Complex.re ⟪y,
-        ((∑ i ∈ Finset.range m, colourTerm (chainTerm h) 0 i) +
-          ∑ i ∈ Finset.range m, colourTerm (chainTerm h) 1 i) y⟫_ℂ := by
-    rw [← hk, sum_colourTerm]
+        ((∑ i ∈ Finset.range m, colorTerm (chainTerm h) 0 i) +
+          ∑ i ∈ Finset.range m, colorTerm (chainTerm h) 1 i) y⟫_ℂ := by
+    rw [← hk, sum_colorTerm]
     exact hgap
   have hxperp' : x ∈ (⨅ i : Fin (m + m), LinearMap.ker
-      (parityOrderedTerm (colourTerm (chainTerm h) 0)
-        (colourTerm (chainTerm h) 1) m i).toLinearMap)ᗮ := by rwa [← hk]
-  have hg := collapsedLayer_gap (colourTerm_projection hproj 0) (colourTerm_commute hc 0)
-    (colourTerm_projection hproj 1) (colourTerm_commute hc 1)
+      (parityOrderedTerm (colorTerm (chainTerm h) 0)
+        (colorTerm (chainTerm h) 1) m i).toLinearMap)ᗮ := by rwa [← hk]
+  have hg := collapsedLayer_gap (colorTerm_projection hproj 0) (colorTerm_commute hc 0)
+    (colorTerm_projection hproj 1) (colorTerm_commute hc 1)
     (evenBonds a b) (oddBonds a b) m hγ
     (commutationDegree_parityOrderedTerm_le_two hc m) hgap' hx hxperp'
-  rw [collapsed_colourTerm_sum] at hg
+  rw [collapsed_colorTerm_sum] at hg
   norm_num only [Nat.cast_ofNat, show (2 : ℝ) ^ 2 = 4 by norm_num] at hg
   exact hg
 
@@ -393,7 +393,7 @@ theorem chainReplacement_gap_linear
   exact hr.trans (chainReplacement_gap hq hh hsupp hγ hgap a b hx hxperp)
 
 /-- The corrected ALVV regional-replacement theorem on a finite nearest-neighbor chain.
-It assembles actual layer projections, positivity, termwise frustration freeness, full
+It assembles layer projections, positivity, termwise frustration freeness, full
 kernel equality, the corrected all-cut rank bounds, and the explicit gap comparison.
 All parity commutations, degree bounds and detectability-product identities are proved
 from the supplied local terms. No uniqueness assumption is needed; when the original
