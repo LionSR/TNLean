@@ -5034,6 +5034,17 @@ three-plaquette output measurement, and the routed reunion measurement.
 
 ## Candidates
 
+### Exact small indices from their defining sets — candidate (2026-10-29)
+
+- **Pattern:** supply a small admissible positive length, use `Nat.sInf_mem`
+  and `Nat.sInf_le`, exclude any smaller positive length, and finish the
+  resulting natural-number bounds with `omega`.
+- **Seen:** the two concrete index computations `threePauliTensor_qIndex`
+  and `threePauliTensor_iIndex` in `MPS/Examples/PauliWielandt.lean`.
+- **Abstraction:** the existing Mathlib infimum lemmas already do the main
+  work. Two occurrences in one file are below the promotion threshold;
+  no specialized index tactic is introduced.
+
 ### Recovering letters by an identity contraction — candidate (2026-10-29)
 
 - **Seen:** `isInjective_uncleTensor_of_isInjective_perturbation` in
