@@ -10131,6 +10131,162 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     % Source lines: paper_v2.tex 1201--1252.
 \end{proof}
 
+\begin{lemma}[Physical transposition of normalized source factors]
+    \label{lem:mpu_physical_transpose_source_factors}
+    \lean{MPOTensor.physicalTransposeTensor, MPOTensor.physicalTransposeTensor_apply, MPOTensor.physicalTransposeTensor_physicalTransposeTensor, MPOTensor.mpo_physicalTransposeTensor, MPOTensor.source_ranks_physicalTransposeTensor, MPOTensor.IsMPUCanonicalFormII.physicalTransposeTensor, MPOTensor.IsMPUCanonicalFormII.isMPUSimple_physicalTransposeTensor, MPOTensor.IsMPUCanonicalFormII.sourceRanks_eq_phys_of_even_mpo_eq_transpose, MPOTensor.SourceFactors.physicalTranspose, MPOTensor.SourceFactors.sourceU_physicalTranspose, MPOTensor.SourceFactors.sourceV_physicalTranspose, MPOTensor.IsMPUCanonicalFormII.sourceFactors_physicalTranspose_of_even_mpo_eq_transpose}
+    \notready
+    Physical transposition replaces $U^{ij}$ by $U^{ji}$ without reflecting
+    its virtual indices. It is an involution, and its periodic operators are
+    $(U^{(N)})^T$ at every length. It exchanges the two source ranks and
+    preserves simplicity and a reduced canonical-form-II presentation with
+    its real diagonal weight $\rho$.
+
+    For a simple tensor in this presentation, take any normalized source
+    factorization at $\rho$. If $r=\ell=d$, normalized factors for the
+    physical transpose are
+    \begin{align}
+        (X_1',Y_1',Z_1') & =(Y_2^T,X_2^T,\overline{X_2}), \\
+        (X_2',Y_2',Z_2') & =(Y_1^T,X_1^T,
+        (\Id_d\otimes\rho)\overline{X_1}),
+    \end{align}
+    in the canonical exchanged-rank coordinates. Their actual gates are
+    $u'=v^T$ and $v'=u^T$. Moreover, symmetry
+    $U^{(N)}=(U^{(N)})^T$ at every even length $N>1$ forces $r=\ell=d$,
+    so under this symmetry no square-rank or normalization hypothesis is added
+    to the factor construction. These are the physical and factor
+    comparisons in \cite[lines~1258--1288]{Cirac2017MPU}.
+    This does not establish the local equivalence criterion below. The reduced
+    presentation restriction is recorded in
+    \cite{gap:mpu_canonical_form_full_support}.
+\end{lemma}
+
+\begin{proof}
+    \uses{lem:mpu_normalized_physical_adjoint_source_factors,
+        lem:mpu_even_family_supplied_source_gauges}
+    Compose physical adjunction with entrywise conjugation. The real diagonal
+    weight is fixed under conjugation, so the actual adjoint factor
+    normalizations give the displayed transpose factors and gates. Under
+    even-chain symmetry the even-family virtual comparison preserves the
+    source ranks. Since transposition exchanges them, they agree. Simplicity
+    gives $r\ell=d^2$, hence both equal $d$.
+\end{proof}
+
+\begin{lemma}[Forward transposition phase for actual canonical source factors]
+    \label{lem:mpu_canonical_source_transposition_phase}
+    \lean{MPOTensor.IsMPUCanonicalFormII.exists_source_transposition_phase_certificate, MPOTensor.IsMPUCanonicalFormII.exists_source_transposition_exponential_certificate, MPOTensor.IsMPUCanonicalFormII.exists_local_transposition_certificate, MPOTensor.IsMPUCanonicalFormII.exists_local_transposition_exponential_certificate}
+    \notready
+    Let $U$ be a simple reduced canonical tensor and construct its actual
+    standard form $W$ with gates $u,v$. If
+    $W^{(N)}=(W^{(N)})^T$ at every even length $N>1$, then $r(U)=\ell(U)=d$.
+    In the corresponding canonical rank identifications there are a unitary
+    $x$ on $\mathbb C^d\otimes\mathbb C^d$ and a phase $c$, $|c|=1$, such that
+    \begin{align}
+        v_{23}(u\otimes u) & =c(x\otimes x^T)v_{23}^T.
+    \end{align}
+    The scalar can equivalently be written as $c=e^{i\phi}$ with real $\phi$.
+    More generally, even-chain transpose symmetry of a simple reduced canonical
+    tensor gives the corresponding phase equation for any normalized source
+    factors at its specified canonical weight. All comparison gauges are
+    derived from the actual periodic family. These are forward consequences
+    of \cite[lines~1258--1288]{Cirac2017MPU}, under the presentation restriction
+    in \cite{gap:mpu_canonical_form_full_support}. The unrestricted supplied
+    standard forms, converse and phase deformation remain separate.
+\end{lemma}
+
+\begin{proof}
+    \uses{lem:mpu_physical_transpose_source_factors,
+        lem:mpu_even_family_supplied_source_gauges,
+        lem:mpu_canonical_forward_local_time_reversal}
+    The actual transpose factors have gates $B^T,A^T$. Their two gauge
+    equations are $B^T=(X\otimes Y)A$ and
+    $A^T=B(Y^\dagger\otimes X^\dagger)$. Transpose the second and substitute
+    the first, then cancel $A$, to obtain
+    $(\overline YX)\otimes(\overline XY)=\Id$.
+    Therefore $\overline YX=c\Id$. Unitarity forces $|c|=1$ and
+    $\overline Y=cX^\dagger$. Substitution gives
+    $A=c(X^\dagger\otimes\overline X)B^T$. Take $x=X^\dagger$ and use
+    the explicit four-spin coordinate dictionary. The principal argument of
+    $c$ supplies the pointwise exponential form; no continuity of that choice
+    is asserted.
+\end{proof}
+
+\begin{lemma}[Even-ring converse for the canonical transposition phase]
+    \label{lem:mpu_canonical_even_transposition_iff}
+    \lean{MPOTensor.IsMPUCanonicalFormII.mpo_even_eq_transpose_of_source_local_certificate, MPOTensor.IsMPUCanonicalFormII.mpo_standardForm_even_eq_transpose_of_local_certificate, MPOTensor.IsMPUCanonicalFormII.standardForm_even_transposition_iff_exists_local_certificate}
+    \notready
+    Let $U$ be a simple reduced canonical tensor, and construct its actual
+    standard form $W$ with gates $u,v$. Then $W^{(N)}=(W^{(N)})^T$ at every
+    even length $N>1$ if and only if $r(U)=\ell(U)=d$ and, in the canonical
+    rank identifications, there are a unitary $x$ on
+    $\mathbb C^d\otimes\mathbb C^d$ and a phase $c$, $|c|=1$, satisfying
+    \begin{align}
+        v_{23}(u\otimes u) & =c(x\otimes x^T)v_{23}^T.
+    \end{align}
+    A phase is equivalently $e^{i\phi}$ with real $\phi$. More generally,
+    the corresponding local phase equation for any normalized source
+    factorization of a simple reduced canonical tensor, with square source
+    ranks, implies transpose symmetry on its even periodic rings.
+    These are the two implications in \cite[lines~1266--1288]{Cirac2017MPU}
+    for the constructed canonical source form. Arbitrary supplied standard
+    forms remain separate; see
+    \cite{gap:mpu_canonical_form_full_support}.
+\end{lemma}
+
+\begin{proof}
+    \uses{lem:mpu_canonical_source_transposition_phase,
+        lem:mpu_standard_form_from_normalized_source_factors,
+        lem:mpu_physical_transpose_source_factors, FundamentalMPU}
+    For the converse write $A=c(x\otimes x^T)B^T$ and put
+    $X=x^\dagger$, $Y=\overline c\,\overline x$. Since $|c|=1$, both
+    matrices are unitary and satisfy $B^T=(X\otimes Y)A$ and
+    $A^T=B(Y^\dagger\otimes X^\dagger)$. Use the actual source and transpose
+    factor normalizations to construct standard forms with gates $A,B$ and
+    $B^T,A^T$, respectively. Closing the two gauge relations cancels each
+    internal unitary and gives equality on the even rings of the original
+    tensor. The four-spin dictionary transports the given local equation
+    without enlarging its antecedent.
+\end{proof}
+
+\begin{lemma}[Continuous removal of the local transposition phase]
+    \label{lem:mpu_transposition_phase_deformation}
+    \lean{MPOTensor.transpositionPhaseScalar, MPOTensor.norm_transpositionPhaseScalar,
+        MPOTensor.transpositionPhaseScalar_sq_mul, MPOTensor.continuous_transpositionPhaseScalar,
+        MPOTensor.transpositionPhaseScalar_zero,
+        MPOTensor.TwoSiteStandardFormData.transpositionPhaseDeformation,
+        MPOTensor.mpo_transpositionPhaseDeformation_eq_transpose,
+        MPOTensor.continuous_transpositionPhaseDeformation,
+        MPOTensor.transposition_local_phase_deformation,
+        MPOTensor.transposition_local_phase_deformation_one}
+    \notready
+    Let $W$ have supplied two-site standard-form gates $u,v$ and half factors
+    $X_1,X_2$, and let $\phi\in\mathbb R$. Set
+    $\delta_t=e^{-it\phi/2}$, $W_t=\delta_t W$ and $u_t=\delta_t u$.
+    Then $(u_t,v,X_1,X_2)$ is an actual standard form of $W_t$, and both
+    $t\mapsto W_t$ and $t\mapsto u_t$ are continuous, starting at $W,u$.
+    At every chain length where $W^{(N)}$ is transpose invariant, so is
+    $W_t^{(N)}$. If the square gates satisfy
+    $v_{23}(u\otimes u)=e^{i\phi}(x\otimes x^T)v_{23}^T$, then
+    \begin{align}
+        v_{23}(u_t\otimes u_t)
+         & =e^{i(1-t)\phi}(x\otimes x^T)v_{23}^T.
+    \end{align}
+    In particular the endpoint $t=1$ has local phase one, with the same
+    shifted gate and virtual unitary. This is the explicit deformation in
+    \cite[lines~1285--1288]{Cirac2017MPU}, without a continuous choice of
+    arguments for a varying family of phases.
+\end{lemma}
+
+\begin{proof}
+    \uses{SF}
+    Since $|\delta_t|=1$, multiplying the unshifted gate by $\delta_t$
+    preserves its two unitary identities. The open contraction is linear in
+    that gate, giving exactly $W_t$. The periodic operators obey
+    $W_t^{(N)}=\delta_t^N W^{(N)}$, which preserves transpose symmetry.
+    The two unshifted gates in the local equation contribute $\delta_t^2$,
+    and $\delta_t^2e^{i\phi}=e^{i(1-t)\phi}$. The complex exponential and
+    scalar multiplication give continuity.
+\end{proof}
+
 \begin{lemma}[Local characterization of transposition]
     \label{prop:local-char-transposition}
     \notready
