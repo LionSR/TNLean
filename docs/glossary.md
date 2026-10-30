@@ -328,8 +328,7 @@ normalizations.
   third clause directly, with a positive-definite fixed matrix spanning the
   fixed eigenspace and no other peripheral eigenvalue. Their reverse direction
   derives irreducibility through QICLean's channel criterion; it does not
-  assume it as additional input. These new statements are written but await
-  compiled verification and integration under #10276.
+  assume it as additional input.
 
 ## Injectivity
 

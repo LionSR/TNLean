@@ -578,7 +578,7 @@ trace illustrates this failure.
         MPSTensor.wBlockEncoding_conjTranspose_mul_self,
         MPSTensor.rectKronecker_wBlockEncoding_isometry}
     \leanok
-    \uses{def:w_indicator}
+    \uses{def:w_indicator, thm:spt_physical_embedding_boundary}
     The unnormalized W vector has squared norm $N$, so $\|W_N\|=\sqrt N$, and
     for $N>0$ the vector $N^{-1/2}|W_N\rangle$ has unit norm. For $k>0$, the map
     \begin{align}
@@ -639,7 +639,8 @@ trace illustrates this failure.
         MPSTensor.prime_divisor_lt_of_mpv_eq_smul_wIndicator}
     \notready
     \discussion{2947}
-    \uses{lem:w_state_isometric_blocking, thm:w_state_prime_bound}
+    \uses{lem:w_state_isometric_blocking, lem:w_state_block_encoding,
+        lem:eval_word_block, thm:w_state_prime_bound}
     Suppose a tensor $A$ of bond dimension $D$ has periodic vector
     $cW_{mk}$, with $k>0$. Block $k$ consecutive physical sites and apply
     $U_k^\dagger$ to each physical leg. The resulting qubit tensor has the
@@ -658,8 +659,10 @@ trace illustrates this failure.
 \end{lemma}
 \begin{proof}
     The physical action on a periodic vector is the tensor product of the
-    local physical matrices. Apply the adjoint of the isometry in
-    Lemma~\ref{lem:w_state_isometric_blocking}; its Gram matrix is the identity.
+    local physical matrices. Lemma~\ref{lem:w_state_isometric_blocking}
+    writes $W_{mk}$ as $\sqrt k\,U_k^{\otimes m}W_m$. Apply the adjoint of
+    $U_k^{\otimes m}$, whose Gram matrix is the identity by
+    Lemma~\ref{lem:w_state_block_encoding}.
     For a prime divisor write $N=pk$ with $k>0$. The compressed coefficient
     $c\sqrt k$ is nonzero, so Lemma~\ref{thm:w_state_prime_bound} applies
     to the compressed tensor.

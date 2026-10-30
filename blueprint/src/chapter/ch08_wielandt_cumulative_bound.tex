@@ -370,7 +370,9 @@ matrices, and let $\E_K$ be its Kraus map.
         MPSTensor.hasEventuallyFullKrausRank_iff_exists_simple_peripheral_fixedPoint}
     \leanok
     \uses{def:paper_primitive, def:eventually_full_kraus_rank,
-        def:strongly_irreducible_paper, thm:wielandt_proposition_three}
+        def:strongly_irreducible_paper, thm:wielandt_proposition_three,
+        thm:wolf_6_8_kraus_span, thm:strongly_irreducible_of_paper_primitive,
+        thm:primitive_from_strongly_irred}
     Let $D>0$ and suppose $\sum_i(A^i)^\dagger A^i=\Id$.
     The following conditions are equivalent:
     \begin{enumerate}
@@ -427,7 +429,7 @@ matrices, and let $\E_K$ be its Kraus map.
     \label{thm:q_index_le_i_index_channel}
     \lean{MPSTensor.qIndex_le_iIndex_of_tracePreserving}
     \leanok
-    \uses{def:wielandt_i_index, def:wielandt_q_index, thm:wielandt_proposition_three}
+    \uses{def:wielandt_i_index, def:wielandt_q_index, thm:wolf_6_8_kraus_span}
     Let $A_1,\ldots,A_d\in\MN{D}$, where $D>0$, satisfy
     $\sum_i A_i^\dagger A_i=\Id$. With both indices set to zero when
     their defining sets are empty, one has $q(\E_A)\le\iota(A)$.
@@ -438,7 +440,7 @@ matrices, and let $\E_K$ be its Kraus map.
     If $\iota(A)$ is a positive integer with $S_{\iota(A)}(A)=\MN{D}$, then
     $H_{\iota(A)}(A,\varphi)=\C^D$ for every $\varphi\neq0$, so $\iota(A)$
     lies in the defining set for $q(\E_A)$ and $q(\E_A)\le\iota(A)$.
-    Otherwise, Lemma~\ref{thm:wielandt_proposition_three} excludes
+    Otherwise, Lemma~\ref{thm:wolf_6_8_kraus_span} excludes
     primitivity, so
     $\{q\ge1:H_q(A,\varphi)=\C^D\text{ for every }\varphi\neq0\}=\emptyset$
     and $q(\E_A)=0\le\iota(A)$.
@@ -1171,7 +1173,7 @@ case are proved in Section~\ref{sec:app_wielandt_blocking_support}.
         MPSTensor.CyclicWielandt.classical_bound_lt_iIndex}
     \leanok
     \uses{def:cyclic_wielandt_family, def:wielandt_i_index,
-        def:paper_primitive}
+        def:paper_primitive, def:normal}
     The cyclic family is normal and primitive, and
     $\iota(A)=D(D-1)$. For $D>2$, this exceeds the classical
     Wielandt exponent $D^2-2D+2$.
