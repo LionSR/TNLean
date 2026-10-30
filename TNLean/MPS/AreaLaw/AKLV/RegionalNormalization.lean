@@ -46,6 +46,11 @@ def normalizationCoreSites {L : ℕ} (a b : Fin (L - 1)) : Fin 3 → Finset (Fin
   | 1 => interval L (a.val + 2) b.val
   | 2 => interval L (b.val + 2) L
 
+-- The simultaneous-support membership and the disjoint-region common-ground
+-- extraction are elaborated over the pi-indexed matrix type
+-- `Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ`, whose unification cost exceeds
+-- the default heartbeat budget.
+set_option maxHeartbeats 1000000 in
 /-- The actual regional minimum shifts are obtained from the spectrum,
 and their three shifted cores have a common unit zero vector.
 Source: AKLV, Section 6.1, normalization preceding Theorem 6.1. -/
@@ -177,6 +182,10 @@ theorem normalizedCutBlocks_posSemidef_of_core_shifts {L q : ℕ}
     simp only [normalizationCoreBonds, Finset.mem_filter, Finset.mem_univ, true_and] at hi ⊢ <;>
     omega
 
+-- The boundary positivity bound and the ground-energy assembly are elaborated
+-- over the pi-indexed matrix type `Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ`,
+-- whose scalar-coercion unification exceeds the default heartbeat budget.
+set_option maxHeartbeats 800000 in
 /-- Normalizing the original chain at the actual regional minima derives
 all three positive clipped blocks and the ground energy bound \(0\le e\le6\).
 The only spectral inputs describe the original chain ground vector and
