@@ -80,3 +80,37 @@
     each periodic sector vector belongs to $S_N$ and is fixed by
     cyclic translation of its trace.
 \end{proof}
+
+\begin{theorem}[Ground space of the actual periodic uncle Hamiltonian]
+    \label{thm:uncle_periodic_ground_space}
+    \lean{MPSTensor.cyclicRestrictₗ_cyclicTranslateState,
+        MPSTensor.mem_uncleBoundarySpace_two_iff,
+        MPSTensor.uncleHamiltonianES_apply_eq_zero_iff_boundary_windows,
+        MPSTensor.mem_uncleBoundarySpace_of_cyclic_windows,
+        MPSTensor.ker_uncleHamiltonianES_eq_span_mpv}
+    \leanok
+    \uses{lem:uncle_kernel_local_conditions,lem:uncle_boundary_intersection,
+        thm:uncle_periodic_boundary_closure,lem:uncle_parent_sector_containment}
+    Let $C=A\oplus B$ and let the perturbation have off-diagonal blocks
+    $R,L$. Suppose the full letter family
+    $\left(\begin{smallmatrix}A&R\\L&B\end{smallmatrix}\right)$ is injective.
+    Then at every periodic length $N\ge2$,
+    \begin{align}
+        \ker H'_P
+         & =\operatorname{span}\{\ket{M_N(A)},\ket{M_N(B)}\}.
+    \end{align}
+    This is the finite periodic ground-space theorem
+    of~\cite{FernandezGonzalez2015Uncle}; no intersection or closure identity
+    is imposed as an additional hypothesis.
+\end{theorem}
+\begin{proof}\leanok
+    The two-site coefficient word is the explicit uncle tensor, so the
+    actual local projector kernel is $S_2$. A vector in $\ker H'_P$
+    satisfies every cyclic $S_2$ constraint by
+    Lemma~\ref{lem:uncle_kernel_local_conditions}. Keeping the nonwrapping
+    constraints and iterating Lemma~\ref{lem:uncle_boundary_intersection}
+    puts it in $S_N$. The same argument applied to its inverse cyclic
+    translate puts it in the one-site translate of $S_N$. Periodic closure
+    therefore places it in the two-sector span. The reverse inclusion is
+    Lemma~\ref{lem:uncle_parent_sector_containment}.
+\end{proof}
