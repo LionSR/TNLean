@@ -292,10 +292,9 @@ matrices, and let $\E_K$ be its Kraus map.
     \lean{MPSTensor.isStronglyIrreduciblePaper_of_simple_peripheral_fixedPoint,
         MPSTensor.primitivePaper_iff_exists_simple_peripheral_fixedPoint,
         MPSTensor.hasEventuallyFullKrausRank_iff_exists_simple_peripheral_fixedPoint}
-    \notready
-    \discussion{10276}
+    \leanok
     \uses{def:paper_primitive, def:eventually_full_kraus_rank,
-        thm:wielandt_proposition_three}
+        def:strongly_irreducible_paper, thm:wielandt_proposition_three}
     Let $D>0$ and suppose $\sum_i(A^i)^\dagger A^i=\Id$.
     The following conditions are equivalent:
     \begin{enumerate}
@@ -308,13 +307,21 @@ matrices, and let $\E_K$ be its Kraus map.
     In the third condition, irreducibility is a conclusion rather than
     an additional hypothesis. This is \cite[Proposition~3]{Sanz2010Quantum}.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     For a primitive channel, the positive-definite fixed point and the
-    complementary spectral gap give the third condition. Conversely, every
-    positive fixed matrix is proportional to the given faithful fixed matrix.
-    The irreducibility criterion for a trace-preserving positive map therefore
-    excludes a nontrivial invariant projection. Together with peripheral
-    primitivity this gives eventual full Kraus rank and hence primitivity.
+    complementary spectral gap give the third condition. Conversely, assume
+    the third condition and let $P\neq0,\Id$ be an orthogonal projection with
+    $\E_A(P\MN{D}P)\subseteq P\MN{D}P$. The restriction of $\E_A$ to this
+    corner is positive and trace preserving, so it fixes a density matrix
+    $\sigma=P\sigma P$. Simplicity of the fixed eigenspace gives
+    $\sigma=c\rho$ with $c\neq0$, hence
+    \begin{align}
+        (\Id-P)\rho(\Id-P) & =c^{-1}(\Id-P)\sigma(\Id-P)=0,
+        \notag
+    \end{align}
+    contradicting $\rho>0$. Thus $\E_A$ is irreducible, and together with
+    peripheral primitivity this gives eventual full Kraus rank and hence
+    primitivity.
 \end{proof}
 
 \begin{lemma}[Normalized normal tensors are strongly irreducible]
