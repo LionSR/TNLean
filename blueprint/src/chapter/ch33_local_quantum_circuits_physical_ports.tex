@@ -792,3 +792,52 @@ start, and is discarded only after the circuit has finished.
         =(I_W\otimes\bra{e})(\phi\otimes\eta)=\eta_e\phi.
     \]
 \end{proof}
+
+
+\begin{lemma}[Bounded pure-state conversion on the original ports]
+    \label{lem:qc_bounded_port_pure_output}
+    \lean{QuantumCircuit.IsDimensionBoundedLocalChannelProtocol.exists_physicalPort_pure_output}
+    \leanok
+    \discussion{8640}
+    \uses{def:qc_dimension_bounded_protocol, thm:qc_physical_port_codes,
+        thm:qc_bounded_physical_port_io, thm:qc_physical_port_pure_output}
+    Fix $d\ge2$ and an intermediate dimension bound $B$. Let $N\ge2$,
+    let $\Psi$ be a $B$-dimension-bounded native protocol of depth $T$,
+    and suppose
+    $\Psi(\ketbra{\psi}{\psi})=\ketbra{\phi}{\phi}$ with
+    $\langle\phi,\phi\rangle=1$ and physical input and output dimension $d$.
+    Set $k=\lceil\log_d B\rceil$. Let $V_{\rm port}$ store each original
+    physical qudit on its port and set its data and scratch digits to zero,
+    so $J_{\rm port}(X)=V_{\rm port}XV_{\rm port}^\dagger$.
+    There are fresh local environment wires, a physical-port unitary $U$,
+    and a unit environment vector $\eta$ such that
+    \begin{align}
+        U(V_{\rm port}\psi\otimes\ket{0^A})
+         & =V_{\rm port}\phi\otimes\eta,
+         & \operatorname{depth}_{\rm intersite}(U) & \le2kT,
+        \label{eq:qc_bounded_port_pure_vector}               \\
+        \mathcal D_A\circ\operatorname{Ad}_U\circ\mathcal I_A\circ J_{\rm port}
+         & =J_{\rm port}\circ\Psi.
+        \label{eq:qc_bounded_port_pure_channel}
+    \end{align}
+    Thus the designated data and scratch memory is zero in the
+    final vector. The environment $\eta$ need not reset or factor over
+    sites. For a uniform family bound, $B$ and $d$ are fixed independently
+    of $N$. No adaptive protocol-block or control condition is asserted.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:qc_register_code_completion, thm:qc_bounded_physical_port_io,
+        thm:qc_physical_port_pure_output}
+    The explicit port code is an isometry, so $V_{\rm port}\phi$ is
+    normalized. The channel identity of
+    Lemma~\ref{thm:qc_bounded_physical_port_io} gives
+    $\Gamma J_{\rm port}(\ketbra{\psi}{\psi})
+        =J_{\rm port}(\ketbra{\phi}{\phi})$.
+    Apply Lemma~\ref{thm:qc_physical_port_pure_output} to this compiled
+    channel and these two encoded vectors. It derives $\eta$ with
+    $U(V_{\rm port}\psi\otimes\ket{0^A})=V_{\rm port}\phi\otimes\eta$
+    in~(\ref{eq:qc_bounded_port_pure_vector}), without changing the
+    unitary's physical depth. Compose its full channel
+    identity with $J_{\rm port}$ to obtain
+    (\ref{eq:qc_bounded_port_pure_channel}).
+\end{proof}
