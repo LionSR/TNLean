@@ -5051,6 +5051,21 @@ three-plaquette output measurement, and the routed reunion measurement.
   work. Two occurrences in one file are below the promotion threshold;
   no specialized index tactic is introduced.
 
+### Completing an orthonormal family by its cardinality — candidate (2026-10-29)
+
+- **Pattern:** Use
+  `hv.linearIndependent.span_eq_top_of_card_eq_finrank' hcard`, then
+  `OrthonormalBasis.mk hv hspan.ge`, to turn an orthonormal family with as
+  many vectors as the dimension into an orthonormal basis.
+- **Seen:** The zero and successor cases of
+  `LinearIsometry.exists_paired_orthonormalBasis` in
+  `Algebra/OrthogonalComplexStructureBasis.lean`.
+- **Abstraction:** Mathlib already supplies both mathematical steps. Two
+  occurrences in one proof do not justify a local wrapper or tactic.
+- **Notes:** The empty-index form of the spanning lemma handles dimension
+  zero without assuming a nontrivial space. The successor case combines an
+  invariant orthonormal pair with a basis of its orthogonal complement.
+
 ### Recovering letters by an identity contraction — candidate (2026-10-29)
 
 - **Seen:** `isInjective_uncleTensor_of_isInjective_perturbation` in
