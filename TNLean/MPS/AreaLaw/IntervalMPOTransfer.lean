@@ -291,22 +291,18 @@ private theorem intervalDifferenceNaturalEquiv_apply_val {T c d u v : ℕ}
     (intervalDifferenceNaturalEquiv hcd hd i).val =
       (intervalShiftOrderIso hcd hd i.val).val := rfl
 
-/-- One actual transferred regional factor has natural interval MPO bound
-`max 1 D`. The two regions are intervals with nonreversed overlap; their
-increasing coordinates are the canonical interval order isomorphisms. The
-positive local dimension supplies only a dummy common configuration.
-This is the individual-factor change-of-cuts step supporting ALVV,
-arXiv:1602.08828v2, Proposition 5.7, lines 1332–1333. -/
-private theorem isOpenMPS_changingRegionalMiddleFactor
-    {T q c d u v D : ℕ} (hq : 0 < q)
+/-- The actual regional matrix factor is an interval slice with fixed row and
+column data, extended by fixed row and column configurations on the new region.
+All coordinates are increasing interval coordinates. The positive local
+dimension supplies only a dummy common configuration. No bond bound or
+representation hypothesis is required. The overlap may have length zero.
+Supporting ALVV, arXiv:1602.08828v2, Proposition 5.7, lines 1332–1333. -/
+theorem exists_intervalSlice_changingRegionalMiddleFactor
+    {T q c d u v : ℕ} (hq : 0 < q)
     (hcd : c ≤ d) (hd : d ≤ T) (huv : u ≤ v) (hv : v ≤ T)
     (hover : max c u ≤ min d v)
     (Vphys : Matrix (FiniteProduct.Configuration (fun _ : Fin T ↦ Fin q) (interval T c d))
       (FiniteProduct.Configuration (fun _ : Fin T ↦ Fin q) (interval T c d)) ℂ)
-    (hV : let eE := intervalShiftOrderIso hcd hd
-      IsOpenMPS (d - c) (q * q) D (fun x ↦
-        Vphys (fun z ↦ (finProdFinEquiv.symm (x (eE.symm z))).1)
-          (fun z ↦ (finProdFinEquiv.symm (x (eE.symm z))).2)))
     (αr αc : FiniteProduct.Configuration (fun _ : Fin T ↦ Fin q)
       (interval T c d \ interval T u v))
     (ηr ηc : FiniteProduct.Configuration (fun _ : Fin T ↦ Fin q)
@@ -317,10 +313,25 @@ private theorem isOpenMPS_changingRegionalMiddleFactor
       (fun _ : Fin T ↦ Fin q) (interval T c d) (interval T u v)
     let Wphys := ((Matrix.single ηr ηc (1 : ℂ)) ⊗ₖ
       Matrix.operatorBlock (Vphys.reindex old old) αr αc).reindex new.symm new.symm
+    let eE := intervalShiftOrderIso hcd hd
     let eJ := intervalShiftOrderIso huv hv
-    IsOpenMPS (v - u) (q * q) (max 1 D) (fun x ↦
-      Wphys (fun z ↦ (finProdFinEquiv.symm (x (eJ.symm z))).1)
-        (fun z ↦ (finProdFinEquiv.symm (x (eJ.symm z))).2)) := by
+    let Vnat := Vphys.submatrix
+      (fun σ z ↦ σ (eE.symm z)) (fun σ z ↦ σ (eE.symm z))
+    ∃ (a b len : ℕ) (_ha : a + len ≤ d - c) (hb : b + len ≤ v - u)
+        (fixedRow fixedCol : Fin (d - c) → Fin q)
+        (outsideRow outsideCol :
+          {j : Fin (v - u) // ¬(b ≤ j.val ∧ j.val < b + len)} → Fin q),
+      (fun σ τ : Fin (v - u) → Fin q ↦
+        Wphys (fun z ↦ σ (eJ.symm z)) (fun z ↦ τ (eJ.symm z))) =
+        (fun σ τ : Fin (v - u) → Fin q ↦
+          if (fun j : {j : Fin (v - u) // ¬(b ≤ j.val ∧ j.val < b + len)} ↦
+              σ j.val) = outsideRow ∧
+            (fun j : {j : Fin (v - u) // ¬(b ≤ j.val ∧ j.val < b + len)} ↦
+              τ j.val) = outsideCol
+          then Vnat
+            (insertInterval a fixedRow (fun r : Fin len ↦ σ ⟨b + r.val, by omega⟩))
+            (insertInterval a fixedCol (fun r : Fin len ↦ τ ⟨b + r.val, by omega⟩))
+          else 0) := by
   let β := fun _ : Fin T ↦ Fin q
   let E := interval T c d
   let J := interval T u v
@@ -334,13 +345,7 @@ private theorem isOpenMPS_changingRegionalMiddleFactor
     fun σ z ↦ σ (eE.symm z)
   let toJ : (Fin (v - u) → Fin q) → FiniteProduct.Configuration β J :=
     fun σ z ↦ σ (eJ.symm z)
-  change IsOpenMPS (v - u) (q * q) (max 1 D) (fun x ↦
-    Wphys (toJ (fun j ↦ (finProdFinEquiv.symm (x j)).1))
-      (toJ (fun j ↦ (finProdFinEquiv.symm (x j)).2)))
   let Vnat := Vphys.submatrix toE toE
-  have hVnat : IsOpenMPS (d - c) (q * q) D (fun x ↦
-      Vnat (fun j ↦ (finProdFinEquiv.symm (x j)).1)
-        (fun j ↦ (finProdFinEquiv.symm (x j)).2)) := hV
   let left := max u c
   let right := min v d
   let len := right - left
@@ -422,11 +427,6 @@ private theorem isOpenMPS_changingRegionalMiddleFactor
         (fun j : {j : Fin (v - u) // ¬(b ≤ j.val ∧ j.val < b + len)} ↦ τ j.val) = ηcN
     then Vnat (insertInterval a (fixed αr) (fun r : Fin len ↦ σ ⟨b + r.val, by omega⟩))
       (insertInterval a (fixed αc) (fun r : Fin len ↦ τ ⟨b + r.val, by omega⟩)) else 0
-  have hslice : IsOpenMPS (v - u) (q * q) (max 1 D) (fun x ↦
-      Wslice (fun j ↦ (finProdFinEquiv.symm (x j)).1)
-        (fun j ↦ (finProdFinEquiv.symm (x j)).2)) :=
-    isOpenMPS_matrix_intervalSlice_extend_by_configuration
-      Vnat hVnat a ha (fixed αr) (fixed αc) b hb ηrN ηcN
   have hW : (fun (σ τ : Fin (v - u) → Fin q) ↦ Wphys (toJ σ) (toJ τ)) = Wslice := by
     funext σ τ
     change Matrix.single ηr ηc (1 : ℂ) ((new (toJ σ)).1) ((new (toJ τ)).1) *
@@ -450,6 +450,72 @@ private theorem isOpenMPS_changingRegionalMiddleFactor
         intro hn
         exact h ⟨((hmatch ηr σ).mp hn.1).symm, ((hmatch ηc τ).mp hn.2).symm⟩
       rw [ite_eq_right h, ite_eq_right hn]
+  exact ⟨a, b, len, ha, hb, fixed αr, fixed αc, ηrN, ηcN, hW⟩
+
+/-- One actual transferred regional factor has natural interval MPO bound
+`max 1 D`. The two regions are intervals with nonreversed overlap; their
+increasing coordinates are the canonical interval order isomorphisms. The
+positive local dimension supplies only a dummy common configuration.
+This is the individual-factor change-of-cuts step supporting ALVV,
+arXiv:1602.08828v2, Proposition 5.7, lines 1332–1333. -/
+private theorem isOpenMPS_changingRegionalMiddleFactor
+    {T q c d u v D : ℕ} (hq : 0 < q)
+    (hcd : c ≤ d) (hd : d ≤ T) (huv : u ≤ v) (hv : v ≤ T)
+    (hover : max c u ≤ min d v)
+    (Vphys : Matrix (FiniteProduct.Configuration (fun _ : Fin T ↦ Fin q) (interval T c d))
+      (FiniteProduct.Configuration (fun _ : Fin T ↦ Fin q) (interval T c d)) ℂ)
+    (hV : let eE := intervalShiftOrderIso hcd hd
+      IsOpenMPS (d - c) (q * q) D (fun x ↦
+        Vphys (fun z ↦ (finProdFinEquiv.symm (x (eE.symm z))).1)
+          (fun z ↦ (finProdFinEquiv.symm (x (eE.symm z))).2)))
+    (αr αc : FiniteProduct.Configuration (fun _ : Fin T ↦ Fin q)
+      (interval T c d \ interval T u v))
+    (ηr ηc : FiniteProduct.Configuration (fun _ : Fin T ↦ Fin q)
+      (interval T u v \ interval T c d)) :
+    let old := FiniteProduct.changingOldMiddleConfigEquiv
+      (fun _ : Fin T ↦ Fin q) (interval T c d) (interval T u v)
+    let new := FiniteProduct.changingNewMiddleConfigEquiv
+      (fun _ : Fin T ↦ Fin q) (interval T c d) (interval T u v)
+    let Wphys := ((Matrix.single ηr ηc (1 : ℂ)) ⊗ₖ
+      Matrix.operatorBlock (Vphys.reindex old old) αr αc).reindex new.symm new.symm
+    let eJ := intervalShiftOrderIso huv hv
+    IsOpenMPS (v - u) (q * q) (max 1 D) (fun x ↦
+      Wphys (fun z ↦ (finProdFinEquiv.symm (x (eJ.symm z))).1)
+        (fun z ↦ (finProdFinEquiv.symm (x (eJ.symm z))).2)) := by
+  let β := fun _ : Fin T ↦ Fin q
+  let E := interval T c d
+  let J := interval T u v
+  let old := FiniteProduct.changingOldMiddleConfigEquiv β E J
+  let new := FiniteProduct.changingNewMiddleConfigEquiv β E J
+  let Wphys := ((Matrix.single ηr ηc (1 : ℂ)) ⊗ₖ
+    Matrix.operatorBlock (Vphys.reindex old old) αr αc).reindex new.symm new.symm
+  let eE := intervalShiftOrderIso hcd hd
+  let eJ := intervalShiftOrderIso huv hv
+  let toE : (Fin (d - c) → Fin q) → FiniteProduct.Configuration β E :=
+    fun σ z ↦ σ (eE.symm z)
+  let toJ : (Fin (v - u) → Fin q) → FiniteProduct.Configuration β J :=
+    fun σ z ↦ σ (eJ.symm z)
+  change IsOpenMPS (v - u) (q * q) (max 1 D) (fun x ↦
+    Wphys (toJ (fun j ↦ (finProdFinEquiv.symm (x j)).1))
+      (toJ (fun j ↦ (finProdFinEquiv.symm (x j)).2)))
+  let Vnat := Vphys.submatrix toE toE
+  have hVnat : IsOpenMPS (d - c) (q * q) D (fun x ↦
+      Vnat (fun j ↦ (finProdFinEquiv.symm (x j)).1)
+        (fun j ↦ (finProdFinEquiv.symm (x j)).2)) := hV
+  obtain ⟨a, b, len, ha, hb, fixedRow, fixedCol, outsideRow, outsideCol, hW⟩ :=
+    exists_intervalSlice_changingRegionalMiddleFactor
+      hq hcd hd huv hv hover Vphys αr αc ηr ηc
+  let Wslice : Matrix (Fin (v - u) → Fin q) (Fin (v - u) → Fin q) ℂ := fun σ τ ↦
+    if (fun j : {j : Fin (v - u) // ¬(b ≤ j.val ∧ j.val < b + len)} ↦ σ j.val) = outsideRow ∧
+        (fun j : {j : Fin (v - u) // ¬(b ≤ j.val ∧ j.val < b + len)} ↦ τ j.val) = outsideCol
+    then Vnat (insertInterval a fixedRow (fun r : Fin len ↦ σ ⟨b + r.val, by omega⟩))
+      (insertInterval a fixedCol (fun r : Fin len ↦ τ ⟨b + r.val, by omega⟩)) else 0
+  have hslice : IsOpenMPS (v - u) (q * q) (max 1 D) (fun x ↦
+      Wslice (fun j ↦ (finProdFinEquiv.symm (x j)).1)
+        (fun j ↦ (finProdFinEquiv.symm (x j)).2)) :=
+    isOpenMPS_matrix_intervalSlice_extend_by_configuration
+      Vnat hVnat a ha fixedRow fixedCol b hb outsideRow outsideCol
+  change (fun σ τ : Fin (v - u) → Fin q ↦ Wphys (toJ σ) (toJ τ)) = Wslice at hW
   rw [← hW] at hslice
   exact hslice
 
