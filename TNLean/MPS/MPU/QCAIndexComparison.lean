@@ -75,7 +75,9 @@ theorem canonicalMPU_index_eq_neg_logb_gnvwIndex
         (blocked_bufferedMPUQuasiLocalAut_propagatesWithin hU.isMPU k hk S) : ℚ) : ℝ) =
         (MPOTensor.leftRank (MPOTensor.blockTensor U k) : ℝ) /
           (MPSTensor.blockPhysDim d k : ℝ) := by
-      exact_mod_cast hr
+      rw [hr]
+      push_cast
+      rfl
     have hdim : (MPSTensor.blockPhysDim d k : ℝ) = (d ^ k : ℕ) := by
       exact_mod_cast MPSTensor.blockPhysDim_eq_pow d k
     simpa only [hdim] using hrReal

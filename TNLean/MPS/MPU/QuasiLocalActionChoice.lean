@@ -56,8 +56,9 @@ theorem mpuQuasiLocalEquiv_eq_of_mpo_eq
   apply DFunLike.ext
   intro X
   induction X using UniformSpace.Completion.induction_on with
-  | hp => exact isClosed_eq (mpuQuasiLocalEquiv hU).isometry.continuous
-      (mpuQuasiLocalEquiv hV).isometry.continuous
+  | hp =>
+      exact isClosed_eq (StarAlgEquiv.isometry (mpuQuasiLocalEquiv hU)).continuous
+        (StarAlgEquiv.isometry (mpuQuasiLocalEquiv hV)).continuous
   | ih A =>
       induction A using DirectLimit.induction with
       | _ Λ A => exact hlocal Λ A
