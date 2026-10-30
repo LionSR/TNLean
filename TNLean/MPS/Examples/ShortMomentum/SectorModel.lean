@@ -36,13 +36,12 @@ particle sector. Source context: SPWC10, Theorem 5, lines 850--880, with the
 permitted-volume and translation-phase distinctions explicit in this module. -/
 noncomputable def sevenSectorInteraction (ζ q : ℂ) : MPVSpace 5 7 →ₗ[ℂ] MPVSpace 5 7 :=
   ((groundSpaceES (threeLetterTensor ζ) 7).map
-      (Function.Embedding.piCongrRight
-        (fun _ : Fin 7 ↦ (Fin.castAddEmb 2 : Fin 3 ↪ Fin 5)))
-        .euclideanExtendByZero.toLinearMap ⊔
+      (Function.Embedding.euclideanExtendByZero (Function.Embedding.piCongrRight
+        (fun _ : Fin 7 ↦ (Fin.castAddEmb 2 : Fin 3 ↪ Fin 5)))).toLinearMap ⊔
     (Submodule.span ℂ {WithLp.toLp 2 (pvbsEdge q 7)}).map
-      (Function.Embedding.piCongrRight
-        (fun _ : Fin 7 ↦ (Fin.natAddEmb 3 : Fin 2 ↪ Fin 5)))
-        .euclideanExtendByZero.toLinearMap)ᗮ.starProjection.toLinearMap
+      (Function.Embedding.euclideanExtendByZero (Function.Embedding.piCongrRight
+        (fun _ : Fin 7 ↦ (Fin.natAddEmb 3 : Fin 2 ↪ Fin 5)))).toLinearMap)ᗮ
+    |>.starProjection.toLinearMap
 
 /-- The fixed seven-site interaction is positive, independently of the chosen
 complex parameters. Source: its actual complementary orthogonal projection. -/
@@ -56,9 +55,9 @@ kernel identity is assumed. Source context: SPWC10, Theorem 5, lines 850--880. -
 theorem ker_sevenSectorHamiltonian_of_eight_le {ζ q : ℂ}
     (hζ : IsPrimitiveRoot ζ 5) (hq : q ≠ 0) (M : ℕ) (hM : 8 ≤ M) :
     LinearMap.ker (periodicInteractionHamiltonianES (sevenSectorInteraction ζ q) M) =
-      Submodule.span ℂ {(Function.Embedding.piCongrRight
-        (fun _ : Fin M ↦ (Fin.castAddEmb 2 : Fin 3 ↪ Fin 5)))
-          .euclideanExtendByZero (mpvState (threeLetterTensor ζ) M)} := by
+      Submodule.span ℂ {(Function.Embedding.euclideanExtendByZero
+        (Function.Embedding.piCongrRight (fun _ : Fin M ↦ (Fin.castAddEmb 2 : Fin 3 ↪ Fin 5)))
+          (mpvState (threeLetterTensor ζ) M))} := by
   have hmain : LinearMap.ker (periodicInteractionHamiltonianES
       (groundSpaceES (threeLetterTensor ζ) 7)ᗮ.starProjection.toLinearMap M) =
       Submodule.span ℂ {mpvState (threeLetterTensor ζ) M} := by
@@ -70,7 +69,8 @@ theorem ker_sevenSectorHamiltonian_of_eight_le {ζ q : ℂ}
       (Submodule.span ℂ {WithLp.toLp 2 (pvbsEdge q 7)})ᗮ.starProjection.toLinearMap M) = ⊥ :=
     ker_pvbsPureWindowHamiltonian_eq_bot q hq 5 hM
   rw [sevenSectorInteraction, ker_physical_sum_projectorHamiltonian _ _ (by decide) (by omega),
-    hmain, hparticle, Submodule.map_bot, sup_bot_eq, Submodule.map_span, Set.image_singleton]
+    hmain, hparticle, Submodule.map_bot, sup_bot_eq, Submodule.map_span, Set.image_singleton,
+    LinearIsometry.coe_toLinearMap]
 
 /-- One actual site-independent tensor of bond dimension five represents the
 nonzero ground line at every length at least eight. The tensor is the physical
@@ -89,10 +89,8 @@ theorem exists_bond_five_eventual_ground_family_sevenSector {ζ q : ℂ}
   constructor
   · rw [hstate]
     intro hzero
-    have hz := (Function.Embedding.piCongrRight (fun _ : Fin M ↦ e))
-      .euclideanExtendByZero.injective
-      (hzero.trans ((Function.Embedding.piCongrRight (fun _ : Fin M ↦ e))
-        .euclideanExtendByZero.map_zero).symm)
+    let E := (Function.Embedding.piCongrRight (fun _ : Fin M ↦ e)).euclideanExtendByZero
+    have hz := E.injective (hzero.trans (map_zero E).symm)
     exact mpvState_threeLetterTensor_ne_zero hζ M hM hz
   · rw [hstate]
     exact ker_sevenSectorHamiltonian_of_eight_le hζ hq M hM
@@ -103,9 +101,9 @@ Source context: the finite-prefix distinction in SPWC10, Theorem 5, lines 850--8
 theorem ker_sevenSectorHamiltonian_seven {ζ q : ℂ}
     (hζ : IsPrimitiveRoot ζ 5) (hq : q ^ 7 = 1) :
     LinearMap.ker (periodicInteractionHamiltonianES (sevenSectorInteraction ζ q) 7) =
-      Submodule.span ℂ {(Function.Embedding.piCongrRight
-        (fun _ : Fin 7 ↦ (Fin.natAddEmb 3 : Fin 2 ↪ Fin 5)))
-          .euclideanExtendByZero (WithLp.toLp 2 (pvbsEdge q 7))} := by
+      Submodule.span ℂ {(Function.Embedding.euclideanExtendByZero
+        (Function.Embedding.piCongrRight (fun _ : Fin 7 ↦ (Fin.natAddEmb 3 : Fin 2 ↪ Fin 5)))
+          (WithLp.toLp 2 (pvbsEdge q 7)))} := by
   have hmain : LinearMap.ker (periodicInteractionHamiltonianES
       (groundSpaceES (threeLetterTensor ζ) 7)ᗮ.starProjection.toLinearMap 7) = ⊥ := by
     change LinearMap.ker (periodicInteractionHamiltonianES
@@ -117,7 +115,8 @@ theorem ker_sevenSectorHamiltonian_seven {ζ q : ℂ}
       Submodule.span ℂ {WithLp.toLp 2 (pvbsEdge q 7)} :=
     ker_pvbsPureWindowHamiltonian_matching_volume q (by decide) hq
   rw [sevenSectorInteraction, ker_physical_sum_projectorHamiltonian _ _ (by decide) le_rfl,
-    hmain, hparticle, Submodule.map_bot, bot_sup_eq, Submodule.map_span, Set.image_singleton]
+    hmain, hparticle, Submodule.map_bot, bot_sup_eq, Submodule.map_span, Set.image_singleton,
+    LinearIsometry.coe_toLinearMap]
 
 /-- Every permitted volume has an actual nonzero spanning ground vector for
 this one fixed interaction. This proves frustration-free nonvanishing as well
@@ -147,7 +146,11 @@ theorem exists_nonzero_ground_line_sevenSectorHamiltonian {ζ q : ℂ}
         (periodicInteractionHamiltonianES (sevenSectorInteraction ζ q) 7) =
         Submodule.span ℂ {v} := ker_sevenSectorHamiltonian_seven hζ hq
     refine ⟨v, hv, ?_, hker⟩
-    exact hker.symm ▸ Submodule.mem_span_singleton_self v
+    have hmem : v ∈ LinearMap.ker
+        (periodicInteractionHamiltonianES (sevenSectorInteraction ζ q) _) := by
+      rw [hker]
+      exact Submodule.mem_span_singleton_self v
+    exact hmem
   · have hlarge : 8 ≤ M := by omega
     let E := (Function.Embedding.piCongrRight
       (fun _ : Fin M ↦ (Fin.castAddEmb 2 : Fin 3 ↪ Fin 5))).euclideanExtendByZero
@@ -160,7 +163,11 @@ theorem exists_nonzero_ground_line_sevenSectorHamiltonian {ζ q : ℂ}
         (periodicInteractionHamiltonianES (sevenSectorInteraction ζ q) M) =
         Submodule.span ℂ {v} := ker_sevenSectorHamiltonian_of_eight_le hζ hqzero M hlarge
     refine ⟨v, hv, ?_, hker⟩
-    exact hker.symm ▸ Submodule.mem_span_singleton_self v
+    have hmem : v ∈ LinearMap.ker
+        (periodicInteractionHamiltonianES (sevenSectorInteraction ζ q) _) := by
+      rw [hker]
+      exact Submodule.mem_span_singleton_self v
+    exact hmem
 
 /-- The fixed interaction has a one-dimensional actual ground kernel at every
 permitted volume. Its nonzero spanning vector is derived in the preceding
@@ -182,9 +189,9 @@ theorem eq_zero_of_sevenSectorHamiltonian_fixed {ζ q : ℂ}
     (hζ : IsPrimitiveRoot ζ 5) (hq : q ^ 7 = 1) (hqone : q ≠ 1) (ψ : MPVSpace 5 7)
     (hzero : periodicInteractionHamiltonianES (sevenSectorInteraction ζ q) 7 ψ = 0)
     (hfixed : ∀ s : Fin 7, cyclicTranslateState s ψ.ofLp = ψ.ofLp) : ψ = 0 := by
-  have hmem : ψ ∈ Submodule.span ℂ {(Function.Embedding.piCongrRight
-      (fun _ : Fin 7 ↦ (Fin.natAddEmb 3 : Fin 2 ↪ Fin 5)))
-        .euclideanExtendByZero (WithLp.toLp 2 (pvbsEdge q 7))} := by
+  have hmem : ψ ∈ Submodule.span ℂ {(Function.Embedding.euclideanExtendByZero
+      (Function.Embedding.piCongrRight (fun _ : Fin 7 ↦ (Fin.natAddEmb 3 : Fin 2 ↪ Fin 5)))
+        (WithLp.toLp 2 (pvbsEdge q 7)))} := by
     rw [← ker_sevenSectorHamiltonian_seven hζ hq]
     exact hzero
   obtain ⟨c, hc⟩ := Submodule.mem_span_singleton.mp hmem
@@ -192,10 +199,12 @@ theorem eq_zero_of_sevenSectorHamiltonian_fixed {ζ q : ℂ}
     (fun _ : Fin 7 ↦ (Fin.natAddEmb 3 : Fin 2 ↪ Fin 5))).euclideanExtendByZero
   let y : MPVSpace 2 7 := c • WithLp.toLp 2 (pvbsEdge q 7)
   have hEy : E y = ψ := by
-    rw [y, map_smul]
+    dsimp only [y]
+    rw [map_smul]
     exact hc
   have hyzero : periodicInteractionHamiltonianES (pvbsPureWindowInteraction q 7) 7 y = 0 := by
-    rw [y, map_smul, pvbsPureWindowHamiltonian_apply_pvbsEdge q (by decide) hq, smul_zero]
+    dsimp only [y]
+    rw [map_smul, pvbsPureWindowHamiltonian_apply_pvbsEdge q (by decide) hq, smul_zero]
   have hyfixed (s : Fin 7) : cyclicTranslateState s y.ofLp = y.ofLp := by
     funext σ
     have h := congrFun (hfixed s) (fun i ↦ Fin.natAdd 3 (σ i))
@@ -204,6 +213,7 @@ theorem eq_zero_of_sevenSectorHamiltonian_fixed {ζ q : ℂ}
       (fun _ : Fin 7 ↦ (Fin.natAddEmb 3 : Fin 2 ↪ Fin 5))) (cyclicTranslateCfg s σ)) =
       E y ((Function.Embedding.piCongrRight
         (fun _ : Fin 7 ↦ (Fin.natAddEmb 3 : Fin 2 ↪ Fin 5))) σ) at h
+    change y.ofLp (cyclicTranslateCfg s σ) = y.ofLp σ
     simpa only [E, Function.Embedding.euclideanExtendByZero_apply_image] using h
   have hy := eq_zero_of_pvbsPureWindow_matching_volume_fixed q (by decide) hq hqone y hyzero hyfixed
   rw [← hEy, hy, map_zero]
