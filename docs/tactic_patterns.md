@@ -9810,6 +9810,26 @@ there is no need for a new tactic.
   mathematical lemma to a lower matrix-analysis module and reuse it; do not duplicate its
   statement or introduce a new tactic.
 
+### Local interaction separation by a joint boundary map — candidate
+- **Pattern:** compose an arbitrary local interaction with the joint boundary
+  map, extend vanishing from a spanning word family using
+  `LinearMap.ext_on_range`, and evaluate on `Pi.single` to isolate a block.
+- **Seen:** `MPS/ParentHamiltonian/ArbitraryInteractionBlockDegeneracy.lean`.
+- **Notes:** one occurrence. The implementation reuses Mathlib `LinearMap.lsum`
+  and `lsum_piSingle`; it avoids entrywise expansion of the local interaction.
+  Positivity is used separately via QICLean's
+  `WeightedPositiveKernel.apply_sum_eq_zero_iff`.
+
+### Cyclic local interaction in its defining coordinates — candidate
+- **Pattern:** expose a translated arbitrary interaction by applying the
+  active-block isometry, then cancel the inverse isometry.
+- **Seen:** two local separation uses in
+  `MPS/ParentHamiltonian/ArbitraryInteractionBlockDegeneracy.lean` (one file,
+  two occurrences; below the promotion threshold).
+- **Abstraction:** `cyclicActiveBlock_periodicLocalInteractionES_apply` in
+  the defining periodic-interaction module. Consumers use this action
+  formula rather than repeating conjugation and isometry coercion rewrites.
+
 ### Dense local image inside a closed commutant — candidate (2026-10-29)
 
 - **Seen:** `QCA/SupportAlgebraGeneration.lean`, the support-family generation
