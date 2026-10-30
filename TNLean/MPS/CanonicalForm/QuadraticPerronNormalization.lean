@@ -69,7 +69,7 @@ theorem exists_apply_ne_zero_of_mpv_ne_zero (A : MPSTensor d D) (hN : 0 < N)
     (hnonzero : ∃ σ : Fin N → Fin d, mpv A σ ≠ 0) : ∃ i, A i ≠ 0 := by
   classical
   by_contra hzero
-  push_neg at hzero
+  push Not at hzero
   obtain ⟨σ, hσ⟩ := hnonzero
   obtain ⟨n, rfl⟩ := Nat.exists_eq_succ_of_ne_zero hN.ne'
   apply hσ
@@ -138,7 +138,7 @@ theorem exists_quadraticSolution_physicalCutWindow_of_isNBlkInjective [NeZero D]
         P * (Y j * quadraticPhysicalCutWindow (mpv A) C j i * Z j) * P' := by
       simp only [Matrix.mul_assoc]
     simp only [Matrix.smul_mul, Matrix.mul_smul, smul_smul]
-    rw [hratio, hproduct, hlocal, hconj, hX]
+    rw [mul_comm (ζ ^ (j.val + 1)), hratio, hproduct, hlocal, hconj, hX]
     simp only [Pi.smul_apply, Matrix.mul_smul, Matrix.smul_mul, Matrix.smul_kronecker]
   · intro j hj
     have hproduct : (P * Y ⟨j.val + 1, hj⟩) * (Z j * P') = P * P' := by
@@ -147,6 +147,6 @@ theorem exists_quadraticSolution_physicalCutWindow_of_isNBlkInjective [NeZero D]
     change (ζ⁻¹) ^ (j.val + 1) • (P * Y ⟨j.val + 1, hj⟩) *
       (ζ ^ (j.val + 1) • (Z j * P')) = 1
     simp only [Matrix.smul_mul, Matrix.mul_smul, smul_smul]
-    rw [hproduct, hPP', ← mul_pow, inv_mul_cancel₀ hζ, one_pow, one_smul]
+    rw [hproduct, hPP', ← mul_pow, mul_inv_cancel₀ hζ, one_pow, one_smul]
 
 end MPSTensor

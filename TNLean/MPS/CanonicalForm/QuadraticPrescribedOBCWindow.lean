@@ -34,8 +34,17 @@ namespace MPSTensor
 
 variable {d D N L : ℕ} {A : MPSTensor d D}
 
-private def prescribedOBCBondNeZero (B : OBCChainTensor d (D * D) N) : NeZero D :=
-  ⟨fun hD ↦ by have h := B.bondBound_pos; simpa [hD] using h⟩
+private theorem toMatrix_reindex_reindex_apply {ι κ ι' κ' M₁ M₂ : Type*}
+    [Fintype ι] [Finite κ] [Fintype ι'] [Finite κ'] [DecidableEq ι] [DecidableEq ι']
+    [AddCommGroup M₁] [Module ℂ M₁] [AddCommGroup M₂] [Module ℂ M₂]
+    (b₁ : Module.Basis ι ℂ M₁) (b₂ : Module.Basis κ ℂ M₂) (e₁ : ι ≃ ι') (e₂ : κ ≃ κ')
+    (f : M₁ →ₗ[ℂ] M₂) (a : κ') (b : ι') :
+    LinearMap.toMatrix (b₁.reindex e₁) (b₂.reindex e₂) f a b =
+      LinearMap.toMatrix b₁ b₂ f (e₂.symm a) (e₁.symm b) := by
+  simp [LinearMap.toMatrix_apply]
+
+private theorem prescribedOBCBondNeZero (B : OBCChainTensor d (D * D) N) : NeZero D :=
+  ⟨fun hD ↦ by have h := B.bondBound_pos; simp [hD] at h⟩
 
 private def reconstructionCut (hN : 2 * L + D ^ 4 < N)
     (j : Fin (D ^ 4 + 1)) : Fin (N + 1) :=
@@ -49,21 +58,20 @@ theorem prescribedOBC_window_bondDim_eq (hletter : ∃ i, A i ≠ 0)
     (hC1 : Kraus.IsNBlkInjective A L) (hN : 2 * L + D ^ 4 < N)
     (B : OBCChainTensor d (D * D) N) (hcoeff : B.coeff = mpv A)
     (j : Fin (D ^ 4 + 1)) : B.bondDim (reconstructionCut hN j) = D * D := by
-  let : NeZero D := prescribedOBCBondNeZero B
+  have : NeZero D := prescribedOBCBondNeZero B
   have hrank : cutRank B.coeff (L + j.val) = D * D := by
     rw [hcoeff, ← cutCoefficientRank_eq_cutRank _
       (show L + j.val ≤ N by have := j.isLt; omega)]
     exact quadraticWindow_cutCoefficientRank_eq_of_isNBlkInjective A hC1 hletter hN j
   apply le_antisymm (B.bondDim_le _)
-  rw [← hrank]
-  exact B.cutRank_coeff_le (reconstructionCut hN j)
+  exact hrank.symm.le.trans (B.cutRank_coeff_le (reconstructionCut hN j))
 
 private theorem prescribedOBC_window_minimal (hletter : ∃ i, A i ≠ 0)
     (hC1 : Kraus.IsNBlkInjective A L) (hN : 2 * L + D ^ 4 < N)
     (B : OBCChainTensor d (D * D) N) (hcoeff : B.coeff = mpv A)
     (j : Fin (D ^ 4 + 1)) :
     B.bondDim (reconstructionCut hN j) = cutCoefficientRank B.coeff (L + j.val) := by
-  let : NeZero D := prescribedOBCBondNeZero B
+  have : NeZero D := prescribedOBCBondNeZero B
   rw [prescribedOBC_window_bondDim_eq hletter hC1 hN B hcoeff, hcoeff,
     quadraticWindow_cutCoefficientRank_eq_of_isNBlkInjective A hC1 hletter hN j]
 
@@ -120,13 +128,21 @@ theorem quadraticPrescribedOBCWindow_eq_physicalCutWindow
     prescribedOBC_window_minimal hletter hC1 hN B hcoeff j.succ
   have hsite := toMatrix_cutSlice_physicalPrefixBasis B p hprev hnext i
   ext a b
-  have hentry := congrFun (congrFun hsite
-    ((prescribedOBCWindowBondEquiv hletter hC1 hN B hcoeff j.castSucc).symm a))
-      ((prescribedOBCWindowBondEquiv hletter hC1 hN B hcoeff j.succ).symm b)
-  simpa only [quadraticPrescribedOBCWindow, quadraticPhysicalCutWindow,
-    prescribedOBCWindowCutBases, Module.Basis.reindex_apply,
-    Module.Basis.repr_reindex_apply, Matrix.reindex_apply, Matrix.submatrix_apply,
-    LinearMap.toMatrix_apply] using hentry.symm
+  let e₁ := prescribedOBCWindowBondEquiv hletter hC1 hN B hcoeff j.castSucc
+  let e₂ := prescribedOBCWindowBondEquiv hletter hC1 hN B hcoeff j.succ
+  have key : quadraticPhysicalCutWindow B.coeff
+      (prescribedOBCWindowCutBases hletter hC1 hN B hcoeff) j i a b =
+        LinearMap.toMatrix (physicalPrefixBasis B p.succ hnext)
+          (physicalPrefixBasis B p.castSucc hprev) (cutSlice B.coeff p.val i)
+          (e₁.symm a) (e₂.symm b) := by
+    exact toMatrix_reindex_reindex_apply
+      (physicalPrefixBasis B (reconstructionCut hN j.succ)
+        (prescribedOBC_window_minimal hletter hC1 hN B hcoeff j.succ))
+      (physicalPrefixBasis B (reconstructionCut hN j.castSucc)
+        (prescribedOBC_window_minimal hletter hC1 hN B hcoeff j.castSucc))
+      e₂ e₁ (cutSlice B.coeff (L + j.val) i) a b
+  rw [key, hsite]
+  rfl
 
 /-- The prescribed actual bounded OBC window admits a quadratic
 solution, constructed from the C1 TI representation of its actual state.
@@ -139,7 +155,7 @@ theorem exists_quadraticSolution_prescribedOBCWindow
     (hcoeff : B.coeff = mpv A) :
     Nonempty (QuadraticReconstructionSolution
       (quadraticPrescribedOBCWindow hletter hC1 hN B hcoeff)) := by
-  let : NeZero D := prescribedOBCBondNeZero B
+  have : NeZero D := prescribedOBCBondNeZero B
   rw [quadraticPrescribedOBCWindow_eq_physicalCutWindow]
   have hsource : ∀ (ψ : (Fin N → Fin d) → ℂ), ψ = mpv A →
       ∀ C : (j : Fin (D ^ 4 + 1)) →

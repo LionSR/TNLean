@@ -118,7 +118,7 @@ theorem exists_quadraticSolution_canonicalOBCWindow
   classical
   have hnonzero : ∃ σ : Fin N → Fin d, mpv A σ ≠ 0 := by
     by_contra h
-    push_neg at h
+    push Not at h
     apply coeff_ne_zero_of_faithful_density B Λ hzero hstep hfaithful
     rw [hcoeff]
     exact funext h

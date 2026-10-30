@@ -44,12 +44,16 @@ Source: PGVWC07, Theorem thm:OBC-Vidal, condition 3, lines 449--456. -/
 theorem physicalPrefixMatrix_zero_gram :
     (physicalPrefixMatrix B 0)ᴴ * physicalPrefixMatrix B 0 = 1 := by
   classical
-  let : IsEmpty {s : Fin N // s.val < 0} := ⟨fun s ↦ Nat.not_lt_zero _ s.property⟩
+  let : IsEmpty {s : Fin N // s.val < (0 : Fin (N + 1)).val} :=
+    ⟨fun s ↦ Nat.not_lt_zero _ s.property⟩
   let : Unique (Fin (B.bondDim 0)) := Equiv.unique (finCongr B.left_dim)
   ext q r
   have hqr : q = r := Subsingleton.elim _ _
   subst r
-  simp [Matrix.mul_apply, Matrix.conjTranspose_apply, physicalPrefixMatrix_zero]
+  rw [Matrix.mul_apply, Matrix.one_apply_eq]
+  have h1 : ∀ u, physicalPrefixMatrix B 0 u q = 1 := fun u ↦ physicalPrefixMatrix_zero B u q
+  change ∑ u, star (physicalPrefixMatrix B 0 u q) * physicalPrefixMatrix B 0 u q = 1
+  rw [Fintype.sum_unique, h1, star_one, one_mul]
 
 /-- The supplied canonical densities are the actual physical prefix
 Grams, derived from their source recursion and scalar initial boundary.
@@ -82,26 +86,29 @@ theorem physicalSuffixMatrix_step (p : Fin N) (i : Fin d)
               Nat.le_add_right _ _⟩)) := by
     rw [List.ofFn_congr hlen, List.ofFn_succ]
     apply congrArg₂ List.cons
-    · simp only [Fin.val_cast, Fin.val_zero, Nat.add_zero, extendCutSuffix,
-        Nat.not_succ_le_self, dite_false]
-      rfl
+    · simp [extendCutSuffix]
     · apply congrArg List.ofFn
       funext q
       simp only [Fin.val_cast, Fin.val_succ]
       congr 1
-      · exact Fin.ext (by omega)
+      · exact Fin.ext (by dsimp only; omega)
       · simp only [extendCutSuffix,
           show p.val + 1 ≤ p.val + (q.val + 1) by omega, dite_true]
         apply congrArg v
-        exact Subtype.ext (Fin.ext (by omega))
-  change (List.ofFn _).prod (Fin.castLE (B.bondDim_le p.castSucc) a)
-    ⟨0, B.bondBound_pos⟩ = _
+        exact Subtype.ext (Fin.ext (by dsimp only; omega))
+  change (List.ofFn (fun q : Fin (N - p.val) ↦
+      B.zeroPad ⟨p.val + q.val, by have := q.isLt; omega⟩
+        (extendCutSuffix p.val i v
+          ⟨⟨p.val + q.val, by have := q.isLt; omega⟩, Nat.le_add_right _ _⟩))).prod
+    (Fin.castLE (B.bondDim_le p.castSucc) a) ⟨0, B.bondBound_pos⟩ = _
   rw [hword, List.prod_cons, Matrix.mul_apply]
-  rw [Fin.sum_castLE_extend_zero _ (B.bondDim_le p.succ)]
+  change ∑ j, Matrix.zeroPad Q (B.tensor p i) (Fin.castLE (B.bondDim_le p.castSucc) a) j * _ = _
+  rw [Matrix.mul_apply, Fin.sum_castLE_extend_zero
+    (fun j ↦ B.tensor p i a j * physicalSuffixMatrix B p.succ j v) (B.bondDim_le p.succ)]
   apply Finset.sum_congr rfl
   intro γ _
   split_ifs with hγ
-  · rw [Matrix.zeroPad_apply_of_lt _ a.isLt hγ]
+  · rw [Matrix.zeroPad_apply_of_lt (β := γ) _ a.isLt hγ]
     rfl
   · rw [Matrix.zeroPad_apply_eq_zero _ (by intro h; exact hγ h.2),
       zero_mul]
@@ -110,10 +117,10 @@ theorem physicalSuffixMatrix_step (p : Fin N) (i : Fin d)
 entry equal to one. Source: PGVWC07, scalar OBC boundaries, lines 419--429. -/
 theorem physicalSuffixMatrix_last (a : Fin (B.bondDim (Fin.last N)))
     (v : CutSuffixConfig d N N) : physicalSuffixMatrix B (Fin.last N) a v = 1 := by
-  have ha : a.val = 0 := by have := a.isLt; rw [B.right_dim] at this; omega
+  have ha : a.val = 0 := by have := a.isLt; have := B.right_dim; omega
   simp only [physicalSuffixMatrix, Fin.val_last, Nat.sub_self, List.ofFn_zero,
-    List.prod_nil, Matrix.one_apply]
-  exact if_pos (Fin.ext ha)
+    List.prod_nil]
+  simp [Matrix.one_apply, Fin.ext_iff, ha]
 
 /-- The actual suffix Grams satisfy the backward canonical recursion.
 Source: PGVWC07, Theorem thm:OBC-Vidal, condition 1, lines 444--456. -/
