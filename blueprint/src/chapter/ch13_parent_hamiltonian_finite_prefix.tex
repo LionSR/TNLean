@@ -7,7 +7,7 @@
         MPSTensor.exists_mpvState_eq_of_cyclic_invariant,
         MPSTensor.mpvState_cyclic_invariant,
         MPSTensor.exists_mpvState_eq_iff_cyclic_invariant}
-    \notready
+    \leanok
     \uses{thm:seqanc_cut_rank_attained, thm:seqanc_cut_rank_bounds,
         thm:pgvwc07_site_independent_matrices}
     Let $N>0$ and let $\psi\ne0$ be a finite vector satisfying
@@ -18,8 +18,8 @@
     Thus a nonzero positive-length vector is representable precisely
     when its cyclic momentum is zero.
 \end{lemma}
-\begin{proof}
-    The actual finite OBC construction supplies a chain with bond bound
+\begin{proof}\leanok
+    The finite OBC construction supplies a chain with bond bound
     $d^{\lfloor N/2\rfloor}$. Apply the cyclic block averaging of
     \cite[Theorem~3]{PerezGarcia2007Matrix}; exact invariance makes the
     average equal to the original vector. The converse is cyclicity
@@ -29,23 +29,34 @@
 \begin{lemma}[Unused periodic bond coordinates]
     \label{lem:periodic_uniform_bond_padding}
     \lean{MPSTensor.padBond, MPSTensor.mpv_padBond, MPSTensor.mpvState_padBond}
-    \notready
+    \leanok
     \uses{def:mps_tensor}
-    Extending all site matrices by zero from dimension $D$ to any
-    dimension $K\ge D$ preserves every periodic vector of positive
-    length. The assertion excludes the empty word, whose trace is the
+    Let $\widetilde A^i=A^i\oplus0_{K-D}$ be the extension of every site
+    matrix by zero from dimension $D$ to a dimension $K\ge D$. Then for
+    every $N>0$,
+    \begin{align}
+        V^{(N)}(\widetilde A) & =V^{(N)}(A).
+        \label{eq:periodic_uniform_bond_padding}
+    \end{align}
+    The assertion excludes the empty word, whose trace is the
     bond dimension.
 \end{lemma}
-\begin{proof}
-    Zero extension preserves products through a retained intermediate
-    bond. Induct on nonempty words and take the trace; all added
-    diagonal entries are zero.
+\begin{proof}\leanok
+    For matrices $X,Y$ of dimension $D$,
+    $(X\oplus0_{K-D})(Y\oplus0_{K-D})=XY\oplus0_{K-D}$. Induction on
+    nonempty words gives
+    $\widetilde A^{\sigma_0}\cdots\widetilde A^{\sigma_{N-1}}
+    =A^{\sigma_0}\cdots A^{\sigma_{N-1}}\oplus0_{K-D}$, so
+    \begin{align}
+        \tr\bigl(\widetilde A^{\sigma_0}\cdots\widetilde A^{\sigma_{N-1}}\bigr)
+         & =\tr\bigl(A^{\sigma_0}\cdots A^{\sigma_{N-1}}\bigr).
+    \end{align}
 \end{proof}
 
 \begin{lemma}[One common bond size on the exact cyclic ground sector]
     \label{lem:uniform_bond_cyclic_ground_sector}
     \lean{MPSTensor.exists_uniform_bond_on_cyclic_ground_sector}
-    \notready
+    \leanok
     \uses{thm:eventual_mps_prime_length_dichotomy,
         lem:periodic_finite_cyclic_representation, lem:periodic_uniform_bond_padding}
     Suppose the permitted ground spaces $\ker H_M$, $M\ge L$, are
@@ -59,18 +70,18 @@
     every such line at $M<M_0$. The representing tensor may depend
     on $M$.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     At long lengths extend $B$ by unused bond coordinates. At a short
     length use the preceding finite representation, whose dimension is
     $M d^{\lfloor M/2\rfloor}\le M_0d^{M_0}<K$, and then extend it.
-    The actual nonzero ground vector and uniqueness identify the whole
+    The nonzero ground vector and uniqueness identify the whole
     ground line.
 \end{proof}
 
 \begin{lemma}[Exact finite-prefix criterion for an all-volume family]
     \label{lem:uniform_bond_finite_prefix_criterion}
     \lean{MPSTensor.uniform_bond_family_iff_short_cyclic_ground}
-    \notready
+    \leanok
     \uses{lem:uniform_bond_cyclic_ground_sector}
     Under the preceding assumptions, the following are equivalent:
     \begin{enumerate}
@@ -89,7 +100,7 @@
     representation conventions is recorded in
     \cite{gap:spwc10_ground_state_dichotomy_quantifiers}.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     The first condition supplies nonzero periodic trace vectors, and
     trace cyclicity proves the second. Conversely use the preceding
     common-size construction at the short volumes and the already
@@ -104,7 +115,7 @@
     \lean{MPSTensor.mpv_apply_of_bondOne,
         MPSTensor.exists_mpv_ne_zero_of_bondOne,
         MPSTensor.mpvState_ne_zero_of_normal_bondOne}
-    \notready
+    \leanok
     For a bond-one tensor,
     \[
         V^{(M)}(B)_\sigma=\prod_{j=1}^M B_{\sigma_j}.
@@ -113,21 +124,22 @@
     length. In particular this holds for every normal bond-one tensor;
     no finite-volume nonvanishing hypothesis is needed.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     The unique virtual index leaves one product in the trace expansion.
     Choose the same nonzero letter at every physical site. Its product
     is nonzero. Normality supplies such a letter.
 \end{proof}
 
-\begin{lemma}[Actual short ground vectors in the product-state branch]
+\begin{lemma}[Short ground vectors in the product-state branch]
     \label{lem:spwc_bond_one_finite_prefix_ground}
     \lean{MPSTensor.exists_cyclic_ground_of_normal_bondOne_local_kernel,
         MPSTensor.uniform_bondOne_ground_family_of_normal_local_kernel}
-    \notready
-    \uses{lem:spwc_bond_one_all_volume_nonvanishing}
+    \leanok
+    \uses{lem:spwc_bond_one_all_volume_nonvanishing, lem:local_mps_kernel_all_volumes,
+        lem:periodic_finite_cyclic_representation}
     Suppose the normal tensor in the eventual fixed-state construction
     has bond dimension one. Retain the derived inclusion of its
-    length-$L$ local MPS space in $\ker h$. Then its actual periodic
+    length-$L$ local MPS space in $\ker h$. Then its periodic
     vector is a nonzero zero-momentum ground vector at every positive
     $M\geq L$, including the whole finite prefix. If each such
     Hamiltonian has a one-dimensional zero-energy space, the same
@@ -136,34 +148,41 @@
     This treats the product-state branch only; the general short-volume
     obligation remains in \cite{gap:spwc10_ground_state_dichotomy_quantifiers}.
 \end{lemma}
-\begin{proof}
-    The preceding lemma proves actual nonvanishing at every positive
-    length. The local-kernel inclusion annihilates each cyclic local
-    term on the periodic vector, so the full energy is zero. Cyclicity
-    of the trace gives exact zero momentum. Global uniqueness then
-    identifies the kernel with the line of this explicit product vector.
+\begin{proof}\leanok
+    The preceding lemma gives $V^{(M)}(B)\ne0$ for every $M>0$. Since
+    $G_L(B)\subseteq\ker h$, Lemma~\ref{lem:local_mps_kernel_all_volumes}
+    gives $h_iV^{(M)}(B)=0$ for every cyclic translate, so
+    \begin{align}
+        H_MV^{(M)}(B) & =\sum_{i=0}^{M-1}h_iV^{(M)}(B)=0.
+    \end{align}
+    Cyclicity of the trace gives
+    $V^{(M)}(B)_{\sigma(\cdot+s)}=V^{(M)}(B)_\sigma$ for every shift $s$.
+    When $\dim\ker H_M=1$, the nonzero vector $V^{(M)}(B)$ spans the
+    kernel.
 \end{proof}
 
-\begin{lemma}[Product-state completion from one actual prime-length ground vector]
+\begin{lemma}[Product-state completion from one prime-length ground vector]
     \label{lem:spwc_bond_one_prime_ground_family}
     \lean{MPSTensor.exists_uniform_bondOne_ground_family_of_prime_length_bound}
-    \notready
-    \uses{lem:spwc_bond_one_finite_prefix_ground}
+    \leanok
+    \uses{lem:spwc_bond_one_finite_prefix_ground,
+        lem:prime_small_representation_fixed_tensor}
     Let $h$ be the one fixed positive interaction of range $L$, and
     assume every permitted periodic Hamiltonian has a one-dimensional
-    zero-energy space. If one prime $N\geq L+4$ has an actual nonzero
+    zero-energy space. If one prime $N\geq L+4$ has a nonzero
     bond-one MPS ground representation, then one bond-one tensor
     generates all permitted positive-volume ground spaces, including
     the entire finite prefix. The normal tensor and local-kernel
     inclusion are derived rather than supplied.
 \end{lemma}
-\begin{proof}
-    Apply the actual prime-length extraction, retaining its normality
+\begin{proof}\leanok
+    Apply the prime-length extraction, retaining its normality
     and local-kernel inclusion. Its positive retained dimension is at
     most the input dimension one, hence equals one. Apply the preceding
     product-state construction at every positive volume. The numerical
-    threshold is the general fifth-degree threshold specialized to
-    bond dimension one.
+    threshold is the general fifth-degree threshold at $D=1$:
+    $q(1)=(1^2+1)^2=4$ and $3(1-1)(q(1)+1)=0$, so
+    $\max\{q(1),3(1-1)(q(1)+1)\}=4$.
 \end{proof}
 
 \subsection{Fifth-root Weyl word ingredients}
@@ -179,14 +198,15 @@
         MPSTensor.ShortMomentum.exists_word_eight_of_charge,
         MPSTensor.ShortMomentum.exists_word_of_eight_le_of_charge,
         MPSTensor.ShortMomentum.exists_central_counts_of_eight_le}
-    \notready
+    \leanok
     Give three letters the charges $(1,0)$, $(0,1)$ and $(-1,-1)$
     in $(\mathbb Z/5\mathbb Z)^2$. At fixed degree, the total charge
     determines all three letter-count residues. At degree seven the
-    reached charges are exactly the nonzero charges; at degree eight
-    all charges occur. Every degree at least eight admits central counts.
+    reached charges are exactly the nonzero charges; at every degree
+    at least eight all charges occur. Every degree at least eight admits
+    central counts.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     The two charges and the total degree determine three times the
     third count, and three has inverse two modulo five. The least
     residues at degree seven sum to two, seven or twelve; the last
@@ -202,21 +222,21 @@
         MPSTensor.ShortMomentum.chargedWeyl_mul,
         MPSTensor.ShortMomentum.threeLetterTensor,
         MPSTensor.ShortMomentum.evalWord_threeLetterTensor}
-    \notready
+    \leanok
     \uses{lem:short_volume_weyl_charges}
-    Fix a primitive fifth root $q$ and put
+    Fix a fifth root of unity $q$ and put
     $W(u,v)_{ij}=q^{ui}\mathbf1_{j=i-v}$. Then
     \[
         W(a,b)W(c,d)=q^{-cb}W(a+c,b+d).
     \]
-    The actual three-letter tensor
+    The three-letter tensor
     $(W(1,0),W(0,1),q^{-1}W(-1,-1))$ evaluates every word to a
     nonzero scalar multiple of the matrix indexed by its charge.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     Each matrix row has one retained intermediate index.
     Multiplying its two character values gives the displayed cocycle.
-    Induction on actual physical words records the accumulated exponent.
+    Induction on physical words records the accumulated exponent.
 \end{proof}
 
 \begin{lemma}[Full span at degree eight and vanishing trace at degree seven]
@@ -229,15 +249,16 @@
         MPSTensor.ShortMomentum.trace_evalWord_threeLetterTensor_seven,
         MPSTensor.ShortMomentum.not_isNBlkInjective_threeLetterTensor_seven,
         MPSTensor.ShortMomentum.exists_trace_evalWord_ne_zero_of_eight_le}
-    \notready
+    \leanok
     \uses{lem:short_volume_weyl_charges, lem:short_volume_weyl_products}
-    The actual three-letter tensor is injective at every degree at least eight and
+    Let $q$ be a primitive fifth root of unity.
+    The three-letter tensor is injective at every degree at least eight and
     therefore normal. Every degree-seven word is traceless, so it is
     not injective at degree seven. At every degree at least eight its
     periodic trace vector is nonzero. These matrix facts do not classify
     the ground spaces of any proposed fixed local interaction.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     The finite Fourier identity
     \[
         \sum_u q^{-ui}W(u,i-j)=5E_{ij}
@@ -249,26 +270,26 @@
     the identity and hence a nonzero trace coefficient.
 \end{proof}
 
-\begin{lemma}[Actual homogeneous Weyl-letter relations]
+\begin{lemma}[Homogeneous Weyl-letter relations]
     \label{lem:short_volume_weyl_letter_relations}
     \lean{MPSTensor.ShortMomentum.chargedWeyl_commute,
         MPSTensor.ShortMomentum.threeLetterTensor_commute,
         MPSTensor.ShortMomentum.threeLetterTensor_cyclic_commute,
         MPSTensor.ShortMomentum.threeLetterTensor_pow_five,
         MPSTensor.ShortMomentum.evalWord_five_letter_transfer}
-    \notready
+    \leanok
     \uses{lem:short_volume_weyl_products}
-    The actual letters $X,Y,Z$ satisfy
+    The letters $X,Y,Z$ satisfy
     \[
         XY=qYX,\qquad YZ=qZY,\qquad ZX=qXZ,
         \qquad X^5=Y^5=Z^5=1.
     \]
     Thus replacing five consecutive equal letters by five copies of
-    another letter preserves the actual matrix word in every left
+    another letter preserves the matrix word in every left
     and right context. Completeness of these relations for periodic
     local constraints is not asserted.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     The charged multiplication formula gives the commutator phase as
     the symplectic pairing. Each cyclic adjacent pair has pairing one.
     A five-letter constant word has zero charge and zero accumulated
@@ -282,18 +303,18 @@
         MPSTensor.ShortMomentum.chargeBoundary,
         MPSTensor.ShortMomentum.mem_groundSpace_threeLetterTensor_iff,
         MPSTensor.ShortMomentum.groundSpace_threeLetterTensor_same_charge}
-    \notready
+    \leanok
     \uses{lem:short_volume_weyl_products}
     Set $D_{u,v}=q^{-uv}W(-u,-v)/5$. These matrices satisfy
     $\operatorname{tr}(W(p)D_q)=\mathbf1_{p=q}$.
-    At every length, the actual local boundary MPS space consists
+    At every length, the local boundary MPS space consists
     exactly of the vectors whose coefficients are the accumulated
     word phase times an arbitrary function of the total charge.
     This is a local-space characterization; no global periodic
     intersection conclusion is asserted.
 \end{lemma}
-\begin{proof}
-    Multiply the actual charged matrices and use the vanishing trace
+\begin{proof}\leanok
+    Multiply the charged matrices and use the vanishing trace
     at every nonzero charge. The two central phases cancel.
     Given a function $g$ of the charge, the boundary matrix
     $\sum_p g(p)D_p$ represents the asserted coefficient family.
@@ -301,25 +322,25 @@
     its trace pairing with the charged matrices.
 \end{proof}
 
-\begin{lemma}[Actual charge comparison across a cyclic cut]
+\begin{lemma}[Charge comparison across a cyclic cut]
     \label{lem:short_volume_weyl_cyclic_phase}
     \lean{MPSTensor.ShortMomentum.letterPairing,
         MPSTensor.ShortMomentum.wordPhase_append,
         MPSTensor.ShortMomentum.wordPhase_cons_sub_snoc,
         MPSTensor.ShortMomentum.exists_charge_comparison_of_cyclic_agreement}
-    \notready
+    \leanok
     \uses{lem:short_volume_weyl_local_spaces}
     Moving a first letter of charge $(a,b)$ to the end changes the
-    actual scalar exponent by $av-ub$, where $(u,v)$ is the total charge.
-    If two actual local boundary vectors agree across that cyclic cut,
+    scalar exponent by $av-ub$, where $(u,v)$ is the total charge.
+    If two local boundary vectors agree across that cyclic cut,
     their charge functions satisfy the corresponding character relation.
-    The relation is derived from their actual coefficients.
+    The relation is derived from their coefficients.
 \end{lemma}
-\begin{proof}
-    Concatenation gives the same cocycle as actual matrix multiplication.
+\begin{proof}\leanok
+    Concatenation gives the same cocycle as matrix multiplication.
     The first-letter and last-letter expressions differ by the displayed
     pairing. Cancel the nonzero character of the remaining word in the
-    two actual local-space parametrizations.
+    two local-space parametrizations.
 \end{proof}
 
 \begin{lemma}[Zero main-sector periodic space at length seven]
@@ -328,25 +349,25 @@
         MPSTensor.ShortMomentum.eq_zero_of_seven_cyclic_agreement,
         MPSTensor.ShortMomentum.eq_zero_of_seven_cyclic_local_membership,
         MPSTensor.ShortMomentum.chainGroundSpace_threeLetterTensor_seven_eq_bot}
-    \notready
+    \leanok
     \uses{lem:short_volume_weyl_cyclic_phase, lem:short_volume_weyl_charges}
-    The actual seven-site periodic parent space formed from the
+    The seven-site periodic parent space formed from the
     seven-site local boundary space of the three-letter Weyl tensor
     is zero. More precisely, two seven-site boundary vectors agreeing
     across the cyclic cut must both vanish. This is an exceptional
     short-volume obstruction; long-volume uniqueness remains separate.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     Each of the 24 noncentral charges has two explicit degree-seven words
     whose first letters have different pairings with that charge.
     The preceding cyclic comparison would give two distinct character
     values times the same charge coefficient. Thus that coefficient
     vanishes. The central charge never occurs at this degree, so every
-    actual vector coefficient is zero. The windows starting at zero
-    and one supply the two required actual local boundary vectors.
+    vector coefficient is zero. The windows starting at zero
+    and one supply the two required local boundary vectors.
 \end{proof}
 
-\begin{lemma}[All-degree cyclic closure of actual boundary spaces]
+\begin{lemma}[All-degree cyclic closure of boundary spaces]
     \label{lem:short_volume_weyl_global_boundary_closure}
     \lean{MPSTensor.ShortMomentum.exists_six_config_of_charge,
         MPSTensor.ShortMomentum.exists_distinct_eight_cyclic_phases,
@@ -354,69 +375,69 @@
         MPSTensor.ShortMomentum.exists_distinct_cyclic_phases,
         MPSTensor.ShortMomentum.exists_smul_mpv_of_cyclic_agreement,
         MPSTensor.ShortMomentum.mem_mpvSubmodule_of_cyclic_local_membership}
-    \notready
+    \leanok
     \uses{lem:short_volume_weyl_cyclic_phase,
         lem:short_volume_weyl_seven_periodic_zero}
-    At every degree at least seven, two actual global boundary vectors
-    agreeing across a cyclic cut close to the actual periodic trace line.
-    This conclusion presupposes only their actual global boundary-space
+    At every degree at least seven, two global boundary vectors
+    agreeing across a cyclic cut close to the periodic trace line.
+    This conclusion presupposes only their global boundary-space
     membership and their coefficient agreement. It does not state that
     seven-site local constraints already give global membership.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     Explicit word pairs detect distinct cyclic phases at every noncentral
     charge in degrees seven, eight and nine. Appending one copy of each
     letter preserves their charge and extends the witnesses by three
     sites, covering every larger degree. Hence all noncentral charge
     coefficients vanish. The remaining central coefficient is the
-    actual periodic trace coefficient divided by five.
+    periodic trace coefficient divided by five.
 \end{proof}
 
-\begin{lemma}[Actual long-window open intersection]
+\begin{lemma}[Long-window open intersection]
     \label{lem:short_volume_weyl_long_intersection}
     \lean{MPSTensor.ShortMomentum.groundSpace_intersection_threeLetterTensor_of_eight_le}
-    \notready
+    \leanok
     \uses{lem:short_volume_weyl_normality, lem:short_volume_weyl_letter_relations}
     If the common middle of two overlapping boundary windows has at
-    least eight sites, their actual left and right constraints imply
+    least eight sites, their left and right constraints imply
     membership in the next boundary space. No intersection identity
     is supplied. The steps producing eight and nine sites remain separate.
 \end{lemma}
-\begin{proof}
-    Fullness of the actual middle word span makes trace pairing
+\begin{proof}\leanok
+    Fullness of the middle word span makes trace pairing
     injective and gives the required intertwining boundary matrices.
-    The fourth power of the first physical letter is its actual inverse.
+    The fourth power of the first physical letter is its inverse.
     Apply the standard one-sided reconstruction with this inverse and
     zero coefficients on the other two physical letters.
 \end{proof}
 
-\begin{lemma}[Actual endpoint charge coefficients on an overlap]
+\begin{lemma}[Endpoint charge coefficients on an overlap]
     \label{lem:short_volume_weyl_overlap_charge_coefficients}
     \lean{MPSTensor.ShortMomentum.exists_overlap_charge_coefficients}
-    \notready
+    \leanok
     \uses{lem:short_volume_weyl_cyclic_phase, lem:short_volume_weyl_local_spaces}
     Suppose every restriction obtained by fixing the first or last site
     of a vector lies in the corresponding boundary MPS space.
     There are functions of the total charge for each fixed endpoint
-    whose product with the actual full-word phase equals each physical
+    whose product with the full-word phase equals each physical
     coefficient. Their equality on overlapping interior words is not
     supplied as a premise. Values at unreachable endpoint charges
     may remain arbitrary.
 \end{lemma}
-\begin{proof}
-    Apply the exact actual local-space characterization to each endpoint
+\begin{proof}\leanok
+    Apply the exact local-space characterization to each endpoint
     restriction. Subtract that endpoint's charge, and cancel its scalar
-    exponent together with the actual concatenation cocycle. This gives
+    exponent together with the concatenation cocycle. This gives
     the asserted normalization by the full-word phase on both sides.
 \end{proof}
 
 \begin{lemma}[Charge bridges in the short overlaps]
     \label{lem:short_weyl_overlap_charge_bridges}
-    \lean{MPSTensor.ShortMomentum.exists_six_overlap_charge_bridge}
-    \lean{MPSTensor.ShortMomentum.exists_seven_overlap_charge_bridge}
-    \lean{MPSTensor.ShortMomentum.eq_of_six_overlap_charge_edges}
-    \lean{MPSTensor.ShortMomentum.eq_of_seven_overlap_charge_edges}
-    \notready
+    \lean{MPSTensor.ShortMomentum.exists_six_overlap_charge_bridge,
+        MPSTensor.ShortMomentum.exists_seven_overlap_charge_bridge,
+        MPSTensor.ShortMomentum.eq_of_six_overlap_charge_edges,
+        MPSTensor.ShortMomentum.eq_of_seven_overlap_charge_edges}
+    \leanok
     Write $c_0=(1,0)$, $c_1=(0,1)$ and $c_2=(-1,-1)$ in
     $(\mathbb Z/5\mathbb Z)^2$, and fix a total charge $p$.
     For six-letter middle words, call an edge $(i,j)$ allowed when
@@ -429,7 +450,7 @@
     on every active pair in the first case and every pair in the second.
 \end{lemma}
 \begin{proof}
-    \notready
+    \leanok
     For each of the twenty-five charges and each pair of relevant endpoints,
     choose letters $k,l$ with allowed edges $(i,k),(l,k),(l,j)$.
     The finite residue identities give all the witnesses.
@@ -438,10 +459,14 @@
 
 \begin{lemma}[The two short Weyl intersections]
     \label{lem:short_weyl_eight_nine_intersections}
-    \lean{MPSTensor.ShortMomentum.groundSpace_intersection_threeLetterTensor_eight}
-    \lean{MPSTensor.ShortMomentum.groundSpace_intersection_threeLetterTensor_nine}
-    \notready
-    \uses{lem:short_weyl_overlap_charge_bridges}
+    \lean{MPSTensor.ShortMomentum.groundSpace_intersection_threeLetterTensor_eight,
+        MPSTensor.ShortMomentum.groundSpace_intersection_threeLetterTensor_nine}
+    \leanok
+    \uses{lem:short_weyl_overlap_charge_bridges,
+        lem:short_volume_weyl_overlap_charge_coefficients,
+        lem:short_volume_weyl_local_spaces,
+        lem:short_volume_weyl_global_boundary_closure,
+        lem:short_volume_weyl_charges}
     For the three-letter fifth-root Weyl tensor, a vector on eight sites
     whose first and last seven-site coefficient sections belong to the
     respective boundary spaces belongs to the eight-site boundary space.
@@ -449,19 +474,19 @@
     belongs to the nine-site boundary space.
 \end{lemma}
 \begin{proof}
-    \notready
+    \leanok
     Normalize the endpoint charge coefficients by the full-word phase.
-    Every actual middle word equates the two endpoint coefficients at
+    Every middle word equates the two endpoint coefficients at
     its total charge. The charge bridges make these coefficients agree
     with a single function of that charge.
-    On eight sites, an actual first letter is active because its remaining
+    On eight sites, a first letter is active because its remaining
     seven-site word cannot have zero charge. Choose any active endpoint
     as the reference. On nine sites every endpoint can serve as reference.
     Multiplying the resulting common charge function by the word phase
     gives the full boundary-space representation.
 \end{proof}
 
-\begin{lemma}[Actual main-sector kernels of the seven-site Weyl interaction]
+\begin{lemma}[Main-sector kernels of the seven-site Weyl interaction]
     \label{lem:short_volume_weyl_periodic_kernel}
     \lean{MPSTensor.ShortMomentum.groundSpace_restriction_intersection_threeLetterTensor,
         MPSTensor.ShortMomentum.mem_groundSpace_of_seven_contiguous_constraints,
@@ -470,25 +495,27 @@
         MPSTensor.ShortMomentum.ker_parentHamiltonianES_threeLetterTensor_eq_span,
         MPSTensor.ShortMomentum.ker_parentHamiltonianES_threeLetterTensor_seven_eq_bot,
         MPSTensor.ShortMomentum.mpvState_threeLetterTensor_ne_zero}
-    \notready
-    \uses{lem:short_volume_weyl_global_boundary_closure,
+    \leanok
+    \uses{lem:short_volume_weyl_normality,
+        lem:short_volume_weyl_seven_periodic_zero,
+        lem:short_volume_weyl_global_boundary_closure,
         lem:short_volume_weyl_long_intersection,
         lem:short_weyl_eight_nine_intersections}
-    Let the actual local interaction be the orthogonal projection onto
+    Let the local interaction be the orthogonal projection onto
     the complement of the seven-site boundary space of the three-letter
-    Weyl tensor. Its actual periodic Hamiltonian has zero kernel at
+    Weyl tensor. Its periodic Hamiltonian has zero kernel at
     length seven. At every length $N\ge8$, its kernel is exactly the
-    line generated by its actual periodic trace vector, which is nonzero.
+    line generated by its periodic trace vector, which is nonzero.
     No open-chain intersection or global-space premise is supplied.
     This statement concerns the main physical sector alone.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     The two short overlap calculations and the full-span reconstruction
     give every one-step boundary-space intersection from range seven.
-    Contiguous-window induction yields actual global boundary membership.
-    Cyclic translation preserves the actual local constraints, so the
+    Contiguous-window induction yields global boundary membership.
+    Cyclic translation preserves the local constraints, so the
     translated vector also lies in the global boundary space. Apply
-    the actual cyclic closure theorem. Finally transport the existing
+    the cyclic closure theorem. Finally transport the existing
     equality between cyclic constraints and the parent-Hamiltonian kernel
     to the Euclidean realization. The explicit central words prove
     nonvanishing at every length at least eight.
@@ -506,25 +533,25 @@ matrix product representations.
 \begin{definition}[The seven-site two-sector interaction]
     \label{def:seven_sector_interaction}
     \lean{MPSTensor.ShortMomentum.sevenSectorInteraction}
-    \notready
+    \leanok
     \uses{lem:short_volume_weyl_local_spaces,def:pvbs_pure_window_interaction}
     Split the five physical letters into three Weyl letters and two particle
     letters. Let $E_R$ and $F_R$ be their word embeddings. For parameters
     $\zeta,q\in\mathbb C$, define $h$ to be the orthogonal projection onto
     the complement of
     $E_7\mathcal G_7(\zeta)+F_7\operatorname{span}\{\Psi_7(q)\}$.
-    Here $\mathcal G_7(\zeta)$ is the actual three-letter Weyl boundary space.
+    Here $\mathcal G_7(\zeta)$ is the three-letter Weyl boundary space.
 \end{definition}
 
 \begin{lemma}[Positivity of the seven-site interaction]
     \label{lem:seven_sector_interaction_positive}
     \lean{MPSTensor.ShortMomentum.sevenSectorInteraction_isPositive}
-    \notready
+    \leanok
     \uses{def:seven_sector_interaction}
     The interaction $h$ is positive for all $\zeta,q\in\mathbb C$.
 \end{lemma}
 \begin{proof}
-    \notready
+    \leanok
     It is an orthogonal projection.
 \end{proof}
 
@@ -532,30 +559,30 @@ matrix product representations.
     \label{lem:seven_sector_periodic_kernels}
     \lean{MPSTensor.ShortMomentum.ker_sevenSectorHamiltonian_of_eight_le}
     \lean{MPSTensor.ShortMomentum.ker_sevenSectorHamiltonian_seven}
-    \notready
+    \leanok
     \uses{def:seven_sector_interaction,lem:physical_sum_full_kernel,
         lem:short_volume_weyl_periodic_kernel,lem:pvbs_pure_window_large_kernel,
         lem:pvbs_matching_volume_kernel}
     Suppose $\zeta$ is a primitive fifth root of unity, and let
-    $H_M=\sum_i h_i$ be the actual periodic Hamiltonian of $h$.
+    $H_M=\sum_i h_i$ be the periodic Hamiltonian of $h$.
     If $q\ne0$ and $M\ge8$, then
     $\ker H_M=\operatorname{span}\{E_M\psi_M(\zeta)\}$, where
-    $\psi_M(\zeta)$ is the actual Weyl trace vector.
+    $\psi_M(\zeta)$ is the Weyl trace vector.
     If $q^7=1$, then
     $\ker H_7=\operatorname{span}\{F_7\Psi_7(q)\}$.
 \end{lemma}
 \begin{proof}
-    \notready
-    The full physical-sector kernel identity gives the sum of the actual
+    \leanok
+    The full physical-sector kernel identity gives the sum of the
     component kernels. The Weyl component vanishes at seven sites and is
     its trace line thereafter; the pure particle component is its particle
     line at seven sites and vanishes thereafter.
 \end{proof}
 
-\begin{lemma}[An actual fixed tensor for every larger volume]
+\begin{lemma}[A fixed tensor for every larger volume]
     \label{lem:seven_sector_eventual_fixed_tensor}
     \lean{MPSTensor.ShortMomentum.exists_bond_five_eventual_ground_family_sevenSector}
-    \notready
+    \leanok
     \uses{lem:seven_sector_periodic_kernels,lem:mpv_state_extend_physical}
     Under the same primitive-fifth-root and $q\ne0$ assumptions, there is
     one site-independent tensor with physical dimension five and bond
@@ -563,9 +590,9 @@ matrix product representations.
     for every $M\ge8$.
 \end{lemma}
 \begin{proof}
-    \notready
+    \leanok
     Extend the three-letter Weyl tensor by zero on the two particle letters.
-    Its actual periodic vectors are the isometric extensions of the nonzero
+    Its periodic vectors are the isometric extensions of the nonzero
     Weyl trace vectors, and the kernel identity applies at every larger volume.
 \end{proof}
 
@@ -573,15 +600,15 @@ matrix product representations.
     \label{lem:seven_sector_permitted_ground_lines}
     \lean{MPSTensor.ShortMomentum.exists_nonzero_ground_line_sevenSectorHamiltonian}
     \lean{MPSTensor.ShortMomentum.finrank_ker_sevenSectorHamiltonian}
-    \notready
+    \leanok
     \uses{lem:seven_sector_periodic_kernels}
     Suppose $\zeta$ is a primitive fifth root of unity and $q^7=1$.
-    For every $M\ge7$, there is a nonzero actual vector $v_M$ with
+    For every $M\ge7$, there is a nonzero vector $v_M$ with
     $H_Mv_M=0$ and $\ker H_M=\operatorname{span}\{v_M\}$.
     In particular, $\dim\ker H_M=1$.
 \end{lemma}
 \begin{proof}
-    \notready
+    \leanok
     At seven sites use the embedded particle vector, whose first-excitation
     coefficient is one. At every larger volume use the embedded Weyl trace
     vector. Isometric embedding preserves nonvanishing in both cases.
@@ -591,7 +618,7 @@ matrix product representations.
     \label{lem:seven_sector_no_short_trace_ground}
     \lean{MPSTensor.ShortMomentum.eq_zero_of_sevenSectorHamiltonian_fixed}
     \lean{MPSTensor.ShortMomentum.mpvState_eq_zero_of_sevenSectorHamiltonian_eq_zero}
-    \notready
+    \leanok
     \uses{lem:seven_sector_periodic_kernels,lem:pvbs_matching_volume_no_fixed_ground_vector,
         lem:periodic_finite_cyclic_representation}
     Suppose additionally $q\ne1$. Every vector in $\ker H_7$ fixed exactly
@@ -600,8 +627,8 @@ matrix product representations.
     killed by $H_7$ is zero.
 \end{lemma}
 \begin{proof}
-    \notready
-    Restrict a vector in the embedded particle line to its actual particle
+    \leanok
+    Restrict a vector in the embedded particle line to its particle
     coefficients. Cyclic translation commutes with this restriction, so an
     invariant vector would give an invariant vector in the particle ground
     line, where the nontrivial phase forces it to vanish. Every ordinary
@@ -611,22 +638,22 @@ matrix product representations.
 \begin{lemma}[A fixed frustration-free interaction with a short cyclic phase]
     \label{lem:seven_sector_concrete_interaction}
     \lean{MPSTensor.ShortMomentum.exists_seven_site_interaction_without_short_fixed_ground}
-    \notready
+    \leanok
     \uses{lem:seven_sector_interaction_positive,lem:seven_sector_permitted_ground_lines,
         lem:seven_sector_eventual_fixed_tensor,lem:seven_sector_no_short_trace_ground}
     There exists one positive seven-site interaction on five physical letters
-    with the following properties. At every $M\ge7$ its actual periodic
+    with the following properties. At every $M\ge7$ its periodic
     kernel is one-dimensional and contains a nonzero vector killed by every
-    local term. One actual tensor of bond dimension five spans its nonzero
+    local term. One tensor of bond dimension five spans its nonzero
     periodic ground line at every $M\ge8$. At seven sites, no nonzero ground
     vector is fixed exactly by cyclic translation.
 \end{lemma}
 \begin{proof}
-    \notready
+    \leanok
     Choose $\zeta=\exp(2\pi i/5)$ and $q=\exp(2\pi i/7)$ and use the
     two-sector interaction. The preceding kernel identities give the unique
     nonzero lines. Positivity turns each zero equation for the sum into
     zero equations for every local term. The seventh root has nontrivial
-    cyclic phase, while physical extension gives the actual eventual
+    cyclic phase, while physical extension gives the eventual
     bond-five tensor.
 \end{proof}

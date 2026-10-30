@@ -52,7 +52,7 @@ We follow the cyclic-cut argument of
     \lean{MPSTensor.periodicLocalInteractionES_smul_mpvState_eq_zero_of_wordTupleSpanTop}
     \leanok
     \uses{lem:cyclic_mpv_active_boundary, lem:cyclic_active_local_interaction,
-        def:periodic-fixed-interaction, lem:local_weighted_boundary_annihilation}
+        def:periodic-fixed-interaction}
     Let $A_1,\ldots,A_b$ be tensors with arbitrary finite virtual dimensions,
     let $c_j\in\C$, and let $h$ be any linear operator on $L$ sites of an
     $N$-site ring, with $L\le N$. Assume that the complementary word tuples
@@ -63,11 +63,12 @@ We follow the cyclic-cut argument of
     is not needed for this local assertion.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{lem:cyclic_mpv_active_boundary, lem:cyclic_active_local_interaction}
+    \uses{lem:cyclic_mpv_active_boundary, lem:cyclic_active_local_interaction,
+        lem:local_weighted_boundary_annihilation}
     In the cyclic coordinates at $i$, compose the weighted joint boundary map
     with $h$: for boundaries $X=(X_1,\ldots,X_b)$ in the product algebra put
     \begin{align}
-        T(X) & =(h\otimes I_{N-L})\sum_jc_j\,\Gamma_L^{A_j}(X_j).
+        T(X) & =h\Bigl(\sum_jc_j\,\Gamma_L^{A_j}(X_j)\Bigr).
         \label{eq:arbitrary_local_block_separation_map}
     \end{align}
     By (\ref{eq:cyclic_mpv_active_boundary}) and
@@ -77,7 +78,7 @@ We follow the cyclic-cut argument of
     $T=0$. Evaluating on the boundary $\delta_{jk}X$ supported in block $j$
     gives
     \begin{align}
-        c_j\,(h\otimes I_{N-L})\,\Gamma_L^{A_j}(X) & =0
+        c_j\,h\,\Gamma_L^{A_j}(X) & =0
         \label{eq:arbitrary_local_block_separation_single}
     \end{align}
     for every $X$, which at $X=A_j^\tau$ is the local annihilation equation
@@ -100,7 +101,7 @@ We follow the cyclic-cut argument of
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{lem:arbitrary_local_block_separation}
+    \uses{lem:arbitrary_local_block_separation, thm:weighted_sum_kernel}
     Each $h_i$ is positive. A finite sum of positive operators has kernel equal
     to the intersection of their kernels. Apply
     Lemma~\ref{lem:arbitrary_local_block_separation} to each $h_i$, cancel

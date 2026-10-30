@@ -6,20 +6,20 @@ ring to all sufficiently long rings. The interaction is fixed throughout.
 \begin{lemma}[Local annihilation of every virtual boundary]
     \label{lem:local_weighted_boundary_annihilation}
     \lean{MPSTensor.weighted_boundary_eq_zero_of_periodicLocalInteractionES_eq_zero}
-    \notready
+    \leanok
     \uses{lem:cyclic_mpv_active_boundary}
     Let the complementary tuples of words in $A_1,\ldots,A_b$ span the
     product matrix algebra at length $N-L$, with $L\le N$, and let $c_j\in\C$.
-    If a local translate $h_i$ annihilates $\sum_jc_jV^{(N)}(A_j)$, then
+    If a local translate $h_i$ annihilates $\sum_jc_jV^{(N)}(A_j)$, then for
+    every $j$ and every virtual matrix $X$,
     \begin{align}
-        c_jh\Gamma_L^{A_j}(X)=0
-        \qquad\text{for every }j\text{ and every virtual matrix }X.
+        c_jh\Gamma_L^{A_j}(X) & =0.
         \label{eq:local_weighted_boundary_annihilation}
     \end{align}
     The operator $h$ may be any linear operator, and the coefficients may vanish.
 \end{lemma}
-\begin{proof}
-    \uses{lem:cyclic_mpv_active_boundary}
+\begin{proof}\leanok
+    \uses{lem:cyclic_mpv_active_boundary, lem:cyclic_active_local_interaction}
     Compose the joint boundary map with $h$, extend its vanishing from the
     spanning tuples to the whole product algebra, and evaluate on a boundary
     supported in one block.
@@ -29,18 +29,19 @@ ring to all sufficiently long rings. The interaction is fixed throughout.
     \label{lem:finite_volume_local_kernel_inclusion}
     \lean{MPSTensor.boundary_eq_zero_of_periodicInteractionHamiltonianES_eq_zero,
         MPSTensor.groundSpaceES_le_ker_of_periodicInteractionHamiltonianES_eq_zero}
-    \notready
+    \leanok
     \uses{lem:local_weighted_boundary_annihilation, def:periodic-fixed-interaction}
     Suppose $N>0$, $L\le N$, $h\ge0$, and every $c_j\ne0$. If the length-$N-L$
     word tuples span the product matrix algebra and
-    $H_N\sum_jc_jV^{(N)}(A_j)=0$, then
+    $H_N\sum_jc_jV^{(N)}(A_j)=0$, then for every $j$ and every virtual
+    matrix $X$,
     \begin{align}
-        h\Gamma_L^{A_j}(X) & =0\quad\text{for every }X,
-                           & G_L(A_j)                   & \subseteq\ker h\quad\text{for every }j.
+        h\Gamma_L^{A_j}(X) & =0,
+                           & G_L(A_j) & \subseteq\ker h.
         \label{eq:finite_volume_local_kernel_inclusion}
     \end{align}
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     \uses{lem:local_weighted_boundary_annihilation}
     Positivity separates the finite Hamiltonian equation into local equations.
     Use the translate at site zero and
@@ -51,15 +52,15 @@ ring to all sufficiently long rings. The interaction is fixed throughout.
     \label{lem:local_mps_kernel_all_volumes}
     \lean{MPSTensor.periodicLocalInteractionES_mpvState_eq_zero_of_groundSpaceES_le_ker,
         MPSTensor.periodicInteractionHamiltonianES_mpvState_eq_zero_of_groundSpaceES_le_ker}
-    \notready
+    \leanok
     \uses{lem:cyclic_mpv_active_boundary, def:periodic-fixed-interaction}
     Let $h$ be linear on $L$ sites and suppose $G_L(A)\subseteq\ker h$.
-    For every $M\ge L$, every cyclic translate of $h$ annihilates the actual
+    For every $M\ge L$, every cyclic translate of $h$ annihilates the
     periodic vector $V^{(M)}(A)$. Consequently $H_MV^{(M)}(A)=0$.
     No positivity or complementary-span condition at $M$ is needed.
 \end{lemma}
-\begin{proof}
-    \uses{lem:cyclic_mpv_active_boundary}
+\begin{proof}\leanok
+    \uses{lem:cyclic_mpv_active_boundary, lem:cyclic_active_local_interaction}
     Every complementary configuration supplies a virtual boundary matrix for
     the active block. The local-kernel inclusion kills each such fiber, and
     summing the translated equations gives the Hamiltonian equation.
@@ -68,20 +69,21 @@ ring to all sufficiently long rings. The interaction is fixed throughout.
 \begin{lemma}[Propagation from a finite ring to every permitted volume]
     \label{lem:finite_ring_constraint_all_volumes}
     \lean{MPSTensor.periodicInteractionHamiltonianES_mpvState_eq_zero_all_volumes}
-    \notready
+    \leanok
     \discussion{10280}
     \uses{lem:finite_volume_local_kernel_inclusion, lem:local_mps_kernel_all_volumes}
     Let $N>0$, $L\le N$, and $h\ge0$. If the words of length $N-L$ in $A$
-    span its full matrix algebra and $H_NV^{(N)}(A)=0$, then
+    span its full matrix algebra and $H_NV^{(N)}(A)=0$, then for every
+    $M\ge L$,
     \begin{align}
-        H_MV^{(M)}(A)=0\qquad\text{for every }M\ge L.
+        H_MV^{(M)}(A) & =0.
         \label{eq:finite_ring_constraint_all_volumes}
     \end{align}
     The same tensor $A$ and interaction $h$ work at every volume. Nonvanishing
     of these periodic vectors and uniqueness of the ground state, needed for
     the full dichotomy, are separate assertions.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     \uses{lem:finite_volume_local_kernel_inclusion, lem:local_mps_kernel_all_volumes}
     Apply Lemma~\ref{lem:finite_volume_local_kernel_inclusion} to the one-block
     family with coefficient one. Then apply

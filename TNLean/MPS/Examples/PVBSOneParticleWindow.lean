@@ -61,7 +61,7 @@ theorem eq_zero_of_pvbsEdge_overlapping_sections {N : ℕ} (q : ℂ) (hq : q ≠
   have hR (a : Fin 2) : ∃ g : ℂ, ∀ b c, φ a b c = g * V b c := by
     obtain ⟨g, hg⟩ := hright a
     exact ⟨g, fun b c ↦ hg (Fin.snoc b c)⟩
-  have hφ := MPSPreparation.eq_zero_of_overlapping_one_dimensional_sections
+  have hφ := MPSTensor.eq_zero_of_overlapping_one_dimensional_sections
     W V 1 0 0 (Fin.cons 1 0) hminor φ hL hR
   funext σ
   have h := hφ (σ 0) (Fin.init (Fin.tail σ)) ((Fin.tail σ) (Fin.last (N + 1)))

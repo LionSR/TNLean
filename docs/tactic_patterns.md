@@ -9931,7 +9931,11 @@ there is no need for a new tactic.
 - **Abstraction:** `exists_normal_blocks_of_no_small_divisor` in
   `MPS/CanonicalForm/PrimeLengthNormalBlocks.lean` extracts the existing
   W-state-independent proof and generalizes its physical alphabet. Both
-  applications consume the same actual decomposition and derived bounds.
+  applications consume the same decomposition and derived bounds. Promoted
+  under the two-occurrence criterion: the extracted argument is well over
+  five lines, and the bond-one finite-prefix ground-state theorem in
+  `MPS/ParentHamiltonian/BondOneFinitePrefixGroundStates.lean` already
+  consumes the same reduction through the prime-length dichotomy.
 
 ### Nonzero finite physical state forces a nonempty alphabet — candidate (2026-10-29)
 
@@ -9956,6 +9960,9 @@ there is no need for a new tactic.
   comparison used at both short and long lengths in the uniform-bound proof.
 - **Decision:** the existing matrix-padding multiplication identity suffices;
   the empty word remains excluded because its trace is the matrix dimension.
+- **Parallel:** `MPOTensor.padBond` in `MPS/MPU/BondPadding.lean` proves the
+  same positive-length trace invariance for operator tensors by conjugating
+  with `bondInclusion`; a later pass may route it through `Matrix.zeroPad`.
 
 
 ### A unique virtual path for a bond-one periodic vector — reused helper (2026-10-29)
