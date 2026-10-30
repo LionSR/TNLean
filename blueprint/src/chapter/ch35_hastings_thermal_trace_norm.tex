@@ -10,19 +10,19 @@ in trace norm. The second extends the matrix product form of
 Section~\ref{sec:hastings_product_form} to every temperature by taking an even
 power of the high-temperature form. This section proves both steps for general
 operators. The truncated density matrix $\rho(\beta,l_{\mathrm{proj}})$ of the
-cluster expansion enters only through the hypotheses, and the error bound at
-every temperature \cite[lines 1322--1349]{Hastings2006Solving} is not proved
-here. The trace norm of a square matrix $D$ is
+cluster expansion enters only through the hypotheses. Its error bound at
+every temperature \cite[lines 1322--1349]{Hastings2006Solving} is proved in
+Section~\ref{sec:hastings_temperature_error}. The trace norm of a square matrix $D$ is
 $\|D\|_1=\operatorname{Tr}\sqrt{D^\dagger D}$, and $\|O\|$ is the operator norm.
 
-\begin{theorem}[The trace norm from expectation values]
+\begin{lemma}[The trace norm from expectation values]
     \label{thm:hastings_thermal_trace_norm_duality}
     \lean{Matrix.re_trace_sqrt_conjTranspose_mul_self_le_of_forall_norm_trace_mul_le}
     \leanok
     Let $D$ be a square complex matrix and $\epsilon$ a real number. If
     $|\operatorname{Tr}(OD)|\le\epsilon$ for every matrix $O$ with
     $\|O\|\le1$, then $\|D\|_1\le\epsilon$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The polar decomposition writes $D=U\sqrt{D^\dagger D}$ with $U$ unitary.
     Then $O=U^\dagger$ has $\|O\|\le1$ and
@@ -32,7 +32,7 @@ $\|D\|_1=\operatorname{Tr}\sqrt{D^\dagger D}$, and $\|O\|$ is the operator norm.
     the polar decomposition removes the need for $D$ to be Hermitian.
 \end{proof}
 
-\begin{theorem}[The trace-norm form of the cluster-expansion bound]
+\begin{lemma}[The trace-norm form of the cluster-expansion bound]
     \label{thm:hastings_thermal_trace_norm}
     \lean{TNLean.Lattice.ClusterExpansion.re_trace_sqrt_sub_le_of_forall_norm_trace_mul_sub_le}
     \leanok
@@ -47,21 +47,21 @@ $\|D\|_1=\operatorname{Tr}\sqrt{D^\dagger D}$, and $\|O\|$ is the operator norm.
     thermal state $\rho=\rho(\beta)$, which is positive with
     $\operatorname{Tr}\rho(\beta)=Z=\|\rho(\beta)\|_1$, and
     $\sigma=\rho(\beta,l_{\mathrm{proj}})$, the hypothesis is the bound of
-    Theorem~\ref{thm:hastings_percolation_large_diameter} with
+    Lemma~\ref{thm:hastings_percolation_large_diameter} with
     $\epsilon=\exp[N(xy)^{-1}\exp(-l_{\mathrm{proj}}/\xi_{\mathrm{perc}})]-1$.
     The factor $(xy)^{-1}$ is the size-threshold correction to eq.~(perc2)
     \cite{gap:hastings05_percolation_cluster_size}. The conclusion is the
     corresponding trace-norm bound of \cite[lines 1281--1299]{Hastings2006Solving}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:hastings_thermal_trace_norm_duality}
     For $\|O\|\le1$ the hypothesis gives
     $|\operatorname{Tr}(O(\rho-\sigma))|\le\epsilon\operatorname{Re}\operatorname{Tr}\rho$,
     since $\epsilon\ge0$. Apply
-    Theorem~\ref{thm:hastings_thermal_trace_norm_duality} to $D=\rho-\sigma$.
+    Lemma~\ref{thm:hastings_thermal_trace_norm_duality} to $D=\rho-\sigma$.
 \end{proof}
 
-\begin{theorem}[The matrix product form at every temperature]
+\begin{lemma}[The matrix product form at every temperature]
     \label{thm:hastings_thermal_all_temperatures}
     \lean{TNLean.Lattice.HasProductForm.pow_of_even,
         TNLean.Lattice.ClusterExpansion.posSemidef_pow_of_even,
@@ -79,21 +79,20 @@ $\|D\|_1=\operatorname{Tr}\sqrt{D^\dagger D}$, and $\|O\|$ is the operator norm.
     eq.~(mplt) of \cite[lines 1303--1317]{Hastings2006Solving}, with positive
     semidefiniteness in place of the source's positive definiteness, which
     would need $\rho(\beta/m,l_{\mathrm{proj}})$ to be
-    invertible~\cite{gap:hastings05_mplt_positivity}. The count of
-    index values in lines 1318--1320 is not established; it is the count
-    recorded as open for
-    Theorem~\ref{thm:hastings_trotter_product_form_radius}.
-\end{theorem}
+    invertible~\cite{gap:hastings05_mplt_positivity}. The local index ranges
+    and their growth under powers are proved in
+    Lemma~\ref{thm:hastings_truncated_index_count}.
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:hastings_product_form_mul}
     For $m=2k$, $\rho^m=(\rho^k)^\dagger\rho^k$ since $\rho^k$ is Hermitian, and
     this is positive semidefinite. Products of operators in matrix product form
     of range $l$ are again in that form, with the indices at each site grouped
-    into one (Theorem~\ref{thm:hastings_product_form_mul}). For the number of
+    into one (Lemma~\ref{thm:hastings_product_form_mul}). For the number of
     factors take $m=2(\lceil\beta/\beta_0\rceil+1)$.
 \end{proof}
 
-\begin{theorem}[Positivity of the truncated operator at every temperature]
+\begin{lemma}[Positivity of the truncated operator at every temperature]
     \label{thm:hastings_truncated_positivity}
     \lean{TNLean.Lattice.ClusterExpansion.isHermitian_clusterPart,
         TNLean.Lattice.ClusterExpansion.isHermitian_truncatedExp,
@@ -108,27 +107,28 @@ $\|D\|_1=\operatorname{Tr}\sqrt{D^\dagger D}$, and $\|O\|$ is the operator norm.
     eq.~(mplt) of \cite[lines 1303--1314]{Hastings2006Solving}, with positive
     semidefiniteness in place of positive
     definiteness~\cite{gap:hastings05_mplt_positivity}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:hastings_truncation_inclusion_exclusion,
         thm:hastings_thermal_all_temperatures}
     Each $\rho(\beta,C)$ is a sum of the exponentials $e^{-\beta(H-H_B-H_D)}$ of
     Hermitian operators with coefficients $\pm1$, hence Hermitian. By
-    Theorem~\ref{thm:hastings_truncation_inclusion_exclusion}, $\rho(\beta,l)$ is a
+    Lemma~\ref{thm:hastings_truncation_inclusion_exclusion}, $\rho(\beta,l)$ is a
     sum of the $\rho(\beta,U)$ with coefficients $\pm1$, hence Hermitian, and
-    Theorem~\ref{thm:hastings_thermal_all_temperatures} gives the positivity of
+    Lemma~\ref{thm:hastings_thermal_all_temperatures} gives the positivity of
     its even powers.
 \end{proof}
 
-\begin{theorem}[The truncated operator at every temperature]
+\begin{lemma}[The truncated operator at every temperature]
     \label{thm:hastings_truncated_all_temperatures}
-    \lean{TNLean.Lattice.ClusterExpansion.hasProductForm_truncatedExp_pow_of_even}
+    \lean{TNLean.Lattice.ClusterExpansion.hasProductForm_truncatedExp_pow_of_even,
+        TNLean.Lattice.ClusterExpansion.hasProductForm_truncatedExp_pow_of_even_of_dist_le}
     \leanok
     \uses{def:hastings_product_form, def:hastings_truncated_expansion,
         def:hastings_cluster_of_terms}
-    Let the domain be nonempty, let every term $H_k$ be Hermitian and act only
+    Let the finite metric lattice be nonempty, let every term $H_k$ be Hermitian and act only
     on a set $S_k$ of sites, with clusters and largeness as in
-    Theorem~\ref{thm:hastings_truncated_product_form}, and let $m$ be even.
+    Lemma~\ref{thm:hastings_truncated_product_form}, and let $m$ be even.
     Then $\rho(\beta,l)^m$ is in matrix product form of range $l$ and positive
     semidefinite. With $\beta/m$ in place of $\beta$, this is the matrix product
     form and the positivity of
@@ -136,12 +136,39 @@ $\|D\|_1=\operatorname{Tr}\sqrt{D^\dagger D}$, and $\|O\|$ is the operator norm.
     eq.~(mplt) of \cite[lines 1303--1317]{Hastings2006Solving}, with positive
     semidefiniteness in place of positive
     definiteness~\cite{gap:hastings05_mplt_positivity}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:hastings_truncated_product_form, thm:hastings_truncated_positivity,
         thm:hastings_thermal_all_temperatures}
     The truncated operator is in matrix product form of range $l$ by
-    Theorem~\ref{thm:hastings_truncated_product_form} and Hermitian by
-    Theorem~\ref{thm:hastings_truncated_positivity}, so
-    Theorem~\ref{thm:hastings_thermal_all_temperatures} applies.
+    Lemma~\ref{thm:hastings_truncated_product_form} and Hermitian by
+    Lemma~\ref{thm:hastings_truncated_positivity}, so
+    Lemma~\ref{thm:hastings_thermal_all_temperatures} applies.
+\end{proof}
+
+\begin{lemma}[The least sufficient even number of factors]
+    \label{thm:hastings_even_temperature_factors}
+    \lean{TNLean.Lattice.ClusterExpansion.evenTemperatureFactors,
+        TNLean.Lattice.ClusterExpansion.evenTemperatureFactors_spec,
+        TNLean.Lattice.ClusterExpansion.evenTemperatureFactors_le,
+        TNLean.Lattice.ClusterExpansion.exp_evenTemperatureFactors_mul_sub_one_le}
+    \leanok
+    For $\beta>0$ and $\beta_0>0$, put
+    $n=2\lceil\beta/(2\beta_0)\rceil$. Then $n\ge2$ is the least
+    positive even integer with $\beta/n\le\beta_0$, and
+    \begin{align*}
+        \beta/\beta_0\le n<\beta/\beta_0+2.
+    \end{align*}
+    Consequently, for every $A\ge0$,
+    $e^{nA}-1\le e^{(\beta/\beta_0+2)A}-1$.
+    This supplies the exact rounding bound for the choice in
+    \cite[lines 1307--1312]{Hastings2006Solving} and its corrected
+    error estimate\cite{gap:hastings05_temperature_factor_count}.
+\end{lemma}
+\begin{proof}\leanok
+    The ceiling lies between $\beta/(2\beta_0)$ and
+    $\beta/(2\beta_0)+1$. Multiplication by two gives the displayed
+    interval and $\beta/n\le\beta_0$. Any sufficient positive even
+    integer is $2k$ with $k\ge\beta/(2\beta_0)$, hence is at least $n$.
+    The last inequality follows from monotonicity of the exponential.
 \end{proof}

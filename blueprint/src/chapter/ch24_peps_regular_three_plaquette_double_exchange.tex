@@ -13,7 +13,7 @@
     $(c^{-1}b^{-1}a^{-1},c^{-1}b^{-1},c^{-1})$.
 \end{definition}
 
-\begin{theorem}[Evaluation and equivariance of three plaquette coordinates]%
+\begin{lemma}[Evaluation and equivariance of three plaquette coordinates]%
     \label{thm:peps_regular_three_plaquette_coordinates}
     \lean{TNLean.PEPS.regularThreeCyclePlaquetteCoordinates_apply,
         TNLean.PEPS.regularThreeCyclePlaquetteCoordinates_conjugation}
@@ -22,7 +22,7 @@
     The selected coordinates of $Cz$ are
     $(z_{e_0}^{-1}z_{e_1},z_{e_1}^{-1}z_{e_2},z_{e_2}^{-1})$, and
     $C(xzx^{-1})=xC(z)x^{-1}$ for every common conjugating element $x$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Evaluating the defining cases at the three distinct indices gives the
     coordinate formula, and since conjugation preserves multiplication and
@@ -40,7 +40,7 @@
     $(a,b)$ to $(aba^{-1},a)$ and retains every other label.
 \end{definition}
 
-\begin{theorem}[Equivariance and the double exchange formula]%
+\begin{lemma}[Equivariance and the double exchange formula]%
     \label{thm:peps_regular_two_cycle_exchange}
     \lean{TNLean.PEPS.regularTwoCycleExchange_conjugation,
         TNLean.PEPS.regularTwoCycleExchange_apply,
@@ -60,7 +60,7 @@
     \end{align}
     The two output labels are respectively conjugate to $a$ by $ab$ and to
     $b$ by $a$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Evaluating the controlled conjugation followed by the interchange once
     and then a second time gives the formula for $H^2$, where multiplication
@@ -82,7 +82,7 @@
     $\Phi_\varepsilon=I_\varepsilon^{-1}\Phi I_\varepsilon$.
 \end{definition}
 
-\begin{theorem}[Equivariance and action of oriented double exchange]%
+\begin{lemma}[Equivariance and action of oriented double exchange]%
     \label{thm:peps_regular_three_plaquette_double_exchange}
     \lean{TNLean.PEPS.regularThreePlaquetteDoubleExchange_conjugation,
         TNLean.PEPS.regularThreePlaquetteDoubleExchange_coordinates,
@@ -106,7 +106,7 @@
     Their ordered product $abc$ and their individual conjugacy classes are
     preserved. At $(g,h,h^{-1})$, the last two output labels have joint product
     $ghg^{-1}h^{-1}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Equivariance of $C$ implies equivariance of its inverse, and since both
     inversion and $H$ are equivariant under conjugation, composing them in the
@@ -115,7 +115,7 @@
     product and conjugacy assertions.
 \end{proof}
 
-\begin{theorem}[A fixed original-spin double exchange]%
+\begin{lemma}[A fixed original-spin double exchange]%
     \label{thm:peps_regular_three_plaquette_double_exchange_physical}
     \lean{TNLean.PEPS.exists_unitary_regularOrientedThreePlaquetteDoubleExchange}
     \leanok
@@ -138,7 +138,7 @@
     the conjugation and controlling-flux backreaction discussed in
     \cite[Section 6.6]{Schuch2010PEPS}. Identifying it with the prescribed
     oriented lattice string crossing remains separate.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Since the permutation $\Phi_\varepsilon$ is conjugation-equivariant,
     applying the physical and global cycle-permutation theorem to

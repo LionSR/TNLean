@@ -12,7 +12,7 @@ layer $k$.
 % revision adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 % These local interfaces do not assemble the full two-family partition.
 
-\begin{theorem}[An interior elementary contact determines the whole dummy side]
+\begin{lemma}[An interior elementary contact determines the whole dummy side]
     \label{thm:area_law_elementary_open_dummy_contact}
     \lean{TNLean.PEPS.AreaLaw.Geometry.fineLayer_elementarySide_subset_dummy_of_mem_openSegment}
     \leanok
@@ -23,7 +23,7 @@ layer $k$.
     $e_i=[a_i,b_i]$ be an elementary base of the resulting fan.
     If $x\in(a_i,b_i)\cap\overline{N_0}$, then
     $e_i\subseteq\overline{N_0}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_dummy_corner_elementary_side,
         thm:area_law_dummy_layer_disjoint}
@@ -39,7 +39,7 @@ layer $k$.
     coarse-cell closure contains $e_i$ and lies in $\overline{N_0}$.
 \end{proof}
 
-\begin{theorem}[A triangle meets the dummy closure through its base]
+\begin{lemma}[A triangle meets the dummy closure through its base]
     \label{thm:area_law_fan_dummy_contact}
     \lean{TNLean.PEPS.AreaLaw.Geometry.fineLayer_cellFanPolygon_inter_dummy_eq}
     \leanok
@@ -51,7 +51,7 @@ layer $k$.
     \begin{align}
         P_i\cap\overline{N_0}=e_i\cap\overline{N_0}.
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_dummy_layer_disjoint,thm:area_law_cell_fan_cover,
         thm:area_law_fan_own_side_contact,thm:area_law_unsplit_side_endpoints}
@@ -64,7 +64,7 @@ layer $k$.
     $e_i\subseteq P_i$.
 \end{proof}
 
-\begin{theorem}[Opposite dummy parity along a belt-run contact]
+\begin{lemma}[Opposite dummy parity along a belt-run contact]
     \label{thm:area_law_belt_run_dummy_interface}
     \lean{TNLean.PEPS.AreaLaw.Geometry.beltCellFanRun_dummy_interface}
     \leanok
@@ -75,7 +75,7 @@ layer $k$.
     a closed segment with distinct endpoints lies in both the run region
     and $\overline{N_0}$, then every constituent triangle of $R$ has label
     $k_0\ne k_0-1$ modulo two.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_fan_dummy_contact,
         thm:area_law_elementary_open_dummy_contact,
