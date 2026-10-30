@@ -442,8 +442,6 @@
       "theorems": [
         "thm:factorial_commutator_conjugation",
         "thm:chain_local_imaginary_time",
-        "thm:aklv_boundary_energy_tail",
-        "thm:aklv_ground_energy_tail",
         "thm:aklv_robustness",
         "thm:aklv_inverse_gap_robustness"
       ],
@@ -451,10 +449,8 @@
       "notes": {
         "thm:factorial_commutator_conjugation": "Kept as converted by hand in #10267",
         "thm:chain_local_imaginary_time": "Kept as converted by hand in #10267",
-        "thm:aklv_boundary_energy_tail": "AKLV boundary energy off-diagonal decay, an independent physical estimate in the energy-truncation section",
-        "thm:aklv_ground_energy_tail": "AKLV exponentially small high-energy ground-vector tail, the independent truncation estimate",
-        "thm:aklv_robustness": "Accepted normalized-chain ground-vector and spectral-gap robustness (AKLV Theorem 6.1)",
-        "thm:aklv_inverse_gap_robustness": "Stronger inverse-gap robustness cutoff for the same exterior clipping, used by the downstream area-law arguments"
+        "thm:aklv_robustness": "AKLV Theorem 6.1: ground-vector and spectral-gap robustness of the normalized chain under exterior clipping",
+        "thm:aklv_inverse_gap_robustness": "Refinement of AKLV Theorem 6.1 at the inverse-gap cutoff 32768/g, used by the downstream area-law arguments"
       }
     },
     "ch:one_dimensional_open_mps": {

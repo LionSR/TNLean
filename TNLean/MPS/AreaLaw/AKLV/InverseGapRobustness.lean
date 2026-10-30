@@ -168,25 +168,10 @@ theorem exists_ground_gap_twoSidedEnergyTruncation_of_inverse_gap_cutoff
         (e + g / 2 - e') * (‖x‖ ^ 2 - ‖⟪φ, x⟫_ℂ‖ ^ 2) ≤
           (⟪x, ι K x⟫_ℂ).re - e' * ‖x‖ ^ 2) ∧
       (∀ x : EuclideanSpace ℂ n, ⟪φ, x⟫_ℂ = 0 →
-        (e + g / 2) * ‖x‖ ^ 2 ≤ (⟪x, ι K x⟫_ℂ).re) := by
-  intro ι K
-  obtain ⟨hKpos, hKle⟩ :=
-    twoSidedEnergyTruncation_posSemidef_le L (N + A) R hL (hN.add hA) hR t ht
-  have hpositive : (ι K).IsPositive := hKpos.isPositive_toEuclideanCLM
-  have htest : (⟪Ω, ι K Ω⟫_ℂ).re ≤ e := by
-    have h := (Matrix.isPositive_toEuclideanLin_iff.mpr (Matrix.le_iff.mp hKle))
-      |>.re_inner_nonneg_right Ω
-    change 0 ≤ (⟪Ω, ι (L + (N + A) + R - K) Ω⟫_ℂ).re at h
-    rw [map_sub] at h
-    change 0 ≤ (⟪Ω, ι (L + (N + A) + R) Ω - ι K Ω⟫_ℂ).re at h
-    rw [inner_sub_right, Complex.sub_re, heig, inner_smul_right,
-      Complex.re_ofReal_mul, inner_self_eq_norm_sq_to_K, hΩ] at h
-    norm_num at h
-    exact h
-  exact exists_ground_gap_of_orthogonal_lower (ι K) hpositive Ω hΩ e (e + g / 2)
-    (by linarith) htest
-    (orthogonal_clipped_energy_ge_of_inverse_gap_cutoff L N R A hL hN hR hA hLN hLR hNR hAcap
-      Ω hΩ e g t hg ht hcut hgap)
+        (e + g / 2) * ‖x‖ ^ 2 ≤ (⟪x, ι K x⟫_ℂ).re) :=
+  exists_ground_gap_twoSidedEnergyTruncation_of_orthogonal L N R A hL hN hR hA Ω hΩ e g t hg ht
+    heig (orthogonal_clipped_energy_ge_of_inverse_gap_cutoff L N R A hL hN hR hA hLN hLR hNR
+      hAcap Ω hΩ e g t hg ht hcut hgap)
 
 /-- The normalized energy and gap bounds turn the refined cutoff into
 an inverse-gap bound. Auxiliary to the refinement of AKLV, Theorem 6.1. -/
@@ -198,50 +183,6 @@ private theorem refined_cutoff_le (e g t : ℝ) (he6 : e ≤ 6)
   have heg := mul_le_mul_of_nonneg_right he6 hg.le
   have hg2 : g ^ 2 ≤ 1 := by nlinarith
   nlinarith
-
-/-- Polynomial gap prefactors in the residual estimate are absorbed by
-the cutoff in AKLV, Theorem 6.1. No numerical exponential approximation
-is needed for these explicit universal constants. -/
-private theorem inverse_gap_phase_budget_le_exp (g t : ℝ) (hg : 0 < g) (hg1 : g ≤ 1)
-    (htg : 32768 ≤ t * g) :
-    2 * (10 * Real.exp (-(t - 40) / 16) / (g / 2) +
-      2 * Real.exp (-(t - 40) / 16)) ^ 2 ≤ Real.exp (-t / 16) := by
-  let η := Real.exp (-(t - 40) / 16)
-  have hη : 0 ≤ η := (Real.exp_pos _).le
-  have hbound : 10 * η / (g / 2) + 2 * η ≤ 22 * η / g := by
-    apply (le_div_iff₀ hg).mpr
-    rw [add_mul]
-    have hc : (10 * η / (g / 2)) * g = 20 * η := by field_simp; ring
-    rw [hc]
-    nlinarith [mul_le_mul_of_nonneg_left hg1 hη]
-  have hsquare : 2 * (10 * η / (g / 2) + 2 * η) ^ 2 ≤
-      (968 / g ^ 2) * Real.exp (-(t - 40) / 8) := by
-    have h := mul_le_mul_of_nonneg_left
-      (pow_le_pow_left₀ (by positivity) hbound 2) (by norm_num : (0 : ℝ) ≤ 2)
-    refine h.trans_eq ?_
-    rw [div_pow]
-    have hexp : η ^ 2 = Real.exp (-(t - 40) / 8) := by
-      rw [show η ^ 2 = η * η from pow_two η, ← Real.exp_add]
-      congr 1
-      ring
-    rw [mul_pow, hexp]
-    field_simp
-    norm_num
-  have hlog : Real.log 968 - 2 * Real.log g - (t - 40) / 8 ≤ -t / 16 := by
-    have hl := Real.log_le_sub_one_of_pos (by norm_num : (0 : ℝ) < 968)
-    have hi := Real.one_sub_inv_le_log_of_pos hg
-    have hl' := mul_le_mul_of_nonneg_left hl hg.le
-    have hi' := mul_le_mul_of_nonneg_left hi hg.le
-    rw [mul_sub, mul_inv_cancel₀ hg.ne', mul_one] at hi'
-    apply le_of_mul_le_mul_left (a := g) _ hg
-    nlinarith
-  have hpositive : 0 < (968 / g ^ 2) * Real.exp (-(t - 40) / 8) := by positivity
-  have hfinal : (968 / g ^ 2) * Real.exp (-(t - 40) / 8) ≤ Real.exp (-t / 16) := by
-    apply (Real.log_le_iff_le_exp hpositive).mp
-    rw [Real.log_mul (by positivity) (Real.exp_ne_zero _),
-      Real.log_div (by norm_num) (pow_ne_zero _ hg.ne'), Real.log_pow, Real.log_exp]
-    nlinarith only [hlog]
-  exact hsquare.trans hfinal
 
 /-- **Refined AKLV robustness for a normalized chain with its disconnected
 regional blocks.** The local positive contractions imply both the
@@ -280,9 +221,6 @@ theorem exists_robust_ground_twoSidedEnergyTruncation_of_inverse_gap_cutoff {L q
       ∃ θ : ℝ, ‖Ω - Complex.exp (θ * Complex.I) • φ‖ ^ 2 ≤ Real.exp (-t / 16) := by
   intro ι K
   let A := h a + h b
-  let B := X + N + Y
-  let P := 1 - Matrix.spectralProjectionGE B t
-  let η := Real.exp (-(t - 40) / 16)
   have hA : A.PosSemidef := Matrix.nonneg_iff_posSemidef.mp (add_nonneg (h0 a) (h0 b))
   have hAcap : A ≤ (2 : ℂ) • 1 := by
     simpa only [two_smul] using add_le_add (h1 a) (h1 b)
@@ -290,47 +228,16 @@ theorem exists_robust_ground_twoSidedEnergyTruncation_of_inverse_gap_cutoff {L q
   have ht0 : 0 < t := by nlinarith
   have hcut : e + 3 * g / 2 + 8 / g ≤ t :=
     refined_cutoff_le e g t he6 hg hg1 (by linarith)
-  have hH : X + (N + A) + Y = B + A := by dsimp [B]; abel
+  have hH : X + (N + A) + Y = X + N + Y + A := by abel
   obtain ⟨e', φ, hφ, hφeig, he'0, he'e, hstrong, horth⟩ :=
     exists_ground_gap_twoSidedEnergyTruncation_of_inverse_gap_cutoff
       X N Y A hX hN hY hA hXN hXY hNY hAcap
       Ω hΩ e g t hg ht0.le hcut (by simpa only [hH] using heig)
       (by simpa only [hH] using hgap)
-  have hpositive : (ι K).IsPositive :=
-    (twoSidedEnergyTruncation_posSemidef_le X (N + A) Y hX (hN.add hA) hY t ht0.le).1
-      |>.isPositive_toEuclideanCLM
-  have hweak (v : EuclideanSpace ℂ (Fin L → Fin q)) :
-      (g / 2) * (‖v‖ ^ 2 - ‖⟪φ, v⟫_ℂ‖ ^ 2) ≤ (⟪v, ι K v⟫_ℂ).re - e' * ‖v‖ ^ 2 := by
-    have hv : ‖⟪φ, v⟫_ℂ‖ ≤ ‖v‖ := by
-      simpa only [hφ, one_mul] using norm_inner_le_norm (𝕜 := ℂ) φ v
-    have hdef : 0 ≤ ‖v‖ ^ 2 - ‖⟪φ, v⟫_ℂ‖ ^ 2 := by
-      nlinarith [pow_le_pow_left₀ (norm_nonneg _) hv 2]
-    exact (mul_le_mul_of_nonneg_right (by linarith : g / 2 ≤ e + g / 2 - e') hdef).trans
-      (hstrong v)
-  have hres : ‖ι K (ι P Ω) - (e : ℂ) • ι P Ω‖ ≤ 10 * η :=
-    norm_clipped_lowProjection_residual_le_exp I h hs h0 h1 a b z e t ht0.le
-      X N Y hX hN hY hXN hXY hNY hB Ω hΩ he0 he6 heig
-  have htail : ‖Ω - ι P Ω‖ ≤ 2 * η := by
-    have htail' := norm_groundState_highProjection_le_exp I h hs h0 h1 a b z e t Ω
-      he0 he6 (by simpa only [← hB] using heig)
-    have hid : Ω - ι P Ω = ι (Matrix.spectralProjectionGE B t) Ω := by
-      simp only [P, map_sub, map_one, _root_.sub_apply, one_apply_eq_self, sub_sub_cancel]
-    rw [hid]
-    have hdecay : 2 * Real.exp (-(t - 20) / 8) ≤ 2 * η :=
-      mul_le_mul_of_nonneg_left (Real.exp_le_exp.mpr (by linarith)) (by norm_num)
-    apply le_trans ?_ hdecay
-    simpa only [← hB, hΩ, mul_one] using htail'
-  obtain ⟨θ, hθ⟩ := exists_phase_sq_distance_le_residual (ι K) hpositive.isSymmetric
-    φ Ω hφ hΩ e' e (e + g / 2) hφeig (by linarith) horth (ι P Ω)
-  have hden : e + g / 2 - e = g / 2 := by ring
-  rw [hden] at hθ
-  have hsmall : ‖ι K (ι P Ω) - (e : ℂ) • ι P Ω‖ / (g / 2) + ‖Ω - ι P Ω‖ ≤
-      10 * η / (g / 2) + 2 * η :=
-    add_le_add (div_le_div_of_nonneg_right hres (by positivity)) htail
-  refine ⟨e', φ, hφ, hφeig, he'0, he'e, hweak, θ, ?_⟩
-  exact hθ.trans ((mul_le_mul_of_nonneg_left
-    (pow_le_pow_left₀ (by positivity) hsmall 2) (by norm_num : (0 : ℝ) ≤ 2)).trans
-      (inverse_gap_phase_budget_le_exp g t hg hg1 htg))
+  obtain ⟨hweak, θ, hθ⟩ := robust_ground_of_clipped_ground_gap I h hs h0 h1 a b z e g t
+    X N Y hX hN hY hXN hXY hNY hB Ω hΩ he0 he6 hg hg1 htg heig e' φ hφ hφeig he'e
+    hstrong horth
+  exact ⟨e', φ, hφ, hφeig, he'0, he'e, hweak, θ, hθ⟩
 
 /-- **Refinement of AKLV Theorem 6.1 on the normalized nearest-neighbour chain.**
 For `t ≥ 32768/g`, separate clipping of the exterior blocks has
@@ -366,34 +273,7 @@ theorem normalized_chain_robustness_of_inverse_gap_cutoff {L q : ℕ}
         (1 - Matrix.vecMulVec (WithLp.ofLp φ) (star (WithLp.ofLp φ)))).PosSemidef ∧
       ∃ θ : ℝ, ‖Ω - Complex.exp (θ * Complex.I) • φ‖ ^ 2 ≤ Real.exp (-t / 16) := by
   intro ι X N Y H K heig hgap
-  classical
-  let S := Finset.univ.filter fun i : Fin (L - 1) ↦ i.val < a.val
-  let T := Finset.univ.filter fun i : Fin (L - 1) ↦ a.val < i.val ∧ i.val < b.val
-  let U := Finset.univ.filter fun i : Fin (L - 1) ↦ b.val < i.val
-  let I := (S ∪ T) ∪ U
-  have hST : Disjoint S T := by
-    apply Finset.disjoint_left.mpr
-    intro i hi hj
-    simp only [S, T, Finset.mem_filter, Finset.mem_univ, true_and] at hi hj
-    omega
-  have hSU : Disjoint S U := by
-    apply Finset.disjoint_left.mpr
-    intro i hi hj
-    simp only [S, U, Finset.mem_filter, Finset.mem_univ, true_and] at hi hj
-    omega
-  have hTU : Disjoint T U := by
-    apply Finset.disjoint_left.mpr
-    intro i hi hj
-    simp only [T, U, Finset.mem_filter, Finset.mem_univ, true_and] at hi hj
-    omega
-  have hsumI : (∑ i ∈ I, h i) = (∑ i ∈ S, h i) + (∑ i ∈ T, h i) + ∑ i ∈ U, h i := by
-    rw [show I = (S ∪ T) ∪ U from rfl,
-      Finset.sum_union (Finset.disjoint_union_left.mpr ⟨hSU, hTU⟩), Finset.sum_union hST]
-  have hB : X + N + Y = (∑ i ∈ I, h i) - ((x + m + y : ℝ) : ℂ) • 1 := by
-    rw [hsumI]
-    dsimp only [X, N, Y, leftCutBlock, middleCutBlock, rightCutBlock]
-    simp only [Complex.ofReal_add, add_smul]
-    abel
+  obtain ⟨I, hB⟩ := exists_normalizedCutBlock_eq_sum_sub h a b hab x m y
   obtain ⟨hXN, hXY, hNY⟩ := normalizedCutBlock_commutations h hs a b hab x m y
   have hH : X + N + Y + (h a + h b) = H := normalizedCutBlock_sum h a b hab x m y
   obtain ⟨e', φ, hφ, hφeig, he'0, he'e, hquad, θ, hθ⟩ :=
