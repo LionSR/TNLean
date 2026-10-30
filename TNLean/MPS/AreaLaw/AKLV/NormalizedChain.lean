@@ -132,6 +132,39 @@ theorem normalizedCutBlock_sum {L q : ℕ}
   rw [← hsum]
   abel
 
+/-- The three normalized blocks are the sum of the original terms over the
+bonds other than the two removed ones, shifted by `x+m+y`. AKLV, Section 6.1. -/
+theorem exists_normalizedCutBlock_eq_sum_sub {L q : ℕ}
+    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
+    (a b : Fin (L - 1)) (hab : a.val < b.val) (x m y : ℝ) :
+    ∃ I : Finset (Fin (L - 1)),
+      leftCutBlock h a x + middleCutBlock h a b m + rightCutBlock h b y =
+        (∑ i ∈ I, h i) - ((x + m + y : ℝ) : ℂ) • 1 := by
+  classical
+  let S := Finset.univ.filter fun i : Fin (L - 1) ↦ i.val < a.val
+  let T := Finset.univ.filter fun i : Fin (L - 1) ↦ a.val < i.val ∧ i.val < b.val
+  let U := Finset.univ.filter fun i : Fin (L - 1) ↦ b.val < i.val
+  have hST : Disjoint S T := by
+    apply Finset.disjoint_left.mpr
+    intro i hi hj
+    simp only [S, T, Finset.mem_filter, Finset.mem_univ, true_and] at hi hj
+    omega
+  have hSU : Disjoint S U := by
+    apply Finset.disjoint_left.mpr
+    intro i hi hj
+    simp only [S, U, Finset.mem_filter, Finset.mem_univ, true_and] at hi hj
+    omega
+  have hTU : Disjoint T U := by
+    apply Finset.disjoint_left.mpr
+    intro i hi hj
+    simp only [T, U, Finset.mem_filter, Finset.mem_univ, true_and] at hi hj
+    omega
+  refine ⟨(S ∪ T) ∪ U, ?_⟩
+  rw [Finset.sum_union (Finset.disjoint_union_left.mpr ⟨hSU, hTU⟩), Finset.sum_union hST]
+  dsimp only [leftCutBlock, middleCutBlock, rightCutBlock]
+  simp only [Complex.ofReal_add, add_smul]
+  abel
+
 /-- **AKLV Theorem 6.1 on the normalized nearest-neighbour chain.**
 For `t ≥ 32768 (e+g)/g²`, separate clipping of the exterior blocks has
 an actual unit ground vector, gap at least `g/2`, and phase-aligned
@@ -166,34 +199,7 @@ theorem normalized_chain_robustness {L q : ℕ}
         (1 - Matrix.vecMulVec (WithLp.ofLp φ) (star (WithLp.ofLp φ)))).PosSemidef ∧
       ∃ θ : ℝ, ‖Ω - Complex.exp (θ * Complex.I) • φ‖ ^ 2 ≤ Real.exp (-t / 16) := by
   intro ι X N Y H K heig hgap
-  classical
-  let S := Finset.univ.filter fun i : Fin (L - 1) ↦ i.val < a.val
-  let T := Finset.univ.filter fun i : Fin (L - 1) ↦ a.val < i.val ∧ i.val < b.val
-  let U := Finset.univ.filter fun i : Fin (L - 1) ↦ b.val < i.val
-  let I := (S ∪ T) ∪ U
-  have hST : Disjoint S T := by
-    apply Finset.disjoint_left.mpr
-    intro i hi hj
-    simp only [S, T, Finset.mem_filter, Finset.mem_univ, true_and] at hi hj
-    omega
-  have hSU : Disjoint S U := by
-    apply Finset.disjoint_left.mpr
-    intro i hi hj
-    simp only [S, U, Finset.mem_filter, Finset.mem_univ, true_and] at hi hj
-    omega
-  have hTU : Disjoint T U := by
-    apply Finset.disjoint_left.mpr
-    intro i hi hj
-    simp only [T, U, Finset.mem_filter, Finset.mem_univ, true_and] at hi hj
-    omega
-  have hsumI : (∑ i ∈ I, h i) = (∑ i ∈ S, h i) + (∑ i ∈ T, h i) + ∑ i ∈ U, h i := by
-    rw [show I = (S ∪ T) ∪ U from rfl,
-      Finset.sum_union (Finset.disjoint_union_left.mpr ⟨hSU, hTU⟩), Finset.sum_union hST]
-  have hB : X + N + Y = (∑ i ∈ I, h i) - ((x + m + y : ℝ) : ℂ) • 1 := by
-    rw [hsumI]
-    dsimp only [X, N, Y, leftCutBlock, middleCutBlock, rightCutBlock]
-    simp only [Complex.ofReal_add, add_smul]
-    abel
+  obtain ⟨I, hB⟩ := exists_normalizedCutBlock_eq_sum_sub h a b hab x m y
   obtain ⟨hXN, hXY, hNY⟩ := normalizedCutBlock_commutations h hs a b hab x m y
   have hH : X + N + Y + (h a + h b) = H := normalizedCutBlock_sum h a b hab x m y
   obtain ⟨e', φ, hφ, hφeig, he'0, he'e, hquad, θ, hθ⟩ :=

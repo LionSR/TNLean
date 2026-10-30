@@ -441,12 +441,16 @@
     "ch:one_dimensional_preliminaries": {
       "theorems": [
         "thm:factorial_commutator_conjugation",
-        "thm:chain_local_imaginary_time"
+        "thm:chain_local_imaginary_time",
+        "thm:aklv_robustness",
+        "thm:aklv_inverse_gap_robustness"
       ],
       "corollaries": [],
       "notes": {
         "thm:factorial_commutator_conjugation": "Kept as converted by hand in #10267",
-        "thm:chain_local_imaginary_time": "Kept as converted by hand in #10267"
+        "thm:chain_local_imaginary_time": "Kept as converted by hand in #10267",
+        "thm:aklv_robustness": "AKLV Theorem 6.1: ground-vector and spectral-gap robustness of the normalized chain under exterior clipping",
+        "thm:aklv_inverse_gap_robustness": "Refinement of AKLV Theorem 6.1 at the inverse-gap cutoff 32768/g, used by the downstream area-law arguments"
       }
     },
     "ch:one_dimensional_open_mps": {
