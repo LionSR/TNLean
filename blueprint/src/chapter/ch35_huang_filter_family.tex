@@ -1,0 +1,119 @@
+\section{A finite family of ground filters}
+\label{sec:huang_filter_family}
+
+The ground energy need not be known when the filters are chosen. For a
+positive nearest-neighbour chain, every eigenvalue has modulus at most the
+chain length. A mesh on this fixed interval therefore contains a sufficiently
+accurate estimate of the ground energy. Applying the Gaussian construction at
+every mesh point gives one finite family, chosen before the ground vector.
+The estimates below use the conservative parameters of
+Section~\ref{sec:huang_filter_parameters}; no sharper printed dependence on
+the inverse gap is asserted.
+
+\begin{lemma}[An energy window determined by the chain length]
+    \label{lem:huang_positive_chain_energy_window}
+    \lean{TNLean.MPS.AreaLaw.abs_eigenvalue_positive_chain_le_length}
+    \leanok
+    Let $H=\sum_{j=0}^{L-2}h_j$, with $0\le h_j\le I$. If
+    $H\Gamma=E_0\Gamma$ and $\|\Gamma\|=1$, then $|E_0|\le L$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Each summand has norm at most one, so
+    $|E_0|=\|H\Gamma\|\le\|H\|\le L$.
+\end{proof}
+
+\begin{lemma}[The finite family of Gaussian approximants]
+    \label{thm:huang_positive_chain_filter_family}
+    \lean{TNLean.MPS.AreaLaw.exists_positive_chain_filter_family}
+    \leanok
+    \uses{thm:huang_physical_gaussian}
+    Let $q\ge1$, let $h_j$ additionally be supported on sites $j,j+1$, and fix
+    $c,\Delta>0$. Let $\eta,h,T$ and the energy mesh width be the
+    parameters of Section~\ref{sec:huang_filter_parameters}.
+    There is a family $(Q_e)$ indexed by that mesh in $[-L,L]$ such that
+    every member has operator-Schmidt rank at most $R$ at every cut, where
+    $R$ is the uniform filter rank bound, and
+    \begin{align*}
+        \left\|Q_e-
+        \exp\!\left(-\frac h2(H-eI)^2\right)\right\|\le3\eta.
+    \end{align*}
+\end{lemma}
+\begin{proof}
+    \leanok
+    Apply the finite Gaussian approximation at each mesh point.
+    The bound $|e|\le L$ gives a common sample count. The time tail,
+    quadrature error and propagation error are each at most $\eta$.
+    The simultaneous rank bound is therefore uniform over the family.
+\end{proof}
+
+\begin{lemma}[A member close to the ground projection]
+    \label{thm:huang_positive_chain_ground_filter_family}
+    \lean{TNLean.MPS.AreaLaw.exists_positive_chain_ground_filter_family}
+    \leanok
+    \uses{lem:huang_positive_chain_energy_window,
+        thm:huang_positive_chain_filter_family}
+    The family can be chosen before $E_0$ and $\Gamma$ so that the following
+    holds for every unit vector $\Gamma$ with $H\Gamma=E_0\Gamma$ and
+    \begin{align*}
+        H-E_0I\ge\Delta(I-|\Gamma\rangle\langle\Gamma|).
+    \end{align*}
+    Some member $Q_e$ and some $a\in[1/2,1]$ satisfy
+    \begin{align*}
+        \|Q_e-a|\Gamma\rangle\langle\Gamma|\|\le4\eta.
+    \end{align*}
+\end{lemma}
+\begin{proof}
+    \leanok
+    Choose a mesh point within the prescribed energy accuracy of $E_0$.
+    The spectral Gaussian estimate gives error at most $\eta$ from
+    $a|\Gamma\rangle\langle\Gamma|$, where
+    $a=\exp(-h(E_0-e)^2/2)\in[\exp(-1/2),1]$.
+    Since $\exp(-1/2)\ge1/2$, the triangle inequality gives the claim.
+\end{proof}
+
+\begin{lemma}[One finite collection of left factors]
+    \label{lem:huang_finite_left_filter_factors}
+    \lean{TNLean.MPS.AreaLaw.exists_finite_left_filter_factors}
+    \leanok
+    \uses{thm:lvv_cut_decomposition}
+    Suppose that $M$ chain operators have operator-Schmidt rank at most
+    $R$ at every cut. At the cut after $i\le L$ sites, their left factors
+    can be drawn from one set $F$ of cardinality at most $MR$. Each member
+    of $F$ has operator-Schmidt rank at most $R$ at every internal left cut.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Decompose each operator using at most $R$ product terms, with the left
+    factors retaining the earlier cut-rank bounds. Take the union of the
+    $M$ resulting sets of left factors.
+\end{proof}
+
+\begin{lemma}[Error reduction chosen before the ground pair]
+    \label{thm:huang_positive_chain_viable_filter}
+    \lean{TNLean.MPS.AreaLaw.exists_positive_chain_error_reduced_set}
+    \leanok
+    \uses{lem:huang_finite_left_filter_factors,
+        thm:huang_positive_chain_ground_filter_family,
+        thm:lvv_scaled_projection_error_reduction}
+    Let $L\ge1$, $i\le L$, and let $S$ be a finite set of left vectors,
+    with $|S|\le s$ and individual MPS bond bound $b$. Under the physical
+    assumptions of Lemma~\ref{thm:huang_positive_chain_ground_filter_family},
+    there is a finite set $T$, chosen before every ground pair, with
+    \begin{align*}
+        |T|\le MR s,\qquad
+        \text{individual bond bound }R\max(1,b),
+    \end{align*}
+    where $M$ is the energy-mesh cardinality and $R$ is the uniform filter
+    rank bound. Whenever $S$ is half-viable for a unit ground vector
+    satisfying the gap assumption, $T$ is $(i,c/L)$-viable for that vector.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Form $T=\{Av:A\in F,\ v\in S\}$ from the common collection of left
+    factors. This gives both the cardinality and individual bond bounds.
+    One Gaussian approximant is within $4\eta$ of $a|\Gamma\rangle\langle\Gamma|$
+    with $a\ge1/2$. Applying its left factors to $S$ gives a subset of $T$ with viability
+    error at most $16\eta/a\le32\eta\le c/L$. The same witness is therefore
+    supported on the span of $T$.
+\end{proof}
