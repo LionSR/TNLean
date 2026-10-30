@@ -18,6 +18,8 @@ import TNLean.PEPS.Examples.CZXRectangleMap
 import TNLean.PEPS.Examples.CZXRectangleSupport
 import TNLean.PEPS.Examples.CZXRegionSymmetry
 import TNLean.PEPS.Examples.CZXSymmetry
+import TNLean.PEPS.Examples.CZXWrappingRectangle
+import TNLean.PEPS.Examples.CZXWrappingRectangleTransport
 import TNLean.PEPS.Examples.Classical
 import TNLean.PEPS.Examples.Cluster
 import TNLean.PEPS.Examples.ClusterStabilizer
@@ -27,6 +29,7 @@ import TNLean.PEPS.Examples.QuantumDoubleBondAverage
 import TNLean.PEPS.Examples.QuantumDoubleBondParent
 import TNLean.PEPS.Examples.QuantumDoubleLocalConstraint
 import TNLean.PEPS.Examples.QuantumDoublePlaquetteConstraint
+import TNLean.PEPS.Examples.QuantumDoubleRenormalization
 import TNLean.PEPS.Examples.RVB
 import TNLean.PEPS.Examples.ToricCodePrimal
 import TNLean.PEPS.Examples.ToricCodeTorusAmplitudes

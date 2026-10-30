@@ -1,0 +1,94 @@
+\section{An explicit grid partition of the chain}
+\label{sec:huang_chain_grid}
+
+The following construction supplies the two support layouts in
+\cite[Figure 2]{Osborne2006Dynamics}. It fixes the blocks, internal boundaries
+and boundary buffers directly from the chain length and two integer parameters.
+
+\begin{definition}[Grid blocks and boundary buffers]
+    \label{def:huang_chain_grid}
+    \lean{TNLean.MPS.AreaLaw.chainGridBlock,TNLean.MPS.AreaLaw.chainGridCut,
+        TNLean.MPS.AreaLaw.chainCutPair,TNLean.MPS.AreaLaw.chainCutBuffer,
+        TNLean.MPS.AreaLaw.chainGridOwner}
+    \leanok
+    Let $L,w,r$ be nonnegative integers, with $w>0$. On the chain
+    $\{0,\ldots,L-1\}$, set
+    \begin{align*}
+        C_j & =[jw,(j+1)w),       & 0\le j & <\lfloor L/w\rfloor+1,  \\
+        c_k & =(k+1)w,            & 0\le k & <\lfloor(L-1)/w\rfloor, \\
+        S_k & =[c_k-1,c_k+1),     &
+        K_k & =[c_k-1-r,c_k+r+1).
+    \end{align*}
+    All intervals are intersected with the chain; a negative left endpoint is
+    replaced by zero. The subtraction $L-1$ in the label count is truncated
+    at zero, so for $L=0$ the cut label set is empty.
+    A site $x$ is assigned the block label $\lfloor x/w\rfloor$.
+\end{definition}
+
+\begin{lemma}[Disjoint blocks covering the chain]
+    \label{thm:huang_chain_grid_blocks}
+    \lean{TNLean.MPS.AreaLaw.card_chainGridBlock_le,
+        TNLean.MPS.AreaLaw.chainGridBlock_width,
+        TNLean.MPS.AreaLaw.pairwise_disjoint_chainGridBlock,
+        TNLean.MPS.AreaLaw.mem_chainGridBlock_owner,
+        TNLean.MPS.AreaLaw.iUnion_chainGridBlock_eq_univ,
+        TNLean.MPS.AreaLaw.chainGrid_label_counts,
+        TNLean.MPS.AreaLaw.chainGridCut_bounds}
+    \leanok
+    \uses{def:huang_chain_grid}
+    The blocks $C_j$ are pairwise disjoint, each has at most $w$ sites, and
+    their union is the chain. Their nominal endpoint widths equal $w$.
+    Every site belongs to its assigned block. There are
+    $\lfloor L/w\rfloor+1\le L+1$ block labels and
+    $\lfloor(L-1)/w\rfloor\le L$ cut labels.
+    Each enumerated cut satisfies $0<c_k<L$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    The division algorithm gives
+    $\lfloor x/w\rfloor w\le x<(\lfloor x/w\rfloor+1)w$.
+    Distinct grid intervals do not intersect. The internal-cut label bound
+    gives $(k+1)w\le L-1$, and the remaining counts follow from integer division.
+\end{proof}
+
+\begin{lemma}[Exact neighborhoods and disjoint boundary buffers]
+    \label{thm:huang_chain_grid_buffers}
+    \lean{TNLean.MPS.AreaLaw.chainCutBuffer_width_le,
+        TNLean.MPS.AreaLaw.card_chainCutBuffer_le,
+        TNLean.MPS.AreaLaw.chainNeighborhood_chainCutPair_eq,
+        TNLean.MPS.AreaLaw.pairwise_disjoint_chainGridBuffer,
+        TNLean.MPS.AreaLaw.chainCutPair_eq_pair}
+    \leanok
+    \uses{def:huang_chain_grid, thm:huang_chain_grid_blocks}
+    For every internal cut, $S_k=\{c_k-1,c_k\}$ and its closed radius-$r$
+    neighborhood is exactly $K_k$. The nominal width and cardinality of $K_k$
+    are at most $2r+2$. If $2r+2\le w$, the buffers are pairwise disjoint.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Taking the closed integer-radius neighborhood expands the adjacent pair
+    by $r$ sites on either side, with clipping at the chain ends. Distinct
+    grid cuts are separated by at least $w$. When $2r+2\le w$, the right
+    endpoint of the earlier buffer is no larger than the left endpoint of
+    the later one.
+\end{proof}
+
+\begin{lemma}[Classification of nearest-neighbor edges]
+    \label{thm:huang_chain_grid_edges}
+    \lean{TNLean.MPS.AreaLaw.chainGrid_edge_classification,
+        TNLean.MPS.AreaLaw.chainGrid_boundary_edge_eq_pair,
+        TNLean.MPS.AreaLaw.chainGrid_pair_not_subset_block,
+        TNLean.MPS.AreaLaw.chainGrid_edge_in_block_iff}
+    \leanok
+    \uses{def:huang_chain_grid, thm:huang_chain_grid_blocks}
+    For every edge $\{i,i+1\}$ of the chain, exactly one of the following holds:
+    the edge is contained in a grid block, or $i+1=c_k$ for an enumerated
+    internal cut. In the second case, the edge is exactly $S_k$ and is
+    contained in no single block.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Put $j=\lfloor i/w\rfloor$. If $i+1<(j+1)w$, both endpoints lie in $C_j$.
+    Otherwise $i<(j+1)w\le i+1$, so $(j+1)w=i+1$ and the cut is internal.
+    The pair on either side of a grid boundary cannot lie in one grid interval.
+\end{proof}
