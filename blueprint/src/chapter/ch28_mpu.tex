@@ -9914,7 +9914,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 
 \begin{lemma}[Supplied four-spin gates and normalized source factorizations]
     \label{lem:mpu_supplied_four_spin_source_comparison}
-    \lean{MPOTensor.TwoSiteStandardFormData.isMPUSimple, MPOTensor.TwoSiteStandardFormData.exists_fourSpin_source_gate_gauges, MPOTensor.TwoSiteStandardFormData.exists_fourSpin_selected_source_gate_gauges}
+    \lean{MPOTensor.TwoSiteStandardFormData.isMPUSimple, MPOTensor.TwoSiteStandardFormData.exists_fourSpin_source_gate_gauges, MPOTensor.TwoSiteStandardFormData.exists_fourSpin_selected_source_gate_gauges, MPOTensor.TwoSiteStandardFormData.exists_fourSpin_selected_source_gate_gauges_of_square_ranks}
     \notready
     Let $W$ have any supplied two-site standard form with unitary gates
     $u,v$ and positive dimensions. Write
@@ -10433,6 +10433,52 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     internal unitary and gives equality on the even rings of the original
     tensor. The four-spin dictionary transports the given local equation
     without enlarging its antecedent.
+\end{proof}
+
+\begin{lemma}[Local transposition for any supplied standard form in a canonical ambient tensor]
+    \label{lem:mpu_supplied_even_transposition_criterion}
+    \lean{MPOTensor.TwoSiteStandardFormData.intermediateRanks_eq_phys_of_even_mpo_eq_transpose,
+        MPOTensor.TwoSiteStandardFormData.exists_transposition_certificate_of_square_ranks,
+        MPOTensor.TwoSiteStandardFormData.exists_transposition_certificate,
+        MPOTensor.TwoSiteStandardFormData.mpo_even_eq_transpose_of_transposition_certificate,
+        MPOTensor.TwoSiteStandardFormData.even_transposition_iff_exists_certificate,
+        MPOTensor.TwoSiteStandardFormData.exists_transposition_exponential_certificate,
+        Matrix.reindex_transposition_certificate}
+    \notready
+    Let $W$ be explicitly in reduced canonical form II and let $u,v$ be
+    any supplied standard-form gates on pairs of $d$-dimensional sites.
+    Then $W^{(N)}=W^{(N)T}$ for every even $N>1$ if and only if the
+    intermediate dimensions satisfy $r=\ell=d$ and, under these coordinate
+    identifications, there are a unitary $x$ on
+    $\mathbb C^d\otimes\mathbb C^d$ and $|c|=1$ such that
+    \[
+        v_{23}(u\otimes u)=c(x\otimes x^T)v_{23}^T.
+    \]
+    The phase can be written $c=e^{i\phi}$ with a pointwise chosen real
+    $\phi$. The local equation is preserved under any common coordinate
+    relabeling of the pair spaces. No normalization of the supplied half
+    factors is required. This is the explicit canonical-ambient,
+    even-standard-form-length restriction of
+    \cite[lines~1258--1288]{Cirac2017MPU}; the unrestricted source criterion
+    retains the presentation restriction in
+    \cite{gap:mpu_canonical_form_full_support}.
+\end{lemma}
+\begin{proof}
+    \uses{lem:mpu_supplied_four_spin_source_comparison,
+        lem:mpu_canonical_source_transposition_phase,
+        lem:mpu_canonical_even_transposition_iff}
+    Even-family comparison with the actual transposed tensor exchanges
+    the actual source ranks. The supplied cut-rank identities therefore
+    give $r=\ell=d$. Choose the actual normalized source factors and
+    compare their gates with $A=v_{23}(u\otimes u)$ and $B=v_{23}$:
+    $\widetilde A=(X\otimes Y)A$ and
+    $\widetilde B=B(Y^\dagger\otimes X^\dagger)$.
+    The normalized transpose certificate with unitary $z$ transports to
+    the displayed equation with $x=X^\dagger z\overline Y$.
+    Conversely the inverse comparison gives the normalized certificate
+    with $z=XxY^T$, whose actual even-ring contraction proves transpose
+    symmetry. The argument of the resulting unit complex phase gives
+    its displayed exponential form. No further physical blocking is used.
 \end{proof}
 
 \begin{lemma}[Continuous removal of the local transposition phase]

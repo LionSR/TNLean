@@ -115,6 +115,31 @@ theorem reindex_adjoint_certificate
   rw [Matrix.smul_mul]
   exact h'
 
+/-- A common coordinate relabeling preserves the local transposition gate equation.
+Source context: CPSV17, `UUtransposetrick`, lines 1258–1288; this is its
+physical-pair coordinate transport. -/
+theorem reindex_transposition_certificate
+    {ι κ : Type*} [Fintype ι] [Fintype κ]
+    (e : ι ≃ κ) {A B : Matrix (ι × ι) (ι × ι) ℂ}
+    {x : Matrix ι ι ℂ} {σ : ℂ}
+    (h : A = σ • (x ⊗ₖ xᵀ) * Bᵀ) :
+    Matrix.reindex (e.prodCongr e) (e.prodCongr e) A =
+      σ • (Matrix.reindex e e x ⊗ₖ (Matrix.reindex e e x)ᵀ) *
+        (Matrix.reindex (e.prodCongr e) (e.prodCongr e) B)ᵀ := by
+  let p := e.prodCongr e
+  let E := Matrix.reindexLinearEquiv ℂ ℂ p p
+  have h' := congrArg E h
+  rw [Matrix.smul_mul, map_smul] at h'
+  conv_rhs at h' => rw [← Matrix.reindexLinearEquiv_mul ℂ ℂ p p p]
+  have hx : E (x ⊗ₖ xᵀ) = Matrix.reindex e e x ⊗ₖ (Matrix.reindex e e x)ᵀ := by
+    simp only [E, p, Matrix.coe_reindexLinearEquiv]
+    rw [Matrix.transpose_reindex]
+    exact (Matrix.kroneckerMap_reindex (fun a b : ℂ ↦ a * b) e e e e x xᵀ).symm
+  rw [hx] at h'
+  simp only [E, p, Matrix.coe_reindexLinearEquiv, Matrix.transpose_reindex] at h'
+  rw [Matrix.smul_mul]
+  exact h'
+
 omit [DecidableEq m] [DecidableEq n] in
 /-- A product vector times a Kronecker product is the product of the two vector-matrix
 products. -/

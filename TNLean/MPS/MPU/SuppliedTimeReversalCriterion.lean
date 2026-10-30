@@ -40,13 +40,12 @@ private theorem adjoint_certificate_of_unitary_gate_transport
     ∃ w : Matrix.unitaryGroup ι ℂ,
       A = σ • ((w : Matrix ι ι ℂ) ⊗ₖ (w : Matrix ι ι ℂ)ᴴ) * Bᴴ := by
   let w := star X * z * Y
-  have hX : (X : Matrix ι ι ℂ)ᴴ * (X : Matrix ι ι ℂ) = 1 :=
-    ((Matrix.isUnitaryBetween_iff_mem_unitaryGroup _).mpr X.property).1
-  have hY : (Y : Matrix ι ι ℂ)ᴴ * (Y : Matrix ι ι ℂ) = 1 :=
-    ((Matrix.isUnitaryBetween_iff_mem_unitaryGroup _).mpr Y.property).1
+  have hXY := (Matrix.isUnitaryBetween_coe_unitaryGroup X).kronecker _ _
+    (Matrix.isUnitaryBetween_coe_unitaryGroup Y)
   have hcancel : ((X : Matrix ι ι ℂ)ᴴ ⊗ₖ (Y : Matrix ι ι ℂ)ᴴ) *
       ((X : Matrix ι ι ℂ) ⊗ₖ (Y : Matrix ι ι ℂ)) = 1 := by
-    rw [← Matrix.mul_kronecker_mul, hX, hY, Matrix.one_kronecker_one]
+    rw [← Matrix.conjTranspose_kronecker]
+    exact hXY.1
   have hw : ((X : Matrix ι ι ℂ)ᴴ ⊗ₖ (Y : Matrix ι ι ℂ)ᴴ) *
       ((z : Matrix ι ι ℂ) ⊗ₖ (z : Matrix ι ι ℂ)ᴴ) *
       ((Y : Matrix ι ι ℂ) ⊗ₖ (X : Matrix ι ι ℂ)) =
@@ -70,73 +69,6 @@ private theorem adjoint_certificate_of_unitary_gate_transport
     _ = σ • ((w : Matrix ι ι ℂ) ⊗ₖ (w : Matrix ι ι ℂ)ᴴ) * Bᴴ := by rw [hw]
 
 namespace TwoSiteStandardFormData
-
-private theorem selected_square_source_gate_comparison
-    {d D : ℕ} {W : MPOTensor (d * d) D}
-    {u v : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ}
-    (S : TwoSiteStandardFormData W u v) (hW : IsMPUCanonicalFormII W) :
-    let T := sourceFactors W hW.ρ hW.ρ_posDef
-    let L := finCongr S.sourceRanks_eq.2
-    let R := finCongr S.sourceRanks_eq.1
-    let p := Equiv.prodCongr (finProdFinEquiv (m := d) (n := d))
-      (finProdFinEquiv (m := d) (n := d))
-    ∃ X Y : Matrix.unitaryGroup (Fin (d * d)) ℂ,
-      Matrix.reindex (Equiv.prodCongr L R) (Equiv.refl _) (SourceFactors.sourceU W T) =
-        ((X : Matrix (Fin (d * d)) (Fin (d * d)) ℂ) ⊗ₖ (Y : Matrix (Fin (d * d)) (Fin (d * d)) ℂ)) *
-          Matrix.reindex p p (staircaseMiddle (A := Fin d) (E := Fin d) v * (u ⊗ₖ u)) ∧
-      Matrix.reindex (Equiv.refl _) (Equiv.prodCongr R L) (SourceFactors.sourceV W T) =
-        Matrix.reindex p p (staircaseMiddle (A := Fin d) (E := Fin d) v) *
-          ((Y : Matrix (Fin (d * d)) (Fin (d * d)) ℂ)ᴴ ⊗ₖ
-              (X : Matrix (Fin (d * d)) (Fin (d * d)) ℂ)ᴴ) := by
-  classical
-  let T := sourceFactors W hW.ρ hW.ρ_posDef
-  have hr : r[W] = d * d := S.sourceRanks_eq.1
-  have hl : ℓ[W] = d * d := S.sourceRanks_eq.2
-  obtain ⟨X, Y, hu, hv⟩ := S.exists_fourSpin_selected_source_gate_gauges hW
-  let L := finCongr hl
-  let R := finCongr hr
-  let X' : Matrix.unitaryGroup (Fin (d * d)) ℂ :=
-    ⟨Matrix.reindex L L X, Matrix.reindex_mem_unitaryGroup L _ X.property⟩
-  let Y' : Matrix.unitaryGroup (Fin (d * d)) ℂ :=
-    ⟨Matrix.reindex R R Y, Matrix.reindex_mem_unitaryGroup R _ Y.property⟩
-  let e : (Fin d × Fin d) ≃ Fin (d * d) := finProdFinEquiv
-  let p := Equiv.prodCongr e e
-  let A := staircaseMiddle (A := Fin d) (E := Fin d) v * (u ⊗ₖ u)
-  let B := staircaseMiddle (A := Fin d) (E := Fin d) v
-  have hu' : Matrix.reindex (Equiv.prodCongr L R) (Equiv.refl _)
-      (SourceFactors.sourceU W T) =
-      ((X' : Matrix (Fin (d * d)) (Fin (d * d)) ℂ) ⊗ₖ (Y' : Matrix (Fin (d * d)) (Fin (d * d)) ℂ)) *
-          Matrix.reindex p p A := by
-    have h := congrArg (Matrix.reindex (Equiv.prodCongr L R) (Equiv.refl _)) hu
-    rw [Matrix.reindex_kronecker_mul] at h
-    have hA : Matrix.reindex (Equiv.prodCongr L R) (Equiv.refl _)
-        (Matrix.reindex
-          (Equiv.prodCongr
-            (finProdFinEquiv.trans (finCongr S.sourceRanks_eq.2.symm))
-            (finProdFinEquiv.trans (finCongr S.sourceRanks_eq.1.symm))) p A) =
-        Matrix.reindex p p A := by
-      ext ⟨i, j⟩ ⟨k, l⟩
-      rfl
-    rw [hA] at h
-    exact h
-  have hv' : Matrix.reindex (Equiv.refl _) (Equiv.prodCongr R L)
-      (SourceFactors.sourceV W T) = Matrix.reindex p p B *
-      ((Y' : Matrix (Fin (d * d)) (Fin (d * d)) ℂ)ᴴ ⊗ₖ
-          (X' : Matrix (Fin (d * d)) (Fin (d * d)) ℂ)ᴴ) := by
-    have h := congrArg (Matrix.reindex (Equiv.refl _) (Equiv.prodCongr R L)) hv
-    rw [Matrix.reindex_mul_kronecker] at h
-    have hB : Matrix.reindex (Equiv.refl _) (Equiv.prodCongr R L)
-        (Matrix.reindex p
-          (Equiv.prodCongr
-            (finProdFinEquiv.trans (finCongr S.sourceRanks_eq.1.symm))
-            (finProdFinEquiv.trans (finCongr S.sourceRanks_eq.2.symm))) B) =
-        Matrix.reindex p p B := by
-      ext ⟨i, j⟩ ⟨k, l⟩
-      rfl
-    rw [hB] at h
-    simpa only [X', Y', Unitary.coe_star, Matrix.star_eq_conjTranspose,
-      Matrix.conjTranspose_reindex] using h
-  exact ⟨X', Y', hu', hv'⟩
 
 /-- Even-family time reversal gives the literal four-spin certificate for
 any supplied square standard form in an explicitly canonical ambient
@@ -163,7 +95,7 @@ theorem exists_timeReversal_certificate_of_square_ranks
   let p := Equiv.prodCongr e e
   let A := staircaseMiddle (A := Fin d) (E := Fin d) v * (u ⊗ₖ u)
   let B := staircaseMiddle (A := Fin d) (E := Fin d) v
-  obtain ⟨X', Y', hu', hv'⟩ := selected_square_source_gate_comparison S hW
+  obtain ⟨X', Y', hu', hv'⟩ := S.exists_fourSpin_selected_source_gate_gauges_of_square_ranks hW
   rw [hu', hv'] at hcert
   obtain ⟨w, hw⟩ := adjoint_certificate_of_unitary_gate_transport
     (Matrix.reindex p p A) (Matrix.reindex p p B) X' Y' z σ hcert
@@ -263,21 +195,18 @@ theorem mpo_even_eq_adjoint_of_timeReversal_certificate
       ((x' : Matrix (Fin (d * d)) (Fin (d * d)) ℂ) ⊗ₖ
           (x' : Matrix (Fin (d * d)) (Fin (d * d)) ℂ)ᴴ) * B₀ᴴ := by
     exact Matrix.reindex_adjoint_certificate e hlocal
-  obtain ⟨X, Y, hu, hv⟩ := selected_square_source_gate_comparison S hW
-  have hX : (X : Matrix (Fin (d * d)) (Fin (d * d)) ℂ)ᴴ *
-      (X : Matrix (Fin (d * d)) (Fin (d * d)) ℂ) = 1 :=
-    ((Matrix.isUnitaryBetween_iff_mem_unitaryGroup _).mpr X.property).1
-  have hY : (Y : Matrix (Fin (d * d)) (Fin (d * d)) ℂ)ᴴ *
-      (Y : Matrix (Fin (d * d)) (Fin (d * d)) ℂ) = 1 :=
-    ((Matrix.isUnitaryBetween_iff_mem_unitaryGroup _).mpr Y.property).1
+  obtain ⟨X, Y, hu, hv⟩ := S.exists_fourSpin_selected_source_gate_gauges_of_square_ranks hW
+  have hXY := (Matrix.isUnitaryBetween_coe_unitaryGroup X).kronecker _ _
+    (Matrix.isUnitaryBetween_coe_unitaryGroup Y)
+  have hYX := (Matrix.isUnitaryBetween_coe_unitaryGroup Y).kronecker _ _
+    (Matrix.isUnitaryBetween_coe_unitaryGroup X)
   have hAcancel : ((X : Matrix (Fin (d * d)) (Fin (d * d)) ℂ)ᴴ ⊗ₖ
       (Y : Matrix (Fin (d * d)) (Fin (d * d)) ℂ)ᴴ) * A = A₀ := by
     change ((X : Matrix (Fin (d * d)) (Fin (d * d)) ℂ)ᴴ ⊗ₖ
         (Y : Matrix (Fin (d * d)) (Fin (d * d)) ℂ)ᴴ) *
       Matrix.reindex (Equiv.prodCongr (finCongr hl) (finCongr hr))
         (Equiv.refl _) (SourceFactors.sourceU W T) = A₀
-    rw [hu, ← Matrix.mul_assoc, ← Matrix.mul_kronecker_mul, hX, hY,
-      Matrix.one_kronecker_one, Matrix.one_mul]
+    rw [hu, ← Matrix.mul_assoc, ← Matrix.conjTranspose_kronecker, hXY.1, Matrix.one_mul]
   have hBcancel : B *
       ((Y : Matrix (Fin (d * d)) (Fin (d * d)) ℂ) ⊗ₖ (X : Matrix (Fin (d * d)) (Fin (d * d)) ℂ)) =
           B₀ := by
@@ -285,8 +214,7 @@ theorem mpo_even_eq_adjoint_of_timeReversal_certificate
       (Equiv.prodCongr (finCongr hr) (finCongr hl)) (SourceFactors.sourceV W T) *
         ((Y : Matrix (Fin (d * d)) (Fin (d * d)) ℂ) ⊗ₖ (X : Matrix (Fin (d * d)) (Fin (d * d)) ℂ)) =
             B₀
-    rw [hv, Matrix.mul_assoc, ← Matrix.mul_kronecker_mul, hY, hX,
-      Matrix.one_kronecker_one, Matrix.mul_one]
+    rw [hv, Matrix.mul_assoc, ← Matrix.conjTranspose_kronecker, hYX.1, Matrix.mul_one]
   have hraw' : ((X : Matrix (Fin (d * d)) (Fin (d * d)) ℂ)ᴴ ⊗ₖ
       (Y : Matrix (Fin (d * d)) (Fin (d * d)) ℂ)ᴴ) * A =
       σ • ((x' : Matrix (Fin (d * d)) (Fin (d * d)) ℂ) ⊗ₖ
