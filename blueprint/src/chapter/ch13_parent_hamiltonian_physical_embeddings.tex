@@ -151,3 +151,116 @@
     extensions vanish. The projector-kernel statement supplies precisely
     this mixed-coefficient vanishing.
 \end{proof}
+
+\section{Component Hamiltonians of disjoint physical sectors}
+
+Write $E_m$ and $F_m$ for extension by zero on $m$-letter words along
+one-letter injections $e$ and $f$ with disjoint images. For local subspaces
+$S$ and $T$ on $R$ sites, put $U=E_R S+F_R T$. Let $H_U$, $H_S$, and $H_T$
+be the actual periodic sums of the complementary projections of these spaces.
+
+\begin{lemma}[Orthogonality of the actual physical sectors]
+    \label{lem:physical_sector_word_orthogonality}
+    \lean{Function.Embedding.inner_extendByZero_eq_zero_of_disjoint,
+        MPSTensor.disjoint_physical_word_ranges}
+    \notready
+    \uses{def:physical_euclidean_extension_zero}
+    Extension by zero from disjoint coordinate ranges gives orthogonal
+    vectors. In particular, for $m\ge1$, the actual word embeddings of
+    disjoint one-letter alphabets have disjoint ranges, and
+    $\langle E_m v,F_m w\rangle=0$.
+\end{lemma}
+\begin{proof}
+    \notready
+    In the coefficient sum defining the inner product, at least one
+    coefficient vanishes at every coordinate. An embedded word in both
+    ranges would have its first letter in both one-letter images.
+\end{proof}
+
+\begin{lemma}[The actual local projector restricts to its sector]
+    \label{lem:physical_sector_parent_projection_transport}
+    \lean{MPSTensor.physical_sector_parent_projection_embed}
+    \notready
+    \uses{lem:physical_sector_word_orthogonality}
+    For $R\ge1$, the complementary projection of the actual sum
+    $U=E_R S+F_R T$ satisfies
+    \begin{align}
+        P_{U^{\perp}}E_R v & =E_R P_{S^{\perp}}v.
+    \end{align}
+    Interchanging the two alphabets gives the analogous identity on the
+    second sector. No range or projector identity is assumed.
+\end{lemma}
+\begin{proof}
+    \notready
+    The candidate projection $E_R P_Sv$ belongs to $U$. Its residual is
+    orthogonal to $E_R S$ by isometry and to $F_R T$ by sector orthogonality.
+    Uniqueness of orthogonal projection gives $P_U E_Rv=E_RP_Sv$.
+    Subtract from $E_Rv$ to obtain the complementary projection identity.
+\end{proof}
+
+\begin{lemma}[The actual periodic sum restricts to its component]
+    \label{lem:physical_sector_periodic_hamiltonian_transport}
+    \lean{MPSTensor.physical_sector_projectorHamiltonian_embed,
+        MPSTensor.physical_sector_projectorHamiltonian_embed_eq_zero_iff}
+    \notready
+    \uses{lem:physical_sector_parent_projection_transport,
+        lem:physical_spectator_embedding_transport}
+    If $1\le R\le M$, then
+    \begin{align}
+        H_U E_Mv  & =E_MH_Sv,                             &
+        H_UE_Mv=0 & \quad\Longleftrightarrow\quad H_Sv=0.
+    \end{align}
+    The second-sector assertions follow by interchanging the embeddings
+    and local spaces. All operators are the actual periodic sums.
+\end{lemma}
+\begin{proof}
+    \notready
+    Splitting a cyclic window and its complement commutes with sitewise
+    physical embedding. The local complementary projection intertwines
+    with $E_R$, and its extension by the identity intertwines with the
+    corresponding outside embedding. Conjugate by the cyclic coordinate
+    changes and sum over all starting sites. Injectivity of the physical
+    isometry gives the zero equation in both directions.
+\end{proof}
+
+\begin{lemma}[Exact component kernel condition for a sector sum]
+    \label{lem:physical_sector_sum_kernel_iff}
+    \lean{MPSTensor.physical_sector_projectorHamiltonian_sum_eq_zero_iff}
+    \notready
+    \uses{lem:physical_sector_periodic_hamiltonian_transport,
+        lem:physical_sector_word_orthogonality}
+    Under the same assumptions,
+    \begin{align}
+        H_U(E_Mv+F_Mw)=0
+        \quad\Longleftrightarrow\quad H_Sv=0\ \text{and}\ H_Tw=0.
+    \end{align}
+    No whole-kernel decomposition or dynamics relation is a premise.
+\end{lemma}
+\begin{proof}
+    \notready
+    The actual sum acts as $E_MH_Sv+F_MH_Tw$. Its two terms are orthogonal.
+    If their sum vanishes, taking the inner product with the first term
+    shows that term vanishes; the second then vanishes also. Injectivity
+    gives the two component equations. The converse follows by linearity.
+\end{proof}
+
+\begin{lemma}[Full kernel decomposition for a split physical alphabet]
+    \label{lem:physical_sum_full_kernel}
+    \lean{MPSTensor.ker_physical_sum_projectorHamiltonian}
+    \notready
+    \uses{lem:physical_sector_state_decomposition,lem:physical_sector_sum_kernel_iff}
+    Let $M\ge R\ge2$, and split the physical alphabet into its first $a$
+    and last $b$ letters. For local spaces $S$ and $T$, put
+    $U=E_RS+F_RT$, where the two maps extend by zero on physical words.
+    For the actual periodic sums of the complementary projections,
+    $\ker H_U=E_M\ker H_S+F_M\ker H_T$.
+\end{lemma}
+\begin{proof}
+    \notready
+    Every kernel vector has zero mixed-sector coefficients and therefore
+    splits into its two actual coefficient restrictions. The component
+    kernel equivalence puts each restriction in its respective kernel.
+    Conversely, the component kernel equivalence and linearity show that
+    the sum of any two embedded component kernel vectors is killed by
+    the combined Hamiltonian.
+\end{proof}
