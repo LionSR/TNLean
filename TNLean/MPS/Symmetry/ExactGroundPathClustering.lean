@@ -70,28 +70,30 @@ theorem ExactMPSGroundPath.exists_uniform_connected_exponential_clustering
     dsimp only [s]
     rw [Real.coe_toNNReal _ (div_nonneg hq.le (sq_nonneg Δ))]
     dsimp only [q]
-    field_simp [hΔ.ne'] <;> ring
+    field_simp [hΔ.ne']
   have htime : v * T = ℓ / 2 := by
     dsimp only [T]
-    field_simp [hv.ne'] <;> ring
+    field_simp [hv.ne']
   have hqexp : Real.exp (-q / 2) = Real.exp (-ℓ * Δ / (4 * v)) := by
     congr 1
     dsimp only [q, T]
-    simp only [div_eq_mul_inv, mul_inv_rev]
+    simp only [div_eq_mul_inv, _root_.mul_inv_rev]
     ring
   have htail : Real.exp (-T ^ 2 / (2 * (s : ℝ))) = Real.exp (-q / 2) := by
     rw [hs]
     congr 1
     dsimp only [q]
-    field_simp [hT.ne', hΔ.ne'] <;> ring
+    field_simp [hT.ne', hΔ.ne']
   have hc : kernel s⁻¹ 0 = Real.sqrt (ℓ / (4 * Real.pi * v * Δ)) := by
     rw [kernel_inv_zero_eq_sqrt, hs]
     congr 1
     dsimp only [T]
-    field_simp [hv.ne', hΔ.ne', Real.pi_ne_zero] <;> ring
+    field_simp [hv.ne', hΔ.ne', Real.pi_ne_zero]
+    ring
   have hrecip : 2 / T = 4 * v / ℓ := by
     dsimp only [T]
-    field_simp [hℓpos.ne', hv.ne'] <;> ring
+    field_simp [hℓpos.ne', hv.ne']
+    ring
   have hshort :
       (2 * (X.card : ℝ) * Real.exp (-ℓ)) * v * Real.exp (v * T) =
         2 * X.card * v * Real.exp (-ℓ / 2) := by

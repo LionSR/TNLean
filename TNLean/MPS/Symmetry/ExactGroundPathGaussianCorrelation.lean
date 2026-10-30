@@ -131,7 +131,7 @@ theorem ExactMPSGroundPath.exists_uniform_connected_correlation_gaussian_bound
     dsimp only [A₀]
     rw [inner_centeredObservable_mul]
     simp only [normalizedVectorExpectation, sub_div, mul_div_assoc]
-  show ‖normalizedVectorExpectation ψ (A * B) -
+  change ‖normalizedVectorExpectation ψ (A * B) -
       normalizedVectorExpectation ψ A * normalizedVectorExpectation ψ B‖ ≤
     2 * ‖A‖ * ‖B‖ * B₀
   rw [hcov, norm_div, Complex.norm_real, Real.norm_of_nonneg (sq_nonneg _)]
