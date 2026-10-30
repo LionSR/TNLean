@@ -23,7 +23,7 @@ exactly once. Source: PGVWC07, Theorem thm:OBC-Vidal, lines 431--458. -/
 def extendCutPrefixEquiv {d N k : ℕ} (hk : k < N) :
     CutPrefixConfig d N k × Fin d ≃ CutPrefixConfig d N (k + 1) where
   toFun ui := extendCutPrefix k ui.1 ui.2
-  invFun w := (fun s ↦ w ⟨s.val, by omega⟩,
+  invFun w := (fun s ↦ w ⟨s.val, by have := s.2; omega⟩,
     w ⟨⟨k, hk⟩, Nat.lt_succ_self k⟩)
   left_inv := by
     rintro ⟨u, i⟩
@@ -39,6 +39,7 @@ def extendCutPrefixEquiv {d N k : ℕ} (hk : k < N) :
       congr 1
       apply Subtype.ext
       apply Fin.ext
+      show k = s.val.val
       have := s.property
       omega
 
@@ -47,7 +48,7 @@ suffix exactly once. Source: PGVWC07, Theorem thm:OBC-Vidal, lines 431--458. -/
 def extendCutSuffixEquiv {d N k : ℕ} (hk : k < N) :
     Fin d × CutSuffixConfig d N (k + 1) ≃ CutSuffixConfig d N k where
   toFun iv := extendCutSuffix k iv.1 iv.2
-  invFun w := (w ⟨⟨k, hk⟩, le_rfl⟩, fun s ↦ w ⟨s.val, by omega⟩)
+  invFun w := (w ⟨⟨k, hk⟩, le_rfl⟩, fun s ↦ w ⟨s.val, by have := s.2; omega⟩)
   left_inv := by
     rintro ⟨i, v⟩
     apply Prod.ext
@@ -62,6 +63,7 @@ def extendCutSuffixEquiv {d N k : ℕ} (hk : k < N) :
       congr 1
       apply Subtype.ext
       apply Fin.ext
+      show k = s.val.val
       have := s.property
       omega
 

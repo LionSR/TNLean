@@ -81,22 +81,22 @@ theorem exists_weightedSchmidtCutBasis {d N : ℕ} (ψ : (Fin N → Fin d) → �
     intro q
     change ((basisOfLinearIndependentOfCardEqFinrank' b hli _) q).val = F.col q
     rw [coe_basisOfLinearIndependentOfCardEqFinrank']
-    rfl
   have hrepr : ∀ v,
       B.equivFun ⟨M.col v, Submodule.subset_span ⟨v, rfl⟩⟩ = S.U.col v := by
     intro v
-    apply B.equivFun.symm.injective
-    apply Subtype.val_injective
-    rw [B.equivFun.symm_apply_apply, Module.Basis.equivFun_symm_apply]
-    simp only [Submodule.coe_sum, Submodule.coe_smul, Finset.sum_apply, Pi.smul_apply, hB,
-      smul_eq_mul]
-    funext u
-    change M u v = ∑ q, S.U q v * F u q
-    rw [hM, Matrix.mul_apply]
-    exact Finset.sum_congr rfl fun q _ ↦ mul_comm _ _
+    have hsum : (⟨M.col v, Submodule.subset_span ⟨v, rfl⟩⟩ : cutColumnSpace ψ k)
+        = ∑ q, (S.U.col v) q • B q := by
+      apply Subtype.val_injective
+      simp only [Submodule.coe_sum, Submodule.coe_smul, hB]
+      funext u
+      rw [Finset.sum_apply]
+      change M u v = ∑ q, S.U q v * F u q
+      rw [hM, Matrix.mul_apply]
+      exact Finset.sum_congr rfl fun q _ ↦ mul_comm _ _
+    rw [hsum, Module.Basis.equivFun_apply, Module.Basis.repr_sum_self]
   refine ⟨B, S.singularValues, S.singularValues_pos, ?_, ?_⟩
-  · change (fun u q ↦ (B q).val u)ᴴ * (fun u q ↦ (B q).val u) = _
-    have hBF : (fun u q ↦ (B q).val u) = F := by
+  · intro F₀
+    have hBF : F₀ = F := by
       funext u q
       exact congrFun (hB q) u
     rw [hBF]
@@ -110,9 +110,8 @@ theorem exists_weightedSchmidtCutBasis {d N : ℕ} (ψ : (Fin N → Fin d) → �
         congr 1
         funext q
         exact (pow_two _).symm
-  · change (fun q v ↦ B.repr ⟨M.col v, Submodule.subset_span ⟨v, rfl⟩⟩ q) *
-      (fun q v ↦ B.repr ⟨M.col v, Submodule.subset_span ⟨v, rfl⟩⟩ q)ᴴ = 1
-    have hG : (fun q v ↦ B.repr ⟨M.col v, Submodule.subset_span ⟨v, rfl⟩⟩ q) = S.U := by
+  · intro G₀
+    have hG : G₀ = S.U := by
       funext q v
       exact congrFun (hrepr v) q
     rw [hG]
