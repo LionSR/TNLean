@@ -31,6 +31,7 @@ import TNLean.MPS.Examples.ClusterSPTFixedPoint
 import TNLean.MPS.Examples.ClusterSourceGroundState
 import TNLean.MPS.Examples.EvenParity
 import TNLean.MPS.Examples.Fibonacci
+import TNLean.MPS.Examples.FiniteSetWeakHopf
 import TNLean.MPS.Examples.GHZ
 import TNLean.MPS.Examples.GHZCluster
 import TNLean.MPS.Examples.GHZClusterAction

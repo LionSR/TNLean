@@ -755,6 +755,13 @@ arXiv:2504.16985:
 
 For the MPU action on injective MPS blocks in arXiv:2502.20257:
 
+- `fbc25_boundary_dressed_l_symbols.tex` (local fix, resolved) records that
+  the scalar gauges of fusion and action tensors and the L-symbols are
+  defined by comparison against long words, since the reduction theorem gives
+  no bare-scalar uniqueness; proves the gauge law of the L-symbols in that
+  form; and shows that rescaled tensors realize every scalar gauge, so the
+  single-block, stabilizer-form and block-independence arguments hold
+  verbatim.
 - `fbc25_circle_complex_units_cohomology.tex` distinguishes the source
   footnote's sheaf-cohomology comparison from the algebraic group cohomology
   of a finite discrete group and records the direct phase-and-radial proof of
