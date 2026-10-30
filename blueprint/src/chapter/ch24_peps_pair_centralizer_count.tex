@@ -1,4 +1,4 @@
-\begin{theorem}[Commuting closure labels and centralizers]%
+\begin{lemma}[Commuting closure labels and centralizers]%
     \label{thm:peps_pair_centralizer_count}
     \lean{TNLean.PEPS.card_commutingPairConjugacyClass_eq_sum_card_centralizer_of_representatives,
         TNLean.PEPS.card_commutingPairConjugacyClass_eq_sum_card_centralizer,
@@ -20,7 +20,7 @@
         \bigl|\operatorname{Cl}(Z_G(g_C))\bigr|.
         \label{eq:peps_pair_class_count}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_pair_conjugacy_centralizer}
@@ -30,12 +30,12 @@
     For a fixed first element $g_C$, two such pairs have the same
     simultaneous-conjugacy class exactly when their second elements
     are conjugate in $Z_G(g_C)$, by
-    Theorem~\ref{thm:peps_pair_conjugacy_centralizer}.
+    Lemma~\ref{thm:peps_pair_conjugacy_centralizer}.
     This proves the stated bijection. Counting its disjoint components
     gives (\ref{eq:peps_pair_class_count}).
 \end{proof}
 
-\begin{theorem}[Dimension of the commuting torus closure span]%
+\begin{lemma}[Dimension of the commuting torus closure span]%
     \label{thm:peps_g_injective_closure_dimension}
     \lean{TNLean.PEPS.IsGInjective.finrank_span_torusGClosure_commuting_eq_sum_card_centralizer,
         TNLean.PEPS.IsGInjective.finrank_span_torusGClosureClass_commuting_eq_sum_card_centralizer,
@@ -55,14 +55,14 @@
         =\sum_{C\in\operatorname{Cl}(G)}
         \bigl|\operatorname{Cl}(Z_G(g_C))\bigr|.
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_semiregular_g_injective_closure_independence,
         thm:peps_pair_centralizer_count}
     The class-labelled vectors are linearly independent by
-    Theorem~\ref{thm:peps_semiregular_g_injective_closure_independence}.
+    Lemma~\ref{thm:peps_semiregular_g_injective_closure_independence}.
     They form a basis of their span, whose dimension is therefore
     the number of commuting pair classes given by
-    Theorem~\ref{thm:peps_pair_centralizer_count}.
+    Lemma~\ref{thm:peps_pair_centralizer_count}.
 \end{proof}

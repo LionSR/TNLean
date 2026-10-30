@@ -1,4 +1,4 @@
-\begin{theorem}[Reconstruction from regular inverse coordinates]%
+\begin{lemma}[Reconstruction from regular inverse coordinates]%
     \label{thm:peps_regular_parent_reconstruction}
     \lean{TNLean.PEPS.globalRegularTensorMap,
         TNLean.PEPS.regularSiteRetraction_eq_self_of_mem_range,
@@ -24,9 +24,9 @@
                                              & =(F_{\mathrm{all}}\Psi)(\alpha).
         \label{eq:peps_regular_parent_left_invariance}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
-    By Theorem~\ref{thm:peps_region_vertex_image_support}, every one-site
+    By Lemma~\ref{thm:peps_region_vertex_image_support}, every one-site
     slice of $\Psi$ lies in $\operatorname{im}A_v$, where $A_v\Pi_v=A_v$
     gives $A_vF_vA_v=A_v$:
     % Formula: A_v F_v A_v = A_v Pi_v = A_v, not A_v F_v = I globally.
@@ -68,7 +68,7 @@
     invariance gives~(\ref{eq:peps_regular_parent_left_invariance}).
 \end{proof}
 
-\begin{theorem}[Shared-edge invariance and flat support of parent coordinates]%
+\begin{lemma}[Shared-edge invariance and flat support of parent coordinates]%
     \label{thm:peps_regular_parent_coordinate_support}
     \lean{TNLean.PEPS.dependentRegionSlice_regularInverse_halfEdgeRightMul,
         TNLean.PEPS.dependentRegionSlice_regularInverse_apply_eq_zero_of_cycle_ne_one,
@@ -83,7 +83,7 @@
     \uses{thm:peps_regular_parent_reconstruction,
         lem:peps_regular_region_bond_right_invariance,
         thm:peps_regular_region_parent_flatness}
-    In the setting of Theorem~\ref{thm:peps_regular_parent_reconstruction},
+    In the setting of Lemma~\ref{thm:peps_regular_parent_reconstruction},
     if every edge is internal to some parent region, then
     $\phi=F_{\mathrm{all}}\Psi$ satisfies $\phi(\alpha\cdot r)=\phi(\alpha)$
     for all $r\in G^E$, where $(\alpha\cdot r)_{v,e}=\alpha_{v,e}r_e$.
@@ -97,7 +97,7 @@
     satisfies (\ref{eq:peps_regular_parent_reconstruction}),
     (\ref{eq:peps_regular_parent_left_invariance}), right edge invariance,
     and vanishing at nonidentity plaquette holonomies.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Fixing labels outside a parent region $R$ expresses the slice of $\phi$
     as a linear combination of $\bigotimes_{v\in R}F_v$-images of physical
@@ -111,7 +111,7 @@
     forces $\phi(\alpha)=0$.
 \end{proof}
 
-\begin{theorem}[Global spanning of the regular torus parent kernel]%
+\begin{lemma}[Global spanning of the regular torus parent kernel]%
     \label{thm:peps_regular_torus_parent_spanning}
     \lean{TNLean.PEPS.globalRegularTensorMap_regularProjectorClosedState,
         TNLean.PEPS.IsGInjective.stateCoeff_mem_commutingClosureSpan_of_flat,
@@ -130,13 +130,13 @@
         \operatorname{span}\{\lvert\Psi_{g,h}\rangle:gh=hg\}.
         \label{eq:peps_regular_global_spanning}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Every $\Psi\in\ker H$ lies in $\ker(h_v\otimes I_{R_v^c})$ for all $v$.
     Let $\phi=F_{\mathrm{all}}\Psi$, let $\mathcal F$ be the set of
     plaquette-flat edge assignments $u$, let $\alpha^u$ have tail label $1$
     and head label $u_e$, and let $C_u$ be the closed contraction of $\Pi_v$
-    with insertion $u$. Theorems~\ref{thm:peps_regular_parent_coordinate_support},
+    with insertion $u$. Lemmas~\ref{thm:peps_regular_parent_coordinate_support},
     \ref{thm:peps_regular_invariant_state_span},
     and~\ref{thm:peps_regular_closed_physical_contraction} give
     \begin{align}
@@ -182,7 +182,7 @@
             \tnwire{parentAbsorbed0.0}{parentAbsorbed1.180}
         \end{tenkz}
     \end{tenkzequation}
-    By Theorem~\ref{thm:peps_flat_insertion_closure_state}, each
+    By Lemma~\ref{thm:peps_flat_insertion_closure_state}, each
     $\lvert\Psi_u\rangle$ with $u\in\mathcal F$ equals some commuting
     closure state $\lvert\Psi_{g,h}\rangle$, so
     (\ref{eq:peps_regular_flat_expansion}) yields

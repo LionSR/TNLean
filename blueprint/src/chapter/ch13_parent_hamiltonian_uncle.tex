@@ -85,6 +85,35 @@ one scalar need not be a similarity transformation.
     $\varepsilon(L_iP_j+Q_iL_j)$. In particular $U(0)=U$.
 \end{definition}
 
+\begin{lemma}[Injective perturbations give injective uncle tensors]
+    \label{lem:uncle_injective_perturbation}
+    \lean{MPSTensor.isInjective_uncleTensor_of_isInjective_perturbation}
+    \notready
+    \discussion{10284}
+    \uses{def:two_block_uncle_tensor, def:injective}
+    Let $A_i\in\mathcal M_a$, $B_i\in\mathcal M_b$ and let $R_i,L_i$
+    have matching rectangular sizes. Suppose the matrices
+    $T_i=\left(\begin{smallmatrix}A_i&R_i\\L_i&B_i\end{smallmatrix}\right)$
+    span $\mathcal M_{a+b}$. Then the two-site matrices $U_{ij}$ in
+    (\ref{eq:uncle_explicit_tensor}) also span $\mathcal M_{a+b}$.
+    This is the injective-perturbation lemma of
+    \cite{FernandezGonzalez2015Uncle}.
+    % Source: Papers/1210.6613/UncleHMPS.tex, lemma:inj-perturbation, lines 973--1016.
+\end{lemma}
+\begin{proof}
+    Since the $T_i$ span the full algebra, choose coefficients $c_i$ with
+    $\sum_i c_iT_i=\Id$. Their four block identities are
+    $\sum_i c_iA_i=\Id_a$, $\sum_i c_iB_i=\Id_b$ and
+    $\sum_i c_iR_i=\sum_i c_iL_i=0$. Substituting them into
+    (\ref{eq:uncle_explicit_tensor}) gives
+    \begin{align}
+        \sum_i c_iU_{ij}
+         & =\begin{pmatrix}A_j&R_j\\L_j&B_j\end{pmatrix}=T_j.
+        \label{eq:uncle_identity_contraction}
+    \end{align}
+    Thus the uncle span contains every $T_j$ and hence the full algebra.
+\end{proof}
+
 \begin{lemma}[Regularization of the blocked perturbation]
     \label{lem:uncle_regularization}
     \lean{MPSTensor.twoBlockVirtualScale_blockTensor}
@@ -102,7 +131,7 @@ one scalar need not be a similarity transformation.
     polynomials in $\varepsilon$.
 \end{proof}
 
-\begin{theorem}[Canonical two-block uncle interaction and Hamiltonian]
+\begin{lemma}[Canonical two-block uncle interaction and Hamiltonian]
     \label{thm:two_block_uncle_parent_limit}
     \lean{MPSTensor.uncleInteractionES}
     \lean{MPSTensor.uncleHamiltonianES}
@@ -119,7 +148,7 @@ one scalar need not be a similarity transformation.
     length $N\ge2$, the canonical parent Hamiltonians converge in operator norm
     to $H'_P=\sum_{i=1}^N(h'_P)_{i,i+1}$. The Hamiltonian limit also holds along real
     perturbation parameters.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{lem:uncle_local_projector_continuity,lem:uncle_virtual_rescaling,
@@ -131,6 +160,26 @@ one scalar need not be a similarity transformation.
     two-site Hilbert space. Each translated interaction is expressed through
     the existing cyclic restriction and its adjoint. Finite sums and these
     fixed operator compositions preserve operator-norm convergence.
+\end{proof}
+
+\begin{lemma}[Uncle limits under an injective perturbation]
+    \label{cor:uncle_parent_limit_injective_perturbation}
+    \lean{MPSTensor.tendsto_parentInteractionES_twoBlockPerturbation_of_isInjective_perturbation,
+        MPSTensor.tendsto_parentHamiltonianES_twoBlockPerturbation_of_isInjective_perturbation}
+    \notready
+    \discussion{10284}
+    \uses{lem:uncle_injective_perturbation, thm:two_block_uncle_parent_limit}
+    If the full matrices $T_i$ of Lemma~\ref{lem:uncle_injective_perturbation}
+    span $\mathcal M_{a+b}$, then the canonical interactions of
+    $C(\varepsilon)$ converge to $\Pi[U]$. At every fixed periodic length
+    $N\geq2$, the corresponding Hamiltonians converge to the translated
+    sum of uncle projectors. Both limits are operator-norm limits as
+    $\varepsilon\to0$ through nonzero complex values.
+\end{lemma}
+\begin{proof}
+    The perturbation hypothesis gives injectivity of $U$ by
+    Lemma~\ref{lem:uncle_injective_perturbation}. Apply
+    Lemma~\ref{thm:two_block_uncle_parent_limit}.
 \end{proof}
 
 The source assumes $C=A\oplus B$ is block-injective. The local limit proof

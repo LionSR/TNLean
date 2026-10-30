@@ -42,11 +42,11 @@ product basis, whereas graded contraction rules and graded injectivity lie
 outside the scope of these results.
 
 The boundary twist enters as $\tr(YA^{i_1}\cdots A^{i_N})$.
-Theorem~\ref{thm:kitaev_amplitudes} and
+Lemma~\ref{thm:kitaev_amplitudes} and
 Corollary~\ref{cor:kitaev_parity_supports} compute both twisted and
 untwisted coefficients and their parity supports, while
 Lemma~\ref{lem:kitaev_open_boundary} relates the four open-boundary closures.
-Theorems~\ref{thm:kitaev_not_normal} and \ref{thm:kitaev_two_injective}
+Lemmas~\ref{thm:kitaev_not_normal} and \ref{thm:kitaev_two_injective}
 establish non-normality of the ordinary matrix tensor and decompose its
 twisted contraction into a sum of two injective bond-dimension-one sectors;
 as noted in \cite{gap:rmp_kitaev_chain_bosonic_scope}, these are statements
@@ -92,7 +92,7 @@ about the ungraded contraction rather than graded injectivity.
     $A^{i_1}\cdots A^{i_N}=Y^k$.
 \end{proof}
 
-\begin{theorem}[Periodic amplitudes]\label{thm:kitaev_amplitudes}
+\begin{lemma}[Periodic amplitudes]\label{thm:kitaev_amplitudes}
     \lean{MPSTensor.kitaevTensor_coeff, MPSTensor.kitaevTwistedCoeff_eq}
     \leanok
     \uses{def:mpv, def:kitaev_twisted_coeff, lem:kitaev_eval_word}
@@ -114,7 +114,7 @@ about the ungraded contraction rather than graded injectivity.
         \label{eq:kitaev_amplitudes_twisted}
     \end{align}
     Neither amplitude depends on the length $N$ except through $k$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -161,7 +161,7 @@ about the ungraded contraction rather than graded injectivity.
     Both $\mathbb 1$ and $Y$ have this form, and so does every power of $Y$.
 \end{proof}
 
-\begin{theorem}[The ordinary contraction is reducible and not normal]%
+\begin{lemma}[The ordinary contraction is reducible and not normal]%
     \label{thm:kitaev_not_normal}
     \lean{MPSTensor.kitaevTensor_mulVec_common_eigenvector,
         MPSTensor.kitaevTensor_not_isIrreducibleFamily,
@@ -175,7 +175,7 @@ about the ungraded contraction rather than graded injectivity.
     spans is a nontrivial projection invariant under both matrices.
     Consequently, the tensor is neither injective nor normal, as no blocking
     length makes its products span the full matrix algebra.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -187,7 +187,7 @@ about the ungraded contraction rather than graded injectivity.
     $\operatorname{span}\{A^w : |w|=N\} \subsetneq \MN{2}$ for every $N$.
 \end{proof}
 
-\begin{theorem}[Sum of two injective matrix product states]%
+\begin{lemma}[Sum of two injective matrix product states]%
     \label{thm:kitaev_two_injective}
     \lean{MPSTensor.kitaevSectorTensor, MPSTensor.kitaevSectorTensor_evalWord,
         MPSTensor.kitaevSectorTensor_isInjective, MPSTensor.kitaevTwistedCoeff_eq_add}
@@ -206,7 +206,7 @@ about the ungraded contraction rather than graded injectivity.
     As in \cite[Section~III.A.4]{Cirac2021Matrix}, the ordinary contraction of
     the twisted state therefore decomposes as a sum of two injective matrix
     product states.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok

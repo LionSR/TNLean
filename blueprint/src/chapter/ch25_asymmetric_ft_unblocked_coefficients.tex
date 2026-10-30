@@ -9,7 +9,7 @@ spectral-radius normalization required, and pairwise inequivalence excludes
 gauge equivalence up to any nonzero complex scalar rather than only a
 unit-modulus phase.
 
-\begin{theorem}[Uniqueness of nonzero weights from tail power sums]
+\begin{lemma}[Uniqueness of nonzero weights from tail power sums]
     \label{thm:asym_tail_weights}
     \lean{Multiset.eq_of_notMem_zero_of_forall_sum_map_pow_eq,
         Multiset.eq_zero_of_notMem_zero_of_forall_sum_map_pow_eq_zero}
@@ -19,7 +19,7 @@ unit-modulus phase.
     $\Lambda=\Lambda'$, including multiplicities. In particular, if the
     power sums of $\Lambda$ vanish for all sufficiently large $N$, then
     $\Lambda$ is empty.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     List the distinct entries of the two multisets as
@@ -33,7 +33,7 @@ unit-modulus phase.
     multiset proves the vanishing assertion.
 \end{proof}
 
-\begin{theorem}[Power-sum coefficients without blocking]
+\begin{lemma}[Power-sum coefficients without blocking]
     \label{thm:asym_unblocked_coefficients}
     \lean{MPSTensor.exists_unblocked_powerSum_coeff_unique,
         MPSTensor.exists_unblocked_powerSum_coeff}
@@ -72,14 +72,14 @@ unit-modulus phase.
     at all sufficiently large lengths have, for each $\gamma$, exactly
     the same entries with the same multiplicities. Empty weight
     multisets are allowed.
-\end{theorem}
+\end{lemma}
 
 \begin{center}
     % Formula: the component of (\ref{eq:asym_unblocked_expansion}) at
     % the configuration (i_1,\ldots,i_N):
     % \tr(B^{i_1}\cdots B^{i_N})=\sum_\gamma(\sum_k\mu_{\gamma k}^N)
     % \tr(M_\gamma^{i_1}\cdots M_\gamma^{i_N}).
-    % Source: Theorem~\ref{thm:asym_unblocked_coefficients}.
+    % Source: Lemma~\ref{thm:asym_unblocked_coefficients}.
     % Ink-to-index map: the left ring is the periodic chain of $B$, the
     % right ring the periodic chain of $M_\gamma$; the site in column $n$
     % carries the physical letter $i_n$.
@@ -109,7 +109,7 @@ unit-modulus phase.
     \leanok
     \uses{thm:irred_decomp,thm:periodic_overlap_dichotomy,
         thm:periodic_basis_eventually_li,thm:asym_tail_weights}
-    By the irreducible decomposition of Theorem~\ref{thm:irred_decomp}
+    By the irreducible decomposition of Lemma~\ref{thm:irred_decomp}
     \cite{DeLasCuevas2017Irreducible}, normalizing each nonzero irreducible
     factor to a periodic tensor and grouping factors whose periodic vectors
     are proportional by a fixed nonzero scalar power yields separated periodic
@@ -125,19 +125,19 @@ unit-modulus phase.
     $A,A'$ of periods $m,m'$ have proportional periodic vectors, then
     $|O_{AA'}(N)|^2=O_{AA}(N)O_{A'A'}(N)$, whereas different dimensions would
     force the left side to tend to zero by
-    Theorem~\ref{thm:periodic_overlap_dichotomy} while the right side tends to
+    Lemma~\ref{thm:periodic_overlap_dichotomy} while the right side tends to
     $mm'>0$ along common multiples of the periods.
 
     Normalizing the targets $M_\gamma$ to period-one tensors $C_\gamma$ and
     adjoining those representatives $A_j$ not related to any target by an
     invertible gauge and a nonzero scalar produces a combined family without
     repeated blocks. Along sufficiently large multiples $pn$ of a common
-    period, Theorem~\ref{thm:periodic_basis_eventually_li} makes this combined
+    period, Lemma~\ref{thm:periodic_basis_eventually_li} makes this combined
     family linearly independent. Subtracting~(\ref{eq:asym_unblocked_span})
     from (\ref{eq:asym_periodic_expansion}) after absorbing matched terms into
     the targets then forces every unmatched representative to satisfy
     $\sum_{q=0}^{r_j-1}(a_{jq}^{p})^n=0$ for all sufficiently large $n$, which
-    contradicts $r_j>0$ by Theorem~\ref{thm:asym_tail_weights}; thus every
+    contradicts $r_j>0$ by Lemma~\ref{thm:asym_tail_weights}; thus every
     representative $A_j$ matches some target $M_{\gamma(j)}$ with
     $\ket{V^{(N)}(M_{\gamma(j)})}=\theta_j^N\ket{V^{(N)}(A_j)}$ for a nonzero
     scalar $\theta_j$.
@@ -148,11 +148,11 @@ unit-modulus phase.
     linear independence of the normalized targets equates any expansion
     coefficients $c_\gamma^{(N)}$ with these power sums beyond a positive
     threshold $N_0$ after cancelling the nonzero normalization scalars, and
-    Theorem~\ref{thm:asym_tail_weights} applied target by target establishes
+    Lemma~\ref{thm:asym_tail_weights} applied target by target establishes
     the uniqueness of the nonzero weight multisets.
 \end{proof}
 
-\begin{theorem}[Power-sum structure coefficients for operator closure]
+\begin{lemma}[Power-sum structure coefficients for operator closure]
     \label{thm:asym_operator_coefficients}
     \lean{MPOTensor.exists_operatorProduct_powerSum_coeff_unique}
     \leanok
@@ -185,13 +185,13 @@ unit-modulus phase.
     Any other finite families of nonzero diagonal entries giving such an
     expansion at all sufficiently large lengths agree target by target,
     including multiplicities.
-\end{theorem}
+\end{lemma}
 
 \begin{center}
     % Formula: (\ref{eq:asym_operator_expansion}),
     % O_L(M_\alpha)O_L(M_\beta)
     % =\sum_\gamma\tr(\chi_{\alpha,\beta,\gamma}^L)O_L(M_\gamma).
-    % Source: Theorem~\ref{thm:asym_operator_coefficients}; the closed
+    % Source: Lemma~\ref{thm:asym_operator_coefficients}; the closed
     % fusion identity of \cite[Section~4.5]{Cirac2016MPDO_arXiv}, drawn
     % as in Figure~\ref{fig:mpdo_fusion_trace_power}.
     % Ink-to-index map: on the left, the upper row is $M_\alpha$ with
@@ -246,10 +246,10 @@ unit-modulus phase.
     \uses{thm:mpdo_operator_product_mpo,thm:asym_unblocked_coefficients}
     For the stacked product tensor
     $P^{ij}=\sum_s M_\alpha^{is}\otimes M_\beta^{sj}$ of bond dimension
-    $D_\alpha D_\beta$, Theorem~\ref{thm:mpdo_operator_product_mpo} gives
+    $D_\alpha D_\beta$, Lemma~\ref{thm:mpdo_operator_product_mpo} gives
     $O_L(P)=O_L(M_\alpha)O_L(M_\beta)$. Because operator equality coincides
     entry by entry with equality of periodic vectors on the paired physical
-    alphabet, Theorem~\ref{thm:asym_unblocked_coefficients} applied to $P$
+    alphabet, Lemma~\ref{thm:asym_unblocked_coefficients} applied to $P$
     produces nonzero weights $\{\mu_{\gamma k}\}_{k=0}^{n_\gamma-1}$; placing
     them on the diagonal of $\chi_{\alpha,\beta,\gamma}$ carries the
     power-sum expansion, eventual coefficient uniqueness, dimension bound, and

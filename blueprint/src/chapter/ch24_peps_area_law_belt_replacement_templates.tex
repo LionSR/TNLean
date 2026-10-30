@@ -17,7 +17,7 @@ in~\cite{gap:arealaw2d_belt_replacement_template_scope}.
 % constants, lines 756--762; Definition 9.3 in 08-scanner.tex, lines 546--564.
 % Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 
-\begin{theorem}[A transported normalized fan run]
+\begin{lemma}[A transported normalized fan run]
     \label{thm:area_law_centered_fan_run_image}
     \lean{TNLean.PEPS.AreaLaw.Geometry.cellFanRunGraph_centered,
         TNLean.PEPS.AreaLaw.Geometry.cellFanRunRegion_centered_image}
@@ -29,7 +29,7 @@ in~\cite{gap:arealaw2d_belt_replacement_template_scope}.
     $[-1,1]^2$, and the image of any normalized run under
     $\phi(x)=c+2^{\ell-1}x$ equals the union of the corresponding run on
     $c+[-2^{\ell-1},2^{\ell-1}]^2$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{lem:area_law_isolated_star_mono}
     Since $\phi(x)=c+2^{\ell-1}x$ is a bijection mapping the endpoints of each
@@ -38,7 +38,7 @@ in~\cite{gap:arealaw2d_belt_replacement_template_scope}.
     indexed triangles are preserved under $\phi$.
 \end{proof}
 
-\begin{theorem}[Templates of initial belt tiles]
+\begin{lemma}[Templates of initial belt tiles]
     \label{thm:area_law_belt_templates}
     \lean{TNLean.PEPS.AreaLaw.Geometry.initialBelt_exists_template}
     \leanok
@@ -48,15 +48,15 @@ in~\cite{gap:arealaw2d_belt_replacement_template_scope}.
     $B$ at layer $k$ satisfies $B\cap\mathbb Z^2\ne\varnothing$, then with
     $u=t_k$ there is a template $T=B\cap\mathbb Z^2$ with parameters
     $(s_0,n)=(u,\lceil C_Bu\rceil)$ and $N_0\le8$ closed fan triangles.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_fan_run_template}
     By Definition~\ref{def:area_law_initial_birth_regions}, $B$ is a fan run of
-    a fine cell of side $t_k$, so Theorem~\ref{thm:area_law_fan_run_template}
+    a fine cell of side $t_k$, so Lemma~\ref{thm:area_law_fan_run_template}
     applies.
 \end{proof}
 
-\begin{theorem}[Templates of replacements]
+\begin{lemma}[Templates of replacements]
     \label{thm:area_law_replacement_templates}
     \lean{TNLean.PEPS.AreaLaw.Geometry.exists_nat_eq_repairHalfSide,
         TNLean.PEPS.AreaLaw.Geometry.repairReplacementBirthRegion_exists_template,
@@ -71,38 +71,38 @@ in~\cite{gap:arealaw2d_belt_replacement_template_scope}.
     template $T=B\cap\mathbb Z^2$ with parameters
     $(s_0,n)=(2u,\lceil C_Bu\rceil)$ and $N_0\le8$ fan triangles of the removal
     square (including wide sectors and homogeneous squares).
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_fan_run_template,thm:area_law_centered_fan_run_image}
     Since $S$ is nonterminal, $u=2^m\ge S_*\ge1$ ($m\in\mathbb N$). By
-    Theorem~\ref{thm:area_law_centered_fan_run_image} with $\ell=m+1$, $B$ is a
+    Lemma~\ref{thm:area_law_centered_fan_run_image} with $\ell=m+1$, $B$ is a
     fan run of the square of side $2u$ centered at the parent mark; applying
-    Theorem~\ref{thm:area_law_fan_run_template} with
+    Lemma~\ref{thm:area_law_fan_run_template} with
     $C_B/2\ge16C_{\mathrm{tpl}}$ gives $(s_0,n)=(2u,\lceil C_Bu\rceil)$.
 \end{proof}
 
-\begin{theorem}[One scale constant for belt tiles and replacements]
+\begin{lemma}[One scale constant for belt tiles and replacements]
     \label{thm:area_law_belt_replacement_templates}
     \lean{TNLean.PEPS.AreaLaw.Geometry.exists_belt_replacement_templates}
     \leanok
     \uses{thm:area_law_belt_templates,thm:area_law_replacement_templates}
     For every $C_{\mathrm{tpl}}\ge1$, setting $C_B=32C_{\mathrm{tpl}}$ (before
     $S_*$ and $k_0$) ensures that every belt tile and replacement meeting
-    $\mathbb Z^2$ has a template $T$ as in Theorems~\ref{thm:area_law_belt_templates}
+    $\mathbb Z^2$ has a template $T$ as in Lemmas~\ref{thm:area_law_belt_templates}
     and~\ref{thm:area_law_replacement_templates} with $N_0\le8$ and
     \begin{align}
         n                            & \ge C_{\mathrm{tpl}}N_0(s_0+1), &
         \operatorname{diam}_\infty T & \le n.
         \label{eq:area_law_belt_replacement_template_bounds}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_belt_templates,thm:area_law_replacement_templates}
-    Take $C_B=32C_{\mathrm{tpl}}$ in Theorems~\ref{thm:area_law_belt_templates}
+    Take $C_B=32C_{\mathrm{tpl}}$ in Lemmas~\ref{thm:area_law_belt_templates}
     and~\ref{thm:area_law_replacement_templates}.
 \end{proof}
 
-\begin{theorem}[The dilation count is small]
+\begin{lemma}[The dilation count is small]
     \label{thm:area_law_belt_replacement_scale_limit}
     \lean{TNLean.PEPS.AreaLaw.Geometry.eventually_beltReplacementScaleLimit}
     \leanok
@@ -114,7 +114,7 @@ in~\cite{gap:arealaw2d_belt_replacement_template_scope}.
         \label{eq:area_law_belt_replacement_scale_limit}
     \end{align}
     so $L=o(u)$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     With $B=\max\{C_B,0\}+1$, $u\ge1$ gives $n\le Bu$ and
     $L\le B^{1-\ell}u^{-\ell}u\le\varepsilon u$ once
@@ -123,13 +123,13 @@ in~\cite{gap:arealaw2d_belt_replacement_template_scope}.
 
 Since the two-family decomposition retains only identifiers whose final regions
 meet $A\subseteq\mathbb Z^2$ \cite[Section~11]{OpenAI2026AreaLaw}, the lattice-point
-hypothesis of Theorems~\ref{thm:area_law_belt_templates}
+hypothesis of Lemmas~\ref{thm:area_law_belt_templates}
 and~\ref{thm:area_law_replacement_templates} holds for every retained region:
 
 % Source: 10-geometry.tex, lines 776--779, with the remembered births of
 % lines 398--409 and 558--561.
 
-\begin{theorem}[Retained regions have lattice points in their births]
+\begin{lemma}[Retained regions have lattice points in their births]
     \label{thm:area_law_retained_birth_lattice_point}
     \lean{TNLean.PEPS.AreaLaw.Geometry.repairStage_birth_oldInclusion,
         TNLean.PEPS.AreaLaw.Geometry.repairStage_exists_integerPoint_mem_birth,
@@ -142,10 +142,10 @@ and~\ref{thm:area_law_replacement_templates} holds for every retained region:
     region $B$; if its current region $R_{j'}$ at generation $j'$ meets
     $A\subseteq\mathbb Z^2$, then $B\cap\mathbb Z^2\ne\varnothing$ (in
     particular for every belt tile and replacement whose final region meets $A$).
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_repair_current_birth_containment}
     By Definition~\ref{def:area_law_repair_inclusions} and
-    Theorem~\ref{thm:area_law_repair_current_birth_containment},
+    Lemma~\ref{thm:area_law_repair_current_birth_containment},
     $\varnothing\ne R_{j'}\cap A\subseteq B\cap\mathbb Z^2$.
 \end{proof}

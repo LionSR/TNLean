@@ -172,7 +172,11 @@ Sub-issues relation and will automatically:
 
 - Post progress comments when sub-issues are closed or reopened.
 - Post progress comments on linked issues when PRs are merged (what was done, what remains).
-- Add the `all-resolved` label when every native sub-issue is complete.
+- Add the `all-resolved` label when every currently linked native sub-issue is closed.
+
+Before closing the parent, review its source coverage and remaining mathematical
+obligations. The label records the states of the linked issues; omitted tasks,
+conditional results, and pending integration still require that review.
 
 ### Pinned issues
 

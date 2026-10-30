@@ -1,0 +1,381 @@
+\section{Vertex gauges and holonomy}%
+\label{sec:peps_regular_gauges_holonomy}
+
+Group elements inserted on the internal bonds of a region can be moved by
+gauge transformations at its vertices. Along a spanning tree they can be
+removed, and what remains is the holonomy of the inserted elements along
+closed walks.
+
+\begin{lemma}[Twisted canonical block in spanning-tree coordinates]%
+    \label{thm:peps_regular_twisted_projector_coordinates}
+    \lean{TNLean.PEPS.regularProjectorTwistedRegionMatrix_coordinates}
+    \leanok
+    \uses{def:peps_regular_region_coordinates,
+        thm:peps_regular_region_tree_gauge,
+        def:peps_regular_projector_twisted_region}
+    Choose a spanning tree $T$ rooted at $o$ in the finite region $R$,
+    and insert arbitrary operators $u_e\in G$ on its incident bonds.
+    Let $k_o=1$, $k_tk_s^{-1}=u_e$ on $T$, and
+    $\omega_e=k_t^{-1}u_ek_s$ on the internal edges.
+    Let $\theta'$ be the crossing configuration transformed by
+    (\ref{eq:peps_tree_boundary_transport}). In the original physical
+    coordinates $\alpha(y,a,r,z)$, the twisted canonical matrix satisfies
+    \begin{align}
+        M_R^u\bigl(\alpha(y,a,r,z),\theta\bigr)
+         & = |G|^{-|R|}\sum_{x\in G}
+        \mathbf 1_{\{y=x\theta'\}}
+        \mathbf 1_{\{z_e=x\omega_ex^{-1}\ (e\in I\setminus T)\}}.
+        \label{eq:peps_twisted_projector_coordinates}
+    \end{align}
+    The reference labels $a$ and rooted vertex labels $r$ do not affect
+    the coefficient. Operators on crossing bonds are allowed, and no
+    condition is imposed on the internal residuals or the size of the
+    boundary. This is a finite-contraction form of the regular
+    coordinate changes in \cite[\S6.2--6.3]{Schuch2010PEPS}.
+\end{lemma}
+\begin{proof}\leanok
+    Expanding the original contraction into its internal bond labels
+    $\eta$ and local translations $q$, and setting
+    $q'_v=q_vk_v$ and $\eta'_e=k_s^{-1}\eta_e$ on the tree,
+    rewrites the endpoint equations as
+    $r_sa_e=q'_s\eta'_e$ and $r_ta_e=q'_t\eta'_e$.
+    Rooted tree-gradient uniqueness yields $q'_v=r_vx$, with $x=q_o$.
+    Thus $q_v=r_vxk_v^{-1}$, and internal references are uniquely fixed
+    as $\eta_e=k_sx^{-1}a_e$. On each remaining internal edge the
+    head equation is equivalent to $z_e=x\omega_ex^{-1}$.
+
+    At a crossing edge, the unique reference equals
+    $k_sx^{-1}y_e$ when $s\in R$, and
+    $u_e^{-1}k_tx^{-1}y_e$ when $t\in R$.
+    Fixing these references to $\theta$ is exactly $y=x\theta'$.
+    Conversely, these boundary and cycle equations reconstruct a
+    compatible pair $(\eta,q)$. Hence the compatible pairs are in
+    bijection with the surviving $x\in G$, and the original local
+    averages contribute the factor $|G|^{-|R|}$ in
+    (\ref{eq:peps_twisted_projector_coordinates}).
+\end{proof}
+
+\begin{lemma}[Mixed Gram matrices of twisted canonical blocks]%
+    \label{thm:peps_twisted_projector_cross_gram_coordinates}
+    \lean{TNLean.PEPS.regularProjectorTwistedRegionMatrix_crossGram_coordinates,
+        TNLean.PEPS.regularProjectorTwistedRegionMatrix_crossGram_eq_zero_of_cycles_not_conjugate}
+    \leanok
+    Fix a region $R$, a spanning tree, and a root, and let $u,w$ be
+    arbitrary bond insertions, including crossing operators. Write
+    $\omega^u,\omega^w$ for their cycle residual tuples and
+    $b_u,b_w$ for their respective boundary maps. Let $N$ be
+    the number of pairs $(a,r)$ of internal references and vertex
+    labels normalized at the root. The canonical matrices obey
+    \begin{align}
+        \bigl((M_R^u)^\dagger M_R^w\bigr)(\theta,\vartheta)
+         & = |G|^{-2|R|}N\sum_{x,t\in G}
+        \mathbf 1_{\{x b_u(\theta)=t b_w(\vartheta)\}}
+        \mathbf 1_{\{x\omega^ux^{-1}=t\omega^wt^{-1}\}}.
+        \label{eq:peps_twisted_projector_cross_gram}
+    \end{align}
+    In particular, if no $s\in G$ satisfies
+    $\omega^u=s\omega^ws^{-1}$ coordinatewise, then
+    $(M_R^u)^\dagger M_R^w=0$. Thus these two blocks have
+    orthogonal physical ranges. The boundary may be empty; neither
+    flatness nor a mixed Gram identity is assumed.
+    This is a finite-region comparison supporting the coherent closure
+    arguments in \cite[\S6.3--6.4]{Schuch2010PEPS}.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:peps_regular_twisted_projector_coordinates}
+    Reindexing the physical row sum by the reversible spanning-tree
+    coordinates and substituting
+    (\ref{eq:peps_twisted_projector_coordinates}) for each coefficient
+    leaves the factors indexed by $(a,r)$ constant, contributing $N$.
+    Summing over the shared boundary and cycle coordinates pairs the
+    two indicators, leaving precisely the equalities in
+    (\ref{eq:peps_twisted_projector_cross_gram}).
+    Any surviving cycle equality implies
+    $\omega^u=(x^{-1}t)\omega^w(x^{-1}t)^{-1}$.
+    If simultaneous conjugacy fails, every summand vanishes.
+\end{proof}
+
+\begin{lemma}[Vertex gauges in a regular-region contraction]%
+    \label{thm:peps_regular_region_gauge_contraction}
+    \lean{TNLean.PEPS.regularRegionGaugeIncidentLabels_boundary,
+        TNLean.PEPS.regularRegionGaugeEdgeOperators,
+        TNLean.PEPS.regularRegionGaugeIncidentLabels,
+        TNLean.PEPS.regularRegionGaugeIncidentLabels_twisted,
+        TNLean.PEPS.openRegionWeight_regularRegionGauge,
+        TNLean.PEPS.openRegionWeight_eq_untwisted_of_regularRegionGaugeResidual_eq_one}
+    \leanok
+    \uses{def:peps_regular_twisted_region, def:peps_open_region_contraction}
+    Suppose each original site coefficient is invariant under simultaneous
+    left translation of its incident regular labels. Let $k_v\in G$ be
+    arbitrary gauges at the vertices of a finite region $R$, and let $u_e$
+    be arbitrary inserted operators, including those on crossing bonds.
+    Put $\widetilde u_e=k_t^{-1}u_ek_s$ on internal edges $e=(s,t)$,
+    and put $\widetilde u_e=1$ on all other edges. With the transformed
+    crossing configuration $\theta'$ of
+    (\ref{eq:peps_tree_boundary_transport}), the physical columns satisfy
+    \begin{align}
+        T_R^u(\theta) & =T_R^{\widetilde u}(\theta').
+    \end{align}
+    If every internal residual is the identity, this reduces to
+    $T_R^u(\theta)=T_R(\theta')$ for the original untwisted region.
+    No connectedness or Gram identity is required. These identities
+    implement the regular-coordinate changes in
+    \cite[\S6.2--6.3]{Schuch2010PEPS} inside the original finite contraction.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:peps_regular_region_tree_gauge}
+    Reindexing the sum over incident edge references multiplies the reference
+    by $k_s^{-1}$ on an internal edge and applies
+    the map in (\ref{eq:peps_tree_boundary_transport}) on a crossing edge. Each change
+    is a bijection. Its boundary restriction is exactly $\theta\mapsto\theta'$.
+    At every region vertex, the resulting twisted half-edge labels are
+    $k_v^{-1}$ times the original twisted labels. Local simultaneous
+    invariance therefore leaves each site coefficient unchanged, and
+    hence leaves their product and the contracted sum unchanged.
+\end{proof}
+
+\begin{lemma}[The transformed boundary projector]%
+    \label{thm:peps_regular_region_gauge_boundary}
+    \lean{TNLean.PEPS.regularRegionBoundaryGaugeEquiv_apply,
+        TNLean.PEPS.regularRegionBoundaryGaugeEquiv,
+        TNLean.PEPS.regularRegionGaugeBoundaryProjector,
+        TNLean.PEPS.regularRegionGaugeBoundaryProjector_mul_self,
+        TNLean.PEPS.regularRegionGaugeBoundaryProjector_conjTranspose,
+        TNLean.PEPS.rank_regularRegionGaugeBoundaryProjector,
+        TNLean.PEPS.trace_regularRegionGaugeBoundaryProjector}
+    \leanok
+    \uses{thm:peps_regular_region_tree_gauge}
+    Enumerate the crossing bonds of a region by $\{1,\ldots,b\}$, and let
+    $F$ be the resulting permutation of boundary configurations induced
+    by the vertex gauge and the crossing operators. The pulled-back
+    averaging projector is
+    \begin{align}
+        \Pi_{\partial R}^{k,u}(x,y)=\Pi_{\partial R}(F(x),F(y)).
+    \end{align}
+    It is idempotent. If $b\geq1$, it is self-adjoint, has rank
+    $|G|^{b-1}$, and has trace $|G|^{b-1}$. This coordinate change is
+    part of the boundary disentangling argument of
+    \cite[Theorem~6.9]{Schuch2010PEPS}; it imposes no condition on
+    internal twists.
+\end{lemma}
+
+\begin{proof}\leanok
+    Reindexing the common summation variable in the square of the matrix
+    by $F$ derives idempotence from that of the original averaging
+    projector. Taking the adjoint commutes with applying the same
+    permutation to both indices. Finally, a basis permutation preserves
+    rank, and reindexing the diagonal sum preserves trace.
+\end{proof}
+
+\begin{lemma}[The Gram matrix with removable internal operators]%
+    \label{thm:peps_regular_region_gauge_gram}
+    \lean{TNLean.PEPS.regularTwistedOpenRegionMatrix_regularRegionGauge,
+        TNLean.PEPS.regularTwistedOpenRegionMatrix_eq_submatrix_of_regularRegionGaugeResidual_eq_one,
+        TNLean.PEPS.exists_positive_gram_regularTwistedOpenRegionMatrix_of_regularRegionGaugeResidual_eq_one,
+        TNLean.PEPS.rank_regularTwistedOpenRegionMatrix_of_regularRegionGaugeResidual_eq_one}
+    \leanok
+    Number the crossing bonds and write $F$ for the boundary permutation
+    induced by an arbitrary vertex gauge $k$ and inserted operators $u$.
+    If the original sites have simultaneous regular invariance, the
+    ordered coefficient matrices satisfy
+    \begin{align}
+        M_R^u(\sigma,x) & =M_R^{\widetilde u}(\sigma,F(x)).
+    \end{align}
+    Suppose further that $R$ is connected, the sites are $G$-isometric,
+    and every internal residual $k_t^{-1}u_ek_s$ is the identity.
+    Then $M_R^u(\sigma,x)=M_R(\sigma,F(x))$ and there is a positive
+    scalar $c_R$ such that
+    \begin{align}
+        (M_R^u)^\dagger M_R^u & =c_R\Pi_{\partial R}^{k,u}.
+    \end{align}
+    If the boundary contains $b>0$ bonds, the matrix has rank
+    $|G|^{b-1}$. The Gram statement allows an empty boundary and derives the block Gram
+    identity from the local sites. It is the removable-operator case of
+    the boundary-isometry argument in \cite[Theorem~6.9]{Schuch2010PEPS},
+    not the unrestricted disk theorem
+    \cite{gap:rmp_peps_quantum_double_g_isometry}.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:peps_regular_region_gauge_contraction, thm:peps_regular_region_gauge_boundary, thm:peps_connected_regular_region_isometry}
+    The ordered coefficient identities follow from the contraction
+    identity in Lemma~\ref{thm:peps_regular_region_gauge_contraction}.
+    With identity internal residuals, the matrix is the untwisted block
+    with its columns permuted by $F$. Local regular isometry and
+    connectedness give $M_R^\dagger M_R=c_R\Pi_{\partial R}$ with $c_R>0$.
+    Pulling both boundary indices back along $F$ therefore gives the
+    claimed Gram matrix. Its rank equals the rank of the matrix
+    because $\operatorname{rank}(M^\dagger M)=\operatorname{rank}(M)$;
+    the positive scalar does not change the rank of the boundary projector.
+\end{proof}
+
+\begin{lemma}[Vertex gauges of a closed regular PEPS]%
+    \label{thm:peps_regular_closed_gauge}
+    \lean{TNLean.PEPS.sameState_regularVertexGauge,
+        TNLean.PEPS.regularVertexGaugeOperators}
+    \leanok
+    \uses{thm:peps_regular_region_gauge_contraction}
+    Suppose the site coefficients $a_v$ are invariant under simultaneous left translation of their incident group labels. For vertex gauges $k_v\in G$, replacing the bond operators $u_e$ on $e=(s,t)$ by
+    \begin{align}
+        u_e' & = k_t^{-1}u_e k_s
+        \label{eq:peps_regular_closed_gauge}
+    \end{align}
+    leaves every closed physical PEPS coefficient unchanged (without requiring connectedness or isometry \cite[\S5.3]{Schuch2010PEPS}).
+\end{lemma}
+
+\begin{proof}\leanok
+    Reindexing each bond label $\eta_e\mapsto k_s^{-1}\eta_e$ on $e=(s,t)$ sends the tail half-edge label to $k_s^{-1}\eta_e$ and the head half-edge label to $u_e'k_s^{-1}\eta_e=k_t^{-1}u_e\eta_e$, left-translating all incident labels at each vertex $v$ by $k_v^{-1}$.
+\end{proof}
+
+\begin{lemma}[Nonabelian holonomy along native walks]%
+    \label{thm:peps_regular_walk_holonomy}
+    \lean{TNLean.PEPS.regularDirectedTransport_of_lt,
+        TNLean.PEPS.regularDirectedTransport,
+        TNLean.PEPS.regularDirectedTransport_of_gt,
+        TNLean.PEPS.regularDirectedTransport_symm,
+        TNLean.PEPS.regularDirectedTransport_gauge,
+        TNLean.PEPS.regularWalkHolonomy,
+        TNLean.PEPS.regularWalkHolonomy_nil,
+        TNLean.PEPS.regularWalkHolonomy_cons,
+        TNLean.PEPS.regularWalkHolonomy_append,
+        TNLean.PEPS.regularWalkHolonomy_reverse,
+        TNLean.PEPS.regularWalkHolonomy_gauge,
+        TNLean.PEPS.regularWalkHolonomy_gauge_loop,
+        TNLean.PEPS.regularWalkHolonomy_gradient,
+        TNLean.PEPS.regularWalkHolonomy_gradient_loop}
+    \leanok
+    \uses{thm:peps_regular_closed_gauge}
+    Let $G$ be any group, and assign $u_e\in G$ to each edge of a graph
+    with ordered vertices. A directed step along $e=(s,t)$ uses $u_e$
+    from $s$ to $t$ and $u_e^{-1}$ in the reverse direction. For a walk
+    $p$, let $H(u,p)$ be the product of these operators in reverse
+    traversal order; the empty walk has product one. If $p:v\to w$
+    and $q:w\to z$, and if $u'_e=k_t^{-1}u_ek_s$, then
+    \begin{align}
+        H(u,pq)     & =H(u,q)H(u,p),      \\
+        H(u,p^{-1}) & =H(u,p)^{-1},       \\
+        H(u',p)     & =k_w^{-1}H(u,p)k_v.
+        \label{eq:peps_walk_gauge}
+    \end{align}
+    In particular a closed-walk holonomy transforms by conjugation at
+    its base vertex. A gradient assignment $u_e=k_tk_s^{-1}$ has
+    $H(u,p)=k_wk_v^{-1}$ and hence identity holonomy on closed walks.
+    These are group identities underlying the seam deformation and
+    accessible complement cycle calculations in
+    \cite[\S5.3 and Theorem~6.9]{Schuch2010PEPS}; no boundary-word
+    relation or tensor factorization is assumed.
+\end{lemma}
+
+\begin{proof}\leanok
+    Reversing a directed edge takes its inverse. The concatenation and
+    reversal formulas follow by induction on the walk. The directed
+    gauged operator from $v$ to $w$ is $k_w^{-1}u_{v\to w}k_v$.
+    In the reverse-ordered product, adjacent endpoint gauges cancel,
+    leaving (\ref{eq:peps_walk_gauge}). For a gradient, the factors
+    telescope directly to $k_wk_v^{-1}$.
+\end{proof}
+
+\begin{lemma}[Closure holonomy from oriented seam crossing numbers]%
+    \label{thm:peps_torus_walk_winding}
+    \lean{TNLean.PEPS.torusDirectedWinding_right,
+        TNLean.PEPS.torusEdgeWinding,
+        TNLean.PEPS.torusDirectedWinding,
+        TNLean.PEPS.torusWalkWinding,
+        TNLean.PEPS.torusDirectedWinding_up,
+        TNLean.PEPS.torusDirectedWinding_symm,
+        TNLean.PEPS.torusWalkWinding_append,
+        TNLean.PEPS.torusWalkWinding_reverse,
+        TNLean.PEPS.regularWalkHolonomy_torusClosureEdgeAssignment,
+        TNLean.PEPS.regularWalkHolonomy_torusClosure_eq_of_winding_eq}
+    \leanok
+    \uses{thm:peps_regular_walk_holonomy, thm:peps_regular_torus_closure_cut_identification}
+    Consider the native torus graph with both periods at least three.
+    For a directed step, count $+1$ at a rightward horizontal seam
+    crossing and at an upward vertical seam crossing, count $-1$ in
+    the respective reverse directions, and count zero elsewhere.
+    Let $N(p)=(n(p),m(p))\in\mathbb Z^2$ be the sum of these pairs
+    along a walk $p$. Concatenation and reversal satisfy
+    $N(pq)=N(p)+N(q)$ and $N(p^{-1})=-N(p)$.
+
+    Let $g,h\in G$ commute, and let $u(g,h)$ be the ordered-edge
+    closure assignment. Then
+    \begin{align}
+        H(u(g,h),p)=h^{n(p)}(g^{-1})^{m(p)}.
+        \label{eq:peps_winding_holonomy}
+    \end{align}
+    Consequently any two walks with equal seam crossing numbers have
+    equal closure holonomies, even when their endpoints differ.
+    This is the walk identity used in the seam deformation and
+    complement construction of
+    \cite[\S5.3 and proof of Theorem~6.9]{Schuch2010PEPS}.
+\end{lemma}
+
+\begin{proof}\leanok
+    Both native seam orientations are opposite to their ordered-edge
+    orientations. Thus the rightward seam operator is $h$ and the
+    upward seam operator is $g^{-1}$. Reversing a directed step
+    negates its crossing numbers and inverts its operator. Every step
+    therefore satisfies~(\ref{eq:peps_winding_holonomy}). Induction on
+    the walk adds the integer exponents; commutativity of $g$ and $h$
+    permits the two powers to be grouped. The addition and reversal
+    rules for $N$ follow by induction from the corresponding rules for
+    directed steps.
+\end{proof}
+
+\begin{lemma}[Walk words in the region cycle labels]%
+    \label{thm:peps_regular_region_cycle_holonomy}
+    \lean{TNLean.PEPS.regularRegionCycleWord_append,
+        TNLean.PEPS.RegionCycleEdge,
+        TNLean.PEPS.regularRegionInternalOperators,
+        TNLean.PEPS.regularRegionCycleOperators,
+        TNLean.PEPS.regularRegionCycleWord,
+        TNLean.PEPS.regularRegionCycleWord_reverse,
+        TNLean.PEPS.regularRegionCycleWord_eval,
+        TNLean.PEPS.regularRegionCycleWord_eval_conj,
+        TNLean.PEPS.regularRegionCycleOperators_treeGauge,
+        TNLean.PEPS.regularRegionCycleWord_eval_treeResidual,
+        TNLean.PEPS.regularRegionCycleWord_eval_rootLoop,
+        TNLean.PEPS.regularWalkHolonomy_eq_cycleWord_eval}
+    \leanok
+    Let $T$ be a chosen spanning tree of an induced region graph, rooted
+    at $o$, and let $C$ be its native internal edges outside $T$.
+    For a region walk $p$, construct a word $W_T(p)$ in the
+    free group on $C$: traverse $p$, use the generator or its inverse
+    on each non-tree edge according to its orientation, omit tree edges,
+    and multiply in reverse traversal order. Given any tuple $z\in G^C$,
+    write $\operatorname{ev}_z$ for evaluation of this word. Assigning
+    identity operators to tree edges and $z_e$ to the remaining edges
+    gives walk holonomy equal to $\operatorname{ev}_zW_T(p)$.
+    Concatenation satisfies $W_T(pq)=W_T(q)W_T(p)$ and reversal satisfies
+    $W_T(p^{-1})=W_T(p)^{-1}$.
+
+    For arbitrary native bond operators $u$, let $k$ be the existing
+    root-normalized tree gauge and $\omega$ its cycle residual tuple.
+    Its reduced assignment is precisely identity on the tree and
+    $\omega_e$ on $C$. For $p:v\to w$ one therefore has
+    \begin{align}
+        \operatorname{ev}_{\omega}W_T(p) & =k_w^{-1}H(u,p)k_v,                           \\
+        H(u,p)                           & =k_w\operatorname{ev}_{\omega}W_T(p)k_v^{-1}, \\
+        \operatorname{ev}_{xzx^{-1}}W_T(p)
+                                         & =x\operatorname{ev}_zW_T(p)x^{-1}.
+    \end{align}
+    For a loop based at $o$, normalization gives
+    $\operatorname{ev}_{\omega}W_T(p)=H(u,p)$.
+    Word construction and conjugation require no finiteness or
+    commutativity; the existing normalized tree gauge is used for finite $G$.
+    These are walk-word identities for the accessible complement
+    cycle argument in \cite[Theorem~6.9]{Schuch2010PEPS}. They do not
+    assert existence of walks representing a prescribed boundary map.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:peps_regular_walk_holonomy, thm:peps_regular_region_tree_gauge}
+    Applying the native walk product to the free generators and using the fact that evaluation
+    commutes with each product and inverse yields the residual holonomy.
+    The tree gauge removes each tree operator and retains exactly the
+    prescribed cycle residual on every other edge. Endpoint gauge
+    covariance gives the first two identities. Conjugating every
+    residual operator conjugates the whole ordered product. At the
+    normalized root the endpoint gauges are both the identity.
+\end{proof}
