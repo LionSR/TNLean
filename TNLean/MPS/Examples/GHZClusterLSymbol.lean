@@ -231,7 +231,7 @@ theorem z4z2LSymbol_zero_sq_v :
 /-! ### The stabilizer cocycle -/
 
 /-- The unbroken subgroup `H = ⟨(2,0), (0,1)⟩`, the stabilizer of the block `0`. -/
-abbrev z4z2Unbroken : Subgroup (Multiplicative (ZMod 4 × ZMod 2)) := 
+abbrev z4z2Unbroken : Subgroup (Multiplicative (ZMod 4 × ZMod 2)) :=
     MulAction.stabilizer (Multiplicative (ZMod 4 × ZMod 2)) (0 : Fin 2)
 
 /-- **The stabilizer cocycle** `ψ(a, b) = L⁰_{a,b}` on the unbroken subgroup
