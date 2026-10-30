@@ -43,7 +43,7 @@ All products of site matrices retain their natural order.
 \end{definition}
 
 
-\begin{theorem}[Restriction of a trace contraction to an interval]
+\begin{lemma}[Restriction of a trace contraction to an interval]
     \label{thm:actual_retained_interval_trace}
     \lean{MPOTensor.trace_actual_retainedInterval_eq}
     \leanok
@@ -61,14 +61,14 @@ All products of site matrices retain their natural order.
     \end{align}
     Empty intervals and zero dimensions are allowed whenever the supplied
     configurations exist.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Split the ordered product into prefix, interval and suffix.
     Cyclicity gives $\operatorname{tr}(CPXS)=\operatorname{tr}(SCPX)$,
     and $F=SCP$ by (\ref{eq:actual_retained_interval_closing}).
 \end{proof}
 
-\begin{theorem}[Insertion of fixed configurations at the same trace dimension]
+\begin{lemma}[Insertion of fixed configurations at the same trace dimension]
     \label{thm:retained_single_trace_insert}
     \lean{MPOTensor.exists_traceChainOperator_retainedSingle_insert}
     \leanok
@@ -87,7 +87,7 @@ All products of site matrices retain their natural order.
     \end{align}
     The restrictions to $J$ use its increasing enumeration. Both $L$ and
     $T$ may vanish; no positivity assumption on $q$ or $\chi$ is imposed.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Use $A'_v=A_{v-a}$ inside $J$ and
     $A'_v(i,j)=\mathbf1_{i=\eta_v}\mathbf1_{j=\theta_v}\Id_\chi$ outside $J$.
@@ -95,7 +95,7 @@ All products of site matrices retain their natural order.
     matrices and the trace is unchanged. Otherwise one letter is zero.
 \end{proof}
 
-\begin{theorem}[A trace contraction after restriction and fixed extension]
+\begin{lemma}[A trace contraction after restriction and fixed extension]
     \label{thm:trace_interval_slice_configuration_extend}
     \lean{MPOTensor.exists_traceChainOperator_intervalSlice_extend_by_configuration}
     \leanok
@@ -118,14 +118,14 @@ All products of site matrices retain their natural order.
     \end{align}
     Restrictions to $J'$ use increasing coordinates. All chain lengths and
     dimensions may vanish, subject only to the stated supplied data.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:actual_retained_interval_trace,thm:retained_single_trace_insert}
     Fix the old outside configurations to those of $f,g$ and apply
-    Theorem~\ref{thm:actual_retained_interval_trace}, obtaining the restricted
+    Lemma~\ref{thm:actual_retained_interval_trace}, obtaining the restricted
     tensors and their suffix-closing-prefix matrix $C'$.
     Insert the new retained configurations by
-    Theorem~\ref{thm:retained_single_trace_insert}, retaining $C'$ and $\chi$.
+    Lemma~\ref{thm:retained_single_trace_insert}, retaining $C'$ and $\chi$.
 \end{proof}
 
 \begin{definition}[The scalar-closed core at a retained matrix entry]

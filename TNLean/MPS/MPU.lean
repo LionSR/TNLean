@@ -8,6 +8,7 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.MPS.MPU
 
+import TNLean.MPS.MPU.ActionCommonBlocking
 import TNLean.MPS.MPU.AdjointSimpleContraction
 import TNLean.MPS.MPU.AffineFactorizationIsometry
 import TNLean.MPS.MPU.AffineFactorizationRank
@@ -37,6 +38,7 @@ import TNLean.MPS.MPU.CanonicalForm
 import TNLean.MPS.MPU.CanonicalFormBlocking
 import TNLean.MPS.MPU.CanonicalFormGauge
 import TNLean.MPS.MPU.CanonicalFormOfCanonicalFormII
+import TNLean.MPS.MPU.CanonicalQuasiLocalAction
 import TNLean.MPS.MPU.ColumnCoordinateTransport
 import TNLean.MPS.MPU.CompatibleBondDilationCircuit
 import TNLean.MPS.MPU.CompositionFlattening
@@ -45,6 +47,8 @@ import TNLean.MPS.MPU.CompositionRanks
 import TNLean.MPS.MPU.ConjugationSourceFactors
 import TNLean.MPS.MPU.ConjugationSymmetry
 import TNLean.MPS.MPU.ConstantBranchingBounds
+import TNLean.MPS.MPU.DaggerFusionCompatibility
+import TNLean.MPS.MPU.DaggerFusionScalars
 import TNLean.MPS.MPU.DaggerInverse
 import TNLean.MPS.MPU.DaggerInverseGauge
 import TNLean.MPS.MPU.DeterminantStationarity
@@ -63,6 +67,7 @@ import TNLean.MPS.MPU.Examples
 import TNLean.MPS.MPU.FactorFreeSandwich
 import TNLean.MPS.MPU.FinalCircuitRegisters
 import TNLean.MPS.MPU.FiniteAlphabetRows
+import TNLean.MPS.MPU.FiniteChainAdjoint
 import TNLean.MPS.MPU.FiniteChainConjugation
 import TNLean.MPS.MPU.FiniteGroupSourceRanks
 import TNLean.MPS.MPU.FundamentalTheorem
@@ -104,6 +109,7 @@ import TNLean.MPS.MPU.InverseCompatibleGates
 import TNLean.MPS.MPU.InverseCompatibleMovement
 import TNLean.MPS.MPU.InverseCompatiblePeriodicComposition
 import TNLean.MPS.MPU.InverseCompatiblePhysicalRanks
+import TNLean.MPS.MPU.InverseCompatiblePleasantProperties
 import TNLean.MPS.MPU.InverseCompatibleSourceFactors
 import TNLean.MPS.MPU.InverseCompatibleSourceProperties
 import TNLean.MPS.MPU.InverseCompatibleSourceTransport
@@ -152,6 +158,7 @@ import TNLean.MPS.MPU.PrefixGramNormalizer
 import TNLean.MPS.MPU.PrefixGramReindex
 import TNLean.MPS.MPU.ProductBasisFactorization
 import TNLean.MPS.MPU.ProjectionPhaseIsometries
+import TNLean.MPS.MPU.QuasiLocalAction
 import TNLean.MPS.MPU.RectangularSourceRanks
 import TNLean.MPS.MPU.ReducedCanonicalRepresentative
 import TNLean.MPS.MPU.ReducedRepresentative
@@ -199,6 +206,7 @@ import TNLean.MPS.MPU.SpinOneSchmidtObstruction
 import TNLean.MPS.MPU.StaircaseGates
 import TNLean.MPS.MPU.StaircaseUnitarity
 import TNLean.MPS.MPU.StandardForm
+import TNLean.MPS.MPU.StandardFormFromGates
 import TNLean.MPS.MPU.StandardFormParityCounterexample
 import TNLean.MPS.MPU.SuccessAttenuationCircuit
 import TNLean.MPS.MPU.SuppliedFixedWitnesses
@@ -210,8 +218,11 @@ import TNLean.MPS.MPU.TensorProductCanonicalForm
 import TNLean.MPS.MPU.TensorProductIndex
 import TNLean.MPS.MPU.ThreeFormInsertion
 import TNLean.MPS.MPU.ThreeFormSpan
+import TNLean.MPS.MPU.ThreeLeggedDecomposition
 import TNLean.MPS.MPU.TimeReversalLocalNecessity
 import TNLean.MPS.MPU.TimeReversalLocalSufficiency
+import TNLean.MPS.MPU.TimeReversalSign
+import TNLean.MPS.MPU.TimeReversalSignIntrinsic
 import TNLean.MPS.MPU.TimeReversalTraceGauge
 import TNLean.MPS.MPU.TransferMatrix
 import TNLean.MPS.MPU.TransferMultiplicity
@@ -224,11 +235,17 @@ import TNLean.MPS.MPU.TruncatedSymmetryUnitarity
 import TNLean.MPS.MPU.TruncationCommutator
 import TNLean.MPS.MPU.TwoKrausPolar
 import TNLean.MPS.MPU.TwoSectorMerging
+import TNLean.MPS.MPU.TwoSiteBufferedAction
+import TNLean.MPS.MPU.TwoSiteFiniteHeisenberg
+import TNLean.MPS.MPU.TwoSiteLocalAction
+import TNLean.MPS.MPU.TwoSitePropagation
+import TNLean.MPS.MPU.TwoSiteQuasiLocalAction
 import TNLean.MPS.MPU.TwoSiteStandardForm
 import TNLean.MPS.MPU.TwoSiteStandardFormCircuit
 import TNLean.MPS.MPU.TwoSiteStandardFormOpenWord
 import TNLean.MPS.MPU.TwoSiteStandardFormResidualWord
 import TNLean.MPS.MPU.TwoSiteStandardFormSourceCuts
+import TNLean.MPS.MPU.TwoSiteTranslationCovariance
 import TNLean.MPS.MPU.UniformCircuitResourceBounds
 import TNLean.MPS.MPU.UniformMergingResourceBounds
 import TNLean.MPS.MPU.UnitCircleRankTwo

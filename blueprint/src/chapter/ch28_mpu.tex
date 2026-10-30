@@ -5778,6 +5778,50 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     $\mathcal U$ is simple.
 \end{proof}
 
+\begin{theorem}[Three-legged decomposition of a simple tensor]
+    \label{thm:mpu_three_legged_decomposition}
+    \lean{MPOTensor.SourceFactors.IsThreeLegged,
+        MPOTensor.SourceFactors.X₁_leftInverse,
+        MPOTensor.SourceFactors.X₂_leftInverse,
+        MPOTensor.IsMPUCanonicalFormII.sourceFactors_isThreeLegged,
+        MPOTensor.IsMPUCanonicalFormII.exists_threeLegged}
+    \leanok
+    \uses{ThmFund1, def:mpu_weighted_source_factors, def:mpu_source_uv,
+        def:mpu_canonical_form_ii, def:mpu_simple}
+    Let $\mathcal U$ be a simple MPU tensor of physical dimension $d$ under
+    the standing canonical-form-II convention, whose periodic operator is
+    unitary on every chain of length at least two, and let $\rho>0$ be its
+    recorded diagonal fixed point. Then the weighted source factors
+    $X_1,Y_1,X_2,Y_2$ for $\rho$ satisfy:
+    \begin{enumerate}
+        \item the two three-legged decompositions
+              $\mathcal U^{ij}_{\alpha\beta}=(X_1Y_1)_{(i,\beta),(\alpha,j)}
+                  =(X_2Y_2)_{(\alpha,i),(j,\beta)}$, joined along the curly leg of
+              dimension $d_r=r$ and the thick leg of dimension $d_l=\ell$;
+        \item the gates $u=Y_2\mathbin{-}Y_1$ and $v=X_1\mathbin{-}X_2$ are
+              unitary;
+        \item the normalized contractions $X_2^\dagger X_2=\Id_{d_l}$ and
+              $X_1^\dagger(I_d\otimes\rho)X_1=\Id_{d_r}$ hold;
+        \item $X_1$ and $X_2$ are left-invertible, with left inverses
+              $X_1^\dagger(I_d\otimes\rho)$ and $X_2^\dagger$, and $Y_1,Y_2$ are
+              right-invertible;
+        \item $d_ld_r=d^2$.
+    \end{enumerate}
+    This is the structure theorem for simple matrix product unitaries in
+    canonical form II of \cite{FrancoRubio2025MPUGauging}, which asks
+    unitarity on every nonempty chain; that convention implies the one used
+    here.
+    % Source lines: 2502.20257/main.tex 657--809.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{ThmFund1, def:mpu_weighted_source_factors}
+    Items 1, 3 and the one-sided inverses of item 4 are the defining
+    identities of the weighted source factors. Since $\mathcal U$ is simple,
+    Theorem~\ref{ThmFund1} gives $r\ell=d^2$ and unitarity of $u$ and $v$,
+    which are items 2 and 5.
+\end{proof}
+
 \begin{definition}[Standard form]
     \label{SF}
     \notready
@@ -9136,7 +9180,9 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \begin{lemma}[Conjugation of supplied source decompositions]
     \label{lem:mpu_source_conjugation_transport}
     \lean{MPOTensor.sourceCutM₁_mapStar, MPOTensor.sourceCutM₂_mapStar, MPOTensor.source_ranks_mapStar, MPOTensor.normalizedFlattening_mapStar, MPOTensor.IsMPUCanonicalFormII.mapStar, MPOTensor.SourceCutSVD.mapStar, MPOTensor.SourceFactors.mapStar, MPOTensor.SourceFactors.sourceU_mapStar, MPOTensor.SourceFactors.sourceV_mapStar}
-    \notready
+    \leanok
+    \uses{def:mpu_canonical_form_ii, def:mpu_weighted_source_factors,
+        def:mpu_source_svd_data}
     Both source cuts satisfy
     $M_i(\overline{\mathcal U})=\overline{M_i(\mathcal U)}$, and their ranks
     are unchanged. A supplied compact decomposition
@@ -9154,6 +9200,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{lemma}
 
 \begin{proof}
+    \leanok
+    \uses{thm:mpu_physical_adjoint_cfii, thm:mpu_physical_adjoint_full_support}
     Conjugate both factorizations, both normalization identities and both
     right-inverse identities. Products, sums, adjoints and traces commute
     with conjugation. The singular-value matrices and the diagonal positive
@@ -9165,9 +9213,11 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \begin{lemma}[Forward conjugation equations in a reduced canonical presentation]
     \label{lem:mpu_source_local_conjugation_forward}
     \lean{MPOTensor.supplied_source_factor_gate_relations, MPOTensor.IsMPUCanonicalFormII.exists_supplied_source_gate_unitary_gauges_of_mpo_eq, MPOTensor.IsMPUCanonicalFormII.exists_local_conjugation_gauges, MPOTensor.IsMPUCanonicalFormII.exists_local_conjugation_gauges_common_transpose_case}
-    \notready
+    \leanok
+    \uses{def:mpu_canonical_form_ii, def:mpu_weighted_source_factors}
     Let $\mathcal U$ be in reduced canonical form II, with supplied source
-    factors whose unshifted gate $u$ is unitary. If
+    factors whose unshifted gate $u$ is unitary between its physical-pair and
+    source-rank coordinate spaces. If
     $U^{(N)}=\overline{U^{(N)}}$ at every length $N>1$, there are unitaries
     $x,y$ such that either both are symmetric or both are skew-symmetric, and
     \begin{align}
@@ -9181,20 +9231,37 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{lemma}
 
 \begin{proof}
-    \uses{lem:mpu_source_conjugation_transport, FundamentalMPU, lem:mpu_local_conjugation_sign}
+    \leanok
+    \uses{lem:mpu_source_conjugation_transport, FundamentalMPU,
+        lem:mpu_local_conjugation_sign, thm:mpu_source_factorizations}
     Apply the letter-level Fundamental Theorem to $\mathcal U$ and
     $\overline{\mathcal U}$. Compare the actual conjugated source factors
     with those transported by the resulting bond unitary. Normalized factor
-    comparison gives two unitary changes of source-rank coordinates.
-    Contract their four half-factor relations to the two gate relations,
-    then transport the unitaries back through the canonical rank
-    identifications. The unshifted equation gives the common transpose sign.
+    comparison gives two unitary changes $W_1,W_2$ of source-rank
+    coordinates. With the bond unitary $z$, the source factors $X_i',Y_i'$
+    of $\overline{\mathcal U}$ satisfy
+    \begin{align}
+        X_1' & =(\Id\otimes\overline z)X_1W_1,         &
+        Y_1' & =W_1^\dagger Y_1(z^T\otimes\Id),          \\
+        X_2' & =(z\otimes\Id)X_2W_2,                   &
+        Y_2' & =W_2^\dagger Y_2(\Id\otimes z^\dagger).
+    \end{align}
+    The gate $u$ is contracted from $Y_1,Y_2$ and the gate $v$ from
+    $X_1,X_2$. In both contractions $z^T$ meets $\overline z$ and $z$ meets
+    $z^\dagger$ on the internal bond, so
+    \begin{align}
+        \overline u & =(W_2^\dagger\otimes W_1^\dagger)u, &
+        \overline v & =v(W_1\otimes W_2).
+    \end{align}
+    Thus $x=W_2^\dagger$ and $y=W_1^\dagger$, after transport back through
+    the canonical rank identifications. The unshifted equation gives the
+    common transpose sign.
 \end{proof}
 
 \begin{lemma}[Transpose signs from the unshifted conjugation equation]
     \label{lem:mpu_local_conjugation_sign}
     \lean{Matrix.kronecker_map_star_mul_eq_one_of_gate_conjugation, Matrix.transpose_eq_self_or_transpose_eq_neg_of_gate_conjugation}
-    \notready
+    \leanok
     Let $L,R,P$ be finite coordinate sets with $L,R$ nonempty, let
     $u:\mathbb C^P\to\mathbb C^L\otimes\mathbb C^R$ satisfy
     $uu^\dagger=\Id$, and let $x,y$ be unitaries on $L,R$. If
@@ -9208,6 +9275,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{lemma}
 
 \begin{proof}
+    \leanok
     \uses{thm:mpu_conjugation_common_transpose_sign}
     Conjugating the gate equation gives
     $u=(\overline x\otimes\overline y)(x\otimes y)u$.
@@ -9218,9 +9286,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \begin{lemma}[Contraction of the local conjugation equations]
     \label{lem:mpu_local_conjugation_contract}
     \lean{Matrix.IsUnitaryBetween.map_star, MPOTensor.mapStar, MPOTensor.mpo_map_star, MPOTensor.TwoSiteStandardFormData.mapStar, MPOTensor.twoSiteUnshiftedLayer_map_star, MPOTensor.twoSiteShiftedLayer_map_star, MPOTensor.TwoSiteStandardFormData.map_star_mpo_eq_of_gate_conjugation}
-    \notready
-    One-site blocking is the original tensor in its canonically identified
-    one-letter physical alphabet.
+    \leanok
+    \uses{def:mpu_supplied_two_site_standard_form}
     Let $W$ have a supplied two-site standard form with unitary gates $u,v$,
     and let $x,y$ be unitaries satisfying
     \begin{align}
@@ -9235,13 +9302,24 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{lemma}
 
 \begin{proof}
-    \uses{thm:mpu_supplied_two_site_periodic_circuit}
+    \leanok
+    \uses{thm:mpu_supplied_two_site_periodic_circuit,
+        def:mpu_two_site_circuit_layers}
     Conjugation preserves the two open contractions and their unitary
     identities. It also conjugates every factor of each circuit layer.
-    Substitute the two local equations into the conjugated circuit. At every
-    internal leg, the inserted $x$ or $y$ meets its adjoint, and the circuit
-    product is unchanged. Taking the trace of a product commutes with
-    conjugation, so the same equality holds for the periodic operators.
+    Let $\Gamma_N$ act on the intermediate labels by $x$ on every first
+    component $h_{s,1}$ and by $y$ on every second component $h_{s,2}$.
+    The two local equations give $C_{\overline u,N}=\Gamma_NC_{u,N}$ and,
+    regrouping the same legs along the shifted pairs,
+    $C_{\overline v,N}=C_{v,N}\Gamma_N^\dagger$. Hence
+    \begin{align}
+        \overline{U^{(N)}(W)}
+         & =C_{\overline v,N}C_{\overline u,N}
+        =C_{v,N}\Gamma_N^\dagger\Gamma_NC_{u,N}
+        =C_{v,N}C_{u,N}
+        =U^{(N)}(W).
+        \label{eq:mpu_local_conjugation_contract_circuit}
+    \end{align}
 \end{proof}
 
 \begin{lemma}[Admissible conjugation symmetry]
@@ -9551,11 +9629,122 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     Lemma~\ref{lem:mpu_skew_symmetric_even_card} applied to $U$ shows that $d$ is even.
 \end{proof}
 
+\begin{lemma}[Invariant orthogonal planes]
+    \label{lem:mpu_skew_orthogonal_plane}
+    \lean{LinearIsometry.orthonormal_pair_of_sq_eq_neg,
+        LinearIsometry.apply_pair_eq_standardSkew_sum,
+        LinearIsometry.mapsTo_span_pair_of_sq_eq_neg,
+        LinearIsometry.mapsTo_orthogonal_of_sq_eq_neg,
+        LinearIsometry.restrictInvariantOrthogonal_sq,
+        Matrix.orthogonalLinearIsometry_sq}
+    \leanok
+    \discussion{7581}
+    Let $J$ be a linear isometry of a real inner-product space satisfying
+    $J^2=-\Id$. For every unit vector $v$, the ordered pair $(v,-Jv)$ is
+    orthonormal. Its span and its orthogonal complement are invariant under
+    $J$, and the restriction to the complement also squares to $-\Id$.
+    On that ordered plane the matrix of $J$ is
+    $Y=\left(\begin{smallmatrix}0&1\\-1&0\end{smallmatrix}\right)$.
+    Every real skew-symmetric orthogonal matrix supplies such an isometry.
+\end{lemma}
+\begin{proof}\leanok
+    Isometry and $J^2=-\Id$ give
+    $\langle x,Jy\rangle=-\langle Jx,y\rangle$. Taking $x=y=v$ shows
+    $\langle v,Jv\rangle=0$. The identities $Jv=-(-Jv)$ and
+    $J(-Jv)=v$ give invariance and the displayed orientation. For an invariant
+    subspace $W$, the same skew-adjoint identity gives
+    $\langle w,Jz\rangle=-\langle Jw,z\rangle=0$ for $w\in W$ and
+    $z\in W^\perp$, proving invariance of the complement. Finally,
+    $A^T=-A$ and $AA^T=\Id$ imply $A^2=-\Id$.
+\end{proof}
+
+\begin{lemma}[Sign and indexing of the standard skew form]
+    \label{lem:mpu_standard_skew_indexing}
+    \lean{Matrix.interleavedSkewForm_eq_neg_J_submatrix,
+        Matrix.interleavedSkewFormFin_apply}
+    \leanok
+    \discussion{7581}
+    For a finite index set $I$, identify $(i,0),(i,1)\in I\times\{0,1\}$
+    with $i$ in the first and second copies of $I\sqcup I$. Under this
+    identification $\Id_I\otimes Y$ corresponds to
+    $\left(\begin{smallmatrix}0&\Id_I\\-\Id_I&0\end{smallmatrix}\right)$,
+    the negative of the split matrix
+    $\left(\begin{smallmatrix}0&-\Id_I\\\Id_I&0\end{smallmatrix}\right)$.
+    For $I=\{0,\ldots,m-1\}$ the interleaved enumeration gives the same
+    ordered blocks on $\{0,\ldots,2m-1\}$.
+\end{lemma}
+\begin{proof}\leanok
+    Compare the four choices of the two binary coordinates. The two diagonal
+    blocks vanish, and the off-diagonal blocks are $\Id_I$ and $-\Id_I$
+    in that order. Reindexing preserves these entries.
+\end{proof}
+
+\begin{lemma}[Paired orthonormal basis]
+    \label{lem:mpu_skew_paired_orthonormal_basis}
+    \lean{LinearIsometry.exists_paired_orthonormalBasis}
+    \leanok
+    \discussion{7581}
+    \uses{lem:mpu_skew_orthogonal_plane}
+    Let $E$ be a real inner-product space of dimension $2m$, and let $J$ be
+    a linear isometry with $J^2=-\Id$. There is an orthonormal basis
+    $(e_{i,0},e_{i,1})_{i=0}^{m-1}$ such that
+    $Je_{i,0}=-e_{i,1}$ and $Je_{i,1}=e_{i,0}$.
+\end{lemma}
+\begin{proof}\leanok
+    Induct on $m$. The empty basis covers $m=0$. Otherwise choose a unit
+    vector $v$ and use the ordered orthonormal pair $(v,-Jv)$.
+    Its invariant orthogonal complement has dimension $2m-2$.
+    Append its inductively constructed paired basis to this pair.
+    The resulting orthonormal family has $2m$ members and therefore spans $E$.
+\end{proof}
+
+\begin{lemma}[Real skew-orthogonal normal form]
+    \label{thm:mpu_real_skew_orthogonal_normal_form}
+    \lean{Matrix.toMatrix_paired_orthonormalBasis,
+        Matrix.exists_orthogonal_congruence_interleavedSkewForm}
+    \leanok
+    \discussion{7581}
+    \uses{lem:mpu_skew_paired_orthonormal_basis, lem:mpu_standard_skew_indexing}
+    Let $A\in\operatorname{Mat}_{2m}(\mathbb R)$ be orthogonal with
+    $A^T=-A$. Set $\Sigma_m=\Id_m\otimes Y$, in interleaved order, where
+    $Y=\left(\begin{smallmatrix}0&1\\-1&0\end{smallmatrix}\right)$.
+    There is a real orthogonal matrix $O$ such that
+    $O^T\Sigma_m O=A$.
+    This is the real normal form used in the proof of
+    \cite[Proposition~V.2]{Cirac2017MPU}.
+    % Source lines: paper_v2.tex 1129--1140.
+\end{lemma}
+\begin{proof}\leanok
+    The action of $A$ is an isometry squaring to $-\Id$. In the paired
+    orthonormal basis of Lemma~\ref{lem:mpu_skew_paired_orthonormal_basis},
+    its matrix is $\Sigma_m$. The orthogonal change of coordinates from
+    the original basis to this paired basis gives the displayed congruence.
+\end{proof}
+
+\begin{lemma}[Complex skew-unitary normal form]
+    \label{thm:mpu_complex_skew_unitary_normal_form}
+    \lean{Matrix.exists_unitary_congruence_interleavedSkewForm}
+    \leanok
+    \discussion{7581}
+    \uses{lem:mpu_skew_unitary_congruence, thm:mpu_real_skew_orthogonal_normal_form}
+    Let $x\in\operatorname{Mat}_{2m}(\mathbb C)$ be unitary with $x^T=-x$.
+    There is a unitary matrix $U$ such that $x=U^T\Sigma_m U$.
+    This is the complex normal form used in the proof of
+    \cite[Proposition~V.2]{Cirac2017MPU}.
+    % Source lines: paper_v2.tex 1129--1140.
+\end{lemma}
+\begin{proof}\leanok
+    The skew congruence factorization gives $x=S^T\Lambda S$ with $S$
+    unitary and $\Lambda$ real, skew-symmetric and unitary.
+    The real normal form gives $\Lambda=O^T\Sigma_m O$ with $O$ orthogonal.
+    Regard $O$ as a complex unitary matrix and set $U=OS$.
+\end{proof}
+
 \begin{lemma}[Orthogonal and symplectic standard forms]
     \label{corconj}
     \notready
     \discussion{5713}
-    \uses{prop1conj, lemma:conjclass-normalform-continuous, FundamentalMPU, thm:mpu_skew_unitary_even_dimension}
+    \uses{prop1conj, lemma:conjclass-normalform-continuous, FundamentalMPU, thm:mpu_skew_unitary_even_dimension, thm:mpu_complex_skew_unitary_normal_form}
     Let an MPU in standard form be invariant under complex conjugation. Its
     standard-form unitaries can be chosen in exactly one of the following two
     cases. In Case I,
@@ -9778,8 +9967,9 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 
 \begin{lemma}[Normalized physical-adjoint source factors]
     \label{lem:mpu_normalized_physical_adjoint_source_factors}
-    \lean{MPOTensor.IsMPUCanonicalFormII.reindexPhysical, MPOTensor.IsMPUCanonicalFormII.isMPUSimple_physicalAdjointTensor, MPOTensor.IsMPUCanonicalFormII.sourceFactors_sourceU_isUnitaryBetween, MPOTensor.IsMPUCanonicalFormII.sourceFactors_Y₁_mul_conjTranspose, MPOTensor.IsMPUCanonicalFormII.sourceFactors_Y₂_weighted_mul_conjTranspose, MPOTensor.SourceFactors.physicalAdjoint, MPOTensor.SourceFactors.sourceU_physicalAdjoint, MPOTensor.SourceFactors.sourceV_physicalAdjoint, MPOTensor.IsMPUCanonicalFormII.twoSiteSourceFactors_physicalAdjoint}
+    \lean{MPOTensor.IsMPUCanonicalFormII.reindexPhysical, MPOTensor.IsMPUCanonicalFormII.sourceFactors_sourceU_isUnitaryBetween, MPOTensor.IsMPUCanonicalFormII.sourceFactors_Y₁_mul_conjTranspose, MPOTensor.IsMPUCanonicalFormII.sourceFactors_Y₂_weighted_mul_conjTranspose, MPOTensor.SourceFactors.physicalAdjoint, MPOTensor.SourceFactors.sourceU_physicalAdjoint, MPOTensor.SourceFactors.sourceV_physicalAdjoint, MPOTensor.IsMPUCanonicalFormII.twoSiteSourceFactors_physicalAdjoint}
     \leanok
+    \uses{thm:mpug_canonical_adjoint_simple}
     Let $U$ be simple and in reduced canonical form II, with recorded positive
     diagonal boundary $\rho$. Bijective physical relabeling preserves this
     presentation and boundary. Physical adjunction preserves simplicity.
@@ -10879,7 +11069,90 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     $\sigma=\pm1$ is independent of the gauge and is constant under continuous
     deformations that preserve time-reversal symmetry.
     % Source lines: paper_v2.tex 1613--1631.
+    % The intrinsic auxiliary results below need pointwise supplied standard
+    % forms and the local certificate; no continuous gate choices are needed.
+    % Deducing that certificate from global symmetry remains separate.
 \end{lemma}
+
+\begin{lemma}[Extraction of the sign from a supplied local equation]
+    \label{lem:mpu_supplied_time_reversal_sign}
+    \lean{MPOTensor.timeReversalSign, MPOTensor.TwoSiteStandardFormData.timeReversalSign_eq_of_local_relation}
+    \leanok
+    \uses{def:mpu_supplied_two_site_standard_form}
+    Let $d>0$ and let $W$ have a supplied two-site standard form with square
+    gates $u,v$ on $\mathbb C^d\otimes\mathbb C^d$. Define
+    $s(u,v)=d^{-2}\tr[\mathbb S_{12,34}v_{23}(u_{12}\otimes u_{34})v_{23}]$.
+    If a unitary $x$ and a scalar $\sigma$ satisfy
+    \begin{align}
+        v_{23}(u_{12}\otimes u_{34})
+         & =\sigma(x\otimes x^\dagger)v_{23}^\dagger,
+    \end{align}
+    then $s(u,v)=\sigma$. This is the local-equation extraction in
+    \cite[lines~1595--1610]{Cirac2017MPU} for the supplied standard form.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:matrix_trace_swap_scaled_kronecker}
+    Multiply the local equation by $v_{23}$ and cancel
+    $v_{23}^\dagger v_{23}=\Id$. Exchange of the two physical pairs gives
+    $\tr[\mathbb S(x\otimes x^\dagger)]=\tr[xx^\dagger]=d^2$.
+    Division by the nonzero scalar $d^2$ gives the result.
+\end{proof}
+
+\begin{lemma}[Intrinsic trace and independence of standard-form representatives]
+    \label{lem:mpu_source_time_reversal_sign_independent}
+    \lean{MPOTensor.timeReversalPeriodicTrace, MPOTensor.intrinsicTimeReversalSign, MPOTensor.TwoSiteStandardFormData.timeReversalTrace_eq_periodicTrace, MPOTensor.TwoSiteStandardFormData.timeReversalSign_eq_intrinsic, MPOTensor.TwoSiteStandardFormData.timeReversalSign_eq_of_mpo_two_eq}
+    \leanok
+    \uses{def:mpu_supplied_two_site_standard_form}
+    Let $W$ have a supplied two-site standard form with square gates $u,v$
+    on $\mathbb C^d\otimes\mathbb C^d$. For exchange $P$ of the two physical
+    blocks, define $s(W)=d^{-2}\tr[P U_W^{(2)}]$. Then $s(u,v)=s(W)$.
+    Consequently two supplied standard forms whose two-block
+    periodic operators agree have the same normalized sign expression,
+    including representatives in different bond dimensions. No canonical
+    source-factor comparison is required. This gives the independence
+    assertion of \cite[lines~1613--1627]{Cirac2017MPU} for the supplied
+    square standard forms.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_supplied_two_site_periodic_circuit}
+    The shifted layer on two blocks is $P v_{23}P v_{23}$, so
+    $U_W^{(2)}=P v_{23}P v_{23}(u\otimes u)$. Since $P^2=\Id$,
+    cyclicity gives
+    \begin{align}
+        \tr[P U_W^{(2)}]
+         & =\tr[v_{23}P v_{23}(u\otimes u)]  \\
+         & =\tr[P v_{23}(u\otimes u)v_{23}].
+    \end{align}
+    Division by $d^2$ gives the identity and independence.
+\end{proof}
+
+\begin{lemma}[Constancy along tensor paths with pointwise local certificates]
+    \label{lem:mpu_supplied_time_reversal_sign_constant}
+    \lean{MPOTensor.continuous_intrinsicTimeReversalSign, MPOTensor.intrinsicTimeReversalSign_eq_on_path}
+    \leanok
+    \uses{lem:mpu_supplied_time_reversal_sign, def:mpu_supplied_two_site_standard_form}
+    Let $W(t)$ be a continuous path of tensors for $t\in[0,1]$.
+    At each $t$, suppose there is a supplied square two-site standard form
+    and a local time-reversal certificate as in
+    Lemma~\ref{lem:mpu_supplied_time_reversal_sign}, with
+    $\sigma(t)\in\{1,-1\}$. These choices are pointwise; no continuity
+    of the gates, source factors, unitary or sign witnesses is required.
+    Then $s(W(t))=s(W(0))$ throughout the interval.
+    This is the intrinsic-trace argument for
+    \cite[lines~1628--1630]{Cirac2017MPU}. Deducing the pointwise local
+    certificate from global time reversal remains the separate local
+    characterization.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:mpu_supplied_time_reversal_sign, lem:mpu_source_time_reversal_sign_independent}
+    The finite-chain operator is polynomial in the tensor entries,
+    so $s(W(t))$ is continuous. At each point the local equation and
+    intrinsic identity give $s(W(t))\in\{1,-1\}$. A continuous function
+    from the connected interval to this two-point set is constant.
+\end{proof}
 
 \begin{lemma}[Admissible well-definedness of the time-reversal sign]
     \label{prop:mpu_admissible_sigma_well_defined}
@@ -12744,3 +13017,5 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     Definition~\ref{def:mpu_admissible_symmetry_equivalence}.
     % Source lines: paper_v2.tex 2203--2235.
 \end{lemma}
+
+\input{chapter/ch28_mpu_finite_heisenberg}
