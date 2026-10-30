@@ -49,7 +49,7 @@ theorem cyclicActiveBlock_periodicLocalInteractionES_apply
   let U := cyclicActiveBlockConfigLinearIsometryEquiv d R hRN i
   let G := ContinuousLinearMap.rightFiberwiseMap (S := Cfg d (N - R))
     (LinearMap.toContinuousLinearMap h)
-  rw [periodicLocalInteractionES, dif_pos hRN]
+  rw [periodicLocalInteractionES, dite_eq_left hRN]
   change U (U.symm (G (U ψ))) = G (U ψ)
   exact U.apply_symm_apply _
 
