@@ -1,0 +1,203 @@
+\subsection{Unitary gates for the actual adjacent factors}
+\label{sec:qca_margolus_unitary_gates}
+
+Let $d>0$ and let $\omega$ be a nearest-neighbour star-automorphism of the
+homogeneous chain. Write $E_x=\{2x,2x+1\}$,
+$L_x=\{2x-1,2x\}$ and $P_x=\{2x+1,2x+2\}$.
+Choose the already derived coherent matrix sizes $n(y)>0$ of the support
+factors, with $n(2x)n(2x+1)=n(2x+1)n(2x+2)=d^2$.
+The gates below may depend on $x$; no translation covariance is assumed.
+These are the finite spatial steps of generalized Margolus partitioning
+in \cite[equations~bruleU and bruleV, lines~980--1001]{SchumacherWerner2004QCA},
+using the adjacent-generation equalities of
+\cite[lines~1276--1318]{Gross2012IndexTheory}.
+
+\begin{lemma}[Prescribed coordinates of commuting products]
+    \label{lem:qca_commuting_product_coordinates}
+    \lean{StarSubalgebra.commutingMulEquivSup,
+        StarSubalgebra.commutingMulEquivSup_tmul_coe,
+        StarSubalgebra.commutingSupEquivMatrix_apply_mul,
+        SpinChain.PropagatesWithin.adjacentSupportJoinMatrixEquiv,
+        SpinChain.PropagatesWithin.adjacentSupportJoinMatrixEquiv_apply_product,
+        SpinChain.PropagatesWithin.physicalPairSupportJoinMatrixEquiv,
+        SpinChain.PropagatesWithin.physicalPairSupportJoinMatrixEquiv_apply_product}
+    \notready
+    \uses{thm:qca_commuting_full_matrix_product,
+        cor:qca_support_factor_presentations}
+    For commuting full matrix factors $\mathcal R$ and $\mathcal S$ with
+    prescribed presentations $e_R$ and $e_S$, multiplication identifies
+    $\mathcal R\otimes\mathcal S$ with $\mathcal R\vee\mathcal S$ and
+    the prescribed matrix coordinates satisfy
+    \begin{align}
+        e_{R\vee S}(ab) & =e_R(a)\otimes e_S(b).
+    \end{align}
+    This applies in order to the even and odd support factors, and to
+    the odd and following even support factors.
+\end{lemma}
+\begin{proof}
+    \notready
+    Multiplication is injective by the full matrix factor theorem and
+    has the join as its range. Transport the tensor product of the two
+    presentations through this multiplication equivalence. A pure tensor
+    maps to its actual ambient product and to its Kronecker coordinates.
+\end{proof}
+
+\begin{lemma}[The two actual matrix rules]
+    \label{lem:qca_margolus_matrix_rules}
+    \lean{SpinChain.PropagatesWithin.evenSupportMatrixEquiv,
+        SpinChain.PropagatesWithin.oddSupportMatrixEquiv,
+        SpinChain.PropagatesWithin.margolusInputRule,
+        SpinChain.PropagatesWithin.margolusOutputRule,
+        SpinChain.PropagatesWithin.margolusInputRule_symm_kronecker,
+        SpinChain.PropagatesWithin.margolusOutputRule_kronecker}
+    \notready
+    \uses{lem:qca_commuting_product_coordinates,
+        thm:qca_image_pair_adjacent_generation,
+        thm:qca_physical_pair_adjacent_generation}
+    The actual even-pair image and the actual shifted physical-pair join
+    give star-isomorphisms
+    \begin{align}
+        F_x & : M_{d^2}(\mathbb C)\longrightarrow
+        M_{n(2x)n(2x+1)}(\mathbb C),\notag                   \\
+        G_x & : M_{n(2x+1)n(2x+2)}(\mathbb C)\longrightarrow
+        M_{d^2}(\mathbb C).
+    \end{align}
+    If $\iota_\Lambda$ denotes canonical finite-region inclusion, then
+    for $a\in\mathcal R_{2x}$ and $b\in\mathcal R_{2x+1}$,
+    \begin{align}
+        \omega\bigl(\iota_{E_x}(F_x^{-1}(e_{2x}(a)\otimes e_{2x+1}(b)))\bigr)
+         & =\iota_{L_x}(a)\iota_{P_x}(b).
+    \end{align}
+    For $b\in\mathcal R_{2x+1}$ and $c\in\mathcal R_{2x+2}$,
+    \begin{align}
+        \iota_{P_x}(G_x(e_{2x+1}(b)\otimes e_{2x+2}(c)))
+         & =\iota_{P_x}(b)\iota_{L_{x+1}}(c).
+    \end{align}
+\end{lemma}
+\begin{proof}
+    \notready
+    Restrict the injective even-pair image homomorphism to its actual
+    range, which is its two-factor join. Compose with its prescribed
+    matrix presentation. For the shifted rule, use the inverse of the
+    shifted join presentation and the inverse of faithful physical-pair
+    inclusion. The preceding product-coordinate identity gives both
+    displayed formulas.
+\end{proof}
+
+\begin{lemma}[Spatial unitaries for both local rules]
+    \label{lem:qca_margolus_spatial_unitaries}
+    \lean{SpinChain.PropagatesWithin.exists_margolus_unitary_gates}
+    \notready
+    \uses{lem:qca_margolus_matrix_rules,lem:qca_full_matrix_spatial_implementer}
+    At every integer position $x$ there are unitary maps
+    \begin{align}
+        U_x & : \mathbb C^{d^2}\longrightarrow
+        \mathbb C^{n(2x)}\otimes\mathbb C^{n(2x+1)},\notag    \\
+        V_x & : \mathbb C^{n(2x+1)}\otimes\mathbb C^{n(2x+2)}
+        \longrightarrow\mathbb C^{d^2}
+    \end{align}
+    such that $F_x(A)=U_xAU_x^*$ and $G_x(B)=V_xBV_x^*$.
+    Consequently the two preceding local identities hold with
+    $F_x^{-1}(B)=U_x^*BU_x$ and $G_x(B)=V_xBV_x^*$.
+\end{lemma}
+\begin{proof}
+    \notready
+    Apply finite full matrix spatial implementation to each actual
+    matrix rule. The unitary identities give the inverse conjugation
+    formula. Substitute the prescribed factor products into the two
+    actual local-rule identities.
+\end{proof}
+
+\begin{lemma}[Cancelling intermediate basis freedom]
+    \label{lem:qca_margolus_basis_freedom}
+    \lean{SpinChain.PropagatesWithin.margolus_basisChange_unitary,
+        SpinChain.PropagatesWithin.margolus_basisChange_input,
+        SpinChain.PropagatesWithin.margolus_basisChange_output}
+    \notready
+    \uses{lem:qca_margolus_spatial_unitaries}
+    Let $P,Q$ be independent unitary basis changes on two intermediate
+    factors, and write $K=P\otimes Q$. The changed input and output gates
+    $U'=KU$ and $V'=VK^*$ are unitary whenever $U,V$ are unitary. For all
+    factor observables $A,B$,
+    \begin{align}
+        U'^*((PAP^*)\otimes(QBQ^*))U' & =U^*(A\otimes B)U,\notag \\
+        V'((PAP^*)\otimes(QBQ^*))V'^* & =V(A\otimes B)V^*.
+    \end{align}
+    Thus a basis rotation on each actual intermediate factor cancels
+    between its input and output appearances. This is the freedom in
+    \cite[lines~1033--1041]{SchumacherWerner2004QCA}; it imposes no invented
+    translation constraint on an arbitrary pair of gates.
+\end{lemma}
+\begin{proof}
+    \notready
+    Kronecker products preserve both unitary identities. Substitution of
+    the changed gates gives $K^*K=I$ on both sides of the intermediate
+    observable; cancellation proves the two identities.
+\end{proof}
+
+\begin{lemma}[Actual alternating output for every pair matrix]
+    \label{lem:qca_margolus_alternating_pair_rule}
+    \lean{SpinChain.PropagatesWithin.margolus_alternating_kronecker,
+        SpinChain.PropagatesWithin.margolusAlternatingPairRule,
+        SpinChain.PropagatesWithin.margolusAlternatingPairRule_eq,
+        SpinChain.PropagatesWithin.margolusAlternatingPairRule_input}
+    \notready
+    \uses{lem:qca_margolus_matrix_rules,lem:qca_margolus_spatial_unitaries}
+    Write $e_{ac}$ and $f_{bd}$ for matrix units in the even and odd
+    intermediate factors of $E_{x+1}$, respectively. Define
+    \begin{align}
+        H_x(K) & =\sum_{a,b,c,d}K_{(a,b),(c,d)}\,
+        \iota_{P_x}\bigl(G_x(I\otimes e_{ac})\bigr)
+        \iota_{P_{x+1}}\bigl(G_{x+1}(f_{bd}\otimes I)\bigr).
+    \end{align}
+    Then for every intermediate matrix $K$ and physical matrix $A$,
+    \begin{align}
+        \omega\bigl(\iota_{E_{x+1}}(F_{x+1}^{-1}(K))\bigr) & =H_x(K),\notag    \\
+        \omega\bigl(\iota_{E_{x+1}}(A)\bigr)               & =H_x(F_{x+1}(A)).
+    \end{align}
+    Thus the input gate is followed by the two neighbouring shifted
+    output gates, in their odd--even factor order. No local-action
+    equality is assumed.
+\end{lemma}
+\begin{proof}
+    \notready
+    For $K=C\otimes D$, the first identity reduces to the two product
+    rules: $G_x(I\otimes C)$ recovers the even factor and
+    $G_{x+1}(D\otimes I)$ recovers the odd factor. Expand an arbitrary
+    $K$ into matrix units, each of which is a scalar multiple of a
+    Kronecker product of matrix units, and use linearity. Substitute
+    $K=F_{x+1}(A)$ for the second identity.
+\end{proof}
+
+\begin{lemma}[Unique global extension and translation compatibility]
+    \label{lem:qca_margolus_global_extension}
+    \lean{SpinChain.PropagatesWithin.existsUnique_margolus_local_extension,
+        SpinChain.PropagatesWithin.margolusAlternatingPairRule_translation}
+    \notready
+    \uses{lem:qca_margolus_alternating_pair_rule,lem:qca_even_pair_hom_ext}
+    There is exactly one continuous complex star-algebra homomorphism
+    $T$ on the quasi-local algebra satisfying
+    \begin{align}
+        T\bigl(\iota_{E_{x+1}}(A)\bigr) & =H_x(F_{x+1}(A))
+    \end{align}
+    for every integer $x$ and pair matrix $A$. It is the given
+    automorphism $\omega$. If $\omega$ commutes with translations
+    $\tau_t$, then for every $t\in\mathbb Z$,
+    \begin{align}
+        \omega\bigl(\tau_t(\iota_{E_{x+1}}(A))\bigr)
+         & =\tau_t\bigl(H_x(F_{x+1}(A))\bigr).
+    \end{align}
+    This expresses one-site translation compatibility as agreement with
+    the original QCA on every translated block. It does not assert that
+    independently chosen factor coordinates yield constant gates.
+\end{lemma}
+\begin{proof}
+    \notready
+    The preceding finite matrix formula supplies existence. The even-pair
+    local algebras generate the algebraic local algebra. Their equality
+    set for two star-algebra homomorphisms is a star-subalgebra, so
+    agreement on pairs gives agreement on all algebraic local observables.
+    Continuity and completion density give global equality. Translation
+    compatibility is the covariance identity for the actual automorphism
+    after substituting the finite alternating formula.
+\end{proof}

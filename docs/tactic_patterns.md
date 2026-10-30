@@ -9734,6 +9734,55 @@ there is no need for a new tactic.
   statements and consolidate the closed-containment argument before a third
   copy, rather than adding another notion of local generation.
 
+
+### Coordinate transport of a rectangular conjugation (2026-10-29)
+
+- **Seen:** `Algebra/MatrixStarEquivSpatial.lean`.
+- **Pattern:** A square unitary becomes a rectangular unitary by reindexing its columns;
+  conjugation then transports the input matrix along the same coordinate equivalence.
+- **Reuse:** `Matrix.reindexLinearEquiv_mul` receives all three equivalences explicitly,
+  and `Matrix.conjTranspose_reindex` transports the adjoint. The existing QICLean
+  Skolem–Noether theorem supplies the square implementer. No entrywise double sum
+  or duplicate Skolem–Noether argument is introduced.
+
+### Prescribed coordinates of a commuting-factor product — promoted (2026-10-29)
+
+- **Seen:** the two actual adjacent support-factor presentations and the
+  corresponding unshifted/shifted matrix rules.
+- **Promotion:** `StarSubalgebra.commutingMulEquivSup` exposes the actual
+  multiplication equivalence, and
+  `StarSubalgebra.commutingSupEquivMatrix_apply_mul` evaluates its prescribed
+  matrix coordinates on a factor product.
+- **Reuse:** Both adjacent-generation presentations use this one evaluation
+  theorem. The two QCA matrix rules then reuse their owner evaluations,
+  rather than reconstructing the tensor-product map or a Kronecker expansion.
+- **Notes:** This is a helper theorem, not a new algebra structure or tactic.
+
+### Pairwise matrix-unit expansion of an actual local rule — candidate (2026-10-29)
+
+- **Seen:** `QCA/MargolusAlternatingLocalRule.lean`.
+- **Pattern:** Rewrite a full intermediate matrix using the pinned
+  `Matrix.matrix_eq_sum_single`, express each product-index matrix unit as
+  a scalar multiple of a Kronecker product, and map the two finite sums
+  through the already constructed linear rules.
+- **Reuse:** One product rule supplies every summand. Existing even-pair
+  generation then controls the equalizer of any two continuous global
+  extensions; no second local-generation induction is written.
+- **Decision:** Keep the finite source formula and one private product
+  matrix-unit helper until another independent consumer appears.
+
+### Even-pair values determine the completed homomorphism — promoted (2026-10-29)
+
+- **Seen:** the actual alternating-rule extension and the common finite-window
+  comparison needed by the matrix product unitary construction.
+- **Promotion:** `SpinChain.quasiLocalStarAlgHom_ext_evenPair` belongs to the
+  existing support-generation owner. It pulls back an equalizer, consumes the
+  established algebraic even-pair generation, then uses completion density.
+- **Reuse:** The Margolus extension proof now supplies only the pair values;
+  it no longer carries a private copy of the global equalizer/density proof.
+- **Notes:** The public statement uses canonical physical even pairs and
+  continuous homomorphisms. No new local-generation predicate is introduced.
+
 ### Weighted geometric sums grouped by their anchors — promoted (2026-10-28)
 
 - **Seen:** `Lattice/LowEnergyCommutatorSum.lean`,

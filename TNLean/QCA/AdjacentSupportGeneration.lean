@@ -29,6 +29,8 @@ See `docs/paper-gaps/gnvw12_site_dependent_adjacent_generation_scope.tex`.
 No translation-covariance hypothesis is used.
 -/
 
+open scoped Kronecker
+
 namespace SpinChain
 namespace PropagatesWithin
 
@@ -57,7 +59,10 @@ private noncomputable def supportEmbeddingEquiv (Λ : Finset ℤ)
     obtain ⟨a, ha, rfl⟩ := StarSubalgebra.mem_map.mp hz
     exact ⟨⟨a, ha⟩, rfl⟩
 
-private noncomputable def adjacentSupportJoinMatrixEquiv
+/-- The prescribed presentations of the actual even and odd support
+factors present their join, in that order. Source: GNVW AARReven,
+lines 1276–1287; Schumacher–Werner bruleU, lines 980–1001. -/
+noncomputable def adjacentSupportJoinMatrixEquiv
     (hω : PropagatesWithin ω (Finset.Icc (-1) 1)) (x : ℤ)
     {r s : ℕ} [NeZero r] [NeZero s]
     (eR : ↥(evenSupportAlgebra hω x) ≃⋆ₐ[ℂ] Matrix (Fin r) (Fin r) ℂ)
@@ -79,6 +84,26 @@ private noncomputable def adjacentSupportJoinMatrixEquiv
       (by simpa only [embeddedSupportAlgebra_even] using a.2) b
       (by simpa only [embeddedSupportAlgebra_odd] using b.2)
   exact StarSubalgebra.commutingSupEquivMatrix _ _ hEO eE eO
+
+/-- The even and odd support presentations send an actual product to the
+Kronecker product of the prescribed factor coordinates.
+Source: Schumacher–Werner, bruleU/bruleV, lines 980–1001. -/
+theorem adjacentSupportJoinMatrixEquiv_apply_product
+    (hω : PropagatesWithin ω (Finset.Icc (-1) 1)) (x : ℤ)
+    {r s : ℕ} [NeZero r] [NeZero s]
+    (eR : ↥(evenSupportAlgebra hω x) ≃⋆ₐ[ℂ] Matrix (Fin r) (Fin r) ℂ)
+    (eS : ↥(oddSupportAlgebra hω x) ≃⋆ₐ[ℂ] Matrix (Fin s) (Fin s) ℂ)
+    (a : evenSupportAlgebra hω x) (b : oddSupportAlgebra hω x) :
+    adjacentSupportJoinMatrixEquiv hω x eR eS
+      ⟨matrixToQuasiLocalObservable d (leftPair x) a *
+          matrixToQuasiLocalObservable d (rightPair x) b,
+        (embeddedEvenSupportAlgebra hω x ⊔ embeddedOddSupportAlgebra hω x).mul_mem
+          (le_sup_left (StarSubalgebra.mem_map.mpr ⟨a, a.2, rfl⟩))
+          (le_sup_right (StarSubalgebra.mem_map.mpr ⟨b, b.2, rfl⟩))⟩ =
+      Matrix.reindex finProdFinEquiv finProdFinEquiv (eR a ⊗ₖ eS b) := by
+  unfold adjacentSupportJoinMatrixEquiv
+  rw [StarSubalgebra.commutingSupEquivMatrix_apply_mul]
+  simp only [StarAlgEquiv.trans_apply, StarAlgEquiv.symm_apply_apply]
 
 /-- The join of the actual adjacent support factors is a full matrix
 algebra of positive size. This derives its matrix presentation, rather
@@ -204,7 +229,10 @@ theorem exists_supportAlgebra_matrixSizes_even_mul
   obtain ⟨eS⟩ := eO x
   exact evenSupportAlgebra_matrixSize_mul_odd hω x eR eS
 
-private noncomputable def physicalPairSupportJoinMatrixEquiv
+/-- The prescribed presentations of the actual odd factor and next
+even factor present their join on a physical pair, in that order.
+Source: GNVW AARRodd, lines 1306–1315; Schumacher–Werner bruleV. -/
+noncomputable def physicalPairSupportJoinMatrixEquiv
     (hω : PropagatesWithin ω (Finset.Icc (-1) 1)) (x : ℤ)
     {r s : ℕ} [NeZero r] [NeZero s]
     (eR : ↥(oddSupportAlgebra hω x) ≃⋆ₐ[ℂ] Matrix (Fin r) (Fin r) ℂ)
@@ -225,6 +253,26 @@ private noncomputable def physicalPairSupportJoinMatrixEquiv
       (by simpa only [embeddedSupportAlgebra_odd] using a.2) b
       (by simpa only [embeddedSupportAlgebra_even] using b.2)
   exact StarSubalgebra.commutingSupEquivMatrix _ _ hOE eO eE
+
+/-- The odd and next even support presentations send an actual product to the
+Kronecker product of the prescribed factor coordinates.
+Source: Schumacher–Werner, bruleU/bruleV, lines 980–1001. -/
+theorem physicalPairSupportJoinMatrixEquiv_apply_product
+    (hω : PropagatesWithin ω (Finset.Icc (-1) 1)) (x : ℤ)
+    {r s : ℕ} [NeZero r] [NeZero s]
+    (eR : ↥(oddSupportAlgebra hω x) ≃⋆ₐ[ℂ] Matrix (Fin r) (Fin r) ℂ)
+    (eS : ↥(evenSupportAlgebra hω (x + 1)) ≃⋆ₐ[ℂ] Matrix (Fin s) (Fin s) ℂ)
+    (a : oddSupportAlgebra hω x) (b : evenSupportAlgebra hω (x + 1)) :
+    physicalPairSupportJoinMatrixEquiv hω x eR eS
+      ⟨matrixToQuasiLocalObservable d (rightPair x) a *
+          matrixToQuasiLocalObservable d (leftPair (x + 1)) b,
+        (embeddedOddSupportAlgebra hω x ⊔ embeddedEvenSupportAlgebra hω (x + 1)).mul_mem
+          (le_sup_left (StarSubalgebra.mem_map.mpr ⟨a, a.2, rfl⟩))
+          (le_sup_right (StarSubalgebra.mem_map.mpr ⟨b, b.2, rfl⟩))⟩ =
+      Matrix.reindex finProdFinEquiv finProdFinEquiv (eR a ⊗ₖ eS b) := by
+  unfold physicalPairSupportJoinMatrixEquiv
+  rw [StarSubalgebra.commutingSupEquivMatrix_apply_mul]
+  simp only [StarAlgEquiv.trans_apply, StarAlgEquiv.symm_apply_apply]
 
 /-- A physical-pair observable commuting with its two support factors is
 scalar. All other support factors are disjoint from the pair; global

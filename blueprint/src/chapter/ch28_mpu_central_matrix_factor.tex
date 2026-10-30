@@ -49,3 +49,31 @@ $\mathcal R_y$, hence with the algebra they generate, which is the whole
 quasi-local algebra; its centre is scalar, so
 (\ref{eq:qca_central_star_subalgebra_scalar_centre}) holds for $\mathcal R_x$
 and $\mathcal R_x\cong M_{r(x)}(\C)$.
+
+
+\begin{lemma}[A full-matrix star-isomorphism has a unitary implementer]
+    \label{lem:qca_full_matrix_spatial_implementer}
+    \lean{Matrix.exists_unitary_conj_of_starAlgEquiv_matrix_between}
+    \notready
+    Let $I,J$ be nonempty finite coordinate sets and let
+    $f:M_I(\mathbb C)\to M_J(\mathbb C)$ be a complex star-algebra
+    isomorphism. Then $|I|=|J|$ and there is a unitary map
+    $U:\mathbb C^I\to\mathbb C^J$ with
+    \begin{align}
+        U^\dagger U=I,\qquad UU^\dagger=I,\qquad
+        f(A)=UAU^\dagger\quad(A\in M_I(\mathbb C)).
+    \end{align}
+    This applies between distinct coordinate types, as required for the
+    unitaries in \cite[equations~\textup{bruleU} and~\textup{bruleV},
+        lines~980--1001]{SchumacherWerner2004QCA}.
+\end{lemma}
+\begin{proof}
+    \notready
+    The algebra isomorphism is complex linear, so $|I|^2=|J|^2$ and
+    $|I|=|J|$. Choose an equivalence of the two coordinate sets and
+    transport $f$ to an automorphism of one full matrix algebra.
+    The unitary Skolem--Noether theorem implements that automorphism.
+    Transport its columns back to the original input coordinates;
+    multiplication and adjoints respect this reindexing, yielding the
+    displayed formula and both unitary identities.
+\end{proof}
