@@ -468,7 +468,9 @@
       "theorems": [
         "thm:chain_area_law",
         "thm:domain_area_law",
-        "thm:chain_mps_approximation"
+        "thm:chain_mps_approximation",
+        "thm:strip_area_law",
+        "thm:strip_mps_approximation"
       ],
       "corollaries": [
         "thm:chain_area_log_cube",
@@ -485,7 +487,9 @@
       "notes": {
         "thm:chain_area_law": "Chain case of Theorem A, named in the main-results paragraph",
         "thm:domain_area_law": "Theorem A, named in the chapter's main-results paragraph",
-        "thm:chain_mps_approximation": "Theorem B, named in the main-results paragraph"
+        "thm:chain_mps_approximation": "Theorem B, named in the main-results paragraph",
+        "thm:strip_area_law": "The bounded-width strip extension with a quadratic width and linear inverse-gap entropy bound",
+        "thm:strip_mps_approximation": "Normalized physical-site snake approximation with explicit width and length dependence"
       }
     },
     "ch:one_dimensional_protocol": {
