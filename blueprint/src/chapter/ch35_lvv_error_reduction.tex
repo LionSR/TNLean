@@ -184,3 +184,28 @@ estimate recorded in~\cite{gap:lvv13_error_reduction_witness_norm}.
     Numbering the left block commutes with the matrix action, since it
     only changes the summation index in each matrix-vector product.
 \end{proof}
+
+\begin{lemma}[Error reduction with a positive ground amplitude]
+    \label{thm:lvv_scaled_projection_error_reduction}
+    \lean{TNLean.MPS.AreaLaw.IsViable.errorReduction_of_norm_sub_smul_groundProjection_le,
+        TNLean.MPS.AreaLaw.IsViableMPS.errorReduction_of_norm_sub_smul_groundProjection_le}
+    \leanok
+    \uses{lem:lvv_filter_witness, lem:lvv_operator_bond_growth}
+    Let $c>0$ and let $S$ be $(i,s,b,1/2)$-viable for a unit vector
+    $\Gamma$. Suppose that $K=\sum_{j\in J}A_j\otimes B_j$,
+    each $A_j$ has operator-Schmidt rank at most $D$ at every internal
+    cut of the first $i$ sites, and
+    $\|K-c|\Gamma\rangle\langle\Gamma|\|\le\eta<c/2$.
+    Then $\{A_jt:j\in J,\ t\in S\}$ is
+    $(i,|J|s,D\max(1,b),4\eta/c)$-viable.
+\end{lemma}
+\begin{proof}
+    \leanok
+    For a half-viable unit witness $v$, put
+    $A_0=c|\Gamma\rangle\langle\Gamma|$. Then
+    $\|A_0v\|\ge c/2$ and
+    $|\langle\Gamma,A_0v\rangle|=\|A_0v\|$.
+    Apply Lemma~\ref{lem:lvv_filter_witness} with lower norm bound
+    $c/2$ and zero initial error. Cardinality and bond dimensions follow
+    as in Lemma~\ref{thm:lvv_mps_error_reduction}.
+\end{proof}

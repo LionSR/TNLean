@@ -9701,6 +9701,31 @@ there is no need for a new tactic.
   mathematical lemma to a lower matrix-analysis module and reuse it; do not duplicate its
   statement or introduce a new tactic.
 
+### Functional calculus on a Hermitian eigenbasis — candidate (2026-10-28)
+
+- **Pattern:** Expand the Hermitian functional calculus using its eigenvector
+  unitary, multiply by a basis vector and cancel the unitary factors. The
+  result is scalar multiplication by the function at the corresponding energy.
+- **Seen:** Two private helper proofs, in
+  `MPS/AreaLaw/Huang/ApproximateEnergyFilter.lean` and the companion module
+  `QICLean/Analysis/GroundProjection.lean`.
+- **Abstraction:** A public Mathlib or QICLean theorem for the action of a real
+  functional calculus on `IsHermitian.eigenvectorBasis` would replace both helpers.
+- **Notes:** The current spectral proof calls the helper once and then uses
+  `norm_cfc_le`; it does not repeat the full Gaussian Parseval argument.
+  The generic filtering module is intended for QICLean, where the helper can be
+  consolidated with the existing ground-projection development.
+
+
+### Increasing a matrix product bond bound — reuse (2026-10-29)
+
+- **Lemma:** `IsOpenMPS.mono` in `MPS/AreaLaw/OpenMPSCutRank.lean`
+  follows from the characterization by internal-cut matrix ranks.
+- **Use:** The uniform successive approximation and its arbitrary-accuracy
+  consequence enlarge a computed bond bound to one natural polynomial.
+  Both reuse this lemma, including the empty-chain case.
+- **Mechanism:** An ordinary monotonicity theorem suffices.
+
 
 ### Pure output Gram projection — library zero criterion (2026-10-29)
 
@@ -9749,6 +9774,16 @@ there is no need for a new tactic.
 - **Finite coordinates:** Reuse `Fin.cast_val_eq_self`, `Fin.val_natCast`,
   `Nat.mod_eq_of_lt`, and `Fin.val_add_eq_ite` in the matrix identities and the
   entry obstruction. No custom finite-arithmetic tactic is needed.
+
+### Delta half factors for a supplied two-site circuit (2026-10-29)
+
+- **Seen:** `MPS/MPU/StandardFormFromGates.lean`.
+- **Pattern:** A virtual index records a physical/intermediate pair; a matrix-unit
+  half factor contracts the other half factor to the supplied shifted gate.
+- **Reuse:** The finite delta sum is handled by Mathlib's ordinary `simp` lemmas.
+  The periodic seam, circuit unitarity and basis-change cancellation reuse the
+  existing supplied standard-form and fundamental-theorem APIs. No fourth copy
+  of the circuit contraction or custom tactic is introduced.
 
 
 ### Exponential comparisons with a common nonnegative factor — reused Mathlib (2026-10-29)

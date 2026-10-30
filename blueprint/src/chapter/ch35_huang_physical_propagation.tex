@@ -1,0 +1,183 @@
+\section{Physical propagation on the explicit grid}
+\label{sec:huang_physical_propagation}
+
+The following construction applies to the original nearest-neighbor interactions.
+It supplies the full-chain propagator approximation used in
+\cite[Section 5.4, Lemma 19]{Huang2015GroundState}, following
+\cite[Figure 2 and equations (2)--(13)]{Osborne2006Dynamics}.
+
+\begin{definition}[Within-block and omitted interactions]
+    \label{def:huang_grid_hamiltonian}
+    \lean{TNLean.MPS.AreaLaw.chainGridBoundaryEdge,
+        TNLean.MPS.AreaLaw.chainGridBoundaryEdges,
+        TNLean.MPS.AreaLaw.chainGridEdgeOwner,
+        TNLean.MPS.AreaLaw.chainGridBlockHamiltonian,
+        TNLean.MPS.AreaLaw.chainGridRetainedHamiltonian,
+        TNLean.MPS.AreaLaw.chainGridBoundaryTerm}
+    \leanok
+    \uses{def:huang_chain_grid}
+    Write $H=\sum_{i=0}^{L-2}h_i$, where $h_i$ acts on sites $i,i+1$.
+    At a grid boundary $c_k$, let $e_k=c_k-1$ be the omitted edge index,
+    and put $E=\{e_k\}_k$. The owner of an edge $i$ is $j(i)=\lfloor i/w\rfloor$.
+    Define
+    \[
+        A_j=\sum_{i\notin E,\ j(i)=j}h_i,\qquad
+        A=\sum_jA_j,\qquad B_k=-h_{e_k}.
+    \]
+\end{definition}
+
+\begin{lemma}[Exact Hamiltonian decomposition]
+    \label{thm:huang_grid_hamiltonian_decomposition}
+    \lean{TNLean.MPS.AreaLaw.chainGridBoundaryEdge_val_succ,
+        TNLean.MPS.AreaLaw.chainGridBoundaryEdge_injective,
+        TNLean.MPS.AreaLaw.chainGridEdge_subset_ownerBlock,
+        TNLean.MPS.AreaLaw.chainGridRetainedHamiltonian_eq_sum_filter,
+        TNLean.MPS.AreaLaw.sum_eq_chainGridRetained_sub_boundary,
+        TNLean.MPS.AreaLaw.chainGridBlockHamiltonian_mem_supported,
+        TNLean.MPS.AreaLaw.isHermitian_chainGridBlockHamiltonian}
+    \leanok
+    \uses{def:huang_grid_hamiltonian, thm:huang_chain_grid_edges}
+    The omitted edge indices are distinct and satisfy $e_k+1=c_k$.
+    Every non-omitted edge is contained in its assigned block, and
+    \[
+        A=\sum_{i\notin E}h_i,\qquad H=A-\sum_kB_k.
+    \]
+    Each $A_j$ is supported on $C_j$. If the original terms are Hermitian,
+    then every $A_j$ is Hermitian.
+\end{lemma}
+\begin{proof}
+    \leanok
+    The explicit edge classification separates the original edge indices into
+    internal and boundary edges. Group the internal terms by their unique owners.
+    Distinct boundaries give distinct omitted edges. Support and Hermiticity are
+    preserved under finite sums.
+\end{proof}
+
+\begin{lemma}[Exact evolution of the retained interaction]
+    \label{thm:huang_grid_exact_evolution}
+    \lean{TNLean.MPS.AreaLaw.hermitianUnitaryPath_mem_supported,
+        TNLean.MPS.AreaLaw.commute_chainGridBlockHamiltonian,
+        TNLean.MPS.AreaLaw.hermitianUnitaryPath_chainGridRetained_eq_prod,
+        TNLean.MPS.AreaLaw.chainGridBlockEvolution_mem_supported}
+    \leanok
+    \uses{thm:huang_grid_hamiltonian_decomposition}
+    The block Hamiltonians commute, and, in their prescribed order,
+    \[
+        e^{itA}=\prod_j e^{itA_j}.
+    \]
+    Each factor is supported on its actual block. More generally, the exponential
+    path of a supported operator remains supported on the same region.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Operators with disjoint supports commute. The exponential of a finite sum of
+    commuting operators factors into their ordered exponentials. An exponential
+    commutes with every operator commuting with its generator; the complementary
+    commutant characterization gives the support assertion.
+\end{proof}
+
+\begin{lemma}[Derived localization of the omitted interactions]
+    \label{thm:huang_grid_generator_localization}
+    \lean{TNLean.MPS.AreaLaw.nearestNeighborChainSupport,
+        TNLean.MPS.AreaLaw.chainGridRetainedTerm,
+        TNLean.MPS.AreaLaw.sum_chainGridRetainedTerm,
+        TNLean.MPS.AreaLaw.card_nearestNeighborChainSupport_containing_le_two,
+        TNLean.MPS.AreaLaw.chainGridRetained_site_budget,
+        TNLean.MPS.AreaLaw.chainGridBoundaryTerm_supported,
+        TNLean.MPS.AreaLaw.chainGridLRVelocity,
+        TNLean.MPS.AreaLaw.chainGridLRPrefactor,
+        TNLean.MPS.AreaLaw.chainGridLRPrefactor_pos,
+        TNLean.MPS.AreaLaw.norm_chainGridBoundaryTerm_sub_siteExpectation_le}
+    \leanok
+    \uses{thm:huang_grid_hamiltonian_decomposition, thm:huang_chain_grid_buffers}
+    Suppose the original terms are Hermitian and $\|h_i\|\le1$. Set
+    \[
+        v=8e^2+1,\qquad C=\frac{8(2+8e^2)e}{1-e^{-1/2}}>0.
+    \]
+    The retained original terms are obtained by replacing precisely the omitted
+    terms by zero. At most two designated supports meet any site, so their site
+    norm budget is at most two. If $\mathbb E_{K_k}$ is the normalized site expectation
+    onto the actual radius-$r$ buffer, then
+    \[
+        \|e^{isA}B_ke^{-isA}-\mathbb E_{K_k}(e^{isA}B_ke^{-isA})\|
+        \le C e^{v|s|-r/2}.
+    \]
+\end{lemma}
+\begin{proof}
+    \leanok
+    Apply the chain Lieb--Robinson localization bound to the retained original
+    nearest-neighbor terms. The site budget is two, the omitted term has norm at
+    most one, and its designated pair has at most two sites. The exact neighborhood
+    identity identifies the localization region with $K_k$.
+\end{proof}
+
+\begin{lemma}[One physical two-layer approximation at every cut]
+    \label{thm:huang_grid_propagator}
+    \lean{TNLean.MPS.AreaLaw.exists_chainGrid_propagator_approximation}
+    \leanok
+    \uses{thm:huang_grid_generator_localization, thm:huang_grid_exact_evolution,
+        thm:huang_two_interval_layer_ranks}
+    Let $2r+2\le w$ and let $m=\lfloor(L-1)/w\rfloor$. The original terms determine
+    a family $K(t)$ such that
+    \[
+        \|e^{-itH}-K(t)\|\le mC|t|e^{v|t|-r/2},\qquad
+        \operatorname{OSR}_k(K(t))\le q^{2(w+2r+2)}
+    \]
+    for every real $t$ and every cut $k$. The same operator $K(t)$ occurs at all cuts.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Construct the projected relative-evolution paths on the disjoint boundary
+    buffers. Their ordered product approximates the full relative evolution with
+    error bounded by $|t|$ times the sum of the generator errors. Multiply by the
+    exact retained evolution, written as its actual block product. This is a product
+    of two disjoint interval layers of widths $w$ and $2r+2$, giving the rank bound.
+\end{proof}
+
+\begin{lemma}[Explicit radius at prescribed accuracy]
+    \label{thm:huang_propagation_radius}
+    \lean{TNLean.MPS.AreaLaw.chainPropagationRadius,
+        TNLean.MPS.AreaLaw.chainPropagationRadius_error_le,
+        TNLean.MPS.AreaLaw.chainPropagationRadius_width_le}
+    \leanok
+    Let $T\ge0$, $\varepsilon>0$, $\delta=\min\{\varepsilon,1\}$, and
+    \[
+        r=\left\lceil2\left(vT+
+        \log\frac{(L+1)C(T+1)}{\delta}\right)\right\rceil_+.
+    \]
+    For every integer $m\le L$, one has $mCTe^{vT-r/2}\le\varepsilon$. Moreover,
+    \[
+        2r+2\le4\bigl((v+1)T+\log(L+1)+|\log C|+\log(1/\delta)\bigr)+4.
+    \]
+\end{lemma}
+\begin{proof}
+    \leanok
+    The ceiling bound gives $e^{vT-r/2}\le\delta/((L+1)C(T+1))$.
+    For the width bound, expand the logarithm of the product and use
+    $\log(T+1)\le T$ and the elementary upper bound on the natural ceiling.
+\end{proof}
+
+\begin{lemma}[Uniform physical propagation at prescribed precision]
+    \label{thm:huang_physical_propagation}
+    \lean{TNLean.MPS.AreaLaw.exists_physical_chain_propagator_approximation,
+        TNLean.MPS.AreaLaw.exists_positive_chain_propagator_approximation}
+    \leanok
+    \uses{thm:huang_grid_propagator, thm:huang_propagation_radius}
+    Let $q\ge1$, let $H=\sum_ih_i$ be the original nearest-neighbor Hamiltonian,
+    and suppose $0\le h_i\le I$. For $T\ge0$ and $\varepsilon>0$, choose the radius
+    above and put $w=2r+2$. There is one family $K(t)$ with
+    \[
+        \|e^{-itH}-K(t)\|\le\varepsilon\quad (|t|\le T),\qquad
+        \operatorname{OSR}_k(K(t))\le q^{8r+8}\quad(t\in\mathbb R, k\ge0).
+    \]
+    The same conclusion holds for arbitrary Hermitian nearest-neighbor terms
+    with norms at most one. No partition, supported propagator or localization
+    error is assumed as additional input.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Positive contractions are Hermitian and have norm at most one. Apply the
+    constructed grid approximation. The error bound increases with $|t|$ on
+    $[0,T]$, and there are at most $L$ boundary labels. The radius estimate gives
+    the desired error; substituting $w=2r+2$ gives the rank exponent $8r+8$.
+\end{proof}
