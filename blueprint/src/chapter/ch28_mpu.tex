@@ -8896,18 +8896,234 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     while multiplication by $A$ gives $X_AA=AX_A=P$.
 \end{proof}
 
+\begin{lemma}[Rank-one transfer maps have positive trace factors]
+    \label{lem:mpu_rank_one_transfer_trace_pair}
+    \lean{Kraus.exists_posSemidef_trace_pair_of_transferMatrix_eq_vecMulVec,
+        Kraus.mul_supportProj_eq_of_transferMap_eq_trace_smul,
+        Kraus.supportProj_mul_eq_of_transferMap_eq_trace_smul}
+    \leanok
+    Let $A_1,\dots,A_n\in\MN{D}$ and let $\mathcal E(X)=\sum_aA_aXA_a^\dagger$.
+    Suppose that the matrix of $\mathcal E$ is $|\rho)(\Phi|$ with
+    $(\Phi|\rho)=1$. Then there are $L,R\succeq0$ with
+    \begin{align}
+        \mathcal E(X) & =\operatorname{tr}(LX)R
+    \end{align}
+    for every $X$. Whenever $\mathcal E(X)=\operatorname{tr}(LX)R$ with
+    $L,R\succeq0$, the support projections $P$ of $L$ and $Q$ of $R$ satisfy
+    \begin{align}
+        A_aP & =A_a, & QA_a & =A_a
+    \end{align}
+    for every $a$.
+    % Source lines: paper_v2.tex 747--756.
+\end{lemma}
+
+\begin{proof}\leanok
+    Set $R=\mathcal E(I)=\sum_aA_aA_a^\dagger\succeq0$. Every output of
+    $\mathcal E$ is a multiple of the matrix whose vectorization is $\rho$, and
+    $R\neq0$: otherwise every $A_a$ vanishes, contrary to $(\Phi|\rho)=1$.
+    Hence $\operatorname{tr}R>0$ and
+    $\mathcal E(X)=\operatorname{tr}\mathcal E(X)\,(\operatorname{tr}R)^{-1}R$.
+    Since $\operatorname{tr}\mathcal E(X)=\operatorname{tr}\bigl(
+        (\sum_aA_a^\dagger A_a)X\bigr)$, the matrix
+    $L=(\operatorname{tr}R)^{-1}\sum_aA_a^\dagger A_a\succeq0$ works.
+
+    For the absorptions, $L(I-P)=0$ gives
+    $\sum_a\bigl(A_a(I-P)\bigr)\bigl(A_a(I-P)\bigr)^\dagger
+        =\mathcal E(I-P)=0$, so $A_a(I-P)=0$. Similarly $(I-Q)R=0$ gives
+    $\sum_a\bigl((I-Q)A_a\bigr)\bigl((I-Q)A_a\bigr)^\dagger
+        =(I-Q)\mathcal E(I)(I-Q)=0$, so $(I-Q)A_a=0$.
+\end{proof}
+
+\begin{lemma}[Simultaneous congruence of two positive definite matrices]
+    \label{lem:mpu_posdef_congruence_diagonal}
+    \lean{Matrix.PosDef.exists_congruence_isDiag}
+    \leanok
+    Let $L,R\in\MN{m}$ be positive definite. There is an invertible $S$ such
+    that $S^\dagger S=L$ and $SRS^\dagger$ is positive definite and diagonal.
+    % Source lines: paper_v2.tex 798--804.
+\end{lemma}
+
+\begin{proof}\leanok
+    Let $G=L^{1/2}$ and let $U$ be a unitary diagonalizing the positive
+    definite matrix $GRG$. Then $S=U^\dagger G$ satisfies
+    $S^\dagger S=G^2=L$ and $SRS^\dagger=U^\dagger(GRG)U$.
+\end{proof}
+
+\begin{lemma}[Canonical form from a rank-one transfer map]
+    \label{lem:mpu_rank_one_transfer_canonical_form}
+    \lean{MPOTensor.mpo_rectangularSandwich_of_absorb,
+        MPOTensor.exists_isMPUCanonicalFormII_of_transferMap_eq_trace_smul}
+    \leanok
+    \uses{def:mpu, def:mpu_canonical_form_ii, def:mpu_virtual_sandwich, def:mpu_right_rank, def:mpu_left_rank}
+    Let $\mathcal W$ generate MPU with $d>0$, and suppose that its normalized
+    transfer map is $X\mapsto\operatorname{tr}(LX)R$ with $L,R\succeq0$. Then
+    there is a tensor $\mathcal B$ in canonical form II such that
+    $\operatorname{MPO}_N(\mathcal B)=\operatorname{MPO}_N(\mathcal W)$ for
+    every $N\geq1$ and
+    \begin{align}
+        r[\mathcal B]    & =r[L\mathcal WR],    &
+        \ell[\mathcal B] & =\ell[L\mathcal WR].
+    \end{align}
+    % Source lines: paper_v2.tex 756--804.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:mpu_rank_one_transfer_trace_pair, lem:mpu_posdef_congruence_diagonal, thm:mpu_reduced_representative, thm:mpu_reduced_to_hat_source_ranks, thm:reduced_projection_invertible_factor, lem:mpu_rectangular_reduction_source_ranks, thm:mpu_canonical_form_ii_stabilization_converse}
+    Let $P,Q$ be the support projections of $L,R$ and let $\widetilde P$ be
+    their reduced projection. By
+    Lemma~\ref{lem:mpu_rank_one_transfer_trace_pair}, the letters satisfy
+    $W^{ij}P=W^{ij}=QW^{ij}$. Choose an isometry $J$ with
+    $JJ^\dagger=\widetilde P$. By
+    Lemma~\ref{thm:mpu_reduced_representative}, $J^\dagger LJ$ and
+    $J^\dagger RJ$ are positive definite; let $S$ be the congruence of
+    Lemma~\ref{lem:mpu_posdef_congruence_diagonal} and put
+    $\Lambda=S(J^\dagger RJ)S^\dagger$. Define
+    \begin{align}
+        B^{ij} & =SJ^\dagger W^{ij}JS^{-1}.
+    \end{align}
+    Since $(JS^{-1})(SJ^\dagger)=\widetilde P$ and the letters of
+    $\widetilde W=\widetilde PW\widetilde P$ absorb $\widetilde P$ on both
+    sides, nonempty words of $\mathcal B$ are compressions of words of
+    $\widetilde{\mathcal W}$ with the same trace, so $\mathcal B$ and
+    $\mathcal W$ generate the same periodic operators. The tensors
+    $\mathcal B$ and $\widetilde{\mathcal W}$ are rectangular compressions of
+    each other, so they have the same source ranks, and
+    Lemma~\ref{thm:mpu_reduced_to_hat_source_ranks} identifies these with the
+    ranks of $L\mathcal WR$. Finally
+    $(S^{-1})^\dagger J^\dagger LJS^{-1}=I$, so the normalized transfer map of
+    $\mathcal B$ is $X\mapsto\operatorname{tr}(X)\Lambda$ with $\Lambda$
+    positive definite and diagonal. Lemma~\ref{thm:mpu_canonical_form_ii_stabilization_converse}
+    puts $\mathcal B$ in canonical form II.
+\end{proof}
+
+\begin{lemma}[Blocked transfer matrices of an MPU are rank one]
+    \label{lem:mpu_blocked_transfer_rank_one}
+    \lean{MPOTensor.transferMatrix_normalizedFlattening_blockTensor,
+        MPOTensor.IsMPU.exists_transferMatrix_blockTensor_eq_vecMulVec}
+    \leanok
+    \uses{def:mpu, def:mpu_normalized_flattening}
+    The normalized transfer matrix of the block of $k$ sites is the $k$-th
+    power of the normalized transfer matrix. If $\mathcal W$ generates MPU
+    with $d>0$ and $k\geq D^2$, it equals $|\rho)(\Phi|$ for vectors with
+    $(\Phi|\rho)=1$.
+    % Source lines: paper_v2.tex 397--409 and 747--752.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_blocked_double_layer_diagonal, thm:mpu_normalized_transfer_stabilization}
+    The first claim is the blocking identity for the normalized double-layer
+    diagonal. For $D>1$ every power of exponent at least $D^2-1$ equals the
+    stabilized rank-one projector. For $D=1$ the normalized transfer matrix is
+    the identity of a one-dimensional space.
+\end{proof}
+
+\begin{lemma}[Canonical source ranks from the factor-free sandwich]
+    \label{lem:mpu_canonical_ranks_factor_free}
+    \lean{MPOTensor.IsMPUCanonicalFormII.bondDim_le_of_mpo_eq,
+        MPOTensor.IsMPUCanonicalFormII.rightRank_mul_leftRank_blockTensor_of_mpo_eq,
+        MPOTensor.IsMPU.sourceRanks_blockTensor_eq_factorFreeSandwich}
+    \leanok
+    \uses{def:mpu, def:mpu_canonical_form_ii, def:mpu_factor_free_sandwich, def:mpu_right_rank, def:mpu_left_rank}
+    Let $\mathcal W$ generate MPU with $d>0$, let $k\geq D^2$, and let
+    $\mathcal U$, of bond dimension $D'$, be in canonical form II and generate
+    the same MPU as $\mathcal W$. Then $D'\leq D$, the block $\mathcal U_k$ is
+    simple with $r[\mathcal U_k]\ell[\mathcal U_k]=d^{2k}$, and
+    \begin{align}
+        r[\mathcal U_k]    & =r[\widehat{\mathcal W}_{k,\mathrm{ff}}],    &
+        \ell[\mathcal U_k] & =\ell[\widehat{\mathcal W}_{k,\mathrm{ff}}],
+    \end{align}
+    where $\widehat{\mathcal W}_{k,\mathrm{ff}}$ is the factor-free sandwich
+    of the block $\mathcal W_k$.
+    % Source lines: paper_v2.tex 747--812.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_reduced_cfii_representative, thm:mpu_cfii_equal_periodic_virtual_unitary, thm:mpu_bounded_simple_blocking, prop:mpu_admissible_index_well_defined, lem:mpu_blocked_transfer_rank_one, lem:mpu_rank_one_transfer_trace_pair, lem:mpu_rank_one_transfer_canonical_form, thm:mpu_cfii_index_periodic_comparison, thm:mpu_canonical_form_ii_positive_blocking, thm:mpu_factor_free_sandwich_continuous}
+    Canonical-form-II tensors generating the same MPU are related by a unitary
+    virtual gauge, so $D'$ equals the bond dimension of the reduced
+    representative, which is at most $D$. Hence $D'^2\leq k$ and
+    $\mathcal U_k$ is simple. By Lemmas~\ref{lem:mpu_blocked_transfer_rank_one}
+    and~\ref{lem:mpu_rank_one_transfer_trace_pair}, the normalized transfer map
+    of $\mathcal W_k$ is $X\mapsto\operatorname{tr}(LX)R$ with $L,R\succeq0$,
+    and $\widehat{\mathcal W}_{k,\mathrm{ff}}=L\mathcal W_kR$.
+    Lemma~\ref{lem:mpu_rank_one_transfer_canonical_form} gives a
+    canonical-form-II tensor $\mathcal B$ with the ranks of $L\mathcal W_kR$
+    and the periodic operators of $\mathcal W_k$, which are those of
+    $\mathcal U_k$. Canonical-form-II tensors with equal periodic operators
+    have equal source ranks.
+\end{proof}
+
+\begin{lemma}[Source ranks along a path with fixed rank product]
+    \label{lem:mpu_path_fixed_product_source_ranks}
+    \lean{MPOTensor.lowerSemicontinuous_rightRank,
+        MPOTensor.lowerSemicontinuous_leftRank,
+        MPOTensor.sourceRanks_const_of_fixed_product}
+    \leanok
+    \uses{def:mpu_right_rank, def:mpu_left_rank}
+    Both source ranks are lower semicontinuous along a continuous family of
+    tensors. If $[0,1]\ni x\mapsto\mathcal V(x)$ is continuous and
+    $r[\mathcal V(x)]\ell[\mathcal V(x)]=c>0$ for every $x$, then both ranks
+    are constant.
+    % Source lines: paper_v2.tex 813--818.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_rank_lower_semicontinuous, thm:mpu_fixed_product_preconnected}
+    The source cuts are coordinate rearrangements of the tensor, so they vary
+    continuously and their ranks are lower semicontinuous. The fixed positive
+    product makes both ranks constant on the connected interval.
+\end{proof}
+
 \begin{lemma}[Constancy of the source ranks]
     \label{prop:continuity-index}
-    \notready
+    \lean{MPOTensor.IsMPU.sourceRanks_canonicalFormII_blockTensor_pow_four_const,
+        MPOTensor.IsMPU.sourceRanks_canonicalFormII_blockTensor_const,
+        MPOTensor.IsMPU.sourceRanks_canonicalForm_blockTensor_const}
+    \leanok
     \discussion{6022}
-    \uses{def:mpu_canonical_form, ThmFund1, thm:mpu_common_pow_four_simple_blocking, thm:mpu_two_projection_angle_defect_sum, thm:mpu_two_projection_reduced_projection, thm:mpu_two_projection_reduced_projection_right_factor, thm:mpu_reduced_representative, thm:mpu_rank_lower_semicontinuous, thm:mpu_fixed_product_preconnected, thm:mpu_factor_free_sandwich_continuous, thm:mpu_virtual_sandwich_source_ranks, thm:mpu_ambient_support_inverse_extension}
-    Let $[0,1]\ni x\mapsto\mathcal W(x)$ be a continuous path of tensors
-    generating MPUs, without requiring the path to be in canonical form. For
-    each $x$, take the canonical form and the two source-cut ranks $r(x)$ and
-    $\ell(x)$ of its associated simple tensor. Then $r(x)$ and $\ell(x)$ are
-    constant on $[0,1]$.
+    \uses{def:mpu, def:mpu_canonical_form, def:mpu_canonical_form_ii, def:mpu_right_rank, def:mpu_left_rank}
+    Let $[0,1]\ni x\mapsto\mathcal W(x)$ be a continuous path of tensors of
+    physical dimension $d>0$ and bond dimension $D$ generating MPUs, without
+    requiring the path to be in canonical form. For each $x$, let
+    $\mathcal U(x)$ be a tensor in canonical form generating the same MPU as
+    $\mathcal W(x)$, and let $r(x)$ and $\ell(x)$ be the two source-cut ranks
+    of its block of $D^4$ sites, which is simple. Then $r(x)$ and $\ell(x)$ are
+    constant on $[0,1]$. The same holds at every blocking length $k\geq D^2$.
     % Source lines: paper_v2.tex 733--818.
 \end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:mpu_canonical_ranks_factor_free, lem:mpu_path_fixed_product_source_ranks, thm:mpu_factor_free_sandwich_continuous, thm:mpu_canonical_form_similar_cfii, thm:mpu_reduced_cfii_representative}
+    A tensor in canonical form is similar to one in canonical form II, and
+    blocking commutes with this similarity without changing the source ranks,
+    so it suffices to take $\mathcal U(x)$ in canonical form II. Fix
+    $k\geq D^2$. By Lemma~\ref{lem:mpu_canonical_ranks_factor_free}, the source
+    ranks of $\mathcal U(x)_k$ are those of the factor-free sandwich of
+    $\mathcal W(x)_k$, which is a continuous function of $x$. Applying the same
+    lemma to a reduced representative shows that the product of these ranks is
+    $d^{2k}$ at every point. Lemma~\ref{lem:mpu_path_fixed_product_source_ranks}
+    makes both ranks constant. The blocking length $D^4$ satisfies
+    $D^4\geq D^2$.
+\end{proof}
+
+\begin{lemma}[Index along an arbitrary continuous path]
+    \label{thm:mpu_path_index_constant}
+    \lean{MPOTensor.IsMPU.index_const_of_continuous}
+    \leanok
+    \uses{def:mpu_reduced_representative_index, prop:continuity-index}
+    Under the hypotheses of Lemma~\ref{prop:continuity-index}, the index of
+    $\mathcal W(x)$ is independent of $x\in[0,1]$.
+    % Source lines: paper_v2.tex 681--688 and 733--818.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{prop:continuity-index, thm:mpu_reduced_representative_index_invariance, prop:mpu_admissible_index_well_defined, thm:mpu_reduced_cfii_representative}
+    The index of $\mathcal W(x)$ is the index of a reduced canonical-form-II
+    representative $\mathcal U(x)$, computed from the source ranks of its
+    simple block of $D^2$ sites as
+    $\tfrac12(\log_2r-\log_2\ell)$. These ranks are constant by
+    Lemma~\ref{prop:continuity-index}.
+\end{proof}
 
 \begin{lemma}[Admissible constancy of the source ranks]
     \label{prop:mpu_admissible_continuity_index}
