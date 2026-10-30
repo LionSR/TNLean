@@ -50,7 +50,6 @@ quasi-local algebra; its centre is scalar, so
 (\ref{eq:qca_central_star_subalgebra_scalar_centre}) holds for $\mathcal R_x$
 and $\mathcal R_x\cong M_{r(x)}(\C)$.
 
-
 \begin{lemma}[A full-matrix star-isomorphism has a unitary implementer]
     \label{lem:qca_full_matrix_spatial_implementer}
     \lean{Matrix.exists_unitary_conj_of_starAlgEquiv_matrix_between}
@@ -60,10 +59,10 @@ and $\mathcal R_x\cong M_{r(x)}(\C)$.
     isomorphism. Then $|I|=|J|$ and there is a unitary map
     $U:\mathbb C^I\to\mathbb C^J$ with
     \begin{align}
-        U^\dagger U=I,\qquad UU^\dagger=I,\qquad
+        U^\dagger U=\Id_I,\qquad UU^\dagger=\Id_J,\qquad
         f(A)=UAU^\dagger\quad(A\in M_I(\mathbb C)).
     \end{align}
-    This applies between distinct coordinate types, as required for the
+    This applies between distinct coordinate sets, as required for the
     unitaries in \cite[equations~\textup{bruleU} and~\textup{bruleV},
         lines~980--1001]{SchumacherWerner2004QCA}.
 \end{lemma}
