@@ -316,7 +316,12 @@ follows on a ring of $N$ sites.
         Z3Clock.clockAmplitude_add_one, Z3Clock.fixesMPV_clockState,
         Z3Clock.isTrivialGaugeClass_omega_clockFamily,
         Z3Clock.clockFamily_anomalyClass_eq_zero,
-        Z3Clock.cyclicInvariant_omega_clockFamily}
+        Z3Clock.cyclicInvariant_omega_clockFamily,
+        Z3Clock.clockFamily_clockAlpha_anomalyClass_eq_zero,
+        Z3Clock.clockAlpha_pow_three,
+        Z3Clock.fixesMPV_normUTensor,
+        Z3Clock.mpv_clockState,
+        Z3Clock.det_clockExponent}
     \leanok
     \uses{def:asymex_z3clock_rescaled, thm:asymex_z3clock_table,
         thm:mpug_anomaly_obstruction, def:mpug_anomaly_class,
@@ -324,9 +329,9 @@ follows on a ring of $N$ sites.
     For every cube root $\alpha$ of $\omega$ the rescaled clock operators
     $U'_N=\alpha^NU_N$ and $V'_N=(\alpha^2\omega)^NV_N$ satisfy
     \begin{align}
-        U_N'^2    & =V'_N, &
-        U'_NV'_N  & =V'_NU'_N=\Id, &
-        V_N'^2    & =U'_N
+        U_N'^2   & =V'_N,         &
+        U'_NV'_N & =V'_NU'_N=\Id, &
+        V_N'^2   & =U'_N
     \end{align}
     on every periodic chain of $N>0$ qutrits, and the three tensors of the
     rescaled representation are normal. The invariant state of
