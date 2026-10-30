@@ -84,7 +84,7 @@ private theorem cohomologousTo_of_character_covariance
       (ScalarCocycle.isMulCocycle₂_of_projRep ρ₁ (NeZero.pos D))) =
     groupCohomology.H2π _ (groupCohomology.cocyclesOfIsMulCocycle₂
       (ScalarCocycle.isMulCocycle₂_of_projRep ρ₀ (NeZero.pos D))) := by
-  apply cohomologousTo_of_isInjective A hA _ (NeZero.pos D) h₀
+  refine cohomologousTo_of_isInjective (ρ₂ := ρ₁) A hA _ (NeZero.pos D) h₀ ?_
   intro g i
   have hχne : χ₁ g ≠ 0 := norm_ne_zero_iff.mp (by rw [hχ₁]; exact one_ne_zero)
   have hTw : ∀ j, twistedTensor A ((Matrix.unitaryGroup (Fin d) ℂ).subtype.comp

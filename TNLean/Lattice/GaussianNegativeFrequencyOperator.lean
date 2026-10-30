@@ -54,7 +54,8 @@ Source: Hastings–Koma, arXiv:math-ph/0507008, equation (3.8). -/
 theorem continuous_gaussianNegativeFrequencyIntegrand
     (H A : Matrix n n ℂ) {ε : ℝ} (hε : 0 < ε) :
     Continuous (gaussianNegativeFrequencyIntegrand H A ε) := by
-  apply Continuous.smul
+  unfold gaussianNegativeFrequencyIntegrand
+  apply Continuous.fun_smul
   · exact (by fun_prop : Continuous fun t : ℝ ↦ (ε : ℂ) - Complex.I * t).inv₀
       (cauchyDenominator_ne_zero hε)
   · exact SpectralFilter.continuous_hermitianUnitaryPath_conj H A

@@ -71,7 +71,7 @@ theorem tendsto_mpvConnectedCorrelator_limitCorrelator [NeZero D]
       Tendsto (fun n : ℕ ↦ LinearMap.trace ℂ V (F * T ^ n)) atTop (nhds 0) := by
     have hprod := (tendsto_const_nhds (x := Φ F)).mul hpow
     have h := (tr.continuous.tendsto (Φ F * 0)).comp hprod
-    simpa only [hTraceEq, mul_zero, map_zero] using h
+    simpa only [Function.comp_def, hTraceEq, mul_zero, map_zero] using h
   have hTraceAdd (F : Module.End ℂ V) (k : ℕ) :
       Tendsto (fun n : ℕ ↦ LinearMap.trace ℂ V (F * T ^ (k + n))) atTop (nhds 0) := by
     simpa only [pow_add, mul_assoc] using hTrace (F * T ^ k)
@@ -114,7 +114,7 @@ theorem tendsto_mpvConnectedCorrelator_limitCorrelator [NeZero D]
           (1 + LinearMap.trace ℂ V (T ^ (L + t + L + n))) *
         ((β + LinearMap.trace ℂ V (EY * T ^ (n + (L + t)))) /
           (1 + LinearMap.trace ℂ V (T ^ (L + t + L + n))))) atTop (nhds g) := by
-    simpa only [div_one, add_sub_cancel_left] using hlim
+    simpa only [Pi.div_apply, div_one, add_sub_cancel_left] using hlim
   apply hlim'.congr'
   filter_upwards [eventually_ge_atTop 1] with n hn
   exact (mpvConnectedCorrelator_eq_of_compl hL0 hA hρfix hρtr htr X Y ht hn).symm

@@ -110,7 +110,7 @@ theorem tendsto_gaussianCauchyTransform_zero_regularizer
   have hhReal : 0 < (h : ℝ) := by exact_mod_cast hh
   have hGNorm (s : ℝ) : ‖G s‖ = g s := by
     have hcast : -(h : ℂ) * ((ω + s : ℝ) : ℂ) ^ 2 / 2 =
-        ((-(h : ℝ) * (ω + s) ^ 2 / 2 : ℝ) : ℂ) := by push_cast <;> ring
+        ((-(h : ℝ) * (ω + s) ^ 2 / 2 : ℝ) : ℂ) := by push_cast; ring
     dsimp only [G, g]
     rw [hcast, ← Complex.ofReal_exp, Complex.norm_real,
       Real.norm_of_nonneg (Real.exp_pos _).le]
