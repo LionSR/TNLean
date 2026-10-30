@@ -77,7 +77,9 @@ theorem twoLinkOutputObservable_eq_constantMargolusGateRule
       ext x y
       rfl
     change bipartiteMatrixToQuasiLocalObservable _ (Matrix.reindex e e (B ⊗ₖ C)) = _
-    rw [hreindex, bipartiteMatrixToQuasiLocalObservable_kronecker]
+    exact (congrArg (bipartiteMatrixToQuasiLocalObservable (d := d)
+      (disjoint_leftPair_rightPair 0)) hreindex).trans
+        (bipartiteMatrixToQuasiLocalObservable_kronecker (disjoint_leftPair_rightPair 0) _ _)
   change H (MPOTensor.twoLinkOutputObservable u v A) = _
   rw [MPOTensor.twoLinkOutputObservable_eq_sum_kronecker]
   simp only [map_sum, map_smul, hproduct, ← hleft, constantMargolusGateRule]

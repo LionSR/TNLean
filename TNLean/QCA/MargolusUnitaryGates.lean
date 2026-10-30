@@ -139,18 +139,18 @@ theorem margolusInputRule_symm_kronecker
         (evenSupportMatrixEquiv hω x a ⊗ₖ oddSupportMatrixEquiv hω x b))) =
       matrixToQuasiLocalObservable d (leftPair x) a *
         matrixToQuasiLocalObservable d (rightPair x) b := by
-  let z : embeddedEvenSupportAlgebra hω x ⊔ embeddedOddSupportAlgebra hω x :=
+  let z : ↥(embeddedEvenSupportAlgebra hω x ⊔ embeddedOddSupportAlgebra hω x) :=
     ⟨matrixToQuasiLocalObservable d (leftPair x) a *
         matrixToQuasiLocalObservable d (rightPair x) b,
       (embeddedEvenSupportAlgebra hω x ⊔ embeddedOddSupportAlgebra hω x).mul_mem
-        (le_sup_left (StarSubalgebra.mem_map.mpr ⟨a, a.2, rfl⟩))
-        (le_sup_right (StarSubalgebra.mem_map.mpr ⟨b, b.2, rfl⟩))⟩
+        (StarSubalgebra.mem_sup_left (StarSubalgebra.mem_map.mpr ⟨a, a.2, rfl⟩))
+        (StarSubalgebra.mem_sup_right (StarSubalgebra.mem_map.mpr ⟨b, b.2, rfl⟩))⟩
   have hz := adjacentSupportJoinMatrixEquiv_apply_product hω x
     (evenSupportMatrixEquiv hω x) (oddSupportMatrixEquiv hω x) a b
   have hcoord : (margolusInputRule hω x).symm
       (evenSupportMatrixEquiv hω x a ⊗ₖ oddSupportMatrixEquiv hω x b) =
       CStarMatrix.ofMatrixStarAlgEquiv.symm ((inputPairEquiv hω x).symm z) := by
-    apply (margolusInputRule hω x).injective
+    apply EquivLike.injective (margolusInputRule hω x)
     rw [StarAlgEquiv.apply_symm_apply]
     change _ = (Matrix.matrixReindexStarAlgEquiv finProdFinEquiv.symm)
       ((adjacentSupportJoinMatrixEquiv hω x
@@ -176,12 +176,12 @@ theorem margolusOutputRule_kronecker
         (oddSupportMatrixEquiv hω x a ⊗ₖ evenSupportMatrixEquiv hω (x + 1) b)) =
       matrixToQuasiLocalObservable d (rightPair x) a *
         matrixToQuasiLocalObservable d (leftPair (x + 1)) b := by
-  let z : embeddedOddSupportAlgebra hω x ⊔ embeddedEvenSupportAlgebra hω (x + 1) :=
+  let z : ↥(embeddedOddSupportAlgebra hω x ⊔ embeddedEvenSupportAlgebra hω (x + 1)) :=
     ⟨matrixToQuasiLocalObservable d (rightPair x) a *
         matrixToQuasiLocalObservable d (leftPair (x + 1)) b,
       (embeddedOddSupportAlgebra hω x ⊔ embeddedEvenSupportAlgebra hω (x + 1)).mul_mem
-        (le_sup_left (StarSubalgebra.mem_map.mpr ⟨a, a.2, rfl⟩))
-        (le_sup_right (StarSubalgebra.mem_map.mpr ⟨b, b.2, rfl⟩))⟩
+        (StarSubalgebra.mem_sup_left (StarSubalgebra.mem_map.mpr ⟨a, a.2, rfl⟩))
+        (StarSubalgebra.mem_sup_right (StarSubalgebra.mem_map.mpr ⟨b, b.2, rfl⟩))⟩
   have hz := physicalPairSupportJoinMatrixEquiv_apply_product hω x
     (oddSupportMatrixEquiv hω x) (evenSupportMatrixEquiv hω (x + 1)) a b
   have hcoord : margolusOutputRule hω x
@@ -207,12 +207,15 @@ private theorem symm_eq_conjTranspose
     (e : Matrix m m ℂ ≃⋆ₐ[ℂ] Matrix n n ℂ) (U : Matrix n m ℂ)
     (hU : U.IsUnitaryBetween) (he : ∀ A, e A = U * A * Uᴴ)
     (B : Matrix n n ℂ) : e.symm B = Uᴴ * B * U := by
-  apply e.injective
-  rw [StarAlgEquiv.apply_symm_apply, he]
+  have h : e (Uᴴ * B * U) = B := by
+    rw [he]
+    calc
+      U * (Uᴴ * B * U) * Uᴴ = (U * Uᴴ) * B * (U * Uᴴ) := by
+        simp only [Matrix.mul_assoc]
+      _ = B := by rw [hU.2, Matrix.one_mul, Matrix.mul_one]
   calc
-    B = (U * Uᴴ) * B * (U * Uᴴ) := by
-      rw [hU.2, Matrix.one_mul, Matrix.mul_one]
-    _ = U * (Uᴴ * B * U) * Uᴴ := by simp only [Matrix.mul_assoc]
+    e.symm B = e.symm (e (Uᴴ * B * U)) := by rw [h]
+    _ = Uᴴ * B * U := e.symm_apply_apply _
 
 /-- Both actual full matrix rules have spatial unitary implementations.
 The support presentations, their dimensions and both local rules have
@@ -263,7 +266,7 @@ private theorem unitary_kronecker
   exact Matrix.one_kronecker_one
 
 private theorem kronecker_conjugation
-    {p q : Type*} [Fintype p] [Fintype q] [DecidableEq p] [DecidableEq q]
+    {p q : Type*} [Fintype p] [Fintype q]
     (P A : Matrix p p ℂ) (Q B : Matrix q q ℂ) :
     (P * A * Pᴴ) ⊗ₖ (Q * B * Qᴴ) =
       (P ⊗ₖ Q) * (A ⊗ₖ B) * (P ⊗ₖ Q)ᴴ := by
@@ -287,8 +290,8 @@ theorem margolus_basisChange_unitary
 inserted after the input gate, cancels against the same change in the
 factor coordinates. Source: Schumacher–Werner, lines 1033–1041. -/
 theorem margolus_basisChange_input
-    {p q i : Type*} [Fintype p] [Fintype q] [Fintype i]
-    [DecidableEq p] [DecidableEq q] [DecidableEq i]
+    {p q i : Type*} [Fintype p] [Fintype q]
+    [DecidableEq p] [DecidableEq q]
     (P : Matrix p p ℂ) (Q : Matrix q q ℂ)
     (hP : P.IsUnitaryBetween) (hQ : Q.IsUnitaryBetween)
     (U : Matrix (p × q) i ℂ) (A : Matrix p p ℂ) (B : Matrix q q ℂ) :
@@ -311,8 +314,8 @@ cancel the rotated intermediate factor coordinates. This is the
 cancelling basis freedom, not a translation constraint on arbitrary gates.
 Source: Schumacher–Werner, lines 1033–1041. -/
 theorem margolus_basisChange_output
-    {p q i : Type*} [Fintype p] [Fintype q] [Fintype i]
-    [DecidableEq p] [DecidableEq q] [DecidableEq i]
+    {p q i : Type*} [Fintype p] [Fintype q]
+    [DecidableEq p] [DecidableEq q]
     (P : Matrix p p ℂ) (Q : Matrix q q ℂ)
     (hP : P.IsUnitaryBetween) (hQ : Q.IsUnitaryBetween)
     (V : Matrix i (p × q) ℂ) (A : Matrix p p ℂ) (B : Matrix q q ℂ) :

@@ -40,8 +40,7 @@ theorem quasiLocalTranslation_consecutivePair (d : ℕ) [NeZero d] (t a : ℤ)
     ext z
     simp only [mem_translateRegion, Finset.mem_insert, Finset.mem_singleton]
     omega
-  change quasiLocalTranslation d t (quasiLocalObservable d _ _) =
-    quasiLocalObservable d _ _
+  simp only [matrixToQuasiLocalObservable, StarAlgHom.comp_apply]
   rw [quasiLocalTranslation_quasiLocalObservable,
     ← quasiLocalObservable_localInclusion d hregion.le]
   apply congrArg (quasiLocalObservable d ({a + t, a + t + 1} : Finset ℤ))
@@ -52,7 +51,7 @@ theorem quasiLocalTranslation_consecutivePair (d : ℕ) [NeZero d] (t a : ℤ)
     funext z
     exact False.elim ((Finset.mem_sdiff.mp z.2).2
       (hregion.ge (Finset.mem_sdiff.mp z.2).1))
-  rw [localInclusion_apply, if_pos hcomp, mul_one, localTranslation_apply]
+  rw [localInclusion_apply, ite_eq_left hcomp, mul_one, localTranslation_apply]
   change A ((consecutivePairConfigEquiv d a).symm
       ((Config.translation d t _).symm (Config.restrict hregion.le x)))
     ((consecutivePairConfigEquiv d a).symm
@@ -66,8 +65,6 @@ theorem quasiLocalTranslation_consecutivePair (d : ℕ) [NeZero d] (t a : ℤ)
     apply Prod.ext
     · change z _ = z _
       congr 1
-      apply Subtype.ext
-      exact siteTranslation_apply_val t _ _
     · change z _ = z _
       congr 1
       apply Subtype.ext

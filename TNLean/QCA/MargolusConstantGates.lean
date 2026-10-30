@@ -44,7 +44,7 @@ theorem coherentMargolusOutputRule_left
       matrixToQuasiLocalObservable d (leftPair 0)
         ((evenSupportMatrixEquiv hω 0).symm A) := by
   have h := coherentMargolusOutputRule_kronecker hω hcov 1 A
-  simp only [map_one, one_mul] at h
+  simp only [map_one, OneMemClass.coe_one, one_mul] at h
   rw [h, ← quasiLocalTranslation_symm d 2, StarAlgEquiv.symm_apply_apply]
 
 /-- The same shifted output rule recovers the odd input factor directly.
@@ -57,7 +57,7 @@ theorem coherentMargolusOutputRule_right
       matrixToQuasiLocalObservable d (rightPair 0)
         ((oddSupportMatrixEquiv hω 0).symm B) := by
   have h := coherentMargolusOutputRule_kronecker hω hcov B 1
-  simpa only [map_one, mul_one] using h
+  simpa only [map_one, OneMemClass.coe_one, mul_one] using h
 
 /-- The actual product input rule uses the same shifted output rule at
 both neighbouring pairs. Source: Schumacher–Werner locMarg, bruleU,
@@ -93,10 +93,14 @@ noncomputable def constantMargolusGateRule
     (quasiLocalTranslation d (-2)
         (matrixToQuasiLocalObservable d (rightPair 0)
           (Matrix.reindex (consecutivePairConfigEquiv d 1) (consecutivePairConfigEquiv d 1)
-            (V * (1 ⊗ₖ Matrix.single i.1 j.1 (1 : ℂ)) * Vᴴ))) *
+            (V * ((1 : Matrix (Fin (supportAlgebraMatrixSize hω 1))
+              (Fin (supportAlgebraMatrixSize hω 1)) ℂ) ⊗ₖ
+                Matrix.single i.1 j.1 (1 : ℂ)) * Vᴴ))) *
       matrixToQuasiLocalObservable d (rightPair 0)
         (Matrix.reindex (consecutivePairConfigEquiv d 1) (consecutivePairConfigEquiv d 1)
-          (V * (Matrix.single i.2 j.2 (1 : ℂ) ⊗ₖ 1) * Vᴴ)))
+          (V * (Matrix.single i.2 j.2 (1 : ℂ) ⊗ₖ
+            (1 : Matrix (Fin (supportAlgebraMatrixSize hω 0))
+              (Fin (supportAlgebraMatrixSize hω 0)) ℂ)) * Vᴴ)))
 
 private theorem single_prod_eq_smul_kronecker
     {p q : Type*} [DecidableEq p] [DecidableEq q]
@@ -166,15 +170,17 @@ theorem exists_fixed_margolus_unitary_gates :
         (V * B * Vᴴ) := by
     have h := congrArg E (hOutput B)
     change E (E.symm (coherentMargolusOutputRule hω hcov B)) = E (V * B * Vᴴ) at h
-    rw [StarAlgEquiv.apply_symm_apply] at h
-    exact h
+    exact (E.apply_symm_apply _).symm.trans h
   refine ⟨U, V, hU, hV, hInput', hOutput', ?_⟩
   intro t A
   rw [(translationCovariant_iff ω).mp hcov t]
   congr 1
-  have h := constantMargolusGateRule_eq hω hcov V hOutput'
-    (margolusInputRule hω 0
-      (Matrix.reindex (consecutivePairConfigEquiv d 0) (consecutivePairConfigEquiv d 0) A))
-  simpa only [StarAlgEquiv.symm_apply_apply, hInput'] using h
+  have h := constantMargolusGateRule_eq hω hcov V hOutput' (U * A * Uᴴ)
+  have hA : (margolusInputRule hω 0).symm (U * A * Uᴴ) =
+      Matrix.reindex (consecutivePairConfigEquiv d 0) (consecutivePairConfigEquiv d 0) A := by
+    rw [← hInput' A]
+    exact StarAlgEquiv.symm_apply_apply _ _
+  rw [hA] at h
+  exact h
 
 end SpinChain.PropagatesWithin

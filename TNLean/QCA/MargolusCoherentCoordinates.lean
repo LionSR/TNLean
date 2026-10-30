@@ -73,17 +73,15 @@ theorem coherentEvenOneMatrixEquiv_symm_embed
   let z := evenTranslationEquiv hω hcov
     (supportEmbeddingEquiv (leftPair 0) (evenSupportAlgebra hω 0) a)
   have hcoord : (coherentEvenOneMatrixEquiv hω hcov).symm A =
-      (supportEmbeddingEquiv (leftPair 1) (evenSupportAlgebra hω 1)).symm z := by
-    apply (coherentEvenOneMatrixEquiv hω hcov).injective
-    simp only [StarAlgEquiv.apply_symm_apply, coherentEvenOneMatrixEquiv,
-      StarAlgEquiv.trans_apply, StarAlgEquiv.symm_apply_apply, z, a]
+      (supportEmbeddingEquiv (leftPair 1) (evenSupportAlgebra hω 1)).symm z := rfl
   calc
     matrixToQuasiLocalObservable d (leftPair 1)
         ((coherentEvenOneMatrixEquiv hω hcov).symm A) =
         ((supportEmbeddingEquiv (leftPair 1) (evenSupportAlgebra hω 1))
           ((supportEmbeddingEquiv (leftPair 1) (evenSupportAlgebra hω 1)).symm z) :
             QuasiLocalAlgebra d) := by rw [hcoord]; rfl
-    _ = (z : QuasiLocalAlgebra d) := by rw [StarAlgEquiv.apply_symm_apply]
+    _ = (z : QuasiLocalAlgebra d) := congrArg Subtype.val
+      ((supportEmbeddingEquiv (leftPair 1) (evenSupportAlgebra hω 1)).apply_symm_apply z)
     _ = quasiLocalTranslation d 2
         (matrixToQuasiLocalObservable d (leftPair 0)
           ((evenSupportMatrixEquiv hω 0).symm A)) := evenTranslationEquiv_coe hω hcov _
@@ -117,12 +115,12 @@ theorem coherentMargolusOutputRule_kronecker
             ((evenSupportMatrixEquiv hω 0).symm B)) := by
   let a := (oddSupportMatrixEquiv hω 0).symm A
   let b := (coherentEvenOneMatrixEquiv hω hcov).symm B
-  let z : embeddedOddSupportAlgebra hω 0 ⊔ embeddedEvenSupportAlgebra hω 1 :=
+  let z : ↥(embeddedOddSupportAlgebra hω 0 ⊔ embeddedEvenSupportAlgebra hω 1) :=
     ⟨matrixToQuasiLocalObservable d (rightPair 0) a *
         matrixToQuasiLocalObservable d (leftPair 1) b,
       (embeddedOddSupportAlgebra hω 0 ⊔ embeddedEvenSupportAlgebra hω 1).mul_mem
-        (le_sup_left (StarSubalgebra.mem_map.mpr ⟨a, a.2, rfl⟩))
-        (le_sup_right (StarSubalgebra.mem_map.mpr ⟨b, b.2, rfl⟩))⟩
+        (StarSubalgebra.mem_sup_left (StarSubalgebra.mem_map.mpr ⟨a, a.2, rfl⟩))
+        (StarSubalgebra.mem_sup_right (StarSubalgebra.mem_map.mpr ⟨b, b.2, rfl⟩))⟩
   have hz := physicalPairSupportJoinMatrixEquiv_apply_product hω 0
     (oddSupportMatrixEquiv hω 0) (coherentEvenOneMatrixEquiv hω hcov) a b
   have hcoord : coherentMargolusOutputRule hω hcov (A ⊗ₖ B) =
@@ -137,7 +135,9 @@ theorem coherentMargolusOutputRule_kronecker
     have hz' : physicalPairSupportJoinMatrixEquiv hω 0
         (oddSupportMatrixEquiv hω 0) (coherentEvenOneMatrixEquiv hω hcov) z =
           Matrix.reindex finProdFinEquiv finProdFinEquiv (A ⊗ₖ B) := by
-      simpa only [StarAlgEquiv.apply_symm_apply] using hz
+      have h := hz
+      simp only [a, b, StarAlgEquiv.apply_symm_apply] at h
+      exact h
     rw [← hz', StarAlgEquiv.symm_apply_apply]
   rw [hcoord]
   change quasiLocalObservable d (rightPair 0) ((outputPairEquiv hω 0).symm z) = _

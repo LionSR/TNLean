@@ -48,15 +48,17 @@ theorem margolus_alternating_kronecker
           (margolusOutputRule hω x (1 ⊗ₖ A)) *
         matrixToQuasiLocalObservable d (rightPair (x + 1))
           (margolusOutputRule hω (x + 1) (B ⊗ₖ 1)) := by
-  let a := (evenSupportMatrixEquiv hω (x + 1)).symm A
-  let b := (oddSupportMatrixEquiv hω (x + 1)).symm B
-  have hInput := margolusInputRule_symm_kronecker hω (x + 1) a b
-  have hLeft := margolusOutputRule_kronecker hω x 1 a
-  have hRight := margolusOutputRule_kronecker hω (x + 1) b 1
-  simp only [map_one, StarAlgEquiv.apply_symm_apply, one_mul] at hLeft
-  simp only [map_one, StarAlgEquiv.apply_symm_apply, mul_one] at hRight
+  have hInput := margolusInputRule_symm_kronecker hω (x + 1)
+    ((evenSupportMatrixEquiv hω (x + 1)).symm A) ((oddSupportMatrixEquiv hω (x + 1)).symm B)
+  have hLeft := margolusOutputRule_kronecker hω x 1
+    ((evenSupportMatrixEquiv hω (x + 1)).symm A)
+  have hRight := margolusOutputRule_kronecker hω (x + 1)
+    ((oddSupportMatrixEquiv hω (x + 1)).symm B) 1
+  simp only [map_one, StarAlgEquiv.apply_symm_apply, OneMemClass.coe_one, one_mul] at hLeft
+  simp only [map_one, StarAlgEquiv.apply_symm_apply, OneMemClass.coe_one, mul_one] at hRight
+  simp only [StarAlgEquiv.apply_symm_apply] at hInput
   rw [hLeft, hRight]
-  simpa only [StarAlgEquiv.apply_symm_apply] using hInput
+  exact hInput
 
 /-- The finite matrix-unit expression for the alternating output on an
 even pair. The two factors are placed on the actual neighbouring shifted
@@ -130,22 +132,21 @@ theorem existsUnique_margolus_local_extension
         (A : Matrix (Config d (evenPair (x + 1))) (Config d (evenPair (x + 1))) ℂ),
         F (matrixToQuasiLocalObservable d (evenPair (x + 1)) A) =
           margolusAlternatingPairRule hω x (margolusInputRule hω (x + 1) A) := by
-  refine ⟨ω.toStarAlgHom, ⟨ω.isometry.continuous, ?_⟩, ?_⟩
+  refine ⟨ω.toStarAlgHom, ⟨(StarAlgEquiv.isometry ω).continuous, ?_⟩, ?_⟩
   · exact margolusAlternatingPairRule_input hω
   · intro F hF
-    apply quasiLocalStarAlgHom_ext_evenPair F ω.toStarAlgHom hF.1 ω.isometry.continuous
+    apply quasiLocalStarAlgHom_ext_evenPair F ω.toStarAlgHom hF.1
+      (StarAlgEquiv.isometry ω).continuous
     intro x A
+    obtain ⟨x, rfl⟩ : ∃ y : ℤ, x = y + 1 := ⟨x - 1, by omega⟩
     have hpair (y : ℤ)
         (B : Matrix (Config d (evenPair (y + 1))) (Config d (evenPair (y + 1))) ℂ) :
         F (matrixToQuasiLocalObservable d (evenPair (y + 1)) B) =
           ω (matrixToQuasiLocalObservable d (evenPair (y + 1)) B) :=
       (hF.2 y B).trans (margolusAlternatingPairRule_input hω y B).symm
-    have hx : ∀ B : Matrix (Config d (evenPair x)) (Config d (evenPair x)) ℂ,
-        F (matrixToQuasiLocalObservable d (evenPair x) B) =
-          ω (matrixToQuasiLocalObservable d (evenPair x) B) := by
-      simpa only [sub_add_cancel] using hpair (x - 1)
     simpa only [matrixToQuasiLocalObservable, StarAlgHom.comp_apply,
-      StarAlgEquiv.apply_symm_apply] using hx (CStarMatrix.ofMatrixStarAlgEquiv.symm A)
+      StarAlgEquiv.toStarAlgHom_apply, StarAlgEquiv.apply_symm_apply] using
+      hpair x (CStarMatrix.ofMatrixStarAlgEquiv.symm A)
 
 /-- Translation compatibility is agreement with the original QCA at
 all translated blocks, derived from its actual covariance. No constraint

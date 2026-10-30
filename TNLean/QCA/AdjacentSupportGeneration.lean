@@ -92,12 +92,16 @@ theorem adjacentSupportJoinMatrixEquiv_apply_product
       ⟨matrixToQuasiLocalObservable d (leftPair x) a *
           matrixToQuasiLocalObservable d (rightPair x) b,
         (embeddedEvenSupportAlgebra hω x ⊔ embeddedOddSupportAlgebra hω x).mul_mem
-          (le_sup_left (StarSubalgebra.mem_map.mpr ⟨a, a.2, rfl⟩))
-          (le_sup_right (StarSubalgebra.mem_map.mpr ⟨b, b.2, rfl⟩))⟩ =
+          (StarSubalgebra.mem_sup_left (StarSubalgebra.mem_map.mpr ⟨a, a.2, rfl⟩))
+          (StarSubalgebra.mem_sup_right (StarSubalgebra.mem_map.mpr ⟨b, b.2, rfl⟩))⟩ =
       Matrix.reindex finProdFinEquiv finProdFinEquiv (eR a ⊗ₖ eS b) := by
+  let : Nontrivial (QuasiLocalAlgebra d) :=
+    (quasiLocalObservable_injective d ∅).nontrivial
   unfold adjacentSupportJoinMatrixEquiv
-  rw [StarSubalgebra.commutingSupEquivMatrix_apply_mul]
-  simp only [StarAlgEquiv.trans_apply, StarAlgEquiv.symm_apply_apply]
+  exact (StarSubalgebra.commutingSupEquivMatrix_apply_mul _ _ _ _ _
+    (supportEmbeddingEquiv (leftPair x) (evenSupportAlgebra hω x) a)
+    (supportEmbeddingEquiv (rightPair x) (oddSupportAlgebra hω x) b)).trans
+    (by simp only [StarAlgEquiv.trans_apply, StarAlgEquiv.symm_apply_apply])
 
 /-- The join of the actual adjacent support factors is a full matrix
 algebra of positive size. This derives its matrix presentation, rather
@@ -261,12 +265,16 @@ theorem physicalPairSupportJoinMatrixEquiv_apply_product
       ⟨matrixToQuasiLocalObservable d (rightPair x) a *
           matrixToQuasiLocalObservable d (leftPair (x + 1)) b,
         (embeddedOddSupportAlgebra hω x ⊔ embeddedEvenSupportAlgebra hω (x + 1)).mul_mem
-          (le_sup_left (StarSubalgebra.mem_map.mpr ⟨a, a.2, rfl⟩))
-          (le_sup_right (StarSubalgebra.mem_map.mpr ⟨b, b.2, rfl⟩))⟩ =
+          (StarSubalgebra.mem_sup_left (StarSubalgebra.mem_map.mpr ⟨a, a.2, rfl⟩))
+          (StarSubalgebra.mem_sup_right (StarSubalgebra.mem_map.mpr ⟨b, b.2, rfl⟩))⟩ =
       Matrix.reindex finProdFinEquiv finProdFinEquiv (eR a ⊗ₖ eS b) := by
+  let : Nontrivial (QuasiLocalAlgebra d) :=
+    (quasiLocalObservable_injective d ∅).nontrivial
   unfold physicalPairSupportJoinMatrixEquiv
-  rw [StarSubalgebra.commutingSupEquivMatrix_apply_mul]
-  simp only [StarAlgEquiv.trans_apply, StarAlgEquiv.symm_apply_apply]
+  exact (StarSubalgebra.commutingSupEquivMatrix_apply_mul _ _ _ _ _
+    (supportEmbeddingEquiv (rightPair x) (oddSupportAlgebra hω x) a)
+    (supportEmbeddingEquiv (leftPair (x + 1)) (evenSupportAlgebra hω (x + 1)) b)).trans
+    (by simp only [StarAlgEquiv.trans_apply, StarAlgEquiv.symm_apply_apply])
 
 /-- A physical-pair observable commuting with its two support factors is
 scalar. All other support factors are disjoint from the pair; global
