@@ -27,15 +27,15 @@ def consecutivePairConfigEquiv (b : ℕ) (a : ℤ) :
   invFun f := (f ⟨a, by simp⟩, f ⟨a + 1, by simp⟩)
   left_inv c := by
     apply Prod.ext
-    · exact if_pos rfl
-    · exact if_neg (by omega : a + 1 ≠ a)
+    · exact ite_eq_left rfl
+    · exact ite_eq_right (by omega : a + 1 ≠ a)
   right_inv f := by
     funext x
     rcases x with ⟨x, hx⟩
     have hx' : x = a ∨ x = a + 1 := by
       simpa only [Finset.mem_insert, Finset.mem_singleton] using hx
     rcases hx' with rfl | rfl
-    · exact if_pos rfl
-    · exact if_neg (by omega : a + 1 ≠ a)
+    · exact ite_eq_left rfl
+    · exact ite_eq_right (by omega : a + 1 ≠ a)
 
 end SpinChain

@@ -162,6 +162,7 @@ import TNLean.Algebra.ProjectiveCommutantEigenspace
 import TNLean.Algebra.ProjectiveRepresentation
 import TNLean.Algebra.PureStateTraceNorm
 import TNLean.Algebra.RankOneFactorization
+import TNLean.Algebra.RectangularUnitaryConjugation
 import TNLean.Algebra.RegularRepresentationBlocking
 import TNLean.Algebra.RepresentationDelta
 import TNLean.Algebra.RepresentationDeltaInverse
