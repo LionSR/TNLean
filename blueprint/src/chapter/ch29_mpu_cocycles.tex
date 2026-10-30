@@ -5214,6 +5214,92 @@ tensor-level bridge to an underlying MPS--MPU pair is not asserted here.
     (\ref{eq:mpug_l_gauge}) cancels the multiplier under the inverse gauges.
 \end{proof}
 
+\begin{lemma}[Exact extension from trivializing scalar gauges]
+    \label{lem:mpug_trivializing_extension}
+    \lean{TNLean.Algebra.LSymbol.isMulCocycle₂_of_isTrivial_gauge,
+        TNLean.Algebra.LSymbol.basepointExtension,
+        TNLean.Algebra.LSymbol.basepointExtension_isMulCocycle₂,
+        TNLean.Algebra.StabilizerRepresentatives.basepointExtension_restrict,
+        TNLean.Algebra.StabilizerRepresentatives.exists_extension_of_inducedLSymbol_hasTrivialGauge}
+    \leanok
+    \uses{thm:mpug_stabilizer_cocycle_l_symbol, def:mpug_l_gauge}
+    Let $G$ act on $\mathsf X$ with basepoint $x_0$, stabilizer
+    $H=\operatorname{Stab}_G(x_0)$, and representatives $k_x$ satisfying
+    $k_xx_0=x$ and $k_{x_0}=e$. Let $\psi:H\times H\to\C^\times$ be a
+    two-cocycle and $L[\psi]$ its induced scalar $L$-symbol.
+    Suppose scalar cochains $\beta:G\times G\to\C^\times$ and
+    $\gamma:G\times\mathsf X\to\C^\times$ satisfy
+    $(\beta,\gamma)\mathbin{\triangleright}L[\psi]=1$.
+    Then $\beta$ is a two-cocycle and
+    \begin{align}
+        \Psi(g,h)
+         & =\beta(g,h)^{-1}
+        \frac{\gamma_{g,x_0}\gamma_{h,x_0}}{\gamma_{gh,x_0}}
+        \label{eq:mpug_trivializing_extension}
+    \end{align}
+    is a two-cocycle with $\Psi|_{H\times H}=\psi$ exactly.
+    Neither cocycles nor gauges need be normalized.
+    This is the converse scalar calculation in
+    \cite[lines~7057--7064]{FrancoRubio2025MPUGauging}, with gauges that
+    trivialize $L[\psi]$, the inverses of the source's forward gauges.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_stabilizer_cocycle_l_symbol, def:mpug_l_gauge,
+        thm:mpug_h2_exact_extension}
+    Compatibility of $L[\psi]$ with $\omega=1$ transports under
+    $(\beta,\gamma)$ to compatibility of the constant symbol $1$ with
+    $d\beta$. Thus $d\beta=1$, which is the two-cocycle equation for
+    $\beta$. Setting $\varphi(g)=\gamma_{g,x_0}$, formula
+    (\ref{eq:mpug_trivializing_extension}) is
+    $\Psi=d\varphi\,\beta^{-1}$, hence is a two-cocycle.
+    For $a,b\in H$, the equality $bx_0=x_0$ and the chosen
+    $k_{x_0}=e$ identify $L[\psi]^{x_0}_{a,b}$ with $\psi(a,b)$.
+    Evaluating the trivializing-gauge identity there gives
+    $\Psi(a,b)=\psi(a,b)$.
+\end{proof}
+
+% Scalar criterion only: the tensor bridge and U(1) naturality remain open.
+\begin{lemma}[Scalar block independence and restriction of the stabilizer class]
+    \label{lem:mpug_scalar_bi_restriction}
+    \lean{TNLean.Algebra.StabilizerRepresentatives.inducedLSymbol_isBlockIndependent_iff_exists_extension,
+        TNLean.Algebra.StabilizerRepresentatives.inducedLSymbol_isBlockIndependent_iff_H2π_mem_range_map_subtype}
+    \leanok
+    \uses{lem:mpug_trivializing_extension, thm:mpug_stabilizer_extension_gauge,
+        thm:mpug_h2_exact_extension, thm:mpug_block_independence_four_forms}
+    Let $G$ act on $\mathsf X$ with basepoint $x_0$, stabilizer
+    $H=\operatorname{Stab}_G(x_0)$, and representatives $k_x$ satisfying
+    $k_xx_0=x$ and $k_{x_0}=e$. For a two-cocycle
+    $\psi:H\times H\to\C^\times$, the following are equivalent:
+    \begin{enumerate}
+        \item The induced scalar $L$-symbol $L[\psi]$ is block independent
+              after a joint scalar gauge.
+        \item There is a two-cocycle $\Psi:G\times G\to\C^\times$ with
+              $\Psi|_{H\times H}=\psi$ exactly.
+        \item The class $[\psi]$ belongs to the image of the restriction map
+              $H^2(G,\C^\times)\to H^2(H,\C^\times)$ for trivial coefficients.
+    \end{enumerate}
+    No normality or finiteness assumption is imposed on $H$ or $G$.
+    This states the scalar consequence of
+    \cite[lines~7042--7064]{FrancoRubio2025MPUGauging} for the induced symbols.
+    The distinction between classes, representatives, and tensor data is
+    explained in \cite{gap:fbc25_mpu_action_stabilizer_source_audit}.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_block_independence_four_forms,
+        lem:mpug_trivializing_extension, thm:mpug_stabilizer_extension_gauge,
+        thm:mpug_h2_exact_extension}
+    By Lemma~\ref{thm:mpug_block_independence_four_forms}, scalar block
+    independence is equivalent to the existence of a trivializing scalar
+    gauge. Lemma~\ref{lem:mpug_trivializing_extension} constructs an exact
+    extension from such a gauge, and
+    Lemma~\ref{thm:mpug_stabilizer_extension_gauge} constructs a trivializing
+    gauge from an exact extension. Finally,
+    Lemma~\ref{thm:mpug_h2_exact_extension} identifies exact extension of
+    $\psi$ with membership of $[\psi]$ in the image of restriction.
+\end{proof}
+
 \begin{lemma}[Reconstruction of stabilizer L-symbols]
     \label{thm:mpug_stabilizer_reconstruction}
     \lean{TNLean.Algebra.StabilizerRepresentatives.reconstructedLSymbol,
