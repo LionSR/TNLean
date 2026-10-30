@@ -37,7 +37,7 @@ $\mathcal U e_\sigma=e_{\sigma|_J}\otimes e_{\sigma|_{J^c}}$.
 For a matrix on $\mathcal C(J^c)\times\mathcal C(J)$, the superscript
 $\mathrm{phys}$ denotes its pullback by these two restrictions.
 
-\begin{theorem}[A common middle-first tensor decomposition]
+\begin{lemma}[A common middle-first tensor decomposition]
     \label{thm:physical_polynomial_tensor_family}
     \lean{TNLean.MPS.AreaLaw.exists_common_physical_aeval_mpo_middleFirst_family_fin}
     \leanok
@@ -69,11 +69,11 @@ $\mathrm{phys}$ denotes its pullback by these two restrictions.
     The exterior matrices may depend on $P_L,P_R,P$, whereas $N$ and the
     middle matrices do not. The dimension $B$ may be zero. No symmetry or
     spectral assumption is imposed on $H$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:physical_aeval_fin_middle_family}
     Choose the common family from
-    Theorem~\ref{thm:physical_aeval_fin_middle_family}; this gives
+    Lemma~\ref{thm:physical_aeval_fin_middle_family}; this gives
     (\ref{eq:physical_tensor_matrix}) with the same count and bond bounds.
     In the configuration basis, a Kronecker matrix acts as the tensor product
     of its two linear operators. Thus the canonical exterior-first coordinate
