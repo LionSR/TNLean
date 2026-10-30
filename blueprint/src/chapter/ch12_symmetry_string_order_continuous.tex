@@ -7,7 +7,7 @@ $M(H)=[E,H\otimes\Id-\Id\otimes\overline H]=0$ for Hermitian $H$.
 Every scalar Hermitian matrix belongs to this kernel. Here an effective
 generator means $H\notin\C\Id$; as suggested by
 \cite[lines~291--296]{PerezGarcia2008StringOrder},
-Theorem~\ref{thm:continuous_generator_string_order} proves that such a
+Lemma~\ref{thm:continuous_generator_string_order} proves that such a
 generator produces a nonscalar physical symmetry and string order with
 identity endpoints.
 % Scope: only the forward implication from a nonscalar Hermitian generator
@@ -32,7 +32,7 @@ identity endpoints.
     Thus $E\opvec_r X=\opvec_r\E_A(X)$.
 \end{definition}
 
-\begin{theorem}[Realignment of the transfer and Choi commutators]
+\begin{lemma}[Realignment of the transfer and Choi commutators]
     \label{thm:row_transfer_gram_realignment}
     \lean{MPSTensor.krausRowMatrix_gram_apply,
         MPSTensor.krausRowMatrix_gram_commutator_apply,
@@ -53,7 +53,7 @@ identity endpoints.
         \label{eq:symmetry_commutator_realignment}
     \end{align}
     Consequently $[L_H,E]=0$ if and only if $[L_H,FF^\dagger]=0$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     In (\ref{eq:symmetry_gram_realignment}), expanding the Gram product gives
     $G_{(a,b),(c,e)}=\sum_i(A^i)_{ab}\overline{(A^i)_{ce}}$.
@@ -74,7 +74,7 @@ identity endpoints.
     four indices, so the two commutators vanish simultaneously.
 \end{proof}
 
-\begin{theorem}[Physical transpose and virtual conjugation]
+\begin{lemma}[Physical transpose and virtual conjugation]
     \label{thm:row_physical_virtual_actions}
     \lean{MPSTensor.krausRowMatrix_mul_apply,
         MPSTensor.rowAdjointGenerator_mul_krausRowMatrix_apply,
@@ -95,7 +95,7 @@ identity endpoints.
     $(L_HF)_{(a,b),i}=(HA^i-A^iH)_{ab}$.
     Hence $FK_0=L_HF$ implies
     $\sum_j(K_0^{\top})_{ij}A^j=HA^i-A^iH$ for every $i$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The first identity in (\ref{eq:symmetry_row_actions}) is matrix
     multiplication with $(K_0^\top)_{ij}=(K_0)_{ji}$.
@@ -106,7 +106,7 @@ identity endpoints.
     Taking adjoints of the tensor factors gives $L_H^\dagger=L_H$.
 \end{proof}
 
-\begin{theorem}[One Hermitian generator for the physical action]
+\begin{lemma}[One Hermitian generator for the physical action]
     \label{thm:continuous_physical_generator}
     \lean{MPSTensor.exists_hermitian_physical_generator,
         MPSTensor.condC1_hermitianUnitaryPath_of_intertwiner}
@@ -147,10 +147,10 @@ identity endpoints.
             \tn[skin=ring]{V(t)^\dagger}
         \end{tenkz}.
     \end{tenkzequation}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:row_transfer_gram_realignment, thm:row_physical_virtual_actions}
-    By Theorem~\ref{thm:row_transfer_gram_realignment}, $L_H$ commutes
+    By Lemma~\ref{thm:row_transfer_gram_realignment}, $L_H$ commutes
     with $G=FF^\dagger$. The Hermitian lift criterion of the companion
     quantum-channel volume~\cite[``Hermitian intertwiners of rectangular
         matrices'']{QICLean2026Blueprint} gives
@@ -160,7 +160,7 @@ identity endpoints.
             & FK_0                & =L_HF.
         \label{eq:symmetry_supported_generator}
     \end{align}
-    With $K=K_0^\top$, Theorem~\ref{thm:row_physical_virtual_actions}
+    With $K=K_0^\top$, Lemma~\ref{thm:row_physical_virtual_actions}
     gives the infinitesimal relation, and $K$ inherits Hermiticity from $K_0$.
     Intertwining passes to powers and then to the exponential series:
     \begin{align}
@@ -183,7 +183,7 @@ identity endpoints.
     Thus $u(t)$ is the identity on $\overline{\ker F}$.
 \end{proof}
 
-\begin{theorem}[Scalar physical commutator rigidity]
+\begin{lemma}[Scalar physical commutator rigidity]
     \label{thm:scalar_physical_commutator_rigidity}
     \lean{MPSTensor.eq_scalar_of_scalar_commutator_action}
     \leanok
@@ -192,7 +192,7 @@ identity endpoints.
     $\tr\Lambda=1$, and every fixed matrix of $\E_A$ is scalar.
     If $HA^i-A^iH=cA^i$ for every $i$, then $c=0$ and $H\in\C\Id$.
     Neither $H$ nor $\Lambda$ needs to be Hermitian for this assertion.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Multiplying each commutator by $(A^i)^\dagger$ and summing gives
     \begin{align}
@@ -205,7 +205,7 @@ identity endpoints.
     Hence $H$ is fixed by $\E_A$ and is scalar by hypothesis.
 \end{proof}
 
-\begin{theorem}[Complex string limit with identity endpoints]
+\begin{lemma}[Complex string limit with identity endpoints]
     \label{thm:identity_endpoint_complex_limit}
     \lean{MPSTensor.physicalStringOrderParam_identity_tendsto}
     \leanok
@@ -223,10 +223,10 @@ identity endpoints.
         \label{eq:symmetry_identity_endpoint_limit}
     \end{align}
     No additional invariance assumption on $\Lambda$ is required.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:physical_string_phase_retaining_asymptotics}
-    Applying Theorem~\ref{thm:physical_string_phase_retaining_asymptotics}
+    Applying Lemma~\ref{thm:physical_string_phase_retaining_asymptotics}
     with $x=y=\Id$ and phase $\mu=1$ gives the asymptotics. Since $\E_1=\E_A$,
     unitality and stationarity give
     \begin{align}
@@ -240,20 +240,20 @@ identity endpoints.
     in (\ref{eq:symmetry_identity_endpoint_limit}).
 \end{proof}
 
-\begin{theorem}[Nonvanishing trace near the identity]
+\begin{lemma}[Nonvanishing trace near the identity]
     \label{thm:virtual_path_trace_nonzero}
     \lean{MPSTensor.eventually_trace_virtualPath_ne_zero}
     \leanok
     Let $\tr\Lambda=1$, and let $V:\R\to\MN{D}$ be continuous at zero
     with $V(0)=\Id$. Then $\tr(\Lambda V(t))\ne0$ for all $t$ in
     some neighborhood of zero.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The function $t\mapsto\tr(\Lambda V(t))$ is continuous at zero and
     has value $1$ there. The complement of $\{0\}$ is open in $\C$.
 \end{proof}
 
-\begin{theorem}[Effective continuous generators give physical string order]
+\begin{lemma}[Effective continuous generators give physical string order]
     \label{thm:continuous_generator_string_order}
     \lean{MPSTensor.pureCanonical_continuous_generator_identity_endpoints,
         MPSTensor.hasPhysicalStringOrder_of_continuous_generator}
@@ -279,30 +279,30 @@ identity endpoints.
     \end{align}
     In particular, $A$ has physical string order with Hermitian identity
     endpoints in the sense of Definition~\ref{def:has_physical_string_order}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:continuous_physical_generator,
         thm:scalar_physical_commutator_rigidity,
         thm:physical_block_order_pure_canonical,
         thm:virtual_path_trace_nonzero,
         thm:identity_endpoint_complex_limit}
-    Theorem~\ref{thm:continuous_physical_generator} provides the Hermitian
+    Lemma~\ref{thm:continuous_physical_generator} provides the Hermitian
     generator $K$.
     Purity makes every fixed matrix scalar. If $K=c\Id$, the
     infinitesimal relation in (\ref{eq:symmetry_continuous_covariance})
     becomes $HA^i-A^iH=cA^i$ for every $i$.
-    Theorem~\ref{thm:scalar_physical_commutator_rigidity} would force
+    Lemma~\ref{thm:scalar_physical_commutator_rigidity} would force
     $H\in\C\Id$, a contradiction. Thus $K$ is nonscalar.
 
     The nonscalar-exponential theorem in
     \cite[``Hermitian exponential paths'']{QICLean2026Blueprint} gives
     $u(t)\notin\C\Id$ throughout a punctured neighborhood of zero.
-    Theorem~\ref{thm:virtual_path_trace_nonzero} gives
+    Lemma~\ref{thm:virtual_path_trace_nonzero} gives
     $\tr(\Lambda V(t))\ne0$ in a neighborhood of zero.
     Canonical purity implies irreducibility and peripheral primitivity,
-    as in Theorem~\ref{thm:physical_block_order_pure_canonical}.
+    as in Lemma~\ref{thm:physical_block_order_pure_canonical}.
     Intersecting the two neighborhoods and applying
-    Theorem~\ref{thm:identity_endpoint_complex_limit} yields
+    Lemma~\ref{thm:identity_endpoint_complex_limit} yields
     (\ref{eq:symmetry_continuous_string_limit}). Taking absolute values
     gives the positive limiting magnitude required for physical string
     order, with the same fixed operators $x=y=\Id$.

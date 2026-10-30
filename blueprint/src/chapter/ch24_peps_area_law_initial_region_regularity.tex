@@ -10,7 +10,7 @@ $C\ge 2$, and $k_0\ge 50{,}000{,}000$.
 % revision adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 % This auxiliary assertion concerns the initial regions before repairs.
 
-\begin{theorem}[Birth regions are closures of their interiors]
+\begin{lemma}[Birth regions are closures of their interiors]
     \label{thm:area_law_initial_birth_regularity}
     \lean{TNLean.PEPS.AreaLaw.Geometry.initialBirthRegion_eq_closure_initialOpenRegion}
     \leanok
@@ -19,7 +19,7 @@ $C\ge 2$, and $k_0\ge 50{,}000{,}000$.
     \begin{align}
         X_i^0 & =\overline{\operatorname{int}(X_i^0)}.
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_cell_fan_cover,
         thm:area_law_primary_fine_cell_cover,def:area_law_fan_runs,

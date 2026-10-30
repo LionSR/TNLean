@@ -22,7 +22,7 @@
     $Q_{\eta,\mathcal H}x=(\bigotimes_e\eta_e)\otimes x$.
 \end{definition}
 
-\begin{theorem}[A common order and endpoint orientation]
+\begin{lemma}[A common order and endpoint orientation]
     \label{thm:peps_source_ordering}
     \lean{TNLean.Lattice.PartyCircuit.SourceInventory.Expands.of_perm}
     \lean{TNLean.Lattice.PartyCircuit.SourceInventory.exists_ofSlots_expands}
@@ -35,11 +35,11 @@
     operations for every spectator memory $\mathcal H$
     (Definition~\ref{def:peps_source_expansion}); permuting whole source blocks
     also defines such a transformation.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:peps_source_expansion,thm:peps_source_expansion_operations}
-    By induction on $R$ using Theorem~\ref{thm:peps_source_expansion_operations},
+    By induction on $R$ using Lemma~\ref{thm:peps_source_expansion_operations},
     move the unique source in $S$ matching the first unordered pair of $R$ to
     the front, apply the swap $U\otimes V\to V\otimes U$ if its endpoint
     orientation is reversed, and apply the induction hypothesis to the remaining
@@ -61,7 +61,7 @@
     $\pi_\xi:\widehat U\to U_\xi$.
 \end{definition}
 
-\begin{theorem}[Embedding and recovering a pair source]
+\begin{lemma}[Embedding and recovering a pair source]
     \label{thm:peps_common_pair_source}
     \lean{TNLean.Lattice.PartyCircuit.PairSource.commonProjection_commonInclusion}
     \lean{TNLean.Lattice.PartyCircuit.PairSource.norm_commonProjection_le}
@@ -80,7 +80,7 @@
         (\pi_\xi\otimes\rho_\xi)\widehat\eta_\xi & =\eta_\xi.
         \label{eq:peps_common_pair_recovery}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     From $\|j_\xi u\|=\|u\|$, $\|\pi_\xi u\|^2\le\sum_{\zeta}\|u_\zeta\|^2=\|u\|^2$,
@@ -89,7 +89,7 @@
     $(\pi_\xi\otimes\rho_\xi)(j_\xi\otimes k_\xi)=\Id_{U_\xi\otimes V_\xi}$.
 \end{proof}
 
-\begin{theorem}[Local maps on a prepared pair]
+\begin{lemma}[Local maps on a prepared pair]
     \label{thm:peps_map_source_pair}
     \lean{TNLean.Lattice.PartyCircuit.Word.mapPair}
     \lean{TNLean.Lattice.PartyCircuit.Word.mapPair_spec}
@@ -107,7 +107,7 @@
         \label{eq:peps_map_source_pair}
     \end{align}
     forming an allowed source-free composition when $\|A\|,\|B\|\le 1$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Verify (\ref{eq:peps_map_source_pair}) on elementary tensors
@@ -115,7 +115,7 @@
     allowedness.
 \end{proof}
 
-\begin{theorem}[Local contractions with a prepared tail]
+\begin{lemma}[Local contractions with a prepared tail]
     \label{thm:peps_source_cons_mapL}
     \lean{TNLean.Lattice.PartyCircuit.SourceInventory.Expands.cons_mapL}
     \leanok
@@ -127,18 +127,18 @@
     and $s'=(p,q,U',V',(A\otimes B)\eta)$ before $T$ to form $S$ and $S'$ gives
     an allowed source-free composition $D$ satisfying
     $D P_{S,\mathcal H}=P_{S',\mathcal H}$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:peps_map_source_pair,def:peps_source_inventory}
-    Apply Theorem~\ref{thm:peps_map_source_pair} with spectator memory
+    Apply Lemma~\ref{thm:peps_map_source_pair} with spectator memory
     $\mathcal H_T\otimes\mathcal H$ to obtain
     $D P_{s,\mathcal H_T\otimes\mathcal H}=P_{s',\mathcal H_T\otimes\mathcal H}$,
     and compose on the right with $P_{T,\mathcal H}$.
 \end{proof}
 
-\begin{theorem}[Common spaces for normalized source lists]
+\begin{lemma}[Common spaces for normalized source lists]
     \label{thm:peps_common_source_lists}
     \lean{TNLean.Lattice.PartyCircuit.SourceInventory.common_ofSlots_expands}
     \lean{TNLean.Lattice.PartyCircuit.SourceInventory.exists_common_expansions}
@@ -156,19 +156,19 @@
          & =P_{S_\xi,\mathcal H}.
         \label{eq:peps_common_list_recovery}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_source_ordering,thm:peps_common_pair_source,thm:peps_source_cons_mapL,
         thm:peps_source_expansion_operations}
-    Reorder each $S_\xi$ by Theorem~\ref{thm:peps_source_ordering}, embed each
+    Reorder each $S_\xi$ by Lemma~\ref{thm:peps_source_ordering}, embed each
     slot into the orthogonal sums $\widehat U_e,\widehat V_e$ via
-    Theorem~\ref{thm:peps_common_pair_source}, and recover each slot by
-    (\ref{eq:peps_common_pair_recovery}), Theorem~\ref{thm:peps_source_cons_mapL},
-    and Theorem~\ref{thm:peps_source_expansion_operations}.
+    Lemma~\ref{thm:peps_common_pair_source}, and recover each slot by
+    (\ref{eq:peps_common_pair_recovery}), Lemma~\ref{thm:peps_source_cons_mapL},
+    and Lemma~\ref{thm:peps_source_expansion_operations}.
 \end{proof}
 
-\begin{theorem}[Local factorization in common private spaces]
+\begin{lemma}[Local factorization in common private spaces]
     \label{thm:peps_common_party_maps}
     \lean{TNLean.Lattice.PartyCircuit.Word.exists_common_source_preparation}
     \lean{TNLean.Lattice.PartyCircuit.Word.exists_common_prepared_tensorPartyMaps}
@@ -187,27 +187,27 @@
         U_{\rm in}Q_{\widehat\eta_\xi,\mathcal H_{\rm in}}.
         \label{eq:peps_common_party_maps}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_complete_pair_sources,thm:peps_complete_prepared_party_maps,
         thm:peps_common_source_lists,thm:peps_party_factorization}
     Complete the sources of each $F_\xi$ to all unordered pairs in $P$ by
-    Theorems~\ref{thm:peps_complete_pair_sources}
+    Lemmas~\ref{thm:peps_complete_pair_sources}
     and~\ref{thm:peps_complete_prepared_party_maps}, embed into common
-    halfspaces by Theorem~\ref{thm:peps_common_source_lists}, and factor the
+    halfspaces by Lemma~\ref{thm:peps_common_source_lists}, and factor the
     resulting source-free composition by party via
-    Theorem~\ref{thm:peps_party_factorization}.
+    Lemma~\ref{thm:peps_party_factorization}.
 \end{proof}
 
-\begin{theorem}[The weighted gate in common private spaces]
+\begin{lemma}[The weighted gate in common private spaces]
     \label{thm:peps_common_source_gate}
     \lean{TNLean.Lattice.PartyCircuit.Word.exists_common_source_gate}
     \leanok
     \uses{def:peps_source_slots,def:peps_party_registers}
     In \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}
     (\texttt{04-compression.tex}, lines 233--267), for $F=\sum_{\xi\in\Xi}c_\xi F_\xi$
-    with $(F_\xi)_{\xi\in\Xi}$ as in Theorem~\ref{thm:peps_common_party_maps},
+    with $(F_\xi)_{\xi\in\Xi}$ as in Lemma~\ref{thm:peps_common_party_maps},
     \begin{align}
         U_{\rm out}F
          & =\sum_{\xi\in\Xi}c_\xi
@@ -215,7 +215,7 @@
         U_{\rm in}Q_{\widehat\eta_\xi,\mathcal H_{\rm in}}.
         \label{eq:peps_common_source_gate}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_common_party_maps}
@@ -224,7 +224,7 @@
 \end{proof}
 
 
-\begin{theorem}[Finite coordinates for a finite family of source vectors]
+\begin{lemma}[Finite coordinates for a finite family of source vectors]
     \label{thm:peps_finite_pair_coordinates}
     \lean{TNLean.Lattice.PartyCircuit.PairSource.exists_finite_coordinates}
     \leanok
@@ -234,7 +234,7 @@
     linear isometries $f:\C^a\to U$ and $g:\C^b\to V$, and vectors
     $\eta^0_\xi\in\C^a\otimes\C^b$ such that $(f\otimes g)\eta^0_\xi=\eta_\xi$
     and $\|\eta^0_\xi\|=\|\eta_\xi\|$ for all $\xi\in\Xi$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Span the finitely many elementary tensor factors of $\{\eta_\xi\}_{\xi\in\Xi}$
@@ -243,7 +243,7 @@
     and $g:\C^b\simeq V_0\hookrightarrow V$.
 \end{proof}
 
-\begin{theorem}[Source preparations in finite coordinates]
+\begin{lemma}[Source preparations in finite coordinates]
     \label{thm:peps_finite_source_coordinates}
     \lean{TNLean.Lattice.PartyCircuit.SourceInventory.ofSlots_mapIsometry_expands}
     \lean{TNLean.Lattice.PartyCircuit.SourceInventory.exists_finite_coordinate_expansions}
@@ -257,18 +257,18 @@
     $\|\eta^0_{\xi,e}\|=\|\eta_{\xi,e}\|$, and allowed source-free compositions
     $D_\xi$ satisfying $D_\xi Q_{\eta^0_\xi,\mathcal H}=Q_{\eta_\xi,\mathcal H}$
     for every spectator memory $\mathcal H$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_finite_pair_coordinates,thm:peps_source_cons_mapL,
         thm:peps_source_expansion_operations}
-    Apply Theorem~\ref{thm:peps_finite_pair_coordinates} at each slot $e$, and
+    Apply Lemma~\ref{thm:peps_finite_pair_coordinates} at each slot $e$, and
     compose the local isometries $f_e,g_e$ across the slots by
-    Theorems~\ref{thm:peps_source_cons_mapL}
+    Lemmas~\ref{thm:peps_source_cons_mapL}
     and~\ref{thm:peps_source_expansion_operations}.
 \end{proof}
 
-\begin{theorem}[The source-gate expansion in finite coordinates]
+\begin{lemma}[The source-gate expansion in finite coordinates]
     \label{thm:peps_finite_source_gate}
     \lean{TNLean.Lattice.PartyCircuit.Word.exists_finite_source_preparation}
     \lean{TNLean.Lattice.PartyCircuit.Word.exists_finite_prepared_tensorPartyMaps}
@@ -277,7 +277,7 @@
     \uses{def:peps_source_slots,def:peps_party_registers}
     In \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}
     (\texttt{04-compression.tex}, lines 233--299), for $F=\sum_{\xi\in\Xi}c_\xi F_\xi$
-    with $(F_\xi)_{\xi\in\Xi}$ as in Theorem~\ref{thm:peps_common_party_maps},
+    with $(F_\xi)_{\xi\in\Xi}$ as in Lemma~\ref{thm:peps_common_party_maps},
     there exist common dimensions $a_e,b_e\in\N$ for every unordered pair in
     $P$, normalized vectors $\eta^0_{\xi,e}\in\C^{a_e}\otimes\C^{b_e}$, and
     local contractions $B_{\xi,p}$ such that
@@ -291,14 +291,14 @@
         U_{\rm in}Q_{\eta^0_\xi,\mathcal H_{\rm in}}.
         \label{eq:peps_finite_source_gate}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_common_party_maps,thm:peps_common_source_lists,
         thm:peps_finite_source_coordinates,thm:peps_party_factorization}
-    Combine Theorems~\ref{thm:peps_common_party_maps}
+    Combine Lemmas~\ref{thm:peps_common_party_maps}
     and~\ref{thm:peps_common_source_lists} with
-    Theorem~\ref{thm:peps_finite_source_coordinates}, factor the resulting
-    source-free operations by party via Theorem~\ref{thm:peps_party_factorization},
+    Lemma~\ref{thm:peps_finite_source_coordinates}, factor the resulting
+    source-free operations by party via Lemma~\ref{thm:peps_party_factorization},
     and sum over $\xi\in\Xi$ with weights $c_\xi$.
 \end{proof}

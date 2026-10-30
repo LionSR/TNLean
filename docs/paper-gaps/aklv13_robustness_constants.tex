@@ -1,0 +1,132 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+\input{command}
+\providecommand{\leanid}[1]{\begingroup\urlstyle{sf}\path{#1}\endgroup}
+\providecommand{\gapnote}[2]{\par\noindent\textbf{Verdict:} #1 (#2).\par}
+\title{Constants in the AKLV Energy-Truncation Argument}
+\author{}
+\date{2026-10-29}
+\begin{document}
+\maketitle
+\gapnote{local-correction}{resolved}
+
+\section{Source and normalization}
+Arad, Kitaev, Landau and Vazirani, arXiv:1301.1162v1,
+Sections~6.1 and~6.3, consider positive nearest-neighbour terms bounded
+by the identity. After regional scalar shifts the ground energy is in
+$[0,6]$. Put $A=H_2+H_{s-1}$ and $B=H-A$.
+In Section~6.3, $P_t=\mathbf 1_{(-\infty,t)}(B)$ has a strict threshold;
+write $Q_t=1-P_t$. The truncation in Section~6.1 is the continuous
+function $x\mapsto\min(x,t)$, so choosing either side at equality in its
+spectral formula produces the same operator.
+
+\section{The printed normalization denominator}
+The uniform interior shift printed in Section~6.1 is $d/(s-7)$ for
+$4\le i\le s-3$. For $s\ge8$ this range contains $s-6$ terms. If the
+unshifted interior sum has ground energy $d>0$, the printed shifts give
+ground energy
+\begin{align}
+    d-(s-6)\frac{d}{s-7}=-\frac{d}{s-7}<0,
+\end{align}
+rather than the stated zero. To obtain zero, the uniform shift would
+be $d/(s-6)$; equivalently, subtract $dI$ from the interior sum once.
+This correction follows by counting the displayed range. The normalized
+robustness theorem takes the regional positivity and $0\le e\le6$ as
+data and does not use the printed distribution of scalar shifts.
+
+\section{The cross term and two typographical slips}
+The Cauchy--Schwarz calculation in the proof of Lemma~6.5 gives
+\begin{align}
+    |\langle P_tv,AQ_tv\rangle|
+    &\le \|A\|\,\|P_tv\|\,\|Q_tv\|
+    \le 2\sqrt{\langle v,H^{(t)}v\rangle/t}
+\end{align}
+for a unit vector and positive $t$, using the first assertion of that lemma.
+The last expression bounds the unsquared modulus in this calculation.
+Squaring gives the different estimate
+$|\langle P_tv,AQ_tv\rangle|^2\le4\langle v,H^{(t)}v\rangle/t$.
+The unsquared estimate is proved by
+\leanid{TNLean.MPS.AreaLaw.AKLV.norm_low_high_boundary_inner_le_sqrt_clipped_energy}.
+The actual mass estimate is proved from positivity and pairwise commutation
+of the three disconnected regional blocks by
+\leanid{TNLean.MPS.AreaLaw.AKLV.norm_highProjection_le_sqrt_clipped_energy}.
+The proof of Lemma~6.6(1) uses $\epsilon_0$, where the printed expansion
+has $\epsilon$. Positivity of $A$ gives
+$\langle Q_t\Gamma,HQ_t\Gamma\rangle\ge
+\langle Q_t\Gamma,BQ_t\Gamma\rangle$; the comparison printed in the prose
+after that expansion has the opposite sign.
+
+\section{Recovering the off-diagonal constant}
+The printed commutator bound $\|Q_i\|\le2\cdot4^i i!$ sums at $r=1/8$
+to $4$, while Lemma~6.6(2) states coefficient $2$.
+For each boundary bond replace $h_j$ by $O_j=h_j-I/2$.
+Then $\|O_j\|\le1/2$, and the local Hadamard bound gives
+$\|e^{B/8}O_je^{-B/8}\|\le1$.
+For $t\ge u$, $Q_tP_u=0$, so the scalar shifts disappear and
+\begin{align}
+    \|Q_tAP_u\|&\le e^{-(t-u)/8}
+      \sum_{j\in\{2,s-1\}}\|e^{B/8}O_je^{-B/8}\|
+      \le2e^{-(t-u)/8}.
+\end{align}
+The proved statement is
+\leanid{TNLean.MPS.AreaLaw.AKLV.norm_two_boundary_spectral_offDiagonal_le}.
+Its hypotheses are the original local positive contractions and their
+supports; no commutator-growth or spectral-tail bound is supplied.
+The complement may have an arbitrary real scalar shift.
+
+\section{An explicit eigenvector tail}
+Let $(B+A)x=ex$, $0\le e\le6$, $W=e^{B/8}$ and $y=Wx$.
+The uncentered local estimate gives $\|WAW^{-1}\|\le4$, hence
+$\|By\|\le10\|y\|$. The spectral inverse above energy $20$ gives
+$\|Q_{20}y\|\le\|By\|/20\le\|y\|/2$.
+The low part satisfies $\|P_{20}y\|\le e^{20/8}\|x\|$, so
+$\|y\|\le2e^{20/8}\|x\|$. For every real $t$,
+\begin{align}
+    \|Q_tx\|&\le\|Q_te^{-B/8}\|\,\|y\|
+      \le2e^{-(t-20)/8}\|x\|.
+\end{align}
+This alternative to the shell induction of Lemma~6.7 is proved by
+\leanid{TNLean.MPS.AreaLaw.AKLV.norm_groundState_highProjection_le_exp}.
+It applies to every eigenvector in this energy range, including the unit
+ground vector. It requires neither a gap nor uniqueness.
+
+\section{Explicit robustness constants and the final statement}
+Separate clipping of the two exterior blocks, its positive order bounds,
+and its agreement with the original operator on the low-energy subspace
+use QICLean's energy truncation. The full Hamiltonian is not clipped in
+place of the exterior blocks, and no ALVV regional approximation theorem
+is substituted for this construction.
+
+The projected-energy comparison is
+$\langle P_tv,HP_tv\rangle\le\langle v,H^{(t)}v\rangle+4\|Q_tv\|$.
+For $tg^2\ge1024(e+g)$ it implies that every unit vector orthogonal to
+the original ground vector has clipped energy at least $e+g/2$.
+A min--max argument constructs the actual clipped ground vector and
+proves its gap is at least $g/2$.
+
+The projected original ground vector has residual at most
+$10\exp(-(t-40)/16)$. Combining this with the absolute excited-energy
+threshold gives a phase-aligned squared-distance bound
+$968g^{-2}\exp(-(t-40)/8)$.
+For $t\ge32768(e+g)/g^2$, this is at most $\exp(-t/16)$.
+The final statement is
+\leanid{TNLean.MPS.AreaLaw.AKLV.normalized_chain_robustness}.
+
+Its hypotheses are the original nearest-neighbour supports and
+$0\le h_i\le I$, the two boundary bonds, the three scalar energy shifts,
+positivity of the resulting regional blocks, a unit original ground
+vector with $0\le e\le6$, and the original gap $0<g\le1$ in operator
+form. The three positivity assumptions and energy bound are the
+normalization fixed in Section~6.1. Regional commutations and the sum
+decomposition are derived from the actual supports and cuts. No
+spectral tail, commutator-growth bound, clipped gap, residual estimate
+or closeness of the ground vectors is supplied as an assumption.
+The conclusion uses the actual separate clipping, an actual ground
+eigenvector, the operator gap inequality, and an explicit complex phase.
+Constructing the normalization from an unshifted Hamiltonian is the
+source's preceding reduction; this theorem is stated on the normalized
+data of Theorem~6.1.
+\end{document}

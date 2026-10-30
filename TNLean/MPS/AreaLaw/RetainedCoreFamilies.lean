@@ -7,6 +7,10 @@ import TNLean.Algebra.CoreWordCoefficients
 import TNLean.MPS.AreaLaw.TraceCoreSlices
 import TNLean.MPS.AreaLaw.FixedConfigurationExtension
 import Mathlib.Data.Matrix.Basis
+import Mathlib.Algebra.BigOperators.Ring.List
+import Mathlib.Logic.Function.Basic
+import TNLean.MPS.MPDO.TraceChainOperator
+import TNLean.MPS.AreaLaw.IntervalSlice
 import Mathlib.LinearAlgebra.Matrix.Reindex
 
 /-!
@@ -337,6 +341,41 @@ def actualRetainedIntervalClosing {T L q B : ℕ}
     retainedIntervalPrefix (fun v (z : Fin q × Fin q) ↦ A v z.1 z.2)
       a ha (fun v ↦ (η v, θ v))
 
+/-- Fixing the physical configurations outside a contiguous interval changes
+only the closing matrix: it is the retained suffix times the original cap
+times the retained prefix. The new cap is independent of the interval inputs,
+and the virtual dimension is unchanged, including empty intervals and zero
+dimensions. Supporting explicit trace algebra for ALVV, arXiv:1602.08828v2,
+Proposition 5.7, lines 1332–1333. -/
+theorem trace_actual_retainedInterval_eq {T L q B : ℕ}
+    (A : Fin T → MPOTensor q B) (C : Matrix (Fin B) (Fin B) ℂ)
+    (a : ℕ) (ha : a + L ≤ T)
+    (η θ : {v : Fin T // ¬(a ≤ v.val ∧ v.val < a + L)} → Fin q)
+    (σ τ : Fin L → Fin q) :
+    Matrix.trace (C * (List.ofFn (fun v ↦
+      A v (retainedIntervalEquiv a ha (η, σ) v)
+        (retainedIntervalEquiv a ha (θ, τ) v))).prod) =
+      Matrix.trace (actualRetainedIntervalClosing A C a ha η θ *
+        (List.ofFn (fun v : Fin L ↦ A ⟨a + v.val, by omega⟩ (σ v) (τ v))).prod) := by
+  have hpair (v : Fin T) :
+      (retainedIntervalEquiv a ha (η, σ) v,
+        retainedIntervalEquiv a ha (θ, τ) v) =
+      retainedIntervalEquiv a ha (fun v ↦ (η v, θ v), fun v ↦ (σ v, τ v)) v := by
+    dsimp only [retainedIntervalEquiv, Equiv.coe_fn_mk]
+    split_ifs <;> rfl
+  have h := trace_retainedInterval_eq
+    (fun v (z : Fin q × Fin q) ↦ A v z.1 z.2)
+    C a ha (fun v ↦ (η v, θ v)) (fun v ↦ (σ v, τ v))
+  have hsites (v : Fin T) :
+      A v (retainedIntervalEquiv a ha (η, σ) v)
+        (retainedIntervalEquiv a ha (θ, τ) v) =
+      A v (retainedIntervalEquiv a ha
+        (fun v ↦ (η v, θ v), fun v ↦ (σ v, τ v)) v).1
+        (retainedIntervalEquiv a ha
+          (fun v ↦ (η v, θ v), fun v ↦ (σ v, τ v)) v).2 := by
+    rw [← hpair v]
+  simpa only [actualRetainedIntervalClosing, ← hsites] using h
+
 /-- In the canonical retained-complement and natural interval coordinates, the
 supplied trace operator is the sum of its retained matrices tensored with the
 actual ordered interior slices. No endpoint is duplicated for short intervals.
@@ -360,24 +399,7 @@ private theorem trace_actual_retainedInterval_eq_sum {T L q B : ℕ}
     (actualRetainedIntervalClosing A C a ha)
     (fun v : Fin L ↦ A ⟨a + v.val, by omega⟩)]
   ext ⟨η, σ⟩ ⟨θ, τ⟩
-  have hpair (v : Fin T) :
-      (retainedIntervalEquiv a ha (η, σ) v,
-        retainedIntervalEquiv a ha (θ, τ) v) =
-      retainedIntervalEquiv a ha (fun v ↦ (η v, θ v), fun v ↦ (σ v, τ v)) v := by
-    dsimp only [retainedIntervalEquiv, Equiv.coe_fn_mk]
-    split_ifs <;> rfl
-  have h := trace_retainedInterval_eq
-    (fun v (z : Fin q × Fin q) ↦ A v z.1 z.2)
-    C a ha (fun v ↦ (η v, θ v)) (fun v ↦ (σ v, τ v))
-  have hsites (v : Fin T) :
-      A v (retainedIntervalEquiv a ha (η, σ) v)
-        (retainedIntervalEquiv a ha (θ, τ) v) =
-      A v (retainedIntervalEquiv a ha
-        (fun v ↦ (η v, θ v), fun v ↦ (σ v, τ v)) v).1
-        (retainedIntervalEquiv a ha
-          (fun v ↦ (η v, θ v), fun v ↦ (σ v, τ v)) v).2 := by
-    rw [← hpair v]
-  simpa only [actualRetainedIntervalClosing, ← hsites] using h
+  exact trace_actual_retainedInterval_eq A C a ha η θ σ τ
 
 end MPOTensor
 
@@ -409,6 +431,75 @@ private theorem retainedSingle_kronecker_entry {T L q : ℕ}
     · simp [hη, hθ]
     · simp [hη, hθ, Ne.symm hθ]
   · simp [hη, Ne.symm hη]
+
+/-- A fixed matrix unit on the retained complement can be inserted beside a
+trace-presented interval operator without changing the virtual dimension or
+closing matrix. Empty cores and targets and zero dimensions are included
+whenever the physical configurations are supplied. Supporting explicit trace
+algebra for ALVV, arXiv:1602.08828v2, Proposition 5.7, lines 1332–1333. -/
+private theorem exists_retainedSingle_trace_tensors {T L q D : ℕ}
+    (a : ℕ) (ha : a + L ≤ T)
+    (η θ : {v : Fin T // ¬(a ≤ v.val ∧ v.val < a + L)} → Fin q)
+    (A : Fin L → MPOTensor q D) (C : Matrix (Fin D) (Fin D) ℂ) :
+    ∃ Af : Fin T → MPOTensor q D, ∀ σ τ : Fin T → Fin q,
+      ((Matrix.single η θ (1 : ℂ)) ⊗ₖ
+        (Matrix.of fun x y : Fin L → Fin q ↦ Matrix.trace
+          (C * (List.ofFn (fun v ↦ A v (x v) (y v))).prod))).submatrix
+          (retainedIntervalEquiv a ha).symm (retainedIntervalEquiv a ha).symm σ τ =
+        Matrix.trace (C * (List.ofFn (fun v ↦ Af v (σ v) (τ v))).prod) := by
+  classical
+  let Af : Fin T → MPOTensor q D := fun v x y ↦
+    if h : a ≤ v.val ∧ v.val < a + L then A ⟨v.val - a, by omega⟩ x y
+    else if x = η ⟨v, h⟩ ∧ y = θ ⟨v, h⟩ then 1 else 0
+  have hcore (v : Fin L) (x y : Fin q) :
+      Af ⟨a + v.val, by omega⟩ x y = A v x y := by
+    simp [Af, show a ≤ a + v.val ∧ a + v.val < a + L by omega]
+  have hoff (v : Fin T) (hv : ¬(a ≤ v.val ∧ v.val < a + L)) :
+      Af v (η ⟨v, hv⟩) (θ ⟨v, hv⟩) = 1 := by
+    simp [Af, hv]
+  have hcap : MPOTensor.actualRetainedIntervalClosing Af C a ha η θ = C := by
+    simp [MPOTensor.actualRetainedIntervalClosing, retainedIntervalPrefix,
+      retainedIntervalSuffix, hoff]
+  refine ⟨Af, ?_⟩
+  intro σ τ
+  rw [retainedSingle_kronecker_entry]
+  by_cases h :
+      (fun v : {v : Fin T // ¬(a ≤ v.val ∧ v.val < a + L)} ↦ σ v.val) = η ∧
+      (fun v : {v : Fin T // ¬(a ≤ v.val ∧ v.val < a + L)} ↦ τ v.val) = θ
+  · rw [ite_eq_left h]
+    let σin : Fin L → Fin q := fun v ↦ σ ⟨a + v.val, by omega⟩
+    let τin : Fin L → Fin q := fun v ↦ τ ⟨a + v.val, by omega⟩
+    have hσ : retainedIntervalEquiv a ha (η, σin) = σ := by
+      have hx : (retainedIntervalEquiv a ha).symm σ = (η, σin) :=
+        Prod.ext h.1 rfl
+      rw [← hx]
+      exact (retainedIntervalEquiv a ha).apply_symm_apply σ
+    have hτ : retainedIntervalEquiv a ha (θ, τin) = τ := by
+      have hx : (retainedIntervalEquiv a ha).symm τ = (θ, τin) :=
+        Prod.ext h.2 rfl
+      rw [← hx]
+      exact (retainedIntervalEquiv a ha).apply_symm_apply τ
+    have htrace := MPOTensor.trace_actual_retainedInterval_eq Af C a ha η θ σin τin
+    rw [hσ, hτ] at htrace
+    simpa only [Matrix.of_apply, hcap, hcore] using htrace.symm
+  · rw [ite_eq_right h]
+    obtain ⟨v, hv⟩ : ∃ v : {v : Fin T // ¬(a ≤ v.val ∧ v.val < a + L)},
+        σ v.val ≠ η v ∨ τ v.val ≠ θ v := by
+      rcases not_and_or.mp h with hη | hθ
+      · obtain ⟨v, hv⟩ := Function.ne_iff.mp hη
+        exact ⟨v, Or.inl hv⟩
+      · obtain ⟨v, hv⟩ := Function.ne_iff.mp hθ
+        exact ⟨v, Or.inr hv⟩
+    have hbad : ¬(σ v.val = η v ∧ τ v.val = θ v) := by
+      intro hh
+      exact hv.elim (fun he ↦ he hh.1) (fun he ↦ he hh.2)
+    have hz : Af v.val (σ v.val) (τ v.val) = 0 := by
+      simp [Af, v.property, hbad]
+    have hmem : (0 : Matrix (Fin D) (Fin D) ℂ) ∈
+        List.ofFn (fun v ↦ Af v (σ v) (τ v)) := by
+      simp only [List.mem_ofFn]
+      exact ⟨v.val, hz⟩
+    simp only [List.prod_eq_zero hmem, Matrix.mul_zero, Matrix.trace_zero]
 
 /-- Insert a retained matrix unit around an actual operator core in the original
 physical order. A pair-alphabet open-boundary witness for the core gives the
@@ -467,6 +558,73 @@ end TNLean.MPS.AreaLaw
 namespace MPOTensor
 
 open TNLean.MPS.AreaLaw
+
+/-- Insert a fixed retained matrix unit into a trace-presented interval operator
+in natural site order. The site tensors change but the supplied cap and virtual
+dimension do not. Empty cores and targets and zero dimensions are included.
+Supporting explicit trace algebra for ALVV, arXiv:1602.08828v2,
+Proposition 5.7, lines 1332–1333. -/
+theorem exists_traceChainOperator_retainedSingle_insert {T L q D : ℕ}
+    (A : Fin L → MPOTensor q D) (C : Matrix (Fin D) (Fin D) ℂ)
+    (a : ℕ) (ha : a + L ≤ T)
+    (η θ : {v : Fin T // ¬(a ≤ v.val ∧ v.val < a + L)} → Fin q) :
+    ∃ Af : Fin T → MPOTensor q D,
+      ((Matrix.single η θ (1 : ℂ)) ⊗ₖ traceChainOperator A C).submatrix
+        (retainedIntervalEquiv a ha).symm (retainedIntervalEquiv a ha).symm =
+          traceChainOperator Af C := by
+  obtain ⟨Af, hAf⟩ := exists_retainedSingle_trace_tensors a ha η θ A C
+  refine ⟨Af, ?_⟩
+  unfold traceChainOperator
+  ext σ τ
+  exact hAf σ τ
+
+/-- Restrict a trace-presented chain to a contiguous interval at fixed row and
+column coordinates, then extend it at prescribed retained configurations.
+The virtual dimension is unchanged and the new closing matrix is fixed before
+the variable target entries. Empty chains, overlaps and targets and zero
+physical or virtual dimensions are included whenever the configurations exist.
+Supporting explicit trace algebra for ALVV, arXiv:1602.08828v2,
+Proposition 5.7, lines 1332–1333. -/
+theorem exists_traceChainOperator_intervalSlice_extend_by_configuration
+    {T len N q D : ℕ}
+    (A : Fin T → MPOTensor q D) (C : Matrix (Fin D) (Fin D) ℂ)
+    (a : ℕ) (ha : a + len ≤ T) (fixedRow fixedCol : Fin T → Fin q)
+    (b : ℕ) (hb : b + len ≤ N)
+    (outsideRow outsideCol :
+      {v : Fin N // ¬(b ≤ v.val ∧ v.val < b + len)} → Fin q) :
+    ∃ C' : Matrix (Fin D) (Fin D) ℂ, ∃ A' : Fin N → MPOTensor q D,
+      (fun σ τ : Fin N → Fin q ↦
+        if (fun v : {v : Fin N // ¬(b ≤ v.val ∧ v.val < b + len)} ↦
+            σ v.val) = outsideRow ∧
+          (fun v : {v : Fin N // ¬(b ≤ v.val ∧ v.val < b + len)} ↦
+            τ v.val) = outsideCol then
+          traceChainOperator A C
+            (insertInterval a fixedRow (fun v : Fin len ↦ σ ⟨b + v.val, by omega⟩))
+            (insertInterval a fixedCol (fun v : Fin len ↦ τ ⟨b + v.val, by omega⟩))
+        else 0) = traceChainOperator A' C' := by
+  let C' := actualRetainedIntervalClosing A C a ha
+    (fun v ↦ fixedRow v.val) (fun v ↦ fixedCol v.val)
+  let Ain : Fin len → MPOTensor q D := fun v ↦ A ⟨a + v.val, by omega⟩
+  obtain ⟨A', hA'⟩ := exists_traceChainOperator_retainedSingle_insert
+    Ain C' b hb outsideRow outsideCol
+  refine ⟨C', A', ?_⟩
+  rw [← hA']
+  ext σ τ
+  rw [retainedSingle_kronecker_entry]
+  split_ifs with h
+  · unfold traceChainOperator
+    have hrow (x : Fin len → Fin q) :
+        retainedIntervalEquiv a ha ((fun v ↦ fixedRow v.val), x) =
+          insertInterval a fixedRow x := rfl
+    have hcol (x : Fin len → Fin q) :
+        retainedIntervalEquiv a ha ((fun v ↦ fixedCol v.val), x) =
+          insertInterval a fixedCol x := rfl
+    have htrace := trace_actual_retainedInterval_eq A C a ha
+      (fun v ↦ fixedRow v.val) (fun v ↦ fixedCol v.val)
+      (fun v : Fin len ↦ σ ⟨b + v.val, by omega⟩)
+      (fun v : Fin len ↦ τ ⟨b + v.val, by omega⟩)
+    simpa only [Ain, C', hrow, hcol] using htrace
+  · rfl
 
 /-- The actual scalar-closed stack, inserted beside a retained matrix unit in
 natural interval order, has the same open-boundary square bound as the core.

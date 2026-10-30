@@ -49,7 +49,7 @@
     \end{tenkzequation}
 \end{definition}
 
-\begin{theorem}[The multiplicity-restoring bond isometry]%
+\begin{lemma}[The multiplicity-restoring bond isometry]%
     \label{thm:peps_multiplicity_bond_isometry}
     \lean{TNLean.PEPS.trace_multiplicityBondMap_conjTranspose_mul,
         TNLean.PEPS.multiplicityBondMap_injective,
@@ -63,7 +63,7 @@
         =\sum_i\tr[X_i^\dagger Y_i].
     \end{align}
     In particular, it is injective.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     For each block,
@@ -77,7 +77,7 @@
     only on the zero matrix, which proves injectivity.
 \end{proof}
 
-\begin{theorem}[The weighted semi-regular bond becomes a regular bond]%
+\begin{lemma}[The weighted semi-regular bond becomes a regular bond]%
     \label{thm:peps_multiplicity_bond_weight}
     \lean{TNLean.PEPS.multiplicityBondMap_sqrt_smul,
         TNLean.PEPS.multiplicityBondFamilyMap_sqrt_smul}
@@ -92,7 +92,7 @@
     compared in \cite[Section~7]{Schuch2010PEPS}. This establishes the
     isometry on the bond matrix spaces; the equality of complete PEPS
     contractions after its application on all bonds is a further statement.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     In each block the factors $m_i^{-1/2}$ and $\sqrt{m_i}$ cancel.
