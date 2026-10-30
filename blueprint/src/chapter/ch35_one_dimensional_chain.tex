@@ -2942,7 +2942,8 @@ In particular the ground eigenspace is one-dimensional.
         TNLean.MPS.AreaLaw.card_crossingTerms_stripPrefix_le}
     \leanok
     \uses{def:strip_column_model, thm:area_diamond_count,
-        thm:area_law_crossing_supports}
+        thm:area_law_crossing_supports, thm:area_law_buffer_contours,
+        thm:area_law_initial_buffer}
     Every admissible support has at most $v_R$ sites, hence dimension at
     most $q^{v_R}$, and at most $\mu_R$ admissible supports contain any
     specified site. The one-dimensional bound $q^{R+1}$ does not hold for
@@ -2957,7 +2958,8 @@ In particular the ground eigenspace is one-dimensional.
 \begin{proof}
     \leanok
     \uses{def:strip_column_model, thm:area_diamond_count,
-        thm:area_law_crossing_supports}
+        thm:area_law_crossing_supports, thm:area_law_buffer_contours,
+        thm:area_law_initial_buffer}
     The bounds on the size of a support and on the number of supports
     containing a site are the lattice support counts, since $v_R-1=2R(R+1)$.
     A crossing support has an inside site in the two bands
@@ -3056,7 +3058,8 @@ In particular the ground eigenspace is one-dimensional.
         TNLean.MPS.AreaLaw.surprisalTail_stripSnakePrefix_le,
         TNLean.MPS.AreaLaw.surprisalTail_stripSnakeState_le}
     \leanok
-    \uses{def:strip_snake, thm:strip_area_law, lem:strip_column_geometry}
+    \uses{def:strip_snake, thm:strip_area_law, lem:strip_column_geometry,
+        thm:area_law_initial_buffer}
     Put $b'=1+(R+1)\mu_R\ell_R^2$ and $s=\sqrt{tb'w}$.
     Every snake prefix $P$ has entropy at most $C_0tw^2+w\log q$ and
     cut budget at most $b'w$. Its actual marginal satisfies
@@ -3064,7 +3067,8 @@ In particular the ground eigenspace is one-dimensional.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:strip_area_law, lem:strip_column_geometry, def:strip_snake}
+    \uses{thm:strip_area_law, lem:strip_column_geometry, def:strip_snake,
+        thm:area_law_initial_buffer}
     A prefix lies between two consecutive whole-column prefixes; its
     additional region has at most $w$ sites. Subadditivity gives the entropy
     estimate, and the partial-column crossing count gives the cut budget.
