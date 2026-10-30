@@ -27,11 +27,14 @@ equations displayed at MPSarchive.tex lines 1139-1152:
   window;
 * `∑ i, B i * (B i)ᴴ = 1`.
 
-The reconstruction theorem (MPSarchive.tex lines 1154-1165) asserts that the
-system is solvable whenever the state admits a translation-invariant
-representation with condition C1, and that any solution is unitarily conjugate
-to the canonical one. Its proof reduces, as in the uniqueness theorem
-`thm-uniq`, to two lemmas formalized below: the chain-combination lemma
+The printed reconstruction theorem (MPSarchive.tex lines 1154-1165) claims
+solvability from condition C1 and an unrestricted exact unitary conclusion.
+Its corrected same-state converse requires the separate actual nonzero
+fixed-length state equality, both endpoint cuts and an Nth-root phase; see
+`docs/paper-gaps/pgvwc07_quadratic_reconstruction_phase.tex` and the companion
+`QuadraticReconstructionConverse` module. The internal equations alone do not
+supply that state equality. The algebraic proof uses, as in the uniqueness
+theorem `thm-uniq`, the two lemmas formalized below: the chain-combination lemma
 `lem-same-matr` (lines 1022-1049) and the Kronecker intertwiner lemma
 `lem-horn` (lines 1053-1058).
 
