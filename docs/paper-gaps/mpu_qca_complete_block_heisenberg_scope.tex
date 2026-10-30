@@ -108,6 +108,50 @@ original-site radius follows from the source simple-block bound. The
 remaining source assembly is tracked by TNLean issue~\#7013; the induced
 QCA evaluation is also required by issue~\#7040.
 
+The finite inverse step can be separated from periodic boundary
+relocation. The actual finite star-automorphism reflects forward
+commutators, and the finite outside-singleton relative commutant recovers
+inverse support. With the supplied standard form, the actual inverse
+conjugation of an observable on $[b,b+L)$ is supported inside the finite
+chain intersected with
+\begin{align}
+    [b-4k,b+L+4k)\cup[a,a+2k)\cup[a+N-4k,a+N).
+\end{align}
+The declarations
+\leanid{SpinChain.inverse_mem_range_localInclusion_of_forward_support} and
+\leanid{SpinChain.finiteChainConjugation_symm_mem_range_bufferedRegion}
+write this step without an inverse-locality or compatibility premise.
+The two boundary collars remain explicit in this first statement.
+The subsequent cyclic argument removes them on rings of length at least
+$6k$. The finite statement alone is not a completed QCA theorem.
+Lean checking is pending.
+
+The exact cyclic relocation identities for both actual conjugations
+are now written in
+\leanid{MPOTensor.mpo_conjugation_submatrix_rotateConfig} and
+\leanid{MPOTensor.mpo_adjointConjugation_submatrix_rotateConfig}.
+They reuse closed-trace invariance of the periodic MPO; simultaneous
+reindexing preserves products and adjoints. Existing operator support
+therefore rotates with the input even across the seam. Identifying the
+actual standard-form input window with the complete central interval
+gives an actual singleton bound at one interior site. Finite cyclic
+induction now gives the same radius $4k$ at every site of every ring
+$N\geq 6k$, including its seam, in
+\leanid{MPOTensor.mpo_conjugation_mem_supportedOperators_singleton}.
+
+Numbering an arbitrary canonical local inclusion agrees with the
+existing finite site embedding. Thus the actual forward singleton
+bounds give disjoint commutators for every singleton outside the ring
+neighbourhood of an arbitrary target. Reflecting them through the actual
+finite unitary and applying its outside commutant proves boundary-free
+finite inverse support in
+\leanid{SpinChain.finiteChainConjugation_symm_mem_range_ringNeighbourhood}.
+Only the forward supplied standard form is used; inverse standard form,
+inverse locality and inverse compatibility are not hypotheses. These
+source-written results are pending Lean checking. A compatible inverse
+family, surjectivity on completion, construction of standard form from
+bare MPU data, and the source bond-dimension radius remain separate.
+
 \bibliographystyle{alpha}
 \bibliography{references}
 \end{document}
