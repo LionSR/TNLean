@@ -42,14 +42,14 @@ noncomputable def commonPhysicalEmbedding {ι : Type*} [Fintype ι]
 embeds isometrically into a common-alphabet chain by extension by zero.
 Source: PGVWC07, arbitrary consecutive blocking before Theorem 9, lines 1195–1201. -/
 noncomputable def commonPhysicalConfigurationIsometry {ι : Type*} [Fintype ι]
-    (q : ι → ℕ) : EuclideanSpace ℂ ((i : ι) → Fin (q i)) →ₗᵢ[ℂ]
+    [DecidableEq ι] (q : ι → ℕ) : EuclideanSpace ℂ ((i : ι) → Fin (q i)) →ₗᵢ[ℂ]
       EuclideanSpace ℂ (ι → Fin (∑ j, q j)) :=
   (Function.Embedding.piCongrRight (commonPhysicalEmbedding q)).euclideanExtendByZero
 
 /-- Every actual physical coefficient is preserved by the full configuration
 embedding, without a dimension-dependent factor. -/
 @[simp] theorem commonPhysicalConfigurationIsometry_apply_image
-    {ι : Type*} [Fintype ι] (q : ι → ℕ)
+    {ι : Type*} [Fintype ι] [DecidableEq ι] (q : ι → ℕ)
     (v : EuclideanSpace ℂ ((i : ι) → Fin (q i))) (σ : (i : ι) → Fin (q i)) :
     commonPhysicalConfigurationIsometry q v (fun i ↦ commonPhysicalEmbedding q i (σ i)) =
       v σ :=
@@ -60,6 +60,7 @@ variable {I J K L a b c : Type*}
   [Fintype I] [Fintype J] [Fintype K] [Fintype L]
   [Fintype a] [Fintype b] [Fintype c]
 
+omit [Fintype I] [Fintype J] [Fintype a] [Fintype b] in
 /-- Extending a physical matrix family by zero preserves its actual rectangular
 span, hence its C1 condition. Source: PGVWC07, Theorem 9, lines 1199–1201. -/
 theorem span_range_extend_physical (e : I ↪ J) (A : I → Matrix a b ℂ) :
@@ -73,13 +74,14 @@ theorem span_range_extend_physical (e : I ↪ J) (A : I → Matrix a b ℂ) :
     · obtain ⟨i, rfl⟩ := hj
       rw [e.injective.extend_apply]
       exact Submodule.subset_span (Set.mem_range_self i)
-    · rw [Function.extend_apply' A 0 j hj]
+    · rw [Function.extend_apply' (f := ⇑e) A 0 j hj]
       exact Submodule.zero_mem _
   · apply Submodule.span_le.mpr
     rintro _ ⟨i, rfl⟩
     rw [← e.injective.extend_apply A 0 i]
     exact Submodule.subset_span (Set.mem_range_self (e i))
 
+omit [Fintype a] in
 /-- Extension by zero preserves the canonical row sum exactly, without a
 dimension or normalization factor. Source: PGVWC07, Theorem 9 proof,
 canonical row identity at lines 1224–1229. -/
@@ -90,7 +92,7 @@ theorem sum_mul_conjTranspose_extend_physical (e : I ↪ J) (A : I → Matrix a 
   symm
   apply Fintype.sum_of_injective e e.injective
   · intro j hj
-    rw [Function.extend_apply' A 0 j hj]
+    rw [Function.extend_apply' (f := ⇑e) A 0 j hj]
     simp
   · intro i
     rw [e.injective.extend_apply]
@@ -101,8 +103,17 @@ noncomputable def rectangularPairBoundary (A : I → Matrix a b ℂ) (B : K → 
     Matrix c a ℂ →ₗ[ℂ] EuclideanSpace ℂ (I × K) :=
   (WithLp.linearEquiv 2 ℂ ((I × K) → ℂ)).symm.toLinearMap.comp
     (LinearMap.pi fun ik ↦ (Matrix.traceLinearMap c ℂ ℂ).comp
-      (Matrix.mulRightLinearMap c ℂ (A ik.1 * B ik.2)))
+      (_root_.mulRightLinearMap c ℂ (A ik.1 * B ik.2)))
 
+omit [Fintype I] [Fintype K] in
+/-- Coordinates of the rectangular pair boundary map are two-site traces.
+Source: PGVWC07, Theorem 9, lines 1201–1205. -/
+theorem rectangularPairBoundary_apply (A : I → Matrix a b ℂ) (B : K → Matrix b c ℂ)
+    (X : Matrix c a ℂ) (ik : I × K) :
+    rectangularPairBoundary A B X ik = Matrix.trace (X * (A ik.1 * B ik.2)) := by
+  simp [rectangularPairBoundary, Matrix.mul_assoc]
+
+omit [Fintype I] [Fintype J] [Fintype K] [Fintype L] in
 private theorem extend_rectangular_pair_coefficients
     (e : I ↪ J) (f : K ↪ L) (A : I → Matrix a b ℂ) (B : K → Matrix b c ℂ)
     (X : Matrix c a ℂ) (j : J) (l : L) :
@@ -114,17 +125,17 @@ private theorem extend_rectangular_pair_coefficients
   · obtain ⟨i, rfl⟩ := hj
     by_cases hl : ∃ k, f k = l
     · obtain ⟨k, rfl⟩ := hl
-      rw [(e.prodMap f).injective.extend_apply,
-        e.injective.extend_apply, f.injective.extend_apply]
+      rw [e.injective.extend_apply, f.injective.extend_apply]
+      exact (e.prodMap f).injective.extend_apply _ (0 : J × L → ℂ) (i, k)
     · have hp : ¬ ∃ ik, e.prodMap f ik = (e i, l) := by
         rintro ⟨⟨i', k⟩, h⟩
         exact hl ⟨k, congrArg Prod.snd h⟩
-      rw [Function.extend_apply' _ _ _ hp, Function.extend_apply' B 0 l hl]
+      rw [Function.extend_apply' _ _ _ hp, Function.extend_apply' (f := ⇑f) B 0 l hl]
       simp
   · have hp : ¬ ∃ ik, e.prodMap f ik = (j, l) := by
       rintro ⟨⟨i, k⟩, h⟩
       exact hj ⟨i, congrArg Prod.fst h⟩
-    rw [Function.extend_apply' _ _ _ hp, Function.extend_apply' A 0 j hj]
+    rw [Function.extend_apply' _ _ _ hp, Function.extend_apply' (f := ⇑e) A 0 j hj]
     simp
 
 /-- The pair boundary range of the zero-extended families is exactly the
@@ -137,13 +148,18 @@ theorem range_rectangularPairBoundary_extend_physical
         (e.prodMap f).euclideanExtendByZero.toLinearMap := by
   rw [← LinearMap.range_comp]
   congr 1
-  ext X jl
-  rw [LinearMap.comp_apply, LinearIsometry.coe_toLinearMap,
-    Function.Embedding.euclideanExtendByZero_apply]
-  simp only [rectangularPairBoundary, LinearMap.comp_apply, LinearEquiv.coe_toLinearMap,
-    WithLp.coe_symm_linearEquiv, PiLp.toLp_apply, LinearMap.pi_apply,
-    Matrix.mulRightLinearMap_apply, Matrix.traceLinearMap_apply]
-  exact (extend_rectangular_pair_coefficients e f A B X jl.1 jl.2).symm
+  ext X ⟨j, l⟩
+  change rectangularPairBoundary _ _ X (j, l) =
+    Function.extend (e.prodMap f) (fun ik ↦ rectangularPairBoundary A B X ik) 0 (j, l)
+  simp only [rectangularPairBoundary_apply]
+  exact (extend_rectangular_pair_coefficients e f A B X j l).symm
+
+private theorem starProjection_eq_of_eq {F : Type*} [NormedAddCommGroup F]
+    [InnerProductSpace ℂ F] {K₁ K₂ : Submodule ℂ F}
+    [K₁.HasOrthogonalProjection] [K₂.HasOrthogonalProjection]
+    (h : K₁ = K₂) (x : F) : K₁.starProjection x = K₂.starProjection x := by
+  subst h
+  rfl
 
 /-- The actual complementary pair projectors intertwine with the physical
 embedding, even when the two physical alphabets have different sizes.
@@ -156,17 +172,17 @@ theorem pair_parent_projection_extend_physical
         ((e.prodMap f).euclideanExtendByZero v) =
       (e.prodMap f).euclideanExtendByZero
         ((LinearMap.range (rectangularPairBoundary A B))ᗮ.starProjection v) := by
-  simp only [range_rectangularPairBoundary_extend_physical]
-  let E := (e.prodMap f).euclideanExtendByZero
-  let G := LinearMap.range (rectangularPairBoundary A B)
-  change (G.map E.toLinearMap)ᗮ.starProjection (E v) = E (Gᗮ.starProjection v)
+  set E := (e.prodMap f).euclideanExtendByZero
+  set G := LinearMap.range (rectangularPairBoundary A B)
+  have hrange := range_rectangularPairBoundary_extend_physical e f A B
   calc
-    (G.map E.toLinearMap)ᗮ.starProjection (E v) =
-        E v - (G.map E.toLinearMap).starProjection (E v) := by
-      rw [Submodule.starProjection_orthogonal']
+    _ = (G.map E.toLinearMap)ᗮ.starProjection (E v) :=
+      starProjection_eq_of_eq (congrArg (fun S : Submodule ℂ _ ↦ Sᗮ) hrange) (E v)
+    _ = E v - (G.map E.toLinearMap).starProjection (E v) := by
+      rw [Submodule.starProjection_orthogonal_val]
     _ = E (v - G.starProjection v) := by
       rw [map_sub, E.map_starProjection G v]
     _ = E (Gᗮ.starProjection v) := by
-      rw [Submodule.starProjection_orthogonal']
+      rw [Submodule.starProjection_orthogonal_val]
 
 end Matrix

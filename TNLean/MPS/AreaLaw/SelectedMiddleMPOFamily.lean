@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.PhysicalIntervalTransport
 import TNLean.MPS.AreaLaw.RetainedCoreFamilies
+import TNLean.MPS.AreaLaw.RetainedCoreTracePresentation
 import TNLean.MPS.AreaLaw.SelectedCoefficientDecomposition
 import TNLean.MPS.AreaLaw.SelectedMiddleData
 import TNLean.MPS.AreaLaw.TraceCoreSlices
@@ -181,12 +182,12 @@ namespace MPOTensor
 
 open TNLean.MPS.AreaLaw
 
-/-- Every supplied ordered affine word admits a finite matrix product
-operator decomposition in the original site order. The family has exactly
-(length+1) times the square of the retained configuration dimension terms;
-its term of degree t has the general open bond bound (B^t)^2.
-Supporting algebra for ALVV, arXiv:1602.08828v2, Proposition 5.7,
-lines 1324–1333. This bound does not establish the paper's sharper estimate. -/
+/-- The actual finite affine family retains both its general open-boundary
+estimate and a trace contraction at the unsquared virtual dimension. The
+closing matrix and site tensors describe the whole member before its physical
+configurations are evaluated. No rank hypothesis is imposed on that closing
+matrix. Supporting contraction algebra for ALVV, arXiv:1602.08828v2,
+Proposition 5.7, lines 1324–1333. -/
 private theorem exists_finite_actual_natural_affine_family {T L q B : ℕ}
     (Afull : Fin T → MPOTensor q B) (C : Matrix (Fin B) (Fin B) ℂ)
     (a : ℕ) (ha : a + L ≤ T)
@@ -198,6 +199,9 @@ private theorem exists_finite_actual_natural_affine_family {T L q B : ℕ}
       (∀ r, IsOpenMPS T (q * q) ((B ^ (t r).val) ^ 2) (fun w ↦ V r
         (fun v ↦ ((finProdFinEquiv (m := q) (n := q)).symm (w v)).1)
         (fun v ↦ ((finProdFinEquiv (m := q) (n := q)).symm (w v)).2))) ∧
+      (∀ r, ∃ Cr : Matrix (Fin (B ^ (t r).val)) (Fin (B ^ (t r).val)) ℂ,
+        ∃ Ar : Fin T → MPOTensor q (B ^ (t r).val),
+          V r = traceChainOperator Ar Cr) ∧
       (steps.map (fun z : Matrix (actualAffineRetainedConfig T L q a)
           (actualAffineRetainedConfig T L q a) ℂ × ℂ ↦
         (z.1 ⊗ₖ (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)).submatrix
@@ -211,9 +215,17 @@ private theorem exists_finite_actual_natural_affine_family {T L q B : ℕ}
     actualRetainedIntervalClosing Afull C a ha η θ ab.2 ab.1
   let Ainterval : Fin L → MPOTensor q B :=
     fun v ↦ Afull ⟨a + v.val, by omega⟩
-  obtain ⟨t, _, _, V, _, hV, hprod⟩ :=
+  obtain ⟨t, η, θ, V, hVeq, hV, hprod⟩ :=
     exists_finite_natural_retained_core_family a ha R steps Ainterval
-  exact ⟨t, V, hV, (prod_actual_natural_affine_eq Afull C a ha steps).trans hprod⟩
+  refine ⟨t, V, hV, ?_, (prod_actual_natural_affine_eq Afull C a ha steps).trans hprod⟩
+  intro r
+  obtain ⟨Cr, hCr⟩ := exists_retainedStackCore_traceChainOperator
+    R steps Ainterval (t r).val (η r) (θ r)
+  obtain ⟨Ar, hAr⟩ := exists_traceChainOperator_retainedSingle_insert
+    (fun v : Fin L ↦ stackedTensor (Ainterval v) (t r).val) Cr a ha (η r) (θ r)
+  refine ⟨Cr, Ar, ?_⟩
+  rw [hVeq r, hCr]
+  exact hAr
 
 end MPOTensor
 
@@ -270,6 +282,9 @@ private noncomputable def actualSelectedMiddleWordStatement
             (∀ r, IsOpenMPS N (q * q) ((B ^ (t r).val) ^ 2) (fun w ↦ V r
               (fun v ↦ ((finProdFinEquiv (m := q) (n := q)).symm (w v)).1)
               (fun v ↦ ((finProdFinEquiv (m := q) (n := q)).symm (w v)).2))) ∧
+            (∀ r, ∃ Cr : Matrix (Fin (B ^ (t r).val)) (Fin (B ^ (t r).val)) ℂ,
+              ∃ Ar : Fin N → MPOTensor q (B ^ (t r).val),
+                V r = MPOTensor.traceChainOperator Ar Cr) ∧
             (twoMarkerMiddleFactor (zmid • ME + K) U W pIndex).submatrix
               (fun σ : Fin N → Fin q ↦ σ ∘ eE.symm)
               (fun σ : Fin N → Fin q ↦ σ ∘ eE.symm) = ∑ r, V r
@@ -388,9 +403,9 @@ private theorem exists_actual_selected_middle_word_mpo_family
         change natPull (Entropy.localLift C x.1 + x.2 • ME) =
           place (g x.1) + x.2 • Hnat
         rw [map_add, map_smul, hg, hME]
-  obtain ⟨t, V, hV, hsum⟩ :=
+  obtain ⟨t, V, hV, htrace, hsum⟩ :=
     MPOTensor.exists_finite_actual_natural_affine_family Afull C0 aNat ha stepsNat
-  refine ⟨stepsNat.length, hlengthNat, hbound, t, V, hV, ?_⟩
+  refine ⟨stepsNat.length, hlengthNat, hbound, t, V, hV, htrace, ?_⟩
   rw [← hnatPull]
   exact hproduct.trans hsum
 
@@ -440,6 +455,9 @@ theorem exists_common_physical_twoMarkerCoefficient_mpo_family
     (∀ r, IsOpenMPS Nnat (q * q) ((B ^ (deg r).val) ^ 2) (fun w ↦ V r
       (fun v ↦ ((finProdFinEquiv (m := q) (n := q)).symm (w v)).1)
       (fun v ↦ ((finProdFinEquiv (m := q) (n := q)).symm (w v)).2))) ∧
+    (∀ r, ∃ Cr : Matrix (Fin (B ^ (deg r).val)) (Fin (B ^ (deg r).val)) ℂ,
+      ∃ Ar : Fin Nnat → MPOTensor q (B ^ (deg r).val),
+        V r = MPOTensor.traceChainOperator Ar Cr) ∧
     ∀ (PL PR : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ),
       Entropy.IsSupportedOn PL (interval L 0 (a + 1)) →
       Entropy.IsSupportedOn PR (interval L (b + 2 * ell) L) →
@@ -506,21 +524,24 @@ theorem exists_common_physical_twoMarkerCoefficient_mpo_family
         (∀ r, IsOpenMPS Nnat (q * q) ((B ^ (t r).val) ^ 2) (fun v ↦ Vw r
           (fun x ↦ ((finProdFinEquiv (m := q) (n := q)).symm (v x)).1)
           (fun x ↦ ((finProdFinEquiv (m := q) (n := q)).symm (v x)).2))) ∧
+        (∀ r, ∃ Cr : Matrix (Fin (B ^ (t r).val)) (Fin (B ^ (t r).val)) ℂ,
+          ∃ Ar : Fin Nnat → MPOTensor q (B ^ (t r).val),
+            Vw r = MPOTensor.traceChainOperator Ar Cr) ∧
         natPsi w = ∑ r, Vw r := by
-    obtain ⟨dw, hdw, _hdk, t, Vw, hVw, hsum⟩ :=
+    obtain ⟨dw, hdw, _hdk, t, Vw, hVw, htrace, hsum⟩ :=
       exists_actual_selected_middle_word_mpo_family
         (L := L) (a := a) (b := b) (ell := ell) (q := q) (B := B)
         (rU := q * q) (rV := q * q) hab hb p s Acore C0 (z (Sum.inr 1))
         Kz (Nmid eL) (Nmid eR) hKz hNL hNR k i j w
     have hdw' : dw = d w := hdw
     subst dw
-    refine ⟨t, Vw, hVw, ?_⟩
+    refine ⟨t, Vw, hVw, htrace, ?_⟩
     change (twoMarkerMiddleFactor A (Nmid eL) (Nmid eR) w).submatrix
       (fun σ : Fin Nnat → Fin q ↦ σ ∘ eE.symm)
       (fun σ : Fin Nnat → Fin q ↦ σ ∘ eE.symm) = ∑ r, Vw r
     rw [hA]
     exact hsum
-  choose tWord VWord hVWord hPsiWord using hword
+  choose tWord VWord hVWord hTraceWord hPsiWord using hword
   let I := Σ w : Widx, Fin (nw w)
   let n := Fintype.card I
   let enum : I ≃ Fin n := Fintype.equivFin I
@@ -547,6 +568,12 @@ theorem exists_common_physical_twoMarkerCoefficient_mpo_family
       (fun v ↦ ((finProdFinEquiv (m := q) (n := q)).symm (w v)).2)) := by
     intro r
     exact hVWord (enum.symm r).1 (enum.symm r).2
+  have hTrace : ∀ r, ∃ Cr : Matrix (Fin (B ^ (deg r).val))
+      (Fin (B ^ (deg r).val)) ℂ,
+      ∃ Ar : Fin Nnat → MPOTensor q (B ^ (deg r).val),
+        V r = MPOTensor.traceChainOperator Ar Cr := by
+    intro r
+    exact hTraceWord (enum.symm r).1 (enum.symm r).2
   let S : Submodule ℂ (Matrix (Fin Nnat → Fin q) (Fin Nnat → Fin q) ℂ) :=
     Submodule.span ℂ (Set.range V)
   have hgenerator (w : Widx) (r : Fin (nw w)) : VWord w r ∈ S := by
@@ -557,7 +584,7 @@ theorem exists_common_physical_twoMarkerCoefficient_mpo_family
   have hPsiSpan (w : Widx) : natPsi w ∈ S := by
     rw [hPsiWord w]
     exact S.sum_mem (fun r _hr ↦ hgenerator w r)
-  refine ⟨n, deg, V, hcount, hV, ?_⟩
+  refine ⟨n, deg, V, hcount, hV, hTrace, ?_⟩
   intro PL PR hPL hPR F Dphys cPoly
   obtain ⟨Bword, hBword⟩ := hphysical PL PR hPL hPR cPoly
   let Ext := (T → Fin q) × (↥(T ∪ E)ᶜ → Fin q)

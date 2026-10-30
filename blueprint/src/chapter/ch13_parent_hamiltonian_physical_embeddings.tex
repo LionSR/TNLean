@@ -5,7 +5,7 @@
     \lean{Function.Embedding.euclideanExtendByZero,
         Function.Embedding.euclideanExtendByZero_apply_image,
         Function.Embedding.euclideanExtendByZero_apply_not_mem_range}
-    \notready
+    \leanok
     For an injection $e:I\hookrightarrow J$ of finite sets, let
     $E_e:\mathbb C^I\to\mathbb C^J$ extend each coefficient family by zero:
     \begin{align}
@@ -19,8 +19,7 @@
     injection of dependent configuration sets induced by a family of
     physical embeddings.
 \end{definition}
-\begin{proof}
-    \notready
+\begin{proof}\leanok
     The sum of $|(E_e\xi)(j)|^2$ over $j\in J$ equals the sum of
     $|\xi(i)|^2$ over $i\in I$, since every coefficient outside $e(I)$ is
     zero and each coefficient in $e(I)$ occurs once.
@@ -31,12 +30,12 @@
     \lean{Matrix.commonPhysicalEmbedding,
         Matrix.commonPhysicalConfigurationIsometry,
         Matrix.commonPhysicalConfigurationIsometry_apply_image}
-    \notready
+    \leanok
     \uses{def:physical_euclidean_extension_zero}
     Let a finite family of sites have physical dimensions $d_i$, and set
     $D=\sum_i d_i$. Each alphabet $\{0,\ldots,d_i-1\}$ embeds in
     $\{0,\ldots,D-1\}$ by retaining its numerical label. The induced injection
-    of dependent configuration sets gives an actual linear isometry from
+    of dependent configuration sets gives a linear isometry from
     the physical chain space into the common-alphabet chain space.
     Each original coefficient is preserved and all coefficients outside
     the image vanish.
@@ -46,35 +45,35 @@
     \label{lem:varying_physical_extension_span_row}
     \lean{Matrix.span_range_extend_physical,
         Matrix.sum_mul_conjTranspose_extend_physical}
-    \notready
+    \leanok
     Let $A_i\in M_{a,b}(\mathbb C)$ and $e:I\hookrightarrow J$ be an injection
     of finite physical alphabets. Define $\widetilde A_{e(i)}=A_i$ and
     $\widetilde A_j=0$ outside the image. Then
     \begin{align}
         \operatorname{span}\{\widetilde A_j:j\in J\}
          & =\operatorname{span}\{A_i:i\in I\},
-         & \sum_{j\in J}\widetilde A_j\widetilde A_j^*
-         & =\sum_{i\in I}A_iA_i^*.
+         & \sum_{j\in J}\widetilde A_j\widetilde A_j^\dagger
+         & =\sum_{i\in I}A_iA_i^\dagger.
     \end{align}
     Thus both the spanning condition and canonical row normalization are
     unchanged by physical extension.
 \end{lemma}
-\begin{proof}
-    \notready
+\begin{proof}\leanok
     Every original matrix occurs at its embedded label; every added matrix
     is zero. The same observation removes the zero terms from the row sum.
 \end{proof}
 
-\begin{lemma}[Actual pair boundary ranges and parent projectors intertwine]
+\begin{lemma}[Pair boundary ranges and parent projectors intertwine]
     \label{lem:varying_physical_pair_projection_transport}
     \lean{Matrix.rectangularPairBoundary,
+        Matrix.rectangularPairBoundary_apply,
         Matrix.range_rectangularPairBoundary_extend_physical,
         Matrix.pair_parent_projection_extend_physical}
-    \notready
+    \leanok
     \uses{def:physical_euclidean_extension_zero}
     Consider rectangular families $A_i\in M_{a,b}(\mathbb C)$ and
     $B_k\in M_{b,c}(\mathbb C)$, with independent physical embeddings
-    $e:I\hookrightarrow J$ and $f:K\hookrightarrow L$. Their actual pair range is
+    $e:I\hookrightarrow J$ and $f:K\hookrightarrow L$. Their pair range is
     \begin{align}
         G & =\left\{\left(\operatorname{tr}(XA_iB_k)\right)_{i,k}:
         X\in M_{c,a}(\mathbb C)\right\}.
@@ -88,33 +87,31 @@
     \end{align}
     No spanning or normalization assumption is required.
 \end{lemma}
-\begin{proof}
-    \notready
+\begin{proof}\leanok
     The pair coefficients extend by zero because a matrix at any added
-    physical label is zero. This proves equality of the actual ranges.
+    physical label is zero. This proves equality of the ranges.
     An isometry carries the orthogonal projection onto $G$ to the projection
     onto its image when evaluated on embedded vectors. Subtracting that
     identity from the identity operator gives the complementary projections.
 \end{proof}
 
-\begin{lemma}[Actual extended local parent terms intertwine]
+\begin{lemma}[Extended local parent terms intertwine]
     \label{lem:varying_physical_local_parent_transport}
     \lean{Matrix.pair_parent_localTerm_extend_physical}
-    \notready
+    \leanok
     \uses{lem:varying_physical_pair_projection_transport,
         lem:physical_spectator_embedding_transport}
     Let $S$ be the finite configuration space outside a pair, with any
-    injection $g:S\hookrightarrow T$. Extend the actual complementary pair
+    injection $g:S\hookrightarrow T$. Extend the complementary pair
     projectors by the identity outside the pair. Then
     \begin{align}
         (P_{\widetilde G^\perp}\otimes I_T)E_{(e\times f)\times g}
          & =E_{(e\times f)\times g}(P_{G^\perp}\otimes I_S).
     \end{align}
-    The local operators and their intertwining are derived from the actual
+    The local operators and their intertwining are derived from the
     rectangular families and their physical embeddings.
 \end{lemma}
-\begin{proof}
-    \notready
+\begin{proof}\leanok
     At an outside configuration $g(s)$, the active-coordinate vector of an
     embedded vector is the embedding of its original active-coordinate vector
     at $s$. At outside configurations not in the image of $g$, that vector is
@@ -122,13 +119,13 @@
     handles the zero vectors outside the image.
 \end{proof}
 
-\subsection{Dependent chain coordinates and the actual open sum}
+\subsection{Dependent chain coordinates and the open sum}
 
 \begin{definition}[Pair coordinates of a dependent physical chain]
     \label{def:dependent_physical_pair_coordinates}
     \lean{Matrix.pairConfigurationEquiv, Matrix.pairConfigurationEquiv_apply,
         Matrix.pairConfigurationReindex}
-    \notready
+    \leanok
     Let the physical alphabet at site $k$ be a finite set $I_k$. For two
     distinct sites $i,j$, split the dependent configuration set as
     \begin{align}
@@ -144,7 +141,7 @@
     \label{lem:dependent_physical_pair_embedding}
     \lean{Matrix.pairConfigurationEquiv_embedding_apply,
         Matrix.pairConfigurationReindex_extendByZero}
-    \notready
+    \leanok
     \uses{def:dependent_physical_pair_coordinates,
         def:physical_euclidean_extension_zero}
     For sitewise injections $e_k:I_k\hookrightarrow J_k$, the dependent
@@ -156,8 +153,7 @@
          & =E_{(e_i\times e_j)\times\prod_{k\ne i,j}e_k} Q_I.
     \end{align}
 \end{lemma}
-\begin{proof}
-    \notready
+\begin{proof}\leanok
     The coordinate bijection reads the same sitewise embedded letters on
     both sides. At coordinates in the image, both Euclidean maps preserve
     the source coefficient. Outside that image, both coefficients vanish.
@@ -167,144 +163,139 @@
     \label{def:varying_physical_parent_hamiltonian}
     \lean{Matrix.physicalPairParentTerm, Matrix.physicalPairParentTerm_in_coordinates,
         Matrix.varyingPhysicalParentHamiltonian}
-    \notready
+    \leanok
     \uses{def:dependent_physical_pair_coordinates}
     Let $A^{[j]}_i\in M_{D_j,D_{j+1}}(\mathbb C)$ have an arbitrary finite
     physical alphabet $I_j$ at each site. For the adjacent pair $j,j+1$,
-    let $G_j$ be its actual rectangular trace-boundary range. On the actual
+    let $G_j$ be its rectangular trace-boundary range. On the
     chain space $\mathbb C^{\prod_k I_k}$, define
     \begin{align}
         h_j & =Q_j^{-1}(P_{G_j^\perp}\otimes I)Q_j,
             & H                                     & =\sum_{j=0}^{N-2}h_j.
     \end{align}
-    These are the actual pair projections and open Hamiltonian of
+    These are the pair projections and open Hamiltonian of
     \cite[Theorem~9, lines~1195--1217]{PerezGarcia2007Matrix}, with no
     common-alphabet restriction on the sites.
 \end{definition}
 
-\begin{lemma}[Actual varying-physical parent transport and kernel equivalence]
+\begin{lemma}[Varying-physical parent transport and kernel equivalence]
     \label{lem:varying_physical_parent_embedding_transport}
     \lean{Matrix.physicalPairParentTerm_isPositive,
         Matrix.physicalPairParentTerm_extend_physical,
         Matrix.varyingPhysicalParentHamiltonian_isPositive,
         Matrix.varyingPhysicalParentHamiltonian_extend_physical,
         Matrix.varyingPhysicalParentHamiltonian_extend_eq_zero_iff}
-    \notready
+    \leanok
     \uses{def:varying_physical_parent_hamiltonian,
         lem:dependent_physical_pair_embedding,
         lem:varying_physical_local_parent_transport}
-    Every actual local term $h_j$ and their sum $H$ are positive. For
+    Every local term $h_j$ and their sum $H$ are positive. For
     arbitrary sitewise physical injections, extend each site matrix by
-    zero to obtain the corresponding actual parent $\widetilde H$. Then
+    zero to obtain the corresponding parent $\widetilde H$. Then
     \begin{align}
         \widetilde H E & =EH,
                        & \widetilde H(E\phi)=0 & \iff H\phi=0.
     \end{align}
-    Here $E$ is the actual dependent configuration isometry. No canonical
+    Here $E$ is the dependent configuration isometry. No canonical
     normalization, spanning assumption, or supplied Hamiltonian relation
     is required for these identities.
 \end{lemma}
-\begin{proof}
-    \notready
+\begin{proof}\leanok
     A complementary pair projection is positive, and identity extension
     and isometric coordinate change preserve positivity. The pair/outside
-    coordinate intertwining and actual local-projector transport give
+    coordinate intertwining and local-projector transport give
     $\widetilde h_j E=E h_j$ at each bond. Summing these derived identities
     gives $\widetilde H E=EH$. Injectivity of the isometry gives the kernel
     equivalence.
 \end{proof}
 
-\begin{lemma}[Actual local equations are actual boundary sections]
+\begin{lemma}[Local equations are boundary sections]
     \label{lem:varying_physical_local_boundary_sections}
     \lean{Matrix.physicalPairParentTerm_boundary_of_apply_eq_zero,
         Matrix.physicalPairParentTerm_apply_eq_zero_iff_boundary}
-    \notready
+    \leanok
     \uses{def:varying_physical_parent_hamiltonian}
-    An actual local term annihilates a vector if and only if, at every
-    fixed outside configuration $\eta$, its pair coefficients have an actual
+    A local term annihilates a vector if and only if, at every
+    fixed outside configuration $\eta$, its pair coefficients have a
     rectangular trace boundary:
     \begin{align}
         \phi\bigl(Q^{-1}((x,y),\eta)\bigr) & =\operatorname{tr}(XA_xB_y).
     \end{align}
     The matrix $X$ may depend on $\eta$.
 \end{lemma}
-\begin{proof}
-    \notready
+\begin{proof}\leanok
     In pair/outside coordinates the local term applies the complementary
     pair projection independently on every outside vector. Its kernel is
-    exactly the actual pair trace range. Membership in that range supplies
+    exactly the pair trace range. Membership in that range supplies
     $X$. Conversely the displayed representation places every outside
     vector in that kernel, so the identity-extended term vanishes.
 \end{proof}
 
-\begin{lemma}[Unused physical letters are excluded by the actual kernel]
+\begin{lemma}[Unused physical letters are excluded by the kernel]
     \label{lem:varying_physical_kernel_forces_support}
     \lean{Matrix.physicalPairParentTerm_coeff_eq_zero_of_not_mem_range,
         Matrix.varyingPhysicalParentHamiltonian_apply_eq_zero_iff_terms,
         Matrix.varyingPhysicalParentHamiltonian_pair_apply_eq_zero,
         Matrix.varyingPhysicalParentHamiltonian_coeff_eq_zero_of_not_mem_range}
-    \notready
+    \leanok
     \uses{lem:varying_physical_local_boundary_sections,
         lem:varying_physical_parent_embedding_transport}
     Extend site matrices by zero along arbitrary sitewise physical
-    injections $e_k:I_k\hookrightarrow J_k$. Suppose $N\ge2$ and the actual
-    extended parent satisfies $\widetilde H\phi=0$. Then $\phi(\sigma)=0$
+    injections $e_k:I_k\hookrightarrow J_k$. Suppose $N\ge2$ and the extended
+    parent satisfies $\widetilde H\phi=0$. Then $\phi(\sigma)=0$
     whenever some physical letter $\sigma_k$ is outside $e_k(I_k)$.
-    Every actual adjacent local term annihilates $\phi$.
+    Every adjacent local term annihilates $\phi$.
 \end{lemma}
-\begin{proof}
-    \notready
-    Positivity of the actual local terms derives each local equation from
+\begin{proof}\leanok
+    Positivity of the local terms derives each local equation from
     the equation for their sum. At a letter outside the original alphabet,
-    its extended site matrix is zero, so every actual pair trace coefficient
+    its extended site matrix is zero, so every pair trace coefficient
     at that letter is zero. Every site of a chain with $N\ge2$ belongs to an
     adjacent pair, including the final site, which belongs to the final pair.
     The local boundary sections therefore give the claimed vanishing at
     every configuration containing an unused letter.
 \end{proof}
 
-\begin{lemma}[The actual kernel lies in the original physical image]
+\begin{lemma}[The kernel lies in the original physical image]
     \label{lem:varying_physical_kernel_actual_pullback}
     \lean{Matrix.varyingPhysicalParentHamiltonian_eq_extendByZero_pullback_of_eq_zero}
-    \notready
+    \leanok
     \uses{lem:varying_physical_kernel_forces_support}
-    Under the same hypotheses, every actual extended-kernel vector is the
+    Under the same hypotheses, every extended-kernel vector is the
     extension of its literal coefficient pullback:
     \begin{align}
         \phi & =E\bigl(\tau\mapsto\phi((e_k(\tau_k))_k)\bigr).
     \end{align}
     Membership in this embedded state space is a conclusion, not a hypothesis.
 \end{lemma}
-\begin{proof}
-    \notready
+\begin{proof}\leanok
     At a configuration in the embedding image, extension by zero recovers
     exactly its original coefficient. A configuration outside that image has
     a letter outside one of the site images, since sitewise preimages would
     assemble a full dependent preimage. Its coefficient vanishes by the
-    actual kernel support statement, and the extended coefficient is zero too.
+    kernel support statement, and the extended coefficient is zero too.
 \end{proof}
 
-\begin{lemma}[The two actual common-alphabet parent descriptions have the same kernel]
+\begin{lemma}[The two common-alphabet parent descriptions have the same kernel]
     \label{lem:uniform_physical_parent_kernel_comparison}
     \lean{Matrix.varyingPhysicalParentHamiltonian_uniform_apply_eq_zero_iff}
-    \notready
+    \leanok
     \uses{lem:varying_physical_local_boundary_sections,
         lem:varying_obc_parent_kernel_sections}
-    On a common nonempty physical alphabet, the actual dependent-coordinate
-    open parent and the actual prefix/pair/suffix open parent have exactly
+    On a common nonempty physical alphabet, the dependent-coordinate
+    open parent and the prefix/pair/suffix open parent have exactly
     the same kernel at every length.
 \end{lemma}
-\begin{proof}
-    \notready
-    Both local equations say that every fixed-outside pair section has an
-    actual rectangular trace boundary. To compare the coordinate descriptions,
+\begin{proof}\leanok
+    Both local equations say that every fixed-outside pair section has a
+    rectangular trace boundary. To compare the coordinate descriptions,
     concatenate a prefix, the active pair, and a suffix. Changing only the
     pair leaves all outside coordinates unchanged. Conversely, split a full
-    configuration into its actual prefix, pair, and suffix; concatenating
+    configuration into its prefix, pair, and suffix; concatenating
     them recovers the configuration. A reference pair from the nonempty
     alphabet fixes the outside section. These two coordinate identifications
     transport the boundary representations in both directions. Positivity
-    and the actual local-kernel characterizations give the full kernel
+    and the local-kernel characterizations give the full kernel
     equivalence. Canonical normalization derives alphabet nonemptiness in
     the subsequent uniqueness application.
 \end{proof}

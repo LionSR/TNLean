@@ -13,12 +13,12 @@ identities are the local reconstruction step of the open-boundary
 uniqueness proof in \cite[Theorem~9, lines~1212--1237]{PerezGarcia2007Matrix}.
 The first identities concern rectangular trace representations on three sites.
 The subsequent induction treats the entire chain. The final section identifies
-the adjacent-pair conditions with the kernel of the actual open parent Hamiltonian.
+the adjacent-pair conditions with the kernel of the open parent Hamiltonian.
 
 \begin{lemma}[Matching the boundary products on an overlap]
     \label{lem:varying_obc_overlap_boundary_products}
     \lean{Matrix.obc_overlap_boundary_mul_eq}
-    \notready
+    \leanok
     Assume that $\operatorname{span}\{B_j\}=M_{b,c}(\mathbb C)$.
     Let $X_k\in M_{c,a}(\mathbb C)$ and $Y_i\in M_{e,b}(\mathbb C)$ satisfy
     \begin{align}
@@ -26,8 +26,7 @@ the adjacent-pair conditions with the kernel of the actual open parent Hamiltoni
     \end{align}
     for every $i,j,k$. Then $X_kA_i=C_kY_i$ for every $i,k$.
 \end{lemma}
-\begin{proof}
-    \notready
+\begin{proof}\leanok
     Cyclicity gives
     $\operatorname{tr}(Y_iB_jC_k)=\operatorname{tr}(C_kY_iB_j)$.
     By the spanning assumption, equality of these trace functionals on
@@ -39,12 +38,12 @@ the adjacent-pair conditions with the kernel of the actual open parent Hamiltoni
     \label{lem:varying_obc_three_site_reconstruction}
     \lean{Matrix.obc_three_site_boundary_reconstruction,
         Matrix.obc_three_site_trace_reconstruction}
-    \notready
+    \leanok
     \uses{lem:varying_obc_overlap_boundary_products}
     In addition assume the canonical row-isometry identity
-    $\sum_iA_iA_i^*=I_a$. Define the actual common boundary
+    $\sum_iA_iA_i^\dagger=I_a$. Define the common boundary
     \begin{align}
-        Z & =\sum_iY_iA_i^*\in M_{e,a}(\mathbb C).
+        Z & =\sum_iY_iA_i^\dagger\in M_{e,a}(\mathbb C).
     \end{align}
     Then $X_k=C_kZ$ for every $k$, and
     \begin{align}
@@ -52,22 +51,25 @@ the adjacent-pair conditions with the kernel of the actual open parent Hamiltoni
     \end{align}
     for every $i,j,k$.
 \end{lemma}
-\begin{proof}
-    \notready
+\begin{proof}\leanok
     The preceding overlap identity and the canonical normalization give
     \begin{align}
-        X_k & =X_k\sum_iA_iA_i^*
-        =\sum_iC_kY_iA_i^*=C_kZ.
+        X_k & =X_k\sum_iA_iA_i^\dagger
+        =\sum_iC_kY_iA_i^\dagger=C_kZ.
     \end{align}
-    Substitute this equality in the original trace representation and
-    move $C_k$ cyclically to the right. This is precisely the adjoint
-    boundary construction in the source proof.
+    Substituting this in the original trace representation and using
+    cyclicity of the trace gives
+    \begin{align}
+        \operatorname{tr}(X_kA_iB_j) & =\operatorname{tr}(C_kZA_iB_j)
+        =\operatorname{tr}(ZA_iB_jC_k).
+    \end{align}
+    This is the adjoint boundary construction in the source proof.
 \end{proof}
 
 \begin{lemma}[Two adjacent section conditions give a three-site representation]
     \label{lem:varying_obc_pair_sections_reconstruct}
     \lean{Matrix.obc_three_site_reconstruction_of_pair_sections}
-    \notready
+    \leanok
     \uses{lem:varying_obc_three_site_reconstruction}
     Assume the same row-isometry and middle-site spanning conditions.
     Let $\phi:I\times J\times K\to\mathbb C$. Suppose that for every
@@ -81,8 +83,7 @@ the adjacent-pair conditions with the kernel of the actual open parent Hamiltoni
     \end{align}
     simultaneously for every $i,j,k$.
 \end{lemma}
-\begin{proof}
-    \notready
+\begin{proof}\leanok
     Choose boundary matrices from the two local section conditions. Their
     trace representations agree because they both give $\phi$.
     The canonical adjoint reconstruction supplies the common boundary.
@@ -91,32 +92,31 @@ the adjacent-pair conditions with the kernel of the actual open parent Hamiltoni
 \begin{lemma}[Blocking preserves the rectangular row isometry]
     \label{lem:varying_obc_block_row_isometry}
     \lean{Matrix.obc_block_row_isometry}
-    \notready
-    If $\sum_iA_iA_i^*=I_a$ and $\sum_jB_jB_j^*=I_b$, then the blocked
-    family satisfies
+    \leanok
+    If $\sum_iA_iA_i^\dagger=I_a$ and $\sum_jB_jB_j^\dagger=I_b$, then the
+    blocked family satisfies
     \begin{align}
-        \sum_{i,j}(A_iB_j)(A_iB_j)^* & =I_a.
+        \sum_{i,j}(A_iB_j)(A_iB_j)^\dagger & =I_a.
     \end{align}
 \end{lemma}
-\begin{proof}
-    \notready
+\begin{proof}\leanok
     Reverse the product under adjoints and first sum over the middle
     physical letter:
     \begin{align}
-        \sum_{i,j}A_iB_jB_j^*A_i^*
-         & =\sum_iA_i\Bigl(\sum_jB_jB_j^*\Bigr)A_i^*
-        =\sum_iA_iA_i^*=I_a.
+        \sum_{i,j}A_iB_jB_j^\dagger A_i^\dagger
+         & =\sum_iA_i\Bigl(\sum_jB_jB_j^\dagger\Bigr)A_i^\dagger
+        =\sum_iA_iA_i^\dagger=I_a.
     \end{align}
 \end{proof}
 
 
 \subsection{Reconstruction on the whole open chain}
 
-\begin{lemma}[Products on the actual prefix bond spaces]
+\begin{lemma}[Products on the prefix bond spaces]
     \label{lem:varying_obc_prefix_product_row_isometry}
     \lean{Matrix.obc_rectangularEval_snoc,
         Matrix.obc_rectangularEval_row_isometry}
-    \notready
+    \leanok
     \uses{lem:varying_obc_block_row_isometry}
     Let $B^{[j]}_i\in M_{D_j,D_{j+1}}(\mathbb C)$ be the site matrices,
     and put $P_m(i_0,\ldots,i_{m-1})=B^{[0]}_{i_0}\cdots B^{[m-1]}_{i_{m-1}}$,
@@ -125,13 +125,12 @@ the adjacent-pair conditions with the kernel of the actual open parent Hamiltoni
         P_{m+1}(u,i) & =P_m(u)B^{[m]}_i.
     \end{align}
     If every site is canonically normalized by
-    $\sum_iB^{[j]}_i B^{[j]*}_i=I_{D_j}$, then
+    $\sum_iB^{[j]}_i B^{[j]\dagger}_i=I_{D_j}$, then
     \begin{align}
-        \sum_{u}P_m(u)P_m(u)^* & =I_{D_0}.
+        \sum_{u}P_m(u)P_m(u)^\dagger & =I_{D_0}.
     \end{align}
 \end{lemma}
-\begin{proof}
-    \notready
+\begin{proof}\leanok
     The first equality follows from ordered multiplication. Induction on the
     prefix length applies the two-family row-isometry identity at each step.
 \end{proof}
@@ -140,7 +139,7 @@ the adjacent-pair conditions with the kernel of the actual open parent Hamiltoni
     \label{lem:varying_obc_full_chain_reconstruction}
     \lean{Matrix.obc_trace_reconstruction_of_adjacent_pair_sections,
         Matrix.obc_scalar_reconstruction_of_adjacent_pair_sections}
-    \notready
+    \leanok
     \uses{lem:varying_obc_pair_sections_reconstruct,
         lem:varying_obc_prefix_product_row_isometry}
     Consider an open chain of $N\ge2$ sites, canonically normalized as above,
@@ -161,10 +160,9 @@ the adjacent-pair conditions with the kernel of the actual open parent Hamiltoni
     If $D_0=D_N=1$, the coefficient family is a scalar multiple of the
     represented open-chain state.
 \end{lemma}
-\begin{proof}
-    \notready
+\begin{proof}\leanok
     Inductively suppose that every fixed suffix gives a trace representation
-    on a prefix of length $m\ge2$. Separate the first $m-1$ sites as the actual
+    on a prefix of length $m\ge2$. Separate the first $m-1$ sites as the
     prefix product, followed by sites $m-1,m$. The induction hypothesis gives
     the left two-family sections, and the original adjacent-pair condition
     gives the right sections. The prefix product is row-isometric, and the
@@ -175,14 +173,15 @@ the adjacent-pair conditions with the kernel of the actual open parent Hamiltoni
     conclusion without identifying normalized vectors of different phases.
 \end{proof}
 
-\subsection{The actual open parent Hamiltonian}
+\subsection{The open parent Hamiltonian}
 
 \begin{definition}[Pair boundary ranges and open local terms]
     \label{def:varying_obc_parent_projectors}
-    \lean{Matrix.obcPairBoundary, Matrix.obcPairProjector,
+    \lean{Matrix.obcPairBoundary, Matrix.obcPairBoundary_apply,
+        Matrix.obcPairProjector,
         Matrix.obcPairSection, Matrix.obcParentHamiltonian}
-    \notready
-    Let $B^{[j]}_i\in M_{D_j,D_{j+1}}(\mathbb C)$. The actual two-site
+    \leanok
+    Let $B^{[j]}_i\in M_{D_j,D_{j+1}}(\mathbb C)$. The two-site
     boundary range at $j$ is
     \begin{align}
         G_j & =\left\{\left(\operatorname{tr}
@@ -194,7 +193,7 @@ the adjacent-pair conditions with the kernel of the actual open parent Hamiltoni
     $N-j-2$, let $(R_{j,u,v}\phi)(i,k)=\phi(u,i,k,v)$. The open parent
     Hamiltonian is
     \begin{align}
-        H_N & =\sum_{j=0}^{N-2}\sum_{u,v}R_{j,u,v}^*P_jR_{j,u,v}.
+        H_N & =\sum_{j=0}^{N-2}\sum_{u,v}R_{j,u,v}^\dagger P_jR_{j,u,v}.
     \end{align}
     Summing over each outside configuration once extends $P_j$ by the identity
     outside its adjacent pair. There is no interaction across the endpoints.
@@ -202,18 +201,17 @@ the adjacent-pair conditions with the kernel of the actual open parent Hamiltoni
     \cite[Theorem~9, lines~1201--1217]{PerezGarcia2007Matrix}.
 \end{definition}
 
-\begin{lemma}[Kernel of an actual pair projector]
+\begin{lemma}[Kernel of a pair projector]
     \label{lem:varying_obc_pair_projector_kernel}
     \lean{Matrix.obcPairProjector_isPositive,
         Matrix.obcPairProjector_apply_eq_zero_iff}
-    \notready
+    \leanok
     \uses{def:varying_obc_parent_projectors}
     Each $P_j$ is positive. Moreover $P_j\xi=0$ if and only if there is a
     rectangular matrix $X$ with
     $\xi(i,k)=\operatorname{tr}(XB^{[j]}_iB^{[j+1]}_k)$ for every $i,k$.
 \end{lemma}
-\begin{proof}
-    \notready
+\begin{proof}\leanok
     An orthogonal projection is positive, and the kernel of the projection
     onto $G_j^\perp$ is $G_j$. Membership in this range is exactly the
     displayed boundary representation.
@@ -225,12 +223,12 @@ the adjacent-pair conditions with the kernel of the actual open parent Hamiltoni
         Matrix.obcParentHamiltonian_apply_eq_zero_iff,
         Matrix.obcParentHamiltonian_pair_sections_of_apply_eq_zero,
         Matrix.obcParentHamiltonian_apply_eq_zero_iff_pair_sections}
-    \notready
+    \leanok
     \uses{def:varying_obc_parent_projectors,
         lem:varying_obc_pair_projector_kernel}
     The Hamiltonian $H_N$ is positive. A vector $\phi$ satisfies $H_N\phi=0$
     if and only if, for every adjacent
-    pair and every fixed outside configuration, there is an actual
+    pair and every fixed outside configuration, there is a
     rectangular boundary matrix $X$ such that
     \begin{align}
         \phi(u,i,k,v) & =\operatorname{tr}(XB^{[j]}_iB^{[j+1]}_k)
@@ -238,12 +236,11 @@ the adjacent-pair conditions with the kernel of the actual open parent Hamiltoni
     for every $i,k$. Neither a spanning condition nor canonical
     normalization is required for this equivalence.
 \end{lemma}
-\begin{proof}
-    \notready
-    Every compression $R^*P_jR$ is positive, so a vector lies in the kernel
+\begin{proof}\leanok
+    Every compression $R^\dagger P_jR$ is positive, so a vector lies in the kernel
     of their sum exactly when each compression annihilates it. The quadratic
     form identity
-    $\langle R^*P_jR\phi,\phi\rangle=\langle P_jR\phi,R\phi\rangle$
+    $\langle R^\dagger P_jR\phi,\phi\rangle=\langle P_jR\phi,R\phi\rangle$
     and positivity identify this with $P_jR\phi=0$. The pair-projector kernel
     characterization gives the boundary matrix for each outside configuration.
     In the reverse direction these boundary representations make all the
@@ -251,27 +248,26 @@ the adjacent-pair conditions with the kernel of the actual open parent Hamiltoni
     identifies the same physical configurations in either description.
 \end{proof}
 
-\begin{lemma}[Actual boundary states lie in the open parent kernel]
+\begin{lemma}[Boundary states lie in the open parent kernel]
     \label{lem:varying_obc_boundary_states_parent_kernel}
     \lean{Matrix.obc_rectangularEval_append, Matrix.obcBoundaryState,
         Matrix.obcBoundaryState_pair_section,
         Matrix.obcParentHamiltonian_apply_obcBoundaryState}
-    \notready
+    \leanok
     \uses{def:varying_obc_parent_projectors,
         lem:varying_obc_parent_kernel_sections}
-    Let $Z\in M_{D_N,D_0}(\mathbb C)$ and define the actual physical vector
+    Let $Z\in M_{D_N,D_0}(\mathbb C)$ and define the physical vector
     \begin{align}
         \phi_Z(i_0,\ldots,i_{N-1})
          & =\operatorname{tr}(ZB^{[0]}_{i_0}\cdots B^{[N-1]}_{i_{N-1}}).
     \end{align}
     Then $H_N\phi_Z=0$, with no spanning or canonical normalization assumption.
     More precisely, if $P_u$ and $P_v$ are the ordered prefix and suffix
-    products outside the pair at $j$, its actual local boundary is
+    products outside the pair at $j$, its local boundary is
     $X=P_v ZP_u\in M_{D_{j+2},D_j}(\mathbb C)$.
 \end{lemma}
-\begin{proof}
-    \notready
-    Concatenating physical words multiplies their actual rectangular products.
+\begin{proof}\leanok
+    Concatenating physical words multiplies their rectangular products.
     This identity follows by induction on the suffix length, adjoining its
     last matrix. Hence cyclicity of the rectangular trace gives
     \begin{align}
@@ -280,58 +276,56 @@ the adjacent-pair conditions with the kernel of the actual open parent Hamiltoni
         =\operatorname{tr}((P_vZP_u)B^{[j]}_iB^{[j+1]}_k).
     \end{align}
     Every pair section therefore belongs to its boundary range, so the
-    actual Hamiltonian kernel characterization applies.
+    Hamiltonian kernel characterization applies.
 \end{proof}
 
 
-\subsection{The actual open parent ground-state line}
+\subsection{The open parent ground-state line}
 
 The following conclusions concern a common finite physical alphabet and
-$N\ge2$ sites. They identify the actual parent kernel, including its nonzero
+$N\ge2$ sites. They identify the parent kernel, including its nonzero
 normalized spanning vector. The length and physical-alphabet domain are
 retained explicitly; see \cite{gap:pgvwc07_open_parent_domain}.
 
 \begin{definition}[The scalar-endpoint open-chain state]
     \label{def:varying_obc_scalar_state}
     \lean{Matrix.obcScalarState, Matrix.obcScalarState_apply}
-    \notready
-    Suppose $D_0=D_N=1$. The actual open-chain vector $\Omega$ has coefficients
+    \leanok
+    Suppose $D_0=D_N=1$. The open-chain vector $\Omega$ has coefficients
     \begin{align}
         \Omega(i_0,\ldots,i_{N-1})
          & =\bigl(B^{[0]}_{i_0}\cdots B^{[N-1]}_{i_{N-1}}\bigr)_{0,0}.
     \end{align}
 \end{definition}
 
-\begin{lemma}[Canonical equations normalize the actual state]
+\begin{lemma}[Canonical equations normalize the state]
     \label{lem:varying_obc_scalar_state_normalized}
     \lean{Matrix.norm_obcScalarState_eq_one}
-    \notready
+    \leanok
     \uses{def:varying_obc_scalar_state,
         lem:varying_obc_prefix_product_row_isometry}
-    If $\sum_iB^{[j]}_i B^{[j]*}_i=I_{D_j}$ at every site and
+    If $\sum_iB^{[j]}_i B^{[j]\dagger}_i=I_{D_j}$ at every site and
     $D_0=D_N=1$, then $\|\Omega\|=1$.
 \end{lemma}
-\begin{proof}
-    \notready
+\begin{proof}\leanok
     The full-prefix row identity is a scalar equation. Expanding its unique
     endpoint entry gives $\sum_w|\Omega(w)|^2=1$.
 \end{proof}
 
-\begin{lemma}[The represented state is annihilated by the actual parent]
+\begin{lemma}[The represented state is annihilated by the parent]
     \label{lem:varying_obc_scalar_state_parent_kernel}
     \lean{Matrix.obcBoundaryState_one_eq_obcScalarState,
         Matrix.obcParentHamiltonian_apply_obcScalarState}
-    \notready
+    \leanok
     \uses{def:varying_obc_scalar_state,
         lem:varying_obc_boundary_states_parent_kernel}
     For singleton endpoint bonds, the boundary trace state with unit scalar
-    boundary is precisely $\Omega$. Consequently $H\Omega=0$ for the actual
+    boundary is precisely $\Omega$. Consequently $H\Omega=0$ for the
     open parent Hamiltonian, without any spanning or normalization assumption.
 \end{lemma}
-\begin{proof}
-    \notready
+\begin{proof}\leanok
     The two singleton sums in the boundary trace contain one term each.
-    The actual full-boundary state is annihilated by every local projector.
+    The full-boundary state is annihilated by every local projector.
 \end{proof}
 
 \begin{lemma}[Unique ground-state line of the varying-bond open parent]
@@ -339,7 +333,7 @@ retained explicitly; see \cite{gap:pgvwc07_open_parent_domain}.
     \lean{Matrix.exists_smul_obcScalarState_of_obcParentHamiltonian_apply_eq_zero,
         Matrix.ker_obcParentHamiltonian_eq_span,
         Matrix.finrank_ker_obcParentHamiltonian_eq_one}
-    \notready
+    \leanok
     \uses{lem:varying_obc_parent_kernel_sections,
         lem:varying_obc_full_chain_reconstruction,
         lem:varying_obc_scalar_state_normalized,
@@ -347,18 +341,17 @@ retained explicitly; see \cite{gap:pgvwc07_open_parent_domain}.
     Consider $N\ge2$ sites with a common physical alphabet. Suppose that the
     endpoint bonds are singletons, the site matrices obey the canonical row
     equations, and each site family spans its rectangular matrix space.
-    Then every vector in the kernel of the actual open parent Hamiltonian is
+    Then every vector in the kernel of the open parent Hamiltonian is
     a scalar multiple of $\Omega$, and
     \begin{align}
         \ker H & =\mathbb C\Omega, & \dim\ker H & =1.
     \end{align}
     The Hamiltonian is positive, so this is its ground-state line.
 \end{lemma}
-\begin{proof}
-    \notready
-    The actual projector kernel gives the adjacent-pair coefficient sections.
+\begin{proof}\leanok
+    The projector kernel gives the adjacent-pair coefficient sections.
     Reconstruct the entire chain and reduce its endpoint boundary to a scalar.
-    Conversely the actual represented state is annihilated by the parent.
+    Conversely the represented state is annihilated by the parent.
     Its derived unit norm proves that its span has dimension one. Positivity
     of the parent puts this kernel at the bottom of its spectrum.
 \end{proof}

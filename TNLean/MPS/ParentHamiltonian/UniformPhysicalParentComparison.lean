@@ -107,7 +107,8 @@ private theorem uniform_parent_list_sections_of_eq_zero
   let s : Fin 2 → Fin d := ![i, j]
   let w := Fin.append (Fin.append u.get s) v.get
   have hw : List.ofFn w = u ++ i :: j :: v := by
-    simp [w, s, List.ofFn_fin_append, List.ofFn_get, List.ofFn_succ, List.append_assoc]
+    simp only [w, List.ofFn_fin_append, List.ofFn_get]
+    simp [s, List.ofFn_succ]
   have hcoord : w = Q.symm ((i, j), (Q w0).2) := by
     apply Q.injective
     rw [Q.apply_symm_apply]
@@ -146,9 +147,14 @@ private theorem uniform_pair_term_eq_zero_of_list_sections
     rw [hτ]
     change (Q (Q.symm ((δ, δ), η))).2 = η
     rw [Q.apply_symm_apply]
-  have hx := hpair (List.ofFn u) (List.ofFn v)
-  simp only [List.length_ofFn] at hx
-  obtain ⟨X, hX⟩ := hx rfl
+  have key : ∀ m : ℕ, m = (List.ofFn u).length →
+      ∃ X : Matrix (Fin (D (m + 2))) (Fin (D m)) ℂ,
+        ∀ i j, f (List.ofFn u ++ i :: j :: List.ofFn v) =
+          Matrix.trace (X * A m i * A (m + 1) j) := by
+    intro m hm
+    subst hm
+    exact hpair (List.ofFn u) (List.ofFn v) (by simp only [List.length_ofFn])
+  obtain ⟨X, hX⟩ := key p List.length_ofFn.symm
   refine ⟨X, fun x y ↦ ?_⟩
   let s : Fin 2 → Fin d := ![x, y]
   let w := Fin.append (Fin.append u s) v
@@ -158,8 +164,12 @@ private theorem uniform_pair_term_eq_zero_of_list_sections
     have hc := pair_coordinates_append u s t v
     rw [hη] at hc
     exact hc
-  rw [← hw, ← hf]
-  simpa [w, s, List.ofFn_fin_append, List.ofFn_succ, List.append_assoc] using hX x y
+  have hlist : List.ofFn w = List.ofFn u ++ x :: y :: List.ofFn v := by
+    simp only [w, List.ofFn_fin_append]
+    simp [s, List.ofFn_succ]
+  change ψ (Q.symm ((x, y), η)) = _
+  rw [← hw, ← hf, hlist]
+  exact hX x y
 
 /-- On a common nonempty physical alphabet, the actual dependent-coordinate
 parent and the existing prefix/pair/suffix parent have precisely the same
