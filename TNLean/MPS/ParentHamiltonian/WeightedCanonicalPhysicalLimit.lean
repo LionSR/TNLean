@@ -57,7 +57,6 @@ theorem norm_mpvState_sub_unitWeight_sum_le (N : ℕ) :
   apply (norm_sum_le _ _).trans
   apply Finset.sum_le_sum
   intro k _
-  let : NeZero (h.dim k) := ⟨(h.dim_pos k).ne'⟩
   rw [norm_smul, norm_pow, Complex.norm_real, Real.norm_of_nonneg (h.weight_pos k).le]
   exact mul_le_mul_of_nonneg_left
     (norm_mpvState_le_bondDimension_of_unital (h.blocks k) (h.unital k) N)

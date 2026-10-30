@@ -40,7 +40,6 @@ theorem exists_normalized_diagonal_dualFixedPoint (k : Fin h.r) :
       ∑ i, (h.blocks k i)ᴴ * (Matrix.diagonal fun a => (lam a : ℂ)) * h.blocks k i =
         Matrix.diagonal fun a => (lam a : ℂ) := by
   classical
-  let : NeZero (h.dim k) := ⟨(h.dim_pos k).ne'⟩
   obtain ⟨Λ, hΛ, hDiag, hFix⟩ := h.dual_fixedPoint k
   have hPositive : ∀ a, 0 < (Λ a a).re := fun a =>
     (Complex.pos_iff.mp (hΛ.diag_pos (i := a))).1
@@ -295,7 +294,6 @@ theorem isNormalTensor_of_weight_eq_one_of_c2
     (hC2 : ∀ μ, Module.End.HasEigenvalue (Kraus.transferMap A) μ → ‖μ‖ = 1 →
       μ = 1 ∧ (Kraus.transferMap A).charpoly.rootMultiplicity μ = 1)
     {k : Fin h.r} (hk : h.weight k = 1) : IsNormalTensor (h.blocks k) := by
-  let : NeZero (h.dim k) := ⟨(h.dim_pos k).ne'⟩
   have hOne : Kraus.transferMap (h.blocks k) 1 = 1 := by
     simpa only [Kraus.transferMap_apply, Matrix.mul_one] using h.unital k
   have hPeripheral : ∀ μ, Module.End.HasEigenvalue (Kraus.transferMap (h.blocks k)) μ →
