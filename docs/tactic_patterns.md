@@ -10025,6 +10025,19 @@ removed after the dependency audit exposed it.
 - **Related reuse:** The local scalar path uses the existing actual `mpo_smul`
   law and `TwoSiteStandardFormData` structure; no new path predicate is added.
 
+### Kernel vectors in an open unitary contraction — candidate (2026-10-29)
+
+- **Pattern:** Tensor a kernel vector of one half factor with a fixed
+  coordinate of the other intermediate space; the isometric contraction
+  forces the vector to vanish. Apply the same argument to the adjoint
+  four-spin contraction for full row rank of the cut factors.
+- **Seen:** `MPS/MPU/SuppliedHalfFactorMinimality.lean`, original half factors
+  and both adjointed actual cut factors.
+- **Abstraction:** One private finite-coordinate kernel lemma and its
+  exchanged-leg form serve all four applications. Mathlib's existing
+  linear left-inverse and range-dimension APIs supply inverse matrices and
+  ranks; no parallel factorization structure or normalization predicate.
+
 ### Weighted geometric sums grouped by their anchors — promoted (2026-10-28)
 
 - **Seen:** `Lattice/LowEnergyCommutatorSum.lean`,
