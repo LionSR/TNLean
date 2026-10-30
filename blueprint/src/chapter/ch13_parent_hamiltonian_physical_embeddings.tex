@@ -219,3 +219,26 @@ be the actual periodic sums of the complementary projections of these spaces.
     shows that term vanishes; the second then vanishes also. Injectivity
     gives the two component equations. The converse follows by linearity.
 \end{proof}
+
+\begin{lemma}[Physical extension of an actual periodic tensor]
+    \label{lem:mpv_state_extend_physical}
+    \lean{MPSTensor.mpvState_extend_physical}
+    \notready
+    \uses{def:physical_euclidean_extension_zero}
+    Let $e:\{1,\ldots,a\}\hookrightarrow\{1,\ldots,d\}$ be an embedding,
+    and let $A_i$ be $D\times D$ matrices. Set $\widetilde A_{e(i)}=A_i$
+    and $\widetilde A_j=0$ outside the image. At every length $N\ge0$,
+    the actual periodic matrix product vectors satisfy
+    \begin{align}
+        |\Psi_N(\widetilde A)\rangle=E_N|\Psi_N(A)\rangle,
+    \end{align}
+    where $E_N$ is extension by zero along the sitewise configuration
+    embedding. The bond dimension is unchanged.
+\end{lemma}
+\begin{proof}
+    \notready
+    An embedded configuration has the same ordered matrix product.
+    Every configuration outside the image contains a letter whose matrix
+    is zero, so its coefficient vanishes. The empty configuration belongs
+    to the image, and both coefficients are the trace of the identity.
+\end{proof}
