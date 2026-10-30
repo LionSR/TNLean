@@ -207,10 +207,10 @@ require(process.argv[1]);
             with self.assertRaisesRegex(RuntimeError, "Node.js 18"):
                 renderer._route_dependency_graph(_fixture_source())
         with patch.object(renderer.subprocess, "run", side_effect=
-                          subprocess.TimeoutExpired("node", 600)) as run:
+                          subprocess.TimeoutExpired("node", 1200)) as run:
             with self.assertRaises(subprocess.TimeoutExpired):
                 renderer._render_dependency_graph(_fixture_source())
-            self.assertEqual(run.call_args.kwargs["timeout"], 600)
+            self.assertEqual(run.call_args.kwargs["timeout"], 1200)
         failure = subprocess.CompletedProcess("node", 1, "", "layout failure")
         with patch.object(renderer.subprocess, "run", return_value=failure):
             with self.assertRaisesRegex(RuntimeError, "layout failure"):
