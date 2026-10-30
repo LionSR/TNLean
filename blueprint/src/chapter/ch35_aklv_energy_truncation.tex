@@ -411,7 +411,7 @@ In this section $P_t=\mathbf1_{(-\infty,t)}(B)$ and $Q_t=I-P_t$.
 \begin{lemma}[Exact preservation under frustration-free exterior clipping]
     \label{lem:aklv_frustration_free_clipping}
     \lean{TNLean.MPS.AreaLaw.AKLV.frustrationFree_twoSidedEnergyTruncation_ground_gap}
-    \notready
+    \leanok
     \uses{def:aklv_normalized_cut_blocks}
     Let $h_i$ be positive contractions supported on the consecutive site pairs
     $\{i,i+1\}$ of a finite chain. Choose two boundary bonds $a<b$ and put
@@ -429,6 +429,7 @@ In this section $P_t=\mathbf1_{(-\infty,t)}(B)$ and $Q_t=I-P_t$.
     \cite[Theorem~4.3]{Arad2013AreaLaw}, with an explicit cutoff.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{def:aklv_two_sided_truncation,lem:aklv_projected_energy,
         lem:aklv_clipped_gap}
     Each unshifted regional sum is positive, its two boundary bonds sum
