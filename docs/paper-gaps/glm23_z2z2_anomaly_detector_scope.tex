@@ -110,23 +110,37 @@ exact dressed representation.\footnote{
 
 \section{Resolution for the original two-site-blocked family}
 
-Let $B_g=M_g^{[2]}$ be the original tensor blocked by two physical sites.
-Its operator on $N>0$ blocked sites is $U_{g,2N}$ after regrouping physical
-configurations. Since $\lambda(g,h)^{2N}=1$, this family is an exact
-representation; its actual doubled-index tensors are normal by blocking
-and physical relabeling.
+Write $U_{g,L}$ for the periodic operator of $M_g$ on a ring of $L$ sites,
+so that $U_g=U_{g,L}$ above. Let $B_g=M_g^{[2]}$ be the original tensor
+blocked by two physical sites. After regrouping physical configurations in
+pairs, its operator on $N>0$ blocked sites is $U_{g,2N}$. Since
+$\lambda(g,h)^{2N}=1$, this family is an exact representation; its
+doubled-index tensors are normal by blocking and physical relabeling.
 
-The anomaly calculation uses its own fusion witnesses. On the subgroups
-$\{e,x\}$ and $\{e,xy\}$, block the original square reductions, retaining
-both compression matrices. The target $-M_e$ for the second square becomes
-$B_e$ after blocking. For the actual raw triple tensor $T_g$, integer matrix
-multiplication gives
-$(V_g\otimes\mathrm{Id})T_g^a=s_g(\mathrm{Id}\otimes V_g)T_g^a$
-on every letter, with $s_x=1$ and $s_{xy}=-1$. The equality extends to
-nonempty words and hence to blocked words. The restriction to $\{e,y\}$
+The anomaly calculation uses its own fusion witnesses. For $g\in\{x,xy\}$,
+the stacked square $M_g\cdot M_g$ of bond dimension four reduces onto $M_e$
+when $g=x$ and onto $-M_e$ when $g=xy$; let $V_g$ be the $1\times4$ left
+compression matrix of this reduction. Blocking two sites keeps both
+compression matrices, and the target $-M_e$ becomes $B_e$, since its
+blocked letters are products of two letters. Let
+$T_g=(M_g\cdot M_g)\cdot M_g$ be the raw triple tensor, with letters $T_g^a$
+indexed by the sixteen pair labels $a$, and let $\mathrm{Id}$ be the
+identity on the bond space of $M_g$, of dimension two. Integer matrix
+multiplication gives, for every letter $a$,
+\begin{align}
+    (V_g\otimes\mathrm{Id})\,T_g^a
+     & =s_g\,(\mathrm{Id}\otimes V_g)\,T_g^a,
+    \qquad s_x=1,\quad s_{xy}=-1.
+    \label{eq:glm23z2z2_raw_tree_comparison}
+\end{align}
+The two sides of \eqref{eq:glm23z2z2_raw_tree_comparison} are the two
+fusion trees of $g\otimes g\otimes g$, so $s_g$ is the associator of the
+blocked fusion witnesses on $\{e,g\}$. The identity extends from letters to
+nonempty words, and hence to blocked words. The restriction to $\{e,y\}$
 has bond dimension one and identity fusion matrices. This computes the
-three detectors of the actual blocked family as $(+1,+1,-1)$, for every
-fusion choice. Detector completeness gives
+three detectors of the blocked family as $(+1,+1,-1)$, for every
+fusion choice. Let $\omega_B$ be the anomaly three-cochain of any choice of
+fusion tensors of the blocked family. Detector completeness gives
 $[\omega_B]=[\omega_{\mathrm{II}}]\neq0$.\footnote{
     \leanid{Z2Z2Condensation.blockedFamily\_isNormalRepresentation},
     \leanid{Z2Z2Condensation.omega\_blockedFamily\_cohomologousTo\_kleinCocycle},

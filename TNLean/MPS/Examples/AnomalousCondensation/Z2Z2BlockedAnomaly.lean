@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.MPS.Core.PhysicalReindexTransport
 import TNLean.MPS.Core.ReductionBlocking
 import TNLean.MPS.Examples.AnomalousCondensation.Z2Z2AnomalyClass
 import TNLean.MPS.MPDO.PhysicalBlocking
@@ -30,7 +31,7 @@ fusion choice, and `KleinCocycleCompleteness` identifies the class.
 
 ## Main results
 
-* `blockedFamily_isNormalRepresentation`: exactness of the actual blocked family.
+* `blockedFamily_isNormalRepresentation`: exactness of the blocked family.
 * `omega_blockedFamily_cohomologousTo_kleinCocycle`: its type-II class for every fusion choice.
 * `not_isTrivialGaugeClass_omega_blockedFamily`: nontriviality of that class.
 * `raw_odd_square_ne_identity`: the retained obstruction on raw odd rings.
@@ -48,7 +49,7 @@ def blockedTensor (g : Multiplicative (ZMod 2 × ZMod 2)) :
     MPOTensor (MPSTensor.blockPhysDim 4 2) (bondDim (MPOTensor.GroupCocycle.kleinEquiv g)) :=
   MPOTensor.blockTensor (symTensor (MPOTensor.GroupCocycle.kleinEquiv g)) 2
 
-/-- The genuinely two-site-blocked original family. -/
+/-- The two-site-blocked original family. -/
 def blockedFamily : GroupFamily (Multiplicative (ZMod 2 × ZMod 2))
     (MPSTensor.blockPhysDim 4 2) where
   bondDim g := bondDim (MPOTensor.GroupCocycle.kleinEquiv g)
@@ -64,7 +65,7 @@ theorem mpo_blockedTensor (g : Multiplicative (ZMod 2 × ZMod 2)) (N : ℕ) :
         (mpo (symTensor (MPOTensor.GroupCocycle.kleinEquiv g)) (N * 2)) :=
   mpo_blockTensor_eq_reindex _ 2 N
 
-/-- The actual projective factor, in group coordinates. -/
+/-- The projective factor, in group coordinates. -/
 theorem fusionSign_kleinEquiv (g h : Multiplicative (ZMod 2 × ZMod 2)) :
     fusionSign (MPOTensor.GroupCocycle.kleinEquiv g) (MPOTensor.GroupCocycle.kleinEquiv h) =
       (-1 : ℂ) ^ (g.toAdd.1.val * h.toAdd.2.val) := by
@@ -82,29 +83,11 @@ theorem mpo_symTensor_mul_even (g h : Fin 4) (N : ℕ) (hN : 0 < N) :
     fin_cases g <;> fin_cases h <;> norm_num [fusionSign]
   rw [Nat.mul_comm N 2, pow_mul, hs, one_pow, one_smul]
 
-private theorem normal_reindex {d d' D : ℕ} (e : Fin d' ≃ Fin d)
-    (A : MPSTensor d D) (hA : Kraus.IsNormal A) :
-    Kraus.IsNormal (Kraus.reindexPhysical e A) := by
-  obtain ⟨N, hN, hA⟩ := hA
-  refine ⟨N, hN, ?_⟩
-  have hr : Set.range (fun σ : Fin N → Fin d' ↦
-      Kraus.evalWord (Kraus.reindexPhysical e A) (List.ofFn σ)) =
-      Set.range (fun σ : Fin N → Fin d ↦ Kraus.evalWord A (List.ofFn σ)) := by
-    ext X
-    constructor
-    · rintro ⟨σ, rfl⟩
-      exact ⟨fun i ↦ e (σ i), by
-        simp [Kraus.evalWord_reindexPhysical, List.map_ofFn, Function.comp_def]⟩
-    · rintro ⟨σ, rfl⟩
-      exact ⟨fun i ↦ e.symm (σ i), by
-        simp [Kraus.evalWord_reindexPhysical, List.map_ofFn, Function.comp_def]⟩
-  simpa only [Kraus.IsNBlkInjective, Kraus.wordSpan, hr] using hA
-
-/-- Normality is proved for the actual blocked tensors. -/
+/-- The blocked tensors are normal. -/
 theorem blockedTensor_isNormal (g : Multiplicative (ZMod 2 × ZMod 2)) :
     Kraus.IsNormal (blockedTensor g).toMPSTensor := by
   rw [blockedTensor, toMPSTensor_blockTensor]
-  apply normal_reindex
+  refine (isNormal_reindexPhysical_equiv _ _).2 ?_
   apply MPSTensor.isNormal_blockTensor _ 2 (by omega)
   rw [← symMPS_eq_toMPSTensor]
   exact symMPS_isNormal _
@@ -130,7 +113,7 @@ theorem mpo_blockedTensor_one (N : ℕ) (hN : 0 < N) : mpo (blockedTensor 1) N =
   rw [mpo_symTensor_zero]
   exact Matrix.reindexLinearEquiv_one ℂ ℂ _
 
-/-- Inverses of the blocked group operators are genuine inverses. -/
+/-- Inverse group elements give inverse blocked operators. -/
 theorem mpo_blockedTensor_mul_inv (g : Multiplicative (ZMod 2 × ZMod 2))
     (N : ℕ) (hN : 0 < N) :
     mpo (blockedTensor g) N * mpo (blockedTensor g⁻¹) N = 1 := by
@@ -201,16 +184,6 @@ def blockedXyFusionData :
       change IsReduction _ (blockedMPS eMPS) _ _
       simpa only [block_neg] using block_reduction _ _ _ xyXy_isReduction)
 
-private theorem triple_complexOfInt
-    (M : Fin 4 → Fin 4 → Matrix (Fin 2) (Fin 2) ℤ) (a : Fin 16) :
-    (mulTensor (mulTensor (fun o i ↦ complexOfInt (M o i))
-      (fun o i ↦ complexOfInt (M o i))) (fun o i ↦ complexOfInt (M o i))).toMPSTensor a =
-      complexOfInt (mulIntTensor (mulIntTensor M M) M (@Fin.divNat 4 4 a) (@Fin.modNat 4 4 a)) := by
-  have h := funext₂ fun o i ↦ mulTensor_complexOfRing (Int.castRingHom ℂ) M M o i
-  change mulTensor _ _ (@Fin.divNat 4 4 a) (@Fin.modNat 4 4 a) = _
-  rw [h]
-  exact mulTensor_complexOfRing _ _ M _ _
-
 -- Only the sixteen raw letters are checked, never the 256 blocked letters.
 private theorem raw_x_tree_letter (a : Fin 16) :
     kronId xXLeft 2 * (mulTensor (mulTensor xTensor xTensor) xTensor).toMPSTensor a =
@@ -253,7 +226,7 @@ private theorem block_tree {D m : ℕ} (T : MPOTensor 4 D)
   rw [he, List.length_nil, List.length_map] at hh
   omega
 
-/-- The actual blocked `x` fusion trees have associator `+1`.
+/-- The blocked `x` fusion trees have associator `+1`.
 Source: arXiv:2203.12563, type-II row, lines 1856–1872. -/
 theorem blockedXFusionData_isAssociator :
     blockedXFusionData.IsAssociator GroupFamily.orderTwoGen GroupFamily.orderTwoGen
@@ -267,7 +240,7 @@ theorem blockedXFusionData_isAssociator :
   rw [← blockTensor_mulTensor, ← blockTensor_mulTensor]
   exact block_tree _ _ _ _ raw_x_tree_letter
 
-/-- The actual blocked `xy` fusion trees have associator `−1`.
+/-- The blocked `xy` fusion trees have associator `−1`.
 Source: arXiv:2203.12563, type-II row, lines 1856–1872. -/
 theorem blockedXyFusionData_isAssociator :
     blockedXyFusionData.IsAssociator GroupFamily.orderTwoGen GroupFamily.orderTwoGen
@@ -292,13 +265,13 @@ private theorem twoFamily_ext {d : ℕ}
   · exact funext (Multiplicative.forall_zmod_two hb0 hb1)
   · exact Multiplicative.forall_zmod_two ht0 ht1
 
-/-- Restriction of the actual blocked family to `{e,x}`. -/
+/-- Restriction of the blocked family to `{e,x}`. -/
 theorem blockedFamily_comap_xHom :
     blockedFamily.comap xHom = GroupFamily.orderTwoFamily
       (MPOTensor.blockTensor eTensor 2) (MPOTensor.blockTensor xTensor 2) :=
   twoFamily_ext rfl rfl HEq.rfl HEq.rfl
 
-/-- Restriction of the actual blocked family to `{e,xy}`. -/
+/-- Restriction of the blocked family to `{e,xy}`. -/
 theorem blockedFamily_comap_xyHom :
     blockedFamily.comap xyHom = GroupFamily.orderTwoFamily
       (MPOTensor.blockTensor eTensor 2) (MPOTensor.blockTensor xyTensor 2) :=
@@ -318,7 +291,7 @@ def blockedYFusionData : blockedYFamily.FusionData :=
     · exact block_pair_eq _ _ _ (funext yEStacked_eq)
     · exact block_pair_eq _ _ _ (funext yYStacked_eq)
 
-/-- Restriction of the actual blocked family to `{e,y}`. -/
+/-- Restriction of the blocked family to `{e,y}`. -/
 theorem blockedFamily_comap_yHom : blockedFamily.comap yHom = blockedYFamily :=
   twoFamily_ext rfl rfl HEq.rfl HEq.rfl
 
@@ -358,8 +331,8 @@ theorem cyclicInvariant_omega_blockedFamily_y (fd : blockedFamily.FusionData) :
     ScalarThreeCochain.cyclicInvariant fd.omega (Multiplicative.ofAdd (0, 1)) 2 = 1 :=
   cyclicInvariant_blocked_yHom fd GroupFamily.orderTwoGen
 
-/-- Every cyclic detector of the actual blocked family agrees with the type-II cocycle.
-The values are computed from the actual blocked fusion witnesses above. -/
+/-- Every cyclic detector of the blocked family agrees with the type-II cocycle.
+The values are computed from the blocked fusion witnesses above. -/
 theorem cyclicInvariant_omega_blockedFamily (fd : blockedFamily.FusionData)
     (g : Multiplicative (ZMod 2 × ZMod 2)) :
     ScalarThreeCochain.cyclicInvariant fd.omega g 2 =
