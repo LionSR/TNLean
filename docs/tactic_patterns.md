@@ -5034,6 +5034,21 @@ three-plaquette output measurement, and the routed reunion measurement.
 
 ## Candidates
 
+### Constancy of a continuous trace sign — candidate (2026-10-29)
+
+- **Pattern:** A finite matrix-product/trace expression is continuous by
+  `Continuous.matrix_mul`, `Continuous.matrix_kronecker` and
+  `Continuous.matrix_trace`. A local identity puts its value in `{1,-1}`.
+- **Seen:** `MPS/MPU/TimeReversalSignIntrinsic.lean`,
+  `intrinsicTimeReversalSign_eq_on_path`.
+- **Abstraction:** Mathlib's
+  `IsPreconnected.eq_one_or_eq_neg_one_of_sq_eq` already supplies the
+  topological step; no local connectedness tactic or parallel sign predicate
+  is needed.
+- **Notes:** Continuity of all gate, source-factor and sign witnesses is unnecessary.
+  The trace equals an intrinsic polynomial in the actual tensor, so only
+  tensor continuity and pointwise local certificates are used.
+
 ### Recovering letters by an identity contraction — candidate (2026-10-29)
 
 - **Seen:** `isInjective_uncleTensor_of_isInjective_perturbation` in
