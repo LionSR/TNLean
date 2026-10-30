@@ -48,7 +48,7 @@ theorem exists_supported_ground_cutoff {S : Set ι}
       cfc_id' ℝ A hA.isSelfAdjoint, cfc_const groundEnergy A hA.isSelfAdjoint,
       Algebra.algebraMap_eq_smul_one, ← Complex.coe_smul]
   have hkill : (A - (groundEnergy : ℂ) • 1) * P = 0 := by
-    rw [← hshift, P, ← cfc_mul _ _ A (hc _) (hc _)]
+    rw [← hshift, show P = cfc f A from rfl, ← cfc_mul _ _ A (hc _) (hc _)]
     have hfun : (fun x : ℝ => (x - groundEnergy) * f x) = fun _ => 0 := by
       funext x
       by_cases hx : x = groundEnergy <;> simp [f, hx]
@@ -58,7 +58,7 @@ theorem exists_supported_ground_cutoff {S : Set ι}
     obtain ⟨i, hi⟩ := minEigenvalue_achieved hA
     exact ⟨i, Finset.mem_filter.mpr ⟨Finset.mem_univ _, hi⟩⟩
   have htrace : Matrix.trace P = (T.card : ℂ) := by
-    simp [P, hA.cfc_eq, hA.trace_cfc_eq_sum, f, T, ← Finset.sum_filter]
+    simp [P, hA.cfc_eq, hA.trace_cfc_eq_sum, f, T]
   refine ⟨P, cfc_mem_supportedOperators f hs, ?_, hkill⟩
   rw [htrace]
   exact_mod_cast Finset.card_ne_zero.mpr hT
