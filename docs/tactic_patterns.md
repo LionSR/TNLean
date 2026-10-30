@@ -9844,6 +9844,19 @@ there is no need for a new tactic.
   threshold. Before extending this pattern to another module, move the value equality
   before the case distinction or reuse `Fin.val_inj`; no new tactic is needed.
 
+### Uniform prefix truncation and normalization — candidate (2026-10-29)
+
+- **Pattern:** choose slack from a uniform surprisal-tail scale, sum the square
+  roots of all physical prefix tails to obtain error at most half the requested
+  accuracy, and normalize the nonzero truncated vector while preserving its MPS bond.
+- **Seen:** the private prefix-bound helper in `MPS/AreaLaw/MPSApproximation.lean`
+  and `strip_approximation_of_prefix_bounds` in `MPS/AreaLaw/StripApproximation.lean`.
+- **Existing reuse:** the actual sequential truncation, norm comparison,
+  tail prefactor, and cut-rank-to-MPS theorem are shared. The former helper is
+  private, so the strip argument proves its normalization step locally.
+- **Decision:** Two consumers, below the promotion threshold. A third consumer
+  should extract the common finite-chain argument to a shared narrow module.
+
 ### Uncle boundary contraction and trace extension — candidate (2026-10-29)
 
 - **Seen:** `MPS/ParentHamiltonian/UncleBoundaryWords.lean` and
