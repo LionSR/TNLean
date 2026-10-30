@@ -81,21 +81,25 @@ theorem exists_weightedSchmidtCutBasis {d N : ℕ} (ψ : (Fin N → Fin d) → �
     intro q
     change ((basisOfLinearIndependentOfCardEqFinrank' b hli _) q).val = F.col q
     rw [coe_basisOfLinearIndependentOfCardEqFinrank']
-    rfl
   have hrepr : ∀ v,
       B.equivFun ⟨M.col v, Submodule.subset_span ⟨v, rfl⟩⟩ = S.U.col v := by
     intro v
-    apply B.equivFun.symm.injective
-    apply Subtype.val_injective
-    rw [B.equivFun.symm_apply_apply, Module.Basis.equivFun_symm_apply]
-    simp only [Submodule.coe_sum, Submodule.coe_smul, Finset.sum_apply, Pi.smul_apply, hB,
-      smul_eq_mul]
-    funext u
-    change M u v = ∑ q, S.U q v * F u q
-    rw [hM, Matrix.mul_apply]
-    exact Finset.sum_congr rfl fun q _ ↦ mul_comm _ _
+    have key : (⟨M.col v, Submodule.subset_span ⟨v, rfl⟩⟩ : cutColumnSpace ψ k)
+        = B.equivFun.symm (S.U.col v) := by
+      apply Subtype.ext
+      rw [Module.Basis.equivFun_symm_apply]
+      simp only [Submodule.coe_sum, Submodule.coe_smul, Finset.sum_apply, Pi.smul_apply, hB,
+        smul_eq_mul]
+      funext u
+      change M u v = ∑ q, S.U q v * F u q
+      rw [hM, Matrix.mul_apply]
+      exact Finset.sum_congr rfl fun q _ ↦ mul_comm _ _
+    rw [key, B.equivFun.apply_symm_apply]
   refine ⟨B, S.singularValues, S.singularValues_pos, ?_, ?_⟩
-  · change (fun u q ↦ (B q).val u)ᴴ * (fun u q ↦ (B q).val u) = _
+  · change (fun u q ↦ (B q).val u :
+          Matrix (CutPrefixConfig d N k) (Fin (cutCoefficientRank ψ k)) ℂ)ᴴ *
+        (fun u q ↦ (B q).val u :
+          Matrix (CutPrefixConfig d N k) (Fin (cutCoefficientRank ψ k)) ℂ) = _
     have hBF : (fun u q ↦ (B q).val u) = F := by
       funext u q
       exact congrFun (hB q) u
@@ -110,8 +114,10 @@ theorem exists_weightedSchmidtCutBasis {d N : ℕ} (ψ : (Fin N → Fin d) → �
         congr 1
         funext q
         exact (pow_two _).symm
-  · change (fun q v ↦ B.repr ⟨M.col v, Submodule.subset_span ⟨v, rfl⟩⟩ q) *
-      (fun q v ↦ B.repr ⟨M.col v, Submodule.subset_span ⟨v, rfl⟩⟩ q)ᴴ = 1
+  · change (fun q v ↦ B.repr ⟨M.col v, Submodule.subset_span ⟨v, rfl⟩⟩ q :
+          Matrix (Fin (cutCoefficientRank ψ k)) (CutSuffixConfig d N k) ℂ) *
+        (fun q v ↦ B.repr ⟨M.col v, Submodule.subset_span ⟨v, rfl⟩⟩ q :
+          Matrix (Fin (cutCoefficientRank ψ k)) (CutSuffixConfig d N k) ℂ)ᴴ = 1
     have hG : (fun q v ↦ B.repr ⟨M.col v, Submodule.subset_span ⟨v, rfl⟩⟩ q) = S.U := by
       funext q v
       exact congrFun (hrepr v) q
