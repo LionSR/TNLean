@@ -53,26 +53,40 @@ and $\mathcal R_x\cong M_{r(x)}(\C)$.
 \begin{lemma}[A full-matrix star-isomorphism has a unitary implementer]
     \label{lem:qca_full_matrix_spatial_implementer}
     \lean{Matrix.exists_unitary_conj_of_starAlgEquiv_matrix_between}
-    \notready
+    \leanok
     Let $I,J$ be nonempty finite coordinate sets and let
-    $f:M_I(\mathbb C)\to M_J(\mathbb C)$ be a complex star-algebra
+    $f:M_I(\C)\to M_J(\C)$ be a complex star-algebra
     isomorphism. Then $|I|=|J|$ and there is a unitary map
-    $U:\mathbb C^I\to\mathbb C^J$ with
+    $U:\C^I\to\C^J$ with
     \begin{align}
         U^\dagger U=\Id_I,\qquad UU^\dagger=\Id_J,\qquad
-        f(A)=UAU^\dagger\quad(A\in M_I(\mathbb C)).
+        f(A)=UAU^\dagger\quad(A\in M_I(\C)).
     \end{align}
     This applies between distinct coordinate sets, as required for the
-    unitaries in \cite[equations~\textup{bruleU} and~\textup{bruleV},
+    unitaries in \cite[equations~\texttt{bruleU} and~\texttt{bruleV},
         lines~980--1001]{SchumacherWerner2004QCA}.
 \end{lemma}
 \begin{proof}
-    \notready
+    \leanok
     The algebra isomorphism is complex linear, so $|I|^2=|J|^2$ and
     $|I|=|J|$. Choose an equivalence of the two coordinate sets and
     transport $f$ to an automorphism of one full matrix algebra.
     The unitary Skolem--Noether theorem implements that automorphism.
-    Transport its columns back to the original input coordinates;
-    multiplication and adjoints respect this reindexing, yielding the
-    displayed formula and both unitary identities.
+    Let $\sigma:J\to I$ be the chosen equivalence, let $P_\sigma$ be its
+    permutation matrix, and let $W\in M_I(\C)$ be a unitary with
+    $P_\sigma^\dagger f(A)P_\sigma=WAW^\dagger$ for all $A$. Put
+    $U=P_\sigma W$. Since multiplication and adjoints respect the
+    reindexing,
+    \begin{align}
+        f(A)
+         & =P_\sigma WAW^\dagger P_\sigma^\dagger
+        =UAU^\dagger,
+         &
+        U^\dagger U
+         & =W^\dagger W=\Id_I,
+         &
+        UU^\dagger
+         & =P_\sigma P_\sigma^\dagger=\Id_J.
+        \label{eq:qca_full_matrix_spatial_transport}
+    \end{align}
 \end{proof}
