@@ -51,13 +51,14 @@ an existence theorem or a new source-predicate family. General availability
 of the required square standard forms remains subject to the reduced/full-
 support restriction in `docs/paper-gaps/mpu_canonical_form_full_support.tex`.
 Both source and admissible umbrella Blueprint nodes remain `notready`.
-The new auxiliary entries are also `notready` pending kernel verification.
+The three auxiliary entries are marked formalized: hosted CI on
+`4804f518` compiled both sign modules.
 Issue #9880 remains open.
 
 ## Validation boundary
 
 No local Lean build, elaboration, compilation or cache mutation was run.
-These proofs are uncompiled. Source checks inspect pinned reindex, trace,
+Hosted CI is the compilation check. Source checks inspect pinned reindex, trace,
 continuity and preconnectedness APIs. Exact integer coordinate sanity checks
 for arbitrary gates at dimensions 1, 2 and 3 agree with the shifted-layer and
 trace identities; these are not proof verification. Generated imports,

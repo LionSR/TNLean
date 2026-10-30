@@ -10487,7 +10487,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \begin{lemma}[Extraction of the sign from a supplied local equation]
     \label{lem:mpu_supplied_time_reversal_sign}
     \lean{MPOTensor.timeReversalSign, MPOTensor.TwoSiteStandardFormData.timeReversalSign_eq_of_local_relation}
-    \notready
+    \leanok
     Let $d>0$ and let $W$ have a supplied two-site standard form with square
     gates $u,v$ on $\mathbb C^d\otimes\mathbb C^d$. Define
     $s(u,v)=d^{-2}\tr[\mathbb S_{12,34}v_{23}(u_{12}\otimes u_{34})v_{23}]$.
@@ -10500,7 +10500,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \cite[lines~1595--1610]{Cirac2017MPU} for the supplied standard form.
 \end{lemma}
 
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:matrix_trace_swap_scaled_kronecker}
     Multiply the local equation by $v_{23}$ and cancel
     $v_{23}^\dagger v_{23}=\Id$. Exchange of the two physical pairs gives
@@ -10511,7 +10511,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \begin{lemma}[Intrinsic trace and independence of standard-form representatives]
     \label{lem:mpu_source_time_reversal_sign_independent}
     \lean{MPOTensor.timeReversalPeriodicTrace, MPOTensor.intrinsicTimeReversalSign, MPOTensor.TwoSiteStandardFormData.timeReversalTrace_eq_periodicTrace, MPOTensor.TwoSiteStandardFormData.timeReversalSign_eq_intrinsic, MPOTensor.TwoSiteStandardFormData.timeReversalSign_eq_of_mpo_two_eq}
-    \notready
+    \leanok
     Let $W$ have a supplied two-site standard form with square gates $u,v$
     on $\mathbb C^d\otimes\mathbb C^d$. For exchange $P$ of the two physical
     blocks, define $s(W)=d^{-2}\tr[P U_W^{(2)}]$. Then $s(u,v)=s(W)$.
@@ -10523,7 +10523,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     square standard forms.
 \end{lemma}
 
-\begin{proof}
+\begin{proof}\leanok
     The shifted layer on two blocks is $P v_{23}P v_{23}$, so
     $U_W^{(2)}=P v_{23}P v_{23}(u\otimes u)$. Since $P^2=\Id$,
     cyclicity gives
@@ -10538,7 +10538,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \begin{lemma}[Constancy along actual tensor paths with pointwise local certificates]
     \label{lem:mpu_supplied_time_reversal_sign_constant}
     \lean{MPOTensor.continuous_intrinsicTimeReversalSign, MPOTensor.intrinsicTimeReversalSign_eq_on_path}
-    \notready
+    \leanok
     Let $W(t)$ be a continuous path of actual tensors for $t\in[0,1]$.
     At each $t$, suppose there is a supplied square two-site standard form
     and a local time-reversal certificate as in
@@ -10552,7 +10552,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     characterization.
 \end{lemma}
 
-\begin{proof}
+\begin{proof}\leanok
     \uses{lem:mpu_supplied_time_reversal_sign, lem:mpu_source_time_reversal_sign_independent}
     The actual finite-chain operator is polynomial in the tensor entries,
     so $s(W(t))$ is continuous. At each point the local equation and
