@@ -9783,3 +9783,16 @@ there is no need for a new tactic.
   `Matrix.trace_reindex` perform the matrix algebra. One helper transports either resulting
   inclusion through physical blocking and the actual orthogonal-complement projector.
 - **Decision:** Two sector cases in one file; no new tactic or parallel ground-space predicate.
+
+### Uncle boundary contraction and trace extension — candidate (2026-10-29)
+
+- **Seen:** `MPS/ParentHamiltonian/UncleBoundaryWords.lean` and
+  `MPS/ParentHamiltonian/UncleBoundaryIntersection.lean`.
+- **Pattern:** Extract coefficients of the identity from a full one-letter span,
+  contract a physical endpoint, and extend a trace identity from spanning words
+  to arbitrary matrices.
+- **Reuse:** The source-specific contraction is stated once as
+  `sum_smul_uncleBoundaryWord_cons`; Mathlib's `LinearMap.ext_on_range` supplies
+  the general extension. The existing matrix trace-representation theorem
+  handles both endpoint restriction directions.
+- **Decision:** Reuse the lemmas; no new tactic or parallel dual structure.
