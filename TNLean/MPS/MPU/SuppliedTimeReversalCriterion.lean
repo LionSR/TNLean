@@ -82,11 +82,12 @@ private theorem selected_square_source_gate_comparison
       (finProdFinEquiv (m := d) (n := d))
     ∃ X Y : Matrix.unitaryGroup (Fin (d * d)) ℂ,
       Matrix.reindex (Equiv.prodCongr L R) (Equiv.refl _) (SourceFactors.sourceU W T) =
-        ((X : Matrix _ _ ℂ) ⊗ₖ (Y : Matrix _ _ ℂ)) * Matrix.reindex p p
-          (staircaseMiddle (A := Fin d) (E := Fin d) v * (u ⊗ₖ u)) ∧
+        ((X : Matrix (Fin (d * d)) (Fin (d * d)) ℂ) ⊗ₖ (Y : Matrix (Fin (d * d)) (Fin (d * d)) ℂ)) *
+          Matrix.reindex p p (staircaseMiddle (A := Fin d) (E := Fin d) v * (u ⊗ₖ u)) ∧
       Matrix.reindex (Equiv.refl _) (Equiv.prodCongr R L) (SourceFactors.sourceV W T) =
         Matrix.reindex p p (staircaseMiddle (A := Fin d) (E := Fin d) v) *
-          ((Y : Matrix _ _ ℂ)ᴴ ⊗ₖ (X : Matrix _ _ ℂ)ᴴ) := by
+          ((Y : Matrix (Fin (d * d)) (Fin (d * d)) ℂ)ᴴ ⊗ₖ
+              (X : Matrix (Fin (d * d)) (Fin (d * d)) ℂ)ᴴ) := by
   classical
   let T := sourceFactors W hW.ρ hW.ρ_posDef
   have hr : r[W] = d * d := S.sourceRanks_eq.1
@@ -95,16 +96,17 @@ private theorem selected_square_source_gate_comparison
   let L := finCongr hl
   let R := finCongr hr
   let X' : Matrix.unitaryGroup (Fin (d * d)) ℂ :=
-    ⟨Matrix.reindex L L X, Matrix.reindex_mem_unitaryGroup _ _ X.property⟩
+    ⟨Matrix.reindex L L X, Matrix.reindex_mem_unitaryGroup L _ X.property⟩
   let Y' : Matrix.unitaryGroup (Fin (d * d)) ℂ :=
-    ⟨Matrix.reindex R R Y, Matrix.reindex_mem_unitaryGroup _ _ Y.property⟩
+    ⟨Matrix.reindex R R Y, Matrix.reindex_mem_unitaryGroup R _ Y.property⟩
   let e : (Fin d × Fin d) ≃ Fin (d * d) := finProdFinEquiv
   let p := Equiv.prodCongr e e
   let A := staircaseMiddle (A := Fin d) (E := Fin d) v * (u ⊗ₖ u)
   let B := staircaseMiddle (A := Fin d) (E := Fin d) v
   have hu' : Matrix.reindex (Equiv.prodCongr L R) (Equiv.refl _)
       (SourceFactors.sourceU W T) =
-      ((X' : Matrix _ _ ℂ) ⊗ₖ (Y' : Matrix _ _ ℂ)) * Matrix.reindex p p A := by
+      ((X' : Matrix (Fin (d * d)) (Fin (d * d)) ℂ) ⊗ₖ (Y' : Matrix (Fin (d * d)) (Fin (d * d)) ℂ)) *
+          Matrix.reindex p p A := by
     have h := congrArg (Matrix.reindex (Equiv.prodCongr L R) (Equiv.refl _)) hu
     rw [Matrix.reindex_kronecker_mul] at h
     have hA : Matrix.reindex (Equiv.prodCongr L R) (Equiv.refl _)
@@ -119,7 +121,8 @@ private theorem selected_square_source_gate_comparison
     exact h
   have hv' : Matrix.reindex (Equiv.refl _) (Equiv.prodCongr R L)
       (SourceFactors.sourceV W T) = Matrix.reindex p p B *
-      ((Y' : Matrix _ _ ℂ)ᴴ ⊗ₖ (X' : Matrix _ _ ℂ)ᴴ) := by
+      ((Y' : Matrix (Fin (d * d)) (Fin (d * d)) ℂ)ᴴ ⊗ₖ
+          (X' : Matrix (Fin (d * d)) (Fin (d * d)) ℂ)ᴴ) := by
     have h := congrArg (Matrix.reindex (Equiv.refl _) (Equiv.prodCongr R L)) hv
     rw [Matrix.reindex_mul_kronecker] at h
     have hB : Matrix.reindex (Equiv.refl _) (Equiv.prodCongr R L)
@@ -165,24 +168,30 @@ theorem exists_timeReversal_certificate_of_square_ranks
   obtain ⟨w, hw⟩ := adjoint_certificate_of_unitary_gate_transport
     (Matrix.reindex p p A) (Matrix.reindex p p B) X' Y' z σ hcert
   let x : Matrix.unitaryGroup (Fin d × Fin d) ℂ :=
-    ⟨Matrix.reindex e.symm e.symm w, Matrix.reindex_mem_unitaryGroup _ _ w.property⟩
+    ⟨Matrix.reindex e.symm e.symm w,
+      Matrix.reindex_mem_unitaryGroup e.symm _ w.property⟩
   refine ⟨σ, x, hσ, ?_⟩
   apply (Matrix.reindexLinearEquiv ℂ ℂ p p).injective
   change Matrix.reindexLinearEquiv ℂ ℂ p p A =
     Matrix.reindexLinearEquiv ℂ ℂ p p
-      ((σ • ((x : Matrix _ _ ℂ) ⊗ₖ (x : Matrix _ _ ℂ)ᴴ)) * Bᴴ)
+      ((σ • ((x : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ) ⊗ₖ
+          (x : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ)ᴴ)) * Bᴴ)
   rw [Matrix.smul_mul, map_smul]
   conv_rhs => rw [← Matrix.reindexLinearEquiv_mul ℂ ℂ p p p]
   have hx : Matrix.reindexLinearEquiv ℂ ℂ p p
-      ((x : Matrix _ _ ℂ) ⊗ₖ (x : Matrix _ _ ℂ)ᴴ) =
-      (w : Matrix _ _ ℂ) ⊗ₖ (w : Matrix _ _ ℂ)ᴴ := by
+      ((x : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ) ⊗ₖ
+          (x : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ)ᴴ) =
+      (w : Matrix (Fin (d * d)) (Fin (d * d)) ℂ) ⊗ₖ
+          (w : Matrix (Fin (d * d)) (Fin (d * d)) ℂ)ᴴ := by
     change Matrix.reindex p p
-      ((x : Matrix _ _ ℂ) ⊗ₖ (x : Matrix _ _ ℂ)ᴴ) = _
+      ((x : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ) ⊗ₖ
+          (x : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ)ᴴ) = _
     rw [← Matrix.kroneckerMap_reindex]
-    have hx' : Matrix.reindex e e (x : Matrix _ _ ℂ) = (w : Matrix _ _ ℂ) := by
+    have hx' : Matrix.reindex e e (x : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ) =
+        (w : Matrix (Fin (d * d)) (Fin (d * d)) ℂ) := by
       ext i j
-      change (w : Matrix _ _ ℂ) (e (e.symm i)) (e (e.symm j)) =
-        (w : Matrix _ _ ℂ) i j
+      change (w : Matrix (Fin (d * d)) (Fin (d * d)) ℂ) (e (e.symm i)) (e (e.symm j)) =
+        (w : Matrix (Fin (d * d)) (Fin (d * d)) ℂ) i j
       rw [Equiv.apply_symm_apply, Equiv.apply_symm_apply]
     rw [hx', ← Matrix.conjTranspose_reindex, hx']
   rw [hx]
@@ -231,7 +240,8 @@ theorem mpo_even_eq_adjoint_of_timeReversal_certificate
     (σ : ℂ) (hσ : σ = 1 ∨ σ = -1)
     (x : Matrix.unitaryGroup (Fin d × Fin d) ℂ)
     (hlocal : staircaseMiddle (A := Fin d) (E := Fin d) v * (u ⊗ₖ u) =
-      σ • ((x : Matrix _ _ ℂ) ⊗ₖ (x : Matrix _ _ ℂ)ᴴ) *
+      σ • ((x : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ) ⊗ₖ
+          (x : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ)ᴴ) *
         (staircaseMiddle (A := Fin d) (E := Fin d) v)ᴴ)
     (N : ℕ) (hN : 1 < N) (heven : Even N) : mpo W N = (mpo W N)ᴴ := by
   classical
@@ -245,32 +255,44 @@ theorem mpo_even_eq_adjoint_of_timeReversal_certificate
   let e : (Fin d × Fin d) ≃ Fin (d * d) := finProdFinEquiv
   let p := Equiv.prodCongr e e
   let x' : Matrix.unitaryGroup (Fin (d * d)) ℂ :=
-    ⟨Matrix.reindex e e x, Matrix.reindex_mem_unitaryGroup _ _ x.property⟩
+    ⟨Matrix.reindex e e x, Matrix.reindex_mem_unitaryGroup e _ x.property⟩
   let A₀ := Matrix.reindex p p
     (staircaseMiddle (A := Fin d) (E := Fin d) v * (u ⊗ₖ u))
   let B₀ := Matrix.reindex p p (staircaseMiddle (A := Fin d) (E := Fin d) v)
-  have hraw : A₀ = σ • ((x' : Matrix _ _ ℂ) ⊗ₖ (x' : Matrix _ _ ℂ)ᴴ) * B₀ᴴ := by
+  have hraw : A₀ = σ •
+      ((x' : Matrix (Fin (d * d)) (Fin (d * d)) ℂ) ⊗ₖ
+          (x' : Matrix (Fin (d * d)) (Fin (d * d)) ℂ)ᴴ) * B₀ᴴ := by
     exact Matrix.reindex_adjoint_certificate e hlocal
   obtain ⟨X, Y, hu, hv⟩ := selected_square_source_gate_comparison S hW
-  have hX : (X : Matrix _ _ ℂ)ᴴ * (X : Matrix _ _ ℂ) = 1 :=
+  have hX : (X : Matrix (Fin (d * d)) (Fin (d * d)) ℂ)ᴴ *
+      (X : Matrix (Fin (d * d)) (Fin (d * d)) ℂ) = 1 :=
     ((Matrix.isUnitaryBetween_iff_mem_unitaryGroup _).mpr X.property).1
-  have hY : (Y : Matrix _ _ ℂ)ᴴ * (Y : Matrix _ _ ℂ) = 1 :=
+  have hY : (Y : Matrix (Fin (d * d)) (Fin (d * d)) ℂ)ᴴ *
+      (Y : Matrix (Fin (d * d)) (Fin (d * d)) ℂ) = 1 :=
     ((Matrix.isUnitaryBetween_iff_mem_unitaryGroup _).mpr Y.property).1
-  have hAcancel : ((X : Matrix _ _ ℂ)ᴴ ⊗ₖ (Y : Matrix _ _ ℂ)ᴴ) * A = A₀ := by
-    change ((X : Matrix _ _ ℂ)ᴴ ⊗ₖ (Y : Matrix _ _ ℂ)ᴴ) *
+  have hAcancel : ((X : Matrix (Fin (d * d)) (Fin (d * d)) ℂ)ᴴ ⊗ₖ
+      (Y : Matrix (Fin (d * d)) (Fin (d * d)) ℂ)ᴴ) * A = A₀ := by
+    change ((X : Matrix (Fin (d * d)) (Fin (d * d)) ℂ)ᴴ ⊗ₖ
+        (Y : Matrix (Fin (d * d)) (Fin (d * d)) ℂ)ᴴ) *
       Matrix.reindex (Equiv.prodCongr (finCongr hl) (finCongr hr))
         (Equiv.refl _) (SourceFactors.sourceU W T) = A₀
     rw [hu, ← Matrix.mul_assoc, ← Matrix.mul_kronecker_mul, hX, hY,
       Matrix.one_kronecker_one, Matrix.one_mul]
-  have hBcancel : B * ((Y : Matrix _ _ ℂ) ⊗ₖ (X : Matrix _ _ ℂ)) = B₀ := by
+  have hBcancel : B *
+      ((Y : Matrix (Fin (d * d)) (Fin (d * d)) ℂ) ⊗ₖ (X : Matrix (Fin (d * d)) (Fin (d * d)) ℂ)) =
+          B₀ := by
     change Matrix.reindex (Equiv.refl _)
       (Equiv.prodCongr (finCongr hr) (finCongr hl)) (SourceFactors.sourceV W T) *
-        ((Y : Matrix _ _ ℂ) ⊗ₖ (X : Matrix _ _ ℂ)) = B₀
+        ((Y : Matrix (Fin (d * d)) (Fin (d * d)) ℂ) ⊗ₖ (X : Matrix (Fin (d * d)) (Fin (d * d)) ℂ)) =
+            B₀
     rw [hv, Matrix.mul_assoc, ← Matrix.mul_kronecker_mul, hY, hX,
       Matrix.one_kronecker_one, Matrix.mul_one]
-  have hraw' : ((X : Matrix _ _ ℂ)ᴴ ⊗ₖ (Y : Matrix _ _ ℂ)ᴴ) * A =
-      σ • ((x' : Matrix _ _ ℂ) ⊗ₖ (x' : Matrix _ _ ℂ)ᴴ) *
-        (B * ((Y : Matrix _ _ ℂ) ⊗ₖ (X : Matrix _ _ ℂ)))ᴴ := by
+  have hraw' : ((X : Matrix (Fin (d * d)) (Fin (d * d)) ℂ)ᴴ ⊗ₖ
+      (Y : Matrix (Fin (d * d)) (Fin (d * d)) ℂ)ᴴ) * A =
+      σ • ((x' : Matrix (Fin (d * d)) (Fin (d * d)) ℂ) ⊗ₖ
+          (x' : Matrix (Fin (d * d)) (Fin (d * d)) ℂ)ᴴ) *
+        (B * ((Y : Matrix (Fin (d * d)) (Fin (d * d)) ℂ) ⊗ₖ
+            (X : Matrix (Fin (d * d)) (Fin (d * d)) ℂ)))ᴴ := by
     rw [hAcancel, hBcancel]
     exact hraw
   obtain ⟨z, hz⟩ := adjoint_certificate_of_unitary_gate_transport A B
@@ -298,7 +320,8 @@ theorem even_timeReversal_iff_exists_certificate
           (Equiv.prodCongr (finCongr hr) (finCongr hl)) v
         (σ = 1 ∨ σ = -1) ∧
         staircaseMiddle (A := Fin d) (E := Fin d) v₀ * (u₀ ⊗ₖ u₀) =
-          σ • ((x : Matrix _ _ ℂ) ⊗ₖ (x : Matrix _ _ ℂ)ᴴ) *
+          σ • ((x : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ) ⊗ₖ
+              (x : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ)ᴴ) *
             (staircaseMiddle (A := Fin d) (E := Fin d) v₀)ᴴ := by
   constructor
   · exact S.exists_timeReversal_certificate hW
