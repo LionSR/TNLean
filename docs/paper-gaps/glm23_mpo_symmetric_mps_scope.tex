@@ -7,7 +7,7 @@
 \input{./command}
 \title{Matrix Product Operator Symmetric States:\newline Formalized Layers and Remaining Scope}
 \author{}
-\date{2026-10-05}
+\date{2026-10-30}
 \begin{document}
 \maketitle
 \gapnote{scope-restriction}{open}
@@ -235,7 +235,49 @@ so it is the inverse printed F-matrix of the complete-zipper convention.
 The coupled F factor has row $(d,\eta,\chi)$ and column $(f,\mu,\nu)$,
 correcting the source's reversed multiplicity pairs as documented in
 \path{docs/paper-gaps/glm23_multiplicity_l_indices.tex}. Individual L entries may vanish.
-These results do not establish the general joint multiplicity gauge law.
+
+\paragraph{Joint multiplicity gauge law.}
+Changing the analysis maps by $V^i\mapsto\sum_{i'}X_{ii'}V^{i'}$ and the
+synthesis maps by $W^i\mapsto\sum_{i'}\hat X_{ii'}W^{i'}$ changes the L and
+F coefficients by the multilinear formulas of source lines 415--422 and
+593--605, for arbitrary matrices $X,\hat X,Y,\hat Y$. Conversely, two exact
+biorthogonal decompositions of the same tensor onto individually injective,
+positive-dimensional, scalar-gauge-separated blocks differ by invertible
+multiplicity gauges with $\hat X=(X^{-1})^{T}$, exactly and not only after
+multiplication by a letter: injectivity of the target block writes the
+identity as a combination of its letters. Hence the L and F coefficients
+of any two choices of exact fusion and action maps are related by the
+source's joint gauge transformation.\footnote{
+    \leanid{MPOTensor.actionLMatrix_regauge},
+    \leanid{MPOTensor.fusionFMatrix_regauge},
+    \leanid{MPSTensor.IsBiorthogonalDecomposition.exists_multiplicityGauge_eq_of_isInjective},
+    and
+    \leanid{MPOTensor.exists_actionLMatrix_fusionFMatrix_regauge_of_isInjective}, in
+    \doclink{TNLean/MPS/MPDO/BoundaryActionLMatrixGauge}.}
+
+\paragraph{The single-block obstruction for exact maps.}
+For a single injective state block acted on without multiplicity, the L
+matrix of each operator pair has one row; being invertible, it has one
+column, so $\sum_cN_{ab}^c=1$. With $\lambda$ the entries of the inverse L
+matrices, the coupled pentagon gives the source's formula
+$F=\lambda\lambda/(\lambda\lambda)$, and rescaling the exact fusion maps
+by $\lambda$ makes every F coefficient one. This is the source's
+obstruction of lines 607--636 for general fusion data; the operator
+hypotheses are those of the coupled pentagon.\footnote{
+    \leanid{MPOTensor.sum_fusionMultiplicity_eq_one_of_singleBlock},
+    \leanid{MPOTensor.fusionFMatrix_eq_singleBlockLambda}, and
+    \leanid{MPOTensor.exists_fusionFMatrix_eq_one_of_singleBlock}, in
+    \doclink{TNLean/MPS/MPDO/BoundarySingleBlockObstruction}.}
+For group fusion and action multiplicities, every multiplicity space has
+one element; the scalar L and F entries form a scalar L-symbol compatible
+with a scalar three-cochain, and a block fixed by the whole group makes
+that cochain a coboundary.\footnote{
+    \leanid{MPOTensor.exists_lSymbol_isCompatible_of_group} and
+    \leanid{MPOTensor.isTrivialGaugeClass_of_group_of_forall_smul_eq}, in
+    \doclink{TNLean/MPS/MPDO/BoundaryGroupSpecialization}.}
+This scalar cochain is built from the exact maps; its identification with
+the boundary-dressed associator of the periodic group reductions is the
+adapter of item 3 below.
 
 \paragraph{Group cocycles, L-symbols, and the group obstruction.}
 For a normal periodic group representation, the two fusion trees define a
@@ -289,8 +331,8 @@ periodic, boundary-dressed group reductions.\footnote{
 \paragraph{Other periodic consequences.}
 The fusion-ring obstruction to a single normal symmetric block is also
 proved: its eigenvalues define a nonnegative integer fusion character.
-This excludes Fibonacci, but it is not the general F-symbol obstruction
-of source lines 610--636. Separately, for a fusion ring and a unital
+This excludes Fibonacci; the general F-symbol obstruction of source lines
+610--636 is the separate exact-map result above. Separately, for a fusion ring and a unital
 nonnegative integer representation, a strictly positive common eigenvector
 produces the symmetric boundary state of source lines 1795--1805.
 That construction requires neither commutativity of the fusion ring nor
@@ -310,16 +352,13 @@ at each length is not substituted for the source's condition. The
 matrix-unit splitting retains the possibly nonunital support instead of
 adding a star-closure, vanishing-remainder, or ambient-completeness premise.
 The multiplicity L construction and the corrected coupled pentagon are
-also formalized.
+also formalized, as are the joint multiplicity gauge law of the L and F
+coefficients and the general single-block, multiplicity-one obstruction
+that trivializes the F-symbols.
 
-The following algebraic obligations remain distinct:
+The following algebraic obligation remains distinct:
 \begin{enumerate}
-    \item Derive the full joint multiplicity gauge law for L from arbitrary
-          compatible changes of the original fusion and action maps, beyond
-          the proved complete-fusion gauge covariance and scalar group laws.
-    \item Prove the source's general single-block, multiplicity-one
-          obstruction that trivializes the F-symbols, beyond the scalar group
-          case and the different fusion-ring obstruction.
+    \setcounter{enumi}{2}
     \item Connect the exact source maps to the one-channel closed-group and
           coset constructions where an exact adapter is still required;
           periodic or boundary-dressed reductions alone are not that adapter.
@@ -330,7 +369,17 @@ distinguished from these remaining questions. The periodic predicates
 remain useful as explicitly weaker hypotheses and need not be renamed as
 the arbitrary-boundary ones.
 
-Further independent work concerns tensor-derived time-reversal constraints;
+For a group with normal tensors, commutation of every operator with an
+antiunitary time reversal $v^{\otimes N}K$ is proved to make the anomaly
+three-cochain cohomologous to its complex conjugate, hence to a real one:
+the source's gauges $q_g$ are derived from the single-block reduction
+theorem, and the conjugated fusion tensors, transported along them, have
+the conjugate associator.\footnote{
+    \leanid{MPOTensor.GroupFamily.nonempty_bondGauge_timeReversal} and
+    \leanid{MPOTensor.GroupFamily.FusionData.exists_real_cohomologousTo_omega_of_timeReversal},
+    in \doclink{TNLean/MPS/Symmetry/MPOSymmetry/TimeReversalAnomaly}.}
+Further independent work concerns the tensor-derived time-reversal
+constraint on the L-symbols;
 the weak-Hopf realization, represented-unit support, and canonical-integral
 normalization used by the source's parent construction; the general physical
 phase classification of Section 5, including non-fixed-point and varying-bond
@@ -373,10 +422,9 @@ hypotheses, including physical adjoint compatibility where required.
 
 \section{Elimination plan}
 
-Use the completed exact arbitrary-boundary reconstruction and the actual
-multiplicity F/L comparisons as the starting point. Derive the remaining
-joint multiplicity gauge law with the source's corrected dual index
-positions, then address the general multiplicity-one F-symbol obstruction.
+Use the completed exact arbitrary-boundary reconstruction, the actual
+multiplicity F/L comparisons, their joint gauge law, and the exact
+single-block obstruction as the starting point.
 Complete the exact one-channel group and coset adapters without replacing
 exact identities by long-word, boundary-dressed ones. Keep the already
 proved scalar group and fusion-ring results as separate reusable inputs.
