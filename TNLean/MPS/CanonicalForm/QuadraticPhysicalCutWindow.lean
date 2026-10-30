@@ -113,12 +113,12 @@ theorem exists_quadraticSolution_physicalCutWindow [NeZero D] {A : MPSTensor d D
     sum_mul_conjTranspose := sum_inv_smul_mul_conjTranspose_eq_one hlam hsum }⟩
   · intro i j
     simp only [Matrix.smul_mul, Matrix.mul_smul, smul_smul]
-    rw [hlocal, hratio, Matrix.smul_kronecker]
+    rw [hlocal, mul_comm ((lam : ℂ)⁻¹ ^ (j.val + 1)), hratio, Matrix.smul_kronecker]
   · intro j hj
     change (lam : ℂ) ^ (j.val + 1) • Y ⟨j.val + 1, hj⟩ *
       (((lam : ℂ)⁻¹) ^ (j.val + 1) • Z j) = 1
     simp only [Matrix.smul_mul, Matrix.mul_smul, smul_smul]
-    rw [hinverse j hj, ← mul_pow, mul_inv_cancel₀ hlam0, one_pow, one_smul]
+    rw [hinverse j hj, ← mul_pow, inv_mul_cancel₀ hlam0, one_pow, one_smul]
 
 /-- Reindexing any actual minimal physical cut-basis family gives the
 square bases of the reconstruction window. Their dimension equality is
@@ -170,5 +170,6 @@ theorem quadraticPhysicalCutWindow_cutSiteMatrix [NeZero D] {A : MPSTensor d D}
     Module.Basis.reindex_apply, Module.Basis.repr_reindex_apply, Matrix.reindex_apply,
     Matrix.submatrix_apply,
     cutSiteMatrix]
+  rfl
 
 end MPSTensor

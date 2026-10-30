@@ -37,8 +37,9 @@ theorem linearIndependent_physicalPrefixMatrix (k : Fin (N + 1))
     apply le_antisymm
     · simpa only [Fintype.card_fin] using
         Matrix.rank_le_card_width (physicalPrefixMatrix B k)
-    · rw [hmin]
-      change (cutCoefficientMatrix B.coeff k.val).rank ≤ _
+    · calc B.bondDim k = cutCoefficientRank B.coeff k.val := hmin
+        _ = (cutCoefficientMatrix B.coeff k.val).rank := rfl
+        _ ≤ _ := ?_
       rw [cutCoefficientMatrix_eq_physicalPrefix_mul_suffix B k]
       exact Matrix.rank_mul_le_left _ _
   apply linearIndependent_iff_card_eq_finrank_span.mpr
@@ -78,6 +79,7 @@ coefficients. Source: PGVWC07, MPSarchive.tex lines 444--458. -/
     (physicalPrefixBasis B k hmin a).val u = physicalPrefixMatrix B k u a := by
   simp only [physicalPrefixBasis, Module.Basis.map_apply, LinearEquiv.coe_ofEq_apply,
     Module.Basis.coe_span_apply]
+  rfl
 
 /-- Between two minimal cuts, the original prescribed OBC site matrix
 is the matrix of the actual physical-coordinate slice. This identifies
@@ -102,8 +104,7 @@ theorem toMatrix_cutSlice_physicalPrefixBasis (p : Fin N)
     rw [physicalPrefixMatrix_step]
     simp only [Matrix.mul_apply, mul_comm]
   ext b a
-  change C.repr (cutSlice B.coeff p.val i (C' a)) b = _
-  rw [hslice]
-  simp
+  rw [LinearMap.toMatrix_apply, hslice]
+  simp [C, Finsupp.single_apply]
 
 end OBCChainTensor
