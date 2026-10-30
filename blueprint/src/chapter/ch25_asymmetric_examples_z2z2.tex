@@ -1108,6 +1108,7 @@ in~\cite{gap:glm23_z2z2_anomaly_detector_scope}.
         Z2Z2Condensation.blockedFamily_isNormalRepresentation,
         Z2Z2Condensation.mpo_blockedTensor_one,
         Z2Z2Condensation.mpo_blockedTensor_mul_inv,
+        Z2Z2Condensation.mpo_xy_mul_xy,
         Z2Z2Condensation.raw_odd_square_ne_identity}
     \leanok
     \uses{def:asymex_z2z2_blocked, thm:asymex_z2z2_fusion,
@@ -1167,10 +1168,16 @@ in~\cite{gap:glm23_z2z2_anomaly_detector_scope}.
     originally reduces to $-M_e$, whose two-site block equals $B_e$.
     With identity fusion matrices when a factor is $e$, the two trees of
     three generators are $V_g\otimes\Id$ and $\Id\otimes V_g$.
-    For the actual raw triple tensor $T_g=(M_g\cdot M_g)\cdot M_g$,
+    For the raw triple tensor $T_g=(M_g\cdot M_g)\cdot M_g$,
     direct integer multiplication gives, for every doubled letter $a$,
-    $(V_g\otimes\Id)T_g^a=s_g(\Id\otimes V_g)T_g^a$, with
-    $s_x=1$ and $s_{xy}=-1$. Right multiplication extends this equality
+    \begin{align}
+        (V_g\otimes\Id)T_g^a
+               & =s_g(\Id\otimes V_g)T_g^a, &
+        s_x    & =1,                        &
+        s_{xy} & =-1.
+        \label{eq:asymex_z2z2_raw_tree_comparison}
+    \end{align}
+    Right multiplication extends this equality
     to every nonempty word. The blocked triple tensor is the two-site
     block of $T_g$, so it has the same tree comparison. Thus the three
     detectors are $(+1,+1,-1)$. Fusion-gauge invariance makes them valid
