@@ -10095,7 +10095,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \begin{lemma}[Minimality of the supplied standard-form cuts]
     \label{lem:mpu_supplied_half_factor_minimality}
     \lean{MPOTensor.TwoSiteStandardFormData.X₁_mulVec_injective, MPOTensor.TwoSiteStandardFormData.X₂_mulVec_injective, MPOTensor.TwoSiteStandardFormData.exists_left_inverses, MPOTensor.TwoSiteStandardFormData.cutX₁_mulVec_injective, MPOTensor.TwoSiteStandardFormData.cutX₂_mulVec_injective, MPOTensor.TwoSiteStandardFormData.exists_cutY_right_inverses, MPOTensor.TwoSiteStandardFormData.cut_factor_ranks, MPOTensor.TwoSiteStandardFormData.sourceRanks_eq, MPOTensor.TwoSiteStandardFormData.fourSpinGate_isUnitaryBetween}
-    \notready
+    \leanok
     Let $W$ have any supplied standard form as in
     Lemma~\ref{lem:mpu_supplied_standard_form_source_cuts}, with both gates
     unitary and positive physical, bond, and intermediate dimensions.
@@ -10117,18 +10117,38 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         1237--1244]{Cirac2017MPU}.
 \end{lemma}
 
-\begin{proof}
+\begin{proof}\leanok
     \uses{lem:mpu_supplied_standard_form_source_cuts}
-    A vector in the kernel of $X_1$, tensored with a fixed coordinate of
-    the left intermediate space, would give a kernel vector of $v$.
-    The isometry of $v$ therefore makes $X_1$ injective. Exchanging the
-    two physical and intermediate legs proves the same assertion for $X_2$.
-    The spectator identity factors preserve this injectivity in
-    $\widehat X_1$ and $\widehat X_2$.
+    The supplied contraction of the half factors is
+    \begin{align}
+        v(i,j;s,t) & =\sum_\beta X_1(i,\beta;s)X_2(\beta,j;t).
+        \label{eq:mpu_supplied_half_factor_minimality_v}
+    \end{align}
+    Let $X_1z=0$, fix an intermediate coordinate $t_0$, and put
+    $w(s,t)=z(s)\delta_{t,t_0}$. By
+    \eqref{eq:mpu_supplied_half_factor_minimality_v},
+    \begin{align}
+        (vw)(i,j) & =\sum_\beta X_2(\beta,j;t_0)
+        \sum_sX_1(i,\beta;s)z(s)=0.
+    \end{align}
+    Since $v^\dagger v=\Id$, this gives $w=v^\dagger vw=0$, hence $z=0$:
+    $X_1$ is injective. Exchanging the two physical and intermediate legs
+    of \eqref{eq:mpu_supplied_half_factor_minimality_v} proves the same
+    assertion for $X_2$. By the formulas of
+    Lemma~\ref{lem:mpu_supplied_standard_form_source_cuts},
+    $\widehat X_1=\Id_d\otimes X_1$ and $\widehat X_2=X_2\otimes\Id_d$
+    up to the order of the tensor factors, so both are injective.
 
-    The four-spin matrix $v_{23}(u_{12}\otimes u_{34})$ is unitary, and
-    its open contraction consists of $\widehat Y_2$ and $\widehat Y_1$.
-    Applying the same kernel argument to its adjoint makes
+    Write $A=v_{23}(u_{12}\otimes u_{34})$. It is unitary, and by
+    Lemma~\ref{lem:mpu_supplied_standard_form_source_cuts}
+    \begin{align}
+        A^\dagger(j,j';(t,b),(a,s))
+         & =\sum_\gamma\overline{\widehat Y_2(t,b;j,\gamma)}\,
+        \overline{\widehat Y_1(a,s;\gamma,j')}.
+    \end{align}
+    This is \eqref{eq:mpu_supplied_half_factor_minimality_v} for the
+    isometry $A^\dagger$, with half factors $\widehat Y_2^\dagger$ and
+    $\widehat Y_1^\dagger$. The kernel argument above therefore makes
     $\widehat Y_1^\dagger$ and $\widehat Y_2^\dagger$ injective.
     Their left inverses, after taking adjoints, give the asserted right
     inverses. All four factor ranks follow. Multiplying each source cut
@@ -10243,8 +10263,9 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 
 \begin{lemma}[Normalized physical-adjoint source factors]
     \label{lem:mpu_normalized_physical_adjoint_source_factors}
-    \lean{MPOTensor.IsMPUCanonicalFormII.reindexPhysical, MPOTensor.IsMPUCanonicalFormII.isMPUSimple_physicalAdjointTensor, MPOTensor.IsMPUCanonicalFormII.sourceFactors_sourceU_isUnitaryBetween, MPOTensor.IsMPUCanonicalFormII.sourceFactors_Y₁_mul_conjTranspose, MPOTensor.IsMPUCanonicalFormII.sourceFactors_Y₂_weighted_mul_conjTranspose, MPOTensor.SourceFactors.physicalAdjoint, MPOTensor.SourceFactors.sourceU_physicalAdjoint, MPOTensor.SourceFactors.sourceV_physicalAdjoint, MPOTensor.IsMPUCanonicalFormII.twoSiteSourceFactors_physicalAdjoint}
+    \lean{MPOTensor.IsMPUCanonicalFormII.reindexPhysical, MPOTensor.IsMPUCanonicalFormII.sourceFactors_sourceU_isUnitaryBetween, MPOTensor.IsMPUCanonicalFormII.sourceFactors_Y₁_mul_conjTranspose, MPOTensor.IsMPUCanonicalFormII.sourceFactors_Y₂_weighted_mul_conjTranspose, MPOTensor.SourceFactors.physicalAdjoint, MPOTensor.SourceFactors.sourceU_physicalAdjoint, MPOTensor.SourceFactors.sourceV_physicalAdjoint, MPOTensor.IsMPUCanonicalFormII.twoSiteSourceFactors_physicalAdjoint}
     \leanok
+    \uses{thm:mpug_canonical_adjoint_simple}
     Let $U$ be simple and in reduced canonical form II, with recorded positive
     diagonal boundary $\rho$. Bijective physical relabeling preserves this
     presentation and boundary. Physical adjunction preserves simplicity.
