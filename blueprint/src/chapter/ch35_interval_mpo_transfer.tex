@@ -6,6 +6,40 @@ product of a region and its complement. In the identities below the
 complement factor is listed first. Open matrix product representations
 use the paired row and column alphabet, in increasing site order.
 
+
+\begin{theorem}[Natural coordinates of one transferred interval factor]
+    \label{thm:interval_transfer_entry_coordinates}
+    \lean{TNLean.MPS.AreaLaw.exists_intervalSlice_changingRegionalMiddleFactor}
+    \leanok
+    \uses{def:regional_middle_transferred_family,def:physical_interval_increasing_coordinates}
+    Let $q\ge1$ and let $E=\lbrack c,d)$ and $J=\lbrack u,v)$ in a $T$-site chain satisfy
+    $c\le d\le T$, $u\le v\le T$ and $\max(c,u)\le\min(d,v)$.
+    Supply one matrix $V$ on $\mathcal C(E)$ and fixed configurations on
+    $E\setminus J$ and $J\setminus E$ defining the transferred matrix $W$.
+    In increasing coordinates, there are nonnegative integers $a,b,l$ with
+    $a+l\le d-c$ and $b+l\le v-u$, old full configurations $f,g$, and new
+    outside configurations $\eta,\theta$ such that
+    \begin{align}
+        W(\sigma,\tau)
+         & =\mathbf1_{\sigma|_{[b,b+l)^c}=\eta}
+        \mathbf1_{\tau|_{[b,b+l)^c}=\theta}
+        V\bigl(\iota_a(f,\sigma|_{[b,b+l)}),
+        \iota_a(g,\tau|_{[b,b+l)})\bigr).
+        \label{eq:interval_transfer_entry_coordinates}
+    \end{align}
+    Here $V,W$ are read in their natural coordinates, and $\iota_a$ has
+    the meaning in Theorem~\ref{thm:trace_interval_slice_configuration_extend}.
+    Complements in this formula are in the new natural interval.
+    The overlap length $l$ may be zero. No matrix product representation
+    is assumed.
+\end{theorem}
+\begin{proof}\leanok
+    Take the increasing coordinates of $E\cap J$. Extend the supplied old
+    and new outside configurations to full natural configurations, using
+    $q\ge1$ for unused entries. Evaluation of the prescribed regional
+    matrix gives (\ref{eq:interval_transfer_entry_coordinates}).
+\end{proof}
+
 \begin{lemma}[Transfer of a common middle family between intervals]
     \label{thm:interval_mpo_common_family_transfer}
     \lean{TNLean.MPS.AreaLaw.changingRegionalMiddleFamily_mpo_and_global_decomposition}
