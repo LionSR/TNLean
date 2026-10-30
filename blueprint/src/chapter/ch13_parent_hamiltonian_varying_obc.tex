@@ -132,7 +132,13 @@ the adjacent-pair conditions with the kernel of the open parent Hamiltonian.
 \end{lemma}
 \begin{proof}\leanok
     The first equality follows from ordered multiplication. Induction on the
-    prefix length applies the two-family row-isometry identity at each step.
+    prefix length applies the two-family row-isometry identity at each step:
+    \begin{align}
+        \sum_{u,i}\bigl(P_m(u)B^{[m]}_i\bigr)\bigl(P_m(u)B^{[m]}_i\bigr)^\dagger
+         & =\sum_uP_m(u)\Bigl(\sum_iB^{[m]}_iB^{[m]\dagger}_i\Bigr)P_m(u)^\dagger
+        =\sum_uP_m(u)P_m(u)^\dagger.
+        \label{eq:varying_obc_prefix_row_isometry_step}
+    \end{align}
 \end{proof}
 
 \begin{lemma}[Adjacent coefficient sections determine a full boundary]
@@ -162,15 +168,31 @@ the adjacent-pair conditions with the kernel of the open parent Hamiltonian.
 \end{lemma}
 \begin{proof}\leanok
     Inductively suppose that every fixed suffix gives a trace representation
-    on a prefix of length $m\ge2$. Separate the first $m-1$ sites as the
-    prefix product, followed by sites $m-1,m$. The induction hypothesis gives
-    the left two-family sections, and the original adjacent-pair condition
-    gives the right sections. The prefix product is row-isometric, and the
-    middle site satisfies the spanning condition. The three-site adjoint
-    reconstruction therefore extends the represented prefix by one site.
-    Iterating gives one boundary for the full chain. Singleton endpoint
-    spaces make this boundary a scalar. This proves the representation
-    conclusion without identifying normalized vectors of different phases.
+    on a prefix of length $m\ge2$. Fix the suffix $v$ after site $m$ and
+    write $u$ for the configuration on the first $m-1$ sites. For each $j$,
+    the induction hypothesis applied with the suffix $(j,v)$ gives $X_j$, and
+    for each $u$ the adjacent-pair condition at sites $m-1,m$ gives $Y_u$, with
+    \begin{align}
+        \phi(u,i,j,v)
+         & =\operatorname{tr}\bigl(X_jP_{m-1}(u)B^{[m-1]}_i\bigr)
+        =\operatorname{tr}\bigl(Y_uB^{[m-1]}_iB^{[m]}_j\bigr).
+        \label{eq:varying_obc_full_chain_sections}
+    \end{align}
+    By Lemma~\ref{lem:varying_obc_prefix_product_row_isometry} the family
+    $u\mapsto P_{m-1}(u)$ is row-isometric, and the middle site spans its
+    matrix space. Lemma~\ref{lem:varying_obc_pair_sections_reconstruct},
+    applied with $A_u=P_{m-1}(u)$, $B_i=B^{[m-1]}_i$ and $C_j=B^{[m]}_j$,
+    gives one $Z$ with
+    \begin{align}
+        \phi(u,i,j,v)
+         & =\operatorname{tr}\bigl(ZP_{m-1}(u)B^{[m-1]}_iB^{[m]}_j\bigr)
+        =\operatorname{tr}\bigl(ZP_{m+1}(u,i,j)\bigr),
+        \label{eq:varying_obc_full_chain_extension}
+    \end{align}
+    which extends the represented prefix to length $m+1$. Iterating gives
+    one boundary for the full chain. Singleton endpoint spaces make this
+    boundary a scalar. This proves the representation conclusion without
+    identifying normalized vectors of different phases.
 \end{proof}
 
 \subsection{The open parent Hamiltonian}
