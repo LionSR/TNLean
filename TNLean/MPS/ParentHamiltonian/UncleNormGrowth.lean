@@ -141,11 +141,11 @@ theorem uncleTwoWallTrialSource_ae_quadratic_norm_growth
   have ha : a ≠ 0 := by
     intro ha
     subst a
-    simpa using htrA
+    simp at htrA
   have hb : b ≠ 0 := by
     intro hb
     subst b
-    simpa using htrB
+    simp at htrB
   let : NeZero a := ⟨ha⟩
   let : NeZero b := ⟨hb⟩
   obtain ⟨hIA, hIB⟩ := uncleBoundaryLetter_isInjective_diagonal_blocks A B R₀ L₀ hPert
