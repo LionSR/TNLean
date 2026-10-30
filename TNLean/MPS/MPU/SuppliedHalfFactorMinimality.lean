@@ -31,8 +31,8 @@ open scoped Matrix Kronecker BigOperators ComplexOrder
 namespace MPOTensor.TwoSiteStandardFormData
 
 private theorem firstHalf_mulVec_injective_of_isometry
-    {P B R L : Type*} [Fintype P] [Fintype B] [Fintype R] [Fintype L]
-    [DecidableEq P] [DecidableEq B] [DecidableEq R] [DecidableEq L]
+    {P B R L : Type*} [Fintype P] [Fintype B] [Fintype R] [Finite L]
+    [DecidableEq R] [DecidableEq L]
     (X₁ : Matrix (P × B) (R) ℂ)
     (X₂ : Matrix (B × P) (L) ℂ)
     (v : Matrix (P × P) (R × L) ℂ)
@@ -41,6 +41,7 @@ private theorem firstHalf_mulVec_injective_of_isometry
       ∑ β : B, X₁ (i, β) s * X₂ (β, j) t)
     (t₀ : L) : Function.Injective X₁.mulVec := by
   classical
+  have : Fintype L := Fintype.ofFinite L
   change Function.Injective X₁.mulVecLin
   rw [← LinearMap.ker_eq_bot, Matrix.ker_mulVecLin_eq_bot_iff]
   intro z hz
@@ -77,8 +78,8 @@ private theorem firstHalf_mulVec_injective_of_isometry
   simpa only [w, ↓reduceIte, Pi.zero_apply] using h
 
 private theorem secondHalf_mulVec_injective_of_isometry
-    {P B R L : Type*} [Fintype P] [Fintype B] [Fintype R] [Fintype L]
-    [DecidableEq P] [DecidableEq B] [DecidableEq R] [DecidableEq L]
+    {P B R L : Type*} [Fintype P] [Fintype B] [Finite R] [Fintype L]
+    [DecidableEq R] [DecidableEq L]
     (X₁ : Matrix (P × B) R ℂ) (X₂ : Matrix (B × P) L ℂ)
     (v : Matrix (P × P) (R × L) ℂ) (hv : v.IsIsometry)
     (hfac : ∀ i j s t, v (i, j) (s, t) = ∑ β : B, X₁ (i, β) s * X₂ (β, j) t)
@@ -238,7 +239,7 @@ theorem exists_cutY_right_inverses (S : TwoSiteStandardFormData W u v) :
       Matrix.conjTranspose_one] using congrArg Matrix.conjTranspose hM₂
 
 private theorem rank_eq_card_of_mulVec_injective
-    {m n : Type*} [Fintype m] [Fintype n]
+    {m n : Type*} [Fintype n]
     (M : Matrix m n ℂ) (hM : Function.Injective M.mulVec) :
     M.rank = Fintype.card n := by
   rw [Matrix.rank, LinearMap.finrank_range_of_inj hM, Module.finrank_fintype_fun_eq_card]
