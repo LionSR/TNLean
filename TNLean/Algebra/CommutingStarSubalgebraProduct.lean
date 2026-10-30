@@ -158,30 +158,30 @@ private noncomputable def tensorProductFullMatrixStarAlgEquiv
 
 section FullMatrix
 
-variable {n : Type*} [Fintype n] [DecidableEq n] [Nonempty n]
-variable (A B : StarSubalgebra ℂ (Matrix n n ℂ))
+variable [Nontrivial C]
+variable (A B : StarSubalgebra ℂ C)
 variable {p q : ℕ} [NeZero p] [NeZero q]
 
-/-- For two commuting full matrix factors in a nonzero ambient matrix algebra, multiplication from
+/-- For two commuting full matrix factors in a nontrivial ambient star-algebra, multiplication from
 their tensor product is injective. This is the unital single-block specialization of
 Schumacher--Werner Proposition `Cscom`, quant-ph/0405174, lines 2119--2138, used in GNVW at
 arXiv:0910.3675v2, lines 1270--1308. -/
 theorem commutingMulMap_injective_of_equiv_matrix
-    (hAB : ∀ a : A, ∀ b : B, Commute (a : Matrix n n ℂ) (b : Matrix n n ℂ))
+    (hAB : ∀ a : A, ∀ b : B, Commute (a : C) (b : C))
     (eA : A ≃⋆ₐ[ℂ] Matrix (Fin p) (Fin p) ℂ)
     (eB : B ≃⋆ₐ[ℂ] Matrix (Fin q) (Fin q) ℂ) :
     Function.Injective (commutingMulMap A B hAB) := by
   have hSimple : IsSimpleRing (A ⊗[ℂ] B) :=
     IsSimpleRing.of_ringEquiv
       (tensorProductFullMatrixStarAlgEquiv eA eB).symm.toRingEquiv inferInstance
-  exact RingHom.injective (R := A ⊗[ℂ] B) (S := Matrix n n ℂ) (commutingMulMap A B hAB)
+  exact RingHom.injective (R := A ⊗[ℂ] B) (S := C) (commutingMulMap A B hAB)
 
 /-- The join of two commuting full matrix factors of sizes `p` and `q` is a full matrix algebra of
 size `p * q`. This is the unital single-block specialization of Schumacher--Werner Proposition
 `Cscom`, quant-ph/0405174, lines 2119--2138. It does not assert that the join is the whole ambient
 matrix algebra. -/
 noncomputable def commutingSupEquivMatrix
-    (hAB : ∀ a : A, ∀ b : B, Commute (a : Matrix n n ℂ) (b : Matrix n n ℂ))
+    (hAB : ∀ a : A, ∀ b : B, Commute (a : C) (b : C))
     (eA : A ≃⋆ₐ[ℂ] Matrix (Fin p) (Fin p) ℂ)
     (eB : B ≃⋆ₐ[ℂ] Matrix (Fin q) (Fin q) ℂ) :
     ↥(A ⊔ B) ≃⋆ₐ[ℂ] Matrix (Fin (p * q)) (Fin (p * q)) ℂ := by
@@ -193,7 +193,7 @@ noncomputable def commutingSupEquivMatrix
 
 /-- The full-matrix presentation of the join of two commuting full matrix factors exists. -/
 theorem nonempty_equiv_sup_matrix
-    (hAB : ∀ a : A, ∀ b : B, Commute (a : Matrix n n ℂ) (b : Matrix n n ℂ))
+    (hAB : ∀ a : A, ∀ b : B, Commute (a : C) (b : C))
     (eA : A ≃⋆ₐ[ℂ] Matrix (Fin p) (Fin p) ℂ)
     (eB : B ≃⋆ₐ[ℂ] Matrix (Fin q) (Fin q) ℂ) :
     Nonempty (↥(A ⊔ B) ≃⋆ₐ[ℂ] Matrix (Fin (p * q)) (Fin (p * q)) ℂ) :=
@@ -202,7 +202,7 @@ theorem nonempty_equiv_sup_matrix
 /-- The complex dimension of the join of commuting full matrix factors of sizes `p` and `q` is
 `(p * q) * (p * q)`. -/
 theorem finrank_sup_of_equiv_matrix
-    (hAB : ∀ a : A, ∀ b : B, Commute (a : Matrix n n ℂ) (b : Matrix n n ℂ))
+    (hAB : ∀ a : A, ∀ b : B, Commute (a : C) (b : C))
     (eA : A ≃⋆ₐ[ℂ] Matrix (Fin p) (Fin p) ℂ)
     (eB : B ≃⋆ₐ[ℂ] Matrix (Fin q) (Fin q) ℂ) :
     Module.finrank ℂ ↥(A ⊔ B) = (p * q) * (p * q) := by
