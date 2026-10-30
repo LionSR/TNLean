@@ -6,7 +6,7 @@
     \lean{MPSTensor.QuadraticReconstructionSolution.rephase,
         MPSTensor.QuadraticReconstructionSolution.rephase_tensor,
         MPSTensor.QuadraticReconstructionSolution.mpv_rephase}
-    \notready
+    \leanok
     \uses{def:pgvwc07_quadratic_system}
     Let $(B,Y_j,Z_j)$ solve the quadratic system and let $|\xi|=1$.
     Then the same system has the solution
@@ -19,6 +19,7 @@
     $\widehat B$ are equal.
 \end{lemma}
 \begin{proof}
+    \leanok
     The scalar product at a site is $\xi^{-j}\xi^{j+1}=\xi$,
     whereas the scalar product at an internal inverse equation is
     $\xi^{-(j+1)}\xi^{j+1}=1$. Unit modulus preserves row
@@ -30,7 +31,7 @@
     \label{lem:quadratic_same_state_unitary_phase}
     \lean{MPSTensor.QuadraticReconstructionSolution.exists_unitary_phase_of_same_state,
         MPSTensor.QuadraticReconstructionSolution.unitGaugePhaseEquiv_of_same_state}
-    \notready
+    \leanok
     \uses{def:pgvwc07_quadratic_system, thm:pgvwc07_fixed_length_intertwiner}
     Let $A$ be a translation-invariant canonical tensor satisfying
     condition C1 at length $L_0$, and let $B$ be the tensor of a solution
@@ -49,6 +50,7 @@
     these cuts are not inferred from the internal quadratic equations.
 \end{lemma}
 \begin{proof}
+    \leanok
     Condition C1 reduces the canonical tensor to one positive weighted
     block, with row sum $\lambda^2I$. The solution equation gives
     the row sum $I$ for $B$. The corrected weighted finite-length
@@ -61,7 +63,7 @@
 \begin{lemma}[An actual rephased solution with exact unitary gauge]
     \label{lem:quadratic_same_state_exact_rephased_solution}
     \lean{MPSTensor.QuadraticReconstructionSolution.exists_rephased_solution_exact_gauge_of_same_state}
-    \notready
+    \leanok
     \uses{lem:quadratic_solution_rephasing, lem:quadratic_same_state_unitary_phase}
     Under the preceding hypotheses, the explicitly rephased solution
     over the same window has tensor $\widehat B_i=\xi B_i$, preserves
@@ -78,6 +80,7 @@
     \cite{gap:pgvwc07_intertwiner_chain_off_by_one}.
 \end{lemma}
 \begin{proof}
+    \leanok
     Apply the two preceding lemmas with the derived root of unity.
     A unitary matrix is a unit of the matrix ring, with its adjoint
     as inverse, so the same matrix gives the exact gauge equivalence.
@@ -97,7 +100,7 @@
         MPSTensor.cutRank_mpv_eq_of_canonical,
         MPSTensor.cutCoefficientRank_mpv_eq_of_canonical,
         MPSTensor.quadraticWindow_cutCoefficientRank_eq}
-    \notready
+    \leanok
     \uses{thm:pgvwc07_fixed_length_intertwiner}
     Let $A$ be a canonical tensor of positive bond dimension satisfying
     condition C1 at length $L_0$. Every physical cut at $k$ with
@@ -107,6 +110,7 @@
     reconstruction window have rank $D^2$ when $N>2L_0+D^4$.
 \end{lemma}
 \begin{proof}
+    \leanok
     The coefficient matrix factors as $FG$, with columns of $F$ the
     left virtual vectors and rows of $G$ the right virtual vectors.
     Suffix injectivity gives a right inverse of $G$. Therefore the
@@ -123,13 +127,14 @@
         MPSTensor.physicalPeriodicCutBasis,
         MPSTensor.physicalPeriodicCutBasis_apply,
         MPSTensor.toMatrix_cutSlice_physicalPeriodicCutBasis}
-    \notready
+    \leanok
     \uses{lem:quadratic_injective_physical_cut}
     Transfer the derived cut bases to the original physical-site
     coordinates. Fixing the next physical letter $i$ has matrix
     $A_i\otimes I_D$ between the two adjacent virtual cut bases.
 \end{lemma}
 \begin{proof}
+    \leanok
     The configuration bijections identify the numbered and original
     physical column spaces. Appending the letter $i$ multiplies the
     virtual product by $A_i$ and leaves the second virtual index fixed.
@@ -143,7 +148,7 @@
         MPSTensor.quadraticWindowCutBases,
         MPSTensor.exists_quadraticSolution_cutSiteWindow,
         MPSTensor.quadraticPhysicalCutWindow_cutSiteMatrix}
-    \notready
+    \leanok
     \uses{def:pgvwc07_quadratic_system, lem:quadratic_virtual_cut_slicing}
     Let $A$ be a canonical condition-C1 tensor as above. Choose any
     bases of its actual physical prefix column spaces. On an interior
@@ -154,6 +159,7 @@
     quadratic solution are assumed.
 \end{lemma}
 \begin{proof}
+    \leanok
     Let $C_j$ be the chosen physical cut bases and $Q_j$ the derived
     virtual bases. The matrices of the identity from $C_j$ to $Q_j$
     and from $Q_{j+1}$ to $C_{j+1}$ supply the two gauges. Composition

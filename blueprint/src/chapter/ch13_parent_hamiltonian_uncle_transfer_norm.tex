@@ -9,7 +9,7 @@ maps. This finite identity precedes the large-separation estimates in
     \label{def:uncle_wall_gram_maps}
     \lean{MPSTensor.uncleWallGramMap,MPSTensor.uncleWallGramMap_one,
         MPSTensor.uncleTwoWallTransfer}
-    \notready
+    \leanok
     \uses{def:uncle_wall_gram,def:uncle_two_wall_trial}
     For the actual one-wall word sums $W_R(w)$, set
     \begin{align}
@@ -31,7 +31,7 @@ maps. This finite identity precedes the large-separation estimates in
         MPSTensor.trace_uncleTwoWallTransfer_join_exterior,
         MPSTensor.norm_uncleTwoWallTrial_sq_eq_trace_transfer,
         MPSTensor.norm_uncleTwoWallTrialSource_sq_eq_trace_transfer}
-    \notready
+    \leanok
     \uses{def:uncle_wall_gram_maps,def:uncle_two_wall_trial}
     For arbitrary tensors and rectangular walls, the actual five-segment
     trial satisfies
@@ -54,6 +54,7 @@ maps. This finite identity precedes the large-separation estimates in
     these finite identities.
 \end{lemma}
 \begin{proof}
+    \leanok
     Expand each transfer map in its actual Kraus words. Composition
     multiplies the Kraus matrices in physical order. The operator trace
     of $X\mapsto\sum_z C_zXC_z^*$ is
@@ -66,7 +67,7 @@ maps. This finite identity precedes the large-separation estimates in
 \begin{lemma}[The rank-one leading contraction]
     \label{lem:uncle_wall_rank_one_contraction}
     \lean{MPSTensor.trace_uncleWallGram_rankOne_factorization}
-    \notready
+    \leanok
     \uses{def:uncle_wall_gram_maps,def:uncle_wall_gram}
     Put $P_A(X)=\operatorname{tr}(\rho_AX)I_A$ and
     $P_B(X)=\operatorname{tr}(\rho_BX)I_B$. For arbitrary densities
@@ -79,6 +80,7 @@ maps. This finite identity precedes the large-separation estimates in
     holds. Here each weight uses its corresponding left density.
 \end{lemma}
 \begin{proof}
+    \leanok
     The composition is the rank-one map sending $X$ to
     $\operatorname{tr}(\rho_B\mathcal G_L^{(s)}(X))
         \eta_R(r)I_A$. Its operator trace is

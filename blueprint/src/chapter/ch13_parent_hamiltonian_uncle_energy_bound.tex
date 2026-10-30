@@ -5,7 +5,7 @@
     \label{lem:uncle_pinned_trial_linear_norm}
     \lean{MPSTensor.norm_uncleTwoWallTrial_one_wall_sq_le_mul,
         MPSTensor.norm_uncleTwoWallTrial_second_wall_sq_le_mul}
-    \notready
+    \leanok
     \uses{def:uncle_two_wall_trial,lem:uncle_wall_gram_linear_bounds}
     Suppose the transfers of $A$ and $B$ are unital. If $B$ has a faithful
     stationary dual density and the mixed $B/A$ transfer spectral radius
@@ -16,6 +16,7 @@
     norm at most $C'r$ for some $C'>0$, uniformly in all lengths.
 \end{lemma}
 \begin{proof}
+    \leanok
     The moving wall map has an operator-norm bound linear in its length.
     The pinned wall map has a finite Gram-trace bound. Unital complete
     positivity contracts matrix operator norms, so diagonal transfer powers
@@ -34,7 +35,7 @@
         MPSTensor.uncleConfigSegment_contiguous_end,
         MPSTensor.uncleConfigSegment_contiguous_start,
         MPSTensor.cyclicRestrictES_pinnedGlobalState_eq}
-    \notready
+    \leanok
     \uses{def:uncle_two_wall_trial,lem:uncle_trial_pinned_endpoint_residuals}
     For $N>0$, pin the appropriate wall at each of the four endpoint
     bonds $N-1,2N,4N-1,5N$ on the original chain of length $6N+1$.
@@ -53,7 +54,7 @@
     \label{thm:uncle_trial_linear_energy}
     \lean{MPSTensor.norm_uncleTrialPinnedGlobalState_sq_le_mul,
         MPSTensor.re_inner_uncleHamiltonianES_trial_le_mul}
-    \notready
+    \leanok
     \uses{def:uncle_pinned_global_trials,lem:uncle_pinned_trial_linear_norm,
         lem:cyclic_restriction_norm_partition}
     Suppose both diagonal transfers are unital, both have faithful
@@ -68,6 +69,7 @@
     this upper bound alone.
 \end{lemma}
 \begin{proof}
+    \leanok
     The four globally pinned states have squared norm at most $K(N+1)$.
     The actual energy is bounded by the averaged squared norms of their
     local restrictions at the four endpoint bonds. The exact cyclic

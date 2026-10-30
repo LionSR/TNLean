@@ -4,7 +4,7 @@
 \begin{lemma}[Vanishing ground-space projection]
     \label{lem:uncle_trial_ground_projection_decay}
     \lean{MPSTensor.uncleTwoWallTrialSource_span_projection_tendsto_zero}
-    \notready
+    \leanok
     \uses{lem:uncle_ground_gram_limits,thm:uncle_trial_ground_overlap_decay,lem:uncle_periodic_sector_projection_bound}
     Let $\varphi_N$ be the actual two-wall trial on $6N+1$ sites.
     Under the normalized block assumptions, let $P_N$ project onto the
@@ -12,6 +12,7 @@
     $\|P_N\varphi_N\|^2\longrightarrow0$.
 \end{lemma}
 \begin{proof}
+    \leanok
     The two periodic squared norms tend to one and their cross inner
     product tends to zero. Eventually the Gram bounds of
     Lemma~\ref{lem:uncle_periodic_sector_projection_bound} hold.
@@ -22,7 +23,7 @@
 \begin{lemma}[The asymptotic variational inequality]
     \label{lem:uncle_asymptotic_variational_inequality}
     \lean{MPSTensor.eventually_exists_pos_eigenvalue_uncleHamiltonianES_lt_of_trial_bounds}
-    \notready
+    \leanok
     \uses{lem:uncle_variational_projection_bound}
     Let $H_N$ be the actual periodic uncle Hamiltonian on $6N+1$
     sites, and let $Q_N$ project onto its kernel. Suppose a trial family
@@ -36,6 +37,7 @@
     $H_N$ eventually has an eigenvalue $0<\lambda<\varepsilon$.
 \end{lemma}
 \begin{proof}
+    \leanok
     Eventually $\|Q_Nv_N\|^2<c/2$, so
     $\|v_N\|^2-\|Q_Nv_N\|^2\ge(c/2)N^2$.
     Taking $N>2C/(\varepsilon c)$ makes the energy strictly smaller
@@ -46,7 +48,7 @@
 \begin{theorem}[Generic finite-volume gaplessness]
     \label{thm:uncle_generic_finite_volume_gaplessness}
     \lean{MPSTensor.uncleHamiltonianES_ae_eventually_exists_pos_eigenvalue_lt}
-    \notready
+    \leanok
     \uses{thm:uncle_periodic_ground_space,thm:uncle_trial_generic_quadratic_norm,thm:uncle_trial_linear_energy,lem:uncle_trial_ground_projection_decay,lem:uncle_asymptotic_variational_inequality}
     Let $A,B$ be two blocks whose transfer maps are unital and whose
     dual transfer maps have faithful stationary density matrices of
@@ -62,6 +64,7 @@
     $0<\lambda<\varepsilon$.
 \end{theorem}
 \begin{proof}
+    \leanok
     If no pair of walls satisfies the stated full-span condition,
     the implication holds for every pair. Otherwise fix one such
     pair. It supplies diagonal injectivity, primitive transfer decay

@@ -12,12 +12,13 @@ limit and its generic quadratic growth.
 \begin{lemma}[Diagonal injectivity from perturbation span]
     \label{lem:uncle_diagonal_injectivity}
     \lean{MPSTensor.uncleBoundaryLetter_isInjective_diagonal_blocks}
-    \notready
+    \leanok
     \uses{def:uncle_boundary_space}
     Full span of the one-site perturbation letters implies injectivity
     of each diagonal block separately.
 \end{lemma}
 \begin{proof}
+    \leanok
     The two diagonal block projections are surjective linear maps. Their
     images of the perturbation letters are precisely the letters of the
     two diagonal blocks, so their spans are the entire block algebras.
@@ -27,7 +28,7 @@ limit and its generic quadratic growth.
     \label{lem:uncle_mixed_damping_from_span}
     \lean{MPSTensor.uncleBoundaryLetter_mixedMapSpectralRadius_lt_one,
         MPSTensor.uncleBoundaryLetter_mixedMapSpectralRadius_reverse_lt_one}
-    \notready
+    \leanok
     \uses{def:uncle_boundary_space}
     Suppose that the one-site perturbation letters span the full block
     algebra, the diagonal transfers are unital, and they have faithful
@@ -35,6 +36,7 @@ limit and its generic quadratic growth.
     strictly below one.
 \end{lemma}
 \begin{proof}
+    \leanok
     Embed a mixed eigenvector as the upper off-diagonal block of the
     block-diagonal channel. Unital contractivity bounds its eigenvalue
     modulus by one. If equality holds, the faithful stationary density
@@ -51,7 +53,7 @@ limit and its generic quadratic growth.
     \lean{MPSTensor.uncleTransfer_isPrimitive_of_injective_unital,
         MPSTensor.uncleTransfer_complement_spectralRadius_lt_one,
         MPSTensor.uncleTransfer_pow_sub_projection_bound}
-    \notready
+    \leanok
     \uses{lem:uncle_diagonal_injectivity}
     Let $A$ be an injective unital block with stationary dual density
     $\rho$ of trace one. Write $E(X)=\sum_iA_iXA_i^*$ and
@@ -64,6 +66,7 @@ limit and its generic quadratic growth.
     for every positive integer $n$ and every matrix $X$.
 \end{lemma}
 \begin{proof}
+    \leanok
     The adjoint letter family is injective and trace preserving, hence
     primitive, and peripheral primitivity transports back to the original
     family. Irreducibility makes each fixed matrix a scalar multiple of
@@ -75,7 +78,7 @@ limit and its generic quadratic growth.
 \begin{lemma}[Quantitative factorization error]
     \label{lem:uncle_trial_norm_factorization_error}
     \lean{MPSTensor.uncleTwoWallTransfer_factorization_bound}
-    \notready
+    \leanok
     \uses{lem:uncle_injective_transfer_decay,lem:uncle_wall_gram_linear_bounds,
         lem:uncle_wall_rank_one_contraction,thm:uncle_trial_norm_transfer}
     Under the stated canonical spectral conditions, let $T_N$ denote the
@@ -87,6 +90,7 @@ limit and its generic quadratic growth.
     \end{align}
 \end{lemma}
 \begin{proof}
+    \leanok
     Replace the first long transfer power by its canonical projection,
     then the second. The two errors are bounded by geometric sequences
     times the product of the two actual moving-wall map bounds. The
@@ -101,7 +105,7 @@ limit and its generic quadratic growth.
     \lean{MPSTensor.uncleTwoWallTrialSource_normalized_norm_sq_tendsto,
         MPSTensor.uncleTwoWallTrialSource_eventual_norm_bounds,
         MPSTensor.uncleTwoWallTrialSource_ae_quadratic_norm_growth}
-    \notready
+    \leanok
     \uses{lem:uncle_trial_norm_factorization_error,
         thm:uncle_wall_gram_linear_limit,cor:uncle_wall_gram_pair_generic_positive,
         lem:uncle_diagonal_injectivity,lem:uncle_mixed_damping_from_span}
@@ -122,6 +126,7 @@ limit and its generic quadratic growth.
     of both walls.
 \end{lemma}
 \begin{proof}
+    \leanok
     Divide the quantitative error by $(N+1)^2$. Its geometric upper bound
     tends to zero, while the normalized wall weights converge to their
     actual slopes. Almost every pair has both slopes positive, so their
@@ -132,7 +137,7 @@ limit and its generic quadratic growth.
 \begin{lemma}[Gram limits of the two periodic ground vectors]
     \label{lem:uncle_ground_gram_limits}
     \lean{MPSTensor.uncleMPV_norm_sq_tendsto_one,MPSTensor.uncleGroundGram_tendsto}
-    \notready
+    \leanok
     \uses{lem:uncle_injective_transfer_decay,lem:uncle_diagonal_injectivity,
         lem:uncle_mixed_damping_from_span}
     Under the same normalized canonical data and full perturbation span,
@@ -144,6 +149,7 @@ limit and its generic quadratic growth.
     \end{align}
 \end{lemma}
 \begin{proof}
+    \leanok
     The actual pure transfer powers converge in operator norm to their
     canonical rank-one contractions. Their operator traces therefore tend
     to the trace of the canonical contraction, which is the density trace,

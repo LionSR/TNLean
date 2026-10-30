@@ -8,7 +8,7 @@
         OBCChainTensor.physicalPrefixBasis,
         OBCChainTensor.physicalPrefixBasis_apply,
         OBCChainTensor.toMatrix_cutSlice_physicalPrefixBasis}
-    \notready
+    \leanok
     At a minimal bond of any prescribed OBC representation, its own
     physical prefix columns form a basis of the actual physical cut
     column space. Between two minimal bonds, the matrix of physical
@@ -16,6 +16,7 @@
     matrix.
 \end{lemma}
 \begin{proof}
+    \leanok
     The actual coefficient matrix factors through the prescribed
     prefix and suffix factors. Its rank equals the bond dimension,
     so the prefix columns are independent. The physical column
@@ -30,7 +31,7 @@
         MPSTensor.exists_apply_ne_zero_of_mpv_ne_zero,
         MPSTensor.quadraticWindow_cutCoefficientRank_eq_of_isNBlkInjective,
         MPSTensor.exists_quadraticSolution_physicalCutWindow_of_isNBlkInjective}
-    \notready
+    \leanok
     \uses{lem:quadratic_virtual_cut_slicing,
         lem:quadratic_actual_physical_window_solution}
     Let $A$ satisfy C1 at length $L_0$ and have a nonzero letter.
@@ -43,6 +44,7 @@
     supplies the required nonzero letter.
 \end{lemma}
 \begin{proof}
+    \leanok
     C1 gives full vector spreading, hence irreducibility, including
     at zero C1 length. Perron normalization gives $B$, $X$ and
     $\zeta$. Transport C1 to $B$, extend it by row normalization,
@@ -66,7 +68,7 @@
         MPSTensor.quadraticPrescribedOBCWindow_eq_physicalCutWindow,
         MPSTensor.exists_quadraticSolution_prescribedOBCWindow,
         MPSTensor.exists_quadraticSolution_prescribedOBCWindow_of_mpv_ne_zero}
-    \notready
+    \leanok
     \uses{lem:quadratic_prescribed_prefix_basis,
         lem:quadratic_injective_physical_cut,
         lem:quadratic_perron_normalization}
@@ -82,6 +84,7 @@
     be the canonical one; uniqueness is unnecessary.
 \end{lemma}
 \begin{proof}
+    \leanok
     At each window cut, C1 forces physical rank $D^2$. This rank is
     at most the original bond dimension, which is at most $D^2$.
     Hence the bond is minimal. The preceding lemma derives physical
@@ -107,7 +110,7 @@
         OBCChainTensor.withBondBound,
         OBCChainTensor.withBondBound_tensor,
         OBCChainTensor.withBondBound_coeff}
-    \notready
+    \leanok
     \uses{lem:quadratic_prescribed_prefix_basis}
     Let $B$ be the prescribed OBC tensor, with arbitrary common bond
     bound. Assume its source canonical equations
@@ -123,6 +126,7 @@
     retains every original bond space, site matrix and coefficient.
 \end{lemma}
 \begin{proof}
+    \leanok
     The physical extension bijections give the forward prefix and
     backward suffix Gram recursions. Induct from the two scalar
     boundaries. Faithfulness makes the prefix columns independent.
@@ -139,7 +143,7 @@
         MPSTensor.quadraticCanonicalOBCWindow,
         MPSTensor.quadraticCanonicalOBCWindow_apply,
         MPSTensor.exists_quadraticSolution_canonicalOBCWindow}
-    \notready
+    \leanok
     \uses{lem:quadratic_canonical_obc_physical_ranks,
         lem:quadratic_prescribed_obc_window_solution}
     Let the original canonical OBC tensor represent the actual
@@ -151,6 +155,7 @@
     unnecessary; the source canonical equations above suffice.
 \end{lemma}
 \begin{proof}
+    \leanok
     The preceding lemma identifies the original bond dimensions
     with physical cut ranks. Opening a periodic trace contraction
     gives the bound $D^2$ for every such rank. This changes only the

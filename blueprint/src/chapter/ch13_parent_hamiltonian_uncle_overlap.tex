@@ -8,7 +8,7 @@
         MPSTensor.uncleWallMixedMap,
         MPSTensor.uncleWallMixedMap_apply,
         MPSTensor.uncleTwoWallMixedTransfer}
-    \notready
+    \leanok
     \uses{def:uncle_two_wall_trial}
     Pair each actual single-wall word with the word of a pure tensor $C$
     on the same physical interval. Its mixed map sends a rectangular
@@ -23,7 +23,7 @@
         MPSTensor.inner_mpvState_uncleTwoWallTrial_eq_trace,
         MPSTensor.trace_uncleTwoWallMixedTransfer_join_exterior,
         MPSTensor.inner_mpvState_uncleTwoWallTrialSource_eq_trace}
-    \notready
+    \leanok
     \uses{def:uncle_trial_mixed_contraction}
     The inner product of the pure periodic state of $C$ with the actual
     five-segment trial is the algebraic operator trace of this ordered
@@ -32,6 +32,7 @@
     while the separating pure $B$ interval has length $2N-1$.
 \end{lemma}
 \begin{proof}
+    \leanok
     Expand the mixed maps over their actual word matrices and compose the
     finite sums. The operator trace is the product of the left word trace
     and the conjugated pure-sector word trace. Concatenation of the five
@@ -43,7 +44,7 @@
     \label{lem:uncle_wall_mixed_linear_bounds}
     \lean{MPSTensor.uncleWallMixedMap_left_norm_le_mul,
         MPSTensor.uncleWallMixedMap_right_norm_le_mul}
-    \notready
+    \leanok
     \uses{def:uncle_trial_mixed_contraction}
     Against its left pure sector, an actual wall mixed map has norm at
     most $Cn$ if that sector is unital and the opposite mixed transfer
@@ -51,6 +52,7 @@
     its right pure sector with the reversed mixed transfer.
 \end{lemma}
 \begin{proof}
+    \leanok
     Split the actual wall words at the initial site for the first bound,
     and at the final site for the second. The resulting exact recurrences
     have a unital self-transfer on one side and a mixed-transfer power on
@@ -67,7 +69,7 @@
         MPSTensor.norm_inner_mpvState_right_uncleTwoWallTrialSource_le_geometric,
         MPSTensor.inner_mpvState_left_uncleTwoWallTrialSource_tendsto_zero,
         MPSTensor.inner_mpvState_right_uncleTwoWallTrialSource_tendsto_zero}
-    \notready
+    \leanok
     \uses{lem:uncle_trial_overlap_trace,lem:uncle_wall_mixed_linear_bounds}
     Suppose both diagonal transfers are unital and both mixed transfer
     spectral radii are below one. There are $C_A,C_B>0$ and
@@ -82,6 +84,7 @@
     In particular, both actual overlaps tend to zero as $N\to\infty$.
 \end{lemma}
 \begin{proof}
+    \leanok
     For the $A$ comparison, the pure $B$ interval supplies a mixed power
     of length $2N-1\ge N$. For the $B$ comparison, the joined exterior
     $A$ intervals supply a mixed power of length $2N\ge N$. The two

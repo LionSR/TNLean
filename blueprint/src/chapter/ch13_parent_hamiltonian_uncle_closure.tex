@@ -6,7 +6,7 @@
     \lean{MPSTensor.trace_uncleBlockMatrix_mul,
         MPSTensor.eq_of_uncleBoundary_cyclic_pairing,
         MPSTensor.exists_scalar_blocks_of_uncleBoundary_trace_cyclic}
-    \notready
+    \leanok
     \uses{def:two_block_uncle_tensor}
     On four blocks write
     \begin{align}
@@ -22,6 +22,7 @@
 \end{lemma}
 
 \begin{proof}
+    \leanok
     Taking $M=I$ gives $X=Y$ by nondegeneracy of the ordinary trace
     pairing. Pair a sector identity with an off-diagonal block: one
     product is that block and the reversed product is zero. Trace
@@ -35,7 +36,7 @@
 \begin{lemma}[Scalar boundaries are the periodic sector vectors]
     \label{thm:uncle_scalar_boundaries}
     \lean{MPSTensor.uncleBoundaryMap_scalar_blocks}
-    \notready
+    \leanok
     \uses{def:two_block_uncle_tensor}
     For the actual single-wall boundary map $\Gamma_N$, the boundary
     $\operatorname{diag}(\alpha I,\beta I)$ gives
@@ -44,6 +45,7 @@
 \end{lemma}
 
 \begin{proof}
+    \leanok
     The diagonal blocks of the single-wall coefficient word are the
     pure $A$ and $B$ words. Scalar diagonal boundaries remove the two
     off-diagonal contributions, leaving their two traces.
@@ -52,7 +54,7 @@
 \begin{lemma}[Periodic uncle boundary closure]
     \label{thm:uncle_periodic_boundary_closure}
     \lean{MPSTensor.uncleBoundarySpace_inf_cyclicTranslate}
-    \notready
+    \leanok
     \uses{def:two_block_uncle_tensor, def:parent_cyclic_translate_state}
     Let the full perturbation letter
     $\left(\begin{smallmatrix}A&R\\L&B\end{smallmatrix}\right)$ be
@@ -65,6 +67,7 @@
 \end{lemma}
 
 \begin{proof}
+    \leanok
     \uses{thm:uncle_cyclic_boundary_coefficients,
         thm:uncle_scalar_boundaries}
     Represent a vector in the intersection by boundaries $X$ and $Y$

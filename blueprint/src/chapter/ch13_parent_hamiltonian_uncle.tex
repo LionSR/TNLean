@@ -88,7 +88,7 @@ one scalar need not be a similarity transformation.
 \begin{lemma}[Injective perturbations give injective uncle tensors]
     \label{lem:uncle_injective_perturbation}
     \lean{MPSTensor.isInjective_uncleTensor_of_isInjective_perturbation}
-    \notready
+    \leanok
     \discussion{10284}
     \uses{def:two_block_uncle_tensor, def:injective}
     Let $A_i\in\mathcal M_a$, $B_i\in\mathcal M_b$ and let $R_i,L_i$
@@ -101,6 +101,7 @@ one scalar need not be a similarity transformation.
     % Source: Papers/1210.6613/UncleHMPS.tex, lemma:inj-perturbation, lines 973--1016.
 \end{lemma}
 \begin{proof}
+    \leanok
     Since the $T_i$ span the full algebra, choose coefficients $c_i$ with
     $\sum_i c_iT_i=\Id$. Their four block identities are
     $\sum_i c_iA_i=\Id_a$, $\sum_i c_iB_i=\Id_b$ and
@@ -166,7 +167,7 @@ one scalar need not be a similarity transformation.
     \label{cor:uncle_parent_limit_injective_perturbation}
     \lean{MPSTensor.tendsto_parentInteractionES_twoBlockPerturbation_of_isInjective_perturbation,
         MPSTensor.tendsto_parentHamiltonianES_twoBlockPerturbation_of_isInjective_perturbation}
-    \notready
+    \leanok
     \discussion{10284}
     \uses{lem:uncle_injective_perturbation, thm:two_block_uncle_parent_limit}
     If the full matrices $T_i$ of Lemma~\ref{lem:uncle_injective_perturbation}
@@ -177,6 +178,7 @@ one scalar need not be a similarity transformation.
     $\varepsilon\to0$ through nonzero complex values.
 \end{lemma}
 \begin{proof}
+    \leanok
     The perturbation hypothesis gives injectivity of $U$ by
     Lemma~\ref{lem:uncle_injective_perturbation}. Apply
     Lemma~\ref{thm:two_block_uncle_parent_limit}.
@@ -268,7 +270,7 @@ infinite-volume Hamiltonian is included here.
     \lean{MPSTensor.uncleBoundaryWord_block}
     \lean{MPSTensor.uncleBoundarySpace}
     \lean{MPSTensor.uncleBoundaryMap_two}
-    \notready
+    \leanok
     \uses{def:two_block_uncle_tensor}
     Write $C_i=\left(\begin{smallmatrix}A_i&R_i\\L_i&B_i\end{smallmatrix}\right)$.
     For a word $w=(i_1,\ldots,i_n)$, let $F(w)$ have diagonal blocks
@@ -290,7 +292,7 @@ infinite-volume Hamiltonian is included here.
     \lean{MPSTensor.uncleBoundary_span_eq_top_succ}
     \lean{MPSTensor.mem_uncleBoundarySpace_of_overlap}
     \lean{MPSTensor.uncleBoundarySpace_intersection}
-    \notready
+    \leanok
     \uses{def:uncle_boundary_space}
     Suppose the full matrices $C_i$ span $M_{a+b}(\mathbb C)$. For every
     $n\geq2$, the vectors whose restrictions at the first and last sites
@@ -298,6 +300,7 @@ infinite-volume Hamiltonian is included here.
     the full matrix space at every positive word length.
 \end{lemma}
 \begin{proof}
+    \leanok
     Choose $c_i$ with $\sum_i c_iC_i=I$. Concatenation of the coefficient
     words uses the associative product
     \begin{align}

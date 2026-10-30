@@ -5,7 +5,7 @@
     \label{lem:obc_weighted_schmidt_cut_bases}
     \lean{MPSPreparation.exists_weightedSchmidtCutBasis,
         MPSPreparation.exists_canonicalCutBasisFamily}
-    \notready
+    \leanok
     \uses{def:varying_bond_obc_chain}
     Let $M_k$ be the physical coefficient matrix of a finite state at cut
     $k$, with rank $r_k$. Its compact singular-value decomposition
@@ -21,6 +21,7 @@
     endpoint suffix factors are row coisometries as well.
 \end{lemma}
 \begin{proof}
+    \leanok
     The inverse $D_k^{-1}V_k$ proves independence of the weighted left
     singular vectors. The equation $F_k=M_kU_k^\dagger$ places them
     in the physical column space, whose dimension is $r_k$. Their
@@ -39,7 +40,7 @@
         MPSPreparation.cutPrefixMatrix_last_gram,
         MPSPreparation.cutSuffixMatrix_zero_coisometry,
         MPSPreparation.cutSuffixMatrix_last_coisometry}
-    \notready
+    \leanok
     \uses{lem:obc_weighted_schmidt_cut_bases}
     Adjoining one physical letter gives bijections from the preceding
     prefix configurations times the letter to the next prefix
@@ -51,6 +52,7 @@
     exactly once.
 \end{lemma}
 \begin{proof}
+    \leanok
     Restrict a configuration away from the cut site and record the
     letter at that site. These operations are inverse to adjoining
     that letter. At the endpoints the empty configuration spaces are
@@ -66,7 +68,7 @@
         MPSPreparation.cutSuffixMatrix_gram_step,
         MPSPreparation.sum_cutSiteMatrix_mul_conjTranspose_eq_one,
         MPSPreparation.trace_cutBondDensity_step}
-    \notready
+    \leanok
     \uses{lem:obc_weighted_schmidt_cut_bases,
         lem:obc_canonical_configurations_endpoints}
     Let $A_k^i$ be the coordinate matrices between the chosen adjacent
@@ -83,6 +85,7 @@
     $\operatorname{tr}\Lambda_{k+1}=\operatorname{tr}\Lambda_k$.
 \end{lemma}
 \begin{proof}
+    \leanok
     Expand the physical prefix and suffix factors by the same coordinate
     slicing matrices, and use the preceding bijections to take their
     Grams. Cyclicity of the trace and the right-canonical equation
@@ -92,7 +95,7 @@
 \begin{theorem}[Simultaneous OBC Schmidt canonical form]
     \label{thm:obc_schmidt_canonical}
     \lean{OBCChainTensor.exists_canonical_coeff_eq}
-    \notready
+    \leanok
     \uses{lem:obc_canonical_cut_recurrences, thm:seqanc_cut_rank_bounds}
     Let $N>0$, and let $\psi$ be a normalized state on $N$ sites of
     physical dimension $d$. There is an exact OBC representation
@@ -113,6 +116,7 @@
     \cite[Theorem~1, conditions~1--3]{PerezGarcia2007Matrix}.
 \end{theorem}
 \begin{proof}
+    \leanok
     Use the weighted Schmidt cut bases from the first lemma in the
     existing exact minimal-bond construction. The endpoint basis vectors
     give the original coefficient tensor without changing its phase.
@@ -131,7 +135,7 @@
         OBCChainTensor.physicalPrefixMatrix_last,
         OBCChainTensor.cutCoefficientMatrix_eq_physicalPrefix_mul_suffix,
         OBCChainTensor.cutColumnSpace_le_range_physicalPrefixMatrix}
-    \notready
+    \leanok
     \uses{def:varying_bond_obc_coeff}
     For any OBC representation $B$, let $P_k$ and $H_k$ be its actual
     prefix and suffix contractions through the original $k$th bond.
@@ -146,6 +150,7 @@
     the actual physical state, with its complete complex amplitude.
 \end{lemma}
 \begin{proof}
+    \leanok
     Split the actual ordered site product at the cut. Its prefix has
     zero columns outside the current original bond, including the
     scalar left endpoint case. Restricting the contraction to that bond
@@ -157,7 +162,7 @@
     \label{lem:obc_rectangular_cut_maps}
     \lean{MPSPreparation.exists_cutPrefixMatrix_leftInverse,
         OBCChainTensor.exists_rectangular_maps_to_cutBasis}
-    \notready
+    \leanok
     \uses{lem:obc_original_boundary_factors,
         lem:obc_weighted_schmidt_cut_bases}
     Choose bases of the physical cut column spaces, with prefix matrices
@@ -173,6 +178,7 @@
     or additional full-rank assumption on the original representation.
 \end{lemma}
 \begin{proof}
+    \leanok
     The physical cut-space inclusion supplies $Z_k$ with $P_kZ_k=F_k$.
     Basis independence gives a left inverse $T_kF_k=I$. Set $Y_k=T_kP_k$;
     then $Y_kZ_k=I$. The two actual prefix recurrences give
@@ -184,7 +190,7 @@
 \begin{theorem}[Rectangular freedom of OBC representations]
     \label{thm:obc_rectangular_canonical_freedom}
     \lean{OBCChainTensor.exists_canonical_coeff_eq_rectangular_maps}
-    \notready
+    \leanok
     \uses{thm:obc_schmidt_canonical, lem:obc_rectangular_cut_maps}
     Let $N>0$, and let $B$ be any OBC representation of a normalized
     state. There is a simultaneous Schmidt canonical representation $A$
@@ -204,6 +210,7 @@
     formulas of \cite[Theorem~2]{PerezGarcia2007Matrix}.
 \end{theorem}
 \begin{proof}
+    \leanok
     Use the weighted Schmidt cut bases in the construction of
     Theorem~\ref{thm:obc_schmidt_canonical}. Apply the preceding lemma to
     the actual original representation and these same physical bases.
