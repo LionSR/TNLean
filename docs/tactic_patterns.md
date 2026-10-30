@@ -9951,6 +9951,19 @@ there is no need for a new tactic.
 - **Decision:** Derive the four-state energy bound from those identities; do not
   introduce an assumed energy-support or norm-rate condition.
 
+
+### Actual mixed word overlaps — finite configuration reuse (2026-10-29)
+
+- **Seen:** `MPS/ParentHamiltonian/UncleTrialOverlap.lean` and the finite
+  norm calculation in `UncleTrialTransferNorm.lean`.
+- **Pattern:** Expand actual ordered word maps, take their algebraic operator
+  trace and identify the resulting physical configuration sum.
+- **Reuse:** Promote the existing canonical five-segment configuration
+  equivalence and its evaluation theorem for their actual second consumer.
+  Use `spectralRadius_eq_of_unital` and `AlgEquiv.spectrum_eq` when the
+  same finite linear map is estimated under another matrix norm.
+- **Decision:** Keep one configuration equivalence and derive all rates from
+  actual mixed maps; do not assume the overlap estimate being established.
 ### Canonical transfer replacement in the actual wall contraction — candidate (2026-10-29)
 
 - **Seen:** `MPS/ParentHamiltonian/UncleNormFactorization.lean`, two long transfer factors.
