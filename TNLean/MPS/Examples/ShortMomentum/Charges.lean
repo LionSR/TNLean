@@ -7,6 +7,7 @@ import Mathlib.Data.List.Count
 import Mathlib.Data.ZMod.Basic
 import Mathlib.Tactic.LinearCombination
 import Mathlib.Tactic.NormNum
+import Mathlib.Tactic.Ring
 import Lean.Elab.Tactic.Omega
 
 /-!
@@ -53,7 +54,7 @@ theorem sum_letter_counts (w : List (Fin 3)) :
 
 /-- The sorted word has precisely the prescribed total degree. -/
 @[simp] theorem length_sortedWord (a b c : ℕ) : (sortedWord a b c).length = a + b + c := by
-  simp [sortedWord]
+  simp [sortedWord, Nat.add_assoc]
 
 /-- The sorted word has the charge of its prescribed letter counts. -/
 @[simp] theorem wordCharge_sortedWord (a b c : ℕ) :
@@ -208,10 +209,13 @@ theorem exists_word_of_eight_le_of_charge (n : ℕ) (hn : 8 ≤ n) (u v : ZMod 5
     omega
   · rw [wordCharge_append, hc]
     have hrep : wordCharge (List.replicate (n - 8) 0) =
-        ((n - 8 : ℕ), 0) := by
-      simp [wordCharge, countCharge, List.count_replicate]
-    rw [hrep]
-    apply Prod.ext <;> simp
+        (((n - 8 : ℕ) : ZMod 5), 0) := by
+      have hsorted : List.replicate (n - 8) (0 : Fin 3) = sortedWord (n - 8) 0 0 := by
+        simp [sortedWord]
+      rw [hsorted, wordCharge_sortedWord]
+      simp [countCharge]
+    rw [hrep, Prod.mk_add_mk]
+    congr 1 <;> ring
 
 /-- Every degree at least eight is a nonnegative combination of three
 and five. This proves actual central reachability above the exceptional
@@ -238,6 +242,6 @@ theorem exists_central_counts_of_eight_le (n : ℕ) (hn : 8 ≤ n) :
     ∃ a b c : ℕ, a + b + c = n ∧ (a : ZMod 5) = b ∧ (b : ZMod 5) = c := by
   obtain ⟨t, k, htk⟩ := exists_three_five_decomposition n hn
   refine ⟨t + 5 * k, t, t, by omega, ?_, rfl⟩
-  simp
+  rw [Nat.cast_add, Nat.cast_mul, ZMod.natCast_self 5, zero_mul, add_zero]
 
 end MPSTensor.ShortMomentum
