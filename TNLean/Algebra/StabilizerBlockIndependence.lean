@@ -73,6 +73,34 @@ theorem basepointExtension_isMulCocycle₂ (x₀ : X)
     simpa only [Pi.inv_apply, mul_inv] using congrArg Inv.inv (hβ g h k)
   exact ScalarCocycle.isMulCocycle₂_coboundary_mul hi (fun g ↦ γ g x₀)
 
+/-- On a stabilizer argument the extension cochain of a trivializing gauge is the L-symbol of
+the basepoint: `Ψ(a, b) = L^{x₀}_{a,b}` whenever `b • x₀ = x₀`. This is the basepoint
+calculation of arXiv:2502.20257, `prop:BI_psi`, line 7064, for an arbitrary L-symbol. -/
+theorem basepointExtension_apply_of_isTrivial_gauge {L : LSymbol G X}
+    {β : ScalarCocycle G} {γ : ActionTensorGauge G X} (htriv : IsTrivial (gauge β γ L))
+    {a b : G} (hb : b • x₀ = x₀) : basepointExtension x₀ β γ (a, b) = L x₀ a b := by
+  have ht := htriv x₀ a b
+  rw [gauge, hb] at ht
+  apply (mul_left_cancel (a := γ (a * b) x₀ * β (a, b) / (γ a x₀ * γ b x₀)))
+  rw [ht]
+  dsimp only [basepointExtension]
+  (apply Units.ext; push_cast; field_simp)
+
+/-- **Block independence forces the basepoint cocycle to extend.** If an L-symbol compatible with
+the trivial three-cochain is block independent, then some two-cocycle of the whole group agrees
+with the L-symbol of the basepoint on the stabilizer, `Ψ(a, b) = L^{x₀}_{a,b}`. This is the
+converse direction of arXiv:2502.20257, `prop:BI_psi`, lines 7057–7064, for an arbitrary
+compatible L-symbol rather than one induced from representatives. -/
+theorem exists_extension_of_isBlockIndependent (x₀ : X) {L : LSymbol G X}
+    (hL : IsCompatible L (fun _ _ _ ↦ 1)) (hBI : IsBlockIndependent L) :
+    ∃ Ψ : ScalarCocycle G, groupCohomology.IsMulCocycle₂ Ψ ∧
+      ∀ a b : MulAction.stabilizer G x₀, Ψ ((a : G), (b : G)) = L x₀ a b := by
+  let : Nonempty X := ⟨x₀⟩
+  obtain ⟨β, γ, htriv⟩ := hBI.hasTrivialGauge hL
+  exact ⟨basepointExtension x₀ β γ, basepointExtension_isMulCocycle₂ x₀ hL htriv,
+    fun a b ↦ basepointExtension_apply_of_isTrivial_gauge htriv
+      (MulAction.mem_stabilizer_iff.mp b.property)⟩
+
 end LSymbol
 
 namespace StabilizerRepresentatives
@@ -86,14 +114,8 @@ theorem basepointExtension_restrict (K : StabilizerRepresentatives G X x₀)
     (htriv : LSymbol.IsTrivial (LSymbol.gauge β γ (K.inducedLSymbol ψ)))
     (a b : MulAction.stabilizer G x₀) :
     LSymbol.basepointExtension x₀ β γ ((a : G), (b : G)) = ψ (a, b) := by
-  have hb : (b : G) • x₀ = x₀ := MulAction.mem_stabilizer_iff.mp b.property
-  have ht := htriv x₀ (a : G) (b : G)
-  rw [LSymbol.gauge, K.inducedLSymbol_base, hb] at ht
-  apply (mul_left_cancel (a :=
-    γ ((a : G) * (b : G)) x₀ * β ((a : G), (b : G)) / (γ (a : G) x₀ * γ (b : G) x₀)))
-  rw [ht]
-  dsimp only [LSymbol.basepointExtension]
-  (apply Units.ext; push_cast; field_simp)
+  rw [LSymbol.basepointExtension_apply_of_isTrivial_gauge htriv
+    (MulAction.mem_stabilizer_iff.mp b.property), K.inducedLSymbol_base]
 
 /-- Actual trivializing gauges produce an exact cocycle extension of the
 stabilizer representative, the converse scalar calculation in
