@@ -41,8 +41,16 @@ noncomputable def obcPairBoundary (b : ℕ → ℕ)
   (WithLp.linearEquiv 2 ℂ ((Fin 2 → Fin d) → ℂ)).symm.toLinearMap.comp
     (LinearMap.pi fun σ ↦
       (Matrix.traceLinearMap (Fin (b (p + 2))) ℂ ℂ).comp
-        (Matrix.mulRightLinearMap (Fin (b (p + 2))) ℂ
+        (_root_.mulRightLinearMap (Fin (b (p + 2))) ℂ
           (A p (σ 0) * A (p + 1) (σ 1))))
+
+/-- Coordinates of the pair boundary map are two-site rectangular traces.
+Source: PGVWC07, Theorem 9, lines 1201–1205. -/
+theorem obcPairBoundary_apply (b : ℕ → ℕ)
+    (A : ∀ k, Fin d → Matrix (Fin (b k)) (Fin (b (k + 1))) ℂ) (p : ℕ)
+    (X : Matrix (Fin (b (p + 2))) (Fin (b p)) ℂ) (σ : Fin 2 → Fin d) :
+    obcPairBoundary b A p X σ = Matrix.trace (X * A p (σ 0) * A (p + 1) (σ 1)) := by
+  simp [obcPairBoundary, Matrix.mul_assoc]
 
 /-- The local parent projector is the orthogonal projection onto the complement
 of the actual pair boundary range. Source: PGVWC07, Theorem 9, lines 1201–1205. -/
@@ -70,20 +78,16 @@ theorem obcPairProjector_apply_eq_zero_iff (b : ℕ → ℕ)
   have hker : obcPairProjector b A p v = 0 ↔
       v ∈ LinearMap.range (obcPairBoundary b A p) := by
     change (LinearMap.range (obcPairBoundary b A p))ᗮ.starProjection v = 0 ↔ _
-    rw [Submodule.starProjection_orthogonal']
-    simp only [sub_apply, one_apply_eq_self]
-    rw [sub_eq_zero, eq_comm, Submodule.starProjection_eq_self_iff]
+    rw [Submodule.starProjection_orthogonal_val, sub_eq_zero, eq_comm,
+      Submodule.starProjection_eq_self_iff]
   rw [hker, LinearMap.mem_range]
   constructor
   · rintro ⟨X, rfl⟩
-    refine ⟨X, fun σ ↦ ?_⟩
-    change Matrix.trace (X * (A p (σ 0) * A (p + 1) (σ 1))) = _
-    rw [Matrix.mul_assoc]
+    exact ⟨X, obcPairBoundary_apply b A p X⟩
   · rintro ⟨X, hX⟩
     refine ⟨X, ?_⟩
     ext σ
-    change Matrix.trace (X * (A p (σ 0) * A (p + 1) (σ 1))) = v σ
-    rw [← Matrix.mul_assoc]
+    rw [obcPairBoundary_apply]
     exact (hX σ).symm
 
 /-- Restrict a vector to its pair coordinates after fixing the actual prefix and
@@ -209,7 +213,8 @@ theorem obcParentHamiltonian_pair_sections_of_apply_eq_zero (b : ℕ → ℕ)
   let w : Fin (u.length + 2 + v.length) → Fin d := Fin.append (Fin.append u.get σ) v.get
   have hw : List.ofFn (fun k : Fin N ↦ w (Fin.cast huv.symm k)) = u ++ i :: j :: v := by
     rw [← List.ofFn_congr huv w]
-    simp [w, σ, List.ofFn_fin_append, List.ofFn_get, List.ofFn_succ, List.append_assoc]
+    simp only [w, List.ofFn_fin_append, List.ofFn_get]
+    simp [σ, List.ofFn_succ]
   rw [← hw, hf]
   exact hX σ
 
@@ -230,9 +235,14 @@ theorem obcParentHamiltonian_apply_eq_zero_iff_pair_sections (b : ℕ → ℕ)
   · intro hpair
     apply (obcParentHamiltonian_apply_eq_zero_iff b A N ψ).mpr
     intro p q h u v
-    have hx := hpair (List.ofFn u) (List.ofFn v)
-    simp only [List.length_ofFn] at hx
-    obtain ⟨X, hX⟩ := hx h
+    have key : ∀ m : ℕ, m = (List.ofFn u).length →
+        ∃ X : Matrix (Fin (b (m + 2))) (Fin (b m)) ℂ,
+          ∀ i j, f (List.ofFn u ++ i :: j :: List.ofFn v) =
+            Matrix.trace (X * A m i * A (m + 1) j) := by
+      intro m hm
+      subst hm
+      exact hpair (List.ofFn u) (List.ofFn v) (by simp only [List.length_ofFn]; omega)
+    obtain ⟨X, hX⟩ := key p List.length_ofFn.symm
     apply (obcPairProjector_apply_eq_zero_iff b A p _).mpr
     refine ⟨X, fun σ ↦ ?_⟩
     change ψ (fun k : Fin N ↦

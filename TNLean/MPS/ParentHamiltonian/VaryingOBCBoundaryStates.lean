@@ -33,10 +33,11 @@ theorem obc_rectangularEval_append (b : ℕ → ℕ)
       Kraus.rectangularEval b (fun k : Fin m ↦ A k.val) u *
         Kraus.rectangularEval (fun k ↦ b (m + k))
           (fun k : Fin n ↦ A (m + k.val)) v := by
-  induction n generalizing v with
+  induction n with
   | zero =>
     rw [Fin.append_right_nil u v rfl]
-    simp only [Function.comp_def, Fin.cast_refl, Kraus.rectangularEval, Matrix.mul_one]
+    simp only [Kraus.rectangularEval, Matrix.mul_one]
+    rfl
   | succ n ih =>
     have hleft := obc_rectangularEval_snoc b A
       (Fin.append u (Fin.init v)) (v (Fin.last n))
@@ -44,8 +45,8 @@ theorem obc_rectangularEval_append (b : ℕ → ℕ)
       (fun k ↦ A (m + k)) (Fin.init v) (v (Fin.last n))
     rw [← Fin.append_snoc, Fin.snoc_init_self] at hleft
     rw [Fin.snoc_init_self] at hright
-    rw [hleft, hright, ih]
-    exact Matrix.mul_assoc _ _ _
+    rw [hright, ← Matrix.mul_assoc, ← ih]
+    exact hleft
 
 /-- The full physical vector associated with an actual rectangular chain and
 an arbitrary endpoint boundary matrix. Source: PGVWC07, equation unique-OBC
