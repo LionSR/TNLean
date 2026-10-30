@@ -140,7 +140,7 @@ The declarations
 \leanid{MPSTensor.norm_mpvState_le_bondDimension_of_unital} and
 \leanid{MPSTensor.PGVWC07CanonicalFormData.tendsto_norm_mpvState_sub_unitWeight_sum}
 write this estimate directly from the canonical hypotheses, without
-assuming any convergence or decay. They are pending Lean checking.
+assuming any convergence or decay, and both are Lean-checked.
 
 This estimate does not identify the retained sum with a unique block.
 The one-block formalization of C2 excludes other peripheral eigenvalue
@@ -158,7 +158,9 @@ so radius one forces a unit weight; simplicity excludes two such sectors.
 Every block eigenvalue lifts to $w_j^2$ times that eigenvalue in the full
 transfer map, which makes the retained block normal. Combined with the
 physical remainder estimate, this derives convergence to the unique dominant
-normal block. These statements are pending Lean checking.
+normal block. These statements are Lean-checked under the multiplicity-aware
+reading of C2 stated above. The source theorem with the literal C2 condition
+and an arbitrary number of blocks remains open.
 
 The actual finite normalization and spectral comparison are now written in
 \path{TNLean/MPS/ParentHamiltonian/HalfChainPhysicalStability.lean}.
@@ -191,9 +193,7 @@ normalization excludes zero dimension.
 This capstone spells out generic C2 with algebraic multiplicity, consistent
 with the source's exclusion of eigenvalues degenerate in magnitude. It
 does not silently change the weaker distinct-value C2 hypothesis of the
-one-block theorem. All new weighted/normalization/spectral statements
-remain pending hosted Lean acceptance and integration; their Blueprint
-entries remain unfinished.
+one-block theorem.
 
 \bibliographystyle{alpha}
 \bibliography{references}
