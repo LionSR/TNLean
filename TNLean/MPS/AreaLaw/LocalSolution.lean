@@ -16,6 +16,7 @@ import TNLean.MPS.AreaLaw.LocalSolution.FinalStateCount
 import TNLean.MPS.AreaLaw.LocalSolution.FinalStateEnergy
 import TNLean.MPS.AreaLaw.LocalSolution.FiniteHierarchyApproximation
 import TNLean.MPS.AreaLaw.LocalSolution.FiniteHierarchyEdges
+import TNLean.MPS.AreaLaw.LocalSolution.GappedPeriodicHierarchy
 import TNLean.MPS.AreaLaw.LocalSolution.HierarchicalEnergy
 import TNLean.MPS.AreaLaw.LocalSolution.HierarchicalProjection
 import TNLean.MPS.AreaLaw.LocalSolution.HierarchyApproximation

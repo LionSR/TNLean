@@ -1,0 +1,76 @@
+\section{Bond bounds for disjoint interval layers}
+\label{sec:huang_block_product_bonds}
+
+The approximation to time evolution in
+\cite[Figure 2]{Osborne2006Dynamics} is a product of two layers of disjoint
+interval-supported operators. The following estimates bound the operator-Schmidt
+ranks of that same product at every cut, and then of its finite weighted sums as in
+\cite[Section 5.4, equation (22)]{Huang2015GroundState}. The approximation estimate
+for time evolution is a separate assertion.
+
+\begin{lemma}[A crossing interval contains the boundary site]
+    \label{thm:huang_crossing_interval_boundary}
+    \lean{TNLean.MPS.AreaLaw.boundary_mem_interval_of_not_oneSided}
+    \leanok
+    \uses{def:chain_model}
+    Let $I=[a,b)$ be an interval of a chain of $L$ sites. If $I$ meets both
+    $[0,k)$ and its complement, then $k<L$ and $k\in I$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Choose $x\in I$ with $x<k$ and $y\in I$ with $k\le y$. Then
+    $a\le x<k\le y<b$ and $y<L$, giving the assertion.
+\end{proof}
+
+\begin{lemma}[Simultaneous ranks of interval layers]
+    \label{thm:huang_two_interval_layer_ranks}
+    \lean{TNLean.MPS.AreaLaw.operatorSchmidtRank_disjoint_interval_prod_le,
+        TNLean.MPS.AreaLaw.operatorSchmidtRank_two_interval_layers_le}
+    \leanok
+    \uses{thm:huang_crossing_interval_boundary}
+    Let $q\ge1$. Consider two ordered finite layers $(P_j)$ and $(Q_j)$ of
+    operators on a chain of local dimension $q$. Within each layer, the designated
+    support intervals are pairwise disjoint. Suppose that their widths are at most
+    $w_0$ in the first layer and $w_1$ in the second.
+    Every cut has operator-Schmidt rank at most $q^{2w_0}$ for the first-layer
+    product and at most $q^{2w_1}$ for the second-layer product. Consequently the
+    single operator
+    \[
+        K=\left(\prod_jP_j\right)\left(\prod_jQ_j\right)
+    \]
+    has operator-Schmidt rank at most $q^{2(w_0+w_1)}$ at every cut.
+    The products retain the prescribed order. Unitarity is not required.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Two intervals crossing the same cut both contain its first site on the right,
+    contradicting disjointness. Thus at most one factor of a layer crosses the cut.
+    One-sided factors have operator-Schmidt rank at most one. A crossing factor
+    supported on at most $w$ sites has rank at most $q^{2w}$ by its matrix-unit
+    decomposition. Submultiplicativity gives each layer bound and then the bound
+    for their product. This reasoning applies to every cut of the same operator.
+\end{proof}
+
+\begin{lemma}[Finite weighted sums of interval-layer products]
+    \label{thm:huang_weighted_interval_layer_ranks}
+    \lean{TNLean.MPS.AreaLaw.operatorSchmidtRank_weighted_chain_sum_le,
+        TNLean.MPS.AreaLaw.operatorSchmidtRank_weighted_two_interval_layers_le}
+    \leanok
+    \uses{thm:huang_two_interval_layer_ranks}
+    Fix the two support layouts and their orders in the preceding theorem. The
+    operators may vary with a sample index $t$ in a finite set $J$, giving products
+    $K_t$. For arbitrary complex coefficients $c_t$, the single operator
+    \[
+        K=\sum_{t\in J}c_tK_t
+    \]
+    has operator-Schmidt rank at most $|J|q^{2(w_0+w_1)}$ simultaneously at every cut.
+    More generally, a finite weighted sum of operators whose ranks at every cut
+    are bounded by $D$ has simultaneous bound $|J|D$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    At any fixed cut, scalar multiplication does not increase operator-Schmidt
+    rank, and the rank of a sum is at most the sum of the ranks. Apply the preceding
+    simultaneous bounds to each summand. Neither positivity nor normalization of
+    the coefficients is needed.
+\end{proof}
