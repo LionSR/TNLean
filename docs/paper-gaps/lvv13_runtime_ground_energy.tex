@@ -13,7 +13,7 @@
 
 \title{The Ground Energy in the Number of Sampled Words of Landau, Vazirani and Vidick}
 \author{}
-\date{2026-10-29}
+\date{2026-10-30}
 
 \begin{document}
 \maketitle
@@ -27,7 +27,7 @@ Landau, Vazirani and Vidick~\cite{Landau2015Polynomial},
 $d$, with $H_i$ acting on the qudits $i$ and $i+1$ and $0\le H_i\le1$, a unique
 ground state $\Gamma$ of energy $\varepsilon_0$, and gap
 $\varepsilon=\varepsilon_1-\varepsilon_0$ (lines 283--285). No bound on
-$\varepsilon_0$ is assumed. With $C=(1-\varepsilon_0/n)^{-1}$ and $P_i=1-H_i$,
+$\varepsilon_0$ is assumed. The unused letter is the identity $P_n=I$. With $C=(1-\varepsilon_0/n)^{-1}$ and $P_i=1-H_i$,
 the operator
 \begin{align*}
     A=\Bigl(C\Bigl(1-\frac Hn\Bigr)\Bigr)^m
@@ -50,6 +50,24 @@ Theorem~1 of the source (\texttt{thm:main}, lines 213--216) states the running t
 $n^{c(d,\varepsilon)}\,\mathrm{poly}(n/\eta)$ with
 $c(d,\varepsilon)=2^{O(\log^3d/\varepsilon)}$, independent of $\varepsilon_0$.
 
+\section{The published correction}
+
+The published article~\cite{Landau2015Published}, Methods, states the
+complexity exponent as
+\begin{align}
+    c(d,\varepsilon_0,\varepsilon)
+    =2^{O(\log^3d/\varepsilon)}+O(\varepsilon_0/\varepsilon).
+    \label{eq:lvv_sampling_published_exponent}
+\end{align}
+The Methods statement of Proposition~1, author PDF page~6, retains the
+ground energy in the sampling complexity. The normalization estimate below
+makes this dependence explicit. The abstract advertises the uniform
+polynomial case with constant ground energy.
+The published theorem treats $\varepsilon_0$ as a complexity parameter;
+it does not impose an unprinted bounded-energy hypothesis. Thus the omission
+of $\varepsilon_0$ in the preprint was corrected in publication. The example below concerns that omitted dependence, and does
+not contradict the published theorem.
+
 \section{The point at issue}
 
 Since $1+x\le e^x$,
@@ -59,11 +77,13 @@ Since $1+x\le e^x$,
     \qquad
     C^m\le\exp\Bigl(\frac{\varepsilon_0m}{n-\varepsilon_0}\Bigr).
 \end{align*}
-At $m$ of order $(n/\varepsilon)\log n$ this gives
-$C^{2m}=n^{O(\varepsilon_0/\varepsilon)}$, which is (\ref{eq:printed}) only when
-$\varepsilon_0$ is bounded independently of $n$. The hypotheses
-$0\le H_i\le1$ allow $\varepsilon_0$ of order $n$, and then
-(\ref{eq:printed}) fails.
+If $\varepsilon_0\le cn$ for a fixed $c<1$, then at powers
+$m=O((n/\varepsilon)\log n)$ this gives
+$C^{2m}=n^{O(\varepsilon_0/\varepsilon)}$. Even in this range the estimate
+is not uniform in the ground energy. The hypotheses $0\le H_i\le1$
+allow $\varepsilon_0$ of order $n$; the following family shows that
+(\ref{eq:printed}) then fails. The energy-dependent choice of power in
+the corrected statement below also covers energies closer to $n$.
 
 \section{A family with extensive ground energy}
 
@@ -104,6 +124,82 @@ for this family; it records only that the printed step and the stated
 dependence of $\ell$ and of the running time on $\varepsilon$ alone do not
 follow from the source's argument.
 
+\section{A commuting chain with zero local minima}
+
+Let $n=2r+1$ with $r\ge1$, and let $N_j=|1\rangle\langle1|_j$ on a chain
+of $n$ qubits. For $1\le k\le r$, set
+\begin{align}
+    H_{2k-1} & =\frac34N_{2k}+\frac18N_{2k-1},     \\
+    H_{2k}   & =\frac12(I-N_{2k})+\frac18N_{2k+1}.
+    \label{eq:lvv_sampling_chain}
+\end{align}
+Each term is supported on its prescribed adjacent pair, has smallest
+eigenvalue zero, and satisfies $0\le H_i\le(7/8)I$. All terms commute.
+Their sum is
+\begin{align}
+    H=\frac r2I+\frac14\sum_{k=1}^{r}N_{2k}
+    +\frac18(N_1+N_n)+\frac14\sum_{k=1}^{r-1}N_{2k+1}.
+    \label{eq:lvv_sampling_hamiltonian}
+\end{align}
+Consequently $\Gamma=|0\rangle^{\otimes n}$ is the unique ground vector,
+$\varepsilon_0=r/2$, and the gap is exactly $1/8$, attained by flipping
+either endpoint. This is a nondegenerate example even if zero local
+minimum is imposed as an additional convention.
+
+\section{Failure of the claimed normalized operator-norm estimate}
+
+Put $p=r/n$, so $1/3\le p<1/2$. On $\Gamma$, the operators $P_i$ have
+eigenvalue $1$ for odd $i$ and for the dummy label, and eigenvalue $1/2$
+for even $i$. For a uniform word of length $m$, let $B$ count the even
+labels. Then $B$ has the binomial distribution with parameters $m,p$, and
+the eigenvalue of $C^mP_I$ on $\Gamma$ is $Z=C^m2^{-B}$, with
+$C=(1-p/2)^{-1}$. In particular,
+\begin{align}
+    \mathbb EZ=\bigl(C(1-p/2)\bigr)^m=1.
+    \label{eq:lvv_sampling_word_law}
+\end{align}
+Its square-root moment is
+\begin{align}
+    \mathbb E\sqrt Z & =\alpha_p^m,                        \\
+    \alpha_p         & =\frac{1-p+p/\sqrt2}{\sqrt{1-p/2}}.
+    \label{eq:lvv_sampling_fractional_moment}
+\end{align}
+Writing $t=1-1/\sqrt2$, direct expansion gives
+\begin{align}
+    \alpha_p^2
+    =1-\frac{p(1-p)t^2}{1-p/2}
+    \le 1-\frac1{96}=\frac{95}{96}.
+    \label{eq:lvv_sampling_moment_decay}
+\end{align}
+Indeed $p(1-p)\ge1/6$, $t\ge1/4$, and $0<1-p/2\le1$.
+
+For $\ell\ge1$ sampled words, let
+$Y=\ell^{-1}\sum_{j=1}^{\ell}Z_j$, so $K\Gamma=Y\Gamma$.
+The inequality $\sqrt{\sum_jZ_j}\le\sum_j\sqrt{Z_j}$ and Markov's
+inequality imply
+\begin{align}
+    \Pr(Y\ge1/2)
+     & \le \sqrt2\,\mathbb E\sqrt Y
+    \le\sqrt{2\ell}\,\alpha_p^m
+    \le\sqrt{2\ell}\left(\frac{95}{96}\right)^{m/2}.
+    \label{eq:lvv_sampling_failure}
+\end{align}
+Since $A\Gamma=\Gamma$, the event $\|K-A\|\le1/n$ implies
+$Y\ge1-1/n\ge1/2$. For every fixed polynomial bound on $\ell$ and every
+$m\ge cn$ with $c>0$ fixed, the right side of
+(\ref{eq:lvv_sampling_failure}) tends to zero. In particular, the
+prescribed power of order $n\log n$ cannot have the claimed success
+probability with a polynomial number of uniform samples.
+This concerns the stated normalization and additive operator-norm estimate.
+It does not say that every normalized output vector of this commuting
+example is poorly approximated: a nonzero scalar multiple of the ground
+vector has the same normalized direction.
+
+The bare upper bound $m=O(n\log n)$ also permits small powers, including
+$m=0$. The contradiction is to the sampled approximate projection at
+the powers required by equation~\path{e:cutdown}, not to an
+upper-bound statement interpreted without that requirement.
+
 \section{The corrected statement}
 
 With $R=C^m+1$, an accuracy $\eta>0$, and
@@ -142,8 +238,8 @@ existence form, with the rank bound of equation \texttt{e:decomp}, is
 \leanid{TNLean.MPS.AreaLaw.powerNormalization_pow_ceil_le}. These statements
 carry only the source's hypotheses. The statement $\ell=n^{O(1/\varepsilon)}$
 for unbounded $\varepsilon_0$, and the running time of Theorem~1,
-are not formalized; the status stays open until the dependence of the whole
-algorithm on $\varepsilon_0$ is settled.
+are not formalized. The published article corrects the energy dependence;
+the formalization of its running-time assertion remains open.
 
 The construction with a fixed bound $B$ on $\varepsilon_0/\Delta$ is now
 \leanid{TNLean.MPS.AreaLaw.exists_sampled_successive_viable_sets_polynomial}.
@@ -154,7 +250,74 @@ energy. The final-span theorem
 gives a normalized matrix product state with overlap at least
 $1-\eta/L^a$. This uses the library constant-cut bond and corrected trimming
 radius; it does not assert the printed sharp degree or a running time.
-The source-error status above is unchanged.
+The error recorded here concerns the preprint, not the corrected published
+complexity exponent.
+
+\section{Overall scaling and an unknown energy}
+
+The scalar $C^m$ is not itself an obstacle to using the left-factor
+construction without an energy input. The published Methods discussion before Proposition~1,
+author PDF page~6, explicitly observes that an overall scalar is immaterial after
+normalizing the output vectors. The same point occurs in
+\path{algo53.tex}, line~614. One may use the unscaled sum
+$\ell^{-1}\sum_jP_{I_j}$; multiplication of all factors by one nonzero
+scalar preserves their spans and Schmidt ranks.
+
+What remains energy-dependent in the present formal statement is the
+selection of its word length, relative error and sample budget.
+A known upper bound on the energy, or a proved sequence of trial bounds
+with a valid acceptance and termination argument, would address a different
+question from computing the immaterial scalar. Such a bound cannot be
+inferred merely by subtracting the global ground energy while retaining
+positive original local contractions.
+
+Both source versions use the power of the full original nearest-neighbour
+Hamiltonian. Its left and right block sums occur in the size-trimming
+optimization; they do not replace the original letters in this sampler.
+Subtracting their two separate minima gives a residual ground energy in
+$[0,1]$, but the shifted block operators are nonlocal and can have norm of
+order the chain length. Their internal-cut ranks are not controlled by the
+original-letter estimate. Substituting them would require new norm and
+spatial-rank arguments.
+
+\section{Uniform successive families}
+
+Fix the local dimension $q\ge2$ and a positive lower bound $\Delta$ for
+the spectral gap. The Gaussian energy-mesh construction, following
+Huang~\cite[Section~5.4]{Huang2015GroundState}, supplies a
+sequence of viable families whose size and individual bond dimensions
+are bounded by one polynomial in the chain length. The coefficients and
+degree are chosen before the length and interaction, and the families
+are chosen before any ground energy or ground vector. The theorem is
+\leanid{TNLean.MPS.AreaLaw.exists_uniform_positive_chain_successive_approximation}.
+Its proof performs extension, size trimming, independent bond trimming
+and Gaussian error reduction at each cut. The final approximation lies
+in the span of the family produced at the last cut.
+
+Arbitrary accuracy follows by adjoining $2R^2$ sites with product-state
+penalties, for a prescribed integer $R\ge1$. The extended chain has
+length $N=L+2R^2$ and gap at least $g=\min\{\Delta,1\}$. A normalized
+column of the stage-$L$ witness, with its phase chosen, gives an
+original-chain matrix product state $\psi$. There are natural numbers
+$P,d$, depending only on $q,\Delta$, such that
+\begin{align}
+    \|\psi-\Gamma\|^2 & \le R^{-2},        &
+    D(\psi)           & \le P(L+2R^2+1)^d.
+    \label{eq:lvv_gaussian_arbitrary_accuracy}
+\end{align}
+The same polynomial bounds the cardinalities and individual bond
+dimensions at every stage of the extended construction. This is
+\leanid{TNLean.MPS.AreaLaw.exists_uniform_positive_chain_successive_accuracy}.
+The extension by product states is a consequence of the construction,
+not a step claimed to occur in the cited papers.
+
+These results use the corrected trimming radius and the constant-cut
+bond described in \path{lvv13_constant_bond.tex}. They require no bound
+on the ground energy. They do not repair the false normalized estimate
+for the original uniform sampler, establish the sharper printed
+dependence on the inverse gap, or assert a computational running time.
+The source-level construction and complexity comparisons remain
+tracked by issues \#9822 and \#9823 under \#9832.
 
 \bibliographystyle{unsrt}
 \bibliography{references}

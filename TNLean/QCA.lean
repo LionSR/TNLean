@@ -8,6 +8,7 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.QCA
 
+import TNLean.QCA.AdjacentSupportGeneration
 import TNLean.QCA.AlgebraicBlocking
 import TNLean.QCA.AlgebraicTranslation
 import TNLean.QCA.BipartiteLocalAlgebra
@@ -17,6 +18,7 @@ import TNLean.QCA.BlockingIntervalCoordinates
 import TNLean.QCA.BlockingQCA
 import TNLean.QCA.BlockingStateTransport
 import TNLean.QCA.BlockingTranslation
+import TNLean.QCA.CanonicalAdjacentSupportGeneration
 import TNLean.QCA.CommutingStarSubalgebraKronecker
 import TNLean.QCA.CompatibleLocalAutomorphism
 import TNLean.QCA.CompatibleLocalState
@@ -47,6 +49,7 @@ import TNLean.QCA.SiteIndexedSupportAlgebra
 import TNLean.QCA.StateSpace
 import TNLean.QCA.SupportAlgebraCommutation
 import TNLean.QCA.SupportAlgebraCovariance
+import TNLean.QCA.SupportAlgebraFactors
 import TNLean.QCA.SupportAlgebraGeneration
 import TNLean.QCA.Translation
 import TNLean.QCA.TranslationCovariance

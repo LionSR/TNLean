@@ -1,7 +1,7 @@
 \section{Chebyshev improvement of physical viability}
 
 Use the supplied windows, core tensors and closing matrix of
-Theorem~\ref{thm:physical_polynomial_tensor_family}. In particular,
+Lemma~\ref{thm:physical_polynomial_tensor_family}. In particular,
 $a+2\ell\le b$, $b+2\ell\le L-1$, $\ell\ge1$, $q\ge2$ and $k\ge1$;
 $W^L_r,W^R_r$ have the stated two-site supports. The core is the actual trace
 contraction (\ref{eq:physical_tensor_core}), with arbitrary closing matrix
@@ -16,7 +16,7 @@ recorded in \cite{gap:alvv16_spectral_projector_boundary}.
 The norm estimate for the Chebyshev filter requires no positivity of its
 unsquared polynomial~\cite{gap:alvv16_chebyshev_filter_positivity}.
 
-\begin{theorem}[A common family for Chebyshev viability improvement]
+\begin{lemma}[A common family for Chebyshev viability improvement]
     \label{thm:physical_chebyshev_viability}
     \lean{TNLean.MPS.AreaLaw.exists_common_physical_chebyshev_viable_family_fin}
     \leanok
@@ -59,11 +59,11 @@ unsquared polynomial~\cite{gap:alvv16_chebyshev_filter_positivity}.
     \end{align}
     These are supporting consequences for the spectral filtering and
     error-reduction arguments in \cite{Arad2016RigorousRG}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:physical_polynomial_tensor_family}
     Choose the common family in
-    Theorem~\ref{thm:physical_polynomial_tensor_family}.
+    Lemma~\ref{thm:physical_polynomial_tensor_family}.
     The Chebyshev spectral estimate supplies a real polynomial $p$ of degree
     $k$ whose operator $K=p(H_m)$ preserves $G$ and $G^\perp$ and satisfies
     \begin{align}
