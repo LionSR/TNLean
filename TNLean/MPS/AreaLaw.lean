@@ -9,6 +9,7 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.MPS.AreaLaw
 
 import TNLean.MPS.AreaLaw.AKLV
+import TNLean.MPS.AreaLaw.ALVV
 import TNLean.MPS.AreaLaw.AreaLaw
 import TNLean.MPS.AreaLaw.BandDissolution
 import TNLean.MPS.AreaLaw.BandInformation
@@ -65,7 +66,10 @@ import TNLean.MPS.AreaLaw.OpenMPSRank
 import TNLean.MPS.AreaLaw.OpenMPSSpan
 import TNLean.MPS.AreaLaw.OverlapEnergy
 import TNLean.MPS.AreaLaw.PartialSwap
+import TNLean.MPS.AreaLaw.PhysicalChebyshevViability
 import TNLean.MPS.AreaLaw.PhysicalIntervalTransport
+import TNLean.MPS.AreaLaw.PhysicalPeriodicPolynomialFamily
+import TNLean.MPS.AreaLaw.PhysicalPolynomialTensorFamily
 import TNLean.MPS.AreaLaw.PolynomialFilterParameters
 import TNLean.MPS.AreaLaw.ProductCutIteration
 import TNLean.MPS.AreaLaw.ProductReplacement
@@ -98,6 +102,7 @@ import TNLean.MPS.AreaLaw.RelativeGeneratorLocalization
 import TNLean.MPS.AreaLaw.RenyiEntropy
 import TNLean.MPS.AreaLaw.ResetSupportSeparation
 import TNLean.MPS.AreaLaw.RetainedCoreFamilies
+import TNLean.MPS.AreaLaw.RetainedCoreTracePresentation
 import TNLean.MPS.AreaLaw.SelectedCoefficientDecomposition
 import TNLean.MPS.AreaLaw.SelectedMiddleData
 import TNLean.MPS.AreaLaw.SelectedMiddleMPOFamily
@@ -109,6 +114,7 @@ import TNLean.MPS.AreaLaw.SupportedGaussianIntegral
 import TNLean.MPS.AreaLaw.SwappedDoubledHamiltonian
 import TNLean.MPS.AreaLaw.ThreeRegionSupport
 import TNLean.MPS.AreaLaw.TraceCoreSlices
+import TNLean.MPS.AreaLaw.TraceIntervalTransfer
 import TNLean.MPS.AreaLaw.TwoCutEdgeSupports
 import TNLean.MPS.AreaLaw.TwoCutOperatorForms
 import TNLean.MPS.AreaLaw.TwoWindowFamilyCardinality

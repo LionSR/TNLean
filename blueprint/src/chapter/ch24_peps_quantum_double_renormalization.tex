@@ -1,0 +1,129 @@
+% SCP10 paper_v3.tex:2886--2916; tc-lattice.pdf and tc-2x2-renorm.pdf inspected.
+% The unavailable renorm-as-diff-doubles figure supplies no geometric evidence.
+\paragraph{Physical renormalization of an elementary block.}
+The following local construction starts from the elementary tensors of
+\cite[Section~7.D]{Schuch2010PEPS}. Boundary pairs are ordered N,E,S,W and
+physical spins NE,SE,SW,NW. The arrows of the original lattice give inverse
+clockwise differences; physical basis inversion restores the convention of
+Definition~\ref{def:peps_quantum_double_k_tensor}.
+
+\begin{definition}[Elementary block and its boundary coordinates]
+    \label{def:peps_qd_elementary_block}
+    \lean{TNLean.PEPS.quantumDoubleElementaryTensor,
+        TNLean.PEPS.quantumDoubleElementaryBlock,
+        TNLean.PEPS.quantumDoubleElementaryBlockMatrix,
+        TNLean.PEPS.quantumDoubleRenormPair,
+        TNLean.PEPS.quantumDoubleRenormBoundary,
+        TNLean.PEPS.quantumDoubleRenormColors,
+        TNLean.PEPS.quantumDoubleRenormSurplus}
+    \leanok
+    Let $T(r,r';s,s';x)=\delta_{r,r'}\delta_{s,s'}\delta_{x,sr^{-1}}$,
+    the coefficient of $L_sR_r\ket1$ with both virtual colors copied.
+    Write the eight boundary labels as
+    $\alpha=((n_0,n_1),(e_0,e_1),(s_0,s_1),(w_0,w_1))$.
+    Set $c(\alpha)=(n_0,e_0,s_0,w_0)$,
+    $d(\alpha)=(n_1,e_1,s_1,w_1)$ and let $D$ act on each pair by
+    $D(a,b)=(a,b^{-1}a)$, with inverse $D^{-1}(a,d)=(a,ad^{-1})$.
+    The elementary block map has coefficients
+    \begin{align}
+        B_\alpha(x) & =\sum_{p,q,r,s}
+        T(n_1,p;e_0,q;x_1)T(e_1,q;s_0,r;x_2)
+        T(s_1,r;w_0,s;x_3)T(w_1,s;n_0,p;x_4).
+        \label{eq:peps_qd_elementary_block}
+    \end{align}
+\end{definition}
+
+\begin{lemma}[Evaluation of the elementary block]
+    \label{lem:peps_qd_elementary_block}
+    \lean{TNLean.PEPS.quantumDoubleElementaryBlock_apply,
+        TNLean.PEPS.quantumDoubleElementaryTensor_eq_regular}
+    \leanok
+    \uses{def:peps_qd_elementary_block}
+    Put $O(p,q,r,s)=(qp^{-1},rq^{-1},sr^{-1},ps^{-1})$.
+    Then $B_\alpha(x)=\delta_{d(\alpha),c(\alpha)}\delta_{x,O(c(\alpha))}$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{def:peps_qd_elementary_block}
+    The physical coefficient of each elementary tensor is that of
+    $R_r\ket s=R_rL_s\ket1=L_sR_r\ket1$.
+    The four copy constraints in (\ref{eq:peps_qd_elementary_block}) force the
+    unique internal assignment $(p,q,r,s)=c(\alpha)$ and require
+    $d(\alpha)=c(\alpha)$. Its coefficient is exactly one.
+\end{proof}
+
+\begin{definition}[Physical permutation and retained tensor]
+    \label{def:peps_qd_physical_renorm}
+    \lean{TNLean.PEPS.quantumDoubleRenormPhysical,
+        TNLean.PEPS.quantumDoubleRenormReconstruct,
+        TNLean.PEPS.quantumDoubleRenormReducedSpins,
+        TNLean.PEPS.quantumDoubleRenormReducedTensor,
+        TNLean.PEPS.quantumDoubleRenormFactorMatrix}
+    \leanok
+    \uses{def:peps_qd_elementary_block}
+    Let $A(p,q,r,s)=(pq^{-1},qr^{-1},rs^{-1})$ and
+    $R_c(z)=\delta_{z,A(c)}$. On the entire four-spin space set
+    \begin{align}
+        P(x)              & =(x_1^{-1},x_2^{-1},x_3^{-1},x_1^{-1}x_2^{-1}x_3^{-1}x_4^{-1}), \\
+        P^{-1}(a,b,c,h)   & =(a^{-1},b^{-1},c^{-1},h^{-1}abc),                              \\
+        Q(a,b,c,h)        & =(a,b,c,(abc)^{-1}h),                                           \\
+        M_\alpha(a,b,c,h) & =\delta_{d(\alpha),1}\delta_{h,1}R_{c(\alpha)}(a,b,c).
+        \label{eq:peps_qd_physical_renorm}
+    \end{align}
+    Thus $P$ inverts the original-arrow basis and extracts ordered holonomy.
+    The last physical factor remains a copy of $\C[G]$, fixed at $\ket1$;
+    all four surplus virtual factors remain, fixed by $\bra1$.
+\end{definition}
+
+\begin{lemma}[Local physical renormalization]
+    \label{thm:peps_qd_physical_renorm}
+    \lean{TNLean.PEPS.quantumDoubleElementaryBlock_physicalRG,
+        TNLean.PEPS.quantumDoubleRenormReducedTensor_reconstruct,
+        TNLean.PEPS.quantumDoubleElementaryBlock_toK,
+        TNLean.PEPS.quantumDoubleElementaryBlockMatrix_physicalRG,
+        TNLean.PEPS.quantumDoubleRenorm_unitary}
+    \leanok
+    \uses{def:peps_qd_physical_renorm,def:peps_quantum_double_k_tensor}
+    For every finite group, without a commutativity assumption,
+    \begin{align}
+        B_{D^{-1}\alpha}(P^{-1}y) & =M_\alpha(y)
+        =\delta_{d(\alpha),1}K_{c(\alpha)}(Qy).
+        \label{eq:peps_qd_physical_rg}
+    \end{align}
+    Both $P$ and $D$ induce unitary permutation matrices on their full
+    spaces. In ket notation their matrices satisfy
+    $\widehat P B\widehat D^{-1}=M$.
+    This assertion concerns one four-site block.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:peps_qd_elementary_block,def:peps_qd_physical_renorm}
+    The equality $d(D^{-1}\alpha)=c(D^{-1}\alpha)$ is equivalent to
+    $d(\alpha)=1$, while $P(O(c))=(A(c),1)$.
+    These identities give the first equality in (\ref{eq:peps_qd_physical_rg}).
+    Since $(pq^{-1})(qr^{-1})(rs^{-1})(sp^{-1})=1$, reinserting the
+    fourth spin by $Q$ gives the second equality. Taking all matrix entries
+    proves the tensor-map equality. The displayed inverse formulas establish
+    bijectivity, hence unitarity of the permutation matrices.
+\end{proof}
+
+\begin{lemma}[Exact normalization]
+    \label{thm:peps_qd_physical_rg_normalization}
+    \lean{TNLean.PEPS.quantumDoubleRenormColorEquiv,
+        TNLean.PEPS.quantumDoubleRenormReducedTensor_mul_conjTranspose,
+        TNLean.PEPS.quantumDoubleRenormNormalizedTensor,
+        TNLean.PEPS.quantumDoubleRenormNormalizedTensor_mul_conjTranspose}
+    \leanok
+    \uses{def:peps_qd_physical_renorm}
+    The retained map satisfies $RR^\dagger=|G|I$; consequently
+    $N=|G|^{-1/2}R$ satisfies $NN^\dagger=I$.
+    The elementary-block identity (\ref{eq:peps_qd_physical_rg}) has scalar one.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{def:peps_qd_physical_renorm}
+    The color map $(p,q,r,s)\mapsto(A(p,q,r,s),s)$ is bijective, with inverse
+    \begin{align}
+        ((a,b,c),t)\mapsto(abct,bct,ct,t).\notag
+    \end{align}
+    Reindexing the Gram sum by this bijection leaves $|G|$ identical
+    contributions on each diagonal entry and zero off the diagonal.
+    Multiplication by $|G|^{-1/2}$ on both factors gives the normalized identity.
+\end{proof}

@@ -9701,6 +9701,18 @@ there is no need for a new tactic.
   mathematical lemma to a lower matrix-analysis module and reuse it; do not duplicate its
   statement or introduce a new tactic.
 
+
+### Pure output Gram projection — library zero criterion (2026-10-29)
+
+- **Seen:** `Circuit/Channel/PhysicalPortPureOutput.lean`.
+- **Pattern:** A pure marginal gives C*C†=P with P²=P; derive that every
+  actual output column is fixed by P before extracting its environment factor.
+- **Reuse:** Mathlib's `Matrix.mul_self_mul_conjTranspose_eq_zero` turns
+  (1-P)*(C*C†)=0 directly into (1-P)*C=0. Existing vector outer-product and
+  partial-trace identities give the factorization and its normalization.
+- **Decision:** Use the positive Gram zero criterion rather than add a parallel
+  purification structure or assume system/environment decoupling.
+
 ### Weighted geometric sums grouped by their anchors — promoted (2026-10-28)
 
 - **Seen:** `Lattice/LowEnergyCommutatorSum.lean`,
@@ -9724,6 +9736,43 @@ there is no need for a new tactic.
 - **Decision:** Three branch occurrences in one file, below the two-file promotion
   threshold. Before extending this pattern to another module, move the value equality
   before the case distinction or reuse `Fin.val_inj`; no new tactic is needed.
+
+### Complementary-product prefix and suffix — candidate (2026-10-29)
+
+- **Pattern:** Induct on the complementary-product length, rewrite the successor
+  equation, and identify a masked or concatenated prefix before appending factors.
+- **Seen:** Three local inductions across
+  `MPS/AreaLaw/ALVV/FrustrationFree.lean` and
+  `MPS/AreaLaw/ALVV/FrustrationFreeGap.lean`.
+- **Abstraction:** Candidate for a general complementary-product congruence or
+  concatenation lemma if further consumers appear. The current inductions use
+  different ranges and factorizations, so no identical tactic block was promoted.
+- **Notes:** The repository tactic-pattern scan was run; it reported no new
+  repeated block in these modules among its twenty highest-ranked patterns.
+
+### Supported exterior sums at a cut — candidate (2026-10-29)
+
+- **Pattern:** Split retained nearest-neighbor terms into left, right and at most
+  one crossing bond; absorb identity and regional corrections into their supported
+  side, then use actual one-sided tensor decompositions.
+- **Seen:** Three rank bounds in `MPS/AreaLaw/ALVV/FrustrationFreeRank.lean`.
+- **Abstraction:** The private exterior decomposition and support lemmas are
+  shared by the interior, exterior and boundary-region cases.
+- **Notes:** No tactic macro is needed; the common mathematical statements are
+  already factored out. The repository tactic-pattern scan was rerun.
+
+### Active parity positions and adjacent bonds — candidate (2026-10-29)
+
+- **Pattern:** Recover the original bond index of a nonzero parity-ordered
+  factor, then bound its noncommuting positions by the images of its two
+  adjacent indices.
+- **Seen:** The ordered-family activity and degree-two proofs in
+  `MPS/AreaLaw/ALVV/FrustrationFreeChain.lean`.
+- **Abstraction:** The private activity lemma and public degree-two theorem
+  separate the index bookkeeping from the detectability estimate.
+- **Notes:** No tactic repetition reaches the promotion threshold. The
+  repository pattern scan was rerun after the concrete chain assembly.
+
 
 ### Rank-one density under scalar multiplication — promoted (2026-10-29)
 

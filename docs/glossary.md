@@ -2129,7 +2129,17 @@ in `MPS/Preparation/` uses it.
   `IsLocalChannelProtocol.channelCircuitMap_comp` (appending a local channel
   circuit of `n` layers adds `n` to the depth), and
   `IsLocalChannelProtocol.exists_dual` (light cone of radius `T` of the
-  Heisenberg dual).
+  Heisenberg dual). Grouping `k` consecutive sites is constructed in
+  `Circuit/Channel/RegroupedProtocol.lean`:
+  for positive block count, block size, and input local dimension,
+  `IsLocalChannelProtocol.exists_regrouped` gives depth at most `2T` for
+  even block counts and `3T` in general, with exact equality on all operators
+  and arbitrary external references. The dimension-bounded version raises
+  the budget from `B` to `B^k`. `IsLocalChannelConversion.then_blocked`
+  composes an unblocked conversion followed by a blocked conversion with
+  bound `2T+U` or `3T+U`. One block admits depth zero; the generic two-block
+  bound is `2T`. The six-site seam matching projects to a triangle after
+  grouping pairs, obstructing its direct partition into two block matchings.
 - **Caveat:** the depth `T` counts the two-site layers exactly; onsite channels
   are free. Onsite channels may enlarge the dimension, and a layer on the
   enlarged sites still costs one depth unit. No uniform intermediate-dimension
@@ -3123,9 +3133,14 @@ involve no boundary.
   `exists_bounded_matching_simulation`, `PortRegisters.dataChannelLift_word`,
   `IsDimensionBoundedLocalChannelProtocol.exists_physicalPortSimulation`,
   `.exists_appended_unitary_dilation`, and
-  `.exists_appended_unitary_dilation_reference`. The last two construct an
+  `.exists_appended_unitary_dilation_reference`. These construct an
   actual same-depth unitary on a port-preserving extension, with fresh local
   product-zero environments initialized once and discarded only at the end.
+  When the channel output of a pure input is pure,
+  `.exists_appended_unitary_dilation_pure_output` derives a normalized
+  environment vector and a system/environment product output, and
+  `.exists_environmentKraus_pure_output` identifies the environment-basis
+  branches, their normalized amplitudes and their common pure system output.
 - **Caveat:** source pure-state conditions and the fixed number of composed
   `QCcc` blocks with their internal measurement/control rules remain separate.
   The appended environments need not reset, and their total number is only
