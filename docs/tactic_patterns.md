@@ -45,6 +45,18 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Positive dimensions of canonical blocks — promoted (2026-10-30)
+
+- **Pattern:** `let : NeZero (h.dim k) := ⟨(h.dim_pos k).ne'⟩` before using a
+  canonical block as a tensor of positive bond dimension.
+- **Helper:** the instance `MPSTensor.PGVWC07CanonicalFormData.neZero_dim` in
+  `TNLean/MPS/CanonicalForm/PGVWC07CanonicalForm.lean`.
+- **Occurrences:** two in `WeightedCanonicalSectors.lean` and one in
+  `WeightedCanonicalPhysicalLimit.lean`, all removed; the two local `have`s in
+  `TNLean/MPS/Examples/WStateCanonicalBound.lean` are now redundant.
+- **Decision:** An instance lets typeclass search supply positivity for every
+  block, instead of a local assumption at each use.
+
 ### Identity site translation — promoted (2026-10-28)
 
 - **Pattern:** Unfold the matrix of a site permutation and rewrite the identity
