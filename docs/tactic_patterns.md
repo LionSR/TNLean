@@ -9970,6 +9970,22 @@ there is no need for a new tactic.
   existing supplied standard-form and fundamental-theorem APIs. No fourth copy
   of the circuit contraction or custom tactic is introduced.
 
+### Rectangular reduction of doubled words — promoted (2026-10-29)
+
+- **Pattern:** Apply a full-word reduction to a physical block, double its
+  rectangular bond maps, and decode the blocked physical indices.
+- **Defined in:** `MPS/MPU/SimpleReduction.lean`,
+  `doubleLayer_evalWord_of_isReduction`.
+- **Reuse:** Promotes the existing `doubledBondMap` and
+  `doubleLayer_rectangularSandwich` from `SimpleSupportCompression.lean`;
+  the support-compression and full-word-reduction arguments share their owner.
+- **Related extraction:** `simple2_of_normalizedDiagonal_insertion` in
+  `SuppliedFixedWitnesses.lean` factors the existing positive-power insertion
+  argument. Both the old supplied-witness theorem and the new canonical
+  reduction theorem use that proof; no second induction was copied.
+- **Scope:** A one-letter sandwich alone is insufficient. The reduction must
+  contract every open word, including the empty word.
+
 ### Complementary-product prefix and suffix — candidate (2026-10-29)
 
 - **Pattern:** Induct on the complementary-product length, rewrite the successor
