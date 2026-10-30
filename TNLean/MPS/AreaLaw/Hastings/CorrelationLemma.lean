@@ -4,50 +4,32 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.Hastings.SchmidtDiagonalChain
-import TNLean.MPS.AreaLaw.Hastings.LemmaOneConstant
+import TNLean.MPS.AreaLaw.Hastings.PrintedAreaLawSource
 
 /-!
-# Hastings' Lemma 3 on the chain
+# Hastings' correlation lemma at an admissible source length
 
-Lemma 3 of Hastings, *An area law for one-dimensional quantum systems* (arXiv:0705.2024v4,
-`References/0705.2024/law16.tex`, lines 627–646, eq. `fwdback`), bounds the correlation between
-an operator `A` supported away from the `l` sites on either side of a cut and an operator `B_L`
-that is diagonal in the left Schmidt vectors of the ground state `Ψ₀`:
-`⟨Ψ₀, A B_L Ψ₀⟩ − ⟨Ψ₀, A Ψ₀⟩⟨Ψ₀, B_L Ψ₀⟩ ≤ 3 √(2ε(l)) + ε(l)` with `ε(l) = C₁ e^{-l/ξ'}`.
-Its proof uses the Hamiltonian only through the positive operators `O_B`, `O_L`, `O_R` of
-Lemma 1.
+For a gapped ground state, Hastings' Lemma 3 bounds the correlation of an operator
+supported away from a cut and an operator diagonal in the Schmidt vectors at that cut.
+The bound is `3 √(2ε(l)) + ε(l)`, with `ε(l) = C₁ exp(-l/ξ')`.
 
-This file discharges the factorization hypothesis of `norm_inner_mul_sub_le_of_factorization` with
-the positive form of Lemma 1 at the printed rate,
-`exists_projectorFactorization_posSemidef_endpoint`. The result is a quantitatively restricted
-Lemma 3 on Hastings' own hypotheses: a chain Hamiltonian of finite range and finite interaction
-strength with a unique gapped ground state. With `ζ = lemmaOneEndpointLength R J ΔE = (5/4) ξ̂`
-the length of Lemma 1 at the printed rate and `ξ' = 6ζ` (lines 139–142), the constant is
-`C₁ = K ζ³` with `K` depending only on the range. The length `ζ` may stand in for the source's
-`ξ`: the source fixes `ξ = max(2v/ΔE, ξ_C)` only through some Lieb–Robinson pair, and a bound
-valid for `|t| ≤ l/v` stays valid for a larger velocity (lines 96–112), so raising the chain
-velocity by `5/4` is a legitimate choice. The constant `C₁` is bounded by a polynomial in the
-length (lines 258–262) and does not depend on the length of the chain, the cut, the Schmidt data
-or `A`. The bound is on the modulus of the difference, which is stronger than the printed
-one-sided bound.
+The positive factorization is supplied at the admissible source length
+`s = max(2v/ΔE,80)`, where `v = 40 c_R J` and
+`c_R = 2(R+1)2^(2R+1)exp(2R)`. At this length its rate is `ξ' = 6s` and its
+constant is `C₁ = K s³`, with `K` depending only on the interaction range.
+Both observable supports are arbitrary finite sets, as required by the
+Lieb–Robinson bound. The resulting absolute-value estimate is stronger than the
+source's one-sided correlation estimate.
 
-**Local fix (positivity rate):** the proof of Lemma 3 needs `O_B` positive, and the positive
-form of Lemma 1 decays at half its rate, so eq. `fwdback` holds with
-`ε(l) = C₁ e^{-l/(2 · 6ζ)}` rather than at the rate `ξ' = 6ζ` of Lemma 1. Documented in
-`docs/paper-gaps/hastings07_lemma1_positivity_rate.tex`.
+**Local fix (positivity and length convention):** the factors are positive
+semidefinite. At the original factorization length the positive repair halves the
+rate; the enlarged admissible length absorbs that loss. The commutator bound uses
+the reciprocal-length convention `exp(-d/ξ_C)` on `|t| ≤ d/v`. These corrections are
+recorded in `docs/paper-gaps/hastings07_lemma1_positivity_rate.tex` and
+`docs/paper-gaps/hastings07_lemma1_decay_length.tex`.
 
-**Scope restriction (quantitative bounds):** `exists_norm_inner_mul_sub_le` inherits the
-quantitative restriction of the formalized Lemma 1. Its length
-`ζ = (5/4) lemmaOneLength R (J/ΔE) 1` comes from the chain Lieb–Robinson estimate with the
-velocity raised by `5/4`, whose prefactor grows with `J` and whose second operator acts on one
-site, so `ζ` is not shown to be the source's `max(2v/ΔE, ξ_C)` for a Lieb–Robinson pair in the
-source's sense (lines 96–112). Documented in
-`docs/paper-gaps/hastings07_lemma1_decay_length.tex` and
-`docs/paper-gaps/hastings07_gaussian_average_exponent.tex`.
-
-## Main results
-
-* `exists_norm_inner_mul_sub_le`: Lemma 3.
+Source: Hastings, arXiv:0705.2024v4, Lemma 3, eq. `fwdback`, lines 627–692;
+Lemma 1, lines 246–267; note added, lines 912–1003.
 -/
 
 open Matrix
@@ -59,21 +41,17 @@ open Hastings
 
 local notation "T" => toEuclideanCLM (𝕜 := ℂ)
 
-/-- **Hastings' Lemma 3 (eq. `fwdback`).** There is a constant `K ≥ 0`, depending only on the
-range `R`, with the following property. Let `H` be a chain Hamiltonian of range `R` and term norm
-at most `J ≥ 0` with a unique ground state `Ω` and gap `ΔE > 0`, on `L` sites, and let
-`ζ = lemmaOneEndpointLength R J ΔE`. For every cut `j` and length `l`, every Schmidt
-decomposition `Ω = ∑ a_α ψ_L(α) ⊗ ψ_R(α)` across the cut with orthonormal `ψ_L`, `ψ_R`, every
-`B_L = ∑ O(α) |ψ_L(α)⟩⟨ψ_L(α)| ⊗ 1` with `|O(α)| ≤ 1`, and every `A` with `‖A‖ ≤ 1` supported
-away from the sites `j − l, …, j + l − 1`,
-`|⟨Ω, A B_L Ω⟩ − ⟨Ω, A Ω⟩⟨Ω, B_L Ω⟩| ≤ 3 √(2ε) + ε` with `ε = K ζ³ e^{-l/(2 · 6ζ)}`.
-Hastings, arXiv:0705.2024v4, Lemma 3, lines 627–646, with `ξ' = 6ζ` (lines 139–142),
-`C₁ = K ζ³` polynomial in the length (lines 258–262) and the local fix and restriction of the
-module docstring. -/
+/-- **Hastings' correlation lemma.** With
+`s = max(2(40(chainLRVelocity R J - 1))/ΔE,80)` and `ξ' = 6s`, the correlation
+of a contraction away from the cut and a Schmidt-diagonal contraction is at most
+`3 √(2ε(l)) + ε(l)`, where `ε(l) = K s³ exp(-l/ξ')` and `K` depends only on `R`.
+Hastings, arXiv:0705.2024v4, Lemma 3, eq. `fwdback`, lines 627–692, with the
+positive-semidefinite and length conventions of the module docstring. -/
 theorem exists_norm_inner_mul_sub_le (R : ℕ) :
     ∃ K : ℝ, 0 ≤ K ∧ ∀ {J ΔE : ℝ}, 0 ≤ J → 0 < ΔE →
       ∀ {L q : ℕ} [NeZero q] (h : ChainHamiltonian L q R J) {E₀ : ℝ}
       {Ω : EuclideanSpace ℂ (Fin L → Fin q)}, IsGappedGroundState h.operator E₀ Ω ΔE →
+      let s := max (2 * (40 * (chainLRVelocity R J - 1)) / ΔE) 80
       ∀ (j l : ℕ) {ι : Type*} [Fintype ι] (a : ι → ℂ)
         {ψL : ι → EuclideanSpace ℂ (Entropy.RegionConfig (fun _ : Fin L ↦ q) (leftBlock L j))}
         {ψR : ι → EuclideanSpace ℂ ((v : {v // v ∉ leftBlock L j}) → Fin q)},
@@ -87,13 +65,13 @@ theorem exists_norm_inner_mul_sub_le (R : ℕ) :
         ‖⟪Ω, T (A * Entropy.localLift (leftBlock L j) (schmidtDiagonal O ψL)) Ω⟫_ℂ -
             ⟪Ω, T A Ω⟫_ℂ *
               ⟪Ω, T (Entropy.localLift (leftBlock L j) (schmidtDiagonal O ψL)) Ω⟫_ℂ‖ ≤
-          3 * Real.sqrt (2 * (K * lemmaOneEndpointLength R J ΔE ^ 3 *
-              Real.exp (-(l / (2 * (6 * lemmaOneEndpointLength R J ΔE)))))) +
-            K * lemmaOneEndpointLength R J ΔE ^ 3 *
-              Real.exp (-(l / (2 * (6 * lemmaOneEndpointLength R J ΔE)))) := by
-  obtain ⟨K, hK, hF⟩ := exists_projectorFactorization_posSemidef_endpoint R
+          3 * Real.sqrt (2 * (K * s ^ 3 *
+              Real.exp (-(l / (6 * s))))) +
+            K * s ^ 3 *
+              Real.exp (-(l / (6 * s))) := by
+  obtain ⟨K, hK, hF⟩ := exists_projectorFactorization_posSemidef_source R
   refine ⟨K, hK, ?_⟩
-  intro J ΔE hJ hΔ L q _ h E₀ Ω hgs j l ι _ a ψL ψR hψL hψR hdec O hO A SA hA hSA hA1
+  intro J ΔE hJ hΔ L q _ h E₀ Ω hgs s j l ι _ a ψL ψR hψL hψR hdec O hO A SA hA hSA hA1
   obtain ⟨OB, OL, OR, hOB, hOL, hOR, -, hOB1, hsB, hsL, hsR, herr⟩ := hF hJ hΔ h hgs j l
   exact norm_inner_mul_sub_le_of_factorization hgs.1 a hψL hψR hdec hO hA hSA hA1
     ⟨OB, OL, OR, _, _, _, hOB, nonneg_iff_posSemidef.mp hOL.nonneg,

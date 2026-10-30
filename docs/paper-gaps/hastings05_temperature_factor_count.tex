@@ -59,11 +59,28 @@ $\{\exp[(\beta/\beta_0+2)Ne^{-l_{\mathrm{proj}}/\xi_{\mathrm{perc}}}]-1\}
 growing logarithmically in the system size suffices for a good approximation
 (lines 1348--1349), is unchanged.
 
+The factor count is now constructed as
+\[
+ n=2\Bigl\lceil\frac{\beta/\beta_0}{2}\Bigr\rceil
+\]
+for $\beta>0$ and $\beta_0>0$. The ceiling is positive, so $n\ge2$.
+Its defining inequalities give $\beta/\beta_0\le n<\beta/\beta_0+2$,
+and every sufficient positive even integer $2k$ has
+$k\ge\beta/(2\beta_0)$, which proves minimality. At $\beta=0$, the
+separate existence statement takes two factors. Thus the positive-
+temperature choice has precisely the rounding behavior used above.
+
 \section{Formalization}
 The bound (\ref{eq:hastings05_temperature_factor_count_n}) is
 \leanid{TNLean.Lattice.ClusterExpansion.norm_trace_mul_exp_sub_truncatedExp_pow_le_percolation},
 derived from
 \leanid{TNLean.Lattice.ClusterExpansion.norm_trace_mul_exp_sub_truncatedExp_pow_le}.
+The canonical choice and its exact interval are
+\leanid{TNLean.Lattice.ClusterExpansion.evenTemperatureFactors} and
+\leanid{TNLean.Lattice.ClusterExpansion.evenTemperatureFactors_spec};
+\leanid{TNLean.Lattice.ClusterExpansion.evenTemperatureFactors_le}
+proves minimality. The corrected bound with $\beta/\beta_0+2$ is
+\leanid{TNLean.Lattice.ClusterExpansion.norm_trace_mul_exp_sub_truncatedExp_pow_le_percolation_add_two}.
 There the size threshold counts the terms of a large connected set rather
 than its diameter, as recorded in the note on cluster size and diameter in
 the percolation bound.

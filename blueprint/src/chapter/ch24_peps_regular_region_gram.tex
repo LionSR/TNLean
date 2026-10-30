@@ -1,0 +1,407 @@
+\section{Gram operators of connected regular regions}%
+\label{sec:peps_regular_region_gram}
+
+This section computes the Gram operator of the open tensor of a connected
+region with regular bonds, and introduces coordinates on its bond labels
+adapted to a spanning tree of the region.
+
+\begin{lemma}[Expansion of the Gram matrix of a region]%
+    \label{thm:peps_open_region_gram_expansion}
+    \lean{TNLean.PEPS.sum_star_regionIncidentWeight_mul,
+        TNLean.PEPS.openRegionCoefficientMatrix_gram_apply,
+        TNLean.PEPS.regularOpenRegionMatrix_gram_apply,
+        TNLean.PEPS.regularRegionIncidentConfigEquiv,
+        TNLean.PEPS.regionIncidentBoundaryLabel_regular_iff,
+        TNLean.PEPS.regularOpenRegionMatrix_gram_apply_group}
+    \leanok
+    \uses{def:peps_open_region_contraction, def:peps_regular_site_gram}
+    For any finite region $R$, the entry $(\mu,\nu)$ of
+    $T_R^\dagger T_R$ is the sum over pairs of incident-edge assignments
+    with crossing labels $\mu,\nu$ of
+    \begin{align}
+        \prod_{v\in R}\sum_s
+        \overline{a_v(\eta|_{E_v};s)}a_v(\theta|_{E_v};s).
+    \end{align}
+    This identity requires no isometry assumption.
+\end{lemma}
+\begin{proof}\leanok
+    Expanding both copies of the region tensor, interchanging the finite
+    sums, and distributing the independent physical sums over the
+    vertices turns each factor into the corresponding site Gram kernel.
+\end{proof}
+
+\begin{lemma}[Synchronization of group labels in a connected region]%
+    \label{thm:peps_region_group_synchronization}
+    \lean{TNLean.PEPS.regionLabels_eq_of_internalEdge_eq,
+        TNLean.PEPS.regionLabels_constant_iff_internalEdge_eq,
+        TNLean.PEPS.IsRegionLabelCompatible,
+        TNLean.PEPS.IsRegionLabelCompatible.internalEdge_eq,
+        TNLean.PEPS.IsRegionLabelCompatible.exists_common_label,
+        TNLean.PEPS.IsRegionLabelCompatible.exists_translation,
+        TNLean.PEPS.isRegionLabelCompatible_iff_exists_translation,
+        TNLean.PEPS.sum_regionLabelCompatible_eq_sum_translation}
+    \leanok
+    Suppose the induced graph on $R$ is nonempty and connected.
+    The compatibility equations
+    $\eta_e=q_v\theta_e$ at every incident leg hold precisely when
+    $q_v=g$ at every vertex and $\eta=g\theta$, for one $g\in G$.
+    Thus the sum over compatible vertex translations reduces to
+    the sum over simultaneous translations.
+\end{lemma}
+\begin{proof}\leanok
+    For an internal edge with endpoints $u,v$, the two equations give
+    $q_u\theta_e=q_v\theta_e$, hence $q_u=q_v$.
+    Equality propagates along paths. Every incident edge has an
+    endpoint in $R$, so its label is translated by this common element.
+    Nonemptiness makes the assignment $g\mapsto(q_v=g)$ injective.
+\end{proof}
+
+\begin{lemma}[Counting free internal regular bonds]%
+    \label{thm:peps_region_internal_bond_count}
+    \lean{TNLean.PEPS.sum_boundaryRestriction_eq_card,
+        TNLean.PEPS.sum_translated_boundaryRestriction_eq_card,
+        TNLean.PEPS.sum_boundaryRestriction_translations_eq_card,
+        TNLean.PEPS.regionInternalEdgeEquiv,
+        TNLean.PEPS.card_regionIncident_not_boundary,
+        TNLean.PEPS.sum_regionBoundary_translations_eq_card}
+    \leanok
+    Fix the crossing configurations $\mu,\nu$ and a simultaneous
+    translation $g$. Pairs of incident configurations satisfying
+    $\eta=g\theta$ and these prescribed boundary values number
+    $|G|^{I_R}$ if $\mu=g\nu$, and zero otherwise, where $I_R$ is
+    the number of edges with both endpoints in $R$.
+\end{lemma}
+\begin{proof}\leanok
+    The second configuration has one free label on each internal
+    edge, and fixes the first configuration by translation.
+    An incident edge that is not a crossing edge has both endpoints
+    in $R$, which identifies these free indices with the internal bonds.
+\end{proof}
+
+\begin{lemma}[Gram operator of a connected regular region]%
+    \label{thm:peps_connected_regular_region_gram}
+    \lean{TNLean.PEPS.prod_regularSiteGram_eq_sum_compatible,
+        TNLean.PEPS.sum_regularBoundary_translation_eq_card_mul_projector,
+        TNLean.PEPS.regularRegionGramScalar,
+        TNLean.PEPS.regularOpenRegionMatrix_gram_of_connected}
+    \leanok
+    \uses{thm:peps_open_region_gram_expansion, thm:peps_region_group_synchronization, thm:peps_region_internal_bond_count}
+    Let $R$ induce a nonempty connected graph, with $V_R$ vertices
+    and $I_R$ internal edges. Suppose the local Gram kernels are
+    $A_v^\dagger A_v=c_vP_v$. For unnormalized regular bonds and
+    no inserted bond operators, the open-region tensor satisfies
+    \begin{align}
+        T_R^\dagger T_R=\kappa_R P_{\partial R},\qquad
+        \kappa_R=\left(\prod_{v\in R}c_v\right)
+        \frac{|G|^{I_R+1}}{|G|^{V_R}}.
+    \end{align}
+    The boundary may be empty. In particular, positive local Gram
+    factors give an isometry on the invariant boundary space after
+    dividing by $\sqrt{\kappa_R}$, also when the region contains cycles.
+    This is the untwisted connected-region contraction underlying
+    \cite[Lemma~6.2 and proof of Theorem~6.9]{Schuch2010PEPS}.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:peps_regular_site_gram}
+    Expanding the Gram matrix into local pairings contributes
+    $|G|^{-V_R}$ from their averages together with a sum over vertex group labels. Compatibility
+    reduces this to one common translation. For each such translation,
+    the internal labels contribute $|G|^{I_R}$. The remaining boundary
+    translation sum is $|G|P_{\partial R}$.
+\end{proof}
+
+\begin{lemma}[Cycle exponent of a connected region]%
+    \label{thm:peps_regular_region_cycle_exponent}
+    \lean{TNLean.PEPS.card_inducedRegion_edgeSet,
+        TNLean.PEPS.orderedEdgeEquivEdgeSet,
+        TNLean.PEPS.inducedRegionEdgeEquiv,
+        TNLean.PEPS.region_card_le_internalEdge_card_add_one,
+        TNLean.PEPS.internalEdge_card_add_one_eq_card_of_isTree,
+        TNLean.PEPS.regionGroupOrder_pow_div_pow_eq_cycleRank,
+        TNLean.PEPS.regularRegionGramScalar_eq_cycleRank,
+        TNLean.PEPS.regularRegionGramScalar_eq_prod_of_isTree}
+    \leanok
+    \uses{thm:peps_connected_regular_region_gram}
+    In a nonempty connected region, $V_R\leq I_R+1$. Thus
+    \begin{align}
+        \frac{|G|^{I_R+1}}{|G|^{V_R}}
+        =|G|^{I_R+1-V_R}.
+    \end{align}
+    The exponent is the cycle rank. For a tree it vanishes, so that
+    the region Gram factor is just the product of the local factors.
+\end{lemma}
+\begin{proof}\leanok
+    The internal edges are exactly the edges of the induced graph.
+    A connected graph with $V_R$ vertices has at least $V_R-1$ edges,
+    with equality for a tree. Since $|G|\ne0$, subtracting these
+    nonnegative exponents gives the ratio identity.
+\end{proof}
+
+\begin{lemma}[Physical implementation of a supported canonical unitary]%
+    \label{thm:peps_regular_physical_unitary_transport}
+    \lean{TNLean.PEPS.exists_positive_regionPhysicalProductMatrix_gram,
+        TNLean.PEPS.exists_unitary_regionPhysicalProductMatrix_mul_of_projector_commute}
+    \leanok
+    \uses{thm:peps_region_physical_maps}
+    Let $A_v$ be the physical map of a regular $G$-isometric site,
+    with arbitrary finite physical dimension, and let $P_v$ be its
+    regular invariant projector. On a finite region $R$, put
+    $T=\bigotimes_{v\in R}A_v$ and $P=\bigotimes_{v\in R}P_v$.
+    There is $c>0$ such that $T^\dagger T=cP$, derived from local
+    isometry alone. If a unitary $U$ on the canonical half-edge coordinate space
+    satisfies $UP=PU$, then there is a unitary $W$ on the original
+    physical region satisfying
+    \begin{align}
+        WT & =TU.
+    \end{align}
+    No surjectivity of the site maps is required. This auxiliary
+    form of physical accessibility extends the operation to any unused
+    physical directions; compare \cite[Lemma~6.3 and \S6.2]{Schuch2010PEPS}.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:peps_regular_site_gram}
+    Local isometry gives $A_v^\dagger A_v=c_vP_v$, with $c_v>0$.
+    Products and adjoints of the product physical maps are computed
+    site by site, so $T^\dagger T=cP$, where $c=\prod_{v\in R}c_v$.
+    Hence
+    \begin{align}
+        (TU)^\dagger(TU) & =cU^\dagger PU=cP=T^\dagger T.
+    \end{align}
+    Equal Gram matrices define an isometry between the two ranges,
+    which extends to a unitary on the finite-dimensional physical space.
+\end{proof}
+
+\begin{definition}[Spanning-tree coordinates for regular half-edge labels]%
+    \label{def:peps_regular_region_coordinates}
+    \lean{TNLean.PEPS.RootedGroupLabels,
+        TNLean.PEPS.rootedGroupLabelsEquiv,
+        TNLean.PEPS.rootedTreeGradient,
+        TNLean.PEPS.rootedTreeGradientEquiv,
+        TNLean.PEPS.RegularRegionCoordinates,
+        TNLean.PEPS.regularRegionCoordinatesEquiv,
+        TNLean.PEPS.regularRegionCoordinatesEquiv_symm_internal_tail,
+        TNLean.PEPS.regularRegionCoordinatesEquiv_symm_internal_head,
+        TNLean.PEPS.regularRegionCoordinatesEquiv_symm_boundary_tail,
+        TNLean.PEPS.regularRegionCoordinatesEquiv_symm_boundary_head}
+    \leanok
+    \uses{def:peps_open_region_contraction}
+    Let $G$ be a finite group and $R$ a finite region. Choose a spanning
+    tree $T$ of its induced graph and a root $o\in R$. Write $I$ for the
+    internal edges and $\partial R$ for the crossing edges, and orient
+    each internal edge $e=(u,v)$ by the ordering of its endpoints.
+    The tree gradient $r\mapsto(r_vr_u^{-1})_{e\in T}$ is a bijection
+    from vertex labels satisfying $r_o=1$ to arbitrary labels on $T$.
+    Such normalized vertex labels are themselves in bijection with
+    arbitrary labels on $R\setminus\{o\}$.
+
+    Physical labels $\alpha_{v,e}\in G$, one for each incident half-edge
+    at every $v\in R$, are in bijection with coordinates
+    $y\in G^{\partial R}$, $a\in G^I$, normalized vertex labels $r$,
+    and $z\in G^{I\setminus T}$. The reconstruction is
+    \begin{align}
+        \alpha_{v,e} & =r_vy_e
+                     &         & (e\in\partial R,\ v\in R),
+        \label{eq:peps_region_boundary_coordinates}         \\
+        \alpha_{u,e} & =r_ua_e
+                     &         & (e=(u,v)\in I),\notag      \\
+        \alpha_{v,e} & =
+        \begin{cases}
+            r_va_e,    & e\in T,            \\
+            r_vz_ea_e, & e\in I\setminus T.
+        \end{cases}
+        \label{eq:peps_region_internal_coordinates}
+    \end{align}
+    This is a reversible change of regular basis labels associated with
+    the accessible virtual systems and blocking operations in
+    \cite[\S6.2--6.3]{Schuch2010PEPS}.
+\end{definition}
+\begin{proof}\leanok
+    \uses{thm:peps_regular_region_cycle_exponent}
+    If two normalized vertex labellings have the same tree gradient,
+    their relative label $r_v^{-1}s_v$ is constant along every tree edge.
+    Connectedness and the root normalization give $r=s$. A tree has
+    $|R|-1$ edges, so the domain and codomain of the gradient each have
+    $|G|^{|R|-1}$ elements. Its injectivity therefore gives bijectivity.
+
+    From $\alpha$, recovering $r$ via the tree ratios
+    $\alpha_{v,e}\alpha_{u,e}^{-1}$ and setting
+    $y_e=r_v^{-1}\alpha_{v,e}$ on the boundary,
+    $a_e=r_u^{-1}\alpha_{u,e}$ on each internal edge, and
+    $z_e=r_v^{-1}\alpha_{v,e}a_e^{-1}$ outside the tree
+    recovers every original label upon substitution into
+    (\ref{eq:peps_region_boundary_coordinates})--(\ref{eq:peps_region_internal_coordinates}).
+    Conversely, the reconstructed tree
+    ratios equal $r_vr_u^{-1}$, so uniqueness recovers $r$, and then
+    the same formulas recover $y$, $a$, and $z$.
+\end{proof}
+
+\begin{lemma}[Canonical regular block in spanning-tree coordinates]%
+    \label{thm:peps_regular_region_projector_coordinates}
+    \lean{TNLean.PEPS.regularRegionCoordinates_rootLabels_of_tree_compatibility,
+        TNLean.PEPS.regularProjectorOpenRegionMatrix_coordinates,
+        TNLean.PEPS.regularProjectorOpenRegionMatrix_exists_normalized_ancilla}
+    \leanok
+    \uses{def:peps_regular_region_coordinates}
+    Let $R$ have a spanning tree $T$ rooted at $o$, and let every local
+    tensor be the simultaneous regular averaging projector. Write
+    $\alpha(y,a,r,z)$ for the reconstructed half-edge labels in
+    (\ref{eq:peps_region_boundary_coordinates})--(\ref{eq:peps_region_internal_coordinates}).
+    The open-region coefficient matrix $M_R$ satisfies
+    \begin{align}
+        M_R\bigl(\alpha(y,a,r,z),\theta\bigr)
+         & = |G|^{1-|R|}P_{\partial R}(y,\theta)
+        \mathbf 1_{\{z=1\}}.
+        \label{eq:peps_region_projector_coordinates}
+    \end{align}
+    No nonempty-boundary assumption is required.
+
+    Let $N$ be the number of pairs $(a,r)$, with $r_o=1$, and put
+    $\phi(a,r,z)=N^{-1/2}\mathbf 1_{\{z=1\}}$. In the coefficient form of the regular blocking construction
+    of \cite[\S6.2--6.3]{Schuch2010PEPS}, $\|\phi\|^2=1$,
+    and (\ref{eq:peps_region_projector_coordinates}) factors as
+    $\gamma P_{\partial R}(y,\theta)\phi(a,r,z)$, where
+    $\gamma=|G|^{1-|R|}\sqrt N>0$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:peps_regular_open_region_projector}
+    Expanding the original internal-bond contraction into a sum over bond
+    labels $\eta$ and vertex translations $q$ gives
+    $r_ua_e=q_u\eta_e$ and $r_va_e=q_v\eta_e$ on each tree edge
+    $e=(u,v)$ by compatibility.
+    Thus $q_vq_u^{-1}=r_vr_u^{-1}$. The uniqueness of rooted tree
+    gradients gives $q_v=r_vx$, where $x=q_o$; this conclusion already
+    follows from compatibility on the tree alone.
+
+    Compatibility on the remaining internal edges forces $z_e=1$.
+    The bond labels are then uniquely determined by $x$, and boundary
+    compatibility is precisely $y=x\theta$. Consequently the coefficient
+    is $|G|^{-|R|}\sum_x\mathbf 1_{\{y=x\theta,\ z=1\}}$,
+    which is (\ref{eq:peps_region_projector_coordinates}). There are
+    exactly $N$ nonzero ancillary coefficients, each of modulus
+    $N^{-1/2}$, proving the stated normalization.
+\end{proof}
+
+\begin{lemma}[Isometry of a connected regular block]%
+    \label{thm:peps_connected_regular_region_isometry}
+    \lean{TNLean.PEPS.regularOpenRegionMatrix_invariant,
+        TNLean.PEPS.isGIsometric_regularOpenRegionMatrix_of_connected}
+    \leanok
+    \uses{thm:peps_connected_regular_region_gram}
+    Let every site be regular $G$-isometric, and let $R$ induce a nonempty
+    connected graph. The open-region map $T_R$ is $G$-isometric for
+    simultaneous regular translation on the crossing bonds. Its derived
+    positive factor is
+    \begin{align}
+        c_R=\left(\prod_{v\in R}c_v\right)
+        |G|^{I_R+1-|R|},
+    \end{align}
+    where $I_R$ is the number of internal edges. This includes blocks with
+    internal cycles and blocks with no crossing bonds. It is the
+    finite-region form of the stability and blocking argument in
+    \cite[Lemma~6.2 and \S6.2]{Schuch2010PEPS}, with the positive-factor
+    convention recorded in \cite{gap:rmp_peps_quantum_double_g_isometry}.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:peps_regular_open_region_projector}
+    Translating all virtual labels in the contraction proves boundary
+    invariance. The proved connected-region Gram formula gives
+    $T_R^\dagger T_R=c_R\Pi_{\partial R}$ with $c_R>0$.
+    Dividing the adjoint by $c_R$ gives a left inverse on the invariant
+    boundary space. The same identity gives the required inner-product
+    identity there.
+\end{proof}
+
+\begin{lemma}[Injectivity of a connected regular block]%
+    \label{thm:peps_connected_regular_region_injectivity}
+    \lean{TNLean.PEPS.isGInjective_regularOpenRegionMatrix_of_connected}
+    \leanok
+    \uses{def:peps_g_injective}
+    Let $R$ be a nonempty connected finite region whose site tensors
+    are $G$-injective for the simultaneous regular action on their
+    incident legs. Then the open tensor of $R$ is $G$-injective
+    for the simultaneous regular action on its crossing legs.
+    Internal cycles and an empty boundary are allowed.
+    This is the regular-representation connected-region consequence of
+    \cite[Lemma~5.2 and the following observation]{Schuch2010PEPS};
+    the argument does not assume local isometry.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:peps_regular_region_projector_coordinates, thm:peps_regular_open_region_accessibility}
+    Applying the product of the local inverses to the open tensor yields
+    its canonical averaging-projector contraction.
+    Choosing a spanning tree and a root, in the coordinates of
+    Lemma~\ref{thm:peps_regular_region_projector_coordinates} the row
+    with identity reference, normalized vertex, and residual cycle labels
+    is $|G|^{1-|R|}\Pi_{\partial R}$. This scalar is nonzero, and
+    $\Pi_{\partial R}$ fixes every invariant boundary vector. Thus a
+    vanishing physical output implies a vanishing invariant input.
+    Boundary invariance follows by translating every internal label
+    in the contraction.
+\end{proof}
+
+\begin{lemma}[Removing bond operators on a spanning tree]%
+    \label{thm:peps_regular_region_tree_gauge}
+    \lean{TNLean.PEPS.regularRegionTreeGauge_root,
+        TNLean.PEPS.regularRegionTreeGauge,
+        TNLean.PEPS.regularRegionTreeGauge_gradient,
+        TNLean.PEPS.regularRegionGaugeResidual,
+        TNLean.PEPS.regularRegionGaugeResidual_transport,
+        TNLean.PEPS.regularRegionGaugeResidual_eq_one_of_tree,
+        TNLean.PEPS.regularRegionTreeCycleResidual,
+        TNLean.PEPS.regularRegionGaugeInternalLabels,
+        TNLean.PEPS.regularRegionGaugeInternalLabels_apply,
+        TNLean.PEPS.regularRegionGaugePhysicalLabels,
+        TNLean.PEPS.regularRegionGaugePhysicalLabels_apply,
+        TNLean.PEPS.regularRegionBoundaryTransport,
+        TNLean.PEPS.regularRegionBoundaryTransport_tail,
+        TNLean.PEPS.regularRegionBoundaryTransport_head,
+        TNLean.PEPS.regularTwistedLabels_gauge}
+    \leanok
+    \uses{def:peps_regular_region_coordinates,
+        def:peps_regular_twisted_region}
+    Let $G$ be finite, choose a spanning tree $T$ of the region $R$,
+    and fix a root $o$. Assign a group operator $u_e$ to each oriented
+    edge $e=(s,t)$. There is a unique vertex gauge $k$ with $k_o=1$
+    and $k_tk_s^{-1}=u_e$ on $T$. The internal residual operators
+    $\omega_e=k_t^{-1}u_ek_s$ therefore equal the identity on $T$;
+    their values on the remaining internal edges are unrestricted.
+
+    Internal references and physical half-edge labels transform by the invertible
+    shifts $\eta'_e=k_s^{-1}\eta_e$ and
+    $\alpha'_{v,e}=k_v^{-1}\alpha_{v,e}$. Crossing labels transform by the
+    invertible map
+    \begin{align}
+        \theta'_e & =
+        \begin{cases}
+            k_s^{-1}\theta_e,    & s\in R,\ t\notin R, \\
+            k_t^{-1}u_e\theta_e, & s\notin R,\ t\in R.
+        \end{cases}
+        \label{eq:peps_tree_boundary_transport}
+    \end{align}
+    On every internal edge,
+    $\omega_e\eta'_e=k_t^{-1}u_e\eta_e$.
+    More generally, for any ambient vertex labels $K$, set
+    $\widetilde u_e=K_t^{-1}u_eK_s$ and
+    $\widetilde\eta_{v,e}=K_s^{-1}\eta_{v,e}$.
+    If $D_u$ inserts $u_e$ at the head of each edge and leaves its
+    tail label unchanged, then
+    $D_{\widetilde u}(\widetilde\eta)_{v,e}
+        =K_v^{-1}D_u(\eta)_{v,e}$.
+    These are group-coordinate identities associated with the reversible
+    regular blocking operations in \cite[\S6.2--6.3]{Schuch2010PEPS}.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{def:peps_regular_region_coordinates,
+        def:peps_regular_twisted_region}
+    Inverting the tree-gradient bijection at $(u_e)_{e\in T}$ yields
+    the normalized $k$, so on a tree edge
+    $k_t^{-1}u_ek_s=k_t^{-1}(k_tk_s^{-1})k_s=1$.
+    The reference identity follows from
+    $(k_t^{-1}u_ek_s)(k_s^{-1}\eta_e)=k_t^{-1}u_e\eta_e$.
+    Each map is multiplication by a fixed group element at each
+    coordinate, hence is reversible. At a head endpoint the native
+    twisted-label identity is
+    $(K_t^{-1}u_eK_s)(K_s^{-1}\eta_{t,e})
+        =K_t^{-1}u_e\eta_{t,e}$;
+    at a tail endpoint both expressions are $K_s^{-1}\eta_{s,e}$.
+\end{proof}
