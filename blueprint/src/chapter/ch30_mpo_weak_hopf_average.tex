@@ -62,8 +62,8 @@ No other weak-Hopf axiom is used.
         MPOTensor.weakHopfRep_one_one}
     \leanok
     \uses{def:glm_wha_represented_coproduct}
-    For $N>0$ and $x,y\in H$, $\rho_N(xy)=\rho_N(x)\rho_N(y)$. Moreover
-    $\rho_1=\phi$, so $\rho_1(1)=I$.
+    For $N>0$ and $x,y\in H$, $\rho_N(xy)=\rho_N(x)\rho_N(y)$.
+    At one site, $\rho_1=\phi$, so $\rho_1(1)=I$.
 \end{lemma}
 \begin{proof}
     \leanok
@@ -107,7 +107,7 @@ No other weak-Hopf axiom is used.
     \uses{def:glm_wha_representation,thm:glm_coalgebra_adjoint_boundary,
         thm:glm_wha_represented_coproduct_mul}
     For a weak-Hopf representation, every boundary $X$ has one $Y$ with
-    $(O^N_{T,X})^\dagger=O^N_{T,Y}$ for all $N$. Moreover
+    $(O^N_{T,X})^\dagger=O^N_{T,Y}$ for all $N$. Also
     $\sum\Omega_{(1)}T_\Omega(\Omega_{(2)})=1$ in $H$, and for every finite
     expansion $\Delta(\Omega)=\sum_{j\in J}a_j\otimes b_j$ and $N>0$,
     \begin{align}
@@ -157,7 +157,7 @@ No other weak-Hopf axiom is used.
         MPOTensor.WeakHopfRepresentation.commute_one_sub_weakHopfAverage_mpoWithBoundary}
     \leanok
     \uses{def:glm_wha_average,thm:glm_wha_integral_normalization,
-        thm:glm_boundary_projection_average,thm:glm_boundary_average_nonzero,
+        thm:glm_boundary_projection_average,thm:glm_boundary_parent_nonzero,
         def:glm_boundary_closedness,def:injective,def:parent_interaction}
     Let $T$ come from a weak-Hopf representation, and let $A$ be a state
     tensor of bond dimension $D_A$ that is injective at one site and length-independently compatible
@@ -181,7 +181,7 @@ No other weak-Hopf axiom is used.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:glm_boundary_projection_average,thm:glm_boundary_average_nonzero,
+    \uses{thm:glm_boundary_projection_average,thm:glm_boundary_parent_nonzero,
         thm:glm_boundary_parent_local}
     Choose a finite expansion $\Delta(\Omega)=\sum_{j\in J}a_j\otimes b_j$ and
     the boundaries $X_j=X_{a_j}$, $Y_j=X_{T_\Omega(b_j)}$ and $U=X_1$.
@@ -192,7 +192,8 @@ No other weak-Hopf axiom is used.
     (\ref{eq:glm_wha_support_average}). The identity $E_n(I)=Q_n$ is
     (\ref{eq:glm_wha_boundary_normalization}), and linearity gives
     $E_n(h_n)=Q_n-P_n$ and (\ref{eq:glm_wha_ambient_complement}).
-    Lemma~\ref{thm:glm_boundary_average_nonzero} gives the nonvanishing, and
+    By (\ref{eq:glm_wha_ambient_complement}), $I-E_n(P_n)=h_n$, so
+    Lemma~\ref{thm:glm_boundary_parent_nonzero} gives the nonvanishing, and
     Lemma~\ref{thm:glm_boundary_parent_local} the commutation.
 \end{proof}
 
