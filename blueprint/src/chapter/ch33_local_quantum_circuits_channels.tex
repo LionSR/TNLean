@@ -274,4 +274,100 @@ change the local dimension act on single sites.
     Combine Lemmas~\ref{lem:qc_local_channel_conversion_properties}, \ref{lem:qc_local_channel_conversion_trans}, \ref{lem:qc_protocol_light_cone}, and~\ref{lem:qc_local_channel_conversion_correlations} on the blocked ring with the support and product-state preservation of $\beta_k$ from Lemma~\ref{lem:qc_blocking_supports}.
 \end{proof}
 
+\begin{lemma}[Matching schedules after grouping sites]
+    \label{lem:qc_regrouped_matching_schedule}
+    \uses{def:qc_blocked_local_channel_conversion}
+    \lean{QuantumCircuit.regroupColor,
+        QuantumCircuit.regroupColor_lt_two,
+        QuantumCircuit.regroupColor_pairwiseDisjoint,
+        QuantumCircuit.ringBond_subset_preimage_siteBlock,
+        QuantumCircuit.sixSite_seam_matching,
+        QuantumCircuit.sixSite_seam_block_image,
+        QuantumCircuit.threeBlock_seams_no_two_colors}
+    \leanok
+    Let $M,k\ge1$. Every original bond $\{i,i+1\}$ lies in the union of blocks
+    $\pi_k(i)$ and $\pi_k(i)+1$. Color the block bond $j\to j+1$ by $j\bmod2$,
+    except that the closing bond receives color $2$ when $M$ is odd.
+    Each color consists of disjoint bonds; when $M$ is even only colors $0,1$ occur.
+    For $M=3,k=2$, the matching $\{\{1,2\},\{3,4\},\{5,0\}\}$ projects to
+    the three edges of a triangle, which cannot be partitioned into two matchings.
+    This obstruction concerns that partition and does not exclude other channel realizations.
+\end{lemma}
+\begin{proof}
+    \leanok
+    The quotient $\lfloor(i+1)/k\rfloor$ equals either $\lfloor i/k\rfloor$ or
+    $\lfloor i/k\rfloor+1$, with cyclic reduction at the seam. Distinct intersecting block bonds
+    have distinct colors, including the closing bond. The three triangle edges
+    intersect pairwise, so they require three distinct colors.
+\end{proof}
+
+\begin{definition}[Regrouped channels]
+    \label{def:qc_regrouped_channel}
+    \uses{def:qc_blocked_local_channel_conversion}
+    \lean{QuantumCircuit.regroupChannel,
+        QuantumCircuit.regroupChannel_blockSites,
+        QuantumCircuit.regroupChannel_blockSites_reference,
+        QuantumCircuit.OnsiteChannel.regroup,
+        QuantumCircuit.OnsiteChannel.regroup_map}
+    \leanok
+    Write $\beta_{k,d}$ for blocking $k$ sites of local dimension $d$.
+    For a linear map $\Psi$ from $Mk$ sites of dimension $d$ to $Mk$ sites of
+    dimension $e$, set $\widetilde\Psi=\beta_{k,e}\circ\Psi\circ\beta_{k,d}^{-1}$.
+    Then $\widetilde\Psi\circ\beta_{k,d}=\beta_{k,e}\circ\Psi$ on every operator,
+    and the same identity holds after tensoring all maps with an identity on any
+    external reference. An onsite channel regroups into the onsite channel whose
+    map at block $j$ is the tensor product of its $k$ original site maps, with the
+    corresponding basis relabelling.
+\end{definition}
+
+\begin{lemma}[Depth and dimension bounds for regrouped protocols]
+    \label{lem:qc_regrouped_protocol}
+    \uses{def:qc_regrouped_channel, lem:qc_regrouped_matching_schedule,
+        def:qc_local_channel_conversion}
+    \lean{QuantumCircuit.ChannelLayer.exists_regrouped_layers,
+        QuantumCircuit.IsDimensionBoundedLocalChannelProtocol.exists_regrouped,
+        QuantumCircuit.IsLocalChannelProtocol.exists_regrouped,
+        QuantumCircuit.regroupChannel_oneBlock_depth_zero}
+    \leanok
+    Let $M,k\ge1$ and $d\ge1$. A depth-$T$ local channel protocol on $Mk$ sites
+    has a regrouped protocol of depth at most $C(M)T$, where $C(M)=2$ for even
+    $M$ and $C(M)=3$ for odd $M$. If every intermediate local dimension, including
+    ancillary registers, is positive and at most $B$, every regrouped dimension is
+    positive and at most $B^k$. Onsite operations cost zero depth. For $M=1$ the
+    entire regrouped channel is onsite and has depth zero. For $M=2$ the bound is
+    $2T$, including both orientations of the periodic bond.
+    These are enlarged-site channel costs; the fixed physical-port comparison in
+    the source is separate~\cite[Appendix E]{Piroli2021LOCC}.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Conjugate each original Kraus operator by blocking. For every block $j$,
+    compose all gates whose left site belongs to $j$. Their Kraus operators are
+    products of the original Kraus operators and are supported on $\{j,j+1\}$.
+    Completeness follows from $\sum_{a,b}(A_aB_b)^\dagger(A_aB_b)=I$.
+    Partition these composite channels by the explicit colors of
+    Lemma~\ref{lem:qc_regrouped_matching_schedule}. Original matching channels
+    commute, so regrouping their products preserves the entire channel.
+    Induct on protocol composition, regrouping each onsite map blockwise.
+    The depths add and $0<q\le B$ gives $0<q^k\le B^k$ at every intermediate step.
+    On one block any finite Kraus channel is an onsite channel.
+\end{proof}
+
+\begin{corollary}[An unblocked conversion followed by a blocked conversion]
+    \label{cor:qc_unblocked_then_blocked_conversion}
+    \uses{lem:qc_regrouped_protocol, lem:qc_local_channel_conversion_trans}
+    \lean{QuantumCircuit.IsLocalChannelConversion.then_blocked}
+    \leanok
+    Let $M,k,d\ge1$. If $\rho$ converts to $\sigma$ on the $Mk$-site ring in
+    depth at most $T$, and $\sigma$ converts to $\tau$ after grouping $k$ sites
+    in depth at most $U$, then $\rho$ converts to $\tau$ after the same grouping
+    in depth at most $C(M)T+U$. The input matrices are arbitrary operators.
+\end{corollary}
+\begin{proof}
+    \leanok
+    Regroup the first channel and compose it with the second.
+    The equality $\widetilde\Psi(\beta_{k,d}(\rho))=\beta_{k,e}(\Psi(\rho))$
+    identifies the intermediate operator, and protocol composition adds the depths.
+\end{proof}
+
 \input{chapter/ch33_local_quantum_circuits_approximate}
