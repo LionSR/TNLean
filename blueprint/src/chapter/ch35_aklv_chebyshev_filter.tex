@@ -1,0 +1,47 @@
+\section{A physical Chebyshev filter}
+
+\begin{theorem}[Chebyshev suppression and rank for the same physical operator]
+    \label{thm:aklv_physical_chebyshev_filter}
+    \lean{TNLean.MPS.AreaLaw.exists_aklv_chebyshev_filter}
+    \leanok
+    \uses{def:aklv_window_alphabet}
+    Let $G=H_L+\sum_{j=0}^{s-1}H_j+H_R$ be the supported Hamiltonian of
+    Definition~\ref{def:aklv_window_alphabet}, with $q\ge1$, $s\ge1$ and
+    $a+s+1\le L$. Suppose $G$ is Hermitian and has a unit vector $\Gamma$
+    satisfying $G\Gamma=E_0\Gamma$ and
+    \begin{align*}
+        G-E_0\mathbb 1\ge\gamma(\mathbb 1-P_\Gamma),\qquad
+        P_\Gamma=|\Gamma\rangle\langle\Gamma|,\qquad\gamma>0.
+    \end{align*}
+    Suppose $E_0+\gamma\le u$ and every spectral value of $G$ is at most $u$.
+    For every $\ell\ge0$ there is a real polynomial $p$ of degree exactly $\ell$
+    with $p(E_0)=1$. The same operator $K=p(G)$ satisfies
+    \begin{align*}
+        K\Gamma                                      & =\Gamma,    & \|K-P_\Gamma\| & \le A_\ell, \\
+        \operatorname{OSR}_{a+\lfloor s/2\rfloor}(K) & \le D_\ell,
+    \end{align*}
+    where
+    \begin{align*}
+        A_\ell & =2\exp\left(-2\ell\sqrt{\frac{\gamma}{u-E_0}}\right), \\
+        D_\ell & =\bigl(q(\ell+1)\bigr)^{
+                16(\lfloor\ell/s\rfloor+\lfloor\sqrt\ell\rfloor+1)}.
+    \end{align*}
+    Every unit $\psi\perp\Gamma$ satisfies $K\psi\perp\Gamma$ and
+    $\|K\psi\|^2\le A_\ell^2$.
+    These are the ground-state, shrinking and rank estimates from
+    \cite[Section~4, Lemmas~4.1 and 4.2]{Arad2013AreaLaw}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:aklv_polynomial_rank}
+    The global gap identifies the spectral projection at $E_0$ with
+    $P_\Gamma$. Construct the normalized real Chebyshev
+    polynomial for the isolated interval $\{E_0\}\cup[E_0+\gamma,u]$.
+    Functional calculus gives $KP_\Gamma=P_\Gamma K=P_\Gamma$ and
+    $\|K-P_\Gamma\|\le A_\ell$, hence the stated ground action,
+    orthogonal-complement invariance and squared shrinking estimate.
+    Regard the same real polynomial as a complex polynomial. Its degree is
+    at most $\ell$ and its evaluation at $G$ is unchanged.
+    Theorem~\ref{thm:aklv_polynomial_rank} gives the rank estimate for this same $K$.
+\end{proof}
+
