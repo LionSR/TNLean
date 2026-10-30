@@ -21,7 +21,7 @@ recorded at <https://sirui-lu.com/QICLean/paper-gaps/lvv13_trimming_radius.pdf>.
 The library constant-cut bound and corrected net exponent are documented in
 `docs/paper-gaps/lvv13_constant_bond.tex`. Error reduction uses Huang's Gaussian
 construction, with the quantitative scope recorded in
-`docs/paper-gaps/lvv13_sampling_ground_energy.tex`.
+`docs/paper-gaps/lvv13_runtime_ground_energy.tex`.
 
 Source: LVV13, arXiv:1307.5143v1, `algo53.tex`, algorithm steps 1--4 and Claims
 `c:ext`, `c:2`, `c:trim`, `c:errorreduction`, lines 379--592; Huang,

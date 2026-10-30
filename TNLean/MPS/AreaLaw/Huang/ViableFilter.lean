@@ -22,7 +22,7 @@ error-reduction argument of LVV, arXiv:1307.5143v1, `algo53.tex`, Claim
 `c:errorreduction`, lines 580--592. It does not assume a supplied approximate
 projection, a supplied family of suitable factors, or knowledge of the ground energy.
 The polynomial quantitative scope is the conservative one stated in
-`docs/paper-gaps/lvv13_sampling_ground_energy.tex`.
+`docs/paper-gaps/lvv13_runtime_ground_energy.tex`.
 -/
 
 open Matrix

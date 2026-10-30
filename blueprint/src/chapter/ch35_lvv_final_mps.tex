@@ -68,3 +68,23 @@ does not appeal to a separate ground-state approximation theorem.
     Its actual cardinality is at most $s$. Enlarge the finite-span bond bound
     by this inequality.
 \end{proof}
+
+\begin{theorem}[Polynomial final bond at prescribed accuracy]
+    \label{thm:lvv_sampled_ground_state}
+    \lean{TNLean.MPS.AreaLaw.exists_sampled_groundState_openMPS_polynomial}
+    \leanok
+    For fixed $q\ge2$, $\Delta>0$, $\eta>0$, an integer $a\ge1$, and $B$, there are natural
+    constants $C\ge1,p$ such that every positive nearest-neighbour
+    contraction chain of length $L\ge1$, with a unique gapped ground vector
+    $\Gamma$ and $\varepsilon_0/\Delta\le B$, admits a normalized matrix
+    product state $\psi$ of bond at most $CL^p$ with
+    $|\langle\psi,\Gamma\rangle|\ge1-\eta/L^a$.
+    The construction is the successive sampled construction.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:lvv_sampled_successive_families, thm:lvv_final_span_mps}
+    Apply Lemma~\ref{thm:lvv_final_span_mps} to $S_L$.
+    Multiply the size and bond polynomials. The overlap error is at most
+    $\alpha/L^a\le\eta/L^a$.
+\end{proof}

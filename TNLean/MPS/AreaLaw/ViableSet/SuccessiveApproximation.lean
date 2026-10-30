@@ -18,7 +18,7 @@ has a normalized approximation in the span of the final actual family.
 recorded at <https://sirui-lu.com/QICLean/paper-gaps/lvv13_trimming_radius.pdf>.
 The library constant-cut bound and corrected net exponent are documented in
 `docs/paper-gaps/lvv13_constant_bond.tex`; the conservative Gaussian error-reduction
-scope is documented in `docs/paper-gaps/lvv13_sampling_ground_energy.tex`.
+scope is documented in `docs/paper-gaps/lvv13_runtime_ground_energy.tex`.
 
 Source: LVV13, arXiv:1307.5143v1, `algo53.tex`, final induction, lines 652--678,
 using Huang, arXiv:1406.6355v6, Section 5.4, Lemmas 18--19. The conclusion concerns

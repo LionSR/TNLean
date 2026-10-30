@@ -54,7 +54,7 @@ corrections and conservative bounds remain in force:
 
 - [Quadratic trimming radius](https://sirui-lu.com/QICLean/paper-gaps/lvv13_trimming_radius.pdf).
 - `docs/paper-gaps/lvv13_constant_bond.tex`.
-- `docs/paper-gaps/lvv13_sampling_ground_energy.tex`.
+- `docs/paper-gaps/lvv13_runtime_ground_energy.tex`.
 
 The theorem concerns finite families, retained spans, and MPS ranks.
 It makes no computational running-time claim or claim to every printed
@@ -64,7 +64,7 @@ rank-one projector-gap ground-state condition. No supplied ancillary gap,
 cut decomposition, viable witness, MPS approximation, or attained excited
 energy is assumed.
 
-## Verification
+## Initial verification
 
 The construction is extracted onto TNLean `6da5dd6c42`, with QICLean pinned
 to public revision `648432e86018a50272372ecf2e80c8263e81b601`
@@ -101,3 +101,59 @@ and record these results.
 The manual axiom inspection used standard input and left no Lean fixture.
 These checks are recorded in
 [TNLean #10362](https://github.com/LionSR/TNLean/pull/10362).
+
+## Reconciliation with the sampled construction on October 30
+
+TNLean main at `b285e741bc` includes the sampled successive construction
+from #10339. Its `ViableSet/CutDecomposition.lean` and `ViableSet/FinalMPS.lean`
+are identical to the corresponding sources used here. They therefore no
+longer occur in this pull request's mathematical changes.
+
+The shared cut decomposition and final-span estimates each have one detailed
+blueprint entry. The sampled and Gaussian constructions use those entries.
+All sections are included from the gapped-chain chapter, with gluing, trimming,
+error reduction and the endpoint lemmas preceding the constructions. The final
+MPS extraction and product-state extension conclude the viable-set development.
+Only the principal approximation results are designated as theorems.
+
+The ground-energy discussion is consolidated in
+`docs/paper-gaps/lvv13_runtime_ground_energy.tex`. It distinguishes the false
+energy-independent estimate in the preprint from the published correction,
+preserves both counterexamples, and describes the Gaussian existence result.
+The former sampling-note path and bibliography entry have been removed.
+
+QICLean is pinned to `a505cd42d30f9d1ae5629700a11b8d5b95981fbc`, the public
+revision of #1002 after its merge of QICLean main. The pin cannot yet be
+removed: `Matrix.PosSemidef.gap_mono` and
+`Matrix.PosSemidef.tensorSum_gap`, used in `ChainPaddingGroundState.lean`,
+are absent from TNLean main's QICLean revision `14ecc5b64b`.
+The duplicate TNLean declaration
+`Kraus.isNBlkInjective_of_isNBlkInjective_conjTranspose` is removed from
+`MPS/Core/Blocking.lean`; the imported QICLean theorem now supplies it under
+the same name.
+
+Verification after reconciliation:
+
+- The canonical locked full-library build passes (15,118 jobs), including
+  the updated QICLean dependency. The initial build exposed the duplicate
+  adjoint-injectivity declaration above; the full build was repeated after
+  its removal.
+- `MPS/Core/Blocking.lean` passes strict elaboration with warnings as errors,
+  both automatic implicit options disabled, Mathlib standard linters and
+  the package synthesis-depth limit.
+- Imported axiom inspection of the four principal successive-construction
+  theorems again reports only `propext`, `Classical.choice` and `Quot.sound`.
+- Blueprint/source synchronization, generated imports and manifest agreement
+  pass. The active blueprint has no duplicate labels, and every reference
+  in the changed chapters resolves.
+- The role check reports twenty discrepancies across seven files, each
+  unchanged from the merged main revision `b285e741bc`. None concerns the
+  revised viable-set or Gaussian sections.
+- The changed chapter sources and consolidated note pass the pinned formatter
+  and LaTeX lint checks. The six-page note compiles with its bibliography,
+  without unresolved references or overfull boxes, and has been visually
+  checked.
+- After the full build, `leanblueprint checkdecls` passes for all 31,097
+  blueprint declaration names, and the paper-gap declaration check passes
+  for all 3,397 cited declaration heads. Both checks run under the repository
+  build lock.

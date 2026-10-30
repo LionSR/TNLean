@@ -19,7 +19,7 @@ the required viability bounds.
 recorded at <https://sirui-lu.com/QICLean/paper-gaps/lvv13_trimming_radius.pdf>.
 The constant-cut bond and net-exponent scope is documented in
 `docs/paper-gaps/lvv13_constant_bond.tex`; the use of Huang's Gaussian filters is
-documented in `docs/paper-gaps/lvv13_sampling_ground_energy.tex`.
+documented in `docs/paper-gaps/lvv13_runtime_ground_energy.tex`.
 
 Source: LVV13, arXiv:1307.5143v1, `algo53.tex`, the induction at lines 652--678,
 using Huang, arXiv:1406.6355v6, Section 5.4, Lemmas 18--19 for error reduction.

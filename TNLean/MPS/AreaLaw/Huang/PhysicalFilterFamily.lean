@@ -21,7 +21,7 @@ The precision and rank budgets are the conservative polynomial bounds from
 `FilterPolynomial`. No printed sharper dependence on the inverse gap is asserted.
 The construction uses Huang, arXiv:1406.6355v6, Section 5.4, Lemmas 18--19,
 in place of the energy-dependent power sampler of LVV; see
-`docs/paper-gaps/lvv13_sampling_ground_energy.tex`.
+`docs/paper-gaps/lvv13_runtime_ground_energy.tex`.
 -/
 
 open Matrix
