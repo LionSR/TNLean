@@ -5,7 +5,7 @@ prefixes. The following consequence of entropy continuity transfers the
 original prefix bound to that same state. The original entropy estimate
 and the compact-region volume estimate remain explicit hypotheses.
 
-\begin{theorem}[Uniform entropy transfer on positive-depth prefixes]
+\begin{lemma}[Uniform entropy transfer on positive-depth prefixes]
     \label{thm:al_positive_prefix_entropy_transfer}
     \lean{TNLean.PEPS.AreaLaw.Scan.eventually_regionalEntropy_positiveDepthPrefix_le}
     \leanok
@@ -39,7 +39,7 @@ and the compact-region volume estimate remain explicit hypotheses.
     The threshold depends only on $q,g,C_{\mathrm{vol}}$; in particular,
     it precedes the choices of both vectors, the depth function, and
     $C_e,e$. No sign condition on $C_e,e$ is needed for this implication.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{lem:al_continuity_fixed_coefficient,

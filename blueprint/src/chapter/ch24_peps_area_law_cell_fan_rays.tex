@@ -6,7 +6,7 @@ $Q=o+2^\ell(z+[0,1]^2)$ be the corresponding closed dyadic square.
 Write $c$ for its center. On each side choose either the whole side or
 its two midpoint halves, and let $\mathcal E$ index the resulting
 ordered elementary bases $[a_i,b_i]$.
-By Theorem~\ref{thm:area_law_cell_fan_base_radius}, every final endpoint
+By Lemma~\ref{thm:area_law_cell_fan_base_radius}, every final endpoint
 satisfies $\|b_i-c\|_\infty=2^\ell/2>0$.
 
 For nonzero vectors $u,w\in\R^2$, write $u\sim w$ if
@@ -23,7 +23,7 @@ These are the directions from a cell center in the fan construction of
 % Manuscript: preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/
 % build/sections/10-geometry.tex.
 
-\begin{theorem}[Equality of endpoint directions]
+\begin{lemma}[Equality of endpoint directions]
     \label{thm:area_law_cell_fan_end_same_ray}
     \lean{TNLean.PEPS.AreaLaw.Geometry.cellFanEnd_sameRay_iff}
     \leanok
@@ -32,7 +32,7 @@ These are the directions from a cell center in the fan construction of
     \begin{align}
         b_i-c\sim b_j-c & \quad\Longleftrightarrow\quad i=j.
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_cell_fan_base_radius,
         thm:area_law_cell_fan_final_endpoint_injective}
@@ -56,13 +56,13 @@ These are the directions from a cell center in the fan construction of
     Since $\|b_i-c\|_\infty=2^\ell/2>0$, the vector $b_i-c$ is nonzero.
 \end{definition}
 
-\begin{theorem}[Injectivity of the directed-ray assignment]
+\begin{lemma}[Injectivity of the directed-ray assignment]
     \label{thm:area_law_cell_fan_ray_injective}
     \lean{TNLean.PEPS.AreaLaw.Geometry.cellFanRay_injective}
     \leanok
     \uses{def:area_law_cell_fan_ray}
     The map $\rho:\mathcal E\to\mathcal R$ is injective.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{def:area_law_cell_fan_ray,thm:area_law_cell_fan_end_same_ray}
     Equality $\rho(i)=\rho(j)$ means $b_i-c\sim b_j-c$, which is equivalent
@@ -75,7 +75,7 @@ These are the directions from a cell center in the fan construction of
 % Manuscript: preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/
 % build/sections/10-geometry.tex.
 
-\begin{theorem}[Restriction of a directed ray to the fan radius]
+\begin{lemma}[Restriction of a directed ray to the fan radius]
     \label{thm:area_law_cell_fan_radial_ray_restriction}
     \lean{TNLean.PEPS.AreaLaw.Geometry.cellFan_mem_radial_iff_sameRay_of_mem_closedBall}
     \leanok
@@ -93,7 +93,7 @@ These are the directions from a cell center in the fan construction of
     \end{align}
     This is the local restriction of a radial direction used in the
     initial-star construction of \cite[Section~11]{OpenAI2026AreaLaw}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_cell_fan_base_radius}
     Every point of $[c,b_s]$ belongs to $R_s$.

@@ -22,14 +22,14 @@ $\tau:[N]\to\mathcal S$ and $\kappa_p:[n_p]\to\mathcal S_p$ be the canonical pos
     % Source: 04-compression.tex, lines 565--579.
 \end{definition}
 
-\begin{theorem}[The root is an original participant]
+\begin{lemma}[The root is an original participant]
     \label{thm:peps_source_gate_root_mem}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sourceGateRoot_mem}
     \leanok
     \uses{def:peps_source_gate_root}
     Every $g\in G$ satisfies $r_g\in C_g$ (Definition~\ref{def:peps_source_gate_root}).
     % Source: 04-compression.tex, lines 565--579.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -37,22 +37,22 @@ $\tau:[N]\to\mathcal S$ and $\kappa_p:[n_p]\to\mathcal S_p$ be the canonical pos
     By Definition~\ref{def:peps_source_gate_root}, $C_g\ne\varnothing$ and $r_g\in C_g$.
 \end{proof}
 
-\begin{theorem}[Incident labels after reindexing a full choice]
+\begin{lemma}[Incident labels after reindexing a full choice]
     \label{thm:peps_reindexed_incident_gate_labels}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.originalGateLabelsAtOfAllChoices_eq_restrictGates}
     \leanok
     \uses{thm:peps_incident_gate_labels,def:peps_touched_labels}
-    Let $e:\Xi_{\rm all}\to\prod_{g\in G}\Xi_g$ be the canonical all-party choice bijection (Definition~\ref{def:peps_touched_labels}). For any $\eta\in\prod_{g\in G}\Xi_g$ and $p\in P$, the incident-label extraction of Theorem~\ref{thm:peps_incident_gate_labels} applied to $e^{-1}\eta$ equals $\eta|_{\{g\in G:p\in C_g\}}$.
+    Let $e:\Xi_{\rm all}\to\prod_{g\in G}\Xi_g$ be the canonical all-party choice bijection (Definition~\ref{def:peps_touched_labels}). For any $\eta\in\prod_{g\in G}\Xi_g$ and $p\in P$, the incident-label extraction of Lemma~\ref{thm:peps_incident_gate_labels} applied to $e^{-1}\eta$ equals $\eta|_{\{g\in G:p\in C_g\}}$.
     % Source: 04-compression.tex, lines 351--381 and 565--579.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:peps_incident_gate_labels,def:peps_touched_labels}
-    At each $g\in G$ with $p\in C_g$, Theorem~\ref{thm:peps_incident_gate_labels} and Definition~\ref{def:peps_touched_labels} give $(e(e^{-1}\eta))_g=\eta_g$.
+    At each $g\in G$ with $p\in C_g$, Lemma~\ref{thm:peps_incident_gate_labels} and Definition~\ref{def:peps_touched_labels} give $(e(e^{-1}\eta))_g=\eta_g$.
 \end{proof}
 
-\begin{theorem}[Incident samples after reindexing a full assignment]
+\begin{lemma}[Incident samples after reindexing a full assignment]
     \label{thm:peps_reindexed_incident_samples}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.restrict_reindexedSourceSampleAssignment_eq}
     \leanok
@@ -62,7 +62,7 @@ $\tau:[N]\to\mathcal S$ and $\kappa_p:[n_p]\to\mathcal S_p$ be the canonical pos
         \widetilde j\circ\iota_p & = (j|_{\mathcal S_p})\circ\kappa_p. \notag
     \end{align}
     % Source: 04-compression.tex, lines 342--417 and 568--579.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -70,7 +70,7 @@ $\tau:[N]\to\mathcal S$ and $\kappa_p:[n_p]\to\mathcal S_p$ be the canonical pos
     By Definitions~\ref{def:peps_source_sample_assignment_indices} and~\ref{def:peps_local_source_sample_indices}, $\tau(\iota_p(i))=\kappa_p(i)$ for all $i\in[n_p]$.
 \end{proof}
 
-\begin{theorem}[Reindexing choices and common samples together]
+\begin{lemma}[Reindexing choices and common samples together]
     \label{thm:peps_joint_gate_sample_sum}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sum_choiceSamples_eq_sum_originalGateSamples}
     \leanok
@@ -85,18 +85,18 @@ $\tau:[N]\to\mathcal S$ and $\kappa_p:[n_p]\to\mathcal S_p$ be the canonical pos
         \label{eq:peps_joint_gate_sample_sum}
     \end{align}
     % Source: 04-compression.tex, lines 351--381 and 565--579.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:peps_mixed_gate_label_sum,thm:peps_source_sample_assignment_sum}
-    Reindex $(\xi,\zeta)$ via Theorem~\ref{thm:peps_mixed_gate_label_sum} and $\ell=j\circ\tau$ via Theorem~\ref{thm:peps_source_sample_assignment_sum}.
+    Reindex $(\xi,\zeta)$ via Lemma~\ref{thm:peps_mixed_gate_label_sum} and $\ell=j\circ\tau$ via Lemma~\ref{thm:peps_source_sample_assignment_sum}.
 \end{proof}
 
 \section{Ordered gate labels in a distributed density contraction}
 \label{sec:peps_ordered_gate_density_algebra}
 
-\begin{theorem}[Labels on the full selected gate set]
+\begin{lemma}[Labels on the full selected gate set]
     \label{thm:peps_full_selected_gate_label_sum}
     \lean{TNLean.Lattice.Compression.DistributedOperatorContraction.sum_eq_sum_gateLabels_univ}
     \leanok
@@ -109,7 +109,7 @@ $\tau:[N]\to\mathcal S$ and $\kappa_p:[n_p]\to\mathcal S_p$ be the canonical pos
         \label{eq:peps_full_selected_gate_label_sum}
     \end{align}
     % Source: 04-compression.tex, lines 565--579.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -118,7 +118,7 @@ $\tau:[N]\to\mathcal S$ and $\kappa_p:[n_p]\to\mathcal S_p$ be the canonical pos
 
 For the next three theorems, let $G,K_g,B_g$ be finite, set $\mathcal K:=\prod_{g\in G} K_g$ and $\mathcal B:=\prod_{g\in G} B_g$, and for $z\in\prod_{g\in G}(K_g\times B_g)$ write $z^K_g:=(z_g)_1$ and $z^B_g:=(z_g)_2$.
 
-\begin{theorem}[Pairing the ket and bra label sums]
+\begin{lemma}[Pairing the ket and bra label sums]
     \label{thm:peps_ordered_gate_label_pair_sum}
     \lean{TNLean.Lattice.Compression.sum_gateLabels_eq_sum_orderedGateLabelPairs}
     \leanok
@@ -129,14 +129,14 @@ For the next three theorems, let $G,K_g,B_g$ be finite, set $\mathcal K:=\prod_{
         \label{eq:peps_ordered_gate_label_pair_sum}
     \end{align}
     % Source: 04-compression.tex, lines 565--579.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     Reindex $\mathcal K\times\mathcal B$ along the bijection $(\eta,\theta)\mapsto((\eta_g,\theta_g))_{g\in G}$.
 \end{proof}
 
-\begin{theorem}[Pairing the weighted ket and bra sums]
+\begin{lemma}[Pairing the weighted ket and bra sums]
     \label{thm:peps_ordered_gate_label_pair_weighted_sum}
     \lean{TNLean.Lattice.Compression.sum_weighted_gateLabels_eq_sum_orderedGateLabelPairs}
     \leanok
@@ -149,7 +149,7 @@ For the next three theorems, let $G,K_g,B_g$ be finite, set $\mathcal K:=\prod_{
         \label{eq:peps_ordered_gate_label_pair_weighted_sum}
     \end{align}
     % Source: 04-compression.tex, lines 565--579.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -157,7 +157,7 @@ For the next three theorems, let $G,K_g,B_g$ be finite, set $\mathcal K:=\prod_{
     Apply (\ref{eq:peps_ordered_gate_label_pair_sum}) to $(\eta,\theta)\mapsto\bigl(\prod_g a_g(\eta_g)\overline{b_g(\theta_g)}\bigr)F(\eta,\theta)$.
 \end{proof}
 
-\begin{theorem}[Placing gate weights inside the ordered coefficient product]
+\begin{lemma}[Placing gate weights inside the ordered coefficient product]
     \label{thm:peps_ordered_gate_label_averaging}
     \lean{TNLean.Lattice.Compression.weighted_sum_gateLabels_eq_exterior_smul_orderedGateLabelPairs}
     \leanok
@@ -171,7 +171,7 @@ For the next three theorems, let $G,K_g,B_g$ be finite, set $\mathcal K:=\prod_{
         \label{eq:peps_ordered_gate_label_averaging}
     \end{align}
     % Source: 04-compression.tex, lines 568--588.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -179,7 +179,7 @@ For the next three theorems, let $G,K_g,B_g$ be finite, set $\mathcal K:=\prod_{
     Distribute $\prod_g w_g$ into each summand of (\ref{eq:peps_ordered_gate_label_pair_weighted_sum}).
 \end{proof}
 
-\begin{theorem}[The distributed density contraction in original gate labels]
+\begin{lemma}[The distributed density contraction in original gate labels]
     \label{thm:peps_density_pair_univ_double_sum}
     \lean{TNLean.Lattice.Compression.DistributedOperatorContraction.contractedOperator_densityPair_univ_eq_double_sum}
     \leanok
@@ -195,13 +195,13 @@ For the next three theorems, let $G,K_g,B_g$ be finite, set $\mathcal K:=\prod_{
         \label{eq:peps_density_pair_univ_double_sum}
     \end{align}
     % Source: 04-compression.tex, lines 565--588.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:compression_operator_density_pair,
         thm:peps_full_selected_gate_label_sum,thm:peps_ordered_gate_label_averaging}
-    Expand $\mathcal C(C,r,K\times B,k,c,T)$ by Theorem~\ref{thm:compression_operator_density_pair}, reindex along $\widetilde G\to G$ by (\ref{eq:peps_full_selected_gate_label_sum}), and apply (\ref{eq:peps_ordered_gate_label_averaging}) in reverse.
+    Expand $\mathcal C(C,r,K\times B,k,c,T)$ by Lemma~\ref{thm:compression_operator_density_pair}, reindex along $\widetilde G\to G$ by (\ref{eq:peps_full_selected_gate_label_sum}), and apply (\ref{eq:peps_ordered_gate_label_averaging}) in reverse.
 \end{proof}
 
 \section{The sampled physical density as a distributed contraction}
@@ -216,7 +216,7 @@ Let $\widehat\rho_{\mathrm{phys},\psi}(\widehat X)$ be the sampled physical oper
     \label{eq:peps_distributed_incident_matrix}
 \end{align}
 
-\begin{theorem}[The sampled physical sum in original gate and sample positions]
+\begin{lemma}[The sampled physical sum in original gate and sample positions]
     \label{thm:peps_original_gate_sample_physical_sum}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.physicalSourceReplacedDensity_pure_sampled_eq_scalar_smul_originalGateSampleSum}
     \leanok
@@ -232,17 +232,17 @@ Let $\widehat\rho_{\mathrm{phys},\psi}(\widehat X)$ be the sampled physical oper
         \label{eq:peps_original_gate_sample_physical_sum}
     \end{align}
     % Source: 04-compression.tex, lines 351--381 and 565--588.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:peps_incident_pure_sampled_physical_sum,
         thm:peps_joint_gate_sample_sum,thm:peps_reindexed_incident_gate_labels,
         thm:peps_reindexed_incident_samples}
-    Reindexing Theorem~\ref{thm:peps_incident_pure_sampled_physical_sum} by (\ref{eq:peps_joint_gate_sample_sum}) and substituting Theorems~\ref{thm:peps_reindexed_incident_gate_labels} and~\ref{thm:peps_reindexed_incident_samples} and (\ref{eq:peps_distributed_incident_matrix}) yields (\ref{eq:peps_original_gate_sample_physical_sum}).
+    Reindexing Lemma~\ref{thm:peps_incident_pure_sampled_physical_sum} by (\ref{eq:peps_joint_gate_sample_sum}) and substituting Lemmas~\ref{thm:peps_reindexed_incident_gate_labels} and~\ref{thm:peps_reindexed_incident_samples} and (\ref{eq:peps_distributed_incident_matrix}) yields (\ref{eq:peps_original_gate_sample_physical_sum}).
 \end{proof}
 
-\begin{theorem}[The exact distributed contraction of the sampled physical density]
+\begin{lemma}[The exact distributed contraction of the sampled physical density]
     \label{thm:peps_actual_sampled_distributed_contraction}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.physicalSourceReplacedDensity_pure_sampled_eq_exterior_smul_contractedOperator}
     \leanok
@@ -261,12 +261,12 @@ Let $\widehat\rho_{\mathrm{phys},\psi}(\widehat X)$ be the sampled physical oper
         \label{eq:peps_actual_sampled_distributed_contraction}
     \end{align}
     % Source: 04-compression.tex, lines 565--588.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:peps_original_gate_sample_physical_sum,
         thm:peps_source_gate_root_mem,thm:peps_density_pair_univ_double_sum,
         thm:peps_original_source_sample_averaging}
-    Expanding $\gamma\mathcal C(C,r,\Xi\times\Xi,k,c,T)$ by (\ref{eq:peps_density_pair_univ_double_sum}) (using Theorem~\ref{thm:peps_source_gate_root_mem}) and substituting $\prod_{g\in G}w_g=(k^{-1})^N$ from Theorem~\ref{thm:peps_original_source_sample_averaging} gives (\ref{eq:peps_original_gate_sample_physical_sum}), proving (\ref{eq:peps_actual_sampled_distributed_contraction}).
+    Expanding $\gamma\mathcal C(C,r,\Xi\times\Xi,k,c,T)$ by (\ref{eq:peps_density_pair_univ_double_sum}) (using Lemma~\ref{thm:peps_source_gate_root_mem}) and substituting $\prod_{g\in G}w_g=(k^{-1})^N$ from Lemma~\ref{thm:peps_original_source_sample_averaging} gives (\ref{eq:peps_original_gate_sample_physical_sum}), proving (\ref{eq:peps_actual_sampled_distributed_contraction}).
 \end{proof}

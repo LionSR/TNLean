@@ -26,7 +26,7 @@ from the marginal tail bound and bound the failure probability of each.
     \end{align*}
 \end{definition}
 
-\begin{theorem}[Typical projection of one cut]
+\begin{lemma}[Typical projection of one cut]
     \label{thm:al_amp_typical_projection_cut}
     \lean{TNLean.PEPS.AreaLaw.typicalProjection_failure_le_surprisalTail}
     \leanok
@@ -35,11 +35,11 @@ from the marginal tail bound and bound the failure probability of each.
     Then $P_A^w$ is an orthogonal projection commuting with $\rho_A$. Every
     retained eigenvalue satisfies $p_j>0$ and
     $\mathrm e^{-S_\Omega(A)-w}\le p_j\le\mathrm e^{-S_\Omega(A)+w}$.
-    With $K$ as in Theorem~\ref{thm:area_law_marginal_tails},
+    With $K$ as in Lemma~\ref{thm:area_law_marginal_tails},
     \begin{align*}
         1-\operatorname{tr}(\rho_AP_A^w)\le\Pr\{|K-S_\Omega(A)|>w\}.
     \end{align*}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Since $P_A^w$ is diagonal in the eigenbasis of $\rho_A$, the trace
     $\operatorname{tr}(\rho_AP_A^w)$ is the sum of the retained
@@ -48,7 +48,7 @@ from the marginal tail bound and bound the failure probability of each.
     and $|-\log p_j-S_\Omega(A)|>w$, the stated tail bound holds.
 \end{proof}
 
-\begin{theorem}[Failure probability of a typical projection]
+\begin{lemma}[Failure probability of a typical projection]
     \label{thm:al_amp_typical_failure}
     \lean{TNLean.PEPS.AreaLaw.exists_typicalProjection_failure_le_stretchedExp}
     \leanok
@@ -63,14 +63,14 @@ from the marginal tail bound and bound the failure probability of each.
         1-\operatorname{tr}\bigl(\rho_AP_A^{n^{3/5}}\bigr)
         \le C\exp(-cn^{1/10}).
     \end{align*}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_marginal_tails, thm:area_law_tail_parameter,
         thm:al_amp_typical_projection_cut}
-    Let $C_1$ be the constant of Theorem~\ref{thm:area_law_tail_parameter}
+    Let $C_1$ be the constant of Lemma~\ref{thm:area_law_tail_parameter}
     and set $\vartheta=J/\Delta$. Then
     $\mathcal B_A\le C_1(1+C_0n)\le C_1(1+C_0)n$. By
-    Theorem~\ref{thm:al_amp_typical_projection_cut} and
+    Lemma~\ref{thm:al_amp_typical_projection_cut} and
     (\ref{eq:area_law_marginal_tail}) at $w=n^{3/5}$, the failure
     probability is at most
     $2\mathrm e^{\mathrm e/2}\exp(-n^{3/5}/(32\sqrt{(1+\vartheta)\mathcal B_A}))$.
@@ -79,14 +79,14 @@ from the marginal tail bound and bound the failure probability of each.
     $c=1/(32\sqrt{(1+\vartheta)C_1(1+C_0)})$.
 \end{proof}
 
-\begin{theorem}[Typical projectors of the amplification]
+\begin{lemma}[Typical projectors of the amplification]
     \label{thm:al_amp_typical_projectors}
     \lean{TNLean.PEPS.AreaLaw.exists_typicalProjection_failure_le_inv_pow,
         TNLean.PEPS.AreaLaw.exists_typicalProjectors_three_cuts}
     \leanok
     \uses{def:al_amp_typical_projection}
     Fix $q$, $R$, $J$, $\Delta$, and $C_0$ as in
-    Theorem~\ref{thm:al_amp_typical_failure}, and an integer $K\ge0$.
+    Lemma~\ref{thm:al_amp_typical_failure}, and an integer $K\ge0$.
     There exists a threshold $N$, depending only on these parameters, such
     that for every $n\ge N$, every such $\Lambda$, $H$, and $\Omega$, and
     every three cuts $X$, $Y$, $S_0$ with at most $C_0n$ crossing edges
@@ -100,14 +100,14 @@ from the marginal tail bound and bound the failure probability of each.
     \end{align*}
     This is the projector construction in \cite[Section~10]{OpenAI2026AreaLaw}
     preceding the Schmidt expansion of $\Omega$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:al_amp_typical_failure, thm:al_amp_typical_projection_cut}
     Since $x^{20K}\mathrm e^{-cx}\to0$ as $x\to\infty$, setting $x=n^{1/10}$
     shows that the bound $C\exp(-cn^{1/10})$ of
-    Theorem~\ref{thm:al_amp_typical_failure} is at most $n^{-2K}$ for all
+    Lemma~\ref{thm:al_amp_typical_failure} is at most $n^{-2K}$ for all
     sufficiently large $n$. Applying
-    Theorem~\ref{thm:al_amp_typical_projection_cut} to each of the three cuts
+    Lemma~\ref{thm:al_amp_typical_projection_cut} to each of the three cuts
     gives the result.
 \end{proof}
 

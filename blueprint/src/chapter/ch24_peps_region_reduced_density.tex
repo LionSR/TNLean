@@ -14,7 +14,7 @@
     2003--2011.
 \end{definition}
 
-\begin{theorem}[Contraction across a cut with arbitrary bond dimensions]%
+\begin{lemma}[Contraction across a cut with arbitrary bond dimensions]%
     \label{thm:peps_open_region_cut_unconditional}
     \lean{TNLean.PEPS.stateCoeff_eq_openRegionComplement_unconditional}
     \leanok
@@ -23,7 +23,7 @@
     configurations $\sigma,\tau$ on $R,R^c$, respectively,
     $\psi(\sigma,\tau)=\sum_\mu T_R(\mu;\sigma)T_{R^c}(\mu;\tau)$.
     This identity includes zero-dimensional virtual spaces.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_open_region_cut}
@@ -37,7 +37,7 @@
     of the claimed identity are then zero.
 \end{proof}
 
-\begin{theorem}[Support of the physical reduced density]%
+\begin{lemma}[Support of the physical reduced density]%
     \label{thm:peps_region_reduced_density_support}
     \lean{TNLean.PEPS.regionReducedDensity_posSemidef,
         TNLean.PEPS.range_regionReducedDensity_eq_cutRange,
@@ -48,7 +48,7 @@
     $\operatorname{ran}\rho_R=\operatorname{ran}M_R
         \subseteq\mathcal G_R$.
     No injectivity of the regional tensor is assumed.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_region_ground_space_slice}
@@ -59,7 +59,7 @@
     $\mathcal G_R$. Their span therefore lies in $\mathcal G_R$.
 \end{proof}
 
-\begin{theorem}[Parent interactions annihilate the local density]%
+\begin{lemma}[Parent interactions annihilate the local density]%
     \label{thm:peps_region_reduced_density_parent}
     \lean{TNLean.PEPS.IsRegionParentInteraction.mul_regionReducedDensity_eq_zero,
         TNLean.PEPS.IsRegionParentInteraction.regionReducedDensity_mul_eq_zero}
@@ -70,7 +70,7 @@
     This is the density-operator form of local frustration freeness
     in \cite[Section~IV.C.1]{Cirac2021Matrix}, local source lines
     2008--2011.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_region_reduced_density_support}

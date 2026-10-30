@@ -34,16 +34,15 @@ order~\cite{PerezGarcia2008StringOrder,Schuch2011Phases,Cirac2021Matrix}.
 
 On a ring the virtual indices are closed by the trace, whereas on an open
 chain the two end spins remain as boundary data.
-Theorem~\ref{thm:aklt_review_pauli_form} and
+Lemma~\ref{thm:aklt_review_pauli_form} and
 Lemma~\ref{lem:aklt_review_gauge_bridge} relate this singlet-bond
 presentation to its Pauli form and to the normalized Clebsch--Gordan
-representative, while Theorems~\ref{thm:aklt_review_symmetries} and
-\ref{thm:aklt_review_spt} establish its normality, on-site symmetry, and
+representative, while Lemma~\ref{thm:aklt_review_symmetries} and Theorem~\ref{thm:aklt_review_spt} establish its normality, on-site symmetry, and
 projective virtual action. For the normalized representative,
-Theorem~\ref{thm:aklt_correlation_length} evaluates the correlation length
-to $1/\log 3$. Finally, Theorem~\ref{thm:aklt_review_parent_hamiltonian}
+Lemma~\ref{thm:aklt_correlation_length} evaluates the correlation length
+to $1/\log 3$. Finally, Lemma~\ref{thm:aklt_review_parent_hamiltonian}
 characterizes the unique periodic ground state of the two-site parent
-Hamiltonian, and Theorem~\ref{thm:aklt_open_ground_space} identifies its
+Hamiltonian, and Lemma~\ref{thm:aklt_open_ground_space} identifies its
 four-dimensional open-boundary ground space.
 
 
@@ -57,7 +56,7 @@ four-dimensional open-boundary ground space.
     $A^{-1}=\ketbra{1}{0}$.
 \end{lemma}
 
-\begin{theorem}[The site map projects onto spin $1$]\label{thm:aklt_review_spin_one}
+\begin{lemma}[The site map projects onto spin $1$]\label{thm:aklt_review_spin_one}
     \lean{MPSTensor.akltRMPSpinOneState_transpose,
         MPSTensor.akltRMPSpinOneState_orthonormal}
     \leanok
@@ -66,7 +65,7 @@ four-dimensional open-boundary ground space.
     $(P^{s})^{T}=P^{s}$, so they are states of the symmetric (spin-$1$)
     subspace of two spin-$\tfrac12$ particles, and they are orthonormal:
     $\tr\big((P^{s})^{\dagger}P^{t}\big)=\delta_{st}$.
-\end{theorem}
+\end{lemma}
 
 \begin{definition}[The Pauli basis of the spin-$1$ site]\label{def:aklt_review_basis}
     \lean{MPSTensor.akltRMPBasis, MPSTensor.akltRMPBasisFixed}
@@ -83,7 +82,7 @@ four-dimensional open-boundary ground space.
     $-\frac{i}{\sqrt2}(\ket{-1}+\ket{+1})$ and keeps $\ket{-}$ and $\ket{0}$.
 \end{definition}
 
-\begin{theorem}[The Pauli bases are orthonormal]\label{thm:aklt_review_basis_unitary}
+\begin{lemma}[The Pauli bases are orthonormal]\label{thm:aklt_review_basis_unitary}
     \lean{MPSTensor.akltRMPBasis_mem_unitaryGroup,
         MPSTensor.akltRMPBasisFixed_mem_unitaryGroup}
     \leanok
@@ -91,7 +90,7 @@ four-dimensional open-boundary ground space.
     The basis (\ref{eq:aklt_review_basis}) is orthonormal, and so is the basis
     obtained by replacing $\ket{+}$ with $-\frac{i}{\sqrt2}(\ket{-1}+\ket{+1})$:
     the matrices whose columns are these vectors are unitary.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     The vectors $\ket{\pm}$ are supported on $\ket{\pm1}$ and $\ket{0}$ is
@@ -100,7 +99,7 @@ four-dimensional open-boundary ground space.
     preserves all of these relations.
 \end{proof}
 
-\begin{theorem}[Pauli form of the AKLT tensor]\label{thm:aklt_review_pauli_form}
+\begin{lemma}[Pauli form of the AKLT tensor]\label{thm:aklt_review_pauli_form}
     \lean{MPSTensor.akltTensorRMPPauli, MPSTensor.rotatePhysical_akltRMPBasis,
         MPSTensor.akltTensorRMPPauli_neg_gaugeEquiv,
         MPSTensor.mpv_rotatePhysical_akltRMPBasis,
@@ -129,7 +128,7 @@ four-dimensional open-boundary ground space.
     \cite{gap:rmp_aklt_pauli_basis_sign}, the printed identity
     $A^{+}=\sigma_y/\sqrt2$ in the basis (\ref{eq:aklt_review_basis}) holds
     only up to the virtual gauge $\sigma_y$ and sign $-1$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Since $\langle +|\pm1\rangle=-i/\sqrt2$, one has
@@ -182,7 +181,7 @@ four-dimensional open-boundary ground space.
     Lemma~\ref{lem:aklt_review_matrices} after rescaling by $\sqrt{3/2}$.
 \end{proof}
 
-\begin{theorem}[AKLT tensor is not injective]\label{thm:aklt_not_injective}
+\begin{lemma}[AKLT tensor is not injective]\label{thm:aklt_not_injective}
     \lean{MPSTensor.aklt_not_isInjective}
     \leanok
     \uses{def:aklt_tensor, def:injective}
@@ -190,9 +189,9 @@ four-dimensional open-boundary ground space.
     $\spn_{\C}\{A^0, A^1, A^2\}$ is the three-dimensional space of
     traceless matrices $\mathfrak{sl}(2,\C)$, which is a proper
     subspace of~$\MN{2}$.
-\end{theorem}
+\end{lemma}
 
-\begin{theorem}[AKLT tensor is normal]\label{thm:aklt_normal}
+\begin{lemma}[AKLT tensor is normal]\label{thm:aklt_normal}
     \lean{MPSTensor.aklt_isNormal}
     \leanok
     \uses{def:aklt_tensor, def:transfer_map}
@@ -200,24 +199,24 @@ four-dimensional open-boundary ground space.
     maximal modulus (a simple spectral-radius eigenvalue); in
     particular the AKLT tensor is normal. Concretely, the
     length-$2$ blocked tensor is injective.
-\end{theorem}
+\end{lemma}
 
-\begin{theorem}[$\Z_2 \times \Z_2$ on-site symmetry of the AKLT tensor]\label{thm:aklt_z2z2_symmetric}
+\begin{lemma}[$\Z_2 \times \Z_2$ on-site symmetry of the AKLT tensor]\label{thm:aklt_z2z2_symmetric}
     \lean{MPSTensor.aklt_isOnSiteSymmetric_Z2Z2}
     \leanok
     \uses{def:aklt_tensor, def:on_site_symmetric}
     The AKLT tensor is on-site symmetric under the $\Z_2 \times \Z_2$ subgroup
     of $\mathrm{SO}(3)$ generated by two commuting $\pi$-rotations about
     orthogonal axes, acting on the spin-$1$ physical index.
-\end{theorem}
+\end{lemma}
 
-\begin{theorem}[Anticommuting virtual gauges of the AKLT symmetry]\label{thm:aklt_gauge_anticomm}
+\begin{lemma}[Anticommuting virtual gauges of the AKLT symmetry]\label{thm:aklt_gauge_anticomm}
     \lean{MPSTensor.aklt_gauge_anticomm}
     \leanok
     The two virtual matrices that implement the symmetry of
-    Theorem~\ref{thm:aklt_z2z2_symmetric}, namely $i\sigma_y$ and $\sigma_z$,
+    Lemma~\ref{thm:aklt_z2z2_symmetric}, namely $i\sigma_y$ and $\sigma_z$,
     anticommute.
-\end{theorem}
+\end{lemma}
 
 \begin{definition}[AKLT factor system]\label{def:aklt_omega}
     \lean{MPSTensor.akltOmega}
@@ -238,27 +237,27 @@ four-dimensional open-boundary ground space.
     The commutator phase of the AKLT factor system on the two generators is $-1$.
 \end{lemma}
 
-\begin{theorem}[The AKLT factor system is a $2$-cocycle]\label{thm:aklt_omega_cocycle}
+\begin{lemma}[The AKLT factor system is a $2$-cocycle]\label{thm:aklt_omega_cocycle}
     \lean{MPSTensor.akltOmega_isCocycle}
     \leanok
     \uses{def:is_cocycle, def:aklt_omega}
     The AKLT factor system is a genuine $2$-cocycle, being the factor system of an
     explicit projective representation, so it represents an element of
     $H^2(\Z_2 \times \Z_2, \mathrm{U}(1))$.
-\end{theorem}
+\end{lemma}
 
-\begin{theorem}[The AKLT $\Z_2 \times \Z_2$ phase is non-trivial]\label{thm:aklt_nontrivial_spt}
+\begin{lemma}[The AKLT $\Z_2 \times \Z_2$ phase is non-trivial]\label{thm:aklt_nontrivial_spt}
     \lean{MPSTensor.aklt_isNontrivialSPT}
     \leanok
     \uses{def:nontrivial_class, thm:nontrivial_of_comm_phase, lem:aklt_comm_phase_neg_one}
-    The AKLT factor system (Theorem~\ref{thm:aklt_omega_cocycle}), built from the
+    The AKLT factor system (Lemma~\ref{thm:aklt_omega_cocycle}), built from the
     anticommuting gauges $i\sigma_y$ and $\sigma_z$
-    (Theorem~\ref{thm:aklt_gauge_anticomm}), is not a coboundary: its commutator
+    (Lemma~\ref{thm:aklt_gauge_anticomm}), is not a coboundary: its commutator
     phase on the two generators is $-1$. Its class in
     $H^2(\Z_2 \times \Z_2, \mathrm{U}(1)) \cong \Z_2$ is therefore non-trivial,
     so the AKLT chain realizes a non-trivial SPT phase rather than a trivial
     product state.
-\end{theorem}
+\end{lemma}
 
 \begin{remark}\label{rem:aklt_z2z2_spt}
     The subgroup $\Z_2 \times \Z_2$ is the minimal subgroup of $\mathrm{SO}(3)$
@@ -282,7 +281,7 @@ four-dimensional open-boundary ground space.
     $9$-dimensional blocked physical space is the Kronecker square
     $g \longmapsto P_g \otimes P_g$ of the single-site spin-$1$
     $\pi$-rotation representation $P_g$ that implements the symmetry of
-    Theorem~\ref{thm:aklt_z2z2_symmetric}. Identifying the blocked physical
+    Lemma~\ref{thm:aklt_z2z2_symmetric}. Identifying the blocked physical
     index with the pair of single-site indices, the entry of
     $P_g \otimes P_g$ at $(i_1 i_2, j_1 j_2)$ is the product
     $(P_g)_{i_1 j_1}(P_g)_{i_2 j_2}$ over the two grouped sites. This is the
@@ -290,21 +289,21 @@ four-dimensional open-boundary ground space.
     single-site twist.
 \end{definition}
 
-\begin{theorem}[The blocked AKLT tensor is injective]\label{thm:aklt_blocked_injective}
+\begin{lemma}[The blocked AKLT tensor is injective]\label{thm:aklt_blocked_injective}
     \lean{MPSTensor.akltBlocked_isInjective}
     \leanok
     \uses{def:aklt_blocked, def:injective}
     The length-$2$ blocked AKLT tensor is injective: its nine matrices span
     $\MN{2}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:aklt_normal}
-    By Theorem~\ref{thm:aklt_normal}, the single-site AKLT tensor is $2$-block
+    By Lemma~\ref{thm:aklt_normal}, the single-site AKLT tensor is $2$-block
     injective, which is equivalent to injectivity of its length-$2$ blocking.
 \end{proof}
 
-\begin{theorem}[$\Z_2 \times \Z_2$ on-site symmetry of the blocked AKLT tensor]\label{thm:aklt_blocked_z2z2_symmetric}
+\begin{lemma}[$\Z_2 \times \Z_2$ on-site symmetry of the blocked AKLT tensor]\label{thm:aklt_blocked_z2z2_symmetric}
     \lean{MPSTensor.aklt_blocked_isOnSiteSymmetric_Z2Z2}
     \leanok
     \uses{def:aklt_blocked, def:aklt_blocked_z2z2_action, def:on_site_symmetric, thm:aklt_z2z2_symmetric}
@@ -313,7 +312,7 @@ four-dimensional open-boundary ground space.
     acts by the Kronecker square $P_g \otimes P_g$ of the single-site spin-$1$
     $\pi$-rotation $P_g$, the length-$2$ blocked AKLT tensor is on-site
     symmetric.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:aklt_z2z2_symmetric}
@@ -323,20 +322,20 @@ four-dimensional open-boundary ground space.
     $(A^{[2]})^{P_g \otimes P_g} = (A^{P_g})^{[2]}$, where the superscript
     denotes the twist. Since the single-site tensor is symmetric, $A^{P_g}$ has
     the same matrix product vector family as $A$
-    (Theorem~\ref{thm:aklt_z2z2_symmetric}), and blocking preserves the matrix
+    (Lemma~\ref{thm:aklt_z2z2_symmetric}), and blocking preserves the matrix
     product vector family, so $(A^{[2]})^{P_g \otimes P_g}$ has the same matrix
     product vector family as $A^{[2]}$.
 \end{proof}
 
-\begin{theorem}[The single-site $\Z_2 \times \Z_2$ action is unitary]\label{thm:aklt_unitary_z2z2}
+\begin{lemma}[The single-site $\Z_2 \times \Z_2$ action is unitary]\label{thm:aklt_unitary_z2z2}
     \lean{MPSTensor.aklt_isUnitary_Z2Z2}
     \leanok
     \uses{thm:aklt_z2z2_symmetric}
     Each single-site spin-$1$ $\pi$-rotation matrix $P_g$ of the
     $\Z_2 \times \Z_2$ action is unitary: $P_g P_g^\dagger = \Id$.
-\end{theorem}
+\end{lemma}
 
-\begin{theorem}[Time-reversal and reflection symmetry of the AKLT tensor]
+\begin{lemma}[Time-reversal and reflection symmetry of the AKLT tensor]
     \label{thm:aklt_time_reversal_reflection}
     \lean{MPSTensor.akltTensor_timeReversal, MPSTensor.akltTensor_reflection, MPSTensor.akltSpinRotationY_mul_map_star, MPSTensor.akltAntisymmetricGauge_mul_map_star}
     \leanok
@@ -346,30 +345,30 @@ four-dimensional open-boundary ground space.
     \cite[Section~III.A]{Cirac2021Matrix}, the AKLT tensor satisfies
     $\overline{\sum_jR_{ij}A^j}=X^\dagger A^iX$ and $(A^i)^{T}=-X^\dagger A^iX$ for
     every $i$, with $X\bar X=-\Id$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Both identities are checked entry by entry on the three matrices of the AKLT
     tensor, which are real.
 \end{proof}
 
-\begin{theorem}[Non-trivial time-reversal and reflection indices of the AKLT state]
+\begin{lemma}[Non-trivial time-reversal and reflection indices of the AKLT state]
     \label{thm:aklt_time_reversal_reflection_index}
     \lean{MPSTensor.aklt_timeReversal_index_eq_neg_one, MPSTensor.aklt_reflection_index_eq_neg_one}
     \leanok
     Every unitary gauge implementing the time-reversal or the reflection symmetry
     of the AKLT tensor has index $X\bar X=-\Id$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:aklt_time_reversal_reflection, thm:time_reversal_index, thm:reflection_index, thm:aklt_normal}
-    The AKLT tensor is normal, so by Theorems~\ref{thm:time_reversal_index}
+    The AKLT tensor is normal, so by Lemmas~\ref{thm:time_reversal_index}
     and~\ref{thm:reflection_index} the index does not depend on the gauge; the
-    gauge $i\sigma_y$ of Theorem~\ref{thm:aklt_time_reversal_reflection} has index
+    gauge $i\sigma_y$ of Lemma~\ref{thm:aklt_time_reversal_reflection} has index
     $-\Id$.
 \end{proof}
 
-\begin{theorem}[Doubly degenerate entanglement spectrum of the AKLT state]
+\begin{lemma}[Doubly degenerate entanglement spectrum of the AKLT state]
     \label{thm:aklt_entanglement_spectrum_even}
     \lean{MPSTensor.akltBlocked_even_finrank_eigenspace, MPSTensor.akltTensor_twist_intertwine, MPSTensor.akltProjRep_generators_anticomm, MPSTensor.akltBlocked_transferMap_one, MPSTensor.akltBlockedZ2Z2Action_unitary}
     \leanok
@@ -377,7 +376,7 @@ four-dimensional open-boundary ground space.
     Let $\Lambda$ be a positive definite fixed point of the adjoint transfer map
     of the length-$2$ blocked AKLT tensor.  Every eigenspace of $\Lambda$ has
     even dimension.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:spt_entanglement_spectrum_even, thm:aklt_blocked_injective, lem:twisted_tensor_block_gauge}
@@ -385,11 +384,11 @@ four-dimensional open-boundary ground space.
     Lemma~\ref{lem:twisted_tensor_block_gauge}, the two generators of
     $\Z_2\times\Z_2$ act by unitary Kronecker squares with the anticommuting
     single-site virtual gauges $i\sigma_y$ and $\sigma_z$, so
-    Theorem~\ref{thm:spt_entanglement_spectrum_even} implies that every
+    Lemma~\ref{thm:spt_entanglement_spectrum_even} implies that every
     eigenspace of $\Lambda$ has even dimension.
 \end{proof}
 
-\begin{theorem}[Virtual-boundary nondecay for the AKLT symmetry]\label{thm:aklt_string_order}
+\begin{lemma}[Virtual-boundary nondecay for the AKLT symmetry]\label{thm:aklt_string_order}
     \lean{MPSTensor.aklt_hasStringOrder}
     \leanok
     \uses{def:has_string_order, def:aklt_blocked, def:aklt_blocked_z2z2_action}
@@ -399,13 +398,13 @@ four-dimensional open-boundary ground space.
     identity group element, with the
     maximally mixed boundary state $\Lambda = \tfrac{1}{2}\Id$ as its stationary
     boundary state.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:has_string_order_of_symmetric_injective, thm:aklt_blocked_injective, thm:aklt_blocked_z2z2_symmetric, thm:aklt_unitary_z2z2, def:transfer_map}
-    The blocked tensor is injective (Theorem~\ref{thm:aklt_blocked_injective}) and
+    The blocked tensor is injective (Lemma~\ref{thm:aklt_blocked_injective}) and
     on-site symmetric under $\Z_2 \times \Z_2$
-    (Theorem~\ref{thm:aklt_blocked_z2z2_symmetric}), and each group element acts
+    (Lemma~\ref{thm:aklt_blocked_z2z2_symmetric}), and each group element acts
     by a real symmetric involutive matrix, hence unitarily. The maximally mixed
     state $\Lambda = \tfrac{1}{2}\Id$ is positive definite and has trace~$1$.
     The single-site AKLT matrices satisfy
@@ -447,7 +446,7 @@ four-dimensional open-boundary ground space.
     site rather than the $\ket{m}$ basis.
 \end{definition}
 
-\begin{theorem}[The spin-$\tfrac12$ cover is surjective onto $\mathrm{SO}(3)$]\label{thm:su2_so3_surjective}
+\begin{lemma}[The spin-$\tfrac12$ cover is surjective onto $\mathrm{SO}(3)$]\label{thm:su2_so3_surjective}
     \lean{SpinCover.spinHalfCover_surjective_onto_SO3}
     \leanok
     Every rotation $R \in \mathrm{SO}(3)$ is realized by conjugating the Pauli
@@ -455,7 +454,7 @@ four-dimensional open-boundary ground space.
     $(\tfrac12\tr(\sigma_i U\sigma_j U^{-1}))_{ij} = R$.
     Equivalently, the adjoint double cover
     $\mathrm{SU}(2) \to \mathrm{SO}(3)$ is surjective.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     The $ZXZ$ Euler decomposition factors $R = R_z(\alpha)R_x(\beta)R_z(\gamma)$,
@@ -472,13 +471,13 @@ four-dimensional open-boundary ground space.
     \end{align}
 \end{proof}
 
-\begin{theorem}[$\mathrm{SO}(3)$ on-site symmetry of the AKLT tensor]\label{thm:aklt_so3_symmetric}
+\begin{lemma}[$\mathrm{SO}(3)$ on-site symmetry of the AKLT tensor]\label{thm:aklt_so3_symmetric}
     \lean{MPSTensor.aklt_isOnSiteSymmetric_SO3}
     \leanok
     \uses{def:aklt_cartesian, def:on_site_symmetric, thm:su2_so3_surjective}
     The Cartesian AKLT tensor is on-site symmetric under the spin-$1$ (defining)
     representation of $\mathrm{SO}(3)$ on the physical index.
-\end{theorem}
+\end{lemma}
 
 \begin{remark}\label{rem:aklt_so3_spt}
     The bond index carries the projective spin-$\tfrac12$ representation: the
@@ -493,7 +492,7 @@ four-dimensional open-boundary ground space.
     % docs/paper-gaps/rmp_aklt_continuous_rotation_gap.tex.
 \end{remark}
 
-\begin{theorem}[Symmetries and normality of the singlet-bond AKLT tensor]%
+\begin{lemma}[Symmetries and normality of the singlet-bond AKLT tensor]%
     \label{thm:aklt_review_symmetries}
     \lean{MPSTensor.akltTensorRMP_isNormal,
         MPSTensor.akltTensorRMP_isOnSiteSymmetric_Z2Z2,
@@ -504,10 +503,10 @@ four-dimensional open-boundary ground space.
         lem:on_site_symmetric_smul_gauge}
     The tensor of Definition~\ref{def:aklt_tensor_review} is normal and on-site
     symmetric under the $\Z_2\times\Z_2$ action of
-    Theorem~\ref{thm:aklt_z2z2_symmetric}. Its Pauli form
-    $\sigma_i/\sqrt2$ of Theorem~\ref{thm:aklt_review_pauli_form} is on-site
+    Lemma~\ref{thm:aklt_z2z2_symmetric}. Its Pauli form
+    $\sigma_i/\sqrt2$ of Lemma~\ref{thm:aklt_review_pauli_form} is on-site
     symmetric under the spin-$1$ representation of $\mathrm{SO}(3)$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     By Lemma~\ref{lem:aklt_review_gauge_bridge}, normality and
@@ -528,7 +527,7 @@ four-dimensional open-boundary ground space.
     Definition~\ref{def:aklt_tensor_review} by $g$ satisfies
     $\sum_j (P_g)_{ij}A^{j}\,X_g=X_g\,A^{i}$, where $X_g$ is the projective
     representation generated by $i\sigma_y$ and $\sigma_z$. By
-    Theorem~\ref{thm:aklt_nontrivial_spt}, its factor system represents the
+    Lemma~\ref{thm:aklt_nontrivial_spt}, its factor system represents the
     non-trivial class in $H^2(\Z_2\times\Z_2,\mathrm{U}(1))$.
 \end{theorem}
 \begin{proof}
@@ -568,7 +567,7 @@ four-dimensional open-boundary ground space.
     composite of the two, and $g=1$ is trivial.
 \end{proof}
 
-\begin{theorem}[Two-site parent Hamiltonian of the singlet-bond AKLT tensor]%
+\begin{lemma}[Two-site parent Hamiltonian of the singlet-bond AKLT tensor]%
     \label{thm:aklt_review_parent_hamiltonian}
     \lean{MPSTensor.akltTensorRMP_groundSpace_eq, MPSTensor.akltTensorRMP_mpvSubmodule_eq,
         MPSTensor.akltTensorRMP_chainGroundSpace_two_eq_mpvSubmodule,
@@ -580,12 +579,12 @@ four-dimensional open-boundary ground space.
     as the representative of Definition~\ref{def:aklt_tensor}. Hence on a
     periodic chain of $N\geq3$ sites its two-site parent Hamiltonian has the
     AKLT state as its unique ground state.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Because a virtual gauge and a nonzero rescaling preserve the local ground
     spaces and multiply the periodic state by $(3/2)^{N/2}$,
-    Theorem~\ref{thm:aklt_chain_ground_space_two} implies that the periodic
+    Lemma~\ref{thm:aklt_chain_ground_space_two} implies that the periodic
     AKLT state spans the two-site chain ground space for $N\geq3$.
 \end{proof}
 
@@ -616,7 +615,7 @@ $\xi = 1/\log 3$, and connected correlations decay as $(\tfrac13)^n$.
     the real identity $(\sqrt{x})^2=x$.
 \end{proof}
 
-\begin{theorem}[Pauli eigenvectors of the AKLT transfer map]\label{thm:aklt_pauli_eigenvectors}
+\begin{lemma}[Pauli eigenvectors of the AKLT transfer map]\label{thm:aklt_pauli_eigenvectors}
     \lean{MPSTensor.aklt_transferMap_sigmaZ, MPSTensor.aklt_transferMap_sigmaX,
         MPSTensor.aklt_transferMap_sigmaY}
     \leanok
@@ -628,7 +627,7 @@ $\xi = 1/\log 3$, and connected correlations decay as $(\tfrac13)^n$.
                        & k                      & \in \{x,y,z\}.
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -637,7 +636,7 @@ $\xi = 1/\log 3$, and connected correlations decay as $(\tfrac13)^n$.
     $(\sqrt{3})^2 = 3$ and $(\sqrt{2})^2 = 2$ to clear the prefactors.
 \end{proof}
 
-\begin{theorem}[Subleading eigenvalue of the AKLT transfer map]\label{thm:aklt_subleading_eigenvalue}
+\begin{lemma}[Subleading eigenvalue of the AKLT transfer map]\label{thm:aklt_subleading_eigenvalue}
     \lean{MPSTensor.aklt_transferMap_hasEigenvalue_one,
         MPSTensor.aklt_transferMap_hasEigenvalue_neg_third,
         MPSTensor.aklt_subleading_norm,
@@ -648,9 +647,9 @@ $\xi = 1/\log 3$, and connected correlations decay as $(\tfrac13)^n$.
     identity $\Id$ as eigenvector, and $-\tfrac13$ is a subleading eigenvalue,
     with $\sigma_z$ as eigenvector. The subleading modulus is therefore
     $\tfrac13$.
-\end{theorem}
+\end{lemma}
 
-\begin{theorem}[AKLT correlation length]\label{thm:aklt_correlation_length}
+\begin{lemma}[AKLT correlation length]\label{thm:aklt_correlation_length}
     \lean{MPSTensor.aklt_correlationLength_eq, MPSTensor.aklt_correlationLength_pos}
     \leanok
     \uses{def:correlation_length, thm:aklt_subleading_eigenvalue}
@@ -663,7 +662,7 @@ $\xi = 1/\log 3$, and connected correlations decay as $(\tfrac13)^n$.
         \notag
     \end{align}
     It is finite and positive.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok

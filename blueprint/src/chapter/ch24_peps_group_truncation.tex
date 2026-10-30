@@ -72,7 +72,7 @@ the sum of its singular values and $\lVert M\rVert_2$ its Hilbert--Schmidt norm.
     $\beta$ to edges incident to $v$.
 \end{definition}
 
-\begin{theorem}[Whole-group tensor bound, norm part]
+\begin{lemma}[Whole-group tensor bound, norm part]
     \label{thm:peps_group_contraction_norm}
     \lean{TNLean.Lattice.WholeGroup.contraction_norm_le_one,
         TNLean.Lattice.WholeGroup.partialNormSq_le_one}
@@ -82,7 +82,7 @@ the sum of its singular values and $\lVert M\rVert_2$ its Hilbert--Schmidt norm.
     then $\lVert Z\rVert\le1$, and the same bound holds for the partial
     contraction over any $T\subseteq V$ (keeping open the open legs of $T$ and
     edges leaving $T$).
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     By induction on $|T|$: the empty subset has norm $1$, a single loopless
@@ -92,22 +92,22 @@ the sum of its singular values and $\lVert M\rVert_2$ its Hilbert--Schmidt norm.
     $\lVert AB\rVert_2\le\lVert A\rVert_2\lVert B\rVert_2$.
 \end{proof}
 
-\begin{theorem}[Whole-group tensor bound, nuclear part]
+\begin{lemma}[Whole-group tensor bound, nuclear part]
     \label{thm:peps_group_contraction_nuclear}
     \lean{TNLean.Lattice.WholeGroup.rectangularTraceNorm_flattening_le_one,
         TNLean.Lattice.WholeGroup.flattening,
         TNLean.Lattice.WholeGroup.flattening_contraction}
     \leanok
     \uses{def:peps_group_contraction, def:peps_group_nuclear_norm}
-    Under the hypotheses of Theorem~\ref{thm:peps_group_contraction_norm}, for
+    Under the hypotheses of Lemma~\ref{thm:peps_group_contraction_norm}, for
     every $T\subseteq V$, the matrix reshaping $Z_T$ of $Z$ with rows indexed
     by $\prod_{v\in T}P_v$ and columns by $\prod_{v\in V\setminus T}P_v$
     satisfies $\lVert Z_T\rVert_1\le1$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_group_contraction_norm, lem:peps_group_nuclear_holder}
-    By Theorem~\ref{thm:peps_group_contraction_norm}, the partial contractions
+    By Lemma~\ref{thm:peps_group_contraction_norm}, the partial contractions
     $A$ on $T$ and $B$ on $V\setminus T$ satisfy $\lVert A\rVert_2,\lVert B\rVert_2\le1$,
     and grouping the edges between $T$ and $V\setminus T$ gives
     $Z_T=AB^{\mathsf T}$, so Lemma~\ref{lem:peps_group_nuclear_holder} yields
@@ -143,7 +143,7 @@ the sum of its singular values and $\lVert M\rVert_2$ its Hilbert--Schmidt norm.
     coefficient by $1$.
 \end{proof}
 
-\begin{theorem}[Whole-group tensor bound]
+\begin{lemma}[Whole-group tensor bound]
     \label{thm:peps_group_tensor}
     \lean{TNLean.Lattice.WholeGroup.exists_simultaneous_openLeg_truncation,
         TNLean.Lattice.WholeGroup.exists_simultaneous_group_truncation}
@@ -159,12 +159,12 @@ the sum of its singular values and $\lVert M\rVert_2$ its Hilbert--Schmidt norm.
     $\lVert Z-Z_k\rVert\le g/\sqrt{k}$ and expands in orthonormal bases of
     these subspaces as at most $k^g$ product terms with coefficients of
     modulus at most $1$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_group_contraction_norm, thm:peps_group_contraction_nuclear,
         lem:peps_group_truncation_abstract}
-    Theorems~\ref{thm:peps_group_contraction_norm} and
+    Lemmas~\ref{thm:peps_group_contraction_norm} and
     \ref{thm:peps_group_contraction_nuclear} give $\lVert Z\rVert\le1$ and
     $\lVert Z_T\rVert_1\le1$. Since $|P_v|=1$ when $v$ has no open legs, the
     set $G$ of vertices with nonempty open-leg groups contains every $v$ with
@@ -181,7 +181,7 @@ the sum of its singular values and $\lVert M\rVert_2$ its Hilbert--Schmidt norm.
     \uses{thm:peps_group_tensor}
     For a loopless tensor network with one leg per incident edge endpoint,
     identity edge matrices, and $\lVert A_v\rVert\le1$ for all $v\in V$, the
-    conclusions of Theorem~\ref{thm:peps_group_tensor} hold for the network
+    conclusions of Lemma~\ref{thm:peps_group_tensor} hold for the network
     contraction.
 \end{corollary}
 
@@ -189,5 +189,5 @@ the sum of its singular values and $\lVert M\rVert_2$ its Hilbert--Schmidt norm.
     \uses{thm:peps_group_tensor}
     With identity edge matrices and no self-loops, the network contraction and
     vertex norms coincide with those of (\ref{eq:peps_group_contraction}), so
-    Theorem~\ref{thm:peps_group_tensor} applies.
+    Lemma~\ref{thm:peps_group_tensor} applies.
 \end{proof}

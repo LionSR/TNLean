@@ -12,7 +12,7 @@ $H'^{\mathrm{open}}_{\gamma,N}$ for the periodic and nonwrapping sums
 of its extended two-site interaction, respectively. All bounds below
 concern these given tensors; the constants may depend on them.
 
-\begin{theorem}[Fixed-window continuity of the extended open gap]
+\begin{lemma}[Fixed-window continuity of the extended open gap]
     \label{thm:mpo_mixed_open_gap_continuity}
     \lean{MPSTensor.continuous_periodicLocalInteractionES_family,
         MPSTensor.continuous_openInteractionHamiltonianES_family,
@@ -30,7 +30,7 @@ concern these given tensors; the constants may depend on them.
     parameter set, there is a positive gap bound uniform on that set;
     the bound may depend on both. For $0<\gamma<1$, the extended
     open Hamiltonian equals the canonical open parent of $A(\gamma)$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:mpo_mixed_support_continuity,
@@ -46,7 +46,7 @@ concern these given tensors; the constants may depend on them.
     the two open sums coincide.
 \end{proof}
 
-\begin{theorem}[Periodic ground lines and fixed-volume gaps]
+\begin{lemma}[Periodic ground lines and fixed-volume gaps]
     \label{thm:mpo_mixed_periodic_line_continuity}
     \lean{MPSTensor.periodicMpvLineMap_injective_of_mpv_ne_zero,
         MPSTensor.continuous_periodicInteractionHamiltonianES_family,
@@ -74,7 +74,7 @@ concern these given tensors; the constants may depend on them.
     on $[0,1]$.
     For each fixed $N\geq2$, a positive periodic gap works throughout
     the closed parameter interval.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{lem:asymex_absorbing_compression,
@@ -96,7 +96,7 @@ concern these given tensors; the constants may depend on them.
     kernel projector then yields the uniform fixed-volume gap.
 \end{proof}
 
-\begin{theorem}[Uniform periodic gap on the closed interpolation]
+\begin{lemma}[Uniform periodic gap on the closed interpolation]
     \label{thm:mpo_mixed_uniform_periodic_path_gap}
     \lean{MPSTensor.MPOSymmetry.exists_uniform_mixedEndpoint_periodic_path_gap}
     \leanok
@@ -107,7 +107,7 @@ concern these given tensors; the constants may depend on them.
     \begin{align}
         \delta\|v\|\leq\|H'_{\gamma,N}v\|.
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:mpo_mixed_open_endpoint_gaps,thm:mpo_mixed_interior,

@@ -7,7 +7,7 @@ Gibbs representation of the virtual boundary states. The following
 finite-dimensional results concern the support of such states. They
 do not assert locality or a uniform gap.
 
-\begin{theorem}[Full-space obstruction for a regular boundary]%
+\begin{lemma}[Full-space obstruction for a regular boundary]%
     \label{thm:peps_regular_boundary_gibbs_obstruction}
     \lean{TNLean.PEPS.rank_regularBoundaryDensity_lt_card,
         TNLean.PEPS.not_isUnit_regularBoundaryDensity,
@@ -24,7 +24,7 @@ do not assert locality or a uniform gap.
     More generally, if $T$ is a regular $G$-injective open map,
     its virtual Gram operator $T^\dagger T$ has the same rank
     and cannot be such an exponential.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     The rank of $\rho$ is the dimension of the invariant boundary
@@ -35,7 +35,7 @@ do not assert locality or a uniform gap.
     its inverse being the exponential of the negative matrix.
 \end{proof}
 
-\begin{theorem}[Gibbs representation on the invariant support]%
+\begin{lemma}[Gibbs representation on the invariant support]%
     \label{thm:peps_regular_boundary_supported_gibbs}
     \lean{TNLean.PEPS.regularBoundarySupportedDensity,
         TNLean.PEPS.regularBoundarySupportedHamiltonian,
@@ -52,7 +52,7 @@ do not assert locality or a uniform gap.
     This is a statement on the invariant support, whose dimension
     is $|G|^{b-1}$. It imposes no interaction decomposition on the
     original $b$ virtual legs.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     The averaging projector fixes invariant vectors, so the
