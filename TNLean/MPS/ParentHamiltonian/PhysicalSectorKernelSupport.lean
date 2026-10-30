@@ -146,7 +146,7 @@ theorem coeff_eq_zero_of_two_sector_projectorHamiltonian
           (Function.Embedding.piCongrRight (fun _ : Fin R ↦ e)).euclideanExtendByZero.toLinearMap ⊔
         T.map
           (Function.Embedding.piCongrRight (fun _ : Fin R ↦ f)).euclideanExtendByZero.toLinearMap)ᗮ
-        .starProjection.toLinearMap) M ψ = 0)
+        |>.starProjection.toLinearMap) M ψ = 0)
     (σ : Cfg d M) (i j : Fin M) (hij : label (σ i) ≠ label (σ j)) : ψ σ = 0 := by
   apply coeff_eq_zero_of_projectorHamiltonian_of_physical_labels_ne _ label hR hRM
     (fun v hv ω hω ↦ coeff_eq_zero_of_mem_two_embedded_physical_sectors
@@ -169,7 +169,7 @@ theorem coeff_eq_zero_of_physical_sum_projectorHamiltonian
         T.map
           (Function.Embedding.piCongrRight
             (fun _ : Fin R ↦ Fin.natAddEmb a)).euclideanExtendByZero.toLinearMap)ᗮ
-        .starProjection.toLinearMap) M ψ = 0)
+        |>.starProjection.toLinearMap) M ψ = 0)
     (σ : Cfg (a + b) M) (i j : Fin M) (hi : (σ i).val < a) (hj : a ≤ (σ j).val) :
     ψ σ = 0 := by
   let label : Fin (a + b) → Bool := fun k ↦ decide (k.val < a)
