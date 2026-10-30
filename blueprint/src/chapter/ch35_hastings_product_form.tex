@@ -4,11 +4,16 @@
 % Hastings, arXiv:cond-mat/0508554v3, proj3new.tex, lines 1024--1046 (eq. mpf)
 % and 1048--1079 (the Trotter decomposition).
 
-For nonzero-temperature density matrices on a finite square-lattice domain
-$\Lambda$ with walk distance $d_\Lambda$, \cite[lines 1024--1079]{Hastings2006Solving}
-expresses Trotter products of finite-range Hamiltonians in a matrix product form
-with single-site operators and finite-range scalar factors
-\cite{gap:hastings05_planar_domain_scope}.
+For the density matrix at nonzero temperature, \cite[lines
+    1024--1079]{Hastings2006Solving} introduces a matrix product form in which
+every site carries one index, every site carries an operator acting on it
+alone, and the coefficients are products of functions of finite range. Every
+Trotter product of a finite-range Hamiltonian has this form exactly. The error
+between a Trotter product and the Gibbs operator is not estimated here. The
+sites form an arbitrary finite metric lattice, as in the source. The term supports lie in balls of
+radius $R$ about specified centres, as in the source. The original
+diameter-bounded statement follows as a corollary. The construction also gives the source's bound of at most $nS$ index components
+at each site after $n$ Trotter steps.
 
 \begin{definition}[Matrix product form]
     \label{def:hastings_product_form}
@@ -20,20 +25,27 @@ with single-site operators and finite-range scalar factors
         TNLean.Lattice.HasProductForm.mono
     }
     \leanok
-    \uses{def:area_law_hamiltonian}
-    For a finite domain $\Lambda$ of local dimension $q$ and $l\ge0$, an
-    operator $\rho$ on $\mathcal H_\Lambda$ has a \emph{matrix product form of
-        range $l$} if there exist a finite index set $\mathcal A$, single-site
-    operators $\rho_j(a)$ ($j\in\Lambda$, $a\in\mathcal A$), and functions
-    $F_i\colon\mathcal A^\Lambda\to\mathbb C$ ($i\in\Lambda$) depending only on
-    $(\alpha_j)_{d_\Lambda(i,j)\le l}$ such that
+    Let $\Lambda$ be a finite set of sites with local dimension $q$, and prescribe a
+    neighborhood $N_i$ at every site $i$. On a metric lattice of range $l\ge0$,
+    take $N_i=\{j:d(i,j)\le l\}$.
+    An operator $\rho$ on $\mathcal H_\Lambda$ has a matrix product form
+    with these neighborhoods if there are finite sets $\mathcal A_j$ and operators
+    $\rho_j(a)$ on site $j$ for every site $j$ and every
+    $a\in\mathcal A_j$, and functions
+    $F_i\colon\prod_{j\in\Lambda}\mathcal A_j\to\mathbb C$
+    for every site $i$, such that $F_i(\alpha)$ depends only on the indices
+    $\alpha_j$ with $j\in N_i$ and
     \begin{align}
         \label{eq:hastings_mpf}
-        \rho=\sum_{\alpha\in\mathcal A^\Lambda}
+        \rho=\sum_{\alpha\in\prod_{j\in\Lambda}\mathcal A_j}
         \Bigl(\prod_{i\in\Lambda}F_i(\alpha)\Bigr)
         \bigotimes_{j\in\Lambda}\rho_j(\alpha_j)
     \end{align}
-    \cite[lines 1024--1039]{Hastings2006Solving}.
+    This is the right-hand side of the product-form identity in~\cite[lines
+        1024--1039]{Hastings2006Solving}. The index set may vary with the site.
+    Enlarging any coefficient neighborhood
+    preserves the product form; in particular a metric product form of range
+    $l$ has every larger range.
 \end{definition}
 
 \begin{lemma}[Operators supported near a specified centre]
@@ -41,15 +53,25 @@ with single-site operators and finite-range scalar factors
     \lean{TNLean.Lattice.hasProductForm_of_mem_supportedOperators_radius}
     \leanok
     \uses{def:hastings_product_form}
-    If $i_0\in\Lambda$ and $X\subseteq\{j\in\Lambda:d_\Lambda(i_0,j)\le R\}$,
-    then every operator supported on $X$ has a matrix product form of range $R$
-    \cite[lines 1053--1061]{Hastings2006Solving}.
+    Fix $i_0\in\Lambda$ and $X\subseteq\Lambda$ such that
+    $X\subseteq N_{i_0}$, and assume $i\in N_i$ for every site $i$.
+    Every operator supported on $X$ has a matrix product form with these
+    coefficient neighborhoods.
+    The centre need not belong to $X$, and $X$ may be empty.
+    This is the supported-factor expansion
+    in~\cite[lines 1053--1061]{Hastings2006Solving}.
 \end{lemma}
 \begin{proof}\leanok
-    Take $\mathcal A=\{1,\dots,q\}^2$ and $\rho_j(a_j,b_j)=|a_j\rangle\langle b_j|$;
-    place the $X$-matrix element of the operator in $F_{i_0}$ (which depends
-    only on $(a_j,b_j)_{j\in X\cup\{i_0\}}$) and $\delta_{a_j,b_j}$ in $F_j$ for
-    $j\notin X$, so (\ref{eq:hastings_mpf}) holds entrywise.
+    Take $\mathcal A=\{1,\dots,q\}^2$ and let the single-site operators be
+    the matrix units $|a_j\rangle\langle b_j|$. Attach to $i_0$ the matrix
+    element between the configurations equal to $a$ and $b$ on $X$ and
+    equal to $a_{i_0}$ off $X$. At every site outside $X$, multiply the
+    coefficient by the indicator of $a_j=b_j$, including at $i_0$ if
+    $i_0\notin X$. The matrix element reads only indices on $X$ and at
+    $i_0$, all in $N_{i_0}$; each diagonal indicator reads only its
+    own index. Supported operators vanish between configurations differing
+    off $X$, and their other entries depend only on the labels on $X$.
+    Thus~(\ref{eq:hastings_mpf}) holds entry by entry.
 \end{proof}
 
 \begin{lemma}[Operators supported on a small set]
@@ -57,8 +79,10 @@ with single-site operators and finite-range scalar factors
     \lean{TNLean.Lattice.hasProductForm_of_mem_supportedOperators}
     \leanok
     \uses{thm:hastings_product_form_supported_radius}
-    If $\emptyset\ne X\subseteq\Lambda$ satisfies $\operatorname{diam}X\le R$,
-    then every operator supported on $X$ has a matrix product form of range $R$.
+    Assume every site belongs to its own neighborhood. Let
+    $X\subseteq\Lambda$ be nonempty with $y\in N_x$ for all $x,y\in X$.
+    Every operator supported on $X$ has a matrix product form with these
+    coefficient neighborhoods.
 \end{lemma}
 \begin{proof}\leanok
     Pick $i_0\in X$ and apply
@@ -87,7 +111,8 @@ with single-site operators and finite-range scalar factors
 
 \begin{lemma}[Trotter products with prescribed centres]
     \label{thm:hastings_trotter_product_form_radius}
-    \lean{TNLean.Lattice.hasProductForm_trotterProduct_of_radius}
+    \lean{TNLean.Lattice.hasProductForm_trotterProduct_of_radius,
+        TNLean.Lattice.hasProductForm_trotterProduct_of_dist_le}
     \leanok
     \uses{thm:hastings_product_form_supported_radius,thm:hastings_product_form_mul}
     If each $H_i$ ($i\in\Lambda$) is supported on
@@ -97,13 +122,57 @@ with single-site operators and finite-range scalar factors
         \label{eq:hastings_trotter_product_radius}
         \Bigl[\prod_{k=1}^m\exp\bigl(-\tfrac\beta n H_{i_k}\bigr)\Bigr]^n
     \end{align}
-    has a matrix product form of range $R$
-    \cite[lines 1053--1077]{Hastings2006Solving}.
+    has a matrix product form of range $R$. Neither Hermiticity nor
+    nonempty supports are required. With the separate convention that the
+    zero-step product is the identity, the conclusion also holds for $n=0$.
+    This proves the radius-based construction of~\cite[lines
+        1053--1077]{Hastings2006Solving} on every finite metric lattice.
 \end{lemma}
 \begin{proof}\leanok
     Each $\exp(-\tfrac\beta nH_{i_k})$ is supported on $X_{i_k}$; apply
     Lemmas~\ref{thm:hastings_product_form_supported_radius}
     and~\ref{thm:hastings_product_form_mul}.
+\end{proof}
+
+\begin{lemma}[Local index counts of Trotter products]
+    \label{thm:hastings_trotter_index_count}
+    \lean{TNLean.Lattice.ProductForm.ofSupported,
+        TNLean.Lattice.ProductForm.card_index_ofSupported,
+        TNLean.Lattice.ProductForm.one,
+        TNLean.Lattice.ProductForm.mul,
+        TNLean.Lattice.ProductForm.pow,
+        TNLean.Lattice.ProductForm.card_index_one,
+        TNLean.Lattice.ProductForm.card_index_mul,
+        TNLean.Lattice.ProductForm.card_index_pow,
+        TNLean.Lattice.exists_productForm_list_prod_card_index,
+        TNLean.Lattice.exists_productForm_trotterProduct_card_index,
+        TNLean.Lattice.exists_productForm_trotterProduct_card_index_of_dist_le}
+    \leanok
+    \uses{def:hastings_product_form,thm:hastings_product_form_mul}
+    Let the local dimension satisfy $q\ge1$. Suppose every radius-$R$ ball
+    of the finite metric lattice contains at most $S$ sites, and each
+    $H_i$ acts on a set $X_i$ in the radius-$R$ ball about $i$.
+    If the centres $i_1,\ldots,i_m$ are distinct, the Trotter product
+    (\ref{eq:hastings_trotter_product_radius}) has a matrix product form of
+    range $R$ whose index set at every site satisfies
+    \begin{align}
+        |\mathcal A_j|\le(q^2)^{nS}.
+        \label{eq:hastings_trotter_index_count}
+    \end{align}
+    At $n=0$ every index set has one element. This is the count of at most
+    $nS$ components with $q^2$ values each asserted in
+    \cite[lines 1068--1075]{Hastings2006Solving}.
+\end{lemma}
+\begin{proof}\leanok
+    Expand a factor only in matrix units at its supporting sites, and use a
+    one-element index set elsewhere. The matrix-element coefficient is
+    attached to the factor's centre and depends only on its support.
+    At a site $j$, the indices of an ordered product therefore have
+    $(q^2)^{a_j}$ values, where $a_j$ is the number of its factors acting
+    at $j$. Such a factor has its centre within distance $R$ of $j$;
+    distinctness of the centres gives $a_j\le S$.
+    In $n$ copies of the product the site index sets are multiplied $n$
+    times, which gives $(q^2)^{na_j}\le(q^2)^{nS}$.
 \end{proof}
 
 \begin{lemma}[Trotter products have a matrix product form]
