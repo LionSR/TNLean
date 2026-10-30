@@ -34,13 +34,15 @@ open scoped ComplexOrder Matrix BigOperators
 
 namespace MPOTensor
 
-/-- Locally discharge the source's adjoint-simplicity premise using the
-canonical-form-II rank-product criterion and rank exchange under adjunction.
-Source: arXiv:1703.09188, `ThmFund1` (lines 563–601) and `defnrl`;
-the discharged premise occurs in arXiv:2502.20257, line 5344. -/
-private theorem adjoint_simple_of_canonical_simple {d D : ℕ} {U : MPOTensor d D}
+/-- The physical adjoint of a simple tensor in canonical form II is simple.
+Physical adjunction preserves canonical form II and exchanges the two source
+ranks, so the rank-product criterion $r\ell=d^2$ transfers. This discharges the
+adjoint-simplicity premise of arXiv:2502.20257, `prop:MPUsplus` and line 5344,
+for a tensor in canonical form II.
+Source: arXiv:1703.09188, `ThmFund1` (lines 563–601) and `defnrl`. -/
+theorem IsMPUCanonicalFormII.isMPUSimple_physicalAdjointTensor {d D : ℕ} {U : MPOTensor d D}
     (hU : IsMPUCanonicalFormII U) (hsimple : IsMPUSimple U) :
-    IsMPUSimple (physicalAdjointTensor U) := by
+    IsMPUSimple (MPOTensor.physicalAdjointTensor U) := by
   have hrank : r[U] * ℓ[U] = d * d := (hU.isMPUSimple_tfae.out 1 2).mp hsimple
   apply (hU.physicalAdjointTensor.isMPUSimple_tfae.out 1 2).mpr
   rw [rightRank_physicalAdjointTensor, leftRank_physicalAdjointTensor, mul_comm]
@@ -84,7 +86,7 @@ theorem IsRepresentation.inverseCompatibleSourceProperties_of_inv_eq
   let σ := hF.daggerInverseScalar F hcanonical g
   have hT := hF.physicalAdjointTensor_eq_daggerInverseGauge_of_inv_eq F hcanonical g hg
   have hσ := hF.daggerInverseGauge_mul_mapStar_self_eq_smul_one_of_inv_eq F hcanonical g hg
-  have hadjoint := adjoint_simple_of_canonical_simple hU (hF.isSimple g)
+  have hadjoint := hU.isMPUSimple_physicalAdjointTensor (hF.isSimple g)
   exact ⟨inverseCompatibleSourceFactors_Y_physical_contractions
       (F.tensor g) T hU (hF.isSimple g) hT σ hσ,
     inverseCompatibleSourceFactors_Y_rank_normalizations
