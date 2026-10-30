@@ -98,22 +98,9 @@ theorem bond_subset_bondNeighbourhood {X : Set ι} {b : β} (hb : (bond b ∩ X)
     bond b ⊆ bondNeighbourhood bond X :=
   fun _ hx ↦ mem_bondNeighbourhood.mpr (Or.inr ⟨b, hx, hb⟩)
 
-theorem bondNeighbourhood_mono {X Y : Set ι} (h : X ⊆ Y) :
-    bondNeighbourhood bond X ⊆ bondNeighbourhood bond Y := by
-  intro x hx
-  rcases mem_bondNeighbourhood.mp hx with hx | ⟨b, hxb, y, hyb, hyX⟩
-  · exact subset_bondNeighbourhood Y (h hx)
-  · exact mem_bondNeighbourhood.mpr (Or.inr ⟨b, hxb, y, hyb, h hyX⟩)
-
 theorem lightCone_subset_succ (X : Set ι) (r : ℕ) :
     lightCone bond X r ⊆ lightCone bond X (r + 1) :=
   subset_bondNeighbourhood _
-
-theorem lightCone_mono_radius (X : Set ι) {r s : ℕ} (h : r ≤ s) :
-    lightCone bond X r ⊆ lightCone bond X s := by
-  induction s, h using Nat.le_induction with
-  | base => exact subset_rfl
-  | succ s _ ih => exact ih.trans (lightCone_subset_succ X s)
 
 theorem lightCone_lightCone (X : Set ι) (r s : ℕ) :
     lightCone bond (lightCone bond X r) s = lightCone bond X (r + s) := by
