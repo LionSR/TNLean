@@ -4,7 +4,12 @@
 % The chain specialization of the 2026 area-law and PEPS manuscripts, following the
 % TNLean note docs/notes/one_dimensional_note. Every constant is explicit. The model is
 % stated natively on the chain of L sites. The chain proof uses only the site-generic
+<<<<<<< HEAD
 % layer TNLean/Lattice and QICLean. The separate strip extension reuses lattice counting.
+=======
+% layer TNLean/Lattice and QICLean. The square-grid snake specialization at the
+% end of the chapter also uses the two-dimensional area law.
+>>>>>>> origin/main
 
 The chain of $L$ sites carries a local dimension $q$, a finite-range Hamiltonian
 with one Hermitian term of norm at most $J$ per support of diameter at most $R$,
@@ -2900,6 +2905,7 @@ Theorem~B a second way, by a sequential preparation protocol.
     \end{align}
 \end{proof}
 
+<<<<<<< HEAD
 \section{Extension to strips of bounded width}
 
 The following results extend the interval argument to a rectangular strip;
@@ -2996,10 +3002,51 @@ In particular the ground eigenspace is one-dimensional.
     \begin{align}
         2S(X_{a,b}\mid T)
         \le S(X_{a,b})+4096e(J/\Delta)B/m+m\log2.\notag
+=======
+
+\section{Matrix product approximation along a square-grid snake}
+
+% Source: polynomial-PEPS manuscript, Section 1, and the threshold argument
+% in part2a_mps_information.tex, sec:shortcut, thm:Bshort, lines 73--92.
+% The older Part IIb, Section 7 citation does not locate that argument.
+\begin{definition}[Snake ordering of an open square]
+    \label{def:snake_grid_order}
+    \lean{TNLean.MPS.AreaLaw.snakeNativeEquiv,
+        TNLean.MPS.AreaLaw.snakeIndex,
+        TNLean.MPS.AreaLaw.snakeIndex_val,
+        TNLean.MPS.AreaLaw.snakeGridEquiv,
+        TNLean.MPS.AreaLaw.snakeGridPrefix,
+        TNLean.MPS.AreaLaw.mem_snakeGridPrefix,
+        TNLean.MPS.AreaLaw.snakeGridPrefix_eq_map,
+        TNLean.MPS.AreaLaw.snakeGridStateEquiv}
+    \leanok
+    On $\{0,\ldots,L-1\}^2$, visit the rows in increasing order, the
+    columns in increasing order in even rows and decreasing order in odd
+    rows. Let $A_k$ be the first $k$ sites. Relabelling the tensor factors
+    in this order is a linear isometry of the physical Hilbert space.
+\end{definition}
+
+\begin{lemma}[Snake cut boundary and finite-range budget]
+    \label{lem:snake_grid_cut_budget}
+    \lean{TNLean.MPS.AreaLaw.card_edgeBoundary_snakeGridPrefix_le,
+        TNLean.MPS.AreaLaw.cutLogBudget_snakeGridPrefix_le,
+        TNLean.MPS.AreaLaw.snakeGrid_window_le_linear}
+    \leanok
+    \uses{def:snake_grid_order}
+    Every prefix has $|\partial A_k|\le L+1$. For local dimension
+    $q\ge1$, the logarithmic budget of the actual range-$R$ interaction
+    supports satisfies $\mathcal B_{A_k}\le B(q,R)(L+2)$, where $B(q,R)$
+    is the constant in the finite-range boundary budget. For
+    $a\ge0$, $b\ge1$ and $L\ge2$,
+    \begin{align}
+        \sqrt{a(L+2)}\log(2L^3b)
+        \le \sqrt{2a}\bigl(\log(2b)+6\bigr)L.
+>>>>>>> origin/main
     \end{align}
 \end{lemma}
 \begin{proof}
     \leanok
+<<<<<<< HEAD
     \uses{lem:strip_column_geometry}
     Apply the finite-site logarithmic buffered discount to the genuine
     column shells with weights $a_j=2/m$. Their total weight is two;
@@ -3119,4 +3166,47 @@ In particular the ground eigenspace is one-dimensional.
     while the length term is at most $c\sqrt t\,w\log L$.
     The inverse site isometry returns the normalized vector to the original
     lattice Hilbert space with the same error. These estimates include $L=1$.
+=======
+    A boundary edge between distinct rows is determined by its column:
+    along each column, membership in the prefix decreases with the row
+    index. A boundary edge inside one row joins consecutive positions
+    of the snake, so at most one such edge crosses the prefix. The
+    finite-range boundary budget then gives the stated bound on
+    $\mathcal B_{A_k}$. Finally, $\log L\le2\sqrt L$,
+    $\sqrt L\le L$ and $L+2\le2L$ give the displayed inequality.
+\end{proof}
+
+\begin{corollary}[Exponential matrix product approximation on an open square]
+    \label{cor:snake_grid_mps}
+    \lean{TNLean.MPS.AreaLaw.exists_snakeGridMPS_of_uniformAreaLaw,
+        TNLean.MPS.AreaLaw.exists_snakeGridMPS,
+        TNLean.MPS.AreaLaw.isOpenMPS_snakeGridStateEquiv_one}
+    \leanok
+    \uses{thm:openai_uniform_area_law,lem:snake_grid_cut_budget,
+        lem:chain_sequential_truncation,thm:chain_mps_of_cut_rank,
+        thm:area_law_marginal_tails}
+    Fix $q\ge1$, $R\ge0$ and $J,\Delta>0$. There is a constant
+    $C=C(q,R,J,\Delta)\ge0$ such that every normalized gapped ground
+    vector $\Omega$, with gap $\Delta$, of a finite-range Hamiltonian
+    with term norms at most $J$ on an open $L\times L$ square, $L\ge2$,
+    has a normalized open-boundary matrix product approximation $\Phi$
+    along the snake ordering with
+    \begin{align}
+        \|\Phi-\Omega\|\le L^{-1},\qquad D\le e^{CL}.
+    \end{align}
+    A vector on a one-site square already has a bond-one representation.
+\end{corollary}
+\begin{proof}
+    \leanok
+    Let $C_0$ be the uniform area-law constant, $a=(1+J/\Delta)B(q,R)$,
+    $b=\sqrt{2e^{e/2}}$ and $s=\sqrt{a(L+2)}$. Choose
+    $w=64s\log(2L^3b)$. At each cut, the spectral projection above
+    $e^{-S(A_k)-w}$ has rank at most $e^{C_0(L+1)+w}$, and the square
+    root of its discarded mass is at most $1/(2L^3)$. The actual
+    reverse-prefix product has error at most
+    $(L^2-1)/(2L^3)\le1/(2L)$. It is nonzero, and normalization at
+    most doubles the error without changing the bond bound. Taking
+    $D=\lfloor e^{C_0(L+1)+w}\rfloor$ and
+    $C=2C_0+64\sqrt{2a}(\log(2b)+6)$ completes the proof.
+>>>>>>> origin/main
 \end{proof}
