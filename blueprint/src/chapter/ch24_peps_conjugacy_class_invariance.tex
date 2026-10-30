@@ -1,11 +1,18 @@
-\begin{theorem}[Conjugacy classes are unchanged by conjugation]%
+\section{Physical measurement of fluxes}%
+\label{sec:peps_flux_measurement}
+
+The holonomy of a regular network around a cycle or a plaquette is a flux.
+This section measures its conjugacy class by a projective measurement that
+acts on physical sites only.
+
+\begin{lemma}[Conjugacy classes are unchanged by conjugation]%
     \label{thm:peps_conjugacy_class_invariance}
     \lean{ConjClasses.mk_conjugate}
     \leanok
     For every group $G$ and $g,x\in G$, the conjugacy-class quotient satisfies
     $C[xgx^{-1}]=C[g]$. This is the class invariance used in
     \cite[Theorem 6.15 and Section 6.6]{Schuch2010PEPS}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The elements $g$ and $xgx^{-1}$ are conjugate, with conjugating element $x$.
     Their images in the conjugacy-class quotient are therefore equal.

@@ -681,18 +681,31 @@ def render(work, source, checkerboard, pics, *, only_combined=False):
         cases.append((f"qd-source-equation-{i+1}", unit, [p.signature() for p in pics[at:at+count]]))
         at += count
     # Include the real referenced definition, not a fake label or a suppressed warning.
-    chapter = (SOURCE / "chapter/ch24_peps_examples.tex").read_text()
+    chapter = (SOURCE / "chapter/ch24_peps_quantum_double_models.tex").read_text()
     definition = next(block for block in re.findall(r"\\begin\{definition\}.*?\\end\{definition\}", chapter, re.S)
                       if r"\label{def:peps_quantum_double_dual}" in block)
     # Omit only this context definition's invisible dependency annotation:
     # its G-injectivity definition lies outside the source-construction packet.
     definition = re.sub(r"\\uses\{[^}]*\}", "", definition)
     local = (SOURCE / "chapter/ch24_peps_quantum_double_local_terms.tex").read_text()
+    # The construction cites the proved local physical renormalization result.
+    # Include that actual statement so the combined fragment has its real label.
+    renormalization = (SOURCE / "chapter/ch24_peps_quantum_double_renormalization.tex").read_text()
     local_pics = pictures(local)
     assert len(local_pics) == 3
     combined_pics = pics[:6] + local_pics + pics[6:]
-    cases.append(("qd-source-combined", r"\chapter{Quantum-double source construction}" +
-                  definition + source + local + checkerboard, [p.signature() for p in combined_pics]))
+    cases.append(
+        (
+            "qd-source-combined",
+            r"\chapter{Quantum-double source construction}"
+            + definition
+            + source
+            + local
+            + renormalization
+            + checkerboard,
+            [p.signature() for p in combined_pics],
+        )
+    )
     bibliography = r"""
 \begin{thebibliography}{4}
 \bibitem{Schuch2010PEPS} N. Schuch, J. I. Cirac and D. P\'erez-Garc\'ia.

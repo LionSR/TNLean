@@ -1,7 +1,7 @@
 \subsection{Corner comparison at the minimal torus sizes}
 \label{subsec:peps_window_scalar_comparison}
 
-\begin{theorem}[Enlarging an injective cyclic window]%
+\begin{lemma}[Enlarging an injective cyclic window]%
     \label{thm:peps_arc_rectangle_injective}
     \lean{TNLean.PEPS.NormalTorusArcWindowInjectivityHypotheses.arcRectangle_injective}
     \leanok
@@ -9,7 +9,7 @@
     $L\times K$ cyclic-window hypothesis (Definition~\ref{def:peps_normal_arc_windows}),
     where $L,K>0$. If $L\le a\le w$ and $K\le b\le h$, then
     $\mathcal R(s;a,b)\in\mathcal I$ for every $s$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{def:peps_normal_arc_windows, lem:peps_regionInjectivityUnionClosure_finite}
     Since $\mathcal R(s;a,b)=\bigcup_{(i,j)\in\{0,\ldots,a-L\}\times\{0,\ldots,b-K\}}\mathcal R(s+(i,j);L,K)$,
@@ -17,7 +17,7 @@
     $\mathcal R(s;a,b)\in\mathcal I$.
 \end{proof}
 
-\begin{theorem}[Complement of a cyclic rectangle]%
+\begin{lemma}[Complement of a cyclic rectangle]%
     \label{thm:peps_arc_rectangle_complement}
     \lean{TNLean.PEPS.compl_torusArcRectangle}
     \leanok
@@ -28,7 +28,7 @@
         \cup\mathcal R((s_1,s_2+b);a,h-b).
         \label{eq:peps_arc_complement}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     A vertex outside $\mathcal R(s;a,b)$ either has its first coordinate outside
     the cyclic interval of length $a$ or has its first coordinate inside that
@@ -54,7 +54,7 @@
     \end{align}
 \end{definition}
 
-\begin{theorem}[Restoring the omitted corner]%
+\begin{lemma}[Restoring the omitted corner]%
     \label{thm:peps_window_corner_geometry}
     \lean{TNLean.PEPS.mem_windowCornerRegion}
     \lean{TNLean.PEPS.eq_windowCornerVertex_iff}
@@ -69,7 +69,7 @@
         R^c=S^c\cup\bigl({\lbrack 1,L+1)}\times{\lbrack 1,K+1)}\bigr).
         \label{eq:peps_window_corner_complement}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{def:peps_window_corner_regions}
     By (\ref{eq:peps_window_corner_regions}), $S\setminus R=\{v_0\}$ and
@@ -77,7 +77,7 @@
     $R\cup\{v_0\}=S$ and (\ref{eq:peps_window_corner_complement}).
 \end{proof}
 
-\begin{theorem}[Injectivity of the corner regions and their complements]%
+\begin{lemma}[Injectivity of the corner regions and their complements]%
     \label{thm:peps_window_corner_injectivity}
     \lean{TNLean.PEPS.NormalTorusArcWindowInjectivityHypotheses.windowCornerRegion_injective}
     \lean{TNLean.PEPS.NormalTorusArcWindowInjectivityHypotheses.windowCornerRectangle_injective}
@@ -87,20 +87,20 @@
     Let $\mathcal I$ be closed under finite nonempty unions and satisfy the
     $L\times K$ cyclic-window hypothesis. If $L,K>0$, $2L+1\le w$, and
     $2K+1\le h$, then $R,S,R^c,S^c\in\mathcal I$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_arc_rectangle_injective, thm:peps_arc_rectangle_complement,
         thm:peps_window_corner_geometry}
-    Theorem~\ref{thm:peps_arc_rectangle_injective} places $S$ (of size
+    Lemma~\ref{thm:peps_arc_rectangle_injective} places $S$ (of size
     $(L+1)\times(K+1)$) and the two rectangles of $R$ (of sizes $L\times(K+1)$
     and $(L+1)\times K$) in $\mathcal I$. Since $w-L-1\ge L$ and $h-K-1\ge K$,
-    Theorem~\ref{thm:peps_arc_rectangle_complement} and
-    Theorem~\ref{thm:peps_arc_rectangle_injective} place $S^c\in\mathcal I$, and
+    Lemma~\ref{thm:peps_arc_rectangle_complement} and
+    Lemma~\ref{thm:peps_arc_rectangle_injective} place $S^c\in\mathcal I$, and
     (\ref{eq:peps_window_corner_complement}) of
-    Theorem~\ref{thm:peps_window_corner_geometry} then gives $R^c\in\mathcal I$.
+    Lemma~\ref{thm:peps_window_corner_geometry} then gives $R^c\in\mathcal I$.
 \end{proof}
 
-\begin{theorem}[Boundary edges of the corner regions]%
+\begin{lemma}[Boundary edges of the corner regions]%
     \label{thm:peps_window_corner_boundary}
     \lean{TNLean.PEPS.isRegionBoundaryEdge_windowCornerRegion}
     \lean{TNLean.PEPS.isRegionBoundaryEdge_windowCornerRectangle}
@@ -108,14 +108,14 @@
     If $w,h>1$, $K>0$, $2L+1\le w$, and $2K+1\le h$, the upward edge from
     $(L,K)$ crosses $\partial R$ and the upward edge from $(L,K-1)$ crosses
     $\partial S$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_window_corner_geometry}
-    By Theorem~\ref{thm:peps_window_corner_geometry} and $2L+1\le w$, $2K+1\le h$,
+    By Lemma~\ref{thm:peps_window_corner_geometry} and $2L+1\le w$, $2K+1\le h$,
     $(L,K)\notin R$ with $(L,K+1)\in R$, and $(L,K-1)\notin S$ with $(L,K)\in S$.
 \end{proof}
 
-\begin{theorem}[Injectivity under identification of coordinates]%
+\begin{lemma}[Injectivity under identification of coordinates]%
     \label{thm:peps_region_injective_identification}
     \lean{TNLean.PEPS.regionBlockedTensorInjective_transport}
     \lean{TNLean.PEPS.regionBlockedTensorInjective_translate}
@@ -125,14 +125,14 @@
     $A$ is injective on $R$; replacing bond dimensions by equal dimensions
     preserves injectivity on $R$, and for translation-invariant $A$ every
     translate $tR$ has the same injectivity as $R$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Bijections of boundary and physical configurations induce invertible linear
     coordinate changes on the blocked tensor families, preserving linear
     independence.
 \end{proof}
 
-\begin{theorem}[Block proportionality from absorbed edge identities]%
+\begin{lemma}[Block proportionality from absorbed edge identities]%
     \label{thm:peps_block_proportional_absorbed}
     \lean{TNLean.PEPS.twoBlockProportional_of_edgeAbsorbed}
     \leanok
@@ -141,15 +141,15 @@
     are injective on $Q$ and $Q^c$, $\partial Q\ne\varnothing$, and
     $C_A(e,M;\sigma)=C_C(e,M;\sigma)$ for all $e,M,\sigma$, then $A_Q=c_Q C_Q$
     for some $c_Q\ne0$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_twoInjectiveTensorInsertionComparison}
     Equality of $C_A(e,M;\sigma)=C_C(e,M;\sigma)$ on $e\in\partial Q$ and
-    Theorem~\ref{thm:peps_twoInjectiveTensorInsertionComparison} yield
+    Lemma~\ref{thm:peps_twoInjectiveTensorInsertionComparison} yield
     $A_Q=c_Q C_Q$ with $c_Q\ne0$.
 \end{proof}
 
-\begin{theorem}[Translation preserves the block proportionality scalar]%
+\begin{lemma}[Translation preserves the block proportionality scalar]%
     \label{thm:peps_block_proportional_translate}
     \lean{TNLean.PEPS.twoBlockScalarProportional_translate}
     \leanok
@@ -157,38 +157,38 @@
     bond dimensions, and put $C=X\cdot B$ for a translation-covariant invertible
     edge gauge family $X$. If $A_Q=c C_Q$, then $A_{tQ}=c C_{tQ}$ for every
     translation $t$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Translation invariance of $A,B$ and covariance of $X$ identify the blocked
     weights on $Q$ and $tQ$ under the translation bijections of boundary and
     physical configurations, preserving $c$.
 \end{proof}
 
-\begin{theorem}[A common scalar from a translated one-site comparison]%
+\begin{lemma}[A common scalar from a translated one-site comparison]%
     \label{thm:peps_translated_scalar_comparison}
     \lean{TNLean.PEPS.component_eq_gaugeVertex_of_translatedProportional}
     \leanok
-    Under the hypotheses of Theorem~\ref{thm:peps_block_proportional_translate},
+    Under the hypotheses of Lemma~\ref{thm:peps_block_proportional_translate},
     assume positive bond dimensions of $A$, injectivity of $B$ on $Q$, and
     $v_0\notin Q$. If $A_Q=c_Q C_Q$ and
     $A_{Q\cup\{v_0\}}=c_S C_{Q\cup\{v_0\}}$ with $c_Q\ne0$, then
     $A_v=(c_S/c_Q)C_v$ at every vertex $v$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_block_proportional_translate,
         thm:peps_region_injective_identification,
         thm:peps_regionBlockedTensorInjective_applyGauge,
         cor:peps_component_eq_gaugeVertex_of_twoBlockProportional}
     For the translation $t$ with $tv_0=v$,
-    Theorem~\ref{thm:peps_block_proportional_translate} gives
+    Lemma~\ref{thm:peps_block_proportional_translate} gives
     $A_{tQ}=c_Q C_{tQ}$ and $A_{tQ\cup\{v\}}=c_S C_{tQ\cup\{v\}}$, while
-    Theorems~\ref{thm:peps_region_injective_identification} and
+    Lemmas~\ref{thm:peps_region_injective_identification} and
     \ref{thm:peps_regionBlockedTensorInjective_applyGauge} give injectivity of
-    $C$ on $tQ$. Corollary~\ref{cor:peps_component_eq_gaugeVertex_of_twoBlockProportional}
+    $C$ on $tQ$. Lemma~\ref{cor:peps_component_eq_gaugeVertex_of_twoBlockProportional}
     then yields $A_v=(c_S/c_Q)C_v$.
 \end{proof}
 
-\begin{theorem}[The volume power of a common site scalar]%
+\begin{lemma}[The volume power of a common site scalar]%
     \label{thm:peps_common_scalar_volume}
     \lean{TNLean.PEPS.lambda_pow_card_torus_eq_one}
     \leanok
@@ -196,14 +196,14 @@
     bond dimensions, have positive bond dimensions for $A$, and $A$ is
     injective on $Q$ and $Q^c$ for some $Q$. If an invertible edge gauge family
     $X$ satisfies $A_v=\lambda(X\cdot B)_v$ for all $v$, then $\lambda^{wh}=1$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Injectivity of $A$ on $Q$ and $Q^c$ gives a nonzero state coefficient, and
     since gauge action preserves the closed state while $A_v=\lambda(X\cdot B)_v$
     scales it by $\lambda^{wh}$, equality of the states gives $\lambda^{wh}=1$.
 \end{proof}
 
-\begin{theorem}[Scalar normalization from injective windows and absorbed gauges]%
+\begin{lemma}[Scalar normalization from injective windows and absorbed gauges]%
     \label{thm:peps_window_absorbed_scalar}
     \lean{TNLean.PEPS.exists_scalar_of_normalArcWindows_absorbedGauge}
     \leanok
@@ -215,7 +215,7 @@
     $C_A(e,M;\sigma)=C_{X\cdot B}(e,M;\sigma)$ for all $e,M,\sigma$, then there
     exists $\lambda\in\C$ with $\lambda^{wh}=1$ and $A_v=\lambda(X\cdot B)_v$
     for all $v$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_regionInjectivityUnionClosure_of_overlap,
         thm:peps_window_corner_injectivity, thm:peps_window_corner_geometry,
@@ -223,17 +223,17 @@
         thm:peps_regionBlockedTensorInjective_applyGauge,
         thm:peps_block_proportional_absorbed, thm:peps_translated_scalar_comparison,
         thm:peps_common_scalar_volume}
-    Theorems~\ref{thm:peps_regionInjectivityUnionClosure_of_overlap},
+    Lemmas~\ref{thm:peps_regionInjectivityUnionClosure_of_overlap},
     \ref{thm:peps_window_corner_injectivity},
     \ref{thm:peps_region_injective_identification}, and
     \ref{thm:peps_regionBlockedTensorInjective_applyGauge} give injectivity of
     $A$ and $X\cdot B$ on $R,S,R^c,S^c$ of
     (\ref{eq:peps_window_corner_regions}). By
-    Theorems~\ref{thm:peps_window_corner_boundary} and
+    Lemmas~\ref{thm:peps_window_corner_boundary} and
     \ref{thm:peps_block_proportional_absorbed}, $A_R=c_R(X\cdot B)_R$ and
     $A_S=c_S(X\cdot B)_S$ with $c_R\ne0$. Since $S=R\cup\{v_0\}$ by
-    Theorem~\ref{thm:peps_window_corner_geometry},
-    Theorem~\ref{thm:peps_translated_scalar_comparison} gives
+    Lemma~\ref{thm:peps_window_corner_geometry},
+    Lemma~\ref{thm:peps_translated_scalar_comparison} gives
     $A_v=\lambda(X\cdot B)_v$ with $\lambda=c_S/c_R$, and
-    Theorem~\ref{thm:peps_common_scalar_volume} gives $\lambda^{wh}=1$.
+    Lemma~\ref{thm:peps_common_scalar_volume} gives $\lambda^{wh}=1$.
 \end{proof}

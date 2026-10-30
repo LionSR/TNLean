@@ -6,13 +6,14 @@ The number of family members and their open-boundary bond dimensions are
 separate quantities. No sharp source bond or running-time conclusion is
 included.
 
-\begin{theorem}[Natural middle operators chosen before the exterior pair]
+\begin{lemma}[Natural middle operators chosen before the exterior pair]
     \label{thm:selected_common_natural_mpo_family}
     \lean{TNLean.MPS.AreaLaw.exists_common_physical_twoMarkerCoefficient_mpo_family}
     \leanok
     \uses{thm:selected_coefficient_prescribed_middle,
         thm:selected_middle_fixed_physical_data,thm:finite_natural_retained_core_family,
-        thm:actual_natural_affine_product,thm:physical_interval_nested_trace,
+        thm:actual_natural_affine_product,thm:retained_single_trace_insert,
+        thm:physical_interval_nested_trace,
         thm:physical_interval_retained_matrix,def:two_marker_middle_index}
     Let the chain have $L$ sites with local dimension $q\ge0$.
     Let $a,b,\ell$ be nonnegative integers satisfying
@@ -49,7 +50,16 @@ included.
     \end{align}
     and every $V_r$, on the paired physical alphabet, has an open-boundary
     MPS representation of bond at most $(B^{d_r})^2$ in increasing site order.
-    These choices precede the following exterior data.
+    In addition, there are closing matrices
+    $C_r\in\C^{B^{d_r}\times B^{d_r}}$ and site-dependent matrices
+    $A_{r,v}(i,j)\in\C^{B^{d_r}\times B^{d_r}}$ such that
+    \begin{align}
+        V_r(\sigma,\tau) & =\operatorname{tr}\left(C_r
+        \prod_{v=0}^{N-1}A_{r,v}(\sigma_v,\tau_v)\right).
+        \label{eq:selected_common_natural_trace}
+    \end{align}
+    These presentations concern the same $V_r$ and are chosen before the
+    following exterior data.
 
     For every supported exterior pair $P_L,P_R$ on $[0,a+1)$ and
     $[b+2\ell,L)$, respectively, form the full family
@@ -74,11 +84,12 @@ included.
     Zero physical or virtual dimensions, degree zero, and impossible crossing
     frequencies are included. No factorization of each joint exterior $Q_r$
     into separate left and right operators is asserted.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:selected_coefficient_prescribed_middle,
         thm:selected_middle_fixed_physical_data,thm:finite_natural_retained_core_family,
-        thm:actual_natural_affine_product,thm:physical_interval_nested_trace,
+        thm:actual_natural_affine_product,thm:retained_single_trace_insert,
+        thm:physical_interval_nested_trace,
         thm:physical_interval_retained_matrix,def:two_marker_middle_index,
         thm:two_marker_prescribed_span}
     The prescribed-middle coefficient decomposition first gives one ordered
@@ -95,6 +106,10 @@ included.
     identities identify its central trace operator with the supplied core.
     The finite natural family theorem expresses that word as a sum of exactly
     $(h_w+1)\rho^2$ natural operators, each with its corresponding square bond.
+    Each core is a trace contraction of stacked tensors of virtual dimension
+    $B^{d_r}$. The fixed retained configurations are inserted using scalar
+    identity matrices at that same dimension, giving
+    (\ref{eq:selected_common_natural_trace}).
 
     Take the disjoint union over $w$ and enumerate it. Its size is at most
     $|\mathcal W_{k,i,j}|(k+1)\rho^2$, proving
@@ -105,7 +120,7 @@ included.
     chosen middle operators.
 \end{proof}
 
-\begin{theorem}[A polynomial-base bound for the selected family count]
+\begin{lemma}[A polynomial-base bound for the selected family count]
     \label{thm:selected_common_natural_cardinality}
     \lean{TNLean.MPS.AreaLaw.actual_common_physical_mpo_card_le}
     \leanok
@@ -120,7 +135,7 @@ included.
         \label{eq:selected_common_natural_cardinality}
     \end{align}
     holds. No low-frequency restriction is required.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:selected_middle_collar_cardinality,thm:two_marker_middle_cardinality,
         def:physical_interval_complement_coordinates}
@@ -133,7 +148,7 @@ included.
     (\ref{eq:selected_common_natural_cardinality}).
 \end{proof}
 
-\begin{theorem}[The low-frequency numerical consequence]
+\begin{lemma}[The low-frequency numerical consequence]
     \label{thm:selected_common_natural_low_frequency_cardinality}
     \lean{TNLean.MPS.AreaLaw.actual_common_physical_mpo_card_low_frequency_le}
     \leanok
@@ -147,7 +162,7 @@ included.
     \end{align}
     This is an arithmetic implication and supplies no further operator or
     bond assertion.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The frequency bounds give $(i+j)\ell\le k$, so
     $i+j\le\lfloor k/\ell\rfloor$. Since $\ell\ge1$,

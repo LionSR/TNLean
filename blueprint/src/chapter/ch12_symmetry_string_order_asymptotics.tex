@@ -12,7 +12,7 @@
 \end{lemma}
 
 For the statements from Lemma~\ref{lem:canonical_transfer_stationary_trace_limit}
-through Theorem~\ref{thm:physical_string_fixed_twist_letter_criterion},
+through Lemma~\ref{thm:physical_string_fixed_twist_letter_criterion},
 let $A$ be canonical with faithful normalized
 stationary dual density $\Lambda$, and suppose its ordinary transfer map is
 irreducible and peripheral-primitive.  Fix a physical twist $u$, a unitary
@@ -52,7 +52,7 @@ theorem derives irreducibility directly.
     the one-site physical limit below is its corresponding trace contraction.
 \end{lemma}
 
-\begin{theorem}[Phase-retaining physical correlator asymptotics]
+\begin{lemma}[Phase-retaining physical correlator asymptotics]
     % **Local fix (peripheral phase):** The source complex limit omits mu^N.
     % The corrected formula and fixed-twist scope are recorded in
     % docs/paper-gaps/pgwsvc08_string_order_virtual_boundary.tex.
@@ -79,9 +79,9 @@ theorem derives irreducibility directly.
     Thus $S_N=\mu^N\alpha_y\beta_x+o(1)$.
     The complex sequence $S_N$ itself need not converge.  These are the
     physical endpoints in the transfer-form correlator.
-\end{theorem}
+\end{lemma}
 
-\begin{theorem}[Selection rule for fixed physical endpoints]
+\begin{lemma}[Selection rule for fixed physical endpoints]
     \label{thm:physical_string_fixed_endpoint_selection}
     \lean{MPSTensor.hasPhysicalStringOrderWith_iff_endpoint_coefficients}
     \leanok
@@ -96,7 +96,7 @@ theorem derives irreducibility directly.
     \end{align}
     This is a criterion for the fixed physical correlator, not a replacement
     by arbitrary virtual boundary matrices.
-\end{theorem}
+\end{lemma}
 
 \begin{lemma}[Physical endpoint pairing and phase removal]
     \label{lem:physical_string_endpoint_pairing}
@@ -120,7 +120,7 @@ theorem derives irreducibility directly.
     It requires only Hermiticity of $\Lambda$ for the trace conjugation.
 \end{lemma}
 
-\begin{theorem}[Physical-letter criterion at a fixed twist]
+\begin{lemma}[Physical-letter criterion at a fixed twist]
     \label{thm:physical_string_fixed_twist_letter_criterion}
     \lean{MPSTensor.physicalStringEndpoint_coefficient,
         MPSTensor.exists_physicalStringEndpoint_left_iff,
@@ -146,12 +146,12 @@ theorem derives irreducibility directly.
     This does not assert that $u_0\ne\Id$, or classify scalar phases as
     nontrivial physical actions.  The existential Theorem~1 over twists
     and the physical reduced-state symmetry Theorem~2 remain separate.
-\end{theorem}
+\end{lemma}
 
 The following criterion starts only from canonical spectral purity and a
 fixed physical unitary; its virtual eigenmatrix is existentially quantified.
 
-\begin{theorem}[Peripheral letter criterion for a fixed physical twist]
+\begin{lemma}[Peripheral letter criterion for a fixed physical twist]
     \label{thm:physical_string_peripheral_letter_criterion}
     \lean{MPSTensor.pureCanonical_exists_physicalStringOrderWith_iff_peripheral_letter}
     \leanok
@@ -171,4 +171,4 @@ fixed physical unitary; its virtual eigenmatrix is existentially quantified.
     The physical twist is unchanged. The nonzero coefficient excludes
     $V=0$, and peripheral rigidity identifies its direction with that of
     a unitary intertwiner, so the fixed-intertwiner endpoint criterion applies.
-\end{theorem}
+\end{lemma}

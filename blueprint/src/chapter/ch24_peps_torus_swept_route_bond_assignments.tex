@@ -18,7 +18,7 @@
     while retaining all other ordered bonds (as auxiliary coefficient assignments for \cite[\S6.6, local lines 2340--2423]{Schuch2010PEPS}, without asserting a complete physical braid).
 \end{definition}
 
-\begin{theorem}[Derived vacancies and moving based fluxes]%
+\begin{lemma}[Derived vacancies and moving based fluxes]%
     \label{thm:peps_torus_swept_route_vacancies}
     \lean{TNLean.PEPS.regularWalkHolonomy_torusVacatingPlaquetteMove,
         TNLean.PEPS.regularWalkHolonomy_torusSweptPhysicalRoute_target_vacancy,
@@ -37,7 +37,7 @@
         \end{cases}
         \label{eq:swept_route_moving_flux}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Substituting (\ref{eq:swept_route_updates}) into the clockwise holonomy $B^{-1}V^{-1}TL$ yields $1$.
@@ -61,7 +61,7 @@
     Each joint loop traverses the partner loop conjugated along the connector $p$ followed by the base loop $\ell_0$, giving holonomy $H(\ell_0)\,H(p)^{-1}H(\ell_1)H(p)$.
 \end{definition}
 
-\begin{theorem}[Reunion holonomies of the endpoint route]%
+\begin{lemma}[Reunion holonomies of the endpoint route]%
     \label{thm:peps_torus_swept_route_reunion_holonomy}
     \lean{TNLean.PEPS.regularWalkHolonomy_torusSweptPhysicalRoute_finalEndpoints,
         TNLean.PEPS.regularWalkHolonomy_torusSweptPhysicalRoute_finalConnectorA,
@@ -85,8 +85,8 @@
         H_{B,\mathrm{joint}} = h(ghg^{-1}h^{-1})h^{-1}, \label{eq:B_reunion_flux}
     \end{align}
     which lies in the conjugacy class of $ghg^{-1}h^{-1}$ and satisfies $H_{B,\mathrm{joint}}=1\iff gh=hg$ (as properties of $u_{12}$, separate from physical step implementation).
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
-    Evaluating the four plaquette loops and both connectors on $u_{12}$ via Theorem~\ref{thm:peps_torus_swept_route_vacancies} and Theorem~\ref{thm:peps_regular_connector_holonomy} gives (\ref{eq:final_endpoint_fluxes}) and (\ref{eq:B_reunion_flux}); Theorem~\ref{thm:peps_conjugacy_class_invariance} gives the conjugacy-class and commutation equivalences.
+    Evaluating the four plaquette loops and both connectors on $u_{12}$ via Lemma~\ref{thm:peps_torus_swept_route_vacancies} and Lemma~\ref{thm:peps_regular_connector_holonomy} gives (\ref{eq:final_endpoint_fluxes}) and (\ref{eq:B_reunion_flux}); Lemma~\ref{thm:peps_conjugacy_class_invariance} gives the conjugacy-class and commutation equivalences.
 \end{proof}
