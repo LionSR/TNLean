@@ -4,58 +4,8 @@ The information reset of \cite{OpenAI2026PolynomialPEPS} combines a
 relative-entropy overlap bound, a two-sided Gaussian energy filter,
 Lieb--Robinson localization, and a polar unitary correction.
 Throughout, $\mathcal X_D=[q]^D$ denotes the configurations on a region $D$,
-and $F_R$ denotes the replica swap on a region $R$.
-
-\begin{lemma}[A unitary polar factor on the same support]
-    \label{thm:peps_supported_polar_unitary}
-    \lean{QuantumCircuit.exists_supported_unitary_polar_correction}
-    \leanok
-    For any operator $D$ supported on a site set $S$, there exists a unitary $U$ supported on $S$ such that for all vectors $x,y$,
-    \begin{align}
-        \|Ux-y\| & \le\|Dx-y\|+\|D^*y-x\|. \notag
-    \end{align}
-\end{lemma}
-\begin{proof}
-    \leanok
-    Write $D=D_S\otimes\id$, take a unitary polar factor $D_S=U_S|D_S|$ on $S$, and set $U=U_S\otimes\id$ so $D=U|D|$ with $|D|\ge0$. With $w=U^*y$, since $\id+|D|\ge\id$,
-    \begin{align}
-        \|Ux-y\| = \|x-w\| \le \|(\id+|D|)(x-w)\| \le \||D|x-w\|+\||D|w-x\| = \|Dx-y\|+\|D^*y-x\|. \notag
-    \end{align}
-\end{proof}
-
-\begin{lemma}[Regional coordinates of the replica exchange]
-    \label{thm:peps_reset_regional_coordinates}
-    \lean{TNLean.Lattice.splitTwoRegions_sheetSwap,
-        TNLean.Lattice.submatrix_partialSwap_kronecker_one_eq_sheetSwapOp,
-        TNLean.Lattice.quantumRelativeEntropy_splitTwoRegionsState_eq_mutualInformation}
-    \leanok
-    For disjoint regions $R,C$ and $Q=(R\cup C)^c$, in replica coordinates $\mathcal X_R\times\mathcal X_C\times\mathcal X_Q$, the operator $F_R$ swaps the two $\mathcal X_R$ registers and fixes the other four registers, and any unit vector $\Omega$ satisfies $D(\rho_{RC}\,\|\,\rho_R\otimes\rho_C)=I_\Omega(R:C)$.
-\end{lemma}
-\begin{proof}
-    \leanok
-    The action of $F_R$ follows from $R\cap C=R\cap Q=\varnothing$, and $D(\rho_{RC}\,\|\,\rho_R\otimes\rho_C)=S(\rho_R)+S(\rho_C)-S(\rho_{RC})=I_\Omega(R:C)$.
-\end{proof}
-
-\begin{definition}[The variance and cutoff of the information reset]
-    \label{def:lattice_reset_constants}
-    \lean{TNLean.Lattice.resetVariance,
-        TNLean.Lattice.resetCutoff,
-        TNLean.Lattice.resetVariance_pos,
-        TNLean.Lattice.resetCutoff_pos,
-        TNLean.Lattice.resetVariance_mul_sq_div_two,
-        TNLean.Lattice.resetCutoff_sq_div}
-    \leanok
-    For $\Delta,r\in\mathbb R$, define
-    \begin{align}
-        A(\Delta,r) & =\frac{2(30+r)}{\Delta^2}, & T_0(\Delta,r) & =\frac{2(30+r)}{\Delta}.
-        \label{eq:lattice_reset_constants}
-    \end{align}
-    For $\Delta\neq0$ and $r\neq-30$, $A\Delta^2/2=T_0^2/(2A)=30+r$; for $\Delta>0$ and $r\ge0$, $A,T_0>0$.
-\end{definition}
-
-\begin{proof}\leanok
-    Direct computation from (\ref{eq:lattice_reset_constants}).
-\end{proof}
+and $F_R$ denotes the replica swap on a region $R$. The finite-site filter
+and polar correction were proved in Chapter~\ref{ch:finite_site_reset}.
 
 \begin{definition}[The constants of the information reset]
     \label{def:peps_reset_constants}
@@ -78,47 +28,6 @@ and $F_R$ denotes the replica swap on a region $R$.
     \end{align}
     all positive when $J\geq0$, $\Delta>0$, and $r\geq0$.
 \end{definition}
-
-\begin{lemma}[The two-sided Gaussian filter, with explicit constants]
-    \label{thm:peps_reset_regional_filter_explicit}
-    \lean{TNLean.Lattice.regional_physicalBuffer_filter}
-    \leanok
-    \uses{def:lattice_reset_constants}
-    Fix $\Delta>0$ and $r\geq0$, with $A,T_0$ from (\ref{eq:lattice_reset_constants}). Let $H$ have unit ground vector $\Omega$ ($H\Omega=E_0\Omega$, $H-E_0\geq\Delta(\id-|\Omega\rangle\langle\Omega|)$), let $R,C$ be disjoint with $I_\Omega(R:C)\leq b$ ($b\geq0$), and put $Q=(R\cup C)^c$, $\Psi=\Omega\otimes\Omega$, $\Phi=F_R\Psi$, $\mathbb H=H\otimes\id+\id\otimes H$, and $\mathbb H'=F_R\mathbb HF_R^*$. Then $\|\Psi\|=\|\Phi\|=1$, and there exist a contraction $W$ on the two copies of $\mathcal X_Q$ and $z\geq e^{-2b}$ such that for every $L\geq1$, with $B_*=1+b+\log L$, $h=AB_*$, $T=T_0B_*$, and Gaussian density $g_h$,
-    \begin{align}
-        M                                   & =\int_{[-T,T]}g_h(t)e^{it\mathbb H'}(\id\otimes W)e^{-it\mathbb H}\,dt, \label{eq:peps_reset_regional_filter} \\
-        \|M\Psi-z\Phi\|,\ \|M^*\Phi-z\Psi\| & \le3e^{-10b}L^{-r}. \label{eq:peps_reset_regional_filter_err}
-    \end{align}
-\end{lemma}
-\begin{proof}
-    \leanok
-    \uses{thm:peps_reset_regional_coordinates,def:lattice_reset_constants}
-    By Lemma~\ref{thm:peps_reset_regional_coordinates}, $D(\rho_{RC}\,\|\,\rho_R\otimes\rho_C)=I_\Omega(R:C)\le b$, so the purified relative-entropy overlap bound gives a Hermitian contraction $W$ on the buffer with $z=\langle\Phi,(\id\otimes W)\Psi\rangle\ge e^{-2b}$. Since $\mathbb H,\mathbb H'$ have ground vectors $\Psi,\Phi$ at $2E_0$ with gap $\Delta$ and $A\Delta^2/2=T_0^2/(2A)=30+r$ (Definition~\ref{def:lattice_reset_constants}), the full Gaussian filter residual is at most $e^{-h\Delta^2/2}\le e^{-10b}L^{-r}$ and truncation at $T$ adds at most $2e^{-T^2/(2h)}\le 2e^{-10b}L^{-r}$, giving (\ref{eq:peps_reset_regional_filter_err}).
-\end{proof}
-
-\begin{lemma}[The two-sided Gaussian filter of the physical buffer]
-    \label{thm:peps_reset_regional_filter}
-    \lean{TNLean.Lattice.exists_regional_physicalBuffer_filter}
-    \leanok
-    For every $\Delta>0$ and $r\ge0$, there exist $A,T_0>0$ such that under the hypotheses of Lemma~\ref{thm:peps_reset_regional_filter_explicit}, some buffer contraction $W$ and $z\ge e^{-2b}$ make $M$ in (\ref{eq:peps_reset_regional_filter}) satisfy (\ref{eq:peps_reset_regional_filter_err}) for all $L\ge1$.
-\end{lemma}
-\begin{proof}
-    \leanok
-    \uses{thm:peps_reset_regional_filter_explicit,def:lattice_reset_constants}
-    Take $A=A(\Delta,r)>0$ and $T_0=T_0(\Delta,r)>0$ from Definition~\ref{def:lattice_reset_constants} in Lemma~\ref{thm:peps_reset_regional_filter_explicit}.
-\end{proof}
-
-\begin{lemma}[The polar step of the information reset]
-    \label{thm:peps_reset_polar_step}
-    \lean{TNLean.Lattice.exists_supported_unitary_of_two_sided}
-    \leanok
-    If $M$ is supported on $S$, $b,C,\varepsilon\ge0$, and $z\ge e^{-2b}$ satisfies $\|M\psi-z\varphi\|,\|M^*\varphi-z\psi\|\le Ce^{-10b}\varepsilon$, then there exists a unitary $U$ supported on $S$ with $\|U\psi-\varphi\|\le2C\varepsilon$.
-\end{lemma}
-\begin{proof}
-    \leanok
-    \uses{thm:peps_supported_polar_unitary}
-    Apply Lemma~\ref{thm:peps_supported_polar_unitary} to $D=M/z$, noting $z^{-1}Ce^{-10b}\varepsilon\le Ce^{-8b}\varepsilon\le C\varepsilon$.
-\end{proof}
 
 \begin{lemma}[The localized filter, with explicit constants]
     \label{thm:peps_reset_localized_filter_explicit}
