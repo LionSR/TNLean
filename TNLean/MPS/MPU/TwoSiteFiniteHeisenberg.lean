@@ -532,7 +532,8 @@ theorem originalSiteHeisenbergInputWindowEquiv_outside_eq_iff (d k : ℕ)
           j.val + (2 * k) * 0 < 2 * k + 2 * k)
         omega)
       simpa only [originalSiteHeisenbergInputWindowEquiv, Equiv.trans_apply,
-        originalWindowMiddleEquiv_block] using hj
+        originalWindowMiddleEquiv_block, windowInputHeadEquiv, Equiv.coe_fn_mk,
+        Matrix.cons_val_zero, MPSTensor.decodeBlockEquiv_apply] using hj
     · apply (twoSiteDirectBlockEquiv d k).symm.injective
       apply (MPSTensor.decodeBlockEquiv d (2 * k)).injective
       funext j
@@ -541,20 +542,24 @@ theorem originalSiteHeisenbergInputWindowEquiv_outside_eq_iff (d k : ℕ)
           j.val + (2 * k) * 2 < 2 * k + 2 * k)
         omega)
       simpa only [originalSiteHeisenbergInputWindowEquiv, Equiv.trans_apply,
-        originalWindowMiddleEquiv_block] using hj
+        originalWindowMiddleEquiv_block, windowInputHeadEquiv, Equiv.coe_fn_mk,
+        Matrix.cons_val_two, Matrix.head_cons, Matrix.tail_cons,
+        MPSTensor.decodeBlockEquiv_apply] using hj
   · intro h
     subst e'
     intro i hi
     obtain ⟨⟨b, j⟩, rfl⟩ := finProdFinEquiv.surjective i
     fin_cases b
     · simp only [originalSiteHeisenbergInputWindowEquiv, Equiv.trans_apply,
-        originalWindowMiddleEquiv_block]
+        originalWindowMiddleEquiv_block, windowInputHeadEquiv, Equiv.coe_fn_mk,
+        Matrix.cons_val_zero]
     · exfalso
       apply hi
       change 2 * k ≤ j.val + (2 * k) * 1 ∧
         j.val + (2 * k) * 1 < 2 * k + 2 * k
       omega
     · simp only [originalSiteHeisenbergInputWindowEquiv, Equiv.trans_apply,
-        originalWindowMiddleEquiv_block]
+        originalWindowMiddleEquiv_block, windowInputHeadEquiv, Equiv.coe_fn_mk,
+        Matrix.cons_val_two, Matrix.head_cons, Matrix.tail_cons]
 
 end MPOTensor
