@@ -261,7 +261,8 @@ theorem twoLinkOutputObservable_eq_sum_kronecker
       map_smul' := by
         intro c B
         ext x y
-        simp only [twoLinkMiddleLift, Matrix.smul_apply, smul_eq_mul]
+        simp only [twoLinkMiddleLift, Matrix.smul_apply, smul_eq_mul,
+          RingHom.id_apply]
         ring }
   have hsingle (i j : Fin ℓ × Fin r) (c : ℂ) :
       F (Matrix.single i j c) = c •
@@ -270,7 +271,7 @@ theorem twoLinkOutputObservable_eq_sum_kronecker
     ext x y
     simp only [F, LinearMap.coe_mk, AddHom.coe_mk, twoLinkMiddleLift,
       Matrix.smul_apply, smul_eq_mul, Matrix.kroneckerMap_apply,
-      Matrix.single_apply, Matrix.one_apply, Prod.mk.injEq]
+      Matrix.single_apply, Matrix.one_apply, Prod.ext_iff]
     split_ifs <;> simp_all <;> ring
   have hmiddle (C : Matrix (Fin ℓ × Fin r) (Fin ℓ × Fin r) ℂ) :
       twoLinkMiddleLift C =
