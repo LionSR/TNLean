@@ -37,15 +37,15 @@ at `g/8192`; no actual first-excited-energy hypothesis is used. -/
 lemma exists_aklv_frustrationFree_scalar_parameters :
     ∃ A : ℝ, 1 ≤ A ∧ 21 ≤ A ∧
       ∀ (q : ℕ) (g : ℝ), 2 ≤ q → 0 < g → g ≤ 1 →
-      let g0 := g / 8192
-      let u := 1 + log (q : ℝ) + log (1 / g)
-      let u0 := 1 + log (q : ℝ) + log (1 / g0)
+      let g0 : ℝ := g / 8192
+      let u : ℝ := 1 + log (q : ℝ) + log (1 / g)
+      let u0 : ℝ := 1 + log (q : ℝ) + log (1 / g0)
       let s : ℕ := ⌈A * u0 ^ 2 / g0⌉₊
-      let ell := s ^ 2
-      let t := 1024 / g
-      let R := 2 * t + (s : ℝ)
-      let D := (q * (s ^ 2 + 1)) ^ (32 * (2 * s + 1))
-      let delta := 4 * exp (-(4 * (ell : ℝ) * sqrt ((g / 2) / R)))
+      let ell : ℕ := s ^ 2
+      let t : ℝ := 1024 / g
+      let R : ℝ := 2 * t + (s : ℝ)
+      let D : ℕ := (q * (s ^ 2 + 1)) ^ (32 * (2 * s + 1))
+      let delta : ℝ := 4 * exp (-(4 * (ell : ℝ) * sqrt ((g / 2) / R)))
       21 ≤ s ∧ 1 / g ≤ (s : ℝ) ∧
       (s : ℝ) ≤ 8192 * (A + 1) * (1 + log 8192) ^ 2 / g * u ^ 2 ∧
       ell / s = s ∧ Nat.sqrt ell = s ∧
