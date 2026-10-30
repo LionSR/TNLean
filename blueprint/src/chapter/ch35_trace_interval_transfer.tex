@@ -1,6 +1,6 @@
 \section{Trace presentations after a change of middle interval}
 
-\begin{theorem}[Trace presentation of one transferred middle factor]
+\begin{lemma}[Trace presentation of one transferred middle factor]
     \label{thm:interval_trace_factor_transfer}
     \lean{TNLean.MPS.AreaLaw.exists_traceChainOperator_changingRegionalMiddleFactor}
     \leanok
@@ -16,17 +16,17 @@
     The tensors and closing matrix are chosen for the whole operator,
     before its variable row and column configurations. The dimension
     $\chi$ and the overlap length may vanish.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:interval_transfer_entry_coordinates,
         thm:trace_interval_slice_configuration_extend}
     Write $W$ in the natural conditional form
     (\ref{eq:interval_transfer_entry_coordinates}). Substitute the trace
     presentation of $V$ and apply
-    Theorem~\ref{thm:trace_interval_slice_configuration_extend}.
+    Lemma~\ref{thm:trace_interval_slice_configuration_extend}.
 \end{proof}
 
-\begin{theorem}[A common transferred family at the same trace dimensions]
+\begin{lemma}[A common transferred family at the same trace dimensions]
     \label{thm:interval_trace_common_family_transfer}
     \lean{TNLean.MPS.AreaLaw.changingRegionalMiddleFamily_trace_and_global_decomposition}
     \leanok
@@ -45,10 +45,10 @@
     same whole-chain operator as in
     (\ref{eq:interval_mpo_transfer_decomposition}). Empty carriers and
     empty overlaps are allowed.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:interval_trace_factor_transfer,thm:regional_middle_exterior_transfer}
-    Apply Theorem~\ref{thm:interval_trace_factor_transfer} to each prescribed
+    Apply Lemma~\ref{thm:interval_trace_factor_transfer} to each prescribed
     member. The two configuration pairs give the stated cardinality.
     The regional exterior-transfer identity gives the decomposition for
     every later exterior family, without changing the middle matrices.

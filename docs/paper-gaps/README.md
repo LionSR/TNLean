@@ -225,6 +225,10 @@ For the MPU symmetry-defect gauging paper:
   coordinate spaces, while the finite-group endpoint identifications
   \(d_l=d_r=d\), the interior action condition, and the complementary
   finite-chain relation remain outside that theorem.
+- `fbc25_complementary_truncation_shared_endpoints.tex` records that the
+  complementary truncated symmetry in `eq:complementary` and `eq:UUU` shares
+  both endpoint sites with `U^L`, so its total length is two more than the
+  printed `∞-L`; the corrected relation is formally verified and resolved.
 - `fbc25_gauss_law_commuting_projector_source_audit.tex` pins the oriented
   matter--link space and multiplication convention of the local Gauss-law
   representation, the cited three-defect associator calculation, the
@@ -1804,3 +1808,18 @@ and [#9847](https://github.com/LionSR/TNLean/issues/9847).
   bound on `‖A v‖`; a two-dimensional example disproves it without one. The
   source's `A` is Hermitian and fixes `Γ`, so `‖A v‖ ≥ 1/2`, and the new error is
   `δ + 4 ‖K - A‖` in place of `2 δ`, a constant absorbed by the choice of `q(n)`.
+
+For ALVV, arXiv:1602.08828v2, Section 5.4:
+
+- `alvv16_ff_rank.tex` gives an exact eight-qubit counterexample to the
+  operator Schmidt rank bound in Theorem 5.14(2) for an interior region:
+  the replacement has rank seven while the printed bound is six.
+  The example has orthogonal local projections and a unique frustration-free
+  ground state. It also records the squared-norm correction in the independent
+  gap comparison. Issue #9849 remains open; the unrestricted printed theorem
+  is not formalized.
+
+The corrected interval rank bound `d²+3` and the prefix/suffix bound `d²+2`
+are proved in `ALVV/FrustrationFreeRank.lean` for actual supported chain matrices.
+The note records the distinction between the source's site endpoints and its
+selected bond indices.
