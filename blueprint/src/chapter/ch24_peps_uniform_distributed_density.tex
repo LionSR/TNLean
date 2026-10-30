@@ -71,7 +71,7 @@ monomial lists at the gate occurrences to vary independently.
     Reexpansion assigns to each nonprivate occurrence in $\mathcal C[\mathcal L]$ (Definition~\ref{def:peps_fixed_chronology_reexpansion}) the original gate operator $G_g$ of the corresponding occurrence $g$ in $\mathcal C$.
 \end{definition}
 
-\begin{theorem}[Original-operator evaluation is unchanged]
+\begin{lemma}[Original-operator evaluation is unchanged]
     \label{thm:peps_fixed_chronology_evaluation}
     \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.evalWithGateMaps_reexpand}
     \leanok
@@ -80,7 +80,7 @@ monomial lists at the gate occurrences to vary independently.
     \begin{align}
         U_{\mathcal C[\mathcal L],G}=U_{\mathcal C,G}.
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     By structural induction on $\mathcal C$: each nonprivate occurrence evaluates $G_g$, and all private operations, swaps, and spectator factors are identical in $\mathcal C[\mathcal L]$ and $\mathcal C$.
@@ -94,40 +94,40 @@ monomial lists at the gate occurrences to vary independently.
     The canonical occurrence bijection $E_{\mathcal L}$ from nonprivate gate occurrences of $\mathcal C[\mathcal L]$ to those of $\mathcal C$ is the identity on a single gate and the disjoint union of the component bijections on a composition.
 \end{definition}
 
-\begin{theorem}[The prescribed participant sets are unchanged]
+\begin{lemma}[The prescribed participant sets are unchanged]
     \label{thm:peps_fixed_chronology_participants}
     \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.participants_reexpand}
     \leanok
     \uses{def:peps_fixed_chronology_occurrences}
     Every nonprivate occurrence $g'$ of $\mathcal C[\mathcal L]$ has participant set $\mathcal P_{g'}=\mathcal P_{E_{\mathcal L}(g')}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     By structural induction on $\mathcal C$, since reexpansion preserves the owner embedding at each gate.
 \end{proof}
 
-\begin{theorem}[The original gate count is unchanged]
+\begin{lemma}[The original gate count is unchanged]
     \label{thm:peps_fixed_chronology_gate_count}
     \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.expandedGateCount_reexpand}
     \leanok
     \uses{def:peps_fixed_chronology_occurrences}
     The number $N$ of nonprivate gate occurrences in $\mathcal C[\mathcal L]$ equals that in $\mathcal C$ (including occurrences with $\mathcal L_g=\varnothing$).
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     The bijection $E_{\mathcal L}$ of Definition~\ref{def:peps_fixed_chronology_occurrences} preserves the count of nonprivate occurrences.
 \end{proof}
 
-\begin{theorem}[Whole-lifetime participation is unchanged]
+\begin{lemma}[Whole-lifetime participation is unchanged]
     \label{thm:peps_fixed_chronology_lifetime}
     \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.participationCount_reexpand}
     \leanok
     \uses{thm:peps_fixed_chronology_participants,def:compression_lifetime_gates}
     For every $p\in P$, the number of nonprivate occurrences $g'$ with $p\in\mathcal P_{g'}$ (Definition~\ref{def:compression_lifetime_gates}) is the same in $\mathcal C[\mathcal L]$ and in $\mathcal C$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
-    By Theorem~\ref{thm:peps_fixed_chronology_participants}, $E_{\mathcal L}$ restricts to a bijection between $\{g':p\in\mathcal P_{g'}\}$ and $\{g:p\in\mathcal P_g\}$.
+    By Lemma~\ref{thm:peps_fixed_chronology_participants}, $E_{\mathcal L}$ restricts to a bijection between $\{g':p\in\mathcal P_{g'}\}$ and $\{g:p\in\mathcal P_g\}$.
 \end{proof}
 
 \begin{definition}[Constants of the sampled network]
@@ -146,22 +146,22 @@ monomial lists at the gate occurrences to vary independently.
     with $\alpha_{\mathrm{net}}>0$ when $p>0$. The two arguments of $\alpha_{\mathrm{net}}$ bound the label-link dimension $|\Xi|^2\le(Km^r)^2$ and sample-link dimension $k$ ($Q/\sqrt k\le\epsilon/(8N)$, $Q=B^{4b}D^4$) in \cite{OpenAI2026PolynomialPEPS}, \texttt{04-compression.tex}, lines 61--67, 343--344, 552--557, and 565--585.
 \end{definition}
 
-\begin{theorem}[Sampled bounds at one precision with explicit constants]
+\begin{lemma}[Sampled bounds at one precision with explicit constants]
     \label{thm:peps_uniform_prescribed_expansion_bounds_of_le}
     \lean{TNLean.Lattice.Compression.sampledNetworkPrefactor_pos,
         TNLean.Lattice.Compression.sampledNetworkExponent_pos,
         TNLean.Lattice.PartyCircuit.EffectCircuit.uniform_sampled_approximate_network_bounds_of_le}
     \leanok
     \uses{def:peps_sampled_network_constants}
-    In the setting of Theorem~\ref{thm:peps_uniform_prescribed_expansion_bounds}, with $t=\max\{\lceil p\rceil,0\}$, $q=n+t+\lceil16C_N\rceil$, and $C_{\mathrm{net}},\alpha_{\mathrm{net}}$ from (\ref{eq:peps_sampled_network_constants}) at $C_K,C_B,u,s$, the conclusion of Theorem~\ref{thm:peps_uniform_prescribed_expansion_bounds} holds with $\dim\mathcal V_e\le C_pL^{\alpha_p}$ for every $C_p\ge C_{\mathrm{net}}$ and integer $\alpha_p\ge\alpha_{\mathrm{net}}$.
-\end{theorem}
+    In the setting of Lemma~\ref{thm:peps_uniform_prescribed_expansion_bounds}, with $t=\max\{\lceil p\rceil,0\}$, $q=n+t+\lceil16C_N\rceil$, and $C_{\mathrm{net}},\alpha_{\mathrm{net}}$ from (\ref{eq:peps_sampled_network_constants}) at $C_K,C_B,u,s$, the conclusion of Lemma~\ref{thm:peps_uniform_prescribed_expansion_bounds} holds with $\dim\mathcal V_e\le C_pL^{\alpha_p}$ for every $C_p\ge C_{\mathrm{net}}$ and integer $\alpha_p\ge\alpha_{\mathrm{net}}$.
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_fixed_power_gate_budget,thm:peps_approximate_sampled_distributed_error,thm:peps_actual_physicalFirst_density_polynomial,thm:peps_actual_physicalFirst_density_incidence,thm:peps_actual_physicalFirst_density_locality}
-    By Theorems~\ref{thm:peps_fixed_power_gate_budget}, \ref{thm:peps_approximate_sampled_distributed_error}, \ref{thm:peps_actual_physicalFirst_density_polynomial}, \ref{thm:peps_actual_physicalFirst_density_incidence}, and~\ref{thm:peps_actual_physicalFirst_density_locality}, the error, incidence, and locality bounds hold with $\dim\mathcal V_e\le C_{\mathrm{net}}L^{\alpha_{\mathrm{net}}}\le C_pL^{\alpha_p}$ since $L\ge1$.
+    By Lemmas~\ref{thm:peps_fixed_power_gate_budget}, \ref{thm:peps_approximate_sampled_distributed_error}, \ref{thm:peps_actual_physicalFirst_density_polynomial}, \ref{thm:peps_actual_physicalFirst_density_incidence}, and~\ref{thm:peps_actual_physicalFirst_density_locality}, the error, incidence, and locality bounds hold with $\dim\mathcal V_e\le C_{\mathrm{net}}L^{\alpha_{\mathrm{net}}}\le C_pL^{\alpha_p}$ since $L\ge1$.
 \end{proof}
 
-\begin{theorem}[Uniform sampled bounds at one prescribed precision]
+\begin{lemma}[Uniform sampled bounds at one prescribed precision]
     \label{thm:peps_uniform_prescribed_expansion_bounds}
     \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.exists_uniform_sampled_approximate_network_bounds}
     \leanok
@@ -180,10 +180,10 @@ monomial lists at the gate occurrences to vary independently.
         \dim\mathcal V_e                               & \le C_pL^{\alpha_p},
     \end{align}
     with at most $2b(b-1)$ incident links per party, each joining participants of one original gate, and no bound required on private dimensions or source Schmidt ranks.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
-    Apply Theorem~\ref{thm:peps_uniform_prescribed_expansion_bounds_of_le} with $C_p=C_{\mathrm{net}}$ and $\alpha_p=\alpha_{\mathrm{net}}$ from Definition~\ref{def:peps_sampled_network_constants}.
+    Apply Lemma~\ref{thm:peps_uniform_prescribed_expansion_bounds_of_le} with $C_p=C_{\mathrm{net}}$ and $\alpha_p=\alpha_{\mathrm{net}}$ from Definition~\ref{def:peps_sampled_network_constants}.
 \end{proof}
 
 \begin{definition}[Constants of the compression theorem]
@@ -203,7 +203,7 @@ monomial lists at the gate occurrences to vary independently.
     \end{align}
 \end{definition}
 
-\begin{theorem}[Operator networks at one precision with explicit constants]
+\begin{lemma}[Operator networks at one precision with explicit constants]
     \label{thm:peps_uniform_approximate_operator_network_of_le}
     \lean{TNLean.Lattice.Compression.compressionPrefactor_pos,
         TNLean.Lattice.Compression.compressionExponent_pos,
@@ -212,15 +212,15 @@ monomial lists at the gate occurrences to vary independently.
         TNLean.Lattice.PartyCircuit.EffectCircuit.IsExpansionBounded.mono}
     \leanok
     \uses{def:peps_compression_constants,def:peps_original_gate_construction}
-    In the setting of Theorem~\ref{thm:peps_uniform_approximate_operator_network}, fix $p$, set $t:=\max\{\lceil p\rceil,0\}$ and $q:=n+t+\lceil16(1+(C_N)_+)\rceil$, and suppose each family member admits allowed monomial lists at its original gate occurrences with at most $C_KL^u$ monomials per list, at most $r$ pair effects per monomial, local operator error at most $L^{-q}$, and either individual coefficients of modulus at most $C_CL^v$ or per-list absolute coefficient sums at most $C_SL^s$. Then the conclusion of Theorem~\ref{thm:peps_uniform_approximate_operator_network} holds with $\dim\mathcal V_e\le C_pL^{\alpha_p}$ whenever $C_p\ge C(r,b,C_N,C_D,C_K,C_C)$ and $\alpha_p\ge\alpha(r,b,n,d,u,v,p)$ in the first case, or $C_p\ge C_\Sigma(r,b,C_N,C_D,C_K,C_S)$ and $\alpha_p\ge\alpha_{\mathrm{net}}(r,b,n,d,u,s,p)$ in the second (Definition~\ref{def:peps_compression_constants}).
-\end{theorem}
+    In the setting of Lemma~\ref{thm:peps_uniform_approximate_operator_network}, fix $p$, set $t:=\max\{\lceil p\rceil,0\}$ and $q:=n+t+\lceil16(1+(C_N)_+)\rceil$, and suppose each family member admits allowed monomial lists at its original gate occurrences with at most $C_KL^u$ monomials per list, at most $r$ pair effects per monomial, local operator error at most $L^{-q}$, and either individual coefficients of modulus at most $C_CL^v$ or per-list absolute coefficient sums at most $C_SL^s$. Then the conclusion of Lemma~\ref{thm:peps_uniform_approximate_operator_network} holds with $\dim\mathcal V_e\le C_pL^{\alpha_p}$ whenever $C_p\ge C(r,b,C_N,C_D,C_K,C_C)$ and $\alpha_p\ge\alpha(r,b,n,d,u,v,p)$ in the first case, or $C_p\ge C_\Sigma(r,b,C_N,C_D,C_K,C_S)$ and $\alpha_p\ge\alpha_{\mathrm{net}}(r,b,n,d,u,s,p)$ in the second (Definition~\ref{def:peps_compression_constants}).
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_uniform_prescribed_expansion_bounds_of_le,thm:peps_fixed_chronology_evaluation,thm:peps_fixed_chronology_participants,thm:peps_fixed_chronology_gate_count,thm:peps_fixed_chronology_lifetime,thm:peps_effect_coefficient_majorant,thm:peps_distributed_operator_scalar_absorption}
-    Reexpanding at precision $q$ preserves $U_{\mathcal C,G}$, $\mathcal P_g$, $N_L$, and lifetime participation by Theorems~\ref{thm:peps_fixed_chronology_evaluation}, \ref{thm:peps_fixed_chronology_participants}, \ref{thm:peps_fixed_chronology_gate_count}, and~\ref{thm:peps_fixed_chronology_lifetime}. Applying Theorem~\ref{thm:peps_uniform_prescribed_expansion_bounds_of_le} with the constants of Definition~\ref{def:peps_compression_constants} (using Theorem~\ref{thm:peps_effect_coefficient_majorant} to bound the coefficient sum by $(C_K)_+(C_C)_+L^{u+v}$ in the termwise case) and absorbing $|\gamma|^2$ into one local tensor via Theorem~\ref{thm:peps_distributed_operator_scalar_absorption} gives the result.
+    Reexpanding at precision $q$ preserves $U_{\mathcal C,G}$, $\mathcal P_g$, $N_L$, and lifetime participation by Lemmas~\ref{thm:peps_fixed_chronology_evaluation}, \ref{thm:peps_fixed_chronology_participants}, \ref{thm:peps_fixed_chronology_gate_count}, and~\ref{thm:peps_fixed_chronology_lifetime}. Applying Lemma~\ref{thm:peps_uniform_prescribed_expansion_bounds_of_le} with the constants of Definition~\ref{def:peps_compression_constants} (using Lemma~\ref{thm:peps_effect_coefficient_majorant} to bound the coefficient sum by $(C_K)_+(C_C)_+L^{u+v}$ in the termwise case) and absorbing $|\gamma|^2$ into one local tensor via Lemma~\ref{thm:peps_distributed_operator_scalar_absorption} gives the result.
 \end{proof}
 
-\begin{theorem}[Uniform operator networks from approximate original gate expansions]
+\begin{lemma}[Uniform operator networks from approximate original gate expansions]
     \label{thm:peps_uniform_approximate_operator_network}
     \lean{TNLean.Lattice.PartyCircuit.GateMapConstruction.exists_uniform_approximate_sampled_network}
     \leanok
@@ -238,8 +238,8 @@ monomial lists at the gate occurrences to vary independently.
     \end{align}
     where $\rho_L$ is the unnormalized physical density of Definition~\ref{def:peps_original_gate_construction_density}. This establishes the message-free case of \cite[Theorem~5.2]{OpenAI2026PolynomialPEPS}.
     % Source: 04-compression.tex, lines 137--175 and 590--600.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
-    Apply Theorem~\ref{thm:peps_uniform_approximate_operator_network_of_le} with $C_p=C(r_q,b,C_N,C_D,C_K(q),C_C(q))$ and $\alpha_p=\alpha(r_q,b,n,d,u(q),v(q),p)$ from Definition~\ref{def:peps_compression_constants}.
+    Apply Lemma~\ref{thm:peps_uniform_approximate_operator_network_of_le} with $C_p=C(r_q,b,C_N,C_D,C_K(q),C_C(q))$ and $\alpha_p=\alpha(r_q,b,n,d,u(q),v(q),p)$ from Definition~\ref{def:peps_compression_constants}.
 \end{proof}

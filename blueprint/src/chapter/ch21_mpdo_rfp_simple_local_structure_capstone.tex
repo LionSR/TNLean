@@ -28,7 +28,7 @@
     statement used by the following corollary.
 \end{remark}
 
-\begin{theorem}[SAL--ZCL rank-one normalization obstruction]
+\begin{lemma}[SAL--ZCL rank-one normalization obstruction]
     \label{thm:mpdo_sal_zcl_rank_one_normalization_obstruction}
     \lean{MPOTensor.ActiveSectorSpanningCounterexample.tensor_isSAL}
     \lean{MPOTensor.ActiveSectorSpanningCounterexample.%
@@ -51,7 +51,7 @@
     conclusion in Lemma~C.5 fails for this unnormalized representative. The
     normal-tensor hypothesis imposed in Case~I at source lines~1374--1381 is
     not included in this statement.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -80,7 +80,7 @@
     factorization.
 \end{proof}
 
-\begin{theorem}[Blocked renormalization maps from two-to-four maps]
+\begin{lemma}[Blocked renormalization maps from two-to-four maps]
     \label{thm:mpdo_block_two_rfp_of_two_four_maps}
     \lean{MPOTensor.blockTwo_isRFPViaTS_of_two_four_maps}
     \leanok
@@ -94,7 +94,7 @@
     \end{align}
     Then the two-site physical blocking $K^{[2]}$ is a renormalization fixed
     point.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpdo_one_site_closure_two_site_blocking, thm:mpdo_two_site_closure_two_site_blocking}
@@ -107,7 +107,7 @@
     renormalization identities for $K^{[2]}$.
 \end{proof}
 
-\begin{theorem}[Two-site blocking preserves renormalization maps]
+\begin{lemma}[Two-site blocking preserves renormalization maps]
     \label{thm:mpdo_rfp_via_ts_block_two}
     \lean{MPOTensor.IsRFPViaTS.blockTwo}
     \leanok
@@ -121,7 +121,7 @@
     for every virtual matrix $X$. Then the two-site physical blocking
     $K^{[2]}$ has maps satisfying the same two identities and is therefore a
     renormalization fixed point.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -135,7 +135,7 @@
     coordinates and preserves both complete positivity and trace preservation.
 \end{proof}
 
-\begin{theorem}[Renormalization maps and normalization obstruction for the
+\begin{lemma}[Renormalization maps and normalization obstruction for the
         four-sector tensor]
     \label{thm:mpdo_four_sector_witness_rfp}
     \lean{MPOTensor.ActiveSectorSpanningCounterexample.normalizedTensor}
@@ -147,7 +147,7 @@
     \leanok
     \uses{def:is_rfp_via_ts, def:mpdo_two_site_blocking, thm:mpdo_sal_zcl_rank_one_normalization_obstruction, thm:mpdo_rfp_via_ts_block_two}
     The four-sector tensor in
-    Theorem~\ref{thm:mpdo_sal_zcl_rank_one_normalization_obstruction} has
+    Lemma~\ref{thm:mpdo_sal_zcl_rank_one_normalization_obstruction} has
     trace-preserving completely positive maps $S,T$ such that, for every
     virtual matrix $X$,
     \begin{align}
@@ -169,7 +169,7 @@
     counterexample to Theorem~4.9 of
     \cite{Cirac2016MPDO_arXiv}. The simple-biCF-BNT hypotheses of that theorem
     are not part of this theorem's statement.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -193,7 +193,7 @@
     required physical-closure identities. Applying each channel twice and
     regrouping two neighboring physical sites gives the maps for the blocked
     tensor, as in
-    Theorem~\ref{thm:mpdo_rfp_via_ts_block_two}.
+    Lemma~\ref{thm:mpdo_rfp_via_ts_block_two}.
 
     Let $P=\operatorname{diag}(1,0)$. The physical-trace transfer of the
     normalized representative is $(4/\sqrt5)P$, while that of its two-site
@@ -216,7 +216,7 @@
 % coarsened channel pair exists.  This is a project-derived example, not the
 % construction used in the source proof of Proposition C.15.
 % Taxonomy: proof-path drift.
-\begin{theorem}[Pair-preserving obstruction for the four-sector tensor]
+\begin{lemma}[Pair-preserving obstruction for the four-sector tensor]
     \label{thm:mpdo_four_sector_pair_preserving_obstruction}
     \lean{MPOTensor.ActiveSectorSpanningCounterexample.%
         factorization_neighboringTraceMatrix}
@@ -233,7 +233,7 @@
     \leanok
     \uses{thm:mpdo_pair_preserving_trace_obstruction, thm:mpdo_four_sector_witness_rfp, thm:mpdo_inverse_map_nonzero_rectangular_remainder, thm:mpdo_virtual_spanning_active_trace_counterexample}
     For the inverse-map-selected four-sector factorization of the tensor in
-    Theorem~\ref{thm:mpdo_four_sector_witness_rfp}, let
+    Lemma~\ref{thm:mpdo_four_sector_witness_rfp}, let
     $C_{k,h}=\tr(\eta_{k,h})$.  Then
     \begin{align}
         C^2 & =C^3,
@@ -255,7 +255,7 @@
     \end{align}
     so they mix or coarsen the selected labels rather than retaining every
     fixed outer-sector pair.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -263,13 +263,13 @@
     associativity gives $C^2=C^3$.  On the other hand, the $(0,1)$ entry of
     $C$ is $1/8$, whereas that of $C^2$ is $1/4$.  If $C=C^3$, then
     $C^2=C^3$ would give $C=C^2$, a contradiction.
-    Theorem~\ref{thm:mpdo_pair_preserving_trace_obstruction} therefore
+    Lemma~\ref{thm:mpdo_pair_preserving_trace_obstruction} therefore
     excludes both pair-preserving families.  The explicit Kraus maps in
-    Theorem~\ref{thm:mpdo_four_sector_witness_rfp}, applied twice and passed
+    Lemma~\ref{thm:mpdo_four_sector_witness_rfp}, applied twice and passed
     to blocked coordinates, give the remaining assertion.
 \end{proof}
 
-\begin{theorem}[Inverse-map factorization with a nonzero rectangular remainder]
+\begin{lemma}[Inverse-map factorization with a nonzero rectangular remainder]
     \label{thm:mpdo_inverse_map_nonzero_rectangular_remainder}
     \lean{MPOTensor.ActiveSectorSpanningCounterexample.normalizedFourSiteTail_tensor}
     \lean{MPOTensor.ActiveSectorSpanningCounterexample.crossSectorMatrix}
@@ -301,7 +301,7 @@
     recovers the closed sector tensors $L$ and $Q$ exactly. Its
     neighboring operators therefore coincide with those obtained directly
     from $L$ and $Q$, while $Q(1-LQ)L\ne0$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -372,17 +372,17 @@
 \begin{proof}
     \leanok
     \uses{thm:mpdo_casei_all_sector_rank_one_coefficients_of_is_sal}
-    Theorem~\ref{thm:mpdo_casei_all_sector_rank_one_coefficients_of_is_sal}
+    Lemma~\ref{thm:mpdo_casei_all_sector_rank_one_coefficients_of_is_sal}
     gives the physical isometry, the
     direct-sum physical-slice formula, and positive neighboring operators, while
-    Theorem~\ref{thm:mpdo_casei_all_sector_rank_one_coefficients_of_is_sal}
+    Lemma~\ref{thm:mpdo_casei_all_sector_rank_one_coefficients_of_is_sal}
     also yields the real-part identity
     $\operatorname{Re}\tr(\eta_{k,h})=a_kb_h$. Positivity makes each
     neighboring operator Hermitian, so its trace is real and the displayed
     complex trace identity follows.
 \end{proof}
 
-\begin{theorem}[Positive neighboring sectors generate positive periodic operators]
+\begin{lemma}[Positive neighboring sectors generate positive periodic operators]
     \label{thm:mpdo_neighboring_sector_positivity}
     \lean{MPOTensor.PhysicalSectorFactorization.isMPDO_of_neighboringOperator_pos}
     \leanok
@@ -395,7 +395,7 @@
         \rho^{(N)}(K) & \geq0.
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -472,7 +472,7 @@
     \end{align}
 \end{definition}
 
-\begin{theorem}[Adjoint closure of the physical slices]
+\begin{lemma}[Adjoint closure of the physical slices]
     \label{thm:mpdo_injective_mpdo_adjoint_closure}
     \lean{MPOTensor.IsMPDO.sameMPV₂Pos_physicalAdjointTensor,
         MPOTensor.IsMPDO.sameMPV_physicalAdjointTensor,
@@ -489,7 +489,7 @@
         \notag
     \end{align}
     for all virtual indices $\beta,\alpha$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -499,7 +499,7 @@
     entries yields the displayed expansion.
 \end{proof}
 
-\begin{theorem}[Canonical supports of the active physical-sector factors]
+\begin{lemma}[Canonical supports of the active physical-sector factors]
     \label{thm:mpdo_active_physical_sector_factor_supports}
     \lean{MPOTensor.PhysicalSectorFactorization.sectorProductFamily,
         MPOTensor.PhysicalSectorFactorization.IsActiveSector,
@@ -555,13 +555,13 @@
     whose range projections are $P_k^L$ and $P_k^R$. If $k$ is inactive,
     every product $l_{k,\beta}\otimes r_{k,\alpha}$ vanishes; in particular,
     there is no active sector when the virtual dimension is zero.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     The sector-coordinate tensor remains injective. Positivity of the
     neighboring operators makes it a matrix product density operator, so
-    Theorem~\ref{thm:mpdo_injective_mpdo_adjoint_closure} closes its physical
+    Lemma~\ref{thm:mpdo_injective_mpdo_adjoint_closure} closes its physical
     slices under conjugate transpose. Restriction to the $k$-th diagonal
     sector gives coefficients $c_{k,\beta,\alpha}(\mu,\nu)$ such that
     \begin{align}
@@ -593,7 +593,7 @@
     isometries.
 \end{proof}
 
-\begin{theorem}[Canonical restriction constructed from the active sector factors]
+\begin{lemma}[Canonical restriction constructed from the active sector factors]
     \label{thm:mpdo_active_physical_sector_restriction}
     \lean{MPOTensor.PhysicalSectorFactorization.ActiveFactorSupportData,
         MPOTensor.PhysicalSectorFactorization.physicalSupportInclusion,
@@ -641,7 +641,7 @@
     \end{align}
     This construction also applies when every sector is inactive: then
     $e=0$, with no complementary summand added.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -656,7 +656,7 @@
     descends through the physical isometry.
 \end{proof}
 
-\begin{theorem}[Neighboring positivity and trace factorization on the canonical
+\begin{lemma}[Neighboring positivity and trace factorization on the canonical
         active restriction]
     \label{thm:mpdo_active_physical_sector_neighboring_positivity}
     \lean{MPOTensor.PhysicalSectorFactorization.FactorActiveSector,
@@ -673,7 +673,7 @@
     \leanok
     \uses{thm:mpdo_active_physical_sector_restriction, def:mpdo_neighboring_trace_factorization}
     In the setting of
-    Theorem~\ref{thm:mpdo_active_physical_sector_restriction}, the restricted
+    Lemma~\ref{thm:mpdo_active_physical_sector_restriction}, the restricted
     tensor $K_{\mathrm{act}}$ has a physical-sector factorization indexed
     precisely by the active ambient sectors.  For active sectors $k,h$, put
     \begin{align}
@@ -714,7 +714,7 @@
     preservation under active physical support compression is an auxiliary
     construction rather than an assertion of that source theorem; documented in
     \cite{gap:cpsv16_active_physical_support_compression}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -758,7 +758,7 @@
 % This descent statement is project-derived. It combines the canonical active
 % restriction with the coordinate comparison for a fixed physical support; it
 % is not asserted in CPSV16.
-\begin{theorem}[Neighboring-trace factorization descends through a full-support
+\begin{lemma}[Neighboring-trace factorization descends through a full-support
         physical embedding]
     \label{thm:mpdo_neighboring_trace_factorization_isometric_embedding_descent}
     \lean{MPOTensor.PhysicalSectorFactorization.%
@@ -791,7 +791,7 @@
     \cite{Cirac2016MPDO_arXiv}. It carries the neighboring data of
     Theorem~4.9(iv), lines~864--889, through the physical-support restriction
     used in Appendix~C.2, lines~1680--1691 and 1733--1770.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -824,7 +824,7 @@
 % This theorem supplies the orthogonal-support step used in the completed
 % proof of CPSV16 Proposition `prop3to4`. The final proof does not derive or
 % assume common-copy-weight independence.
-\begin{theorem}[Orthogonal two-sided supports from unstarred layer orthogonality]
+\begin{lemma}[Orthogonal two-sided supports from unstarred layer orthogonality]
     \label{thm:mpdo_bnt_layer_orthogonal_supports}
     \lean{MPOTensor.physicalSliceColumns,
         MPOTensor.physicalSupportProj,
@@ -854,14 +854,14 @@
     for every $x,\beta,\alpha$. Conversely, any pairwise annihilating family
     with these two-sided support identities satisfies the unstarred layer
     identities.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     Let $C_x$ be the matrix obtained by stacking the columns of all slices of
     $\mathcal K_x$, and let $P_x$ be the orthogonal projection onto its column
     space. The left support identity is immediate.
-    Theorem~\ref{thm:mpdo_injective_mpdo_adjoint_closure} gives the right
+    Lemma~\ref{thm:mpdo_injective_mpdo_adjoint_closure} gives the right
     support identity. For $x\ne y$, (\ref{eq:mpdo_bnt_layer_unstarred}) and
     adjoint closure give
     \begin{align}
@@ -895,14 +895,14 @@
     \leanok
     One-site spanning makes every absorbed representative injective, and the
     positive neighboring operators make every representative an MPDO, so
-    Theorem~\ref{thm:mpdo_bnt_layer_orthogonal_supports} gives the projections.
+    Lemma~\ref{thm:mpdo_bnt_layer_orthogonal_supports} gives the projections.
 \end{proof}
 
 % **Scope restriction (active physical support compression):** the proof first
 % passes through the canonical joint-support restriction, which CPSV16 does
 % not form, and then lifts the bond to the printed physical support. See
 % `docs/paper-gaps/cpsv16_active_physical_support_compression.tex`.
-\begin{theorem}[Positive sector bonds on the printed physical supports]
+\begin{lemma}[Positive sector bonds on the printed physical supports]
     \label{thm:mpdo_ambient_sector_factorization_supported_bond}
     \lean{MPOTensor.PhysicalSectorFactorization.%
         exists_etaLocalStructureData_supported_of_twoSidedPhysicalSlice,
@@ -932,12 +932,12 @@
     Applied to pairwise orthogonal projections $P_s$, this construction gives
     an orthogonal family of positive commuting sector bonds for the tensors
     $K_s$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     Restricting $K$ to its canonical joint physical support $Q$ via
-    Theorems~\ref{thm:mpdo_active_physical_sector_restriction}
+    Lemmas~\ref{thm:mpdo_active_physical_sector_restriction}
     and~\ref{thm:mpdo_active_physical_sector_neighboring_positivity},
     the positive neighboring operators on the restriction yield a positive
     commuting bond supported on $Q\otimes Q$ with the displayed periodic
@@ -952,7 +952,7 @@
     gives the final assertion.
 \end{proof}
 
-\begin{theorem}[The five BNT identities give the GSNNCH form]
+\begin{lemma}[The five BNT identities give the GSNNCH form]
     \label{thm:mpdo_bnt_physical_sector_gsnnch}
     \lean{MPOTensor.changePhysicalBasis_eq_ite_of_pairwise_orthogonal_twoSided_physicalSupport}
     \lean{MPOTensor.singleKrausMap_sitewise_eq_coefficient_smul_of_orthogonalSupport}
@@ -990,7 +990,7 @@
     Then the matrix product density operators generated by $M$ have the
     GSNNCH form, with the BNT copy numbers $n_x$ as their outer
     multiplicities.  No equality among the copy weights is assumed.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -1012,7 +1012,7 @@
     Hence uniqueness of the positive scalar phase shows that $q_x(N)$ is a
     nonnegative real number.
 
-    Theorem~\ref{thm:mpdo_ambient_sector_factorization_supported_bond} gives
+    Lemma~\ref{thm:mpdo_ambient_sector_factorization_supported_bond} gives
     a supported positive commuting bond $B_x$ with periodic product
     $\rho^{(N)}(A_x)$.  Replacing it at this chain length by
     \begin{align}
@@ -1025,7 +1025,7 @@
     construction proves the claimed form without copy independence.
 \end{proof}
 
-\begin{theorem}[Square-zero obstruction for arbitrary MPO tensors]
+\begin{lemma}[Square-zero obstruction for arbitrary MPO tensors]
     \label{thm:mpdo_bnt_layer_square_zero_obstruction}
     \lean{MPOTensor.BNTLayerOrthogonalityCounterexample.squareZeroPhysicalMatrix_ne_zero,
         MPOTensor.BNTLayerOrthogonalityCounterexample.squareZeroPhysicalMatrix_mul_self,
@@ -1043,7 +1043,7 @@
           & A^2=0.
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -1104,7 +1104,7 @@ $\mathcal K_i=P_i\mathcal K_i=\mathcal K_iP_i$.
 % The IsHorizontalCF conclusion uses the normalized BNT-refined notion; its
 % scope relative to the literal source grouping is documented in
 % docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex.
-\begin{theorem}[Normal BNT representatives, biCF, exact direct sum, and
+\begin{lemma}[Normal BNT representatives, biCF, exact direct sum, and
         nonnilpotence in the Case-II example]
     \label{thm:mpdo_caseii_absorption_algebraic_data}
     \lean{MPOTensor.CaseIIAbsorptionCounterexample.basis_isNormalTensor,
@@ -1137,7 +1137,7 @@ $\mathcal K_i=P_i\mathcal K_i=\mathcal K_iP_i$.
     Each representative occurs in exactly one copy. Thus independence of the
     weight from the copy label is vacuous within each representative and does
     not compare the two representatives or their displayed weights.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -1170,7 +1170,7 @@ $\mathcal K_i=P_i\mathcal K_i=\mathcal K_iP_i$.
 % Classification: missing statement (repaired). The printed inference that
 % absorption preserves normality remains proof-path drift; the conclusion of
 % Theorem 4.9 is not refuted by this example.
-\begin{theorem}[Coefficient absorption need not preserve normality]
+\begin{lemma}[Coefficient absorption need not preserve normality]
     \label{thm:mpdo_caseii_absorption_not_normal}
     \lean{MPOTensor.CaseIIAbsorptionCounterexample.ambient_isMPDO,
         MPOTensor.CaseIIAbsorptionCounterexample.trace_mpo_ambient,
@@ -1215,7 +1215,7 @@ $\mathcal K_i=P_i\mathcal K_i=\mathcal K_iP_i$.
     absorbed-normality inference is false
     \cite[lines~1628--1665 and 1740--1782]{Cirac2016MPDO_arXiv}. This does not
     refute the asserted all-sector conclusion or Theorem~4.9.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -1334,7 +1334,7 @@ $\mathcal K_i=P_i\mathcal K_i=\mathcal K_iP_i$.
     (iv)$\Rightarrow$(v) between the fixed-point condition, SAL with zero
     correlation length, the commuting Gibbs form with zero correlation length,
     the blockwise local structure, and the fixed-point condition for $M$.
-    Theorem~\ref{thm:mpdo_sal_zcl_bnt_sector_structure} refutes the
+    Lemma~\ref{thm:mpdo_sal_zcl_bnt_sector_structure} refutes the
     representativewise assertion used in (ii)$\Rightarrow$(iv). Its ambient
     tensor has a two-representative BNT presentation in biCF. Independently,
     Theorem~\ref{thm:mpdo_theorem49_iv_to_v_counterexample} refutes the printed
@@ -1343,7 +1343,7 @@ $\mathcal K_i=P_i\mathcal K_i=\mathcal K_iP_i$.
     conditionally for given absorbed-sector factorizations, but the printed
     route obtains those factorizations from the false representativewise
     assertion. More strongly,
-    Theorem~\ref{thm:mpdo_sal_zcl_blocking_channels} gives a trace-norm
+    Lemma~\ref{thm:mpdo_sal_zcl_blocking_channels} gives a trace-norm
     counterexample to Proposition~C.15 itself and shows that the same ambient
     tensor has a two-site blocking which is not an RFP. These false-source and
     proof-path dispositions are documented in
@@ -1360,22 +1360,22 @@ $\mathcal K_i=P_i\mathcal K_i=\mathcal K_iP_i$.
     as follows.  Example~4.10, read with one left and one right bit flip and
     $p=1/4$ (Definition~\ref{def:cpsv_example410_corrected_tensor}), has source
     zero correlation length and does not saturate the area law
-    (Theorems~\ref{thm:cpsv_example410_source_zcl}
+    (Lemmas~\ref{thm:cpsv_example410_source_zcl}
     and~\ref{thm:cpsv_example410_tensor_entropy_obstruction}); no claim is made
     about the printed universal statement in $p$.  The printed finite periodic
     family of Example~4.11 fails both saturation and source zero correlation
-    length (Theorems~\ref{thm:cpsv_example411_ambient_not_sal}
+    length (Lemmas~\ref{thm:cpsv_example411_ambient_not_sal}
     and~\ref{thm:cpsv_example411_not_source_zcl}).  The printed tensor of
     Example~4.12 is unnormalized, so its fixed-point and zero-correlation-length
     assertions fail for that representative
-    (Theorem~\ref{thm:cpsv_example412_literal_zcl_rfp_gap}); the halved tensor
+    (Lemma~\ref{thm:cpsv_example412_literal_zcl_rfp_gap}); the halved tensor
     saturates the area law, has unscaled zero correlation length, and
     satisfies the two channel equations without imposing the unit-weight
     convention
-    (Theorems~\ref{thm:cpsv_example412_normalized_rfp_maps}
+    (Lemmas~\ref{thm:cpsv_example412_normalized_rfp_maps}
     and~\ref{thm:cpsv_example412_normalized_four_properties}), and both
     representatives lie outside the full GSNNCH class
-    (Theorems~\ref{thm:cpsv_example412_not_gsnnch}
+    (Lemmas~\ref{thm:cpsv_example412_not_gsnnch}
     and~\ref{thm:cpsv_example412_normalized_not_gsnnch}).
 \end{remark}
 
@@ -1403,7 +1403,7 @@ $\mathcal K_i=P_i\mathcal K_i=\mathcal K_iP_i$.
     distinct from the repeated-left expression printed in the source.
 \end{definition}
 
-\begin{theorem}[Source zero correlation length of the corrected tensor]
+\begin{lemma}[Source zero correlation length of the corrected tensor]
     \label{thm:cpsv_example410_source_zcl}
     \lean{MPOTensor.CPSVExample410Operator.M_isLPDO,
         MPOTensor.CPSVExample410Operator.M_isMPDO,
@@ -1417,7 +1417,7 @@ $\mathcal K_i=P_i\mathcal K_i=\mathcal K_iP_i$.
     \uses{def:cpsv_example410_corrected_tensor, def:mpo_source_zcl}
     The corrected tensor is locally purified and hence positive at every
     chain length.  It has source zero correlation length.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -1435,7 +1435,7 @@ $\mathcal K_i=P_i\mathcal K_i=\mathcal K_iP_i$.
     Since $P^2=P$, the tensor has source zero correlation length.
 \end{proof}
 
-\begin{theorem}[One- through four-site spectra of the corrected tensor]
+\begin{lemma}[One- through four-site spectra of the corrected tensor]
     \label{thm:cpsv_example410_four_site_spectrum}
     \lean{MPOTensor.CPSVExample410Spectrum.charpoly_roots_one,
         MPOTensor.CPSVExample410Spectrum.charpoly_roots_two,
@@ -1454,7 +1454,7 @@ $\mathcal K_i=P_i\mathcal K_i=\mathcal K_iP_i$.
     \end{align}
     These spectra are consequences of the corrected $p=1/4$ tensor and are
     not formulas stated in the source.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -1512,7 +1512,7 @@ $\mathcal K_i=P_i\mathcal K_i=\mathcal K_iP_i$.
 
 % Project-derived weight layer for CPSV16 Example 4.10, lines 897--905.
 % See docs/paper-gaps/cpsv16_examples_4_10_4_11_entropy.tex.
-\begin{theorem}[Exact bond-pattern distribution for Example 4.10]
+\begin{lemma}[Exact bond-pattern distribution for Example 4.10]
     \label{thm:cpsv_example410_bond_distribution}
     \lean{CPSVExample410CorrelatedFlip.sum_flipProb,
         CPSVExample410CorrelatedFlip.flipProb_nonneg,
@@ -1542,7 +1542,7 @@ $\mathcal K_i=P_i\mathcal K_i=\mathcal K_iP_i$.
     its two-adjacent-bond marginal assigns $7/16$ to the doubly unflipped
     pair and $3/16$ to each of the three remaining pairs.  All the window
     weight families are probability distributions.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -1553,7 +1553,7 @@ $\mathcal K_i=P_i\mathcal K_i=\mathcal K_iP_i$.
 
 % Project-derived weight layer for CPSV16 Example 4.10, lines 897--905.
 % See docs/paper-gaps/cpsv16_examples_4_10_4_11_entropy.tex.
-\begin{theorem}[Exact window entropies for Example 4.10]
+\begin{lemma}[Exact window entropies for Example 4.10]
     \label{thm:cpsv_example410_window_entropies}
     \lean{CPSVExample410CorrelatedFlip.entropyOne,
         CPSVExample410CorrelatedFlip.entropyTwo,
@@ -1578,7 +1578,7 @@ $\mathcal K_i=P_i\mathcal K_i=\mathcal K_iP_i$.
     \end{align}
     Divided by $\log 2$ these are the printed decimals $2$, $2.9544$,
     $3.8802$, and $2.7839$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -1593,7 +1593,7 @@ $\mathcal K_i=P_i\mathcal K_i=\mathcal K_iP_i$.
 
 % Project-derived scalar certificate for CPSV16 Example 4.10.
 % See docs/paper-gaps/cpsv16_examples_4_10_4_11_entropy.tex.
-\begin{theorem}[Positivity of the Example 4.10 logarithmic ratio]
+\begin{lemma}[Positivity of the Example 4.10 logarithmic ratio]
     \label{thm:cpsv_example410_log_ratio_pos}
     \lean{CPSVExamples410411Arithmetic.example410_integer_inequality,
         CPSVExamples410411Arithmetic.example410_log_ratio_pos}
@@ -1604,7 +1604,7 @@ $\mathcal K_i=P_i\mathcal K_i=\mathcal K_iP_i$.
         \frac{2^{32}7^7}{3^3 5^{20}}
         \right) & >0. \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -1615,7 +1615,7 @@ $\mathcal K_i=P_i\mathcal K_i=\mathcal K_iP_i$.
 
 % Project-derived weight layer for CPSV16 Example 4.10, lines 897--905.
 % See docs/paper-gaps/cpsv16_examples_4_10_4_11_entropy.tex.
-\begin{theorem}[Exact mutual-information defect for Example 4.10]
+\begin{lemma}[Exact mutual-information defect for Example 4.10]
     \label{thm:cpsv_example410_mutual_information_defect}
     \lean{CPSVExample410CorrelatedFlip.mutualInfoOne,
         CPSVExample410CorrelatedFlip.mutualInfoTwo,
@@ -1631,7 +1631,7 @@ $\mathcal K_i=P_i\mathcal K_i=\mathcal K_iP_i$.
         \frac{2^{32}7^7}{3^3 5^{20}}\right)>0.
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -1645,7 +1645,7 @@ $\mathcal K_i=P_i\mathcal K_i=\mathcal K_iP_i$.
 % Corrected fixed-parameter conclusion for CPSV16 Example 4.10.
 % The source prints the channel and decimal entropies. The root multisets and
 % exact entropy calculation below are project-derived.
-\begin{theorem}[Entropy obstruction for the corrected Example 4.10 tensor]
+\begin{lemma}[Entropy obstruction for the corrected Example 4.10 tensor]
     \label{thm:cpsv_example410_tensor_entropy_obstruction}
     \lean{MPOTensor.CPSVExample410Entropy.blockEntropy_one,
         MPOTensor.CPSVExample410Entropy.blockEntropy_two,
@@ -1675,17 +1675,17 @@ $\mathcal K_i=P_i\mathcal K_i=\mathcal K_iP_i$.
     The tensor has source zero correlation length and does not saturate the
     area law. These identities concern only the corrected fixed value
     $p=1/4$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:block_entropy_of_charpoly_roots, thm:cpsv_example410_source_zcl, thm:cpsv_example410_four_site_spectrum, thm:cpsv_example410_window_entropies, thm:cpsv_example410_mutual_information_defect, thm:cpsv_example410_log_ratio_pos, lem:sal_const}
     The four root multisets give the displayed block entropies. Substitution
     into $I_L=S_L+S_{4-L}-S_4$ gives the exact logarithmic ratio, which is
-    positive by Theorem~\ref{thm:cpsv_example410_log_ratio_pos}. If the area
+    positive by Lemma~\ref{thm:cpsv_example410_log_ratio_pos}. If the area
     law saturated, Lemma~\ref{lem:sal_const} would give $I_1=I_2$, a
     contradiction. The source zero-correlation-length statement is
-    Theorem~\ref{thm:cpsv_example410_source_zcl}.
+    Lemma~\ref{thm:cpsv_example410_source_zcl}.
 \end{proof}
 
 % CPSV16 Example 4.11, lines 907--924.
@@ -1724,7 +1724,7 @@ $\mathcal K_i=P_i\mathcal K_i=\mathcal K_iP_i$.
     equivalence.
 \end{definition}
 
-\begin{theorem}[Diagonal formula and normalization of the binary-support model]
+\begin{lemma}[Diagonal formula and normalization of the binary-support model]
     \label{thm:cpsv_example411_binary_support_normalization}
     \lean{MPOTensor.CPSVExample411BinarySupport.mpo_M_apply,
         MPOTensor.CPSVExample411BinarySupport.mpo_M_eq_diagonal,
@@ -1744,7 +1744,7 @@ $\mathcal K_i=P_i\mathcal K_i=\mathcal K_iP_i$.
     ambient definition below carries over the operator and trace identities, but
     no spectrum, entropy, saturation of the area law, or zero correlation
     length assertion is made here.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -1769,7 +1769,7 @@ $\mathcal K_i=P_i\mathcal K_i=\mathcal K_iP_i$.
     indices $n\in\{1,\ldots,L-1\}$ for which $x_n\ne x_{n+1}$.
 \end{definition}
 
-\begin{theorem}[Exact effective-binary finite-ring block probabilities]
+\begin{lemma}[Exact effective-binary finite-ring block probabilities]
     \label{thm:cpsv_example411_binary_block_probability}
     \lean{MPOTensor.CPSVExample411BinarySupport.internalEdgeProduct_eq,
         MPOTensor.CPSVExample411BinarySupport.weightMatrix_pow_apply,
@@ -1789,7 +1789,7 @@ $\mathcal K_i=P_i\mathcal K_i=\mathcal K_iP_i$.
     \end{align}
     This includes $L=1$ and $L=N$.  It is a project-derived consequence of the
     finite periodic model, not a formula stated in CPSV16.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -1832,7 +1832,7 @@ $\mathcal K_i=P_i\mathcal K_i=\mathcal K_iP_i$.
     $\sigma$, let $\iota\sigma$ denote its sitewise image in the ambient basis.
 \end{definition}
 
-\begin{theorem}[Exact ambient support and periodic-operator congruence]
+\begin{lemma}[Exact ambient support and periodic-operator congruence]
     \label{thm:cpsv_example411_ambient_support_bridge}
     \lean{MPOTensor.CPSVExample411Ambient.ambientM_supported,
         MPOTensor.CPSVExample411Ambient.ambientM_left_unsupported,
@@ -1852,7 +1852,7 @@ $\mathcal K_i=P_i\mathcal K_i=\mathcal K_iP_i$.
          & =\delta_{\sigma,\tau}c_N(\sigma).
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -1863,7 +1863,7 @@ $\mathcal K_i=P_i\mathcal K_i=\mathcal K_iP_i$.
     formula follows from the binary diagonal formula.
 \end{proof}
 
-\begin{theorem}[Ambient trace and closed normalization]
+\begin{lemma}[Ambient trace and closed normalization]
     \label{thm:cpsv_example411_ambient_normalization}
     \lean{MPOTensor.CPSVExample411Ambient.trace_mpo_ambientM,
         MPOTensor.CPSVExample411Ambient.trace_mpo_ambientM_eq_partitionFunction,
@@ -1878,7 +1878,7 @@ $\mathcal K_i=P_i\mathcal K_i=\mathcal K_iP_i$.
         =Z_N=\frac{3^N+1}{2^N}.
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -1888,7 +1888,7 @@ $\mathcal K_i=P_i\mathcal K_i=\mathcal K_iP_i$.
     form then give the result.
 \end{proof}
 
-\begin{theorem}[Finite-marginal obstruction to source zero correlation length]
+\begin{lemma}[Finite-marginal obstruction to source zero correlation length]
     \label{thm:cpsv_example411_not_source_zcl}
     \lean{MPOTensor.CPSVExample411BinarySupport.reducedBlockState_four_two_zero,
         MPOTensor.CPSVExample411BinarySupport.reducedBlockState_three_two_zero,
@@ -1929,7 +1929,7 @@ $\mathcal K_i=P_i\mathcal K_i=\mathcal K_iP_i$.
     relation.  The final inequalities concern its scalar-one
     specialization, not the distinct legacy convention based on idempotence
     of the doubled-index transfer map.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -1965,7 +1965,7 @@ $\mathcal K_i=P_i\mathcal K_i=\mathcal K_iP_i$.
 
 % Project-derived finite-ring consequence of CPSV16 Example 4.11.
 % See docs/paper-gaps/cpsv16_examples_4_10_4_11_entropy.tex.
-\begin{theorem}[Exact length-four effective spectra]
+\begin{lemma}[Exact length-four effective spectra]
     \label{thm:cpsv_example411_length_four_effective_spectra}
     \lean{MPOTensor.CPSVExample411Spectrum.effective_reducedBlockState_four_eq_diagonal,
         MPOTensor.CPSVExample411Spectrum.transition_counts_one,
@@ -1994,7 +1994,7 @@ $\mathcal K_i=P_i\mathcal K_i=\mathcal K_iP_i$.
     \end{align}
     Here $a^{[m]}$ denotes a root $a$ of multiplicity $m$.  These are the
     effective nonzero spectra, not the full ambient root multisets.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -2019,7 +2019,7 @@ $\mathcal K_i=P_i\mathcal K_i=\mathcal K_iP_i$.
     and multiplicities.
 \end{proof}
 
-\begin{theorem}[Exact length-four ambient spectra]
+\begin{lemma}[Exact length-four ambient spectra]
     \label{thm:cpsv_example411_length_four_ambient_spectra}
     \lean{MPOTensor.CPSVExample411Spectrum.ambient_charpoly_eq_X_pow_mul_effective,
         MPOTensor.CPSVExample411Spectrum.ambient_charpoly_roots_eq_zero_add_effective,
@@ -2040,7 +2040,7 @@ $\mathcal K_i=P_i\mathcal K_i=\mathcal K_iP_i$.
     For the positive block lengths $L=1$, $2$, $3$, and $4$, the full ambient
     root multiset is the effective multiset together with zero of multiplicity
     $2$, $12$, $56$, and $240$, respectively.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -2062,7 +2062,7 @@ $\mathcal K_i=P_i\mathcal K_i=\mathcal K_iP_i$.
 
 % Project-derived finite-ring consequence of CPSV16 Example 4.11.
 % See docs/paper-gaps/cpsv16_examples_4_10_4_11_entropy.tex.
-\begin{theorem}[Exact length-four effective entropies]
+\begin{lemma}[Exact length-four effective entropies]
     \label{thm:cpsv_example411_length_four_effective_entropies}
     \lean{MPOTensor.CPSVExample411Entropy.M_isMPDO,
         MPOTensor.CPSVExample411Entropy.blockEntropy_one,
@@ -2081,7 +2081,7 @@ $\mathcal K_i=P_i\mathcal K_i=\mathcal K_iP_i$.
         S_4 & =2h(8/41)+12h(2/41)+2h(1/82).
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -2091,13 +2091,13 @@ $\mathcal K_i=P_i\mathcal K_i=\mathcal K_iP_i$.
     $W=\left(\begin{smallmatrix}1&1/2\\1/2&1\end{smallmatrix}\right)$, hence is
     non-negative.  For each $L$, summing $h(\lambda)$ over the roots and their
     multiplicities in
-    Theorem~\ref{thm:cpsv_example411_length_four_effective_spectra} gives the
+    Lemma~\ref{thm:cpsv_example411_length_four_effective_spectra} gives the
     displayed entropy.
 \end{proof}
 
 % Project-derived scalar certificate for CPSV16 Example 4.11.
 % See docs/paper-gaps/cpsv16_examples_4_10_4_11_entropy.tex.
-\begin{theorem}[Positivity of the Example 4.11 logarithmic ratio]
+\begin{lemma}[Positivity of the Example 4.11 logarithmic ratio]
     \label{thm:cpsv_example411_log_ratio_pos}
     \lean{CPSVExamples410411Arithmetic.example411_log_ratio_pos}
     \leanok
@@ -2107,7 +2107,7 @@ $\mathcal K_i=P_i\mathcal K_i=\mathcal K_iP_i$.
         \frac{41^{82}5^{50}}{2^{48}13^{52}7^{112}}
         \right)>0.
     \]
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -2116,7 +2116,7 @@ $\mathcal K_i=P_i\mathcal K_i=\mathcal K_iP_i$.
     logarithm is strictly positive.
 \end{proof}
 
-\begin{theorem}[Exact length-four mutual-information obstruction]
+\begin{lemma}[Exact length-four mutual-information obstruction]
     \label{thm:cpsv_example411_length_four_mutual_information_obstruction}
     \lean{MPOTensor.CPSVExample411Entropy.mutualInfo_two_sub_one,
         MPOTensor.CPSVExample411Entropy.mutualInfo_two_sub_one_pos,
@@ -2132,7 +2132,7 @@ $\mathcal K_i=P_i\mathcal K_i=\mathcal K_iP_i$.
     \end{align}
     Consequently, the effective binary tensor does not satisfy saturation of
     the area law.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -2144,14 +2144,14 @@ $\mathcal K_i=P_i\mathcal K_i=\mathcal K_iP_i$.
     Saturation would instead require $I_1=I_2$ on the four-site ring.
 \end{proof}
 
-\begin{theorem}[Ambient length-four saturation obstruction]
+\begin{lemma}[Ambient length-four saturation obstruction]
     \label{thm:cpsv_example411_ambient_not_sal}
     \lean{MPOTensor.CPSVExample411Entropy.ambientM_not_isSAL}
     \leanok
     \uses{def:cpsv_example411_ambient_support_inclusion, thm:cpsv_example411_length_four_mutual_information_obstruction, thm:mpdo_sal_physical_isometry_transport}
     The isometric inclusion of the effective binary tensor into the
     two-qubit one-site space does not satisfy saturation of the area law.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -2205,7 +2205,7 @@ $\mathcal K_i=P_i\mathcal K_i=\mathcal K_iP_i$.
     \end{align}
 \end{definition}
 
-\begin{theorem}[Exact positive-length operator and positivity]
+\begin{lemma}[Exact positive-length operator and positivity]
     \label{thm:cpsv_example412_literal_formula}
     \lean{MPOTensor.CPSVExample412Literal.rho_eq_diagonal,
         MPOTensor.CPSVExample412Literal.rho_eq_finKronecker,
@@ -2221,7 +2221,7 @@ $\mathcal K_i=P_i\mathcal K_i=\mathcal K_iP_i$.
         \notag
     \end{align}
     and $\rho^{(N)}(M)$ is positive semidefinite.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Both tensor powers are diagonal.  On a binary configuration their sum has
     eigenvalue $1+\prod_k z_k$, where each $z_k$ is $1$ or $-1$; hence every
@@ -2229,7 +2229,7 @@ $\mathcal K_i=P_i\mathcal K_i=\mathcal K_iP_i$.
     configurations gives zero when $N>0$, so the trace is $2^N$.
 \end{proof}
 
-\begin{theorem}[One-site loss and saturation]
+\begin{lemma}[One-site loss and saturation]
     \label{thm:cpsv_example412_literal_sal}
     \lean{MPOTensor.CPSVExample412Literal.reducedBlockState_M_eq_scaled_one,
         MPOTensor.CPSVExample412Literal.one_site_trace_loses_sigmaZ,
@@ -2241,7 +2241,7 @@ $\mathcal K_i=P_i\mathcal K_i=\mathcal K_iP_i$.
     $2^{-L}I^{\otimes L}$.
     Therefore its entropy is $L\log 2$, the mutual information is independent
     of $L$, and $M$ satisfies saturation of the area law.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The identity term contributes the dimension of the traced complement,
     while the signed term contains the vanishing one-site sum $1+(-1)$.  The
@@ -2274,7 +2274,7 @@ $\mathcal K_i=P_i\mathcal K_i=\mathcal K_iP_i$.
     \end{align}
 \end{definition}
 
-\begin{theorem}[Four-site failure of strong-subadditivity equality]
+\begin{lemma}[Four-site failure of strong-subadditivity equality]
     \label{thm:cpsv_example412_four_cycle_ssa_defect}
     \lean{MPOTensor.CPSVExample412Literal.fourCycleTripartiteState_eq_diagonal,
         MPOTensor.CPSVExample412Literal.fourCycleTripartiteState_isHermitian,
@@ -2306,7 +2306,7 @@ $\mathcal K_i=P_i\mathcal K_i=\mathcal K_iP_i$.
     \end{align}
     so $S(ABC)+S(B)=5\log 2<6\log 2=S(AB)+S(BC)$.  Thus equality in
     strong subadditivity fails for this tripartition.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:cpsv_example412_literal_formula}
     The diagonal coefficient is
@@ -2320,7 +2320,7 @@ $\mathcal K_i=P_i\mathcal K_i=\mathcal K_iP_i$.
 
 % Project-derived consequence of Beigi's spatial decomposition and the HJPW
 % quantum Markov direct-sum form.
-\begin{theorem}[Positive commuting overlapping products are quantum Markov]
+\begin{lemma}[Positive commuting overlapping products are quantum Markov]
     \label{thm:positive_commuting_overlapping_product_markov}
     \lean{Matrix.exists_quantumMarkovDecomposition_of_positive_overlapping_product}
     \leanok
@@ -2333,7 +2333,7 @@ $\mathcal K_i=P_i\mathcal K_i=\mathcal K_iP_i$.
         \notag
     \end{align}
     Then $\rho_{ABC}$ admits a quantum Markov decomposition on $B$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
 
     The spatial decomposition
@@ -2353,7 +2353,7 @@ $\mathcal K_i=P_i\mathcal K_i=\mathcal K_iP_i$.
 % Derived four-site consequence of CPSV16 Definition 4.8, lines 829--850.
 % Issue #6072: the missing and unlinked statement is now proved. The former
 % route through Proposition prop4to2 had proof-path drift and is not used.
-\begin{theorem}[Four-cycle GSNNCH states are quantum Markov]
+\begin{lemma}[Four-cycle GSNNCH states are quantum Markov]
     \label{thm:mpdo_gsnnch_four_cycle_markov}
     \lean{MPOTensor.fourCycleTripartiteEquiv,
         MPOTensor.fourCycleTripartiteState,
@@ -2371,7 +2371,7 @@ $\mathcal K_i=P_i\mathcal K_i=\mathcal K_iP_i$.
         S(ABC)+S(B)=S(AB)+S(BC).
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{def:mpdo_source_gsnnch, thm:positive_commuting_overlapping_product_markov}
     Writing $B_j^{(x)}$ for the four translated bonds in sector $x$, $n_x$
@@ -2396,7 +2396,7 @@ $\mathcal K_i=P_i\mathcal K_i=\mathcal K_iP_i$.
 
 % CPSV16 Example 4.12, lines 932--938.
 % Issue #6045: the formerly missing statement is now proved.
-\begin{theorem}[Example 4.12 is not GSNNCH]
+\begin{lemma}[Example 4.12 is not GSNNCH]
     \label{thm:cpsv_example412_not_gsnnch}
     \lean{MPOTensor.CPSVExample412Literal.fourCycleTripartiteState_eq_generic,
         MPOTensor.CPSVExample412Literal.M_not_isGSNNCH}
@@ -2404,7 +2404,7 @@ $\mathcal K_i=P_i\mathcal K_i=\mathcal K_iP_i$.
     \uses{def:cpsv_example412_literal_tensor, thm:cpsv_example412_four_cycle_ssa_defect, thm:mpdo_gsnnch_four_cycle_markov}
     The tensor $M$ printed in Example~4.12 does not satisfy the GSNNCH
     condition of Definition~4.8 for its normalized density-operator family.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:cpsv_example412_four_cycle_ssa_defect, thm:mpdo_gsnnch_four_cycle_markov}
     If $M$ were GSNNCH, its normalized four-site state would satisfy the
@@ -2415,7 +2415,7 @@ $\mathcal K_i=P_i\mathcal K_i=\mathcal K_iP_i$.
     contradiction.
 \end{proof}
 
-\begin{theorem}[Scale-two transfer relation and the unscaled ZCL--RFP obstruction]
+\begin{lemma}[Scale-two transfer relation and the unscaled ZCL--RFP obstruction]
     \label{thm:cpsv_example412_literal_zcl_rfp_gap}
     \lean{MPOTensor.CPSVExample412Literal.physTraceTransfer_M,
         MPOTensor.CPSVExample412Literal.physTraceTransfer_M_sq,
@@ -2438,7 +2438,7 @@ $\mathcal K_i=P_i\mathcal K_i=\mathcal K_iP_i$.
     fixed-representative condition. The tensor $(1/2)M$ is the likely intended
     correction, and the following theorem gives its two trace-preserving
     completely positive channel equations.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The transfer calculation is immediate from the two diagonal physical
     letters.  Trace preservation of a refinement from one site to two sites
@@ -2451,7 +2451,7 @@ $\mathcal K_i=P_i\mathcal K_i=\mathcal K_iP_i$.
 % Local normalization fix and line-246 boundary:
 % docs/paper-gaps/cpsv16_example_4_12_normalization.tex and
 % docs/paper-gaps/cpsv16_unit_weight_rfp_scale_tension.tex.
-\begin{theorem}[Normalized channel fixed point in Example 4.12]
+\begin{lemma}[Normalized channel fixed point in Example 4.12]
     \label{thm:cpsv_example412_normalized_rfp_maps}
     \lean{MPOTensor.CPSVExample412NormalizedRFP.Mhat,
         MPOTensor.CPSVExample412NormalizedRFP.mpo_Mhat,
@@ -2503,7 +2503,7 @@ $\mathcal K_i=P_i\mathcal K_i=\mathcal K_iP_i$.
     This proves the two channel equations in Definition~4.1 without further
     assumptions. Compatibility with the line-246 global unit-weight canonical
     convention is outside the conclusion of this theorem.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Each parity fibre contains two pairs. Hence
     $\sum_p C_p^\dagger C_p=I_4$ and
@@ -2518,7 +2518,7 @@ $\mathcal K_i=P_i\mathcal K_i=\mathcal K_iP_i$.
 \end{proof}
 
 % CPSV16 Example 4.12, lines 932--938, and Definition 4.8, lines 829--850.
-\begin{theorem}[The normalized representative of Example 4.12 is not GSNNCH]
+\begin{lemma}[The normalized representative of Example 4.12 is not GSNNCH]
     \label{thm:cpsv_example412_normalized_not_gsnnch}
     \lean{MPOTensor.isGSNNCH_smul_iff,
         MPOTensor.CPSVExample412NormalizedRFP.Mhat_not_isGSNNCH}
@@ -2530,7 +2530,7 @@ $\mathcal K_i=P_i\mathcal K_i=\mathcal K_iP_i$.
     under nonzero rescaling. In particular the normalized representative
     $\widehat M=\frac12 M$ of Example~4.12 is not a Gibbs state of a
     nearest-neighbor commuting Hamiltonian.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:mpdo_normalized_mpo_scaling_invariance, thm:cpsv_example412_not_gsnnch, thm:cpsv_example412_normalized_rfp_maps}
     For nonzero $c$ and every chain length, the normalized density operator
@@ -2565,13 +2565,13 @@ $\mathcal K_i=P_i\mathcal K_i=\mathcal K_iP_i$.
 \end{lemma}
 \begin{proof}\leanok
     \uses{thm:mpdo_normalized_mpo_scaling_invariance, thm:mpdo_mpo_scalar_scaling, thm:mpdo_positive_rescaling_iff}
-    By Theorem~\ref{thm:mpdo_normalized_mpo_scaling_invariance}, the
+    By Lemma~\ref{thm:mpdo_normalized_mpo_scaling_invariance}, the
     normalized operator $\sigma^{(N)}(cM)$ equals $\sigma^{(N)}(M)$, so their
     partial traces agree; the block entropies and mutual informations are
     functions of these reduced states. For $r>0$,
-    Theorem~\ref{thm:mpdo_positive_rescaling_iff} shows that $rM$ generates
+    Lemma~\ref{thm:mpdo_positive_rescaling_iff} shows that $rM$ generates
     positive semidefinite operators exactly when $M$ does, and
-    Theorem~\ref{thm:mpdo_mpo_scalar_scaling} gives
+    Lemma~\ref{thm:mpdo_mpo_scalar_scaling} gives
     $\rho^{(N)}(rM)=r^N\rho^{(N)}(M)$, so the traces of the two operators
     vanish together.
     The mutual-information clause of Definition~\ref{def:is_sal} transfers by
@@ -2579,7 +2579,7 @@ $\mathcal K_i=P_i\mathcal K_i=\mathcal K_iP_i$.
 \end{proof}
 
 % CPSV16 Example 4.12, lines 932--939, with Definitions 4.1, 4.2, 4.6, and 4.8.
-\begin{theorem}[Four properties of the normalized representative in Example 4.12]
+\begin{lemma}[Four properties of the normalized representative in Example 4.12]
     \label{thm:cpsv_example412_normalized_four_properties}
     \lean{MPOTensor.CPSVExample412NormalizedRFP.Mhat_isSAL,
         MPOTensor.CPSVExample412NormalizedRFP.Mhat_isPhysicalTraceIdempotent,
@@ -2599,21 +2599,21 @@ $\mathcal K_i=P_i\mathcal K_i=\mathcal K_iP_i$.
     canonical convention of the source
     \cite{gap:cpsv16_example_4_12_normalization,
         gap:cpsv16_unit_weight_rfp_scale_tension}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{lem:mpdo_area_law_scaling_invariance, thm:cpsv_example412_literal_sal, thm:cpsv_example412_normalized_rfp_maps, thm:rfp_via_ts_physical_trace_idempotent, thm:cpsv_example412_normalized_not_gsnnch}
     Lemma~\ref{lem:mpdo_area_law_scaling_invariance} with $r=\frac12$
     transfers saturation from the printed tensor
-    (Theorem~\ref{thm:cpsv_example412_literal_sal}) to $\widehat M$. By
+    (Lemma~\ref{thm:cpsv_example412_literal_sal}) to $\widehat M$. By
     Theorem~\ref{thm:rfp_via_ts_physical_trace_idempotent}, the channel
-    equations of Theorem~\ref{thm:cpsv_example412_normalized_rfp_maps} imply
+    equations of Lemma~\ref{thm:cpsv_example412_normalized_rfp_maps} imply
     that the physical-trace transfer is idempotent. The commuting-form
     obstruction is
-    Theorem~\ref{thm:cpsv_example412_normalized_not_gsnnch}.
+    Lemma~\ref{thm:cpsv_example412_normalized_not_gsnnch}.
 \end{proof}
 
 % CPSV16 Theorem 4.9 and Appendix C.2, lines 1381--1403, 1441--1450, and 1647--1782.
-\begin{theorem}[Bond-one physical-sector boundary]
+\begin{lemma}[Bond-one physical-sector boundary]
     \label{thm:mpdo_bond_one_physical_sector_factorization}
     \lean{MPOTensor.BondOnePhysicalSectorFactorization.sectorEquiv,
         MPOTensor.BondOnePhysicalSectorFactorization.factorization,
@@ -2638,7 +2638,7 @@ $\mathcal K_i=P_i\mathcal K_i=\mathcal K_iP_i$.
         \sum_k a_kb_k & =1.
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{lem:mpdo_sal_phys_trace_transfer_nonzero}
     Taking one physical sector with the full physical space as its left factor
@@ -2649,7 +2649,7 @@ $\mathcal K_i=P_i\mathcal K_i=\mathcal K_iP_i$.
     normalized by $a_0=b_0=1$.
 \end{proof}
 
-\begin{theorem}[Counterexample to the low-level absorbed-sector implication]
+\begin{lemma}[Counterexample to the low-level absorbed-sector implication]
     \label{thm:mpdo_sal_zcl_bnt_sector_structure_counterexample}
     \lean{MPOTensor.NonCartesianActiveSectorCandidate.transferMap_posDef_eigenvalue_lt_one,
         MPOTensor.NonCartesianActiveSectorCandidate.transferMap_posDef_eigenvalue_le_one,
@@ -2672,7 +2672,7 @@ $\mathcal K_i=P_i\mathcal K_i=\mathcal K_iP_i$.
     \cite[Theorem~4.9 and Appendix~C.2, lines~1647--1782]
     {Cirac2016MPDO_arXiv}, whose hypotheses include an ambient simple tensor
     in biCF and its canonical reconstruction.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Setting
@@ -2710,7 +2710,7 @@ $\mathcal K_i=P_i\mathcal K_i=\mathcal K_iP_i$.
     $K=\mu A$ with $A$ normal and $0<|\mu|=\sqrt r<1$.
 \end{proof}
 
-\begin{theorem}[Prepared BNT decomposition for the rank-one neighboring-trace obstruction]
+\begin{lemma}[Prepared BNT decomposition for the rank-one neighboring-trace obstruction]
     \label{thm:mpdo_neighboring_trace_obstruction_prepared_two_block_bnt}
     \lean{MPOTensor.NeighboringTraceObstructionAmbientBlocks.exists_obstruction_terminal_twoBlock_BNT_witness,
         MPOTensor.NeighboringTraceObstructionAmbientBlocks.terminalBlock_isNormalTensor}
@@ -2734,7 +2734,7 @@ $\mathcal K_i=P_i\mathcal K_i=\mathcal K_iP_i$.
     This is a project-derived preparation of the counterexample, not a
     construction asserted in \cite{Cirac2016MPDO_arXiv}. It gives the two
     normal blocks used in the ambient construction below.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpdo_sal_zcl_bnt_sector_structure_counterexample,
@@ -2764,14 +2764,14 @@ $\mathcal K_i=P_i\mathcal K_i=\mathcal K_iP_i$.
     \uses{thm:mpdo_simple_cf_is_simple}
     The displayed block-diagonal gauge and the nonnilpotent physical-trace
     transfers of the two representatives give a normalized simple canonical
-    form. Theorem~\ref{thm:mpdo_simple_cf_is_simple} then gives simplicity in
+    form. Lemma~\ref{thm:mpdo_simple_cf_is_simple} then gives simplicity in
     the sense of Definition~4.7.
 \end{proof}
 
 % The displayed conjunction matches the hypotheses used in CPSV16
 % Appendix C.2, lines 1628--1782. The simultaneous one-letter span and the
 % local orthogonal-sum entropy calculation are proved directly in TNLean.
-\begin{theorem}[Ambient neighboring-trace counterexample properties]
+\begin{lemma}[Ambient neighboring-trace counterexample properties]
     \label{thm:mpdo_neighboring_trace_obstruction_ambient_properties}
     \lean{MPOTensor.NeighboringTraceObstructionAmbientCounterexample.%
         exists_ambient_simpleBiCF_neighboringTraceObstruction}
@@ -2810,7 +2810,7 @@ $\mathcal K_i=P_i\mathcal K_i=\mathcal K_iP_i$.
         P_0P_1=P_1P_0 & =0, \notag \\
         P_0+P_1       & =1. \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpdo_neighboring_trace_obstruction_prepared_two_block_bnt,
@@ -2840,7 +2840,7 @@ $\mathcal K_i=P_i\mathcal K_i=\mathcal K_iP_i$.
     positivity.
 \end{proof}
 
-\begin{theorem}[Universal obstruction for the absorbed representative]
+\begin{lemma}[Universal obstruction for the absorbed representative]
     \label{thm:mpdo_neighboring_trace_obstruction_absorbed_no_factorization}
     \lean{MPOTensor.NeighboringTraceObstructionAmbientCounterexample.%
         firstCommonWeightAbsorbed_not_exists_neighboringTraceFactorization}
@@ -2859,7 +2859,7 @@ $\mathcal K_i=P_i\mathcal K_i=\mathcal K_iP_i$.
     \end{align}
     The negation is universal over all physical-sector factorizations of
     $\mu B$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpdo_sal_zcl_bnt_sector_structure_counterexample,
@@ -2871,14 +2871,14 @@ $\mathcal K_i=P_i\mathcal K_i=\mathcal K_iP_i$.
     is injective with full one-site physical support. Isometric physical
     descent therefore gives a normalized rank-one neighboring-trace
     factorization of the original four-letter tensor. This contradicts
-    Theorem~\ref{thm:mpdo_sal_zcl_bnt_sector_structure_counterexample}.
+    Lemma~\ref{thm:mpdo_sal_zcl_bnt_sector_structure_counterexample}.
 \end{proof}
 
 % **False source result:** Proposition C.12 is contradicted under the complete
 % simultaneous-one-letter-span, simple, normalized-simple-canonical, MPDO,
 % SAL, literal-ZCL, and line-246 normalization hypotheses. Documented in
 % docs/paper-gaps/cpgsv17_pf_rank_one.tex.
-\begin{theorem}[The printed absorbed-representative structure assertion is false]
+\begin{lemma}[The printed absorbed-representative structure assertion is false]
     \label{thm:mpdo_sal_zcl_bnt_sector_structure}
     \lean{MPOTensor.NeighboringTraceObstructionAmbientCounterexample.%
         printed_theorem49_ii_to_iv_is_false}
@@ -2917,15 +2917,15 @@ $\mathcal K_i=P_i\mathcal K_i=\mathcal K_iP_i$.
     \cite[Theorem~4.9 and Appendix~C.2, lines~1628--1782]
     {Cirac2016MPDO_arXiv} are false under the stated hypotheses. This
     false-source result is documented in \cite{gap:cpgsv17_pf_rank_one}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpdo_neighboring_trace_obstruction_ambient_properties,
         thm:mpdo_neighboring_trace_obstruction_absorbed_no_factorization}
     For the tensor and its two representatives from
-    Theorem~\ref{thm:mpdo_neighboring_trace_obstruction_ambient_properties},
+    Lemma~\ref{thm:mpdo_neighboring_trace_obstruction_ambient_properties},
     the first representative satisfies the gauge relation required by
-    Theorem~\ref{thm:mpdo_neighboring_trace_obstruction_absorbed_no_factorization},
+    Lemma~\ref{thm:mpdo_neighboring_trace_obstruction_absorbed_no_factorization},
     which excludes every normalized rank-one neighboring-trace factorization
     of its absorbed tensor. All remaining hypotheses are the properties listed
     in the ambient theorem.

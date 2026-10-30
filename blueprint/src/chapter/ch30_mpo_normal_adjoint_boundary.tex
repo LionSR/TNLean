@@ -23,7 +23,7 @@ structure considered in \cite[Section~5]{GarreRubio2023MPOSym}.
 
 \subsection{From periodic duality to exact similarities}
 
-\begin{theorem}[Physical adjunction with an arbitrary boundary]
+\begin{lemma}[Physical adjunction with an arbitrary boundary]
     \label{thm:glm_boundary_physical_adjoint}
     \lean{MPOTensor.conjTranspose_mpoWithBoundary}
     \leanok
@@ -32,7 +32,7 @@ structure considered in \cite[Section~5]{GarreRubio2023MPOSym}.
         (O^N_{T,X})^\dagger & =O^N_{T^\sharp,\overline X}.
         \label{eq:glm_boundary_physical_adjoint}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The $(\sigma,\tau)$ entry of the left side is
     $\overline{\tr(XT^{\tau_1\sigma_1}\cdots
@@ -42,7 +42,7 @@ structure considered in \cite[Section~5]{GarreRubio2023MPOSym}.
     is $\overline X$, without a virtual transpose.
 \end{proof}
 
-\begin{theorem}[Boundary transformation under a two-sided similarity]
+\begin{lemma}[Boundary transformation under a two-sided similarity]
     \label{thm:glm_boundary_similarity}
     \lean{MPOTensor.mpoWithBoundary_eq_of_conj}
     \leanok
@@ -50,7 +50,7 @@ structure considered in \cite[Section~5]{GarreRubio2023MPOSym}.
     $V:\C^\chi\to\C^\eta$, $W:\C^\eta\to\C^\chi$ satisfy
     $VW=I_\eta$, $WV=I_\chi$, and $VP^{ij}W=Q^{ij}$ for every $i,j$.
     Then $O^N_{P,X}=O^N_{Q,VXW}$ for every $X$ and $N\geq0$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Cancelling successive factors $WV$ extends the letter identity to
     every word. Equivalently, $P^w=WQ^wV$, including the empty word
@@ -75,7 +75,7 @@ structure considered in \cite[Section~5]{GarreRubio2023MPOSym}.
     vectors at every positive length.
 \end{definition}
 
-\begin{theorem}[Equality of dual bond dimensions]
+\begin{lemma}[Equality of dual bond dimensions]
     \label{thm:glm_dual_bond_dimension}
     \lean{MPOTensor.IsPeriodicAdjointFamily.bondDim_dual}
     \leanok
@@ -85,7 +85,7 @@ structure considered in \cite[Section~5]{GarreRubio2023MPOSym}.
     is normal with $\chi_a>0$. Then $\chi_a=\chi_{a^\vee}$ for every $a$.
     Here normality means that some positive blocking length makes the
     word matrices span $\MN{\chi_a}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:mps_equality_reduction_exists}
     The equality case of \cite[Proposition~20]{Molnar2018SemiInjective},
@@ -98,12 +98,12 @@ structure considered in \cite[Section~5]{GarreRubio2023MPOSym}.
     $\chi_a\leq\chi_{a^\vee}$.
 \end{proof}
 
-\begin{theorem}[Exact dual gauges and arbitrary-boundary adjoints]
+\begin{lemma}[Exact dual gauges and arbitrary-boundary adjoints]
     \label{thm:glm_normal_adjoint_gauge}
     \lean{MPOTensor.IsPeriodicAdjointFamily.exists_boundaryGauge}
     \leanok
     \uses{def:glm_periodic_adjoint_family,def:normal}
-    Under the hypotheses of Theorem~\ref{thm:glm_dual_bond_dimension},
+    Under the hypotheses of Lemma~\ref{thm:glm_dual_bond_dimension},
     for each $a$ there exist maps
     $V_a:\C^{\chi_a}\to\C^{\chi_{a^\vee}}$ and
     $W_a:\C^{\chi_{a^\vee}}\to\C^{\chi_a}$ with
@@ -121,7 +121,7 @@ structure considered in \cite[Section~5]{GarreRubio2023MPOSym}.
     \end{align}
     No one-site injectivity, canonical normalization, or inequivalence
     between distinct blocks is required.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:mps_equality_reduction_exists,thm:glm_dual_bond_dimension,
         thm:glm_boundary_physical_adjoint,thm:glm_boundary_similarity}
@@ -131,7 +131,7 @@ structure considered in \cite[Section~5]{GarreRubio2023MPOSym}.
     ($W_aV_a=I$), so multiplying the letter identity by $W_a$ and $V_a$
     proves (\ref{eq:glm_dual_letters}), and combining
     (\ref{eq:glm_boundary_physical_adjoint}) with
-    Theorem~\ref{thm:glm_boundary_similarity} yields
+    Lemma~\ref{thm:glm_boundary_similarity} yields
     (\ref{eq:glm_dual_boundary}) for every $N\geq0$, including $N=0$.
 \end{proof}
 
@@ -203,7 +203,7 @@ Write $J_a:\C^{\chi_a}\to\bigoplus_b\C^{\chi_b}$ for its coordinate
 inclusions and $X_{aa}=J_a^\dagger XJ_a$ for the diagonal blocks of an
 arbitrary $X\in\MN{\chi}$.
 
-\begin{theorem}[Diagonal boundaries of a block sum]
+\begin{lemma}[Diagonal boundaries of a block sum]
     \label{thm:glm_adjoint_block_diagonal}
     \lean{MPOTensor.mpoWithBoundary_blockSum}
     \leanok
@@ -212,7 +212,7 @@ arbitrary $X\in\MN{\chi}$.
         O^N_{T,X} & =\sum_aO^N_{T_a,X_{aa}}.
         \label{eq:glm_adjoint_block_diagonal}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Each word in $T$ is block diagonal with blocks the corresponding
     words in $T_a$. Only the diagonal blocks of $X$ contribute to its
@@ -237,7 +237,7 @@ arbitrary $X\in\MN{\chi}$.
     \leanok
     \uses{def:glm_adjoint_block_inclusion}
     Given dual labels and maps $V_a,W_a$ of the dimensions in
-    Theorem~\ref{thm:glm_normal_adjoint_gauge}, define
+    Lemma~\ref{thm:glm_normal_adjoint_gauge}, define
     \begin{align}
         \mathcal B(X)
          & =\sum_a\iota_{a^\vee}
@@ -257,7 +257,7 @@ arbitrary $X\in\MN{\chi}$.
     The output boundary is chosen before the length.
 \end{definition}
 
-\begin{theorem}[Adjoint closure from normal periodic dual blocks]
+\begin{lemma}[Adjoint closure from normal periodic dual blocks]
     \label{thm:glm_normal_block_adjoint}
     \lean{MPOTensor.IsPeriodicAdjointFamily.exists_blockSumAdjointBoundary,
         MPOTensor.IsPeriodicAdjointFamily.isBoundaryAdjointClosed_blockSum}
@@ -274,7 +274,7 @@ arbitrary $X\in\MN{\chi}$.
         \label{eq:glm_normal_block_adjoint}
     \end{align}
     In particular the block sum is boundary adjoint closed.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:glm_normal_adjoint_gauge,thm:glm_adjoint_block_diagonal,
         def:glm_adjoint_block_inclusion,def:glm_block_adjoint_transport}
@@ -292,12 +292,12 @@ arbitrary $X\in\MN{\chi}$.
     of an individual label is assumed.
 \end{proof}
 
-\begin{theorem}[Canonical parent symmetry from normal adjoint duality]
+\begin{lemma}[Canonical parent symmetry from normal adjoint duality]
     \label{thm:glm_normal_adjoint_parent}
     \lean{MPOTensor.IsBoundaryCompatible.parentHamiltonianES_commute_mpo_block_of_periodicAdjoint}
     \leanok
     \uses{def:glm_boundary_closedness,def:glm_periodic_adjoint_family,def:normal}
-    Under the hypotheses of Theorem~\ref{thm:glm_normal_block_adjoint},
+    Under the hypotheses of Lemma~\ref{thm:glm_normal_block_adjoint},
     let the block sum $T$ be boundary compatible with a state
     tensor $A$. Let $P_{A,L}$ be the orthogonal projection onto its
     length-$L$ arbitrary-boundary state space and let $H_{A,L,N}$ be the
@@ -308,10 +308,10 @@ arbitrary $X\in\MN{\chi}$.
         \label{eq:glm_normal_adjoint_parent}
     \end{align}
     No normality or injectivity of $A$ is required.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:glm_normal_block_adjoint,thm:glm_boundary_parent_blocks}
-    Theorem~\ref{thm:glm_normal_block_adjoint} gives adjoint closure of
+    Lemma~\ref{thm:glm_normal_block_adjoint} gives adjoint closure of
     the entire boundary range at length $L$. Compatibility makes
     $\mathcal S_A^L$ invariant under that range. Its orthogonal
     complement is invariant as well, since
@@ -322,7 +322,7 @@ arbitrary $X\in\MN{\chi}$.
     $T$ and extracts $O^N_{T_a}$. Cutting at each cyclic window, including
     wrapping windows, therefore gives commutation with every translated
     local parent term. Applying the block-sum commutation criterion of
-    Theorem~\ref{thm:glm_boundary_parent_blocks} with this derived adjoint
+    Lemma~\ref{thm:glm_boundary_parent_blocks} with this derived adjoint
     closure therefore establishes (\ref{eq:glm_normal_adjoint_parent}).
 \end{proof}
 
@@ -362,7 +362,7 @@ physical $*$-representation or weak-Hopf assumptions discussed in
     $O^1_{T,x}=xP$ and $\psi^1_{A,y}=y\ket{0}$.
 \end{definition}
 
-\begin{theorem}[Injectivity of both bond-one tensors]
+\begin{lemma}[Injectivity of both bond-one tensors]
     \label{thm:glm_counterexample_injective}
     \lean{MPOTensor.BoundaryAdjointCounterexample.tensor_isInjective,
         MPOTensor.BoundaryAdjointCounterexample.state_isInjective,
@@ -372,7 +372,7 @@ physical $*$-representation or weak-Hopf assumptions discussed in
     \uses{def:glm_adjoint_counterexample,def:injective,def:normal}
     Both $T$, on its paired physical alphabet, and $A$ are one-site
     injective, and hence normal.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Each family contains the scalar matrix $1$, which spans
     $\MN{1}=\C$. Thus blocking length one suffices.
@@ -380,7 +380,7 @@ physical $*$-representation or weak-Hopf assumptions discussed in
     the physical matrix $P$ as an operator on $\C^2$.
 \end{proof}
 
-\begin{theorem}[Exact fusion and action identities]
+\begin{lemma}[Exact fusion and action identities]
     \label{thm:glm_counterexample_local}
     \lean{MPOTensor.BoundaryAdjointCounterexample.mulTensor_tensor,
         MPOTensor.BoundaryAdjointCounterexample.actTensor_state}
@@ -393,14 +393,14 @@ physical $*$-representation or weak-Hopf assumptions discussed in
         \sum_{j=0}^1T^{ij}A^j    & =A^i.
         \label{eq:glm_counterexample_local}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Direct multiplication gives $P^2=P$ and $P\ket{0}=\ket{0}$.
     The tensor products of the one-dimensional bond spaces are
     canonically one-dimensional, so these are the stated letter identities.
 \end{proof}
 
-\begin{theorem}[Algebraic closedness and compatibility at every length]
+\begin{lemma}[Algebraic closedness and compatibility at every length]
     \label{thm:glm_counterexample_closed}
     \lean{MPOTensor.BoundaryAdjointCounterexample.tensor_isBoundaryClosed,
         MPOTensor.BoundaryAdjointCounterexample.tensor_isBoundaryCompatible,
@@ -416,7 +416,7 @@ physical $*$-representation or weak-Hopf assumptions discussed in
         \label{eq:glm_counterexample_boundary}
     \end{align}
     Every boundary commutes with every virtual tensor letter.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:glm_counterexample_local,
         thm:glm_boundary_closedness_of_decomposition}
@@ -430,7 +430,7 @@ physical $*$-representation or weak-Hopf assumptions discussed in
     All virtual letters and boundaries are scalars, so they commute.
 \end{proof}
 
-\begin{theorem}[Failure of adjoint closure of the whole boundary range]
+\begin{lemma}[Failure of adjoint closure of the whole boundary range]
     \label{thm:glm_counterexample_not_adjoint}
     \lean{MPOTensor.BoundaryAdjointCounterexample.adjoint_not_mem_boundaryRange,
         MPOTensor.BoundaryAdjointCounterexample.not_boundaryAdjointClosed}
@@ -444,7 +444,7 @@ physical $*$-representation or weak-Hopf assumptions discussed in
         \label{eq:glm_counterexample_not_adjoint}
     \end{align}
     Thus even the full one-site boundary range is not adjoint closed.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Every matrix $yP$ has $(1,0)$ entry zero, while
     $(P^\dagger)_{10}=1$. No output boundary can represent this adjoint,
