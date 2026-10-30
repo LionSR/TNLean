@@ -1,5 +1,8 @@
 # Non-QCA issue delivery status, 29 October 2026
 
+Historical delivery snapshot. For the refreshed labels, remaining-work queue,
+and verified closures, see [30 October triage](2026-10-30_non_qca_triage.md).
+
 Implementation snapshot base: main `c7d2992c89c16d85237e18557ff292979b3a67b4`.
 The latest main is `7b1ef717cec8bb851b433585e7b28cf4f7639208`; its accepted
 QICLean pin update and PEPS chapter-role regrouping are integrated into this audit.
