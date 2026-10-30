@@ -103,43 +103,42 @@ eventual exact-word spanning, and spectral strong irreducibility.
     If the set is empty, its value is defined to be zero.
 \end{definition}
 
-% Source-written against QICLean draft #987; compilation remains pending.
 \begin{definition}[Classical stochastic embedding and index]
     \label{def:stochastic_wielandt_embedding}
     \lean{Kraus.stochasticFamily, Matrix.positivePowerIndex}
-    \notready
+    \leanok
     For an entrywise nonnegative real $D\times D$ matrix $a$, let
     $K^{ij}=\sqrt{a_{ij}}\ketbra{i}{j}$ and let
-    $p(a)=\inf\{n\ge1:(a^n)_{ij}>0\text{ for every }i,j\}$,
+    $p(a)=\min\{n\ge1:(a^n)_{ij}>0\text{ for every }i,j\}$,
     with value zero for the empty set. These are the classical embedding
     and index in \cite[Proposition~2]{Sanz2010Quantum}.
 \end{definition}
 
 \begin{lemma}[Equality of the stochastic indices]
     \label{thm:stochastic_wielandt_indices}
-    \lean{MPSTensor.stochasticFamily_iIndex,
-        MPSTensor.stochasticFamily_qIndex}
-    \notready
+    \lean{MPSTensor.iIndex_stochasticFamily,
+        MPSTensor.qIndex_stochasticFamily}
+    \leanok
     \uses{def:stochastic_wielandt_embedding, def:wielandt_i_index,
         def:wielandt_q_index}
     For every entrywise nonnegative real $D\times D$ matrix $a$ with
     $D>0$, the matrix-unit family satisfies $q(\E_K)=p(a)=\iota(K)$.
 \end{lemma}
 
-\begin{proof}
+\begin{proof}\leanok
     The three sets of admissible positive lengths coincide:
     the normalized Choi matrix of $\E_K^n$ is diagonal with entries
     $(a^n)_{ij}/D$, so full word span is equivalent to strict positivity
     of $a^n$. Full vector spreading is equivalent to the same condition,
     as seen by applying the channel to the coordinate rank-one states.
-    Taking the infima gives the equalities.
+    Taking the minima gives the equalities.
 \end{proof}
 
 \begin{lemma}[Primitive stochastic embedding]
     \label{thm:primitive_stochastic_embedding}
-    \lean{MPSTensor.stochasticFamily_isPrimitivePaper,
+    \lean{MPSTensor.isPrimitivePaper_stochasticFamily,
         MPSTensor.stochasticFamily_primitive_and_indices}
-    \notready
+    \leanok
     \uses{def:stochastic_wielandt_embedding, def:paper_primitive,
         def:wielandt_i_index, def:wielandt_q_index}
     Let $a$ be a primitive column-stochastic $D\times D$ matrix with
@@ -148,7 +147,7 @@ eventual exact-word spanning, and spectral strong irreducibility.
     \cite[Proposition~2]{Sanz2010Quantum}.
 \end{lemma}
 
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:stochastic_wielandt_indices}
     A strictly positive positive-length power of $a$ gives full vector
     spreading at that length. The index equalities hold by

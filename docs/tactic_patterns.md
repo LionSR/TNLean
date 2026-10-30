@@ -9728,7 +9728,7 @@ there is no need for a new tactic.
 ### Positive-length index equality — candidate (2026-10-29)
 
 - **Seen:** The classical and quantum index equalities in
-  `MPS/Examples/StochasticWielandt.lean` identify the positive-length
+  `Wielandt/Primitivity/Stochastic.lean` identify the positive-length
   admissible sets, discard length zero, and apply `congrArg sInf`.
 - **Reuse:** Fixed-length equivalences remain in QICLean; use set extensionality
   for the tensor indices. Two occurrences in one file do not warrant a tactic.

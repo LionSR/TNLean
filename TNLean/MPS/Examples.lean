@@ -69,7 +69,6 @@ import TNLean.MPS.Examples.SPTEntanglementSpectrum
 import TNLean.MPS.Examples.SpinHalf
 import TNLean.MPS.Examples.SpinOne
 import TNLean.MPS.Examples.SpinOperator
-import TNLean.MPS.Examples.StochasticWielandt
 import TNLean.MPS.Examples.StringOrderScalarPhase
 import TNLean.MPS.Examples.WState
 import TNLean.MPS.Examples.WStateCanonicalBound

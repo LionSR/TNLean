@@ -21,8 +21,10 @@ this file only relates them to the tensor indices.
 
 ## Main results
 
-* `MPSTensor.stochasticFamily_iIndex`: the full-word index is the classical index.
-* `MPSTensor.stochasticFamily_qIndex`: the vector-spreading index is the classical index.
+* `MPSTensor.iIndex_stochasticFamily`: the full-word index is the classical index.
+* `MPSTensor.qIndex_stochasticFamily`: the vector-spreading index is the classical index.
+* `MPSTensor.isPrimitivePaper_stochasticFamily`: a strictly positive positive-length power
+  gives paper primitivity of the embedding.
 * `MPSTensor.stochasticFamily_primitive_and_indices`: the primitive stochastic case.
 -/
 
@@ -35,7 +37,7 @@ variable {D : ℕ} [NeZero D]
 /-- The full-Kraus-rank index of the actual stochastic embedding is the
 classical positive-power index. Source: arXiv:0909.5347, Proposition 2,
 lines 478–494. The equality also covers nonprimitive nonnegative matrices. -/
-theorem stochasticFamily_iIndex (a : Matrix (Fin D) (Fin D) ℝ)
+theorem iIndex_stochasticFamily (a : Matrix (Fin D) (Fin D) ℝ)
     (ha : ∀ i j, 0 ≤ a i j) :
     iIndex (Kraus.stochasticFamily a) = Matrix.positivePowerIndex a := by
   unfold iIndex Matrix.positivePowerIndex
@@ -49,7 +51,7 @@ theorem stochasticFamily_iIndex (a : Matrix (Fin D) (Fin D) ℝ)
 /-- The primitivity index of the actual stochastic embedding is the
 classical positive-power index. Source: arXiv:0909.5347, Proposition 2,
 lines 478–494. The equality also covers nonprimitive nonnegative matrices. -/
-theorem stochasticFamily_qIndex (a : Matrix (Fin D) (Fin D) ℝ)
+theorem qIndex_stochasticFamily (a : Matrix (Fin D) (Fin D) ℝ)
     (ha : ∀ i j, 0 ≤ a i j) :
     qIndex (Kraus.stochasticFamily a) = Matrix.positivePowerIndex a := by
   unfold qIndex Matrix.positivePowerIndex
@@ -64,7 +66,7 @@ theorem stochasticFamily_qIndex (a : Matrix (Fin D) (Fin D) ℝ)
 the actual stochastic Kraus family. Source: arXiv:0909.5347, Proposition 2,
 lines 478–494. Classical primitivity is expressed by a strictly positive
 positive-length matrix power. -/
-theorem stochasticFamily_isPrimitivePaper (a : Matrix (Fin D) (Fin D) ℝ)
+theorem isPrimitivePaper_stochasticFamily (a : Matrix (Fin D) (Fin D) ℝ)
     (ha : ∀ i j, 0 ≤ a i j)
     (hp : ∃ n : ℕ, 0 < n ∧ ∀ i j : Fin D, 0 < (a ^ n) i j) :
     IsPrimitivePaper (Kraus.stochasticFamily a) := by
@@ -84,7 +86,7 @@ theorem stochasticFamily_primitive_and_indices (a : Matrix (Fin D) (Fin D) ℝ)
       qIndex (Kraus.stochasticFamily a) = Matrix.positivePowerIndex a ∧
       Matrix.positivePowerIndex a = iIndex (Kraus.stochasticFamily a) := by
   have hnonneg : ∀ i j, 0 ≤ a i j := fun _ _ ↦ Matrix.nonneg_of_mem_colStochastic ha
-  exact ⟨stochasticFamily_isPrimitivePaper a hnonneg hp,
-    stochasticFamily_qIndex a hnonneg, (stochasticFamily_iIndex a hnonneg).symm⟩
+  exact ⟨isPrimitivePaper_stochasticFamily a hnonneg hp,
+    qIndex_stochasticFamily a hnonneg, (iIndex_stochasticFamily a hnonneg).symm⟩
 
 end MPSTensor
