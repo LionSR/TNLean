@@ -79,8 +79,8 @@ theorem chainWindowOperator_eq_embedOp {L N a : â„•} (ha : a < N) (haL : a + L â
       have hval := congrArg Fin.val hj
       dsimp [e] at hval
       omega
-  rw [hOff]
-  rfl
+  simp only [hOff]
+  split_ifs <;> rfl
 
 /-- Every operator supported on a consecutive window is an actual
 placement of a matrix on that complete window. Source context:

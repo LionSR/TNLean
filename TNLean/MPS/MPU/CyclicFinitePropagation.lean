@@ -65,8 +65,8 @@ theorem mpo_conjugation_singleton_propagation_of_one
       simp only [A₀, Matrix.submatrix_apply, rotateConfig_apply, Function.comp_def,
         Equiv.apply_symm_apply]
     have h := mpo_conjugation_mem_supportedOperators_rotate U (hi A₀ hA₀)
-    simpa only [hcancel, QuantumCircuit.neighbourhood_finRotate,
-      Set.image_singleton, finRotate_apply, add_assoc] using h
+    rw [QuantumCircuit.neighbourhood_finRotate, Set.image_singleton] at h
+    simpa only [hcancel, finRotate_apply, add_assoc] using h
   intro x
   have h := Fin.cyclic_induction hbase hstep (x - x₀)
   have hx : x₀ + (x - x₀) = x := by abel
@@ -77,7 +77,7 @@ singleton propagation radius on every sufficiently long periodic ring,
 including the seam. Source: arXiv:1703.09188, StandardForm/SF and
 Appendix eq:appendix-1, lines 603–622 and 2300–2306. -/
 theorem mpo_conjugation_mem_supportedOperators_singleton
-    {d D ℓ r N : ℕ} {U : MPOTensor d D} (hU : U.IsMPU)
+    {d D ℓ r N : ℕ} [NeZero N] {U : MPOTensor d D} (hU : U.IsMPU)
     (k : ℕ) (hk : 0 < k) (hN : 3 * (2 * k) ≤ N)
     {u : Matrix (Fin ℓ × Fin r)
       (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k)) ℂ}
@@ -89,22 +89,21 @@ theorem mpo_conjugation_mem_supportedOperators_singleton
     mpo U N * A * (mpo U N)ᴴ ∈ QuantumCircuit.supportedOperators d
       (QuantumCircuit.neighbourhood {x} (4 * k)) := by
   classical
-  obtain ⟨s, rfl⟩ := Nat.exists_eq_add_of_le hN
-  let : NeZero (3 * (2 * k) + s) := ⟨by omega⟩
-  let x₀ : Fin (3 * (2 * k) + s) := ⟨2 * k, by omega⟩
+  obtain ⟨s, rfl⟩ : ∃ s, N = 0 + (3 * (2 * k) + s) := ⟨N - 3 * (2 * k), by omega⟩
+  let x₀ : Fin (0 + (3 * (2 * k) + s)) := ⟨2 * k, by omega⟩
   apply mpo_conjugation_singleton_propagation_of_one U x₀ (4 * k) ?_ x A hA
   intro B hB
   have hCentral : B ∈ QuantumCircuit.supportedOperators d
-      {i : Fin (3 * (2 * k) + s) | 2 * k ≤ i.val ∧ i.val < 2 * k + 2 * k} :=
+      {i : Fin (0 + (3 * (2 * k) + s)) | 0 + 2 * k ≤ i.val ∧ i.val < 0 + 2 * k + 2 * k} :=
     QuantumCircuit.supportedOperators_mono (by
       intro i hi
       obtain rfl := Set.mem_singleton_iff.mp hi
-      change 2 * k ≤ 2 * k ∧ 2 * k < 2 * k + 2 * k
+      change 0 + 2 * k ≤ 2 * k ∧ 2 * k < 0 + 2 * k + 2 * k
       omega) hB
   have hForward := mpo_conjugation_mem_supportedOperators_central hU k 0 s hk S hCentral
-  simp only [zero_add, zero_le, true_and] at hForward
   apply QuantumCircuit.supportedOperators_mono ?_ hForward
   intro j hj
+  have hj' : j.val < 0 + 3 * (2 * k) := hj.2
   refine ⟨x₀, Set.mem_singleton x₀, (j.val : ℤ) - x₀.val, ?_, ?_⟩
   · apply abs_le.mpr
     change -((4 * k : ℕ) : ℤ) ≤ (j.val : ℤ) - (2 * k : ℕ) ∧
