@@ -166,3 +166,53 @@ We follow the cyclic-cut argument of
     Lemma~\ref{lem:periodic_block_linear_independence} gives $b$ independent
     vectors in $\ker H$.
 \end{proof}
+
+
+\begin{example}[Cancellation under literal weighted-vector distinctness]
+    \label{ex:canonical_weighted_vector_cancellation}
+    \lean{MPSTensor.CanonicalBlockCancellation.basisTensor,
+        MPSTensor.CanonicalBlockCancellation.blocks,
+        MPSTensor.CanonicalBlockCancellation.tensor,
+        MPSTensor.CanonicalBlockCancellation.canonicalData,
+        MPSTensor.CanonicalBlockCancellation.blocks_c1,
+        MPSTensor.CanonicalBlockCancellation.tensor_state_thirteen,
+        MPSTensor.CanonicalBlockCancellation.norm_tensor_state_thirteen,
+        MPSTensor.CanonicalBlockCancellation.blocks_pairwise_ne_thirteen,
+        MPSTensor.CanonicalBlockCancellation.interaction,
+        MPSTensor.CanonicalBlockCancellation.interaction_isPositive,
+        MPSTensor.CanonicalBlockCancellation.tensor_ground_thirteen,
+        MPSTensor.CanonicalBlockCancellation.first_block_not_ground_thirteen,
+        MPSTensor.CanonicalBlockCancellation.blocks_nonzero_thirteen,
+        MPSTensor.CanonicalBlockCancellation.literal_weighted_vector_counterexample}
+    \notready
+    \discussion{7684}
+    \uses{def:pgvwc07_ti_canonical_representation, def:periodic-fixed-interaction}
+    Consider three bond-one blocks on the alphabet $\{0,1\}$,
+    \[
+        A^1=(1,0),\qquad A^2=(-1,0),\qquad A^3=(0,1),
+    \]
+    with weights $\lambda_1=\lambda_2=\lambda_3=1$.
+    All three blocks satisfy the canonical conditions and injectivity
+    at $L_0=1$. On the ring of $N=13$ sites their three nonzero weighted
+    vectors are pairwise unequal, and their sum is the unit vector
+    $\phi=|1\rangle^{\otimes13}$. For the positive one-site interaction
+    $h=|0\rangle\langle0|$ and its periodic sum $H$,
+    \[
+        H\phi=0,\qquad H|0\rangle^{\otimes13}\ne0,
+        \qquad 13=3(3-1)(1+1)+1.
+    \]
+    Thus the literal inequality of the displayed weighted finite-ring
+    vectors does not suffice for the first conclusion of
+    \cite[Theorem~11]{PerezGarcia2007Matrix}. A projective reading of
+    ``different states'' excludes the first two blocks; this formulation
+    distinction is recorded in \cite{gap:pgvwc07_direct_sum_input}.
+\end{example}
+\begin{proof}
+    Each bond space is one-dimensional. The canonical fixed point is $1$,
+    and one of its two letters is $1$ or $-1$, giving injectivity.
+    At odd length the first two vectors are opposites and cancel.
+    The remaining product vector has norm one, and every translated
+    interaction annihilates it. Each translated interaction fixes the
+    all-zero product vector, so positivity of the summands prevents their
+    sum from annihilating that vector.
+\end{proof}
