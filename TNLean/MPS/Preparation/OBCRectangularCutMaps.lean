@@ -83,17 +83,19 @@ theorem exists_rectangular_maps_to_cutBasis {d D N : ℕ}
   choose Z₀ hZ₀ using hlift
   let Z : (k : Fin (N + 1)) →
       Matrix (Fin (B.bondDim k)) (Fin (cutCoefficientRank ψ k.val)) ℂ := fun k ↦
-    if k = Fin.last N then fun _ _ ↦ 1 else Z₀ k
+    if k = Fin.last N then Matrix.of fun _ _ ↦ 1 else Z₀ k
   have hZ : ∀ k, physicalPrefixMatrix B k * Z k = cutPrefixMatrix ψ C k.val := by
     intro k
     by_cases hk : k = Fin.last N
     · subst k
       let : Unique (Fin (B.bondDim (Fin.last N))) := Equiv.unique (finCongr B.right_dim)
       ext u q
-      simp only [Z, if_pos rfl, Matrix.mul_apply, physicalPrefixMatrix_last,
-        mul_one, Fintype.sum_unique, cutPrefixMatrix, hCN]
+      have hCN' : ∀ q, (C (Fin.last N).val q).val = fullCutVector ψ := hCN
+      simp only [Z, ↓reduceIte, cutPrefixMatrix, hCN']
+      rw [Matrix.mul_apply, Fintype.sum_unique, physicalPrefixMatrix_last, Matrix.of_apply,
+        mul_one]
       exact congrFun hcoeff (finalCutPrefixEquiv d N u)
-    · simpa only [Z, if_neg hk] using hZ₀ k
+    · simpa only [Z, hk, ↓reduceIte] using hZ₀ k
   choose T hT using fun k : Fin (N + 1) ↦ exists_cutPrefixMatrix_leftInverse ψ C k.val
   let Y : (k : Fin (N + 1)) →
       Matrix (Fin (cutCoefficientRank ψ k.val)) (Fin (B.bondDim k)) ℂ :=
@@ -105,11 +107,13 @@ theorem exists_rectangular_maps_to_cutBasis {d D N : ℕ}
   refine ⟨Y, Z, hYZ, ?_, ?_, ?_⟩
   · intro q r
     have h := congrArg (fun M ↦ M q q) (hT 0)
-    simp only [Matrix.mul_apply, cutPrefixMatrix_zero ψ C hC0, mul_one,
-      Matrix.one_apply_eq] at h
-    simpa only [Y, Matrix.mul_apply, physicalPrefixMatrix_zero, mul_one] using h
+    have h1 : ∀ j, cutPrefixMatrix ψ C ((0 : Fin (N + 1)) : ℕ) j q = 1 :=
+      fun j ↦ cutPrefixMatrix_zero ψ C hC0 j q
+    have h2 : ∀ j, physicalPrefixMatrix B 0 j r = 1 := fun j ↦ physicalPrefixMatrix_zero B j r
+    simp only [Matrix.mul_apply, h1, mul_one, Matrix.one_apply_eq] at h
+    simpa only [Y, Matrix.mul_apply, h2, mul_one] using h
   · intro q r
-    simp only [Z, if_pos rfl]
+    simp only [Z, ↓reduceIte, Matrix.of_apply]
   · intro p i
     have hstep : cutPrefixMatrix ψ C p.val * cutSiteMatrix ψ C p.val i =
         physicalPrefixMatrix B p.castSucc * B.tensor p i * Z p.succ := by
@@ -119,14 +123,18 @@ theorem exists_rectangular_maps_to_cutBasis {d D N : ℕ}
         _ = (physicalPrefixMatrix B p.succ * Z p.succ) (extendCutPrefix p.val u i) q :=
           congrArg (fun M ↦ M (extendCutPrefix p.val u i) q) (hZ p.succ).symm
         _ = _ := by simp only [Matrix.mul_apply, physicalPrefixMatrix_step]
+    let Tp : Matrix (Fin (cutCoefficientRank ψ p.val)) (CutPrefixConfig d N p.val) ℂ :=
+      T p.castSucc
+    have hTp : Tp * cutPrefixMatrix ψ C p.val = 1 := hT p.castSucc
     calc
       cutSiteMatrix ψ C p.val i =
-          (T p.castSucc * cutPrefixMatrix ψ C p.val) * cutSiteMatrix ψ C p.val i := by
-        rw [hT, Matrix.one_mul]
-      _ = T p.castSucc * (cutPrefixMatrix ψ C p.val * cutSiteMatrix ψ C p.val i) :=
+          (Tp * cutPrefixMatrix ψ C p.val) * cutSiteMatrix ψ C p.val i := by
+        rw [hTp, Matrix.one_mul]
+      _ = Tp * (cutPrefixMatrix ψ C p.val * cutSiteMatrix ψ C p.val i) :=
         Matrix.mul_assoc _ _ _
-      _ = T p.castSucc * (physicalPrefixMatrix B p.castSucc * B.tensor p i * Z p.succ) :=
-        congrArg (fun M ↦ T p.castSucc * M) hstep
-      _ = _ := by simp only [Y, Matrix.mul_assoc]
+      _ = Tp * (show Matrix (CutPrefixConfig d N p.val) (Fin (cutCoefficientRank ψ (p.val + 1))) ℂ
+            from physicalPrefixMatrix B p.castSucc * B.tensor p i * Z p.succ) :=
+        congrArg (fun M ↦ Tp * M) hstep
+      _ = _ := by simp only [Y, Tp, Matrix.mul_assoc]
 
 end OBCChainTensor

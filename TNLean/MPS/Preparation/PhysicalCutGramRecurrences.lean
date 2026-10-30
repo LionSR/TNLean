@@ -24,6 +24,7 @@ namespace MPSPreparation
 
 variable {d N k : ℕ} {ι κ : Type*} [Fintype ι] [Fintype κ]
 
+omit [Fintype κ] in
 /-- The physical prefix extension identity determines the forward Gram
 recursion for arbitrary adjacent-cut factors.
 Source: PGVWC07, MPSarchive.tex lines 444--456, condition 2. -/
@@ -48,9 +49,9 @@ theorem prefixGram_eq_sum_of_extendCutPrefix (hk : k < N)
       intro u _
       apply Finset.sum_congr rfl
       intro i _
-      rw [hstep, hstep]
-      rfl
+      exact congrArg₂ (fun a b ↦ star a * b) (hstep u i q) (hstep u i r)
 
+omit [Fintype ι] in
 /-- The physical suffix extension identity determines the backward Gram
 recursion for arbitrary adjacent-cut factors.
 Source: PGVWC07, MPSarchive.tex lines 444--456, condition 1. -/
@@ -69,8 +70,7 @@ theorem suffixGram_eq_sum_of_extendCutSuffix (hk : k < N)
       intro i _
       apply Finset.sum_congr rfl
       intro v _
-      rw [hstep, hstep]
-      rfl
+      exact congrArg₂ (fun a b ↦ a * star b) (hstep i v q) (hstep i v r)
     _ = _ := by
       apply Finset.sum_congr rfl
       intro i _

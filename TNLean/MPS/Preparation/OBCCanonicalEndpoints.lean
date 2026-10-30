@@ -26,6 +26,8 @@ namespace MPSPreparation
 variable {d N : ℕ} (ψ : (Fin N → Fin d) → ℂ) (hψ : ψ ≠ 0)
     (B : ∀ k, Module.Basis (Fin (cutCoefficientRank ψ k)) ℂ (cutColumnSpace ψ k))
 
+include hψ
+
 /-- The fixed initial cut vector has unit Gram matrix.
 Source: PGVWC07, Theorem thm:OBC-Vidal, condition 3. -/
 theorem cutPrefixMatrix_zero_gram (hB0 : ∀ q, (B 0 q).val = 1) :
@@ -53,7 +55,8 @@ theorem cutPrefixMatrix_last_gram (hBN : ∀ q, (B N q).val = fullCutVector ψ)
   simp only [Matrix.mul_apply, Matrix.conjTranspose_apply, cutPrefixMatrix, hBN,
     Matrix.one_apply_eq]
   change (∑ u, star (ψ (finalCutPrefixEquiv d N u)) * ψ (finalCutPrefixEquiv d N u)) = 1
-  rw [(finalCutPrefixEquiv d N).sum_comp]
+  rw [Fintype.sum_equiv (finalCutPrefixEquiv d N) _ (fun σ ↦ star (ψ σ) * ψ σ)
+    (fun _ ↦ rfl)]
   exact hnorm
 
 /-- The final suffix factor is a row coisometry because the endpoint
@@ -93,7 +96,8 @@ theorem cutSuffixMatrix_zero_coisometry (hB0 : ∀ q, (B 0 q).val = 1)
   have hqr : q = r := Subsingleton.elim _ _
   subst r
   simp only [Matrix.mul_apply, Matrix.conjTranspose_apply, hG, Matrix.one_apply_eq]
-  rw [(initialCutSuffixEquiv d N).sum_comp]
+  rw [Fintype.sum_equiv (initialCutSuffixEquiv d N) _ (fun σ ↦ ψ σ * star (ψ σ))
+    (fun _ ↦ rfl)]
   simpa only [mul_comm] using hnorm
 
 end MPSPreparation

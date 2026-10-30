@@ -55,7 +55,7 @@ theorem exists_canonicalCutBasisFamily {d N : ℕ} (hN : 0 < N)
     simpa only [B, dite_eq_left rfl] using hE0 q
   have hBN : ∀ q, (B N q).val = fullCutVector ψ := by
     intro q
-    simpa only [B, dite_eq_right (Nat.ne_of_gt hN), dite_eq_left rfl] using hEN q
+    simpa only [B, hN.ne', ↓reduceDIte] using hEN q
   refine ⟨B, hB0, hBN, ?_⟩
   intro k
   by_cases h0 : k = 0
@@ -70,8 +70,19 @@ theorem exists_canonicalCutBasisFamily {d N : ℕ} (hN : 0 < N)
       cutSuffixMatrix_last_coisometry ψ hψ B hBN⟩
     simpa only [Complex.ofReal_one, Matrix.diagonal_one] using
       cutPrefixMatrix_last_gram ψ hψ B hBN hnorm
+  have hBk : B k = C k := by simp only [B, h0, hlast, ↓reduceDIte]
+  have hP : cutPrefixMatrix ψ B k = cutPrefixMatrix ψ C k := by
+    unfold cutPrefixMatrix
+    rw [hBk]
+  have hS : cutSuffixMatrix ψ B k = cutSuffixMatrix ψ C k := by
+    unfold cutSuffixMatrix
+    rw [hBk]
   refine ⟨⟨fun q ↦ s k q ^ 2, fun q ↦ sq_pos_of_pos (hs k q), ?_⟩, ?_⟩
-  · simpa only [cutPrefixMatrix, B, dif_neg h0, dif_neg hlast, Complex.ofReal_pow] using hGram k
-  · simpa only [cutSuffixMatrix, B, dif_neg h0, dif_neg hlast] using hG k
+  · rw [hP]
+    have h := hGram k
+    simp only [← Complex.ofReal_pow] at h
+    exact h
+  · rw [hS]
+    exact hG k
 
 end MPSPreparation

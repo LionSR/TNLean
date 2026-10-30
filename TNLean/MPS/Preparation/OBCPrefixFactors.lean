@@ -76,15 +76,10 @@ private theorem prefixProduct_step (p : Fin N) (u : CutPrefixConfig d N p.val) (
   · apply congrArg List.prod
     apply congrArg List.ofFn
     funext q
-    have hq : Fin.castLE (Nat.lt_succ_iff.mp p.succ.isLt) q.castSucc =
-        Fin.castLE (Nat.lt_succ_iff.mp p.castSucc.isLt) q := Fin.ext rfl
-    rw [hq]
-    simp only [extendCutPrefix, q.isLt, dite_true]
+    simp only [extendCutPrefix, Fin.val_castLE, Fin.val_castSucc, q.isLt, dite_true]
     rfl
-  · have hp : Fin.castLE (Nat.lt_succ_iff.mp p.succ.isLt) (Fin.last p.val) = p :=
-      Fin.ext rfl
-    rw [hp]
-    simp only [extendCutPrefix, Nat.lt_irrefl, dite_false]
+  · simp only [extendCutPrefix, Fin.val_castLE, Fin.val_last, Nat.lt_irrefl, dite_false]
+    rfl
 
 /-- The actual arbitrary-representation prefix factors propagate by the
 original site matrices. Source: PGVWC07, free-OBC, local maps in
@@ -102,7 +97,8 @@ theorem physicalPrefixMatrix_step (p : Fin N) (u : CutPrefixConfig d N p.val)
   apply Finset.sum_congr rfl
   intro γ _
   split_ifs with hγ
-  · rw [Matrix.zeroPad_apply_of_lt _ hγ q.isLt]
+  · rw [show B.zeroPad p i = Matrix.zeroPad D (B.tensor p i) from rfl,
+      Matrix.zeroPad_apply_of_lt _ hγ q.isLt]
     rfl
   · rw [prefixProduct_outside B p.castSucc u γ (not_lt.mp hγ), zero_mul]
 
@@ -112,9 +108,15 @@ Source: PGVWC07, endpoint convention preceding Theorem thm:OBC-Vidal. -/
 theorem physicalPrefixMatrix_zero (u : CutPrefixConfig d N 0) (q : Fin (B.bondDim 0)) :
     physicalPrefixMatrix B 0 u q = 1 := by
   have hq : q.val = 0 := by have h := q.isLt; have hd := B.left_dim; omega
-  simp only [physicalPrefixMatrix, prefixProduct]
-  rw [List.ofFn_zero, List.prod_nil, Matrix.one_apply]
-  exact if_pos (Fin.ext hq.symm)
+  have h0 : prefixProduct B 0 u = 1 := by
+    apply List.prod_eq_one
+    intro x hx
+    obtain ⟨j, -⟩ := List.mem_ofFn.mp hx
+    exact absurd j.isLt (by simp)
+  simp only [physicalPrefixMatrix]
+  rw [h0, Matrix.one_apply]
+  have hidx : (⟨0, B.bondBound_pos⟩ : Fin D) = Fin.castLE (B.bondDim_le 0) q := Fin.ext hq.symm
+  simp only [hidx, ↓reduceIte]
 
 /-- The right endpoint prefix factor is the actual represented physical
 state, including its complete complex amplitude.

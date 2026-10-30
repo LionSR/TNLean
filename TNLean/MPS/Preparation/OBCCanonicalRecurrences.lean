@@ -38,7 +38,8 @@ theorem cutBondDensity_step {k : ℕ} (hk : k < N) :
     ∑ i, (cutSiteMatrix ψ B k i)ᴴ * cutBondDensity ψ B k * cutSiteMatrix ψ B k i =
       cutBondDensity ψ B (k + 1) := by
   exact prefixGram_eq_sum_of_extendCutPrefix hk (cutPrefixMatrix ψ B k)
-    (cutPrefixMatrix ψ B (k + 1)) (cutSiteMatrix ψ B k) (cutPrefixMatrix_step ψ B k)
+    (cutPrefixMatrix ψ B (k + 1)) (cutSiteMatrix ψ B k)
+    (fun u i q ↦ cutPrefixMatrix_step ψ B k i u q)
 
 /-- Suffix propagation gives the exact backward Gram recursion.
 Source: PGVWC07, Theorem thm:OBC-Vidal, condition 1. -/
