@@ -17,10 +17,18 @@
     condition is assumed.
 \end{lemma}
 \begin{proof}
+    \leanok
     Physical adjunction interchanges the physical matrix indices and
     conjugates coefficients, so it gives $U^{(N)\dagger}$ without
-    reversing site order. The two actual finite conjugations cancel
-    by the two unitary equations.
+    reversing site order. The two finite conjugations cancel by the
+    unitary equations
+    \begin{align}
+        U_b^{(N)\dagger}U_b^{(N)} & =I, & U_b^{(N)}U_b^{(N)\dagger} & =I,
+        \label{eq:mpu_actual_finite_unitary_pair}
+    \end{align}
+    which give
+    $U_b^{(N)\dagger}\bigl(U_b^{(N)}AU_b^{(N)\dagger}\bigr)U_b^{(N)}=A$
+    and the symmetric identity.
 \end{proof}
 
 \begin{lemma}[Actual QCA from canonical form II]
@@ -28,6 +36,7 @@
     \lean{SpinChain.exists_isQCA_of_isMPUCanonicalFormII}
     \leanok
     \uses{lem:mpu_actual_finite_adjoint_inverse,
+        thm:mpu_bounded_source_open_standard_form,
         thm:mpu_finite_heisenberg_completed_forward_action,
         lem:mpu_finite_heisenberg_translation_covariance,
         lem:mpu_finite_heisenberg_forward_propagation}
@@ -42,19 +51,29 @@
     \cite[lines~378--427, 563--622 and~2292--2306]{Cirac2017MPU}.
 \end{lemma}
 \begin{proof}
+    \leanok
     The established simple-block construction supplies a positive block
-    length $k\le D^2$ and its actual standard form. Physical adjunction
+    length $k\le D^2$ and its standard form. Physical adjunction
     preserves the canonical datum, and the same construction supplies
     an adjoint block and standard form independently. Their completed
     forward maps have derived finite support. For a finite input,
-    choose one common chain buffering both its support and the actual
-    first output support. Faithfulness of the finite-region inclusion
-    identifies that output with the actual first finite conjugation.
-    The two finite conjugations cancel by the preceding lemma.
+    choose one common chain $\Gamma$ buffering both its support
+    $\Lambda$ and the first output support $K$. Faithfulness of the
+    finite-region inclusion and the preceding lemma give
+    \begin{align}
+        \iota_{K,\Gamma}(B)
+         & =U_b^{(N)}\,\iota_{\Lambda,\Gamma}(A)\,U_b^{(N)\dagger},
+        \\
+        V_b^{(N)}\bigl(U_b^{(N)}\,\iota_{\Lambda,\Gamma}(A)\,
+        U_b^{(N)\dagger}\bigr)V_b^{(N)\dagger}
+         & =\iota_{\Lambda,\Gamma}(A),
+        \label{eq:mpu_actual_qca_buffered_cancellation}
+    \end{align}
+    where $B$ is the first output and $V$ the physical adjoint.
     Density extends both inverse identities to the completion. The
     resulting star-automorphism has the derived covariance and
     propagation properties. Finally $D^2\le D^4$ for $D>0$ gives the
-    stated neighbourhood, and the actual finite-chain evaluation
+    stated neighbourhood, and the finite-chain evaluation
     holds on every fully buffered interval.
 \end{proof}
 
@@ -67,7 +86,7 @@
         SpinChain.mpuQuasiLocalEquiv_finiteChainConjugation,
         SpinChain.mpuQuasiLocalEquiv_apply_eq_bufferedMPUQuasiLocalAction}
     \leanok
-    \uses{lem:mpu_actual_qca_canonical}
+    \uses{lem:mpu_actual_qca_canonical, thm:mpu_reduced_cfii_representative}
     Let $d>0$ and let $U$ be an MPU of bond dimension $D$.
     There is an actual quasi-local star-automorphism $\Phi_U$ which is
     translation covariant and propagates within
@@ -94,14 +113,20 @@
     \cite{gap:mpu_qca_complete_block_heisenberg_scope}.
 \end{theorem}
 \begin{proof}
-    The existing reduced canonical representative has bond dimension
+    \leanok
+    \uses{lem:mpu_actual_qca_canonical, thm:mpu_reduced_cfii_representative}
+    The reduced canonical representative has bond dimension
     $0<D_{\mathrm{red}}\le D$ and exactly the same periodic physical
     operator at every positive length. Apply the preceding construction
     to it. Enlarge its neighbourhood using
-    $4D_{\mathrm{red}}^4\le4D^4$. For every $N>1$, equality of the
-    actual periodic physical matrices identifies the two anchored
-    finite conjugations, so the resulting QCA has the original
-    tensor's finite-chain formula. No source factors, selected cut
+    $4D_{\mathrm{red}}^4\le4D^4$. For every $N>1$ the periodic
+    physical matrices agree,
+    \begin{align}
+        U_{\mathrm{red},b}^{(N)} & =U_b^{(N)},
+        \label{eq:mpu_actual_qca_reduced_matrix}
+    \end{align}
+    and finite conjugation depends only on this matrix, so the
+    resulting QCA has the original tensor's finite-chain formula. No source factors, selected cut
     spaces or virtual gauges are transported between the possibly
     different bond dimensions.
 \end{proof}
