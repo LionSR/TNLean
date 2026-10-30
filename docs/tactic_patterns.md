@@ -10054,3 +10054,16 @@ there is no need for a new tactic.
   normalization calls `Matrix.obc_block_row_isometry`.
 - **Decision:** Existing mathematical lemmas handle the induction; no inverse
   supplier, square padding, or additional tactic is introduced.
+
+### Positive coordinate compressions and local kernels — candidate (2026-10-29)
+
+- **Seen:** `MPS/ParentHamiltonian/VaryingOBCProjectorKernel.lean`.
+- **Pattern:** Apply the existing positive-sum kernel theorem to actual operators
+  R† P R, move R† through the inner product, and use positive quadratic-zero
+  to identify the kernel with P R ψ = 0.
+- **Reuse:** `WeightedPositiveKernel.apply_sum_eq_zero_iff`,
+  `LinearMap.adjoint_inner_left`, and
+  `LinearMap.IsPositive.apply_eq_zero_of_re_inner_eq_zero` already provide the
+  general analytic steps; the local proof only supplies the actual restrictions.
+- **Notes:** No new positivity or chain predicate is introduced. Further direct
+  occurrences may justify one generic compression-kernel equivalence in QICLean.
