@@ -42,9 +42,95 @@ All products of site matrices retain their natural order.
     chosen before any physical coordinates inside $J$.
 \end{definition}
 
+
+\begin{theorem}[Restriction of a trace contraction to an interval]
+    \label{thm:actual_retained_interval_trace}
+    \lean{MPOTensor.trace_actual_retainedInterval_eq}
+    \leanok
+    \uses{def:retained_interval_coordinates,def:actual_retained_interval_closing,
+        def:trace_chain_operator}
+    Use $a+L\le T$, the full-chain tensors $A_v$, the closing matrix $C$,
+    the coordinate equivalence $e$, and the fixed retained configurations
+    $\eta,\theta$ of (\ref{eq:actual_retained_interval_closing}).
+    Put $A^{\mathrm{int}}_r=A_{a+r}$ for $0\le r<L$.
+    For all interior configurations $\sigma,\tau$,
+    \begin{align}
+        \mathcal T(A,C)(e(\eta,\sigma),e(\theta,\tau))
+         & =\mathcal T(A^{\mathrm{int}},F(\eta,\theta))(\sigma,\tau).
+        \label{eq:actual_retained_interval_trace}
+    \end{align}
+    Empty intervals and zero dimensions are allowed whenever the supplied
+    configurations exist.
+\end{theorem}
+\begin{proof}\leanok
+    Split the ordered product into prefix, interval and suffix.
+    Cyclicity gives $\operatorname{tr}(CPXS)=\operatorname{tr}(SCPX)$,
+    and $F=SCP$ by (\ref{eq:actual_retained_interval_closing}).
+\end{proof}
+
+\begin{theorem}[Insertion of fixed configurations at the same trace dimension]
+    \label{thm:retained_single_trace_insert}
+    \lean{MPOTensor.exists_traceChainOperator_retainedSingle_insert}
+    \leanok
+    \uses{def:retained_interval_coordinates,def:trace_chain_operator}
+    Let $T,L,q,\chi,a$ be nonnegative integers with $a+L\le T$.
+    Put $J=[a,a+L)$ and supply site tensors $A_r$ on the $L$ interior sites,
+    of virtual dimension $\chi$, and a closing matrix $C$.
+    Fix row and column configurations $\eta,\theta$ on $J^c$.
+    There are tensors $A'_v$ on the full $T$ sites, of the same dimension,
+    such that for all full-chain configurations $\sigma,\tau$,
+    \begin{align}
+        \mathcal T(A',C)(\sigma,\tau)
+         & =\mathbf1_{\sigma|_{J^c}=\eta}\mathbf1_{\tau|_{J^c}=\theta}
+        \mathcal T(A,C)(\sigma|_J,\tau|_J).
+        \label{eq:retained_single_trace_insert}
+    \end{align}
+    The restrictions to $J$ use its increasing enumeration. Both $L$ and
+    $T$ may vanish; no positivity assumption on $q$ or $\chi$ is imposed.
+\end{theorem}
+\begin{proof}\leanok
+    Use $A'_v=A_{v-a}$ inside $J$ and
+    $A'_v(i,j)=\mathbf1_{i=\eta_v}\mathbf1_{j=\theta_v}\Id_\chi$ outside $J$.
+    If the retained configurations match, the extra letters are identity
+    matrices and the trace is unchanged. Otherwise one letter is zero.
+\end{proof}
+
+\begin{theorem}[A trace contraction after restriction and fixed extension]
+    \label{thm:trace_interval_slice_configuration_extend}
+    \lean{MPOTensor.exists_traceChainOperator_intervalSlice_extend_by_configuration}
+    \leanok
+    \uses{thm:actual_retained_interval_trace,thm:retained_single_trace_insert}
+    Let $T,L,N,q,\chi,a,b$ be nonnegative integers with $a+L\le T$ and
+    $b+L\le N$. Supply old tensors $A_v$ of dimension $\chi$, a closing
+    matrix $C$, and full old configurations $f,g$. For an interior
+    configuration $z$, write $\iota_a(f,z)$ for the old configuration
+    equal to $z_{v-a}$ on $[a,a+L)$ and to $f_v$ elsewhere.
+    Fix new outside configurations $\eta,\theta$ on
+    $J'^c$, where $J'=[b,b+L)$ in the new chain of $N$ sites.
+    There are a matrix $C'$ and tensors $A'_v$ of the same virtual
+    dimension $\chi$ such that
+    \begin{align}
+        \mathcal T(A',C')(\sigma,\tau)
+         & =\mathbf1_{\sigma|_{J'^c}=\eta}\mathbf1_{\tau|_{J'^c}=\theta}
+        \mathcal T(A,C)\bigl(\iota_a(f,\sigma|_{J'}),
+        \iota_a(g,\tau|_{J'})\bigr).
+        \label{eq:trace_interval_slice_configuration_extend}
+    \end{align}
+    Restrictions to $J'$ use increasing coordinates. All chain lengths and
+    dimensions may vanish, subject only to the stated supplied data.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:actual_retained_interval_trace,thm:retained_single_trace_insert}
+    Fix the old outside configurations to those of $f,g$ and apply
+    Theorem~\ref{thm:actual_retained_interval_trace}, obtaining the restricted
+    tensors and their suffix-closing-prefix matrix $C'$.
+    Insert the new retained configurations by
+    Theorem~\ref{thm:retained_single_trace_insert}, retaining $C'$ and $\chi$.
+\end{proof}
+
 \begin{definition}[The scalar-closed core at a retained matrix entry]
     \label{def:retained_stack_core}
-    \lean{MPOTensor.retainedStackCore}
+    \lean{MPOTensor.retainedStackCore,MPOTensor.exists_retainedStackCore_traceChainOperator}
     \leanok
     \uses{def:core_word_coefficients,def:trace_core_word_closing}
     Let $m$ be a finite retained index set, let
