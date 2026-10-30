@@ -57,6 +57,8 @@ import TNLean.MPS.MPU.EncodedUniformMergingCircuit
 import TNLean.MPS.MPU.EndpointBondEncoding
 import TNLean.MPS.MPU.EndpointGramNormalization
 import TNLean.MPS.MPU.Equivalence
+import TNLean.MPS.MPU.EvenFamilySourceGauges
+import TNLean.MPS.MPU.EvenFamilyVirtualGauge
 import TNLean.MPS.MPU.ExactBoundedCutRankCircuit
 import TNLean.MPS.MPU.ExactCleanAmplificationCircuit
 import TNLean.MPS.MPU.ExactUniformMerging
@@ -182,6 +184,9 @@ import TNLean.MPS.MPU.SourceFactorChoice
 import TNLean.MPS.MPU.SourceFactorChoiceGates
 import TNLean.MPS.MPU.SourceFactorContraction
 import TNLean.MPS.MPU.SourceFactors
+import TNLean.MPS.MPU.SourceFactorsPhysicalAdjoint
+import TNLean.MPS.MPU.SourceFactorsScalar
+import TNLean.MPS.MPU.SourceFactorsStandardForm
 import TNLean.MPS.MPU.SourceFactorsTensorProduct
 import TNLean.MPS.MPU.SourceIndexValue
 import TNLean.MPS.MPU.SourcePeriodicSewing
@@ -211,6 +216,8 @@ import TNLean.MPS.MPU.TensorProductIndex
 import TNLean.MPS.MPU.ThreeFormInsertion
 import TNLean.MPS.MPU.ThreeFormSpan
 import TNLean.MPS.MPU.ThreeLeggedDecomposition
+import TNLean.MPS.MPU.TimeReversalLocalNecessity
+import TNLean.MPS.MPU.TimeReversalLocalSufficiency
 import TNLean.MPS.MPU.TimeReversalSign
 import TNLean.MPS.MPU.TimeReversalSignIntrinsic
 import TNLean.MPS.MPU.TimeReversalTraceGauge
@@ -234,6 +241,7 @@ import TNLean.MPS.MPU.TwoSiteStandardForm
 import TNLean.MPS.MPU.TwoSiteStandardFormCircuit
 import TNLean.MPS.MPU.TwoSiteStandardFormOpenWord
 import TNLean.MPS.MPU.TwoSiteStandardFormResidualWord
+import TNLean.MPS.MPU.TwoSiteStandardFormSourceCuts
 import TNLean.MPS.MPU.TwoSiteTranslationCovariance
 import TNLean.MPS.MPU.UniformCircuitResourceBounds
 import TNLean.MPS.MPU.UniformMergingResourceBounds

@@ -25,11 +25,6 @@ namespace MPOTensor
 
 variable {d D : ℕ}
 
-private theorem blockTensor_one_eq_reindexPhysical (U : MPOTensor d D) :
-    blockTensor U 1 = reindexPhysical (Kraus.singleBlockEquiv d) U := by
-  ext i j
-  simp [blockTensor, reindexPhysical, MPSTensor.wordOfBlock, Kraus.wordOfBlock_one]
-
 private theorem canonical_index_eq_logb_of_isMPUSimple {U : MPOTensor d D}
     (hU : IsMPUCanonicalFormII U) (hS : IsMPUSimple U) :
     hU.index = (1 / 2 : ℝ) * (Real.logb 2 r[U] - Real.logb 2 ℓ[U]) := by

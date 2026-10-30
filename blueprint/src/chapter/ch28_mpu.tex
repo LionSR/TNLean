@@ -9796,6 +9796,292 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     % Source lines: paper_v2.tex 1201--1252.
 \end{proof}
 
+\begin{lemma}[Source cuts of a supplied square standard form]
+    \label{lem:mpu_supplied_standard_form_source_cuts}
+    \lean{MPOTensor.TwoSiteStandardFormData.cutX₁, MPOTensor.TwoSiteStandardFormData.cutY₁, MPOTensor.TwoSiteStandardFormData.cutX₂, MPOTensor.TwoSiteStandardFormData.cutY₂, MPOTensor.TwoSiteStandardFormData.sourceCutM₁_eq_cutX₁_mul_cutY₁, MPOTensor.TwoSiteStandardFormData.sourceCutM₂_eq_cutX₂_mul_cutY₂, MPOTensor.TwoSiteStandardFormData.cutY₂_cutY₁_eq_staircaseMiddle_mul_kronecker, MPOTensor.TwoSiteStandardFormData.cutX₁_cutX₂_eq_staircaseMiddle, MPOTensor.IsMPUCanonicalFormII.twoSite_cutX₁_weighted_isometry, MPOTensor.IsMPUCanonicalFormII.twoSite_cutX₂_isIsometry, MPOTensor.IsMPUCanonicalFormII.twoSite_sourceRanks, MPOTensor.IsMPUCanonicalFormII.twoSiteSourceFactors, MPOTensor.IsMPUCanonicalFormII.sourceRanks_eq_phys_of_standardForm_even_mpo_eq_adjoint, MPOTensor.IsMPUCanonicalFormII.blockTwo, MPOTensor.IsMPUCanonicalFormII.isMPUSimple_blockTwo, MPOTensor.IsMPUCanonicalFormII.twoSiteSourceFactors_sourceU, MPOTensor.IsMPUCanonicalFormII.twoSiteSourceFactors_sourceV, MPOTensor.blockTensor_one_eq_reindexPhysical}
+    \leanok
+    Let $W$ have a supplied two-site standard form with unitary gates
+    $u:\mathbb C^d\otimes\mathbb C^d\to\mathbb C^\ell\otimes\mathbb C^r$ and
+    $v:\mathbb C^r\otimes\mathbb C^\ell\to\mathbb C^d\otimes\mathbb C^d$,
+    and half factors $X_1,X_2$.
+    The two source cuts of $W$ itself admit factors through
+    $\mathbb C^d\otimes\mathbb C^r$ and
+    $\mathbb C^\ell\otimes\mathbb C^d$, respectively, given by
+    \begin{align}
+        \widehat X_1((i_1,i_2),\gamma;a,s)
+         & =\delta_{i_1,a}X_1(i_2,\gamma;s), \\
+        \widehat Y_1(a,s;\alpha,j)
+         & =\sum_t X_2(\alpha,a;t)u(t,s;j),  \\
+        \widehat X_2(\alpha,(i_1,i_2);t,b)
+         & =X_2(\alpha,i_1;t)\delta_{i_2,b}, \\
+        \widehat Y_2(t,b;j,\gamma)
+         & =\sum_s u(t,s;j)X_1(b,\gamma;s).
+    \end{align}
+    Thus $\mathcal M_a(W)=\widehat X_a\widehat Y_a$ for $a=1,2$.
+    Contracting $\widehat Y_2$ with $\widehat Y_1$ gives
+    $v_{23}(u_{12}\otimes u_{34})$; contracting $\widehat X_1$ with
+    $\widehat X_2$ gives $v_{23}$. These are the four-original-spin
+    matrices in \cite[lines~1237--1252]{Cirac2017MPU}, without first
+    blocking $W$ again. When this standard form is constructed from a simple
+    canonical tensor with boundary $\rho$, its coarse left factors satisfy
+    $\widehat X_1^\dagger(\Id_{d^2}\otimes\rho)\widehat X_1=\Id$ and
+    $\widehat X_2^\dagger\widehat X_2=\Id$. In this canonical construction,
+    the actual cut ranks are $d r$ and $\ell d$. The right factors have
+    full row rank, hence right inverses; together these give normalized
+    source factors at the same boundary $\rho$. If the original canonical
+    tensor $U$ is simple and its standard-form tensor $W$ satisfies
+    $W^{(N)}=W^{(N)\dagger}$ at every even length $N>1$, then
+    $r(U)=\ell(U)=d$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{SF}
+    Substitute the open standard-form contraction in each source cut.
+    Sum the two spectator Kronecker deltas. In the right-factor contraction,
+    the virtual sum of $X_1$ and $X_2$ is $v$; the two remaining factors are
+    $u$. The left-factor contraction uses the same virtual sum and leaves
+    the first and fourth spins fixed. The first coarse left factor is
+    $\Id_d\otimes X_1$ and the second is $X_2\otimes\Id_d$, after
+    the stated coordinate regroupings. Their normalizations follow from
+    those of the original source factors by taking these tensor products.
+    Simplicity persists under blocking; the rank-product saturation argument
+    gives the ranks $dr$ and $\ell d$. Each cut factors through its displayed
+    pair space, so its right factor has full row rank and a right inverse.
+    For the last assertion, adjoint invariance at even standard-form lengths
+    identifies the even periodic families of the two-site block and its
+    adjoint. Their cut ranks agree by the sign-sensitive virtual comparison, while
+    adjunction exchanges the two cuts. Thus $dr(U)=\ell(U)d$, so
+    $r(U)=\ell(U)$. Simplicity gives $r(U)\ell(U)=d^2$, hence both equal $d$.
+\end{proof}
+
+\begin{lemma}[Normalized physical-adjoint source factors]
+    \label{lem:mpu_normalized_physical_adjoint_source_factors}
+    \lean{MPOTensor.IsMPUCanonicalFormII.reindexPhysical, MPOTensor.IsMPUCanonicalFormII.isMPUSimple_physicalAdjointTensor, MPOTensor.IsMPUCanonicalFormII.sourceFactors_sourceU_isUnitaryBetween, MPOTensor.IsMPUCanonicalFormII.sourceFactors_Y₁_mul_conjTranspose, MPOTensor.IsMPUCanonicalFormII.sourceFactors_Y₂_weighted_mul_conjTranspose, MPOTensor.SourceFactors.physicalAdjoint, MPOTensor.SourceFactors.sourceU_physicalAdjoint, MPOTensor.SourceFactors.sourceV_physicalAdjoint, MPOTensor.IsMPUCanonicalFormII.twoSiteSourceFactors_physicalAdjoint}
+    \leanok
+    Let $U$ be simple and in reduced canonical form II, with recorded positive
+    diagonal boundary $\rho$. Bijective physical relabeling preserves this
+    presentation and boundary. Physical adjunction preserves simplicity.
+    For every normalized source factorization at this same boundary,
+    \begin{align}
+        Y_1Y_1^\dagger                   & =(d/r)\Id,    &
+        Y_2(\Id_d\otimes\rho)Y_2^\dagger & =(d/\ell)\Id.
+    \end{align}
+    Its unshifted gate is unitary. If $r=\ell=d$, source factors for the
+    physical adjoint at the same boundary are
+    \begin{align}
+        (X_1',Y_1',Z_1') & =(Y_2^\dagger,X_2^\dagger,X_2), \\
+        (X_2',Y_2',Z_2') & =(Y_1^\dagger,X_1^\dagger,
+        (\Id_d\otimes\rho)X_1),
+    \end{align}
+    after the canonical identifications of the exchanged cut ranks.
+    Their gates are exactly $u'=v^\dagger$ and $v'=u^\dagger$ in these
+    coordinates. For the actual coarse record of
+    Lemma~\ref{lem:mpu_supplied_standard_form_source_cuts}, adjoint symmetry
+    at even standard-form lengths derives all these prerequisites, giving an
+    actual adjoint coarse record without extra normalization witnesses.
+    These are the normalized cut constructions underlying
+    \cite[lines~1237--1252]{Cirac2017MPU}; the Gram formulas are
+    \cite[lines~1326--1398]{FrancoRubio2025MPUGauging}.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:mpu_supplied_standard_form_source_cuts}
+    Simplicity is the equality $r\ell=d^2$ and adjunction exchanges $r,\ell$.
+    For the Gram formulas, compare a supplied cut factorization $XY$ with
+    the selected normalized one. The right inverse makes their left-factor
+    ranges equal. Their common weighted normalization gives a coisometry
+    $A$ with $Y'=AY$, so each scalar Gram matrix is unchanged.
+    At $r=\ell=d$ both Grams are identities. Taking adjoints exchanges the
+    two cut factorizations. The displayed old left-factor normalizations
+    give the new right inverses, and their old Gram identities give the new
+    left-factor normalizations. Direct contraction gives the two adjoint gates.
+\end{proof}
+
+\begin{lemma}[Scalar transport of normalized source factors]
+    \label{lem:mpu_source_factors_scalar_transport}
+    \lean{MPOTensor.source_ranks_smul, MPOTensor.SourceFactors.smul, MPOTensor.SourceFactors.sourceU_smul, MPOTensor.SourceFactors.sourceV_smul}
+    \leanok
+    For a nonzero scalar $c$, the two source ranks of $cU$ equal those of $U$.
+    Any normalized source factorization of $U$ transports to one of $cU$
+    with the same weight, by keeping both left factors, multiplying both
+    right factors by $c$, and multiplying both right inverses by $c^{-1}$.
+    In the canonical rank identifications the transported gates are $c^2u$
+    and $v$. In particular a sign disappears in the two-letter source gate.
+    These are the contractions of
+    \cite[lines~479--524]{Cirac2017MPU} used in the even-family comparison.
+\end{lemma}
+
+\begin{proof}\leanok
+    A nonzero scalar does not change matrix rank. The two cut products acquire
+    the scalar, the two left-factor normalizations stay unchanged, and the
+    right-inverse products acquire $cc^{-1}=1$. The unshifted gate contracts
+    two right factors, so it acquires $c^2$; the shifted gate contracts the
+    unchanged left factors.
+\end{proof}
+
+\begin{lemma}[Even-family virtual rigidity up to a sign]
+    \label{lem:mpu_even_family_virtual_sign_gauge}
+    \lean{MPOTensor.IsMPUCanonicalFormII.exists_unitary_virtual_sign_gauge_of_mpo_eq_even}
+    \leanok
+    Let $U,V$ be reduced canonical-form-II MPU tensors with equal periodic
+    operators at every even length greater than one. Their bond dimensions
+    agree, and there are a virtual unitary $z$ and a sign $\eta\in\{1,-1\}$
+    such that $V^{ij}=\eta zU^{ij}z^\dagger$ for every physical pair $i,j$.
+    No equality at odd lengths is inferred. This is the virtual comparison
+    needed in the even-length setting of
+    \cite[lines~1209--1252]{Cirac2017MPU}; reconstructing the four-spin
+    gates remains a separate step. The presentation restriction is recorded
+    in \cite{gap:mpu_canonical_form_full_support}.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:cpsv_normal_overlap_dichotomy}
+    Equality along the even subsequence makes the cross-overlap equal the
+    self-overlap there, whose limit is one. The normal-tensor overlap
+    dichotomy therefore rules out vanishing cross-overlap and gives an
+    unblocked invertible gauge with a unit phase $\eta$. The nonzero periodic
+    vector at length two forces $\eta^2=1$. Left canonical normalization and
+    irreducibility replace the invertible gauge by a unitary without changing
+    the phase.
+\end{proof}
+
+\begin{lemma}[Supplied source gates from even-family equality]
+    \label{lem:mpu_even_family_supplied_source_gauges}
+    \lean{MPOTensor.IsMPUCanonicalFormII.eq_sign_virtualSandwich_of_mpo_eq_even, MPOTensor.IsMPUCanonicalFormII.source_ranks_eq_of_mpo_eq_even, MPOTensor.IsMPUCanonicalFormII.exists_supplied_source_gate_unitary_gauges_of_mpo_eq_even}
+    \leanok
+    Let $U,V$ be reduced canonical-form-II MPU tensors with the same bond
+    dimension and equal periodic operators at every even length greater than
+    one. For any supplied normalized source factors whose unshifted gates
+    are unitary, their source ranks agree and their actual gates satisfy
+    $u_V=(x\otimes y)u_U$ and $v_V=v_U(y^\dagger\otimes x^\dagger)$
+    for unitary rank-coordinate transformations $x,y$, in the canonical
+    identifications of equal ranks. The signed target is a virtual unitary
+    conjugate of the original tensor. This is the even-family source
+    comparison used in \cite[lines~1237--1252]{Cirac2017MPU}.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:mpu_even_family_virtual_sign_gauge,
+        lem:mpu_source_factors_scalar_transport, FundamentalMPU}
+    Write $\eta V=zUz^\dagger$ with $\eta^2=1$. Transport the supplied
+    factors of $V$ to those of $\eta V$. Their gates are unchanged since
+    the unshifted gate acquires $\eta^2$ and the shifted gate acquires no
+    scalar. Apply the normalized factor comparison under the actual virtual
+    sandwich, then transport the rank-coordinate unitaries back. Nonzero
+    scaling and unitary virtual conjugation preserve both source ranks.
+\end{proof}
+
+\begin{lemma}[Forward local time reversal for the constructed canonical standard form]
+    \label{lem:mpu_canonical_forward_local_time_reversal}
+    \lean{MPOTensor.IsMPUCanonicalFormII.exists_coarse_timeReversal_certificate, MPOTensor.IsMPUCanonicalFormII.exists_local_timeReversal_certificate, MPOTensor.IsMPUCanonicalFormII.exists_twoSiteStandardFormData_timeReversal_certificate, MPOTensor.coarse_gates_eq_four_spin_gates}
+    \leanok
+    Let $U$ be a simple reduced canonical-form-II tensor. Construct its actual
+    source standard form $W$ with gates $u,v$, and suppose that
+    $W^{(N)}=W^{(N)\dagger}$ at every even length $N>1$. Its source
+    ranks equal the physical dimension $d$. In the canonical identifications
+    of both rank spaces with $\mathbb C^d$, write these same gates as $u_0,v_0$.
+    There exist a unitary $x$ on $\mathbb C^d\otimes\mathbb C^d$ and
+    $\sigma\in\{1,-1\}$ such that
+    \begin{align}
+        (v_0)_{23}(u_0\otimes u_0)
+         & =\sigma(x\otimes x^\dagger)(v_0)_{23}^\dagger.
+    \end{align}
+    This gives the four-original-spin equation of
+    \cite[lines~1237--1252]{Cirac2017MPU} for the standard form constructed
+    from the chosen reduced canonical source. Its length hypothesis is exactly
+    at even standard-form lengths, hence original lengths divisible by four.
+    The intermediate virtual comparison retains the possible sign phase
+    discussed in \cite{gap:mpu_standard_form_parity_gap}. No gauge or local-equation
+    witness is assumed. The actual square standard-form data are supplied
+    together with the certificate by relabeling the existing half factors.
+    No continuity of any such choice is needed. Arbitrary supplied standard forms, the converse and
+    the transposition criterion are separate obligations; the unrestricted
+    source proposition remains unformalized. The reduced presentation
+    restriction is recorded in \cite{gap:mpu_canonical_form_full_support}.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:mpu_supplied_standard_form_source_cuts,
+        lem:mpu_normalized_physical_adjoint_source_factors,
+        lem:mpu_even_family_supplied_source_gauges}
+    The actual coarse source factors have gates
+    $A=v_{23}(u\otimes u)$ and $B=v_{23}$. Adjoint symmetry identifies
+    the even periodic families of the standard-form tensor and its adjoint.
+    The unblocked virtual comparison supplies a possible sign, which cancels
+    in the two-letter source gate. Apply the supplied-factor comparison to
+    the actual normalized records. In physical-block coordinates its unitary
+    gauges $X,Y$ satisfy $B^\dagger=(X\otimes Y)A$ and
+    $A^\dagger=B(Y^\dagger\otimes X^\dagger)$. Taking the adjoint of the
+    second equation and substituting the first gives
+    $A=(YX\otimes XY)A$. Cancel $A$ to obtain $YX\otimes XY=\Id$.
+    Thus $YX=c\Id$ and $XY=c^{-1}\Id$. Unitarity gives $Y=cX^\dagger$,
+    whence also $XY=c\Id$ and $c=c^{-1}$. Therefore $c=\pm1$.
+    The explicit physical-pair and rank identifications transport this
+    relation back to the displayed four-spin equation, with $x=X^\dagger$.
+    Only one two-site blocking has been used; no odd-length symmetry follows.
+\end{proof}
+
+\begin{lemma}[Standard forms from supplied normalized factors]
+    \label{lem:mpu_standard_form_from_normalized_source_factors}
+    \lean{MPOTensor.IsMPUCanonicalFormII.exists_twoSiteStandardFormData_sourceFactors}
+    \leanok
+    Let $U$ be a simple reduced canonical-form-II MPU with recorded weight
+    $\rho$. Every normalized supplied source factorization at this weight
+    provides actual standard-form data for its own gates on the two-site
+    block of $U$. No new compact decomposition is assumed. These are the
+    standard forms of \cite[lines~603--648]{Cirac2017MPU}.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{SF, FundamentalMPU}
+    Compare the supplied factors with the selected factors of the same tensor.
+    The normalized factor comparison gives two unitary rank transformations.
+    Apply them to the existing open standard-form contraction. Its gates are
+    exactly those of the supplied factors.
+\end{proof}
+
+\begin{lemma}[Even-ring converse for the constructed canonical standard form]
+    \label{lem:mpu_canonical_even_local_time_reversal_iff}
+    \lean{MPOTensor.IsMPUCanonicalFormII.mpo_even_eq_adjoint_of_source_local_certificate, MPOTensor.IsMPUCanonicalFormII.mpo_standardForm_even_eq_adjoint_of_local_certificate, MPOTensor.IsMPUCanonicalFormII.standardForm_even_timeReversal_iff_exists_local_certificate}
+    \leanok
+    Let $U$ be a simple reduced canonical-form-II tensor, and construct its
+    actual standard form $W$ with gates $u,v$. Then $W^{(N)}$ is self-adjoint
+    at every even length $N>1$ if and only if $r(U)=\ell(U)=d$ and, in
+    these canonical rank identifications, there are a unitary $x$ on
+    $\mathbb C^d\otimes\mathbb C^d$ and a sign $\sigma$ satisfying
+    \begin{align}
+        v_{23}(u\otimes u)
+         & =\sigma(x\otimes x^\dagger)v_{23}^\dagger.
+    \end{align}
+    More generally, a normalized supplied source record of a simple reduced
+    canonical tensor, with both source ranks equal to its physical dimension,
+    gives self-adjoint periodic operators on even rings whenever its two
+    gates satisfy the corresponding sign equation. No extra gate, factor,
+    or transform witness is assumed in this implication. This is the
+    even-ring contraction in \cite[lines~1214--1236]{Cirac2017MPU}.
+    Arbitrary supplied standard-form presentations and transposition remain
+    separate; the reduced presentation restriction is recorded in
+    \cite{gap:mpu_canonical_form_full_support}.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:mpu_canonical_forward_local_time_reversal,
+        lem:mpu_standard_form_from_normalized_source_factors,
+        lem:mpu_normalized_physical_adjoint_source_factors, FundamentalMPU}
+    The forward implication is the preceding construction. For the converse,
+    write $A=v_{23}(u\otimes u)$ and $B=v_{23}$. The local equation
+    $A=\sigma(x\otimes x^\dagger)B^\dagger$ gives
+    $B^\dagger=(X\otimes Y)A$ and
+    $A^\dagger=B(Y^\dagger\otimes X^\dagger)$ with
+    $X=x^\dagger$ and $Y=\sigma x$. Both are unitary since $\sigma^2=1$.
+    The actual normalized source and adjoint factors provide standard forms
+    with gates $A,B$ and $B^\dagger,A^\dagger$, respectively. Close the two
+    gate relations on each positive blocked ring by cancelling the internal
+    unitaries. These are precisely the even rings of $W$. The explicit
+    coordinate dictionary transports the given four-original-spin equation
+    to these gate relations without enlarging its local antecedent.
+\end{proof}
+
 \begin{lemma}[Admissible local characterization of time reversal]
     \label{prop:mpu_admissible_local_time_reversal}
     \notready
