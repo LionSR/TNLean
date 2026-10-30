@@ -75,7 +75,7 @@ theorem chargedWeyl_mul {ζ : ℂ} (hζ : ζ ^ 5 = 1) (a b c d : ZMod 5) :
       rootCharacter ζ (-c * b) • chargedWeyl ζ (a + c) (b + d) := by
   ext i j
   rw [Matrix.mul_apply, Finset.sum_eq_single (i - b)]
-  · simp only [chargedWeyl, if_pos rfl, Matrix.smul_apply, smul_eq_mul]
+  · simp only [chargedWeyl, Matrix.smul_apply, smul_eq_mul]
     rw [show i - b - d = i - (b + d) by ring]
     by_cases hj : j = i - (b + d)
     · simp only [hj, ite_true]
@@ -84,7 +84,7 @@ theorem chargedWeyl_mul {ζ : ℂ} (hζ : ζ ^ 5 = 1) (a b c d : ZMod 5) :
       ring
     · simp only [hj, ite_false, mul_zero]
   · intro k _ hk
-    simp only [chargedWeyl, if_neg hk, zero_mul]
+    simp only [chargedWeyl, ite_eq_right hk, zero_mul]
   · intro h
     exact (h (Finset.mem_univ _)).elim
 
@@ -103,7 +103,7 @@ noncomputable def threeLetterTensor (ζ : ℂ) : MPSTensor 3 5 :=
 theorem wordCharge_cons (i : Fin 3) (w : List (Fin 3)) :
     wordCharge (i :: w) = letterCharge i + wordCharge w := by
   fin_cases i <;> apply Prod.ext <;>
-    simp [wordCharge, countCharge, letterCharge, List.count_cons] <;> ring
+    simp [wordCharge, countCharge, letterCharge] <;> ring
 
 /-- The exact scalar exponent produced by multiplying an actual word. -/
 def wordPhase : List (Fin 3) → ZMod 5
@@ -116,15 +116,23 @@ theorem evalWord_threeLetterTensor {ζ : ℂ} (hζ : ζ ^ 5 = 1) (w : List (Fin 
       rootCharacter ζ (wordPhase w) •
         chargedWeyl ζ (wordCharge w).1 (wordCharge w).2 := by
   induction w with
-  | nil => simp [Kraus.evalWord, wordPhase, wordCharge, countCharge]
+  | nil =>
+      change (1 : Matrix (ZMod 5) (ZMod 5) ℂ) =
+        rootCharacter ζ (wordPhase []) • chargedWeyl ζ (wordCharge []).1 (wordCharge []).2
+      simp [wordPhase, wordCharge, countCharge]
   | cons i w ih =>
-      rw [Kraus.evalWord_cons, threeLetterTensor, ih]
-      simp only [smul_mul_assoc, mul_smul_comm, chargedWeyl_mul hζ, smul_smul]
-      rw [wordCharge_cons]
-      simp only [Prod.fst_add, Prod.snd_add]
-      rw [← rootCharacter_add hζ, ← rootCharacter_add hζ]
-      congr 1
-      simp only [wordPhase, sub_eq_add_neg, neg_mul, add_assoc]
+      rw [Kraus.evalWord_cons, ih]
+      change (rootCharacter ζ (letterPhase i) •
+          chargedWeyl ζ (letterCharge i).1 (letterCharge i).2 :
+            Matrix (ZMod 5) (ZMod 5) ℂ) *
+          (rootCharacter ζ (wordPhase w) • chargedWeyl ζ (wordCharge w).1 (wordCharge w).2) =
+        rootCharacter ζ (wordPhase (i :: w)) •
+          chargedWeyl ζ (wordCharge (i :: w)).1 (wordCharge (i :: w)).2
+      rw [smul_mul_smul_comm, chargedWeyl_mul hζ, smul_smul, wordCharge_cons, Prod.fst_add,
+        Prod.snd_add, ← rootCharacter_add hζ, ← rootCharacter_add hζ]
+      congr 2
+      simp only [wordPhase]
+      ring
 
 /-- A noncentral charged matrix has zero trace. -/
 theorem trace_chargedWeyl_eq_zero {ζ : ℂ} (hζ : IsPrimitiveRoot ζ 5)
@@ -138,19 +146,23 @@ theorem trace_chargedWeyl_eq_zero {ζ : ℂ} (hζ : IsPrimitiveRoot ζ 5)
       rw [← pow_mul, Nat.mul_comm, pow_mul, hζ.pow_eq_one, one_pow]
     simp only [Matrix.trace, Matrix.diag, chargedWeyl, sub_zero, ite_true]
     simp_rw [rootCharacter_mul hζ.pow_eq_one]
-    rw [Matrix.sum_pow_val_eq_ite hpow, if_neg hu]
+    rw [Matrix.sum_pow_val_eq_ite hpow, ite_eq_right hu]
   · apply Finset.sum_eq_zero
     intro i _
     change (if i = i - v then rootCharacter ζ (u * i) else 0) = 0
-    apply if_neg
+    apply ite_eq_right
     intro h
-    exact hv (by linear_combination -h)
+    exact hv (by linear_combination h)
 
 /-- Every actual degree-seven word has zero trace. -/
 theorem trace_evalWord_threeLetterTensor_seven {ζ : ℂ} (hζ : IsPrimitiveRoot ζ 5)
     (w : List (Fin 3)) (hw : w.length = 7) :
     (Kraus.evalWord (threeLetterTensor ζ) w).trace = 0 := by
-  rw [evalWord_threeLetterTensor hζ.pow_eq_one, Matrix.trace_smul,
-    trace_chargedWeyl_eq_zero hζ _ _ (wordCharge_ne_zero_of_length_seven hw), smul_zero]
+  rw [evalWord_threeLetterTensor hζ.pow_eq_one]
+  change (rootCharacter ζ (wordPhase w) • chargedWeyl ζ (wordCharge w).1 (wordCharge w).2 :
+    Matrix (ZMod 5) (ZMod 5) ℂ).trace = 0
+  rw [Matrix.trace_smul,
+    trace_chargedWeyl_eq_zero hζ (wordCharge w).1 (wordCharge w).2
+      (wordCharge_ne_zero_of_length_seven hw), smul_zero]
 
 end MPSTensor.ShortMomentum

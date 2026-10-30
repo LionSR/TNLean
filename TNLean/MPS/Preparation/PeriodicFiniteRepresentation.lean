@@ -48,7 +48,8 @@ theorem exists_mpv_eq_of_cyclic_invariant {d N : ℕ} (hN : 0 < N)
     (fun k ↦ MPSPreparation.cutRank_le_pow_half ψ k.val)
   have hBTI : B.IsTranslationInvariantState := by
     intro s σ
-    simpa only [hB, OBCChainTensor.cyclicTranslateConfig] using hTI s σ
+    simp only [hB]
+    exact hTI s σ
   obtain ⟨A, hA⟩ := OBCChainTensor.exists_pgvwc07_site_independent_tensor B hBTI
   exact ⟨A, fun σ ↦ (hA σ).trans (congrFun hB σ)⟩
 

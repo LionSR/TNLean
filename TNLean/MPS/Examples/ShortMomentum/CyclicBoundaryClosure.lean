@@ -46,12 +46,13 @@ theorem exists_smul_mpv_of_cyclic_agreement {ζ : ℂ} (hζ : IsPrimitiveRoot ζ
   refine ⟨F 0 / 5, ?_⟩
   funext σ
   change f σ = (F 0 / 5) * (mpv (threeLetterTensor ζ) σ)
-  rw [hF, mpv, coeff, evalWord_threeLetterTensor hζ.pow_eq_one,
-    Matrix.trace_smul, smul_eq_mul, trace_chargedWeyl hζ]
+  rw [hF, mpv, coeff, evalWord_threeLetterTensor hζ.pow_eq_one]
+  change _ = _ * Matrix.trace (_ : Matrix (ZMod 5) (ZMod 5) ℂ)
+  rw [Matrix.trace_smul, smul_eq_mul, trace_chargedWeyl hζ]
   by_cases hcharge : wordCharge (List.ofFn σ) = 0
-  · rw [hcharge, if_pos rfl]
+  · rw [hcharge, ite_eq_left rfl]
     ring
-  · simp only [hFzero _ hcharge, if_neg hcharge, mul_zero]
+  · simp only [hFzero _ hcharge, ite_eq_right hcharge, mul_zero]
 
 /-- One actual global boundary vector whose cyclic reordering is also a
 global boundary vector lies in the periodic trace line. -/

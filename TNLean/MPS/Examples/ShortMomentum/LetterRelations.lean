@@ -20,7 +20,7 @@ arXiv:0909.5347, Theorem 5, main.tex lines 850--880; see
 namespace MPSTensor.ShortMomentum
 
 @[simp] theorem rootCharacter_one (ζ : ℂ) : rootCharacter ζ 1 = ζ := by
-  simp [rootCharacter]
+  rw [rootCharacter, show (1 : ZMod 5).val = 1 from rfl, pow_one]
 
 /-- The commutator phase is the symplectic pairing of the actual charges. -/
 theorem chargedWeyl_commute {ζ : ℂ} (hζ : ζ ^ 5 = 1) (a b c d : ZMod 5) :
@@ -38,9 +38,15 @@ theorem threeLetterTensor_commute {ζ : ℂ} (hζ : ζ ^ 5 = 1) (i j : Fin 3) :
       rootCharacter ζ ((letterCharge i).1 * (letterCharge j).2 -
         (letterCharge j).1 * (letterCharge i).2) •
       (threeLetterTensor ζ j * threeLetterTensor ζ i) := by
-  unfold threeLetterTensor
-  rw [smul_mul_assoc, mul_smul_comm, chargedWeyl_commute hζ]
-  simp only [smul_mul_assoc, mul_smul_comm, smul_smul]
+  change (rootCharacter ζ (letterPhase i) •
+      chargedWeyl ζ (letterCharge i).1 (letterCharge i).2 : Matrix (ZMod 5) (ZMod 5) ℂ) *
+      (rootCharacter ζ (letterPhase j) • chargedWeyl ζ (letterCharge j).1 (letterCharge j).2) =
+    rootCharacter ζ ((letterCharge i).1 * (letterCharge j).2 -
+        (letterCharge j).1 * (letterCharge i).2) •
+      ((rootCharacter ζ (letterPhase j) •
+          chargedWeyl ζ (letterCharge j).1 (letterCharge j).2 : Matrix (ZMod 5) (ZMod 5) ℂ) *
+        (rootCharacter ζ (letterPhase i) • chargedWeyl ζ (letterCharge i).1 (letterCharge i).2))
+  rw [smul_mul_smul_comm, smul_mul_smul_comm, chargedWeyl_commute hζ, smul_smul, smul_smul]
   congr 1
   ring
 
@@ -60,8 +66,10 @@ theorem threeLetterTensor_pow_five {ζ : ℂ} (hζ : ζ ^ 5 = 1) (i : Fin 3) :
     fin_cases i <;> decide
   have hphase : wordPhase (List.replicate 5 i) = 0 := by
     fin_cases i <;> decide
-  rw [← Kraus.evalWord_replicate, evalWord_threeLetterTensor hζ, hcharge, hphase,
-    rootCharacter_zero, chargedWeyl_zero, one_smul]
+  rw [← Kraus.evalWord_replicate, evalWord_threeLetterTensor hζ, hcharge, hphase]
+  change (rootCharacter ζ 0 • chargedWeyl ζ (0 : ZMod 5 × ZMod 5).1 (0 : ZMod 5 × ZMod 5).2 :
+    Matrix (ZMod 5) (ZMod 5) ℂ) = 1
+  simp
 
 /-- Replacing five equal physical letters by five copies of any other
 letter preserves the actual matrix word in every left and right context. -/
