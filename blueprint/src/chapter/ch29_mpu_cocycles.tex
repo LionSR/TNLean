@@ -1237,6 +1237,99 @@ $N\geq1$.
     Lemma~\ref{thm:mpug_involution_anomaly_ratio} gives the claim.
 \end{proof}
 
+\begin{lemma}[Gauge law for the L-symbols of permuted blocks]
+    \label{lem:mpug_permuted_block_l_gauge}
+    \lean{MPOTensor.GroupFamily.FusionData.rescale,
+        MPOTensor.GroupFamily.FusionData.isDressedProportional_rescale,
+        MPOTensor.GroupFamily.FusionData.relativeScalar_rescale,
+        MPOTensor.GroupFamily.FusionData.omega_rescale,
+        MPOTensor.GroupFamily.BlockActionData.relativeScalar,
+        MPOTensor.GroupFamily.BlockActionData.isDressedProportional_relativeScalar,
+        MPOTensor.GroupFamily.BlockActionData.rescale,
+        MPOTensor.GroupFamily.BlockActionData.relativeScalar_rescale,
+        MPOTensor.GroupFamily.BlockActionData.lSymbol_eq_gauge,
+        MPOTensor.GroupFamily.BlockActionData.lSymbol_rescale}
+    \leanok
+    \uses{def:mpug_permuted_block_l_symbol,
+        thm:mpug_permuted_block_l_symbol_spec,
+        thm:mpug_anomaly_three_cocycle_gauge, def:mpug_l_gauge,
+        thm:mpug_dressed_proportionality}
+    Keep the setting of Definition~\ref{def:mpug_permuted_block_l_symbol}
+    and let the doubled-index tensors be normal. Take two choices of fusion
+    tensors and two choices of action tensors, with $L$ and $L'$ the
+    corresponding $L$-symbols. Let $\beta_{g,h}$ be the nonzero scalar with
+    $F^<_{g,h}B^{\mathbf w}=\beta_{g,h}F'^<_{g,h}B^{\mathbf w}$ for all long
+    words of $B=O_gO_h$, as in
+    Lemma~\ref{thm:mpug_anomaly_three_cocycle_gauge}, and let $\gamma^x_g$ be
+    the nonzero scalar with
+    $V_{g,x}C^{\mathbf w}=\gamma^x_gV'_{g,x}C^{\mathbf w}$ for all long words
+    of $C=O_g\cdot A_x$. Then
+    \begin{align}
+        L'^x_{g,h}
+         & =\frac{\gamma^x_{gh}\beta_{g,h}}{\gamma^{hx}_g\gamma^x_h}L^x_{g,h},
+        \notag
+    \end{align}
+    which is the joint gauge (\ref{eq:mpug_l_gauge}). Conversely,
+    multiplying $F^>_{g,h}$ by $\beta_{g,h}$ and $F^<_{g,h}$ by
+    $\beta_{g,h}^{-1}$, and $W_{g,x}$ by $\gamma^x_g$ and $V_{g,x}$ by
+    $(\gamma^x_g)^{-1}$, gives fusion and action tensors whose comparison
+    scalars with the original ones are exactly $\beta$ and $\gamma$, so every
+    joint scalar gauge of the $L$-symbols is realized by tensors, and the
+    rescaled fusion tensors have anomaly three-cocycle
+    $\beta\mathbin{\triangleright}\omega$.
+
+    This is the gauge law \cite[line~1918]{FrancoRubio2025MPUGauging}, with
+    the scalars of
+    \cite[lines~1500--1504, 1871--1873]{FrancoRubio2025MPUGauging}.
+    As recorded in
+    \cite{gap:fbc25_boundary_dressed_l_symbols}, all three families of scalars
+    relate the tensors against long words rather than as bare matrices,
+    because the uniqueness of reductions onto a normal tensor holds only in
+    that form.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_permuted_block_l_symbol_spec,
+        thm:mpug_dressed_proportionality}
+    Comparing the action tensors of $h$ on the block $x$ and lifting through
+    the operator $O_g$, then pulling the comparison for $g$ on the block $hx$
+    back along the reduction by the primed action of $h$, shows that the
+    first boundary of Definition~\ref{def:mpug_permuted_block_l_symbol}
+    changes by $\gamma^x_h\gamma^{hx}_g$ against long words. In the same way
+    the second boundary changes by $\beta_{g,h}\gamma^x_{gh}$. Hence the
+    first boundary of the original choice equals both
+    $\gamma^x_h\gamma^{hx}_gL'^x_{g,h}$ and $L^x_{g,h}\beta_{g,h}\gamma^x_{gh}$
+    times the second boundary of the primed choice against long words, and it
+    is nonzero against arbitrarily long words because it belongs to a
+    reduction onto a normal tensor. For rescaled tensors the left boundaries
+    differ by the rescaling factor exactly, so the comparison scalars are the
+    rescaling factors, and the statement about the anomaly is
+    Lemma~\ref{thm:mpug_anomaly_three_cocycle_gauge}.
+\end{proof}
+
+\begin{lemma}[A single block is trivial in some gauge]
+    \label{lem:mpug_single_block_gauge_trivial}
+    \lean{MPOTensor.GroupFamily.BlockActionData.exists_rescale_omega_eq_one_lSymbol_eq_one}
+    \leanok
+    \uses{lem:mpug_permuted_block_l_gauge,
+        thm:mpug_permuted_block_l_compatibility}
+    In the setting of Lemma~\ref{lem:mpug_permuted_block_l_gauge}, if the set
+    $\mathsf X$ has exactly one element, some rescaling of the fusion and
+    action tensors gives $\omega(g,h,k)=1$ and $L_{g,h}=1$ for all
+    $g,h,k\in G$, as stated in
+    \cite[lines~1925--1926]{FrancoRubio2025MPUGauging}.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:mpug_permuted_block_l_gauge,
+        thm:mpug_permuted_block_l_compatibility}
+    Rescale the fusion tensors by $\beta_{g,h}=L_{g,h}^{-1}$ and leave the
+    action tensors unchanged. By Lemma~\ref{lem:mpug_permuted_block_l_gauge}
+    the new $L$-symbols are $\beta_{g,h}L_{g,h}=1$, and compatibility,
+    Lemma~\ref{thm:mpug_permuted_block_l_compatibility}, for the new tensors
+    then reads $1=\omega'(g,h,k)$.
+\end{proof}
+
 \subsection{Domain walls between permuted blocks}
 
 Keep the setting of the previous subsection. A domain wall between the
@@ -5261,7 +5354,7 @@ tensor-level bridge to an underlying MPS--MPU pair is not asserted here.
     $\Psi(a,b)=\psi(a,b)$.
 \end{proof}
 
-% Scalar criterion only: the tensor bridge and U(1) naturality remain open.
+% Scalar criterion; the circle-coefficient and tensor forms follow below.
 \begin{lemma}[Scalar block independence and restriction of the stabilizer class]
     \label{lem:mpug_scalar_bi_restriction}
     \lean{TNLean.Algebra.StabilizerRepresentatives.inducedLSymbol_isBlockIndependent_iff_exists_extension,
@@ -5468,6 +5561,141 @@ tensor-level bridge to an underlying MPS--MPU pair is not asserted here.
     gauge, so the rule is well defined, and by the two identities acting by
     $[\psi_1]+[\psi_2]$ is acting by $[\psi_2]$ and then by $[\psi_1]$. With
     base point $L$ the action is the bijection of the third item.
+\end{proof}
+
+\begin{lemma}[Scalar block independence with circle coefficients]
+    \label{lem:mpug_scalar_bi_restriction_circle}
+    \lean{TNLean.Algebra.circleRepresentationRes,
+        TNLean.Algebra.circleToComplexUnits_map_comp_map_res,
+        TNLean.Algebra.circleToComplexUnits_map_res_apply,
+        TNLean.Algebra.mem_range_map_circleRepresentationRes_iff,
+        TNLean.Algebra.LSymbol.isBlockIndependent_gauge_iff,
+        TNLean.Algebra.StabilizerRepresentatives.inducedLSymbol_isBlockIndependent_iff_circle}
+    \leanok
+    \uses{lem:mpug_scalar_bi_restriction, thm:mpug_circle_complex_units_h2,
+        thm:mpug_l_gauge_composition}
+    Restriction along a group homomorphism $f\colon S\to G$ commutes with
+    the maps $H^2(-,U(1))\to H^2(-,\C^\times)$ induced by inclusion of the
+    unit circle. If $G$ is finite, a class $c\in H^2(S,U(1))$ is the
+    restriction of a class of $G$ exactly when its image in
+    $H^2(S,\C^\times)$ is. Moreover, block independence of an $L$-symbol after
+    a joint scalar gauge is unchanged by any further joint scalar gauge.
+
+    Consequently, in the setting of Lemma~\ref{lem:mpug_scalar_bi_restriction}
+    with $G$ finite, the induced $L$-symbol $L[\psi]$ is block independent
+    after a joint scalar gauge if and only if the class in $H^2(H,U(1))$ of
+    the pointwise phase $\psi/|\psi|$ lies in the image of the restriction map
+    $H^2(G,U(1))\to H^2(H,U(1))$. For a cocycle of modulus one this phase is
+    $\psi$ itself. This is the coefficient group of
+    \cite[lines~7042--7064]{FrancoRubio2025MPUGauging}; the comparison of
+    coefficients is the algebraic one of
+    Lemma~\ref{thm:mpug_circle_complex_units_h2}.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:mpug_scalar_bi_restriction, thm:mpug_circle_complex_units_h2,
+        thm:mpug_l_gauge_composition}
+    Both composites of restriction and inclusion are induced by the same
+    homomorphism $S\to G$ and the same coefficient map
+    $U(1)\to\C^\times$, so they agree. If $c=\operatorname{res}(a)$, then
+    the image of $c$ is the restriction of the image of $a$. Conversely, if
+    the image of $c$ is $\operatorname{res}(b)$, surjectivity of inclusion
+    for the finite group $G$ writes $b$ as the image of some $a$; then $c$
+    and $\operatorname{res}(a)$ have the same image, and inclusion is
+    injective for every group. Gauge invariance follows from
+    (\ref{eq:mpug_l_gauge_composition}) applied with the inverse gauge. By
+    Lemma~\ref{thm:mpug_circle_complex_units_h2} the class of the phase of
+    $\psi$ maps to $[\psi]$, and Lemma~\ref{lem:mpug_scalar_bi_restriction}
+    finishes the proof.
+\end{proof}
+
+\begin{lemma}[Stabilizer form of the L-symbols of permuted blocks]
+    \label{lem:mpug_permuted_block_stabilizer_form}
+    \lean{MPOTensor.GroupFamily.BlockActionData.exists_rescale_lSymbol_eq_inducedLSymbol,
+        MPOTensor.GroupFamily.BlockActionData.exists_rescale_lSymbol_eq_inducedLSymbol_of_finite}
+    \leanok
+    \uses{lem:mpug_permuted_block_l_gauge,
+        thm:mpug_permuted_block_l_compatibility, cor:mpug_anomaly_class,
+        thm:mpug_stabilizer_torsor, thm:mpug_stabilizer_cocycle_l_symbol,
+        thm:mpug_stabilizer_transition, thm:mpug_circle_complex_units_h2}
+    In the setting of Lemma~\ref{lem:mpug_permuted_block_l_gauge}, choose
+    $x_0\in\mathsf X$, let $H$ be its stabilizer, and choose $k_x\in G$ with
+    $k_xx_0=x$ and $k_{x_0}=e$. If the anomaly class vanishes, some rescaling
+    of the fusion and action tensors gives $\omega=1$ and
+    \begin{align}
+        L^x_{g_1,g_2}
+         & =\psi(h_1,h_2),
+         &
+        h_1
+         & =k_{g_1g_2x}^{-1}g_1k_{g_2x},
+         &
+        h_2
+         & =k_{g_2x}^{-1}g_2k_x,
+        \notag
+    \end{align}
+    for a two-cocycle $\psi\colon H\times H\to\C^\times$. If $G$ is finite,
+    $\psi$ can be chosen with values of modulus one.
+
+    This is \cite[lines~7028--7042]{FrancoRubio2025MPUGauging}, with the
+    corrected last representative in $h_1$ of
+    \cite{gap:fbc25_stabilizer_transition_index_typo}; $\psi$ is a cocycle
+    representative, not a cohomology class.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:mpug_permuted_block_l_gauge,
+        thm:mpug_permuted_block_l_compatibility, cor:mpug_anomaly_class,
+        thm:mpug_stabilizer_torsor, thm:mpug_stabilizer_cocycle_l_symbol,
+        thm:mpug_circle_complex_units_h2}
+    By Corollary~\ref{cor:mpug_anomaly_class} there is $\beta$ with
+    $\beta\mathbin{\triangleright}\omega=1$, and by
+    Lemma~\ref{lem:mpug_permuted_block_l_gauge} rescaling the fusion tensors
+    by $\beta$ makes $\omega=1$ and changes $L$ to
+    $(\beta,1)\mathbin{\triangleright}L$, which is compatible with the
+    trivial three-cochain by
+    Lemma~\ref{thm:mpug_permuted_block_l_compatibility}. The first item of
+    Lemma~\ref{thm:mpug_stabilizer_torsor} writes it as
+    $(1,\gamma)\mathbin{\triangleright}L[\psi]$, so rescaling the action
+    tensors by $\gamma^{-1}$ gives $L[\psi]$. For finite $G$, $\psi$ is
+    cohomologous to its pointwise phase by
+    Lemma~\ref{thm:mpug_circle_complex_units_h2}, and by
+    Lemma~\ref{thm:mpug_stabilizer_cocycle_l_symbol} the coboundary is an
+    action gauge, which is absorbed into the rescaling of the action tensors.
+\end{proof}
+
+\begin{lemma}[Block independence and extension of the stabilizer class]
+    \label{lem:mpug_permuted_block_bi_extension}
+    \lean{MPOTensor.GroupFamily.BlockActionData.isBlockIndependent_lSymbol_iff,
+        MPOTensor.GroupFamily.BlockActionData.isBlockIndependent_lSymbol_iff_circle}
+    \leanok
+    \uses{lem:mpug_permuted_block_stabilizer_form,
+        lem:mpug_permuted_block_l_gauge, lem:mpug_scalar_bi_restriction,
+        lem:mpug_scalar_bi_restriction_circle}
+    In the setting of Lemma~\ref{lem:mpug_permuted_block_stabilizer_form},
+    take any rescaling of the tensors for which $L^x_{g_1,g_2}=\psi(h_1,h_2)$
+    with a two-cocycle $\psi$ on $H$. The $L$-symbols are block independent
+    after a joint scalar gauge if and only if $[\psi]\in H^2(H,\C^\times)$
+    lies in the image of the restriction map from $H^2(G,\C^\times)$. If $G$
+    is finite, this holds if and only if the class in $H^2(H,U(1))$ of the
+    phase of $\psi$ lies in the image of the restriction map from
+    $H^2(G,U(1))$.
+
+    This is \cite[lines~7042--7064]{FrancoRubio2025MPUGauging} for the
+    $L$-symbols of actual tensors, stated for the class of $\psi$; the
+    representative form, an exact extension of $\psi$ to a cocycle on $G$, is
+    Lemma~\ref{lem:mpug_scalar_bi_restriction}. The subgroup $H$ need not be
+    normal.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:mpug_permuted_block_l_gauge, lem:mpug_scalar_bi_restriction,
+        lem:mpug_scalar_bi_restriction_circle}
+    By Lemma~\ref{lem:mpug_permuted_block_l_gauge} the rescaled $L$-symbols
+    are a joint scalar gauge of the original ones, and block independence is
+    gauge invariant by Lemma~\ref{lem:mpug_scalar_bi_restriction_circle}.
+    The two criteria for $L[\psi]$ are
+    Lemmas~\ref{lem:mpug_scalar_bi_restriction}
+    and~\ref{lem:mpug_scalar_bi_restriction_circle}.
 \end{proof}
 
 \begin{definition}[Generalized coboundary and cocycle]
