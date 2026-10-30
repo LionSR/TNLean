@@ -13,11 +13,7 @@ perturbation span condition in Theorem~\ref{thm:uncle_periodic_ground_space}.
 \begin{definition}[The finite two-wall trial]
     \label{def:uncle_two_wall_trial}
     \lean{MPSTensor.uncleTwoWallCoefficient,
-        MPSTensor.uncleTwoWallCoefficient_eq_sum,
-        MPSTensor.uncleTwoWallTrial,MPSTensor.uncleTwoWallTrialSource,
-        MPSTensor.uncleTwoWallTrial_append_apply,
-        MPSTensor.uncleTwoWallTrialSource_cast_apply,
-        MPSTensor.norm_uncleTwoWallTrialSource_eq}
+        MPSTensor.uncleTwoWallTrial,MPSTensor.uncleTwoWallTrialSource}
     \leanok
     \uses{def:uncle_boundary_space}
     For five consecutive words $u,v,w,x,y$, define the coefficient
@@ -25,18 +21,36 @@ perturbation span condition in Theorem~\ref{thm:uncle_periodic_ground_space}.
         \operatorname{tr}\!\left(A(u)\,R(v)\,B(w)\,L(x)\,A(y)\right),
     \end{align}
     where $R(v)$ and $L(x)$ are the sums with one rectangular wall at each
-    position of their respective words. Thus the coefficient is precisely
-    the independent double sum over both wall positions. On a chain of
+    position of their respective words. On a chain of
     length $6N+1$ with $N\ge1$, choose consecutive segment lengths
     $N,N+1,2N-1,N+1,N$. In coordinates numbered from zero, the first wall
     ranges from $N$ through $2N$, and the second from $4N$ through $5N$.
-    Denote the resulting vector by $\phi_N$. Concatenating five physical
-    configurations evaluates the coefficient on precisely their five words.
-    For $N\ge1$, the length identity
-    $N+(N+1)+(2N-1)+(N+1)+N=6N+1$ identifies the source trial with this
-    five-segment trial by a finite coordinate bijection, preserving its norm
-    exactly.
+    Denote the resulting vector by $\phi_N$.
 \end{definition}
+
+\begin{lemma}[Coordinates of the two-wall trial]
+    \label{lem:uncle_two_wall_trial_coordinates}
+    \lean{MPSTensor.uncleTwoWallCoefficient_eq_sum,
+        MPSTensor.uncleTwoWallTrial_append_apply,
+        MPSTensor.uncleTwoWallTrialSource_cast_apply,
+        MPSTensor.norm_uncleTwoWallTrialSource_eq}
+    \leanok
+    \uses{def:uncle_two_wall_trial}
+    The coefficient is the independent double sum over both wall
+    positions. Concatenating five physical configurations evaluates the
+    coefficient on precisely their five words. For $N\ge1$, the length
+    identity $N+(N+1)+(2N-1)+(N+1)+N=6N+1$ identifies the source trial
+    with this five-segment trial by a finite coordinate bijection,
+    preserving its norm exactly.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Expanding each one-wall word sum and distributing the trace over both
+    sums gives the double sum. The ordered list of a concatenated
+    configuration is the concatenation of the five ordered lists. The
+    coordinate bijection is the cast along the length identity, which
+    permutes no coefficients and hence preserves the Euclidean norm.
+\end{proof}
 
 \begin{lemma}[Interior moving-wall cancellation]
     \label{lem:uncle_two_wall_interior_cancellation}

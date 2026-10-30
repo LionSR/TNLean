@@ -6,11 +6,11 @@ Authors: TNLean contributors
 import TNLean.MPS.ParentHamiltonian.VaryingOBCProjectorKernel
 
 /-!
-# Actual open-chain boundary states lie in the parent kernel
+# Open-chain boundary states lie in the parent kernel
 
 Splitting a physical word splits its ordered rectangular matrix product on the
-actual intermediate bond. For a fixed prefix and suffix, cyclicity of the
-rectangular trace therefore gives a two-site boundary matrix. The actual
+intermediate bond. For a fixed prefix and suffix, cyclicity of the
+rectangular trace therefore gives a two-site boundary matrix. The
 projector kernel characterization then proves annihilation by the open parent
 Hamiltonian. This direction requires neither injectivity nor row normalization.
 
@@ -24,7 +24,7 @@ namespace Matrix
 
 variable {d : ℕ}
 
-/-- Concatenation splits the actual rectangular product at its intermediate
+/-- Concatenation splits the rectangular product at its intermediate
 bond. Source: PGVWC07, Theorem 9 proof, equation unique-OBC, lines 1213–1220. -/
 theorem obc_rectangularEval_append (b : ℕ → ℕ)
     (A : ∀ k, Fin d → Matrix (Fin (b k)) (Fin (b (k + 1))) ℂ)
@@ -48,7 +48,7 @@ theorem obc_rectangularEval_append (b : ℕ → ℕ)
     rw [hright, ← Matrix.mul_assoc, ← ih]
     exact hleft
 
-/-- The full physical vector associated with an actual rectangular chain and
+/-- The full physical vector associated with a rectangular chain and
 an arbitrary endpoint boundary matrix. Source: PGVWC07, equation unique-OBC
 and its full-chain conclusion, lines 1213–1237. -/
 noncomputable def obcBoundaryState (b : ℕ → ℕ)
@@ -59,7 +59,7 @@ noncomputable def obcBoundaryState (b : ℕ → ℕ)
     (fun w ↦ Matrix.trace (Z * Kraus.rectangularEval b (fun k : Fin N ↦ A k.val) w))
 
 /-- Fixing the outside configurations gives the explicit pair boundary
-\(X=P_{\mathrm{suffix}}ZP_{\mathrm{prefix}}\) on the actual virtual spaces.
+\(X=P_{\mathrm{suffix}}ZP_{\mathrm{prefix}}\) on the virtual spaces.
 Source: PGVWC07, equation unique-OBC, lines 1213–1220. -/
 theorem obcBoundaryState_pair_section (b : ℕ → ℕ)
     (A : ∀ k, Fin d → Matrix (Fin (b k)) (Fin (b (k + 1))) ℂ)
@@ -86,7 +86,7 @@ theorem obcBoundaryState_pair_section (b : ℕ → ℕ)
   rw [← Matrix.mul_assoc, Matrix.trace_mul_cycle]
   simp only [Matrix.mul_assoc]
 
-/-- Every actual full-chain boundary state is annihilated by the actual open
+/-- Every full-chain boundary state is annihilated by the open
 parent Hamiltonian. No spanning or canonical normalization hypothesis is used.
 Source: PGVWC07, Theorem 9 and equation unique-OBC, lines 1201–1220. -/
 theorem obcParentHamiltonian_apply_obcBoundaryState (b : ℕ → ℕ)

@@ -11,11 +11,11 @@ import QICLean.Analysis.TraceMulBound
 import QICLean.Analysis.OperatorNormConvergence
 
 /-!
-# Quantitative factorization of the actual two-wall transfer contraction
+# Quantitative factorization of the two-wall transfer contraction
 
-The exact finite transfer identity is approximated by the two actual
+The exact finite transfer identity is approximated by the two
 canonical rank-one contractions. Pure transfer powers converge by source
-block injectivity and unital normalization, and the actual moving-wall
+block injectivity and unital normalization, and the moving-wall
 maps have linear bounds. This derives a geometric factorization error;
 neither factorization nor norm growth is assumed.
 
@@ -29,9 +29,9 @@ namespace MPSTensor
 
 variable {d a b : ℕ}
 
-/-- Replacing the actual separated transfer powers by their canonical
+/-- Replacing the separated transfer powers by their canonical
 contractions gives an error bounded by a quadratic length factor times a
-geometric sequence. The leading term is the product of the two actual
+geometric sequence. The leading term is the product of the two
 finite wall Gram weights. Source: arXiv:1210.6613, proof of Lemma
 lowenergystates, lines 1230–1265. -/
 theorem uncleTwoWallTransfer_factorization_bound [NeZero a] [NeZero b]
@@ -153,8 +153,8 @@ theorem uncleTwoWallTransfer_factorization_bound [NeZero a] [NeZero b]
       mul_le_mul_of_nonneg_right (by linarith) (by positivity)
     _ = (‖tr‖ + 1) * K * ((N + 1 : ℕ) : ℝ) ^ 2 * z ^ N := by ring
 
-/-- The squared norm of the actual source trial, divided by the squared
-moving-window length, converges to the product of the genuine limiting
+/-- The squared norm of the source trial, divided by the squared
+moving-window length, converges to the product of the limiting
 wall coefficients. No positive-slope or norm-growth premise is required.
 Source: arXiv:1210.6613, proof of Lemma lowenergystates. -/
 theorem uncleTwoWallTrialSource_normalized_norm_sq_tendsto [NeZero a] [NeZero b]

@@ -11,15 +11,15 @@ import Mathlib.Analysis.Matrix.MeasurableSpace
 import Mathlib.MeasureTheory.Constructions.BorelSpace.Complex
 
 /-!
-# Generic positivity of the actual one-wall norm coefficient
+# Generic positivity of the one-wall norm coefficient
 
-The actual source wall coefficient is a nonnegative real quadratic form.
+The source wall coefficient is a nonnegative real quadratic form.
 Its zero set is its radical, a real linear subspace; the explicit positive
 wall witness makes this subspace proper. Consequently its complement is
 open and dense and the exceptional set has zero additive Haar measure.
 
 Source: arXiv:1210.6613, proof of Lemma lowenergystates, lines 1250–1265.
-These are the one-wall coefficients. The actual two-wall norm estimate
+These are the one-wall coefficients. The two-wall norm estimate
 still needs the separating-transfer factorization error bound.
 -/
 
@@ -92,8 +92,8 @@ private theorem wallQuadratic_radical_ne_top {V : Type*} [AddCommGroup V] [Modul
   have hx : x ∈ Q.radical := by rw [htop]; trivial
   exact hx.1
 
-/-- The zero set of the actual source quadratic coefficient is its real
-linear radical. This is derived from nonnegative actual finite Gram
+/-- The zero set of the source quadratic coefficient is its real
+linear radical. This is derived from nonnegative finite Gram
 weights, not assumed as a genericity premise; arXiv:1210.6613,
 proof of Lemma lowenergystates. -/
 theorem uncleWallSlopeQuadratic_mem_radical_iff
@@ -106,7 +106,7 @@ theorem uncleWallSlopeQuadratic_mem_radical_iff
       uncleWallSlopeQuadratic A B ρ hSpect R = 0 :=
   wallQuadratic_mem_radical_iff _ (uncleWallSlopeQuadratic_nonneg A B ρ hρ hA hB hSpect) R
 
-/-- The exceptional subspace of zero actual wall coefficients is proper in
+/-- The exceptional subspace of zero wall coefficients is proper in
 the source full-perturbation setting; arXiv:1210.6613, proof of Lemma
 lowenergystates, nonzero quadratic coefficient. -/
 theorem uncleWallSlopeQuadratic_radical_ne_top [NeZero a] [NeZero b]
@@ -128,7 +128,7 @@ private theorem wallQuadratic_positive_set_eq_compl_radical {V : Type*}
   rw [wallQuadratic_mem_radical_iff Q hQ x]
   exact ⟨ne_of_gt, fun hx ↦ lt_of_le_of_ne (hQ x) (Ne.symm hx)⟩
 
-/-- Positive actual wall slopes form an open dense set under the source
+/-- Positive wall slopes form an open dense set under the source
 canonical normalizations and full perturbation span. This assertion
 concerns the coefficient itself, not the full two-wall trial norm;
 arXiv:1210.6613, proof of Lemma lowenergystates. -/
@@ -152,7 +152,7 @@ theorem uncleWallSlopeQuadratic_positive_open_dense [NeZero a] [NeZero b]
   by_contra h
   exact hproper (S.eq_top_of_nonempty_interior' (Set.nonempty_iff_ne_empty.mpr h))
 
-/-- The actual zero wall coefficient has zero additive Haar measure;
+/-- The zero wall coefficient has zero additive Haar measure;
 arXiv:1210.6613, proof of Lemma lowenergystates. The exceptional set is
 the derived proper linear radical of its nonnegative quadratic form. -/
 theorem uncleWallSlopeQuadratic_zero_measure [NeZero a] [NeZero b]
@@ -179,7 +179,7 @@ theorem uncleWallSlopeQuadratic_zero_measure [NeZero a] [NeZero b]
     _ _ _ hBorel _ μ hμ _
     (uncleWallSlopeQuadratic_radical_ne_top A B R₀ L₀ hPert ρ hρ hSpect)
 
-/-- Almost every wall has strictly positive actual limiting Gram slope
+/-- Almost every wall has strictly positive limiting Gram slope
 under the source canonical normalizations and a full perturbation span.
 This supplies the one-wall generic positivity step; the two-wall norm
 factorization estimate remains separate. Source: arXiv:1210.6613,
@@ -209,7 +209,7 @@ theorem uncleWallNormSlope_ae_pos [NeZero a] [NeZero b]
   exact ⟨hR, (Complex.nonneg_iff.mp
     (uncleWallNormSlope_nonneg A B R ρ hρ.posSemidef hA hB hSpect)).2⟩
 
-/-- For almost every pair of walls, both actual one-wall limiting
+/-- For almost every pair of walls, both one-wall limiting
 coefficients are strictly positive. A single additive Haar measure on
 the pair space is used; independence of component measures is not a
 hypothesis. Source: arXiv:1210.6613, proof of Lemma lowenergystates,

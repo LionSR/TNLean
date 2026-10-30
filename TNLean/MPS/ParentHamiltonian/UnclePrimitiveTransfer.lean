@@ -16,10 +16,10 @@ import QICLean.Kraus.Wielandt.Primitivity.VectorSpreadToPrimitive
 /-!
 # Exponential transfer convergence for the normalized uncle blocks
 
-An injective unital block has primitive transfer dynamics. The actual
+An injective unital block has primitive transfer dynamics. The
 stationary trace functional defines its canonical rank-one projection;
 subtracting that projection leaves spectral radius strictly below one.
-Gelfand's formula then gives quantitative convergence of the actual
+Gelfand's formula then gives quantitative convergence of the
 transfer powers. No convergence or spectral-gap hypothesis is added.
 
 Source: arXiv:1210.6613, Lemma exptransferoperator, lines 1165–1175,
@@ -56,7 +56,7 @@ private theorem uncleDensityFunctional_map (A : MPSTensor d D)
   change Matrix.trace (ρ * Kraus.mapLM A X) = Matrix.trace (ρ * X)
   rw [Kraus.mapLM_apply, Kraus.trace_mul_map_eq_trace_adjointMap_mul, hfix]
 
-/-- Source block injectivity and unital normalization imply actual
+/-- Source block injectivity and unital normalization imply
 peripheral primitivity; arXiv:1210.6613, Lemma exptransferoperator.
 The trace-preserving bridge is applied to the adjoint family and then
 transported back algebraically, with no adjoint norm comparison. -/
@@ -94,7 +94,7 @@ theorem uncleTransfer_isPrimitive_of_injective_unital [NeZero D]
   rw [hspec, hPrim]
   simp
 
-/-- Subtracting the actual canonical rank-one contraction from a source
+/-- Subtracting the canonical rank-one contraction from a source
 injective unital transfer leaves spectral radius strictly below one.
 Source: arXiv:1210.6613, Lemma exptransferoperator, lines 1165–1175. -/
 theorem uncleTransfer_complement_spectralRadius_lt_one [NeZero D]
@@ -180,7 +180,7 @@ private theorem uncleTransfer_pow_decomposition
       conv_lhs => rhs; rw [show E = P + N by dsimp [N]; abel]
       simp only [add_mul, mul_add, hPP, hPN, hpowP, add_zero, zero_add, ← pow_succ]
 
-/-- Actual source transfer powers converge geometrically to their
+/-- Source transfer powers converge geometrically to their
 canonical weighted trace contraction. The strict complementary gap and
 peripheral primitivity are derived from block injectivity and unitality,
 not assumed. Source: arXiv:1210.6613, Lemma exptransferoperator. -/

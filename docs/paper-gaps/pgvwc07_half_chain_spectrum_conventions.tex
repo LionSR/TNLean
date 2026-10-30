@@ -164,17 +164,23 @@ and an arbitrary number of blocks remains open.
 
 The actual finite normalization and spectral comparison are now written in
 \path{TNLean/MPS/ParentHamiltonian/HalfChainPhysicalStability.lean}.
-Reading the actual $2L$-site vector as its coefficient matrix gives
-\[
+For a vector $\psi$ on $2L$ sites, let $K_\psi$ be its coefficient matrix,
+$(K_\psi)_{\sigma\tau}=\psi(\sigma\tau)$ for configurations $\sigma,\tau$
+of the two halves, let $R_\psi=K_\psi K_\psi^\dagger$ be its reduced matrix,
+and let $\widehat\psi=\|\psi\|^{-1}\psi$, with $\widehat0=0$. For two such
+vectors $\psi,\phi$, reading each as its coefficient matrix gives
+\begin{align}
     \|R_\psi-R_\phi\|
     \leq(\|\psi\|+\|\phi\|)\|\psi-\phi\|,
-\]
+    \label{eq:halfchain_note_reduced_stability}
+\end{align}
 with no factor depending on the growing physical dimension. The finite
 normalization is the actual squared ring norm, and
-\[
+\begin{align}
     \|\widehat\psi-\widehat\phi\|
     \leq2\|\psi-\phi\|+2\bigl|\|\phi\|-1\bigr|,
-\]
+    \label{eq:halfchain_note_normalized_remainder}
+\end{align}
 including zero-norm finite lengths. Weyl's inequality at each finite size
 then bounds every difference of ordered padded half-chain eigenvalues by
 $2\|\widehat\psi-\widehat\phi\|$.

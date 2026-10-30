@@ -167,7 +167,7 @@
     \uses{def:dependent_physical_pair_coordinates,lem:varying_physical_pair_projection_transport}
     Let $A^{[j]}_i\in M_{D_j,D_{j+1}}(\mathbb C)$ have an arbitrary finite
     physical alphabet $I_j$ at each site. For the adjacent pair $j,j+1$,
-    let $G_j$ be its rectangular trace-boundary range. On the
+    let $G_j$ be its pair range. On the
     chain space $\mathbb C^{\prod_k I_k}$, define
     \begin{align}
         h_j & =Q_j^{-1}(P_{G_j^\perp}\otimes I)Q_j,
@@ -248,9 +248,15 @@
 \end{lemma}
 \begin{proof}\leanok
     Positivity of the local terms derives each local equation from
-    the equation for their sum. At a letter outside the original alphabet,
-    its extended site matrix is zero, so every pair trace coefficient
-    at that letter is zero. Every site of a chain with $N\ge2$ belongs to an
+    the equation for their sum. At a letter $\sigma_k$ outside the original
+    alphabet, the extended site matrix $\widetilde A_{\sigma_k}$ is zero, so
+    for every boundary matrix $X$ of a pair containing site $k$,
+    \begin{align}
+        \operatorname{tr}\bigl(X\widetilde A_{\sigma_k}\widetilde A_{\sigma_{k+1}}\bigr)=0,
+        \qquad
+        \operatorname{tr}\bigl(X\widetilde A_{\sigma_{k-1}}\widetilde A_{\sigma_k}\bigr)=0.
+        \label{eq:varying_physical_unused_letter_trace}
+    \end{align} Every site of a chain with $N\ge2$ belongs to an
     adjacent pair, including the final site, which belongs to the final pair.
     The local boundary sections therefore give the claimed vanishing at
     every configuration containing an unused letter.
@@ -288,8 +294,14 @@
 \begin{proof}\leanok
     Both local equations say that every fixed-outside pair section has a
     rectangular trace boundary. To compare the coordinate descriptions,
-    concatenate a prefix, the active pair, and a suffix. Changing only the
-    pair leaves all outside coordinates unchanged. Conversely, split a full
+    concatenate a prefix $u$ of length $j$, the active pair $s=(s_0,s_1)$,
+    and a suffix $v$. With $Q_j$ the pair coordinates at $j$,
+    \begin{align}
+        Q_j(u\,s\,v) & =\bigl(s,\eta_{u,v}\bigr),
+        \label{eq:uniform_physical_pair_coordinates}
+    \end{align}
+    where the outside coordinates $\eta_{u,v}$ do not depend on $s$; changing
+    only the pair leaves all outside coordinates unchanged. Conversely, split a full
     configuration into its prefix, pair, and suffix; concatenating
     them recovers the configuration. A reference pair from the nonempty
     alphabet fixes the outside section. These two coordinate identifications

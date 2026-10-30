@@ -340,13 +340,23 @@ retained explicitly; see \cite{gap:pgvwc07_open_parent_domain}.
     \leanok
     \uses{def:varying_obc_scalar_state,
         lem:varying_obc_boundary_states_parent_kernel}
-    For singleton endpoint bonds, the boundary trace state with unit scalar
-    boundary is precisely $\Omega$. Consequently $H\Omega=0$ for the
-    open parent Hamiltonian, without any spanning or normalization assumption.
+    For singleton endpoint bonds, the boundary trace state of
+    Lemma~\ref{lem:varying_obc_boundary_states_parent_kernel} with unit
+    scalar boundary $Z=1\in M_{1,1}(\mathbb C)$ is precisely $\Omega$:
+    \begin{align}
+        \phi_1 & =\Omega.
+        \label{eq:varying_obc_unit_boundary_state}
+    \end{align}
+    Consequently $H\Omega=0$ for the open parent Hamiltonian, without any
+    spanning or normalization assumption.
 \end{lemma}
 \begin{proof}\leanok
-    The two singleton sums in the boundary trace contain one term each.
-    The full-boundary state is annihilated by every local projector.
+    The two singleton sums in the boundary trace contain one term each, so
+    $\phi_1(i_0,\ldots,i_{N-1})
+        =\bigl(B^{[0]}_{i_0}\cdots B^{[N-1]}_{i_{N-1}}\bigr)_{0,0}
+        =\Omega(i_0,\ldots,i_{N-1})$.
+    By Lemma~\ref{lem:varying_obc_boundary_states_parent_kernel},
+    $H\Omega=H\phi_1=0$.
 \end{proof}
 
 \begin{lemma}[Unique ground-state line of the varying-bond open parent]

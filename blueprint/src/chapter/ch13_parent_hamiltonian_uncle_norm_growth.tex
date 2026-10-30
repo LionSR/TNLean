@@ -42,10 +42,19 @@ limit and its generic quadratic growth.
     block-diagonal channel. Unital contractivity bounds its eigenvalue
     modulus by one. If equality holds, the faithful stationary density
     forces equality in the Schwarz inequality and hence an intertwining
-    identity for every adjoint Kraus letter. Full perturbation span supplies
-    coefficients selecting zero in the first diagonal block and the identity
-    in the second. Contracting the intertwining identity gives a zero
-    eigenvector, a contradiction. Conjugate transpose treats the reverse
+    identity for every adjoint Kraus letter: for the mixed eigenvector $X$
+    with eigenvalue $\mu$,
+    \begin{align}
+        XB_i^*=\mu A_i^*X\qquad\text{for every }i.
+        \label{eq:uncle_mixed_damping_intertwining}
+    \end{align}
+    Full perturbation span supplies coefficients $c_i$ with
+    $\sum_ic_iA_i^*=0$ and $\sum_ic_iB_i^*=I$. Contracting
+    (\ref{eq:uncle_mixed_damping_intertwining}) with them gives
+    \begin{align}
+        X=X\sum_ic_iB_i^*=\mu\Bigl(\sum_ic_iA_i^*\Bigr)X=0,
+    \end{align}
+    contradicting $X\ne0$. Conjugate transpose treats the reverse
     orientation.
 \end{proof}
 
@@ -82,7 +91,7 @@ limit and its generic quadratic growth.
     \leanok
     \uses{lem:uncle_injective_transfer_decay,lem:uncle_wall_gram_linear_bounds,lem:uncle_wall_rank_one_contraction}
     Under the stated canonical spectral conditions, let $T_N$ denote the
-    actual source transfer contraction. There are $C>0$ and $0<z<1$ such
+    source transfer contraction. There are $C>0$ and $0<z<1$ such
     that, for every positive $N$,
     \begin{align}
         \left|\operatorname{Tr}(T_N)-\eta_R(N+1)\eta_L(N+1)\right|
@@ -91,13 +100,23 @@ limit and its generic quadratic growth.
 \end{lemma}
 \begin{proof}
     \leanok
-    Replace the first long transfer power by its canonical projection,
-    then the second. The two errors are bounded by geometric sequences
-    times the product of the two actual moving-wall map bounds. The
-    remaining pure transfer is contractive, as is the normalized canonical
-    projection. The operator trace is a continuous linear functional on
+    Write $M_R=\mathcal G_R^{(N+1)}$ and $M_L=\mathcal G_L^{(N+1)}$, so that
+    $T_N=E_A^{2N}\circ M_R\circ E_B^{2N-1}\circ M_L$. Replacing the first
+    long transfer power by its canonical projection, and then the second,
+    gives
+    \begin{align}
+        T_N-P_A\circ M_R\circ P_B\circ M_L
+         & =(E_A^{2N}-P_A)\circ M_R\circ E_B^{2N-1}\circ M_L
+        +P_A\circ M_R\circ(E_B^{2N-1}-P_B)\circ M_L.
+        \label{eq:uncle_trial_factorization_split}
+    \end{align}
+    The two differences are bounded by geometric sequences, and the two
+    moving-wall maps by multiples of $N+1$. The remaining pure transfer is
+    contractive, as is the normalized canonical projection. The operator trace is a continuous linear functional on
     the finite-dimensional space of endomorphisms. The two rank-one
-    contractions give exactly the product of the finite wall weights.
+    contractions give exactly the product of the finite wall weights,
+    $\operatorname{Tr}(P_A\circ M_R\circ P_B\circ M_L)
+        =\eta_R(N+1)\eta_L(N+1)$.
 \end{proof}
 
 \begin{lemma}[Normalized norm limit and generic quadratic growth]
@@ -106,15 +125,13 @@ limit and its generic quadratic growth.
         MPSTensor.uncleTwoWallTrialSource_eventual_norm_bounds,
         MPSTensor.uncleTwoWallTrialSource_ae_quadratic_norm_growth}
     \leanok
-    \uses{lem:uncle_trial_norm_factorization_error,thm:uncle_wall_gram_linear_limit,cor:uncle_wall_gram_pair_generic_positive,lem:uncle_diagonal_injectivity,lem:uncle_mixed_damping_from_span,thm:uncle_trial_norm_transfer}
+    \uses{lem:uncle_trial_norm_factorization_error,thm:uncle_wall_gram_linear_limit,cor:uncle_wall_gram_pair_generic_positive,lem:uncle_diagonal_injectivity,lem:uncle_mixed_damping_from_span,lem:uncle_trial_norm_transfer}
     Under the stated canonical normalization and strict mixed damping,
-    the actual source trial satisfies
+    the source trial satisfies
     \begin{align}
         \frac{\lVert\phi_N\rVert^2}{(N+1)^2}
         \longrightarrow\operatorname{Re}(\kappa_R\kappa_L).
     \end{align}
-    If a full perturbation span is possible for the fixed diagonal
-    blocks, it supplies the strict mixed damping needed for this limit.
     For almost every pair $(R,L)$ there are $c,C>0$ such
     that, for all sufficiently large $N$,
     \begin{align}
@@ -125,9 +142,12 @@ limit and its generic quadratic growth.
 \end{lemma}
 \begin{proof}
     \leanok
+    If a full perturbation span is possible for the fixed diagonal
+    blocks, it supplies the strict mixed damping needed for this limit
+    by Lemma~\ref{lem:uncle_mixed_damping_from_span}.
     Divide the quantitative error by $(N+1)^2$. Its geometric upper bound
     tends to zero, while the normalized wall weights converge to their
-    actual slopes. Almost every pair has both slopes positive, so their
+    slopes. Almost every pair has both slopes positive, so their
     product has positive real part. Convergence then bounds the normalized
     squared norm above and below by positive constants.
 \end{proof}
@@ -139,7 +159,7 @@ limit and its generic quadratic growth.
     \uses{lem:uncle_injective_transfer_decay,lem:uncle_diagonal_injectivity,
         lem:uncle_mixed_damping_from_span}
     Under the same normalized canonical data and full perturbation span,
-    the actual periodic ground vectors satisfy
+    the periodic ground vectors satisfy
     \begin{align}
         \lVert\psi_A^N\rVert^2\longrightarrow1,\qquad
         \lVert\psi_B^N\rVert^2\longrightarrow1,\qquad
@@ -148,11 +168,19 @@ limit and its generic quadratic growth.
 \end{lemma}
 \begin{proof}
     \leanok
-    The actual pure transfer powers converge in operator norm to their
-    canonical rank-one contractions. Their operator traces therefore tend
-    to the trace of the canonical contraction, which is the density trace,
-    namely one. The exact transfer trace identity identifies these with
-    the periodic squared norms. Strict mixed damping makes the mixed power
-    trace tend to zero, and hence the actual periodic inner product does
-    also. All transfer conditions were derived from the stated source data.
+    The pure transfer powers converge in operator norm to their
+    canonical rank-one contractions, so
+    $\operatorname{Tr}(E_A^N)\to\operatorname{Tr}(P_A)
+        =\operatorname{tr}(\rho_A)=1$, and likewise for $B$. With the mixed
+    transfer $E_{AB}(X)=\sum_iA_iXB_i^*$, the exact transfer trace
+    identities give
+    \begin{align}
+        \lVert\psi_A^N\rVert^2=\operatorname{Tr}(E_A^N),\qquad
+        \lVert\psi_B^N\rVert^2=\operatorname{Tr}(E_B^N),\qquad
+        \lvert\langle\psi_A^N,\psi_B^N\rangle\rvert
+        =\lvert\operatorname{Tr}(E_{AB}^N)\rvert.
+        \label{eq:uncle_ground_gram_traces}
+    \end{align}
+    Strict mixed damping makes $\operatorname{Tr}(E_{AB}^N)$ tend to zero,
+    and hence the periodic inner product does also. All transfer conditions were derived from the stated source data.
 \end{proof}

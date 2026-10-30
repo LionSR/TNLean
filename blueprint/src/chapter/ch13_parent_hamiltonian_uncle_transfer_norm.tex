@@ -26,7 +26,7 @@ maps. This finite identity precedes the large-separation estimates in
 \end{definition}
 
 \begin{lemma}[Exact finite norm contraction]
-    \label{thm:uncle_trial_norm_transfer}
+    \label{lem:uncle_trial_norm_transfer}
     \lean{MPSTensor.trace_uncleTwoWallTransfer_eq_sum,
         MPSTensor.trace_uncleTwoWallTransfer_join_exterior,
         MPSTensor.norm_uncleTwoWallTrial_sq_eq_trace_transfer,
@@ -60,8 +60,16 @@ maps. This finite identity precedes the large-separation estimates in
     of $X\mapsto\sum_z C_zXC_z^*$ is
     $\sum_z\operatorname{tr}(C_z)\overline{\operatorname{tr}(C_z)}$,
     which is the squared coefficient norm after joining the five physical
-    configurations. Cyclicity of the operator trace combines the two
-    exterior powers of $E_A$.
+    configurations. With
+    $M=\mathcal G_R^{(r)}\circ E_B^q\circ\mathcal G_L^{(s)}$, cyclicity
+    $\operatorname{Tr}(XY)=\operatorname{Tr}(YX)$ of the operator trace
+    combines the two exterior powers of $E_A$:
+    \begin{align}
+        \operatorname{Tr}(E_A^p\circ M\circ E_A^t)
+        =\operatorname{Tr}(E_A^t\circ E_A^p\circ M)
+        =\operatorname{Tr}(E_A^{p+t}\circ M).
+        \label{eq:uncle_trial_transfer_join_exterior}
+    \end{align}
 \end{proof}
 
 \begin{lemma}[The rank-one leading contraction]

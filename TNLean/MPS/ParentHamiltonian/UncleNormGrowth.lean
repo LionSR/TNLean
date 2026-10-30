@@ -8,10 +8,10 @@ import TNLean.MPS.ParentHamiltonian.UncleWallGramGeneric
 import TNLean.MPS.ParentHamiltonian.UncleMixedDamping
 
 /-!
-# Generic quadratic norm growth of the actual two-wall trial
+# Generic quadratic norm growth of the two-wall trial
 
 The exact source trial has normalized squared norm converging to the product
-of its two actual wall coefficients. Their derived generic positivity gives
+of its two wall coefficients. Their derived generic positivity gives
 both quadratic upper and lower bounds for almost every pair of walls.
 The individual diagonal block injectivities and strict mixed damping are
 derived from the full perturbation span and canonical normalization,
@@ -84,8 +84,8 @@ theorem uncleBoundaryLetter_isInjective_diagonal_blocks
       ext j k
       simp [fB, e, uncleBoundaryLetter, uncleBlockMatrix, Matrix.reindex_apply]
 
-/-- A positive value of the actual limiting coefficient product gives
-quadratic upper and lower bounds on the squared norm of the actual source
+/-- A positive value of the limiting coefficient product gives
+quadratic upper and lower bounds on the squared norm of the source
 trial. The following generic theorem derives this positivity without
 assuming it. Source: arXiv:1210.6613, Lemma lowenergystates, first assertion. -/
 theorem uncleTwoWallTrialSource_eventual_norm_bounds [NeZero a] [NeZero b]
@@ -116,7 +116,7 @@ theorem uncleTwoWallTrialSource_eventual_norm_bounds [NeZero a] [NeZero b]
   have hden : 0 < ((N + 1 : ℕ) : ℝ) ^ 2 := by positivity
   exact ⟨(le_div_iff₀ hden).mp hNlow.le, (div_le_iff₀ hden).mp hNupp.le⟩
 
-/-- For almost every pair of walls the actual source trial has quadratic
+/-- For almost every pair of walls the source trial has quadratic
 squared-norm growth. The coefficient product is positive by the derived
 proper-radical exceptional-set theorem, not by a norm-growth premise.
 A single additive Haar measure on the pair space is used. Source:

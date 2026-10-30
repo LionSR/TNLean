@@ -13,13 +13,13 @@ import Mathlib.Analysis.SpecificLimits.Normed
 /-!
 # Exact overlaps of the finite uncle trial with pure ground sectors
 
-The overlap with a pure periodic sector is the trace of an actual ordered
-mixed-transfer composition. The moving intervals retain their actual
+The overlap with a pure periodic sector is the trace of an ordered
+mixed-transfer composition. The moving intervals retain their
 single-domain-wall sums. This finite identity precedes the spectral estimate;
 no overlap rate or orthogonality premise enters its statement.
 
 Source: arXiv:1210.6613, proof of Lemma lowenergystates, item 2,
-lines 1277–1287. The numbered source trial has separations 2N−1 in B
+lines 1278–1288. The numbered source trial has separations 2N−1 in B
 and 2N in A after joining the exterior intervals.
 -/
 
@@ -78,7 +78,7 @@ private theorem trace_familyMixedMap {ι : Type*} [Fintype ι]
     star_sum, Finset.sum_mul, Finset.mul_sum]
   exact Finset.sum_comm
 
-/-- The actual wall-word map paired with a pure sector of the same physical
+/-- The wall-word map paired with a pure sector of the same physical
 alphabet. Its two rectangular endpoint spaces are retained. Source:
 arXiv:1210.6613, proof of Lemma lowenergystates, item 2. -/
 def uncleWallMixedMap (A : MPSTensor d a) (B : MPSTensor d b)
@@ -87,7 +87,7 @@ def uncleWallMixedMap (A : MPSTensor d a) (B : MPSTensor d b)
   familyMixedMap (fun σ : Cfg d n ↦ uncleDomainWallWord A B R (List.ofFn σ))
     (fun σ : Cfg d n ↦ Kraus.evalWord C (List.ofFn σ))
 
-/-- The actual wall mixed map is its finite coefficient contraction.
+/-- The wall mixed map is its finite coefficient contraction.
 Source: arXiv:1210.6613, proof of Lemma lowenergystates, item 2. -/
 theorem uncleWallMixedMap_apply (A : MPSTensor d a) (B : MPSTensor d b)
     (R : Fin d → Matrix (Fin a) (Fin b) ℂ) (C : MPSTensor d c) (n : ℕ)
@@ -149,7 +149,7 @@ private theorem uncleWallMixedMap_succ_right
     Matrix.sum_mul, Matrix.mul_assoc, Finset.sum_add_distrib]
   exact add_comm _ _
 
-/-- The ordered mixed-transfer contraction for the actual five-segment
+/-- The ordered mixed-transfer contraction for the five-segment
 trial against one pure periodic sector. Source: arXiv:1210.6613,
 proof of Lemma lowenergystates, item 2. -/
 def uncleTwoWallMixedTransfer (A : MPSTensor d a) (B : MPSTensor d b)
@@ -160,7 +160,7 @@ def uncleTwoWallMixedTransfer (A : MPSTensor d a) (B : MPSTensor d b)
     ((Kraus.mixedMapLM B C ^ q).comp
       ((uncleWallMixedMap B A L C s).comp (Kraus.mixedMapLM A C ^ t))))
 
-/-- Exact finite mixed trace, with the actual five-segment coefficients
+/-- Exact finite mixed trace, with the five-segment coefficients
 and the conjugated pure-sector coefficient on their concatenated word.
 Source: arXiv:1210.6613, proof of Lemma lowenergystates, item 2. -/
 theorem trace_uncleTwoWallMixedTransfer_eq_sum
@@ -183,7 +183,7 @@ theorem trace_uncleTwoWallMixedTransfer_eq_sum
   simp only [Fintype.sum_prod_type, uncleTwoWallCoefficient, Kraus.evalWord_append,
     Matrix.mul_assoc]
 
-/-- The actual inner product of a pure periodic state with the five-segment
+/-- The inner product of a pure periodic state with the five-segment
 trial is the ordered mixed-transfer trace. No overlap estimate is assumed.
 Source: arXiv:1210.6613, proof of Lemma lowenergystates, item 2. -/
 theorem inner_mpvState_uncleTwoWallTrial_eq_trace
@@ -205,7 +205,7 @@ theorem inner_mpvState_uncleTwoWallTrial_eq_trace
     uncleTwoWallTrial_append_apply, mpv, coeff_eq, List.ofFn_fin_append,
     trace_uncleTwoWallMixedTransfer_eq_sum, List.append_assoc]
 
-/-- Joining the two exterior intervals preserves the actual mixed trace.
+/-- Joining the two exterior intervals preserves the mixed trace.
 For the numbered source trial their joined A separation is exactly 2N.
 Source: arXiv:1210.6613, proof of Lemma lowenergystates, item 2. -/
 theorem trace_uncleTwoWallMixedTransfer_join_exterior
@@ -233,7 +233,7 @@ private theorem inner_mpvState_config_cast {n m : ℕ} (h : n = m)
   subst m
   rfl
 
-/-- The actual source trial overlap has its exact numbered separation lengths:
+/-- The source trial overlap has its exact numbered separation lengths:
 2N in A after closing the exterior intervals and 2N−1 in B.
 Source: arXiv:1210.6613, proof of Lemma lowenergystates, item 2. -/
 theorem inner_mpvState_uncleTwoWallTrialSource_eq_trace
@@ -295,7 +295,7 @@ private theorem unital_transfer_norm_le (A : MPSTensor d a)
   have hCP : IsKrausCP (Kraus.mapLM A) := Kraus.isCPMap_mapLM A
   exact hCP.norm_apply_le_of_map_one_eq_one hA X
 
-/-- The actual wall mixed map against its left pure sector is uniformly
+/-- The wall mixed map against its left pure sector is uniformly
 linear in the interval length. Strict mixed damping supplies bounded powers;
 no overlap estimate is assumed. Source: arXiv:1210.6613,
 proof of Lemma lowenergystates, item 2. -/
@@ -336,7 +336,7 @@ theorem uncleWallMixedMap_left_norm_le_mul
         add_le_add (ih X) (mul_le_mul_of_nonneg_left (hpow n X) hD.le)
       _ = _ := by push_cast; ring
 
-/-- The complementary actual wall mixed map against its right pure sector
+/-- The complementary wall mixed map against its right pure sector
 has the same uniform linear control. Source: arXiv:1210.6613,
 proof of Lemma lowenergystates, item 2. -/
 theorem uncleWallMixedMap_right_norm_le_mul
@@ -398,7 +398,7 @@ private theorem exists_trace_norm_bound (u v : ℕ) :
       (mul_le_mul_of_nonneg_left hnorm (norm_nonneg tr)).trans
         (mul_le_mul_of_nonneg_right (by linarith) hD)
 
-/-- Against the A ground sector the actual source overlap has a polynomial
+/-- Against the A ground sector the source overlap has a polynomial
 prefactor and a strict geometric rate. Its separating B interval is
 2N−1, which is at least N for N>0. Source: arXiv:1210.6613,
 proof of Lemma lowenergystates, item 2. -/
@@ -536,7 +536,7 @@ private theorem absorb_quadratic_geometric {r : ℝ} (hr : 0 < r) (hr1 : r < 1) 
       rw [mul_assoc, ← mul_pow, div_mul_cancel₀ _ hz.ne']
     _ ≤ D * z ^ n := mul_le_mul_of_nonneg_right hterm (pow_nonneg hz.le n)
 
-/-- The actual overlap with the A periodic ground sector decays at a strict
+/-- The overlap with the A periodic ground sector decays at a strict
 geometric rate. The polynomial number of possible wall positions is absorbed
 by a weaker rate between the derived mixed rate and one; no fixed printed
 exponent is assumed. Source: arXiv:1210.6613, Lemma lowenergystates, item 2. -/
@@ -559,7 +559,7 @@ theorem norm_inner_mpvState_left_uncleTwoWallTrialSource_le_geometric
     _ ≤ C * (D * z ^ N) := mul_le_mul_of_nonneg_left (habsorb N) hC.le
     _ = (C * D) * z ^ N := (mul_assoc _ _ _).symm
 
-/-- The actual overlap with the B periodic ground sector also decays
+/-- The overlap with the B periodic ground sector also decays
 geometrically, with its rate derived from strict mixed damping.
 Source: arXiv:1210.6613, Lemma lowenergystates, item 2. -/
 theorem norm_inner_mpvState_right_uncleTwoWallTrialSource_le_geometric
@@ -581,7 +581,7 @@ theorem norm_inner_mpvState_right_uncleTwoWallTrialSource_le_geometric
     _ ≤ C * (D * z ^ N) := mul_le_mul_of_nonneg_left (habsorb N) hC.le
     _ = (C * D) * z ^ N := (mul_assoc _ _ _).symm
 
-/-- The actual A-sector overlap tends to zero along the numbered source
+/-- The A-sector overlap tends to zero along the numbered source
 trial, as a consequence of the derived geometric estimate.
 Source: arXiv:1210.6613, Lemma lowenergystates, item 2. -/
 theorem inner_mpvState_left_uncleTwoWallTrialSource_tendsto_zero
@@ -599,7 +599,7 @@ theorem inner_mpvState_left_uncleTwoWallTrialSource_tendsto_zero
   · simpa only [mul_zero] using tendsto_const_nhds.mul
       (tendsto_pow_atTop_nhds_zero_of_lt_one hz.le hz1)
 
-/-- The actual B-sector overlap tends to zero along the numbered source
+/-- The B-sector overlap tends to zero along the numbered source
 trial, without supplying an orthogonality hypothesis.
 Source: arXiv:1210.6613, Lemma lowenergystates, item 2. -/
 theorem inner_mpvState_right_uncleTwoWallTrialSource_tendsto_zero

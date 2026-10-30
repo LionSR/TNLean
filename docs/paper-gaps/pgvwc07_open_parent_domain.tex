@@ -11,7 +11,7 @@
 \gapnote{scope-restriction}{open}
 
 \section{Source and actual conclusion}
-PGVWC07, arXiv:quant-ph/0608197, Theorem 9 and proof,
+PGVWC07~\cite{PerezGarcia2007Matrix}, arXiv:quant-ph/0608197, Theorem 9 and proof,
 \path{Papers/quant-ph_0608197/MPSarchive.tex}, lines 1195--1237,
 starts from a canonical open-boundary representation whose blocked site
 families satisfy C1. The local interaction is the orthogonal projector
@@ -22,11 +22,18 @@ sum, derives the adjacent coefficient sections from the actual kernel,
 reconstructs the full chain by the printed canonical adjoint method,
 and closes the singleton endpoint bonds. The dependent-physical-space
 continuation allows arbitrary physical dimensions at the different sites.
+Let $B^{[j]}_i\in M_{D_j,D_{j+1}}(\mathbb C)$ be the site matrices of an
+open chain of $N$ sites with $D_0=D_N=1$. Let $h_{j,j+1}$ be the local
+projector on the adjacent pair $j,j+1$, extended by the identity, and let
+$H=\sum_{j=0}^{N-2}h_{j,j+1}$ be the open parent Hamiltonian. Let $\Omega$
+be the open-chain vector with coefficients
+$\Omega(i_0,\ldots,i_{N-1})=(B^{[0]}_{i_0}\cdots B^{[N-1]}_{i_{N-1}})_{0,0}$.
 For $N\ge2$, the conclusion is
-\[
+\begin{align}
     H\ge0,\qquad \|\Omega\|=1,\qquad
     \ker H=\mathbb C\Omega,\qquad \dim\ker H=1.
-\]
+    \label{eq:pgvwc07_open_parent_domain_ground_state_line}
+\end{align}
 The unit norm and both kernel inclusions are derived from the supplied
 site matrices. There is no assumed ground state, local annihilation
 condition, larger-block boundary, or canonical-form supplier.
@@ -63,4 +70,6 @@ common-alphabet comparison and final normalized state line are in
 \path{TNLean/MPS/ParentHamiltonian/UniformPhysicalParentComparison.lean}, and
 \path{TNLean/MPS/ParentHamiltonian/VaryingPhysicalParentUniqueness.lean}.
 
+\bibliographystyle{alpha}
+\bibliography{references}
 \end{document}

@@ -220,13 +220,15 @@ infinite-volume Hamiltonian is included here.
 \end{lemma}
 \begin{proof}
     \leanok
+    \uses{lem:parent_interaction_es_kernel,lem:mpv_mem_chain_ground_space}
     A boundary matrix supported on the first diagonal virtual block pairs
     with $U_{ij}$ as $\operatorname{tr}(A_iA_jX)$; one on the second block
     gives $\operatorname{tr}(B_iB_jX)$. Hence both parent spaces lie in the
     range defining the uncle projector. Their orthogonal-complement
     projector vanishes on these spaces. Restricting a vector satisfying
     either sector's parent constraints to each cyclic window therefore
-    gives zero in every translated uncle term. Summation proves the claim.
+    gives $(h'_P)_{i,i+1}\psi=0$ for every $i$, and hence
+    $H'_P\psi=\sum_{i=1}^N(h'_P)_{i,i+1}\psi=0$.
     Equality of the kernel requires the separate intersection and closure
     properties and is not concluded from this inclusion.
 \end{proof}
@@ -247,6 +249,7 @@ infinite-volume Hamiltonian is included here.
 \end{lemma}
 \begin{proof}
     \leanok
+    \uses{lem:euclidean_local_projector_positive,lem:parent_interaction_es_kernel}
     The local interaction is an orthogonal-complement projector conjugated
     by the physical configuration isometry, hence positive. Write
     $\mathcal R_{i,\tau}$ for the restriction of a configuration to the

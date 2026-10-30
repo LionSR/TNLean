@@ -10,8 +10,8 @@ import TNLean.Spectral.MPVOverlapDecayRect
 # Gram limits for the two periodic uncle ground states
 
 The normalized injective blocks have periodic squared norms tending to one.
-Full perturbation span forces strict mixed damping, so their actual periodic
-inner product tends to zero. These are the actual finite ground vectors;
+Full perturbation span forces strict mixed damping, so their periodic
+inner product tends to zero. These are the finite ground vectors;
 no Gram, asymptotic orthogonality, or transfer-gap premise is supplied.
 
 Source: arXiv:1210.6613, Lemma exptransferoperator and the projection against
@@ -26,7 +26,7 @@ namespace MPSTensor
 
 variable {d a b : ℕ}
 
-/-- The actual periodic squared norm of a normalized injective source block
+/-- The periodic squared norm of a normalized injective source block
 tends to one. This follows from the derived canonical transfer contraction,
 not a supplied state-normalization limit. Source: arXiv:1210.6613,
 Lemma exptransferoperator. -/
@@ -82,7 +82,7 @@ theorem uncleMPV_norm_sq_tendsto_one
   have hre := (Complex.continuous_re.tendsto (1 : ℂ)).comp htrace
   simpa only [Complex.one_re] using hre.congr hnorm
 
-/-- The actual two periodic source ground vectors become orthogonal, with
+/-- The two periodic source ground vectors become orthogonal, with
 both squared norms tending to one. The full perturbation witness and
 normalized canonical data derive every transfer and Gram condition.
 Source: arXiv:1210.6613, Lemmas exptransferoperator and lowenergystates. -/

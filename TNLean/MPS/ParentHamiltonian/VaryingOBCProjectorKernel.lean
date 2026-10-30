@@ -10,7 +10,7 @@ import Mathlib.Analysis.InnerProductSpace.PiL2
 /-!
 # Local projector kernels on a varying-bond open chain
 
-The two-site boundary range uses the actual rectangular matrices at each bond.
+The two-site boundary range uses the rectangular matrices at each bond.
 Its orthogonal complement defines the local parent projector. Fixing a prefix
 and a suffix gives a coordinate restriction to the intervening pair. Summing
 the adjoint compressions of the local projector over these outside configurations
@@ -31,7 +31,7 @@ namespace Matrix
 
 variable {d : ℕ}
 
-/-- The actual rectangular two-site boundary map at position \(p\).
+/-- The rectangular two-site boundary map at position \(p\).
 Source: PGVWC07, Theorem 9, lines 1201–1205. -/
 noncomputable def obcPairBoundary (b : ℕ → ℕ)
     (A : ∀ k, Fin d → Matrix (Fin (b k)) (Fin (b (k + 1))) ℂ) (p : ℕ) :
@@ -52,13 +52,13 @@ theorem obcPairBoundary_apply (b : ℕ → ℕ)
   simp [obcPairBoundary, Matrix.mul_assoc]
 
 /-- The local parent projector is the orthogonal projection onto the complement
-of the actual pair boundary range. Source: PGVWC07, Theorem 9, lines 1201–1205. -/
+of the pair boundary range. Source: PGVWC07, Theorem 9, lines 1201–1205. -/
 noncomputable def obcPairProjector (b : ℕ → ℕ)
     (A : ∀ k, Fin d → Matrix (Fin (b k)) (Fin (b (k + 1))) ℂ) (p : ℕ) :
     EuclideanSpace ℂ (Fin 2 → Fin d) →ₗ[ℂ] EuclideanSpace ℂ (Fin 2 → Fin d) :=
   (LinearMap.range (obcPairBoundary b A p))ᗮ.starProjection.toLinearMap
 
-/-- The actual pair projector is positive. Source: PGVWC07, Theorem 9,
+/-- The pair projector is positive. Source: PGVWC07, Theorem 9,
 lines 1201–1217. -/
 theorem obcPairProjector_isPositive (b : ℕ → ℕ)
     (A : ∀ k, Fin d → Matrix (Fin (b k)) (Fin (b (k + 1))) ℂ) (p : ℕ) :
@@ -89,7 +89,7 @@ theorem obcPairProjector_apply_eq_zero_iff (b : ℕ → ℕ)
     rw [obcPairBoundary_apply]
     exact (hX σ).symm
 
-/-- Restrict a vector to its pair coordinates after fixing the actual prefix and
+/-- Restrict a vector to its pair coordinates after fixing the prefix and
 suffix. Source: PGVWC07, equation unique-OBC, lines 1213–1220. -/
 noncomputable def obcPairSection {N p q : ℕ} (h : p + 2 + q = N)
     (u : Fin p → Fin d) (w : Fin q → Fin d) :
@@ -142,7 +142,7 @@ noncomputable def obcParentHamiltonian (b : ℕ → ℕ)
     ∑ u : Fin s.val.1.val → Fin d, ∑ w : Fin s.val.2.val → Fin d,
       obcPairCompression b A s.property u w
 
-/-- The actual varying-bond open parent Hamiltonian is positive.
+/-- The varying-bond open parent Hamiltonian is positive.
 Source: PGVWC07, Theorem 9 proof, lines 1213–1217. -/
 theorem obcParentHamiltonian_isPositive (b : ℕ → ℕ)
     (A : ∀ k, Fin d → Matrix (Fin (b k)) (Fin (b (k + 1))) ℂ) (N : ℕ) :
@@ -153,8 +153,8 @@ theorem obcParentHamiltonian_isPositive (b : ℕ → ℕ)
       LinearMap.isPositive_sum Finset.univ fun w _ ↦
         obcPairCompression_isPositive b A s.property u w
 
-/-- The actual Hamiltonian vanishes exactly when every fixed-outside pair
-section belongs to the actual two-site boundary range. Source: PGVWC07,
+/-- The Hamiltonian vanishes exactly when every fixed-outside pair
+section belongs to the two-site boundary range. Source: PGVWC07,
 equation unique-OBC, lines 1213–1220. -/
 theorem obcParentHamiltonian_apply_eq_zero_iff (b : ℕ → ℕ)
     (A : ∀ k, Fin d → Matrix (Fin (b k)) (Fin (b (k + 1))) ℂ) (N : ℕ)
@@ -190,7 +190,7 @@ theorem obcParentHamiltonian_apply_eq_zero_iff (b : ℕ → ℕ)
     exact (obcPairCompression_apply_eq_zero_iff b A s.property u w ψ).mpr
       (hzero s.val.1.val s.val.2.val s.property u w)
 
-/-- The kernel of the actual open Hamiltonian gives the list-indexed pair
+/-- The kernel of the open Hamiltonian gives the list-indexed pair
 sections needed for reconstruction along the whole chain. The coefficient
 identification only changes the representation of a physical word.
 Source: PGVWC07, equation unique-OBC, lines 1213–1220. -/
@@ -217,7 +217,7 @@ theorem obcParentHamiltonian_pair_sections_of_apply_eq_zero (b : ℕ → ℕ)
   rw [← hw, hf]
   exact hX σ
 
-/-- The actual open Hamiltonian kernel is exactly the adjacent-pair trace-section
+/-- The open Hamiltonian kernel is exactly the adjacent-pair trace-section
 condition, in list coordinates. Source: PGVWC07, equation unique-OBC,
 lines 1213–1220. -/
 theorem obcParentHamiltonian_apply_eq_zero_iff_pair_sections (b : ℕ → ℕ)
