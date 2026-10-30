@@ -9871,6 +9871,17 @@ there is no need for a new tactic.
   the bond-two restrictions; a shared API can be considered if another example
   needs this shape.
 - **Decision:** Mathematical extensionality suffices; no tactic is needed.
+=======
+- **Pattern:** choose slack from a uniform surprisal-tail scale, sum the square
+  roots of all physical prefix tails to obtain error at most half the requested
+  accuracy, and normalize the nonzero truncated vector while preserving its MPS bond.
+- **Seen:** the private prefix-bound helper in `MPS/AreaLaw/MPSApproximation.lean`
+  and `strip_approximation_of_prefix_bounds` in `MPS/AreaLaw/StripApproximation.lean`.
+- **Existing reuse:** the actual sequential truncation, norm comparison,
+  tail prefactor, and cut-rank-to-MPS theorem are shared. The former helper is
+  private, so the strip argument proves its normalization step locally.
+- **Decision:** Two consumers, below the promotion threshold. A third consumer
+  should extract the common finite-chain argument to a shared narrow module.
 
 ### Delta half factors for a supplied two-site circuit (2026-10-29)
 

@@ -17,7 +17,7 @@ not a theorem stated in that note. Its counting argument is the
 strip counterpart of `part1_arealaw.tex`, lines 29–53, and its separated shells correspond
 to Lemma `lem:singlesplit`, lines 388–403.
 
-**Local fix (support size):** the one-dimensional support dimension `q^(R+1)` does not
+The one-dimensional support dimension `q^(R+1)` does not
 extend to lattice supports. A diameter-two cross has five sites. The valid bound is
 `q^(1+2R(R+1))`, independent of strip width; at most `2^(2R(R+1))` distinct supports
 contain a specified site. These bounds are supplied by the existing lattice counting
