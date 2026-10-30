@@ -1,0 +1,226 @@
+% Source: arXiv:2203.12563v3, REsubmission.tex, Section 5,
+% lines 1584--1586 (restriction to the physical support),
+% defAgamma/Agammasym, lines 1586--1665, fusion, lines 1667--1685,
+% and the endpoint limit, lines 1690--1692.
+
+\section{Symmetry and endpoint projections in arbitrary alphabets}
+\label{sec:mpo_arbitrary_physical_symmetry}
+
+We keep the notation of Section~\ref{sec:mpo_arbitrary_physical_path}:
+$A_p=F_pB_p$ is the physical polar factorization of $A_p$, with
+$F_p^\dagger F_p=\Pi_p$ the projection onto the support of the positive
+factor, $J$ includes $\C^{D^2}$ into
+$\mathcal H=\C^{D^2}\oplus\C^{d_0}\oplus\C^{d_1}$, $E_p$ are the full
+endpoint embeddings, and $\widetilde A(\gamma)=J\mathcal B(\gamma)$.
+For a matrix $G:\C^{d}\to\C^{e}$ and an operator tensor $T$ with
+physical space $\C^d$, write $GTG^\dagger$ for the operator tensor with
+entries $(GTG^\dagger)^{xy}=\sum_{u,v}G_{xu}\overline{G_{yv}}\,T^{uv}$.
+
+\cite[Section~5]{GarreRubio2023MPOSym} first restricts each local
+Hilbert space to the span of the tensor. Here that restriction is
+derived from the symmetry: an exact action decomposition already forces
+the operator to preserve the physical support.
+
+\begin{lemma}[Physical coordinate changes of the action and fusion]
+    \label{thm:mpo_physical_basis_action}
+    \lean{MPOTensor.actTensor_apply_finProdFinEquiv,
+        MPOTensor.actTensor_changePhysicalBasis,
+        MPOTensor.physicalSlice_mulTensor,
+        MPOTensor.mulTensor_changePhysicalBasis_of_slice,
+        MPOTensor.mulTensor_changePhysicalBasis,
+        MPSTensor.IsBiorthogonalDecomposition.rotatePhysical,
+        MPSTensor.IsBiorthogonalDecomposition.actTensor_changePhysicalBasis,
+        MPSTensor.IsBiorthogonalDecomposition.toMPSTensor_changePhysicalBasis,
+        MPSTensor.IsBiorthogonalDecomposition.mulTensor_changePhysicalBasis}
+    \leanok
+    \uses{def:glm_boundary_decomposition}
+    For every matrix $G:\C^d\to\C^e$, operator tensor $T$, and tensor $B$
+    with physical space $\C^e$,
+    \begin{align}
+        \bigl((GTG^\dagger)\cdot B\bigr)^x
+         & =\sum_uG_{xu}\bigl(T\cdot(G^\dagger B)\bigr)^u.
+        \label{eq:mpo_physical_basis_action}
+    \end{align}
+    Physical mixing preserves exact biorthogonal decompositions with the
+    same analysis and synthesis maps. Consequently an action
+    decomposition of $T$ on $G^\dagger B$ gives one of $GTG^\dagger$ on
+    $B$ with targets mixed by $G$, and a fusion decomposition of $T$
+    into tensors $T_c$ gives one of $GTG^\dagger$ into $GT_cG^\dagger$.
+    If every physical slice $s$ of $S$ satisfies
+    $G^\dagger GsG^\dagger=sG^\dagger$, then
+    $(GTG^\dagger)(GSG^\dagger)=G(TS)G^\dagger$; this holds whenever
+    $G^\dagger G=\Id$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Expanding one coefficient of either side of
+    (\ref{eq:mpo_physical_basis_action}) gives the same triple sum.
+    Mixing the letters $B^x=\sum_cW_cA_c^xV_c$ by $G$ commutes with the
+    left and right multiplications. For products, the physical slice of
+    a stacked product is the product of the slices, so the intermediate
+    factor $G^\dagger G$ is absorbed by the stated identity.
+\end{proof}
+
+\begin{lemma}[Support invariance from an exact action]
+    \label{thm:mpo_support_invariance}
+    \lean{MPOTensor.physicalSlice_mul_eq_of_isBiorthogonalDecomposition,
+        MPSTensor.rotatePhysical_conjTranspose_polarIsoMatrix,
+        MPSTensor.rotatePhysical_polarIsoMatrix_mul_conjTranspose,
+        MPSTensor.linearIndependent_polarPosTensor,
+        MPSTensor.polarIsoMatrix_mul_physicalSlice_of_isBiorthogonalDecomposition}
+    \leanok
+    \uses{thm:mpo_physical_basis_action,thm:mpo_polar_support_injective,
+        thm:ldpolar_tensor_decomposition}
+    Let $U:\C^e\to\C^d$, let $B$ have linearly independent letters, and
+    suppose $T\cdot(UB)=\sum_cW_cA_cV_c$ exactly, where physical mixing
+    by $G$ fixes every target $A_c$. Then every physical slice $s$ of
+    $T$ satisfies $GsU=sU$. In particular, for every tensor $A$,
+    $F^\dagger A=B$ and $FF^\dagger A=A$; if $A$ is one-site injective,
+    the $D^2$ letters of $B$ are linearly independent, and an exact action
+    of $T$ on $A$ into copies of $A$ gives $FF^\dagger sF=sF$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Mixing by $G$ fixes the right side of the decomposition, hence also
+    $T\cdot(UB)$. Comparing coefficients gives
+    $\sum_k(GsU)_{xk}B^k=\sum_k(sU)_{xk}B^k$, and linear independence
+    identifies the coefficients. For the polar factorization,
+    $F^\dagger A=F^\dagger FB=\Pi B=B$. Injectivity of $B$ means that
+    its $D^2$ letters span $\MN D$, which has dimension $D^2$.
+\end{proof}
+
+\begin{definition}[The common operator in arbitrary alphabets]
+    \label{def:mpo_arbitrary_mixed_operator}
+    \lean{MPSTensor.polarSupportMPO,
+        MPSTensor.MPOSymmetry.arbitraryPhysicalMixedMPO}
+    \leanok
+    \uses{def:mpo_mixed_action_tensor,def:mpo_arbitrary_physical_tensor}
+    For an operator tensor $T_p$ with physical space $\C^{d_p}$, put
+    $S_p=F_p^\dagger T_pF_p$, an operator tensor with physical space
+    $\C^{D_p^2}$. Given action maps $V_{p,\mu},W_{p,\mu}$, let
+    $T_{\mathrm{mix}}$ be the mixed operator of
+    Definition~\ref{def:mpo_mixed_action_tensor} built from $S_0,S_1$,
+    and define $\widetilde T=JT_{\mathrm{mix}}J^\dagger$.
+\end{definition}
+
+\begin{lemma}[Exact covariance of the arbitrary-alphabet path]
+    \label{thm:mpo_arbitrary_mixed_action}
+    \lean{MPSTensor.isBiorthogonalDecomposition_polarSupportMPO,
+        MPSTensor.MPOSymmetry.isBiorthogonalDecomposition_arbitraryPhysicalMixedInterpolation,
+        MPSTensor.MPOSymmetry.isBoundaryCompatible_arbitraryPhysicalMixedInterpolation,
+        MPSTensor.MPOSymmetry.mpo_mulVec_arbitraryPhysicalMixedInterpolation,
+        MPSTensor.MPOSymmetry.mpo_mulVec_mpv_commonPhysicalEmbeddingLeft,
+        MPSTensor.MPOSymmetry.mpo_mulVec_mpv_commonPhysicalEmbeddingRight}
+    \leanok
+    \uses{def:mpo_arbitrary_mixed_operator,thm:mpo_mixed_action_exact,
+        thm:mpo_support_invariance,thm:mpo_arbitrary_endpoint_vectors}
+    Suppose that $(T_p\cdot A_p)^x=\sum_{\mu=0}^{m-1}W_{p,\mu}A_p^xV_{p,\mu}$
+    and $V_{p,\mu}W_{p,\nu}=\delta_{\mu\nu}\Id$ for $p=0,1$. Then
+    $S_p$ acts on $B_p$ by the same maps, and for every $\gamma\in\R$,
+    \begin{align}
+        (\widetilde T\cdot\widetilde A(\gamma))^x
+         & =\sum_{\mu=0}^{m-1}W_\mu\widetilde A(\gamma)^xV_\mu,
+        \label{eq:mpo_arbitrary_mixed_action}
+    \end{align}
+    with the mixed maps $V_\mu,W_\mu$ of
+    Definition~\ref{def:mpo_mixed_action_maps}. Hence $\widetilde T$ is
+    compatible with the arbitrary-boundary states of $\widetilde A(\gamma)$
+    and, for every $N>0$,
+    $O^{(N)}_{\widetilde T}\ket{V^{(N)}(\widetilde A(\gamma))}
+        =m\ket{V^{(N)}(\widetilde A(\gamma))}$.
+    If $A_p$ is injective, then also
+    $O^{(N)}_{\widetilde T}\ket{V^{(N)}(E_pA_p)}=m\ket{V^{(N)}(E_pA_p)}$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Since $A_p=(F_p^\dagger)^\dagger B_p$ and $F_p^\dagger A_p=B_p$,
+    Lemma~\ref{thm:mpo_physical_basis_action} transfers the action to
+    $S_p$ and $B_p$ without any injectivity. Lemma~\ref{thm:mpo_mixed_action_exact}
+    gives the action of $T_{\mathrm{mix}}$ on $\mathcal B(\gamma)$.
+    Since $J^\dagger\widetilde A(\gamma)=\mathcal B(\gamma)$, the same
+    lemma, applied with $G=J$, gives (\ref{eq:mpo_arbitrary_mixed_action}).
+    Biorthogonality gives the boundary transport and, with identity
+    boundaries, the eigenvalue $m$. At $\gamma=p$ the periodic vectors
+    are those of $E_pA_p$ by Lemma~\ref{thm:mpo_arbitrary_endpoint_vectors}.
+\end{proof}
+
+\begin{lemma}[Fusion of the common operators]
+    \label{thm:mpo_arbitrary_mixed_fusion}
+    \lean{MPSTensor.IsBiorthogonalDecomposition.mulTensor_polarSupportMPO,
+        MPSTensor.MPOSymmetry.isBiorthogonalDecomposition_arbitraryPhysicalMixedMPO,
+        MPSTensor.MPOSymmetry.isMPOFusionAlgebra_arbitraryPhysicalMixedMPO,
+        MPSTensor.MPOSymmetry.isMPOSymmetric_arbitraryPhysicalMixedInterpolation}
+    \leanok
+    \uses{thm:mpo_arbitrary_mixed_action,thm:mpo_mixed_fusion_exact,
+        thm:mpo_mixed_fusion_periodic,thm:mpo_support_invariance,
+        def:mpo_symmetric_family}
+    Let $(T_{p,a})_a$ be operator families with exact biorthogonal fusion
+    into copies $T_{p,c}$, with multiplicities $N_{ab}^c$, and exact
+    actions on $A_p$ with multiplicities $m_a$, for $p=0,1$. Suppose
+    $D_0,D_1>0$, $A_0,A_1$ are one-site injective, and the chosen raw
+    $L$ matrices agree for every pair $a,b$. Then the common operators
+    $\widetilde T_a$ fuse exactly with the mixed fusion maps, and
+    $O^{(N)}_{\widetilde T_a}O^{(N)}_{\widetilde T_b}
+        =\sum_cN_{ab}^cO^{(N)}_{\widetilde T_c}$ for every $N>0$.
+    Without the fusion and injectivity hypotheses, $\widetilde A(\gamma)$
+    is symmetric under $(\widetilde T_a)_a$ with eigenvalues $m_a$ for
+    every $\gamma\in\R$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    By Lemma~\ref{thm:mpo_support_invariance}, the action of $T_{p,b}$
+    on $A_p$ gives $F_pF_p^\dagger sF_p=sF_p$ on every physical slice
+    of $T_{p,b}$. Lemma~\ref{thm:mpo_physical_basis_action} then
+    compresses the fusion of $T_{p,a}T_{p,b}$ to $S_{p,a}S_{p,b}$.
+    Lemma~\ref{thm:mpo_mixed_fusion_exact} gives exact fusion of the
+    square-alphabet mixed operators, and $J^\dagger J=\Id$ transports it
+    to $\widetilde T_a\widetilde T_b$. Taking identity boundaries gives
+    the periodic fusion rule.
+\end{proof}
+
+The analysis and synthesis maps of
+(\ref{eq:mpo_arbitrary_mixed_action}) are those of the square-alphabet
+construction, so Lemma~\ref{thm:mpo_mixed_l_symbols} identifies their
+$L$-symbols with the common endpoint value along the whole path. As in
+Lemma~\ref{thm:mpo_mixed_fusion_periodic}, the comparison uses equal
+chosen raw matrices rather than equivalent classes; see
+\cite{gap:glm23_multiplicity_l_indices}.
+
+\begin{lemma}[Canonical endpoint ground projections]
+    \label{thm:mpo_arbitrary_ground_projection}
+    \lean{MPSTensor.MPOSymmetry.arbitraryPhysicalMixedInteraction_groundSpace_eq_range,
+        MPSTensor.MPOSymmetry.continuous_arbitraryPhysicalMixed_groundSpace_starProjection,
+        MPSTensor.MPOSymmetry.arbitraryPhysicalMixed_groundSpace_starProjection_endpoint,
+        MPSTensor.MPOSymmetry.tendsto_arbitraryPhysicalMixed_groundSpace_starProjection,
+        MPSTensor.MPOSymmetry.arbitraryPhysicalEndpointAttachment_groundSpace_starProjection}
+    \leanok
+    \uses{thm:mpo_arbitrary_periodic_ground_line,
+        thm:mpo_arbitrary_endpoint_attachment_gap,
+        thm:mpo_mixed_periodic_line_continuity}
+    Suppose $D_0,D_1>0$ and $A_0,A_1$ are one-site injective, and fix
+    $N\geq2$. Let $P_\gamma$ be the orthogonal projection onto
+    $\ker\widetilde H_{\gamma,N}$ and let $Q_p$ be the orthogonal
+    projection onto the ground space of the canonical parent Hamiltonian
+    $K_{p,N}$ of $E_pA_p$. Then $\gamma\mapsto P_\gamma$ is continuous on
+    $[0,1]$, $P_p=Q_p$, and hence $P_\gamma\to Q_p$ as $\gamma\to p$
+    within $[0,1]$. Along the affine attachments of
+    Definition~\ref{def:mpo_arbitrary_endpoint_attachment}, the ground
+    projection equals $Q_p$ for every $t\geq0$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    The ground space of $\widetilde H_{\gamma,N}$ is the line of
+    $\ket{V^{(N)}(\widetilde A(\gamma))}$, the range of a continuous
+    family of injective maps from $\C$. Its orthogonal projection is
+    therefore continuous. At $\gamma=p$ the kernels of $\widetilde
+        H_{p,N}$ and $K_{p,N}$ agree by
+    Theorem~\ref{thm:mpo_arbitrary_endpoint_attachment_gap}, and so do
+    the kernels along the attachments.
+\end{proof}
+
+The source obtains the endpoint limit at the level of the local supports
+by orthonormalizing a continuous basis. The periodic statement above
+identifies the limit with the ground projection of the canonical parent
+itself. Commutation of the Hamiltonians with the common operators, and
+the construction for degenerate ground spaces, are not asserted here;
+see \cite{gap:glm23_mpo_symmetric_mps_scope}.
