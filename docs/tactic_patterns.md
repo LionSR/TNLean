@@ -5034,6 +5034,30 @@ three-plaquette output measurement, and the routed reunion measurement.
 
 ## Candidates
 
+### Eliminating a geometric prefactor from a spectral rate — reused Mathlib (2026-10-29)
+
+- **Seen:** `norm_transfer_spectrum_le_of_limitCorrelator_bound` in
+  `MPS/Preparation/TransferSpectrumFromCorrelations.lean`.
+- **Pattern:** An exact eigenvalue correlator `λ^n` and an eventual bound
+  `C r^n` imply `|λ| ≤ r`, even when `C` and the starting separation depend
+  on the observables.
+- **Reuse:** `pow_unbounded_of_one_lt` for the ratio `|λ|/r`, then
+  `pow_le_pow_right₀` to shift past the starting separation.
+- **Decision:** Reuse the existing Archimedean power lemmas and physical
+  eigenvalue-observer construction; no new asymptotic tactic is introduced.
+
+### Identifying the ground energy of two physical conditions — candidate (2026-10-29)
+
+- **Seen:** `ExactMPSGroundPath.exists_uniform_ground_line_spectral_gap` in
+  `MPS/Symmetry/ExactGroundPathGaussianFilter.lean`.
+- **Pattern:** The path gap and the exact ground-line condition each supply
+  a least spectral value. Apply each minimality inequality to the other's
+  spectral witness, identify the energies by antisymmetry, and transport the
+  spectral dichotomy to the actual MPS ground line.
+- **Decision:** One use. Keep the mathematical extraction in its named helper
+  and reuse the existing Gaussian spectral and ground-space estimates; no
+  new tactic or duplicate eigenbasis calculation is needed.
+
 ### Recovering letters by an identity contraction — candidate (2026-10-29)
 
 - **Seen:** `isInjective_uncleTensor_of_isInjective_perturbation` in
