@@ -21,7 +21,7 @@ Let $A=(A_i)_i$ be an arbitrary translation-invariant matrix product state
 (MPS) tensor on a finite ring, with bond dimension $D$. The
 translation-invariant canonical-form theorem of P\'erez-Garc\'ia, Verstraete,
 Wolf, and Cirac applies directly to $A$
-\cite[Theorem~\texttt{Th:TIcanonical}, lines~742--763]{PerezGarcia2007Matrix}.
+\cite[Theorem~\texttt{Th:TIcanonical}, lines~742--763]{PerezGarcia2007MPSReps}.
 It decomposes each matrix as
 \begin{align}
     A_i
@@ -55,21 +55,21 @@ Define the transfer map of block $j$ by
 The identity is the only fixed point of $\mathcal{E}_j$ after the usual scalar
 normalization of the fixed-point line. The resulting representation has bond
 dimension at most $D$
-\cite[Theorem~\texttt{Th:TIcanonical}, lines~742--763]{PerezGarcia2007Matrix}.
+\cite[Theorem~\texttt{Th:TIcanonical}, lines~742--763]{PerezGarcia2007MPSReps}.
 
 The theorem does not assume injectivity, condition C1, blockwise primitivity, a
 pre-existing block decomposition, strict separation of the weights, or one
 block in each weight class. These properties appear elsewhere in the source as
 later hypotheses, consequences, or genericity conditions. Injectivity is
 established only after canonical form
-\cite[Proposition~\texttt{prop-inj}, lines~911--950]{PerezGarcia2007Matrix},
+\cite[Proposition~\texttt{prop-inj}, lines~911--950]{PerezGarcia2007MPSReps},
 and generic uniqueness is a separate result
-\cite[Theorem~\texttt{thm-uniq}, lines~1002--1015]{PerezGarcia2007Matrix}.
+\cite[Theorem~\texttt{thm-uniq}, lines~1002--1015]{PerezGarcia2007MPSReps}.
 
 \section{Faithful proof order}
 
 The proof of Theorem~\texttt{Th:TIcanonical} in
-Ref.~\cite{PerezGarcia2007Matrix} follows a specific sequence. A faithful
+Ref.~\cite{PerezGarcia2007MPSReps} follows a specific sequence. A faithful
 formalization must derive the block structure in that order rather than assume
 the hypotheses of later canonical-form results.
 
@@ -146,7 +146,7 @@ canonical-form chapter often uses the dual, trace-preserving orientation
 The conventions correspond after passing to the adjoint transfer map or the
 conjugate-transposed Kraus family. A theorem stated only in the left-canonical
 orientation is not literally Theorem~\texttt{Th:TIcanonical} of
-Ref.~\cite{PerezGarcia2007Matrix} unless it also supplies this dualization or
+Ref.~\cite{PerezGarcia2007MPSReps} unless it also supplies this dualization or
 an equivalent gauge conversion.
 
 \section{Conditional formal reductions}
@@ -163,7 +163,7 @@ trace-preserving normalization, primitivity, pairwise distinct weight moduli,
 nonzero weights, and positive bond dimensions.
 
 These are valid conditional reductions, but they do not formalize the
-arbitrary-input theorem of Ref.~\cite{PerezGarcia2007Matrix}. Their
+arbitrary-input theorem of Ref.~\cite{PerezGarcia2007MPSReps}. Their
 hypotheses already contain substantial block structure. Citing them as the
 source theorem would add assumptions to later uses of canonical-form
 existence.
@@ -178,7 +178,7 @@ The formal development contains the following components.
           \leanid{Kraus.spectralUnitalGauge_isUnital_of_map_eigenvector}
           formalizes the spectral-radius normalization in lines~765--769 of
           Theorem~\texttt{Th:TIcanonical} in
-          Ref.~\cite{PerezGarcia2007Matrix}. Given a positive-definite
+          Ref.~\cite{PerezGarcia2007MPSReps}. Given a positive-definite
           eigenvector $\rho$ with $\mathcal{E}_A(\rho)=r\rho$ and $r>0$, it
           constructs
           \begin{align}
@@ -332,7 +332,7 @@ The formal development contains the following components.
           as the normalized weighted block tensor. This is the exact
           finite-ring effect of the ``without loss of generality''
           normalization in lines~765--766 of
-          Ref.~\cite{PerezGarcia2007Matrix}.
+          Ref.~\cite{PerezGarcia2007MPSReps}.
 
     \item
           \leanid{MPSTensor.exists_pgvwc07_normalized_exact_form_after_rescaling_or_forall_pos_mpv_eq_zero}
@@ -392,7 +392,7 @@ The formal development contains the following components.
           primitivity, pairwise distinct weight moduli, nonzero weights, and
           positive bond dimensions. It remains a conditional corollary, not a
           citation target for Theorem~\texttt{Th:TIcanonical} of
-          Ref.~\cite{PerezGarcia2007Matrix}.
+          Ref.~\cite{PerezGarcia2007MPSReps}.
 \end{enumerate}
 
 The primitive, peripheral-primitive, and normal-canonical-form reductions are
@@ -416,7 +416,7 @@ from an arbitrary translation-invariant MPS representation.
 \section{Current conclusion}
 
 The formal theorem used for Theorem~\texttt{Th:TIcanonical} of
-Ref.~\cite{PerezGarcia2007Matrix}, under the blueprint's positive-length
+Ref.~\cite{PerezGarcia2007MPSReps}, under the blueprint's positive-length
 convention, is
 \leanid{MPSTensor.exists_pgvwc07_normalized_exact_form_after_rescaling_allow_empty}.
 It starts from an arbitrary translation-invariant MPS representation. After a
