@@ -573,10 +573,16 @@ matrix product representations.
 \end{lemma}
 \begin{proof}
     \leanok
-    The full physical-sector kernel identity gives the sum of the
-    component kernels. The Weyl component vanishes at seven sites and is
-    its trace line thereafter; the pure particle component is its particle
-    line at seven sites and vanishes thereafter.
+    Write $H^{W}_M$ and $H^{P}_M$ for the periodic Hamiltonians of the
+    two component interactions. Lemma~\ref{lem:physical_sum_full_kernel}
+    gives
+    \begin{align}
+        \ker H_M & =E_M\ker H^{W}_M+F_M\ker H^{P}_M.
+    \end{align}
+    The Weyl component satisfies $\ker H^{W}_7=0$ and
+    $\ker H^{W}_M=\mathbb C\psi_M(\zeta)$ for $M\ge8$; the particle
+    component satisfies $\ker H^{P}_7=\mathbb C\Psi_7(q)$ and
+    $\ker H^{P}_M=0$ for $M\ge8$.
 \end{proof}
 
 \begin{lemma}[A fixed tensor for every larger volume]
@@ -652,8 +658,11 @@ matrix product representations.
     \leanok
     Choose $\zeta=\exp(2\pi i/5)$ and $q=\exp(2\pi i/7)$ and use the
     two-sector interaction. The preceding kernel identities give the unique
-    nonzero lines. Positivity turns each zero equation for the sum into
-    zero equations for every local term. The seventh root has nontrivial
+    nonzero lines. For the positive local terms,
+    \begin{align}
+        \sum_ih_iv=0 & \quad\Longleftrightarrow\quad h_iv=0\ \text{for every }i,
+    \end{align}
+    so each ground vector is killed by every local term. The seventh root has nontrivial
     cyclic phase, while physical extension gives the eventual
     bond-five tensor.
 \end{proof}
