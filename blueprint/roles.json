@@ -862,6 +862,17 @@
         "thm:peps_separate_arity_compression": "Uniform compression, Theorem 5.2 of the source"
       }
     },
+    "ch:aklv_polynomial_filters": {
+      "theorems": [
+        "thm:aklv_polynomial_rank",
+        "thm:aklv_physical_chebyshev_filter"
+      ],
+      "corollaries": [],
+      "notes": {
+        "thm:aklv_polynomial_rank": "AKLV Lemma 4.2 with explicit universal constants",
+        "thm:aklv_physical_chebyshev_filter": "The constructed filter has both spectral suppression and the polynomial rank bound"
+      }
+    },
     "ch:parent_hamiltonian_long_range_gaps": {
       "theorems": [
         "thm:compact_parent_gap"
