@@ -138,7 +138,17 @@ theorem range_rectangularPairBoundary_extend_physical
   rw [← LinearMap.range_comp]
   congr 1
   ext X jl
-  exact (extend_rectangular_pair_coefficients e f A B X jl.1 jl.2).symm
+  obtain ⟨j, l⟩ := jl
+  exact (extend_rectangular_pair_coefficients e f A B X j l).symm
+
+/-- Equal subspaces induce the same orthogonal projection. Stated separately so
+it can transport a projection across a subspace equality without the
+dependent-instance rewrite that `rw` cannot perform through `starProjection`. -/
+private theorem starProjection_eq_of_eq {F : Type*} [NormedAddCommGroup F]
+    [InnerProductSpace ℂ F] {K₁ K₂ : Submodule ℂ F}
+    [K₁.HasOrthogonalProjection] [K₂.HasOrthogonalProjection]
+    (h : K₁ = K₂) (x : F) : K₁.starProjection x = K₂.starProjection x := by
+  subst h; rfl
 
 /-- The actual complementary pair projectors intertwine with the physical
 embedding, even when the two physical alphabets have different sizes.
@@ -151,17 +161,21 @@ theorem pair_parent_projection_extend_physical
         ((e.prodMap f).euclideanExtendByZero v) =
       (e.prodMap f).euclideanExtendByZero
         ((LinearMap.range (rectangularPairBoundary A B))ᗮ.starProjection v) := by
-  rw [range_rectangularPairBoundary_extend_physical]
-  let E := (e.prodMap f).euclideanExtendByZero
-  let G := LinearMap.range (rectangularPairBoundary A B)
-  change (G.map E.toLinearMap)ᗮ.starProjection (E v) = E (Gᗮ.starProjection v)
+  set E := (e.prodMap f).euclideanExtendByZero
+  set G := LinearMap.range (rectangularPairBoundary A B)
+  set R := LinearMap.range
+    (rectangularPairBoundary (Function.extend e A 0) (Function.extend f B 0))
+  have hrange : R = G.map E.toLinearMap :=
+    range_rectangularPairBoundary_extend_physical e f A B
   calc
-    (G.map E.toLinearMap)ᗮ.starProjection (E v) =
-        E v - (G.map E.toLinearMap).starProjection (E v) := by
-      rw [Submodule.starProjection_orthogonal']
+    Rᗮ.starProjection (E v) =
+        (G.map E.toLinearMap)ᗮ.starProjection (E v) :=
+      starProjection_eq_of_eq (congrArg (fun S => Sᗮ) hrange) (E v)
+    _ = E v - (G.map E.toLinearMap).starProjection (E v) := by
+      rw [Submodule.starProjection_orthogonal_val]
     _ = E (v - G.starProjection v) := by
       rw [map_sub, E.map_starProjection G v]
     _ = E (Gᗮ.starProjection v) := by
-      rw [Submodule.starProjection_orthogonal']
+      rw [Submodule.starProjection_orthogonal_val]
 
 end Matrix
