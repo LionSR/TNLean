@@ -84,16 +84,18 @@ theorem exists_weightedSchmidtCutBasis {d N : ℕ} (ψ : (Fin N → Fin d) → �
   have hrepr : ∀ v,
       B.equivFun ⟨M.col v, Submodule.subset_span ⟨v, rfl⟩⟩ = S.U.col v := by
     intro v
+    let c : Fin (cutCoefficientRank ψ k) → ℂ := fun q ↦ S.U q v
     have hsum : (⟨M.col v, Submodule.subset_span ⟨v, rfl⟩⟩ : cutColumnSpace ψ k)
-        = ∑ q, (S.U.col v) q • B q := by
+        = ∑ q, c q • B q := by
       apply Subtype.val_injective
-      simp only [Submodule.coe_sum, Submodule.coe_smul, hB]
       funext u
-      rw [Finset.sum_apply]
+      simp only [Submodule.coe_sum, Submodule.coe_smul, hB, Finset.sum_apply, Pi.smul_apply,
+        smul_eq_mul, c]
       change M u v = ∑ q, S.U q v * F u q
-      rw [hM, Matrix.mul_apply]
+      rw [congrFun (congrFun hM u) v, Matrix.mul_apply]
       exact Finset.sum_congr rfl fun q _ ↦ mul_comm _ _
-    rw [hsum, Module.Basis.equivFun_apply, Module.Basis.repr_sum_self]
+    rw [hsum, B.equivFun_apply]
+    exact B.repr_sum_self c
   refine ⟨B, S.singularValues, S.singularValues_pos, ?_, ?_⟩
   · intro F₀
     have hBF : F₀ = F := by

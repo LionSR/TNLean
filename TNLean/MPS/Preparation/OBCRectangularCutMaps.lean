@@ -40,7 +40,7 @@ theorem exists_cutPrefixMatrix_leftInverse {d N : ℕ} (ψ : (Fin N → Fin d) �
   obtain ⟨T, hT⟩ := (cutPrefixMatrix ψ C k).mulVecLin.exists_leftInverse_of_injective
     (LinearMap.ker_eq_bot.mpr hinj)
   refine ⟨LinearMap.toMatrix' T, ?_⟩
-  simpa only [LinearMap.toMatrix'_comp, LinearMap.toMatrix'_toLin',
+  simpa only [LinearMap.toMatrix'_comp, ← Matrix.toLin'_apply', LinearMap.toMatrix'_toLin',
     LinearMap.toMatrix'_id] using congrArg LinearMap.toMatrix' hT
 
 end MPSPreparation
@@ -100,7 +100,8 @@ theorem exists_rectangular_maps_to_cutBasis {d D N : ℕ}
     fun k ↦ T k * physicalPrefixMatrix B k
   have hYZ : ∀ k, Y k * Z k = 1 := by
     intro k
-    rw [Y, Matrix.mul_assoc, hZ, hT]
+    change T k * physicalPrefixMatrix B k * Z k = 1
+    rw [Matrix.mul_assoc, hZ, hT]
   refine ⟨Y, Z, hYZ, ?_, ?_, ?_⟩
   · intro q r
     have h := congrArg (fun M ↦ M q q) (hT 0)

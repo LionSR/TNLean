@@ -50,8 +50,8 @@ private theorem exists_canonical_coeff_eq_with_cutBasis {d N : ℕ} (hN : 0 < N)
       (∀ p, ∑ i, (A.tensor p i)ᴴ * Λ p.castSucc * A.tensor p i = Λ p.succ) ∧
       Λ 0 = 1 ∧ Λ (Fin.last N) = 1 ∧
       (∀ k, (Λ k).PosDef ∧
-        (∃ λ : Fin (A.bondDim k) → ℝ,
-          (∀ q, 0 < λ q) ∧ Λ k = Matrix.diagonal (fun q ↦ (λ q : ℂ))) ∧
+        (∃ lam : Fin (A.bondDim k) → ℝ,
+          (∀ q, 0 < lam q) ∧ Λ k = Matrix.diagonal (fun q ↦ (lam q : ℂ))) ∧
         Matrix.trace (Λ k) = 1) ∧
       ∃ (hψ : ψ ≠ 0)
         (C : ∀ k, Module.Basis (Fin (cutCoefficientRank ψ k)) ℂ (cutColumnSpace ψ k)),
@@ -98,12 +98,12 @@ private theorem exists_canonical_coeff_eq_with_cutBasis {d N : ℕ} (hN : 0 < N)
   · exact cutPrefixMatrix_zero_gram ψ hψ B hB0
   · exact cutPrefixMatrix_last_gram ψ hψ B hBN hnorm
   · intro k
-    obtain ⟨λ, hλ, hdiag⟩ := (hcuts k.val).1
-    refine ⟨?_, ⟨λ, hλ, hdiag⟩, htrace k.val (Nat.lt_succ_iff.mp k.isLt)⟩
+    obtain ⟨lam, hlam, hdiag⟩ := (hcuts k.val).1
+    refine ⟨?_, ⟨lam, hlam, hdiag⟩, htrace k.val (Nat.lt_succ_iff.mp k.isLt)⟩
     change ((cutPrefixMatrix ψ B k.val)ᴴ * cutPrefixMatrix ψ B k.val).PosDef
     rw [hdiag, Matrix.posDef_diagonal_iff]
     intro q
-    exact_mod_cast hλ q
+    exact_mod_cast hlam q
 
   · exact ⟨hψ, B, hB0, hBN, hbound, rfl⟩
 
@@ -122,8 +122,8 @@ theorem exists_canonical_coeff_eq {d N : ℕ} (hN : 0 < N)
       (∀ p, ∑ i, (A.tensor p i)ᴴ * Λ p.castSucc * A.tensor p i = Λ p.succ) ∧
       Λ 0 = 1 ∧ Λ (Fin.last N) = 1 ∧
       ∀ k, (Λ k).PosDef ∧
-        (∃ λ : Fin (A.bondDim k) → ℝ,
-          (∀ q, 0 < λ q) ∧ Λ k = Matrix.diagonal (fun q ↦ (λ q : ℂ))) ∧
+        (∃ lam : Fin (A.bondDim k) → ℝ,
+          (∀ q, 0 < lam q) ∧ Λ k = Matrix.diagonal (fun q ↦ (lam q : ℂ))) ∧
         Matrix.trace (Λ k) = 1 := by
   obtain ⟨A, Λ, hcoeff, hbond, hiso, hdensity, hleft, hright, hΛ, _⟩ :=
     exists_canonical_coeff_eq_with_cutBasis hN ψ hnorm
@@ -147,8 +147,8 @@ theorem exists_canonical_coeff_eq_rectangular_maps {d D N : ℕ} (hN : 0 < N)
       (∀ p, ∑ i, (A.tensor p i)ᴴ * Λ p.castSucc * A.tensor p i = Λ p.succ) ∧
       Λ 0 = 1 ∧ Λ (Fin.last N) = 1 ∧
       (∀ k, (Λ k).PosDef ∧
-        (∃ λ : Fin (A.bondDim k) → ℝ,
-          (∀ q, 0 < λ q) ∧ Λ k = Matrix.diagonal (fun q ↦ (λ q : ℂ))) ∧
+        (∃ lam : Fin (A.bondDim k) → ℝ,
+          (∀ q, 0 < lam q) ∧ Λ k = Matrix.diagonal (fun q ↦ (lam q : ℂ))) ∧
         Matrix.trace (Λ k) = 1) ∧
       (∀ k, Y k * Z k = 1) ∧
       (∀ q r, Y 0 q r = 1) ∧ (∀ q r, Z (Fin.last N) q r = 1) ∧
