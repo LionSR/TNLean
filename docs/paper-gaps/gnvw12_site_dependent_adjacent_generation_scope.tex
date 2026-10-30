@@ -178,13 +178,23 @@ is their algebraic consequence.%
     and
     \leanid{SpinChain.PropagatesWithin.exists_supportAlgebra_matrixSizes_mul}
     in \doclink{TNLean/QCA/AdjacentSupportGeneration}.}
-The homogeneous GNVW index is constructed from these sizes.%
-\footnote{Formal declaration:
-    \leanid{SpinChain.PropagatesWithin.gnvwIndex}
-    in \doclink{TNLean/QCA/GNVWIndex}.}
-Extending the construction, the commutation theorem, adjacent generation, the
-dimension identities and the index to site-dependent cell sizes remains outside
-the present scope.
+These sizes define the positive rational GNVW index
+(\ref{eq:gnvw12_site_dependent_adjacent_generation_scope_index_ratio}),
+and the one-site shifts have index $d$ and $d^{-1}$; the shift example and
+its subscript correction are recorded in
+\path{docs/paper-gaps/gnvw12_shift_example_subscript.tex}.%
+\footnote{Formal declarations:
+    \leanid{SpinChain.PropagatesWithin.gnvwIndex},
+    \leanid{SpinChain.PropagatesWithin.coe_gnvwIndex_eq_even},
+    \leanid{SpinChain.PropagatesWithin.coe_gnvwIndex_eq_odd} and
+    \leanid{SpinChain.PropagatesWithin.gnvwIndex_ratio_eq}
+    in \doclink{TNLean/QCA/GNVWIndex};
+    \leanid{SpinChain.PropagatesWithin.gnvwIndex_quasiLocalTranslation_neg_one} and
+    \leanid{SpinChain.PropagatesWithin.gnvwIndex_quasiLocalTranslation_one}
+    in \doclink{TNLean/QCA/GNVWShift}.}
+Extending the construction, the commutation theorem, adjacent generation,
+the dimension identities and the index to site-dependent cell sizes remains
+outside the present scope.
 
 This restriction differs from the full-matrix-factor restriction recorded in
 \path{docs/paper-gaps/gnvw12_support_algebra_full_matrix_scope.tex}. That note
