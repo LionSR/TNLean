@@ -4239,6 +4239,115 @@ arbitrary finite set of sites in Section~\ref{sec:qc_lieb_robinson}.
     and is contractive. Apply the preceding finite-ring estimate.
 \end{proof}
 
+\begin{lemma}[Gaussian-filtered finite-ring commutators]
+    \label{lem:spt_finite_ring_gaussian_commutator}
+    \lean{MPSTensor.interactionHamiltonian_isHermitian,
+        MPSTensor.norm_gaussianFilteredTerm_interactionHamiltonian_commutator_le,
+        MPSTensor.norm_gaussianFilteredTerm_interactionHamiltonian_commutator_le_exp}
+    \leanok
+    \discussion{9879}
+    \uses{aux:interaction-hamiltonian-lieb-robinson, thm:hastings_filtered_locality}
+    Let $H_N$ be the periodic Hamiltonian of a Hermitian two-site interaction
+    of norm at most one. Let $A\in\mathcal A_X$ and $B\in\mathcal A_Y$ for
+    nonempty disjoint $X,Y$. For $q,T,a\geq0$ and $\Delta\in\mathbb R$, let
+    $\widetilde A$ be the Gaussian average of $e^{itH_N}Ae^{-itH_N}$ with
+    variance $\max(q/\Delta^2,0)$. Then
+    \begin{align}
+        \|[\widetilde A,B]\|
+         & \leq 2\|A\|\|B\|\,|X|e^{-a d(X,Y)}
+        \bigl(e^{8e^aT}-1\bigr)
+        +2\|A\|\|B\|e^{-(T\Delta)^2/(2q)}.
+        \label{eq:spt_gaussian_commutator}
+    \end{align}
+    The constants are independent of the ring length and physical dimension.
+    At $q=0$, the final exponential is read as $1$.
+    This is the periodic specialization of the Gaussian locality estimate
+    of \cite[equation \texttt{lbnd}]{Hastings2006Solving}.
+    For $0<\ell\leq d(X,Y)$ and $\Delta>0$, the choice
+    $T=\ell/(16e)$ and $q=T\Delta$ gives
+    \begin{align}
+        \|[\widetilde A,B]\|
+         & \leq 2\|A\|\|B\|\,|X|e^{-\ell/2}
+        +2\|A\|\|B\|e^{-\ell\Delta/(32e)}.
+        \label{eq:spt_gaussian_commutator_exp}
+    \end{align}
+\end{lemma}
+\begin{proof}\leanok
+    On $|t|\leq T$, monotonicity replaces the time factor in the periodic
+    propagation estimate by $e^{8e^aT}-1$. On the remaining times use
+    $\|[e^{itH_N}Ae^{-itH_N},B]\|\leq2\|A\|\|B\|$.
+    The Gaussian mass outside $[-T,T]$ is at most
+    $e^{-(T\Delta)^2/(2q)}$. Splitting the integral gives
+    (\ref{eq:spt_gaussian_commutator}).
+    For the stated parameter choice, $8eT=\ell/2$ and
+    $(T\Delta)^2/(2q)=\ell\Delta/(32e)$. Also
+    $e^{-d(X,Y)}(e^{\ell/2}-1)\leq e^{-\ell/2}$, which yields
+    (\ref{eq:spt_gaussian_commutator_exp}).
+\end{proof}
+
+\begin{lemma}[Uniform Gaussian ground estimates along an exact MPS path]
+    \label{lem:spt_exact_ground_gaussian_bounds}
+    \lean{MPSTensor.ExactMPSGroundPath.exists_uniform_ground_line_spectral_gap,
+        MPSTensor.ExactMPSGroundPath.exists_uniform_gaussian_ground_bounds}
+    \leanok
+    \discussion{9879}
+    \uses{def:spt_exact_mps_gapped_phase, thm:hastings_gaussian_filtered_spectral,
+        thm:hastings_filtered_no_ground_component}
+    Let a symmetric gapped interaction path have a continuous exact MPS
+    realization of its unique ground lines. There is a single $\Delta>0$
+    such that the following holds at every parameter and ring length
+    $N\geq2$. Write $H_N$ for the Hamiltonian, $\psi_N$ for the nonzero
+    periodic MPS vector and $P_N$ for the projection onto $\mathbb C\psi_N$.
+    For every operator $W$ and $q\geq0$, its Gaussian average with variance
+    $q/\Delta^2$ satisfies
+    \begin{align}
+        \|(1-P_N)\widetilde W\psi_N\|
+         & \leq \|W\|e^{-q/2}\|\psi_N\|.
+        \label{eq:spt_gaussian_excited_ground}
+    \end{align}
+    If $\langle\psi_N,W\psi_N\rangle=0$, then also
+    \begin{align}
+        \|\widetilde W\psi_N\|
+         & \leq \Delta^{-1}e^{-q/2}\|[H_N,W]\psi_N\|.
+        \label{eq:spt_gaussian_centered_ground}
+    \end{align}
+    These are the filtered ground estimates of
+    \cite[equation \texttt{gs}]{Hastings2006Solving} and
+    \cite[equations \texttt{tighter}, \texttt{tighter2}]{Hastings2007AreaLaw}
+    with a constant supplied by the physical path.
+\end{lemma}
+\begin{proof}\leanok
+    The least energies in the gap condition and the unique-ground-line
+    condition agree: each is at most the other. Thus every eigenvalue is
+    either the ground energy or at least $\Delta$ above it, and the ground
+    eigenspace is $\mathbb C\psi_N$. Apply the Gaussian spectral estimate
+    to obtain (\ref{eq:spt_gaussian_excited_ground}). For centered $W$,
+    $W\psi_N$ is orthogonal to that whole line; the commutator estimate gives
+    (\ref{eq:spt_gaussian_centered_ground}). No normalization of $\psi_N$
+    is needed.
+\end{proof}
+
+\begin{lemma}[Transfer spectral rate from limiting correlations]
+    \label{lem:spt_transfer_rate_from_correlations}
+    \lean{MPSTensor.norm_transfer_spectrum_le_of_limitCorrelator_bound}
+    \leanok
+    \discussion{9879}
+    \uses{lem:ldp_limit_correlator_eigenvalue, def:physical_connected_correlator}
+    Let the products of $L$ letters of $A$ span the bond matrix algebra,
+    suppose $\sum_i(A^i)^\dagger A^i=\Id$, and let $\rho$ have trace one.
+    Suppose $r>0$ and for every pair of observables $X,Y$ on $L$ sites
+    there are $C\in\mathbb R$ and $n_0\in\mathbb N$ with
+    $|C_{\mathrm{phys}}(X,Y;n)|\leq Cr^n$ for $n\geq n_0$.
+    Every $\lambda\ne1$ in the transfer spectrum satisfies $|\lambda|\leq r$.
+\end{lemma}
+\begin{proof}\leanok
+    The eigenvalue observables give $C_{\mathrm{phys}}(X,Y;n)=\lambda^n$. If
+    $|\lambda|>r$, the ratio $|\lambda|/r$ is greater than one and its
+    powers are unbounded. The assumed estimate at $n+n_0$ bounds these
+    powers by $C$, a contradiction. The prefactors and starting
+    separations need not be uniform over the observables.
+\end{proof}
+
 \subsection{Virtual classes at a compact limit}
 
 \begin{lemma}[The virtual class of an exact ground-state path under a transfer bound]
