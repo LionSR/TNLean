@@ -8899,8 +8899,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \begin{lemma}[Rank-one transfer maps have positive trace factors]
     \label{lem:mpu_rank_one_transfer_trace_pair}
     \lean{Kraus.exists_posSemidef_trace_pair_of_transferMatrix_eq_vecMulVec,
-        Kraus.mul_supportProj_eq_of_transferMap_eq_trace_smul,
-        Kraus.supportProj_mul_eq_of_transferMap_eq_trace_smul}
+        Kraus.mul_supportProj_of_map_eq_trace_smul,
+        Kraus.supportProj_mul_of_map_eq_trace_smul}
     \leanok
     Let $A_1,\dots,A_n\in\MN{D}$ and let $\mathcal E(X)=\sum_aA_aXA_a^\dagger$.
     Suppose that the matrix of $\mathcal E$ is $|\rho)(\Phi|$ with
@@ -8982,8 +8982,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         B^{ij} & =SJ^\dagger W^{ij}JS^{-1}.
     \end{align}
     Since $(JS^{-1})(SJ^\dagger)=\widetilde P$ and the letters of
-    $\widetilde W=\widetilde PW\widetilde P$ absorb $\widetilde P$ on both
-    sides, nonempty words of $\mathcal B$ are compressions of words of
+    $\widetilde W=\widetilde PW\widetilde P$ absorb $\widetilde P$ on the
+    right, nonempty words of $\mathcal B$ are compressions of words of
     $\widetilde{\mathcal W}$ with the same trace, so $\mathcal B$ and
     $\mathcal W$ generate the same periodic operators. The tensors
     $\mathcal B$ and $\widetilde{\mathcal W}$ are rectangular compressions of
