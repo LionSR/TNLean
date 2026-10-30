@@ -8,7 +8,7 @@ of size at most $r$ (Definition~\ref{def:area_law_safe_rectangle}).
 This section uses integer clearance $D_0\in\N$; the source permits real
 clearance (compared in~\cite{gap:arealaw2d_safe_box_collar_scope}), whose
 initial entropy bound and scale recurrence are recovered in
-Theorems~\ref{thm:arealaw-physical-safe-rectangle-real} and
+Lemmas~\ref{thm:arealaw-physical-safe-rectangle-real} and
 \ref{thm:area_law_real_box_recurrence_after_area_law}.
 
 \begin{definition}[Safe-box entropy]
@@ -21,7 +21,7 @@ Theorems~\ref{thm:arealaw-physical-safe-rectangle-real} and
     $F_{\mathrm{box}}$ defined before~\cite[Proposition~3.3]{OpenAI2026AreaLaw}.
 \end{definition}
 
-\begin{theorem}[Elementary bounds for the safe-box entropy]
+\begin{lemma}[Elementary bounds for the safe-box entropy]
     \label{thm:area_law_box_entropy_bounds}
     \lean{TNLean.PEPS.AreaLaw.boxEntropy_nonneg,
         TNLean.PEPS.AreaLaw.boxEntropy_mono,
@@ -30,21 +30,21 @@ Theorems~\ref{thm:arealaw-physical-safe-rectangle-real} and
     \uses{def:area_law_box_entropy}
     For $q\ge1$, $F_{\mathrm{box}}(r)$ is nondecreasing in $r$ and satisfies
     $0\le F_{\mathrm{box}}(r)\le r^2\log q$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Since $|A\cap Q|\le\operatorname{size}(Q)^2\le r^2$, one has
     $0\le S_\Omega(A\cap Q)\le r^2\log q$, and enlarging $r$ enlarges the
     admissible set in the supremum.
 \end{proof}
 
-\begin{theorem}[Dependence on the safety parameter]
+\begin{lemma}[Dependence on the safety parameter]
     \label{thm:area_law_box_entropy_safety}
     \lean{TNLean.PEPS.AreaLaw.boxEntropy_antitone}
     \leanok
     \uses{def:area_law_box_entropy, def:area_law_safe_rectangle}
     For fixed $q,R,J,\Delta,r$ with $q\ge1$ and $D_0,D_1\in\N$, if
     $D_0\le D_1$, then $F_{\mathrm{box},D_1}(r)\le F_{\mathrm{box},D_0}(r)$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \lean{TNLean.PEPS.AreaLaw.card_rectRegion_le,
         TNLean.PEPS.AreaLaw.le_of_mem_boxEntropyValues,
@@ -55,7 +55,7 @@ Theorems~\ref{thm:arealaw-physical-safe-rectangle-real} and
     is safe at threshold $D_0$, shrinking the set in the supremum.
 \end{proof}
 
-\begin{theorem}[Children of a rectangle]
+\begin{lemma}[Children of a rectangle]
     \label{thm:area_law_box_children}
     \lean{TNLean.PEPS.AreaLaw.IntRect.child,
         TNLean.PEPS.AreaLaw.IntRect.exists_mem_child,
@@ -74,7 +74,7 @@ Theorems~\ref{thm:arealaw-physical-safe-rectangle-real} and
     indices differ by at most $C$ along each axis, and any child at least $C$
     positions from the first chunk and $C+2$ from the last along both axes has
     its $Cr$-padding contained in $Q$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \lean{TNLean.PEPS.AreaLaw.IntRect.width_eq,
         TNLean.PEPS.AreaLaw.IntRect.height_eq,
@@ -91,7 +91,7 @@ Theorems~\ref{thm:arealaw-physical-safe-rectangle-real} and
     $Q$, and the $Cr$-padding extends each side by $Cr$.
 \end{proof}
 
-\begin{theorem}[Averaged entropy chain rule]
+\begin{lemma}[Averaged entropy chain rule]
     \label{thm:area_law_rotated_chain_rule}
     \lean{TNLean.PEPS.AreaLaw.regionalEntropy_biUnion_le_rotations}
     \leanok
@@ -105,7 +105,7 @@ Theorems~\ref{thm:arealaw-physical-safe-rectangle-real} and
         +\frac{|G|\beta}N.
         \label{eq:area_law_rotated_chain_rule}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \lean{TNLean.PEPS.AreaLaw.sum_sub_filter_key_eq,
         TNLean.PEPS.AreaLaw.regionalEntropy_cond_anti}
@@ -116,21 +116,21 @@ Theorems~\ref{thm:arealaw-physical-safe-rectangle-real} and
     (\ref{eq:area_law_rotated_chain_rule}).
 \end{proof}
 
-\begin{theorem}[Scale recurrence at integer clearance]
+\begin{lemma}[Scale recurrence at integer clearance]
     \label{thm:area_law_box_recurrence}
     \lean{TNLean.PEPS.AreaLaw.regionalEntropy_rectRegion_le_of_children,
         TNLean.PEPS.AreaLaw.boxEntropy_le_of_scale}
     \leanok
     \uses{thm:area_law_initial_buffer, def:area_law_box_entropy}
     Fix an integer $D_0>2R+10$. With $C_{\mathrm{pad}},C_{\mathrm{buf}}$ from
-    Theorem~\ref{thm:area_law_initial_buffer}, $P=2C_{\mathrm{pad}}+1$, and
+    Lemma~\ref{thm:area_law_initial_buffer}, $P=2C_{\mathrm{pad}}+1$, and
     $p=1/(2P^2)$, for every $M$ and $r\ge1$,
     \begin{align}
         F_{\mathrm{box}}(Mr)\le\bigl[(1-p)M^2+p\cdot2PM\bigr]F_{\mathrm{box}}(r)
         +C_{\mathrm{buf}}M^2r.
         \label{eq:area_law_box_recurrence}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_initial_buffer, thm:area_law_box_children,
         thm:area_law_rotated_chain_rule}
@@ -138,12 +138,12 @@ Theorems~\ref{thm:arealaw-physical-safe-rectangle-real} and
         TNLean.PEPS.AreaLaw.card_filter_not_interior_le,
         TNLean.PEPS.AreaLaw.IntRect.size_le_of_subset,
         TNLean.PEPS.AreaLaw.IsSafe.mono}
-    Coloring the children of a safe parent (Theorem~\ref{thm:area_law_box_children})
+    Coloring the children of a safe parent (Lemma~\ref{thm:area_law_box_children})
     modulo $P$ along both axes gives $N=P^2$ colors such that the
     $C_{\mathrm{pad}}r$-padding of any child meets only other colors. At most
     $2PM$ children are non-interior, while interior children satisfy
-    Theorem~\ref{thm:area_law_initial_buffer}; applying
-    Theorem~\ref{thm:area_law_rotated_chain_rule} yields
+    Lemma~\ref{thm:area_law_initial_buffer}; applying
+    Lemma~\ref{thm:area_law_rotated_chain_rule} yields
     (\ref{eq:area_law_box_recurrence}).
 \end{proof}
 
@@ -157,21 +157,21 @@ Theorems~\ref{thm:arealaw-physical-safe-rectangle-real} and
     $D_0>2R+10$ and integer $r\ge1$, $F_{\mathrm{box},D_0}(r)\le Cr^{1+e_0}$
     (the integer-clearance specialization of
     \cite[Proposition~3.3]{OpenAI2026AreaLaw}; see
-    Theorem~\ref{thm:arealaw-physical-safe-rectangle-real} for real clearance).
+    Lemma~\ref{thm:arealaw-physical-safe-rectangle-real} for real clearance).
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:area_law_box_recurrence, thm:area_law_box_entropy_bounds}
     Choosing $M=8(C_{\mathrm{pad}}+1)$ gives $2PM\le M^2/2$, so the coefficient
     in (\ref{eq:area_law_box_recurrence}) of
-    Theorem~\ref{thm:area_law_box_recurrence} is at most
+    Lemma~\ref{thm:area_law_box_recurrence} is at most
     $\lambda=(1-p/2)M^2\in(M,M^2)$. Iterating (\ref{eq:area_law_box_recurrence})
     along powers of $M$ from $F_{\mathrm{box},D_0}(1)\le\log q$ and using
-    monotonicity from Theorem~\ref{thm:area_law_box_entropy_bounds} gives
+    monotonicity from Lemma~\ref{thm:area_law_box_entropy_bounds} gives
     $F_{\mathrm{box},D_0}(r)\le Cr^{1+e_0}$ with $e_0=\log_M\lambda-1\in(0,1)$
     and $C,e_0$ independent of $D_0$.
 \end{proof}
 
-\begin{theorem}[Safety inside a dilated rectangle]
+\begin{lemma}[Safety inside a dilated rectangle]
     \label{thm:area_law_safe_rectangle_dilation}
     \lean{TNLean.PEPS.AreaLaw.IsSafe.of_subset_dilate}
     \leanok
@@ -185,7 +185,7 @@ Theorems~\ref{thm:arealaw-physical-safe-rectangle-real} and
     $\|p-z\|_\infty>D_0\operatorname{size}(Q')$ for all $p\in Q'$ and $z\in Z$
     (the clearance step of
     \cite[proof of Proposition~9.5, lines~723--729]{OpenAI2026AreaLaw}).
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{def:area_law_safe_rectangle}
     If $p\in Q'$ and $z\in Z$ satisfied
@@ -194,7 +194,7 @@ Theorems~\ref{thm:arealaw-physical-safe-rectangle-real} and
     contradicting the safety of $Q$.
 \end{proof}
 
-\begin{theorem}[Uniform entropy of physical safe rectangles]
+\begin{lemma}[Uniform entropy of physical safe rectangles]
     \label{thm:area_law_initial_safe_rectangle_entropy}
     \lean{TNLean.PEPS.AreaLaw.exists_regionalEntropy_safe_rect_le_rpow}
     \leanok
@@ -214,13 +214,12 @@ Theorems~\ref{thm:arealaw-physical-safe-rectangle-real} and
     \end{align}
     This is the pointwise integer-clearance specialization of
     \cite[Proposition~3.3]{OpenAI2026AreaLaw} (see
-    Theorem~\ref{thm:arealaw-physical-safe-rectangle-real} for real clearance).
-\end{theorem}
+    Lemma~\ref{thm:arealaw-physical-safe-rectangle-real} for real clearance).
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_initial_box,thm:area_law_box_entropy_bounds,
         def:area_law_box_entropy}
-    Theorems~\ref{thm:area_law_initial_box} and
-    \ref{thm:area_law_box_entropy_bounds} at $D_0=2R+11$ and $r=1$ give
+    Theorem~\ref{thm:area_law_initial_box} and Lemma~\ref{thm:area_law_box_entropy_bounds} at $D_0=2R+11$ and $r=1$ give
     $0\le F_{\mathrm{box},2R+11}(1)\le C$, and since $\operatorname{size}(Q)\ge1$,
     Definition~\ref{def:area_law_box_entropy} and
     Theorem~\ref{thm:area_law_initial_box} give

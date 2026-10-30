@@ -15,9 +15,9 @@ three-cocycle of type II whose exponent $(-1)^{a_1b_2c_2}$ couples the first
 factor of the group to the second, motivated by anomalous
 $\Z_2\times\Z_2$ symmetry-protected topological phases~\cite{ChenGuWen2011}.
 The four operators do not form an exact representation. After an on-site
-dressing they do (Theorem~\ref{thm:asymex_z2z2_exact}), and the anomaly
+dressing they do (Lemma~\ref{thm:asymex_z2z2_exact}), and the anomaly
 class of the dressed representation has the detector values of the type-II
-class (Theorem~\ref{thm:asymex_z2z2_anomaly_class}); in particular it is
+class (Lemma~\ref{thm:asymex_z2z2_anomaly_class}); in particular it is
 nontrivial.
 Matrix product operator symmetries of this kind are reviewed
 in~\cite[Section~III.A.6]{Cirac2021Matrix}. The local tensors are built from
@@ -135,12 +135,12 @@ The boundary convention is the ordinary, unnormalized trace:
 \end{align}
 There are no open boundary vectors.
 
-Theorem~\ref{thm:asymex_z2z2_normal} establishes the word spans, with
+Lemma~\ref{thm:asymex_z2z2_normal} establishes the word spans, with
 one-site injectivity for the bond-one tensors and two-site injectivity
 for the bond-two tensors. The multiplication phases are retained in
-Theorem~\ref{thm:asymex_z2z2_fusion}. The dressed exact representation
-is given in Theorem~\ref{thm:asymex_z2z2_exact}, and its nontrivial
-anomaly detectors in Theorem~\ref{thm:asymex_z2z2_anomaly_class}.
+Lemma~\ref{thm:asymex_z2z2_fusion}. The dressed exact representation
+is given in Lemma~\ref{thm:asymex_z2z2_exact}, and its nontrivial
+anomaly detectors in Lemma~\ref{thm:asymex_z2z2_anomaly_class}.
 These detector values concern the dressed family; they do not identify
 the full cohomology class of the original family.
 
@@ -166,7 +166,7 @@ the full cohomology class of the original family.
 The first property is that the periodic contraction of each tensor
 reproduces the operator of~(\ref{eq:asymex_z2z2_action}).
 
-\begin{theorem}[Periodic contraction and unitarity]%
+\begin{lemma}[Periodic contraction and unitarity]%
     \label{thm:asymex_z2z2_physical}
     \lean{Z2Z2Condensation.mpo_symTensor_apply,
         Z2Z2Condensation.mpo_symTensor_mulVec_single,
@@ -185,7 +185,7 @@ reproduces the operator of~(\ref{eq:asymex_z2z2_action}).
          & =(-1)^{Lg_1g_2}U_{g,L}.
         \label{eq:asymex_z2z2_inverse}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -256,13 +256,13 @@ Thus $\lambda(g,h)=(-1)^{g_1h_2}$ gives a length-dependent
 scalar factor, reflecting the non-trivial projective 2-cocycle class of
 $\Z_2\times\Z_2$~\cite{ChenGuWen2011,GarreRubio2023MPOSym}.
 The tensor proof of this law, through word traces,
-is given in Theorem~\ref{thm:asymex_z2z2_fusion}.
+is given in Lemma~\ref{thm:asymex_z2z2_fusion}.
 
 The second property concerns the word spans of the four tensors,
 which the compression results of
 Section~\ref{sec:asymex_z2z2_pairs} require.
 
-\begin{theorem}[Injectivity after blocking of the four symmetry tensors]%
+\begin{lemma}[Injectivity after blocking of the four symmetry tensors]%
     \label{thm:asymex_z2z2_normal}
     \lean{Z2Z2Condensation.eMPS_isNormal, Z2Z2Condensation.yMPS_isNormal,
         Z2Z2Condensation.xMPS_isNormal, Z2Z2Condensation.xyMPS_isNormal,
@@ -281,7 +281,7 @@ Section~\ref{sec:asymex_z2z2_pairs} require.
     These assertions concern word spans. The tensors are proportional
     to normal tensors (NT); the spectral-radius normalization required
     for NT is imposed separately.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -314,7 +314,7 @@ Definition~\ref{def:mpo_direct_sum}, with bond dimension six.
 \begin{center}
     \tenkzkernel
     % Formula: the periodic ring of the direct-sum tensor N, generating
-    % A = U_e + U_x + U_y + U_xy by Theorem~\ref{thm:mpo_direct_sum_additive}
+    % A = U_e + U_x + U_y + U_xy by Lemma~\ref{thm:mpo_direct_sum_additive}
     % applied three times.
     % Ink/index correspondence: as in the ring above, with the node
     % renamed N; boundary signature (0,0,L,L).
@@ -350,7 +350,7 @@ Definition~\ref{def:mpo_direct_sum}, with bond dimension six.
     \leanok
     \uses{thm:mpo_direct_sum_additive}
     Applying the additivity of
-    Theorem~\ref{thm:mpo_direct_sum_additive} three times yields the sum
+    Lemma~\ref{thm:mpo_direct_sum_additive} three times yields the sum
     of the four periodic operators.
 \end{proof}
 
@@ -358,7 +358,7 @@ The multiplication law~(\ref{eq:asymex_z2z2_basis_product}) of the
 four operators is now derived from the tensors themselves, through
 word traces of their stacked products.
 
-\begin{theorem}[The periodic fusion table]%
+\begin{lemma}[The periodic fusion table]%
     \label{thm:asymex_z2z2_fusion}
     \lean{Z2Z2Condensation.bondDim, Z2Z2Condensation.symTensor,
         Z2Z2Condensation.gmul, Z2Z2Condensation.fusionSign,
@@ -387,7 +387,7 @@ word traces of their stacked products.
     The four operators form a projective representation of
     $\Z_2\times\Z_2$ on odd rings and a linear representation on even
     rings.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -403,7 +403,7 @@ word traces of their stacked products.
     \end{align}
     for every nonempty word $w$ on the paired physical alphabet.
     The explicit split and non-split compressions are described in
-    Theorems~\ref{thm:asymex_z2z2_split}
+    Lemmas~\ref{thm:asymex_z2z2_split}
     and~\ref{thm:asymex_z2z2_nonsplit}.
     Lemma~\ref{lem:asym_mpo_trace_eq} converts
     (\ref{eq:asymex_z2z2_pair_trace}) into the operator identity
@@ -420,7 +420,7 @@ $(i_1,i_2)$, so that each site carries $\C[\Z_2\times\Z_2]$, and write
 $U^{\omega}_{g,L}$ for the periodic operator of that construction on a
 ring of $L$ sites.
 
-\begin{theorem}[Comparison with the cocycle construction]%
+\begin{lemma}[Comparison with the cocycle construction]%
     \label{thm:asymex_z2z2_group_cocycle}
     \lean{Z2Z2Condensation.mpo_symTensor_eq_groupCocycle,
         Z2Z2Condensation.secondZDressing,
@@ -439,14 +439,14 @@ ring of $L$ sites.
     The dressing is trivial for $g\in\{e,y\}$ and is a product of
     single-site unitaries. The cocycle operators form an exact
     representation, whereas the operators $U_{g,L}$ compose only up to
-    the signs of Theorem~\ref{thm:asymex_z2z2_fusion}.
-\end{theorem}
+    the signs of Lemma~\ref{thm:asymex_z2z2_fusion}.
+\end{lemma}
 
 \begin{proof}
     \leanok
     Both sides vanish at $(s,t)$ unless $s=g\oplus t$, since the table
     of the labels $2i_1+i_2$ is the group law of $\Z_2\times\Z_2$. On
-    that support, Theorem~\ref{thm:asymex_group_cocycle_klein} gives the
+    that support, Lemma~\ref{thm:asymex_group_cocycle_klein} gives the
     sign of the right side as $(-1)^e$ with
     \begin{align}
         e
@@ -459,7 +459,7 @@ ring of $L$ sites.
     of~(\ref{eq:asymex_z2z2_action}).
 \end{proof}
 
-\begin{theorem}[An exact normal representation by dressed tensors]%
+\begin{lemma}[An exact normal representation by dressed tensors]%
     \label{thm:asymex_z2z2_exact}
     \lean{Z2Z2Condensation.secondZSign,
         Z2Z2Condensation.secondZSign_ne_zero,
@@ -480,23 +480,23 @@ ring of $L$ sites.
     ring of $L>0$ sites is $U^{\omega}_{g,L}$. In particular the tensors
     $M'_g$ form an exact representation of $\Z_2\times\Z_2$ by normal
     tensors.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:asymex_z2z2_group_cocycle, thm:asymex_z2z2_normal,
         thm:asymex_group_cocycle_klein, thm:mpo_diagonal_dressing}
-    By Theorem~\ref{thm:mpo_diagonal_dressing} the periodic operator
+    By Lemma~\ref{thm:mpo_diagonal_dressing} the periodic operator
     of $M'_g$ is $U_{g,L}Z_{2,L}^{\,g_1}$, which is $U^{\omega}_{g,L}$ by
     (\ref{eq:asymex_z2z2_group_cocycle}) and $Z_{2,L}^2=\Id$. The
     operators $U^{\omega}_{g,L}$ multiply as the group by
-    Theorem~\ref{thm:asymex_group_cocycle_klein}. The letters of $M'_g$
+    Lemma~\ref{thm:asymex_group_cocycle_klein}. The letters of $M'_g$
     are those of the normal tensor $M_g$ of
-    Theorem~\ref{thm:asymex_z2z2_normal} multiplied by signs, so
-    Theorem~\ref{thm:mpo_diagonal_dressing} gives normality.
+    Lemma~\ref{thm:asymex_z2z2_normal} multiplied by signs, so
+    Lemma~\ref{thm:mpo_diagonal_dressing} gives normality.
 \end{proof}
 
-\begin{theorem}[The condensation defect squares to a length-dependent
+\begin{lemma}[The condensation defect squares to a length-dependent
         multiple of itself]%
     \label{thm:asymex_z2z2_defect_sq}
     \lean{Z2Z2Condensation.mpo_condensationTensor_sq,
@@ -514,12 +514,12 @@ ring of $L$ sites.
     Consequently $(A_L/4)^2=A_L/4$ if and only if $L$ is even.
     Thus the normalization by $\tfrac14$ is not idempotent on odd
     rings.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:asymex_z2z2_fusion}
-    In the expansion of the square by Theorem~\ref{thm:asymex_z2z2_fusion},
+    In the expansion of the square by Lemma~\ref{thm:asymex_z2z2_fusion},
     the four pairs satisfying $gh=k$ for each $k\in G$ contribute
     three weights $+1$ and one weight $(-1)^L$. Hence
     \begin{align}
@@ -666,7 +666,7 @@ $s=(g,h)$.
     \end{tenkz}
 \end{center}
 
-\begin{theorem}[The twelve split pair blocks]%
+\begin{lemma}[The twelve split pair blocks]%
     \label{thm:asymex_z2z2_split}
     \lean{Z2Z2Condensation.eEStacked_eq, Z2Z2Condensation.eYStacked_eq,
         Z2Z2Condensation.eXStacked_eq, Z2Z2Condensation.eXyStacked_eq,
@@ -695,7 +695,7 @@ $s=(g,h)$.
     target, with vanishing remainder. The gauge is the identity for ten
     pairs and $\begin{pmatrix}0&-1\\1&0\end{pmatrix}$ for $(x,y)$ and
     $(xy,y)$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -708,7 +708,7 @@ $s=(g,h)$.
     Direct multiplication gives $S^{-1}T_{1-b}S=-T_b$ for
     $b\in\{0,1\}$. This proves the conjugation identities for
     $(x,y)$ and $(xy,y)$.
-    Theorem~\ref{thm:asymex_explicit_gauge} gives the compression
+    Lemma~\ref{thm:asymex_explicit_gauge} gives the compression
     maps $W=S^{-1}$ and $V=S$ in these two cases, and identity maps
     in the other ten.
     In every case $B^{(o,i)}=VC_s^{(o,i)}W$ on the entire bond
@@ -721,7 +721,7 @@ dimension two. Their stacked blocks have bond dimension four but
 targets of bond dimension one, so the compression must discard three
 bond directions.
 
-\begin{theorem}[The four non-split pair blocks]%
+\begin{lemma}[The four non-split pair blocks]%
     \label{thm:asymex_z2z2_nonsplit}
     \lean{Z2Z2Condensation.xXCompression, Z2Z2Condensation.xXyCompression,
         Z2Z2Condensation.xyXCompression, Z2Z2Condensation.xyXyCompression,
@@ -754,7 +754,7 @@ bond directions.
     $R^{i_1j_1}R^{i_2j_2}R^{i_3j_3}R^{i_4j_4}=0$.
     The other three blocks admit the same construction, each with its
     own gauge.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -764,18 +764,18 @@ bond directions.
     the stacked tensor in upper triangular form, with the target
     in the third diagonal position and zero in the other diagonal
     positions.
-    Theorem~\ref{thm:asymex_explicit_gauge} gives the compression pair
+    Lemma~\ref{thm:asymex_explicit_gauge} gives the compression pair
     from this gauge. Subtracting $VC^{ij}W$ removes the only
     potentially nonzero diagonal entry. The remaining matrices are
     strictly upper triangular in a common four-dimensional basis,
     so every product of four remainders is zero, as given by the
     nilpotency clause of Theorem~\ref{thm:asym_multiblock} with
     $|S|+z=4$. The intertwiner calculation in
-    Theorem~\ref{thm:asymex_z2z2_no_intertwiner} then excludes any
+    Lemma~\ref{thm:asymex_z2z2_no_intertwiner} then excludes any
     splitting.
 \end{proof}
 
-\begin{theorem}[Both sitewise intertwiner spaces vanish for the four
+\begin{lemma}[Both sitewise intertwiner spaces vanish for the four
         non-split blocks]%
     \label{thm:asymex_z2z2_no_intertwiner}
     \lean{Z2Z2Condensation.xX_right_intertwiner_eq_zero,
@@ -794,7 +794,7 @@ bond directions.
     every physical-index pair, then $v=0$.
     Likewise, if a row vector $u$ satisfies $uB^{oi}=C^{oi}u$ for
     every physical-index pair, then $u=0$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -828,7 +828,7 @@ bond directions.
 The sixteen pair-block compressions assemble into one compression of
 the full stacked tensor.
 
-\begin{theorem}[Compression of the stacked defect tensor]%
+\begin{lemma}[Compression of the stacked defect tensor]%
     \label{thm:asymex_z2z2_assembled}
     \lean{Z2Z2Condensation.condensationSquare_trace_evalWord,
         Z2Z2Condensation.exists_condensationSquare_compression,
@@ -851,8 +851,8 @@ the full stacked tensor.
     since $36=4(1+2+1+2)+12$.
     In the pair-block construction, these twelve entries come from
     the four non-split blocks of
-    Theorem~\ref{thm:asymex_z2z2_nonsplit}, each of which has $z=3$.
-\end{theorem}
+    Lemma~\ref{thm:asymex_z2z2_nonsplit}, each of which has $z=3$.
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -860,7 +860,7 @@ the full stacked tensor.
     Decoding $w$ as a pair of physical configurations of length $|w|$
     identifies the corresponding entry of the periodic operator of $B$
     with that of the square of the sum in~(\ref{eq:asymex_z2z2_defect_sum}).
-    Expanding it and applying Theorem~\ref{thm:asymex_z2z2_fusion} gives
+    Expanding it and applying Lemma~\ref{thm:asymex_z2z2_fusion} gives
     the sum of the corresponding matrix entries of
     $\lambda(g,h)^{|w|}\rho^{(|w|)}(M_{gh})$.
     Lemma~\ref{lem:asym_mpo_trace_eq} identifies these entries with
@@ -870,7 +870,7 @@ the full stacked tensor.
     required for compression.
 
     The targets have positive bond dimensions and are normal in the
-    word-span sense by Theorem~\ref{thm:asymex_z2z2_normal}:
+    word-span sense by Lemma~\ref{thm:asymex_z2z2_normal}:
     multiplication by the nonzero scalar $\lambda(g,h)$ does not
     change any fixed-length word span.
     Theorem~\ref{thm:asym_multiblock} therefore gives the
@@ -884,7 +884,7 @@ the full stacked tensor.
     split block.
 \end{proof}
 
-\begin{theorem}[The combined compression and its remainder]%
+\begin{lemma}[The combined compression and its remainder]%
     \label{thm:asymex_z2z2_assembled_remainder}
     \lean{Z2Z2Condensation.condensationBond,
         Z2Z2Condensation.condensationTensor_eq_blockDiagonal,
@@ -911,7 +911,7 @@ the full stacked tensor.
     word with $|w|\geq3$, while $R^aR^a\neq0$ for the physical letter
     $a=0$. The generic bound of
     Theorem~\ref{thm:asym_multiblock} is $|S|+z=16+12=28$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -919,8 +919,8 @@ the full stacked tensor.
         lem:asymex_direct_sum_ring, thm:asymex_z2z2_split,
         thm:asymex_z2z2_nonsplit}
     The defect tensor $N$ is block diagonal over the four group elements,
-    so Theorem~\ref{thm:asymex_mul_block_diagonal} makes $B$ block diagonal
-    over the pairs. By Theorem~\ref{thm:asymex_direct_sum_compression}, the
+    so Lemma~\ref{thm:asymex_mul_block_diagonal} makes $B$ block diagonal
+    over the pairs. By Lemma~\ref{thm:asymex_direct_sum_compression}, the
     remainder of the direct sum is the direct sum of the pair remainders.
     The twelve split pairs have zero remainder. On each of the four
     non-split pairs, the remainder letters vanish outside two physical
@@ -932,7 +932,7 @@ the full stacked tensor.
 \begin{remark}[Failure of closure under conjugate transposition]%
     \label{rem:asymex_z2z2_anomaly}
     \uses{cor:asym_anomaly_not_star, thm:asymex_z2z2_no_intertwiner}
-    By Theorem~\ref{thm:asymex_z2z2_no_intertwiner} and
+    By Lemma~\ref{thm:asymex_z2z2_no_intertwiner} and
     Corollary~\ref{cor:asym_anomaly_not_star}, the algebra generated
     by the matrices of each stacked pair block with
     $g,h\in\{x,xy\}$ is not closed under conjugate transposition.
@@ -941,7 +941,7 @@ the full stacked tensor.
     For each of these four blocks, there is no nonzero sitewise
     intertwiner with the specified target in either direction.
     In contrast, the twelve split pairs of
-    Theorem~\ref{thm:asymex_z2z2_split} have one-dimensional
+    Lemma~\ref{thm:asymex_z2z2_split} have one-dimensional
     sitewise intertwiner spaces in both directions.
     Indeed, conjugation identifies these spaces with the commutant
     of the target matrices, and injectivity after blocking makes
@@ -958,10 +958,10 @@ the full stacked tensor.
 \subsection{The anomaly class of the full group}%
 \label{sec:asymex_z2z2_anomaly}
 
-By Theorem~\ref{thm:asymex_z2z2_fusion} the four operators $U_{g,L}$
+By Lemma~\ref{thm:asymex_z2z2_fusion} the four operators $U_{g,L}$
 compose only projectively on odd rings, and no rescaling of the four
 tensors removes the signs, since $\lambda(x,y)\neq\lambda(y,x)$. The
-dressed tensors $M'_g$ of Theorem~\ref{thm:asymex_z2z2_exact} form an
+dressed tensors $M'_g$ of Lemma~\ref{thm:asymex_z2z2_exact} form an
 exact representation by normal tensors, so the anomaly three-cochain of
 Definition~\ref{def:mpug_anomaly_three_cochain} is defined for them.
 According to~\cite{GarreRubio2023MPOSym}, the values
@@ -970,12 +970,12 @@ distinguish the eight classes of
 $H^3(\Z_2\times\Z_2,\C^\times)\cong\Z_2^3$, and the type-II class has the
 values $(+1,+1,-1)$ at $x$, $y$ and $xy$. The theorem below states these
 detector values for the dressed representation.
-Theorem~\ref{thm:asymex_klein_complete_classification} proves that the three
+Lemma~\ref{thm:asymex_klein_complete_classification} proves that the three
 products distinguish all cohomology classes. The distinction between the dressed
 representation and the original odd-ring projective family remains as described
 in~\cite{gap:glm23_z2z2_anomaly_detector_scope}.
 
-\begin{theorem}[The anomaly class of the full group]%
+\begin{lemma}[The anomaly class of the full group]%
     \label{thm:asymex_z2z2_anomaly_class}
     \lean{Z2Z2Condensation.omega_cohomologousTo_kleinCocycle,
         Z2Z2Condensation.xHom,
@@ -1039,7 +1039,7 @@ in~\cite{gap:glm23_z2z2_anomaly_detector_scope}.
         def:mpug_trivial_gauge_class, def:mpug_h3_group_cohomology}
     Let $\omega$ be the anomaly three-cochain of any choice of fusion
     tensors of the representation $g\mapsto M'_g$ of
-    Theorem~\ref{thm:asymex_z2z2_exact}. For every
+    Lemma~\ref{thm:asymex_z2z2_exact}. For every
     $g\in\Z_2\times\Z_2$,
     \begin{align}
         \omega(g,e,g)\,\omega(g,g,g)
@@ -1052,7 +1052,7 @@ in~\cite{gap:glm23_z2z2_anomaly_detector_scope}.
     $[\omega]\neq0$ in $H^3(\Z_2\times\Z_2,\C^\times_{\mathrm{triv}})$.
     Its class is the mixed type-II
     class $[(-1)^{a_1b_2c_2}]$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -1063,13 +1063,13 @@ in~\cite{gap:glm23_z2z2_anomaly_detector_scope}.
     Since $g^2=e$, the product $\omega(g,e,g)\,\omega(g,g,g)$ does not
     depend on the fusion tensors and can be computed on the restriction of
     the family along an embedding of $\Z_2$ onto $\{e,g\}$, by
-    Theorem~\ref{thm:mpug_family_restriction_omega}. On $\{e,y\}$ all bond
+    Lemma~\ref{thm:mpug_family_restriction_omega}. On $\{e,y\}$ all bond
     dimensions are one. The fusion tensors can be taken to be the identity,
     since $M'_y=M_y$ and the blocks with factors in $\{e,y\}$ are split, so
     every value of $\omega$ is one. On $\{e,x\}$ and $\{e,xy\}$, taking the
     identity whenever a factor is $e$ and taking the compression pair
     $(V,W)$ of the block $(x,x)$, respectively $(xy,xy)$, of
-    Theorem~\ref{thm:asymex_z2z2_nonsplit} for the generator gives a
+    Lemma~\ref{thm:asymex_z2z2_nonsplit} for the generator gives a
     reduction onto $M_e$: the stacked square of $M'_x$ equals that of $M_x$,
     and the stacked square of $M'_{xy}$ is minus that of $M_{xy}$, which
     cancels the weight $-1$ of the target of that block. With these choices
@@ -1080,9 +1080,9 @@ in~\cite{gap:glm23_z2z2_anomaly_detector_scope}.
     $(V\otimes\Id)R^a=\pm(\Id\otimes V)R^a$, with the sign $+$ for $x$ and
     $-$ for $xy$. These are integer identities over the few distinct
     letters, and induction on the word gives $\omega(g,g,g)=+1$ for $x$
-    and $-1$ for $xy$. By Theorem~\ref{thm:mpug_cyclic_invariant_gauge}, the
+    and $-1$ for $xy$. By Lemma~\ref{thm:mpug_cyclic_invariant_gauge}, the
     value $-1$ at $xy$ shows that the class is nontrivial, and
-    Theorem~\ref{thm:asymex_klein_complete_classification} identifies its
+    Lemma~\ref{thm:asymex_klein_complete_classification} identifies its
     class from these three products.
 \end{proof}
 
@@ -1102,7 +1102,7 @@ in~\cite{gap:glm23_z2z2_anomaly_detector_scope}.
     of~\cite[Section~6]{GarreRubio2023MPOSym}. The exponent is evaluated in $\Z_2$.
 \end{definition}
 
-\begin{theorem}[Cocycle equation and restriction signs]
+\begin{lemma}[Cocycle equation and restriction signs]
     \label{thm:asymex_klein_cocycle_restrictions}
     \lean{TNLean.Algebra.ScalarThreeCochain.kleinCocycleFamily_isCocycle,
         TNLean.Algebra.ScalarThreeCochain.kleinCocycleFamily_isNormalized,
@@ -1125,7 +1125,7 @@ in~\cite{gap:glm23_z2z2_anomaly_detector_scope}.
     $H\leq\Z_2\times\Z_2$, $\omega_{111}|_H=1$ if and only if $H=\{0\}$.
     The representative $\omega_{001}$ is the cocycle
     $(-1)^{a_1b_2c_2}$ of Definition~\ref{def:asymex_group_cocycle_klein}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -1140,7 +1140,7 @@ in~\cite{gap:glm23_z2z2_anomaly_detector_scope}.
 \end{proof}
 
 
-\begin{theorem}[Distinct Klein-four classes and the last-row restriction]
+\begin{lemma}[Distinct Klein-four classes and the last-row restriction]
     \label{thm:asymex_klein_distinct_classes}
     \lean{TNLean.Algebra.ScalarThreeCochain.kleinCocycleFamily_diagonal_eq_of_cohomologousTo,
         TNLean.Algebra.ScalarThreeCochain.kleinCocycleFamily_cohomologousTo_iff,
@@ -1153,7 +1153,7 @@ in~\cite{gap:glm23_z2z2_anomaly_detector_scope}.
     $\omega_{pqr}$ and $\omega_{p'q'r'}$ are cohomologous if and only if
     $(p,q,r)=(p',q',r')$, and for every subgroup $H\leq\Z_2^2$ the class of
     $\omega_{111}|_H$ is trivial if and only if $H=\{0\}$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -1165,14 +1165,14 @@ in~\cite{gap:glm23_z2z2_anomaly_detector_scope}.
     The three signs therefore agree for cohomologous representatives;
     they recover $p$, $q$, and then $r$. Conversely, equal parameters give
     the same cocycle. If the restriction of $\omega_{111}$ to $H$ has
-    trivial class, Theorem~\ref{thm:asymex_klein_subgroup_table} gives
+    trivial class, Lemma~\ref{thm:asymex_klein_subgroup_table} gives
     diagonal value $1$ at every $g\in H$.
     The last row has diagonal value $-1$ at every nonzero element, so
     $H=\{0\}$. On the trivial subgroup the cocycle is identically one.
 \end{proof}
 
 
-\begin{theorem}[Four-block orbits for the last Klein-four class]
+\begin{lemma}[Four-block orbits for the last Klein-four class]
     \label{thm:asymex_klein_four_blocks}
     \lean{TNLean.Algebra.LSymbol.stabilizer_eq_bot_of_kleinCocycleFamily_one,
         TNLean.Algebra.LSymbol.card_orbit_of_kleinCocycleFamily_one,
@@ -1184,7 +1184,7 @@ in~\cite{gap:glm23_z2z2_anomaly_detector_scope}.
     and $|Gx|=4$. In particular, as in the block count for the last class
     in~\cite[Section~6]{GarreRubio2023MPOSym}, if $X$ is nonempty and the
     action is transitive, then $|X|=4$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -1196,7 +1196,7 @@ in~\cite{gap:glm23_z2z2_anomaly_detector_scope}.
 \end{proof}
 
 
-\begin{theorem}[L-symbols on a free transitive action]
+\begin{lemma}[L-symbols on a free transitive action]
     \label{thm:asymex_free_action_l_symbols}
     \lean{TNLean.Algebra.LSymbol.actionGaugeEquiv_of_bijective_smul,
         TNLean.Algebra.LSymbol.isCompatible_regular}
@@ -1210,7 +1210,7 @@ in~\cite{gap:glm23_z2z2_anomaly_detector_scope}.
     \cite[Section~4.1]{GarreRubio2023MPOSym}, if $\omega$ is a three-cocycle
     then the regular action of $G$ on itself admits the compatible solution
     $L^x_{g,h}=\omega(g,h,x)^{-1}$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -1230,7 +1230,7 @@ in~\cite{gap:glm23_z2z2_anomaly_detector_scope}.
     compatibility of $\omega(g,h,x)^{-1}$.
 \end{proof}
 
-\begin{theorem}[Unique four-block L-symbol class]
+\begin{lemma}[Unique four-block L-symbol class]
     \label{thm:asymex_klein_four_block_uniqueness}
     \lean{TNLean.Algebra.LSymbol.exists_regular_actionGaugeEquiv_of_kleinCocycleFamily_one}
     \leanok
@@ -1244,7 +1244,7 @@ in~\cite{gap:glm23_z2z2_anomaly_detector_scope}.
     \cite[Section~6]{GarreRubio2023MPOSym} for the $(1,1,1)$ class, there is
     therefore exactly one compatible L-symbol class up to equivariant
     relabeling and action-tensor gauge, and it has four blocks.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -1252,12 +1252,12 @@ in~\cite{gap:glm23_z2z2_anomaly_detector_scope}.
         thm:asymex_klein_cocycle_restrictions}
     All stabilizers are trivial, so $e(k)=k\cdot x_0$ is an equivariant
     bijection. Pulling back $L$ along $e$ and applying
-    Theorem~\ref{thm:asymex_free_action_l_symbols} reduces $L$ to the regular
+    Lemma~\ref{thm:asymex_free_action_l_symbols} reduces $L$ to the regular
     action. Every value of $\omega_{111}$ is $\pm1$, so its inverse equals
     itself, and the regular solution also proves existence.
 \end{proof}
 
-\begin{theorem}[Normalization and involution signs]
+\begin{lemma}[Normalization and involution signs]
     \label{thm:asymex_l_symbol_normalization}
     \lean{TNLean.Algebra.LSymbol.IsCompatible.isNormalized_gauge,
         TNLean.Algebra.LSymbol.IsCompatible.apply_involution}
@@ -1271,7 +1271,7 @@ in~\cite{gap:glm23_z2z2_anomaly_detector_scope}.
     every normalized $L$ compatible with $\omega$, every $x\in X$, and every
     $g\in G$ with $g^2=e$, one has
     $L^x_{g,g}=\omega(g,g,g)L^{g\cdot x}_{g,g}$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -1285,7 +1285,7 @@ in~\cite{gap:glm23_z2z2_anomaly_detector_scope}.
     Compatibility at $(g,g,g)$ reduces to the stated sign relation.
 \end{proof}
 
-\begin{theorem}[Diagonal L-symbols for the Klein-four representatives]
+\begin{lemma}[Diagonal L-symbols for the Klein-four representatives]
     \label{thm:asymex_klein_l_symbol_signs}
     \lean{TNLean.Algebra.LSymbol.apply_self_of_kleinCocycleFamily}
     \leanok
@@ -1301,18 +1301,18 @@ in~\cite{gap:glm23_z2z2_anomaly_detector_scope}.
     If $c$ exchanges two blocks $x,y$, this is
     $L^x_{c,c}=-L^y_{c,c}$, the relation for the element $ab$ in
     \cite[Section~6]{GarreRubio2023MPOSym}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:asymex_l_symbol_normalization,def:asymex_klein_cocycle_family}
     Every element of $\Z_2^2$ squares to the identity, so substituting
     $\omega_{pqr}(g,g,g)=(-1)^{pu+qv+ruv}$ into
-    Theorem~\ref{thm:asymex_l_symbol_normalization} and using $u^2=u$ and
+    Lemma~\ref{thm:asymex_l_symbol_normalization} and using $u^2=u$ and
     $v^2=v$ in $\Z_2$ yields the sign relation.
 \end{proof}
 
-\begin{theorem}[Trivial restrictions of all Klein-four representatives]
+\begin{lemma}[Trivial restrictions of all Klein-four representatives]
     \label{thm:asymex_klein_subgroup_table}
     \lean{TNLean.Algebra.ScalarThreeCochain.kleinCocycleFamily_isTrivialGaugeClass_comap_iff,
         TNLean.Algebra.ScalarThreeCochain.kleinCocycleFamily_isTrivialGaugeClass_comap_iff_generators}
@@ -1339,7 +1339,7 @@ in~\cite{gap:glm23_z2z2_anomaly_detector_scope}.
     This gives the subgroup restrictions in
     \cite[Section~6]{GarreRubio2023MPOSym}, including arbitrary changes
     of fusion gauge.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -1380,7 +1380,7 @@ in~\cite{gap:glm23_z2z2_anomaly_detector_scope}.
     two and one, respectively.
 \end{definition}
 
-\begin{theorem}[The printed Klein-four representation]
+\begin{lemma}[The printed Klein-four representation]
     \label{thm:asymex_klein_spin_representation}
     \lean{KleinSymmetry.generatorA_mul_self,KleinSymmetry.generatorB_mul_self,
         KleinSymmetry.generators_commute,KleinSymmetry.generatorA_mul_generatorB,
@@ -1395,14 +1395,14 @@ in~\cite{gap:glm23_z2z2_anomaly_detector_scope}.
     is a representation of $\Z_2\times\Z_2$ on the state space.
     The periodic operators of $A$ and $B$ are $U_a$ and $U_b$.
     Their product is the decorated CZX operator.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:asymex_czx_decorated_operator}
     The diagonal entries of $U_a$ are signs, and the spin flip is an
     involution, so both generators square to the identity and are unitary.
-    By Theorem~\ref{thm:asymex_czx_decorated_operator},
+    By Lemma~\ref{thm:asymex_czx_decorated_operator},
     $O_N(A)(s,t)=O_N(\widehat T)(s,\bar t)
         =\delta_{s,t}(-1)^{\sum_i(s_is_{i+1}+s_i)}=U_a(s,t)$, and
     $O_N(B)(s,t)=\Id(s,\bar t)=\delta_{s,\bar t}=U_b(s,t)$. By (\ref{eq:asymex_klein_spin_generators}), $U_aU_b$ is the
@@ -1426,7 +1426,7 @@ in~\cite{gap:glm23_z2z2_anomaly_detector_scope}.
     and cluster-like vectors used there, without changing $S_c$.
 \end{definition}
 
-\begin{theorem}[Action on the two state pairs]
+\begin{lemma}[Action on the two state pairs]
     \label{thm:asymex_klein_spin_spaces}
     \lean{KleinSymmetry.generatorA_mulVec_constantBasis,
         KleinSymmetry.generatorB_mulVec_constantBasis,KleinSymmetry.generatorB_mulVec_const,
@@ -1445,7 +1445,7 @@ in~\cite{gap:glm23_z2z2_anomaly_detector_scope}.
         U_b u   & =u,\notag       \\
         U_b v   & =v.\notag
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -1459,7 +1459,7 @@ in~\cite{gap:glm23_z2z2_anomaly_detector_scope}.
     Linearity proves invariance of both spans.
 \end{proof}
 
-\begin{theorem}[Normalization of scalar three-cocycles]
+\begin{lemma}[Normalization of scalar three-cocycles]
     \label{thm:asymex_three_cocycle_normalization}
     \lean{TNLean.Algebra.ScalarThreeCochain.exists_isNormalized_cohomologousTo}
     \leanok
@@ -1471,7 +1471,7 @@ in~\cite{gap:glm23_z2z2_anomaly_detector_scope}.
     $\beta(g,h)=\omega(g,e,e)/\omega(e,e,h)$ and replace $\omega$ by
     $(d\beta)\omega$, where
     $d\beta(g,h,k)=\beta(g,hk)\beta(h,k)/(\beta(g,h)\beta(gh,k))$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -1486,7 +1486,7 @@ in~\cite{gap:glm23_z2z2_anomaly_detector_scope}.
     makes each identity-axis value of $(d\beta)\omega$ equal to one.
 \end{proof}
 
-\begin{theorem}[Triviality from the Klein diagonal signs]
+\begin{lemma}[Triviality from the Klein diagonal signs]
     \label{thm:asymex_klein_trivial_diagonal}
     \lean{TNLean.Algebra.ScalarThreeCochain.isTrivialGaugeClass_of_klein_diagonal_eq_one}
     \leanok
@@ -1495,7 +1495,7 @@ in~\cite{gap:glm23_z2z2_anomaly_detector_scope}.
     \cite[Section~6]{GarreRubio2023MPOSym}, a normalized three-cocycle on
     $G=\{e,a,b,c=ab\}\cong\Z_2^2$ whose diagonal values $\omega(g,g,g)$ are
     all one is a coboundary.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -1521,7 +1521,7 @@ in~\cite{gap:glm23_z2z2_anomaly_detector_scope}.
     and $\omega=d\beta$.
 \end{proof}
 
-\begin{theorem}[Complete classification of Klein three-cocycles]
+\begin{lemma}[Complete classification of Klein three-cocycles]
     \label{thm:asymex_klein_complete_classification}
     \lean{TNLean.Algebra.ScalarThreeCochain.cohomologousTo_of_klein_diagonal_eq,
         TNLean.Algebra.ScalarThreeCochain.cohomologousTo_iff_klein_cyclicInvariant_eq,
@@ -1549,7 +1549,7 @@ in~\cite{gap:glm23_z2z2_anomaly_detector_scope}.
     the source states it for $U(1)$, and the degree-three comparison of the
     two coefficient groups is not formalized
     here~\cite{gap:glm23_klein_h3_circle_coefficients}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -1558,13 +1558,13 @@ in~\cite{gap:glm23_z2z2_anomaly_detector_scope}.
         thm:mpug_cyclic_invariant_gauge,thm:mpug_h3_group_cohomology}
     After normalizing both cocycles, their quotient has trivial diagonal
     precisely when their three signs agree, so
-    Theorem~\ref{thm:asymex_klein_trivial_diagonal} proves sufficiency of
+    Lemma~\ref{thm:asymex_klein_trivial_diagonal} proves sufficiency of
     (\ref{eq:asymex_klein_complete_detectors}). Necessity follows from
     invariance of the cyclic products under coboundaries.
     The cocycle equation at $(g,g,g,g)$ makes each normalized diagonal
     value a sign. If the signs are $(-1)^p,(-1)^q,(-1)^t$, the matching
     representative is $\omega_{p,q,p+q+t}$.
-    Theorem~\ref{thm:asymex_klein_distinct_classes} proves uniqueness.
+    Lemma~\ref{thm:asymex_klein_distinct_classes} proves uniqueness.
     Finally $\omega_{pqr}\omega_{p'q'r'}=\omega_{p+p',q+q',r+r'}$, so
     this bijection of cohomology classes is a group isomorphism.
 \end{proof}
@@ -1579,7 +1579,7 @@ in~\cite{gap:glm23_z2z2_anomaly_detector_scope}.
     and $T_{ab}=\widehat T$ the decorated CZX tensor.
 \end{definition}
 
-\begin{theorem}[Normality and anomaly of the printed symmetry]
+\begin{lemma}[Normality and anomaly of the printed symmetry]
     \label{thm:asymex_klein_printed_anomaly}
     \lean{KleinSymmetry.tensorA_isNormal,KleinSymmetry.mpo_printedFamily,
         KleinSymmetry.printedFamily_isNormalRepresentation,
@@ -1603,7 +1603,7 @@ in~\cite{gap:glm23_z2z2_anomaly_detector_scope}.
     Its class $[\omega]\in H^3(\Z_2\times\Z_2,\C^\times_{\mathrm{triv}})$
     is nonzero and admits a normalized representative $\nu$
     with $\nu(ab,ab,ab)=-1$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -1614,7 +1614,7 @@ in~\cite{gap:glm23_z2z2_anomaly_detector_scope}.
         thm:asymex_three_cocycle_normalization,
         thm:mpug_h3_group_cohomology,thm:mpug_family_restriction_omega}
     The equalities $O_N(T_g)=U_g$ are
-    Theorem~\ref{thm:asymex_klein_spin_representation} for $g=a,b,ab$ and
+    Lemma~\ref{thm:asymex_klein_spin_representation} for $g=a,b,ab$ and
     the identity tensor for $g=e$. On the physical alphabet
     $\{0,1\}^2$ let $\varphi(i,j)=(i,1-j)$. Then
     $A^{\varphi(i,j)}=\widehat T^{ij}$, so $A^{\varphi\circ w}=\widehat T^{w}$ for every
@@ -1626,15 +1626,15 @@ in~\cite{gap:glm23_z2z2_anomaly_detector_scope}.
     Restriction to $\{e,ab\}$ gives exactly the decorated CZX family; let
     $\omega_{\mathrm{CZX}}$ be the anomaly of its fusion tensors and write
     $ab$ also for the generator of $\{e,ab\}$. Restricting the fusion
-    tensors (Theorem~\ref{thm:mpug_family_restriction_omega}) and using
+    tensors (Lemma~\ref{thm:mpug_family_restriction_omega}) and using
     invariance of the cyclic product under a change of fusion tensors
-    (Theorem~\ref{thm:mpug_cyclic_invariant_gauge}) gives
+    (Lemma~\ref{thm:mpug_cyclic_invariant_gauge}) gives
     \begin{align}
         \omega(ab,e,ab)\,\omega(ab,ab,ab)
          & =\omega_{\mathrm{CZX}}(ab,e,ab)\,\omega_{\mathrm{CZX}}(ab,ab,ab)=-1,
         \notag
     \end{align}
-    the last value by Theorem~\ref{thm:asymex_czx_decorated_anomaly_class}.
+    the last value by Lemma~\ref{thm:asymex_czx_decorated_anomaly_class}.
     This proves (\ref{eq:asymex_klein_printed_anomaly}). A trivial class would have
     cyclic product one, so the gauge class is nontrivial; by
     Theorem~\ref{thm:mpug_h3_group_cohomology} the class
@@ -1683,7 +1683,7 @@ in~\cite{gap:glm23_z2z2_anomaly_detector_scope}.
     \uses{thm:asymex_klein_printed_anomaly,thm:asymex_z2z2_anomaly_class,
         thm:mpug_family_restriction_omega,thm:mpug_cyclic_invariant_gauge,
         thm:asymex_klein_complete_classification}
-    As in the proof of Theorem~\ref{thm:asymex_klein_printed_anomaly},
+    As in the proof of Lemma~\ref{thm:asymex_klein_printed_anomaly},
     each cyclic product is computed on a restriction of the family with
     chosen fusion tensors. On $\{e,b\}$ all tensors have bond dimension one,
     $B$ squares to the identity tensor letter by letter, and the one-by-one
@@ -1700,14 +1700,14 @@ in~\cite{gap:glm23_z2z2_anomaly_detector_scope}.
     agree on every letter $u_i\otimes u_i\otimes u_i$ of the triple product.
     Hence $\omega(a,e,a)\,\omega(a,a,a)=1$; reading the cyclic product off
     the two fusion trees of an order-two family with a bond-two generator is
-    the step used in Theorem~\ref{thm:asymex_z2z2_anomaly_class}. Together with
+    the step used in Lemma~\ref{thm:asymex_z2z2_anomaly_class}. Together with
     (\ref{eq:asymex_klein_printed_anomaly}), the three cyclic products are
     those of $\omega_{001}$, and
-    Theorem~\ref{thm:asymex_klein_complete_classification} identifies the
+    Lemma~\ref{thm:asymex_klein_complete_classification} identifies the
     class. For normalized $\nu$ the cyclic products are the diagonal values.
 \end{proof}
 
-\begin{theorem}[L-symbol relations of the printed symmetry]
+\begin{lemma}[L-symbol relations of the printed symmetry]
     \label{thm:asymex_klein_printed_l_symbols}
     \lean{KleinSymmetry.lSymbol_signs_printedFamily}
     \leanok
@@ -1729,13 +1729,13 @@ in~\cite{gap:glm23_z2z2_anomaly_detector_scope}.
     relation for $a$ relates the two blocks in the phase $H_b$, and that for
     $b$ in the phase $H_a$; the source attaches them to $H_a$ and $H_b$
     respectively~\cite{gap:glm23_klein_printed_anomaly_scope}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:asymex_klein_printed_anomaly_class,thm:asymex_l_symbol_normalization}
     Each nonidentity element is an involution, so
-    Theorem~\ref{thm:asymex_l_symbol_normalization} gives
+    Lemma~\ref{thm:asymex_l_symbol_normalization} gives
     $L^x_{g,g}=\nu(g,g,g)L^{g\cdot x}_{g,g}$, and substituting the diagonal
     values (\ref{eq:asymex_klein_printed_diagonal}) yields the three relations.
 \end{proof}

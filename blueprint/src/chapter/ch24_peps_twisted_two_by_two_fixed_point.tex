@@ -1,7 +1,7 @@
 % SCP10, Definition 5.6, Theorem 5.9 and Observation 6.6.
 % Native periodic closures and coherent sums; physical periods at least three.
 
-\begin{theorem}[Physical support isometry uniform in inserted bonds]%
+\begin{lemma}[Physical support isometry uniform in inserted bonds]%
     \label{thm:peps_inserted_physical_support_transport}
     \lean{TNLean.PEPS.graphPhysicalProductMap_graphInsertedBondNetwork,
         TNLean.PEPS.graphInsertedBondNetwork_mem_range_productSiteMap,
@@ -20,10 +20,10 @@
         \Psi_B(K).
         \label{eq:peps_inserted_support_transport}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_g_isometric_physical_transport}
-    Theorem~\ref{thm:peps_g_isometric_physical_transport} provides the local
+    Lemma~\ref{thm:peps_g_isometric_physical_transport} provides the local
     normalized-adjoint maps $F_v$ and constants $c_{A,v},c_{B,v}>0$ before
     choosing $K$, whose column Gram identities make $\bigotimes_v F_v$
     isometric on $\bigotimes_v\operatorname{ran}\mathcal P(A_v)$. Expanding
@@ -46,7 +46,7 @@
     and vertical insertions on the top leg in the native downward orientation.
 \end{definition}
 
-\begin{theorem}[Exact twisted geometric grouping]%
+\begin{lemma}[Exact twisted geometric grouping]%
     \label{thm:peps_twisted_two_by_two_geometry}
     \lean{TNLean.PEPS.twoByTwoSiteLegs_permutation,
         TNLean.PEPS.torusBondNetwork_perm_eq_twoByTwoTiledSum,
@@ -65,7 +65,7 @@
     scalar factor. In particular, a native closure $(g_0,h_0)$ (without
     assuming symmetry or $g_0h_0=h_0g_0$) becomes the closure $(g_0,h_0)$ for
     $L^{(2)}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{def:peps_twisted_two_by_two_coordinates}
     Reindexing the fine bonds of Definition~\ref{def:peps_twisted_two_by_two_coordinates}
@@ -87,7 +87,7 @@
     downward vertical seam.
 \end{definition}
 
-\begin{theorem}[Native, paired, and ordered inserted contractions]%
+\begin{lemma}[Native, paired, and ordered inserted contractions]%
     \label{thm:peps_twisted_torus_graph_coordinates}
     \lean{TNLean.PEPS.graphInsertedBondNetwork_equiv,
         TNLean.PEPS.graphInsertedBondNetwork_torusIncidentFamily,
@@ -104,19 +104,19 @@
     closure equals the inserted coarse contraction of its four-site tensors
     with two regular labels on each bond, and reversal acts by
     $L_u^{\mathsf T}=L_{u^{-1}}$ on both single and bundled regular bonds.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{def:peps_twisted_torus_ordered_labels,
         thm:peps_twisted_two_by_two_geometry}
     Under the incidence-coordinate and endpoint bijections of
     Definition~\ref{def:peps_twisted_torus_ordered_labels} and
-    Theorem~\ref{thm:peps_twisted_two_by_two_geometry}, left-multiplication
+    Lemma~\ref{thm:peps_twisted_two_by_two_geometry}, left-multiplication
     permutation matrices satisfy $L_u^{\mathsf T}=L_{u^{-1}}$ on both single
     and paired labels, matching native and ordered contraction factors at every
     endpoint.
 \end{proof}
 
-\begin{theorem}[Inserted bonds preserve the surplus Bell state]%
+\begin{lemma}[Inserted bonds preserve the surplus Bell state]%
     \label{thm:peps_inserted_regular_surplus}
     \lean{TNLean.PEPS.regularBundleMatrix_transpose,
         TNLean.PEPS.regularSurplusCoordinates_twisted,
@@ -131,19 +131,19 @@
     A single physical-support isometry maps every bundled inserted state to
     this form with the same local normalization factors and normalized Bell
     product.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_inserted_physical_support_transport,
         thm:peps_regular_graph_surplus_factorization}
     At a twisted head, $(ua)^{-1}(ub_k)=a^{-1}b_k$ leaves the relative labels
     invariant; summing over $a$ gives the original inserted contraction while
     the independent relative sums give the surplus equality vectors as in
-    Theorem~\ref{thm:peps_regular_graph_surplus_factorization}, and
-    Theorem~\ref{thm:peps_inserted_physical_support_transport} supplies the
+    Lemma~\ref{thm:peps_regular_graph_surplus_factorization}, and
+    Lemma~\ref{thm:peps_inserted_physical_support_transport} supplies the
     uniform physical-support isometry.
 \end{proof}
 
-\begin{theorem}[Nonzero native closures in one fine physical support]%
+\begin{lemma}[Nonzero native closures in one fine physical support]%
     \label{thm:peps_twisted_two_by_two_support}
     \lean{TNLean.PEPS.IsGIsometric.torusLegRep_of_regularFourLeg,
         TNLean.PEPS.IsGIsometric.regularFourLegClosure_ne_zero,
@@ -154,18 +154,18 @@
     nonzero, and on a doubled torus with coarse periods at least $3$, all fine
     closure vectors lie in the pullback of the product block physical support
     under the physical grouping unitary.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_twisted_torus_graph_coordinates,
         thm:peps_inserted_physical_support_transport}
     The closure self-overlap equals a positive site factor times a positive
     power of $|G|$ times $|\{k\in G:kg_0=g_0k,\ kh_0=h_0k\}|\ge1$, so the
     closure is nonzero; support membership follows from
-    Theorems~\ref{thm:peps_twisted_torus_graph_coordinates} and
+    Lemmas~\ref{thm:peps_twisted_torus_graph_coordinates} and
     \ref{thm:peps_inserted_physical_support_transport}.
 \end{proof}
 
-\begin{theorem}[Uniform twisted fixed point and coherent superpositions]%
+\begin{lemma}[Uniform twisted fixed point and coherent superpositions]%
     \label{thm:peps_twisted_two_by_two_fixed_point}
     \lean{TNLean.PEPS.physicalStateProduct_sum,
         TNLean.PEPS.LinearIsometry.coherent_physicalStateProduct,
@@ -186,13 +186,13 @@
     $y=\sum_{g,h}z_{g,h}\Psi_c(g,h)$ gives $Ix=R\,y\otimes\Omega$,
     $x\ne0\iff y\ne0$, and $I\widehat x=\widehat y\otimes\Omega$ whenever
     $x\ne0$ (in particular for coherent sums over commuting pairs $gh=hg$).
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_twisted_two_by_two_support,
         thm:peps_inserted_regular_surplus,
         thm:peps_two_by_two_original_scale,
         thm:peps_physical_state_normalization}
-    Combining Theorems~\ref{thm:peps_twisted_two_by_two_support},
+    Combining Lemmas~\ref{thm:peps_twisted_two_by_two_support},
     \ref{thm:peps_inserted_regular_surplus},
     \ref{thm:peps_two_by_two_original_scale}, and
     \ref{thm:peps_physical_state_normalization} gives

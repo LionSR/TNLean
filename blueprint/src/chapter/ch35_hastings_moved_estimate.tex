@@ -12,7 +12,7 @@ the distance to the ground-state projector only slightly. This section states
 the estimate for finite complex matrices with explicit constants. Norms are
 operator norms.
 
-\begin{theorem}[A nearly invariant projection next to the ground-state projector]
+\begin{lemma}[A nearly invariant projection next to the ground-state projector]
     \label{thm:hastings_ground_projector_mul}
     \lean{TNLean.MPS.AreaLaw.Hastings.norm_groundProjector_mul_sub_le}
     \leanok
@@ -21,7 +21,7 @@ operator norms.
         \bigl\||\Omega\rangle\langle\Omega|\,O-|\Omega\rangle\langle\Omega|\bigr\|
         \le\|\Omega-O\Omega\|.
     \end{align*}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Taking adjoints, the norm equals that of
     $(O-1)|\Omega\rangle\langle\Omega|$, which maps $x$ to
@@ -29,7 +29,7 @@ operator norms.
     bounds its norm by $\|x\|\,\|O\Omega-\Omega\|$.
 \end{proof}
 
-\begin{theorem}[The cut-offs next to the Gaussian time average]
+\begin{lemma}[The cut-offs next to the Gaussian time average]
     \label{thm:hastings_moved_estimate}
     \lean{TNLean.MPS.AreaLaw.Hastings.norm_gaussianTimeAverage_mul_sub_groundProjector_le,
         TNLean.MPS.AreaLaw.Hastings.norm_gaussianTimeAverage_mul_mul_sub_groundProjector_le}
@@ -37,7 +37,7 @@ operator norms.
     \uses{def:hastings_gaussian_time_average,
         thm:hastings_gaussian_time_average_gap}
     Let $H$, $\Omega$ and $\Delta E>0$ satisfy the hypotheses of
-    Theorem~\ref{thm:hastings_gaussian_time_average_gap}, and let $M$ be
+    Lemma~\ref{thm:hastings_gaussian_time_average_gap}, and let $M$ be
     Hermitian with $\|M-H\|\le\delta$. Let $O_L$ and $O_R$ be commuting
     orthogonal projections with $\|\Omega-O_LO_R\Omega\|\le\eta$. Then for
     every real $q$,
@@ -51,15 +51,15 @@ operator norms.
     estimate on the spectral cut-offs, this is the estimate on
     \cite[lines 865--876]{Hastings2007AreaLaw}; the term $e^{-q/2}$ is the gap
     bound of \cite[line 848]{Hastings2007AreaLaw}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:hastings_gaussian_time_average_stability,
         thm:hastings_ground_projector_mul}
     Write $P_0=|\Omega\rangle\langle\Omega|$ and $O=O_LO_R$, an orthogonal
     projection since the factors commute. Then
     $P_q(M)O-P_0=(P_q(M)-P_0)O+(P_0O-P_0)$. Since $\|O\|\le1$,
-    Theorem~\ref{thm:hastings_gaussian_time_average_stability} bounds the
+    Lemma~\ref{thm:hastings_gaussian_time_average_stability} bounds the
     first term by $e^{-q/2}+\sqrt q\,\delta/\Delta E$, and
-    Theorem~\ref{thm:hastings_ground_projector_mul} bounds the second by
+    Lemma~\ref{thm:hastings_ground_projector_mul} bounds the second by
     $\eta$.
 \end{proof}

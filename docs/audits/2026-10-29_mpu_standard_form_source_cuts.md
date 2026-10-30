@@ -24,11 +24,23 @@ converse transports its antecedent with the existing explicit dictionary.
 A final equivalence combines this with the forward theorem; the forward
 implication derives the rank identifications appearing on its right side.
 
-Remaining: arbitrary supplied standard-form presentations, transposition,
-and exact-head hosted validation. The chosen simple reduced
-canonical construction remains a load-bearing restriction. The exact source
-proposition and auxiliary Blueprint entries all remain `notready`; #7020 stays
-open. The new phase/factor/assembly/converse proofs are source-written and uncompiled.
+Hosted job `123610345177`, with exact `PR_HEAD_SHA`
+`d3ba9df6ef28bc51fcf96ee4ffde1f17e8072ff9`, completed the full Lean build
+(14,992 jobs) and reports all 14 changed-file strict checks as `ok`, ending
+`All strict Lean checks passed`. This includes both final necessity/converse
+modules, actual source cuts, normalized physical-adjoint/scalar/standard-form
+factors, both even-family comparisons, and the repaired physical-blocking owner.
+The existing rank-reindex owner also compiled in that same job. The eight
+matching scoped Blueprint lemmas and their proofs are now `leanok`. This
+documentation update changes no Lean source bytes relative to that exact
+compiled head.
+
+Remaining: the unrestricted source proposition still requires removal of the
+canonical chosen-presentation restriction. The source proposition and the old
+admissible entry remain `notready`; #7020 remains open. Newer drafts #10360 and
+#10377 separately extend to arbitrary supplied standard forms with an explicit
+canonical ambient presentation and to transposition, and their proofs are not
+covered by this job. Blueprint web/PDF and timing jobs have separate status.
 No local Lean build, elaboration, compilation or cache mutation was run.
 
 Source review also found that rank relabeling already belongs to
@@ -367,3 +379,14 @@ physical and bond dimension variables, which ordinary implicit inference
 accepted but strict `autoImplicit=false` rejected. Both dimensions are now
 declared at that namespace boundary. No statement changed and no local Lean
 command was run. Exact repaired-head acceptance remains pending.
+
+## Exact-head acceptance of the final repaired source
+
+On 2026-10-29, decoded hosted job `123610345177` was independently checked for
+its exact `d3ba9df6ef28bc51fcf96ee4ffde1f17e8072ff9` PR head. The full build
+and all strict changed-file checks passed. In particular the reopened namespace
+repair in `PhysicalBlocking.lean` passed strict checking, resolving the last
+failure of `160dc15b5`. The readiness change covers only the eight scoped
+Blueprint statements whose complete anchor lists belong to modules accepted by
+that full build (all changed sources also passed strict checks); the unrestricted
+source claim is unchanged.

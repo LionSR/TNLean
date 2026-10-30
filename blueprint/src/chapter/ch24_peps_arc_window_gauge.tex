@@ -12,7 +12,7 @@
     coordinate exchange in the opposite direction.
 \end{definition}
 
-\begin{theorem}[Arc windows and translations under coordinate exchange]%
+\begin{lemma}[Arc windows and translations under coordinate exchange]%
     \label{thm:peps_torus_coordinate_swap_windows}
     \lean{TNLean.PEPS.Region_map_torusCoordinateSwap_arcRectangle}
     \lean{TNLean.PEPS.NormalTorusArcWindowInjectivityHypotheses.transportCoordinateSwap}
@@ -27,7 +27,7 @@
     Consequently, translation invariance and injectivity of every
     cyclic $L\times K$ window are preserved, with the side lengths
     exchanged.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{def:peps_torus_coordinate_swap, thm:peps_graph_transport_composition,
@@ -38,7 +38,7 @@
     give translation invariance of the relabelled tensor.
 \end{proof}
 
-\begin{theorem}[Equality of all bond dimensions from normal arc windows]%
+\begin{lemma}[Equality of all bond dimensions from normal arc windows]%
     \label{thm:peps_arc_window_all_bond_dimensions}
     \lean{TNLean.PEPS.bondDim_eq_of_normalArcWindows_sameState}
     \leanok
@@ -49,7 +49,7 @@
     (Definition~\ref{def:peps_normal_torus_arc_window_tensor}), where
     $L,K>0$, $2L+1\leq w$, and $2K+1\leq h$. Then $D_A(e)=D_B(e)$ at
     every edge $e$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_staircase_cross_tensor_bond_dimension,
@@ -64,7 +64,7 @@
     edge dimension.
 \end{proof}
 
-\begin{theorem}[A covariant absorbed gauge family from two reference edges]%
+\begin{lemma}[A covariant absorbed gauge family from two reference edges]%
     \label{thm:peps_absorbed_family_reference_witnesses}
     \lean{TNLean.PEPS.exists_torusCovariantAbsorbedGaugeFamily_of_edgeReferenceWitnesses}
     \leanok
@@ -90,7 +90,7 @@
     where $X\cdot B$ denotes the tensor obtained by the edge gauges
     and the matrix on the right is identified by the matched bond
     dimensions.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{def:peps_absorbedBoundaryGauge,

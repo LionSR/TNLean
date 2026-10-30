@@ -98,7 +98,7 @@ periodic operators.
     \uses{thm:asym_weighted_compression}
     On the pair alphabet $(i,j)$, the operator identity equates the periodic
     vectors of $B$ with those of $\bigoplus_\gamma \lambda_\gamma M_\gamma$,
-    so Theorem~\ref{thm:asym_weighted_compression} gives the mutually
+    so Lemma~\ref{thm:asym_weighted_compression} gives the mutually
     biorthogonal compression pairs and the nilpotent remainder.
 \end{proof}
 
@@ -183,7 +183,7 @@ periodic operators.
     The periodic vectors of $T\cdot A_x$ are the images of those of $A_x$
     under the periodic operators of $T$, so
     Corollary~\ref{cor:asym_single_block} and
-    Theorem~\ref{thm:asym_weighted_compression} give the single-block and
+    Lemma~\ref{thm:asym_weighted_compression} give the single-block and
     weighted multi-block reductions of $T\cdot A_x$.
 \end{proof}
 
@@ -206,7 +206,7 @@ periodic operators.
 \begin{proof}
     \leanok
     \uses{prop:asym_compression_trace}
-    Proposition~\ref{prop:asym_compression_trace} on the pair alphabet for
+    Lemma~\ref{prop:asym_compression_trace} on the pair alphabet for
     the stacked product, and on the physical alphabet for $T\cdot A_x$,
     equates the periodic word traces with the sums over $s\in S$; the
     definitions of $O_N$ and of $T\cdot A_x$ then give the two periodic
@@ -221,7 +221,7 @@ nonnegative integer multiplicities: $O_N(M_a)O_N(M_b)=\sum_c
     N_{ab}^cO_N(M_c)$ for every $N\geq1$ \cite{GarreRubio2023MPOSym}. Each copy
 of a channel $c$ is then a separate block of the reduction.
 
-\begin{theorem}[Reduction onto blocks with multiplicity]
+\begin{lemma}[Reduction onto blocks with multiplicity]
     \label{thm:asym_multiplicity_reductions}
     \lean{MPSTensor.exists_multiBlockCompression_sigma_of_isNormal,
         MPSTensor.exists_multiplicityReductions_of_isNormal}
@@ -236,7 +236,7 @@ of a channel $c$ is then a separate block of the reduction.
     $V_{c,\mu}B^{i_1}\cdots B^{i_N}W_{c,\mu}=C_c^{i_1}\cdots C_c^{i_N}$ for
     every $N\geq0$, and every product of at least $D$ matrices of the
     remainder $B^i-\sum_{c,\mu}W_{c,\mu}C_c^iV_{c,\mu}$ vanishes.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -261,7 +261,7 @@ of a channel $c$ is then a separate block of the reduction.
     $O_N(M_a)O_N(M_b)=\sum_cN_{ab}^cO_N(M_c)$ for every $N\geq1$. Then
     the stacked product of $M_a$ and $M_b$ has fusion tensors
     $V_{ab}^{c,\mu}$, $W_{ab}^{c,\mu}$, $\mu<N_{ab}^c$, as in
-    Theorem~\ref{thm:asym_multiplicity_reductions}, with nilpotency order
+    Lemma~\ref{thm:asym_multiplicity_reductions}, with nilpotency order
     at most $\chi_a\chi_b$. Likewise, if
     $O_N(T)\ket{V^{(N)}(A_x)}=\sum_yM_y\ket{V^{(N)}(A_y)}$ for every
     $N\geq1$ with normal $A_y$ of positive bond dimension, then
@@ -274,7 +274,7 @@ of a channel $c$ is then a separate block of the reduction.
     The periodic vectors of the stacked product on the pair alphabet are
     the matrix entries of $O_N(M_a)O_N(M_b)$, and those of $T\cdot A_x$
     are the entries of $O_N(T)\ket{V^{(N)}(A_x)}$, so
-    Theorem~\ref{thm:asym_multiplicity_reductions} yields the fusion and
+    Lemma~\ref{thm:asym_multiplicity_reductions} yields the fusion and
     action tensors together with the nilpotency bound $\chi_a\chi_b$.
 \end{proof}
 
@@ -298,7 +298,7 @@ of a channel $c$ is then a separate block of the reduction.
     \leanok
     \uses{thm:mps_reduction_boundary_dressed_uniqueness}
     Viewing $B$ and $M_c$ as tensors on the pair alphabet,
-    Theorem~\ref{thm:mps_reduction_boundary_dressed_uniqueness} gives a
+    Lemma~\ref{thm:mps_reduction_boundary_dressed_uniqueness} gives a
     nonzero scalar $z$ satisfying both boundary-dressed relations for all
     words of length greater than $2K$.
 \end{proof}

@@ -34,7 +34,7 @@ linkwise matching in \cite[Definition~5.1]{Schuch2010PEPS}.
     $S\beta=(\beta_{e,+},\beta_{e,-})_{e\in\mathcal E}$.
 \end{definition}
 
-\begin{theorem}[Incidence products and sums]%
+\begin{lemma}[Incidence products and sums]%
     \label{thm:peps_dependent_incidence_sums}
     \lean{TNLean.Lattice.DependentBondNetwork.prod_incident_eq_prod_endpoint,
         TNLean.Lattice.DependentBondNetwork.prod_endpoint_eq_prod_edge,
@@ -51,7 +51,7 @@ linkwise matching in \cite[Definition~5.1]{Schuch2010PEPS}.
         =\prod_e\sum_{a,b\in X_e}f_e(a,b).
         \label{eq:peps_dependent_incidence_sum}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The sets $I_v$ partition the incidence set. Regroup first by this
     partition and then by the two signs of each bond. For the sum, change
@@ -111,7 +111,7 @@ linkwise matching in \cite[Definition~5.1]{Schuch2010PEPS}.
     The function $M$ may correlate all cut indices.
 \end{definition}
 
-\begin{theorem}[Fixed cut configurations and bond matrices]%
+\begin{lemma}[Fixed cut configurations and bond matrices]%
     \label{thm:peps_dependent_cut_basis}
     \lean{TNLean.Lattice.DependentBondNetwork.cutMap_eq_sum_single,
         TNLean.Lattice.DependentBondNetwork.cutSpace_eq_span_single,
@@ -139,7 +139,7 @@ linkwise matching in \cite[Definition~5.1]{Schuch2010PEPS}.
     $|\eta_{e,+}\rangle\langle\eta_{e,-}|$ on $C$, and $I$ elsewhere.
     Then $M_{E^\eta}=\delta_\eta$ and
     $\mathcal C_{A,C}(\delta_\eta)=\mathcal N_A(E^\eta)$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{def:peps_dependent_cut, def:peps_dependent_network}
     Expand $M=\sum_\eta M(\eta)\delta_\eta$ and use linearity.
@@ -165,7 +165,7 @@ linkwise matching in \cite[Definition~5.1]{Schuch2010PEPS}.
     \end{align}
 \end{definition}
 
-\begin{theorem}[Products, single-coordinate actions, and fixed slices]%
+\begin{lemma}[Products, single-coordinate actions, and fixed slices]%
     \label{thm:peps_dependent_product_calculus}
     \lean{TNLean.Lattice.dependentPhysicalProductFamilyMatrix_mul,
         TNLean.Lattice.dependentPhysicalProductFamilyMap_comp,
@@ -182,7 +182,7 @@ linkwise matching in \cite[Definition~5.1]{Schuch2010PEPS}.
     $\psi(\tau)\mapsto\sum_sP_v(\tau_v,s)\psi(\tau[v\leftarrow s])$.
     If each $P_v$ fixes every slice $s\mapsto\psi(\tau[v\leftarrow s])$,
     then $\bigotimes_vP_v$ fixes $\psi$; the $P_v$ need not be projections.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Finite distributivity separates the intermediate sum in a matrix product
     into one sum at each coordinate. Identity entries force equality of
@@ -191,7 +191,7 @@ linkwise matching in \cite[Definition~5.1]{Schuch2010PEPS}.
     using the one-coordinate formula and coordinatewise composition.
 \end{proof}
 
-\begin{theorem}[A product range is determined by its slices]%
+\begin{lemma}[A product range is determined by its slices]%
     \label{thm:peps_dependent_product_range}
     \lean{TNLean.Lattice.dependentPhysicalProductFamilyMap_slice_mem_range,
         TNLean.Lattice.mem_range_dependentPhysicalProductFamilyMap_iff}
@@ -209,7 +209,7 @@ linkwise matching in \cite[Definition~5.1]{Schuch2010PEPS}.
     \end{align}
     Empty alphabets, an empty vertex set, zero matrices, and different local
     ranks are allowed.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_dependent_product_calculus}
     For the forward implication, expand a slice as a sum of columns of
