@@ -45,6 +45,20 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Conjugating a rectangular unitary identity — promoted (2026-10-29)
+
+- **Pattern:** Commute entrywise complex conjugation with the adjoint and
+  matrix multiplication, then transport the two identities `Aᴴ * A = 1`
+  and `A * Aᴴ = 1` through conjugation.
+- **Seen:** The two gates in `TwoSiteStandardFormData.mapStar` in
+  `MPS/MPU/ConjugationSymmetry.lean`, and the supplied source gate in
+  `IsMPUCanonicalFormII.exists_local_conjugation_gauges` in
+  `MPS/MPU/ConjugationSourceFactors.lean`.
+- **Abstraction:** `Matrix.IsUnitaryBetween.map_star` in
+  `MPS/MPU/ConjugationSymmetry.lean` transports both identities at once.
+- **Notes:** No new matrix predicate or parallel standard-form structure was
+  introduced. The supplied half factors and gates are conjugated directly.
+
 ### Identity site translation — promoted (2026-10-28)
 
 - **Pattern:** Unfold the matrix of a site permutation and rewrite the identity
