@@ -219,6 +219,32 @@ theorem iSup_range_localObservable_evenPair (d : ℕ) [NeZero d] :
   exact range_localObservable_biUnion_evenPair_le d _
     (range_localObservable_mono d (subset_biUnion_evenPair Λ) ⟨a, rfl⟩)
 
+/-- Continuous star-algebra homomorphisms on the quasi-local algebra
+are determined by their values on every physical even pair. The existing
+algebraic even-pair generation and completion density supply the proof.
+Source: Schumacher–Werner, Lemma localrule, lines 341–365; GNVW,
+local tensor-product generation, lines 592–596. -/
+theorem quasiLocalStarAlgHom_ext_evenPair [NeZero d]
+    (f g : QuasiLocalAlgebra d →⋆ₐ[ℂ] QuasiLocalAlgebra d)
+    (hf : Continuous f) (hg : Continuous g)
+    (h : ∀ (x : ℤ) (A : LocalAlgebra d (evenPair x)),
+      f (quasiLocalObservable d (evenPair x) A) =
+        g (quasiLocalObservable d (evenPair x) A)) : f = g := by
+  let S := StarAlgHom.equalizer (f.comp (algebraicToQuasiLocal d))
+    (g.comp (algebraicToQuasiLocal d))
+  have hle : (⨆ x : ℤ, (localObservable d (evenPair x)).range) ≤ S := by
+    refine iSup_le fun x => ?_
+    rintro _ ⟨A, rfl⟩
+    exact h x A
+  have hlocal (A : AlgebraicLocalAlgebra d) :
+      f (algebraicToQuasiLocal d A) = g (algebraicToQuasiLocal d A) :=
+    hle (by rw [iSup_range_localObservable_evenPair]; exact StarSubalgebra.mem_top)
+  apply DFunLike.ext
+  intro X
+  induction X using UniformSpace.Completion.induction_on with
+  | hp => exact isClosed_eq hf hg
+  | ih A => exact hlocal A
+
 /-- Commuting with the automorphic images of every even-pair algebra
 implies commutation with the full quasi-local algebra. This is the intermediate
 generation argument needed for the strict-inclusion step of GNVW,
