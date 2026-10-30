@@ -9810,6 +9810,20 @@ there is no need for a new tactic.
   coefficient lemmas, without a new weighted state or density-matrix layer.
 - **Decision:** A mathematical lemma suffices; no custom tactic is needed.
 
+### Translated interaction sections — candidate (2026-10-29)
+
+- **Seen:** the private canonical-parent restriction proof in
+  `MPS/ParentHamiltonian/Martingale/Transport.lean` and the arbitrary-interaction
+  proof in `MPS/ParentHamiltonian/Martingale/PeriodicInteractionSections.lean`.
+- **Pattern:** Restrict an identity-extended interaction to its own window,
+  identify the unchanged outside coordinates, and recover the inserted word.
+- **Abstraction:** The latter module exposes
+  `cyclicRestrictES_periodicLocalInteractionES` for arbitrary local operators.
+  The earlier canonical proof occurs before this module in the import order;
+  sharing it would require moving the general definition before that proof.
+- **Decision:** Record the two occurrences; do not introduce a tactic or an
+  import cycle for this small coordinate identity.
+
 ### Weighted geometric sums grouped by their anchors — promoted (2026-10-28)
 
 - **Seen:** `Lattice/LowEnergyCommutatorSum.lean`,
