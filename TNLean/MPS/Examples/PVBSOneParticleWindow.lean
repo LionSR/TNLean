@@ -102,11 +102,11 @@ theorem pvbsEdge_snoc (q : ℂ) (N : ℕ) (σ : Cfg 2 N) (i : Fin 2) :
       if i = 0 then pvbsEdge q (N + 1) (Fin.cons a τ)
       else q ^ (N + 1) * pvbsVacuum (N + 1) (Fin.cons a τ)
     rw [← Fin.cons_snoc_eq_snoc_cons]
-    have ha : a = 0 ∨ a = 1 := (eq_or_ne a 0).imp id (Fin.eq_one_of_ne_zero a)
-    have hi : i = 0 ∨ i = 1 := (eq_or_ne i 0).imp id (Fin.eq_one_of_ne_zero i)
-    rcases ha with rfl | rfl <;> rcases hi with rfl | rfl <;>
-      simp [pvbsEdge_cons_zero, pvbsEdge_cons_one, pvbsVacuum_cons, pvbsVacuum_snoc,
-        ih, pow_succ, mul_assoc, mul_comm, mul_left_comm]
+    obtain rfl | rfl : a = 0 ∨ a = 1 := by fin_cases a <;> simp
+    · simp only [pvbsEdge_cons_zero, ih, pvbsVacuum_cons, ↓reduceIte]
+      split_ifs <;> ring
+    · simp only [pvbsEdge_cons_one, pvbsVacuum_cons, pvbsVacuum_snoc, one_ne_zero, ↓reduceIte,
+        mul_zero]
 
 /-- At a root-of-unity weight, the actual one-particle vector spans a
 cyclically invariant line, with its geometric phase retained.
@@ -121,10 +121,11 @@ theorem pvbsEdge_cyclic_step (q : ℂ) (N : ℕ) (hq : q ^ (N + 1) = 1)
   change q * pvbsEdge q (N + 1)
       (fun j ↦ (Fin.cons a τ : Cfg 2 (N + 1)) (finRotate (N + 1) j)) =
     pvbsEdge q (N + 1) (Fin.cons a τ)
-  rw [← Fin.snoc_eq_cons_rotate, pvbsEdge_snoc]
-  rcases (eq_or_ne a 0).imp id (Fin.eq_one_of_ne_zero a) with rfl | rfl
+  rw [show (fun j ↦ (Fin.cons a τ : Cfg 2 (N + 1)) (finRotate (N + 1) j)) =
+      Fin.snoc τ a from (Fin.snoc_eq_cons_rotate τ a).symm, pvbsEdge_snoc]
+  obtain rfl | rfl : a = 0 ∨ a = 1 := by fin_cases a <;> simp
   · simp
-  · simp only [show (1 : Fin 2) ≠ 0 by decide, ite_false, pvbsEdge_cons_one]
+  · simp only [one_ne_zero, ↓reduceIte, pvbsEdge_cons_one]
     rw [← mul_assoc, ← pow_succ', hq, one_mul]
 
 /-- A nontrivial root-of-unity weight gives a vector which is not

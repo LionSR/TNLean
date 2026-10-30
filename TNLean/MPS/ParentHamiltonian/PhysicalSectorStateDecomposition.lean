@@ -49,6 +49,7 @@ private theorem mem_natAdd_word_range_iff (σ : Cfg (a + b) M) :
     funext i
     apply Fin.ext
     change a + ((σ i).val - a) = (σ i).val
+    have := hσ i
     omega
 
 /-- A vector supported on the two pure physical alphabets is the sum of the
@@ -58,10 +59,12 @@ Source: physical-sector assembly for SPWC10, Theorem 5, lines 850--880. -/
 theorem physical_sum_state_decomposition (hM : 0 < M) (ψ : MPVSpace (a + b) M)
     (hψ : ∀ (σ : Cfg (a + b) M) (i j : Fin M),
       (σ i).val < a → a ≤ (σ j).val → ψ σ = 0) :
-    ψ = (Function.Embedding.piCongrRight (fun _ : Fin M ↦ Fin.castAddEmb b))
-        .euclideanExtendByZero (WithLp.toLp 2 fun w ↦ ψ (fun i ↦ Fin.castAdd b (w i))) +
-      (Function.Embedding.piCongrRight (fun _ : Fin M ↦ Fin.natAddEmb a))
-        .euclideanExtendByZero (WithLp.toLp 2 fun w ↦ ψ (fun i ↦ Fin.natAdd a (w i))) := by
+    ψ = Function.Embedding.euclideanExtendByZero
+          (Function.Embedding.piCongrRight (fun _ : Fin M ↦ Fin.castAddEmb b))
+          (WithLp.toLp 2 fun w ↦ ψ (fun i ↦ Fin.castAdd b (w i))) +
+      Function.Embedding.euclideanExtendByZero
+          (Function.Embedding.piCongrRight (fun _ : Fin M ↦ Fin.natAddEmb a))
+          (WithLp.toLp 2 fun w ↦ ψ (fun i ↦ Fin.natAdd a (w i))) := by
   classical
   let E := Function.Embedding.piCongrRight
     (fun _ : Fin M ↦ (Fin.castAddEmb b : Fin a ↪ Fin (a + b)))
@@ -99,7 +102,7 @@ theorem physical_sum_state_decomposition (hM : 0 < M) (ψ : MPVSpace (a + b) M)
       have hnot_right : ¬ ∀ i, a ≤ (σ i).val := by
         intro h
         exact hF ((mem_natAdd_word_range_iff σ).mpr h)
-      push_neg at hnot_left hnot_right
+      push Not at hnot_left hnot_right
       obtain ⟨j, hj⟩ := hnot_left
       obtain ⟨i, hi⟩ := hnot_right
       rw [E.euclideanExtendByZero_apply_not_mem_range x _ hE,
@@ -120,11 +123,13 @@ theorem physical_sum_state_decomposition_of_projectorHamiltonian_eq_zero
         T.map
           (Function.Embedding.piCongrRight
             (fun _ : Fin R ↦ Fin.natAddEmb a)).euclideanExtendByZero.toLinearMap)ᗮ
-        .starProjection.toLinearMap) M ψ = 0) :
-    ψ = (Function.Embedding.piCongrRight (fun _ : Fin M ↦ Fin.castAddEmb b))
-        .euclideanExtendByZero (WithLp.toLp 2 fun w ↦ ψ (fun i ↦ Fin.castAdd b (w i))) +
-      (Function.Embedding.piCongrRight (fun _ : Fin M ↦ Fin.natAddEmb a))
-        .euclideanExtendByZero (WithLp.toLp 2 fun w ↦ ψ (fun i ↦ Fin.natAdd a (w i))) := by
+        |>.starProjection.toLinearMap) M ψ = 0) :
+    ψ = Function.Embedding.euclideanExtendByZero
+          (Function.Embedding.piCongrRight (fun _ : Fin M ↦ Fin.castAddEmb b))
+          (WithLp.toLp 2 fun w ↦ ψ (fun i ↦ Fin.castAdd b (w i))) +
+      Function.Embedding.euclideanExtendByZero
+          (Function.Embedding.piCongrRight (fun _ : Fin M ↦ Fin.natAddEmb a))
+          (WithLp.toLp 2 fun w ↦ ψ (fun i ↦ Fin.natAdd a (w i))) := by
   apply physical_sum_state_decomposition (by omega) ψ
   intro σ i j hi hj
   exact coeff_eq_zero_of_physical_sum_projectorHamiltonian S T hR hRM ψ hzero σ i j hi hj

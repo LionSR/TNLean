@@ -36,7 +36,7 @@ theorem ker_physical_sum_projectorHamiltonian
         T.map
           (Function.Embedding.piCongrRight
             (fun _ : Fin R ↦ Fin.natAddEmb a)).euclideanExtendByZero.toLinearMap)ᗮ
-        .starProjection.toLinearMap) M) =
+        |>.starProjection.toLinearMap) M) =
       (LinearMap.ker (periodicInteractionHamiltonianES Sᗮ.starProjection.toLinearMap M)).map
         (Function.Embedding.piCongrRight
           (fun _ : Fin M ↦ Fin.castAddEmb b)).euclideanExtendByZero.toLinearMap ⊔
@@ -68,9 +68,9 @@ theorem ker_physical_sum_projectorHamiltonian
       (Submodule.mem_map.mpr ⟨y, hcomponents.2, rfl⟩)
   · intro hψ
     obtain ⟨x, hx, y, hy, rfl⟩ := Submodule.mem_sup.mp hψ
-    obtain ⟨x, hx, rfl⟩ := Submodule.mem_map.mp hx
-    obtain ⟨y, hy, rfl⟩ := Submodule.mem_map.mp hy
+    obtain ⟨x', hx', rfl⟩ := Submodule.mem_map.mp hx
+    obtain ⟨y', hy', rfl⟩ := Submodule.mem_map.mp hy
     exact (physical_sector_projectorHamiltonian_sum_eq_zero_iff e f hdisj
-      (by omega) hRM S T x y).mpr ⟨hx, hy⟩
+      (by omega) hRM S T x' y').mpr ⟨hx', hy'⟩
 
 end MPSTensor
