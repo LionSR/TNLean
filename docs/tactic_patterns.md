@@ -9751,6 +9751,32 @@ there is no need for a new tactic.
 - **Mechanism:** An ordinary monotonicity theorem suffices.
 
 
+### Complete finite operators from fixed-exterior matrix slices — candidate (2026-10-29)
+
+- **Seen:** `MPS/MPU/TwoSiteFiniteHeisenberg.lean`, the blocked-tensor and
+  original-site full-matrix intertwiners.
+- **Pattern:** A rectangular matrix is indexed by exterior/local products.
+  Multiply by the identity/right-Kronecker local operator; sum the exterior
+  delta coefficients to recover the established slice intertwiner.
+- **Reuse:** Both proofs reuse the existing actual three-block trace theorem;
+  they do not assume a full-operator identity as a hypothesis.
+- **Decision:** Two occurrences in one file. Before a third copy, promote the
+  rectangular block multiplication identity at its generic matrix owner in
+  QICLean, and retain the actual MPU source-specific wrappers here.
+
+
+### Nested finite-chain local inclusions — promoted lemma (2026-10-29)
+
+- **Seen:** The fixed-window, full-central-interval, singleton comparison,
+  and canonical forward-family proofs in `MPS/MPU/TwoSiteBufferedAction.lean`
+  and `MPS/MPU/TwoSiteLocalAction.lean`.
+- **Pattern:** Compose two canonical local inclusions inside an actual finite
+  MPU conjugation and its algebraic-local inclusion.
+- **Promoted:** `SpinChain.finiteChainLocalObservable_localInclusion` in
+  `MPS/MPU/FiniteChainConjugation.lean` applies the existing inclusion
+  composition theorem under the actual conjugation. The downstream proofs
+  reuse this lemma rather than repeat the matrix map composition.
+
 ### Pure output Gram projection — library zero criterion (2026-10-29)
 
 - **Seen:** `Circuit/Channel/PhysicalPortPureOutput.lean`.
@@ -9885,3 +9911,13 @@ there is no need for a new tactic.
   predicate or source witness is introduced. The new result eliminates
   transient terms in commuting weighted traces rather than reproving
   stabilization or the existing unweighted nilpotent trace theorem.
+
+### Coordinate transport of a rectangular conjugation (2026-10-29)
+
+- **Seen:** `Algebra/MatrixStarEquivSpatial.lean`.
+- **Pattern:** A square unitary becomes a rectangular unitary by reindexing its columns;
+  conjugation then transports the input matrix along the same coordinate equivalence.
+- **Reuse:** `Matrix.reindexLinearEquiv_mul` receives all three equivalences explicitly,
+  and `Matrix.conjTranspose_reindex` transports the adjoint. The existing QICLean
+  Skolem–Noether theorem supplies the square implementer. No entrywise double sum
+  or duplicate Skolem–Noether argument is introduced.
