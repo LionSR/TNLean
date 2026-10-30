@@ -302,11 +302,11 @@ theorem actual_ground_energies {K : ℕ} (hK : 2 ≤ K) :
   · rw [regional_diagonal]
     exact Matrix.PosSemidef.diagonal fun σ ↦ Complex.zero_le_real.mpr (regional_nonneg K σ)
   · rw [total_diagonal]
-    simp [Ω, diagonal_mulVec_single, hH]
+    simp [Ω, diagonal_mulVec_single, ← Pi.single_smul', hH]
   · rw [total_diagonal]
     exact hdiag_lower _ fun σ ↦ (ground_lower_bounds hK σ).1
   · rw [truncated_diagonal]
-    simp [Ω, diagonal_mulVec_single, hF]
+    simp [Ω, diagonal_mulVec_single, ← Pi.single_smul', hF]
   · rw [truncated_diagonal]
     exact hdiag_lower _ fun σ ↦ (ground_lower_bounds hK σ).2
 
@@ -332,9 +332,9 @@ theorem high_vector_in_truncated_low_space {K : ℕ} (hK : 2 ≤ K) :
     simp [truncatedWeight, hA, hB, min_eq_right hKreal]
   refine ⟨by simp [ψ, EuclideanSpace.norm_eq], ?_, ?_, ?_⟩
   · rw [total_diagonal]
-    simp [ψ, diagonal_mulVec_single, totalWeight, hA, hB]
+    simp [ψ, diagonal_mulVec_single, ← Pi.single_smul', totalWeight, hA, hB]
   · rw [truncated_diagonal]
-    simp [ψ, diagonal_mulVec_single, hHt]
+    simp [ψ, diagonal_mulVec_single, ← Pi.single_smul', hHt]
   · rw [truncatedLowProjection, truncated_diagonal,
       Matrix.cfc_diagonal _ _ ((Set.finite_range _).continuousOn _)]
     norm_num [ψ, diagonal_mulVec_single, hHt]
@@ -351,15 +351,17 @@ theorem truncated_low_discrepancy_lower_bound {K : ℕ} (hK : 2 ≤ K) :
     linarith
   have hHt : truncatedWeight K (highConfig K) = 3 / 2 := by
     simp [truncatedWeight, hA, hB, min_eq_right hKreal]
+  have hnonneg : 0 ≤ (K : ℝ) - 3 / 2 := by linarith
+  have htotal : totalWeight K (highConfig K) = (K : ℝ) := by simp [totalWeight, hA, hB]
   rw [total_diagonal, truncatedLowProjection, truncated_diagonal,
     Matrix.cfc_diagonal _ _ ((Set.finite_range _).continuousOn _), diagonal_sub,
     diagonal_mul_diagonal, Matrix.l2_opNorm_diagonal]
-  have h := norm_le_pi_norm
-    (fun σ : Config K ↦ (((totalWeight K σ : ℂ) - (truncatedWeight K σ : ℂ)) *
-      ((if truncatedWeight K σ ≤ 7 / 4 then 1 else 0 : ℝ) : ℂ))) (highConfig K)
-  have hnonneg : 0 ≤ (K : ℝ) - 3 / 2 := by linarith
-  simpa [totalWeight, hA, hB, hHt, ← Complex.ofReal_sub, Complex.norm_real,
-    Real.norm_eq_abs, abs_of_nonneg hnonneg] using h
+  -- Bound the sup norm below by the entry at the high-energy configuration, whose
+  -- discrepancy weight is exactly `K - 3/2` since `3/2 ≤ 7/4` keeps it in the window.
+  refine le_trans (le_of_eq ?_) (norm_le_pi_norm _ (highConfig K))
+  simp only [htotal, hHt, if_pos (show (3 / 2 : ℝ) ≤ 7 / 4 by norm_num),
+    Complex.ofReal_one, mul_one, ← Complex.ofReal_sub, Complex.norm_real,
+    Real.norm_eq_abs, abs_of_nonneg hnonneg]
 
 /-- No length-independent constant bounds the actual truncated-side error for
 all positive-contraction nearest-neighbor chains under merely `t>η`.
