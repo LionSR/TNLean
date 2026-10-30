@@ -76,8 +76,12 @@ theorem norm_ringVectorReducedMatrix_sub_le (ψ φ : MPVSpace d (L + L)) :
       norm_add_le _ _
     _ ≤ ‖ringBipartiteKernel ψ - ringBipartiteKernel φ‖ * ‖ringBipartiteKernel ψ‖ +
         ‖ringBipartiteKernel φ‖ * ‖ringBipartiteKernel ψ - ringBipartiteKernel φ‖ := by
-      simpa only [Matrix.l2_opNorm_conjTranspose] using
-        add_le_add (norm_mul_le _ _) (norm_mul_le _ _)
+      have h₁ := norm_mul_le (ringBipartiteKernel ψ - ringBipartiteKernel φ)
+        (ringBipartiteKernel ψ)ᴴ
+      have h₂ := norm_mul_le (ringBipartiteKernel φ)
+        (ringBipartiteKernel ψ - ringBipartiteKernel φ)ᴴ
+      rw [Matrix.l2_opNorm_conjTranspose] at h₁ h₂
+      exact add_le_add h₁ h₂
     _ ≤ ‖ψ - φ‖ * ‖ψ‖ + ‖φ‖ * ‖ψ - φ‖ := by
       simp only [hsub]
       gcongr <;> exact norm_ringBipartiteKernel_le _
@@ -91,6 +95,7 @@ theorem halfChainNormSq_eq_norm_mpvState_sq (A : MPSTensor d D) (L : ℕ) :
   rw [halfChainNormSq_eq_sum, EuclideanSpace.norm_sq_eq,
     ← (Fin.appendEquiv L L).sum_comp, Fintype.sum_prod_type]
   simp only [mpvState_apply, Complex.normSq_eq_norm_sq]
+  rfl
 
 /-- The actual normalized reduced matrix is the reduced matrix of the
 actual normalized periodic vector, including zero-norm lengths.
@@ -108,9 +113,9 @@ theorem normalizedHalfChainReducedMatrix_eq_ringVectorReducedMatrix
     Matrix.smul_mul, Matrix.mul_smul, smul_smul, normalizedHalfChainReducedMatrix,
     halfChainNormSq_eq_norm_mpvState_sq]
   ext σ τ
-  simp only [Matrix.smul_apply, Complex.real_smul, smul_eq_mul,
-    Complex.ofReal_inv, Complex.ofReal_pow, star_inv, Complex.star_def,
-    Complex.conj_ofReal, inv_pow, pow_two, mul_inv_rev, halfChainReducedMatrix]
+  simp only [Matrix.smul_apply, Complex.real_smul, smul_eq_mul, Complex.star_def,
+    map_inv₀, Complex.conj_ofReal, pow_two, Complex.ofReal_mul, Complex.ofReal_inv,
+    _root_.mul_inv_rev, halfChainReducedMatrix]
 
 private theorem norm_normalizedMPVState_le_one (A : MPSTensor d D) (N : ℕ) :
     ‖normalizedMPVState A N‖ ≤ 1 := by
@@ -175,7 +180,8 @@ theorem tendsto_normalizedMPVState_sub_of_mpvState_sub
     (hNorm : Tendsto (fun n : ℕ ↦ ‖mpvState B (length n)‖) atTop (𝓝 1)) :
     Tendsto (fun n : ℕ ↦
       ‖normalizedMPVState A (length n) - normalizedMPVState B (length n)‖) atTop (𝓝 0) := by
-  apply squeeze_zero (fun _ ↦ norm_nonneg _) (fun n ↦ norm_normalizedMPVState_sub_le A B (length n))
+  apply squeeze_zero (fun _ ↦ norm_nonneg _)
+    (fun n ↦ norm_normalizedMPVState_sub_le A B (length n))
   have h := (hStates.const_mul 2).add ((hNorm.sub_const 1).norm.const_mul 2)
   simpa only [sub_self, norm_zero, Real.norm_eq_abs, mul_zero, add_zero] using h
 

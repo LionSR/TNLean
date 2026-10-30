@@ -64,7 +64,7 @@ theorem PGVWC07CanonicalFormData.exists_halfChainSpectrumLimit_of_c2
     (fun a ↦ (hlam a).le) htr (h.unital k) hfix).1
   have hNorm : Tendsto (fun L : ℕ ↦ ‖mpvState (h.blocks k) (L + L)‖) atTop (𝓝 1) := by
     have hsqrt := (Real.continuous_sqrt.tendsto (1 : ℝ)).comp hZ
-    simpa only [halfChainNormSq_eq_norm_mpvState_sq, Function.comp_apply,
+    simpa only [halfChainNormSq_eq_norm_mpvState_sq, Function.comp_def,
       Real.sqrt_sq_eq_abs, abs_norm, Real.sqrt_one] using hsqrt
   have hLength : Tendsto (fun L : ℕ ↦ L + L) atTop atTop := by
     apply tendsto_atTop.mpr
