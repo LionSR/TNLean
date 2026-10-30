@@ -10,7 +10,7 @@
 \date{}
 \begin{document}
 \maketitle
-\gapnote{scope-restriction}{resolved}
+\gapnote{clarification}{resolved}
 
 \section{The source argument}
 Hastings, \emph{Solving gapped Hamiltonians locally}~\cite{Hastings2006Solving},
@@ -146,12 +146,95 @@ $M_i$.\footnote{\leanid{TNLean.Lattice.truncatedTerm_smul} and
 At line 1638 the source writes the distance ``between $(\vec x_1,y_2)$ and
 $(\vec x_2+\vec x',y_2)$''; the first site is $(\vec x_1,y_1)$.
 
-\section{The case not covered}
-Lines 1643--1652 mention a case the source calls ``very artificial'', in
-which the denominators depend on the system size and the supercell is as
-large as the system. The source states that the commutators are still
-exponentially small there, but does not give the proof. This case is not
-covered.
+\section{Arbitrary momentum denominators}
+
+Lines 1644--1654 assert exponential smallness even when the momentum
+denominators grow with the system size, but omit the proof. A
+finite-dimensional argument proves this assertion without a condition on
+the momenta.
+
+Let $K$ be the actual ground eigenspace, let $P$ be its orthogonal
+projection, and put $C_K(W)=(PWP)|_K$. A physical translation preserving
+$H$ restricts to a unitary $u$ on $K$. It commutes with $P$, and hence
+\[
+ T^k(C_K(W))=C_K(U^kW(U^k)^*),\qquad T(B)=uBu^{-1}.
+\]
+Here $T$ preserves the operator norm on the $n^2$-dimensional space of
+operators on $K$, where $n=\dim K$. The ambient compressed commutator
+has exactly the norm of its restriction to $K$.\footnote{Declarations:
+\leanid{TNLean.Lattice.groundTranslation},
+\leanid{TNLean.Lattice.groundTranslationConjugation},
+\leanid{TNLean.Lattice.groundTranslationConjugation_pow_compression}, and
+\leanid{TNLean.Lattice.norm_groundSpaceCompression_commutator_eq}.}
+
+More generally, let $T$ preserve a norm on a complex space of dimension
+$d$. Its characteristic polynomial $p(z)=\sum_{k=0}^d p_kz^k$ is monic,
+its roots have modulus one, and consequently
+\[
+ |p_0|=1,\qquad \sum_{k=1}^d|p_k|\le2^d-1.
+\]
+Cayley--Hamilton gives $1=-\sum_{k=1}^d p_0^{-1}p_kT^k$. Thus
+\[
+ \|[A,B]\|\le(2^{n^2}-1)
+       \max_{1\le k\le n^2}\|[A,T^k(B)]\|.
+\]
+The characteristic-polynomial estimate uses no separation of the
+translation eigenvalues.\footnote{Declaration:
+\leanid{TNLean.Lattice.norm_commutator_le_of_finite_translation_orbit_bounds}.}
+
+Choose an integer $m\ge\max\{1,n^2\}$ independent of the system size,
+let $N$ be the number of cells in one direction, and put
+$L=\lfloor N/[2(m+1)]\rfloor$. If two cells have circular separation at
+most $\lfloor L/2\rfloor$, translating the second by $kL$ cells, for
+$1\le k\le m$, gives separation at least $\lfloor L/2\rfloor$.
+Indeed, a signed representative of the initial displacement has absolute
+value at most $\lfloor L/2\rfloor$, and adding $kL$ puts it between
+$\lfloor L/2\rfloor$ and $N-\lfloor L/2\rfloor$. If the initial cells
+are already farther apart, no translation is needed.\footnote{Declarations:
+\leanid{TNLean.Lattice.natAbs_valMinAbs_add_mul_ge_of_near} and
+\leanid{TNLean.Lattice.edist_pow_mul_ge_of_near}.}
+
+For the local observables, suppose the graph radius is at most $\rho$,
+the support cardinality is at most $v_{\rm obs}$, and their norms are at
+most $J$. The propagation and original-gap estimate gives a positive
+spatial rate $\gamma$ and the factor
+$C_0=(4v_{\rm obs}+4)J^2$. It applies to arbitrary observables on their
+supports, rather than only to members of the chosen local decomposition.
+Apply it to the above translates of the second observable. The finite
+orbit estimate, the fixed support offset, and
+\[
+ \frac{N}{4(m+1)}\le\frac{L}{2}+\frac12
+\]
+give the uniform bound
+\[
+ \|[PWP,PBP]\|\le
+ (2^m-1)C_0 e^{\gamma(2\rho+2)}
+       e^{-\gamma N/[4(m+1)]}.
+\]
+For small $N$, including $L=0$, the same bound follows from
+$\|[PWP,PBP]\|\le2J^2$; its displayed prefactor absorbs these cases.
+The integer rounding and the small-size comparison are both
+proved.\footnote{Declarations:
+\leanid{TNLean.Lattice.translation_half_natDiv_lower_bound},
+\leanid{TNLean.Lattice.translation_exp_floor_decay_le}, and
+\leanid{TNLean.Lattice.translation_finiteOrbit_decay_of_near_far}.}
+
+Only the Hamiltonian must be invariant. The physical translations
+preserve the graph geometry, so conjugation preserves support radius,
+cardinality, and norm. The local terms of an arbitrary decomposition
+need not be covariant, and neither do their truncation sets: the proof
+translates the second observable itself. In particular it applies to
+the source's actual $M_i$, whose support and norm were proved from the
+truncated Gaussian construction. The constants are uniform when the
+local data and the ground-space dimension are uniformly bounded, as
+assumed in the source passage.
+The physical bounds and their specialization to the
+actual truncated terms are formalized without a supplied spatial-decay
+premise.\footnote{Declarations:
+\leanid{TNLean.Lattice.norm_groundCompression_commutator_le_of_finite_observable_orbit},
+\leanid{TNLean.Lattice.norm_groundCompression_commutator_le_finite_translation_exp}, and
+\leanid{TNLean.Lattice.norm_groundCompression_truncated_commutator_le_finite_translation_exp},
+in \doclink{TNLean/Lattice/TranslationFiniteOrbitCommutator}.}
 
 \bibliographystyle{alpha}
 \bibliography{references}

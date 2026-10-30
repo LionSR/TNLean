@@ -7,67 +7,39 @@ import TNLean.Lattice.LocalHamiltonian
 import TNLean.Circuit.SupportedMatrixElements
 import Mathlib.Analysis.Normed.Algebra.Exponential
 import Mathlib.Topology.Algebra.Module.FiniteDimension
+import Mathlib.Topology.MetricSpace.Pseudo.Defs
 
 /-!
-# Matrix product form of operators and of Trotter products
+# Matrix product form on finite sets of sites
 
-Hastings writes the thermal density matrix in the matrix product form of eq. `mpf`:
-`ρ = ∑_{α} ρ₁(α₁) ρ₂(α₂) ⋯ F₁(α) F₂(α) ⋯`, where each site `i` carries an index `αᵢ`, each
-`ρᵢ(αᵢ)` acts only on site `i`, and each function `Fᵢ` depends only on the indices `αⱼ` with
-`d(i, j) ≤ l`. He then observes that every Trotter product
-`ρₙ = [∏ᵢ exp(-β Hᵢ / n)]ⁿ`, taken over any sequence of interaction terms, can be written exactly
-in this form with range `R`: each factor `exp(-β Hᵢ / n)` is a sum of products of single-site
-operators near `i` with one coefficient function, and the indices of all factors at a site are
-grouped into one index, with the coefficient functions multiplied.
+For a finite set of sites and a locality relation `near`, a matrix product form is an
+expansion
+`ρ = ∑_α (∏_i F_i(α)) • ⊗_j ρ_j(α_j)`
+in which `F_i` depends only on indices `α_j` with `near i j`. On a metric lattice the
+relation is `dist i j ≤ l`; on a finite graph it may instead mean that a walk of length
+at most `l` joins the sites. The construction and its closure under products use no
+embedding or particular metric.
 
-## Correspondence with eq. `mpf`
+An operator supported in the neighborhood of a specified centre has this form. Applying
+this to each exponential in a finite Trotter product and grouping the indices at each
+site proves the product form for an arbitrary finite metric lattice. Empty supports and
+zero Trotter steps are included. The planar local-Hamiltonian result is a specialization.
 
-`TNLean.Lattice.ProductForm Λ q l ρ` records the data of eq. `mpf` for an operator `ρ` on the
-configurations of a finite domain `Λ`: one finite index type `Index`, a single-site operator
-`siteOp j a` for every site `j` and index value `a`, and a coefficient function `coeff i` for
-every site `i`, depending only on the indices at sites joined to `i` in the domain by a walk of
-length at most `l` (the distance used for the supports of `TNLean.Lattice.LocalHamiltonian`).
-The product `ρ₁(α₁) ρ₂(α₂) ⋯` of operators on distinct sites is the site-wise Kronecker product
-`Matrix.rectKronecker`. The index type is the same at every site; this loses nothing, since
-indices of a smaller site can be padded with values on which the coefficient vanishes.
-
-## Main definitions
-
-* `TNLean.Lattice.ProductForm`: the data of eq. `mpf` for an operator.
-* `TNLean.Lattice.HasProductForm`: an operator admits such data.
-* `TNLean.Lattice.LocalHamiltonian.trotterProduct`: the Trotter product `ρₙ`.
+The index type may depend on the site, as in the source's indices `α_i`. A supported
+factor can therefore carry a matrix-unit index only on its support. The construction and
+the source's bound of `n S` index components at each site are proved in
+`TNLean/Lattice/TrotterIndexCount.lean`.
 
 ## Main results
 
-* `TNLean.Lattice.hasProductForm_of_mem_supportedOperators_radius`: an operator supported
-  within radius `R` of a specified centre has a product form of range `R`.
-* `TNLean.Lattice.hasProductForm_of_mem_supportedOperators`: the diameter-bounded corollary.
-* `TNLean.Lattice.HasProductForm.mul`: product forms of a common range are closed under
-  multiplication.
-* `TNLean.Lattice.hasProductForm_trotterProduct_of_radius`: centre-indexed Trotter products
-  preserve the radius bound.
-* `TNLean.Lattice.LocalHamiltonian.hasProductForm_trotterProduct`: every Trotter product of a
-  local Hamiltonian of range `R` has a product form of range `R`.
-
-The error between `ρₙ` and `exp(-β H)` is not estimated here, and neither is the source's
-count of at most `n S` index components per site, one for each nearby factor (lines
-1069–1075): every factor is expanded in single-site matrix units at every site, so a product of
-`m` factors carries `m` components of `q²` values at each site, and its `n`-th power `ρₙ`
-carries `n m`.
-
-**Scope restriction (geometry and index count):** the source uses an arbitrary metric
-lattice; this file uses finite planar domains with walk distance. The supported-operator
-and centre-indexed Trotter theorems use the source's radius bound about a specified centre.
-The local-Hamiltonian theorem retains the stronger diameter bound as a corollary.
-The source's index-component count is not established. Documented in
-`docs/paper-gaps/hastings05_planar_domain_scope.tex`. Elimination: define the product form on
-arbitrary finite metric site sets and repeat the supported expansion and product closure
-with metric locality. The index count requires the separate construction described in the note.
+* `hasProductForm_of_mem_supportedOperators_radius`: the expansion for a supported operator.
+* `HasProductForm.mul`, `HasProductForm.pow`: closure under products and powers.
+* `hasProductForm_trotterProduct_of_dist_le`: the source's finite metric-lattice statement.
 
 ## References
 
-* M. B. Hastings, *Solving gapped Hamiltonians locally*, arXiv:cond-mat/0508554v3, Section IV,
-  eq. `mpf` (lines 1024–1046) and the Trotter decomposition (lines 1048–1079).
+* M. B. Hastings, *Solving gapped Hamiltonians locally*, arXiv:cond-mat/0508554v3,
+  eq. `mpf`, lines 1024–1046, and the Trotter decomposition, lines 1048–1079.
 -/
 
 open Matrix QuantumCircuit
@@ -109,75 +81,82 @@ end QuantumCircuit
 
 namespace TNLean.Lattice
 
-variable {Λ : Finset (ℤ × ℤ)} {q : ℕ}
+variable {ι : Type*} [Fintype ι] [DecidableEq ι] {q : ℕ} {near : ι → ι → Prop}
 
-/-- A coefficient function at site `i` that reads only the indices at sites joined to `i` by a
-walk of length at most `l` in the domain.
+/-- A coefficient function at site `i` that depends only on indices at the sites `j`
+with `near i j`. On a metric lattice of range `l`, this means `dist i j ≤ l`.
 Source: Hastings, arXiv:cond-mat/0508554v3, lines 1037–1039. -/
-def IsLocalCoefficient (l : ℕ) (i : Site Λ) {A : Type*} (f : (Site Λ → A) → ℂ) : Prop :=
-  ∀ α β : Site Λ → A,
-    (∀ j, (∃ p : (domainGraph Λ).Walk i j, p.length ≤ l) → α j = β j) → f α = f β
+def IsLocalCoefficient (near : ι → ι → Prop) (i : ι) {A : ι → Type*} (f : (∀ j, A j) → ℂ) : Prop :=
+  ∀ α β : (∀ j, A j),
+    (∀ j, near i j → α j = β j) → f α = f β
 
-/-- **Matrix product form.** The data of eq. `mpf`: an index type, single-site operators
-`siteOp j a`, and coefficient functions `coeff i` of range `l`, with
+/-- **Matrix product form.** The data of eq. `mpf`: an index type at each site and operators
+`siteOp j a`, and coefficient functions `coeff i` depending only on `near i`, with
 `ρ = ∑_α (∏ᵢ coeff i α) • ⊗ⱼ siteOp j (α j)`.
 Source: Hastings, arXiv:cond-mat/0508554v3, eq. `mpf`, lines 1024–1039. -/
-structure ProductForm (Λ : Finset (ℤ × ℤ)) (q l : ℕ)
-    (ρ : Matrix (Configuration Λ q) (Configuration Λ q) ℂ) where
-  /-- The values of the index carried by each site. -/
-  Index : Type
-  /-- The index takes finitely many values. -/
-  [fintype : Fintype Index]
+structure ProductForm (q : ℕ) (near : ι → ι → Prop)
+    (ρ : Matrix (ι → Fin q) (ι → Fin q) ℂ) where
+  /-- The values of the index carried by each site; the type may vary with the site. -/
+  Index : ι → Type
+  /-- The index at each site takes finitely many values. -/
+  [fintype : ∀ j, Fintype (Index j)]
   /-- The operator `ρⱼ(a)` acting only on site `j`. -/
-  siteOp : Site Λ → Index → Matrix (Fin q) (Fin q) ℂ
+  siteOp : (j : ι) → Index j → Matrix (Fin q) (Fin q) ℂ
   /-- The coefficient function `Fᵢ` attached to site `i`. -/
-  coeff : Site Λ → (Site Λ → Index) → ℂ
-  /-- Each `Fᵢ` depends only on the indices at distance at most `l` from `i`. -/
-  coeff_local : ∀ i, IsLocalCoefficient l i (coeff i)
+  coeff : ι → (∀ j, Index j) → ℂ
+  /-- Each `Fᵢ` depends only on the indices at sites `j` with `near i j`. -/
+  coeff_local : ∀ i, IsLocalCoefficient near i (coeff i)
   /-- The expansion of eq. `mpf`. -/
-  eq_sum : ρ = ∑ α : Site Λ → Index, (∏ i, coeff i α) • rectKronecker fun j ↦ siteOp j (α j)
+  eq_sum : ρ = ∑ α : (∀ j, Index j), (∏ i, coeff i α) • rectKronecker fun j ↦ siteOp j (α j)
 
 attribute [instance] ProductForm.fintype
 
-/-- An operator has a matrix product form of range `l`.
+/-- An operator has a matrix product form with coefficient neighborhoods `near`.
 Source: Hastings, arXiv:cond-mat/0508554v3, eq. `mpf`, lines 1024–1039. -/
-def HasProductForm (Λ : Finset (ℤ × ℤ)) (q l : ℕ)
-    (ρ : Matrix (Configuration Λ q) (Configuration Λ q) ℂ) : Prop :=
-  Nonempty (ProductForm Λ q l ρ)
+def HasProductForm (q : ℕ) (near : ι → ι → Prop)
+    (ρ : Matrix (ι → Fin q) (ι → Fin q) ℂ) : Prop :=
+  Nonempty (ProductForm q near ρ)
 
-/-- A coefficient function of range `l` has every larger range. -/
-theorem IsLocalCoefficient.mono {l l' : ℕ} (hl : l ≤ l') {i : Site Λ} {A : Type*}
-    {f : (Site Λ → A) → ℂ} (hf : IsLocalCoefficient l i f) : IsLocalCoefficient l' i f :=
-  fun α β h ↦ hf α β fun j ⟨p, hp⟩ ↦ h j ⟨p, hp.trans hl⟩
+omit [Fintype ι] [DecidableEq ι] in
+/-- A coefficient depending only on `near i` also depends only on any larger set. -/
+theorem IsLocalCoefficient.mono {near' : ι → ι → Prop}
+    (hnear : ∀ i j, near i j → near' i j) {i : ι} {A : ι → Type*}
+    {f : (∀ j, A j) → ℂ} (hf : IsLocalCoefficient near i f) : IsLocalCoefficient near' i f :=
+  fun α β h ↦ hf α β fun j hj ↦ h j (hnear i j hj)
 
-/-- A product form of range `l` has every larger range. -/
-theorem HasProductForm.mono {l l' : ℕ} (hl : l ≤ l')
-    {ρ : Matrix (Configuration Λ q) (Configuration Λ q) ℂ} (hρ : HasProductForm Λ q l ρ) :
-    HasProductForm Λ q l' ρ := by
+/-- Enlarging the allowed neighborhoods preserves a product form. -/
+theorem HasProductForm.mono {near' : ι → ι → Prop}
+    (hnear : ∀ i j, near i j → near' i j)
+    {ρ : Matrix (ι → Fin q) (ι → Fin q) ℂ} (hρ : HasProductForm q near ρ) :
+    HasProductForm q near' ρ := by
   obtain ⟨P⟩ := hρ
-  exact ⟨{ P with coeff_local := fun i ↦ (P.coeff_local i).mono hl }⟩
+  exact ⟨{ P with coeff_local := fun i ↦ (P.coeff_local i).mono hnear }⟩
 
-/-- The identity has a product form of every range, with one index value at every site. -/
-theorem hasProductForm_one (l : ℕ) : HasProductForm Λ q l 1 :=
-  ⟨{ Index := Unit
-     siteOp := fun _ _ ↦ 1
-     coeff := fun _ _ ↦ 1
-     coeff_local := fun _ _ _ _ ↦ rfl
-     eq_sum := by simp }⟩
+/-- The product form of the identity with one index value at every site.
+Source: Hastings, arXiv:cond-mat/0508554v3, eq. `mpf`, lines 1024–1039. -/
+noncomputable def ProductForm.one (near : ι → ι → Prop) : ProductForm q near 1 where
+  Index := fun _ ↦ Unit
+  siteOp := fun _ _ ↦ 1
+  coeff := fun _ _ ↦ 1
+  coeff_local := fun _ _ _ _ ↦ rfl
+  eq_sum := by simp
 
-/-- **Products.** Product forms of range `l` are closed under multiplication: the indices of the
-two factors at each site are grouped into one index and the coefficient functions are multiplied.
+/-- The identity has a product form for every locality relation. -/
+theorem hasProductForm_one (near : ι → ι → Prop) : HasProductForm q near 1 :=
+  ⟨ProductForm.one near⟩
+
+/-- **Products.** Product forms with the same coefficient neighborhoods are closed under
+multiplication: pair the two indices at each site and multiply the coefficient functions.
 Source: Hastings, arXiv:cond-mat/0508554v3, lines 1068–1077. -/
-theorem HasProductForm.mul {l : ℕ} {ρ σ : Matrix (Configuration Λ q) (Configuration Λ q) ℂ}
-    (hρ : HasProductForm Λ q l ρ) (hσ : HasProductForm Λ q l σ) :
-    HasProductForm Λ q l (ρ * σ) := by
-  obtain ⟨P⟩ := hρ
-  obtain ⟨Q⟩ := hσ
-  refine ⟨{ Index := P.Index × Q.Index
-            siteOp := fun j a ↦ P.siteOp j a.1 * Q.siteOp j a.2
-            coeff := fun i γ ↦ P.coeff i (fun j ↦ (γ j).1) * Q.coeff i (fun j ↦ (γ j).2)
-            coeff_local := fun i α β h ↦ ?_
-            eq_sum := ?_ }⟩
+noncomputable def ProductForm.mul {ρ σ : Matrix (ι → Fin q) (ι → Fin q) ℂ}
+    (P : ProductForm q near ρ) (Q : ProductForm q near σ) :
+    ProductForm q near (ρ * σ) := by
+  refine {
+    Index := fun j ↦ P.Index j × Q.Index j
+    siteOp := fun j a ↦ P.siteOp j a.1 * Q.siteOp j a.2
+    coeff := fun i γ ↦ P.coeff i (fun j ↦ (γ j).1) * Q.coeff i (fun j ↦ (γ j).2)
+    coeff_local := fun i α β h ↦ ?_
+    eq_sum := ?_ }
   · dsimp only
     rw [P.coeff_local i _ _ fun j hj ↦ congrArg Prod.fst (h j hj),
       Q.coeff_local i _ _ fun j hj ↦ congrArg Prod.snd (h j hj)]
@@ -187,47 +166,83 @@ theorem HasProductForm.mul {l : ℕ} {ρ σ : Matrix (Configuration Λ q) (Confi
     simp [rectKronecker_mul, Finset.prod_mul_distrib, Equiv.arrowProdEquivProdArrow, smul_smul,
       mul_comm]
 
-/-- Finite ordered products of operators with product forms of range `l` have product forms of
-range `l`. -/
-theorem hasProductForm_list_prod {l : ℕ}
-    (L : List (Matrix (Configuration Λ q) (Configuration Λ q) ℂ))
-    (hL : ∀ ρ ∈ L, HasProductForm Λ q l ρ) : HasProductForm Λ q l L.prod := by
+/-- Products preserve coefficient neighborhoods. -/
+theorem HasProductForm.mul {ρ σ : Matrix (ι → Fin q) (ι → Fin q) ℂ}
+    (hρ : HasProductForm q near ρ) (hσ : HasProductForm q near σ) :
+    HasProductForm q near (ρ * σ) := by
+  obtain ⟨P⟩ := hρ
+  obtain ⟨Q⟩ := hσ
+  exact ⟨P.mul Q⟩
+
+/-- Repeated multiplication groups the per-site indices in the product form of a power.
+Source: Hastings, arXiv:cond-mat/0508554v3, eq. `mplt`, lines 1303–1317. -/
+noncomputable def ProductForm.pow {ρ : Matrix (ι → Fin q) (ι → Fin q) ℂ}
+    (P : ProductForm q near ρ) : (n : ℕ) → ProductForm q near (ρ ^ n)
+  | 0 => ProductForm.one near
+  | n + 1 => (P.pow n).mul P
+
+/-- The index of the identity product form has one value at each site. -/
+@[simp] theorem ProductForm.card_index_one (near : ι → ι → Prop) (i : ι) :
+    Fintype.card ((ProductForm.one (q := q) near).Index i) = 1 := by
+  change Fintype.card Unit = 1
+  exact Fintype.card_unique
+
+/-- Multiplying product forms multiplies the numbers of index values at each site. -/
+@[simp] theorem ProductForm.card_index_mul {ρ σ : Matrix (ι → Fin q) (ι → Fin q) ℂ}
+    (P : ProductForm q near ρ) (Q : ProductForm q near σ) (i : ι) :
+    Fintype.card ((P.mul Q).Index i) = Fintype.card (P.Index i) * Fintype.card (Q.Index i) := by
+  exact Fintype.card_prod _ _
+
+/-- The index count in a power is the corresponding power of the original count.
+Source: Hastings, arXiv:cond-mat/0508554v3, lines 1072–1075 and 1318–1320. -/
+@[simp] theorem ProductForm.card_index_pow {ρ : Matrix (ι → Fin q) (ι → Fin q) ℂ}
+    (P : ProductForm q near ρ) (n : ℕ) (i : ι) :
+    Fintype.card ((P.pow n).Index i) = Fintype.card (P.Index i) ^ n := by
+  induction n with
+  | zero => exact card_index_one near i
+  | succ n ih =>
+    change Fintype.card ((P.pow n).Index i × P.Index i) = _
+    rw [Fintype.card_prod, ih, pow_succ]
+
+/-- Finite ordered products preserve the coefficient neighborhoods of a product form. -/
+theorem hasProductForm_list_prod (L : List (Matrix (ι → Fin q) (ι → Fin q) ℂ))
+    (hL : ∀ ρ ∈ L, HasProductForm q near ρ) : HasProductForm q near L.prod := by
   induction L with
-  | nil => exact hasProductForm_one l
+  | nil => exact hasProductForm_one near
   | cons ρ L ih =>
     rw [List.prod_cons]
     exact (hL ρ (by simp)).mul (ih fun σ hσ ↦ hL σ (by simp [hσ]))
 
-/-- Powers of an operator with a product form of range `l` have product forms of range `l`. -/
-theorem HasProductForm.pow {l : ℕ} {ρ : Matrix (Configuration Λ q) (Configuration Λ q) ℂ}
-    (hρ : HasProductForm Λ q l ρ) (n : ℕ) : HasProductForm Λ q l (ρ ^ n) := by
-  induction n with
-  | zero => simpa using hasProductForm_one l
-  | succ n ih => simpa [pow_succ] using ih.mul hρ
+/-- Powers preserve the coefficient neighborhoods of a product form. -/
+theorem HasProductForm.pow {ρ : Matrix (ι → Fin q) (ι → Fin q) ℂ}
+    (hρ : HasProductForm q near ρ) (n : ℕ) : HasProductForm q near (ρ ^ n) := by
+  obtain ⟨P⟩ := hρ
+  exact ⟨P.pow n⟩
 
-/-- An operator supported within walk distance `R` of a specified centre has a product
-form of range `R`. The centre need not belong to the support, which may be empty.
+/-- An operator supported in the neighborhood of a specified centre has a product form
+with those coefficient neighborhoods. The centre need not belong to the support, which may
+be empty. Every site is assumed to belong to its own neighborhood.
 The matrix-element coefficient is attached to the centre; diagonal identity factors
 are retained at every site off the support, including the centre when necessary.
 Source: Hastings, arXiv:cond-mat/0508554v3, lines 1053–1061. -/
-theorem hasProductForm_of_mem_supportedOperators_radius {R : ℕ} {X : Finset (Site Λ)}
-    (i₀ : Site Λ) (hX : ∀ j ∈ X, ∃ p : (domainGraph Λ).Walk i₀ j, p.length ≤ R)
-    {ρ : Matrix (Configuration Λ q) (Configuration Λ q) ℂ}
-    (hρ : ρ ∈ supportedOperators q (X : Set (Site Λ))) : HasProductForm Λ q R ρ := by
+theorem hasProductForm_of_mem_supportedOperators_radius {X : Finset ι}
+    (hnear : ∀ i, near i i) (i₀ : ι) (hX : ∀ j ∈ X, near i₀ j)
+    {ρ : Matrix (ι → Fin q) (ι → Fin q) ℂ}
+    (hρ : ρ ∈ supportedOperators q (X : Set ι)) : HasProductForm q near ρ := by
   classical
   /- The configurations read off the indices: their labels on `X`, and one common label
   (the row label at `i₀`) off `X`. -/
-  let row : (Site Λ → Fin q × Fin q) → Configuration Λ q :=
+  let row : (ι → Fin q × Fin q) → ι → Fin q :=
     fun α j ↦ if j ∈ X then (α j).1 else (α i₀).1
-  let col : (Site Λ → Fin q × Fin q) → Configuration Λ q :=
+  let col : (ι → Fin q × Fin q) → ι → Fin q :=
     fun α j ↦ if j ∈ X then (α j).2 else (α i₀).1
-  refine ⟨{ Index := Fin q × Fin q
+  refine ⟨{ Index := fun _ ↦ Fin q × Fin q
             siteOp := fun _ a ↦ single a.1 a.2 1
             coeff := fun i α ↦ (if i = i₀ then ρ (row α) (col α) else 1) *
               if i ∈ X then 1 else if (α i).1 = (α i).2 then 1 else 0
             coeff_local := fun i α β h ↦ ?_
             eq_sum := ?_ }⟩
-  · have hnil : α i = β i := h i ⟨.nil, Nat.zero_le _⟩
+  · have hnil : α i = β i := h i (hnear i)
     by_cases hi : i = i₀
     · subst hi
       have hrow : row α = row β := funext fun j ↦ by
@@ -247,7 +262,7 @@ theorem hasProductForm_of_mem_supportedOperators_radius {R : ℕ} {X : Finset (S
     rw [Finset.sum_eq_single (fun j ↦ (u j, v j))]
     · simp only [single_apply_same, Finset.prod_const_one, mul_one, Finset.prod_mul_distrib,
         Fintype.prod_ite_eq']
-      by_cases hoff : ∃ j ∉ (X : Set (Site Λ)), u j ≠ v j
+      by_cases hoff : ∃ j ∉ (X : Set ι), u j ≠ v j
       · rw [apply_eq_zero_of_mem_supportedOperators hρ hoff]
         obtain ⟨j, hj, huv⟩ := hoff
         refine (mul_eq_zero_of_right _ (Finset.prod_eq_zero (Finset.mem_univ j) ?_)).symm
@@ -271,31 +286,47 @@ theorem hasProductForm_of_mem_supportedOperators_radius {R : ℕ} {X : Finset (S
       · rfl
     · simp
 
-/-- An operator on a nonempty support of diameter at most `R` has a product form of
-range `R`, by choosing any site of the support as its centre.
-Source: Hastings, arXiv:cond-mat/0508554v3, lines 1053–1061, specialized to such supports. -/
-theorem hasProductForm_of_mem_supportedOperators {R : ℕ} {X : Finset (Site Λ)}
-    (hX : IsAdmissibleSupport Λ R X) {ρ : Matrix (Configuration Λ q) (Configuration Λ q) ℂ}
-    (hρ : ρ ∈ supportedOperators q (X : Set (Site Λ))) : HasProductForm Λ q R ρ := by
+/-- An operator on a nonempty support whose sites are pairwise related by `near` has
+the corresponding product form, by choosing any site of the support as its centre.
+Source: Hastings, arXiv:cond-mat/0508554v3, lines 1053–1061. -/
+theorem hasProductForm_of_mem_supportedOperators {X : Finset ι}
+    (hnear : ∀ i, near i i)
+    (hX : X.Nonempty ∧ ∀ i ∈ X, ∀ j ∈ X, near i j)
+    {ρ : Matrix (ι → Fin q) (ι → Fin q) ℂ}
+    (hρ : ρ ∈ supportedOperators q (X : Set ι)) : HasProductForm q near ρ := by
   obtain ⟨i₀, hi₀⟩ := hX.1
-  exact hasProductForm_of_mem_supportedOperators_radius i₀ (hX.2 i₀ hi₀) hρ
+  exact hasProductForm_of_mem_supportedOperators_radius hnear i₀ (hX.2 i₀ hi₀) hρ
 
-/-- Trotter products of centre-indexed operators supported within radius `R` have a
-product form of range `R`. No diameter bound, nonempty support, or Hermiticity is needed.
-At zero steps the product is the identity. This is the finite planar-domain case of
-Hastings, arXiv:cond-mat/0508554v3, lines 1053–1077; no index-component count is asserted. -/
-theorem hasProductForm_trotterProduct_of_radius {R : ℕ}
-    (H : Site Λ → Matrix (Configuration Λ q) (Configuration Λ q) ℂ)
-    (X : Site Λ → Finset (Site Λ))
-    (hX : ∀ i j, j ∈ X i → ∃ p : (domainGraph Λ).Walk i j, p.length ≤ R)
-    (hH : ∀ i, H i ∈ supportedOperators q (X i : Set (Site Λ)))
-    (seq : List (Site Λ)) (β : ℝ) (n : ℕ) :
-    HasProductForm Λ q R
+/-- Trotter products of operators supported in the neighborhoods of their centres have
+the same product form. Empty supports and zero steps are admitted.
+Source: Hastings, arXiv:cond-mat/0508554v3, lines 1053–1077. -/
+theorem hasProductForm_trotterProduct_of_radius
+    (hnear : ∀ i, near i i)
+    (H : ι → Matrix (ι → Fin q) (ι → Fin q) ℂ)
+    (X : ι → Finset ι) (hX : ∀ i j, j ∈ X i → near i j)
+    (hH : ∀ i, H i ∈ supportedOperators q (X i : Set ι))
+    (seq : List ι) (β : ℝ) (n : ℕ) :
+    HasProductForm q near
       (((seq.map fun i ↦ NormedSpace.exp ((-((β : ℂ) / n)) • H i)).prod) ^ n) := by
   refine HasProductForm.pow (hasProductForm_list_prod _ fun ρ hρ ↦ ?_) n
   obtain ⟨i, _, rfl⟩ := List.mem_map.mp hρ
-  exact hasProductForm_of_mem_supportedOperators_radius i (hX i)
+  exact hasProductForm_of_mem_supportedOperators_radius hnear i (hX i)
     (exp_mem_supportedOperators (Submodule.smul_mem _ _ (hH i)))
+
+/-- The Trotter product on an arbitrary finite pseudometric site set has product form
+of range `R` when each term is supported within distance `R` of its centre.
+Source: Hastings, arXiv:cond-mat/0508554v3, lines 1024–1077. -/
+theorem hasProductForm_trotterProduct_of_dist_le [PseudoMetricSpace ι] {R : ℝ}
+    (hR : 0 ≤ R) (H : ι → Matrix (ι → Fin q) (ι → Fin q) ℂ)
+    (X : ι → Finset ι) (hX : ∀ i j, j ∈ X i → dist i j ≤ R)
+    (hH : ∀ i, H i ∈ supportedOperators q (X i : Set ι))
+    (seq : List ι) (β : ℝ) (n : ℕ) :
+    HasProductForm q (fun i j ↦ dist i j ≤ R)
+      (((seq.map fun i ↦ NormedSpace.exp ((-((β : ℂ) / n)) • H i)).prod) ^ n) := by
+  exact hasProductForm_trotterProduct_of_radius (fun i ↦ by simpa using hR)
+    H X hX hH seq β n
+
+variable {Λ : Finset (ℤ × ℤ)}
 
 /-- The Trotter product `ρₙ = [∏_X exp(-(β / n) H_X)]ⁿ` of a local Hamiltonian, for an ordered
 sequence of supports `seq`.
@@ -310,10 +341,11 @@ product form of range `R`, exactly.
 Source: Hastings, arXiv:cond-mat/0508554v3, lines 1053–1077. -/
 theorem LocalHamiltonian.hasProductForm_trotterProduct {R : ℕ} {J : ℝ}
     (h : LocalHamiltonian Λ q R J) (seq : List (AdmissibleSupport Λ R)) (β : ℝ) (n : ℕ) :
-    HasProductForm Λ q R (h.trotterProduct seq β n) := by
+    HasProductForm q (fun i j : Site Λ ↦
+      ∃ p : (domainGraph Λ).Walk i j, p.length ≤ R) (h.trotterProduct seq β n) := by
   refine HasProductForm.pow (hasProductForm_list_prod _ fun ρ hρ ↦ ?_) n
   obtain ⟨X, _, rfl⟩ := List.mem_map.mp hρ
-  exact hasProductForm_of_mem_supportedOperators X.2
+  exact hasProductForm_of_mem_supportedOperators (fun _ ↦ ⟨.nil, Nat.zero_le _⟩) X.2
     (exp_mem_supportedOperators (Submodule.smul_mem _ _ (h.supported X)))
 
 end TNLean.Lattice
