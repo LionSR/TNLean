@@ -9797,6 +9797,19 @@ there is no need for a new tactic.
 - **Decision:** reuse one extraction proof; do not duplicate its canonical
   reduction or add the derived standing data as hypotheses to the public caller.
 
+### A nonzero coefficient minor excludes overlapping pure windows — candidate (2026-10-29)
+
+- **Seen:** `MPS/ParentHamiltonian/RankOneWindowOverlap.lean` and its
+  PVBS application in `MPS/Examples/PVBSOneParticleWindow.lean`.
+- **Pattern:** Multiply a nonzero two-by-two minor by the square of an
+  outside coefficient. Substitute the two actual section factorizations;
+  commutativity cancels the products and forces the outside coefficient
+  to vanish.
+- **Reuse:** One tensor-facing helper owns the cancellation. The actual
+  PVBS application computes its minor using the existing endpoint
+  coefficient lemmas, without a new weighted state or density-matrix layer.
+- **Decision:** A mathematical lemma suffices; no custom tactic is needed.
+
 ### Weighted geometric sums grouped by their anchors — promoted (2026-10-28)
 
 - **Seen:** `Lattice/LowEnergyCommutatorSum.lean`,
