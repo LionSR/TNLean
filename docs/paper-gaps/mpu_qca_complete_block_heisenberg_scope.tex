@@ -178,6 +178,29 @@ source-written results are pending Lean checking. A compatible inverse
 family, surjectivity on completion, construction of standard form from
 bare MPU data, and the source bond-dimension radius remain separate.
 
+
+The completed supplied-standard-form action can now be made invertible
+without a second standard form. Its actual finite inverse on one
+sufficiently buffered chain has support in the ordinary radius-$4k$
+neighbourhood of the target, since this neighbourhood does not cross
+the periodic seam. That neighbourhood remains buffered for the actual
+forward finite-chain evaluation, which returns the target by finite
+unitarity. Thus every local observable has a local preimage. Completeness
+makes the range of the forward isometry closed; local density gives
+surjectivity. The declarations
+\leanid{SpinChain.bufferedMPUQuasiLocalAction_surjective} and
+\leanid{SpinChain.bufferedMPUQuasiLocalAut_isQCA} write this construction
+with only the forward supplied standard form and radius $4k$.
+
+The unrestricted source reduction is distinct from this supplied-data
+proof. The repository already constructs a reduced canonical-form-II
+representative with the same positive-length periodic operators in
+\leanid{MPOTensor.IsMPU.exists_reduced_cfii_representative}. This
+representative permits the independent canonical-form-II argument to
+transfer an actual QCA and its source bond-dimension radius to the bare
+tensor; no new inverse datum is needed in the supplied-standard-form
+argument above.
+
 \bibliographystyle{alpha}
 \bibliography{references}
 \end{document}
