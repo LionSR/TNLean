@@ -38,11 +38,7 @@ theorem uncleMPV_norm_sq_tendsto_one
     (hF : Kraus.adjointMap A ρ = ρ) :
     Tendsto (fun N ↦ ‖mpvState A N‖ ^ 2) atTop (nhds (1 : ℝ)) := by
   classical
-  have ha : a ≠ 0 := by
-    intro ha
-    subst a
-    simp at htr
-  let : NeZero a := ⟨ha⟩
+  have : NeZero a := Matrix.neZero_of_trace_eq_one htr
   let V := Matrix (Fin a) (Fin a) ℂ
   let Φ : (V →ₗ[ℂ] V) ≃ₐ[ℂ] (V →L[ℂ] V) := Module.End.toContinuousLinearMap V
   let : FiniteDimensional ℂ (V →L[ℂ] V) := Φ.toLinearEquiv.finiteDimensional
@@ -101,16 +97,8 @@ theorem uncleGroundGram_tendsto
     Tendsto (fun N ↦ ‖mpvState A N‖ ^ 2) atTop (nhds (1 : ℝ)) ∧
       Tendsto (fun N ↦ ‖mpvState B N‖ ^ 2) atTop (nhds (1 : ℝ)) ∧
       Tendsto (fun N ↦ ⟪mpvState A N, mpvState B N⟫_ℂ) atTop (nhds (0 : ℂ)) := by
-  have ha : a ≠ 0 := by
-    intro ha
-    subst a
-    simp at htrA
-  have hb : b ≠ 0 := by
-    intro hb
-    subst b
-    simp at htrB
-  let : NeZero a := ⟨ha⟩
-  let : NeZero b := ⟨hb⟩
+  have : NeZero a := Matrix.neZero_of_trace_eq_one htrA
+  have : NeZero b := Matrix.neZero_of_trace_eq_one htrB
   obtain ⟨hIA, hIB⟩ := uncleBoundaryLetter_isInjective_diagonal_blocks A B R L hPert
   refine ⟨uncleMPV_norm_sq_tendsto_one A hIA hUA ρA htrA hFA,
     uncleMPV_norm_sq_tendsto_one B hIB hUB ρB htrB hFB, ?_⟩

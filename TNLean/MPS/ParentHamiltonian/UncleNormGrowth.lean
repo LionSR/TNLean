@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.ParentHamiltonian.UncleNormFactorization
 import TNLean.MPS.ParentHamiltonian.UncleWallGramGeneric
 import TNLean.MPS.ParentHamiltonian.UncleMixedDamping
+import TNLean.MPS.Preparation.SecondOrderOverlap
 
 /-!
 # Generic quadratic norm growth of the two-wall trial
@@ -139,16 +140,8 @@ theorem uncleTwoWallTrialSource_ae_quadratic_norm_growth
           (uncleTwoWallTrialSource A B P.1 P.2 N)‖ ^ 2 ∧
       ‖(WithLp.linearEquiv 2 ℂ (NSiteSpace d (6 * N + 1))).symm
           (uncleTwoWallTrialSource A B P.1 P.2 N)‖ ^ 2 ≤ C * ((N + 1 : ℕ) : ℝ) ^ 2 := by
-  have ha : a ≠ 0 := by
-    intro ha
-    subst a
-    simp at htrA
-  have hb : b ≠ 0 := by
-    intro hb
-    subst b
-    simp at htrB
-  let : NeZero a := ⟨ha⟩
-  let : NeZero b := ⟨hb⟩
+  have : NeZero a := Matrix.neZero_of_trace_eq_one htrA
+  have : NeZero b := Matrix.neZero_of_trace_eq_one htrB
   obtain ⟨hIA, hIB⟩ := uncleBoundaryLetter_isInjective_diagonal_blocks A B R₀ L₀ hPert
   have hAB := uncleBoundaryLetter_mixedMapSpectralRadius_lt_one
     A B R₀ L₀ hPert hUA hUB ρA hρA ρB hρB hFA hFB
