@@ -10703,6 +10703,30 @@ removed after the dependency audit exposed it.
   the remaining steps.
 - **Decision:** One source-specific lemma suffices; no new tactic or predicate.
 
+### Moving-wall finite Gram expansion — candidate (2026-10-29)
+
+- **Pattern:** Split a sum over fixed-length configurations with
+  `Fin.consEquiv`, expand a rectangular wall recurrence, and regroup
+  matrix products before using a unital word sum.
+- **Seen:** The two recurrences in
+  `MPS/ParentHamiltonian/UncleWallGram.lean`.
+- **Abstraction:** The private `sum_ofFn_cons` shares the configuration
+  reindexing. Correlation and Gram recurrences have different cross terms;
+  no additional public tactic is justified by these two occurrences.
+- **Notes:** Keep the finite coefficient identity separate from asymptotic
+  positivity and from estimates for the actual two-wall state.
+
+### Exact increments followed by Cesaro convergence — candidate (2026-10-29)
+
+- **Pattern:** Express an actual finite coefficient as the sum of its
+  derived increments, prove convergence of those increments by continuity,
+  and use `Filter.Tendsto.cesaro_smul` for the coefficient divided by length.
+- **Seen:** `MPS/ParentHamiltonian/UncleWallGramAsymptotics.lean`.
+- **Abstraction:** Existing Mathlib Cesaro convergence already supplies the
+  general analytic step; no new tactic or generic averaging API is needed.
+- **Notes:** Spectral-radius damping supplies summability of the genuine
+  mixed series. A positive limiting slope is a separate mathematical claim.
+
 
 ### Numbered trial segments under a local restriction — reused helpers (2026-10-29)
 
@@ -10727,6 +10751,19 @@ removed after the dependency audit exposed it.
   preservation give both claims directly. The endpoint quadratic sum reuses
   the already-derived global cancellation identity and adjoint-inner identity.
 - **Decision:** No new projection structure or automation; use the library lemmas.
+
+### Nonnegative quadratic coefficient exceptional set — candidate (2026-10-29)
+
+- **Pattern:** Derive the zero set of an actual nonnegative quadratic form
+  as its radical by testing a scalar perturbation. An explicit positive
+  witness makes the radical proper; reuse `addHaar_submodule` for measure
+  zero and the closed-subspace interior theorem for open dense complement.
+- **Seen:** `MPS/ParentHamiltonian/UncleWallGramGeneric.lean`.
+- **Abstraction:** Existing Mathlib quadratic and Haar APIs provide the
+  structures and final measure statement. The private scalar test is
+  shared within this source calculation; no genericity premise is added.
+- **Notes:** This establishes the one-wall coefficient's exceptional set,
+  independently of the unresolved actual two-wall norm factorization.
 
 
 ### Removing the unpinned contribution at a wall endpoint — candidate (2026-10-29)
