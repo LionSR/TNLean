@@ -148,7 +148,7 @@ theorem exists_transposition_certificate_of_square_ranks
       rw [Equiv.apply_symm_apply, Equiv.apply_symm_apply]
     rw [hx', ← Matrix.transpose_reindex, hx']
   rw [hx]
-  simp only [Matrix.coe_reindexLinearEquiv, Matrix.transpose_reindex]
+  simp only [Matrix.coe_reindexLinearEquiv]
   rw [← Matrix.smul_mul]
   exact hw
 
