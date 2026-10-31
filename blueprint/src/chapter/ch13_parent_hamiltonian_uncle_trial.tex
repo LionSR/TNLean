@@ -1,0 +1,208 @@
+\section{Two-domain-wall trial vectors}
+\label{sec:uncle_two_wall_trial}
+
+The variational argument of
+\cite[equation defining $\phi_N$, low-energy-state lemma]{FernandezGonzalez2015Uncle}
+uses the earlier normalized standard form: the two diagonal blocks have
+unital transfer operators of spectral radius one, faithful trace-one dual
+fixed densities, and no other peripheral eigenvalues. Distinct blocks have
+mixed transfer spectral radius strictly below one. These conditions are
+needed for the asymptotic estimates and do not follow merely from the full
+perturbation span condition in Theorem~\ref{thm:uncle_periodic_ground_space}.
+
+\begin{definition}[The finite two-wall trial]
+    \label{def:uncle_two_wall_trial}
+    \lean{MPSTensor.uncleTwoWallCoefficient,
+        MPSTensor.uncleTwoWallCoefficient_eq_sum,
+        MPSTensor.uncleTwoWallTrial,MPSTensor.uncleTwoWallTrialSource,
+        MPSTensor.uncleTwoWallTrial_append_apply,
+        MPSTensor.uncleTwoWallTrialSource_cast_apply,
+        MPSTensor.norm_uncleTwoWallTrialSource_eq}
+    \leanok
+    \uses{def:uncle_boundary_space}
+    For five consecutive words $u,v,w,x,y$, define the coefficient
+    \[
+        \operatorname{tr}\!\left(A(u)\,R(v)\,B(w)\,L(x)\,A(y)\right),
+    \]
+    where $R(v)$ and $L(x)$ are the sums with one rectangular wall at each
+    position of their respective words. Thus the coefficient is precisely
+    the independent double sum over both wall positions. On a chain of
+    length $6N+1$ with $N\ge1$, choose consecutive segment lengths
+    $N,N+1,2N-1,N+1,N$. In coordinates numbered from zero, the first wall
+    ranges from $N$ through $2N$, and the second from $4N$ through $5N$.
+    Denote the resulting vector by $\phi_N$. Concatenating five physical
+    configurations evaluates the coefficient on precisely their five words.
+    For $N\ge1$, the length identity
+    $N+(N+1)+(2N-1)+(N+1)+N=6N+1$ identifies the source trial with this
+    five-segment trial by a finite coordinate bijection, preserving its norm
+    exactly.
+\end{definition}
+
+\begin{lemma}[Interior moving-wall cancellation]
+    \label{lem:uncle_two_wall_interior_cancellation}
+    \lean{MPSTensor.uncleBoundaryWord_slice_mem,
+        MPSTensor.uncleInteractionES_upper_wall_slice_eq_zero,
+        MPSTensor.uncleInteractionES_lower_wall_slice_eq_zero,
+        MPSTensor.uncleInteractionES_twoWall_slice_first_eq_zero,
+        MPSTensor.uncleInteractionES_twoWall_slice_second_eq_zero}
+    \leanok
+    \uses{def:uncle_two_wall_trial,thm:uncle_periodic_ground_space}
+    Fix all exterior physical letters, and vary two adjacent physical
+    letters entirely inside either moving-wall interval. The resulting
+    two-site vector is annihilated by the actual uncle local projector.
+    This algebraic cancellation requires neither perturbation injectivity
+    nor canonical normalization.
+\end{lemma}
+\begin{proof}\leanok
+    Concatenation multiplies the single-wall coefficient words by the
+    bilinear product defining $S_n$. A fixed exterior contraction therefore
+    composes a linear functional with multiplication by the two fixed
+    exterior coefficient words. Trace duality represents that functional
+    by a boundary matrix, so its two-site range lies in $S_2$, the actual
+    local projector kernel. Reading the upper or lower rectangular block
+    gives the first or second wall interval, respectively. For the latter,
+    the rectangular trace identity rotates the fixed exterior first wall
+    around the trace. Each wall position is included in the moving sum.
+\end{proof}
+
+\begin{lemma}[Four-bond localization of the actual trial]
+    \label{lem:uncle_trial_four_bond_localization}
+    \lean{MPSTensor.uncleTrialEndpointBonds,
+        MPSTensor.uncleTrialEndpointBonds_card,
+        MPSTensor.uncleInteractionES_trial_cyclicRestrict_eq_zero,
+        MPSTensor.uncleHamiltonianES_trial_eq_sum_endpoints}
+    \leanok
+    \uses{def:uncle_two_wall_trial,lem:uncle_two_wall_interior_cancellation,
+        lem:uncle_parent_sector_containment}
+    For every $N\ge1$, let
+    $E_N=\{N-1,2N,4N-1,5N\}$ be the four distinct bond starting sites.
+    Every cyclic local term outside $E_N$ annihilates $\phi_N$, including
+    the periodic bond from site $6N$ to site zero. Consequently,
+    \[
+        H'_P\phi_N=\sum_{i\in E_N}(h'_P)_{i,i+1}\phi_N.
+    \]
+    This finite identity uses no perturbation injectivity or normalization
+    assumption and does not yet bound the surviving contributions.
+\end{lemma}
+\begin{proof}\leanok
+    A nonwrapping pair outside the four endpoints lies entirely in one of
+    the five consecutive segments. Within a moving-wall segment, use the
+    preceding local cancellation with all exterior physical letters fixed.
+    In a uniform segment the same fixed-exterior contraction is in the
+    corresponding two-site parent space, which the uncle projector kills.
+    At the periodic cut, the first segment begins with the second local
+    letter and the last segment ends with the first local letter. Trace
+    cyclicity brings these two A letters together in their cyclic order,
+    giving the A-parent local space again. Expanding the actual finite
+    Hamiltonian and discarding these derived zero terms leaves precisely
+    the four displayed summands.
+\end{proof}
+
+\begin{lemma}[Norm partition through cyclic restrictions]
+    \label{lem:cyclic_restriction_norm_partition}
+    \lean{MPSTensor.cyclicWindowCfgEquiv,
+        MPSTensor.cyclicWindowCfgEquiv_apply_window,
+        MPSTensor.cyclicCfg_cyclicWindowCfgEquiv,
+        MPSTensor.sum_norm_sq_cyclicRestrictES,
+        MPSTensor.inv_pow_mul_sum_norm_sq_cyclicRestrictES}
+    \leanok
+    \uses{def:parent_hamiltonian}
+    On a chain of length $T$, let $L\le T$ and choose a cyclic starting
+    site $i$. Splitting a physical configuration into its ordered window
+    and complement is a bijection. Consequently, for every full-chain vector $v$,
+    \[
+        \sum_\tau\|R_{i,\tau}v\|^2=d^L\|v\|^2.
+    \]
+    When $d>0$, multiplication by $d^{-L}$ gives an exact norm partition.
+    The unnormalized identity also includes zero physical dimension and
+    empty windows.
+\end{lemma}
+\begin{proof}\leanok
+    Write each full exterior configuration as its old window label and
+    complement label. Replacing the window by a new local configuration
+    discards the old window label and preserves the complement. Summing
+    coefficient norms first over the new window and complement gives
+    the full norm; the redundant old window has exactly $d^L$ choices.
+\end{proof}
+
+\begin{lemma}[The actual endpoint quadratic energy]
+    \label{lem:uncle_trial_endpoint_quadratic_energy}
+    \lean{MPSTensor.norm_uncleInteractionES_apply_le,
+        MPSTensor.norm_uncleInteractionES_le_one,
+        MPSTensor.re_inner_uncleInteractionES_eq_norm_sq,
+        MPSTensor.re_inner_uncleInteractionES_bounds,
+        MPSTensor.re_inner_uncleHamiltonianES_trial_eq_sum_endpoints,
+        MPSTensor.re_inner_uncleHamiltonianES_trial_le_endpoint_norms}
+    \leanok
+    \uses{lem:uncle_trial_four_bond_localization,def:two_block_uncle_tensor}
+    The actual local uncle projector is a contraction, and
+    \[
+        0\le\operatorname{Re}\langle h'_P v,v\rangle
+        =\|h'_P v\|^2\le\|v\|^2.
+    \]
+    Let $R_{i,\tau}$ restrict to the ordered cyclic pair starting at $i$
+    with fixed exterior configuration $\tau$. The actual finite trial satisfies
+    \[
+        \operatorname{Re}\langle H'_P\phi_N,\phi_N\rangle
+        =d^{-2}\sum_{i\in E_N}\sum_\tau\|h'_P R_{i,\tau}\phi_N\|^2
+        \le d^{-2}\sum_{i\in E_N}\sum_\tau\|R_{i,\tau}\phi_N\|^2.
+    \]
+    The latter finite bound does not yet assert the source's linear energy rate.
+\end{lemma}
+\begin{proof}\leanok
+    The local interaction is an isometric conjugate of an orthogonal projector.
+    Orthogonal projection contracts norms, and its real quadratic form equals
+    the squared projected norm. Expand the preceding four-bond identity,
+    move each restriction adjoint through the inner product, and apply that
+    local quadratic identity. The real scalar $d^{-2}$ is nonnegative,
+    so contraction bounds each squared projected norm by the corresponding
+    squared restricted norm.
+\end{proof}
+
+\begin{lemma}[Pinned-wall endpoint residuals]
+    \label{lem:uncle_trial_pinned_endpoint_residuals}
+    \lean{MPSTensor.uncleDomainWallWord_append,
+        MPSTensor.uncleTwoWallCoefficient_rotate,
+        MPSTensor.uncleInteractionES_pin_upper_left,
+        MPSTensor.uncleInteractionES_pin_upper_right,
+        MPSTensor.uncleInteractionES_pin_lower_left,
+        MPSTensor.uncleInteractionES_pin_lower_right,
+        MPSTensor.uncleInteractionES_trial_pin_first_endpoint,
+        MPSTensor.uncleInteractionES_trial_pin_second_endpoint,
+        MPSTensor.uncleInteractionES_trial_pin_third_endpoint,
+        MPSTensor.uncleInteractionES_trial_pin_fourth_endpoint,
+        MPSTensor.uncleTrialPinnedEndpointState,
+        MPSTensor.uncleInteractionES_trial_eq_pinnedEndpointState,
+        MPSTensor.re_inner_uncleHamiltonianES_trial_le_pinnedEndpoint_norms}
+    \leanok
+    \uses{lem:uncle_trial_endpoint_quadratic_energy,
+        lem:uncle_two_wall_interior_cancellation}
+    At the four endpoints, the actual projected residual is the image of
+    an explicit vector with one wall pinned to the cut. In local order,
+    the surviving pairs are $A_iR_j$, $R_iB_j$, $B_iL_j$, and $L_iA_j$,
+    respectively. The pinned physical sites are $N,2N,4N,5N$.
+    Denote these explicit local vectors by $\eta_{i,\tau}$. The opposite
+    wall still ranges over all $N+1$ positions in its original interval;
+    every exterior physical word is fixed by $\tau$. Then
+    \[
+        h'_P R_{i,\tau}\phi_N=h'_P\eta_{i,\tau},\qquad
+        \operatorname{Re}\langle H'_P\phi_N,\phi_N\rangle
+        \le d^{-2}\sum_{i\in E_N}\sum_\tau\|\eta_{i,\tau}\|^2.
+    \]
+    No asymptotic norm estimate is imposed as a hypothesis.
+\end{lemma}
+\begin{proof}\leanok
+    Split the wall sum at the endpoint site. The contribution with the
+    wall elsewhere has a pure A/A or B/B local pair, hence is killed by
+    the actual projector. Only the displayed pinned pair remains.
+    Splitting the two physical segments adjacent to each numbered cut
+    identifies the actual cyclic restriction with this expression.
+    For the L cuts, rotate the first rectangular wall around the trace.
+    Substitute the four derived identities into the preceding exact
+    quadratic energy sum and use local contraction.
+\end{proof}
+
+The four interval-end energy estimates, the asymptotic norm and ground-sector
+orthogonality estimates, the proper algebraic exceptional sets, and the
+variational spectral conclusion are separate steps. The exact finite
+localization does not yet assert finite-volume gaplessness.

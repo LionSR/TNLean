@@ -41,7 +41,9 @@ conclude `(i, δ + 4 η)`-viability where the source states `(i, 2 δ)` for `η 
 The operator-Schmidt ranks of each `A_j` at the internal cuts of the first `i` sites bound
 the MPS bond dimensions of its images. The theorem
 `IsViableMPS.errorReduction_of_norm_sub_groundProjection_le` derives these output bounds
-from the input MPS bounds and combines them with viability and cardinality. The theorem
+from the input MPS bounds and combines them with viability and cardinality. The corresponding
+`smul_groundProjection` theorems allow a positive ground amplitude `c`, as occurs for a
+Gaussian filter with an approximate energy estimate, and give overlap loss `4 η / c`. The theorem
 `IsViableMPS.errorReduction` also applies when MPS bounds for the images are already known.
 
 ## Main definitions
@@ -349,6 +351,22 @@ theorem IsViable.errorReduction_of_norm_sub_groundProjection_le
   convert h using 1
   ring
 
+private theorem isViableMPS_errorReductionSet_of_isViable
+    {J : Finset ι} {A : ι → LeftBlockMatrix L q i}
+    {Γ : EuclideanSpace ℂ (Fin L → Fin q)} {s b D : ℕ} {δ : ℝ}
+    {S : Finset (LeftBlockVector L q i)} (hi : i ≤ L)
+    (hcard : S.card ≤ s) (hSmps : ∀ v ∈ S, IsLeftOpenMPS b v)
+    (hA : ∀ j ∈ J, ∀ k : ℕ, 0 < k → k < i →
+      operatorSchmidtRank (Entropy.cutOperator (n := fun _ : Fin i ↦ q) (leftBlock i k)
+        ((A j).submatrix leftConfigOfFin leftConfigOfFin)) ≤ D)
+    (hviable : IsViable Γ δ (errorReductionSet J A S : Set (LeftBlockVector L q i))) :
+    IsViableMPS Γ (J.card * s) (D * max 1 b) δ (errorReductionSet J A S) := by
+  refine ⟨(card_errorReductionSet_le J A S).trans (Nat.mul_le_mul_left _ hcard), ?_, hviable⟩
+  intro w hw
+  unfold errorReductionSet at hw
+  obtain ⟨j, hj, t, ht, rfl⟩ := Finset.mem_image₂.mp hw
+  exact IsLeftOpenMPS.toEuclideanLin hi (hSmps t ht) (A j) (hA j hj)
+
 /-- The deterministic LVV error-reduction step with derived MPS bond bounds.
 LVV, arXiv:1307.5143v1, `algo53.tex`, Claim `c:errorreduction`, lines 580–592.
 The hypotheses are the product decomposition, operator-Schmidt-rank bounds and approximation
@@ -369,11 +387,71 @@ theorem IsViableMPS.errorReduction_of_norm_sub_groundProjection_le
     {η : ℝ} (hKP : ‖K - vecMulVec (WithLp.ofLp Γ) (star (WithLp.ofLp Γ))‖ ≤ η)
     (hη : η < 1 / 2) :
     IsViableMPS Γ (J.card * s) (D * max 1 b) (4 * η) (errorReductionSet J A S) := by
-  refine ⟨(card_errorReductionSet_le J A S).trans (Nat.mul_le_mul_left _ hS.1), ?_,
-    hS.2.2.errorReduction_of_norm_sub_groundProjection_le hΓ hK hKP hη⟩
-  intro w hw
-  unfold errorReductionSet at hw
-  obtain ⟨j, hj, t, ht, rfl⟩ := Finset.mem_image₂.mp hw
-  exact IsLeftOpenMPS.toEuclideanLin hi (hS.2.1 t ht) (A j) (hA j hj)
+  exact isViableMPS_errorReductionSet_of_isViable hi hS.1 hS.2.1 hA
+    (hS.2.2.errorReduction_of_norm_sub_groundProjection_le hΓ hK hKP hη)
+
+/-- Error reduction when an approximate projection has a positive ground amplitude.
+This is the normalization estimate for Huang, arXiv:1406.6355v6, Section 5.4,
+equation (19) and Lemma 18, applied to the actual half-viable witness. -/
+theorem IsViable.errorReduction_of_norm_sub_smul_groundProjection_le
+    {J : Finset ι} {A : ι → LeftBlockMatrix L q i}
+    {B : ι → RightBlockMatrix L q i}
+    {K : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
+    {Γ : EuclideanSpace ℂ (Fin L → Fin q)} {S : Finset (LeftBlockVector L q i)}
+    (hS : IsViable Γ (1 / 2) (S : Set (LeftBlockVector L q i))) (hΓ : ‖Γ‖ = 1)
+    (hK : Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L i) K =
+      ∑ j ∈ J, A j ⊗ₖ B j)
+    {η c : ℝ} (hc : 0 < c)
+    (hKP : ‖K - (c : ℂ) • vecMulVec (WithLp.ofLp Γ) (star (WithLp.ofLp Γ))‖ ≤ η)
+    (hη : η < c / 2) :
+    IsViable Γ (4 * η / c) (errorReductionSet J A S : Set (LeftBlockVector L q i)) := by
+  obtain ⟨v, hv1, hvΓ, hvS⟩ := hS
+  have happly : toEuclideanLin
+      ((c : ℂ) • vecMulVec (WithLp.ofLp Γ) (star (WithLp.ofLp Γ))) v =
+        ((c : ℂ) * ⟪Γ, v⟫_ℂ) • Γ := by
+    rw [map_smul, LinearMap.smul_apply, toEuclideanLin_vecMulVec_star_self_apply, smul_smul]
+  have hoverlap : (1 / 2 : ℝ) ≤ ‖⟪Γ, v⟫_ℂ‖ := by
+    rw [norm_inner_symm]
+    linarith
+  have hcv : c / 2 ≤ ‖toEuclideanLin
+      ((c : ℂ) • vecMulVec (WithLp.ofLp Γ) (star (WithLp.ofLp Γ))) v‖ := by
+    rw [happly, norm_smul, hΓ, mul_one, norm_mul, Complex.norm_real,
+      Real.norm_eq_abs, abs_of_pos hc]
+    calc
+      c / 2 = c * (1 / 2 : ℝ) := by ring
+      _ ≤ c * ‖⟪Γ, v⟫_ℂ‖ := mul_le_mul_of_nonneg_left hoverlap hc.le
+  have hPv : (1 - (0 : ℝ)) * ‖toEuclideanLin
+      ((c : ℂ) • vecMulVec (WithLp.ofLp Γ) (star (WithLp.ofLp Γ))) v‖ ≤
+      ‖⟪Γ, toEuclideanLin
+        ((c : ℂ) • vecMulVec (WithLp.ofLp Γ) (star (WithLp.ofLp Γ))) v⟫_ℂ‖ := by
+    simp only [happly]
+    simp [inner_smul_right, inner_self_eq_norm_sq_to_K, hΓ, norm_smul]
+  have h := isViable_errorReductionSet_of_witness hΓ hK hv1 hvS (by norm_num)
+    (half_pos hc) hcv hPv hKP hη
+  have heq : (0 : ℝ) + 2 * η / (c / 2) = 4 * η / c := by
+    field_simp
+    ring
+  simpa only [heq] using h
+
+/-- The MPS bounds and actual witness after error reduction with positive ground amplitude.
+Huang, arXiv:1406.6355v6, Section 5.4, equation (19) and Lemma 18. -/
+theorem IsViableMPS.errorReduction_of_norm_sub_smul_groundProjection_le
+    {J : Finset ι} {A : ι → LeftBlockMatrix L q i}
+    {B : ι → RightBlockMatrix L q i}
+    {K : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
+    {Γ : EuclideanSpace ℂ (Fin L → Fin q)} {s b D : ℕ}
+    {S : Finset (LeftBlockVector L q i)} (hi : i ≤ L)
+    (hS : IsViableMPS Γ s b (1 / 2) S) (hΓ : ‖Γ‖ = 1)
+    (hK : Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L i) K =
+      ∑ j ∈ J, A j ⊗ₖ B j)
+    (hA : ∀ j ∈ J, ∀ k : ℕ, 0 < k → k < i →
+      operatorSchmidtRank (Entropy.cutOperator (n := fun _ : Fin i ↦ q) (leftBlock i k)
+        ((A j).submatrix leftConfigOfFin leftConfigOfFin)) ≤ D)
+    {η c : ℝ} (hc : 0 < c)
+    (hKP : ‖K - (c : ℂ) • vecMulVec (WithLp.ofLp Γ) (star (WithLp.ofLp Γ))‖ ≤ η)
+    (hη : η < c / 2) :
+    IsViableMPS Γ (J.card * s) (D * max 1 b) (4 * η / c) (errorReductionSet J A S) := by
+  exact isViableMPS_errorReductionSet_of_isViable hi hS.1 hS.2.1 hA
+    (hS.2.2.errorReduction_of_norm_sub_smul_groundProjection_le hΓ hK hc hKP hη)
 
 end TNLean.MPS.AreaLaw

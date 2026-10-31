@@ -59,7 +59,7 @@ private theorem cyclicTranslateCfg_cyclicCfg {N L : ℕ} (hN : 0 < N)
 
 /-- A cyclic restriction of a translated state is the restriction of the
 original state at the translated starting site. -/
-private theorem cyclicRestrictₗ_cyclicTranslateState {N L : ℕ} (hN : 0 < N)
+theorem cyclicRestrictₗ_cyclicTranslateState {N L : ℕ} (hN : 0 < N)
     (s i : Fin N) (τ : Fin N → Fin d) (ψ : NSiteSpace d N) :
     cyclicRestrictₗ hN L i τ (cyclicTranslateState s ψ) =
       cyclicRestrictₗ hN L (i - s) (cyclicTranslateCfg s τ) ψ := by

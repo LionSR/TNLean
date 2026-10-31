@@ -15,6 +15,7 @@ import Mathlib.Tactic.Linarith
 import Mathlib.Analysis.Complex.Basic
 import Mathlib.LinearAlgebra.Quotient.Basic
 import QICLean.Channel.Peripheral.JordanBlocks
+import QICLean.Channel.Peripheral.SpectralRadius
 import TNLean.MPS.Preparation.SecondOrderOverlap
 import QICLean.Channel.KrausMap
 import Mathlib.Analysis.SpecificLimits.Basic
@@ -166,6 +167,31 @@ private theorem norm_trace_pow_sub_one_le_of_simple_fixedVector
   simpa only [hdim] using norm_trace_pow_le_of_spectrum_norm_le (p.mapQ p f hp) q hquot N
 
 namespace MPSTensor
+
+/-- Unitality uniformly bounds the actual periodic state norm by the bond
+dimension, without primitivity or a transfer gap. This controls the weighted
+subleading blocks in PGVWC07, arXiv:quant-ph/0608197, Theorem 6, lines 970–993. -/
+theorem norm_mpvState_le_bondDimension_of_unital
+    {d D : ℕ} [NeZero D] (A : MPSTensor d D) (hUnital : Kraus.IsUnital A) (N : ℕ) :
+    ‖mpvState A N‖ ≤ D := by
+  have hOne : Kraus.transferMap A 1 = 1 := Kraus.map_one_of_isUnital A hUnital
+  have hSpec : ∀ z ∈ spectrum ℂ (Kraus.transferMap A), ‖z‖ ≤ 1 := by
+    intro z hz
+    exact (Kraus.isPositiveMap_mapLM A).eigenvalue_norm_le_one_of_map_one_eq_one hOne z
+      (Module.End.hasEigenvalue_iff_mem_spectrum.mpr hz)
+  have hTrace : LinearMap.trace ℂ (Matrix (Fin D) (Fin D) ℂ)
+      ((Kraus.transferMap A) ^ N) = mpvOverlap A A N := by
+    simpa only [Kraus.mixedMapLM_self] using trace_mixedMapLM_pow_eq_mpvOverlap A A N
+  have hBound := norm_trace_pow_le_of_spectrum_norm_le (Kraus.transferMap A) 1 hSpec N
+  rw [hTrace, ← ofReal_norm_mpvState_sq A N] at hBound
+  have hSq : ‖mpvState A N‖ ^ 2 ≤ (D : ℝ) ^ 2 := by
+    calc
+      ‖mpvState A N‖ ^ 2 ≤ |‖mpvState A N‖ ^ 2| := le_abs_self _
+      _ ≤ (D : ℝ) ^ 2 := by
+        simpa only [Complex.norm_real, Real.norm_eq_abs, Module.finrank_matrix,
+          Fintype.card_fin, Module.finrank_self, mul_one, one_pow, Nat.cast_mul,
+          pow_two] using hBound
+  nlinarith [norm_nonneg (mpvState A N), Nat.cast_nonneg (α := ℝ) D]
 
 /-- A uniform bound on all transfer eigenvalues other than one bounds the
 squared periodic MPS norm. Unital positivity makes the eigenvalue one
