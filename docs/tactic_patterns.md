@@ -45,6 +45,17 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Positive dimensions of canonical blocks — promoted (2026-10-30)
+
+- **Pattern:** `let : NeZero (h.dim k) := ⟨(h.dim_pos k).ne'⟩` before using a
+  canonical block as a tensor of positive bond dimension.
+- **Helper:** the instance `MPSTensor.PGVWC07CanonicalFormData.neZero_dim` in
+  `TNLean/MPS/CanonicalForm/PGVWC07CanonicalForm.lean`.
+- **Occurrences:** two in `WeightedCanonicalSectors.lean` and one in
+  `WeightedCanonicalPhysicalLimit.lean`, all removed.
+- **Decision:** An instance lets typeclass search supply positivity for every
+  block, instead of a local assumption at each use.
+
 ### One-site MPO blocking as physical relabeling — promoted (2026-10-29)
 
 - **Pattern:** Expand one-site blocking into singleton words and identify
@@ -10107,6 +10118,17 @@ removed after the dependency audit exposed it.
   threshold. Before extending this pattern to another module, move the value equality
   before the case distinction or reuse `Fin.val_inj`; no new tactic is needed.
 
+### Uniform periodic norm from transfer eigenvalues — reused trace bound (2026-10-29)
+
+- **Seen:** `MPS/Symmetry/PeriodicMPSNormLowerBound.lean` and
+  `MPS/ParentHamiltonian/WeightedCanonicalPhysicalLimit.lean`.
+- **Pattern:** Express the actual periodic squared norm as the trace of a transfer power,
+  then bound it by matrix-space dimension times a uniform eigenvalue bound.
+- **Reuse:** The existing `norm_trace_pow_le_of_spectrum_norm_le` supplies the trace estimate.
+  The public `norm_mpvState_le_bondDimension_of_unital` specializes it once to positive
+  unital maps and is reused for every canonical block; no new spectral proof or tactic.
+- **Validation:** Source-only; hosted Lean checking is pending.
+
 ### Rectangular reduction of doubled words — promoted (2026-10-29)
 
 - **Pattern:** Apply a full-word reduction to a physical block, double its
@@ -10645,3 +10667,65 @@ removed after the dependency audit exposed it.
 - **Notes:** The matrix-specific support-map presentation in the index
   comparison uses this shared owner; its duplicate private helper is removed.
 
+
+### Fixed exterior contractions of uncle words — reused lemmas (2026-10-29)
+
+- **Seen:** `MPS/ParentHamiltonian/UncleTwoWallTrial.lean`.
+- **Pattern:** Fix exterior words, compose their bilinear product maps with
+  a virtual functional, and represent the result by a trace boundary.
+- **Reuse:** `uncleBoundaryWord_slice_mem` states the common argument once;
+  the upper/lower moving-wall cancellations both use it. Existing matrix
+  trace representation and the actual two-site local-kernel identity supply
+  the remaining steps.
+- **Decision:** One source-specific lemma suffices; no new tactic or predicate.
+
+
+### Numbered trial segments under a local restriction — reused helpers (2026-10-29)
+
+- **Seen:** `MPS/ParentHamiltonian/UncleTrialLocalization.lean`, five physical segments.
+- **Pattern:** A local pair is either inside a numbered segment, splitting it
+  into fixed prefix, variable pair and fixed suffix, or outside the segment,
+  leaving its entire word fixed.
+- **Reuse:** Two shared segment lemmas carry all finite-index arithmetic; the
+  five segment cases reuse the existing wall and pure-parent kernel results.
+  Existing wrapping-site lemmas supply the periodic endpoint evaluations.
+- **Decision:** Keep the coordinate lemmas and direct source partition; no new
+  support predicate or assumed vanishing condition.
+
+
+### Conjugated projector contraction and quadratic form — reused Mathlib (2026-10-29)
+
+- **Seen:** `MPS/ParentHamiltonian/UncleTrialEnergy.lean`.
+- **Pattern:** The actual interaction is an isometric conjugate of a submodule
+  projection; transport norm and inner-product statements through that isometry.
+- **Reuse:** `Submodule.norm_starProjection_apply_le`,
+  `Submodule.re_inner_starProjection_eq_normSq` and the isometry's norm/inner
+  preservation give both claims directly. The endpoint quadratic sum reuses
+  the already-derived global cancellation identity and adjoint-inner identity.
+- **Decision:** No new projection structure or automation; use the library lemmas.
+
+
+### Removing the unpinned contribution at a wall endpoint — candidate (2026-10-29)
+
+- **Seen:** `MPS/ParentHamiltonian/UncleTrialPinnedWalls.lean`, four endpoint orientations.
+- **Pattern:** Split the actual wall word at its end, decompose the physical
+  vector into pinned and uniform contributions, and use linearity plus the
+  actual pure-sector local-kernel theorem to delete the uniform contribution.
+- **Reuse:** `uncleDomainWallWord_append` supplies the shared word split;
+  `uncleTwoWallCoefficient_rotate` supplies the rectangular rotation, also
+  replacing the repeated rotations in the interior and middle-region proofs.
+- **Decision:** Keep four explicit matrix orientations rather than introducing
+  a parallel wall-state structure. Their coordinate proofs reuse the same
+  inside/outside and endpoint segment lemmas.
+
+
+### Actual five-segment coordinates — reused list lemmas (2026-10-29)
+
+- **Seen:** `MPS/ParentHamiltonian/UncleTwoWallTrial.lean`.
+- **Pattern:** Evaluate a coefficient at nested Fin.append, or compare an
+  explicitly numbered source configuration with its five segment lengths.
+- **Reuse:** `List.ofFn_fin_append`, exact list take/drop rules and one
+  elementwise segment/slice identity give the coefficient comparison. The
+  length cast preserves the actual Euclidean norm by equality elimination.
+- **Decision:** Use these public coordinate identities rather than a parallel
+  configuration structure or a supplied norm-equivalence hypothesis.
