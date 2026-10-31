@@ -21,6 +21,7 @@ import TNLean.MPS.AreaLaw.AKLV.CutApproximationTail
 import TNLean.MPS.AreaLaw.AKLV.CutTransport
 import TNLean.MPS.AreaLaw.AKLV.FavorableFilter
 import TNLean.MPS.AreaLaw.AKLV.FavorableParameters
+import TNLean.MPS.AreaLaw.AKLV.FrustrationFreeClipping
 import TNLean.MPS.AreaLaw.AKLV.FullFrequencyRank
 import TNLean.MPS.AreaLaw.AKLV.GroundStateTail
 import TNLean.MPS.AreaLaw.AKLV.HighEnergyMass
