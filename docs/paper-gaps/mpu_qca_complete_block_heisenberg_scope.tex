@@ -92,23 +92,47 @@ each one-site algebra on the actual chain $[x-2k,x+4k)$ and applying
 finite one-site generation. Neither covariance nor output support is
 assumed.
 
-The original forward-only restriction was the supplied standard-form
-data, together with the unassembled inverse family and surjectivity.
-The completed supplied-data argument below removes the latter two
-restrictions. The
-unrestricted source statement starts from a bare MPU. Its source-faithful
-construction must first supply the required canonical/simple-block data;
-the present results consume those concrete data. The resulting forward
-buffering statement uses $4k$, with the source bond-dimension bound still
-to be derived in that assembly.
+\section{The canonical and bare-MPU construction now written}
 
-The elimination plan is to construct the supplied standard form from the
-paper's standing MPU data and assemble the actual inverse action.
-The physical-adjoint family supplies the inverse; these proved families
-then populate the existing compatible-local-action completion. The
-original-site radius follows from the source simple-block bound. The
-remaining source assembly is tracked by TNLean issue~\#7013; the induced
-QCA evaluation is also required by issue~\#7040.
+Canonical form II also gives canonical data for the physical adjoint.
+Its own positive simple block and standard form are therefore supplied
+internally, without assuming physical-adjoint simplicity at a prescribed
+length. The two actual completed forward maps are mutual inverses:
+choose one chain buffering both a finite input and its derived output
+support, identify the actual finite representatives by faithfulness, and
+cancel the physical unitary with its adjoint. Density extends both
+inverse identities. The actual QCA, source radius and fully buffered
+finite-chain formula are stated in
+\leanid{SpinChain.exists_isQCA_of_isMPUCanonicalFormII}.
+
+The existing representative theorem
+\leanid{MPOTensor.IsMPU.exists_reduced_cfii_representative}
+already supplies a reduced canonical-form-II tensor with
+$0<D_{\mathrm{red}}\le D$ and the same periodic operator family at every
+positive length. It is not a remaining hypothesis or missing supplier.
+Transporting only those actual physical matrices gives
+\leanid{SpinChain.exists_isQCA_of_isMPU}, and the actual chosen
+star-automorphism is
+\leanid{SpinChain.mpuQuasiLocalEquiv}.
+The radius enlarges from $4D_{\mathrm{red}}^4$ to $4D^4$.
+No selected source factors, source-cut ranks or virtual gauge are
+transported to the original auxiliary space.
+
+The public bare-MPU statement assumes only $d>0$ and the actual MPU
+property. Positivity of the bond dimension is derived from unitarity;
+positive physical dimension is intrinsic to the quasi-local algebra and
+is not inferred from the vacuous zero-alphabet reading of the MPU
+predicate. Neither canonical form nor a supplied standard form, inverse
+family, compatibility, covariance or output support is a public premise.
+The finite-chain formula covers all $N>1$ and every fully buffered
+original-site interval, with no divisibility condition.
+
+The earlier mathematical scope restriction is therefore discharged by
+the statement and complete proof now written. This note remains open
+until hosted Lean verification and integration of the construction;
+no uncompiled result is marked formalized. Tracking issue~\#7013 stays
+open for that acceptance. The separate MPU/QCA index comparison in
+issue~\#7040 is not asserted by this construction.
 
 The finite inverse step can be separated from periodic boundary
 relocation. The actual finite star-automorphism reflects forward
@@ -167,7 +191,6 @@ surjectivity. The declarations
 \leanid{SpinChain.bufferedMPUQuasiLocalAction_surjective} and
 \leanid{SpinChain.bufferedMPUQuasiLocalAut_isQCA} write this construction
 with only the forward supplied standard form and radius $4k$.
-They remain pending Lean checking.
 
 The unrestricted source reduction is distinct from this supplied-data
 proof. The repository already constructs a reduced canonical-form-II
