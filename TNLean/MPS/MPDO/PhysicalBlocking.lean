@@ -83,8 +83,8 @@ lemma blockTensor_apply (M : MPOTensor d D) (L : ℕ)
   rfl
 
 /-- Blocking one site is the original tensor in the canonical identification
-of its one-letter physical alphabet. Source: arXiv:1703.09188, physical
-blocking, lines 390–405. -/
+of its one-letter physical alphabet. Source: arXiv:1703.09188, definition
+`blocking`, lines 297–305. -/
 theorem blockTensor_one_eq_reindexPhysical (M : MPOTensor d D) :
     blockTensor M 1 = reindexPhysical (Kraus.singleBlockEquiv d) M := by
   ext i j
