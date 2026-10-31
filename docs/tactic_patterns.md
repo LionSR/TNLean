@@ -45,6 +45,19 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### One-site MPO blocking as physical relabeling — promoted (2026-10-29)
+
+- **Pattern:** Expand one-site blocking into singleton words and identify
+  its decoded physical letter with the original alphabet.
+- **Defined in:** `MPS/MPDO/PhysicalBlocking.lean`,
+  `MPOTensor.blockTensor_one_eq_reindexPhysical`.
+- **Refactored occurrences:** remove the identical private helpers from
+  `IdentityIndex.lean` and `InjectiveSourceIndex.lean`; both use the public
+  theorem, as does the new exact coarse-rank proof.
+- **Notes:** This is an actual MPO blocking identity at its existing owner;
+  no deprecated aliases or additional matrix layer is introduced.
+
+
 ### Conjugating a rectangular unitary identity — promoted (2026-10-29)
 
 - **Pattern:** Commute entrywise complex conjugation with the adjoint and
@@ -58,6 +71,19 @@ abstracted — record why, so it is not re-proposed).
   `MPS/MPU/ConjugationSymmetry.lean` transports both identities at once.
 - **Notes:** No new matrix predicate or parallel standard-form structure was
   introduced. The supplied half factors and gates are conjugated directly.
+
+### Adjoint simplicity from the canonical rank product — promoted (2026-10-29)
+
+- **Pattern:** Convert simplicity to `r*ℓ=d*d`, exchange the ranks under
+  physical adjunction and convert back using canonical form II.
+- **Defined in:** `MPS/MPU/SourceFactorsPhysicalAdjoint.lean`,
+  `IsMPUCanonicalFormII.isMPUSimple_physicalAdjointTensor`.
+- **Refactored occurrences:** the private helper in
+  `InverseCompatibleFamilyProperties.lean` and the inline proof in
+  `Index.lean`; both now use the theorem. The supplied Y-Gram and adjoint
+  factor constructions also use it, eliminating an adjoint-simplicity premise.
+- **Notes:** The theorem derives the premise from actual canonical data;
+  it does not introduce a new admissibility predicate or a witness supplier.
 
 ### Faithful bipartite matrix embeddings — promoted (2026-10-29)
 
@@ -5072,6 +5098,23 @@ three-plaquette output measurement, and the routed reunion measurement.
   `isReordering_comp_iff`; apply `IsReordering.comp` as a term instead.
 
 ## Candidates
+### Supplied standard-form source-cut contraction — candidate (2026-10-29)
+
+- **Pattern:** Preserve the external physical coordinates by Kronecker deltas,
+  expand the actual supplied half factors, and reorder the virtual sum once
+  to identify the middle gate.
+- **Seen:** `MPS/MPU/TwoSiteStandardFormSourceCuts.lean`, both cut
+  factorizations and both four-spin gate contractions.
+- **Abstraction:** Existing `Finset.sum_congr₂` handles consecutive two-index
+  descents. The cut identities are the reusable mathematical statements;
+  no new contraction tactic or parallel source-factor predicate is needed.
+- **Notes:** The sum over the virtual bond is consumed only by the actual
+  `v_apply` relation. No gauge or symmetry premise enters these identities.
+  The canonical construction now derives both coarse normalizations by
+  Kronecker products and actual cut ranks by existing blocking saturation.
+  Full row rank gives right inverses through Mathlib's matrix surjectivity
+  theorem; no duplicate inverse-construction tactic is introduced.
+
 
 ### Exact small indices from their defining sets — candidate (2026-10-29)
 
@@ -9803,12 +9846,16 @@ there is no need for a new tactic.
   mathematical lemma to a lower matrix-analysis module and reuse it; do not duplicate its
   statement or introduce a new tactic.
 
-### Local interaction separation by a joint boundary map — candidate
+### Local interaction separation by a joint boundary map — promoted
 - **Pattern:** compose an arbitrary local interaction with the joint boundary
   map, extend vanishing from a spanning word family using
   `LinearMap.ext_on_range`, and evaluate on `Pi.single` to isolate a block.
-- **Seen:** `MPS/ParentHamiltonian/ArbitraryInteractionBlockDegeneracy.lean`.
-- **Notes:** one occurrence. The implementation reuses Mathlib `LinearMap.lsum`
+- **Seen:** `MPS/ParentHamiltonian/ArbitraryInteractionBlockDegeneracy.lean`
+  and the finite-to-all-volumes consequence in
+  `MPS/ParentHamiltonian/FiniteVolumeConstraintPropagation.lean`.
+- **Abstraction:** `weighted_boundary_eq_zero_of_periodicLocalInteractionES_eq_zero`
+  now supplies both local component annihilation and the whole local-kernel
+  inclusion. The implementation reuses Mathlib `LinearMap.lsum`
   and `lsum_piSingle`; it avoids entrywise expansion of the local interaction.
   Positivity is used separately via QICLean's
   `WeightedPositiveKernel.apply_sum_eq_zero_iff`.
@@ -9923,6 +9970,56 @@ there is no need for a new tactic.
   purification structure or assume system/environment decoupling.
 
 
+### Unbounded-subsequence exclusion in overlap rigidity — candidate (2026-10-29)
+
+- **Pattern:** Compose the overlap limit with an unbounded subsequence;
+  equality on that subsequence identifies the cross-overlap with a self-overlap.
+- **Seen:** `MPS/MPU/EvenFamilyVirtualGauge.lean` (even-family virtual descent).
+- **Abstraction:** Reuse the existing normal overlap dichotomy and
+  `Filter.tendsto_atTop_mono`; no separate blocked-family predicate is needed.
+
+### Retaining and cancelling the even-family sign — candidate (2026-10-29)
+
+- **Pattern:** Keep the virtual sign from an even-family comparison, construct
+  the actual scalar-transformed source factors, and cancel its square only
+  at the two-right-factor gate contraction.
+- **Seen:** `MPS/MPU/EvenFamilySourceGauges.lean`; the derived rank and gate
+  comparisons replace the stronger all-standard-form-length hypothesis in
+  `TwoSiteStandardFormSourceCuts.lean` and `TimeReversalLocalNecessity.lean`.
+- **Abstraction:** `eq_sign_virtualSandwich_of_mpo_eq_even` packages the shared
+  actual virtual comparison. The existing normalized factor and gate
+  contractions are reused; no parallel source or admissibility predicate is
+  introduced. Reindex cancellation uses the existing linear equivalence.
+
+The even-family assembly reuses the existing
+`TwoSiteStandardFormData.reindexRanks` in
+`FundamentalTheoremGatesBlocked.lean`; the duplicate source-cut definition is
+removed after the dependency audit exposed it.
+
+### Standard forms with arbitrary normalized source gates — candidate (2026-10-29)
+
+- **Pattern:** Compare a normalized source record with the selected record
+  of the same tensor, then apply the resulting rank unitaries to the existing
+  open standard form.
+- **Seen:** `MPS/MPU/SourceFactorsStandardForm.lean`, reused for both the
+  source and actual physical-adjoint records in `TimeReversalLocalSufficiency.lean`.
+- **Abstraction:** The public `exists_twoSiteStandardFormData_sourceFactors`
+  supplies the actual data; no SVD or standard-form witness is added downstream.
+  The converse uses the existing periodic gauge cancellation theorem.
+
+### Finite local generation by single-site algebras — promoted helper (2026-10-29)
+
+- **Seen:** `MPS/MPU/TwoSiteBufferedAction.lean` and
+  `QCA/SingletonGeneration.lean`, used by `QCA/FiniteInverseLocality.lean`.
+- **Pattern:** Empty-region scalars form the base case; adjoining a disjoint singleton
+  and using `range_localObservable_union` propagates a subalgebra containment.
+- **Abstraction:** `range_localObservable_empty_le` and
+  `range_localObservable_le_of_singletons` retain this finite generation once.
+  The single-site commutant and finite inverse reflection reuse it.
+- **Refactored consumer:** The forward buffered-action equalizer argument consumes this
+  public helper in place of its private repeated finite-region induction.
+- **Validation:** Source-only; hosted Lean checking pending.
+
 ### Weighted geometric sums grouped by their anchors — promoted (2026-10-28)
 
 - **Seen:** `Lattice/LowEnergyCommutatorSum.lean`,
@@ -9959,6 +10056,32 @@ there is no need for a new tactic.
 - **Finite coordinates:** Reuse `Fin.cast_val_eq_self`, `Fin.val_natCast`,
   `Nat.mod_eq_of_lt`, and `Fin.val_add_eq_ite` in the matrix identities and the
   entry obstruction. No custom finite-arithmetic tactic is needed.
+
+
+### Rectangular reduction of doubled words — promoted (2026-10-29)
+
+- **Pattern:** Apply a full-word reduction to a physical block, double its
+  rectangular bond maps, and decode the blocked physical indices.
+- **Defined in:** `MPS/MPU/SimpleReduction.lean`,
+  `doubleLayer_evalWord_of_isReduction`.
+- **Reuse:** Promotes the existing `doubledBondMap` and
+  `doubleLayer_rectangularSandwich` from `SimpleSupportCompression.lean`;
+  the support-compression and full-word-reduction arguments share their owner.
+- **Related extraction:** `simple2_of_normalizedDiagonal_insertion` in
+  `SuppliedFixedWitnesses.lean` factors the existing positive-power insertion
+  argument. Both the old supplied-witness theorem and the new canonical
+  reduction theorem use that proof; no second induction was copied.
+- **Scope:** A one-letter sandwich alone is insufficient. The reduction must
+  contract every open word, including the empty word.
+
+### Actual W-vector blocking through the vacuum recurrence — candidate (2026-10-29)
+
+- **Seen:** `MPS/Examples/WStateBlocking.lean`, norm counting and the tensor-power encoding.
+- **Pattern:** Reindex a sum by `Fin.consEquiv`, use `Fintype.sum_prod_type`, and split the
+  physical qubit with `Fin.sum_univ_two`; the existing PVBS recurrence separates the
+  remaining W vector and vacuum. Block flattening uses the existing word concatenation.
+- **Decision:** One file, below the two-file promotion threshold. The private recurrence
+  lemmas retain the shared algebra once; no new tactic or general blocking framework.
 
 ### Regional and cyclic slice membership — candidate (2026-10-29)
 
@@ -10019,15 +10142,6 @@ there is no need for a new tactic.
   handles both endpoint restriction directions.
 - **Decision:** Reuse the lemmas; no new tactic or parallel dual structure.
 
-### Actual W-vector blocking through the vacuum recurrence — candidate (2026-10-29)
-
-- **Seen:** `MPS/Examples/WStateBlocking.lean`, norm counting and the tensor-power encoding.
-- **Pattern:** Reindex a sum by `Fin.consEquiv`, use `Fintype.sum_prod_type`, and split the
-  physical qubit with `Fin.sum_univ_two`; the existing PVBS recurrence separates the
-  remaining W vector and vacuum. Block flattening uses the existing word concatenation.
-- **Decision:** One file, below the two-file promotion threshold. The private recurrence
-  lemmas retain the shared algebra once; no new tactic or general blocking framework.
-
 ### Equality of two-element tensor families — candidate (2026-10-29)
 
 - **Seen:** `MPS/Examples/AnomalousCondensation/Z2Z2AnomalyClass.lean` and
@@ -10039,6 +10153,17 @@ there is no need for a new tactic.
   the bond-two restrictions; a shared API can be considered if another example
   needs this shape.
 - **Decision:** Mathematical extensionality suffices; no tactic is needed.
+
+
+### Cyclic coefficient identities from two spanning families — candidate (2026-10-29)
+
+- **Seen:** `uncleBoundary_cyclic_pairing_of_word_pairing` in
+  `MPS/ParentHamiltonian/UnclePeriodicClosure.lean` extends a cyclic identity
+  first from positive-length coefficient words and then from one-site letters.
+- **Reuse:** Compose the existing trace functional with the concrete left/right
+  coefficient linear maps, then apply `LinearMap.ext_on_range` twice. This
+  avoids duplicating scalar-sum or span-induction proofs and introduces no
+  new algebra instance or tactic.
 
 ### Delta half factors for a supplied two-site circuit (2026-10-29)
 
@@ -10183,6 +10308,19 @@ there is no need for a new tactic.
   for the tensor indices. Two occurrences in one file do not warrant a tactic.
 
 
+### Exact ground preservation from positive order — existing lemma (2026-10-29)
+
+- **Consumer:** `MPS/AreaLaw/AKLV/FrustrationFreeClipping.lean` derives exact
+  preservation of the original zero-energy ground vector from `0 ≤ K ≤ H`.
+- **Reuse:** `Matrix.mulVec_eq_smul_of_order_sandwich` at energy zero avoids
+  redoing termwise kernel arguments or functional calculus. Existing
+  `orthogonal_clipped_energy_ge` at energy zero already gives the inverse-gap
+  cutoff; no separate clipping-gap framework is introduced.
+- **Candidate:** The final orthogonal decomposition reuses
+  `re_inner_smul_add_eigenvector`, as does `CodimensionOneGap.lean`. A future
+  consolidation may expose that final gap-lifting step; this bounded wrapper
+  introduces no new tactic or general projector structure.
+
 ### Prefix reconstruction by canonical adjoints — candidate (2026-10-29)
 
 - **Seen:** `MPS/ParentHamiltonian/VaryingOBCIntersection.lean` and
@@ -10212,7 +10350,6 @@ there is no need for a new tactic.
   identity is exposed for reuse.
 
 
-
 ### Euclidean action on a Hermitian eigenbasis — promoted (2026-10-29)
 
 - **Pattern:** Transport Mathlib's `mulVec_eigenvectorBasis` equation through
@@ -10230,7 +10367,6 @@ there is no need for a new tactic.
   needed. Each replacement was checked before the next proof was changed.
 
 
-
 ### Support of an internal-bond sum — promoted (2026-10-29)
 
 - **Pattern:** Apply support under finite sums, then enlarge the two-site support
@@ -10242,7 +10378,6 @@ there is no need for a new tactic.
   `MPS/AreaLaw/AKLV/Normalization.lean` call that same lemma; the original three
   uses in `FiveRegionHamiltonian.lean` are retained. No parallel support API or
   new tactic is introduced.
-
 
 
 ### Real spectral membership from a nonzero eigenvector — promoted (2026-10-29)
@@ -10300,7 +10435,6 @@ there is no need for a new tactic.
 - **Refactored occurrences:** All three comparisons now reuse `add_sq_le`;
   the additional hand-written squared-difference nonnegativity argument is
   removed from the initialization proof. No new generic theorem is needed.
-
 
 
 ### Coherent dependent sequences of normalized images — candidate (2026-10-29)
@@ -10400,3 +10534,26 @@ there is no need for a new tactic.
   predicate or source witness is introduced. The new result eliminates
   transient terms in commuting weighted traces rather than reproving
   stabilization or the existing unweighted nilpotent trace theorem.
+
+### Kernel vectors in an open unitary contraction — candidate (2026-10-29)
+
+- **Pattern:** Tensor a kernel vector of one half factor with a fixed
+  coordinate of the other intermediate space; the isometric contraction
+  forces the vector to vanish. Apply the same argument to the adjoint
+  four-spin contraction for full row rank of the cut factors.
+- **Seen:** `MPS/MPU/SuppliedHalfFactorMinimality.lean`, original half factors
+  and both adjointed actual cut factors.
+- **Abstraction:** One private finite-coordinate kernel lemma and its
+  exchanged-leg form serve all four applications. Mathlib's existing
+  linear left-inverse and range-dimension APIs supply inverse matrices and
+  ranks; no parallel factorization structure or normalization predicate.
+
+### Iterating derived boundary intersections — reused library theorem (2026-10-29)
+
+- **Seen:** `MPS/ParentHamiltonian/UncleGroundSpace.lean`, the actual periodic uncle kernel.
+- **Reuse:** `contiguous_mem_of_restriction_intersection_submodules` iterates the already
+  derived single-wall boundary intersection with local length two. The actual kernel
+  theorem supplies its window conditions; no new induction or assumed intersection
+  predicate is introduced.
+- **Translation reuse:** `cyclicRestrictₗ_cyclicTranslateState` is promoted from private
+  visibility for this second consumer; the existing proof remains unchanged.

@@ -47,6 +47,8 @@ import TNLean.MPS.MPU.CompositionRanks
 import TNLean.MPS.MPU.ConjugationSourceFactors
 import TNLean.MPS.MPU.ConjugationSymmetry
 import TNLean.MPS.MPU.ConstantBranchingBounds
+import TNLean.MPS.MPU.CyclicConjugation
+import TNLean.MPS.MPU.CyclicFinitePropagation
 import TNLean.MPS.MPU.DaggerFusionCompatibility
 import TNLean.MPS.MPU.DaggerFusionScalars
 import TNLean.MPS.MPU.DaggerInverse
@@ -58,6 +60,8 @@ import TNLean.MPS.MPU.EncodedUniformMergingCircuit
 import TNLean.MPS.MPU.EndpointBondEncoding
 import TNLean.MPS.MPU.EndpointGramNormalization
 import TNLean.MPS.MPU.Equivalence
+import TNLean.MPS.MPU.EvenFamilySourceGauges
+import TNLean.MPS.MPU.EvenFamilyVirtualGauge
 import TNLean.MPS.MPU.ExactBoundedCutRankCircuit
 import TNLean.MPS.MPU.ExactCleanAmplificationCircuit
 import TNLean.MPS.MPU.ExactUniformMerging
@@ -68,6 +72,7 @@ import TNLean.MPS.MPU.FiniteAlphabetRows
 import TNLean.MPS.MPU.FiniteChainAdjoint
 import TNLean.MPS.MPU.FiniteChainConjugation
 import TNLean.MPS.MPU.FiniteGroupSourceRanks
+import TNLean.MPS.MPU.FiniteWindowSupport
 import TNLean.MPS.MPU.FundamentalTheorem
 import TNLean.MPS.MPU.FundamentalTheoremGates
 import TNLean.MPS.MPU.FundamentalTheoremGatesBlocked
@@ -173,7 +178,9 @@ import TNLean.MPS.MPU.SelectedSourceFactorVirtualGauge
 import TNLean.MPS.MPU.SelectedSourceGateVirtualGauge
 import TNLean.MPS.MPU.Simple
 import TNLean.MPS.MPU.SimpleBlocking
+import TNLean.MPS.MPU.SimpleCanonicalRepresentative
 import TNLean.MPS.MPU.SimpleRankOne
+import TNLean.MPS.MPU.SimpleReduction
 import TNLean.MPS.MPU.SimpleSupportCompression
 import TNLean.MPS.MPU.SimpleTensorEquivalence
 import TNLean.MPS.MPU.SimpleTensorProduct
@@ -186,6 +193,9 @@ import TNLean.MPS.MPU.SourceFactorChoice
 import TNLean.MPS.MPU.SourceFactorChoiceGates
 import TNLean.MPS.MPU.SourceFactorContraction
 import TNLean.MPS.MPU.SourceFactors
+import TNLean.MPS.MPU.SourceFactorsPhysicalAdjoint
+import TNLean.MPS.MPU.SourceFactorsScalar
+import TNLean.MPS.MPU.SourceFactorsStandardForm
 import TNLean.MPS.MPU.SourceFactorsTensorProduct
 import TNLean.MPS.MPU.SourceIndexValue
 import TNLean.MPS.MPU.SourcePeriodicSewing
@@ -206,6 +216,7 @@ import TNLean.MPS.MPU.StandardFormFromGates
 import TNLean.MPS.MPU.StandardFormParityCounterexample
 import TNLean.MPS.MPU.SuccessAttenuationCircuit
 import TNLean.MPS.MPU.SuppliedFixedWitnesses
+import TNLean.MPS.MPU.SuppliedHalfFactorMinimality
 import TNLean.MPS.MPU.SupportedAmplification
 import TNLean.MPS.MPU.SupportedChildColumns
 import TNLean.MPS.MPU.SymmetryPathTransport
@@ -215,6 +226,8 @@ import TNLean.MPS.MPU.TensorProductIndex
 import TNLean.MPS.MPU.ThreeFormInsertion
 import TNLean.MPS.MPU.ThreeFormSpan
 import TNLean.MPS.MPU.ThreeLeggedDecomposition
+import TNLean.MPS.MPU.TimeReversalLocalNecessity
+import TNLean.MPS.MPU.TimeReversalLocalSufficiency
 import TNLean.MPS.MPU.TimeReversalSign
 import TNLean.MPS.MPU.TimeReversalSignIntrinsic
 import TNLean.MPS.MPU.TimeReversalTraceGauge
@@ -231,7 +244,9 @@ import TNLean.MPS.MPU.TruncationCommutator
 import TNLean.MPS.MPU.TwoKrausPolar
 import TNLean.MPS.MPU.TwoSectorMerging
 import TNLean.MPS.MPU.TwoSiteBufferedAction
+import TNLean.MPS.MPU.TwoSiteCyclicInverse
 import TNLean.MPS.MPU.TwoSiteFiniteHeisenberg
+import TNLean.MPS.MPU.TwoSiteFiniteInverse
 import TNLean.MPS.MPU.TwoSiteLocalAction
 import TNLean.MPS.MPU.TwoSitePropagation
 import TNLean.MPS.MPU.TwoSiteQuasiLocalAction
@@ -239,6 +254,8 @@ import TNLean.MPS.MPU.TwoSiteStandardForm
 import TNLean.MPS.MPU.TwoSiteStandardFormCircuit
 import TNLean.MPS.MPU.TwoSiteStandardFormOpenWord
 import TNLean.MPS.MPU.TwoSiteStandardFormResidualWord
+import TNLean.MPS.MPU.TwoSiteStandardFormSourceCuts
+import TNLean.MPS.MPU.TwoSiteSurjectivity
 import TNLean.MPS.MPU.TwoSiteTranslationCovariance
 import TNLean.MPS.MPU.UniformCircuitResourceBounds
 import TNLean.MPS.MPU.UniformMergingResourceBounds
