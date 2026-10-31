@@ -54,12 +54,22 @@
             0,      & j\notin e(I).
         \end{cases}
     \end{align}
-    Then $E_e$ is a linear isometry. In particular, this applies to an
-    injection of dependent configuration sets induced by a family of
-    physical embeddings.
+    This applies in particular to an injection of dependent configuration
+    sets induced by a family of physical embeddings.
 \end{definition}
+
+\begin{lemma}[Extension by zero is an isometry]
+    \label{lem:physical_euclidean_extension_zero_isometry}
+    \lean{Function.Embedding.norm_euclideanExtendByZero}
+    \leanok
+    \uses{def:physical_euclidean_extension_zero}
+    For every injection $e:I\hookrightarrow J$ of finite sets, the map $E_e$
+    is linear and $\lVert E_e\xi\rVert=\lVert\xi\rVert$ for every
+    $\xi\in\mathbb C^I$.
+\end{lemma}
 \begin{proof}
     \leanok
+    \uses{def:physical_euclidean_extension_zero}
     Since $(E_e\xi)(j)=0$ for $j\notin e(I)$ and $e$ is injective,
     \begin{align}
         \sum_{j\in J}\lvert(E_e\xi)(j)\rvert^2
@@ -199,7 +209,8 @@ be the periodic sums of the complementary projections of these spaces.
     \label{lem:physical_sector_parent_projection_transport}
     \lean{MPSTensor.physical_sector_parent_projection_embed}
     \leanok
-    \uses{lem:physical_sector_word_orthogonality}
+    \uses{lem:physical_sector_word_orthogonality,
+        lem:physical_euclidean_extension_zero_isometry}
     For $R\ge1$, the complementary projection of the sum
     $U=E_R S+F_R T$ satisfies
     \begin{align}
@@ -222,7 +233,8 @@ be the periodic sums of the complementary projections of these spaces.
         MPSTensor.physical_sector_projectorHamiltonian_embed_eq_zero_iff}
     \leanok
     \uses{lem:physical_sector_parent_projection_transport,
-        lem:physical_spectator_embedding_transport}
+        lem:physical_spectator_embedding_transport,
+        lem:physical_euclidean_extension_zero_isometry}
     If $1\le R\le M$, then
     \begin{align}
         H_U E_Mv  & =E_MH_Sv,                             &

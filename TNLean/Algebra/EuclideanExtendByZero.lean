@@ -45,6 +45,11 @@ noncomputable def euclideanExtendByZero (e : I ↪ J) :
     nlinarith [norm_nonneg (LinearMap.withLpMap 2
       (Function.ExtendByZero.linearMap ℂ e) v), norm_nonneg v]
 
+/-- Extension by zero preserves the Euclidean norm of every coefficient vector. -/
+theorem norm_euclideanExtendByZero (e : I ↪ J) (v : EuclideanSpace ℂ I) :
+    ‖e.euclideanExtendByZero v‖ = ‖v‖ :=
+  e.euclideanExtendByZero.norm_map v
+
 /-- The embedded vector agrees with the original vector on every actual
 physical coordinate. -/
 @[simp] theorem euclideanExtendByZero_apply_image (e : I ↪ J)
