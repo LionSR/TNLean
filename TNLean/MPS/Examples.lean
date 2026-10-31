@@ -62,6 +62,7 @@ import TNLean.MPS.Examples.PVBSGroundSpace
 import TNLean.MPS.Examples.PVBSHamiltonian
 import TNLean.MPS.Examples.PVBSLocalInteraction
 import TNLean.MPS.Examples.PVBSLocalization
+import TNLean.MPS.Examples.PVBSOneParticleWindow
 import TNLean.MPS.Examples.PVBSPeriodicGroundSpace
 import TNLean.MPS.Examples.PauliWielandt
 import TNLean.MPS.Examples.PeriodicFullRingPhase

@@ -131,7 +131,9 @@ theorem trace_uncleTwoWallTransfer_join_exterior
     LinearMap.trace_mul_comm (R := ℂ) (M := Matrix (Fin a) (Fin a) ℂ)
       (E ^ p * M) (E ^ t), ← mul_assoc, ← pow_add, Nat.add_comm t p]
 
-private def fiveConfigEquiv (p r q s t : ℕ) :
+/-- Canonical concatenation of five consecutive physical configuration segments.
+Source: arXiv:1210.6613, the five intervals in phiN-def. -/
+def uncleFiveConfigEquiv (p r q s t : ℕ) :
     Cfg d p × (Cfg d r × (Cfg d q × (Cfg d s × Cfg d t))) ≃
       Cfg d (p + r + q + s + t) := by
   let e₁ := (Equiv.prodAssoc (Cfg d p) (Cfg d r) (Cfg d q × (Cfg d s × Cfg d t))).symm
@@ -144,9 +146,11 @@ private def fiveConfigEquiv (p r q s t : ℕ) :
   exact e₁.trans (e₂.trans (e₃.trans (e₄.trans (e₅.trans (e₆.trans
     (Fin.appendEquiv (α := Fin d) (p + r + q + s) t))))))
 
-private theorem fiveConfigEquiv_apply (p r q s t : ℕ)
+/-- The five-segment configuration equivalence is left-associated concatenation.
+Source: arXiv:1210.6613, the physical word ordering in phiN-def. -/
+theorem uncleFiveConfigEquiv_apply (p r q s t : ℕ)
     (z : Cfg d p × (Cfg d r × (Cfg d q × (Cfg d s × Cfg d t)))) :
-    fiveConfigEquiv p r q s t z =
+    uncleFiveConfigEquiv p r q s t z =
       Fin.append (Fin.append (Fin.append (Fin.append z.1 z.2.1) z.2.2.1)
         z.2.2.2.1) z.2.2.2.2 := rfl
 
@@ -167,9 +171,9 @@ theorem norm_uncleTwoWallTrial_sq_eq_trace_transfer
   rw [PiLp.norm_sq_eq_of_L2]
   change (∑ σ : Cfg d (p + r + q + s + t),
     ‖uncleTwoWallTrial A B R L p r q s t σ‖ ^ 2) = _
-  rw [← (fiveConfigEquiv (d := d) p r q s t).sum_comp
+  rw [← (uncleFiveConfigEquiv (d := d) p r q s t).sum_comp
     (fun σ ↦ ‖uncleTwoWallTrial A B R L p r q s t σ‖ ^ 2)]
-  simp only [Fintype.sum_prod_type, fiveConfigEquiv_apply, uncleTwoWallTrial_append_apply]
+  simp only [Fintype.sum_prod_type, uncleFiveConfigEquiv_apply, uncleTwoWallTrial_append_apply]
   rw [trace_uncleTwoWallTransfer_eq_sum]
   change _ = Complex.reCLM _
   simp only [map_sum, Complex.reCLM_apply, Complex.star_def,
