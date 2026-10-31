@@ -1,0 +1,23 @@
+\section{Image and equality coordinates of star-subalgebras}
+\label{sec:qca_star_subalgebra_coordinates}
+
+\begin{lemma}[Coordinate identifications preserve ambient values]
+    \label{lem:star_subalgebra_coordinate_equivalences}
+    \lean{StarSubalgebra.equivMapOfInjective,
+        StarSubalgebra.equivMapOfInjective_coe,
+        StarSubalgebra.equivOfEq,StarSubalgebra.equivOfEq_coe}
+    \leanok
+    Let $A,B$ be unital star-algebras over a commutative star-semiring
+    $R$. An injective star-algebra homomorphism $f:A\to B$ identifies
+    every star-subalgebra $S\subseteq A$ with its image $f(S)$, and the
+    identification sends $a\in S$ to the same ambient value $f(a)$.
+    Equal star-subalgebras are identified by preserving every ambient
+    element. These identifications retain both multiplication and star.
+\end{lemma}
+\begin{proof}\leanok
+    \leanok
+    Restrict the injective homomorphism to its image, using the usual
+    algebra isomorphism, and retain its preservation of star. The equality
+    identification changes the membership proof and leaves the element
+    itself unchanged, so it also preserves star.
+\end{proof}
