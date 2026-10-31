@@ -17,10 +17,10 @@ the two-letter source gate. Its two unitary equations then force a common
 local sign. An explicit coordinate dictionary gives the literal
 four-original-spin equation without another physical block.
 
-**Scope restriction (canonical source construction):** The public certificate
+**Scope restriction (canonical source construction):** The coarse and original-spin certificate
 theorems concern the actual standard form constructed from the chosen simple
 reduced canonical source tensor. Arbitrary supplied standard forms and the
-converse are separate obligations; see
+converse are treated separately; see
 `docs/paper-gaps/mpu_canonical_form_full_support.tex`. The original-leg rank
 dictionary is proved explicitly. The even-length convention and the need to
 retain the intermediate sign are recorded in
@@ -215,7 +215,12 @@ theorem coarse_gates_eq_four_spin_gates
     simp only [Matrix.reindexLinearEquiv_comp_apply, Equiv.trans_refl,
       Equiv.refl_trans, hcols]
 
-private theorem source_adjoint_certificate_of_even_symmetry
+/-- Actual normalized source factors of an explicitly canonical simple tensor
+have a local adjoint certificate when its even periodic family is adjoint
+invariant and its source ranks equal the physical dimension. The adjoint
+factors and both comparison gauges are derived internally.
+Source: arXiv:1703.09188, proof of `PropChiral`, lines 1237–1252. -/
+theorem IsMPUCanonicalFormII.exists_supplied_source_adjoint_certificate
     {q D : ℕ} {U : MPOTensor q D} (hU : IsMPUCanonicalFormII U)
     (hsimple : IsMPUSimple U) (S : SourceFactors U hU.ρ)
     (hr : r[U] = q) (hl : ℓ[U] = q)
@@ -328,7 +333,7 @@ theorem IsMPUCanonicalFormII.exists_coarse_timeReversal_certificate
   have hr : r[W] = d * d := hrB.trans (congrArg (d * ·) hrU)
   have hl : ℓ[W] = d * d := hlB.trans (congrArg (· * d) hlU)
   obtain ⟨σ, x, hσ, hlocal⟩ :=
-    source_adjoint_certificate_of_even_symmetry hW hSW S hr hl hTR
+    hW.exists_supplied_source_adjoint_certificate hSW S hr hl hTR
   exact ⟨hr, hl, σ, x, hσ, hlocal⟩
 
 /-- The literal four-original-spin time-reversal certificate for the actual
