@@ -16,6 +16,7 @@ in the explicitly supplied-data scope of
         MPOTensor.twoSiteSuppliedOutputEquiv,
         MPOTensor.twoSiteSuppliedHeisenbergMatrix}
     \leanok
+    \uses{thm:mpu_finite_heisenberg_complete_block}
     For arbitrary prefix and suffix lengths $p,s\ge0$, write $N=p+3+s$.
     The full input coordinates separate the $p$ prefix cells, the first
     and third input cells of the central window, the middle input
@@ -25,6 +26,7 @@ in the explicitly supplied-data scope of
     onto the full configuration set, and let
     \begin{align}
         M_{p,s} & =e_o^{-1}\operatorname{MPO}_W(N)e_i
+        \label{eq:mpu_supplied_window_matrix}
     \end{align}
     denote the periodic matrix in these two coordinate systems.
 \end{definition}
@@ -36,33 +38,60 @@ in the explicitly supplied-data scope of
         MPOTensor.twoSiteSuppliedHeisenbergMatrix_conjugation,
         MPOTensor.mpo_suppliedWindow_conjugation}
     \leanok
-    \uses{def:mpu_supplied_window_coordinates,thm:mpu_finite_heisenberg_complete_block}
-    Let $\Phi_{u,v}(A)$ be the actual four-half-site output observable.
-    For every input half-pair matrix $A$ and arbitrary $p,s\ge0$,
+    \uses{def:mpu_supplied_window_coordinates,
+        lem:mpu_two_site_open_three_block_buffers,
+        thm:mpu_supplied_two_site_periodic_unitary}
+    Let $B_{u,v}(A)$ be the four-half-site output observable of the open
+    three-block window. For every input half-pair matrix $A$ and arbitrary
+    $p,s\ge0$,
     \begin{align}
         M_{p,s}(I_{\rm in}\otimes A)
-         & =(I_{\rm out}\otimes\Phi_{u,v}(A))M_{p,s},\notag \\
-        M_{p,s}(I_{\rm in}\otimes A)M_{p,s}^*
-         & =I_{\rm out}\otimes\Phi_{u,v}(A).
+         & =(I_{\rm out}\otimes B_{u,v}(A))M_{p,s},
+        \label{eq:mpu_supplied_window_intertwiner}  \\
+        M_{p,s}(I_{\rm in}\otimes A)M_{p,s}^\dagger
+         & =I_{\rm out}\otimes B_{u,v}(A).
+        \label{eq:mpu_supplied_window_conjugation}
     \end{align}
     The matrix $M_{p,s}$ is unitary between the two complete coordinate
     spaces. In the original configuration coordinates,
     \begin{align}
         \operatorname{MPO}_W(N)\,
         e_i(I_{\rm in}\otimes A)e_i^{-1}\,
-        \operatorname{MPO}_W(N)^*
-         & =e_o(I_{\rm out}\otimes\Phi_{u,v}(A))e_o^{-1}.
+        \operatorname{MPO}_W(N)^\dagger
+         & =e_o(I_{\rm out}\otimes B_{u,v}(A))e_o^{-1}.
+        \label{eq:mpu_supplied_window_original_conjugation}
     \end{align}
-    The actual periodic matrix, both buffers and the periodic seam remain
+    The periodic matrix, both buffers and the periodic seam remain
     present. No output-locality identity or additional blocking is a premise.
 \end{lemma}
-\begin{proof}
-    \leanok
-    Attach the prefix and suffix words to the existing open three-block
-    intertwiner and take their actual virtual trace. The complete
-    coordinate bijections lift the resulting coefficient identity to
-    the full finite matrix product. The supplied standard form makes
-    the actual periodic matrix unitary for $N\ge3$; cancelling its
-    adjoint gives conjugation. Reindex both matrix products to obtain
-    the original-coordinate formula.
+\begin{proof}\leanok
+    Fix prefix and suffix rows and columns, and let $P$ and $Q$ be the
+    matrix products of the corresponding complete-block prefix and suffix
+    letters. In these coordinates the entry of $M_{p,s}$ at central
+    output $(e_-,a,b,e_+)$ and central input $(j_0,j,j_2)$ is the virtual
+    trace of the whole word,
+    \begin{align}
+        \bigl(M_{p,s}\bigr)_{(e_-,a,b,e_+),(j_0,j,j_2)}
+         & =\operatorname{tr}\bigl(P\,W^{(e_-,a_0),j_0}
+        W^{(a_1,b_0),j}W^{(b_1,e_+),j_2}\,Q\bigr)
+        =F_{P,Q}(a,b;j).
+        \label{eq:mpu_supplied_window_entry}
+    \end{align}
+    The buffered three-block identity $F_{P,Q}A=B_{u,v}(A)F_{P,Q}$ holds
+    for every such pair $P,Q$, which is
+    (\ref{eq:mpu_supplied_window_intertwiner}). Since $e_i,e_o$ are
+    bijections and $\operatorname{MPO}_W(N)$ is unitary for $N\ge3$,
+    \begin{align}
+        M_{p,s}M_{p,s}^\dagger
+         & =e_o^{-1}\operatorname{MPO}_W(N)\operatorname{MPO}_W(N)^\dagger e_o
+        =I,
+         &
+        M_{p,s}^\dagger M_{p,s}
+         & =I.
+        \label{eq:mpu_supplied_window_unitary}
+    \end{align}
+    Multiplying (\ref{eq:mpu_supplied_window_intertwiner}) on the right by
+    $M_{p,s}^\dagger$ gives (\ref{eq:mpu_supplied_window_conjugation}).
+    Substituting $\operatorname{MPO}_W(N)=e_oM_{p,s}e_i^{-1}$ gives
+    (\ref{eq:mpu_supplied_window_original_conjugation}).
 \end{proof}

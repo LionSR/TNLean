@@ -4405,37 +4405,26 @@ three-plaquette output measurement, and the routed reunion measurement.
   module imports it, preserving the same name and binders for every existing consumer.
   Actual varying-bond interval identification uses the same coordinate transport.
 
-### MPDO pair-trace separation duality
-- **Pattern:** use Hahn--Banach separation for a proper pair-matrix submodule,
-  represent the separating functional as a pair trace, and contradict trace
-  separation by proving the representing pair is zero.
-- **Reuse:** the private file-local helper
-  `pair_matrix_span_top_of_pair_trace_separating` in
-  `TNLean/MPS/MPDO/BiCFDerivation/Core.lean`.
-- **Result:** three copies in the homogeneous, cumulative, and all-word pair-span
-  criteria now reduce to generator membership facts. Public theorem statements and
-  trace-pairing order are unchanged.
-- **Update (2026-09-19):** the representation step is no longer proved from matrix
-  units. `Matrix.exists_trace_representation` is now the inverse of the linear equivalence with the
-  dual space induced by the nondegenerate trace form
-  (`Matrix.traceBilinForm`, `Matrix.traceBilinForm_nondegenerate`, and Mathlib's
-  `LinearMap.BilinForm.toDual`), and the pi- and pair-indexed corollaries are
-  three-line consequences of it. The separation step itself still runs by hand,
-  because no nondegeneracy statement exists yet for the pi-indexed or product trace
-  form; once one does, `Matrix.family_submodule_eq_top_of_trace_separating` and
-  `pair_matrix_span_top_of_pair_trace_separating` become one-line consequences.
-- **Update (2026-10-02):** the ordinary representation, finite-family
-  representation, and family span criterion are public in
-  `MPS/SharedInfra/MatrixFamilyTracePairing.lean`. The MPDO criteria and
-  the prescribed-length converse for the joint parent boundary map reuse
-  these proofs. No parallel product bilinear form is needed.
-- **Candidate (2026-09-19):** "a trace pairing that vanishes on a generating set
-  vanishes on its span" now appears twice as `Submodule.span_le` into the kernel of
-  the trace functional: `pair_trace_zero_on_span` in
-  `TNLean/MPS/MPDO/BiCFDerivation/Core.lean` and
-  `block_matrices_eq_zero_of_wordTupleSpanTop_trace` in
-  `TNLean/MPS/SharedInfra/WordTupleGauge.lean`. A third occurrence should be
-  abstracted into a single lemma over an indexed family of trace forms.
+### MPDO pair-trace separation duality — upstream reuse (2026-10-29)
+
+- **Pattern:** conclude that a family or product matrix subspace is the whole
+  algebra from trace separation, or that a boundary family is zero from a
+  full word span and vanishing pairings.
+- **Reuse:** QICLean's `Matrix.eq_top_of_pi_trace_separating`,
+  `Matrix.eq_top_of_prod_trace_separating`,
+  `Matrix.eq_zero_of_forall_sum_trace_mul_eq_zero`, and
+  `Matrix.eq_zero_of_forall_trace_mul_add_eq_zero` in
+  `QICLean/Algebra/TraceFormDuality.lean`. Generator vanishing extends to the
+  span by `Submodule.span_le` into the kernel of `piTraceForm` or `prodTraceForm`.
+- **Refactored occurrences:** the homogeneous, cumulative and all-word MPDO
+  pair criteria, simultaneous word-family separation, joint parent-boundary
+  injectivity, and joint inserted-boundary spanning. The remaining single
+  trace representation uses Mathlib's `LinearMap.BilinForm.toDual` directly.
+- **Deletion:** the three local public matrix-family wrappers and four private
+  pair-trace wrappers have no surviving call sites. The audit is
+  `docs/audits/2026-10-29_trace_form_duality_reuse.md` (#7850).
+- **Validation status:** source and deterministic import checks only; the user
+  requested writing without local Lean compilation. The change remains a draft.
 
 ### Martingale coefficient upper bound
 - **Pattern:** prove `((1 : ℝ) / (4 * (L : ℝ))) ≤ 1` from `hL : 1 < L` by
@@ -10154,6 +10143,7 @@ there is no need for a new tactic.
   `Matrix.reindexLinearEquiv_mul` with all three equivalences explicit,
   together with `Matrix.conjTranspose_reindex`; no new reindex algebra is built.
 
+
 ### Unbounded-subsequence exclusion in overlap rigidity — candidate (2026-10-29)
 
 - **Pattern:** Compose the overlap limit with an unbounded subsequence;
@@ -10415,6 +10405,58 @@ removed after the dependency audit exposed it.
   coefficient lemmas, without a new weighted state or density-matrix layer.
 - **Decision:** A mathematical lemma suffices; no custom tactic is needed.
 
+### Least residue padding at a fixed word degree — candidate (2026-10-29)
+
+- **Pattern:** Solve the two charge equations and total degree in residues,
+  bound the least-residue sum, and add a multiple of the modulus to one count.
+- **Seen:** The degree-seven and degree-eight reachability proofs in
+  `MPS/Examples/ShortMomentum/Charges.lean`.
+- **Abstraction:** A common least-residue construction could expose the
+  dependence on the chosen degree. The exceptional central residue at degree
+  seven still needs its separate arithmetic argument.
+- **Notes:** Two concrete occurrences in one file; the abstraction threshold
+  is not met. Reuse the current charge and count lemmas in downstream proofs.
+
+### Extending finite charge witnesses by a neutral word — promoted (2026-10-29)
+
+- **Seen:** The degree-seven, degree-eight, and degree-nine phase-detecting
+  word tables in `MPS/Examples/ShortMomentum/SevenCyclicObstruction.lean` and
+  `CyclicChargeDetection.lean`.
+- **Pattern:** Preserve both the total charge and the detecting first letters
+  while appending a fixed neutral physical word.
+- **Abstraction:** `MPSTensor.ShortMomentum.exists_distinct_cyclic_phases`
+  packages the three explicit base tables into one all-degree statement by
+  strong induction with a three-letter neutral suffix. The global boundary
+  closure calls this one helper.
+- **Notes:** The finite witness tables contain distinct mathematical data;
+  their closed reductions remain explicit. No specialized tactic is needed.
+
+### Translated interaction sections — candidate (2026-10-29)
+
+- **Seen:** the private canonical-parent restriction proof in
+  `MPS/ParentHamiltonian/Martingale/Transport.lean` and the arbitrary-interaction
+  proof in `MPS/ParentHamiltonian/Martingale/PeriodicInteractionSections.lean`.
+- **Pattern:** Restrict an identity-extended interaction to its own window,
+  identify the unchanged outside coordinates, and recover the inserted word.
+- **Abstraction:** The latter module exposes
+  `cyclicRestrictES_periodicLocalInteractionES` for arbitrary local operators.
+  The earlier canonical proof occurs before this module in the import order;
+  sharing it would require moving the general definition before that proof.
+- **Decision:** Record the two occurrences; do not introduce a tactic or an
+  import cycle for this small coordinate identity.
+
+### Complete finite windows by prefixing an existing tail equivalence — candidate (2026-10-29)
+
+- **Seen:** `MPS/MPU/TwoSiteSuppliedWindow.lean`.
+- **Pattern:** Combine the existing complete three-cell-plus-tail coordinate
+  equivalence with a prefix using `Equiv.prodAssoc` and `Fin.appendEquiv`.
+- **Reuse:** No input/output head-coordinate proof is copied. The existing
+  arbitrary buffered word intertwiner is evaluated in these complete
+  coordinates, and actual unitary-between data gives conjugation.
+- **Notes:** Returning to the original coordinates reuses
+  `Matrix.reindexLinearEquiv_mul` with all three equivalences explicit,
+  together with `Matrix.conjTranspose_reindex`; no new reindex algebra is built.
+
 ### Weighted geometric sums grouped by their anchors — promoted (2026-10-28)
 
 - **Seen:** `Lattice/LowEnergyCommutatorSum.lean`,
@@ -10438,6 +10480,20 @@ removed after the dependency audit exposed it.
 - **Decision:** Three branch occurrences in one file, below the two-file promotion
   threshold. Before extending this pattern to another module, move the value equality
   before the case distinction or reuse `Fin.val_inj`; no new tactic is needed.
+
+### Exact-length membership in the cyclic example — candidate (2026-10-29)
+
+- **Seen:** Return-block insertion and padded sandwich membership in
+  `MPS/Examples/CyclicWielandt/Spanning.lean` repeatedly combine two exact
+  lengths using `Kraus.wordSpan_add` and `Submodule.mul_mem_mul`.
+- **Reuse:** A private specialization to the concrete binary family names this
+  step. The arithmetic remains explicit, including the exceptional diagonal
+  recovered from the identity. There is one mathematical consumer file, so no
+  channel-generic tactic or new theory is introduced.
+- **Finite coordinates:** Reuse `Fin.cast_val_eq_self`, `Fin.val_natCast`,
+  `Nat.mod_eq_of_lt`, and `Fin.val_add_eq_ite` in the matrix identities and the
+  entry obstruction. No custom finite-arithmetic tactic is needed.
+
 
 
 ### Uniform periodic norm from transfer eigenvalues — reused trace bound (2026-10-29)
@@ -10476,20 +10532,6 @@ removed after the dependency audit exposed it.
 - **Decision:** One file, below the two-file promotion threshold. The private recurrence
   lemmas retain the shared algebra once; no new tactic or general blocking framework.
 
-### Exact-length membership in the cyclic example — candidate (2026-10-29)
-
-- **Seen:** Return-block insertion and padded sandwich membership in
-  `MPS/Examples/CyclicWielandt/Spanning.lean` repeatedly combine two exact
-  lengths using `Kraus.wordSpan_add` and `Submodule.mul_mem_mul`.
-- **Reuse:** A private specialization to the concrete binary family names this
-  step. The arithmetic remains explicit, including the exceptional diagonal
-  recovered from the identity. There is one mathematical consumer file, so no
-  channel-generic tactic or new theory is introduced.
-- **Finite coordinates:** Reuse `Fin.cast_val_eq_self`, `Fin.val_natCast`,
-  `Nat.mod_eq_of_lt`, and `Fin.val_add_eq_ite` in the matrix identities and the
-  entry obstruction. No custom finite-arithmetic tactic is needed.
-
-
 ### Regional and cyclic slice membership — candidate (2026-10-29)
 
 - **Seen:** The two inclusions in `PEPS/ParentHamiltonian/CycleParentGroundSpace.lean`
@@ -10509,18 +10551,6 @@ removed after the dependency audit exposed it.
   `Matrix.trace_reindex` perform the matrix algebra. One helper transports either resulting
   inclusion through physical blocking and the actual orthogonal-complement projector.
 - **Decision:** Two sector cases in one file; no new tactic or parallel ground-space predicate.
-
-### Equality of two-element tensor families — candidate (2026-10-29)
-
-- **Seen:** `MPS/Examples/AnomalousCondensation/Z2Z2AnomalyClass.lean` and
-  `Z2Z2BlockedAnomaly.lean`, the three subgroup restrictions.
-- **Pattern:** Prove family equality by the bond dimensions and heterogeneous
-  tensor equalities at the identity and generator.
-- **Abstraction:** The blocked example uses a private `twoFamily_ext` lemma at
-  all three restrictions. The older dressed example uses its own helper for
-  the bond-two restrictions; a shared API can be considered if another example
-  needs this shape.
-- **Decision:** Mathematical extensionality suffices; no tactic is needed.
 
 ### Rectangular trace agreement on a spanning family — candidate (2026-10-29)
 
@@ -10561,6 +10591,19 @@ removed after the dependency audit exposed it.
   handles both endpoint restriction directions.
 - **Decision:** Reuse the lemmas; no new tactic or parallel dual structure.
 
+### Equality of two-element tensor families — candidate (2026-10-29)
+
+- **Seen:** `MPS/Examples/AnomalousCondensation/Z2Z2AnomalyClass.lean` and
+  `Z2Z2BlockedAnomaly.lean`, the three subgroup restrictions.
+- **Pattern:** Prove family equality by the bond dimensions and heterogeneous
+  tensor equalities at the identity and generator.
+- **Abstraction:** The blocked example uses a private `twoFamily_ext` lemma at
+  all three restrictions. The older dressed example uses its own helper for
+  the bond-two restrictions; a shared API can be considered if another example
+  needs this shape.
+- **Decision:** Mathematical extensionality suffices; no tactic is needed.
+
+
 ### Cyclic coefficient identities from two spanning families — candidate (2026-10-29)
 
 - **Seen:** `uncleBoundary_cyclic_pairing_of_word_pairing` in
@@ -10595,6 +10638,7 @@ removed after the dependency audit exposed it.
 - **Reuse:** Normalize the exponent by `ring`, then use Mathlib's `gcongr`
   and `min_le_right`. This removes the third copy without introducing a
   new scalar lemma or tactic. The resulting proof passes strict elaboration.
+
 
 ### Complementary-product prefix and suffix — candidate (2026-10-29)
 
@@ -10631,6 +10675,19 @@ removed after the dependency audit exposed it.
   separate the index bookkeeping from the detectability estimate.
 - **Notes:** No tactic repetition reaches the promotion threshold. The
   repository pattern scan was rerun after the concrete chain assembly.
+
+### Specializing a nonnegative Gaussian variance — candidate (2026-10-29)
+
+- **Seen:** `Lattice/GaussianFilteredCommutatorSeries.lean`, the exponential
+  identity and its norm-convergent series specialization.
+- **Pattern:** Identify the actual filter variance `(q/ΔE²).toNNReal` with
+  the source's nonnegative real variance, then transport that equality
+  through the real-to-complex coercion once before applying the existing
+  QICLean theorem.
+- **Reuse:** `Real.coe_toNNReal`, `div_nonneg` and `congrArg` supply the
+  whole argument; no Gaussian integration or exponential proof is copied.
+- **Decision:** Two short occurrences in one file; no custom tactic or
+  new variance definition is needed.
 
 ### Intrinsic blocked traces from a product-tensor diagonal — candidate (2026-10-29)
 
@@ -10670,6 +10727,51 @@ removed after the dependency audit exposed it.
   Skolem–Noether theorem supplies the square implementer. No entrywise double sum
   or duplicate Skolem–Noether argument is introduced.
 
+### Adjacent physical cut Gram identities — promoted helpers (2026-10-29)
+
+- **Pattern:** reindex a physical configuration sum by restriction and the
+  letter at one cut site, then apply the actual adjacent-factor recursion.
+- **Occurrences:** both density and suffix-Gram recurrences in
+  `MPS/Preparation/OBCCanonicalRecurrences.lean`, and the two endpoint Gram
+  identifications in `OBCCanonicalEndpoints.lean`.
+- **Abstraction:** the explicit `extendCutPrefixEquiv`, `extendCutSuffixEquiv`,
+  `initialCutSuffixEquiv`, and `finalCutPrefixEquiv` in
+  `OBCCanonicalConfigurations.lean` centralize the configuration geometry.
+- **Decision:** the existing `Equiv.sum_comp` suffices after these mathematical
+  bijections; no tactic or parallel sum API is needed.
+
+### Rectangular cut comparison by actual physical prefix factors — promoted helper (2026-10-29)
+
+- **Pattern:** lift each physical cut-basis vector through the original prefix,
+  choose a left inverse of the minimal prefix, and use actual adjacent-prefix
+  recurrences to derive local rectangular maps with a one-sided inverse.
+- **Abstraction:** `OBCChainTensor.exists_rectangular_maps_to_cutBasis` in
+  `MPS/Preparation/OBCRectangularCutMaps.lean`; the simultaneous canonical
+  freedom theorem uses this helper without repeating the cut comparison.
+- **Decision:** a matrix-factor comparison lemma suffices; the common-bound
+  padding remains only in the actual boundary contractions, not in the
+  rectangular local formula.
+
+
+### Adjacent-cut Gram recurrences — promoted shared physical identities (2026-10-29)
+
+- **Pattern:** use the physical prefix/suffix extension bijections to pass
+  between a Gram sum and the sum over one additional physical letter.
+- **Abstraction:** `prefixGram_eq_sum_of_extendCutPrefix` and
+  `suffixGram_eq_sum_of_extendCutSuffix` in
+  `MPS/Preparation/PhysicalCutGramRecurrences.lean`.
+- **Occurrences:** both recurrences for constructed canonical cut factors in
+  `OBCCanonicalRecurrences.lean`.
+- **Decision:** the physical cut identities are shared; callers supply their
+  actual adjacent-factor recurrence instead of copying the double-sum proof.
+
+### Positive-length index equality — candidate (2026-10-29)
+
+- **Seen:** The classical and quantum index equalities in
+  `Wielandt/Primitivity/Stochastic.lean` identify the positive-length
+  admissible sets, discard length zero, and apply `congrArg sInf`.
+- **Reuse:** Fixed-length equivalences remain in QICLean; use set extensionality
+  for the tensor indices. Two occurrences in one file do not warrant a tactic.
 ### Signed unitary transfer comparisons and weighted traces — candidate (2026-10-29)
 
 - **Pattern:** Express an actual transfer as `η • A E`, where `A` is an

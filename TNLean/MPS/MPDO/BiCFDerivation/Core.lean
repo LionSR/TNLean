@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.PerCopyHorizontalCF
-import TNLean.MPS.SharedInfra.MatrixFamilyTracePairing
+import QICLean.Algebra.TraceFormDuality
 import TNLean.MPS.SharedInfra.WordTupleGauge
 import Mathlib.LinearAlgebra.Finsupp.LinearCombination
 import Mathlib.LinearAlgebra.Prod
@@ -391,45 +391,6 @@ theorem pairTraceSeparatingUpTo_of_pairTraceSeparatingAt {D₁ D₂ : ℕ}
   exact hSep ΔA ΔB (fun w => by
     simpa using hΔ (List.ofFn w) (by simp))
 
-private theorem exists_pair_trace_repr {m n : Type*} [Fintype m] [Fintype n]
-    (f : (Matrix m m ℂ × Matrix n n ℂ) →ₗ[ℂ] ℂ) :
-    ∃ ΔA : Matrix m m ℂ, ∃ ΔB : Matrix n n ℂ,
-      ∀ M : Matrix m m ℂ × Matrix n n ℂ,
-        f M = Matrix.trace (ΔA * M.1) + Matrix.trace (ΔB * M.2) := by
-  classical
-  obtain ⟨ΔA, hA⟩ := Matrix.exists_trace_representation
-    (f.comp (LinearMap.inl ℂ (Matrix m m ℂ) (Matrix n n ℂ)))
-  obtain ⟨ΔB, hB⟩ := Matrix.exists_trace_representation
-    (f.comp (LinearMap.inr ℂ (Matrix m m ℂ) (Matrix n n ℂ)))
-  refine ⟨ΔA, ΔB, fun M ↦ ?_⟩
-  rw [← LinearMap.coprod_comp_inl_inr f, LinearMap.coprod_apply, hA M.1, hB M.2]
-
-private theorem pair_matrix_span_top_of_pair_trace_separating {D₁ D₂ : ℕ}
-    (W : Submodule ℂ
-      (Matrix (Fin D₁) (Fin D₁) ℂ × Matrix (Fin D₂) (Fin D₂) ℂ))
-    (hSep : ∀ (ΔA : Matrix (Fin D₁) (Fin D₁) ℂ)
-        (ΔB : Matrix (Fin D₂) (Fin D₂) ℂ),
-      (∀ M ∈ W, Matrix.trace (ΔA * M.1) + Matrix.trace (ΔB * M.2) = 0) →
-        ΔA = 0 ∧ ΔB = 0) :
-    W = ⊤ := by
-  classical
-  by_contra hnot
-  have hlt : W < ⊤ := lt_of_le_of_ne le_top hnot
-  obtain ⟨f, hfne, hfker⟩ := Submodule.exists_le_ker_of_lt_top W hlt
-  obtain ⟨ΔA, ΔB, hf_repr⟩ := exists_pair_trace_repr f
-  have hΔ : ΔA = 0 ∧ ΔB = 0 := by
-    refine hSep ΔA ΔB ?_
-    intro M hM
-    have hf0 : f M = 0 := hfker hM
-    simpa [hf_repr] using hf0
-  have hfzero : f = 0 := by
-    apply LinearMap.ext
-    intro M
-    have hM := hf_repr M
-    rw [hΔ.1, hΔ.2] at hM
-    simpa using hM
-  exact hfne hfzero
-
 /-- Finite-word trace separation has a finite homogeneous word-tuple span
 witness. -/
 theorem exists_wordTupleSpanTop_of_hasFiniteWordTraceSeparation
@@ -440,15 +401,14 @@ theorem exists_wordTupleSpanTop_of_hasFiniteWordTraceSeparation
   rcases hSep with ⟨L, hL⟩
   refine ⟨L, ?_⟩
   unfold WordTupleSpanTop
-  exact Matrix.family_submodule_eq_top_of_trace_separating
-    (Submodule.span ℂ (Set.range (wordTuple A L))) (by
-      intro Δ hZero
-      refine hL Δ ?_
-      intro w
-      have hwmem : wordTuple A L w ∈
-          Submodule.span ℂ (Set.range (wordTuple A L)) :=
-        Submodule.subset_span ⟨w, rfl⟩
-      simpa [wordTuple] using hZero (wordTuple A L w) hwmem)
+  apply Matrix.eq_top_of_pi_trace_separating
+  intro Δ hZero
+  apply funext
+  refine hL Δ ?_
+  intro w
+  have hwmem : wordTuple A L w ∈ Submodule.span ℂ (Set.range (wordTuple A L)) :=
+    Submodule.subset_span ⟨w, rfl⟩
+  simpa [wordTuple] using hZero (wordTuple A L w) hwmem
 
 /-- Finite-word trace separation is equivalent to a homogeneous word-tuple span
 at some finite length. -/
@@ -458,35 +418,6 @@ theorem hasFiniteWordTraceSeparation_iff_exists_wordTupleSpanTop
   ⟨exists_wordTupleSpanTop_of_hasFiniteWordTraceSeparation A, fun ⟨_, hSpan⟩ ↦
     hasFiniteWordTraceSeparation_of_wordTupleSpanTop A hSpan⟩
 
-private theorem pair_trace_zero_on_span {D₁ D₂ : ℕ}
-    {Ω : Set (Matrix (Fin D₁) (Fin D₁) ℂ × Matrix (Fin D₂) (Fin D₂) ℂ)}
-    (ΔA : Matrix (Fin D₁) (Fin D₁) ℂ)
-    (ΔB : Matrix (Fin D₂) (Fin D₂) ℂ)
-    (hΩ : ∀ M ∈ Ω, Matrix.trace (ΔA * M.1) + Matrix.trace (ΔB * M.2) = 0) :
-    ∀ M : Matrix (Fin D₁) (Fin D₁) ℂ × Matrix (Fin D₂) (Fin D₂) ℂ,
-      M ∈ Submodule.span ℂ Ω →
-        Matrix.trace (ΔA * M.1) + Matrix.trace (ΔB * M.2) = 0 := by
-  have hle : Submodule.span ℂ Ω ≤ LinearMap.ker
-      ((Matrix.traceBilinForm _ ΔA).coprod (Matrix.traceBilinForm _ ΔB)) :=
-    Submodule.span_le.2 fun M hM ↦ by simpa using hΩ M hM
-  intro M hM
-  simpa using hle hM
-
-private theorem eq_zero_and_eq_zero_of_pair_trace_eq_zero {D₁ D₂ : ℕ}
-    (W : Submodule ℂ
-      (Matrix (Fin D₁) (Fin D₁) ℂ × Matrix (Fin D₂) (Fin D₂) ℂ))
-    (hW : W = ⊤)
-    (ΔA : Matrix (Fin D₁) (Fin D₁) ℂ)
-    (ΔB : Matrix (Fin D₂) (Fin D₂) ℂ)
-    (hZero : ∀ M ∈ W,
-      Matrix.trace (ΔA * M.1) + Matrix.trace (ΔB * M.2) = 0) :
-    ΔA = 0 ∧ ΔB = 0 := by
-  constructor
-  · exact (Matrix.ext_iff_trace_mul_right (A := ΔA) (B := 0)).2 fun M ↦ by
-      simpa using hZero (M, 0) (by rw [hW]; exact Submodule.mem_top)
-  · exact (Matrix.ext_iff_trace_mul_right (A := ΔB) (B := 0)).2 fun N ↦ by
-      simpa using hZero (0, N) (by rw [hW]; exact Submodule.mem_top)
-
 /-- The pair trace-separation criterion is the dual form of pair product-span. -/
 theorem pairWordTupleSpanTop_of_pairTraceSeparatingAt {D₁ D₂ : ℕ}
     (A : MPSTensor d D₁) (B : MPSTensor d D₂) {S : ℕ}
@@ -494,15 +425,15 @@ theorem pairWordTupleSpanTop_of_pairTraceSeparatingAt {D₁ D₂ : ℕ}
     PairWordTupleSpanTop A B S := by
   classical
   unfold PairWordTupleSpanTop
-  exact pair_matrix_span_top_of_pair_trace_separating
-    (Submodule.span ℂ (Set.range (pairWordTuple A B S))) (by
-      intro ΔA ΔB hZero
-      refine hSep ΔA ΔB ?_
-      intro w
-      have hwmem : pairWordTuple A B S w ∈
-          Submodule.span ℂ (Set.range (pairWordTuple A B S)) :=
-        Submodule.subset_span ⟨w, rfl⟩
-      simpa [pairWordTuple] using hZero (pairWordTuple A B S w) hwmem)
+  apply Matrix.eq_top_of_prod_trace_separating
+  rintro ⟨ΔA, ΔB⟩ hZero
+  apply Prod.ext_iff.mpr
+  refine hSep ΔA ΔB ?_
+  intro w
+  have hwmem : pairWordTuple A B S w ∈
+      Submodule.span ℂ (Set.range (pairWordTuple A B S)) :=
+    Submodule.subset_span ⟨w, rfl⟩
+  simpa [pairWordTuple] using hZero (pairWordTuple A B S w) hwmem
 
 /-- Homogeneous pair product-span gives homogeneous trace separation. -/
 theorem pairTraceSeparatingAt_of_pairWordTupleSpanTop {D₁ D₂ : ℕ}
@@ -511,19 +442,14 @@ theorem pairTraceSeparatingAt_of_pairWordTupleSpanTop {D₁ D₂ : ℕ}
     PairTraceSeparatingAt A B S := by
   classical
   intro ΔA ΔB hΔ
-  have hZeroOnSpan :
-      ∀ M : Matrix (Fin D₁) (Fin D₁) ℂ × Matrix (Fin D₂) (Fin D₂) ℂ,
-        M ∈ Submodule.span ℂ (Set.range (pairWordTuple A B S)) →
-          Matrix.trace (ΔA * M.1) + Matrix.trace (ΔB * M.2) = 0 := by
-    intro M hM
-    exact pair_trace_zero_on_span ΔA ΔB
-      (Ω := Set.range (pairWordTuple A B S))
-      (by
-        rintro M ⟨w, rfl⟩
-        exact hΔ w)
-      M hM
-  exact eq_zero_and_eq_zero_of_pair_trace_eq_zero
-    (Submodule.span ℂ (Set.range (pairWordTuple A B S))) hSpan ΔA ΔB hZeroOnSpan
+  have hle : Submodule.span ℂ (Set.range (pairWordTuple A B S)) ≤
+      LinearMap.ker (Matrix.prodTraceForm (Fin D₁) (Fin D₂) (ΔA, ΔB)) := by
+    apply Submodule.span_le.mpr
+    rintro M ⟨w, rfl⟩
+    change Matrix.prodTraceForm (Fin D₁) (Fin D₂) (ΔA, ΔB) (pairWordTuple A B S w) = 0
+    simpa only [Matrix.prodTraceForm_apply, pairWordTuple] using hΔ w
+  exact Prod.mk.inj (Matrix.eq_zero_of_forall_trace_mul_add_eq_zero (ΔA, ΔB)
+    (fun M ↦ hle (by rw [hSpan]; exact Submodule.mem_top)))
 
 /-- Homogeneous pair product-span is equivalent to homogeneous trace separation. -/
 theorem pairWordTupleSpanTop_iff_pairTraceSeparatingAt {D₁ D₂ : ℕ}
@@ -539,14 +465,14 @@ theorem pairCumulativeWordTupleSpanTop_of_pairTraceSeparatingUpTo {D₁ D₂ : �
     PairCumulativeWordTupleSpanTop A B S := by
   classical
   unfold PairCumulativeWordTupleSpanTop
-  exact pair_matrix_span_top_of_pair_trace_separating
-    (pairCumulativeSpan A B S) (by
-      intro ΔA ΔB hZero
-      refine hSep ΔA ΔB ?_
-      intro w hw
-      have hwmem : pairEvalWordTuple A B w ∈ pairCumulativeSpan A B S :=
-        pairEvalWordTuple_mem_pairCumulativeSpan A B hw
-      simpa [pairEvalWordTuple] using hZero (pairEvalWordTuple A B w) hwmem)
+  apply Matrix.eq_top_of_prod_trace_separating
+  rintro ⟨ΔA, ΔB⟩ hZero
+  apply Prod.ext_iff.mpr
+  refine hSep ΔA ΔB ?_
+  intro w hw
+  have hwmem : pairEvalWordTuple A B w ∈ pairCumulativeSpan A B S :=
+    pairEvalWordTuple_mem_pairCumulativeSpan A B hw
+  simpa [pairEvalWordTuple] using hZero (pairEvalWordTuple A B w) hwmem
 
 /-- Cumulative pair product-span gives cumulative trace separation. -/
 theorem pairTraceSeparatingUpTo_of_pairCumulativeWordTupleSpanTop {D₁ D₂ : ℕ}
@@ -555,19 +481,14 @@ theorem pairTraceSeparatingUpTo_of_pairCumulativeWordTupleSpanTop {D₁ D₂ : �
     PairTraceSeparatingUpTo A B S := by
   classical
   intro ΔA ΔB hΔ
-  have hZeroOnSpan :
-      ∀ M : Matrix (Fin D₁) (Fin D₁) ℂ × Matrix (Fin D₂) (Fin D₂) ℂ,
-        M ∈ pairCumulativeSpan A B S →
-          Matrix.trace (ΔA * M.1) + Matrix.trace (ΔB * M.2) = 0 := by
-    intro M hM
-    exact pair_trace_zero_on_span ΔA ΔB
-      (Ω := {M | ∃ w : List (Fin d), w.length ≤ S ∧ M = pairEvalWordTuple A B w})
-      (by
-        rintro M ⟨w, hw, rfl⟩
-        exact hΔ w hw)
-      M (by simpa [pairCumulativeSpan] using hM)
-  exact eq_zero_and_eq_zero_of_pair_trace_eq_zero
-    (pairCumulativeSpan A B S) hSpan ΔA ΔB hZeroOnSpan
+  have hle : pairCumulativeSpan A B S ≤
+      LinearMap.ker (Matrix.prodTraceForm (Fin D₁) (Fin D₂) (ΔA, ΔB)) := by
+    apply Submodule.span_le.mpr
+    rintro M ⟨w, hw, rfl⟩
+    change Matrix.prodTraceForm (Fin D₁) (Fin D₂) (ΔA, ΔB) (pairEvalWordTuple A B w) = 0
+    simpa only [Matrix.prodTraceForm_apply, pairEvalWordTuple] using hΔ w hw
+  exact Prod.mk.inj (Matrix.eq_zero_of_forall_trace_mul_add_eq_zero (ΔA, ΔB)
+    (fun M ↦ hle (by rw [hSpan]; exact Submodule.mem_top)))
 
 /-- Cumulative trace separation is equivalent to cumulative pair product-span. -/
 theorem pairCumulativeWordTupleSpanTop_iff_pairTraceSeparatingUpTo {D₁ D₂ : ℕ}
@@ -611,14 +532,14 @@ theorem pairAllWordsSpanTop_of_pairTraceSeparatingAll {D₁ D₂ : ℕ}
     PairAllWordsSpanTop A B := by
   classical
   unfold PairAllWordsSpanTop
-  exact pair_matrix_span_top_of_pair_trace_separating
-    (pairAllWordsSpan A B) (by
-      intro ΔA ΔB hZero
-      refine hSep ΔA ΔB ?_
-      intro w
-      have hwmem : pairEvalWordTuple A B w ∈ pairAllWordsSpan A B :=
-        Submodule.subset_span ⟨w, rfl⟩
-      simpa [pairEvalWordTuple] using hZero (pairEvalWordTuple A B w) hwmem)
+  apply Matrix.eq_top_of_prod_trace_separating
+  rintro ⟨ΔA, ΔB⟩ hZero
+  apply Prod.ext_iff.mpr
+  refine hSep ΔA ΔB ?_
+  intro w
+  have hwmem : pairEvalWordTuple A B w ∈ pairAllWordsSpan A B :=
+    Submodule.subset_span ⟨w, rfl⟩
+  simpa [pairEvalWordTuple] using hZero (pairEvalWordTuple A B w) hwmem
 
 /-- The span of all finite pair words gives trace separation by all finite pair words. -/
 theorem pairTraceSeparatingAll_of_pairAllWordsSpanTop {D₁ D₂ : ℕ}
@@ -627,19 +548,14 @@ theorem pairTraceSeparatingAll_of_pairAllWordsSpanTop {D₁ D₂ : ℕ}
     PairTraceSeparatingAll A B := by
   classical
   intro ΔA ΔB hΔ
-  have hZeroOnSpan :
-      ∀ M : Matrix (Fin D₁) (Fin D₁) ℂ × Matrix (Fin D₂) (Fin D₂) ℂ,
-        M ∈ pairAllWordsSpan A B →
-          Matrix.trace (ΔA * M.1) + Matrix.trace (ΔB * M.2) = 0 := by
-    intro M hM
-    exact pair_trace_zero_on_span ΔA ΔB
-      (Ω := Set.range (pairEvalWordTuple A B))
-      (by
-        rintro M ⟨w, rfl⟩
-        exact hΔ w)
-      M (by simpa [pairAllWordsSpan] using hM)
-  exact eq_zero_and_eq_zero_of_pair_trace_eq_zero
-    (pairAllWordsSpan A B) hSpan ΔA ΔB hZeroOnSpan
+  have hle : pairAllWordsSpan A B ≤
+      LinearMap.ker (Matrix.prodTraceForm (Fin D₁) (Fin D₂) (ΔA, ΔB)) := by
+    apply Submodule.span_le.mpr
+    rintro M ⟨w, rfl⟩
+    change Matrix.prodTraceForm (Fin D₁) (Fin D₂) (ΔA, ΔB) (pairEvalWordTuple A B w) = 0
+    simpa only [Matrix.prodTraceForm_apply, pairEvalWordTuple] using hΔ w
+  exact Prod.mk.inj (Matrix.eq_zero_of_forall_trace_mul_add_eq_zero (ΔA, ΔB)
+    (fun M ↦ hle (by rw [hSpan]; exact Submodule.mem_top)))
 
 /-- All-length trace separation is equivalent to all-word pair product-span. -/
 theorem pairAllWordsSpanTop_iff_pairTraceSeparatingAll {D₁ D₂ : ℕ}
