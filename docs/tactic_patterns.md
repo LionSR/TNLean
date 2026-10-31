@@ -10042,6 +10042,8 @@ there is no need for a new tactic.
 
 ### Finite gate conjugation in matrix units — candidate (2026-10-29)
 
+### Pure output Gram projection — library zero criterion (2026-10-29)
+
 - **Seen:** `MPS/MPU/TwoSiteStandardFormOpenWord.lean` and
   `QCA/MargolusTensorLocalRule.lean`.
 - **Pattern:** Expand the middle observable once as a finite matrix-unit
