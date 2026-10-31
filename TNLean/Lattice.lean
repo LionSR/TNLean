@@ -20,6 +20,7 @@ import TNLean.Lattice.GaussianCauchyKernel
 import TNLean.Lattice.GaussianCauchyNormalization
 import TNLean.Lattice.GaussianCauchyTransform
 import TNLean.Lattice.GaussianConnectedCorrelation
+import TNLean.Lattice.GaussianFilteredCommutatorSeries
 import TNLean.Lattice.GaussianFilteredGround
 import TNLean.Lattice.GaussianFilteredIncrement
 import TNLean.Lattice.GaussianFilteredLocality

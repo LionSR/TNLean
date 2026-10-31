@@ -321,6 +321,14 @@ normalizations.
   the cited passage's literal positive-eigenvector and peripheral-uniqueness
   wording; it records the interpretation above and makes this predicate
   strictly stronger than peripheral primitivity alone.
+- **Literal source criterion:**
+  `MPSTensor.primitivePaper_iff_exists_simple_peripheral_fixedPoint` and
+  `MPSTensor.hasEventuallyFullKrausRank_iff_exists_simple_peripheral_fixedPoint`
+  in `TNLean/Wielandt/Primitivity/PeripheralCriterion.lean` state the source's
+  third clause directly, with a positive-definite fixed matrix spanning the
+  fixed eigenspace and no other peripheral eigenvalue. Their reverse direction
+  derives irreducibility through QICLean's channel criterion; it does not
+  assume it as additional input.
 
 ## Injectivity
 

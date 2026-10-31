@@ -4405,37 +4405,26 @@ three-plaquette output measurement, and the routed reunion measurement.
   module imports it, preserving the same name and binders for every existing consumer.
   Actual varying-bond interval identification uses the same coordinate transport.
 
-### MPDO pair-trace separation duality
-- **Pattern:** use Hahn--Banach separation for a proper pair-matrix submodule,
-  represent the separating functional as a pair trace, and contradict trace
-  separation by proving the representing pair is zero.
-- **Reuse:** the private file-local helper
-  `pair_matrix_span_top_of_pair_trace_separating` in
-  `TNLean/MPS/MPDO/BiCFDerivation/Core.lean`.
-- **Result:** three copies in the homogeneous, cumulative, and all-word pair-span
-  criteria now reduce to generator membership facts. Public theorem statements and
-  trace-pairing order are unchanged.
-- **Update (2026-09-19):** the representation step is no longer proved from matrix
-  units. `Matrix.exists_trace_representation` is now the inverse of the linear equivalence with the
-  dual space induced by the nondegenerate trace form
-  (`Matrix.traceBilinForm`, `Matrix.traceBilinForm_nondegenerate`, and Mathlib's
-  `LinearMap.BilinForm.toDual`), and the pi- and pair-indexed corollaries are
-  three-line consequences of it. The separation step itself still runs by hand,
-  because no nondegeneracy statement exists yet for the pi-indexed or product trace
-  form; once one does, `Matrix.family_submodule_eq_top_of_trace_separating` and
-  `pair_matrix_span_top_of_pair_trace_separating` become one-line consequences.
-- **Update (2026-10-02):** the ordinary representation, finite-family
-  representation, and family span criterion are public in
-  `MPS/SharedInfra/MatrixFamilyTracePairing.lean`. The MPDO criteria and
-  the prescribed-length converse for the joint parent boundary map reuse
-  these proofs. No parallel product bilinear form is needed.
-- **Candidate (2026-09-19):** "a trace pairing that vanishes on a generating set
-  vanishes on its span" now appears twice as `Submodule.span_le` into the kernel of
-  the trace functional: `pair_trace_zero_on_span` in
-  `TNLean/MPS/MPDO/BiCFDerivation/Core.lean` and
-  `block_matrices_eq_zero_of_wordTupleSpanTop_trace` in
-  `TNLean/MPS/SharedInfra/WordTupleGauge.lean`. A third occurrence should be
-  abstracted into a single lemma over an indexed family of trace forms.
+### MPDO pair-trace separation duality — upstream reuse (2026-10-29)
+
+- **Pattern:** conclude that a family or product matrix subspace is the whole
+  algebra from trace separation, or that a boundary family is zero from a
+  full word span and vanishing pairings.
+- **Reuse:** QICLean's `Matrix.eq_top_of_pi_trace_separating`,
+  `Matrix.eq_top_of_prod_trace_separating`,
+  `Matrix.eq_zero_of_forall_sum_trace_mul_eq_zero`, and
+  `Matrix.eq_zero_of_forall_trace_mul_add_eq_zero` in
+  `QICLean/Algebra/TraceFormDuality.lean`. Generator vanishing extends to the
+  span by `Submodule.span_le` into the kernel of `piTraceForm` or `prodTraceForm`.
+- **Refactored occurrences:** the homogeneous, cumulative and all-word MPDO
+  pair criteria, simultaneous word-family separation, joint parent-boundary
+  injectivity, and joint inserted-boundary spanning. The remaining single
+  trace representation uses Mathlib's `LinearMap.BilinForm.toDual` directly.
+- **Deletion:** the three local public matrix-family wrappers and four private
+  pair-trace wrappers have no surviving call sites. The audit is
+  `docs/audits/2026-10-29_trace_form_duality_reuse.md` (#7850).
+- **Validation status:** source and deterministic import checks only; the user
+  requested writing without local Lean compilation. The change remains a draft.
 
 ### Martingale coefficient upper bound
 - **Pattern:** prove `((1 : ℝ) / (4 * (L : ℝ))) ≤ 1` from `hL : 1 < L` by
@@ -8899,23 +8888,6 @@ spectral split → block extraction → MPV calculation → strict bounds
   Neither theorem replaces the other by cancellation when a factor vanishes.
   The small helper is retained unchanged for the first compiler diagnostic.
 
-### Excluding a party outside the image of an owner map — candidate (2026-10-11)
-
-- **Pattern:** Rewrite the parties of a restriction as a filtered image,
-  extract the original owner from image membership, and contradict the
-  selector using exclusion from the owner map. The no-party theorem then
-  gives the identity on the empty memory.
-- **Seen:** `Word.restrict_mapOwner_eval_eq_id_of_disjoint` in
-  `TNLean/Lattice/Compression/WordOwnerRestriction.lean` and
-  `Word.restrict_localPart_mapOwner_eval_heq_id_of_disjoint` in
-  `TNLean/Lattice/Compression/SourceWordParties.lean` (two occurrences).
-- **Abstraction:** At a third occurrence, share the restriction lemma for
-  a party absent from the original participating-party set, before applying
-  the relabelling identities.
-- **Notes:** Named scalar local maps belong to the participating-party set.
-  Excluding register owners alone would not exclude those scalar operations.
-
-
 ### Selecting the exterior owner — promoted (2026-10-11)
 
 - **Helper:** `partySelector_none` in
@@ -9534,21 +9506,6 @@ spectral split → block extraction → MPV calculation → strict bounds
   extracting its actual network witnesses. This retains the same tensors and
   all cut bounds. One occurrence does not justify a new abstraction.
 
-### Agreement outside a finite support — candidate (2026-10-17)
-
-- **Pattern:** Identify agreement outside a finite support with agreement off its subtype inclusion when comparing two local lifts.
-- **Seen:** Two proofs, in `Circuit/EntropySupport.lean`, `mem_supportedOperators_of_isSupportedOn`, and `PEPS/AreaLaw/RegionalEntropyBridge.lean`, `localLift_eq_entropyLocalLift`.
-- **Possible abstraction:** A lemma identifying these two agreement conditions if a third use appears. The current two occurrences do not require a new public lemma.
-- **Notes:** Both comparisons reuse the existing local-lift entry formula. The Circuit result imports no PEPS or MPS module.
-
-### Choosing sites in nonempty interaction supports — candidate (2026-10-17)
-
-- **Pattern:** Choose a site in each nonempty interaction support and retain its membership proof.
-- **Seen:** The two proofs in `MPS/AreaLaw/LiebRobinson.lean`.
-- **Possible abstraction:** A support-choice lemma if a third substantive use appears. The diameter comparison is already a shared private lemma; two choices in one file do not warrant another abstraction.
-- **Notes:** The choices remain internal to the proofs and add no premise to either theorem.
-
-
 ### Core information after a regional replica swap — candidate (2026-10-18)
 
 - **Pattern:** Transport a supported unitary and its vector error from paired
@@ -9560,15 +9517,6 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Existing reuse:** The coordinate isometry, support transport, replica-swap
   marginal identity and entropy continuity theorem are shared already.
   A third consumer would justify a single finite-site comparison theorem.
-
-### Absorbing a localization coefficient with spare decay — candidate (2026-10-18)
-
-- **Pattern:** Reserve one quarter of the spatial exponential to absorb
-  P = C(1+T₀), while the other quarter controls the polynomial factors.
-- **Seen:** `MPS/AreaLaw/InformationReset.lean`, once.
-- **Existing reuse:** The proof applies the Gaussian localization parameter
-  estimate and Mathlib's `Real.mul_exp_neg_le_exp_neg_one`; no new scalar
-  theorem or tactic is needed for this occurrence.
 
 ### Real-radius chain neighborhood comparisons — candidate (2026-10-18)
 
@@ -10021,6 +9969,7 @@ there is no need for a new tactic.
   completion proof. No tactic is needed; a public generalization should wait for
   an independent caller.
 
+
 ### Pure output Gram projection — library zero criterion (2026-10-29)
 
 - **Seen:** `Circuit/Channel/PhysicalPortPureOutput.lean`.
@@ -10031,6 +9980,7 @@ there is no need for a new tactic.
   partial-trace identities give the factorization and its normalization.
 - **Decision:** Use the positive Gram zero criterion rather than add a parallel
   purification structure or assume system/environment decoupling.
+
 
 ### Unbounded-subsequence exclusion in overlap rigidity — candidate (2026-10-29)
 
@@ -10068,6 +10018,170 @@ removed after the dependency audit exposed it.
 - **Abstraction:** The public `exists_twoSiteStandardFormData_sourceFactors`
   supplies the actual data; no SVD or standard-form witness is added downstream.
   The converse uses the existing periodic gauge cancellation theorem.
+
+### Transposition via actual adjunction and conjugation — candidate (2026-10-29)
+
+- **Pattern:** Compose the existing physical-adjoint construction with entrywise
+  conjugation and retain a real diagonal weight by its proved conjugation identity.
+- **Seen:** `MPS/MPU/PhysicalTransposeSourceFactors.lean`, canonical presentation,
+  actual factors and both gate identities.
+- **Abstraction:** Reuse `IsMPUCanonicalFormII.physicalAdjointTensor.mapStar`,
+  `SourceFactors.physicalAdjoint`, and `SourceFactors.mapStar`. No parallel
+  admissibility or transpose-source predicate is introduced. The square-rank
+  supplier derives its ranks from actual even-family symmetry.
+
+### Cancelling the coisometric factor — upstream reuse (2026-10-29)
+
+- **Pattern:** From `A = K*A` and `A*Aᴴ=1`, derive `K=1` before applying
+  the scalar Kronecker theorem.
+- **Existing owner:** Mathlib `Matrix.mul_left_injective_of_inv` in
+  `LinearAlgebra/Matrix/NonsingularInverse.lean`.
+- **Reuse:** `MPS/MPU/TranspositionLocalNecessity.lean` applies the existing
+  injectivity theorem directly instead of copying the multiplication proof.
+- **Related occurrences:** the earlier conjugation and adjoint gate arguments
+  multiply by the adjoint explicitly; they can use the same upstream theorem
+  when their owned dependency stacks are next integrated. No local matrix
+  cancellation wrapper or new tactic is introduced.
+
+### Actual periodic closure of an involutive local phase — candidate (2026-10-29)
+
+- **Pattern:** Derive both unitary gauge equations from a local phase, obtain
+  actual standard-form data for the source and transformed factor records,
+  and close them using `TwoSiteStandardFormData.mpo_eq_of_gate_gauges`.
+- **Seen:** `TimeReversalLocalSufficiency.lean` and
+  `TranspositionLocalSufficiency.lean`; both reuse the existing actual-record
+  supplier instead of adding a transform or standard-form witness.
+- **Abstraction:** The mathematical periodic cancellation is already shared.
+  The sign/phase algebra differs under adjunction and transposition; no
+  duplicate symmetry-predicate family or new closure axiom is introduced.
+
+### Unit phase scalar multiplication of rectangular gates — candidate (2026-10-29)
+
+- **Pattern:** Derive `c*star c=1` from unit norm, then pull the two scalars
+  out of both gate Gram products.
+- **Seen:** Sign-gauge construction in `TimeReversalLocalSufficiency.lean`,
+  phase-gauge construction in `TranspositionLocalSufficiency.lean`, and
+  actual standard-form scalar deformation in `TranspositionPhaseDeformation.lean`.
+- **Next:** A companion-library rectangular-unitary scalar lemma can replace
+  these after the prerequisite stack is accepted; the current private helper
+  proves both identities once within the deformation module.
+- **Related reuse:** The local scalar path uses the existing actual `mpo_smul`
+  law and `TwoSiteStandardFormData` structure; no new path predicate is added.
+
+### Kernel vectors in an open unitary contraction — candidate (2026-10-29)
+
+- **Pattern:** Tensor a kernel vector of one half factor with a fixed
+  coordinate of the other intermediate space; the isometric contraction
+  forces the vector to vanish. Apply the same argument to the adjoint
+  four-spin contraction for full row rank of the cut factors.
+- **Seen:** `MPS/MPU/SuppliedHalfFactorMinimality.lean`, original half factors
+  and both adjointed actual cut factors.
+- **Abstraction:** One private finite-coordinate kernel lemma and its
+  exchanged-leg form serve all four applications. Mathlib's existing
+  linear left-inverse and range-dimension APIs supply inverse matrices and
+  ranks; no parallel factorization structure or normalization predicate.
+
+### Reciprocal raw source factors at the four-spin gates — candidate (2026-10-29)
+
+- **Pattern:** Transport minimal raw cut factors to their actual source-rank
+  coordinates, apply existing reciprocal-unitary uniqueness, and cancel
+  the reciprocal scalars only in the two literal gate contractions.
+- **Seen:** `MPS/MPU/SuppliedFourSpinSourceComparison.lean`.
+- **Abstraction:** Reuse `sourceU_contraction_transport`; its mirror right
+  multiplication of the two left factors is one private finite-sum lemma.
+  The existing four-spin unitarity argument is extracted at its original
+  owner and reused by the adjoint-cut and comparison proofs.
+- **Scope:** Factor minimality does not imply ambient canonicality. The
+  canonical comparison takes that presentation explicitly and derives its
+  simplicity, selected normalized factors and gate unitarity internally.
+
+
+### Normalized source necessity at its existing owner — promoted (2026-10-29)
+
+- **Pattern:** Construct actual physical-adjoint normalized factors, apply
+  the even-family source-gauge theorem and derive the common adjoint sign.
+- **Defined in:** `MPS/MPU/TimeReversalLocalNecessity.lean`,
+  `IsMPUCanonicalFormII.exists_supplied_source_adjoint_certificate`.
+- **Refactored occurrences:** the original coarse-source certificate and
+  the arbitrary supplied-gate forward certificate both use this single
+  source proof. The latter transports the certificate through the actual
+  raw-factor comparison with `x=X†zY`.
+- **Notes:** This promotes an existing theorem at its owner; the canonical
+  ambient presentation and exact even-length premise remain explicit.
+
+
+### Physical-pair relabeling of adjoint certificates — promoted (2026-10-29)
+
+- **Pattern:** Apply a matrix relabeling equivalence to a local sign equation,
+  commute it with multiplication, scalar action and adjunction, and transport
+  the two Kronecker factors along the physical-pair equivalence.
+- **Defined in:** `MPS/MPU/SourceFactorChoiceGates.lean`,
+  `Matrix.reindex_adjoint_certificate`.
+- **Refactored occurrences:** the chosen-source converse in
+  `TimeReversalLocalSufficiency.lean` and the actual arbitrary supplied-gate
+  converse in `SuppliedTimeReversalCriterion.lean` use the single proof.
+  The new module also shares its actual source-coordinate comparison between
+  both directions and reuses the same unitary transport in reverse.
+- **Notes:** The helper is a coordinate identity on actual matrices, with no
+  extra gate or factor predicate. Unitarity is required only by the actual
+  local-certificate transport, not by this identity.
+
+
+### Supplied unitary gate dimension product — promoted (2026-10-29)
+
+- **Pattern:** Apply both cardinal inequalities of a supplied rectangular
+  unitary and simplify the product/finite-index cardinalities to ℓ*r=d*d.
+- **Defined in:** `MPS/MPU/TwoSiteStandardForm.lean`,
+  `TwoSiteStandardFormData.left_mul_right`.
+- **Refactored occurrences:** four-spin unitarity in
+  `SuppliedHalfFactorMinimality.lean`, and both the simplicity and
+  zero-index consequences in `SuppliedFourSpinSourceComparison.lean`.
+- **Notes:** The theorem is at the existing supplied-standard-form owner;
+  no normalization or ambient canonicality premise is introduced.
+
+### Actual square-coordinate source comparison — promoted (2026-10-29)
+
+- **Pattern:** Reindex the actual supplied four-spin/source comparison by
+  the proved source ranks, giving both square gate equations in the same
+  physical-pair coordinates.
+- **Defined in:** `MPS/MPU/SuppliedFourSpinSourceComparison.lean`,
+  `TwoSiteStandardFormData.exists_fourSpin_selected_source_gate_gauges_of_square_ranks`.
+- **Refactored occurrences:** both directions in `SuppliedTimeReversalCriterion.lean`
+  and both directions in `SuppliedTranspositionCriterion.lean` reuse the single
+  existing proof; no duplicate source comparison or witness predicate.
+
+### Physical-pair transpose-certificate coordinates — promoted (2026-10-29)
+
+- **Pattern:** Commute the actual pair-space reindexing with scalar action,
+  products, Kronecker factors and transpose in a local phase equation.
+- **Defined in:** `MPS/MPU/SourceFactorChoiceGates.lean`,
+  `Matrix.reindex_transposition_certificate`.
+- **Refactored occurrences:** chosen-source and arbitrary-supplied-source
+  transpose converses both use this coordinate theorem. It does not assume
+  unitarity, a factor presentation or another local equation.
+
+### Unit phase from the circle argument — upstream reuse (2026-10-29)
+
+- **Pattern:** Recover exp(i*arg(c))=c from |c|=1.
+- **Existing owner:** Mathlib `Circle.exp_arg` in
+  `Analysis/SpecialFunctions/Complex/Circle.lean`.
+- **Refactored occurrences:** both exponential certificate callers in
+  `TranspositionLocalNecessity.lean` and the supplied exponential certificate
+  use this existing identity directly through the complex coercion.
+- **Notes:** No repeated norm-times-polar normalization proof, new local phase
+  wrapper or continuous phase-argument assumption is introduced.
+
+
+### Kronecker gauge cancellation — upstream reuse (2026-10-29)
+
+- **Pattern:** Cancel a Kronecker pair of unitary comparison gauges and
+  their adjoints in an actual local-equation transport.
+- **Existing owner:** `Matrix.IsUnitaryBetween.kronecker`, already exposed
+  through the gate-coordinate imports.
+- **Refactored occurrences:** both supplied adjoint and supplied transpose
+  directions instantiate the existing Kronecker unitarity theorem and use
+  its Gram identity directly, rather than expanding both one-factor Gram
+  proofs and Kronecker multiplication repeatedly. No local wrapper added.
 
 ### Finite local generation by single-site algebras — promoted helper (2026-10-29)
 
@@ -10141,6 +10255,45 @@ removed after the dependency audit exposed it.
 - **Decision:** reuse one extraction proof; do not duplicate its canonical
   reduction or add the derived standing data as hypotheses to the public caller.
 
+### A nonzero coefficient minor excludes overlapping pure windows — candidate (2026-10-29)
+
+- **Seen:** `MPS/ParentHamiltonian/RankOneWindowOverlap.lean` and its
+  PVBS application in `MPS/Examples/PVBSOneParticleWindow.lean`.
+- **Pattern:** Multiply a nonzero two-by-two minor by the square of an
+  outside coefficient. Substitute the two actual section factorizations;
+  commutativity cancels the products and forces the outside coefficient
+  to vanish.
+- **Reuse:** One tensor-facing helper owns the cancellation. The actual
+  PVBS application computes its minor using the existing endpoint
+  coefficient lemmas, without a new weighted state or density-matrix layer.
+- **Decision:** A mathematical lemma suffices; no custom tactic is needed.
+
+### Least residue padding at a fixed word degree — candidate (2026-10-29)
+
+- **Pattern:** Solve the two charge equations and total degree in residues,
+  bound the least-residue sum, and add a multiple of the modulus to one count.
+- **Seen:** The degree-seven and degree-eight reachability proofs in
+  `MPS/Examples/ShortMomentum/Charges.lean`.
+- **Abstraction:** A common least-residue construction could expose the
+  dependence on the chosen degree. The exceptional central residue at degree
+  seven still needs its separate arithmetic argument.
+- **Notes:** Two concrete occurrences in one file; the abstraction threshold
+  is not met. Reuse the current charge and count lemmas in downstream proofs.
+
+### Extending finite charge witnesses by a neutral word — promoted (2026-10-29)
+
+- **Seen:** The degree-seven, degree-eight, and degree-nine phase-detecting
+  word tables in `MPS/Examples/ShortMomentum/SevenCyclicObstruction.lean` and
+  `CyclicChargeDetection.lean`.
+- **Pattern:** Preserve both the total charge and the detecting first letters
+  while appending a fixed neutral physical word.
+- **Abstraction:** `MPSTensor.ShortMomentum.exists_distinct_cyclic_phases`
+  packages the three explicit base tables into one all-degree statement by
+  strong induction with a three-letter neutral suffix. The global boundary
+  closure calls this one helper.
+- **Notes:** The finite witness tables contain distinct mathematical data;
+  their closed reductions remain explicit. No specialized tactic is needed.
+
 ### Weighted geometric sums grouped by their anchors — promoted (2026-10-28)
 
 - **Seen:** `Lattice/LowEnergyCommutatorSum.lean`,
@@ -10164,6 +10317,21 @@ removed after the dependency audit exposed it.
 - **Decision:** Three branch occurrences in one file, below the two-file promotion
   threshold. Before extending this pattern to another module, move the value equality
   before the case distinction or reuse `Fin.val_inj`; no new tactic is needed.
+
+### Exact-length membership in the cyclic example — candidate (2026-10-29)
+
+- **Seen:** Return-block insertion and padded sandwich membership in
+  `MPS/Examples/CyclicWielandt/Spanning.lean` repeatedly combine two exact
+  lengths using `Kraus.wordSpan_add` and `Submodule.mul_mem_mul`.
+- **Reuse:** A private specialization to the concrete binary family names this
+  step. The arithmetic remains explicit, including the exceptional diagonal
+  recovered from the identity. There is one mathematical consumer file, so no
+  channel-generic tactic or new theory is introduced.
+- **Finite coordinates:** Reuse `Fin.cast_val_eq_self`, `Fin.val_natCast`,
+  `Nat.mod_eq_of_lt`, and `Fin.val_add_eq_ite` in the matrix identities and the
+  entry obstruction. No custom finite-arithmetic tactic is needed.
+
+
 
 ### Uniform periodic norm from transfer eigenvalues — reused trace bound (2026-10-29)
 
@@ -10201,20 +10369,6 @@ removed after the dependency audit exposed it.
 - **Decision:** One file, below the two-file promotion threshold. The private recurrence
   lemmas retain the shared algebra once; no new tactic or general blocking framework.
 
-### Exact-length membership in the cyclic example — candidate (2026-10-29)
-
-- **Seen:** Return-block insertion and padded sandwich membership in
-  `MPS/Examples/CyclicWielandt/Spanning.lean` repeatedly combine two exact
-  lengths using `Kraus.wordSpan_add` and `Submodule.mul_mem_mul`.
-- **Reuse:** A private specialization to the concrete binary family names this
-  step. The arithmetic remains explicit, including the exceptional diagonal
-  recovered from the identity. There is one mathematical consumer file, so no
-  channel-generic tactic or new theory is introduced.
-- **Finite coordinates:** Reuse `Fin.cast_val_eq_self`, `Fin.val_natCast`,
-  `Nat.mod_eq_of_lt`, and `Fin.val_add_eq_ite` in the matrix identities and the
-  entry obstruction. No custom finite-arithmetic tactic is needed.
-
-
 ### Regional and cyclic slice membership — candidate (2026-10-29)
 
 - **Seen:** The two inclusions in `PEPS/ParentHamiltonian/CycleParentGroundSpace.lean`
@@ -10234,18 +10388,6 @@ removed after the dependency audit exposed it.
   `Matrix.trace_reindex` perform the matrix algebra. One helper transports either resulting
   inclusion through physical blocking and the actual orthogonal-complement projector.
 - **Decision:** Two sector cases in one file; no new tactic or parallel ground-space predicate.
-
-### Equality of two-element tensor families — candidate (2026-10-29)
-
-- **Seen:** `MPS/Examples/AnomalousCondensation/Z2Z2AnomalyClass.lean` and
-  `Z2Z2BlockedAnomaly.lean`, the three subgroup restrictions.
-- **Pattern:** Prove family equality by the bond dimensions and heterogeneous
-  tensor equalities at the identity and generator.
-- **Abstraction:** The blocked example uses a private `twoFamily_ext` lemma at
-  all three restrictions. The older dressed example uses its own helper for
-  the bond-two restrictions; a shared API can be considered if another example
-  needs this shape.
-- **Decision:** Mathematical extensionality suffices; no tactic is needed.
 
 ### Rectangular trace agreement on a spanning family — candidate (2026-10-29)
 
@@ -10285,6 +10427,19 @@ removed after the dependency audit exposed it.
   the general extension. The existing matrix trace-representation theorem
   handles both endpoint restriction directions.
 - **Decision:** Reuse the lemmas; no new tactic or parallel dual structure.
+
+### Equality of two-element tensor families — candidate (2026-10-29)
+
+- **Seen:** `MPS/Examples/AnomalousCondensation/Z2Z2AnomalyClass.lean` and
+  `Z2Z2BlockedAnomaly.lean`, the three subgroup restrictions.
+- **Pattern:** Prove family equality by the bond dimensions and heterogeneous
+  tensor equalities at the identity and generator.
+- **Abstraction:** The blocked example uses a private `twoFamily_ext` lemma at
+  all three restrictions. The older dressed example uses its own helper for
+  the bond-two restrictions; a shared API can be considered if another example
+  needs this shape.
+- **Decision:** Mathematical extensionality suffices; no tactic is needed.
+
 
 ### Cyclic coefficient identities from two spanning families — candidate (2026-10-29)
 
@@ -10331,6 +10486,7 @@ removed after the dependency audit exposed it.
 - **Reuse:** Normalize the exponent by `ring`, then use Mathlib's `gcongr`
   and `min_le_right`. This removes the third copy without introducing a
   new scalar lemma or tactic. The resulting proof passes strict elaboration.
+
 
 ### Complementary-product prefix and suffix — candidate (2026-10-29)
 
@@ -10395,6 +10551,47 @@ removed after the dependency audit exposed it.
 - **Related API:** QICLean's `Entropy.norm_toEuclideanLin_le` gives the same
   bound, but its entropy import is unnecessary for these matrix-only modules.
 
+### Specializing a nonnegative Gaussian variance — candidate (2026-10-29)
+
+- **Seen:** `Lattice/GaussianFilteredCommutatorSeries.lean`, the exponential
+  identity and its norm-convergent series specialization.
+- **Pattern:** Identify the actual filter variance `(q/ΔE²).toNNReal` with
+  the source's nonnegative real variance, then transport that equality
+  through the real-to-complex coercion once before applying the existing
+  QICLean theorem.
+- **Reuse:** `Real.coe_toNNReal`, `div_nonneg` and `congrArg` supply the
+  whole argument; no Gaussian integration or exponential proof is copied.
+- **Decision:** Two short occurrences in one file; no custom tactic or
+  new variance definition is needed.
+
+### Intrinsic blocked traces from a product-tensor diagonal — candidate (2026-10-29)
+
+- **Pattern:** Expand `normalizedDiagonal (mulTensor U U)` powers with the
+  existing normalized-diagonal word formula and `evalWord_mulTensor`, then
+  contract each Kronecker summand with the existing QIC swap-trace identity.
+- **Seen:** `MPS/MPU/TimeReversalTwistedTransfer.lean`.
+- **Reuse:** `normalizedDiagonal_pow_eq_sum_evalWord`, `evalWord_mulTensor`,
+  `Matrix.trace_swapMatrix_mul_kronecker`, the existing
+  `Matrix.swapMatrix_mul_kronecker`, and the existing physical-word
+  decoding equivalence. No new tensor-product expansion induction is copied.
+- **Decision:** The resulting actual twisted-transfer power identity is a
+  mathematical lemma, shared by the exchange-commutation and blocked-trace
+  proofs. No custom tactic or new source predicate is needed.
+
+### Commuting weights on stabilized trace powers — candidate (2026-10-29)
+
+- **Pattern:** Factor a positive power minus its stabilized projector as
+  `E^k * (1 - P)`. Idempotence of the complement and eventual stabilization
+  make it nilpotent. A commuting weight preserves nilpotence, hence gives
+  zero trace for that difference.
+- **Defined in:** `Algebra/StabilizedWeightedTrace.lean`, using the existing
+  QIC `Matrix.StabilizedRankOneData`, Mathlib complementary idempotents,
+  `Commute.isNilpotent_mul_left`, and nilpotent matrix traces.
+- **Decision:** Reuse the existing stabilized-data structure; no new spectral
+  predicate or source witness is introduced. The new result eliminates
+  transient terms in commuting weighted traces rather than reproving
+  stabilization or the existing unweighted nilpotent trace theorem.
+
 ### Coordinate transport of a rectangular conjugation (2026-10-29)
 
 - **Seen:** `Algebra/MatrixStarEquivSpatial.lean`.
@@ -10404,6 +10601,96 @@ removed after the dependency audit exposed it.
   and `Matrix.conjTranspose_reindex` transports the adjoint. The existing QICLean
   Skolem–Noether theorem supplies the square implementer. No entrywise double sum
   or duplicate Skolem–Noether argument is introduced.
+
+### Adjacent physical cut Gram identities — promoted helpers (2026-10-29)
+
+- **Pattern:** reindex a physical configuration sum by restriction and the
+  letter at one cut site, then apply the actual adjacent-factor recursion.
+- **Occurrences:** both density and suffix-Gram recurrences in
+  `MPS/Preparation/OBCCanonicalRecurrences.lean`, and the two endpoint Gram
+  identifications in `OBCCanonicalEndpoints.lean`.
+- **Abstraction:** the explicit `extendCutPrefixEquiv`, `extendCutSuffixEquiv`,
+  `initialCutSuffixEquiv`, and `finalCutPrefixEquiv` in
+  `OBCCanonicalConfigurations.lean` centralize the configuration geometry.
+- **Decision:** the existing `Equiv.sum_comp` suffices after these mathematical
+  bijections; no tactic or parallel sum API is needed.
+
+### Rectangular cut comparison by actual physical prefix factors — promoted helper (2026-10-29)
+
+- **Pattern:** lift each physical cut-basis vector through the original prefix,
+  choose a left inverse of the minimal prefix, and use actual adjacent-prefix
+  recurrences to derive local rectangular maps with a one-sided inverse.
+- **Abstraction:** `OBCChainTensor.exists_rectangular_maps_to_cutBasis` in
+  `MPS/Preparation/OBCRectangularCutMaps.lean`; the simultaneous canonical
+  freedom theorem uses this helper without repeating the cut comparison.
+- **Decision:** a matrix-factor comparison lemma suffices; the common-bound
+  padding remains only in the actual boundary contractions, not in the
+  rectangular local formula.
+
+
+### Adjacent-cut Gram recurrences — promoted shared physical identities (2026-10-29)
+
+- **Pattern:** use the physical prefix/suffix extension bijections to pass
+  between a Gram sum and the sum over one additional physical letter.
+- **Abstraction:** `prefixGram_eq_sum_of_extendCutPrefix` and
+  `suffixGram_eq_sum_of_extendCutSuffix` in
+  `MPS/Preparation/PhysicalCutGramRecurrences.lean`.
+- **Occurrences:** both recurrences for constructed canonical cut factors in
+  `OBCCanonicalRecurrences.lean`.
+- **Decision:** the physical cut identities are shared; callers supply their
+  actual adjacent-factor recurrence instead of copying the double-sum proof.
+
+### Positive-length index equality — candidate (2026-10-29)
+
+- **Seen:** The classical and quantum index equalities in
+  `Wielandt/Primitivity/Stochastic.lean` identify the positive-length
+  admissible sets, discard length zero, and apply `congrArg sInf`.
+- **Reuse:** Fixed-length equivalences remain in QICLean; use set extensionality
+  for the tensor indices. Two occurrences in one file do not warrant a tactic.
+### Signed unitary transfer comparisons and weighted traces — candidate (2026-10-29)
+
+- **Pattern:** Express an actual transfer as `η • A E`, where `A` is an
+  existing unitary conjugation automorphism and `η² = 1`. Pull back the
+  commuting weight by `A.symm`, use `map_pow` and conjugation-invariance of
+  matrix trace, then apply the stabilized weighted-trace lemma.
+- **Seen:** `MPS/MPU/CanonicalTwistedTransfer.lean`.
+- **Reuse:** Mathlib `Unitary.conjStarAlgAut`, QIC actual normalized-transfer
+  stabilization (including its bond-one case), and
+  `Matrix.StabilizedRankOneData.trace_mul_pow_eq_of_commute`.
+- **Decision:** The generic signed comparison is private to this proof; no
+  new spectral predicate or supplied similarity premise is added to the
+  source-facing canonical statements. The derived scalar constant remains
+  explicit, avoiding an unjustified normalization to one.
+
+### Intrinsic trace transport through actual periodic families — promoted (2026-10-29)
+
+- **Pattern:** The intrinsic trace is a fixed swap-contracted expression in
+  the length-two physical matrix. Equality of actual blocked periodic
+  operators therefore transports it without a bond-space gauge.
+- **Defined in:** `MPS/MPU/TimeReversalSignIntrinsic.lean`,
+  `intrinsicTimeReversalSign_eq_of_mpo_two_eq`; extracted from the existing
+  supplied-standard-form independence proof, which now calls it.
+- **Second consumer:** `MPS/MPU/IntrinsicBlockingParity.lean` first uses the
+  existing exact blocked-MPO reindexing to transport every positive blocked
+  trace, then removes the canonical input assumption from intrinsic parity
+  using the existing reduced representative.
+- **Decision:** Promote the existing physical-matrix argument, preserving
+  positive-length scope and avoiding source-factor transport across bonds.
+
+### Raw cut reconstruction of a two-letter standard form — promoted (2026-10-29)
+
+- **Pattern:** Expand one tensor letter through its second cut, the next
+  through its first cut, and contract their common virtual index to the
+  ordered product of the two right factors.
+- **Defined in:** `MPS/MPU/StandardForm.lean`,
+  `mul_apply_eq_sum_of_sourceCut_factorizations`.
+- **Refactored consumer:** The old normalized `SourceFactors` contraction
+  calls the raw theorem, so the finite-sum proof stays at its original owner.
+- **Second consumer:** `MPS/MPU/SuppliedTwoBlockStandardForm.lean` uses the
+  existing actual cuts of any supplied square standard form to construct
+  its literal paper two-block gates and open standard-form data.
+- **Decision:** No normalized source record is introduced merely to access
+  an algebraic contraction which does not use its normalization fields.
 
 
 
@@ -10461,7 +10748,6 @@ removed after the dependency audit exposed it.
   identity is exposed for reuse.
 
 
-
 ### Euclidean action on a Hermitian eigenbasis — promoted (2026-10-29)
 
 - **Pattern:** Transport Mathlib's `mulVec_eigenvectorBasis` equation through
@@ -10479,7 +10765,6 @@ removed after the dependency audit exposed it.
   needed. Each replacement was checked before the next proof was changed.
 
 
-
 ### Support of an internal-bond sum — promoted (2026-10-29)
 
 - **Pattern:** Apply support under finite sums, then enlarge the two-site support
@@ -10491,7 +10776,6 @@ removed after the dependency audit exposed it.
   `MPS/AreaLaw/AKLV/Normalization.lean` call that same lemma; the original three
   uses in `FiveRegionHamiltonian.lean` are retained. No parallel support API or
   new tactic is introduced.
-
 
 
 ### Real spectral membership from a nonzero eigenvector — promoted (2026-10-29)
@@ -10549,7 +10833,6 @@ removed after the dependency audit exposed it.
 - **Refactored occurrences:** All three comparisons now reuse `add_sq_le`;
   the additional hand-written squared-difference nonnegativity argument is
   removed from the initialization proof. No new generic theorem is needed.
-
 
 
 ### Coherent dependent sequences of normalized images — candidate (2026-10-29)
@@ -10622,47 +10905,6 @@ removed after the dependency audit exposed it.
   exposed and reused for the physical entropy theorem, without a second
   endpoint-unitary or dimension argument.
 
-### Intrinsic blocked traces from a product-tensor diagonal — candidate (2026-10-29)
-
-- **Pattern:** Expand `normalizedDiagonal (mulTensor U U)` powers with the
-  existing normalized-diagonal word formula and `evalWord_mulTensor`, then
-  contract each Kronecker summand with the existing QIC swap-trace identity.
-- **Seen:** `MPS/MPU/TimeReversalTwistedTransfer.lean`.
-- **Reuse:** `normalizedDiagonal_pow_eq_sum_evalWord`, `evalWord_mulTensor`,
-  `Matrix.trace_swapMatrix_mul_kronecker`, the existing
-  `Matrix.swapMatrix_mul_kronecker`, and the existing physical-word
-  decoding equivalence. No new tensor-product expansion induction is copied.
-- **Decision:** The resulting actual twisted-transfer power identity is a
-  mathematical lemma, shared by the exchange-commutation and blocked-trace
-  proofs. No custom tactic or new source predicate is needed.
-
-### Commuting weights on stabilized trace powers — candidate (2026-10-29)
-
-- **Pattern:** Factor a positive power minus its stabilized projector as
-  `E^k * (1 - P)`. Idempotence of the complement and eventual stabilization
-  make it nilpotent. A commuting weight preserves nilpotence, hence gives
-  zero trace for that difference.
-- **Defined in:** `Algebra/StabilizedWeightedTrace.lean`, using the existing
-  QIC `Matrix.StabilizedRankOneData`, Mathlib complementary idempotents,
-  `Commute.isNilpotent_mul_left`, and nilpotent matrix traces.
-- **Decision:** Reuse the existing stabilized-data structure; no new spectral
-  predicate or source witness is introduced. The new result eliminates
-  transient terms in commuting weighted traces rather than reproving
-  stabilization or the existing unweighted nilpotent trace theorem.
-
-### Kernel vectors in an open unitary contraction — candidate (2026-10-29)
-
-- **Pattern:** Tensor a kernel vector of one half factor with a fixed
-  coordinate of the other intermediate space; the isometric contraction
-  forces the vector to vanish. Apply the same argument to the adjoint
-  four-spin contraction for full row rank of the cut factors.
-- **Seen:** `MPS/MPU/SuppliedHalfFactorMinimality.lean`, original half factors
-  and both adjointed actual cut factors.
-- **Abstraction:** One private finite-coordinate kernel lemma and its
-  exchanged-leg form serve all four applications. Mathlib's existing
-  linear left-inverse and range-dimension APIs supply inverse matrices and
-  ranks; no parallel factorization structure or normalization predicate.
-
 ### Iterating derived boundary intersections — reused library theorem (2026-10-29)
 
 - **Seen:** `MPS/ParentHamiltonian/UncleGroundSpace.lean`, the actual periodic uncle kernel.
@@ -10672,34 +10914,6 @@ removed after the dependency audit exposed it.
   predicate is introduced.
 - **Translation reuse:** `cyclicRestrictₗ_cyclicTranslateState` is promoted from private
   visibility for this second consumer; the existing proof remains unchanged.
-
-### Dense local image inside a closed commutant — candidate (2026-10-29)
-
-- **Seen:** `QCA/SupportAlgebraGeneration.lean`, the support-family generation
-  theorem and the even-pair-image commutant theorem.
-- **Pattern:** Pull back a closed ambient subset under an automorphism;
-  include the dense algebraic local image; use closure minimality and
-  surjectivity to obtain the global containment.
-- **Reuse:** The new commutant theorem exposes the source's intermediate
-  even-pair argument, avoiding the stronger premise of commutation with
-  each separate support factor.
-- **Decision:** Two proof occurrences in one file; keep the concrete source
-  statements and consolidate the closed-containment argument before a third
-  copy, rather than adding another notion of local generation.
-
-
-### Supplied unitary gate dimension product — promoted (2026-10-29)
-
-- **Pattern:** Apply both cardinal inequalities of a supplied rectangular
-  unitary and simplify the product/finite-index cardinalities to ℓ*r=d*d.
-- **Defined in:** `MPS/MPU/TwoSiteStandardForm.lean`,
-  `TwoSiteStandardFormData.left_mul_right`.
-- **Refactored occurrences:** four-spin unitarity in
-  `SuppliedHalfFactorMinimality.lean`, and both the simplicity and
-  zero-index consequences in `SuppliedFourSpinSourceComparison.lean`.
-- **Notes:** The theorem is at the existing supplied-standard-form owner;
-  no normalization or ambient canonicality premise is introduced.
-
 
 ### Commutation after a finite-local star homomorphism — promoted helper (2026-10-29)
 
@@ -10861,3 +11075,53 @@ removed after the dependency audit exposed it.
   the entire argument; no new compatible-family predicate or source-rank transport.
   The earlier common-buffer inverse helper has different cancellation hypotheses,
   so the equality theorem remains a separate mathematical statement.
+
+
+### Actual transfer-norm trace bound — reused matrix units (2026-10-29)
+
+- **Seen:** `MPS/ParentHamiltonian/UnclePinnedTrialNorm.lean`.
+- **Pattern:** Turn a derived pointwise matrix operator-norm bound on a
+  transfer contraction into an algebraic operator-trace bound.
+- **Reuse:** QICLean's matrix-unit trace expansion, entry/operator-norm bound
+  and unit-norm matrix units give the finite dimension factor directly. Its
+  unital CP contraction also bounds every normalized transfer power.
+- **Decision:** Keep the thin local trace calculation and reuse the generic
+  library APIs; no supplied trace-rate or state-rate hypothesis.
+
+
+### Actual endpoint norm averages — coordinate and partition reuse (2026-10-29)
+
+- **Seen:** `MPS/ParentHamiltonian/UncleEndpointEnergyBound.lean`, four endpoints.
+- **Pattern:** Identify a pinned local residual as the actual cyclic restriction
+  of a globally pinned trial, then remove the redundant exterior-window sum.
+- **Reuse:** Public segment addition, boundary-segment and length-cast identities
+  handle all four coordinates. The exact cyclic restriction norm partition
+  gives the global squared norm with its actual physical normalization.
+- **Decision:** Derive the four-state energy bound from those identities; do not
+  introduce an assumed energy-support or norm-rate condition.
+
+
+### Actual mixed word overlaps — finite configuration reuse (2026-10-29)
+
+- **Seen:** `MPS/ParentHamiltonian/UncleTrialOverlap.lean` and the finite
+  norm calculation in `UncleTrialTransferNorm.lean`.
+- **Pattern:** Expand actual ordered word maps, take their algebraic operator
+  trace and identify the resulting physical configuration sum.
+- **Reuse:** Promote the existing canonical five-segment configuration
+  equivalence and its evaluation theorem for their actual second consumer.
+  Use `spectralRadius_eq_of_unital` and `AlgEquiv.spectrum_eq` when the
+  same finite linear map is estimated under another matrix norm.
+- **Decision:** Keep one configuration equivalence and derive all rates from
+  actual mixed maps; do not assume the overlap estimate being established.
+### Canonical transfer replacement in the actual wall contraction — candidate (2026-10-29)
+
+- **Seen:** `MPS/ParentHamiltonian/UncleNormFactorization.lean`, two long transfer factors.
+- **Pattern:** Subtract the actual canonical projection one factor at a time;
+  apply geometric pure-transfer decay, actual wall-map linear bounds, and
+  positivity-preserving norm contractivity to the remaining factors.
+- **Reuse:** The primitive decay is stated once in `UnclePrimitiveTransfer`;
+  existing finite-dimensional trace continuity bounds the scalar contraction.
+- **Notes:** The private unital-power contraction also appears in
+  `UnclePinnedTrialNorm.lean`. These are two proof occurrences across two
+  separately stacked branches; consolidate into a shared lemma before a third
+  proof copy, without duplicating a generic channel contractivity theory.

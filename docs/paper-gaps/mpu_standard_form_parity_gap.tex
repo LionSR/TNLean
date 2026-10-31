@@ -145,9 +145,10 @@ antecedent; they are not asserted by block equality alone.
 
 \section{Even lengths in the chirality criterion}
 
-The length convention is also load-bearing in Proposition~Chiral
-\cite[lines~1209--1252]{Cirac2017MPU}. Immediately before that proposition,
-one site of the standard-form tensor contains two original spins. Write
+The length convention is also load-bearing in the proposition labelled
+\texttt{PropChiral} \cite[lines~1209--1252]{Cirac2017MPU}. Immediately
+before that proposition, one site of the standard-form tensor contains two
+original spins. Write
 $W=\mathcal U_2$ for this tensor. Its stated symmetry at even lengths is
 therefore $W^{(2n)}=W^{(2n)\dagger}$, or symmetry of $\mathcal U$ at
 original lengths divisible by four. Requiring instead
@@ -165,16 +166,39 @@ The distinction can be retained by an unblocked virtual comparison. For
 reduced canonical normal tensors, equality of the even periodic families
 identifies cross-overlap and self-overlap along the unbounded even
 subsequence. The normal-tensor overlap dichotomy therefore supplies an
-invertible gauge and a unit phase $\eta$. The nonzero periodic vector at
-length two forces $\eta^2=1$, and canonical normalization makes the gauge
-unitary without changing $\eta$. Scaling both right source factors by
-$\eta$ scales their two-letter gate by $\eta^2=1$ and leaves the shifted
-gate unchanged. Thus the phase can be retained until it cancels in the
-four-spin comparison. Equality at odd standard-form lengths need not be
+invertible gauge $X$ and a unit phase $\eta$ relating the physical adjoint
+tensor $W^\dagger$ to $W$:
+\begin{align}
+    (W^\dagger)^{ij} & =\eta\,XW^{ij}X^{-1}\quad\text{for all physical indices }i,j.
+    \label{eq:mpu_standard_form_parity_gap_virtual_sign}
+\end{align}
+At length two the gauge cancels in the trace, and the hypothesis gives
+\begin{align}
+    W^{(2)} & =W^{(2)\dagger}=\eta^2W^{(2)}, &
+    \eta^2  & =1,
+    \label{eq:mpu_standard_form_parity_gap_sign_square}
+\end{align}
+since $W^{(2)}$ is unitary and hence nonzero.
+Canonical normalization makes $X$ unitary without changing $\eta$. Scaling
+both right source factors $Y_1,Y_2$ by $\eta$ scales their two-letter gate
+and leaves the shifted gate unchanged:
+\begin{align}
+    u(\eta Y_1,\eta Y_2) & =\eta^2u(Y_1,Y_2)=u(Y_1,Y_2), &
+    v(\eta Y_1,\eta Y_2) & =v(Y_1,Y_2).
+    \label{eq:mpu_standard_form_parity_gap_gate_scaling}
+\end{align}
+Thus the phase can be retained until it cancels, by
+\eqref{eq:mpu_standard_form_parity_gap_gate_scaling}, in the four-spin
+comparison. Equality at odd standard-form lengths need not be
 assumed. Another gate-level block would instead produce an eight-original-spin
 equation and would not establish the required four-spin equation.
 The unrestricted source proposition still requires removal of the separate
 presentation restrictions and proof of its converse.
+
+This section is a notational clarification of \texttt{PropChiral}: it fixes
+which lengths the printed symmetry hypothesis refers to. It does not change
+the verdict of this note, which concerns only the unblocked reading of the
+converse of the Fundamental Theorem.
 
 \bibliographystyle{alpha}
 \bibliography{references}
