@@ -47,6 +47,8 @@ import TNLean.MPS.MPU.CompositionRanks
 import TNLean.MPS.MPU.ConjugationSourceFactors
 import TNLean.MPS.MPU.ConjugationSymmetry
 import TNLean.MPS.MPU.ConstantBranchingBounds
+import TNLean.MPS.MPU.CyclicConjugation
+import TNLean.MPS.MPU.CyclicFinitePropagation
 import TNLean.MPS.MPU.DaggerFusionCompatibility
 import TNLean.MPS.MPU.DaggerFusionScalars
 import TNLean.MPS.MPU.DaggerInverse
@@ -70,6 +72,7 @@ import TNLean.MPS.MPU.FiniteAlphabetRows
 import TNLean.MPS.MPU.FiniteChainAdjoint
 import TNLean.MPS.MPU.FiniteChainConjugation
 import TNLean.MPS.MPU.FiniteGroupSourceRanks
+import TNLean.MPS.MPU.FiniteWindowSupport
 import TNLean.MPS.MPU.FundamentalTheorem
 import TNLean.MPS.MPU.FundamentalTheoremGates
 import TNLean.MPS.MPU.FundamentalTheoremGatesBlocked
@@ -225,6 +228,7 @@ import TNLean.MPS.MPU.TimeReversalLocalSufficiency
 import TNLean.MPS.MPU.TimeReversalSign
 import TNLean.MPS.MPU.TimeReversalSignIntrinsic
 import TNLean.MPS.MPU.TimeReversalTraceGauge
+import TNLean.MPS.MPU.TimeReversalTwistedTransfer
 import TNLean.MPS.MPU.TransferMatrix
 import TNLean.MPS.MPU.TransferMultiplicity
 import TNLean.MPS.MPU.TransferStabilization
@@ -237,7 +241,9 @@ import TNLean.MPS.MPU.TruncationCommutator
 import TNLean.MPS.MPU.TwoKrausPolar
 import TNLean.MPS.MPU.TwoSectorMerging
 import TNLean.MPS.MPU.TwoSiteBufferedAction
+import TNLean.MPS.MPU.TwoSiteCyclicInverse
 import TNLean.MPS.MPU.TwoSiteFiniteHeisenberg
+import TNLean.MPS.MPU.TwoSiteFiniteInverse
 import TNLean.MPS.MPU.TwoSiteLocalAction
 import TNLean.MPS.MPU.TwoSitePropagation
 import TNLean.MPS.MPU.TwoSiteQuasiLocalAction

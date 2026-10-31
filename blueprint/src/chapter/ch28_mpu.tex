@@ -13242,4 +13242,85 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     % Source lines: paper_v2.tex 2203--2235.
 \end{lemma}
 
+\subsection{Intrinsic blocked traces and the twisted transfer}
+
+\begin{definition}[Twisted transfer of the squared operator tensor]
+    \label{def:mpu_time_reversal_twisted_transfer}
+    \lean{MPOTensor.timeReversalTwistedTransfer}
+    \leanok
+    Let $W$ be an MPO tensor with physical dimension $d$ and bond dimension
+    $D$. In product bond coordinates, define
+    \begin{align}
+        T_W=\frac{1}{d}\sum_{i,j=0}^{d-1}W^{ij}\otimes W^{ji}.
+    \end{align}
+    Equivalently, this is the normalized physical diagonal of the product
+    tensor for $W^2$. It is not assumed positive or Hermitian. The algebraic
+    convention $0^{-1}=0$ permits zero physical dimension as well.
+\end{definition}
+
+\begin{lemma}[Opposite-word expressions for blocked exchange traces]
+    \label{lem:mpu_time_reversal_blocked_open_words}
+    \lean{MPOTensor.timeReversalPeriodicTrace_eq_sum,
+        MPOTensor.timeReversalPeriodicTrace_blockTensor,
+        MPOTensor.timeReversalTwistedTransfer_pow_eq_sum_evalWord}
+    \leanok
+    \uses{def:mpu_time_reversal_twisted_transfer}
+    The exchange-contracted trace of the two-site periodic operator is
+    \begin{align}
+        \tau(W)=\sum_{i,j=0}^{d-1}\tr(W^{ij}W^{ji}).
+    \end{align}
+    For $k\geq0$, write $W^{ww'}$ for the ordered product along
+    physical words $w,w'$ of length $k$. Then
+    \begin{align}
+        \tau(W_k)
+         & =\sum_{w,w'}\tr(W^{ww'}W^{w'w}), \\
+        T_W^k
+         & =d^{-k}\sum_{w,w'}
+        W^{ww'}\otimes W^{w'w}.
+    \end{align}
+    The products use exactly $k$ physical sites, without a further blocking.
+    These are algebraic identities for arbitrary MPO tensors, including the
+    empty words when $k=0$.
+\end{lemma}
+
+\begin{lemma}[Intrinsic blocked trace as a twisted-transfer trace]
+    \label{lem:mpu_intrinsic_blocked_twisted_trace}
+    \lean{MPOTensor.swapMatrix_commute_timeReversalTwistedTransfer,
+        MPOTensor.intrinsicTimeReversalSign_blockTensor_eq_twistedTransfer_trace}
+    \leanok
+    \uses{def:mpu_time_reversal_twisted_transfer,
+        lem:mpu_time_reversal_blocked_open_words}
+    Let $F_D$ exchange the two bond factors. Then $F_DT_W=T_WF_D$, and the
+    normalized intrinsic exchange trace of each block is
+    \begin{align}
+        \sigma_{\mathrm{int}}(W_k)=\tr(F_DT_W^k),\qquad k\geq0.
+    \end{align}
+    No canonical form, symmetry or standard-form choice is needed for these
+    identities. They give a finite-dimensional expression relevant to
+    \cite[lines~1633--1733]{Cirac2017MPU}.
+    % The blocking parity proposition and the identification of the virtual
+    % sign from even-chain comparison with the intrinsic sign are separate.
+\end{lemma}
+
+\begin{lemma}[Commuting weights remove stabilized nilpotent transients]
+    \label{lem:mpu_stabilized_commuting_weighted_trace}
+    \lean{Matrix.StabilizedRankOneData.isNilpotent_pow_sub_power,
+        Matrix.StabilizedRankOneData.trace_mul_pow_eq_of_commute}
+    \leanok
+    Let $E$ be a finite complex matrix and suppose that, for some $J>0$,
+    every power $E^n$ with $n\geq J$ equals a normalized rank-one projector
+    $P=E^J$. Then $E^k-P$ is nilpotent for every $k>0$. If $F$ commutes
+    with $E$, then
+    \[
+        \tr(FE^k)=\tr(FP),\qquad k>0.
+    \]
+    Indeed, $E^k-P=E^k(\Id-P)$ and the complementary idempotent shows
+    that its $J$th power vanishes. Since $F$ commutes with this difference,
+    their product is nilpotent and has trace zero. The hypotheses here
+    describe a stabilized matrix; no assertion that a particular twisted
+    transfer has these properties is made. This is the linear-algebra step
+    needed to remove transient terms in a subsequent use of
+    Lemma~\ref{lem:mpu_intrinsic_blocked_twisted_trace}.
+\end{lemma}
+
 \input{chapter/ch28_mpu_finite_heisenberg}
