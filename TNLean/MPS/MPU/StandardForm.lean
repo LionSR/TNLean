@@ -26,6 +26,42 @@ namespace MPOTensor
 
 variable {d D : ℕ} (U : MPOTensor d D)
 
+/-- Two raw source-cut factorizations give the open two-letter contraction
+through the ordered product of their right factors. No normalization,
+minimality, inverse or canonical datum is needed.
+
+Source: CPSV17, equations `uuvv` and `uu`, lines 532--543. -/
+theorem mul_apply_eq_sum_of_sourceCut_factorizations
+    {L R : Type*} [Fintype L] [Fintype R]
+    (X₁ : Matrix (Fin d × Fin D) R ℂ) (Y₁ : Matrix R (Fin D × Fin d) ℂ)
+    (X₂ : Matrix (Fin D × Fin d) L ℂ) (Y₂ : Matrix L (Fin d × Fin D) ℂ)
+    (h₁ : sourceCutM₁ U = X₁ * Y₁) (h₂ : sourceCutM₂ U = X₂ * Y₂)
+    (i₁ j₁ i₂ j₂ : Fin d) (α γ : Fin D) :
+    (U i₁ j₁ * U i₂ j₂) α γ =
+      ∑ l : L, ∑ r : R, X₂ (α, i₁) l *
+        (∑ β : Fin D, Y₂ l (j₁, β) * Y₁ r (β, j₂)) * X₁ (i₂, γ) r := by
+  classical
+  simp only [Matrix.mul_apply]
+  have hleft (β : Fin D) : U i₁ j₁ α β =
+      ∑ l : L, X₂ (α, i₁) l * Y₂ l (j₁, β) := by
+    simpa only [sourceCutM₂_apply, Matrix.mul_apply] using
+      congrArg (fun M ↦ M (α, i₁) (j₁, β)) h₂
+  have hright (β : Fin D) : U i₂ j₂ β γ =
+      ∑ r : R, X₁ (i₂, γ) r * Y₁ r (β, j₂) := by
+    simpa only [sourceCutM₁_apply, Matrix.mul_apply] using
+      congrArg (fun M ↦ M (i₂, γ) (β, j₂)) h₁
+  simp_rw [hleft, hright, Finset.sum_mul_sum]
+  simp_rw [Finset.mul_sum, Finset.sum_mul]
+  rw [Finset.sum_comm]
+  apply Finset.sum_congr rfl
+  intro l _
+  rw [Finset.sum_comm]
+  apply Finset.sum_congr rfl
+  intro r _
+  apply Finset.sum_congr rfl
+  intro β _
+  ring
+
 namespace SourceFactors
 
 /-- Contracting the right source leg of $v=X_1\mathbin{-}X_2$ with $Y_1$
@@ -107,25 +143,9 @@ theorem mul_apply_eq_sum_X₂_mul_sourceU_mul_X₁
     (U i₁ j₁ * U i₂ j₂) α γ =
       ∑ l : Fin ℓ[U], ∑ r : Fin r[U],
         S.X₂ (α, i₁) l * sourceU U S (l, r) (j₁, j₂) * S.X₁ (i₂, γ) r := by
-  classical
-  simp only [Matrix.mul_apply]
-  have h₁ (β : Fin D) : U i₁ j₁ α β =
-      ∑ l : Fin ℓ[U], S.X₂ (α, i₁) l * S.Y₂ l (j₁, β) := by
-    simpa only [Matrix.mul_apply] using (X₂_mul_Y₂_apply U S α i₁ j₁ β).symm
-  have h₂ (β : Fin D) : U i₂ j₂ β γ =
-      ∑ r : Fin r[U], S.X₁ (i₂, γ) r * S.Y₁ r (β, j₂) := by
-    simpa only [Matrix.mul_apply] using (X₁_mul_Y₁_apply U S i₂ γ β j₂).symm
-  simp_rw [h₁, h₂, Finset.sum_mul_sum]
-  simp_rw [sourceU_apply, Finset.mul_sum, Finset.sum_mul]
-  rw [Finset.sum_comm]
-  apply Finset.sum_congr rfl
-  intro l _
-  rw [Finset.sum_comm]
-  apply Finset.sum_congr rfl
-  intro r _
-  apply Finset.sum_congr rfl
-  intro β _
-  ring
+  simpa only [sourceU_apply] using
+    mul_apply_eq_sum_of_sourceCut_factorizations U S.X₁ S.Y₁ S.X₂ S.Y₂
+      S.sourceCutM₁_eq S.sourceCutM₂_eq i₁ j₁ i₂ j₂ α γ
 
 /-- The concrete two-site block has the $X_2$--$u$--$X_1$ source form.
 
