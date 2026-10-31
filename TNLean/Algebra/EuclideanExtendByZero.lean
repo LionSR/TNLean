@@ -42,8 +42,7 @@ noncomputable def euclideanExtendByZero (e : I ↪ J) :
         ‖LinearMap.withLpMap 2 (Function.ExtendByZero.linearMap ℂ e) v‖ ^ 2 = ‖v‖ ^ 2 := by
       rw [EuclideanSpace.norm_sq_eq, EuclideanSpace.norm_sq_eq]
       exact hsum.symm
-    nlinarith [norm_nonneg (LinearMap.withLpMap 2
-      (Function.ExtendByZero.linearMap ℂ e) v), norm_nonneg v]
+    exact (sq_eq_sq₀ (norm_nonneg _) (norm_nonneg _)).1 hsq
 
 /-- Extension by zero preserves the Euclidean norm of every coefficient vector. -/
 theorem norm_euclideanExtendByZero (e : I ↪ J) (v : EuclideanSpace ℂ I) :
