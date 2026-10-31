@@ -162,7 +162,9 @@ import TNLean.MPS.MPU.PrefixGramNormalizer
 import TNLean.MPS.MPU.PrefixGramReindex
 import TNLean.MPS.MPU.ProductBasisFactorization
 import TNLean.MPS.MPU.ProjectionPhaseIsometries
+import TNLean.MPS.MPU.QCAIndexComparison
 import TNLean.MPS.MPU.QuasiLocalAction
+import TNLean.MPS.MPU.QuasiLocalActionChoice
 import TNLean.MPS.MPU.RectangularSourceRanks
 import TNLean.MPS.MPU.ReducedCanonicalRepresentative
 import TNLean.MPS.MPU.ReducedRepresentative

@@ -10813,3 +10813,13 @@ removed after the dependency audit exposed it.
   length cast preserves the actual Euclidean norm by equality elimination.
 - **Decision:** Use these public coordinate identities rather than a parallel
   configuration structure or a supplied norm-equivalence hypothesis.
+
+### Equality of actual induced actions through a common buffer (2026-10-29)
+
+- **Seen:** `MPS/MPU/QuasiLocalActionChoice.lean`.
+- **Pattern:** Put a local region and both actual source-radius neighbourhoods in one
+  finite chain; compare its physical matrices, then use completion density.
+- **Reuse:** Existing actual finite-evaluation and buffer-existence theorems supply
+  the entire argument; no new compatible-family predicate or source-rank transport.
+  The earlier common-buffer inverse helper has different cancellation hypotheses,
+  so the equality theorem remains a separate mathematical statement.
