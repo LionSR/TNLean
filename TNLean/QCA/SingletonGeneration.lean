@@ -60,17 +60,23 @@ theorem range_localObservable_le_of_singletons {d : ℕ} [NeZero d]
       exact sup_le (hS x (Finset.mem_insert_self x Λ))
         (ih (fun y hy => hS y (Finset.mem_insert_of_mem hy)))
 
-/-- Commutation with every single-site algebra in a finite region implies
-commutation with its full observable algebra. Source context:
-arXiv:1703.09188, Appendix, local observable algebras, lines 2292–2298. -/
-theorem commute_localObservable_of_singletons {d : ℕ} [NeZero d]
-    (Λ : Finset ℤ) (z : AlgebraicLocalAlgebra d)
-    (hcomm : ∀ x ∈ Λ, ∀ C : LocalAlgebra d {x}, Commute z (localObservable d {x} C))
-    (B : LocalAlgebra d Λ) : Commute z (localObservable d Λ B) := by
-  let S := StarSubalgebra.centralizer ℂ ({z} : Set (AlgebraicLocalAlgebra d))
+/-- After a star-homomorphism, commutation with all one-site images
+implies commutation with the full finite local image. This is the same
+finite generation used in the QCA appendix of arXiv:1703.09188,
+lines 2292–2298. -/
+theorem commute_map_localObservable_of_singletons
+    {d : ℕ} [NeZero d] {A : Type*} [Ring A] [Algebra ℂ A]
+    [StarRing A] [StarModule ℂ A]
+    (f : AlgebraicLocalAlgebra d →⋆ₐ[ℂ] A) (Λ : Finset ℤ) (z : A)
+    (hcomm : ∀ x ∈ Λ, ∀ C : LocalAlgebra d {x},
+      Commute z (f (localObservable d {x} C))) (B : LocalAlgebra d Λ) :
+    Commute z (f (localObservable d Λ B)) := by
+  let T := StarSubalgebra.centralizer ℂ ({z} : Set A)
+  let S := T.comap f
   have hS : ∀ x ∈ Λ, (localObservable d {x}).range ≤ S := by
     intro x hx C hC
     obtain ⟨C, rfl⟩ := hC
+    change f (localObservable d {x} C) ∈ T
     rw [StarSubalgebra.mem_centralizer_iff]
     intro y hy
     have hyz : y = z := Set.mem_singleton_iff.mp hy
@@ -78,9 +84,18 @@ theorem commute_localObservable_of_singletons {d : ℕ} [NeZero d]
     refine ⟨(hcomm x hx C).eq, ?_⟩
     have hstar := (hcomm x hx (star C)).star_star
     simpa only [map_star, star_star] using! hstar.eq
-  have hB : localObservable d Λ B ∈ S :=
+  have hB : f (localObservable d Λ B) ∈ T :=
     range_localObservable_le_of_singletons Λ S hS ⟨B, rfl⟩
   exact ((StarSubalgebra.mem_centralizer_iff ℂ).mp hB z (Set.mem_singleton z)).1
+
+/-- Commutation with every single-site algebra in a finite region implies
+commutation with its full observable algebra. Source context:
+arXiv:1703.09188, Appendix, local observable algebras, lines 2292–2298. -/
+theorem commute_localObservable_of_singletons {d : ℕ} [NeZero d]
+    (Λ : Finset ℤ) (z : AlgebraicLocalAlgebra d)
+    (hcomm : ∀ x ∈ Λ, ∀ C : LocalAlgebra d {x}, Commute z (localObservable d {x} C))
+    (B : LocalAlgebra d Λ) : Commute z (localObservable d Λ B) :=
+  commute_map_localObservable_of_singletons (StarAlgHom.id ℂ _) Λ z hcomm B
 
 /-- A finite observable is in the retained local algebra exactly when it
 commutes with every outside single-site observable. This is the finite

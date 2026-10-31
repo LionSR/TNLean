@@ -12,6 +12,7 @@ import TNLean.MPS.Core.BlockSum
 import TNLean.MPS.Core.Blocking
 import TNLean.MPS.Core.BlockingInfrastructure
 import TNLean.MPS.Core.BlockingTransfer
+import TNLean.MPS.Core.BondOneVector
 import TNLean.MPS.Core.BondReindex
 import TNLean.MPS.Core.CanonicalNormalization
 import TNLean.MPS.Core.CommonNormalBlocking
