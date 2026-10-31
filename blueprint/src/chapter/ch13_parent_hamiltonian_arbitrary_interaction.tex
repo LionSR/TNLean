@@ -52,7 +52,7 @@ We follow the cyclic-cut argument of
     \lean{MPSTensor.periodicLocalInteractionES_smul_mpvState_eq_zero_of_wordTupleSpanTop}
     \leanok
     \uses{lem:cyclic_mpv_active_boundary, lem:cyclic_active_local_interaction,
-        def:periodic-fixed-interaction, lem:local_weighted_boundary_annihilation}
+        def:periodic-fixed-interaction}
     Let $A_1,\ldots,A_b$ be tensors with arbitrary finite virtual dimensions,
     let $c_j\in\C$, and let $h$ be any linear operator on $L$ sites of an
     $N$-site ring, with $L\le N$. Assume that the complementary word tuples
@@ -63,7 +63,8 @@ We follow the cyclic-cut argument of
     is not needed for this local assertion.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{lem:cyclic_mpv_active_boundary, lem:cyclic_active_local_interaction}
+    \uses{lem:cyclic_mpv_active_boundary, lem:cyclic_active_local_interaction,
+        lem:local_weighted_boundary_annihilation}
     In the cyclic coordinates at $i$, compose the weighted joint boundary map
     with $h$: for boundaries $X=(X_1,\ldots,X_b)$ in the product algebra put
     \begin{align}

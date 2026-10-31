@@ -10,19 +10,31 @@ ring to all sufficiently long rings. The interaction is fixed throughout.
     \uses{lem:cyclic_mpv_active_boundary}
     Let the complementary tuples of words in $A_1,\ldots,A_b$ span the
     product matrix algebra at length $N-L$, with $L\le N$, and let $c_j\in\C$.
-    If a local translate $h_i$ annihilates $\sum_jc_jV^{(N)}(A_j)$, then
+    If a local translate $h_i$ annihilates $\sum_jc_jV^{(N)}(A_j)$, then,
+    for every $j$ and every virtual matrix $X$,
     \begin{align}
-        c_jh\Gamma_L^{A_j}(X)=0
-        \qquad\text{for every }j\text{ and every virtual matrix }X.
+        c_jh\Gamma_L^{A_j}(X) & =0.
         \label{eq:local_weighted_boundary_annihilation}
     \end{align}
     The operator $h$ may be any linear operator, and the coefficients may vanish.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{lem:cyclic_mpv_active_boundary}
-    Compose the joint boundary map with $h$, extend its vanishing from the
-    spanning tuples to the whole product algebra, and evaluate on a boundary
-    supported in one block.
+    \uses{lem:cyclic_mpv_active_boundary, lem:cyclic_active_local_interaction}
+    In the cyclic coordinates at $i$, put, for boundaries
+    $X=(X_1,\ldots,X_b)$ in the product algebra,
+    \begin{align}
+        T(X) & =(h\otimes I_{N-L})\sum_jc_j\,\Gamma_L^{A_j}(X_j).
+        \label{eq:local_weighted_boundary_joint_map}
+    \end{align}
+    By (\ref{eq:cyclic_mpv_active_boundary}) and
+    (\ref{eq:cyclic_active_local_interaction}), the hypothesis says
+    $T(A_1^\tau,\ldots,A_b^\tau)=0$ for every $|\tau|=N-L$. These tuples
+    span the product algebra and $T$ is linear, so $T=0$. Evaluating on the
+    boundary with $X$ in block $j$ and zero elsewhere gives
+    \begin{align}
+        T(0,\ldots,X,\ldots,0) & =c_j\,(h\otimes I_{N-L})\,\Gamma_L^{A_j}(X)=0.
+        \label{eq:local_weighted_boundary_single_block}
+    \end{align}
 \end{proof}
 
 \begin{lemma}[The entire active MPS space is in the interaction kernel]
@@ -33,10 +45,10 @@ ring to all sufficiently long rings. The interaction is fixed throughout.
     \uses{lem:local_weighted_boundary_annihilation, def:periodic-fixed-interaction}
     Suppose $N>0$, $L\le N$, $h\ge0$, and every $c_j\ne0$. If the length-$N-L$
     word tuples span the product matrix algebra and
-    $H_N\sum_jc_jV^{(N)}(A_j)=0$, then
+    $H_N\sum_jc_jV^{(N)}(A_j)=0$, then, for every $j$ and every virtual
+    matrix $X$,
     \begin{align}
-        h\Gamma_L^{A_j}(X) & =0\quad\text{for every }X,
-                           & G_L(A_j)                   & \subseteq\ker h\quad\text{for every }j.
+        h\Gamma_L^{A_j}(X) & =0, & G_L(A_j) & \subseteq\ker h.
         \label{eq:finite_volume_local_kernel_inclusion}
     \end{align}
 \end{lemma}
@@ -59,10 +71,17 @@ ring to all sufficiently long rings. The interaction is fixed throughout.
     No positivity or complementary-span condition at $M$ is needed.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{lem:cyclic_mpv_active_boundary}
-    Every complementary configuration supplies a virtual boundary matrix for
-    the active block. The local-kernel inclusion kills each such fiber, and
-    summing the translated equations gives the Hamiltonian equation.
+    \uses{lem:cyclic_mpv_active_boundary, lem:cyclic_active_local_interaction}
+    In the cyclic coordinates at $i$, the fiber of $V^{(M)}(A)$ over a
+    complementary configuration $\tau$ is
+    $\Gamma_L^A(A^\tau)$ by (\ref{eq:cyclic_mpv_active_boundary}), and
+    $h_i$ acts on it as $h$ by (\ref{eq:cyclic_active_local_interaction}).
+    Since $\Gamma_L^A(A^\tau)\in G_L(A)\subseteq\ker h$, every fiber of
+    $h_iV^{(M)}(A)$ vanishes, so $h_iV^{(M)}(A)=0$ for every $i$. Summing,
+    \begin{align}
+        H_MV^{(M)}(A) & =\sum_ih_iV^{(M)}(A)=0.
+        \label{eq:local_mps_kernel_all_volumes_sum}
+    \end{align}
 \end{proof}
 
 \begin{lemma}[Propagation from a finite ring to every permitted volume]
@@ -72,9 +91,10 @@ ring to all sufficiently long rings. The interaction is fixed throughout.
     \discussion{10280}
     \uses{lem:finite_volume_local_kernel_inclusion, lem:local_mps_kernel_all_volumes}
     Let $N>0$, $L\le N$, and $h\ge0$. If the words of length $N-L$ in $A$
-    span its full matrix algebra and $H_NV^{(N)}(A)=0$, then
+    span its full matrix algebra and $H_NV^{(N)}(A)=0$, then, for every
+    $M\ge L$,
     \begin{align}
-        H_MV^{(M)}(A)=0\qquad\text{for every }M\ge L.
+        H_MV^{(M)}(A) & =0.
         \label{eq:finite_ring_constraint_all_volumes}
     \end{align}
     The same tensor $A$ and interaction $h$ work at every volume. Nonvanishing
