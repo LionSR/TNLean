@@ -82,7 +82,7 @@ theorem isPrimitivePaper_of_isNormal
 /-- **q(E_A) ≤ i(A)**: the primitivity index is at most the full-Kraus-rank index,
 provided the tensor has eventually full Kraus rank.
 
-Paper: "q(E_A) ≤ i(A)" (arXiv:0909.5347, equation (2)).
+Paper: "q(E_A) ≤ i(A)" (arXiv:0909.5347, Proposition 1).
 
 The proof uses `Kraus.vectorSpreadSpan_eq_top_of_wordSpan_eq_top`: since
 `Kraus.wordSpan A (iIndex A) = ⊤`, we have `Kraus.vectorSpreadSpan A φ (iIndex A) = ⊤`
