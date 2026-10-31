@@ -9857,12 +9857,16 @@ there is no need for a new tactic.
   mathematical lemma to a lower matrix-analysis module and reuse it; do not duplicate its
   statement or introduce a new tactic.
 
-### Local interaction separation by a joint boundary map — candidate
+### Local interaction separation by a joint boundary map — promoted
 - **Pattern:** compose an arbitrary local interaction with the joint boundary
   map, extend vanishing from a spanning word family using
   `LinearMap.ext_on_range`, and evaluate on `Pi.single` to isolate a block.
-- **Seen:** `MPS/ParentHamiltonian/ArbitraryInteractionBlockDegeneracy.lean`.
-- **Notes:** one occurrence. The implementation reuses Mathlib `LinearMap.lsum`
+- **Seen:** `MPS/ParentHamiltonian/ArbitraryInteractionBlockDegeneracy.lean`
+  and the finite-to-all-volumes consequence in
+  `MPS/ParentHamiltonian/FiniteVolumeConstraintPropagation.lean`.
+- **Abstraction:** `weighted_boundary_eq_zero_of_periodicLocalInteractionES_eq_zero`
+  now supplies both local component annihilation and the whole local-kernel
+  inclusion. The implementation reuses Mathlib `LinearMap.lsum`
   and `lsum_piSingle`; it avoids entrywise expansion of the local interaction.
   Positivity is used separately via QICLean's
   `WeightedPositiveKernel.apply_sum_eq_zero_iff`.
@@ -10177,6 +10181,19 @@ removed after the dependency audit exposed it.
   its Gram identity directly, rather than expanding both one-factor Gram
   proofs and Kronecker multiplication repeatedly. No local wrapper added.
 
+### Finite local generation by single-site algebras — promoted helper (2026-10-29)
+
+- **Seen:** `MPS/MPU/TwoSiteBufferedAction.lean` and
+  `QCA/SingletonGeneration.lean`, used by `QCA/FiniteInverseLocality.lean`.
+- **Pattern:** Empty-region scalars form the base case; adjoining a disjoint singleton
+  and using `range_localObservable_union` propagates a subalgebra containment.
+- **Abstraction:** `range_localObservable_empty_le` and
+  `range_localObservable_le_of_singletons` retain this finite generation once.
+  The single-site commutant and finite inverse reflection reuse it.
+- **Refactored consumer:** The forward buffered-action equalizer argument consumes this
+  public helper in place of its private repeated finite-region induction.
+- **Validation:** Source-only; hosted Lean checking pending.
+
 ### Weighted geometric sums grouped by their anchors — promoted (2026-10-28)
 
 - **Seen:** `Lattice/LowEnergyCommutatorSum.lean`,
@@ -10200,6 +10217,45 @@ removed after the dependency audit exposed it.
 - **Decision:** Three branch occurrences in one file, below the two-file promotion
   threshold. Before extending this pattern to another module, move the value equality
   before the case distinction or reuse `Fin.val_inj`; no new tactic is needed.
+
+
+### Rectangular reduction of doubled words — promoted (2026-10-29)
+
+- **Pattern:** Apply a full-word reduction to a physical block, double its
+  rectangular bond maps, and decode the blocked physical indices.
+- **Defined in:** `MPS/MPU/SimpleReduction.lean`,
+  `doubleLayer_evalWord_of_isReduction`.
+- **Reuse:** Promotes the existing `doubledBondMap` and
+  `doubleLayer_rectangularSandwich` from `SimpleSupportCompression.lean`;
+  the support-compression and full-word-reduction arguments share their owner.
+- **Related extraction:** `simple2_of_normalizedDiagonal_insertion` in
+  `SuppliedFixedWitnesses.lean` factors the existing positive-power insertion
+  argument. Both the old supplied-witness theorem and the new canonical
+  reduction theorem use that proof; no second induction was copied.
+- **Scope:** A one-letter sandwich alone is insufficient. The reduction must
+  contract every open word, including the empty word.
+
+### Actual W-vector blocking through the vacuum recurrence — candidate (2026-10-29)
+
+- **Seen:** `MPS/Examples/WStateBlocking.lean`, norm counting and the tensor-power encoding.
+- **Pattern:** Reindex a sum by `Fin.consEquiv`, use `Fintype.sum_prod_type`, and split the
+  physical qubit with `Fin.sum_univ_two`; the existing PVBS recurrence separates the
+  remaining W vector and vacuum. Block flattening uses the existing word concatenation.
+- **Decision:** One file, below the two-file promotion threshold. The private recurrence
+  lemmas retain the shared algebra once; no new tactic or general blocking framework.
+
+### Exact-length membership in the cyclic example — candidate (2026-10-29)
+
+- **Seen:** Return-block insertion and padded sandwich membership in
+  `MPS/Examples/CyclicWielandt/Spanning.lean` repeatedly combine two exact
+  lengths using `Kraus.wordSpan_add` and `Submodule.mul_mem_mul`.
+- **Reuse:** A private specialization to the concrete binary family names this
+  step. The arithmetic remains explicit, including the exceptional diagonal
+  recovered from the identity. There is one mathematical consumer file, so no
+  channel-generic tactic or new theory is introduced.
+- **Finite coordinates:** Reuse `Fin.cast_val_eq_self`, `Fin.val_natCast`,
+  `Nat.mod_eq_of_lt`, and `Fin.val_add_eq_ite` in the matrix identities and the
+  entry obstruction. No custom finite-arithmetic tactic is needed.
 
 
 ### Regional and cyclic slice membership — candidate (2026-10-29)
@@ -10272,6 +10328,16 @@ removed after the dependency audit exposed it.
   the general extension. The existing matrix trace-representation theorem
   handles both endpoint restriction directions.
 - **Decision:** Reuse the lemmas; no new tactic or parallel dual structure.
+
+### Cyclic coefficient identities from two spanning families — candidate (2026-10-29)
+
+- **Seen:** `uncleBoundary_cyclic_pairing_of_word_pairing` in
+  `MPS/ParentHamiltonian/UnclePeriodicClosure.lean` extends a cyclic identity
+  first from positive-length coefficient words and then from one-site letters.
+- **Reuse:** Compose the existing trace functional with the concrete left/right
+  coefficient linear maps, then apply `LinearMap.ext_on_range` twice. This
+  avoids duplicating scalar-sum or span-induction proofs and introduces no
+  new algebra instance or tactic.
 
 ### Delta half factors for a supplied two-site circuit (2026-10-29)
 
@@ -10428,6 +10494,21 @@ removed after the dependency audit exposed it.
 - **Decision:** No normalized source record is introduced merely to access
   an algebraic contraction which does not use its normalization fields.
 
+
+
+
+### Exact ground preservation from positive order — existing lemma (2026-10-29)
+
+- **Consumer:** `MPS/AreaLaw/AKLV/FrustrationFreeClipping.lean` derives exact
+  preservation of the original zero-energy ground vector from `0 ≤ K ≤ H`.
+- **Reuse:** `Matrix.mulVec_eq_smul_of_order_sandwich` at energy zero avoids
+  redoing termwise kernel arguments or functional calculus. Existing
+  `orthogonal_clipped_energy_ge` at energy zero already gives the inverse-gap
+  cutoff; no separate clipping-gap framework is introduced.
+- **Candidate:** The final orthogonal decomposition reuses
+  `re_inner_smul_add_eigenvector`, as does `CodimensionOneGap.lean`. A future
+  consolidation may expose that final gap-lifting step; this bounded wrapper
+  introduces no new tactic or general projector structure.
 
 ### Prefix reconstruction by canonical adjoints — candidate (2026-10-29)
 
@@ -10619,3 +10700,12 @@ removed after the dependency audit exposed it.
   exposed and reused for the physical entropy theorem, without a second
   endpoint-unitary or dimension argument.
 
+### Iterating derived boundary intersections — reused library theorem (2026-10-29)
+
+- **Seen:** `MPS/ParentHamiltonian/UncleGroundSpace.lean`, the actual periodic uncle kernel.
+- **Reuse:** `contiguous_mem_of_restriction_intersection_submodules` iterates the already
+  derived single-wall boundary intersection with local length two. The actual kernel
+  theorem supplies its window conditions; no new induction or assumed intersection
+  predicate is introduced.
+- **Translation reuse:** `cyclicRestrictₗ_cyclicTranslateState` is promoted from private
+  visibility for this second consumer; the existing proof remains unchanged.
