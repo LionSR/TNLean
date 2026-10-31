@@ -10095,6 +10095,22 @@ removed after the dependency audit exposed it.
   threshold. Before extending this pattern to another module, move the value equality
   before the case distinction or reuse `Fin.val_inj`; no new tactic is needed.
 
+### Rectangular reduction of doubled words — promoted (2026-10-29)
+
+- **Pattern:** Apply a full-word reduction to a physical block, double its
+  rectangular bond maps, and decode the blocked physical indices.
+- **Defined in:** `MPS/MPU/SimpleReduction.lean`,
+  `doubleLayer_evalWord_of_isReduction`.
+- **Reuse:** Promotes the existing `doubledBondMap` and
+  `doubleLayer_rectangularSandwich` from `SimpleSupportCompression.lean`;
+  the support-compression and full-word-reduction arguments share their owner.
+- **Related extraction:** `simple2_of_normalizedDiagonal_insertion` in
+  `SuppliedFixedWitnesses.lean` factors the existing positive-power insertion
+  argument. Both the old supplied-witness theorem and the new canonical
+  reduction theorem use that proof; no second induction was copied.
+- **Scope:** A one-letter sandwich alone is insufficient. The reduction must
+  contract every open word, including the empty word.
+
 ### Actual W-vector blocking through the vacuum recurrence — candidate (2026-10-29)
 
 - **Seen:** `MPS/Examples/WStateBlocking.lean`, norm counting and the tensor-power encoding.

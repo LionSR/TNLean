@@ -178,7 +178,9 @@ import TNLean.MPS.MPU.SelectedSourceFactorVirtualGauge
 import TNLean.MPS.MPU.SelectedSourceGateVirtualGauge
 import TNLean.MPS.MPU.Simple
 import TNLean.MPS.MPU.SimpleBlocking
+import TNLean.MPS.MPU.SimpleCanonicalRepresentative
 import TNLean.MPS.MPU.SimpleRankOne
+import TNLean.MPS.MPU.SimpleReduction
 import TNLean.MPS.MPU.SimpleSupportCompression
 import TNLean.MPS.MPU.SimpleTensorEquivalence
 import TNLean.MPS.MPU.SimpleTensorProduct
