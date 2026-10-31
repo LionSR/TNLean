@@ -8,6 +8,7 @@ import TNLean.MPS.MPU.StaircaseGates
 import TNLean.MPS.MPDO.SimpleScaling
 import Mathlib.Analysis.Complex.Trigonometric
 import Mathlib.Tactic.FunProp
+import TNLean.Algebra.UnitPhaseScalar
 
 /-!
 # Removing the local transposition phase along actual standard forms
@@ -61,27 +62,6 @@ Source: CPSV17, lines 1285–1288. -/
     transpositionPhaseScalar φ 0 = 1 := by
   simp [transpositionPhaseScalar]
 
-/-- A unit-modulus multiple of a unitary between two coordinate spaces is again unitary,
-since `c * star c = 1`. -/
-private theorem unitaryBetween_smul_of_norm_eq_one
-    {a b : Type*} [Fintype a] [Fintype b] [DecidableEq a] [DecidableEq b]
-    {A : Matrix a b ℂ} (hA : A.IsUnitaryBetween) (c : ℂ) (hc : ‖c‖ = 1) :
-    (c • A).IsUnitaryBetween := by
-  have hcc : c * star c = 1 := by
-    have h := Complex.mul_conj c
-    rw [Complex.normSq_eq_norm_sq, hc] at h
-    simpa only [one_pow, Complex.ofReal_one, starRingEnd_apply] using h
-  have hcc' : star c * c = 1 := by rw [mul_comm, hcc]
-  constructor
-  · change (c • A)ᴴ * (c • A) = 1
-    rw [Matrix.conjTranspose_smul, Matrix.smul_mul, Matrix.mul_smul,
-      smul_smul, hcc', one_smul]
-    exact hA.1
-  · change (c • A) * (c • A)ᴴ = 1
-    rw [Matrix.conjTranspose_smul, Matrix.smul_mul, Matrix.mul_smul,
-      smul_smul, hcc, one_smul]
-    exact hA.2
-
 /-- The explicit phase path consists of actual supplied standard forms,
 with the original half factors and shifted gate. Source: CPSV17,
 `paper_v2.tex` lines 1285–1288. -/
@@ -98,7 +78,7 @@ noncomputable def TwoSiteStandardFormData.transpositionPhaseDeformation
   right_pos := S.right_pos
   X₁ := S.X₁
   X₂ := S.X₂
-  u_unitary := unitaryBetween_smul_of_norm_eq_one S.u_unitary _
+  u_unitary := S.u_unitary.smul_of_norm_eq_one _
     (norm_transpositionPhaseScalar φ t)
   v_unitary := S.v_unitary
   v_apply := S.v_apply

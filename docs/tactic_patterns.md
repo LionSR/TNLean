@@ -10065,17 +10065,20 @@ removed after the dependency audit exposed it.
   The sign/phase algebra differs under adjunction and transposition; no
   duplicate symmetry-predicate family or new closure axiom is introduced.
 
-### Unit phase scalar multiplication of rectangular gates — candidate (2026-10-29)
+### Unit phase scalar multiplication of rectangular gates — promoted (2026-10-31)
 
 - **Pattern:** Derive `c*star c=1` from unit norm, then pull the two scalars
   out of both gate Gram products.
-- **Seen:** Sign-gauge construction in `TimeReversalLocalSufficiency.lean`,
-  phase-gauge construction in `TranspositionLocalSufficiency.lean`, and
-  actual standard-form scalar deformation in `TranspositionPhaseDeformation.lean`.
-- **Next:** A companion-library rectangular-unitary scalar lemma can replace
-  these after the prerequisite stack is accepted; the current private helper
-  proves both identities once within the deformation module.
-- **Related reuse:** The local scalar path uses the existing actual `mpo_smul`
+- **Promoted:** `Complex.mul_star_self_of_norm_eq_one`,
+  `Complex.star_mul_self_of_norm_eq_one` and
+  `Matrix.IsUnitaryBetween.smul_of_norm_eq_one` in
+  `TNLean/Algebra/UnitPhaseScalar.lean`.
+- **Refactored call sites:** phase-gauge construction in
+  `TranspositionLocalSufficiency.lean`, standard-form scalar deformation in
+  `TranspositionPhaseDeformation.lean`, and the phase alignment in
+  `Algebra/PureStateTraceNorm.lean`. The sign-gauge construction in
+  `TimeReversalLocalSufficiency.lean` uses no complex phase.
+- **Related reuse:** The local scalar path uses the existing `mpo_smul`
   law and `TwoSiteStandardFormData` structure; no new path predicate is added.
 
 ### Kernel vectors in an open unitary contraction — candidate (2026-10-29)

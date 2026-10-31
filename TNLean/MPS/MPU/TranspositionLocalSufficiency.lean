@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.MPU.TranspositionLocalNecessity
 import TNLean.MPS.MPU.SourceFactorsStandardForm
+import TNLean.Algebra.UnitPhaseScalar
 
 /-!
 # Even-ring converse of the local transposition phase equation
@@ -38,10 +39,7 @@ private theorem transpose_gate_gauges_of_local_phase
         (Y : Matrix (Fin q) (Fin q) ℂ)) * A ∧
       Aᵀ = B * ((Y : Matrix (Fin q) (Fin q) ℂ)ᴴ ⊗ₖ
         (X : Matrix (Fin q) (Fin q) ℂ)ᴴ) := by
-  have hcc : c * star c = 1 := by
-    have h := Complex.mul_conj c
-    rw [Complex.normSq_eq_norm_sq, hc] at h
-    simpa only [one_pow, Complex.ofReal_one, starRingEnd_apply] using h
+  have hcc : c * star c = 1 := Complex.mul_star_self_of_norm_eq_one hc
   have hcc' : star c * c = 1 := by rw [mul_comm, hcc]
   let Xbar := (x : Matrix (Fin q) (Fin q) ℂ).map (starRingEnd ℂ)
   have hbar : Xbar.IsUnitaryBetween :=
