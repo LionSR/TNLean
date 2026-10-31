@@ -25,6 +25,9 @@ open scoped Matrix Kronecker
 
 namespace MPOTensor
 
+/-- Conversely, a local phase `A = c • (x ⊗ₖ xᵀ) * Bᵀ` with `‖c‖ = 1` gives the two gate
+gauge relations with `X = star x` and `Y = star c • x.map star`. Source: CPSV17,
+`prop:local-char-transposition`, lines 1266–1288. -/
 private theorem transpose_gate_gauges_of_local_phase
     {q : ℕ} (A B : Matrix (Fin q × Fin q) (Fin q × Fin q) ℂ)
     (c : ℂ) (hc : ‖c‖ = 1) (x : Matrix.unitaryGroup (Fin q) ℂ)
