@@ -51,7 +51,7 @@ elimination plan are documented in
 `docs/paper-gaps/gnvw12_cscom_single_block_scope.tex`.
 -/
 
-open scoped TensorProduct
+open scoped TensorProduct Kronecker
 
 namespace StarSubalgebra
 
@@ -176,6 +176,35 @@ theorem commutingMulMap_injective_of_equiv_matrix
       (tensorProductFullMatrixStarAlgEquiv eA eB).symm.toRingEquiv inferInstance
   exact RingHom.injective (R := A ⊗[ℂ] B) (S := C) (commutingMulMap A B hAB)
 
+/-- Multiplication identifies the tensor product of two commuting full
+matrix factors with their actual join. The finite full-matrix hypotheses
+derive injectivity; the existing range identity derives surjectivity.
+Source: Schumacher–Werner, Proposition Cscom, lines 2119–2138. -/
+noncomputable def commutingMulEquivSup
+    (hAB : ∀ a : A, ∀ b : B, Commute (a : C) (b : C))
+    (eA : A ≃⋆ₐ[ℂ] Matrix (Fin p) (Fin p) ℂ)
+    (eB : B ≃⋆ₐ[ℂ] Matrix (Fin q) (Fin q) ℂ) :
+    A ⊗[ℂ] B ≃⋆ₐ[ℂ] ↥(A ⊔ B) := by
+  let f := (commutingMulMap A B hAB).codRestrict (A ⊔ B) (fun x => by
+    rw [← commutingMulMap_range A B hAB]
+    exact ⟨x, rfl⟩)
+  apply StarAlgEquiv.ofBijective f
+  constructor
+  · intro x y h
+    exact commutingMulMap_injective_of_equiv_matrix A B hAB eA eB (congrArg Subtype.val h)
+  · rintro ⟨z, hz⟩
+    rw [← commutingMulMap_range A B hAB] at hz
+    obtain ⟨x, hx⟩ := hz
+    exact ⟨x, Subtype.ext hx⟩
+
+/-- The tensor-product identification sends a pure tensor to its actual
+ambient product. Source: Schumacher–Werner, Proposition Cscom. -/
+@[simp] theorem commutingMulEquivSup_tmul_coe
+    (hAB : ∀ a : A, ∀ b : B, Commute (a : C) (b : C))
+    (eA : A ≃⋆ₐ[ℂ] Matrix (Fin p) (Fin p) ℂ)
+    (eB : B ≃⋆ₐ[ℂ] Matrix (Fin q) (Fin q) ℂ) (a : A) (b : B) :
+    ((commutingMulEquivSup A B hAB eA eB) (a ⊗ₜ[ℂ] b) : C) = (a : C) * (b : C) := rfl
+
 /-- The join of two commuting full matrix factors of sizes `p` and `q` is a full matrix algebra of
 size `p * q`. This is the unital single-block specialization of Schumacher--Werner Proposition
 `Cscom`, quant-ph/0405174, lines 2119--2138. It does not assert that the join is the whole ambient
@@ -184,12 +213,31 @@ noncomputable def commutingSupEquivMatrix
     (hAB : ∀ a : A, ∀ b : B, Commute (a : C) (b : C))
     (eA : A ≃⋆ₐ[ℂ] Matrix (Fin p) (Fin p) ℂ)
     (eB : B ≃⋆ₐ[ℂ] Matrix (Fin q) (Fin q) ℂ) :
-    ↥(A ⊔ B) ≃⋆ₐ[ℂ] Matrix (Fin (p * q)) (Fin (p * q)) ℂ := by
-  let eJoin : A ⊗[ℂ] B ≃⋆ₐ[ℂ] ↥(A ⊔ B) := by
-    rw [← commutingMulMap_range A B hAB]
-    exact StarAlgEquiv.ofInjective (commutingMulMap A B hAB)
-      (commutingMulMap_injective_of_equiv_matrix A B hAB eA eB)
-  exact eJoin.symm.trans (tensorProductFullMatrixStarAlgEquiv eA eB)
+    ↥(A ⊔ B) ≃⋆ₐ[ℂ] Matrix (Fin (p * q)) (Fin (p * q)) ℂ :=
+  (commutingMulEquivSup A B hAB eA eB).symm.trans (tensorProductFullMatrixStarAlgEquiv eA eB)
+
+/-- The prescribed matrix coordinates of an actual product are the
+Kronecker product of its two prescribed factor coordinates.
+Source: Schumacher–Werner, Proposition Cscom and bruleU/bruleV. -/
+theorem commutingSupEquivMatrix_apply_mul
+    (hAB : ∀ a : A, ∀ b : B, Commute (a : C) (b : C))
+    (eA : A ≃⋆ₐ[ℂ] Matrix (Fin p) (Fin p) ℂ)
+    (eB : B ≃⋆ₐ[ℂ] Matrix (Fin q) (Fin q) ℂ) (a : A) (b : B) :
+    commutingSupEquivMatrix A B hAB eA eB
+      ⟨(a : C) * (b : C), (A ⊔ B).mul_mem
+        ((show A ≤ A ⊔ B from le_sup_left) a.property)
+        ((show B ≤ A ⊔ B from le_sup_right) b.property)⟩ =
+      Matrix.reindex finProdFinEquiv finProdFinEquiv (eA a ⊗ₖ eB b) := by
+  have hprod : (⟨(a : C) * (b : C), (A ⊔ B).mul_mem
+      ((show A ≤ A ⊔ B from le_sup_left) a.property)
+      ((show B ≤ A ⊔ B from le_sup_right) b.property)⟩ : ↥(A ⊔ B)) =
+      commutingMulEquivSup A B hAB eA eB (a ⊗ₜ[ℂ] b) := Subtype.ext rfl
+  rw [hprod]
+  change tensorProductFullMatrixStarAlgEquiv eA eB
+    ((commutingMulEquivSup A B hAB eA eB).symm
+      ((commutingMulEquivSup A B hAB eA eB) (a ⊗ₜ[ℂ] b))) = _
+  rw [StarAlgEquiv.symm_apply_apply]
+  rfl
 
 /-- The full-matrix presentation of the join of two commuting full matrix factors exists. -/
 theorem nonempty_equiv_sup_matrix

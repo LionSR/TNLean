@@ -69,6 +69,7 @@ import TNLean.MPS.ParentHamiltonian.Martingale.OverlappingIntervalGap
 import TNLean.MPS.ParentHamiltonian.Martingale.ParentInteractionGap
 import TNLean.MPS.ParentHamiltonian.Martingale.PeriodicGapFromDivisibleOpen
 import TNLean.MPS.ParentHamiltonian.Martingale.PeriodicInteraction
+import TNLean.MPS.ParentHamiltonian.Martingale.PeriodicInteractionSections
 import TNLean.MPS.ParentHamiltonian.Martingale.PeriodicRangeComparison
 import TNLean.MPS.ParentHamiltonian.Martingale.PositiveComparisonGap
 import TNLean.MPS.ParentHamiltonian.Martingale.PrescribedGap
