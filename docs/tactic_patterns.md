@@ -5065,6 +5065,17 @@ three-plaquette output measurement, and the routed reunion measurement.
 
 ## Candidates
 
+### Exact small indices from their defining sets — candidate (2026-10-29)
+
+- **Pattern:** supply a small admissible positive length, use `Nat.sInf_mem`
+  and `Nat.sInf_le`, exclude any smaller positive length, and finish the
+  resulting natural-number bounds with `omega`.
+- **Seen:** the two concrete index computations `threePauliTensor_qIndex`
+  and `threePauliTensor_iIndex` in `MPS/Examples/PauliWielandt.lean`.
+- **Abstraction:** the existing Mathlib infimum lemmas already do the main
+  work. Two occurrences in one file are below the promotion threshold;
+  no specialized index tactic is introduced.
+
 ### Completing an orthonormal family by its cardinality — candidate (2026-10-29)
 
 - **Pattern:** Use
@@ -9969,6 +9980,15 @@ there is no need for a new tactic.
   before the case distinction or reuse `Fin.val_inj`; no new tactic is needed.
 
 
+### Regional and cyclic slice membership — candidate (2026-10-29)
+
+- **Seen:** The two inclusions in `PEPS/ParentHamiltonian/CycleParentGroundSpace.lean`
+  transport local membership through the existing arc physical equivalence, then
+  rewrite the proved regional-slice/cyclic-restriction identity.
+- **Reuse:** One named slice identity handles both directions. A complementary
+  assignment extends using its own exterior value, avoiding positive-dimension
+  assumptions or separate empty-alphabet proof branches. No new tactic is needed.
+
 ### Diagonal boundary matrices select uncle sectors — candidate (2026-10-29)
 
 - **Seen:** `MPS/ParentHamiltonian/UncleGroundSpaceInclusion.lean`, the first and second
@@ -10123,6 +10143,19 @@ there is no need for a new tactic.
   Skolem–Noether theorem supplies the square implementer. No entrywise double sum
   or duplicate Skolem–Noether argument is introduced.
 
+
+### Prefix reconstruction by canonical adjoints — candidate (2026-10-29)
+
+- **Seen:** `MPS/ParentHamiltonian/VaryingOBCIntersection.lean` and
+  `MPS/ParentHamiltonian/VaryingOBCReconstruction.lean`.
+- **Pattern:** Match overlapping trace sections using the middle-site spanning
+  condition, then sum against the adjoint first family to construct the enlarged
+  boundary. The first family may be an actual multi-site prefix.
+- **Reuse:** The full-chain induction calls
+  `Matrix.obc_three_site_reconstruction_of_pair_sections`; the actual-prefix
+  normalization calls `Matrix.obc_block_row_isometry`.
+- **Decision:** Existing mathematical lemmas handle the induction; no inverse
+  supplier, square padding, or additional tactic is introduced.
 
 
 ### Rank-one density under scalar multiplication — promoted (2026-10-29)
