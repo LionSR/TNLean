@@ -412,46 +412,26 @@ spanning-family form of the uniqueness of the bond operator
 2045--2255 of `Papers/1804.04964/paper_normal.tex`).  Two matrices
 multiplying every member of a spanning family to the same product on the
 right are equal. -/
-theorem eq_of_span_mul_left {ι : Type*} [Finite ι]
+theorem eq_of_span_mul_left {ι : Sort*}
     {W : ι → Matrix (Fin D) (Fin D) ℂ}
     (hspan : Submodule.span ℂ (Set.range W) = ⊤)
     {X X' : Matrix (Fin D) (Fin D) ℂ}
     (h : ∀ i, W i * X = W i * X') : X = X' := by
-  cases nonempty_fintype ι
-  have h1 : (1 : Matrix (Fin D) (Fin D) ℂ) ∈
-      Submodule.span ℂ (Set.range W) := hspan ▸ Submodule.mem_top
-  obtain ⟨α, hα⟩ := Submodule.mem_span_range_iff_exists_fun ℂ |>.mp h1
-  calc X = (1 : Matrix (Fin D) (Fin D) ℂ) * X := (Matrix.one_mul _).symm
-    _ = (∑ i, α i • W i) * X := by rw [hα]
-    _ = ∑ i, α i • (W i * X) := by
-        rw [Finset.sum_mul]
-        exact Finset.sum_congr rfl fun i _ => smul_mul_assoc _ _ _
-    _ = ∑ i, α i • (W i * X') := Finset.sum_congr rfl fun i _ => by rw [h i]
-    _ = (∑ i, α i • W i) * X' := by
-        rw [Finset.sum_mul]
-        exact Finset.sum_congr rfl fun i _ => (smul_mul_assoc _ _ _).symm
-    _ = X' := by rw [hα, Matrix.one_mul]
+  have hmaps : LinearMap.mulRight ℂ X = LinearMap.mulRight ℂ X' :=
+    LinearMap.ext_on_range hspan h
+  simpa only [LinearMap.mulRight_apply, Matrix.one_mul] using
+    congrArg (fun f => f (1 : Matrix (Fin D) (Fin D) ℂ)) hmaps
 
 /-- **Uniqueness of a left factor against a spanning family** — the mirror
 of `MPSChainTensor.eq_of_span_mul_left`. -/
-theorem eq_of_mul_span_right {ι : Type*} [Finite ι]
+theorem eq_of_mul_span_right {ι : Sort*}
     {W : ι → Matrix (Fin D) (Fin D) ℂ}
     (hspan : Submodule.span ℂ (Set.range W) = ⊤)
     {X X' : Matrix (Fin D) (Fin D) ℂ}
     (h : ∀ i, X * W i = X' * W i) : X = X' := by
-  cases nonempty_fintype ι
-  have h1 : (1 : Matrix (Fin D) (Fin D) ℂ) ∈
-      Submodule.span ℂ (Set.range W) := hspan ▸ Submodule.mem_top
-  obtain ⟨α, hα⟩ := Submodule.mem_span_range_iff_exists_fun ℂ |>.mp h1
-  calc X = X * (1 : Matrix (Fin D) (Fin D) ℂ) := (Matrix.mul_one _).symm
-    _ = X * ∑ i, α i • W i := by rw [hα]
-    _ = ∑ i, α i • (X * W i) := by
-        rw [Finset.mul_sum]
-        exact Finset.sum_congr rfl fun i _ => mul_smul_comm _ _ _
-    _ = ∑ i, α i • (X' * W i) := Finset.sum_congr rfl fun i _ => by rw [h i]
-    _ = X' * ∑ i, α i • W i := by
-        rw [Finset.mul_sum]
-        exact Finset.sum_congr rfl fun i _ => (mul_smul_comm _ _ _).symm
-    _ = X' := by rw [hα, Matrix.mul_one]
+  have hmaps : LinearMap.mulLeft ℂ X = LinearMap.mulLeft ℂ X' :=
+    LinearMap.ext_on_range hspan h
+  simpa only [LinearMap.mulLeft_apply, Matrix.mul_one] using
+    congrArg (fun f => f (1 : Matrix (Fin D) (Fin D) ℂ)) hmaps
 
 end MPSChainTensor

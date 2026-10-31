@@ -390,8 +390,6 @@ theorem peripheralProportionalCase_periodicFT_of_sameMPV₂Pos
     (hA : IsPeriodic m_a A) (hB : IsPeriodic m_b B)
     (hSame : SameMPV₂Pos A B) :
     HetRepeatedBlocks A B := by
-  have : NeZero D₁ := ⟨hA.bondDim_ne_zero⟩
-  have : NeZero D₂ := ⟨hB.bondDim_ne_zero⟩
   rcases periodicOverlapDichotomy A B hA hB with hDecay | ⟨hdim, hRep⟩
   · have hSameOverlap : ∀ᶠ N : ℕ in Filter.atTop,
         mpvOverlap (d := d) A B N = mpvOverlap A A N := by

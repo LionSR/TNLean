@@ -49,13 +49,13 @@ unique-ground-state theorem, is not addressed here.
 
 ## Verification
 
-All new entries and proofs remain `notready`. No local Lean build, elaboration
-or declaration checker was run, following the user's instruction. Source
-review independently checked the cyclic trace orientation, pinned Mathlib
-linear-extension and lsum signatures, and the actual positive-sum kernel API.
+Hosted CI built every new module, and the blueprint entries and proofs now
+carry `\leanok`. Source review independently checked the cyclic trace
+orientation, pinned Mathlib linear-extension and lsum signatures, and the
+positive-sum kernel API.
 Source integrity, imports, width, pinned TeX formatting, ChkTeX, dependency
 references, duplicate ownership and diff checks pass. New tactic usage is
-recorded in the ledger. Hosted Lean and web/PDF validation remain pending.
+recorded in the ledger.
 
 The newly merged #10327 introduced unrelated theorem-role inconsistencies in
 `ch35_aklv_energy_truncation.tex`. Draft #10359 repairs the registry and the two
