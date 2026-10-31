@@ -121,6 +121,8 @@ import TNLean.MPS.Preparation.OverlappingMeasurementPreparation
 import TNLean.MPS.Preparation.PaddedBondState
 import TNLean.MPS.Preparation.PairLayer
 import TNLean.MPS.Preparation.PartialIsometryPreparation
+import TNLean.MPS.Preparation.PeriodicBondPadding
+import TNLean.MPS.Preparation.PeriodicFiniteRepresentation
 import TNLean.MPS.Preparation.PhaseWeightCounterexample
 import TNLean.MPS.Preparation.PhysicalCutGramRecurrences
 import TNLean.MPS.Preparation.PolarCompression

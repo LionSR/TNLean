@@ -23,6 +23,7 @@ import TNLean.QCA.CanonicalAdjacentSupportGeneration
 import TNLean.QCA.CommutingStarSubalgebraKronecker
 import TNLean.QCA.CompatibleLocalAutomorphism
 import TNLean.QCA.CompatibleLocalState
+import TNLean.QCA.ConsecutivePairCoordinates
 import TNLean.QCA.DisjointSupport
 import TNLean.QCA.FiniteInverseLocality
 import TNLean.QCA.FiniteLocalRestriction
@@ -55,5 +56,7 @@ import TNLean.QCA.SupportAlgebraCommutation
 import TNLean.QCA.SupportAlgebraCovariance
 import TNLean.QCA.SupportAlgebraFactors
 import TNLean.QCA.SupportAlgebraGeneration
+import TNLean.QCA.SupportAlgebraReindex
+import TNLean.QCA.SupportIntersection
 import TNLean.QCA.Translation
 import TNLean.QCA.TranslationCovariance

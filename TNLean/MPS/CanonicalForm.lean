@@ -32,6 +32,7 @@ import TNLean.MPS.CanonicalForm.PGVWC07CanonicalForm
 import TNLean.MPS.CanonicalForm.PeriodicCutBasisCoordinates
 import TNLean.MPS.CanonicalForm.PhaseClassSectorData
 import TNLean.MPS.CanonicalForm.PhaseCover
+import TNLean.MPS.CanonicalForm.PrimeLengthNormalBlocks
 import TNLean.MPS.CanonicalForm.ProjectorClosure
 import TNLean.MPS.CanonicalForm.ProjectorClosureDecomposition
 import TNLean.MPS.CanonicalForm.ProjectorClosureSpectral

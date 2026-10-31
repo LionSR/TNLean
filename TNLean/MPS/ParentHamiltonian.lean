@@ -59,6 +59,7 @@ import TNLean.MPS.ParentHamiltonian.BlockedPrimitiveQuasiLocalGap
 import TNLean.MPS.ParentHamiltonian.BlockedQuasiLocalFace
 import TNLean.MPS.ParentHamiltonian.BlockedQuasiLocalGap
 import TNLean.MPS.ParentHamiltonian.BlockedQuasiLocalSupport
+import TNLean.MPS.ParentHamiltonian.BondOneFinitePrefixGroundStates
 import TNLean.MPS.ParentHamiltonian.BoundaryBlockMatEq
 import TNLean.MPS.ParentHamiltonian.BoundaryClosing
 import TNLean.MPS.ParentHamiltonian.BoundaryClosingAuxiliary
@@ -134,6 +135,7 @@ import TNLean.MPS.ParentHamiltonian.FaithfulParentGroundStates
 import TNLean.MPS.ParentHamiltonian.FaithfulParentInteractionGap
 import TNLean.MPS.ParentHamiltonian.FaithfulPeriodicGroundSpace
 import TNLean.MPS.ParentHamiltonian.FaithfulQuasiLocalGap
+import TNLean.MPS.ParentHamiltonian.FinitePrefixUniformBond
 import TNLean.MPS.ParentHamiltonian.FiniteVolumeConstraintPropagation
 import TNLean.MPS.ParentHamiltonian.FrameOperator
 import TNLean.MPS.ParentHamiltonian.GaugePhaseSeparationTransport
@@ -237,6 +239,7 @@ import TNLean.MPS.ParentHamiltonian.PhysicalResidualCoverLimit
 import TNLean.MPS.ParentHamiltonian.PositiveFunctionalCommutator
 import TNLean.MPS.ParentHamiltonian.PositivePhysicalDeformationGap
 import TNLean.MPS.ParentHamiltonian.PoweredCyclicPrimitiveResolution
+import TNLean.MPS.ParentHamiltonian.PrimeLengthBondDimensionDichotomy
 import TNLean.MPS.ParentHamiltonian.PrimitiveBlockIntervalDefectDecay
 import TNLean.MPS.ParentHamiltonian.PrimitiveBlockOpenGroundSpace
 import TNLean.MPS.ParentHamiltonian.PrimitiveBlockSharpOpenGroundSpace
@@ -262,6 +265,7 @@ import TNLean.MPS.ParentHamiltonian.QuasiLocalMultiblockLimitGap
 import TNLean.MPS.ParentHamiltonian.QuasiLocalOpenInteractionExpectation
 import TNLean.MPS.ParentHamiltonian.QuasiLocalParentGroundStateFace
 import TNLean.MPS.ParentHamiltonian.QuasiLocalPrimitiveGap
+import TNLean.MPS.ParentHamiltonian.QuasiLocalWindowCoordinates
 import TNLean.MPS.ParentHamiltonian.ResidualBoundaryGram
 import TNLean.MPS.ParentHamiltonian.ResidualBoundaryGramInverse
 import TNLean.MPS.ParentHamiltonian.ResidualBoundaryOverlap

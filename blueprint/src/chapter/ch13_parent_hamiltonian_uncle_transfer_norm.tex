@@ -14,14 +14,16 @@ maps. This finite identity precedes the large-separation estimates in
     For the actual one-wall word sums $W_R(w)$, set
     \begin{align}
         \mathcal G_R^{(n)}(X)=\sum_{|w|=n}W_R(w)XW_R(w)^*.
+        \label{eq:uncle_wall_gram_map}
     \end{align}
     Thus $\mathcal G_R^{(n)}(I)=Y_n$. The analogous map
     $\mathcal G_L^{(n)}$ reverses the roles of $A$ and $B$.
     For the five segment lengths $p,r,q,s,t$, define
     \begin{align}
         \mathcal T_{p,r,q,s,t}=
-        E_A^p\circ\mathcal G_R^{(r)}\circ E_B^q
-        \circ\mathcal G_L^{(s)}\circ E_A^t.
+        \E_A^p\circ\mathcal G_R^{(r)}\circ\E_B^q
+        \circ\mathcal G_L^{(s)}\circ\E_A^t.
+        \label{eq:uncle_two_wall_transfer}
     \end{align}
 \end{definition}
 
@@ -38,6 +40,7 @@ maps. This finite identity precedes the large-separation estimates in
     \begin{align}
         \|\varphi_{p,r,q,s,t}\|^2=
         \operatorname{Re}\operatorname{Tr}\mathcal T_{p,r,q,s,t}.
+        \label{eq:uncle_trial_norm_trace}
     \end{align}
     Here $\operatorname{Tr}$ denotes the trace of an endomorphism of the
     matrix space. Cyclicity joins the two exterior segments:
@@ -47,8 +50,9 @@ maps. This finite identity precedes the large-separation estimates in
     \begin{align}
         \|\varphi_N\|^2=
         \operatorname{Re}\operatorname{Tr}
-        \bigl(E_A^{2N}\circ\mathcal G_R^{(N+1)}
-        \circ E_B^{2N-1}\circ\mathcal G_L^{(N+1)}\bigr).
+        \bigl(\E_A^{2N}\circ\mathcal G_R^{(N+1)}
+        \circ\E_B^{2N-1}\circ\mathcal G_L^{(N+1)}\bigr).
+        \label{eq:uncle_source_trial_norm_trace}
     \end{align}
     No unitality, injectivity, or limiting norm estimate is needed for
     these finite identities.
@@ -61,13 +65,13 @@ maps. This finite identity precedes the large-separation estimates in
     $\sum_z\operatorname{tr}(C_z)\overline{\operatorname{tr}(C_z)}$,
     which is the squared coefficient norm after joining the five physical
     configurations. With
-    $M=\mathcal G_R^{(r)}\circ E_B^q\circ\mathcal G_L^{(s)}$, cyclicity
+    $M=\mathcal G_R^{(r)}\circ\E_B^q\circ\mathcal G_L^{(s)}$, cyclicity
     $\operatorname{Tr}(XY)=\operatorname{Tr}(YX)$ of the operator trace
-    combines the two exterior powers of $E_A$:
+    combines the two exterior powers of $\E_A$:
     \begin{align}
-        \operatorname{Tr}(E_A^p\circ M\circ E_A^t)
-        =\operatorname{Tr}(E_A^t\circ E_A^p\circ M)
-        =\operatorname{Tr}(E_A^{p+t}\circ M).
+        \operatorname{Tr}(\E_A^p\circ M\circ\E_A^t)
+        =\operatorname{Tr}(\E_A^t\circ\E_A^p\circ M)
+        =\operatorname{Tr}(\E_A^{p+t}\circ M).
         \label{eq:uncle_trial_transfer_join_exterior}
     \end{align}
 \end{proof}
@@ -84,6 +88,7 @@ maps. This finite identity precedes the large-separation estimates in
         \operatorname{Tr}(P_A\circ\mathcal G_R^{(r)}
         \circ P_B\circ\mathcal G_L^{(s)})=
         \eta_R(r)\eta_L(s)
+        \label{eq:uncle_wall_rank_one_trace}
     \end{align}
     holds. Here each weight uses its corresponding left density.
 \end{lemma}

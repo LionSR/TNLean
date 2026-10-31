@@ -131,7 +131,7 @@ theorem aklv_clipped_hamiltonian_decomposition {L q a s : ℕ}
       (interval L ((![0, a + 2, a + s - 1, L] : Fin 4 → ℕ) j.castSucc)
         ((![0, a + 2, a + s - 1, L] : Fin 4 → ℕ) j.succ)) := by
     exact QuantumCircuit.isSupportedOn_of_mem_supportedOperators
-      (LocalSolution.cfc_mem_supportedOperators _
+      (QuantumCircuit.cfc_mem_supportedOperators _
         (QuantumCircuit.mem_supportedOperators_of_isSupportedOn (hC j)))
   have hleft : Entropy.IsSupportedOn HL (interval L 0 (a + 2)) := by
     apply QuantumCircuit.isSupportedOn_of_mem_supportedOperators
