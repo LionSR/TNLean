@@ -413,7 +413,7 @@ In this section $P_t=\mathbf1_{(-\infty,t)}(B)$ and $Q_t=I-P_t$.
     \lean{TNLean.MPS.AreaLaw.AKLV.frustrationFree_twoSidedEnergyTruncation_ground_gap}
     \leanok
     \uses{def:aklv_normalized_cut_blocks}
-    Let $h_i$ be positive contractions supported on the consecutive site pairs
+    Let $0\le h_i\le I$ be supported on the consecutive site pairs
     $\{i,i+1\}$ of a finite chain. Choose two boundary bonds $a<b$ and put
     $H=\sum_i h_i$. Let $\Omega$ be a unit vector satisfying $H\Omega=0$
     and $H\ge g(I-|\Omega\rangle\langle\Omega|)$, where $0<g\le1$.
@@ -435,8 +435,14 @@ In this section $P_t=\mathbf1_{(-\infty,t)}(B)$ and $Q_t=I-P_t$.
     Each unshifted regional sum is positive, its two boundary bonds sum
     to an operator at most $2I$, and the original supports give the
     regional commutations and reconstruction of $H$.
-    The clipped order bounds give $0\le K\le H$, hence $H\Omega=0$
-    implies $K\Omega=0$.
+    The clipped order bounds give $0\le K\le H$. Hence
+    \begin{align}
+        0\le\|K^{1/2}\Omega\|^2
+         & =\langle\Omega,K\Omega\rangle
+        \le\langle\Omega,H\Omega\rangle=0,
+        \label{eq:aklv_ff_clipping_kernel_sandwich}
+    \end{align}
+    so $K^{1/2}\Omega=0$ and $K\Omega=0$.
     Apply Lemma~\ref{lem:aklv_clipped_gap} at $e=0$:
     the condition $tg^2\ge1024g$ follows from $t\ge1024/g$.
     Every $w\perp\Omega$ therefore satisfies
