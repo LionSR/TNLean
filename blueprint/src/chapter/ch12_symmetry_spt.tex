@@ -4331,7 +4331,7 @@ arbitrary finite set of sites in Section~\ref{sec:qc_lieb_robinson}.
 \begin{definition}[The energy-lowering part of an observable]
     \label{def:spt_negative_frequency_part}
     \lean{TNLean.Lattice.negativeFrequencyPart}
-    \notready
+    \leanok
     \discussion{9879}
     Let $H$ be a finite Hermitian Hamiltonian with an orthonormal
     eigenbasis $e_i$ and energies $E_i$. For an observable $A$, define
@@ -4349,7 +4349,7 @@ arbitrary finite set of sites in Section~\ref{sec:qc_lieb_robinson}.
     \lean{TNLean.Lattice.negativeFrequencyPart_apply_ground_eq_zero,
         TNLean.Lattice.inner_ground_projected_eq_negativeFrequency_commutator,
         TNLean.Lattice.inner_ground_connected_eq_negativeFrequency_commutator}
-    \notready
+    \leanok
     \discussion{9879}
     \uses{def:spt_negative_frequency_part}
     Suppose $E_0\le E_i$ for every $i$, let $\psi$ belong to the
@@ -4367,7 +4367,7 @@ arbitrary finite set of sites in Section~\ref{sec:qc_lieb_robinson}.
         =\langle\psi,[A^-,B]\psi\rangle.
     \]
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     An energy-lowering matrix element cannot act nontrivially on a
     ground vector. Expand an arbitrary vector orthogonal to the ground
     eigenspace in the energy basis. Between that vector and a ground
@@ -4381,7 +4381,7 @@ arbitrary finite set of sites in Section~\ref{sec:qc_lieb_robinson}.
 \begin{lemma}[Negative-frequency identity along the actual MPS path]
     \label{cor:spt_exact_ground_negative_frequency_identity}
     \lean{MPSTensor.ExactMPSGroundPath.negativeFrequency_connected_identity}
-    \notready
+    \leanok
     \discussion{9879}
     \uses{lem:spt_exact_ground_gaussian_bounds,lem:spt_negative_frequency_ground_correlation}
     At each parameter and every ring length $N\ge2$ of an exact MPS
@@ -4390,15 +4390,16 @@ arbitrary finite set of sites in Section~\ref{sec:qc_lieb_robinson}.
     above. No transfer, correlation-decay or continuous-gauge input is
     required.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     The physical path supplies the least ground energy and the actual
     full ground line. Apply the preceding lemma to its Hamiltonian
     and periodic MPS vector.
 \end{proof}
 
-The sharp energy-lowering part need not be local. Gaussian
-regularization, control by a time integral of local commutators, and the
-resulting ordinary exponential clustering bound remain to be proved.
+The sharp energy-lowering part need not be local. The following lemmas
+replace it by a Gaussian regularization, control that regularization by a
+time integral of local commutators, and derive ordinary exponential
+clustering.
 
 \begin{lemma}[The Gaussian negative-frequency selector]
     \label{lem:spt_gaussian_negative_frequency_cutoff}
@@ -4407,7 +4408,7 @@ resulting ordinary exponential clustering bound remain to be proved.
         TNLean.Lattice.gaussianNegativeFrequencyCutoff_le_one,
         TNLean.Lattice.gaussianNegativeFrequencyCutoff_le_exp_of_gap,
         TNLean.Lattice.abs_one_sub_gaussianNegativeFrequencyCutoff_le_exp_of_gap}
-    \notready
+    \leanok
     \discussion{9879}
     For $q,\Delta>0$, let $X$ be a centered Gaussian of variance
     $\Delta^2/q$ and put $F_{q,\Delta}(\omega)=\mathbb P(X\ge\omega)$.
@@ -4423,7 +4424,7 @@ resulting ordinary exponential clustering bound remain to be proved.
     \cite[Lemma 3.1, equation (3.7)]{Hastings2006Spectral}, with
     $\alpha=\Delta^2/(2q)$.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     The moment-generating function is
     $\mathbb E(e^{tX})=\exp(\Delta^2t^2/(2q))$.
     Chernoff's bound at $\Delta$ is $e^{-q/2}$. The positive-frequency
@@ -4433,12 +4434,12 @@ resulting ordinary exponential clustering bound remain to be proved.
 \end{proof}
 
 The following regularized time-integral argument identifies this actual
-Gaussian selector. Operator locality estimates remain separate obligations.
+Gaussian selector. The operator locality estimates are proved after it.
 
 \begin{definition}[The regularized Gaussian--Cauchy kernel]
     \label{def:spt_gaussian_cauchy_kernel}
     \lean{TNLean.Lattice.gaussianCauchyKernel}
-    \notready
+    \leanok
     \discussion{9879}
     For $\alpha,\varepsilon>0$, set
     \[
@@ -4457,7 +4458,7 @@ Gaussian selector. Operator locality estimates remain separate obligations.
         TNLean.Lattice.norm_gaussianCauchyKernel_le,
         TNLean.Lattice.integrable_gaussianCauchyKernel_mul_exp,
         TNLean.Lattice.norm_integral_gaussianCauchyKernel_mul_exp_le}
-    \notready
+    \leanok
     \discussion{9879}
     \uses{def:spt_gaussian_cauchy_kernel}
     For $\alpha,\varepsilon>0$ and $\omega,t\in\mathbb R$,
@@ -4476,7 +4477,7 @@ Gaussian selector. Operator locality estimates remain separate obligations.
         \le \frac1{2\pi\varepsilon}\sqrt{\frac\pi\alpha}.
     \]
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     The complex exponential integral converges since its exponent has
     real part $-\varepsilon<0$. Its antiderivative gives the Laplace
     identity. The denominator has norm at least $\varepsilon$, so
@@ -4486,9 +4487,8 @@ Gaussian selector. Operator locality estimates remain separate obligations.
 \end{proof}
 
 The bound retains its dependence on $\varepsilon$. It is not a uniform
-regularizer-limit estimate. Interchanging the two integrals, identifying
-the Gaussian selector, and passing to the regularizer limit still require
-proof.
+regularizer-limit estimate. The next lemma interchanges the two integrals,
+identifies the Gaussian selector, and passes to the regularizer limit.
 
 \begin{lemma}[The actual scalar Gaussian--Cauchy limit]
     \label{lem:spt_gaussian_cauchy_limit}
@@ -4498,7 +4498,7 @@ proof.
         GaussianFilter.halfLine_gaussian_integral_eq_measureReal,
         TNLean.Lattice.tendsto_normalized_gaussianCauchyTransform,
         TNLean.Lattice.tendsto_normalized_gaussianCauchyTransform_cutoff}
-    \notready
+    \leanok
     \discussion{9879}
     \uses{lem:spt_gaussian_cauchy_integrability,lem:spt_gaussian_negative_frequency_cutoff}
     Let $\nu_h$ be the centered Gaussian probability measure of variance
@@ -4521,7 +4521,7 @@ proof.
     In particular, $h=q/\Delta^2$ gives the actual Gaussian selector
     $F_{q,\Delta}$ above and its explicit gap-error bounds.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     Insert the half-line Laplace representation of the Cauchy
     denominator. Under $\nu_h\otimes ds$ on $s>0$, the absolute value of
     the joint integrand is $e^{-\varepsilon s}$, which is integrable.
@@ -4542,7 +4542,7 @@ argument below.
     \label{def:spt_regularized_negative_frequency_operator}
     \lean{TNLean.Lattice.gaussianNegativeFrequencyIntegrand,
         TNLean.Lattice.gaussianNegativeFrequencyOperator}
-    \notready
+    \leanok
     \discussion{9879}
     \uses{lem:spt_gaussian_cauchy_limit}
     For a Hermitian $H$, an observable $A$, Gaussian time variance $h$,
@@ -4564,7 +4564,7 @@ argument below.
         TNLean.Lattice.dotProduct_gaussianNegativeFrequencyOperator_mulVec,
         TNLean.Lattice.inner_gaussianNegativeFrequencyOperator,
         TNLean.Lattice.tendsto_dotProduct_gaussianNegativeFrequencyOperator}
-    \notready
+    \leanok
     \discussion{9879}
     \uses{def:spt_regularized_negative_frequency_operator,lem:spt_gaussian_cauchy_limit}
     The actual regularized observable is integrable and
@@ -4580,7 +4580,7 @@ argument below.
         \nu_{1/h}([E-E',\infty))\langle v,Aw\rangle.
     \]
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     Unitary conjugation preserves the norm, and the rational factor has
     norm at most $\varepsilon^{-1}$, so the finite Gaussian measure
     gives integrability. Between energy eigenvectors the actual
@@ -4592,7 +4592,7 @@ argument below.
 \begin{lemma}[Uniform locality after cancelling the Cauchy singularity]
     \label{lem:spt_regularized_frequency_uniform_locality}
     \lean{TNLean.Lattice.norm_commutator_gaussianNegativeFrequencyOperator_le}
-    \notready
+    \leanok
     \discussion{9879}
     \uses{def:spt_regularized_negative_frequency_operator}
     Suppose $C,v\ge0$ and the actual dynamics satisfy
@@ -4605,7 +4605,7 @@ argument below.
     \]
     In particular the bound is independent of the positive regularizer.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     The rational factor is at most $|t|^{-1}$ for $t\ne0$.
     For $|t|\le T$, the inequality $e^x-1\le xe^x$ cancels this
     factor against the actual short-time increment. At $t=0$ the
@@ -4619,7 +4619,7 @@ argument below.
 \begin{lemma}[Actual finite-ring regularized-frequency locality]
     \label{cor:spt_finite_ring_regularized_frequency_locality}
     \lean{MPSTensor.norm_negativeFrequency_interactionHamiltonian_commutator_le}
-    \notready
+    \leanok
     \discussion{9879}
     \uses{lem:spt_regularized_frequency_uniform_locality,aux:interaction-hamiltonian-lieb-robinson}
     For an actual periodic nearest-neighbour Hamiltonian with Hermitian
@@ -4631,7 +4631,7 @@ argument below.
     \]
     There is no supplied propagation or correlation estimate.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     The actual finite-ring Lieb--Robinson bound supplies exactly the
     required short-time increment. Apply the preceding lemma.
 \end{proof}
@@ -4640,7 +4640,7 @@ argument below.
     \label{lem:spt_gaussian_ground_frequency_separation}
     \lean{TNLean.Lattice.exists_gaussianNegativeFrequency_ground_limits,
         TNLean.Lattice.exists_gaussianNegativeFrequency_ground_commutator_limit}
-    \notready
+    \leanok
     \discussion{9879}
     \uses{lem:spt_regularized_frequency_matrix_elements,lem:spt_gaussian_negative_frequency_cutoff}
     Suppose the full ground eigenspace of $H$ is $\mathbb C\psi$,
@@ -4660,7 +4660,7 @@ argument below.
     \]
     No normalization of $\psi$ or centering of $B$ is required.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     Expand in an orthonormal energy basis and apply the matrix-element
     limit. Centering removes all ground-energy coefficients. The two
     probability-tail estimates bound the remaining coefficients, and
@@ -4678,14 +4678,14 @@ argument below.
         TNLean.Lattice.inner_centeredObservable_mul,
         TNLean.Lattice.centeredObservable_mem,
         TNLean.Lattice.centeredObservable_commutator}
-    \notready
+    \leanok
     \discussion{9879}
     For $\psi\ne0$, write
     $\langle A\rangle_\psi=\langle\psi,A\psi\rangle/\|\psi\|^2$
     and $A_0=A-\langle A\rangle_\psi\Id$. Then
     $|\langle A\rangle_\psi|\le\|A\|$,
     $\langle\psi,A_0\psi\rangle=0$, and $\|A_0\|\le2\|A\|$.
-    Moreover
+    The centered observable gives the connected correlation:
     \[
         \frac{\langle\psi,A_0B\psi\rangle}{\|\psi\|^2}
         =\langle AB\rangle_\psi
@@ -4694,7 +4694,7 @@ argument below.
     Subtracting this scalar identity preserves every linear space of
     observables containing $A$ and $\Id$, as well as the commutator with $B$.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     Use Cauchy--Schwarz, the operator-norm bound, and the triangle
     inequality. Expand the scalar identity and use that $\|\psi\|^2>0$.
 \end{proof}
@@ -4702,7 +4702,7 @@ argument below.
 \begin{lemma}[Ordinary centered correlation from Gaussian frequency separation]
     \label{lem:spt_gaussian_ordinary_centered_correlation}
     \lean{TNLean.Lattice.norm_centered_ground_correlation_le_gaussian}
-    \notready
+    \leanok
     \discussion{9879}
     \uses{lem:spt_gaussian_ground_frequency_separation,lem:spt_regularized_frequency_uniform_locality}
     Under the preceding ground-line and propagation hypotheses, for
@@ -4714,7 +4714,7 @@ argument below.
             +\frac{2\|A\|\|B\|}{T}e^{-T^2/(2h)}\right)\right)\|\psi\|^2.
     \]
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     The regularized commutator is bounded uniformly in its positive
     regularizer. Pass this bound to its scalar limit and add the proved
     Gaussian ground-vector error.
@@ -4724,7 +4724,7 @@ argument below.
     \label{cor:spt_exact_ground_connected_gaussian_bound}
     \lean{MPSTensor.ExactMPSGroundPath.exists_uniform_centered_correlation_gaussian_bound,
         MPSTensor.ExactMPSGroundPath.exists_uniform_connected_correlation_gaussian_bound}
-    \notready
+    \leanok
     \discussion{9879}
     \uses{lem:spt_gaussian_ordinary_centered_correlation,lem:spt_actual_observable_centering,
         lem:spt_exact_ground_gaussian_bounds,aux:interaction-hamiltonian-lieb-robinson}
@@ -4741,7 +4741,7 @@ argument below.
     \]
     where $q,T>0$, $a\ge0$, $h=q/\Delta^2$, and $v=8e^a$.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     The actual physical gap supplies the full ground line and the common
     spectral gap. The actual finite-ring propagation estimate supplies
     the time increment. Center the first observable at the actual
@@ -4753,7 +4753,7 @@ argument below.
     \label{lem:spt_gaussian_frequency_clustering_rate}
     \lean{GaussianFilter.kernel_inv_zero_eq_sqrt,
         TNLean.Lattice.exists_gaussianFrequencyClusteringRate}
-    \notready
+    \leanok
     \discussion{9879}
     If $\Delta,v>0$, there are $C,\kappa>0$ such that for $m\ge0$ and
     $\ell\ge1$,
@@ -4765,7 +4765,7 @@ argument below.
         \le C(m+1)e^{-\kappa\ell}.
     \]
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     The density normalization is $c_h=\sqrt{h/(2\pi)}$.
     Take $\kappa=\min(1/4,\Delta/(8v))$ and absorb the square-root
     factors using $\sqrt\ell\le\ell$ and
@@ -4775,7 +4775,7 @@ argument below.
 \begin{lemma}[Ordinary connected exponential clustering along the physical path]
     \label{thm:spt_exact_ground_connected_exponential_clustering}
     \lean{MPSTensor.ExactMPSGroundPath.exists_uniform_connected_exponential_clustering}
-    \notready
+    \leanok
     \discussion{9879}
     \uses{cor:spt_exact_ground_connected_gaussian_bound,lem:spt_gaussian_frequency_clustering_rate}
     Along an exact MPS ground-state path there are $K,\kappa>0$,
@@ -4788,7 +4788,7 @@ argument below.
     \]
     whenever $1\le\ell\le d(X,Y)$.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     Set $a=1$, $v=8e$, $T=\ell/(2v)$, and $q=T\Delta$ in the
     preceding Gaussian bound. Both Gaussian errors are
     $e^{-\ell\Delta/(4v)}$, while the short-time term is bounded
@@ -4801,7 +4801,7 @@ argument below.
         MPSTensor.mpvExpectation_eq_normalizedVectorExpectation,
         MPSTensor.SamePositiveMpvRay.mpvExpectation_eq,
         MPSTensor.SamePositiveMpvRay.mpvConnectedCorrelator_eq}
-    \notready
+    \leanok
     \discussion{9879}
     \uses{lem:spt_actual_observable_centering}
     If two tensors generate the same periodic vector line at every
@@ -4809,7 +4809,7 @@ argument below.
     connected window correlators coincide. Their bond dimensions and
     scalar normalizations may differ.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     Equal singleton spans differ by an invertible scalar, including when
     both vectors vanish. The scalar and its complex conjugate cancel in
     the ratio defining the normalized expectation. Apply this identity
@@ -4820,7 +4820,7 @@ argument below.
     \label{cor:spt_physical_window_clustering}
     \lean{MPSTensor.ExactMPSGroundPath.exists_uniform_window_correlation_bound,
         MPSTensor.ExactMPSGroundPath.exists_uniform_ray_window_correlation_bound}
-    \notready
+    \leanok
     \discussion{9879}
     \uses{thm:spt_exact_ground_connected_exponential_clustering,lem:spt_positive_ray_expectations}
     There are common $K,\kappa>0$ such that for any tensor representing
@@ -4832,7 +4832,7 @@ argument below.
         \le K(L+1)\|X\|\|Y\|e^{-\kappa t}.
     \]
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     The two windows have at least $t$ sites between them in both cyclic
     directions, so their shortest-path distance is greater than $t$.
     Window embeddings are contractive and the first support has at most
@@ -4844,7 +4844,7 @@ argument below.
     \lean{MPSTensor.tendsto_mpvConnectedCorrelator_limitCorrelator,
         MPSTensor.norm_limitCorrelator_le_of_eventually_mpvConnectedCorrelator_le,
         MPSTensor.norm_transfer_spectrum_le_of_finite_mpvConnectedCorrelator_bound}
-    \notready
+    \leanok
     \discussion{9879}
     \uses{def:physical_connected_correlator,lem:spt_transfer_rate_from_correlations}
     Let $A$ be trace preserving and injective after blocking $L>0$ sites,
@@ -4856,7 +4856,7 @@ argument below.
     a common eventual rate $r>0$ for all such observables bounds every
     transfer eigenvalue different from one by $r$.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     Block injectivity gives pointwise primitivity. The complementary
     transfer operator has spectral radius less than one, so its powers
     tend to zero. Substitute this in the exact finite-ring contraction
@@ -4869,7 +4869,7 @@ argument below.
 \begin{lemma}[A common transfer bound for trace-preserving representatives]
     \label{thm:spt_physical_gap_tp_transfer_bound}
     \lean{MPSTensor.ExactMPSGroundPath.exists_uniform_tracePreserving_transfer_bound}
-    \notready
+    \leanok
     \discussion{9879}
     \uses{cor:spt_physical_window_clustering,lem:spt_actual_finite_ring_correlation_limit}
     An exact physical MPS ground-state path has a common $0<r<1$ such
@@ -4878,7 +4878,7 @@ argument below.
     density, has all transfer eigenvalues different from one of modulus
     at most $r$.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     Take $r=e^{-\kappa}$ from the physical window bound. For each pair
     of observables the estimate holds for all return lengths $n\ge t$.
     Pass to the limiting contraction and then to the transfer spectrum.
@@ -4888,15 +4888,16 @@ argument below.
     \label{lem:spt_injective_tp_gauge}
     \lean{MPSTensor.exists_posDef_fixedPoint_trace_one_of_isInjective_isTP,
         MPSTensor.exists_tpGauge_of_isInjective_unital}
-    \notready
+    \leanok
     \discussion{9879}
-    A trace-preserving one-site injective tensor has a faithful stationary
-    density of trace one. Every unital one-site injective tensor $A$ of
-    positive bond dimension has a bond gauge $B$ that is trace preserving,
-    one-site injective, has the same positive-length periodic rays and
-    transfer spectrum, and has such a density.
+    A trace-preserving one-site injective tensor of positive bond dimension
+    has a faithful stationary density of trace one. Every unital one-site
+    injective tensor $A$ of positive bond dimension has a bond gauge $B$
+    that is trace preserving, one-site injective, has the same
+    positive-length periodic rays and transfer spectrum, and has such a
+    density.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     Primitive Perron--Frobenius theory supplies the positive-definite
     stationary density, which is normalized by its positive trace.
     For the gauge, derive the faithful adjoint fixed point $\Lambda$ of
@@ -4910,7 +4911,7 @@ argument below.
 \begin{lemma}[A common unital transfer bound from the physical gap]
     \label{thm:spt_physical_gap_unital_transfer_bound}
     \lean{MPSTensor.ExactMPSGroundPath.exists_uniform_unital_transfer_bound}
-    \notready
+    \leanok
     \discussion{9879}
     \uses{thm:spt_physical_gap_tp_transfer_bound,lem:spt_injective_tp_gauge}
     Along an exact physical MPS ground-state path there is a common
@@ -4919,7 +4920,7 @@ argument below.
     family on the path. No transfer bound or canonical gauge is an
     additional hypothesis.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     Derive a trace-preserving gauge and its faithful fixed density.
     Apply the preceding physical transfer bound at blocking length one,
     and transport the spectrum back through the bond gauge.
@@ -4951,7 +4952,7 @@ argument below.
 \begin{theorem}[One virtual class from the actual physical gap]
     \label{thm:spt_exact_ground_physical_class}
     \lean{MPSTensor.ExactMPSGroundPath.exists_constant_virtual_class}
-    \notready
+    \leanok
     \discussion{9879}
     \uses{thm:spt_physical_gap_unital_transfer_bound,
         thm:spc_aux_exact_ground_uniform_transfer_class}
@@ -4965,7 +4966,7 @@ argument below.
     path, and no continuous choice of minimal tensors, stationary
     densities, or virtual matrices is required.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     Derive the common unital transfer bound from the physical gap and
     apply the compact-limit class-invariance theorem below.
 \end{proof}
@@ -4975,7 +4976,7 @@ argument below.
     \lean{MPSTensor.bondDimension_eq_of_samePositiveMpvRay,
         MPSTensor.cohomologousTo_of_samePositiveMpvRay,
         MPSTensor.cohomologousTo_of_samePositiveMpvRay_character_covariance}
-    \notready
+    \leanok
     \uses{thm:spt_positive_ray_finite_traces}
     Let $A$ and $B$ be injective tensors of positive bond dimensions with
     the same positive-length periodic rays. Their bond dimensions agree.
@@ -4983,7 +4984,7 @@ argument below.
     equal cohomology classes, including when the actions remove separately
     chosen unit-modulus physical characters.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     The nonzero two- and three-site trace normalizations determine the
     common bond dimension and a scalar bond gauge. Transport the first
     virtual action through this gauge. On the second tensor, injective
@@ -4994,7 +4995,7 @@ argument below.
 \begin{lemma}[Prescribed classes at the endpoints of a physical path]
     \label{cor:spt_exact_ground_endpoint_class}
     \lean{MPSTensor.ExactMPSGroundPath.cohomologousTo_endpoints}
-    \notready
+    \leanok
     \uses{thm:spt_exact_ground_physical_class, lem:spt_periodic_ray_virtual_class}
     Let $Q$ realize the unique finite-chain ground lines of a symmetric
     gapped interaction path. Suppose injective positive-dimensional
@@ -5003,7 +5004,7 @@ argument below.
     after independent unit-modulus character changes, have equal
     cohomology classes.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     Compare each endpoint action with the corresponding action in the
     common class supplied by Theorem~\ref{thm:spt_exact_ground_physical_class}.
     Lemma~\ref{lem:spt_periodic_ray_virtual_class} identifies each pair.
@@ -5012,7 +5013,7 @@ argument below.
 \begin{lemma}[Cohomology obstruction to an exact MPS gapped phase]
     \label{cor:spt_exact_phase_cohomology_obstruction}
     \lean{MPSTensor.IsSameExactMPSGappedPhase.cohomologousTo}
-    \notready
+    \leanok
     \uses{def:spt_exact_mps_gapped_phase, cor:spt_exact_ground_endpoint_class}
     Let $A_0,A_1$ be one-site injective tensors of positive bond dimensions
     with prescribed virtual projective actions implementing their exact
@@ -5022,7 +5023,7 @@ argument below.
     and orthogonal physical inclusions are those permitted by the phase
     condition.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     Blocking preserves each virtual factor system and injectivity.
     Each physical isometry also preserves injectivity. The physical
     intertwining relation transports the blocked virtual action to its
@@ -5034,7 +5035,7 @@ argument below.
 \begin{theorem}[Classification for injective endpoints with exact virtual covariance]
     \label{thm:spt_exact_phase_injective_classification}
     \lean{MPSTensor.isSameExactMPSGappedPhase_iff_cohomologous}
-    \notready
+    \leanok
     \uses{cor:spt_exact_phase_cohomology_obstruction, thm:spt_exact_phase_forward}
     Let $A_0,A_1$ be one-site injective tensors of positive bond dimensions,
     with prescribed virtual projective representations implementing their
@@ -5045,7 +5046,7 @@ argument below.
     The comparison with arbitrary scalar-character original endpoints
     remains separate \cite{gap:spc11_spt_interpolation_upper_range}.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     The forward construction for cohomologous virtual actions gives the
     physical phase condition. The converse is
     Lemma~\ref{cor:spt_exact_phase_cohomology_obstruction}.
