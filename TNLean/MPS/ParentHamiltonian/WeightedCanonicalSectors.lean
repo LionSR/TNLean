@@ -23,6 +23,15 @@ Condition C2, lines 954–963. For several blocks the generic exclusion of
 peripheral degeneracy is counted with multiplicity, as distinguished in
 `docs/paper-gaps/pgvwc07_half_chain_spectrum_conventions.tex`; the earlier
 one-block hypothesis about distinct eigenvalue values is unchanged.
+
+**Scope restriction (multiplicity-aware C2):** `existsUnique_weight_eq_one_of_c2`,
+`exists_dominantBlock_physical_limit_of_c2`, `isNormalTensor_of_weight_eq_one_of_c2`
+and `exists_dominantNormalBlock_physical_limit_of_c2` assume that every peripheral
+eigenvalue of the transfer map is one with algebraic multiplicity one. The literal
+reading of PGVWC07 Condition C2 (lines 954–963) excludes only other peripheral values,
+and the multi-block theorem under that literal reading remains open. Documented in
+`docs/paper-gaps/pgvwc07_half_chain_spectrum_conventions.tex`. The sector, spectral-radius
+and remainder results of this module are unconditional and outside this restriction.
 -/
 
 open scoped Matrix BigOperators Matrix.Norms.L2Operator ComplexOrder Topology ENNReal
