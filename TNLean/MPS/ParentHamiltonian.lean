@@ -306,12 +306,14 @@ import TNLean.MPS.ParentHamiltonian.UncleBoundaryIntersection
 import TNLean.MPS.ParentHamiltonian.UncleBoundaryProduct
 import TNLean.MPS.ParentHamiltonian.UncleBoundaryTraceClosure
 import TNLean.MPS.ParentHamiltonian.UncleBoundaryWords
+import TNLean.MPS.ParentHamiltonian.UncleEndpointEnergyBound
 import TNLean.MPS.ParentHamiltonian.UncleGroundSpace
 import TNLean.MPS.ParentHamiltonian.UncleGroundSpaceInclusion
 import TNLean.MPS.ParentHamiltonian.UncleInjectivity
 import TNLean.MPS.ParentHamiltonian.UncleKernelConditions
 import TNLean.MPS.ParentHamiltonian.UncleParentLimit
 import TNLean.MPS.ParentHamiltonian.UnclePeriodicClosure
+import TNLean.MPS.ParentHamiltonian.UnclePinnedTrialNorm
 import TNLean.MPS.ParentHamiltonian.UncleTensor
 import TNLean.MPS.ParentHamiltonian.UncleTrialEnergy
 import TNLean.MPS.ParentHamiltonian.UncleTrialLocalization
