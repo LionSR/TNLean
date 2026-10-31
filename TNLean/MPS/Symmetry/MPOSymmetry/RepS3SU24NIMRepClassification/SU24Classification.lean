@@ -134,12 +134,20 @@ namespace SU24Local
 variable {σ : κ → κ} (L : SU24Local M σ)
 include L
 
+/-- If `σ` moves the block `x`, the row of label `2` at `x` either has diagonal entry one and
+vanishes away from `x` and `σ x`, or has diagonal entry zero and is the unit vector at a
+`σ`-fixed block `w`, whose own row has diagonal entry one and vanishes away from `x`, `σ x`,
+and `w`. -/
 theorem of_ne {x : κ} (hx : σ x ≠ x) :
     (M 2 x x = 1 ∧ ∀ z, z ≠ x → z ≠ σ x → M 2 x z = 0) ∨
     (M 2 x x = 0 ∧ ∃ w, w ≠ x ∧ w ≠ σ x ∧ σ w = w ∧ M 2 x w = 1 ∧ M 2 w w = 1 ∧
       (∀ z, z ≠ w → M 2 x z = 0) ∧ ∀ z, z ≠ x → z ≠ σ x → z ≠ w → M 2 w z = 0) :=
   repS3_of_ne L.T_symm L.T_σ L.T_row L.T_off hx
 
+/-- If `σ` fixes the block `x`, the row of label `2` at `x` has diagonal entry two and no other
+entries, or diagonal entry one and a nonzero entry at a block moved by `σ`, or diagonal entry
+zero and unit entries at two further `σ`-fixed blocks `w` and `v` joined to each other, with
+the three rows vanishing elsewhere. -/
 theorem of_eq {x : κ} (hx : σ x = x) :
     (M 2 x x = 2 ∧ ∀ z, z ≠ x → M 2 x z = 0) ∨
     (M 2 x x = 1 ∧ ∃ w, σ w ≠ w ∧ M 2 x w ≠ 0) ∨
@@ -148,11 +156,13 @@ theorem of_eq {x : κ} (hx : σ x = x) :
       ∀ z, z ≠ x → z ≠ w → z ≠ v → M 2 x z = 0 ∧ M 2 w z = 0 ∧ M 2 v z = 0) :=
   repS3_of_eq L.T_symm L.invol L.T_σ L.T_row L.T_off hx
 
+/-- Every diagonal entry of the action matrix of label `2` is at most two. -/
 theorem T_le_two (x : κ) : M 2 x x ≤ 2 := by
   by_cases hx : σ x = x
   · rcases L.of_eq hx with ⟨h, -⟩ | ⟨h, -⟩ | ⟨h, -⟩ <;> omega
   · rcases L.of_ne hx with ⟨h, -⟩ | ⟨h, -⟩ <;> omega
 
+/-- The diagonal of the action matrix of label `2` is invariant under the involution `σ`. -/
 theorem T_σσ (x : κ) : M 2 (σ x) (σ x) = M 2 x x := by
   rw [L.T_σ, L.T_symm, L.T_σ]
 

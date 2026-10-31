@@ -144,6 +144,8 @@ structure BlockActionData (F : GroupFamily G d) (A : (x : X) → MPSTensor d (D 
   V : ∀ (g : G) (x : X), Matrix (Fin (D (g • x))) (Fin (F.bondDim g * D x)) ℂ
   /-- The right action tensor of `g` on the block `x`. -/
   W : ∀ (g : G) (x : X), Matrix (Fin (F.bondDim g * D x)) (Fin (D (g • x))) ℂ
+  /-- The action tensors `V g x` and `W g x` reduce the action of `g` on the block `x` onto the
+  block `g • x`. -/
   isReduction : ∀ g x,
     MPSTensor.IsReduction (actTensor (F.tensor g) (A x)) (A (g • x)) (V g x) (W g x)
 

@@ -82,11 +82,13 @@ variable {d D₁ m n : ℕ}
 
 /-! ### Sums of endpoint tensors -/
 
+/-- The left action of the zero endpoint tensor on any tensor is zero. -/
 theorem leftAct_zero (C : Fin d → Matrix (Fin m) (Fin n) ℂ) (a : Fin d) :
     leftAct (0 : Fin d → Fin d → Matrix (Fin 1) (Fin D₁) ℂ) C a = 0 := by
   ext
   simp [leftAct]
 
+/-- The right action of the zero endpoint tensor on any tensor is zero. -/
 theorem rightAct_zero (C : Fin d → Matrix (Fin m) (Fin n) ℂ) (b : Fin d) :
     rightAct (0 : Fin d → Fin d → Matrix (Fin D₁) (Fin 1) ℂ) C b = 0 := by
   ext
