@@ -18,7 +18,7 @@ physical dimension is handled directly through the empty configuration
 space.
 
 Source: arXiv:1210.6613, proof of Theorem thm:gs-subspace-uncle,
-lines 1050–1073. This identifies the analytic kernel conditions; their
+lines 1050–1065. This identifies the analytic kernel conditions; their
 intersection and periodic closure still require separate algebraic proofs.
 -/
 
@@ -32,7 +32,7 @@ variable {d a b : ℕ}
 
 /-- The actual uncle interaction is positive, with no injectivity premise.
 Source: arXiv:1210.6613, the projector defining the uncle interaction and
-proof of thm:gs-subspace-uncle, lines 1050–1073. -/
+proof of thm:gs-subspace-uncle, lines 1050–1065. -/
 theorem uncleInteractionES_isPositive
     (A : MPSTensor d a) (B : MPSTensor d b)
     (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
@@ -72,7 +72,7 @@ theorem uncleHamiltonianES_isPositive
 /-- Vanishing of the explicit uncle projector is exactly membership in its
 blocked boundary space, transported to the original two physical sites.
 Source: arXiv:1210.6613, eq:uncletensor-2site and the local kernel in
-thm:gs-subspace-uncle, lines 1050–1073. -/
+thm:gs-subspace-uncle, lines 1050–1065. -/
 theorem uncleInteractionES_apply_eq_zero_iff
     (A : MPSTensor d a) (B : MPSTensor d b)
     (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
@@ -87,15 +87,12 @@ theorem uncleInteractionES_apply_eq_zero_iff
     change e (parentInteractionES (uncleTensor A B R L) 1 (e.symm v)) = 0 ↔ _
     exact e.map_eq_zero_iff
   rw [he]
-  change (groundSpaceES (uncleTensor A B R L) 1)ᗮ.starProjection (e.symm v) = 0 ↔ _
-  rw [Submodule.starProjection_orthogonal']
-  simp only [sub_apply, one_apply_eq_self]
-  rw [sub_eq_zero, eq_comm, Submodule.starProjection_eq_self_iff]
+  exact parentInteractionES_apply_eq_zero_iff (uncleTensor A B R L) 1 (e.symm v)
 
 /-- The actual periodic uncle Hamiltonian vanishes exactly when every
 cyclic two-site restriction lies in the explicit uncle local kernel.
 This is the common-kernel step of arXiv:1210.6613,
-thm:gs-subspace-uncle, lines 1050–1073. No perturbation injectivity is
+thm:gs-subspace-uncle, lines 1050–1065. No perturbation injectivity is
 assumed; classifying this intersection is a separate argument. -/
 theorem uncleHamiltonianES_apply_eq_zero_iff
     (A : MPSTensor d a) (B : MPSTensor d b)

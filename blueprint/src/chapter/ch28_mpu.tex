@@ -5778,21 +5778,68 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     $\mathcal U$ is simple.
 \end{proof}
 
+\begin{theorem}[Three-legged decomposition of a simple tensor]
+    \label{thm:mpu_three_legged_decomposition}
+    \lean{MPOTensor.SourceFactors.IsThreeLegged,
+        MPOTensor.SourceFactors.X₁_leftInverse,
+        MPOTensor.SourceFactors.X₂_leftInverse,
+        MPOTensor.IsMPUCanonicalFormII.sourceFactors_isThreeLegged,
+        MPOTensor.IsMPUCanonicalFormII.exists_threeLegged}
+    \leanok
+    \uses{ThmFund1, def:mpu_weighted_source_factors, def:mpu_source_uv,
+        def:mpu_canonical_form_ii, def:mpu_simple}
+    Let $\mathcal U$ be a simple MPU tensor of physical dimension $d$ under
+    the standing canonical-form-II convention, whose periodic operator is
+    unitary on every chain of length at least two, and let $\rho>0$ be its
+    recorded diagonal fixed point. Then the weighted source factors
+    $X_1,Y_1,X_2,Y_2$ for $\rho$ satisfy:
+    \begin{enumerate}
+        \item the two three-legged decompositions
+              $\mathcal U^{ij}_{\alpha\beta}=(X_1Y_1)_{(i,\beta),(\alpha,j)}
+                  =(X_2Y_2)_{(\alpha,i),(j,\beta)}$, joined along the curly leg of
+              dimension $d_r=r$ and the thick leg of dimension $d_l=\ell$;
+        \item the gates $u=Y_2\mathbin{-}Y_1$ and $v=X_1\mathbin{-}X_2$ are
+              unitary;
+        \item the normalized contractions $X_2^\dagger X_2=\Id_{d_l}$ and
+              $X_1^\dagger(I_d\otimes\rho)X_1=\Id_{d_r}$ hold;
+        \item $X_1$ and $X_2$ are left-invertible, with left inverses
+              $X_1^\dagger(I_d\otimes\rho)$ and $X_2^\dagger$, and $Y_1,Y_2$ are
+              right-invertible;
+        \item $d_ld_r=d^2$.
+    \end{enumerate}
+    This is the structure theorem for simple matrix product unitaries in
+    canonical form II of \cite{FrancoRubio2025MPUGauging}, which asks
+    unitarity on every nonempty chain; that convention implies the one used
+    here.
+    % Source lines: 2502.20257/main.tex 657--809.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{ThmFund1, def:mpu_weighted_source_factors}
+    Items 1, 3 and the one-sided inverses of item 4 are the defining
+    identities of the weighted source factors. Since $\mathcal U$ is simple,
+    Theorem~\ref{ThmFund1} gives $r\ell=d^2$ and unitarity of $u$ and $v$,
+    which are items 2 and 5.
+\end{proof}
+
 \begin{definition}[Standard form]
     \label{SF}
     \notready
     \discussion{6019}
-    \uses{ThmFund1, def:mpu_source_uv}
-    Let $\mathcal U$ be a simple tensor under the source's standing
-    canonical-form-II convention. Its standard form is the depth-two form of
-    the two-site block $\mathcal U_2$ determined by the source unitaries
+    \uses{ThmFund1, def:mpu_source_uv,
+        lem:mpu_simple_reduced_literal_standard_form}
+    Let $\mathcal U$ be a simple tensor with positive physical and bond
+    dimensions. Choose its simple canonical representative $\mathcal V$,
+    of no larger bond dimension and with the same periodic operator at every
+    positive length. Its standard form is the depth-two form of the two-site
+    block $\mathcal V_2$ determined by the literal source unitaries
     \begin{align}
         u & \colon\mathbb C^d\otimes\mathbb C^d
         \longrightarrow\mathbb C^\ell\otimes\mathbb C^r, \\
         v & \colon\mathbb C^r\otimes\mathbb C^\ell
         \longrightarrow\mathbb C^d\otimes\mathbb C^d.
     \end{align}
-    On four consecutive blocked legs its unitary is
+    On four original sites its unitary is
     \begin{align}
         U & =v_{23}v_{41}u_{12}u_{34}.
     \end{align}
@@ -5832,6 +5879,20 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     % equation is unreflected; the alternative closed reflection is specific
     % to the source tensor and is not a condition on supplied gates.
 \end{definition}
+
+\begin{lemma}[Dimensions of supplied standard-form gates]
+    \label{lem:mpu_supplied_gate_dimension_identity}
+    \lean{MPOTensor.TwoSiteStandardFormData.left_mul_right}
+    \leanok
+    Every supplied standard form of Definition~\ref{def:mpu_supplied_two_site_standard_form}
+    satisfies $\ell r=d^2$. This is the dimension identity of its actual
+    unitary gate in \cite[Definition~III.9]{Cirac2017MPU}.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:mpu_supplied_two_site_standard_form}
+    The isometry and coisometry of $u$ give the two dimension inequalities.
+\end{proof}
 
 \begin{center}
     % Formula: W^{(i_1,i_2),(j_1,j_2)}_{\alpha,\gamma}=\sum_{l,s}
@@ -8896,18 +8957,242 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     while multiplication by $A$ gives $X_AA=AX_A=P$.
 \end{proof}
 
+\begin{lemma}[Rank-one transfer maps have positive trace factors]
+    \label{lem:mpu_rank_one_transfer_trace_pair}
+    \lean{Kraus.exists_posSemidef_trace_pair_of_transferMatrix_eq_vecMulVec,
+        Kraus.mul_supportProj_of_map_eq_trace_smul,
+        Kraus.supportProj_mul_of_map_eq_trace_smul}
+    \leanok
+    Let $A_1,\dots,A_n\in\MN{D}$ and let $\mathcal E(X)=\sum_aA_aXA_a^\dagger$.
+    Suppose that the matrix of $\mathcal E$ is $|\rho)(\Phi|$ with
+    $(\Phi|\rho)=1$. Then there are $L,R\succeq0$ with
+    \begin{align}
+        \mathcal E(X) & =\operatorname{tr}(LX)R
+    \end{align}
+    for every $X$. Whenever $\mathcal E(X)=\operatorname{tr}(LX)R$ with
+    $L,R\succeq0$, the support projections $P$ of $L$ and $Q$ of $R$ satisfy
+    \begin{align}
+        A_aP & =A_a, & QA_a & =A_a
+    \end{align}
+    for every $a$.
+    % Source lines: paper_v2.tex 747--756.
+\end{lemma}
+
+\begin{proof}\leanok
+    Set $R=\mathcal E(I)=\sum_aA_aA_a^\dagger\succeq0$. Every output of
+    $\mathcal E$ is a multiple of the matrix whose vectorization is $\rho$, and
+    $R\neq0$: otherwise every $A_a$ vanishes, contrary to $(\Phi|\rho)=1$.
+    Hence $\operatorname{tr}R>0$ and
+    $\mathcal E(X)=\operatorname{tr}\mathcal E(X)\,(\operatorname{tr}R)^{-1}R$.
+    Since $\operatorname{tr}\mathcal E(X)=\operatorname{tr}\bigl(
+        (\sum_aA_a^\dagger A_a)X\bigr)$, the matrix
+    $L=(\operatorname{tr}R)^{-1}\sum_aA_a^\dagger A_a\succeq0$ works.
+
+    For the absorptions, $L(I-P)=0$ gives
+    $\sum_a\bigl(A_a(I-P)\bigr)\bigl(A_a(I-P)\bigr)^\dagger
+        =\mathcal E(I-P)=0$, so $A_a(I-P)=0$. Similarly $(I-Q)R=0$ gives
+    $\sum_a\bigl((I-Q)A_a\bigr)\bigl((I-Q)A_a\bigr)^\dagger
+        =(I-Q)\mathcal E(I)(I-Q)=0$, so $(I-Q)A_a=0$.
+\end{proof}
+
+\begin{lemma}[Simultaneous congruence of two positive definite matrices]
+    \label{lem:mpu_posdef_congruence_diagonal}
+    \lean{Matrix.PosDef.exists_congruence_isDiag}
+    \leanok
+    Let $L,R\in\MN{m}$ be positive definite. There is an invertible $S$ such
+    that $S^\dagger S=L$ and $SRS^\dagger$ is positive definite and diagonal.
+    % Source lines: paper_v2.tex 798--804.
+\end{lemma}
+
+\begin{proof}\leanok
+    Let $G=L^{1/2}$ and let $U$ be a unitary diagonalizing the positive
+    definite matrix $GRG$. Then $S=U^\dagger G$ satisfies
+    $S^\dagger S=G^2=L$ and $SRS^\dagger=U^\dagger(GRG)U$.
+\end{proof}
+
+\begin{lemma}[Canonical form from a rank-one transfer map]
+    \label{lem:mpu_rank_one_transfer_canonical_form}
+    \lean{MPOTensor.mpo_rectangularSandwich_of_absorb,
+        MPOTensor.exists_isMPUCanonicalFormII_of_transferMap_eq_trace_smul}
+    \leanok
+    \uses{def:mpu, def:mpu_canonical_form_ii, def:mpu_virtual_sandwich, def:mpu_right_rank, def:mpu_left_rank}
+    Let $\mathcal W$ generate MPU with $d>0$, and suppose that its normalized
+    transfer map is $X\mapsto\operatorname{tr}(LX)R$ with $L,R\succeq0$. Then
+    there is a tensor $\mathcal B$ in canonical form II such that
+    $\operatorname{MPO}_N(\mathcal B)=\operatorname{MPO}_N(\mathcal W)$ for
+    every $N\geq1$ and
+    \begin{align}
+        r[\mathcal B]    & =r[L\mathcal WR],    &
+        \ell[\mathcal B] & =\ell[L\mathcal WR].
+    \end{align}
+    % Source lines: paper_v2.tex 756--804.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:mpu_rank_one_transfer_trace_pair, lem:mpu_posdef_congruence_diagonal, thm:mpu_reduced_representative, thm:mpu_reduced_to_hat_source_ranks, thm:reduced_projection_invertible_factor, lem:mpu_rectangular_reduction_source_ranks, thm:mpu_canonical_form_ii_stabilization_converse}
+    Let $P,Q$ be the support projections of $L,R$ and let $\widetilde P$ be
+    their reduced projection. By
+    Lemma~\ref{lem:mpu_rank_one_transfer_trace_pair}, the letters satisfy
+    $W^{ij}P=W^{ij}=QW^{ij}$. Choose an isometry $J$ with
+    $JJ^\dagger=\widetilde P$. By
+    Lemma~\ref{thm:mpu_reduced_representative}, $J^\dagger LJ$ and
+    $J^\dagger RJ$ are positive definite; let $S$ be the congruence of
+    Lemma~\ref{lem:mpu_posdef_congruence_diagonal} and put
+    $\Lambda=S(J^\dagger RJ)S^\dagger$. Define
+    \begin{align}
+        B^{ij} & =SJ^\dagger W^{ij}JS^{-1}.
+    \end{align}
+    Since $(JS^{-1})(SJ^\dagger)=\widetilde P$ and the letters of
+    $\widetilde W=\widetilde PW\widetilde P$ absorb $\widetilde P$ on the
+    right, nonempty words of $\mathcal B$ are compressions of words of
+    $\widetilde{\mathcal W}$ with the same trace, so $\mathcal B$ and
+    $\mathcal W$ generate the same periodic operators. The tensors
+    $\mathcal B$ and $\widetilde{\mathcal W}$ are rectangular compressions of
+    each other, so they have the same source ranks, and
+    Lemma~\ref{thm:mpu_reduced_to_hat_source_ranks} identifies these with the
+    ranks of $L\mathcal WR$. Finally
+    $(S^{-1})^\dagger J^\dagger LJS^{-1}=I$, so the normalized transfer map of
+    $\mathcal B$ is $X\mapsto\operatorname{tr}(X)\Lambda$ with $\Lambda$
+    positive definite and diagonal. Lemma~\ref{thm:mpu_canonical_form_ii_stabilization_converse}
+    puts $\mathcal B$ in canonical form II.
+\end{proof}
+
+\begin{lemma}[Blocked transfer matrices of an MPU are rank one]
+    \label{lem:mpu_blocked_transfer_rank_one}
+    \lean{MPOTensor.transferMatrix_normalizedFlattening_blockTensor,
+        MPOTensor.IsMPU.exists_transferMatrix_blockTensor_eq_vecMulVec}
+    \leanok
+    \uses{def:mpu, def:mpu_normalized_flattening}
+    The normalized transfer matrix of the block of $k$ sites is the $k$-th
+    power of the normalized transfer matrix. If $\mathcal W$ generates MPU
+    with $d>0$ and $k\geq D^2$, it equals $|\rho)(\Phi|$ for vectors with
+    $(\Phi|\rho)=1$.
+    % Source lines: paper_v2.tex 397--409 and 747--752.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_blocked_double_layer_diagonal, thm:mpu_normalized_transfer_stabilization}
+    Write $E_{\mathcal W}$ for the normalized transfer matrix of
+    $\mathcal W$. The normalized transfer matrix of the block is the
+    normalized physical diagonal of its double layer, so
+    Lemma~\ref{thm:mpu_blocked_double_layer_diagonal} gives
+    \begin{align}
+        E_{\mathcal W_k} & =E_{\mathcal W}^k,
+        \label{eq:mpu_blocked_transfer_power}
+    \end{align}
+    which is the first claim. For $D>1$ every power of exponent at least $D^2-1$ equals the
+    stabilized rank-one projector. For $D=1$ the normalized transfer matrix is
+    the identity of a one-dimensional space.
+\end{proof}
+
+\begin{lemma}[Canonical source ranks from the factor-free sandwich]
+    \label{lem:mpu_canonical_ranks_factor_free}
+    \lean{MPOTensor.IsMPUCanonicalFormII.bondDim_le_of_mpo_eq,
+        MPOTensor.IsMPUCanonicalFormII.rightRank_mul_leftRank_blockTensor_of_mpo_eq,
+        MPOTensor.IsMPU.sourceRanks_blockTensor_eq_factorFreeSandwich}
+    \leanok
+    \uses{def:mpu, def:mpu_canonical_form_ii, def:mpu_factor_free_sandwich, def:mpu_right_rank, def:mpu_left_rank,
+        thm:mpu_bounded_simple_blocking}
+    Let $\mathcal W$ generate MPU with $d>0$, let $k\geq D^2$, and let
+    $\mathcal U$, of bond dimension $D'$, be in canonical form II and generate
+    the same MPU as $\mathcal W$. Then $D'\leq D$, the block $\mathcal U_k$ is
+    simple with $r[\mathcal U_k]\ell[\mathcal U_k]=d^{2k}$, and
+    \begin{align}
+        r[\mathcal U_k]    & =r[\widehat{\mathcal W}_{k,\mathrm{ff}}],    &
+        \ell[\mathcal U_k] & =\ell[\widehat{\mathcal W}_{k,\mathrm{ff}}],
+    \end{align}
+    where $\widehat{\mathcal W}_{k,\mathrm{ff}}$ is the factor-free sandwich
+    of the block $\mathcal W_k$.
+    % Source lines: paper_v2.tex 747--812.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_reduced_cfii_representative, thm:mpu_cfii_equal_periodic_virtual_unitary, thm:mpu_bounded_simple_blocking, prop:mpu_admissible_index_well_defined, lem:mpu_blocked_transfer_rank_one, lem:mpu_rank_one_transfer_trace_pair, lem:mpu_rank_one_transfer_canonical_form, thm:mpu_cfii_index_periodic_comparison, thm:mpu_canonical_form_ii_positive_blocking, thm:mpu_factor_free_sandwich_continuous}
+    Canonical-form-II tensors generating the same MPU are related by a unitary
+    virtual gauge, so $D'$ equals the bond dimension of the reduced
+    representative, which is at most $D$. Hence $D'^2\leq k$ and
+    $\mathcal U_k$ is simple. By Lemmas~\ref{lem:mpu_blocked_transfer_rank_one}
+    and~\ref{lem:mpu_rank_one_transfer_trace_pair}, the normalized transfer map
+    of $\mathcal W_k$ is $X\mapsto\operatorname{tr}(LX)R$ with $L,R\succeq0$,
+    and $\widehat{\mathcal W}_{k,\mathrm{ff}}=L\mathcal W_kR$.
+    Lemma~\ref{lem:mpu_rank_one_transfer_canonical_form} gives a
+    canonical-form-II tensor $\mathcal B$ with the ranks of $L\mathcal W_kR$
+    and the periodic operators of $\mathcal W_k$, which are those of
+    $\mathcal U_k$. Canonical-form-II tensors with equal periodic operators
+    have equal source ranks.
+\end{proof}
+
+\begin{lemma}[Source ranks along a path with fixed rank product]
+    \label{lem:mpu_path_fixed_product_source_ranks}
+    \lean{MPOTensor.lowerSemicontinuous_rightRank,
+        MPOTensor.lowerSemicontinuous_leftRank,
+        MPOTensor.sourceRanks_const_of_fixed_product}
+    \leanok
+    \uses{def:mpu_right_rank, def:mpu_left_rank}
+    Both source ranks are lower semicontinuous along a continuous family of
+    tensors. If $[0,1]\ni x\mapsto\mathcal V(x)$ is continuous and
+    $r[\mathcal V(x)]\ell[\mathcal V(x)]=c>0$ for every $x$, then both ranks
+    are constant.
+    % Source lines: paper_v2.tex 813--818.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_rank_lower_semicontinuous, thm:mpu_fixed_product_preconnected}
+    The source cuts are coordinate rearrangements of the tensor, so they vary
+    continuously and their ranks are lower semicontinuous. The fixed positive
+    product makes both ranks constant on the connected interval.
+\end{proof}
+
 \begin{lemma}[Constancy of the source ranks]
     \label{prop:continuity-index}
-    \notready
+    \lean{MPOTensor.IsMPU.sourceRanks_canonicalFormII_blockTensor_pow_four_const,
+        MPOTensor.IsMPU.sourceRanks_canonicalFormII_blockTensor_const,
+        MPOTensor.IsMPU.sourceRanks_canonicalForm_blockTensor_const}
+    \leanok
     \discussion{6022}
-    \uses{def:mpu_canonical_form, ThmFund1, thm:mpu_common_pow_four_simple_blocking, thm:mpu_two_projection_angle_defect_sum, thm:mpu_two_projection_reduced_projection, thm:mpu_two_projection_reduced_projection_right_factor, thm:mpu_reduced_representative, thm:mpu_rank_lower_semicontinuous, thm:mpu_fixed_product_preconnected, thm:mpu_factor_free_sandwich_continuous, thm:mpu_virtual_sandwich_source_ranks, thm:mpu_ambient_support_inverse_extension}
-    Let $[0,1]\ni x\mapsto\mathcal W(x)$ be a continuous path of tensors
-    generating MPUs, without requiring the path to be in canonical form. For
-    each $x$, take the canonical form and the two source-cut ranks $r(x)$ and
-    $\ell(x)$ of its associated simple tensor. Then $r(x)$ and $\ell(x)$ are
-    constant on $[0,1]$.
+    \uses{def:mpu, def:mpu_canonical_form, def:mpu_canonical_form_ii, def:mpu_right_rank, def:mpu_left_rank}
+    Let $[0,1]\ni x\mapsto\mathcal W(x)$ be a continuous path of tensors of
+    physical dimension $d>0$ and bond dimension $D$ generating MPUs, without
+    requiring the path to be in canonical form. For each $x$, let
+    $\mathcal U(x)$ be a tensor in canonical form generating the same MPU as
+    $\mathcal W(x)$, and let $r(x)$ and $\ell(x)$ be the two source-cut ranks
+    of its block of $D^4$ sites. Then $r(x)$ and $\ell(x)$ are
+    constant on $[0,1]$. The same holds at every blocking length $k\geq D^2$.
     % Source lines: paper_v2.tex 733--818.
 \end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:mpu_canonical_ranks_factor_free, lem:mpu_path_fixed_product_source_ranks, thm:mpu_factor_free_sandwich_continuous, thm:mpu_canonical_form_similar_cfii, thm:mpu_reduced_cfii_representative}
+    A tensor in canonical form is similar to one in canonical form II, and
+    blocking commutes with this similarity without changing the source ranks,
+    so it suffices to take $\mathcal U(x)$ in canonical form II. Fix
+    $k\geq D^2$. By Lemma~\ref{lem:mpu_canonical_ranks_factor_free}, the source
+    ranks of $\mathcal U(x)_k$ are those of the factor-free sandwich of
+    $\mathcal W(x)_k$, which is a continuous function of $x$. Applying the same
+    lemma to a reduced representative shows that the product of these ranks is
+    $d^{2k}$ at every point. Lemma~\ref{lem:mpu_path_fixed_product_source_ranks}
+    makes both ranks constant. The blocking length $D^4$ satisfies
+    $D^4\geq D^2$.
+\end{proof}
+
+\begin{lemma}[Index along an arbitrary continuous path]
+    \label{thm:mpu_path_index_constant}
+    \lean{MPOTensor.IsMPU.index_const_of_continuous}
+    \leanok
+    \uses{def:mpu_reduced_representative_index, prop:continuity-index}
+    Under the hypotheses of Lemma~\ref{prop:continuity-index}, the index of
+    $\mathcal W(x)$ is independent of $x\in[0,1]$.
+    % Source lines: paper_v2.tex 681--688 and 733--818.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{prop:continuity-index, thm:mpu_reduced_representative_index_invariance, prop:mpu_admissible_index_well_defined, thm:mpu_reduced_cfii_representative}
+    The index of $\mathcal W(x)$ is the index of a reduced canonical-form-II
+    representative $\mathcal U(x)$, computed from the source ranks of its
+    simple block of $D^2$ sites as
+    $\tfrac12(\log_2r-\log_2\ell)$. These ranks are constant by
+    Lemma~\ref{prop:continuity-index}.
+\end{proof}
 
 \begin{lemma}[Admissible constancy of the source ranks]
     \label{prop:mpu_admissible_continuity_index}
@@ -9128,7 +9413,155 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     In \cite[Proposition~V.1]{Cirac2017MPU}, this equivalence is the unrestricted conjugation
     characterization.
     % Source lines: paper_v2.tex 1008--1039.
+    % The forward result below concerns supplied reduced canonical data.
+    % The contraction in lem:mpu_local_conjugation_contract is on positive
+    % blocked rings; no unblocked all-length converse has been established.
 \end{lemma}
+
+\begin{lemma}[Conjugation of supplied source decompositions]
+    \label{lem:mpu_source_conjugation_transport}
+    \lean{MPOTensor.sourceCutM₁_mapStar, MPOTensor.sourceCutM₂_mapStar, MPOTensor.source_ranks_mapStar, MPOTensor.normalizedFlattening_mapStar, MPOTensor.IsMPUCanonicalFormII.mapStar, MPOTensor.SourceCutSVD.mapStar, MPOTensor.SourceFactors.mapStar, MPOTensor.SourceFactors.sourceU_mapStar, MPOTensor.SourceFactors.sourceV_mapStar}
+    \leanok
+    \uses{def:mpu_canonical_form_ii, def:mpu_weighted_source_factors,
+        def:mpu_source_svd_data}
+    Both source cuts satisfy
+    $M_i(\overline{\mathcal U})=\overline{M_i(\mathcal U)}$, and their ranks
+    are unchanged. A supplied compact decomposition
+    $M_i=V_i^\dagger D_i G_i$ conjugates to
+    $\overline{M_i}=\overline{V_i}^\dagger D_i\overline{G_i}$, retaining
+    the positive diagonal matrices $D_i,D_i^{-1}$.
+    Supplied source factors $X_i,Y_i,Z_i$ at weight $\rho$ conjugate to
+    source factors of $\overline{\mathcal U}$ at weight $\overline\rho$,
+    in the canonical identifications of the equal rank dimensions. Their
+    gates are exactly $\overline u,\overline v$ in those coordinates.
+    Normalized flattening commutes with conjugation. Reduced canonical form II
+    is preserved, with the same real diagonal fixed matrix.
+    These are the source-data identifications in
+    \cite[Proposition~V.1, lines~1030--1033]{Cirac2017MPU}.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpu_physical_adjoint_cfii, thm:mpu_physical_adjoint_full_support}
+    Conjugate both factorizations, both normalization identities and both
+    right-inverse identities. Products, sums, adjoints and traces commute
+    with conjugation. The singular-value matrices and the diagonal positive
+    fixed matrix are real. Conjugating the gate contractions therefore gives
+    exactly the conjugate gates. The canonical blocks and ambient coisometry
+    conjugate coefficient by coefficient, retaining dimensions and full support.
+\end{proof}
+
+\begin{lemma}[Forward conjugation equations in a reduced canonical presentation]
+    \label{lem:mpu_source_local_conjugation_forward}
+    \lean{MPOTensor.supplied_source_factor_gate_relations, MPOTensor.IsMPUCanonicalFormII.exists_supplied_source_gate_unitary_gauges_of_mpo_eq, MPOTensor.IsMPUCanonicalFormII.exists_local_conjugation_gauges, MPOTensor.IsMPUCanonicalFormII.exists_local_conjugation_gauges_common_transpose_case}
+    \leanok
+    \uses{def:mpu_canonical_form_ii, def:mpu_weighted_source_factors}
+    Let $\mathcal U$ be in reduced canonical form II, with supplied source
+    factors whose unshifted gate $u$ is unitary between its physical-pair and
+    source-rank coordinate spaces. If
+    $U^{(N)}=\overline{U^{(N)}}$ at every length $N>1$, there are unitaries
+    $x,y$ such that either both are symmetric or both are skew-symmetric, and
+    \begin{align}
+        \overline u & =(x\otimes y)u,                 &
+        \overline v & =v(y^\dagger\otimes x^\dagger).
+    \end{align}
+    The gates $u,v$ are the supplied gates. This is the forward argument of
+    \cite[Proposition~V.1, lines~1030--1038]{Cirac2017MPU} for a reduced
+    canonical presentation, with the full-support restriction recorded in
+    \cite{gap:mpu_canonical_form_full_support}.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:mpu_source_conjugation_transport, FundamentalMPU,
+        lem:mpu_local_conjugation_sign, thm:mpu_source_factorizations}
+    Apply the letter-level Fundamental Theorem to $\mathcal U$ and
+    $\overline{\mathcal U}$. Compare the actual conjugated source factors
+    with those transported by the resulting bond unitary. Normalized factor
+    comparison gives two unitary changes $W_1,W_2$ of source-rank
+    coordinates. With the bond unitary $z$, the source factors $X_i',Y_i'$
+    of $\overline{\mathcal U}$ satisfy
+    \begin{align}
+        X_1' & =(\Id\otimes\overline z)X_1W_1,         &
+        Y_1' & =W_1^\dagger Y_1(z^T\otimes\Id),          \\
+        X_2' & =(z\otimes\Id)X_2W_2,                   &
+        Y_2' & =W_2^\dagger Y_2(\Id\otimes z^\dagger).
+    \end{align}
+    The gate $u$ is contracted from $Y_1,Y_2$ and the gate $v$ from
+    $X_1,X_2$. In both contractions $z^T$ meets $\overline z$ and $z$ meets
+    $z^\dagger$ on the internal bond, so
+    \begin{align}
+        \overline u & =(W_2^\dagger\otimes W_1^\dagger)u, &
+        \overline v & =v(W_1\otimes W_2).
+    \end{align}
+    Thus $x=W_2^\dagger$ and $y=W_1^\dagger$, after transport back through
+    the canonical rank identifications. The unshifted equation gives the
+    common transpose sign.
+\end{proof}
+
+\begin{lemma}[Transpose signs from the unshifted conjugation equation]
+    \label{lem:mpu_local_conjugation_sign}
+    \lean{Matrix.kronecker_map_star_mul_eq_one_of_gate_conjugation, Matrix.transpose_eq_self_or_transpose_eq_neg_of_gate_conjugation}
+    \leanok
+    Let $L,R,P$ be finite coordinate sets with $L,R$ nonempty, let
+    $u:\mathbb C^P\to\mathbb C^L\otimes\mathbb C^R$ satisfy
+    $uu^\dagger=\Id$, and let $x,y$ be unitaries on $L,R$. If
+    $\overline u=(x\otimes y)u$, then
+    \begin{align}
+        (\overline xx)\otimes(\overline yy) & =\Id.
+    \end{align}
+    Consequently either $x^T=x$ and $y^T=y$, or $x^T=-x$ and $y^T=-y$.
+    This is the step in \cite[lines~1033--1038]{Cirac2017MPU} starting from
+    the local gate equation.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpu_conjugation_common_transpose_sign}
+    Conjugating the gate equation gives
+    $u=(\overline x\otimes\overline y)(x\otimes y)u$.
+    Multiplication by $u^\dagger$ cancels $uu^\dagger=\Id$ and yields the
+    Kronecker identity. Its two factors have one common transpose sign.
+\end{proof}
+
+\begin{lemma}[Contraction of the local conjugation equations]
+    \label{lem:mpu_local_conjugation_contract}
+    \lean{Matrix.IsUnitaryBetween.map_star, MPOTensor.mapStar, MPOTensor.mpo_map_star, MPOTensor.TwoSiteStandardFormData.mapStar, MPOTensor.twoSiteUnshiftedLayer_map_star, MPOTensor.twoSiteShiftedLayer_map_star, MPOTensor.TwoSiteStandardFormData.map_star_mpo_eq_of_gate_conjugation}
+    \leanok
+    \uses{def:mpu_supplied_two_site_standard_form}
+    Let $W$ have a supplied two-site standard form with unitary gates $u,v$,
+    and let $x,y$ be unitaries satisfying
+    \begin{align}
+        \overline u & =(x\otimes y)u,                 &
+        \overline v & =v(y^\dagger\otimes x^\dagger).
+    \end{align}
+    Conjugation of all coefficients gives a standard form of $\overline W$
+    with gates $\overline u,\overline v$, and
+    $\overline{W^{(N)}}=W^{(N)}$ at every positive blocked length $N$.
+    This is the contraction direction of
+    \cite[Proposition~V.1, lines~1029--1030]{Cirac2017MPU}, on blocked rings.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpu_supplied_two_site_periodic_circuit,
+        def:mpu_two_site_circuit_layers}
+    Conjugation preserves the two open contractions and their unitary
+    identities. It also conjugates every factor of each circuit layer.
+    Let $\Gamma_N$ act on the intermediate labels by $x$ on every first
+    component $h_{s,1}$ and by $y$ on every second component $h_{s,2}$.
+    The two local equations give $C_{\overline u,N}=\Gamma_NC_{u,N}$ and,
+    regrouping the same legs along the shifted pairs,
+    $C_{\overline v,N}=C_{v,N}\Gamma_N^\dagger$. Hence
+    \begin{align}
+        \overline{U^{(N)}(W)}
+         & =C_{\overline v,N}C_{\overline u,N}
+        =C_{v,N}\Gamma_N^\dagger\Gamma_NC_{u,N}
+        =C_{v,N}C_{u,N}
+        =U^{(N)}(W).
+        \label{eq:mpu_local_conjugation_contract_circuit}
+    \end{align}
+\end{proof}
 
 \begin{lemma}[Admissible conjugation symmetry]
     \label{prop:mpu_admissible_conjugation_symmetry}
@@ -9437,11 +9870,122 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     Lemma~\ref{lem:mpu_skew_symmetric_even_card} applied to $U$ shows that $d$ is even.
 \end{proof}
 
+\begin{lemma}[Invariant orthogonal planes]
+    \label{lem:mpu_skew_orthogonal_plane}
+    \lean{LinearIsometry.orthonormal_pair_of_sq_eq_neg,
+        LinearIsometry.apply_pair_eq_standardSkew_sum,
+        LinearIsometry.mapsTo_span_pair_of_sq_eq_neg,
+        LinearIsometry.mapsTo_orthogonal_of_sq_eq_neg,
+        LinearIsometry.restrictInvariantOrthogonal_sq,
+        Matrix.orthogonalLinearIsometry_sq}
+    \leanok
+    \discussion{7581}
+    Let $J$ be a linear isometry of a real inner-product space satisfying
+    $J^2=-\Id$. For every unit vector $v$, the ordered pair $(v,-Jv)$ is
+    orthonormal. Its span and its orthogonal complement are invariant under
+    $J$, and the restriction to the complement also squares to $-\Id$.
+    On that ordered plane the matrix of $J$ is
+    $Y=\left(\begin{smallmatrix}0&1\\-1&0\end{smallmatrix}\right)$.
+    Every real skew-symmetric orthogonal matrix supplies such an isometry.
+\end{lemma}
+\begin{proof}\leanok
+    Isometry and $J^2=-\Id$ give
+    $\langle x,Jy\rangle=-\langle Jx,y\rangle$. Taking $x=y=v$ shows
+    $\langle v,Jv\rangle=0$. The identities $Jv=-(-Jv)$ and
+    $J(-Jv)=v$ give invariance and the displayed orientation. For an invariant
+    subspace $W$, the same skew-adjoint identity gives
+    $\langle w,Jz\rangle=-\langle Jw,z\rangle=0$ for $w\in W$ and
+    $z\in W^\perp$, proving invariance of the complement. Finally,
+    $A^T=-A$ and $AA^T=\Id$ imply $A^2=-\Id$.
+\end{proof}
+
+\begin{lemma}[Sign and indexing of the standard skew form]
+    \label{lem:mpu_standard_skew_indexing}
+    \lean{Matrix.interleavedSkewForm_eq_neg_J_submatrix,
+        Matrix.interleavedSkewFormFin_apply}
+    \leanok
+    \discussion{7581}
+    For a finite index set $I$, identify $(i,0),(i,1)\in I\times\{0,1\}$
+    with $i$ in the first and second copies of $I\sqcup I$. Under this
+    identification $\Id_I\otimes Y$ corresponds to
+    $\left(\begin{smallmatrix}0&\Id_I\\-\Id_I&0\end{smallmatrix}\right)$,
+    the negative of the split matrix
+    $\left(\begin{smallmatrix}0&-\Id_I\\\Id_I&0\end{smallmatrix}\right)$.
+    For $I=\{0,\ldots,m-1\}$ the interleaved enumeration gives the same
+    ordered blocks on $\{0,\ldots,2m-1\}$.
+\end{lemma}
+\begin{proof}\leanok
+    Compare the four choices of the two binary coordinates. The two diagonal
+    blocks vanish, and the off-diagonal blocks are $\Id_I$ and $-\Id_I$
+    in that order. Reindexing preserves these entries.
+\end{proof}
+
+\begin{lemma}[Paired orthonormal basis]
+    \label{lem:mpu_skew_paired_orthonormal_basis}
+    \lean{LinearIsometry.exists_paired_orthonormalBasis}
+    \leanok
+    \discussion{7581}
+    \uses{lem:mpu_skew_orthogonal_plane}
+    Let $E$ be a real inner-product space of dimension $2m$, and let $J$ be
+    a linear isometry with $J^2=-\Id$. There is an orthonormal basis
+    $(e_{i,0},e_{i,1})_{i=0}^{m-1}$ such that
+    $Je_{i,0}=-e_{i,1}$ and $Je_{i,1}=e_{i,0}$.
+\end{lemma}
+\begin{proof}\leanok
+    Induct on $m$. The empty basis covers $m=0$. Otherwise choose a unit
+    vector $v$ and use the ordered orthonormal pair $(v,-Jv)$.
+    Its invariant orthogonal complement has dimension $2m-2$.
+    Append its inductively constructed paired basis to this pair.
+    The resulting orthonormal family has $2m$ members and therefore spans $E$.
+\end{proof}
+
+\begin{lemma}[Real skew-orthogonal normal form]
+    \label{thm:mpu_real_skew_orthogonal_normal_form}
+    \lean{Matrix.toMatrix_paired_orthonormalBasis,
+        Matrix.exists_orthogonal_congruence_interleavedSkewForm}
+    \leanok
+    \discussion{7581}
+    \uses{lem:mpu_skew_paired_orthonormal_basis, lem:mpu_standard_skew_indexing}
+    Let $A\in\operatorname{Mat}_{2m}(\mathbb R)$ be orthogonal with
+    $A^T=-A$. Set $\Sigma_m=\Id_m\otimes Y$, in interleaved order, where
+    $Y=\left(\begin{smallmatrix}0&1\\-1&0\end{smallmatrix}\right)$.
+    There is a real orthogonal matrix $O$ such that
+    $O^T\Sigma_m O=A$.
+    This is the real normal form used in the proof of
+    \cite[Proposition~V.2]{Cirac2017MPU}.
+    % Source lines: paper_v2.tex 1129--1140.
+\end{lemma}
+\begin{proof}\leanok
+    The action of $A$ is an isometry squaring to $-\Id$. In the paired
+    orthonormal basis of Lemma~\ref{lem:mpu_skew_paired_orthonormal_basis},
+    its matrix is $\Sigma_m$. The orthogonal change of coordinates from
+    the original basis to this paired basis gives the displayed congruence.
+\end{proof}
+
+\begin{lemma}[Complex skew-unitary normal form]
+    \label{thm:mpu_complex_skew_unitary_normal_form}
+    \lean{Matrix.exists_unitary_congruence_interleavedSkewForm}
+    \leanok
+    \discussion{7581}
+    \uses{lem:mpu_skew_unitary_congruence, thm:mpu_real_skew_orthogonal_normal_form}
+    Let $x\in\operatorname{Mat}_{2m}(\mathbb C)$ be unitary with $x^T=-x$.
+    There is a unitary matrix $U$ such that $x=U^T\Sigma_m U$.
+    This is the complex normal form used in the proof of
+    \cite[Proposition~V.2]{Cirac2017MPU}.
+    % Source lines: paper_v2.tex 1129--1140.
+\end{lemma}
+\begin{proof}\leanok
+    The skew congruence factorization gives $x=S^T\Lambda S$ with $S$
+    unitary and $\Lambda$ real, skew-symmetric and unitary.
+    The real normal form gives $\Lambda=O^T\Sigma_m O$ with $O$ orthogonal.
+    Regard $O$ as a complex unitary matrix and set $U=OS$.
+\end{proof}
+
 \begin{lemma}[Orthogonal and symplectic standard forms]
     \label{corconj}
     \notready
     \discussion{5713}
-    \uses{prop1conj, lemma:conjclass-normalform-continuous, FundamentalMPU, thm:mpu_skew_unitary_even_dimension}
+    \uses{prop1conj, lemma:conjclass-normalform-continuous, FundamentalMPU, thm:mpu_skew_unitary_even_dimension, thm:mpu_complex_skew_unitary_normal_form}
     Let an MPU in standard form be invariant under complex conjugation. Its
     standard-form unitaries can be chosen in exactly one of the following two
     cases. In Case I,
@@ -9602,6 +10146,336 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     Conversely, contract that relation and its adjoint alternately around an
     even periodic chain.
     % Source lines: paper_v2.tex 1201--1252.
+\end{proof}
+
+\begin{lemma}[Source cuts of a supplied square standard form]
+    \label{lem:mpu_supplied_standard_form_source_cuts}
+    \lean{MPOTensor.TwoSiteStandardFormData.cutX₁, MPOTensor.TwoSiteStandardFormData.cutY₁, MPOTensor.TwoSiteStandardFormData.cutX₂, MPOTensor.TwoSiteStandardFormData.cutY₂, MPOTensor.TwoSiteStandardFormData.sourceCutM₁_eq_cutX₁_mul_cutY₁, MPOTensor.TwoSiteStandardFormData.sourceCutM₂_eq_cutX₂_mul_cutY₂, MPOTensor.TwoSiteStandardFormData.cutY₂_cutY₁_eq_staircaseMiddle_mul_kronecker, MPOTensor.TwoSiteStandardFormData.cutX₁_cutX₂_eq_staircaseMiddle, MPOTensor.IsMPUCanonicalFormII.twoSite_cutX₁_weighted_isometry, MPOTensor.IsMPUCanonicalFormII.twoSite_cutX₂_isIsometry, MPOTensor.IsMPUCanonicalFormII.twoSite_sourceRanks, MPOTensor.IsMPUCanonicalFormII.twoSiteSourceFactors, MPOTensor.IsMPUCanonicalFormII.sourceRanks_eq_phys_of_standardForm_even_mpo_eq_adjoint, MPOTensor.IsMPUCanonicalFormII.blockTwo, MPOTensor.IsMPUCanonicalFormII.isMPUSimple_blockTwo, MPOTensor.IsMPUCanonicalFormII.twoSiteSourceFactors_sourceU, MPOTensor.IsMPUCanonicalFormII.twoSiteSourceFactors_sourceV, MPOTensor.blockTensor_one_eq_reindexPhysical}
+    \leanok
+    Let $W$ have a supplied two-site standard form with unitary gates
+    $u:\mathbb C^d\otimes\mathbb C^d\to\mathbb C^\ell\otimes\mathbb C^r$ and
+    $v:\mathbb C^r\otimes\mathbb C^\ell\to\mathbb C^d\otimes\mathbb C^d$,
+    and half factors $X_1,X_2$.
+    The two source cuts of $W$ itself admit factors through
+    $\mathbb C^d\otimes\mathbb C^r$ and
+    $\mathbb C^\ell\otimes\mathbb C^d$, respectively, given by
+    \begin{align}
+        \widehat X_1((i_1,i_2),\gamma;a,s)
+         & =\delta_{i_1,a}X_1(i_2,\gamma;s), \\
+        \widehat Y_1(a,s;\alpha,j)
+         & =\sum_t X_2(\alpha,a;t)u(t,s;j),  \\
+        \widehat X_2(\alpha,(i_1,i_2);t,b)
+         & =X_2(\alpha,i_1;t)\delta_{i_2,b}, \\
+        \widehat Y_2(t,b;j,\gamma)
+         & =\sum_s u(t,s;j)X_1(b,\gamma;s).
+    \end{align}
+    Thus $\mathcal M_a(W)=\widehat X_a\widehat Y_a$ for $a=1,2$.
+    Contracting $\widehat Y_2$ with $\widehat Y_1$ gives
+    $v_{23}(u_{12}\otimes u_{34})$; contracting $\widehat X_1$ with
+    $\widehat X_2$ gives $v_{23}$. These are the four-original-spin
+    matrices in \cite[lines~1237--1252]{Cirac2017MPU}, without first
+    blocking $W$ again. When this standard form is constructed from a simple
+    canonical tensor with boundary $\rho$, its coarse left factors satisfy
+    $\widehat X_1^\dagger(\Id_{d^2}\otimes\rho)\widehat X_1=\Id$ and
+    $\widehat X_2^\dagger\widehat X_2=\Id$. In this canonical construction,
+    the actual cut ranks are $d r$ and $\ell d$. The right factors have
+    full row rank, hence right inverses; together these give normalized
+    source factors at the same boundary $\rho$. If the original canonical
+    tensor $U$ is simple and its standard-form tensor $W$ satisfies
+    $W^{(N)}=W^{(N)\dagger}$ at every even length $N>1$, then
+    $r(U)=\ell(U)=d$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{SF}
+    Substitute the open standard-form contraction in each source cut.
+    Sum the two spectator Kronecker deltas. In the right-factor contraction,
+    the virtual sum of $X_1$ and $X_2$ is $v$; the two remaining factors are
+    $u$. The left-factor contraction uses the same virtual sum and leaves
+    the first and fourth spins fixed. The first coarse left factor is
+    $\Id_d\otimes X_1$ and the second is $X_2\otimes\Id_d$, after
+    the stated coordinate regroupings. Their normalizations follow from
+    those of the original source factors by taking these tensor products.
+    Simplicity persists under blocking; the rank-product saturation argument
+    gives the ranks $dr$ and $\ell d$. Each cut factors through its displayed
+    pair space, so its right factor has full row rank and a right inverse.
+    For the last assertion, adjoint invariance at even standard-form lengths
+    identifies the even periodic families of the two-site block and its
+    adjoint. Their cut ranks agree by the sign-sensitive virtual comparison, while
+    adjunction exchanges the two cuts. Thus $dr(U)=\ell(U)d$, so
+    $r(U)=\ell(U)$. Simplicity gives $r(U)\ell(U)=d^2$, hence both equal $d$.
+\end{proof}
+
+\begin{lemma}[Minimality of the supplied standard-form cuts]
+    \label{lem:mpu_supplied_half_factor_minimality}
+    \lean{MPOTensor.TwoSiteStandardFormData.X₁_mulVec_injective, MPOTensor.TwoSiteStandardFormData.X₂_mulVec_injective, MPOTensor.TwoSiteStandardFormData.exists_left_inverses, MPOTensor.TwoSiteStandardFormData.cutX₁_mulVec_injective, MPOTensor.TwoSiteStandardFormData.cutX₂_mulVec_injective, MPOTensor.TwoSiteStandardFormData.exists_cutY_right_inverses, MPOTensor.TwoSiteStandardFormData.cut_factor_ranks, MPOTensor.TwoSiteStandardFormData.sourceRanks_eq}
+    \leanok
+    Let $W$ have any supplied standard form as in
+    Lemma~\ref{lem:mpu_supplied_standard_form_source_cuts}, with both gates
+    unitary and positive physical, bond, and intermediate dimensions.
+    The half factors $X_1,X_2$ have independent columns and left inverses.
+    The displayed cut factors satisfy
+    \begin{align}
+        \operatorname{rank}\widehat X_1
+        =\operatorname{rank}\widehat Y_1 & =dr,     \\
+        \operatorname{rank}\widehat X_2
+        =\operatorname{rank}\widehat Y_2 & =\ell d.
+    \end{align}
+    There are matrices $Z_1,Z_2$ with
+    $\widehat Y_1Z_1=\Id_{dr}$ and $\widehat Y_2Z_2=\Id_{\ell d}$.
+    Consequently the actual source ranks are $r(W)=dr$ and
+    $\ell(W)=\ell d$. Neither a canonical presentation nor a normalization
+    of the half factors is required. These are consequences of the supplied
+    contraction in \cite[lines~532--543, 603--617 and
+        1237--1244]{Cirac2017MPU}.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:mpu_supplied_standard_form_source_cuts}
+    A vector in the kernel of $X_1$, tensored with a fixed coordinate of
+    the left intermediate space, would give a kernel vector of $v$.
+    The isometry of $v$ therefore makes $X_1$ injective. Exchanging the
+    two physical and intermediate legs proves the same assertion for $X_2$.
+    The spectator identity factors preserve this injectivity in
+    $\widehat X_1$ and $\widehat X_2$.
+
+    The four-spin matrix $v_{23}(u_{12}\otimes u_{34})$ is unitary, and
+    its open contraction consists of $\widehat Y_2$ and $\widehat Y_1$.
+    Applying the same kernel argument to its adjoint makes
+    $\widehat Y_1^\dagger$ and $\widehat Y_2^\dagger$ injective.
+    Their left inverses, after taking adjoints, give the asserted right
+    inverses. All four factor ranks follow. Multiplying each source cut
+    by its right-factor inverse recovers its left factor, so the source
+    cut and its left factor have equal rank.
+\end{proof}
+
+\begin{lemma}[Normalized physical-adjoint source factors]
+    \label{lem:mpu_normalized_physical_adjoint_source_factors}
+    \lean{MPOTensor.IsMPUCanonicalFormII.reindexPhysical, MPOTensor.IsMPUCanonicalFormII.sourceFactors_sourceU_isUnitaryBetween, MPOTensor.IsMPUCanonicalFormII.sourceFactors_Y₁_mul_conjTranspose, MPOTensor.IsMPUCanonicalFormII.sourceFactors_Y₂_weighted_mul_conjTranspose, MPOTensor.SourceFactors.physicalAdjoint, MPOTensor.SourceFactors.sourceU_physicalAdjoint, MPOTensor.SourceFactors.sourceV_physicalAdjoint, MPOTensor.IsMPUCanonicalFormII.twoSiteSourceFactors_physicalAdjoint}
+    \leanok
+    \uses{thm:mpug_canonical_adjoint_simple}
+    Let $U$ be simple and in reduced canonical form II, with recorded positive
+    diagonal boundary $\rho$. Bijective physical relabeling preserves this
+    presentation and boundary. Physical adjunction preserves simplicity.
+    For every normalized source factorization at this same boundary,
+    \begin{align}
+        Y_1Y_1^\dagger                   & =(d/r)\Id,    &
+        Y_2(\Id_d\otimes\rho)Y_2^\dagger & =(d/\ell)\Id.
+    \end{align}
+    Its unshifted gate is unitary. If $r=\ell=d$, source factors for the
+    physical adjoint at the same boundary are
+    \begin{align}
+        (X_1',Y_1',Z_1') & =(Y_2^\dagger,X_2^\dagger,X_2), \\
+        (X_2',Y_2',Z_2') & =(Y_1^\dagger,X_1^\dagger,
+        (\Id_d\otimes\rho)X_1),
+    \end{align}
+    after the canonical identifications of the exchanged cut ranks.
+    Their gates are exactly $u'=v^\dagger$ and $v'=u^\dagger$ in these
+    coordinates. For the actual coarse record of
+    Lemma~\ref{lem:mpu_supplied_standard_form_source_cuts}, adjoint symmetry
+    at even standard-form lengths derives all these prerequisites, giving an
+    actual adjoint coarse record without extra normalization witnesses.
+    These are the normalized cut constructions underlying
+    \cite[lines~1237--1252]{Cirac2017MPU}; the Gram formulas are
+    \cite[lines~1326--1398]{FrancoRubio2025MPUGauging}.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:mpu_supplied_standard_form_source_cuts}
+    Simplicity is the equality $r\ell=d^2$ and adjunction exchanges $r,\ell$.
+    For the Gram formulas, compare a supplied cut factorization $XY$ with
+    the selected normalized one. The right inverse makes their left-factor
+    ranges equal. Their common weighted normalization gives a coisometry
+    $A$ with $Y'=AY$, so each scalar Gram matrix is unchanged.
+    At $r=\ell=d$ both Grams are identities. Taking adjoints exchanges the
+    two cut factorizations. The displayed old left-factor normalizations
+    give the new right inverses, and their old Gram identities give the new
+    left-factor normalizations. Direct contraction gives the two adjoint gates.
+\end{proof}
+
+\begin{lemma}[Scalar transport of normalized source factors]
+    \label{lem:mpu_source_factors_scalar_transport}
+    \lean{MPOTensor.source_ranks_smul, MPOTensor.SourceFactors.smul, MPOTensor.SourceFactors.sourceU_smul, MPOTensor.SourceFactors.sourceV_smul}
+    \leanok
+    For a nonzero scalar $c$, the two source ranks of $cU$ equal those of $U$.
+    Any normalized source factorization of $U$ transports to one of $cU$
+    with the same weight, by keeping both left factors, multiplying both
+    right factors by $c$, and multiplying both right inverses by $c^{-1}$.
+    In the canonical rank identifications the transported gates are $c^2u$
+    and $v$. In particular a sign disappears in the two-letter source gate.
+    These are the contractions of
+    \cite[lines~479--524]{Cirac2017MPU} used in the even-family comparison.
+\end{lemma}
+
+\begin{proof}\leanok
+    A nonzero scalar does not change matrix rank. The two cut products acquire
+    the scalar, the two left-factor normalizations stay unchanged, and the
+    right-inverse products acquire $cc^{-1}=1$. The unshifted gate contracts
+    two right factors, so it acquires $c^2$; the shifted gate contracts the
+    unchanged left factors.
+\end{proof}
+
+\begin{lemma}[Even-family virtual rigidity up to a sign]
+    \label{lem:mpu_even_family_virtual_sign_gauge}
+    \lean{MPOTensor.IsMPUCanonicalFormII.exists_unitary_virtual_sign_gauge_of_mpo_eq_even}
+    \leanok
+    Let $U,V$ be reduced canonical-form-II MPU tensors with equal periodic
+    operators at every even length greater than one. Their bond dimensions
+    agree, and there are a virtual unitary $z$ and a sign $\eta\in\{1,-1\}$
+    such that $V^{ij}=\eta zU^{ij}z^\dagger$ for every physical pair $i,j$.
+    No equality at odd lengths is inferred. This is the virtual comparison
+    needed in the even-length setting of
+    \cite[lines~1209--1252]{Cirac2017MPU}; reconstructing the four-spin
+    gates remains a separate step. The presentation restriction is recorded
+    in \cite{gap:mpu_canonical_form_full_support}.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:cpsv_normal_overlap_dichotomy}
+    Equality along the even subsequence makes the cross-overlap equal the
+    self-overlap there, whose limit is one. The normal-tensor overlap
+    dichotomy therefore rules out vanishing cross-overlap and gives an
+    unblocked invertible gauge with a unit phase $\eta$. The nonzero periodic
+    vector at length two forces $\eta^2=1$. Left canonical normalization and
+    irreducibility replace the invertible gauge by a unitary without changing
+    the phase.
+\end{proof}
+
+\begin{lemma}[Supplied source gates from even-family equality]
+    \label{lem:mpu_even_family_supplied_source_gauges}
+    \lean{MPOTensor.IsMPUCanonicalFormII.eq_sign_virtualSandwich_of_mpo_eq_even, MPOTensor.IsMPUCanonicalFormII.source_ranks_eq_of_mpo_eq_even, MPOTensor.IsMPUCanonicalFormII.exists_supplied_source_gate_unitary_gauges_of_mpo_eq_even}
+    \leanok
+    Let $U,V$ be reduced canonical-form-II MPU tensors with the same bond
+    dimension and equal periodic operators at every even length greater than
+    one. For any supplied normalized source factors whose unshifted gates
+    are unitary, their source ranks agree and their actual gates satisfy
+    $u_V=(x\otimes y)u_U$ and $v_V=v_U(y^\dagger\otimes x^\dagger)$
+    for unitary rank-coordinate transformations $x,y$, in the canonical
+    identifications of equal ranks. The signed target is a virtual unitary
+    conjugate of the original tensor. This is the even-family source
+    comparison used in \cite[lines~1237--1252]{Cirac2017MPU}.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:mpu_even_family_virtual_sign_gauge,
+        lem:mpu_source_factors_scalar_transport, FundamentalMPU}
+    Write $\eta V=zUz^\dagger$ with $\eta^2=1$. Transport the supplied
+    factors of $V$ to those of $\eta V$. Their gates are unchanged since
+    the unshifted gate acquires $\eta^2$ and the shifted gate acquires no
+    scalar. Apply the normalized factor comparison under the actual virtual
+    sandwich, then transport the rank-coordinate unitaries back. Nonzero
+    scaling and unitary virtual conjugation preserve both source ranks.
+\end{proof}
+
+\begin{lemma}[Forward local time reversal for the constructed canonical standard form]
+    \label{lem:mpu_canonical_forward_local_time_reversal}
+    \lean{MPOTensor.IsMPUCanonicalFormII.exists_coarse_timeReversal_certificate, MPOTensor.IsMPUCanonicalFormII.exists_local_timeReversal_certificate, MPOTensor.IsMPUCanonicalFormII.exists_twoSiteStandardFormData_timeReversal_certificate, MPOTensor.coarse_gates_eq_four_spin_gates}
+    \leanok
+    Let $U$ be a simple reduced canonical-form-II tensor. Construct its actual
+    source standard form $W$ with gates $u,v$, and suppose that
+    $W^{(N)}=W^{(N)\dagger}$ at every even length $N>1$. Its source
+    ranks equal the physical dimension $d$. In the canonical identifications
+    of both rank spaces with $\mathbb C^d$, write these same gates as $u_0,v_0$.
+    There exist a unitary $x$ on $\mathbb C^d\otimes\mathbb C^d$ and
+    $\sigma\in\{1,-1\}$ such that
+    \begin{align}
+        (v_0)_{23}(u_0\otimes u_0)
+         & =\sigma(x\otimes x^\dagger)(v_0)_{23}^\dagger.
+    \end{align}
+    This gives the four-original-spin equation of
+    \cite[lines~1237--1252]{Cirac2017MPU} for the standard form constructed
+    from the chosen reduced canonical source. Its length hypothesis is exactly
+    at even standard-form lengths, hence original lengths divisible by four.
+    The intermediate virtual comparison retains the possible sign phase
+    discussed in \cite{gap:mpu_standard_form_parity_gap}. No gauge or local-equation
+    witness is assumed. The actual square standard-form data are supplied
+    together with the certificate by relabeling the existing half factors.
+    No continuity of any such choice is needed. Arbitrary supplied standard forms, the converse and
+    the transposition criterion are separate obligations; the unrestricted
+    source proposition remains unformalized. The reduced presentation
+    restriction is recorded in \cite{gap:mpu_canonical_form_full_support}.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:mpu_supplied_standard_form_source_cuts,
+        lem:mpu_normalized_physical_adjoint_source_factors,
+        lem:mpu_even_family_supplied_source_gauges}
+    The actual coarse source factors have gates
+    $A=v_{23}(u\otimes u)$ and $B=v_{23}$. Adjoint symmetry identifies
+    the even periodic families of the standard-form tensor and its adjoint.
+    The unblocked virtual comparison supplies a possible sign, which cancels
+    in the two-letter source gate. Apply the supplied-factor comparison to
+    the actual normalized records. In physical-block coordinates its unitary
+    gauges $X,Y$ satisfy $B^\dagger=(X\otimes Y)A$ and
+    $A^\dagger=B(Y^\dagger\otimes X^\dagger)$. Taking the adjoint of the
+    second equation and substituting the first gives
+    $A=(YX\otimes XY)A$. Cancel $A$ to obtain $YX\otimes XY=\Id$.
+    Thus $YX=c\Id$ and $XY=c^{-1}\Id$. Unitarity gives $Y=cX^\dagger$,
+    whence also $XY=c\Id$ and $c=c^{-1}$. Therefore $c=\pm1$.
+    The explicit physical-pair and rank identifications transport this
+    relation back to the displayed four-spin equation, with $x=X^\dagger$.
+    Only one two-site blocking has been used; no odd-length symmetry follows.
+\end{proof}
+
+\begin{lemma}[Standard forms from supplied normalized factors]
+    \label{lem:mpu_standard_form_from_normalized_source_factors}
+    \lean{MPOTensor.IsMPUCanonicalFormII.exists_twoSiteStandardFormData_sourceFactors}
+    \leanok
+    Let $U$ be a simple reduced canonical-form-II MPU with recorded weight
+    $\rho$. Every normalized supplied source factorization at this weight
+    provides actual standard-form data for its own gates on the two-site
+    block of $U$. No new compact decomposition is assumed. These are the
+    standard forms of \cite[lines~603--648]{Cirac2017MPU}.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{SF, FundamentalMPU}
+    Compare the supplied factors with the selected factors of the same tensor.
+    The normalized factor comparison gives two unitary rank transformations.
+    Apply them to the existing open standard-form contraction. Its gates are
+    exactly those of the supplied factors.
+\end{proof}
+
+\begin{lemma}[Even-ring converse for the constructed canonical standard form]
+    \label{lem:mpu_canonical_even_local_time_reversal_iff}
+    \lean{MPOTensor.IsMPUCanonicalFormII.mpo_even_eq_adjoint_of_source_local_certificate, MPOTensor.IsMPUCanonicalFormII.mpo_standardForm_even_eq_adjoint_of_local_certificate, MPOTensor.IsMPUCanonicalFormII.standardForm_even_timeReversal_iff_exists_local_certificate}
+    \leanok
+    Let $U$ be a simple reduced canonical-form-II tensor, and construct its
+    actual standard form $W$ with gates $u,v$. Then $W^{(N)}$ is self-adjoint
+    at every even length $N>1$ if and only if $r(U)=\ell(U)=d$ and, in
+    these canonical rank identifications, there are a unitary $x$ on
+    $\mathbb C^d\otimes\mathbb C^d$ and a sign $\sigma$ satisfying
+    \begin{align}
+        v_{23}(u\otimes u)
+         & =\sigma(x\otimes x^\dagger)v_{23}^\dagger.
+    \end{align}
+    More generally, a normalized supplied source record of a simple reduced
+    canonical tensor, with both source ranks equal to its physical dimension,
+    gives self-adjoint periodic operators on even rings whenever its two
+    gates satisfy the corresponding sign equation. No extra gate, factor,
+    or transform witness is assumed in this implication. This is the
+    even-ring contraction in \cite[lines~1214--1236]{Cirac2017MPU}.
+    Arbitrary supplied standard-form presentations and transposition remain
+    separate; the reduced presentation restriction is recorded in
+    \cite{gap:mpu_canonical_form_full_support}.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:mpu_canonical_forward_local_time_reversal,
+        lem:mpu_standard_form_from_normalized_source_factors,
+        lem:mpu_normalized_physical_adjoint_source_factors, FundamentalMPU}
+    The forward implication is the preceding construction. For the converse,
+    write $A=v_{23}(u\otimes u)$ and $B=v_{23}$. The local equation
+    $A=\sigma(x\otimes x^\dagger)B^\dagger$ gives
+    $B^\dagger=(X\otimes Y)A$ and
+    $A^\dagger=B(Y^\dagger\otimes X^\dagger)$ with
+    $X=x^\dagger$ and $Y=\sigma x$. Both are unitary since $\sigma^2=1$.
+    The actual normalized source and adjoint factors provide standard forms
+    with gates $A,B$ and $B^\dagger,A^\dagger$, respectively. Close the two
+    gate relations on each positive blocked ring by cancelling the internal
+    unitaries. These are precisely the even rings of $W$. The explicit
+    coordinate dictionary transports the given four-original-spin equation
+    to these gate relations without enlarging its local antecedent.
 \end{proof}
 
 \begin{lemma}[Admissible local characterization of time reversal]
@@ -10479,7 +11353,90 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     $\sigma=\pm1$ is independent of the gauge and is constant under continuous
     deformations that preserve time-reversal symmetry.
     % Source lines: paper_v2.tex 1613--1631.
+    % The intrinsic auxiliary results below need pointwise supplied standard
+    % forms and the local certificate; no continuous gate choices are needed.
+    % Deducing that certificate from global symmetry remains separate.
 \end{lemma}
+
+\begin{lemma}[Extraction of the sign from a supplied local equation]
+    \label{lem:mpu_supplied_time_reversal_sign}
+    \lean{MPOTensor.timeReversalSign, MPOTensor.TwoSiteStandardFormData.timeReversalSign_eq_of_local_relation}
+    \leanok
+    \uses{def:mpu_supplied_two_site_standard_form}
+    Let $d>0$ and let $W$ have a supplied two-site standard form with square
+    gates $u,v$ on $\mathbb C^d\otimes\mathbb C^d$. Define
+    $s(u,v)=d^{-2}\tr[\mathbb S_{12,34}v_{23}(u_{12}\otimes u_{34})v_{23}]$.
+    If a unitary $x$ and a scalar $\sigma$ satisfy
+    \begin{align}
+        v_{23}(u_{12}\otimes u_{34})
+         & =\sigma(x\otimes x^\dagger)v_{23}^\dagger,
+    \end{align}
+    then $s(u,v)=\sigma$. This is the local-equation extraction in
+    \cite[lines~1595--1610]{Cirac2017MPU} for the supplied standard form.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:matrix_trace_swap_scaled_kronecker}
+    Multiply the local equation by $v_{23}$ and cancel
+    $v_{23}^\dagger v_{23}=\Id$. Exchange of the two physical pairs gives
+    $\tr[\mathbb S(x\otimes x^\dagger)]=\tr[xx^\dagger]=d^2$.
+    Division by the nonzero scalar $d^2$ gives the result.
+\end{proof}
+
+\begin{lemma}[Intrinsic trace and independence of standard-form representatives]
+    \label{lem:mpu_source_time_reversal_sign_independent}
+    \lean{MPOTensor.timeReversalPeriodicTrace, MPOTensor.intrinsicTimeReversalSign, MPOTensor.TwoSiteStandardFormData.timeReversalTrace_eq_periodicTrace, MPOTensor.TwoSiteStandardFormData.timeReversalSign_eq_intrinsic, MPOTensor.TwoSiteStandardFormData.timeReversalSign_eq_of_mpo_two_eq}
+    \leanok
+    \uses{def:mpu_supplied_two_site_standard_form}
+    Let $W$ have a supplied two-site standard form with square gates $u,v$
+    on $\mathbb C^d\otimes\mathbb C^d$. For exchange $P$ of the two physical
+    blocks, define $s(W)=d^{-2}\tr[P U_W^{(2)}]$. Then $s(u,v)=s(W)$.
+    Consequently two supplied standard forms whose two-block
+    periodic operators agree have the same normalized sign expression,
+    including representatives in different bond dimensions. No canonical
+    source-factor comparison is required. This gives the independence
+    assertion of \cite[lines~1613--1627]{Cirac2017MPU} for the supplied
+    square standard forms.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_supplied_two_site_periodic_circuit}
+    The shifted layer on two blocks is $P v_{23}P v_{23}$, so
+    $U_W^{(2)}=P v_{23}P v_{23}(u\otimes u)$. Since $P^2=\Id$,
+    cyclicity gives
+    \begin{align}
+        \tr[P U_W^{(2)}]
+         & =\tr[v_{23}P v_{23}(u\otimes u)]  \\
+         & =\tr[P v_{23}(u\otimes u)v_{23}].
+    \end{align}
+    Division by $d^2$ gives the identity and independence.
+\end{proof}
+
+\begin{lemma}[Constancy along tensor paths with pointwise local certificates]
+    \label{lem:mpu_supplied_time_reversal_sign_constant}
+    \lean{MPOTensor.continuous_intrinsicTimeReversalSign, MPOTensor.intrinsicTimeReversalSign_eq_on_path}
+    \leanok
+    \uses{lem:mpu_supplied_time_reversal_sign, def:mpu_supplied_two_site_standard_form}
+    Let $W(t)$ be a continuous path of tensors for $t\in[0,1]$.
+    At each $t$, suppose there is a supplied square two-site standard form
+    and a local time-reversal certificate as in
+    Lemma~\ref{lem:mpu_supplied_time_reversal_sign}, with
+    $\sigma(t)\in\{1,-1\}$. These choices are pointwise; no continuity
+    of the gates, source factors, unitary or sign witnesses is required.
+    Then $s(W(t))=s(W(0))$ throughout the interval.
+    This is the intrinsic-trace argument for
+    \cite[lines~1628--1630]{Cirac2017MPU}. Deducing the pointwise local
+    certificate from global time reversal remains the separate local
+    characterization.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:mpu_supplied_time_reversal_sign, lem:mpu_source_time_reversal_sign_independent}
+    The finite-chain operator is polynomial in the tensor entries,
+    so $s(W(t))$ is continuous. At each point the local equation and
+    intrinsic identity give $s(W(t))\in\{1,-1\}$. A continuous function
+    from the connected interval to this two-point set is constant.
+\end{proof}
 
 \begin{lemma}[Admissible well-definedness of the time-reversal sign]
     \label{prop:mpu_admissible_sigma_well_defined}
@@ -12344,3 +13301,248 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     Definition~\ref{def:mpu_admissible_symmetry_equivalence}.
     % Source lines: paper_v2.tex 2203--2235.
 \end{lemma}
+
+\subsection{Simple reduced representatives at the original scale}
+
+\begin{lemma}[Doubled rectangular bond maps]
+    \label{lem:mpu_doubled_rectangular_bond_map}
+    \lean{MPOTensor.doubledBondMap, MPOTensor.doubleLayer_rectangularSandwich}
+    \leanok
+    For a rectangular matrix $A$, write $\widehat A=\overline A\otimes A$,
+    with the canonical enumeration of the product indices.
+    If $V^{ij}=AU^{ij}B$, then its double-layer letters satisfy
+    \begin{align}
+        E_V^{ij} & =\widehat A E_U^{ij}\widehat B.
+        \notag
+    \end{align}
+    This identity holds for arbitrary rectangular matrices; it does not
+    require an inverse or an isometry.
+\end{lemma}
+
+\begin{lemma}[Normalized diagonal insertions]
+    \label{lem:mpu_normalized_diagonal_insertions}
+    \lean{MPOTensor.normalizedDiagonal_eq_smul_sum_diagonal,
+        MPOTensor.IsMPUSimple.letter_mul_normalizedDiagonal_mul_letter,
+        MPOTensor.simple2_of_normalizedDiagonal_insertion}
+    \leanok
+    \uses{def:mpu_simple, def:mpu_double_layer}
+    For double-layer letters $E^{ij}$, let
+    $E=d^{-1}\sum_{q=0}^{d-1}E^{qq}$, where $d>0$.
+    A simple tensor satisfies
+    \begin{align}
+        E^{ij} E E^{kl} & =E^{ij}E^{kl}.
+        \notag
+    \end{align}
+    Conversely, suppose this insertion identity holds and
+    $E^J=\rho\Phi$ for some integer $J>0$, with a column $\rho$ and row $\Phi$.
+    Then
+    \begin{align}
+        E^{ij}E^{kl} & =E^{ij}\rho\Phi E^{kl}.
+        \notag
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:mpu_simple}
+    Let $a,b$ be the simplicity vectors and put $R=|b)(a|$. Since
+    $(a|E^{qq}|b)=1$, we have $RE^{qq}R=R$, and two insertions of $R$ give
+    \begin{align}
+        E^{ij}E^{qq}E^{kl} & =E^{ij}RE^{qq}RE^{kl}=E^{ij}RE^{kl}=E^{ij}E^{kl}.
+        \notag
+    \end{align}
+    Averaging over $q$ gives the first identity. For the converse, expanding
+    the last copy of $E$ gives $E^{ij}E^2=E^{ij}E$, so induction permits
+    inserting every positive power, in particular $E^J=\rho\Phi$.
+\end{proof}
+
+\begin{lemma}[Doubled open words under a rectangular reduction]
+    \label{lem:mpu_doubled_open_word_reduction}
+    \lean{MPOTensor.doubleLayer_evalWord_of_isReduction}
+    \leanok
+    \uses{lem:mpu_doubled_rectangular_bond_map}
+    Suppose $AB=\Id$ and $AU^wB=V^w$ for every open physical word $w$,
+    including the empty word. For every pair of words $\sigma,\tau$ of the
+    same length $N\geq0$,
+    \begin{align}
+        \widehat A E_U^{\sigma_1\tau_1}\cdots
+        E_U^{\sigma_N\tau_N}\widehat B
+         & =E_V^{\sigma_1\tau_1}\cdots E_V^{\sigma_N\tau_N}.
+        \notag
+    \end{align}
+    % The full open-word identities are required, rather than their
+    % single-letter consequences alone.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:mpu_doubled_rectangular_bond_map,
+        lem:mpu_rectangular_reduction_source_ranks,
+        thm:mpu_double_layer_blocking}
+    The open-word identities of length $N$ say that the $N$-site blocks
+    satisfy $V_N^{IJ}=AU_N^{IJ}B$. Apply the preceding lemma to these
+    blocks; the double layer of an $N$-site block at the pair of words
+    $(\sigma,\tau)$ is the product $E^{\sigma_1\tau_1}\cdots E^{\sigma_N\tau_N}$.
+\end{proof}
+
+\begin{lemma}[Simplicity descends to a canonical reduction]
+    \label{lem:mpu_simple_canonical_reduction}
+    \lean{MPOTensor.IsMPUSimple.normalizedDiagonal_insertion_of_isReduction,
+        MPOTensor.IsMPUCanonicalFormII.isMPUSimple_of_isReduction}
+    \leanok
+    \uses{def:mpu_simple, def:mpu_double_layer, def:mpu_canonical_form_ii}
+    Let $d>0$, let $U$ be simple, and suppose $AB=\Id$ and $AU^wB=V^w$
+    for every open word $w$. Then the double layer of $V$ satisfies
+    \begin{align}
+        E_V^{ij}E_VE_V^{kl} & =E_V^{ij}E_V^{kl}.
+        \notag
+    \end{align}
+    If $V$ is in canonical form II, then $V$ is simple at the same physical
+    scale.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:mpu_doubled_open_word_reduction,
+        lem:mpu_normalized_diagonal_insertions,
+        thm:mpu_canonical_form_ii_transfer_stabilization,
+        thm:mpu_all_later_simple_blockings}
+    To prove the first assertion, contract the insertion identity for $U$
+    between $\widehat A$ and $\widehat B$ and use the two- and three-letter
+    word identities. For the second assertion, the canonical normalized
+    diagonal of $V$ has a rank-one power, so the converse insertion gives the
+    two-letter rank-one insertion identity for $V$. That identity makes the
+    MPU tensor $V$ simple.
+    % This argument does not replace V by a further physical block.
+\end{proof}
+
+\begin{lemma}[Simple reduced canonical representative]
+    \label{lem:mpu_simple_reduced_canonical_representative}
+    \lean{MPOTensor.IsMPUSimple.exists_reduced_cfii_representative}
+    \leanok
+    \uses{def:mpu_simple, def:mpu_canonical_form_ii}
+    Let $d,D>0$ and let $U$ be a simple MPU tensor of bond dimension $D$.
+    There is a simple tensor $V$ in canonical form II, of bond dimension
+    $0<E\leq D$, such that $V^{(N)}=U^{(N)}$ for every $N>0$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_reduced_cfii_representative,
+        thm:mpu_canonical_representative_reduction,
+        lem:mpu_simple_canonical_reduction}
+    Take the reduced canonical-form-II representative $V$ of $U$. The
+    canonical representative is normal, so equality of the periodic
+    families supplies a rectangular reduction of all open words onto it.
+    The preceding lemma then supplies simplicity at the original scale.
+\end{proof}
+
+\begin{lemma}[Literal standard form of a reduced simple MPU]
+    \label{lem:mpu_simple_reduced_literal_standard_form}
+    \lean{MPOTensor.IsMPUSimple.exists_reduced_twoSiteStandardFormData}
+    \leanok
+    \uses{def:mpu_simple, def:mpu_canonical_form_ii,
+        def:mpu_supplied_two_site_standard_form, def:mpu_source_uv}
+    Every simple MPU tensor $U$ with $d,D>0$ has a simple canonical
+    representative $V$, with $0<E\leq D$ and $V^{(N)}=U^{(N)}$ for all $N>0$,
+    whose two-site block has standard form with the literal corrected source
+    gates
+    \begin{align}
+        u & =Y_2Y_1, & v & =X_1X_2.
+        \notag
+    \end{align}
+    The input tensor need not be in canonical form II or have full bond
+    support. The sole physical blocking in this conclusion is the two-site
+    blocking in the standard form of \cite[Definition~III.9]{Cirac2017MPU}.
+    % No virtual similarity between the potentially unequal bond spaces is
+    % asserted.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:mpu_simple_reduced_canonical_representative,
+        def:mpu_source_open_two_site_standard_form}
+    Take the simple canonical representative $V$ of the preceding lemma.
+    Its two-site block has the open standard form built from the source
+    cuts of $V$, whose gates are the source operators of $V$.
+\end{proof}
+
+\subsection{Intrinsic blocked traces and the twisted transfer}
+
+\begin{definition}[Twisted transfer of the squared operator tensor]
+    \label{def:mpu_time_reversal_twisted_transfer}
+    \lean{MPOTensor.timeReversalTwistedTransfer}
+    \leanok
+    Let $W$ be an MPO tensor with physical dimension $d$ and bond dimension
+    $D$. In product bond coordinates, define
+    \begin{align}
+        T_W=\frac{1}{d}\sum_{i,j=0}^{d-1}W^{ij}\otimes W^{ji}.
+    \end{align}
+    Equivalently, this is the normalized physical diagonal of the product
+    tensor for $W^2$. It is not assumed positive or Hermitian. The algebraic
+    convention $0^{-1}=0$ permits zero physical dimension as well.
+\end{definition}
+
+\begin{lemma}[Opposite-word expressions for blocked exchange traces]
+    \label{lem:mpu_time_reversal_blocked_open_words}
+    \lean{MPOTensor.timeReversalPeriodicTrace_eq_sum,
+        MPOTensor.timeReversalPeriodicTrace_blockTensor,
+        MPOTensor.timeReversalTwistedTransfer_pow_eq_sum_evalWord}
+    \leanok
+    \uses{def:mpu_time_reversal_twisted_transfer}
+    The exchange-contracted trace of the two-site periodic operator is
+    \begin{align}
+        \tau(W)=\sum_{i,j=0}^{d-1}\tr(W^{ij}W^{ji}).
+    \end{align}
+    For $k\geq0$, write $W^{ww'}$ for the ordered product along
+    physical words $w,w'$ of length $k$. Then
+    \begin{align}
+        \tau(W_k)
+         & =\sum_{w,w'}\tr(W^{ww'}W^{w'w}), \\
+        T_W^k
+         & =d^{-k}\sum_{w,w'}
+        W^{ww'}\otimes W^{w'w}.
+    \end{align}
+    The products use exactly $k$ physical sites, without a further blocking.
+    These are algebraic identities for arbitrary MPO tensors, including the
+    empty words when $k=0$.
+\end{lemma}
+
+\begin{lemma}[Intrinsic blocked trace as a twisted-transfer trace]
+    \label{lem:mpu_intrinsic_blocked_twisted_trace}
+    \lean{MPOTensor.swapMatrix_commute_timeReversalTwistedTransfer,
+        MPOTensor.intrinsicTimeReversalSign_blockTensor_eq_twistedTransfer_trace}
+    \leanok
+    \uses{def:mpu_time_reversal_twisted_transfer,
+        lem:mpu_time_reversal_blocked_open_words}
+    Let $F_D$ exchange the two bond factors. Then $F_DT_W=T_WF_D$, and the
+    normalized intrinsic exchange trace of each block is
+    \begin{align}
+        \sigma_{\mathrm{int}}(W_k)=\tr(F_DT_W^k),\qquad k\geq0.
+    \end{align}
+    No canonical form, symmetry or standard-form choice is needed for these
+    identities. They give a finite-dimensional expression relevant to
+    \cite[lines~1633--1733]{Cirac2017MPU}.
+    % The blocking parity proposition and the identification of the virtual
+    % sign from even-chain comparison with the intrinsic sign are separate.
+\end{lemma}
+
+\begin{lemma}[Commuting weights remove stabilized nilpotent transients]
+    \label{lem:mpu_stabilized_commuting_weighted_trace}
+    \lean{Matrix.StabilizedRankOneData.isNilpotent_pow_sub_power,
+        Matrix.StabilizedRankOneData.trace_mul_pow_eq_of_commute}
+    \leanok
+    Let $E$ be a finite complex matrix and suppose that, for some $J>0$,
+    every power $E^n$ with $n\geq J$ equals a normalized rank-one projector
+    $P=E^J$. Then $E^k-P$ is nilpotent for every $k>0$. If $F$ commutes
+    with $E$, then
+    \[
+        \tr(FE^k)=\tr(FP),\qquad k>0.
+    \]
+    Indeed, $E^k-P=E^k(\Id-P)$ and the complementary idempotent shows
+    that its $J$th power vanishes. Since $F$ commutes with this difference,
+    their product is nilpotent and has trace zero. The hypotheses here
+    describe a stabilized matrix; no assertion that a particular twisted
+    transfer has these properties is made. This is the linear-algebra step
+    needed to remove transient terms in a subsequent use of
+    Lemma~\ref{lem:mpu_intrinsic_blocked_twisted_trace}.
+\end{lemma}
+
+\input{chapter/ch28_mpu_finite_heisenberg}
+
+\input{chapter/ch28_mpu_qca_index_comparison}

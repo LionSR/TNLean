@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import Mathlib.Order.Filter.Basic
 import Mathlib.RepresentationTheory.Homological.GroupCohomology.LowDegree
 import TNLean.Algebra.ProjectiveRepresentation
 
@@ -24,7 +25,7 @@ action of an arbitrary group on `ℂˣ`.  Open it with
 
 * `groupCohomology.IsMulCocycle₂` : the multiplicative 2-cocycle condition
 * `groupCohomology.IsMulCoboundary₂` : the multiplicative 2-coboundary condition
-* `ScalarCohomology.trivialMulDistribMulAction` : the trivial action of `G` on `ℂˣ`
+* `ScalarCohomology.trivialMulDistribMulAction` : the trivial action on a coefficient group
 * `scalarRepresentationRes` : restriction of the trivial representation on `ℂˣ`
   along a group homomorphism, the coefficient map of Mathlib's restriction
 * `ScalarCocycle.commPhase` : the commutator phase `ω(g,h) ω(h,g)⁻¹`
@@ -34,6 +35,8 @@ action of an arbitrary group on `ℂˣ`.  Open it with
 * `isMulCocycle₂_iff` : the scalar cocycle equation in the source orientation
 * `H2π_eq_iff_isMulCoboundary₂_div` : two cocycles have the same class in
   Mathlib's `H²(G, ℂˣ)` iff their ratio is a coboundary
+* `eventually_H2π_eq_iff_isMulCoboundary₂_div` : the same equivalence for
+  filter-indexed families of cocycles
 * `ScalarCocycle.exists_H2π_eq` : every class of `H²(G, ℂˣ)` is the class of a
   scalar cocycle
 * `ScalarCocycle.H2π_ne_zero_of_commPhase_ne_one` : a non-trivial commutator phase
@@ -57,10 +60,12 @@ variable {D : ℕ}
 namespace ScalarCohomology
 
 set_option warn.classDefReducibility false in
-/-- The trivial action of `G` on the scalar coefficient group `ℂˣ`, so that
-`Rep.ofMulDistribMulAction G ℂˣ` is the coefficient module of `H²(G, ℂˣ)` and
-`H³(G, ℂˣ)`.  It is scoped: other actions of particular groups on `ℂˣ` exist. -/
-scoped instance trivialMulDistribMulAction : MulDistribMulAction G (Units ℂ) where
+/-- The trivial action on a commutative coefficient group. It supplies both
+circle-valued and complex-unit-valued scalar cohomology through Mathlib's
+`Rep.ofMulDistribMulAction`, without separate coefficient representations.
+It is scoped because the coefficient groups can also carry nontrivial actions. -/
+scoped instance trivialMulDistribMulAction {A : Type} [CommGroup A] :
+    MulDistribMulAction G A where
   smul _ z := z
   one_smul _ := rfl
   mul_smul _ _ _ := rfl
@@ -217,6 +222,19 @@ theorem H2π_eq_iff_isMulCoboundary₂_div {ω₁ ω₂ : G × G → ℂˣ}
       (G := G) (M := ℂˣ) _ h
   · intro h
     exact (groupCohomology.coboundariesOfIsMulCoboundary₂ h).property
+
+/-- Two filter-indexed families of scalar cocycles eventually have equal cohomology
+classes precisely when their pointwise ratios are eventually coboundaries. -/
+theorem eventually_H2π_eq_iff_isMulCoboundary₂_div
+    {ι : Type*} {l : Filter ι} {ω₁ ω₂ : ι → G × G → ℂˣ}
+    (h₁ : ∀ i, groupCohomology.IsMulCocycle₂ (ω₁ i))
+    (h₂ : ∀ i, groupCohomology.IsMulCocycle₂ (ω₂ i)) :
+    (∀ᶠ i in l, groupCohomology.H2π (Rep.ofMulDistribMulAction G ℂˣ)
+        (groupCohomology.cocyclesOfIsMulCocycle₂ (h₁ i)) =
+      groupCohomology.H2π (Rep.ofMulDistribMulAction G ℂˣ)
+        (groupCohomology.cocyclesOfIsMulCocycle₂ (h₂ i))) ↔
+      ∀ᶠ i in l, groupCohomology.IsMulCoboundary₂ (ω₁ i / ω₂ i) :=
+  Filter.eventually_congr (.of_forall fun i ↦ H2π_eq_iff_isMulCoboundary₂_div (h₁ i) (h₂ i))
 
 /-- The class of the constant cocycle `1` is zero. -/
 theorem ScalarCocycle.H2π_one
