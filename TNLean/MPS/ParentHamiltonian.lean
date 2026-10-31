@@ -132,6 +132,7 @@ import TNLean.MPS.ParentHamiltonian.FaithfulParentGroundStates
 import TNLean.MPS.ParentHamiltonian.FaithfulParentInteractionGap
 import TNLean.MPS.ParentHamiltonian.FaithfulPeriodicGroundSpace
 import TNLean.MPS.ParentHamiltonian.FaithfulQuasiLocalGap
+import TNLean.MPS.ParentHamiltonian.FiniteVolumeConstraintPropagation
 import TNLean.MPS.ParentHamiltonian.FrameOperator
 import TNLean.MPS.ParentHamiltonian.GaugePhaseSeparationTransport
 import TNLean.MPS.ParentHamiltonian.GramConvergence
@@ -298,6 +299,7 @@ import TNLean.MPS.ParentHamiltonian.UncleBoundaryIntersection
 import TNLean.MPS.ParentHamiltonian.UncleBoundaryProduct
 import TNLean.MPS.ParentHamiltonian.UncleBoundaryTraceClosure
 import TNLean.MPS.ParentHamiltonian.UncleBoundaryWords
+import TNLean.MPS.ParentHamiltonian.UncleGroundSpace
 import TNLean.MPS.ParentHamiltonian.UncleGroundSpaceInclusion
 import TNLean.MPS.ParentHamiltonian.UncleInjectivity
 import TNLean.MPS.ParentHamiltonian.UncleKernelConditions

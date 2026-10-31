@@ -9909,12 +9909,16 @@ there is no need for a new tactic.
   mathematical lemma to a lower matrix-analysis module and reuse it; do not duplicate its
   statement or introduce a new tactic.
 
-### Local interaction separation by a joint boundary map — candidate
+### Local interaction separation by a joint boundary map — promoted
 - **Pattern:** compose an arbitrary local interaction with the joint boundary
   map, extend vanishing from a spanning word family using
   `LinearMap.ext_on_range`, and evaluate on `Pi.single` to isolate a block.
-- **Seen:** `MPS/ParentHamiltonian/ArbitraryInteractionBlockDegeneracy.lean`.
-- **Notes:** one occurrence. The implementation reuses Mathlib `LinearMap.lsum`
+- **Seen:** `MPS/ParentHamiltonian/ArbitraryInteractionBlockDegeneracy.lean`
+  and the finite-to-all-volumes consequence in
+  `MPS/ParentHamiltonian/FiniteVolumeConstraintPropagation.lean`.
+- **Abstraction:** `weighted_boundary_eq_zero_of_periodicLocalInteractionES_eq_zero`
+  now supplies both local component annihilation and the whole local-kernel
+  inclusion. The implementation reuses Mathlib `LinearMap.lsum`
   and `lsum_piSingle`; it avoids entrywise expansion of the local interaction.
   Positivity is used separately via QICLean's
   `WeightedPositiveKernel.apply_sum_eq_zero_iff`.
@@ -10112,6 +10116,22 @@ removed after the dependency audit exposed it.
   The public `norm_mpvState_le_bondDimension_of_unital` specializes it once to positive
   unital maps and is reused for every canonical block; no new spectral proof or tactic.
 - **Validation:** Source-only; hosted Lean checking is pending.
+
+### Rectangular reduction of doubled words — promoted (2026-10-29)
+
+- **Pattern:** Apply a full-word reduction to a physical block, double its
+  rectangular bond maps, and decode the blocked physical indices.
+- **Defined in:** `MPS/MPU/SimpleReduction.lean`,
+  `doubleLayer_evalWord_of_isReduction`.
+- **Reuse:** Promotes the existing `doubledBondMap` and
+  `doubleLayer_rectangularSandwich` from `SimpleSupportCompression.lean`;
+  the support-compression and full-word-reduction arguments share their owner.
+- **Related extraction:** `simple2_of_normalizedDiagonal_insertion` in
+  `SuppliedFixedWitnesses.lean` factors the existing positive-power insertion
+  argument. Both the old supplied-witness theorem and the new canonical
+  reduction theorem use that proof; no second induction was copied.
+- **Scope:** A one-letter sandwich alone is insufficient. The reduction must
+  contract every open word, including the empty word.
 
 ### Actual W-vector blocking through the vacuum recurrence — candidate (2026-10-29)
 
@@ -10532,3 +10552,13 @@ removed after the dependency audit exposed it.
   predicate or source witness is introduced. The new result eliminates
   transient terms in commuting weighted traces rather than reproving
   stabilization or the existing unweighted nilpotent trace theorem.
+
+### Iterating derived boundary intersections — reused library theorem (2026-10-29)
+
+- **Seen:** `MPS/ParentHamiltonian/UncleGroundSpace.lean`, the actual periodic uncle kernel.
+- **Reuse:** `contiguous_mem_of_restriction_intersection_submodules` iterates the already
+  derived single-wall boundary intersection with local length two. The actual kernel
+  theorem supplies its window conditions; no new induction or assumed intersection
+  predicate is introduced.
+- **Translation reuse:** `cyclicRestrictₗ_cyclicTranslateState` is promoted from private
+  visibility for this second consumer; the existing proof remains unchanged.
