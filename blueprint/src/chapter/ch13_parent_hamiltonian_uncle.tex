@@ -88,8 +88,7 @@ one scalar need not be a similarity transformation.
 \begin{lemma}[Injective perturbations give injective uncle tensors]
     \label{lem:uncle_injective_perturbation}
     \lean{MPSTensor.isInjective_uncleTensor_of_isInjective_perturbation}
-    \notready
-    \discussion{10284}
+    \leanok
     \uses{def:two_block_uncle_tensor, def:injective}
     Let $A_i\in\mathcal M_a$, $B_i\in\mathcal M_b$ and let $R_i,L_i$
     have matching rectangular sizes. Suppose the matrices
@@ -101,6 +100,7 @@ one scalar need not be a similarity transformation.
     % Source: Papers/1210.6613/UncleHMPS.tex, lemma:inj-perturbation, lines 973--1016.
 \end{lemma}
 \begin{proof}
+    \leanok
     Since the $T_i$ span the full algebra, choose coefficients $c_i$ with
     $\sum_i c_iT_i=\Id$. Their four block identities are
     $\sum_i c_iA_i=\Id_a$, $\sum_i c_iB_i=\Id_b$ and
@@ -166,8 +166,7 @@ one scalar need not be a similarity transformation.
     \label{cor:uncle_parent_limit_injective_perturbation}
     \lean{MPSTensor.tendsto_parentInteractionES_twoBlockPerturbation_of_isInjective_perturbation,
         MPSTensor.tendsto_parentHamiltonianES_twoBlockPerturbation_of_isInjective_perturbation}
-    \notready
-    \discussion{10284}
+    \leanok
     \uses{lem:uncle_injective_perturbation, thm:two_block_uncle_parent_limit}
     If the full matrices $T_i$ of Lemma~\ref{lem:uncle_injective_perturbation}
     span $\mathcal M_{a+b}$, then the canonical interactions of
@@ -177,6 +176,7 @@ one scalar need not be a similarity transformation.
     $\varepsilon\to0$ through nonzero complex values.
 \end{lemma}
 \begin{proof}
+    \leanok
     The perturbation hypothesis gives injectivity of $U$ by
     Lemma~\ref{lem:uncle_injective_perturbation}. Apply
     Lemma~\ref{thm:two_block_uncle_parent_limit}.
@@ -190,3 +190,174 @@ interpretation. Arbitrary diagonal perturbations
 $P,Q$ have the same limit for fixed $A,B,R,L$. No assertion about generic
 perturbations, an algebraic exceptional set, gaplessness, or an
 infinite-volume Hamiltonian is included here.
+
+\begin{lemma}[Parent sectors in the uncle kernel]
+    \label{lem:uncle_parent_sector_containment}
+    \lean{MPSTensor.groundSpaceMap_uncleTensor_left,
+        MPSTensor.groundSpaceMap_uncleTensor_right,
+        MPSTensor.groundSpace_blockTensor_le_uncleTensor_left,
+        MPSTensor.groundSpace_blockTensor_le_uncleTensor_right,
+        MPSTensor.uncleInteractionES_apply_eq_zero_left,
+        MPSTensor.uncleInteractionES_apply_eq_zero_right,
+        MPSTensor.uncleHamiltonianES_apply_eq_zero_of_mem_chainGroundSpace_left,
+        MPSTensor.uncleHamiltonianES_apply_eq_zero_of_mem_chainGroundSpace_right,
+        MPSTensor.span_mpv_le_ker_uncleHamiltonianES}
+    \leanok
+    \uses{def:two_block_uncle_tensor,thm:two_block_uncle_parent_limit,
+        def:ground_space_map,def:chain_ground_space}
+    Let $A,B,R,L$ have the matching block sizes in
+    (\ref{eq:uncle_explicit_tensor}), with no injectivity assumption.
+    The two-site spaces $\mathcal G_2(A)$ and $\mathcal G_2(B)$ lie in
+    $\ker h'_P$. At every periodic length $N\ge2$, the uncle Hamiltonian
+    annihilates every vector satisfying the two-site parent constraints of
+    either sector. In particular,
+    \begin{align}
+        \operatorname{span}\{\ket{V^{(N)}(A)},\ket{V^{(N)}(B)}\}
+         & \subseteq\ker H'_P.
+    \end{align}
+    This is the containment direction of
+    \cite[ground-space theorem]{FernandezGonzalez2015Uncle}.
+\end{lemma}
+\begin{proof}
+    \leanok
+    A boundary matrix supported on the first diagonal virtual block pairs
+    with $U_{ij}$ as $\operatorname{tr}(A_iA_jX)$; one on the second block
+    gives $\operatorname{tr}(B_iB_jX)$. Hence both parent spaces lie in the
+    range defining the uncle projector. Their orthogonal-complement
+    projector vanishes on these spaces. Restricting a vector satisfying
+    either sector's parent constraints to each cyclic window therefore
+    gives zero in every translated uncle term. Summation proves the claim.
+    Equality of the kernel requires the separate intersection and closure
+    properties and is not concluded from this inclusion.
+\end{proof}
+
+\begin{lemma}[Local conditions for the uncle kernel]
+    \label{lem:uncle_kernel_local_conditions}
+    \lean{MPSTensor.uncleInteractionES_isPositive,
+        MPSTensor.uncleHamiltonianES_isPositive,
+        MPSTensor.uncleInteractionES_apply_eq_zero_iff,
+        MPSTensor.uncleHamiltonianES_apply_eq_zero_iff}
+    \leanok
+    \uses{thm:two_block_uncle_parent_limit,def:two_block_uncle_tensor}
+    The local interaction and every finite periodic Hamiltonian are positive.
+    At each periodic length $N\ge2$, a vector is in $\ker H'_P$ if and only
+    if every cyclic two-site slice lies in $\ker h'_P$. After grouping its
+    two physical sites, this local kernel is precisely the boundary-map
+    range of $U$. The statement does not require injectivity.
+\end{lemma}
+\begin{proof}
+    \leanok
+    The local interaction is an orthogonal-complement projector conjugated
+    by the physical configuration isometry, hence positive. Write
+    $\mathcal R_{i,\tau}$ for the restriction of a configuration to the
+    cyclic two-site window at $\tau$. Every cyclic summand has the form
+    $\mathcal R_{i,\tau}^*h'_P\mathcal R_{i,\tau}$ and is positive. For
+    positive physical dimension, the averaging coefficient is strictly
+    positive, so the kernel of their sum is their common kernel. Vanishing
+    of $\mathcal R_{i,\tau}^*h'_P\mathcal R_{i,\tau}$ on a vector forces the nonnegative quadratic form of
+    $h'_P$ on its slice to vanish, and therefore forces the slice into
+    $\ker h'_P$. The converse is immediate. At physical dimension zero,
+    the full configuration space is empty and the assertion holds directly.
+\end{proof}
+
+\subsection{Single-domain-wall boundary spaces and intersection}
+
+\begin{definition}[The four boundary sectors]
+    \label{def:uncle_boundary_space}
+    \lean{MPSTensor.uncleBoundaryWord}
+    \lean{MPSTensor.uncleDomainWallWord_eq_sum}
+    \lean{MPSTensor.uncleBoundaryWord_block}
+    \lean{MPSTensor.uncleBoundarySpace}
+    \leanok
+    \uses{def:two_block_uncle_tensor}
+    Write $T_i=\left(\begin{smallmatrix}A_i&R_i\\L_i&B_i\end{smallmatrix}\right)$.
+    For a word $w=(i_1,\ldots,i_n)$, let $F(w)$ have diagonal blocks
+    $A_{i_1}\cdots A_{i_n}$ and $B_{i_1}\cdots B_{i_n}$ and off-diagonal blocks
+    \begin{align}
+        F(w)_{12} & =\sum_{k=1}^n A_{i_1}\cdots A_{i_{k-1}}R_{i_k}B_{i_{k+1}}\cdots B_{i_n}, \\
+        F(w)_{21} & =\sum_{k=1}^n B_{i_1}\cdots B_{i_{k-1}}L_{i_k}A_{i_{k+1}}\cdots A_{i_n}.
+    \end{align}
+    Empty products are identities. Define
+    $S_n=\{(\tr(F(w)X))_w:X\in\mathcal M_{a+b}\}$.
+    This is exactly the sum of the two uniform sectors and the two sectors
+    containing one domain wall in
+    \cite[equation defining $S_n$, Appendix intersection proof]{FernandezGonzalez2015Uncle}.
+\end{definition}
+
+\begin{lemma}[Two-site boundary words]
+    \label{lem:uncle_boundary_length_two}
+    \lean{MPSTensor.uncleBoundaryMap_two}
+    \leanok
+    \uses{def:uncle_boundary_space, def:two_block_uncle_tensor}
+    For every $X\in\mathcal M_{a+b}$, the vector $(\tr(F(i,j)X))_{i,j}$ is
+    the two-site vector of $X$ built from the matrices $U_{ij}$ in
+    (\ref{eq:uncle_explicit_tensor}). Hence $S_2$ is the two-site uncle
+    boundary space.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Expanding $F(i,j)$ and $U_{ij}$ blockwise gives the same four blocks.
+\end{proof}
+
+\begin{definition}[The boundary product]
+    \label{def:uncle_boundary_product}
+    \lean{MPSTensor.uncleBoundaryMul}
+    \lean{MPSTensor.uncleBoundaryMul_block}
+    \leanok
+    \uses{def:uncle_boundary_space}
+    On block matrices in $\mathcal M_{a+b}$ define
+    \begin{align}
+        (A,R,L,B)\star(A',R',L',B')
+         & =(AA',AR'+RB',LA'+BL',BB').
+    \end{align}
+\end{definition}
+
+\begin{lemma}[The boundary product is associative and unital]
+    \label{lem:uncle_boundary_product_monoid}
+    \lean{MPSTensor.uncleBoundaryMul_assoc}
+    \lean{MPSTensor.one_uncleBoundaryMul}
+    \lean{MPSTensor.uncleBoundaryMul_one}
+    \leanok
+    \uses{def:uncle_boundary_product}
+    The product $\star$ is associative, and the identity matrix is a
+    two-sided unit.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Compare the four blocks; each is a sum of products of the original
+    blocks, associated in the same way on both sides.
+\end{proof}
+
+\begin{lemma}[Intersection of single-wall spaces]
+    \label{lem:uncle_boundary_intersection}
+    \lean{MPSTensor.uncleBoundary_span_eq_top_succ}
+    \lean{MPSTensor.mem_uncleBoundarySpace_of_overlap}
+    \lean{MPSTensor.uncleBoundarySpace_intersection}
+    \leanok
+    \uses{def:uncle_boundary_space}
+    Suppose the full matrices $T_i$ span $\mathcal M_{a+b}$. For every
+    $n\geq2$, the vectors whose restrictions at the first and last sites
+    belong to $S_n$ are exactly $S_{n+1}$. Moreover, the matrices $F(w)$ span
+    the full matrix space at every positive word length.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{lem:uncle_boundary_product_monoid}
+    Choose $c_i$ with $\sum_i c_iT_i=I$. Concatenation of the coefficient
+    words uses the associative product $\star$ of
+    Definition~\ref{def:uncle_boundary_product}.
+    Consequently, contracting the first site by $c_i$ removes that site,
+    and induction gives the full coefficient span at every positive length.
+    Given the two overlapping descriptions, write their boundary matrices
+    as $X_k$ and $Y_i$, with $i$ and $k$ the first and last physical labels.
+    Compatibility and the same contraction give, for every middle word $w$,
+    \begin{align}
+        \tr(F(w)X_k) & =\tr(F(wk)Z), & Z & =\sum_i c_iY_i.
+    \end{align}
+    The positive-length middle words span all matrices. Thus this equality
+    extends to every middle coefficient, and evaluation on each longer
+    prefix yields the single boundary $Z$ on all $n+1$ sites.
+    The forward inclusion follows by moving a fixed letter through the
+    bilinear trace pairing. This is the coefficient argument of the source
+    Appendix; it assumes neither an intersection identity nor a closure identity.
+\end{proof}

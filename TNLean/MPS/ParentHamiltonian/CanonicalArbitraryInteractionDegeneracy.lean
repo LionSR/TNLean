@@ -33,7 +33,7 @@ namespace MPSTensor
 variable {d D : ℕ} {A : MPSTensor d D}
 
 /-- At the source volume bound, any positive periodic interaction annihilating
-the original canonical vector annihilates every actual block vector.
+the original canonical vector annihilates every block vector.
 The simultaneous span and all individual local annihilation equations are
 derived. Source: PGVWC07, Theorem 11 (`2blocks.1`), lines 1407–1422;
 standing block hypotheses at lines 1314–1330. -/

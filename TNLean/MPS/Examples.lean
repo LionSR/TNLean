@@ -29,14 +29,17 @@ import TNLean.MPS.Examples.ClusterPhysicalStringOrder
 import TNLean.MPS.Examples.ClusterReview
 import TNLean.MPS.Examples.ClusterSPTFixedPoint
 import TNLean.MPS.Examples.ClusterSourceGroundState
+import TNLean.MPS.Examples.CyclicWielandt
 import TNLean.MPS.Examples.EvenParity
 import TNLean.MPS.Examples.Fibonacci
+import TNLean.MPS.Examples.FiniteSetWeakHopf
 import TNLean.MPS.Examples.GHZ
 import TNLean.MPS.Examples.GHZCluster
 import TNLean.MPS.Examples.GHZClusterAction
 import TNLean.MPS.Examples.GHZGInjective
 import TNLean.MPS.Examples.GHZParentHamiltonian
 import TNLean.MPS.Examples.GHZQudit
+import TNLean.MPS.Examples.HardTruncationCutoff
 import TNLean.MPS.Examples.Ising
 import TNLean.MPS.Examples.KitaevChain
 import TNLean.MPS.Examples.KleinSymmetry
@@ -60,6 +63,7 @@ import TNLean.MPS.Examples.PVBSHamiltonian
 import TNLean.MPS.Examples.PVBSLocalInteraction
 import TNLean.MPS.Examples.PVBSLocalization
 import TNLean.MPS.Examples.PVBSPeriodicGroundSpace
+import TNLean.MPS.Examples.PauliWielandt
 import TNLean.MPS.Examples.PeriodicFullRingPhase
 import TNLean.MPS.Examples.PeriodicStringExamples
 import TNLean.MPS.Examples.ProductState
@@ -72,6 +76,7 @@ import TNLean.MPS.Examples.SpinOne
 import TNLean.MPS.Examples.SpinOperator
 import TNLean.MPS.Examples.StringOrderScalarPhase
 import TNLean.MPS.Examples.WState
+import TNLean.MPS.Examples.WStateBlocking
 import TNLean.MPS.Examples.WStateCanonicalBound
 import TNLean.MPS.Examples.WStatePeriodic
 import TNLean.MPS.Examples.WStatePrimeLengthBound

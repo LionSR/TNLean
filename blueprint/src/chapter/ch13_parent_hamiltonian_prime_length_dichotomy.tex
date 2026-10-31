@@ -10,7 +10,7 @@ recorded in \cite{gap:spwc10_ground_state_dichotomy_quantifiers}.
 \begin{lemma}[Actual normal blocks at lengths without small divisors]
     \label{lem:normal_blocks_no_small_divisor}
     \lean{MPSTensor.exists_normal_blocks_of_no_small_divisor}
-    \notready
+    \leanok
     Let $A$ have physical dimension $d$, bond dimension $D$, and chain length
     $N\ge2$. Suppose no integer $m$ with $2\le m\le D$ divides $N$. There
     exist $b\le D$ blocks $B_j$ of positive bond dimensions $D_j\le D$ and
@@ -24,7 +24,7 @@ recorded in \cite{gap:spwc10_ground_state_dichotomy_quantifiers}.
     Distinct retained blocks are inequivalent under a gauge and a phase.
     The decomposition and all these properties are derived from $A$.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     Reduce $A$ to canonical blocks and choose their periodic representatives.
     Each nontrivial period is at most $D$ and does not divide $N$, so its
     periodic vector vanishes. The general Wielandt bound gives injectivity
@@ -36,7 +36,7 @@ recorded in \cite{gap:spwc10_ground_state_dichotomy_quantifiers}.
     \label{lem:prime_small_representation_fixed_tensor}
     \lean{MPSTensor.exists_normal_eventual_ground_data_of_prime_length_bound,
         MPSTensor.exists_eventually_fixed_mps_of_prime_length_bound}
-    \notready
+    \leanok
     \uses{lem:normal_blocks_no_small_divisor,
         lem:finite_volume_local_kernel_inclusion, lem:local_mps_kernel_all_volumes}
     Let $h\ge0$ act on $L$ sites, and assume $\dim\ker H_M=1$ for every
@@ -55,7 +55,7 @@ recorded in \cite{gap:spwc10_ground_state_dichotomy_quantifiers}.
         \label{eq:prime_small_representation_fixed_tensor}
     \end{align}
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     \uses{lem:normal_blocks_no_small_divisor,
         lem:finite_volume_local_kernel_inclusion, lem:local_mps_kernel_all_volumes}
     The threshold gives $D<N$, so primality permits
@@ -71,7 +71,7 @@ recorded in \cite{gap:spwc10_ground_state_dichotomy_quantifiers}.
 \begin{theorem}[Fixed eventual tensor or a prime-length fifth-degree obstruction]
     \label{thm:eventual_mps_prime_length_dichotomy}
     \lean{MPSTensor.eventually_fixed_mps_or_prime_length_bound}
-    \notready
+    \leanok
     \discussion{10280}
     \uses{lem:prime_small_representation_fixed_tensor}
     Let $h\ge0$ be one fixed $L$-site interaction, and assume
@@ -90,7 +90,7 @@ recorded in \cite{gap:spwc10_ground_state_dichotomy_quantifiers}.
     formulation is separate; see
     \cite{gap:spwc10_ground_state_dichotomy_quantifiers}.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     \uses{lem:prime_small_representation_fixed_tensor}
     If the eventual fixed-tensor alternative fails, the contrapositive of
     Lemma~\ref{lem:prime_small_representation_fixed_tensor} gives the displayed
