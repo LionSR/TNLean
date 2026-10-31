@@ -23,6 +23,8 @@ Source: arXiv:1703.09188, canonical replacement, lines 319--356,
 `prop:sigma1-and-sigma2-equal`, lines 1643--1733.
 -/
 
+open scoped Matrix
+
 namespace MPOTensor
 
 variable {d D E : ℕ}
@@ -56,10 +58,10 @@ theorem IsMPU.intrinsic_blocking_trace_parity
     [NeZero d] [NeZero D] {U : MPOTensor d D} (hU : IsMPU U)
     (hTR : ∀ N : ℕ, 1 < N → Even N → mpo U N = (mpo U N)ᴴ) :
     ∀ k : ℕ, 0 < k →
-      (Odd k → intrinsicTimeReversalSign (blockTensor U k) =
+      (Odd k → intrinsicTimeReversalSign (MPOTensor.blockTensor U k) =
         intrinsicTimeReversalSign U) ∧
-      (Even k → intrinsicTimeReversalSign (blockTensor U k) =
-        intrinsicTimeReversalSign (blockTensor U 2)) := by
+      (Even k → intrinsicTimeReversalSign (MPOTensor.blockTensor U k) =
+        intrinsicTimeReversalSign (MPOTensor.blockTensor U 2)) := by
   obtain ⟨Dred, _, V, hV, _, hMpo⟩ := hU.exists_reduced_cfii_representative
   have hEq : ∀ N : ℕ, 0 < N → mpo U N = mpo V N :=
     fun N hN ↦ (hMpo N hN).symm
