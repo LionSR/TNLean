@@ -21,7 +21,10 @@ constant along the path. No continuous choice of canonical data is required.
 source allows the path to leave canonical form and compares ranks of reduced
 representatives. The results here apply to the tensors of the path themselves
 under a canonical-form-II hypothesis at each point. See
-`docs/paper-gaps/mpu_canonical_form_full_support.tex`.
+`docs/paper-gaps/mpu_canonical_form_full_support.tex`. The unrestricted
+proposition is proved in `TNLean.MPS.MPU.GeneralIndexContinuity` from the
+general fixed-product constancy theorem `sourceRanks_const_of_fixed_product`
+stated here.
 
 ## References
 
@@ -45,19 +48,34 @@ private theorem continuous_sourceCutM₂ :
   unfold sourceCutM₂
   fun_prop
 
-private theorem lowerSemicontinuous_rightRank_blockTensor
-    {X : Type*} [TopologicalSpace X] {W : X → MPOTensor d D}
-    (hW : Continuous W) (k : ℕ) :
-    LowerSemicontinuous (fun x => r[blockTensor (W x) k]) := by
-  change LowerSemicontinuous (fun x => (sourceCutM₁ (blockTensor (W x) k)).rank)
-  exact ((continuous_sourceCutM₁.comp (hW.blockTensor k))).lowerSemicontinuous_matrix_rank
+/-- The right source rank is lower semicontinuous along a continuous family of
+tensors. Source: arXiv:1703.09188, Proposition `prop:continuity-index`,
+lines 813--814. -/
+theorem lowerSemicontinuous_rightRank
+    {X : Type*} [TopologicalSpace X] {V : X → MPOTensor d D} (hV : Continuous V) :
+    LowerSemicontinuous (fun x => r[V x]) := by
+  change LowerSemicontinuous (fun x => (sourceCutM₁ (V x)).rank)
+  exact (continuous_sourceCutM₁.comp hV).lowerSemicontinuous_matrix_rank
 
-private theorem lowerSemicontinuous_leftRank_blockTensor
-    {X : Type*} [TopologicalSpace X] {W : X → MPOTensor d D}
-    (hW : Continuous W) (k : ℕ) :
-    LowerSemicontinuous (fun x => ℓ[blockTensor (W x) k]) := by
-  change LowerSemicontinuous (fun x => (sourceCutM₂ (blockTensor (W x) k)).rank)
-  exact ((continuous_sourceCutM₂.comp (hW.blockTensor k))).lowerSemicontinuous_matrix_rank
+/-- The left source rank is lower semicontinuous along a continuous family of
+tensors. Source: arXiv:1703.09188, Proposition `prop:continuity-index`,
+lines 813--814. -/
+theorem lowerSemicontinuous_leftRank
+    {X : Type*} [TopologicalSpace X] {V : X → MPOTensor d D} (hV : Continuous V) :
+    LowerSemicontinuous (fun x => ℓ[V x]) := by
+  change LowerSemicontinuous (fun x => (sourceCutM₂ (V x)).rank)
+  exact (continuous_sourceCutM₂.comp hV).lowerSemicontinuous_matrix_rank
+
+/-- A continuous path of tensors has constant source ranks when their product
+is a fixed positive number. Source: arXiv:1703.09188,
+Proposition `prop:continuity-index`, lines 813--818. -/
+theorem sourceRanks_const_of_fixed_product
+    {V : unitInterval → MPOTensor d D} (hV : Continuous V)
+    (c : ℕ) (hc : 0 < c) (hprod : ∀ x, r[V x] * ℓ[V x] = c)
+    (x y : unitInterval) :
+    r[V x] = r[V y] ∧ ℓ[V x] = ℓ[V y] :=
+  unitInterval_eq_of_lowerSemicontinuous_nat_mul_eq
+    (lowerSemicontinuous_rightRank hV) (lowerSemicontinuous_leftRank hV) hc hprod x y
 
 /-- A continuous path of blocked tensors has constant source ranks when their
 product is a fixed positive number. Source: arXiv:1703.09188,
@@ -68,10 +86,8 @@ theorem sourceRanks_blockTensor_const_of_fixed_product
     (hprod : ∀ x, r[blockTensor (W x) k] * ℓ[blockTensor (W x) k] = c)
     (x y : unitInterval) :
     r[blockTensor (W x) k] = r[blockTensor (W y) k] ∧
-      ℓ[blockTensor (W x) k] = ℓ[blockTensor (W y) k] := by
-  exact unitInterval_eq_of_lowerSemicontinuous_nat_mul_eq
-    (lowerSemicontinuous_rightRank_blockTensor hW k)
-    (lowerSemicontinuous_leftRank_blockTensor hW k) hc hprod x y
+      ℓ[blockTensor (W x) k] = ℓ[blockTensor (W y) k] :=
+  sourceRanks_const_of_fixed_product (hW.blockTensor k) c hc hprod x y
 
 /-- The source ranks of the common simple block of length `D ^ 4` are
 constant along a continuous path of canonical-form-II tensors.
