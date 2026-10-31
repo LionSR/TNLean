@@ -1,0 +1,68 @@
+\subsection{Arbitrary finite buffers of a directly supplied tensor}
+\label{sec:mpu_direct_supplied_window}
+
+Let $W$ have physical size $d^2$ and supplied two-site standard-form gates
+$u:\mathbb C^d\otimes\mathbb C^d\to\mathbb C^\ell\otimes\mathbb C^r$
+and $v:\mathbb C^r\otimes\mathbb C^\ell\to\mathbb C^d\otimes\mathbb C^d$.
+No preimage of $W$ under tensor blocking is assumed. This is the finite
+standard-form calculation underlying
+\cite[equation~StandardForm, lines~603--622 and~2300--2306]{Cirac2017MPU},
+in the explicitly supplied-data scope of
+\cite{gap:mpu_qca_complete_block_heisenberg_scope}.
+
+\begin{definition}[Complete supplied-window coordinates]
+    \label{def:mpu_supplied_window_coordinates}
+    \lean{MPOTensor.twoSiteSuppliedInputEquiv,
+        MPOTensor.twoSiteSuppliedOutputEquiv,
+        MPOTensor.twoSiteSuppliedHeisenbergMatrix}
+    \leanok
+    For arbitrary prefix and suffix lengths $p,s\ge0$, write $N=p+3+s$.
+    The full input coordinates separate the $p$ prefix cells, the first
+    and third input cells of the central window, the middle input
+    half-pair, and the $s$ suffix cells. The full output coordinates
+    separate the same prefix and suffix, the two exterior half-sites,
+    and the four output half-sites. Let $e_i,e_o$ be these bijections
+    onto the full configuration set, and let
+    \begin{align}
+        M_{p,s} & =e_o^{-1}\operatorname{MPO}_W(N)e_i
+    \end{align}
+    denote the periodic matrix in these two coordinate systems.
+\end{definition}
+
+\begin{lemma}[Full finite intertwining and conjugation with arbitrary buffers]
+    \label{lem:mpu_direct_supplied_window_conjugation}
+    \lean{MPOTensor.twoSiteSuppliedHeisenbergMatrix_intertwiner,
+        MPOTensor.twoSiteSuppliedHeisenbergMatrix_isUnitaryBetween,
+        MPOTensor.twoSiteSuppliedHeisenbergMatrix_conjugation,
+        MPOTensor.mpo_suppliedWindow_conjugation}
+    \leanok
+    \uses{def:mpu_supplied_window_coordinates,thm:mpu_finite_heisenberg_complete_block}
+    Let $\Phi_{u,v}(A)$ be the actual four-half-site output observable.
+    For every input half-pair matrix $A$ and arbitrary $p,s\ge0$,
+    \begin{align}
+        M_{p,s}(I_{\rm in}\otimes A)
+         & =(I_{\rm out}\otimes\Phi_{u,v}(A))M_{p,s},\notag \\
+        M_{p,s}(I_{\rm in}\otimes A)M_{p,s}^*
+         & =I_{\rm out}\otimes\Phi_{u,v}(A).
+    \end{align}
+    The matrix $M_{p,s}$ is unitary between the two complete coordinate
+    spaces. In the original configuration coordinates,
+    \begin{align}
+        \operatorname{MPO}_W(N)\,
+        e_i(I_{\rm in}\otimes A)e_i^{-1}\,
+        \operatorname{MPO}_W(N)^*
+         & =e_o(I_{\rm out}\otimes\Phi_{u,v}(A))e_o^{-1}.
+    \end{align}
+    The actual periodic matrix, both buffers and the periodic seam remain
+    present. No output-locality identity or additional blocking is a premise.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Attach the prefix and suffix words to the existing open three-block
+    intertwiner and take their actual virtual trace. The complete
+    coordinate bijections lift the resulting coefficient identity to
+    the full finite matrix product. The supplied standard form makes
+    the actual periodic matrix unitary for $N\ge3$; cancelling its
+    adjoint gives conjugation. Reindex both matrix products to obtain
+    the original-coordinate formula.
+\end{proof}

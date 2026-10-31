@@ -22,6 +22,13 @@ a uniform cyclic neighborhood remains a separate step.
 
 Source: arXiv:1703.09188, StandardForm/SF, lines 603–622, and
 Appendix eq:appendix-1, lines 2292–2306.
+
+**Scope restriction (supplied standard form):** These results consume
+actual MPU unitarity, a positive block length and supplied two-site
+standard-form data, and their neighbourhoods are measured in that block
+length. The standard-form construction from bare MPU data and the source
+bond-dimension radius remain separate. See
+`docs/paper-gaps/mpu_qca_complete_block_heisenberg_scope.tex`.
 -/
 
 namespace SpinChain
@@ -61,7 +68,8 @@ theorem finiteChainConjugation_symm_mem_range_of_twoSiteStandardForm_buffers
   have hd : d ≠ 0 := by
     intro hd
     have hpos := S.phys_pos
-    simp [MPSTensor.blockPhysDim_eq_pow, hd, hk.ne'] at hpos
+    simp only [MPSTensor.blockPhysDim_eq_pow, hd, zero_pow hk.ne'] at hpos
+    omega
   let : NeZero d := ⟨hd⟩
   apply inverse_mem_range_localInclusion_of_forward_support hJ hK
     (finiteChainConjugation hU hN a) B
@@ -74,7 +82,7 @@ theorem finiteChainConjugation_symm_mem_range_of_twoSiteStandardForm_buffers
     simp only [Δ, finiteChainRegion, Finset.mem_Ico] at *
     dsimp [b] at *
     omega
-  let hsingle : ({x} : Finset ℤ) ⊆ finiteChainRegion (b + (2 * k : ℕ)) (2 * k) := by
+  have hsingle : ({x} : Finset ℤ) ⊆ finiteChainRegion (b + (2 * k : ℕ)) (2 * k) := by
     intro y hy
     have hyx := Finset.mem_singleton.mp hy
     subst y
