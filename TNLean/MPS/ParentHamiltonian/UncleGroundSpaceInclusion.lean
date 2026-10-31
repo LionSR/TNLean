@@ -117,11 +117,8 @@ private theorem uncleInteractionES_apply_eq_zero_of_blocked_groundSpace
   have hwU : w ∈ groundSpaceES (uncleTensor A B R L) 1 := by
     apply (mem_groundSpaceES_iff _ _ w).mpr
     exact hC ((mem_groundSpaceES_iff _ _ w).mp hw)
-  have hkill : parentInteractionES (uncleTensor A B R L) 1 w = 0 := by
-    change (groundSpaceES (uncleTensor A B R L) 1)ᗮ.starProjection w = 0
-    rw [Submodule.starProjection_orthogonal']
-    simp only [sub_apply, one_apply_eq_self]
-    rw [Submodule.starProjection_eq_self_iff.mpr hwU, sub_self]
+  have hkill : parentInteractionES (uncleTensor A B R L) 1 w = 0 :=
+    (parentInteractionES_apply_eq_zero_iff (uncleTensor A B R L) 1 w).mpr hwU
   change blockedConfigLinearIsometryEquiv d 1 2
       (parentInteractionES (uncleTensor A B R L) 1
         ((blockedConfigLinearIsometryEquiv d 1 2).symm

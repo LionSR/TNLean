@@ -1,0 +1,120 @@
+\section{Five consecutive regions and their original bonds}
+
+\begin{definition}[Internal bonds and regional sums]
+    \label{def:five_region_bond_partition}
+    \uses{def:chain_model}
+    For a chain of $L$ sites put $\mathcal B_L=\{i\in\N:i+1<L\}$ and,
+    for arbitrary $l,h\in\N$, set
+    \begin{align}
+        R(l,h) & =\{v<L:l\le v<h\},\notag              \\
+        I(l,h) & =\{i\in\mathcal B_L:l\le i,\ i+1<h\}.
+    \end{align}
+    Given $k_1\le k_2\le k_3\le k_4$, put $k_0=0$, $k_5=L$ and
+    $I_j=I(k_j,k_{j+1})$, $A_j=\sum_{i\in I_j}h_i$ for $0\le j<5$.
+    Set $J=\{i\in\mathcal B_L:i+1\in\{k_1,k_2,k_3,k_4\}\}$ and
+    $Y=\sum_{i\in J}h_i$. All site sets are intersected with the finite chain.
+\end{definition}
+
+\begin{lemma}[Support of an internal bond]
+    \label{thm:internal_bond_region_subset}
+    \lean{TNLean.MPS.AreaLaw.internal_bond_support_subset,
+        TNLean.MPS.AreaLaw.isSupportedOn_sum_internal_bonds}
+    \leanok
+    \uses{def:five_region_bond_partition}
+    If $i\in I(l,h)$, then $\{i,i+1\}\subseteq R(l,h)$. Consequently,
+    a sum of interactions supported on these internal bonds is supported on
+    $R(l,h)$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    The inequalities $l\le i$ and $i+1<h$ hold by definition; both sites
+    lie in the chain because $i+1<L$. Support is preserved by finite sums.
+\end{proof}
+
+\begin{lemma}[The number of internal bonds]
+    \label{thm:internal_bond_card_bound}
+    \lean{TNLean.MPS.AreaLaw.card_internal_bonds_le}
+    \leanok
+    \uses{def:five_region_bond_partition}
+    For arbitrary $L,l,h\in\N$, one has
+    $|I(l,h)|\le\max\{h-l-1,0\}$, where subtraction inside the maximum
+    is integer subtraction. Empty and out-of-range intervals are included.
+\end{lemma}
+\begin{proof}
+    \leanok
+    If $h\le l+1$ there are no internal bonds. Otherwise every bond start
+    lies between $l$ and $h-2$, giving at most $h-l-1$ choices.
+\end{proof}
+
+\begin{lemma}[Commutation of consecutive internal sums]
+    \label{thm:consecutive_internal_sums_commute}
+    \lean{TNLean.MPS.AreaLaw.pairwise_commute_sum_internal_consecutive_regions}
+    \leanok
+    \uses{def:five_region_bond_partition}
+    Let $k_0\le\cdots\le k_m$ be natural numbers. If every $h_i$ is
+    supported on $\{i,i+1\}$, the operators
+    $\sum_{i\in I(k_j,k_{j+1})}h_i$, $0\le j<m$, commute pairwise.
+    No positivity or Hermiticity assumption is needed.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{thm:internal_bond_region_subset}
+    Each sum is supported on $R(k_j,k_{j+1})$. These regions are pairwise
+    disjoint, so their supported operators commute.
+\end{proof}
+
+\begin{lemma}[The additive five-region decomposition]
+    \label{thm:five_region_additive_partition}
+    \lean{Finset.sum_five_internal_regions_add_crossings}
+    \leanok
+    \uses{def:five_region_bond_partition}
+    For $k_1\le k_2\le k_3\le k_4$ and arbitrary values $h_i$ in an
+    additive commutative monoid,
+    \begin{align}
+        \sum_{i\in\mathcal B_L}h_i=\sum_{j=0}^4A_j+Y.
+    \end{align}
+    No upper bound on the cut positions is required for this identity.
+\end{lemma}
+\begin{proof}
+    \leanok
+    A bond either has its right endpoint at one of the four cuts or is
+    internal to exactly one of the five regions. Partition the finite sum
+    according to these alternatives. Repeated cuts contribute only once
+    to the crossing set.
+\end{proof}
+
+\begin{lemma}[Original regional support and order budgets]
+    \label{thm:five_region_original_bond_bounds}
+    \lean{TNLean.MPS.AreaLaw.five_region_original_bond_data}
+    \leanok
+    \uses{def:five_region_bond_partition}
+    Suppose $k_4\le L$, $0\le h_i\le\Id$, and $h_i$ is supported on
+    $\{i,i+1\}$. Then $(k_j)_{j=0}^5$ is monotone, the regions
+    $R_j=R(k_j,k_{j+1})$ are pairwise disjoint, and $A_j$ is supported
+    on $R_j$. In addition,
+    \begin{align}
+        0\le A_j & \le |I_j|\Id, & 0\le Y     & \le |J|\Id,\notag   \\
+        |J|      & \le4,         & \sum_i h_i & =\sum_{j=0}^4A_j+Y.
+    \end{align}
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{thm:internal_bond_region_subset,thm:five_region_additive_partition}
+    Support follows term by term, and positive unit bounds add.
+    Each crossing bond is determined by its right endpoint, so there are
+    at most four. Apply the additive partition to the original operators.
+\end{proof}
+
+\begin{lemma}[The clipping budget with an independent threshold]
+    \label{thm:five_region_independent_budget}
+    \lean{Real.five_region_final_clipping_budget_le}
+    \leanok
+    Let $\ell\ge1$ and $t\in\R$, let $c_0,\ldots,c_4,C$ be natural numbers with
+    $c_1,c_3\le2\ell-2$ and $C\le4$, and put $K=\{0,2,4\}$.
+    Then $\sum_{j\in K}t+\sum_{j\notin K}c_j+C\le3t+4\ell$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    The left side is $3t+c_1+c_3+C$, at most
+    $3t+2(2\ell-2)+4=3t+4\ell$.
+\end{proof}

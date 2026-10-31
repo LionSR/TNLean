@@ -160,7 +160,10 @@ private theorem unitaryBetween_mul_pullThrough
   rw [Matrix.mul_assoc, Matrix.mul_assoc, hU.1]
   simp
 
-private noncomputable def twoLinkMiddleLift
+/-- Extend the complete middle matrix by the identity on its exterior
+link factors, in the source order `(r, ℓ, r, ℓ)`.
+Source: arXiv:1703.09188, StandardForm/SF, lines 603–622. -/
+noncomputable def twoLinkMiddleLift
     (C : Matrix (Fin ℓ × Fin r) (Fin ℓ × Fin r) ℂ) :
     Matrix ((Fin r × Fin ℓ) × (Fin r × Fin ℓ))
       ((Fin r × Fin ℓ) × (Fin r × Fin ℓ)) ℂ :=
