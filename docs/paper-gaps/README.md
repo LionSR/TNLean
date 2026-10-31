@@ -209,6 +209,16 @@ For the MPU index of arXiv:1703.09188:
   swap labels in Figure `fig:TR-ancilla` agree with $\widetilde U_3$ and differ
   from the claimed $\widetilde U_2$ endpoint when $N\geq3$ and $d\geq2$, and
   that reversing those crossed swaps gives the intended local correction.
+- `mpu_qca_complete_block_heisenberg_scope.tex` (scope restriction, resolved)
+  records the supplied two-site standard-form scope of the finite MPU
+  Heisenberg identity, the forward and inverse finite propagation built on it
+  with radius measured in the block length, and the canonical and bare-MPU
+  construction of the induced QCA with source radius $4D^4$.
+- `mpu_qca_index_normalization.tex` (local correction) records that the
+  Appendix relation $\operatorname{ind}_{\mathrm{MPU}}=-2\log_2(\ell/d)$
+  conflicts with the defining formula of the MPU index, corrects it to
+  $-\log_2$ of the positive rational QCA index, and records the reversed
+  adjoint order in the printed transport of the left support factor.
 
 For the MPU symmetry-defect gauging paper:
 
@@ -274,6 +284,9 @@ restriction are recorded separately.
 - `gnvw12_support_algebra_full_matrix_scope.tex` records the remaining open
   restriction from arbitrary finite-dimensional $C^*$-algebra factors to
   full complex matrix factors.
+- `gnvw12_shift_example_subscript.tex` records the resolved correction that
+  the scalar support factor in the printed shift example carries the odd
+  subscript, and checks both shift orientations against the index.
 - `sw04_support_covariance_scope.tex` records that the formal
   support-algebra covariance theorem treats star-automorphisms of a homogeneous
   one-dimensional nearest-neighbour chain, while Schumacher--Werner allow
@@ -728,10 +741,11 @@ For the matrix product operator symmetries of arXiv:2203.12563:
   `ℤ₃` phase of `Rep(S₃)` fails the representation identity, and that the
   trivial action of `ψ` is forced by the source's identification of that phase
   with part of `𝓜_TY`.
-- `glm23_reps3_su24_module_list.tex` records that completeness of the listed
-  `Rep(S₃)` and `su(2)₄` phases is formalized only on one block, with a
-  two-block representation of `Rep(S₃)` showing that the representation
-  identity alone does not determine the list.
+- `glm23_reps3_su24_module_list.tex` (scope restriction, resolved) records
+  that completeness of the listed `Rep(S₃)` and `su(2)₄` phases holds on any
+  number of blocks once the duality `M_{a*} = M_aᵀ` of a module category is
+  imposed, with a two-block representation of `Rep(S₃)` showing that the
+  representation identity alone does not determine the list.
 - `glm23_mpo_symmetric_mps_scope.tex` records that the formal layer of fusion
   algebras, symmetric families, and nonnegative integer representations uses
   only the periodic-boundary form of the source's arbitrary-boundary

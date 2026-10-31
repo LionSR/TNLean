@@ -20,6 +20,7 @@ import TNLean.MPS.Core.CorrelationReduction
 import TNLean.MPS.Core.Correlations
 import TNLean.MPS.Core.CyclicTrace
 import TNLean.MPS.Core.CyclicTraceForcedBond
+import TNLean.MPS.Core.ForcedColumnNormality
 import TNLean.MPS.Core.InsertedLeftInverse
 import TNLean.MPS.Core.IsometricBondCompression
 import TNLean.MPS.Core.LetterScaledNormality
@@ -28,6 +29,7 @@ import TNLean.MPS.Core.MultiBlockWord
 import TNLean.MPS.Core.NormalityFromTwoWords
 import TNLean.MPS.Core.ObservableTransfer
 import TNLean.MPS.Core.PhysicalDimension
+import TNLean.MPS.Core.PhysicalEmbedding
 import TNLean.MPS.Core.PhysicalIndexMixing
 import TNLean.MPS.Core.PhysicalMatrix
 import TNLean.MPS.Core.PhysicalReindexTransport

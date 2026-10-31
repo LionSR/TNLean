@@ -48,11 +48,11 @@ simplicity, transitivity, nor finiteness is used.
 open scoped Matrix Kronecker
 open TNLean.Algebra
 
+universe u v
+
 namespace MPOTensor
 
 namespace GroupFamily
-
-universe u v
 
 variable {d : ℕ} {G : Type u} [Group G] {F : GroupFamily G d}
   {X : Type v} [MulAction G X] {D : X → ℕ} {A : (x : X) → MPSTensor d (D x)}
@@ -144,6 +144,8 @@ structure BlockActionData (F : GroupFamily G d) (A : (x : X) → MPSTensor d (D 
   V : ∀ (g : G) (x : X), Matrix (Fin (D (g • x))) (Fin (F.bondDim g * D x)) ℂ
   /-- The right action tensor of `g` on the block `x`. -/
   W : ∀ (g : G) (x : X), Matrix (Fin (F.bondDim g * D x)) (Fin (D (g • x))) ℂ
+  /-- The action tensors `V g x` and `W g x` reduce the action of `g` on the block `x` onto the
+  block `g • x`. -/
   isReduction : ∀ g x,
     MPSTensor.IsReduction (actTensor (F.tensor g) (A x)) (A (g • x)) (V g x) (W g x)
 
@@ -235,6 +237,21 @@ theorem isDressedProportional_lSymbol (hA : ∀ x, Kraus.IsNormal (A x))
         (MPSTensor.SameMPV₂Pos.refl (A x)))
   exact MPSTensor.isDressedProportional_dressedScalar hex
 
+/-- **Uniqueness of the L-symbols**: a scalar `z` with `actV g h x ~ z · fuseV g h x` against
+long words is the L-symbol `Lˣ_{g,h}`. This is how an L-symbol is read off from explicit fusion
+and action tensors.
+
+Source: arXiv:2502.20257, `eq:defL`, `main.tex` lines 1905--1913. -/
+theorem eq_lSymbol_of_isDressedProportional (hA : ∀ x, Kraus.IsNormal (A x))
+    (hD : ∀ x, 0 < D x) (hperm : ∀ g x, CarriesMPV (F.tensor g) (A x) (A (g • x)))
+    {x : X} {g h : G} {z : ℂ}
+    (hz : MPSTensor.IsDressedProportional (actTensor (mulTensor (F.tensor g) (F.tensor h)) (A x))
+      (ad.actV g h x) (ad.fuseV fd g h x) z) :
+    z = ad.lSymbol fd x g h := by
+  obtain ⟨W, hW⟩ := ad.exists_isReduction_actV g h x
+  exact hz.eq_of_forall_exists_ne_zero (isDressedProportional_lSymbol hA hperm x g h)
+    (hW.exists_mul_evalWord_ne_zero (hA _) (hD _))
+
 /-! ### The five reductions of the triple action -/
 
 section Triple
@@ -304,6 +321,9 @@ private theorem fuseV_mul_left :
         (ad.V (g * h * k) x * kronId (fd.leftV g h k) (D x)) := by
   simp only [fuseV, FusionData.leftV, Matrix.mul_assoc, kronId_mul]
 
+set_option maxHeartbeats 800000 in
+-- The target-block identifications `castIndex D …` make elaborating this statement and its
+-- siblings heavier than the invariant-block analogues in `AnomalyObstruction`.
 /-- Fusing `g` with `hk` after fusing `h` with `k` is the fusion tree `rightV` of the
 associator, followed by the action of `ghk`. -/
 private theorem fuseV_mul_right :
@@ -316,6 +336,10 @@ private theorem fuseV_mul_right :
 
 end Triple
 
+set_option maxHeartbeats 800000 in
+-- The permuted-block reductions carry extra target-block identifications `castIndex D …`
+-- throughout, so the pullback bookkeeping is heavier than the invariant-block analogue
+-- `MPOTensor.GroupFamily.ActionData.isCompatible_lSymbol` in `AnomalyObstruction`.
 /-- **Compatibility of the L-symbols of permuted blocks with the anomaly three-cocycle**
 (arXiv:2502.20257, `eq:omega_and_Ls`, `main.tex` lines 1920--1923; arXiv:2203.12563,
 `pentagongroups` and line 1129):

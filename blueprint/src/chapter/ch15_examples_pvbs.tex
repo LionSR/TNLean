@@ -167,8 +167,8 @@ spectral-gap assertion.
 
 \begin{lemma}[Overlapping one-dimensional windows with an entangled cut]
     \label{lem:overlapping_one_dimensional_windows_zero}
-    \lean{MPSPreparation.eq_zero_of_overlapping_one_dimensional_sections}
-    \notready
+    \lean{MPSTensor.eq_zero_of_overlapping_one_dimensional_sections}
+    \leanok
     Let $W_{ab}$ and $V_{bc}$ be two coefficient arrays. Suppose some
     two-by-two minor of $W$ is nonzero. If a three-part coefficient
     array satisfies
@@ -178,28 +178,34 @@ spectral-gap assertion.
     then $\psi=0$.
 \end{lemma}
 \begin{proof}
-    \notready
-    Fix $c$. Multiplying the nonzero minor by $f_c^2$ and substituting
-    the two section identities makes its two products cancel. Thus
-    $f_c^2=0$, whence $f_c=0$ and every coefficient vanishes.
+    \leanok
+    Fix $c$, and let $W_{a_0b_0}W_{a_1b_1}-W_{a_0b_1}W_{a_1b_0}\ne0$ be the
+    nonzero minor. The two section identities give
+    \begin{align}
+        (W_{a_0b_0}W_{a_1b_1}-W_{a_0b_1}W_{a_1b_0})f_c^2
+         & =(f_cW_{a_0b_0})(f_cW_{a_1b_1})-(f_cW_{a_0b_1})(f_cW_{a_1b_0})         \\
+         & =(g_{a_0}V_{b_0c})(g_{a_1}V_{b_1c})-(g_{a_0}V_{b_1c})(g_{a_1}V_{b_0c})
+        =0.
+    \end{align}
+    Thus $f_c^2=0$, whence $f_c=0$ and $\psi_{abc}=f_cW_{ab}=0$.
 \end{proof}
 
 \begin{lemma}[Two pure geometric one-particle windows are incompatible]
     \label{lem:pvbs_pure_window_overlap_zero}
     \lean{MPSTensor.pvbsEdge_first_cut_minor,
         MPSTensor.eq_zero_of_pvbsEdge_overlapping_sections}
-    \notready
+    \leanok
     \uses{def:pvbs_tensor,lem:pvbs_amplitudes,
         lem:overlapping_one_dimensional_windows_zero}
-    For $q\ne0$, the geometric one-particle vector on $n\ge2$ sites has
-    a first-cut minor equal to $q$. Consequently no nonzero vector on
+    The geometric one-particle vector on $n\ge2$ sites has a first-cut
+    minor equal to $q$. Consequently, for $q\ne0$, no nonzero vector on
     $n+1$ sites can have all its first-window sections proportional to
     this vector and all its last-window sections proportional to the
-    same vector. These are actual coefficient sections of the vector
+    same vector. These are coefficient sections of the vector
     on the union.
 \end{lemma}
 \begin{proof}
-    \notready
+    \leanok
     At the first cut take first-site values $1,0$ and tail words equal
     to the vacuum and its first excitation. The coefficient matrix is
     $\left(\begin{smallmatrix}1&0\\0&q\end{smallmatrix}\right)$.
@@ -209,16 +215,18 @@ spectral-gap assertion.
 \begin{lemma}[Right-endpoint one-particle coefficients]
     \label{lem:pvbs_right_endpoint_coefficients}
     \lean{MPSTensor.pvbsVacuum_snoc,MPSTensor.pvbsEdge_snoc}
-    \notready
+    \leanok
     \uses{lem:pvbs_amplitudes}
-    Appending a zero site to the vacuum keeps its amplitude, and
-    appending a particle annihilates it. For the geometric particle
-    vector on $n+1$ sites, a zero at the last site leaves the length-$n$
-    particle amplitude; a particle there has amplitude $q^n$ times the
-    length-$n$ vacuum amplitude.
+    For every word $\sigma$ on $n$ sites,
+    \begin{align}
+        \Omega_{n+1}(\sigma,0)  & =\Omega_n(\sigma),
+                                & \Omega_{n+1}(\sigma,1)  & =0,                   \\
+        \Psi_{n+1}(q)(\sigma,0) & =\Psi_n(q)(\sigma),
+                                & \Psi_{n+1}(q)(\sigma,1) & =q^n\Omega_n(\sigma).
+    \end{align}
 \end{lemma}
 \begin{proof}
-    \notready
+    \leanok
     Use the defining first-site recursion and induction on the number
     of sites. The vacuum condition is equality with the all-zero word.
 \end{proof}
@@ -227,68 +235,29 @@ spectral-gap assertion.
     \label{lem:pvbs_geometric_cyclic_phase}
     \lean{MPSTensor.pvbsEdge_cyclic_step,
         MPSTensor.pvbsEdge_not_cyclic_invariant}
-    \notready
-    \uses{lem:pvbs_right_endpoint_coefficients}
+    \leanok
+    \uses{lem:pvbs_amplitudes, lem:pvbs_right_endpoint_coefficients}
     On a chain of $n\ge1$ sites, if $q^n=1$, rotating the physical
     coefficients by one site satisfies
     \begin{align}
-        q\,W_q(\sigma_1,\ldots,\sigma_{n-1},\sigma_0)=W_q(\sigma).
+        q\,\Psi_n(q)(\sigma_1,\ldots,\sigma_{n-1},\sigma_0)=\Psi_n(q)(\sigma).
     \end{align}
-    For $q\ne1$, the actual coefficient vector is not invariant,
+    For $q\ne1$, the coefficient vector is not invariant,
     although its line is invariant. This is a statement about the
     given one-particle vector, not about a fixed Hamiltonian at all volumes.
 \end{lemma}
 \begin{proof}
-    \notready
+    \leanok
     Move the first site to the right endpoint and apply the preceding
     recursion. The case with a particle at the first site uses
     $q\,q^{n-1}=1$. Exact invariance would force $q=1$ by evaluating the
     first-site excitation, whose amplitude is one.
 \end{proof}
 
-\begin{lemma}[Sections of a positive periodic interaction]
-    \label{lem:periodic_interaction_sections}
-    \lean{MPSTensor.cyclicRestrictES_periodicLocalInteractionES}
-    \lean{MPSTensor.periodicLocalInteractionES_eq_zero_iff_sections}
-    \lean{MPSTensor.periodicInteractionHamiltonianES_eq_zero_iff_sections}
-    \notready
-    For $1\le R\le M$, let $h$ be an operator on $R$ consecutive sites,
-    let $h_i$ be its cyclic translate extended by the identity, and write
-    $R_{i,\tau}\psi$ for the coefficient section with the outside letters
-    fixed to $\tau$. Then $R_{i,\tau}h_i\psi=hR_{i,\tau}\psi$.
-    In particular, $h_i\psi=0$ precisely when $hR_{i,\tau}\psi=0$ for every
-    $\tau$. If $h\ge0$, then
-    $(\sum_i h_i)\psi=0$ precisely when every $hR_{i,\tau}\psi=0$.
-\end{lemma}
-\begin{proof}
-    \notready
-    Extending $h$ by the identity applies it independently to each outside
-    coefficient section. A sum of positive operators kills a vector precisely
-    when every summand kills it.
-\end{proof}
-
-\begin{lemma}[Restriction of an interaction inside an interval]
-    \label{lem:periodic_interaction_interval_section}
-    \lean{MPSTensor.periodicLocalInteractionES_rightFiber_eq_zero_of_eq_zero}
-    \notready
-    Let $h$ have range $R\ge1$, let $W\le M$, and let a translated copy of
-    $h$ lie wholly inside a cyclic interval of $W$ sites. If that translated
-    operator kills $\psi$, then its corresponding translate on $W$ sites
-    kills every coefficient section of $\psi$ obtained by fixing the
-    complement of the interval.
-\end{lemma}
-\begin{proof}
-    \notready
-    Regroup the sites as the interval and its complement. The translated
-    operator becomes the same $W$-site operator acting independently at
-    each fixed outside configuration. Taking any such section preserves
-    its zero equation.
-\end{proof}
-
 \begin{definition}[Complementary pure particle projection]
     \label{def:pvbs_pure_window_interaction}
     \lean{MPSTensor.pvbsPureWindowInteraction}
-    \notready
+    \leanok
     \uses{def:pvbs_tensor}
     For $q\in\mathbb C$ and range $R$, let $p_R(q)$ be the orthogonal
     projection onto $\operatorname{span}\{\Psi_R(q)\}^{\perp}$.
@@ -298,13 +267,13 @@ spectral-gap assertion.
     \label{lem:pvbs_pure_window_kernel}
     \lean{MPSTensor.pvbsPureWindowInteraction_isPositive}
     \lean{MPSTensor.pvbsPureWindowInteraction_apply_eq_zero_iff}
-    \notready
+    \leanok
     \uses{def:pvbs_pure_window_interaction}
     The operator $p_R(q)$ is positive, and $p_R(q)v=0$ precisely when
     $v=c\Psi_R(q)$ for some $c\in\mathbb C$.
 \end{lemma}
 \begin{proof}
-    \notready
+    \leanok
     An orthogonal projection is positive, and the kernel of projection
     onto the orthogonal complement of a subspace is that subspace.
 \end{proof}
@@ -312,13 +281,13 @@ spectral-gap assertion.
 \begin{lemma}[Two adjacent pure particle projections]
     \label{lem:pvbs_pure_window_adjacent_kernel}
     \lean{MPSTensor.eq_zero_of_pvbsPureWindow_adjacent_terms_eq_zero}
-    \notready
+    \leanok
     \uses{lem:pvbs_pure_window_kernel,lem:periodic_interaction_sections,lem:pvbs_pure_window_overlap_zero}
     Suppose $q\ne0$ and $R\ge2$. On $R+1$ sites, the copies of $p_R(q)$
     beginning at the first and second sites have trivial common kernel.
 \end{lemma}
 \begin{proof}
-    \notready
+    \leanok
     The two zero equations put every left and right length-$R$ section
     in $\operatorname{span}\{\Psi_R(q)\}$. The nonzero first-cut minor of
     $\Psi_R(q)$ forces the vector on their union to vanish.
@@ -328,14 +297,14 @@ spectral-gap assertion.
     \label{lem:pvbs_pure_window_large_kernel}
     \lean{MPSTensor.eq_zero_of_pvbsPureWindowHamiltonian_eq_zero}
     \lean{MPSTensor.ker_pvbsPureWindowHamiltonian_eq_bot}
-    \notready
+    \leanok
     \uses{lem:pvbs_pure_window_adjacent_kernel,lem:periodic_interaction_interval_section}
     Suppose $q\ne0$, $R\ge2$ and $M\ge R+1$. The periodic Hamiltonian
     obtained by summing all cyclic translates of $p_R(q)$ on $M$ sites
     has trivial kernel.
 \end{lemma}
 \begin{proof}
-    \notready
+    \leanok
     Positivity makes each local term vanish on a Hamiltonian kernel
     vector. Fix the letters outside any interval of $R+1$ sites.
     Its first two length-$R$ terms kill that section, which therefore
@@ -346,17 +315,22 @@ spectral-gap assertion.
 \begin{lemma}[The root-of-unity particle line is cyclically invariant]
     \label{lem:pvbs_matching_volume_line_invariance}
     \lean{MPSTensor.cyclicTranslateState_pvbsEdge_mem_span}
-    \notready
-    \uses{lem:pvbs_geometric_cyclic_phase}
+    \leanok
+    \uses{lem:pvbs_geometric_cyclic_phase, thm:parent_cyclic_translate_add}
     Let $R\ge1$ and $q^R=1$. Every cyclic translate of $\Psi_R(q)$ belongs
     to $\mathbb C\Psi_R(q)$. This preserves the line without asserting
     that the coefficient vector is fixed by translation.
 \end{lemma}
 \begin{proof}
-    \notready
-    The one-step coefficient identity gives translation by the scalar
-    $q^{-1}$. Cyclic induction and composition of translations preserve
-    the same line at every offset.
+    \leanok
+    By Lemma~\ref{lem:pvbs_geometric_cyclic_phase},
+    $T_1\Psi_R(q)=q^{-1}\Psi_R(q)$. If $T_s\Psi_R(q)\in\mathbb C\Psi_R(q)$,
+    then Lemma~\ref{thm:parent_cyclic_translate_add} gives
+    \begin{align}
+        T_{s+1}\Psi_R(q)=T_1(T_s\Psi_R(q))\in\mathbb C\,T_1\Psi_R(q)
+        =\mathbb C\Psi_R(q),
+    \end{align}
+    so induction on $s$ proves the claim at every offset.
 \end{proof}
 
 \begin{lemma}[Exact kernel at the matching periodic volume]
@@ -365,8 +339,8 @@ spectral-gap assertion.
         MPSTensor.pvbsPureWindowHamiltonian_apply_pvbsEdge,
         MPSTensor.ker_pvbsPureWindowHamiltonian_matching_volume,
         MPSTensor.pvbsEdge_ne_zero_matching_volume}
-    \notready
-    \uses{lem:pvbs_matching_volume_line_invariance,
+    \leanok
+    \uses{lem:pvbs_amplitudes, lem:pvbs_matching_volume_line_invariance,
         lem:pvbs_pure_window_kernel,lem:periodic_interaction_sections}
     Let $R\ge1$ and $q^R=1$. At the matching periodic volume $R$, let
     $H_R(q)$ be the sum of all cyclic translates of the complementary
@@ -379,25 +353,33 @@ spectral-gap assertion.
     a ground state for the same interaction at every other volume.
 \end{lemma}
 \begin{proof}
-    \notready
-    A full-window coefficient section is the original coefficient vector
-    translated by the negative starting offset. Every section of the
-    one-particle vector therefore lies in its line, so every local term
-    kills it. Conversely, positivity and the section at the zero offset
-    place every kernel vector in the original particle line. Its first
-    excitation has coefficient one, proving nonvanishing.
+    \leanok
+    The window covers the whole ring, so the outside word $\tau$ is empty
+    and the coefficient section at offset $i$ is a translate,
+    $R_{i,\tau}\psi=T_{-i}\psi$. By
+    Lemma~\ref{lem:pvbs_matching_volume_line_invariance},
+    $T_{-i}\Psi_R(q)\in\mathbb C\Psi_R(q)$, so
+    Lemma~\ref{lem:pvbs_pure_window_kernel} gives
+    $p_R(q)R_{i,\tau}\Psi_R(q)=0$ for every $i$, and
+    Lemma~\ref{lem:periodic_interaction_sections} gives
+    $H_R(q)\Psi_R(q)=0$. Conversely, if $H_R(q)\psi=0$, positivity and
+    Lemma~\ref{lem:periodic_interaction_sections} give
+    $p_R(q)R_{0,\tau}\psi=0$. Since $R_{0,\tau}\psi=\psi$,
+    Lemma~\ref{lem:pvbs_pure_window_kernel} gives
+    $\psi\in\mathbb C\Psi_R(q)$. Finally
+    $\Psi_R(q)(1,0,\ldots,0)=1$, so $\Psi_R(q)\ne0$.
 \end{proof}
 
 \begin{lemma}[No fixed vector in a nontrivial-phase matching kernel]
     \label{lem:pvbs_matching_volume_no_fixed_ground_vector}
     \lean{MPSTensor.eq_zero_of_pvbsPureWindow_matching_volume_fixed}
-    \notready
+    \leanok
     \uses{lem:pvbs_matching_volume_kernel,lem:pvbs_geometric_cyclic_phase}
     Suppose also $q\ne1$. If $\phi\in\ker H_R(q)$ is fixed by every cyclic
     translation as a coefficient vector, then $\phi=0$.
 \end{lemma}
 \begin{proof}
-    \notready
+    \leanok
     Let $T_1$ translate by one site,
     $(T_1\psi)(\sigma)=\psi(\sigma_1,\ldots,\sigma_{R-1},\sigma_0)$.
     The exact kernel identity gives $\phi=c\,\Psi_R(q)$ for some

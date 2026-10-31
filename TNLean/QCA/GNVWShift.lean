@@ -26,7 +26,7 @@ No regrouping-independence or composition theorem is used.
 **Local fix (shift-example subscript):** The scalar support in the source
 shift example is the odd support; line 1268 repeats the even subscript.
 The correction is recorded in
-`docs/paper-gaps/gnvw12_site_dependent_adjacent_generation_scope.tex`.
+`docs/paper-gaps/gnvw12_shift_example_subscript.tex`.
 -/
 
 namespace SpinChain

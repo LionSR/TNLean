@@ -18,6 +18,13 @@ The supplied positive-block standard form is the only standard-form datum.
 
 Source: arXiv:1703.09188, StandardForm/SF and eq:appendix-1,
 lines 603–622 and 2300–2306.
+
+**Scope restriction (supplied standard form):** These results consume
+actual MPU unitarity, a positive block length and supplied two-site
+standard-form data, and their neighbourhoods are measured in that block
+length. The standard-form construction from bare MPU data and the source
+bond-dimension radius remain separate. See
+`docs/paper-gaps/mpu_qca_complete_block_heisenberg_scope.tex`.
 -/
 
 open Fin.CommRing
@@ -75,9 +82,9 @@ theorem finiteChainConjugation_symm_mem_range_ringNeighbourhood
     (finiteRingNeighbourhood_subset a N J (4 * k))
     (finiteChainConjugation hU (by omega : 1 < N) a) (localInclusion hJ B)
   intro x hx C
-  let hxΓ := (Finset.mem_sdiff.mp hx).1
+  have hxΓ := (Finset.mem_sdiff.mp hx).1
   let ix := E.symm ⟨x, hxΓ⟩
-  let hsingle : ({x} : Finset ℤ) ⊆ finiteChainRegion a N :=
+  have hsingle : ({x} : Finset ℤ) ⊆ finiteChainRegion a N :=
     Finset.singleton_subset_iff.mpr hxΓ
   have hC : intervalCoordinates d a N (localInclusion hsingle C) ∈
       QuantumCircuit.supportedOperators d ({ix} : Set (Fin N)) := by

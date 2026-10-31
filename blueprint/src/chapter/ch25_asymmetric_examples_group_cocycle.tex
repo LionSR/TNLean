@@ -260,6 +260,88 @@ The single-site tensors are not injective: their $|G|^2$ physical matrices
 span a space of dimension at most $|G|$. The operator laws above are
 therefore stated directly rather than through an injective representation.
 
+\subsection{The arbitrary-boundary operators}
+
+The periodic operators $U_g$ descend from operators $O_g$ on a chain whose
+sites carry two half sites, $\C[G]\otimes\C[G]$
+\cite{GarreRubio2023MPOSym}. The projector $O_e$ identifies the right half of
+every site with the left half of the next, and the isometry that merges the
+identified half sites carries $O_g$ to $U_g$.
+
+\begin{definition}[The arbitrary-boundary tensor]
+    \label{def:asymex_group_cocycle_boundary_tensor}
+    \lean{MPOTensor.GroupCocycle.boundaryTensor, MPOTensor.GroupCocycle.boundaryTensor_apply,
+        MPOTensor.GroupCocycle.halfSiteConfig, MPOTensor.GroupCocycle.halfSiteEmbedding,
+        MPOTensor.GroupCocycle.halfSiteEmbedding_apply,
+        MPOTensor.GroupCocycle.conjTranspose_halfSiteEmbedding_apply}
+    \leanok
+    \uses{def:asymex_group_cocycle_tensor}
+    Let $\omega$ be a scalar three-cochain. The tensor $T_g$ has physical
+    indices in $G\times G$, the two half sites of a site, and bond indices in
+    $G$, with
+    \begin{align}
+        (T_g^{\,(a,a'),(k,l)})_{k',l'}
+         & =\delta_{k,k'}\delta_{l,l'}\delta_{a,gk}\delta_{a',gl}\,
+        \omega(g,l,l^{-1}k),
+        \notag
+    \end{align}
+    where $(a,a')$ is the output and $(k,l)$ the input
+    \cite{GarreRubio2023MPOSym}. Write $O_g=O_N(T_g)$ for its periodic
+    operator on $N>0$ sites. For a configuration $t\in G^N$, let
+    $\Gamma^\dagger\ket t=\bigotimes_i\ket{t_i,t_{i+1}}$, with $t_N=t_0$.
+\end{definition}
+
+\begin{lemma}[The arbitrary-boundary operators]
+    \label{lem:asymex_group_cocycle_boundary_operators}
+    \lean{MPOTensor.GroupCocycle.halfSiteConfig_injective,
+        MPOTensor.GroupCocycle.exists_eq_halfSiteConfig_iff,
+        MPOTensor.GroupCocycle.conjTranspose_halfSiteEmbedding_mul,
+        MPOTensor.GroupCocycle.halfSiteEmbedding_mul_conjTranspose_apply,
+        MPOTensor.GroupCocycle.mpo_boundaryTensor,
+        MPOTensor.GroupCocycle.mpo_boundaryTensor_one_apply,
+        MPOTensor.GroupCocycle.mpo_boundaryTensor_one,
+        MPOTensor.GroupCocycle.mpo_boundaryTensor_one_mul_self,
+        MPOTensor.GroupCocycle.isHermitian_mpo_boundaryTensor_one,
+        MPOTensor.GroupCocycle.mpo_boundaryTensor_mul,
+        MPOTensor.GroupCocycle.mpo_boundaryTensor_conjTranspose,
+        MPOTensor.GroupCocycle.mpo_tensor_eq_halfSiteEmbedding}
+    \leanok
+    \uses{def:asymex_group_cocycle_boundary_tensor,
+        thm:asymex_group_cocycle_kernel, thm:asymex_group_cocycle_mul,
+        thm:asymex_group_cocycle_one, thm:asymex_group_cocycle_unitary}
+    On every periodic chain of $N>0$ sites, $\Gamma\Gamma^\dagger=\mathbf 1$
+    and $O_g=\Gamma^\dagger U_g\Gamma$. Hence:
+    \begin{enumerate}
+        \item if $\omega$ is normalized, then
+              $O_e=\Gamma^\dagger\Gamma=\bigotimes_i\mathcal P^{[i]_r,[i+1]_l}$
+              with $\mathcal P=\sum_g\ket{g,g}\bra{g,g}$, an orthogonal
+              projector;
+        \item if $\omega$ is a three-cocycle, then $O_gO_h=O_{gh}$;
+        \item if $\omega$ is a normalized three-cocycle with values of unit
+              modulus, then $O_g^\dagger=O_{g^{-1}}$;
+        \item $U_g=\Gamma O_g\Gamma^\dagger$.
+    \end{enumerate}
+    So the operators $O_g$ form a representation of $G$ on the range of
+    $O_e$, as stated in \cite{GarreRubio2023MPOSym}, and the multiplication
+    law holds on the whole space.
+\end{lemma}
+
+\begin{proof}\leanok
+    The map $t\mapsto(t_i,t_{i+1})_i$ is injective, so
+    $\Gamma\Gamma^\dagger=\mathbf 1$, and its image consists of the
+    configurations in which the right half of every site agrees with the
+    left half of the next, so $\Gamma^\dagger\Gamma=\bigotimes_i\mathcal P$.
+    The bond to the left of a site of $T_g$ is the left half of its input,
+    which must equal the right half of the input of the previous site; the
+    surviving bond configuration therefore exists exactly on the image of
+    $\Gamma^\dagger$, and the product of the entries along it is the entry of
+    $U_g$ in Lemma~\ref{thm:asymex_group_cocycle_kernel}. This gives
+    $O_g=\Gamma^\dagger U_g\Gamma$. The remaining claims follow from
+    $\Gamma\Gamma^\dagger=\mathbf 1$ and
+    Lemmas~\ref{thm:asymex_group_cocycle_mul},
+    \ref{thm:asymex_group_cocycle_one} and~\ref{thm:asymex_group_cocycle_unitary}.
+\end{proof}
+
 \subsection{Fusion tensors and the inverse cocycle}
 
 The source equips the tensors $\hat T_g$ with explicit fusion tensors and

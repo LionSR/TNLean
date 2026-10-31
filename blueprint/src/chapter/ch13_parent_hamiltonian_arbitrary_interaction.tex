@@ -68,7 +68,7 @@ We follow the cyclic-cut argument of
     In the cyclic coordinates at $i$, compose the weighted joint boundary map
     with $h$: for boundaries $X=(X_1,\ldots,X_b)$ in the product algebra put
     \begin{align}
-        T(X) & =(h\otimes I_{N-L})\sum_jc_j\,\Gamma_L^{A_j}(X_j).
+        T(X) & =h\Bigl(\sum_jc_j\,\Gamma_L^{A_j}(X_j)\Bigr).
         \label{eq:arbitrary_local_block_separation_map}
     \end{align}
     By (\ref{eq:cyclic_mpv_active_boundary}) and
@@ -78,7 +78,7 @@ We follow the cyclic-cut argument of
     $T=0$. Evaluating on the boundary $\delta_{jk}X$ supported in block $j$
     gives
     \begin{align}
-        c_j\,(h\otimes I_{N-L})\,\Gamma_L^{A_j}(X) & =0
+        c_j\,h\,\Gamma_L^{A_j}(X) & =0
         \label{eq:arbitrary_local_block_separation_single}
     \end{align}
     for every $X$, which at $X=A_j^\tau$ is the local annihilation equation
@@ -101,7 +101,7 @@ We follow the cyclic-cut argument of
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{lem:arbitrary_local_block_separation}
+    \uses{lem:arbitrary_local_block_separation, thm:weighted_sum_kernel}
     Each $h_i$ is positive. A finite sum of positive operators has kernel equal
     to the intersection of their kernels. Apply
     Lemma~\ref{lem:arbitrary_local_block_separation} to each $h_i$, cancel
@@ -129,6 +129,7 @@ We follow the cyclic-cut argument of
     \leanok
     \discussion{7684}
     \uses{def:pgvwc07_ti_canonical_representation,
+        def:l_blk_injective, def:blocks_not_gauge_phase_equiv,
         lem:pgvwc07_block_tuple_span,
         lem:arbitrary_positive_block_ground_states,
         lem:periodic_block_linear_independence}

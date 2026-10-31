@@ -24,6 +24,7 @@ import TNLean.Algebra.CharacterProjectorWeighted
 import TNLean.Algebra.CircleCohomology
 import TNLean.Algebra.CoalgebraDualStar
 import TNLean.Algebra.CocycleCohomology
+import TNLean.Algebra.CocycleCommPhase
 import TNLean.Algebra.CocycleRestriction
 import TNLean.Algebra.CommonBufferLength
 import TNLean.Algebra.CommonFixedSubmodule
@@ -48,6 +49,7 @@ import TNLean.Algebra.CycleLaplacianFourier
 import TNLean.Algebra.CyclicInsertion
 import TNLean.Algebra.CyclicMomentRigidity
 import TNLean.Algebra.DirectedWalkCoboundary
+import TNLean.Algebra.EuclideanExtendByZero
 import TNLean.Algebra.EuclideanFiberwiseMap
 import TNLean.Algebra.EuclideanFiberwiseProjection
 import TNLean.Algebra.EventuallyConstantCycleWeights
@@ -102,6 +104,7 @@ import TNLean.Algebra.KleinCocycleTable
 import TNLean.Algebra.KrausSpanRank
 import TNLean.Algebra.KroneckerLeastEigenvalue
 import TNLean.Algebra.LSymbol
+import TNLean.Algebra.LSymbolActionMatrix
 import TNLean.Algebra.LSymbolBlockIndependence
 import TNLean.Algebra.LSymbolDomainWall
 import TNLean.Algebra.LSymbolFreeAction
@@ -237,6 +240,7 @@ import TNLean.Algebra.TwoWindowSum
 import TNLean.Algebra.TwoWindowTensorForms
 import TNLean.Algebra.UniformSelectionBounds
 import TNLean.Algebra.UnimodularPowerSum
+import TNLean.Algebra.UnitPhaseScalar
 import TNLean.Algebra.UnitaryAdjointKronecker
 import TNLean.Algebra.UnitaryCompletionClass
 import TNLean.Algebra.UnitaryCongruence

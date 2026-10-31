@@ -37,7 +37,7 @@ presentation. The site-dependent source setting is recorded separately in
         SpinChain.PropagatesWithin.supportAlgebraMatrixSize_even_eq_of_equiv,
         SpinChain.PropagatesWithin.supportAlgebraMatrixSize_odd_eq_of_equiv}
     \leanok
-    \uses{def:qca_gnvw_index,lem:qca_physical_pair_adjacent_generation}
+    \uses{def:qca_gnvw_index}
     For every $x\in\mathbb Z$,
     \begin{align}
         \operatorname{ind}(\omega)
@@ -68,17 +68,47 @@ presentation. The site-dependent source setting is recorded separately in
         Matrix.rightSupportAlgebra_range_rightKroneckerEmbed}
     \leanok
     \uses{def:qca_left_support_algebra,def:qca_right_support_algebra}
-    For finite nonempty matrix coordinates, the full left tensor factor
-    has full left support and scalar right support. The full right factor
-    has scalar left support and full right support. These are the support
-    calculations in the shift example following equation~RR2x of
+    Let $I$ and $J$ be finite index sets. Then
+    \begin{align}
+        \operatorname{Spp}_{\mathrm L}
+        \bigl(M_I(\mathbb C)\otimes I_J\bigr)
+                                       & =M_I(\mathbb C)
+        \quad\text{if }J\neq\emptyset, &
+        \operatorname{Spp}_{\mathrm R}
+        \bigl(M_I(\mathbb C)\otimes I_J\bigr)
+                                       & =\mathbb C I_J,\notag   \\
+        \operatorname{Spp}_{\mathrm L}
+        \bigl(I_I\otimes M_J(\mathbb C)\bigr)
+                                       & =\mathbb C I_I,       &
+        \operatorname{Spp}_{\mathrm R}
+        \bigl(I_I\otimes M_J(\mathbb C)\bigr)
+                                       & =M_J(\mathbb C)
+        \quad\text{if }I\neq\emptyset.
+        \label{eq:qca_kronecker_embedding_supports}
+    \end{align}
+    Only the full support of each factor needs the spectator index set to
+    be nonempty. These are the support calculations in the shift example
+    following equation~RR2x of
     \cite[lines~1251--1268]{Gross2012IndexTheory}.
 \end{lemma}
 \begin{proof}\leanok
-    A diagonal spectator coefficient recovers every matrix on the full
-    factor. Each coefficient on the spectator factor is a scalar multiple
-    of its identity. The coefficient-generated support algebras therefore
-    have the stated values.
+    For $A\in M_I(\mathbb C)$, $B\in M_J(\mathbb C)$, $i,j\in I$ and
+    $r,s\in J$, the coefficients are
+    \begin{align}
+        (A\otimes I_J)^{\mathrm L}_{rs}
+         & =\delta_{rs}A,    &
+        (A\otimes I_J)^{\mathrm R}_{ij}
+         & =A_{ij}I_J,\notag   \\
+        (I_I\otimes B)^{\mathrm L}_{rs}
+         & =B_{rs}I_I,       &
+        (I_I\otimes B)^{\mathrm R}_{ij}
+         & =\delta_{ij}B.
+        \label{eq:qca_kronecker_embedding_coefficients}
+    \end{align}
+    Taking $r=s$, which needs $J\neq\emptyset$, recovers every $A$ as a
+    left coefficient; taking $i=j$, which needs $I\neq\emptyset$, recovers
+    every $B$ as a right coefficient. The remaining coefficients are scalar
+    multiples of the identity, so they generate only the scalars.
 \end{proof}
 
 \begin{lemma}[Finite-region configuration count]
@@ -109,9 +139,22 @@ presentation. The site-dependent source setting is recorded separately in
     \cite[lines~1251--1278]{Gross2012IndexTheory}.
 \end{lemma}
 \begin{proof}\leanok
-    The ordered bipartite coordinate equivalence identifies the left and
-    right embeddings with canonical local inclusions. Faithfulness and
-    compatibility of the finite-region embeddings give the assertions.
+    Write $\varphi$ for the bipartite embedding and
+    $\iota_\Lambda,\iota_\Gamma$ for the canonical finite-region
+    observable inclusions. The ordered bipartite coordinate equivalence
+    gives, for $A\in M_{\Lambda}(\mathbb C)$ and
+    $B\in M_{\Gamma}(\mathbb C)$,
+    \begin{align}
+        \varphi(A\otimes I_\Gamma)
+         & =\iota_\Lambda(A), &
+        \varphi(I_\Lambda\otimes B)
+         & =\iota_\Gamma(B).
+        \label{eq:qca_bipartite_observable_embedding}
+    \end{align}
+    Injectivity of $\varphi$ follows from faithfulness of the canonical
+    inclusion of $\Lambda\cup\Gamma$. The two identities map the full left
+    and right factor ranges onto the ranges of $\iota_\Lambda$ and
+    $\iota_\Gamma$.
 \end{proof}
 
 \begin{lemma}[Direct shift normalization]
@@ -156,7 +199,7 @@ presentation. The site-dependent source setting is recorded separately in
     \cite[lines~1325--1329]{Gross2012IndexTheory}; the second is a direct
     orientation check. The repeated even subscript in the source scalar
     support example at line~1268 is corrected as documented in
-    \cite{gap:gnvw12_site_dependent_adjacent_generation_scope}.
+    \cite{gap:gnvw12_shift_example_subscript}.
 \end{lemma}
 \begin{proof}\leanok
     Translation has its singleton propagation neighbourhood, which lies
