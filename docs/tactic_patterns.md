@@ -9871,16 +9871,6 @@ there is no need for a new tactic.
   Positivity is used separately via QICLean's
   `WeightedPositiveKernel.apply_sum_eq_zero_iff`.
 
-### Cyclic local interaction in its defining coordinates — candidate
-- **Pattern:** expose a translated arbitrary interaction by applying the
-  active-block isometry, then cancel the inverse isometry.
-- **Seen:** two local separation uses in
-  `MPS/ParentHamiltonian/ArbitraryInteractionBlockDegeneracy.lean` (one file,
-  two occurrences; below the promotion threshold).
-- **Abstraction:** `cyclicActiveBlock_periodicLocalInteractionES_apply` in
-  the defining periodic-interaction module. Consumers use this action
-  formula rather than repeating conjugation and isometry coercion rewrites.
-
 ### Dense local image inside a closed commutant — candidate (2026-10-29)
 
 - **Seen:** `QCA/SupportAlgebraGeneration.lean`, the support-family generation
@@ -10143,6 +10133,210 @@ there is no need for a new tactic.
   `Matrix.reindexLinearEquiv_mul` with all three equivalences explicit,
   together with `Matrix.conjTranspose_reindex`; no new reindex algebra is built.
 
+### Cyclic local interaction in its defining coordinates — promoted
+- **Pattern:** expose a translated arbitrary interaction by applying the
+  active-block isometry, then cancel the inverse isometry.
+- **Seen:** both local separation uses in
+  `MPS/ParentHamiltonian/ArbitraryInteractionBlockDegeneracy.lean`, and the
+  all-volumes consumer under development in
+  `MPS/ParentHamiltonian/FiniteVolumeConstraintPropagation.lean`.
+- **Abstraction:** `cyclicActiveBlock_periodicLocalInteractionES_apply` in
+  the defining periodic-interaction module. Consumers use this actual action
+  formula rather than repeating conjugation and isometry coercion rewrites.
+
+### Prime-length periodic reduction shared by ground-state applications — promoted
+- **Pattern:** canonicalize an arbitrary tensor, discard periodic blocks whose
+  periods do not divide the length, derive a common Wielandt injectivity
+  length, group phase-equivalent blocks, and remove zero coefficients.
+- **Seen:** the W-state bound in `MPS/Examples/WStatePrimeLengthBound.lean` and
+  the general ground-state dichotomy in
+  `MPS/ParentHamiltonian/PrimeLengthBondDimensionDichotomy.lean`.
+- **Abstraction:** `exists_normal_blocks_of_no_small_divisor` in
+  `MPS/CanonicalForm/PrimeLengthNormalBlocks.lean` extracts the existing
+  W-state-independent proof and generalizes its physical alphabet. Both
+  applications consume the same decomposition and derived bounds. Promoted
+  under the two-occurrence criterion: the extracted argument is well over
+  five lines, and the bond-one finite-prefix ground-state theorem in
+  `MPS/ParentHamiltonian/BondOneFinitePrefixGroundStates.lean` already
+  consumes the same reduction through the prime-length dichotomy.
+
+### Nonzero finite physical state forces a nonempty alphabet — candidate (2026-10-29)
+
+- **Pattern:** at positive chain length, setting the physical dimension to zero
+  makes every physical configuration impossible; extensionality therefore
+  makes the state zero, contradicting nonvanishing.
+- **Occurrences:** the finite cyclic-vector representation in
+  `MPS/Preparation/PeriodicFiniteRepresentation.lean` and the short-prefix
+  dimension bound in `MPS/ParentHamiltonian/FinitePrefixUniformBond.lean`.
+- **Abstraction:** a scalar-function and Hilbert-space nonempty-alphabet helper
+  could centralize this argument when a third occurrence is integrated. The
+  independent OBC canonical-form draft has a related occurrence; consolidate
+  the shared fact when those branches meet.
+- **Decision:** no tactic is needed; an elementary helper theorem is sufficient.
+
+### Positive-length periodic bond padding — promoted mathematical helper (2026-10-29)
+
+- **Pattern:** enlarge every periodic site matrix by unused zero coordinates,
+  preserve the nonempty word by `Matrix.zeroPad_mul`, and reindex the trace.
+- **Abstraction:** `MPSTensor.mpv_padBond` and `mpvState_padBond` in
+  `MPS/Preparation/PeriodicBondPadding.lean` centralize the actual-vector
+  comparison used at both short and long lengths in the uniform-bound proof.
+- **Decision:** the existing matrix-padding multiplication identity suffices;
+  the empty word remains excluded because its trace is the matrix dimension.
+- **Parallel:** `MPOTensor.padBond` in `MPS/MPU/BondPadding.lean` proves the
+  same positive-length trace invariance for operator tensors by conjugating
+  with `bondInclusion`; a later pass may route it through `Matrix.zeroPad`.
+
+
+### A unique virtual path for a bond-one periodic vector — reused helper (2026-10-29)
+
+- **Seen:** `Core/BondOneVector.lean`; the periodic-operator counterpart is
+  `MPDO/BondOneOperator.lean`.
+- **Reuse:** the existing `mpv_eq_prod_of_forced_bond` specializes to the
+  unique virtual configuration; `Finset.prod_ne_zero_iff` proves actual
+  nonvanishing from one nonzero physical letter.
+- **Decision:** reuse the common cyclic contraction helper instead of a new
+  entrywise word induction or a separately supplied finite-volume hypothesis.
+
+### Retain derived source data for a downstream finite-prefix argument — reused extraction (2026-10-29)
+
+- **Pattern:** a prime-length reduction already derives normality and a
+  local-kernel inclusion before projecting to an eventual ground-family theorem.
+- **Abstraction:** `exists_normal_eventual_ground_data_of_prime_length_bound`
+  retains those actual witnesses from the existing single proof;
+  the eventual-only API projects them for the quantitative dichotomy.
+- **Caller:** `exists_uniform_bondOne_ground_family_of_prime_length_bound`
+  derives the retained dimension as one and fills all short volumes.
+- **Decision:** reuse one extraction proof; do not duplicate its canonical
+  reduction or add the derived standing data as hypotheses to the public caller.
+
+### A nonzero coefficient minor excludes overlapping pure windows — candidate (2026-10-29)
+
+- **Seen:** `MPS/ParentHamiltonian/RankOneWindowOverlap.lean` and its
+  PVBS application in `MPS/Examples/PVBSOneParticleWindow.lean`.
+- **Pattern:** Multiply a nonzero two-by-two minor by the square of an
+  outside coefficient. Substitute the two actual section factorizations;
+  commutativity cancels the products and forces the outside coefficient
+  to vanish.
+- **Reuse:** One tensor-facing helper owns the cancellation. The actual
+  PVBS application computes its minor using the existing endpoint
+  coefficient lemmas, without a new weighted state or density-matrix layer.
+- **Decision:** A mathematical lemma suffices; no custom tactic is needed.
+
+### Translated interaction sections — candidate (2026-10-29)
+
+- **Seen:** the private canonical-parent restriction proof in
+  `MPS/ParentHamiltonian/Martingale/Transport.lean` and the arbitrary-interaction
+  proof in `MPS/ParentHamiltonian/Martingale/PeriodicInteractionSections.lean`.
+- **Pattern:** Restrict an identity-extended interaction to its own window,
+  identify the unchanged outside coordinates, and recover the inserted word.
+- **Abstraction:** The latter module exposes
+  `cyclicRestrictES_periodicLocalInteractionES` for arbitrary local operators.
+  The earlier canonical proof occurs before this module in the import order;
+  sharing it would require moving the general definition before that proof.
+- **Decision:** Record the two occurrences; do not introduce a tactic or an
+  import cycle for this small coordinate identity.
+
+
+### Invariant finite cyclic lines — candidate (2026-10-29)
+
+- **Seen:** `MPS/Examples/PVBSPureWindowMatchingVolume.lean`.
+- **Pattern:** Turn an actual one-step eigenvector equation into line invariance,
+  then use `Fin.cyclic_induction` and `cyclicTranslateState_add` for all offsets.
+- **Reuse:** The existing cyclic induction helper handles the finite index;
+  `Submodule.smul_mem` handles arbitrary eigenvector phases.
+- **Decision:** No manual predecessor induction or new translation predicate is
+  introduced. The actual vector phase remains available in the one-step equation.
+
+### Least residue padding at a fixed word degree — candidate (2026-10-29)
+
+- **Pattern:** Solve the two charge equations and total degree in residues,
+  bound the least-residue sum, and add a multiple of the modulus to one count.
+- **Seen:** The degree-seven and degree-eight reachability proofs in
+  `MPS/Examples/ShortMomentum/Charges.lean`.
+- **Abstraction:** A common least-residue construction could expose the
+  dependence on the chosen degree. The exceptional central residue at degree
+  seven still needs its separate arithmetic argument.
+- **Notes:** Two concrete occurrences in one file; the abstraction threshold
+  is not met. Reuse the current charge and count lemmas in downstream proofs.
+
+### Extending finite charge witnesses by a neutral word — promoted (2026-10-29)
+
+- **Seen:** The degree-seven, degree-eight, and degree-nine phase-detecting
+  word tables in `MPS/Examples/ShortMomentum/SevenCyclicObstruction.lean` and
+  `CyclicChargeDetection.lean`.
+- **Pattern:** Preserve both the total charge and the detecting first letters
+  while appending a fixed neutral physical word.
+- **Abstraction:** `MPSTensor.ShortMomentum.exists_distinct_cyclic_phases`
+  packages the three explicit base tables into one all-degree statement by
+  strong induction with a three-letter neutral suffix. The global boundary
+  closure calls this one helper.
+- **Notes:** The finite witness tables contain distinct mathematical data;
+  their closed reductions remain explicit. No specialized tactic is needed.
+
+### Endpoint charge functions on a short overlap — reused normalized coefficients (2026-10-29)
+
+- **Seen:** `MPS/Examples/ShortMomentum/ShortIntersections.lean`, for the
+  eight- and nine-site intersections.
+- **Pattern:** Derive normalized endpoint charge functions from actual local
+  boundary restrictions, choose an actual middle word, and cancel its common
+  nonzero scalar character to equate the endpoint values.
+- **Reuse:** `exists_overlap_charge_coefficients` owns normalization;
+  `overlap_charge_edge` owns cancellation for both lengths. The finite bridge
+  lemmas give the three equality steps, with inactive vertices excluded only
+  where the seven-site complement cannot exist.
+- **Decision:** Mathematical lemmas suffice; no graph record or new tactic.
+
+### Actual periodic state under physical alphabet extension — reuse (2026-10-29)
+
+- **Seen:** `MPS/Core/PhysicalEmbedding.lean` and the existing
+  `MPS/Core/PhysicalRotation.lean` physical-coordinate calculations.
+- **Pattern:** Transport periodic coefficients after changing the physical alphabet.
+- **Reuse:** The new embedding identity uses `MPSTensor.mpv_reindexPhysical` on
+  image configurations and `Kraus.evalWord_append` at a zero letter elsewhere;
+  it does not copy the general physical-rotation word expansion.
+- **Decision:** Existing mathematical helpers suffice; no new tactic or tensor
+  construction is introduced.
+
+### Euclidean physical extension by zero — promoted (2026-10-29)
+
+- **Pattern:** Extend finite physical coefficients by zero along an injection,
+  transport the linear map through `WithLp`, and prove the norm identity by
+  `Fintype.sum_of_injective`.
+- **Defined in:** `Algebra/EuclideanExtendByZero.lean`,
+  `Function.Embedding.euclideanExtendByZero` and its coordinate identities.
+- **Seen:** dependent full configurations and pair-boundary range transport in
+  `ParentHamiltonian/PhysicalAlphabetEmbedding.lean`, and actual local-term
+  transport in `ParentHamiltonian/PhysicalAlphabetLocalTerms.lean`.
+- **Notes:** Reuses Mathlib's extension-by-zero linear map and dependent product
+  embedding. No separate physical configuration record or isometry predicate.
+
+### Physical sector labels around a periodic chain — reused cyclic induction (2026-10-29)
+
+- **Seen:** `MPS/ParentHamiltonian/PhysicalSectorKernelSupport.lean`.
+- **Pattern:** An actual positive Hamiltonian equation forces every local
+  section into the prescribed subspace. A nonzero global coefficient then
+  gives equality of each site's sector label with its successor's label.
+- **Reuse:** The promoted `Fin.cyclic_induction` propagates that equality;
+  no new finite-cycle induction or configuration predicate is introduced.
+- **Decision:** Keep the local-support derivation in mathematical lemmas,
+  using shared Euclidean extension by zero and ordinary submodule sums.
+
+
+### Physical embeddings commute with coordinate reindexing — candidate (2026-10-29)
+
+- **Seen:** the private reindexing lemma in
+  `MPS/ParentHamiltonian/PhysicalSectorProjectorTransport.lean`; independent
+  dependent-pair coordinates in the varying-physical-alphabet continuation.
+- **Pattern:** A commuting square of actual coordinate embeddings and bijections
+  gives a commuting square of Euclidean extension by zero and reindexing.
+  On an embedded coordinate, use inverse-coordinate naturality and
+  `euclideanExtendByZero_apply_image`; off the image, both coefficients vanish.
+- **Decision:** Two occurrences across two files, below the promotion threshold.
+  The periodic operator proof reuses the shared
+  `ContinuousLinearMap.rightFiberwiseMap_extendByZero` for spectator extension.
+
+
 
 ### Unbounded-subsequence exclusion in overlap rigidity — candidate (2026-10-29)
 
@@ -10151,6 +10345,7 @@ there is no need for a new tactic.
 - **Seen:** `MPS/MPU/EvenFamilyVirtualGauge.lean` (even-family virtual descent).
 - **Abstraction:** Reuse the existing normal overlap dichotomy and
   `Filter.tendsto_atTop_mono`; no separate blocked-family predicate is needed.
+
 
 ### Retaining and cancelling the even-family sign — candidate (2026-10-29)
 
@@ -10170,6 +10365,7 @@ The even-family assembly reuses the existing
 `FundamentalTheoremGatesBlocked.lean`; the duplicate source-cut definition is
 removed after the dependency audit exposed it.
 
+
 ### Standard forms with arbitrary normalized source gates — candidate (2026-10-29)
 
 - **Pattern:** Compare a normalized source record with the selected record
@@ -10180,6 +10376,7 @@ removed after the dependency audit exposed it.
 - **Abstraction:** The public `exists_twoSiteStandardFormData_sourceFactors`
   supplies the actual data; no SVD or standard-form witness is added downstream.
   The converse uses the existing periodic gauge cancellation theorem.
+
 
 ### Transposition via actual adjunction and conjugation — candidate (2026-10-29)
 
@@ -10348,20 +10545,6 @@ removed after the dependency audit exposed it.
   W-state-independent proof and generalizes its physical alphabet. Both
   applications consume the same actual decomposition and derived bounds.
 
-### Nonzero finite physical state forces a nonempty alphabet — candidate (2026-10-29)
-
-- **Pattern:** at positive chain length, setting the physical dimension to zero
-  makes every physical configuration impossible; extensionality therefore
-  makes the state zero, contradicting nonvanishing.
-- **Occurrences:** the finite cyclic-vector representation in
-  `MPS/Preparation/PeriodicFiniteRepresentation.lean` and the short-prefix
-  dimension bound in `MPS/ParentHamiltonian/FinitePrefixUniformBond.lean`.
-- **Abstraction:** a scalar-function and Hilbert-space nonempty-alphabet helper
-  could centralize this argument when a third occurrence is integrated. The
-  independent OBC canonical-form draft has a related occurrence; consolidate
-  the shared fact when those branches meet.
-- **Decision:** no tactic is needed; an elementary helper theorem is sufficient.
-
 ### Positive-length periodic bond padding — promoted mathematical helper (2026-10-29)
 
 - **Pattern:** enlarge every periodic site matrix by unused zero coordinates,
@@ -10372,81 +10555,6 @@ removed after the dependency audit exposed it.
 - **Decision:** the existing matrix-padding multiplication identity suffices;
   the empty word remains excluded because its trace is the matrix dimension.
 
-
-### A unique virtual path for a bond-one periodic vector — reused helper (2026-10-29)
-
-- **Seen:** `Core/BondOneVector.lean`; the periodic-operator counterpart is
-  `MPDO/BondOneOperator.lean`.
-- **Reuse:** the existing `mpv_eq_prod_of_forced_bond` specializes to the
-  unique virtual configuration; `Finset.prod_ne_zero_iff` proves actual
-  nonvanishing from one nonzero physical letter.
-- **Decision:** reuse the common cyclic contraction helper instead of a new
-  entrywise word induction or a separately supplied finite-volume hypothesis.
-
-### Retain derived source data for a downstream finite-prefix argument — reused extraction (2026-10-29)
-
-- **Pattern:** a prime-length reduction already derives normality and a
-  local-kernel inclusion before projecting to an eventual ground-family theorem.
-- **Abstraction:** `exists_normal_eventual_ground_data_of_prime_length_bound`
-  retains those actual witnesses from the existing single proof;
-  the eventual-only API projects them for the quantitative dichotomy.
-- **Caller:** `exists_uniform_bondOne_ground_family_of_prime_length_bound`
-  derives the retained dimension as one and fills all short volumes.
-- **Decision:** reuse one extraction proof; do not duplicate its canonical
-  reduction or add the derived standing data as hypotheses to the public caller.
-
-### A nonzero coefficient minor excludes overlapping pure windows — candidate (2026-10-29)
-
-- **Seen:** `MPS/ParentHamiltonian/RankOneWindowOverlap.lean` and its
-  PVBS application in `MPS/Examples/PVBSOneParticleWindow.lean`.
-- **Pattern:** Multiply a nonzero two-by-two minor by the square of an
-  outside coefficient. Substitute the two actual section factorizations;
-  commutativity cancels the products and forces the outside coefficient
-  to vanish.
-- **Reuse:** One tensor-facing helper owns the cancellation. The actual
-  PVBS application computes its minor using the existing endpoint
-  coefficient lemmas, without a new weighted state or density-matrix layer.
-- **Decision:** A mathematical lemma suffices; no custom tactic is needed.
-
-### Least residue padding at a fixed word degree — candidate (2026-10-29)
-
-- **Pattern:** Solve the two charge equations and total degree in residues,
-  bound the least-residue sum, and add a multiple of the modulus to one count.
-- **Seen:** The degree-seven and degree-eight reachability proofs in
-  `MPS/Examples/ShortMomentum/Charges.lean`.
-- **Abstraction:** A common least-residue construction could expose the
-  dependence on the chosen degree. The exceptional central residue at degree
-  seven still needs its separate arithmetic argument.
-- **Notes:** Two concrete occurrences in one file; the abstraction threshold
-  is not met. Reuse the current charge and count lemmas in downstream proofs.
-
-### Extending finite charge witnesses by a neutral word — promoted (2026-10-29)
-
-- **Seen:** The degree-seven, degree-eight, and degree-nine phase-detecting
-  word tables in `MPS/Examples/ShortMomentum/SevenCyclicObstruction.lean` and
-  `CyclicChargeDetection.lean`.
-- **Pattern:** Preserve both the total charge and the detecting first letters
-  while appending a fixed neutral physical word.
-- **Abstraction:** `MPSTensor.ShortMomentum.exists_distinct_cyclic_phases`
-  packages the three explicit base tables into one all-degree statement by
-  strong induction with a three-letter neutral suffix. The global boundary
-  closure calls this one helper.
-- **Notes:** The finite witness tables contain distinct mathematical data;
-  their closed reductions remain explicit. No specialized tactic is needed.
-
-### Translated interaction sections — candidate (2026-10-29)
-
-- **Seen:** the private canonical-parent restriction proof in
-  `MPS/ParentHamiltonian/Martingale/Transport.lean` and the arbitrary-interaction
-  proof in `MPS/ParentHamiltonian/Martingale/PeriodicInteractionSections.lean`.
-- **Pattern:** Restrict an identity-extended interaction to its own window,
-  identify the unchanged outside coordinates, and recover the inserted word.
-- **Abstraction:** The latter module exposes
-  `cyclicRestrictES_periodicLocalInteractionES` for arbitrary local operators.
-  The earlier canonical proof occurs before this module in the import order;
-  sharing it would require moving the general definition before that proof.
-- **Decision:** Record the two occurrences; do not introduce a tactic or an
-  import cycle for this small coordinate identity.
 
 ### Complete finite windows by prefixing an existing tail equivalence — candidate (2026-10-29)
 

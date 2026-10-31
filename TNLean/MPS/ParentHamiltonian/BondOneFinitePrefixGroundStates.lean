@@ -80,7 +80,7 @@ theorem uniform_bondOne_ground_family_of_normal_local_kernel
 /-- A bond-one ground representation at one sufficiently long prime
 volume supplies the same bond-one ground family at every permitted
 positive volume. The normal tensor and local-kernel inclusion are derived
-by the actual prime-length reduction, not supplied by the caller.
+by the actual prime-length reduction, not assumed as hypotheses.
 Source: SPWC10, Theorem 5 proof, lines 861--880, bond-one input branch. -/
 theorem exists_uniform_bondOne_ground_family_of_prime_length_bound
     (h : MPVSpace d L →ₗ[ℂ] MPVSpace d L) (hh : h.IsPositive)

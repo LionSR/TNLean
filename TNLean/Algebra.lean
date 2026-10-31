@@ -49,6 +49,7 @@ import TNLean.Algebra.CycleLaplacianFourier
 import TNLean.Algebra.CyclicInsertion
 import TNLean.Algebra.CyclicMomentRigidity
 import TNLean.Algebra.DirectedWalkCoboundary
+import TNLean.Algebra.EuclideanExtendByZero
 import TNLean.Algebra.EuclideanFiberwiseMap
 import TNLean.Algebra.EuclideanFiberwiseProjection
 import TNLean.Algebra.EventuallyConstantCycleWeights

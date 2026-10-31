@@ -9,7 +9,7 @@
         MPOTensor.twoSiteHeisenbergMatrix_intertwiner,
         MPOTensor.twoSiteHeisenbergMatrix_isUnitaryBetween,
         MPOTensor.twoSiteHeisenbergMatrix_conjugation}
-    \notready
+    \leanok
     \uses{def:mpu_supplied_two_site_standard_form,
         lem:mpu_two_site_open_three_block_buffers}
     Let $W$ have a supplied two-site standard form with gates $u,v$.
@@ -30,7 +30,7 @@
     \cite[lines~603--622 and~2300--2306]{Cirac2017MPU}, under the scope restriction and remaining
     assembly recorded in \cite{gap:mpu_qca_complete_block_heisenberg_scope}.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     Fixing all exterior indices gives the already derived three-block
     trace intertwiner, with the arbitrary tail retained as a virtual word
     factor. Summing the middle indices identifies the two complete finite
@@ -48,7 +48,7 @@
         MPOTensor.originalSiteHeisenbergMatrix_intertwiner,
         MPOTensor.originalSiteHeisenbergMatrix_isUnitaryBetween,
         MPOTensor.originalSiteHeisenbergMatrix_conjugation}
-    \notready
+    \leanok
     \uses{thm:mpu_original_site_buffered_three_block_locality,
         thm:mpu_finite_heisenberg_complete_block,
         def:mpu_supplied_two_site_standard_form}
@@ -69,7 +69,7 @@
     \cite[lines~2300--2306]{Cirac2017MPU}, with the remaining scope recorded
     in \cite{gap:mpu_qca_complete_block_heisenberg_scope}.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     The actual direct-block equivalence identifies the three complete
     middle blocks with their standard-form letters. The original residual
     products remain at the virtual ends of the established three-block
@@ -87,7 +87,7 @@
         MPOTensor.originalSiteHeisenbergInputWindow,
         MPOTensor.originalSiteHeisenbergOutputWindow,
         MPOTensor.mpo_bufferedWindow_conjugation}
-    \notready
+    \leanok
     \uses{thm:mpu_finite_heisenberg_original_residuals}
     Under the preceding hypotheses, let $I_k(A)$ and $O_k(A)$ be the
     input and output matrices on the fixed window of $6k$ original
@@ -105,7 +105,7 @@
     given below, with the inverse and completion scope recorded in
     \cite{gap:mpu_qca_complete_block_heisenberg_scope}.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     Separate the prefix and suffix words from the complete central
     window. In these coordinates, the exterior Kronecker identity is
     the product of the identities on the original residual words and
@@ -156,7 +156,7 @@
     \label{thm:mpu_finite_heisenberg_canonical_window}
     \lean{SpinChain.intervalCoordinates_localInclusion_eq_bufferedWindowMatrix,
         SpinChain.finiteChainLocalObservable_originalSiteHeisenbergWindow}
-    \notready
+    \leanok
     \uses{thm:mpu_finite_heisenberg_fixed_window}
     Fix an integer interval $\Lambda=[a,a+6k)$ and the preceding
     standard-form data. Interpret $I_k(A)$ and $O_k(A)$ as matrices
@@ -171,7 +171,7 @@
     given below, with the inverse and completion scope recorded in
     \cite{gap:mpu_qca_complete_block_heisenberg_scope}.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     Equality of the complementary coordinates is precisely equality
     of both exterior words, so canonical local inclusion is the same
     identity-tensor inclusion in consecutive coordinates. Apply the
@@ -186,7 +186,7 @@
     \lean{MPOTensor.originalSiteHeisenbergCentreEquiv,
         SpinChain.intervalCoordinates_centralInclusion_originalSiteHeisenbergInputWindow,
         SpinChain.exists_finiteChainLocalObservable_central_interval}
-    \notready
+    \leanok
     \uses{thm:mpu_finite_heisenberg_canonical_window}
     Under the preceding hypotheses, every observable on
     $\lbrack a+2k,a+4k)$ has a fixed output observable on
@@ -201,7 +201,7 @@
     \cite[lines~2300--2306]{Cirac2017MPU}; see
     \cite{gap:mpu_qca_complete_block_heisenberg_scope}.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     The direct-block decoding bijection identifies the middle input
     coordinates with all configurations on the central $2k$ sites.
     Reading the three consecutive blocks shows that the middle
@@ -216,7 +216,7 @@
 \begin{lemma}[Actual buffering compatibility on arbitrary finite support]
     \label{thm:mpu_finite_heisenberg_arbitrary_region_compatibility}
     \lean{SpinChain.finiteChainLocalObservable_eq_of_twoSiteStandardForm_buffers}
-    \notready
+    \leanok
     \uses{thm:mpu_finite_heisenberg_full_central_interval,
         lem:mpu_singleton_generation_and_inverse_reflection}
     Let $k>0$ and suppose that the length-$k$ blocked tensor has the
@@ -236,7 +236,7 @@
     remain separate as recorded in
     \cite{gap:mpu_qca_complete_block_heisenberg_scope}.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     For $x\in\Lambda$, place its one-site algebra in the complete central
     interval $[x,x+2k)$. The preceding theorem gives one fixed output
     on $[x-2k,x+4k)$ for both ambient chains. The two homomorphisms
@@ -259,7 +259,7 @@
         SpinChain.bufferedMPUAlgebraicAction,
         SpinChain.norm_bufferedMPULocalAction,
         SpinChain.norm_bufferedMPUAlgebraicAction}
-    \notready
+    \leanok
     \uses{thm:mpu_finite_heisenberg_arbitrary_region_compatibility}
     Under the preceding supplied standard-form hypotheses, choosing one
     sufficiently buffered finite chain for each region gives an actual
@@ -273,7 +273,7 @@
     automorphism remain separate as in
     \cite{gap:mpu_qca_complete_block_heisenberg_scope}.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     The largest absolute site coordinate of a finite support is finite.
     Adding $4k+1$ on both sides gives a canonical chain of length greater
     than one with all required buffers. For nested supports, the two
@@ -295,7 +295,7 @@
         SpinChain.bufferedMPUQuasiLocalAction_finiteChainConjugation,
         SpinChain.bufferedMPUQuasiLocalAction_isometry,
         SpinChain.norm_bufferedMPUQuasiLocalAction}
-    \notready
+    \leanok
     \uses{thm:mpu_finite_heisenberg_forward_local_action}
     For positive physical dimension, the preceding actual forward action
     extends to an isometric unital star-algebra endomorphism of the
@@ -309,7 +309,7 @@
     automorphism statement remain separate as in
     \cite{gap:mpu_qca_complete_block_heisenberg_scope}.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     Norm preservation makes the actual algebraic-local homomorphism an
     isometry. The uniform completion extends its ring homomorphism;
     preservation of complex scalars and the involution follow from the
@@ -326,7 +326,7 @@
         SpinChain.mem_range_localInclusion_iff_commute_outside_singletons,
         SpinChain.inverse_mem_range_localInclusion_of_forward_commute,
         SpinChain.inverse_mem_range_localInclusion_of_forward_support}
-    \notready
+    \leanok
     The one-site algebras generate every finite local algebra; the empty
     local algebra consists of scalars. An observable on a finite region
     is supported in a retained subregion exactly when it commutes with
@@ -339,7 +339,7 @@
     argument in \cite[lines~2292--2306]{Cirac2017MPU}; no inverse family
     or global locality assertion is assumed or concluded here.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     Induct over disjoint unions of sites using matrix tensor expansion.
     Commutation with each generating algebra therefore implies
     commutation with the whole exterior algebra. Its relative commutant
@@ -486,7 +486,7 @@
         SpinChain.quasiLocalTranslation_finiteChainConjugation,
         SpinChain.bufferedMPUQuasiLocalAction_translation_quasiLocalObservable,
         SpinChain.bufferedMPUQuasiLocalAction_translation}
-    \notready
+    \leanok
     \uses{thm:mpu_finite_heisenberg_completed_forward_action}
     Translation of an interval observable shifts its integer anchor
     without changing its consecutive-coordinate matrix. The same is
@@ -502,7 +502,7 @@
     \cite[lines~2292--2306]{Cirac2017MPU}, with the source restriction
     recorded in \cite{gap:mpu_qca_complete_block_heisenberg_scope}.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     Canonical translation and consecutive coordinates give the same
     site numbering after shifting the interval anchor. Their local
     representatives agree after canonical inclusion. The periodic
@@ -519,7 +519,7 @@
     \label{lem:mpu_finite_heisenberg_forward_propagation}
     \lean{SpinChain.bufferedMPUAlgebraicAction_supportedIn,
         SpinChain.bufferedMPUQuasiLocalAction_supportedIn}
-    \notready
+    \leanok
     \uses{thm:mpu_finite_heisenberg_completed_forward_action,
         lem:mpu_singleton_generation_and_inverse_reflection}
     Under the preceding supplied positive block and standard-form
@@ -537,7 +537,7 @@
     assembly remain separate as in
     \cite{gap:mpu_qca_complete_block_heisenberg_scope}.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     For a one-site observable at $x$, choose the actual chain
     $[x-2k,x+4k)$ of length $6k>1$. The established finite-chain
     formula represents its output in precisely that finite-region

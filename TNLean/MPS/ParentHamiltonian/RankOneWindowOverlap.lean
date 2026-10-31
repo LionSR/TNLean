@@ -20,7 +20,7 @@ Theorem 5, lines 850--880. It is not itself a counterexample to that theorem
 or a claim about an assembled all-volume parent Hamiltonian.
 -/
 
-namespace MPSPreparation
+namespace MPSTensor
 
 /-- Two overlapping one-dimensional coefficient sections are incompatible
 when the left window has a nonzero two-by-two minor. No global state,
@@ -55,4 +55,4 @@ theorem eq_zero_of_overlapping_one_dimensional_sections
   intro a b c
   rw [hL, hf, zero_mul]
 
-end MPSPreparation
+end MPSTensor

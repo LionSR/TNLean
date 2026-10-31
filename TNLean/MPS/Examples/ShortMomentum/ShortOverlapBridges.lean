@@ -15,8 +15,9 @@ active endpoint letters has a three-edge overlap bridge. At degree seven only
 the zero charge is missing and every pair of endpoint letters has such a bridge.
 
 The assertions are finite charge identities; the bridges themselves are
-quantified witnesses, checked by ordinary kernel reduction. They do not assume
-or assert a Hamiltonian kernel or open-chain intersection property.
+quantified witnesses, verified by finite case analysis over the twenty-five
+charges. They do not assume or assert a Hamiltonian kernel or open-chain
+intersection property.
 Source context: SPWC10, arXiv:0909.5347, Theorem 5, lines 850--880.
 -/
 
