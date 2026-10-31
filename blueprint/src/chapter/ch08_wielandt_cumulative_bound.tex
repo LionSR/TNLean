@@ -209,6 +209,82 @@ matrices, and let $\E_K$ be its Kraus map.
     Lemma~\ref{thm:wielandt_proposition_three}.
 \end{remark}
 
+\subsection{Different indices for the three-Pauli channel}
+
+\begin{definition}[Three-Pauli channel]
+    \label{def:wielandt_three_pauli_channel}
+    \lean{MPSTensor.threePauliTensor}
+    \leanok
+    The three-Pauli channel is the qubit channel with Kraus matrices
+    $A_x=\sigma_x/\sqrt3$, $A_y=\sigma_y/\sqrt3$ and
+    $A_z=\sigma_z/\sqrt3$, where
+    \begin{align}
+        \sigma_x & =\begin{pmatrix}0&1\\1&0\end{pmatrix},                  &
+        \sigma_y & =\begin{pmatrix}0&-\mathrm i\\\mathrm i&0\end{pmatrix}, &
+        \sigma_z & =\begin{pmatrix}1&0\\0&-1\end{pmatrix}.
+    \end{align}
+    This is the example following Proposition~2 of~\cite{Sanz2010Quantum}.
+\end{definition}
+
+\begin{lemma}[The three-Pauli channel is trace preserving]
+    \label{lem:wielandt_three_pauli_trace_preserving}
+    \lean{MPSTensor.threePauliTensor_isTP}
+    \leanok
+    \uses{def:wielandt_three_pauli_channel}
+    The Kraus matrices of the three-Pauli channel satisfy
+    $\sum_{k=x,y,z}A_k^\dagger A_k=\Id$.
+\end{lemma}
+\begin{proof}\leanok
+    Each Pauli matrix is Hermitian and squares to the identity, so
+    $A_k^\dagger A_k=\Id/3$ for $k=x,y,z$.
+\end{proof}
+
+\begin{lemma}[One-step spreading and two-step matrix spanning]
+    \label{lem:wielandt_three_pauli_spans}
+    \lean{MPSTensor.threePauliTensor_vectorSpreadSpan_one,
+        MPSTensor.threePauliTensor_wordSpan_one_ne_top,
+        MPSTensor.threePauliTensor_wordSpan_two}
+    \leanok
+    \uses{def:wielandt_three_pauli_channel, def:word_span, def:mps_vector_spread_span}
+    For every $0\ne\varphi\in\mathbb C^2$, one has
+    $H_1(A,\varphi)=\mathbb C^2$. Nevertheless $S_1(A)\ne M_2(\mathbb C)$,
+    whereas $S_2(A)=M_2(\mathbb C)$.
+\end{lemma}
+\begin{proof}\leanok
+    Write $\varphi=(a,b)$. The combinations
+    $(\sigma_x+\mathrm i\sigma_y)\varphi=(2b,0)$ and
+    $(\sigma_x-\mathrm i\sigma_y)\varphi=(0,2a)$, together with
+    $\sigma_z\varphi=(a,-b)$, span both coordinate axes since $a$ and $b$
+    do not both vanish. The common nonzero scalar $1/\sqrt3$ does not
+    change this span. Every one-letter matrix has trace zero, so their span
+    excludes the identity. The two-letter products satisfy
+    \begin{align}
+        \sigma_x^2=\sigma_y^2=\sigma_z^2=\Id,\quad
+        \sigma_x\sigma_y=\mathrm i\sigma_z,\quad
+        \sigma_y\sigma_z=\mathrm i\sigma_x,\quad
+        \sigma_z\sigma_x=\mathrm i\sigma_y,
+        \notag
+    \end{align}
+    so $\Id,\sigma_x,\sigma_y,\sigma_z\in S_2(A)$, and these four matrices
+    span $M_2(\mathbb C)$.
+\end{proof}
+
+\begin{lemma}[Strict inequality between the two channel indices]
+    \label{thm:wielandt_three_pauli_indices}
+    \lean{MPSTensor.threePauliTensor_qIndex, MPSTensor.threePauliTensor_iIndex,
+        MPSTensor.threePauliTensor_qIndex_lt_iIndex}
+    \leanok
+    \uses{lem:wielandt_three_pauli_spans, def:wielandt_q_index, def:wielandt_i_index}
+    The three-Pauli channel satisfies $q(\mathcal E_A)=1<2=\iota(A)$.
+    Thus the comparison of Proposition~1 in~\cite{Sanz2010Quantum} can be strict.
+\end{lemma}
+\begin{proof}\leanok
+    The least positive spreading length is one by
+    Lemma~\ref{lem:wielandt_three_pauli_spans}. The least positive
+    full-matrix-span length is two, since the length-one span is proper
+    and the length-two span is full.
+\end{proof}
+
 \begin{lemma}[Eventual full Kraus rank gives paper primitivity]
     \label{thm:paper_primitive_of_full_kraus_rank}
     \lean{MPSTensor.isPrimitivePaper_of_hasEventuallyFullKrausRank}
@@ -308,6 +384,27 @@ matrices, and let $\E_K$ be its Kraus map.
     Lemma~\ref{thm:paper_primitive_of_full_kraus_rank} then gives paper
     primitivity, and Lemma~\ref{thm:strongly_irreducible_of_paper_primitive}
     gives strong irreducibility.
+\end{proof}
+
+\begin{lemma}[Comparison of the two channel indices]
+    \label{thm:q_index_le_i_index_channel}
+    \lean{MPSTensor.qIndex_le_iIndex_of_tracePreserving}
+    \leanok
+    \uses{def:wielandt_i_index, def:wielandt_q_index, thm:wielandt_proposition_three}
+    Let $A_1,\ldots,A_d\in\MN{D}$, where $D>0$, satisfy
+    $\sum_i A_i^\dagger A_i=\Id$. With both indices set to zero when
+    their defining sets are empty, one has $q(\E_A)\le\iota(A)$.
+    This is \cite[Proposition~1]{Sanz2010Quantum}.
+\end{lemma}
+
+\begin{proof}\leanok
+    If $\iota(A)$ is a positive integer with $S_{\iota(A)}(A)=\MN{D}$, then
+    $H_{\iota(A)}(A,\varphi)=\C^D$ for every $\varphi\neq0$, so $\iota(A)$
+    lies in the defining set for $q(\E_A)$ and $q(\E_A)\le\iota(A)$.
+    Otherwise, Lemma~\ref{thm:wielandt_proposition_three} excludes
+    primitivity, so
+    $\{q\ge1:H_q(A,\varphi)=\C^D\text{ for every }\varphi\neq0\}=\emptyset$
+    and $q(\E_A)=0\le\iota(A)$.
 \end{proof}
 
 \begin{lemma}[Primitive-channel specialization of the index bound]
