@@ -738,14 +738,120 @@ conjugate-transposed tensor.
     in (\ref{eq:half_chain_weighted_remainder}) is precisely this block.
 \end{proof}
 
-\begin{lemma}[General canonical C2 half-chain limit]%
-    \label{thm:half_chain_general_c2_source}
-    \notready
-    For a TI MPS satisfying Condition C2, \cite[Theorem~6]{PerezGarcia2007Matrix}
-    asserts convergence of the half-chain reduced spectrum to the doubled
-    canonical fixed-point spectrum. As recorded in
-    \cite{gap:pgvwc07_half_chain_spectrum_conventions}, extending
-    Theorem~\ref{thm:half_chain_source_limit} to a general weighted canonical
-    representation requires passing to its dominant block and controlling the
-    subleading physical contribution.
+\begin{lemma}[Dimension-independent physical reduced-matrix comparison]
+    \label{lem:half_chain_physical_reduced_stability}
+    \lean{MPSTensor.ringBipartiteKernel,
+        MPSTensor.ringVectorReducedMatrix,
+        MPSTensor.norm_ringBipartiteKernel_le,
+        MPSTensor.norm_ringVectorReducedMatrix_sub_le}
+    \leanok
+    Read a ring vector $\psi$ on $2L$ sites as its coefficient matrix
+    $K_\psi(\sigma,\tau)=\psi(\sigma\tau)$, and write
+    $R_\psi=K_\psi K_\psi^\dagger$. Then
+    \begin{align}
+        \|K_\psi\|\le\|\psi\|,
+        \qquad
+        \|R_\psi-R_\phi\|
+        \le(\|\psi\|+\|\phi\|)\|\psi-\phi\|.
+    \end{align}
+    Neither bound depends on the physical half-chain dimension.
 \end{lemma}
+\begin{proof}\leanok
+    The squared operator norm is at most the sum of squared matrix
+    entries, which is the squared vector norm under concatenation.
+    Factor the reduced-matrix difference as
+    $(K_\psi-K_\phi)K_\psi^\dagger+
+        K_\phi(K_\psi-K_\phi)^\dagger$ and apply the norm bounds.
+\end{proof}
+
+\begin{lemma}[Actual finite normalization of the physical reduced matrix]
+    \label{lem:half_chain_actual_vector_normalization}
+    \lean{MPSTensor.halfChainNormSq_eq_norm_mpvState_sq,
+        MPSTensor.normalizedHalfChainReducedMatrix_eq_ringVectorReducedMatrix}
+    \leanok
+    \uses{lem:half_chain_physical_reduced_stability}
+    The finite normalization is exactly $\|\psi_{2L}(A)\|^2$.
+    The normalized half-chain reduced matrix equals $R_{\widehat\psi}$,
+    where $\widehat\psi=\psi/\|\psi\|$ and the quotient is zero when
+    $\psi=0$. This identity includes zero-norm finite lengths.
+\end{lemma}
+\begin{proof}\leanok
+    Concatenation identifies the sum of squared ring coefficients with
+    the vector norm. The scalar in the coefficient matrix and its
+    adjoint multiply to the inverse squared vector norm.
+\end{proof}
+
+\begin{lemma}[Normalization preserves a vanishing physical remainder]
+    \label{lem:half_chain_normalized_physical_remainder}
+    \lean{MPSTensor.norm_normalizedMPVState_sub_le,
+        MPSTensor.tendsto_normalizedMPVState_sub_of_mpvState_sub}
+    \leanok
+    For two actual periodic vectors $\psi,\phi$ at the same length,
+    \begin{align}
+        \|\widehat\psi-\widehat\phi\|
+        \le2\|\psi-\phi\|+2\bigl|\|\phi\|-1\bigr|.
+    \end{align}
+    Thus a vanishing physical difference and a norm-one limit of the
+    second vector give a vanishing normalized difference, also along
+    any subsequence of lengths.
+\end{lemma}
+\begin{proof}\leanok
+    The distance from a vector to its normalization is at most the
+    absolute difference of its norm from one, including the zero vector.
+    Insert the two unnormalized vectors, and use the reverse triangle
+    inequality to compare their norms.
+\end{proof}
+
+\begin{lemma}[Stability of every ordered physical half-chain eigenvalue]
+    \label{lem:half_chain_physical_eigenvalue_stability}
+    \lean{MPSTensor.abs_halfChainEigenvalues_sub_le,
+        MPSTensor.tendsto_halfChainEigenvalues_of_normalizedMPVState_sub}
+    \leanok
+    \uses{lem:half_chain_physical_reduced_stability,lem:half_chain_actual_vector_normalization}
+    For any two tensors of the same physical dimension and possibly
+    different bond dimensions, their decreasing normalized half-chain
+    spectra, extended by zeroes, satisfy
+    \begin{align}
+        |\lambda_i(A,L)-\lambda_i(B,L)|
+        \le2\|\widehat\psi_{2L}(A)-\widehat\psi_{2L}(B)\|.
+    \end{align}
+    A vanishing normalized physical difference therefore transfers
+    every ordered eigenvalue limit, despite the growing physical
+    half-chain dimension.
+\end{lemma}
+\begin{proof}\leanok
+    Apply Weyl's inequality at each finite length and the preceding
+    reduced-matrix bound. Each normalized vector has norm at most one.
+    Beyond the physical dimension both padded eigenvalues are zero.
+    Squeeze the eigenvalue difference and add the known limit.
+\end{proof}
+
+\begin{theorem}[General canonical C2 half-chain limit]%
+    \label{thm:half_chain_general_c2_source}
+    \lean{MPSTensor.PGVWC07CanonicalFormData.exists_halfChainSpectrumLimit_of_c2}
+    \leanok
+    \uses{lem:half_chain_c2_dominant_physical_limit,
+        lem:half_chain_canonical_normalized_dual,
+        lem:half_chain_normalized_physical_remainder,
+        lem:half_chain_physical_eigenvalue_stability,thm:half_chain_unital_limit}
+    Let $A$ be a general weighted TI canonical tensor with transfer
+    spectral radius one, satisfying generic Condition C2 with algebraic
+    multiplicity: its only peripheral root is the simple root $1$.
+    There is a unique unit-weight block $A^j$, with a normalized faithful
+    diagonal dual fixed point $\Lambda_j$. The actual normalized half-chain
+    ordered spectrum of $A$ converges to that of
+    $\Lambda_j\otimes\Lambda_j$, retaining multiplicities and zero padding.
+    Its finite ring norm is positive at every sufficiently large even
+    length. The conventions are recorded in
+    \cite{gap:pgvwc07_half_chain_spectrum_conventions}; this is the generic
+    weighted-canonical interpretation of \cite[Theorem~6]{PerezGarcia2007Matrix}.
+\end{theorem}
+\begin{proof}\leanok
+    Derive the dominant normal block, its vanishing physical remainder,
+    and its normalized diagonal dual fixed point. The one-block result
+    gives both its norm-one limit and its half-chain spectrum. The
+    normalization bound makes the two actual normalized vectors close,
+    and the dimension-independent eigenvalue bound transfers every
+    ordered limit. The physical remainder and the dominant norm-one
+    limit also make the original finite norm eventually positive.
+\end{proof}
