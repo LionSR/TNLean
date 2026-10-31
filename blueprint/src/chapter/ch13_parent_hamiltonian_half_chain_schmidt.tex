@@ -583,14 +583,275 @@ conjugate-transposed tensor.
 \end{proof}
 
 
-\begin{lemma}[General canonical C2 half-chain limit]%
-    \label{thm:half_chain_general_c2_source}
-    \notready
-    For a TI MPS satisfying Condition C2, \cite[Theorem~6]{PerezGarcia2007Matrix}
-    asserts convergence of the half-chain reduced spectrum to the doubled
-    canonical fixed-point spectrum. As recorded in
-    \cite{gap:pgvwc07_half_chain_spectrum_conventions}, extending
-    Theorem~\ref{thm:half_chain_source_limit} to a general weighted canonical
-    representation requires passing to its dominant block and controlling the
-    subleading physical contribution.
+\begin{lemma}[Uniform periodic norm of a unital tensor]
+    \label{lem:half_chain_unital_periodic_norm}
+    \lean{MPSTensor.norm_mpvState_le_bondDimension_of_unital}
+    \leanok
+    A unital tensor of positive bond dimension $D$ satisfies
+    $\|\psi_N\|\leq D$ at every length $N$, without primitivity or
+    a spectral gap.
 \end{lemma}
+\begin{proof}\leanok
+    Positivity and unitality place every transfer eigenvalue in the
+    closed unit disk. Counting algebraic multiplicities on the
+    $D^2$-dimensional matrix space,
+    \begin{align}
+        \|\psi_N\|^2
+         & =\operatorname{tr}\left(\mathcal E_A^N\right),
+         & \left|\operatorname{tr}\left(\mathcal E_A^N\right)\right|
+         & \leq D^2,
+        \label{eq:half_chain_unital_periodic_norm_trace}
+    \end{align}
+    so $\|\psi_N\|\leq D$.
+\end{proof}
+
+\begin{lemma}[Vanishing physical contribution of subunit canonical weights]
+    \label{lem:half_chain_weighted_remainder}
+    \lean{MPSTensor.PGVWC07CanonicalFormData.norm_mpvState_sub_unitWeight_sum_le,
+        MPSTensor.PGVWC07CanonicalFormData.tendsto_norm_mpvState_sub_unitWeight_sum}
+    \leanok
+    \uses{def:pgvwc07_ti_canonical_representation}
+    Let $A_i=\bigoplus_j \lambda_j A_i^j$ be a TI canonical representation with
+    $0<\lambda_j\leq1$, unital blocks $A^j$, and block dimensions $D_j$.
+    Its actual periodic vector satisfies
+    \begin{align}
+        \left\|\psi_N(A)-\sum_{\lambda_j=1}\psi_N(A^j)\right\|
+         & \leq\sum_{\lambda_j<1}\lambda_j^N D_j\longrightarrow0.
+        \label{eq:half_chain_weighted_remainder}
+    \end{align}
+    No condition on the peripheral transfer spectrum is required for
+    this estimate.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:half_chain_unital_periodic_norm}
+    The exact canonical decomposition is
+    $\psi_N(A)=\sum_j\lambda_j^N\psi_N(A^j)$.
+    Subtract the unit-weight terms and apply the triangle inequality
+    and Lemma~\ref{lem:half_chain_unital_periodic_norm}. Each remaining
+    geometric sequence tends to zero, and there are finitely many blocks.
+\end{proof}
+
+\begin{lemma}[Normalized diagonal dual fixed point of a canonical block]
+    \label{lem:half_chain_canonical_normalized_dual}
+    \lean{MPSTensor.PGVWC07CanonicalFormData.exists_normalized_diagonal_dualFixedPoint}
+    \leanok
+    \uses{def:pgvwc07_ti_canonical_representation}
+    Each canonical block has a strictly positive diagonal dual fixed point
+    $\operatorname{diag}(\nu_a)$ with $\sum_a\nu_a=1$.
+\end{lemma}
+\begin{proof}\leanok
+    The canonical dual fixed point $\Lambda$ is diagonal and positive
+    definite, so its diagonal entries are real and strictly positive.
+    Divide them by their positive sum $s$. With $c=s^{-1}$,
+    \begin{align}
+        \sum_iA_i^\dagger(c\Lambda)A_i
+         & =c\sum_iA_i^\dagger\Lambda A_i=c\Lambda.
+        \label{eq:half_chain_canonical_normalized_dual}
+    \end{align}
+\end{proof}
+
+\begin{lemma}[Transfer eigenvectors of canonical sectors]
+    \label{lem:half_chain_canonical_sector_eigenvalues}
+    \lean{MPSTensor.PGVWC07CanonicalFormData.transferMap_reindex_blockDiagonal,
+        MPSTensor.PGVWC07CanonicalFormData.sectorProjection,
+        MPSTensor.PGVWC07CanonicalFormData.sectorProjection_ne_zero,
+        MPSTensor.PGVWC07CanonicalFormData.transferMap_sectorProjection,
+        MPSTensor.PGVWC07CanonicalFormData.hasEigenvalue_weight_sq,
+        MPSTensor.PGVWC07CanonicalFormData.hasEigenvalue_of_block}
+    \leanok
+    \uses{def:pgvwc07_ti_canonical_representation}
+    For a weighted canonical tensor, let $P_j$ project onto the $j$th
+    bond sector. Then $P_j\ne0$ and $\mathcal E_A(P_j)=\lambda_j^2P_j$.
+    More generally, every eigenvalue $\mu$ of the transfer map of the
+    unweighted block $A^j$ gives the eigenvalue $\lambda_j^2\mu$ of
+    $\mathcal E_A$. Block-diagonal observables evolve separately,
+    with the $j$th block acted on by $\lambda_j^2\mathcal E_{A^j}$.
+\end{lemma}
+\begin{proof}\leanok
+    For a block-diagonal observable $X=\bigoplus_kX_k$, the canonical
+    block form of $A_i$ gives
+    \begin{align}
+        A_iXA_i^\dagger
+         & =\bigoplus_k\lambda_k^2A_i^kX_k\left(A_i^k\right)^\dagger,
+        \label{eq:half_chain_canonical_blockwise_transfer}
+    \end{align}
+    so $\mathcal E_A(X)=\bigoplus_k\lambda_k^2\mathcal E_{A^k}(X_k)$. Taking
+    $X=P_j$ and using unitality of $A^j$ gives
+    $\mathcal E_A(P_j)=\lambda_j^2\mathcal E_{A^j}(\Id_{D_j})=\lambda_j^2P_j$.
+    Embedding an arbitrary block eigenvector in the $j$th sector gives
+    the remaining assertion.
+\end{proof}
+
+\begin{lemma}[Unique dominant sector from normalized generic C2]
+    \label{lem:half_chain_c2_dominant_sector}
+    \lean{MPSTensor.PGVWC07CanonicalFormData.exists_weight_eq_one,
+        MPSTensor.PGVWC07CanonicalFormData.weight_eq_one_unique_of_simple_fixedEigenvalue,
+        MPSTensor.PGVWC07CanonicalFormData.existsUnique_weight_eq_one_of_c2}
+    \leanok
+    \uses{def:pgvwc07_ti_canonical_representation}
+    Suppose the actual canonical transfer map has spectral radius one
+    and satisfies generic Condition C2, counting algebraic multiplicity:
+    its only peripheral eigenvalue is $1$, and that root is simple.
+    There is exactly one block $j$ with $\lambda_j=1$.
+    This is the multiplicity-aware reading of C2 recorded in
+    \cite{gap:pgvwc07_half_chain_spectrum_conventions}; the literal reading
+    excludes only other peripheral values.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:half_chain_canonical_sector_eigenvalues,
+        lem:pgvwc07_ti_canonical_representation_single_block}
+    By (\ref{eq:half_chain_canonical_blockwise_transfer}) and unitality
+    of the blocks,
+    \begin{align}
+        \mathcal E_A(\Id)
+         & =\bigoplus_j\lambda_j^2\Id_{D_j},
+         & \|\mathcal E_A(\Id)\|
+         & =\max_j\lambda_j^2.
+        \label{eq:half_chain_canonical_identity_transfer}
+    \end{align}
+    If every weight were less than one, this would give
+    $\|\mathcal E_A(\Id)\|<1$. Positivity implies
+    $r(\mathcal E_A)\leq\|\mathcal E_A(\Id)\|$, contradicting the
+    radius normalization. Two distinct unit-weight sector projections
+    would be independent fixed vectors, contradicting algebraic
+    simplicity of the root $1$.
+\end{proof}
+
+\begin{lemma}[Actual physical approximation by the dominant normal block]
+    \label{lem:half_chain_c2_dominant_physical_limit}
+    \lean{MPSTensor.PGVWC07CanonicalFormData.exists_dominantBlock_physical_limit_of_c2,
+        MPSTensor.PGVWC07CanonicalFormData.isNormalTensor_of_weight_eq_one_of_c2,
+        MPSTensor.PGVWC07CanonicalFormData.exists_dominantNormalBlock_physical_limit_of_c2}
+    \leanok
+    \uses{def:pgvwc07_ti_canonical_representation}
+    Under the preceding canonical and normalized C2 hypotheses, the
+    unique unit-weight block $A^j$ is normal and
+    $\|\psi_N(A)-\psi_N(A^j)\|\to0$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:half_chain_c2_dominant_sector, lem:half_chain_weighted_remainder,
+        lem:half_chain_canonical_sector_eigenvalues, lem:pgvwc07_block_irreducible}
+    Canonical unitality, the faithful dual fixed point, and scalar fixed
+    points give irreducibility of the block. Its peripheral eigenvalues
+    lift to those of the actual tensor, so C2 excludes every peripheral
+    value other than one. Thus the block is normal. The unit-weight sum
+    in (\ref{eq:half_chain_weighted_remainder}) is precisely this block.
+\end{proof}
+
+\begin{lemma}[Dimension-independent physical reduced-matrix comparison]
+    \label{lem:half_chain_physical_reduced_stability}
+    \lean{MPSTensor.ringBipartiteKernel,
+        MPSTensor.ringVectorReducedMatrix,
+        MPSTensor.norm_ringBipartiteKernel_le,
+        MPSTensor.norm_ringVectorReducedMatrix_sub_le}
+    \leanok
+    Read a ring vector $\psi$ on $2L$ sites as its coefficient matrix
+    $K_\psi(\sigma,\tau)=\psi(\sigma\tau)$, and write
+    $R_\psi=K_\psi K_\psi^\dagger$. Then
+    \begin{align}
+        \|K_\psi\|\le\|\psi\|,
+        \qquad
+        \|R_\psi-R_\phi\|
+        \le(\|\psi\|+\|\phi\|)\|\psi-\phi\|.
+    \end{align}
+    Neither bound depends on the physical half-chain dimension.
+\end{lemma}
+\begin{proof}\leanok
+    The squared operator norm is at most the sum of squared matrix
+    entries, which is the squared vector norm under concatenation.
+    Factor the reduced-matrix difference as
+    $(K_\psi-K_\phi)K_\psi^\dagger+
+        K_\phi(K_\psi-K_\phi)^\dagger$ and apply the norm bounds.
+\end{proof}
+
+\begin{lemma}[Actual finite normalization of the physical reduced matrix]
+    \label{lem:half_chain_actual_vector_normalization}
+    \lean{MPSTensor.halfChainNormSq_eq_norm_mpvState_sq,
+        MPSTensor.normalizedHalfChainReducedMatrix_eq_ringVectorReducedMatrix}
+    \leanok
+    \uses{lem:half_chain_physical_reduced_stability}
+    The finite normalization is exactly $\|\psi_{2L}(A)\|^2$.
+    The normalized half-chain reduced matrix equals $R_{\widehat\psi}$,
+    where $\widehat\psi=\psi/\|\psi\|$ and the quotient is zero when
+    $\psi=0$. This identity includes zero-norm finite lengths.
+\end{lemma}
+\begin{proof}\leanok
+    Concatenation identifies the sum of squared ring coefficients with
+    the vector norm. The scalar in the coefficient matrix and its
+    adjoint multiply to the inverse squared vector norm.
+\end{proof}
+
+\begin{lemma}[Normalization preserves a vanishing physical remainder]
+    \label{lem:half_chain_normalized_physical_remainder}
+    \lean{MPSTensor.norm_normalizedMPVState_sub_le,
+        MPSTensor.tendsto_normalizedMPVState_sub_of_mpvState_sub}
+    \leanok
+    For two actual periodic vectors $\psi,\phi$ at the same length,
+    \begin{align}
+        \|\widehat\psi-\widehat\phi\|
+        \le2\|\psi-\phi\|+2\bigl|\|\phi\|-1\bigr|.
+    \end{align}
+    Thus a vanishing physical difference and a norm-one limit of the
+    second vector give a vanishing normalized difference, also along
+    any subsequence of lengths.
+\end{lemma}
+\begin{proof}\leanok
+    The distance from a vector to its normalization is at most the
+    absolute difference of its norm from one, including the zero vector.
+    Insert the two unnormalized vectors, and use the reverse triangle
+    inequality to compare their norms.
+\end{proof}
+
+\begin{lemma}[Stability of every ordered physical half-chain eigenvalue]
+    \label{lem:half_chain_physical_eigenvalue_stability}
+    \lean{MPSTensor.abs_halfChainEigenvalues_sub_le,
+        MPSTensor.tendsto_halfChainEigenvalues_of_normalizedMPVState_sub}
+    \leanok
+    \uses{lem:half_chain_physical_reduced_stability,lem:half_chain_actual_vector_normalization}
+    For any two tensors of the same physical dimension and possibly
+    different bond dimensions, their decreasing normalized half-chain
+    spectra, extended by zeroes, satisfy
+    \begin{align}
+        |\lambda_i(A,L)-\lambda_i(B,L)|
+        \le2\|\widehat\psi_{2L}(A)-\widehat\psi_{2L}(B)\|.
+    \end{align}
+    A vanishing normalized physical difference therefore transfers
+    every ordered eigenvalue limit, despite the growing physical
+    half-chain dimension.
+\end{lemma}
+\begin{proof}\leanok
+    Apply Weyl's inequality at each finite length and the preceding
+    reduced-matrix bound. Each normalized vector has norm at most one.
+    Beyond the physical dimension both padded eigenvalues are zero.
+    Squeeze the eigenvalue difference and add the known limit.
+\end{proof}
+
+\begin{theorem}[General canonical C2 half-chain limit]%
+    \label{thm:half_chain_general_c2_source}
+    \lean{MPSTensor.PGVWC07CanonicalFormData.exists_halfChainSpectrumLimit_of_c2}
+    \leanok
+    \uses{lem:half_chain_c2_dominant_physical_limit,
+        lem:half_chain_canonical_normalized_dual,
+        lem:half_chain_normalized_physical_remainder,
+        lem:half_chain_physical_eigenvalue_stability,thm:half_chain_unital_limit}
+    Let $A$ be a general weighted TI canonical tensor with transfer
+    spectral radius one, satisfying generic Condition C2 with algebraic
+    multiplicity: its only peripheral root is the simple root $1$.
+    There is a unique unit-weight block $A^j$, with a normalized faithful
+    diagonal dual fixed point $\Lambda_j$. The actual normalized half-chain
+    ordered spectrum of $A$ converges to that of
+    $\Lambda_j\otimes\Lambda_j$, retaining multiplicities and zero padding.
+    Its finite ring norm is positive at every sufficiently large even
+    length. The conventions are recorded in
+    \cite{gap:pgvwc07_half_chain_spectrum_conventions}; this is the generic
+    weighted-canonical interpretation of \cite[Theorem~6]{PerezGarcia2007Matrix}.
+\end{theorem}
+\begin{proof}\leanok
+    Derive the dominant normal block, its vanishing physical remainder,
+    and its normalized diagonal dual fixed point. The one-block result
+    gives both its norm-one limit and its half-chain spectrum. The
+    normalization bound makes the two actual normalized vectors close,
+    and the dimension-independent eigenvalue bound transfers every
+    ordered limit. The physical remainder and the dominant norm-one
+    limit also make the original finite norm eventually positive.
+\end{proof}
