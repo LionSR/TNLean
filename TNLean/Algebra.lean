@@ -24,6 +24,7 @@ import TNLean.Algebra.CharacterProjectorWeighted
 import TNLean.Algebra.CircleCohomology
 import TNLean.Algebra.CoalgebraDualStar
 import TNLean.Algebra.CocycleCohomology
+import TNLean.Algebra.CocycleCommPhase
 import TNLean.Algebra.CocycleRestriction
 import TNLean.Algebra.CommonBufferLength
 import TNLean.Algebra.CommonFixedSubmodule
@@ -102,6 +103,7 @@ import TNLean.Algebra.KleinCocycleTable
 import TNLean.Algebra.KrausSpanRank
 import TNLean.Algebra.KroneckerLeastEigenvalue
 import TNLean.Algebra.LSymbol
+import TNLean.Algebra.LSymbolActionMatrix
 import TNLean.Algebra.LSymbolBlockIndependence
 import TNLean.Algebra.LSymbolDomainWall
 import TNLean.Algebra.LSymbolFreeAction

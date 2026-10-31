@@ -1,0 +1,279 @@
+% Gauge law of the multiplicity symbols and the single-block obstruction.
+% Source: GLM23, arXiv:2203.12563v3, REsubmission.tex, lines 415--422,
+% 593--605 (gauge transformations), 607--636 (nonuniqueGS), 640--720 (groups).
+\section{Gauge freedom of the multiplicity symbols and the single-block obstruction}
+\label{sec:glm_mixed_gauge}
+
+The exact fusion and action maps are determined only up to a change of basis
+of their multiplicity spaces. This section shows that the coefficients $L$
+and $F$ transform by the gauge law of \cite[Section~3]{GarreRubio2023MPOSym}
+and that any two choices of exact maps are related by such a change of basis.
+It then proves that a matrix product state with a single injective block,
+acted on without multiplicity, forces the $F$-symbols into the trivial gauge
+class, and specializes the coefficients to scalar symbols for groups.
+
+\begin{lemma}[Gauge transformations of the coefficients]
+    \leanok
+    \label{lem:glm_mixed_gauge_coefficients}
+    \lean{MPOTensor.kronId_sum_smul,MPOTensor.idKron_sum_smul,
+        MPOTensor.actionLMatrix_apply,
+        MPOTensor.sequentialActionAnalysis_regauge,
+        MPOTensor.fusionThenActionSynthesis_regauge,
+        MPOTensor.actionLMatrix_regauge,MPOTensor.fusionFMatrix_regauge}
+    \uses{def:glm_boundary_action_l_matrix,def:glm_boundary_fusion_f_matrix}
+    Let $X,\widehat X$ be square matrices on the action multiplicity spaces
+    and $Y,\widehat Y$ square matrices on the fusion multiplicity spaces.
+    Replace the action maps by
+    $V_{ax}^{y,i}\mapsto\sum_{i'}(X_{ax}^{y})_{ii'}V_{ax}^{y,i'}$ and
+    $\widehat V_{ax}^{y,i}\mapsto\sum_{i'}(\widehat X_{ax}^{y})_{ii'}
+        \widehat V_{ax}^{y,i'}$, and the fusion maps by
+    $W_{ab}^{c,\mu}\mapsto\sum_{\mu'}(Y_{ab}^{c})_{\mu\mu'}W_{ab}^{c,\mu'}$
+    and
+    $\widehat W_{ab}^{c,\mu}\mapsto\sum_{\mu'}(\widehat Y_{ab}^{c})_{\mu\mu'}
+        \widehat W_{ab}^{c,\mu'}$. The new coefficients are
+    \begin{align}
+        L'^{\,y}_{abx}[(z,i,j),(c,k,\mu)]
+         & =\sum_{i',j',k',\mu'}(X_{az}^{y})_{ii'}(X_{bx}^{z})_{jj'}
+        (\widehat X_{cx}^{y})_{kk'}(\widehat Y_{ab}^{c})_{\mu\mu'}
+        L_{abx}^{y}[(z,i',j'),(c,k',\mu')],
+        \label{eq:glm_mixed_gauge_l}                                 \\
+        F'^{\,d}_{abc}[(e,\mu,\nu),(f,\lambda,\sigma)]
+         & =\sum_{\mu',\nu',\lambda',\sigma'}(Y_{ab}^{e})_{\mu\mu'}
+        (Y_{ec}^{d})_{\nu\nu'}(\widehat Y_{bc}^{f})_{\lambda\lambda'}
+        (\widehat Y_{af}^{d})_{\sigma\sigma'}
+        F_{abc}^{d}[(e,\mu',\nu'),(f,\lambda',\sigma')].
+        \label{eq:glm_mixed_gauge_f}
+    \end{align}
+    No invertibility of the gauge matrices is used. This is the gauge law of
+    \cite[Section~3]{GarreRubio2023MPOSym} for the $L$-symbols and of its
+    Section~2 for the $F$-symbols.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Taking a Kronecker product with an identity is linear. Hence the
+    sequential analysis map $H_{\rm seq}$ and the fusion-then-action
+    synthesis map $S_{\rm fus}$ are multilinear in the action and fusion maps:
+    $H'^{zj;yi}_{\rm seq}=\sum_{i',j'}(X_{az}^y)_{ii'}(X_{bx}^z)_{jj'}
+        H^{zj';yi'}_{\rm seq}$, and similarly for $S_{\rm fus}$. The normalized
+    trace in (\ref{eq:glm_boundary_action_l_entries}) is bilinear, which gives
+    (\ref{eq:glm_mixed_gauge_l}) after reordering the four finite sums. The
+    two tree contractions $H_{\rm L}$ and $S_{\rm R}$ of
+    (\ref{eq:glm_boundary_fusion_f_matrix}) are likewise bilinear in the
+    fusion maps, which gives (\ref{eq:glm_mixed_gauge_f}).
+\end{proof}
+
+\begin{lemma}[Exact multiplicity gauges]
+    \leanok
+    \label{lem:glm_mixed_gauge_exact}
+    \lean{MPSTensor.IsBiorthogonalDecomposition.exists_multiplicityGauge_eq_of_isInjective}
+    \uses{def:glm_boundary_decomposition}
+    Let a tensor $B$ have two exact biorthogonal decompositions, with
+    analysis and synthesis maps $(V_c^\mu,W_c^\mu)$ and $(V'^{\mu}_c,W'^{\mu}_c)$,
+    onto the same individually injective, positive-dimensional blocks $A_c$,
+    no two of which are related by an invertible gauge and a nonzero scalar.
+    Then there are invertible matrices $Y_c$ with
+    \begin{align}
+        V'^{\mu}_c    & =\sum_\nu(Y_c)_{\mu\nu}V^{\nu}_c,         &
+        W'^{\kappa}_c & =\sum_\nu(Y_c^{-1})_{\nu\kappa}W^{\nu}_c.
+        \notag
+    \end{align}
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{thm:glm_boundary_source_decomposition}
+    The zipper uniqueness theorem gives invertible $Y_c$ with
+    $V'^{\mu}_cB^i=\sum_\nu(Y_c)_{\mu\nu}V^\nu_cB^i$ for every letter $i$.
+    Both sides intertwine $B^i$ with $A_c^i$, since $V^\nu_cB^i=A_c^iV^\nu_c$.
+    Injectivity of $A_c$ gives coefficients $\alpha_i$ with
+    $\sum_i\alpha_iA_c^i=1$, so
+    $V'^{\mu}_c=\sum_i\alpha_iA_c^iV'^{\mu}_c=\sum_i\alpha_iV'^{\mu}_cB^i$,
+    and the same computation for $\sum_\nu(Y_c)_{\mu\nu}V_c^\nu$ gives the
+    first identity. The synthesis identity is the mirror image, using
+    $B^iW^\nu_c=W^\nu_cA_c^i$.
+\end{proof}
+
+\begin{theorem}[Joint gauge law of the multiplicity symbols]
+    \leanok
+    \label{thm:glm_mixed_gauge_joint}
+    \lean{MPOTensor.exists_actionLMatrix_fusionFMatrix_regauge_of_isInjective}
+    \uses{lem:glm_mixed_gauge_coefficients,lem:glm_mixed_gauge_exact}
+    Let the operator blocks and the state blocks be individually injective,
+    have positive bond dimensions, and have no scalar-gauge duplicates within
+    either family. Any two choices of exact fusion and action maps for these
+    blocks have coefficients related by
+    (\ref{eq:glm_mixed_gauge_l}) and (\ref{eq:glm_mixed_gauge_f}), with
+    invertible $X,Y$ and $\widehat X=(X^{-1})^{T}$,
+    $\widehat Y=(Y^{-1})^{T}$. Thus the $L$- and $F$-symbols are determined
+    by the blocks up to the gauge equivalence of
+    \cite[Section~3]{GarreRubio2023MPOSym}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Apply Lemma~\ref{lem:glm_mixed_gauge_exact} to the two fusion
+    decompositions of each stacked pair and to the two action
+    decompositions of each operator--state pair. The resulting exact
+    relations are the hypotheses of
+    Lemma~\ref{lem:glm_mixed_gauge_coefficients}.
+\end{proof}
+
+\begin{lemma}[Scalar gauges preserve exact decompositions]
+    \leanok
+    \label{lem:glm_mixed_gauge_scalar}
+    \lean{MPSTensor.IsBiorthogonalDecomposition.inv_smul_smul}
+    \uses{def:glm_boundary_decomposition}
+    If $(V_c,W_c)$ are the maps of an exact biorthogonal decomposition and
+    $t_c\neq0$, then $(t_c^{-1}V_c,t_cW_c)$ are the maps of an exact
+    biorthogonal decomposition of the same tensor onto the same blocks.
+\end{lemma}
+\begin{proof}
+    \leanok
+    The scalars cancel in $V_cW_c$ and in each term $W_cA_c^iV_c$.
+\end{proof}
+
+\begin{definition}[Proportionality constants of a single block]
+    \leanok
+    \label{def:glm_single_block_lambda}
+    \lean{MPOTensor.singleBlockIndex,MPOTensor.singleBlockRow,
+        MPOTensor.singleBlockLambda}
+    \uses{def:glm_boundary_action_l_matrix}
+    Let the state have a single block $x$ with $M_{a,x}^x=1$ for every
+    operator block $a$. Then the row space of $L_{abx}^x$ has the single
+    element $(x,0,0)$. Following \cite[Section~3.2]{GarreRubio2023MPOSym},
+    put $\lambda_{ab}^{c,\mu}=K_{abx}^{x}[(c,0,\mu),(x,0,0)]$, the
+    corresponding entry of the reverse coefficient matrix.
+\end{definition}
+
+\begin{theorem}[Injective states cannot be invariant under non-trivial
+        matrix product operators]
+    \leanok
+    \label{thm:glm_single_block_obstruction}
+    \lean{MPOTensor.subsingleton_fin_of_singleBlock,
+        MPOTensor.card_sequentialActionMultiplicity_of_singleBlock,
+        MPOTensor.sum_fusionMultiplicity_eq_one_of_singleBlock,
+        MPOTensor.subsingleton_fusionChannel_of_singleBlock,
+        MPOTensor.subsingleton_fin_fusionMultiplicity_of_singleBlock,
+        MPOTensor.actionLMatrix_mul_singleBlockLambda,
+        MPOTensor.singleBlockLambda_ne_zero,
+        MPOTensor.fusionFMatrix_eq_singleBlockLambda,
+        MPOTensor.exists_fusionFMatrix_eq_one_of_singleBlock}
+    \uses{def:glm_single_block_lambda,thm:glm_unblocked_mixed_pentagon,
+        thm:glm_boundary_action_l_exists,lem:glm_mixed_gauge_coefficients,
+        lem:glm_mixed_gauge_scalar}
+    Let the operator blocks be individually injective, have positive bond
+    dimensions, and have no scalar-gauge duplicates. Let the state have a
+    single injective block $x$ of positive bond dimension with $M_{a,x}^x=1$
+    for every $a$, and fix exact fusion and action maps. Then
+    $\sum_cN_{ab}^c=1$ for all $a,b$, every $\lambda_{ab}^{c,\mu}$ is
+    nonzero, and
+    \begin{align}
+        F_{abc}^{e}[(d,\eta,\chi),(f,\mu,\nu)]
+         & =\frac{\lambda_{ab}^{d,\eta}\lambda_{dc}^{e,\chi}}
+        {\lambda_{bc}^{f,\mu}\lambda_{af}^{e,\nu}}.
+        \label{eq:glm_single_block_obstruction}
+    \end{align}
+    Consequently, rescaling the fusion maps $W_{ab}^{c,\mu}$ by
+    $(\lambda_{ab}^{c,\mu})^{-1}$ and $\widehat W_{ab}^{c,\mu}$ by
+    $\lambda_{ab}^{c,\mu}$ gives exact fusion maps all of whose $F$
+    coefficients equal one: the $F$-symbols are gauge equivalent to the
+    trivial ones. This is \cite[Section~3.2]{GarreRubio2023MPOSym}, with the
+    multiplicity labels of the $F$ factor in the corrected order of
+    \cite{gap:glm23_multiplicity_l_indices}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    The row space of $L_{abx}^{x}$ has one element, and
+    Lemma~\ref{thm:glm_boundary_action_l_exists} gives $LK=1$ and $KL=1$.
+    Taking traces, the column space also has one element; its cardinality is
+    $\sum_cM_{c,x}^xN_{ab}^c=\sum_cN_{ab}^c$. Hence each multiplicity space
+    has at most one element and the $(x,x)$ entry of $LK=1$ reads
+    $L_{abx}^x[(x,0,0),(c,0,\mu)]\,\lambda_{ab}^{c,\mu}=1$.
+    In the coupled pentagon (\ref{eq:glm_actual_mixed_pentagon}) with
+    $x=y=z=t$, the left sum has the single term with intermediate label
+    $d$. Substituting $L=\lambda^{-1}$ for all four coefficients and solving
+    for $F$ gives (\ref{eq:glm_single_block_obstruction}). For the rescaled
+    maps, Lemma~\ref{lem:glm_mixed_gauge_scalar} gives exactness and
+    (\ref{eq:glm_mixed_gauge_f}) multiplies the right side of
+    (\ref{eq:glm_single_block_obstruction}) by its inverse.
+\end{proof}
+
+\begin{definition}[Scalar symbols of a group]
+    \leanok
+    \label{def:glm_group_scalar_symbols}
+    \lean{MPOTensor.subsingleton_fin_fusion_of_group,
+        MPOTensor.subsingleton_fin_action_of_group,
+        MPOTensor.groupFusionIndex,MPOTensor.groupActionIndex,
+        MPOTensor.groupLScalar,MPOTensor.groupFScalar,
+        MPOTensor.actionLMatrix_eq_groupLScalar,
+        MPOTensor.fusionFMatrix_eq_groupFScalar}
+    \uses{def:glm_boundary_action_l_matrix,def:glm_boundary_fusion_f_matrix}
+    Let the operator blocks be labelled by a group $G$ with
+    $N_{gh}^{k}=\delta_{k,gh}$, and the state blocks by a set $\mathsf X$
+    with an action of $G$ and $M_{g,x}^{y}=\delta_{y,g\cdot x}$, as in
+    \cite[Section~4]{GarreRubio2023MPOSym}. Every multiplicity space then
+    has at most one element. Put
+    \begin{align}
+        L^{x}_{g,h}   & =L_{ghx}^{(gh)\cdot x}[(h\cdot x,0,0),(gh,0,0)], &
+        \omega(g,h,k) & =F_{ghk}^{ghk}[(gh,0,0),(hk,0,0)].
+        \notag
+    \end{align}
+    Any coefficient whose labels agree with these up to the group laws has
+    the same value.
+\end{definition}
+
+\begin{lemma}[The coupled pentagon for groups]
+    \leanok
+    \label{lem:glm_group_coupled_pentagon}
+    \lean{MPOTensor.groupLScalar_ne_zero,MPOTensor.groupFScalar_mul_groupLScalar}
+    \uses{def:glm_group_scalar_symbols,thm:glm_unblocked_mixed_pentagon,
+        thm:glm_boundary_action_l_exists}
+    Under the hypotheses of the coupled pentagon, with injective,
+    positive-dimensional, scalar-gauge-separated operator and state blocks,
+    every $L^x_{g,h}$ is nonzero and
+    \begin{align}
+        L^{k\cdot x}_{g,h}L^{x}_{gh,k}\,\omega(g,h,k)
+         & =L^{x}_{h,k}L^{x}_{g,hk}.
+        \label{eq:glm_group_coupled_pentagon}
+    \end{align}
+\end{lemma}
+\begin{proof}
+    \leanok
+    The coefficient matrix $L_{ghx}^{(gh)\cdot x}$ has one row and one
+    column, and $LK=1$ shows that its entry is nonzero. In
+    (\ref{eq:glm_actual_mixed_pentagon}) with $a,b,c=g,h,k$, $t=k\cdot x$,
+    $z=(hk)\cdot x$ and $y=(ghk)\cdot x$, only the intermediate label $gh$
+    contributes, and every coefficient is one of the scalar symbols.
+\end{proof}
+
+\begin{corollary}[Group specialization of the multiplicity symbols]
+    \leanok
+    \label{cor:glm_group_specialization}
+    \lean{MPOTensor.exists_lSymbol_isCompatible_of_group}
+    \uses{lem:glm_group_coupled_pentagon,def:mpug_l_symbols}
+    If the state has at least one block, the scalars $L^x_{g,h}$ and
+    $\omega(g,h,k)$ are nonzero, and $(L,\omega)$ is an $L$-symbol compatible
+    with a scalar three-cochain:
+    $L^x_{g,hk}L^x_{h,k}=\omega(g,h,k)L^{k\cdot x}_{g,h}L^x_{gh,k}$.
+\end{corollary}
+\begin{proof}
+    \leanok
+    Equation (\ref{eq:glm_group_coupled_pentagon}) at any block, together
+    with the nonvanishing of the $L$ entries, shows that $\omega$ does not
+    vanish; rearranging it gives the compatibility.
+\end{proof}
+
+\begin{corollary}[A fixed block forces a trivial gauge class]
+    \leanok
+    \label{cor:glm_group_single_block_trivial}
+    \lean{MPOTensor.isTrivialGaugeClass_of_group_of_forall_smul_eq}
+    \uses{cor:glm_group_specialization,thm:mpug_fixed_block_trivializes}
+    If some state block $x$ is fixed by every element of $G$, in particular if
+    the state has a single block, then $\omega$ is cohomologous to the
+    constant cochain one.
+\end{corollary}
+\begin{proof}
+    \leanok
+    With $k\cdot x=x$, the compatibility of
+    Corollary~\ref{cor:glm_group_specialization} reads
+    $\omega(g,h,k)=L^x_{g,hk}L^x_{h,k}/(L^x_{g,h}L^x_{gh,k})$, the
+    coboundary of $(g,h)\mapsto L^x_{g,h}$.
+\end{proof}

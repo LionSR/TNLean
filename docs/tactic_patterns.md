@@ -10689,6 +10689,33 @@ removed after the dependency audit exposed it.
 - **Notes:** No tactic repetition reaches the promotion threshold. The
   repository pattern scan was rerun after the concrete chain assembly.
 
+### Virtual class of an injective periodic ray — promoted helper (2026-10-29)
+
+- **Seen:** `MPS/Symmetry/PositiveRayVirtualCohomology.lean`,
+  `ExactGroundPathEndpointClass.lean`, and `ExactMPSPhaseCohomologyObstruction.lean`.
+- **Pattern:** Comparing endpoint actions first identifies the injective bond dimension,
+  then reconstructs a scalar bond gauge from the existing two- and three-ring trace data.
+- **Abstraction:** `bondDimension_eq_of_samePositiveMpvRay` and
+  `cohomologousTo_of_samePositiveMpvRay_character_covariance` retain this comparison once.
+  Physical character compatibility is derived by the existing `gauge_phase_unique` theorem.
+- **Reuse:** The endpoint and independent phase theorems call these mathematical helpers;
+  they do not repeat finite-trace reconstruction or a virtual-gauge uniqueness proof.
+- **Validation:** Source-written only; hosted Lean checking remains pending.
+
+### Euclidean matrix action bounds — promoted upstream reuse (2026-10-29)
+
+- **Pattern:** Bound a matrix acting on a Euclidean vector by the product
+  of its operator norm and the vector norm.
+- **Canonical API:** Mathlib `Matrix.l2_opNorm_mulVec`, already imported by
+  the matrix operator-norm interface; its action is definitionally the
+  same as `Matrix.toEuclideanCLM`.
+- **Refactored occurrences:** `Lattice/ObservableCentering.lean`,
+  `Lattice/GaussianGroundFrequencySeparation.lean`, and
+  `Lattice/GaussianConnectedCorrelation.lean` now invoke the existing theorem
+  directly instead of repeating the norm-identification and `le_opNorm` proof.
+- **Related API:** QICLean's `Entropy.norm_toEuclideanLin_le` gives the same
+  bound, but its entropy import is unnecessary for these matrix-only modules.
+
 ### Specializing a nonnegative Gaussian variance — candidate (2026-10-29)
 
 - **Seen:** `Lattice/GaussianFilteredCommutatorSeries.lean`, the exponential
