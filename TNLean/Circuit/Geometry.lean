@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import Mathlib.Combinatorics.SimpleGraph.Metric
 import Mathlib.Data.Fin.Basic
+import Mathlib.Logic.Equiv.Fin.Rotate
 import Mathlib.Data.ZMod.Defs
 import Mathlib.Algebra.Order.Group.Abs
 import Mathlib.Tactic.Linarith
@@ -167,6 +168,21 @@ def neighbourhood (X : Set (Fin N)) (r : ℕ) : Set (Fin N) :=
 
 theorem subset_neighbourhood (X : Set (Fin N)) (r : ℕ) : X ⊆ neighbourhood X r :=
   fun i hi ↦ ⟨i, hi, 0, by simp, by simp⟩
+
+/-- Rotating a ring rotates every fixed-radius neighbourhood by the same amount.
+Source context: arXiv:2307.01696, Supplemental Material, proof of Theorem 1. -/
+theorem neighbourhood_finRotate (X : Set (Fin N)) (r : ℕ) :
+    (finRotate N) '' neighbourhood X r = neighbourhood ((finRotate N) '' X) r := by
+  ext j
+  constructor
+  · rintro ⟨y, ⟨i, hi, m, hm, rfl⟩, rfl⟩
+    refine ⟨finRotate N i, ⟨i, hi, rfl⟩, m, hm, ?_⟩
+    simp only [finRotate_apply]
+    ring
+  · rintro ⟨_, ⟨i, hi, rfl⟩, m, hm, rfl⟩
+    refine ⟨i + (m : Fin N), ⟨i, hi, m, hm, rfl⟩, ?_⟩
+    simp only [finRotate_apply]
+    ring
 
 theorem neighbourhood_neighbourhood_subset (X : Set (Fin N)) (r s : ℕ) :
     neighbourhood (neighbourhood X r) s ⊆ neighbourhood X (r + s) := by

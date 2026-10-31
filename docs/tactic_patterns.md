@@ -9974,6 +9974,19 @@ there is no need for a new tactic.
 - **Decision:** Use the positive Gram zero criterion rather than add a parallel
   purification structure or assume system/environment decoupling.
 
+### Finite local generation by single-site algebras — promoted helper (2026-10-29)
+
+- **Seen:** `MPS/MPU/TwoSiteBufferedAction.lean` and
+  `QCA/SingletonGeneration.lean`, used by `QCA/FiniteInverseLocality.lean`.
+- **Pattern:** Empty-region scalars form the base case; adjoining a disjoint singleton
+  and using `range_localObservable_union` propagates a subalgebra containment.
+- **Abstraction:** `range_localObservable_empty_le` and
+  `range_localObservable_le_of_singletons` retain this finite generation once.
+  The single-site commutant and finite inverse reflection reuse it.
+- **Refactored consumer:** The forward buffered-action equalizer argument consumes this
+  public helper in place of its private repeated finite-region induction.
+- **Validation:** Source-only; hosted Lean checking pending.
+
 ### Weighted geometric sums grouped by their anchors — promoted (2026-10-28)
 
 - **Seen:** `Lattice/LowEnergyCommutatorSum.lean`,
@@ -10013,6 +10026,19 @@ there is no need for a new tactic.
   reduction theorem use that proof; no second induction was copied.
 - **Scope:** A one-letter sandwich alone is insufficient. The reduction must
   contract every open word, including the empty word.
+
+### Exact-length membership in the cyclic example — candidate (2026-10-29)
+
+- **Seen:** Return-block insertion and padded sandwich membership in
+  `MPS/Examples/CyclicWielandt/Spanning.lean` repeatedly combine two exact
+  lengths using `Kraus.wordSpan_add` and `Submodule.mul_mem_mul`.
+- **Reuse:** A private specialization to the concrete binary family names this
+  step. The arithmetic remains explicit, including the exceptional diagonal
+  recovered from the identity. There is one mathematical consumer file, so no
+  channel-generic tactic or new theory is introduced.
+- **Finite coordinates:** Reuse `Fin.cast_val_eq_self`, `Fin.val_natCast`,
+  `Nat.mod_eq_of_lt`, and `Fin.val_add_eq_ite` in the matrix identities and the
+  entry obstruction. No custom finite-arithmetic tactic is needed.
 
 
 ### Regional and cyclic slice membership — candidate (2026-10-29)
