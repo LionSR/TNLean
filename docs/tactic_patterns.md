@@ -9969,6 +9969,7 @@ there is no need for a new tactic.
   completion proof. No tactic is needed; a public generalization should wait for
   an independent caller.
 
+
 ### Pure output Gram projection — library zero criterion (2026-10-29)
 
 - **Seen:** `Circuit/Channel/PhysicalPortPureOutput.lean`.
