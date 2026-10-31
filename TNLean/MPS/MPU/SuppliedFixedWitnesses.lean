@@ -24,14 +24,19 @@ namespace MPOTensor
 
 variable {d D : ℕ}
 
-private theorem normalizedDiagonal_eq_smul_sum_diagonal
+/-- The normalized physical diagonal is the average of the diagonal letters.
+Source: arXiv:1703.09188, equation `Erightleft`, lines 269--281. -/
+theorem normalizedDiagonal_eq_smul_sum_diagonal
     (W : MPOTensor d D) :
     normalizedDiagonal W = ((d : ℂ)⁻¹) • ∑ q : Fin d, W q q := by
   classical
   simp only [normalizedDiagonal, contractPhysical, Matrix.one_apply, ite_smul,
     one_smul, zero_smul, Finset.sum_ite_eq', Finset.mem_univ, ite_true]
 
-private theorem simple_letter_mul_normalizedDiagonal_mul_letter
+/-- Simplicity permits inserting the normalized diagonal between any two
+double-layer letters. Source: arXiv:1703.09188, equations `simple1` and
+`simple2`, lines 356--374 and 429--438. -/
+theorem IsMPUSimple.letter_mul_normalizedDiagonal_mul_letter
     [NeZero d] {W : MPOTensor d D} (hW : IsMPUSimple W)
     (i j k l : Fin d) :
     doubleLayerTensor W i j * normalizedDiagonal (doubleLayerTensor W) *
@@ -74,6 +79,63 @@ private theorem simple_letter_mul_normalizedDiagonal_mul_letter
   rw [nsmul_eq_mul, ← mul_assoc, inv_mul_cancel₀ hd, one_mul]
   exact congrArg (fun M ↦ M x y) (h₂ i j k l).symm
 
+/-- Inserting the normalized diagonal between every pair of letters permits
+inserting any positive power, hence any supplied rank-one value of that power.
+The argument is purely algebraic; simplicity is one way to obtain the insertion
+identity, but is not an assumption here.
+
+Source: arXiv:1703.09188, equations `simple2` and `Erightleft`, lines 356--374
+and 429--438. -/
+theorem simple2_of_normalizedDiagonal_insertion
+    {W : MPOTensor d D}
+    (hinsert : ∀ i j k l : Fin d,
+      doubleLayerTensor W i j * normalizedDiagonal (doubleLayerTensor W) *
+        doubleLayerTensor W k l =
+          doubleLayerTensor W i j * doubleLayerTensor W k l)
+    (ρ Φ : Fin (D * D) → ℂ) (J : ℕ) (hJ : 0 < J)
+    (hpower : normalizedDiagonal (doubleLayerTensor W) ^ J =
+      Matrix.vecMulVec ρ Φ) :
+    ∀ i j k l : Fin d,
+      doubleLayerTensor W i j * doubleLayerTensor W k l =
+        doubleLayerTensor W i j * Matrix.vecMulVec ρ Φ *
+          doubleLayerTensor W k l := by
+  intro i j k l
+  let E := normalizedDiagonal (doubleLayerTensor W)
+  have hE : E = ((d : ℂ)⁻¹) • ∑ q : Fin d, doubleLayerTensor W q q :=
+    normalizedDiagonal_eq_smul_sum_diagonal (doubleLayerTensor W)
+  have hleftIdem : doubleLayerTensor W i j * E * E =
+      doubleLayerTensor W i j * E := by
+    calc
+      doubleLayerTensor W i j * E * E =
+          doubleLayerTensor W i j * E *
+            (((d : ℂ)⁻¹) • ∑ q : Fin d, doubleLayerTensor W q q) := by rw [hE]
+      _ = ((d : ℂ)⁻¹) • ∑ q : Fin d,
+            doubleLayerTensor W i j * E * doubleLayerTensor W q q := by
+              rw [Matrix.mul_smul, Finset.mul_sum]
+      _ = ((d : ℂ)⁻¹) • ∑ q : Fin d,
+            doubleLayerTensor W i j * doubleLayerTensor W q q := by
+              congr 1
+              apply Finset.sum_congr rfl
+              intro q _
+              exact hinsert i j q q
+      _ = doubleLayerTensor W i j * E := by
+              rw [hE, Matrix.mul_smul, Finset.mul_sum]
+  have hleftPow : ∀ N : ℕ, 0 < N →
+      doubleLayerTensor W i j * E ^ N = doubleLayerTensor W i j * E := by
+    intro N hN
+    obtain ⟨N, rfl⟩ := Nat.exists_eq_succ_of_ne_zero (Nat.ne_of_gt hN)
+    clear hN
+    induction N with
+    | zero => simp
+    | succ N ih =>
+        rw [pow_succ, ← Matrix.mul_assoc, ih, hleftIdem]
+  calc
+    doubleLayerTensor W i j * doubleLayerTensor W k l =
+        doubleLayerTensor W i j * E ^ J * doubleLayerTensor W k l := by
+          rw [hleftPow J hJ, hinsert i j k l]
+    _ = doubleLayerTensor W i j * Matrix.vecMulVec ρ Φ *
+        doubleLayerTensor W k l := by rw [hpower]
+
 /-- If a simple tensor has a positive normalized-diagonal power equal to a
 supplied rank-one matrix, then `simple2` holds with exactly those supplied
 witnesses.
@@ -93,46 +155,9 @@ theorem IsMPUSimple.simple2_of_normalizedDiagonal_pow_eq_vecMulVec
     ∀ i j k l : Fin d,
       doubleLayerTensor W i j * doubleLayerTensor W k l =
         doubleLayerTensor W i j * Matrix.vecMulVec ρ Φ *
-          doubleLayerTensor W k l := by
-  intro i j k l
-  let E := normalizedDiagonal (doubleLayerTensor W)
-  have hinsert : doubleLayerTensor W i j * E * doubleLayerTensor W k l =
-      doubleLayerTensor W i j * doubleLayerTensor W k l :=
-    simple_letter_mul_normalizedDiagonal_mul_letter hW i j k l
-  have hE : E = ((d : ℂ)⁻¹) • ∑ q : Fin d, doubleLayerTensor W q q :=
-    normalizedDiagonal_eq_smul_sum_diagonal (doubleLayerTensor W)
-  have hleftIdem : doubleLayerTensor W i j * E * E =
-      doubleLayerTensor W i j * E := by
-    calc
-      doubleLayerTensor W i j * E * E =
-          doubleLayerTensor W i j * E *
-            (((d : ℂ)⁻¹) • ∑ q : Fin d, doubleLayerTensor W q q) := by rw [hE]
-      _ = ((d : ℂ)⁻¹) • ∑ q : Fin d,
-            doubleLayerTensor W i j * E * doubleLayerTensor W q q := by
-              rw [Matrix.mul_smul, Finset.mul_sum]
-      _ = ((d : ℂ)⁻¹) • ∑ q : Fin d,
-            doubleLayerTensor W i j * doubleLayerTensor W q q := by
-              congr 1
-              apply Finset.sum_congr rfl
-              intro q _
-              exact simple_letter_mul_normalizedDiagonal_mul_letter hW i j q q
-      _ = doubleLayerTensor W i j * E := by
-              rw [hE, Matrix.mul_smul, Finset.mul_sum]
-  have hleftPow : ∀ N : ℕ, 0 < N →
-      doubleLayerTensor W i j * E ^ N = doubleLayerTensor W i j * E := by
-    intro N hN
-    obtain ⟨N, rfl⟩ := Nat.exists_eq_succ_of_ne_zero (Nat.ne_of_gt hN)
-    clear hN
-    induction N with
-    | zero => simp
-    | succ N ih =>
-        rw [pow_succ, ← Matrix.mul_assoc, ih, hleftIdem]
-  calc
-    doubleLayerTensor W i j * doubleLayerTensor W k l =
-        doubleLayerTensor W i j * E ^ J * doubleLayerTensor W k l := by
-          rw [hleftPow J hJ, hinsert]
-    _ = doubleLayerTensor W i j * Matrix.vecMulVec ρ Φ *
-        doubleLayerTensor W k l := by rw [hpower]
+          doubleLayerTensor W k l :=
+  simple2_of_normalizedDiagonal_insertion
+    hW.letter_mul_normalizedDiagonal_mul_letter ρ Φ J hJ hpower
 
 /-- The two-letter simplicity identity holds for the recorded canonical right
 boundary `ρ` and identity left boundary, in that order in `Matrix.vecMulVec`.

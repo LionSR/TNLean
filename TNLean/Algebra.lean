@@ -143,8 +143,11 @@ import TNLean.Algebra.NormedRingTelescoping
 import TNLean.Algebra.OneMagnon
 import TNLean.Algebra.OperatorSchmidt
 import TNLean.Algebra.OrderedIdempotentTracePerturbation
+import TNLean.Algebra.OrthogonalComplexStructure
+import TNLean.Algebra.OrthogonalComplexStructureBasis
 import TNLean.Algebra.OrthogonalKernelGap
 import TNLean.Algebra.OrthogonalResolution
+import TNLean.Algebra.OrthogonalSkewNormalForm
 import TNLean.Algebra.OrthogonalSymplecticKroneckerDeterminant
 import TNLean.Algebra.PathGraphDistance
 import TNLean.Algebra.PermutationMatrixCommutation
@@ -163,6 +166,7 @@ import TNLean.Algebra.ProjectiveCommutantEigenspace
 import TNLean.Algebra.ProjectiveRepresentation
 import TNLean.Algebra.PureStateTraceNorm
 import TNLean.Algebra.RankOneFactorization
+import TNLean.Algebra.RectangularUnitaryConjugation
 import TNLean.Algebra.RegularRepresentationBlocking
 import TNLean.Algebra.RepresentationDelta
 import TNLean.Algebra.RepresentationDeltaInverse
@@ -192,6 +196,8 @@ import TNLean.Algebra.SemiRegularTensorFactor
 import TNLean.Algebra.SemisimpleTracePowers
 import TNLean.Algebra.SignedPermutationSpan
 import TNLean.Algebra.SingletMatrix
+import TNLean.Algebra.SkewUnitaryNormalForm
+import TNLean.Algebra.StabilizedWeightedTrace
 import TNLean.Algebra.StabilizerBlockIndependence
 import TNLean.Algebra.StabilizerBlockIndependenceCircle
 import TNLean.Algebra.StabilizerCocycleExtension
@@ -200,6 +206,7 @@ import TNLean.Algebra.StabilizerCocycleReconstruction
 import TNLean.Algebra.StabilizerTransition
 import TNLean.Algebra.StackedIsometryCard
 import TNLean.Algebra.StarClosedSemisimple
+import TNLean.Algebra.StarSubalgebraEquiv
 import TNLean.Algebra.SubmoduleStarProjectionMatrix
 import TNLean.Algebra.Subquotient
 import TNLean.Algebra.SupportedIsometricCompression

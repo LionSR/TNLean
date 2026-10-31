@@ -329,7 +329,7 @@ private theorem kxyCube_int (a : Fin 16) :
   revert_decide_kernel a
 
 /-- The triple product of an integer tensor is the image of its integer triple product. -/
-private theorem triple_complexOfInt (M : Fin 4 → Fin 4 → Matrix (Fin 2) (Fin 2) ℤ)
+theorem triple_complexOfInt (M : Fin 4 → Fin 4 → Matrix (Fin 2) (Fin 2) ℤ)
     (a : Fin 16) :
     (mulTensor (mulTensor (fun o i ↦ complexOfInt (M o i)) (fun o i ↦ complexOfInt (M o i)))
         (fun o i ↦ complexOfInt (M o i))).toMPSTensor a =
