@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.MPU.InverseCompatibleSourceProperties
+import TNLean.MPS.MPU.SourceFactorsPhysicalAdjoint
 
 /-!
 # Source properties at an involutive element of a canonical MPU family
@@ -33,20 +34,6 @@ truncated-symmetry complement identity.
 open scoped ComplexOrder Matrix BigOperators
 
 namespace MPOTensor
-
-/-- The physical adjoint of a simple tensor in canonical form II is simple.
-Physical adjunction preserves canonical form II and exchanges the two source
-ranks, so the rank-product criterion $r\ell=d^2$ transfers. This discharges the
-adjoint-simplicity premise of arXiv:2502.20257, `prop:MPUsplus` and line 5344,
-for a tensor in canonical form II.
-Source: arXiv:1703.09188, `ThmFund1` (lines 563–601) and `defnrl`. -/
-theorem IsMPUCanonicalFormII.isMPUSimple_physicalAdjointTensor {d D : ℕ} {U : MPOTensor d D}
-    (hU : IsMPUCanonicalFormII U) (hsimple : IsMPUSimple U) :
-    IsMPUSimple (MPOTensor.physicalAdjointTensor U) := by
-  have hrank : r[U] * ℓ[U] = d * d := (hU.isMPUSimple_tfae.out 1 2).mp hsimple
-  apply (hU.physicalAdjointTensor.isMPUSimple_tfae.out 1 2).mpr
-  rw [rightRank_physicalAdjointTensor, leftRank_physicalAdjointTensor, mul_comm]
-  exact hrank
 
 namespace GroupFamily
 
