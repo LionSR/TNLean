@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Algebra.IdempotentTracePerturbation
+import TNLean.Algebra.TraceOneNeZero
 import TNLean.MPS.Preparation.InjectivityCutoff
 import TNLean.MPS.Preparation.PositivePartRate
 import TNLean.Spectral.MPVOverlapTrace
@@ -59,11 +60,6 @@ theorem one_sub_re_inner_eq_norm_sub_sq_div_two
   have h := @norm_sub_sq 𝕜 E _ _ _ x y
   rw [hx, hy] at h
   linarith
-
-/-- A square matrix of trace one has a nonempty index: `Tr σ = 1` forces `D ≠ 0`. -/
-theorem Matrix.neZero_of_trace_eq_one {D : ℕ} {σ : Matrix (Fin D) (Fin D) ℂ}
-    (h : σ.trace = 1) : NeZero D :=
-  ⟨by rintro rfl; simp at h⟩
 
 namespace MPSTensor
 

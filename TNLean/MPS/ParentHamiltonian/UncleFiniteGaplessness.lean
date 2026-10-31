@@ -73,16 +73,8 @@ theorem uncleHamiltonianES_ae_eventually_exists_pos_eigenvalue_lt
       (L₀ : Fin d → Matrix (Fin b) (Fin a) ℂ),
       Kraus.IsInjective (uncleBoundaryLetter A B R₀ L₀)
   · obtain ⟨R₀, L₀, hPert₀⟩ := hExists
-    have ha : a ≠ 0 := by
-      intro ha
-      subst a
-      simp at htrA
-    have hb : b ≠ 0 := by
-      intro hb
-      subst b
-      simp at htrB
-    let : NeZero a := ⟨ha⟩
-    let : NeZero b := ⟨hb⟩
+    have := Matrix.neZero_of_trace_eq_one htrA
+    have := Matrix.neZero_of_trace_eq_one htrB
     have hAB := uncleBoundaryLetter_mixedMapSpectralRadius_lt_one
       A B R₀ L₀ hPert₀ hUA hUB ρA hρA ρB hρB hFA hFB
     have hBA := uncleBoundaryLetter_mixedMapSpectralRadius_reverse_lt_one
