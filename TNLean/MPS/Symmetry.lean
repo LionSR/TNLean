@@ -59,10 +59,18 @@ import TNLean.MPS.Symmetry.EmbeddedFixedPointParent
 import TNLean.MPS.Symmetry.EmbeddedFixedPointTensor
 import TNLean.MPS.Symmetry.EmbeddedInjectiveGappedPath
 import TNLean.MPS.Symmetry.EntanglementSpectrum
+import TNLean.MPS.Symmetry.ExactGroundPathClustering
+import TNLean.MPS.Symmetry.ExactGroundPathEndpointClass
+import TNLean.MPS.Symmetry.ExactGroundPathFrequencySeparation
+import TNLean.MPS.Symmetry.ExactGroundPathGaussianCorrelation
 import TNLean.MPS.Symmetry.ExactGroundPathGaussianFilter
+import TNLean.MPS.Symmetry.ExactGroundPathPhysicalClass
+import TNLean.MPS.Symmetry.ExactGroundPathTransferBound
 import TNLean.MPS.Symmetry.ExactGroundPathTransferClass
+import TNLean.MPS.Symmetry.ExactGroundPathWindowClustering
 import TNLean.MPS.Symmetry.ExactMPSGappedPhase
 import TNLean.MPS.Symmetry.ExactMPSGroundPathComposition
+import TNLean.MPS.Symmetry.ExactMPSPhaseCohomologyObstruction
 import TNLean.MPS.Symmetry.ExactMPSPhaseGaugeInvariance
 import TNLean.MPS.Symmetry.FiniteRingReconstruction
 import TNLean.MPS.Symmetry.FixedBondPhysicalPathInvariance
@@ -78,6 +86,7 @@ import TNLean.MPS.Symmetry.GlobalVirtualGauge
 import TNLean.MPS.Symmetry.GroundLineSymmetryCharacter
 import TNLean.MPS.Symmetry.IndependentBondGap
 import TNLean.MPS.Symmetry.InfinitesimalPhysicalCovariance
+import TNLean.MPS.Symmetry.InjectiveTracePreservingGauge
 import TNLean.MPS.Symmetry.InteractionHamiltonianOrder
 import TNLean.MPS.Symmetry.InteractionHamiltonianSymmetry
 import TNLean.MPS.Symmetry.InvertibleProjectivePathInvariance
@@ -127,7 +136,9 @@ import TNLean.MPS.Symmetry.PolarFrameEmbedding
 import TNLean.MPS.Symmetry.PolarGappedInteractionPath
 import TNLean.MPS.Symmetry.PolarVirtualCohomology
 import TNLean.MPS.Symmetry.PositiveLengthSymmetryCharacter
+import TNLean.MPS.Symmetry.PositiveRayExpectations
 import TNLean.MPS.Symmetry.PositiveRayFiniteTraceData
+import TNLean.MPS.Symmetry.PositiveRayVirtualCohomology
 import TNLean.MPS.Symmetry.PreparedPolarGappedPath
 import TNLean.MPS.Symmetry.ProjectiveDirectSum
 import TNLean.MPS.Symmetry.ProjectiveDirectSumInclusions
