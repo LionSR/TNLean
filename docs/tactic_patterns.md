@@ -9920,6 +9920,19 @@ there is no need for a new tactic.
   composition theorem under the actual conjugation. The downstream proofs
   reuse this lemma rather than repeat the matrix map composition.
 
+### Common buffered chain for completed local inverse identities — candidate (2026-10-29)
+
+- **Pattern:** use derived finite output support, choose one finite chain containing
+  both input and output with their buffers, reflect equality through the faithful
+  local observable embedding, cancel the actual finite conjugations, and extend
+  by completion density.
+- **Occurrences:** the two inverse directions in
+  `SpinChain.exists_isQCA_of_isMPUCanonicalFormII` use the single private helper
+  `leftInverse_of_finiteChainConjugation` in `MPS/MPU/CanonicalQuasiLocalAction.lean`.
+- **Abstraction:** the helper already removes the repeated common-buffer and
+  completion proof. No tactic is needed; a public generalization should wait for
+  an independent caller.
+
 ### Pure output Gram projection — library zero criterion (2026-10-29)
 
 - **Seen:** `Circuit/Channel/PhysicalPortPureOutput.lean`.
@@ -9963,6 +9976,17 @@ there is no need for a new tactic.
 - **Reuse:** One named slice identity handles both directions. A complementary
   assignment extends using its own exterior value, avoiding positive-dimension
   assumptions or separate empty-alphabet proof branches. No new tactic is needed.
+
+### Diagonal boundary matrices select uncle sectors — candidate (2026-10-29)
+
+- **Seen:** `MPS/ParentHamiltonian/UncleGroundSpaceInclusion.lean`, the first and second
+  blocked-sector boundary maps and range inclusions.
+- **Pattern:** A boundary matrix supported on a diagonal virtual block removes every other
+  sector in the trace pairing. Range inclusion follows by supplying that boundary witness.
+- **Reuse:** `Matrix.reindexAlgEquiv`, `Matrix.fromBlocks_multiply`, and QICLean's
+  `Matrix.trace_reindex` perform the matrix algebra. One helper transports either resulting
+  inclusion through physical blocking and the actual orthogonal-complement projector.
+- **Decision:** Two sector cases in one file; no new tactic or parallel ground-space predicate.
 
 ### Equality of two-element tensor families — candidate (2026-10-29)
 
@@ -10096,3 +10120,181 @@ there is no need for a new tactic.
   and `Matrix.conjTranspose_reindex` transports the adjoint. The existing QICLean
   Skolem–Noether theorem supplies the square implementer. No entrywise double sum
   or duplicate Skolem–Noether argument is introduced.
+
+
+
+### Rank-one density under scalar multiplication — promoted (2026-10-29)
+
+- **Pattern:** Move a scalar through both factors of a rank-one matrix and
+  identify its product with its conjugate as its squared modulus.
+- **Abstraction:** The existing `Matrix.vecMulVec_ofLp_smul_self` in QICLean
+  `Analysis/OptimizedPureStateTraceError.lean`, now public with its original
+  statement and proof. No new module or parallel helper is introduced.
+- **Occurrences:** The original pure-state normalization in QICLean and
+  the canonical-to-aligned ground projection in `AKLV/ClippedFilter.lean`.
+  Scalars of norm one cancel by the same general identity.
+- **Scouting:** The relevant Mathlib matrix and inner-product sources and the
+  companion library had no equivalent public lemma. The existing private
+  identity is exposed for reuse.
+
+
+
+### Euclidean action on a Hermitian eigenbasis — promoted (2026-10-29)
+
+- **Pattern:** Transport Mathlib's `mulVec_eigenvectorBasis` equation through
+  `WithLp.ofLp` and convert real scalar multiplication to the complex field.
+- **Abstraction:** `Matrix.IsHermitian.toEuclideanCLM_eigenvectorBasis` in
+  `QICLean/Analysis/EuclideanEigenvectorBasis.lean`, valid over any `RCLike`
+  field and any finite index type.
+- **Occurrences:** The three calculations in
+  `MPS/AreaLaw/AKLV/TwoBlockTruncation.lean`,
+  `MPS/AreaLaw/AKLV/SpectralCluster.lean`, and
+  `MPS/AreaLaw/AKLV/PhysicalRobustness.lean`.
+- **Notes:** This is the existing spectral theorem in Euclidean coordinates;
+  no new spectral or nonempty-index hypothesis is introduced. The underlying
+  linear-map application is definitionally the same, so no parallel helper is
+  needed. Each replacement was checked before the next proof was changed.
+
+
+
+### Support of an internal-bond sum — promoted (2026-10-29)
+
+- **Pattern:** Apply support under finite sums, then enlarge the two-site support
+  of each internal bond to its enclosing interval.
+- **Defined in:** The existing
+  `TNLean.MPS.AreaLaw.isSupportedOn_sum_internal_bonds` in
+  `MPS/AreaLaw/FiveRegionHamiltonian.lean`, now public without a statement change.
+- **Refactored occurrences:** The two new uses in
+  `MPS/AreaLaw/AKLV/Normalization.lean` call that same lemma; the original three
+  uses in `FiveRegionHamiltonian.lean` are retained. No parallel support API or
+  new tactic is introduced.
+
+
+
+### Real spectral membership from a nonzero eigenvector — promoted (2026-10-29)
+
+- **Pattern:** Derive that the ground energy belongs to the real spectrum before
+  comparing it with an attained excited energy.
+- **Seen:** Basis-expansion arguments in `AKLV/PhysicalRobustness.lean` and
+  `AKLV/ClippedFilter.lean`; the logarithmic-threshold extension would have
+  introduced a third copy.
+- **Defined in:** QICLean `Analysis/PositiveGapUniqueness.lean`,
+  `Matrix.mem_spectrum_real_of_mulVec_eq_smul`. It transports Mathlib's
+  eigenvector-to-spectrum implication and needs only a nonzero eigenvector.
+- **Refactored occurrences:** The common physical robustness construction uses
+  this identity once. Both threshold variants and both filter variants reuse
+  that construction. No Hermiticity, normalization, or gap assumption is
+  added to the generic matrix identity.
+
+
+### The ceiling filter scale dominates the inverse-gap logarithm — candidate (2026-10-29)
+
+- **Pattern:** From `u = 1 + log q + log (1/g)`, `q≥2`, `0<g≤1`, `A≥1`,
+  and `A*u^2/g≤s`, derive `log(1/g)≤s` by comparison with `u^2`.
+- **Seen:** `MPS/AreaLaw/AKLV/FavorableParameters.lean`.
+- **Abstraction:** If another scalar application requires it, add this
+  conclusion to the shared scalar scale lemma rather than repeating the proof.
+- **Notes:** This comparison absorbs the logarithmic truncation threshold
+  into a norm ceiling linear in the integer window scale.
+
+
+### Dimension and gap bounds from two physical spectral values — candidate (2026-10-29)
+
+- **Pattern:** A unit ground eigenvector and an attained excited energy give
+  real spectral membership, then local dimension at least two; the endpoint
+  trial-vector theorem then gives a gap at most one for positive-contraction
+  nearest-neighbour chains.
+- **Seen:** `MPS/AreaLaw/AKLV/PhysicalRobustness.lean` and
+  `MPS/AreaLaw/AKLV/FavorableFilter.lean`.
+- **Abstraction:** Both applications already use the shared real-spectrum
+  identity and endpoint gap theorem. If a third physical application needs
+  this pair of conclusions before choosing its window, expose their combined
+  consequence in `MPS/AreaLaw/BoundaryGap.lean` rather than repeat the argument.
+- **Notes:** The favorable scale requires the conclusions before its width is
+  selected. This argument is specific to a rank-one ground-space gap; the
+  degenerate case does not have the same endpoint bound.
+
+
+### Squared triangle bounds through a third vector — promoted (2026-10-29)
+
+- **Pattern:** Bound a squared vector distance by twice the sum of the two
+  squared distances through an intermediate vector.
+- **Seen:** The original-ground comparison in `AKLV/Initialization.lean` and
+  both target comparisons in `AKLV/VariableWindowRefinement.lean`.
+- **Abstraction:** Use Mathlib's `norm_sub_le_norm_sub_add_norm_sub`, square
+  by `pow_le_pow_left₀`, then compose with `add_sq_le`.
+- **Refactored occurrences:** All three comparisons now reuse `add_sq_le`;
+  the additional hand-written squared-difference nonnegativity argument is
+  removed from the initialization proof. No new generic theorem is needed.
+
+
+
+### Coherent dependent sequences of normalized images — candidate (2026-10-29)
+
+- **Pattern:** A successor theorem returns a normalized image of its actual
+  input together with invariants whose bounds depend on the sequence index.
+- **Reuse:** In `AKLV/ChangingTargets.lean`, `State i` is the subtype carrying
+  the unit, error and product-rank invariant. The existence of a successor
+  is proved for each actual state, and `Nat.rec` iterates its chosen value.
+  The choice specification records the polynomial-image relation on each edge.
+- **Scope:** This is the first such moving-target sequence in this argument.
+  The existing LVV recursion retains its own mathematical invariant; no
+  generic recursion framework or tactic is introduced.
+
+
+### Reciprocal square-root factors in selected polynomial degrees — candidate (2026-10-29)
+
+- **Pattern:** For positive gap and spectral ceiling, the product
+  `sqrt (W/g) * sqrt ((9*g/10)/W)` is `sqrt (9/10)`. This converts a
+  ceiling degree bound into the exponent of a shrinking estimate.
+- **Occurrences:** `AKLV/SequenceParameters.lean` uses a constant coefficient;
+  `AKLV/OptimizedTailParameters.lean` uses the actual accuracy logarithm.
+- **Reuse:** Both use Mathlib's `Real.sqrt_mul`, exact field cancellation,
+  and nonnegative square-root bounds. These are two occurrences across two
+  files; a third consumer should factor the shared scalar identity before
+  another copy is written.
+
+
+### Centered-window failure and exact cut rank — helper theorems (2026-10-29)
+
+- **Pattern:** An accuracy-dependent window centered at a fixed cut may
+  fail to fit on a finite chain.
+- **Abstraction:** `aklv_centered_window_iff` retains the exact left and
+  right margins, including odd widths. The failure alternative uses
+  `aklv_rank_cutMatrix_le_pow_min`, which directly reuses the existing
+  endpoint-rank transport theorem rather than repeating configuration counts.
+- **Consumer:** `AKLV/AccuracyWindow.lean` obtains the actual same-cut
+  initialized filter image when the window fits and the exact ground vector
+  otherwise. No smaller replacement window or independent area law is used.
+
+
+### Accuracy scales and quadratic degree costs — promoted (2026-10-29)
+
+- **Pattern:** Bound a ceiling of a fourth root by an accuracy logarithm,
+  then convert a quadratic degree bound into the linear exponent in the
+  sharp AKLV rank formula.
+- **Abstraction:** `aklvAccuracyIncrement_lt_log_add_one` in
+  `MPS/AreaLaw/AKLV/OptimizedRankScale.lean` is used by both the actual-degree
+  and logarithmic-rank comparisons. `aklv_rank_exponent_le_of_degree_le_square`
+  in `OptimizedRankLog.lean` supplies both logarithmic base comparisons.
+- **Notes:** The existing QIC homogeneous Ky Fan overlap inequality and the
+  existing `norm_inv_norm_smul_sub_le_two_mul` are reused for the marginal
+  tail and normalized sequential output. No new matrix overlap or
+  normalization proof is introduced. The scoped tactic-pattern scan
+  reported no repeated blocks at the default thresholds.
+
+
+### Finite entropy cost from the actual AKLV rank product — promoted (2026-10-29)
+
+- **Pattern:** Sum dyadic weights times a quadratic bound on the logarithm
+  of the actual next rank multiplier.
+- **Abstraction:** QICLean's existing `Real.sum_quadratic_div_dyadic_le` is
+  exposed without changing its statement or proof. The actual product
+  recurrence supplies the logarithmic ratio, so no artificial rank family
+  or infinite summability proof is introduced.
+- **Scout and cleanup:** The scoped scanner found a third four-line
+  derivation of `1/2 ≤ log 2`. Mathlib already supplies
+  `Real.log_two_gt_d9`; the new call site now applies that result directly,
+  and the repeated block is not copied. The existing actual-gap helper is
+  exposed and reused for the physical entropy theorem, without a second
+  endpoint-unitary or dimension argument.
