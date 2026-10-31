@@ -104,7 +104,6 @@ private theorem exists_canonical_coeff_eq_with_cutBasis {d N : ℕ} (hN : 0 < N)
     rw [hdiag, Matrix.posDef_diagonal_iff]
     intro q
     exact_mod_cast hlam q
-
   · exact ⟨hψ, B, hB0, hBN, hbound, rfl⟩
 
 /-- Every normalized physical state of positive length has an actual
