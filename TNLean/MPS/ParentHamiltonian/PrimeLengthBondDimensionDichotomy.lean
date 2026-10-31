@@ -34,10 +34,11 @@ namespace MPSTensor
 variable {d L : ℕ}
 
 /-- A small prime-length ground-state representation yields a single fixed
-MPS tensor generating the ground space at all sufficiently large volumes.
-The explicit threshold uses the general Wielandt length \((D^2+1)^2\).
+normal MPS tensor, its actual local-kernel inclusion, and its generation
+of the ground space at all sufficiently large volumes. The explicit threshold
+uses the general Wielandt length \((D^2+1)^2\).
 Source: SPWC10, Theorem 5 proof, lines 858–880. -/
-theorem exists_eventually_fixed_mps_of_prime_length_bound
+theorem exists_normal_eventual_ground_data_of_prime_length_bound
     (h : MPVSpace d L →ₗ[ℂ] MPVSpace d L) (hh : h.IsPositive)
     (hUnique : ∀ M, L ≤ M →
       Module.finrank ℂ (LinearMap.ker (periodicInteractionHamiltonianES h M)) = 1)
@@ -46,7 +47,8 @@ theorem exists_eventually_fixed_mps_of_prime_length_bound
       (3 * (D - 1) * ((D ^ 2 + 1) ^ 2 + 1)) ≤ N)
     (hA : mpvState A N ≠ 0)
     (hzero : periodicInteractionHamiltonianES h N (mpvState A N) = 0) :
-    ∃ D₀ : ℕ, 0 < D₀ ∧ D₀ ≤ D ∧ ∃ B : MPSTensor d D₀, ∃ M₀ : ℕ,
+    ∃ D₀ : ℕ, 0 < D₀ ∧ D₀ ≤ D ∧ ∃ B : MPSTensor d D₀,
+      Kraus.IsNormal B ∧ groundSpaceES B L ≤ LinearMap.ker h ∧ ∃ M₀ : ℕ,
       ∀ M, M₀ ≤ M → mpvState B M ≠ 0 ∧
         LinearMap.ker (periodicInteractionHamiltonianES h M) = ℂ ∙ mpvState B M := by
   classical
@@ -89,7 +91,8 @@ theorem exists_eventually_fixed_mps_of_prime_length_bound
       B c hc h hh hPrime.pos (by omega) hSpan (by rwa [← hsum])
     let j : Fin r := ⟨0, hr⟩
     let : NeZero (dim j) := ⟨(hdim j).ne'⟩
-    refine ⟨dim j, hdim j, hdimD j, B j, max L (q + 1), ?_⟩
+    refine ⟨dim j, hdim j, hdimD j, B j, ⟨q, hq, hC1 j⟩, hker j,
+      max L (q + 1), ?_⟩
     intro M hM
     have hLM : L ≤ M := (le_max_left _ _).trans hM
     have hqM : q + 1 ≤ M := (le_max_right _ _).trans hM
@@ -103,6 +106,26 @@ theorem exists_eventually_fixed_mps_of_prime_length_bound
       (B j) h (hker j) hLM
     exact ⟨hnonzero, eq_span_singleton_of_mem_of_finrank_eq_one
       (hUnique M hLM) hGround hnonzero⟩
+
+/-- A small prime-length ground-state representation yields a single fixed
+MPS tensor generating the ground space at all sufficiently large volumes.
+The explicit threshold uses the general Wielandt length \((D^2+1)^2\).
+Source: SPWC10, Theorem 5 proof, lines 858–880. -/
+theorem exists_eventually_fixed_mps_of_prime_length_bound
+    (h : MPVSpace d L →ₗ[ℂ] MPVSpace d L) (hh : h.IsPositive)
+    (hUnique : ∀ M, L ≤ M →
+      Module.finrank ℂ (LinearMap.ker (periodicInteractionHamiltonianES h M)) = 1)
+    {D N : ℕ} (A : MPSTensor d D) (hPrime : N.Prime)
+    (hBound : L + max ((D ^ 2 + 1) ^ 2)
+      (3 * (D - 1) * ((D ^ 2 + 1) ^ 2 + 1)) ≤ N)
+    (hA : mpvState A N ≠ 0)
+    (hzero : periodicInteractionHamiltonianES h N (mpvState A N) = 0) :
+    ∃ D₀ : ℕ, 0 < D₀ ∧ D₀ ≤ D ∧ ∃ B : MPSTensor d D₀, ∃ M₀ : ℕ,
+      ∀ M, M₀ ≤ M → mpvState B M ≠ 0 ∧
+        LinearMap.ker (periodicInteractionHamiltonianES h M) = ℂ ∙ mpvState B M := by
+  obtain ⟨D₀, hD₀, hD, B, _, _, M₀, hB⟩ :=
+    exists_normal_eventual_ground_data_of_prime_length_bound h hh hUnique A hPrime hBound hA hzero
+  exact ⟨D₀, hD₀, hD, B, M₀, hB⟩
 
 /-- Either one fixed tensor generates the eventual ground spaces, or every
 prime-length nonzero MPS ground-state representation obeys the explicit

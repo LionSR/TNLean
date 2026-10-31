@@ -59,6 +59,7 @@ import TNLean.MPS.ParentHamiltonian.BlockedPrimitiveQuasiLocalGap
 import TNLean.MPS.ParentHamiltonian.BlockedQuasiLocalFace
 import TNLean.MPS.ParentHamiltonian.BlockedQuasiLocalGap
 import TNLean.MPS.ParentHamiltonian.BlockedQuasiLocalSupport
+import TNLean.MPS.ParentHamiltonian.BondOneFinitePrefixGroundStates
 import TNLean.MPS.ParentHamiltonian.BoundaryBlockMatEq
 import TNLean.MPS.ParentHamiltonian.BoundaryClosing
 import TNLean.MPS.ParentHamiltonian.BoundaryClosingAuxiliary
