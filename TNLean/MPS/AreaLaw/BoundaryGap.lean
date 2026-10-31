@@ -8,17 +8,22 @@ import QICLean.Algebra.UnitaryTraceZero
 import QICLean.Representation.RegionPowerSymbol
 
 /-!
-# An upper bound for the gap of a range-one chain
+# Upper bounds for the gap of an open chain
 
 Changing a unit ground vector by a unitary on the first site gives an orthogonal trial vector.
-Only the singleton and the adjacent edge can change their energy expectations.
+Only the singleton and the adjacent edge can change their energy expectations. For the
+original nearest-neighbour positive-contraction model there are no singleton terms, and
+each bond expectation belongs to `[0, 1]`. The sharper bound is therefore one.
 
 This is an auxiliary estimate for the constant comparison in Landau–Vazirani–Vidick,
-arXiv:1307.5143v1, `eq:def-ce` and `l:within` (`algo53.tex`, lines 291–293 and 509–515).
+arXiv:1307.5143v1, `eq:def-ce` and `l:within` (`algo53.tex`, lines 291–293 and
+509–515). The positive nearest-neighbour bound is the
+normalization stated at the beginning of Section 5 of AKLV, arXiv:1301.1162v1,
+before equation (4).
 -/
 
 open Matrix
-open scoped InnerProductSpace Matrix.Norms.L2Operator
+open scoped InnerProductSpace Matrix.Norms.L2Operator ComplexOrder MatrixOrder
 
 namespace TNLean.MPS.AreaLaw
 
@@ -125,6 +130,100 @@ theorem ChainHamiltonian.gap_le_four_mul_of_range_one (h : ChainHamiltonian L q 
     rw [← hE]
     simpa only [ChainHamiltonian.operator, map_sum, LinearMap.sum_apply, inner_sum,
       Complex.re_sum, Finset.sum_sub_distrib] using hsum.trans hmul
+  exact hgap.trans henergy
+
+/-- An open chain with local dimension at least two and positive nearest-neighbour
+contractions has gap at most one above a unique ground vector. This proves the
+normalization used in AKLV, arXiv:1301.1162v1, Section 5, before equation (4).
+An endpoint unitary gives an orthogonal unit trial vector. Only the first bond can
+change its expectation, and the change is at most one because the bond lies between
+zero and the identity. The rank-one gap inequality is essential to the conclusion. -/
+theorem gap_le_one_of_positive_nearest_neighbor_terms {L q : ℕ} (hL : 0 < L) (hq : 2 ≤ q)
+    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
+    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i)
+      (interval L i.val (i.val + 2))) (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1)
+    {E₀ Δ : ℝ} {Ω : EuclideanSpace ℂ (Fin L → Fin q)}
+    (hgs : Matrix.IsGappedGroundState (∑ i, h i) E₀ Ω Δ) : Δ ≤ 1 := by
+  classical
+  let x : Fin L := ⟨0, hL⟩
+  obtain ⟨U, hU⟩ := Matrix.IsHermitian.exists_unitary_trace_mul_eq_zero
+    (Entropy.regionState_isHermitian (n := fun _ : Fin L ↦ q) {x} Ω)
+      (by simpa [Entropy.RegionConfig, Fintype.card_pi] using hq)
+  let K := Entropy.localLift (n := fun _ : Fin L ↦ q) {x} (U : Matrix _ _ ℂ)
+  have hUunit :
+      (U : Matrix (Entropy.RegionConfig (fun _ : Fin L ↦ q) {x})
+        (Entropy.RegionConfig (fun _ : Fin L ↦ q) {x}) ℂ)ᴴ * (U : Matrix _ _ ℂ) = 1 := by
+    convert U.property.1 using 1
+    ext i j
+    simp only [Matrix.one_apply]
+    split_ifs <;> rfl
+  have hK : Kᴴ * K = 1 := by
+    simpa only [K, Entropy.localLift_mul, Entropy.localLift_conjTranspose,
+      Entropy.localLift_one] using
+      congrArg (Entropy.localLift (n := fun _ : Fin L ↦ q) {x}) hUunit
+  have hφ : ‖toEuclideanLin K Ω‖ = 1 :=
+    (Entropy.norm_toEuclideanLin_of_conjTranspose_mul_self hK Ω).trans hgs.1
+  have horth : ⟪Ω, toEuclideanLin K Ω⟫_ℂ = 0 := by
+    simpa only [K, Entropy.inner_localLift] using hU
+  have hgap : Δ ≤
+      (⟪toEuclideanLin K Ω, toEuclideanLin (∑ i, h i) (toEuclideanLin K Ω)⟫_ℂ).re - E₀ := by
+    simpa [hφ, horth] using hgs.2.2.gap_le (toEuclideanLin K Ω)
+  have hnonneg (i : Fin (L - 1)) (v : EuclideanSpace ℂ (Fin L → Fin q)) :
+      0 ≤ (⟪v, toEuclideanLin (h i) v⟫_ℂ).re := by
+    simpa only [RCLike.re_to_complex] using
+      (isPositive_toEuclideanLin_iff.mpr (h0 i).posSemidef).re_inner_nonneg_right v
+  have hnorm (i : Fin (L - 1)) (v : EuclideanSpace ℂ (Fin L → Fin q))
+      (hv : ‖v‖ = 1) : |(⟪v, toEuclideanLin (h i) v⟫_ℂ).re| ≤ 1 := by
+    calc
+      |(⟪v, toEuclideanLin (h i) v⟫_ℂ).re| ≤ ‖⟪v, toEuclideanLin (h i) v⟫_ℂ‖ :=
+        Complex.abs_re_le_norm _
+      _ ≤ ‖v‖ * ‖toEuclideanLin (h i) v‖ := norm_inner_le_norm _ _
+      _ ≤ ‖v‖ * (‖h i‖ * ‖v‖) :=
+        mul_le_mul_of_nonneg_left (Entropy.norm_toEuclideanLin_le _ _) (norm_nonneg _)
+      _ ≤ 1 := by
+        simpa only [hv, mul_one, one_mul] using
+          (CStarAlgebra.norm_le_one_iff_of_nonneg _ (h0 i)).mpr (h1 i)
+  have hsame (i : Fin (L - 1)) (hi : i.val ≠ 0) :
+      ⟪toEuclideanLin K Ω, toEuclideanLin (h i) (toEuclideanLin K Ω)⟫_ℂ =
+        ⟪Ω, toEuclideanLin (h i) Ω⟫_ℂ := by
+    have hx : x ∉ interval L i.val (i.val + 2) := by
+      simp only [mem_interval, x]
+      omega
+    have hc := Entropy.commute_localLift_of_isSupportedOn (n := fun _ : Fin L ↦ q)
+      (Q := {x}) (D := interval L i.val (i.val + 2)) (c := h i)
+      (Finset.disjoint_singleton_left.mpr hx) (U : Matrix _ _ ℂ) (hs i)
+      (fun _ ↦ ⟨0, lt_of_lt_of_le (by decide : 0 < 2) hq⟩)
+    rw [← LinearMap.adjoint_inner_right, ← toEuclideanLin_conjTranspose_eq_adjoint,
+      ← Entropy.toEuclideanLin_mul_apply, ← Entropy.toEuclideanLin_mul_apply, Matrix.mul_assoc,
+      ← hc.eq, ← Matrix.mul_assoc, hK, Matrix.one_mul]
+  have hdiff (i : Fin (L - 1)) :
+      (⟪toEuclideanLin K Ω, toEuclideanLin (h i) (toEuclideanLin K Ω)⟫_ℂ).re -
+        (⟪Ω, toEuclideanLin (h i) Ω⟫_ℂ).re ≤ if i.val = 0 then 1 else 0 := by
+    split_ifs with hi
+    · linarith [hnonneg i Ω, (abs_le.mp (hnorm i (toEuclideanLin K Ω) hφ)).2]
+    · simp only [hsame i hi, sub_self, le_refl]
+  have hE : (⟪Ω, toEuclideanLin (∑ i, h i) Ω⟫_ℂ).re = E₀ := by
+    have heig : toEuclideanLin (∑ i, h i) Ω = (E₀ : ℂ) • Ω := by
+      rw [← coe_toEuclideanCLM_eq_toEuclideanLin]
+      exact hgs.2.1
+    rw [heig, inner_smul_right, inner_self_eq_norm_sq_to_K, hgs.1]
+    simp
+  have hcard : (Finset.univ.filter (fun i : Fin (L - 1) ↦ i.val = 0)).card ≤ 1 :=
+    Finset.card_le_one.mpr fun i hi j hj ↦
+      Fin.ext ((Finset.mem_filter.mp hi).2.trans (Finset.mem_filter.mp hj).2.symm)
+  have hsum :
+      (∑ i : Fin (L - 1),
+        ((⟪toEuclideanLin K Ω, toEuclideanLin (h i) (toEuclideanLin K Ω)⟫_ℂ).re -
+          (⟪Ω, toEuclideanLin (h i) Ω⟫_ℂ).re)) ≤
+        ((Finset.univ.filter (fun i : Fin (L - 1) ↦ i.val = 0)).card : ℝ) := by
+    simpa only [← Finset.sum_filter, Finset.sum_const, nsmul_eq_mul, mul_one] using
+      Finset.sum_le_sum (s := Finset.univ) (fun i _ ↦ hdiff i)
+  have henergy :
+      (⟪toEuclideanLin K Ω, toEuclideanLin (∑ i, h i) (toEuclideanLin K Ω)⟫_ℂ).re - E₀ ≤
+        1 := by
+    rw [← hE]
+    simpa only [map_sum, LinearMap.sum_apply, inner_sum, Complex.re_sum,
+      Finset.sum_sub_distrib] using hsum.trans (by exact_mod_cast hcard)
   exact hgap.trans henergy
 
 end TNLean.MPS.AreaLaw

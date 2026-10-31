@@ -274,38 +274,25 @@ statements, normality means eventual full Kraus rank. Under the normalization
 used in Ref.~\cite{Sanz2010Quantum}, the development proves that the source
 primitive condition is equivalent to eventual full Kraus rank.
 
-\section{Scope of the index comparison}
+\section{The index comparison}
 
 For $H_n(A,\varphi)=S_n(A)\varphi$, Proposition~1 of
-Ref.~\cite{Sanz2010Quantum} states
-\begin{align}
-    q(\mathcal E_A)
-        &\leq
-        i(A)
-    \label{eq:spwc10_wielandt_one_step_subspace_source_index_comparison}
-\end{align}
-for every quantum channel.
+Ref.~\cite{Sanz2010Quantum} states $q(\mathcal E_A)\le i(A)$ for every
+quantum channel. The declaration
+\leanid{MPSTensor.qIndex_le_iIndex_of_tracePreserving} states this inequality
+without a primitivity or finite-index hypothesis.\footnote{See
+    \path{TNLean/Wielandt/Primitivity/Equivalence.lean}.}
 
-The available formal comparison assumes trace-preserving normalization and
-uniform vector-spreading primitivity. It proves
-(\ref{eq:spwc10_wielandt_one_step_subspace_source_index_comparison}) under
-those assumptions, so it specializes Proposition~1 rather than reproducing
-its full hypothesis set. A companion comparison instead assumes that $i(A)$
-is finite.\footnote{The two declarations are
-    \leanid{MPSTensor.qIndex_le_iIndex_of_isPrimitivePaper} and
-    \leanid{MPSTensor.qIndex_le_iIndex}. The definitions are in
-    \path{TNLean/Wielandt/Primitivity/Definitions.lean}, and the restricted
-    theorem is in \path{TNLean/Wielandt/Inequality/Bounds.lean}.}
+The definitions take the infimum over positive admissible lengths and assign
+zero to the empty set. If the exact-length matrix span is full at some
+positive length, the existing comparison applies. Otherwise, the equivalence
+between primitivity and eventual full Kraus rank shows that the admissible
+set for $q(\mathcal E_A)$ is empty. Thus $q(\mathcal E_A)=0\le i(A)$.
 
-The omitted cases are degenerate but still require an explicit formal
-argument. If the channel is not primitive, then the admissible set in
-(\ref{eq:spwc10_wielandt_one_step_subspace_q_index}) is empty and
-$q(\mathcal E_A)=0$. If the channel lacks eventual full Kraus rank, then the
-admissible set in
-(\ref{eq:spwc10_wielandt_one_step_subspace_i_index}) is empty and $i(A)=0$.
-A source-faithful theorem can therefore prove these two zero-index
-characterizations, split on primitivity, and invoke the existing
-primitive-channel inequality in the nontrivial case.
+The earlier declarations \leanid{MPSTensor.qIndex_le_iIndex} and
+\leanid{MPSTensor.qIndex_le_iIndex_of_isPrimitivePaper} remain useful
+specializations. Their stronger hypotheses no longer delimit the available
+source-facing statement.
 
 \section{Scope of the strong-irreducibility equivalence}
 
@@ -345,12 +332,11 @@ matrix may be any element of $S_1(A)$ with the required spectral property.
 Statements for a chosen Kraus operator remain useful corollaries, but they are
 not the source theorem.
 
-Two scope restrictions remain. The index comparison assumes primitivity or,
-in its companion form, finiteness of $i(A)$. The strong-irreducibility
-predicate also contains an irreducibility conjunct absent from the literal
-third clause of Proposition~3 in Ref.~\cite{Sanz2010Quantum}. The preceding
-sections identify the zero-index and source-predicate arguments needed to
-remove these restrictions.
+One scope restriction remains: the strong-irreducibility predicate contains
+an irreducibility conjunct absent from the literal third clause of
+Proposition~3 in Ref.~\cite{Sanz2010Quantum}. The preceding section identifies
+the source-predicate argument needed to remove this restriction. The universal
+index comparison is supplied by the zero-index argument above.
 
 Cumulative-span declarations and bundled analysis chains remain support
 lemmas. The source-facing quantum Wielandt conclusions concern the
