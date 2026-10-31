@@ -223,7 +223,6 @@ import TNLean.Algebra.ThreeOperatorPerturbation
 import TNLean.Algebra.ToEuclideanCLM
 import TNLean.Algebra.ToEuclideanLinApply
 import TNLean.Algebra.TraceInvariantSubmodule
-import TNLean.Algebra.TraceOneNeZero
 import TNLean.Algebra.TranslatedCharacterOrthogonality
 import TNLean.Algebra.TwistedRegularProjective
 import TNLean.Algebra.TwistedRegularRepresentation

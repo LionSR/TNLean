@@ -45,23 +45,6 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
-### Positive dimension from a trace-one matrix — promoted (2026-10-31)
-
-- **Pattern:** Derive `NeZero D` from `Tr σ = 1` for
-  `σ : Matrix (Fin D) (Fin D) ℂ` by substituting `D = 0` and simplifying
-  the trace of the empty matrix.
-- **Defined in:** `Algebra/TraceOneNeZero.lean`,
-  `Matrix.neZero_of_trace_eq_one` (moved from
-  `MPS/Preparation/SecondOrderOverlap.lean`, where the preparation modules
-  already used it).
-- **Refactored occurrences:** the five hand-written copies for the two sector
-  fixed points in `MPS/ParentHamiltonian/UncleGroundGram.lean`,
-  `UncleNormGrowth.lean`, and `UncleFiniteGaplessness.lean` now call the
-  lemma as `have := Matrix.neZero_of_trace_eq_one htr`.
-- **Notes:** `MPS/ParentHamiltonian/HalfChainSourceSpectrum.lean` still
-  carries one copy whose `D ≠ 0` hypothesis feeds only the instance; it can
-  switch to the lemma in a later pass.
-
 ### One-site MPO blocking as physical relabeling — promoted (2026-10-29)
 
 - **Pattern:** Expand one-site blocking into singleton words and identify

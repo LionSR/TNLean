@@ -3,7 +3,6 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Algebra.TraceOneNeZero
 import TNLean.MPS.ParentHamiltonian.UncleNormFactorization
 import TNLean.MPS.ParentHamiltonian.UncleWallGramGeneric
 import TNLean.MPS.ParentHamiltonian.UncleMixedDamping
@@ -139,8 +138,16 @@ theorem uncleTwoWallTrialSource_ae_quadratic_norm_growth
           (uncleTwoWallTrialSource A B P.1 P.2 N)‖ ^ 2 ∧
       ‖(WithLp.linearEquiv 2 ℂ (NSiteSpace d (6 * N + 1))).symm
           (uncleTwoWallTrialSource A B P.1 P.2 N)‖ ^ 2 ≤ C * ((N + 1 : ℕ) : ℝ) ^ 2 := by
-  have := Matrix.neZero_of_trace_eq_one htrA
-  have := Matrix.neZero_of_trace_eq_one htrB
+  have ha : a ≠ 0 := by
+    intro ha
+    subst a
+    simp at htrA
+  have hb : b ≠ 0 := by
+    intro hb
+    subst b
+    simp at htrB
+  let : NeZero a := ⟨ha⟩
+  let : NeZero b := ⟨hb⟩
   obtain ⟨hIA, hIB⟩ := uncleBoundaryLetter_isInjective_diagonal_blocks A B R₀ L₀ hPert
   have hAB := uncleBoundaryLetter_mixedMapSpectralRadius_lt_one
     A B R₀ L₀ hPert hUA hUB ρA hρA ρB hρB hFA hFB
