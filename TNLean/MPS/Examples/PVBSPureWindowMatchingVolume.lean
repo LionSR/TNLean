@@ -23,21 +23,6 @@ The PVBS coefficients are those of arXiv:1112.4097, Section II, equations (1)--(
 
 namespace MPSTensor
 
-private theorem cyclicCfg_full_eq_neg_translate {R : ℕ} (hR : 0 < R)
-    (i : Fin R) (ω τ : Cfg 2 R) :
-    cyclicCfg hR R i ω τ = cyclicTranslateCfg (-i) ω := by
-  let _ : NeZero R := ⟨hR.ne'⟩
-  funext k
-  change (if h : (k.val + R - i.val) % R < R then
-    ω ⟨(k.val + R - i.val) % R, h⟩ else τ k) = ω (k + -i)
-  rw [dite_eq_left (Nat.mod_lt _ hR)]
-  congr 1
-  apply Fin.ext
-  have hi := i.isLt
-  rw [← sub_eq_add_neg, Fin.val_sub, Fin.val_mk]
-  congr 1
-  omega
-
 /-- Every cyclic translate preserves the existing one-particle line when its
 weight satisfies the matching root-of-unity equation. The vector itself need
 not be invariant. Source: PVBS coefficients, arXiv:1112.4097, Section II. -/
@@ -90,7 +75,7 @@ theorem pvbsPureWindowHamiltonian_apply_pvbsEdge (q : ℂ) {R : ℕ} (hR : 0 < R
   apply (pvbsPureWindowInteraction_apply_eq_zero_iff q R _).mpr
   refine ⟨c, fun σ ↦ ?_⟩
   change pvbsEdge q R (cyclicCfg (Fin.pos i) R i σ τ) = c * pvbsEdge q R σ
-  rw [cyclicCfg_full_eq_neg_translate (Fin.pos i)]
+  rw [cyclicCfg_full_eq_cyclicTranslateCfg_neg (Fin.pos i)]
   exact (congrFun hc σ).symm
 
 /-- At its matching periodic volume, the actual pure-window Hamiltonian has
@@ -115,7 +100,7 @@ theorem ker_pvbsPureWindowHamiltonian_matching_volume (q : ℂ) {R : ℕ} (hR : 
     refine ⟨c, ?_⟩
     ext σ
     have hcfg : cyclicCfg (Fin.pos i) R i σ (0 : Cfg 2 R) = σ := by
-      rw [cyclicCfg_full_eq_neg_translate (Fin.pos i)]
+      rw [cyclicCfg_full_eq_cyclicTranslateCfg_neg (Fin.pos i)]
       ext k
       simp [cyclicTranslateCfg, i]
     have h := hc σ
@@ -129,16 +114,12 @@ theorem ker_pvbsPureWindowHamiltonian_matching_volume (q : ℂ) {R : ℕ} (hR : 
       (c • WithLp.toLp 2 (pvbsEdge q R)) = 0
     rw [map_smul, pvbsPureWindowHamiltonian_apply_pvbsEdge q hR hq, smul_zero]
 
-/-- The matching-volume kernel contains the actual nonzero one-particle vector.
-Nonvanishing is read from its unit first-excitation coefficient, rather than
-supplied as a ground-state premise. Source: PVBS coefficients,
-arXiv:1112.4097, Section II. -/
-theorem pvbsPureWindowHamiltonian_matching_volume_nonzero_ground (q : ℂ)
-    {R : ℕ} (hR : 0 < R) (hq : q ^ R = 1) :
-    (WithLp.toLp 2 (pvbsEdge q R) : MPVSpace 2 R) ≠ 0 ∧
-      periodicInteractionHamiltonianES (pvbsPureWindowInteraction q R) R
-        (WithLp.toLp 2 (pvbsEdge q R)) = 0 := by
-  refine ⟨?_, pvbsPureWindowHamiltonian_apply_pvbsEdge q hR hq⟩
+/-- The one-particle vector is nonzero: its coefficient on the configuration
+with a single first excitation is one. Together with
+`pvbsPureWindowHamiltonian_apply_pvbsEdge` it is a nonzero vector of the
+matching-volume kernel. Source: PVBS coefficients, arXiv:1112.4097, Section II. -/
+theorem pvbsEdge_ne_zero_matching_volume (q : ℂ) {R : ℕ} (hR : 0 < R) :
+    (WithLp.toLp 2 (pvbsEdge q R) : MPVSpace 2 R) ≠ 0 := by
   intro hzero
   cases R with
   | zero => omega
