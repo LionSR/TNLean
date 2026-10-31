@@ -17,7 +17,10 @@ The exact finite transfer identity is approximated by the two actual
 canonical rank-one contractions. Pure transfer powers converge by source
 block injectivity and unital normalization, and the actual moving-wall
 maps have linear bounds. This derives a geometric factorization error;
-neither factorization nor norm growth is assumed.
+neither factorization nor norm growth is assumed:
+\(|\operatorname{Tr}\mathcal T_N-\eta_R(N+1)\eta_L(N+1)|\le C(N+1)^2z^N\)
+with \(0<z<1\), and hence \(\|\varphi_N\|^2/(N+1)^2\to\operatorname{Re}(\kappa_R\kappa_L)\)
+for the limiting wall slopes \(\kappa_R,\kappa_L\).
 
 Source: arXiv:1210.6613, proof of Lemma lowenergystates, lines 1230–1265.
 -/
