@@ -9998,6 +9998,7 @@ there is no need for a new tactic.
   threshold. Before extending this pattern to another module, move the value equality
   before the case distinction or reuse `Fin.val_inj`; no new tactic is needed.
 
+
 ### Regional and cyclic slice membership — candidate (2026-10-29)
 
 - **Seen:** The two inclusions in `PEPS/ParentHamiltonian/CycleParentGroundSpace.lean`
@@ -10068,6 +10069,16 @@ there is no need for a new tactic.
   the general extension. The existing matrix trace-representation theorem
   handles both endpoint restriction directions.
 - **Decision:** Reuse the lemmas; no new tactic or parallel dual structure.
+
+### Cyclic coefficient identities from two spanning families — candidate (2026-10-29)
+
+- **Seen:** `uncleBoundary_cyclic_pairing_of_word_pairing` in
+  `MPS/ParentHamiltonian/UnclePeriodicClosure.lean` extends a cyclic identity
+  first from positive-length coefficient words and then from one-site letters.
+- **Reuse:** Compose the existing trace functional with the concrete left/right
+  coefficient linear maps, then apply `LinearMap.ext_on_range` twice. This
+  avoids duplicating scalar-sum or span-induction proofs and introduces no
+  new algebra instance or tactic.
 
 ### Delta half factors for a supplied two-site circuit (2026-10-29)
 
