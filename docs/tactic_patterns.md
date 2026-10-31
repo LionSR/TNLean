@@ -10071,6 +10071,18 @@ removed after the dependency audit exposed it.
   public helper in place of its private repeated finite-region induction.
 - **Validation:** Source-only; hosted Lean checking pending.
 
+### Prime-length periodic reduction shared by ground-state applications — promoted
+- **Pattern:** canonicalize an arbitrary tensor, discard periodic blocks whose
+  periods do not divide the length, derive a common Wielandt injectivity
+  length, group phase-equivalent blocks, and remove zero coefficients.
+- **Seen:** the W-state bound in `MPS/Examples/WStatePrimeLengthBound.lean` and
+  the general ground-state dichotomy in
+  `MPS/ParentHamiltonian/PrimeLengthBondDimensionDichotomy.lean`.
+- **Abstraction:** `exists_normal_blocks_of_no_small_divisor` in
+  `MPS/CanonicalForm/PrimeLengthNormalBlocks.lean` extracts the existing
+  W-state-independent proof and generalizes its physical alphabet. Both
+  applications consume the same actual decomposition and derived bounds.
+
 ### Weighted geometric sums grouped by their anchors — promoted (2026-10-28)
 
 - **Seen:** `Lattice/LowEnergyCommutatorSum.lean`,
