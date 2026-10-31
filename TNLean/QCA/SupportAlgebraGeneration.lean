@@ -3,8 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.QCA.BipartiteQuasiLocalEmbedding
 import TNLean.QCA.CommutingStarSubalgebraKronecker
-import TNLean.QCA.SiteIndexedSupportAlgebra
 
 /-!
 # Norm-closed generation of the quasi-local algebra by the support algebras
@@ -337,8 +337,7 @@ theorem quasiLocalObservable_evenPair_mem_adjacentSupportJoin
   -- the canonical quasi-local map in bipartite coordinates
   set φ : Matrix (Config d (leftPair x) × Config d (rightPair x))
       (Config d (leftPair x) × Config d (rightPair x)) ℂ →⋆ₐ[ℂ] QuasiLocalAlgebra d :=
-    (quasiLocalObservable d (leftPair x ∪ rightPair x)).comp
-      (bipartiteLocalAlgebraEquiv hΓΔ).symm.toStarAlgHom with hφ
+    bipartiteMatrixToQuasiLocalObservable hΓΔ with hφ
   have hφ_apply : ∀ Y, φ Y = quasiLocalObservable d (leftPair x ∪ rightPair x)
       ((bipartiteLocalAlgebraEquiv hΓΔ).symm Y) := fun _ ↦ rfl
   have hleft : (evenSupportAlgebra hω x).map
@@ -347,14 +346,8 @@ theorem quasiLocalObservable_evenPair_mem_adjacentSupportJoin
     rw [StarSubalgebra.map_le_iff_le_comap]
     intro a ha
     rw [StarSubalgebra.mem_comap, StarSubalgebra.mem_comap]
-    have hinc : bipartiteLocalAlgebraEquiv hΓΔ
-        (localInclusion (d := d) Finset.subset_union_left (CStarMatrix.ofMatrix a)) =
-        Matrix.leftKroneckerEmbed (n := Config d (rightPair x)) a :=
-      bipartiteLocalAlgebraEquiv_localInclusion_left hΓΔ (CStarMatrix.ofMatrix a)
-    change φ (Matrix.leftKroneckerEmbed (n := Config d (rightPair x)) a) ∈
-      J
-    rw [hφ_apply, ← hinc, StarAlgEquiv.symm_apply_apply,
-      quasiLocalObservable_localInclusion]
+    change φ (Matrix.leftKroneckerEmbed (n := Config d (rightPair x)) a) ∈ J
+    rw [hφ, bipartiteMatrixToQuasiLocalObservable_leftKroneckerEmbed]
     exact (show embeddedEvenSupportAlgebra hω x ≤ J from le_sup_left)
       (StarSubalgebra.mem_map.mpr ⟨a, ha, rfl⟩)
   have hright : (oddSupportAlgebra hω x).map
@@ -363,14 +356,8 @@ theorem quasiLocalObservable_evenPair_mem_adjacentSupportJoin
     rw [StarSubalgebra.map_le_iff_le_comap]
     intro a ha
     rw [StarSubalgebra.mem_comap, StarSubalgebra.mem_comap]
-    have hinc : bipartiteLocalAlgebraEquiv hΓΔ
-        (localInclusion (d := d) Finset.subset_union_right (CStarMatrix.ofMatrix a)) =
-        Matrix.rightKroneckerEmbed (m := Config d (leftPair x)) a :=
-      bipartiteLocalAlgebraEquiv_localInclusion_right hΓΔ (CStarMatrix.ofMatrix a)
-    change φ (Matrix.rightKroneckerEmbed (m := Config d (leftPair x)) a) ∈
-      J
-    rw [hφ_apply, ← hinc, StarAlgEquiv.symm_apply_apply,
-      quasiLocalObservable_localInclusion]
+    change φ (Matrix.rightKroneckerEmbed (m := Config d (leftPair x)) a) ∈ J
+    rw [hφ, bipartiteMatrixToQuasiLocalObservable_rightKroneckerEmbed]
     exact (show embeddedOddSupportAlgebra hω x ≤ J from le_sup_right)
       (StarSubalgebra.mem_map.mpr ⟨a, ha, rfl⟩)
   have hφX : φ X = ω (quasiLocalObservable d (evenPair x) A) := by

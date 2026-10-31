@@ -66,8 +66,8 @@ The intended relationships are:
 These are the notation-bearing statements for Proposition 3. The full
 equivalence of the three conditions is assembled in `Primitivity/Equivalence.lean`.
 
-At present this layer is not imported by `TNLean.MPS.*` or `TNLean.PiAlgebra.*`;
-it serves the Wielandt inequality modules below.
+This layer serves the Wielandt inequality modules below and the worked
+examples of `TNLean.MPS.Examples` that compute the two indices.
 
 ## References
 
