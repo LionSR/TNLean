@@ -208,7 +208,7 @@
         "thm:ph_primitive_blocks_sharp_open_kernel": "Source theorem: the printed open-chain threshold of Perez-Garcia et al. Theorem 12",
         "thm:block_diagonal_chain_space_global_cut": "Periodic ground space of a block-injective tensor is the span of the block vectors (Perez-Garcia et al., Theorem 12)",
         "thm:canonical_arbitrary_interaction_degeneracy": "Arbitrary positive local interactions annihilate every separated canonical block and have at least as many ground states as blocks",
-        "thm:eventual_mps_prime_length_dichotomy": "Quantified asymptotic SPWC10 ground-state dichotomy with an actual fixed tensor or an explicit prime-length fifth-degree obstruction"
+        "thm:eventual_mps_prime_length_dichotomy": "Quantified asymptotic SPWC10 ground-state dichotomy with a fixed tensor or an explicit prime-length fifth-degree obstruction"
       }
     },
     "ch:correlations": {

@@ -1,3 +1,42 @@
+\begin{lemma}[Sections of a positive periodic interaction]
+    \label{lem:periodic_interaction_sections}
+    \lean{MPSTensor.cyclicRestrictES_periodicLocalInteractionES}
+    \lean{MPSTensor.periodicLocalInteractionES_eq_zero_iff_sections}
+    \lean{MPSTensor.periodicInteractionHamiltonianES_eq_zero_iff_sections}
+    \leanok
+    For $1\le R\le M$, let $h$ be an operator on $R$ consecutive sites,
+    let $h_i$ be its cyclic translate extended by the identity, and write
+    $R_{i,\tau}\psi$ for the coefficient section with the outside letters
+    fixed to $\tau$. Then $R_{i,\tau}h_i\psi=hR_{i,\tau}\psi$.
+    In particular, $h_i\psi=0$ precisely when $hR_{i,\tau}\psi=0$ for every
+    $\tau$. If $h\ge0$, then
+    $(\sum_i h_i)\psi=0$ precisely when every $hR_{i,\tau}\psi=0$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Extending $h$ by the identity applies it independently to each outside
+    coefficient section. A sum of positive operators kills a vector precisely
+    when every summand kills it.
+\end{proof}
+
+\begin{lemma}[Restriction of an interaction inside an interval]
+    \label{lem:periodic_interaction_interval_section}
+    \lean{MPSTensor.periodicLocalInteractionES_rightFiber_eq_zero_of_eq_zero}
+    \leanok
+    Let $h$ have range $R\ge1$, let $W\le M$, and let a translated copy of
+    $h$ lie wholly inside a cyclic interval of $W$ sites. If that translated
+    operator kills $\psi$, then its corresponding translate on $W$ sites
+    kills every coefficient section of $\psi$ obtained by fixing the
+    complement of the interval.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Regroup the sites as the interval and its complement. The translated
+    operator becomes the same $W$-site operator acting independently at
+    each fixed outside configuration. Taking any such section preserves
+    its zero equation.
+\end{proof}
+
 \section{Embeddings of physical coordinate spaces}
 
 \begin{definition}[Euclidean extension by zero]
@@ -15,15 +54,279 @@
             0,      & j\notin e(I).
         \end{cases}
     \end{align}
-    Then $E_e$ is a linear isometry. In particular, this applies to an
-    injection of dependent configuration sets induced by a family of
-    physical embeddings.
+    This applies in particular to an injection of dependent configuration
+    sets induced by a family of physical embeddings.
 \end{definition}
-\begin{proof}\leanok
-    The sum of $|(E_e\xi)(j)|^2$ over $j\in J$ equals the sum of
-    $|\xi(i)|^2$ over $i\in I$, since every coefficient outside $e(I)$ is
-    zero and each coefficient in $e(I)$ occurs once.
+
+\begin{lemma}[Extension by zero is an isometry]
+    \label{lem:physical_euclidean_extension_zero_isometry}
+    \lean{Function.Embedding.norm_euclideanExtendByZero}
+    \leanok
+    \uses{def:physical_euclidean_extension_zero}
+    For every injection $e:I\hookrightarrow J$ of finite sets, the map $E_e$
+    is linear and $\lVert E_e\xi\rVert=\lVert\xi\rVert$ for every
+    $\xi\in\mathbb C^I$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{def:physical_euclidean_extension_zero}
+    Since $(E_e\xi)(j)=0$ for $j\notin e(I)$ and $e$ is injective,
+    \begin{align}
+        \sum_{j\in J}\lvert(E_e\xi)(j)\rvert^2
+         & =\sum_{i\in I}\lvert(E_e\xi)(e(i))\rvert^2
+        =\sum_{i\in I}\lvert\xi(i)\rvert^2.
+    \end{align}
 \end{proof}
+
+\begin{lemma}[Coefficients outside a single physical sector]
+    \label{lem:physical_sector_embedded_coefficients}
+    \lean{MPSTensor.embedded_physical_vector_apply_eq_zero_of_labels_ne}
+    \lean{MPSTensor.coeff_eq_zero_of_mem_two_embedded_physical_sectors}
+    \leanok
+    \uses{def:physical_euclidean_extension_zero}
+    Let each physical letter have a sector label. Extend a vector from an
+    alphabet on which this label is constant by zero to the larger alphabet,
+    site by site. Its coefficient on any word containing two different
+    labels is zero. The same assertion holds for a sum of two local subspaces
+    embedded from alphabets on each of which the label is constant.
+\end{lemma}
+\begin{proof}
+    \leanok
+    A word in the image of either alphabet has constant label. A word with
+    two different labels is outside that image, where extension by zero
+    has zero coefficient. Addition preserves these zero equations.
+\end{proof}
+
+\begin{lemma}[Sector labels in a periodic projector kernel]
+    \label{lem:physical_sector_projector_kernel_support}
+    \lean{MPSTensor.physical_label_eq_of_projectorHamiltonian_coeff_ne_zero}
+    \lean{MPSTensor.coeff_eq_zero_of_projectorHamiltonian_of_physical_labels_ne}
+    \leanok
+    \uses{lem:periodic_interaction_sections}
+    Let $2\le R\le M$ and let $S$ be a subspace on $R$ sites. Suppose
+    every vector in $S$ has zero coefficient on words whose first two
+    letters have different sector labels. Form the periodic Hamiltonian
+    on $M$ sites from the orthogonal projection onto $S^{\perp}$.
+    Every nonzero coefficient of a kernel vector has the same label at
+    every site. Equivalently, a word with two different labels has zero
+    coefficient in every kernel vector.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Let $\psi$ be in the kernel. Positivity and
+    Lemma~\ref{lem:periodic_interaction_sections} give
+    $R_{i,\tau}\psi\in S$ for every site $i$ and outside word $\tau$.
+    Suppose $\psi(\sigma)\ne0$, and let $\tau$ be the outside part of
+    $\sigma$ for the window beginning at $i$. That window is
+    $\sigma_i\cdots\sigma_{i+R-1}$ and
+    \begin{align}
+        \psi(\sigma) & =(R_{i,\tau}\psi)(\sigma_i,\ldots,\sigma_{i+R-1}).
+    \end{align}
+    If $\mathrm{label}(\sigma_i)\ne\mathrm{label}(\sigma_{i+1})$, the
+    hypothesis on $S$ makes the right side zero. Hence
+    $\mathrm{label}(\sigma_i)=\mathrm{label}(\sigma_{i+1})$ for every $i$,
+    and induction around the cycle gives
+    $\mathrm{label}(\sigma_i)=\mathrm{label}(\sigma_0)$.
+\end{proof}
+
+\begin{lemma}[No mixed physical sectors in the periodic kernel]
+    \label{lem:two_physical_sector_projector_kernel}
+    \lean{MPSTensor.coeff_eq_zero_of_two_sector_projectorHamiltonian}
+    \lean{MPSTensor.coeff_eq_zero_of_physical_sum_projectorHamiltonian}
+    \leanok
+    \uses{lem:physical_sector_embedded_coefficients,lem:physical_sector_projector_kernel_support}
+    Let $2\le R\le M$. Embed two local spaces $S$ and $T$ from alphabets
+    on which the sector label is constant, and let $U$ be the sum of their
+    images on $R$ sites. The periodic Hamiltonian formed from the
+    orthogonal projection onto $U^{\perp}$ has zero ground-state coefficient
+    on every word containing different labels. In particular, split an
+    alphabet of $a+b$ letters into its first $a$ and last $b$ letters:
+    every word using letters from both parts has zero coefficient.
+\end{lemma}
+\begin{proof}
+    \leanok
+    The two embedded spaces each vanish on words with different labels,
+    so their sum does also. Apply the periodic projector-kernel statement
+    to this sum of embedded spaces.
+\end{proof}
+
+\begin{lemma}[Exact decomposition into physical sectors]
+    \label{lem:physical_sector_state_decomposition}
+    \lean{MPSTensor.physical_sum_state_decomposition}
+    \lean{MPSTensor.physical_sum_state_decomposition_of_projectorHamiltonian_eq_zero}
+    \leanok
+    \uses{lem:two_physical_sector_projector_kernel}
+    Split an alphabet into $a$ and $b$ letters, and let $M\ge1$.
+    If a vector $\psi$ on $M$ sites has zero coefficient on every word
+    using both alphabets, then $\psi=E_M\psi_a+F_M\psi_b$, where $E_M$
+    and $F_M$ extend by zero from the two alphabets and $\psi_a,\psi_b$
+    are the coefficient restrictions of $\psi$.
+    In particular, this decomposition holds for every kernel vector of
+    the periodic complementary projector of two embedded local spaces
+    whenever $M\ge R\ge2$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    The two word images are disjoint because the chain is nonempty.
+    For a word $\sigma=e\circ\rho$ in the first image,
+    \begin{align}
+        (E_M\psi_a)(\sigma) & =\psi_a(\rho)=\psi(\sigma),
+                            & (F_M\psi_b)(\sigma)         & =0,
+    \end{align}
+    and the second image is analogous. A word $\sigma$ in neither image
+    uses both alphabets, so
+    $\psi(\sigma)=(E_M\psi_a)(\sigma)=(F_M\psi_b)(\sigma)=0$.
+    Lemma~\ref{lem:two_physical_sector_projector_kernel} supplies precisely
+    this mixed-coefficient vanishing for kernel vectors.
+\end{proof}
+
+\section{Component Hamiltonians of disjoint physical sectors}
+
+Write $E_m$ and $F_m$ for extension by zero on $m$-letter words along
+one-letter injections $e$ and $f$ with disjoint images. For local subspaces
+$S$ and $T$ on $R$ sites, put $U=E_R S+F_R T$. Let $H_U$, $H_S$, and $H_T$
+be the periodic sums of the complementary projections of these spaces.
+
+\begin{lemma}[Orthogonality of the physical sectors]
+    \label{lem:physical_sector_word_orthogonality}
+    \lean{Function.Embedding.inner_extendByZero_eq_zero_of_disjoint,
+        MPSTensor.disjoint_physical_word_ranges}
+    \leanok
+    \uses{def:physical_euclidean_extension_zero}
+    Extension by zero from disjoint coordinate ranges gives orthogonal
+    vectors. In particular, for $m\ge1$, the word embeddings of
+    disjoint one-letter alphabets have disjoint ranges, and
+    $\langle E_m v,F_m w\rangle=0$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    In the coefficient sum defining the inner product, at least one
+    coefficient vanishes at every coordinate. An embedded word in both
+    ranges would have its first letter in both one-letter images.
+\end{proof}
+
+\begin{lemma}[The local projector restricts to its sector]
+    \label{lem:physical_sector_parent_projection_transport}
+    \lean{MPSTensor.physical_sector_parent_projection_embed}
+    \leanok
+    \uses{lem:physical_sector_word_orthogonality,
+        lem:physical_euclidean_extension_zero_isometry}
+    For $R\ge1$, the complementary projection of the sum
+    $U=E_R S+F_R T$ satisfies
+    \begin{align}
+        P_{U^{\perp}}E_R v & =E_R P_{S^{\perp}}v.
+    \end{align}
+    Interchanging the two alphabets gives the analogous identity on the
+    second sector. No range or projector identity is assumed.
+\end{lemma}
+\begin{proof}
+    \leanok
+    The candidate projection $E_R P_Sv$ belongs to $U$. Its residual is
+    orthogonal to $E_R S$ by isometry and to $F_R T$ by sector orthogonality.
+    Uniqueness of orthogonal projection gives $P_U E_Rv=E_RP_Sv$.
+    Subtract from $E_Rv$ to obtain the complementary projection identity.
+\end{proof}
+
+\begin{lemma}[The periodic sum restricts to its component]
+    \label{lem:physical_sector_periodic_hamiltonian_transport}
+    \lean{MPSTensor.physical_sector_projectorHamiltonian_embed,
+        MPSTensor.physical_sector_projectorHamiltonian_embed_eq_zero_iff}
+    \leanok
+    \uses{lem:physical_sector_parent_projection_transport,
+        lem:physical_spectator_embedding_transport,
+        lem:physical_euclidean_extension_zero_isometry}
+    If $1\le R\le M$, then
+    \begin{align}
+        H_U E_Mv  & =E_MH_Sv,                             &
+        H_UE_Mv=0 & \quad\Longleftrightarrow\quad H_Sv=0.
+    \end{align}
+    The second-sector assertions follow by interchanging the embeddings
+    and local spaces. All operators are the periodic sums.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Splitting a cyclic window and its complement commutes with sitewise
+    physical embedding. The local complementary projection intertwines
+    with $E_R$, and its extension by the identity intertwines with the
+    corresponding outside embedding. Conjugate by the cyclic coordinate
+    changes and sum over all starting sites. Injectivity of the physical
+    isometry gives the zero equation in both directions.
+\end{proof}
+
+\begin{lemma}[Exact component kernel condition for a sector sum]
+    \label{lem:physical_sector_sum_kernel_iff}
+    \lean{MPSTensor.physical_sector_projectorHamiltonian_sum_eq_zero_iff}
+    \leanok
+    \uses{lem:physical_sector_periodic_hamiltonian_transport,
+        lem:physical_sector_word_orthogonality}
+    Under the same assumptions,
+    \begin{align}
+        H_U(E_Mv+F_Mw)=0
+        \quad\Longleftrightarrow\quad H_Sv=0\ \text{and}\ H_Tw=0.
+    \end{align}
+    No whole-kernel decomposition or dynamics relation is a premise.
+\end{lemma}
+\begin{proof}
+    \leanok
+    The sum acts as $E_MH_Sv+F_MH_Tw$. Its two terms are orthogonal.
+    If their sum vanishes, taking the inner product with the first term
+    shows that term vanishes; the second then vanishes also. Injectivity
+    gives the two component equations. The converse follows by linearity.
+\end{proof}
+
+\begin{lemma}[Full kernel decomposition for a split physical alphabet]
+    \label{lem:physical_sum_full_kernel}
+    \lean{MPSTensor.ker_physical_sum_projectorHamiltonian}
+    \leanok
+    \uses{lem:physical_sector_state_decomposition,lem:physical_sector_sum_kernel_iff}
+    Let $M\ge R\ge2$, and split the physical alphabet into its first $a$
+    and last $b$ letters. For local spaces $S$ and $T$, put
+    $U=E_RS+F_RT$, where the two maps extend by zero on physical words.
+    For the periodic sums of the complementary projections,
+    $\ker H_U=E_M\ker H_S+F_M\ker H_T$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Every kernel vector has zero mixed-sector coefficients and therefore
+    splits into its two coefficient restrictions. The component
+    kernel equivalence puts each restriction in its respective kernel.
+    Conversely, the component kernel equivalence and linearity show that
+    the sum of any two embedded component kernel vectors is killed by
+    the combined Hamiltonian.
+\end{proof}
+
+\begin{lemma}[Physical extension of a periodic tensor]
+    \label{lem:mpv_state_extend_physical}
+    \lean{MPSTensor.mpvState_extend_physical}
+    \leanok
+    \uses{def:physical_euclidean_extension_zero}
+    Let $e:\{0,\ldots,a-1\}\hookrightarrow\{0,\ldots,d-1\}$ be an embedding,
+    and let $A_i$ be $D\times D$ matrices. Set $\widetilde A_{e(i)}=A_i$
+    and $\widetilde A_j=0$ outside the image. At every length $N\ge0$,
+    the periodic matrix product vectors satisfy
+    \begin{align}
+        \ket{V^{(N)}(\widetilde A)} & =E_N\ket{V^{(N)}(A)},
+    \end{align}
+    where $E_N$ is extension by zero along the sitewise configuration
+    embedding. The bond dimension is unchanged.
+\end{lemma}
+\begin{proof}
+    \leanok
+    For $\sigma=e\circ\rho$ in the image, $\widetilde A_{\sigma_k}=A_{\rho_k}$
+    at every site $k$, so
+    \begin{align}
+        V^{(N)}(\widetilde A)_\sigma
+         & =\tr(\widetilde A_{\sigma_0}\cdots\widetilde A_{\sigma_{N-1}})
+        =\tr(A_{\rho_0}\cdots A_{\rho_{N-1}})=V^{(N)}(A)_\rho.
+    \end{align}
+    If some $\sigma_k$ lies outside the image, then
+    $\widetilde A_{\sigma_k}=0$, so the product and
+    $V^{(N)}(\widetilde A)_\sigma$ vanish. At $N=0$ the empty
+    configuration belongs to the image, and both coefficients equal
+    $\tr(\mathbb 1_D)$.
+\end{proof}
+
+\section{Parent Hamiltonians with varying physical dimensions}
 
 \begin{definition}[A common alphabet for differently sized physical sites]
     \label{def:varying_physical_common_alphabet}
