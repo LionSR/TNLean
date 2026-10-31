@@ -31,6 +31,7 @@ import TNLean.QCA.FinitePureStateDecomposition
 import TNLean.QCA.GNVWIndex
 import TNLean.QCA.GNVWShift
 import TNLean.QCA.IntervalCoordinates
+import TNLean.QCA.IntervalSupport
 import TNLean.QCA.IntervalTranslation
 import TNLean.QCA.InversePropagation
 import TNLean.QCA.IsQCA
