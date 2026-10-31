@@ -30,6 +30,7 @@ import TNLean.MPS.Symmetry.MPOSymmetry.DomainWallExchange
 import TNLean.MPS.Symmetry.MPOSymmetry.DomainWallFamily
 import TNLean.MPS.Symmetry.MPOSymmetry.DomainWallString
 import TNLean.MPS.Symmetry.MPOSymmetry.DomainWallStringExchange
+import TNLean.MPS.Symmetry.MPOSymmetry.DomainWallStringGroup
 import TNLean.MPS.Symmetry.MPOSymmetry.Examples
 import TNLean.MPS.Symmetry.MPOSymmetry.FusionRing
 import TNLean.MPS.Symmetry.MPOSymmetry.FusionTensors
@@ -109,6 +110,7 @@ import TNLean.MPS.Symmetry.MPOSymmetry.PBCGroupProjector
 import TNLean.MPS.Symmetry.MPOSymmetry.PermutedBlocks
 import TNLean.MPS.Symmetry.MPOSymmetry.PermutedBlocksGauge
 import TNLean.MPS.Symmetry.MPOSymmetry.RepS3SU24NIMRep
+import TNLean.MPS.Symmetry.MPOSymmetry.RepS3SU24NIMRepClassification
 import TNLean.MPS.Symmetry.MPOSymmetry.RingEndpointComparison
 import TNLean.MPS.Symmetry.MPOSymmetry.RingEndpointRightComparison
 import TNLean.MPS.Symmetry.MPOSymmetry.Similarity

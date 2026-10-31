@@ -80,6 +80,7 @@ import TNLean.MPS.MPU.FundamentalTheoremGatesNecessity
 import TNLean.MPS.MPU.FundamentalTheoremLetters
 import TNLean.MPS.MPU.GeneralIndexContinuity
 import TNLean.MPS.MPU.GroupCocycleMPO
+import TNLean.MPS.MPU.GroupCocycleMPO.ArbitraryBoundary
 import TNLean.MPS.MPU.GroupCocycleMPO.FusionAlgebra
 import TNLean.MPS.MPU.GroupCocycleMPO.FusionTensors
 import TNLean.MPS.MPU.GroupCocycleMPO.Instances
