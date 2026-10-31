@@ -180,6 +180,10 @@ namespace PGVWC07CanonicalFormData
 
 variable {A : MPSTensor d D} (h : PGVWC07CanonicalFormData A)
 
+/-- Every block of a canonical form has positive dimension. -/
+instance neZero_dim (k : Fin h.r) : NeZero (h.dim k) :=
+  ⟨(h.dim_pos k).ne'⟩
+
 /-- Every word of a canonical form is block diagonal, with the word of the
 weighted block `λ_j A^j` on block `j`. -/
 theorem evalWord_eq (w : List (Fin d)) :

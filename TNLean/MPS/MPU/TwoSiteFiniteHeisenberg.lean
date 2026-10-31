@@ -429,6 +429,14 @@ noncomputable def originalSiteHeisenbergInputWindow (d k : ℕ)
     (originalSiteHeisenbergInputWindowEquiv d k)
     (originalSiteHeisenbergInputWindowEquiv d k) (Matrix.rightKroneckerEmbed A)
 
+/-- The actual output configuration order consists of two exterior half
+blocks and the four consecutive output half blocks. Source: CPSV17,
+StandardForm and eq:appendix-1, lines 603–622 and 2300–2306. -/
+noncomputable def originalSiteHeisenbergOutputWindowEquiv (d k : ℕ) :
+    (HalfPair (MPSTensor.blockPhysDim d k) ×
+      FourHalves (MPSTensor.blockPhysDim d k)) ≃ (Fin (3 * (2 * k)) → Fin d) :=
+  (windowOutputHeadEquiv (MPSTensor.blockPhysDim d k)).trans (originalWindowMiddleEquiv d k)
+
 /-- The fixed six-block output matrix of the actual local action. Keeping
 the two exterior half-blocks here makes adjoining original residual words
 canonical without imposing divisibility on their lengths.
@@ -441,10 +449,8 @@ noncomputable def originalSiteHeisenbergOutputWindow {d ℓ r : ℕ} (k : ℕ)
       (HalfPair (MPSTensor.blockPhysDim d k)) ℂ) :
     Matrix (Fin (3 * (2 * k)) → Fin d) (Fin (3 * (2 * k)) → Fin d) ℂ :=
   Matrix.reindex
-    ((windowOutputHeadEquiv (MPSTensor.blockPhysDim d k)).trans
-      (originalWindowMiddleEquiv d k))
-    ((windowOutputHeadEquiv (MPSTensor.blockPhysDim d k)).trans
-      (originalWindowMiddleEquiv d k))
+    (originalSiteHeisenbergOutputWindowEquiv d k)
+    (originalSiteHeisenbergOutputWindowEquiv d k)
     (Matrix.rightKroneckerEmbed (twoLinkOutputObservable u v A))
 
 /-- The actual periodic MPO conjugates identity-tensor inclusions of the
@@ -482,7 +488,7 @@ theorem mpo_bufferedWindow_conjugation {d D ℓ r : ℕ}
   simpa only [ei, eo, originalSiteHeisenbergInputEquiv,
     originalSiteHeisenbergOutputEquiv, originalWindowMatrix_eq_buffer,
     originalSiteHeisenbergInputWindow, originalSiteHeisenbergInputWindowEquiv,
-    originalSiteHeisenbergOutputWindow] using h
+    originalSiteHeisenbergOutputWindow, originalSiteHeisenbergOutputWindowEquiv] using h
 
 
 /-- Original consecutive coordinates on the complete central two-block
@@ -564,5 +570,143 @@ theorem originalSiteHeisenbergInputWindowEquiv_outside_eq_iff (d k : ℕ)
       omega
     · simp [originalSiteHeisenbergInputWindowEquiv,
         originalWindowMiddleEquiv_block, windowInputHeadEquiv]
+
+/-- The original central input decoder is the ordinary two-block
+configuration concatenation. Source: CPSV17, StandardForm and physical
+blocking, lines 603–622. -/
+theorem originalSiteHeisenbergCentreEquiv_eq_blockedConfigEquiv (d k : ℕ)
+    (c : HalfPair (MPSTensor.blockPhysDim d k)) :
+    originalSiteHeisenbergCentreEquiv d k c =
+      MPSTensor.blockedConfigEquiv d 2 k ![c.1, c.2] := by
+  apply List.ofFn_injective
+  change MPSTensor.wordOfBlock d (2 * k)
+    ((twoSiteDirectBlockEquiv d k).symm (finProdFinEquiv c)) = _
+  rw [wordOfBlock_twoSiteDirectBlockEquiv_symm, MPSTensor.ofFn_blockedConfigEquiv]
+  simp [Kraus.flattenBlockedWord, List.ofFn_succ]
+
+private theorem originalSiteHeisenbergCentreEquiv_block (d k : ℕ)
+    (c : HalfPair (MPSTensor.blockPhysDim d k)) (b : Fin 2) (j : Fin k) :
+    originalSiteHeisenbergCentreEquiv d k c (finProdFinEquiv (b, j)) =
+      MPSTensor.decodeBlock d k (![c.1, c.2] b) j := by
+  rw [originalSiteHeisenbergCentreEquiv_eq_blockedConfigEquiv]
+  simp [MPSTensor.blockedConfigEquiv, Equiv.arrowCongr, Equiv.curry, Function.comp]
+
+/-- Four consecutive output half-block indices in their actual word order.
+Source: CPSV17, StandardForm and Appendix index comparison,
+lines 603–622 and 2313–2334. -/
+def originalSiteHeisenbergOutputBlockEquiv (b : ℕ) : FourHalves b ≃ (Fin 4 → Fin b) where
+  toFun c := ![c.1.1, c.1.2, c.2.1, c.2.2]
+  invFun f := ((f 0, f 1), (f 2, f 3))
+  left_inv _ := rfl
+  right_inv f := by funext i; fin_cases i <;> rfl
+
+/-- Original coordinates on the four consecutive output half blocks.
+Source: CPSV17, StandardForm, lines 603–622. -/
+noncomputable def originalSiteHeisenbergOutputCentreEquiv (d k : ℕ) :
+    FourHalves (MPSTensor.blockPhysDim d k) ≃ (Fin (4 * k) → Fin d) :=
+  (originalSiteHeisenbergOutputBlockEquiv (MPSTensor.blockPhysDim d k)).trans
+    (MPSTensor.blockedConfigEquiv d 4 k)
+
+private theorem originalSiteHeisenbergOutputWindowEquiv_half (d k : ℕ)
+    (e : HalfPair (MPSTensor.blockPhysDim d k))
+    (c : FourHalves (MPSTensor.blockPhysDim d k))
+    (b : Fin 3) (t : Fin 2) (j : Fin k) :
+    originalSiteHeisenbergOutputWindowEquiv d k (e, c)
+        (finProdFinEquiv (b, finProdFinEquiv (t, j))) =
+      MPSTensor.decodeBlock d k
+        (![![(e.1), c.1.1], ![c.1.2, c.2.1], ![c.2.2, (e.2)]] b t) j := by
+  rw [originalSiteHeisenbergOutputWindowEquiv, Equiv.trans_apply,
+    originalWindowMiddleEquiv_block]
+  fin_cases b
+  · exact originalSiteHeisenbergCentreEquiv_block d k (e.1, c.1.1) t j
+  · exact originalSiteHeisenbergCentreEquiv_block d k (c.1.2, c.2.1) t j
+  · exact originalSiteHeisenbergCentreEquiv_block d k (c.2.2, e.2) t j
+
+/-- The middle four-half-block interval of the actual six-half-block
+output reads precisely its four output coordinates.
+Source: CPSV17, StandardForm and eq:appendix-1, lines 603–622 and 2300–2306. -/
+theorem originalSiteHeisenbergOutputWindowEquiv_middle (d k : ℕ)
+    (e : HalfPair (MPSTensor.blockPhysDim d k))
+    (c : FourHalves (MPSTensor.blockPhysDim d k)) :
+    (fun i : Fin (4 * k) ↦ originalSiteHeisenbergOutputWindowEquiv d k (e, c)
+      ⟨k + i.val, by omega⟩) = originalSiteHeisenbergOutputCentreEquiv d k c := by
+  funext i
+  obtain ⟨⟨t, j⟩, rfl⟩ := finProdFinEquiv.surjective i
+  have hread (b : Fin 3) (s : Fin 2)
+      (hi : k + (finProdFinEquiv (t, j)).val =
+        (finProdFinEquiv (b, finProdFinEquiv (s, j))).val) :
+      originalSiteHeisenbergOutputWindowEquiv d k (e, c)
+        ⟨k + (finProdFinEquiv (t, j)).val, by omega⟩ =
+      MPSTensor.decodeBlock d k
+        (![![e.1, c.1.1], ![c.1.2, c.2.1], ![c.2.2, e.2]] b s) j := by
+    have hidx : (⟨k + (finProdFinEquiv (t, j)).val, by omega⟩ : Fin (3 * (2 * k))) =
+        finProdFinEquiv (b, finProdFinEquiv (s, j)) := Fin.ext hi
+    rw [hidx, originalSiteHeisenbergOutputWindowEquiv_half]
+  have hcentre : originalSiteHeisenbergOutputCentreEquiv d k c (finProdFinEquiv (t, j)) =
+      MPSTensor.decodeBlock d k (![c.1.1, c.1.2, c.2.1, c.2.2] t) j := by
+    change MPSTensor.blockedConfigEquiv d 4 k ![c.1.1, c.1.2, c.2.1, c.2.2]
+      (finProdFinEquiv (t, j)) = _
+    simp [MPSTensor.blockedConfigEquiv, Equiv.arrowCongr, Equiv.curry, Function.comp]
+  rw [hcentre]
+  fin_cases t
+  · exact hread 0 1 (by change k + (j.val + k * 0) = j.val + k * 1 + (2 * k) * 0; omega)
+  · exact hread 1 0 (by change k + (j.val + k * 1) = j.val + k * 0 + (2 * k) * 1; omega)
+  · exact hread 1 1 (by change k + (j.val + k * 2) = j.val + k * 1 + (2 * k) * 1; omega)
+  · exact hread 2 0 (by change k + (j.val + k * 3) = j.val + k * 0 + (2 * k) * 2; omega)
+
+/-- Equality outside the four consecutive output half blocks is exactly
+equality of the two exterior half-block coordinates. Source: CPSV17,
+identity-tensor inclusions and eq:appendix-1, lines 2292–2306. -/
+theorem originalSiteHeisenbergOutputWindowEquiv_outside_eq_iff (d k : ℕ)
+    (e e' : HalfPair (MPSTensor.blockPhysDim d k))
+    (c c' : FourHalves (MPSTensor.blockPhysDim d k)) :
+    (∀ i : Fin (3 * (2 * k)), ¬ (k ≤ i.val ∧ i.val < k + 4 * k) →
+      originalSiteHeisenbergOutputWindowEquiv d k (e, c) i =
+        originalSiteHeisenbergOutputWindowEquiv d k (e', c') i) ↔ e = e' := by
+  constructor
+  · intro h
+    apply Prod.ext
+    · apply (MPSTensor.decodeBlockEquiv d k).injective
+      funext j
+      have hj := h (finProdFinEquiv ((0 : Fin 3), finProdFinEquiv ((0 : Fin 2), j)))
+        (by change ¬ (k ≤ j.val + k * 0 + (2 * k) * 0 ∧
+          j.val + k * 0 + (2 * k) * 0 < k + 4 * k); omega)
+      simpa [originalSiteHeisenbergOutputWindowEquiv_half, Kraus.decodeBlockEquiv_apply]
+        using hj
+    · apply (MPSTensor.decodeBlockEquiv d k).injective
+      funext j
+      have hj := h (finProdFinEquiv ((2 : Fin 3), finProdFinEquiv ((1 : Fin 2), j)))
+        (by change ¬ (k ≤ j.val + k * 1 + (2 * k) * 2 ∧
+          j.val + k * 1 + (2 * k) * 2 < k + 4 * k); omega)
+      simpa [originalSiteHeisenbergOutputWindowEquiv_half, Kraus.decodeBlockEquiv_apply]
+        using hj
+  · intro h
+    subst e'
+    intro i hi
+    obtain ⟨⟨b, q⟩, rfl⟩ := finProdFinEquiv.surjective i
+    obtain ⟨⟨t, j⟩, rfl⟩ := finProdFinEquiv.surjective q
+    fin_cases b <;> fin_cases t
+    · rw [originalSiteHeisenbergOutputWindowEquiv_half,
+        originalSiteHeisenbergOutputWindowEquiv_half]
+      rfl
+    · exfalso; apply hi
+      change k ≤ j.val + k * 1 + (2 * k) * 0 ∧
+        j.val + k * 1 + (2 * k) * 0 < k + 4 * k
+      omega
+    · exfalso; apply hi
+      change k ≤ j.val + k * 0 + (2 * k) * 1 ∧
+        j.val + k * 0 + (2 * k) * 1 < k + 4 * k
+      omega
+    · exfalso; apply hi
+      change k ≤ j.val + k * 1 + (2 * k) * 1 ∧
+        j.val + k * 1 + (2 * k) * 1 < k + 4 * k
+      omega
+    · exfalso; apply hi
+      change k ≤ j.val + k * 0 + (2 * k) * 2 ∧
+        j.val + k * 0 + (2 * k) * 2 < k + 4 * k
+      omega
+    · rw [originalSiteHeisenbergOutputWindowEquiv_half,
+        originalSiteHeisenbergOutputWindowEquiv_half]
+      rfl
 
 end MPOTensor

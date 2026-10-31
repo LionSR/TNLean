@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Range
+import TNLean.Circuit.SupportedFunctionalCalculus
 import TNLean.Circuit.LocalCircuit
 import TNLean.MPS.AreaLaw.LocalSolution.HierarchyLevels
 
@@ -48,19 +48,6 @@ namespace TNLean.MPS.AreaLaw.LocalSolution
 section Support
 
 variable {d : ℕ} {ι : Type*} [Fintype ι] [DecidableEq ι]
-
-/-- The continuous functional calculus keeps the support of an operator: if `A` acts on `S`, so
-does `f(A)`. -/
-theorem cfc_mem_supportedOperators (f : ℝ → ℝ) {S : Set ι}
-    {A : Matrix (ι → Fin d) (ι → Fin d) ℂ} (hA : A ∈ supportedOperators d S) :
-    cfc f A ∈ supportedOperators d S := by
-  let s : StarSubalgebra ℂ (Matrix (ι → Fin d) (ι → Fin d) ℂ) :=
-    { (supportedOperators d S).toSubalgebra (one_mem_supportedOperators S)
-        fun _ _ ↦ mul_mem_supportedOperators with
-      star_mem' := star_mem_supportedOperators }
-  have : IsClosed (s : Set (Matrix (ι → Fin d) (ι → Fin d) ℂ)) :=
-    Submodule.closed_of_finiteDimensional (supportedOperators d S)
-  exact cfc_mem (𝕜 := ℝ) (s := s) f hA
 
 /-- The window projection of an operator acting on `S` acts on `S`. -/
 theorem windowProjection_mem_supportedOperators {S : Set ι}

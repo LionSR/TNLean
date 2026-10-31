@@ -166,6 +166,7 @@ import TNLean.Algebra.ProjectiveCommutantEigenspace
 import TNLean.Algebra.ProjectiveRepresentation
 import TNLean.Algebra.PureStateTraceNorm
 import TNLean.Algebra.RankOneFactorization
+import TNLean.Algebra.RectangularUnitaryConjugation
 import TNLean.Algebra.RegularRepresentationBlocking
 import TNLean.Algebra.RepresentationDelta
 import TNLean.Algebra.RepresentationDeltaInverse
@@ -205,6 +206,7 @@ import TNLean.Algebra.StabilizerCocycleReconstruction
 import TNLean.Algebra.StabilizerTransition
 import TNLean.Algebra.StackedIsometryCard
 import TNLean.Algebra.StarClosedSemisimple
+import TNLean.Algebra.StarSubalgebraEquiv
 import TNLean.Algebra.SubmoduleStarProjectionMatrix
 import TNLean.Algebra.Subquotient
 import TNLean.Algebra.SupportedIsometricCompression
