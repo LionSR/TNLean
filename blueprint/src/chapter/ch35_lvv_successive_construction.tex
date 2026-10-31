@@ -1,0 +1,150 @@
+\section{The successive viable-set construction}
+\label{sec:lvv_successive_construction}
+
+Fix a local dimension $q\ge2$ and a gap parameter $\Delta>0$.
+The construction below follows the induction of \cite{Landau2015Polynomial},
+with the independent trimming radius corrected as
+in~\cite{gap:lvv13_trimming_radius}. The cardinality constants use the
+stated constant-cut estimate and corrected net exponent
+of~\cite{gap:lvv13_constant_bond}. Error reduction uses the finite Gaussian
+construction of \cite[Section~5.4, Lemmas~18--19]{Huang2015GroundState}.
+This permits arbitrary ground energy, unlike the uniform polynomial
+estimate for the original power sampler; the distinction is explained
+in~\cite{gap:lvv13_runtime_ground_energy}.
+All polynomial bounds have the quantitative scope specified in those constructions.
+
+\begin{definition}[Successive size and bond budgets]
+    \label{def:lvv_successive_budgets}
+    \lean{TNLean.MPS.AreaLaw.lvvSuccessiveError,
+        TNLean.MPS.AreaLaw.lvvSizeTrimmingDegree,
+        TNLean.MPS.AreaLaw.lvvSizeTrimmingCoefficient,
+        TNLean.MPS.AreaLaw.lvvSuccessiveCardBound,
+        TNLean.MPS.AreaLaw.lvvSuccessiveBondBound,
+        TNLean.MPS.AreaLaw.lvvSuccessiveError_pos}
+    \leanok
+    \uses{thm:lvv_size_bond_trimmed_family, def:huang_filter_parameters}
+    Put $c_\Delta=(\Delta/169)^2>0$. Let $D$ be the constant-cut bond bound
+    used in size trimming at precision $c_\Delta$, and define
+    \begin{align}
+        p   & =2(qD)^2,                                           &
+        A   & =\left\lceil\frac{2(qD)^2}{c_\Delta}\right\rceil_+,   \\
+        C_s & =(D+1)D(2A+1)^p,                                    &
+        m_L & =(48L)^2r_{\rm ref}(L).
+    \end{align}
+    Here $r_{\rm ref}(L)$ is the reference bond from the existing constant-accuracy
+    MPS approximation at length $48L$. Write $E_L$ and $R_L$ for the energy count
+    and finite-filter rank budget with precision parameter $c_\Delta$. Set
+    \begin{align}
+        s_L=C_sL^pE_LR_L,\qquad b_L=R_L\max\{1,m_L\}.
+    \end{align}
+\end{definition}
+
+\begin{lemma}[Uniform polynomial budgets]
+    \label{thm:lvv_successive_polynomial_budgets}
+    \lean{TNLean.MPS.AreaLaw.exists_lvvSuccessive_uniform_polynomial}
+    \leanok
+    \uses{def:lvv_successive_budgets, thm:huang_filter_uniform_polynomial,
+        lem:lvv_bond_trimming_radius_polynomial}
+    There are natural numbers $P,d$, with $P\ge1$, depending only on $q,\Delta$
+    and chosen before the length, such that for every $L\ge1$,
+    \begin{align}
+        \max\{1,s_L\}    & \le P(L+1)^d, &
+        \max\{1,b_L\}    & \le P(L+1)^d, &
+        s_L\max\{1,b_L\} & \le P(L+1)^d.
+    \end{align}
+\end{lemma}
+\begin{proof}
+    \leanok
+    The energy count and rank product have a uniform natural-coefficient
+    polynomial bound. So does the corrected reference trimming radius, after
+    taking a natural ceiling of its coefficient. Multiply these bounds by the
+    fixed size coefficient and the power $L^p$. Products of the resulting two
+    polynomial bounds control both budgets and their final-span product. Taking
+    maxima with one also covers the scalar initial family.
+\end{proof}
+
+\begin{lemma}[A complete successive step]
+    \label{thm:lvv_complete_successive_step}
+    \lean{TNLean.MPS.AreaLaw.exists_positive_chain_successive_step}
+    \leanok
+    \uses{def:lvv_successive_budgets, thm:lvv_size_bond_trimmed_family,
+        thm:huang_positive_chain_operator, thm:huang_positive_chain_viable_filter}
+    Let $L\ge1$ and $1\le i\le L$. Let
+    $H=\sum_{j=0}^{L-2}h_j$, where $h_j$ is supported on sites $j,j+1$ and
+    $0\le h_j\le I$. Given a finite family $S$ on the first $i-1$ sites whose
+    members have a common finite MPS bond bound, one can choose a family $T$
+    on the first $i$ sites with $|T|\le s_L$ and individual effective bond
+    bound $b_L$, before any ground energy or ground vector is supplied.
+    For every unit ground vector $\Gamma$ with projector gap $\Delta$,
+    $(i-1,c_\Delta/L)$-viability of $S$ implies $(i,c_\Delta/L)$-viability of $T$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Extend each member by the one-site basis. Apply the actual size-trimming
+    construction to this extended family, using the exact adjacent-pair
+    embedding of $H$. Independently trim every retained vector to bond $m_L$.
+    The resulting family has cardinality at most $C_sL^p$ and is half-viable.
+    Apply the finite Gaussian filter family. Its cardinality multiplier is
+    $E_LR_L$, its individual bond multiplier is $R_L$, and it restores
+    viability precision $c_\Delta/L$. Each family is selected before the
+    ground pair, so the composition has the same quantifier order.
+\end{proof}
+
+\begin{lemma}[One recursively chosen viable sequence]
+    \label{thm:lvv_coherent_successive_sequence}
+    \lean{TNLean.MPS.AreaLaw.exists_positive_chain_successive_viable_sets}
+    \leanok
+    \uses{thm:lvv_complete_successive_step}
+    Under the physical hypotheses of the preceding theorem, there is one
+    sequence $S_0,\ldots,S_L$, chosen before every ground pair, with $S_0$ the
+    scalar singleton. For each positive cut, $|S_i|\le s_L$ and every member
+    has effective MPS bond bound $b_L$. For every unit ground vector $\Gamma$
+    with projector gap $\Delta$, all these same families are
+    $(i,c_\Delta/L)$-viable.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Carry a family together with its cardinality, individual bond and all-ground
+    viability assertions. At zero take the scalar singleton, whose viable
+    witness is $\Gamma$ itself. Define the successor by choosing the complete
+    step applied to the actual preceding family. Its viability assertion follows
+    from that of its predecessor. Natural-number recursion therefore gives a
+    single successive run. No ground pair enters any successor choice.
+\end{proof}
+
+\begin{theorem}[Uniform polynomial successive families and final-span MPS]
+    \label{thm:lvv_uniform_successive_approximation}
+    \lean{TNLean.MPS.AreaLaw.exists_uniform_positive_chain_successive_approximation}
+    \leanok
+    \uses{thm:lvv_successive_polynomial_budgets, thm:lvv_coherent_successive_sequence,
+        thm:lvv_left_span_bond}
+    Fix $q\ge2$ and $\Delta>0$. There exist natural numbers $P,d$, with $P\ge1$,
+    chosen before $L$ and the interaction, such that the following holds.
+    For every $L\ge1$ and every adjacent-pair positive-contraction interaction,
+    one can choose a single successive sequence $S_0,\ldots,S_L$ with scalar
+    initial family, cardinalities and individual effective bond bounds at most
+    $P(L+1)^d$, before every ground pair.
+
+    Suppose $\|\Gamma\|=1$, $H\Gamma=E_0\Gamma$ and
+    $H-E_0I\ge\Delta(I-|\Gamma\rangle\langle\Gamma|)$. Then every $S_i$ is
+    $(i,c_\Delta/L)$-viable, and there is a vector $\psi$ in the span of the
+    actual final family, read on the full chain, such that
+    \begin{align}
+        \|\psi\|=1,\qquad
+        |\langle\psi,\Gamma\rangle|\ge1-c_\Delta/L.
+    \end{align}
+    This $\psi$ is an open-boundary MPS with bond dimension at most $P(L+1)^d$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Choose the polynomial budgets first and then the recursively constructed
+    sequence. Enlarge the explicit budgets to this polynomial at each cut.
+    At the final cut, the right configuration space is one-dimensional. Thus
+    a normalized viable witness belongs to the span of the actual $S_L$ in
+    full-left coordinates. Pull it back by the coordinate isometry, preserving
+    norm and overlap. The finite-span rank estimate bounds its MPS bond by
+    $s_L\max\{1,b_L\}$, already controlled by the same polynomial.
+\end{proof}
+
+The conclusion states the overlap precision $1-c_\Delta/L$ and the displayed
+polynomial existence bounds. It makes no computational running-time assertion.

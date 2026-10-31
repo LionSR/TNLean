@@ -4,7 +4,9 @@
 % The chain specialization of the 2026 area-law and PEPS manuscripts, following the
 % TNLean note docs/notes/one_dimensional_note. Every constant is explicit. The model is
 % stated natively on the chain of L sites. The chain proof uses only the site-generic
-% layer TNLean/Lattice and QICLean; no module of TNLean/MPS/AreaLaw imports TNLean.PEPS.
+% layer TNLean/Lattice and QICLean. The separate strip extension reuses lattice counting;
+% the square-grid snake specialization at the end of the chapter also uses the
+% two-dimensional area law.
 
 The chain of $L$ sites carries a local dimension $q$, a finite-range Hamiltonian
 with one Hermitian term of norm at most $J$ per support of diameter at most $R$,
@@ -29,6 +31,9 @@ is the case of a chain. Theorem~\ref{thm:chain_mps_approximation}
 (Theorem~B) gives a normalized open-boundary matrix product state, of bond
 dimension polynomial in $L$, within distance $1/L$ of the ground state.
 The corollaries that follow them give explicit and sharper constants.
+Theorems~\ref{thm:strip_area_law} and~\ref{thm:strip_mps_approximation} extend
+the argument to strips of width $w$, with a quadratic width bound for entropy
+and an explicit polynomial length bound for the matrix product bond dimension.
 Chapter~\ref{ch:one_dimensional_preliminaries} collects the definitions on
 chains, and Chapter~\ref{ch:one_dimensional_open_mps} the facts on matrix
 product states used here. Chapter~\ref{ch:one_dimensional_protocol} proves
@@ -2895,4 +2900,310 @@ Theorem~B a second way, by a sequential preparation protocol.
         =e^{C_{\mathrm{int}}^{\mathrm{pol}}}(2c_0)^{64s}
         \left(\frac{L}{\varepsilon}\right)^{64s}.\notag
     \end{align}
+\end{proof}
+
+
+\section{Matrix product approximation along a square-grid snake}
+
+% Source: polynomial-PEPS manuscript, Section 1, and the threshold argument
+% in part2a_mps_information.tex, sec:shortcut, thm:Bshort, lines 73--92.
+% The older Part IIb, Section 7 citation does not locate that argument.
+\begin{definition}[Snake ordering of an open square]
+    \label{def:snake_grid_order}
+    \lean{TNLean.MPS.AreaLaw.snakeNativeEquiv,
+        TNLean.MPS.AreaLaw.snakeIndex,
+        TNLean.MPS.AreaLaw.snakeIndex_val,
+        TNLean.MPS.AreaLaw.snakeGridEquiv,
+        TNLean.MPS.AreaLaw.snakeGridPrefix,
+        TNLean.MPS.AreaLaw.mem_snakeGridPrefix,
+        TNLean.MPS.AreaLaw.snakeGridPrefix_eq_map,
+        TNLean.MPS.AreaLaw.snakeGridStateEquiv}
+    \leanok
+    On $\{0,\ldots,L-1\}^2$, visit the rows in increasing order, the
+    columns in increasing order in even rows and decreasing order in odd
+    rows. Let $A_k$ be the first $k$ sites. Relabelling the tensor factors
+    in this order is a linear isometry of the physical Hilbert space.
+\end{definition}
+
+\begin{lemma}[Snake cut boundary and finite-range budget]
+    \label{lem:snake_grid_cut_budget}
+    \lean{TNLean.MPS.AreaLaw.card_edgeBoundary_snakeGridPrefix_le,
+        TNLean.MPS.AreaLaw.cutLogBudget_snakeGridPrefix_le,
+        TNLean.MPS.AreaLaw.snakeGrid_window_le_linear}
+    \leanok
+    \uses{def:snake_grid_order}
+    Every prefix has $|\partial A_k|\le L+1$. For local dimension
+    $q\ge1$, the logarithmic budget of the actual range-$R$ interaction
+    supports satisfies $\mathcal B_{A_k}\le B(q,R)(L+2)$, where $B(q,R)$
+    is the constant in the finite-range boundary budget. For
+    $a\ge0$, $b\ge1$ and $L\ge2$,
+    \begin{align}
+        \sqrt{a(L+2)}\log(2L^3b)
+        \le \sqrt{2a}\bigl(\log(2b)+6\bigr)L.
+    \end{align}
+\end{lemma}
+\begin{proof}
+    \leanok
+    A boundary edge between distinct rows is determined by its column:
+    along each column, membership in the prefix decreases with the row
+    index. A boundary edge inside one row joins consecutive positions
+    of the snake, so at most one such edge crosses the prefix. The
+    finite-range boundary budget then gives the stated bound on
+    $\mathcal B_{A_k}$. Finally, $\log L\le2\sqrt L$,
+    $\sqrt L\le L$ and $L+2\le2L$ give the displayed inequality.
+\end{proof}
+
+\begin{corollary}[Exponential matrix product approximation on an open square]
+    \label{cor:snake_grid_mps}
+    \lean{TNLean.MPS.AreaLaw.exists_snakeGridMPS_of_uniformAreaLaw,
+        TNLean.MPS.AreaLaw.exists_snakeGridMPS,
+        TNLean.MPS.AreaLaw.isOpenMPS_snakeGridStateEquiv_one}
+    \leanok
+    \uses{thm:openai_uniform_area_law,lem:snake_grid_cut_budget,
+        lem:chain_sequential_truncation,thm:chain_mps_of_cut_rank,
+        thm:area_law_marginal_tails}
+    Fix $q\ge1$, $R\ge0$ and $J,\Delta>0$. There is a constant
+    $C=C(q,R,J,\Delta)\ge0$ such that every normalized gapped ground
+    vector $\Omega$, with gap $\Delta$, of a finite-range Hamiltonian
+    with term norms at most $J$ on an open $L\times L$ square, $L\ge2$,
+    has a normalized open-boundary matrix product approximation $\Phi$
+    along the snake ordering with
+    \begin{align}
+        \|\Phi-\Omega\|\le L^{-1},\qquad D\le e^{CL}.
+    \end{align}
+    A vector on a one-site square already has a bond-one representation.
+\end{corollary}
+\begin{proof}
+    \leanok
+    Let $C_0$ be the uniform area-law constant, $a=(1+J/\Delta)B(q,R)$,
+    $b=\sqrt{2e^{e/2}}$ and $s=\sqrt{a(L+2)}$. Choose
+    $w=64s\log(2L^3b)$. At each cut, the spectral projection above
+    $e^{-S(A_k)-w}$ has rank at most $e^{C_0(L+1)+w}$, and the square
+    root of its discarded mass is at most $1/(2L^3)$. The actual
+    reverse-prefix product has error at most
+    $(L^2-1)/(2L^3)\le1/(2L)$. It is nonzero, and normalization at
+    most doubles the error without changing the bond bound. Taking
+    $D=\lfloor e^{C_0(L+1)+w}\rfloor$ and
+    $C=2C_0+64\sqrt{2a}(\log(2b)+6)$ completes the proof.
+\end{proof}
+
+\section{Extension to strips of bounded width}
+
+The following results extend the interval argument to a rectangular strip;
+they are not statements of \cite{TNLean2026OneDimensional}.
+Throughout this section $L,w\ge1$, $q\ge1$, $J\ge0$, and $\Delta>0$.
+The Hamiltonian has one Hermitian interaction of norm at most $J$ per
+nonempty support of induced lattice diameter at most $R$. Its ground vector
+$\Omega$ has norm one and satisfies
+$H\Omega=E_0\Omega$ and
+$H-E_0I\ge\Delta(I-\ketbra{\Omega}{\Omega})$.
+In particular the ground eigenspace is one-dimensional.
+
+\begin{definition}[Column intervals and strip supports]
+    \label{def:strip_column_model}
+    \lean{TNLean.MPS.AreaLaw.stripDomain,
+        TNLean.MPS.AreaLaw.stripSite_bounds,
+        TNLean.MPS.AreaLaw.stripSiteEquiv,
+        TNLean.MPS.AreaLaw.stripColumn,
+        TNLean.MPS.AreaLaw.stripRow,
+        TNLean.MPS.AreaLaw.stripInterval,
+        TNLean.MPS.AreaLaw.mem_stripInterval,
+        TNLean.MPS.AreaLaw.stripInterval_mono}
+    \leanok
+    The domain is $\Lambda=\{0,\ldots,L-1\}\times\{0,\ldots,w-1\}$,
+    with column regions $X_{a,b}=\lbrack a,b)\times\lbrack 0,w)\cap\Lambda$.
+    Put $v_R=1+2R(R+1)$, $\mu_R=2^{2R(R+1)}$, and
+    $\ell_R=\log(e q^{v_R})$.
+\end{definition}
+
+\begin{lemma}[Crossing supports and buffers in a strip]
+    \label{lem:strip_column_geometry}
+    \lean{TNLean.MPS.AreaLaw.card_stripInterval_le,
+        TNLean.MPS.AreaLaw.card_stripInterval_enlargement_sdiff_le,
+        TNLean.MPS.AreaLaw.stripColumn_le_add_range,
+        TNLean.MPS.AreaLaw.crossingSupport_meets_stripBand,
+        TNLean.MPS.AreaLaw.stripCrossConst,
+        TNLean.MPS.AreaLaw.card_crossingTerms_stripInterval_le,
+        TNLean.MPS.AreaLaw.cutLogBudget_stripInterval_le,
+        TNLean.MPS.AreaLaw.strip_single_splitting,
+        TNLean.MPS.AreaLaw.card_crossingTerms_stripPrefix_le}
+    \leanok
+    \uses{def:strip_column_model, thm:area_diamond_count,
+        thm:area_law_crossing_supports, thm:area_law_buffer_contours,
+        thm:area_law_initial_buffer}
+    Every admissible support has at most $v_R$ sites, hence dimension at
+    most $q^{v_R}$, and at most $\mu_R$ admissible supports contain any
+    specified site. The one-dimensional bound $q^{R+1}$ does not hold for
+    these lattice supports: a cross of diameter two already contains five
+    sites. Put $N_R=2R\mu_R$. At most $N_Rw$ supports cross any column interval,
+    and its logarithmic cut budget is at most $1+N_Rw\ell_R^2$.
+    Enlarging the interval by $d$ columns at each end adds at most $2dw$
+    sites. No support splits two enlargements whose radii differ by at
+    least $R$. A region between the whole-column prefixes of lengths $c$
+    and $c+1$ has at most $(R+1)\mu_Rw$ crossing supports.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{def:strip_column_model, thm:area_diamond_count,
+        thm:area_law_crossing_supports, thm:area_law_buffer_contours,
+        thm:area_law_initial_buffer}
+    The bounds on the size of a support and on the number of supports
+    containing a site are the lattice support counts, since $v_R-1=2R(R+1)$.
+    A crossing support has an inside site in the two bands
+    $\lbrack a,a+R)\times\lbrack 0,w)$ and $\lbrack b-R,b)\times\lbrack 0,w)$, after clipping by
+    $\Lambda$. There are at most $2Rw$ such sites, each contained in at
+    most $\mu_R$ supports. For a partial-column prefix an inside site of
+    a crossing support lies in $\lbrack c-R,c+1)\times\lbrack 0,w)$.
+    The diameter bound also forces every support meeting an earlier
+    shell to lie inside any later shell whose radius is at least $R$
+    larger. The two end intervals of the enlargement contain at most
+    $2dw$ sites, including clipped or reversed intervals.
+\end{proof}
+
+\begin{lemma}[Logarithmic buffered discount on a strip]
+    \label{lem:strip_buffer_discount}
+    \lean{TNLean.MPS.AreaLaw.stripBudgetConst,
+        TNLean.MPS.AreaLaw.one_le_stripBudgetConst,
+        TNLean.MPS.AreaLaw.cutLogBudget_stripInterval_le_mul,
+        TNLean.MPS.AreaLaw.stripShellCount,
+        TNLean.MPS.AreaLaw.stripShell,
+        TNLean.MPS.AreaLaw.union_stripShell,
+        TNLean.MPS.AreaLaw.two_mul_condEntropy_stripInterval_le,
+        TNLean.MPS.AreaLaw.stripShellConst,
+        TNLean.MPS.AreaLaw.stripShellCount_le}
+    \leanok
+    \uses{lem:strip_column_geometry}
+    Put $t=1+J/\Delta$, $b=1+N_R\ell_R^2$, $B=bw$, and
+    \begin{align}
+        m & =\left\lceil4+64e(J/\Delta)B+128\sqrt{tB}\right\rceil,
+          & M                                                      & =5+(64e+128)b.\notag
+    \end{align}
+    Then $m\le Mtw$. For the buffer
+    $T=X_{a-mR,b+mR}\setminus X_{a,b}$,
+    \begin{align}
+        2S(X_{a,b}\mid T)
+        \le S(X_{a,b})+4096e(J/\Delta)B/m+m\log2.\notag
+    \end{align}
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{lem:strip_column_geometry}
+    Apply the finite-site logarithmic buffered discount to the genuine
+    column shells with weights $a_j=2/m$. Their total weight is two;
+    the tail-radius condition follows from $m\ge128\sqrt{tB}$.
+    Summing the actual crossing energies gives
+    $\sum_j8e a_j^2\sum_{Y\text{ crossing }X_j}
+        J\log^2(e\dim\mathcal H_Y)\le32eJB/m\le\Delta/2$.
+    The logarithmic overlap cost is $m\log2$, and the sum of the
+    entropy errors is at most $4096e(J/\Delta)B/m$.
+\end{proof}
+
+\begin{theorem}[Area law for column intervals of a strip]
+    \label{thm:strip_area_law}
+    \lean{TNLean.MPS.AreaLaw.stripAreaLawConst,
+        TNLean.MPS.AreaLaw.regionEntropy_stripInterval_le,
+        TNLean.MPS.AreaLaw.stripAreaLaw}
+    \leanok
+    \uses{lem:strip_buffer_discount}
+    The constant $C_0(q,R)=(8R\log q+\log2)M+1024eb$, fixed before
+    $L,w,J,\Delta,H,\Omega$, satisfies
+    $S_\Omega(X_{a,b})\le C_0(q,R)(1+J/\Delta)w^2$ for every column interval.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{lem:strip_buffer_discount, lem:strip_column_geometry}
+    Araki--Lieb gives $S(X)\le S(X\cup T)+S(T)$, while
+    $S(T)\le2mRw\log q$. Combining with the discount gives
+    $S(X)\le8mRw\log q+4096e(J/\Delta)bw/m+m\log2$.
+    Use $m\le Mtw$, $m\ge4$, and $w\ge1$.
+\end{proof}
+
+\begin{definition}[Physical column-snake ordering]
+    \label{def:strip_snake}
+    \lean{TNLean.MPS.AreaLaw.stripSnakeRows,
+        TNLean.MPS.AreaLaw.stripSnakeEquiv,
+        TNLean.MPS.AreaLaw.stripColumn_stripSnakeEquiv,
+        TNLean.MPS.AreaLaw.stripSnakePrefix,
+        TNLean.MPS.AreaLaw.stripSnakeState,
+        TNLean.MPS.AreaLaw.norm_stripSnakeState,
+        TNLean.MPS.AreaLaw.regionEntropy_stripSnakeState}
+    \leanok
+    Number the $Lw$ physical sites column by column, reversing the row
+    order in each odd column. The position $i$ lies in column $\lfloor i/w\rfloor$.
+    This bijection preserves vector norms and the entropies of corresponding
+    regions. Each physical site retains local dimension $q$.
+\end{definition}
+
+\begin{lemma}[Entropy and tails at every snake prefix]
+    \label{lem:strip_prefix_tails}
+    \lean{TNLean.MPS.AreaLaw.stripInterval_subset_snakePrefix,
+        TNLean.MPS.AreaLaw.snakePrefix_subset_stripInterval,
+        TNLean.MPS.AreaLaw.card_snakePrefix_sdiff_le,
+        TNLean.MPS.AreaLaw.regionEntropy_stripSnakePrefix_le,
+        TNLean.MPS.AreaLaw.stripPrefixBudgetConst,
+        TNLean.MPS.AreaLaw.cutLogBudget_stripSnakePrefix_le,
+        TNLean.MPS.AreaLaw.surprisalTail_stripSnakePrefix_le,
+        TNLean.MPS.AreaLaw.surprisalTail_stripSnakeState_le}
+    \leanok
+    \uses{def:strip_snake, thm:strip_area_law, lem:strip_column_geometry,
+        thm:area_law_initial_buffer}
+    Put $b'=1+(R+1)\mu_R\ell_R^2$ and $s=\sqrt{tb'w}$.
+    Every snake prefix $P$ has entropy at most $C_0tw^2+w\log q$ and
+    cut budget at most $b'w$. Its actual marginal satisfies
+    $\Pr\{|K-S(P)|>u\}\le2e^{e/2}e^{-u/(32s)}$ for $u\ge0$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{thm:strip_area_law, lem:strip_column_geometry, def:strip_snake,
+        thm:area_law_initial_buffer}
+    A prefix lies between two consecutive whole-column prefixes; its
+    additional region has at most $w$ sites. Subadditivity gives the entropy
+    estimate, and the partial-column crossing count gives the cut budget.
+    Apply the finite-site marginal tail theorem to the original Hamiltonian.
+    Under the site bijection $e$ the reduced state $\rho'_P$ along the snake
+    is the reindexed lattice reduced state $\rho_P$:
+    \begin{align}
+        \rho'_P(x,y) & =\rho_P(e(x),e(y)),
+                     & \det(\lambda I-\rho'_P)
+                     & =\det(\lambda I-\rho_P).
+        \label{eq:strip_snake_reindexed_state}
+    \end{align}
+    By \eqref{eq:strip_snake_reindexed_state} the two reduced states have the
+    same eigenvalues with multiplicity, hence the same spectral tail sums.
+\end{proof}
+
+\begin{theorem}[Normalized matrix product approximation on a strip]
+    \label{thm:strip_mps_approximation}
+    \lean{TNLean.MPS.AreaLaw.stripApproximationExponent,
+        TNLean.MPS.AreaLaw.stripApproximationConst,
+        TNLean.MPS.AreaLaw.exists_stripMPS_norm_sub_le,
+        TNLean.MPS.AreaLaw.stripMPSApproximation}
+    \leanok
+    \uses{lem:strip_prefix_tails, def:strip_snake,
+        lem:chain_sequential_truncation}
+    There are nonnegative constants $C(q,R),c(q,R)$, chosen before
+    $L,w,J,\Delta,H,\Omega$, and a normalized matrix product vector $\Phi$
+    along the physical column-snake ordering such that
+    \begin{align}
+        \|\Phi-\Omega\| & \le L^{-1},
+                        & D           & \le e^{C(q,R)(1+J/\Delta)w^2}
+        L^{c(q,R)\sqrt{1+J/\Delta}\,w}.\notag
+    \end{align}
+    Explicit choices are $c=128\sqrt{b'}$ and
+    $C=C_0+\log q+64\sqrt{b'}(\log(2A)+1)$, where
+    $A=\sqrt{2e^{e/2}}$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{lem:strip_prefix_tails, def:strip_snake,
+        lem:chain_sequential_truncation}
+    Sequentially truncate all $Lw-1$ internal cuts with slack
+    $64s\log(2L^2wA)$. The sum of square roots of the actual discarded
+    masses is at most $1/(2L)$. The truncated vector has nonzero norm;
+    normalization increases the error by at most a factor two and preserves
+    the matrix product bond bound. Since $\sqrt w\le w$, $\log w\le w$,
+    and $\sqrt t\le t$, the width logarithm is absorbed into $Ctw^2$,
+    while the length term is at most $c\sqrt t\,w\log L$.
+    The inverse site isometry returns the normalized vector to the original
+    lattice Hilbert space with the same error. These estimates include $L=1$.
 \end{proof}

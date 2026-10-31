@@ -644,8 +644,8 @@ that $ab=ba$ for every $a\in\mathcal A$ and $b\in\mathcal B$.
         StarSubalgebra.finrank_sup_of_equiv_matrix}
     \leanok
     \uses{def:qca_commuting_factor_multiplication}
-    Suppose that $\mathcal C=M_I(\mathbb C)$ for a finite nonempty set
-    $I$, that $p,q>0$, and that
+    Suppose that $\mathcal C$ is a nontrivial complex star-algebra,
+    that $p,q>0$, and that
     \begin{align}
         \mathcal A & \cong M_p(\mathbb C), \notag \\
         \mathcal B & \cong M_q(\mathbb C)
@@ -3425,9 +3425,103 @@ completion from compatible forward and inverse finite-local actions.
     are exactly the two defining properties of a one-dimensional QCA.
 \end{proof}
 
+\begin{definition}[A two-site tensor constructed from two unitary gates]
+    \label{def:mpu_tensor_from_two_gates}
+    \lean{MPOTensor.standardFormTensorOfGates,
+        MPOTensor.standardFormTensorOfGatesData}
+    \leanok
+    \uses{def:mpu_supplied_two_site_standard_form}
+    Let $d,\ell,r>0$ and let
+    \begin{align}
+        u                                 & : \mathbb C^d\otimes\mathbb C^d\longrightarrow
+        \mathbb C^\ell\otimes\mathbb C^r, &
+        v                                 & : \mathbb C^r\otimes\mathbb C^\ell\longrightarrow
+        \mathbb C^d\otimes\mathbb C^d
+    \end{align}
+    be unitary. Set $D=dr$ and identify a virtual coordinate with
+    $\beta=(x,s)\in\{1,\ldots,d\}\times\{1,\ldots,r\}$. Define
+    \begin{align}
+        (X_1)_{(i,\beta),s'} & =\delta_{\beta,(i,s')},           &
+        (X_2)_{(\beta,i),t}  & =v_{(x,i),(s,t)},                   \\
+        W_{(i_1,i_2),(j_1,j_2);\alpha,\gamma}
+                             & =\sum_{t,s}(X_2)_{(\alpha,i_1),t}
+        u_{(t,s),(j_1,j_2)}(X_1)_{(i_2,\gamma),s}.
+    \end{align}
+    The half factors satisfy
+    $v_{(i_1,i_2),(s,t)}=\sum_\beta
+        (X_1)_{(i_1,\beta),s}(X_2)_{(\beta,i_2),t}$.
+    Thus $W$ has the supplied standard form of
+    \cite[equation~\textup{StandardForm}, lines~603--622]{Cirac2017MPU}.
+    The physical site of $W$ is an ordered pair of the original sites.
+\end{definition}
+
+\begin{lemma}[The constructed tensor is the alternating unitary circuit]
+    \label{lem:mpu_tensor_from_gates_periodic_circuit}
+    \lean{MPOTensor.isMPU_standardFormTensorOfGates,
+        MPOTensor.mpo_standardFormTensorOfGates}
+    \leanok
+    \uses{def:mpu_tensor_from_two_gates,thm:mpu_supplied_two_site_periodic_circuit}
+    At every positive ring length $N$, the periodic operator of the
+    constructed tensor is, in ordered pair coordinates,
+    \begin{align}
+        U_W^{(N)}=V_{\rm shifted}^{(N)}U_{\rm unshifted}^{(N)}.
+    \end{align}
+    Consequently $W$ is a matrix product unitary. This includes $N=1$;
+    periodic unitarity is derived from the two gates.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Use the supplied standard form constructed in
+    Definition~\ref{def:mpu_tensor_from_two_gates} in the general periodic
+    circuit identity. Both layers are unitary, and their product is unitary.
+\end{proof}
+
+\begin{lemma}[Changing the intermediate bases preserves the circuit]
+    \label{lem:mpu_tensor_from_gates_basis_freedom}
+    \lean{MPOTensor.mpo_standardFormTensorOfGates_eq_of_gate_gauges}
+    \leanok
+    \uses{def:mpu_tensor_from_two_gates}
+    If $x\in U(\ell)$ and $y\in U(r)$, replace the supplied gates by
+    \begin{align}
+        u'=(x\otimes y)u,\qquad v'=v(y^\dagger\otimes x^\dagger).
+    \end{align}
+    The tensors constructed from $(u,v)$ and $(u',v')$ generate identical
+    periodic operators at every positive length. These are the cancelling
+    intermediate basis changes in the generalized Margolus construction.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Apply the gate sufficiency direction of the fundamental theorem to
+    the two constructed supplied standard forms. Each intermediate basis
+    change cancels its adjoint in the adjacent circuit layer.
+\end{proof}
+
+\begin{lemma}[Constructing the tensor from generalized Margolus gates]
+    \label{lem:mpu_tensor_from_margolus_gates}
+    \lean{MPOTensor.margolusShiftedGate,
+        MPOTensor.exists_standardFormTensor_of_margolus_gates}
+    \leanok
+    \uses{def:mpu_tensor_from_two_gates,lem:mpu_tensor_from_gates_periodic_circuit}
+    Let Schumacher--Werner's unitary gates be
+    $U:(\mathbb C^d)^{\otimes2}\to\mathbb C^\ell\otimes\mathbb C^r$ and
+    $V:\mathbb C^\ell\otimes\mathbb C^r\to(\mathbb C^d)^{\otimes2}$.
+    Set $u=U$ and $v=V\circ\operatorname{swap}_{r,\ell}$, explicitly
+    $v_{(i_1,i_2),(s,t)}=V_{(i_1,i_2),(t,s)}$.
+    There is a positive bond dimension and a tensor on the two-site
+    physical alphabet with the supplied standard form for $u,v$; its
+    periodic operator is the alternating circuit at every positive length.
+    This is the tensor construction in
+    \cite[Appendix, line~2308]{Cirac2017MPU}. Equality with a chosen blocked
+    cellular automorphism additionally requires agreement with that
+    automorphism's local rule.
+\end{lemma}
+\begin{proof}
+    \leanok
+    The explicit product-coordinate swap preserves unitarity. Use
+    Definition~\ref{def:mpu_tensor_from_two_gates} with $D=dr$ and then
+    Lemma~\ref{lem:mpu_tensor_from_gates_periodic_circuit}.
+\end{proof}
 
 \input{chapter/ch28_qca_support_factors}
-
-\input{chapter/ch28_qca_index}
-
 \input{chapter/ch28_mpu_actual_qca}
+\input{chapter/ch28_qca_index}

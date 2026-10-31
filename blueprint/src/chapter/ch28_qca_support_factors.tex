@@ -12,13 +12,13 @@ recorded in \cite{gap:gnvw12_site_dependent_adjacent_generation_scope}.
     \lean{SpinChain.PropagatesWithin.embeddedSupportAlgebra_isCentral,
         SpinChain.PropagatesWithin.evenSupportAlgebra_isCentral,
         SpinChain.PropagatesWithin.oddSupportAlgebra_isCentral}
-    \notready
+    \leanok
     \uses{thm:qca_site_indexed_support_algebras_commute,
         cor:qca_support_algebra_commutant,thm:qca_quasi_local_center_scalar}
     Each support algebra $\mathcal R_y$ has scalar center:
     $Z(\mathcal R_y)=\mathbb C I$.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     If $X\in Z(\mathcal R_y)$, then $X$ commutes with $\mathcal R_y$ by
     centrality and with every $\mathcal R_z$, $z\ne y$, by pairwise
     commutation. Norm-closed generation implies $[X,A]=0$ for every
@@ -28,11 +28,11 @@ recorded in \cite{gap:gnvw12_site_dependent_adjacent_generation_scope}.
 \end{proof}
 
 \begin{lemma}[Positive matrix presentations]
-    \label{cor:qca_support_factor_presentations}
+    \label{lem:qca_support_factor_presentations}
     \lean{SpinChain.PropagatesWithin.exists_evenSupportAlgebra_matrix,
         SpinChain.PropagatesWithin.exists_oddSupportAlgebra_matrix,
         SpinChain.PropagatesWithin.exists_supportAlgebra_matrixSizes}
-    \notready
+    \leanok
     \uses{lem:qca_support_factor_centers}
     There is a family of positive integers $r(y)$ with star-algebra
     isomorphisms
@@ -44,7 +44,7 @@ recorded in \cite{gap:gnvw12_site_dependent_adjacent_generation_scope}.
     The integer $r(y)$ is the matrix size; the complex dimension of
     $\mathcal R_y$ is $r(y)^2$.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     Apply the full-matrix scalar-center consequence of the finite-dimensional
     star-algebra classification to each finite support algebra. This is the
     consequence of \cite[Proposition~Csform]{SchumacherWerner2004QCA}
@@ -57,7 +57,7 @@ recorded in \cite{gap:gnvw12_site_dependent_adjacent_generation_scope}.
 \begin{lemma}[Commutant of the even-pair images]
     \label{lem:qca_even_pair_image_commutant}
     \lean{SpinChain.commute_of_forall_commute_image_evenPair}
-    \notready
+    \leanok
     \uses{thm:qca_even_pair_algebraic_generation,def:qca_quasi_local_algebra}
     Let $\omega$ be any star-automorphism of the homogeneous quasi-local
     chain. If $Z$ commutes with $\omega(\mathcal A_{E_x})$ for every even
@@ -68,12 +68,23 @@ recorded in \cite{gap:gnvw12_site_dependent_adjacent_generation_scope}.
     homogeneous scope of
     \cite{gap:gnvw12_site_dependent_adjacent_generation_scope}.
 \end{lemma}
-\begin{proof}
-    The even-pair algebras generate the algebraic local algebra. Their
-    images lie in the closed star-algebra of elements commuting with $Z$
-    and $Z^*$. Density of the local union and continuity of $\omega$ extend
-    this containment to its entire image. Surjectivity makes that image
-    the full quasi-local algebra.
+\begin{proof}\leanok
+    Put $C=\{w\in\mathcal A:[Z,w]=[Z^*,w]=0\}$, a closed star-subalgebra.
+    The hypothesis gives $\omega(\mathcal A_{E_x})\subseteq C$ for every
+    $x$, and the even-pair algebras generate the algebraic local algebra, so
+    \begin{align}
+        \mathcal A_{\mathrm{loc}}
+         & \subseteq\omega^{-1}(C).
+        \label{eq:qca_even_pair_image_commutant_local}
+    \end{align}
+    Since $\omega^{-1}(C)$ is closed and $\mathcal A_{\mathrm{loc}}$ is
+    dense, $\omega^{-1}(C)=\mathcal A$. Surjectivity of $\omega$ then gives
+    \begin{align}
+        a
+         & =\omega\bigl(\omega^{-1}(a)\bigr)\in C
+         &                                        & (a\in\mathcal A).
+        \label{eq:qca_even_pair_image_commutant_all}
+    \end{align}
 \end{proof}
 
 \begin{lemma}[Relative commutant inside an adjacent support pair]
@@ -81,7 +92,7 @@ recorded in \cite{gap:gnvw12_site_dependent_adjacent_generation_scope}.
     \lean{SpinChain.PropagatesWithin.quasiLocalObservable_evenPair_mem_adjacentSupportJoin,
         SpinChain.PropagatesWithin.adjacentSupportJoin_commute,
         SpinChain.PropagatesWithin.existsUnique_eq_smul_one_of_mem_adjacentSupportJoin_commute_image}
-    \notready
+    \leanok
     \uses{lem:qca_even_pair_image_commutant,
         thm:qca_site_indexed_support_algebras_commute,thm:qca_quasi_local_center_scalar}
     Put $\mathcal J_x=\mathcal R_{2x}\vee\mathcal R_{2x+1}$.
@@ -95,7 +106,7 @@ recorded in \cite{gap:gnvw12_site_dependent_adjacent_generation_scope}.
     This is the relative-commutant argument preceding the first adjacent
     generation identity in \cite[lines~1276--1287]{Gross2012IndexTheory}.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     The two-sided support containment gives the first inclusion. The four
     support labels of distinct pairs are distinct, so their pairwise
     commutation extends to the two joins. If $Z\in\mathcal J_x$ commutes
@@ -105,13 +116,13 @@ recorded in \cite{gap:gnvw12_site_dependent_adjacent_generation_scope}.
 \end{proof}
 
 \begin{lemma}[Generation of each image pair by its support factors]
-    \label{thm:qca_image_pair_adjacent_generation}
+    \label{lem:qca_image_pair_adjacent_generation}
     \lean{SpinChain.PropagatesWithin.exists_adjacentSupportJoin_matrix,
         SpinChain.PropagatesWithin.range_image_evenPair_eq_adjacentSupportJoin,
         SpinChain.PropagatesWithin.evenPairLocalImage_eq_sup_supportAlgebra,
         SpinChain.PropagatesWithin.evenPairLocalImage_map_bipartiteMatrixToQuasiLocalObservable}
-    \notready
-    \uses{cor:qca_support_factor_presentations,
+    \leanok
+    \uses{lem:qca_support_factor_presentations,
         lem:qca_adjacent_support_relative_commutant,thm:qca_commuting_full_matrix_product}
     The image of each even-pair algebra is the join of its two adjacent
     support factors:
@@ -125,22 +136,36 @@ recorded in \cite{gap:gnvw12_site_dependent_adjacent_generation_scope}.
     Kronecker embeddings. This is equation~AARReven of
     \cite[lines~1276--1287]{Gross2012IndexTheory}, in the homogeneous domain.
 \end{lemma}
-\begin{proof}
-    Both support factors are full matrix algebras of positive size. Their
-    commuting join is therefore a full matrix algebra. The image-pair
-    algebra is another full matrix algebra and embeds unitally into this
-    join. Its relative commutant is scalar. A unital homomorphism between
-    full complex matrix algebras with scalar relative commutant is onto,
-    so the support containment is an equality.
+\begin{proof}\leanok
+    Both support factors are full matrix algebras of positive size, and
+    their commuting join is again one:
+    \begin{align}
+        \mathcal R_{2x}\vee\mathcal R_{2x+1}
+         & \cong M_{r(2x)}(\mathbb C)\otimes_{\mathbb C}M_{r(2x+1)}(\mathbb C)
+        \cong M_{r(2x)r(2x+1)}(\mathbb C).
+        \label{eq:qca_image_pair_adjacent_join_matrix}
+    \end{align}
+    The image-pair algebra is another full matrix algebra and embeds
+    unitally into this join:
+    \begin{align}
+        \omega(\mathcal A_{E_x})
+         & \cong M_{d^2}(\mathbb C)
+        \hookrightarrow\mathcal R_{2x}\vee\mathcal R_{2x+1}.
+        \label{eq:qca_image_pair_unital_embedding}
+    \end{align}
+    By (\ref{eq:qca_adjacent_support_relative_commutant}) its relative
+    commutant is scalar. A unital homomorphism between full complex matrix
+    algebras with scalar relative commutant is onto, so the support
+    containment is an equality.
 \end{proof}
 
 \begin{lemma}[Matrix sizes of the image-pair factors]
-    \label{cor:qca_image_pair_matrix_sizes}
+    \label{lem:qca_image_pair_matrix_sizes}
     \lean{SpinChain.PropagatesWithin.evenSupportAlgebra_matrixSize_mul_odd,
         SpinChain.PropagatesWithin.exists_supportAlgebra_matrixSizes_even_mul}
-    \notready
-    \uses{thm:qca_image_pair_adjacent_generation,
-        cor:qca_support_factor_presentations,thm:qca_commuting_full_matrix_product}
+    \leanok
+    \uses{lem:qca_image_pair_adjacent_generation,
+        lem:qca_support_factor_presentations,thm:qca_commuting_full_matrix_product}
     The positive matrix sizes can be chosen coherently so that
     \begin{align}
         r(2x)r(2x+1) & =d^2
@@ -149,7 +174,7 @@ recorded in \cite{gap:gnvw12_site_dependent_adjacent_generation_scope}.
     for every $x\in\mathbb Z$. This is the first size identity following
     equation~AARReven in \cite[lines~1287--1290]{Gross2012IndexTheory}.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     The commuting product presentation identifies the adjacent join with
     $M_{r(2x)r(2x+1)}(\mathbb C)$. Its equality with the actual image pair
     also identifies it with $M_{d^2}(\mathbb C)$. Full complex matrix
@@ -157,15 +182,15 @@ recorded in \cite{gap:gnvw12_site_dependent_adjacent_generation_scope}.
 \end{proof}
 
 \begin{lemma}[Generation of the physical pair and both size identities]
-    \label{thm:qca_physical_pair_adjacent_generation}
+    \label{lem:qca_physical_pair_adjacent_generation}
     \lean{SpinChain.PropagatesWithin.existsUnique_eq_smul_one_of_supported_rightPair_commute_supports,
         SpinChain.PropagatesWithin.adjacentSupportJoin_eq_range_rightPair,
         SpinChain.PropagatesWithin.oddSupportAlgebra_sup_evenSupportAlgebra_eq_top,
         SpinChain.PropagatesWithin.oddSupportAlgebra_matrixSize_mul_even_add_one,
         SpinChain.PropagatesWithin.exists_supportAlgebra_matrixSizes_mul}
-    \notready
-    \uses{cor:qca_image_pair_matrix_sizes,
-        cor:qca_support_factor_presentations,cor:qca_support_algebra_commutant,
+    \leanok
+    \uses{lem:qca_image_pair_matrix_sizes,
+        lem:qca_support_factor_presentations,cor:qca_support_algebra_commutant,
         thm:qca_quasi_local_center_scalar,thm:qca_commuting_full_matrix_product}
     The two support factors on the same physical pair generate that pair:
     \begin{align}
@@ -182,7 +207,7 @@ recorded in \cite{gap:gnvw12_site_dependent_adjacent_generation_scope}.
     This is equation~AARRodd and the two size consequences in
     \cite[lines~1276--1318]{Gross2012IndexTheory}, in the homogeneous domain.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     Both support factors lie on $P_x$. If an observable on $P_x$ commutes
     with both, it commutes with every other support factor by disjoint
     locality. Global support generation makes it scalar. The support join

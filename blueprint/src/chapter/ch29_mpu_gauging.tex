@@ -182,6 +182,18 @@ $\mathcal U_g$. Throughout this section the chain length is positive: $N\geq1$.
     tensors are not required.
 \end{definition}
 
+\begin{definition}[The general linear representation on chain states]
+    \label{def:mpug_general_linear_representation}
+    \lean{MPOTensor.GroupFamily.IsRawRepresentation.rep,
+        MPOTensor.GroupFamily.IsRawRepresentation.rep_apply}
+    \leanok
+    \uses{def:mpug_operator_representation}
+    For a raw matrix product unitary representation and $N\geq1$, compose
+    the unitary representation on $(\C^d)^{\otimes N}$ with the inclusion
+    into its general linear group. The resulting linear automorphism at
+    $g\in G$ acts by the periodic operator $U_g^{(N)}$.
+\end{definition}
+
 \input{chapter/ch29_mpu_group_index}
 
 \begin{lemma}[Group fusion rules]
@@ -3747,9 +3759,9 @@ the disjoint complement of the first.
         \widehat A_{n,m}M_{n,m} & =\sigma C_{n,m}.
     \end{align}
     Exactly one phase occurs, independently of $n$ and $m$. The two
-    endpoint-inclusive arcs share both marked sites, so this is a
-    shared-boundary composition and not the disjoint-complement identity
-    of \cite[lines~5486--5487]{FrancoRubio2025MPUGauging}.
+    endpoint-inclusive arcs share both marked sites; in terms of the
+    inverse-compatible source factors this is the relation between truncated
+    symmetries of Theorem~\ref{thm:mpug_inverse_complementary_truncation}.
 \end{lemma}
 \begin{proof}\leanok
     \uses{thm:mpug_inverse_periodic_factorization,
@@ -3869,4 +3881,233 @@ the disjoint complement of the first.
     therefore equal $\delta_{p,q}$. These Gram identities cancel the $X_2$
     and $X_1$ factors using their respective normalizations, as in
     \cite[lines~1030--1050]{FrancoRubio2025MPUGauging}.
+\end{proof}
+
+\subsection{The pleasant properties of the inverse-compatible decomposition}
+
+\begin{definition}[The pleasant properties]
+    \label{def:mpug_pleasant_properties}
+    \lean{MPOTensor.SourceFactors.PleasantProperties}
+    \leanok
+    \uses{def:mpu_weighted_source_factors, thm:mpu_three_legged_decomposition,
+        def:mpug_staircase_gates}
+    Let $\mathcal U$ be an MPU tensor of dimensions $d,D$, let $\rho$ be a
+    positive-definite matrix, and let $X_1,Y_1,X_2,Y_2$ be source factors of
+    $\mathcal U$ for $\rho$, with leg dimensions $d_r=r$ and $d_l=\ell$. They
+    have the pleasant properties if, besides the three-legged decompositions,
+    the normalized contractions and the one-sided inverses that every system
+    of source factors has:
+    \begin{enumerate}
+        \item the gates $u=Y_2\mathbin{-}Y_1$ and $v=X_1\mathbin{-}X_2$ are
+              unitary and $d_ld_r=d^2$;
+        \item the staircase gates $w_L$ and $w_R$ are unitary;
+        \item the physical closures of $Y_1$, and of $Y_2$ weighted by $\rho$,
+              are the identity on $\C^d$:
+              \begin{align}
+                  \sum_{r,\alpha}\overline{(Y_1)_{r,(\alpha,p)}}(Y_1)_{r,(\alpha,q)}
+                   & =\delta_{p,q}, &
+                  \sum_{l,\alpha,\beta}\overline{(Y_2)_{l,(p,\alpha)}}(Y_2)_{l,(q,\beta)}
+                  \rho_{\beta\alpha}
+                   & =\delta_{p,q};
+              \end{align}
+        \item $Y_1Y_1^\dagger=\frac{d}{d_r}\Id_{d_r}$ and
+              $Y_2(I_d\otimes\rho)Y_2^\dagger=\frac{d}{d_l}\Id_{d_l}$;
+        \item the physical closures of $X_1$ weighted by $\rho$, and of $X_2$,
+              are $\frac{d_r}{d}\Id_d$ and $\frac{d_l}{d}\Id_d$:
+              \begin{align}
+                  \sum_{r,\alpha,\beta}(X_1)_{(i,\alpha),r}\rho_{\beta\alpha}
+                  \overline{(X_1)_{(j,\beta),r}}
+                   & =\frac{d_r}{d}\delta_{i,j}, &
+                  \sum_{l,x}(X_2)_{(x,i),l}\overline{(X_2)_{(x,j),l}}
+                   & =\frac{d_l}{d}\delta_{i,j}.
+              \end{align}
+    \end{enumerate}
+    These are the equations collectively named pleasant properties in
+    \cite[lines~5342--5350]{FrancoRubio2025MPUGauging}: the structure theorem
+    for simple tensors, the staircase corollary, and the proposition for
+    tensors with simple adjoint.
+\end{definition}
+
+\begin{lemma}[Simplicity of the physical adjoint]
+    \label{thm:mpug_canonical_adjoint_simple}
+    \lean{MPOTensor.IsMPUCanonicalFormII.isMPUSimple_physicalAdjointTensor}
+    \leanok
+    \uses{ThmFund1, def:mpdo_physical_adjoint}
+    If $\mathcal U$ is simple and in canonical form II, then its physical
+    adjoint $\mathcal U^\dagger$ is simple.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{ThmFund1}
+    Physical adjunction preserves canonical form II and exchanges the two
+    source-cut ranks, so $r\ell=d^2$ for $\mathcal U$ gives $r\ell=d^2$ for
+    $\mathcal U^\dagger$, which is simple by Theorem~\ref{ThmFund1}.
+\end{proof}
+
+\begin{theorem}[The chosen source factors have the pleasant properties]
+    \label{thm:mpug_source_pleasant_properties}
+    \lean{MPOTensor.IsMPUCanonicalFormII.sourceFactors_pleasantProperties}
+    \leanok
+    \uses{def:mpug_pleasant_properties, thm:mpu_three_legged_decomposition,
+        thm:mpug_staircase_gates_unitary, thm:mpug_canonical_adjoint_simple,
+        thm:mpug_source_y_physical_contractions,
+        thm:mpug_source_y_one_normalization, thm:mpug_source_y_two_normalization,
+        thm:mpug_source_x_one_physical_normalization,
+        thm:mpug_source_x_two_physical_normalization}
+    Let $\mathcal U$ be a simple MPU tensor in canonical form II with recorded
+    fixed point $\rho$. Its weighted source factors for $\rho$ have the
+    pleasant properties.
+\end{theorem}
+
+\begin{proof}\leanok
+    The gates and the dimension identity are
+    Theorem~\ref{thm:mpu_three_legged_decomposition}; the staircase gates are
+    unitary by Lemma~\ref{thm:mpug_staircase_gates_unitary}, and the closures
+    of the $Y$ factors by Lemma~\ref{thm:mpug_source_y_physical_contractions}.
+    The adjoint is simple by Lemma~\ref{thm:mpug_canonical_adjoint_simple},
+    so the normalizations of $Y_1$, $Y_2$ and the closures of $X_1$, $X_2$
+    hold by Lemmas~\ref{thm:mpug_source_y_one_normalization},
+    \ref{thm:mpug_source_y_two_normalization},
+    \ref{thm:mpug_source_x_one_physical_normalization} and
+    \ref{thm:mpug_source_x_two_physical_normalization}.
+\end{proof}
+
+\begin{lemma}[Gates of the compatible source factors]
+    \label{thm:mpug_inverse_record_gates}
+    \lean{MPOTensor.sourceU_inverseCompatibleSourceFactors,
+        MPOTensor.sourceV_inverseCompatibleSourceFactors}
+    \leanok
+    \uses{def:mpug_inverse_compatible_source_factors,
+        def:mpug_inverse_compatible_gates, def:mpu_source_uv}
+    The gates $u$ and $v$ of the inverse-compatible source factors are the
+    gates on the common second-cut space, with the first-cut coordinate
+    identified along the equality of the two source ranks.
+\end{lemma}
+
+\begin{proof}\leanok
+    The first-cut factors of the inverse-compatible source factors are the
+    candidate factors with their intermediate coordinate identified, and the
+    second-cut factors are unchanged, so both contractions agree entrywise.
+\end{proof}
+
+\begin{definition}[The complementary truncated symmetry]
+    \label{def:mpug_complementary_truncated_symmetry}
+    \lean{MPOTensor.SourceFactors.complementaryTruncatedSymmetry}
+    \leanok
+    \uses{def:mpug_truncated_symmetry, def:mpug_inverse_periodic_grouping}
+    Let $X_1,Y_1,X_2,Y_2$ be source factors of an MPO tensor $\mathcal U$,
+    let $e$ identify the indices $0\leq l<d_l$ with the indices
+    $0\leq r<d_r$, and group a ring of $n+m+2$ sites as $((a,p,b),q)$ as in
+    Definition~\ref{def:mpug_inverse_periodic_grouping}. The complementary
+    truncated symmetry is
+    \begin{align}
+        (U^{\infty-L})_{((l,p,t),q),((a,p',b),q')}
+         & =\delta_{p,p'}\,
+        (U^{m+2})_{(e^{-1}(t),q,e(l)),(b,q',a)},
+    \end{align}
+    the identity on $p$ and the truncated symmetry of
+    Definition~\ref{def:mpug_truncated_symmetry} with bulk $q$ and endpoint
+    sites $b$ and $a$. Its rows are grouped as those of $U^{n+2}\otimes I$,
+    whose endpoint sites are $a$ and $b$; the legs at each endpoint site are
+    matched along $e$. Its total length is $m+2$: the two endpoint sites are
+    shared with $U^{n+2}$
+    \cite{gap:fbc25_complementary_truncation_shared_endpoints}.
+\end{definition}
+
+\begin{theorem}[Complementary truncated symmetries]
+    \label{thm:mpug_inverse_complementary_truncation}
+    \lean{MPOTensor.inverseCompatibleSourceFactors_truncatedSymmetry_mul_groupedMPO}
+    \leanok
+    \uses{def:mpug_complementary_truncated_symmetry,
+        def:mpug_inverse_compatible_source_factors,
+        thm:mpug_inverse_periodic_one_phase, thm:mpug_inverse_word_unitary}
+    Let $\mathcal U$ be a simple MPU tensor of dimensions $d,D$ in canonical
+    form II. Suppose that $T$ is unitary, that
+    $(\mathcal U^\dagger)^{ij}=T^\dagger\mathcal U^{ij}T$ for every physical
+    pair, and that $T\overline T=\sigma I_D$. For the inverse-compatible
+    source factors, with $e$ the equality $d_l=d_r$, and for all bulk lengths
+    $n,m$,
+    \begin{align}
+        \bigl(U^{n+2}\otimes I\bigr)\,\mathcal U^{(n+m+2)}
+         & =\sigma\,U^{\infty-L},
+    \end{align}
+    where the periodic operator acts on the ring in the order $(a,p,b,q)$.
+    This is the relation $U^LU^\infty=\sigma U^{\infty-L}$ of
+    \cite[lines~5344--5348]{FrancoRubio2025MPUGauging}, whose proof is left
+    to the reader there. The printed complementary length $\infty-L$ is two
+    short, since the complementary truncated symmetry shares both endpoint
+    sites with $U^L$
+    \cite{gap:fbc25_complementary_truncation_shared_endpoints}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_inverse_periodic_one_phase, thm:mpug_inverse_word_unitary}
+    The first-cut factors of the inverse-compatible source factors are the
+    candidates with their intermediate index identified along $e$, so
+    $(A_N)_{(l,p,s),x}=(U^{N+2})_{(l,p,e(s)),x}$ for the endpoint matrices of
+    Definition~\ref{def:mpug_inverse_word_endpoints}. Hence both sides are
+    the corresponding entries of $\widehat A_{n,m}M_{n,m}=\sigma C_{n,m}$
+    (Lemma~\ref{thm:mpug_inverse_periodic_one_phase}) at the row
+    $((l,p,e^{-1}(t)),q)$.
+\end{proof}
+
+\begin{theorem}[Pleasant properties of the inverse-compatible decomposition]
+    \label{thm:mpug_inverse_pleasant_properties}
+    \lean{MPOTensor.inverseCompatibleSourceFactors_pleasantProperties,
+        MPOTensor.exists_inverseCompatible_pleasantProperties,
+        MPOTensor.GroupFamily.IsRepresentation.exists_inverseCompatible_pleasantProperties_of_inv_eq}
+    \leanok
+    \uses{def:mpug_pleasant_properties, def:mpug_inverse_compatible_source_factors,
+        thm:mpug_inverse_record_gates, thm:mpug_inverse_new_gates_unitary_phase,
+        thm:mpug_inverse_movement_unitary, thm:mpug_inverse_source_y_physical,
+        thm:mpug_inverse_source_y_rank, thm:mpug_inverse_source_x_physical,
+        thm:mpug_canonical_adjoint_simple, thm:mpug_involutive_adjoint_gauge,
+        thm:mpug_dagger_inverse_scalar, thm:mpug_inverse_complementary_truncation}
+    Let $\mathcal U$ be a simple MPU tensor of dimensions $d,D$ in canonical
+    form II with recorded fixed point $\rho$. Suppose that $T$ is unitary on
+    $\C^D$, that $(\mathcal U^\dagger)^{ij}=T^\dagger\mathcal U^{ij}T$ for every
+    physical pair $i,j$, and that $T\overline T=\sigma I_D$. Then there are
+    source factors $X_1,Y_1,X_2,Y_2$ of $\mathcal U$ for $\rho$ with the
+    pleasant properties that satisfy the modified compatibility relations
+    \begin{align}
+        X_1 & =(I_d\otimes\overline T)Y_2^\dagger,    &
+        Y_1 & =X_2^\dagger(T^{\mathsf T}\otimes I_d),
+    \end{align}
+    where the intermediate space of the right-hand sides, of dimension $d_l$,
+    is identified with that of $X_1,Y_1$, of dimension $d_r$, along the
+    equality $d_r=d_l$, and whose truncated symmetries satisfy the relation of
+    Theorem~\ref{thm:mpug_inverse_complementary_truncation}. In particular this
+    holds at every element $g=g^{-1}$
+    of a group represented by simple tensors in canonical form, with the
+    dagger-inverse gauge $T_g$ and sign $\sigma_g$.
+
+    This is the decomposition statement of the second proposition of the
+    appendix on $\mathbb Z_2$ in \cite[lines~5342--5350]{FrancoRubio2025MPUGauging},
+    with the complementary length corrected as in
+    \cite{gap:fbc25_complementary_truncation_shared_endpoints}. Simplicity of the
+    adjoint, assumed there, follows from
+    Lemma~\ref{thm:mpug_canonical_adjoint_simple}. The right dressing is
+    written $T^{\mathsf T}\otimes I_d$ because the first source cut orders its
+    column coordinate as (virtual, physical)
+    \cite{gap:mpu_source_cut_orientation}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Take the inverse-compatible source factors; the modified compatibility
+    relations hold by construction. By
+    Lemma~\ref{thm:mpug_inverse_record_gates} their gates are the gates on the
+    common second-cut space, unitary by
+    Lemma~\ref{thm:mpug_inverse_new_gates_unitary_phase}; the dimension
+    identity concerns only $\mathcal U$. The staircase gates are unitary by
+    Lemma~\ref{thm:mpug_inverse_movement_unitary}, and the closures and
+    normalizations of the four factors transfer by
+    Lemmas~\ref{thm:mpug_inverse_source_y_physical},
+    \ref{thm:mpug_inverse_source_y_rank} and
+    \ref{thm:mpug_inverse_source_x_physical}, using
+    Lemma~\ref{thm:mpug_canonical_adjoint_simple} for the simplicity of the
+    adjoint. At an involutive element of a representation, the gauge
+    equation and the sign equation are
+    Lemmas~\ref{thm:mpug_involutive_adjoint_gauge} and
+    \ref{thm:mpug_dagger_inverse_scalar}. The relation between truncated
+    symmetries is Theorem~\ref{thm:mpug_inverse_complementary_truncation}.
 \end{proof}

@@ -13,15 +13,16 @@
         MPOTensor.leftSupportAlgebra_twoLinkOutputMap,
         MPOTensor.twoLinkLeftSupportEquiv,
         MPOTensor.TwoSiteStandardFormData.left_div_phys_eq_phys_div_right}
-    \notready
+    \leanok
     Let $d,r,\ell$ be positive and let
     $u:\mathbb C^d\otimes\mathbb C^d\to\mathbb C^\ell\otimes\mathbb C^r$
     and $v:\mathbb C^r\otimes\mathbb C^\ell\to\mathbb C^d\otimes\mathbb C^d$
     be unitary. The actual output family
-    \[
-        A\longmapsto(v\otimes v)
+    \begin{align}
+        A & \longmapsto(v\otimes v)
         (I_r\otimes uAu^\dagger\otimes I_\ell)(v\otimes v)^\dagger
-    \]
+        \label{eq:mpu_actual_two_link_output_family}
+    \end{align}
     is a star-homomorphism. The dimensions satisfy $\ell r=d^2$, so
     $\ell/d=d/r$. Its least left support algebra is
     $v(I_r\otimes M_\ell)v^\dagger$, and hence has matrix size $\ell$.
@@ -31,7 +32,7 @@
     Appendix correction and its distinct logarithmic factor-of-two
     correction are recorded in \cite{gap:mpu_qca_index_normalization}.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     Change the arbitrary input by the inverse of $u$. An intermediate
     product $A_\ell\otimes B_r$ then gives exactly
     $v(I_r\otimes A_\ell)v^\dagger\otimes
@@ -47,11 +48,11 @@
     \label{lem:mpu_qca_left_support_coordinate_transport}
     \lean{Matrix.bipartiteSlice_reindex_prod,
         Matrix.leftSupportAlgebra_map_matrixReindexStarAlgEquiv}
-    \notready
+    \leanok
     Independent coordinate bijections on the two factors transport the
     least left support algebra by the first-factor bijection.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     A left coefficient in the new coordinates is exactly the
     first-factor coordinate transport of the old coefficient, with
     its two right indices relabelled. Apply the least-support
@@ -62,11 +63,11 @@
     \label{lem:mpu_qca_support_intersection}
     \lean{SpinChain.commute_map_localObservable_of_singletons,
         SpinChain.QuasiLocalSupportedIn.inter}
-    \notready
+    \leanok
     An observable supported on two finite regions $\Lambda$ and $\Gamma$
     is supported on $\Lambda\cap\Gamma$.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     Any site outside the intersection lies outside at least one
     of the two supports. The observable therefore commutes with
     its one-site algebra. Finite one-site generation gives commutation
@@ -78,7 +79,7 @@
     \label{lem:mpu_actual_complete_interval_four_output}
     \lean{SpinChain.bufferedMPUQuasiLocalAut_central_interval,
         SpinChain.bufferedMPUQuasiLocalAut_central_interval_four_output}
-    \notready
+    \leanok
     \uses{lem:mpu_supplied_standard_form_actual_qca,thm:quasi_local_bulk_inclusion}
     Under the supplied positive-block standard-form hypotheses, the
     actual completed action sends every matrix on the complete
@@ -86,7 +87,7 @@
     on $[a+k,a+5k)$, with the indicated block-coordinate identifications.
     In particular, its output support is this four-block interval.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     Choose the actual ambient chain $[a,a+8k)$ so that every input
     site has the required buffers. The finite-chain evaluation of
     the completed action and the actual standard-form identity give
@@ -104,7 +105,7 @@
         SpinChain.blocked_bufferedMPUQuasiLocalAut_pair_supportedIn,
         SpinChain.blocked_bufferedMPUQuasiLocalAut_singleton_supportedIn,
         SpinChain.blocked_bufferedMPUQuasiLocalAut_propagatesWithin}
-    \notready
+    \leanok
     \uses{lem:mpu_actual_complete_interval_four_output,
         lem:mpu_qca_support_intersection}
     Let $\omega$ be the actual supplied-standard-form automorphism and
@@ -114,7 +115,7 @@
     on $[a-1,a+3)$. It has nearest-neighbour propagation on the blocked
     chain, without a supplied locality hypothesis.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     The actual blocking equivalence transports the complete two-block
     input and four-block output matrices to consecutive cell coordinates.
     A singleton belongs to either of its two adjacent input pairs.
@@ -129,7 +130,7 @@
         SpinChain.blocked_bufferedMPUQuasiLocalAut_supportAlgebraMatrixSize_zero,
         SpinChain.coe_gnvwIndex_blocked_bufferedMPUQuasiLocalAut,
         SpinChain.coe_gnvwIndex_blocked_bufferedMPUQuasiLocalAut_eq_phys_div_right}
-    \notready
+    \leanok
     \uses{def:qca_consecutive_pair_coordinates,lem:star_subalgebra_coordinate_equivalences,
         lem:mpu_actual_blocked_nearest_neighbour,
         lem:mpu_actual_two_link_left_support,
@@ -140,17 +141,18 @@
     $\mathcal R_0$ on the cell pair $\{-1,0\}$ isomorphic to $M_\ell$.
     Its chosen matrix size at this cut is therefore $\ell$, and its
     positive rational GNVW index is
-    \[
+    \begin{align}
         \operatorname{ind}_{\mathrm{QCA}}
-        =\frac{\ell}{d_k}=\frac{d_k}{r},\qquad d_k=d^k.
-    \]
+         & =\frac{\ell}{d_k}=\frac{d_k}{r},\qquad d_k=d^k.
+        \label{eq:mpu_qca_blocked_index_ratio}
+    \end{align}
     This is the actual support-factor comparison after the source's
     grouping of sites in \cite[Appendix, lines~2313--2334]{Cirac2017MPU}.
     Independence of arbitrary regrouping is not asserted here. The
     Appendix normalization correction is recorded in
     \cite{gap:mpu_qca_index_normalization}.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     The exact finite action identifies the canonical ordered even-pair
     image with the actual two-link family in its left and right
     configuration coordinates. The canonical bipartite embedding is
@@ -167,7 +169,7 @@
     \label{lem:mpu_actual_qca_family_independence}
     \lean{SpinChain.mpuQuasiLocalEquiv_eq_of_mpo_eq,
         SpinChain.mpuQuasiLocalEquiv_eq_bufferedMPUQuasiLocalAut}
-    \notready
+    \leanok
     \uses{thm:mpu_actual_qca,lem:mpu_actual_blocked_nearest_neighbour}
     Two MPU tensors on the same positive physical alphabet, possibly
     with different bond dimensions, induce identical actual quasi-local
@@ -177,7 +179,7 @@
     positive block of that same tensor.
 \end{lemma}
 \begin{proof}
-    \notready
+    \leanok
     A common finite chain contains a given local observable and both
     source-radius buffers. The two actual finite conjugations coincide
     because their physical periodic matrices coincide. Faithfulness
@@ -190,7 +192,7 @@
     \label{lem:mpu_canonical_actual_log_index}
     \lean{SpinChain.canonicalMPU_blocked_propagatesWithin,
         SpinChain.canonicalMPU_index_eq_neg_logb_gnvwIndex}
-    \notready
+    \leanok
     \uses{lem:mpu_actual_blocked_gnvw_index,lem:mpu_actual_qca_family_independence}
     Let an MPU be in canonical form II, and let its positive-length
     $k$-block tensor be simple. Its named actual induced automorphism,
@@ -204,7 +206,7 @@
     nearest-neighbour propagation are derived.
 \end{lemma}
 \begin{proof}
-    \notready
+    \leanok
     The actual support formula gives
     $\operatorname{ind}_{\rm QCA}=\ell_k/d^k$.
     The canonical MPU index at that same simple block is
@@ -215,7 +217,7 @@
 \begin{theorem}[The actual MPU--QCA index comparison after a derived blocking]
     \label{thm:mpu_actual_log_index_comparison}
     \lean{SpinChain.exists_blocked_mpu_index_comparison}
-    \notready
+    \leanok
     \uses{lem:mpu_canonical_actual_log_index,lem:mpu_actual_qca_family_independence}
     Every MPU on positive physical and bond dimensions $d,D$ has a
     positive block length $k\le D^2$ such that its actual induced QCA,
@@ -234,7 +236,7 @@
     \cite{gap:mpu_qca_index_normalization}.
 \end{theorem}
 \begin{proof}
-    \notready
+    \leanok
     Choose a reduced canonical representative of bond dimension
     $E\le D$ with the same positive-length periodic operators.
     It has a simple block of length $k\le E^2\le D^2$.
