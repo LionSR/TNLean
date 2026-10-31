@@ -10341,3 +10341,31 @@ there is no need for a new tactic.
   and the repeated block is not copied. The existing actual-gap helper is
   exposed and reused for the physical entropy theorem, without a second
   endpoint-unitary or dimension argument.
+
+### Intrinsic blocked traces from a product-tensor diagonal — candidate (2026-10-29)
+
+- **Pattern:** Expand `normalizedDiagonal (mulTensor U U)` powers with the
+  existing normalized-diagonal word formula and `evalWord_mulTensor`, then
+  contract each Kronecker summand with the existing QIC swap-trace identity.
+- **Seen:** `MPS/MPU/TimeReversalTwistedTransfer.lean`.
+- **Reuse:** `normalizedDiagonal_pow_eq_sum_evalWord`, `evalWord_mulTensor`,
+  `Matrix.trace_swapMatrix_mul_kronecker`, the existing
+  `Matrix.swapMatrix_mul_kronecker`, and the existing physical-word
+  decoding equivalence. No new tensor-product expansion induction is copied.
+- **Decision:** The resulting actual twisted-transfer power identity is a
+  mathematical lemma, shared by the exchange-commutation and blocked-trace
+  proofs. No custom tactic or new source predicate is needed.
+
+### Commuting weights on stabilized trace powers — candidate (2026-10-29)
+
+- **Pattern:** Factor a positive power minus its stabilized projector as
+  `E^k * (1 - P)`. Idempotence of the complement and eventual stabilization
+  make it nilpotent. A commuting weight preserves nilpotence, hence gives
+  zero trace for that difference.
+- **Defined in:** `Algebra/StabilizedWeightedTrace.lean`, using the existing
+  QIC `Matrix.StabilizedRankOneData`, Mathlib complementary idempotents,
+  `Commute.isNilpotent_mul_left`, and nilpotent matrix traces.
+- **Decision:** Reuse the existing stabilized-data structure; no new spectral
+  predicate or source witness is introduced. The new result eliminates
+  transient terms in commuting weighted traces rather than reproving
+  stabilization or the existing unweighted nilpotent trace theorem.
