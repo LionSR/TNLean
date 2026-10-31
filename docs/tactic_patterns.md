@@ -5076,6 +5076,17 @@ three-plaquette output measurement, and the routed reunion measurement.
 
 ## Candidates
 
+### Exact small indices from their defining sets — candidate (2026-10-29)
+
+- **Pattern:** supply a small admissible positive length, use `Nat.sInf_mem`
+  and `Nat.sInf_le`, exclude any smaller positive length, and finish the
+  resulting natural-number bounds with `omega`.
+- **Seen:** the two concrete index computations `threePauliTensor_qIndex`
+  and `threePauliTensor_iIndex` in `MPS/Examples/PauliWielandt.lean`.
+- **Abstraction:** the existing Mathlib infimum lemmas already do the main
+  work. Two occurrences in one file are below the promotion threshold;
+  no specialized index tactic is introduced.
+
 ### Completing an orthonormal family by its cardinality — candidate (2026-10-29)
 
 - **Pattern:** Use
@@ -9989,6 +10000,15 @@ there is no need for a new tactic.
   The public `norm_mpvState_le_bondDimension_of_unital` specializes it once to positive
   unital maps and is reused for every canonical block; no new spectral proof or tactic.
 - **Validation:** Source-only; hosted Lean checking is pending.
+
+### Regional and cyclic slice membership — candidate (2026-10-29)
+
+- **Seen:** The two inclusions in `PEPS/ParentHamiltonian/CycleParentGroundSpace.lean`
+  transport local membership through the existing arc physical equivalence, then
+  rewrite the proved regional-slice/cyclic-restriction identity.
+- **Reuse:** One named slice identity handles both directions. A complementary
+  assignment extends using its own exterior value, avoiding positive-dimension
+  assumptions or separate empty-alphabet proof branches. No new tactic is needed.
 
 ### Diagonal boundary matrices select uncle sectors — candidate (2026-10-29)
 
