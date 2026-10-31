@@ -15,7 +15,8 @@ of its two actual wall coefficients. Their derived generic positivity gives
 both quadratic upper and lower bounds for almost every pair of walls.
 The individual diagonal block injectivities and strict mixed damping are
 derived from the full perturbation span and canonical normalization,
-rather than supplied as extra hypotheses.
+rather than supplied as extra hypotheses. The bounds read
+\(c(N+1)^2\le\|\varphi_N\|^2\le C(N+1)^2\) for all large \(N\).
 
 Source: arXiv:1210.6613, Lemma lowenergystates, first assertion,
 lines 1196–1265. The ground-space overlaps and spectral variational
