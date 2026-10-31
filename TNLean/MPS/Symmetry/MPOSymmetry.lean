@@ -113,4 +113,5 @@ import TNLean.MPS.Symmetry.MPOSymmetry.RingEndpointComparison
 import TNLean.MPS.Symmetry.MPOSymmetry.RingEndpointRightComparison
 import TNLean.MPS.Symmetry.MPOSymmetry.Similarity
 import TNLean.MPS.Symmetry.MPOSymmetry.SymmetricBoundary
+import TNLean.MPS.Symmetry.MPOSymmetry.TimeReversalAnomaly
 import TNLean.MPS.Symmetry.MPOSymmetry.ZipperUniqueness
