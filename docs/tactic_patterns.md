@@ -45,6 +45,19 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### One-site MPO blocking as physical relabeling — promoted (2026-10-29)
+
+- **Pattern:** Expand one-site blocking into singleton words and identify
+  its decoded physical letter with the original alphabet.
+- **Defined in:** `MPS/MPDO/PhysicalBlocking.lean`,
+  `MPOTensor.blockTensor_one_eq_reindexPhysical`.
+- **Refactored occurrences:** remove the identical private helpers from
+  `IdentityIndex.lean` and `InjectiveSourceIndex.lean`; both use the public
+  theorem, as does the new exact coarse-rank proof.
+- **Notes:** This is an actual MPO blocking identity at its existing owner;
+  no deprecated aliases or additional matrix layer is introduced.
+
+
 ### Conjugating a rectangular unitary identity — promoted (2026-10-29)
 
 - **Pattern:** Commute entrywise complex conjugation with the adjoint and
@@ -58,6 +71,19 @@ abstracted — record why, so it is not re-proposed).
   `MPS/MPU/ConjugationSymmetry.lean` transports both identities at once.
 - **Notes:** No new matrix predicate or parallel standard-form structure was
   introduced. The supplied half factors and gates are conjugated directly.
+
+### Adjoint simplicity from the canonical rank product — promoted (2026-10-29)
+
+- **Pattern:** Convert simplicity to `r*ℓ=d*d`, exchange the ranks under
+  physical adjunction and convert back using canonical form II.
+- **Defined in:** `MPS/MPU/SourceFactorsPhysicalAdjoint.lean`,
+  `IsMPUCanonicalFormII.isMPUSimple_physicalAdjointTensor`.
+- **Refactored occurrences:** the private helper in
+  `InverseCompatibleFamilyProperties.lean` and the inline proof in
+  `Index.lean`; both now use the theorem. The supplied Y-Gram and adjoint
+  factor constructions also use it, eliminating an adjoint-simplicity premise.
+- **Notes:** The theorem derives the premise from actual canonical data;
+  it does not introduce a new admissibility predicate or a witness supplier.
 
 ### Faithful bipartite matrix embeddings — promoted (2026-10-29)
 
@@ -5083,6 +5109,23 @@ three-plaquette output measurement, and the routed reunion measurement.
   `isReordering_comp_iff`; apply `IsReordering.comp` as a term instead.
 
 ## Candidates
+### Supplied standard-form source-cut contraction — candidate (2026-10-29)
+
+- **Pattern:** Preserve the external physical coordinates by Kronecker deltas,
+  expand the actual supplied half factors, and reorder the virtual sum once
+  to identify the middle gate.
+- **Seen:** `MPS/MPU/TwoSiteStandardFormSourceCuts.lean`, both cut
+  factorizations and both four-spin gate contractions.
+- **Abstraction:** Existing `Finset.sum_congr₂` handles consecutive two-index
+  descents. The cut identities are the reusable mathematical statements;
+  no new contraction tactic or parallel source-factor predicate is needed.
+- **Notes:** The sum over the virtual bond is consumed only by the actual
+  `v_apply` relation. No gauge or symmetry premise enters these identities.
+  The canonical construction now derives both coarse normalizations by
+  Kronecker products and actual cut ranks by existing blocking saturation.
+  Full row rank gives right inverses through Mathlib's matrix surjectivity
+  theorem; no duplicate inverse-construction tactic is introduced.
+
 
 ### Exact small indices from their defining sets — candidate (2026-10-29)
 
@@ -9973,6 +10016,43 @@ there is no need for a new tactic.
   partial-trace identities give the factorization and its normalization.
 - **Decision:** Use the positive Gram zero criterion rather than add a parallel
   purification structure or assume system/environment decoupling.
+
+### Unbounded-subsequence exclusion in overlap rigidity — candidate (2026-10-29)
+
+- **Pattern:** Compose the overlap limit with an unbounded subsequence;
+  equality on that subsequence identifies the cross-overlap with a self-overlap.
+- **Seen:** `MPS/MPU/EvenFamilyVirtualGauge.lean` (even-family virtual descent).
+- **Abstraction:** Reuse the existing normal overlap dichotomy and
+  `Filter.tendsto_atTop_mono`; no separate blocked-family predicate is needed.
+
+### Retaining and cancelling the even-family sign — candidate (2026-10-29)
+
+- **Pattern:** Keep the virtual sign from an even-family comparison, construct
+  the actual scalar-transformed source factors, and cancel its square only
+  at the two-right-factor gate contraction.
+- **Seen:** `MPS/MPU/EvenFamilySourceGauges.lean`; the derived rank and gate
+  comparisons replace the stronger all-standard-form-length hypothesis in
+  `TwoSiteStandardFormSourceCuts.lean` and `TimeReversalLocalNecessity.lean`.
+- **Abstraction:** `eq_sign_virtualSandwich_of_mpo_eq_even` packages the shared
+  actual virtual comparison. The existing normalized factor and gate
+  contractions are reused; no parallel source or admissibility predicate is
+  introduced. Reindex cancellation uses the existing linear equivalence.
+
+The even-family assembly reuses the existing
+`TwoSiteStandardFormData.reindexRanks` in
+`FundamentalTheoremGatesBlocked.lean`; the duplicate source-cut definition is
+removed after the dependency audit exposed it.
+
+### Standard forms with arbitrary normalized source gates — candidate (2026-10-29)
+
+- **Pattern:** Compare a normalized source record with the selected record
+  of the same tensor, then apply the resulting rank unitaries to the existing
+  open standard form.
+- **Seen:** `MPS/MPU/SourceFactorsStandardForm.lean`, reused for both the
+  source and actual physical-adjoint records in `TimeReversalLocalSufficiency.lean`.
+- **Abstraction:** The public `exists_twoSiteStandardFormData_sourceFactors`
+  supplies the actual data; no SVD or standard-form witness is added downstream.
+  The converse uses the existing periodic gauge cancellation theorem.
 
 ### Finite local generation by single-site algebras — promoted helper (2026-10-29)
 
