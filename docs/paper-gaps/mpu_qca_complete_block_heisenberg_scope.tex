@@ -1,0 +1,206 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\input{command}
+\title{Supplied-Standard-Form Scope of the Finite MPU Heisenberg Identity}
+\author{}
+\date{2026-10-29}
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+\section{The source stabilization statement}
+
+Cirac--P\'erez-Garc\'ia--Schuch--Verstraete construct the induced
+quasi-local action from the eventually constant finite-chain conjugates
+$U^{(N)}A U^{(N)\dagger}$
+\cite[equation~\texttt{eq:appendix-1}, lines~2300--2306]{Cirac2017MPU}.
+Its neighbourhood is the original-site interval of radius $4D^4$.
+The full statement permits arbitrary supported observables and arbitrary
+sufficiently buffered finite intervals, including lengths not divisible
+by a selected simple-block length.
+
+\section{The finite identity proved here}
+
+Let $W$ have supplied two-site standard-form data with unitary gates
+$u$ and $v$, in the exact factor orders of
+\cite[\texttt{StandardForm} and Definition~\texttt{SF}, lines~603--622]{Cirac2017MPU}.
+For every $n\ge0$, use complete bijective coordinates on the actual
+periodic MPO of length $3+n$ in the $W$ alphabet. Separate the middle
+input pair from the two exterior input blocks and the arbitrary tail.
+On the output side separate the four neighbouring half-sites from the
+two exterior half-sites and the same tail. Write the resulting matrix as
+$M_n$. The derived identity is
+\begin{align}
+    M_n(I\otimes A)M_n^\dagger
+     & =I\otimes B_{u,v}(A),
+    \label{eq:mpu_qca_complete_block_finite_heisenberg}
+\end{align}
+where $B_{u,v}(A)$ is the actual two-link output observable determined by
+$u$ and $v$. The identity on the right includes the entire tail, so the
+local output is independent of its length. The periodic seam is retained
+inside the word trace, rather than discarded or replaced by a boundary
+premise.
+
+This is actual finite conjugation: the coordinate systems are bijections
+on all configurations, and unitarity of $M_n$ follows from the supplied
+standard form. No compatibility, stabilization, or support assertion is
+introduced as a hypothesis.
+
+\section{Remaining assembly}
+
+The preceding formula is first obtained for the supplied blocked tensor.
+There is also an original-site version: given a standard form of the
+two-site block of a length-$k$ block of $U$, retain arbitrary original-site
+prefix and suffix lengths $p,s$. Complete coordinate bijections give the
+same identity for the actual original MPO of length
+\begin{align}
+    N & =p+6k+s>1.
+    \label{eq:mpu_qca_original_residual_window_length}
+\end{align}
+The residual products stay inside the virtual trace before multiplication
+by the actual unitary's adjoint. Thus the original-site result does not
+require the whole chain length to be divisible by $k$ or $2k$.
+
+The original-site identity also agrees with the canonical local-algebra
+inclusions on every integer interval containing the fixed window. Its
+image in the algebraic local algebra is therefore independent of both
+buffers and of the ambient interval. This conclusion is derived for the
+middle two complete blocks, rather than assumed as compatibility data.
+
+The finite identities further give actual compatibility on arbitrary
+finite supported regions. Place each one-site algebra at the beginning
+of the central interval of length $2k$. Its output lies on
+$[x-2k,x+4k)$, and agrees for every ambient chain containing that window.
+The one-site algebras generate every finite local algebra, so the actual
+finite-chain maps agree on the complete supported region. No
+compatibility conclusion is introduced as a premise.
+
+Choosing one actual sufficiently buffered chain for each finite support
+now gives a forward local family. The proved compatibility under local
+inclusions induces a norm-preserving forward homomorphism of the
+algebraic local algebra. This actual isometric ring homomorphism also
+extends to the quasi-local completion; scalar and involution preservation
+follow on the dense algebraic local algebra. Thus a completed isometric
+forward endomorphism is constructed without an inverse premise. The
+actual forward map also commutes with every integer lattice translation:
+shift both the buffered chain and its anchor, whose periodic matrix in
+consecutive coordinates is unchanged, and use continuity on completion.
+Its forward support bound is $\Lambda+[-4k,4k]$, obtained by evaluating
+each one-site algebra on the actual chain $[x-2k,x+4k)$ and applying
+finite one-site generation. Neither covariance nor output support is
+assumed.
+
+\section{The canonical and bare-MPU construction now written}
+
+Canonical form II also gives canonical data for the physical adjoint.
+Its own positive simple block and standard form are therefore supplied
+internally, without assuming physical-adjoint simplicity at a prescribed
+length. The two actual completed forward maps are mutual inverses:
+choose one chain buffering both a finite input and its derived output
+support, identify the actual finite representatives by faithfulness, and
+cancel the physical unitary with its adjoint. Density extends both
+inverse identities. The actual QCA, source radius and fully buffered
+finite-chain formula are stated in
+\leanid{SpinChain.exists_isQCA_of_isMPUCanonicalFormII}.
+
+The existing representative theorem
+\leanid{MPOTensor.IsMPU.exists_reduced_cfii_representative}
+already supplies a reduced canonical-form-II tensor with
+$0<D_{\mathrm{red}}\le D$ and the same periodic operator family at every
+positive length. It is not a remaining hypothesis or missing supplier.
+Transporting only those actual physical matrices gives
+\leanid{SpinChain.exists_isQCA_of_isMPU}, and the actual chosen
+star-automorphism is
+\leanid{SpinChain.mpuQuasiLocalEquiv}.
+The radius enlarges from $4D_{\mathrm{red}}^4$ to $4D^4$.
+No selected source factors, source-cut ranks or virtual gauge are
+transported to the original auxiliary space.
+
+The public bare-MPU statement assumes only $d>0$ and the actual MPU
+property. Positivity of the bond dimension is derived from unitarity;
+positive physical dimension is intrinsic to the quasi-local algebra and
+is not inferred from the vacuous zero-alphabet reading of the MPU
+predicate. Neither canonical form nor a supplied standard form, inverse
+family, compatibility, covariance or output support is a public premise.
+The finite-chain formula covers all $N>1$ and every fully buffered
+original-site interval, with no divisibility condition.
+
+The earlier mathematical scope restriction is therefore discharged by
+the statement and complete proof now written. This note remains open
+until hosted Lean verification and integration of the construction;
+no uncompiled result is marked formalized. Tracking issue~\#7013 stays
+open for that acceptance. The separate MPU/QCA index comparison in
+issue~\#7040 is not asserted by this construction.
+
+The finite inverse step can be separated from periodic boundary
+relocation. The actual finite star-automorphism reflects forward
+commutators, and the finite outside-singleton relative commutant recovers
+inverse support. With the supplied standard form, the actual inverse
+conjugation of an observable on $[b,b+L)$ is supported inside the finite
+chain intersected with
+\begin{align}
+    [b-4k,b+L+4k)\cup[a,a+2k)\cup[a+N-4k,a+N).
+\end{align}
+The declarations
+\leanid{SpinChain.inverse_mem_range_localInclusion_of_forward_support} and
+\leanid{SpinChain.finiteChainConjugation_symm_mem_range_bufferedRegion}
+write this step without an inverse-locality or compatibility premise.
+The two boundary collars remain explicit in this first statement.
+The subsequent cyclic argument removes them on rings of length at least
+$6k$. The finite statement alone is not a completed QCA theorem.
+Lean checking is pending.
+
+The exact cyclic relocation identities for both actual conjugations
+are now written in
+\leanid{MPOTensor.mpo_conjugation_submatrix_rotateConfig} and
+\leanid{MPOTensor.mpo_adjointConjugation_submatrix_rotateConfig}.
+They reuse closed-trace invariance of the periodic MPO; simultaneous
+reindexing preserves products and adjoints. Existing operator support
+therefore rotates with the input even across the seam. Identifying the
+actual standard-form input window with the complete central interval
+gives an actual singleton bound at one interior site. Finite cyclic
+induction now gives the same radius $4k$ at every site of every ring
+$N\geq 6k$, including its seam, in
+\leanid{MPOTensor.mpo_conjugation_mem_supportedOperators_singleton}.
+
+Numbering an arbitrary canonical local inclusion agrees with the
+existing finite site embedding. Thus the actual forward singleton
+bounds give disjoint commutators for every singleton outside the ring
+neighbourhood of an arbitrary target. Reflecting them through the actual
+finite unitary and applying its outside commutant proves boundary-free
+finite inverse support in
+\leanid{SpinChain.finiteChainConjugation_symm_mem_range_ringNeighbourhood}.
+Only the forward supplied standard form is used; inverse standard form,
+inverse locality and inverse compatibility are not hypotheses. These
+source-written results are pending Lean checking. A compatible inverse
+family, surjectivity on completion, construction of standard form from
+bare MPU data, and the source bond-dimension radius remain separate.
+
+
+The completed supplied-standard-form action can now be made invertible
+without a second standard form. Its actual finite inverse on one
+sufficiently buffered chain has support in the ordinary radius-$4k$
+neighbourhood of the target, since this neighbourhood does not cross
+the periodic seam. That neighbourhood remains buffered for the actual
+forward finite-chain evaluation, which returns the target by finite
+unitarity. Thus every local observable has a local preimage. Completeness
+makes the range of the forward isometry closed; local density gives
+surjectivity. The declarations
+\leanid{SpinChain.bufferedMPUQuasiLocalAction_surjective} and
+\leanid{SpinChain.bufferedMPUQuasiLocalAut_isQCA} write this construction
+with only the forward supplied standard form and radius $4k$.
+
+The unrestricted source reduction is distinct from this supplied-data
+proof. The repository already constructs a reduced canonical-form-II
+representative with the same positive-length periodic operators in
+\leanid{MPOTensor.IsMPU.exists_reduced_cfii_representative}. This
+representative permits the independent canonical-form-II argument to
+transfer an actual QCA and its source bond-dimension radius to the bare
+tensor; no new inverse datum is needed in the supplied-standard-form
+argument above.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+\end{document}
