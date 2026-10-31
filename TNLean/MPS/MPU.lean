@@ -39,6 +39,7 @@ import TNLean.MPS.MPU.CanonicalFormBlocking
 import TNLean.MPS.MPU.CanonicalFormGauge
 import TNLean.MPS.MPU.CanonicalFormOfCanonicalFormII
 import TNLean.MPS.MPU.CanonicalQuasiLocalAction
+import TNLean.MPS.MPU.CanonicalTwistedTransfer
 import TNLean.MPS.MPU.ColumnCoordinateTransport
 import TNLean.MPS.MPU.CompatibleBondDilationCircuit
 import TNLean.MPS.MPU.CompositionFlattening
@@ -104,6 +105,7 @@ import TNLean.MPS.MPU.IntervalJointSuffixFactorization
 import TNLean.MPS.MPU.IntervalMergingSupport
 import TNLean.MPS.MPU.IntervalParentColumns
 import TNLean.MPS.MPU.IntervalRegisterLayout
+import TNLean.MPS.MPU.IntrinsicBlockingParity
 import TNLean.MPS.MPU.InverseCompatibleComparisonUnitarity
 import TNLean.MPS.MPU.InverseCompatibleCutComparison
 import TNLean.MPS.MPU.InverseCompatibleFamilyProperties
@@ -219,7 +221,11 @@ import TNLean.MPS.MPU.StandardFormFromGates
 import TNLean.MPS.MPU.StandardFormParityCounterexample
 import TNLean.MPS.MPU.SuccessAttenuationCircuit
 import TNLean.MPS.MPU.SuppliedFixedWitnesses
+import TNLean.MPS.MPU.SuppliedFourSpinSourceComparison
 import TNLean.MPS.MPU.SuppliedHalfFactorMinimality
+import TNLean.MPS.MPU.SuppliedTimeReversalCriterion
+import TNLean.MPS.MPU.SuppliedTranspositionCriterion
+import TNLean.MPS.MPU.SuppliedTwoBlockStandardForm
 import TNLean.MPS.MPU.SupportedAmplification
 import TNLean.MPS.MPU.SupportedChildColumns
 import TNLean.MPS.MPU.SymmetryPathTransport

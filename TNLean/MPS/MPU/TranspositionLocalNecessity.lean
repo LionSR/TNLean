@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.MPU.PhysicalTransposeSourceFactors
 import TNLean.MPS.MPU.TimeReversalLocalNecessity
-import Mathlib.Analysis.SpecialFunctions.Complex.Arg
+import Mathlib.Analysis.SpecialFunctions.Complex.Circle
 
 /-!
 # Local transposition phase from the actual even periodic family
@@ -394,8 +394,9 @@ theorem IsMPUCanonicalFormII.exists_source_transposition_exponential_certificate
             (Equiv.prodCongr (finCongr hr) (finCongr hl)) (SourceFactors.sourceV U S))ᵀ := by
   obtain ⟨hr, hl, c, x, hc, hlocal⟩ :=
     hU.exists_source_transposition_phase_certificate hsimple S hTR
-  have hphase : Complex.exp ((Complex.arg c : ℂ) * Complex.I) = c := by
-    simpa only [hc, Complex.ofReal_one, one_mul] using Complex.norm_mul_exp_arg_mul_I c
+  have hphase : Complex.exp ((Complex.arg c : ℂ) * Complex.I) = c :=
+    congrArg (fun z : Circle => (z : ℂ))
+      (Circle.exp_arg ⟨c, mem_sphere_zero_iff_norm.mpr hc⟩)
   exact ⟨hr, hl, Complex.arg c, x, by simpa only [hphase] using hlocal⟩
 
 /-- Literal exponential-phase form of the four-original-spin certificate for
@@ -417,8 +418,9 @@ theorem IsMPUCanonicalFormII.exists_local_transposition_exponential_certificate
           ((x : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ) ⊗ₖ
             (x : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ)ᵀ) * (staircaseMiddle v₀)ᵀ := by
   obtain ⟨hr, hl, c, x, hc, hlocal⟩ := hU.exists_local_transposition_certificate hsimple hTR
-  have hphase : Complex.exp ((Complex.arg c : ℂ) * Complex.I) = c := by
-    simpa only [hc, Complex.ofReal_one, one_mul] using Complex.norm_mul_exp_arg_mul_I c
+  have hphase : Complex.exp ((Complex.arg c : ℂ) * Complex.I) = c :=
+    congrArg (fun z : Circle => (z : ℂ))
+      (Circle.exp_arg ⟨c, mem_sphere_zero_iff_norm.mpr hc⟩)
   exact ⟨hr, hl, Complex.arg c, x, by simpa only [hphase] using hlocal⟩
 
 end MPOTensor

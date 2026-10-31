@@ -21,7 +21,7 @@ open scoped Matrix BigOperators
 namespace MPOTensor
 
 /-- Nonzero scaling preserves both source-cut ranks. Source: CPSV17,
-`eq:II_SVD`, lines 463–486, applied to scalar-multiple source cuts. -/
+`II_SVD`, lines 463–486, applied to scalar-multiple source cuts. -/
 theorem source_ranks_smul {d D : ℕ} (U : MPOTensor d D) {c : ℂ} (hc : c ≠ 0) :
     r[c • U] = r[U] ∧ ℓ[c • U] = ℓ[U] := by
   constructor

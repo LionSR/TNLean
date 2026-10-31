@@ -42,7 +42,8 @@ private theorem transpose_gate_gauges_of_local_phase
     have h := Complex.mul_conj c
     rw [Complex.normSq_eq_norm_sq, hc] at h
     simpa only [one_pow, Complex.ofReal_one, starRingEnd_apply] using h
-  let Xbar :=(x : Matrix (Fin q) (Fin q) ℂ).map (starRingEnd ℂ)
+  have hcc' : star c * c = 1 := by rw [mul_comm, hcc]
+  let Xbar := (x : Matrix (Fin q) (Fin q) ℂ).map (starRingEnd ℂ)
   have hbar : Xbar.IsUnitaryBetween :=
     ((Matrix.isUnitaryBetween_iff_mem_unitaryGroup _).mpr x.property).map_star
   have hxt : ((x : Matrix (Fin q) (Fin q) ℂ)ᵀ).IsUnitaryBetween :=
@@ -75,8 +76,8 @@ private theorem transpose_gate_gauges_of_local_phase
   refine ⟨X, Y, ?_, ?_⟩
   · rw [hXY, hlocal]
     change Bᵀ = (star c • Kᴴ) * ((c • K) * Bᵀ)
-    simp only [Matrix.smul_mul, Matrix.mul_smul, smul_smul, hcc, one_smul]
-    rw [← Matrix.mul_assoc, hK, Matrix.one_mul]
+    rw [Matrix.smul_mul, Matrix.smul_mul, Matrix.mul_smul, smul_smul,
+      ← Matrix.mul_assoc, hK, Matrix.one_mul, hcc', one_smul]
   · have h := congrArg Matrix.transpose hlocal
     simp only [Matrix.transpose_mul, Matrix.transpose_smul, Matrix.transpose_transpose,
       ← Matrix.kroneckerMap_transpose] at h
@@ -176,8 +177,6 @@ theorem IsMPUCanonicalFormII.mpo_standardForm_even_eq_transpose_of_local_certifi
   have hr : r[MPOTensor.blockTwo U] = d * d := hrB.trans (congrArg (d * ·) hrU)
   have hl : ℓ[MPOTensor.blockTwo U] = d * d := hlB.trans (congrArg (· * d) hlU)
   let e : (Fin d × Fin d) ≃ Fin (d * d) := finProdFinEquiv
-  let p := Equiv.prodCongr e e
-  let E := Matrix.reindexLinearEquiv ℂ ℂ p p
   let x' : Matrix.unitaryGroup (Fin (d * d)) ℂ :=
     ⟨Matrix.reindex e e (x : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ),
       Matrix.reindex_mem_unitaryGroup _ _ x.property⟩
@@ -192,24 +191,7 @@ theorem IsMPUCanonicalFormII.mpo_standardForm_even_eq_transpose_of_local_certifi
               (hU.twoSiteSourceFactors hsimple)))ᵀ := by
     obtain ⟨hA, hB⟩ := coarse_gates_eq_four_spin_gates hU hsimple hrU hlU hr hl
     rw [hA, hB]
-    have h := congrArg E hlocal
-    rw [Matrix.smul_mul, map_smul] at h
-    conv_rhs at h => rw [← Matrix.reindexLinearEquiv_mul ℂ ℂ p p p]
-    have hK : E ((x : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ) ⊗ₖ
-        (x : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ)ᵀ) =
-        (x' : Matrix (Fin (d * d)) (Fin (d * d)) ℂ) ⊗ₖ
-          (x' : Matrix (Fin (d * d)) (Fin (d * d)) ℂ)ᵀ := by
-      simp only [E, p, Matrix.coe_reindexLinearEquiv]
-      dsimp only [x']
-      rw [Matrix.transpose_reindex]
-      exact (Matrix.kroneckerMap_reindex (fun a b : ℂ ↦ a * b) e e e e
-        (x : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ)
-        (x : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ)ᵀ).symm
-    rw [hK] at h
-    simp only [E, p, Matrix.coe_reindexLinearEquiv,
-      Matrix.transpose_reindex] at h ⊢
-    rw [Matrix.smul_mul]
-    exact h
+    exact Matrix.reindex_transposition_certificate e hlocal
   exact hU.blockTwo.mpo_even_eq_transpose_of_source_local_certificate
     (hU.isMPUSimple_blockTwo hsimple) (hU.twoSiteSourceFactors hsimple)
     hr hl c hc x' hsource N hN heven
