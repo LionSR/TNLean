@@ -197,6 +197,7 @@ import TNLean.Algebra.SemisimpleTracePowers
 import TNLean.Algebra.SignedPermutationSpan
 import TNLean.Algebra.SingletMatrix
 import TNLean.Algebra.SkewUnitaryNormalForm
+import TNLean.Algebra.StabilizedWeightedTrace
 import TNLean.Algebra.StabilizerBlockIndependence
 import TNLean.Algebra.StabilizerBlockIndependenceCircle
 import TNLean.Algebra.StabilizerCocycleExtension

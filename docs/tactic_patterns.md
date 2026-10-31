@@ -5084,6 +5084,17 @@ three-plaquette output measurement, and the routed reunion measurement.
 
 ## Candidates
 
+### Exact small indices from their defining sets — candidate (2026-10-29)
+
+- **Pattern:** supply a small admissible positive length, use `Nat.sInf_mem`
+  and `Nat.sInf_le`, exclude any smaller positive length, and finish the
+  resulting natural-number bounds with `omega`.
+- **Seen:** the two concrete index computations `threePauliTensor_qIndex`
+  and `threePauliTensor_iIndex` in `MPS/Examples/PauliWielandt.lean`.
+- **Abstraction:** the existing Mathlib infimum lemmas already do the main
+  work. Two occurrences in one file are below the promotion threshold;
+  no specialized index tactic is introduced.
+
 ### Completing an orthonormal family by its cardinality — candidate (2026-10-29)
 
 - **Pattern:** Use
@@ -8834,23 +8845,6 @@ spectral split → block extraction → MPV calculation → strict bounds
   Neither theorem replaces the other by cancellation when a factor vanishes.
   The small helper is retained unchanged for the first compiler diagnostic.
 
-### Excluding a party outside the image of an owner map — candidate (2026-10-11)
-
-- **Pattern:** Rewrite the parties of a restriction as a filtered image,
-  extract the original owner from image membership, and contradict the
-  selector using exclusion from the owner map. The no-party theorem then
-  gives the identity on the empty memory.
-- **Seen:** `Word.restrict_mapOwner_eval_eq_id_of_disjoint` in
-  `TNLean/Lattice/Compression/WordOwnerRestriction.lean` and
-  `Word.restrict_localPart_mapOwner_eval_heq_id_of_disjoint` in
-  `TNLean/Lattice/Compression/SourceWordParties.lean` (two occurrences).
-- **Abstraction:** At a third occurrence, share the restriction lemma for
-  a party absent from the original participating-party set, before applying
-  the relabelling identities.
-- **Notes:** Named scalar local maps belong to the participating-party set.
-  Excluding register owners alone would not exclude those scalar operations.
-
-
 ### Selecting the exterior owner — promoted (2026-10-11)
 
 - **Helper:** `partySelector_none` in
@@ -9469,21 +9463,6 @@ spectral split → block extraction → MPV calculation → strict bounds
   extracting its actual network witnesses. This retains the same tensors and
   all cut bounds. One occurrence does not justify a new abstraction.
 
-### Agreement outside a finite support — candidate (2026-10-17)
-
-- **Pattern:** Identify agreement outside a finite support with agreement off its subtype inclusion when comparing two local lifts.
-- **Seen:** Two proofs, in `Circuit/EntropySupport.lean`, `mem_supportedOperators_of_isSupportedOn`, and `PEPS/AreaLaw/RegionalEntropyBridge.lean`, `localLift_eq_entropyLocalLift`.
-- **Possible abstraction:** A lemma identifying these two agreement conditions if a third use appears. The current two occurrences do not require a new public lemma.
-- **Notes:** Both comparisons reuse the existing local-lift entry formula. The Circuit result imports no PEPS or MPS module.
-
-### Choosing sites in nonempty interaction supports — candidate (2026-10-17)
-
-- **Pattern:** Choose a site in each nonempty interaction support and retain its membership proof.
-- **Seen:** The two proofs in `MPS/AreaLaw/LiebRobinson.lean`.
-- **Possible abstraction:** A support-choice lemma if a third substantive use appears. The diameter comparison is already a shared private lemma; two choices in one file do not warrant another abstraction.
-- **Notes:** The choices remain internal to the proofs and add no premise to either theorem.
-
-
 ### Core information after a regional replica swap — candidate (2026-10-18)
 
 - **Pattern:** Transport a supported unitary and its vector error from paired
@@ -9495,15 +9474,6 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Existing reuse:** The coordinate isometry, support transport, replica-swap
   marginal identity and entropy continuity theorem are shared already.
   A third consumer would justify a single finite-site comparison theorem.
-
-### Absorbing a localization coefficient with spare decay — candidate (2026-10-18)
-
-- **Pattern:** Reserve one quarter of the spatial exponential to absorb
-  P = C(1+T₀), while the other quarter controls the polynomial factors.
-- **Seen:** `MPS/AreaLaw/InformationReset.lean`, once.
-- **Existing reuse:** The proof applies the Gaussian localization parameter
-  estimate and Mathlib's `Real.mul_exp_neg_le_exp_neg_one`; no new scalar
-  theorem or tactic is needed for this occurrence.
 
 ### Real-radius chain neighborhood comparisons — candidate (2026-10-18)
 
@@ -10164,6 +10134,15 @@ there is no need for a new tactic.
 - **Scope:** A one-letter sandwich alone is insufficient. The reduction must
   contract every open word, including the empty word.
 
+### Regional and cyclic slice membership — candidate (2026-10-29)
+
+- **Seen:** The two inclusions in `PEPS/ParentHamiltonian/CycleParentGroundSpace.lean`
+  transport local membership through the existing arc physical equivalence, then
+  rewrite the proved regional-slice/cyclic-restriction identity.
+- **Reuse:** One named slice identity handles both directions. A complementary
+  assignment extends using its own exterior value, avoiding positive-dimension
+  assumptions or separate empty-alphabet proof branches. No new tactic is needed.
+
 ### Diagonal boundary matrices select uncle sectors — candidate (2026-10-29)
 
 - **Seen:** `MPS/ParentHamiltonian/UncleGroundSpaceInclusion.lean`, the first and second
@@ -10297,6 +10276,19 @@ there is no need for a new tactic.
   Skolem–Noether theorem supplies the square implementer. No entrywise double sum
   or duplicate Skolem–Noether argument is introduced.
 
+
+### Prefix reconstruction by canonical adjoints — candidate (2026-10-29)
+
+- **Seen:** `MPS/ParentHamiltonian/VaryingOBCIntersection.lean` and
+  `MPS/ParentHamiltonian/VaryingOBCReconstruction.lean`.
+- **Pattern:** Match overlapping trace sections using the middle-site spanning
+  condition, then sum against the adjoint first family to construct the enlarged
+  boundary. The first family may be an actual multi-site prefix.
+- **Reuse:** The full-chain induction calls
+  `Matrix.obc_three_site_reconstruction_of_pair_sections`; the actual-prefix
+  normalization calls `Matrix.obc_block_row_isometry`.
+- **Decision:** Existing mathematical lemmas handle the induction; no inverse
+  supplier, square padding, or additional tactic is introduced.
 
 
 ### Rank-one density under scalar multiplication — promoted (2026-10-29)
@@ -10474,3 +10466,31 @@ there is no need for a new tactic.
   and the repeated block is not copied. The existing actual-gap helper is
   exposed and reused for the physical entropy theorem, without a second
   endpoint-unitary or dimension argument.
+
+### Intrinsic blocked traces from a product-tensor diagonal — candidate (2026-10-29)
+
+- **Pattern:** Expand `normalizedDiagonal (mulTensor U U)` powers with the
+  existing normalized-diagonal word formula and `evalWord_mulTensor`, then
+  contract each Kronecker summand with the existing QIC swap-trace identity.
+- **Seen:** `MPS/MPU/TimeReversalTwistedTransfer.lean`.
+- **Reuse:** `normalizedDiagonal_pow_eq_sum_evalWord`, `evalWord_mulTensor`,
+  `Matrix.trace_swapMatrix_mul_kronecker`, the existing
+  `Matrix.swapMatrix_mul_kronecker`, and the existing physical-word
+  decoding equivalence. No new tensor-product expansion induction is copied.
+- **Decision:** The resulting actual twisted-transfer power identity is a
+  mathematical lemma, shared by the exchange-commutation and blocked-trace
+  proofs. No custom tactic or new source predicate is needed.
+
+### Commuting weights on stabilized trace powers — candidate (2026-10-29)
+
+- **Pattern:** Factor a positive power minus its stabilized projector as
+  `E^k * (1 - P)`. Idempotence of the complement and eventual stabilization
+  make it nilpotent. A commuting weight preserves nilpotence, hence gives
+  zero trace for that difference.
+- **Defined in:** `Algebra/StabilizedWeightedTrace.lean`, using the existing
+  QIC `Matrix.StabilizedRankOneData`, Mathlib complementary idempotents,
+  `Commute.isNilpotent_mul_left`, and nilpotent matrix traces.
+- **Decision:** Reuse the existing stabilized-data structure; no new spectral
+  predicate or source witness is introduced. The new result eliminates
+  transient terms in commuting weighted traces rather than reproving
+  stabilization or the existing unweighted nilpotent trace theorem.
