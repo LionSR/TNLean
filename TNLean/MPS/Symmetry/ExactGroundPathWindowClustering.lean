@@ -42,13 +42,15 @@ private theorem card_windowFinset_le (N a L : ℕ) : (windowFinset N a L).card �
   have hMaps : Set.MapsTo (fun k : Fin N ↦ k.val - a)
       (windowFinset N a L) (Finset.range L) := by
     intro k hk
-    simp only [windowFinset, Finset.mem_filter, Finset.mem_univ, true_and] at hk
+    simp only [windowFinset, Finset.mem_coe, Finset.mem_filter, Finset.mem_univ,
+      true_and] at hk
     simp only [Finset.mem_coe, Finset.mem_range]
     omega
   have hInj : Set.InjOn (fun k : Fin N ↦ k.val - a) (windowFinset N a L) := by
     intro i hi j hj heq
     simp only [windowFinset, Finset.mem_coe, Finset.mem_filter,
       Finset.mem_univ, true_and] at hi hj
+    have heq' : (i : ℕ) - a = (j : ℕ) - a := heq
     exact Fin.ext (by omega)
   simpa only [Finset.card_range] using
     Finset.card_le_card_of_injOn (fun k : Fin N ↦ k.val - a) hMaps hInj
