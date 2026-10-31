@@ -911,13 +911,14 @@ of the virtual projective representation.
     systems have constant cohomology class by the determinant argument.
     Symmetry of a unique ground-state line initially gives a scalar action;
     its character must first be removed by a fixed physical phase gauge.
-    Changes of minimal bond dimension require an additional step: derive
-    continuous balanced canonical data from the physical gap and restrict
-    the virtual action to the invariant bond subspace surviving the limit.
-    The algebraic restriction is
-    Lemma~\ref{thm:spt_invariant_bond_compression}, but the required
-    continuity implication remains unformalized
-    \cite{gap:spc11_spt_interpolation_upper_range}.
+    To handle changes of minimal bond dimension, the physical gap gives
+    ordinary connected exponential clustering. Pass the actual finite-ring
+    correlators to their limiting contractions, normalize each minimal
+    representative to a trace-preserving gauge, and use the eigenvalue
+    observables to obtain a common transfer bound below one. Compactness
+    and restriction to the invariant bond subspace surviving the limit then
+    give one class along the path, as in
+    Theorem~\ref{thm:spt_exact_ground_physical_class}.
 
     Conversely, let the endpoint isometric forms have virtual actions
     $V_g^0$ and $V_g^1$ in the same cohomology class.  Embed their bond spaces
@@ -4794,8 +4795,135 @@ argument below.
     by $2|X|v e^{-\ell/2}$. Apply the exponential-rate lemma.
 \end{proof}
 
-Passing these finite correlations to limiting transfer contractions and
-choosing minimal canonical representatives are separate steps below.
+\begin{lemma}[Normalized correlations depend only on the periodic rays]
+    \label{lem:spt_positive_ray_expectations}
+    \lean{TNLean.Lattice.normalizedVectorExpectation_smul,
+        MPSTensor.mpvExpectation_eq_normalizedVectorExpectation,
+        MPSTensor.SamePositiveMpvRay.mpvExpectation_eq,
+        MPSTensor.SamePositiveMpvRay.mpvConnectedCorrelator_eq}
+    \notready
+    \discussion{9879}
+    \uses{lem:spt_actual_observable_centering}
+    If two tensors generate the same periodic vector line at every
+    positive length, all their normalized finite expectations and
+    connected window correlators coincide. Their bond dimensions and
+    scalar normalizations may differ.
+\end{lemma}
+\begin{proof}
+    Equal singleton spans differ by an invertible scalar, including when
+    both vectors vanish. The scalar and its complex conjugate cancel in
+    the ratio defining the normalized expectation. Apply this identity
+    to the three expectations defining the connected correlator.
+\end{proof}
+
+\begin{lemma}[Physical clustering for the actual two-window correlator]
+    \label{cor:spt_physical_window_clustering}
+    \lean{MPSTensor.ExactMPSGroundPath.exists_uniform_window_correlation_bound,
+        MPSTensor.ExactMPSGroundPath.exists_uniform_ray_window_correlation_bound}
+    \notready
+    \discussion{9879}
+    \uses{thm:spt_exact_ground_connected_exponential_clustering,lem:spt_positive_ray_expectations}
+    There are common $K,\kappa>0$ such that for any tensor representing
+    a periodic ray family along the physical path, length-$L$ observables
+    $X,Y$ with $L>0$, and $n\ge t\ge1$, their connected correlator on
+    the ring of length $L+t+L+n$ satisfies
+    \[
+        |G_{L+t+L+n}(X,Y;L+t+1)|
+        \le K(L+1)\|X\|\|Y\|e^{-\kappa t}.
+    \]
+\end{lemma}
+\begin{proof}
+    The two windows have at least $t$ sites between them in both cyclic
+    directions, so their shortest-path distance is greater than $t$.
+    Window embeddings are contractive and the first support has at most
+    $L$ sites. Apply physical clustering and the preceding ray identity.
+\end{proof}
+
+\begin{lemma}[Actual finite-ring correlations converge to the limiting contraction]
+    \label{lem:spt_actual_finite_ring_correlation_limit}
+    \lean{MPSTensor.tendsto_mpvConnectedCorrelator_limitCorrelator,
+        MPSTensor.norm_limitCorrelator_le_of_eventually_mpvConnectedCorrelator_le,
+        MPSTensor.norm_transfer_spectrum_le_of_finite_mpvConnectedCorrelator_bound}
+    \notready
+    \discussion{9879}
+    \uses{def:physical_connected_correlator,lem:spt_transfer_rate_from_correlations}
+    Let $A$ be trace preserving and injective after blocking $L>0$ sites,
+    with a faithful stationary density $\rho$ of trace one. For fixed
+    $t\ge1$ and length-$L$ observables $X,Y$, the actual finite connected
+    correlator on $L+t+L+n$ sites converges, as $n\to\infty$, to the
+    limiting fixed-point contraction. Every eventual bound on the
+    finite correlator therefore bounds this contraction. In particular,
+    a common eventual rate $r>0$ for all such observables bounds every
+    transfer eigenvalue different from one by $r$.
+\end{lemma}
+\begin{proof}
+    Block injectivity gives pointwise primitivity. The complementary
+    transfer operator has spectral radius less than one, so its powers
+    tend to zero. Substitute this in the exact finite-ring contraction
+    formula; its denominator tends to one. Pass the finite bound through
+    the norm limit and use the transfer eigenvalue observables.
+    The auxiliary decay rate may depend on the tensor; no common transfer
+    bound is used to prove convergence.
+\end{proof}
+
+\begin{lemma}[A common transfer bound for trace-preserving representatives]
+    \label{thm:spt_physical_gap_tp_transfer_bound}
+    \lean{MPSTensor.ExactMPSGroundPath.exists_uniform_tracePreserving_transfer_bound}
+    \notready
+    \discussion{9879}
+    \uses{cor:spt_physical_window_clustering,lem:spt_actual_finite_ring_correlation_limit}
+    An exact physical MPS ground-state path has a common $0<r<1$ such
+    that every trace-preserving block-injective representative of one of
+    its periodic ray families, with a faithful stationary trace-one
+    density, has all transfer eigenvalues different from one of modulus
+    at most $r$.
+\end{lemma}
+\begin{proof}
+    Take $r=e^{-\kappa}$ from the physical window bound. For each pair
+    of observables the estimate holds for all return lengths $n\ge t$.
+    Pass to the limiting contraction and then to the transfer spectrum.
+\end{proof}
+
+\begin{lemma}[An actual trace-preserving gauge with faithful fixed density]
+    \label{lem:spt_injective_tp_gauge}
+    \lean{MPSTensor.exists_posDef_fixedPoint_trace_one_of_isInjective_isTP,
+        MPSTensor.exists_tpGauge_of_isInjective_unital}
+    \notready
+    \discussion{9879}
+    A trace-preserving one-site injective tensor has a faithful stationary
+    density of trace one. Every unital one-site injective tensor $A$ of
+    positive bond dimension has a bond gauge $B$ that is trace preserving,
+    one-site injective, has the same positive-length periodic rays and
+    transfer spectrum, and has such a density.
+\end{lemma}
+\begin{proof}
+    Primitive Perron--Frobenius theory supplies the positive-definite
+    stationary density, which is normalized by its positive trace.
+    For the gauge, derive the faithful adjoint fixed point $\Lambda$ of
+    the unital transfer map and set
+    $B^i=\Lambda^{1/2}A^i\Lambda^{-1/2}$.
+    The adjoint fixed-point identity gives trace preservation. Invertible
+    bond conjugation preserves injectivity, the periodic vectors, and
+    the transfer spectrum.
+\end{proof}
+
+\begin{lemma}[A common unital transfer bound from the physical gap]
+    \label{thm:spt_physical_gap_unital_transfer_bound}
+    \lean{MPSTensor.ExactMPSGroundPath.exists_uniform_unital_transfer_bound}
+    \notready
+    \discussion{9879}
+    \uses{thm:spt_physical_gap_tp_transfer_bound,lem:spt_injective_tp_gauge}
+    Along an exact physical MPS ground-state path there is a common
+    $0<r<1$ bounding the modulus of every transfer eigenvalue different
+    from one of every unital injective representative of a periodic ray
+    family on the path. No transfer bound or canonical gauge is an
+    additional hypothesis.
+\end{lemma}
+\begin{proof}
+    Derive a trace-preserving gauge and its faithful fixed density.
+    Apply the preceding physical transfer bound at blocking length one,
+    and transport the spectrum back through the bond gauge.
+\end{proof}
 
 \begin{lemma}[Transfer spectral rate from limiting correlations]
     \label{lem:spt_transfer_rate_from_correlations}
@@ -4819,6 +4947,28 @@ choosing minimal canonical representatives are separate steps below.
 \end{proof}
 
 \subsection{Virtual classes at a compact limit}
+
+\begin{theorem}[One virtual class from the actual physical gap]
+    \label{thm:spt_exact_ground_physical_class}
+    \lean{MPSTensor.ExactMPSGroundPath.exists_constant_virtual_class}
+    \notready
+    \discussion{9879}
+    \uses{thm:spt_physical_gap_unital_transfer_bound,
+        thm:spc_aux_exact_ground_uniform_transfer_class}
+    A symmetric gapped interaction path with a continuous exact MPS
+    realization of its unique finite-chain ground lines has a common
+    unit-modulus physical character and unital injective representatives
+    of positive bond dimensions bounded by the ambient dimension.
+    After removing the character, these representatives have unitary
+    projective virtual actions whose factor systems all determine the
+    same cohomology class. The minimal dimensions may change along the
+    path, and no continuous choice of minimal tensors, stationary
+    densities, or virtual matrices is required.
+\end{theorem}
+\begin{proof}
+    Derive the common unital transfer bound from the physical gap and
+    apply the compact-limit class-invariance theorem below.
+\end{proof}
 
 \begin{lemma}[The virtual class of an exact ground-state path under a transfer bound]
     \label{thm:spc_aux_exact_ground_uniform_transfer_class}
