@@ -59,6 +59,25 @@ abstracted — record why, so it is not re-proposed).
 - **Notes:** No new matrix predicate or parallel standard-form structure was
   introduced. The supplied half factors and gates are conjugated directly.
 
+### Faithful bipartite matrix embeddings — promoted (2026-10-29)
+
+- **Pattern:** Convert a left or right Kronecker embedding through ordered
+  bipartite finite-region coordinates and then into the quasi-local algebra.
+  Previously the local-inclusion identity and inverse-equivalence cancellation
+  were written separately for both factors at each use.
+- **Defined in:** `QCA/BipartiteQuasiLocalEmbedding.lean`, the canonical
+  `bipartiteMatrixToQuasiLocalObservable`, its injectivity and left/right
+  evaluation and full-factor range theorems.
+- **Refactored occurrences:** `QCA/SupportAlgebraGeneration.lean`,
+  `QCA/CanonicalAdjacentSupportGeneration.lean`, and the direct shift-image
+  calculations in `QCA/GNVWShift.lean`. The actual finite-image range identity
+  is exposed once as
+  `evenPairLocalImage_map_bipartiteMatrixToQuasiLocalObservable`.
+- **Status:** Source-written helper promotion, with hosted elaboration pending;
+  no local Lean invocation. No new support predicate or alternate local image
+  is introduced.
+
+
 ### Identity site translation — promoted (2026-10-28)
 
 - **Pattern:** Unfold the matrix of a site permutation and rewrite the identity
@@ -5064,6 +5083,17 @@ three-plaquette output measurement, and the routed reunion measurement.
   `isReordering_comp_iff`; apply `IsReordering.comp` as a term instead.
 
 ## Candidates
+
+### Exact small indices from their defining sets — candidate (2026-10-29)
+
+- **Pattern:** supply a small admissible positive length, use `Nat.sInf_mem`
+  and `Nat.sInf_le`, exclude any smaller positive length, and finish the
+  resulting natural-number bounds with `omega`.
+- **Seen:** the two concrete index computations `threePauliTensor_qIndex`
+  and `threePauliTensor_iIndex` in `MPS/Examples/PauliWielandt.lean`.
+- **Abstraction:** the existing Mathlib infimum lemmas already do the main
+  work. Two occurrences in one file are below the promotion threshold;
+  no specialized index tactic is introduced.
 
 ### Completing an orthonormal family by its cardinality — candidate (2026-10-29)
 
@@ -10185,6 +10215,15 @@ there is no need for a new tactic.
   threshold. Before extending this pattern to another module, move the value equality
   before the case distinction or reuse `Fin.val_inj`; no new tactic is needed.
 
+### Regional and cyclic slice membership — candidate (2026-10-29)
+
+- **Seen:** The two inclusions in `PEPS/ParentHamiltonian/CycleParentGroundSpace.lean`
+  transport local membership through the existing arc physical equivalence, then
+  rewrite the proved regional-slice/cyclic-restriction identity.
+- **Reuse:** One named slice identity handles both directions. A complementary
+  assignment extends using its own exterior value, avoiding positive-dimension
+  assumptions or separate empty-alphabet proof branches. No new tactic is needed.
+
 ### Diagonal boundary matrices select uncle sectors — candidate (2026-10-29)
 
 - **Seen:** `MPS/ParentHamiltonian/UncleGroundSpaceInclusion.lean`, the first and second
@@ -10329,6 +10368,19 @@ there is no need for a new tactic.
   Skolem–Noether theorem supplies the square implementer. No entrywise double sum
   or duplicate Skolem–Noether argument is introduced.
 
+
+### Prefix reconstruction by canonical adjoints — candidate (2026-10-29)
+
+- **Seen:** `MPS/ParentHamiltonian/VaryingOBCIntersection.lean` and
+  `MPS/ParentHamiltonian/VaryingOBCReconstruction.lean`.
+- **Pattern:** Match overlapping trace sections using the middle-site spanning
+  condition, then sum against the adjoint first family to construct the enlarged
+  boundary. The first family may be an actual multi-site prefix.
+- **Reuse:** The full-chain induction calls
+  `Matrix.obc_three_site_reconstruction_of_pair_sections`; the actual-prefix
+  normalization calls `Matrix.obc_block_row_isometry`.
+- **Decision:** Existing mathematical lemmas handle the induction; no inverse
+  supplier, square padding, or additional tactic is introduced.
 
 
 ### Rank-one density under scalar multiplication — promoted (2026-10-29)
@@ -10506,3 +10558,31 @@ there is no need for a new tactic.
   and the repeated block is not copied. The existing actual-gap helper is
   exposed and reused for the physical entropy theorem, without a second
   endpoint-unitary or dimension argument.
+
+### Intrinsic blocked traces from a product-tensor diagonal — candidate (2026-10-29)
+
+- **Pattern:** Expand `normalizedDiagonal (mulTensor U U)` powers with the
+  existing normalized-diagonal word formula and `evalWord_mulTensor`, then
+  contract each Kronecker summand with the existing QIC swap-trace identity.
+- **Seen:** `MPS/MPU/TimeReversalTwistedTransfer.lean`.
+- **Reuse:** `normalizedDiagonal_pow_eq_sum_evalWord`, `evalWord_mulTensor`,
+  `Matrix.trace_swapMatrix_mul_kronecker`, the existing
+  `Matrix.swapMatrix_mul_kronecker`, and the existing physical-word
+  decoding equivalence. No new tensor-product expansion induction is copied.
+- **Decision:** The resulting actual twisted-transfer power identity is a
+  mathematical lemma, shared by the exchange-commutation and blocked-trace
+  proofs. No custom tactic or new source predicate is needed.
+
+### Commuting weights on stabilized trace powers — candidate (2026-10-29)
+
+- **Pattern:** Factor a positive power minus its stabilized projector as
+  `E^k * (1 - P)`. Idempotence of the complement and eventual stabilization
+  make it nilpotent. A commuting weight preserves nilpotence, hence gives
+  zero trace for that difference.
+- **Defined in:** `Algebra/StabilizedWeightedTrace.lean`, using the existing
+  QIC `Matrix.StabilizedRankOneData`, Mathlib complementary idempotents,
+  `Commute.isNilpotent_mul_left`, and nilpotent matrix traces.
+- **Decision:** Reuse the existing stabilized-data structure; no new spectral
+  predicate or source witness is introduced. The new result eliminates
+  transient terms in commuting weighted traces rather than reproving
+  stabilization or the existing unweighted nilpotent trace theorem.

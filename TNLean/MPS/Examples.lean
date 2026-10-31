@@ -65,6 +65,7 @@ import TNLean.MPS.Examples.PVBSOneParticleWindow
 import TNLean.MPS.Examples.PVBSPeriodicGroundSpace
 import TNLean.MPS.Examples.PVBSPureWindowHamiltonian
 import TNLean.MPS.Examples.PVBSPureWindowMatchingVolume
+import TNLean.MPS.Examples.PauliWielandt
 import TNLean.MPS.Examples.PeriodicFullRingPhase
 import TNLean.MPS.Examples.PeriodicStringExamples
 import TNLean.MPS.Examples.ProductState
