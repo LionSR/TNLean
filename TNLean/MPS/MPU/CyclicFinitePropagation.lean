@@ -19,6 +19,13 @@ is supplied as a hypothesis.
 
 Source: arXiv:1703.09188, StandardForm/SF and Appendix eq:appendix-1,
 lines 603–622 and 2300–2306.
+
+**Scope restriction (supplied standard form):** These results consume
+actual MPU unitarity, a positive block length and supplied two-site
+standard-form data, and their neighbourhoods are measured in that block
+length. The standard-form construction from bare MPU data and the source
+bond-dimension radius remain separate. See
+`docs/paper-gaps/mpu_qca_complete_block_heisenberg_scope.tex`.
 -/
 
 open scoped Matrix
