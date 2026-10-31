@@ -16,8 +16,8 @@ No injectivity, normalization, nonzero bond dimension or extra parent-space
 inclusion is assumed by the public theorems. These formulas hold for the
 explicit uncle projector even when its identification with a perturbative
 limit needs a separate injectivity argument. The limit theorems remain in
-`UncleParentLimit.lean`; draft #10308 derives their injectivity premise from
-the source perturbation condition. This PR is independent of that draft.
+`UncleParentLimit.lean`; #10308 derives their injectivity premise from
+the source perturbation condition. This development does not depend on it.
 
 The companion `UncleKernelConditions.lean` identifies the actual Hamiltonian
 kernel with all cyclic local uncle-kernel conditions. It proves positivity
@@ -30,7 +30,8 @@ uncle boundary-map range.
 The reverse kernel inclusion into the two-sector span is not supplied: the source's open-chain
 intersection identity and periodic closure identity remain necessary.
 Neither equality nor exact degeneracy follows from the containment alone.
-The issue stays open and the new Blueprint entry is pending verification.
+The issue stays open; the two new Blueprint entries record only the
+containment and the local kernel conditions.
 
 Validation: exact pinned Mathlib/QICLean source inspected, import generator,
 reader-facing prose check, tactic-pattern scan, Blueprint source-reference

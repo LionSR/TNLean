@@ -1,19 +1,14 @@
 \subsection{Periodic closure of the single-wall spaces}
 
-% Source-written declarations; hosted elaboration and declaration checks are pending.
 \begin{lemma}[Cyclic boundary trace coefficients]
     \label{thm:uncle_cyclic_boundary_coefficients}
     \lean{MPSTensor.trace_uncleBlockMatrix_mul,
         MPSTensor.eq_of_uncleBoundary_cyclic_pairing,
         MPSTensor.exists_scalar_blocks_of_uncleBoundary_trace_cyclic}
-    \notready
-    \uses{def:two_block_uncle_tensor}
-    On four blocks write
-    \begin{align}
-        (A,R,L,B)\star(C,S,T,E)
-        =(AC,AS+RE,LC+BT,BE).
-        \notag
-    \end{align}
+    \leanok
+    \uses{def:two_block_uncle_tensor, def:uncle_boundary_product}
+    Let $\star$ be the boundary product of
+    Definition~\ref{def:uncle_boundary_product}.
     If two boundary matrices $X,Y$ satisfy
     $\operatorname{tr}((M\star N)X)=\operatorname{tr}((N\star M)Y)$
     for every $M,N$, then $X=Y$. If the pairing with $X$ is cyclic,
@@ -22,10 +17,18 @@
 \end{lemma}
 
 \begin{proof}
+    \leanok
     Taking $M=I$ gives $X=Y$ by nondegeneracy of the ordinary trace
-    pairing. Pair a sector identity with an off-diagonal block: one
-    product is that block and the reversed product is zero. Trace
-    nondegeneracy therefore kills both off-diagonal boundary blocks.
+    pairing. Let $P_1=\operatorname{diag}(I,0)$ be the first sector
+    identity and $E_R=(0,R,0,0)$ an off-diagonal block. Then
+    \begin{align}
+        P_1\star E_R & =E_R, & E_R\star P_1 & =0,
+        \label{eq:uncle_cyclic_offdiagonal_products}
+    \end{align}
+    so cyclicity of the pairing gives $\operatorname{tr}(E_RX)=0$ for every
+    $R$. Trace nondegeneracy therefore kills the lower off-diagonal block
+    of $X$; the second sector identity treats the upper block in the same
+    way.
     On either diagonal sector, cyclicity says
     $\operatorname{tr}(PQX)=\operatorname{tr}(QPX)$. Trace
     nondegeneracy makes $X$ commute with every sector matrix, so each
@@ -35,15 +38,16 @@
 \begin{lemma}[Scalar boundaries are the periodic sector vectors]
     \label{thm:uncle_scalar_boundaries}
     \lean{MPSTensor.uncleBoundaryMap_scalar_blocks}
-    \notready
-    \uses{def:two_block_uncle_tensor}
-    For the actual single-wall boundary map $\Gamma_N$, the boundary
+    \leanok
+    \uses{def:two_block_uncle_tensor, def:uncle_boundary_space, def:mpv}
+    For the single-wall boundary map $\Gamma_N$, the boundary
     $\operatorname{diag}(\alpha I,\beta I)$ gives
     $\Gamma_N(\operatorname{diag}(\alpha I,\beta I))
-        =\alpha\ket{M(A)}+\beta\ket{M(B)}$.
+        =\alpha\ket{V^{(N)}(A)}+\beta\ket{V^{(N)}(B)}$.
 \end{lemma}
 
 \begin{proof}
+    \leanok
     The diagonal blocks of the single-wall coefficient word are the
     pure $A$ and $B$ words. Scalar diagonal boundaries remove the two
     off-diagonal contributions, leaving their two traces.
@@ -52,19 +56,21 @@
 \begin{lemma}[Periodic uncle boundary closure]
     \label{thm:uncle_periodic_boundary_closure}
     \lean{MPSTensor.uncleBoundarySpace_inf_cyclicTranslate}
-    \notready
-    \uses{def:two_block_uncle_tensor, def:parent_cyclic_translate_state}
+    \leanok
+    \uses{def:two_block_uncle_tensor, def:parent_cyclic_translate_state,
+        def:uncle_boundary_space, def:mpv}
     Let the full perturbation letter
     $\left(\begin{smallmatrix}A&R\\L&B\end{smallmatrix}\right)$ be
-    injective. For every $N\ge2$, let $S_N$ be the actual sum of the
-    two pure-sector and two single-wall boundary spaces, and let $T$
+    injective. For every $n\ge2$, let $S_n$ be the boundary space of
+    Definition~\ref{def:uncle_boundary_space}, and let $T$
     be the one-site cyclic translation. Then
-    $S_N\cap T(S_N)=\operatorname{span}\{\ket{M(A)},\ket{M(B)}\}$.
+    $S_n\cap T(S_n)=\operatorname{span}\{\ket{V^{(n)}(A)},\ket{V^{(n)}(B)}\}$.
     This is the closure lemma in~\cite{FernandezGonzalez2015Uncle},
     used after the two-site uncle interaction.
 \end{lemma}
 
 \begin{proof}
+    \leanok
     \uses{thm:uncle_cyclic_boundary_coefficients,
         thm:uncle_scalar_boundaries}
     Represent a vector in the intersection by boundaries $X$ and $Y$
@@ -77,7 +83,7 @@
     coefficient matrices. Extend the identity linearly in each
     variable. The cyclic boundary theorem makes $X=Y$ scalar on
     each diagonal sector, giving the asserted span. Conversely,
-    each periodic sector vector belongs to $S_N$ and is fixed by
+    each periodic sector vector belongs to $S_n$ and is fixed by
     cyclic translation of its trace.
 \end{proof}
 
@@ -89,15 +95,15 @@
         MPSTensor.mem_uncleBoundarySpace_of_cyclic_windows,
         MPSTensor.ker_uncleHamiltonianES_eq_span_mpv}
     \leanok
-    \uses{thm:uncle_kernel_local_conditions,lem:uncle_boundary_intersection,
-        thm:uncle_periodic_boundary_closure,thm:uncle_parent_sector_containment}
+    \uses{lem:uncle_kernel_local_conditions,lem:uncle_boundary_intersection,
+        thm:uncle_periodic_boundary_closure,lem:uncle_parent_sector_containment}
     Let $C=A\oplus B$ and let the perturbation have off-diagonal blocks
     $R,L$. Suppose the full letter family
     $\left(\begin{smallmatrix}A&R\\L&B\end{smallmatrix}\right)$ is injective.
     Then at every periodic length $N\ge2$,
     \begin{align}
         \ker H'_P
-         & =\operatorname{span}\{\ket{M_N(A)},\ket{M_N(B)}\}.
+         & =\operatorname{span}\{\ket{V^{(N)}(A)},\ket{V^{(N)}(B)}\}.
     \end{align}
     This is the finite periodic ground-space theorem
     of~\cite{FernandezGonzalez2015Uncle}; no intersection or closure identity
@@ -107,10 +113,10 @@
     The two-site coefficient word is the explicit uncle tensor, so the
     actual local projector kernel is $S_2$. A vector in $\ker H'_P$
     satisfies every cyclic $S_2$ constraint by
-    Lemma~\ref{thm:uncle_kernel_local_conditions}. Keeping the nonwrapping
+    Lemma~\ref{lem:uncle_kernel_local_conditions}. Keeping the nonwrapping
     constraints and iterating Lemma~\ref{lem:uncle_boundary_intersection}
     puts it in $S_N$. The same argument applied to its inverse cyclic
     translate puts it in the one-site translate of $S_N$. Periodic closure
     therefore places it in the two-sector span. The reverse inclusion is
-    Lemma~\ref{thm:uncle_parent_sector_containment}.
+    Lemma~\ref{lem:uncle_parent_sector_containment}.
 \end{proof}
