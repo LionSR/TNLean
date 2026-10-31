@@ -45,6 +45,17 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Positive dimensions of canonical blocks — promoted (2026-10-30)
+
+- **Pattern:** `let : NeZero (h.dim k) := ⟨(h.dim_pos k).ne'⟩` before using a
+  canonical block as a tensor of positive bond dimension.
+- **Helper:** the instance `MPSTensor.PGVWC07CanonicalFormData.neZero_dim` in
+  `TNLean/MPS/CanonicalForm/PGVWC07CanonicalForm.lean`.
+- **Occurrences:** two in `WeightedCanonicalSectors.lean` and one in
+  `WeightedCanonicalPhysicalLimit.lean`, all removed.
+- **Decision:** An instance lets typeclass search supply positivity for every
+  block, instead of a local assumption at each use.
+
 ### One-site MPO blocking as physical relabeling — promoted (2026-10-29)
 
 - **Pattern:** Expand one-site blocking into singleton words and identify
@@ -10106,6 +10117,17 @@ removed after the dependency audit exposed it.
 - **Decision:** Three branch occurrences in one file, below the two-file promotion
   threshold. Before extending this pattern to another module, move the value equality
   before the case distinction or reuse `Fin.val_inj`; no new tactic is needed.
+
+### Uniform periodic norm from transfer eigenvalues — reused trace bound (2026-10-29)
+
+- **Seen:** `MPS/Symmetry/PeriodicMPSNormLowerBound.lean` and
+  `MPS/ParentHamiltonian/WeightedCanonicalPhysicalLimit.lean`.
+- **Pattern:** Express the actual periodic squared norm as the trace of a transfer power,
+  then bound it by matrix-space dimension times a uniform eigenvalue bound.
+- **Reuse:** The existing `norm_trace_pow_le_of_spectrum_norm_le` supplies the trace estimate.
+  The public `norm_mpvState_le_bondDimension_of_unital` specializes it once to positive
+  unital maps and is reused for every canonical block; no new spectral proof or tactic.
+- **Validation:** Source-only; hosted Lean checking is pending.
 
 ### Rectangular reduction of doubled words — promoted (2026-10-29)
 
