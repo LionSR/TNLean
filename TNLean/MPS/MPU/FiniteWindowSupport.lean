@@ -17,6 +17,17 @@ without replacing either notion by a new support predicate.
 
 Source: arXiv:1703.09188, Appendix identity-tensor inclusions and
 finite conjugation eq:appendix-1, lines 2292–2306.
+
+**Scope restriction (supplied standard form):** The three conjugation
+results `mpo_bufferedWindow_conjugation_mem_supportedOperators`,
+`mpo_chainWindow_conjugation_mem_supportedOperators` and
+`mpo_conjugation_mem_supportedOperators_central` consume actual MPU
+unitarity, a positive block length and supplied two-site standard-form
+data, and their windows are measured in that block length. The window
+identifications carry no restriction. The standard-form construction
+from bare MPU data and the source bond-dimension radius remain
+separate. See
+`docs/paper-gaps/mpu_qca_complete_block_heisenberg_scope.tex`.
 -/
 
 open scoped Matrix
