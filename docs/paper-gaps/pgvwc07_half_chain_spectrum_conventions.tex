@@ -9,7 +9,7 @@
 \date{2026-10-04}
 \begin{document}
 \maketitle
-\gapnote{scope-restriction}{open}
+\gapnote{scope-restriction}{wip}
 
 \section{Source and index convention}
 Theorem~6 of~\cite{PerezGarcia2007MPSReps}, preceded by the calculation
@@ -115,15 +115,86 @@ The phrase ``just one block'' at source lines 960--963 therefore requires
 an asymptotic dominant-block interpretation rather than literal deletion
 of all subleading weighted blocks at finite length.
 
-The new source-hypothesis corollary treats an explicitly one-block
+The one-block source-hypothesis corollary treats an explicitly one-block
 canonical tensor. It repairs the previously missing derivation of
 normality in that setting; it does not formalize the reduction from an
 arbitrary weighted canonical representation satisfying C2 to its dominant
-block. That reduction, including the disappearing subleading physical
-contribution and spectral normalization, remains open here. Accordingly,
-the unrestricted source theorem is not marked as completely formalized.
+block. The additional weighted reduction and physical spectral comparison
+are now written below, pending hosted proof acceptance. Accordingly,
+the general source theorem is not yet marked as completely formalized.
 The boundary-index and decay corrections in the preceding sections remain
 resolved independently of this representation-scope obligation.
+
+The physical disappearance estimate can be separated from the remaining
+peripheral-simplicity step. For canonical block weights $0<w_j\leq1$,
+positivity and unitality imply $\|\psi_N(A^j)\|\leq D_j$ at every length:
+the squared norm is the trace of a transfer power and all transfer
+eigenvalues have modulus at most one. Hence the exact weighted decomposition
+gives
+\begin{align}
+    \left\|\psi_N(A)-\sum_{w_j=1}\psi_N(A^j)\right\|
+     & \leq\sum_{w_j<1}w_j^ND_j\longrightarrow0.
+    \label{eq:pgvwc07_weighted_remainder_estimate}
+\end{align}
+The declarations
+\leanid{MPSTensor.norm_mpvState_le_bondDimension_of_unital} and
+\leanid{MPSTensor.PGVWC07CanonicalFormData.tendsto_norm_mpvState_sub_unitWeight_sum}
+write this estimate directly from the canonical hypotheses, without
+assuming any convergence or decay, and both are Lean-checked.
+
+This estimate does not identify the retained sum with a unique block.
+The one-block formalization of C2 excludes other peripheral eigenvalue
+values. For several blocks that exclusion alone cannot assert algebraic
+simplicity: repeated unit-weight blocks still have peripheral value one
+with multiplicity. The source's generic exclusion of eigenvalues degenerate
+in magnitude must be distinguished from a statement about distinct values.
+No additional simplicity hypothesis is silently incorporated into the
+weighted disappearance estimate. The generic multiplicity condition is now used explicitly in
+\leanid{MPSTensor.PGVWC07CanonicalFormData.exists_dominantNormalBlock_physical_limit_of_c2}:
+every peripheral eigenvalue is one and has algebraic multiplicity one.
+Canonical sector projections are actual nonzero eigenvectors with eigenvalues
+$w_j^2$. Positivity gives $r(\mathcal E_A)\leq\|\mathcal E_A(I)\|$,
+so radius one forces a unit weight; simplicity excludes two such sectors.
+Every block eigenvalue lifts to $w_j^2$ times that eigenvalue in the full
+transfer map, which makes the retained block normal. Combined with the
+physical remainder estimate, this derives convergence to the unique dominant
+normal block. These statements are Lean-checked under the multiplicity-aware
+reading of C2 stated above.
+
+The finite normalization and spectral comparison are written in
+\path{TNLean/MPS/ParentHamiltonian/HalfChainPhysicalStability.lean}.
+Reading the $2L$-site vector as its coefficient matrix gives
+\begin{align}
+    \|R_\psi-R_\phi\|
+     & \leq(\|\psi\|+\|\phi\|)\|\psi-\phi\|,
+    \label{eq:pgvwc07_coefficient_matrix_perturbation}
+\end{align}
+with no factor depending on the growing physical dimension. The finite
+normalization is the squared ring norm, and
+\begin{align}
+    \|\widehat\psi-\widehat\phi\|
+     & \leq2\|\psi-\phi\|+2\bigl|\|\phi\|-1\bigr|,
+    \label{eq:pgvwc07_normalized_vector_perturbation}
+\end{align}
+including zero-norm finite lengths. Weyl's inequality at each finite size
+then bounds every difference of ordered padded half-chain eigenvalues by
+$2\|\widehat\psi-\widehat\phi\|$.
+
+\leanid{MPSTensor.PGVWC07CanonicalFormData.exists_halfChainSpectrumLimit_of_c2}
+in \path{TNLean/MPS/ParentHamiltonian/HalfChainGeneralCanonicalSpectrum.lean}
+combines the derived dominant block and physical remainder with these
+bounds. Its normalized faithful diagonal fixed point is derived from the
+canonical data, not added as a hypothesis. The weighted tensor's ordered
+normalized half-chain spectrum converges to that of the doubled dominant
+fixed point, and the finite norm is eventually positive. The ambient bond
+dimension is not separately assumed positive; the radius-one normalization
+excludes zero dimension.
+
+This statement uses generic C2 with algebraic multiplicity, consistent with
+the source's exclusion of eigenvalues degenerate in magnitude; it does not
+change the weaker distinct-value C2 hypothesis of the one-block theorem. One
+step remains open: the source theorem with the literal C2 condition and an
+arbitrary number of blocks.
 
 \bibliographystyle{alpha}
 \bibliography{references}

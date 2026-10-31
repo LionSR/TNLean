@@ -7,12 +7,12 @@ import TNLean.Algebra.ListOfFn
 import TNLean.MPS.Examples.ShortMomentum.LocalSpace
 
 /-!
-# Actual cyclic phase comparison for charged local spaces
+# Cyclic phase comparison for charged local spaces
 
-The word exponent obeys the actual matrix cocycle under concatenation.
+The word exponent obeys the matrix cocycle under concatenation.
 Moving the first letter to the end changes it by the symplectic pairing
 of that letter with the total charge. This derives the charge comparison
-for two actual local boundary vectors whose coefficients agree across
+for two local boundary vectors whose coefficients agree across
 a cyclic cut. No all-volume intersection classification is assumed.
 
 Source context: SPWC10, arXiv:0909.5347, Theorem 5, main.tex lines 850--880;
@@ -25,7 +25,7 @@ namespace MPSTensor.ShortMomentum
 def letterPairing (i : Fin 3) (p : ZMod 5 × ZMod 5) : ZMod 5 :=
   (letterCharge i).1 * p.2 - p.1 * (letterCharge i).2
 
-/-- The exact word exponent obeys the same cocycle as the actual matrices. -/
+/-- The exact word exponent obeys the same cocycle as the matrices. -/
 theorem wordPhase_append (u v : List (Fin 3)) :
     wordPhase (u ++ v) = wordPhase u + wordPhase v -
       (wordCharge v).1 * (wordCharge u).2 := by
@@ -43,7 +43,7 @@ theorem wordPhase_append (u v : List (Fin 3)) :
 @[simp] theorem wordPhase_singleton (i : Fin 3) : wordPhase [i] = letterPhase i := by
   simp [wordPhase, wordCharge, countCharge]
 
-/-- Moving the first physical letter to the end produces its actual cyclic phase. -/
+/-- Moving the first physical letter to the end produces its cyclic phase. -/
 theorem wordPhase_cons_sub_snoc (i : Fin 3) (w : List (Fin 3)) :
     wordPhase (i :: w) - wordPhase (w ++ [i]) =
       letterPairing i (wordCharge (i :: w)) := by
@@ -52,7 +52,7 @@ theorem wordPhase_cons_sub_snoc (i : Fin 3) (w : List (Fin 3)) :
   simp only [letterPairing, Prod.fst_add, Prod.snd_add]
   ring
 
-/-- The exact cyclic change of the actual scalar word phase. -/
+/-- The exact cyclic change of the scalar word phase. -/
 theorem rootCharacter_wordPhase_cons {ζ : ℂ} (hζ : ζ ^ 5 = 1)
     (i : Fin 3) (w : List (Fin 3)) :
     rootCharacter ζ (wordPhase (i :: w)) =
@@ -62,8 +62,8 @@ theorem rootCharacter_wordPhase_cons {ζ : ℂ} (hζ : ζ ^ 5 = 1)
   congr 1
   linear_combination wordPhase_cons_sub_snoc i w
 
-/-- Two actual boundary vectors agreeing across a cyclic cut have charge
-coefficients related by the actual cyclic phase, with no comparison premise
+/-- Two boundary vectors agreeing across a cyclic cut have charge
+coefficients related by the cyclic phase, with no comparison premise
 about those coefficients. -/
 theorem exists_charge_comparison_of_cyclic_agreement {ζ : ℂ}
     (hζ : IsPrimitiveRoot ζ 5) {n : ℕ} (f g : NSiteSpace 3 (n + 1))

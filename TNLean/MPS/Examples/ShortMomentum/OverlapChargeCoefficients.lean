@@ -7,11 +7,11 @@ import TNLean.MPS.Examples.ShortMomentum.CyclicPhases
 import TNLean.MPS.ParentHamiltonian.IntersectionProperty
 
 /-!
-# Actual charge coefficients for two overlapping boundary windows
+# Charge coefficients for two overlapping boundary windows
 
-The left and right boundary-space conditions on an actual physical
+The left and right boundary-space conditions on a physical
 vector supply normalized charge functions for each fixed endpoint.
-The normalization uses the actual full-word scalar phase. No endpoint
+The normalization uses the full-word scalar phase. No endpoint
 coefficient agreement or global boundary-space membership is assumed.
 
 Source context: SPWC10, arXiv:0909.5347, Theorem 5, main.tex lines 850--880;
@@ -20,8 +20,8 @@ see `docs/audits/2026-10-29_weyl_short_volume_candidate.md`.
 
 namespace MPSTensor.ShortMomentum
 
-/-- Actual left and right local boundary conditions give charge
-coefficients normalized by the actual full-word phase. The functions may
+/-- Left and right local boundary conditions give charge
+coefficients normalized by the full-word phase. The functions may
 be arbitrary on charges not reached with the fixed endpoint. -/
 theorem exists_overlap_charge_coefficients {ζ : ℂ} (hζ : IsPrimitiveRoot ζ 5)
     {n : ℕ} (ψ : NSiteSpace 3 (n + 2))

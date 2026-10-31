@@ -6,12 +6,12 @@ Authors: TNLean contributors
 import TNLean.MPS.Examples.ShortMomentum.CyclicChargeDetection
 
 /-!
-# Cyclic closure of actual global Weyl boundary spaces
+# Cyclic closure of global Weyl boundary spaces
 
-At every degree at least seven, two actual global boundary vectors
+At every degree at least seven, two global boundary vectors
 agreeing across the cyclic cut must be scalar multiples of the periodic
 trace vector. The coefficient is derived by eliminating every noncentral
-charge with two actual phase-detecting words.
+charge with two phase-detecting words.
 
 This does not assume or prove that overlapping seven-site constraints
 already yield the global boundary space; that remains the outstanding
@@ -22,7 +22,7 @@ see `docs/audits/2026-10-29_weyl_short_volume_candidate.md`.
 
 namespace MPSTensor.ShortMomentum
 
-/-- Actual global boundary vectors with cyclic agreement close to the
+/-- Global boundary vectors with cyclic agreement close to the
 periodic trace line at every degree at least seven. -/
 theorem exists_smul_mpv_of_cyclic_agreement {ζ : ℂ} (hζ : IsPrimitiveRoot ζ 5)
     {n : ℕ} (hn : 6 ≤ n) (f g : NSiteSpace 3 (n + 1))
@@ -53,7 +53,7 @@ theorem exists_smul_mpv_of_cyclic_agreement {ζ : ℂ} (hζ : IsPrimitiveRoot ζ
     ring
   · simp only [hFzero _ hcharge, ite_eq_right hcharge, mul_zero]
 
-/-- One actual global boundary vector whose cyclic reordering is also a
+/-- One global boundary vector whose cyclic reordering is also a
 global boundary vector lies in the periodic trace line. -/
 theorem mem_mpvSubmodule_of_cyclic_local_membership {ζ : ℂ}
     (hζ : IsPrimitiveRoot ζ 5) {n : ℕ} (hn : 6 ≤ n)
