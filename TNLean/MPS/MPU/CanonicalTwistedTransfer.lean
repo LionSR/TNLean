@@ -157,8 +157,7 @@ private theorem trace_signed_unitary_comparison
   have hG : (G : Matrix ι ι ℂ).IsUnitaryBetween :=
     (Matrix.isUnitaryBetween_iff_mem_unitaryGroup _).mpr G.property
   have htrace (M : Matrix ι ι ℂ) : Matrix.trace (A M) = Matrix.trace M := by
-    simp only [A, Unitary.conjStarAlgAut_symm_apply, Unitary.coe_star,
-      Matrix.star_eq_conjTranspose]
+    simp only [A, Unitary.conjStarAlgAut_symm_apply, Matrix.star_eq_conjTranspose]
     rw [Matrix.trace_mul_cycle, hG.2, Matrix.one_mul]
   refine ⟨Matrix.trace (B * E ^ data.exponent), ?_⟩
   intro k hk
