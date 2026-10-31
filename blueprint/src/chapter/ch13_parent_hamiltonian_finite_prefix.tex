@@ -464,13 +464,28 @@
 \end{lemma}
 \begin{proof}
     \notready
-    Normalize the endpoint charge coefficients by the full-word phase.
-    Every actual middle word equates the two endpoint coefficients at
-    its total charge. The charge bridges make these coefficients agree
-    with a single function of that charge.
-    On eight sites, an actual first letter is active because its remaining
-    seven-site word cannot have zero charge. Choose any active endpoint
-    as the reference. On nine sites every endpoint can serve as reference.
-    Multiplying the resulting common charge function by the word phase
-    gives the full boundary-space representation.
+    The endpoint charge coefficients give functions $H_j,K_i$ with
+    \begin{align}
+        \psi(\sigma j) & =q^{\varphi(\sigma j)}H_j(c(\sigma j)), &
+        \psi(i\sigma)  & =q^{\varphi(i\sigma)}K_i(c(i\sigma)).
+        \label{eq:short_weyl_intersection_endpoint_coefficients}
+    \end{align}
+    For a middle word $\mu$ both expressions evaluate $\psi(i\mu j)$ with
+    the same phase, so
+    \begin{align}
+        H_j(c_i+c(\mu)+c_j) & =K_i(c_i+c(\mu)+c_j).
+        \label{eq:short_weyl_intersection_edge}
+    \end{align}
+    These are the allowed edges, and the charge bridges extend the
+    equality to every active pair. On eight sites a first letter $i$ is
+    active: its remaining seven-site word has nonzero charge, so
+    $p\ne c_i$, and likewise for a last letter. Choose an active
+    reference letter $\pi(p)$; on nine sites any letter serves. With
+    $F(p)=H_{\pi(p)}(p)$ every last letter $j$ satisfies
+    $H_j(p)=K_{\pi(p)}(p)=H_{\pi(p)}(p)=F(p)$, hence
+    \begin{align}
+        \psi(w) & =q^{\varphi(w)}F(c(w))
+        \label{eq:short_weyl_intersection_representation}
+    \end{align}
+    for every word $w$. This is the boundary-space representation.
 \end{proof}
