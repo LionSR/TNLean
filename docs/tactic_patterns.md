@@ -85,6 +85,25 @@ abstracted — record why, so it is not re-proposed).
 - **Notes:** The theorem derives the premise from actual canonical data;
   it does not introduce a new admissibility predicate or a witness supplier.
 
+### Faithful bipartite matrix embeddings — promoted (2026-10-29)
+
+- **Pattern:** Convert a left or right Kronecker embedding through ordered
+  bipartite finite-region coordinates and then into the quasi-local algebra.
+  Previously the local-inclusion identity and inverse-equivalence cancellation
+  were written separately for both factors at each use.
+- **Defined in:** `QCA/BipartiteQuasiLocalEmbedding.lean`, the canonical
+  `bipartiteMatrixToQuasiLocalObservable`, its injectivity and left/right
+  evaluation and full-factor range theorems.
+- **Refactored occurrences:** `QCA/SupportAlgebraGeneration.lean`,
+  `QCA/CanonicalAdjacentSupportGeneration.lean`, and the direct shift-image
+  calculations in `QCA/GNVWShift.lean`. The actual finite-image range identity
+  is exposed once as
+  `evenPairLocalImage_map_bipartiteMatrixToQuasiLocalObservable`.
+- **Status:** Source-written helper promotion, with hosted elaboration pending;
+  no local Lean invocation. No new support predicate or alternate local image
+  is introduced.
+
+
 ### Identity site translation — promoted (2026-10-28)
 
 - **Pattern:** Unfold the matrix of a site permutation and rewrite the identity
@@ -5108,6 +5127,17 @@ three-plaquette output measurement, and the routed reunion measurement.
   theorem; no duplicate inverse-construction tactic is introduced.
 
 
+### Exact small indices from their defining sets — candidate (2026-10-29)
+
+- **Pattern:** supply a small admissible positive length, use `Nat.sInf_mem`
+  and `Nat.sInf_le`, exclude any smaller positive length, and finish the
+  resulting natural-number bounds with `omega`.
+- **Seen:** the two concrete index computations `threePauliTensor_qIndex`
+  and `threePauliTensor_iIndex` in `MPS/Examples/PauliWielandt.lean`.
+- **Abstraction:** the existing Mathlib infimum lemmas already do the main
+  work. Two occurrences in one file are below the promotion threshold;
+  no specialized index tactic is introduced.
+
 ### Completing an orthonormal family by its cardinality — candidate (2026-10-29)
 
 - **Pattern:** Use
@@ -10048,6 +10078,26 @@ removed after the dependency audit exposed it.
   threshold. Before extending this pattern to another module, move the value equality
   before the case distinction or reuse `Fin.val_inj`; no new tactic is needed.
 
+### Regional and cyclic slice membership — candidate (2026-10-29)
+
+- **Seen:** The two inclusions in `PEPS/ParentHamiltonian/CycleParentGroundSpace.lean`
+  transport local membership through the existing arc physical equivalence, then
+  rewrite the proved regional-slice/cyclic-restriction identity.
+- **Reuse:** One named slice identity handles both directions. A complementary
+  assignment extends using its own exterior value, avoiding positive-dimension
+  assumptions or separate empty-alphabet proof branches. No new tactic is needed.
+
+### Diagonal boundary matrices select uncle sectors — candidate (2026-10-29)
+
+- **Seen:** `MPS/ParentHamiltonian/UncleGroundSpaceInclusion.lean`, the first and second
+  blocked-sector boundary maps and range inclusions.
+- **Pattern:** A boundary matrix supported on a diagonal virtual block removes every other
+  sector in the trace pairing. Range inclusion follows by supplying that boundary witness.
+- **Reuse:** `Matrix.reindexAlgEquiv`, `Matrix.fromBlocks_multiply`, and QICLean's
+  `Matrix.trace_reindex` perform the matrix algebra. One helper transports either resulting
+  inclusion through physical blocking and the actual orthogonal-complement projector.
+- **Decision:** Two sector cases in one file; no new tactic or parallel ground-space predicate.
+
 ### Equality of two-element tensor families — candidate (2026-10-29)
 
 - **Seen:** `MPS/Examples/AnomalousCondensation/Z2Z2AnomalyClass.lean` and
@@ -10181,6 +10231,19 @@ removed after the dependency audit exposed it.
   Skolem–Noether theorem supplies the square implementer. No entrywise double sum
   or duplicate Skolem–Noether argument is introduced.
 
+
+### Prefix reconstruction by canonical adjoints — candidate (2026-10-29)
+
+- **Seen:** `MPS/ParentHamiltonian/VaryingOBCIntersection.lean` and
+  `MPS/ParentHamiltonian/VaryingOBCReconstruction.lean`.
+- **Pattern:** Match overlapping trace sections using the middle-site spanning
+  condition, then sum against the adjoint first family to construct the enlarged
+  boundary. The first family may be an actual multi-site prefix.
+- **Reuse:** The full-chain induction calls
+  `Matrix.obc_three_site_reconstruction_of_pair_sections`; the actual-prefix
+  normalization calls `Matrix.obc_block_row_isometry`.
+- **Decision:** Existing mathematical lemmas handle the induction; no inverse
+  supplier, square padding, or additional tactic is introduced.
 
 
 ### Rank-one density under scalar multiplication — promoted (2026-10-29)

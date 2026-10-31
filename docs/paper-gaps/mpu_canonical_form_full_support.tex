@@ -975,13 +975,20 @@ Thus both ranks and the index are constant on the interval. This proves a
 special case, not Proposition~IV.5 with its stated hypotheses.
 
 Pointwise existence of reduced representatives and invariance of the index
-under a change of representative do not establish the unrestricted result.
-The remaining step is to construct, at least locally along the path, a
-continuous rank-preserving comparison tensor for the reduced representatives.
-The source uses the weighted tensor $L(x)\mathcal W(x)R(x)$ and invertible
-changes of auxiliary coordinates to identify its two cut ranks with those of
-the reduced canonical tensor. The required continuity and rank comparison
-cannot be inferred from an arbitrary pointwise choice of reductions.
+under a change of representative do not by themselves establish the
+unrestricted result. The source uses the weighted tensor
+$L(x)\mathcal W(x)R(x)$ and invertible changes of auxiliary coordinates to
+identify its two cut ranks with those of the reduced canonical tensor. This
+comparison is now formalized. After blocking $k\geq D^2$ sites, the transfer
+map of the block is $X\mapsto\tr(LX)R$ with explicit positive semidefinite
+$L$ and $R$; the reduced tensor on the range of the reduced projection,
+gauged by a congruence, is in canonical form II and has the source ranks of
+$L\mathcal WR$; and $L\mathcal WR$ is the contraction of the blocked tensor
+with its own transfer matrix, hence continuous in $x$ with no choice of $L$
+or $R$. Proposition~IV.5 is therefore formalized with its stated hypotheses,
+for representatives in canonical form or canonical form II, at the blocking
+length $D^4$ and at every length $k\geq D^2$, together with the constancy of
+the index along the path.
 
 This special case is a second scoped counterpart of
 \texttt{prop:continuity-index}, beside
@@ -1007,8 +1014,8 @@ pointwise from simplicity and the source datum at that point, by the admissible
 simple-tensor equivalence theorem. The continuity of the source data along the
 path is not used. Once that equivalence theorem is formalized, the admissible
 proposition should be proved by the same argument, and its path hypothesis may
-be weakened to a pointwise one. The unrestricted proposition still needs the
-comparison of reduced representatives described above.
+be weakened to a pointwise one. The unrestricted proposition no longer depends
+on either scoped counterpart.
 
 \section{Verdict}
 
@@ -1052,8 +1059,8 @@ transformed comparison tensors, and continuous paths. The representative
 index and its composition additivity do not depend on those transports. For
 the continuity proposition alone, a path already in canonical form II at every
 point has constant source ranks and constant index without any continuity of
-source data; paths that leave canonical form remain open, through the
-admissible and unrestricted entries.
+source data, and the unrestricted proposition, for paths that leave canonical
+form, is now formalized through the reduced comparison tensor.
 Chapter~28 records these requirements as explicit admissibility hypotheses
 rather than consequences of the MPU predicate. They come off in two stages,
 neither singly nor all at once. The converse of the stabilization theorem is
