@@ -1,6 +1,6 @@
 \section{Periodic trace presentations of the common middle family}
 
-\begin{theorem}[A common polynomial family with periodic trace presentations]
+\begin{lemma}[A common polynomial family with periodic trace presentations]
     \label{thm:physical_aeval_periodic_middle_family}
     \lean{TNLean.MPS.AreaLaw.exists_common_physical_aeval_periodic_family_fin}
     \leanok
@@ -11,7 +11,7 @@
     (\ref{eq:physical_polynomial_two_bounds}). Write $\beta=\max(1,B)$.
     One may choose $N\le D^2$ and matrices $W_0,\ldots,W_{N-1}$ on
     $\mathcal C(J)$ with all the properties of
-    Theorem~\ref{thm:physical_aeval_fin_middle_family} and the following
+    Lemma~\ref{thm:physical_aeval_fin_middle_family} and the following
     additional property. For each $r$, there are a nonnegative integer
     $\chi_r\le\beta^k$ and site-dependent matrices
     $T_{r,v}(x,y)\in\C^{\chi_r\times\chi_r}$ such that
@@ -36,14 +36,14 @@
     \end{align}
     where $H$ is given by (\ref{eq:physical_polynomial_hamiltonian}).
     The zero polynomial and zero supplied virtual dimension are allowed.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:physical_aeval_fin_middle_family,thm:trace_chain_closing_absorption}
     Choose the common family and, for each member, its closing matrix and
     tensors from (\ref{eq:physical_polynomial_trace_presentation}).
     The geometric assumptions imply $|J|=(b+\ell+1)-(a+\ell)\ge1$.
     Absorb each closing matrix into the first tensor by
-    Theorem~\ref{thm:trace_chain_closing_absorption}. The virtual dimension
+    Lemma~\ref{thm:trace_chain_closing_absorption}. The virtual dimension
     $\chi_r$ and physical matrix $W_r$ are unchanged. Thus the count, the
     open-boundary estimate and (\ref{eq:physical_periodic_middle_decomposition})
     hold for the same family.

@@ -8,7 +8,7 @@
 \date{2026-08-16}
 \begin{document}
 \maketitle
-\gapnote{scope-restriction}{open}
+\gapnote{scope-restriction}{resolved}
 
 \section{Source statement and derivation of the fixed pair}
 
@@ -200,26 +200,43 @@ Proposition~IV.5 of Ref.~\cite{Cirac2017MPU}. Until both obligations are
 resolved, no formal statement may infer the fixed pair or the absorption
 identities from the bare MPU predicate.
 
+\section{Construction of the supplier}
+
+The supplier is now formalized for every tensor generating an MPU with
+nonzero physical dimension. After blocking $k\geq D^2$ sites, the normalized
+transfer matrix of the block is the stabilized rank-one projector
+$|\rho)(\Phi|$ with $(\Phi|\rho)=1$. For a Kraus family
+$A_1,\dots,A_n$ with such a transfer matrix, the explicit matrices
+\begin{align}
+    R &= \sum_a A_aA_a^\dagger, &
+    L &= (\tr R)^{-1}\sum_a A_a^\dagger A_a
+\end{align}
+are positive semidefinite and give the rank-one formula
+\eqref{eq:mpu_reduced_representative_supplied_fixed_pair_rank_one_transfer}.
+The two absorptions follow without an isometric factorization: $L(I-P)=0$
+makes $\sum_a\bigl(A_a(I-P)\bigr)\bigl(A_a(I-P)\bigr)^\dagger$ vanish, and
+$(I-Q)R=0$ makes $\sum_a\bigl((I-Q)A_a\bigr)\bigl((I-Q)A_a\bigr)^\dagger$
+vanish. The trace normalization
+\eqref{eq:mpu_reduced_representative_supplied_fixed_pair_trace_normalization}
+is not needed for the remaining steps of Proposition~IV.5: the reduced
+tensor on the range of $\widetilde P$ is gauged to canonical form II by a
+congruence $S$ with $S^\dagger S=J^\dagger LJ$ and $SJ^\dagger RJS^\dagger$
+diagonal, and canonical form II then fixes the normalization of its own fixed
+matrix.
+
+The supplied-pair lemmas of this note remain stated with explicit
+hypotheses; they are reusable steps that the constructed supplier
+discharges. Proposition~IV.5 itself is formalized with the source's
+hypothesis set.
+
 \section{Verdict}
 
-\textbf{Verdict: scope restriction.} The paper derives $L,R\succeq0$ with
-$\tr(LR)=1$, the rank-one transfer formula, and the two-sided support
-absorption
-\begin{align}
-    \mathcal WP
-        &=\mathcal W,
-    \label{eq:mpu_reduced_representative_supplied_fixed_pair_verdict_right_absorption}\\
-    Q\mathcal W
-        &=\mathcal W.
-    \label{eq:mpu_reduced_representative_supplied_fixed_pair_verdict_left_absorption}
-\end{align}
-from the MPU property after blocking $D^4$ sites. The current formalization
-takes these ingredients as explicit hypotheses and proves only the subsequent
-reduced-representative conclusions. It does not construct the supplier.
-
-The formal results are correct as stated but have narrower scope than the
-argument in Ref.~\cite{Cirac2017MPU}. Their assumptions become derived
-theorems only after \ghissue{6137} and \ghissue{6022} are resolved.
+\textbf{Verdict: scope restriction, resolved.} The reduced-representative
+lemmas take the positive fixed pair and the support absorptions as
+hypotheses, which is narrower than the argument in
+Ref.~\cite{Cirac2017MPU}. The construction described above derives these
+hypotheses from the MPU property after blocking, so the restriction no longer
+limits any source statement.
 
 \bibliographystyle{alpha}
 \bibliography{references}
