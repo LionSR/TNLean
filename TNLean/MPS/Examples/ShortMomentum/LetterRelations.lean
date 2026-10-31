@@ -7,10 +7,10 @@ import QICLean.Kraus.Blocking
 import TNLean.MPS.Examples.ShortMomentum.WeylWords
 
 /-!
-# Homogeneous relations of the actual fifth-root Weyl letters
+# Homogeneous relations of the fifth-root Weyl letters
 
 The adjacent cyclic commutation and fifth-power transfer relations are
-proved for the actual matrices, without a supplied algebra presentation.
+proved for the matrices, without a supplied algebra presentation.
 Completeness of these relations for all periodic local constraints is
 not asserted. Source context: the finite-prefix question for SPWC10,
 arXiv:0909.5347, Theorem 5, main.tex lines 850--880; see
@@ -22,7 +22,7 @@ namespace MPSTensor.ShortMomentum
 @[simp] theorem rootCharacter_one (ζ : ℂ) : rootCharacter ζ 1 = ζ := by
   rw [rootCharacter, show (1 : ZMod 5).val = 1 from rfl, pow_one]
 
-/-- The commutator phase is the symplectic pairing of the actual charges. -/
+/-- The commutator phase is the symplectic pairing of the charges. -/
 theorem chargedWeyl_commute {ζ : ℂ} (hζ : ζ ^ 5 = 1) (a b c d : ZMod 5) :
     chargedWeyl ζ a b * chargedWeyl ζ c d =
       rootCharacter ζ (a * d - c * b) •
@@ -32,7 +32,7 @@ theorem chargedWeyl_commute {ζ : ℂ} (hζ : ζ ^ 5 = 1) (a b c d : ZMod 5) :
   rw [show a * d - c * b + -a * d = -c * b by ring,
     add_comm c a, add_comm d b]
 
-/-- The actual site matrices obey the charged commutator relation. -/
+/-- The site matrices obey the charged commutator relation. -/
 theorem threeLetterTensor_commute {ζ : ℂ} (hζ : ζ ^ 5 = 1) (i j : Fin 3) :
     threeLetterTensor ζ i * threeLetterTensor ζ j =
       rootCharacter ζ ((letterCharge i).1 * (letterCharge j).2 -
@@ -59,7 +59,7 @@ theorem threeLetterTensor_cyclic_commute {ζ : ℂ} (hζ : ζ ^ 5 = 1) (i : Fin 
     fin_cases i <;> decide
   simpa only [hdet, rootCharacter_one] using threeLetterTensor_commute hζ i (i + 1)
 
-/-- Each actual physical letter has fifth power equal to the identity. -/
+/-- Each physical letter has fifth power equal to the identity. -/
 theorem threeLetterTensor_pow_five {ζ : ℂ} (hζ : ζ ^ 5 = 1) (i : Fin 3) :
     threeLetterTensor ζ i ^ 5 = 1 := by
   have hcharge : wordCharge (List.replicate 5 i) = 0 := by
@@ -72,7 +72,7 @@ theorem threeLetterTensor_pow_five {ζ : ℂ} (hζ : ζ ^ 5 = 1) (i : Fin 3) :
   simp
 
 /-- Replacing five equal physical letters by five copies of any other
-letter preserves the actual matrix word in every left and right context. -/
+letter preserves the matrix word in every left and right context. -/
 theorem evalWord_five_letter_transfer {ζ : ℂ} (hζ : ζ ^ 5 = 1)
     (u v : List (Fin 3)) (i j : Fin 3) :
     Kraus.evalWord (threeLetterTensor ζ) (u ++ List.replicate 5 i ++ v) =
