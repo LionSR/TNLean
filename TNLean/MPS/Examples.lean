@@ -29,6 +29,7 @@ import TNLean.MPS.Examples.ClusterPhysicalStringOrder
 import TNLean.MPS.Examples.ClusterReview
 import TNLean.MPS.Examples.ClusterSPTFixedPoint
 import TNLean.MPS.Examples.ClusterSourceGroundState
+import TNLean.MPS.Examples.CyclicWielandt
 import TNLean.MPS.Examples.EvenParity
 import TNLean.MPS.Examples.Fibonacci
 import TNLean.MPS.Examples.FiniteSetWeakHopf
@@ -74,6 +75,7 @@ import TNLean.MPS.Examples.SpinOne
 import TNLean.MPS.Examples.SpinOperator
 import TNLean.MPS.Examples.StringOrderScalarPhase
 import TNLean.MPS.Examples.WState
+import TNLean.MPS.Examples.WStateBlocking
 import TNLean.MPS.Examples.WStateCanonicalBound
 import TNLean.MPS.Examples.WStatePeriodic
 import TNLean.MPS.Examples.WStatePrimeLengthBound
