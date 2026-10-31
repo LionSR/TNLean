@@ -40,7 +40,7 @@ private theorem transpose_gate_gauges_of_local_phase
       Aᵀ = B * ((Y : Matrix (Fin q) (Fin q) ℂ)ᴴ ⊗ₖ
         (X : Matrix (Fin q) (Fin q) ℂ)ᴴ) := by
   have hcc : c * star c = 1 := Complex.mul_star_self_of_norm_eq_one hc
-  have hcc' : star c * c = 1 := by rw [mul_comm, hcc]
+  have hcc' : star c * c = 1 := Complex.star_mul_self_of_norm_eq_one hc
   let Xbar := (x : Matrix (Fin q) (Fin q) ℂ).map (starRingEnd ℂ)
   have hbar : Xbar.IsUnitaryBetween :=
     ((Matrix.isUnitaryBetween_iff_mem_unitaryGroup _).mpr x.property).map_star

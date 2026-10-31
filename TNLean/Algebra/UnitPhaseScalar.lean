@@ -16,6 +16,7 @@ unitary.
 ## Main results
 
 * `Complex.mul_star_self_of_norm_eq_one`: `c * star c = 1` when `‖c‖ = 1`.
+* `Complex.star_mul_self_of_norm_eq_one`: the mirror identity `star c * c = 1`.
 * `Matrix.IsUnitaryBetween.smul_of_norm_eq_one`: a unit-modulus multiple of a
   rectangular unitary is a rectangular unitary.
 -/
