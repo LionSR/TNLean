@@ -60,17 +60,17 @@ $\mathcal U$ are the flattenings
 If $M_1$ has rank $k_1$ and $M_2$ has rank $k_2$, the source chooses compact
 factorizations and right inverses
 \begin{align}
-    M_1           & =X_1Y_1,          &
-    M_2           & =X_2Y_2,          &
-    Y_1Z_1        & =I_{k_1},         &
-    Y_2Z_2        & =I_{k_2},
+    M_1    & =X_1Y_1,  &
+    M_2    & =X_2Y_2,  &
+    Y_1Z_1 & =I_{k_1}, &
+    Y_2Z_2 & =I_{k_2},
     \label{eq:mpu_standard_form_parity_factors}
 \end{align}
 normalized by $X_1^\dagger(I_d\otimes\rho)X_1=I_{k_1}$ and $X_2^\dagger X_2=I_{k_2}$.
 The gates are the contractions
 \begin{align}
     u_{(l,r),(i_1,i_2)}
-     & =\sum_\beta(Y_2)_{l,(i_1,\beta)}(Y_1)_{r,(\beta,i_2)}, &
+     & =\sum_\beta(Y_2)_{l,(i_1,\beta)}(Y_1)_{r,(\beta,i_2)},    &
     v_{(j_1,j_2),(r,l)}
      & =\sum_\alpha(X_1)_{(j_1,\alpha),r}(X_2)_{(\alpha,j_2),l}.
     \label{eq:mpu_standard_form_parity_gate_formulas}
@@ -142,6 +142,39 @@ formal parity witness records simplicity, equality of the two-site blocks,
 and inequality at length three. The explicit factors and local $x,y,z$
 relations above are the additional mathematical check of the printed local
 antecedent; they are not asserted by block equality alone.
+
+\section{Even lengths in the chirality criterion}
+
+The length convention is also load-bearing in Proposition~Chiral
+\cite[lines~1209--1252]{Cirac2017MPU}. Immediately before that proposition,
+one site of the standard-form tensor contains two original spins. Write
+$W=\mathcal U_2$ for this tensor. Its stated symmetry at even lengths is
+therefore $W^{(2n)}=W^{(2n)\dagger}$, or symmetry of $\mathcal U$ at
+original lengths divisible by four. Requiring instead
+$\mathcal U^{(2n)}=\mathcal U^{(2n)\dagger}$ for every $n$ forces symmetry
+of $W$ at all lengths and is a strictly stronger hypothesis.
+
+Already in physical and bond dimension one, take the scalar tensor
+$\mathcal U=e^{i\pi/4}$. Its standard-form tensor is $W=i$, with unitary
+gates $u=i$ and $v=1$. Then $W^{(2n)}=(-1)^n$ is self-adjoint, while
+$W^{(1)}=i$ is not. The local four-spin equation holds with its negative
+sign, since $v(u\otimes u)=-1=-v^\dagger$. Thus the even-length premise
+must not be silently strengthened to all lengths of $W$.
+
+The distinction can be retained by an unblocked virtual comparison. For
+reduced canonical normal tensors, equality of the even periodic families
+identifies cross-overlap and self-overlap along the unbounded even
+subsequence. The normal-tensor overlap dichotomy therefore supplies an
+invertible gauge and a unit phase $\eta$. The nonzero periodic vector at
+length two forces $\eta^2=1$, and canonical normalization makes the gauge
+unitary without changing $\eta$. Scaling both right source factors by
+$\eta$ scales their two-letter gate by $\eta^2=1$ and leaves the shifted
+gate unchanged. Thus the phase can be retained until it cancels in the
+four-spin comparison. Equality at odd standard-form lengths need not be
+assumed. Another gate-level block would instead produce an eight-original-spin
+equation and would not establish the required four-spin equation.
+The unrestricted source proposition still requires removal of the separate
+presentation restrictions and proof of its converse.
 
 \bibliographystyle{alpha}
 \bibliography{references}

@@ -350,3 +350,56 @@ corrected deficiency and the additional closing window of
     Lemma~\ref{thm:hastings_periodic_physical_log_squared} to these
     constructed terms and the source's local residual condition.
 \end{proof}
+
+\begin{lemma}[The hierarchy for a specified unique ground state]
+    \label{thm:hastings_periodic_unique_ground_hierarchy}
+    \lean{TNLean.MPS.AreaLaw.LocalSolution.exists_periodicPhysicalHierarchy_of_isGappedGroundState}
+    \leanok
+    \uses{thm:hastings_periodic_physical_hierarchy,
+        thm:hastings05_metric_facld,thm:hastings_periodic_physical_log_squared}
+    Fix $R\ge0$, $J>0$ and $\Delta>0$. There are $c_1,\eta>0$ and
+    $C\ge0$, chosen before the chain and its ground-state data, with the
+    following property. Let $H=\sum_iH_i$ on a nonempty periodic chain,
+    with Hermitian terms of norm at most $J$ supported within cyclic
+    distance $R$ of their centres. Suppose that a specified unit vector
+    $\Omega$ satisfies
+    \begin{align*}
+        H\Omega=E_0\Omega,\qquad
+        H\ge E_0I+\Delta(I-|\Omega\rangle\langle\Omega|).
+    \end{align*}
+    Put $J_b=2\max\{J,JC\}$ and choose $\ell$ by the formula in
+    Lemma~\ref{thm:hastings_periodic_physical_hierarchy} with this
+    value of $J_b$. Set $r=\eta\ell$.
+    The actual truncated filters, rounded pair family and spectral
+    windows centred at the expectations in $\Omega$ retain a unit
+    vector $\phi$ satisfying
+    \begin{align*}
+        \|\phi-\Omega\|\le2(3^{h+1}-1)e^{-r/8}.
+    \end{align*}
+    It belongs to every descendant retained space, and the final
+    retained space has dimension at most two. The local residual
+    condition is derived from the original gap.
+\end{lemma}
+\begin{proof}\leanok
+    Start with the localization constants $c_1,\eta_{\rm loc},C$ and
+    set $\eta=\min\{\eta_{\rm loc},c_1\Delta/2\}$. The unique-ground
+    Gaussian estimate and the localization bound give
+    \begin{align*}
+        \|(M_i-\langle\Omega,M_i\Omega\rangle)\Omega\|
+         & \le J e^{-c_1\ell\Delta/2}+JC e^{-\eta_{\rm loc}\ell}
+        \le (J+JC)e^{-r}\le J_b e^{-r}.
+    \end{align*}
+    The same constants bound the localization error and term norms.
+    The constructed-window estimate therefore gives the retained
+    vector. The original ground projection has trace one, so the
+    physical-gap count bounds the retained dimension by two.
+\end{proof}
+
+The filters and pair assignment depend on the interactions and the chosen
+parameters. The spectral-window centres use the specified ground vector.
+The result is a representation theorem for that vector; it does not give
+an algorithm to obtain these centres without ground-state data. The
+general degenerate-ground-space construction remains separate
+\cite{gap:hastings05_two_dim_ground_basis}. The corrected deficiency
+recurrence and periodic closing window are retained
+\cite{gap:hastings05_hierarchical_projection,gap:hastings05_hierarchical_energy}.
