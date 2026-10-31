@@ -45,6 +45,17 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Positive dimensions of canonical blocks — promoted (2026-10-30)
+
+- **Pattern:** `let : NeZero (h.dim k) := ⟨(h.dim_pos k).ne'⟩` before using a
+  canonical block as a tensor of positive bond dimension.
+- **Helper:** the instance `MPSTensor.PGVWC07CanonicalFormData.neZero_dim` in
+  `TNLean/MPS/CanonicalForm/PGVWC07CanonicalForm.lean`.
+- **Occurrences:** two in `WeightedCanonicalSectors.lean` and one in
+  `WeightedCanonicalPhysicalLimit.lean`, all removed.
+- **Decision:** An instance lets typeclass search supply positivity for every
+  block, instead of a local assumption at each use.
+
 ### One-site MPO blocking as physical relabeling — promoted (2026-10-29)
 
 - **Pattern:** Expand one-site blocking into singleton words and identify
@@ -10268,6 +10279,65 @@ removed after the dependency audit exposed it.
   public helper in place of its private repeated finite-region induction.
 - **Validation:** Source-only; hosted Lean checking pending.
 
+### Prime-length periodic reduction shared by ground-state applications — promoted
+- **Pattern:** canonicalize an arbitrary tensor, discard periodic blocks whose
+  periods do not divide the length, derive a common Wielandt injectivity
+  length, group phase-equivalent blocks, and remove zero coefficients.
+- **Seen:** the W-state bound in `MPS/Examples/WStatePrimeLengthBound.lean` and
+  the general ground-state dichotomy in
+  `MPS/ParentHamiltonian/PrimeLengthBondDimensionDichotomy.lean`.
+- **Abstraction:** `exists_normal_blocks_of_no_small_divisor` in
+  `MPS/CanonicalForm/PrimeLengthNormalBlocks.lean` extracts the existing
+  W-state-independent proof and generalizes its physical alphabet. Both
+  applications consume the same actual decomposition and derived bounds.
+
+### Nonzero finite physical state forces a nonempty alphabet — candidate (2026-10-29)
+
+- **Pattern:** at positive chain length, setting the physical dimension to zero
+  makes every physical configuration impossible; extensionality therefore
+  makes the state zero, contradicting nonvanishing.
+- **Occurrences:** the finite cyclic-vector representation in
+  `MPS/Preparation/PeriodicFiniteRepresentation.lean` and the short-prefix
+  dimension bound in `MPS/ParentHamiltonian/FinitePrefixUniformBond.lean`.
+- **Abstraction:** a scalar-function and Hilbert-space nonempty-alphabet helper
+  could centralize this argument when a third occurrence is integrated. The
+  independent OBC canonical-form draft has a related occurrence; consolidate
+  the shared fact when those branches meet.
+- **Decision:** no tactic is needed; an elementary helper theorem is sufficient.
+
+### Positive-length periodic bond padding — promoted mathematical helper (2026-10-29)
+
+- **Pattern:** enlarge every periodic site matrix by unused zero coordinates,
+  preserve the nonempty word by `Matrix.zeroPad_mul`, and reindex the trace.
+- **Abstraction:** `MPSTensor.mpv_padBond` and `mpvState_padBond` in
+  `MPS/Preparation/PeriodicBondPadding.lean` centralize the actual-vector
+  comparison used at both short and long lengths in the uniform-bound proof.
+- **Decision:** the existing matrix-padding multiplication identity suffices;
+  the empty word remains excluded because its trace is the matrix dimension.
+
+
+### A unique virtual path for a bond-one periodic vector — reused helper (2026-10-29)
+
+- **Seen:** `Core/BondOneVector.lean`; the periodic-operator counterpart is
+  `MPDO/BondOneOperator.lean`.
+- **Reuse:** the existing `mpv_eq_prod_of_forced_bond` specializes to the
+  unique virtual configuration; `Finset.prod_ne_zero_iff` proves actual
+  nonvanishing from one nonzero physical letter.
+- **Decision:** reuse the common cyclic contraction helper instead of a new
+  entrywise word induction or a separately supplied finite-volume hypothesis.
+
+### Retain derived source data for a downstream finite-prefix argument — reused extraction (2026-10-29)
+
+- **Pattern:** a prime-length reduction already derives normality and a
+  local-kernel inclusion before projecting to an eventual ground-family theorem.
+- **Abstraction:** `exists_normal_eventual_ground_data_of_prime_length_bound`
+  retains those actual witnesses from the existing single proof;
+  the eventual-only API projects them for the quantitative dichotomy.
+- **Caller:** `exists_uniform_bondOne_ground_family_of_prime_length_bound`
+  derives the retained dimension as one and fills all short volumes.
+- **Decision:** reuse one extraction proof; do not duplicate its canonical
+  reduction or add the derived standing data as hypotheses to the public caller.
+
 ### Weighted geometric sums grouped by their anchors — promoted (2026-10-28)
 
 - **Seen:** `Lattice/LowEnergyCommutatorSum.lean`,
@@ -10291,6 +10361,17 @@ removed after the dependency audit exposed it.
 - **Decision:** Three branch occurrences in one file, below the two-file promotion
   threshold. Before extending this pattern to another module, move the value equality
   before the case distinction or reuse `Fin.val_inj`; no new tactic is needed.
+
+### Uniform periodic norm from transfer eigenvalues — reused trace bound (2026-10-29)
+
+- **Seen:** `MPS/Symmetry/PeriodicMPSNormLowerBound.lean` and
+  `MPS/ParentHamiltonian/WeightedCanonicalPhysicalLimit.lean`.
+- **Pattern:** Express the actual periodic squared norm as the trace of a transfer power,
+  then bound it by matrix-space dimension times a uniform eigenvalue bound.
+- **Reuse:** The existing `norm_trace_pow_le_of_spectrum_norm_le` supplies the trace estimate.
+  The public `norm_mpvState_le_bondDimension_of_unital` specializes it once to positive
+  unital maps and is reused for every canonical block; no new spectral proof or tactic.
+- **Validation:** Source-only; hosted Lean checking is pending.
 
 ### Rectangular reduction of doubled words — promoted (2026-10-29)
 
@@ -10495,6 +10576,17 @@ removed after the dependency audit exposed it.
   or duplicate Skolem–Noether argument is introduced.
 
 
+
+### A common ground vector from disjoint supported spectra (2026-10-29)
+
+- **Seen:** `Circuit/SupportedGroundSpace.lean` and AKLV regional normalization.
+- **Pattern:** Produce regional ground cutoffs by real functional calculus, factor
+  their product trace on disjoint supports, and extract a nonzero common ground column.
+- **Reuse:** Promoted the existing Hastings functional-calculus support theorem to
+  `QuantumCircuit.cfc_mem_supportedOperators`; the Hastings consumer now uses that owner.
+  `exists_normalized_common_ground_of_disjoint` performs normalization once for the
+  actual ground-energy bound consumer. The annihilator equations use three distinct
+  reassociations within one file; no custom tactic is warranted.
 
 
 ### Exact ground preservation from positive order — existing lemma (2026-10-29)
@@ -10750,3 +10842,192 @@ removed after the dependency audit exposed it.
   predicate is introduced.
 - **Translation reuse:** `cyclicRestrictₗ_cyclicTranslateState` is promoted from private
   visibility for this second consumer; the existing proof remains unchanged.
+
+### Dense local image inside a closed commutant — candidate (2026-10-29)
+
+- **Seen:** `QCA/SupportAlgebraGeneration.lean`, the support-family generation
+  theorem and the even-pair-image commutant theorem.
+- **Pattern:** Pull back a closed ambient subset under an automorphism;
+  include the dense algebraic local image; use closure minimality and
+  surjectivity to obtain the global containment.
+- **Reuse:** The new commutant theorem exposes the source's intermediate
+  even-pair argument, avoiding the stronger premise of commutation with
+  each separate support factor.
+- **Decision:** Two proof occurrences in one file; keep the concrete source
+  statements and consolidate the closed-containment argument before a third
+  copy, rather than adding another notion of local generation.
+
+
+### Supplied unitary gate dimension product — promoted (2026-10-29)
+
+- **Pattern:** Apply both cardinal inequalities of a supplied rectangular
+  unitary and simplify the product/finite-index cardinalities to ℓ*r=d*d.
+- **Defined in:** `MPS/MPU/TwoSiteStandardForm.lean`,
+  `TwoSiteStandardFormData.left_mul_right`.
+- **Refactored occurrences:** four-spin unitarity in
+  `SuppliedHalfFactorMinimality.lean`, and both the simplicity and
+  zero-index consequences in `SuppliedFourSpinSourceComparison.lean`.
+- **Notes:** The theorem is at the existing supplied-standard-form owner;
+  no normalization or ambient canonicality premise is introduced.
+
+
+### Commutation after a finite-local star homomorphism — promoted helper (2026-10-29)
+
+- **Seen:** `QCA/SingletonGeneration.lean` and `QCA/SupportIntersection.lean`.
+- **Pattern:** Pull back the target's star centralizer through a star
+  homomorphism, include every finite single-site image, and use the existing
+  finite local generation theorem to obtain whole-region commutation.
+- **Promoted:** `commute_map_localObservable_of_singletons` retains this
+  argument once. The original algebraic-local commutation helper and finite
+  quasi-local support intersection both use it.
+- **Validation:** Independent source/API review; local Lean was not run.
+
+
+### Reading original half-block output coordinates — candidate (2026-10-29)
+
+- **Pattern:** Decode the actual paired physical identification into its two
+  original block words, read the six half-block coordinates through the
+  existing three-pair decoder, and compare the actual middle/outside words
+  with the existing consecutive-window inclusion.
+- **Seen:** `MPS/MPU/TwoSiteFiniteHeisenberg.lean` and
+  `MPS/MPU/TwoSiteMiddleOutput.lean`.
+- **Abstraction:** One private half-block reading lemma serves every middle
+  and exterior case. The two-site decoded-word identity is at the existing
+  physical standard-form owner. The final matrix proof reuses the existing
+  window evaluation and support theorems.
+- **Notes:** The actual middle output is [k,5k) inside its existing 6k-site
+  window; no support conclusion or new factor predicate is a premise.
+### Reuse established interval-coordinate owners across consumers (2026-10-29)
+
+- **Seen:** actual MPU/QCA window and translation consumers, and parent-Hamiltonian
+  observable translation/commutator consumers.
+- **Finding:** Two newly written helpers collided with existing full declaration names;
+  one was a specialization, and the other reversed the two integer parameters.
+- **Repair:** Move the established general window statements unchanged to
+  `ParentHamiltonian/QuasiLocalWindowCoordinates`; move the established translation
+  statement unchanged to `QCA/IntervalTranslation`. Reuse those owners and retain
+  their existing signatures, rather than renaming the duplicates or adding aliases.
+
+### Faithful image coordinates of a star-subalgebra — promoted (2026-10-29)
+
+- **Seen:** the finite support embedding, range-equality coordinates, and
+  actual two-site translation of support factors.
+- **Promotion:** `StarSubalgebra.equivMapOfInjective` and
+  `StarSubalgebra.equivOfEq` retain the corresponding existing Mathlib
+  algebra equivalences and add only preservation of star. Their coercion
+  lemmas evaluate as the original map and unchanged ambient element.
+- **Reuse:** The previous manual finite embedding bijection and the
+  equality-transported range presentation now consume these adapters;
+  the translated even-factor coordinates use them directly.
+- **Notes:** The matrix-specific support-map presentation in the index
+  comparison uses this shared owner; its duplicate private helper is removed.
+
+
+### Fixed exterior contractions of uncle words — reused lemmas (2026-10-29)
+
+- **Seen:** `MPS/ParentHamiltonian/UncleTwoWallTrial.lean`.
+- **Pattern:** Fix exterior words, compose their bilinear product maps with
+  a virtual functional, and represent the result by a trace boundary.
+- **Reuse:** `uncleBoundaryWord_slice_mem` states the common argument once;
+  the upper/lower moving-wall cancellations both use it. Existing matrix
+  trace representation and the actual two-site local-kernel identity supply
+  the remaining steps.
+- **Decision:** One source-specific lemma suffices; no new tactic or predicate.
+
+### Moving-wall finite Gram expansion — candidate (2026-10-29)
+
+- **Pattern:** Split a sum over fixed-length configurations with
+  `Fin.consEquiv`, expand a rectangular wall recurrence, and regroup
+  matrix products before using a unital word sum.
+- **Seen:** The two recurrences in
+  `MPS/ParentHamiltonian/UncleWallGram.lean`.
+- **Abstraction:** The private `sum_ofFn_cons` shares the configuration
+  reindexing. Correlation and Gram recurrences have different cross terms;
+  no additional public tactic is justified by these two occurrences.
+- **Notes:** Keep the finite coefficient identity separate from asymptotic
+  positivity and from estimates for the actual two-wall state.
+
+### Exact increments followed by Cesaro convergence — candidate (2026-10-29)
+
+- **Pattern:** Express an actual finite coefficient as the sum of its
+  derived increments, prove convergence of those increments by continuity,
+  and use `Filter.Tendsto.cesaro_smul` for the coefficient divided by length.
+- **Seen:** `MPS/ParentHamiltonian/UncleWallGramAsymptotics.lean`.
+- **Abstraction:** Existing Mathlib Cesaro convergence already supplies the
+  general analytic step; no new tactic or generic averaging API is needed.
+- **Notes:** Spectral-radius damping supplies summability of the genuine
+  mixed series. A positive limiting slope is a separate mathematical claim.
+
+
+### Numbered trial segments under a local restriction — reused helpers (2026-10-29)
+
+- **Seen:** `MPS/ParentHamiltonian/UncleTrialLocalization.lean`, five physical segments.
+- **Pattern:** A local pair is either inside a numbered segment, splitting it
+  into fixed prefix, variable pair and fixed suffix, or outside the segment,
+  leaving its entire word fixed.
+- **Reuse:** Two shared segment lemmas carry all finite-index arithmetic; the
+  five segment cases reuse the existing wall and pure-parent kernel results.
+  Existing wrapping-site lemmas supply the periodic endpoint evaluations.
+- **Decision:** Keep the coordinate lemmas and direct source partition; no new
+  support predicate or assumed vanishing condition.
+
+
+### Conjugated projector contraction and quadratic form — reused Mathlib (2026-10-29)
+
+- **Seen:** `MPS/ParentHamiltonian/UncleTrialEnergy.lean`.
+- **Pattern:** The actual interaction is an isometric conjugate of a submodule
+  projection; transport norm and inner-product statements through that isometry.
+- **Reuse:** `Submodule.norm_starProjection_apply_le`,
+  `Submodule.re_inner_starProjection_eq_normSq` and the isometry's norm/inner
+  preservation give both claims directly. The endpoint quadratic sum reuses
+  the already-derived global cancellation identity and adjoint-inner identity.
+- **Decision:** No new projection structure or automation; use the library lemmas.
+
+### Nonnegative quadratic coefficient exceptional set — candidate (2026-10-29)
+
+- **Pattern:** Derive the zero set of an actual nonnegative quadratic form
+  as its radical by testing a scalar perturbation. An explicit positive
+  witness makes the radical proper; reuse `addHaar_submodule` for measure
+  zero and the closed-subspace interior theorem for open dense complement.
+- **Seen:** `MPS/ParentHamiltonian/UncleWallGramGeneric.lean`.
+- **Abstraction:** Existing Mathlib quadratic and Haar APIs provide the
+  structures and final measure statement. The private scalar test is
+  shared within this source calculation; no genericity premise is added.
+- **Notes:** This establishes the one-wall coefficient's exceptional set,
+  independently of the unresolved actual two-wall norm factorization.
+
+
+### Removing the unpinned contribution at a wall endpoint — candidate (2026-10-29)
+
+- **Seen:** `MPS/ParentHamiltonian/UncleTrialPinnedWalls.lean`, four endpoint orientations.
+- **Pattern:** Split the actual wall word at its end, decompose the physical
+  vector into pinned and uniform contributions, and use linearity plus the
+  actual pure-sector local-kernel theorem to delete the uniform contribution.
+- **Reuse:** `uncleDomainWallWord_append` supplies the shared word split;
+  `uncleTwoWallCoefficient_rotate` supplies the rectangular rotation, also
+  replacing the repeated rotations in the interior and middle-region proofs.
+- **Decision:** Keep four explicit matrix orientations rather than introducing
+  a parallel wall-state structure. Their coordinate proofs reuse the same
+  inside/outside and endpoint segment lemmas.
+
+
+### Actual five-segment coordinates — reused list lemmas (2026-10-29)
+
+- **Seen:** `MPS/ParentHamiltonian/UncleTwoWallTrial.lean`.
+- **Pattern:** Evaluate a coefficient at nested Fin.append, or compare an
+  explicitly numbered source configuration with its five segment lengths.
+- **Reuse:** `List.ofFn_fin_append`, exact list take/drop rules and one
+  elementwise segment/slice identity give the coefficient comparison. The
+  length cast preserves the actual Euclidean norm by equality elimination.
+- **Decision:** Use these public coordinate identities rather than a parallel
+  configuration structure or a supplied norm-equivalence hypothesis.
+
+### Equality of actual induced actions through a common buffer (2026-10-29)
+
+- **Seen:** `MPS/MPU/QuasiLocalActionChoice.lean`.
+- **Pattern:** Put a local region and both actual source-radius neighbourhoods in one
+  finite chain; compare its physical matrices, then use completion density.
+- **Reuse:** Existing actual finite-evaluation and buffer-existence theorems supply
+  the entire argument; no new compatible-family predicate or source-rank transport.
+  The earlier common-buffer inverse helper has different cancellation hypotheses,
+  so the equality theorem remains a separate mathematical statement.
