@@ -18,7 +18,10 @@ mixed eigenvector would intertwine their adjoint letters, by equality in
 the weighted Schwarz inequality for the block-diagonal channel. Contracting
 that identity with coefficients isolating one block forces the vector to
 vanish. Thus strict mixed damping follows from the source span and canonical
-normalization; it is not an additional spectral assumption.
+normalization; it is not an additional spectral assumption. The
+conclusion is \(r(\mathcal E_{AB})<1\) for the mixed transfer map
+\(\mathcal E_{AB}(X)=\sum_iA_iXB_i^\dagger\), and likewise
+\(r(\mathcal E_{BA})<1\).
 
 This is not a formalization of the source's Lemma offdiagonal-damping
 (lines 1175–1177), which derives the same bound from block injectivity of the

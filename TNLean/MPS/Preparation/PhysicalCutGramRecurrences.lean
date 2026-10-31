@@ -49,9 +49,7 @@ theorem prefixGram_eq_sum_of_extendCutPrefix (hk : k < N)
       intro u _
       apply Finset.sum_congr rfl
       intro i _
-      change star (F' (extendCutPrefix k u i) q) * F' (extendCutPrefix k u i) r = _
-      rw [hstep, hstep]
-      rfl
+      exact congrArg₂ (fun a b ↦ star a * b) (hstep u i q) (hstep u i r)
 
 omit [Fintype ι] in
 /-- The physical suffix extension identity determines the backward Gram
@@ -72,9 +70,7 @@ theorem suffixGram_eq_sum_of_extendCutSuffix (hk : k < N)
       intro i _
       apply Finset.sum_congr rfl
       intro v _
-      change G q (extendCutSuffix k i v) * star (G r (extendCutSuffix k i v)) = _
-      rw [hstep, hstep]
-      rfl
+      exact congrArg₂ (fun a b ↦ a * star b) (hstep i v q) (hstep i v r)
     _ = _ := by
       apply Finset.sum_congr rfl
       intro i _

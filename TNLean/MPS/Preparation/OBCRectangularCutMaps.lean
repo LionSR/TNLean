@@ -89,17 +89,13 @@ theorem exists_rectangular_maps_to_cutBasis {d D N : ℕ}
     by_cases hk : k = Fin.last N
     · subst k
       let : Unique (Fin (B.bondDim (Fin.last N))) := Equiv.unique (finCongr B.right_dim)
-      have hZl : Z (Fin.last N) = Matrix.of fun _ _ ↦ 1 := by simp [Z]
       ext u q
-      rw [hZl]
-      simp only [Matrix.mul_apply, Matrix.of_apply, physicalPrefixMatrix_last, mul_one,
-        Fintype.sum_unique]
-      change B.coeff (finalCutPrefixEquiv d N u) = (C N q).val u
-      rw [hCN, hcoeff]
-      rfl
-    · have hZk : Z k = Z₀ k := by simp [Z, hk]
-      rw [hZk]
-      exact hZ₀ k
+      have hCN' : ∀ q, (C (Fin.last N).val q).val = fullCutVector ψ := hCN
+      simp only [Z, ↓reduceIte, cutPrefixMatrix, hCN']
+      rw [Matrix.mul_apply, Fintype.sum_unique, physicalPrefixMatrix_last, Matrix.of_apply,
+        mul_one]
+      exact congrFun hcoeff (finalCutPrefixEquiv d N u)
+    · simpa only [Z, hk, ↓reduceIte] using hZ₀ k
   choose T hT using fun k : Fin (N + 1) ↦ exists_cutPrefixMatrix_leftInverse ψ C k.val
   let Y : (k : Fin (N + 1)) →
       Matrix (Fin (cutCoefficientRank ψ k.val)) (Fin (B.bondDim k)) ℂ :=
@@ -111,17 +107,13 @@ theorem exists_rectangular_maps_to_cutBasis {d D N : ℕ}
   refine ⟨Y, Z, hYZ, ?_, ?_, ?_⟩
   · intro q r
     have h := congrArg (fun M ↦ M q q) (hT 0)
-    simp only [Matrix.mul_apply, Matrix.one_apply_eq] at h
-    rw [← h]
-    simp only [Y, Matrix.mul_apply]
-    apply Finset.sum_congr rfl
-    intro u _
-    have hp : B.physicalPrefixMatrix 0 u r = 1 := physicalPrefixMatrix_zero B u r
-    rw [hp, mul_one]
-    have hu : cutPrefixMatrix ψ C (0 : Fin (N + 1)).val u q = 1 := congrFun (hC0 q) u
-    rw [hu, mul_one]
+    have h1 : ∀ j, cutPrefixMatrix ψ C ((0 : Fin (N + 1)) : ℕ) j q = 1 :=
+      fun j ↦ cutPrefixMatrix_zero ψ C hC0 j q
+    have h2 : ∀ j, physicalPrefixMatrix B 0 j r = 1 := fun j ↦ physicalPrefixMatrix_zero B j r
+    simp only [Matrix.mul_apply, h1, mul_one, Matrix.one_apply_eq] at h
+    simpa only [Y, Matrix.mul_apply, h2, mul_one] using h
   · intro q r
-    simp [Z]
+    simp only [Z, ↓reduceIte, Matrix.of_apply]
   · intro p i
     have hstep : cutPrefixMatrix ψ C p.val * cutSiteMatrix ψ C p.val i =
         physicalPrefixMatrix B p.castSucc * B.tensor p i * Z p.succ := by
@@ -131,19 +123,18 @@ theorem exists_rectangular_maps_to_cutBasis {d D N : ℕ}
         _ = (physicalPrefixMatrix B p.succ * Z p.succ) (extendCutPrefix p.val u i) q :=
           congrArg (fun M ↦ M (extendCutPrefix p.val u i) q) (hZ p.succ).symm
         _ = _ := by simp only [Matrix.mul_apply, physicalPrefixMatrix_step]
-    have hT' : T p.castSucc * cutPrefixMatrix ψ C p.castSucc.val = 1 := hT p.castSucc
-    have hstep' : cutPrefixMatrix ψ C p.castSucc.val * cutSiteMatrix ψ C p.castSucc.val i =
-        physicalPrefixMatrix B p.castSucc * B.tensor p i * Z p.succ := hstep
+    let Tp : Matrix (Fin (cutCoefficientRank ψ p.val)) (CutPrefixConfig d N p.val) ℂ :=
+      T p.castSucc
+    have hTp : Tp * cutPrefixMatrix ψ C p.val = 1 := hT p.castSucc
     calc
-      cutSiteMatrix ψ C p.val i = cutSiteMatrix ψ C p.castSucc.val i := rfl
-      _ = (T p.castSucc * cutPrefixMatrix ψ C p.castSucc.val) *
-          cutSiteMatrix ψ C p.castSucc.val i := by
-        rw [hT', Matrix.one_mul]
-      _ = T p.castSucc *
-          (cutPrefixMatrix ψ C p.castSucc.val * cutSiteMatrix ψ C p.castSucc.val i) :=
+      cutSiteMatrix ψ C p.val i =
+          (Tp * cutPrefixMatrix ψ C p.val) * cutSiteMatrix ψ C p.val i := by
+        rw [hTp, Matrix.one_mul]
+      _ = Tp * (cutPrefixMatrix ψ C p.val * cutSiteMatrix ψ C p.val i) :=
         Matrix.mul_assoc _ _ _
-      _ = T p.castSucc * (physicalPrefixMatrix B p.castSucc * B.tensor p i * Z p.succ) := by
-        rw [hstep']
-      _ = _ := by simp only [Y, Matrix.mul_assoc]
+      _ = Tp * (show Matrix (CutPrefixConfig d N p.val) (Fin (cutCoefficientRank ψ (p.val + 1))) ℂ
+            from physicalPrefixMatrix B p.castSucc * B.tensor p i * Z p.succ) :=
+        congrArg (fun M ↦ Tp * M) hstep
+      _ = _ := by simp only [Y, Tp, Matrix.mul_assoc]
 
 end OBCChainTensor

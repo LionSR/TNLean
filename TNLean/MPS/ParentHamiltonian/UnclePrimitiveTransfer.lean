@@ -20,7 +20,9 @@ An injective unital block has primitive transfer dynamics. The
 stationary trace functional defines its canonical rank-one projection;
 subtracting that projection leaves spectral radius strictly below one.
 Gelfand's formula then gives quantitative convergence of the
-transfer powers. No convergence or spectral-gap hypothesis is added.
+transfer powers. No convergence or spectral-gap hypothesis is added:
+\(\|\mathcal E_A^n(X)-\operatorname{tr}(\rho X)\,I\|\le Cr^n\|X\|\) with
+\(0<r<1\).
 
 Source: arXiv:1210.6613, Lemma exptransferoperator, lines 1165–1175,
 under the normalized standard form used in the gaplessness argument.
