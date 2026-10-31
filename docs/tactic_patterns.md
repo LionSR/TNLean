@@ -65,7 +65,8 @@ abstracted — record why, so it is not re-proposed).
 - **Helper:** the instance `MPSTensor.PGVWC07CanonicalFormData.neZero_dim` in
   `TNLean/MPS/CanonicalForm/PGVWC07CanonicalForm.lean`.
 - **Occurrences:** two in `WeightedCanonicalSectors.lean` and one in
-  `WeightedCanonicalPhysicalLimit.lean`, all removed.
+  `WeightedCanonicalPhysicalLimit.lean`, all removed; the two local `have`s in
+  `TNLean/MPS/Examples/WStateCanonicalBound.lean` are now redundant.
 - **Decision:** An instance lets typeclass search supply positivity for every
   block, instead of a local assumption at each use.
 
@@ -10909,18 +10910,6 @@ removed after the dependency audit exposed it.
   full-chain reconstruction rather than copying their coordinate proofs.
 - **Decision:** Existing mathematical transport lemmas suffice; no new chain
   record, product recursion, predicate family or tactic is introduced.
-
-### Positive dimensions of canonical blocks — promoted (2026-10-30)
-
-- **Pattern:** `let : NeZero (h.dim k) := ⟨(h.dim_pos k).ne'⟩` before using a
-  canonical block as a tensor of positive bond dimension.
-- **Helper:** the instance `MPSTensor.PGVWC07CanonicalFormData.neZero_dim` in
-  `TNLean/MPS/CanonicalForm/PGVWC07CanonicalForm.lean`.
-- **Occurrences:** two in `WeightedCanonicalSectors.lean` and one in
-  `WeightedCanonicalPhysicalLimit.lean`, all removed; the two local `have`s in
-  `TNLean/MPS/Examples/WStateCanonicalBound.lean` are now redundant.
-- **Decision:** An instance lets typeclass search supply positivity for every
-  block, instead of a local assumption at each use.
 
 ### Specializing a nonnegative Gaussian variance — candidate (2026-10-29)
 
