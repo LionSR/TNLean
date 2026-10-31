@@ -211,7 +211,6 @@ live mathematics. Tracked under [#4529](https://github.com/LionSR/TNLean/issues/
   registers are retained. The evidence and preserved boundaries are in
   `docs/audits/2026-10-29_zero_reference_circuit_helpers.md`. This written
   slice is uncompiled by the user's explicit request; #9881 remains open.
-
 - **Written implementation-helper slice (2026-10-29)**: remove the unused
   `TNLean.Lattice.mem_labelClass_symm` and
   `EncodedFrame.exists_mem_tagSample_of_mem_patchSquares`, minus 14 production
