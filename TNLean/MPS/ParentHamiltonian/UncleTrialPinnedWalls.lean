@@ -159,7 +159,8 @@ theorem uncleInteractionES_pin_lower_right
   simp only [Matrix.mul_assoc] at hfun hkill ⊢
   rw [hfun, map_add, map_add, hkill, add_zero]
 
-private theorem uncleConfigSegment_contiguous_end {T : ℕ}
+/-- A pair crossing the end of a numbered segment varies only its final letter. -/
+theorem uncleConfigSegment_contiguous_end {T : ℕ}
     (τ : Cfg d T) (s n i : ℕ) (hs : s + n ≤ T) (hn : 0 < n)
     (hi : s + n = i + 1) (σ : Cfg d 2) :
     uncleConfigSegment (contiguousCfg i 2 σ τ) s n hs =
@@ -182,7 +183,8 @@ private theorem uncleConfigSegment_contiguous_end {T : ℕ}
     apply congrArg σ
     exact Fin.ext (by change s + (n - 1) - i = 0; omega)
 
-private theorem uncleConfigSegment_contiguous_start {T : ℕ}
+/-- A pair crossing the start of a numbered segment varies only its first letter. -/
+theorem uncleConfigSegment_contiguous_start {T : ℕ}
     (τ : Cfg d T) (s n i : ℕ) (hs : s + n ≤ T) (hn : 0 < n)
     (hi : s = i + 1) (σ : Cfg d 2) :
     uncleConfigSegment (contiguousCfg i 2 σ τ) s n hs =
@@ -490,7 +492,7 @@ theorem uncleInteractionES_trial_eq_pinnedEndpointState
   have h23 : 4 * N - 1 < 5 * N := by omega
   have hcases : i = ⟨N - 1, by omega⟩ ∨ i = ⟨2 * N, by omega⟩ ∨
       i = ⟨4 * N - 1, by omega⟩ ∨ i = ⟨5 * N, by omega⟩ := by
-    simpa only [uncleTrialEndpointBonds, Finset.mem_insert, Finset.mem_singleton] using hi
+    exact (mem_uncleTrialEndpointBonds_iff N hN i).mp hi
   rcases hcases with rfl | rfl | rfl | rfl
   · simpa [uncleTrialPinnedEndpointState] using
       uncleInteractionES_trial_pin_first_endpoint A B R L N hN τ

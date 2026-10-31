@@ -306,6 +306,7 @@ import TNLean.MPS.ParentHamiltonian.UncleBoundaryIntersection
 import TNLean.MPS.ParentHamiltonian.UncleBoundaryProduct
 import TNLean.MPS.ParentHamiltonian.UncleBoundaryTraceClosure
 import TNLean.MPS.ParentHamiltonian.UncleBoundaryWords
+import TNLean.MPS.ParentHamiltonian.UncleEndpointEnergyBound
 import TNLean.MPS.ParentHamiltonian.UncleGroundGram
 import TNLean.MPS.ParentHamiltonian.UncleGroundSpace
 import TNLean.MPS.ParentHamiltonian.UncleGroundSpaceInclusion
@@ -316,6 +317,7 @@ import TNLean.MPS.ParentHamiltonian.UncleNormFactorization
 import TNLean.MPS.ParentHamiltonian.UncleNormGrowth
 import TNLean.MPS.ParentHamiltonian.UncleParentLimit
 import TNLean.MPS.ParentHamiltonian.UnclePeriodicClosure
+import TNLean.MPS.ParentHamiltonian.UnclePinnedTrialNorm
 import TNLean.MPS.ParentHamiltonian.UnclePrimitiveTransfer
 import TNLean.MPS.ParentHamiltonian.UncleTensor
 import TNLean.MPS.ParentHamiltonian.UncleTrialEnergy
