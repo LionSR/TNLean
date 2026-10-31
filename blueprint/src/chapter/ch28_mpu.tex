@@ -9867,11 +9867,122 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     Lemma~\ref{lem:mpu_skew_symmetric_even_card} applied to $U$ shows that $d$ is even.
 \end{proof}
 
+\begin{lemma}[Invariant orthogonal planes]
+    \label{lem:mpu_skew_orthogonal_plane}
+    \lean{LinearIsometry.orthonormal_pair_of_sq_eq_neg,
+        LinearIsometry.apply_pair_eq_standardSkew_sum,
+        LinearIsometry.mapsTo_span_pair_of_sq_eq_neg,
+        LinearIsometry.mapsTo_orthogonal_of_sq_eq_neg,
+        LinearIsometry.restrictInvariantOrthogonal_sq,
+        Matrix.orthogonalLinearIsometry_sq}
+    \leanok
+    \discussion{7581}
+    Let $J$ be a linear isometry of a real inner-product space satisfying
+    $J^2=-\Id$. For every unit vector $v$, the ordered pair $(v,-Jv)$ is
+    orthonormal. Its span and its orthogonal complement are invariant under
+    $J$, and the restriction to the complement also squares to $-\Id$.
+    On that ordered plane the matrix of $J$ is
+    $Y=\left(\begin{smallmatrix}0&1\\-1&0\end{smallmatrix}\right)$.
+    Every real skew-symmetric orthogonal matrix supplies such an isometry.
+\end{lemma}
+\begin{proof}\leanok
+    Isometry and $J^2=-\Id$ give
+    $\langle x,Jy\rangle=-\langle Jx,y\rangle$. Taking $x=y=v$ shows
+    $\langle v,Jv\rangle=0$. The identities $Jv=-(-Jv)$ and
+    $J(-Jv)=v$ give invariance and the displayed orientation. For an invariant
+    subspace $W$, the same skew-adjoint identity gives
+    $\langle w,Jz\rangle=-\langle Jw,z\rangle=0$ for $w\in W$ and
+    $z\in W^\perp$, proving invariance of the complement. Finally,
+    $A^T=-A$ and $AA^T=\Id$ imply $A^2=-\Id$.
+\end{proof}
+
+\begin{lemma}[Sign and indexing of the standard skew form]
+    \label{lem:mpu_standard_skew_indexing}
+    \lean{Matrix.interleavedSkewForm_eq_neg_J_submatrix,
+        Matrix.interleavedSkewFormFin_apply}
+    \leanok
+    \discussion{7581}
+    For a finite index set $I$, identify $(i,0),(i,1)\in I\times\{0,1\}$
+    with $i$ in the first and second copies of $I\sqcup I$. Under this
+    identification $\Id_I\otimes Y$ corresponds to
+    $\left(\begin{smallmatrix}0&\Id_I\\-\Id_I&0\end{smallmatrix}\right)$,
+    the negative of the split matrix
+    $\left(\begin{smallmatrix}0&-\Id_I\\\Id_I&0\end{smallmatrix}\right)$.
+    For $I=\{0,\ldots,m-1\}$ the interleaved enumeration gives the same
+    ordered blocks on $\{0,\ldots,2m-1\}$.
+\end{lemma}
+\begin{proof}\leanok
+    Compare the four choices of the two binary coordinates. The two diagonal
+    blocks vanish, and the off-diagonal blocks are $\Id_I$ and $-\Id_I$
+    in that order. Reindexing preserves these entries.
+\end{proof}
+
+\begin{lemma}[Paired orthonormal basis]
+    \label{lem:mpu_skew_paired_orthonormal_basis}
+    \lean{LinearIsometry.exists_paired_orthonormalBasis}
+    \leanok
+    \discussion{7581}
+    \uses{lem:mpu_skew_orthogonal_plane}
+    Let $E$ be a real inner-product space of dimension $2m$, and let $J$ be
+    a linear isometry with $J^2=-\Id$. There is an orthonormal basis
+    $(e_{i,0},e_{i,1})_{i=0}^{m-1}$ such that
+    $Je_{i,0}=-e_{i,1}$ and $Je_{i,1}=e_{i,0}$.
+\end{lemma}
+\begin{proof}\leanok
+    Induct on $m$. The empty basis covers $m=0$. Otherwise choose a unit
+    vector $v$ and use the ordered orthonormal pair $(v,-Jv)$.
+    Its invariant orthogonal complement has dimension $2m-2$.
+    Append its inductively constructed paired basis to this pair.
+    The resulting orthonormal family has $2m$ members and therefore spans $E$.
+\end{proof}
+
+\begin{lemma}[Real skew-orthogonal normal form]
+    \label{thm:mpu_real_skew_orthogonal_normal_form}
+    \lean{Matrix.toMatrix_paired_orthonormalBasis,
+        Matrix.exists_orthogonal_congruence_interleavedSkewForm}
+    \leanok
+    \discussion{7581}
+    \uses{lem:mpu_skew_paired_orthonormal_basis, lem:mpu_standard_skew_indexing}
+    Let $A\in\operatorname{Mat}_{2m}(\mathbb R)$ be orthogonal with
+    $A^T=-A$. Set $\Sigma_m=\Id_m\otimes Y$, in interleaved order, where
+    $Y=\left(\begin{smallmatrix}0&1\\-1&0\end{smallmatrix}\right)$.
+    There is a real orthogonal matrix $O$ such that
+    $O^T\Sigma_m O=A$.
+    This is the real normal form used in the proof of
+    \cite[Proposition~V.2]{Cirac2017MPU}.
+    % Source lines: paper_v2.tex 1129--1140.
+\end{lemma}
+\begin{proof}\leanok
+    The action of $A$ is an isometry squaring to $-\Id$. In the paired
+    orthonormal basis of Lemma~\ref{lem:mpu_skew_paired_orthonormal_basis},
+    its matrix is $\Sigma_m$. The orthogonal change of coordinates from
+    the original basis to this paired basis gives the displayed congruence.
+\end{proof}
+
+\begin{lemma}[Complex skew-unitary normal form]
+    \label{thm:mpu_complex_skew_unitary_normal_form}
+    \lean{Matrix.exists_unitary_congruence_interleavedSkewForm}
+    \leanok
+    \discussion{7581}
+    \uses{lem:mpu_skew_unitary_congruence, thm:mpu_real_skew_orthogonal_normal_form}
+    Let $x\in\operatorname{Mat}_{2m}(\mathbb C)$ be unitary with $x^T=-x$.
+    There is a unitary matrix $U$ such that $x=U^T\Sigma_m U$.
+    This is the complex normal form used in the proof of
+    \cite[Proposition~V.2]{Cirac2017MPU}.
+    % Source lines: paper_v2.tex 1129--1140.
+\end{lemma}
+\begin{proof}\leanok
+    The skew congruence factorization gives $x=S^T\Lambda S$ with $S$
+    unitary and $\Lambda$ real, skew-symmetric and unitary.
+    The real normal form gives $\Lambda=O^T\Sigma_m O$ with $O$ orthogonal.
+    Regard $O$ as a complex unitary matrix and set $U=OS$.
+\end{proof}
+
 \begin{lemma}[Orthogonal and symplectic standard forms]
     \label{corconj}
     \notready
     \discussion{5713}
-    \uses{prop1conj, lemma:conjclass-normalform-continuous, FundamentalMPU, thm:mpu_skew_unitary_even_dimension}
+    \uses{prop1conj, lemma:conjclass-normalform-continuous, FundamentalMPU, thm:mpu_skew_unitary_even_dimension, thm:mpu_complex_skew_unitary_normal_form}
     Let an MPU in standard form be invariant under complex conjugation. Its
     standard-form unitaries can be chosen in exactly one of the following two
     cases. In Case I,

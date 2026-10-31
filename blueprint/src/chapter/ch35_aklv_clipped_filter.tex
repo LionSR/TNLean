@@ -1,0 +1,118 @@
+\section{The actual clipped Chebyshev filter}
+
+\begin{lemma}[Spatial decomposition and norm of the clipped Hamiltonian]
+    \label{lem:aklv_clipped_hamiltonian_data}
+    \lean{TNLean.MPS.AreaLaw.aklv_clipped_hamiltonian_decomposition,
+        TNLean.MPS.AreaLaw.aklv_clipped_hamiltonian_posSemidef_norm_le}
+    \leanok
+    \uses{def:aklv_normalization_regions,def:aklv_two_block_truncation}
+    Let $s\ge6$, $a+s+1\le L$, and let $0\le h_i\le\Id$ act on
+    $\{i,i+1\}$. Let $e_0,e_1,e_2$ be lower bounds for the three reference
+    Hamiltonians, with $e_1\ge0$, and let $t\ge0$.
+    The actual two-exterior truncation $B$ satisfies
+    \begin{align*}
+        0\le B,\qquad \|B\|\le2t+s.
+    \end{align*}
+    It can be written as
+    \begin{align*}
+        B=H'_L+\sum_{j=0}^{s-3}h_{a+1+j}+H'_R,
+    \end{align*}
+    where $H'_L$ acts on $[0,a+2)$ and $H'_R$ acts on ${[a+s-1,L)}$.
+    This window has width $s-2$ and the same central cut, since
+    \begin{align*}
+        a+1+\left\lfloor\frac{s-2}{2}\right\rfloor
+        =a+\left\lfloor\frac{s}{2}\right\rfloor.
+    \end{align*}
+\end{lemma}
+\begin{proof}
+    \leanok
+    The two clipped exterior sums have ceilings $e_0+t$ and $e_2+t$.
+    The $s-2$ retained bonds have sum at most $(s-2)\Id$.
+    After subtracting $e_0+e_1+e_2$, their sum is at most
+    $(2t+s-2-e_1)\Id\le(2t+s)\Id$.
+    Each centered clipped region is positive because its clipping ceiling
+    is at least its regional lower bound; the connecting bonds are positive.
+    The norm estimate follows. Functional calculus preserves the exterior
+    supports. Placing the scalar shift in the left exterior gives the displayed
+    decomposition of the same operator.
+\end{proof}
+
+\begin{lemma}[A clipped physical filter]
+    \label{thm:aklv_clipped_physical_filter}
+    \lean{TNLean.MPS.AreaLaw.exists_aklv_clipped_chebyshev_filter}
+    \leanok
+    \uses{thm:aklv_physical_robustness,lem:aklv_clipped_hamiltonian_data}
+    Under the physical hypotheses of
+    Lemma~\ref{thm:aklv_physical_robustness}, choose the three actual
+    reference minima and the normalized original ground energy $E_0$.
+    For every
+    \begin{align*}
+        t\ge\frac{1024}{g}\left(\frac{E_0}{g}+1\right),
+    \end{align*}
+    the actual two-exterior truncation $B$ has a unit ground vector $\phi$
+    with energy $E\ge0$, gap at least $9g/10$, and
+    \begin{align*}
+        \|\phi-\Omega\|^2\le e^{-t/16}/100.
+    \end{align*}
+    For each integer $\ell\ge0$ there is a real polynomial $p$ of degree
+    $\ell$, with $p(E)=1$, such that $K=p(B)$ fixes $\phi$ and
+    \begin{align*}
+        \|K-|\phi\rangle\langle\phi|\|
+         & \le A,
+         & A                           & =2\exp\left(-2\ell\sqrt{\frac{9g}{10(2t+s)}}\right), \\
+        \operatorname{OSR}_{a+\lfloor s/2\rfloor}(K)
+         & \le\bigl(q(\ell+1)\bigr)^ {
+                32(\lfloor\ell/s\rfloor+\lfloor\sqrt\ell\rfloor+1)}.
+    \end{align*}
+    Moreover, $K$ preserves $\phi^\perp$ and
+    $\|K\psi\|^2\le A^2$ for every unit $\psi\perp\phi$.
+    The vector $\phi$ and its energy are chosen before $\ell$.
+    This constructs the physical filter used after
+    \cite[Theorem~6.1]{Arad2013AreaLaw}, for the stated window range;
+    it does not assert the later varying-truncation entropy construction.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{thm:aklv_physical_chebyshev_filter}
+    The actual canonical eigenvalues obey a gap of $9g/10$ above the
+    distinguished ground index. Their complete orthonormal basis therefore
+    gives
+    \begin{align*}
+        B-E\Id\ge\frac{9g}{10}
+        (\Id-|\phi\rangle\langle\phi|).
+    \end{align*}
+    The preceding lemma supplies the ceiling $2t+s$ and the shorter supported
+    window at the original central cut. Apply the Chebyshev construction and
+    the sharp polynomial rank estimate to this same matrix. Its exact
+    denominator is $2t+s-E$; replacing it by $2t+s$ weakens the error bound
+    because $E\ge0$. For $s\ge6$, division with remainder gives
+    $\lfloor\ell/(s-2)\rfloor\le2\lfloor\ell/s\rfloor+1$, which
+    gives the displayed exponent. The squared shrinking estimate follows on
+    $\phi^\perp$.
+\end{proof}
+
+\begin{lemma}[The clipped filter above a logarithmic threshold]
+    \label{cor:aklv_logarithmic_clipped_filter}
+    \lean{TNLean.MPS.AreaLaw.exists_aklv_logarithmic_clipped_chebyshev_filter}
+    \leanok
+    \uses{def:aklv_logarithmic_threshold,thm:aklv_clipped_physical_filter}
+    Under the physical hypotheses of
+    Lemma~\ref{thm:aklv_clipped_physical_filter}, one has $q\ge2$ and
+    $g\le1$. The regional minima can be chosen before $t$ so that every
+    conclusion of that theorem holds already for
+    \begin{align*}
+        t\ge T(g)=1024+16\log(1/g).
+    \end{align*}
+    In particular, the actual ground vector, projector gap, spectral ceiling,
+    and same-cut polynomial rank bound require no supplied auxiliary data.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{thm:aklv_logarithmic_robustness,
+        lem:aklv_clipped_hamiltonian_data,thm:aklv_physical_chebyshev_filter}
+    Use the stronger logarithmic robustness theorem to construct the
+    actual ground vector. The norm, spatial decomposition and Chebyshev
+    argument of Lemma~\ref{thm:aklv_clipped_physical_filter} then apply
+    unchanged to the same clipped matrix. The polynomial-threshold
+    version follows from $T(g)\le1024/g$ and $E_0\ge0$.
+\end{proof}
