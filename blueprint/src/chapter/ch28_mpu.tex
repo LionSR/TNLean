@@ -5883,13 +5883,13 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \begin{lemma}[Dimensions of supplied standard-form gates]
     \label{lem:mpu_supplied_gate_dimension_identity}
     \lean{MPOTensor.TwoSiteStandardFormData.left_mul_right}
-    \notready
+    \leanok
     Every supplied standard form of Definition~\ref{def:mpu_supplied_two_site_standard_form}
     satisfies $\ell r=d^2$. This is the dimension identity of its actual
     unitary gate in \cite[Definition~III.9]{Cirac2017MPU}.
 \end{lemma}
 
-\begin{proof}
+\begin{proof}\leanok
     \uses{def:mpu_supplied_two_site_standard_form}
     The isometry and coisometry of $u$ give the two dimension inequalities.
 \end{proof}
@@ -10273,7 +10273,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \begin{lemma}[Supplied four-spin gates and normalized source factorizations]
     \label{lem:mpu_supplied_four_spin_source_comparison}
     \lean{MPOTensor.TwoSiteStandardFormData.isMPUSimple, MPOTensor.TwoSiteStandardFormData.exists_fourSpin_source_gate_gauges, MPOTensor.TwoSiteStandardFormData.exists_fourSpin_selected_source_gate_gauges, MPOTensor.TwoSiteStandardFormData.exists_fourSpin_selected_source_gate_gauges_of_square_ranks}
-    \notready
+    \leanok
     Let $W$ have any supplied two-site standard form with unitary gates
     $u,v$ and positive dimensions. Write
     $A=v_{23}(u_{12}\otimes u_{34})$ and $B=v_{23}$.
@@ -10299,7 +10299,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     uniqueness lemma in \cite{FrancoRubio2025MPUGauging}.
 \end{lemma}
 
-\begin{proof}
+\begin{proof}\leanok
     \uses{lem:mpu_supplied_half_factor_minimality}
     The two supplied cut factorizations have full intermediate rank and
     right inverses. Compare them with the normalized factors by the raw
@@ -10314,7 +10314,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \begin{lemma}[Square intermediate dimensions for any supplied adjoint-symmetric standard form]
     \label{lem:mpu_supplied_standard_form_adjoint_zero_index}
     \lean{MPOTensor.TwoSiteStandardFormData.intermediateRanks_eq_phys_of_even_mpo_eq_adjoint}
-    \notready
+    \leanok
     Let $W$ have any supplied standard form with unitary gates on pairs
     of $d$-dimensional sites and intermediate dimensions $\ell,r>0$.
     Suppose the ambient tensor $W$ is explicitly in reduced canonical
@@ -10324,7 +10324,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \cite[lines~1201--1252]{Cirac2017MPU} in the explicit canonical ambient scope.
 \end{lemma}
 
-\begin{proof}
+\begin{proof}\leanok
     \uses{lem:mpu_supplied_half_factor_minimality}
     The even periodic families of $W$ and its actual adjoint agree.
     Their actual source ranks agree by the sign-sensitive virtual
@@ -10337,7 +10337,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \begin{lemma}[Local time reversal for any supplied standard form in a canonical ambient tensor]
     \label{lem:mpu_supplied_forward_local_time_reversal}
     \lean{MPOTensor.TwoSiteStandardFormData.exists_timeReversal_certificate_of_square_ranks, MPOTensor.TwoSiteStandardFormData.exists_timeReversal_certificate, MPOTensor.TwoSiteStandardFormData.mpo_even_eq_adjoint_of_timeReversal_certificate, MPOTensor.TwoSiteStandardFormData.even_timeReversal_iff_exists_certificate}
-    \notready
+    \leanok
     Let $W$ be explicitly in reduced canonical form II and let $u,v$
     be any supplied standard-form gates on pairs of $d$-dimensional sites.
     Suppose $W^{(N)}=W^{(N)\dagger}$ for every even $N>1$.
@@ -10356,7 +10356,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \cite[lines~1201--1252]{Cirac2017MPU}, not the unrestricted source criterion.
 \end{lemma}
 
-\begin{proof}
+\begin{proof}\leanok
     \uses{lem:mpu_supplied_standard_form_adjoint_zero_index,
         lem:mpu_supplied_four_spin_source_comparison,
         lem:mpu_normalized_source_forward_adjoint_certificate}
@@ -10496,7 +10496,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \begin{lemma}[Forward adjoint certificate for actual normalized source factors]
     \label{lem:mpu_normalized_source_forward_adjoint_certificate}
     \lean{MPOTensor.IsMPUCanonicalFormII.exists_supplied_source_adjoint_certificate, Matrix.reindex_adjoint_certificate}
-    \notready
+    \leanok
     Let $W$ be simple and explicitly in reduced canonical form II, with
     $r(W)=\ell(W)=q$, where $q$ is its physical dimension.
     Take any actual normalized source factorization at its recorded boundary.
@@ -10509,7 +10509,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \cite[lines~1237--1252]{Cirac2017MPU} in the stated canonical scope.
 \end{lemma}
 
-\begin{proof}
+\begin{proof}\leanok
     \uses{lem:mpu_normalized_physical_adjoint_source_factors,
         lem:mpu_even_family_supplied_source_gauges}
     Construct the actual physical-adjoint factors and compare the even
@@ -10681,7 +10681,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \begin{lemma}[Physical transposition of normalized source factors]
     \label{lem:mpu_physical_transpose_source_factors}
     \lean{MPOTensor.physicalTransposeTensor, MPOTensor.physicalTransposeTensor_apply, MPOTensor.physicalTransposeTensor_physicalTransposeTensor, MPOTensor.mpo_physicalTransposeTensor, MPOTensor.source_ranks_physicalTransposeTensor, MPOTensor.IsMPUCanonicalFormII.physicalTransposeTensor, MPOTensor.IsMPUCanonicalFormII.isMPUSimple_physicalTransposeTensor, MPOTensor.IsMPUCanonicalFormII.sourceRanks_eq_phys_of_even_mpo_eq_transpose, MPOTensor.SourceFactors.physicalTranspose, MPOTensor.SourceFactors.sourceU_physicalTranspose, MPOTensor.SourceFactors.sourceV_physicalTranspose, MPOTensor.IsMPUCanonicalFormII.sourceFactors_physicalTranspose_of_even_mpo_eq_transpose}
-    \notready
+    \leanok
     Physical transposition replaces $U^{ij}$ by $U^{ji}$ without reflecting
     its virtual indices. It is an involution, and its periodic operators are
     $(U^{(N)})^T$ at every length. It exchanges the two source ranks and
@@ -10697,7 +10697,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         (\Id_d\otimes\rho)\overline{X_1}),
     \end{align}
     in the canonical exchanged-rank coordinates. Their actual gates are
-    $u'=v^T$ and $v'=u^T$. Moreover, symmetry
+    $u'=v^T$ and $v'=u^T$. Symmetry
     $U^{(N)}=(U^{(N)})^T$ at every even length $N>1$ forces $r=\ell=d$,
     so under this symmetry no square-rank or normalization hypothesis is added
     to the factor construction. These are the physical and factor
@@ -10707,7 +10707,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \cite{gap:mpu_canonical_form_full_support}.
 \end{lemma}
 
-\begin{proof}
+\begin{proof}\leanok
     \uses{lem:mpu_normalized_physical_adjoint_source_factors,
         lem:mpu_even_family_supplied_source_gauges}
     Compose physical adjunction with entrywise conjugation. The real diagonal
@@ -10721,7 +10721,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \begin{lemma}[Forward transposition phase for actual canonical source factors]
     \label{lem:mpu_canonical_source_transposition_phase}
     \lean{MPOTensor.IsMPUCanonicalFormII.exists_source_transposition_phase_certificate, MPOTensor.IsMPUCanonicalFormII.exists_source_transposition_exponential_certificate, MPOTensor.IsMPUCanonicalFormII.exists_local_transposition_certificate, MPOTensor.IsMPUCanonicalFormII.exists_local_transposition_exponential_certificate}
-    \notready
+    \leanok
     Let $U$ be a simple reduced canonical tensor and construct its actual
     standard form $W$ with gates $u,v$. If
     $W^{(N)}=(W^{(N)})^T$ at every even length $N>1$, then $r(U)=\ell(U)=d$.
@@ -10740,7 +10740,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     standard forms, converse and phase deformation remain separate.
 \end{lemma}
 
-\begin{proof}
+\begin{proof}\leanok
     \uses{lem:mpu_physical_transpose_source_factors,
         lem:mpu_even_family_supplied_source_gauges,
         lem:mpu_canonical_forward_local_time_reversal}
@@ -10760,7 +10760,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \begin{lemma}[Even-ring converse for the canonical transposition phase]
     \label{lem:mpu_canonical_even_transposition_iff}
     \lean{MPOTensor.IsMPUCanonicalFormII.mpo_even_eq_transpose_of_source_local_certificate, MPOTensor.IsMPUCanonicalFormII.mpo_standardForm_even_eq_transpose_of_local_certificate, MPOTensor.IsMPUCanonicalFormII.standardForm_even_transposition_iff_exists_local_certificate}
-    \notready
+    \leanok
     Let $U$ be a simple reduced canonical tensor, and construct its actual
     standard form $W$ with gates $u,v$. Then $W^{(N)}=(W^{(N)})^T$ at every
     even length $N>1$ if and only if $r(U)=\ell(U)=d$ and, in the canonical
@@ -10779,7 +10779,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \cite{gap:mpu_canonical_form_full_support}.
 \end{lemma}
 
-\begin{proof}
+\begin{proof}\leanok
     \uses{lem:mpu_canonical_source_transposition_phase,
         lem:mpu_standard_form_from_normalized_source_factors,
         lem:mpu_physical_transpose_source_factors, FundamentalMPU}
@@ -10803,7 +10803,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         MPOTensor.TwoSiteStandardFormData.even_transposition_iff_exists_certificate,
         MPOTensor.TwoSiteStandardFormData.exists_transposition_exponential_certificate,
         Matrix.reindex_transposition_certificate}
-    \notready
+    \leanok
     Let $W$ be explicitly in reduced canonical form II and let $u,v$ be
     any supplied standard-form gates on pairs of $d$-dimensional sites.
     Then $W^{(N)}=W^{(N)T}$ for every even $N>1$ if and only if the
@@ -10822,7 +10822,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     retains the presentation restriction in
     \cite{gap:mpu_canonical_form_full_support}.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     \uses{lem:mpu_supplied_four_spin_source_comparison,
         lem:mpu_canonical_source_transposition_phase,
         lem:mpu_canonical_even_transposition_iff}
@@ -10850,7 +10850,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         MPOTensor.continuous_transpositionPhaseDeformation,
         MPOTensor.transposition_local_phase_deformation,
         MPOTensor.transposition_local_phase_deformation_one}
-    \notready
+    \leanok
     Let $W$ have supplied two-site standard-form gates $u,v$ and half factors
     $X_1,X_2$, and let $\phi\in\mathbb R$. Set
     $\delta_t=e^{-it\phi/2}$, $W_t=\delta_t W$ and $u_t=\delta_t u$.
@@ -10869,7 +10869,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     arguments for a varying family of phases.
 \end{lemma}
 
-\begin{proof}
+\begin{proof}\leanok
     \uses{SF}
     Since $|\delta_t|=1$, multiplying the unshifted gate by $\delta_t$
     preserves its two unitary identities. The open contraction is linear in
@@ -13901,7 +13901,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \begin{lemma}[Actual signed comparison of the twisted transfer]
     \label{lem:mpu_canonical_twisted_transfer_comparison}
     \lean{MPOTensor.IsMPUCanonicalFormII.exists_twistedTransfer_signed_unitary_comparison}
-    \notready
+    \leanok
     \uses{lem:mpu_even_family_virtual_sign_gauge,
         def:mpu_time_reversal_twisted_transfer}
     Let $U$ be a canonical-form-II MPU tensor and suppose that
@@ -13923,7 +13923,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \begin{lemma}[Derived intrinsic phase formula]
     \label{lem:mpu_canonical_intrinsic_blocking_phase_formula}
     \lean{MPOTensor.IsMPUCanonicalFormII.exists_intrinsic_blocking_phase_formula}
-    \notready
+    \leanok
     \uses{lem:mpu_canonical_twisted_transfer_comparison,
         lem:mpu_stabilized_commuting_weighted_trace,
         lem:mpu_intrinsic_blocked_twisted_trace}
@@ -13946,7 +13946,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \label{lem:mpu_canonical_intrinsic_blocking_parity}
     \lean{MPOTensor.IsMPUCanonicalFormII.intrinsic_blocking_trace_eq_of_odd,
         MPOTensor.IsMPUCanonicalFormII.intrinsic_blocking_trace_eq_of_even}
-    \notready
+    \leanok
     \uses{lem:mpu_canonical_intrinsic_blocking_phase_formula}
     Let $U$ be a canonical-form-II MPU tensor with
     $U^{(N)}=U^{(N)\dagger}$ at all even $N>1$. For every $k>0$,
@@ -13970,7 +13970,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \label{lem:mpu_intrinsic_blocked_trace_representative}
     \lean{MPOTensor.intrinsicTimeReversalSign_eq_of_mpo_two_eq,
         MPOTensor.intrinsicTimeReversalSign_blockTensor_eq_of_mpo_eq}
-    \notready
+    \leanok
     Let $U,V$ have the same physical dimension, with possibly different bond
     dimensions. Equality $U^{(2)}=V^{(2)}$ gives
     $\sigma_{\mathrm{int}}(U)=\sigma_{\mathrm{int}}(V)$.
@@ -13986,7 +13986,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \begin{lemma}[Intrinsic time-reversal blocking parity for arbitrary MPUs]
     \label{lem:mpu_intrinsic_blocking_parity}
     \lean{MPOTensor.IsMPU.intrinsic_blocking_trace_parity}
-    \notready
+    \leanok
     \uses{lem:mpu_intrinsic_blocked_trace_representative,
         lem:mpu_canonical_intrinsic_blocking_parity,
         thm:mpu_reduced_cfii_representative}
@@ -14012,7 +14012,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \begin{lemma}[Two-letter contraction from raw source cuts]
     \label{lem:mpu_raw_cut_two_letter_contraction}
     \lean{MPOTensor.mul_apply_eq_sum_of_sourceCut_factorizations}
-    \notready
+    \leanok
     \uses{def:mpu_source_matrix_one, def:mpu_source_matrix_two}
     Suppose the two source cuts of $U$ factor as $M_1=X_1Y_1$ and
     $M_2=X_2Y_2$, with arbitrary finite intermediate spaces. Put
@@ -14033,7 +14033,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \begin{definition}[The printed two-block gates]
     \label{def:mpu_printed_two_block_gates}
     \lean{MPOTensor.twoBlockInputGate, MPOTensor.twoBlockOutputGate}
-    \notready
+    \leanok
     Let $u,v$ be square gates on $\mathbb C^d\otimes\mathbb C^d$.
     Grouping the four physical coordinates in the order $(12,34)$, define
     \[
@@ -14048,7 +14048,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \begin{lemma}[Actual standard form with the printed two-block gates]
     \label{lem:mpu_supplied_printed_two_block_standard_form}
     \lean{MPOTensor.TwoSiteStandardFormData.blockTwo}
-    \notready
+    \leanok
     \uses{def:mpu_printed_two_block_gates,
         lem:mpu_raw_cut_two_letter_contraction,
         lem:mpu_supplied_standard_form_source_cuts,
