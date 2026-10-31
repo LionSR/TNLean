@@ -10,6 +10,7 @@
     $v\in(\ker H'_P)^\perp$ and
     \begin{align}
         \operatorname{Re}\langle H'_Pv,v\rangle<\varepsilon\|v\|^2,
+        \label{eq:uncle_variational_rayleigh}
     \end{align}
     then $H'_P$ has a real eigenvalue $\mu$ with
     $0<\mu<\varepsilon$.
@@ -38,6 +39,7 @@ finite spectral argument of
     \begin{align}
         \operatorname{Re}\langle H'_Pv,v\rangle
         <\varepsilon(\|v\|^2-\|Pv\|^2)
+        \label{eq:uncle_variational_projection_bound}
     \end{align}
     yields an eigenvalue $0<\mu<\varepsilon$ of $H'_P$.
 \end{lemma}
@@ -52,7 +54,6 @@ finite spectral argument of
     \label{lem:uncle_periodic_sector_projection_bound}
     \lean{MPSTensor.norm_mpv_span_projection_sq_le}
     \leanok
-    \uses{def:mpv_state}
     Let $u,v$ be the periodic states of the two blocks at the same
     length. If $\|u\|^2,\|v\|^2\ge1/2$ and
     $|\langle u,v\rangle|\le1/4$, then for every trial vector $\varphi$
@@ -61,6 +62,7 @@ finite spectral argument of
         \|P\varphi\|^2\le
         4\bigl(|\langle u,\varphi\rangle|^2+
         |\langle v,\varphi\rangle|^2\bigr).
+        \label{eq:uncle_variational_two_sector_overlap}
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
