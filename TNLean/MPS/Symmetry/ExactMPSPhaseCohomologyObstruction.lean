@@ -40,7 +40,7 @@ private theorem included_blockTensor_character_covariance
     (χ : G →* ℂ) (hχ : ∀ g, ‖χ g‖ = 1)
     (E : Matrix (Fin m) (Fin (blockPhysDim d k)) ℂ)
     (hE : ∀ g, (U g : Matrix (Fin m) (Fin m) ℂ) * E =
-      E * (χ g • blockKron k (U₀ g)))
+      E * (χ g • blockKron k (U₀ g : Matrix (Fin d) (Fin d) ℂ)))
     {ω : ScalarCocycle G} (ρ : ProjectiveRepresentation (D := D) ω)
     (hρ : ∀ g i, twistedTensor A ((Matrix.unitaryGroup (Fin d) ℂ).subtype.comp U₀) g i =
       (ρ.X (g⁻¹) : Matrix (Fin D) (Fin D) ℂ) * A i *
@@ -54,7 +54,7 @@ private theorem included_blockTensor_character_covariance
   intro g i
   have hχne : χ g ≠ 0 := norm_ne_zero_iff.mp (by rw [hχ]; exact one_ne_zero)
   have hMatrix : ((χ g)⁻¹ • (U g : Matrix (Fin m) (Fin m) ℂ)) * E =
-      E * blockKron k (U₀ g) := by
+      E * blockKron k (U₀ g : Matrix (Fin d) (Fin d) ℂ) := by
     rw [Matrix.smul_mul, hE g, Matrix.mul_smul, smul_smul,
       inv_mul_cancel₀ hχne, one_smul]
   have hBlocked := twistedTensor_blockTensor_eq_gauge
