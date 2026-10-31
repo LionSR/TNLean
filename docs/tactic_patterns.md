@@ -10308,6 +10308,17 @@ removed after the dependency audit exposed it.
 - **Decision:** Record the two occurrences; do not introduce a tactic or an
   import cycle for this small coordinate identity.
 
+
+### Invariant finite cyclic lines — candidate (2026-10-29)
+
+- **Seen:** `MPS/Examples/PVBSPureWindowMatchingVolume.lean`.
+- **Pattern:** Turn an actual one-step eigenvector equation into line invariance,
+  then use `Fin.cyclic_induction` and `cyclicTranslateState_add` for all offsets.
+- **Reuse:** The existing cyclic induction helper handles the finite index;
+  `Submodule.smul_mem` handles arbitrary eigenvector phases.
+- **Decision:** No manual predecessor induction or new translation predicate is
+  introduced. The actual vector phase remains available in the one-step equation.
+
 ### Weighted geometric sums grouped by their anchors — promoted (2026-10-28)
 
 - **Seen:** `Lattice/LowEnergyCommutatorSum.lean`,
