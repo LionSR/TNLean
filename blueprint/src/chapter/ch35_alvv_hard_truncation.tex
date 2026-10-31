@@ -1,0 +1,50 @@
+\section{One regional clipping with an explicit energy separation}
+
+\begin{lemma}[Physical restricted errors for a regional hard truncation]
+    \label{lem:alvv_single_region_residuals}
+    \lean{TNLean.MPS.AreaLaw.ALVV.exists_single_region_hard_truncation_residuals}
+    \leanok
+    \uses{def:chain_model,thm:disjoint_regional_clipping,
+        thm:five_region_original_bond_bounds,thm:consecutive_regional_truncation_low}
+    Let $q\ge1$, let $0\le h_i\le I$ be nearest-neighbour terms on an
+    $L$-site chain, and take $0\le l\le r\le L$.
+    The three intervals ${\lbrack 0,l)}$, ${\lbrack l,r)}$ and ${\lbrack r,L)}$ determine their actual
+    internal sums $A_0,A_1,A_2$. Let $Y$ be the sum of the original bonds
+    crossing at $l$ or $r$, with a coincident bond retained once.
+    There are at most two such bonds, and $\sum_i h_i=\sum_j A_j+Y$.
+
+    There exist genuine regional minimum energies $e_0,e_1,e_2$ and one
+    common unit vector attaining all three. Set $S=\sum_j e_j$ and
+    $H=\sum_i h_i-SI$. Its attained ground energy $E$ belongs to $[0,2]$.
+    For $\eta>0$ and $t\ge\eta+7$, put
+    \begin{align}
+        F   & =\min(A_1,(e_1+t)I)+A_0+A_2+Y-SI,\notag \\
+        \xi & =32e^{-(t-\eta)/8}.\notag
+    \end{align}
+    Then $F\le H$ and the attained ground energy $E'$ of $F$ also belongs
+    to $[0,2]$. Write $T_M(c)$ for the closed spectral space of the actual
+    centered operator $M$ at energies at most $c$. Both errors satisfy
+    \begin{align}
+        \|(H-F)|_{T_H(E+\eta)}\| & \le\xi,       &
+        \|(H-F)|_{T_F(E+\eta)}\| & \le\xi.\notag
+    \end{align}
+    These operators use the same scalar shift, and
+    $H-F=A_1-\min(A_1,(e_1+t)I)$.
+    This is the regional construction of
+    \cite[Definition~4.3 and Proposition~4.4(1)]{Arad2016RigorousRG}
+    with the displayed sufficient cutoff.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:disjoint_regional_clipping,thm:five_region_original_bond_bounds,
+        thm:consecutive_regional_truncation_low}
+    Apply the five-region decomposition with cuts $l,l,r,r$ and remove the
+    two empty regions. The disjoint regional minima give the common test
+    vector. The crossing interaction is positive and bounded by $2I$,
+    giving both relative ground energies in $[0,2]$.
+    Apply the single-region error estimate to the original and middle-clipped
+    families with $s=1/8$, $u=\eta+7$ and $\varepsilon=E+\eta$.
+    The denominator $u-\varepsilon-2|J|$ is at least one, since $E\le2$
+    and $|J|\le2$. The resulting coefficient is at most
+    $32e^{-(t-\eta)/8}$. Reindexing the actual orthonormal eigenbasis
+    identifies its closed spectral span with the canonically ordered one.
+\end{proof}
