@@ -361,7 +361,8 @@ spectral-gap assertion.
 
 \begin{lemma}[Exact kernel at the matching periodic volume]
     \label{lem:pvbs_matching_volume_kernel}
-    \lean{MPSTensor.pvbsPureWindowHamiltonian_apply_pvbsEdge,
+    \lean{MPSTensor.cyclicCfg_full_eq_cyclicTranslateCfg_neg,
+        MPSTensor.pvbsPureWindowHamiltonian_apply_pvbsEdge,
         MPSTensor.ker_pvbsPureWindowHamiltonian_matching_volume,
         MPSTensor.pvbsEdge_ne_zero_matching_volume}
     \notready
@@ -397,7 +398,15 @@ spectral-gap assertion.
 \end{lemma}
 \begin{proof}
     \notready
-    Write $\phi=c\Psi_R(q)$ by the exact kernel identity. If $c\ne0$,
-    translation invariance cancels this scalar and makes $\Psi_R(q)$
-    itself invariant, contradicting its nontrivial one-step phase.
+    Let $T_1$ translate by one site,
+    $(T_1\psi)(\sigma)=\psi(\sigma_1,\ldots,\sigma_{R-1},\sigma_0)$.
+    The exact kernel identity gives $\phi=c\,\Psi_R(q)$ for some
+    $c\in\mathbb C$. If $c\ne0$, then
+    \begin{align}
+        c\,T_1\Psi_R(q) & =T_1\phi=\phi=c\,\Psi_R(q),
+        \label{eq:pvbs_matching_volume_fixed_cancel}
+    \end{align}
+    so $T_1\Psi_R(q)=\Psi_R(q)$. The one-step phase gives
+    $T_1\Psi_R(q)=q^{-1}\Psi_R(q)$, which differs from $\Psi_R(q)$
+    because $q\ne1$ and $\Psi_R(q)\ne0$. Hence $c=0$ and $\phi=0$.
 \end{proof}
