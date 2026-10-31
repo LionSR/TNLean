@@ -10091,6 +10091,15 @@ removed after the dependency audit exposed it.
   threshold. Before extending this pattern to another module, move the value equality
   before the case distinction or reuse `Fin.val_inj`; no new tactic is needed.
 
+### Actual W-vector blocking through the vacuum recurrence — candidate (2026-10-29)
+
+- **Seen:** `MPS/Examples/WStateBlocking.lean`, norm counting and the tensor-power encoding.
+- **Pattern:** Reindex a sum by `Fin.consEquiv`, use `Fintype.sum_prod_type`, and split the
+  physical qubit with `Fin.sum_univ_two`; the existing PVBS recurrence separates the
+  remaining W vector and vacuum. Block flattening uses the existing word concatenation.
+- **Decision:** One file, below the two-file promotion threshold. The private recurrence
+  lemmas retain the shared algebra once; no new tactic or general blocking framework.
+
 ### Exact-length membership in the cyclic example — candidate (2026-10-29)
 
 - **Seen:** Return-block insertion and padded sandwich membership in
@@ -10514,3 +10523,13 @@ removed after the dependency audit exposed it.
   exchanged-leg form serve all four applications. Mathlib's existing
   linear left-inverse and range-dimension APIs supply inverse matrices and
   ranks; no parallel factorization structure or normalization predicate.
+
+### Iterating derived boundary intersections — reused library theorem (2026-10-29)
+
+- **Seen:** `MPS/ParentHamiltonian/UncleGroundSpace.lean`, the actual periodic uncle kernel.
+- **Reuse:** `contiguous_mem_of_restriction_intersection_submodules` iterates the already
+  derived single-wall boundary intersection with local length two. The actual kernel
+  theorem supplies its window conditions; no new induction or assumed intersection
+  predicate is introduced.
+- **Translation reuse:** `cyclicRestrictₗ_cyclicTranslateState` is promoted from private
+  visibility for this second consumer; the existing proof remains unchanged.
