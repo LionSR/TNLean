@@ -9898,12 +9898,16 @@ there is no need for a new tactic.
   mathematical lemma to a lower matrix-analysis module and reuse it; do not duplicate its
   statement or introduce a new tactic.
 
-### Local interaction separation by a joint boundary map — candidate
+### Local interaction separation by a joint boundary map — promoted
 - **Pattern:** compose an arbitrary local interaction with the joint boundary
   map, extend vanishing from a spanning word family using
   `LinearMap.ext_on_range`, and evaluate on `Pi.single` to isolate a block.
-- **Seen:** `MPS/ParentHamiltonian/ArbitraryInteractionBlockDegeneracy.lean`.
-- **Notes:** one occurrence. The implementation reuses Mathlib `LinearMap.lsum`
+- **Seen:** `MPS/ParentHamiltonian/ArbitraryInteractionBlockDegeneracy.lean`
+  and the finite-to-all-volumes consequence in
+  `MPS/ParentHamiltonian/FiniteVolumeConstraintPropagation.lean`.
+- **Abstraction:** `weighted_boundary_eq_zero_of_periodicLocalInteractionES_eq_zero`
+  now supplies both local component annihilation and the whole local-kernel
+  inclusion. The implementation reuses Mathlib `LinearMap.lsum`
   and `lsum_piSingle`; it avoids entrywise expansion of the local interaction.
   Positivity is used separately via QICLean's
   `WeightedPositiveKernel.apply_sum_eq_zero_iff`.
