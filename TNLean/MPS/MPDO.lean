@@ -82,6 +82,7 @@ import TNLean.MPS.MPDO.BoundaryActionComparison
 import TNLean.MPS.MPDO.BoundaryActionCrossFusionEntries
 import TNLean.MPS.MPDO.BoundaryActionCrossTransport
 import TNLean.MPS.MPDO.BoundaryActionLMatrix
+import TNLean.MPS.MPDO.BoundaryActionLMatrixGauge
 import TNLean.MPS.MPDO.BoundaryActionTreeEntries
 import TNLean.MPS.MPDO.BoundaryActionTrees
 import TNLean.MPS.MPDO.BoundaryAdjointClosed
@@ -96,10 +97,12 @@ import TNLean.MPS.MPDO.BoundaryDecompositionCoordinates
 import TNLean.MPS.MPDO.BoundaryDecompositionIntertwining
 import TNLean.MPS.MPDO.BoundaryDecompositionOperations
 import TNLean.MPS.MPDO.BoundaryFusionFMatrix
+import TNLean.MPS.MPDO.BoundaryGroupSpecialization
 import TNLean.MPS.MPDO.BoundaryMultiplicity
 import TNLean.MPS.MPDO.BoundaryRepresentation
 import TNLean.MPS.MPDO.BoundaryRepresentationClosedness
 import TNLean.MPS.MPDO.BoundaryRestriction
+import TNLean.MPS.MPDO.BoundarySingleBlockObstruction
 import TNLean.MPS.MPDO.BoundarySourceDecomposition
 import TNLean.MPS.MPDO.BoundarySourceMixedPentagon
 import TNLean.MPS.MPDO.BoundaryTransport
@@ -142,9 +145,11 @@ import TNLean.MPS.MPDO.CZXDefectMaps
 import TNLean.MPS.MPDO.CZXFusionActionCoordinates
 import TNLean.MPS.MPDO.CZXFusionTensors
 import TNLean.MPS.MPDO.CZXGHZAction
+import TNLean.MPS.MPDO.CZXGaugedMPS
 import TNLean.MPS.MPDO.CZXGaussCircuitTuple
 import TNLean.MPS.MPDO.CZXGaussInvariantSubspace
 import TNLean.MPS.MPDO.CZXMovementCoordinates
+import TNLean.MPS.MPDO.CZXPermutedBlocks
 import TNLean.MPS.MPDO.CZXSecondTupleCertificate
 import TNLean.MPS.MPDO.CZXSourceFactors
 import TNLean.MPS.MPDO.CZXTensor

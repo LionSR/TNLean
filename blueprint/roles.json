@@ -227,7 +227,9 @@
         "thm:spt_classification",
         "thm:has_string_order_of_symmetric_injective",
         "thm:pgwsvc08_physical_string_order",
-        "thm:virtual_rep_injective"
+        "thm:virtual_rep_injective",
+        "thm:spt_exact_ground_physical_class",
+        "thm:spt_exact_phase_injective_classification"
       ],
       "corollaries": [
         "cor:virtual_rep_cocycle"
@@ -236,7 +238,9 @@
         "thm:spt_classification": "Classification of SPT phases along symmetric parent-Hamiltonian paths by the cocycle class",
         "thm:has_string_order_of_symmetric_injective": "Virtual-boundary nondecay for injective symmetric tensors, named in the chapter title",
         "thm:pgwsvc08_physical_string_order": "Physical string-order criterion of Perez-Garcia et al. 2008, named in the chapter title",
-        "thm:virtual_rep_injective": "On-site symmetries of injective tensors induce projective virtual representations, the first result of the opening"
+        "thm:virtual_rep_injective": "On-site symmetries of injective tensors induce projective virtual representations, the first result of the opening",
+        "thm:spt_exact_ground_physical_class": "Physical-gap converse across changes of minimal MPS bond dimension, derived without a supplied transfer bound",
+        "thm:spt_exact_phase_injective_classification": "Phase/cohomology equivalence for one-site injective endpoints with prescribed exact virtual covariance, combining physical forward and converse directions"
       }
     },
     "ch:examples": {
@@ -777,11 +781,18 @@
     },
     "ch:mpo_boundaries": {
       "theorems": [
-        "thm:glm_boundary_reverse"
+        "thm:glm_boundary_reverse",
+        "thm:glm_mixed_gauge_joint",
+        "thm:glm_single_block_obstruction"
       ],
-      "corollaries": [],
+      "corollaries": [
+        "cor:glm_group_specialization",
+        "cor:glm_group_single_block_trivial"
+      ],
       "notes": {
-        "thm:glm_boundary_reverse": "Exact reconstruction of an operator from a boundary map, named in the opening"
+        "thm:glm_boundary_reverse": "Exact reconstruction of an operator from a boundary map, named in the opening",
+        "thm:glm_mixed_gauge_joint": "The L- and F-symbols are determined by the blocks up to the source's gauge equivalence",
+        "thm:glm_single_block_obstruction": "A single injective block without multiplicity forces trivial F-symbols (Garre-Rubio et al., Section 3.2), named in the opening"
       }
     },
     "ch:peps_anyons": {

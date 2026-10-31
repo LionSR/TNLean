@@ -10168,17 +10168,20 @@ removed after the dependency audit exposed it.
   The sign/phase algebra differs under adjunction and transposition; no
   duplicate symmetry-predicate family or new closure axiom is introduced.
 
-### Unit phase scalar multiplication of rectangular gates — candidate (2026-10-29)
+### Unit phase scalar multiplication of rectangular gates — promoted (2026-10-31)
 
 - **Pattern:** Derive `c*star c=1` from unit norm, then pull the two scalars
   out of both gate Gram products.
-- **Seen:** Sign-gauge construction in `TimeReversalLocalSufficiency.lean`,
-  phase-gauge construction in `TranspositionLocalSufficiency.lean`, and
-  actual standard-form scalar deformation in `TranspositionPhaseDeformation.lean`.
-- **Next:** A companion-library rectangular-unitary scalar lemma can replace
-  these after the prerequisite stack is accepted; the current private helper
-  proves both identities once within the deformation module.
-- **Related reuse:** The local scalar path uses the existing actual `mpo_smul`
+- **Promoted:** `Complex.mul_star_self_of_norm_eq_one`,
+  `Complex.star_mul_self_of_norm_eq_one` and
+  `Matrix.IsUnitaryBetween.smul_of_norm_eq_one` in
+  `TNLean/Algebra/UnitPhaseScalar.lean`.
+- **Refactored call sites:** phase-gauge construction in
+  `TranspositionLocalSufficiency.lean`, standard-form scalar deformation in
+  `TranspositionPhaseDeformation.lean`, and the phase alignment in
+  `Algebra/PureStateTraceNorm.lean`. The sign-gauge construction in
+  `TimeReversalLocalSufficiency.lean` uses no complex phase.
+- **Related reuse:** The local scalar path uses the existing `mpo_smul`
   law and `TwoSiteStandardFormData` structure; no new path predicate is added.
 
 ### Kernel vectors in an open unitary contraction — candidate (2026-10-29)
@@ -10991,6 +10994,33 @@ removed after the dependency audit exposed it.
   full-chain reconstruction rather than copying their coordinate proofs.
 - **Decision:** Existing mathematical transport lemmas suffice; no new chain
   record, product recursion, predicate family or tactic is introduced.
+
+### Virtual class of an injective periodic ray — promoted helper (2026-10-29)
+
+- **Seen:** `MPS/Symmetry/PositiveRayVirtualCohomology.lean`,
+  `ExactGroundPathEndpointClass.lean`, and `ExactMPSPhaseCohomologyObstruction.lean`.
+- **Pattern:** Comparing endpoint actions first identifies the injective bond dimension,
+  then reconstructs a scalar bond gauge from the existing two- and three-ring trace data.
+- **Abstraction:** `bondDimension_eq_of_samePositiveMpvRay` and
+  `cohomologousTo_of_samePositiveMpvRay_character_covariance` retain this comparison once.
+  Physical character compatibility is derived by the existing `gauge_phase_unique` theorem.
+- **Reuse:** The endpoint and independent phase theorems call these mathematical helpers;
+  they do not repeat finite-trace reconstruction or a virtual-gauge uniqueness proof.
+- **Validation:** Source-written only; hosted Lean checking remains pending.
+
+### Euclidean matrix action bounds — promoted upstream reuse (2026-10-29)
+
+- **Pattern:** Bound a matrix acting on a Euclidean vector by the product
+  of its operator norm and the vector norm.
+- **Canonical API:** Mathlib `Matrix.l2_opNorm_mulVec`, already imported by
+  the matrix operator-norm interface; its action is definitionally the
+  same as `Matrix.toEuclideanCLM`.
+- **Refactored occurrences:** `Lattice/ObservableCentering.lean`,
+  `Lattice/GaussianGroundFrequencySeparation.lean`, and
+  `Lattice/GaussianConnectedCorrelation.lean` now invoke the existing theorem
+  directly instead of repeating the norm-identification and `le_opNorm` proof.
+- **Related API:** QICLean's `Entropy.norm_toEuclideanLin_le` gives the same
+  bound, but its entropy import is unnecessary for these matrix-only modules.
 
 ### Specializing a nonnegative Gaussian variance — candidate (2026-10-29)
 

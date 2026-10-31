@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.MPU.TranspositionLocalNecessity
 import TNLean.MPS.MPU.SourceFactorsStandardForm
+import TNLean.Algebra.UnitPhaseScalar
 
 /-!
 # Even-ring converse of the local transposition phase equation
@@ -25,6 +26,10 @@ open scoped Matrix Kronecker
 
 namespace MPOTensor
 
+/-- Conversely, a local phase `A = c • (x ⊗ₖ xᵀ) * Bᵀ` with `‖c‖ = 1` gives the two gate
+gauge relations with `X = star x` and `Y = star c • x.map star`. Source: CPSV17, the
+"(if)" case of the proof of `PropChiral`, lines 1230–1237, which
+`prop:local-char-transposition` invokes by analogy at lines 1277–1282. -/
 private theorem transpose_gate_gauges_of_local_phase
     {q : ℕ} (A B : Matrix (Fin q × Fin q) (Fin q × Fin q) ℂ)
     (c : ℂ) (hc : ‖c‖ = 1) (x : Matrix.unitaryGroup (Fin q) ℂ)
@@ -35,11 +40,8 @@ private theorem transpose_gate_gauges_of_local_phase
         (Y : Matrix (Fin q) (Fin q) ℂ)) * A ∧
       Aᵀ = B * ((Y : Matrix (Fin q) (Fin q) ℂ)ᴴ ⊗ₖ
         (X : Matrix (Fin q) (Fin q) ℂ)ᴴ) := by
-  have hcc : c * star c = 1 := by
-    have h := Complex.mul_conj c
-    rw [Complex.normSq_eq_norm_sq, hc] at h
-    simpa only [one_pow, Complex.ofReal_one, starRingEnd_apply] using h
-  have hcc' : star c * c = 1 := by rw [mul_comm, hcc]
+  have hcc : c * star c = 1 := Complex.mul_star_self_of_norm_eq_one hc
+  have hcc' : star c * c = 1 := Complex.star_mul_self_of_norm_eq_one hc
   let Xbar := (x : Matrix (Fin q) (Fin q) ℂ).map (starRingEnd ℂ)
   have hbar : Xbar.IsUnitaryBetween :=
     ((Matrix.isUnitaryBetween_iff_mem_unitaryGroup _).mpr x.property).map_star
