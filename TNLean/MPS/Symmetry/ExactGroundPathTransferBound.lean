@@ -29,7 +29,7 @@ Hastings–Koma, arXiv:math-ph/0507008, Section 3.
 noncomputable section
 
 open Filter
-open scoped Matrix BigOperators ComplexOrder MatrixOrder
+open scoped Matrix BigOperators ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 
 namespace MPSTensor
 
