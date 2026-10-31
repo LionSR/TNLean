@@ -61,6 +61,8 @@ Source: CPSV17, lines 1285–1288. -/
     transpositionPhaseScalar φ 0 = 1 := by
   simp [transpositionPhaseScalar]
 
+/-- A unit-modulus multiple of a unitary between two coordinate spaces is again unitary,
+since `c * star c = 1`. -/
 private theorem unitaryBetween_smul_of_norm_eq_one
     {a b : Type*} [Fintype a] [Fintype b] [DecidableEq a] [DecidableEq b]
     {A : Matrix a b ℂ} (hA : A.IsUnitaryBetween) (c : ℂ) (hc : ‖c‖ = 1) :

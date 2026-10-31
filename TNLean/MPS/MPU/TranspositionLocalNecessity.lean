@@ -29,6 +29,10 @@ open scoped Matrix Kronecker
 
 namespace MPOTensor
 
+/-- Transposing the second gauge relation and cancelling `A` against the first through its
+coisometry leaves a Kronecker product equal to a scalar, which yields a unit-modulus phase
+`c` and a unitary `x` with `A = c • (x ⊗ₖ xᵀ) * Bᵀ`. Source: CPSV17,
+`prop:local-char-transposition`, lines 1266–1288. -/
 private theorem transpose_local_phase_of_gate_gauges
     {q : ℕ} [NeZero q]
     (A B : Matrix (Fin q × Fin q) (Fin q × Fin q) ℂ) (hA : A.IsCoisometry)

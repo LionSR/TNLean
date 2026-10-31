@@ -10530,7 +10530,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \begin{lemma}[Physical transposition of normalized source factors]
     \label{lem:mpu_physical_transpose_source_factors}
     \lean{MPOTensor.physicalTransposeTensor, MPOTensor.physicalTransposeTensor_apply, MPOTensor.physicalTransposeTensor_physicalTransposeTensor, MPOTensor.mpo_physicalTransposeTensor, MPOTensor.source_ranks_physicalTransposeTensor, MPOTensor.IsMPUCanonicalFormII.physicalTransposeTensor, MPOTensor.IsMPUCanonicalFormII.isMPUSimple_physicalTransposeTensor, MPOTensor.IsMPUCanonicalFormII.sourceRanks_eq_phys_of_even_mpo_eq_transpose, MPOTensor.SourceFactors.physicalTranspose, MPOTensor.SourceFactors.sourceU_physicalTranspose, MPOTensor.SourceFactors.sourceV_physicalTranspose, MPOTensor.IsMPUCanonicalFormII.sourceFactors_physicalTranspose_of_even_mpo_eq_transpose}
-    \notready
+    \leanok
     Physical transposition replaces $U^{ij}$ by $U^{ji}$ without reflecting
     its virtual indices. It is an involution, and its periodic operators are
     $(U^{(N)})^T$ at every length. It exchanges the two source ranks and
@@ -10546,7 +10546,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         (\Id_d\otimes\rho)\overline{X_1}),
     \end{align}
     in the canonical exchanged-rank coordinates. Their actual gates are
-    $u'=v^T$ and $v'=u^T$. Moreover, symmetry
+    $u'=v^T$ and $v'=u^T$. Symmetry
     $U^{(N)}=(U^{(N)})^T$ at every even length $N>1$ forces $r=\ell=d$,
     so under this symmetry no square-rank or normalization hypothesis is added
     to the factor construction. These are the physical and factor
@@ -10556,7 +10556,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \cite{gap:mpu_canonical_form_full_support}.
 \end{lemma}
 
-\begin{proof}
+\begin{proof}\leanok
     \uses{lem:mpu_normalized_physical_adjoint_source_factors,
         lem:mpu_even_family_supplied_source_gauges}
     Compose physical adjunction with entrywise conjugation. The real diagonal
@@ -10570,7 +10570,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \begin{lemma}[Forward transposition phase for actual canonical source factors]
     \label{lem:mpu_canonical_source_transposition_phase}
     \lean{MPOTensor.IsMPUCanonicalFormII.exists_source_transposition_phase_certificate, MPOTensor.IsMPUCanonicalFormII.exists_source_transposition_exponential_certificate, MPOTensor.IsMPUCanonicalFormII.exists_local_transposition_certificate, MPOTensor.IsMPUCanonicalFormII.exists_local_transposition_exponential_certificate}
-    \notready
+    \leanok
     Let $U$ be a simple reduced canonical tensor and construct its actual
     standard form $W$ with gates $u,v$. If
     $W^{(N)}=(W^{(N)})^T$ at every even length $N>1$, then $r(U)=\ell(U)=d$.
@@ -10589,7 +10589,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     standard forms, converse and phase deformation remain separate.
 \end{lemma}
 
-\begin{proof}
+\begin{proof}\leanok
     \uses{lem:mpu_physical_transpose_source_factors,
         lem:mpu_even_family_supplied_source_gauges,
         lem:mpu_canonical_forward_local_time_reversal}
@@ -10609,7 +10609,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \begin{lemma}[Even-ring converse for the canonical transposition phase]
     \label{lem:mpu_canonical_even_transposition_iff}
     \lean{MPOTensor.IsMPUCanonicalFormII.mpo_even_eq_transpose_of_source_local_certificate, MPOTensor.IsMPUCanonicalFormII.mpo_standardForm_even_eq_transpose_of_local_certificate, MPOTensor.IsMPUCanonicalFormII.standardForm_even_transposition_iff_exists_local_certificate}
-    \notready
+    \leanok
     Let $U$ be a simple reduced canonical tensor, and construct its actual
     standard form $W$ with gates $u,v$. Then $W^{(N)}=(W^{(N)})^T$ at every
     even length $N>1$ if and only if $r(U)=\ell(U)=d$ and, in the canonical
@@ -10628,7 +10628,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \cite{gap:mpu_canonical_form_full_support}.
 \end{lemma}
 
-\begin{proof}
+\begin{proof}\leanok
     \uses{lem:mpu_canonical_source_transposition_phase,
         lem:mpu_standard_form_from_normalized_source_factors,
         lem:mpu_physical_transpose_source_factors, FundamentalMPU}
@@ -10653,7 +10653,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         MPOTensor.continuous_transpositionPhaseDeformation,
         MPOTensor.transposition_local_phase_deformation,
         MPOTensor.transposition_local_phase_deformation_one}
-    \notready
+    \leanok
     Let $W$ have supplied two-site standard-form gates $u,v$ and half factors
     $X_1,X_2$, and let $\phi\in\mathbb R$. Set
     $\delta_t=e^{-it\phi/2}$, $W_t=\delta_t W$ and $u_t=\delta_t u$.
@@ -10672,7 +10672,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     arguments for a varying family of phases.
 \end{lemma}
 
-\begin{proof}
+\begin{proof}\leanok
     \uses{SF}
     Since $|\delta_t|=1$, multiplying the unshifted gate by $\delta_t$
     preserves its two unitary identities. The open contraction is linear in
