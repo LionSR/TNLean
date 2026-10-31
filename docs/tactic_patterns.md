@@ -9968,6 +9968,17 @@ there is no need for a new tactic.
   threshold. Before extending this pattern to another module, move the value equality
   before the case distinction or reuse `Fin.val_inj`; no new tactic is needed.
 
+### Diagonal boundary matrices select uncle sectors — candidate (2026-10-29)
+
+- **Seen:** `MPS/ParentHamiltonian/UncleGroundSpaceInclusion.lean`, the first and second
+  blocked-sector boundary maps and range inclusions.
+- **Pattern:** A boundary matrix supported on a diagonal virtual block removes every other
+  sector in the trace pairing. Range inclusion follows by supplying that boundary witness.
+- **Reuse:** `Matrix.reindexAlgEquiv`, `Matrix.fromBlocks_multiply`, and QICLean's
+  `Matrix.trace_reindex` perform the matrix algebra. One helper transports either resulting
+  inclusion through physical blocking and the actual orthogonal-complement projector.
+- **Decision:** Two sector cases in one file; no new tactic or parallel ground-space predicate.
+
 ### Equality of two-element tensor families — candidate (2026-10-29)
 
 - **Seen:** `MPS/Examples/AnomalousCondensation/Z2Z2AnomalyClass.lean` and
