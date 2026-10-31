@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.Basic
 import TNLean.MPS.ParentHamiltonian.LocalSupport
+import TNLean.MPS.ParentHamiltonian.CyclicRestrictionNorm
 import TNLean.MPS.ParentHamiltonian.CyclicWindowIndex
 import TNLean.MPS.ParentHamiltonian.Martingale.Transport
 
@@ -287,63 +288,6 @@ private theorem cyclicRestrictₗ_three_extractWindow
   rw [replaceWindow_extractWindow]
 
 /-! ### Transport of three-site quadratic forms -/
-
-/-- Split an \(N\)-site configuration into the cyclic three-site window
-starting at \(i\) and its ordered complement.  The first coordinates occur at
-cyclic offsets \(0,1,2\) from \(i\); the complementary coordinates then occur
-at offsets \(3,4,\ldots,N-1\), in that order. -/
-private def cyclicWindowCfgEquiv {N : ℕ} (hN : 3 ≤ N) (i : Fin N) :
-    Cfg d 3 × Cfg d (N - 3) ≃ Cfg d N :=
-  (Equiv.sumArrowEquivProdArrow (Fin 3) (Fin (N - 3)) (Fin d)).symm.trans
-    (Equiv.piCongrLeft (fun _ : Fin N ↦ Fin d) (cyclicWindowIndexEquiv 3 N hN i))
-
-@[simp] private theorem cyclicWindowCfgEquiv_apply_window {N : ℕ} (hN : 3 ≤ N)
-    (i : Fin N) (σ : Cfg d 3) (τ : Cfg d (N - 3)) (r : Fin 3) :
-    cyclicWindowCfgEquiv hN i (σ, τ) (cyclicForwardSite i r.val) = σ r := by
-  change Equiv.piCongrLeft (fun _ : Fin N ↦ Fin d) (cyclicWindowIndexEquiv 3 N hN i)
-    ((Equiv.sumArrowEquivProdArrow (Fin 3) (Fin (N - 3)) (Fin d)).symm (σ, τ))
-    (cyclicWindowIndexEquiv 3 N hN i (Sum.inl r)) = σ r
-  rw [Equiv.piCongrLeft_apply_apply]
-  rfl
-
-private theorem cyclicCfg_cyclicWindowCfgEquiv {N : ℕ} (hN : 3 ≤ N) [NeZero d]
-    (i : Fin N) (σ : Cfg d 3) (τ : Cfg d (N - 3)) :
-    cyclicCfg (by omega) 3 i σ (cyclicWindowCfgEquiv hN i ((fun _ ↦ 0), τ)) =
-      cyclicWindowCfgEquiv hN i (σ, τ) := by
-  funext k
-  simp only [cyclicCfg]
-  by_cases hk : (k.val + N - i.val) % N < 3
-  · rw [dite_eq_left hk]
-    let r : Fin 3 := ⟨(k.val + N - i.val) % N, hk⟩
-    have hki : k = cyclicForwardSite i r.val := by
-      simpa [cyclicForwardSite, r] using
-        eq_cyclic_site_of_offset_eq (Fin.pos i) (i := i) (k := k) (r := r.val) rfl
-    have hleft : σ ⟨(k.val + N - i.val) % N, hk⟩ = σ r := rfl
-    rw [hleft]
-    rw [hki]
-    exact cyclicWindowCfgEquiv_apply_window hN i σ τ r |>.symm
-  · rw [dite_eq_right hk]
-    let x := (cyclicWindowIndexEquiv 3 N hN i).symm k
-    have hkx : cyclicWindowIndexEquiv 3 N hN i x = k := by simp [x]
-    rcases x with r | r
-    · exfalso
-      apply hk
-      rw [← hkx]
-      change ((cyclicForwardSite i r.val).val + N - i.val) % N < 3
-      rw [show ((cyclicForwardSite i r.val).val + N - i.val) % N = r.val by
-        simpa [cyclicForwardSite] using
-          offset_mod_eq i.isLt (Nat.lt_of_lt_of_le r.isLt hN)]
-      exact r.isLt
-    · change Equiv.piCongrLeft (fun _ : Fin N ↦ Fin d)
-          (cyclicWindowIndexEquiv 3 N hN i)
-          ((Equiv.sumArrowEquivProdArrow (Fin 3) (Fin (N - 3)) (Fin d)).symm
-            (fun _ ↦ 0, τ)) k =
-        Equiv.piCongrLeft (fun _ : Fin N ↦ Fin d)
-          (cyclicWindowIndexEquiv 3 N hN i)
-          ((Equiv.sumArrowEquivProdArrow (Fin 3) (Fin (N - 3)) (Fin d)).symm
-            (σ, τ)) k
-      rw [← hkx, Equiv.piCongrLeft_apply_apply, Equiv.piCongrLeft_apply_apply]
-      rfl
 
 private theorem re_inner_eq_sum_cyclicRestrict_three {N : ℕ} (hN : 3 ≤ N)
     [NeZero d] (i : Fin N) (u v : EuclideanSpace ℂ (Cfg d N)) :
