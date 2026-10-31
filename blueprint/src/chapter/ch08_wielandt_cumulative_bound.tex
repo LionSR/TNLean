@@ -1020,3 +1020,132 @@ case are proved in Section~\ref{sec:app_wielandt_blocking_support}.
     on the injectivity length. For the Fundamental Theorem of MPS, the
     qualitative assertion that $S_N(A)=\MN{D}$ for some finite $N$ suffices.
 \end{remark}
+
+\subsection{The cyclic lower-bound example}
+
+\begin{definition}[Cyclic shift and jump family]
+    \label{def:cyclic_wielandt_family}
+    \lean{MPSTensor.CyclicWielandt.shift, MPSTensor.CyclicWielandt.jump,
+        MPSTensor.CyclicWielandt.tensor,
+        MPSTensor.CyclicWielandt.tensor_zero, MPSTensor.CyclicWielandt.tensor_one}
+    \leanok
+    For $D\ge2$, let $S=\sum_{i=0}^{D-1}\ketbra{i+1}{i}$, with indices
+    modulo $D$, and $R=\ketbra{1}{D-1}$. The family $A=\{S,R\}$ is the
+    cyclic example following the main theorem in~\cite{Sanz2010Quantum}.
+\end{definition}
+
+\begin{lemma}[Cyclic matrix identities]
+    \label{thm:cyclic_wielandt_identities}
+    \lean{MPSTensor.CyclicWielandt.shift_mul_apply,
+        MPSTensor.CyclicWielandt.shift_pow_apply,
+        MPSTensor.CyclicWielandt.shift_pow_dim,
+        MPSTensor.CyclicWielandt.shift_pow_mul_dim,
+        MPSTensor.CyclicWielandt.shift_pow_mod,
+        MPSTensor.CyclicWielandt.shift_isUnit,
+        MPSTensor.CyclicWielandt.shift_pow_mul_single,
+        MPSTensor.CyclicWielandt.single_mul_shift_pow,
+        MPSTensor.CyclicWielandt.sandwich_eq_single,
+        MPSTensor.CyclicWielandt.return_coordinate_iff,
+        MPSTensor.CyclicWielandt.one_add_last,
+        MPSTensor.CyclicWielandt.jump_shift_pow_jump,
+        MPSTensor.CyclicWielandt.jump_return}
+    \leanok
+    \uses{def:cyclic_wielandt_family}
+    The shift satisfies $S^D=I$ and is invertible. For $0\le k<D$,
+    $RS^kR=R$ if $k=D-2$ and $RS^kR=0$ otherwise. For all $k,l\ge0$,
+    $S^kRS^l=\ketbra{1+k}{D-1-l}$, with coordinates modulo $D$.
+\end{lemma}
+
+\begin{proof}\leanok
+    The entries of $S^n$ are $\delta_{i,j+n}$. Multiplication by a
+    matrix unit then gives the two sandwich identities.
+\end{proof}
+
+\begin{lemma}[Exact cyclic word normal form]
+    \label{thm:cyclic_wielandt_word_normal_form}
+    \lean{MPSTensor.CyclicWielandt.evalWord_normalForm}
+    \leanok
+    \uses{def:cyclic_wielandt_family}
+    Every word of length $L$ evaluates to zero, to $S^L$, or to
+    $S^kRS^l$ for some $0\le k,l<D$ and $n,m\ge0$ satisfying
+    $L=1+k+l+n(D-1)+mD$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:cyclic_wielandt_identities}
+    Induct by prepending a letter. Prepending $S$ increments $k$,
+    carrying a full turn into $m$. Prepending $R$ to a shifted jump
+    survives precisely when $k=D-2$, resets $k$ to zero, and increases
+    $n$ by one. Prepending $R$ to a pure shift reduces its exponent
+    modulo $D$.
+\end{proof}
+
+\begin{lemma}[Full span at the cyclic length]
+    \label{thm:cyclic_wielandt_full_span}
+    \lean{MPSTensor.CyclicWielandt.jump_mem_wordSpan,
+        MPSTensor.CyclicWielandt.sandwich_mem_wordSpan,
+        MPSTensor.CyclicWielandt.exists_full_length_padding,
+        MPSTensor.CyclicWielandt.wordSpan_full_length}
+    \leanok
+    \uses{def:cyclic_wielandt_family, def:word_span}
+    At $N=D(D-1)$, the cyclic family satisfies $S_N(A)=\MN{D}$.
+    The omitted diagonal-unit step in the source proof is supplied as
+    recorded in~\cite{gap:spwc10_cyclic_missing_diagonal}.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:cyclic_wielandt_identities}
+    Return blocks give $R\in S_{1+n(D-1)}(A)$ and full turns give
+    $I\in S_{mD}(A)$. For $s=k+l\le D-2$, choose $n=s+1$ and
+    $m=D-s-2$. For $D-1\le s\le2D-3$, choose $n=s+1-D$ and
+    $m=2D-s-3$. Thus every matrix unit except $\ketbra{0}{0}$ belongs
+    to $S_N(A)$. Since $S^N=I$, subtraction of the other diagonal units
+    gives $\ketbra{0}{0}\in S_N(A)$.
+\end{proof}
+
+\begin{lemma}[The predecessor entry obstruction]
+    \label{thm:cyclic_wielandt_predecessor}
+    \lean{MPSTensor.CyclicWielandt.evalWord_pred_entries_eq,
+        MPSTensor.CyclicWielandt.wordSpan_pred_entries_eq,
+        MPSTensor.CyclicWielandt.wordSpan_pred_ne_top}
+    \leanok
+    \uses{def:cyclic_wielandt_family, def:word_span}
+    Every $X\in S_{D(D-1)-1}(A)$ satisfies $X_{D-1,0}=X_{0,1}$.
+    Consequently $S_{D(D-1)-1}(A)\ne\MN{D}$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:cyclic_wielandt_word_normal_form,
+        thm:cyclic_wielandt_identities}
+    A shifted-jump word having a nonzero entry at either position
+    requires $k+l=2D-3$. Its length constraint would give
+    $D(D-1)=(n+m+2)(D-1)+m+1$, which forces $m+1<D-1$ and
+    $n+m+2<D$ and is therefore impossible. Such words vanish at both
+    positions; pure shifts have equal entries there. The equality
+    persists under linear combinations, whereas $\ketbra{D-1}{0}$
+    violates it.
+\end{proof}
+
+\begin{lemma}[Exact index of the cyclic example]
+    \label{thm:cyclic_wielandt_index}
+    \lean{MPSTensor.CyclicWielandt.isNormal,
+        MPSTensor.CyclicWielandt.isPrimitivePaper,
+        MPSTensor.CyclicWielandt.iIndex_eq,
+        MPSTensor.CyclicWielandt.classical_bound_lt_iIndex}
+    \leanok
+    \uses{def:cyclic_wielandt_family, def:wielandt_i_index,
+        def:paper_primitive, def:normal}
+    The cyclic family is normal and primitive, and
+    $\iota(A)=D(D-1)$. For $D>2$, this exceeds the classical
+    Wielandt exponent $D^2-2D+2$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:cyclic_wielandt_full_span,
+        thm:cyclic_wielandt_predecessor, thm:cyclic_wielandt_identities,
+        thm:normal_irreducible_tensor}
+    Full span holds at $D(D-1)$ and fails at its predecessor. Since
+    $S$ is invertible, fullness at any earlier length would persist
+    to the predecessor length, a contradiction. The index difference
+    from the classical exponent is $D-2$.
+\end{proof}
