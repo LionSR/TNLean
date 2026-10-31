@@ -17,5 +17,7 @@ import TNLean.MPS.Examples.ShortMomentum.LocalSpace
 import TNLean.MPS.Examples.ShortMomentum.LongIntersection
 import TNLean.MPS.Examples.ShortMomentum.OverlapChargeCoefficients
 import TNLean.MPS.Examples.ShortMomentum.SevenCyclicObstruction
+import TNLean.MPS.Examples.ShortMomentum.ShortIntersections
+import TNLean.MPS.Examples.ShortMomentum.ShortOverlapBridges
 import TNLean.MPS.Examples.ShortMomentum.WeylSpans
 import TNLean.MPS.Examples.ShortMomentum.WeylWords

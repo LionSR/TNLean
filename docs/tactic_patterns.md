@@ -10320,6 +10320,19 @@ removed after the dependency audit exposed it.
   `Matrix.reindexLinearEquiv_mul` with all three equivalences explicit,
   together with `Matrix.conjTranspose_reindex`; no new reindex algebra is built.
 
+### Endpoint charge functions on a short overlap — reused normalized coefficients (2026-10-29)
+
+- **Seen:** `MPS/Examples/ShortMomentum/ShortIntersections.lean`, for the
+  eight- and nine-site intersections.
+- **Pattern:** Derive normalized endpoint charge functions from actual local
+  boundary restrictions, choose an actual middle word, and cancel its common
+  nonzero scalar character to equate the endpoint values.
+- **Reuse:** `exists_overlap_charge_coefficients` owns normalization;
+  `overlap_charge_edge` owns cancellation for both lengths. The finite bridge
+  lemmas give the three equality steps, with inactive vertices excluded only
+  where the seven-site complement cannot exist.
+- **Decision:** Mathematical lemmas suffice; no graph record or new tactic.
+
 ### Weighted geometric sums grouped by their anchors — promoted (2026-10-28)
 
 - **Seen:** `Lattice/LowEnergyCommutatorSum.lean`,
