@@ -10094,6 +10094,30 @@ removed after the dependency audit exposed it.
   W-state-independent proof and generalizes its physical alphabet. Both
   applications consume the same actual decomposition and derived bounds.
 
+### Nonzero finite physical state forces a nonempty alphabet — candidate (2026-10-29)
+
+- **Pattern:** at positive chain length, setting the physical dimension to zero
+  makes every physical configuration impossible; extensionality therefore
+  makes the state zero, contradicting nonvanishing.
+- **Occurrences:** the finite cyclic-vector representation in
+  `MPS/Preparation/PeriodicFiniteRepresentation.lean` and the short-prefix
+  dimension bound in `MPS/ParentHamiltonian/FinitePrefixUniformBond.lean`.
+- **Abstraction:** a scalar-function and Hilbert-space nonempty-alphabet helper
+  could centralize this argument when a third occurrence is integrated. The
+  independent OBC canonical-form draft has a related occurrence; consolidate
+  the shared fact when those branches meet.
+- **Decision:** no tactic is needed; an elementary helper theorem is sufficient.
+
+### Positive-length periodic bond padding — promoted mathematical helper (2026-10-29)
+
+- **Pattern:** enlarge every periodic site matrix by unused zero coordinates,
+  preserve the nonempty word by `Matrix.zeroPad_mul`, and reindex the trace.
+- **Abstraction:** `MPSTensor.mpv_padBond` and `mpvState_padBond` in
+  `MPS/Preparation/PeriodicBondPadding.lean` centralize the actual-vector
+  comparison used at both short and long lengths in the uniform-bound proof.
+- **Decision:** the existing matrix-padding multiplication identity suffices;
+  the empty word remains excluded because its trace is the matrix dimension.
+
 ### Weighted geometric sums grouped by their anchors — promoted (2026-10-28)
 
 - **Seen:** `Lattice/LowEnergyCommutatorSum.lean`,
