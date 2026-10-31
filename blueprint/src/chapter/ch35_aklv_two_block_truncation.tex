@@ -1,0 +1,74 @@
+\section{A residual for the two exterior truncations}
+
+\begin{definition}[The two exterior truncations]
+    \label{def:aklv_two_block_truncation}
+    \lean{TNLean.MPS.AreaLaw.aklvRegionalHamiltonians,
+        TNLean.MPS.AreaLaw.aklvTwoBlockHamiltonian}
+    \leanok
+    Let $0\le l\le r\le L$, let $k=(0,l,r,L)$, and let
+    $0\le h_i\le\Id$ be supported on $\{i,i+1\}$.
+    For $j\in\{0,1,2\}$ put
+    \begin{align}
+        A_j & =\sum_{\substack{k_j\le i                          \\i+1<k_{j+1}}}h_i, &
+        J   & =\{i:i+1\in\{l,r\}\},     & Y & =\sum_{i\in J}h_i.
+        \label{eq:aklv_two_block_regions}
+    \end{align}
+    Thus $\sum_i h_i=A_0+A_1+A_2+Y$ and $|J|\le2$.
+    Choose real lower bounds $e_j\Id\le A_j$.
+    For $T\subseteq\{0,1\}$ define $O_T=\{2j:j\in T\}$ and
+    \begin{align}
+        B_T     & =\sum_{j=0}^2(F_{j,T}-e_j\Id)+Y, &
+        F_{j,T} & =
+        \begin{cases}
+            \min(A_j,(e_j+t)\Id), & j\in O_T,    \\
+            A_j,                  & j\notin O_T.
+        \end{cases}
+        \label{eq:aklv_two_block_hamiltonian}
+    \end{align}
+    Here the minimum is defined by spectral calculus.
+    Only the exterior sums are clipped; the middle sum and both connecting bonds
+    are retained. This is the two-exterior geometry used in
+    \cite[Section~6.1, after (5)]{Arad2013AreaLaw}.
+\end{definition}
+
+\begin{lemma}[Exponential residual on each partially truncated low-energy space]
+    \label{thm:aklv_two_block_truncation_low}
+    \lean{TNLean.MPS.AreaLaw.norm_aklv_two_block_truncation_low_le}
+    \leanok
+    \uses{def:aklv_two_block_truncation}
+    Suppose $\varepsilon\ge0$ and $t\ge\varepsilon+5$.
+    Each $B_T$ is Hermitian and
+    $B_\varnothing=\sum_i h_i-(\sum_j e_j)\Id$.
+    Let $G_T(\varepsilon)$ be the actual spectral subspace of $B_T$
+    with eigenvalues at most $\varepsilon$.
+    For every $T\subseteq\{0,1\}$,
+    \begin{align}
+        \bigl\|(B_\varnothing-B_{\{0,1\}})|_{G_T(\varepsilon)}\bigr\|
+        \le64\exp\left(-\frac{t-\varepsilon}{8}\right).
+        \label{eq:aklv_two_block_residual}
+    \end{align}
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{def:aklv_two_block_truncation,thm:consecutive_regional_truncation_low}
+    The centered partial clippings and $Y$ are positive, so each $B_T$ is Hermitian.
+    Partition the original bonds into the three regional interiors and $J$;
+    this gives the untruncated identity. For each region, apply
+    Lemma~\ref{thm:consecutive_regional_truncation_low} with
+    $u=\varepsilon+5$ and imaginary time $1/8$.
+    Writing $c=|J|\le2$, the resulting coefficient satisfies
+    \begin{align*}
+        \frac{e^{-(t-\varepsilon-5)/8-1}}{1/8}
+        \frac{2c}{5-2c}
+         & \le32e^{-3/8}e^{-(t-\varepsilon)/8}
+        \le32e^{-(t-\varepsilon)/8}.
+    \end{align*}
+    The scalar shifts and the retained connecting terms cancel in
+    $B_\varnothing-B_{\{0,1\}}$.
+    Sum the two exterior residuals to obtain
+    (\ref{eq:aklv_two_block_residual}).
+\end{proof}
+
+% This is an auxiliary residual on original nearest-neighbour data, not
+% AKLV Theorem 6.1. Its source normalization, gap preservation, and normalized
+% ground-vector comparison remain open; see the associated paper-gap note.

@@ -1,0 +1,177 @@
+\section{Accuracy-dependent windows at every cut}
+
+\begin{definition}[Accuracy-dependent parameters]
+    \label{def:aklv_accuracy_parameters}
+    \lean{TNLean.MPS.AreaLaw.aklvAccuracyLog,
+        TNLean.MPS.AreaLaw.aklvAccuracyIncrement,
+        TNLean.MPS.AreaLaw.aklvAccuracyWidth,
+        TNLean.MPS.AreaLaw.aklvAccuracyThreshold,
+        TNLean.MPS.AreaLaw.aklvAccuracyDegree}
+    \leanok
+    \uses{def:aklv_logarithmic_threshold}
+    For squared accuracy $\rho>0$, initial width $s_0$ and gap $g$, set
+    \begin{align*}
+        z    & =\log(128/\rho),                           & m & =\left\lceil\sqrt{\sqrt{z^3/g}}\right\rceil,\notag \\
+        s    & =s_0+2m,                                   & t & =T(g)+16z,\notag                                   \\
+        \ell & =\left\lceil z\sqrt{(2t+s)/g}\right\rceil.
+    \end{align*}
+\end{definition}
+
+\begin{lemma}[Accuracy and shrinking estimates]
+    \label{thm:aklv_accuracy_parameter_bounds}
+    \lean{TNLean.MPS.AreaLaw.aklvAccuracyLog_bounds,
+        TNLean.MPS.AreaLaw.aklvAccuracyThreshold_bounds,
+        TNLean.MPS.AreaLaw.aklvAccuracyDegree_shrink_le,
+        TNLean.MPS.AreaLaw.aklvAccuracy_refinement_error_le,
+        TNLean.MPS.AreaLaw.aklvAccuracyIncrement_bounds}
+    \leanok
+    \uses{def:aklv_accuracy_parameters}
+    For $0<\rho\le1$ and $0<g\le1$, one has $z\ge1$,
+    $e^{-z}=\rho/128$, $t\ge T(g)>0$, and
+    \begin{align*}
+        e^{-t/16}             & \le\rho/128,\notag    \\
+        \delta:=\left(2e^{-2\ell\sqrt{(9g/10)/(2t+s)}}\right)^2
+                              & \le\rho^2/4096,\notag \\
+        16\delta+e^{-t/16}/50 & \le\rho.
+    \end{align*}
+    Also $\sqrt{\sqrt{z^3/g}}\le m<\sqrt{\sqrt{z^3/g}}+1$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    The identity for $e^{-z}$ follows from the logarithm.
+    Since $\log2\ge1/2$, one has $\log128\ge1$ and hence $z\ge1$.
+    The threshold identity and $T(g)\ge0$ give the bound for $e^{-t/16}$.
+    Writing $W=2t+s$, the degree bound and
+    $\sqrt{W/g}\sqrt{(9g/10)/W}=\sqrt{9/10}\ge1/2$
+    imply $4\ell\sqrt{(9g/10)/W}\ge2z$.
+    Thus $\delta\le4e^{-2z}=\rho^2/4096$.
+    The last error inequality uses $\rho^2\le\rho$.
+    The increment bounds are the defining ceiling inequalities.
+\end{proof}
+
+\begin{lemma}[Centered-window geometry]
+    \label{thm:aklv_centered_window_geometry}
+    \lean{TNLean.MPS.AreaLaw.aklv_centered_window_iff,
+        TNLean.MPS.AreaLaw.aklv_initial_window_of_enlarged,
+        TNLean.MPS.AreaLaw.aklv_short_side_of_no_centered_window}
+    \leanok
+    Let $0\le k\le L$ be a cut and $s$ a natural width. A window
+    $a+\lfloor s/2\rfloor=k$, $a+s+1\le L$ exists exactly when
+    \begin{align*}
+        \lfloor s/2\rfloor     & \le k,   &
+        s-\lfloor s/2\rfloor+1 & \le L-k.
+    \end{align*}
+    If $s=s_0+2m$ and this window fits, the initial window starting at
+    $a_0=a+m$ fits at the same cut.
+    If the window does not fit, then
+    $\min\{k,L-k\}\le s-\lfloor s/2\rfloor$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    The starting point is $a=k-\lfloor s/2\rfloor$.
+    For the enlarged width,
+    $\lfloor(s_0+2m)/2\rfloor=\lfloor s_0/2\rfloor+m$.
+    Negating either margin condition gives the asserted short-side bound.
+\end{proof}
+
+\begin{lemma}[An exact finite-dimensional boundary alternative]
+    \label{thm:aklv_exact_boundary_rank}
+    \lean{TNLean.MPS.AreaLaw.aklv_rank_cutMatrix_le_pow_min,
+        TNLean.MPS.AreaLaw.aklv_centered_window_or_exact_rank}
+    \leanok
+    \uses{thm:aklv_centered_window_geometry}
+    For any chain vector $\Omega$ and $k\le L$, its actual coefficient
+    rank satisfies $\operatorname{SR}_k(\Omega)\le q^{\min\{k,L-k\}}$.
+    If $q\ge1$, either the prescribed width $s$ fits at $k$ or
+    $\Omega$ itself is an exact approximant of rank at most
+    $q^{s-\lfloor s/2\rfloor}$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Both endpoint coefficient ranks are at most one. Moving sites from
+    the nearer endpoint to $k$ costs at most one factor $q$ per site.
+    Apply the short-side bound of
+    Lemma~\ref{thm:aklv_centered_window_geometry} when the window fails
+    to fit. This includes $k=0,L$ and chains shorter than the window.
+\end{proof}
+
+\begin{definition}[A common exact rank budget]
+    \label{def:aklv_accuracy_rank_budget}
+    \lean{TNLean.MPS.AreaLaw.aklvAccuracyRankBound}
+    \leanok
+    \uses{def:aklv_accuracy_parameters}
+    Put $D_0=[q(s_0^2+1)]^{32(2s_0+1)}$,
+    $E=32(\lfloor\ell/s\rfloor+\lfloor\sqrt\ell\rfloor+1)$, and
+    \begin{align*}
+        B=\max\{D_0[q(\ell+1)]^E,\ q^{s-\lfloor s/2\rfloor}\}.
+    \end{align*}
+\end{definition}
+
+\begin{lemma}[The logarithm of the exact rank budget]
+    \label{thm:aklv_accuracy_rank_log}
+    \lean{TNLean.MPS.AreaLaw.aklvAccuracyRankBound_log}
+    \leanok
+    \uses{def:aklv_accuracy_rank_budget}
+    For $q\ge1$, the budget has exactly the logarithmic expression
+    \begin{align*}
+        \log B=\max\{\log D_0+E\log(q(\ell+1)),\
+        (s-\lfloor s/2\rfloor)\log q\}.
+    \end{align*}
+\end{lemma}
+\begin{proof}
+    \leanok
+    All factors are positive. The logarithm preserves the larger of the two
+    terms, turns products into sums, and turns natural powers into multiples.
+\end{proof}
+
+\begin{definition}[An actual accuracy-dependent filter image]
+    \label{def:aklv_accuracy_filter_image}
+    \lean{TNLean.MPS.AreaLaw.IsAKLVAccuracyFilteredOutput}
+    \leanok
+    \uses{def:aklv_accuracy_parameters,def:aklv_sequence_initialization}
+    An accuracy-dependent filter image at cut $k$ consists of a fitting
+    enlarged window and an initial favorable window at that same cut,
+    an actual initialized unit vector $x$ with $\|x-\Omega\|^2\le1/16$,
+    and the actual enlarged-window clipped Hamiltonian $B_t$.
+    Its unit ground vector $\phi$ satisfies projector gap at least $9g/10$
+    and $\|\phi-\Omega\|^2\le\rho/12800$.
+    The real polynomial $p$ has degree $\ell$, fixes $\phi$, and is normalized
+    by $p(E)=1$ at its ground energy. With $K=p(B_t)$ and $Kx\ne0$, the
+    image is $y=cKx/\|Kx\|$ for $|c|=1$.
+    Both Hamiltonians are formed from their actual regional energies;
+    these energies may differ between the two widths.
+\end{definition}
+
+% The source's uniform fourth-root logarithmic comparison and final global
+% MPS assembly are not asserted by this exact-budget per-cut theorem.
+\begin{lemma}[Actual accuracy-dependent approximants at every cut]
+    \label{thm:aklv_physical_accuracy_window}
+    \lean{TNLean.MPS.AreaLaw.exists_aklv_physical_accuracy_window}
+    \leanok
+    \uses{thm:aklv_coherent_changing_targets,thm:aklv_variable_window_refinement,
+        thm:aklv_accuracy_parameter_bounds,thm:aklv_exact_boundary_rank,
+        def:aklv_accuracy_filter_image,def:aklv_accuracy_rank_budget}
+    There is a universal $A\ge21$ with the following property.
+    Let $q\ge2$, let the original nearest-neighbour interactions be supported
+    positive contractions, and let $\Omega$ be their unit ground vector at
+    energy $\mu$, with positive projector gap $g$ and actual excited
+    spectral value $\mu+g$.
+    For any cut $k\le L$ and $0<\rho\le1$, choose
+    $u=1+\log q+\log(1/g)$, $s_0=\lceil Au^2/g\rceil$, and the parameters
+    and rank budget above. There is a unit vector $y$ with
+    $\|y-\Omega\|^2\le\rho$ and $\operatorname{SR}_k(y)\le B$.
+    It is either $\Omega$ exactly or an actual accuracy-dependent filter
+    image at the same cut.
+\end{lemma}
+\begin{proof}
+    \leanok
+    If the enlarged window fails to fit, use
+    Lemma~\ref{thm:aklv_exact_boundary_rank} with $y=\Omega$.
+    Otherwise its initial window fits at the same cut. The coherent
+    construction gives its actual initial vector $x$, of rank at most $D_0$.
+    This physical construction also derives $g\le1$.
+    Apply the enlarged-window physical refinement to this $x$, at the
+    selected $t,\ell$. Its actual normalized output has squared error
+    at most $16\delta+e^{-t/16}/50\le\rho$ and rank at most
+    $D_0[q(\ell+1)]^E\le B$. Retain its actual polynomial, target and phase.
+\end{proof}
