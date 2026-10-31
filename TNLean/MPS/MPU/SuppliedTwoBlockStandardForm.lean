@@ -78,7 +78,8 @@ noncomputable def TwoSiteStandardFormData.blockTwo
         ∑ β : Fin D, S.cutY₂ (e l) (j₁, β) * S.cutY₁ (e r) (β, j₂) := by
     have h := congrArg (fun M ↦ M (e l, e r) (e j₁, e j₂))
       S.cutY₂_cutY₁_eq_staircaseMiddle_mul_kronecker
-    simpa only [twoBlockInputGate, Matrix.reindex_apply, twoBlockGateEquiv,
+    simpa only [twoBlockInputGate, Matrix.reindex_apply, Matrix.submatrix_apply,
+      twoBlockGateEquiv,
       Equiv.prodCongr_symm, Equiv.prodCongr_apply, Prod.map_apply,
       Equiv.apply_symm_apply, e] using h.symm
   refine {
@@ -95,7 +96,8 @@ noncomputable def TwoSiteStandardFormData.blockTwo
   · intro i₁ i₂ s t
     have h := congrArg (fun M ↦ M (e i₁, e i₂) (e s, e t))
       S.cutX₁_cutX₂_eq_staircaseMiddle
-    simpa only [twoBlockOutputGate, Matrix.reindex_apply, twoBlockGateEquiv,
+    simpa only [twoBlockOutputGate, Matrix.reindex_apply, Matrix.submatrix_apply,
+      twoBlockGateEquiv,
       Equiv.prodCongr_symm, Equiv.prodCongr_apply, Prod.map_apply,
       Equiv.apply_symm_apply, X₁, X₂, e] using h.symm
   · intro i j α γ
