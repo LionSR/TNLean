@@ -12,9 +12,9 @@ import Mathlib.Analysis.Normed.Group.InfiniteSum
 /-!
 # The linear limiting coefficient of a moving wall
 
-The source mixed spectral-radius condition makes the genuine rectangular
+The source mixed spectral-radius condition makes the rectangular
 correlation series converge. Its contraction defines the linear limiting
-coefficient of the actual wall Gram weight. Cesàro convergence of the exact
+coefficient of the wall Gram weight. Cesàro convergence of the exact
 Gram increments proves the normalized limit without assuming norm growth.
 
 Source: arXiv:1210.6613, proof of Lemma lowenergystates, lines 1230–1265.
@@ -29,7 +29,7 @@ namespace MPSTensor
 
 variable {d a b : ℕ}
 
-/-- The genuine mixed-transfer series entering the source wall norm
+/-- The mixed-transfer series entering the source wall norm
 coefficient. Its convergence follows below from the source strict mixed
 spectral-radius condition; arXiv:1210.6613, proof of Lemma lowenergystates. -/
 noncomputable def uncleWallCorrelationLimit (A : MPSTensor d a) (B : MPSTensor d b)
@@ -37,7 +37,7 @@ noncomputable def uncleWallCorrelationLimit (A : MPSTensor d a) (B : MPSTensor d
   ∑' k : ℕ, ((Kraus.mixedMapLM A B) ^ k) (uncleWallSeed B R)
 
 /-- The explicit linear limiting coefficient of the source one-wall Gram
-weight, formed from the convergent mixed-transfer series and actual wall
+weight, formed from the convergent mixed-transfer series and wall
 contractions; arXiv:1210.6613, proof of Lemma lowenergystates. -/
 noncomputable def uncleWallNormSlope (A : MPSTensor d a) (B : MPSTensor d b)
     (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
@@ -55,7 +55,7 @@ private theorem mixedContinuous_pow_apply (A : MPSTensor d a) (B : MPSTensor d b
     (map_pow (Module.End.toContinuousLinearMap (Matrix (Fin a) (Fin b) ℂ))
       (Kraus.mixedMapLM A B) n).symm
 
-/-- The actual mixed correlation series is summable under spectral radius
+/-- The mixed correlation series is summable under spectral radius
 strictly below one. The proof uses geometric power decay from Gelfand's
 formula, not the stronger condition that the operator norm is below one;
 arXiv:1210.6613, Lemma offdiagonal-damping and the norm calculation. -/
@@ -74,7 +74,7 @@ theorem uncleWallCorrelation_summable (A : MPSTensor d a) (B : MPSTensor d b)
   simpa only [F, mixedContinuous_pow_apply] using hbound k (uncleWallSeed B R)
 
 /-- Under source unital right-block normalization and strict mixed-transfer
-damping, the actual finite wall correlation converges to its mixed series;
+damping, the finite wall correlation converges to its mixed series;
 arXiv:1210.6613, proof of Lemma lowenergystates. -/
 theorem uncleWallCorrelation_tendsto (A : MPSTensor d a) (B : MPSTensor d b)
     (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
@@ -99,7 +99,7 @@ private theorem uncleWallGramWeight_eq_sum_increments
       rw [uncleWallGramWeight_succ A B R ρ hρ hA hB, ih, Finset.sum_range_succ]
       ring
 
-/-- The actual wall Gram weight divided by its length converges to the
+/-- The wall Gram weight divided by its length converges to the
 explicit mixed-series coefficient under the source stationary/unital
 normalizations and strict mixed spectral-radius condition. This does not
 assert strict positivity or a genericity statement; arXiv:1210.6613,

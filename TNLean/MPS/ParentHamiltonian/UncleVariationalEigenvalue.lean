@@ -11,7 +11,7 @@ import Mathlib.Analysis.InnerProductSpace.Spectrum
 # The finite variational spectral step for the uncle Hamiltonian
 
 A positive operator with a vector orthogonal to its kernel and Rayleigh
-quotient below epsilon has an actual positive eigenvalue below epsilon.
+quotient below epsilon has a positive eigenvalue below epsilon.
 Applied to the explicit finite uncle Hamiltonian, this is the spectral step
 in arXiv:1210.6613, proof of Theorem thm:gapless, lines 1302–1314.
 The preceding norm, energy, and ground-overlap estimates must still supply
@@ -133,10 +133,10 @@ private theorem norm_span_pair_projection_sq_le
   apply (mul_le_mul_iff_left₀ hwpos).mp
   nlinarith only [hsquare]
 
-/-- The actual two periodic MPS sectors give a controlled ground-space
+/-- The two periodic MPS sectors give a controlled ground-space
 projection once their Gram matrix is close to the identity. The hypotheses
 are finite scalar inequalities, to be supplied by the canonical transfer
-limits and the actual mixed-overlap decay. Source application:
+limits and the mixed-overlap decay. Source application:
 arXiv:1210.6613, proof of thm:gapless, lines 1302–1314. -/
 theorem norm_mpv_span_projection_sq_le
     {d a b : ℕ} (A : MPSTensor d a) (B : MPSTensor d b) (N : ℕ)
@@ -149,9 +149,9 @@ theorem norm_mpv_span_projection_sq_le
       4 * (‖inner ℂ (mpvState A N) φ‖ ^ 2 + ‖inner ℂ (mpvState B N) φ‖ ^ 2) :=
   norm_span_pair_projection_sq_le _ _ _ hA hB hAB
 
-/-- The actual finite uncle Hamiltonian has a positive eigenvalue below a
+/-- The finite uncle Hamiltonian has a positive eigenvalue below a
 strict Rayleigh bound from its kernel complement. Positivity is derived from
-the actual interaction rather than supplied as another hypothesis.
+the interaction rather than supplied as another hypothesis.
 
 This is the finite spectral argument of arXiv:1210.6613, proof of thm:gapless,
 lines 1302–1314; constructing the variational vector remains a separate step. -/
@@ -168,8 +168,8 @@ theorem exists_pos_eigenvalue_uncleHamiltonianES_lt_of_rayleigh
   exists_small_pos_eigenvalue_of_rayleigh _ (uncleHamiltonianES_isPositive A B R L N)
     v hv ε hRayleigh
 
-/-- The actual variational spectral step for an arbitrary trial vector.
-Subtracting its actual kernel projection preserves energy and removes
+/-- The variational spectral step for an arbitrary trial vector.
+Subtracting its kernel projection preserves energy and removes
 exactly the projected squared norm. This derives the kernel-complement
 vector rather than requiring orthogonality of the supplied trial.
 Source: arXiv:1210.6613, proof of thm:gapless, lines 1302–1314. -/

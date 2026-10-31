@@ -12,9 +12,9 @@
     $M_k=V_k^\dagger D_kU_k$ gives a basis of its column space consisting
     of the columns of $F_k=V_k^\dagger D_k$. In this basis the suffix
     coefficient matrix is $G_k=U_k$, so
-    \[
+    \begin{align}
         F_k^\dagger F_k=D_k^2>0,\qquad G_kG_k^\dagger=I_{r_k}.
-    \]
+    \end{align}
     For a normalized state on a positive number of sites, these bases
     can be chosen simultaneously with endpoint vectors $1$ and $\psi$.
     The endpoint Gram matrices are both the scalar identity, and the
@@ -74,12 +74,12 @@
     Let $A_k^i$ be the coordinate matrices between the chosen adjacent
     cut bases, and put $\Lambda_k=F_k^\dagger F_k$. The actual prefix
     and suffix recursions give
-    \[
+    \begin{align}
         \sum_i(A_k^i)^\dagger\Lambda_kA_k^i=\Lambda_{k+1},
         \qquad
         G_kG_k^\dagger=
         \sum_i A_k^i(G_{k+1}G_{k+1}^\dagger)(A_k^i)^\dagger.
-    \]
+    \end{align}
     In particular, if both suffix factors are row coisometries, then
     $\sum_i A_k^i(A_k^i)^\dagger=I$ and
     $\operatorname{tr}\Lambda_{k+1}=\operatorname{tr}\Lambda_k$.
@@ -100,15 +100,15 @@
     Let $N>0$, and let $\psi$ be a normalized state on $N$ sites of
     physical dimension $d$. There is an exact OBC representation
     $c_A=\psi$ with bonds
-    \[
+    \begin{align}
         D_k=\operatorname{rank}_k\psi\le d^{\lfloor N/2\rfloor}
-    \]
+    \end{align}
     and matrices $\Lambda_k\in\mathrm M_{D_k}(\mathbb C)$ satisfying,
     for every site $k$,
-    \[
+    \begin{align}
         \sum_i A_k^i(A_k^i)^\dagger=I_{D_k},\qquad
         \sum_i(A_k^i)^\dagger\Lambda_kA_k^i=\Lambda_{k+1}.
-    \]
+    \end{align}
     Both endpoint densities are the scalar identity. Every
     $\Lambda_k$ is diagonal with strictly positive real diagonal
     entries, is positive definite, and has trace one. This is the
@@ -142,10 +142,10 @@
     The physical coefficient matrix factors as $M_k=P_kH_k$, so its
     column space lies in the range of $P_k$. The adjacent prefix
     factors satisfy
-    \[
+    \begin{align}
         P_{k+1}(\sigma i,\beta)
         =\bigl(P_kB_k^i\bigr)(\sigma,\beta).
-    \]
+    \end{align}
     The initial prefix is the scalar identity, and the final prefix is
     the actual physical state, with its complete complex amplitude.
 \end{lemma}
@@ -169,10 +169,10 @@
     $F_k$, initial basis vector $1$ and final basis vector $\psi$. For
     every OBC representation $B$ of the same state there are rectangular
     matrices $Y_k,Z_k$ such that
-    \[
+    \begin{align}
         Y_kZ_k=I,\qquad
         A_k^i=Y_kB_k^iZ_{k+1}.
-    \]
+    \end{align}
     The initial $Y_0$ and final $Z_N$ are the scalar endpoint
     identifications. These conclusions require no square invertibility
     or additional full-rank assumption on the original representation.
@@ -198,12 +198,12 @@
     $d^{\lfloor N/2\rfloor}$ and all the density conditions of
     Theorem~\ref{thm:obc_schmidt_canonical}, together with rectangular
     matrices
-    \[
+    \begin{align}
         Y_k:\mathbb C^{D_k^B}\longrightarrow\mathbb C^{D_k^A},
         \qquad
         Z_k:\mathbb C^{D_k^A}\longrightarrow\mathbb C^{D_k^B},
         \qquad Y_kZ_k=I_{D_k^A},
-    \]
+    \end{align}
     such that $A_k^i=Y_kB_k^iZ_{k+1}$ for every site and letter.
     The initial and final endpoint maps are the scalar identities,
     giving precisely the first-site, interior-site and last-site

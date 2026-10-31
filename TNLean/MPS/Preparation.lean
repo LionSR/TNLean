@@ -97,7 +97,9 @@ import TNLean.MPS.Preparation.OBCCanonicalConfigurations
 import TNLean.MPS.Preparation.OBCCanonicalCutBases
 import TNLean.MPS.Preparation.OBCCanonicalEndpoints
 import TNLean.MPS.Preparation.OBCCanonicalForm
+import TNLean.MPS.Preparation.OBCCanonicalPhysicalRanks
 import TNLean.MPS.Preparation.OBCCanonicalRecurrences
+import TNLean.MPS.Preparation.OBCMinimalPrefixBasis
 import TNLean.MPS.Preparation.OBCPrefixFactors
 import TNLean.MPS.Preparation.OBCRectangularCutMaps
 import TNLean.MPS.Preparation.ObservableTransferBound

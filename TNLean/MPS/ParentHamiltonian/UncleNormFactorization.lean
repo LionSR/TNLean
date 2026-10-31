@@ -11,11 +11,11 @@ import QICLean.Analysis.TraceMulBound
 import QICLean.Analysis.OperatorNormConvergence
 
 /-!
-# Quantitative factorization of the actual two-wall transfer contraction
+# Quantitative factorization of the two-wall transfer contraction
 
-The exact finite transfer identity is approximated by the two actual
+The exact finite transfer identity is approximated by the two
 canonical rank-one contractions. Pure transfer powers converge by source
-block injectivity and unital normalization, and the actual moving-wall
+block injectivity and unital normalization, and the moving-wall
 maps have linear bounds. This derives a geometric factorization error;
 neither factorization nor norm growth is assumed:
 \(|\operatorname{Tr}\mathcal T_N-\eta_R(N+1)\eta_L(N+1)|\le C(N+1)^2z^N\)
@@ -32,20 +32,9 @@ namespace MPSTensor
 
 variable {d a b : ℕ}
 
-private theorem uncleUnital_pow_norm_le (A : MPSTensor d a)
-    (hU : Kraus.mapLM A 1 = 1) (n : ℕ) (X : Matrix (Fin a) (Fin a) ℂ) :
-    ‖((Kraus.mapLM A) ^ n) X‖ ≤ ‖X‖ := by
-  have hCP : IsKrausCP (Kraus.mapLM A) := Kraus.isCPMap_mapLM A
-  induction n with
-  | zero => simp
-  | succ n ih =>
-      rw [pow_succ']
-      change ‖Kraus.mapLM A (((Kraus.mapLM A) ^ n) X)‖ ≤ ‖X‖
-      exact (hCP.norm_apply_le_of_map_one_eq_one hU _).trans ih
-
-/-- Replacing the actual separated transfer powers by their canonical
+/-- Replacing the separated transfer powers by their canonical
 contractions gives an error bounded by a quadratic length factor times a
-geometric sequence. The leading term is the product of the two actual
+geometric sequence. The leading term is the product of the two
 finite wall Gram weights. Source: arXiv:1210.6613, proof of Lemma
 lowenergystates, lines 1230–1265. -/
 theorem uncleTwoWallTransfer_factorization_bound [NeZero a] [NeZero b]
@@ -77,12 +66,8 @@ theorem uncleTwoWallTransfer_factorization_bound [NeZero a] [NeZero b]
   have hGL (n : ℕ) (X : Matrix (Fin a) (Fin a) ℂ) :
       ‖uncleWallGramMap B A L n X‖ ≤ cL * n * ‖X‖ := by
     simpa only [uncleWallGramMap] using hwallL n X
-  let fA := (Matrix.traceLinearMap (Fin a) ℂ ℂ).comp
-    (mulLeftLinearMap (n := Fin a) ℂ ρA)
-  let fB := (Matrix.traceLinearMap (Fin b) ℂ ℂ).comp
-    (mulLeftLinearMap (n := Fin b) ℂ ρB)
-  let PA := fA.smulRight (1 : Matrix (Fin a) (Fin a) ℂ)
-  let PB := fB.smulRight (1 : Matrix (Fin b) (Fin b) ℂ)
+  let PA := uncleDensityProjection ρA
+  let PB := uncleDensityProjection ρB
   have hPA (X : Matrix (Fin a) (Fin a) ℂ) : ‖PA X‖ ≤ ‖X‖ := by
     change ‖Matrix.trace (ρA * X) • (1 : Matrix (Fin a) (Fin a) ℂ)‖ ≤ ‖X‖
     simpa only [norm_smul, norm_one, mul_one, htrA, Complex.one_re, one_mul] using
@@ -107,7 +92,7 @@ theorem uncleTwoWallTransfer_factorization_bound [NeZero a] [NeZero b]
       calc
         ‖Z‖ ≤ cR * m * ‖((Kraus.mapLM B) ^ (2 * N - 1)) Y‖ := hGR (N + 1) _
         _ ≤ cR * m * ‖Y‖ := mul_le_mul_of_nonneg_left
-          (uncleUnital_pow_norm_le B hUB _ _) (by positivity)
+          (norm_mapLM_pow_apply_le_of_mapLM_one B hUB _ _) (by positivity)
         _ ≤ cR * m * (cL * m * ‖X‖) := mul_le_mul_of_nonneg_left hY (by positivity)
     have hrateA : rA ^ (2 * N) ≤ z ^ N :=
       (pow_le_pow_left₀ hrA.le (show rA ≤ z from le_max_left _ _) (2 * N)).trans
@@ -171,8 +156,8 @@ theorem uncleTwoWallTransfer_factorization_bound [NeZero a] [NeZero b]
       mul_le_mul_of_nonneg_right (by linarith) (by positivity)
     _ = (‖tr‖ + 1) * K * ((N + 1 : ℕ) : ℝ) ^ 2 * z ^ N := by ring
 
-/-- The squared norm of the actual source trial, divided by the squared
-moving-window length, converges to the product of the genuine limiting
+/-- The squared norm of the source trial, divided by the squared
+moving-window length, converges to the product of the limiting
 wall coefficients. No positive-slope or norm-growth premise is required.
 Source: arXiv:1210.6613, proof of Lemma lowenergystates. -/
 theorem uncleTwoWallTrialSource_normalized_norm_sq_tendsto [NeZero a] [NeZero b]

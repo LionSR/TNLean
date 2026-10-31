@@ -10524,6 +10524,391 @@ removed after the dependency audit exposed it.
 - **Notes:** No tactic repetition reaches the promotion threshold. The
   repository pattern scan was rerun after the concrete chain assembly.
 
+### Iterating derived boundary intersections — reused library theorem (2026-10-29)
+
+- **Seen:** `MPS/ParentHamiltonian/UncleGroundSpace.lean`, the actual periodic uncle kernel.
+- **Reuse:** `contiguous_mem_of_restriction_intersection_submodules` iterates the already
+  derived single-wall boundary intersection with local length two. The actual kernel
+  theorem supplies its window conditions; no new induction or assumed intersection
+  predicate is introduced.
+- **Translation reuse:** `cyclicRestrictₗ_cyclicTranslateState` is promoted from private
+  visibility for this second consumer; the existing proof remains unchanged.
+
+
+### Fixed exterior contractions of uncle words — reused lemmas (2026-10-29)
+
+- **Seen:** `MPS/ParentHamiltonian/UncleTwoWallTrial.lean`.
+- **Pattern:** Fix exterior words, compose their bilinear product maps with
+  a virtual functional, and represent the result by a trace boundary.
+- **Reuse:** `uncleBoundaryWord_slice_mem` states the common argument once;
+  the upper/lower moving-wall cancellations both use it. Existing matrix
+  trace representation and the actual two-site local-kernel identity supply
+  the remaining steps.
+- **Decision:** One source-specific lemma suffices; no new tactic or predicate.
+
+### Moving-wall finite Gram expansion — candidate (2026-10-29)
+
+- **Pattern:** Split a sum over fixed-length configurations with
+  `Fin.consEquiv`, expand a rectangular wall recurrence, and regroup
+  matrix products before using a unital word sum.
+- **Seen:** The two recurrences in
+  `MPS/ParentHamiltonian/UncleWallGram.lean`.
+- **Abstraction:** The private `sum_ofFn_cons` shares the configuration
+  reindexing. Correlation and Gram recurrences have different cross terms;
+  no additional public tactic is justified by these two occurrences.
+- **Notes:** Keep the finite coefficient identity separate from asymptotic
+  positivity and from estimates for the actual two-wall state.
+
+### Exact increments followed by Cesaro convergence — candidate (2026-10-29)
+
+- **Pattern:** Express an actual finite coefficient as the sum of its
+  derived increments, prove convergence of those increments by continuity,
+  and use `Filter.Tendsto.cesaro_smul` for the coefficient divided by length.
+- **Seen:** `MPS/ParentHamiltonian/UncleWallGramAsymptotics.lean`.
+- **Abstraction:** Existing Mathlib Cesaro convergence already supplies the
+  general analytic step; no new tactic or generic averaging API is needed.
+- **Notes:** Spectral-radius damping supplies summability of the genuine
+  mixed series. A positive limiting slope is a separate mathematical claim.
+
+
+### Numbered trial segments under a local restriction — reused helpers (2026-10-29)
+
+- **Seen:** `MPS/ParentHamiltonian/UncleTrialLocalization.lean`, five physical segments.
+- **Pattern:** A local pair is either inside a numbered segment, splitting it
+  into fixed prefix, variable pair and fixed suffix, or outside the segment,
+  leaving its entire word fixed.
+- **Reuse:** Two shared segment lemmas carry all finite-index arithmetic; the
+  five segment cases reuse the existing wall and pure-parent kernel results.
+  Existing wrapping-site lemmas supply the periodic endpoint evaluations.
+- **Decision:** Keep the coordinate lemmas and direct source partition; no new
+  support predicate or assumed vanishing condition.
+
+
+### Conjugated projector contraction and quadratic form — reused Mathlib (2026-10-29)
+
+- **Seen:** `MPS/ParentHamiltonian/UncleTrialEnergy.lean`.
+- **Pattern:** The actual interaction is an isometric conjugate of a submodule
+  projection; transport norm and inner-product statements through that isometry.
+- **Reuse:** `Submodule.norm_starProjection_apply_le`,
+  `Submodule.re_inner_starProjection_eq_normSq` and the isometry's norm/inner
+  preservation give both claims directly. The endpoint quadratic sum reuses
+  the already-derived global cancellation identity and adjoint-inner identity.
+- **Decision:** No new projection structure or automation; use the library lemmas.
+
+### Nonnegative quadratic coefficient exceptional set — candidate (2026-10-29)
+
+- **Pattern:** Derive the zero set of an actual nonnegative quadratic form
+  as its radical by testing a scalar perturbation. An explicit positive
+  witness makes the radical proper; reuse `addHaar_submodule` for measure
+  zero and the closed-subspace interior theorem for open dense complement.
+- **Seen:** `MPS/ParentHamiltonian/UncleWallGramGeneric.lean`.
+- **Abstraction:** Existing Mathlib quadratic and Haar APIs provide the
+  structures and final measure statement. The private scalar test is
+  shared within this source calculation; no genericity premise is added.
+- **Notes:** This establishes the one-wall coefficient's exceptional set,
+  independently of the unresolved actual two-wall norm factorization.
+
+
+### Removing the unpinned contribution at a wall endpoint — candidate (2026-10-29)
+
+- **Seen:** `MPS/ParentHamiltonian/UncleTrialPinnedWalls.lean`, four endpoint orientations.
+- **Pattern:** Split the actual wall word at its end, decompose the physical
+  vector into pinned and uniform contributions, and use linearity plus the
+  actual pure-sector local-kernel theorem to delete the uniform contribution.
+- **Reuse:** `uncleDomainWallWord_append` supplies the shared word split;
+  `uncleTwoWallCoefficient_rotate` supplies the rectangular rotation, also
+  replacing the repeated rotations in the interior and middle-region proofs.
+- **Decision:** Keep four explicit matrix orientations rather than introducing
+  a parallel wall-state structure. Their coordinate proofs reuse the same
+  inside/outside and endpoint segment lemmas.
+
+
+### Actual five-segment coordinates — reused list lemmas (2026-10-29)
+
+- **Seen:** `MPS/ParentHamiltonian/UncleTwoWallTrial.lean`.
+- **Pattern:** Evaluate a coefficient at nested Fin.append, or compare an
+  explicitly numbered source configuration with its five segment lengths.
+- **Reuse:** `List.ofFn_fin_append`, exact list take/drop rules and one
+  elementwise segment/slice identity give the coefficient comparison. The
+  length cast preserves the actual Euclidean norm by equality elimination.
+- **Decision:** Use these public coordinate identities rather than a parallel
+  configuration structure or a supplied norm-equivalence hypothesis.
+
+
+### Actual transfer-norm trace bound — reused matrix units (2026-10-29)
+
+- **Seen:** `MPS/ParentHamiltonian/UnclePinnedTrialNorm.lean`.
+- **Pattern:** Turn a derived pointwise matrix operator-norm bound on a
+  transfer contraction into an algebraic operator-trace bound.
+- **Reuse:** QICLean's matrix-unit trace expansion, entry/operator-norm bound
+  and unit-norm matrix units give the finite dimension factor directly. Its
+  unital CP contraction also bounds every normalized transfer power.
+- **Decision:** Keep the thin local trace calculation and reuse the generic
+  library APIs; no supplied trace-rate or state-rate hypothesis.
+
+
+### Actual endpoint norm averages — coordinate and partition reuse (2026-10-29)
+
+- **Seen:** `MPS/ParentHamiltonian/UncleEndpointEnergyBound.lean`, four endpoints.
+- **Pattern:** Identify a pinned local residual as the actual cyclic restriction
+  of a globally pinned trial, then remove the redundant exterior-window sum.
+- **Reuse:** Public segment addition, boundary-segment and length-cast identities
+  handle all four coordinates. The exact cyclic restriction norm partition
+  gives the global squared norm with its actual physical normalization.
+- **Decision:** Derive the four-state energy bound from those identities; do not
+  introduce an assumed energy-support or norm-rate condition.
+
+
+### Actual mixed word overlaps — finite configuration reuse (2026-10-29)
+
+- **Seen:** `MPS/ParentHamiltonian/UncleTrialOverlap.lean` and the finite
+  norm calculation in `UncleTrialTransferNorm.lean`.
+- **Pattern:** Expand actual ordered word maps, take their algebraic operator
+  trace and identify the resulting physical configuration sum.
+- **Reuse:** Promote the existing canonical five-segment configuration
+  equivalence and its evaluation theorem for their actual second consumer.
+  Use `spectralRadius_eq_of_unital` and `AlgEquiv.spectrum_eq` when the
+  same finite linear map is estimated under another matrix norm.
+- **Decision:** Keep one configuration equivalence and derive all rates from
+  actual mixed maps; do not assume the overlap estimate being established.
+
+### Canonical transfer replacement in the actual wall contraction — candidate (2026-10-29)
+
+- **Seen:** `MPS/ParentHamiltonian/UncleNormFactorization.lean`, two long transfer factors.
+- **Pattern:** Subtract the actual canonical projection one factor at a time;
+  apply geometric pure-transfer decay, actual wall-map linear bounds, and
+  positivity-preserving norm contractivity to the remaining factors.
+- **Reuse:** The primitive decay is stated once in `UnclePrimitiveTransfer`;
+  existing finite-dimensional trace continuity bounds the scalar contraction.
+- **Notes:** The unital-power contraction had three private proof copies, in
+  this file, `UnclePinnedTrialNorm.lean` and `UncleTrialOverlap.lean`. It is
+  promoted to `MPSTensor.norm_mapLM_pow_apply_le_of_mapLM_one` in
+  `UncleTrialTransferNorm.lean`, which iterates QICLean's
+  `IsKrausCP.norm_apply_le_of_map_one_eq_one`; all three consumers use it.
+
+### Unit matrices as exact gauges — promoted Mathlib construction (2026-10-29)
+
+- **Pattern:** convert an actual matrix unitary into the matrix-ring unit
+  used by a tensor gauge equivalence, with its adjoint as inverse.
+- **Abstraction:** Mathlib's `Unitary.toUnits`; no determinant witness or
+  nonsingular-matrix inverse proof is necessary.
+- **Occurrences:** the phase-gauge and exact rephased-gauge conclusions in
+  `MPS/CanonicalForm/QuadraticReconstructionConverse.lean`.
+- **Decision:** reuse the existing unitary-to-unit construction directly;
+  no project-specific conversion structure or tactic is introduced.
+
+
+### Physical cut-basis changes — reused Mathlib (2026-10-29)
+
+- **Seen:** `MPS/CanonicalForm/PeriodicCutBasisCoordinates.lean` and
+  `QuadraticPhysicalCutWindow.lean`.
+- **Pattern:** transport an actual cut basis along a configuration equivalence,
+  then multiply matrices of physical slicing and identity maps in successive bases.
+- **Reuse:** `LinearEquiv.ofSubmodules`, `Module.Basis.map`,
+  `LinearMap.toMatrix_comp` and `LinearMap.toMatrix_id` give the physical
+  coordinate change and both quadratic-system gauge equations directly.
+- **Decision:** use these existing mathematical identities rather than expanding
+  virtual matrix entries or introducing a parallel window-gauge predicate.
+
+### Left inverses of independent physical cut factors — candidate (2026-10-29)
+
+- **Seen:** `CanonicalForm/InjectivePeriodicCuts.lean` and the independent
+  `Preparation/OBCRectangularCutMaps.lean` draft.
+- **Pattern:** injective `mulVecLin` gives a linear left inverse;
+  `LinearMap.toMatrix'_comp` transports its composition identity to matrices.
+- **Decision:** two matrix-specific occurrences. If another independent caller
+  needs this conversion, promote the rectangular matrix fact in QICLean and
+  consume its published dependency revision rather than duplicating a new
+  channel-independent matrix API in TNLean.
+
+### Adjacent physical cut Gram identities — promoted helpers (2026-10-29)
+
+- **Pattern:** reindex a physical configuration sum by restriction and the
+  letter at one cut site, then apply the actual adjacent-factor recursion.
+- **Occurrences:** both density and suffix-Gram recurrences in
+  `MPS/Preparation/OBCCanonicalRecurrences.lean`, and the two endpoint Gram
+  identifications in `OBCCanonicalEndpoints.lean`.
+- **Abstraction:** the explicit `extendCutPrefixEquiv`, `extendCutSuffixEquiv`,
+  `initialCutSuffixEquiv`, and `finalCutPrefixEquiv` in
+  `OBCCanonicalConfigurations.lean` centralize the configuration geometry.
+- **Decision:** the existing `Equiv.sum_comp` suffices after these mathematical
+  bijections; no tactic or parallel sum API is needed.
+
+### Rectangular cut comparison by actual physical prefix factors — promoted helper (2026-10-29)
+
+- **Pattern:** lift each physical cut-basis vector through the original prefix,
+  choose a left inverse of the minimal prefix, and use actual adjacent-prefix
+  recurrences to derive local rectangular maps with a one-sided inverse.
+- **Abstraction:** `OBCChainTensor.exists_rectangular_maps_to_cutBasis` in
+  `MPS/Preparation/OBCRectangularCutMaps.lean`; the simultaneous canonical
+  freedom theorem uses this helper without repeating the cut comparison.
+- **Decision:** a matrix-factor comparison lemma suffices; the common-bound
+  padding remains only in the actual boundary contractions, not in the
+  rectangular local formula.
+
+
+### Prescribed minimal OBC prefix factors — promoted physical-basis helper (2026-10-29)
+
+- **Pattern:** derive independence and physical column-space equality of an
+  actual original prefix factor from the prefix-suffix factorization and
+  equality of physical rank and bond dimension.
+- **Abstraction:** `OBCChainTensor.physicalPrefixBasis` and
+  `toMatrix_cutSlice_physicalPrefixBasis` in `Preparation/OBCMinimalPrefixBasis.lean`.
+- **Caller:** `CanonicalForm/QuadraticPrescribedOBCWindow.lean` derives minimality
+  from C1 and the source bond bound, then identifies the original supplied
+  window by the shared basis/slicing helper.
+- **Decision:** no new gauge predicate or repeated matrix-entry comparison;
+  use the actual physical prefix recursion and existing finite-rank lemmas.
+
+
+### Normalization after actual cut-basis comparison — promoted helper (2026-10-29)
+
+- **Pattern:** construct both comparison matrices as identity-map matrices
+  between the physical cut bases and virtual cut bases, then normalize the
+  tensor by scalar powers and an amplified virtual gauge.
+- **Abstraction:** `exists_physicalCutWindow_gauges` in
+  `CanonicalForm/QuadraticPhysicalCutWindow.lean` is shared by the canonical
+  weight construction and `QuadraticPerronNormalization.lean`.
+- **Decision:** compare the actual physical bases once, before normalization;
+  no duplicate window-comparison proof or parallel solution predicate.
+
+### Reciprocal powers at adjacent window cuts — reused Mathlib (2026-10-29)
+
+- **Seen:** `CanonicalForm/QuadraticSolutionRephasing.lean`,
+  `QuadraticPhysicalCutWindow.lean` and the Perron-normalization child.
+- **Pattern:** cancel the common powers in a product with exponents n and n+1.
+- **Reuse:** `pow_succ`, `inv_pow`, `inv_mul_cancel_left₀` and
+  `mul_inv_cancel_left₀` give the identity directly from `pow_ne_zero`.
+- **Decision:** use the existing group-with-zero cancellation lemmas at all
+  three sites rather than copying a power-distribution proof or adding a tactic.
+
+### Adjacent-cut Gram recurrences — promoted shared physical identities (2026-10-29)
+
+- **Pattern:** use the physical prefix/suffix extension bijections to pass
+  between a Gram sum and the sum over one additional physical letter.
+- **Abstraction:** `prefixGram_eq_sum_of_extendCutPrefix` and
+  `suffixGram_eq_sum_of_extendCutSuffix` in
+  `MPS/Preparation/PhysicalCutGramRecurrences.lean`.
+- **Occurrences:** both recurrences for constructed canonical cut factors in
+  `OBCCanonicalRecurrences.lean`, and both recurrences for the original
+  supplied OBC factors in `OBCCanonicalPhysicalRanks.lean`.
+- **Decision:** the physical cut identities are shared; callers supply their
+  actual adjacent-factor recurrence instead of copying the double-sum proof.
+
+### Prefix reconstruction by canonical adjoints — candidate (2026-10-29)
+
+- **Seen:** `MPS/ParentHamiltonian/VaryingOBCIntersection.lean` and
+  `MPS/ParentHamiltonian/VaryingOBCReconstruction.lean`.
+- **Pattern:** Match overlapping trace sections using the middle-site spanning
+  condition, then sum against the adjoint first family to construct the enlarged
+  boundary. The first family may be an actual multi-site prefix.
+- **Reuse:** The full-chain induction calls
+  `Matrix.obc_three_site_reconstruction_of_pair_sections`; the actual-prefix
+  normalization calls `Matrix.obc_block_row_isometry`.
+- **Decision:** Existing mathematical lemmas handle the induction; no inverse
+  supplier, square padding, or additional tactic is introduced.
+
+### Positive coordinate compressions and local kernels — candidate (2026-10-29)
+
+- **Seen:** `MPS/ParentHamiltonian/VaryingOBCProjectorKernel.lean`.
+- **Pattern:** Apply the existing positive-sum kernel theorem to actual operators
+  R† P R, move R† through the inner product, and use positive quadratic-zero
+  to identify the kernel with P R ψ = 0.
+- **Reuse:** `WeightedPositiveKernel.apply_sum_eq_zero_iff`,
+  `LinearMap.adjoint_inner_left`, and
+  `LinearMap.IsPositive.apply_eq_zero_of_re_inner_eq_zero` already provide the
+  general analytic steps; the local proof only supplies the actual restrictions.
+- **Notes:** No new positivity or chain predicate is introduced. Further direct
+  occurrences may justify one generic compression-kernel equivalence in QICLean.
+
+
+### Extending finite-word coefficients to lists — candidate (2026-10-29)
+
+- **Seen:** `MPS/ParentHamiltonian/VaryingOBCParentUniqueness.lean`.
+- **Pattern:** Use `Function.extend List.ofFn` and
+  `List.ofFn_injective.extend_apply` to apply a list-section reconstruction
+  theorem to an actual finite-chain vector, without assuming an auxiliary
+  coefficient extension.
+- **Decision:** The existing function-extension API supplies the extension;
+  no new coefficient predicate or compatibility witness is introduced.
+
+### Euclidean physical extension by zero — promoted (2026-10-29)
+
+- **Pattern:** Extend finite physical coefficients by zero along an injection,
+  transport the linear map through `WithLp`, and prove the norm identity by
+  `Fintype.sum_of_injective`.
+- **Defined in:** `Algebra/EuclideanExtendByZero.lean`,
+  `Function.Embedding.euclideanExtendByZero` and its coordinate identities.
+- **Seen:** dependent full configurations and pair-boundary range transport in
+  `ParentHamiltonian/PhysicalAlphabetEmbedding.lean`, and actual local-term
+  transport in `ParentHamiltonian/PhysicalAlphabetLocalTerms.lean`.
+- **Notes:** Reuses Mathlib's extension-by-zero linear map and dependent product
+  embedding. No separate physical configuration record or isometry predicate.
+
+### Pairwise physical transport with outside coordinates — promoted (2026-10-29)
+
+- **Seen:** `ParentHamiltonian/PhysicalAlphabetLocalTerms.lean`.
+- **Pattern:** At an embedded outside coordinate, identify the active vector
+  with the embedding of the original active vector; outside the image it is
+  zero. Apply the already-derived active operator intertwining pointwise.
+- **Reuse:** The operator is the canonical `rightFiberwiseMap` from
+  `ParentHamiltonian/Martingale/SpectatorMaps.lean`; physical extension is the
+  shared Euclidean isometry. No new tensor-product operator model is defined.
+- **Abstraction:** `ContinuousLinearMap.rightFiberwiseMap_extendByZero` in
+  `ParentHamiltonian/Martingale/SpectatorPhysicalEmbedding.lean` is the shared
+  generic transport theorem. The parent caller derives its active intertwining
+  from actual rectangular boundary ranges; the physical-sector caller derives
+  it from its actual orthogonal sector subspaces. No copied fiber proof remains.
+
+### Dependent pair coordinates under physical embeddings — candidate (2026-10-29)
+
+- **Seen:** `ParentHamiltonian/DependentPairCoordinates.lean` and
+  `ParentHamiltonian/VaryingPhysicalParentHamiltonian.lean`.
+- **Pattern:** Split a dependent physical product twice using `Equiv.piSplitAt`,
+  prove the coordinate diagram by reflexivity, and lift it to Euclidean
+  extension by zero by separating image and outside-image coordinates.
+- **Abstraction:** `pairConfigurationReindex_extendByZero` removes the complete
+  coordinate proof from the actual local-term and full-Hamiltonian transport.
+- **Notes:** The outside coordinates are the original dependent site spaces.
+  No equal-size physical assumption or new chain structure is introduced.
+
+### Actual local projection kernels give physical boundary sections — candidate (2026-10-29)
+
+- **Seen:** `ParentHamiltonian/VaryingOBCProjectorKernel.lean` and
+  `ParentHamiltonian/VaryingPhysicalKernelSupport.lean`.
+- **Pattern:** Apply the existing fiberwise kernel theorem, identify the
+  complementary projection kernel with the actual trace range, and extract
+  the rectangular boundary matrix by range membership.
+- **Abstraction:** `physicalPairParentTerm_apply_eq_zero_iff_boundary` is the
+  actual dependent-site section theorem. Added-letter support and uniform
+  parent comparison both consume it, without copied projection arguments.
+- **Notes:** Mathlib's projection-zero and double-orthogonal identities supply
+  the generic projection step; no new subspace or positivity predicate.
+
+### Recovering an actual varying-physical state line — reuse (2026-10-29)
+
+- **Seen:** `MPS/ParentHamiltonian/VaryingPhysicalParentUniqueness.lean`.
+- **Pattern:** Transfer the actual canonical state and kernel through physical
+  extension, while deriving state-image membership from the actual parent.
+- **Reuse:** The private `extend_varyingPhysicalScalarState` identity is shared
+  by normalization and kernel uniqueness. The proof uses the existing support
+  extraction, actual Hamiltonian intertwining, uniform kernel comparison and
+  full-chain reconstruction rather than copying their coordinate proofs.
+- **Decision:** Existing mathematical transport lemmas suffice; no new chain
+  record, product recursion, predicate family or tactic is introduced.
+
+### Positive dimensions of canonical blocks — promoted (2026-10-30)
+
+- **Pattern:** `let : NeZero (h.dim k) := ⟨(h.dim_pos k).ne'⟩` before using a
+  canonical block as a tensor of positive bond dimension.
+- **Helper:** the instance `MPSTensor.PGVWC07CanonicalFormData.neZero_dim` in
+  `TNLean/MPS/CanonicalForm/PGVWC07CanonicalForm.lean`.
+- **Occurrences:** two in `WeightedCanonicalSectors.lean` and one in
+  `WeightedCanonicalPhysicalLimit.lean`, all removed; the two local `have`s in
+  `TNLean/MPS/Examples/WStateCanonicalBound.lean` are now redundant.
+- **Decision:** An instance lets typeclass search supply positivity for every
+  block, instead of a local assumption at each use.
+
 ### Specializing a nonnegative Gaussian variance — candidate (2026-10-29)
 
 - **Seen:** `Lattice/GaussianFilteredCommutatorSeries.lean`, the exponential
@@ -10574,32 +10959,6 @@ removed after the dependency audit exposed it.
   and `Matrix.conjTranspose_reindex` transports the adjoint. The existing QICLean
   Skolem–Noether theorem supplies the square implementer. No entrywise double sum
   or duplicate Skolem–Noether argument is introduced.
-
-### Adjacent physical cut Gram identities — promoted helpers (2026-10-29)
-
-- **Pattern:** reindex a physical configuration sum by restriction and the
-  letter at one cut site, then apply the actual adjacent-factor recursion.
-- **Occurrences:** both density and suffix-Gram recurrences in
-  `MPS/Preparation/OBCCanonicalRecurrences.lean`, and the two endpoint Gram
-  identifications in `OBCCanonicalEndpoints.lean`.
-- **Abstraction:** the explicit `extendCutPrefixEquiv`, `extendCutSuffixEquiv`,
-  `initialCutSuffixEquiv`, and `finalCutPrefixEquiv` in
-  `OBCCanonicalConfigurations.lean` centralize the configuration geometry.
-- **Decision:** the existing `Equiv.sum_comp` suffices after these mathematical
-  bijections; no tactic or parallel sum API is needed.
-
-### Rectangular cut comparison by actual physical prefix factors — promoted helper (2026-10-29)
-
-- **Pattern:** lift each physical cut-basis vector through the original prefix,
-  choose a left inverse of the minimal prefix, and use actual adjacent-prefix
-  recurrences to derive local rectangular maps with a one-sided inverse.
-- **Abstraction:** `OBCChainTensor.exists_rectangular_maps_to_cutBasis` in
-  `MPS/Preparation/OBCRectangularCutMaps.lean`; the simultaneous canonical
-  freedom theorem uses this helper without repeating the cut comparison.
-- **Decision:** a matrix-factor comparison lemma suffices; the common-bound
-  padding remains only in the actual boundary contractions, not in the
-  rectangular local formula.
-
 
 ### Adjacent-cut Gram recurrences — promoted shared physical identities (2026-10-29)
 
@@ -10691,20 +11050,6 @@ removed after the dependency audit exposed it.
   `re_inner_smul_add_eigenvector`, as does `CodimensionOneGap.lean`. A future
   consolidation may expose that final gap-lifting step; this bounded wrapper
   introduces no new tactic or general projector structure.
-
-### Prefix reconstruction by canonical adjoints — candidate (2026-10-29)
-
-- **Seen:** `MPS/ParentHamiltonian/VaryingOBCIntersection.lean` and
-  `MPS/ParentHamiltonian/VaryingOBCReconstruction.lean`.
-- **Pattern:** Match overlapping trace sections using the middle-site spanning
-  condition, then sum against the adjoint first family to construct the enlarged
-  boundary. The first family may be an actual multi-site prefix.
-- **Reuse:** The full-chain induction calls
-  `Matrix.obc_three_site_reconstruction_of_pair_sections`; the actual-prefix
-  normalization calls `Matrix.obc_block_row_isometry`.
-- **Decision:** Existing mathematical lemmas handle the induction; no inverse
-  supplier, square padding, or additional tactic is introduced.
-
 
 ### Rank-one density under scalar multiplication — promoted (2026-10-29)
 
@@ -10878,16 +11223,6 @@ removed after the dependency audit exposed it.
   exposed and reused for the physical entropy theorem, without a second
   endpoint-unitary or dimension argument.
 
-### Iterating derived boundary intersections — reused library theorem (2026-10-29)
-
-- **Seen:** `MPS/ParentHamiltonian/UncleGroundSpace.lean`, the actual periodic uncle kernel.
-- **Reuse:** `contiguous_mem_of_restriction_intersection_submodules` iterates the already
-  derived single-wall boundary intersection with local length two. The actual kernel
-  theorem supplies its window conditions; no new induction or assumed intersection
-  predicate is introduced.
-- **Translation reuse:** `cyclicRestrictₗ_cyclicTranslateState` is promoted from private
-  visibility for this second consumer; the existing proof remains unchanged.
-
 ### Commutation after a finite-local star homomorphism — promoted helper (2026-10-29)
 
 - **Seen:** `QCA/SingletonGeneration.lean` and `QCA/SupportIntersection.lean`.
@@ -10940,105 +11275,6 @@ removed after the dependency audit exposed it.
   comparison uses this shared owner; its duplicate private helper is removed.
 
 
-### Fixed exterior contractions of uncle words — reused lemmas (2026-10-29)
-
-- **Seen:** `MPS/ParentHamiltonian/UncleTwoWallTrial.lean`.
-- **Pattern:** Fix exterior words, compose their bilinear product maps with
-  a virtual functional, and represent the result by a trace boundary.
-- **Reuse:** `uncleBoundaryWord_slice_mem` states the common argument once;
-  the upper/lower moving-wall cancellations both use it. Existing matrix
-  trace representation and the actual two-site local-kernel identity supply
-  the remaining steps.
-- **Decision:** One source-specific lemma suffices; no new tactic or predicate.
-
-### Moving-wall finite Gram expansion — candidate (2026-10-29)
-
-- **Pattern:** Split a sum over fixed-length configurations with
-  `Fin.consEquiv`, expand a rectangular wall recurrence, and regroup
-  matrix products before using a unital word sum.
-- **Seen:** The two recurrences in
-  `MPS/ParentHamiltonian/UncleWallGram.lean`.
-- **Abstraction:** The private `sum_ofFn_cons` shares the configuration
-  reindexing. Correlation and Gram recurrences have different cross terms;
-  no additional public tactic is justified by these two occurrences.
-- **Notes:** Keep the finite coefficient identity separate from asymptotic
-  positivity and from estimates for the actual two-wall state.
-
-### Exact increments followed by Cesaro convergence — candidate (2026-10-29)
-
-- **Pattern:** Express an actual finite coefficient as the sum of its
-  derived increments, prove convergence of those increments by continuity,
-  and use `Filter.Tendsto.cesaro_smul` for the coefficient divided by length.
-- **Seen:** `MPS/ParentHamiltonian/UncleWallGramAsymptotics.lean`.
-- **Abstraction:** Existing Mathlib Cesaro convergence already supplies the
-  general analytic step; no new tactic or generic averaging API is needed.
-- **Notes:** Spectral-radius damping supplies summability of the genuine
-  mixed series. A positive limiting slope is a separate mathematical claim.
-
-
-### Numbered trial segments under a local restriction — reused helpers (2026-10-29)
-
-- **Seen:** `MPS/ParentHamiltonian/UncleTrialLocalization.lean`, five physical segments.
-- **Pattern:** A local pair is either inside a numbered segment, splitting it
-  into fixed prefix, variable pair and fixed suffix, or outside the segment,
-  leaving its entire word fixed.
-- **Reuse:** Two shared segment lemmas carry all finite-index arithmetic; the
-  five segment cases reuse the existing wall and pure-parent kernel results.
-  Existing wrapping-site lemmas supply the periodic endpoint evaluations.
-- **Decision:** Keep the coordinate lemmas and direct source partition; no new
-  support predicate or assumed vanishing condition.
-
-
-### Conjugated projector contraction and quadratic form — reused Mathlib (2026-10-29)
-
-- **Seen:** `MPS/ParentHamiltonian/UncleTrialEnergy.lean`.
-- **Pattern:** The actual interaction is an isometric conjugate of a submodule
-  projection; transport norm and inner-product statements through that isometry.
-- **Reuse:** `Submodule.norm_starProjection_apply_le`,
-  `Submodule.re_inner_starProjection_eq_normSq` and the isometry's norm/inner
-  preservation give both claims directly. The endpoint quadratic sum reuses
-  the already-derived global cancellation identity and adjoint-inner identity.
-- **Decision:** No new projection structure or automation; use the library lemmas.
-
-### Nonnegative quadratic coefficient exceptional set — candidate (2026-10-29)
-
-- **Pattern:** Derive the zero set of an actual nonnegative quadratic form
-  as its radical by testing a scalar perturbation. An explicit positive
-  witness makes the radical proper; reuse `addHaar_submodule` for measure
-  zero and the closed-subspace interior theorem for open dense complement.
-- **Seen:** `MPS/ParentHamiltonian/UncleWallGramGeneric.lean`.
-- **Abstraction:** Existing Mathlib quadratic and Haar APIs provide the
-  structures and final measure statement. The private scalar test is
-  shared within this source calculation; no genericity premise is added.
-- **Notes:** This establishes the one-wall coefficient's exceptional set,
-  independently of the unresolved actual two-wall norm factorization.
-
-
-### Removing the unpinned contribution at a wall endpoint — candidate (2026-10-29)
-
-- **Seen:** `MPS/ParentHamiltonian/UncleTrialPinnedWalls.lean`, four endpoint orientations.
-- **Pattern:** Split the actual wall word at its end, decompose the physical
-  vector into pinned and uniform contributions, and use linearity plus the
-  actual pure-sector local-kernel theorem to delete the uniform contribution.
-- **Reuse:** `uncleDomainWallWord_append` supplies the shared word split;
-  `uncleTwoWallCoefficient_rotate` supplies the rectangular rotation, also
-  replacing the repeated rotations in the interior and middle-region proofs.
-- **Decision:** Keep four explicit matrix orientations rather than introducing
-  a parallel wall-state structure. Their coordinate proofs reuse the same
-  inside/outside and endpoint segment lemmas.
-
-
-### Actual five-segment coordinates — reused list lemmas (2026-10-29)
-
-- **Seen:** `MPS/ParentHamiltonian/UncleTwoWallTrial.lean`.
-- **Pattern:** Evaluate a coefficient at nested Fin.append, or compare an
-  explicitly numbered source configuration with its five segment lengths.
-- **Reuse:** `List.ofFn_fin_append`, exact list take/drop rules and one
-  elementwise segment/slice identity give the coefficient comparison. The
-  length cast preserves the actual Euclidean norm by equality elimination.
-- **Decision:** Use these public coordinate identities rather than a parallel
-  configuration structure or a supplied norm-equivalence hypothesis.
-
 ### Equality of actual induced actions through a common buffer (2026-10-29)
 
 - **Seen:** `MPS/MPU/QuasiLocalActionChoice.lean`.
@@ -11050,42 +11286,6 @@ removed after the dependency audit exposed it.
   so the equality theorem remains a separate mathematical statement.
 
 
-### Actual transfer-norm trace bound — reused matrix units (2026-10-29)
-
-- **Seen:** `MPS/ParentHamiltonian/UnclePinnedTrialNorm.lean`.
-- **Pattern:** Turn a derived pointwise matrix operator-norm bound on a
-  transfer contraction into an algebraic operator-trace bound.
-- **Reuse:** QICLean's matrix-unit trace expansion, entry/operator-norm bound
-  and unit-norm matrix units give the finite dimension factor directly. Its
-  unital CP contraction also bounds every normalized transfer power.
-- **Decision:** Keep the thin local trace calculation and reuse the generic
-  library APIs; no supplied trace-rate or state-rate hypothesis.
-
-
-### Actual endpoint norm averages — coordinate and partition reuse (2026-10-29)
-
-- **Seen:** `MPS/ParentHamiltonian/UncleEndpointEnergyBound.lean`, four endpoints.
-- **Pattern:** Identify a pinned local residual as the actual cyclic restriction
-  of a globally pinned trial, then remove the redundant exterior-window sum.
-- **Reuse:** Public segment addition, boundary-segment and length-cast identities
-  handle all four coordinates. The exact cyclic restriction norm partition
-  gives the global squared norm with its actual physical normalization.
-- **Decision:** Derive the four-state energy bound from those identities; do not
-  introduce an assumed energy-support or norm-rate condition.
-
-
-### Actual mixed word overlaps — finite configuration reuse (2026-10-29)
-
-- **Seen:** `MPS/ParentHamiltonian/UncleTrialOverlap.lean` and the finite
-  norm calculation in `UncleTrialTransferNorm.lean`.
-- **Pattern:** Expand actual ordered word maps, take their algebraic operator
-  trace and identify the resulting physical configuration sum.
-- **Reuse:** Promote the existing canonical five-segment configuration
-  equivalence and its evaluation theorem for their actual second consumer.
-  Use `spectralRadius_eq_of_unital` and `AlgEquiv.spectrum_eq` when the
-  same finite linear map is estimated under another matrix norm.
-- **Decision:** Keep one configuration equivalence and derive all rates from
-  actual mixed maps; do not assume the overlap estimate being established.
 ### Canonical transfer replacement in the actual wall contraction — candidate (2026-10-29)
 
 - **Seen:** `MPS/ParentHamiltonian/UncleNormFactorization.lean`, two long transfer factors.

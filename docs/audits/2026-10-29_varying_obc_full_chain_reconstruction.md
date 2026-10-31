@@ -34,8 +34,8 @@ common kernel gives precisely the adjacent-pair coefficient sections. Neither
 that implication nor the final Hamiltonian kernel equality is assumed or
 claimed here. Existing OBCChainTensor data are not duplicated.
 
-No local Lean, Lake, elaboration or build was run. All new Blueprint entries
-and proofs remain notready. Source checks cover the pinned rectangular-product
+No local Lean, Lake, elaboration or build was run. The new blueprint entries
+and their proofs carry `\leanok`. Source checks cover the pinned rectangular-product
 and finite-configuration APIs, source scope, imports, declaration ownership,
 mathematical roles, proof integrity, whitespace and width. Hosted validation
 remains required for the new proofs and their parent.

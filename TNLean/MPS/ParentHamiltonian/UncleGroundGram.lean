@@ -10,8 +10,8 @@ import TNLean.Spectral.MPVOverlapDecayRect
 # Gram limits for the two periodic uncle ground states
 
 The normalized injective blocks have periodic squared norms tending to one.
-Full perturbation span forces strict mixed damping, so their actual periodic
-inner product tends to zero. These are the actual finite ground vectors;
+Full perturbation span forces strict mixed damping, so their periodic
+inner product tends to zero. These are the finite ground vectors;
 no Gram, asymptotic orthogonality, or transfer-gap premise is supplied.
 In formulas, \(\|\psi_A^N\|^2\to1\), \(\|\psi_B^N\|^2\to1\) and
 \(\langle\psi_A^N,\psi_B^N\rangle\to0\) as \(N\to\infty\).
@@ -28,7 +28,7 @@ namespace MPSTensor
 
 variable {d a b : ℕ}
 
-/-- The actual periodic squared norm of a normalized injective source block
+/-- The periodic squared norm of a normalized injective source block
 tends to one, \(\|\psi_A^N\|^2\to1\). This follows from the derived canonical transfer contraction,
 not a supplied state-normalization limit. Source: arXiv:1210.6613,
 Lemma exptransferoperator. -/
@@ -46,9 +46,7 @@ theorem uncleMPV_norm_sq_tendsto_one
   let V := Matrix (Fin a) (Fin a) ℂ
   let Φ : (V →ₗ[ℂ] V) ≃ₐ[ℂ] (V →L[ℂ] V) := Module.End.toContinuousLinearMap V
   let : FiniteDimensional ℂ (V →L[ℂ] V) := Φ.toLinearEquiv.finiteDimensional
-  let f := (Matrix.traceLinearMap (Fin a) ℂ ℂ).comp
-    (mulLeftLinearMap (n := Fin a) ℂ ρ)
-  let P := f.smulRight (1 : V)
+  let P : V →ₗ[ℂ] V := uncleDensityProjection ρ
   let E := Kraus.mapLM A
   let tr : (V →L[ℂ] V) →L[ℂ] ℂ :=
     ((LinearMap.trace ℂ V).comp (ContinuousLinearMap.coeLM ℂ)).toContinuousLinearMap
@@ -68,7 +66,8 @@ theorem uncleMPV_norm_sq_tendsto_one
   have htrace_eq (N : ℕ) : tr (Φ (E ^ N - P)) = LinearMap.trace ℂ V (E ^ N) - 1 := by
     change LinearMap.trace ℂ V (E ^ N - P) = _
     rw [map_sub]
-    change LinearMap.trace ℂ V (E ^ N) - LinearMap.trace ℂ V (f.smulRight (1 : V)) = _
+    change LinearMap.trace ℂ V (E ^ N) -
+      LinearMap.trace ℂ V ((uncleDensityFunctional ρ).smulRight (1 : V)) = _
     rw [LinearMap.trace_smulRight]
     change LinearMap.trace ℂ V (E ^ N) - Matrix.trace (ρ * (1 : V)) = _
     rw [Matrix.mul_one, htr]
@@ -85,7 +84,7 @@ theorem uncleMPV_norm_sq_tendsto_one
   have hre := (Complex.continuous_re.tendsto (1 : ℂ)).comp htrace
   simpa only [Complex.one_re] using hre.congr hnorm
 
-/-- The actual two periodic source ground vectors become orthogonal,
+/-- The two periodic source ground vectors become orthogonal,
 \(\langle\psi_A^N,\psi_B^N\rangle\to0\), with both squared norms tending
 to one. The full perturbation witness and
 normalized canonical data derive every transfer and Gram condition.

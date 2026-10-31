@@ -1,0 +1,75 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\input{command}
+\title{The Domain of the Varying-Bond Open Parent Theorem}
+\author{}
+\date{October 29, 2026}
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+\section{Source and actual conclusion}
+PGVWC07~\cite{PerezGarcia2007Matrix}, arXiv:quant-ph/0608197, Theorem 9 and proof,
+\path{Papers/quant-ph_0608197/MPSarchive.tex}, lines 1195--1237,
+starts from a canonical open-boundary representation whose blocked site
+families satisfy C1. The local interaction is the orthogonal projector
+onto the complement of the corresponding two-site boundary range.
+
+The current candidate constructs these actual projectors and their open
+sum, derives the adjacent coefficient sections from the actual kernel,
+reconstructs the full chain by the printed canonical adjoint method,
+and closes the singleton endpoint bonds. The dependent-physical-space
+continuation allows arbitrary physical dimensions at the different sites.
+Let $B^{[j]}_i\in M_{D_j,D_{j+1}}(\mathbb C)$ be the site matrices of an
+open chain of $N$ sites with $D_0=D_N=1$. Let $h_{j,j+1}$ be the local
+projector on the adjacent pair $j,j+1$, extended by the identity, and let
+$H=\sum_{j=0}^{N-2}h_{j,j+1}$ be the open parent Hamiltonian. Let $\Omega$
+be the open-chain vector with coefficients
+$\Omega(i_0,\ldots,i_{N-1})=(B^{[0]}_{i_0}\cdots B^{[N-1]}_{i_{N-1}})_{0,0}$.
+For $N\ge2$, the conclusion is
+\begin{align}
+    H\ge0,\qquad \|\Omega\|=1,\qquad
+    \ker H=\mathbb C\Omega,\qquad \dim\ker H=1.
+    \label{eq:pgvwc07_open_parent_domain_ground_state_line}
+\end{align}
+The unit norm and both kernel inclusions are derived from the supplied
+site matrices. There is no assumed ground state, local annihilation
+condition, larger-block boundary, or canonical-form supplier.
+
+\section{Scope still retained}
+The proof is stated for at least two sites, the domain with an adjacent
+pair. It does not assert an unrestricted conclusion for lengths without
+such a pair. The physical dimensions may vary from site to site. They are
+embedded into a common finite alphabet internally; the canonical equations and actual
+parent equation force the represented state into the original physical
+configuration image. Thus no common-alphabet or state-image premise is
+retained. The remaining length restriction must remain visible in the
+mathematical entry. The unrestricted source theorem is not marked complete by this candidate.
+
+The remaining scope work is to establish the intended short-length
+convention from the full source setting. The physical-alphabet restriction
+has been removed by actual operator transport, support extraction and the
+common-alphabet kernel comparison. No counterexample to the unrestricted
+source claim is asserted here. The current proofs also await hosted Lean validation.
+
+\section{Formalization}
+The actual local terms and their kernel characterization are in
+\path{TNLean/MPS/ParentHamiltonian/VaryingOBCProjectorKernel.lean}.
+The full-chain adjoint induction is in
+\path{TNLean/MPS/ParentHamiltonian/VaryingOBCReconstruction.lean},
+and actual boundary-state annihilation is in
+\path{TNLean/MPS/ParentHamiltonian/VaryingOBCBoundaryStates.lean}.
+The scalar-endpoint normalization and final kernel statements are in
+\path{TNLean/MPS/ParentHamiltonian/VaryingOBCParentUniqueness.lean}.
+The actual dependent-physical-space parent, physical support extraction,
+common-alphabet comparison and final normalized state line are in
+\path{TNLean/MPS/ParentHamiltonian/VaryingPhysicalParentHamiltonian.lean},
+\path{TNLean/MPS/ParentHamiltonian/VaryingPhysicalKernelSupport.lean},
+\path{TNLean/MPS/ParentHamiltonian/UniformPhysicalParentComparison.lean}, and
+\path{TNLean/MPS/ParentHamiltonian/VaryingPhysicalParentUniqueness.lean}.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+\end{document}

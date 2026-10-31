@@ -13,30 +13,44 @@ perturbation span condition in Theorem~\ref{thm:uncle_periodic_ground_space}.
 \begin{definition}[The finite two-wall trial]
     \label{def:uncle_two_wall_trial}
     \lean{MPSTensor.uncleTwoWallCoefficient,
-        MPSTensor.uncleTwoWallCoefficient_eq_sum,
-        MPSTensor.uncleTwoWallTrial,MPSTensor.uncleTwoWallTrialSource,
+        MPSTensor.uncleTwoWallTrial,MPSTensor.uncleTwoWallTrialSource}
+    \leanok
+    \uses{def:uncle_boundary_space}
+    For five consecutive words $u,v,w,x,y$, define the coefficient
+    \begin{align}
+        \operatorname{tr}\!\left(A(u)\,R(v)\,B(w)\,L(x)\,A(y)\right),
+    \end{align}
+    where $R(v)$ and $L(x)$ are the sums with one rectangular wall at each
+    position of their respective words. On a chain of
+    length $6N+1$ with $N\ge1$, choose consecutive segment lengths
+    $N,N+1,2N-1,N+1,N$. In coordinates numbered from zero, the first wall
+    ranges from $N$ through $2N$, and the second from $4N$ through $5N$.
+    Denote the resulting vector by $\phi_N$.
+\end{definition}
+
+\begin{lemma}[Coordinates of the two-wall trial]
+    \label{lem:uncle_two_wall_trial_coordinates}
+    \lean{MPSTensor.uncleTwoWallCoefficient_eq_sum,
         MPSTensor.uncleTwoWallTrial_append_apply,
         MPSTensor.uncleTwoWallTrialSource_cast_apply,
         MPSTensor.norm_uncleTwoWallTrialSource_eq}
     \leanok
-    \uses{def:uncle_boundary_space}
-    For five consecutive words $u,v,w,x,y$, define the coefficient
-    \[
-        \operatorname{tr}\!\left(A(u)\,R(v)\,B(w)\,L(x)\,A(y)\right),
-    \]
-    where $R(v)$ and $L(x)$ are the sums with one rectangular wall at each
-    position of their respective words. Thus the coefficient is precisely
-    the independent double sum over both wall positions. On a chain of
-    length $6N+1$ with $N\ge1$, choose consecutive segment lengths
-    $N,N+1,2N-1,N+1,N$. In coordinates numbered from zero, the first wall
-    ranges from $N$ through $2N$, and the second from $4N$ through $5N$.
-    Denote the resulting vector by $\phi_N$. Concatenating five physical
-    configurations evaluates the coefficient on precisely their five words.
-    For $N\ge1$, the length identity
-    $N+(N+1)+(2N-1)+(N+1)+N=6N+1$ identifies the source trial with this
-    five-segment trial by a finite coordinate bijection, preserving its norm
-    exactly.
-\end{definition}
+    \uses{def:uncle_two_wall_trial}
+    The coefficient is the independent double sum over both wall
+    positions. Concatenating five physical configurations evaluates the
+    coefficient on precisely their five words. For $N\ge1$, the length
+    identity $N+(N+1)+(2N-1)+(N+1)+N=6N+1$ identifies the source trial
+    with this five-segment trial by a finite coordinate bijection,
+    preserving its norm exactly.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Expanding each one-wall word sum and distributing the trace over both
+    sums gives the double sum. The ordered list of a concatenated
+    configuration is the concatenation of the five ordered lists. The
+    coordinate bijection is the cast along the length identity, which
+    permutes no coefficients and hence preserves the Euclidean norm.
+\end{proof}
 
 \begin{lemma}[Interior moving-wall cancellation]
     \label{lem:uncle_two_wall_interior_cancellation}
@@ -78,9 +92,9 @@ perturbation span condition in Theorem~\ref{thm:uncle_periodic_ground_space}.
     $E_N=\{N-1,2N,4N-1,5N\}$ be the four distinct bond starting sites.
     Every cyclic local term outside $E_N$ annihilates $\phi_N$, including
     the periodic bond from site $6N$ to site zero. Consequently,
-    \[
+    \begin{align}
         H'_P\phi_N=\sum_{i\in E_N}(h'_P)_{i,i+1}\phi_N.
-    \]
+    \end{align}
     This finite identity uses no perturbation injectivity or normalization
     assumption and does not yet bound the surviving contributions.
 \end{lemma}
@@ -110,9 +124,9 @@ perturbation span condition in Theorem~\ref{thm:uncle_periodic_ground_space}.
     On a chain of length $T$, let $L\le T$ and choose a cyclic starting
     site $i$. Splitting a physical configuration into its ordered window
     and complement is a bijection. Consequently, for every full-chain vector $v$,
-    \[
+    \begin{align}
         \sum_\tau\|R_{i,\tau}v\|^2=d^L\|v\|^2.
-    \]
+    \end{align}
     When $d>0$, multiplication by $d^{-L}$ gives an exact norm partition.
     The unnormalized identity also includes zero physical dimension and
     empty windows.
@@ -136,17 +150,17 @@ perturbation span condition in Theorem~\ref{thm:uncle_periodic_ground_space}.
     \leanok
     \uses{lem:uncle_trial_four_bond_localization,def:two_block_uncle_tensor}
     The actual local uncle projector is a contraction, and
-    \[
+    \begin{align}
         0\le\operatorname{Re}\langle h'_P v,v\rangle
         =\|h'_P v\|^2\le\|v\|^2.
-    \]
+    \end{align}
     Let $R_{i,\tau}$ restrict to the ordered cyclic pair starting at $i$
     with fixed exterior configuration $\tau$. The actual finite trial satisfies
-    \[
+    \begin{align}
         \operatorname{Re}\langle H'_P\phi_N,\phi_N\rangle
         =d^{-2}\sum_{i\in E_N}\sum_\tau\|h'_P R_{i,\tau}\phi_N\|^2
         \le d^{-2}\sum_{i\in E_N}\sum_\tau\|R_{i,\tau}\phi_N\|^2.
-    \]
+    \end{align}
     The latter finite bound does not yet assert the source's linear energy rate.
 \end{lemma}
 \begin{proof}\leanok
@@ -184,11 +198,11 @@ perturbation span condition in Theorem~\ref{thm:uncle_periodic_ground_space}.
     Denote these explicit local vectors by $\eta_{i,\tau}$. The opposite
     wall still ranges over all $N+1$ positions in its original interval;
     every exterior physical word is fixed by $\tau$. Then
-    \[
+    \begin{align}
         h'_P R_{i,\tau}\phi_N=h'_P\eta_{i,\tau},\qquad
         \operatorname{Re}\langle H'_P\phi_N,\phi_N\rangle
         \le d^{-2}\sum_{i\in E_N}\sum_\tau\|\eta_{i,\tau}\|^2.
-    \]
+    \end{align}
     No asymptotic norm estimate is imposed as a hypothesis.
 \end{lemma}
 \begin{proof}\leanok

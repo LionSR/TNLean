@@ -11,7 +11,7 @@ import QICLean.Algebra.MatrixAux
 /-!
 # Finite Gram matrices of a moving domain wall
 
-The actual single-wall sum has a rectangular correlation matrix and a positive
+The single-wall sum has a rectangular correlation matrix and a positive
 Gram matrix. Unital normalization of the right block gives exact recurrences;
 a stationary Hermitian left density gives their weighted trace recurrence.
 The resulting finite weighted mixed-transfer sum is the quantity entering
@@ -34,7 +34,7 @@ noncomputable def uncleWallCorrelation (A : MPSTensor d a) (B : MPSTensor d b)
   ∑ σ : Fin n → Fin d, uncleDomainWallWord A B R (List.ofFn σ) *
     (Kraus.evalWord B (List.ofFn σ))ᴴ
 
-/-- The actual Gram matrix of the moving-wall coefficients;
+/-- The Gram matrix of the moving-wall coefficients;
 arXiv:1210.6613, proof of Lemma lowenergystates. -/
 noncomputable def uncleWallGram (A : MPSTensor d a) (B : MPSTensor d b)
     (R : Fin d → Matrix (Fin a) (Fin b) ℂ) (n : ℕ) :
@@ -70,7 +70,7 @@ noncomputable def uncleWallCrossMap (A : MPSTensor d a)
   simp [uncleWallGram, uncleDomainWallWord]
 
 /-- Every finite moving-wall Gram matrix is positive semidefinite.
-This uses its actual coefficient sum, not a norm-growth hypothesis. -/
+This uses its coefficient sum, not a norm-growth hypothesis. -/
 theorem uncleWallGram_posSemidef (A : MPSTensor d a) (B : MPSTensor d b)
     (R : Fin d → Matrix (Fin a) (Fin b) ℂ) (n : ℕ) :
     (uncleWallGram A B R n).PosSemidef := by
@@ -105,7 +105,7 @@ private theorem sum_evalWord_mul_conjTranspose (B : MPSTensor d b)
         rw [ih, hB]
   simpa only [Kraus.mapLM_pow_apply, Matrix.mul_one] using hpow n
 
-/-- The actual correlation obeys an affine mixed-transfer recurrence under
+/-- The correlation obeys an affine mixed-transfer recurrence under
 source unital normalization of the right block; arXiv:1210.6613,
 proof of Lemma lowenergystates, formula for \(\Xi_R\). -/
 theorem uncleWallCorrelation_succ (A : MPSTensor d a) (B : MPSTensor d b)
@@ -177,7 +177,7 @@ theorem uncleWallGram_succ (A : MPSTensor d a) (B : MPSTensor d b)
     Matrix.conjTranspose_sum]
   abel
 
-/-- Exact finite geometric expansion of the actual wall correlation;
+/-- Exact finite geometric expansion of the wall correlation;
 arXiv:1210.6613, the mixed-transfer sum in \(\Xi_R\). -/
 theorem uncleWallCorrelation_eq_sum (A : MPSTensor d a) (B : MPSTensor d b)
     (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
@@ -200,7 +200,7 @@ noncomputable def uncleWallGramWeight (A : MPSTensor d a) (B : MPSTensor d b)
     (ρ : Matrix (Fin a) (Fin a) ℂ) (n : ℕ) : ℂ :=
   Matrix.trace (ρ * uncleWallGram A B R n)
 
-/-- The actual finite Gram weight is nonnegative for a positive left density.
+/-- The finite Gram weight is nonnegative for a positive left density.
 This is finite positivity, not strict positivity of the asymptotic coefficient
 in arXiv:1210.6613, Lemma lowenergystates. -/
 theorem uncleWallGramWeight_nonneg (A : MPSTensor d a) (B : MPSTensor d b)
@@ -209,7 +209,7 @@ theorem uncleWallGramWeight_nonneg (A : MPSTensor d a) (B : MPSTensor d b)
     0 ≤ uncleWallGramWeight A B R ρ n := by
   exact hρ.trace_mul_nonneg (uncleWallGram_posSemidef A B R n)
 
-/-- The actual scalar cross contraction appearing in the norm calculation;
+/-- The scalar cross contraction appearing in the norm calculation;
 arXiv:1210.6613, the displayed formula for \(\Xi_R\). -/
 noncomputable def uncleWallCrossWeight (A : MPSTensor d a)
     (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
@@ -263,7 +263,7 @@ private theorem weighted_prefix_succ (g : ℕ → ℂ) (n : ℕ) :
   rw [hsub, Nat.cast_add, Nat.cast_one]
   ring
 
-/-- Exact finite weighted mixed-transfer formula for the actual moving-wall
+/-- Exact finite weighted mixed-transfer formula for the moving-wall
 Gram coefficient. At length two it reads twice the one-site Gram weight
 plus twice the real part of the seed cross contraction. This is the finite
 sum in \(\Xi_R\), arXiv:1210.6613, proof of Lemma lowenergystates,

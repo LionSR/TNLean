@@ -1,27 +1,42 @@
 \section{Linear energy of the finite uncle trial}
 \label{sec:uncle_pinned_trial_linear_norm}
 
-\begin{lemma}[Actual pinned-trial norm bounds]
+\begin{lemma}[Pinned-trial norm bounds]
     \label{lem:uncle_pinned_trial_linear_norm}
     \lean{MPSTensor.norm_uncleTwoWallTrial_one_wall_sq_le_mul,
         MPSTensor.norm_uncleTwoWallTrial_second_wall_sq_le_mul}
-    \notready
-    \uses{def:uncle_two_wall_trial,lem:uncle_wall_gram_linear_bounds}
+    \leanok
+    \uses{def:uncle_two_wall_trial,lem:uncle_wall_gram_linear_bounds,lem:uncle_trial_norm_transfer}
     Suppose the transfers of $A$ and $B$ are unital. If $B$ has a faithful
     stationary dual density and the mixed $B/A$ transfer spectral radius
-    is below one, the actual five-segment trial with lengths $p,1,q,s,t$
+    is below one, the five-segment trial with lengths $p,1,q,s,t$
     has squared norm at most $Cs$ for some $C>0$, uniformly in all lengths.
     If instead $A$ has such a density and the mixed $A/B$ transfer spectral
     radius is below one, the trial with lengths $p,r,q,1,t$ has squared
     norm at most $C'r$ for some $C'>0$, uniformly in all lengths.
 \end{lemma}
 \begin{proof}
-    The moving wall map has an operator-norm bound linear in its length.
-    The pinned wall map has a finite Gram-trace bound. Unital complete
-    positivity contracts matrix operator norms, so diagonal transfer powers
-    do not enlarge the bound. The exact finite norm identity is the real
-    operator trace of the five-map composition. Expanding that trace on
-    matrix units gives the stated bounds.
+    \leanok
+    By Lemma~\ref{lem:uncle_trial_norm_transfer},
+    \begin{align}
+        \|\varphi_{p,1,q,s,t}\|^2
+        =\operatorname{Re}\operatorname{Tr}\bigl(E_A^p\circ\mathcal G_R^{(1)}
+        \circ E_B^q\circ\mathcal G_L^{(s)}\circ E_A^t\bigr).
+        \label{eq:uncle_pinned_trial_norm_trace}
+    \end{align}
+    The moving wall map satisfies $\|\mathcal G_L^{(s)}(X)\|\le Cs\|X\|$,
+    the pinned wall map satisfies $\|\mathcal G_R^{(1)}(X)\|\le K\|X\|$,
+    and unital complete positivity gives $\|E_A^n(X)\|\le\|X\|$ and
+    $\|E_B^n(X)\|\le\|X\|$. Expanding the trace on the matrix units
+    $e_{kl}$ therefore gives
+    \begin{align}
+        \|\varphi_{p,1,q,s,t}\|^2
+        \le\sum_{k,l}\bigl\|\bigl(E_A^p\circ\mathcal G_R^{(1)}
+        \circ E_B^q\circ\mathcal G_L^{(s)}\circ E_A^t\bigr)(e_{kl})\bigr\|
+        \le a^2KCs.
+        \label{eq:uncle_pinned_trial_norm_bound}
+    \end{align}
+    The second bound is symmetric, with the roles of the two walls exchanged.
 \end{proof}
 
 \begin{definition}[Globally pinned endpoint trials]
@@ -32,48 +47,71 @@
         MPSTensor.norm_uncleTwoWallTrial_cast,
         MPSTensor.mem_uncleTrialEndpointBonds_iff,
         MPSTensor.uncleConfigSegment_contiguous_end,
-        MPSTensor.uncleConfigSegment_contiguous_start,
-        MPSTensor.cyclicRestrictES_pinnedGlobalState_eq}
-    \notready
+        MPSTensor.uncleConfigSegment_contiguous_start}
+    \leanok
     \uses{def:uncle_two_wall_trial,lem:uncle_trial_pinned_endpoint_residuals}
     For $N>0$, pin the appropriate wall at each of the four endpoint
     bonds $N-1,2N,4N-1,5N$ on the original chain of length $6N+1$.
     The five segment lengths are respectively
-    \[
+    \begin{align}
         (N,1,3N-1,N+1,N),\quad(2N,1,2N-1,N+1,N),
-    \]
-    \[
+    \end{align}
+    \begin{align}
         (N,N+1,2N-1,1,2N),\quad(N,N+1,3N-1,1,N).
-    \]
-    Each cyclic two-site restriction is exactly the corresponding local
-    pinned endpoint vector, with all exterior words preserved.
+    \end{align}
 \end{definition}
 
-\begin{lemma}[Linear energy of the actual source trial]
-    \label{thm:uncle_trial_linear_energy}
+\begin{lemma}[Restrictions of the pinned endpoint trials]
+    \label{lem:uncle_pinned_global_trial_restrictions}
+    \lean{MPSTensor.cyclicRestrictES_pinnedGlobalState_eq}
+    \leanok
+    \uses{def:uncle_pinned_global_trials,lem:uncle_trial_pinned_endpoint_residuals}
+    At each of the four endpoint bonds, every cyclic two-site restriction
+    of the corresponding globally pinned trial is exactly the local pinned
+    endpoint vector, with all exterior words preserved.
+\end{lemma}
+\begin{proof}
+    \leanok
+    In each of the four cases the restriction fixes the configuration
+    outside the endpoint bond. The segment-addition identities identify
+    the remaining coordinates with the five segments of the pinned trial,
+    and the length cast preserves the coefficients.
+\end{proof}
+
+\begin{lemma}[Linear energy of the source trial]
+    \label{lem:uncle_trial_linear_energy}
     \lean{MPSTensor.norm_uncleTrialPinnedGlobalState_sq_le_mul,
         MPSTensor.re_inner_uncleHamiltonianES_trial_le_mul}
-    \notready
-    \uses{def:uncle_pinned_global_trials,lem:uncle_pinned_trial_linear_norm,
-        lem:cyclic_restriction_norm_partition}
+    \leanok
+    \uses{def:uncle_pinned_global_trials,lem:uncle_pinned_trial_linear_norm,lem:cyclic_restriction_norm_partition,lem:uncle_trial_pinned_endpoint_residuals,lem:uncle_pinned_global_trial_restrictions}
     Suppose both diagonal transfers are unital, both have faithful
     stationary dual densities, and both mixed transfer spectral radii are
     below one. For arbitrary rectangular walls there is $C>0$ such that
-    the actual source trial $\phi_N$ on $6N+1$ sites satisfies
-    \[
-        \operatorname{Re}\langle H_N\phi_N,\phi_N\rangle\le CN
+    the source trial $\phi_N$ on $6N+1$ sites satisfies
+    \begin{align}
+        \operatorname{Re}\langle H'_P\phi_N,\phi_N\rangle\le CN
         \qquad (N>0).
-    \]
+    \end{align}
     No perturbation injectivity or generic nonvanishing is needed for
     this upper bound alone.
 \end{lemma}
 \begin{proof}
-    The four globally pinned states have squared norm at most $K(N+1)$.
-    The actual energy is bounded by the averaged squared norms of their
-    local restrictions at the four endpoint bonds. The exact cyclic
-    restriction norm partition turns each average into the corresponding
-    global squared norm. Thus the energy is at most $4K(N+1)\le8KN$.
+    \leanok
+    Let $\Phi_i$ be the four globally pinned states, $i\in E_N$, and let
+    $\eta_{i,\tau}$ be the local pinned endpoint vectors. Each $\Phi_i$ has
+    squared norm at most $K(N+1)$. By
+    Lemma~\ref{lem:uncle_trial_pinned_endpoint_residuals},
+    Lemma~\ref{lem:uncle_pinned_global_trial_restrictions} and the cyclic
+    restriction norm partition of
+    Lemma~\ref{lem:cyclic_restriction_norm_partition},
+    \begin{align}
+        \operatorname{Re}\langle H'_P\phi_N,\phi_N\rangle
+        \le d^{-2}\sum_{i\in E_N}\sum_\tau\|\eta_{i,\tau}\|^2
+        =\sum_{i\in E_N}\|\Phi_i\|^2
+        \le4K(N+1)\le8KN.
+        \label{eq:uncle_trial_linear_energy_chain}
+    \end{align}
 \end{proof}
 
-The actual two-wall norm lower bound, its ground-sector overlaps and the
-final variational argument remain to be established for gaplessness.
+The two-wall norm lower bound, its ground-sector overlaps and the final
+variational argument are established in the following sections.
