@@ -23,17 +23,6 @@ namespace Matrix
 variable {m n m' n' : Type*} [Fintype m] [Fintype n] [Fintype m'] [Fintype n']
   [DecidableEq m] [DecidableEq n] [DecidableEq m'] [DecidableEq n']
 
-omit [Fintype m] [Fintype n] [Fintype m'] [Fintype n']
-  [DecidableEq m] [DecidableEq n] [DecidableEq m'] [DecidableEq n'] in
-/-- Reindexing both factors transports a left coefficient by the first
-factor's equivalence. Source context: GNVW, support-algebra Lemma 7. -/
-theorem bipartiteSlice_reindex_prod (e : m ≃ m') (f : n ≃ n')
-    (X : Matrix (m × n) (m × n) ℂ) (i j : n') :
-    bipartiteSlice (Matrix.reindex (e.prodCongr f) (e.prodCongr f) X) i j =
-      Matrix.reindex e e (bipartiteSlice X (f.symm i) (f.symm j)) := by
-  ext p q
-  simp [bipartiteSlice_apply, Matrix.reindex_apply]
-
 /-- The least left support algebra is independent of independent
 coordinate choices on its two finite factors. Source context:
 arXiv:1703.09188, Appendix support factors, lines 2322–2334. -/

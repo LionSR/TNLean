@@ -123,7 +123,7 @@
         MPOTensor.originalSiteHeisenbergOutputWindowEquiv_outside_eq_iff,
         MPOTensor.originalSiteHeisenbergOutputWindow_eq_chainWindowOperator,
         MPOTensor.originalSiteHeisenbergOutputWindow_mem_supportedOperators}
-    \notready
+    \leanok
     Let $k>0$. For arbitrary matrices $u,v,A$ of the standard-form gate
     dimensions, write $B_{u,v}(A)$ for the actual four-half-block output.
     The six-half-block output window is exactly
@@ -138,7 +138,7 @@
     four-half-block geometry of
     \cite[lines~603--622 and~2300--2334]{Cirac2017MPU}.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:mpu_finite_heisenberg_fixed_window}
     The actual two-site physical identification decodes to the
     concatenation of its two original block words. The output coordinate
@@ -568,7 +568,7 @@
         SpinChain.bufferedMPUQuasiLocalAut_apply,
         SpinChain.bufferedMPUQuasiLocalAut_propagatesWithin,
         SpinChain.bufferedMPUQuasiLocalAut_isQCA}
-    \notready
+    \leanok
     \uses{lem:mpu_finite_cyclic_inverse_propagation,
         lem:mpu_finite_heisenberg_forward_propagation,
         lem:mpu_finite_heisenberg_translation_covariance,
@@ -581,7 +581,7 @@
     This is the supplied-standard-form specialization of the
     source QCA construction; it requires no inverse standard form.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     Choose one actual periodic chain buffering $J\cup\{0\}$ by six
     blocks on the left and twelve on the right. Its length is at
     least $6k$. The actual finite inverse of the target is supported
