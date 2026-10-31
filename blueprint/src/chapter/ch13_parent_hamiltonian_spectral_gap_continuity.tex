@@ -1420,9 +1420,8 @@ is recorded in
 
 \begin{lemma}[Trace duality for a finite family of matrices]
     \label{thm:matrix_family_trace_duality}
-    \lean{Matrix.exists_trace_representation,
-        Matrix.exists_family_trace_representation,
-        Matrix.family_submodule_eq_top_of_trace_separating}
+    \lean{LinearMap.BilinForm.toDual, Matrix.piTraceForm,
+        Matrix.piTraceForm_nondegenerate, Matrix.eq_top_of_pi_trace_separating}
     \leanok
     Every complex linear functional on $\prod_j\operatorname{Mat}_{D_j}(\mathbb C)$
     has the form $M\mapsto\sum_j\tr(\Delta_jM_j)$ for some family

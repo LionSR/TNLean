@@ -21,7 +21,7 @@ see `docs/audits/2026-10-29_weyl_short_volume_candidate.md`.
 namespace MPSTensor.ShortMomentum
 
 /-- Every charge outside the three omitted degree-six charges has an
-explicit actual six-site physical word. -/
+explicit six-site physical word. -/
 theorem exists_six_config_of_charge (u v : ZMod 5)
     (h04 : (u, v) ≠ (0, 4)) (h11 : (u, v) ≠ (1, 1)) (h40 : (u, v) ≠ (4, 0)) :
     ∃ σ : Cfg 3 6, wordCharge (List.ofFn σ) = (u, v) := by
@@ -118,7 +118,7 @@ theorem exists_distinct_nine_cyclic_phases (u v : ZMod 5) (hne : (u, v) ≠ 0) :
   · exact ⟨0, 1, ![0, 0, 1, 1, 2, 2, 2, 2], ![0, 0, 0, 1, 2, 2, 2, 2], by decide⟩
   · exact ⟨0, 1, ![1, 2, 2, 2, 2, 2, 2, 2], ![0, 2, 2, 2, 2, 2, 2, 2], by decide⟩
 
-/-- Every noncentral charge is detected by two actual physical first
+/-- Every noncentral charge is detected by two physical first
 letters at every degree at least seven. -/
 theorem exists_distinct_cyclic_phases (n : ℕ) (hn : 6 ≤ n)
     (u v : ZMod 5) (hne : (u, v) ≠ 0) :

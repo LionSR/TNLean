@@ -9,9 +9,9 @@ import TNLean.MPS.ParentHamiltonian.ChainGroundSpace
 /-!
 # No cyclic main-sector boundary state at degree seven
 
-Two actual seven-site charged boundary vectors agreeing across the
+Two seven-site charged boundary vectors agreeing across the
 cyclic cut are zero. Each nonzero virtual charge has two explicit
-physical first letters with distinct cyclic phases. This is an actual
+physical first letters with distinct cyclic phases. This is an
 short local-space obstruction, not an all-volume kernel classification.
 
 Source context: SPWC10, arXiv:0909.5347, Theorem 5, main.tex lines 850--880;
@@ -20,7 +20,7 @@ see `docs/audits/2026-10-29_weyl_short_volume_candidate.md`.
 
 namespace MPSTensor.ShortMomentum
 
-/-- Every nonzero charge has two actual degree-seven words whose first
+/-- Every nonzero charge has two degree-seven words whose first
 letters detect distinct cyclic phases. All witnesses are explicit finite
 physical configurations; each displayed equality is checked by reduction. -/
 theorem exists_distinct_seven_cyclic_phases (u v : ZMod 5) (hne : (u, v) ≠ 0) :
@@ -55,14 +55,14 @@ theorem exists_distinct_seven_cyclic_phases (u v : ZMod 5) (hne : (u, v) ≠ 0) 
   · exact ⟨0, 1, ![0, 0, 0, 1, 1, 1], ![0, 0, 0, 0, 1, 1], by decide⟩
   · exact ⟨0, 1, ![0, 1, 1, 2, 2, 2], ![0, 0, 1, 2, 2, 2], by decide⟩
 
-/-- The actual character separates any two distinct virtual residues. -/
+/-- The character separates any two distinct virtual residues. -/
 theorem rootCharacter_injective {ζ : ℂ} (hζ : IsPrimitiveRoot ζ 5) :
     Function.Injective (rootCharacter ζ) := by
   intro a b h
   apply ZMod.val_injective 5
   exact hζ.pow_inj (ZMod.val_lt a) (ZMod.val_lt b) h
 
-/-- Actual local boundary vectors agreeing across the seven-site cyclic
+/-- Local boundary vectors agreeing across the seven-site cyclic
 cut vanish. There is no assumed boundary or local-kernel classification. -/
 theorem eq_zero_of_seven_cyclic_agreement {ζ : ℂ} (hζ : IsPrimitiveRoot ζ 5)
     (f g : NSiteSpace 3 7)
@@ -101,7 +101,7 @@ theorem eq_zero_of_seven_cyclic_local_membership {ζ : ℂ} (hζ : IsPrimitiveRo
   exact (eq_zero_of_seven_cyclic_agreement hζ f _ hf hrotate
     (fun i σ ↦ by simp only [Fin.snoc_last, Fin.init_snoc])).1
 
-/-- The actual seven-site periodic main-sector parent space is zero.
+/-- The seven-site periodic main-sector parent space is zero.
 Every cyclic local condition is used through the existing chain ground space. -/
 theorem chainGroundSpace_threeLetterTensor_seven_eq_bot {ζ : ℂ}
     (hζ : IsPrimitiveRoot ζ 5) : chainGroundSpace (threeLetterTensor ζ) 7 7 = ⊥ := by

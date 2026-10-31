@@ -31,7 +31,7 @@ namespace MPSTensor.ShortMomentum
 def countCharge (a b c : ℕ) : ZMod 5 × ZMod 5 :=
   ((a : ZMod 5) - c, (b : ZMod 5) - c)
 
-/-- The charge of an actual three-letter physical word. -/
+/-- The charge of a three-letter physical word. -/
 def wordCharge (w : List (Fin 3)) : ZMod 5 × ZMod 5 :=
   countCharge (w.count 0) (w.count 1) (w.count 2)
 
@@ -39,13 +39,13 @@ def wordCharge (w : List (Fin 3)) : ZMod 5 × ZMod 5 :=
 def sortedWord (a b c : ℕ) : List (Fin 3) :=
   List.replicate a 0 ++ List.replicate b 1 ++ List.replicate c 2
 
-/-- Concatenation adds the actual virtual charge. -/
+/-- Concatenation adds the virtual charge. -/
 theorem wordCharge_append (u v : List (Fin 3)) :
     wordCharge (u ++ v) = wordCharge u + wordCharge v := by
   apply Prod.ext <;> dsimp [wordCharge, countCharge] <;>
     simp only [List.count_append, Nat.cast_add] <;> ring
 
-/-- The three actual letter counts sum to the word length. -/
+/-- The three letter counts sum to the word length. -/
 theorem sum_letter_counts (w : List (Fin 3)) :
     w.count 0 + w.count 1 + w.count 2 = w.length := by
   induction w with
@@ -102,7 +102,7 @@ theorem countCharge_eq_zero_iff (a b c : ℕ) : countCharge a b c = 0 ↔
   · rintro ⟨hab, hbc⟩
     apply Prod.ext <;> dsimp [countCharge] <;> simp [hab, hbc]
 
-/-- No actual degree-seven physical word has central Weyl charge. -/
+/-- No degree-seven physical word has central Weyl charge. -/
 theorem wordCharge_ne_zero_of_length_seven {w : List (Fin 3)} (hw : w.length = 7) :
     wordCharge w ≠ 0 := by
   intro h
@@ -151,7 +151,7 @@ theorem exists_counts_seven_of_charge (u v : ZMod 5) (hne : (u, v) ≠ 0) :
     dsimp [a, b]
     apply Prod.ext <;> dsimp only <;> ring
 
-/-- Every noncentral charge is reached by an actual word of length seven. -/
+/-- Every noncentral charge is reached by a word of length seven. -/
 theorem exists_word_seven_of_charge (u v : ZMod 5) (hne : (u, v) ≠ 0) :
     ∃ w : List (Fin 3), w.length = 7 ∧ wordCharge w = (u, v) := by
   obtain ⟨a, b, c, hdegree, hcharge⟩ := exists_counts_seven_of_charge u v hne
@@ -193,14 +193,14 @@ theorem exists_counts_eight_of_charge (u v : ZMod 5) :
     dsimp [a, b]
     apply Prod.ext <;> dsimp only <;> ring
 
-/-- Every virtual charge is reached by an actual word of length eight. -/
+/-- Every virtual charge is reached by a word of length eight. -/
 theorem exists_word_eight_of_charge (u v : ZMod 5) :
     ∃ w : List (Fin 3), w.length = 8 ∧ wordCharge w = (u, v) := by
   obtain ⟨a, b, c, hdegree, hcharge⟩ := exists_counts_eight_of_charge u v
   exact ⟨sortedWord a b c, by simpa using hdegree, by simpa using hcharge⟩
 
 /-- Every charge is reached at each degree at least eight, using an
-actual degree-eight word followed by copies of the first physical letter. -/
+degree-eight word followed by copies of the first physical letter. -/
 theorem exists_word_of_eight_le_of_charge (n : ℕ) (hn : 8 ≤ n) (u v : ZMod 5) :
     ∃ w : List (Fin 3), w.length = n ∧ wordCharge w = (u, v) := by
   obtain ⟨w, hw, hc⟩ := exists_word_eight_of_charge (u - (n - 8 : ℕ)) v
@@ -215,7 +215,7 @@ theorem exists_word_of_eight_le_of_charge (n : ℕ) (hn : 8 ≤ n) (u v : ZMod 5
     apply Prod.ext <;> simp
 
 /-- Every degree at least eight is a nonnegative combination of three
-and five. This proves actual central reachability above the exceptional
+and five. This proves central reachability above the exceptional
 short degree without extrapolating from a numerical sample. -/
 theorem exists_three_five_decomposition (n : ℕ) (hn : 8 ≤ n) :
     ∃ a b : ℕ, n = 3 * a + 5 * b := by
@@ -233,7 +233,7 @@ theorem exists_three_five_decomposition (n : ℕ) (hn : 8 ≤ n) :
         · exact ⟨3, 0, rfl⟩
         · exact ⟨0, 2, rfl⟩
 
-/-- Every degree at least eight has actual central counts, while degree
+/-- Every degree at least eight has central counts, while degree
 seven has none. -/
 theorem exists_central_counts_of_eight_le (n : ℕ) (hn : 8 ≤ n) :
     ∃ a b c : ℕ, a + b + c = n ∧ (a : ZMod 5) = b ∧ (b : ZMod 5) = c := by

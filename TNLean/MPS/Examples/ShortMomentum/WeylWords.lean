@@ -8,7 +8,7 @@ import QICLean.Kraus.Word
 import TNLean.MPS.Examples.ShortMomentum.Charges
 
 /-!
-# Actual fifth-root Weyl words with an exceptional central degree
+# Fifth-root Weyl words with an exceptional central degree
 
 The matrices in this module have charges (1,0), (0,1), and (-1,-1).
 Their word products are nonzero scalar multiples of the corresponding
@@ -31,7 +31,7 @@ noncomputable def rootCharacter (ζ : ℂ) (a : ZMod 5) : ℂ := ζ ^ a.val
 @[simp] theorem rootCharacter_zero (ζ : ℂ) : rootCharacter ζ 0 = 1 := by
   simp [rootCharacter]
 
-/-- Addition of residues becomes multiplication of actual complex phases. -/
+/-- Addition of residues becomes multiplication of complex phases. -/
 theorem rootCharacter_add {ζ : ℂ} (hζ : ζ ^ 5 = 1) (a b : ZMod 5) :
     rootCharacter ζ (a + b) = rootCharacter ζ a * rootCharacter ζ b := by
   unfold rootCharacter
@@ -60,7 +60,7 @@ theorem rootCharacter_eq_one_iff {ζ : ℂ} (hζ : IsPrimitiveRoot ζ 5) (a : ZM
   · rintro rfl
     exact rootCharacter_zero ζ
 
-/-- The actual charged matrix: its nonzero entry in row i lies in column i-v. -/
+/-- The charged matrix: its nonzero entry in row i lies in column i-v. -/
 noncomputable def chargedWeyl (ζ : ℂ) (u v : ZMod 5) :
     Matrix (ZMod 5) (ZMod 5) ℂ :=
   fun i j ↦ if j = i - v then rootCharacter ζ (u * i) else 0
@@ -69,7 +69,7 @@ noncomputable def chargedWeyl (ζ : ℂ) (u v : ZMod 5) :
   ext i j
   simp [chargedWeyl, Matrix.one_apply, eq_comm]
 
-/-- The exact scalar cocycle of actual charged matrix multiplication. -/
+/-- The exact scalar cocycle of charged matrix multiplication. -/
 theorem chargedWeyl_mul {ζ : ℂ} (hζ : ζ ^ 5 = 1) (a b c d : ZMod 5) :
     chargedWeyl ζ a b * chargedWeyl ζ c d =
       rootCharacter ζ (-c * b) • chargedWeyl ζ (a + c) (b + d) := by
@@ -94,23 +94,23 @@ def letterCharge : Fin 3 → ZMod 5 × ZMod 5 := ![(1, 0), (0, 1), (-1, -1)]
 /-- The third generator is the inverse of the product of the first two. -/
 def letterPhase : Fin 3 → ZMod 5 := ![0, 0, -1]
 
-/-- The actual three-letter tensor on a five-dimensional virtual space. -/
+/-- The three-letter tensor on a five-dimensional virtual space. -/
 noncomputable def threeLetterTensor (ζ : ℂ) : MPSTensor 3 5 :=
   fun i ↦ rootCharacter ζ (letterPhase i) •
     chargedWeyl ζ (letterCharge i).1 (letterCharge i).2
 
-/-- Charge addition agrees with the actual letter counts. -/
+/-- Charge addition agrees with the letter counts. -/
 theorem wordCharge_cons (i : Fin 3) (w : List (Fin 3)) :
     wordCharge (i :: w) = letterCharge i + wordCharge w := by
   fin_cases i <;> apply Prod.ext <;>
     simp [wordCharge, countCharge, letterCharge] <;> ring
 
-/-- The exact scalar exponent produced by multiplying an actual word. -/
+/-- The exact scalar exponent produced by multiplying a word. -/
 def wordPhase : List (Fin 3) → ZMod 5
   | [] => 0
   | i :: w => letterPhase i + wordPhase w - (wordCharge w).1 * (letterCharge i).2
 
-/-- Every actual word is a scalar times its charged Weyl matrix. -/
+/-- Every word is a scalar times its charged Weyl matrix. -/
 theorem evalWord_threeLetterTensor {ζ : ℂ} (hζ : ζ ^ 5 = 1) (w : List (Fin 3)) :
     Kraus.evalWord (threeLetterTensor ζ) w =
       rootCharacter ζ (wordPhase w) •
@@ -154,7 +154,7 @@ theorem trace_chargedWeyl_eq_zero {ζ : ℂ} (hζ : IsPrimitiveRoot ζ 5)
     intro h
     exact hv (by linear_combination h)
 
-/-- Every actual degree-seven word has zero trace. -/
+/-- Every degree-seven word has zero trace. -/
 theorem trace_evalWord_threeLetterTensor_seven {ζ : ℂ} (hζ : IsPrimitiveRoot ζ 5)
     (w : List (Fin 3)) (hw : w.length = 7) :
     (Kraus.evalWord (threeLetterTensor ζ) w).trace = 0 := by

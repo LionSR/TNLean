@@ -8,11 +8,11 @@ import TNLean.MPS.Examples.ShortMomentum.WeylSpans
 import TNLean.MPS.ParentHamiltonian.IntersectionProperty
 
 /-!
-# Actual long-window intersections for the fifth-root Weyl tensor
+# Long-window intersections for the fifth-root Weyl tensor
 
-When the shared interior has at least eight sites, its actual word span
+When the shared interior has at least eight sites, its word span
 is full. Existing trace-pairing reconstruction therefore gives the
-one-step intersection, using the actual inverse of the first physical
+one-step intersection, using the inverse of the first physical
 letter. No intersection property is supplied as a hypothesis.
 
 The exceptional overlaps producing eight and nine sites are not covered
@@ -24,7 +24,7 @@ open scoped BigOperators
 
 namespace MPSTensor.ShortMomentum
 
-/-- The actual one-step intersection once the common interior has at
+/-- The one-step intersection once the common interior has at
 least eight sites. -/
 theorem groundSpace_intersection_threeLetterTensor_of_eight_le {ζ : ℂ}
     (hζ : IsPrimitiveRoot ζ 5) {K : ℕ} (hK : 8 ≤ K)

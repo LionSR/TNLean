@@ -13,6 +13,8 @@ The normalized injective blocks have periodic squared norms tending to one.
 Full perturbation span forces strict mixed damping, so their actual periodic
 inner product tends to zero. These are the actual finite ground vectors;
 no Gram, asymptotic orthogonality, or transfer-gap premise is supplied.
+In formulas, \(\|\psi_A^N\|^2\to1\), \(\|\psi_B^N\|^2\to1\) and
+\(\langle\psi_A^N,\psi_B^N\rangle\to0\) as \(N\to\infty\).
 
 Source: arXiv:1210.6613, Lemma exptransferoperator and the projection against
 the two periodic sectors in Lemma lowenergystates, lines 1165–1295.
@@ -27,7 +29,7 @@ namespace MPSTensor
 variable {d a b : ℕ}
 
 /-- The actual periodic squared norm of a normalized injective source block
-tends to one. This follows from the derived canonical transfer contraction,
+tends to one, \(\|\psi_A^N\|^2\to1\). This follows from the derived canonical transfer contraction,
 not a supplied state-normalization limit. Source: arXiv:1210.6613,
 Lemma exptransferoperator. -/
 theorem uncleMPV_norm_sq_tendsto_one
@@ -83,8 +85,9 @@ theorem uncleMPV_norm_sq_tendsto_one
   have hre := (Complex.continuous_re.tendsto (1 : ℂ)).comp htrace
   simpa only [Complex.one_re] using hre.congr hnorm
 
-/-- The actual two periodic source ground vectors become orthogonal, with
-both squared norms tending to one. The full perturbation witness and
+/-- The actual two periodic source ground vectors become orthogonal,
+\(\langle\psi_A^N,\psi_B^N\rangle\to0\), with both squared norms tending
+to one. The full perturbation witness and
 normalized canonical data derive every transfer and Gram condition.
 Source: arXiv:1210.6613, Lemmas exptransferoperator and lowenergystates. -/
 theorem uncleGroundGram_tendsto

@@ -7,7 +7,7 @@ import TNLean.MPS.Examples.ShortMomentum.WeylWords
 import TNLean.MPS.ParentHamiltonian.GroundSpace
 
 /-!
-# The actual local Weyl boundary space
+# The local Weyl boundary space
 
 Every local boundary vector is exactly a character phase times an
 arbitrary function of the total Weyl charge. The converse is obtained
@@ -39,7 +39,7 @@ noncomputable def chargedWeylDual (ζ : ℂ) (p : ZMod 5 × ZMod 5) :
     Matrix (ZMod 5) (ZMod 5) ℂ :=
   ((5 : ℂ)⁻¹ * rootCharacter ζ (-p.1 * p.2)) • chargedWeyl ζ (-p.1) (-p.2)
 
-/-- Actual trace orthogonality of the charged matrices and their explicit duals. -/
+/-- Trace orthogonality of the charged matrices and their explicit duals. -/
 theorem trace_chargedWeyl_mul_dual {ζ : ℂ} (hζ : IsPrimitiveRoot ζ 5)
     (p q : ZMod 5 × ZMod 5) :
     (chargedWeyl ζ p.1 p.2 * chargedWeylDual ζ q).trace = if p = q then 1 else 0 := by
@@ -70,7 +70,7 @@ theorem trace_chargedWeyl_mul_dual {ζ : ℂ} (hζ : IsPrimitiveRoot ζ 5)
           (by simpa only [sub_eq_add_neg, Prod.snd_zero] using congrArg Prod.snd hz)
     rw [ite_eq_right hzero, ite_eq_right h, mul_zero, mul_zero]
 
-/-- An actual boundary matrix representing a prescribed function of the charge. -/
+/-- A boundary matrix representing a prescribed function of the charge. -/
 noncomputable def chargeBoundary (ζ : ℂ) (g : ZMod 5 × ZMod 5 → ℂ) :
     Matrix (ZMod 5) (ZMod 5) ℂ :=
   ∑ q : ZMod 5 × ZMod 5, g q • chargedWeylDual ζ q
@@ -88,7 +88,7 @@ theorem trace_chargedWeyl_mul_chargeBoundary {ζ : ℂ} (hζ : IsPrimitiveRoot �
   · intro h
     exact (h (Finset.mem_univ _)).elim
 
-/-- Exact local-space characterization on actual finite configurations. -/
+/-- Exact local-space characterization on finite configurations. -/
 theorem mem_groundSpace_threeLetterTensor_iff {ζ : ℂ} (hζ : IsPrimitiveRoot ζ 5)
     (n : ℕ) (f : NSiteSpace 3 n) :
     f ∈ groundSpace (threeLetterTensor ζ) n ↔
@@ -112,7 +112,7 @@ theorem mem_groundSpace_threeLetterTensor_iff {ζ : ℂ} (hζ : IsPrimitiveRoot 
     exact (hg σ).symm
 
 /-- Equal-charge configurations have exactly the corresponding phase relation
-in every actual local boundary vector. -/
+in every local boundary vector. -/
 theorem groundSpace_threeLetterTensor_same_charge {ζ : ℂ} (hζ : IsPrimitiveRoot ζ 5)
     {n : ℕ} {f : NSiteSpace 3 n} (hf : f ∈ groundSpace (threeLetterTensor ζ) n)
     (σ τ : Cfg 3 n) (hcharge : wordCharge (List.ofFn σ) = wordCharge (List.ofFn τ)) :

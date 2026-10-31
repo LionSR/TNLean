@@ -103,6 +103,57 @@ eventual exact-word spanning, and spectral strong irreducibility.
     If the set is empty, its value is defined to be zero.
 \end{definition}
 
+\begin{definition}[Classical stochastic embedding and index]
+    \label{def:stochastic_wielandt_embedding}
+    \lean{Kraus.stochasticFamily, Matrix.positivePowerIndex}
+    \leanok
+    For an entrywise nonnegative real $D\times D$ matrix $a$, let
+    $K^{ij}=\sqrt{a_{ij}}\ketbra{i}{j}$ and let
+    $p(a)=\min\{n\ge1:(a^n)_{ij}>0\text{ for every }i,j\}$,
+    with value zero for the empty set. These are the classical embedding
+    and index in \cite[Proposition~2]{Sanz2010Quantum}.
+\end{definition}
+
+\begin{lemma}[Equality of the stochastic indices]
+    \label{thm:stochastic_wielandt_indices}
+    \lean{MPSTensor.iIndex_stochasticFamily,
+        MPSTensor.qIndex_stochasticFamily}
+    \leanok
+    \uses{def:stochastic_wielandt_embedding, def:wielandt_i_index,
+        def:wielandt_q_index}
+    For every entrywise nonnegative real $D\times D$ matrix $a$ with
+    $D>0$, the matrix-unit family satisfies $q(\E_K)=p(a)=\iota(K)$.
+\end{lemma}
+
+\begin{proof}\leanok
+    The three sets of admissible positive lengths coincide:
+    the normalized Choi matrix of $\E_K^n$ is diagonal with entries
+    $(a^n)_{ij}/D$, so full word span is equivalent to strict positivity
+    of $a^n$. Full vector spreading is equivalent to the same condition,
+    as seen by applying the channel to the coordinate rank-one states.
+    Taking the minima gives the equalities.
+\end{proof}
+
+\begin{lemma}[Primitive stochastic embedding]
+    \label{thm:primitive_stochastic_embedding}
+    \lean{MPSTensor.isPrimitivePaper_stochasticFamily,
+        MPSTensor.stochasticFamily_primitive_and_indices}
+    \leanok
+    \uses{def:stochastic_wielandt_embedding, def:paper_primitive,
+        def:wielandt_i_index, def:wielandt_q_index}
+    Let $a$ be a primitive column-stochastic $D\times D$ matrix with
+    $D>0$. Then its matrix-unit quantum embedding is primitive and
+    $q(\E_K)=p(a)=\iota(K)$, as in
+    \cite[Proposition~2]{Sanz2010Quantum}.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:stochastic_wielandt_indices}
+    A strictly positive positive-length power of $a$ gives full vector
+    spreading at that length. The index equalities hold by
+    Lemma~\ref{thm:stochastic_wielandt_indices}.
+\end{proof}
+
 \begin{definition}[Strengthened strong irreducibility]
     \label{def:strongly_irreducible_paper}
     \lean{MPSTensor.IsStronglyIrreduciblePaper}
@@ -363,6 +414,45 @@ matrices, and let $\E_K$ be its Kraus map.
     large $m$.
 \end{proof}
 
+\begin{lemma}[The simple peripheral eigenspace criterion]
+    \label{thm:wielandt_literal_peripheral_criterion}
+    \lean{MPSTensor.isStronglyIrreduciblePaper_of_simple_peripheral_fixedPoint,
+        MPSTensor.primitivePaper_iff_exists_simple_peripheral_fixedPoint,
+        MPSTensor.hasEventuallyFullKrausRank_iff_exists_simple_peripheral_fixedPoint}
+    \leanok
+    \uses{def:paper_primitive, def:eventually_full_kraus_rank,
+        def:strongly_irreducible_paper, thm:wielandt_proposition_three,
+        thm:wolf_6_8_kraus_span, thm:strongly_irreducible_of_paper_primitive,
+        thm:primitive_from_strongly_irred}
+    Let $D>0$ and suppose $\sum_i(A^i)^\dagger A^i=\Id$.
+    The following conditions are equivalent:
+    \begin{enumerate}
+        \item $\E_A$ is primitive.
+        \item The exact-length word spaces eventually equal $\MN{D}$.
+        \item There is $\rho>0$ such that $\E_A(\rho)=\rho$, the fixed
+              eigenspace is $\mathbb C\rho$, and $1$ is the only peripheral
+              eigenvalue.
+    \end{enumerate}
+    In the third condition, irreducibility is a conclusion rather than
+    an additional hypothesis. This is \cite[Proposition~3]{Sanz2010Quantum}.
+\end{lemma}
+\begin{proof}\leanok
+    For a primitive channel, the positive-definite fixed point and the
+    complementary spectral gap give the third condition. Conversely, assume
+    the third condition and let $P\neq0,\Id$ be an orthogonal projection with
+    $\E_A(P\MN{D}P)\subseteq P\MN{D}P$. The restriction of $\E_A$ to this
+    corner is positive and trace preserving, so it fixes a density matrix
+    $\sigma=P\sigma P$. Simplicity of the fixed eigenspace gives
+    $\sigma=c\rho$ with $c\neq0$, hence
+    \begin{align}
+        (\Id-P)\rho(\Id-P) & =c^{-1}(\Id-P)\sigma(\Id-P)=0,
+        \notag
+    \end{align}
+    contradicting $\rho>0$. Thus $\E_A$ is irreducible, and together with
+    peripheral primitivity this gives eventual full Kraus rank and hence
+    primitivity.
+\end{proof}
+
 \begin{lemma}[Normalized normal tensors are strongly irreducible]
     \label{thm:normalized_normal_strongly_irreducible}
     \lean{MPSTensor.isStronglyIrreduciblePaper_of_hasEventuallyFullKrausRank,
@@ -390,7 +480,7 @@ matrices, and let $\E_K$ be its Kraus map.
     \label{thm:q_index_le_i_index_channel}
     \lean{MPSTensor.qIndex_le_iIndex_of_tracePreserving}
     \leanok
-    \uses{def:wielandt_i_index, def:wielandt_q_index, thm:wielandt_proposition_three}
+    \uses{def:wielandt_i_index, def:wielandt_q_index, thm:wolf_6_8_kraus_span}
     Let $A_1,\ldots,A_d\in\MN{D}$, where $D>0$, satisfy
     $\sum_i A_i^\dagger A_i=\Id$. With both indices set to zero when
     their defining sets are empty, one has $q(\E_A)\le\iota(A)$.
@@ -401,7 +491,7 @@ matrices, and let $\E_K$ be its Kraus map.
     If $\iota(A)$ is a positive integer with $S_{\iota(A)}(A)=\MN{D}$, then
     $H_{\iota(A)}(A,\varphi)=\C^D$ for every $\varphi\neq0$, so $\iota(A)$
     lies in the defining set for $q(\E_A)$ and $q(\E_A)\le\iota(A)$.
-    Otherwise, Lemma~\ref{thm:wielandt_proposition_three} excludes
+    Otherwise, Lemma~\ref{thm:wolf_6_8_kraus_span} excludes
     primitivity, so
     $\{q\ge1:H_q(A,\varphi)=\C^D\text{ for every }\varphi\neq0\}=\emptyset$
     and $q(\E_A)=0\le\iota(A)$.

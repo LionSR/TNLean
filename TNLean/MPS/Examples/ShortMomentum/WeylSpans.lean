@@ -8,12 +8,12 @@ import TNLean.MPS.Examples.ShortMomentum.WeylWords
 import QICLean.Kraus.Injectivity
 
 /-!
-# The actual degree-eight span and the degree-seven trace obstruction
+# The degree-eight span and the degree-seven trace obstruction
 
 The three-letter fifth-root Weyl tensor is normal, with a concrete
 injectivity witness at degree eight. Every word of degree seven is
 traceless, whereas every degree at least eight contains a word with
-nonzero trace. These are properties of the actual matrix products;
+nonzero trace. These are properties of the matrix products;
 no all-volume Hamiltonian kernel claim is made here.
 
 Source context: SPWC10, arXiv:0909.5347, Theorem 5, main.tex lines 850--880.
@@ -38,7 +38,7 @@ theorem sum_rootCharacter_mul {ζ : ℂ} (hζ : IsPrimitiveRoot ζ 5) (a : ZMod 
   rw [Matrix.sum_pow_val_eq_ite (rootCharacter_pow_five hζ.pow_eq_one a)]
   simp only [rootCharacter_eq_one_iff hζ, Nat.cast_ofNat]
 
-/-- A finite Fourier sum of actual charged matrices is a matrix unit. -/
+/-- A finite Fourier sum of charged matrices is a matrix unit. -/
 theorem sum_rootCharacter_smul_chargedWeyl {ζ : ℂ} (hζ : IsPrimitiveRoot ζ 5)
     (i j : ZMod 5) :
     ∑ u : ZMod 5, rootCharacter ζ (-u * i) • chargedWeyl ζ u (i - j) =
@@ -68,7 +68,7 @@ theorem sum_rootCharacter_smul_chargedWeyl {ζ : ℂ} (hζ : IsPrimitiveRoot ζ 
       rw [sum_rootCharacter_mul hζ, ite_eq_right hki]
     · simp [chargedWeyl, hl]
 
-/-- The actual charged matrices span the entire matrix algebra. -/
+/-- The charged matrices span the entire matrix algebra. -/
 theorem span_chargedWeyl_eq_top {ζ : ℂ} (hζ : IsPrimitiveRoot ζ 5) :
     Submodule.span ℂ (Set.range fun p : ZMod 5 × ZMod 5 ↦ chargedWeyl ζ p.1 p.2) = ⊤ := by
   let S := Submodule.span ℂ
@@ -83,7 +83,7 @@ theorem span_chargedWeyl_eq_top {ζ : ℂ} (hζ : IsPrimitiveRoot ζ 5) :
   have hscaled := S.smul_mem ((5 : ℂ)⁻¹) hmem
   simpa only [smul_smul, inv_mul_cancel₀ (by norm_num : (5 : ℂ) ≠ 0), one_smul] using hscaled
 
-/-- Every charged matrix belongs to the actual word span at every degree
+/-- Every charged matrix belongs to the word span at every degree
 at least eight. -/
 theorem chargedWeyl_mem_wordSpan {ζ : ℂ} (hζ : IsPrimitiveRoot ζ 5)
     (n : ℕ) (hn : 8 ≤ n) (u v : ZMod 5) :
@@ -97,7 +97,7 @@ theorem chargedWeyl_mem_wordSpan {ζ : ℂ} (hζ : IsPrimitiveRoot ζ 5)
   rw [heq]
   exact Submodule.smul_mem _ _ hmem
 
-/-- Every degree at least eight has the full actual matrix word span. -/
+/-- Every degree at least eight has the full matrix word span. -/
 theorem isNBlkInjective_threeLetterTensor_of_eight_le {ζ : ℂ}
     (hζ : IsPrimitiveRoot ζ 5) (n : ℕ) (hn : 8 ≤ n) :
     Kraus.IsNBlkInjective (threeLetterTensor ζ) n := by
@@ -107,7 +107,7 @@ theorem isNBlkInjective_threeLetterTensor_of_eight_le {ζ : ℂ}
   rintro _ ⟨⟨u, v⟩, rfl⟩
   exact chargedWeyl_mem_wordSpan hζ n hn u v
 
-/-- Degree eight is an actual injectivity witness for the three-letter tensor. -/
+/-- Degree eight is an injectivity witness for the three-letter tensor. -/
 theorem isNBlkInjective_threeLetterTensor_eight {ζ : ℂ} (hζ : IsPrimitiveRoot ζ 5) :
     Kraus.IsNBlkInjective (threeLetterTensor ζ) 8 :=
   isNBlkInjective_threeLetterTensor_of_eight_le hζ 8 (by omega)
@@ -125,7 +125,7 @@ theorem not_isNBlkInjective_threeLetterTensor_seven {ζ : ℂ} (hζ : IsPrimitiv
   · exact trace_evalWord_threeLetterTensor_seven hζ _ List.length_ofFn
   · norm_num [Matrix.trace_one]
 
-/-- Every degree at least eight contains an actual word with nonzero trace. -/
+/-- Every degree at least eight contains a word with nonzero trace. -/
 theorem exists_trace_evalWord_ne_zero_of_eight_le {ζ : ℂ} (hζ : IsPrimitiveRoot ζ 5)
     (n : ℕ) (hn : 8 ≤ n) :
     ∃ w : List (Fin 3), w.length = n ∧
