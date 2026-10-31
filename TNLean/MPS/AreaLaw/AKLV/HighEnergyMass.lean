@@ -190,6 +190,14 @@ theorem norm_highProjection_le_sqrt_clipped_energy
     _ = Real.sqrt (‖ι Q x‖ ^ 2) := (Real.sqrt_sq (norm_nonneg _)).symm
     _ ≤ _ := Real.sqrt_le_sqrt hsq
 
+/-- A positive matrix bounded above by `c • 1` has operator norm at most `c`. This is
+how the two removed boundary bonds `0 ≤ hₐ + h_b ≤ 2` enter the AKLV estimates. -/
+theorem _root_.Matrix.PosSemidef.norm_le_of_le_smul_one {n : Type*} [Fintype n]
+    [DecidableEq n] {A : Matrix n n ℂ} (hA : A.PosSemidef) {c : ℝ} (hc : 0 ≤ c)
+    (hAc : A ≤ (c : ℂ) • 1) : ‖A‖ ≤ c :=
+  (CStarAlgebra.norm_le_iff_le_algebraMap A hc hA.nonneg).mpr
+    (by simpa [Algebra.algebraMap_eq_smul_one, ← Complex.coe_smul] using hAc)
+
 /-- The corrected Cauchy--Schwarz bound in AKLV, arXiv:1301.1162v1,
 the proof of Lemma 6.5(2): the unsquared modulus is at most twice the
 square root of clipped energy divided by the cutoff. The source typo is
@@ -212,9 +220,7 @@ theorem norm_low_high_boundary_inner_le_sqrt_clipped_energy
       |>.isStarProjection_spectralProjectionGE t).one_sub).map ι
   have hlow : ‖ι (1 - Q) x‖ ≤ 1 := by
     simpa only [hx] using ContinuousLinearMap.IsStarProjection.norm_apply_le hQ x
-  have hnormA : ‖A‖ ≤ 2 := by
-    apply (CStarAlgebra.norm_le_iff_le_algebraMap A (by norm_num) hA.nonneg).mpr
-    simpa [Algebra.algebraMap_eq_smul_one, ← Complex.coe_smul] using hAcap
+  have hnormA : ‖A‖ ≤ 2 := hA.norm_le_of_le_smul_one (by norm_num) (by simpa using hAcap)
   have hhigh := norm_highProjection_le_sqrt_clipped_energy
     L N R A hL hN hR hA hLN hLR hNR t ht x
   calc

@@ -42,5 +42,6 @@ import TNLean.Circuit.Channel.PortSimulation
 import TNLean.Circuit.Channel.RegisterChannelLift
 import TNLean.Circuit.Channel.RegisterEncoding
 import TNLean.Circuit.Channel.RegisterEnvironment
+import TNLean.Circuit.Channel.RegroupedProtocol
 import TNLean.Circuit.Channel.SiteBlocking
 import TNLean.Circuit.Channel.WholeSiteChannels

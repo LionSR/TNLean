@@ -2129,7 +2129,17 @@ in `MPS/Preparation/` uses it.
   `IsLocalChannelProtocol.channelCircuitMap_comp` (appending a local channel
   circuit of `n` layers adds `n` to the depth), and
   `IsLocalChannelProtocol.exists_dual` (light cone of radius `T` of the
-  Heisenberg dual).
+  Heisenberg dual). Grouping `k` consecutive sites is constructed in
+  `Circuit/Channel/RegroupedProtocol.lean`:
+  for positive block count, block size, and input local dimension,
+  `IsLocalChannelProtocol.exists_regrouped` gives depth at most `2T` for
+  even block counts and `3T` in general, with exact equality on all operators
+  and arbitrary external references. The dimension-bounded version raises
+  the budget from `B` to `B^k`. `IsLocalChannelConversion.then_blocked`
+  composes an unblocked conversion followed by a blocked conversion with
+  bound `2T+U` or `3T+U`. One block admits depth zero; the generic two-block
+  bound is `2T`. The six-site seam matching projects to a triangle after
+  grouping pairs, obstructing its direct partition into two block matchings.
 - **Caveat:** the depth `T` counts the two-site layers exactly; onsite channels
   are free. Onsite channels may enlarge the dimension, and a layer on the
   enlarged sites still costs one depth unit. No uniform intermediate-dimension
@@ -4023,3 +4033,20 @@ cut lie in `Span(S)`, that is, whose reduced density on the first `i` sites is s
 | `TNLean.MPS.AreaLaw.IsViable Γ δ S` | Some unit vector `φ ∈ Span(S) ⊗ H_R` has `‖⟨φ, Γ⟩‖ ≥ 1 - δ` | Definition `def:viable`, lines 240–242, with the overlap itself (not its square) bounded below. For `δ < 1`, `isViable_iff_le_norm_starProjection` makes it `‖P_{Span(S) ⊗ H_R} Γ‖ ≥ 1 - δ`; at `δ = 1` with `Span(S) = 0` this fails. For a unit `Γ`, `IsViable.forall_mem_span_singleton` (all `δ ≤ 1`) and `isViable_iff_forall_mem_span_singleton` (`δ < 1`) identify it with the vector form of QICLean's `Submodule.IsCloseTo (1 - (1 - δ)²)` for `span {Γ}`, the squared-overlap closeness of arXiv:1602.08828v2 (Definitions `d:vs`, `d:close`); the parameter changes from `δ` to `1 - (1 - δ)²`. |
 | `TNLean.MPS.AreaLaw.IsLeftOpenMPS b v` | The vector `v` on the first `k` sites, read on `Fin k → Fin q`, is an open-boundary matrix product state of bond dimension at most `max 1 b` | Line 243. Bond dimension `0` is read as `1`, a local fix recorded in `docs/paper-gaps/lvv13_bond_dimension_zero.tex`; it makes `IsLeftOpenMPS.extendSite` hold with no hypothesis `0 < b`. |
 | `TNLean.MPS.AreaLaw.IsViableMPS Γ s b δ S` | `S` has at most `s` members, each `IsLeftOpenMPS b`, and is `IsViable Γ δ` | Definition `def:viable`, lines 240–244. Claim `c:ext` (lines 379–400) is `IsViableMPS.extend`: appending one site in every basis state gives an `(i, q s, b, δ)`-viable set with the same witness. |
+
+## The physical AKLV filter sequence
+
+The following predicates record the actual polynomial and normalized-vector
+relations in AKLV, arXiv:1301.1162v1. They are derived from the original
+nearest-neighbour interactions by the construction theorems; they are not
+additional hypotheses of the final entropy or MPS approximation theorems.
+
+| Declaration | Mathematical meaning | Source and qualification |
+|---|---|---|
+| `IsAKLVSequenceInitialization` | The initial vector is the phase-aligned normalized polynomial image of a product vector for the clipped ground state. | Lines 1016–1024. The product overlap is with that clipped ground state. |
+| `IsAKLVSequenceStep` | One subsequent vector is the normalized Chebyshev image of the preceding vector for the next clipped Hamiltonian, retaining its ground state, gap and phase. | Lemma `l:5`, lines 1025–1052. |
+| `IsAKLVAccuracyFilteredOutput` | A vector is the actual filtered image of the initialized vector in an enlarged window at the same physical cut. | Lines 1503–1517. When the window does not fit, the final theorem uses the exact ground vector and the finite-dimensional rank bound instead. |
+
+The construction uses an actual first excitation gap. The final entropy
+estimate retains its inverse-gap logarithms. Regional support and normalization
+corrections are documented in `docs/paper-gaps/aklv13_two_block_robustness.tex`.
