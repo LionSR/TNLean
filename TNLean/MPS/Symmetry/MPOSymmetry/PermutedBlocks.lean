@@ -48,11 +48,11 @@ simplicity, transitivity, nor finiteness is used.
 open scoped Matrix Kronecker
 open TNLean.Algebra
 
+universe u v
+
 namespace MPOTensor
 
 namespace GroupFamily
-
-universe u v
 
 variable {d : ℕ} {G : Type u} [Group G] {F : GroupFamily G d}
   {X : Type v} [MulAction G X] {D : X → ℕ} {A : (x : X) → MPSTensor d (D x)}
@@ -319,9 +319,9 @@ private theorem fuseV_mul_left :
         (ad.V (g * h * k) x * kronId (fd.leftV g h k) (D x)) := by
   simp only [fuseV, FusionData.leftV, Matrix.mul_assoc, kronId_mul]
 
+set_option maxHeartbeats 800000 in
 -- The target-block identifications `castIndex D …` make elaborating this statement and its
 -- siblings heavier than the invariant-block analogues in `AnomalyObstruction`.
-set_option maxHeartbeats 800000 in
 /-- Fusing `g` with `hk` after fusing `h` with `k` is the fusion tree `rightV` of the
 associator, followed by the action of `ghk`. -/
 private theorem fuseV_mul_right :
@@ -334,10 +334,10 @@ private theorem fuseV_mul_right :
 
 end Triple
 
+set_option maxHeartbeats 800000 in
 -- The permuted-block reductions carry extra target-block identifications `castIndex D …`
 -- throughout, so the pullback bookkeeping is heavier than the invariant-block analogue
 -- `MPOTensor.GroupFamily.ActionData.isCompatible_lSymbol` in `AnomalyObstruction`.
-set_option maxHeartbeats 800000 in
 /-- **Compatibility of the L-symbols of permuted blocks with the anomaly three-cocycle**
 (arXiv:2502.20257, `eq:omega_and_Ls`, `main.tex` lines 1920--1923; arXiv:2203.12563,
 `pentagongroups` and line 1129):
