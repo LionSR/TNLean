@@ -7,7 +7,7 @@
         MPSTensor.exists_mpvState_eq_of_cyclic_invariant,
         MPSTensor.mpvState_cyclic_invariant,
         MPSTensor.exists_mpvState_eq_iff_cyclic_invariant}
-    \notready
+    \leanok
     \uses{thm:seqanc_cut_rank_attained, thm:seqanc_cut_rank_bounds,
         thm:pgvwc07_site_independent_matrices}
     Let $N>0$ and let $\psi\ne0$ be a finite vector satisfying
@@ -18,7 +18,7 @@
     Thus a nonzero positive-length vector is representable precisely
     when its cyclic momentum is zero.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     The actual finite OBC construction supplies a chain with bond bound
     $d^{\lfloor N/2\rfloor}$. Apply the cyclic block averaging of
     \cite[Theorem~3]{PerezGarcia2007Matrix}; exact invariance makes the
@@ -29,14 +29,14 @@
 \begin{lemma}[Unused periodic bond coordinates]
     \label{lem:periodic_uniform_bond_padding}
     \lean{MPSTensor.padBond, MPSTensor.mpv_padBond, MPSTensor.mpvState_padBond}
-    \notready
+    \leanok
     \uses{def:mps_tensor}
     Extending all site matrices by zero from dimension $D$ to any
     dimension $K\ge D$ preserves every periodic vector of positive
     length. The assertion excludes the empty word, whose trace is the
     bond dimension.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     Zero extension preserves products through a retained intermediate
     bond. Induct on nonempty words and take the trace; all added
     diagonal entries are zero.
@@ -45,7 +45,7 @@
 \begin{lemma}[One common bond size on the exact cyclic ground sector]
     \label{lem:uniform_bond_cyclic_ground_sector}
     \lean{MPSTensor.exists_uniform_bond_on_cyclic_ground_sector}
-    \notready
+    \leanok
     \uses{thm:eventual_mps_prime_length_dichotomy,
         lem:periodic_finite_cyclic_representation, lem:periodic_uniform_bond_padding}
     Suppose the permitted ground spaces $\ker H_M$, $M\ge L$, are
@@ -59,7 +59,7 @@
     every such line at $M<M_0$. The representing tensor may depend
     on $M$.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     At long lengths extend $B$ by unused bond coordinates. At a short
     length use the preceding finite representation, whose dimension is
     $M d^{\lfloor M/2\rfloor}\le M_0d^{M_0}<K$, and then extend it.
@@ -70,7 +70,7 @@
 \begin{lemma}[Exact finite-prefix criterion for an all-volume family]
     \label{lem:uniform_bond_finite_prefix_criterion}
     \lean{MPSTensor.uniform_bond_family_iff_short_cyclic_ground}
-    \notready
+    \leanok
     \uses{lem:uniform_bond_cyclic_ground_sector}
     Under the preceding assumptions, the following are equivalent:
     \begin{enumerate}
@@ -88,7 +88,7 @@
     boundary is recorded in
     \cite{gap:spwc10_ground_state_dichotomy_quantifiers}.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     The first condition supplies nonzero periodic trace vectors, and
     trace cyclicity proves the second. Conversely use the preceding
     common-size construction at the short volumes and the already
@@ -103,16 +103,17 @@
     \lean{MPSTensor.mpv_apply_of_bondOne,
         MPSTensor.exists_mpv_ne_zero_of_bondOne,
         MPSTensor.mpvState_ne_zero_of_normal_bondOne}
-    \notready
+    \leanok
     For a bond-one tensor,
-    \[
-        V^{(M)}(B)_\sigma=\prod_{j=1}^M B_{\sigma_j}.
-    \]
+    \begin{align}
+        V^{(M)}(B)_\sigma & =\prod_{j=1}^M B_{\sigma_j}.
+        \label{eq:spwc_bond_one_product_vector}
+    \end{align}
     If one letter is nonzero, this vector is nonzero at every positive
     length. In particular this holds for every normal bond-one tensor;
     no finite-volume nonvanishing hypothesis is needed.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     The unique virtual index leaves one product in the trace expansion.
     Choose the same nonzero letter at every physical site. Its product
     is nonzero. Normality supplies such a letter.
@@ -122,7 +123,7 @@
     \label{lem:spwc_bond_one_finite_prefix_ground}
     \lean{MPSTensor.exists_cyclic_ground_of_normal_bondOne_local_kernel,
         MPSTensor.uniform_bondOne_ground_family_of_normal_local_kernel}
-    \notready
+    \leanok
     \uses{lem:spwc_bond_one_all_volume_nonvanishing}
     Suppose the normal tensor in the eventual fixed-state construction
     has bond dimension one. Retain the derived inclusion of its
@@ -135,7 +136,7 @@
     This treats the product-state branch only; the general short-volume
     obligation remains in \cite{gap:spwc10_ground_state_dichotomy_quantifiers}.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     The preceding lemma proves actual nonvanishing at every positive
     length. The local-kernel inclusion annihilates each cyclic local
     term on the periodic vector, so the full energy is zero. Cyclicity
@@ -146,7 +147,7 @@
 \begin{lemma}[Product-state completion from one actual prime-length ground vector]
     \label{lem:spwc_bond_one_prime_ground_family}
     \lean{MPSTensor.exists_uniform_bondOne_ground_family_of_prime_length_bound}
-    \notready
+    \leanok
     \uses{lem:spwc_bond_one_finite_prefix_ground}
     Let $h$ be the one fixed positive interaction of range $L$, and
     assume every permitted periodic Hamiltonian has a one-dimensional
@@ -156,7 +157,7 @@
     the entire finite prefix. The normal tensor and local-kernel
     inclusion are derived rather than supplied.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     Apply the actual prime-length extraction, retaining its normality
     and local-kernel inclusion. Its positive retained dimension is at
     most the input dimension one, hence equals one. Apply the preceding

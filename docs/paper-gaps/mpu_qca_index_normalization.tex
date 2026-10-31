@@ -1,0 +1,82 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\input{command}
+\title{Normalization and Gate Orientation in the MPU--QCA Index Comparison}
+\author{}
+\date{2026-10-29}
+\begin{document}
+\maketitle
+\gapnote{local-correction}{open}
+
+\section{Two printed normalizations}
+
+Definition~\texttt{def:index} of Ref.~\cite{Cirac2017MPU}, source
+\path{Papers/1703.09188/paper_v2.tex}, lines 681--688, defines the MPU index by
+\begin{align}
+    \operatorname{ind}_{\mathrm{MPU}}
+    =\tfrac12(\log_2r-\log_2\ell)
+    =\log_2(r/d)=-\log_2(\ell/d),
+    \qquad r\ell=d^2.
+    \label{eq:mpu_qca_main_index_normalization}
+\end{align}
+The last equality is also stated explicitly at line 688.
+
+In the Appendix, equation~\texttt{eq:original-index}, lines 2329--2333,
+identifies the positive rational QCA index as
+\begin{align}
+    \operatorname{ind}_{\mathrm{QCA}}=s/d=\ell/d.
+    \label{eq:mpu_qca_original_ratio}
+\end{align}
+Line 2334 instead prints
+$\operatorname{ind}_{\mathrm{MPU}}=-2\log_2(\ell/d)$.
+This factor of two conflicts with both the defining formula and its
+immediate consequence in (\ref{eq:mpu_qca_main_index_normalization}).
+
+\section{Nondegenerate check and correction}
+
+For $d>1$, $r=d^2$ and $\ell=1$, the defining formula gives
+$\log_2d$, whereas the printed Appendix expression gives $2\log_2d$.
+These are the nonzero shift dimensions, not an empty or inactive factor.
+The correction is therefore
+\begin{align}
+    \operatorname{ind}_{\mathrm{MPU}}
+    =-\log_2(\operatorname{ind}_{\mathrm{QCA}}).
+    \label{eq:mpu_qca_corrected_log_relation}
+\end{align}
+The positive rational identification (\ref{eq:mpu_qca_original_ratio}) is
+unchanged. The left support factor carries $\ell$, as printed at line 2333.
+Main-text line 543 states that $u$ and $v^\dagger$ map the physical pair
+space to the intermediate $r\ell$-dimensional space. Thus $v$ maps back
+to the physical pair, in the direction used by the actual forward
+conjugation in equation~\texttt{eq:appendix-1}. Transporting the intermediate
+left factor to the physical pair therefore gives
+$v(I_r\otimes M_\ell)v^\dagger$. Appendix line 2333 instead writes
+$v^\dagger(I\otimes M_\ell)v$, reversing the adjoints relative to the
+main-text direction. The formalized finite output family uses the actual
+forward order; its least left support is derived, rather than assumed
+from either printed expression. The matrix size is $\ell$ in the corrected
+presentation, so this adjoint-order correction does not change the
+positive rational index.
+
+\section{Formalization scope}
+
+The finite output-family calculation derives its least left support
+algebra and matrix size from the supplied unitary gates. It does not
+assume a support-factor presentation or identify an arbitrary supplied
+gate with a selected singular-value factorization. The actual
+QCA comparison now identifies this finite family with the canonical
+nearest-neighbour pair image of the induced automorphism after the
+supplied physical blocking. The source-written declarations
+\leanid{SpinChain.blocked_bufferedMPUQuasiLocalAut_evenSupportEquiv_zero} and
+\leanid{SpinChain.coe_gnvwIndex_blocked_bufferedMPUQuasiLocalAut}
+derive the actual matrix size and positive rational index $\ell/d^k$.
+This assembly is distinct from the printed factor-of-two correction and
+remains pending Lean checking. Arbitrary regrouping independence and a
+comparison with the public logarithmic MPU index are not asserted by
+these positive-rational declarations.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+\end{document}
