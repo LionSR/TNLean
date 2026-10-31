@@ -82,6 +82,14 @@ lemma blockTensor_apply (M : MPOTensor d D) (L : ℕ)
       evalWord M (MPSTensor.wordOfBlock d L i) (MPSTensor.wordOfBlock d L j) :=
   rfl
 
+/-- Blocking one site is the original tensor in the canonical identification
+of its one-letter physical alphabet. Source: arXiv:1703.09188, physical
+blocking, lines 390–405. -/
+theorem blockTensor_one_eq_reindexPhysical (M : MPOTensor d D) :
+    blockTensor M 1 = reindexPhysical (Kraus.singleBlockEquiv d) M := by
+  ext i j
+  simp [blockTensor, reindexPhysical, MPSTensor.wordOfBlock, Kraus.wordOfBlock_one]
+
 /-- Physical blocking commutes with the physical adjoint. The equality is
 literal: both operations preserve the order of the virtual word.
 
@@ -135,6 +143,8 @@ theorem Continuous.blockTensor {X : Type*} [TopologicalSpace X] {d D : ℕ}
   (MPOTensor.continuous_blockTensor L).comp hM
 
 namespace MPOTensor
+
+variable {d D : ℕ}
 
 /-- Canonical identification between the doubled physical index of an
 `L`-site MPO block and the `L`-site block of the doubled MPS index.

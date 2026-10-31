@@ -107,12 +107,6 @@ def effectParties : {ℓX ℓY : Layout P} → PartyChain ℓX ℓY → List (P 
   | _, _, final _ => []
   | _, _, effect (p := p) (q := q) _ _ _ _ _ _ rest => (p, q) :: rest.effectParties
 
-theorem length_effectParties : {ℓX ℓY : Layout P} → (M : PartyChain ℓX ℓY) →
-    M.effectParties.length = M.toEffectChain.effectCount
-  | _, _, final _ => rfl
-  | _, _, effect _ _ _ _ _ _ rest => by
-      simp only [effectParties, toEffectChain, List.length_cons, length_effectParties rest]
-
 variable (m : ℕ)
 
 /-- The stacks of all effect occurrences, in front of the layout `ℓ`. -/

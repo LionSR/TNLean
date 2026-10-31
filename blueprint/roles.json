@@ -164,7 +164,7 @@
         "thm:parent_hamiltonian_unique_gs",
         "thm:unique_gs_injective",
         "thm:unique_gs_normal",
-        "thm:uncle_periodic_ground_space"
+        "thm:half_chain_general_c2_source"
       ],
       "corollaries": [],
       "notes": {
@@ -172,7 +172,7 @@
         "thm:parent_hamiltonian_unique_gs": "Source theorem: Perez-Garcia et al. Theorem 10, uniqueness throughout the interaction range",
         "thm:unique_gs_injective": "Unique ground state for injective tensors, stated in the opening",
         "thm:unique_gs_normal": "Unique ground state for normal tensors at range L_0+1, stated in the opening",
-        "thm:uncle_periodic_ground_space": "Full actual finite uncle-Hamiltonian ground-space theorem, Fernández-González et al. Theorem thm:gs-subspace-uncle"
+        "thm:half_chain_general_c2_source": "PGVWC07 Theorem 6: half-chain spectrum of the actual general weighted canonical tensor under normalized generic C2"
       }
     },
     "ch:parent_hamiltonian_commuting_and_gap": {
@@ -189,14 +189,18 @@
     "ch:parent_hamiltonian_block_ground_spaces": {
       "theorems": [
         "thm:ph_primitive_blocks_sharp_open_kernel",
-        "thm:block_diagonal_chain_space_global_cut"
+        "thm:block_diagonal_chain_space_global_cut",
+        "thm:canonical_arbitrary_interaction_degeneracy",
+        "thm:eventual_mps_prime_length_dichotomy"
       ],
       "corollaries": [
         "cor:block_diagonal_kernel_global_cut"
       ],
       "notes": {
         "thm:ph_primitive_blocks_sharp_open_kernel": "Source theorem: the printed open-chain threshold of Perez-Garcia et al. Theorem 12",
-        "thm:block_diagonal_chain_space_global_cut": "Periodic ground space of a block-injective tensor is the span of the block vectors (Perez-Garcia et al., Theorem 12)"
+        "thm:block_diagonal_chain_space_global_cut": "Periodic ground space of a block-injective tensor is the span of the block vectors (Perez-Garcia et al., Theorem 12)",
+        "thm:canonical_arbitrary_interaction_degeneracy": "Arbitrary positive local interactions annihilate every separated canonical block and have at least as many ground states as blocks",
+        "thm:eventual_mps_prime_length_dichotomy": "Quantified asymptotic SPWC10 ground-state dichotomy with an actual fixed tensor or an explicit prime-length fifth-degree obstruction"
       }
     },
     "ch:correlations": {
@@ -443,12 +447,18 @@
     "ch:one_dimensional_preliminaries": {
       "theorems": [
         "thm:factorial_commutator_conjugation",
-        "thm:chain_local_imaginary_time"
+        "thm:chain_local_imaginary_time",
+        "thm:aklv_original_chain_robustness",
+        "thm:aklv_robustness",
+        "thm:aklv_inverse_gap_robustness"
       ],
       "corollaries": [],
       "notes": {
         "thm:factorial_commutator_conjugation": "Kept as converted by hand in #10267",
-        "thm:chain_local_imaginary_time": "Kept as converted by hand in #10267"
+        "thm:chain_local_imaginary_time": "Kept as converted by hand in #10267",
+        "thm:aklv_original_chain_robustness": "Source Theorem 6.1 from the original chain, deriving the regional normalization and six-bond energy bound",
+        "thm:aklv_robustness": "AKLV Theorem 6.1: ground-vector and spectral-gap robustness of the normalized chain under exterior clipping",
+        "thm:aklv_inverse_gap_robustness": "Refinement of AKLV Theorem 6.1 at the inverse-gap cutoff 32768/g, used by the downstream area-law arguments"
       }
     },
     "ch:one_dimensional_open_mps": {
@@ -466,7 +476,9 @@
       "theorems": [
         "thm:chain_area_law",
         "thm:domain_area_law",
-        "thm:chain_mps_approximation"
+        "thm:chain_mps_approximation",
+        "thm:strip_area_law",
+        "thm:strip_mps_approximation"
       ],
       "corollaries": [
         "thm:chain_area_log_cube",
@@ -477,12 +489,15 @@
         "thm:chain_window_mps_error",
         "thm:chain_polynomial_mps_accuracy",
         "thm:chain_polynomial_mps_printed_bound",
-        "thm:chain_polynomial_mps_accuracy_bound"
+        "thm:chain_polynomial_mps_accuracy_bound",
+        "cor:snake_grid_mps"
       ],
       "notes": {
         "thm:chain_area_law": "Chain case of Theorem A, named in the main-results paragraph",
         "thm:domain_area_law": "Theorem A, named in the chapter's main-results paragraph",
-        "thm:chain_mps_approximation": "Theorem B, named in the main-results paragraph"
+        "thm:chain_mps_approximation": "Theorem B, named in the main-results paragraph",
+        "thm:strip_area_law": "The bounded-width strip extension with a quadratic width and linear inverse-gap entropy bound",
+        "thm:strip_mps_approximation": "Normalized physical-site snake approximation with explicit width and length dependence"
       }
     },
     "ch:one_dimensional_protocol": {
@@ -521,12 +536,22 @@
     "ch:gapped_chain_algorithms": {
       "theorems": [
         "thm:chain_boundary_net_polynomial",
-        "thm:alvv_collective_trim"
+        "thm:alvv_collective_trim",
+        "thm:lvv_uniform_successive_approximation",
+        "thm:lvv_successive_arbitrary_accuracy",
+        "thm:lvv_sampled_ground_state",
+        "thm:alvv_ff_chain_replacement",
+        "thm:alvv_ff_corrected_rank"
       ],
       "corollaries": [],
       "notes": {
         "thm:chain_boundary_net_polynomial": "Boundary net of polynomial size used to glue a left state at a cut",
-        "thm:alvv_collective_trim": "Trimming a viable subspace on the chain (Arad et al.), the step the opening names"
+        "thm:alvv_collective_trim": "Trimming a viable subspace on the chain (Arad et al.), the step the opening names",
+        "thm:lvv_uniform_successive_approximation": "Uniform polynomial successive viable families and final approximation from their retained span",
+        "thm:lvv_successive_arbitrary_accuracy": "Arbitrary accuracy with polynomial size and bond bounds via product-state extension",
+        "thm:lvv_sampled_ground_state": "Polynomial final bond from sampled successive families with bounded ground-energy-to-gap ratio",
+        "thm:alvv_ff_chain_replacement": "ALVV Theorem 5.14 with the corrected rank bound: regional replacement of a frustration-free chain",
+        "thm:alvv_ff_corrected_rank": "Corrected regional rank bound d^2+3, replacing the false unrestricted claim of ALVV Theorem 5.14(2)"
       }
     },
     "ch:peps_ft": {
@@ -730,11 +755,17 @@
       }
     },
     "ch:mpu_qca": {
-      "theorems": [],
+      "theorems": [
+        "thm:mpu_actual_qca",
+        "thm:mpu_actual_log_index_comparison"
+      ],
       "corollaries": [
         "cor:qca_support_algebra_commutant"
       ],
-      "notes": {}
+      "notes": {
+        "thm:mpu_actual_qca": "Actual QCA induced by a bare MPU, with its source original-site finite-chain formula",
+        "thm:mpu_actual_log_index_comparison": "Actual public MPU index versus positive rational index of its derived nearest-neighbour blocked QCA"
+      }
     },
     "ch:mpo_boundaries": {
       "theorems": [
@@ -758,7 +789,9 @@
       "theorems": [
         "lem:qc_channel_light_cone"
       ],
-      "corollaries": [],
+      "corollaries": [
+        "cor:qc_unblocked_then_blocked_conversion"
+      ],
       "notes": {
         "lem:qc_channel_light_cone": "Light cone of a local channel circuit, named in the opening"
       }
@@ -850,6 +883,17 @@
       "corollaries": [],
       "notes": {
         "thm:peps_separate_arity_compression": "Uniform compression, Theorem 5.2 of the source"
+      }
+    },
+    "ch:aklv_polynomial_filters": {
+      "theorems": [
+        "thm:aklv_polynomial_rank",
+        "thm:aklv_physical_chebyshev_filter"
+      ],
+      "corollaries": [],
+      "notes": {
+        "thm:aklv_polynomial_rank": "AKLV Lemma 4.2 with explicit universal constants",
+        "thm:aklv_physical_chebyshev_filter": "The constructed filter has both spectral suppression and the polynomial rank bound"
       }
     },
     "ch:parent_hamiltonian_long_range_gaps": {
@@ -1066,6 +1110,18 @@
       "corollaries": [],
       "notes": {
         "thm:quasi_local_interval_observable": "Quasi-local interval observables, the structure used across chapters"
+      }
+
+    },
+    "ch:aklv_entropy_approximation": {
+      "theorems": [
+        "thm:aklv_physical_sequence_entropy",
+        "thm:aklv_sharp_sequential_mps"
+      ],
+      "corollaries": [],
+      "notes": {
+        "thm:aklv_physical_sequence_entropy": "Uniform physical entropy bound obtained from the coherent AKLV sequence",
+        "thm:aklv_sharp_sequential_mps": "Accuracy-dependent physical matrix product approximation with the fourth-root rank bound"
       }
     }
   }
