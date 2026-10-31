@@ -170,8 +170,6 @@ theorem IsMPUCanonicalFormII.mpo_standardForm_even_eq_adjoint_of_local_certifica
   have hr : r[MPOTensor.blockTwo U] = d * d := hrB.trans (congrArg (d * ·) hrU)
   have hl : ℓ[MPOTensor.blockTwo U] = d * d := hlB.trans (congrArg (· * d) hlU)
   let e : (Fin d × Fin d) ≃ Fin (d * d) := finProdFinEquiv
-  let p := Equiv.prodCongr e e
-  let E := Matrix.reindexLinearEquiv ℂ ℂ p p
   let x' : Matrix.unitaryGroup (Fin (d * d)) ℂ :=
     ⟨Matrix.reindex e e (x : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ),
       Matrix.reindex_mem_unitaryGroup _ _ x.property⟩
@@ -186,24 +184,7 @@ theorem IsMPUCanonicalFormII.mpo_standardForm_even_eq_adjoint_of_local_certifica
               (hU.twoSiteSourceFactors hsimple)))ᴴ := by
     obtain ⟨hA, hB⟩ := coarse_gates_eq_four_spin_gates hU hsimple hrU hlU hr hl
     rw [hA, hB]
-    have h := congrArg E hlocal
-    rw [Matrix.smul_mul, map_smul] at h
-    conv_rhs at h => rw [← Matrix.reindexLinearEquiv_mul ℂ ℂ p p p]
-    have hK : E ((x : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ) ⊗ₖ
-        (x : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ)ᴴ) =
-        (x' : Matrix (Fin (d * d)) (Fin (d * d)) ℂ) ⊗ₖ
-          (x' : Matrix (Fin (d * d)) (Fin (d * d)) ℂ)ᴴ := by
-      simp only [E, p, Matrix.coe_reindexLinearEquiv]
-      dsimp only [x']
-      rw [Matrix.conjTranspose_reindex]
-      exact (Matrix.kroneckerMap_reindex (fun a b : ℂ ↦ a * b) e e e e
-        (x : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ)
-        (x : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ)ᴴ).symm
-    rw [hK] at h
-    simp only [E, p, Matrix.coe_reindexLinearEquiv,
-      Matrix.conjTranspose_reindex] at h ⊢
-    rw [Matrix.smul_mul]
-    exact h
+    exact Matrix.reindex_adjoint_certificate e hlocal
   exact hU.blockTwo.mpo_even_eq_adjoint_of_source_local_certificate
     (hU.isMPUSimple_blockTwo hsimple) (hU.twoSiteSourceFactors hsimple)
     hr hl σ hσ x' hsource N hN heven
