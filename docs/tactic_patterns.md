@@ -10510,3 +10510,13 @@ removed after the dependency audit exposed it.
   predicate or source witness is introduced. The new result eliminates
   transient terms in commuting weighted traces rather than reproving
   stabilization or the existing unweighted nilpotent trace theorem.
+
+### Iterating derived boundary intersections — reused library theorem (2026-10-29)
+
+- **Seen:** `MPS/ParentHamiltonian/UncleGroundSpace.lean`, the actual periodic uncle kernel.
+- **Reuse:** `contiguous_mem_of_restriction_intersection_submodules` iterates the already
+  derived single-wall boundary intersection with local length two. The actual kernel
+  theorem supplies its window conditions; no new induction or assumed intersection
+  predicate is introduced.
+- **Translation reuse:** `cyclicRestrictₗ_cyclicTranslateState` is promoted from private
+  visibility for this second consumer; the existing proof remains unchanged.
