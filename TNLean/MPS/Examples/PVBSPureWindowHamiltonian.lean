@@ -103,7 +103,7 @@ theorem eq_zero_of_pvbsPureWindow_adjacent_terms_eq_zero
       · have hj := j.isLt
         rw [Fin.cons_succ]
         simp only [contiguousCfg]
-        rw [dif_pos (show 1 ≤ (j.succ : ℕ) ∧ (j.succ : ℕ) < 1 + (N + 2) by
+        rw [dite_eq_left (show 1 ≤ (j.succ : ℕ) ∧ (j.succ : ℕ) < 1 + (N + 2) by
           simp only [Fin.val_succ]; omega)]
         exact congrArg σ (Fin.ext (by simp))
     have hσ := hg σ
