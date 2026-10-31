@@ -35,7 +35,7 @@ coordinates are
     Both matrices use the single common physical alphabet $\mathcal I$.
 \end{definition}
 
-\begin{theorem}[Joint injectivity and polar factors]
+\begin{lemma}[Joint injectivity and polar factors]
     \label{thm:mpo_joint_boundary_polar}
     \lean{MPSTensor.injective_jointOneSiteColumns_of_wordTupleSpanTop,
         MPSTensor.MPOSymmetry.jointMixedFirstBoundaryColumns_injective,
@@ -52,7 +52,7 @@ coordinates are
     \end{align}
     The factors $P_L=(L^*L)^{1/2}$ and $P_R=(R^*R)^{1/2}$ act on the
     full joint boundary spaces. The assertions include the empty family.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:mpo_joint_mixed_span,def:mpo_joint_boundary_columns}
@@ -66,7 +66,7 @@ coordinates are
     injective matrix gives the stated identities and positive factors.
 \end{proof}
 
-\begin{theorem}[The Gram matrices retain cross-label entries]
+\begin{lemma}[The Gram matrices retain cross-label entries]
     \label{thm:mpo_joint_boundary_gram}
     \lean{MPSTensor.MPOSymmetry.jointMixedFirstBoundaryColumns_gram_apply,
         MPSTensor.MPOSymmetry.jointMixedFirstBoundaryColumns_gram_firstSector,
@@ -91,7 +91,7 @@ coordinates are
     \end{align}
     In particular, simultaneous spanning does not make these matrices
     block diagonal in $x$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{def:mpo_joint_boundary_columns,thm:mpo_joint_mixed_compression}
@@ -100,7 +100,7 @@ coordinates are
     and its rectangular entries are those of $A_x^0$ and $A_y^0$.
 \end{proof}
 
-\begin{theorem}[The original endpoint remains at every interior site]
+\begin{lemma}[The original endpoint remains at every interior site]
     \label{thm:mpo_joint_boundary_original_bulk}
     \lean{MPSTensor.MPOSymmetry.jointMixedEndpoint_insertedEvalWord_boundaryFactors,
         MPSTensor.MPOSymmetry.jointMixedFirstPhysicalIndex,
@@ -120,7 +120,7 @@ coordinates are
     \end{align}
     This identity requires no spanning assumption. The two exterior
     indices $a,e\in\Fin{D_x}$ are unrestricted.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:mpo_joint_mixed_compression,def:mpo_joint_boundary_columns}

@@ -162,12 +162,13 @@ this bound with the area law to prove Theorem~B.
     The assertion about all cuts follows by restricting to internal cuts.
 \end{proof}
 
-\begin{lemma}[Cut ranks characterize open-boundary matrix product states]
+\begin{theorem}[Cut ranks characterize open-boundary matrix product states]
     \label{thm:chain_cut_rank_of_mps}
     \lean{
         TNLean.MPS.AreaLaw.rank_cutMatrix_le_bondDim,
         TNLean.MPS.AreaLaw.IsOpenMPS.rank_cutMatrix_le,
-        TNLean.MPS.AreaLaw.isOpenMPS_iff_internal_cutMatrix_rank_le
+        TNLean.MPS.AreaLaw.isOpenMPS_iff_internal_cutMatrix_rank_le,
+        TNLean.MPS.AreaLaw.IsOpenMPS.mono
     }
     \leanok
     Let $\psi$ be a vector on $L$ sites of local dimension $q$.
@@ -179,10 +180,12 @@ this bound with the area law to prove Theorem~B.
     $\operatorname{rank}M_k\le D$ at every internal cut $0<k<L$.
     No normalization is required. The endpoint ranks are at most one;
     when $L\le1$ there are no internal rank conditions, even for $D=0$.
+    Consequently, increasing the allowed bond dimension preserves the
+    existence of an open-boundary matrix product representation.
     This is the single-cut rank observation used in the truncation-error
     lower bound of~\cite{Schuch2008EntropyScaling}; see also the sequential
     truncation proposition in~\cite[Part IIa]{TNLean2026OneDimensional}.
-\end{lemma}
+\end{theorem}
 \begin{proof}
     \leanok
     \uses{def:chain_open_mps,thm:chain_mps_of_cut_rank}
@@ -400,7 +403,7 @@ this bound with the area law to prove Theorem~B.
     eigenprojections directly.
 \end{proof}
 
-\begin{lemma}[Squared error of sequential truncation]
+\begin{theorem}[Squared error of sequential truncation]
     \label{thm:chain_sequential_truncation_sq}
     \lean{
         TNLean.MPS.AreaLaw.norm_sequentialTruncation_leadingEigenprojection_sub_sq_le,
@@ -413,7 +416,7 @@ this bound with the area law to prove Theorem~B.
     \end{align}
     Verstraete and Cirac~\cite{VerstraeteCirac2006Faithfully} state this
     bound with a factor $2$ on the right; the form here implies theirs.
-\end{lemma}
+\end{theorem}
 \begin{proof}
     \leanok
     Write $\Phi_0=\psi$ and $\Phi_j=P_{L-j}\Phi_{j-1}$, so that

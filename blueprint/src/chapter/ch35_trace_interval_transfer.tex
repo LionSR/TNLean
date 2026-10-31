@@ -1,0 +1,55 @@
+\section{Trace presentations after a change of middle interval}
+
+\begin{lemma}[Trace presentation of one transferred middle factor]
+    \label{thm:interval_trace_factor_transfer}
+    \lean{TNLean.MPS.AreaLaw.exists_traceChainOperator_changingRegionalMiddleFactor}
+    \leanok
+    \uses{thm:interval_transfer_entry_coordinates,
+        thm:trace_interval_slice_configuration_extend}
+    Let $q\ge1$ and let $E=\lbrack c,d)$ and $J=\lbrack u,v)$ satisfy
+    (\ref{eq:interval_mpo_transfer_endpoints}). Supply a matrix $V$ on
+    $\mathcal C(E)$ with a trace presentation of virtual dimension $\chi$.
+    Fix any row and column configurations on $E\setminus J$ and
+    $J\setminus E$, and let $W$ be the resulting prescribed regional
+    middle factor. There are tensors on $J$ of the same dimension $\chi$
+    and a closing matrix whose trace contraction equals $W$.
+    The tensors and closing matrix are chosen for the whole operator,
+    before its variable row and column configurations. The dimension
+    $\chi$ and the overlap length may vanish.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:interval_transfer_entry_coordinates,
+        thm:trace_interval_slice_configuration_extend}
+    Write $W$ in the natural conditional form
+    (\ref{eq:interval_transfer_entry_coordinates}). Substitute the trace
+    presentation of $V$ and apply
+    Lemma~\ref{thm:trace_interval_slice_configuration_extend}.
+\end{proof}
+
+\begin{lemma}[A common transferred family at the same trace dimensions]
+    \label{thm:interval_trace_common_family_transfer}
+    \lean{TNLean.MPS.AreaLaw.changingRegionalMiddleFamily_trace_and_global_decomposition}
+    \leanok
+    \uses{thm:interval_trace_factor_transfer,thm:regional_middle_exterior_transfer}
+    Under (\ref{eq:interval_mpo_transfer_endpoints}), let $q\ge1$ and let
+    $V_t$, $t\in\iota$, be a finite family on $\mathcal C(E)$, each with
+    a trace presentation of virtual dimension $\chi_t$. Define the same
+    prescribed carrier $I$ and matrices $W_r$ by
+    (\ref{eq:interval_mpo_transfer_index}) and
+    (\ref{eq:interval_mpo_transfer_factor}). Then
+    $|I|=|\iota|q^{2|E\setminus J|+2|J\setminus E|}$, and the member
+    indexed by $(t,\alpha_r,\alpha_c,\eta_r,\eta_c)$ has a trace
+    presentation of dimension exactly $\chi_t$ on $J$.
+    The family is chosen before every exterior family. For every later
+    exterior family $M_t$, there is an exterior family $M'_r$ giving the
+    same whole-chain operator as in
+    (\ref{eq:interval_mpo_transfer_decomposition}). Empty carriers and
+    empty overlaps are allowed.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:interval_trace_factor_transfer,thm:regional_middle_exterior_transfer}
+    Apply Lemma~\ref{thm:interval_trace_factor_transfer} to each prescribed
+    member. The two configuration pairs give the stated cardinality.
+    The regional exterior-transfer identity gives the decomposition for
+    every later exterior family, without changing the middle matrices.
+\end{proof}

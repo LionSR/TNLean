@@ -11,7 +11,7 @@ For an observable $O$ on $q$ physical sites, write
 The middle twist below still acts on individual sites. In particular its
 length is an arbitrary $N\in\N$, not a multiple of the endpoint support.
 
-\begin{theorem}[Stationary virtual boundaries from $D^2$ physical sites]
+\begin{lemma}[Stationary virtual boundaries from $D^2$ physical sites]
     \label{thm:physical_endpoint_stationary_span}
     \lean{MPSTensor.exists_physicalObservableTransfer_eq_at_stationary,
         MPSTensor.exists_physicalObservableTransfer_one_eq}
@@ -22,7 +22,7 @@ length is an arbitrary $N\in\N$, not a multiple of the endpoint support.
     $O$ on $q=D^2$ sites satisfying $\E_O^{[q]}(\Omega)=Y$.
     In particular, when $\E_A(\Id)=\Id$, every right virtual boundary is
     $\E_O^{[q]}(\Id)$ for such an $O$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:physical_observable_word_span_mul}
@@ -36,26 +36,26 @@ length is an arbitrary $N\in\N$, not a multiple of the endpoint support.
     form an increasing chain $S_\ell\subseteq S_{\ell+1}$ by stationarity. Equality at one step
     propagates through the recurrence
     $S_{\ell+1}=\sum_{i,j}A_iS_\ell A_j^\dagger$.
-    By Theorem~\ref{thm:physical_observable_word_span_mul}, normality and
+    By Lemma~\ref{thm:physical_observable_word_span_mul}, normality and
     invertibility of $\Omega$ make one of these spaces all of $\MN{D}$. A dimension argument therefore gives $S_{D^2}=\MN{D}$.
     The coefficients of a spanning expansion are the entries of $O$ in
     (\ref{eq:physical_block_transfer}).
 \end{proof}
 
-\begin{theorem}[Block injectivity under adjoints]
+\begin{lemma}[Block injectivity under adjoints]
     \label{thm:block_injectivity_adjoint_reverse}
     \lean{Kraus.isNBlkInjective_of_isNBlkInjective_conjTranspose}
     \leanok
     If the length-$L$ words of the family $(A_i^\dagger)_i$ span $\MN{D}$,
     then the length-$L$ words of $A$ also span $\MN{D}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Conjugate transposition reverses the order of the letters and maps one
     word span bijectively onto the other.
 \end{proof}
 
-\begin{theorem}[Exact realization of both physical endpoints]
+\begin{lemma}[Exact realization of both physical endpoints]
     \label{thm:physical_block_endpoints_exact}
     \lean{MPSTensor.exists_physicalObservableTransfer_trace_eq,
         MPSTensor.exists_physicalStringBlockEndpoints}
@@ -104,7 +104,7 @@ length is an arbitrary $N\in\N$, not a multiple of the endpoint support.
         \end{tenkz}
     \end{center}
     % TENKZ-STRING-BLOCK-ENDPOINTS-END
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:physical_endpoint_stationary_span}
@@ -117,7 +117,7 @@ length is an arbitrary $N\in\N$, not a multiple of the endpoint support.
     every $N$ without blocking the middle string.
 \end{proof}
 
-\begin{theorem}[Hermitian product endpoints with nonzero coefficients]
+\begin{lemma}[Hermitian product endpoints with nonzero coefficients]
     \label{thm:physical_block_product_coefficients}
     \lean{MPSTensor.exists_isHermitian_physicalStringProductEndpoints}
     \leanok
@@ -131,7 +131,7 @@ length is an arbitrary $N\in\N$, not a multiple of the endpoint support.
                                                & \tr\!\left[\Lambda V^\dagger\E_y^{[q]}(\Id)\right] & \ne0.
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Exact realization first gives arbitrary block observables for which
@@ -144,7 +144,7 @@ length is an arbitrary $N\in\N$, not a multiple of the endpoint support.
     themselves to be Hermitian products.
 \end{proof}
 
-\begin{theorem}[Physical string order with $D^2$-site Hermitian endpoints]
+\begin{lemma}[Physical string order with $D^2$-site Hermitian endpoints]
     \label{thm:physical_block_order_pure_canonical}
     \lean{MPSTensor.pureCanonical_isIrreducibleMap_and_isPrimitive,
         MPSTensor.isNormal_of_pureCanonical,
@@ -167,7 +167,7 @@ length is an arbitrary $N\in\N$, not a multiple of the endpoint support.
     sites. No one-site injectivity assumption is imposed. An existential
     claim of nontrivial physical action separately requires the projective
     convention of Definition~\ref{def:has_physical_string_order}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Canonical purity gives irreducibility and peripheral primitivity.
     Applying primitive-channel word-span fullness to the adjoint family and

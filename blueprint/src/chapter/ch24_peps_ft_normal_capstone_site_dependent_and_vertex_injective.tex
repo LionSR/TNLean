@@ -10,7 +10,7 @@ dimension $D$. For the Applications-section translational-invariance
 corollary, the cycle-graph formulation instead retains one dimension $D_e$ per
 bond, derives their equality from the injective Fundamental Theorem, and then
 identifies the virtual spaces to construct the repeated tensor in the source's
-standing regime of at least three sites, whereas Theorem~\ref{thm:peps_cycle_two_site_bond_uniformity_counterexample}
+standing regime of at least three sites, whereas Lemma~\ref{thm:peps_cycle_two_site_bond_uniformity_counterexample}
 (\cite{gap:peps_cyclic_mps_two_site_bond_uniformity}) shows that the two-site case of the printed corollary is false.
 
 \begin{definition}[Arc products and window injectivity of a site-dependent
@@ -66,11 +66,39 @@ standing regime of at least three sites, whereas Theorem~\ref{thm:peps_cycle_two
     $\{A_{(s)}^z:|z|=m+1\}$.
 \end{proof}
 
+\begin{lemma}[Cancellation against a spanning matrix family]
+    \label{lem:chain_spanning_matrix_cancellation}
+    \lean{MPSChainTensor.eq_of_span_mul_left,
+        MPSChainTensor.eq_of_mul_span_right}
+    \leanok
+    Let $I$ be an arbitrary index set, and let
+    $W_i\in\MN{D}$, $i\in I$, span $\MN{D}$ over $\C$.
+    For $X,Y\in\MN{D}$, either of the identities
+    \begin{align}
+        W_iX=W_iY\quad(\forall i\in I),
+        \qquad\text{or}\qquad
+        XW_i=YW_i\quad(\forall i\in I)
+        \label{eq:chain_spanning_matrix_cancellation}
+    \end{align}
+    implies $X=Y$. This is the uniqueness argument for virtual insertions
+    in \cite[Lemma~5]{Molnar2018NormalPEPS}; no finiteness condition on
+    $I$ is needed.
+\end{lemma}
+\begin{proof}\leanok
+    For the first identity, the linear maps $\rho_X(W)=WX$ and $\rho_Y(W)=WY$
+    on $\MN{D}$ agree on every $W_i$. Since the $W_i$ span $\MN{D}$,
+    $\rho_X=\rho_Y$, and
+    \begin{align}
+        X=\rho_X(\Id)=\rho_Y(\Id)=Y.
+    \end{align}
+    For the second identity, apply the same argument to
+    $\lambda_X(W)=XW$ and $\lambda_Y(W)=YW$.
+\end{proof}
+
 \begin{lemma}[Bond-operator extraction from overlapping windows,
         site-dependent form]%
     \label{lem:chain_overlapWindow_exists_bondOperator}
     \lean{MPSChainTensor.overlapWindow_exists_bondOperator}
-    \lean{MPSChainTensor.eq_of_span_mul_left}
     \leanok
     \uses{def:chain_arc_window_injective}
     Let $0<L$, $2L+1\le n$, let $A=(A_0,\ldots,A_{n-1})$ with $A_s\in\MN{D}^d$
@@ -97,15 +125,16 @@ standing regime of at least three sites, whereas Theorem~\ref{thm:peps_cycle_two
     (with constant specialization Lemma~\ref{lem:overlapWindow_exists_bondOperator}).
 \end{lemma}
 \begin{proof}\leanok
-    \uses{lem:isWindowInjective_arc_span, def:chain_arc_window_injective}
+    \uses{lem:isWindowInjective_arc_span, def:chain_arc_window_injective,
+        lem:chain_spanning_matrix_cancellation}
     Since $n-L-1\ge L$, Lemma~\ref{lem:isWindowInjective_arc_span} and trace
     nondegeneracy strip the complementary arc to give
     $C_j(u_1\cdots u_L)A_{r+j+L}^{u_{L+1}}=A_{r+j}^{u_1}C_{j+1}(u_2\cdots u_{L+1})$
     for $0\le j<L$. Chaining $j=0,\ldots,L-1$ yields
     $C_0(a)A_{(r+L)}^b=A_{(r)}^aC_L(b)$ for all $|a|=|b|=L$. Choosing $\alpha_b$
     with $\sum_b\alpha_bA_{(r+L)}^b=\Id$ and setting $X:=\sum_b\alpha_bC_L(b)$
-    gives $A_{(r)}^a X=C_0(a)$ and $X A_{(r+L)}^b=C_L(b)$; spanning of
-    $\{A_{(r)}^a\}$ makes $X$ unique.
+    gives $A_{(r)}^a X=C_0(a)$ and $X A_{(r+L)}^b=C_L(b)$;
+    Lemma~\ref{lem:chain_spanning_matrix_cancellation} makes $X$ unique.
 \end{proof}
 
 \begin{lemma}[Arc transfer between same-state chains]%
@@ -214,7 +243,7 @@ standing regime of at least three sites, whereas Theorem~\ref{thm:peps_cycle_two
     absorbs $\mu_v$ into (\ref{eq:peps_site_dependent_chain_gauge}).
 \end{proof}
 
-\begin{theorem}[Cyclic gauges preserve closed-chain states]%
+\begin{lemma}[Cyclic gauges preserve closed-chain states]%
     \label{thm:mps_chain_gaugeEquiv_sameState}
     \lean{MPSChainTensor.arcEval_eq_gauge_conj}
     \lean{MPSChainTensor.GaugeEquiv.sameState}
@@ -225,7 +254,7 @@ standing regime of at least three sites, whereas Theorem~\ref{thm:peps_cycle_two
     site $s$ and word $x$ of length $\ell$,
     $B_{(s)}^x = Z_s A_{(s)}^x Z_{s+\ell}^{-1}$, and in particular
     $\tr(B_{(0)}^w)=\tr(A_{(0)}^w)$ for all $|w|=n$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Telescoping $B_v^i=Z_v A_v^i Z_{v+1}^{-1}$ along (\ref{eq:peps_chain_arc_product})
     gives $B_{(s)}^x = Z_s A_{(s)}^x Z_{s+\ell}^{-1}$; at $\ell=n$,
@@ -294,7 +323,7 @@ standing regime of at least three sites, whereas Theorem~\ref{thm:peps_cycle_two
     gives $D_e=D_f$ for all $e,f$.
 \end{proof}
 
-\begin{theorem}[Two-site obstruction to cyclic MPS bond uniformity]%
+\begin{lemma}[Two-site obstruction to cyclic MPS bond uniformity]%
     \label{thm:peps_cycle_two_site_bond_uniformity_counterexample}
     \lean{TNLean.PEPS.CycleMPSTwoSiteCounterexample.twoSiteBondUniformityStatement_false}
     \leanok
@@ -310,7 +339,7 @@ standing regime of at least three sites, whereas Theorem~\ref{thm:peps_cycle_two
     dimensions are $1\neq 2$, refuting the $n=2$ case of
     \cite[lines~1803--1805]{Molnar2018NormalPEPS}
     (\cite{gap:peps_cyclic_mps_two_site_bond_uniformity}).
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Let $e_0,e_1$ be the standard basis of $\mathbb C^2$ and set
     $A_1^i=e_i^{\mathsf T}$, $A_2^i=e_i$. Both local maps are injective, and
@@ -321,7 +350,7 @@ standing regime of at least three sites, whereas Theorem~\ref{thm:peps_cycle_two
     whereas the two bonds have dimensions $1$ and $2$.
 \end{proof}
 
-\begin{corollary}[Gauge comparison with the cyclic shift]%
+\begin{lemma}[Gauge comparison with the cyclic shift]%
     \label{cor:fundamentalTheorem_injectiveMPSChain_cyclicShift}
     \lean{TNLean.PEPS.fundamentalTheorem_injectiveMPSChain_cyclicShift}
     \leanok
@@ -336,13 +365,13 @@ standing regime of at least three sites, whereas Theorem~\ref{thm:peps_cycle_two
         \label{eq:peps_cyclic_shift_gauge}
     \end{align}
     \cite[lines~1807--1824]{Molnar2018NormalPEPS}.
-\end{corollary}
+\end{lemma}
 \begin{proof}\leanok
     Apply Corollary~\ref{cor:fundamentalTheorem_injectiveMPSChain_of_sameState}
     to $A$ and $\mathrm{shift}(A)$.
 \end{proof}
 
-\begin{corollary}[Telescoping against the first tensor]%
+\begin{lemma}[Telescoping against the first tensor]%
     \label{cor:exists_gauge_to_first_of_cyclicShift_gaugeEquiv}
     \lean{MPSChainTensor.exists_gauge_to_first_of_cyclicShift_gaugeEquiv}
     \leanok
@@ -351,7 +380,7 @@ standing regime of at least three sites, whereas Theorem~\ref{thm:peps_cycle_two
     then for every site $v$ there exist invertible matrices $L_v,R_v\in\GL_D(\C)$
     such that $A_v^i=L_v A_0^i R_v^{-1}$ for all $i$
     \cite[lines~1828--1862]{Molnar2018NormalPEPS}.
-\end{corollary}
+\end{lemma}
 \begin{proof}\leanok
     Induct on $v$ using (\ref{eq:peps_cyclic_shift_gauge}): set $L_0=R_0=\Id$,
     $L_{v+1}=Z_v L_v$, and $R_{v+1}=Z_{v+1} R_v$.
@@ -368,11 +397,11 @@ standing regime of at least three sites, whereas Theorem~\ref{thm:peps_cycle_two
     all $i$ \cite[lines~1803--1890]{Molnar2018NormalPEPS}.
 \end{corollary}
 \begin{proof}\leanok
-    Combine Corollary~\ref{cor:fundamentalTheorem_injectiveMPSChain_cyclicShift}
-    and Corollary~\ref{cor:exists_gauge_to_first_of_cyclicShift_gaugeEquiv}.
+    Combine Lemma~\ref{cor:fundamentalTheorem_injectiveMPSChain_cyclicShift}
+    and Lemma~\ref{cor:exists_gauge_to_first_of_cyclicShift_gaugeEquiv}.
 \end{proof}
 
-\begin{corollary}[Translation-invariant description of an injective closed MPS chain,
+\begin{lemma}[Translation-invariant description of an injective closed MPS chain,
         uniform bond dimension]%
     \label{cor:exists_constant_injectiveMPS_of_cyclicShiftInvariantState}
     \lean{TNLean.PEPS.exists_constant_injectiveMPS_of_cyclicShiftInvariantState}
@@ -389,9 +418,9 @@ standing regime of at least three sites, whereas Theorem~\ref{thm:peps_cycle_two
         \notag
     \end{align}
     \cite[lines~1803--1890]{Molnar2018NormalPEPS}.
-\end{corollary}
+\end{lemma}
 \begin{proof}\leanok
-    By Corollary~\ref{cor:fundamentalTheorem_injectiveMPSChain_cyclicShift},
+    By Lemma~\ref{cor:fundamentalTheorem_injectiveMPSChain_cyclicShift},
     $A_{v+1}^i=Z_v A_v^i Z_{v+1}^{-1}$. With $P_m=Z_{m-1}\cdots Z_0$ and
     $\widetilde B^i=A_0^i Z_0$, telescoping gives
     $A_m^i=P_m \widetilde B^i P_{m+1}^{-1}$ and
@@ -426,7 +455,7 @@ standing regime of at least three sites, whereas Theorem~\ref{thm:peps_cycle_two
         \notag
     \end{align}
     (the $n=2$ case is false by
-    Theorem~\ref{thm:peps_cycle_two_site_bond_uniformity_counterexample};
+    Lemma~\ref{thm:peps_cycle_two_site_bond_uniformity_counterexample};
     \cite{gap:peps_cyclic_mps_two_site_bond_uniformity}).
 \end{corollary}
 \begin{proof}\leanok
@@ -444,7 +473,7 @@ standing regime of at least three sites, whereas Theorem~\ref{thm:peps_cycle_two
         \notag
     \end{align}
     and $\Coeff_{\mathrm{shift}(C)}(\sigma)=\Coeff_C(\sigma\circ r^{-1})=\Coeff_C(\sigma)$.
-    Applying Corollary~\ref{cor:exists_constant_injectiveMPS_of_cyclicShiftInvariantState}
+    Applying Lemma~\ref{cor:exists_constant_injectiveMPS_of_cyclicShiftInvariantState}
     to $C$ yields $B$.
 \end{proof}
 
@@ -473,14 +502,14 @@ standing regime of at least three sites, whereas Theorem~\ref{thm:peps_cycle_two
     \uses{thm:peps_sameState_translate_of_state_translation_invariant,
         thm:peps_injective_sameState_bondDim_eq,
         thm:peps_torusUniformBondDim_of_translationInvariant}
-    By Theorem~\ref{thm:peps_sameState_translate_of_state_translation_invariant}
-    and Theorem~\ref{thm:peps_injective_sameState_bondDim_eq},
+    By Lemma~\ref{thm:peps_sameState_translate_of_state_translation_invariant}
+    and Lemma~\ref{thm:peps_injective_sameState_bondDim_eq},
     $D_A(\tau_{a,b}(e))=D_A(e)$ for all $(a,b)$, and translations act
     transitively on horizontal and vertical edges
-    (Theorem~\ref{thm:peps_torusUniformBondDim_of_translationInvariant}).
+    (Lemma~\ref{thm:peps_torusUniformBondDim_of_translationInvariant}).
 \end{proof}
 
-\begin{theorem}[Uniqueness of finite product factors]%
+\begin{lemma}[Uniqueness of finite product factors]%
     \label{thm:peps_product_factor_uniqueness}
     \lean{Fintype.exists_scalars_of_prod_eq}
     \leanok
@@ -490,7 +519,7 @@ standing regime of at least three sites, whereas Theorem~\ref{thm:peps_cycle_two
     $\prod_i f_i(a_i)=\prod_i g_i(a_i)$ for every $a\in\prod_iX_i$.
     Then there are $c_i\ne0$ with $\prod_i c_i=1$ and
     $g_i(x)=c_i f_i(x)$ for every $i$ and $x\in X_i$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     All $f_i(a_i^0)$ and $g_i(a_i^0)$ are nonzero. Put
     $c_i=g_i(a_i^0)/f_i(a_i^0)$; equality at $a^0$ gives
@@ -498,7 +527,7 @@ standing regime of at least three sites, whereas Theorem~\ref{thm:peps_cycle_two
     other nonzero factors gives $g_i(x)=c_i f_i(x)$.
 \end{proof}
 
-\begin{theorem}[Proportionality of directional matrix factors]%
+\begin{lemma}[Proportionality of directional matrix factors]%
     \label{thm:peps_directional_product_factors}
     \lean{Matrix.GeneralLinearGroup.exists_directional_scalars_of_prod_translate_eq}
     \leanok
@@ -511,17 +540,17 @@ standing regime of at least three sites, whereas Theorem~\ref{thm:peps_cycle_two
          & =\prod_{r,p} E_{r,p+t}(a_{r,p},b_{r,p}).\notag
     \end{align}
     Then $E_{r,p}=\alpha_{r,p}E_{r,0}$ for nonzero scalars $\alpha_{r,p}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_product_factor_uniqueness}
     Each invertible matrix on a nonzero space has a nonzero entry.
     Choosing one such entry for each factor gives a nonzero reference product.
-    Theorem~\ref{thm:peps_product_factor_uniqueness}, applied to the
+    Lemma~\ref{thm:peps_product_factor_uniqueness}, applied to the
     translation by $t$, gives proportionality of its factors. Take $t=p$
     and inspect the factor at position zero.
 \end{proof}
 
-\begin{theorem}[Reindexing physical product maps]%
+\begin{lemma}[Reindexing physical product maps]%
     \label{thm:peps_physical_product_reindex}
     \lean{TNLean.Lattice.dependentPhysicalProductFamilyMap_reindex_input}
     \leanok
@@ -532,13 +561,13 @@ standing regime of at least three sites, whereas Theorem~\ref{thm:peps_cycle_two
     If $e_v:X'_v\to X_v$ are bijections, then
     $M_{F\circ e}(R\circ e)=M_F R$, where
     $(e x)_v=e_v(x_v)$ and $(F\circ e)_v(\sigma,x)=F_v(\sigma,e_vx)$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     In the coefficient formula, change the summation variable by the
     product bijection $x\mapsto(e_vx_v)_v$.
 \end{proof}
 
-\begin{theorem}[Reflection of permutation invariance by an injective common map]%
+\begin{lemma}[Reflection of permutation invariance by an injective common map]%
     \label{thm:peps_common_map_reflects_invariance}
     \lean{TNLean.Lattice.invariant_of_commonPhysicalProductFamilyMap_invariant}
     \leanok
@@ -547,7 +576,7 @@ standing regime of at least three sites, whereas Theorem~\ref{thm:peps_cycle_two
     let $\tau$ permute $V$. If $F^{\otimes V}R$ is invariant under
     precomposition of configurations by $\tau$, then $R$ has the same
     invariance.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Choose a linear left inverse $L$ of $F$. Products of local maps compose
     site by site, so $L^{\otimes V}F^{\otimes V}=1$.
@@ -570,7 +599,7 @@ standing regime of at least three sites, whereas Theorem~\ref{thm:peps_cycle_two
     $\sum_jK_{u,e}(j,\xi_{u,e})K_{v,e}(j,\xi_{v,e})$.
 \end{definition}
 
-\begin{theorem}[Independence of the stored endpoint order]%
+\begin{lemma}[Independence of the stored endpoint order]%
     \label{thm:peps_independent_leg_endpoint_order}
     \lean{TNLean.PEPS.independentLegKernel_edge_eq_of_endpoints}
     \leanok
@@ -584,7 +613,7 @@ standing regime of at least three sites, whereas Theorem~\ref{thm:peps_cycle_two
          & =\sum_jK_{v,e}(j,\xi_{v,e})K_{u,e}(j,\xi_{u,e}).\notag
     \end{align}
     No invertibility assumption on the incidence matrices is needed.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{def:peps_independent_leg_coefficient}
     In the stored endpoint order the first equality is matrix multiplication.
@@ -592,7 +621,7 @@ standing regime of at least three sites, whereas Theorem~\ref{thm:peps_cycle_two
     summand, which leaves the scalar unchanged.
 \end{proof}
 
-\begin{theorem}[The state as a common physical product image]%
+\begin{lemma}[The state as a common physical product image]%
     \label{thm:peps_independent_leg_physical_image}
     \lean{TNLean.PEPS.stateCoeff_eq_commonPhysicalProductFamilyMap}
     \leanok
@@ -607,7 +636,7 @@ standing regime of at least three sites, whereas Theorem~\ref{thm:peps_cycle_two
     \end{align}
     Then $\Coeff_A=F^{\otimes V}R$, with
     $R(x)=R_K((\mathcal E_vx_v)_v)$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{def:peps_independent_leg_coefficient, thm:peps_physical_product_reindex}
     Expand the local arrays in the state coefficient and exchange the finite
@@ -616,7 +645,7 @@ standing regime of at least three sites, whereas Theorem~\ref{thm:peps_cycle_two
     configuration by $\mathcal E_v$.
 \end{proof}
 
-\begin{theorem}[Injectivity after invertible changes of virtual legs]%
+\begin{lemma}[Injectivity after invertible changes of virtual legs]%
     \label{thm:peps_invertible_leg_injectivity}
     \lean{TNLean.PEPS.linearIndependent_smul_piProductKernel}
     \leanok
@@ -624,7 +653,7 @@ standing regime of at least three sites, whereas Theorem~\ref{thm:peps_cycle_two
     $F:\prod_iX_i\to W$ be a linearly independent family in a complex
     vector space. For $P_i\in\GL(X_i,\C)$ and $\rho\ne0$, the family
     $x\mapsto\rho\sum_y\prod_iP_i(x_i,y_i)F(y)$ is linearly independent.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The product matrix with entries $\prod_iP_i(x_i,y_i)$ is invertible:
     its inverse is the product matrix of the $P_i^{-1}$.
@@ -656,7 +685,7 @@ standing regime of at least three sites, whereas Theorem~\ref{thm:peps_cycle_two
     down $(v,1)$ and left $(h,0)$.
 \end{definition}
 
-\begin{theorem}[Linear independence in common four-leg coordinates]%
+\begin{lemma}[Linear independence in common four-leg coordinates]%
     \label{thm:peps_four_leg_coordinate_independence}
     \lean{TNLean.PEPS.linearIndependent_component_torusFourLegConfigEquiv}
     \leanok
@@ -664,7 +693,7 @@ standing regime of at least three sites, whereas Theorem~\ref{thm:peps_cycle_two
     Under the hypotheses of Definition~\ref{def:peps_common_four_leg_coordinates},
     if $A$ is injective, then $x\mapsto A_p(\mathcal E_p x)$ is linearly
     independent for every vertex $p$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{def:peps_common_four_leg_coordinates,def:peps_injective_tensor}
     Injectivity makes the family of actual local components at $p$ linearly
@@ -685,7 +714,7 @@ standing regime of at least three sites, whereas Theorem~\ref{thm:peps_cycle_two
     vertex $p$.
 \end{definition}
 
-\begin{theorem}[Injectivity of a repeated four-leg tensor]%
+\begin{lemma}[Injectivity of a repeated four-leg tensor]%
     \label{thm:peps_repeated_four_leg_injective}
     \lean{TNLean.PEPS.isInjective_torusFourLegTensor}
     \leanok
@@ -693,14 +722,14 @@ standing regime of at least three sites, whereas Theorem~\ref{thm:peps_cycle_two
     If the bond dimensions are positive and the family $F$ is linearly
     independent, the repeated tensor of
     Definition~\ref{def:peps_repeated_four_leg_tensor} is injective.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Each $\mathcal E_p$ is a bijection. Composing a linearly independent
     family with $\mathcal E_p^{-1}$ preserves linear independence, and the
     bond dimensions retain their positivity.
 \end{proof}
 
-\begin{theorem}[Translation invariance of a repeated four-leg tensor]%
+\begin{lemma}[Translation invariance of a repeated four-leg tensor]%
     \label{thm:peps_repeated_four_leg_translation_invariant}
     \lean{TNLean.PEPS.isTorusTranslationInvariant_torusFourLegTensor}
     \leanok
@@ -708,7 +737,7 @@ standing regime of at least three sites, whereas Theorem~\ref{thm:peps_cycle_two
     Every repeated tensor of
     Definition~\ref{def:peps_repeated_four_leg_tensor} is fixed by transport
     under each torus translation.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Translation preserves horizontal and vertical edges and their dimensions.
     It also preserves the four incidence labels. Thus pullback of a local
@@ -717,20 +746,20 @@ standing regime of at least three sites, whereas Theorem~\ref{thm:peps_cycle_two
     of the transported and original local arrays.
 \end{proof}
 
-\begin{theorem}[Scalar homogeneity of a repeated tensor state]%
+\begin{lemma}[Scalar homogeneity of a repeated tensor state]%
     \label{thm:peps_repeated_four_leg_scaling}
     \lean{TNLean.PEPS.stateCoeff_torusFourLegTensor_smul}
     \leanok
     \uses{def:peps_repeated_four_leg_tensor}
     If $B_F$ denotes the repeated tensor of $F$, $N=nm$ and $\rho\in\C$,
     then $\Coeff_{B_{\rho F}}=\rho^N\Coeff_{B_F}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Each product in the state coefficient contains one copy of $\rho$ per
     vertex. Factor $\rho^N$ out of the finite sum.
 \end{proof}
 
-\begin{theorem}[The local translation orbit of an injective torus tensor]%
+\begin{lemma}[The local translation orbit of an injective torus tensor]%
     \label{thm:peps_common_local_translation_orbit}
     \lean{TNLean.PEPS.exists_torus_common_local_orbit_incident}
     \leanok
@@ -748,7 +777,7 @@ standing regime of at least three sites, whereas Theorem~\ref{thm:peps_cycle_two
     This comparison follows from the injective Fundamental Theorem and
     gives a step toward the translation-invariant description stated
     in~\cite[lines~1891--1894]{Molnar2018NormalPEPS}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:fundamentalTheorem_PEPS, cor:peps_state_translation_bond_uniform}
     Apply the injective Fundamental Theorem to $A$ and its transport by the
@@ -804,7 +833,7 @@ standing regime of at least three sites, whereas Theorem~\ref{thm:peps_cycle_two
     \end{align}
 \end{definition}
 
-\begin{theorem}[The independent coefficient in native torus coordinates]%
+\begin{lemma}[The independent coefficient in native torus coordinates]%
     \label{thm:peps_independent_port_coefficient}
     \lean{TNLean.PEPS.independentLegEdgeCoefficient_eq_torusNativeProduct}
     \leanok
@@ -818,7 +847,7 @@ standing regime of at least three sites, whereas Theorem~\ref{thm:peps_cycle_two
     \end{align}
     All endpoint labels remain independent; they are not restricted to
     equal labels on the two ends of an edge.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_independent_leg_endpoint_order,def:peps_native_outgoing_edges}
     Enumerate the graph edges by their native pairs $(r,p)$.
@@ -828,7 +857,7 @@ standing regime of at least three sites, whereas Theorem~\ref{thm:peps_cycle_two
     each factor becomes $E_{r,p}(x_{p,r,1},x_{p+\delta_r,r,0})$.
 \end{proof}
 
-\begin{theorem}[Translation of the independent edge-pair product]%
+\begin{lemma}[Translation of the independent edge-pair product]%
     \label{thm:peps_independent_port_translation}
     \lean{TNLean.PEPS.torus_prod_translate_eq_of_portProduct_invariant}
     \leanok
@@ -843,7 +872,7 @@ standing regime of at least three sites, whereas Theorem~\ref{thm:peps_cycle_two
         =\prod_{r,p}E_{r,p+t}(a_{r,p},b_{r,p}).\notag
     \end{align}
     This assertion needs neither finite alphabets nor invertible arrays.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{def:peps_independent_port_product}
     Reindex an incidence assignment by the two labels on each directed
@@ -869,7 +898,7 @@ standing regime of at least three sites, whereas Theorem~\ref{thm:peps_cycle_two
     $(P_0,P_1,P_2,P_3)=(1,Q_h^{\mathsf T},Q_v^{\mathsf T},1)$.
 \end{definition}
 
-\begin{theorem}[The common leg transformation on actual incidences]%
+\begin{lemma}[The common leg transformation on actual incidences]%
     \label{thm:peps_four_leg_incident_expansion}
     \lean{TNLean.PEPS.fourLegKernelApply_eq_sum_incident}
     \leanok
@@ -882,7 +911,7 @@ standing regime of at least three sites, whereas Theorem~\ref{thm:peps_cycle_two
         =\sum_\xi\left(\prod_{e\ni p}K_{p,e}(\eta_e,\xi_e)\right)
         F(\mathcal E_p^{-1}\xi,\sigma).\notag
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{def:peps_common_four_leg_transformation,def:peps_common_four_leg_coordinates}
     Substitute the sum defining $\mathcal P F$ and change variables from
@@ -891,14 +920,14 @@ standing regime of at least three sites, whereas Theorem~\ref{thm:peps_cycle_two
     those at the actual incidences, preserving their row and column labels.
 \end{proof}
 
-\begin{theorem}[The native matrix of a common leg transformation]%
+\begin{lemma}[The native matrix of a common leg transformation]%
     \label{thm:peps_four_leg_native_edge_matrix}
     \lean{TNLean.PEPS.torusNativeIndependentEdgeKernel_fourLeg}
     \leanok
     \uses{def:peps_common_four_leg_transformation,def:peps_native_incidence_matrices}
     For every $P_i\in\GL(D_i,\C)$, the induced native matrix is
     $E_{r,p}=P_{r,1}^{\mathsf T}P_{r,0}$ at every vertex $p$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{def:peps_common_four_leg_transformation,def:peps_native_incidence_matrices}
     Write the native contraction in the common directional coordinates.
@@ -909,7 +938,7 @@ standing regime of at least three sites, whereas Theorem~\ref{thm:peps_cycle_two
     $(Q_r^{\mathsf T})^{\mathsf T}\Id=Q_r$.
 \end{proof}
 
-\begin{theorem}[Uniform directional bonds for a common origin tensor]%
+\begin{lemma}[Uniform directional bonds for a common origin tensor]%
     \label{thm:peps_uniform_edge_representation}
     \lean{TNLean.PEPS.exists_torus_uniform_edge_representation}
     \leanok
@@ -920,7 +949,7 @@ standing regime of at least three sites, whereas Theorem~\ref{thm:peps_cycle_two
     $Q_h\in\GL(D_h,\C)$, $Q_v\in\GL(D_v,\C)$ and $\Gamma\ne0$ such that
     $\Coeff_A=\Gamma F^{\otimes V}R_Q$, where $R_Q$ has the same factor
     $Q_r$ on every edge of direction $r$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_common_local_translation_orbit,
         thm:peps_independent_leg_physical_image,thm:peps_common_map_reflects_invariance,
@@ -935,7 +964,7 @@ standing regime of at least three sites, whereas Theorem~\ref{thm:peps_cycle_two
     this scalar out of the physical product map.
 \end{proof}
 
-\begin{theorem}[Absorbing uniform bonds into a repeated tensor]%
+\begin{lemma}[Absorbing uniform bonds into a repeated tensor]%
     \label{thm:peps_uniform_bond_absorption}
     \lean{TNLean.PEPS.stateCoeff_torusFourLegTensor_uniformBondAbsorption}
     \leanok
@@ -945,20 +974,20 @@ standing regime of at least three sites, whereas Theorem~\ref{thm:peps_cycle_two
     If $\mathcal P$ has leg matrices
     $(1,Q_h^{\mathsf T},Q_v^{\mathsf T},1)$, then the repeated tensor
     $B_{\mathcal P F}$ satisfies $\Coeff_{B_{\mathcal P F}}=F^{\otimes V}R_Q$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_independent_leg_physical_image,thm:peps_physical_product_reindex,
         thm:peps_four_leg_incident_expansion,thm:peps_four_leg_native_edge_matrix,
         thm:peps_independent_port_coefficient}
     The actual-incidence formula of
-    Theorem~\ref{thm:peps_four_leg_incident_expansion} allows the
+    Lemma~\ref{thm:peps_four_leg_incident_expansion} allows the
     independent-leg contraction formula to be applied to $B_{\mathcal P F}$.
     Reindex its coefficient to incoming and outgoing ports. Its native edge
     matrices are $(Q_r^{\mathsf T})^{\mathsf T}1=Q_r$, so its independent
     coefficient is $R_Q$.
 \end{proof}
 
-\begin{theorem}[Translation-invariant description of an injective 2D PEPS]%
+\begin{lemma}[Translation-invariant description of an injective 2D PEPS]%
     \label{thm:exists_constant_injectivePEPS_of_translationInvariantState}
     \lean{TNLean.PEPS.exists_isTorusTranslationInvariant_sameState}
     \leanok
@@ -972,7 +1001,7 @@ standing regime of at least three sites, whereas Theorem~\ref{thm:peps_cycle_two
     and every physical configuration $\sigma$, then there is an injective
     translation-invariant torus tensor $B$ with the same bond-dimension
     function and the same represented state as $A$.
-\end{theorem}
+\end{lemma}
 Together with
 Corollary~\ref{cor:peps_state_translation_bond_uniform}, which shows that
 the bond dimensions of $A$ are orientation-uniform with positive horizontal
@@ -1018,7 +1047,7 @@ corollary of \cite[lines~1891--1894]{Molnar2018NormalPEPS}.
     make it invariant under every lattice translation.
 \end{proof}
 
-\begin{theorem}[Uniqueness of the injective closed-chain gauge]%
+\begin{lemma}[Uniqueness of the injective closed-chain gauge]%
     \label{thm:fundamentalTheorem_injectiveMPSChain_gauge_unique}
     \lean{TNLean.PEPS.fundamentalTheorem_injectiveMPSChain_gauge_unique}
     \leanok
@@ -1029,7 +1058,7 @@ corollary of \cite[lines~1891--1894]{Molnar2018NormalPEPS}.
     $B_v^i=Z_vA_v^iZ_{v+1}^{-1}=Z'_vA_v^i(Z'_{v+1})^{-1}$ for all $v,i$, then
     there exists $c\in\C^\times$ such that $Z'_v=cZ_v$ for all $v$
     \cite[line~724]{Molnar2018NormalPEPS}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     With $C_v=Z_v^{-1}Z'_v$, the two relations give $C_v A_v^i = A_v^i C_{v+1}$
     for all $i$. Since $\spn\{A_v^i\}=\MN{D}$, $C_v W = W C_{v+1}$ for all
@@ -1042,7 +1071,7 @@ $L=1$ specialization of the corollaries above for $n\ge 3$.
 
 \section{The vertex-injective case and the residual edge scalars}
 
-\begin{theorem}[Fundamental Theorem for normal PEPS, vertex-injective case]%
+\begin{corollary}[Fundamental Theorem for normal PEPS, vertex-injective case]%
     \label{thm:fundamentalTheorem_normalPEPS_of_vertexInjective}
     \lean{TNLean.PEPS.fundamentalTheorem_normalPEPS_of_vertexInjective}
     \leanok
@@ -1051,7 +1080,7 @@ $L=1$ specialization of the corollaries above for $n\ge 3$.
     $\Coeff_A=\Coeff_B$ and $A$ satisfies
     Definition~\ref{def:peps_normalPEPSBlockingHypotheses}, then $A$ and $B$ are
     gauge equivalent (Definition~\ref{def:GaugeEquivPEPS}).
-\end{theorem}
+\end{corollary}
 \begin{proof}\leanok
     Immediate from Theorem~\ref{thm:fundamentalTheorem_PEPS}.
 \end{proof}

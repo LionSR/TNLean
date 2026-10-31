@@ -1,4 +1,4 @@
-\begin{theorem}[Cyclic-sector single-site grading]
+\begin{lemma}[Cyclic-sector single-site grading]
     \label{thm:cyclic_sector_offdiag_shift}
     \lean{MPSTensor.IsCyclicSectorDecomp.offDiag_shift}
     \leanok
@@ -11,7 +11,7 @@
         \sum_{u=0}^{m-1}P_u & =\Id, \notag
     \end{align}
     and $P_{k+1}A^i=A^iP_k$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     The projection family contained in the cyclic sector decomposition
@@ -21,11 +21,11 @@
         \sum_uP_u             & =\Id, \notag                  \\
         \E_A^\dagger(P_{u+1}) & =P_u. \notag
     \end{align}
-    Theorem~\ref{thm:offdiag_shift_adjoint_cyclic_shift} therefore gives
+    Lemma~\ref{thm:offdiag_shift_adjoint_cyclic_shift} therefore gives
     $P_{k+1}A^i=A^iP_k$.
 \end{proof}
 
-\begin{theorem}[Cyclic-sector off-diagonal reconstruction]
+\begin{lemma}[Cyclic-sector off-diagonal reconstruction]
     \label{thm:cyclic_sector_eq_sum_offdiag}
     \lean{MPSTensor.IsCyclicSectorDecomp.eq_sum_offDiag}
     \leanok
@@ -41,7 +41,7 @@
     \begin{align}
         A^i=\sum_{u=0}^{m-1}P_{u+1}A^iP_u. \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     The projection family contained in the cyclic sector decomposition
@@ -51,11 +51,11 @@
         \sum_uP_u             & =\Id, \notag                  \\
         \E_A^\dagger(P_{u+1}) & =P_u. \notag
     \end{align}
-    Theorem~\ref{thm:eq_sum_offdiag_adjoint_cyclic_shift} therefore gives the
+    Lemma~\ref{thm:eq_sum_offdiag_adjoint_cyclic_shift} therefore gives the
     off-diagonal sum decomposition.
 \end{proof}
 
-\begin{theorem}[Cyclic sector decomposition of a periodic tensor]
+\begin{lemma}[Cyclic sector decomposition of a periodic tensor]
     \label{thm:cyclic_sector_decomp_after_blocking_periodic}
     \lean{MPSTensor.exists_cyclic_sector_decomp_after_blocking_of_isPeriodic}
     \leanok
@@ -68,7 +68,7 @@
     \cite[lines~404--423]{DeLasCuevas2017Irreducible}. The normality and
     non-repetition conclusions of Lemma~\emph{bdcf} are recorded separately in
     the component lemmas below.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     This is the cyclic-sector existence part of Lemma~\emph{bdcf}, translated
@@ -76,7 +76,7 @@
     Definition~\ref{def:cyclic_sector_decomp}.
 \end{proof}
 
-\begin{theorem}[Cyclic-sector decomposition with compressed corner letters]
+\begin{lemma}[Cyclic-sector decomposition with compressed corner letters]
     \label{thm:cyclic_sector_compression_letter}
     \lean{MPSTensor.exists_cyclic_sector_decomp_with_letter_after_blocking_of_isPeriodic}
     \leanok
@@ -91,14 +91,14 @@
     whose sector tensors are left-canonical, reproduce the blocked
     matrix-product vectors, have nonzero bond dimensions, and carry the cyclic
     adjoint-transfer decomposition of
-    Theorem~\ref{thm:cyclic_sector_decomp_after_blocking_periodic}. In addition,
+    Lemma~\ref{thm:cyclic_sector_decomp_after_blocking_periodic}. In addition,
     for every blocked physical letter $i$, the corner isomorphism realizes the
     corner-letter identity of
     \cite[Lemma~\emph{bdcf}, eq.~\emph{Cu}]{DeLasCuevas2017Irreducible}:
     \begin{align}
         \varphi_k(C_k^i)=P_k(A^{(m)})^iP_k. \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Let $U$ diagonalize $P_k$, so that
@@ -137,7 +137,7 @@
     \end{align}
 \end{proof}
 
-\begin{theorem}[Periodic cyclic sectors with support isometries]
+\begin{lemma}[Periodic cyclic sectors with support isometries]
     \label{thm:cyclic_sector_compression_letter_isometry_periodic}
     \lean{MPSTensor.exists_cyclic_sector_decomp_with_letter_and_isometry_after_blocking_of_isPeriodic}
     \leanok
@@ -153,12 +153,12 @@
     $\varphi_k(C_k^i)=P_k(A^{(m)})^iP_k$.
     \begin{proof}
         \leanok
-        Applying Theorem~\ref{thm:cyclic_sector_decomp_after_blocking_isometry}
+        Applying Lemma~\ref{thm:cyclic_sector_decomp_after_blocking_isometry}
         to the original tensor $A$ with its period-$m$ peripheral-spectrum
         hypotheses produces the cyclic-sector decomposition of $A^{(m)}$
         together with the required support isometries $V_k$.
     \end{proof}
-\end{theorem}
+\end{lemma}
 
 \begin{lemma}[One-site shift of sector overlaps]
     \label{lem:sector_overlap_succ_eq_cyclic_sector_decomp}
@@ -229,17 +229,17 @@
 % The self-overlap and no-sector-match theorems are already formal statements;
 % the full periodic overlap dichotomy still requires assembling these pieces
 % with the remaining sector-match argument.
-\begin{theorem}[Different periods imply asymptotic orthogonality]%
+\begin{lemma}[Different periods imply asymptotic orthogonality]%
     \label{thm:periodic_overlap_zero_ne_period}
     \lean{MPSTensor.periodicOverlap_tendsto_zero_of_ne_period}
     \leanok
     \uses{def:periodic_tensor}
     If $A$ and $B$ have periods $m_A\ne m_B$, then
     $\lim_{N\to\infty}O_{AB}(N)=0$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:periodic_overlap_zero_ne_dim}
-    If $D_A\ne D_B$, Theorem~\ref{thm:periodic_overlap_zero_ne_dim} gives the
+    If $D_A\ne D_B$, Lemma~\ref{thm:periodic_overlap_zero_ne_dim} gives the
     claim. Suppose instead that $D_A=D_B$ and $A\sim_{\mathrm{gp}}B$, say
     $B^i=\zeta XA^iX^{-1}$ with $X\in\GL_D(\C)$ and
     $\zeta\ne0$. The transfer maps satisfy
@@ -274,7 +274,7 @@
     \leanok
     Let $A$ be periodic, and let $B_j$ be its nonzero normalized compressed
     cyclic sectors, with the corner letters and support isometries of
-    Theorem~\ref{thm:cyclic_sector_compression_letter_isometry_periodic}.
+    Lemma~\ref{thm:cyclic_sector_compression_letter_isometry_periodic}.
     As in the non-repetition conclusion of
     \cite[Lemma~\emph{bdcf}, lines~404--423]{DeLasCuevas2017Irreducible}, two
     distinct sectors of equal virtual dimension are not gauge-phase equivalent.
@@ -297,7 +297,7 @@
     each nonzero blocked sector tensor is normal.
 \end{lemma}
 
-\begin{theorem}[No sector match implies asymptotic orthogonality]%
+\begin{lemma}[No sector match implies asymptotic orthogonality]%
     \label{thm:periodic_overlap_zero_no_sector_match}
     \lean{MPSTensor.periodicOverlap_tendsto_zero_of_no_sector_match}
     \leanok
@@ -323,7 +323,7 @@
         A_u\not\sim_{\mathrm{gp}}B_v. \notag
     \end{align}
     Then $\lim_{N\to\infty}O_{AB}(N)=0$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{lem:sector_blocked_normal_periodic, thm:periodic_self_overlap_tendsto, thm:overlap_decay_irr_tp, thm:overlap_decay_rect_irr_tp}
     Write $\bar A\sim\bigoplus_{u\in\Z_m}A_u$ and

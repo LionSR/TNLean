@@ -9,7 +9,7 @@
     $\lbrack 2^kz_1,2^k(z_1+1))\times\lbrack 2^kz_2,2^k(z_2+1))$.
 \end{definition}
 
-\begin{theorem}[Integer dyadic nesting]
+\begin{lemma}[Integer dyadic nesting]
     \label{thm:area_law_lattice_dyadic_nesting}
     \lean{TNLean.PEPS.AreaLaw.Geometry.dyadicAncestor_eq_cellIndex,
         TNLean.PEPS.AreaLaw.Geometry.mem_latticeDyadicCell,
@@ -28,7 +28,7 @@
     Thus $|C_{k,z}|=4^k$ and $C_{0,z}=\{z\}$.
     Two intersecting squares are nested in scale order; in particular,
     $C_{k,z}\subseteq C_{k+1,\lfloor z/2\rfloor}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{def:area_law_lattice_dyadic_square,thm:area_law_dyadic_refinement,
         thm:area_law_dyadic_indices}
@@ -50,7 +50,7 @@
     either $k=K$ or $C_{k+1,\lfloor z/2\rfloor}\not\subseteq S$.
 \end{definition}
 
-\begin{theorem}[Exact capped partition]
+\begin{lemma}[Exact capped partition]
     \label{thm:area_law_capped_dyadic_partition}
     \lean{TNLean.PEPS.AreaLaw.Geometry.mem_cappedDyadicPartition,
         TNLean.PEPS.AreaLaw.Geometry.exists_mem_cappedDyadicPartition,
@@ -71,7 +71,7 @@
     \end{align}
     The empty set has an empty partition, and
     $\mathcal P_0(S)=\{(0,x):x\in S\}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_lattice_dyadic_nesting,def:area_law_capped_dyadic_partition}
     For each $x\in S$, the unit square $C_{0,x}=\{x\}$ is contained in $S$.
@@ -101,7 +101,7 @@
     and its complement.
 \end{definition}
 
-\begin{theorem}[Counting integer quotient intervals]
+\begin{lemma}[Counting integer quotient intervals]
     \label{thm:area_law_quotient_interval_count}
     \lean{TNLean.PEPS.AreaLaw.Geometry.quotient_interval_card}
     \leanok
@@ -110,14 +110,14 @@
         u\,\#\bigl([\lfloor a/u\rfloor,\lfloor b/u\rfloor]\cap\mathbb Z\bigr)
         \le b-a+2u.
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The interval contains $\lfloor b/u\rfloor-\lfloor a/u\rfloor+1$ integers,
     and the inequalities $u\lfloor b/u\rfloor\le b$ and
     $a<u(\lfloor a/u\rfloor+1)$ yield the bound.
 \end{proof}
 
-\begin{theorem}[Mixed dyadic squares of an integer rectangle]
+\begin{lemma}[Mixed dyadic squares of an integer rectangle]
     \label{thm:area_law_rectangle_mixed_count}
     \lean{TNLean.PEPS.AreaLaw.IntRect.card_mixedDyadicIndices_toFinset_le}
     \leanok
@@ -131,7 +131,7 @@
     \begin{align}
         u\,\#M_k(Q)\le4\operatorname{size}(Q)+8u.
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{def:area_law_safe_rectangle,thm:area_law_lattice_dyadic_nesting,
         thm:area_law_capped_mixed_parents,thm:area_law_quotient_interval_count}
@@ -148,7 +148,7 @@
     $u\,\#M_k(Q)\le2(x_1-x_0)+2(y_1-y_0)+8u\le4\operatorname{size}(Q)+8u$.
 \end{proof}
 
-\begin{theorem}[Mixed parents below the cap]
+\begin{lemma}[Mixed parents below the cap]
     \label{thm:area_law_capped_mixed_parents}
     \lean{TNLean.PEPS.AreaLaw.Geometry.mem_mixedDyadicIndices,
         TNLean.PEPS.AreaLaw.Geometry.parent_mem_mixedDyadicIndices,
@@ -161,7 +161,7 @@
     \begin{align}
         \bigl|\{(l,z)\in\mathcal P_K(S):l=k\}\bigr|\le4|M_{k+1}(S)|.
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_lattice_dyadic_nesting,def:area_law_capped_dyadic_partition,
         thm:area_law_dyadic_refinement}

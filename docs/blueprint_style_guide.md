@@ -34,6 +34,11 @@ The blueprint links the mathematics to its Lean formalization. A reader should b
    word in prose references (`Lemma~\ref{...}`) instead. Immediate
    projections and accessor lemmas may share the parent entry as described
    below.
+   The roles are data: `blueprint/roles.json` lists the theorems and corollaries
+   of each chapter by label, and `python3 scripts/blueprint_roles.py --apply`
+   sets every environment and the words of prose references from it
+   (`--check` reports mismatches). Add a new headline result to that file
+   rather than hand-editing environments.
    Each chapter opens with a paragraph that says, in ordinary words, what the
    chapter proves and names its theorems, and the chapter title says what is
    proved rather than listing construction names.
@@ -252,7 +257,8 @@ may have no appendix. Appendix source file names use the parent chapter's stable
 `chNN` subject identifier. Later reuse by another chapter does not change the
 result's primary ownership. The displayed umbrella title is `Appendices`, and
 appendix chapter titles use a mathematically descriptive
-`...: Supporting Results` rather than `Technical Complements`.
+`...: supporting results` rather than `Technical complements`, in sentence
+case like every other title.
 
 An appendix is not a dump of Lean declarations or a transcription of a source
 file. It must read like an appendix written by a mathematician:

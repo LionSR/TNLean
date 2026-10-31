@@ -36,7 +36,7 @@ owner identification for the affected and exterior systems in
     \end{align}
 \end{definition}
 
-\begin{theorem}[Compatibility with concatenation]
+\begin{lemma}[Compatibility with concatenation]
     \label{thm:peps_owner_concatenation}
     \lean{TNLean.Lattice.PartyCircuit.Layout.mapOwnerIso_append_tmul}
     \lean{TNLean.Lattice.PartyCircuit.Layout.mapOwnerIso_append}
@@ -52,7 +52,7 @@ owner identification for the affected and exterior systems in
         \label{eq:peps_owner_concatenation}
     \end{align}
     or equivalently $R_{f,\ell m}C_{\ell,m}^{-1}=C_{\ell^f,m^f}^{-1}(R_{f,\ell}\otimes R_{f,m})$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Induction on $\ell$ using (\ref{eq:peps_owner_head}) gives
@@ -75,7 +75,7 @@ owner identification for the affected and exterior systems in
     original order, preserving the empty list and concatenation.
 \end{definition}
 
-\begin{theorem}[Surviving pair labels after grouping]
+\begin{lemma}[Surviving pair labels after grouping]
     \label{thm:peps_owner_source_pairs}
     \lean{TNLean.Lattice.PartyCircuit.SourceInventory.mem_mapOwner}
     \lean{TNLean.Lattice.PartyCircuit.SourceInventory.map_partyPair_mapOwner}
@@ -86,14 +86,14 @@ owner identification for the affected and exterior systems in
     applying $f$ to both endpoints of each pair in $S$ and discarding diagonal
     images $f(p)=f(q)$; in particular, a pair $k$ occurs in $S_f$ iff $k$ is
     non-diagonal and $k=\{f(p),f(q)\}$ for some $\{p,q\}$ occurring in $S$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     By induction on $S$ using Definition~\ref{def:peps_owner_sources}, a
     source with endpoints $p,q$ contributes $\{f(p),f(q)\}$ iff $f(p)\ne f(q)$.
 \end{proof}
 
-\begin{theorem}[Normalization and the absence of crossing sources]
+\begin{lemma}[Normalization and the absence of crossing sources]
     \label{thm:peps_owner_sources_internal}
     \lean{TNLean.Lattice.PartyCircuit.SourceInventory.IsNormalized.mapOwner}
     \lean{TNLean.Lattice.PartyCircuit.SourceInventory.mapOwner_eq_nil_iff}
@@ -101,7 +101,7 @@ owner identification for the affected and exterior systems in
     \uses{def:peps_owner_sources}
     If the vectors of $S$ are normalized, then those of $S_f$ are normalized,
     and $S_f$ is empty iff $f(p)=f(q)$ for every source $(p,q;U,V;\eta)$ in $S$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     By Definition~\ref{def:peps_owner_sources}, surviving records keep the
@@ -119,7 +119,7 @@ owner identification for the affected and exterior systems in
     on all spectator registers.
 \end{definition}
 
-\begin{theorem}[The internal preparation operator]
+\begin{lemma}[The internal preparation operator]
     \label{thm:peps_internal_pair_preparation}
     \lean{TNLean.Lattice.PartyCircuit.Word.localPairSource_spec}
     \lean{TNLean.Lattice.PartyCircuit.Word.eval_localPairSource}
@@ -128,7 +128,7 @@ owner identification for the affected and exterior systems in
     The operation of Definition~\ref{def:peps_internal_pair_preparation} maps
     every spectator vector $x$ to $\eta\otimes x$, and when $\|\eta\|=1$ it is
     an allowed local operation creating no pair source between distinct owners.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     The map $c\mapsto\eta\otimes c$ has norm $\|\eta\|$, so tensoring with the
@@ -152,7 +152,7 @@ owner identification for the affected and exterior systems in
     Definition~\ref{def:peps_internal_pair_preparation}.
 \end{definition}
 
-\begin{theorem}[Exact preservation of an allowed composition]
+\begin{lemma}[Exact preservation of an allowed composition]
     \label{thm:peps_owner_composition}
     \lean{TNLean.Lattice.PartyCircuit.Word.isAllowed_mapOwner}
     \lean{TNLean.Lattice.PartyCircuit.Word.sources_mapOwner}
@@ -167,18 +167,18 @@ owner identification for the affected and exterior systems in
     \end{align}
     If $F$ is allowed with pair-source list $S$, then $F^f$ is allowed with
     pair-source list $S_f$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_owner_concatenation,thm:peps_internal_pair_preparation}
-    By induction on $F$, Theorem~\ref{thm:peps_owner_concatenation} intertwines
-    local maps, Theorem~\ref{thm:peps_internal_pair_preparation} intertwines
+    By induction on $F$, Lemma~\ref{thm:peps_owner_concatenation} intertwines
+    local maps, Lemma~\ref{thm:peps_internal_pair_preparation} intertwines
     internal pair preparations, and surviving sources, exchanges, and untouched
     registers commute with $R_{f,\cdot}$, giving (\ref{eq:peps_owner_composition}),
     preservation of local contraction bounds, and source list $S_f$.
 \end{proof}
 
-\begin{theorem}[Two contractions when every source is internal]
+\begin{lemma}[Two contractions when every source is internal]
     \label{thm:peps_internal_source_factorization}
     \lean{TNLean.Lattice.PartyCircuit.Word.exists_partition_of_sources_internal}
     \leanok
@@ -197,14 +197,14 @@ owner identification for the affected and exterior systems in
          & =(A_+\otimes A_-)J_{f,\ell}.
         \label{eq:peps_internal_source_factorization}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_owner_sources_internal,thm:peps_owner_composition,
         thm:peps_party_binary_factorization,thm:peps_party_restriction}
-    By Theorems~\ref{thm:peps_owner_sources_internal} and
+    By Lemmas~\ref{thm:peps_owner_sources_internal} and
     \ref{thm:peps_owner_composition}, $F^f$ is allowed with empty source list
-    $S_f$; applying Theorems~\ref{thm:peps_party_binary_factorization} and
+    $S_f$; applying Lemmas~\ref{thm:peps_party_binary_factorization} and
     \ref{thm:peps_party_restriction} to $F^f$ and composing with
     (\ref{eq:peps_owner_composition}) yields
     (\ref{eq:peps_internal_source_factorization}) with $\|A_+\|,\|A_-\|\le1$.
