@@ -1,0 +1,157 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\input{command}
+\title{Quantifiers in the Frustration-Free Ground-State Bond-Dimension Dichotomy}
+\author{}
+\date{2026-10-29}
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+\section{Source and quantified asymptotic result}
+
+Theorem~5 of \cite{Sanz2010Quantum}, lines~850--880 of
+\path{Papers/0909.5347/main.tex}, asserts a length-independent matrix size or
+an order-$N^{1/5}$ obstruction at prime lengths for the unique ground states of
+one fixed frustration-free local interaction.
+
+The source-written quantified version takes a positive $L$-site interaction
+$h$ and assumes that the zero-energy space of $H_M=\sum_i\tau^i(h)$ has
+dimension one at every permitted volume $M\ge L$. It proves the alternative
+\begin{align}
+     & \exists B,M_0\quad
+    \ker H_M=\C V^{(M)}(B),\quad V^{(M)}(B)\ne0
+    \quad\text{for every }M\ge M_0; \label{eq:spwc10_eventual_uniform_branch} \\
+     & \text{or}\quad
+    N<L+\max\{q(D),3(D-1)(q(D)+1)\},\qquad
+    q(D)=(D^2+1)^2, \label{eq:spwc10_prime_obstruction}
+\end{align}
+where (\ref{eq:spwc10_prime_obstruction}) quantifies over every prime $N$ and
+every bond-$D$ tensor whose nonzero periodic vector is in $\ker H_N$.
+The interaction and its range are fixed before those quantifiers. The
+polynomial bound is an explicit fifth-degree obstruction; it is not a
+statement only about the W state or a chosen sequence of representations.
+
+\section{Derived data and the remaining boundary}
+
+When the threshold in (\ref{eq:spwc10_prime_obstruction}) fails, primality and
+$D<N$ remove every nonprimitive periodic block at length $N$. Grouping phase
+classes and discarding zero combined coefficients produces an actual
+expansion into separated blocks, with common injectivity length $q(D)$.
+Complementary simultaneous spanning then gives $G_L(B_j)\subseteq\ker h$.
+Consequently each block gives zero energy at every permitted volume. Its
+injectivity ensures a nonzero periodic vector for $M\ge q(D)+1$, and the
+one-dimensional ground-space hypothesis identifies the entire kernel with
+that line. This derives (\ref{eq:spwc10_eventual_uniform_branch}) with
+$M_0=\max\{L,q(D)+1\}$ and a block of bond dimension at most $D$.
+
+The fixed-tensor conclusion is explicitly eventual. The finitely many
+shorter volumes require a length-dependent family at one common matrix
+size, rather than equality with that same tensor at every length.
+
+\section{The actual finite-prefix construction}
+
+Every nonzero vector on a positive-length ring which is fixed exactly by
+cyclic translation now has an actual periodic trace-MPS representation
+with matrix size $M d^{\lfloor M/2\rfloor}$. The open-boundary
+representation is constructed from the existing finite cut-rank theorem,
+and the existing cyclic-block averaging makes the matrices site
+independent. This is stated in
+\leanid{MPSTensor.exists_mpvState_eq_of_cyclic_invariant}.
+Unused bond coordinates preserve every positive-length periodic vector,
+as proved in \leanid{MPSTensor.mpvState_padBond}.
+
+Consequently the eventual tensor of bond dimension $D$ and threshold
+$M_0$ gives one common size
+\begin{align}
+    K & = D+M_0d^{M_0}+1
+    \label{eq:spwc10_finite_prefix_common_size}
+\end{align}
+for all permitted positive-volume ground lines containing nonzero
+exactly cyclic-invariant vectors. Short representations are derived,
+not supplied as hypotheses. The theorem
+\leanid{MPSTensor.exists_uniform_bond_on_cyclic_ground_sector}
+states this result. Its tensors may depend on the volume; it does not
+force a false same-tensor conclusion at the finitely many short lengths.
+
+\section{The exact remaining momentum condition}
+
+A periodic trace vector is fixed by every cyclic translation, as follows
+from cyclicity of the trace. Conversely the finite representation above
+shows that every nonzero exactly cyclic-invariant vector is representable.
+The equivalence is
+\leanid{MPSTensor.exists_mpvState_eq_iff_cyclic_invariant}.
+Therefore the literal all-positive-volume common-size family is equivalent
+to the following precise finite condition: for each permitted positive
+$M<M_0$, there exists a nonzero ground vector on which every cyclic
+translation acts as the identity. This is proved in
+\leanid{MPSTensor.uniform_bond_family_iff_short_cyclic_ground}.
+
+Uniqueness of a translation-invariant Hamiltonian's ground space gives an
+invariant line. On a one-dimensional line a cyclic translation may act by
+a root of unity; line invariance does not itself identify that eigenvalue
+with one. The source proof supplies the eventual zero-momentum branch,
+but no derivation of this additional finite-prefix zero-momentum condition
+from its complete global frustration-free hypotheses is supplied here.
+This is an identified remaining obligation, not a counterexample to the
+source's full hypothesis set. The separate formalization issue
+\href{https://github.com/LionSR/TNLean/issues/10386}{\#10386} asks for a
+derivation from the entire all-volume positive, frustration-free uniqueness
+and derived local-kernel regime, or a counterexample satisfying that full
+hypothesis set. It blocks completion of issue \#10280; invariant-line
+considerations alone do not resolve it.
+
+The original asymptotic dichotomy and its hypotheses are unchanged. No
+canonical decomposition, phase separation, transfer gap, local-kernel
+inclusion, future-volume equation, finite-volume periodic representation,
+or short zero-momentum conclusion is assumed in its proof.
+
+All new proofs and Blueprint entries remain pending hosted acceptance;
+no local Lean build or elaboration was run. The full source theorem
+remains open in issue \#10280 until the finite-prefix zero-momentum
+obligation, validation and integration are complete.
+
+\section{The product-state branch}
+
+The normal bond-one case now has a source-written finite-prefix
+construction. The actual amplitude is the product of the one-site scalar
+entries. Normality supplies a nonzero letter, so a constant physical
+configuration gives a nonzero amplitude at every positive length, not
+merely eventually. The actual local-kernel inclusion derived in the
+prime-length argument then makes this explicit vector a zero-energy,
+zero-momentum vector at every permitted short length. Global uniqueness
+identifies its line with the full kernel.
+
+These are
+\leanid{MPSTensor.exists_cyclic_ground_of_normal_bondOne_local_kernel}
+and
+\leanid{MPSTensor.uniform_bondOne_ground_family_of_normal_local_kernel}.
+They use the actual normal tensor and local-kernel inclusion of the derived
+standing data; they do not assume short representations or nonvanishing.
+The source prime-length extraction now exposes these already-derived data.
+Its bond-one caller
+\leanid{MPSTensor.exists_uniform_bondOne_ground_family_of_prime_length_bound}
+starts from the fixed positive interaction, all-volume uniqueness and one
+actual nonzero prime-length bond-one ground representation at $N\geq L+4$.
+It derives the positive retained bond dimension $D_0\leq1$, hence $D_0=1$,
+and then obtains the same bond-one ground family at all permitted positive
+volumes. Neither the normal tensor nor the local-kernel inclusion is a
+hypothesis of this caller.
+The restriction is explicit: the normal tensor has bond dimension one.
+Issue \#10386 remains open for the general higher-dimensional case and
+for hosted acceptance and integration. No full-hypothesis counterexample
+is asserted.
+
+\section{Verdict}
+
+\textbf{Verdict: scope restriction.} The quantified eventual dichotomy
+and the actual common-bond finite-prefix construction on the exact
+zero-momentum sector are source-written. The literal all-volume family
+has been reduced to an explicit finite zero-momentum condition; that
+condition is not inferred from uniqueness alone.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+\end{document}

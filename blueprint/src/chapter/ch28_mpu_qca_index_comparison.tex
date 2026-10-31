@@ -18,10 +18,11 @@
     $u:\mathbb C^d\otimes\mathbb C^d\to\mathbb C^\ell\otimes\mathbb C^r$
     and $v:\mathbb C^r\otimes\mathbb C^\ell\to\mathbb C^d\otimes\mathbb C^d$
     be unitary. The actual output family
-    \[
-        A\longmapsto(v\otimes v)
+    \begin{align}
+        A & \longmapsto(v\otimes v)
         (I_r\otimes uAu^\dagger\otimes I_\ell)(v\otimes v)^\dagger
-    \]
+        \label{eq:mpu_actual_two_link_output_family}
+    \end{align}
     is a star-homomorphism. The dimensions satisfy $\ell r=d^2$, so
     $\ell/d=d/r$. Its least left support algebra is
     $v(I_r\otimes M_\ell)v^\dagger$, and hence has matrix size $\ell$.
@@ -140,10 +141,11 @@
     $\mathcal R_0$ on the cell pair $\{-1,0\}$ isomorphic to $M_\ell$.
     Its chosen matrix size at this cut is therefore $\ell$, and its
     positive rational GNVW index is
-    \[
+    \begin{align}
         \operatorname{ind}_{\mathrm{QCA}}
-        =\frac{\ell}{d_k}=\frac{d_k}{r},\qquad d_k=d^k.
-    \]
+         & =\frac{\ell}{d_k}=\frac{d_k}{r},\qquad d_k=d^k.
+        \label{eq:mpu_qca_blocked_index_ratio}
+    \end{align}
     This is the actual support-factor comparison after the source's
     grouping of sites in \cite[Appendix, lines~2313--2334]{Cirac2017MPU}.
     Independence of arbitrary regrouping is not asserted here. The
