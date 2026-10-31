@@ -45,6 +45,19 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Nonempty bond from a trace-one matrix — promoted (2026-10-31)
+
+- **Pattern:** `have ha : a ≠ 0 := by intro ha; subst a; simp at htr` followed by
+  `let : NeZero a := ⟨ha⟩`, where `htr : Matrix.trace ρ = 1`.
+- **Helper:** `Matrix.neZero_of_trace_eq_one` in
+  `TNLean/MPS/Preparation/SecondOrderOverlap.lean`.
+- **Occurrences:** about ten Preparation modules, and seven sites in
+  `UncleGroundGram.lean`, `UncleNormGrowth.lean` and `UncleFiniteGaplessness.lean`,
+  all now one `have : NeZero a := Matrix.neZero_of_trace_eq_one htr`.
+- **Decision:** The lemma stays in `SecondOrderOverlap.lean` because that module is
+  near the changed-module compile-time limit; the parent-Hamiltonian modules import it.
+  A move to a leaf algebra module is a later cleanup.
+
 ### Positive dimensions of canonical blocks — promoted (2026-10-30)
 
 - **Pattern:** `let : NeZero (h.dim k) := ⟨(h.dim_pos k).ne'⟩` before using a
