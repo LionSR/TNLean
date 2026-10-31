@@ -104,7 +104,7 @@ private lemma sum_trace_proj_overlap_shift {L' m : ℕ} [NeZero m]
 /-- The cross overlap of two compressed cyclic sectors, expanded via the
 `IsCyclicSectorDecomp` trace formula and reindexed to physical configurations
 of length `N * m`. -/
-private lemma sectorOverlap_eq_physical_sum {m : ℕ} [NeZero D] [NeZero m]
+private lemma sectorOverlap_eq_physical_sum {m : ℕ} [NeZero m]
     (A B : MPSTensor d D)
     {dimA dimB : Fin m → ℕ}
     (blocksA : (k : Fin m) → MPSTensor (blockPhysDim d m) (dimA k))
@@ -133,7 +133,7 @@ private lemma sectorOverlap_eq_physical_sum {m : ℕ} [NeZero D] [NeZero m]
 arXiv:1708.00029 lines 985--1002).  For `N ≥ 1`, the cross overlap of compressed
 cyclic sectors is invariant under the simultaneous index shift
 `(u, v) → (u+1, v+1)`. -/
-private lemma sectorOverlap_succ_eq {m : ℕ} [NeZero D] [NeZero m]
+private lemma sectorOverlap_succ_eq {m : ℕ} [NeZero m]
     (A B : MPSTensor d D)
     (hA_lc : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     (hB_lc : ∑ i : Fin d, (B i)ᴴ * B i = 1)
@@ -167,7 +167,7 @@ For positive lengths, the cross overlap of the compressed cyclic sectors is
 invariant under the simultaneous index shift (u, v) ↦ (u + 1, v + 1).
 This is the formal overlap version of the translation-operator step in
 arXiv:1708.00029, lines 985--1002. -/
-lemma sectorOverlap_succ_eq_of_cyclicSectorDecomp {m : ℕ} [NeZero D] [NeZero m]
+lemma sectorOverlap_succ_eq_of_cyclicSectorDecomp {m : ℕ} [NeZero m]
     (A B : MPSTensor d D)
     (hA_lc : IsLeftCanonical A) (hB_lc : IsLeftCanonical B)
     {dimA dimB : Fin m → ℕ}
