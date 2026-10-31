@@ -10588,6 +10588,85 @@ removed after the dependency audit exposed it.
 - **Translation reuse:** `cyclicRestrictₗ_cyclicTranslateState` is promoted from private
   visibility for this second consumer; the existing proof remains unchanged.
 
+### Dense local image inside a closed commutant — candidate (2026-10-29)
+
+- **Seen:** `QCA/SupportAlgebraGeneration.lean`, the support-family generation
+  theorem and the even-pair-image commutant theorem.
+- **Pattern:** Pull back a closed ambient subset under an automorphism;
+  include the dense algebraic local image; use closure minimality and
+  surjectivity to obtain the global containment.
+- **Reuse:** The new commutant theorem exposes the source's intermediate
+  even-pair argument, avoiding the stronger premise of commutation with
+  each separate support factor.
+- **Decision:** Two proof occurrences in one file; keep the concrete source
+  statements and consolidate the closed-containment argument before a third
+  copy, rather than adding another notion of local generation.
+
+
+### Supplied unitary gate dimension product — promoted (2026-10-29)
+
+- **Pattern:** Apply both cardinal inequalities of a supplied rectangular
+  unitary and simplify the product/finite-index cardinalities to ℓ*r=d*d.
+- **Defined in:** `MPS/MPU/TwoSiteStandardForm.lean`,
+  `TwoSiteStandardFormData.left_mul_right`.
+- **Refactored occurrences:** four-spin unitarity in
+  `SuppliedHalfFactorMinimality.lean`, and both the simplicity and
+  zero-index consequences in `SuppliedFourSpinSourceComparison.lean`.
+- **Notes:** The theorem is at the existing supplied-standard-form owner;
+  no normalization or ambient canonicality premise is introduced.
+
+
+### Commutation after a finite-local star homomorphism — promoted helper (2026-10-29)
+
+- **Seen:** `QCA/SingletonGeneration.lean` and `QCA/SupportIntersection.lean`.
+- **Pattern:** Pull back the target's star centralizer through a star
+  homomorphism, include every finite single-site image, and use the existing
+  finite local generation theorem to obtain whole-region commutation.
+- **Promoted:** `commute_map_localObservable_of_singletons` retains this
+  argument once. The original algebraic-local commutation helper and finite
+  quasi-local support intersection both use it.
+- **Validation:** Independent source/API review; local Lean was not run.
+
+
+### Reading original half-block output coordinates — candidate (2026-10-29)
+
+- **Pattern:** Decode the actual paired physical identification into its two
+  original block words, read the six half-block coordinates through the
+  existing three-pair decoder, and compare the actual middle/outside words
+  with the existing consecutive-window inclusion.
+- **Seen:** `MPS/MPU/TwoSiteFiniteHeisenberg.lean` and
+  `MPS/MPU/TwoSiteMiddleOutput.lean`.
+- **Abstraction:** One private half-block reading lemma serves every middle
+  and exterior case. The two-site decoded-word identity is at the existing
+  physical standard-form owner. The final matrix proof reuses the existing
+  window evaluation and support theorems.
+- **Notes:** The actual middle output is [k,5k) inside its existing 6k-site
+  window; no support conclusion or new factor predicate is a premise.
+### Reuse established interval-coordinate owners across consumers (2026-10-29)
+
+- **Seen:** actual MPU/QCA window and translation consumers, and parent-Hamiltonian
+  observable translation/commutator consumers.
+- **Finding:** Two newly written helpers collided with existing full declaration names;
+  one was a specialization, and the other reversed the two integer parameters.
+- **Repair:** Move the established general window statements unchanged to
+  `ParentHamiltonian/QuasiLocalWindowCoordinates`; move the established translation
+  statement unchanged to `QCA/IntervalTranslation`. Reuse those owners and retain
+  their existing signatures, rather than renaming the duplicates or adding aliases.
+
+### Faithful image coordinates of a star-subalgebra — promoted (2026-10-29)
+
+- **Seen:** the finite support embedding, range-equality coordinates, and
+  actual two-site translation of support factors.
+- **Promotion:** `StarSubalgebra.equivMapOfInjective` and
+  `StarSubalgebra.equivOfEq` retain the corresponding existing Mathlib
+  algebra equivalences and add only preservation of star. Their coercion
+  lemmas evaluate as the original map and unchanged ambient element.
+- **Reuse:** The previous manual finite embedding bijection and the
+  equality-transported range presentation now consume these adapters;
+  the translated even-factor coordinates use them directly.
+- **Notes:** The matrix-specific support-map presentation in the index
+  comparison uses this shared owner; its duplicate private helper is removed.
+
 
 ### Fixed exterior contractions of uncle words — reused lemmas (2026-10-29)
 

@@ -258,6 +258,7 @@ import TNLean.MPS.ParentHamiltonian.QuasiLocalMultiblockLimitGap
 import TNLean.MPS.ParentHamiltonian.QuasiLocalOpenInteractionExpectation
 import TNLean.MPS.ParentHamiltonian.QuasiLocalParentGroundStateFace
 import TNLean.MPS.ParentHamiltonian.QuasiLocalPrimitiveGap
+import TNLean.MPS.ParentHamiltonian.QuasiLocalWindowCoordinates
 import TNLean.MPS.ParentHamiltonian.ResidualBoundaryGram
 import TNLean.MPS.ParentHamiltonian.ResidualBoundaryGramInverse
 import TNLean.MPS.ParentHamiltonian.ResidualBoundaryOverlap

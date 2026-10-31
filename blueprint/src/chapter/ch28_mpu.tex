@@ -5880,6 +5880,20 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     % to the source tensor and is not a condition on supplied gates.
 \end{definition}
 
+\begin{lemma}[Dimensions of supplied standard-form gates]
+    \label{lem:mpu_supplied_gate_dimension_identity}
+    \lean{MPOTensor.TwoSiteStandardFormData.left_mul_right}
+    \leanok
+    Every supplied standard form of Definition~\ref{def:mpu_supplied_two_site_standard_form}
+    satisfies $\ell r=d^2$. This is the dimension identity of its actual
+    unitary gate in \cite[Definition~III.9]{Cirac2017MPU}.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:mpu_supplied_two_site_standard_form}
+    The isometry and coisometry of $u$ give the two dimension inequalities.
+\end{proof}
+
 \begin{center}
     % Formula: W^{(i_1,i_2),(j_1,j_2)}_{\alpha,\gamma}=\sum_{l,s}
     % (X_2)_{(\alpha,i_1),l}\,u_{(l,s),(j_1,j_2)}\,(X_1)_{(i_2,\gamma),s}, the
@@ -13530,3 +13544,5 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{lemma}
 
 \input{chapter/ch28_mpu_finite_heisenberg}
+
+\input{chapter/ch28_mpu_qca_index_comparison}
