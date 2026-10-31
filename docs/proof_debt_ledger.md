@@ -201,6 +201,17 @@ live mathematics. Tracked under [#4529](https://github.com/LionSR/TNLean/issues/
 
 ### S2. Delete ~185 zero-reference declarations across ~103 files — net 2,950 lines, risk 3/10
 - **Status**: open (#9881; supersedes #4564)
+- **Current residue (2026-10-29):** the exact-main scan at `152f3c819` reports
+  33 default candidates, down from the issue's historical 103; the older
+  directory totals below are not a current census. A narrow follow-up removes
+  three unused un-attributed circuit/party helpers (19 Lean lines; the edited
+  scan reports 30 remaining candidates): `bondNeighbourhood_mono`,
+  `lightCone_mono_radius`, and `length_effectParties`. The definitions, live
+  one-step light-cone inclusion, source-facing geometric bounds and party
+  registers are retained. The evidence and preserved boundaries are in
+  `docs/audits/2026-10-29_zero_reference_circuit_helpers.md`. This written
+  slice is uncompiled by the user's explicit request; #9881 remains open.
+
 - **Written implementation-helper slice (2026-10-29)**: remove the unused
   `TNLean.Lattice.mem_labelClass_symm` and
   `EncodedFrame.exists_mem_tagSample_of_mem_patchSquares`, minus 14 production
