@@ -30,7 +30,7 @@ open scoped BigOperators InnerProductSpace ComplexOrder MatrixOrder
 
 namespace TNLean.MPS.AreaLaw
 
-private theorem aklv_regionEntropy_le_short_side {L q k : ℕ}
+theorem aklv_regionEntropy_le_short_side {L q k : ℕ}
     (hk : k ≤ L) (Ω : EuclideanSpace ℂ (Fin L → Fin q)) (hΩ : ‖Ω‖ = 1) :
     Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (leftBlock L k) Ω ≤
       ((min k (L - k) : ℕ) : ℝ) * log (q : ℝ) := by

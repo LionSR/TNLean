@@ -1135,12 +1135,14 @@
     "ch:aklv_entropy_approximation": {
       "theorems": [
         "thm:aklv_physical_sequence_entropy",
-        "thm:aklv_sharp_sequential_mps"
+        "thm:aklv_sharp_sequential_mps",
+        "thm:aklv_frustration_free_entropy"
       ],
       "corollaries": [],
       "notes": {
         "thm:aklv_physical_sequence_entropy": "Uniform physical entropy bound obtained from the coherent AKLV sequence",
-        "thm:aklv_sharp_sequential_mps": "Accuracy-dependent physical matrix product approximation with the fourth-root rank bound"
+        "thm:aklv_sharp_sequential_mps": "Accuracy-dependent physical matrix product approximation with the fourth-root rank bound",
+        "thm:aklv_frustration_free_entropy": "Uniform entropy of the original frustration-free ground vector from a projector gap lower bound"
       }
     }
   }

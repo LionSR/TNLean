@@ -11484,3 +11484,15 @@ removed after the dependency audit exposed it.
 - **Decision:** Three short occurrences in one file, below the two-file
   promotion threshold. The three inequalities describe distinct adjacent
   regions; no new generic support or decomposition certificate is needed.
+
+
+### Candidate: squared Chebyshev exponential coefficient (2026-10-29)
+
+- **Seen:** `AKLV/FavorableFilter.lean` and
+  `AKLV/FrustrationFreeEntropy.lean` identify the square of twice an
+  exponential with the scalar squared shrinking factor.
+- **Reuse:** Both use the existing `Real.exp_nat_mul`, `mul_pow`, and ring
+  normalization. No new overlap, tail or entropy argument is needed.
+- **Decision:** These two sites remain below the rule of three. The entropy
+  development also reuses `aklv_regionEntropy_le_short_side` by exposing its
+  existing proof unchanged, rather than copying that dimension argument.
