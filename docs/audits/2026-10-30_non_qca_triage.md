@@ -1,5 +1,8 @@
 # Non-QCA issue triage, 30 October 2026
 
+Historical snapshot. The refreshed queue and follow-up routing are in the
+[31 October audit](2026-10-31_non_qca_triage.md).
+
 Published evening refresh: **2026-10-30 20:41 UTC**. Frozen inspected main: `37efd4d6d81d3aae155c632fa5baf44d96e542ea`.
 Frozen repository inventory: **183 open issues and 103 open PRs**.
 The refreshed scope contains **66 open issues and 73 open PRs**.
