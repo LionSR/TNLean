@@ -335,9 +335,10 @@ spectral-gap assertion.
 
 \begin{lemma}[Exact kernel at the matching periodic volume]
     \label{lem:pvbs_matching_volume_kernel}
-    \lean{MPSTensor.pvbsPureWindowHamiltonian_apply_pvbsEdge,
+    \lean{MPSTensor.cyclicCfg_full_eq_cyclicTranslateCfg_neg,
+        MPSTensor.pvbsPureWindowHamiltonian_apply_pvbsEdge,
         MPSTensor.ker_pvbsPureWindowHamiltonian_matching_volume,
-        MPSTensor.pvbsPureWindowHamiltonian_matching_volume_nonzero_ground}
+        MPSTensor.pvbsEdge_ne_zero_matching_volume}
     \leanok
     \uses{lem:pvbs_amplitudes, lem:pvbs_matching_volume_line_invariance,
         lem:pvbs_pure_window_kernel,lem:periodic_interaction_sections}
@@ -354,8 +355,12 @@ spectral-gap assertion.
 \begin{proof}
     \leanok
     The window covers the whole ring, so the outside word $\tau$ is empty
-    and the coefficient section at offset $i$ is a translate,
-    $R_{i,\tau}\psi=T_{-i}\psi$. By
+    and the coefficient section at offset $i$ is a translate:
+    \begin{align}
+        R_{i,\tau}\psi & =T_{-i}\psi, & R_{0,\tau}\psi & =\psi.
+        \label{eq:pvbs_matching_volume_full_window}
+    \end{align}
+    By
     Lemma~\ref{lem:pvbs_matching_volume_line_invariance},
     $T_{-i}\Psi_R(q)\in\mathbb C\Psi_R(q)$, so
     Lemma~\ref{lem:pvbs_pure_window_kernel} gives
@@ -363,7 +368,8 @@ spectral-gap assertion.
     Lemma~\ref{lem:periodic_interaction_sections} gives
     $H_R(q)\Psi_R(q)=0$. Conversely, if $H_R(q)\psi=0$, positivity and
     Lemma~\ref{lem:periodic_interaction_sections} give
-    $p_R(q)R_{0,\tau}\psi=0$. Since $R_{0,\tau}\psi=\psi$,
+    $p_R(q)R_{0,\tau}\psi=0$. Since $R_{0,\tau}\psi=\psi$ by
+    (\ref{eq:pvbs_matching_volume_full_window}),
     Lemma~\ref{lem:pvbs_pure_window_kernel} gives
     $\psi\in\mathbb C\Psi_R(q)$. Finally
     $\Psi_R(q)(1,0,\ldots,0)=1$, so $\Psi_R(q)\ne0$.
@@ -379,7 +385,15 @@ spectral-gap assertion.
 \end{lemma}
 \begin{proof}
     \leanok
-    Write $\phi=c\Psi_R(q)$ by the exact kernel identity. If $c\ne0$,
-    translation invariance cancels this scalar and makes $\Psi_R(q)$
-    itself invariant, contradicting its nontrivial one-step phase.
+    Let $T_1$ translate by one site,
+    $(T_1\psi)(\sigma)=\psi(\sigma_1,\ldots,\sigma_{R-1},\sigma_0)$.
+    The exact kernel identity gives $\phi=c\,\Psi_R(q)$ for some
+    $c\in\mathbb C$. If $c\ne0$, then
+    \begin{align}
+        c\,T_1\Psi_R(q) & =T_1\phi=\phi=c\,\Psi_R(q),
+        \label{eq:pvbs_matching_volume_fixed_cancel}
+    \end{align}
+    so $T_1\Psi_R(q)=\Psi_R(q)$. The one-step phase gives
+    $T_1\Psi_R(q)=q^{-1}\Psi_R(q)$, which differs from $\Psi_R(q)$
+    because $q\ne1$ and $\Psi_R(q)\ne0$. Hence $c=0$ and $\phi=0$.
 \end{proof}

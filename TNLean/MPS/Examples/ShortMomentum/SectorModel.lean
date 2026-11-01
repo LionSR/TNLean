@@ -141,7 +141,7 @@ theorem exists_nonzero_ground_line_sevenSectorHamiltonian {ζ q : ℂ}
     have hv : v ≠ 0 := by
       intro hv
       have hz := E.injective (hv.trans E.map_zero.symm)
-      exact (pvbsPureWindowHamiltonian_matching_volume_nonzero_ground q (by decide) hq).1 hz
+      exact pvbsEdge_ne_zero_matching_volume q (by decide) hz
     have hker : LinearMap.ker
         (periodicInteractionHamiltonianES (sevenSectorInteraction ζ q) 7) =
         Submodule.span ℂ {v} := ker_sevenSectorHamiltonian_seven hζ hq

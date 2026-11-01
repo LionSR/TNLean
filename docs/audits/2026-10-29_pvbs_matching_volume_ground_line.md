@@ -34,3 +34,14 @@ nonvanishing steps. Pinned APIs include Fin.val_sub, finRotate_apply,
 Fin.cyclic_induction, cyclicTranslateState_add and the actual interaction
 section kernel theorem. No local Lean, Lake, elaboration or build was run.
 All five public declarations and their Blueprint entries remain notready.
+
+## Follow-up refactor (2026-11-01)
+
+`pvbsPureWindowHamiltonian_matching_volume_nonzero_ground` is removed. Its two
+conjuncts are now `pvbsEdge_ne_zero_matching_volume` for nonvanishing, which no
+longer needs `q ^ R = 1`, and `pvbsPureWindowHamiltonian_apply_pvbsEdge` for
+annihilation. The only caller, `ShortMomentum/SectorModel.lean`, uses the
+former. The private full-window helper is replaced by the public
+`cyclicCfg_full_eq_cyclicTranslateCfg_neg` in
+`ParentHamiltonian/CyclicTranslation.lean`, stated for every physical
+dimension. No blueprint `\lean{...}` tag cites the removed name.
