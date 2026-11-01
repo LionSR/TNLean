@@ -9,15 +9,15 @@ import QICLean.Analysis.OperatorMean.PowerDerivative
 import QICLean.Channel.KrausCPTP
 
 /-!
-# Linear bounds for the actual moving-wall Gram matrix
+# Linear bounds for the moving-wall Gram matrix
 
-The actual normalized Gram limit gives a uniform linear bound for its
+The normalized Gram limit gives a uniform linear bound for its
 weighted trace. A faithful left density dominates a positive multiple of
 the identity, which controls the unweighted Gram trace. Consequently the
-actual positive Gram matrix has a linear operator-norm bound.
+positive Gram matrix has a linear operator-norm bound.
 
 Source: arXiv:1210.6613, proof of Lemma lowenergystates, lines 1230–1310.
-These are bounds on the actual single-wall coefficient matrices used by
+These are bounds on the single-wall coefficient matrices used by
 pinned endpoint terms, not assumed estimates on the two-wall trial.
 -/
 
@@ -28,7 +28,7 @@ namespace MPSTensor
 
 variable {d a b : ℕ}
 
-/-- The actual one-wall Gram weight is uniformly bounded in norm by a
+/-- The one-wall Gram weight is uniformly bounded in norm by a
 constant times its length. The bound is derived from its mixed-series
 limit; arXiv:1210.6613, proof of Lemma lowenergystates. -/
 theorem uncleWallGramWeight_norm_le_mul
@@ -75,7 +75,7 @@ theorem uncleWallGramWeight_norm_le_mul
     exact hsmall.trans (hBC.trans (by
       simpa only [mul_one] using mul_le_mul_of_nonneg_left hone hC.le))
 
-/-- A faithful density uniformly controls the actual unweighted wall Gram
+/-- A faithful density uniformly controls the unweighted wall Gram
 trace by its weighted trace. Source: arXiv:1210.6613, the faithful fixed
 densities in the normalized standard form used by Lemma lowenergystates. -/
 theorem uncleWallGram_trace_re_le_weight
@@ -105,7 +105,7 @@ theorem uncleWallGram_trace_re_le_weight
     _ ≤ c⁻¹ * (uncleWallGramWeight A B R ρ n).re :=
       mul_le_mul_of_nonneg_left hle (inv_nonneg.mpr hc.le)
 
-/-- The actual unweighted one-wall Gram trace is uniformly linear in the
+/-- The unweighted one-wall Gram trace is uniformly linear in the
 word length under source faithful stationary/unital normalizations and
 mixed spectral damping; arXiv:1210.6613, proof of Lemma lowenergystates. -/
 theorem uncleWallGram_trace_re_le_mul
@@ -132,8 +132,8 @@ section OperatorNorm
 
 open scoped Matrix.Norms.L2Operator
 
-/-- The actual rectangular wall Kraus map is bounded by the unweighted
-Gram trace times its input norm. This uses each actual wall word and the
+/-- The rectangular wall Kraus map is bounded by the unweighted
+Gram trace times its input norm. This uses each wall word and the
 rectangular Hilbert--Schmidt trace bound; arXiv:1210.6613, transfer estimates
 in the proof of Lemma lowenergystates. -/
 theorem uncleWallGramMap_apply_l2_opNorm_le_trace
@@ -166,8 +166,8 @@ theorem uncleWallGramMap_apply_l2_opNorm_le_trace
       congr 1
       simp only [uncleWallGram, Matrix.trace_sum, Complex.re_sum, W]
 
-/-- The actual rectangular moving-wall map has a uniform linear bound in
-the Euclidean matrix operator norm, derived from its actual Gram trace.
+/-- The rectangular moving-wall map has a uniform linear bound in
+the Euclidean matrix operator norm, derived from its Gram trace.
 Source: arXiv:1210.6613, transfer estimates in Lemma lowenergystates. -/
 theorem uncleWallGramMap_apply_l2_opNorm_le_mul
     (A : MPSTensor d a) (B : MPSTensor d b)
@@ -183,7 +183,7 @@ theorem uncleWallGramMap_apply_l2_opNorm_le_mul
   exact ⟨C, hC, fun n X ↦ (uncleWallGramMap_apply_l2_opNorm_le_trace A B R n X).trans
     (mul_le_mul_of_nonneg_right (hbound n) (norm_nonneg X))⟩
 
-/-- The actual one-wall Gram matrix has a uniform linear bound in the
+/-- The one-wall Gram matrix has a uniform linear bound in the
 Euclidean operator norm. This follows from its positive trace bound;
 arXiv:1210.6613, endpoint norm estimates in Lemma lowenergystates. -/
 theorem uncleWallGram_l2_opNorm_le_mul

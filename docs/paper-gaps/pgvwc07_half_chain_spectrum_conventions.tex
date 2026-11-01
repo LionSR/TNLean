@@ -159,42 +159,47 @@ Every block eigenvalue lifts to $w_j^2$ times that eigenvalue in the full
 transfer map, which makes the retained block normal. Combined with the
 physical remainder estimate, this derives convergence to the unique dominant
 normal block. These statements are Lean-checked under the multiplicity-aware
-reading of C2 stated above.
+reading of C2 stated above. The source theorem with the literal C2 condition
+and an arbitrary number of blocks remains open.
 
-The finite normalization and spectral comparison are written in
+The actual finite normalization and spectral comparison are now written in
 \path{TNLean/MPS/ParentHamiltonian/HalfChainPhysicalStability.lean}.
-Reading the $2L$-site vector as its coefficient matrix gives
+For a vector $\psi$ on $2L$ sites, let $K_\psi$ be its coefficient matrix,
+$(K_\psi)_{\sigma\tau}=\psi(\sigma\tau)$ for configurations $\sigma,\tau$
+of the two halves, let $R_\psi=K_\psi K_\psi^\dagger$ be its reduced matrix,
+and let $\widehat\psi=\|\psi\|^{-1}\psi$, with $\widehat0=0$. For two such
+vectors $\psi,\phi$, reading each as its coefficient matrix gives
 \begin{align}
     \|R_\psi-R_\phi\|
-     & \leq(\|\psi\|+\|\phi\|)\|\psi-\phi\|,
-    \label{eq:pgvwc07_coefficient_matrix_perturbation}
+    \leq(\|\psi\|+\|\phi\|)\|\psi-\phi\|,
+    \label{eq:halfchain_note_reduced_stability}
 \end{align}
 with no factor depending on the growing physical dimension. The finite
-normalization is the squared ring norm, and
+normalization is the actual squared ring norm, and
 \begin{align}
     \|\widehat\psi-\widehat\phi\|
-     & \leq2\|\psi-\phi\|+2\bigl|\|\phi\|-1\bigr|,
-    \label{eq:pgvwc07_normalized_vector_perturbation}
+    \leq2\|\psi-\phi\|+2\bigl|\|\phi\|-1\bigr|,
+    \label{eq:halfchain_note_normalized_remainder}
 \end{align}
 including zero-norm finite lengths. Weyl's inequality at each finite size
 then bounds every difference of ordered padded half-chain eigenvalues by
 $2\|\widehat\psi-\widehat\phi\|$.
 
+The capstone
 \leanid{MPSTensor.PGVWC07CanonicalFormData.exists_halfChainSpectrumLimit_of_c2}
 in \path{TNLean/MPS/ParentHamiltonian/HalfChainGeneralCanonicalSpectrum.lean}
 combines the derived dominant block and physical remainder with these
 bounds. Its normalized faithful diagonal fixed point is derived from the
-canonical data, not added as a hypothesis. The weighted tensor's ordered
-normalized half-chain spectrum converges to that of the doubled dominant
-fixed point, and the finite norm is eventually positive. The ambient bond
-dimension is not separately assumed positive; the radius-one normalization
-excludes zero dimension.
+canonical data, not added as a hypothesis. The actual weighted tensor's
+ordered normalized half-chain spectrum converges to that of the doubled
+dominant fixed point, and the finite norm is eventually positive. The
+ambient bond dimension is not separately assumed positive; the radius-one
+normalization excludes zero dimension.
 
-This statement uses generic C2 with algebraic multiplicity, consistent with
-the source's exclusion of eigenvalues degenerate in magnitude; it does not
-change the weaker distinct-value C2 hypothesis of the one-block theorem. One
-step remains open: the source theorem with the literal C2 condition and an
-arbitrary number of blocks.
+This capstone spells out generic C2 with algebraic multiplicity, consistent
+with the source's exclusion of eigenvalues degenerate in magnitude. It
+does not silently change the weaker distinct-value C2 hypothesis of the
+one-block theorem.
 
 \bibliographystyle{alpha}
 \bibliography{references}

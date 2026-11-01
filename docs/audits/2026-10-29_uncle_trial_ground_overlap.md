@@ -1,7 +1,7 @@
 # Actual ground-sector overlaps of the uncle trial
 
 Issue #10286, native tracker #7685. Source: arXiv:1210.6613, proof of
-Lemma lowenergystates item 2, `Papers/1210.6613/UncleHMPS.tex:1277–1287`.
+Lemma lowenergystates item 2, `Papers/1210.6613/UncleHMPS.tex:1278–1288`.
 
 ## Derived actual overlap, not a premise
 

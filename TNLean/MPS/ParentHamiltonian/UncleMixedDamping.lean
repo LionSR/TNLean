@@ -23,6 +23,11 @@ conclusion is \(r(\mathcal E_{AB})<1\) for the mixed transfer map
 \(\mathcal E_{AB}(X)=\sum_iA_iXB_i^\dagger\), and likewise
 \(r(\mathcal E_{BA})<1\).
 
+This is not a formalization of the source's Lemma offdiagonal-damping
+(lines 1175–1177), which derives the same bound from block injectivity of the
+unperturbed diagonal blocks alone. The hypothesis here is full span of the
+perturbed letters, which suffices for the two-wall trial argument.
+
 Source: arXiv:1210.6613, Lemma exptransferoperator and the normalized
 two-block setting of Lemma lowenergystates, lines 1165–1265.
 -/
@@ -62,7 +67,7 @@ private theorem uncleBoundary_separating_coefficients
   · simpa only [Matrix.conjTranspose_sum, Matrix.conjTranspose_smul,
       Matrix.conjTranspose_one] using congrArg Matrix.conjTranspose hB
 
-/-- The actual full perturbation span and unital canonical blocks imply
+/-- The full perturbation span and unital canonical blocks imply
 strict mixed-transfer damping. Faithful stationary dual densities suffice;
 their trace normalization is not needed for this implication.
 Source: arXiv:1210.6613, Lemma exptransferoperator. -/
@@ -157,7 +162,7 @@ theorem uncleBoundaryLetter_mixedMapSpectralRadius_lt_one [NeZero a] [NeZero b]
 
 /-- Full source perturbation span also gives strict mixed damping in the
 reverse orientation. The conjugate-transpose mixed eigenvector reduces
-this to the preceding actual block-separation argument.
+this to the preceding block-separation argument.
 Source: arXiv:1210.6613, Lemma exptransferoperator. -/
 theorem uncleBoundaryLetter_mixedMapSpectralRadius_reverse_lt_one [NeZero a] [NeZero b]
     (A : MPSTensor d a) (B : MPSTensor d b)

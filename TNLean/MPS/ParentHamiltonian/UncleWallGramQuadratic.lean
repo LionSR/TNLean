@@ -8,11 +8,11 @@ import Mathlib.LinearAlgebra.QuadraticForm.Basic
 import Mathlib.Topology.Algebra.InfiniteSum.Module
 
 /-!
-# The actual wall slope as a real quadratic form
+# The wall slope as a real quadratic form
 
 The convergent correlation series is complex linear in the wall. Contracting
 it against a second wall and taking the real part gives a real bilinear
-form. Its diagonal is exactly the real part of the actual limiting Gram
+form. Its diagonal is exactly the real part of the limiting Gram
 coefficient, so the source coefficient is a nonnegative quadratic form
 under the standing canonical normalizations.
 
@@ -37,7 +37,7 @@ private theorem uncleWallSeed_smul (B : MPSTensor d b)
     uncleWallSeed B (c • R) = c • uncleWallSeed B R := by
   simp [uncleWallSeed, Matrix.smul_mul, Finset.smul_sum]
 
-/-- The actual convergent wall correlation series is complex linear in its
+/-- The convergent wall correlation series is complex linear in its
 wall argument under strict mixed spectral-radius damping;
 arXiv:1210.6613, quadratic coefficient in the proof of Lemma lowenergystates. -/
 noncomputable def uncleWallCorrelationLimitLinear
@@ -59,7 +59,7 @@ noncomputable def uncleWallCorrelationLimitLinear
     (R : Fin d → Matrix (Fin a) (Fin b) ℂ) :
     uncleWallCorrelationLimitLinear A B hSpect R = uncleWallCorrelationLimit A B R := rfl
 
-/-- The real bilinear contraction whose diagonal is the actual wall slope.
+/-- The real bilinear contraction whose diagonal is the wall slope.
 The mixed correlation is taken in the first wall and the adjoint in the
 second; arXiv:1210.6613, proof of Lemma lowenergystates. -/
 noncomputable def uncleWallSlopeBilin
@@ -90,7 +90,7 @@ noncomputable def uncleWallSlopeBilin
     ring
 
 /-- The bilinear contraction evaluates to the explicit finite trace
-pairing and the genuine convergent correlation series;
+pairing and the convergent correlation series;
 arXiv:1210.6613, proof of Lemma lowenergystates. -/
 theorem uncleWallSlopeBilin_apply
     (A : MPSTensor d a) (B : MPSTensor d b)
@@ -102,7 +102,7 @@ theorem uncleWallSlopeBilin_apply
         2 * (Matrix.trace (ρ * ∑ i,
           A i * uncleWallCorrelationLimit A B R * (S i)ᴴ)).re := rfl
 
-/-- The actual source norm coefficient as a real quadratic form on the
+/-- The source norm coefficient as a real quadratic form on the
 space of rectangular walls; arXiv:1210.6613, proof of Lemma lowenergystates.
 No positivity or genericity premise is used in this definition. -/
 noncomputable def uncleWallSlopeQuadratic
@@ -113,7 +113,7 @@ noncomputable def uncleWallSlopeQuadratic
   LinearMap.BilinMap.toQuadraticMap (uncleWallSlopeBilin A B ρ hSpect)
 
 /-- Evaluating the real quadratic form gives exactly the real part of the
-actual mixed-series slope, not a replacement coefficient;
+mixed-series slope, not a replacement coefficient;
 arXiv:1210.6613, proof of Lemma lowenergystates. -/
 theorem uncleWallSlopeQuadratic_apply
     (A : MPSTensor d a) (B : MPSTensor d b)
@@ -139,7 +139,7 @@ theorem uncleWallSlopeQuadratic_nonneg
   rw [uncleWallSlopeQuadratic_apply]
   exact (Complex.nonneg_iff.mp (uncleWallNormSlope_nonneg A B R ρ hρ hA hB hSpect)).1
 
-/-- The explicit annihilator wall makes the actual coefficient a nonzero
+/-- The explicit annihilator wall makes the coefficient a nonzero
 quadratic form whenever the physical dimension exceeds the right-block
 matrix dimension. Source: arXiv:1210.6613, proof of Lemma lowenergystates. -/
 theorem uncleWallSlopeQuadratic_ne_zero_of_bond_sq_lt [NeZero a] [NeZero b]
@@ -155,7 +155,7 @@ theorem uncleWallSlopeQuadratic_ne_zero_of_bond_sq_lt [NeZero a] [NeZero b]
   rw [uncleWallSlopeQuadratic_apply] at hq
   exact (ne_of_gt (Complex.pos_iff.mp hR).1) hq
 
-/-- The actual quadratic coefficient is not identically zero in the source
+/-- The quadratic coefficient is not identically zero in the source
 full-perturbation setting with a faithful density;
 arXiv:1210.6613, proof of Lemma lowenergystates, nonzero quadratic coefficient. -/
 theorem uncleWallSlopeQuadratic_ne_zero [NeZero a] [NeZero b]

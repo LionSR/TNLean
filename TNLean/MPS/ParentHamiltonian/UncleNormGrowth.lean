@@ -6,12 +6,13 @@ Authors: TNLean contributors
 import TNLean.MPS.ParentHamiltonian.UncleNormFactorization
 import TNLean.MPS.ParentHamiltonian.UncleWallGramGeneric
 import TNLean.MPS.ParentHamiltonian.UncleMixedDamping
+import TNLean.MPS.Preparation.SecondOrderOverlap
 
 /-!
-# Generic quadratic norm growth of the actual two-wall trial
+# Generic quadratic norm growth of the two-wall trial
 
 The exact source trial has normalized squared norm converging to the product
-of its two actual wall coefficients. Their derived generic positivity gives
+of its two wall coefficients. Their derived generic positivity gives
 both quadratic upper and lower bounds for almost every pair of walls.
 The individual diagonal block injectivities and strict mixed damping are
 derived from the full perturbation span and canonical normalization,
@@ -85,8 +86,8 @@ theorem uncleBoundaryLetter_isInjective_diagonal_blocks
       ext j k
       simp [fB, e, uncleBoundaryLetter, uncleBlockMatrix, Matrix.reindex_apply]
 
-/-- A positive value of the actual limiting coefficient product gives
-quadratic upper and lower bounds on the squared norm of the actual source
+/-- A positive value of the limiting coefficient product gives
+quadratic upper and lower bounds on the squared norm of the source
 trial. The following generic theorem derives this positivity without
 assuming it. Source: arXiv:1210.6613, Lemma lowenergystates, first assertion. -/
 theorem uncleTwoWallTrialSource_eventual_norm_bounds [NeZero a] [NeZero b]
@@ -117,7 +118,7 @@ theorem uncleTwoWallTrialSource_eventual_norm_bounds [NeZero a] [NeZero b]
   have hden : 0 < ((N + 1 : ℕ) : ℝ) ^ 2 := by positivity
   exact ⟨(le_div_iff₀ hden).mp hNlow.le, (div_le_iff₀ hden).mp hNupp.le⟩
 
-/-- For almost every pair of walls the actual source trial has quadratic
+/-- For almost every pair of walls the source trial has quadratic
 squared-norm growth. The coefficient product is positive by the derived
 proper-radical exceptional-set theorem, not by a norm-growth premise.
 A single additive Haar measure on the pair space is used. Source:
@@ -139,16 +140,8 @@ theorem uncleTwoWallTrialSource_ae_quadratic_norm_growth
           (uncleTwoWallTrialSource A B P.1 P.2 N)‖ ^ 2 ∧
       ‖(WithLp.linearEquiv 2 ℂ (NSiteSpace d (6 * N + 1))).symm
           (uncleTwoWallTrialSource A B P.1 P.2 N)‖ ^ 2 ≤ C * ((N + 1 : ℕ) : ℝ) ^ 2 := by
-  have ha : a ≠ 0 := by
-    intro ha
-    subst a
-    simp at htrA
-  have hb : b ≠ 0 := by
-    intro hb
-    subst b
-    simp at htrB
-  let : NeZero a := ⟨ha⟩
-  let : NeZero b := ⟨hb⟩
+  have : NeZero a := Matrix.neZero_of_trace_eq_one htrA
+  have : NeZero b := Matrix.neZero_of_trace_eq_one htrB
   obtain ⟨hIA, hIB⟩ := uncleBoundaryLetter_isInjective_diagonal_blocks A B R₀ L₀ hPert
   have hAB := uncleBoundaryLetter_mixedMapSpectralRadius_lt_one
     A B R₀ L₀ hPert hUA hUB ρA hρA ρB hρB hFA hFB

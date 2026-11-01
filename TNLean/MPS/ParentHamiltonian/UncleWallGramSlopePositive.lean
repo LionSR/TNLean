@@ -10,7 +10,7 @@ import Mathlib.LinearAlgebra.Finsupp.LinearCombination
 /-!
 # Nonnegativity and a positive witness for the wall coefficient
 
-The actual normalized Gram limit is nonnegative for a positive density.
+The normalized Gram limit is nonnegative for a positive density.
 A wall with vanishing correlation seed has slope equal to its positive
 one-site Gram weight whenever the density is faithful and the wall is
 nonzero. A physical coefficient annihilating the right-block letters
@@ -30,7 +30,7 @@ namespace MPSTensor
 
 variable {d a b : ℕ}
 
-/-- Nonnegativity of the actual limiting wall coefficient follows from the
+/-- Nonnegativity of the limiting wall coefficient follows from the
 positive finite Gram weights; arXiv:1210.6613, proof of Lemma lowenergystates.
 This does not assert strict positivity or genericity. -/
 theorem uncleWallNormSlope_nonneg (A : MPSTensor d a) (B : MPSTensor d b)
@@ -51,7 +51,7 @@ theorem uncleWallNormSlope_nonneg (A : MPSTensor d a) (B : MPSTensor d b)
       Tendsto.congr (fun n ↦ (Complex.nonneg_iff.mp (hnonneg n)).2) tendsto_const_nhds
     exact tendsto_nhds_unique hzero him
 
-/-- If the actual correlation seed vanishes, every mixed correlation term
+/-- If the correlation seed vanishes, every mixed correlation term
 vanishes, so the source slope is exactly its one-site Gram contraction;
 arXiv:1210.6613, proof of Lemma lowenergystates. -/
 theorem uncleWallNormSlope_of_seed_eq_zero (A : MPSTensor d a) (B : MPSTensor d b)
@@ -77,7 +77,7 @@ private theorem uncleWall_oneSiteGram_ne_zero
     (Complex.nonneg_iff.mp (Matrix.posSemidef_self_mul_conjTranspose (R i)).trace_nonneg).2.symm
   exact Matrix.trace_mul_conjTranspose_self_eq_zero_iff.mp (Complex.ext hre him)
 
-/-- A nonzero wall with zero actual correlation seed has strictly positive
+/-- A nonzero wall with zero correlation seed has strictly positive
 slope for a faithful density. This is a derived positive case, not a
 norm-growth premise; arXiv:1210.6613, proof of Lemma lowenergystates. -/
 theorem uncleWallNormSlope_pos_of_seed_eq_zero
@@ -92,7 +92,7 @@ theorem uncleWallNormSlope_pos_of_seed_eq_zero
     (uncleWall_oneSiteGram_ne_zero R hR)
 
 /-- A physical coefficient annihilating the adjoint right-block letters
-makes a rectangular scalar wall have zero actual correlation seed;
+makes a rectangular scalar wall have zero correlation seed;
 arXiv:1210.6613, positive norm-coefficient construction in the proof of
 Lemma lowenergystates. -/
 theorem uncleWallSeed_smul_of_annihilator (B : MPSTensor d b) (c : Fin d → ℂ)

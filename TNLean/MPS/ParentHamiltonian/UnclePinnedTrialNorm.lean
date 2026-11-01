@@ -29,17 +29,6 @@ namespace MPSTensor
 
 variable {d a b : ℕ}
 
-private theorem unital_transfer_pow_norm_le (A : MPSTensor d a)
-    (hA : Kraus.mapLM A 1 = 1) (n : ℕ) (X : Matrix (Fin a) (Fin a) ℂ) :
-    ‖((Kraus.mapLM A) ^ n) X‖ ≤ ‖X‖ := by
-  have hCP : IsKrausCP (Kraus.mapLM A) := Kraus.isCPMap_mapLM A
-  induction n with
-  | zero => simp
-  | succ n ih =>
-      rw [pow_succ']
-      change ‖Kraus.mapLM A (((Kraus.mapLM A) ^ n) X)‖ ≤ ‖X‖
-      exact (hCP.norm_apply_le_of_map_one_eq_one hA _).trans ih
-
 private theorem norm_linearMap_trace_le_entry_bound
     (T : Matrix (Fin a) (Fin a) ℂ →ₗ[ℂ] Matrix (Fin a) (Fin a) ℂ)
     (C : ℝ) (hT : ∀ X, ‖T X‖ ≤ C * ‖X‖) :
@@ -101,15 +90,15 @@ theorem norm_uncleTwoWallTrial_one_wall_sq_le_mul
     calc
       _ ≤ ‖uncleWallGramMap A B R 1 (((Kraus.mapLM B) ^ q)
           (uncleWallGramMap B A L s (((Kraus.mapLM A) ^ t) X)))‖ :=
-        unital_transfer_pow_norm_le A hA p _
+        norm_mapLM_pow_apply_le_of_mapLM_one A hA p _
       _ ≤ K * ‖((Kraus.mapLM B) ^ q)
           (uncleWallGramMap B A L s (((Kraus.mapLM A) ^ t) X))‖ := hR _
       _ ≤ K * ‖uncleWallGramMap B A L s (((Kraus.mapLM A) ^ t) X)‖ :=
-        mul_le_mul_of_nonneg_left (unital_transfer_pow_norm_le B hB q _) hK.le
+        mul_le_mul_of_nonneg_left (norm_mapLM_pow_apply_le_of_mapLM_one B hB q _) hK.le
       _ ≤ K * (C * s * ‖((Kraus.mapLM A) ^ t) X‖) :=
         mul_le_mul_of_nonneg_left (hLbound s _) hK.le
       _ ≤ K * (C * s * ‖X‖) := mul_le_mul_of_nonneg_left
-        (mul_le_mul_of_nonneg_left (unital_transfer_pow_norm_le A hA t X)
+        (mul_le_mul_of_nonneg_left (norm_mapLM_pow_apply_le_of_mapLM_one A hA t X)
           (mul_nonneg hC.le (Nat.cast_nonneg s))) hK.le
       _ = _ := by ring
   let D := (a : ℝ) ^ 2 * K * C + 1
@@ -156,16 +145,16 @@ theorem norm_uncleTwoWallTrial_second_wall_sq_le_mul
     calc
       _ ≤ ‖uncleWallGramMap A B R r (((Kraus.mapLM B) ^ q)
           (uncleWallGramMap B A L 1 (((Kraus.mapLM A) ^ t) X)))‖ :=
-        unital_transfer_pow_norm_le A hA p _
+        norm_mapLM_pow_apply_le_of_mapLM_one A hA p _
       _ ≤ C * r * ‖((Kraus.mapLM B) ^ q)
           (uncleWallGramMap B A L 1 (((Kraus.mapLM A) ^ t) X))‖ := hR r _
       _ ≤ C * r * ‖uncleWallGramMap B A L 1 (((Kraus.mapLM A) ^ t) X)‖ :=
-        mul_le_mul_of_nonneg_left (unital_transfer_pow_norm_le B hB q _)
+        mul_le_mul_of_nonneg_left (norm_mapLM_pow_apply_le_of_mapLM_one B hB q _)
           (mul_nonneg hC.le (Nat.cast_nonneg r))
       _ ≤ C * r * (K * ‖((Kraus.mapLM A) ^ t) X‖) :=
         mul_le_mul_of_nonneg_left (hL _) (mul_nonneg hC.le (Nat.cast_nonneg r))
       _ ≤ C * r * (K * ‖X‖) := mul_le_mul_of_nonneg_left
-        (mul_le_mul_of_nonneg_left (unital_transfer_pow_norm_le A hA t X) hK.le)
+        (mul_le_mul_of_nonneg_left (norm_mapLM_pow_apply_le_of_mapLM_one A hA t X) hK.le)
           (mul_nonneg hC.le (Nat.cast_nonneg r))
       _ = _ := by ring
   let D := (a : ℝ) ^ 2 * C * K + 1

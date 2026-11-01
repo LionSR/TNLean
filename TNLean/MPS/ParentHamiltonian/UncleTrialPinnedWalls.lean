@@ -211,7 +211,7 @@ theorem uncleConfigSegment_contiguous_start {T : ℕ}
     apply congrArg τ
     exact Fin.ext (by change i + 1 + (1 + j.val) = i + 2 + j.val; omega)
 
-/-- The actual first endpoint residual pins the R wall at site N and
+/-- The actual first endpoint residual pins the R wall at site \(N\) and
 retains precisely the source L-wall sum in the other interval.
 Source: arXiv:1210.6613, proof of Lemma lowenergystates, lines 1289–1296. -/
 theorem uncleInteractionES_trial_pin_first_endpoint
@@ -266,7 +266,7 @@ theorem uncleInteractionES_trial_pin_first_endpoint
           Kraus.evalWord A (uncleConfigSegment τ (5 * N + 1) N (by omega)))
         (uncleConfigSegment τ (N + 1) N (by omega))
 
-/-- The actual second endpoint residual pins the R wall at site 2N and
+/-- The actual second endpoint residual pins the R wall at site \(2N\) and
 retains precisely the source L-wall sum in the other interval.
 Source: arXiv:1210.6613, proof of Lemma lowenergystates, lines 1289–1296. -/
 theorem uncleInteractionES_trial_pin_second_endpoint
@@ -322,7 +322,7 @@ theorem uncleInteractionES_trial_pin_second_endpoint
         Kraus.evalWord A (uncleConfigSegment τ (5 * N + 1) N (by omega)))
       (uncleConfigSegment τ N N (by omega))
 
-/-- The actual third endpoint residual pins the L wall at site 4N and
+/-- The actual third endpoint residual pins the L wall at site \(4N\) and
 retains precisely the source R-wall sum, after the rectangular trace rotation.
 Source: arXiv:1210.6613, proof of Lemma lowenergystates, lines 1289–1296. -/
 theorem uncleInteractionES_trial_pin_third_endpoint
@@ -380,7 +380,7 @@ theorem uncleInteractionES_trial_pin_third_endpoint
           uncleDomainWallWord A B R (uncleConfigSegment τ N (N + 1) (by omega)))
         (uncleConfigSegment τ (4 * N + 1) N (by omega))
 
-/-- The actual fourth endpoint residual pins the L wall at site 5N and
+/-- The actual fourth endpoint residual pins the L wall at site \(5N\) and
 retains precisely the source R-wall sum, after the rectangular trace rotation.
 Source: arXiv:1210.6613, proof of Lemma lowenergystates, lines 1289–1296. -/
 theorem uncleInteractionES_trial_pin_fourth_endpoint

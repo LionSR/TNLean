@@ -12,7 +12,7 @@ import TNLean.MPS.ParentHamiltonian.Martingale.Transport
 
 A full exterior configuration records the window coordinates redundantly.
 Summing all squared restriction norms therefore counts each full coefficient
-exactly d^L times. Dividing by that multiplicity gives the actual normalized
+exactly \(d^L\) times. Dividing by that multiplicity gives the actual normalized
 restriction identity used by the finite parent and uncle Hamiltonians.
 -/
 
@@ -82,7 +82,7 @@ theorem cyclicCfg_cyclicWindowCfgEquiv {N L : ℕ} {η : Cfg d L} (hN : L ≤ N)
       rfl
 
 
-/-- The actual cyclic restrictions count every full-chain coefficient d^L
+/-- The actual cyclic restrictions count every full-chain coefficient \(d^L\)
 times. This identity includes zero physical dimension and empty windows;
 the supplied cyclic site already forces the full chain to be nonempty. -/
 theorem sum_norm_sq_cyclicRestrictES {N L : ℕ} (hLN : L ≤ N) (i : Fin N)
