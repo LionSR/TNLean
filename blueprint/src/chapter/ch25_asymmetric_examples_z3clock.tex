@@ -17,10 +17,11 @@ treats a second family of $\Z_3$ symmetry operators whose representatives
 multiply only up to phases depending on the length, and shows that the
 structure constants of its condensation defect then genuinely depend on the
 length. The length dependence comes from the per-site phases of the chosen
-representatives. The expected triviality of the Else--Nayak class remains
-to be established for these dressed operators;
-the trivial cocycle in Lemma~\ref{thm:asymex_z3clock_kernels} alone does
-not identify that class.
+representatives. The trivial cocycle in
+Lemma~\ref{thm:asymex_z3clock_kernels} alone does not identify the
+Else--Nayak class of these dressed operators; after a rescaling of every site
+that makes them an exact representation, this class is computed and shown to
+vanish in Lemma~\ref{thm:asymex_z3clock_anomaly}.
 
 As in Section~\ref{sec:asymex_z3anomalous}, let
 $\omega=\exp(2\pi\mathrm{i}/3)$, let $X\ket{s}=\ket{s+1}$ on a qutrit, and
@@ -283,3 +284,89 @@ follows on a ring of $N$ sites.
 % with nine targets and 28 zero diagonal blocks. That compression is not
 % formalized; the fusion identity above is proved at the level of periodic
 % operators.
+
+\begin{definition}[The rescaled clock representation and its invariant state]
+    \label{def:asymex_z3clock_rescaled}
+    \lean{Z3Clock.clockAlpha, Z3Clock.normUTensor, Z3Clock.normVTensor,
+        Z3Clock.clockRepTensor, Z3Clock.clockFamily, Z3Clock.clockExponent,
+        Z3Clock.clockAmplitude, Z3Clock.clockState}
+    \leanok
+    \uses{def:asymex_z3clock_tensors}
+    Let $\alpha$ be a cube root of $\omega$, for instance
+    $\alpha=\exp(2\pi\mathrm{i}/9)$. The rescaled clock representation consists
+    of the identity tensor of bond dimension one and the tensors $\alpha U$
+    and $\alpha^2\omega V$ of Definition~\ref{def:asymex_z3clock_tensors},
+    attached to the residues $0$, $1$ and $2$ of $\Z_3$. Let
+    \begin{equation}
+        p=\begin{pmatrix}0&0&1\\0&0&0\\1&0&1\end{pmatrix},
+        \qquad a(l,s)=\alpha^{s}\omega^{p(l,s)},
+    \end{equation}
+    with $s\in\{0,1,2\}$ read as an integer in the exponent of $\alpha$. The
+    invariant state is the bond-three tensor whose letter $s$ has the single
+    nonzero column $s$, with entries $a(l,s)$; its amplitude on a periodic
+    configuration is $\prod_k a(s_k,s_{k+1})$.
+\end{definition}
+
+\begin{lemma}[The clock symmetry is not anomalous]
+    \label{thm:asymex_z3clock_anomaly}
+    \lean{Z3Clock.mpo_normU_mul_normU, Z3Clock.mpo_normU_mul_normV,
+        Z3Clock.mpo_normV_mul_normU, Z3Clock.mpo_normV_mul_normV,
+        Z3Clock.normUTensor_isNormal, Z3Clock.normVTensor_isNormal,
+        Z3Clock.clockFamily_isNormalRepresentation, Z3Clock.clockState_isNormal,
+        Z3Clock.clockAmplitude_add_one, Z3Clock.fixesMPV_clockState,
+        Z3Clock.isTrivialGaugeClass_omega_clockFamily,
+        Z3Clock.clockFamily_anomalyClass_eq_zero,
+        Z3Clock.cyclicInvariant_omega_clockFamily,
+        Z3Clock.clockFamily_clockAlpha_anomalyClass_eq_zero,
+        Z3Clock.clockAlpha_pow_three,
+        Z3Clock.fixesMPV_normUTensor,
+        Z3Clock.mpv_clockState,
+        Z3Clock.det_clockExponent}
+    \leanok
+    \uses{def:asymex_z3clock_rescaled, thm:asymex_z3clock_table,
+        thm:mpug_anomaly_obstruction, def:mpug_anomaly_class,
+        def:mpug_cyclic_invariant}
+    For every cube root $\alpha$ of $\omega$ the rescaled clock operators
+    $U'_N=\alpha^NU_N$ and $V'_N=(\alpha^2\omega)^NV_N$ satisfy
+    \begin{align}
+        U_N'^2   & =V'_N,         &
+        U'_NV'_N & =V'_NU'_N=\Id, &
+        V_N'^2   & =U'_N
+    \end{align}
+    on every periodic chain of $N>0$ qutrits, and the three tensors of the
+    rescaled representation are normal. The invariant state of
+    Definition~\ref{def:asymex_z3clock_rescaled} is normal and fixed by
+    every operator of the representation. Hence, for every choice of fusion
+    tensors, the anomaly three-cocycle has trivial gauge class, the anomaly
+    class in $H^3(\Z_3,\C^\times)$ vanishes, and
+    $\omega(g,e,g)\,\omega(g,g,g)\,\omega(g,g^2,g)=1$ at the generator $g$.
+    The class is the trivial class $\omega_0$ of the classification
+    of~\cite[Section~IV.D]{GarreRubioSchuch2024DomainWall}.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The operator laws follow from Lemma~\ref{thm:asymex_z3clock_table}
+    because $\alpha^3\omega^2=1$ and $\alpha^4\omega^2=\alpha$. The letters
+    $(j+1,j)$ of $\alpha U$ have the single nonzero column $j$, equal to
+    $\alpha(\omega^{lj})_l$, and the letters $(j+2,j)$ of $\alpha^2\omega V$
+    have the column $\alpha^2\omega\,\omega^{2j}(\omega^{2lj})_l$. These are
+    nonzero multiples of the columns of Vandermonde matrices with distinct
+    nodes, and the columns of the invariant state are $\alpha^s$ times the
+    columns of $(\omega^{p(l,s)})$, whose determinant is $3\omega$. A tensor
+    whose letters carry, on a single column each, the columns of an
+    invertible matrix with no vanishing entry is injective after blocking two
+    sites, since $A^{\ell_j}A^{\ell_k}$ is a nonzero multiple of $v_j e_k^{T}$.
+
+    For invariance it suffices to treat $U'$, as $V'=U'^2$. With
+    $k=(0,0,2)$ and the carry $c(s)$ equal to one at $s=2$ and zero
+    otherwise, the nine identities
+    $p(x+1,y+1)-c(y)=xy+k(x)-k(y)+p(x,y)$ modulo three, together with
+    $\alpha^{y+1}=\alpha\,\alpha^{y}\omega^{-c(y)}$, give
+    $a(x+1,y+1)=\alpha\,\omega^{xy+k(x)-k(y)}a(x,y)$. Taking the product
+    around the ring, the terms $k(s_k)-k(s_{k+1})$ cancel, so the shifted
+    amplitude is $\alpha^N\omega^{\sum_ks_ks_{k+1}}$ times the amplitude,
+    which is the invariance under $U'_N$. Theorem~\ref{thm:mpug_anomaly_obstruction}
+    then gives the trivial gauge class, which is the vanishing of the class
+    and forces the cyclic invariant to be one.
+\end{proof}

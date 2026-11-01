@@ -90,10 +90,12 @@ theorem exists_single_region_hard_truncation_spectral_comparison {L q l r : ℕ}
             finrank_euclideanSpace
           let bF := (isSymmetric_toEuclideanLin_iff.mpr hF).eigenvectorBasis
             finrank_euclideanSpace
-          ‖(toEuclideanCLM H - toEuclideanCLM F).domRestrict
+          ‖((toEuclideanCLM (n := Fin L → Fin q) (𝕜 := ℂ)) H -
+              (toEuclideanCLM (n := Fin L → Fin q) (𝕜 := ℂ)) F).domRestrict
             (Submodule.spectralSpanLE bH hH.eigenvalues₀ (E + η))‖ ≤
               ξ ∧
-          ‖(toEuclideanCLM H - toEuclideanCLM F).domRestrict
+          ‖((toEuclideanCLM (n := Fin L → Fin q) (𝕜 := ℂ)) H -
+              (toEuclideanCLM (n := Fin L → Fin q) (𝕜 := ℂ)) F).domRestrict
             (Submodule.spectralSpanLE bF hF.eigenvalues₀ (E + η))‖ ≤
               ξ ∧
           (∀ i : Fin (Fintype.card (Fin L → Fin q)), hF.eigenvalues₀ i ≤ E + η →

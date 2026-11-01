@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.BlockGroundSpaceMapContinuity
-import TNLean.MPS.SharedInfra.MatrixFamilyTracePairing
+import QICLean.Algebra.TraceFormDuality
 
 /-!
 # Simultaneous word spanning and joint boundary injectivity
@@ -35,7 +35,7 @@ theorem wordTupleSpanTop_of_blockGroundSpaceMap_injective
     {A : (j : Fin r) → MPSTensor d (dim j)} {L : ℕ}
     (hInj : Function.Injective (blockGroundSpaceMap A L)) : WordTupleSpanTop A L := by
   unfold WordTupleSpanTop
-  apply Matrix.family_submodule_eq_top_of_trace_separating
+  apply Matrix.eq_top_of_pi_trace_separating
   intro Δ hSep
   have hΔ : blockGroundSpaceMap A L Δ = 0 := by
     ext w
@@ -45,7 +45,7 @@ theorem wordTupleSpanTop_of_blockGroundSpaceMap_injective
       (Kraus.evalWord (A j) (List.ofFn w)) (Δ j))]
     exact hSep (wordTuple A L w) (Submodule.subset_span (Set.mem_range_self w))
   have hΔzero : Δ = 0 := hInj (by simpa using hΔ)
-  exact fun j => congrFun hΔzero j
+  exact hΔzero
 
 /-- Simultaneous word spanning at a prescribed length is equivalent to injectivity of the joint
 Hilbert boundary map. This is the trace-duality form of the boundary parametrization in

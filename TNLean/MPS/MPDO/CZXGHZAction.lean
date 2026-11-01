@@ -37,7 +37,9 @@ theorem blockTensor_ghzSectorTensor_apply (x : Fin 2) (i : Fin 4) :
     norm_num [MPSTensor.blockTensor, Kraus.blockTensor, twoSiteBlockEquiv,
       Kraus.wordOfBlock, MPSTensor.ghzSectorTensor, finProdFinEquiv, Fin.divNat, Fin.modNat]
 
-private theorem blockedGHZTensor_apply (i : Fin 4) :
+/-- Each letter of the blocked GHZ tensor is the diagonal projector onto the
+GHZ sector that it encodes. Source: arXiv:2502.20257, lines 4660–4670. -/
+theorem blockedGHZTensor_apply (i : Fin 4) :
     blockedGHZTensor i = Matrix.diagonal (fun x : Fin 2 ↦
       if i = finProdFinEquiv (x, x) then (1 : ℂ) else 0) := by
   fin_cases i <;>
@@ -71,7 +73,8 @@ theorem mpv_blockedGHZTensor {N : ℕ} :
   rw [h0, h3]
   simp only [← funext_iff]
 
-private theorem cyclicPhase_ghz_constant {N : ℕ} [NeZero N] (x : Fin 2) :
+/-- The cyclic CZX phase vanishes on a constant blocked GHZ configuration. -/
+theorem cyclicPhase_ghz_constant {N : ℕ} [NeZero N] (x : Fin 2) :
     (-1 : ℂ) ^ cyclicExponent (fun _ : Fin N ↦ finProdFinEquiv (x, x)) = 1 := by
   have he : ∀ x : Fin 2,
       edgeExponent (finProdFinEquiv (x, x)) (siteBits (finProdFinEquiv (x, x))).1 =

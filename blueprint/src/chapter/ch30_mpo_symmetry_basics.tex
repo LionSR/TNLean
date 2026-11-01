@@ -1096,9 +1096,10 @@ $N$-th power of one phase.
     $y$ and $z$; that action does not satisfy (\ref{eq:mpo_nimrep}), since
     $\pi\cdot(\pi\cdot y)=x+2y+z$ while $(1+\pi+\psi)\cdot y=x+y+2z$
     \cite{gap:glm23_reps3_z3_table}. That the lists are complete is
-    not treated here beyond one block
-    (Lemma~\ref{thm:mposym_su24_reps3_one_block};
-    \cite{gap:glm23_reps3_su24_module_list}).
+    proved on one block in Lemma~\ref{thm:mposym_su24_reps3_one_block},
+    and on any number of blocks for representations with the duality of a
+    module category in Lemma~\ref{lem:mposym_su24_reps3_dual_classification}
+    \cite{gap:glm23_reps3_su24_module_list}.
     % Source anchor: arXiv:2203.12563, lines 1906--1925 and 1936--1987.
 \end{lemma}
 
@@ -1151,6 +1152,112 @@ $N$-th power of one phase.
     satisfies all relations. For $su(2)_4$, $m_2^2=1$ gives $m_2=1$,
     $m_1^2=2+m_1$ gives $m_1=2$, and then $m_{1/2}^2=m_0+m_1=3$ has no
     solution in $\N$.
+\end{proof}
+
+\begin{definition}[Dual representations and direct summands]%
+    \label{def:mposym_dual_nimrep}
+    \lean{MPOTensor.IsTransposeDual, MPOTensor.IsNIMRepSummand}
+    \leanok
+    \uses{def:fusion_character_nimrep}
+    Let $M_a$ be an action of the labels of a fusion ring on a finite set of
+    blocks by matrices of natural numbers, and let $a\mapsto a^*$ be the
+    duality of the labels. The action is \emph{dual} if
+    $M_{a^*}=M_a^{\mathsf T}$ for every label $a$. The multiplicities of
+    every module category over a fusion category form a dual action
+    \cite{gap:glm23_reps3_su24_module_list}. A family of distinct blocks
+    $x_u$ carries a \emph{direct summand} isomorphic to an action $M'$ if
+    no label sends a block $x_u$ to a block outside the family and
+    $(M_a)_{x_u,x_v}=(M'_a)_{u,v}$ for all $a,u,v$.
+    % Source anchor: arXiv:2203.12563, lines 564--565.
+\end{definition}
+
+\begin{lemma}[Completeness of the $su(2)_4$ and $\mathrm{Rep}(S_3)$ lists]%
+    \label{lem:mposym_su24_reps3_dual_classification}
+    \lean{MPOTensor.exists_isNIMRepSummand_repS3,
+        MPOTensor.exists_equiv_of_isIndecomposable_repS3,
+        MPOTensor.exists_isNIMRepSummand_su24,
+        MPOTensor.exists_equiv_of_isIndecomposable_su24}
+    \leanok
+    \uses{thm:mposym_su24_reps3_nimreps, def:mposym_dual_nimrep}
+    Let $M$ be a dual action satisfying (\ref{eq:mpo_nimrep}) on a finite
+    set of blocks, with the unit acting as the identity. Every label of
+    either ring is self-dual, so every $M_a$ is symmetric.
+    \begin{enumerate}
+        \item For $\mathrm{Rep}(S_3)$, every block lies in a direct summand
+              isomorphic to the $\Z_1$, $\Z_2$, $\Z_3$ or $S_3$ phase of
+              Lemma~\ref{thm:mposym_su24_reps3_nimreps}. If $M_\pi$ is
+              indecomposable, $M$ is one of these four phases up to
+              relabelling the blocks.
+        \item For $su(2)_4$, every block lies in a direct summand
+              isomorphic to the five-block phase or to $\mathcal M_{TY}$. If
+              $M_{1/2}$ is indecomposable, $M$ is one of these two phases up
+              to relabelling the blocks.
+    \end{enumerate}
+    These are the phases listed in \cite[Section~6]{GarreRubio2023MPOSym},
+    which takes completeness from the classification of module categories
+    \cite{gap:glm23_reps3_su24_module_list}.
+    % Source anchor: arXiv:2203.12563, lines 1906--1931 and 1933--1989.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mposym_su24_reps3_units}
+    Consider $\mathrm{Rep}(S_3)$ first. The relation $\psi\times\psi=1$ says
+    that $M_\psi$ squares to the identity; a symmetric matrix of natural
+    numbers with this property is the permutation matrix of an involution
+    $\sigma$ of the blocks. Write $T=M_\pi$. The relations
+    $\pi\times\psi=\pi$ and $\pi\times\pi=1+\pi+\psi$ give
+    $T_{\sigma x,y}=T_{x,y}$ and, on the diagonal,
+    \begin{equation*}
+        \sum_z T_{xz}^2=1+T_{xx}+[\sigma x=x].
+    \end{equation*}
+    Hence $T_{xx}\le2$. If $\sigma x\neq x$, the two equal entries
+    $T_{x,x}=T_{x,\sigma x}$ already contribute $2T_{xx}^2$, so
+    $T_{xx}\le1$. For $T_{xx}=1$ the row of $x$ is supported on
+    $\{x,\sigma x\}$, a $\Z_2$ summand. For $T_{xx}=0$ the row of $x$ has a
+    single entry $1$ at a fixed block $w$ with $T_{ww}=1$, and the
+    off-diagonal relations close $\{x,w,\sigma x\}$ into an $S_3$ summand. If
+    $\sigma x=x$, then $T_{xx}=2$ gives a $\Z_1$ summand, $T_{xx}=1$ makes
+    $x$ the middle block of an $S_3$ summand, and $T_{xx}=0$ gives two
+    further fixed blocks $w,v$ with $T_{xw}=T_{xv}=T_{wv}=1$, a $\Z_3$
+    summand.
+
+    For $su(2)_4$, the integer labels $0,1,2$ act as a dual action of
+    $\mathrm{Rep}(S_3)$ by Lemma~\ref{thm:mposym_su24_reps3_units}, so the
+    configurations above occur, with $T=M_1$ and $\sigma$ the involution of
+    $M_2$. Write $Q=M_{1/2}$. The relations $\tfrac12\times\tfrac12=0+1$,
+    $\tfrac12\times2=2\times\tfrac12=\tfrac32$ give $Q^2=1+T$ and
+    $Q_{\sigma x,y}=Q_{x,\sigma y}$. A fixed block with $T_{xx}=0$ has
+    $\sum_zQ_{xz}^2=1$, a single neighbour $s$ with $T_{ss}=2$, and the
+    $\Z_3$ configuration around $x$ together with $s$ is a summand
+    $\mathcal M_{TY}$; a block with $T_{ss}=2$ has only such neighbours. A
+    block moved by $\sigma$ with $T_{xx}=0$ is the label $0$ of a regular
+    summand formed by $x$, its unique neighbour $p$ under $Q$, the middle
+    block $w$, $\sigma p$ and $\sigma x$. A block moved by $\sigma$ with
+    $T_{xx}=1$ has a neighbour under $Q$ fixed by $\sigma$, since
+    $\sum_zQ_{xz}Q_{x,\sigma z}=T_{x,\sigma x}=1$ while a neighbour
+    $z\neq\sigma z$ would contribute the two terms at $z$ and $\sigma z$.
+    Finally, a summand containing a block of an action on which a label acts
+    indecomposably contains every block.
+\end{proof}
+
+\begin{lemma}[A representation of $\mathrm{Rep}(S_3)$ that is not dual]%
+    \label{lem:mposym_reps3_non_dual}
+    \lean{MPOTensor.repS3NonDual, MPOTensor.isNIMRep_repS3NonDual,
+        MPOTensor.not_isTransposeDual_repS3NonDual}
+    \leanok
+    \uses{def:mposym_dual_nimrep, def:mposym_su24_reps3}
+    On two blocks, $M_\psi=1$ and
+    $M_\pi=\begin{pmatrix}0&1\\2&1\end{pmatrix}$ satisfy
+    (\ref{eq:mpo_nimrep}) with the unit acting as the identity, but $M_\pi$
+    is not symmetric. So the duality hypothesis of
+    Lemma~\ref{lem:mposym_su24_reps3_dual_classification} cannot be dropped
+    \cite{gap:glm23_reps3_su24_module_list}.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Both claims are finite checks on matrices of natural numbers.
 \end{proof}
 
 \begin{example}[Anomalous cyclic group of order three]%

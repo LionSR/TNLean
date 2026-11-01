@@ -21,10 +21,12 @@ import TNLean.MPS.AreaLaw.AKLV.CutApproximationTail
 import TNLean.MPS.AreaLaw.AKLV.CutTransport
 import TNLean.MPS.AreaLaw.AKLV.FavorableFilter
 import TNLean.MPS.AreaLaw.AKLV.FavorableParameters
+import TNLean.MPS.AreaLaw.AKLV.FrustrationFreeClipping
 import TNLean.MPS.AreaLaw.AKLV.FullFrequencyRank
 import TNLean.MPS.AreaLaw.AKLV.GroundStateTail
 import TNLean.MPS.AreaLaw.AKLV.HighEnergyMass
 import TNLean.MPS.AreaLaw.AKLV.Initialization
+import TNLean.MPS.AreaLaw.AKLV.InverseGapRobustness
 import TNLean.MPS.AreaLaw.AKLV.LowFrequencyPower
 import TNLean.MPS.AreaLaw.AKLV.LowSpectrumGap
 import TNLean.MPS.AreaLaw.AKLV.Normalization
@@ -35,10 +37,12 @@ import TNLean.MPS.AreaLaw.AKLV.OptimizedRankBound
 import TNLean.MPS.AreaLaw.AKLV.OptimizedRankLog
 import TNLean.MPS.AreaLaw.AKLV.OptimizedRankScale
 import TNLean.MPS.AreaLaw.AKLV.OptimizedTailParameters
+import TNLean.MPS.AreaLaw.AKLV.OriginalChainRobustness
 import TNLean.MPS.AreaLaw.AKLV.PhysicalEntropy
 import TNLean.MPS.AreaLaw.AKLV.PhysicalRobustness
 import TNLean.MPS.AreaLaw.AKLV.PolynomialRank
 import TNLean.MPS.AreaLaw.AKLV.ProjectionEnergy
+import TNLean.MPS.AreaLaw.AKLV.RegionalNormalization
 import TNLean.MPS.AreaLaw.AKLV.ResidualPhase
 import TNLean.MPS.AreaLaw.AKLV.Robustness
 import TNLean.MPS.AreaLaw.AKLV.SequenceEntropy

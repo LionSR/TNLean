@@ -209,6 +209,16 @@ For the MPU index of arXiv:1703.09188:
   swap labels in Figure `fig:TR-ancilla` agree with $\widetilde U_3$ and differ
   from the claimed $\widetilde U_2$ endpoint when $N\geq3$ and $d\geq2$, and
   that reversing those crossed swaps gives the intended local correction.
+- `mpu_qca_complete_block_heisenberg_scope.tex` (scope restriction, resolved)
+  records the supplied two-site standard-form scope of the finite MPU
+  Heisenberg identity, the forward and inverse finite propagation built on it
+  with radius measured in the block length, and the canonical and bare-MPU
+  construction of the induced QCA with source radius $4D^4$.
+- `mpu_qca_index_normalization.tex` (local correction) records that the
+  Appendix relation $\operatorname{ind}_{\mathrm{MPU}}=-2\log_2(\ell/d)$
+  conflicts with the defining formula of the MPU index, corrects it to
+  $-\log_2$ of the positive rational QCA index, and records the reversed
+  adjoint order in the printed transport of the left support factor.
 
 For the MPU symmetry-defect gauging paper:
 
@@ -225,6 +235,10 @@ For the MPU symmetry-defect gauging paper:
   coordinate spaces, while the finite-group endpoint identifications
   \(d_l=d_r=d\), the interior action condition, and the complementary
   finite-chain relation remain outside that theorem.
+- `fbc25_complementary_truncation_shared_endpoints.tex` records that the
+  complementary truncated symmetry in `eq:complementary` and `eq:UUU` shares
+  both endpoint sites with `U^L`, so its total length is two more than the
+  printed `∞-L`; the corrected relation is formally verified and resolved.
 - `fbc25_gauss_law_commuting_projector_source_audit.tex` pins the oriented
   matter--link space and multiplication convention of the local Gauss-law
   representation, the cited three-defect associator calculation, the
@@ -270,6 +284,9 @@ restriction are recorded separately.
 - `gnvw12_support_algebra_full_matrix_scope.tex` records the remaining open
   restriction from arbitrary finite-dimensional $C^*$-algebra factors to
   full complex matrix factors.
+- `gnvw12_shift_example_subscript.tex` records the resolved correction that
+  the scalar support factor in the printed shift example carries the odd
+  subscript, and checks both shift orientations against the index.
 - `sw04_support_covariance_scope.tex` records that the formal
   support-algebra covariance theorem treats star-automorphisms of a homogeneous
   one-dimensional nearest-neighbour chain, while Schumacher--Werner allow
@@ -557,6 +574,13 @@ For the non-periodic MPS Fundamental Theorem background:
 - `pgvwc07_ti_canonical_form_positive_blocks.tex` records the convention
   that every listed block of the translation-invariant canonical form has
   positive bond dimension, used once when condition C1 forces a single block.
+- [`pgvwc07_open_parent_domain.tex`](pgvwc07_open_parent_domain.tex)
+  (scope restriction, open) records the explicit length-at-least-two and
+  common-physical-alphabet domain of the actual varying-bond open-parent
+  kernel theorem. The candidate proves canonical normalization and the
+  actual ground-state line, with no local-section or kernel supplier.
+  The unrestricted printed Theorem 9 is not certified by that restricted
+  entry; hosted proof validation also remains pending.
 - `pgvwc07_ti_uniqueness_scope.tex` records that the block-separation lemmas
   do not formalize the uniqueness theorem for the translation-invariant
   canonical form, states the corrected root-of-unity conclusion, and records
@@ -695,10 +719,12 @@ note.
   $p$-refinable while its transfer map is no longer trace preserving. The
   corrected statement adds trace preservation of the transfer map, which the
   source's definition of $p$-divisibility presupposes. The note also records
-  why the formal forward canonicalization hypothesis, stated over the
+  why the former forward canonicalization hypothesis, stated over the
   generated-family reading of irreducible form, is refuted rather than
-  dischargeable, and lists the unformalized ingredients of the printed
-  argument.
+  dischargeable. The corrected block-form theorem is proved without an
+  extra canonicalization premise, and the refuted premises and their
+  conditional forward/bundled theorems are retired. This forward gap is
+  resolved; the converse root-selection gap below remains open.
 - `dccsp17_root_kraus_rank_thm41.tex` records the Kraus-rank step that the
   converse implication of Theorem 4.1 uses without proof.
 - `dccsp17_orbit_phase_wraparound.tex` (local correction) records that the
@@ -722,10 +748,11 @@ For the matrix product operator symmetries of arXiv:2203.12563:
   `ℤ₃` phase of `Rep(S₃)` fails the representation identity, and that the
   trivial action of `ψ` is forced by the source's identification of that phase
   with part of `𝓜_TY`.
-- `glm23_reps3_su24_module_list.tex` records that completeness of the listed
-  `Rep(S₃)` and `su(2)₄` phases is formalized only on one block, with a
-  two-block representation of `Rep(S₃)` showing that the representation
-  identity alone does not determine the list.
+- `glm23_reps3_su24_module_list.tex` (scope restriction, resolved) records
+  that completeness of the listed `Rep(S₃)` and `su(2)₄` phases holds on any
+  number of blocks once the duality `M_{a*} = M_aᵀ` of a module category is
+  imposed, with a two-block representation of `Rep(S₃)` showing that the
+  representation identity alone does not determine the list.
 - `glm23_mpo_symmetric_mps_scope.tex` records that the formal layer of fusion
   algebras, symmetric families, and nonnegative integer representations uses
   only the periodic-boundary form of the source's arbitrary-boundary
@@ -749,6 +776,13 @@ arXiv:2504.16985:
 
 For the MPU action on injective MPS blocks in arXiv:2502.20257:
 
+- `fbc25_boundary_dressed_l_symbols.tex` (local fix, resolved) records that
+  the scalar gauges of fusion and action tensors and the L-symbols are
+  defined by comparison against long words, since the reduction theorem gives
+  no bare-scalar uniqueness; proves the gauge law of the L-symbols in that
+  form; and shows that rescaled tensors realize every scalar gauge, so the
+  single-block, stabilizer-form and block-independence arguments hold
+  verbatim.
 - `fbc25_circle_complex_units_cohomology.tex` distinguishes the source
   footnote's sheaf-cohomology comparison from the algebraic group cohomology
   of a finite discrete group and records the direct phase-and-radial proof of
@@ -1802,3 +1836,18 @@ and [#9847](https://github.com/LionSR/TNLean/issues/9847).
   bound on `‖A v‖`; a two-dimensional example disproves it without one. The
   source's `A` is Hermitian and fixes `Γ`, so `‖A v‖ ≥ 1/2`, and the new error is
   `δ + 4 ‖K - A‖` in place of `2 δ`, a constant absorbed by the choice of `q(n)`.
+
+For ALVV, arXiv:1602.08828v2, Section 5.4:
+
+- `alvv16_ff_rank.tex` gives an exact eight-qubit counterexample to the
+  operator Schmidt rank bound in Theorem 5.14(2) for an interior region:
+  the replacement has rank seven while the printed bound is six.
+  The example has orthogonal local projections and a unique frustration-free
+  ground state. It also records the squared-norm correction in the independent
+  gap comparison. Issue #9849 remains open; the unrestricted printed theorem
+  is not formalized.
+
+The corrected interval rank bound `d²+3` and the prefix/suffix bound `d²+2`
+are proved in `ALVV/FrustrationFreeRank.lean` for actual supported chain matrices.
+The note records the distinction between the source's site endpoints and its
+selected bond indices.

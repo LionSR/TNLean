@@ -1,0 +1,100 @@
+\section{A quantitative prime-length bond-dimension dichotomy}
+
+Fix one positive local interaction. A sufficiently small matrix product
+representation at one prime length determines a single tensor generating all
+sufficiently long ground spaces. Otherwise every prime-length representation
+obeys an explicit fifth-degree obstruction. This is the quantified asymptotic
+form of \cite[Theorem~5]{Sanz2010Quantum}; the finite-prefix boundary is
+recorded in \cite{gap:spwc10_ground_state_dichotomy_quantifiers}.
+
+\begin{lemma}[Normal blocks at lengths without small divisors]
+    \label{lem:normal_blocks_no_small_divisor}
+    \lean{MPSTensor.exists_normal_blocks_of_no_small_divisor}
+    \leanok
+    Let $A$ have physical dimension $d$, bond dimension $D$, and chain length
+    $N\ge2$. Suppose no integer $m$ with $2\le m\le D$ divides $N$. There
+    exist $b\le D$ blocks $B_j$ of positive bond dimensions $D_j\le D$ and
+    coefficients $c_j\ne0$ such that
+    \begin{align}
+        V^{(N)}(A) & =\sum_{j=1}^b c_jV^{(N)}(B_j).
+        \label{eq:normal_blocks_no_small_divisor}
+    \end{align}
+    Every $B_j$ is unital, is irreducible, has a positive definite dual fixed
+    point, and is injective at the common length $q(D)=(D^2+1)^2$.
+    Distinct retained blocks are inequivalent under a gauge and a phase.
+    The decomposition and all these properties are derived from $A$.
+\end{lemma}
+\begin{proof}\leanok
+    Reduce $A$ to canonical blocks and choose their periodic representatives.
+    Each nontrivial period is at most $D$ and does not divide $N$, so its
+    periodic vector vanishes. The general Wielandt bound gives injectivity
+    at $q(D)$ for every period-one block. Group phase-equivalent blocks,
+    sum their length-$N$ coefficients, and retain the nonzero terms.
+\end{proof}
+
+\begin{lemma}[One small prime-length representation gives a fixed eventual tensor]
+    \label{lem:prime_small_representation_fixed_tensor}
+    \lean{MPSTensor.exists_normal_eventual_ground_data_of_prime_length_bound,
+        MPSTensor.exists_eventually_fixed_mps_of_prime_length_bound}
+    \leanok
+    \uses{lem:normal_blocks_no_small_divisor,
+        lem:finite_volume_local_kernel_inclusion, lem:local_mps_kernel_all_volumes}
+    Let $h\ge0$ act on $L$ sites, and assume $\dim\ker H_M=1$ for every
+    $M\ge L$. Suppose $N$ is prime, $V^{(N)}(A)\ne0$ is annihilated by
+    $H_N$, and
+    \begin{align}
+        N & \ge L+\max\{q(D),3(D-1)(q(D)+1)\},
+          & q(D)                               & =(D^2+1)^2.
+        \label{eq:prime_small_representation_threshold}
+    \end{align}
+    There exist $0<D_0\le D$, one tensor $B$ of bond dimension $D_0$, and
+    $M_0$ such that, for every $M\ge M_0$,
+    \begin{align}
+        V^{(M)}(B) & \ne0,
+                   & \ker H_M & =\C V^{(M)}(B).
+        \label{eq:prime_small_representation_fixed_tensor}
+    \end{align}
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:normal_blocks_no_small_divisor,
+        lem:finite_volume_local_kernel_inclusion, lem:local_mps_kernel_all_volumes}
+    The threshold gives $D<N$, so primality permits
+    Lemma~\ref{lem:normal_blocks_no_small_divisor}. The original nonzero vector
+    ensures a retained block exists. Simultaneous complementary spanning
+    and Lemma~\ref{lem:finite_volume_local_kernel_inclusion} give
+    $G_L(B_j)\subseteq\ker h$ for each retained block. Choose any one.
+    Its periodic vector has zero energy at all permitted volumes and is
+    nonzero for $M\ge q(D)+1$. The one-dimensional kernel then equals its line.
+    One may take $M_0=\max\{L,q(D)+1\}$.
+\end{proof}
+
+\begin{theorem}[Fixed eventual tensor or a prime-length fifth-degree obstruction]
+    \label{thm:eventual_mps_prime_length_dichotomy}
+    \lean{MPSTensor.eventually_fixed_mps_or_prime_length_bound}
+    \leanok
+    \discussion{10280}
+    \uses{lem:prime_small_representation_fixed_tensor}
+    Let $h\ge0$ be one fixed $L$-site interaction, and assume
+    $\dim\ker H_M=1$ for every $M\ge L$. Then either one fixed tensor $B$
+    generates the nonzero ground-state line at every sufficiently large
+    volume, or every prime $N$ and every bond-$D$ tensor $A$ with
+    $0\ne V^{(N)}(A)\in\ker H_N$ satisfy
+    \begin{align}
+        N<L+\max\{(D^2+1)^2,3(D-1)((D^2+1)^2+1)\}.
+        \label{eq:eventual_mps_prime_length_dichotomy}
+    \end{align}
+    The interaction and $L$ are fixed independently of $N,D,A$.
+    \textbf{Scope restriction (eventual uniform branch):}
+    the theorem supplies the same tensor at all sufficiently large volumes;
+    the finite-prefix representation argument for a literal all-volume
+    formulation is separate; see
+    \cite{gap:spwc10_ground_state_dichotomy_quantifiers}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{lem:prime_small_representation_fixed_tensor}
+    If the eventual fixed-tensor alternative fails, the contrapositive of
+    Lemma~\ref{lem:prime_small_representation_fixed_tensor} gives the displayed
+    strict inequality for every prime-length nonzero ground-state representation.
+\end{proof}
+
+\input{chapter/ch13_parent_hamiltonian_finite_prefix}
