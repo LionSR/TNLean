@@ -17,6 +17,8 @@ import TNLean.MPS.FundamentalTheorem.Reduction.Flag
 import TNLean.MPS.FundamentalTheorem.Reduction.FlagData
 import TNLean.MPS.FundamentalTheorem.Reduction.Identification
 import TNLean.MPS.FundamentalTheorem.Reduction.IntegralRankOneAction
+import TNLean.MPS.FundamentalTheorem.Reduction.IrreducibleTensor
+import TNLean.MPS.FundamentalTheorem.Reduction.LongWords
 import TNLean.MPS.FundamentalTheorem.Reduction.MPOProduct
 import TNLean.MPS.FundamentalTheorem.Reduction.MultiBlock
 import TNLean.MPS.FundamentalTheorem.Reduction.MultiBlockDirectSum
@@ -26,8 +28,18 @@ import TNLean.MPS.FundamentalTheorem.Reduction.ProjectorWeightedSum
 import TNLean.MPS.FundamentalTheorem.Reduction.RingEmbedding
 import TNLean.MPS.FundamentalTheorem.Reduction.SimpleSeparation
 import TNLean.MPS.FundamentalTheorem.Reduction.SingleBlock
+import TNLean.MPS.FundamentalTheorem.Reduction.SplitUniqueness
+import TNLean.MPS.FundamentalTheorem.Reduction.SplitUniquenessGauge
 import TNLean.MPS.FundamentalTheorem.Reduction.Splitting
 import TNLean.MPS.FundamentalTheorem.Reduction.StarSemisimple
 import TNLean.MPS.FundamentalTheorem.Reduction.StationarySplitting
+import TNLean.MPS.FundamentalTheorem.Reduction.UniquenessAllReductions
+import TNLean.MPS.FundamentalTheorem.Reduction.UniquenessBlocks
+import TNLean.MPS.FundamentalTheorem.Reduction.UniquenessCommonBasis
+import TNLean.MPS.FundamentalTheorem.Reduction.UniquenessDifferentFlags
+import TNLean.MPS.FundamentalTheorem.Reduction.UniquenessFlag
+import TNLean.MPS.FundamentalTheorem.Reduction.UniquenessLongWords
+import TNLean.MPS.FundamentalTheorem.Reduction.UniquenessMatrixForm
+import TNLean.MPS.FundamentalTheorem.Reduction.UniquenessSameFlag
 import TNLean.MPS.FundamentalTheorem.Reduction.WeightedMultiBlock
 import TNLean.MPS.FundamentalTheorem.Reduction.WordModule

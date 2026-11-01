@@ -1,0 +1,627 @@
+\section{Uniqueness of multi-block compressions}%
+\label{sec:asym_uniqueness}
+
+Theorem~\ref{thm:asym_multiblock} produces, for a tensor $B$ with the periodic vectors of a sum of
+normal blocks, a block upper triangular form and compression maps $W_s$, $V_s$. This section
+describes every such form of one tensor and the relation between any two of them. The description
+is in terms of the labelled invariant flag of Definition~\ref{def:asym_flag_data}: the form
+determines the flag, the flag determines the compression maps up to an explicit group, and two
+flags of the same tensor are compared by an explicit matching. Throughout, a \emph{compression} of
+$B$ onto the family $(C_s)_{s\in S}$ with $z$ zero slots is the datum of
+Theorem~\ref{thm:asym_multiblock}, clauses (i)--(iii): an ordering $\sigma$ of the $r=|S|+z$ slots
+and an invertible $G$ with $GB^iG^{-1}$ block upper triangular, diagonal block $C_s^i$ at the
+position of $s$ and the $1\times1$ zero at a zero slot; the compression maps $W_b$ are the row
+blocks of $G$ and $V_b$ the column blocks of $G^{-1}$, for every slot $b$, so that
+$W_bV_{b'}=\delta_{bb'}1$. For a block slot $s$ the maps are those of
+Theorem~\ref{thm:asym_multiblock}, and $W_sB^wV_s=C_s^w$ for every word $w$. The blocks are
+assumed normal and of positive bond dimension, as in Theorem~\ref{thm:asym_multiblock}; the
+arguments use of normality only that the module of each block is simple and has a nonzero
+letter.
+
+\subsection{Density and independence of traces}
+
+A tensor $C=(C^i)_i$ of bond dimension $D$ is \emph{irreducible} when its letters have no common
+invariant subspace other than $0$ and $\C^D$. An element $a=\sum_wc_ww$ of the word algebra $F$
+acts on $C$ by $a(C)=\sum_wc_wC^w$, the empty word acting as $\Id$; $F_+$ is the ideal of the
+combinations of nonempty words.
+
+\begin{lemma}[The density theorem with targets]
+    \label{thm:asym_uniq_density}
+    \lean{MPSTensor.exists_eval_eq_of_pairwise_not_isGaugeRelated,
+        MPSTensor.exists_aug_eq_zero_eval_eq_of_pairwise_not_isGaugeRelated}
+    \leanok
+    \uses{def:asym_word_algebra, def:asym_gauge_related}
+    Let $C_1,\ldots,C_m$ be irreducible tensors of bond dimensions $D_1,\ldots,D_m$, pairwise not
+    gauge related, and let $Y_j\in\MN{D_j}$ for every $j$. Then there is $a\in F$ with $a(C_j)=Y_j$
+    for every $j$. If moreover every $C_j$ has a nonzero letter, $a$ can be chosen in $F_+$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{thm:asym_separation}
+    By Burnside's theorem the words act on $\C^{D_j}$ as the full matrix algebra, so there is
+    $b_j\in F_+$ with $b_j(C_j)=Y_j$ whenever $C_j$ has a nonzero letter. The word-algebra modules
+    of the $C_j$ are simple and pairwise non-isomorphic, and Lemma~\ref{thm:asym_separation} gives
+    $p_j\in F_+$ with $p_j(C_k)=\delta_{jk}\Id$ for every $C_j$ with a nonzero letter. An
+    irreducible tensor of positive bond dimension whose letters all vanish has $D=1$, and two such
+    are gauge related, so there is at most one, $C_{j_0}$. Then
+    $a=\sum_jb_jp_j+Y_{j_0}\bigl(1-\sum_jp_j\bigr)$, the second term present only when $C_{j_0}$
+    exists, satisfies $a(C_j)=Y_j$ for every $j$, and lies in $F_+$ when there is no $C_{j_0}$.
+\end{proof}
+
+\begin{lemma}[Independence of the word traces]
+    \label{cor:asym_uniq_trace_independence}
+    \lean{MPSTensor.eq_zero_of_forall_sum_mul_trace_evalWord_eq_zero}
+    \leanok
+    \uses{thm:asym_uniq_density}
+    Let $C_1,\ldots,C_m$ be irreducible tensors, pairwise not gauge related, each with a nonzero
+    letter. If $c\in\C^m$ satisfies $\sum_jc_j\tr(C_j^w)=0$ for every nonempty word $w$, then $c=0$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{thm:asym_uniq_density}
+    The relation extends linearly to $\sum_jc_j\tr(a(C_j))=0$ for every $a\in F_+$.
+    Lemma~\ref{thm:asym_uniq_density} gives $a_j\in F_+$ with $a_j(C_k)=\delta_{jk}\Id$, and the
+    relation at $a_j$ reads $c_jD_j=0$. A tensor with a nonzero letter has $D_j>0$, so $c_j=0$.
+\end{proof}
+
+\subsection{Compressions and labelled flags}
+
+\begin{lemma}[A compression is a labelled flag with an adapted basis]
+    \label{prop:asym_uniq_dictionary}
+    \lean{MPSTensor.MultiBlockCompression.flag,
+        MPSTensor.MultiBlockCompression.toFlagData,
+        MPSTensor.MultiBlockCompression.flag_covBy,
+        MPSTensor.FlagData.toMultiBlockCompression,
+        MPSTensor.FlagData.toMultiBlockCompression_flag}
+    \leanok
+    \uses{thm:asym_multiblock, def:asym_flag_data}
+    Let $(\sigma,G)$ be a compression of $B$ and let $E_k\subseteq\C^{D_B}$ be the span of the
+    first $k$ coordinate blocks. Then $M_k:=G^{-1}E_k$, $k=0,\ldots,r$, is a labelled invariant flag
+    of the word-algebra module of $B$ over $(S,C)$ with $z$ zero steps, the step $M_k/M_{k-1}$
+    carrying the slot $\sigma(k)$. Conversely every labelled invariant flag is the flag of a
+    compression whose order is the order of the labels.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{def:asym_flag_data}
+    Block upper triangular matrices map $E_k$ into $E_k$, so $B^iM_k=G^{-1}(GB^iG^{-1})E_k\subseteq M_k$;
+    the letters induced on $E_k/E_{k-1}$ by $GB^iG^{-1}$ are the diagonal blocks, which are $C_s^i$
+    on a block slot and zero on a one-dimensional zero slot. Conversely, choose a complement of
+    $M_{k-1}$ in $M_k$ for every $k$ and a basis of it in which the induced letters are $C_s^i$
+    (the label provides one); the matrix $G$ whose rows are the dual basis of the union of these
+    bases is block upper triangular with the prescribed diagonal blocks. The flag of the
+    compression so obtained is the given flag.
+\end{proof}
+
+\begin{lemma}[The compression maps in terms of the flag]
+    \label{lem:asym_uniq_maps}
+    \lean{MPSTensor.MultiBlockCompression.leftRow_mulVec_eq_zero_of_mem,
+        MPSTensor.MultiBlockCompression.leftRow_surjOn,
+        MPSTensor.MultiBlockCompression.leftRow_mulVec_mulVec_of_mem,
+        MPSTensor.MultiBlockCompression.rightCol_mulVec_mem_flag,
+        MPSTensor.MultiBlockCompression.leftRow_mul_rightCol_self}
+    \leanok
+    \uses{prop:asym_uniq_dictionary}
+    Let $b$ be the slot at position $k$ of a compression with flag $(M_k)$ and let $C_b$ be its
+    diagonal block ($C_s$ on a block slot, the $1\times1$ zero on a zero slot). Then $W_b$ vanishes
+    on $M_{k-1}$, maps $M_k$ onto $\C^{n_k}$, and $W_bB^ix=C_b^iW_bx$ for $x\in M_k$; and $V_b$ maps
+    $\C^{n_k}$ into $M_k$ with $W_bV_b=1$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    For $x=G^{-1}e$ with $e\in E_k$, $W_bx$ is the $k$-th block of $e$, which vanishes exactly when
+    $e\in E_{k-1}$; the $k$-th block of $(GB^iG^{-1})e$ is the diagonal block times the $k$-th block
+    of $e$ because the row $k$ of a block upper triangular matrix meets only the columns $q\geq k$
+    and $e$ has no component beyond $k$. The column block $V_b$ of $G^{-1}$ places a vector in the
+    $k$-th block and $W_bV_b=1$ is $GG^{-1}=1$.
+\end{proof}
+
+\subsection{The matching of two flags}
+
+\begin{lemma}[One step against another]
+    \label{lem:asym_uniq_step}
+    \lean{CoveringMatching.step_sup_eq_of_lt,
+        CoveringMatching.step_sup_eq_of_lt',
+        CoveringMatching.step_inf_eq_of_lt,
+        CoveringMatching.step_lt_symm,
+        MPSTensor.MultiBlockCompression.subquotEquivMatching}
+    \leanok
+    In a modular lattice let $P\lessdot Q$ and $P'\lessdot Q'$ be covering pairs and put
+    $U=Q\wedge Q'$. If $P\vee(Q\wedge P')<P\vee(Q\wedge Q')$, then $P\vee U=Q$, $Q\wedge P'\leq P$,
+    $P'\vee U=Q'$, $Q'\wedge P\leq P'$, $P\wedge Q'=Q\wedge P'$, and the strict inequality holds
+    with the two pairs exchanged. For the lattice of invariant subspaces of a tensor, with
+    $P\lessdot Q$ meaning that $Q/P$ is irreducible, the inclusions $U\subseteq Q$ and
+    $U\subseteq Q'$ then induce isomorphisms $U/K\to Q/P$ and $U/K\to Q'/P'$ commuting with the
+    letters, where $K=P\wedge Q'=Q\wedge P'$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    $P\vee(Q\wedge P')$ and $P\vee U$ lie between $P$ and $Q$ with the first strictly below the
+    second, so the first is $P$ and the second is $Q$, since nothing lies strictly between $P$ and
+    $Q$. Then $P'\vee U$ equals $P'$ or $Q'$, and the first case gives $U\leq Q\wedge P'\leq P$, so
+    $P\vee U=P\neq Q$; hence $P'\vee U=Q'$. Next $P'\vee(Q'\wedge P)$ equals $P'$ or $Q'$; in the
+    second case $Q'\leq P\vee P'$ and the modular law gives
+    $U\leq Q\wedge(P\vee P')=P\vee(Q\wedge P')=P$, again contradicting $P\vee U=Q$. The two
+    inclusions $Q\wedge P'\leq P\wedge Q'$ and $Q'\wedge P\leq Q\wedge P'$ give the equality, and
+    the exchanged inequality is $P'<Q'$. The isomorphisms are the second isomorphism theorem for
+    $U$ against $P$ and against $P'$.
+\end{proof}
+
+\begin{lemma}[The matching]
+    \label{prop:asym_uniq_matching}
+    \lean{CoveringMatching.CoveringChain,
+        CoveringMatching.CoveringChain.jump,
+        CoveringMatching.CoveringChain.jump_spec,
+        CoveringMatching.CoveringChain.jump_jump,
+        CoveringMatching.CoveringChain.jumpEquiv,
+        CoveringMatching.CoveringChain.length_eq,
+        CoveringMatching.CoveringChain.jump_sup_eq,
+        MPSTensor.MultiBlockCompression.matching,
+        MPSTensor.MultiBlockCompression.matching_symm,
+        MPSTensor.MultiBlockCompression.flag_sup_inf_eq,
+        MPSTensor.MultiBlockCompression.flag_inf_eq,
+        MPSTensor.MultiBlockCompression.isGaugeRelated_matching}
+    \leanok
+    \uses{lem:asym_uniq_step, prop:asym_uniq_dictionary}
+    Let $(M_k)_{k=0}^r$ and $(\widetilde M_{k'})_{k'=0}^{\widetilde r}$ be the flags of two
+    compressions of $B$. For every $k$ there is exactly one $k'$ with
+    $M_{k-1}+(M_k\cap\widetilde M_{k'-1})\subsetneq M_{k-1}+(M_k\cap\widetilde M_{k'})$, namely the least
+    $k'$ with $M_k\cap\widetilde M_{k'}\not\subseteq M_{k-1}$. Writing $k'=\pi(k)$, the map $\pi$ is a
+    bijection, so $r=\widetilde r$, with inverse the same rule for the flags exchanged; and for
+    every $k$ the letters induced on $M_k/M_{k-1}$ and on $\widetilde M_{\pi(k)}/\widetilde M_{\pi(k)-1}$
+    are gauge related, both being isomorphic to the induced letters on $U/K$ with
+    $U=M_k\cap\widetilde M_{\pi(k)}$ and $K=M_{k-1}\cap\widetilde M_{\pi(k)}=M_k\cap\widetilde M_{\pi(k)-1}$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:asym_uniq_step}
+    The subspaces $M_{k-1}+(M_k\cap\widetilde M_j)$ increase with $j$ from $M_{k-1}$ to $M_k$, each
+    equal to one of the two since $M_k/M_{k-1}$ is irreducible, so exactly one step is strict.
+    Lemma~\ref{lem:asym_uniq_step} applied to the two covering pairs shows that the rule for the
+    exchanged flags sends $k'$ back to $k$, and gives the identities and the isomorphisms.
+\end{proof}
+
+\begin{lemma}[The blocks are unique]
+    \label{thm:asym_uniq_blocks}
+    \lean{MPSTensor.MultiBlockCompression.z_eq,
+        MPSTensor.MultiBlockCompression.labelMatching,
+        MPSTensor.MultiBlockCompression.z_eq_and_exists_equiv_isGaugeRelated,
+        MPSTensor.MultiBlockCompression.dim_labelMatching}
+    \leanok
+    \uses{prop:asym_uniq_matching, def:normal, def:asym_gauge_related}
+    Let $B$ have compressions onto families $(C_s)_{s\in S}$ and $(\widetilde C_t)_{t\in\widetilde S}$
+    of normal tensors of positive bond dimension, with $z$ and $\widetilde z$ zero slots. Then
+    $z=\widetilde z$ and there is a bijection $\tau:S\to\widetilde S$ with $D_{\tau(s)}=D_s$ and
+    $\widetilde C_{\tau(s)}$ gauge related to $C_s$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{prop:asym_uniq_matching}
+    The matching pairs steps with gauge related induced letters. On a zero step every letter is
+    zero; on a block step some letter is nonzero, because a normal tensor of positive bond
+    dimension has words of some positive length spanning a nonzero matrix algebra. Gauge related
+    tensors have zero letters together, so zero steps are paired with zero steps, which gives
+    $z=\widetilde z$, and block steps with block steps, which gives $\tau$.
+\end{proof}
+
+\begin{lemma}[The matching as a rank test]
+    \label{lem:asym_uniq_rank_test}
+    \lean{MPSTensor.MultiBlockCompression.leadingCols,
+        MPSTensor.MultiBlockCompression.range_leadingCols,
+        MPSTensor.MultiBlockCompression.range_fromCols_leadingCols,
+        MPSTensor.MultiBlockCompression.rank_fromCols_leadingCols,
+        MPSTensor.MultiBlockCompression.isLeast_rank_fromCols_leadingCols_eq,
+        MPSTensor.MultiBlockCompression.coe_map_inf_eq_leadingCols}
+    \leanok
+    \uses{prop:asym_uniq_matching, prop:asym_uniq_dictionary}
+    For two compressions $(\sigma,G)$ and $(\widetilde\sigma,\widetilde G)$ of $B$ with flags
+    $(M_k)$ and $(\widetilde M_{k'})$, let $G_{\leq k}$ be the matrix of the columns of $G^{-1}$ at
+    the slots of the positions $1,\ldots,k$, so that its column span is $M_k$, and define
+    $\widetilde G_{\leq k'}$ likewise. Then the column span of the block matrix
+    $(G_{\leq k}\ \widetilde G_{\leq k'})$ is $M_k+\widetilde M_{k'}$, so its rank is
+    $\dim(M_k+\widetilde M_{k'})$; the subspace $M_k\cap\widetilde M_{k'}$ consists of the vectors
+    $G_{\leq k}a$ with $G_{\leq k}a=\widetilde G_{\leq k'}a'$ for some $a'$; and, for normal blocks of
+    positive bond dimension, the position $\pi(k)$ matched with $k$ is the least $k'$ with
+    $\mathrm{rank}(G_{\leq k-1}\ \widetilde G_{\leq k'})=\mathrm{rank}(G_{\leq k}\ \widetilde G_{\leq k'})$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{prop:asym_uniq_matching}
+    The columns of $G^{-1}$ at the positions $1,\ldots,k$ span $G^{-1}E_k=M_k$. The two ranks agree
+    exactly when $M_k\subseteq M_{k-1}+\widetilde M_{k'}$, that is, when
+    $M_{k-1}+(M_k\cap\widetilde M_{k'})=M_k$ by the modular law; by
+    Lemma~\ref{prop:asym_uniq_matching} the least such $k'$ is $\pi(k)$.
+\end{proof}
+
+\subsection{Uniqueness of the compression maps}
+
+\begin{lemma}[Two compressions with the same flag]
+    \label{thm:asym_uniq_same_flag}
+    \lean{MPSTensor.MultiBlockCompression.withGauge,
+        MPSTensor.MultiBlockCompression.blockTriangular_coordChange_of_flag_eq,
+        MPSTensor.MultiBlockCompression.blockDiag'_coordChange_eq_smul,
+        MPSTensor.MultiBlockCompression.coordChangeScalar_ne_zero,
+        MPSTensor.MultiBlockCompression.leftRow_withGauge,
+        MPSTensor.MultiBlockCompression.rightCol_withGauge,
+        MPSTensor.MultiBlockCompression.conjTriangular,
+        MPSTensor.MultiBlockCompression.conjTriangular_flag,
+        MPSTensor.MultiBlockCompression.withGauge_eq_conjTriangular,
+        MPSTensor.MultiBlockCompression.coordChange_conjTriangularGauge}
+    \leanok
+    \uses{lem:asym_uniq_maps, def:normal}
+    Let $(\sigma,G)$ and $(\sigma,\widetilde G)$ be compressions of $B$ onto the same family with the
+    same labelled flag, $\widetilde G^{-1}E_k=G^{-1}E_k$ for all $k$. Then $h=\widetilde GG^{-1}$ is
+    block upper triangular for the decomposition of $\sigma$ and every diagonal block $h_{bb}$ is a
+    nonzero scalar $\lambda_b$, so that
+    \begin{align}
+        \widetilde W_b & =\lambda_bW_b+\sum_{c\text{ after }b}h_{bc}W_c,                &
+        \widetilde V_b & =\lambda_b^{-1}V_b+\sum_{c\text{ before }b}V_c\,(h^{-1})_{cb}.
+    \end{align}
+    Conversely, for every block upper triangular $h$ with nonzero scalar diagonal blocks,
+    $(\sigma,hG)$ is a compression onto the same family with the same flag. The compressions with a
+    given labelled flag are therefore a single orbit of the group of such matrices, acting freely.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:asym_uniq_maps, lem:asym_normal_intertwiner}
+    $h$ preserves every $E_k$, hence is block upper triangular, and so is $h^{-1}$. The diagonal
+    block of $h(GB^iG^{-1})h^{-1}$ at a block slot $s$ is $h_{ss}C_s^ih_{ss}^{-1}$ and must equal
+    $C_s^i$, so $h_{ss}$ commutes with every letter of the normal tensor $C_s$ and is a scalar; on a
+    zero slot it is a nonzero number. The displayed formulas are the rows of $hG$ and the columns of
+    $G^{-1}h^{-1}$. For the converse, conjugating a block upper triangular matrix by $h$ keeps it
+    block upper triangular and keeps the diagonal blocks, and $(hG)^{-1}E_k=G^{-1}E_k$.
+\end{proof}
+
+\begin{lemma}[The compressions with one labelled flag form a torsor]
+    \label{thm:asym_uniq_torsor}
+    \lean{MPSTensor.MultiBlockCompression.bijOn_conjTriangular}
+    \leanok
+    \uses{thm:asym_uniq_same_flag}
+    Let $(\sigma,G)$ be a compression of $B$ onto a family of normal tensors of positive bond
+    dimension, and let $T_\sigma$ be the group of matrices that are block upper triangular for the
+    decomposition of $\sigma$ with nonzero scalar diagonal blocks. Then $h\mapsto(\sigma,hG)$ is a
+    bijection from $T_\sigma$ onto the set of compressions of $B$ onto the same family with the same
+    number of zero slots, the same order and the same flag as $(\sigma,G)$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{thm:asym_uniq_same_flag}
+    By the converse part of Lemma~\ref{thm:asym_uniq_same_flag} the map takes values in the set;
+    by its first part every compression $(\sigma,\widetilde G)$ of the set is $(\sigma,hG)$ with
+    $h=\widetilde GG^{-1}\in T_\sigma$; and $h$ is recovered from $(\sigma,hG)$ as $(hG)G^{-1}$, so
+    the map is injective.
+\end{proof}
+
+\begin{lemma}[Two compressions with different flags]
+    \label{thm:asym_uniq_different_flags}
+    \lean{MPSTensor.MultiBlockCompression.exists_intertwiner_of_matching,
+        MPSTensor.MultiBlockCompression.existsUnique_intertwiner_of_matching,
+        MPSTensor.MultiBlockCompression.exists_smul_of_matching_inl,
+        MPSTensor.MultiBlockCompression.exists_smul_of_matching_inr,
+        MPSTensor.MultiBlockCompression.exists_ne_zero_eq_smul_of_slotTensor_eq,
+        MPSTensor.MultiBlockCompression.inf_eq_and_sup_eq_of_flag_eq}
+    \leanok
+    \uses{prop:asym_uniq_matching, lem:asym_uniq_maps}
+    Let two compressions of $B$ onto families $(C_s)_{s\in S}$ and
+    $(\widetilde C_t)_{t\in\widetilde S}$ of normal tensors of positive bond dimension have flags
+    $(M_k)$ and $(\widetilde M_{k'})$ and matching $\pi$. Let $k$ carry the slot $b$ of the first
+    compression and $k'=\pi(k)$ the slot $b'$ of the second, with diagonal blocks $C_b$ and
+    $\widetilde C_{b'}$ (the $1\times1$ zero on a zero slot), and put $U=M_k\cap\widetilde M_{k'}$
+    and $\mathcal N=M_{k-1}+\widetilde M_{k'-1}$. Then there is a unique invertible intertwiner $X$
+    from $C_b$ to $\widetilde C_{b'}$ with
+    \begin{align}
+        \widetilde W_{b'}x             & =XW_bx\quad\text{for all }x\in U,    &
+        (\widetilde V_{b'}-V_bX^{-1})v & \in\mathcal N\quad\text{for all }v .
+    \end{align}
+    On two zero slots $X$ is a nonzero scalar, and so it is when $\widetilde C_{b'}=C_b$, in
+    particular for two compressions onto one family at two slots carrying the same label. When the
+    two labelled flags coincide, $U=M_k$ and $\mathcal N=M_{k-1}$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{prop:asym_uniq_matching, lem:asym_uniq_maps}
+    By Lemma~\ref{prop:asym_uniq_matching}, $M_{k-1}+U=M_k$, $\widetilde M_{k'-1}+U=\widetilde M_{k'}$
+    and $U\cap M_{k-1}=K=U\cap\widetilde M_{k'-1}$. By Lemma~\ref{lem:asym_uniq_maps}, $W_b$
+    restricted to $U$ intertwines the letters with $C_b$, is onto $\C^{n_k}$ since
+    $W_b(U)=W_b(M_{k-1}+U)=W_b(M_k)$, and has kernel $K$; the same for $\widetilde W_{b'}$. Define
+    $Xv=\widetilde W_{b'}u$ for any $u\in U$ with $W_bu=v$; the choice does not matter since
+    $\widetilde W_{b'}$ kills $K$. Then $X$ is bijective and intertwines, and it is unique because
+    $W_b$ maps $U$ onto $\C^{n_k}$. For the injections, decompose $\widetilde V_{b'}v=y+u$ with
+    $y\in\widetilde M_{k'-1}$, $u\in U$ and $V_bX^{-1}v=y'+u'$ with $y'\in M_{k-1}$, $u'\in U$; applying
+    $\widetilde W_{b'}$ and $W_b$ gives $W_b(u-u')=0$, so $u-u'\in K\subseteq M_{k-1}$, and the
+    difference lies in $\mathcal N$. On a zero slot $X$ is $1\times1$; when the two diagonal blocks
+    are the same normal tensor, $X$ commutes with every letter and is a scalar by
+    Lemma~\ref{lem:asym_normal_intertwiner}.
+\end{proof}
+
+\begin{lemma}[Two compressions with different flags in matrices]
+    \label{cor:asym_uniq_different_flags_matrices}
+    \lean{MPSTensor.MultiBlockCompression.leftRow_mul_eq_mul_leftRow_mul,
+        MPSTensor.MultiBlockCompression.exists_rightCol_sub_mul_eq_fromCols_mul}
+    \leanok
+    \uses{thm:asym_uniq_different_flags, lem:asym_uniq_rank_test}
+    In the setting of Lemma~\ref{thm:asym_uniq_different_flags}, with the matrices $G_{\leq k}$
+    and $\widetilde G_{\leq k'}$ of Lemma~\ref{lem:asym_uniq_rank_test}: for every matrix $Y_U$ whose
+    columns lie in $U$, $\widetilde W_{b'}Y_U=XW_bY_U$; and there is a matrix $R$ with
+    $\widetilde V_{b'}-V_bX^{-1}=(G_{\leq k-1}\ \widetilde G_{\leq\pi(k)-1})\,R$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{thm:asym_uniq_different_flags, lem:asym_uniq_rank_test}
+    The first identity is the identity $\widetilde W_{b'}x=XW_bx$ of
+    Lemma~\ref{thm:asym_uniq_different_flags} applied to every column of $Y_U$. By the same
+    theorem every column of $\widetilde V_{b'}-V_bX^{-1}$ lies in
+    $\mathcal N=M_{k-1}+\widetilde M_{\pi(k)-1}$, which is the column span of
+    $(G_{\leq k-1}\ \widetilde G_{\leq\pi(k)-1})$ by Lemma~\ref{lem:asym_uniq_rank_test}.
+\end{proof}
+
+\begin{lemma}[A basis adapted to both flags]
+    \label{thm:asym_uniq_common_basis}
+    \lean{MPSTensor.MultiBlockCompression.bijective_leftRow_matchedCompl,
+        MPSTensor.MultiBlockCompression.bijective_leftRow_matchedCompl',
+        MPSTensor.MultiBlockCompression.flag_succ_eq_sup_matchedCompl,
+        MPSTensor.MultiBlockCompression.flag_matching_succ_eq_sup_matchedCompl,
+        MPSTensor.MultiBlockCompression.flag_succ_eq_sup_matchedCompl',
+        MPSTensor.MultiBlockCompression.iSup_matchedCompl,
+        MPSTensor.MultiBlockCompression.commonCoord',
+        MPSTensor.MultiBlockCompression.commonCoord_of_mem,
+        MPSTensor.MultiBlockCompression.commonCoord'_of_mem,
+        MPSTensor.MultiBlockCompression.mem_flag_iff_commonCoord,
+        MPSTensor.MultiBlockCompression.mem_flag_iff_commonCoord',
+        MPSTensor.MultiBlockCompression.commonGauge,
+        MPSTensor.MultiBlockCompression.commonGauge',
+        MPSTensor.MultiBlockCompression.unipotentFactor,
+        MPSTensor.MultiBlockCompression.unipotentFactor',
+        MPSTensor.MultiBlockCompression.blockTriangular_unipotentFactor',
+        MPSTensor.MultiBlockCompression.blockDiag'_unipotentFactor',
+        MPSTensor.MultiBlockCompression.commonCoord'_eq_mulVec,
+        MPSTensor.MultiBlockCompression.gaugeMatrix_commonGauge',
+        MPSTensor.MultiBlockCompression.gaugeMatrix_eq_unipotentFactor_mul,
+        MPSTensor.MultiBlockCompression.gaugeMatrix_eq_unipotentFactor'_mul,
+        MPSTensor.MultiBlockCompression.matchingPermMatrix_eq_mul,
+        MPSTensor.MultiBlockCompression.MatchedComplements,
+        MPSTensor.MultiBlockCompression.matchedComplements_le,
+        MPSTensor.MultiBlockCompression.matchedCompl,
+        MPSTensor.MultiBlockCompression.finrank_matchedCompl,
+        MPSTensor.MultiBlockCompression.flag_eq_iSup_matchedCompl,
+        MPSTensor.MultiBlockCompression.flag_eq_iSup_matchedCompl',
+        MPSTensor.MultiBlockCompression.iSupIndep_matchedCompl,
+        MPSTensor.MultiBlockCompression.commonCoord,
+        MPSTensor.MultiBlockCompression.blockTriangular_unipotentFactor,
+        MPSTensor.MultiBlockCompression.blockDiag'_unipotentFactor,
+        MPSTensor.MultiBlockCompression.matchingPermMatrix,
+        MPSTensor.MultiBlockCompression.gaugeMatrix_mul_gaugeMatrixInv_eq}
+    \leanok
+    \uses{thm:asym_uniq_different_flags, prop:asym_uniq_matching}
+    In the setting of Lemma~\ref{thm:asym_uniq_different_flags}, for two compressions of $B$ onto
+    families $(C_s)_{s\in S}$ and $(\widetilde C_t)_{t\in\widetilde S}$ of normal tensors of
+    positive bond dimension, let $U_k=M_k\cap\widetilde M_{\pi(k)}$,
+    $K_k=M_{k-1}\cap\widetilde M_{\pi(k)}$, and let $L_k$ be a complement of $K_k$ in $U_k$. Then
+    $\C^{D_B}=\bigoplus_kL_k$, $M_k=\bigoplus_{j\leq k}L_j$ and $\widetilde M_{k'}=\bigoplus_{\pi(j)\leq k'}L_j$,
+    so the union of bases of the $L_j$ is adapted to both flags; and with $\Gamma$ the change of
+    basis reading the coordinates of $L_j$ through $W_{\sigma(j)}$, one has $G=\mathsf A\Gamma$ and
+    $\widetilde G=\widetilde{\mathsf A}P_X\Gamma$, where $\mathsf A$ and $\widetilde{\mathsf A}$ are block
+    upper triangular with identity diagonal blocks in the orders $\sigma$ and $\widetilde\sigma$ and
+    $P_X$ is the block permutation $j\mapsto\pi(j)$ composed with the intertwiners of
+    Lemma~\ref{thm:asym_uniq_different_flags}; hence $\widetilde GG^{-1}=\widetilde{\mathsf A}P_X\mathsf A^{-1}$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{thm:asym_uniq_different_flags, prop:asym_uniq_matching, lem:asym_uniq_maps}
+    $U_k/K_k$ is isomorphic to $M_k/M_{k-1}$, so $\dim L_k$ is the size of the slot at $k$, and
+    $M_k=M_{k-1}+U_k=M_{k-1}+K_k+L_k=M_{k-1}\oplus L_k$ since $K_k\subseteq M_{k-1}$ and $L_k\cap M_{k-1}\subseteq K_k$;
+    induction on $k$, and the same for the second flag through $\pi$. $\Gamma$ is invertible because
+    $W_{\sigma(j)}$ is injective on $L_j$. Both $G$ and $\Gamma$ map $M_k$ onto $E_k$, so $G\Gamma^{-1}$ is
+    block upper triangular, with identity diagonal blocks because both read the step through
+    $W_{\sigma(k)}$; reading the $L_j$ through $\widetilde W$ instead gives $X_j$ times the reading
+    through $W$, by Lemma~\ref{thm:asym_uniq_different_flags}, which is $P_X\Gamma$.
+\end{proof}
+
+\begin{lemma}[Unipotent changes of two compressions]
+    \label{thm:asym_uniq_unipotent_change}
+    \lean{MPSTensor.MultiBlockCompression.matchedCompl_congr,
+        MPSTensor.MultiBlockCompression.matchedKer_conjTriangular,
+        MPSTensor.MultiBlockCompression.commonCoord_conjTriangular,
+        MPSTensor.MultiBlockCompression.commonCoord'_of_mem_of_matching_eq,
+        MPSTensor.MultiBlockCompression.commonCoord'_conjTriangular,
+        MPSTensor.MultiBlockCompression.unipotentFactor_conjTriangular,
+        MPSTensor.MultiBlockCompression.unipotentFactor'_conjTriangular,
+        MPSTensor.MultiBlockCompression.flag_conjTriangular_and_unipotentFactor_conjTriangular,
+        MPSTensor.MultiBlockCompression.matchedCompl_conjTriangular,
+        MPSTensor.MultiBlockCompression.matchedComplements_conjTriangular,
+        MPSTensor.MultiBlockCompression.commonGauge_conjTriangular,
+        MPSTensor.MultiBlockCompression.commonGauge'_conjTriangular,
+        MPSTensor.MultiBlockCompression.matchingPermMatrix_conjTriangular,
+        MPSTensor.MultiBlockCompression.exists_conjTriangular_unipotentFactor_eq}
+    \leanok
+    \uses{thm:asym_uniq_common_basis}
+    In the setting of Lemma~\ref{thm:asym_uniq_common_basis}, let $u$ and $\widetilde u$ be block
+    upper triangular with identity diagonal blocks in the orders $\sigma$ and $\widetilde\sigma$.
+    Then $(\sigma,uG)$ and $(\widetilde\sigma,\widetilde u\widetilde G)$ are compressions with the
+    same flags, the same complements $L_k$, the same change of basis $\Gamma$ and the same block
+    permutation $P_X$, and with the unipotent factors $u\mathsf A$ and $\widetilde u\widetilde{\mathsf A}$.
+    Conversely, for any matrices $\mathsf A_1$ and $\widetilde{\mathsf A}_1$ block upper triangular
+    with identity diagonal blocks in the orders $\sigma$ and $\widetilde\sigma$ there are such $u$
+    and $\widetilde u$ for which the factors are $\mathsf A_1$ and $\widetilde{\mathsf A}_1$: every
+    pair of unipotent factors occurs.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{thm:asym_uniq_common_basis, thm:asym_uniq_same_flag}
+    By Lemma~\ref{thm:asym_uniq_same_flag} the two changes keep the flags, hence the matching, the
+    subspaces $U_k$ and $K_k$ and the complements $L_k$. The row of $uG$ at the slot of position $j$
+    is $W_{\sigma(j)}+\sum_{c\text{ after }j}u_{jc}W_c$, and every $W_c$ with $c$ after $j$ vanishes
+    on $L_j\subseteq M_j$, so $\Gamma$ is unchanged; likewise for $\widetilde u\widetilde G$, so $P_X$
+    is unchanged. Then $uG=u\mathsf A\Gamma$ and $\widetilde u\widetilde G=\widetilde u\widetilde{\mathsf A}P_X\Gamma$.
+    For the converse take $u=\mathsf A_1\mathsf A^{-1}$ and $\widetilde u=\widetilde{\mathsf A}_1\widetilde{\mathsf A}^{-1}$.
+\end{proof}
+
+\begin{theorem}[The set of all compressions]
+    \label{thm:asym_uniq_all}
+    \lean{MPSTensor.MultiBlockCompression.flag_withGauge_eq_iff_exists_eq_conjTriangularGauge,
+        MPSTensor.FlagData.exists_multiBlockCompression_flag_eq,
+        MPSTensor.FlagData.toMultiBlockCompression_ord_symm}
+    \leanok
+    \uses{prop:asym_uniq_dictionary, thm:asym_uniq_same_flag}
+    Every labelled invariant flag of $B$ is the flag of a compression, and two compressions with the
+    same order have the same flag exactly when they differ by a block upper triangular change of
+    basis with nonzero scalar diagonal blocks. The set of all compressions of $B$ onto a family is
+    therefore the disjoint union, over the labelled invariant flags of $B$, of one orbit of that group each.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{prop:asym_uniq_dictionary, thm:asym_uniq_same_flag}
+    Lemma~\ref{prop:asym_uniq_dictionary} and Lemma~\ref{thm:asym_uniq_same_flag}.
+\end{proof}
+
+\begin{theorem}[The set of all reductions]
+    \label{thm:asym_uniq_all_reductions}
+    \lean{MPSTensor.MultiBlockCompression.exists_z_eq_iff_exists_flagData,
+        MPSTensor.MultiBlockCompression.existsUnique_conjTriangular,
+        MPSTensor.FlagData.toMultiBlockCompression_toFlagData,
+        MPSTensor.FlagData.exists_rightInverse_toFlagData}
+    \leanok
+    \uses{prop:asym_uniq_dictionary, thm:asym_uniq_torsor}
+    The tensor $B$ has a compression onto a family $(C_s)_{s\in S}$ with $z$ zero slots exactly when
+    the word-algebra module of $B$ has a labelled invariant flag over $(S,C)$ with $z$ zero steps;
+    this needs no hypothesis on the blocks. Let the blocks be normal of positive bond dimension,
+    and choose for every labelled invariant flag $F$ a compression $(\sigma_F,G_F)$ whose labelled
+    flag is $F$; such a choice exists. Then every compression of $B$ onto $(C_s)$ is
+    $(\sigma_F,hG_F)$ for exactly one pair $(F,h)$ with $h\in T_{\sigma_F}$, and $F$ is its labelled
+    flag. The compressions of $B$ onto $(C_s)$ are therefore the disjoint union, over the labelled
+    invariant flags $F$, of the $T_{\sigma_F}$-orbits of $(\sigma_F,G_F)$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{prop:asym_uniq_dictionary, thm:asym_uniq_torsor}
+    The first statement is Lemma~\ref{prop:asym_uniq_dictionary} in both directions, and the
+    compression constructed there from a labelled flag has that labelled flag, which gives the
+    choice $F\mapsto(\sigma_F,G_F)$. Given a compression, $F$ must be its labelled flag; it then has
+    the number of zero slots, the order and the flag of $(\sigma_F,G_F)$, and
+    Lemma~\ref{thm:asym_uniq_torsor} gives exactly one $h$.
+\end{proof}
+
+\subsection{Long words and the one-block case}
+
+\begin{lemma}[Long words in a triangular form]
+    \label{lem:asym_uniq_long_words}
+    \lean{MPSTensor.MultiBlockCompression.conjMatrix_evalWord_eq_zero_of_forall_notMem,
+        MPSTensor.MultiBlockCompression.conjMatrix_evalWord_eq_zero_of_maxSlotPosition_lt,
+        MPSTensor.MultiBlockCompression.conjMatrix_evalWord_eq_zero_of_lt_minSlotPosition,
+        MPSTensor.MultiBlockCompression.evalWord_mulVec_mem_flag_of_forall_le,
+        MPSTensor.MultiBlockCompression.evalWord_mulVec_eq_zero_of_mem_flag_of_forall_ge}
+    \leanok
+    \uses{thm:asym_multiblock}
+    For a compression with $z$ zero slots and at least one block slot, and a word $w$ with
+    $|w|\geq z$, the block $(GB^wG^{-1})_{pq}$ vanishes unless some block slot sits at a position
+    $m$ with $p\leq m\leq q$. In particular $B^w$ maps $\C^{D_B}$ into $M_{k_{\max}}$ and kills
+    $M_{k_{\min}-1}$, where $k_{\min}$ and $k_{\max}$ are the first and last positions of block slots.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The block $(p,q)$ of a product of $n$ block upper triangular matrices is a sum over
+    non-decreasing chains of positions from $p$ to $q$. If no block slot lies between $p$ and $q$,
+    every chain runs through at most $z$ positions, so for $n\geq z$ it has an equal step whose
+    factor is the diagonal block of a zero slot, which is zero.
+\end{proof}
+
+\begin{lemma}[Bare uniqueness at the ends of the flag; the one-block theorem]
+    \label{cor:asym_uniq_one_block}
+    \lean{MPSTensor.MultiBlockCompression.labelMatching_eq_of_unique,
+        MPSTensor.MultiBlockCompression.exists_left_eq_smul_of_last,
+        MPSTensor.MultiBlockCompression.exists_right_eq_inv_smul_of_first,
+        MPSTensor.MultiBlockCompression.exists_left_mul_evalWord_eq_smul_of_last,
+        MPSTensor.MultiBlockCompression.exists_evalWord_mul_right_eq_inv_smul_of_first,
+        MPSTensor.MultiBlockCompression.exists_smul_single_block,
+        MultiBlockExamples.SharpnessOneBlock.not_exists_left_eq_smul,
+        MultiBlockExamples.SharpnessOneBlock.left_mul_evalWord_eq,
+        MultiBlockExamples.SharpnessOneBlock.not_exists_left_mul_eq_smul_two,
+        MultiBlockExamples.SharpnessOneBlock.left_mul_evalWord_eq_two,
+        MultiBlockExamples.SharpnessOneBlock.exists_rowOnes_mul_pow_eq_smul_iff,
+        MultiBlockExamples.SharpnessOneBlock.exists_length_eq_sub_one_not_exists_smul}
+    \leanok
+    \uses{thm:asym_uniq_different_flags, lem:asym_uniq_long_words, thm:asym_uniq_blocks}
+    Let $C_s$ occur once in the family up to gauge. If $s$ is the last slot of both compressions
+    then $\widetilde W_s=\lambda W_s$ as matrices, for a nonzero scalar $\lambda$; if first in both,
+    $\widetilde V_s=\lambda^{-1}V_s$. If $s$ is the last block slot of both, then
+    $\widetilde W_sB^w=\lambda W_sB^w$ for $|w|\geq z$; if the first block slot of both,
+    $B^w\widetilde V_s=\lambda^{-1}B^wV_s$ for $|w|\geq z$. In particular, for a single block
+    ($S=\{s\}$, $z=D_B-D_s$), there is $\lambda\neq0$ with $\widetilde W_sB^w=\lambda W_sB^w$ and
+    $B^w\widetilde V_s=\lambda^{-1}B^wV_s$ for every word with $|w|\geq D_B-D_s$; for every $z\geq1$
+    this bound cannot be lowered for the first identity.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{thm:asym_uniq_different_flags, lem:asym_uniq_long_words}
+    Since $C_s$ occurs once, the matching pairs the two $s$-steps. If both are last, $U$ is the
+    whole space; if both are first, $\mathcal N=0$. For the identities with words attached,
+    Lemma~\ref{lem:asym_uniq_long_words} gives $B^w\C^{D_B}\subseteq U$ and $B^w\mathcal N=0$ for
+    $|w|\geq z$, and Lemma~\ref{thm:asym_uniq_different_flags} applies to every $B^wx$. For the
+    sharpness, the tensor with one letter acting on $\C^{1+z}$ by $e_0\mapsto e_0$, $e_j\mapsto e_{j-1}$
+    has the compressions with the block first (identity gauge, $W=e_0^{\mathsf T}$) and with the
+    block last (basis $e_{j-1}-e_j$, $e_0$; $\widetilde W=e_0^{\mathsf T}+\cdots+e_z^{\mathsf T}$), and
+    $WB^n=e_0^{\mathsf T}+\cdots+e_{\min(n,z)}^{\mathsf T}$ is proportional to $\widetilde WB^n=\widetilde W$
+    exactly when $n\geq z$.
+\end{proof}
+
+\subsection{Split compressions}
+
+\begin{lemma}[Uniqueness of split compressions, bare form]
+    \label{prop:asym_uniq_split}
+    \lean{MPSTensor.MultiBlockCompression.remainder_eq_zero_iff_conjMatrix_eq_blockDiagonal',
+        MPSTensor.MultiBlockCompression.blockEntry_intertwines,
+        MPSTensor.MultiBlockCompression.blockEntry_eq_zero_of_not_isGaugeRelated,
+        MPSTensor.MultiBlockCompression.blockEntry_inl_inr_eq_zero,
+        MPSTensor.MultiBlockCompression.blockEntry_inr_inl_eq_zero,
+        MPSTensor.MultiBlockCompression.left_eq_smul_of_split_of_pairwise_not_isGaugeRelated,
+        MPSTensor.MultiBlockCompression.right_eq_smul_of_split_of_pairwise_not_isGaugeRelated,
+        MPSTensor.MultiBlockCompression.splitScalar_ne_zero,
+        MPSTensor.MultiBlockCompression.exists_left_eq_smul_and_right_eq_inv_smul_of_split,
+        MPSTensor.MultiBlockCompression.classMatrix,
+        MPSTensor.MultiBlockCompression.blockEntry_relativeGauge_eq_classMatrix_smul,
+        MPSTensor.MultiBlockCompression.isUnit_classMatrix,
+        MPSTensor.MultiBlockCompression.zeroSlotBlock_relativeGauge_mul_zeroSlotBlock_relativeGauge,
+        MPSTensor.MultiBlockCompression.zeroSlotBlock_relativeGauge_mul_eq_one_and_mul_eq_one}
+    \leanok
+    \uses{thm:asym_multiblock, lem:asym_normal_intertwiner, thm:asym_zipper_uniqueness}
+    Let two compressions of $B$ onto the same family of normal blocks both have zero remainder,
+    $B^i=\sum_bV_bC_b^iW_b$. Then every block of $h=\widetilde GG^{-1}$ between two slots whose
+    diagonal blocks are not gauge related, or between a block slot and a zero slot, vanishes;
+    within one gauge class, with chosen intertwiners $Y_t$ from a representative $C_{s_0}$ to
+    each member $C_t$, the blocks are $h_{t't}=\mu_{t't}\,Y_{t'}Y_t^{-1}$ for an invertible
+    coefficient matrix $\mu$ indexed by the class; and the block of $h$ on the zero slots is
+    invertible. If no block of the family is repeated up to gauge, then $\widetilde W_s=\lambda_sW_s$
+    and $\widetilde V_s=\lambda_s^{-1}V_s$ as matrices for nonzero scalars $\lambda_s$, with no words
+    attached. This is the bare form of Lemma~\ref{thm:asym_zipper_uniqueness} for the
+    compressions of Theorem~\ref{thm:asym_multiblock}.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:asym_normal_intertwiner}
+    In the two coordinate systems the letters are block diagonal, so $h$ intertwines two block
+    diagonal tensors and each block $h_{b'b}$ intertwines the diagonal block at $b$ with that at
+    $b'$; Lemma~\ref{lem:asym_normal_intertwiner} makes it zero unless the two are gauge related,
+    and between a block slot and a zero slot a nonzero intertwiner would give a nonzero vector
+    killed by every letter of a normal tensor. Without repetition the row of $h$ at $s$ has the
+    single nonzero block $\lambda_s1$, and likewise the column of $h^{-1}$, which intertwines in the
+    reverse direction, with $\lambda_s\lambda'_s=1$ from $\widetilde W_s\widetilde V_s=1$.
+\end{proof}
