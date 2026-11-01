@@ -31,8 +31,9 @@ periodic.
 
 ## Main statements
 
-* `cfc_mem_supportedOperators`, `windowProjection_mem_supportedOperators`,
-  `compressedWindowProjection_mem_supportedOperators`: support of spectral windows.
+* `windowProjection_mem_supportedOperators`,
+  `compressedWindowProjection_mem_supportedOperators`: support of spectral windows,
+  from the shared `QuantumCircuit.cfc_mem_supportedOperators`.
 * `mem_supportedOperators_hierarchy`: the level-`m` projection acts on its block.
 * `commute_supersiteHierarchy`: the projections of the two halves of a block commute.
 * `norm_sub_supersiteHierarchy_le`: the bound over all levels, with the commutation of the

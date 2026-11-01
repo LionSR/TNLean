@@ -39,3 +39,10 @@ and their proofs carry `\leanok`. Source checks cover the pinned rectangular-pro
 and finite-configuration APIs, source scope, imports, declaration ownership,
 mathematical roles, proof integrity, whitespace and width. Hosted validation
 remains required for the new proofs and their parent.
+
+## Removed helper (2026-11-01)
+
+The private `ofFn_snoc_eq` in `VaryingOBCReconstruction.lean` is removed.
+Its replacement is the shared `List.ofFn_snoc` in `TNLean/Algebra/ListOfFn.lean`,
+which states the same identity `List.ofFn (Fin.snoc w i) = List.ofFn w ++ [i]`.
+The two call sites now use it (#10470).
