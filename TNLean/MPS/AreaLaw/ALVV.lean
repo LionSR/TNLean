@@ -12,4 +12,5 @@ import TNLean.MPS.AreaLaw.ALVV.FrustrationFree
 import TNLean.MPS.AreaLaw.ALVV.FrustrationFreeChain
 import TNLean.MPS.AreaLaw.ALVV.FrustrationFreeGap
 import TNLean.MPS.AreaLaw.ALVV.FrustrationFreeRank
+import TNLean.MPS.AreaLaw.ALVV.HardTruncation
 import TNLean.MPS.AreaLaw.ALVV.HardTruncationResidual
