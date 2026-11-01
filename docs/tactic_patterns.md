@@ -11452,3 +11452,14 @@ removed after the dependency audit exposed it.
   Reuse the existing matrix identities and `registerEncoding_isIsometry`.
   Before adding a third copy, expose the pure-initialization identity at the
   existing product-code owner. No verified parent module is refactored here.
+
+### Rescaling an existing favorable parameter theorem — existing lemma (2026-10-29)
+
+- **Consumer:** `MPS/AreaLaw/AKLV/FrustrationFreeParameters.lean` invokes the
+  existing scalar parameter theorem at `g/8192`, retaining its actual ceiling,
+  degree and rank budget. It does not repeat logarithmic absorption.
+- **Reuse:** A positive denominator comparison and `Real.sqrt_le_sqrt` give
+  monotonicity of the squared shrinking coefficient. The original ceiling
+  estimates supply the inverse-gap window scale and the cost coefficients.
+- **Decision:** One bounded scalar specialization is sufficient; no new
+  parameter predicate, numerical solver, or proof automation is introduced.
