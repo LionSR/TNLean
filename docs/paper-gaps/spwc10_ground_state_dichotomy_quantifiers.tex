@@ -8,7 +8,7 @@
 \date{2026-10-29}
 \begin{document}
 \maketitle
-\gapnote{scope-restriction}{open}
+\gapnote{scope-restriction}{resolved}
 
 \section{Source and quantified asymptotic result}
 
@@ -94,26 +94,34 @@ translation acts as the identity. This is proved in
 Uniqueness of a translation-invariant Hamiltonian's ground space gives an
 invariant line. On a one-dimensional line a cyclic translation may act by
 a root of unity; line invariance does not itself identify that eigenvalue
-with one. The source proof supplies the eventual zero-momentum branch,
-but no derivation of this additional finite-prefix zero-momentum condition
-from its complete global frustration-free hypotheses is supplied here.
-This is an identified remaining obligation, not a counterexample to the
-source's full hypothesis set. The separate formalization issue
-\href{https://github.com/LionSR/TNLean/issues/10386}{\#10386} asks for a
-derivation from the entire all-volume positive, frustration-free uniqueness
-and derived local-kernel regime, or a counterexample satisfying that full
-hypothesis set. It blocks completion of issue \#10280; invariant-line
-considerations alone do not resolve it.
+with one. The source proof supplies the eventual zero-momentum branch. The
+additional finite-prefix zero-momentum condition does not follow from the
+complete global frustration-free hypotheses. The fixed seven-site model of
+\leanid{MPSTensor.ShortMomentum.exists_seven_site_interaction_without_short_fixed_ground}
+(issue \href{https://github.com/LionSR/TNLean/issues/10386}{\#10386},
+settled by \#10420) has a positive interaction whose zero-energy space is
+one-dimensional and contains a common local ground vector at every
+permitted volume $M\ge7$. It satisfies the eventual branch
+(\ref{eq:spwc10_eventual_uniform_branch}) with a tensor of bond dimension
+five for $M\ge8$, yet its seven-site ground line contains no nonzero vector
+fixed by every cyclic translation. Hence the literal all-volume
+common-size family fails for this model at $M=7$. The model contradicts
+only that all-volume strengthening; it satisfies the source's eventual
+conclusion.
 
 The original asymptotic dichotomy and its hypotheses are unchanged. No
 canonical decomposition, phase separation, transfer gap, local-kernel
 inclusion, future-volume equation, finite-volume periodic representation,
 or short zero-momentum conclusion is assumed in its proof.
 
-All new proofs and Blueprint entries remain pending hosted acceptance;
-no local Lean build or elaboration was run. The full source theorem
-remains open in issue \#10280 until the finite-prefix zero-momentum
-obligation, validation and integration are complete.
+The finite-prefix zero-momentum question is therefore settled negatively:
+under the full hypothesis set the eventual form is the strongest
+conclusion. The volume-dependent family of the previous section covers
+only those short volumes whose ground line contains a nonzero exactly
+cyclic-invariant vector. It does not cover this model at $M=7$: every
+periodic trace vector is cyclic-invariant whether or not its tensor
+depends on the volume, so the seven-site ground state has no periodic
+trace representation at all.
 
 \section{The product-state branch}
 
@@ -142,17 +150,17 @@ and then obtains the same bond-one ground family at all permitted positive
 volumes. Neither the normal tensor nor the local-kernel inclusion is a
 hypothesis of this caller.
 The restriction is explicit: the normal tensor has bond dimension one.
-Issue \#10386 remains open for the general higher-dimensional case and
-for hosted acceptance and integration. No full-hypothesis counterexample
-is asserted.
+Beyond bond dimension one the finite-prefix condition can fail, as the
+seven-site model shows.
 
 \section{Verdict}
 
 \textbf{Verdict: scope restriction.} The quantified eventual dichotomy
 and the actual common-bond finite-prefix construction on the exact
 zero-momentum sector are source-written. The literal all-volume family
-has been reduced to an explicit finite zero-momentum condition; that
-condition is not inferred from uniqueness alone.
+has been reduced to an explicit finite zero-momentum condition, and the
+seven-site model shows that this condition can fail under the full
+hypothesis set. The eventual form is the correct all-hypothesis statement.
 
 \bibliographystyle{alpha}
 \bibliography{references}
