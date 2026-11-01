@@ -1,0 +1,107 @@
+\section{Ground-sector overlaps of the finite uncle trial}
+\label{sec:uncle_trial_ground_overlap}
+
+\begin{definition}[Five-segment mixed contraction]
+    \label{def:uncle_trial_mixed_contraction}
+    \lean{MPSTensor.uncleFiveConfigEquiv,
+        MPSTensor.uncleFiveConfigEquiv_apply,
+        MPSTensor.uncleWallMixedMap,
+        MPSTensor.uncleWallMixedMap_apply,
+        MPSTensor.uncleTwoWallMixedTransfer}
+    \leanok
+    \uses{def:uncle_two_wall_trial}
+    Pair each single-wall word with the word of a pure tensor $C$
+    on the same physical interval. Its mixed map sends a rectangular
+    boundary $X$ to the sum of $W X C_w^\dagger$ over physical words.
+    Compose the two wall maps with the three pure mixed-transfer powers
+    in the physical order of the five trial segments.
+\end{definition}
+
+\begin{lemma}[Exact overlap trace]
+    \label{lem:uncle_trial_overlap_trace}
+    \lean{MPSTensor.trace_uncleTwoWallMixedTransfer_eq_sum,
+        MPSTensor.inner_mpvState_uncleTwoWallTrial_eq_trace,
+        MPSTensor.trace_uncleTwoWallMixedTransfer_join_exterior,
+        MPSTensor.inner_mpvState_uncleTwoWallTrialSource_eq_trace}
+    \leanok
+    \uses{def:uncle_trial_mixed_contraction}
+    The inner product of the pure periodic state of $C$ with the
+    five-segment trial is the algebraic operator trace of this ordered
+    mixed contraction. The two exterior intervals join under the trace.
+    For the numbered source trial their joint length is $2N$ in $A$,
+    while the separating pure $B$ interval has length $2N-1$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Expand the mixed maps over their word matrices and compose the
+    finite sums. The operator trace is the product of the left word trace
+    and the conjugated pure-sector word trace. Concatenation of the five
+    physical configurations gives exactly the inner product.
+    Cyclicity of the operator trace joins the exterior powers.
+\end{proof}
+
+\begin{lemma}[Wall mixed-map bounds]
+    \label{lem:uncle_wall_mixed_linear_bounds}
+    \lean{MPSTensor.uncleWallMixedMap_left_norm_le_mul,
+        MPSTensor.uncleWallMixedMap_right_norm_le_mul}
+    \leanok
+    \uses{def:uncle_trial_mixed_contraction}
+    Against its left pure sector, a wall mixed map has norm at
+    most $Cn$ if that sector is unital and the opposite mixed transfer
+    spectral radius is below one. The analogous statement holds against
+    its right pure sector with the reversed mixed transfer.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Write $W_n$ for the wall mixed map of the right wall on $n$ sites,
+    $E_{XC}(Y)=\sum_iX_iYC_i^\dagger$ for a pure tensor $X$, and
+    $\mathcal R_C(Y)=\sum_iR_iYC_i^\dagger$. Splitting the wall words at
+    the initial site, respectively at the final site, gives the exact
+    recurrences
+    \begin{align}
+        W_{n+1}=E_{AC}\circ W_n+\mathcal R_C\circ E_{BC}^n,\qquad
+        W_{n+1}=W_n\circ E_{BC}+E_{AC}^n\circ\mathcal R_C.
+        \label{eq:uncle_wall_mixed_recurrences}
+    \end{align}
+    Each has a self-transfer on one side and a mixed-transfer power on
+    the other. Unital complete positivity contracts the self-transfer;
+    the strict mixed spectral gap bounds every mixed power uniformly.
+    Induction therefore gives linear growth in the interval length.
+\end{proof}
+
+\begin{lemma}[Geometric ground-sector overlap decay]
+    \label{thm:uncle_trial_ground_overlap_decay}
+    \lean{MPSTensor.norm_inner_mpvState_left_uncleTwoWallTrialSource_le_geometric_mul,
+        MPSTensor.norm_inner_mpvState_right_uncleTwoWallTrialSource_le_geometric_mul,
+        MPSTensor.norm_inner_mpvState_left_uncleTwoWallTrialSource_le_geometric,
+        MPSTensor.norm_inner_mpvState_right_uncleTwoWallTrialSource_le_geometric,
+        MPSTensor.inner_mpvState_left_uncleTwoWallTrialSource_tendsto_zero,
+        MPSTensor.inner_mpvState_right_uncleTwoWallTrialSource_tendsto_zero}
+    \leanok
+    \uses{lem:uncle_trial_overlap_trace,lem:uncle_wall_mixed_linear_bounds}
+    Suppose both diagonal transfers are unital and both mixed transfer
+    spectral radii are below one. There are $C_A,C_B>0$ and
+    $0<z_A,z_B<1$ such that the source trial satisfies
+    \begin{align}
+        |\langle M(A),\phi_N\rangle|\le C_Az_A^N,
+        \qquad |\langle M(B),\phi_N\rangle|\le C_Bz_B^N
+        \qquad (N>0).
+    \end{align}
+    No perturbation injectivity, faithful-density, genericity or
+    overlap-rate premise is required for these upper bounds alone.
+    In particular, both overlaps tend to zero as $N\to\infty$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    For the $A$ comparison, the pure $B$ interval supplies a mixed power
+    of length $2N-1\ge N$. For the $B$ comparison, the joined exterior
+    $A$ intervals supply a mixed power of length $2N\ge N$. The two
+    wall mixed maps each have a linear bound in $N+1$.
+    The exact trace identity therefore gives $CN^2r^N$ for some $0<r<1$.
+    Choose $r<z<1$. Summability of $n^2(r/z)^n$ absorbs the polynomial
+    factor into a finite constant, giving the stated geometric rates.
+\end{proof}
+
+These estimates provide the ground-sector overlap part of the source
+variational construction. A quadratic norm lower bound and removal of the
+full ground-space projection are still needed for gaplessness.

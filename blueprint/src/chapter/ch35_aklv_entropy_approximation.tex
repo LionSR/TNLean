@@ -1,0 +1,63 @@
+\chapter{Entropy and matrix product approximation from AKLV filters}
+\label{ch:aklv_entropy_approximation}
+
+Starting from the original positive nearest-neighbour interactions, this
+chapter constructs the normalized AKLV filters and a coherent sequence of
+approximating vectors. Theorem~\ref{thm:aklv_physical_sequence_entropy}
+bounds the entropy at every cut, and
+Theorem~\ref{thm:aklv_sharp_sequential_mps} gives the accuracy-dependent
+matrix product approximation. Both use the actual first excitation gap;
+the displayed logarithmic dependence on its inverse is retained. The
+support and regional-normalization corrections are recorded in
+\cite{gap:aklv13_two_block_robustness}.
+For a frustration-free vector, Theorem~\ref{thm:aklv_frustration_free_entropy}
+gives a uniform entropy bound from the original projector gap lower bound,
+with the inverse-gap logarithm retained.
+
+\begin{lemma}[Gap normalization for positive nearest-neighbour interactions]
+    \label{thm:chain_positive_nearest_neighbor_gap_upper}
+    \lean{TNLean.MPS.AreaLaw.gap_le_one_of_positive_nearest_neighbor_terms}
+    \leanok
+    \uses{def:chain_model}
+    Let $L\ge1$, $q\ge2$, and
+    $H=\sum_{j=0}^{L-2}h_j$, where $h_j$ is supported on sites $j,j+1$ and
+    $0\le h_j\le I$. Suppose that a unit vector $\Omega$ satisfies
+    $H\Omega=E_0\Omega$ and
+    \begin{align*}
+        H-E_0I\ge\Delta(I-|\Omega\rangle\langle\Omega|).
+    \end{align*}
+    Then $\Delta\le1$. This is the normalization used in
+    \cite[Section~5, before equation~(4)]{Arad2013AreaLaw}.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Diagonalize the marginal at site $0$, and let a unitary $U_0$ cyclically
+    permute an orthonormal eigenbasis. Since $q\ge2$, it has zero diagonal
+    in this basis. Thus the unit vector $\varphi=(U_0\otimes I)\Omega$
+    is orthogonal to $\Omega$.
+    All bonds away from site $0$ commute with this unitary and keep their
+    expectations. At most one bond is incident to site $0$. Both its
+    expectations belong to $[0,1]$, so
+    \begin{align*}
+        \Delta\le\langle\varphi,H\varphi\rangle-E_0\le1.
+    \end{align*}
+\end{proof}
+
+\input{chapter/ch35_disjoint_regional_ground}
+\input{chapter/ch35_five_region_hamiltonian}
+\input{chapter/ch35_regional_truncation_residual}
+\input{chapter/ch35_alvv_hard_truncation}
+\input{chapter/ch35_aklv_two_block_truncation}
+\input{chapter/ch35_aklv_normalization}
+\input{chapter/ch35_aklv_spectral_cluster}
+\input{chapter/ch35_aklv_physical_robustness}
+\input{chapter/ch35_aklv_clipped_filter}
+\input{chapter/ch35_aklv_frustration_free_filter}
+\input{chapter/ch35_aklv_favorable_parameters}
+\input{chapter/ch35_aklv_frustration_free_entropy}
+\input{chapter/ch35_aklv_initialization}
+\input{chapter/ch35_aklv_variable_window_refinement}
+\input{chapter/ch35_aklv_changing_targets}
+\input{chapter/ch35_aklv_accuracy_window}
+\input{chapter/ch35_aklv_sharp_mps}
+\input{chapter/ch35_aklv_sequence_entropy}

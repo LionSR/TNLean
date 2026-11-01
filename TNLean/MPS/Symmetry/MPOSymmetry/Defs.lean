@@ -29,7 +29,9 @@ produce.
 arbitrary-boundary subspace `𝒮_A^n` under the arbitrary-boundary algebra `𝒜_T^n` (lines
 431–434); this file records only the consequence the source evaluates at lines 567–568 (and
 recalls at line 1801), where both boundaries are identities. The arbitrary-boundary invariance
-and the action tensors it produces are not formalized. Documented in
+is `MPOTensor.IsBoundaryCompatible`, and
+`MPOTensor.IsBoundaryClosed.exists_isNIMRep_of_isBoundaryCompatible` derives this periodic form
+from it for injective, scalar-gauge-separated blocks. See
 `docs/paper-gaps/glm23_mpo_symmetric_mps_scope.tex`.
 
 ## Main definitions

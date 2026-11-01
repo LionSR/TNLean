@@ -1,0 +1,57 @@
+\section{A filter fixing the original frustration-free ground vector}
+
+\begin{lemma}[The physical frustration-free Chebyshev filter]
+    \label{lem:aklv_frustration_free_filter}
+    \lean{TNLean.MPS.AreaLaw.exists_aklv_frustrationFree_chebyshev_filter}
+    \notready
+    \uses{lem:aklv_frustration_free_clipping,lem:aklv_clipped_hamiltonian_data,
+        thm:aklv_physical_chebyshev_filter}
+    Let $0\le h_i\le I$ be nearest-neighbour terms on an $L$-site chain
+    of local dimension $q\ge1$. Let $\Omega$ be a unit vector with
+    $H\Omega=0$ and $H\ge g(I-|\Omega\rangle\langle\Omega|)$ for
+    $H=\sum_i h_i$ and $0<g\le1$.
+    Suppose $s\ge6$ and $a+s+1\le L$.
+    At every $t\ge1024/g$, clip the actual left and right sums separated
+    by site cuts $a+2$ and $a+s-1$, leaving the middle and crossing bonds
+    unchanged, with zero regional shifts. Denote this operator by $B$.
+    Then
+    \begin{align}
+        0\le B & \le H,                                             & \|B\| & \le2t+s, & B\Omega & =0,\notag \\
+        B      & \ge\frac g2(I-|\Omega\rangle\langle\Omega|).\notag
+    \end{align}
+    For every degree $\ell\ge0$, there is a real polynomial $p$ of degree
+    exactly $\ell$, with $p(0)=1$, such that $K=p(B)$ fixes $\Omega$ and
+    \begin{equation}
+        \|K-|\Omega\rangle\langle\Omega|\|
+        \le b_\ell:=2\exp\left(-2\ell\sqrt{\frac{g/2}{2t+s}}\right).\notag
+    \end{equation}
+    At the original central cut $a+\lfloor s/2\rfloor$, the same $K$
+    satisfies both bounds
+    \begin{align}
+        \operatorname{OSR}(K)
+         & \le\bigl(q(\ell+1)\bigr)^{{16(\lfloor\ell/(s-2)\rfloor+\lfloor\sqrt\ell\rfloor+1)}},\notag \\
+        \operatorname{OSR}(K)
+         & \le\bigl(q(\ell+1)\bigr)^{{32(\lfloor\ell/s\rfloor+\lfloor\sqrt\ell\rfloor+1)}}.\notag
+    \end{align}
+    Every unit $\psi\perp\Omega$ satisfies $K\psi\perp\Omega$ and
+    $\|K\psi\|^2\le b_\ell^2$.
+    This is the same-vector frustration-free construction preceding
+    the entropy theorem in \cite[Section~4]{Arad2013AreaLaw}, using its
+    polynomial rank estimate with the corrected count
+    \cite{gap:aklv13_interpolation_and_word_count}.
+\end{lemma}
+\begin{proof}\notready
+    \uses{lem:aklv_frustration_free_clipping,lem:aklv_clipped_hamiltonian_data,
+        thm:aklv_physical_chebyshev_filter}
+    The retained boundary bonds have indices $a+1$ and $a+s-2$.
+    The original frustration-free clipping lemma therefore gives the
+    displayed order, exact preservation and half-gap for this actual $B$.
+    Positivity of the unshifted regional sums and the existing clipping
+    norm estimate give the ceiling $2t+s$.
+    Its two clipped exteriors and retained $s-2$ original interactions
+    have the same central cut as the original window.
+    Apply the physical Chebyshev construction to this decomposition,
+    the original vector $\Omega$, energy zero and gap $g/2$.
+    Finally $\lfloor\ell/(s-2)\rfloor\le2\lfloor\ell/s\rfloor+1$
+    gives the second rank estimate.
+\end{proof}

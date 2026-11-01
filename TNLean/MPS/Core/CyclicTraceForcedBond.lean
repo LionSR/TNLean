@@ -19,8 +19,9 @@ the surviving configuration. This is the vector counterpart of
 * `MPSTensor.mpv_eq_sum_cyclic`: the amplitude as a sum over closed bond configurations.
 * `MPSTensor.mpv_eq_prod_of_forced_bond`: the amplitude as the product along the unique bond
   configuration that is not forced to vanish.
-* `MPSTensor.mpv_of_forced_left_bond`: for a tensor whose incoming bond is a function of the
-  physical letter, the amplitude is the product of the entries along the forced bonds.
+* `MPSTensor.mpv_of_forced_left_bond`, `MPSTensor.mpv_of_forced_right_bond`: for a tensor whose
+  incoming (or outgoing) bond is a function of the physical letter, the amplitude is the product
+  of the entries along the forced bonds.
 -/
 
 open scoped BigOperators
@@ -57,5 +58,21 @@ theorem mpv_of_forced_left_bond {A : MPSTensor d D} {β : Fin d → Fin D} {φ :
   · exact Finset.prod_congr rfl fun n _ ↦ by rw [hA, ite_eq_left rfl]
   · obtain ⟨n, hn⟩ := Function.ne_iff.mp hg
     exact ⟨n, by rw [hA, ite_eq_right hn]⟩
+
+/-- **The periodic amplitude of a tensor with a forced outgoing bond.** Suppose that the entry
+`A^i_{lr}` vanishes unless the outgoing bond is `r = β i`, and then equals `φ i l`. Then the
+amplitude at `σ` is the product over the edges `(n, n + 1)` of the entry of site `n + 1` at the
+bond forced by site `n`. -/
+theorem mpv_of_forced_right_bond {A : MPSTensor d D} {β : Fin d → Fin D}
+    {φ : Fin d → Fin D → ℂ} (hA : ∀ i l r, A i l r = if r = β i then φ i l else 0)
+    (σ : Fin N → Fin d) :
+    mpv A σ = ∏ n : Fin N, φ (σ (n + 1)) (β (σ n)) := by
+  rw [mpv_eq_prod_of_forced_bond A σ (fun n ↦ β (σ (n - 1))) fun g hg ↦ ?_]
+  · refine (Fintype.prod_equiv (Equiv.addRight 1) _ _ fun n ↦ ?_).symm
+    rw [Equiv.coe_addRight, hA, ite_eq_left (by simp), add_sub_cancel_right]
+  · obtain ⟨n, hn⟩ := Function.ne_iff.mp hg
+    refine ⟨n - 1, ?_⟩
+    rw [hA, ite_eq_right fun h ↦ hn ?_]
+    simpa using h
 
 end MPSTensor

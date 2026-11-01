@@ -911,13 +911,14 @@ of the virtual projective representation.
     systems have constant cohomology class by the determinant argument.
     Symmetry of a unique ground-state line initially gives a scalar action;
     its character must first be removed by a fixed physical phase gauge.
-    Changes of minimal bond dimension require an additional step: derive
-    continuous balanced canonical data from the physical gap and restrict
-    the virtual action to the invariant bond subspace surviving the limit.
-    The algebraic restriction is
-    Lemma~\ref{thm:spt_invariant_bond_compression}, but the required
-    continuity implication remains unformalized
-    \cite{gap:spc11_spt_interpolation_upper_range}.
+    To handle changes of minimal bond dimension, the physical gap gives
+    ordinary connected exponential clustering. Pass the actual finite-ring
+    correlators to their limiting contractions, normalize each minimal
+    representative to a trace-preserving gauge, and use the eigenvalue
+    observables to obtain a common transfer bound below one. Compactness
+    and restriction to the invariant bond subspace surviving the limit then
+    give one class along the path, as in
+    Theorem~\ref{thm:spt_exact_ground_physical_class}.
 
     Conversely, let the endpoint isometric forms have virtual actions
     $V_g^0$ and $V_g^1$ in the same cohomology class.  Embed their bond spaces
@@ -4239,7 +4240,817 @@ arbitrary finite set of sites in Section~\ref{sec:qc_lieb_robinson}.
     and is contractive. Apply the preceding finite-ring estimate.
 \end{proof}
 
+\begin{lemma}[Gaussian-filtered finite-ring commutators]
+    \label{lem:spt_finite_ring_gaussian_commutator}
+    \lean{MPSTensor.interactionHamiltonian_isHermitian,
+        MPSTensor.norm_gaussianFilteredTerm_interactionHamiltonian_commutator_le,
+        MPSTensor.norm_gaussianFilteredTerm_interactionHamiltonian_commutator_le_exp}
+    \leanok
+    \discussion{9879}
+    \uses{aux:interaction-hamiltonian-lieb-robinson, thm:hastings_filtered_locality}
+    Let $H_N$ be the periodic Hamiltonian of a Hermitian two-site interaction
+    of norm at most one. Let $A\in\mathcal A_X$ and $B\in\mathcal A_Y$ for
+    nonempty disjoint $X,Y$. For $q,T,a\geq0$ and $\Delta\in\mathbb R$, let
+    $\widetilde A$ be the Gaussian average of $e^{itH_N}Ae^{-itH_N}$ with
+    variance $\max(q/\Delta^2,0)$. Then
+    \begin{align}
+        \|[\widetilde A,B]\|
+         & \leq 2\|A\|\|B\|\,|X|e^{-a d(X,Y)}
+        \bigl(e^{8e^aT}-1\bigr)
+        +2\|A\|\|B\|e^{-(T\Delta)^2/(2q)}.
+        \label{eq:spt_gaussian_commutator}
+    \end{align}
+    The constants are independent of the ring length and physical dimension.
+    At $q=0$, the final exponential is read as $1$.
+    This is the periodic specialization of the Gaussian locality estimate
+    of \cite[equation \texttt{lbnd}]{Hastings2006Solving}.
+    For $0<\ell\leq d(X,Y)$ and $\Delta>0$, the choice
+    $T=\ell/(16e)$ and $q=T\Delta$ gives
+    \begin{align}
+        \|[\widetilde A,B]\|
+         & \leq 2\|A\|\|B\|\,|X|e^{-\ell/2}
+        +2\|A\|\|B\|e^{-\ell\Delta/(32e)}.
+        \label{eq:spt_gaussian_commutator_exp}
+    \end{align}
+\end{lemma}
+\begin{proof}\leanok
+    On $|t|\leq T$, monotonicity replaces the time factor in the periodic
+    propagation estimate by $e^{8e^aT}-1$. On the remaining times use
+    $\|[e^{itH_N}Ae^{-itH_N},B]\|\leq2\|A\|\|B\|$.
+    The Gaussian mass outside $[-T,T]$ is at most
+    $e^{-(T\Delta)^2/(2q)}$. Splitting the integral gives
+    (\ref{eq:spt_gaussian_commutator}).
+    For the stated parameter choice, $8eT=\ell/2$ and
+    $(T\Delta)^2/(2q)=\ell\Delta/(32e)$. Also
+    $e^{-d(X,Y)}(e^{\ell/2}-1)\leq e^{-\ell/2}$, which yields
+    (\ref{eq:spt_gaussian_commutator_exp}).
+\end{proof}
+
+\begin{lemma}[Uniform Gaussian ground estimates along an exact MPS path]
+    \label{lem:spt_exact_ground_gaussian_bounds}
+    \lean{MPSTensor.ExactMPSGroundPath.exists_uniform_ground_line_spectral_gap,
+        MPSTensor.ExactMPSGroundPath.exists_uniform_gaussian_ground_bounds}
+    \leanok
+    \discussion{9879}
+    \uses{def:spt_exact_mps_gapped_phase, thm:hastings_gaussian_filtered_spectral,
+        thm:hastings_filtered_no_ground_component}
+    Let a symmetric gapped interaction path have a continuous exact MPS
+    realization of its unique ground lines. There is a single $\Delta>0$
+    such that the following holds at every parameter and ring length
+    $N\geq2$. Write $H_N$ for the Hamiltonian, $\psi_N$ for the nonzero
+    periodic MPS vector and $P_N$ for the projection onto $\mathbb C\psi_N$.
+    For every operator $W$ and $q\geq0$, its Gaussian average with variance
+    $q/\Delta^2$ satisfies
+    \begin{align}
+        \|(1-P_N)\widetilde W\psi_N\|
+         & \leq \|W\|e^{-q/2}\|\psi_N\|.
+        \label{eq:spt_gaussian_excited_ground}
+    \end{align}
+    If $\langle\psi_N,W\psi_N\rangle=0$, then also
+    \begin{align}
+        \|\widetilde W\psi_N\|
+         & \leq \Delta^{-1}e^{-q/2}\|[H_N,W]\psi_N\|.
+        \label{eq:spt_gaussian_centered_ground}
+    \end{align}
+    These are the filtered ground estimates of
+    \cite[equation \texttt{gs}]{Hastings2006Solving} and
+    \cite[equations \texttt{tighter}, \texttt{tighter2}]{Hastings2007AreaLaw}
+    with a constant supplied by the physical path.
+\end{lemma}
+\begin{proof}\leanok
+    The least energies in the gap condition and the unique-ground-line
+    condition agree: each is at most the other. Thus every eigenvalue is
+    either the ground energy or at least $\Delta$ above it, and the ground
+    eigenspace is $\mathbb C\psi_N$. Apply the Gaussian spectral estimate
+    to obtain (\ref{eq:spt_gaussian_excited_ground}). For centered $W$,
+    $W\psi_N$ is orthogonal to that whole line; the commutator estimate gives
+    (\ref{eq:spt_gaussian_centered_ground}). No normalization of $\psi_N$
+    is needed.
+\end{proof}
+
+\begin{definition}[The energy-lowering part of an observable]
+    \label{def:spt_negative_frequency_part}
+    \lean{TNLean.Lattice.negativeFrequencyPart}
+    \leanok
+    \discussion{9879}
+    Let $H$ be a finite Hermitian Hamiltonian with an orthonormal
+    eigenbasis $e_i$ and energies $E_i$. For an observable $A$, define
+    \[
+        A^- = \sum_{E_i<E_j}
+        \langle e_i,Ae_j\rangle\,|e_i\rangle\langle e_j|.
+    \]
+    This is the sharp negative-frequency part of the Heisenberg
+    evolution $e^{itH}Ae^{-itH}$ in
+    \cite[Section 3, equations (3.1)--(3.6)]{Hastings2006Spectral}.
+\end{definition}
+
+\begin{lemma}[Exact separation of the connected correlation]
+    \label{lem:spt_negative_frequency_ground_correlation}
+    \lean{TNLean.Lattice.negativeFrequencyPart_apply_ground_eq_zero,
+        TNLean.Lattice.inner_ground_projected_eq_negativeFrequency_commutator,
+        TNLean.Lattice.inner_ground_connected_eq_negativeFrequency_commutator}
+    \leanok
+    \discussion{9879}
+    \uses{def:spt_negative_frequency_part}
+    Suppose $E_0\le E_i$ for every $i$, let $\psi$ belong to the
+    eigenspace at $E_0$, and let $P_0$ project onto that full eigenspace.
+    Then $A^-\psi=0$ and
+    \[
+        \langle\psi,A(1-P_0)B\psi\rangle
+        =\langle\psi,[A^-,B]\psi\rangle.
+    \]
+    If the ground eigenspace is $\mathbb C\psi$, this is
+    \[
+        \langle\psi,AB\psi\rangle-
+        \frac{\langle\psi,A\psi\rangle\langle\psi,B\psi\rangle}
+        {\|\psi\|^2}
+        =\langle\psi,[A^-,B]\psi\rangle.
+    \]
+\end{lemma}
+\begin{proof}\leanok
+    An energy-lowering matrix element cannot act nontrivially on a
+    ground vector. Expand an arbitrary vector orthogonal to the ground
+    eigenspace in the energy basis. Between that vector and a ground
+    bra, every nonzero matrix element of $A$ lowers energy, so it is
+    retained by $A^-$. Apply this to $(1-P_0)B\psi$.
+    The term $BA^-\psi$ vanishes. In a one-dimensional ground space,
+    the rank-one projection formula gives the last identity without
+    choosing a normalized vector.
+\end{proof}
+
+\begin{lemma}[Negative-frequency identity along the actual MPS path]
+    \label{cor:spt_exact_ground_negative_frequency_identity}
+    \lean{MPSTensor.ExactMPSGroundPath.negativeFrequency_connected_identity}
+    \leanok
+    \discussion{9879}
+    \uses{lem:spt_exact_ground_gaussian_bounds,lem:spt_negative_frequency_ground_correlation}
+    At each parameter and every ring length $N\ge2$ of an exact MPS
+    ground path, the ordinary connected correlation of its actual
+    periodic vector equals the actual negative-frequency commutator
+    above. No transfer, correlation-decay or continuous-gauge input is
+    required.
+\end{lemma}
+\begin{proof}\leanok
+    The physical path supplies the least ground energy and the actual
+    full ground line. Apply the preceding lemma to its Hamiltonian
+    and periodic MPS vector.
+\end{proof}
+
+The sharp energy-lowering part need not be local. The following lemmas
+replace it by a Gaussian regularization, control that regularization by a
+time integral of local commutators, and derive ordinary exponential
+clustering.
+
+\begin{lemma}[The Gaussian negative-frequency selector]
+    \label{lem:spt_gaussian_negative_frequency_cutoff}
+    \lean{TNLean.Lattice.gaussianNegativeFrequencyCutoff,
+        TNLean.Lattice.gaussianNegativeFrequencyCutoff_nonneg,
+        TNLean.Lattice.gaussianNegativeFrequencyCutoff_le_one,
+        TNLean.Lattice.gaussianNegativeFrequencyCutoff_le_exp_of_gap,
+        TNLean.Lattice.abs_one_sub_gaussianNegativeFrequencyCutoff_le_exp_of_gap}
+    \leanok
+    \discussion{9879}
+    For $q,\Delta>0$, let $X$ be a centered Gaussian of variance
+    $\Delta^2/q$ and put $F_{q,\Delta}(\omega)=\mathbb P(X\ge\omega)$.
+    Then $0\le F_{q,\Delta}(\omega)\le1$ and
+    \[
+        \omega\ge\Delta\ \Longrightarrow\
+        F_{q,\Delta}(\omega)\le e^{-q/2},
+        \qquad
+        \omega\le-\Delta\ \Longrightarrow\
+        |1-F_{q,\Delta}(\omega)|\le e^{-q/2}.
+    \]
+    This is the actual Gaussian selector of
+    \cite[Lemma 3.1, equation (3.7)]{Hastings2006Spectral}, with
+    $\alpha=\Delta^2/(2q)$.
+\end{lemma}
+\begin{proof}\leanok
+    The moment-generating function is
+    $\mathbb E(e^{tX})=\exp(\Delta^2t^2/(2q))$.
+    Chernoff's bound at $\Delta$ is $e^{-q/2}$. The positive-frequency
+    statement follows by inclusion of the corresponding tail events.
+    The complementary event for $\omega\le-\Delta$ is contained in
+    $\{-X\ge\Delta\}$, and $-X$ has the same sub-Gaussian bound.
+\end{proof}
+
+The following regularized time-integral argument identifies this actual
+Gaussian selector. The operator locality estimates are proved after it.
+
+\begin{definition}[The regularized Gaussian--Cauchy kernel]
+    \label{def:spt_gaussian_cauchy_kernel}
+    \lean{TNLean.Lattice.gaussianCauchyKernel}
+    \leanok
+    \discussion{9879}
+    For $\alpha,\varepsilon>0$, set
+    \[
+        K_{\alpha,\varepsilon}(t)=
+        \frac{e^{-\alpha t^2}}{2\pi(\varepsilon-it)}.
+    \]
+    This is the regularized negative-frequency time kernel of
+    \cite[Lemma 3.1, equation (3.8)]{Hastings2006Spectral}.
+\end{definition}
+
+\begin{lemma}[Laplace representation and integrability of the actual kernel]
+    \label{lem:spt_gaussian_cauchy_integrability}
+    \lean{TNLean.Lattice.cauchyDenominator_ne_zero,
+        TNLean.Lattice.norm_inv_cauchyDenominator_le,
+        TNLean.Lattice.inv_cauchyDenominator_eq_integral,
+        TNLean.Lattice.norm_gaussianCauchyKernel_le,
+        TNLean.Lattice.integrable_gaussianCauchyKernel_mul_exp,
+        TNLean.Lattice.norm_integral_gaussianCauchyKernel_mul_exp_le}
+    \leanok
+    \discussion{9879}
+    \uses{def:spt_gaussian_cauchy_kernel}
+    For $\alpha,\varepsilon>0$ and $\omega,t\in\mathbb R$,
+    \[
+        \frac1{\varepsilon-it}
+        =\int_0^\infty e^{(-\varepsilon+it)s}\,ds,
+        \qquad
+        |K_{\alpha,\varepsilon}(t)|
+        \le\frac{e^{-\alpha t^2}}{2\pi\varepsilon}.
+    \]
+    The function $K_{\alpha,\varepsilon}(t)e^{i\omega t}$ is absolutely
+    integrable and
+    \[
+        \left|\int_{\mathbb R}
+        K_{\alpha,\varepsilon}(t)e^{i\omega t}\,dt\right|
+        \le \frac1{2\pi\varepsilon}\sqrt{\frac\pi\alpha}.
+    \]
+\end{lemma}
+\begin{proof}\leanok
+    The complex exponential integral converges since its exponent has
+    real part $-\varepsilon<0$. Its antiderivative gives the Laplace
+    identity. The denominator has norm at least $\varepsilon$, so
+    the kernel is dominated by the displayed Gaussian. The oscillatory
+    exponential has norm one; Gaussian integrability and the Gaussian
+    integral formula finish the proof.
+\end{proof}
+
+The bound retains its dependence on $\varepsilon$. It is not a uniform
+regularizer-limit estimate. The next lemma interchanges the two integrals,
+identifies the Gaussian selector, and passes to the regularizer limit.
+
+\begin{lemma}[The actual scalar Gaussian--Cauchy limit]
+    \label{lem:spt_gaussian_cauchy_limit}
+    \lean{TNLean.Lattice.gaussianCauchyTransform,
+        TNLean.Lattice.gaussianCauchyTransform_eq_integral,
+        TNLean.Lattice.tendsto_gaussianCauchyTransform_zero_regularizer,
+        GaussianFilter.halfLine_gaussian_integral_eq_measureReal,
+        TNLean.Lattice.tendsto_normalized_gaussianCauchyTransform,
+        TNLean.Lattice.tendsto_normalized_gaussianCauchyTransform_cutoff}
+    \leanok
+    \discussion{9879}
+    \uses{lem:spt_gaussian_cauchy_integrability,lem:spt_gaussian_negative_frequency_cutoff}
+    Let $\nu_h$ be the centered Gaussian probability measure of variance
+    $h>0$, and let $c_h$ be the density at zero of $\nu_{1/h}$.
+    For $\varepsilon>0$, define the actual transform
+    \[
+        C_{h,\varepsilon}(\omega)=\int_{\mathbb R}
+        \frac{e^{i\omega t}}{\varepsilon-it}\,d\nu_h(t).
+    \]
+    Then
+    \[
+        C_{h,\varepsilon}(\omega)=
+        \int_0^\infty e^{-\varepsilon s}
+        e^{-h(\omega+s)^2/2}\,ds,
+        \qquad
+        c_hC_{h,\varepsilon}(\omega)
+        \longrightarrow \nu_{1/h}([\omega,\infty))
+    \]
+    as $\varepsilon\downarrow0$.
+    In particular, $h=q/\Delta^2$ gives the actual Gaussian selector
+    $F_{q,\Delta}$ above and its explicit gap-error bounds.
+\end{lemma}
+\begin{proof}\leanok
+    Insert the half-line Laplace representation of the Cauchy
+    denominator. Under $\nu_h\otimes ds$ on $s>0$, the absolute value of
+    the joint integrand is $e^{-\varepsilon s}$, which is integrable.
+    Fubini and the exact Gaussian characteristic function give the first
+    identity. For the limit, the translated Gaussian
+    $e^{-h(\omega+s)^2/2}$ is an integrable majorant independent of
+    $\varepsilon>0$. Apply dominated convergence.
+    The actual density formula for $\nu_{1/h}$, translation invariance
+    of Lebesgue integration, and equality of open and closed integral
+    endpoints give the normalization to the probability tail.
+\end{proof}
+
+The scalar frequency selector and its integral representation supply
+the regularized observable, ground-vector comparison, and locality
+argument below.
+
+\begin{definition}[The actual regularized negative-frequency observable]
+    \label{def:spt_regularized_negative_frequency_operator}
+    \lean{TNLean.Lattice.gaussianNegativeFrequencyIntegrand,
+        TNLean.Lattice.gaussianNegativeFrequencyOperator}
+    \leanok
+    \discussion{9879}
+    \uses{lem:spt_gaussian_cauchy_limit}
+    For a Hermitian $H$, an observable $A$, Gaussian time variance $h$,
+    and positive regularizer $\varepsilon$, put
+    \[
+        A^-_{h,\varepsilon}
+        =c_h\int_{\mathbb R}
+        \frac{e^{itH}Ae^{-itH}}{\varepsilon-it}\,d\nu_h(t).
+    \]
+\end{definition}
+
+\begin{lemma}[Actual regularized energy matrix elements]
+    \label{lem:spt_regularized_frequency_matrix_elements}
+    \lean{TNLean.Lattice.continuous_gaussianNegativeFrequencyIntegrand,
+        TNLean.Lattice.norm_gaussianNegativeFrequencyIntegrand_le,
+        TNLean.Lattice.integrable_gaussianNegativeFrequencyIntegrand,
+        TNLean.Lattice.norm_gaussianNegativeFrequencyOperator_le,
+        TNLean.Lattice.dotProduct_integral_gaussianNegativeFrequencyIntegrand_mulVec,
+        TNLean.Lattice.dotProduct_gaussianNegativeFrequencyOperator_mulVec,
+        TNLean.Lattice.inner_gaussianNegativeFrequencyOperator,
+        TNLean.Lattice.tendsto_dotProduct_gaussianNegativeFrequencyOperator}
+    \leanok
+    \discussion{9879}
+    \uses{def:spt_regularized_negative_frequency_operator,lem:spt_gaussian_cauchy_limit}
+    The actual regularized observable is integrable and
+    $\|A^-_{h,\varepsilon}\|\le c_h\varepsilon^{-1}\|A\|$.
+    For energy eigenvectors $Hv=Ev$ and $Hw=E'w$,
+    \[
+        \langle v,A^-_{h,\varepsilon}w\rangle
+        =c_hC_{h,\varepsilon}(E-E')\langle v,Aw\rangle.
+    \]
+    If $h>0$, the actual entries therefore converge as
+    $\varepsilon\downarrow0$ to
+    \[
+        \nu_{1/h}([E-E',\infty))\langle v,Aw\rangle.
+    \]
+\end{lemma}
+\begin{proof}\leanok
+    Unitary conjugation preserves the norm, and the rational factor has
+    norm at most $\varepsilon^{-1}$, so the finite Gaussian measure
+    gives integrability. Between energy eigenvectors the actual
+    Heisenberg evolution contributes $e^{it(E-E')}$. Passing the matrix
+    element through the integral gives the actual scalar transform.
+    Apply its proved Gaussian probability-tail limit.
+\end{proof}
+
+\begin{lemma}[Uniform locality after cancelling the Cauchy singularity]
+    \label{lem:spt_regularized_frequency_uniform_locality}
+    \lean{TNLean.Lattice.norm_commutator_gaussianNegativeFrequencyOperator_le}
+    \leanok
+    \discussion{9879}
+    \uses{def:spt_regularized_negative_frequency_operator}
+    Suppose $C,v\ge0$ and the actual dynamics satisfy
+    $\|[A(t),B]\|\le C(e^{v|t|}-1)$ for all real $t$.
+    For $T,\varepsilon>0$,
+    \[
+        \|[A^-_{h,\varepsilon},B]\|
+        \le c_h\left(Cve^{vT}
+        +\frac{2\|A\|\|B\|}{T}e^{-T^2/(2h)}\right).
+    \]
+    In particular the bound is independent of the positive regularizer.
+\end{lemma}
+\begin{proof}\leanok
+    The rational factor is at most $|t|^{-1}$ for $t\ne0$.
+    For $|t|\le T$, the inequality $e^x-1\le xe^x$ cancels this
+    factor against the actual short-time increment. At $t=0$ the
+    commutator vanishes. Outside the time window, the rational factor
+    is at most $T^{-1}$ and the commutator norm at most
+    $2\|A\|\|B\|$. Split the actual Gaussian integral and apply its
+    Gaussian tail bound. No bound growing as $\varepsilon^{-1}$ is
+    used for this passage.
+\end{proof}
+
+\begin{lemma}[Actual finite-ring regularized-frequency locality]
+    \label{cor:spt_finite_ring_regularized_frequency_locality}
+    \lean{MPSTensor.norm_negativeFrequency_interactionHamiltonian_commutator_le}
+    \leanok
+    \discussion{9879}
+    \uses{lem:spt_regularized_frequency_uniform_locality,aux:interaction-hamiltonian-lieb-robinson}
+    For an actual periodic nearest-neighbour Hamiltonian with Hermitian
+    interaction of norm at most one and disjoint nonempty supports $X,Y$,
+    the preceding bound holds with
+    \[
+        C=2\|A\|\|B\|\,|X|e^{-a d(X,Y)},
+        \qquad v=8e^a,\qquad a\ge0.
+    \]
+    There is no supplied propagation or correlation estimate.
+\end{lemma}
+\begin{proof}\leanok
+    The actual finite-ring Lieb--Robinson bound supplies exactly the
+    required short-time increment. Apply the preceding lemma.
+\end{proof}
+
+\begin{lemma}[Actual Gaussian ground-vector separation]
+    \label{lem:spt_gaussian_ground_frequency_separation}
+    \lean{TNLean.Lattice.exists_gaussianNegativeFrequency_ground_limits,
+        TNLean.Lattice.exists_gaussianNegativeFrequency_ground_commutator_limit}
+    \leanok
+    \discussion{9879}
+    \uses{lem:spt_regularized_frequency_matrix_elements,lem:spt_gaussian_negative_frequency_cutoff}
+    Suppose the full ground eigenspace of $H$ is $\mathbb C\psi$,
+    every other energy is at least $\Delta>0$ above it, and
+    $\langle\psi,A\psi\rangle=0$. For $q>0$, put $h=q/\Delta^2$.
+    The vectors $A^-_{h,\varepsilon}\psi$ and
+    $(A^-_{h,\varepsilon})^\dagger\psi$ have limits $\xi,\eta$ with
+    \[
+        \|\xi\|\le e^{-q/2}\|A\psi\|,
+        \qquad \|A^\dagger\psi-\eta\|
+        \le e^{-q/2}\|A^\dagger\psi\|.
+    \]
+    The scalar commutator therefore converges to a number $z$ satisfying
+    \[
+        |\langle\psi,AB\psi\rangle-z|
+        \le 2e^{-q/2}\|A\|\|B\|\|\psi\|^2.
+    \]
+    No normalization of $\psi$ or centering of $B$ is required.
+\end{lemma}
+\begin{proof}\leanok
+    Expand in an orthonormal energy basis and apply the matrix-element
+    limit. Centering removes all ground-energy coefficients. The two
+    probability-tail estimates bound the remaining coefficients, and
+    Parseval gives the vector bounds. Move the adjoint across the inner
+    product and apply Cauchy--Schwarz to the two error terms.
+\end{proof}
+
+\begin{lemma}[Centering an observable at an unnormalized vector]
+    \label{lem:spt_actual_observable_centering}
+    \lean{TNLean.Lattice.normalizedVectorExpectation,
+        TNLean.Lattice.centeredObservable,
+        TNLean.Lattice.norm_normalizedVectorExpectation_le,
+        TNLean.Lattice.inner_centeredObservable_eq_zero,
+        TNLean.Lattice.norm_centeredObservable_le,
+        TNLean.Lattice.inner_centeredObservable_mul,
+        TNLean.Lattice.centeredObservable_mem,
+        TNLean.Lattice.centeredObservable_commutator}
+    \leanok
+    \discussion{9879}
+    For $\psi\ne0$, write
+    $\langle A\rangle_\psi=\langle\psi,A\psi\rangle/\|\psi\|^2$
+    and $A_0=A-\langle A\rangle_\psi\Id$. Then
+    $|\langle A\rangle_\psi|\le\|A\|$,
+    $\langle\psi,A_0\psi\rangle=0$, and $\|A_0\|\le2\|A\|$.
+    The centered observable gives the connected correlation:
+    \[
+        \frac{\langle\psi,A_0B\psi\rangle}{\|\psi\|^2}
+        =\langle AB\rangle_\psi
+        -\langle A\rangle_\psi\langle B\rangle_\psi.
+    \]
+    Subtracting this scalar identity preserves every linear space of
+    observables containing $A$ and $\Id$, as well as the commutator with $B$.
+\end{lemma}
+\begin{proof}\leanok
+    Use Cauchy--Schwarz, the operator-norm bound, and the triangle
+    inequality. Expand the scalar identity and use that $\|\psi\|^2>0$.
+\end{proof}
+
+\begin{lemma}[Ordinary centered correlation from Gaussian frequency separation]
+    \label{lem:spt_gaussian_ordinary_centered_correlation}
+    \lean{TNLean.Lattice.norm_centered_ground_correlation_le_gaussian}
+    \leanok
+    \discussion{9879}
+    \uses{lem:spt_gaussian_ground_frequency_separation,lem:spt_regularized_frequency_uniform_locality}
+    Under the preceding ground-line and propagation hypotheses, for
+    $q,T>0$ and $h=q/\Delta^2$,
+    \[
+        |\langle\psi,AB\psi\rangle|
+        \le\left(2e^{-q/2}\|A\|\|B\|
+        +c_h\left(Cve^{vT}
+            +\frac{2\|A\|\|B\|}{T}e^{-T^2/(2h)}\right)\right)\|\psi\|^2.
+    \]
+\end{lemma}
+\begin{proof}\leanok
+    The regularized commutator is bounded uniformly in its positive
+    regularizer. Pass this bound to its scalar limit and add the proved
+    Gaussian ground-vector error.
+\end{proof}
+
+\begin{lemma}[Ordinary connected Gaussian bound for the physical path]
+    \label{cor:spt_exact_ground_connected_gaussian_bound}
+    \lean{MPSTensor.ExactMPSGroundPath.exists_uniform_centered_correlation_gaussian_bound,
+        MPSTensor.ExactMPSGroundPath.exists_uniform_connected_correlation_gaussian_bound}
+    \leanok
+    \discussion{9879}
+    \uses{lem:spt_gaussian_ordinary_centered_correlation,lem:spt_actual_observable_centering,
+        lem:spt_exact_ground_gaussian_bounds,aux:interaction-hamiltonian-lieb-robinson}
+    Along an exact MPS ground-state path there is one $\Delta>0$ such that,
+    at every parameter and ring length $N\ge2$, arbitrary observables
+    supported on disjoint nonempty sets $X,Y$ satisfy
+    \[
+        |\langle AB\rangle_\psi
+        -\langle A\rangle_\psi\langle B\rangle_\psi|
+        \le2\|A\|\|B\|
+        \left(2e^{-q/2}+c_h\left(
+            2|X|e^{-a d(X,Y)}ve^{vT}
+            +\frac2T e^{-T^2/(2h)}\right)\right),
+    \]
+    where $q,T>0$, $a\ge0$, $h=q/\Delta^2$, and $v=8e^a$.
+\end{lemma}
+\begin{proof}\leanok
+    The actual physical gap supplies the full ground line and the common
+    spectral gap. The actual finite-ring propagation estimate supplies
+    the time increment. Center the first observable at the actual
+    nonzero periodic MPS vector, preserve its support, and divide the
+    preceding estimate by the squared vector norm.
+\end{proof}
+
+\begin{lemma}[An exponential rate for the Gaussian frequency bound]
+    \label{lem:spt_gaussian_frequency_clustering_rate}
+    \lean{GaussianFilter.kernel_inv_zero_eq_sqrt,
+        TNLean.Lattice.exists_gaussianFrequencyClusteringRate}
+    \leanok
+    \discussion{9879}
+    If $\Delta,v>0$, there are $C,\kappa>0$ such that for $m\ge0$ and
+    $\ell\ge1$,
+    \[
+        2e^{-\ell\Delta/(4v)}+
+        \sqrt{\frac{\ell}{4\pi v\Delta}}
+        \left(2mv e^{-\ell/2}
+        +\frac{4v}{\ell}e^{-\ell\Delta/(4v)}\right)
+        \le C(m+1)e^{-\kappa\ell}.
+    \]
+\end{lemma}
+\begin{proof}\leanok
+    The density normalization is $c_h=\sqrt{h/(2\pi)}$.
+    Take $\kappa=\min(1/4,\Delta/(8v))$ and absorb the square-root
+    factors using $\sqrt\ell\le\ell$ and
+    $\ell e^{-\ell/2}\le4e^{-\ell/4}$.
+\end{proof}
+
+\begin{lemma}[Ordinary connected exponential clustering along the physical path]
+    \label{thm:spt_exact_ground_connected_exponential_clustering}
+    \lean{MPSTensor.ExactMPSGroundPath.exists_uniform_connected_exponential_clustering}
+    \leanok
+    \discussion{9879}
+    \uses{cor:spt_exact_ground_connected_gaussian_bound,lem:spt_gaussian_frequency_clustering_rate}
+    Along an exact MPS ground-state path there are $K,\kappa>0$,
+    independent of the parameter and ring length $N\ge2$, such that
+    observables supported on disjoint nonempty $X,Y$ obey
+    \[
+        |\langle AB\rangle_\psi
+        -\langle A\rangle_\psi\langle B\rangle_\psi|
+        \le K(|X|+1)\|A\|\|B\|e^{-\kappa\ell}
+    \]
+    whenever $1\le\ell\le d(X,Y)$.
+\end{lemma}
+\begin{proof}\leanok
+    Set $a=1$, $v=8e$, $T=\ell/(2v)$, and $q=T\Delta$ in the
+    preceding Gaussian bound. Both Gaussian errors are
+    $e^{-\ell\Delta/(4v)}$, while the short-time term is bounded
+    by $2|X|v e^{-\ell/2}$. Apply the exponential-rate lemma.
+\end{proof}
+
+\begin{lemma}[Normalized correlations depend only on the periodic rays]
+    \label{lem:spt_positive_ray_expectations}
+    \lean{TNLean.Lattice.normalizedVectorExpectation_smul,
+        MPSTensor.mpvExpectation_eq_normalizedVectorExpectation,
+        MPSTensor.SamePositiveMpvRay.mpvExpectation_eq,
+        MPSTensor.SamePositiveMpvRay.mpvConnectedCorrelator_eq}
+    \leanok
+    \discussion{9879}
+    \uses{lem:spt_actual_observable_centering}
+    If two tensors generate the same periodic vector line at every
+    positive length, all their normalized finite expectations and
+    connected window correlators coincide. Their bond dimensions and
+    scalar normalizations may differ.
+\end{lemma}
+\begin{proof}\leanok
+    Equal singleton spans differ by an invertible scalar, including when
+    both vectors vanish. The scalar and its complex conjugate cancel in
+    the ratio defining the normalized expectation. Apply this identity
+    to the three expectations defining the connected correlator.
+\end{proof}
+
+\begin{lemma}[Physical clustering for the actual two-window correlator]
+    \label{cor:spt_physical_window_clustering}
+    \lean{MPSTensor.ExactMPSGroundPath.exists_uniform_window_correlation_bound,
+        MPSTensor.ExactMPSGroundPath.exists_uniform_ray_window_correlation_bound}
+    \leanok
+    \discussion{9879}
+    \uses{thm:spt_exact_ground_connected_exponential_clustering,lem:spt_positive_ray_expectations}
+    There are common $K,\kappa>0$ such that for any tensor representing
+    a periodic ray family along the physical path, length-$L$ observables
+    $X,Y$ with $L>0$, and $n\ge t\ge1$, their connected correlator on
+    the ring of length $L+t+L+n$ satisfies
+    \[
+        |G_{L+t+L+n}(X,Y;L+t+1)|
+        \le K(L+1)\|X\|\|Y\|e^{-\kappa t}.
+    \]
+\end{lemma}
+\begin{proof}\leanok
+    The two windows have at least $t$ sites between them in both cyclic
+    directions, so their shortest-path distance is greater than $t$.
+    Window embeddings are contractive and the first support has at most
+    $L$ sites. Apply physical clustering and the preceding ray identity.
+\end{proof}
+
+\begin{lemma}[Actual finite-ring correlations converge to the limiting contraction]
+    \label{lem:spt_actual_finite_ring_correlation_limit}
+    \lean{MPSTensor.tendsto_mpvConnectedCorrelator_limitCorrelator,
+        MPSTensor.norm_limitCorrelator_le_of_eventually_mpvConnectedCorrelator_le,
+        MPSTensor.norm_transfer_spectrum_le_of_finite_mpvConnectedCorrelator_bound}
+    \leanok
+    \discussion{9879}
+    \uses{def:physical_connected_correlator,lem:spt_transfer_rate_from_correlations}
+    Let $A$ be trace preserving and injective after blocking $L>0$ sites,
+    with a faithful stationary density $\rho$ of trace one. For fixed
+    $t\ge1$ and length-$L$ observables $X,Y$, the actual finite connected
+    correlator on $L+t+L+n$ sites converges, as $n\to\infty$, to the
+    limiting fixed-point contraction. Every eventual bound on the
+    finite correlator therefore bounds this contraction. In particular,
+    a common eventual rate $r>0$ for all such observables bounds every
+    transfer eigenvalue different from one by $r$.
+\end{lemma}
+\begin{proof}\leanok
+    Block injectivity gives pointwise primitivity. The complementary
+    transfer operator has spectral radius less than one, so its powers
+    tend to zero. Substitute this in the exact finite-ring contraction
+    formula; its denominator tends to one. Pass the finite bound through
+    the norm limit and use the transfer eigenvalue observables.
+    The auxiliary decay rate may depend on the tensor; no common transfer
+    bound is used to prove convergence.
+\end{proof}
+
+\begin{lemma}[A common transfer bound for trace-preserving representatives]
+    \label{thm:spt_physical_gap_tp_transfer_bound}
+    \lean{MPSTensor.ExactMPSGroundPath.exists_uniform_tracePreserving_transfer_bound}
+    \leanok
+    \discussion{9879}
+    \uses{cor:spt_physical_window_clustering,lem:spt_actual_finite_ring_correlation_limit}
+    An exact physical MPS ground-state path has a common $0<r<1$ such
+    that every trace-preserving block-injective representative of one of
+    its periodic ray families, with a faithful stationary trace-one
+    density, has all transfer eigenvalues different from one of modulus
+    at most $r$.
+\end{lemma}
+\begin{proof}\leanok
+    Take $r=e^{-\kappa}$ from the physical window bound. For each pair
+    of observables the estimate holds for all return lengths $n\ge t$.
+    Pass to the limiting contraction and then to the transfer spectrum.
+\end{proof}
+
+\begin{lemma}[An actual trace-preserving gauge with faithful fixed density]
+    \label{lem:spt_injective_tp_gauge}
+    \lean{MPSTensor.exists_posDef_fixedPoint_trace_one_of_isInjective_isTP,
+        MPSTensor.exists_tpGauge_of_isInjective_unital}
+    \leanok
+    \discussion{9879}
+    A trace-preserving one-site injective tensor of positive bond dimension
+    has a faithful stationary density of trace one. Every unital one-site
+    injective tensor $A$ of positive bond dimension has a bond gauge $B$
+    that is trace preserving, one-site injective, has the same
+    positive-length periodic rays and transfer spectrum, and has such a
+    density.
+\end{lemma}
+\begin{proof}\leanok
+    Primitive Perron--Frobenius theory supplies the positive-definite
+    stationary density, which is normalized by its positive trace.
+    For the gauge, derive the faithful adjoint fixed point $\Lambda$ of
+    the unital transfer map and set
+    $B^i=\Lambda^{1/2}A^i\Lambda^{-1/2}$.
+    The adjoint fixed-point identity gives trace preservation. Invertible
+    bond conjugation preserves injectivity, the periodic vectors, and
+    the transfer spectrum.
+\end{proof}
+
+\begin{lemma}[A common unital transfer bound from the physical gap]
+    \label{thm:spt_physical_gap_unital_transfer_bound}
+    \lean{MPSTensor.ExactMPSGroundPath.exists_uniform_unital_transfer_bound}
+    \leanok
+    \discussion{9879}
+    \uses{thm:spt_physical_gap_tp_transfer_bound,lem:spt_injective_tp_gauge}
+    Along an exact physical MPS ground-state path there is a common
+    $0<r<1$ bounding the modulus of every transfer eigenvalue different
+    from one of every unital injective representative of a periodic ray
+    family on the path. No transfer bound or canonical gauge is an
+    additional hypothesis.
+\end{lemma}
+\begin{proof}\leanok
+    Derive a trace-preserving gauge and its faithful fixed density.
+    Apply the preceding physical transfer bound at blocking length one,
+    and transport the spectrum back through the bond gauge.
+\end{proof}
+
+\begin{lemma}[Transfer spectral rate from limiting correlations]
+    \label{lem:spt_transfer_rate_from_correlations}
+    \lean{MPSTensor.norm_transfer_spectrum_le_of_limitCorrelator_bound}
+    \leanok
+    \discussion{9879}
+    \uses{lem:ldp_limit_correlator_eigenvalue, def:physical_connected_correlator}
+    Let the products of $L$ letters of $A$ span the bond matrix algebra,
+    suppose $\sum_i(A^i)^\dagger A^i=\Id$, and let $\rho$ have trace one.
+    Suppose $r>0$ and for every pair of observables $X,Y$ on $L$ sites
+    there are $C\in\mathbb R$ and $n_0\in\mathbb N$ with
+    $|C_{\mathrm{phys}}(X,Y;n)|\leq Cr^n$ for $n\geq n_0$.
+    Every $\lambda\ne1$ in the transfer spectrum satisfies $|\lambda|\leq r$.
+\end{lemma}
+\begin{proof}\leanok
+    The eigenvalue observables give $C_{\mathrm{phys}}(X,Y;n)=\lambda^n$. If
+    $|\lambda|>r$, the ratio $|\lambda|/r$ is greater than one and its
+    powers are unbounded. The assumed estimate at $n+n_0$ bounds these
+    powers by $C$, a contradiction. The prefactors and starting
+    separations need not be uniform over the observables.
+\end{proof}
+
 \subsection{Virtual classes at a compact limit}
+
+\begin{theorem}[One virtual class from the actual physical gap]
+    \label{thm:spt_exact_ground_physical_class}
+    \lean{MPSTensor.ExactMPSGroundPath.exists_constant_virtual_class}
+    \leanok
+    \discussion{9879}
+    \uses{thm:spt_physical_gap_unital_transfer_bound,
+        thm:spc_aux_exact_ground_uniform_transfer_class}
+    A symmetric gapped interaction path with a continuous exact MPS
+    realization of its unique finite-chain ground lines has a common
+    unit-modulus physical character and unital injective representatives
+    of positive bond dimensions bounded by the ambient dimension.
+    After removing the character, these representatives have unitary
+    projective virtual actions whose factor systems all determine the
+    same cohomology class. The minimal dimensions may change along the
+    path, and no continuous choice of minimal tensors, stationary
+    densities, or virtual matrices is required.
+\end{theorem}
+\begin{proof}\leanok
+    Derive the common unital transfer bound from the physical gap and
+    apply the compact-limit class-invariance theorem below.
+\end{proof}
+
+\begin{lemma}[Virtual class of an injective periodic ray]
+    \label{lem:spt_periodic_ray_virtual_class}
+    \lean{MPSTensor.bondDimension_eq_of_samePositiveMpvRay,
+        MPSTensor.cohomologousTo_of_samePositiveMpvRay,
+        MPSTensor.cohomologousTo_of_samePositiveMpvRay_character_covariance}
+    \leanok
+    \uses{thm:spt_positive_ray_finite_traces}
+    Let $A$ and $B$ be injective tensors of positive bond dimensions with
+    the same positive-length periodic rays. Their bond dimensions agree.
+    Prescribed virtual actions for the same physical representation have
+    equal cohomology classes, including when the actions remove separately
+    chosen unit-modulus physical characters.
+\end{lemma}
+\begin{proof}\leanok
+    The nonzero two- and three-site trace normalizations determine the
+    common bond dimension and a scalar bond gauge. Transport the first
+    virtual action through this gauge. On the second tensor, injective
+    gauge-phase uniqueness forces the ratio of the physical characters
+    to be one. Gauge independence then identifies the factor systems.
+\end{proof}
+
+\begin{lemma}[Prescribed classes at the endpoints of a physical path]
+    \label{cor:spt_exact_ground_endpoint_class}
+    \lean{MPSTensor.ExactMPSGroundPath.cohomologousTo_endpoints}
+    \leanok
+    \uses{thm:spt_exact_ground_physical_class, lem:spt_periodic_ray_virtual_class}
+    Let $Q$ realize the unique finite-chain ground lines of a symmetric
+    gapped interaction path. Suppose injective positive-dimensional
+    tensors $A_0,A_1$ represent its endpoint periodic rays. Any prescribed
+    virtual actions of $A_0,A_1$ for the common physical representation,
+    after independent unit-modulus character changes, have equal
+    cohomology classes.
+\end{lemma}
+\begin{proof}\leanok
+    Compare each endpoint action with the corresponding action in the
+    common class supplied by Theorem~\ref{thm:spt_exact_ground_physical_class}.
+    Lemma~\ref{lem:spt_periodic_ray_virtual_class} identifies each pair.
+\end{proof}
+
+\begin{lemma}[Cohomology obstruction to an exact MPS gapped phase]
+    \label{cor:spt_exact_phase_cohomology_obstruction}
+    \lean{MPSTensor.IsSameExactMPSGappedPhase.cohomologousTo}
+    \leanok
+    \uses{def:spt_exact_mps_gapped_phase, cor:spt_exact_ground_endpoint_class}
+    Let $A_0,A_1$ be one-site injective tensors of positive bond dimensions
+    with prescribed virtual projective actions implementing their exact
+    on-site symmetries. If they satisfy the independent exact MPS gapped
+    phase condition, their virtual factor systems have equal cohomology
+    classes. The common blocking, endpoint physical character changes,
+    and orthogonal physical inclusions are those permitted by the phase
+    condition.
+\end{lemma}
+\begin{proof}\leanok
+    Blocking preserves each virtual factor system and injectivity.
+    Each physical isometry also preserves injectivity. The physical
+    intertwining relation transports the blocked virtual action to its
+    included tensor after removing the endpoint character. Apply
+    Lemma~\ref{cor:spt_exact_ground_endpoint_class} to the resulting
+    endpoint representatives of the actual path.
+\end{proof}
+
+\begin{theorem}[Classification for injective endpoints with exact virtual covariance]
+    \label{thm:spt_exact_phase_injective_classification}
+    \lean{MPSTensor.isSameExactMPSGappedPhase_iff_cohomologous}
+    \leanok
+    \uses{cor:spt_exact_phase_cohomology_obstruction, thm:spt_exact_phase_forward}
+    Let $A_0,A_1$ be one-site injective tensors of positive bond dimensions,
+    with prescribed virtual projective representations implementing their
+    exact on-site symmetries. They satisfy the independent exact MPS gapped
+    phase condition if and only if the prescribed factor systems determine
+    the same cohomology class. This is the injective, exact-symmetry scope
+    of the construction in \cite[Section~II.F.2]{Schuch2011Phases}.
+    The comparison with arbitrary scalar-character original endpoints
+    remains separate \cite{gap:spc11_spt_interpolation_upper_range}.
+\end{theorem}
+\begin{proof}\leanok
+    The forward construction for cohomologous virtual actions gives the
+    physical phase condition. The converse is
+    Lemma~\ref{cor:spt_exact_phase_cohomology_obstruction}.
+\end{proof}
 
 \begin{lemma}[The virtual class of an exact ground-state path under a transfer bound]
     \label{thm:spc_aux_exact_ground_uniform_transfer_class}
