@@ -355,8 +355,12 @@ spectral-gap assertion.
 \begin{proof}
     \leanok
     The window covers the whole ring, so the outside word $\tau$ is empty
-    and the coefficient section at offset $i$ is a translate,
-    $R_{i,\tau}\psi=T_{-i}\psi$. By
+    and the coefficient section at offset $i$ is a translate:
+    \begin{align}
+        R_{i,\tau}\psi & =T_{-i}\psi, & R_{0,\tau}\psi & =\psi.
+        \label{eq:pvbs_matching_volume_full_window}
+    \end{align}
+    By
     Lemma~\ref{lem:pvbs_matching_volume_line_invariance},
     $T_{-i}\Psi_R(q)\in\mathbb C\Psi_R(q)$, so
     Lemma~\ref{lem:pvbs_pure_window_kernel} gives
@@ -364,7 +368,8 @@ spectral-gap assertion.
     Lemma~\ref{lem:periodic_interaction_sections} gives
     $H_R(q)\Psi_R(q)=0$. Conversely, if $H_R(q)\psi=0$, positivity and
     Lemma~\ref{lem:periodic_interaction_sections} give
-    $p_R(q)R_{0,\tau}\psi=0$. Since $R_{0,\tau}\psi=\psi$,
+    $p_R(q)R_{0,\tau}\psi=0$. Since $R_{0,\tau}\psi=\psi$ by
+    (\ref{eq:pvbs_matching_volume_full_window}),
     Lemma~\ref{lem:pvbs_pure_window_kernel} gives
     $\psi\in\mathbb C\Psi_R(q)$. Finally
     $\Psi_R(q)(1,0,\ldots,0)=1$, so $\Psi_R(q)\ne0$.
