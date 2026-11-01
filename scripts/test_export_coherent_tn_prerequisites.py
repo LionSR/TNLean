@@ -13,7 +13,7 @@ class TNExportTests(unittest.TestCase):
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()
         self.addCleanup(self.tmp.cleanup)
-        self.root = Path(self.tmp.name)
+        self.root = Path(self.tmp.name).resolve()
         self.baseline, self.head, self.pin = "a" * 40, "b" * 40, "c" * 40
         self.sources = {
             "TNLean/Example.lean": b"/- import TNLean.Secret -/\nimport TNLean.Dependency\nexample : True := .intro\n",

@@ -3,12 +3,12 @@
 \begin{lemma}[Physical restricted errors for a regional hard truncation]
     \label{lem:alvv_single_region_residuals}
     \lean{TNLean.MPS.AreaLaw.ALVV.exists_single_region_hard_truncation_residuals}
-    \notready
+    \leanok
     \uses{def:chain_model,thm:disjoint_regional_clipping,
         thm:five_region_original_bond_bounds,thm:consecutive_regional_truncation_low}
     Let $q\ge1$, let $0\le h_i\le I$ be nearest-neighbour terms on an
     $L$-site chain, and take $0\le l\le r\le L$.
-    The three intervals $\lbrack 0,l)$, $\lbrack l,r)$ and $\lbrack r,L)$ determine their actual
+    The three intervals ${\lbrack 0,l)}$, ${\lbrack l,r)}$ and ${\lbrack r,L)}$ determine their actual
     internal sums $A_0,A_1,A_2$. Let $Y$ be the sum of the original bonds
     crossing at $l$ or $r$, with a coincident bond retained once.
     There are at most two such bonds, and $\sum_i h_i=\sum_j A_j+Y$.
@@ -32,9 +32,10 @@
     $H-F=A_1-\min(A_1,(e_1+t)I)$.
     This is the regional construction of
     \cite[Definition~4.3 and Proposition~4.4(1)]{Arad2016RigorousRG}
-    with the displayed sufficient cutoff.
+    with the displayed sufficient cutoff; the cutoff qualification is recorded
+    in~\cite{gap:alvv16_hard_truncation_windows}.
 \end{lemma}
-\begin{proof}\notready
+\begin{proof}\leanok
     \uses{thm:disjoint_regional_clipping,thm:five_region_original_bond_bounds,
         thm:consecutive_regional_truncation_low}
     Apply the five-region decomposition with cuts $l,l,r,r$ and remove the

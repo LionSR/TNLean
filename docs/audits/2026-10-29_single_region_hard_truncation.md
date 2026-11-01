@@ -65,17 +65,18 @@ Source: ALVV, arXiv:1602.08828v2, Section 4.2, Definition 4.3 and Proposition
 unrestricted truncated-side statement under merely `t>eta` is not asserted.
 The separate actual-chain counterexample is draft TNLean #10431.
 
-The existing QICLean-owned note is extended in **draft QICLean #1012**, head
-`0cf09da9f6af2b4d24ca4dfd69fc604656ec7211`. Its newly documented cutoff
-qualification is not yet in the currently published PDF at the note URL.
-Acceptance and note publication remain explicit gates. No duplicate TNLean
-paper-gap note or source-paper edit is introduced here.
+The existing QICLean-owned note was extended by QICLean #1012, merged on
+2026-10-30 as `3837d239`. Publication of the updated note PDF is a separate
+question from acceptance of this theorem. No duplicate TNLean paper-gap note
+or source-paper edit is introduced here.
 
-All three dependency records retain the parent's candidate QICLean
-`716753c025d95fe36e3dc8f421571c81754adaaf`. Its prerequisite acceptance and
-accepted repinning remain gates. The later min–max and relative-ground
-closeness client, using QICLean drafts #1011/#1013 and an isolated coherent
-candidate, is separate from this physical residual stage.
+All three dependency records (`lakefile.toml`, `lake-manifest.json` and
+`docbuild/lake-manifest.json`) select the QICLean `main` pin
+`5065f76a30f327d9f30014e7f72cc0e5515161d9`, which already contains #1012. The
+earlier candidate repin to `716753c0` is obsolete. The later min–max and
+relative-ground closeness client uses QICLean #1011/#1013, which merged on
+2026-10-31 after this pin. That client is separate from this physical residual
+stage, and adopting it needs a later QICLean repin on TNLean `main`.
 
 ## Review and verification status
 
@@ -83,8 +84,18 @@ Root and two independent native mathematical/pinned-API reviews passed the
 276-line production source at SHA256
 `f2a7f7a8fb2b0befe9ff3f66fb9a35efe5fc227ce4bf944c8cb5f9ba702767c4`,
 including endpoints, constant side conditions and both actual spectral norms.
-No local Lean, Lake, build, elaboration or declaration check ran.
-All new Blueprint statements/proofs remain `notready` pending hosted checks.
+The original record noted that no local Lean check ran at that time.
+
+**2026-11-01 update.** The first hosted build failed. The statement's outer
+`let` bindings for `A`, `J` and `Y` raised an "unknown free variable"
+elaboration error once the existential proof binders `hH`, `hF` depended on
+them. The statement now writes those terms out, which is definitionally the
+same statement, and the proof recovers the names with `set`. The remaining
+proof repairs are explicit `toEuclideanCLM` arguments, a `convert` for the
+decomposed sum and `rw`/`exact` in place of over-normalizing `simpa` steps.
+The module then elaborated locally with no errors or warnings under the
+Mathlib standard linters, and the Blueprint statement and proof are marked
+`\leanok` on that basis. Hosted checks on the repaired head confirm it.
 
 The four inherited Blueprint role mismatches noted in #10404 are corrected
 only by three theorem-to-lemma environment pairs and one reference word,

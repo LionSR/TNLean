@@ -221,7 +221,6 @@ private theorem eval_twoMarkerBoxExponent_integerGrid (u v : I) (K : ℕ)
       intro a _ha
       simp [z, twoMarkerBoxExponent, a.property]
 
-
 end MvPolynomial
 
 namespace MvPolynomial
@@ -532,7 +531,6 @@ private theorem exists_twoMarker_wordCoefficient_recovery
   simpa only [hcoeff] using h
 
 end Polynomial
-
 
 namespace MvPolynomial
 

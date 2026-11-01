@@ -97,10 +97,8 @@ lemma frustrationFree_twoSidedEnergyTruncation_ground_gap {L q : ℕ}
     Ω hΩ 0 g t (by norm_num) (by norm_num) hg hg1 ht0 hcut
     (by
       intro v
-      have hv := hgap0.gap_le v
-      rw [← Matrix.coe_toEuclideanCLM_eq_toEuclideanLin H] at hv
-      change g * (‖v‖ ^ 2 - ‖⟪Ω, v⟫_ℂ‖ ^ 2) ≤ (⟪v, ι H v⟫_ℂ).re - 0 * ‖v‖ ^ 2 at hv
-      simpa only [hH] using hv)
+      simpa only [hH, ← Matrix.coe_toEuclideanCLM_eq_toEuclideanLin,
+        ContinuousLinearMap.coe_coe] using hgap0.gap_le v)
   have hKΩ : ι K Ω = (0 : ℂ) • Ω := by
     change WithLp.toLp 2 (K *ᵥ WithLp.ofLp Ω) = _
     rw [hKzero]

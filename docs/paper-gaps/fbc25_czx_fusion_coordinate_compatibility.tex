@@ -12,7 +12,7 @@
 
 \begin{document}
 \maketitle
-\gapnote{open-gap}{wip}
+\gapnote{local-correction}{resolved}
 
 \section{The comparison to be established}
 
@@ -194,14 +194,52 @@ These are opposite to the displayed defect coefficients. The convention used to 
     (\ref{eq:fbc25_czx_compat_typed_fusion_sign}) and
     (\ref{eq:fbc25_czx_compat_typed_defect_signs}) remain diagnostic calculations: neither carries a formal declaration, and no identification of either with the intended source diagram is asserted here.}
 
-\section{Verdict and elimination criterion}
+\section{The \texorpdfstring{$L$}{L}-symbols}
 
-The classification is an open gap under active investigation. The explicit boundary coefficients, their uniqueness, and their persistence at positive length are determined. The retained physical signs are also determined. What remains open is whether a single source-faithful convention identifies these two constructions. The present result is not a verdict that the paper contains a proved error, nor does it invalidate the finite restrictions of the retained physical circuits on the displayed defect vectors.
+The coefficients $c_x$ are the $L$-symbols of two generators. With the
+fusion tensors trivial whenever a factor is the identity and equal to the
+cap pair above for $(g,g)$, and with the action tensors trivial for the
+identity and equal to the dressed pair $(p_xC_x,q_x)$ of
+\path{docs/paper-gaps/fbc25_czx_action_empty_word.tex} for the generator, the
+two left boundaries of \papereqref{fbc25}{eq:defL} on the block $x$ are
+$P_x$ and the left cap $V=-i\,(0,1,-1,0)$. On every letter of the stacked
+action the first is $c_x$ times the second; since a nonempty word begins
+with a letter, the $L$-symbol, the unique scalar relating the two
+boundaries against long words, is
+\begin{align}
+    L^x_{g,g} & =c_x, & L^0_{g,g} & =1, & L^1_{g,g} & =-1,
+    \label{eq:fbc25_czx_compat_l_symbols}
+\end{align}
+and all other $L$-symbols equal one. The anomaly of these fusion tensors is
+$\omega(h_1,h_2,h_3)=(-1)^{\delta_{h_1,g}\delta_{h_2,g}\delta_{h_3,g}}$, as
+displayed in Ref.~\cite[lines~4695--4698]{FrancoRubio2025MPUGauging}, and the
+ratio $L^0_{g,g}L^0_{g,e}/(L^1_{g,g}L^0_{e,g})=\omega(g,g,g)=-1$ of
+Ref.~\cite[line~5121]{FrancoRubio2025MPUGauging} holds.\footnote{The
+    $L$-symbols are \leanid{MPOTensor.CZX.blockActionData_lSymbol}, the
+    anomaly is \leanid{MPOTensor.CZX.fusionData_omega}, and the ratio for
+    every choice of fusion and action tensors is
+    \leanid{MPOTensor.CZX.omega_eq_lSymbol_ratio}, in
+    \doclink{TNLean/MPS/MPDO/CZXPermutedBlocks}.}
 
-To eliminate the gap, specify the domain and codomain of every factor in the fusion and defect diagrams, including the fused density insertion, and write all contractions with common physical and virtual index orders. The same convention must recover the blocked tensor, both displayed decompositions, the printed fusion and action tensors, the neutral action, the displayed defects, and the unmodified physical fusion circuit. It must then derive the fusion--action comparison and the physical defect identities within that convention. If a representation or gauge transformation intervenes, its effect on every one of these objects and on the scalar must be exhibited, rather than changing only the sign at the disputed step.
+The printed values $L^0_{g,g}=-1$ and $L^1_{g,g}=1$ are those of the
+transposed caps $Y_{\beta\gamma}$ in place of $Y_{\gamma\beta}$, that is, of
+the two caps multiplied by $-1$ since $Y^{\mathsf T}=-Y$. This is the scalar
+fusion gauge $\beta_{g,g}=-1$ of \papereqref{fbc25}{eq:scalar_fus_ten}, which
+leaves $\omega$ unchanged and multiplies both $L^x_{g,g}$ by $-1$
+(\papereqref{fbc25}{eq:Lsymbgauge}). The physical signs
+(\ref{eq:fbc25_czx_compat_physical_signs}) are likewise $-c_x$, the values for
+the transposed caps.
 
-No cap negation, scalar gauge flip, block relabelling, dressed action tensor, or change of the modified fusion operator is adopted here to force agreement. If a common convention is found, the note can be resolved by giving the explicit identifications. If the source fixes incompatible conventions and no such identification is possible, the precise affected assertion and its correction must first be isolated. The coordinate obstruction alone does not settle broader completion or gauging questions.
+\section{Verdict}
 
-\bibliographystyle{alpha}
-\bibliography{references}
+The classification is a local correction of orientation. The cap diagram of
+Ref.~\cite[lines~4671--4689]{FrancoRubio2025MPUGauging} does not fix which
+end of each horizontal $Y$ carries its row index. With the reading used in
+the formalization the individual $L$-symbols are
+(\ref{eq:fbc25_czx_compat_l_symbols}); with the transposed reading they are
+the printed values. The gauge-invariant ratio $L^0_{g,g}/L^1_{g,g}=-1$, the
+anomaly, and the conclusion that no gauge makes every $L$-symbol one are the
+same for both readings. The density insertion and the one-site diagnostics
+above are not used by the $L$-symbol computation.
+
 \end{document}
