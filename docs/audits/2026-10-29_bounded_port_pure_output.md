@@ -39,7 +39,6 @@ unrestricted enlarged-site relation remain separate open obligations under #8640
 
 ## Verification boundary
 
-The new proof is source-written. No local Lean/Lake build, elaboration or checkdecls
-is run, as requested. Its Blueprint statement and proof remain `notready`. The parent’s
-pure-output source passed hosted full and strict checks; that historical evidence does
-not verify this new source or the final combined tree.
+The new proof was first written without a local Lean build. Its Blueprint statement
+and proof are tagged `leanok`; the declaration compiles in the full root build of the
+merge train `train/wielandt-singletons`, which combines it with current main.

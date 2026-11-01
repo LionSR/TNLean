@@ -32,8 +32,11 @@ Documented in `docs/paper-gaps/glm23_reps3_z3_table.tex`.
 
 **Scope restriction (printed list):** the source's statements that `su(2)₄` has exactly two
 phases and `Rep(S₃)` exactly the four listed ones rest on the classification of module
-categories that it cites; beyond one block, completeness of the lists is not formalized.
-Documented in `docs/paper-gaps/glm23_reps3_su24_module_list.tex`.
+categories that it cites. Completeness is formalized at the level of the multiplicities: on one
+block here, and on any number of blocks for representations with the duality `M_{a*} = M_aᵀ` of
+a module category (`MPOTensor.exists_isNIMRepSummand_repS3`,
+`MPOTensor.exists_isNIMRepSummand_su24`). Documented in
+`docs/paper-gaps/glm23_reps3_su24_module_list.tex`.
 
 ## Main definitions
 

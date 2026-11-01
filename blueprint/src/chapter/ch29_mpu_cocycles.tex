@@ -679,6 +679,289 @@ space of $(MN)P$.
     (\ref{eq:mpug_h3_trivial}).
 \end{proof}
 
+\subsection{Daggered fusion tensors}
+
+\begin{lemma}[The dagger of a reduction]
+    \label{thm:mpug_reduction_dagger}
+    \lean{MPSTensor.IsReduction.physicalAdjointTensor,
+        MPSTensor.IsReduction.mapStar,
+        MPOTensor.toMPSTensor_physicalAdjointTensor,
+        MPSTensor.IsReduction.of_target_intertwine,
+        MPSTensor.IsReduction.of_reindexBond_source,
+        MPOTensor.mulTensor_mul_idKron_of_intertwine}
+    \leanok
+    \uses{def:mps_rectangular_reduction, def:mpdo_physical_adjoint, def:mpo_to_mps}
+    Let $(V,W)$ reduce the doubled-index tensor of $K$ onto that of $M$. Then
+    the entrywise complex conjugates $(\overline V,\overline W)$ reduce the
+    physical adjoint $K^\dagger$ onto $M^\dagger$. Moreover, if $Q R=\Id$ and
+    $A'^{i}Q=QA^{i}$ for every letter, a reduction $(V,W)$ of $B$ onto $A$
+    gives the reduction $(QV,WR)$ of $B$ onto $A'$; a relabelling of the bond
+    coordinates of the source is absorbed into the two boundaries by the
+    corresponding permutation matrices.
+\end{lemma}
+
+\begin{proof}\leanok
+    The doubled-index tensor of $K^\dagger$ is the entrywise conjugate of that
+    of $K$ with the two physical coordinates exchanged. Entrywise conjugation
+    is multiplicative, so $\overline V\,\overline{B^{\mathbf w}}\,\overline W
+        =\overline{A^{\mathbf w}}$ for every word, and relabelling the physical
+    alphabet preserves a reduction. For the second statement,
+    $A'^{\mathbf w}=QA^{\mathbf w}R$ for every word, so
+    $QVB^{\mathbf w}WR=QA^{\mathbf w}R=A'^{\mathbf w}$ and $QVWR=QR=\Id$.
+\end{proof}
+
+\begin{definition}[Daggered fusion tensors]
+    \label{def:mpug_dagger_fusion_tensors}
+    \lean{MPSTensor.reindexBondMatrix,
+        MPOTensor.GroupFamily.IsRepresentation.bondDim_mul_inv_rev,
+        MPOTensor.GroupFamily.IsRepresentation.daggerLegGauge,
+        MPOTensor.GroupFamily.IsRepresentation.daggerLegGaugeInv,
+        MPOTensor.GroupFamily.IsRepresentation.daggerTargetGauge,
+        MPOTensor.GroupFamily.IsRepresentation.daggerTargetGaugeInv,
+        MPOTensor.GroupFamily.FusionData.daggerFusionV,
+        MPOTensor.GroupFamily.FusionData.daggerFusionW}
+    \leanok
+    \uses{def:mpug_anomaly_three_cochain, thm:mpug_dagger_inverse_gauge,
+        def:mpug_product_bond_swap}
+    Let $g\mapsto\mathcal U_g$ be a representation by simple injective MPU
+    tensors in canonical form, with dagger-inverse gauges $T_g$ and a choice
+    of fusion tensors $(F^<_{g,h},F^>_{g,h})$. For $g,h\in G$ the daggered
+    fusion tensors are
+    \begin{align}
+        \widetilde F^<_{g,h}                                      & =T_{(gh)^{-1}}\,
+        \bigl(F^<_{h^{-1},g^{-1}}\bigr)^\dagger
+        \bigl(T^\dagger_{g^{-1}}\otimes T^\dagger_{h^{-1}}\bigr), &
+        \widetilde F^>_{g,h}                                      & =\bigl(T_{g^{-1}}\otimes T_{h^{-1}}\bigr)
+        \bigl(F^>_{h^{-1},g^{-1}}\bigr)^\dagger T^\dagger_{(gh)^{-1}},
+    \end{align}
+    where the dagger conjugates every entry and exchanges the two bond legs
+    on the same side, and the bond spaces of $\mathcal U_x$ and
+    $\mathcal U_{x^{-1}}$, which have equal dimension, are identified by the
+    corresponding permutation matrices.
+\end{definition}
+
+\begin{lemma}[The gauges intertwine the inverse tensors]
+    \label{thm:mpug_dagger_leg_gauges}
+    \lean{MPSTensor.mul_reindexBondMatrix_mul_gauge,
+        MPSTensor.reindexBondMatrix_rfl,
+        MPSTensor.reindexBondMatrix_mul_symm,
+        MPSTensor.reindexBondMatrix_gauge_mul_inv,
+        MPSTensor.reindexBondMatrix_gauge_inv_mul,
+        MPOTensor.GroupFamily.reindex_toMPSTensor_congr,
+        MPOTensor.GroupFamily.IsRepresentation.daggerLegGauge_mul_inv,
+        MPOTensor.GroupFamily.IsRepresentation.tensor_mul_daggerLegGaugeInv,
+        MPOTensor.GroupFamily.IsRepresentation.toMPSTensor_mul_daggerTargetGauge,
+        MPOTensor.GroupFamily.IsRepresentation.daggerTargetGauge_mul_inv}
+    \leanok
+    \uses{def:mpug_dagger_fusion_tensors, thm:mpug_dagger_inverse_gauge}
+    For every $x\in G$ and every physical pair $i,j$,
+    $\mathcal U_x^{ij}\,T_{x^{-1}}=T_{x^{-1}}\,(\mathcal U^\dagger_{x^{-1}})^{ij}$,
+    and similarly
+    $\mathcal U_{gh}\,T_{(gh)^{-1}}=T_{(gh)^{-1}}\,\mathcal U^\dagger_{(gh)^{-1}}$
+    letterwise; all four gauges are unitary.
+\end{lemma}
+
+\begin{proof}\leanok
+    Apply the gauge equation of Lemma~\ref{thm:mpug_dagger_inverse_gauge}
+    at $x^{-1}$, using $(x^{-1})^{-1}=x$, and at
+    $(gh)^{-1}=h^{-1}g^{-1}$, using $(h^{-1}g^{-1})^{-1}=gh$; then cancel
+    $T T^\dagger=\Id$.
+\end{proof}
+
+\begin{theorem}[Daggered fusion tensors are fusion tensors]
+    \label{thm:mpug_dagger_fusion_reduction}
+    \lean{MPOTensor.GroupFamily.FusionData.isReduction_daggerFusion}
+    \leanok
+    \uses{def:mpug_dagger_fusion_tensors, thm:mpug_reduction_dagger,
+        thm:mpug_dagger_leg_gauges, thm:mpug_physical_adjoint_product_reversal}
+    For every $g,h\in G$ the daggered fusion tensors
+    $(\widetilde F^<_{g,h},\widetilde F^>_{g,h})$ reduce
+    $\mathcal U_g\mathcal U_h$ onto $\mathcal U_{gh}$.
+\end{theorem}
+
+\begin{proof}\leanok
+    By Lemma~\ref{thm:mpug_reduction_dagger}, the conjugates of
+    $(F^<_{h^{-1},g^{-1}},F^>_{h^{-1},g^{-1}})$ reduce the physical adjoint of
+    $\mathcal U_{h^{-1}}\mathcal U_{g^{-1}}$ onto that of
+    $\mathcal U_{h^{-1}g^{-1}}$. By
+    Lemma~\ref{thm:mpug_physical_adjoint_product_reversal} the former is
+    $\mathcal U^\dagger_{g^{-1}}\mathcal U^\dagger_{h^{-1}}$ after the
+    product-bond swap. Lemma~\ref{thm:mpug_dagger_leg_gauges} replaces the
+    target by $\mathcal U_{gh}$ and, one factor at a time, the source by
+    $\mathcal U_g\mathcal U_h$; each replacement multiplies the two boundaries
+    by a gauge and its inverse, as in Lemma~\ref{thm:mpug_reduction_dagger}.
+\end{proof}
+
+\begin{theorem}[The scalars comparing daggered and chosen fusion tensors]
+    \label{thm:mpug_dagger_zeta}
+    \lean{MPOTensor.GroupFamily.FusionData.daggerZeta,
+        MPOTensor.GroupFamily.FusionData.daggerZeta_defzeta}
+    \leanok
+    \uses{thm:mpug_dagger_fusion_reduction, thm:mpug_dressed_proportionality}
+    For every $g,h\in G$ there is a scalar $\zeta_{g,h}\in\C^\times$ such that,
+    for all sufficiently long words $\mathbf w$ of $B=\mathcal U_g\mathcal U_h$,
+    \begin{align}
+        \widetilde F^<_{g,h}B^{\mathbf w} & =\zeta_{g,h}\,F^<_{g,h}B^{\mathbf w},      &
+        B^{\mathbf w}\widetilde F^>_{g,h} & =\zeta_{g,h}^{-1}\,B^{\mathbf w}F^>_{g,h}.
+    \end{align}
+    This is the defining equation of the scalars $\zeta_{g,h}$ in
+    \cite[lines~1570--1637]{FrancoRubio2025MPUGauging}, in boundary-dressed
+    form. The relation of $\zeta_{g,h}\overline{\zeta_{h^{-1},g^{-1}}}$ to the
+    dagger-inverse signs is Theorem~\ref{thm:mpug_dagger_zeta_relation}.
+\end{theorem}
+
+\begin{proof}\leanok
+    By Theorem~\ref{thm:mpug_dagger_fusion_reduction} both pairs reduce $B$
+    onto the normal tensor $\mathcal U_{gh}$, and $B$ and $\mathcal U_{gh}$
+    have the same periodic operators on nonempty chains. The two-sided
+    comparison of reductions gives one nonzero scalar $z$ with both identities
+    for $z$ and $z^{-1}$; by the uniqueness in
+    Lemma~\ref{thm:mpug_dressed_proportionality}, $z=\zeta_{g,h}$.
+\end{proof}
+
+\begin{lemma}[The dagger of a boundary-dressed comparison]
+    \label{thm:mpug_dagger_dressed_transport}
+    \lean{MPSTensor.IsDressedProportional.mapStar,
+        MPSTensor.IsDressedProportional.reindexPhysical,
+        MPSTensor.IsDressedProportional.physicalAdjointTensor,
+        MPSTensor.IsDressedProportional.of_reindexBond_source,
+        MPOTensor.GroupFamily.IsRepresentation.daggerBoundary,
+        MPOTensor.GroupFamily.IsRepresentation.daggerLegGaugeInv_mul,
+        MPOTensor.GroupFamily.IsRepresentation.isDressedProportional_daggerBoundary,
+        MPOTensor.GroupFamily.FusionData.daggerFusionV_eq_daggerBoundary}
+    \leanok
+    \uses{thm:mpug_dagger_fusion_reduction, thm:mpug_dressed_proportionality}
+    For a left boundary $X$ of $B'=\mathcal U_{h^{-1}}\mathcal U_{g^{-1}}$ with
+    values in the bond space of $\mathcal U_{h^{-1}g^{-1}}$, write
+    \begin{align}
+        \widetilde X & =T_{(gh)^{-1}}\,X^\dagger
+        \bigl(T^\dagger_{g^{-1}}\otimes T^\dagger_{h^{-1}}\bigr),
+    \end{align}
+    a left boundary of $B=\mathcal U_g\mathcal U_h$, where the dagger
+    conjugates every entry and exchanges the two bond legs on the same side;
+    in particular $\widetilde F^<_{g,h}$ is obtained from $F^<_{h^{-1},g^{-1}}$.
+    If $XB'^{\mathbf w}=zYB'^{\mathbf w}$ for all sufficiently long words, then
+    $\widetilde XB^{\mathbf w}=\overline z\,\widetilde YB^{\mathbf w}$ for all
+    sufficiently long words.
+\end{lemma}
+
+\begin{proof}\leanok
+    Entrywise conjugation is multiplicative and the doubled-index tensor of
+    the physical adjoint of $B'$ is the conjugate of that of $B'$ with the
+    physical coordinates exchanged, so the conjugated relation holds against
+    the physical adjoint with scalar $\overline z$. The physical adjoint of
+    $B'$ is $\mathcal U^\dagger_{g^{-1}}\mathcal U^\dagger_{h^{-1}}$ after the
+    product-bond swap, and the leg gauges of
+    Lemma~\ref{thm:mpug_dagger_leg_gauges} intertwine it, one factor at a
+    time, with $B$; each step multiplies the two boundaries on the right by the
+    same invertible matrix. Multiplying on the left by $T_{(gh)^{-1}}$ gives
+    the claim.
+\end{proof}
+
+\begin{lemma}[The double dagger of a fusion tensor]
+    \label{thm:mpug_double_dagger_fusion}
+    \lean{MPSTensor.reindexBondMatrix_mul_reindexBondMatrix,
+        MPSTensor.reindexBondMatrix_mul_reindexBondMatrix_assoc,
+        MPSTensor.reindexBondMatrix_self,
+        MPSTensor.reindexBondMatrix_map_star,
+        MPSTensor.reindexBondMatrix_conjTranspose,
+        MPSTensor.reindex_finCongr_eq,
+        MPOTensor.kronId_map_star, MPOTensor.idKron_map_star,
+        MPOTensor.equiv_toMatrix_map_star, MPOTensor.kronId_smul, MPOTensor.idKron_smul,
+        MPOTensor.productBondSwap_mul_idKron_mul_kronId_mul_productBondSwap,
+        MPOTensor.productBondSwap_mul_idKron_mul_kronId_mul_productBondSwap_assoc,
+        MPOTensor.GroupFamily.castMat_eq_reindexBondMatrix,
+        MPOTensor.GroupFamily.IsRepresentation.daggerInverseGauge_congr,
+        MPOTensor.GroupFamily.IsRepresentation.transpose_daggerInverseGauge_inv_mul_conjTranspose,
+        MPOTensor.GroupFamily.IsRepresentation.daggerLegGauge_inv_map_star_mul,
+        MPOTensor.GroupFamily.IsRepresentation.daggerTargetGauge_mul_map_star_mul,
+        MPOTensor.GroupFamily.FusionData.V_congr,
+        MPOTensor.GroupFamily.FusionData.daggerLegGauge_double,
+        MPOTensor.GroupFamily.FusionData.daggerBoundary_daggerFusionV}
+    \leanok
+    \uses{thm:mpug_dagger_dressed_transport, thm:mpug_dagger_inverse_scalar}
+    Applying the operation of Lemma~\ref{thm:mpug_dagger_dressed_transport}
+    to $\widetilde F^<_{h^{-1},g^{-1}}$ gives
+    \begin{align}
+        \widetilde{\widetilde F^<_{h^{-1},g^{-1}}}
+         & =\sigma_{h^{-1}g^{-1}}\,\overline{\sigma_{g^{-1}}}\,
+        \overline{\sigma_{h^{-1}}}\,F^<_{g,h}.
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    The two entrywise conjugations cancel, and conjugating the leg gauges of
+    $(h^{-1},g^{-1})$ by the two product-bond swaps exchanges their tensor
+    factors. Equation (\ref{eq:mpug_dagger_inverse_scalar}) at $y$ gives
+    $T_y(T_{y^{-1}})^*=\sigma_y\mathbf 1$, hence, taking adjoints,
+    $T_{y^{-1}}^{\mathsf T}T_y^\dagger=\overline{\sigma_y}\,\mathbf 1$. At
+    $y=g^{-1}$ and $y=h^{-1}$ this collapses the leg gauges to
+    $\overline{\sigma_{g^{-1}}}\,\overline{\sigma_{h^{-1}}}\,\mathbf 1$, and at
+    $y=h^{-1}g^{-1}$ the first form collapses the target gauges to
+    $\sigma_{h^{-1}g^{-1}}\mathbf 1$; the bond identifications of equal group
+    elements compose to the identity.
+\end{proof}
+
+\begin{theorem}[The relation between $\zeta$ and the dagger-inverse signs]
+    \label{thm:mpug_dagger_zeta_relation}
+    \lean{MPOTensor.GroupFamily.FusionData.daggerZeta_mul_star_daggerZeta_inv}
+    \leanok
+    \uses{thm:mpug_dagger_zeta, thm:mpug_dagger_dressed_transport,
+        thm:mpug_double_dagger_fusion, thm:mpug_dagger_inverse_scalar,
+        thm:mpug_dressed_proportionality}
+    For all $g,h\in G$,
+    \begin{align}
+        \zeta_{g,h}\,\overline{\zeta_{h^{-1},g^{-1}}}
+         & =\frac{\sigma_g\sigma_h}{\sigma_{gh}}.
+    \end{align}
+    This is the first identity of the proposition on the scalars $\zeta$ in
+    \cite[lines~1570--1678]{FrancoRubio2025MPUGauging}.
+\end{theorem}
+
+\begin{proof}\leanok
+    By Theorem~\ref{thm:mpug_dagger_zeta} at $(h^{-1},g^{-1})$ and
+    Lemma~\ref{thm:mpug_dagger_dressed_transport}, the double dagger of
+    Lemma~\ref{thm:mpug_double_dagger_fusion} equals
+    $\overline{\zeta_{h^{-1},g^{-1}}}\,\widetilde F^<_{g,h}$ against long words, and
+    by Theorem~\ref{thm:mpug_dagger_zeta} at $(g,h)$ this is
+    $\overline{\zeta_{h^{-1},g^{-1}}}\,\zeta_{g,h}F^<_{g,h}$. The left boundary
+    $F^<_{g,h}$ is nonzero against arbitrarily long words, so
+    $\zeta_{g,h}\overline{\zeta_{h^{-1},g^{-1}}}
+        =\sigma_{h^{-1}g^{-1}}\overline{\sigma_{g^{-1}}}\,\overline{\sigma_{h^{-1}}}$.
+    Finally $\overline{\sigma_x}=\sigma_x^{-1}$ and
+    $\sigma_x\sigma_{x^{-1}}=1$ by Lemma~\ref{thm:mpug_dagger_inverse_scalar},
+    so $\overline{\sigma_{x^{-1}}}=\sigma_x$ and
+    $\sigma_{h^{-1}g^{-1}}=\sigma_{(gh)^{-1}}=\sigma_{gh}^{-1}$.
+\end{proof}
+
+\begin{lemma}[The three-cocycle of the daggered fusion tensors]
+    \label{thm:mpug_dagger_omega_gauge}
+    \lean{MPOTensor.GroupFamily.FusionData.dagger,
+        MPOTensor.GroupFamily.FusionData.daggerZeta_eq_relativeScalar,
+        MPOTensor.GroupFamily.FusionData.omega_eq_fusionGauge_daggerZeta}
+    \leanok
+    \uses{thm:mpug_dagger_fusion_reduction, thm:mpug_dagger_zeta,
+        thm:mpug_anomaly_three_cocycle_gauge}
+    The daggered fusion tensors are a choice of fusion tensors, and if
+    $\widetilde\omega$ denotes their three-cocycle, then
+    \begin{align}
+        \omega(g,h,k) & =\frac{\zeta_{g,hk}\zeta_{h,k}}{\zeta_{g,h}\zeta_{gh,k}}\,
+        \widetilde\omega(g,h,k).
+    \end{align}
+    The second identity of the proposition on the scalars $\zeta$ in
+    \cite[lines~1570--1678]{FrancoRubio2025MPUGauging} follows once
+    $\widetilde\omega(g,h,k)\,\overline{\omega(k^{-1},h^{-1},g^{-1})}=1$, which
+    is obtained by taking the dagger of the two fusion trees and is not part of
+    this statement.
+\end{lemma}
+
+\begin{proof}\leanok
+    By Theorem~\ref{thm:mpug_dagger_fusion_reduction} the daggered tensors are
+    reductions, and by Theorem~\ref{thm:mpug_dagger_zeta} they are compared with
+    the chosen ones by $\zeta$; Lemma~\ref{thm:mpug_anomaly_three_cocycle_gauge}
+    gives the change of the three-cocycle.
+\end{proof}
+
 \subsection{Reductions through action tensors}
 
 \begin{definition}[The action tensor]
@@ -1087,6 +1370,7 @@ $N\geq1$.
     \label{thm:mpug_permuted_block_l_symbol_spec}
     \lean{MPOTensor.GroupFamily.nonempty_blockActionData,
         MPOTensor.GroupFamily.BlockActionData.isDressedProportional_lSymbol,
+        MPOTensor.GroupFamily.BlockActionData.eq_lSymbol_of_isDressedProportional,
         MPOTensor.GroupFamily.actTensor_idTensor_apply,
         MPOTensor.GroupFamily.isReduction_actTensor_idTensor}
     \leanok
@@ -1095,7 +1379,8 @@ $N\geq1$.
     Definition~\ref{def:mpug_permuted_block_l_symbol} exist; for the bond-one
     identity tensor they are the identification of the bond spaces. For
     every choice of them, $L^x_{g,h}$ relates the two left boundaries against
-    all long words of $(O_gO_h)\cdot A_x$.
+    all long words of $(O_gO_h)\cdot A_x$, and it is the only scalar that
+    does.
 \end{lemma}
 
 \begin{proof}\leanok
@@ -1108,8 +1393,13 @@ $N\geq1$.
     and~\ref{thm:mpug_reduction_composition} both boundaries are left
     boundaries of reductions of $(O_gO_h)\cdot A_x$ onto the normal tensor
     $A_{(gh)x}$, so Lemma~\ref{thm:mpug_dressed_proportionality} gives a
-    nonzero scalar relating them against long words.
+    nonzero scalar relating them against long words. The boundary of two
+    successive actions is nonzero against arbitrarily long words, since it is
+    the left boundary of a reduction onto a normal tensor, so the scalar is
+    unique.
 \end{proof}
+
+\input{chapter/ch29_mpu_action_common_blocking}
 
 \begin{lemma}[Compatibility for permuted blocks]
     \label{thm:mpug_permuted_block_l_compatibility}
@@ -1233,6 +1523,110 @@ $N\geq1$.
     and at $(g,e,e)$ it gives $L^z_{e,e}=\omega(g,e,e)L^z_{g,e}$ for $z=x$ and
     $z=gx$. Substituting into the formula of
     Lemma~\ref{thm:mpug_involution_anomaly_ratio} gives the claim.
+\end{proof}
+
+\begin{lemma}[Gauge law for the L-symbols of permuted blocks]
+    \label{lem:mpug_permuted_block_l_gauge}
+    \lean{MPOTensor.GroupFamily.FusionData.rescale,
+        MPOTensor.GroupFamily.FusionData.isDressedProportional_rescale,
+        MPOTensor.GroupFamily.FusionData.relativeScalar_rescale,
+        MPOTensor.GroupFamily.FusionData.omega_rescale,
+        MPOTensor.GroupFamily.BlockActionData.relativeScalar,
+        MPOTensor.GroupFamily.BlockActionData.isDressedProportional_relativeScalar,
+        MPOTensor.GroupFamily.BlockActionData.rescale,
+        MPOTensor.GroupFamily.BlockActionData.relativeScalar_rescale,
+        MPOTensor.GroupFamily.BlockActionData.lSymbol_eq_gauge,
+        MPOTensor.GroupFamily.BlockActionData.lSymbol_rescale}
+    \leanok
+    \uses{def:mpug_permuted_block_l_symbol,
+        thm:mpug_permuted_block_l_symbol_spec,
+        thm:mpug_anomaly_three_cocycle_gauge, def:mpug_l_gauge,
+        thm:mpug_dressed_proportionality}
+    Keep the setting of Definition~\ref{def:mpug_permuted_block_l_symbol}
+    and let the doubled-index tensors be normal. Take two choices of fusion
+    tensors and two choices of action tensors, with $L$ and $L'$ the
+    corresponding $L$-symbols. Let $\beta_{g,h}$ be the nonzero scalar with
+    $F^<_{g,h}B^{\mathbf w}=\beta_{g,h}F'^<_{g,h}B^{\mathbf w}$ for all long
+    words of $B=O_gO_h$, as in
+    Lemma~\ref{thm:mpug_anomaly_three_cocycle_gauge}, and let $\gamma^x_g$ be
+    the nonzero scalar with
+    $V_{g,x}C^{\mathbf w}=\gamma^x_gV'_{g,x}C^{\mathbf w}$ for all long words
+    of $C=O_g\cdot A_x$. Then
+    \begin{align}
+        L'^x_{g,h}
+         & =\frac{\gamma^x_{gh}\beta_{g,h}}{\gamma^{hx}_g\gamma^x_h}L^x_{g,h},
+        \notag
+    \end{align}
+    which is the joint gauge (\ref{eq:mpug_l_gauge}). Conversely,
+    multiplying $F^>_{g,h}$ by $\beta_{g,h}$ and $F^<_{g,h}$ by
+    $\beta_{g,h}^{-1}$, and $W_{g,x}$ by $\gamma^x_g$ and $V_{g,x}$ by
+    $(\gamma^x_g)^{-1}$, gives fusion and action tensors whose comparison
+    scalars with the original ones are exactly $\beta$ and $\gamma$, so every
+    joint scalar gauge of the $L$-symbols is realized by tensors, and the
+    rescaled fusion tensors have anomaly three-cocycle
+    $\beta\mathbin{\triangleright}\omega$.
+
+    This is the gauge law \cite[line~1918]{FrancoRubio2025MPUGauging}, with
+    the scalars of
+    \cite[lines~1500--1504, 1871--1873]{FrancoRubio2025MPUGauging}.
+    As recorded in
+    \cite{gap:fbc25_boundary_dressed_l_symbols}, all three families of scalars
+    relate the tensors against long words rather than as bare matrices,
+    because the uniqueness of reductions onto a normal tensor holds only in
+    that form.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_permuted_block_l_symbol_spec,
+        thm:mpug_dressed_proportionality}
+    As in the proof of Lemma~\ref{thm:mpug_permuted_block_l_compatibility},
+    write $\alpha^x_{g,h}$ and $\varphi^x_{g,h}$ for the two left boundaries
+    of Definition~\ref{def:mpug_permuted_block_l_symbol}, and
+    $\alpha'^x_{g,h}$, $\varphi'^x_{g,h}$ for those of the primed choice.
+    Comparing the action tensors of $h$ on the block $x$ and lifting through
+    the operator $O_g$, then pulling the comparison for $g$ on the block $hx$
+    back along the reduction by the primed action of $h$, and comparing the
+    fusion tensors in the same way, gives for all long words of
+    $C=(O_gO_h)\cdot A_x$
+    \begin{align}
+        \alpha^x_{g,h}C^{\mathbf w}
+         & =\gamma^{hx}_g\gamma^x_h\,\alpha'^x_{g,h}C^{\mathbf w},   &
+        \varphi^x_{g,h}C^{\mathbf w}
+         & =\beta_{g,h}\gamma^x_{gh}\,\varphi'^x_{g,h}C^{\mathbf w}.
+        \label{eq:mpug_permuted_l_gauge_boundaries}
+    \end{align}
+    Since $\alpha=L\varphi$ and $\alpha'=L'\varphi'$ against long words, the
+    first boundary of the original choice equals both
+    $\gamma^{hx}_g\gamma^x_hL'^x_{g,h}\varphi'^x_{g,h}$ and
+    $L^x_{g,h}\beta_{g,h}\gamma^x_{gh}\varphi'^x_{g,h}$ against long words,
+    and $\varphi'^x_{g,h}$ is nonzero against arbitrarily long words because
+    it belongs to a reduction onto a normal tensor. For rescaled tensors the left boundaries
+    differ by the rescaling factor exactly, so the comparison scalars are the
+    rescaling factors, and the statement about the anomaly is
+    Lemma~\ref{thm:mpug_anomaly_three_cocycle_gauge}.
+\end{proof}
+
+\begin{lemma}[A single block is trivial in some gauge]
+    \label{lem:mpug_single_block_gauge_trivial}
+    \lean{MPOTensor.GroupFamily.BlockActionData.exists_rescale_omega_eq_one_lSymbol_eq_one}
+    \leanok
+    \uses{lem:mpug_permuted_block_l_gauge,
+        thm:mpug_permuted_block_l_compatibility}
+    In the setting of Lemma~\ref{lem:mpug_permuted_block_l_gauge}, if the set
+    $\mathsf X$ has exactly one element, some rescaling of the fusion and
+    action tensors gives $\omega(g,h,k)=1$ and $L_{g,h}=1$ for all
+    $g,h,k\in G$, as stated in
+    \cite[lines~1925--1926]{FrancoRubio2025MPUGauging}.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:mpug_permuted_block_l_gauge,
+        thm:mpug_permuted_block_l_compatibility}
+    Rescale the fusion tensors by $\beta_{g,h}=L_{g,h}^{-1}$ and leave the
+    action tensors unchanged. By Lemma~\ref{lem:mpug_permuted_block_l_gauge}
+    the new $L$-symbols are $\beta_{g,h}L_{g,h}=1$, and compatibility,
+    Lemma~\ref{thm:mpug_permuted_block_l_compatibility}, for the new tensors
+    then reads $1=\omega'(g,h,k)$.
 \end{proof}
 
 \subsection{Domain walls between permuted blocks}
@@ -1704,6 +2098,96 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
     $by=y$ and $bz=z$. Dividing the compatibility relations at $y$ and at $z$
     for $(a,b,c)$ with $c\in H_{y,z}$ cancels $\omega(a,b,c)$ and gives the
     two-cocycle equation.
+\end{proof}
+
+\begin{definition}[Domain-wall strings of a group element]
+    \label{def:mpug_group_domain_wall_string}
+    \lean{MPOTensor.GroupFamily.IsSeparatingLeftInverseFamily,
+        MPOTensor.GroupFamily.BlockActionData.groupWallLeftEndpoint,
+        MPOTensor.GroupFamily.BlockActionData.groupWallRightEndpoint,
+        MPOTensor.GroupFamily.BlockActionData.groupWallString,
+        MPOTensor.nestedWallCoeff}
+    \leanok
+    \uses{def:mpug_domain_wall_string, def:mpug_domain_wall_family}
+    Let the blocks $A_x$ form a finite family with left inverses $\hat A_x$
+    of separated supports: $\hat A_x$ is a left inverse of $A_x$ and
+    $\sum_\sigma(\hat A_x^\sigma)_{\alpha\beta}(A_y^\sigma)_{\gamma\delta}=0$
+    for $y\neq x$. Let $e_{yz}$ be a family of domain walls permuted by the
+    group. Following \cite[Section~IV.B]{GarreRubioSchuch2024DomainWall},
+    the left endpoint tensor of $g$ is
+    $\sum_xV_{g,x}e_{x,gx}\hat A_x$, the right endpoint tensor is
+    $\sum_xW_{g,x}e_{gx,x}\hat A_x$, and the string $O_g^{[i,j]}$ acts by the
+    identity outside the sites $i,\dots,j$, by the two endpoint tensors on
+    the sites $i$ and $j$, and by the tensor of $O_g$ between them.
+\end{definition}
+
+\begin{lemma}[Strings of a group element create pairs of domain walls]
+    \label{lem:mpug_group_domain_wall_string_creation}
+    \lean{MPOTensor.leftAct_zero, MPOTensor.rightAct_zero,
+        MPOTensor.leftAct_sum, MPOTensor.rightAct_sum,
+        MPOTensor.GroupFamily.BlockActionData.leftAct_groupWallLeftEndpoint,
+        MPOTensor.GroupFamily.BlockActionData.rightAct_groupWallRightEndpoint,
+        MPOTensor.GroupFamily.BlockActionData.groupWallString_mulVec_mpv}
+    \leanok
+    \uses{def:mpug_group_domain_wall_string,
+        thm:mpug_domain_wall_string_creation}
+    On the periodic chain of every length $L\geq2$ and for all sites $i<j$,
+    $O_g^{[i,j]}\ket{\psi_{A_x}}=\ket{\psi(x,gx)}$, the state with the domain
+    wall $e_{x,gx}$ at $i$, the block $A_{gx}$ between $i$ and $j$, and the
+    domain wall $e_{gx,x}$ at $j$
+    \cite[Section~IV.B]{GarreRubioSchuch2024DomainWall}.
+\end{lemma}
+
+\begin{proof}\leanok
+    On $A_x$ only the term of $\hat A_x$ in each endpoint survives, leaving
+    $e_{x,gx}V_{g,x}$ and $W_{g,x}e_{gx,x}$; the action tensors reduce the
+    string of $O_g\cdot A_x$ between them to $A_{gx}$.
+\end{proof}
+
+\begin{lemma}[Exchange of two domain walls of a group element]
+    \label{lem:mpug_group_domain_wall_exchange}
+    \lean{MPOTensor.GroupFamily.BlockActionData.groupWallString_outer_mul_inner_mulVec_mpv_apply,
+        MPOTensor.GroupFamily.BlockActionData.groupWallString_inner_mul_outer_mulVec_mpv_apply,
+        MPOTensor.GroupFamily.BlockActionData.groupWallString_mul_groupWallString_mulVec_mpv,
+        MPOTensor.GroupFamily.BlockActionData.groupWallString_cross_mulVec_mpv_apply,
+        MPOTensor.GroupFamily.BlockActionData.groupWallString_mul_groupWallString_mulVec_mpv_swap_left}
+    \leanok
+    \uses{lem:mpug_group_domain_wall_string_creation, thm:mpug_domain_wall_pair}
+    In the setting of Definition~\ref{def:mpug_group_domain_wall_string},
+    let the regions between the sites considered below be longer than a
+    fixed buffer. For sites $i_2<i_1<j_1<j_2$,
+    \begin{align}
+        O_g^{[i_2,j_2]}O_g^{[i_1,j_1]}\ket{\psi_{A_x}}
+         & =B^g_{x,gx}B^g_{gx,x}\,O_g^{[i_1,j_1]}O_g^{[i_2,j_2]}\ket{\psi_{A_x}},
+        \notag
+    \end{align}
+    and for sites $j<i<r_2<r_1$,
+    \begin{align}
+        O_g^{[j,r_1]}O_g^{[i,r_2]}\ket{\psi_{A_x}}
+         & =B^g_{x,gx}\,O_g^{[i,r_1]}O_g^{[j,r_2]}\ket{\psi_{A_x}}.
+        \notag
+    \end{align}
+    The second identity is the exchange of two left endpoints
+    $O^{[j]}_{g,a}O^{[i]}_{g,b}\ket{\psi_x}=B^g_{x,gx}\,O^{[i]}_{g,a}O^{[j]}_{g,b}\ket{\psi_x}$
+    of \cite[Section~IV.B]{GarreRubioSchuch2024DomainWall}, with the
+    half-chain operators glued with the right endpoints of their strings
+    \cite{gap:gs24_domain_wall_half_string_gluing}; the buffer is the blocked
+    form of the local action \cite{gap:gs24_domain_wall_nondegenerate}.
+\end{lemma}
+
+\begin{proof}\leanok
+    Every side is a multiple of the state with the domain walls $e_{x,gx}$,
+    $e_{gx,g^2x}$, $e_{g^2x,gx}$, $e_{gx,x}$ at the four sites in increasing
+    order, between the regions $A_x$, $A_{gx}$, $A_{g^2x}$, $A_{gx}$, $A_x$.
+    In a nested pair whose outer string acts second, the outer string passes
+    over the domain walls $e_{x,gx}$ and $e_{gx,x}$ created by the inner one,
+    with phase $B^g_{x,gx}B^g_{gx,x}$ by
+    Lemma~\ref{thm:mpug_domain_wall_pair}. If the outer string acts first,
+    the inner string acts on the region $A_{gx}$ and creates the walls
+    $e_{gx,g^2x}$ and $e_{g^2x,gx}$ with no phase. In the crossed pair, the
+    string on $[i,r_1]$ acting second starts in the region $A_{gx}$, passes
+    over the domain wall $e_{gx,x}$ at $r_2$ and ends in the region $A_x$,
+    with phase $B^g_{gx,x}$; dividing the two phases gives $B^g_{x,gx}$.
 \end{proof}
 
 \begin{lemma}[Domain walls of an involution detect the anomaly]
@@ -4222,6 +4706,211 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     $|L|^2=\overline LL=cL^2$ and $(L/|L|)^2=c^{-1}$.
 \end{proof}
 
+\begin{definition}[The time-reversed tensor]
+    \label{def:mpug_time_reversed_tensor}
+    \lean{MPOTensor.timeReversal}
+    \leanok
+    Let $v$ be a $d\times d$ matrix and $T$ a matrix product operator tensor.
+    The time-reversed tensor $\mathcal T T$ has letters
+    $(\mathcal T T)^{ij}=\sum_{k,l}v_{ik}\,\overline{T^{kl}}\,\overline{v_{jl}}$,
+    where the bar is entrywise complex conjugation of the virtual matrices.
+    For the antiunitary time reversal $\mathcal T=v^{\otimes N}K$ of
+    \cite[Section~4.3]{GarreRubio2023MPOSym}, with $K$ complex conjugation,
+    it generates $\mathcal T O\mathcal T^{-1}$.
+    % Source anchor: arXiv:2203.12563, line 867.
+\end{definition}
+
+\begin{lemma}[Operators and products of time-reversed tensors]
+    \label{lem:mpug_time_reversed_tensor_properties}
+    \lean{MPOTensor.mpo_map_starRingEnd, MPOTensor.mpo_timeReversal,
+        MPOTensor.toMPSTensor_timeReversal, MPOTensor.mulTensor_timeReversal}
+    \leanok
+    \uses{def:mpug_time_reversed_tensor, def:mpdo_operator_product}
+    For every $N$, the periodic operator of $\mathcal T T$ is
+    $O_N(\mathcal T T)=v^{\otimes N}\,\overline{O_N(T)}\,(v^{\otimes N})^\dagger$.
+    On the doubled physical index, each letter of $\mathcal T T$ is the
+    combination $\sum_{k,l}v_{ik}\overline{v_{jl}}\,\overline{T^{kl}}$ of the
+    conjugated letters of $T$. If $v^\dagger v=1$, then time reversal
+    commutes with stacking: the time-reversed tensor of the stacked product
+    of two tensors is the stacked product of their time-reversed tensors.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The periodic operator is the trace of a product of letters, and complex
+    conjugation commutes with products and traces. The physical factors
+    $v$ and $\overline v$ act on the ket and bra legs and produce
+    $v^{\otimes N}$ and $(\overline v^{\otimes N})^T=(v^{\otimes N})^\dagger$.
+    For stacking, the contracted middle leg carries
+    $\sum_k\overline{v_{kb}}v_{kc}=(v^\dagger v)_{bc}=\delta_{bc}$.
+\end{proof}
+
+\begin{lemma}[Reductions under recombination, conjugation and gauges]
+    \label{lem:mpug_reduction_recombination}
+    \lean{MPSTensor.IsReduction.recombine, MPSTensor.IsReduction.map_starRingEnd,
+        MPSTensor.IsReduction.target_gauge,
+        MPSTensor.IsDressedProportional.recombine,
+        MPSTensor.IsDressedProportional.map_starRingEnd,
+        MPSTensor.IsReduction.timeReversal,
+        MPSTensor.IsDressedProportional.timeReversal}
+    \leanok
+    \uses{def:mps_rectangular_reduction, thm:mpug_dressed_proportionality,
+        lem:mpug_time_reversed_tensor_properties}
+    Let $(V,W)$ reduce $B$ onto $A$. Replacing the letters of both tensors by
+    the same combinations $\sum_ac_{ia}B^a$ and $\sum_ac_{ia}A^a$ gives a
+    reduction with the same $V,W$; conjugating the tensors and both
+    boundaries gives a reduction; and if $A'^iQ=QA^i$ with $PQ=1$, a
+    reduction $(V,W)$ of $B$ onto $A'$ gives the reduction $(PV,WQ)$ onto $A$.
+    If $XB^{\mathbf w}=z\,YB^{\mathbf w}$ for long words, the same holds for
+    recombined letters, and conjugation gives
+    $\overline X\,\overline B^{\mathbf w}=\overline z\,\overline Y\,\overline B^{\mathbf w}$.
+    In particular, reductions and dressed proportionalities of tensors pass
+    to their time-reversed tensors with conjugated boundaries and scalars.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    A word in the recombined letters is the combination, with the same
+    coefficients for both tensors, of words of the same length in the
+    original letters; induction on the word with an arbitrary prefix gives
+    both recombination claims. Conjugation commutes with products. For the
+    gauge, $A'^{\mathbf w}Q=QA^{\mathbf w}$ gives
+    $PVB^{\mathbf w}WQ=PA'^{\mathbf w}Q=A^{\mathbf w}$.
+\end{proof}
+
+\begin{lemma}[Fusion tensors along exact bond gauges]
+    \label{lem:mpug_fusion_tensor_gauge_transport}
+    \lean{MPOTensor.bondKron, MPOTensor.bondKron_eq_idKron_mul_kronId,
+        MPOTensor.bondKron_mul_bondKron, MPOTensor.bondKron_one, MPOTensor.bondKron_mul_kronId,
+        MPOTensor.bondKron_mul_idKron, MPOTensor.bondKron_bondKron_mul_assocInv,
+        MPOTensor.mulTensor_mul_bondKron_of_intertwine,
+        MPOTensor.GroupFamily.withTensor, MPOTensor.GroupFamily.castMat_mul_eq,
+        MPOTensor.GroupFamily.BondGauge, MPOTensor.GroupFamily.BondGauge.mul_P,
+        MPOTensor.GroupFamily.FusionData.gaugeTransport,
+        MPOTensor.GroupFamily.FusionData.gaugeTransport_leftV,
+        MPOTensor.GroupFamily.FusionData.gaugeTransport_rightV,
+        MPOTensor.GroupFamily.FusionData.isAssociator_gaugeTransport}
+    \leanok
+    \uses{def:mpug_anomaly_three_cochain, lem:mpug_reduction_recombination,
+        thm:mpug_reduction_dagger}
+    Let $g\mapsto T_g$ be tensors with the bond dimensions of a group family
+    $g\mapsto O_g$, and let $P_g,Q_g$ be mutually inverse matrices with
+    $T_g^{il}Q_g=Q_gO_g^{il}$. If $(V_{g,h},W_{g,h})$ are fusion tensors of
+    the family $T$, then
+    \begin{align}
+        V'_{g,h} & =P_{gh}V_{g,h}(Q_g\otimes Q_h), &
+        W'_{g,h} & =(P_g\otimes P_h)W_{g,h}Q_{gh}
+        \notag
+    \end{align}
+    are fusion tensors of the family $O$, and the two fusion trees of the
+    triple product compare by the same scalar for both choices.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The gauges $P_g\otimes P_h$ intertwine the stacked letters, so
+    Lemma~\ref{lem:mpug_reduction_recombination} gives the reductions. The
+    tensor products of the gauges commute with identity strands and with the
+    bond associator, which gives
+    $V'^L=P_{ghk}V^L(Q_g\otimes Q_h\otimes Q_k)$ and the same for the second
+    tree. The gauge $Q_g\otimes Q_h\otimes Q_k$ intertwines the letters of
+    the two triple products, so the dressed proportionality of the trees
+    is transported unchanged.
+\end{proof}
+
+\begin{lemma}[Conjugated fusion tensors of the time-reversed family]
+    \label{lem:mpug_conjugated_fusion_tensors}
+    \lean{MPOTensor.kronId_map_starRingEnd, MPOTensor.idKron_map_starRingEnd,
+        MPOTensor.mulTensorAssocInvMatrix_map_starRingEnd,
+        MPOTensor.GroupFamily.castMat_map_starRingEnd,
+        MPOTensor.GroupFamily.FusionData.timeReversal,
+        MPOTensor.GroupFamily.FusionData.timeReversal_leftV,
+        MPOTensor.GroupFamily.FusionData.timeReversal_rightV,
+        MPOTensor.GroupFamily.FusionData.isAssociator_timeReversal}
+    \leanok
+    \uses{def:mpug_anomaly_three_cochain,
+        lem:mpug_time_reversed_tensor_properties,
+        lem:mpug_reduction_recombination}
+    Let $v^\dagger v=1$ and let $(V_{g,h},W_{g,h})$ be fusion tensors of a
+    group family $O$. Then $(\overline{V_{g,h}},\overline{W_{g,h}})$ are
+    fusion tensors of the time-reversed family $g\mapsto\mathcal TO_g$, and
+    if the fusion trees of $O$ compare by $z$, those of the conjugated
+    fusion tensors compare by $\overline z$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Time reversal commutes with stacking, by
+    Lemma~\ref{lem:mpug_time_reversed_tensor_properties}, so the stacked
+    and triple products of the time-reversed family are the time-reversed
+    tensors of those of $O$. The identity strands, bond identifications and
+    the bond associator are real, so the fusion trees of the conjugated
+    tensors are the conjugates of the original trees, and
+    Lemma~\ref{lem:mpug_reduction_recombination} applies.
+\end{proof}
+
+\begin{lemma}[The gauges of a time-reversal symmetry]
+    \label{lem:mpug_time_reversal_bond_gauge}
+    \lean{MPOTensor.GroupFamily.CommutesWithTimeReversal,
+        MPOTensor.GroupFamily.nonempty_bondGauge_timeReversal}
+    \leanok
+    \uses{def:mpug_anomaly_three_cochain, cor:asym_single_block,
+        lem:mpug_time_reversed_tensor_properties}
+    Let $g\mapsto O_g$ be a group of matrix product operators with normal
+    tensors, let $v$ be unitary, and suppose that
+    $v^{\otimes N}\overline{O_g}=O_gv^{\otimes N}$ for every $g$ and every
+    $N\geq1$, that is, $\mathcal TO_g=O_g\mathcal T$. Then for every $g$
+    there are mutually inverse matrices $P_g,Q_g$ with
+    $(\mathcal TT_g)^{il}Q_g=Q_gT_g^{il}$, where $T_g$ is the tensor of
+    $O_g$. These are the matrices $q_g$ of
+    \cite[Section~4.3]{GarreRubio2023MPOSym}.
+    % Source anchor: arXiv:2203.12563, lines 869--870.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    By Lemma~\ref{lem:mpug_time_reversed_tensor_properties} and
+    unitarity, $\mathcal TT_g$ and $T_g$ generate the same periodic
+    operators. Corollary~\ref{cor:asym_single_block} gives a reduction
+    $(P_g,Q_g)$ of $\mathcal TT_g$ onto the normal tensor $T_g$. The bond
+    dimensions agree, so $P_gQ_g=1$ forces $Q_gP_g=1$, and the one-letter
+    words give $(\mathcal TT_g)^{il}=Q_gT_g^{il}P_g$.
+\end{proof}
+
+\begin{lemma}[Time reversal makes the anomaly of a group of operators real]
+    \label{lem:mpug_time_reversal_tensor_real_anomaly}
+    \lean{MPOTensor.GroupFamily.FusionData.omega_cohomologousTo_star_of_timeReversal,
+        MPOTensor.GroupFamily.FusionData.exists_real_cohomologousTo_omega_of_timeReversal}
+    \leanok
+    \uses{lem:mpug_time_reversal_bond_gauge,
+        lem:mpug_conjugated_fusion_tensors,
+        lem:mpug_fusion_tensor_gauge_transport,
+        thm:mpug_anomaly_three_cocycle_gauge,
+        thm:mpug_time_reversal_real_anomaly}
+    Under the hypotheses of Lemma~\ref{lem:mpug_time_reversal_bond_gauge},
+    the anomaly three-cochain $\omega$ of any choice of fusion tensors is
+    cohomologous to its complex conjugate, and hence to a real-valued
+    three-cochain. This is the conclusion
+    of~\cite[Section~4.3]{GarreRubio2023MPOSym} that
+    $\omega=\overline\omega\,\beta_{g,h}\beta_{gh,k}/(\beta_{h,k}\beta_{g,hk})$
+    and that $\omega$ can be gauge transformed to a real number.
+    % Source anchor: arXiv:2203.12563, lines 869--891.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Conjugate the fusion tensors, by
+    Lemma~\ref{lem:mpug_conjugated_fusion_tensors}, and transport them
+    along the gauges of Lemma~\ref{lem:mpug_time_reversal_bond_gauge}, by
+    Lemma~\ref{lem:mpug_fusion_tensor_gauge_transport}. This gives fusion
+    tensors of the original family whose trees compare by
+    $\overline{\omega}$, so their anomaly three-cochain is $\overline\omega$.
+    By Lemma~\ref{thm:mpug_anomaly_three_cocycle_gauge}, the two choices of
+    fusion tensors have cohomologous three-cochains; the scalars $\beta_{g,h}$
+    of the source are their relative scalars. The second claim is
+    Lemma~\ref{thm:mpug_time_reversal_real_anomaly}.
+\end{proof}
+
 \begin{lemma}[A block fixed by a subgroup trivializes the restricted three-cocycle]
     \label{thm:mpug_fixed_block_trivializes}
     \lean{TNLean.Algebra.LSymbol.isTrivialGaugeClass_comap_of_isCompatible,
@@ -4487,9 +5176,9 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
         TNLean.Algebra.ScalarCocycle.H2π_circlePhaseInclusion,
         TNLean.Algebra.ScalarCocycle.circlePhaseMathlibCocycle,
         TNLean.Algebra.ScalarCocycle.H2π_map_circlePhaseMathlibCocycle,
-        TNLean.Algebra.circleH2ToComplexUnitsH2_injective,
-        TNLean.Algebra.circleH2ToComplexUnitsH2_surjective,
-        TNLean.Algebra.circleH2EquivComplexUnitsH2}
+        TNLean.Algebra.circleToComplexUnits_map_injective,
+        TNLean.Algebra.circleToComplexUnits_map_surjective,
+        TNLean.Algebra.circleToComplexUnits_map_bijective}
     \leanok
     \uses{thm:mpug_h2_group_cohomology_comparison,
         thm:mpug_positive_generalized_cocycle}
@@ -5214,6 +5903,119 @@ tensor-level bridge to an underlying MPS--MPU pair is not asserted here.
     (\ref{eq:mpug_l_gauge}) cancels the multiplier under the inverse gauges.
 \end{proof}
 
+\begin{lemma}[Exact extension from trivializing scalar gauges]
+    \label{lem:mpug_trivializing_extension}
+    \lean{TNLean.Algebra.LSymbol.isMulCocycle₂_of_isTrivial_gauge,
+        TNLean.Algebra.LSymbol.basepointExtension,
+        TNLean.Algebra.LSymbol.basepointExtension_isMulCocycle₂,
+        TNLean.Algebra.StabilizerRepresentatives.basepointExtension_restrict,
+        TNLean.Algebra.StabilizerRepresentatives.exists_extension_of_inducedLSymbol_hasTrivialGauge}
+    \leanok
+    \uses{thm:mpug_stabilizer_cocycle_l_symbol, def:mpug_l_gauge}
+    Let $G$ act on $\mathsf X$ with basepoint $x_0$, stabilizer
+    $H=\operatorname{Stab}_G(x_0)$, and representatives $k_x$ satisfying
+    $k_xx_0=x$ and $k_{x_0}=e$. Let $\psi:H\times H\to\C^\times$ be a
+    two-cocycle and $L[\psi]$ its induced scalar $L$-symbol.
+    Suppose scalar cochains $\beta:G\times G\to\C^\times$ and
+    $\gamma:G\times\mathsf X\to\C^\times$ satisfy
+    $(\beta,\gamma)\mathbin{\triangleright}L[\psi]=1$.
+    Then $\beta$ is a two-cocycle and
+    \begin{align}
+        \Psi(g,h)
+         & =\beta(g,h)^{-1}
+        \frac{\gamma_{g,x_0}\gamma_{h,x_0}}{\gamma_{gh,x_0}}
+        \label{eq:mpug_trivializing_extension}
+    \end{align}
+    is a two-cocycle with $\Psi|_{H\times H}=\psi$ exactly.
+    Neither cocycles nor gauges need be normalized.
+    This is the converse scalar calculation in
+    \cite[lines~7057--7064]{FrancoRubio2025MPUGauging}, with gauges that
+    trivialize $L[\psi]$, the inverses of the source's forward gauges.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_stabilizer_cocycle_l_symbol, def:mpug_l_gauge,
+        thm:mpug_h2_exact_extension}
+    Compatibility of $L[\psi]$ with $\omega=1$ transports under
+    $(\beta,\gamma)$ to compatibility of the constant symbol $1$ with
+    $d\beta$. Thus $d\beta=1$, which is the two-cocycle equation for
+    $\beta$. Setting $\varphi(g)=\gamma_{g,x_0}$, formula
+    (\ref{eq:mpug_trivializing_extension}) is
+    $\Psi=d\varphi\,\beta^{-1}$, hence is a two-cocycle.
+    For $a,b\in H$, the equality $bx_0=x_0$ and the chosen
+    $k_{x_0}=e$ identify $L[\psi]^{x_0}_{a,b}$ with $\psi(a,b)$.
+    Evaluating the trivializing-gauge identity there gives
+    $\Psi(a,b)=\psi(a,b)$.
+\end{proof}
+
+\begin{lemma}[Block independence extends the stabilizer cocycle]
+    \label{lem:mpug_bi_basepoint_extension}
+    \lean{TNLean.Algebra.LSymbol.basepointExtension_apply_of_isTrivial_gauge,
+        TNLean.Algebra.LSymbol.exists_extension_of_isBlockIndependent}
+    \leanok
+    \uses{lem:mpug_trivializing_extension, thm:mpug_block_independence_four_forms,
+        def:mpug_block_independence_gauge_forms}
+    Let $G$ act on $\mathsf X$ with basepoint $x_0$ and stabilizer
+    $H=\operatorname{Stab}_G(x_0)$, and let $L$ be any $L$-symbol compatible
+    with $\omega=1$. If $L$ is block independent after a joint scalar gauge,
+    then there is a two-cocycle $\Psi:G\times G\to\C^\times$ with
+    $\Psi(a,b)=L^{x_0}_{a,b}$ for all $a,b\in H$. This is the converse
+    direction of \cite[lines~7057--7064]{FrancoRubio2025MPUGauging} for an
+    arbitrary compatible $L$-symbol, not only for one induced by
+    representatives.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:mpug_trivializing_extension, thm:mpug_block_independence_four_forms}
+    By Lemma~\ref{thm:mpug_block_independence_four_forms}, some joint scalar
+    gauge $(\beta,\gamma)$ trivializes $L$. The cochain
+    (\ref{eq:mpug_trivializing_extension}) is a two-cocycle by
+    Lemma~\ref{lem:mpug_trivializing_extension}. For $b\in H$ the trivializing
+    identity at $(x_0,a,b)$ uses only $bx_0=x_0$, and it gives
+    $\Psi(a,b)=L^{x_0}_{a,b}$.
+\end{proof}
+
+% Scalar criterion; the circle-coefficient and tensor forms follow below.
+\begin{lemma}[Scalar block independence and restriction of the stabilizer class]
+    \label{lem:mpug_scalar_bi_restriction}
+    \lean{TNLean.Algebra.StabilizerRepresentatives.inducedLSymbol_isBlockIndependent_iff_exists_extension,
+        TNLean.Algebra.StabilizerRepresentatives.inducedLSymbol_isBlockIndependent_iff_H2π_mem_range_map_subtype}
+    \leanok
+    \uses{lem:mpug_trivializing_extension, thm:mpug_stabilizer_extension_gauge,
+        thm:mpug_h2_exact_extension, thm:mpug_block_independence_four_forms}
+    Let $G$ act on $\mathsf X$ with basepoint $x_0$, stabilizer
+    $H=\operatorname{Stab}_G(x_0)$, and representatives $k_x$ satisfying
+    $k_xx_0=x$ and $k_{x_0}=e$. For a two-cocycle
+    $\psi:H\times H\to\C^\times$, the following are equivalent:
+    \begin{enumerate}
+        \item The induced scalar $L$-symbol $L[\psi]$ is block independent
+              after a joint scalar gauge.
+        \item There is a two-cocycle $\Psi:G\times G\to\C^\times$ with
+              $\Psi|_{H\times H}=\psi$ exactly.
+        \item The class $[\psi]$ belongs to the image of the restriction map
+              $H^2(G,\C^\times)\to H^2(H,\C^\times)$ for trivial coefficients.
+    \end{enumerate}
+    No normality or finiteness assumption is imposed on $H$ or $G$.
+    This states the scalar consequence of
+    \cite[lines~7042--7064]{FrancoRubio2025MPUGauging} for the induced symbols.
+    The distinction between classes, representatives, and tensor data is
+    explained in \cite{gap:fbc25_mpu_action_stabilizer_source_audit}.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_block_independence_four_forms,
+        lem:mpug_trivializing_extension, thm:mpug_stabilizer_extension_gauge,
+        thm:mpug_h2_exact_extension}
+    By Lemma~\ref{thm:mpug_block_independence_four_forms}, scalar block
+    independence is equivalent to the existence of a trivializing scalar
+    gauge. Lemma~\ref{lem:mpug_trivializing_extension} constructs an exact
+    extension from such a gauge, and
+    Lemma~\ref{thm:mpug_stabilizer_extension_gauge} constructs a trivializing
+    gauge from an exact extension. Finally,
+    Lemma~\ref{thm:mpug_h2_exact_extension} identifies exact extension of
+    $\psi$ with membership of $[\psi]$ in the image of restriction.
+\end{proof}
+
 \begin{lemma}[Reconstruction of stabilizer L-symbols]
     \label{thm:mpug_stabilizer_reconstruction}
     \lean{TNLean.Algebra.StabilizerRepresentatives.reconstructedLSymbol,
@@ -5380,6 +6182,140 @@ tensor-level bridge to an underlying MPS--MPU pair is not asserted here.
     gauge, so the rule is well defined, and by the two identities acting by
     $[\psi_1]+[\psi_2]$ is acting by $[\psi_2]$ and then by $[\psi_1]$. With
     base point $L$ the action is the bijection of the third item.
+\end{proof}
+
+\begin{lemma}[Scalar block independence with circle coefficients]
+    \label{lem:mpug_scalar_bi_restriction_circle}
+    \lean{TNLean.Algebra.circleRepresentationRes,
+        TNLean.Algebra.circleToComplexUnits_map_comp_map_res,
+        TNLean.Algebra.circleToComplexUnits_map_res_apply,
+        TNLean.Algebra.mem_range_map_circleRepresentationRes_iff,
+        TNLean.Algebra.LSymbol.isBlockIndependent_gauge_iff,
+        TNLean.Algebra.StabilizerRepresentatives.inducedLSymbol_isBlockIndependent_iff_circle}
+    \leanok
+    \uses{lem:mpug_scalar_bi_restriction, thm:mpug_circle_complex_units_h2}
+    Restriction along a group homomorphism $f\colon S\to G$ commutes with
+    the maps $H^2(-,U(1))\to H^2(-,\C^\times)$ induced by inclusion of the
+    unit circle. If $G$ is finite, a class $c\in H^2(S,U(1))$ is the
+    restriction of a class of $G$ exactly when its image in
+    $H^2(S,\C^\times)$ is. Block independence of an $L$-symbol after
+    a joint scalar gauge is unchanged by any further joint scalar gauge.
+
+    Consequently, in the setting of Lemma~\ref{lem:mpug_scalar_bi_restriction}
+    with $G$ finite, the induced $L$-symbol $L[\psi]$ is block independent
+    after a joint scalar gauge if and only if the class in $H^2(H,U(1))$ of
+    the pointwise phase $\psi/|\psi|$ lies in the image of the restriction map
+    $H^2(G,U(1))\to H^2(H,U(1))$. For a cocycle of modulus one this phase is
+    $\psi$ itself. This is the coefficient group of
+    \cite[lines~7042--7064]{FrancoRubio2025MPUGauging}; the comparison of
+    coefficients is the algebraic one of
+    Lemma~\ref{thm:mpug_circle_complex_units_h2}.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:mpug_scalar_bi_restriction, thm:mpug_circle_complex_units_h2,
+        thm:mpug_l_gauge_composition}
+    Both composites of restriction and inclusion are induced by the same
+    homomorphism $S\to G$ and the same coefficient map
+    $U(1)\to\C^\times$, so they agree. If $c=\operatorname{res}(a)$, then
+    the image of $c$ is the restriction of the image of $a$. Conversely, if
+    the image of $c$ is $\operatorname{res}(b)$, surjectivity of inclusion
+    for the finite group $G$ writes $b$ as the image of some $a$; then $c$
+    and $\operatorname{res}(a)$ have the same image, and inclusion is
+    injective for every group. Gauge invariance follows from
+    (\ref{eq:mpug_l_gauge_composition}) applied with the inverse gauge. By
+    Lemma~\ref{thm:mpug_circle_complex_units_h2} the class of the phase of
+    $\psi$ maps to $[\psi]$, and Lemma~\ref{lem:mpug_scalar_bi_restriction}
+    finishes the proof.
+\end{proof}
+
+\begin{lemma}[Stabilizer form of the L-symbols of permuted blocks]
+    \label{lem:mpug_permuted_block_stabilizer_form}
+    \lean{MPOTensor.GroupFamily.BlockActionData.exists_rescale_lSymbol_eq_inducedLSymbol,
+        MPOTensor.GroupFamily.BlockActionData.exists_rescale_lSymbol_eq_inducedLSymbol_of_finite}
+    \leanok
+    \uses{lem:mpug_permuted_block_l_gauge,
+        thm:mpug_permuted_block_l_compatibility, cor:mpug_anomaly_class,
+        thm:mpug_stabilizer_torsor, thm:mpug_stabilizer_cocycle_l_symbol,
+        thm:mpug_stabilizer_transition, thm:mpug_circle_complex_units_h2}
+    In the setting of Lemma~\ref{lem:mpug_permuted_block_l_gauge}, choose
+    $x_0\in\mathsf X$, let $H$ be its stabilizer, and choose $k_x\in G$ with
+    $k_xx_0=x$ and $k_{x_0}=e$. If the anomaly class vanishes, some rescaling
+    of the fusion and action tensors gives $\omega=1$ and
+    \begin{align}
+        L^x_{g_1,g_2}
+         & =\psi(h_1,h_2),
+         &
+        h_1
+         & =k_{g_1g_2x}^{-1}g_1k_{g_2x},
+         &
+        h_2
+         & =k_{g_2x}^{-1}g_2k_x,
+        \notag
+    \end{align}
+    for a two-cocycle $\psi\colon H\times H\to\C^\times$. If $G$ is finite,
+    $\psi$ can be chosen with values of modulus one.
+
+    This is \cite[lines~7028--7042]{FrancoRubio2025MPUGauging}, with the
+    corrected last representative in $h_1$ of
+    \cite{gap:fbc25_stabilizer_transition_index_typo}; $\psi$ is a cocycle
+    representative, not a cohomology class.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:mpug_permuted_block_l_gauge,
+        thm:mpug_permuted_block_l_compatibility, cor:mpug_anomaly_class,
+        thm:mpug_stabilizer_torsor, thm:mpug_stabilizer_cocycle_l_symbol,
+        thm:mpug_circle_complex_units_h2}
+    By Corollary~\ref{cor:mpug_anomaly_class} there is $\beta$ with
+    $\beta\mathbin{\triangleright}\omega=1$, and by
+    Lemma~\ref{lem:mpug_permuted_block_l_gauge} rescaling the fusion tensors
+    by $\beta$ makes $\omega=1$ and changes $L$ to
+    $(\beta,1)\mathbin{\triangleright}L$, which is compatible with the
+    trivial three-cochain by
+    Lemma~\ref{thm:mpug_permuted_block_l_compatibility}. The first item of
+    Lemma~\ref{thm:mpug_stabilizer_torsor} writes it as
+    $(1,\gamma)\mathbin{\triangleright}L[\psi]$, so rescaling the action
+    tensors by $\gamma^{-1}$ gives $L[\psi]$. For finite $G$, $\psi$ is
+    cohomologous to its pointwise phase by
+    Lemma~\ref{thm:mpug_circle_complex_units_h2}, and by
+    Lemma~\ref{thm:mpug_stabilizer_cocycle_l_symbol} the coboundary is an
+    action gauge, which is absorbed into the rescaling of the action tensors.
+\end{proof}
+
+\begin{lemma}[Block independence and extension of the stabilizer class]
+    \label{lem:mpug_permuted_block_bi_extension}
+    \lean{MPOTensor.GroupFamily.BlockActionData.isBlockIndependent_lSymbol_iff,
+        MPOTensor.GroupFamily.BlockActionData.isBlockIndependent_lSymbol_iff_circle}
+    \leanok
+    \uses{lem:mpug_permuted_block_stabilizer_form,
+        lem:mpug_permuted_block_l_gauge, lem:mpug_scalar_bi_restriction,
+        lem:mpug_scalar_bi_restriction_circle}
+    In the setting of Lemma~\ref{lem:mpug_permuted_block_stabilizer_form},
+    take any rescaling of the tensors for which $L^x_{g_1,g_2}=\psi(h_1,h_2)$
+    with a two-cocycle $\psi$ on $H$. The $L$-symbols are block independent
+    after a joint scalar gauge if and only if $[\psi]\in H^2(H,\C^\times)$
+    lies in the image of the restriction map from $H^2(G,\C^\times)$. If $G$
+    is finite, this holds if and only if the class in $H^2(H,U(1))$ of the
+    phase of $\psi$ lies in the image of the restriction map from
+    $H^2(G,U(1))$.
+
+    This is \cite[lines~7042--7064]{FrancoRubio2025MPUGauging} for the
+    $L$-symbols of actual tensors, stated for the class of $\psi$; the
+    representative form, an exact extension of $\psi$ to a cocycle on $G$, is
+    Lemma~\ref{lem:mpug_scalar_bi_restriction}. The subgroup $H$ need not be
+    normal.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:mpug_permuted_block_l_gauge, lem:mpug_scalar_bi_restriction,
+        lem:mpug_scalar_bi_restriction_circle}
+    By Lemma~\ref{lem:mpug_permuted_block_l_gauge} the rescaled $L$-symbols
+    are a joint scalar gauge of the original ones, and block independence is
+    gauge invariant by Lemma~\ref{lem:mpug_scalar_bi_restriction_circle}.
+    The two criteria for $L[\psi]$ are
+    Lemmas~\ref{lem:mpug_scalar_bi_restriction}
+    and~\ref{lem:mpug_scalar_bi_restriction_circle}.
 \end{proof}
 
 \begin{definition}[Generalized coboundary and cocycle]
@@ -6196,9 +7132,8 @@ $\sigma(s)$ in the setting of \cite[lines~5207--5338]{FrancoRubio2025MPUGauging}
     \end{align}
     after identifying the direct-sum and product bond
     coordinates.
-    % The theorem does not construct the Z4 x Z2 action, its virtual action
-    % tensors, its L-symbols, or its gauging data. The group action and gauging
-    % of this example remain issue #7352.
+    % The Z4 x Z2 action, its action tensors and L-symbols are treated in the
+    % lemmas below; the modified fusion operators and gauging are not.
 \end{lemma}
 
 \begin{proof}\leanok
@@ -6267,11 +7202,10 @@ $\sigma(s)$ in the setting of \cite[lines~5207--5338]{FrancoRubio2025MPUGauging}
     On the subgroup $H=\{(2a,b):a,b\in\{0,1\}\}$, the comparison with the
     cluster virtual representatives $W_{(b,a)}=Z^bX^a$ is
     $V_{(2a,b),x}=(-i)^{ab}W_{(b,a)}$.
-    No claim is made about defect normalization, $L$-symbols, cocycle
-    nonextension, block independence, or gauging.
-    % Scoped calculation only: no defect normalization, L-symbols,
-    % cocycle nonextension, block independence, or gauging is asserted.
-    % Those remaining parts of example:z4z2 stay open in #7352.
+    The $L$-symbols, the nonextension of the stabilizer class and the failure
+    of block independence are treated in
+    Lemma~\ref{thm:mpug_ghz_cluster_l_symbols} and
+    Lemma~\ref{thm:mpug_ghz_cluster_not_block_independent}.
 \end{lemma}
 
 \begin{proof}\leanok
@@ -6287,6 +7221,368 @@ $\sigma(s)$ in the setting of \cite[lines~5207--5338]{FrancoRubio2025MPUGauging}
     on the physical index into the stated conjugation identity.
     Finally, $ZX=iY$, so the only phase needed to compare the restriction
     with $Z^bX^a$ is $-i$ when $a=b=1$.
+\end{proof}
+
+\begin{lemma}[L-symbols of matrix action tensors]
+    \label{thm:mpug_l_symbols_action_matrices}
+    \lean{TNLean.Algebra.LSymbol.isCompatible_one_of_mul_eq_smul,
+        TNLean.Algebra.LSymbol.isNormalized_of_mul_eq_smul}
+    \leanok
+    \uses{def:mpug_l_symbols, def:mpug_l_normalized}
+    Let $G$ act on $\mathsf X$, and let $S_{g,x}$ be nonzero square matrices
+    and $L^x_{g,h}$ nonzero scalars with
+    \begin{align}
+        S_{g,hx}S_{h,x} & =L^x_{g,h}S_{gh,x}
+        \label{eq:mpug_action_matrix_l_symbols}
+    \end{align}
+    for all $g,h\in G$ and $x\in\mathsf X$, as for an onsite symmetry moved to
+    the virtual level of each block
+    \cite[lines~4363--4368]{FrancoRubio2025MPUGauging}. Then $L$ is compatible
+    with the trivial three-cochain. If in addition $S_{e,x}=\Id$ for every $x$,
+    then $L$ is normalized.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:mpug_l_symbols}
+    Both bracketings of $S_{g,hkx}S_{h,kx}S_{k,x}$ are evaluated with
+    (\ref{eq:mpug_action_matrix_l_symbols}). One gives
+    $L^{kx}_{g,h}L^x_{gh,k}S_{ghk,x}$ and the other gives
+    $L^x_{g,hk}L^x_{h,k}S_{ghk,x}$. Since $S_{ghk,x}\neq0$, the scalars agree.
+    With $S_{e,x}=\Id$, the relation at $(g,e)$ and at $(e,g)$ reads
+    $S_{g,x}=L^x_{g,e}S_{g,x}$ and $S_{g,x}=L^x_{e,g}S_{g,x}$.
+\end{proof}
+
+\begin{lemma}[L-symbols of the GHZ--cluster state]
+    \label{thm:mpug_ghz_cluster_l_symbols}
+    \lean{MPSTensor.z4z2GHZClusterBlockMulAction,
+        MPSTensor.z4z2_smul_def,
+        MPSTensor.z4z2ActionMatrix,
+        MPSTensor.twistedTensor_z4z2GHZClusterBlock,
+        MPSTensor.z4z2ActionMatrix_one,
+        MPSTensor.z4z2ActionMatrix_mul_conjTranspose,
+        MPSTensor.z4z2ActionMatrix_ne_zero,
+        MPSTensor.z4z2PauliWord,
+        MPSTensor.z4z2XCode,
+        MPSTensor.z4z2PauliPhase,
+        MPSTensor.z4z2ActionMatrix_eq_pauliWord,
+        MPSTensor.z4z2PauliWord_mul,
+        MPSTensor.z4z2XCode_mul,
+        MPSTensor.z4z2IUnit,
+        MPSTensor.z4z2LSymbol,
+        MPSTensor.coe_z4z2LSymbol,
+        MPSTensor.z4z2ActionMatrix_mul,
+        MPSTensor.z4z2LSymbol_isCompatible,
+        MPSTensor.z4z2LSymbol_isNormalized,
+        MPSTensor.z4z2LSymbol_pow_four,
+        MPSTensor.z4z2U,
+        MPSTensor.z4z2V,
+        MPSTensor.z4z2LSymbol_zero_sq_v}
+    \leanok
+    \uses{thm:mpug_ghz_cluster_action_table, thm:mpug_l_symbols_action_matrices,
+        def:mpug_l_symbols, def:mpug_l_normalized}
+    In the setting of Lemma~\ref{thm:mpug_ghz_cluster_action_table}, put
+    $S_{g,x}=V_{g,x}$, the action tensors $A^\Gamma_{g,x}$ of
+    \cite[lines~4482--4487]{FrancoRubio2025MPUGauging}. Then
+    \begin{align}
+        \sum_j (U_g)_{i,j}A_x^j & =S_{g,x}^\dagger A_{g\cdot x}^iS_{g,x},
+        \qquad S_{e,x}=\Id,
+    \end{align}
+    each $S_{g,x}$ is unitary, and each is a Pauli word
+    $i^{\alpha\beta}X^\alpha Z^\beta$, with $\beta=b$ for $g=(a,b)$. There are
+    scalars $L^x_{g,h}$ with
+    \begin{align}
+        S_{g,h\cdot x}S_{h,x} & =L^x_{g,h}S_{gh,x},
+        \label{eq:mpug_ghz_cluster_l_symbols}
+    \end{align}
+    as at \cite[line~4366]{FrancoRubio2025MPUGauging}. They are compatible with
+    the trivial three-cochain, normalized, and fourth roots of unity, so they
+    take values in $\{\pm1,\pm i\}$ as stated at
+    \cite[line~4495]{FrancoRubio2025MPUGauging}. With $u=(1,0)$ and $v=(0,1)$,
+    \begin{align}
+        L^0_{u^2,v} & =-i, & L^0_{v,u^2} & =i.
+        \label{eq:mpug_ghz_cluster_l_values}
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_ghz_cluster_action_table, thm:mpug_l_symbols_action_matrices}
+    The conjugation identity is the covariance of
+    Lemma~\ref{thm:mpug_ghz_cluster_action_table}, since every $V_{g,x}$ is
+    Hermitian. In the table, $\Id$, $X$, $Z$ and $Y=iXZ$ are the Pauli words
+    with exponents $(0,0)$, $(1,0)$, $(0,1)$ and $(1,1)$. Using $X^2=Z^2=\Id$
+    and $ZX=-XZ$,
+    \begin{align}
+        \bigl(i^{\alpha\beta}X^\alpha Z^\beta\bigr)
+        \bigl(i^{\alpha'\beta'}X^{\alpha'}Z^{\beta'}\bigr)
+         & =i^{\alpha\beta+\alpha'\beta'+2\beta\alpha'
+                -(\alpha+\alpha')(\beta+\beta')}\,
+        i^{(\alpha+\alpha')(\beta+\beta')}X^{\alpha+\alpha'}Z^{\beta+\beta'},
+        \notag
+    \end{align}
+    with exponents of $X$ and $Z$ added modulo two. The $X$ exponent of
+    $S_{g,x}$ is additive along the action,
+    $\alpha(gh,x)=\alpha(g,h\cdot x)+\alpha(h,x)$, as one checks on the
+    sixteen pairs, and the $Z$ exponent is additive. This gives
+    (\ref{eq:mpug_ghz_cluster_l_symbols}) with $L^x_{g,h}$ the displayed power
+    of $i$. Lemma~\ref{thm:mpug_l_symbols_action_matrices} gives compatibility
+    and normalization. Finally $S_{u^2,0}=X$ and $S_{v,0}=Z$, and
+    $XZ=-iY$ while $ZX=iY$.
+\end{proof}
+
+\begin{lemma}[Block independence fails for the GHZ--cluster state]
+    \label{thm:mpug_ghz_cluster_not_block_independent}
+    \lean{MPSTensor.z4z2Unbroken,
+        MPSTensor.z4z2StabilizerCocycle,
+        MPSTensor.z4z2StabilizerCocycle_isMulCocycle₂,
+        MPSTensor.z4z2StabilizerCocycle_H2π_ne_zero,
+        MPSTensor.commPhase_z4z2U_sq_z4z2V,
+        MPSTensor.z4z2StabilizerCocycle_not_extends,
+        MPSTensor.z4z2StabilizerCocycle_H2π_not_mem_range,
+        MPSTensor.z4z2LSymbol_not_isBlockIndependent}
+    \leanok
+    \uses{thm:mpug_ghz_cluster_l_symbols, lem:mpug_bi_basepoint_extension,
+        thm:comm_phase_bicharacter, thm:nontrivial_of_comm_phase,
+        thm:mpug_h2_exact_extension, def:mpug_block_independence_gauge_forms}
+    Let $H=\{(2a,b)\}$ be the stabilizer of the block $0$, the unbroken
+    subgroup of \cite[line~4489]{FrancoRubio2025MPUGauging}, and let
+    $\psi(a,b)=L^0_{a,b}$ for $a,b\in H$. Then $\psi$ is a two-cocycle with
+    nonzero class in $H^2(H,\C^\times)$. No two-cocycle of
+    $G=\Z_4\times\Z_2$ restricts to $\psi$, so $[\psi]$ is not in the image of
+    the restriction map $H^2(G,\C^\times)\to H^2(H,\C^\times)$
+    \cite[line~4385]{FrancoRubio2025MPUGauging}. Consequently the $L$-symbols
+    of Lemma~\ref{thm:mpug_ghz_cluster_l_symbols} are not block independent
+    after any joint scalar gauge, as asserted at
+    \cite[line~4490]{FrancoRubio2025MPUGauging}. Block independence is meant
+    here as the scalar condition on these $L$-symbols, with coefficients in
+    $\C^\times$; see \cite{gap:fbc25_mpu_action_stabilizer_source_audit}. The
+    modified fusion operators and the state-level gauging are not treated.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_ghz_cluster_l_symbols, lem:mpug_bi_basepoint_extension,
+        thm:comm_phase_bicharacter, thm:nontrivial_of_comm_phase,
+        thm:mpug_h2_exact_extension}
+    Compatibility of $L$ with $\omega=1$ at the block $0$ and arguments in $H$
+    is the cocycle equation of $\psi$, because $H$ fixes the block $0$. By
+    (\ref{eq:mpug_ghz_cluster_l_values}), the commutator phase of $\psi$ at the
+    commuting pair $(u^2,v)$ is $(-i)/i=-1$, so the class of $\psi$ is
+    nonzero by Lemma~\ref{thm:nontrivial_of_comm_phase}. If a two-cocycle
+    $\Psi$ of $G$ restricted to $\psi$, then, $G$ being commutative,
+    Lemma~\ref{thm:comm_phase_bicharacter} would give
+    \begin{align}
+        \beta_\Psi(u^2,v) & =\beta_\Psi(u,v)^2=\beta_\Psi(u,v^2)
+        =\beta_\Psi(u,e)=1,
+        \notag
+    \end{align}
+    against $\beta_\Psi(u^2,v)=\beta_\psi(u^2,v)=-1$. The class statement
+    follows by Lemma~\ref{thm:mpug_h2_exact_extension}. Finally, block
+    independence would produce such a $\Psi$ by
+    Lemma~\ref{lem:mpug_bi_basepoint_extension}.
+\end{proof}
+
+\section{The controlled-\texorpdfstring{$Z$}{Z} symmetry and its gauging}
+\label{sec:mpug_controlled_z}
+
+The simplest symmetry that is not onsite is the ring of controlled-$Z$ gates
+$U=\prod_j\mathrm{CZ}_{j,j+1}$ on a chain of qubits
+\cite[lines~3794--3968]{FrancoRubio2025MPUGauging}. Write
+$s(a,b)=(-1)^{ab}$ for bits $a,b$; these are the entries of $\sqrt2H$, and
+$s(a,b)$ is the phase of $\mathrm{CZ}\ket{a,b}$.
+
+\begin{definition}[The controlled-\texorpdfstring{$Z$}{Z} matrix product unitary]
+    \label{def:mpug_controlled_z_tensor}
+    \lean{ControlledZGauging.czSign,
+        ControlledZGauging.czMPUTensor,
+        ControlledZGauging.czMPUTensor_apply,
+        ControlledZGauging.czPhase,
+        ControlledZGauging.czBondDim,
+        ControlledZGauging.czRepTensor,
+        ControlledZGauging.czFamily}
+    \leanok
+    \uses{def:mpo_tensor}
+    Following \cite[eq.~(CZ) and eq.~(deltas)]{FrancoRubio2025MPUGauging}, the
+    gate is a copy tensor $\delta_{ijr}$ on each qubit joined along the bond by
+    $\sqrt2H$. Absorbing each $\sqrt2H$ into the site on its right gives the
+    bond-two tensor
+    \begin{align}
+        M^{ij}_{lr} & =\delta_{ij}\,\delta_{rj}\,s(l,j),
+        \label{eq:mpug_controlled_z_tensor}
+    \end{align}
+    with output index $i$ and input index $j$. Together with the identity
+    tensor of bond dimension one, it gives the family $\{\Id,M\}$ over $\Z_2$.
+\end{definition}
+
+\begin{lemma}[Tensors with a forced outgoing bond]
+    \label{thm:mps_forced_column_normality}
+    \lean{MPSTensor.isNBlkInjective_two_of_forced_column,
+        MPSTensor.isNormal_of_forced_column,
+        MPSTensor.mpv_of_forced_right_bond}
+    \leanok
+    \uses{def:mps_tensor}
+    Let $A$ be a tensor of bond dimension $D$. Suppose that for every bond
+    label $j$ some letter $\ell_j$ has the single nonzero column $j$, equal to
+    a vector $v_j$ with no vanishing entry, and that $v_1,\dots,v_D$ are the
+    columns of an invertible matrix. Then the words of length two span all
+    $D\times D$ matrices, so $A$ is normal. If every entry $A^i_{lr}$ vanishes
+    unless $r=\beta(i)$, and then equals $\varphi(i,l)$, the periodic amplitude
+    on a ring is $\prod_n\varphi(\sigma_{n+1},\beta(\sigma_n))$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:mps_tensor}
+    The product $A^{\ell_j}A^{\ell_k}$ is $v_k(j)\,v_je_k^{T}$, so the matrix
+    unit $e_le_k^T$ is the combination
+    $\sum_j P_{jl}\,v_k(j)^{-1}A^{\ell_j}A^{\ell_k}$, where $P$ is the inverse
+    of the matrix with columns $v_j$. For the amplitude, only the closed bond
+    configuration with bond $\beta(\sigma_n)$ after site $n$ contributes.
+\end{proof}
+
+\begin{lemma}[The controlled-\texorpdfstring{$Z$}{Z} symmetry is not anomalous]
+    \label{thm:mpug_controlled_z_not_anomalous}
+    \lean{ControlledZGauging.mpo_czMPUTensor,
+        ControlledZGauging.mulVec_mpo_czMPUTensor,
+        ControlledZGauging.mpo_czMPUTensor_mul_self,
+        ControlledZGauging.czSign_mul_self,
+        ControlledZGauging.czSign_ne_zero,
+        ControlledZGauging.toMPSTensor_czMPUTensor,
+        ControlledZGauging.czMPUTensor_isNormal,
+        ControlledZGauging.czFamily_isNormalRepresentation,
+        ControlledZGauging.zeroState,
+        ControlledZGauging.zeroState_isNormal,
+        ControlledZGauging.mpv_zeroState,
+        ControlledZGauging.fixesMPV_zeroState,
+        ControlledZGauging.isTrivialGaugeClass_omega_czFamily,
+        ControlledZGauging.czFamily_anomalyClass_eq_zero}
+    \leanok
+    \uses{def:mpug_controlled_z_tensor, thm:mpug_anomaly_obstruction,
+        def:mpug_anomaly_class, thm:mps_forced_column_normality}
+    On every ring of $N\geq1$ qubits the periodic operator of $M$ is the
+    diagonal matrix with entries $\prod_ks(t_k,t_{k+1})$, that is,
+    $U=\prod_j\mathrm{CZ}_{j,j+1}$, and $U^2=\Id$. The tensor $M$ is normal, so
+    $\{\Id,M\}$ represents $\Z_2$ exactly by normal tensors. The product state
+    $\ket{0\cdots0}$ is normal and fixed by $U$. Hence, for every choice of
+    fusion tensors, the anomaly three-cocycle has trivial gauge class and the
+    anomaly class in $H^3(\Z_2,\C^\times)$ vanishes, as stated at
+    \cite[line~3873]{FrancoRubio2025MPUGauging}.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_anomaly_obstruction, thm:mps_forced_column_normality}
+    The outgoing bond of $M$ copies the input, so the periodic operator is the
+    product of the entries along the forced bonds, $s(t_k,t_{k+1})$ at each
+    site, and squares to the identity since $s^2=1$. The letter $(j,j)$ of $M$
+    has the single nonzero column $j$, equal to the column $j$ of $\sqrt2H$, an
+    invertible matrix with no vanishing entry, so $M$ is normal by
+    Lemma~\ref{thm:mps_forced_column_normality}. Every entry
+    $\prod_ks(0,0)=1$ fixes $\ket{0\cdots0}$, and
+    Theorem~\ref{thm:mpug_anomaly_obstruction} applies.
+\end{proof}
+
+\begin{definition}[The invariant state, its defect, and the gauged tensor]
+    \label{def:mpug_controlled_z_defect}
+    \lean{ControlledZGauging.stateInt,
+        ControlledZGauging.defectInt,
+        ControlledZGauging.stateTensor,
+        ControlledZGauging.defectTensor,
+        ControlledZGauging.gaugedLetter,
+        ControlledZGauging.gaugedTensor,
+        ControlledZGauging.gaugedTensor_finProdFinEquiv,
+        ControlledZGauging.twoSite,
+        ControlledZGauging.gaussPerm,
+        ControlledZGauging.gaussOperator}
+    \leanok
+    \uses{def:mpug_controlled_z_tensor}
+    As in \cite[lines~3874--3896]{FrancoRubio2025MPUGauging}, let
+    \begin{align}
+        A^0   & =\begin{pmatrix}1&0&0\\0&0&0\\0&1&1\end{pmatrix},    &
+        A^1   & =\begin{pmatrix}0&1&-1\\-1&0&0\\0&0&0\end{pmatrix},
+        \notag                                                         \\
+        A_g^0 & =\begin{pmatrix}0&-1&-1\\0&0&0\\-1&0&0\end{pmatrix}, &
+        A_g^1 & =\begin{pmatrix}1&0&0\\0&-1&1\\0&0&0\end{pmatrix}.
+        \notag
+    \end{align}
+    The gauged tensor has letters $C^{ie}=A^i$ and $C^{ig}=A_g^i$, with the
+    gauge label written as a bit \cite[line~3966]{FrancoRubio2025MPUGauging}.
+    The Gauss operator $\mathcal G_g=\mathrm{CZ}\otimes X\otimes X$ acts on two
+    gauged sites by $\mathrm{CZ}$ on the two matter labels and $X$ on each
+    gauge label \cite[line~3968]{FrancoRubio2025MPUGauging}.
+\end{definition}
+
+\begin{lemma}[Defect identities and the Gauss law of the controlled-\texorpdfstring{$Z$}{Z} gauging]
+    \label{thm:mpug_controlled_z_gauss_law}
+    \lean{ControlledZGauging.sign_smul_state_mul_state,
+        ControlledZGauging.sign_smul_defect_mul_state,
+        ControlledZGauging.stateTensor_isNormal,
+        ControlledZGauging.czSign_smul_gaugedLetter_mul,
+        ControlledZGauging.gaussOperator_mul_self,
+        ControlledZGauging.sum_gaussOperator_smul_twoSite}
+    \leanok
+    \uses{def:mpug_controlled_z_defect}
+    The tensor $A$ is normal \cite[line~3885]{FrancoRubio2025MPUGauging}, and
+    for all bits $i,j$ \cite[eq.~(Z2\_def)]{FrancoRubio2025MPUGauging},
+    \begin{align}
+        s(i,j)\,A^iA^j   & =A_g^iA_g^j, &
+        s(i,j)\,A_g^iA^j & =A^iA_g^j.
+        \label{eq:mpug_controlled_z_defect}
+    \end{align}
+    The Gauss operator satisfies $\mathcal G_g^2=\Id$ and fixes the two-site
+    contraction of the gauged tensor:
+    $\sum_x(\mathcal G_g)_{y,x}C^{x_1}C^{x_2}=C^{y_1}C^{y_2}$ for every pair
+    $y=(y_1,y_2)$ of gauged labels.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:mpug_controlled_z_defect}
+    The identities (\ref{eq:mpug_controlled_z_defect}) are identities of
+    integer matrices, checked on the four pairs $(i,j)$. Twice every matrix
+    unit is a signed sum of at most four words of $A$ of length four, so the
+    words of length four span all matrices and $A$ is normal. By
+    (\ref{eq:mpug_controlled_z_defect}) and $s^2=1$, flipping both gauge labels
+    multiplies $C^{ia}C^{jb}$ by $s(i,j)$, which is the Gauss law in letters.
+    The operator $\mathcal G_g$ is the monomial matrix of the double gauge
+    flip with phases $s(i,j)$, so it is an involution, and its single nonzero
+    entry in each row turns the Gauss law in letters into the stated
+    invariance.
+\end{proof}
+
+\begin{lemma}[The split-index form of the gauged tensor]
+    \label{thm:mpug_controlled_z_split_index}
+    \lean{ControlledZGauging.simpsRInt,
+        ControlledZGauging.simpsLInt,
+        ControlledZGauging.xInt,
+        ControlledZGauging.simpsR,
+        ControlledZGauging.simpsL,
+        ControlledZGauging.simpsGauge,
+        ControlledZGauging.simpsTensor,
+        ControlledZGauging.stateTensor_eq_simpsR_mul_simpsL,
+        ControlledZGauging.defectTensor_eq_simpsR_mul_mul_simpsL,
+        ControlledZGauging.gaugedLetter_eq_simps,
+        ControlledZGauging.xInt_mul_simpsTensor_mul_xInt}
+    \leanok
+    \uses{def:mpug_controlled_z_defect}
+    Let
+    \begin{align}
+        R^0 & =\begin{pmatrix}1&0\\0&0\\0&-1\end{pmatrix}, &
+        R^1 & =\begin{pmatrix}1&0\\0&-1\\0&0\end{pmatrix}, &
+        L^0 & =\begin{pmatrix}1&0&0\\0&-1&-1\end{pmatrix}, &
+        L^1 & =\begin{pmatrix}0&1&-1\\1&0&0\end{pmatrix}.
+        \notag
+    \end{align}
+    Then $A^i=R^iL^i$, $A_g^i=R^iXL^i$, and $C^{ia}=R^iX^aL^i$, the internal
+    tensor of the virtual representation $S_e=\Id$, $S_g=X$ of
+    \cite[lines~4073--4209]{FrancoRubio2025MPUGauging}. The split-index tensor
+    $S^{ab}=L^aR^b$ satisfies $XS^{ab}X=s(a,b)\,S^{ab}$, the identity of
+    \cite[lines~4002--4072]{FrancoRubio2025MPUGauging}. The source draws $L$
+    and $R$ without listing their entries; the matrices above are one choice
+    realizing the displayed identities.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:mpug_controlled_z_defect}
+    Each identity is an identity of integer matrices, checked on the finitely
+    many values of the bits. For instance $S^{00}=S^{01}=\Id$, $S^{10}=X$ and
+    $S^{11}=\left(\begin{smallmatrix}0&-1\\1&0\end{smallmatrix}\right)$, which
+    anticommutes with $X$.
 \end{proof}
 
 \section{The gauge-invariant subspace of the CZX circuit tuple}
@@ -7663,11 +8959,10 @@ unbuffered defect formulas.
 The contractions below evaluate the printed action pair and right fusion
 cap of \cite[lines~4671--4694]{FrancoRubio2025MPUGauging} in fixed product-bond
 order. They are compared with the fusion--action relation of
-\cite[lines~1875--1913]{FrancoRubio2025MPUGauging}, but do not identify its
-$L$-symbol or its retained physical scalar. Compatibility of the oriented
-legs, density insertion, and fusion gauge remains open
-\cite{gap:fbc25_czx_fusion_coordinate_compatibility}. No cap, action tensor,
-block label, or physical gate is changed.
+\cite[lines~1875--1913]{FrancoRubio2025MPUGauging}; the next subsection
+identifies these coefficients with the $L$-symbols of two generators, up to the
+orientation of the caps \cite{gap:fbc25_czx_fusion_coordinate_compatibility}.
+No cap, action tensor, block label, or physical gate is changed.
 
 \begin{definition}[Sequential action covector]
     \label{def:mpug_czx_sequential_action_bra}
@@ -7856,6 +9151,250 @@ block label, or physical gate is changed.
     Lemma~\ref{thm:mpug_czx_fusion_action_finite_identities} completes
     the proof.
 \end{proof}
+\subsection{The CZX anomaly and its \texorpdfstring{$L$}{L}-symbols}
+
+The once-blocked CZX operators, the fusion caps of
+Definition~\ref{def:mpug_czx_fusion_caps}, and the dressed action tensors of
+Definition~\ref{def:mpug_czx_dressed_action} supply all data of the anomaly and
+of the $L$-symbols on the two blocked GHZ sectors. The computation below
+identifies the coefficients of
+Lemma~\ref{thm:mpug_czx_fusion_action_coefficient_coordinates} with the
+$L$-symbols of two generators. With the caps read in the product-bond order of
+the stacked tensor, $L^0_{g,g}=1$ and $L^1_{g,g}=-1$; the source states
+$L^0_{g,g}=-1$ \cite[line~4699]{FrancoRubio2025MPUGauging}. The two values are
+related by the fusion gauge $\beta_{g,g}=-1$, which transposes both caps, since
+$Y^{\mathsf T}=-Y$, and leaves the anomaly unchanged
+\cite{gap:fbc25_czx_fusion_coordinate_compatibility}. The gauge-invariant ratio
+$L^0_{g,g}/L^1_{g,g}=-1$ agrees with the source.
+
+\begin{lemma}[The CZX representation of \texorpdfstring{$\Z_2$}{Z2}]
+    \label{thm:mpug_czx_z2_representation}
+    \lean{MPOTensor.CZX.mpo_tensor_mul_self,
+        MPOTensor.CZX.family,
+        MPOTensor.CZX.family_isNormalRepresentation}
+    \leanok
+    \discussion{7354}
+    \uses{def:mpug_czx_exact_tensor, thm:mpug_czx_exact_tensor_injective,
+        def:mpug_anomaly_three_cochain, threeMPU}
+    Let $\mathcal U_g$ be the periodic operator of the once-blocked CZX tensor
+    of Definition~\ref{def:mpug_czx_exact_tensor} on $N\geq1$ blocked sites.
+    Then $\mathcal U_g^2=\Id$. Consequently the bond-one identity tensor for
+    $e$ and the CZX tensor for $g$ represent $\Z_2=\{e,g\}$ by normal
+    tensors, with $\mathcal U_e\mathcal U_h=\mathcal U_h\mathcal U_e=\mathcal U_h$
+    and $\mathcal U_g\mathcal U_g=\mathcal U_e$ on every nonempty chain
+    \cite[lines~4503--4547]{FrancoRubio2025MPUGauging}.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_czx_exact_tensor_unitary, thm:mpug_czx_exact_tensor_injective}
+    The periodic operator is the monomial operator of the complement of every
+    matter bit, with a sign given by a cyclic sum of edge exponents. The
+    complement is an involution, and the edge exponents of a configuration and
+    of its complement differ by the sum of the leading bits of the two sites
+    of the edge, modulo two. Summed around the ring these differences cancel,
+    so the two signs multiply to one and $\mathcal U_g^2=\Id$. The identity
+    tensor is normal, and the CZX tensor is injective, hence normal.
+\end{proof}
+
+\begin{lemma}[The displayed CZX anomaly]
+    \label{thm:mpug_czx_anomaly}
+    \lean{MPOTensor.CZX.fusionData,
+        MPOTensor.CZX.tensorInt,
+        MPOTensor.CZX.tensor_eq_complexOfInt,
+        MPOTensor.CZX.fusionVInt,
+        MPOTensor.CZX.fusionV_eq_smul,
+        MPOTensor.CZX.mulTensor_tensor_eq_complexOfInt,
+        MPOTensor.CZX.cubeInt,
+        MPOTensor.CZX.tensorIntMPS,
+        MPOTensor.CZX.fusionData_isAssociator,
+        MPOTensor.CZX.fusionData_omega_gen_gen_gen,
+        MPOTensor.CZX.kronId_fusionV_one,
+        MPOTensor.CZX.fusionData_omega}
+    \leanok
+    \discussion{7354}
+    \uses{thm:mpug_czx_z2_representation, thm:mpug_czx_fusion_reduction,
+        def:mpug_anomaly_three_cochain, thm:mpug_anomaly_three_cochain_spec}
+    Take the fusion tensors to be trivial whenever a factor is the identity
+    and to be the caps $(F^<_{g,g},F^>_{g,g})$ of
+    Definition~\ref{def:mpug_czx_fusion_caps} for two generators. Then, as
+    displayed in \cite[lines~4695--4698]{FrancoRubio2025MPUGauging},
+    \begin{align}
+        \omega(h_1,h_2,h_3)
+         & =(-1)^{\delta_{h_1,g}\delta_{h_2,g}\delta_{h_3,g}}.
+        \label{eq:mpug_czx_anomaly}
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_czx_fusion_reduction, thm:mpug_anomaly_three_cochain_spec}
+    When one of $h_1,h_2,h_3$ is $e$, both fusion trees are built from the
+    trivial fusion tensors and the cap of the remaining pair, and they agree,
+    so $\omega(h_1,h_2,h_3)=1$. For three generators the two trees are
+    $F^<_{g,g}\otimes\Id$ and $\Id\otimes F^<_{g,g}$. Both caps are $-i$ times
+    an integer row, and the letters of the threefold product are images of
+    integer matrices. On every letter $R^a$ of the threefold product the
+    integer identity $(F\otimes\Id)R^a=-(\Id\otimes F)R^a$ holds, and both
+    trees intertwine two letters with the target. Induction on the word gives
+    the dressed identity with scalar $-1$, so $\omega(g,g,g)=-1$.
+\end{proof}
+
+\begin{lemma}[The CZX anomaly class is nonzero]
+    \label{thm:mpug_czx_anomaly_class}
+    \lean{MPOTensor.CZX.cyclicInvariant_omega,
+        MPOTensor.CZX.not_isTrivialGaugeClass_omega,
+        MPOTensor.CZX.family_anomalyClass_ne_zero}
+    \leanok
+    \discussion{7354}
+    \uses{thm:mpug_czx_anomaly, def:mpug_anomaly_class,
+        cor:mpug_anomaly_class}
+    For every choice of fusion tensors of the CZX representation,
+    $\omega(g,e,g)\,\omega(g,g,g)=-1$. Hence the anomaly three-cocycle is not
+    cohomologous to the constant cochain one, and the anomaly class in
+    $H^3(\Z_2,\C^\times)$ is nonzero.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_czx_anomaly, cor:mpug_anomaly_class}
+    The product $\omega(g,e,g)\,\omega(g,g,g)$ is invariant under the scalar
+    gauge action of the fusion tensors because $g^2=e$, and every two choices
+    of fusion tensors differ by that action. For the fusion tensors of
+    Lemma~\ref{thm:mpug_czx_anomaly} it equals $1\cdot(-1)$. A trivial gauge
+    class would make it one.
+\end{proof}
+
+\begin{lemma}[The two blocked GHZ sectors are permuted]
+    \label{thm:mpug_czx_ghz_blocks}
+    \lean{MPOTensor.CZX.blockedGHZTensor_apply,
+        MPOTensor.CZX.cyclicPhase_ghz_constant,
+        MPOTensor.CZX.block,
+        MPOTensor.CZX.block_apply,
+        MPOTensor.CZX.block_isNormal,
+        MPOTensor.CZX.carriesMPV}
+    \leanok
+    \discussion{7354}
+    \uses{thm:mpug_czx_blocked_ghz_sectors, thm:mpug_czx_blocked_ghz_invariant,
+        thm:mpug_czx_z2_representation, def:mpug_permuted_block_l_symbol}
+    Index the two bond-one blocked GHZ sectors $\ket{00}$ and $\ket{11}$ of
+    Lemma~\ref{thm:mpug_czx_blocked_ghz_sectors} by $\Z_2$ acting on itself.
+    Both are normal, and for every $h,x\in\Z_2$ and $N\geq1$ the CZX
+    representation carries the periodic vector of the sector $x$ to that of
+    the sector $hx$, with phase one.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_czx_blocked_ghz_invariant}
+    One letter of each sector is the scalar one, so the sector is normal. The
+    identity tensor acts trivially. The CZX operator is monomial; it carries
+    the constant configuration $x$ to the constant configuration $1-x$, and
+    the cyclic sign of a constant configuration is one.
+\end{proof}
+
+\begin{definition}[Action tensors on the two blocked GHZ sectors]
+    \label{def:mpug_czx_block_action_data}
+    \lean{MPOTensor.CZX.actTensor_tensor_blockedSector,
+        MPOTensor.CZX.actionV,
+        MPOTensor.CZX.actionW,
+        MPOTensor.CZX.blockActionData}
+    \leanok
+    \discussion{7354}
+    \uses{def:mpug_czx_acted_sectors, def:mpug_czx_dressed_action,
+        thm:mpug_czx_dressed_action_reduction, thm:mpug_czx_ghz_blocks,
+        def:mpug_permuted_block_l_symbol, thm:mpug_permuted_block_l_symbol_spec}
+    For the identity the action tensors are the identification of the bond
+    spaces. For the generator, the CZX tensor acting on the sector $x$ is the
+    acted sector of Definition~\ref{def:mpug_czx_acted_sectors}, and the action
+    tensors are the dressed pair $(V_x,W_x)$ of
+    Definition~\ref{def:mpug_czx_dressed_action}, which reduces it onto the
+    sector $1-x$ and agrees with the printed action covector of
+    \cite[lines~4690--4694]{FrancoRubio2025MPUGauging} against every nonempty
+    word.
+\end{definition}
+
+\begin{lemma}[The CZX \texorpdfstring{$L$}{L}-symbols]
+    \label{thm:mpug_czx_l_symbols}
+    \lean{MPOTensor.CZX.blockInt,
+        MPOTensor.CZX.pairActionInt,
+        MPOTensor.CZX.actTensor_mulTensor_blockedSector,
+        MPOTensor.CZX.successiveActionInt,
+        MPOTensor.CZX.actV_gen_gen,
+        MPOTensor.CZX.fuseV_gen_gen,
+        MPOTensor.CZX.isDressedProportional_actV_fuseV_gen_gen,
+        MPOTensor.CZX.lSymbol_one_one,
+        MPOTensor.CZX.blockActionData_isCompatible,
+        MPOTensor.CZX.blockActionData_lSymbol}
+    \leanok
+    \discussion{7354}
+    \uses{def:mpug_czx_block_action_data, thm:mpug_czx_anomaly,
+        thm:mpug_permuted_block_l_symbol_spec,
+        thm:mpug_permuted_block_l_compatibility,
+        thm:mpug_czx_fusion_action_coefficient_coordinates}
+    With the fusion tensors of Lemma~\ref{thm:mpug_czx_anomaly} and the action
+    tensors of Definition~\ref{def:mpug_czx_block_action_data}, the
+    $L$-symbols on the two blocked GHZ sectors are
+    \begin{align}
+        L^x_{h,k} & =
+        \begin{cases}
+            (-1)^x & \text{if } h=k=g, \\
+            1      & \text{otherwise},
+        \end{cases}
+        \label{eq:mpug_czx_l_symbols}
+    \end{align}
+    for $x\in\{0,1\}$. The source states $L^0_{g,g}=-1$
+    \cite[line~4699]{FrancoRubio2025MPUGauging}; with both caps transposed,
+    which is the fusion gauge $\beta_{g,g}=-1$, the two values $L^x_{g,g}$
+    change sign and the printed value is obtained
+    \cite{gap:fbc25_czx_fusion_coordinate_compatibility}.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_permuted_block_l_symbol_spec,
+        thm:mpug_permuted_block_l_compatibility, thm:mpug_czx_anomaly}
+    An $L$-symbol is the unique scalar relating the two left boundaries against
+    long words, because the target sector is normal. For two generators the
+    boundary of two successive actions is $i$ times the integer row
+    $(1,-1,1,-1)$ on $\ket{00}$ and $(1,1,-1,-1)$ on $\ket{11}$, and the
+    boundary of the fusion followed by the trivial action is the cap
+    $F^<_{g,g}=-i\,(0,1,-1,0)$. On every letter of the stacked action, which
+    is the image of an integer matrix, the first row is $\mp1$ times the
+    second; since a nonempty word begins with a letter, the dressed identity
+    holds on every nonempty word with scalar $(-1)^x$. At two identity
+    elements the two boundaries coincide, so $L^x_{e,e}=1$. The compatibility
+    relation (\ref{eq:mpug_l_compatibility}) at $(e,e,g)$ and $(g,e,e)$, with
+    $\omega=1$ there by (\ref{eq:mpug_czx_anomaly}), gives
+    $L^x_{e,g}=L^{gx}_{e,e}$ and $L^x_{g,e}=L^x_{e,e}$.
+\end{proof}
+
+\begin{lemma}[The anomaly from the \texorpdfstring{$L$}{L}-symbols]
+    \label{thm:mpug_czx_l_symbol_ratio}
+    \lean{MPOTensor.CZX.omega_eq_lSymbol_ratio,
+        MPOTensor.CZX.lSymbol_ratio_mul_omega_eq_neg_one}
+    \leanok
+    \discussion{7354}
+    \uses{thm:mpug_czx_ghz_blocks, thm:mpug_permuted_block_l_compatibility,
+        thm:mpug_involution_anomaly_ratio, thm:mpug_czx_anomaly_class}
+    For every choice of fusion tensors and every choice of action tensors on
+    the two blocked GHZ sectors,
+    \begin{align}
+        \omega(g,g,g)
+         & =\frac{L^x_{g,g}L^x_{g,e}}{L^{gx}_{g,g}L^x_{e,g}},
+         &
+        \frac{L^0_{g,g}L^0_{g,e}}{L^1_{g,g}L^0_{e,g}}\,\omega(g,e,g)
+         & =-1,
+    \end{align}
+    as in \cite[line~5121]{FrancoRubio2025MPUGauging}. When the fusion and
+    action tensors are trivial at the identity this is
+    $L^0_{g,g}/L^1_{g,g}=-1$, so no gauge makes every $L$-symbol one.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_involution_anomaly_ratio, thm:mpug_czx_anomaly_class}
+    The compatibility of
+    Lemma~\ref{thm:mpug_permuted_block_l_compatibility} holds for every choice
+    of action tensors, so Lemma~\ref{thm:mpug_involution_anomaly_ratio} gives
+    the first identity. Multiplying by $\omega(g,e,g)$ and using
+    Lemma~\ref{thm:mpug_czx_anomaly_class} gives the second.
+\end{proof}
+
 \subsection{The displayed CZX circuit tuple}
 
 \begin{definition}[The displayed CZX circuit tuple]
@@ -9200,4 +10739,203 @@ dimension over the full class.
     at most the supremum over the class at that chain length, by the same
     boundedness argument as in
     Lemma~\ref{thm:mpug_czx_class_maximum}.
+\end{proof}
+
+\section{The gauged CZX state and the modified Gauss law}
+\label{sec:mpug_czx_gauged_state}
+
+The state-level gauging of \cite[lines~5121--5183]{FrancoRubio2025MPUGauging}
+promotes the symmetry defects of the once-blocked GHZ state to gauge degrees of
+freedom. Each site of the gauged chain carries one blocked matter index in
+$\{0,1,2,3\}$ and one gauge label in $\Z_2=\{e,g\}$. The local Gauss operator
+of the unmodified fusion operators does not fix the gauged state. After the
+modification $\lambda^R_{g,g}\mapsto\lambda^R_{g,g}Z_1$ the gauged state is
+fixed, at the cost of neighbouring Gauss projectors that do not commute. The
+modified operators $\widetilde{\mathcal G}_h$ form a representation of $\Z_2$
+by Lemma~\ref{thm:mpug_gauss_representation}, as every local Gauss operator
+does. The source does not determine the common fixed subspace of the modified
+projectors beyond the gauged state; its dimension for the displayed tuple is
+Lemma~\ref{thm:mpug_czx_dimension}.
+
+\begin{definition}[The gauged CZX tensor]
+    \label{def:mpug_czx_gauged_tensor}
+    \lean{MPOTensor.CZX.gaugeLabelMatrix,
+        MPOTensor.CZX.gaugedSite,
+        MPOTensor.CZX.gaugedTensor,
+        MPOTensor.CZX.gaugedMPS,
+        MPOTensor.CZX.gaugedDefectState}
+    \leanok
+    \discussion{7356}
+    \uses{def:mpug_czx_blocked_ghz, def:mpv}
+    Let $\widehat A$ be the once-blocked GHZ tensor of
+    Definition~\ref{def:mpug_czx_blocked_ghz}, and let
+    \begin{align}
+        G_e & =\Id,                                   &
+        G_g & =\begin{pmatrix}0&1\\-i&0\end{pmatrix}.
+        \label{eq:mpug_czx_gauge_matrices}
+    \end{align}
+    The gauged tensor of \cite[lines~5129--5178]{FrancoRubio2025MPUGauging}
+    has, at a site with blocked matter index $m$ and gauge label $a$, the
+    letter $G_a\widehat A^m$: the gauge matrix sits on the bond to the left of
+    the site. Its periodic matrix product vector on $N$ sites is the gauged
+    CZX state $\ket{\Phi_N}$. For a configuration $\alpha$ of gauge labels, let
+    $\ket{\Psi_\alpha}$ be the periodic GHZ state with $G_{\alpha_k}$ inserted
+    on the bond to the left of the site $k$.
+\end{definition}
+
+\begin{lemma}[The gauged CZX state as a product of nearest-neighbour factors]
+    \label{thm:mpug_czx_gauged_state_product}
+    \lean{MPOTensor.CZX.gaugedMPS_eq_gaugedVector,
+        MPOTensor.CZX.gaugedLeftBond,
+        MPOTensor.CZX.gaugedBondWeightZ,
+        MPOTensor.CZX.gaugedBondFactorZ,
+        MPOTensor.CZX.gaugedTensor_apply,
+        MPOTensor.CZX.gaugedMPS_eq_prod,
+        MPOTensor.CZX.gaugedMPS_replaceWindow}
+    \leanok
+    \discussion{7356}
+    \uses{def:mpug_czx_gauged_tensor, def:mpug_gauged_vector}
+    The gauged CZX state is the gauged vector
+    $\sum_\alpha\ket{\Psi_\alpha}\otimes\ket{\alpha}$ of
+    Definition~\ref{def:mpug_gauged_vector}, the form of
+    \cite[lines~3511--3530]{FrancoRubio2025MPUGauging}. For a site $u=(m,a)$
+    with $m=2y+y'$, identify $e,g$ with $0,1$, let $\ell(u)=y+a$ modulo two,
+    and for $r\in\{0,1\}$ let
+    \begin{align}
+        c_u(r) & =\delta_{m,3r}\cdot
+        \begin{cases}
+            -i & \text{if } a=g \text{ and } r=0, \\
+            1  & \text{otherwise}.
+        \end{cases}
+    \end{align}
+    Then every letter satisfies
+    $(G_a\widehat A^m)_{lr}=\delta_{l,\ell(u)}c_u(r)$, and
+    \begin{align}
+        \braket{s|\Phi_N}
+         & =\prod_{n=1}^Nc_{s_n}\bigl(\ell(s_{n+1})\bigr),
+        \label{eq:mpug_czx_gauged_product}
+    \end{align}
+    with the indices read cyclically. Replacing the sites $j$ and $j+1$
+    without changing $\ell$ at $j$ changes only the factors at $n=j$ and
+    $n=j+1$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:mpug_czx_gauged_tensor}
+    The letter $\widehat A^m$ is the diagonal projector onto the GHZ sector of
+    $m$, and $G_a$ shifts the bond by $a$ with the weights
+    (\ref{eq:mpug_czx_gauge_matrices}); comparing the entries of the eight
+    letters gives the entry formula. Since the incoming bond of every letter is forced by the
+    letter, the trace of a product of letters is the product of the entries
+    along the forced bonds. Replacing the window changes the bond forced at
+    $j+1$, which enters only the factors at $j$ and $j+1$.
+\end{proof}
+
+\begin{definition}[The unmodified CZX fusion operators]
+    \label{def:mpug_czx_unmodified_tuple}
+    \lean{MPOTensor.CZX.lambda_mem_unitaryGroup,
+        MPOTensor.CZX.unmodifiedCircuitTuple}
+    \leanok
+    \discussion{7356}
+    \uses{def:mpug_czx_circuit_tuple, def:mpug_gauss_operator}
+    The unmodified fusion operators are
+    $(\lambda^R_{e,e},\lambda^R_{e,g},\lambda^R_{g,e},\lambda^R_{g,g})
+        =(\Id,\Id,w,\lambda)$, with $w$ and $\lambda$ the unitaries
+    (\ref{eq:mpug_czx_w}) and (\ref{eq:mpug_czx_lambda}). Their local Gauss
+    operator of the generator is
+    \begin{align}
+        \mathcal G_g
+         & =\lambda^\dagger\otimes\ketbra{g,g}{e,e}
+        +w^\dagger\otimes\ketbra{g,e}{e,g}
+        +w\otimes\ketbra{e,g}{g,e}
+        +\lambda\otimes\ketbra{e,e}{g,g},
+        \label{eq:mpug_czx_unmodified_gauss}
+    \end{align}
+    the operator of \cite[lines~5121--5128]{FrancoRubio2025MPUGauging}.
+\end{definition}
+
+\begin{lemma}[The unmodified Gauss law does not fix the gauged state]
+    \label{thm:mpug_czx_unmodified_not_invariant}
+    \lean{MPOTensor.CZX.unmodifiedPlacedGaussOperator_mulVec_gaugedMPS_ne}
+    \leanok
+    \discussion{7356}
+    \uses{def:mpug_czx_unmodified_tuple, def:mpug_placed_gauss_operator,
+        thm:mpug_czx_gauged_state_product}
+    For every $N\geq2$ and every window $(j,j+1)$, the unmodified Gauss
+    operator (\ref{eq:mpug_czx_unmodified_gauss}) placed on the window does not
+    fix $\ket{\Phi_N}$, as stated in
+    \cite[line~5179]{FrancoRubio2025MPUGauging}.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_czx_gauged_state_product, thm:mpug_embed_monomial}
+    The unmodified fusion operators are monomial, so the placed operator is
+    monomial and fixes a vector $v$ exactly when $v(\sigma s)=\varphi(s)v(s)$
+    for every configuration $s$. Take $s$ with matter $\ket{00}$ and label $e$
+    at every site, so that $\braket{s|\Phi_N}=1$. The operator sends $s$ to the
+    configuration with $(\ket{11},g)$ at $j$ and $(\ket{00},g)$ at $j+1$, with
+    phase $i$. By (\ref{eq:mpug_czx_gauged_product}) the gauged state has
+    coefficient $-i$ there, and $-i\neq i$.
+\end{proof}
+
+\begin{lemma}[The modified Gauss law fixes the gauged state]
+    \label{thm:mpug_czx_modified_invariant}
+    \lean{MPOTensor.CZX.iPowZ,
+        MPOTensor.CZX.toComplex_iPowZ,
+        MPOTensor.CZX.gaussWindowImage,
+        MPOTensor.CZX.placedGaussOperator_mulVec_gaugedMPS,
+        MPOTensor.CZX.gaugedMPS_mem_gaugeInvariantSubspace}
+    \leanok
+    \discussion{7356}
+    \uses{def:mpug_czx_circuit_tuple, thm:mpug_czx_placed_operators,
+        thm:mpug_czx_gauged_state_product, def:mpug_gauge_invariant_subspace}
+    Replace $\lambda^R_{g,g}$ by $\tilde\lambda^R_{g,g}=\lambda^R_{g,g}Z_1$ and
+    keep the other three fusion operators, as in
+    \cite[lines~5179--5183]{FrancoRubio2025MPUGauging}. For every $N\geq2$,
+    every placed modified Gauss operator $G_j$ fixes $\ket{\Phi_N}$, and hence
+    so does every placed modified Gauss projector
+    $\widetilde P_j=\frac12(\Id+G_j)$. Thus $\ket{\Phi_N}$ lies in the
+    gauge-invariant subspace $\mathcal V_N(R^{\mathrm{CZX}})$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_czx_local_monomial_action, thm:mpug_czx_placed_operators,
+        thm:mpug_czx_gauged_state_product}
+    By Lemma~\ref{thm:mpug_czx_placed_operators} the operator $G_j$ is
+    monomial: it complements the matter bits at $j$, moves the two labels of
+    the window by the Gauss leg action, and multiplies by $i^{q(s)}$. It does
+    not change $\ell$ at the site $j$. By
+    Lemma~\ref{thm:mpug_czx_gauged_state_product} the claim reduces to
+    \begin{align}
+        c_{u_0'}\bigl(\ell(u_1')\bigr)\,c_{u_1'}(b)
+         & =i^{q(u_0,u_1)}\,c_{u_0}\bigl(\ell(u_1)\bigr)\,c_{u_1}(b)
+    \end{align}
+    for every window $(u_0,u_1)$ with image $(u_0',u_1')$ and every bond
+    $b\in\{0,1\}$. All values are Gaussian integers, and the identity is
+    checked over the $128$ cases.
+\end{proof}
+
+\begin{lemma}[Neighbouring modified projectors do not commute]
+    \label{thm:mpug_czx_projectors_noncommuting}
+    \lean{MPOTensor.CZX.not_commute_placedGaussOperator,
+        MPOTensor.CZX.not_commute_placedGaussProjector}
+    \leanok
+    \discussion{7356}
+    \uses{thm:mpug_czx_placed_operators, thm:mpug_czx_modified_invariant}
+    For every $N\geq3$ and every $j$, the modified Gauss operators $G_j$ and
+    $G_{j+1}$ do not commute, and neither do the projectors $\widetilde P_j$
+    and $\widetilde P_{j+1}$. This is the cost stated in
+    \cite[line~5183]{FrancoRubio2025MPUGauging}.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_czx_placed_operators}
+    Both products $G_jG_{j+1}$ and $G_{j+1}G_j$ are monomial. Let $s$ be the
+    configuration with matter $\ket{00}$ and label $g$ at every site. Since
+    $N\geq3$, the windows at $j$ and $j+1$ share only the site $j+1$, and the
+    phases of the two products at $s$ are read off the phase table of
+    Lemma~\ref{thm:mpug_czx_local_monomial_action}: they differ by a sign.
+    The column of $s$ therefore differs in the two products, whether or not
+    their permutations agree at $s$. Since $G_k=2\widetilde P_k-\Id$,
+    commuting projectors would give commuting operators.
 \end{proof}

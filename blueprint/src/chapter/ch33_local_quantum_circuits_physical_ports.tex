@@ -744,7 +744,7 @@ start, and is discarded only after the circuit has finished.
     $\langle\phi,\phi\rangle=1$. Its same-depth unitary realization can
     be chosen with the existing product-zero environment initializer so that
     \[
-        U(\psi\otimes\ket{0_A})=\phi\otimes\eta,
+        U(\psi\otimes\ket{0^A})=\phi\otimes\eta,
         \qquad \langle\eta,\eta\rangle=1.
     \]
     The unitary retains the same physical ports and the full channel
@@ -753,15 +753,19 @@ start, and is discarded only after the circuit has finished.
     equal its initial zero state.
 \end{lemma}
 \begin{proof}\leanok
-    In system/environment coordinates write the actual joint output as
-    the coefficient matrix $C$. Its first marginal is
-    $CC^\dagger=P=\ketbra{\phi}{\phi}$, with $P^2=P$. Thus
-    $(I-P)CC^\dagger=0$. Positivity of a matrix Gram product gives
-    $(I-P)C=0$, hence $C=PC$. Set
-    $\eta=\phi^\dagger C$. Then each coefficient is $\phi_s\eta_e$.
-    Taking the trace of the actual marginal and using
-    $\langle\phi,\phi\rangle=1$ gives
-    $\langle\eta,\eta\rangle=1$. No factorization assumption is used.
+    \uses{thm:qc_physical_port_unitary_dilation}
+    Take $U$ from Lemma~\ref{thm:qc_physical_port_unitary_dilation} and let
+    $C_{s,e}=\bigl(U(\psi\otimes\ket{0^A})\bigr)_{s,e}$ be the coefficient
+    matrix of the joint output. Its first marginal is
+    \begin{align}
+        CC^\dagger      & =\tr_A\bigl(U(\ketbra{\psi}{\psi}\otimes Z_A)U^\dagger\bigr)
+        =\Phi(\ketbra{\psi}{\psi})=\ketbra{\phi}{\phi}=:P,\notag                       \\
+        (I-P)CC^\dagger & =(I-P)P=P-P^2=0.\notag
+    \end{align}
+    Since $MM^\dagger=0$ implies $M=0$, applied to $M=(I-P)C$, we get
+    $C=PC$. Set $\eta=\phi^\dagger C$. Then $C_{s,e}=\phi_s\eta_e$, and
+    $\langle\eta,\eta\rangle=\tr CC^\dagger=\tr P=\langle\phi,\phi\rangle=1$.
+    No factorization assumption is used.
 \end{proof}
 
 
@@ -772,20 +776,29 @@ start, and is discarded only after the circuit has finished.
     \leanok
     Under the hypotheses of Lemma~\ref{thm:qc_physical_port_pure_output}, measuring the final environment in its standard product basis gives branch operators $K_e$ satisfying
     \[
-        \Phi(X)=\sum_e K_e X K_e^*,\qquad K_e\psi=\eta_e\phi,\qquad \sum_e|\eta_e|^2=1.
+        \Phi(X)=\sum_e K_e X K_e^\dagger,\qquad K_e\psi=\eta_e\phi,\qquad \sum_e|\eta_e|^2=1.
     \]
     Thus every outcome of nonzero probability leaves the same pure system state. The circuit has the same physical ports and intersite depth as in that theorem. This does not impose a fixed number of source QCcc blocks or their internal control restrictions.
 \end{lemma}
 
 \begin{proof}\leanok
-    Take the matrix blocks of the compiled unitary in the initialized environment column. Their channel is the partial trace of that unitary after pure environment initialization. Each block applied to the input vector is the corresponding environment coordinate of the product output from Lemma~\ref{thm:qc_physical_port_pure_output}.
+    \uses{thm:qc_physical_port_pure_output}
+    Let $K_e=(I_W\otimes\bra{e})U(I_W\otimes\ket{0^A})$ be the block of the
+    compiled unitary in the initialized environment column. Then
+    $\sum_e K_eXK_e^\dagger=\tr_A\bigl(U(X\otimes Z_A)U^\dagger\bigr)=\Phi(X)$,
+    and by Lemma~\ref{thm:qc_physical_port_pure_output}
+    \[
+        K_e\psi=(I_W\otimes\bra{e})\,U(\psi\otimes\ket{0^A})
+        =(I_W\otimes\bra{e})(\phi\otimes\eta)=\eta_e\phi.
+    \]
 \end{proof}
+
 
 
 \begin{lemma}[Bounded pure-state conversion on the original ports]
     \label{lem:qc_bounded_port_pure_output}
     \lean{QuantumCircuit.IsDimensionBoundedLocalChannelProtocol.exists_physicalPort_pure_output}
-    \notready
+    \leanok
     \discussion{8640}
     \uses{def:qc_dimension_bounded_protocol, thm:qc_physical_port_codes,
         thm:qc_bounded_physical_port_io, thm:qc_physical_port_pure_output}
@@ -800,7 +813,7 @@ start, and is discarded only after the circuit has finished.
     There are fresh local environment wires, a physical-port unitary $U$,
     and a unit environment vector $\eta$ such that
     \begin{align}
-        U(V_{\rm port}\psi\otimes\ket{0_A})
+        U(V_{\rm port}\psi\otimes\ket{0^A})
          & =V_{\rm port}\phi\otimes\eta,
          & \operatorname{depth}_{\rm intersite}(U) & \le2kT,
         \label{eq:qc_bounded_port_pure_vector}               \\
@@ -808,22 +821,24 @@ start, and is discarded only after the circuit has finished.
          & =J_{\rm port}\circ\Psi.
         \label{eq:qc_bounded_port_pure_channel}
     \end{align}
-    Thus the designated data and scratch memory is zero in the actual
+    Thus the designated data and scratch memory is zero in the
     final vector. The environment $\eta$ need not reset or factor over
     sites. For a uniform family bound, $B$ and $d$ are fixed independently
     of $N$. No adaptive protocol-block or control condition is asserted.
 \end{lemma}
-\begin{proof}
-    \notready
-    \uses{thm:qc_bounded_physical_port_io, thm:qc_physical_port_pure_output}
+\begin{proof}\leanok
+    \uses{lem:qc_register_code_completion, thm:qc_bounded_physical_port_io,
+        thm:qc_physical_port_pure_output}
     The explicit port code is an isometry, so $V_{\rm port}\phi$ is
     normalized. The channel identity of
     Lemma~\ref{thm:qc_bounded_physical_port_io} gives
     $\Gamma J_{\rm port}(\ketbra{\psi}{\psi})
         =J_{\rm port}(\ketbra{\phi}{\phi})$.
-    Apply Lemma~\ref{thm:qc_physical_port_pure_output} to this actual
-    compiled channel and these two encoded vectors. It derives $\eta$
-    without changing the unitary's physical depth. Compose its full channel
+    Apply Lemma~\ref{thm:qc_physical_port_pure_output} to this compiled
+    channel and these two encoded vectors. It derives $\eta$ with
+    $U(V_{\rm port}\psi\otimes\ket{0^A})=V_{\rm port}\phi\otimes\eta$
+    in~(\ref{eq:qc_bounded_port_pure_vector}), without changing the
+    unitary's physical depth. Compose its full channel
     identity with $J_{\rm port}$ to obtain
     (\ref{eq:qc_bounded_port_pure_channel}).
 \end{proof}

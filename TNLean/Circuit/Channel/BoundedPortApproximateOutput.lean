@@ -79,7 +79,7 @@ theorem IsDimensionBoundedLocalChannelProtocol.exists_physicalPort_approximate_o
       rw [star_mulVec, ← dotProduct_mulVec, mulVec_mulVec, hV, one_mulVec, hξ]
     have hs : ‖(WithLp.toLp 2 (V *ᵥ ξ) : EuclideanSpace ℂ (Fin W → Fin d))‖ ^ 2 = 1 := by
       rw [@norm_sq_eq_re_inner ℂ, EuclideanSpace.inner_toLp_toLp,
-        dotProduct_comm, hξV, Complex.one_re]
+        dotProduct_comm, hξV, RCLike.one_re]
     nlinarith [norm_nonneg (WithLp.toLp 2 (V *ᵥ ξ) : EuclideanSpace ℂ (Fin W → Fin d))]
   have hPure (ξ : (Fin N → Fin d) → ℂ) :
       PortRegisters.wordInitialization (PortRegisters.portWordCode d k)
@@ -129,7 +129,7 @@ theorem IsDimensionBoundedLocalChannelProtocol.exists_physicalPort_approximate_o
     have heq := LinearMap.congr_fun hports (vecMulVec ψ (star ψ))
     change Γ (PortRegisters.wordInitialization (PortRegisters.portWordCode d k)
       (vecMulVec ψ (star ψ))) = _ at heq
-    rw [heq, ← map_sub]
+    rw [heq, LinearMap.comp_apply, ← map_sub]
     change rectangularTraceNorm (V *
       (Ψ (vecMulVec ψ (star ψ)) - vecMulVec φ (star φ)) * Vᴴ) ≤ ε
     rw [rectangularTraceNorm_isometry_sandwich _ V V hV hV]

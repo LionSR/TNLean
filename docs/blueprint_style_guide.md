@@ -257,7 +257,8 @@ may have no appendix. Appendix source file names use the parent chapter's stable
 `chNN` subject identifier. Later reuse by another chapter does not change the
 result's primary ownership. The displayed umbrella title is `Appendices`, and
 appendix chapter titles use a mathematically descriptive
-`...: Supporting Results` rather than `Technical Complements`.
+`...: supporting results` rather than `Technical complements`, in sentence
+case like every other title.
 
 An appendix is not a dump of Lean declarations or a transcription of a source
 file. It must read like an appendix written by a mathematician:
