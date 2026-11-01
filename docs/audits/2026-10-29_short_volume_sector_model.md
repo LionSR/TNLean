@@ -2,7 +2,9 @@
 
 Context: #10386 under #10280. This assembles the actual ingredients from
 #10409, #10416, #10417 and #10418. The model statement is source-written;
-no local Lean was run and no new theorem is kernel-accepted yet.
+no local Lean was run at authoring time. (Update 2026-11-01: the model
+landed with the block-degeneracy merge train #10455; its entries are now
+`\leanok` against sorry-free Lean.)
 
 ## Exact mathematical statement
 
@@ -87,8 +89,9 @@ kernels, physical embeddings, nonvanishing, primitive exponentials, local
 frustration-free equations, ordinary trace invariance, and the actual
 fixed future tensor. Native imports, Blueprint synchronization with
 duplicate checking, roles, prose, TeX formatting/ChkTeX, size, integrity,
-tactic-pattern and whitespace checks pass. All ten new declarations and
-their Blueprint statements/proofs remain notready.
+tactic-pattern and whitespace checks pass. At authoring time all ten new
+declarations and their Blueprint statements/proofs were notready; after the
+merge train #10455 they are `\leanok` on `main`, with no `sorry`.
 
 No local Lean, Lake, build, elaboration or checkdecls was run, as requested.
 Source review and native checks are not Lean kernel acceptance. No

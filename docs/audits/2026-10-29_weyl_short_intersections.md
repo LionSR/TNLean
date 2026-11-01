@@ -39,8 +39,9 @@ This change alone asserts no unrestricted source counterexample.
 ## Verification
 
 No local Lean, Lake, build, elaboration or checkdecls is run, as requested.
-All six new public declarations and both Blueprint statements/proofs remain
-notready. Native and independent source checks are recorded in the PR;
+At authoring time all six new public declarations and both Blueprint
+statements/proofs were notready; after the merge train #10455 they are
+`\leanok` on `main`, with no `sorry`. Native and independent source checks are recorded in the PR;
 they do not establish hosted kernel acceptance. No persistent Lean fixtures.
 
 Two independent bounded source/API reviews found no concrete mismatch in the

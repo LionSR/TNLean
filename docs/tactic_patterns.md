@@ -10905,6 +10905,10 @@ removed after the dependency audit exposed it.
   promoted to `MPSTensor.norm_mapLM_pow_apply_le_of_mapLM_one` in
   `UncleTrialTransferNorm.lean`, which iterates QICLean's
   `IsKrausCP.norm_apply_le_of_map_one_eq_one`; all three consumers use it.
+  The stationary-density rank-one projection `X ↦ Tr(ρX) • 1` is likewise
+  promoted: `uncleDensityFunctional` and `uncleDensityProjection` are public in
+  `UnclePrimitiveTransfer.lean` and reused by `UncleNormFactorization.lean` and
+  `UncleGroundGram.lean` instead of inline rebuilds (#10487).
 
 ### Unit matrices as exact gauges — promoted Mathlib construction (2026-10-29)
 

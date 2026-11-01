@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.ParentHamiltonian.VaryingOBCIntersection
 import QICLean.Kraus.RectangularChain
 import Mathlib.Data.List.OfFn
+import TNLean.Algebra.ListOfFn
 
 /-!
 # Reconstruction along a varying-bond open chain
@@ -80,11 +81,6 @@ theorem obc_rectangularEval_row_isometry (b : ℕ → ℕ)
     simp only [Fin.consEquiv_apply, Kraus.rectangularEval, Fin.cons_succ]
     rfl
 
-private theorem ofFn_snoc_eq {α : Type*} {n : ℕ} (w : Fin n → α) (i : α) :
-    List.ofFn (Fin.snoc w i) = List.ofFn w ++ [i] := by
-  rw [List.ofFn_succ']
-  simp only [Fin.snoc_castSucc, Fin.snoc_last, List.concat_eq_append]
-
 /-- The source's overlap argument reconstructs one boundary matrix on the full chain
 from the adjacent-pair sections. Only sitewise C1 and canonical row-isometry
 are assumed. The physical length is at least two, so an adjacent interaction exists.
@@ -129,7 +125,7 @@ theorem obc_trace_reconstruction_of_adjacent_pair_sections (b : ℕ → ℕ)
         obtain ⟨X, hX⟩ := ih (by omega) (j :: v) (by simp only [List.length_cons]; omega)
         refine ⟨X, fun u i ↦ ?_⟩
         have hx := hX (Fin.snoc u i)
-        rw [ofFn_snoc_eq, obc_rectangularEval_snoc] at hx
+        rw [List.ofFn_snoc, obc_rectangularEval_snoc] at hx
         simpa only [φ, P, List.append_assoc, List.singleton_append, Matrix.mul_assoc] using hx
       have hRight (u : Fin (r + 1) → Fin d) :
           ∃ Y : Matrix (Fin (b (r + 3))) (Fin (b (r + 1))) ℂ,
@@ -156,7 +152,7 @@ theorem obc_trace_reconstruction_of_adjacent_pair_sections (b : ℕ → ℕ)
         (fun s ↦ Kraus.rectangularEval b (fun k : Fin (r + 3) ↦ A k.val) s) hw
       rw [obc_rectangularEval_snoc, obc_rectangularEval_snoc] at heval
       have hlist := congrArg List.ofFn hw
-      rw [ofFn_snoc_eq, ofFn_snoc_eq] at hlist
+      rw [List.ofFn_snoc, List.ofFn_snoc] at hlist
       rw [← heval, ← hlist]
       simpa only [φ, P, List.append_assoc, List.singleton_append, List.cons_append,
         List.nil_append, Matrix.mul_assoc] using hz

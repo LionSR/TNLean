@@ -34,7 +34,9 @@ argument. No compatibility aliases or parallel source predicates are introduced.
 
 Validation: source and diff checks, generated import checks, blueprint declaration
 coverage, reader-facing prose checks, theorem-role checks, and the tactic scan.
-No local Lean/Lake command was run. The hosted full build passed at
-`fcb226eebcb26fe78ab8c510d5304c971a1bdc7c` (job 123906082233), with no `sorry`
-in the new declarations, so the six new blueprint entries are `\leanok`.
+No local Lean/Lake command was run. The hosted full build passed at the
+merged head `ed6f043b00a742a112a92bb71fd62efd4f445535` (job 124454337247),
+after the auto-fix to `SimpleReduction.lean`, with no `sorry` in the new
+declarations, so the six new blueprint entries are `\leanok`. An earlier
+build at `fcb226ee` predates that fix and is not the verifying record.
 #7127 stays open pending integration.
