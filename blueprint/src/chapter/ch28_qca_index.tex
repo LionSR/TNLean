@@ -1,0 +1,214 @@
+\subsection{The homogeneous positive-rational index}
+\label{sec:qca_gnvw_index}
+
+Let $d>0$ and let $\omega$ be a nearest-neighbour star-automorphism of the
+homogeneous chain. The following uses the fixed nearest-neighbour cell
+presentation. The site-dependent source setting is recorded separately in
+\cite{gap:gnvw12_site_dependent_adjacent_generation_scope}.
+
+\begin{definition}[The fixed-cut GNVW index]
+    \label{def:qca_gnvw_index}
+    \lean{SpinChain.PropagatesWithin.supportAlgebraMatrixSize,
+        SpinChain.PropagatesWithin.supportAlgebraMatrixSize_spec,
+        SpinChain.PropagatesWithin.supportAlgebraMatrixSize_neZero,
+        SpinChain.PropagatesWithin.gnvwIndex}
+    \leanok
+    \uses{lem:qca_physical_pair_adjacent_generation}
+    Choose the coherent positive matrix-size family $r(y)$ of the actual
+    support factors. Define
+    \begin{align}
+        \operatorname{ind}(\omega) & =\frac{r(0)}{d}\in\mathbb Q_{>0}.
+        \label{eq:qca_gnvw_index_fixed_cut}
+    \end{align}
+    Its codomain is the multiplicative group of positive rationals.
+    This is the homogeneous specialization of equation~dimtransfer in
+    \cite[lines~1317--1329]{Gross2012IndexTheory}.
+\end{definition}
+
+\begin{lemma}[All cut presentations of the same index]
+    \label{thm:qca_gnvw_index_dimtransfer}
+    \lean{SpinChain.PropagatesWithin.supportAlgebraMatrixSize_even_add_one,
+        SpinChain.PropagatesWithin.supportAlgebraMatrixSize_even_eq_zero,
+        SpinChain.PropagatesWithin.coe_gnvwIndex_eq_even,
+        SpinChain.PropagatesWithin.coe_gnvwIndex_eq_odd,
+        SpinChain.PropagatesWithin.coe_gnvwIndex_eq_next_even,
+        SpinChain.PropagatesWithin.gnvwIndex_ratio_eq,
+        SpinChain.PropagatesWithin.coe_gnvwIndex_eq_of_evenSupportAlgebra_equiv,
+        SpinChain.PropagatesWithin.supportAlgebraMatrixSize_even_eq_of_equiv,
+        SpinChain.PropagatesWithin.supportAlgebraMatrixSize_odd_eq_of_equiv}
+    \leanok
+    \uses{def:qca_gnvw_index}
+    For every $x\in\mathbb Z$,
+    \begin{align}
+        \operatorname{ind}(\omega)
+         & =\frac{r(2x)}{d}
+        =\frac{d}{r(2x+1)}
+        =\frac{r(2x+2)}{d}.
+        \label{eq:qca_gnvw_index_dimtransfer}
+    \end{align}
+    These are presentations using the same ordered support family. No
+    translation covariance is assumed. The value is independent of the
+    integer cut and of the chosen full-matrix presentation at that cut.
+    This is homogeneous equation~dimtransfer of
+    \cite[lines~1317--1324]{Gross2012IndexTheory}.
+\end{lemma}
+\begin{proof}\leanok
+    The two size products equal $d^2$. Cancelling the positive common odd
+    size gives $r(2x)=r(2x+2)$. Integer induction in both directions makes
+    the even size constant. Dividing the first product identity gives
+    the reciprocal odd ratio. Matrix-algebra isomorphisms identify the
+    sizes of any two presentations of the same actual factor.
+\end{proof}
+
+\begin{lemma}[Support factors of a full tensor factor]
+    \label{lem:qca_kronecker_embedding_supports}
+    \lean{Matrix.leftSupportAlgebra_range_leftKroneckerEmbed,
+        Matrix.rightSupportAlgebra_range_leftKroneckerEmbed,
+        Matrix.leftSupportAlgebra_range_rightKroneckerEmbed,
+        Matrix.rightSupportAlgebra_range_rightKroneckerEmbed}
+    \leanok
+    \uses{def:qca_left_support_algebra,def:qca_right_support_algebra}
+    Let $I$ and $J$ be finite index sets. Then
+    \begin{align}
+        \operatorname{Spp}_{\mathrm L}
+        \bigl(M_I(\mathbb C)\otimes I_J\bigr)
+                                       & =M_I(\mathbb C)
+        \quad\text{if }J\neq\emptyset, &
+        \operatorname{Spp}_{\mathrm R}
+        \bigl(M_I(\mathbb C)\otimes I_J\bigr)
+                                       & =\mathbb C I_J,\notag   \\
+        \operatorname{Spp}_{\mathrm L}
+        \bigl(I_I\otimes M_J(\mathbb C)\bigr)
+                                       & =\mathbb C I_I,       &
+        \operatorname{Spp}_{\mathrm R}
+        \bigl(I_I\otimes M_J(\mathbb C)\bigr)
+                                       & =M_J(\mathbb C)
+        \quad\text{if }I\neq\emptyset.
+        \label{eq:qca_kronecker_embedding_supports}
+    \end{align}
+    Only the full support of each factor needs the spectator index set to
+    be nonempty. These are the support calculations in the shift example
+    following equation~RR2x of
+    \cite[lines~1251--1268]{Gross2012IndexTheory}.
+\end{lemma}
+\begin{proof}\leanok
+    For $A\in M_I(\mathbb C)$, $B\in M_J(\mathbb C)$, $i,j\in I$ and
+    $r,s\in J$, the coefficients are
+    \begin{align}
+        (A\otimes I_J)^{\mathrm L}_{rs}
+         & =\delta_{rs}A,    &
+        (A\otimes I_J)^{\mathrm R}_{ij}
+         & =A_{ij}I_J,\notag   \\
+        (I_I\otimes B)^{\mathrm L}_{rs}
+         & =B_{rs}I_I,       &
+        (I_I\otimes B)^{\mathrm R}_{ij}
+         & =\delta_{ij}B.
+        \label{eq:qca_kronecker_embedding_coefficients}
+    \end{align}
+    Taking $r=s$, which needs $J\neq\emptyset$, recovers every $A$ as a
+    left coefficient; taking $i=j$, which needs $I\neq\emptyset$, recovers
+    every $B$ as a right coefficient. The remaining coefficients are scalar
+    multiples of the identity, so they generate only the scalars.
+\end{proof}
+
+\begin{lemma}[Finite-region configuration count]
+    \label{lem:qca_finite_region_configuration_count}
+    \lean{SpinChain.card_config}
+    \leanok
+    A region $\Lambda$ has $d^{|\Lambda|}$ configurations. In particular,
+    a physical pair has Hilbert-space dimension $d^2$ and observable-algebra
+    dimension $d^4$.
+\end{lemma}
+\begin{proof}\leanok
+    There is one independent choice among $d$ values at each site.
+\end{proof}
+
+\begin{lemma}[Faithful bipartite observable coordinates]
+    \label{lem:qca_bipartite_observable_embedding}
+    \lean{SpinChain.bipartiteMatrixToQuasiLocalObservable,
+        SpinChain.bipartiteMatrixToQuasiLocalObservable_injective,
+        SpinChain.bipartiteMatrixToQuasiLocalObservable_leftKroneckerEmbed,
+        SpinChain.bipartiteMatrixToQuasiLocalObservable_rightKroneckerEmbed,
+        SpinChain.map_range_leftKroneckerEmbed_bipartiteMatrixToQuasiLocalObservable,
+        SpinChain.map_range_rightKroneckerEmbed_bipartiteMatrixToQuasiLocalObservable}
+    \leanok
+    For disjoint finite regions, the canonical bipartite matrix coordinates
+    embed faithfully into the quasi-local algebra. The full left and right
+    factor ranges become exactly the observable algebras of their respective
+    finite regions. These are the finite coordinates of
+    \cite[lines~1251--1278]{Gross2012IndexTheory}.
+\end{lemma}
+\begin{proof}\leanok
+    Write $\varphi$ for the bipartite embedding and
+    $\iota_\Lambda,\iota_\Gamma$ for the canonical finite-region
+    observable inclusions. The ordered bipartite coordinate equivalence
+    gives, for $A\in M_{\Lambda}(\mathbb C)$ and
+    $B\in M_{\Gamma}(\mathbb C)$,
+    \begin{align}
+        \varphi(A\otimes I_\Gamma)
+         & =\iota_\Lambda(A), &
+        \varphi(I_\Lambda\otimes B)
+         & =\iota_\Gamma(B).
+        \label{eq:qca_bipartite_observable_embedding}
+    \end{align}
+    Injectivity of $\varphi$ follows from faithfulness of the canonical
+    inclusion of $\Lambda\cup\Gamma$. The two identities map the full left
+    and right factor ranges onto the ranges of $\iota_\Lambda$ and
+    $\iota_\Gamma$.
+\end{proof}
+
+\begin{lemma}[Direct shift normalization]
+    \label{thm:qca_gnvw_index_shift}
+    \lean{SpinChain.quasiLocalTranslation_propagatesWithin_singleton,
+        SpinChain.quasiLocalTranslation_propagatesWithin_neg_one,
+        SpinChain.quasiLocalTranslation_propagatesWithin_one,
+        SpinChain.range_quasiLocalTranslation_comp_quasiLocalObservable,
+        SpinChain.translateRegion_neg_one_evenPair,
+        SpinChain.translateRegion_one_evenPair,
+        SpinChain.PropagatesWithin.evenPairLocalImage_quasiLocalTranslation_neg_one,
+        SpinChain.PropagatesWithin.evenPairLocalImage_quasiLocalTranslation_one,
+        SpinChain.PropagatesWithin.supportAlgebras_quasiLocalTranslation_neg_one,
+        SpinChain.PropagatesWithin.supportAlgebras_quasiLocalTranslation_one,
+        SpinChain.PropagatesWithin.supportAlgebraMatrixSize_quasiLocalTranslation_neg_one_even,
+        SpinChain.PropagatesWithin.supportAlgebraMatrixSize_quasiLocalTranslation_neg_one_odd,
+        SpinChain.PropagatesWithin.supportAlgebraMatrixSize_quasiLocalTranslation_one_even,
+        SpinChain.PropagatesWithin.supportAlgebraMatrixSize_quasiLocalTranslation_one_odd,
+        SpinChain.PropagatesWithin.gnvwIndex_quasiLocalTranslation_neg_one,
+        SpinChain.PropagatesWithin.gnvwIndex_quasiLocalTranslation_one}
+    \leanok
+    \uses{def:qca_gnvw_index,thm:qca_gnvw_index_dimtransfer,
+        lem:qca_kronecker_embedding_supports,lem:qca_bipartite_observable_embedding,
+        lem:qca_finite_region_configuration_count}
+    Write $T_a$ for observable translation by $a$. The source Heisenberg
+    shift is $T_{-1}$, which moves observables left and states right.
+    Directly in the ordered finite coordinates,
+    \begin{align}
+        \mathcal R_{2x}(T_{-1})   & =\mathcal A_{L_x},  &
+        \mathcal R_{2x+1}(T_{-1}) & =\mathbb C I,\notag   \\
+        \mathcal R_{2x}(T_1)      & =\mathbb C I,       &
+        \mathcal R_{2x+1}(T_1)    & =\mathcal A_{P_x}.
+        \label{eq:qca_translation_support_factors}
+    \end{align}
+    Hence
+    \begin{align}
+        \operatorname{ind}(T_{-1}) & =d,      &
+        \operatorname{ind}(T_1)    & =d^{-1}.
+        \label{eq:qca_gnvw_index_shift}
+    \end{align}
+    The first is the homogeneous shift normalization of
+    \cite[lines~1325--1329]{Gross2012IndexTheory}; the second is a direct
+    orientation check. The repeated even subscript in the source scalar
+    support example at line~1268 is corrected as documented in
+    \cite{gap:gnvw12_shift_example_subscript}.
+\end{lemma}
+\begin{proof}\leanok
+    Translation has its singleton propagation neighbourhood, which lies
+    inside the nearest-neighbour interval. It maps the full source-pair
+    algebra onto the left pair for $T_{-1}$, and onto the right pair for
+    $T_1$. Faithful bipartite coordinates identify the finite images with
+    the full left and right tensor factors respectively. Their supports
+    therefore have the displayed full/scalar values. The full factor has
+    matrix size $d^2$; the companion product identity makes the scalar
+    factor's matrix size one. Substitution into the already derived index
+    ratios proves both values without any composition or inversion law.
+\end{proof}

@@ -42,10 +42,12 @@ trees of the triple product of the generator then agree against every nonempty w
 sign `+1` for `x` and `−1` for `xy`; the restriction to `{e, y}` has bond dimension one and
 trivial three-cochain.
 
-**Scope restriction (dressed family):** the class identification concerns the exact dressed
-family `kleinFamily`. It does not assign a class to the original odd-ring projective family,
-or compare its even-ring restriction with the dressed representation. The detector-separation
-step is resolved in `docs/paper-gaps/glm23_z2z2_anomaly_detector_scope.tex`.
+**Scope restriction (dressed family):** the class identification in this module concerns the
+exact dressed family `kleinFamily`. The original family is projective on odd rings and has no
+class there. Its two-site blocking is an exact representation with the same type-II class,
+proved separately as `Z2Z2Condensation.omega_blockedFamily_cohomologousTo_kleinCocycle`. Both
+the detector-separation step and the blocked family are recorded in
+`docs/paper-gaps/glm23_z2z2_anomaly_detector_scope.tex`.
 
 ## Main definitions
 
@@ -329,7 +331,7 @@ private theorem kxyCube_int (a : Fin 16) :
   revert_decide_kernel a
 
 /-- The triple product of an integer tensor is the image of its integer triple product. -/
-private theorem triple_complexOfInt (M : Fin 4 → Fin 4 → Matrix (Fin 2) (Fin 2) ℤ)
+theorem triple_complexOfInt (M : Fin 4 → Fin 4 → Matrix (Fin 2) (Fin 2) ℤ)
     (a : Fin 16) :
     (mulTensor (mulTensor (fun o i ↦ complexOfInt (M o i)) (fun o i ↦ complexOfInt (M o i)))
         (fun o i ↦ complexOfInt (M o i))).toMPSTensor a =

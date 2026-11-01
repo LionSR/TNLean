@@ -69,7 +69,7 @@ consistent with a *reducible* `A` (e.g. `B ⊕ B` for an irreducible period-`m`
 block `B`) whose distinct sectors are gauge-phase equivalent. `hP` is supplied at
 the unique call site `sectorBlocks_not_gaugePhaseEquiv_of_ne`. -/
 private lemma not_gaugePhaseEquiv_of_orthogonal_cyclicSector_traces
-    [NeZero D] (A : MPSTensor d D) {m : ℕ} [NeZero m]
+    (A : MPSTensor d D) {m : ℕ} [NeZero m]
     (hP : IsPeriodic m A)
     {dim : Fin m → ℕ}
     (blocks :
@@ -115,6 +115,7 @@ private lemma not_gaugePhaseEquiv_of_orthogonal_cyclicSector_traces
     ¬ GaugePhaseEquiv
       (cast (congr_arg (MPSTensor (blockPhysDim d m)) hdim.symm) (blocks u))
       (blocks v) := by
+  have : NeZero D := ⟨hP.bondDim_ne_zero⟩
   intro hGPE
   have hCyclicDecomp : IsCyclicSectorDecomp A blocks :=
     ⟨P, φ, hPproj, hPsum, hCyclic, hComm, hTrace, hIntertwine, hMul, hStar⟩
@@ -165,7 +166,7 @@ the original irreducible tensor forces this eigenvector to vanish.
 The periodicity hypothesis is essential: orthogonality of the corners alone
 does not exclude gauge-phase equivalent sectors. -/
 lemma sectorBlocks_not_gaugePhaseEquiv_of_ne
-    [NeZero D] (A : MPSTensor d D) {m : ℕ} [NeZero m]
+    (A : MPSTensor d D) {m : ℕ} [NeZero m]
     (hP : IsPeriodic m A)
     {dim : Fin m → ℕ}
     (blocks :
@@ -227,7 +228,7 @@ asymptotically orthogonal.
 This theorem isolates the passage from cyclic-sector decomposition data to the
 overlap-asymptotic statement. -/
 private theorem sectorOverlap_tendsto_delta_of_cyclicSectorDecomp
-    [NeZero D] (A : MPSTensor d D) {m : ℕ} [NeZero m]
+    (A : MPSTensor d D) {m : ℕ} [NeZero m]
     (hP : IsPeriodic m A)
     {dim : Fin m → ℕ}
     (blocks :
@@ -336,7 +337,7 @@ distinct sectors are asymptotically orthogonal. Expanding the blocked
 self-overlap as the finite double sum over sector overlaps therefore gives the
 limit `m`, one contribution from each sector. -/
 private theorem blockTensor_selfOverlap_tendsto_of_cyclicSectorDecomp
-    [NeZero D] (A : MPSTensor d D) {m : ℕ} [NeZero m]
+    (A : MPSTensor d D) {m : ℕ} [NeZero m]
     (hP : IsPeriodic m A)
     {dim : Fin m → ℕ}
     (blocks :

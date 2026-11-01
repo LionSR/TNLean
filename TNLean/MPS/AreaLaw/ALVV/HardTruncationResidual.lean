@@ -97,17 +97,16 @@ private theorem three_region_data {L q l r : ℕ} (hlr : l ≤ r) (hrL : r ≤ L
     exact hA5 (f j)
   · simpa only [hJ5] using hY
   · simpa only [hJ5] using hYC
-  · have hempty (c : ℕ) :
-        (∑ i ∈ Finset.univ.filter (fun i : Fin (L - 1) ↦
-          c ≤ i.val ∧ i.val + 1 < c), h i) = 0 := by
-      apply Finset.sum_eq_zero
-      intro i hi
-      have := (Finset.mem_filter.mp hi).2
-      omega
+  · have hcontra (c m : ℕ) : (c ≤ m ∧ m + 1 < c) ↔ False := ⟨fun h ↦ by omega, False.elim⟩
     have hsum := hsum5
     rw [Fin.sum_univ_five] at hsum
-    simpa [A5, I5, k5, A, aklvRegionalHamiltonians, Fin.sum_univ_three, J,
-      hempty, add_assoc] using hsum
+    simp only [A, aklvRegionalHamiltonians, Fin.sum_univ_three, J, Y]
+    simp only [Fin.isValue, Fin.castSucc_zero, cons_val_zero, zero_le, Fin.succ_zero_eq_one,
+      cons_val_one, true_and, Fin.castSucc_one, Fin.succ_one_eq_two, cons_val, hcontra,
+      Finset.filter_false, Finset.sum_empty, add_zero, Fin.reduceCastSucc, Fin.reduceSucc,
+      add_assoc, Finset.mem_singleton, Finset.insert_eq_of_mem, Finset.mem_insert,
+      true_or] at hsum ⊢
+    convert hsum using 6 <;> rfl
 
 private theorem residual_coefficient_le {c E η t : ℝ} (hc : c ≤ 2) (hE : E ≤ 2) :
     (Real.exp (-(1 / 8) * (t - (η + 7)) - 1) / (1 / 8)) *
@@ -146,7 +145,8 @@ private theorem canonical_spectralSpanLE_eq {n : Type*} [Fintype n] [DecidableEq
     simp only [IsHermitian.eigenvectorBasis, OrthonormalBasis.reindex_apply, e]
   · rintro ⟨i, hi, rfl⟩
     refine ⟨e i, ?_, ?_⟩
-    · simpa only [IsHermitian.eigenvalues, e, Equiv.symm_apply_apply] using hi
+    · have hi' : hM.eigenvalues₀ i ≤ c := hi
+      simpa [IsHermitian.eigenvalues, e] using hi'
     · simp only [IsHermitian.eigenvectorBasis, OrthonormalBasis.reindex_apply,
         e, Equiv.symm_apply_apply]
 
@@ -166,38 +166,48 @@ theorem exists_single_region_hard_truncation_residuals {L q l r : ℕ}
     (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
       (h i) (interval L i.val (i.val + 2)))
     (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1) :
-    let A := aklvRegionalHamiltonians l r h
-    let J := Finset.univ.filter (fun i : Fin (L - 1) ↦ i.val + 1 ∈ ({l, r} : Finset ℕ))
-    let Y := ∑ i ∈ J, h i
     ∃ (e : Fin 3 → ℝ) (x z : (Fin L → Fin q) → ℂ) (E : ℝ),
-      star x ⬝ᵥ x = 1 ∧ (∀ j, A j *ᵥ x = (e j : ℂ) • x) ∧
-      (∀ j, (A j - (e j : ℂ) • 1).PosSemidef) ∧ (∀ j, 0 ≤ e j) ∧
+      star x ⬝ᵥ x = 1 ∧ (∀ j, aklvRegionalHamiltonians l r h j *ᵥ x = (e j : ℂ) • x) ∧
+      (∀ j, (aklvRegionalHamiltonians l r h j - (e j : ℂ) • 1).PosSemidef) ∧ (∀ j, 0 ≤ e j) ∧
       let H := (∑ i, h i) - (((∑ j, e j) : ℝ) : ℂ) • 1
       star z ⬝ᵥ z = 1 ∧ H *ᵥ z = (E : ℂ) • z ∧
       (H - (E : ℂ) • 1).PosSemidef ∧ 0 ≤ E ∧ E ≤ 2 ∧
       ∀ η t : ℝ, 0 < η → η + 7 ≤ t →
-        let F := energyTruncation (A 1) (e 1 + t) + A 0 + A 2 + Y -
+        let F := energyTruncation (aklvRegionalHamiltonians l r h 1) (e 1 + t) +
+          aklvRegionalHamiltonians l r h 0 + aklvRegionalHamiltonians l r h 2 +
+          (∑ i ∈ Finset.univ.filter
+            (fun i : Fin (L - 1) ↦ i.val + 1 ∈ ({l, r} : Finset ℕ)), h i) -
           (((∑ j, e j) : ℝ) : ℂ) • 1
         ∃ (hH : H.IsHermitian) (hF : F.IsHermitian)
           (E' : ℝ) (z' : (Fin L → Fin q) → ℂ),
           F ≤ H ∧ star z' ⬝ᵥ z' = 1 ∧ F *ᵥ z' = (E' : ℂ) • z' ∧
           (F - (E' : ℂ) • 1).PosSemidef ∧ 0 ≤ E' ∧ E' ≤ 2 ∧
-          let bH := (isSymmetric_toEuclideanLin_iff.mpr hH).eigenvectorBasis
-            finrank_euclideanSpace
-          let bF := (isSymmetric_toEuclideanLin_iff.mpr hF).eigenvectorBasis
-            finrank_euclideanSpace
-          ‖(toEuclideanCLM H - toEuclideanCLM F).domRestrict
-            (Submodule.spectralSpanLE bH hH.eigenvalues₀ (E + η))‖ ≤
+          ‖((toEuclideanCLM (n := Fin L → Fin q) (𝕜 := ℂ)) H -
+              (toEuclideanCLM (n := Fin L → Fin q) (𝕜 := ℂ)) F).domRestrict
+            (Submodule.spectralSpanLE
+              ((isSymmetric_toEuclideanLin_iff.mpr hH).eigenvectorBasis
+                finrank_euclideanSpace) hH.eigenvalues₀ (E + η))‖ ≤
               32 * Real.exp (-(t - η) / 8) ∧
-          ‖(toEuclideanCLM H - toEuclideanCLM F).domRestrict
-            (Submodule.spectralSpanLE bF hF.eigenvalues₀ (E + η))‖ ≤
+          ‖((toEuclideanCLM (n := Fin L → Fin q) (𝕜 := ℂ)) H -
+              (toEuclideanCLM (n := Fin L → Fin q) (𝕜 := ℂ)) F).domRestrict
+            (Submodule.spectralSpanLE
+              ((isSymmetric_toEuclideanLin_iff.mpr hF).eigenvectorBasis
+                finrank_euclideanSpace) hF.eigenvalues₀ (E + η))‖ ≤
               32 * Real.exp (-(t - η) / 8) := by
-  intro A J Y
+  set A := aklvRegionalHamiltonians l r h with hAdef
+  set J := Finset.univ.filter (fun i : Fin (L - 1) ↦ i.val + 1 ∈ ({l, r} : Finset ℕ))
+    with hJdef
+  set Y := ∑ i ∈ J, h i with hYdef
   let k : Fin 4 → ℕ := ![0, l, r, L]
   let R := fun j : Fin 3 ↦ interval L (k j.castSucc) (k j.succ)
   let I := fun j : Fin 3 ↦ Finset.univ.filter
     (fun i : Fin (L - 1) ↦ k j.castSucc ≤ i.val ∧ i.val + 1 < k j.succ)
-  obtain ⟨hk, hR, hsA, hA, hY, hYC, hJ, hsum⟩ :=
+  obtain ⟨hk, hR, hsA, hA, hY, hYC, hJ, hsum⟩ :
+      Monotone k ∧ (Pairwise fun i j ↦ Disjoint (R i) (R j)) ∧
+        (∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (A j) (R j)) ∧
+        (∀ j, (A j).PosSemidef ∧ A j ≤ ((I j).card : ℝ) • 1) ∧
+        Y.PosSemidef ∧ Y ≤ (J.card : ℝ) • 1 ∧ J.card ≤ 2 ∧
+        (∑ i, h i) = (∑ j, A j) + Y :=
     three_region_data hlr hrL h hs h0 h1
   obtain ⟨e, x, hx, hxe, he, hclip⟩ :=
     Matrix.exists_disjoint_regional_clipping_structure hq R A (fun j ↦ (I j).card)
@@ -217,9 +227,11 @@ theorem exists_single_region_hard_truncation_residuals {L q l r : ℕ}
     rw [← hcenter 0]
     exact hX0.add hY
   have hHz' : H *ᵥ z = (E : ℂ) • z := by
-    simpa only [← hcenter 0] using hHz
+    rw [← hcenter 0]
+    exact hHz
   have hE' : (H - (E : ℂ) • 1).PosSemidef := by
-    simpa only [← hcenter 0] using hE
+    rw [← hcenter 0]
+    exact hE
   refine ⟨e, x, z, E, hx, hxe, he,
     fun j ↦ (hA j).1.nonneg_of_normalized_eigenvector (e j) x (hxe j) hx,
     hz, hHz', hE', hE0, hEJ.trans (by exact_mod_cast hJ), ?_⟩
@@ -249,18 +261,21 @@ theorem exists_single_region_hard_truncation_residuals {L q l r : ℕ}
   let hF := hFpos.isHermitian
   refine ⟨hH, hF, E', z', hFH, hz', ?_, ?_, hE'0,
     hE'J.trans (by exact_mod_cast hJ), ?_⟩
-  · simpa only [← hmiddle] using hFz'
-  · simpa only [← hmiddle] using hE'
+  · rw [← hmiddle]
+    exact hFz'
+  · rw [← hmiddle]
+    exact hE'
   · have heorder (j : Fin 3) : (e j : ℂ) • 1 ≤ A j := Matrix.le_iff.mpr (he j)
     have hJreal : (J.card : ℝ) ≤ 2 := by exact_mod_cast hJ
     have hE2 : E ≤ 2 := hEJ.trans (by exact_mod_cast hJ)
     have hgap : 2 * (J.card : ℝ) < (η + 7) - (E + η) := by linarith
     have hres (M : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (hM : M.IsHermitian)
         (T : Finset (Fin 3)) (hBM : B t T = M) :
-        ‖(toEuclideanCLM H - toEuclideanCLM F).domRestrict
+        ‖((toEuclideanCLM (n := Fin L → Fin q) (𝕜 := ℂ)) H -
+            (toEuclideanCLM (n := Fin L → Fin q) (𝕜 := ℂ)) F).domRestrict
           (Submodule.spectralSpanLE hM.eigenvectorBasis hM.eigenvalues (E + η))‖ ≤
             32 * Real.exp (-(t - η) / 8) := by
-      have hEigen (v : Fin L → Fin q) : toEuclideanCLM (B t T)
+      have hEigen (v : Fin L → Fin q) : (toEuclideanCLM (n := Fin L → Fin q) (𝕜 := ℂ)) (B t T)
           (hM.eigenvectorBasis v) = (hM.eigenvalues v : ℂ) • hM.eigenvectorBasis v := by
         rw [hBM]
         exact hM.toEuclideanCLM_eigenvectorBasis v
@@ -268,7 +283,8 @@ theorem exists_single_region_hard_truncation_residuals {L q l r : ℕ}
         e T 1 J (η + 7) (E + η) (1 / 8) t (by norm_num) (by norm_num)
         (by linarith) ht hM.eigenvectorBasis hM.eigenvalues heorder hEigen hgap
       have hsingle' := hsingle.trans (residual_coefficient_le hJreal hE2)
-      simpa only [← map_sub, hdiff] using hsingle'
+      rw [← map_sub, hdiff]
+      exact hsingle'
     constructor
     · rw [← canonical_spectralSpanLE_eq hH (E + η)]
       exact hres H hH ∅ (hcenter t)

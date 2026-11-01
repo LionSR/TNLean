@@ -24,6 +24,7 @@ import TNLean.Algebra.CharacterProjectorWeighted
 import TNLean.Algebra.CircleCohomology
 import TNLean.Algebra.CoalgebraDualStar
 import TNLean.Algebra.CocycleCohomology
+import TNLean.Algebra.CocycleCommPhase
 import TNLean.Algebra.CocycleRestriction
 import TNLean.Algebra.CommonBufferLength
 import TNLean.Algebra.CommonFixedSubmodule
@@ -48,6 +49,7 @@ import TNLean.Algebra.CycleLaplacianFourier
 import TNLean.Algebra.CyclicInsertion
 import TNLean.Algebra.CyclicMomentRigidity
 import TNLean.Algebra.DirectedWalkCoboundary
+import TNLean.Algebra.EuclideanExtendByZero
 import TNLean.Algebra.EuclideanFiberwiseMap
 import TNLean.Algebra.EuclideanFiberwiseProjection
 import TNLean.Algebra.EventuallyConstantCycleWeights
@@ -102,6 +104,7 @@ import TNLean.Algebra.KleinCocycleTable
 import TNLean.Algebra.KrausSpanRank
 import TNLean.Algebra.KroneckerLeastEigenvalue
 import TNLean.Algebra.LSymbol
+import TNLean.Algebra.LSymbolActionMatrix
 import TNLean.Algebra.LSymbolBlockIndependence
 import TNLean.Algebra.LSymbolDomainWall
 import TNLean.Algebra.LSymbolFreeAction
@@ -125,6 +128,7 @@ import TNLean.Algebra.MatrixRankOfFactor
 import TNLean.Algebra.MatrixReindexGap
 import TNLean.Algebra.MatrixScalarIdentity
 import TNLean.Algebra.MatrixSingleSpan
+import TNLean.Algebra.MatrixStarEquivSpatial
 import TNLean.Algebra.MatrixSylvesterBound
 import TNLean.Algebra.MatrixTensorPower
 import TNLean.Algebra.MatrixUnitFactorization
@@ -142,8 +146,11 @@ import TNLean.Algebra.NormedRingTelescoping
 import TNLean.Algebra.OneMagnon
 import TNLean.Algebra.OperatorSchmidt
 import TNLean.Algebra.OrderedIdempotentTracePerturbation
+import TNLean.Algebra.OrthogonalComplexStructure
+import TNLean.Algebra.OrthogonalComplexStructureBasis
 import TNLean.Algebra.OrthogonalKernelGap
 import TNLean.Algebra.OrthogonalResolution
+import TNLean.Algebra.OrthogonalSkewNormalForm
 import TNLean.Algebra.OrthogonalSymplecticKroneckerDeterminant
 import TNLean.Algebra.PathGraphDistance
 import TNLean.Algebra.PermutationMatrixCommutation
@@ -154,6 +161,7 @@ import TNLean.Algebra.PiTensorProductPhase
 import TNLean.Algebra.PositiveGeneralizedCocycle
 import TNLean.Algebra.PositivePowerSumMoments
 import TNLean.Algebra.PowerExponential
+import TNLean.Algebra.PreBialgebra
 import TNLean.Algebra.PrimitiveMatrixIdealDimension
 import TNLean.Algebra.ProductFactorUniqueness
 import TNLean.Algebra.ProjectionDefectIsometry
@@ -161,6 +169,7 @@ import TNLean.Algebra.ProjectiveCommutantEigenspace
 import TNLean.Algebra.ProjectiveRepresentation
 import TNLean.Algebra.PureStateTraceNorm
 import TNLean.Algebra.RankOneFactorization
+import TNLean.Algebra.RectangularUnitaryConjugation
 import TNLean.Algebra.RegularRepresentationBlocking
 import TNLean.Algebra.RepresentationDelta
 import TNLean.Algebra.RepresentationDeltaInverse
@@ -190,12 +199,17 @@ import TNLean.Algebra.SemiRegularTensorFactor
 import TNLean.Algebra.SemisimpleTracePowers
 import TNLean.Algebra.SignedPermutationSpan
 import TNLean.Algebra.SingletMatrix
+import TNLean.Algebra.SkewUnitaryNormalForm
+import TNLean.Algebra.StabilizedWeightedTrace
+import TNLean.Algebra.StabilizerBlockIndependence
+import TNLean.Algebra.StabilizerBlockIndependenceCircle
 import TNLean.Algebra.StabilizerCocycleExtension
 import TNLean.Algebra.StabilizerCocycleLSymbol
 import TNLean.Algebra.StabilizerCocycleReconstruction
 import TNLean.Algebra.StabilizerTransition
 import TNLean.Algebra.StackedIsometryCard
 import TNLean.Algebra.StarClosedSemisimple
+import TNLean.Algebra.StarSubalgebraEquiv
 import TNLean.Algebra.SubmoduleStarProjectionMatrix
 import TNLean.Algebra.Subquotient
 import TNLean.Algebra.SupportedIsometricCompression
@@ -226,6 +240,7 @@ import TNLean.Algebra.TwoWindowSum
 import TNLean.Algebra.TwoWindowTensorForms
 import TNLean.Algebra.UniformSelectionBounds
 import TNLean.Algebra.UnimodularPowerSum
+import TNLean.Algebra.UnitPhaseScalar
 import TNLean.Algebra.UnitaryAdjointKronecker
 import TNLean.Algebra.UnitaryCompletionClass
 import TNLean.Algebra.UnitaryCongruence

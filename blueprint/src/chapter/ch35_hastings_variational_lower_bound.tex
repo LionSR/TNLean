@@ -99,6 +99,34 @@ power requires correction, and $i^k$ already supplies the alternating sign
 identity is proved in QICLean; the finite-polynomial theorem above allows
 arbitrary real coefficients.
 
+\begin{lemma}[The Gaussian commutator expansion]
+    \label{lem:hastings_gaussian_commutator_series}
+    \lean{TNLean.Lattice.gaussianFilteredTerm_eq_exp_commutator,
+        TNLean.Lattice.hasSum_gaussianFilteredTerm_commutator}
+    \leanok
+    \uses{def:hastings_gaussian_filtered_term}
+    Let $H$ be Hermitian, let $W$ be any operator, and let $q\ge0$ and
+    $\Delta E>0$. The actual Gaussian-filtered term of variance
+    $h=q/\Delta E^2$ satisfies
+    \begin{align}
+        \widetilde W
+         & =\exp\bigl(-\tfrac h2\operatorname{ad}_H^2\bigr)(W) \\
+         & =\sum_{r=0}^{\infty}\frac{(-h/2)^r}{r!}
+        \operatorname{ad}_H^{2r}(W),
+    \end{align}
+    where $\operatorname{ad}_H(W)=HW-WH$ and the series converges in
+    operator norm. In particular, the variance has power $r$ at order
+    $2r$, as required by the correction of the printed coefficients at
+    lines 1005--1009 of \cite{Hastings2006Solving}, documented in
+    \cite{gap:hastings05_gaussian_series_coefficients}.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Apply the Gaussian exponential and norm-convergent series identities
+    at variance $q/\Delta E^2$. Nonnegativity of $q$ identifies that
+    variance with the nonnegative variance of the actual filter.
+\end{proof}
+
 \begin{lemma}[The Gaussian-filtered variational lower bound]
     \label{thm:hastings_gaussian_variational_lower_bound}
     \lean{TNLean.Lattice.sum_conj_gaussianFilteredTerm,
