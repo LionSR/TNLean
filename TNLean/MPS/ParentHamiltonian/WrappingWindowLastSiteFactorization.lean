@@ -29,7 +29,7 @@ where the window wraps from the last site back to the first sites. -/
 
 /-- At the last-site boundary-crossing position \(N-1\), the cyclic config's last site is
 \(\sigma_w(0)\). -/
-private theorem cyclicCfg_last_eq {N L : ℕ} (hN : 2 ≤ N) (hLN : L ≤ N) (hL : 1 < L)
+theorem cyclicCfg_last_eq {N L : ℕ} (hN : 2 ≤ N) (hLN : L ≤ N) (hL : 1 < L)
     (σ_w : Fin L → Fin d) (τ : Fin N → Fin d) :
     cyclicCfg (by omega : 0 < N) L ⟨N - 1, by omega⟩ σ_w τ ⟨N - 1, by omega⟩ =
       σ_w ⟨0, by omega⟩ := by
@@ -42,7 +42,7 @@ private theorem cyclicCfg_last_eq {N L : ℕ} (hN : 2 ≤ N) (hLN : L ≤ N) (hL
 
 /-- At the wrapping position \(N-1\), sites \(0,\ldots,L-2\) get
 \(\sigma_w(1),\ldots,\sigma_w(L-1)\). -/
-private theorem cyclicCfg_window_site {N L : ℕ} (hN : 2 ≤ N) (_hLN : L ≤ N) (hL : 1 < L)
+theorem cyclicCfg_window_site {N L : ℕ} (hN : 2 ≤ N) (_hLN : L ≤ N) (hL : 1 < L)
     (σ_w : Fin L → Fin d) (τ : Fin N → Fin d)
     {k : ℕ} (hk : k < L - 1) :
     cyclicCfg (by omega : 0 < N) L ⟨N - 1, by omega⟩ σ_w τ ⟨k, by omega⟩ =
@@ -55,7 +55,7 @@ private theorem cyclicCfg_window_site {N L : ℕ} (hN : 2 ≤ N) (_hLN : L ≤ N
   congr 1; ext; simp [hoffset]
 
 /-- At the wrapping position \(N-1\), complement sites get \(\tau\) values. -/
-private theorem cyclicCfg_complement_site {N L : ℕ} (hN : 2 ≤ N) (_hLN : L ≤ N) (hL : 1 < L)
+theorem cyclicCfg_complement_site {N L : ℕ} (hN : 2 ≤ N) (_hLN : L ≤ N) (hL : 1 < L)
     (σ_w : Fin L → Fin d) (τ : Fin N → Fin d)
     {k : ℕ} (hk1 : L - 1 ≤ k) (hk2 : k < N - 1) :
     cyclicCfg (by omega : 0 < N) L ⟨N - 1, by omega⟩ σ_w τ ⟨k, by omega⟩ =

@@ -37,15 +37,15 @@ at `g/8192`; no actual first-excited-energy hypothesis is used. -/
 lemma exists_aklv_frustrationFree_scalar_parameters :
     ∃ A : ℝ, 1 ≤ A ∧ 21 ≤ A ∧
       ∀ (q : ℕ) (g : ℝ), 2 ≤ q → 0 < g → g ≤ 1 →
-      let g0 := g / 8192
-      let u := 1 + log (q : ℝ) + log (1 / g)
-      let u0 := 1 + log (q : ℝ) + log (1 / g0)
+      let g0 : ℝ := g / 8192
+      let u : ℝ := 1 + log (q : ℝ) + log (1 / g)
+      let u0 : ℝ := 1 + log (q : ℝ) + log (1 / g0)
       let s : ℕ := ⌈A * u0 ^ 2 / g0⌉₊
-      let ell := s ^ 2
-      let t := 1024 / g
-      let R := 2 * t + (s : ℝ)
-      let D := (q * (s ^ 2 + 1)) ^ (32 * (2 * s + 1))
-      let delta := 4 * exp (-(4 * (ell : ℝ) * sqrt ((g / 2) / R)))
+      let ell : ℕ := s ^ 2
+      let t : ℝ := 1024 / g
+      let R : ℝ := 2 * t + (s : ℝ)
+      let D : ℕ := (q * (s ^ 2 + 1)) ^ (32 * (2 * s + 1))
+      let delta : ℝ := 4 * exp (-(4 * (ell : ℝ) * sqrt ((g / 2) / R)))
       21 ≤ s ∧ 1 / g ≤ (s : ℝ) ∧
       (s : ℝ) ≤ 8192 * (A + 1) * (1 + log 8192) ^ 2 / g * u ^ 2 ∧
       ell / s = s ∧ Nat.sqrt ell = s ∧
@@ -80,7 +80,7 @@ lemma exists_aklv_frustrationFree_scalar_parameters :
   have hu0 : 1 ≤ u0 := by dsimp only [u0]; linarith
   have hL : 0 ≤ log (8192 : ℝ) := log_nonneg (by norm_num)
   have hu0eq : u0 = u + log 8192 := by
-    have hfrac : 1 / g0 = 8192 * (1 / g) := by dsimp only [g0]; field_simp [hg.ne'] <;> ring
+    have hfrac : 1 / g0 = 8192 * (1 / g) := by dsimp only [g0]; field_simp [hg.ne']
     dsimp only [u0, u]
     rw [hfrac, log_mul (by norm_num : (8192 : ℝ) ≠ 0) (one_div_ne_zero hg.ne')]
     ring
@@ -97,7 +97,10 @@ lemma exists_aklv_frustrationFree_scalar_parameters :
       _ ≤ A * u0 ^ 2 / g0 := div_le_div_of_nonneg_right hlarge hg0.le
       _ ≤ (s : ℝ) := hsLower
   have hR : 0 < R := by dsimp only [R, t]; positivity
-  have hRbound : R ≤ 2049 * (s : ℝ) := by dsimp only [R, t]; nlinarith
+  have hRbound : R ≤ 2049 * (s : ℝ) := by
+    dsimp only [R, t]
+    rw [show (1024 : ℝ) / g = 1024 * (1 / g) by ring]
+    linarith
   have hsR0 : (s : ℝ) ≤ R0 := by dsimp only [R0, t0]; linarith
   have hRcompare : R ≤ 2049 * R0 :=
     hRbound.trans (mul_le_mul_of_nonneg_left hsR0 (by norm_num))
@@ -121,9 +124,9 @@ lemma exists_aklv_frustrationFree_scalar_parameters :
       (s : ℝ) ≤ (A + 1) * u0 ^ 2 / g0 := hsUpper
       _ ≤ (A + 1) * ((1 + log 8192) * u) ^ 2 / g0 :=
         div_le_div_of_nonneg_right
-          (mul_le_mul_of_nonneg_left (pow_le_pow_left₀ (by linarith) hu0le 2)
+          (mul_le_mul_of_nonneg_left (pow_le_pow_left₀ (by linarith : (0 : ℝ) ≤ u0) hu0le 2)
             (by linarith : 0 ≤ A + 1)) hg0.le
-      _ = _ := by dsimp only [g0]; field_simp [hg.ne'] <;> ring
+      _ = _ := by dsimp only [g0]; rw [div_div_eq_mul_div]; ring
   have hlogA : 0 ≤ log (A + 1) := log_nonneg (by linarith)
   have hC : 0 ≤ 198 * (A + 1) * (6 + 2 * log (A + 1)) / g0 := by positivity
   refine ⟨hs21, hsInv, hsUpper', hdiv, hsqrt, hR, hdelta, htrade,
@@ -132,7 +135,7 @@ lemma exists_aklv_frustrationFree_scalar_parameters :
     log (D : ℝ) ≤ 198 * (A + 1) * (6 + 2 * log (A + 1)) / g0 * u0 ^ 3 := hlogD
     _ ≤ 198 * (A + 1) * (6 + 2 * log (A + 1)) / g0 *
         ((1 + log 8192) * u) ^ 3 :=
-      mul_le_mul_of_nonneg_left (pow_le_pow_left₀ (by linarith) hu0le 3) hC
-    _ = _ := by dsimp only [g0]; field_simp [hg.ne'] <;> ring
+      mul_le_mul_of_nonneg_left (pow_le_pow_left₀ (by linarith : (0 : ℝ) ≤ u0) hu0le 3) hC
+    _ = _ := by dsimp only [g0]; rw [div_div_eq_mul_div]; ring
 
 end Real

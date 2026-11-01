@@ -1,0 +1,167 @@
+\subsection{The prescribed bounded open-boundary window}
+\label{sec:quadratic_prescribed_obc_window}
+
+\begin{lemma}[Physical prefix bases of the prescribed minimal representation]
+    \label{lem:quadratic_prescribed_prefix_basis}
+    \lean{OBCChainTensor.linearIndependent_physicalPrefixMatrix,
+        OBCChainTensor.cutColumnSpace_eq_span_physicalPrefixMatrix,
+        OBCChainTensor.physicalPrefixBasis,
+        OBCChainTensor.physicalPrefixBasis_apply,
+        OBCChainTensor.toMatrix_cutSlice_physicalPrefixBasis}
+    \leanok
+    At a minimal bond of any prescribed OBC representation, its own
+    physical prefix columns form a basis of the actual physical cut
+    column space. Between two minimal bonds, the matrix of physical
+    coordinate slicing in these bases is the original supplied site
+    matrix.
+\end{lemma}
+\begin{proof}
+    \leanok
+    The actual coefficient matrix factors through the prescribed
+    prefix and suffix factors. Its rank equals the bond dimension,
+    so the prefix columns are independent. The physical column
+    space is contained in their span, and equality of dimensions
+    gives equality of spaces. The original adjacent-prefix recursion
+    then identifies each supplied site matrix with physical slicing.
+\end{proof}
+
+\begin{lemma}[Derived Perron normalization inside the same physical window]
+    \label{lem:quadratic_perron_normalization}
+    \lean{MPSTensor.exists_unital_gauge_of_isNBlkInjective,
+        MPSTensor.exists_apply_ne_zero_of_mpv_ne_zero,
+        MPSTensor.quadraticWindow_cutCoefficientRank_eq_of_isNBlkInjective,
+        MPSTensor.exists_quadraticSolution_physicalCutWindow_of_isNBlkInjective}
+    \leanok
+    \uses{lem:quadratic_virtual_cut_slicing,
+        lem:quadratic_actual_physical_window_solution}
+    Let $A$ satisfy C1 at length $L_0$ and have a nonzero letter.
+    There are an invertible $X$ and a scalar $\zeta\ne0$ such that
+    $B_i=\zeta X A_iX^{-1}$ is row normalized. C1 holds for the
+    original tensor at every length at least $L_0$. Every actual
+    physical cut-basis window therefore admits a normalized quadratic
+    solution, retaining its original physical coefficient spaces and
+    local matrices. A nonzero actual vector of positive length
+    supplies the required nonzero letter.
+\end{lemma}
+\begin{proof}
+    \leanok
+    C1 gives full vector spreading, hence irreducibility, including
+    at zero C1 length. Perron normalization gives $B$, $X$ and
+    $\zeta$. Transport C1 to $B$, extend it by row normalization,
+    and transport it back to $A$. If $Y_j,Z_j$ are the derived
+    physical basis comparison matrices, use
+    \begin{align}
+        \widehat Y_j=\zeta^{-j}(X\otimes I)Y_j,\qquad
+        \widehat Z_j=\zeta^{j+1}Z_j(X^{-1}\otimes I).
+    \end{align}
+    The scalar factor at a site is $\zeta$ and the amplified
+    conjugation gives $B_i\otimes I$; at an internal inverse equation
+    both cancel. No canonical form of $A$ is assumed.
+\end{proof}
+
+\begin{lemma}[A quadratic solution over the prescribed OBC window]
+    \label{lem:quadratic_prescribed_obc_window_solution}
+    \lean{MPSTensor.prescribedOBC_window_bondDim_eq,
+        MPSTensor.prescribedOBCWindowBondEquiv,
+        MPSTensor.quadraticPrescribedOBCWindow,
+        MPSTensor.prescribedOBCWindowCutBases,
+        MPSTensor.quadraticPrescribedOBCWindow_eq_physicalCutWindow,
+        MPSTensor.exists_quadraticSolution_prescribedOBCWindow,
+        MPSTensor.exists_quadraticSolution_prescribedOBCWindow_of_mpv_ne_zero}
+    \leanok
+    \uses{lem:quadratic_prescribed_prefix_basis,
+        lem:quadratic_injective_physical_cut,
+        lem:quadratic_perron_normalization}
+    Let $A$ be a TI tensor satisfying C1 at length $L_0$, with
+    $N>2L_0+D^4$ and a nonzero actual length-$N$ vector. Let $B$ be any
+    prescribed OBC representation of its actual length-$N$ state,
+    with all bonds bounded by $D^2$. Then every bond at the
+    $D^4+1$ cuts of the reconstruction window has dimension exactly
+    $D^2$. The original site matrices of $B$ in this window, expressed
+    in the resulting doubled coordinates, admit a solution of the
+    quadratic system. No solution, comparison gauge, or bond equality
+    is supplied. The prescribed representation may in particular
+    be the canonical one; uniqueness is unnecessary.
+\end{lemma}
+\begin{proof}
+    \leanok
+    At each window cut, C1 forces physical rank $D^2$. This rank is
+    at most the original bond dimension, which is at most $D^2$.
+    Hence the bond is minimal. The preceding lemma derives physical
+    cut bases from the original prefix columns and identifies the
+    original sites with physical slicing. The solution construction
+    for any physical cut-basis window, with internally derived
+    Perron normalization, therefore applies to this very
+    prescribed representation. Only the forced coordinate
+    identification is made; the representation is not replaced.
+\end{proof}
+
+\begin{lemma}[The original canonical OBC bonds are physical cut ranks]
+    \label{lem:quadratic_canonical_obc_physical_ranks}
+    \lean{OBCChainTensor.physicalPrefixMatrix_gram_step,
+        OBCChainTensor.physicalPrefixMatrix_zero_gram,
+        OBCChainTensor.physicalPrefixMatrix_gram_eq_density,
+        OBCChainTensor.physicalSuffixMatrix_step,
+        OBCChainTensor.physicalSuffixMatrix_last,
+        OBCChainTensor.physicalSuffixMatrix_gram_step,
+        OBCChainTensor.physicalSuffixMatrix_coisometry,
+        OBCChainTensor.bondDim_eq_cutCoefficientRank_of_canonical,
+        OBCChainTensor.coeff_ne_zero_of_faithful_density,
+        OBCChainTensor.withBondBound,
+        OBCChainTensor.withBondBound_tensor,
+        OBCChainTensor.withBondBound_coeff}
+    \leanok
+    \uses{lem:quadratic_prescribed_prefix_basis}
+    Let $B$ be the prescribed OBC tensor, with arbitrary common bond
+    bound. Assume its source canonical equations
+    \begin{align}
+        \sum_i B_i^{[j]}B_i^{[j]\dagger}=I,\qquad
+        \sum_i B_i^{[j]\dagger}\Lambda_j B_i^{[j]}=\Lambda_{j+1},
+        \qquad\Lambda_0=I,\quad\Lambda_j>0.
+    \end{align}
+    At every cut, its actual prefix Gram is $\Lambda_j$ and its
+    actual suffix Gram is the identity. Its original bond dimension
+    is therefore exactly the physical cut rank. The represented
+    vector is nonzero. Replacing only a verified common upper bound
+    retains every original bond space, site matrix and coefficient.
+\end{lemma}
+\begin{proof}
+    \leanok
+    The physical extension bijections give the forward prefix and
+    backward suffix Gram recursions. Induct from the two scalar
+    boundaries. Faithfulness makes the prefix columns independent.
+    If the physical coefficient matrix is $M=FG$, the suffix identity
+    $GG^\dagger=I$ gives $MG^\dagger=F$, hence equality of the physical
+    rank and the original bond dimension. Faithfulness at the last
+    scalar bond also excludes a zero represented vector.
+\end{proof}
+
+\begin{lemma}[Quadratic existence for the original canonical OBC window]
+    \label{lem:quadratic_original_canonical_obc_window}
+    \lean{MPSTensor.canonicalOBC_bondDim_le_of_mpv_eq,
+        MPSTensor.canonicalOBCWithSquaredBound,
+        MPSTensor.quadraticCanonicalOBCWindow,
+        MPSTensor.quadraticCanonicalOBCWindow_apply,
+        MPSTensor.exists_quadraticSolution_canonicalOBCWindow}
+    \leanok
+    \uses{lem:quadratic_canonical_obc_physical_ranks,
+        lem:quadratic_prescribed_obc_window_solution}
+    Let the original canonical OBC tensor represent the actual
+    length-$N$ state of a TI tensor $A$ satisfying C1 at $L_0$, with
+    $N>2L_0+D^4$. Its original window admits a solution of the
+    quadratic system. No common bond bound by $D^2$, nonzero-state
+    premise, canonical TI representative, comparison gauge, window
+    identity or quadratic solution is supplied. OBC uniqueness is
+    unnecessary; the source canonical equations above suffice.
+\end{lemma}
+\begin{proof}
+    \leanok
+    The preceding lemma identifies the original bond dimensions
+    with physical cut ranks. Opening a periodic trace contraction
+    gives the bound $D^2$ for every such rank. This changes only the
+    common upper bound recorded for the original rectangular tensors.
+    The state is nonzero by faithfulness. Apply the prescribed-window
+    theorem, with its internally derived Perron normalization and
+    window gauges. The resulting window entries are the original
+    supplied site entries in the proved doubled coordinates.
+\end{proof}

@@ -95,7 +95,10 @@ lemma frustrationFree_twoSidedEnergyTruncation_ground_gap {L q : ℕ}
     nlinarith
   have horth := orthogonal_clipped_energy_ge X N Y A hX hN hY hA hXN hXY hNY hAcap
     Ω hΩ 0 g t (by norm_num) (by norm_num) hg hg1 ht0 hcut
-    (by intro v; simpa only [hH] using hgap0.gap_le v)
+    (by
+      intro v
+      simpa only [hH, ← Matrix.coe_toEuclideanCLM_eq_toEuclideanLin,
+        ContinuousLinearMap.coe_coe] using hgap0.gap_le v)
   have hKΩ : ι K Ω = (0 : ℂ) • Ω := by
     change WithLp.toLp 2 (K *ᵥ WithLp.ofLp Ω) = _
     rw [hKzero]

@@ -50,9 +50,6 @@ private theorem ff_clipped_hamiltonian_eq {L q a s : ℕ}
         (fun i : Fin (L - 1) ↦ 0 ≤ i.val ∧ i.val + 1 < a + 2), h i
     simp only [zero_smul, sub_zero]
     congr 1
-    ext i
-    simp only [Finset.mem_filter, Finset.mem_univ, true_and]
-    omega
   have hmiddle : AKLV.middleCutBlock h α β 0 = C 1 := by
     change (∑ i ∈ Finset.univ.filter (fun i : Fin (L - 1) ↦
       a + 1 < i.val ∧ i.val < a + s - 2), h i) - (0 : ℂ) • 1 =
@@ -87,7 +84,9 @@ private theorem ff_clipped_hamiltonian_eq {L q a s : ℕ}
     change a + 1 = a + s - 2 at hv
     omega
   have hselector : (Finset.univ : Finset (Fin 2)).image
-      (fun j ↦ (⟨2 * j.val, by omega⟩ : Fin 3)) = {0, 2} := by decide
+      (fun j ↦ (⟨2 * j.val, by omega⟩ : Fin 3)) = {0, 2} := by
+    ext x
+    fin_cases x <;> simp
   dsimp only [aklvTwoBlockHamiltonian]
   rw [hselector, Fin.sum_univ_three, hcross, Finset.sum_pair hne]
   simp only [Finset.mem_insert, Finset.mem_singleton, Fin.reduceEq, or_self,
@@ -164,6 +163,7 @@ theorem exists_aklv_frustrationFree_chebyshev_filter {L q a s : ℕ}
     exact Matrix.nonneg_iff_posSemidef.mp (Finset.sum_nonneg fun i _ ↦ h0 i)
   have hBnorm := (aklv_clipped_hamiltonian_posSemidef_norm_le hs ha h h0 h1
     (fun _ ↦ 0) he le_rfl ht0).2
+  have : Nonempty (Fin q) := ⟨⟨0, by omega⟩⟩
   have hupper (x : ℝ) (hx : x ∈ spectrum ℝ B) : x ≤ 2 * t + s :=
     (le_abs_self x).trans ((by simpa only [Real.norm_eq_abs] using
       spectrum.norm_le_norm_of_mem hx : |x| ≤ ‖B‖).trans hBnorm)
@@ -186,9 +186,9 @@ theorem exists_aklv_frustrationFree_chebyshev_filter {L q a s : ℕ}
       hq (by omega : 0 < s - 2)
       (by omega : a + 1 + (s - 2) + 1 ≤ L) H hmiddle HL HR
       (by simpa only [Nat.add_assoc] using hL) hR'
-      (by simpa only [← hdecomp] using hBpos.isHermitian) hΩ
-      (by simpa only [← hdecomp, Complex.ofReal_zero, zero_smul] using hBΩ)
-      (by simpa only [← hdecomp, Complex.ofReal_zero, zero_smul, sub_zero] using hBgap)
+      (by rw [← hdecomp]; exact hBpos.isHermitian) hΩ
+      (by rw [← hdecomp]; simpa only [Complex.ofReal_zero, zero_smul] using hBΩ)
+      (by rw [← hdecomp]; simpa only [Complex.ofReal_zero, zero_smul, sub_zero] using hBgap)
       (by positivity : 0 < g / 2) hgu (by rwa [← hdecomp]) ell
   rw [← hdecomp] at hfix herr hrank horth
   rw [hcenter] at hrank

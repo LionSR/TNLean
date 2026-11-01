@@ -363,7 +363,7 @@ In this section $P_t=\mathbf1_{(-\infty,t)}(B)$ and $Q_t=I-P_t$.
     $L,N,R\ge0$ and puts the ground energy in $[0,6]$.
 \end{definition}
 
-\begin{lemma}[Ground-vector and gap robustness under exterior truncation]
+\begin{theorem}[Ground-vector and gap robustness under exterior truncation]
     \label{thm:aklv_robustness}
     \lean{TNLean.MPS.AreaLaw.AKLV.exists_robust_ground_twoSidedEnergyTruncation,
         TNLean.MPS.AreaLaw.AKLV.normalized_chain_robustness}
@@ -385,7 +385,7 @@ In this section $P_t=\mathbf1_{(-\infty,t)}(B)$ and $Q_t=I-P_t$.
     \end{align}
     for some real $\theta$. These are explicit universal constants in
     \cite[Theorem~6.1]{Arad2013AreaLaw}, in its normalized setting.
-\end{lemma}
+\end{theorem}
 \begin{proof}\leanok
     \uses{lem:aklv_clipped_gap,lem:aklv_projected_residual,lem:aklv_residual_phase}
     The original supports give the regional commutations and decomposition,
@@ -408,12 +408,143 @@ In this section $P_t=\mathbf1_{(-\infty,t)}(B)$ and $Q_t=I-P_t$.
 \end{proof}
 
 
+\begin{lemma}[Ground cutoffs on disjoint regions]
+    \label{lem:aklv_disjoint_regional_ground}
+    \lean{QuantumCircuit.exists_supported_ground_cutoff,
+        QuantumCircuit.trace_mul_ne_zero_of_disjoint,
+        QuantumCircuit.exists_common_ground_of_disjoint,
+        QuantumCircuit.exists_normalized_common_ground_of_disjoint}
+    \leanok
+    Let $C_0,C_1,C_2$ be Hermitian operators supported on pairwise
+    disjoint sets of sites, with positive on-site dimension. Write
+    $z_j=\min\operatorname{spec}(C_j)$ and
+    $P_j=\mathbf{1}_{\{z_j\}}(C_j)$. Each $P_j$ has the same support
+    as $C_j$, has nonzero trace, and satisfies $(C_j-z_jI)P_j=0$.
+    For operators on disjoint regions, nonzero individual traces imply
+    a nonzero trace of their product. Consequently there is a unit vector
+    $w$ such that $(C_j-z_jI)w=0$ for all three $j$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Functional calculus preserves the supported algebra. The trace of a
+    ground cutoff is the positive multiplicity of the minimum eigenvalue.
+    The tensor product trace identity gives
+    $\operatorname{tr}(AB)\operatorname{tr}(I)
+        =\operatorname{tr}(A)\operatorname{tr}(B)$ on disjoint supports.
+    Applying it twice shows $P_0P_1P_2\ne0$. The shifted cores commute
+    past the other cutoffs and kill the product. Normalize a nonzero
+    column of that product.
+\end{proof}
+
+\begin{definition}[The three normalization cores and boundary bonds]
+    \label{def:aklv_original_normalization_cores}
+    \lean{TNLean.MPS.AreaLaw.AKLV.normalizationCoreBonds,
+        TNLean.MPS.AreaLaw.AKLV.normalizationCoreSites,
+        TNLean.MPS.AreaLaw.AKLV.normalizationBoundaryBonds}
+    \leanok
+    Number original bonds from zero and choose cut bonds $a,b$ with
+    $a+2<b$. The core bond sets are
+    \begin{align}
+        I_0 & =\{i:i+1<a\},         &
+        I_1 & =\{i:a+1<i,\ i+1<b\}, &
+        I_2 & =\{i:b+1<i\}.
+    \end{align}
+    They are supported on the disjoint site intervals
+    $\lbrack 0,a)$, $\lbrack a+2,b)$, and $\lbrack b+2,L)$, respectively. Let $J$ be the
+    complement of their union in the set of original bonds and put
+    $C_j=\sum_{i\in I_j}h_i$ and $B=\sum_{i\in J}h_i$.
+    These are the three regional cores of
+    \cite[Section~6.1]{Arad2013AreaLaw}, with the boundary terms unchanged.
+\end{definition}
+
+\begin{lemma}[Constructed regional shifts and the six-bond bound]
+    \label{lem:aklv_constructed_regional_shifts}
+    \lean{TNLean.MPS.AreaLaw.AKLV.exists_regional_minimum_shifts,
+        TNLean.MPS.AreaLaw.AKLV.normalizationBoundaryBonds_card_le_six,
+        TNLean.MPS.AreaLaw.AKLV.normalizationCoreBonds_sum}
+    \leanok
+    \uses{def:aklv_original_normalization_cores,lem:aklv_disjoint_regional_ground}
+    For original positive bonds, the actual regional minima $z_j$ make
+    $C_j-z_jI\ge0$, and those three matrices have a common unit zero vector.
+    Moreover $|J|\le6$ and
+    \begin{align}
+        \sum_i h_i=\sum_{j=0}^2 C_j+B.
+    \end{align}
+\end{lemma}
+\begin{proof}
+    \leanok
+    Apply Lemma~\ref{lem:aklv_disjoint_regional_ground} to the three core
+    intervals. Every remaining bond lies in
+    $[a-1,a+1]\cup[b-1,b+1]$, so at most six remain, including when an
+    exterior is short. The core bond sets and their complement partition
+    all the original bonds.
+\end{proof}
+
+\begin{lemma}[Derived positivity and normalized ground energy]
+    \label{lem:aklv_original_normalization_data}
+    \lean{TNLean.MPS.AreaLaw.AKLV.normalizedCutBlocks_posSemidef_of_core_shifts,
+        TNLean.MPS.AreaLaw.AKLV.exists_normalized_chain_data}
+    \leanok
+    \uses{lem:aklv_constructed_regional_shifts,def:aklv_normalized_cut_blocks}
+    Suppose $0\le h_i\le I$ and a unit vector $\Omega$ is a ground vector
+    of $H_0=\sum_i h_i$ at energy $E$. The constructed shifts give
+    $L,N,R\ge0$ in Definition~\ref{def:aklv_normalized_cut_blocks} and
+    the shifted ground energy
+    \begin{align}
+        e=E-z_0-z_1-z_2\in[0,6].
+    \end{align}
+\end{lemma}
+\begin{proof}
+    \leanok
+    Each clipped block is its positive shifted core plus original
+    positive boundary terms. The shifted full Hamiltonian is
+    $\sum_j(C_j-z_jI)+B\ge0$. A common unit zero vector of the three
+    shifted cores has energy at most six because $0\le B\le6I$.
+    The ground variational inequality gives $e\le6$.
+\end{proof}
+
+\begin{theorem}[Exterior truncation from the original chain]
+    \label{thm:aklv_original_chain_robustness}
+    \lean{TNLean.MPS.AreaLaw.AKLV.original_chain_robustness}
+    \leanok
+    \uses{lem:aklv_original_normalization_data,thm:aklv_robustness}
+    Let $0\le h_i\le I$ be original nearest-neighbour interactions on a
+    chain of positive on-site dimension. Let $H_0\Omega=E\Omega$,
+    $\|\Omega\|=1$, and
+    \begin{align}
+        H_0-EI\ge g(I-|\Omega\rangle\langle\Omega|),\qquad 0<g\le1.
+    \end{align}
+    For cut bonds $a+2<b$, the regional shifts are constructed from
+    the original interactions. Write $e=E-z_0-z_1-z_2$ and form the
+    actual exterior clipping
+    $K=\min(L,tI)+N+h_a+h_b+\min(R,tI)$.
+    If $t\ge32768(6+g)/g^2$, then $0\le e\le6$ and there are a unit
+    ground vector $\phi$, an energy $e'\in[0,e]$, and $\theta\in\mathbb R$
+    with
+    \begin{align}
+        K-e'I                        & \ge\frac g2(I-|\phi\rangle\langle\phi|), &
+        \|\Omega-e^{i\theta}\phi\|^2 & \le e^{-t/16}.
+    \end{align}
+    The positivity of $L,N,R$ and the bound on $e$ are conclusions of
+    normalization, rather than extra assumptions. The middle-core
+    subtraction uses the bond-count correction recorded in
+    \cite{gap:aklv13_robustness_constants}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Lemma~\ref{lem:aklv_original_normalization_data} constructs the shifts
+    and derives their required bounds. Scalar subtraction preserves
+    the ground vector and the gap inequality. Since $e\le6$, the cutoff
+    implies $t\ge32768(e+g)/g^2$. Apply
+    Theorem~\ref{thm:aklv_robustness} to the resulting normalized chain.
+\end{proof}
+
 \begin{lemma}[Exact preservation under frustration-free exterior clipping]
     \label{lem:aklv_frustration_free_clipping}
     \lean{TNLean.MPS.AreaLaw.AKLV.frustrationFree_twoSidedEnergyTruncation_ground_gap}
-    \notready
+    \leanok
     \uses{def:aklv_normalized_cut_blocks}
-    Let $h_i$ be positive contractions supported on the consecutive site pairs
+    Let $0\le h_i\le I$ be supported on the consecutive site pairs
     $\{i,i+1\}$ of a finite chain. Choose two boundary bonds $a<b$ and put
     $H=\sum_i h_i$. Let $\Omega$ be a unit vector satisfying $H\Omega=0$
     and $H\ge g(I-|\Omega\rangle\langle\Omega|)$, where $0<g\le1$.
@@ -429,13 +560,20 @@ In this section $P_t=\mathbf1_{(-\infty,t)}(B)$ and $Q_t=I-P_t$.
     \cite[Theorem~4.3]{Arad2013AreaLaw}, with an explicit cutoff.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{def:aklv_two_sided_truncation,lem:aklv_projected_energy,
         lem:aklv_clipped_gap}
     Each unshifted regional sum is positive, its two boundary bonds sum
     to an operator at most $2I$, and the original supports give the
     regional commutations and reconstruction of $H$.
-    The clipped order bounds give $0\le K\le H$, hence $H\Omega=0$
-    implies $K\Omega=0$.
+    The clipped order bounds give $0\le K\le H$. Hence
+    \begin{align}
+        0\le\|K^{1/2}\Omega\|^2
+         & =\langle\Omega,K\Omega\rangle
+        \le\langle\Omega,H\Omega\rangle=0,
+        \label{eq:aklv_ff_clipping_kernel_sandwich}
+    \end{align}
+    so $K^{1/2}\Omega=0$ and $K\Omega=0$.
     Apply Lemma~\ref{lem:aklv_clipped_gap} at $e=0$:
     the condition $tg^2\ge1024g$ follows from $t\ge1024/g$.
     Every $w\perp\Omega$ therefore satisfies
@@ -446,4 +584,88 @@ In this section $P_t=\mathbf1_{(-\infty,t)}(B)$ and $Q_t=I-P_t$.
     $\|w\|^2=\|v\|^2-|\langle\Omega,v\rangle|^2$.
     This proves the final operator inequality in
     (\ref{eq:aklv_ff_clipping_gap}).
+\end{proof}
+
+\section{An inverse-gap cutoff}
+
+The high-energy diagonal in the variational comparison sharpens the cutoff
+in \cite[Theorem~6.1]{Arad2013AreaLaw} without changing the exterior
+truncation or the normalization.
+
+\begin{lemma}[Excited-energy comparison retaining the high-energy diagonal]
+    \label{lem:aklv_inverse_gap_comparison}
+    \lean{TNLean.MPS.AreaLaw.AKLV.orthogonal_clipped_energy_ge_of_inverse_gap_cutoff,
+        TNLean.MPS.AreaLaw.AKLV.exists_ground_gap_twoSidedEnergyTruncation_of_inverse_gap_cutoff}
+    \leanok
+    Let $L,N,R$ be commuting positive operators, $0\le A\le2I$, and
+    $H=L+N+R+A$. Suppose $\|\Omega\|=1$, $g>0$, and
+    $H-eI\ge g(I-|\Omega\rangle\langle\Omega|)$. Set
+    $K=\min(L,tI)+N+A+\min(R,tI)$. If $t\ge0$ and
+    $t\ge e+3g/2+8/g$, then every $x\perp\Omega$ satisfies
+    $\langle x,Kx\rangle\ge(e+g/2)\|x\|^2$.
+    If also $H\Omega=e\Omega$, then $K$ has a unit ground vector
+    $\phi$ and ground energy $e'\in[0,e]$, with
+    \begin{align}
+        K-e'I\ge(e+g/2-e')(I-|\phi\rangle\langle\phi|).
+    \end{align}
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:aklv_truncation_low_agreement,lem:aklv_clipped_high_mass,
+        lem:aklv_projected_energy,lem:aklv_codimension_one_gap}
+    Put $B=L+N+R$, $Q=\mathbf1_{[t,\infty)}(B)$, $P=I-Q$,
+    $u=Px$ and $v=Qx$. The low-energy agreement, high-energy lower bound
+    and boundary cross-block identity give
+    \begin{align}
+        \langle u,Ku\rangle
+         & \ge(e+g)\|u\|^2-g\|v\|^2,\notag         \\
+        \langle v,Kv\rangle
+         & \ge t\|v\|^2,\notag                     \\
+        |\langle u,Kv\rangle|
+         & =|\langle u,Av\rangle|\le2\|u\|\,\|v\|.
+    \end{align}
+    The first bound uses
+    $|\langle\Omega,u\rangle|=|\langle\Omega,v\rangle|\le\|v\|$.
+    Completing the square gives
+    $4\|u\|\,\|v\|\le(g/2)\|u\|^2+(8/g)\|v\|^2$, so
+    \begin{align}
+        \langle x,Kx\rangle
+         & \ge(e+g)\|u\|^2+(t-g)\|v\|^2-4\|u\|\,\|v\|\notag \\
+         & \ge(e+g/2)(\|u\|^2+\|v\|^2).
+    \end{align}
+    Finally $K\le H$ gives $e'\le e$, and
+    Lemma~\ref{lem:aklv_codimension_one_gap} transfers the absolute
+    excited-energy threshold to the minimizing eigenvector of $K$.
+\end{proof}
+
+\begin{theorem}[Ground-vector robustness at an inverse-gap cutoff]
+    \label{thm:aklv_inverse_gap_robustness}
+    \lean{TNLean.MPS.AreaLaw.AKLV.exists_robust_ground_twoSidedEnergyTruncation_of_inverse_gap_cutoff,
+        TNLean.MPS.AreaLaw.AKLV.normalized_chain_robustness_of_inverse_gap_cutoff}
+    \leanok
+    \uses{def:aklv_normalized_cut_blocks}
+    Under the normalized-chain assumptions of
+    Theorem~\ref{thm:aklv_robustness}, the same conclusions hold for every
+    $t\ge32768/g$: there are a unit ground vector $\phi$, a ground energy
+    $e'\in[0,e]$ and a real phase $\theta$ such that
+    \begin{align}
+        K-e'I                        & \ge\frac g2(I-|\phi\rangle\langle\phi|),\notag \\
+        \|\Omega-e^{i\theta}\phi\|^2 & \le e^{-t/16}.
+    \end{align}
+    The energy $e$ remains in $[0,6]$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{lem:aklv_inverse_gap_comparison,lem:aklv_projected_residual,
+        lem:aklv_residual_phase}
+    Since $e\le6$ and $0<g\le1$, the condition $tg\ge16$ implies
+    $t\ge e+3g/2+8/g$. Lemma~\ref{lem:aklv_inverse_gap_comparison}
+    therefore supplies the absolute excited-energy threshold $e+g/2$.
+    Put $\eta=e^{-(t-40)/16}$ and $z=P_t\Omega$. The existing residual
+    and tail estimates give $\|(K-eI)z\|\le10\eta$ and
+    $\|\Omega-z\|\le2\eta$. Lemma~\ref{lem:aklv_residual_phase} yields
+    \begin{align}
+        \|\Omega-e^{i\theta}\phi\|^2
+        \le968g^{-2}e^{-(t-40)/8}\le e^{-t/16},
+    \end{align}
+    where the final inequality follows from $tg\ge32768$ by the
+    logarithmic estimate in the proof of Theorem~\ref{thm:aklv_robustness}.
 \end{proof}
