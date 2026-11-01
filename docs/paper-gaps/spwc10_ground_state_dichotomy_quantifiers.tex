@@ -97,7 +97,7 @@ a root of unity; line invariance does not itself identify that eigenvalue
 with one. The source proof supplies the eventual zero-momentum branch. The
 additional finite-prefix zero-momentum condition does not follow from the
 complete global frustration-free hypotheses. The fixed seven-site model of
-\leanid{MPSTensor.exists_seven_site_interaction_without_short_fixed_ground}
+\leanid{MPSTensor.ShortMomentum.exists_seven_site_interaction_without_short_fixed_ground}
 (issue \href{https://github.com/LionSR/TNLean/issues/10386}{\#10386},
 settled by \#10420) has a positive interaction whose zero-energy space is
 one-dimensional and contains a common local ground vector at every
@@ -116,8 +116,12 @@ or short zero-momentum conclusion is assumed in its proof.
 
 The finite-prefix zero-momentum question is therefore settled negatively:
 under the full hypothesis set the eventual form is the strongest
-conclusion, and the short volumes need the volume-dependent family of
-the previous section.
+conclusion. The volume-dependent family of the previous section covers
+only those short volumes whose ground line contains a nonzero exactly
+cyclic-invariant vector. It does not cover this model at $M=7$: every
+periodic trace vector is cyclic-invariant whether or not its tensor
+depends on the volume, so the seven-site ground state has no periodic
+trace representation at all.
 
 \section{The product-state branch}
 
