@@ -117,3 +117,43 @@ comparison, and the successful initial sample remain separate.
     threshold terms give $E(\delta_j)\le f(\delta_j)+a/16$.
     Substitute (\ref{eq:interval_family_reference_envelope}).
 \end{proof}
+
+
+\begin{lemma}[Independent window and count bounds]
+    \label{lem:interleaved_filter_scale_count}
+    \lean{Real.exists_interleaved_log_absorption_constant,
+        Real.interleaved_log_polynomial_base_le,
+        Real.interleaved_filter_scale_count_bounds,
+        Real.interleaved_filter_scale_dominates_width}
+    \leanok
+    For each $K>0$ and lower threshold one can choose $C\ge21$ beyond
+    that threshold with $KJ^3\le C$, where $J=14+2\log(C+1)$.
+    Let $m\ge50$, $0<g\le1$, $w\ge1$, and put
+    \begin{align}
+        v&=1+\log m+\log(1/g)+\log(1+w),\notag\\
+        \ell&=\left\lceil C(v^6/g+\sqrt w\,v^3/\sqrt g)\right\rceil,\notag\\
+        D&=(m\ell^2)^{22\ell}.\notag
+    \end{align}
+    Then $\ell\ge21$, $Cv^6\le g\ell$,
+    $C\sqrt w\,v^3\le\sqrt g\,\ell$, and
+    $\ell\le(C+1)(v^6/g+\sqrt w\,v^3/\sqrt g)$. Moreover
+    \begin{align}
+        \log(m\ell^2)&\le Jv,\notag\\
+        \log D&\le22(C+1)J(v^7/g+\sqrt w\,v^4/\sqrt g).\notag
+    \end{align}
+    If $K\ge1$ and $KJ^3\le C$, the same explicit window satisfies
+    $K\log^3(m\ell^2)\le g\ell$ and
+    $Kw\log^2(m\ell^2)\le g\ell^2$.
+\end{lemma}
+\begin{proof}\leanok
+    Choose $C$ by cubic logarithmic absorption. Apply both contributions
+    to the ceiling separately. Its coarse upper bound is
+    $(C+1)(1+w)v^6/g$; take logarithms and use $\log v\le v$.
+    The exact count identity is $\log D=22\ell\log(m\ell^2)$.
+    The two lower scale bounds, together with $KJ^3\le C$ and
+    $C^2\ge C\ge KJ^2$, give the two width inequalities.
+\end{proof}
+
+These bounds do not yet calibrate the actual sampling size, tiny target
+accuracy and clipping threshold, or establish the final suppression at
+that same count. Those remain separate numerical obligations.

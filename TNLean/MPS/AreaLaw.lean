@@ -71,6 +71,7 @@ import TNLean.MPS.AreaLaw.IndependentPhysicalDGViability
 import TNLean.MPS.AreaLaw.IndependentTruncationParameters
 import TNLean.MPS.AreaLaw.InformationReset
 import TNLean.MPS.AreaLaw.InteractionBudget
+import TNLean.MPS.AreaLaw.InterleavedFilterParameters
 import TNLean.MPS.AreaLaw.IntervalCollectiveTrimming
 import TNLean.MPS.AreaLaw.IntervalFamilyTrimming
 import TNLean.MPS.AreaLaw.IntervalFamilyTrimmingBudget

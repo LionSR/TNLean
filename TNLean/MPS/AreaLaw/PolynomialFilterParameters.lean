@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Analysis.PolynomialFilterLogCount
+import QICLean.Analysis.LogPowerAbsorption
 import Mathlib.Analysis.Asymptotics.Lemmas
 import Mathlib.Analysis.SpecialFunctions.Pow.Asymptotics
 import Mathlib.Tactic.Linarith
@@ -54,32 +55,9 @@ of the square root, beyond any prescribed lower bound. This is a scalar
 estimate supporting ALVV, arXiv:1602.08828v2, lines 1010–1024. -/
 private theorem exists_log_sqrt_absorption (a b c M : ℝ) (hb : 0 ≤ b) (hc : 0 < c) :
     ∃ A : ℝ, 1 ≤ A ∧ M ≤ A ∧ a + b * log (A + 1) ≤ c * sqrt A := by
-  have hlog : log =o[atTop] sqrt := by
-    change log =o[atTop] (fun x : ℝ ↦ sqrt x)
-    simpa only [sqrt_eq_rpow] using
-      (isLittleO_log_rpow_atTop (show 0 < (1 / (2 : ℝ)) by norm_num))
-  have hconst : (fun _ : ℝ ↦ a + b * log 2) =o[atTop] sqrt := by
-    simpa only [Function.comp_def, id_eq] using
-      (Asymptotics.isLittleO_const_id_atTop (a + b * log 2)).comp_tendsto
-        tendsto_sqrt_atTop
-  have hsmall : (fun x : ℝ ↦ a + b * log 2 + b * log x) =o[atTop] sqrt :=
-    hconst.add (hlog.const_mul_left b)
-  obtain ⟨A, hA, hbound⟩ :=
-    ((eventually_ge_atTop (max 1 M)).and (hsmall.def hc)).exists
-  have hA1 : 1 ≤ A := (le_max_left 1 M).trans hA
-  have hAM : M ≤ A := (le_max_right 1 M).trans hA
-  have hlogA : log (A + 1) ≤ log 2 + log A := by
-    calc
-      log (A + 1) ≤ log (2 * A) := log_le_log (by linarith) (by linarith)
-      _ = log 2 + log A := log_mul (by norm_num) (by linarith)
-  refine ⟨A, hA1, hAM, ?_⟩
-  calc
-    a + b * log (A + 1) ≤ a + b * (log 2 + log A) :=
-      add_le_add_right (mul_le_mul_of_nonneg_left hlogA hb) a
-    _ = a + b * log 2 + b * log A := by ring
-    _ ≤ ‖a + b * log 2 + b * log A‖ := le_abs_self _
-    _ ≤ c * ‖sqrt A‖ := hbound
-    _ = c * sqrt A := by rw [Real.norm_eq_abs, abs_of_nonneg (sqrt_nonneg A)]
+  obtain ⟨A, hA, hM, hbound⟩ :=
+    exists_log_rpow_absorption a b c M (1 / 2) hb hc (by norm_num)
+  exact ⟨A, hA, hM, by simpa only [sqrt_eq_rpow] using hbound⟩
 
 /-- Joint choice of the logarithmic absorption constant and a prescribed
 lower threshold. Scalar auxiliary for ALVV, t:ais, lines 1010--1024. -/

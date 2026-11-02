@@ -32,13 +32,15 @@ open scoped BigOperators Kronecker TensorProduct ComplexOrder MatrixOrder
 
 namespace TNLean.MPS.AreaLaw
 
-/-- Actual ordered words in the fixed long-interval polynomial family improve every viable subspace
-for the same target at every power, independently of the input space.
-The threshold and window scales are independent. The scalar filter
-bound is a numerical condition; no rank, overlap, tensor or spectral-basis
-hypothesis is supplied. Auxiliary to ALVV, arXiv:1602.08828v2,
-Corollary 4.6 and the proof of Theorem 4.9, source line 1080. -/
-theorem exists_independent_long_middle_actual_dg_word_family :
+/-- The actual physical cluster polynomial supplies its full filter and
+complementary tensor factors before all viable input spaces. Minimum gain
+one and squared contraction on the actual clipped target are derived from
+the nonconstant Chebyshev low-band filter; no identity-on-band premise is
+introduced. The same retained factors also give all ordered-word bounds.
+This is auxiliary to ALVV, arXiv:1602.08828v2, Corollary 4.6,
+Lemma `l:er`, lines 597–622, and Figure `fig:merge-prime`, lines 1668–1670.
+The independent truncation, count and scalar filter conditions remain explicit. -/
+theorem exists_independent_long_middle_actual_dg_filter_family :
     ∀ (m q ell : ℕ) (t g epsilon Delta : ℝ), 2 ≤ q → q ≤ m →
       1 ≤ ell → 21 ≤ t → 0 < g → g ≤ 1 → 0 < epsilon → epsilon ≤ 1 →
       (288 * Real.exp (11 / 8)) * Real.exp (-(t - g) / 8) ≤
@@ -74,6 +76,17 @@ theorem exists_independent_long_middle_actual_dg_word_family :
         Submodule.IsCloseTo (epsilon / 200 : ℝ) T G ∧
         Submodule.IsCloseTo (epsilon / 200 : ℝ) G T ∧
         Module.finrank ℂ T = Module.finrank ℂ G ∧
+        ∃ (Kphys : (EuclideanSpace ℂ (Jtarget → Fin q) ⊗[ℂ]
+            EuclideanSpace ℂ (↥(Jtargetᶜ) → Fin q)) →L[ℂ]
+          (EuclideanSpace ℂ (Jtarget → Fin q) ⊗[ℂ]
+            EuclideanSpace ℂ (↥(Jtargetᶜ) → Fin q)))
+          (Rop : Fin N → EuclideanSpace ℂ (↥(Jtargetᶜ) → Fin q) →L[ℂ]
+            EuclideanSpace ℂ (↥(Jtargetᶜ) → Fin q)),
+        let Tc := T.map Tm.toLinearEquiv.toLinearMap
+        Kphys = ∑ i, TensorProduct.mapL (F i) (Rop i) ∧
+        (∀ x ∈ Tc, Kphys x ∈ Tc) ∧ (∀ z ∈ Tcᗮ, Kphys z ∈ Tcᗮ) ∧
+        (∀ x ∈ Tc, ‖x‖ ≤ ‖Kphys x‖) ∧
+        (∀ z ∈ Tcᗮ, ‖Kphys z‖ ^ 2 ≤ Delta * ‖z‖ ^ 2) ∧
         ∀ (power : ℕ) (S : Submodule ℂ (EuclideanSpace ℂ (Jtarget → Fin q))) (δ : ℝ),
           Submodule.IsViable (𝕜 := ℂ) (E := EuclideanSpace ℂ (Jtarget → Fin q))
             (F := EuclideanSpace ℂ (↥(Jtargetᶜ) → Fin q)) δ S
@@ -163,7 +176,8 @@ theorem exists_independent_long_middle_actual_dg_word_family :
       simpa only [hdiff, Finset.card_empty, Nat.mul_zero, Nat.zero_add] using hNraw
     exact hN'.trans (collar_card_le_square_of_larger_count_base
       q m ell (Jtarget \ J0).card (D0 ^ 2) hq hqm hell hcollar le_rfl)
-  have hcheb := Matrix.chebyshev_word_power_viability_of_actual_cluster_polynomial_family
+  obtain ⟨Kphys, Rop, hdecK, hKT, hKTo, hlow, hhigh, hcheb⟩ :=
+    Matrix.exists_chebyshev_tensor_family_of_actual_cluster
     B hB v lam heigen W Tm (by
       intro Q hQ
       obtain ⟨M, _hmatrix, hconj⟩ := hdecomp Q hQ
@@ -171,15 +185,85 @@ theorem exists_independent_long_middle_actual_dg_word_family :
     (D ^ 2) hN eta0 eta1 upper hsep hendpoint hclosed hnorm
   let CW := fun i : Fin N ↦ Matrix.toEuclideanCLM (𝕜 := ℂ)
     (n := Jtarget → Fin q) (W i)
-  refine ⟨T, N, CW, hN, hTG, hGT, hdim, ?_⟩
-  intro power S δ hS hδ grow
-  obtain ⟨hdimension, hviable⟩ := hcheb power S δ hS hδ
-  refine ⟨hdimension, ?_⟩
   have hcontract' :
       (2 * Real.exp (-2 * ((ell ^ 2 : ℕ) : ℝ) *
         Real.sqrt ((eta1 - eta0) / (upper - eta0)))) ^ 2 ≤ Delta := by
     simpa only [Nat.cast_pow] using hcontract
+  refine ⟨T, N, CW, hN, hTG, hGT, hdim, Kphys, Rop,
+    hdecK, hKT, hKTo, hlow, ?_, ?_⟩
+  · intro z hz
+    exact (hhigh z hz).trans (mul_le_mul_of_nonneg_right hcontract' (sq_nonneg ‖z‖))
+  intro power S δ hS hδ grow
+  obtain ⟨hdimension, hviable⟩ := hcheb power S δ hS hδ
+  refine ⟨hdimension, ?_⟩
   exact Submodule.IsCloseTo.of_le hviable
     (div_le_div_of_nonneg_right
       (pow_le_pow_left₀ (sq_nonneg _) hcontract' power) (sq_nonneg _))
+/-- Actual ordered words in the fixed long-interval polynomial family improve every viable subspace
+for the same target at every power, independently of the input space.
+The threshold and window scales are independent. The scalar filter
+bound is a numerical condition; no rank, overlap, tensor or spectral-basis
+hypothesis is supplied. Auxiliary to ALVV, arXiv:1602.08828v2,
+Corollary 4.6 and the proof of Theorem 4.9, source line 1080. -/
+theorem exists_independent_long_middle_actual_dg_word_family :
+    ∀ (m q ell : ℕ) (t g epsilon Delta : ℝ), 2 ≤ q → q ≤ m →
+      1 ≤ ell → 21 ≤ t → 0 < g → g ≤ 1 → 0 < epsilon → epsilon ≤ 1 →
+      (288 * Real.exp (11 / 8)) * Real.exp (-(t - g) / 8) ≤
+        epsilon * g / 1000000 →
+      (∀ R : ℝ, 0 < R → R ≤ 3 * t + 4 * (ell : ℝ) →
+        (2 * Real.exp (-2 * (ell : ℝ) ^ 2 * Real.sqrt ((4 * g / 5) / R))) ^ 2 ≤ Delta) →
+      let D : ℕ := (m * ell ^ 2) ^ (22 * ell)
+      ∀ (L p r : ℕ), p ≤ r → r ≤ L → 4 * ell < r - p →
+      let Jtarget := interval L p r
+      let β := fun _ : Fin L ↦ Fin q
+      let tau := (FiniteProduct.splitEquiv β Jtarget).trans (Equiv.prodComm _ _)
+      let U := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ tau
+      let Phi := ((EuclideanSpace.basisFun (FiniteProduct.Configuration β Jtargetᶜ) ℂ).tensorProduct
+        (EuclideanSpace.basisFun (FiniteProduct.Configuration β Jtarget) ℂ)).repr
+      let Tcoord := U.trans Phi.symm
+      let Tm := Tcoord.trans (TensorProduct.commIsometry ℂ
+        (EuclideanSpace ℂ (FiniteProduct.Configuration β Jtargetᶜ))
+        (EuclideanSpace ℂ (FiniteProduct.Configuration β Jtarget)))
+      ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
+        (_hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+          (h i) (interval L i.val (i.val + 2)))
+        (h0 : ∀ i, 0 ≤ h i) (_h1 : ∀ i, h i ≤ 1) (mu : ℝ),
+      let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := ∑ i, h i
+      let hH : H.IsHermitian :=
+        (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
+      let G := Submodule.spectralSpanLE hH.eigenvectorBasis hH.eigenvalues mu
+      mu ∈ spectrum ℝ H →
+      (∀ x ∈ spectrum ℝ H, x = mu ∨ mu + g ≤ x) →
+      ∃ (T : Submodule ℂ (EuclideanSpace ℂ (Fin L → Fin q))) (N : ℕ)
+        (F : Fin N → EuclideanSpace ℂ (Jtarget → Fin q) →L[ℂ]
+          EuclideanSpace ℂ (Jtarget → Fin q)),
+        N ≤ D ^ 2 ∧
+        Submodule.IsCloseTo (epsilon / 200 : ℝ) T G ∧
+        Submodule.IsCloseTo (epsilon / 200 : ℝ) G T ∧
+        Module.finrank ℂ T = Module.finrank ℂ G ∧
+        ∀ (power : ℕ) (S : Submodule ℂ (EuclideanSpace ℂ (Jtarget → Fin q))) (δ : ℝ),
+          Submodule.IsViable (𝕜 := ℂ) (E := EuclideanSpace ℂ (Jtarget → Fin q))
+            (F := EuclideanSpace ℂ (↥(Jtargetᶜ) → Fin q)) δ S
+            (T.map (Tm.toLinearEquiv : EuclideanSpace ℂ (Fin L → Fin q) →ₗ[ℂ]
+              (EuclideanSpace ℂ (Jtarget → Fin q) ⊗[ℂ]
+                EuclideanSpace ℂ (↥(Jtargetᶜ) → Fin q)))) → δ < 1 →
+          let grow := ⨆ w : Fin power → Fin N,
+            S.map ((List.ofFn (fun j ↦ F (w j))).prod : _ →ₗ[ℂ] _)
+          Module.finrank ℂ grow ≤ (D ^ 2) ^ power * Module.finrank ℂ S ∧
+            Submodule.IsViable (𝕜 := ℂ) (E := EuclideanSpace ℂ (Jtarget → Fin q))
+              (F := EuclideanSpace ℂ (↥(Jtargetᶜ) → Fin q))
+              (Delta ^ power / (1 - δ) ^ 2) grow
+              (T.map (Tm.toLinearEquiv : EuclideanSpace ℂ (Fin L → Fin q) →ₗ[ℂ]
+                (EuclideanSpace ℂ (Jtarget → Fin q) ⊗[ℂ]
+                  EuclideanSpace ℂ (↥(Jtargetᶜ) → Fin q)))) := by
+  intro m q ell t g epsilon Delta hq hqm hell ht hg hg1 hepsilon hepsilon1
+    htail hfilter D L p r hpr hrL hlong Jtarget β tau U Phi Tcoord Tm
+    h hs h0 h1 mu H hH G hmu hgap
+  obtain ⟨T, N, F, hN, hTG, hGT, hdim, _Kphys, _Rop,
+    _hdec, _hKT, _hKTo, _hlow, _hhigh, hwords⟩ :=
+    exists_independent_long_middle_actual_dg_filter_family m q ell t g epsilon Delta
+      hq hqm hell ht hg hg1 hepsilon hepsilon1 htail hfilter
+      L p r hpr hrL hlong h hs h0 h1 mu hmu hgap
+  exact ⟨T, N, F, hN, hTG, hGT, hdim, hwords⟩
+
 end TNLean.MPS.AreaLaw
