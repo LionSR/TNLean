@@ -75,7 +75,8 @@ operator definitions are retained. All sixty new public declarations have
 mathematical blueprint references.
 
 The finite-dimensional estimates are submitted in
-[QICLean #1016](https://github.com/LionSR/QICLean/pull/1016). They comprise
+[QICLean #1016](https://github.com/LionSR/QICLean/pull/1016), pinned at
+`5594a69a916a0eb7f66f159b218882846b837f62`. They comprise
 weighted soft remainders, shifted cutoff comparisons, spectral-window
 perturbation, the exact heat expansion, and the inclusion–exclusion bounds.
 
