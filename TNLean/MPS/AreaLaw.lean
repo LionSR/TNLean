@@ -50,6 +50,9 @@ import TNLean.MPS.AreaLaw.GluingHamiltonian
 import TNLean.MPS.AreaLaw.Hamiltonian
 import TNLean.MPS.AreaLaw.Hastings
 import TNLean.MPS.AreaLaw.Huang
+import TNLean.MPS.AreaLaw.IndependentFiveRegionCluster
+import TNLean.MPS.AreaLaw.IndependentFiveRegionResidual
+import TNLean.MPS.AreaLaw.IndependentPhysicalDGPower
 import TNLean.MPS.AreaLaw.InformationReset
 import TNLean.MPS.AreaLaw.InteractionBudget
 import TNLean.MPS.AreaLaw.IntervalMPOTransfer

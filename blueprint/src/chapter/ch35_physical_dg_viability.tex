@@ -187,3 +187,47 @@ with the interval factor first.
     those in~\cite{gap:alvv16_bootstrap_constants,
         gap:alvv16_spectral_projector_boundary}.
 \end{proof}
+
+
+\begin{lemma}[One physical family and all its ordered powers]
+    \label{lem:independent_physical_dg_word_family}
+    \lean{TNLean.MPS.AreaLaw.exists_independent_long_middle_actual_dg_word_family}
+    \leanok
+    Let $m\ge q\ge2$, $\ell\ge1$, $t\ge21$, $0<g\le1$ and
+    $0<\varepsilon\le1$. Assume
+    \begin{align}
+        288e^{11/8}e^{-(t-g)/8}&\le\frac{\varepsilon g}{10^6},\notag
+    \end{align}
+    and suppose $\Delta$ bounds
+    $(2e^{-2\ell^2\sqrt{(4g/5)/R}})^2$ for every $0<R\le3t+4\ell$.
+    Put $D=(m\ell^2)^{22\ell}$.
+    Let $J=[p,r)\subseteq[0,L)$ have length greater than $4\ell$.
+    Let the original positive nearest-neighbour contractions define a
+    Hamiltonian with full ground space $G$ at energy $\mu$ and spectrum in
+    $\{\mu\}\cup[\mu+g,\infty)$.
+
+    There are a global target $T$, an integer $n_0\le D^2$, and operators
+    $F_0,\ldots,F_{n_0-1}$ on $\mathcal H_J$, chosen before every power
+    and input subspace, such that $\dim T=\dim G$ and $T,G$ are mutually
+    $\varepsilon/200$-close.
+    For every integer $a\ge0$, let $F_w$ be the ordered product for a
+    word $w$ of length $a$. If $S$ is $\delta$-viable for $T$ and
+    $\delta<1$, the subspace $V_a=\sum_wF_wS$ has dimension at most
+    $(D^2)^a\dim S$ and is $\Delta^a/(1-\delta)^2$-viable for the same $T$.
+    The interval and its entire exterior use the original chain coordinates.
+    This is a long-interval auxiliary with the displayed scalar tail and
+    filter premises; it does not assume a tensor decomposition or rank bound.
+    It supports the error-reduction argument of
+    \cite[lines 597--622 and 1010--1024]{Arad2016RigorousRG}.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:inward_effective_cuts,lem:five_region_independent_scaled_cluster,
+        thm:actual_clipped_polynomial_family}
+    Move the cuts inward, derive the independent-cutoff physical cluster,
+    and construct its common polynomial family. The collar count is absorbed
+    into $D^2$. Choose its Chebyshev operator and complementary factors once.
+    The ordered-power theorem of
+    \cite[``One polynomial family for every filter power'']{QICLean2026Blueprint}
+    preserves the same target, with squared suppression at most $\Delta^a$.
+    Apply error reduction to the actual powered decomposition.
+\end{proof}

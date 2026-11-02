@@ -16,6 +16,7 @@ import QICLean.Analysis.LowEnergyPerturbation
 import TNLean.Algebra.ExpMulSubMonotone
 import TNLean.Lattice.DisjointRegionalGround
 import TNLean.MPS.AreaLaw.FiveRegionHamiltonian
+import TNLean.MPS.AreaLaw.IndependentFiveRegionResidual
 import TNLean.MPS.AreaLaw.PolynomialFilterParameters
 import TNLean.MPS.AreaLaw.RegionalTruncationResidual
 
@@ -37,40 +38,6 @@ section
 
 section
 
-section
-
-namespace Real
-
-/-- The fixed physical parameters yield a uniform single-region tail
-constant when the connecting set has at most six bonds. The relative
-low-energy cutoff is bounded using all five original regional minima.
-Auxiliary to ALVV, arXiv:1602.08828v2, Theorem `t:ais`, lines 1010–1024.
-The three-region sum consequently has prefactor `288 * exp (11/8)`. -/
-private theorem regional_tail_physical_constants
-    (ell eta e c : ℝ) (hell : 21 ≤ ell) (heta : eta ≤ 1)
-    (he : e ≤ 6 + eta) (hc6 : c ≤ 6) :
-    19 + eta ≤ ell ∧ 2 * c < (19 + eta) - e ∧
-      (exp (-(1 / 8) * (ell - (19 + eta)) - 1) / (1 / 8)) *
-        ((2 * c) / ((19 + eta) - e - 2 * c)) ≤
-          96 * exp (11 / 8) * exp (-(ell - eta) / 8) := by
-  have hden : 1 ≤ (19 + eta) - e - 2 * c := by linarith
-  have hden0 : 0 < (19 + eta) - e - 2 * c := lt_of_lt_of_le zero_lt_one hden
-  have hquot : (2 * c) / ((19 + eta) - e - 2 * c) ≤ 12 := by
-    apply (div_le_iff₀ hden0).mpr
-    linarith
-  have hcoef : 0 ≤ exp (-(1 / 8) * (ell - (19 + eta)) - 1) / (1 / 8) :=
-    div_nonneg (exp_nonneg _) (by norm_num)
-  have hexp : -(1 / 8 : ℝ) * (ell - (19 + eta)) - 1 =
-      11 / 8 + (-(ell - eta) / 8) := by ring
-  refine ⟨by linarith, by linarith, ?_⟩
-  calc
-    _ ≤ (exp (-(1 / 8) * (ell - (19 + eta)) - 1) / (1 / 8)) * 12 :=
-      mul_le_mul_of_nonneg_left hquot hcoef
-    _ = 96 * exp (11 / 8) * exp (-(ell - eta) / 8) := by
-      rw [hexp, exp_add]
-      ring
-end Real
-end
 
 open scoped BigOperators ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 
@@ -123,82 +90,18 @@ private theorem exists_five_region_physical_truncation_residual
             (Submodule.spectralSpanLE v lam (E0 + eta))‖ ≤
           (288 * Real.exp (11 / 8)) * Real.exp (-((ell : ℝ) - eta) / 8) := by
   intro k I A J Y
-  have h12 : a + 1 ≤ a + 2 * ell := by omega
-  have h34 : b + 1 ≤ b + 2 * ell := by omega
-  obtain ⟨hk, hR, hAs, hAcap, hY, hYC, hJ, hH⟩ :=
-    five_region_original_bond_data L q (a + 1) (a + 2 * ell) (b + 1)
-      (b + 2 * ell) h12 hab h34 hbL h hs h0 h1
-  let R : Fin 5 → Finset (Fin L) := fun j ↦ interval L (k j.castSucc) (k j.succ)
-  obtain ⟨e, x, hxunit, hx, hlo, hclip⟩ :=
-    Matrix.exists_disjoint_regional_clipping_structure hq R A
-      (fun j ↦ (I j).card) hR hAs (fun j ↦ (hAcap j).1)
-      (fun j ↦ (hAcap j).2) Y J.card hY hYC
-  let S : ℝ := ∑ j, e j
-  let B : Finset (Fin 5) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := fun T ↦
-    (∑ j, ((if j ∈ T then cfc (fun r : ℝ ↦ min r (e j + (ell : ℝ)))
-      (A j) else A j) - (e j : ℂ) • 1)) + Y
-  let K : Finset (Fin 5) := {0, 2, 4}
-  let ι := Matrix.toEuclideanCLM (n := Fin L → Fin q) (𝕜 := ℂ)
-  have hell0 : 0 ≤ (ell : ℝ) := Nat.cast_nonneg ell
-  have hell1 : 1 ≤ ell := by omega
-  have hellR : 21 ≤ (ell : ℝ) := by exact_mod_cast hell
-  have hsumc : (∑ j, (e j : ℂ) •
-      (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)) = (S : ℂ) • 1 := by
-    simp only [Complex.coe_smul, ← Finset.sum_smul, S]
-  have hcenter : B ∅ = (∑ i, h i) - (S : ℂ) • 1 := by
-    simp only [B, Finset.notMem_empty, ite_false, Finset.sum_sub_distrib, hsumc]
-    rw [hH]
-    abel
-  obtain ⟨_, _, _, _, _, _, E0, z, hzunit, hz, hE0low, hE0ge, hE0le⟩ :=
-    hclip (ell : ℝ) hell0 ∅
-  have hE0le4 : E0 ≤ 4 := hE0le.trans (by exact_mod_cast hJ)
-  have hc1 : (I 1).card ≤ 2 * ell - 2 := by
-    have hc : (I 1).card ≤ (a + 2 * ell) - (a + 1) - 1 := by
-      simpa [I, k] using card_internal_bonds_le L (a + 1) (a + 2 * ell)
-    omega
-  have hc3 : (I 3).card ≤ 2 * ell - 2 := by
-    have hc : (I 3).card ≤ (b + 2 * ell) - (b + 1) - 1 := by
-      simpa [I, k] using card_internal_bonds_le L (b + 1) (b + 2 * ell)
-    omega
-  have hFinalNorm : ‖B K‖ ≤ 7 * (ell : ℝ) := by
-    obtain ⟨_, _, _, _, _, hnorm, _⟩ := hclip (ell : ℝ) hell0 K
-    have hbudget := Real.five_region_final_clipping_budget_le
-      ell J.card (fun j ↦ (I j).card) (ell : ℝ) hell1 hc1 hc3 hJ
-    exact hnorm.trans (hbudget.trans_eq (by ring))
+  obtain ⟨e, E0, x, z, hxunit, hx, hlo, hcenter, hzunit, hz, hE0low,
+    hE0ge, hE0le, hnorm, hres⟩ :=
+    exists_five_region_independent_truncation_residual L q a b ell (ell : ℝ) hq
+      (by omega) (Nat.cast_nonneg ell) hab hbL h hs h0 h1
   refine ⟨e, E0, x, z, hxunit, hx, hlo, hcenter, hzunit, hz, hE0low,
-    hE0ge, hE0le4, hFinalNorm, ?_⟩
-  intro T eta heta0 heta1 v lam hEigen
-  let G := Submodule.spectralSpanLE v lam (E0 + eta)
-  have hc6 : (J.card : ℝ) ≤ 6 := by exact_mod_cast (hJ.trans (by decide : 4 ≤ 6))
-  obtain ⟨hcut, hgap, hcoef⟩ := Real.regional_tail_physical_constants
-    (ell : ℝ) eta (E0 + eta) (J.card : ℝ) hellR heta1 (by linarith) hc6
-  have hu : 0 ≤ 19 + eta := by linarith
-  have he (j : Fin 5) : (e j : ℂ) •
-      (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) ≤ A j :=
-    Matrix.le_iff.mpr (hlo j)
-  have hsingle (j : Fin 5) :
-      ‖(ι (A j - cfc (fun r : ℝ ↦ min r (e j + (ell : ℝ)))
-        (A j))).domRestrict G‖ ≤
-          96 * Real.exp (11 / 8) * Real.exp (-((ell : ℝ) - eta) / 8) := by
-    have htail := norm_consecutive_regional_truncation_low_le k hk h hs h0 h1
-      e T j J (19 + eta) (E0 + eta) (1 / 8) (ell : ℝ)
-      (by norm_num) (by norm_num) hu hcut v lam he hEigen hgap
-    exact htail.trans hcoef
-  have hsum := Matrix.norm_centered_clipping_discrepancy_domRestrict_le_sum
-    A (fun j ↦ cfc (fun r : ℝ ↦ min r (e j + (ell : ℝ))) (A j))
-    (fun j ↦ (e j : ℂ)) K G
-  have hsumB : ‖(ι (B ∅ - B K)).domRestrict G‖ ≤
-      ∑ j ∈ K, ‖(ι (A j - cfc (fun r : ℝ ↦ min r (e j + (ell : ℝ)))
-        (A j))).domRestrict G‖ := by
-    simpa only [B, Finset.notMem_empty, ite_false, add_sub_add_right_eq_sub]
-      using hsum
-  refine hsumB.trans ?_
-  calc
-    _ ≤ ∑ _j ∈ K,
-        (96 * Real.exp (11 / 8) * Real.exp (-((ell : ℝ) - eta) / 8)) :=
-      Finset.sum_le_sum fun j _ ↦ hsingle j
-    _ = (288 * Real.exp (11 / 8)) * Real.exp (-((ell : ℝ) - eta) / 8) := by
-      (norm_num [K, Finset.sum_const, nsmul_eq_mul]; ring)
+    hE0ge, hE0le, ?_, ?_⟩
+  · convert hnorm using 1
+    ring
+  · intro T eta heta0 heta1 v lam hEigen
+    have hellR : (21 : ℝ) ≤ ell := by exact_mod_cast hell
+    exact hres T eta heta0 (by linarith only [hellR, heta1]) v lam hEigen
+
 end TNLean.MPS.AreaLaw
 end
 

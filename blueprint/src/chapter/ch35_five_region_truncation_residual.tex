@@ -110,3 +110,75 @@
     All cutoffs use the original ground-energy shift, as in
     \cite{gap:alvv16_spectral_projector_boundary}.
 \end{proof}
+
+
+\begin{lemma}[The five-region residual at an independent cutoff]
+    \label{lem:five_region_independent_residual}
+    \lean{TNLean.MPS.AreaLaw.exists_five_region_independent_truncation_residual}
+    \leanok
+    \uses{thm:disjoint_regional_clipping,thm:five_region_original_bond_bounds,
+        thm:five_region_independent_budget,thm:consecutive_regional_truncation_low}
+    Let $q\ge1$, $\ell\ge1$, $t\ge0$, $a+2\ell\le b+1$ and
+    $b+2\ell\le L$. Let $H$ be an original nearest-neighbour Hamiltonian
+    with supported positive contraction terms. Use the five cuts
+    $(0,a+1,a+2\ell,b+1,b+2\ell,L)$, regional sums $A_j$ and crossing sum $Y$.
+    There are original regional minima $e_j$, a common unit regional
+    ground vector, and an original centered ground energy $E_0\in[0,4]$.
+    For $U\subseteq\{0,1,2,3,4\}$ define
+    \begin{align}
+        B_U&=\sum_{j\in U}\bigl(\min(A_j,e_j+t)-e_j\Id\bigr)
+             +\sum_{j\notin U}(A_j-e_j\Id)+Y.
+    \end{align}
+    Write $K=\{0,2,4\}$. Then
+    $B_\varnothing=H-(\sum_j e_j)\Id$, $\|B_K\|\le3t+4\ell$, and
+    for every $U$ and $\eta\ge0$ satisfying $19+\eta\le t$,
+    \begin{align}
+        \bigl\|(B_\varnothing-B_K)
+          \mathbf1_{(-\infty,E_0+\eta]}(B_U)\bigr\|
+        &\le288e^{11/8}e^{-(t-\eta)/8}.
+    \end{align}
+    No spectral gap is required. The real cutoff $t$ is independent of
+    the window length $\ell$.
+\end{lemma}
+\begin{proof}\leanok
+    The original regional minima give simultaneous centered positive
+    regional sums. The two retained windows and at most four crossing
+    bonds give the norm budget $3t+4\ell$.
+    At each of the three clipped regions use the original-bond restricted
+    estimate with $s=1/8$ and cutoff $19+\eta$.
+    Its prefactor is at most $96e^{11/8}$: the connecting set has at most
+    six bonds and the denominator is at least one. Sum the three estimates.
+\end{proof}
+
+\begin{lemma}[The full physical low cluster at independent scales]
+    \label{lem:five_region_independent_scaled_cluster}
+    \lean{TNLean.MPS.AreaLaw.exists_five_region_independent_scaled_low_cluster}
+    \leanok
+    \uses{lem:five_region_independent_residual}
+    Retain the geometry and original Hamiltonian of the preceding lemma,
+    and suppose $t\ge21$. Assume $\mu\in\operatorname{spec}(H)$,
+    $0<g\le1$, and
+    $\operatorname{spec}(H)\subseteq\{\mu\}\cup[\mu+g,\infty)$.
+    Put $G=\ker(H-\mu\Id)$. Let $0<\tau\le1$ and suppose
+    \begin{align}
+        288e^{11/8}e^{-(t-g)/8}\le\xi\le\frac{\tau g}{10^6}.
+    \end{align}
+    The actual clipped operator $B=B_K$ has norm at most $3t+4\ell$.
+    Its original regional minima give $E_0+\sum_j e_j=\mu$ with
+    $E_0\in[0,4]$. Its closed spectral subspaces at $E_0+g/10$ and
+    $E_0+9g/10$ coincide. Denote this space by $T$.
+    Every cutoff in $[E_0+g/20,E_0+19g/20]$ also gives $T$.
+    Then $\dim T=\dim G$, the spaces $T$ and $G$ are mutually
+    $\tau/200$-close, and every eigenvalue of $B$ is at most $E_0+g/10$
+    or at least $E_0+9g/10$.
+\end{lemma}
+\begin{proof}\leanok
+    Apply the independent-cutoff residual estimate on the original
+    centered low space at $E_0+g/40$ and on the actual clipped low space
+    at $E_0+19g/20$. Both errors are at most $\xi$.
+    The scaled restricted-residual cluster theorem of
+    \cite[``A low cluster with a scaled projection error'']{QICLean2026Blueprint}
+    gives the common cluster, its dimension and both closeness bounds.
+    The comparison retains the full original ground space with the closed
+    cutoff convention of~\cite{gap:alvv16_spectral_projector_boundary}.
+\end{proof}
