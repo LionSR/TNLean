@@ -66,6 +66,25 @@ theorem mpo_physicalTransposeTensor {d D : ℕ} (U : MPOTensor d D) (N : ℕ) :
   simp only [Matrix.map_apply, Matrix.conjTranspose_apply, Matrix.transpose_apply,
     starRingEnd_apply, star_star]
 
+/-- The first raw source cut of the transposed tensor is the transpose of the
+second raw source cut. Source: CPSV17, the zero-index observation preceding
+`prop:local-char-transposition`, lines 1258–1264. -/
+theorem sourceCutM₁_physicalTransposeTensor {d D : ℕ} (U : MPOTensor d D) :
+    sourceCutM₁ (physicalTransposeTensor U) = (sourceCutM₂ U)ᵀ := by
+  rw [physicalTransposeTensor, sourceCutM₁_mapStar, sourceCutM₁_physicalAdjointTensor]
+  ext row col
+  simp only [Matrix.map_apply, Matrix.conjTranspose_apply, Matrix.transpose_apply,
+    starRingEnd_apply, star_star]
+
+/-- The second raw source cut of the transposed tensor is the transpose of the
+first raw source cut. Source: CPSV17, lines 1258–1264. -/
+theorem sourceCutM₂_physicalTransposeTensor {d D : ℕ} (U : MPOTensor d D) :
+    sourceCutM₂ (physicalTransposeTensor U) = (sourceCutM₁ U)ᵀ := by
+  rw [physicalTransposeTensor, sourceCutM₂_mapStar, sourceCutM₂_physicalAdjointTensor]
+  ext row col
+  simp only [Matrix.map_apply, Matrix.conjTranspose_apply, Matrix.transpose_apply,
+    starRingEnd_apply, star_star]
+
 /-- Transposition exchanges the two source cuts' ranks. Source: CPSV17,
 the zero-index observation preceding `prop:local-char-transposition`,
 lines 1258–1264. -/

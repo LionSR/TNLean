@@ -2931,11 +2931,12 @@ Theorem~B a second way, by a sequential preparation protocol.
         TNLean.MPS.AreaLaw.cutLogBudget_snakeGridPrefix_le,
         TNLean.MPS.AreaLaw.snakeGrid_window_le_linear}
     \leanok
-    \uses{def:snake_grid_order}
+    \uses{def:snake_grid_order, thm:area_law_tail_parameter}
     Every prefix has $|\partial A_k|\le L+1$. For local dimension
     $q\ge1$, the logarithmic budget of the actual range-$R$ interaction
-    supports satisfies $\mathcal B_{A_k}\le B(q,R)(L+2)$, where $B(q,R)$
-    is the constant in the finite-range boundary budget. For
+    supports satisfies $\mathcal B_{A_k}\le C_{\mathrm{tail}}(q,R)(L+2)$,
+    where $C_{\mathrm{tail}}(q,R)\ge1$ is the constant $C$ of the
+    tail-parameter bound in Lemma~\ref{thm:area_law_tail_parameter}. For
     $a\ge0$, $b\ge1$ and $L\ge2$,
     \begin{align}
         \sqrt{a(L+2)}\log(2L^3b)
@@ -2944,11 +2945,12 @@ Theorem~B a second way, by a sequential preparation protocol.
 \end{lemma}
 \begin{proof}
     \leanok
+    \uses{thm:area_law_tail_parameter}
     A boundary edge between distinct rows is determined by its column:
     along each column, membership in the prefix decreases with the row
     index. A boundary edge inside one row joins consecutive positions
     of the snake, so at most one such edge crosses the prefix. The
-    finite-range boundary budget then gives the stated bound on
+    tail-parameter bound then gives the stated bound on
     $\mathcal B_{A_k}$. Finally, $\log L\le2\sqrt L$,
     $\sqrt L\le L$ and $L+2\le2L$ give the displayed inequality.
 \end{proof}
@@ -2975,8 +2977,9 @@ Theorem~B a second way, by a sequential preparation protocol.
 \end{corollary}
 \begin{proof}
     \leanok
-    Let $C_0$ be the uniform area-law constant, $a=(1+J/\Delta)B(q,R)$,
-    $b=\sqrt{2e^{e/2}}$ and $s=\sqrt{a(L+2)}$. Choose
+    Let $C_0$ be the uniform area-law constant,
+    $a=(1+J/\Delta)C_{\mathrm{tail}}(q,R)$, $b=\sqrt{2e^{e/2}}$ and
+    $s=\sqrt{a(L+2)}$. Choose
     $w=64s\log(2L^3b)$. At each cut, the spectral projection above
     $e^{-S(A_k)-w}$ has rank at most $e^{C_0(L+1)+w}$, and the square
     root of its discarded mass is at most $1/(2L^3)$. The actual
@@ -3146,7 +3149,7 @@ In particular the ground eigenspace is one-dimensional.
         TNLean.MPS.AreaLaw.surprisalTail_stripSnakeState_le}
     \leanok
     \uses{def:strip_snake, thm:strip_area_law, lem:strip_column_geometry,
-        thm:area_law_initial_buffer}
+        thm:area_law_initial_buffer, lem:chain_marginal_tail}
     Put $b'=1+(R+1)\mu_R\ell_R^2$ and $s=\sqrt{tb'w}$.
     Every snake prefix $P$ has entropy at most $C_0tw^2+w\log q$ and
     cut budget at most $b'w$. Its actual marginal satisfies
@@ -3155,7 +3158,7 @@ In particular the ground eigenspace is one-dimensional.
 \begin{proof}
     \leanok
     \uses{thm:strip_area_law, lem:strip_column_geometry, def:strip_snake,
-        thm:area_law_initial_buffer}
+        thm:area_law_initial_buffer, lem:chain_marginal_tail}
     A prefix lies between two consecutive whole-column prefixes; its
     additional region has at most $w$ sites. Subadditivity gives the entropy
     estimate, and the partial-column crossing count gives the cut budget.

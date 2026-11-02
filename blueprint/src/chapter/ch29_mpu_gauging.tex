@@ -241,16 +241,16 @@ $\mathcal U_g$. Throughout this section the chain length is positive: $N\geq1$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:mpug_group_representation}
-    We proceed by induction on $n$. For $n=0$, the identity law gives
-    $U_e^{(N)}=\Id$. For the induction step, multiplying the induction
-    hypothesis by $U_g^{(N)}$ and applying the representation multiplication law
-    gives
+    \uses{def:mpug_group_representation, def:mpug_operator_representation}
+    A representation consists of matrix product unitaries on nonempty chains
+    satisfying the identity and multiplication laws, so for fixed $N\geq1$
+    Definition~\ref{def:mpug_operator_representation} gives a group
+    homomorphism $\pi_N\colon G\to\mathrm U\bigl((\C^d)^{\otimes N}\bigr)$ with
+    $\pi_N(g)=U_g^{(N)}$. A monoid homomorphism preserves natural powers, so
     \begin{align}
-        \bigl(U_g^{(N)}\bigr)^{n+1}
-         & =U_{g^n}^{(N)}U_g^{(N)}
-        =U_{g^{n+1}}^{(N)}.
+        \bigl(U_g^{(N)}\bigr)^n & =\pi_N(g)^n=\pi_N(g^n)=U_{g^n}^{(N)}.
     \end{align}
+    Powers in the unitary group are computed as matrix powers.
 \end{proof}
 
 \begin{lemma}[Finite order of represented operators]

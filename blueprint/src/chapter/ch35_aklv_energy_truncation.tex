@@ -431,9 +431,17 @@ In this section $P_t=\mathbf1_{(-\infty,t)}(B)$ and $Q_t=I-P_t$.
     The tensor product trace identity gives
     $\operatorname{tr}(AB)\operatorname{tr}(I)
         =\operatorname{tr}(A)\operatorname{tr}(B)$ on disjoint supports.
-    Applying it twice shows $P_0P_1P_2\ne0$. The shifted cores commute
-    past the other cutoffs and kill the product. Normalize a nonzero
-    column of that product.
+    Applying it twice shows $P_0P_1P_2\ne0$. Operators on disjoint regions
+    commute, and the scalar shift commutes with everything, so
+    \begin{align}
+        \lbrack C_j-z_jI,P_k\rbrack & =0\qquad(k\ne j),\notag \\
+        (C_j-z_jI)P_j               & =0.
+    \end{align}
+    Moving $C_j-z_jI$ past the cutoffs $P_k$ with $k<j$ therefore gives
+    \begin{align}
+        (C_j-z_jI)(P_0P_1P_2) & =0\qquad(j=0,1,2).
+    \end{align}
+    Normalize a nonzero column of $P_0P_1P_2$.
 \end{proof}
 
 \begin{definition}[The three normalization cores and boundary bonds]
@@ -496,8 +504,17 @@ In this section $P_t=\mathbf1_{(-\infty,t)}(B)$ and $Q_t=I-P_t$.
 \end{lemma}
 \begin{proof}
     \leanok
-    Each clipped block is its positive shifted core plus original
-    positive boundary terms. The shifted full Hamiltonian is
+    Write $T_0=\{i:i<a\}$, $T_1=\{i:a<i<b\}$, and $T_2=\{i:i>b\}$ for the
+    bond sets of $L$, $N$, and $R$, so that $I_j\subseteq T_j$. With the
+    constructed shifts $x=z_0$, $m=z_1$, and $y=z_2$, each block is its
+    shifted core plus the boundary bonds it retains:
+    \begin{align}
+        L & =(C_0-z_0I)+\sum_{i\in T_0\setminus I_0}h_i,\notag \\
+        N & =(C_1-z_1I)+\sum_{i\in T_1\setminus I_1}h_i,\notag \\
+        R & =(C_2-z_2I)+\sum_{i\in T_2\setminus I_2}h_i.
+    \end{align}
+    Each shifted core is positive and each $h_i$ is positive, so
+    $L,N,R\ge0$. The shifted full Hamiltonian is
     $\sum_j(C_j-z_jI)+B\ge0$. A common unit zero vector of the three
     shifted cores has energy at most six because $0\le B\le6I$.
     The ground variational inequality gives $e\le6$.

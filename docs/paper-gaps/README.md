@@ -629,6 +629,14 @@ non-periodic FT cleanup loop unless explicitly brought back into scope.
   printed comparison of two cut matrices, derived by a single-letter route
   that is an alternative proof on the printed range and a TNLean
   reconstruction on the short rings below twice the injectivity length).
+- `cpgsv21_physical_deformation_general_graph.tex` (clarification, resolved)
+  records that the ground-space correspondence of arXiv:2011.12127,
+  Section IV.C, under invertible on-site maps is formalized on every finite
+  simple graph, and that on a cycle with `N ≥ 3` and `0 < L < N` the common
+  parent space of the arcs is the periodic matrix-product ground space, so the
+  periodic-chain correspondence follows from the graph theorem. For `L = N`
+  the closed graph region and the chain construction use different boundary
+  prescriptions, and the one- and two-site rings are not simple cycles.
 - `cpgsv21_block_diagonal_parent_ground_space.tex` records the degenerate
   parent-Hamiltonian block-diagonal boundary-condition theorem behind the
   periodic block decomposition and the BNT ground-space span. The fixed-window
@@ -1104,10 +1112,15 @@ For the finite-round extension of arXiv:2103.13367:
   One source block may already contain sequential measurements at many sites;
   the adaptive tree does not record the required source-block decomposition.
 
-- `pgvwc07_half_chain_spectrum_conventions.tex` records the boundary-index
-  convention in the half-chain calculation, normalization by the actual
-  finite-ring norm, exact finite-size zero padding, and the non-sharp geometric
-  transfer-error estimate used for ordered physical eigenvalue convergence.
+- `pgvwc07_half_chain_spectrum_conventions.tex` (scope restriction, resolved)
+  records the boundary-index convention in the half-chain calculation,
+  normalization by the actual finite-ring norm, exact finite-size zero
+  padding, and the non-sharp geometric transfer-error estimate used for
+  ordered physical eigenvalue convergence. It also records that Condition C2
+  counts the peripheral eigenvalue with algebraic multiplicity (with distinct
+  values only, the two-block GHZ tensor violates Theorem 6), and that under
+  this reading Theorem 6 is formalized for weighted canonical forms with any
+  number of blocks.
 
 For the periodic decomposition in PGVWC07 Theorem 5:
 
