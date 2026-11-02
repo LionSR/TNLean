@@ -79,9 +79,14 @@ For every fixed bandwidth one can choose
 $t=C_\eta(16+\log(1/g)+\log(1/\delta))$ and an integer window bounded by
 $8/g+(7C_\eta)^{1/4}g^{-1/4}(16+\log(1/g)+\log(1/\delta))^{3/4}$.
 The same choice gives the squared-buffer residual budget and the required
-Chebyshev suppression. These are parameter and comparison results; the
-actual sharp-rank improving family, normalized fixed-cut approximation and
-global sequential matrix product approximation are separate subsequent steps.
+Chebyshev suppression. The actual regional polynomial family at these scales is now constructed,
+with exact degree $\ell^2$, collar-adjusted count at most
+$(m\ell^2)^{44\ell}$, comparison loss $\delta/100$ and squared suppression
+at most $\delta/8$. The same clipped matrix and tensor factors are retained.
+The canonical original minimum and all-cutoff spectral identity are proved
+before the cutoff and viable source are chosen. The normalized fixed-cut
+approximation and global sequential matrix product approximation remain
+separate subsequent steps.
 
 \paragraph{Remaining conclusions.}
 The long-interval construction assumes no global spectral gap and supplies

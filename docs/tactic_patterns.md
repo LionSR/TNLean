@@ -11630,3 +11630,17 @@ removed after the dependency audit exposed it.
   introduced. The actual buffered comparison is generalized once to independent
   t and ell; both existing t=ell statements specialize it with unchanged
   signatures and share the one ceiling-budget proof.
+
+### Dependent polynomial witnesses — retain the exact canonical identity (2026-11-03)
+
+- **Seen:** Rebuilding a long polynomial/tensor witness proposition after
+  changing centered band notation to canonical raw notation repeatedly unfolds
+  concrete functional-calculus matrices and physical tensor coordinates.
+- **Reuse:** Assemble the nested polynomial tuple while its matrix and isometry
+  are abstract, recording the scalar cutoff difference first. Keep the actual
+  centered family unchanged and return the proved canonical minimum and
+  all-cutoff spectral identity before the cutoff and source-space choices.
+- **Decision:** Consumers transport only the two short viability or closeness
+  propositions with an explicitly typed congrArg. The polynomial witnesses are
+  not unpacked and rebuilt merely to change band notation. The default heartbeat
+  budget suffices; experimental diagnostics and transparency options are removed.
