@@ -707,14 +707,16 @@ gives the recorded-vector rank bound.
 
 \begin{lemma}[Finite refinement of the same physical candidate]
     \label{lem:physical_dg_finite_filter_trim}
-    \lean{TNLean.MPS.AreaLaw.exists_physical_dg_filterTrimIterate_isCloseTo}
+    \lean{TNLean.MPS.AreaLaw.exists_physical_dg_filterTrimIterate_isCloseTo,
+        TNLean.MPS.AreaLaw.physical_dg_filterTrimIterate_ceil_log_isCloseTo}
     \leanok
     Retain the physical hypotheses and raw filter of
     Lemma~\ref{lem:physical_dg_native_root_filter_trim}. Fix $0<\rho\le1$
     and one common reference and threshold satisfying its budgets with
     $\eta=\rho$. Suppose the native initial candidate is
     $\delta_0$-close to $G$, where $0\le\delta_0\le\tfrac12$.
-    Some positive literal iterate of that same candidate is $\rho$-close
+    The literal iterate with
+    $n=\lceil(4/c)\log(1/\rho)\rceil+1$ is $\rho$-close
     to the same original full ground space. Its dimension and recorded
     generators satisfy Lemma~\ref{lem:full_interval_filter_trim_iterates}.
     The reference and threshold remain explicit; this lemma does not
@@ -728,8 +730,9 @@ gives the recorded-vector rank bound.
     $u_{n+1}=(1-c/4)u_n+c\rho/8$. The sequence is nonnegative, stays
     at most one half, and controls the closeness of every actual iterate.
     Moreover $u_n\le(1-c/4)^nu_0+\rho/2$, so eventually $u_n\le\rho$.
-    One further step preserves that upper bound and ensures a positive
-    iterate, to which the recorded-generator conclusion applies.
+    More precisely, $(1-c/4)^n\le e^{-cn/4}$, so the positive integer
+    $n=\lceil(4/c)\log(1/\rho)\rceil+1$ suffices. At this same iterate,
+    the recorded-generator conclusion applies.
 \end{proof}
 
 
