@@ -183,3 +183,72 @@ theorem exists_short_actual_region_improving_family
 end TNLean.MPS.AreaLaw
 end
 end
+
+
+section
+
+open scoped TensorProduct
+
+namespace TNLean.MPS.AreaLaw
+
+/-- A short actual region admits an improving family at any larger numerical
+count base. The physical configurations and matrix units retain their original
+on-site dimension. Zero extension preserves every image span, while the error
+parameter is chosen from the larger budget. Auxiliary to ALVV,
+arXiv:1602.08828v2, `thm:al-dg`, lines 1048–1099, and
+`prop:albootstrap-dg`, lines 1062–1075. The family and error parameter precede
+all target and viable subspaces, including the zero target. -/
+theorem exists_short_actual_region_improving_family_of_count_base
+    (L q m ell : ℕ) (J : Finset (Fin L))
+    (hq : 2 ≤ q) (hqm : q ≤ m) (hell : 1 ≤ ell) (hJ : J.card ≤ 4 * ell)
+    {F : Type*} [NormedAddCommGroup F] [InnerProductSpace ℂ F]
+    [FiniteDimensional ℂ F] :
+    let E := EuclideanSpace ℂ (J → Fin q)
+    let D : ℕ := (m * ell ^ 2) ^ (22 * ell)
+    ∃ (A : Fin (D ^ 2) → E →L[ℂ] E) (Delta : ℝ),
+      0 < Delta ∧ (D : ℝ) ^ 12 * Delta ≤ 1 / 100000 ∧
+      ∀ (T : Submodule ℂ (E ⊗[ℂ] F)) (S : Submodule ℂ E) (δ : ℝ),
+        Submodule.IsViable δ S T → δ < 1 →
+          Submodule.IsViable (Delta / (1 - δ) ^ 2)
+            (⨆ j, S.map (A j : E →ₗ[ℂ] E)) T := by
+  classical
+  intro E D
+  obtain ⟨A0, hA⟩ :=
+    exists_fixed_short_actual_region_clm_family (F := F) L q ell J hq hell hJ
+  have hcount : Fintype.card (Fin (((q * ell ^ 2) ^ (22 * ell)) ^ 2)) ≤ D ^ 2 := by
+    simpa only [Fintype.card_fin] using
+      (Nat.pow_le_pow_left
+        (Nat.pow_le_pow_left (Nat.mul_le_mul_right (ell ^ 2) hqm) (22 * ell)) 2)
+  obtain ⟨_f, A, _hA, _hzero, hspan⟩ :=
+    Submodule.exists_clm_family_extension_of_card_le hcount A0
+  have hDpos : 0 < D := by
+    dsimp only [D]
+    exact pow_pos (Nat.mul_pos (by omega : 0 < m)
+      (pow_pos (by omega : 0 < ell) 2)) _
+  have hDR : 0 < (D : ℝ) := by exact_mod_cast hDpos
+  let Delta : ℝ := 1 / (100000 * (D : ℝ) ^ 12)
+  have hDelta : 0 < Delta := by
+    dsimp only [Delta]
+    exact one_div_pos.mpr (mul_pos (by norm_num) (pow_pos hDR 12))
+  have hDeltaEq : Delta = (1 / 100000 : ℝ) / (D : ℝ) ^ 12 := by
+    dsimp only [Delta]
+    rw [div_div]
+  have hbudget : (D : ℝ) ^ 12 * Delta ≤ 1 / 100000 := by
+    rw [hDeltaEq]
+    exact (mul_div_cancel₀ _ (pow_ne_zero 12 hDR.ne')).le
+  refine ⟨A, Delta, hDelta, hbudget, ?_⟩
+  intro T S δ hviable hδ
+  by_cases hT : T = ⊥
+  · subst T
+    unfold Submodule.IsViable
+    apply Submodule.isCloseTo_iff.mpr
+    intro v hv
+    have hv0 : v = 0 := by simpa using hv
+    subst v
+    simp
+  · obtain ⟨htop, _hzero⟩ := hA δ S T hviable hδ hT
+    rw [hspan S, htop]
+    exact Submodule.isViable_top _
+      (div_nonneg hDelta.le (sq_nonneg (1 - δ))) T
+end TNLean.MPS.AreaLaw
+end
