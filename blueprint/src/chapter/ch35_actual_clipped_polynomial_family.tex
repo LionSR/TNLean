@@ -6,7 +6,7 @@ otherwise. This is the same total convention as in
 \cite[``Centered partial clipping of a finite family'']{QICLean2026Blueprint}.
 All matrices in the later physical application are Hermitian.
 
-\begin{theorem}[A fixed regional family for polynomials of the clipped sum]
+\begin{lemma}[A fixed regional family for polynomials of the clipped sum]
     \label{thm:actual_clipped_polynomial_family}
     \lean{TNLean.MPS.AreaLaw.exists_actual_regional_clipped_polynomial_family_fin}
     \uses{def:chain_model,def:five_region_bond_partition}
@@ -38,7 +38,7 @@ All matrices in the later physical application are Hermitian.
     standard unitary identification with $J$ first. The same $N,W_r$ work
     for every polynomial. No efficient representation or sharp source
     matrix-product bond bound is asserted.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:actual_two_window_alphabet_sum,thm:physical_aeval_fin_middle_family,
