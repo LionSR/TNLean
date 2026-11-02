@@ -534,11 +534,19 @@ theorem exists_pos_common_contact_dichotomy {X Y : Set (ℝ × ℝ)}
   set K : Set ((ℝ × ℝ) × (ℝ × ℝ)) := (X ×ˢ Y) ∩ ⋂ q ∈ X ∩ Y,
     {p | ¬ (‖p.1 - q‖ < 1 / 4 ∧ ‖p.2 - q‖ < 1 / 4)}
   have hKc : IsCompact K := by
-    refine (hX.prod hY).inter_right (isClosed_biInter fun q _ ↦ ?_)
-    refine IsOpen.isClosed_compl ?_
-    exact (isOpen_lt (continuous_norm.comp (continuous_fst.sub continuous_const))
-      continuous_const).inter
-      (isOpen_lt (continuous_norm.comp (continuous_snd.sub continuous_const)) continuous_const)
+    have hcl : ∀ q : ℝ × ℝ, IsClosed
+        {p : (ℝ × ℝ) × (ℝ × ℝ) | ¬ (‖p.1 - q‖ < 1 / 4 ∧ ‖p.2 - q‖ < 1 / 4)} := by
+      intro q
+      have ho : IsOpen
+          {p : (ℝ × ℝ) × (ℝ × ℝ) | ‖p.1 - q‖ < 1 / 4 ∧ ‖p.2 - q‖ < 1 / 4} :=
+        (isOpen_lt (continuous_norm.comp (continuous_fst.sub continuous_const))
+          continuous_const).inter
+          (isOpen_lt (continuous_norm.comp (continuous_snd.sub continuous_const))
+            continuous_const)
+      simpa only [Set.compl_ofPred] using ho.isClosed_compl
+    show IsCompact ((X ×ˢ Y) ∩ ⋂ q ∈ X ∩ Y,
+      {p : (ℝ × ℝ) × (ℝ × ℝ) | ¬ (‖p.1 - q‖ < 1 / 4 ∧ ‖p.2 - q‖ < 1 / 4)})
+    exact (hX.prod hY).inter_right (isClosed_biInter fun q _ ↦ hcl q)
   have hnear : ∀ x ∈ X, ∀ y ∈ Y, (x, y) ∉ K → ∃ q ∈ X ∩ Y,
       ‖x - q‖ < 1 / 4 ∧ ‖y - q‖ < 1 / 4 ∧ ‖y - q‖ / 2 ≤ ‖x - y‖ := by
     intro x hx y hy hK
