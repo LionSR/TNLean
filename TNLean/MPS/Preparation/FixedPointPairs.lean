@@ -79,7 +79,7 @@ theorem tendsto_transferMap_blockTensor_of_spectralRadius_lt_one
           Matrix (Fin D) (Fin D) ℂ)).continuous.tendsto 0).comp hpow
     convert this using 1
     · funext q
-      simp only [Function.comp_apply, ← map_pow]
+      simp only [← map_pow]
       rfl
     · simp only [map_zero]
   have hTP : IsTracePreservingMap E := Kraus.isTracePreservingMap_mapLM_of_isTP A hA
