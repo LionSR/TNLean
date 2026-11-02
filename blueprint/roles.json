@@ -126,10 +126,7 @@
       "corollaries": [
         "thm:periodic_ft_supplied_periods",
         "thm:periodic_equalcase_unit_weights",
-        "cor:symmetry_periodic_assembly",
         "thm:periodic_ft_proportional_supplied_periods",
-        "cor:cor_4_1_physical_symmetry_zgauge",
-        "thm:zgauge_equiv_periodicFT_irreducible_form",
         "cor:z_gauge_blockTensor_same_mpv"
       ],
       "notes": {

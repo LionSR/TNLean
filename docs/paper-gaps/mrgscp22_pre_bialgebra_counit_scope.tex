@@ -1,0 +1,99 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+
+\input{./command}
+
+\title{Pre-Bialgebras of Matrix Product Operator Algebras: the Counit Is Not Formalized}
+\author{}
+\date{2026-11-02}
+
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+\section{The source definition}
+
+Ref.~\cite{Molnar2022MPOAlgebrasI} defines a coalgebra as a triple
+$(\mathcal C,\Delta,\epsilon)$, where $\mathcal C$ is a finite-dimensional
+complex vector space, $\Delta\colon\mathcal C\to\mathcal C\otimes\mathcal C$
+is coassociative,
+\begin{align}
+    (\Delta\otimes\Id)\circ\Delta
+        &=(\Id\otimes\Delta)\circ\Delta,
+    \label{eq:mrgscp22_coassoc}
+\end{align}
+and $\epsilon\in\mathcal C^*$ is a counit,
+\begin{align}
+    (\epsilon\otimes\Id)\circ\Delta
+        &=(\Id\otimes\epsilon)\circ\Delta
+         =\Id
+    \label{eq:mrgscp22_counit}
+\end{align}
+(Definition~3.1).  A pre-bialgebra is an algebra $\mathcal A$ that is also
+a coalgebra such that the coproduct is multiplicative,
+\begin{align}
+    \Delta(xy)
+        &=\Delta(x)\Delta(y)
+        \qquad (x,y\in\mathcal A)
+    \label{eq:mrgscp22_mult}
+\end{align}
+(Definition~4.1).\footnote{Source coordinates in \path{mpo.tex} from
+    \href{https://arxiv.org/abs/2204.05940}{arXiv:2204.05940}:
+    lines~866--875 for Definition~3.1 and lines~1409--1414 for
+    Definition~4.1.}
+No relation between the counit and the unit or the product is imposed:
+the section introduces pre-bialgebras as ``bialgebras without any property
+imposed on the unit and counit'', and $\Delta(1)\neq1\otimes1$ is allowed,
+in which case the image of $\Delta(1)$ in a tensor product of two
+representations is a projector rather than the identity.\footnote{Lines~1407, 1421 and~1708
+    (equation \texttt{eq:delta\_epsilon}).}
+The counit of~(\ref{eq:mrgscp22_counit}) is nevertheless part of the
+definition, and it is used: the unit of the dual pre-bialgebra
+$\mathcal A^*$ is the counit of $\mathcal A$ (line~1419), and the tensor
+product of two representations of $\mathcal A^*$ is the restriction to the
+range of $\Delta(\epsilon)$ (line~1640).
+
+\section{What is formalized}
+
+The formal structure on an algebra $\mathcal A$ over a commutative semiring
+consists of a linear map $\Delta\colon\mathcal A\to\mathcal A\otimes\mathcal A$
+satisfying~(\ref{eq:mrgscp22_coassoc}) and~(\ref{eq:mrgscp22_mult}), with
+neither a counit nor $\Delta(1)=1\otimes1$.  It is therefore strictly weaker
+than a pre-bialgebra in the sense of Definition~4.1: on a nonzero ring $R$,
+regarded as an algebra over itself, the zero map $\Delta=0$ satisfies
+(\ref{eq:mrgscp22_coassoc}) and~(\ref{eq:mrgscp22_mult}), but no functional
+$\epsilon$ satisfies~(\ref{eq:mrgscp22_counit}), since the left side
+of~(\ref{eq:mrgscp22_counit}) vanishes.
+
+The fusion coproduct of a complete zipper fusion family, defined on the
+boundary algebra $\mathcal B=\bigoplus_cM_{D_c}(\C)$ from the fusion
+tensors, is shown to be multiplicative and coassociative, and
+$\Delta(1)$ is shown to be the support projector of the fusion tensors.
+No counit is constructed for it, so $\mathcal B$ is not shown to be a
+pre-bialgebra in the source's sense.\footnote{Formal declarations:
+    \leanid{PreBialgebra} in \doclink{TNLean/Algebra/PreBialgebra}, and
+    \leanid{MPOTensor.CompleteZipperFusionFamily.toPreBialgebra} in
+    \doclink{TNLean/MPS/MPDO/CompleteZipperFusionCoassoc}.  The blueprint
+    entries are \path{def:mpoalg_pre_bialgebra} and
+    \path{thm:mpoalg_fusion_coproduct_coassoc} in
+    \path{blueprint/src/chapter/ch30_mpo_algebras.tex}.}
+
+\section{Elimination plan}
+
+Add a counit and the two identities~(\ref{eq:mrgscp22_counit}) to the
+formal structure, and construct a counit for the fusion coproduct.  In
+the source the boundary algebra plays the role of the dual algebra
+$\mathcal A^*$, whose counit is evaluation at the unit of $\mathcal A$
+(line~1419); the corresponding functional on $\mathcal B$ has to be
+identified from the fusion data and the counit identities proved.  Until
+then, results stated for the counit-free structure are statements about
+multiplicative coassociative coproducts and are not the source's
+statements about pre-bialgebras.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}
