@@ -1,0 +1,115 @@
+\section{Buffered filters at a fixed low-energy bandwidth}
+
+Fix a positive bandwidth $\eta_{\rm LD}$. Let $H=\sum_{i=0}^{L-2}h_i$ be
+an open chain with $q\ge2$, where $0\le h_i\le I$ and $h_i$ is supported
+on sites $i,i+1$. For integers $a,b,\ell$ with $\ell\ge1$,
+$a+2\ell\le b$ and $b+2\ell\le L-1$, partition the sites at
+$0,a+1,a+2\ell,b+1,b+2\ell,L$. Let $A_j$ be the sum of the bonds
+internal to region $j$, and let $Y$ be the sum of the four crossing bonds.
+The regional ground energies $e_j$ determine
+\begin{align}
+    H_0&=\sum_{j=0}^4(A_j-e_jI)+Y=H-\Bigl(\sum_j e_j\Bigr)I,
+    \notag\\
+    B&=\sum_{j\in\{0,2,4\}}
+       \bigl(\min(A_j,(e_j+\ell)I)-e_jI\bigr)
+       +\sum_{j\in\{1,3\}}(A_j-e_jI)+Y.
+    \label{eq:ld_family_clipping}
+\end{align}
+The minimum is defined by spectral calculus. Write $E_0=\min\sigma(H_0)$,
+$G(c)=\mathbf1_{(-\infty,E_0+c]}(H_0)\mathcal H$ and
+$F(c)=\mathbf1_{(-\infty,E_0+c]}(B)\mathcal H$.
+
+\begin{lemma}[Buffered targets from a physical residual budget]
+    \label{lem:ld_buffered_targets}
+    \lean{TNLean.MPS.AreaLaw.exists_five_region_low_energy_targets_of_residual_budget}
+    \leanok
+    Let $w>0$, $19+\eta_{\rm LD}\le\ell$, and put
+    $\xi=288e^{11/8}e^{-(\ell-\eta_{\rm LD})/8}$.
+    Suppose that $\xi\le1$ and
+    $2(6+\eta_{\rm LD})\xi\le w^2/200$.
+    The original regional minima, common regional ground vector and
+    centered ground vector can be chosen so that $0\le E_0\le4$,
+    $\|B\|\le7\ell$, and the following hold for every
+    $6w\le\eta\le\eta_{\rm LD}$. Set
+    $T_-=F(\eta-2w)$ and $T_+=F(\eta-w)$.
+    Then $T_-\subseteq T_+$, $G(\eta)$ is $1/200$-close to $T_+$,
+    and $T_-$ is $1/200$-close to $G(\eta-3w)$.
+\end{lemma}
+\begin{proof}\leanok
+    The actual three-region truncation gives a residual bounded by $\xi$
+    on every current low-energy space of bandwidth at most $\eta_{\rm LD}$.
+    Every partially clipped centered sum is positive. For $c>0$, the
+    ceiling count in the spectral-window comparison satisfies
+    \begin{align}
+        \left\lceil\frac{E_0+c}{2\xi}\right\rceil(2\xi)^2
+        &\le 2(E_0+c)\xi+4\xi^2
+        \le2(6+c)\xi
+        \le\frac{w^2}{200}
+        \le\frac{(w+\xi)^2}{200}.
+        \label{eq:ld_family_window_budget}
+    \end{align}
+    Apply the perturbation comparison in both directions, first at
+    $c=\eta-w$ and then at $c=\eta-3w$.
+    Both are positive because $\eta\ge6w$.
+\end{proof}
+
+\begin{theorem}[One physical family with a common count and suppression bound]
+    \label{thm:fixed_bandwidth_low_energy_family}
+    \lean{TNLean.MPS.AreaLaw.exists_fixed_bandwidth_five_region_low_energy_family}
+    \leanok
+    For every $\eta_{\rm LD}>0$ there is a real constant
+    $C\ge\max\{100,19+\eta_{\rm LD}\}$ with the following property.
+    Choose an integer $m\ge q$, a width $w>0$, and set
+    \begin{align}
+        g&=\min\{w,1\},&
+        u&=1+\log m+\log(1/g),&
+        \ell&=\left\lceil Cu^2/g\right\rceil,&
+        D&=(m\ell^2)^{22\ell}.
+        \label{eq:ld_family_parameters}
+    \end{align}
+    Suppose the five regions fit as above. Then $\ell\ge21$ and
+    \begin{align}
+        \log D
+        &\le\frac{22(C+1)(6+2\log(C+1))}{g}\,u^3.
+        \label{eq:ld_family_log_count}
+    \end{align}
+    For the actual clipped matrix $B$ of
+    (\ref{eq:ld_family_clipping}), there is a family
+    $W_1,\ldots,W_N$ on $J=[a+\ell,b+\ell+1)$, with $N\le D^2$,
+    chosen before every cutoff $\eta$ and every subspace $S$.
+    For each $6w\le\eta\le\eta_{\rm LD}$ the two comparisons of
+    Lemma~\ref{lem:ld_buffered_targets} hold. There is a real polynomial
+    $p$ of degree exactly $\ell^2$, with $p(E_0+\eta-2w)=1$, and matrices
+    $M_i$ on $J^c$ such that, in the physical tensor coordinates,
+    \begin{align}
+        p(B)&=\sum_{i=1}^N W_i\otimes M_i,&
+        \Delta&=4\exp\left(-4\ell^2
+        \sqrt{\frac{w}{7\ell-(E_0+\eta-2w)}}\right),&
+        D^{12}\Delta&\le10^{-5}.
+        \label{eq:ld_family_filter}
+    \end{align}
+    Whenever $S$ is $\delta$-viable for $T_+$ and $\delta<1$,
+    the actual image span $V=\sum_iW_iS$ has dimension at most
+    $N\dim S$ and is $\Delta/(1-\delta)^2$-viable for $T_-$.
+    No spectral gap is assumed. This is the interior five-region
+    construction supporting \cite[Theorem~t:aisgapless]{Arad2016RigorousRG};
+    its geometry and fixed-bandwidth quantifiers are recorded
+    in~\cite{gap:alvv16_low_energy_family_scope}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{lem:fixed_bandwidth_low_density_filter_parameters,
+        lem:ld_buffered_targets,thm:actual_clipped_polynomial_family,
+        thm:collar_larger_count_base}
+    Choose $C$ from the fixed-bandwidth scalar estimate.
+    It supplies the residual budget and the suppression inequality at
+    this same $\ell$ and $D$. The previous theorem constructs $B$ and
+    its target spaces. The common polynomial family for this actual
+    clipped matrix, at degree $\ell^2$, supplies $W_i$ before the cutoff.
+    Its count fits $D^2$ since $q\le m$.
+    The Chebyshev filter between the cutoffs
+    $E_0+\eta-2w$ and $E_0+\eta-w$ gives the actual decomposition and
+    the viability conclusion. Its denominator
+    $R=7\ell-(E_0+\eta-2w)$ satisfies $0<R\le7\ell$.
+    Since $w\ge g>4g/5$, its suppression is bounded by the scalar
+    estimate with numerator $4g/5$, using the same count envelope $D$.
+\end{proof}

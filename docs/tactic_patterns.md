@@ -11531,3 +11531,17 @@ removed after the dependency audit exposed it.
   unscaled construction and independent scaled construction contain only
   two copies of the short original spectral-coordinate identification;
   they do not meet the three-occurrence threshold. No tactic is introduced.
+
+### Actual low-energy filters — reuse the two target contraction (2026-11-02)
+
+- **Seen:** Low-energy filtering needs distinct lower and upper targets,
+  with no spectral gap in the intervening band.
+- **Reuse:** The physical construction uses the shared independent-cutoff
+  residual, the existing eigenvector-to-continuous-operator identity and
+  the companion nested Chebyshev composition. A single local estimate
+  bounds the ceiling budget at both shifted cutoffs. Its constants use
+  the five-region ground-energy bound between zero and four.
+- **Decision:** The physical family supplies its actual polynomial
+  decomposition. No new approximate-projector predicate or copied
+  canonical-eigenvector calculation is introduced. The same degree and
+  numerical count base are retained in the suppression estimate.

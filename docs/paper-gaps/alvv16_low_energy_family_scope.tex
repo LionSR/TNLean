@@ -1,0 +1,60 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+\input{command}
+\title{The scope of the buffered low-energy filter construction}
+\author{}
+\date{November 2, 2026}
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+\paragraph{Source and hypotheses.}
+Arad, Landau, Vazirani and Vidick,
+\cite[Theorem~t:aisgapless, lines 1027--1041]{Arad2016RigorousRG},
+construct a common improving family between two nearby low-energy targets.
+Their Assumption (LD), lines 281--284, fixes a positive bandwidth $\eta$.
+The physical construction here retains the quantifiers
+$\forall\eta_{\rm LD}>0\ \exists C_{\eta_{\rm LD}}$ before the chain,
+its local dimension, its interactions and the narrower width.
+Thus the hidden constants may depend on this declared fixed bandwidth.
+A stronger estimate uniform in an arbitrary variable bandwidth is not
+asserted. The explicit logarithmic local-dimension dependence is retained.
+
+\paragraph{Geometry and buffers.}
+The current result constructs the three clipped bulks and two retained
+windows when $\ell\ge1$, $a+2\ell\le b$ and $b+2\ell\le L-1$.
+The represented interval is $[a+\ell,b+\ell+1)$.
+The source permits any contiguous interval. Short intervals, boundary
+intervals and the cost of moving this family to an arbitrary prescribed
+interval remain separate steps; this interior result is not marked as
+the unrestricted theorem.
+Its buffered cutoffs satisfy $6w\le\eta_1\le\eta_{\rm LD}$.
+The source condition $\eta_1\ge2\mu/\log n$ gives exactly this condition
+under $w=\mu/(3\log n)$ for $n\ge2$. The lower original cutoff is then
+$\eta_1-3w=\eta_1-\mu/\log n$, as in the source.
+
+\paragraph{One degree and one count envelope.}
+The clipping threshold is $t=\ell$, where
+$\ell=\lceil C_{\eta_{\rm LD}}(1+\log m+\log(1/g))^2/g\rceil$,
+$g=\min\{w,1\}$ and $m\ge q\ge2$.
+The actual polynomial degree is $\ell^2$ and the count envelope is
+$D=(m\ell^2)^{22\ell}$.
+The same choice proves both $N\le D^2$ and $D^{12}\Delta\le10^{-5}$.
+Only this numerical count base is enlarged; the physical dimension and
+Hamiltonian are unchanged. Increasing an upper bound on $D$ after choosing
+a filter would not justify the latter inequality and is not used.
+
+\paragraph{Remaining conclusions.}
+This construction assumes no global spectral gap and supplies actual
+polynomials and tensor factors. It does not prove the subsequent
+low-density minimal-dimension argument, an entropy bound, a low-energy
+basis of matrix product states or a running-time bound. Closed spectral
+cutoffs and the absence of a positivity claim for the Chebyshev polynomial
+follow the companion spectral-projector and positivity notes.
+
+\bibliographystyle{plain}
+\bibliography{../../blueprint/src/references}
+\end{document}

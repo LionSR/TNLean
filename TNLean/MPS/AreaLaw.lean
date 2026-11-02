@@ -49,6 +49,7 @@ import TNLean.MPS.AreaLaw.EntropyInequalities
 import TNLean.MPS.AreaLaw.EntropyScaling
 import TNLean.MPS.AreaLaw.FiveRegionHamiltonian
 import TNLean.MPS.AreaLaw.FiveRegionTruncationResidual
+import TNLean.MPS.AreaLaw.FixedBandwidthLowEnergyFamily
 import TNLean.MPS.AreaLaw.FixedConfigurationExtension
 import TNLean.MPS.AreaLaw.FullIntervalMPS
 import TNLean.MPS.AreaLaw.FullIntervalViability
@@ -77,6 +78,7 @@ import TNLean.MPS.AreaLaw.LocalSolution
 import TNLean.MPS.AreaLaw.LocalSumMPO
 import TNLean.MPS.AreaLaw.LogarithmicAreaLaw
 import TNLean.MPS.AreaLaw.LogarithmicSeparation
+import TNLean.MPS.AreaLaw.LowDensityBufferedTargets
 import TNLean.MPS.AreaLaw.LowDensityFilterParameters
 import TNLean.MPS.AreaLaw.MPSApproximation
 import TNLean.MPS.AreaLaw.MPSReferenceSpace
