@@ -46,6 +46,9 @@ import TNLean.MPS.AreaLaw.DomainPartialSwap
 import TNLean.MPS.AreaLaw.DomainRelativeGeneratorLocalization
 import TNLean.MPS.AreaLaw.DomainSupportedGaussianIntegral
 import TNLean.MPS.AreaLaw.DoubledHamiltonian
+import TNLean.MPS.AreaLaw.DyadicIntervalLowDensityFamily
+import TNLean.MPS.AreaLaw.DyadicLongIntervalLowDensityFamily
+import TNLean.MPS.AreaLaw.DyadicRegionalLowDensityFamily
 import TNLean.MPS.AreaLaw.EntropyInequalities
 import TNLean.MPS.AreaLaw.EntropyScaling
 import TNLean.MPS.AreaLaw.FiveRegionHamiltonian

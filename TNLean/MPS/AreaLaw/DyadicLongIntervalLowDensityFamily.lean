@@ -20,7 +20,7 @@ the same image spans and gives exactly the required squared count.
 
 This supports ALVV, arXiv:1602.08828v2, Theorem `t:aisgapless`,
 lines 1027–1041. The fixed bandwidth is explicit. This long-interval
-lemma retains `4*ell < r-p` at each dyadic index. Its original/clipped
+result retains `4*ell < r-p` at each dyadic index. Its original/clipped
 comparison loss is `1 / (200 * 2^(4*i))`. Short intervals are treated by actual
 configuration matrix units in the subsequent interval theorem.
 -/

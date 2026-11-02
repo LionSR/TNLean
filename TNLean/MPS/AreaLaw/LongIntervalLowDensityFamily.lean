@@ -17,7 +17,7 @@ the same image spans and gives exactly the required squared count.
 
 This supports ALVV, arXiv:1602.08828v2, Theorem `t:aisgapless`,
 lines 1027–1041. The fixed bandwidth is explicit. This long-interval
-lemma retains `4*ell < r-p`; short intervals are treated by actual
+result retains `4*ell < r-p`; short intervals are treated by actual
 configuration matrix units in the subsequent interval theorem.
 -/
 
