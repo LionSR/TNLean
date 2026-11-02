@@ -11500,3 +11500,15 @@ removed after the dependency audit exposed it.
 - **Decision:** These two sites remain below the rule of three. The entropy
   development also reuses `aklv_regionEntropy_le_short_side` by exposing its
   existing proof unchanged, rather than copying that dimension argument.
+
+### Fixed-bandwidth residual scale — existing scalar theorem (2026-11-02)
+
+- **Consumer:** `MPS/AreaLaw/LowDensityFilterParameters.lean` chooses a
+  fixed-bandwidth prefactor and error budget, then applies the existing
+  generic tail field of `Real.exists_dg_scalar_parameters`.
+- **Reuse:** The actual natural ceiling is shared by the physical residual
+  comparison and the polynomial suppression estimate. The bandwidth
+  exponential is absorbed in the scalar prefactor before the degree is
+  selected. No logarithmic absorption or ceiling proof is repeated.
+- **Scope:** The coefficient retains its fixed-bandwidth dependence and
+  precedes every count base and width. No new tactic is needed.

@@ -190,3 +190,52 @@
     Then increase this numerical base from $q$ to $m$ in its nonnegative
     integer power.
 \end{proof}
+
+\section{Parameters at a fixed low-density bandwidth}
+
+\begin{lemma}[One degree for residual comparison and suppression]
+    \label{lem:fixed_bandwidth_low_density_filter_parameters}
+    \lean{Real.exists_fixed_bandwidth_low_density_filter_parameters}
+    \leanok
+    Fix $\eta_{\mathrm{LD}}>0$, as in Assumption (LD) of
+    \cite[lines 281--284]{Arad2016RigorousRG}. There is a constant
+    $A\ge\max\{100,19+\eta_{\mathrm{LD}}\}$ with the following property.
+    For every integer $m\ge2$ and every $w>0$, put
+    \begin{align*}
+        g&=\min\{w,1\},&
+        u&=1+\log m+\log(1/g),&
+        \ell&=\lceil Au^2/g\rceil,&
+        D&=(m\ell^2)^{22\ell}.
+    \end{align*}
+    Then $\ell\ge21$, $\ell\ge19+\eta_{\mathrm{LD}}$, and
+    \begin{align*}
+        \log D\le
+        \frac{22(A+1)[6+2\log(A+1)]}{g}\,u^3.
+    \end{align*}
+    For every $0\le\eta\le\eta_{\mathrm{LD}}$, the number
+    $\xi=288e^{11/8}e^{-(\ell-\eta)/8}$ satisfies
+    \begin{align*}
+        \xi\le1,\qquad 2(6+\eta)\xi\le\frac{w^2}{200}.
+    \end{align*}
+    For every $0<R\le7\ell$,
+    \begin{align*}
+        D^{12}\,4\exp\left(-4\ell^2
+          \sqrt{\frac{4g}{5R}}\right)\le10^{-5}.
+    \end{align*}
+    The constant is selected before the count base and width, and retains
+    its dependence on the fixed bandwidth.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{thm:chain_polynomial_filter_parameters}
+    Apply the joint scalar parameter estimate with $C_H=7/2$.
+    Set $C=288e^{11/8}e^{\eta_{\mathrm{LD}}/8}$ and
+    $\varepsilon=[400(6+\eta_{\mathrm{LD}})]^{-1}$.
+    Increase the prescribed lower threshold to absorb the residual estimate
+    with exponent $1/8$ and power two, and to exceed both $100$ and
+    $19+\eta_{\mathrm{LD}}$.
+    Since $\eta\le\eta_{\mathrm{LD}}$ and $g\le w$, the same ceiling
+    gives $\xi\le\varepsilon g^2\le1$ and the stated comparison budget.
+    The suppression estimate is the joint scalar estimate at this same
+    count and degree, with $R\le2C_H\ell$.
+\end{proof}

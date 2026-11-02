@@ -66,6 +66,7 @@ import TNLean.MPS.AreaLaw.LocalSolution
 import TNLean.MPS.AreaLaw.LocalSumMPO
 import TNLean.MPS.AreaLaw.LogarithmicAreaLaw
 import TNLean.MPS.AreaLaw.LogarithmicSeparation
+import TNLean.MPS.AreaLaw.LowDensityFilterParameters
 import TNLean.MPS.AreaLaw.MPSApproximation
 import TNLean.MPS.AreaLaw.NearestNeighbourImaginaryTime
 import TNLean.MPS.AreaLaw.OpenMPS
