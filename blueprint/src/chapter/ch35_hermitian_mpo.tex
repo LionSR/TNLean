@@ -1,0 +1,50 @@
+\section{Hermitian parts of operator chains}
+\label{sec:hermitian_operator_chains}
+
+The approximation to a Hamiltonian may be taken Hermitian while preserving
+its norm error. The following tensor identities supply this property for
+actual site-dependent matrix product operators. They support the operator
+approximation in~\cite[lines 1262--1268 and 1412--1420]{Arad2016RigorousRG}.
+
+\begin{lemma}[The adjoint of an operator chain]
+    \label{lem:trace_chain_adjoint}
+    \lean{MPOTensor.traceChainOperator_conjTranspose}
+    \leanok
+    Let
+    \begin{align}
+        T_{\sigma,\tau}
+           =\operatorname{tr}\bigl(CA_0^{\sigma_0,\tau_0}
+                                  \cdots A_{L-1}^{\sigma_{L-1},\tau_{L-1}}\bigr).
+    \end{align}
+    Define $B_v^{i,j}=\overline{A_v^{j,i}}$, where the conjugation is
+    entrywise on the virtual matrix, and replace $C$ by $\overline C$.
+    These tensors represent $T^*$ at the same bond dimension.
+    The chain, physical dimension and virtual dimension may be zero.
+\end{lemma}
+\begin{proof}\leanok
+    Exchanging the physical indices and conjugating the scalar trace gives
+    the adjoint entry. Complex conjugation preserves the order of matrix
+    multiplication and commutes with the trace. Applying these identities
+    to the finite product proves the result.
+\end{proof}
+
+\begin{lemma}[A Hermitian approximation with actual tensors]
+    \label{lem:hermitian_trace_chain_approximation}
+    \lean{MPOTensor.exists_traceChainOperator_selfAdjointPart,
+        MPOTensor.exists_hermitian_traceChainOperator_approximation}
+    \leanok
+    On a nonempty chain, an operator $T$ with actual tensors of virtual
+    dimension $D$ has a Hermitian part $(T+T^*)/2$ with actual tensors of
+    virtual dimension $2D$. If $H=H^*$ and $\|H-T\|\leq\epsilon$, this
+    constructed Hermitian operator satisfies
+    \begin{align}
+        \|H-(T+T^*)/2\|\leq\epsilon.
+    \end{align}
+\end{lemma}
+\begin{proof}\leanok
+    Use the preceding tensors for $T^*$ and put the two operator chains
+    on diagonal blocks, with coefficients $1/2$ in the closing matrix.
+    Absorb that closing matrix into the first site. The resulting operator
+    is the Hermitian part. Its error is at most the original error because
+    the Hermitian-part map is real-linear, fixes $H$, and has norm at most one.
+\end{proof}
