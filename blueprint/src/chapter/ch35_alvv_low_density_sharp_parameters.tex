@@ -1,0 +1,40 @@
+\section{Independent scales for sharp low-energy approximation}
+
+The clipping threshold must be chosen independently of the polynomial
+window length to retain the three-quarter power of the accuracy logarithm.
+The following numerical choice supplies the squared-buffer comparison budget
+and the Chebyshev exponent for the same pair of parameters. The physical
+approximation and its global matrix product representation are separate.
+
+\begin{lemma}[Sharp scales at a fixed low-energy bandwidth]
+    \label{lem:ld_sharp_independent_parameters}
+    \lean{Real.exists_sharp_low_density_scalar_parameters}
+    \leanok
+    For every fixed $\eta>0$ there is $C_\eta\ge21$, chosen before
+    $0<g\le1$ and $0<\delta\le1$, with the following property.
+    Put $a=16+\log(1/g)+\log(1/\delta)$ and $t=C_\eta a$.
+    There is an integer $\ell\ge1$ such that
+    \begin{align}
+      \ell&\le\frac8g+(7C_\eta)^{1/4}g^{-1/4}a^{3/4},\notag\\
+      19+\eta&\le t,\notag\\
+      \xi&=288e^{11/8}e^{-(t-\eta)/8}\le1,\notag\\
+      2(6+\eta)\xi&\le\frac\delta{100}g^2.
+      \label{eq:ld_sharp_scales}
+    \end{align}
+    For every $0<R\le3t+4\ell$ one also has
+    $\bigl(2e^{-2\ell^2\sqrt{g/R}}\bigr)^2\le\delta/8$.
+\end{lemma}
+\begin{proof}\leanok
+    Let $C_0$ be the existing universal independent-threshold constant,
+    $B=6+\eta$ and $C_\eta=\eta+C_0(2+\log B)$.
+    Apply its residual estimate at buffer $g^2$ and accuracy
+    $\tau=\delta/B$. Its logarithmic scale
+    $u=1+2\log(1/g)+\log B+\log(1/\delta)$ satisfies
+    $u\le(2+\log B)a$, so $t\ge\eta+C_0u$.
+    Consequently $\xi\le\tau g^2/10^6$, which gives the residual
+    assertions in (\ref{eq:ld_sharp_scales}).
+    The fourth-root integer-window choice for $t=C_\eta a$ gives the
+    stated bound on $\ell$ and $a\le\ell^2\sqrt{g/R}$.
+    Since $a\ge16$ and $\log(1/\delta)\le a$, the squared Chebyshev
+    estimate is at most $\delta/8$.
+\end{proof}

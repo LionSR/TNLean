@@ -24,6 +24,42 @@ The minimum is defined by spectral calculus. Write $E_0=\min\sigma(H_0)$,
 $G(c)=\mathbf1_{(-\infty,E_0+c]}(H_0)\mathcal H$ and
 $F(c)=\mathbf1_{(-\infty,E_0+c]}(B)\mathcal H$.
 
+\begin{lemma}[Buffered targets at an independent clipping threshold]
+    \label{lem:ld_buffered_targets_independent}
+    \lean{TNLean.MPS.AreaLaw.exists_five_region_independent_low_energy_targets_of_residual_budget_at_error}
+    \leanok
+    Keep the five physical regions and their integer window length $\ell$.
+    In the clipped sum of (\ref{eq:ld_family_clipping}), replace only the
+    clipping threshold by a real $t\ge0$; denote the result by $B_t$.
+    Let $w>0$, $\nu\ge0$, $19+\eta_{\rm LD}\le t$ and
+    $\xi=288e^{11/8}e^{-(t-\eta_{\rm LD})/8}$. Suppose
+    $\xi\le1$ and $2(6+\eta_{\rm LD})\xi\le\nu w^2$.
+    The actual original regional minima and centered ground energy can
+    be chosen with $0\le E_0\le4$ and $\|B_t\|\le3t+4\ell$.
+    For every $6w\le\eta\le\eta_{\rm LD}$, put
+    $F_t(c)=\mathbf1_{(-\infty,E_0+c]}(B_t)\mathcal H$,
+    $T_-=F_t(\eta-2w)$ and $T_+=F_t(\eta-w)$.
+    Then $T_-\subseteq T_+$, $G(\eta)$ is $\nu$-close to $T_+$,
+    and $T_-$ is $\nu$-close to $G(\eta-3w)$.
+    No spectral gap is assumed.
+\end{lemma}
+\begin{proof}\leanok
+    The independent-threshold three-bulk residual is bounded by $\xi$
+    on every current low-energy space of bandwidth at most
+    $\eta_{\rm LD}$. Every partially clipped centered sum is positive.
+    For each positive $c\le\eta_{\rm LD}$,
+    \begin{align}
+      \left\lceil\frac{E_0+c}{2\xi}\right\rceil(2\xi)^2
+      \le 2(E_0+c)\xi+4\xi^2
+      \le2(6+c)\xi\le\nu w^2\le\nu(w+\xi)^2.
+      \label{eq:ld_family_window_budget}
+    \end{align}
+    Apply the comparison in both directions at $c=\eta-w$ and
+    $c=\eta-3w$. The buffer ensures that both cutoffs are positive.
+    The original regional normalization and the independent clipping
+    retain the norm ceiling $3t+4\ell$.
+\end{proof}
+
 \begin{lemma}[Buffered targets at a prescribed error]
     \label{lem:ld_buffered_targets_at_error}
     \lean{TNLean.MPS.AreaLaw.exists_five_region_low_energy_targets_of_residual_budget_at_error}
@@ -41,21 +77,9 @@ $F(c)=\mathbf1_{(-\infty,E_0+c]}(B)\mathcal H$.
     and $T_-$ is $\nu$-close to $G(\eta-3w)$.
 \end{lemma}
 \begin{proof}\leanok
-    The actual three-region truncation gives a residual bounded by $\xi$
-    on every current low-energy space of bandwidth at most $\eta_{\rm LD}$.
-    Every partially clipped centered sum is positive. For $c>0$, the
-    ceiling count in the spectral-window comparison satisfies
-    \begin{align}
-        \left\lceil\frac{E_0+c}{2\xi}\right\rceil(2\xi)^2
-        &\le 2(E_0+c)\xi+4\xi^2
-        \le2(6+c)\xi
-        \le\nu w^2
-        \le\nu(w+\xi)^2.
-        \label{eq:ld_family_window_budget}
-    \end{align}
-    Apply the perturbation comparison in both directions, first at
-    $c=\eta-w$ and then at $c=\eta-3w$.
-    Both are positive because $\eta\ge6w$.
+    \uses{lem:ld_buffered_targets_independent}
+    Set $t=\ell$ in Lemma~\ref{lem:ld_buffered_targets_independent}.
+    Its norm ceiling is $3\ell+4\ell=7\ell$.
 \end{proof}
 
 \begin{lemma}[Buffered targets from a physical residual budget]

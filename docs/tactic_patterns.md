@@ -11616,3 +11616,17 @@ removed after the dependency audit exposed it.
   rewriting the scalar identity lambda+eta-3w=lambda+(eta-3w) before transferring
   spectral closeness avoids expanding dependent matrix coordinates during
   unification; no heartbeat limit is increased.
+
+### Sharp low-density scales — reuse the squared-buffer threshold (2026-11-03)
+
+- **Seen:** Low-energy window comparison needs residual proportional to the
+  square of its buffer, while the existing independent-threshold lemma gives
+  a residual linear in its numerical buffer.
+- **Reuse:** Apply the existing lemma at g squared and accuracy delta/(6+eta).
+  Adding the fixed bandwidth and rescaling the logarithmic coefficient gives
+  the needed physical threshold. Reuse the existing fourth-root scale and
+  squared Chebyshev accuracy calculation unchanged.
+- **Decision:** No second exponential-threshold or quarter-power proof is
+  introduced. The actual buffered comparison is generalized once to independent
+  t and ell; both existing t=ell statements specialize it with unchanged
+  signatures and share the one ceiling-budget proof.
