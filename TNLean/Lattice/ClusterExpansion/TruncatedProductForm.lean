@@ -17,8 +17,8 @@ the cluster, and the terms of a decomposition of the cluster's operator into pro
 single-site operators (lines 1259–1272).
 
 This file carries out that construction for terms `h k` acting on the sites `acts k` of a finite
-planar domain, the overlap graph of the supports, and clusters counted as large when their
-supports contain two sites joined by no walk of length at most `l` (`IsLargeWalk`). By
+set of sites, a reflexive locality relation `near`, and the overlap graph of the supports.
+A cluster is large when two sites in its supports do not satisfy `near` (`IsLargeSupport`). By
 `truncatedExp_eq_sum_clusterOp`, `ρ(β, l) = ∑_A E_A` over the sets `A` of terms with no large
 cluster.
 
@@ -31,14 +31,14 @@ cluster.
 * The index at a site is the cluster containing it, if any, together with a matrix-unit label.
   The coefficient function at a site checks that the recorded cluster is valid and recorded at
   every site of its supports, and at one anchor site of the cluster it carries the matrix element
-  of `E_C`. It reads only the sites of the recorded cluster, which are within walk distance `l`
+  of `E_C`. It reads only the sites of the recorded cluster, all related to its site by `near`
   (`clusterCoeff`, `isLocalCoefficient_clusterCoeff`). The index records the set of terms of the
   cluster rather than only its sites; the matrix-unit labels play the role of the terms of the
   decomposition into single-site operators.
 
 ## Main results
 
-* `TNLean.Lattice.ClusterExpansion.IsLargeWalk`: largeness of a set of terms in walk distance.
+* `TNLean.Lattice.ClusterExpansion.IsLargeSupport`: largeness relative to the locality relation.
 * `TNLean.Lattice.ClusterExpansion.noncommProd_apply_of_pairwiseDisjoint`: entries of a product
   of operators on disjoint sets of sites.
 * `TNLean.Lattice.ClusterExpansion.truncatedExp_eq_mul`: the terms acting on no site split off
@@ -48,11 +48,11 @@ cluster.
 * `TNLean.Lattice.ClusterExpansion.hasProductForm_truncatedExp`: `ρ(β, l)` has a matrix product
   form of range `l`.
 
-**Scope restriction (geometry):** the source uses an arbitrary lattice of `N` sites with a metric
-(lines 184 and 1230); this file uses finite planar domains with walk distance, and
-`hasProductForm_truncatedExp` assumes the domain is nonempty, as the source's lattice is. The
-source's count of the values of each index (lines 1273–1275) is not established. Documented in
-`docs/paper-gaps/hastings05_planar_domain_scope.tex`.
+The construction applies to every nonempty finite set of sites and every reflexive
+locality relation. Taking `near i j` to mean `dist i j ≤ l` gives the source's metric setting.
+The actual local index counts are proved in
+`TNLean.Lattice.ClusterExpansion.LocalIndexCount`; the lattice-volume interpretation of the
+source's dimensional bound is recorded in `docs/paper-gaps/hastings05_planar_domain_scope.tex`.
 
 ## References
 
@@ -137,19 +137,21 @@ end Entry
 
 section Split
 
-variable {Λ : Finset (ℤ × ℤ)} {q : ℕ} {κ : Type*} [Fintype κ] [DecidableEq κ]
+variable {σ : Type*} [Fintype σ] [DecidableEq σ] {q : ℕ} {κ : Type*} [Fintype κ] [DecidableEq κ]
 
-/-- A set `C` of terms is *large in walk distance* when the union of the supports of its terms
-contains two sites joined by no walk of length at most `l` in the domain.
+/-- A set `C` of terms is large when the union of its supports contains two sites
+that do not satisfy the locality relation `near`.
 Hastings, arXiv:cond-mat/0508554v3, `proj3new.tex`, lines 1103–1107. -/
-def IsLargeWalk (l : ℕ) (acts : κ → Finset (Site Λ)) (C : Finset κ) : Prop :=
-  ∃ a ∈ C.biUnion acts, ∃ b ∈ C.biUnion acts, ¬ ∃ p : (domainGraph Λ).Walk a b, p.length ≤ l
+def IsLargeSupport (near : σ → σ → Prop) (acts : κ → Finset σ) (C : Finset κ) : Prop :=
+  ∃ a ∈ C.biUnion acts, ∃ b ∈ C.biUnion acts, ¬ near a b
 
+omit [Fintype σ] in
 /-- Terms acting on no site do not affect whether a set of terms has a large cluster: such a
 term is adjacent to nothing, so it forms a cluster by itself, which is not large. -/
-theorem noLargeCluster_iff_filter (acts : κ → Finset (Site Λ)) (l : ℕ) (A : Finset κ) :
-    NoLargeCluster (overlapGraph acts) (IsLargeWalk l acts) A ↔
-      NoLargeCluster (overlapGraph acts) (IsLargeWalk l acts) {k ∈ A | (acts k).Nonempty} := by
+theorem noLargeCluster_iff_filter (acts : κ → Finset σ) (near : σ → σ → Prop) (A : Finset κ) :
+    NoLargeCluster (overlapGraph acts) (IsLargeSupport near acts) A ↔
+      NoLargeCluster (overlapGraph acts) (IsLargeSupport near acts)
+        {k ∈ A | (acts k).Nonempty} := by
   constructor
   · intro hA C hC hlarge
     refine hA C ⟨hC.1.trans (filter_subset _ _), hC.2.1, disjoint_left.2 fun j hjA hjB ↦ ?_⟩
@@ -174,13 +176,13 @@ open Classical in
 /-- `ρ(β, l)` is the product of the sum of `E_A` over the sets `A` of terms acting on no site
 (a multiple of the identity) and the sum of `E_A` over the sets `A` of terms acting on some site
 with no large cluster. -/
-theorem truncatedExp_eq_mul (acts : κ → Finset (Site Λ))
-    (h : κ → Matrix (Configuration Λ q) (Configuration Λ q) ℂ)
-    (hh : ∀ k, h k ∈ supportedOperators q (acts k : Set (Site Λ))) (l : ℕ) (β : ℝ) :
-    truncatedExp (overlapGraph acts) (IsLargeWalk l acts) h β =
+theorem truncatedExp_eq_mul (acts : κ → Finset σ)
+    (h : κ → Matrix (σ → Fin q) (σ → Fin q) ℂ)
+    (hh : ∀ k, h k ∈ supportedOperators q (acts k : Set σ)) (near : σ → σ → Prop) (β : ℝ) :
+    truncatedExp (overlapGraph acts) (IsLargeSupport near acts) h β =
       (∑ A with ∀ k ∈ A, ¬ (acts k).Nonempty, clusterOp h A β) *
         ∑ A with (∀ k ∈ A, (acts k).Nonempty) ∧
-          NoLargeCluster (overlapGraph acts) (IsLargeWalk l acts) A, clusterOp h A β := by
+          NoLargeCluster (overlapGraph acts) (IsLargeSupport near acts) A, clusterOp h A β := by
   rw [truncatedExp_eq_sum_clusterOp, Finset.sum_mul_sum, ← Finset.sum_product']
   have hf0 : ∀ A₀ A₁ : Finset κ, (∀ k ∈ A₀, ¬ (acts k).Nonempty) →
       (∀ k ∈ A₁, (acts k).Nonempty) → {k ∈ A₀ ∪ A₁ | ¬ (acts k).Nonempty} = A₀ := by
@@ -196,7 +198,7 @@ theorem truncatedExp_eq_mul (acts : κ → Finset (Site Λ))
   · intro A hA
     simp only [mem_filter, mem_univ, true_and, mem_product] at hA ⊢
     exact ⟨fun k hk ↦ hk.2, fun k hk ↦ hk.2,
-      (noLargeCluster_iff_filter acts l A).1 hA⟩
+      (noLargeCluster_iff_filter acts near A).1 hA⟩
   · rintro ⟨A₀, A₁⟩ hp
     simp only [mem_filter, mem_univ, true_and, mem_product] at hp ⊢
     rw [noLargeCluster_iff_filter, hf1 A₀ A₁ hp.1 hp.2.1]
@@ -216,50 +218,52 @@ end Split
 
 section Core
 
-variable {Λ : Finset (ℤ × ℤ)} {q : ℕ} {κ : Type*} [Fintype κ] [DecidableEq κ]
-  (acts : κ → Finset (Site Λ)) (l : ℕ)
+variable {σ : Type*} [Fintype σ] [DecidableEq σ] {q : ℕ} {κ : Type*} [Fintype κ] [DecidableEq κ]
+  (acts : κ → Finset σ) (near : σ → σ → Prop)
 
 /-- A *valid cluster*: a nonempty connected set of terms, each acting on some site, whose
-supports do not contain two sites farther apart than `l` in walk distance. These are the clusters
+supports contain only pairs of sites satisfying `near`. These are the clusters
 recorded by the indices of the matrix product form.
 Hastings, arXiv:cond-mat/0508554v3, `proj3new.tex`, lines 1096–1107. -/
 def IsValidCluster (C : Finset κ) : Prop :=
   (∀ k ∈ C, (acts k).Nonempty) ∧ ((overlapGraph acts).induce (C : Set κ)).Connected ∧
-    ¬ IsLargeWalk l acts C
+    ¬ IsLargeSupport near acts C
 
 open Classical in
 /-- The families of valid clusters with pairwise disjoint supports. -/
 noncomputable def validFamilies : Finset (Finset (Finset κ)) :=
-  {S | (∀ C ∈ S, IsValidCluster acts l C) ∧
+  {S | (∀ C ∈ S, IsValidCluster acts near C) ∧
     (S : Set (Finset κ)).PairwiseDisjoint (·.biUnion acts)}
 
-variable {acts l}
+variable {acts near}
 
+omit [Fintype σ] in
 theorem mem_validFamilies {S : Finset (Finset κ)} :
-    S ∈ validFamilies acts l ↔ (∀ C ∈ S, IsValidCluster acts l C) ∧
+    S ∈ validFamilies acts near ↔ (∀ C ∈ S, IsValidCluster acts near C) ∧
       (S : Set (Finset κ)).PairwiseDisjoint (·.biUnion acts) := by
   classical
   simp [validFamilies]
 
-omit [Fintype κ] [DecidableEq κ] in
+omit [Fintype σ] [Fintype κ] [DecidableEq κ] in
 /-- The supports of a valid cluster form a nonempty set of sites. -/
-theorem IsValidCluster.nonempty_biUnion {C : Finset κ} (hC : IsValidCluster acts l C) :
+theorem IsValidCluster.nonempty_biUnion {C : Finset κ} (hC : IsValidCluster acts near C) :
     (C.biUnion acts).Nonempty := by
   obtain ⟨⟨k, hk⟩⟩ := hC.2.1.nonempty
   obtain ⟨x, hx⟩ := hC.1 k hk
   exact ⟨x, mem_biUnion.2 ⟨k, hk, hx⟩⟩
 
-omit [Fintype κ] [DecidableEq κ] in
-/-- Two sites in the supports of a valid cluster are joined by a walk of length at most `l`. -/
-theorem IsValidCluster.exists_walk {C : Finset κ} (hC : IsValidCluster acts l C)
-    {a b : Site Λ} (ha : a ∈ C.biUnion acts) (hb : b ∈ C.biUnion acts) :
-    ∃ p : (domainGraph Λ).Walk a b, p.length ≤ l := by
+omit [Fintype σ] [Fintype κ] [DecidableEq κ] in
+/-- Two sites in the supports of a valid cluster satisfy the locality relation. -/
+theorem IsValidCluster.related {C : Finset κ} (hC : IsValidCluster acts near C)
+    {a b : σ} (ha : a ∈ C.biUnion acts) (hb : b ∈ C.biUnion acts) :
+    near a b := by
   by_contra hw
   exact hC.2.2 ⟨a, ha, b, hb, hw⟩
 
+omit [Fintype σ] in
 /-- A member of a family of valid clusters with disjoint supports is a cluster of the union of
 the family. -/
-theorem isCluster_of_mem_validFamilies {S : Finset (Finset κ)} (hS : S ∈ validFamilies acts l)
+theorem isCluster_of_mem_validFamilies {S : Finset (Finset κ)} (hS : S ∈ validFamilies acts near)
     {C : Finset κ} (hC : C ∈ S) : IsCluster (overlapGraph acts) (S.biUnion id) C := by
   rw [mem_validFamilies] at hS
   refine ⟨subset_biUnion_of_mem id hC, (hS.1 C hC).2.1, disjoint_left.2 fun j hjA hjB ↦ ?_⟩
@@ -270,10 +274,11 @@ theorem isCluster_of_mem_validFamilies {S : Finset (Finset κ)} (hS : S ∈ vali
   exact disjoint_left.1 (hS.2 hC' hC hCC') (mem_biUnion.2 ⟨j, hjC', (mem_inter.1 hx).1⟩)
     (mem_inter.1 hx).2
 
+omit [Fintype σ] in
 /-- The clusters of the union of a family of valid clusters with disjoint supports are the
 members of the family. -/
 theorem clusters_biUnion_of_mem_validFamilies {S : Finset (Finset κ)}
-    (hS : S ∈ validFamilies acts l) : clusters (overlapGraph acts) (S.biUnion id) = S := by
+    (hS : S ∈ validFamilies acts near) : clusters (overlapGraph acts) (S.biUnion id) = S := by
   ext D
   rw [mem_clusters]
   refine ⟨fun hD ↦ ?_, isCluster_of_mem_validFamilies hS⟩
@@ -282,6 +287,7 @@ theorem clusters_biUnion_of_mem_validFamilies {S : Finset (Finset κ)}
   rwa [eq_of_isCluster_of_inter_nonempty _ hD (isCluster_of_mem_validFamilies hS hC)
     ⟨k, mem_inter.2 ⟨hk, hkC⟩⟩]
 
+omit [Fintype σ] in
 /-- The clusters of any set of terms have pairwise disjoint supports. -/
 theorem pairwiseDisjoint_clusters (A : Finset κ) :
     (clusters (overlapGraph acts) A : Set (Finset κ)).PairwiseDisjoint (·.biUnion acts) := by
@@ -297,12 +303,12 @@ open Classical in
 acting on some site with no large cluster correspond to the families of valid clusters with
 disjoint supports, `A ↦ clusters A`, and the entries of `E_A` factor over the clusters.
 Hastings, arXiv:cond-mat/0508554v3, `proj3new.tex`, lines 1108–1110 and 1268–1270. -/
-theorem sum_clusterOp_apply {h : κ → Matrix (Configuration Λ q) (Configuration Λ q) ℂ}
-    (hh : ∀ k, h k ∈ supportedOperators q (acts k : Set (Site Λ))) (β : ℝ)
-    (u v : Configuration Λ q) :
+theorem sum_clusterOp_apply {h : κ → Matrix (σ → Fin q) (σ → Fin q) ℂ}
+    (hh : ∀ k, h k ∈ supportedOperators q (acts k : Set σ)) (β : ℝ)
+    (u v : σ → Fin q) :
     (∑ A with (∀ k ∈ A, (acts k).Nonempty) ∧
-        NoLargeCluster (overlapGraph acts) (IsLargeWalk l acts) A, clusterOp h A β) u v =
-      ∑ S ∈ validFamilies acts l,
+        NoLargeCluster (overlapGraph acts) (IsLargeSupport near acts) A, clusterOp h A β) u v =
+      ∑ S ∈ validFamilies acts near,
         (∏ j ∈ (S.biUnion (·.biUnion acts))ᶜ, if u j = v j then 1 else 0) *
           ∏ C ∈ S, clusterOp h C β u (fun j ↦ if j ∈ C.biUnion acts then v j else u j) := by
   rw [Matrix.sum_apply]
@@ -330,13 +336,13 @@ theorem sum_clusterOp_apply {h : κ → Matrix (Configuration Λ q) (Configurati
       noncommProd_apply_of_pairwiseDisjoint _ _ _
         (fun C _ ↦ clusterOp_mem_supportedOperators hh C β) (pairwiseDisjoint_clusters A)]
 
-variable (acts l)
+variable (acts near)
 
 /-- The *anchor* of a set of terms: a chosen site of the union of their supports, at which the
 coefficient carrying the matrix element of `E_C` is placed. When the supports are empty, which
 does not happen for a valid cluster, it is the given site `i`, so no site of the domain need be
 chosen in advance. -/
-noncomputable def anchor (C : Finset κ) (i : Site Λ) : Site Λ :=
+noncomputable def anchor (C : Finset κ) (i : σ) : σ :=
   if hC : (C.biUnion acts).Nonempty then hC.choose else i
 
 open Classical in
@@ -346,35 +352,36 @@ site recording the cluster `C` checks that `C` is valid, that `i` lies in its su
 every site of its supports records `C`; at the anchor of `C` it carries the matrix element of
 `E_C` read off the labels on the supports of `C`.
 Hastings, arXiv:cond-mat/0508554v3, `proj3new.tex`, lines 1259–1272. -/
-noncomputable def clusterCoeff (h : κ → Matrix (Configuration Λ q) (Configuration Λ q) ℂ)
-    (β : ℝ) (i : Site Λ) (α : Site Λ → Option (Finset κ) × (Fin q × Fin q)) : ℂ :=
+noncomputable def clusterCoeff (h : κ → Matrix (σ → Fin q) (σ → Fin q) ℂ)
+    (β : ℝ) (i : σ) (α : σ → Option (Finset κ) × (Fin q × Fin q)) : ℂ :=
   (α i).1.elim (if (α i).2.1 = (α i).2.2 then 1 else 0) fun C ↦
-    if IsValidCluster acts l C ∧ i ∈ C.biUnion acts ∧ ∀ j ∈ C.biUnion acts, (α j).1 = some C then
+    if IsValidCluster acts near C ∧ i ∈ C.biUnion acts ∧ ∀ j ∈ C.biUnion acts, (α j).1 = some C then
       if i = anchor acts C i then
         clusterOp h C β (fun j ↦ if j ∈ C.biUnion acts then (α j).2.1 else (α i).2.1)
           (fun j ↦ if j ∈ C.biUnion acts then (α j).2.2 else (α i).2.1)
       else 1
     else 0
 
-variable {acts l}
+variable {acts near}
 
 omit [Fintype κ] in
-/-- The coefficient function at `i` reads only indices at sites within walk distance `l` of `i`:
-the sites of the supports of the cluster recorded at `i`. -/
+/-- The coefficient function at `i` reads only indices at sites related to `i`:
+the sites in the supports of the cluster recorded at `i`. -/
 theorem isLocalCoefficient_clusterCoeff
-    (h : κ → Matrix (Configuration Λ q) (Configuration Λ q) ℂ) (β : ℝ) (i : Site Λ) :
-    IsLocalCoefficient l i (clusterCoeff acts l h β i) := by
+    (h : κ → Matrix (σ → Fin q) (σ → Fin q) ℂ) (β : ℝ) (i : σ)
+    (hnear : ∀ i, near i i) :
+    IsLocalCoefficient near i (clusterCoeff acts near h β i) := by
   classical
   intro α α' hαα'
-  have hi : α i = α' i := hαα' i ⟨.nil, Nat.zero_le _⟩
+  have hi : α i = α' i := hαα' i (hnear i)
   unfold clusterCoeff
   rw [hi]
   rcases hc : (α' i).1 with _ | C
   · rfl
   simp only [Option.elim]
-  by_cases hv : IsValidCluster acts l C ∧ i ∈ C.biUnion acts
+  by_cases hv : IsValidCluster acts near C ∧ i ∈ C.biUnion acts
   · have hnear : ∀ j ∈ C.biUnion acts, α j = α' j :=
-      fun j hj ↦ hαα' j (hv.1.exists_walk hv.2 hj)
+      fun j hj ↦ hαα' j (hv.1.related hv.2 hj)
     have hrow : (fun j ↦ if j ∈ C.biUnion acts then (α j).2.1 else (α' i).2.1) =
         fun j ↦ if j ∈ C.biUnion acts then (α' j).2.1 else (α' i).2.1 := by
       funext j
@@ -391,17 +398,17 @@ theorem isLocalCoefficient_clusterCoeff
         ∀ j ∈ C.biUnion acts, (α' j).1 = some C :=
       forall₂_congr fun j hj ↦ by rw [hnear j hj]
     simp only [hrow, hcol, hall]
-  · have hn : ∀ γ : Site Λ → Option (Finset κ) × (Fin q × Fin q),
-        ¬ (IsValidCluster acts l C ∧ i ∈ C.biUnion acts ∧
+  · have hn : ∀ γ : σ → Option (Finset κ) × (Fin q × Fin q),
+        ¬ (IsValidCluster acts near C ∧ i ∈ C.biUnion acts ∧
           ∀ j ∈ C.biUnion acts, (γ j).1 = some C) := fun _ h ↦ hv ⟨h.1, h.2.1⟩
     simp only [hn, ↓reduceIte]
 
 /-- The entries of a sum `∑_α F(α) ⊗_j |a_j⟩⟨b_j|` over indices carrying a matrix-unit label:
 the labels are forced to be the row and column configurations. -/
 theorem sum_smul_rectKronecker_single_apply {I : Type*} [Fintype I]
-    (F : (Site Λ → I × (Fin q × Fin q)) → ℂ) (u v : Configuration Λ q) :
+    (F : (σ → I × (Fin q × Fin q)) → ℂ) (u v : σ → Fin q) :
     (∑ α, F α • rectKronecker fun j ↦ single (α j).2.1 (α j).2.2 (1 : ℂ)) u v =
-      ∑ c : Site Λ → I, F fun j ↦ (c j, (u j, v j)) := by
+      ∑ c : σ → I, F fun j ↦ (c j, (u j, v j)) := by
   classical
   rw [Matrix.sum_apply]
   simp only [Matrix.smul_apply, rectKronecker_apply, smul_eq_mul]
@@ -419,41 +426,42 @@ theorem sum_smul_rectKronecker_single_apply {I : Type*} [Fintype I]
     · rfl
   · simp
 
-omit [Fintype κ] [DecidableEq κ] in
+omit [Fintype σ] [Fintype κ] [DecidableEq κ] in
 /-- The anchor of a valid cluster is a fixed site of its supports, independent of `i`. -/
-theorem anchor_eq {C : Finset κ} (hC : IsValidCluster acts l C) (i : Site Λ) :
+theorem anchor_eq {C : Finset κ} (hC : IsValidCluster acts near C) (i : σ) :
     anchor acts C i = hC.nonempty_biUnion.choose :=
   dite_eq_left hC.nonempty_biUnion
 
-variable (acts l)
+variable (acts near)
 
 /-- An assignment of clusters to sites is *consistent* when every recorded cluster is valid,
 contains the site in its supports, and is recorded at every site of its supports. -/
-def IsClusterAssignment (c : Site Λ → Option (Finset κ)) : Prop :=
+def IsClusterAssignment (c : σ → Option (Finset κ)) : Prop :=
   ∀ i C, c i = some C →
-    IsValidCluster acts l C ∧ i ∈ C.biUnion acts ∧ ∀ j ∈ C.biUnion acts, c j = some C
+    IsValidCluster acts near C ∧ i ∈ C.biUnion acts ∧ ∀ j ∈ C.biUnion acts, c j = some C
 
 open Classical in
 /-- The clusters recorded by an assignment of clusters to sites. -/
-noncomputable def recordedClusters (c : Site Λ → Option (Finset κ)) : Finset (Finset κ) :=
+noncomputable def recordedClusters (c : σ → Option (Finset κ)) : Finset (Finset κ) :=
   {C | ∃ i, c i = some C}
 
 open Classical in
 /-- The assignment recording at each site the member of `S` whose supports contain it. -/
-noncomputable def clusterAssignment (S : Finset (Finset κ)) (i : Site Λ) : Option (Finset κ) :=
+noncomputable def clusterAssignment (S : Finset (Finset κ)) (i : σ) : Option (Finset κ) :=
   if hS : ∃ C ∈ S, i ∈ C.biUnion acts then some hS.choose else none
 
-variable {acts l}
+variable {acts near}
 
-theorem mem_recordedClusters {c : Site Λ → Option (Finset κ)} {C : Finset κ} :
+omit [DecidableEq σ] in
+theorem mem_recordedClusters {c : σ → Option (Finset κ)} {C : Finset κ} :
     C ∈ recordedClusters c ↔ ∃ i, c i = some C := by
   classical
   simp [recordedClusters]
 
-omit [Fintype κ] [DecidableEq κ] in
+omit [Fintype σ] [Fintype κ] [DecidableEq κ] in
 theorem clusterAssignment_eq_some_of_mem {S : Finset (Finset κ)}
     (hS : (S : Set (Finset κ)).PairwiseDisjoint (·.biUnion acts)) {C : Finset κ} (hC : C ∈ S)
-    {i : Site Λ} (hi : i ∈ C.biUnion acts) : clusterAssignment acts S i = some C := by
+    {i : σ} (hi : i ∈ C.biUnion acts) : clusterAssignment acts S i = some C := by
   unfold clusterAssignment
   split_ifs with hex
   · obtain ⟨hC', hi'⟩ := hex.choose_spec
@@ -461,16 +469,16 @@ theorem clusterAssignment_eq_some_of_mem {S : Finset (Finset κ)}
     exact disjoint_left.1 (hS hC' hC fun h ↦ hne (congrArg some h)) hi' hi
   · exact absurd ⟨C, hC, hi⟩ hex
 
-omit [Fintype κ] [DecidableEq κ] in
-theorem clusterAssignment_eq_some {S : Finset (Finset κ)} {C : Finset κ} {i : Site Λ}
+omit [Fintype σ] [Fintype κ] [DecidableEq κ] in
+theorem clusterAssignment_eq_some {S : Finset (Finset κ)} {C : Finset κ} {i : σ}
     (h : clusterAssignment acts S i = some C) : C ∈ S ∧ i ∈ C.biUnion acts := by
   unfold clusterAssignment at h
   split_ifs at h with hex
   · obtain rfl := Option.some.inj h
     exact hex.choose_spec
 
-omit [Fintype κ] [DecidableEq κ] in
-theorem clusterAssignment_eq_none {S : Finset (Finset κ)} {i : Site Λ}
+omit [Fintype σ] [Fintype κ] [DecidableEq κ] in
+theorem clusterAssignment_eq_none {S : Finset (Finset κ)} {i : σ}
     (h : ∀ C ∈ S, i ∉ C.biUnion acts) : clusterAssignment acts S i = none := by
   unfold clusterAssignment
   split_ifs with hex
@@ -478,8 +486,8 @@ theorem clusterAssignment_eq_none {S : Finset (Finset κ)} {i : Site Λ}
     exact absurd hi (h C hC)
   · rfl
 
-theorem recordedClusters_mem_validFamilies {c : Site Λ → Option (Finset κ)}
-    (hc : IsClusterAssignment acts l c) : recordedClusters c ∈ validFamilies acts l := by
+theorem recordedClusters_mem_validFamilies {c : σ → Option (Finset κ)}
+    (hc : IsClusterAssignment acts near c) : recordedClusters c ∈ validFamilies acts near := by
   rw [mem_validFamilies]
   refine ⟨fun C hC ↦ ?_, fun C hC C' hC' hne ↦ ?_⟩
   · obtain ⟨i, hi⟩ := mem_recordedClusters.1 hC
@@ -494,22 +502,22 @@ open Classical in
 vanish except at consistent assignments of clusters to sites, which correspond to the families
 of valid clusters with disjoint supports; at such an assignment the product is the diagonal check
 off the supports times the matrix elements of the `E_C`. -/
-theorem sum_prod_clusterCoeff {h : κ → Matrix (Configuration Λ q) (Configuration Λ q) ℂ}
-    (hh : ∀ k, h k ∈ supportedOperators q (acts k : Set (Site Λ))) (β : ℝ)
-    (u v : Configuration Λ q) :
-    ∑ c : Site Λ → Option (Finset κ), ∏ i, clusterCoeff acts l h β i (fun j ↦ (c j, (u j, v j))) =
-      ∑ S ∈ validFamilies acts l,
+theorem sum_prod_clusterCoeff {h : κ → Matrix (σ → Fin q) (σ → Fin q) ℂ}
+    (hh : ∀ k, h k ∈ supportedOperators q (acts k : Set σ)) (β : ℝ)
+    (u v : σ → Fin q) :
+    ∑ c : σ → Option (Finset κ), ∏ i, clusterCoeff acts near h β i (fun j ↦ (c j, (u j, v j))) =
+      ∑ S ∈ validFamilies acts near,
         (∏ j ∈ (S.biUnion (·.biUnion acts))ᶜ, if u j = v j then 1 else 0) *
           ∏ C ∈ S, clusterOp h C β u (fun j ↦ if j ∈ C.biUnion acts then v j else u j) := by
-  have hzero : ∀ c : Site Λ → Option (Finset κ),
-      ∏ i, clusterCoeff acts l h β i (fun j ↦ (c j, (u j, v j))) ≠ 0 →
-        IsClusterAssignment acts l c := by
+  have hzero : ∀ c : σ → Option (Finset κ),
+      ∏ i, clusterCoeff acts near h β i (fun j ↦ (c j, (u j, v j))) ≠ 0 →
+        IsClusterAssignment acts near c := by
     intro c hc i C hci
     by_contra hn
     exact hc (Finset.prod_eq_zero (mem_univ i)
       (by simp only [clusterCoeff, hci, Option.elim, hn, ↓reduceIte]))
-  have hval : ∀ S ∈ validFamilies acts l,
-      ∏ i, clusterCoeff acts l h β i (fun j ↦ (clusterAssignment acts S j, (u j, v j))) =
+  have hval : ∀ S ∈ validFamilies acts near,
+      ∏ i, clusterCoeff acts near h β i (fun j ↦ (clusterAssignment acts S j, (u j, v j))) =
         (∏ j ∈ (S.biUnion (·.biUnion acts))ᶜ, if u j = v j then 1 else 0) *
           ∏ C ∈ S, clusterOp h C β u (fun j ↦ if j ∈ C.biUnion acts then v j else u j) := by
     intro S hS
@@ -525,13 +533,13 @@ theorem sum_prod_clusterCoeff {h : κ → Matrix (Configuration Λ q) (Configura
       have hc : ∀ i ∈ C.biUnion acts, clusterAssignment acts S i = some C :=
         fun i hi ↦ clusterAssignment_eq_some_of_mem hS.2 hC hi
       have hcoeff : ∀ i ∈ C.biUnion acts,
-          clusterCoeff acts l h β i (fun j ↦ (clusterAssignment acts S j, (u j, v j))) =
+          clusterCoeff acts near h β i (fun j ↦ (clusterAssignment acts S j, (u j, v j))) =
             if i = (hS.1 C hC).nonempty_biUnion.choose then
               clusterOp h C β (fun j ↦ if j ∈ C.biUnion acts then u j else u i)
                 (fun j ↦ if j ∈ C.biUnion acts then v j else u i)
             else 1 := by
         intro i hi
-        have hcnd : IsValidCluster acts l C ∧ i ∈ C.biUnion acts ∧
+        have hcnd : IsValidCluster acts near C ∧ i ∈ C.biUnion acts ∧
             ∀ j ∈ C.biUnion acts, clusterAssignment acts S j = some C := ⟨hS.1 C hC, hi, hc⟩
         simp only [clusterCoeff, hc i hi, Option.elim, anchor_eq (hS.1 C hC)]
         split_ifs <;> rfl
@@ -544,7 +552,7 @@ theorem sum_prod_clusterCoeff {h : κ → Matrix (Configuration Λ q) (Configura
       · simp [show j ∈ C.biUnion acts from hj]
       · simp [show j ∉ C.biUnion acts from hj]
       · simp [show j ∉ C.biUnion acts from hj]
-  have hleft : ∀ c, IsClusterAssignment acts l c →
+  have hleft : ∀ c, IsClusterAssignment acts near c →
       clusterAssignment acts (recordedClusters c) = c := by
     intro c hc
     have hpd := (mem_validFamilies.1 (recordedClusters_mem_validFamilies hc)).2
@@ -582,50 +590,62 @@ theorem sum_prod_clusterCoeff {h : κ → Matrix (Configuration Λ q) (Configura
     have hc' := (mem_filter.1 hc).2
     rw [← hval _ (recordedClusters_mem_validFamilies hc'), hleft c hc']
 
-/-- **The product form of the clusters of terms acting on some site.** The sum of `E_A` over the
-sets `A` of terms acting on some site with no cluster large in walk distance has a matrix product
-form of range `l`. The index at a site records the cluster containing it, if any, and a
-matrix-unit label. Hastings, arXiv:cond-mat/0508554v3, `proj3new.tex`, lines 1256–1279. -/
-theorem hasProductForm_sum_clusterOp
-    {h : κ → Matrix (Configuration Λ q) (Configuration Λ q) ℂ}
-    (hh : ∀ k, h k ∈ supportedOperators q (acts k : Set (Site Λ))) (β : ℝ) :
-    open Classical in HasProductForm Λ q l
+/-- The product form whose site index records its cluster, if any, and a matrix-unit
+label. Hastings, arXiv:cond-mat/0508554v3, lines 1259–1272. -/
+noncomputable def clusterProductForm (acts : κ → Finset σ) (near : σ → σ → Prop)
+    (hnear : ∀ i, near i i) {h : κ → Matrix (σ → Fin q) (σ → Fin q) ℂ}
+    (hh : ∀ k, h k ∈ supportedOperators q (acts k : Set σ)) (β : ℝ) :
+    open Classical in ProductForm q near
       (∑ A with (∀ k ∈ A, (acts k).Nonempty) ∧
-        NoLargeCluster (overlapGraph acts) (IsLargeWalk l acts) A, clusterOp h A β) := by
+        NoLargeCluster (overlapGraph acts) (IsLargeSupport near acts) A, clusterOp h A β) := by
   classical
   let e := Fintype.equivFin (Finset κ)
-  refine ⟨{ Index := Option (Fin (Fintype.card (Finset κ))) × (Fin q × Fin q)
-            siteOp := fun _ a ↦ single a.2.1 a.2.2 1
-            coeff := fun i α ↦ clusterCoeff acts l h β i fun j ↦ ((α j).1.map e.symm, (α j).2)
-            coeff_local := fun i α α' hαα' ↦
-              isLocalCoefficient_clusterCoeff h β i _ _ fun j hj ↦ by rw [hαα' j hj]
-            eq_sum := ?_ }⟩
+  refine {
+    Index := fun _ ↦ Option (Fin (Fintype.card (Finset κ))) × (Fin q × Fin q)
+    siteOp := fun _ a ↦ single a.2.1 a.2.2 1
+    coeff := fun i α ↦ clusterCoeff acts near h β i fun j ↦ ((α j).1.map e.symm, (α j).2)
+    coeff_local := fun i α α' hαα' ↦
+      isLocalCoefficient_clusterCoeff h β i hnear _ _ fun j hj ↦ by rw [hαα' j hj]
+    eq_sum := ?_ }
   ext u v
   rw [sum_clusterOp_apply hh β u v, ← sum_prod_clusterCoeff hh β u v,
     sum_smul_rectKronecker_single_apply]
   exact (Fintype.sum_equiv (Equiv.arrowCongr (Equiv.refl _) (Equiv.optionCongr e.symm)) _ _
     fun c ↦ rfl).symm
 
+/-- **The product form of the clusters of terms acting on some site.** The sum of `E_A` over the
+sets `A` of terms acting on some site with no large cluster has a matrix product
+form with coefficient neighborhoods `near`. The index at a site records its cluster, if any,
+and a matrix-unit label. Hastings, arXiv:cond-mat/0508554v3, `proj3new.tex`, lines 1256–1279. -/
+theorem hasProductForm_sum_clusterOp (hnear : ∀ i, near i i)
+    {h : κ → Matrix (σ → Fin q) (σ → Fin q) ℂ}
+    (hh : ∀ k, h k ∈ supportedOperators q (acts k : Set σ)) (β : ℝ) :
+    open Classical in HasProductForm q near
+      (∑ A with (∀ k ∈ A, (acts k).Nonempty) ∧
+        NoLargeCluster (overlapGraph acts) (IsLargeSupport near acts) A, clusterOp h A β) :=
+  ⟨clusterProductForm acts near hnear hh β⟩
+
 end Core
 
 section Main
 
-variable {Λ : Finset (ℤ × ℤ)} {q : ℕ} {κ : Type*} [Fintype κ] [DecidableEq κ]
+variable {σ : Type*} [Fintype σ] [DecidableEq σ] {q : ℕ} {κ : Type*} [Fintype κ] [DecidableEq κ]
 
 /-- **The truncated operator in matrix product form** (Hastings, arXiv:cond-mat/0508554v3,
 `proj3new.tex`, lines 1256–1279). For terms `h k` acting on the sites `acts k` of a nonempty
-finite planar domain, terms adjacent when their supports meet, and clusters large when their
-supports contain two sites farther apart than `l` in walk distance, the truncated operator
-`ρ(β, l)` has a matrix product form of range `l`. No Hermiticity, no nonempty supports and no
-connectivity of the domain are assumed. -/
-theorem hasProductForm_truncatedExp [Nonempty (Site Λ)] (acts : κ → Finset (Site Λ))
-    (h : κ → Matrix (Configuration Λ q) (Configuration Λ q) ℂ)
-    (hh : ∀ k, h k ∈ supportedOperators q (acts k : Set (Site Λ))) (l : ℕ) (β : ℝ) :
-    HasProductForm Λ q l (truncatedExp (overlapGraph acts) (IsLargeWalk l acts) h β) := by
+finite site set, terms adjacent when their supports meet, and clusters large when their
+supports contain two sites not satisfying `near`, the truncated operator has a matrix product
+form with coefficient neighborhoods `near`. The relation is assumed reflexive. No
+Hermiticity, nonempty term supports, or connectivity of the site set is assumed. -/
+theorem hasProductForm_truncatedExp [Nonempty σ] (acts : κ → Finset σ)
+    (h : κ → Matrix (σ → Fin q) (σ → Fin q) ℂ)
+    (hh : ∀ k, h k ∈ supportedOperators q (acts k : Set σ))
+    (near : σ → σ → Prop) (hnear : ∀ i, near i i) (β : ℝ) :
+    HasProductForm q near (truncatedExp (overlapGraph acts) (IsLargeSupport near acts) h β) := by
   classical
-  rw [truncatedExp_eq_mul acts h hh l β]
-  refine HasProductForm.mul ?_ (hasProductForm_sum_clusterOp hh β)
-  refine hasProductForm_of_mem_supportedOperators_radius (X := ∅) (Classical.arbitrary _)
+  rw [truncatedExp_eq_mul acts h hh near β]
+  refine HasProductForm.mul ?_ (hasProductForm_sum_clusterOp hnear hh β)
+  refine hasProductForm_of_mem_supportedOperators_radius (X := ∅) hnear (Classical.arbitrary _)
     (by simp) ?_
   refine Submodule.sum_mem _ fun A hA ↦
     supportedOperators_mono ?_ (clusterOp_mem_supportedOperators hh A β)

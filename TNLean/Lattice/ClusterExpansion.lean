@@ -11,6 +11,7 @@ Authors: TNLean contributors
 import TNLean.Lattice.ClusterExpansion.AllTemperatures
 import TNLean.Lattice.ClusterExpansion.ClusterFactorization
 import TNLean.Lattice.ClusterExpansion.ClusterPart
+import TNLean.Lattice.ClusterExpansion.LocalIndexCount
 import TNLean.Lattice.ClusterExpansion.Percolation
 import TNLean.Lattice.ClusterExpansion.PercolationSource
 import TNLean.Lattice.ClusterExpansion.TemperatureError

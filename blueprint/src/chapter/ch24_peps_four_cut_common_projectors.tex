@@ -12,20 +12,19 @@
         TNLean.PEPS.torusSitewisePhysicalMap}
     \leanok
     \uses{def:peps_physical_product_map}
-    For a finite site set $I$ and matrices $F_v:\C^P\to\C^Q$, put
+    For a finite site set $I$ and matrices $F_v:\C^P\to\C^Q$, define
     \begin{align}
         (\mathcal T_F)_{\tau,\sigma} & =\prod_{v\in I}F_v(\tau_v,\sigma_v),
-        \nonumber                                                                                           \\
+        \notag                                                                                                               \\
         (\mathcal T_F\psi)(\tau)
-                                     & =\sum_{\sigma:I\to P}\prod_{v\in I}F_v(\tau_v,\sigma_v)\psi(\sigma).
+                                     & =\sum_{\sigma:I\to P}\prod_{v\in I}F_v(\tau_v,\sigma_v)\psi(\sigma)\quad(|P|<\infty),
         \label{eq:peps_common_physical_product}
     \end{align}
-    The map formula assumes $P$ finite; the matrix formula does not.
-    A constant family gives $F^{\otimes I}$. Taking $I=X$ gives the
-    site-dependent physical map on the torus.
+    reducing to $F^{\otimes I}$ when $F_v=F$, and to the sitewise torus
+    physical map when $I=X$.
 \end{definition}
 
-\begin{theorem}[Composition and coordinate action of product maps]%
+\begin{lemma}[Composition and coordinate action of product maps]%
     \label{thm:peps_four_cut_common_product_algebra}
     \lean{TNLean.PEPS.physicalProductFamilyMatrix_mul,
         TNLean.PEPS.physicalProductFamilyMap_comp,
@@ -35,40 +34,33 @@
         TNLean.PEPS.physicalProductFamilyMap_fixed_of_slices_fixed}
     \leanok
     \uses{def:peps_four_cut_common_physical_product}
-    For compatible matrices $F_v,L_v$ with finite intermediate alphabets,
-    $\mathcal T_F\mathcal T_L=\mathcal T_{(F_vL_v)_v}$ as matrices;
-    the same equality holds as maps when the input alphabet is finite.
-    A product of identity matrices is the identity matrix and, for finite
-    alphabets, the identity map. If $P$ is finite, $B$ is a matrix on
-    $\C^P$, and $F_v=B$ at a single site $v$ and $F_w=\Id$ elsewhere, then
+    For compatible $F_v,L_v$ over finite intermediate (and for maps, input)
+    alphabets, $\mathcal T_F\mathcal T_L=\mathcal T_{(F_vL_v)_v}$ and
+    $\mathcal T_{(\Id)_v}=\Id$. For finite $P$ and $F_v=B$, $F_w=\Id$ ($w\ne v$),
     \begin{align}
         (\mathcal T_F\psi)(\tau)
          & =\sum_{s\in P}B(\tau_v,s)\psi(\tau[v\mapsto s]).
         \label{eq:peps_common_one_coordinate}
     \end{align}
-    In particular, if matrices $B_v$ fix every slice
-    $s\mapsto\psi(\tau[v\mapsto s])$ at their respective sites, then
-    $\mathcal T_B\psi=\psi$.
-\end{theorem}
+    In particular, if $B_v$ fixes $s\mapsto\psi(\tau[v\mapsto s])$ for all $v,\tau$,
+    then $\mathcal T_B\psi=\psi$.
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_dependent_product_calculus}
-    Specializing the product identities to constant input and output
-    alphabets, finite distributivity factors the intermediate-coordinate
-    sum into $F_vL_v$ at every site, while identity entries force agreement at
-    all unchanged coordinates to give (\ref{eq:peps_common_one_coordinate}).
-    Applying the single-coordinate maps successively over the finite site set
-    fixes $\psi$ at every step, and their product is $\mathcal T_B$.
+    Specialize Lemma~\ref{thm:peps_dependent_product_calculus} to constant
+    alphabets to obtain $\mathcal T_F\mathcal T_L=\mathcal T_{(F_vL_v)_v}$ and
+    (\ref{eq:peps_common_one_coordinate}), and compose the single-coordinate
+    factors over $v\in I$ to obtain $\mathcal T_B\psi=\psi$.
 \end{proof}
 
-\begin{theorem}[Slice characterization of a product range]%
+\begin{lemma}[Slice characterization of a product range]%
     \label{thm:peps_four_cut_common_product_range}
     \lean{TNLean.PEPS.physicalProductFamilyMap_slice_mem_range,
         TNLean.PEPS.mem_range_physicalProductFamilyMap_iff}
     \leanok
     \uses{def:peps_four_cut_common_physical_product}
-    Let $I,P$ be finite. Every one-coordinate slice of $\mathcal T_F\chi$
-    lies in the corresponding range $\operatorname{ran}F_v$.
-    If also $Q$ is finite, then
+    For finite $I,P$, every slice $(\mathcal T_F\chi)(\tau[v\mapsto\cdot])$ lies in
+    $\operatorname{ran}F_v$; if $Q$ is also finite,
     \begin{align}
         \psi\in\operatorname{ran}\mathcal T_F
         \quad\Longleftrightarrow\quad
@@ -76,20 +68,16 @@
         \psi(\tau[v\mapsto\cdot])\in\operatorname{ran}F_v.
         \label{eq:peps_common_product_range}
     \end{align}
-    Empty alphabets and an empty site set are allowed, as are zero maps
-    and maps of different ranks.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_dependent_product_range}
-    Theorem~\ref{thm:peps_dependent_product_range} with constant
-    alphabets gives the equivalence: a slice of a product image is a linear combination
-    of the columns of $F_v$, and conversely, for $L_v$ with $F_vL_v$
-    equal to the identity on $\operatorname{ran}F_v$,
-    the slice conditions imply $\mathcal T_{FL}\psi=\psi$, so
-    $\psi=\mathcal T_F(\mathcal T_L\psi)$.
+    Specialize Lemma~\ref{thm:peps_dependent_product_range} to constant
+    alphabets: choosing $L_v$ with $F_vL_v|_{\operatorname{ran}F_v}=\Id$ gives
+    $\mathcal T_{FL}\psi=\psi=\mathcal T_F(\mathcal T_L\psi)$ whenever the
+    right-hand side of (\ref{eq:peps_common_product_range}) holds.
 \end{proof}
 
-\begin{theorem}[Sitewise physical maps preserve the cut boundary]%
+\begin{lemma}[Sitewise physical maps preserve the cut boundary]%
     \label{thm:peps_four_cut_common_physical_contraction}
     \lean{TNLean.PEPS.torusSitewisePhysicalMap_torusCutMap,
         TNLean.PEPS.torusSitewisePhysicalMap_torusBondNetwork,
@@ -99,35 +87,31 @@
     \leanok
     \uses{def:peps_four_cut_common_physical_product,
         def:peps_four_cut_common_boundary,def:peps_four_cut_common_closure}
-    Let the input physical alphabet be finite, and set
+    For a finite input physical alphabet, with
     \begin{align}
-        (FA)_v(t,r,b,l;q)=\sum_sF_v(q,s)A_v(t,r,b,l;s).
+        (FA)_v(t,r,b,l;q) & =\sum_sF_v(q,s)A_v(t,r,b,l;s),
         \label{eq:peps_common_physical_site}
     \end{align}
-    For every boundary $M$ and every pair of bond-operator families,
+    every boundary $M$ and bond-operator pair $(O^{\mathrm h},O^{\mathrm v})$ satisfy
     \begin{align}
         \mathcal T_F\mathcal C^A_{c,r}M
-                                      & =\mathcal C^{FA}_{c,r}M,
-        \label{eq:peps_common_physical_cut}                                            \\
+                                      & =\mathcal C^{FA}_{c,r}M,                       &
         \mathcal T_F\mathcal N_A(O^{\mathrm h},O^{\mathrm v})
                                       & =\mathcal N_{FA}(O^{\mathrm h},O^{\mathrm v}),
-        \nonumber                                                                      \\
-        \mathcal T_F\mathcal M_A(g,h) & =\mathcal M_{FA}(g,h),
-        \nonumber                                                                      \\
+        \label{eq:peps_common_physical_cut}                                              \\
+        \mathcal T_F\mathcal M_A(g,h) & =\mathcal M_{FA}(g,h),                         &
         \mathcal T_F(\mathcal Z_A)    & =\mathcal Z_{FA}.
-        \nonumber
+        \notag
     \end{align}
-    The closure identities include uniform bond representations.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
-    Expanding the physical and virtual sums and exchanging their order
-    factors the physical sum into $\sum_sF_v(q,s)A_v(\cdot;s)$ at each site,
-    leaving every boundary coefficient and bond operator untouched.
-    Substituting the closure operators gives the third equality, and taking the
-    image of the span of commuting closures gives the fourth.
+    Interchanging the physical and virtual sums factors
+    (\ref{eq:peps_common_physical_site}) at each site $v$, giving
+    (\ref{eq:peps_common_physical_cut}) and hence the closure and closure-span
+    identities.
 \end{proof}
 
-\begin{theorem}[One local inverse for all four cuts]%
+\begin{lemma}[One local inverse for all four cuts]%
     \label{thm:peps_four_cut_common_local_inverse}
     \lean{TNLean.PEPS.physicalMapSite_representationAveragingSite,
         TNLean.PEPS.exists_sitewisePhysicalMap_to_representationAveragingSite,
@@ -139,48 +123,40 @@
     \uses{def:peps_four_cut_common_matched_action,
         def:peps_four_cut_common_physical_product,def:peps_four_cut_common_boundary,
         def:peps_four_cut_common_closure,def:peps_g_injective}
-    Let $G$ be finite and let $\rho_v$ be arbitrary representations on
-    $\C^{V^4}$. Put $R_v=\mathcal P(A_v)$.
-    If $R_v\rho_v(k)=R_v$ for all $v,k$, then $R_v\Pi_{\rho_v}=R_v$,
-    so $R_vA^0_{\rho_v}=A_v$ as tensors and
+    For finite $G$, representations $\rho_v$ on $\C^{V^4}$, and
+    $R_v=\mathcal P(A_v)$, if $R_v\rho_v(k)=R_v$ for all $v,k$, then
+    $R_v\Pi_{\rho_v}=R_v$, $R_vA^0_{\rho_v}=A_v$,
+    $\mathcal T_R(\mathcal Z_{A^0})=\mathcal Z_A$
+    (supporting \cite[Theorem~5.5]{Schuch2010PEPS}), and
     \begin{align}
         \mathcal T_R\mathcal C^{A^0}_{c,r}M
          & =\mathcal C^A_{c,r}M.
         \label{eq:peps_common_cut_recovery}
     \end{align}
-    If every $A_v$ is $G$-injective and the physical alphabet is finite,
-    there exist matrices $L_v$ with $L_vR_v=\Pi_{\rho_v}$, hence
-    $L_vA_v=A^0_{\rho_v}$ and, simultaneously for all $c,r,M$,
+    If every $A_v$ is $G$-injective and the physical alphabet is finite, there
+    exist $L_v$ with $L_vR_v=\Pi_{\rho_v}$, $L_vA_v=A^0_{\rho_v}$, and
+    (for all $c,r,M$)
     \begin{align}
         \mathcal T_L\mathcal C^A_{c,r}M
-         & =\mathcal C^{A^0}_{c,r}M.
+         & =\mathcal C^{A^0}_{c,r}M,
         \label{eq:peps_common_cut_inverse}
     \end{align}
-    On the two-by-two torus this gives
-    $\mathcal S^A=\mathcal T_R(\mathcal S^{A^0})$.
-    In support of \cite[Theorem~5.5]{Schuch2010PEPS},
-    invariance alone also gives
-    $\mathcal T_R(\mathcal Z_{A^0})=\mathcal Z_A$ for the matched actions.
-\end{theorem}
+    so $\mathcal S^A=\mathcal T_R(\mathcal S^{A^0})$ on the $2\times2$ torus.
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_g_injective_left_inverse,
         thm:peps_site_coefficients_composition,
         thm:peps_four_cut_common_physical_contraction}
-    Averaging $R_v\rho_v(k)=R_v$ gives $R_v\Pi_{\rho_v}=R_v$, and
-    Theorem~\ref{thm:peps_g_injective_left_inverse} produces $L_v$
-    independently at each site; equation~(\ref{eq:peps_common_physical_cut})
-    then lifts both local identities to the cuts.
-    If $\psi\in\mathcal S^A$, the same vector $\mathcal T_L\psi$
-    lies in every canonical cut range by
-    (\ref{eq:peps_common_cut_inverse}); recovering it using one cut gives
-    $\mathcal T_R\mathcal T_L\psi=\psi$.
-    Conversely, (\ref{eq:peps_common_cut_recovery}) maps each canonical
-    range into the corresponding physical range. Finally, the physical
-    action on the closure span and $R_vA^0_v=A_v$ give the asserted
-    closure recovery.
+    Averaging $R_v\rho_v(k)=R_v$ yields $R_v\Pi_{\rho_v}=R_v$, and
+    Lemma~\ref{thm:peps_g_injective_left_inverse} supplies $L_v$ with
+    $L_vR_v=\Pi_{\rho_v}$; applying (\ref{eq:peps_common_physical_cut}) gives
+    (\ref{eq:peps_common_cut_recovery}), (\ref{eq:peps_common_cut_inverse}),
+    $\mathcal T_R(\mathcal Z_{A^0})=\mathcal Z_A$, and
+    $\mathcal S^A=\mathcal T_R(\mathcal S^{A^0})$ via
+    $\mathcal T_R\mathcal T_L|_{\mathcal S^A}=\Id$.
 \end{proof}
 
-\begin{theorem}[Multilinear expansion of canonical cut contractions]%
+\begin{lemma}[Multilinear expansion of canonical cut contractions]%
     \label{thm:peps_four_cut_common_cut_expansion}
     \lean{TNLean.PEPS.torusCutCoeff_sum,
         TNLean.PEPS.torusCutCoeff_mul,
@@ -189,33 +165,25 @@
         TNLean.PEPS.representationAveragingSite_torusMatchedLegRep_apply}
     \leanok
     \uses{def:peps_four_cut_common_boundary,def:peps_four_cut_common_matched_action}
-    For a finite family $A^i_v$ and scalars $z_v$, the cut contraction obeys
+    For a finite family $A^i_v$ ($i\in I$) and scalars $z_v$,
     \begin{align}
         \mathcal C^{(\sum_i A^i_v)_v}_{c,r}M
-         & =\sum_{q:X\to I}\mathcal C^{(A^{q_v}_v)_v}_{c,r}M,
-        \nonumber                                             \\
+         & =\sum_{q:X\to I}\mathcal C^{(A^{q_v}_v)_v}_{c,r}M, &
         \mathcal C^{(z_vA_v)_v}_{c,r}M
          & =\left(\prod_vz_v\right)\mathcal C^A_{c,r}M.
-        \nonumber
+        \notag
     \end{align}
-    For finite $G$, the canonical tensor has coefficients
-    $A^0_{\rho_v}(c;s)=|G|^{-1}\sum_{k\in G}\rho_v(k)_{s,c}$.
-    Consequently, if $B^q_v(c;s)=\rho_v(q_v)_{s,c}$, then
+    For finite $G$, $A^0_{\rho_v}(c;s)=|G|^{-1}\sum_{k\in G}\rho_v(k)_{s,c}$;
+    setting $B^q_v(c;s)=\rho_v(q_v)_{s,c}$ (including (\ref{eq:peps_common_matched_action})) gives
     \begin{align}
         \mathcal C^{A^0}_{c,r}M
          & =|G|^{-|X|}\sum_{q:X\to G}\mathcal C^{B^q}_{c,r}M.
         \label{eq:peps_common_cut_average_expansion}
     \end{align}
-    This includes the matched matrices
-    (\ref{eq:peps_common_matched_action}). On the two-by-two torus the
-    normalization is $|G|^{-4}$ and there are four independent group labels.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
-    Distributing the finite sums independently at every site and exchanging
-    them with the bond-end sum factors out site scalars as their product.
-    The averaging formula gives $|G|^{-1}$ at each site and the stated sum
-    of matrix entries. Throughout, the same function $M$ multiplies each
-    bond-end configuration.
+    Distribute the finite site sums and scalar factors across $\prod_{v\in X}$
+    and apply them to $A^0_{\rho_v}=|G|^{-1}\sum_{k\in G}\rho_v(k)$.
 \end{proof}
 
 \begin{definition}[Independent four-leg changes of basis]%
@@ -225,80 +193,68 @@
         TNLean.PEPS.torusLegDress,
         TNLean.PEPS.torusLegDress_single}
     \leanok
-    For four matrices $T,R,B,L$ on $\C^V$, define
-    $K=T\otimes R^{\mathsf T}\otimes B^{\mathsf T}\otimes L$ and,
-    for a row tensor $a:V^4\to\C$, define its dressed row to be $aK$.
-    In coordinates,
+    For matrices $T,R,B,L$ on $\C^V$ and a row tensor $a:V^4\to\C$, define
+    $K=T\otimes R^{\mathsf T}\otimes B^{\mathsf T}\otimes L$ and the dressed
+    row $aK$ by
     \begin{align}
-        K_{c,c'} & =T_{c_1,c'_1}R_{c'_2,c_2}B_{c'_3,c_3}L_{c_4,c'_4},
-        \nonumber                                                     \\
-        (aK)(c') & =\sum_{c\in V^4}a(c)K_{c,c'}.
-        \nonumber
+        K_{c,c'} & =T_{c_1,c'_1}R_{c'_2,c_2}B_{c'_3,c_3}L_{c_4,c'_4}, &
+        (aK)(c') & =\sum_{c\in V^4}a(c)K_{c,c'},
+        \notag
     \end{align}
-    For the fixed row $a(c)=\delta_{s,c}$, the dressed row is $K_{s,c'}$.
+    so $(\delta_s K)(c')=K_{s,c'}$.
 \end{definition}
 \begin{proof}\leanok
-    The entries follow from the tensor-product matrix and transpose
-    formulas. The fixed row removes every summand except $c=s$.
+    Direct from the tensor-product, transpose, and Kronecker-delta definitions.
 \end{proof}
 
-\begin{theorem}[Moving independent leg operators across a bond]%
+\begin{lemma}[Moving independent leg operators across a bond]%
     \label{thm:peps_four_cut_common_leg_gauge}
     \lean{TNLean.PEPS.torusBondNetwork_legGauge}
     \leanok
     \uses{def:peps_four_cut_common_leg_gauge,def:peps_torus_bond_network}
-    For arbitrary site rows $a_v$ and matrix families
-    $O^{\mathrm h},O^{\mathrm v},T,R,B,L$, put
-    $K_v=T_v\otimes R_v^{\mathsf T}\otimes B_v^{\mathsf T}\otimes L_v$.
-    Then the scalar bond contractions satisfy
+    For site rows $a_v$, matrix families $O^{\mathrm h},O^{\mathrm v},T,R,B,L$,
+    and $K_v=T_v\otimes R_v^{\mathsf T}\otimes B_v^{\mathsf T}\otimes L_v$,
     \begin{align}
         \mathcal N_a((L_{v+e}O^{\mathrm h}_vR_v)_v,
         (T_vO^{\mathrm v}_vB_{v+n})_v)
          & =\mathcal N_{(a_vK_v)_v}(O^{\mathrm h},O^{\mathrm v}).
         \label{eq:peps_common_leg_gauge}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
-    Expanding each three-matrix bond product and each dressed site row,
-    the bijection $\beta\mapsto(s_v(\beta))_v$ from
-    (\ref{eq:peps_common_boundary_restriction}) regroups the intermediate
-    endpoint indices by site. Reindexing the factors attached to $L_{v+e}$
-    and $B_{v+n}$ by translation matches the scalar summands on both sides,
-    with the same original bond matrices remaining between them.
+    Regroup the intermediate bond-endpoint indices by site via the bijection
+    $\beta\mapsto(s_v(\beta))_v$ of (\ref{eq:peps_common_boundary_restriction})
+    and shift the indices of $L_{v+e}$ and $B_{v+n}$ by translation.
 \end{proof}
 
-\begin{theorem}[Matched vertex gauge invariance]%
+\begin{lemma}[Matched vertex gauge invariance]%
     \label{thm:peps_four_cut_common_vertex_gauge}
     \lean{TNLean.PEPS.vecMul_torusMatchedLegMatrix_of_comp_eq,
         TNLean.PEPS.torusBondNetwork_matchedVertexGauge}
     \leanok
     \uses{def:peps_four_cut_common_matched_action,def:peps_torus_bond_network}
-    Suppose $\mathcal P(A_v)\rho_v(k)=\mathcal P(A_v)$ for every $v,k$.
-    Each physical row of $A_v$ therefore satisfies $A_v^{s}\rho_v(k)=A_v^{s}$.
-    For every $q:X\to G$, put
+    If $\mathcal P(A_v)\rho_v(k)=\mathcal P(A_v)$ for all $v,k$ (so each
+    physical row satisfies $A_v^s\rho_v(k)=A_v^s$), then for every $q:X\to G$,
+    setting
     \begin{align}
         O^{\mathrm h,q}_v
          & =U^{\mathrm h}_v(q_{v+e})O^{\mathrm h}_vU^{\mathrm h}_v(q_v^{-1}),
         \label{eq:peps_common_gauged_horizontal}                              \\
         O^{\mathrm v,q}_v
-         & =U^{\mathrm v}_v(q_v)O^{\mathrm v}_vU^{\mathrm v}_v(q_{v+n}^{-1}).
+         & =U^{\mathrm v}_v(q_v)O^{\mathrm v}_vU^{\mathrm v}_v(q_{v+n}^{-1})
         \label{eq:peps_common_gauged_vertical}
     \end{align}
-    Then $\mathcal N_A(O^{\mathrm h,q},O^{\mathrm v,q})
-        =\mathcal N_A(O^{\mathrm h},O^{\mathrm v})$.
-\end{theorem}
+    yields $\mathcal N_A(O^{\mathrm h,q},O^{\mathrm v,q})=\mathcal N_A(O^{\mathrm h},O^{\mathrm v})$.
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_four_cut_common_leg_gauge}
-    Testing the site-map invariance on each virtual basis vector yields
-    the row identity. Setting
-    $T_v=U^{\mathrm v}_v(q_v)$,
-    $R_v=U^{\mathrm h}_v(q_v^{-1})$,
-    $B_v=U^{\mathrm v}_{v-n}(q_v^{-1})$, and
-    $L_v=U^{\mathrm h}_{v-e}(q_v)$ in (\ref{eq:peps_common_leg_gauge})
-    combines these four factors into $\rho_v(q_v)$, which each physical row absorbs.
+    Apply (\ref{eq:peps_common_leg_gauge}) with $T_v=U^{\mathrm v}_v(q_v)$,
+    $R_v=U^{\mathrm h}_v(q_v^{-1})$, $B_v=U^{\mathrm v}_{v-n}(q_v^{-1})$, and
+    $L_v=U^{\mathrm h}_{v-e}(q_v)$, so $K_v=\rho_v(q_v)$ and
+    $A_v^s K_v=A_v^s$.
 \end{proof}
 
-\begin{theorem}[Matched averaging networks as coherent bond products]%
+\begin{lemma}[Matched averaging networks as coherent bond products]%
     \label{thm:peps_four_cut_common_network_expansion}
     \lean{TNLean.PEPS.torusBondNetwork_representationAveragingSite,
         TNLean.PEPS.torusBondRegrouping_insertedAveragingSite_coherent,
@@ -306,9 +262,10 @@
     \leanok
     \uses{def:peps_four_cut_common_matched_action,
         def:peps_torus_physical_bond_regrouping}
-    Let $G$ be finite and use the bond matrices
-    (\ref{eq:peps_common_gauged_horizontal}) and
-    (\ref{eq:peps_common_gauged_vertical}). Then
+    For finite $G$, with $O^{\mathrm h,q}_v,O^{\mathrm v,q}_v$ as in
+    (\ref{eq:peps_common_gauged_horizontal})--(\ref{eq:peps_common_gauged_vertical}),
+    $O^q_{(v,d)}=O^{d,q}_v$, $\sigma_v=(t_v,r_v,b_v,l_v)$, and physical bond
+    regrouping $\mathcal R$,
     \begin{align}
         \mathcal N_{A^0}(O^{\mathrm h},O^{\mathrm v})(\sigma)
          & =|G|^{-|X|}\sum_{q:X\to G}\prod_{v\in X}
@@ -320,21 +277,16 @@
         O^q_f(\beta_f^1,\beta_f^2).
         \label{eq:peps_common_regrouped_average}
     \end{align}
-    Here $\sigma_v=(t_v,r_v,b_v,l_v)$, $\mathcal R$ is physical bond
-    regrouping, and $O^q_{(v,d)}=O^{d,q}_v$ defines the single bond-indexed
-    family. No semi-regularity or unitarity is required.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_four_cut_common_cut_expansion,
         thm:peps_four_cut_common_leg_gauge,thm:peps_torus_projector_expansion,
         def:peps_torus_physical_bond_regrouping,
         lem:peps_torus_physical_bond_regrouping_overlap}
-    Expanding each local average as a sum of its matched matrices produces $|G|^{-|X|}\sum_q$ by finite
-    multilinearity.
-    For each $q$, applying (\ref{eq:peps_common_leg_gauge}) to the fixed
-    rows $\delta_{\sigma_v}$ reduces the remaining identity-site contraction
-    to the product of its bond entries, giving
-    (\ref{eq:peps_common_network_average}); substituting the inverse
-    physical regrouping formulas and combining the horizontal and vertical
-    products yields (\ref{eq:peps_common_regrouped_average}).
+    Expand $A^0$ into $|G|^{-|X|}\sum_{q:X\to G}$ as in
+    (\ref{eq:peps_common_cut_average_expansion}), apply
+    (\ref{eq:peps_common_leg_gauge}) to $a_v=\delta_{\sigma_v}$ to obtain
+    (\ref{eq:peps_common_network_average}), and apply $\mathcal R$ via
+    Definition~\ref{def:peps_torus_physical_bond_regrouping} to obtain
+    (\ref{eq:peps_common_regrouped_average}).
 \end{proof}

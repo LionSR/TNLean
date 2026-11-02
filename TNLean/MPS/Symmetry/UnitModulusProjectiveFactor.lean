@@ -20,7 +20,7 @@ scalar factor.
 Source: arXiv:1010.3732, Section II.F.2, lines 886--921.
 -/
 
-open scoped Matrix Matrix.Norms.L2Operator
+open scoped Matrix Matrix.Norms.L2Operator TNLean.Algebra.ScalarCohomology
 
 namespace TNLean.Algebra.ProjectiveRepresentation
 
@@ -60,7 +60,10 @@ theorem exists_unitary_rephase_of_unitary_cohomologous
     (ρ₁ : TNLean.Algebra.ProjectiveRepresentation (D := D₁) ω₁)
     (h₀ : ∀ g, (ρ₀.X g : Matrix (Fin D₀) (Fin D₀) ℂ) ∈ Matrix.unitaryGroup _ ℂ)
     (h₁ : ∀ g, (ρ₁.X g : Matrix (Fin D₁) (Fin D₁) ℂ) ∈ Matrix.unitaryGroup _ ℂ)
-    (h : ω₁.CohomologousTo ω₀) :
+    (h : groupCohomology.H2π _ (groupCohomology.cocyclesOfIsMulCocycle₂
+        (TNLean.Algebra.ScalarCocycle.isMulCocycle₂_of_projRep ρ₁ (NeZero.pos D₁))) =
+      groupCohomology.H2π _ (groupCohomology.cocyclesOfIsMulCocycle₂
+        (TNLean.Algebra.ScalarCocycle.isMulCocycle₂_of_projRep ρ₀ (NeZero.pos D₀)))) :
     ∃ (σ : TNLean.Algebra.ProjectiveRepresentation (D := D₁) ω₀)
       (φ : G → Circle),
       (∀ g, (σ.X g : Matrix (Fin D₁) (Fin D₁) ℂ) ∈ Matrix.unitaryGroup _ ℂ) ∧
@@ -72,7 +75,8 @@ theorem exists_unitary_rephase_of_unitary_cohomologous
     { X := ρ₁.X
       map_mul' := fun g k => by simpa only [e₁] using ρ₁.map_mul g k }
   obtain ⟨σ, φ, hσ, hX⟩ := exists_unitary_rephase_of_cohomologous
-    (ω₀ := ω₁) (ω₁ := ω₀) τ h.symm h₁
+    (ω₀ := ω₁) (ω₁ := ω₀) τ
+      ((H2π_eq_iff_isMulCoboundary₂_div _ _).mp h.symm) h₁
   exact ⟨{ X := σ.X
            map_mul' := fun g k => by simpa only [e₀] using σ.map_mul g k },
     φ, hσ, hX⟩

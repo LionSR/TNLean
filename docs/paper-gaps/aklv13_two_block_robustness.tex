@@ -1,0 +1,293 @@
+\documentclass{article}
+\usepackage[margin=25mm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+\input{command}
+\title{AKLV's two exterior truncations: source conventions and large-window robustness}
+\author{}
+\date{2026-10-29}
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{wip}
+
+\section{The original bounded-term setting remains part of the argument}
+
+The reference is AKLV, \href{https://arxiv.org/abs/1301.1162v1}{arXiv:1301.1162v1},
+\path{1dfrustrated34.tex}. Lines 879--884 start with a nearest-neighbour sum
+$H'=\sum_i h_i$ of positive contractions and a unique gapped ground vector.
+Lines 890--899 introduce an exterior-block description. Lines 901--925 then
+construct its exterior operators and scalar shifts from those original
+bounded local terms. Theorem~6.1 at lines 949--963 refers to the resulting
+$H$; it does not explicitly quantify over arbitrary independently supplied
+exterior matrices.
+
+This context is needed in the exponential part of the proof. Lines
+1301--1312 expand the repeated commutators into the constituent local
+interactions and use that their norms are at most one. A large norm for
+an exterior \emph{sum} is compatible with this setting. An arbitrary
+single-site matrix of the same large norm need not be such a sum.
+The physical formalization retains the original positive-contraction
+nearest-neighbour data. No counterexample to an arbitrary-exterior
+extension is treated as a counterexample to this contextual source theorem.
+
+\section{Two local corrections}
+
+Line 897 assigns the left exterior to sites $1,\ldots,m$, whereas the
+explicit definition at line 907 includes the bond $h_m$ on sites
+$\{m,m+1\}$. The definition therefore includes the boundary site $m+1$.
+The formalization follows the explicit original-bond sum. In zero-based
+coordinates its left reference support is $[0,a+1)$, and adding the first
+window bond enlarges it to $[0,a+2)$. This also gives the overlap needed
+by the subsequent two-exterior truncation.
+
+The inclusive middle range $4\le i\le s-3$ contains $s-6$ interactions,
+whereas line 915 prints the individual subtraction $d/(s-7)$. For $s=8$
+there are two interactions, so that prescription subtracts $2d$ from a
+bulk with lowest energy $d$. If $d>0$, the resulting lowest energy is
+$-d$ rather than zero. Subtracting the true minimum once from the aggregate
+middle sum gives the intended normalization. Its equal redistribution
+among the individual interactions uses $d/(s-6)$ when the range is nonempty.
+No individual redistribution is needed for the proved aggregate identities.
+
+\section{The actual normalization and two exterior clippings}
+
+The three reference regions are
+$[0,a+1)$, $[a+3,a+s-2)$, and $[a+s,L)$.
+Their actual internal sums $A_j$ have pairwise disjoint supports. The
+module \doclink{TNLean/MPS/AreaLaw/AKLV/Normalization} constructs genuine minima $e_j$
+and a common unit vector attaining them. The remaining six boundary
+contractions give an attained ground energy $E_0\in[0,6]$ for
+$H=\sum_i h_i-(\sum_j e_j)\Id$.
+
+For the three-region partition at $a+2,a+s-1$, its enlarged exterior sums
+are exactly $C_0=A_0+h_a$ and $C_2=h_{a+s-1}+A_2$.
+The two exterior clippings replace these by
+$\min(C_0,(e_0+t)\Id)-e_0\Id$ and
+$\min(C_2,(e_2+t)\Id)-e_2\Id$.
+The middle sum and both connecting interactions are retained.
+The minima of the reference sums are lower bounds for the enlarged sums;
+they are not asserted to be their attained minima.
+
+\section{A polynomial threshold and an aligned actual ground vector}
+
+The module \doclink{TNLean/MPS/AreaLaw/AKLV/PhysicalRobustness} retains the actual unit
+ground vector $\Omega$, energy $\mu$, and first excited energy $\mu+g$
+of the original nearest-neighbour Hamiltonian, with $g>0$.
+The ground-line gap and the original endpoint trial-vector argument derive
+$g\le1$; this is not an independent hypothesis.
+The genuine reference minima are chosen before $t$, with
+$E_0+\sum_j e_j=\mu$ and $0\le E_0\le6$.
+For
+\begin{align*}
+ t\ge\frac{1024}{g}\left(\frac{E_0}{g}+1\right),
+\end{align*}
+the actual two-exterior truncation has a phase-aligned unit ground vector
+$\phi$ and actual spectral gap at least $9g/10$, with
+\begin{align*}
+ \|\phi-\Omega\|^2\le\frac{e^{-t/16}}{100}.
+\end{align*}
+This gives an explicit universal sufficient constant in the polynomial
+threshold printed at source line 955, together with the exponential
+conclusion at line 960. No perturbation, residual, truncated ground vector,
+closeness estimate, or upper bound on the original gap is supplied.
+
+\section{The stronger logarithmic threshold}
+
+The same actual exponential residual comparison gives the stronger sufficient
+condition
+\begin{align*}
+ t\ge T(g):=1024+16\log(1/g).
+\end{align*}
+Indeed, setting $\tau=e^{-t/16}$ in the spectral comparison requires only
+\begin{align*}
+ t&\ge g+11,&
+ t&\ge2g+16\log(C_1/g),& C_1&=10^6\cdot64e^{3/4}.
+\end{align*}
+These follow from $0<g\le1$, $\log C_1\le61$, and $t\ge T(g)$.
+The physical endpoint argument derives $g\le1$ from the original chain.
+Thus the actual phase-aligned vector, gap and exponential error are available
+above a logarithmic threshold independently of $E_0$.
+The actual clipped Chebyshev filter, its spectral ceiling and sharp rank
+bound are available at the same threshold. Since $T(g)\le1024/g$, the earlier
+polynomial-threshold conclusions follow as corollaries without changing
+their physical hypotheses. The later changing-target and entropy
+construction remains separate.
+
+\section{The remaining finite-window restriction}
+
+The proved geometry assumes $s\ge6$, so the six boundary labels are
+distinct; at $s=6$ the middle reference sum is empty and is normalized by
+its genuine minimum zero. The source does not state a numerical minimum
+for $s$ beside Theorem~6.1. Its application at line 1023 chooses
+$s=O(\log^2 d/g)$ with a sufficiently large constant. The actual uniform
+choice in \doclink{TNLean/MPS/AreaLaw/AKLV/FavorableFilter} proves $s\ge21$,
+so this application satisfies the six-interaction restriction.
+Windows with fewer than six interactions remain separate. The blueprint
+states this restriction explicitly and does not identify the large-window
+statement with an unrestricted all-window formulation of the printed theorem.
+The actual favorable square-degree filter and initial product approximation
+are constructed for every window selected by the universal scalar choice
+that fits in the chain. The fixed-window changing-target sequence is now constructed by actual
+normalized polynomial images with an exact product rank budget. Finite
+small windows remain a separate robustness statement. The entropy
+argument from the actual coherent sequence is completed below. The
+accuracy-dependent enlarged-window optimization is completed below,
+including exact boundary alternatives for chains too short for that window.
+\section{The initial product overlap}
+
+At source line 1023, the product-overlap inequality is printed with
+$\le$; the cited Lemma~2.2 gives $\ge1/\sqrt{2D}$.
+For the initial application to the clipped filter, its fixed vector is the
+actual clipped ground vector $\phi^{t_0}$.
+The construction in \doclink{TNLean/MPS/AreaLaw/AKLV/Initialization}
+therefore chooses a product vector $\chi$ satisfying
+\begin{align*}
+ |\langle\phi^{t_0},\chi\rangle|\ge1/\sqrt{2D}.
+\end{align*}
+This makes the target explicit where the printed line writes $\Gamma$.
+The robustness estimate alone does not transfer this lower bound to
+$|\langle\Gamma,\chi\rangle|$: its error need not be small relative to
+$D^{-1/2}$. No such transfer is used.
+Instead, apply the actual clipped filter to $\chi$, normalize, and choose a
+unit scalar phase. With squared perpendicular shrinking coefficient $\delta$,
+the resulting unit vector $\psi_0$ satisfies
+\begin{align*}
+ \operatorname{SR}(\psi_0)&\le D,&
+ \|\psi_0-\phi^{t_0}\|^2&\le4D\delta.
+\end{align*}
+The uniform parameter choice gives $D\delta\le10^{-5}$, so the same filter
+already suffices for this initial approximation. The triangle inequality
+then compares $\psi_0$ with $\Gamma$. The weaker bounds retained in the
+statement are $\|\psi_0-\phi^{t_0}\|^2\le1/64$ and
+$\|\psi_0-\Gamma\|^2\le1/16$.
+This is the initial step of the changing-target construction, with the
+available-window restriction stated separately; it is not the full
+sequence or entropy theorem.
+
+\section{The coherent changing-target sequence}
+
+The construction in \doclink{TNLean/MPS/AreaLaw/AKLV/ChangingTargets}
+uses one dependent recursion on the actual preceding unit vector. Its
+fixed regional minima come from the physical initialization; the minimizing
+energies returned by later refinements agree with them by uniqueness of
+the minimum. Thus all thresholds truncate the same normalized physical
+Hamiltonian at the same cut. The available-window and actual-first-excited-
+energy restrictions remain explicit.
+
+With $\beta_i=2^{-i}$ and
+$t_i=1024+16\log(1/g)+16i\log2$, choose
+$\ell_i=\lceil5\sqrt{(2t_i+s)/g}\rceil$ for $i\ge1$.
+The proved sequence has $\|\psi_i-\Omega\|^2\le\beta_i/16$ and
+rank at most the initial rank times the product of the sharp individual
+filter bounds. Every edge retains its actual polynomial, phase and
+normalized filtered image. This establishes a concrete sequence, rather
+than independently selected approximants at different indices.
+
+The printed summary at source line 1053 writes the rank itself as an
+initial term plus a sum of logarithmic rank costs. The multiplicative
+rank bound, or its logarithm, is the correct reading, consistent with
+item 2 of the stated lemma. The current result retains the exact product
+and the proved initial logarithmic budget. The finite entropy summation
+from these actual ranks is completed below.
+The accuracy-dependent enlarged-window argument at lines 1503--1517 is
+also separate and is not replaced by this fixed-window recursion.
+
+\section{Accuracy-dependent windows and the sharp rank comparison}
+
+The construction in \doclink{TNLean/MPS/AreaLaw/AKLV/AccuracyWindow}
+chooses the source's accuracy-dependent enlarged window at a prescribed
+physical cut. A fitting enlarged window admits the actual initial window
+at that same cut. Refinement applies the actual polynomial to that actual
+initialized state. The two widths can have different regional minima;
+no equality of their normalization Hamiltonians is assumed.
+If the enlarged window does not fit, the ground vector itself is the
+exact per-cut approximant, using the coefficient-rank bound
+$q^{\min\{k,L-k\}}$. Thus endpoints and short chains need no supplied window.
+The upper bound one for the actual gap is derived in the fitting case,
+and is not a hypothesis of the all-cut statement.
+
+For squared error $0<\rho\le1$, put $z=\log(128/\rho)$,
+$m=\lceil\sqrt{\sqrt{z^3/g}}\rceil$, $s=s_0+2m$,
+$t=T(g)+16z$, and $\ell=\lceil z\sqrt{(2t+s)/g}\rceil$.
+The actual per-cut squared error is at most $\rho$. Its common rank budget
+is the maximum of the exact filtered rank and exact boundary rank, with
+logarithm
+\begin{align*}
+\max\bigl\{\log D_0+
+32(\lfloor\ell/s\rfloor+\lfloor\sqrt\ell\rfloor+1)\log(q(\ell+1)),\,
+(s-\lfloor s/2\rfloor)\log q\bigr\}.
+\end{align*}
+The construction in \doclink{TNLean/MPS/AreaLaw/AKLV/OptimizedRankBound}
+now proves the uniform comparison
+\begin{align*}
+ \log B\le C_A\left[\frac{u^3}{g}+
+      \left(\frac{z^3}{g}\right)^{1/4}(u+\log(z+1))\right].
+\end{align*}
+The universal coefficient depends only on the already universal $A$.
+For $z\le s_0$, the actual degree is at most $66s_0^2$, and the extra
+logarithmic rank cost is absorbed by the initial cost. For $s_0\le z$,
+one has $m<z+1$, $2t+s\le4225z$, and the actual degree is at most
+$66m^2$. The sharp polynomial-rank formula therefore has exponent at
+most $2432m$. The exact boundary alternative has logarithmic cost at
+most $s_0\log q+2m\log q$, which is absorbed by the same bound.
+No exponential-in-degree replacement is used.
+
+The physical theorem in
+\doclink{TNLean/MPS/AreaLaw/AKLV/SharpPerCutApproximation}
+derives $q\ge2$ and $g\le1$ from the two distinct spectral values and
+the original unique-ground positive-contraction chain, independently
+of window fit. Neither is a new hypothesis. The actual excited spectral
+value $\mu+g$ remains explicit; the statement is not asserted for every
+arbitrary projector-gap lower bound without choosing an actual gap.
+
+Finally \doclink{TNLean/MPS/AreaLaw/AKLV/SharpMPSApproximation}
+sets $\rho=\epsilon^2/[16(L+1)]$. The actual per-cut approximants give
+Schmidt discarded mass at most $\rho$. Sequential truncation by the
+leading marginal spectral projections has squared error at most
+$\epsilon^2/16$ and cut ranks at most $B$. Its normalization is therefore
+an actual unit matrix product state within norm error $\epsilon$, with
+the same bond bound and
+$z=\log(2048(L+1)/\epsilon^2)$. The returned vector is that normalized
+ordered product. The proof uses no independent area-law or matrix
+product approximation existence theorem. This completes this sharp
+approximation route. The entropy summation from the separate coherent
+changing-target sequence is also completed below.
+\section{Entropy from the actual coherent sequence}
+
+The module \doclink{TNLean/MPS/AreaLaw/AKLV/SequenceEntropyParameters}
+proves, for the actual selected degrees and filter ranks,
+\begin{align*}
+ 1\le\ell_j&\le240s(j+1),&
+ \log F_j&\le200000(j+1)^2\log D_0.
+\end{align*}
+These are coarse estimates for entropy summation only; the separate
+accuracy-dependent fourth-root rank comparison is unchanged.
+The actual rank products satisfy $R_i\ge2^{i+1}$ and
+$\log(R_{i+1}/R_i)=\log F_{i+1}$. The generic finite rank-tail entropy
+inequality can therefore be applied with cutoff equal to the finite
+marginal dimension. The existing finite dyadic quadratic moment gives
+\begin{align*}
+ \sum_{i<M}2^{-i}&\le2,&
+ \sum_{i<M}2^{-i}(i+2)^2&\le22.
+\end{align*}
+The actual marginal tails $2^{-i}/16$ supplied by the coherent sequence
+imply entropy at most $300000\log D_0$.
+
+The module \doclink{TNLean/MPS/AreaLaw/AKLV/PhysicalEntropy} combines
+this estimate with the actual initial-width bound. If the prescribed
+initial window fails to fit, the exact smaller-side dimension estimate
+$S_k\le\min\{k,L-k\}\log q\le s\log q$ suffices. The resulting theorem
+holds at every cut, including the endpoints and chains shorter than the
+initial window, with a universal constant chosen before the physical data:
+\begin{align*}
+ S_k(\Omega)\le\frac{C}{g}(1+\log q+\log(1/g))^3.
+\end{align*}
+It retains the actual first excited spectral value $\mu+g$. The local
+dimension and upper-gap bounds are derived from the original physical
+interaction independently of window fit. No supplied spectral tail,
+approximant, filter, or independent area-law theorem is used. The displayed
+logarithmic gap dependence is retained explicitly; no sharper dependence
+with all inverse-gap logarithms removed is asserted.
+\end{document}

@@ -66,6 +66,13 @@ configurations and the permutation-matrix homomorphism. -/
 noncomputable def sitePermMatrix (q : ℕ) (g : G) : Matrix (V → Fin q) (V → Fin q) ℂ :=
   permMatrixHom (MulAction.toPermHom G (V → Fin q) g)
 
+/-- The identity site permutation induces the identity matrix.
+Hastings, arXiv:cond-mat/0508554v3, lines 1603–1618. -/
+@[simp] theorem sitePermMatrix_one (q : ℕ) :
+    sitePermMatrix (V := V) q (1 : G) = 1 := by
+  unfold sitePermMatrix
+  rw [map_one, map_one]
+
 theorem sitePermMatrix_mul (q : ℕ) (g h : G) :
     sitePermMatrix (V := V) q (g * h) = sitePermMatrix q g * sitePermMatrix q h := by
   simp only [sitePermMatrix, map_mul]

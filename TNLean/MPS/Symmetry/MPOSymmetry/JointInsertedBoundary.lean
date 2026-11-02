@@ -131,7 +131,7 @@ theorem span_range_blockInsertedEvalWord_eq_top
     (hW : ∀ x, W x ≠ 0) {N : ℕ} (hN : 0 < N) :
     Submodule.span ℂ (Set.range fun σ : Cfg d N =>
       fun x => insertedEvalWord (A x) (W x) (List.ofFn σ)) = ⊤ := by
-  apply Matrix.family_submodule_eq_top_of_trace_separating
+  apply Matrix.eq_top_of_pi_trace_separating
   intro X hX
   have hz : blockInsertedGroundSpaceMap A W N X = 0 := by
     ext σ
@@ -141,7 +141,7 @@ theorem span_range_blockInsertedEvalWord_eq_top
     exact hX _ (Submodule.subset_span (Set.mem_range_self σ))
   have := blockInsertedGroundSpaceMap_injective A hA W hW hN
     (hz.trans (map_zero _).symm)
-  exact fun x => congrFun this x
+  exact this
 
 /-- Joint extended boundary map in the existing diagonal-block Hilbert coordinates.
 Source: arXiv:2203.12563, Section 5, lines 1695–1777. -/

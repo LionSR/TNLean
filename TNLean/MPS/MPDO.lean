@@ -82,6 +82,7 @@ import TNLean.MPS.MPDO.BoundaryActionComparison
 import TNLean.MPS.MPDO.BoundaryActionCrossFusionEntries
 import TNLean.MPS.MPDO.BoundaryActionCrossTransport
 import TNLean.MPS.MPDO.BoundaryActionLMatrix
+import TNLean.MPS.MPDO.BoundaryActionLMatrixGauge
 import TNLean.MPS.MPDO.BoundaryActionTreeEntries
 import TNLean.MPS.MPDO.BoundaryActionTrees
 import TNLean.MPS.MPDO.BoundaryAdjointClosed
@@ -96,10 +97,12 @@ import TNLean.MPS.MPDO.BoundaryDecompositionCoordinates
 import TNLean.MPS.MPDO.BoundaryDecompositionIntertwining
 import TNLean.MPS.MPDO.BoundaryDecompositionOperations
 import TNLean.MPS.MPDO.BoundaryFusionFMatrix
+import TNLean.MPS.MPDO.BoundaryGroupSpecialization
 import TNLean.MPS.MPDO.BoundaryMultiplicity
 import TNLean.MPS.MPDO.BoundaryRepresentation
 import TNLean.MPS.MPDO.BoundaryRepresentationClosedness
 import TNLean.MPS.MPDO.BoundaryRestriction
+import TNLean.MPS.MPDO.BoundarySingleBlockObstruction
 import TNLean.MPS.MPDO.BoundarySourceDecomposition
 import TNLean.MPS.MPDO.BoundarySourceMixedPentagon
 import TNLean.MPS.MPDO.BoundaryTransport
@@ -142,9 +145,11 @@ import TNLean.MPS.MPDO.CZXDefectMaps
 import TNLean.MPS.MPDO.CZXFusionActionCoordinates
 import TNLean.MPS.MPDO.CZXFusionTensors
 import TNLean.MPS.MPDO.CZXGHZAction
+import TNLean.MPS.MPDO.CZXGaugedMPS
 import TNLean.MPS.MPDO.CZXGaussCircuitTuple
 import TNLean.MPS.MPDO.CZXGaussInvariantSubspace
 import TNLean.MPS.MPDO.CZXMovementCoordinates
+import TNLean.MPS.MPDO.CZXPermutedBlocks
 import TNLean.MPS.MPDO.CZXSecondTupleCertificate
 import TNLean.MPS.MPDO.CZXSourceFactors
 import TNLean.MPS.MPDO.CZXTensor
@@ -269,6 +274,7 @@ import TNLean.MPS.MPDO.PRFP
 import TNLean.MPS.MPDO.PerCopyHorizontalCF
 import TNLean.MPS.MPDO.PeriodicExclusion
 import TNLean.MPS.MPDO.PhysicalAdjoint
+import TNLean.MPS.MPDO.PhysicalBasisAction
 import TNLean.MPS.MPDO.PhysicalBlocking
 import TNLean.MPS.MPDO.PhysicalBlockingResiduals
 import TNLean.MPS.MPDO.PhysicalClosure
@@ -391,6 +397,7 @@ import TNLean.MPS.MPDO.TopologicalPhysicalGibbs
 import TNLean.MPS.MPDO.TopologicalProjectorRecursion
 import TNLean.MPS.MPDO.TopologicalProjectors
 import TNLean.MPS.MPDO.TopologicalTerminalSpectral
+import TNLean.MPS.MPDO.TraceChainOperator
 import TNLean.MPS.MPDO.TriangularActionLIdentification
 import TNLean.MPS.MPDO.TriangularBoundaryBlocked
 import TNLean.MPS.MPDO.TriangularBoundaryDecomposition
@@ -451,4 +458,5 @@ import TNLean.MPS.MPDO.VerticalSectorTraceLoss
 import TNLean.MPS.MPDO.VerticalSectorTracePreservation
 import TNLean.MPS.MPDO.VerticalSpectral
 import TNLean.MPS.MPDO.VerticalTransportCoefficientCovariance
+import TNLean.MPS.MPDO.WeakHopfRepresentation
 import TNLean.MPS.MPDO.ZCL

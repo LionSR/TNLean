@@ -1,6 +1,6 @@
 \subsection{Full-matrix presentation of a factor with scalar centre}
 
-\begin{theorem}[Scalar centre forces a full matrix algebra of a definite size]
+\begin{lemma}[Scalar centre forces a full matrix algebra of a definite size]
     \label{thm:qca_central_star_subalgebra_matrix}
     \lean{StarSubalgebra.exists_starAlgEquiv_matrix_and_finrank_of_isCentral}
     \leanok
@@ -21,7 +21,7 @@
         \dim_{\C}(S) & =r^2,
     \end{align}
     where the first isomorphism is an isomorphism of star-algebras.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     A star-subalgebra of a complex matrix algebra is semisimple, so it is
@@ -49,3 +49,44 @@ $\mathcal R_y$, hence with the algebra they generate, which is the whole
 quasi-local algebra; its centre is scalar, so
 (\ref{eq:qca_central_star_subalgebra_scalar_centre}) holds for $\mathcal R_x$
 and $\mathcal R_x\cong M_{r(x)}(\C)$.
+
+\begin{lemma}[A full-matrix star-isomorphism has a unitary implementer]
+    \label{lem:qca_full_matrix_spatial_implementer}
+    \lean{Matrix.exists_unitary_conj_of_starAlgEquiv_matrix_between}
+    \leanok
+    Let $I,J$ be nonempty finite coordinate sets and let
+    $f:M_I(\C)\to M_J(\C)$ be a complex star-algebra
+    isomorphism. Then $|I|=|J|$ and there is a unitary map
+    $U:\C^I\to\C^J$ with
+    \begin{align}
+        U^\dagger U=\Id_I,\qquad UU^\dagger=\Id_J,\qquad
+        f(A)=UAU^\dagger\quad(A\in M_I(\C)).
+    \end{align}
+    This applies between distinct coordinate sets, as required for the
+    unitaries in \cite[equations~\texttt{bruleU} and~\texttt{bruleV},
+        lines~980--1001]{SchumacherWerner2004QCA}.
+\end{lemma}
+\begin{proof}
+    \leanok
+    The algebra isomorphism is complex linear, so $|I|^2=|J|^2$ and
+    $|I|=|J|$. Choose an equivalence of the two coordinate sets and
+    transport $f$ to an automorphism of one full matrix algebra.
+    The unitary Skolem--Noether theorem implements that automorphism.
+    Let $\sigma:J\to I$ be the chosen equivalence, let $P_\sigma$ be its
+    permutation matrix, and let $W\in M_I(\C)$ be a unitary with
+    $P_\sigma^\dagger f(A)P_\sigma=WAW^\dagger$ for all $A$. Put
+    $U=P_\sigma W$. Since multiplication and adjoints respect the
+    reindexing,
+    \begin{align}
+        f(A)
+         & =P_\sigma WAW^\dagger P_\sigma^\dagger
+        =UAU^\dagger,
+         &
+        U^\dagger U
+         & =W^\dagger W=\Id_I,
+         &
+        UU^\dagger
+         & =P_\sigma P_\sigma^\dagger=\Id_J.
+        \label{eq:qca_full_matrix_spatial_transport}
+    \end{align}
+\end{proof}

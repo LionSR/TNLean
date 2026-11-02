@@ -22,12 +22,11 @@ This file proves the structural part of that step for any Hermitian operator in 
   (`TNLean.Lattice.HasProductForm.pow`, which groups the indices of the factors).
 * For `β ≥ 0` and `β₀ > 0` an even `n ≥ 2` with `β/n ≤ β₀` exists.
 
-The truncated high-temperature form `ρ(β/n, l_proj)` is Hermitian because it is a real-weighted
-sum of exponentials of Hermitian operators, but its definition belongs to the cluster
-expansion and is not used here: the results take any Hermitian operator in product form. The
-error bound at every temperature (lines 1322–1349) and the count of index values (lines
-1318–1320) are not proved here; the index count is the one recorded as not established in
-`TNLean/Lattice/ProductForm.lean`.
+The actual truncated high-temperature operator is Hermitian, and its even powers have
+the required positivity and product form in `TruncatedAllTemperatures.lean`. The error
+estimates at every temperature are proved in `TemperatureError.lean`, and the actual local
+index counts are proved in `LocalIndexCount.lean`. The least positive even factor count
+at positive temperature lies in the interval `[β/β₀, β/β₀ + 2)`.
 
 **Local fix (positivity at every temperature):** the source states that `ρ(β, l_proj)` is
 positive definite. An even power of a Hermitian operator is positive semidefinite, and positive
@@ -35,11 +34,9 @@ definite only when the base `ρ(β/n, l_proj)` is invertible, which the source d
 The results here state positive semidefiniteness, which is what the even power is used for.
 Documented in `docs/paper-gaps/hastings05_mplt_positivity.tex`.
 
-**Scope restriction (geometry):** `TNLean.Lattice.HasProductForm.pow_of_even` is stated for the
-product form on finite domains of `ℤ × ℤ` with walk distance, as defined in
-`TNLean.Lattice.ProductForm`, rather than on the source's arbitrary metric lattice (lines
-1024–1046). The positivity lemmas and `exists_even_div_le` are general. Documented in
-`docs/paper-gaps/hastings05_planar_domain_scope.tex`.
+The product-form statements apply to every finite site set and every locality relation;
+in particular, they apply to the source's arbitrary finite metric lattice. No planar
+embedding is assumed.
 
 ## Main results
 
@@ -82,22 +79,78 @@ of range `l`, as the truncated high-temperature density matrix `ρ(β/n, l_proj)
 the power `ρ^m` is positive semidefinite and again in product form of range `l`, the `m`
 indices at each site being grouped into one. Hastings, arXiv:cond-mat/0508554v3,
 `proj3new.tex`, lines 1303–1317. -/
-theorem _root_.TNLean.Lattice.HasProductForm.pow_of_even {Λ : Finset (ℤ × ℤ)} {q l : ℕ}
-    {ρ : Matrix (Configuration Λ q) (Configuration Λ q) ℂ} (hρ : HasProductForm Λ q l ρ)
+theorem _root_.TNLean.Lattice.HasProductForm.pow_of_even
+    {ι : Type*} [Fintype ι] [DecidableEq ι] {q : ℕ} {near : ι → ι → Prop}
+    {ρ : Matrix (ι → Fin q) (ι → Fin q) ℂ} (hρ : HasProductForm q near ρ)
     (hH : ρ.IsHermitian) {m : ℕ} (hm : Even m) :
-    HasProductForm Λ q l (ρ ^ m) ∧ (ρ ^ m).PosSemidef :=
+    HasProductForm q near (ρ ^ m) ∧ (ρ ^ m).PosSemidef :=
   ⟨hρ.pow m, posSemidef_pow_of_even hH hm⟩
 
-/-- **The number of factors in eq. `mplt`.** For `β ≥ 0` and `β₀ > 0` there is an even `n ≥ 2`
-with `β/n ≤ β₀`. Hastings, arXiv:cond-mat/0508554v3, `proj3new.tex`, lines 1307–1312. -/
+/-- The least even integer not below the temperature ratio. For positive temperatures
+this integer is positive. Hastings, arXiv:cond-mat/0508554v3, lines 1307–1312. -/
+noncomputable def evenTemperatureFactors (β β₀ : ℝ) : ℕ := 2 * ⌈(β / β₀) / 2⌉₊
+
+/-- The canonical even factor count is positive, reaches the high-temperature regime,
+and differs from `β/β₀` by less than two.
+Hastings, arXiv:cond-mat/0508554v3, lines 1307–1312 and 1334–1347. -/
+theorem evenTemperatureFactors_spec {β β₀ : ℝ} (hβ : 0 < β) (hβ₀ : 0 < β₀) :
+    Even (evenTemperatureFactors β β₀) ∧ 2 ≤ evenTemperatureFactors β β₀ ∧
+      β / evenTemperatureFactors β β₀ ≤ β₀ ∧
+      β / β₀ ≤ evenTemperatureFactors β β₀ ∧
+      (evenTemperatureFactors β β₀ : ℝ) < β / β₀ + 2 := by
+  have hhalf : 0 < (β / β₀) / 2 := div_pos (div_pos hβ hβ₀) (by norm_num)
+  have hceil : 0 < ⌈(β / β₀) / 2⌉₊ := Nat.ceil_pos.mpr hhalf
+  have hm : 2 ≤ evenTemperatureFactors β β₀ := by unfold evenTemperatureFactors; omega
+  have hmreal : (0 : ℝ) < evenTemperatureFactors β β₀ := by exact_mod_cast (by omega :
+    0 < evenTemperatureFactors β β₀)
+  have hlo : β / β₀ ≤ evenTemperatureFactors β β₀ := by
+    have := Nat.le_ceil ((β / β₀) / 2)
+    unfold evenTemperatureFactors
+    push_cast
+    nlinarith
+  refine ⟨even_two_mul _, hm, ?_, hlo, ?_⟩
+  · rw [div_le_iff₀ hmreal]
+    have := (div_le_iff₀ hβ₀).mp hlo
+    nlinarith
+  · have := Nat.ceil_lt_add_one hhalf.le
+    unfold evenTemperatureFactors
+    push_cast
+    nlinarith
+
+/-- The canonical factor count is minimal among positive even choices that enter the
+high-temperature regime. Hastings, arXiv:cond-mat/0508554v3, lines 1307–1312. -/
+theorem evenTemperatureFactors_le {β β₀ : ℝ} (hβ₀ : 0 < β₀) {m : ℕ}
+    (hm : Even m) (hmpos : 0 < m) (hdiv : β / m ≤ β₀) : evenTemperatureFactors β β₀ ≤ m := by
+  obtain ⟨k, rfl⟩ := hm
+  have hmreal : (0 : ℝ) < ((k + k : ℕ) : ℝ) := by exact_mod_cast hmpos
+  have hbound := (div_le_iff₀ hmreal).mp hdiv
+  have hceil : ⌈(β / β₀) / 2⌉₊ ≤ k := by
+    apply Nat.ceil_le.mpr
+    rw [div_le_iff₀ (by norm_num : (0 : ℝ) < 2), div_le_iff₀ hβ₀]
+    push_cast at hbound
+    nlinarith
+  unfold evenTemperatureFactors
+  omega
+
+/-- The factor count yields the corrected `β/β₀ + 2` exponential bound for every
+nonnegative cluster weight. Hastings, arXiv:cond-mat/0508554v3, lines 1334–1347;
+`docs/paper-gaps/hastings05_temperature_factor_count.tex`. -/
+theorem exp_evenTemperatureFactors_mul_sub_one_le {β β₀ A : ℝ}
+    (hβ : 0 < β) (hβ₀ : 0 < β₀) (hA : 0 ≤ A) :
+    Real.exp ((evenTemperatureFactors β β₀ : ℝ) * A) - 1 ≤
+      Real.exp ((β / β₀ + 2) * A) - 1 := by
+  have hcount := (evenTemperatureFactors_spec hβ hβ₀).2.2.2.2
+  exact sub_le_sub_right (Real.exp_le_exp.mpr (mul_le_mul_of_nonneg_right hcount.le hA)) 1
+
+/-- **The number of factors in eq. `mplt`.** For `β ≥ 0` and `β₀ > 0` there is an even
+`n ≥ 2` with `β/n ≤ β₀`. At positive temperature the witness is the least such even integer;
+at `β = 0` take two factors. Hastings, arXiv:cond-mat/0508554v3, lines 1307–1312. -/
 theorem exists_even_div_le {β β₀ : ℝ} (hβ : 0 ≤ β) (hβ₀ : 0 < β₀) :
     ∃ m : ℕ, Even m ∧ 2 ≤ m ∧ β / m ≤ β₀ := by
-  refine ⟨2 * (⌈β / β₀⌉₊ + 1), even_two_mul _, by omega, ?_⟩
-  have hceil : β / β₀ ≤ ⌈β / β₀⌉₊ := Nat.le_ceil _
-  have hm : (0 : ℝ) < ((2 * (⌈β / β₀⌉₊ + 1) : ℕ) : ℝ) := by positivity
-  rw [div_le_iff₀ hm]
-  rw [div_le_iff₀ hβ₀] at hceil
-  push_cast
-  nlinarith [Nat.cast_nonneg (α := ℝ) ⌈β / β₀⌉₊]
+  rcases hβ.eq_or_lt with hzero | hpos
+  · refine ⟨2, by decide, le_rfl, ?_⟩
+    simpa only [← hzero, zero_div] using hβ₀.le
+  · have hs := evenTemperatureFactors_spec hpos hβ₀
+    exact ⟨evenTemperatureFactors β β₀, hs.1, hs.2.1, hs.2.2.1⟩
 
 end TNLean.Lattice.ClusterExpansion

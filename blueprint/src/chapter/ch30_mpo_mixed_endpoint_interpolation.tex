@@ -58,7 +58,7 @@ $W_\gamma$ denotes $W(\gamma)$.
     \end{tenkz}
 \end{tenkzequation}
 
-\begin{theorem}[Interior injectivity]
+\begin{lemma}[Interior injectivity]
     \label{thm:mpo_mixed_interior}
     \lean{MPSTensor.MPOSymmetry.span_mixedEndpointLetter_eq_top,
         MPSTensor.MPOSymmetry.isInjective_mixedEndpointBase,
@@ -71,7 +71,7 @@ $W_\gamma$ denotes $W(\gamma)$.
     \uses{def:mpo_mixed_endpoint_tensor,def:injective}
     The unweighted letters span $\End(V)$. The tensor $A(\gamma)$ depends
     continuously on $\gamma\in\R$ and is injective for $0<\gamma<1$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{def:mpo_mixed_endpoint_tensor,def:injective,
@@ -102,7 +102,7 @@ $W_\gamma$ denotes $W(\gamma)$.
     $h_\gamma=I-\Pi_{\mathcal S'_\gamma}$, including at $\gamma=0,1$.
 \end{definition}
 
-\begin{theorem}[Nondegenerate inserted boundary pairing]
+\begin{lemma}[Nondegenerate inserted boundary pairing]
     \label{thm:mpo_inserted_boundary_injective}
     \lean{MPSTensor.MPOSymmetry.eq_zero_of_inserted_pair_trace_eq_zero,
         MPSTensor.MPOSymmetry.insertedTwoSiteMap_injective,
@@ -111,7 +111,7 @@ $W_\gamma$ denotes $W(\gamma)$.
     \uses{def:mpo_mixed_extended_support,def:injective}
     If $B$ is injective and $W\neq0$, then $\Gamma_{B,W}$ is injective
     and $\dim\mathcal S'_{B,W}=D^2$. Invertibility of $W$ is unnecessary.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{lem:one_block_injective_of_injective,
@@ -128,7 +128,7 @@ $W_\gamma$ denotes $W(\gamma)$.
     gives $X=0$, and injectivity gives the dimension.
 \end{proof}
 
-\begin{theorem}[Continuous extension of the parent terms]
+\begin{lemma}[Continuous extension of the parent terms]
     \label{thm:mpo_mixed_support_continuity}
     \lean{MPSTensor.MPOSymmetry.continuous_insertedTwoSiteMap,
         MPSTensor.MPOSymmetry.continuous_range_insertedTwoSiteMap_starProjection,
@@ -149,7 +149,7 @@ $W_\gamma$ denotes $W(\gamma)$.
     the canonical local parent interaction continuously to both endpoints.
     In particular, its interior limit at $p=0,1$ is
     $I-\Pi_{\mathcal S'_p}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:mpo_mixed_interior,thm:mpo_inserted_boundary_injective,
@@ -159,7 +159,7 @@ $W_\gamma$ denotes $W(\gamma)$.
         rem:euclidean_local_projector_ingredients}
     Since both endpoint bond dimensions are positive,
     $W(\gamma)\neq0$ for every real $\gamma$.
-    Theorems~\ref{thm:mpo_mixed_interior}
+    Lemmas~\ref{thm:mpo_mixed_interior}
     and~\ref{thm:mpo_inserted_boundary_injective} give injectivity of
     $\Gamma_\gamma$.
     Its entries are continuous, and the inverse-Gram expression
@@ -191,7 +191,7 @@ $W_\gamma$ denotes $W(\gamma)$.
     respectively, at site $k\in\{0,1\}$ lies in $I_0$.
 \end{definition}
 
-\begin{theorem}[Boundary action of the outer sector projections]
+\begin{lemma}[Boundary action of the outer sector projections]
     \label{thm:mpo_mixed_outer_sectors}
     \lean{MPSTensor.MPOSymmetry.bondInterpolationMatrix_mul_mixedEndpointBase,
         MPSTensor.MPOSymmetry.mixedEndpointRowSector_insertedTwoSiteMap,
@@ -207,7 +207,7 @@ $W_\gamma$ denotes $W(\gamma)$.
         \label{eq:mpo_mixed_outer_sectors}
     \end{align}
     Hence $\mathcal S'_{A,W}$ is invariant under both outer sector projections.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:mpo_mixed_interior,def:mpo_mixed_endpoint_tensor,
@@ -220,14 +220,14 @@ $W_\gamma$ denotes $W(\gamma)$.
     extended boundary vector.
 \end{proof}
 
-\begin{theorem}[Inner sectors of the first endpoint support]
+\begin{lemma}[Inner sectors of the first endpoint support]
     \label{thm:mpo_mixed_inner_sectors}
     \lean{MPSTensor.MPOSymmetry.mixedEndpointColumnSector_zero_insertedTwoSiteMap,
         MPSTensor.MPOSymmetry.mixedEndpointRowSector_one_insertedTwoSiteMap}
     \leanok
     \uses{def:mpo_mixed_physical_sectors,def:mpo_mixed_extended_support}
     Every $v\in\mathcal S'_0$ satisfies $C_0v=v$ and $R_1v=v$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:mpo_mixed_interior,thm:mpo_mixed_outer_sectors,
@@ -237,7 +237,7 @@ $W_\gamma$ denotes $W(\gamma)$.
     $P_0A^j=0$. All such physical coefficients vanish.
 \end{proof}
 
-\begin{theorem}[Reducing outer sectors]
+\begin{lemma}[Reducing outer sectors]
     \label{thm:mpo_mixed_reducing_sectors}
     \lean{MPSTensor.MPOSymmetry.mixedEndpointRowSector_isSymmetric,
         MPSTensor.MPOSymmetry.mixedEndpointColumnSector_isSymmetric,
@@ -247,7 +247,7 @@ $W_\gamma$ denotes $W(\gamma)$.
     \uses{def:mpo_mixed_physical_sectors,def:mpo_mixed_extended_support}
     The maps $R_0,C_1$ are self-adjoint and commute with
     $\Pi_{\mathcal S'_{A,W}}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:mpo_mixed_outer_sectors,def:mpo_mixed_physical_sectors}
@@ -270,7 +270,7 @@ $W_\gamma$ denotes $W(\gamma)$.
     $V_0:\C^{D_0}\to V$ be the coordinate inclusion.
 \end{definition}
 
-\begin{theorem}[First-corner compression and support inclusion]
+\begin{lemma}[First-corner compression and support inclusion]
     \label{thm:mpo_mixed_first_support}
     \lean{MPSTensor.MPOSymmetry.isInjective_mixedEndpointLeftTensor,
         MPSTensor.MPOSymmetry.coordinateInclusion_first_projection_eq_bondWeight,
@@ -288,7 +288,7 @@ $W_\gamma$ denotes $W(\gamma)$.
         \label{eq:mpo_mixed_corner_boundary}
     \end{align}
     Consequently $G_2(B_0)\subseteq\mathcal S'_0$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{def:mpo_mixed_first_endpoint,def:mpo_mixed_endpoint_tensor,
@@ -307,14 +307,14 @@ $W_\gamma$ denotes $W(\gamma)$.
     $G_2(B_0)$ has such a boundary representation.
 \end{proof}
 
-\begin{theorem}[The canonical endpoint support is the outer physical corner]
+\begin{lemma}[The canonical endpoint support is the outer physical corner]
     \label{thm:mpo_mixed_corner_support}
     \lean{MPSTensor.MPOSymmetry.mixedEndpoint_extendedSupport_outerCorner_eq_groundSpaceES}
     \leanok
     \uses{def:mpo_mixed_physical_sectors,def:mpo_mixed_extended_support,
         def:mpo_mixed_first_endpoint,def:ground_space_es}
     The image of $\mathcal S'_0$ under $R_0C_1$ is exactly $G_2(B_0)$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:mpo_mixed_outer_sectors,thm:mpo_mixed_first_support,

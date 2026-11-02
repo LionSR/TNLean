@@ -10,7 +10,7 @@
     \leanok
 \end{definition}
 
-\begin{theorem}[Complete shared-register charge measurement]
+\begin{lemma}[Complete shared-register charge measurement]
     \label{thm:peps_regular_charge_complete_measurement}
     For the charge matrices $A_\chi(p;x,y)$ and their orthogonal projections
     $D_\chi$, one has
@@ -27,7 +27,7 @@
     \lean{TNLean.PEPS.sum_regularChargeMatrix_eq_single,TNLean.PEPS.regularChargeDetectorMatrix_label_vector,TNLean.PEPS.regularChargeDetectorMatrix_complete}
     \uses{def:peps_regular_charge_complete_labels,def:peps_regular_charge_coordinates,thm:peps_regular_charge_detector_matrix}
     \leanok
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     The regular character identity gives the matrix-unit resolution entry by entry.
@@ -35,7 +35,7 @@
     of projections and their sum on a spanning family.
 \end{proof}
 
-\begin{theorem}[Complete original-spin two-site charge measurement]
+\begin{lemma}[Complete original-spin two-site charge measurement]
     \label{thm:peps_regular_two_site_all_charge_measurement}
     Let two regular $G$-isometric site maps have arbitrary finite incident-leg sets,
     with one chosen shared leg at each site. For their character-weighted
@@ -62,7 +62,7 @@
     \lean{TNLean.PEPS.regularTwoSiteChargeDetector_complete,TNLean.PEPS.exists_regularTwoSitePhysicalAllChargeIntertwiner,TNLean.PEPS.exists_regularTwoSitePhysicalAllChargeMeasurement}
     \uses{thm:peps_regular_charge_complete_measurement,thm:peps_regular_two_site_physical_charge_measurement}
     \leanok
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Extend each shared-register projection by the identity on the remaining labels.

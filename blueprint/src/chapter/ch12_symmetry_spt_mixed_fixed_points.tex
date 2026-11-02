@@ -135,7 +135,7 @@ transform with $\alpha=t+r$.
     $H^1_t(G,\mathrm U(1))$ and $H^2_{t+r}(G,\mathrm U(1))$.
 \end{definition}
 
-\begin{theorem}[Regular realization of a twisted circle cocycle]
+\begin{lemma}[Regular realization of a twisted circle cocycle]
     \label{thm:spt_mixed_regular_realization}
     \lean{TNLean.Algebra.conjugateLeftRegular,
         TNLean.Algebra.conjugateLeftRegular_apply,
@@ -151,7 +151,7 @@ transform with $\alpha=t+r$.
     there is a unitary conjugate-projective representation on $\mathbb C^G$
     with factor system exactly $\omega$. No normalization of the chosen
     representative is required.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The matrices $L_g$ with entries $L_g(x,y)=\omega(g,y)$ when $x=gy$ and
     zero otherwise are permutation matrices with unit-modulus weights, hence
@@ -159,7 +159,7 @@ transform with $\alpha=t+r$.
     $L_gC_{t(g)+r(g)}(L_h)=\omega(g,h)L_{gh}$ entrywise.
 \end{proof}
 
-\begin{theorem}[Mixed-symmetry dimer fixed points]
+\begin{lemma}[Mixed-symmetry dimer fixed points]
     \label{thm:spt_mixed_fixed_point}
     \lean{MPSTensor.sptPairingEquiv,
         MPSTensor.mixedSptMatrix,
@@ -196,7 +196,7 @@ transform with $\alpha=t+r$.
     \cite[Section~III.A, local TeX lines~1147--1157]{Cirac2021Matrix},
     every other unitary virtual action implementing this same symmetry and
     character has the same class $[\omega]\in H^2_{t+r}(G,\mathrm U(1))$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The coefficient of $E_{xy}$ in $X_g^\dagger E_{ab}X_g$ is
     $\overline{(X_g)_{ax}}(X_g)_{by}$. Swapping the two column indices of

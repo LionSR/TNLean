@@ -36,6 +36,15 @@ def interval (L a b : ℕ) : Finset (Fin L) := Finset.univ.filter fun i ↦ a �
 theorem mem_interval {a b : ℕ} {i : Fin L} : i ∈ interval L a b ↔ a ≤ i.val ∧ i.val < b := by
   simp [interval]
 
+/-- Two adjacent intervals `[a, b)` and `[b, c)` are disjoint. -/
+theorem disjoint_interval_interval (a b c : ℕ) :
+    Disjoint (interval L a b) (interval L b c) := by
+  apply Finset.disjoint_left.mpr
+  intro x hx hy
+  exact (Finset.disjoint_left.mp (Finset.Ico_disjoint_Ico_consecutive a b c))
+    (Finset.mem_Ico.mpr (mem_interval.mp hx))
+    (Finset.mem_Ico.mpr (mem_interval.mp hy))
+
 /-- Intervals are monotone in their ends. -/
 theorem interval_mono {a a' b b' : ℕ} (ha : a' ≤ a) (hb : b ≤ b') :
     interval L a b ⊆ interval L a' b' := by

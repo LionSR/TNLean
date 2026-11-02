@@ -5,7 +5,7 @@ its use in the proof of Proposition~9.5, lines~693--729, require a collar
 whose depth is small compared with the rectangle size. The following
 numerical estimates give the required clearance.
 
-\begin{theorem}[A rounded sublinear collar is at most half the side length]
+\begin{lemma}[A rounded sublinear collar is at most half the side length]
     \label{thm:area_law_rounded_collar_half}
     \lean{TNLean.PEPS.AreaLaw.Scan.exists_two_mul_floor_rpow_ceil_mul_le}
     \leanok
@@ -16,7 +16,7 @@ numerical estimates give the required clearance.
     \begin{align}
         2L_s\le s.
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Since $1-\eta>0$, there is an integer $N\ge1$ such that
     $s^{1-\eta}\ge2(C_2+1)^\eta$ for every integer $s\ge N$.
@@ -29,7 +29,7 @@ numerical estimates give the required clearance.
     \end{align}
 \end{proof}
 
-\begin{theorem}[A linear bound for collar clearance]
+\begin{lemma}[A linear bound for collar clearance]
     \label{thm:area_law_collar_scalar_clearance}
     \lean{TNLean.PEPS.AreaLaw.Scan.mul_collar_add_collar_le_of_two_mul_le}
     \leanok
@@ -37,7 +37,7 @@ numerical estimates give the required clearance.
     \begin{align}
         D_0L+L\le D_0s.
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Multiplication by $L\ge0$ gives $L\le D_0L$. Therefore
     \begin{align}
@@ -45,7 +45,7 @@ numerical estimates give the required clearance.
     \end{align}
 \end{proof}
 
-\begin{theorem}[Uniform clearance for the fixed bootstrap collar]
+\begin{lemma}[Uniform clearance for the fixed bootstrap collar]
     \label{thm:area_law_bootstrap_collar_clearance}
     \lean{TNLean.PEPS.AreaLaw.Scan.exists_bootstrap_collar_clearance}
     \leanok
@@ -61,17 +61,17 @@ numerical estimates give the required clearance.
         D_0L_s+L_s\le D_0s.
     \end{align}
     The same threshold is chosen before the safety parameter $D_0$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:area_law_bootstrap_margins,thm:area_law_rounded_collar_half,
         thm:area_law_collar_scalar_clearance}
     The fixed parameter bounds give $0<\ell<1$, so $0<1-\ell<1$, and
-    Theorem~\ref{thm:area_law_rounded_collar_half} with
+    Lemma~\ref{thm:area_law_rounded_collar_half} with
     $\eta=1-\ell$ provides an integer $N\ge1$ depending only on $C_2$ and $e_0$
     such that $2L_s\le s$ for every $s\ge N$. Since $C_2s>0$, the integer $n_s$
     is at least one, so $L_s\ge1$, and for each $D_0\ge1$,
-    Theorem~\ref{thm:area_law_collar_scalar_clearance} gives
+    Lemma~\ref{thm:area_law_collar_scalar_clearance} gives
     $D_0L_s+L_s\le D_0s$ without changing $N$.
 \end{proof}
 

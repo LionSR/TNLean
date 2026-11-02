@@ -1,4 +1,4 @@
-\begin{theorem}[Topology of native plaquettes]%
+\begin{lemma}[Topology of native plaquettes]%
     \label{thm:peps_torus_plaquette_realization}
     \lean{TNLean.PEPS.torusVertexPoint_add,
         TNLean.PEPS.torusRegionRealization_image_add,
@@ -13,7 +13,7 @@
     The graph induced on $R_v$ is connected, and the union of its
     closed unit cells in $\mathbb R^2/(m\mathbb Z\times n\mathbb Z)$
     is simply connected, including when $R_v$ crosses a periodic seam.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The four-step plaquette walk has support $R_v$, so its induced graph
     is connected. Translation by $v$ carries the closed-cell realization
@@ -25,7 +25,7 @@
     its convexity gives simple connectedness.
 \end{proof}
 
-\begin{theorem}[Full regular torus parent ground space]%
+\begin{lemma}[Full regular torus parent ground space]%
     \label{thm:peps_regular_torus_parent_ground_space}
     \lean{TNLean.PEPS.IsGInjective.commutingClosureSpan_le_torusParentKernel,
         TNLean.PEPS.IsGInjective.torusParentKernel_eq_commutingClosureSpan,
@@ -48,7 +48,7 @@
     where $G$ acts by simultaneous conjugation, specializing
     \cite[Theorems~5.7 and~5.9]{Schuch2010PEPS}
     to the regular representation and the indicated torus periods.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Each plaquette is connected with simply connected realization,
     so every commuting closure is annihilated by every $P_v$.

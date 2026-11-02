@@ -22,8 +22,8 @@ be $D_0$ and $D_1$. The construction embeds the two bond spaces as consecutive
 direct summands of an ambient space whose dimension is
 \begin{align}
     D_{\mathrm{amb}}
-        &=
-        D_0+D_1.
+     & =
+    D_0+D_1.
     \label{eq:spc11_spt_interpolation_upper_range_ambient_dimension}
 \end{align}
 It then interpolates between maximally entangled vectors supported on the two
@@ -33,10 +33,10 @@ The source display in
 \path{Papers/1010.3732/paper_v3.tex}, lines~900--903, reads
 \begin{align}
     \ket{\omega_{\mathrm{src}}(\gamma)}
-        &=
-        (1-\gamma)\sum_{i=1}^{D_0}\ket{i,i}
-        +
-        \gamma\sum_{i=D_0+1}^{D_1}\ket{i,i}.
+     & =
+    (1-\gamma)\sum_{i=1}^{D_0}\ket{i,i}
+    +
+    \gamma\sum_{i=D_0+1}^{D_1}\ket{i,i}.
     \label{eq:spc11_spt_interpolation_upper_range_source_interpolation}
 \end{align}
 The source immediately states that this vector has bond dimension
@@ -48,33 +48,33 @@ The second summand must occupy the $D_1$ coordinates immediately following
 the first $D_0$ coordinates. Its index set is
 \begin{align}
     I_1
-        &=
-        \{D_0+1,\ldots,D_0+D_1\},
+     & =
+    \{D_0+1,\ldots,D_0+D_1\},
     \label{eq:spc11_spt_interpolation_upper_range_second_index_set}
 \end{align}
 rather than $\{D_0+1,\ldots,D_1\}$. The corrected interpolation is
 \begin{align}
     \ket{\omega(\gamma)}
-        &=
-        (1-\gamma)\sum_{i=1}^{D_0}\ket{i,i}
-        +
-        \gamma\sum_{i=D_0+1}^{D_0+D_1}\ket{i,i}.
+     & =
+    (1-\gamma)\sum_{i=1}^{D_0}\ket{i,i}
+    +
+    \gamma\sum_{i=D_0+1}^{D_0+D_1}\ket{i,i}.
     \label{eq:spc11_spt_interpolation_upper_range_corrected_interpolation}
 \end{align}
 
 At the first endpoint,
 \begin{align}
     \ket{\omega(0)}
-        &=
-        \sum_{i=1}^{D_0}\ket{i,i},
+     & =
+    \sum_{i=1}^{D_0}\ket{i,i},
     \label{eq:spc11_spt_interpolation_upper_range_first_endpoint}
 \end{align}
 which is the maximally entangled vector on the first bond summand. At the
 second endpoint,
 \begin{align}
     \ket{\omega(1)}
-        &=
-        \sum_{i=D_0+1}^{D_0+D_1}\ket{i,i},
+     & =
+    \sum_{i=D_0+1}^{D_0+D_1}\ket{i,i},
     \label{eq:spc11_spt_interpolation_upper_range_second_endpoint}
 \end{align}
 which is the maximally entangled vector on the second bond summand. The upper
@@ -131,24 +131,27 @@ injectivity or a locally constant minimal dimension.
 This argument does not add a one-site-ring hypothesis or a further
 chain-length threshold.
 
-The passage from an exact MPS ground-state path to such a continuous
-fixed-dimension injective tensor family remains to be proved, as does the
+The converse along an exact MPS ground-state path does not pass through
+such a continuous fixed-dimension injective tensor family, nor through the
 change-of-support argument of Appendix~C,
 \path{app:coh-class-cont-dimchange}, in
-\path{Papers/1010.3732/paper_v3.tex}, lines~2653--2717. In particular, the
-larger ambient bond space used by the direct-sum interpolation must not be
-assumed injective at parameters where the minimal bond dimension decreases.
-The remaining separation theorem must include such parameters while retaining
-the exact MPS ground-state hypothesis; the Hamiltonian-only converse is a
-different unresolved statement.
+\path{Papers/1010.3732/paper_v3.tex}, lines~2653--2717. It uses the
+compact-sequence argument described below, which admits parameters where
+the minimal bond dimension decreases; the larger ambient bond space used by
+the direct-sum interpolation is not assumed injective at such parameters.
+The converse for gapped Hamiltonian paths whose ground states are not exact
+MPS is a different, unresolved statement.
 
 Continuity of an ambient tensor alone does not give continuity of its
 minimal canonical support. For example, let $X,Y,Z$ be the Pauli matrices
 and consider the four-letter tensor
-\[
- A_0(t)=\mathbf{1}_2,\qquad
- A_1(t)=tX,\qquad A_2(t)=tY,\qquad A_3(t)=tZ.
-\]
+\begin{align}
+    A_0(t) & =\mathbf{1}_2, &
+    A_1(t) & =tX,          &
+    A_2(t) & =tY,          &
+    A_3(t) & =tZ.
+    \label{eq:spc11_spt_interpolation_upper_range_pauli_tensor}
+\end{align}
 The on-site action of $\mathbb Z_2\times\mathbb Z_2$ is the fixed diagonal
 sign action induced by conjugation with $X$ and $Z$. For every $t>0$ the
 tensor is one-site injective; its virtual generators anticommute, so its
@@ -157,15 +160,16 @@ multiples of the product vector $\ket{0}^{\otimes N}$, whose minimal bond
 dimension is one and whose virtual class is trivial. This example concerns
 raw tensor continuity, not a uniformly gapped path with a unique exact MPS
 ground state. Indeed, the canonical two-site local ground spaces tend to
-\[
- \operatorname{span}\{\ket{00},\;
-   \ket{0a}+\ket{a0}:a=1,2,3\};
-\]
+\begin{align}
+    \operatorname{span}\{\ket{00},\;
+    \ket{0a}+\ket{a0}:a=1,2,3\};
+    \label{eq:spc11_spt_interpolation_upper_range_limiting_local_ground_space}
+\end{align}
 the limiting two-site ring therefore has additional ground vectors.
 Thus the independent relation's uniform-gap and exact-ground-state
 conditions cannot be discarded when deriving continuous canonical data.
-The derivation of those data remains an outstanding theorem, rather than
-an additional hypothesis in the phase relation.
+Those data are not a hypothesis of the phase relation, and the class
+comparison described below does not construct them.
 
 Appendix~C starts with differentiable standard-form tensors and asserts an
 extension to continuous tensors by approximation (lines~2660--2664).
@@ -249,10 +253,11 @@ images in the common physical representation. No physical path or continuous
 virtual family is assumed in this forward theorem. Its one-site injective
 and trivial-character restrictions remain explicit.
 
-The proved forward construction is distinct from the unresolved separation
-argument of Appendix~C. The latter must derive compatible continuous
-balanced canonical data and surviving invariant single-bond subspaces from
-an independent physical exact MPS ground-state path. The local
+The proved forward construction is distinct from the separation argument
+of Appendix~C, which derives compatible continuous balanced canonical data and
+surviving invariant single-bond subspaces from an independent physical exact
+MPS ground-state path. The formal converse takes a different route, described
+below. The local
 dimension-direction assertion can already be justified without canonical
 coordinates. The coefficient matrix of the periodic two-site vector has
 rank $D^2$ for a one-site injective representative of dimension $D$.
@@ -299,8 +304,8 @@ base parameter. The pointwise normalized stationary density is not
 assumed continuous. These results remove several auxiliary continuity
 and invariance assumptions once the continuous unital bond family is
 available. They do not construct that
-family from the independent physical exact MPS path and its uniform gap;
-this remains the analytic question required for the general converse.
+family from the independent physical exact MPS path; the converse described
+below does not require it.
 
 The declaration
 \leanid{MPSTensor.exists_local_continuous_canonicalNormalization_of_isInjective}
@@ -308,8 +313,8 @@ now supplies local continuous Perron data, an explicit unital normalization,
 and a unique normalized adjoint stationary density for any supplied continuous
 tensor family in a fixed positive bond dimension, with injectivity only at the
 base point. No stationary-space hypothesis is added. This completes the
-normalization once a continuous realization is available; choosing that
-realization through a change of minimal bond dimension remains separate.
+normalization once a continuous realization is available; no such
+realization is chosen through a change of minimal bond dimension.
 
 Finite-ring reconstruction is now proved for already injective realizations.
 The declaration
@@ -320,7 +325,7 @@ coefficient quotient, and three-site traces recover multiplication on it;
 Skolem--Noether then gives the scalar and bond conjugation. The trace form
 is complex bilinear, so its inverse is not a positive spectral-support
 construction. Continuous canonical coordinates through a change of quotient
-dimension still require a separate theorem.
+dimension are not constructed.
 
 At constant minimal dimension,
 \leanid{Matrix.exists_local_continuous_traceQuotientUnit}
@@ -334,7 +339,8 @@ Hermitian. The local continuous realization is now supplied by
 it constructs an injective unital tensor for the same full periodic-ray family,
 and a continuous unique normalized adjoint stationary density, without a
 continuous choice of the pointwise minimal representatives. Changes of minimal
-bond dimension remain open.
+bond dimension are handled by the compact-sequence argument rather than by a
+continuous realization.
 
 The projective class is now locally constant for a supplied continuous
 injective tensor family on an arbitrary topological parameter space.
@@ -348,7 +354,8 @@ for all virtual adjoint actions; a nearby invariant line in the space of
 intertwiners then identifies the cohomology classes. In particular, this
 argument applies to convergent sequences. Identifying a limiting supported
 tensor with the prescribed ground-state rays, and deriving the necessary
-uniform transfer bound from the physical gap, remain separate obligations.
+uniform transfer bound from the physical gap, are the remaining steps of the
+compact-sequence argument below.
 
 Local constancy for a supplied unital ambient family now holds on any
 topological parameter space, assuming continuity only at the base point.
@@ -411,18 +418,20 @@ virtual actions can then be chosen. Under the supplied uniform transfer
 bound, the preceding local class theorem and connectedness of the parameter
 interval imply equality of their virtual classes at every pair of parameters.
 No continuous choice of these representatives or virtual actions is needed.
-The transfer bound from the physical Hamiltonian gap remains outstanding.
+The transfer bound itself follows from the physical Hamiltonian gap, as
+described at the end of this section.
 
 The finite-volume dynamical estimate needed for the physical-gap argument
 is now proved directly for the periodic nearest-neighbor Hamiltonian.
 For Hermitian two-site interactions of operator norm at most one,
 observables on nonempty disjoint supports $X,Y$ satisfy
-\[
- \|[e^{itH_N}Ae^{-itH_N},B]\|
- \leq 2\|A\|\|B\|\,|X|e^{-a d(X,Y)}
-                  \bigl(e^{8e^a|t|}-1\bigr)
- \qquad(a\geq0).
-\]
+\begin{align}
+    \|[e^{itH_N}Ae^{-itH_N},B]\|
+     & \leq 2\|A\|\|B\|\,|X|e^{-a d(X,Y)}
+    \bigl(e^{8e^a|t|}-1\bigr)
+    \qquad(a\geq0).
+    \label{eq:spc11_spt_interpolation_upper_range_lieb_robinson}
+\end{align}
 Here $d(X,Y)$ is cyclic graph distance. The constants are independent of
 chain length and physical dimension. The proof establishes the local
 commutator recursion, bounds its weighted row sum, and treats negative time
@@ -430,9 +439,8 @@ by replacing the Hamiltonian by its negative. It does not require positive
 interaction terms, frustration freedom, or a vanishing ground energy.
 Cyclic embedding of the two-site interaction is proved contractive and
 supported on the corresponding cyclic bond, including the bond crossing
-the end of the chain. This proves the propagation estimate used in the
-Gaussian filtering argument; the ground-state spectral calculation and
-exponential-clustering conclusion remain separate.
+the end of the chain. This is the propagation estimate used in the Gaussian filtering argument
+for the physical gap.
 
 The required realization need not be obtainable by gauging the supplied
 ambient tensor. For example, let $a$ be a normalized one-site vector and
@@ -447,10 +455,49 @@ ambient realization recorded in the path. The checked declarations
 \leanid{MPSTensor.repeatedProductTensor_fixedSpace_finrank} and
 \leanid{MPSTensor.repeatedProductTensor_samePositiveMpvRay} record the
 stationary-space dimension and periodic-ray comparison for the product
-vector $a=\ket{0}$. The remaining converse must obtain controlled minimal realizations of the
+vector $a=\ket{0}$. The converse therefore works with controlled minimal realizations of the
 same ground-state rays. The compact-sequence approach requires convergence
 along a subsequence and a uniform transfer bound; it does not require a
 continuous unital realization on the whole parameter interval.
+
+The source separation claim concerns smooth paths of MPS, not arbitrary
+ground states: \path{Papers/1010.3732/paper_v3.tex}, lines~929--953. The
+independent phase condition accordingly requires a continuous exact MPS
+realization of the unique finite-ring ground lines of a uniformly gapped
+symmetric interaction path, after common blocking and orthogonal physical
+inclusions. At each parameter the periodic rays admit a one-site injective
+representative of positive dimension bounded by one ambient bond dimension,
+and the minimal dimension may change. Neither a virtual action nor a common
+transfer bound is part of that condition.
+
+The uniform gap implies the missing transfer bound. Ordinary connected
+clustering follows from the gap by the Gaussian filtering and Cauchy-integral
+argument built on the propagation estimate
+(\ref{eq:spc11_spt_interpolation_upper_range_lieb_robinson}). Pointwise
+transfer convergence and a trace-preserving bond gauge then give a common
+transfer spectral bound below one, and the compact-sequence argument above
+yields one virtual class along the whole exact MPS path.\footnote{Formal
+    declaration: \leanid{MPSTensor.ExactMPSGroundPath.exists_constant_virtual_class}.}
+This requires no continuous choice of minimal representatives or virtual
+matrices.
+
+Transporting that class to prescribed endpoint representations shows that two
+endpoints are joined by such a path exactly when their virtual factor systems
+are cohomologous.\footnote{Formal declaration:
+    \leanid{MPSTensor.isSameExactMPSGappedPhase_iff_cohomologous}.}
+Here the endpoint tensors are one-site injective of positive bond dimension,
+with prescribed projective representations implementing their \emph{exact}
+on-site tensor covariance; the phase condition itself still permits endpoint
+character changes and physical inclusions. The endpoint covariance hypothesis
+carries no scalar character, so the biconditional does not cover arbitrary
+character-covariant endpoints, and it does not classify several-block
+tensors. Comparing this endpoint domain and exact-path definition with the
+full source-labelled classification is a separate question, and the
+corresponding blueprint nodes remain marked \path{notready}. The fixed-point
+character restriction and the compact normal-form gap restriction are resolved
+in their own notes; those resolutions do not enlarge this classification
+statement. No conclusion is asserted about gapped Hamiltonian paths whose
+ground states are not exact MPS.
 
 \section{Verdict}
 

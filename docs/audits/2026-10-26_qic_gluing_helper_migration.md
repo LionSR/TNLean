@@ -1,8 +1,9 @@
 # Matrix identities used by chain gluing
 
-The chain gluing argument uses the matrix results in QICLean revision
-`17a4c0d1a2f9599f8bac689e4fa81f27cee3eadb`. The package configuration, root
-manifest and documentation-build manifest all pin that revision.
+The chain gluing argument uses the matrix results introduced in QICLean
+revision `17a4c0d1a2f9599f8bac689e4fa81f27cee3eadb`. The package
+configuration, root manifest and documentation-build manifest pin a later
+revision that contains it, `6940c86aca0686bf250e3f10adce4638c158e1b9`.
 
 Four private theorems have been removed from
 `TNLean/MPS/AreaLaw/ViableSet/Gluing.lean`:
@@ -22,4 +23,4 @@ are unchanged. No compatibility declarations remain for the private names.
 
 The companion library records the two matrix results and the coordinated
 deletion in its
-[migration audit](https://github.com/LionSR/QICLean/blob/17a4c0d1a2f9599f8bac689e4fa81f27cee3eadb/docs/audits/2026-10-26_chain_gluing_matrix_helpers.md).
+[migration audit](https://github.com/LionSR/QICLean/blob/6940c86aca0686bf250e3f10adce4638c158e1b9/docs/audits/2026-10-26_chain_gluing_matrix_helpers.md).

@@ -52,7 +52,7 @@
     coarse period is one or two.
 \end{definition}
 
-\begin{theorem}[Exact periodic four-site reblocking]%
+\begin{lemma}[Exact periodic four-site reblocking]%
     \label{thm:peps_two_by_two_geometric_blocking}
     \lean{TNLean.PEPS.torusBondNetwork_eq_twoByTwoTiledSum,
         TNLean.PEPS.torusBondNetwork_eq_twoByTwoBlocked}
@@ -64,7 +64,7 @@
     $\Psi_a(\sigma)=\Psi_B(\tau)$, where
     $\tau_{v,i}=\sigma_{(v,i)}$. Both sides sum over all their bonds.
     The equality has scalar factor one and holds for every $w,h>0$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:peps_two_by_two_bond_bijection}
@@ -84,7 +84,7 @@
     Let $W$ be its permutation matrix on the complete physical spaces.
 \end{definition}
 
-\begin{theorem}[Unitary physical regrouping of the fine state]%
+\begin{lemma}[Unitary physical regrouping of the fine state]%
     \label{thm:peps_two_by_two_physical_grouping}
     \lean{TNLean.PEPS.twoByTwoPhysicalMatrix_isIsometry,
         TNLean.PEPS.twoByTwoPhysicalMatrix_conjTranspose_isIsometry,
@@ -95,7 +95,7 @@
     Both $W$ and $W^*$ are isometries, and $W\Psi_a=\Psi_B$.
     All four physical registers per block, including unused directions,
     belong to this unitary identification.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     The physical label map is bijective, so its matrix and the inverse
@@ -115,7 +115,7 @@
     to $B_v$ defines its coarse graph tensor, with physical alphabet $P^4$.
 \end{definition}
 
-\begin{theorem}[Equality with the coarse graph contraction]%
+\begin{lemma}[Equality with the coarse graph contraction]%
     \label{thm:peps_two_by_two_graph_contraction}
     \lean{TNLean.PEPS.graphBondNetwork_torusIncidentFamily,
         TNLean.PEPS.torusBondNetwork_eq_twoByTwoGraphSite}
@@ -125,7 +125,7 @@
     graph contraction, for arbitrary site-dependent tensors and physical
     alphabets. In particular $W\Psi_a$ is the graph state of the
     paired four-site tensors.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Every coarse graph edge is uniquely a horizontal or vertical outgoing

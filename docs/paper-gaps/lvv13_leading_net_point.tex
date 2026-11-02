@@ -1,0 +1,64 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+% Fallbacks keep this note compilable when a different command.tex is found first.
+\providecommand{\leanid}[1]{\textsf{\detokenize{#1}}}
+\providecommand{\gapnote}[2]{\par\noindent\textbf{Verdict:} #1 (#2).\par}
+
+\title{The Net Point in the Leading-Eigenvector Lemma of Landau, Vazirani and Vidick}
+\author{}
+\date{2026-10-28}
+
+\begin{document}
+\maketitle
+\gapnote{open-gap}{resolved}
+
+\section{The source statement}
+
+In the size-trimming step of Landau, Vazirani and Vidick~\cite{Landau2015Polynomial}
+(arXiv:1307.5143v1, \path{algo53.tex}, lines~464--476), $\mathcal N$ is a
+finite net over the boundary contractions of bounded bond dimension, whose
+cardinality is polynomial in the chain length (lines~454--455).
+Lemma \path{l:leading} (lines~493--495) takes for $X$ the element of
+$\mathcal N$ closest to the boundary contraction of a low-energy state $w$,
+and Claim \path{c:2} (lines~519--520) bounds the size of the resulting set by
+the cardinality of $\mathcal N$.
+
+\section{What is formalized}
+
+The leading-vector theorem is stated for any boundary density matrix $X$
+whose trace distance to the boundary contraction of $w$ is at most the
+tolerance of the convex program. The closest net element is one such $X$, so
+the theorem applies to it. The theorem itself makes no assertion about the net
+or its cardinality; when it was first formalized, the covering property of the
+net and Claim \path{c:2} were therefore an open gap in the size-trimming step.
+
+\section{Resolution}
+
+The size-trimming theorem closes this gap.\footnote{\leanid{TNLean.MPS.AreaLaw.ChainHamiltonian.exists_size_trimmed_family}
+    and \leanid{TNLean.MPS.AreaLaw.ChainHamiltonian.exists_size_trimmed_family_polynomial}
+    in \doclink{TNLean/MPS/AreaLaw/ViableSet/SizeTrimming}.}
+For every actual bond dimension up to the uniform cut bound it chooses a
+boundary net, minimizes the left energy at every feasible net point, and takes
+the union of the left columns of the solutions, all before the ground vector is
+given. Whenever the input family is viable, the net point closest to the
+boundary contraction of a low-energy state supplies, through the leading-vector
+theorem, a unit vector witnessing viability of the output family. The output
+family has cardinality at most $C L^{p}$ with $p=2(qD)^2$, where $C$ and $p$ do
+not depend on the chain length. This is Claim \path{c:2}, with the corrected
+net exponent of the trace-norm net and the prefactor $(D+1)D$ recorded in the
+note on the constant bond dimension. The remaining restrictions of that theorem,
+a nonempty chain with at least two states per site and the library's uniform
+cut bound, are recorded in the notes on nontrivial chains and on the constant
+bond dimension; none of them concerns the net point.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}

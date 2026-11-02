@@ -15,7 +15,7 @@ The source target and prefix entropy estimates at exponent $e_*$
 are antecedents throughout this section. This calculation does not
 construct the preceding safe-box estimate.
 
-\begin{theorem}[Rounded scales and scalar losses]
+\begin{lemma}[Rounded scales and scalar losses]
     \label{thm:arealaw-final-sharp-scales}
     \lean{TNLean.PEPS.AreaLaw.Scan.ScannerExponents.eventually_bandCount_le_rpow,TNLean.PEPS.AreaLaw.Scan.exists_finalSharp_scale_bounds,TNLean.PEPS.AreaLaw.Scan.finalSharp_neg_log_mass_le,TNLean.PEPS.AreaLaw.Scan.finalSharp_binEntropy_le,TNLean.PEPS.AreaLaw.Scan.finalSharp_binary_cost_le}
     \leanok
@@ -47,7 +47,7 @@ construct the preceding safe-box estimate.
         \label{eq:final_scalar_mass_binary}
     \end{align}
     The binary estimate uses $h(t)\leq t(1-\log t)$ for $0<t<1$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -84,7 +84,7 @@ construct the preceding safe-box estimate.
     $d_X=\log(e\dim\mathcal H_X)$. No far-region dimension occurs.
 \end{definition}
 
-\begin{theorem}[Pointwise source envelope]
+\begin{lemma}[Pointwise source envelope]
     \label{thm:arealaw-final-sharp-envelope}
     \lean{TNLean.PEPS.AreaLaw.Scan.finalSharp_source_entropy_bounds,TNLean.PEPS.AreaLaw.Scan.finalSharpError_le_powerEnvelope}
     \leanok
@@ -112,7 +112,7 @@ construct the preceding safe-box estimate.
     \end{align}
     The decimal powers in this display denote exact terminating
     rationals, not numerical approximations.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -129,7 +129,7 @@ construct the preceding safe-box estimate.
     and $d_X\leq(1+C_{\dim})n^2$ give the trace correction.
 \end{proof}
 
-\begin{theorem}[Uniform final power absorption]
+\begin{lemma}[Uniform final power absorption]
     \label{thm:arealaw-final-sharp-power}
     \lean{TNLean.PEPS.AreaLaw.Scan.finalSharp_error_exponents,TNLean.PEPS.AreaLaw.Scan.eventually_finalSharp_log_cost_le,TNLean.PEPS.AreaLaw.Scan.eventually_finalSharp_powerEnvelope_le,TNLean.PEPS.AreaLaw.Scan.exists_finalSharp_error_le,TNLean.PEPS.AreaLaw.Scan.finalSharpErrorThreshold,TNLean.PEPS.AreaLaw.Scan.finalSharpErrorConstant,TNLean.PEPS.AreaLaw.Scan.finalSharp_error_le_of_finalSharpErrorThreshold_le}
     \leanok
@@ -149,7 +149,7 @@ construct the preceding safe-box estimate.
     \end{align}
     The exact maximal power is $62497/62500=0.999952$.
     Its margin to $1-1/100000$ is $19/500000>0$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -161,7 +161,7 @@ construct the preceding safe-box estimate.
     gives (\ref{eq:final_scalar_coefficient}).
 \end{proof}
 
-\begin{theorem}[Trace bound and smallness of the step weight]
+\begin{lemma}[Trace bound and smallness of the step weight]
     \label{thm:arealaw-final-sharp-source}
     \lean{TNLean.PEPS.AreaLaw.Scan.finalSharp_traceDistance_power,TNLean.PEPS.AreaLaw.Scan.exists_finalSharp_source_error_le,TNLean.PEPS.AreaLaw.Scan.finalSharp_source_error_le_of_finalSharpErrorThreshold_le,TNLean.PEPS.AreaLaw.Scan.exists_finalSharp_transport_smallness}
     \leanok
@@ -180,7 +180,7 @@ construct the preceding safe-box estimate.
         a\,\ell_q(\lceil C_r\log^2n\rceil) & \leq c_t.
         \label{eq:final_scalar_transport}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok

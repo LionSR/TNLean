@@ -23,8 +23,8 @@ slower rate `e^{-l/ξ'}` with `ξ' > 6ξ`: with `δ = 1/(6ξ) − 1/ξ' > 0`,
 `ξ' = 6ξ` (line 142) is not established, because the final bound keeps the prefactor `√l`; it
 is not shown to be false. It is reached by choosing the length anew: in units of the gap,
 `exists_projectorFactorization_endpoint` gives the rate `6ζ` for the length `ζ = (5/4) ξ̂` of
-the chain estimate with raised velocity, which carries the same restriction on the
-Lieb–Robinson pair as `ξ̂`. Documented in
+the chain estimate with raised velocity. Both physical Lieb–Robinson pairs are
+identified in `TNLean/MPS/AreaLaw/Hastings/LiebRobinson.lean`. Documented in
 `docs/paper-gaps/hastings07_gaussian_average_exponent.tex` and
 `docs/paper-gaps/hastings07_lemma1_decay_length.tex`.
 

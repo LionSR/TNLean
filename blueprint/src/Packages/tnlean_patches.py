@@ -115,7 +115,11 @@ def _prepare_dependency_graph(source: str) -> str:
 # leave its already-produced page alone.
 _GRAPH_PRECOMPUTED = '<div id="graph" data-graphviz-precomputed="true"'
 _SVG_NS = {"svg": "http://www.w3.org/2000/svg"}
-_GRAPH_LAYOUT_TIMEOUT_SECONDS = 600
+# The full blueprint graph's WASM `dot` layout sits close to the old 600 s cap
+# and tipped over it intermittently as the blueprint grew, so raise the per
+# render budget. This is still far below the job's wall-clock limit and bounds
+# a genuinely hung layout.
+_GRAPH_LAYOUT_TIMEOUT_SECONDS = 1200
 
 
 def _dependency_graph_data(source: str, *, layout: bool) -> dict:

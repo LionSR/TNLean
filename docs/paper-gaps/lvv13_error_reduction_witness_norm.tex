@@ -1,0 +1,72 @@
+\documentclass{article}
+\usepackage[margin=28mm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\input{command}
+\providecommand{\gapnote}[2]{\par\noindent\textbf{Verdict:} #1 (#2).\par}
+\providecommand{\leanid}[1]{\textsf{\detokenize{#1}}}
+\begin{document}
+\begin{center}
+    {\Large Normalization in the LVV error-reduction step}
+\end{center}
+\gapnote{local-correction}{resolved}
+
+\section{The source statement}
+Landau, Vazirani and Vidick~\cite{Landau2015Polynomial},
+\href{https://arxiv.org/abs/1307.5143v1}{arXiv:1307.5143v1}, source
+\path{algo53.tex}, line 589, give the error-reduction argument as follows.
+For a witness $v$ of a $(i,\tfrac12)$-viable set they write
+$\bigl|\langle\Gamma, Av/\lVert Av\rVert\rangle\bigr| \ge 1-\delta$ and
+$\lVert K-A\rVert\le\delta$, with $\delta = c_\varepsilon/(2q(n))$, and conclude
+$\bigl|\langle\Gamma, Kv/\lVert Kv\rVert\rangle\bigr| \ge 1-2\delta$.
+
+\section{The point at issue}
+The two displayed bounds do not imply the conclusion without a lower bound on
+$\lVert Av\rVert$. In $\mathbb{C}^2$ take $\Gamma=v=e_1$, $A=\delta\,\mathbf{1}$
+and $K=A+\delta\,\lvert e_2\rangle\langle e_1\rvert$. Then
+$\langle\Gamma, Av\rangle/\lVert Av\rVert = 1$ and $\lVert K-A\rVert=\delta$, while
+$Kv=\delta(e_1+e_2)$ has overlap $1/\sqrt2$ with $\Gamma$, which is smaller than
+$1-2\delta$ for $0<\delta<1/8$.
+
+\section{The correction}
+The operator $A$ of the source is Hermitian and fixes $\Gamma$ (line 602), so
+$\lVert Av\rVert \ge \lvert\langle\Gamma, Av\rangle\rvert = \lvert\langle\Gamma,
+    v\rangle\rvert \ge \tfrac12$ for every witness $v$. For a unit vector $v$ with
+$\lVert Av\rVert\ge c>0$, $\lvert\langle\Gamma,Av\rangle\rvert\ge(1-\delta)\lVert
+    Av\rVert$ and $\lVert K-A\rVert\le\eta$, the triangle inequality gives
+\begin{align}
+    \lvert\langle\Gamma, Kv\rangle\rvert \ge \Bigl(1-\delta-\frac{2\eta}{c}\Bigr)
+    \lVert Kv\rVert .
+    \label{eq:lvv_error_reduction_overlap}
+\end{align}
+With $c=\tfrac12$ the error of the new viable set is $\delta+4\eta$ in place of
+$2\delta$. Since the claim is stated for an arbitrary polynomial $q(n)$, the
+change of constant is absorbed by applying Corollary \texttt{c:agsp} with a
+larger polynomial denominator; the claim holds with the original target error.
+For example, a target error $\tau>0$ is obtained by choosing the normalized
+filter error at most $\tau/2$ and the sampling error at most $\tau/8$.
+The vector $Kv$ is nonzero when $\eta<c$; dividing
+(\ref{eq:lvv_error_reduction_overlap}) by its norm then gives a unit viable witness.
+
+There is also a direct form that needs no separate normalized-filter estimate.
+Let $P=\lvert\Gamma\rangle\langle\Gamma\rvert$ and suppose
+$\lVert K-P\rVert\le\eta<1/2$. Every unit witness $v$ of a half-viable set
+satisfies $\lVert Pv\rVert=|\langle\Gamma,v\rangle|\ge1/2$, and
+$|\langle\Gamma,Pv\rangle|=\lVert Pv\rVert$. Applying
+(\ref{eq:lvv_error_reduction_overlap}) with $A=P$ and $\delta=0$ gives
+overlap at least $1-4\eta$. A power-filter estimate
+$\lVert A-P\rVert\le\rho$ and a sampling estimate
+$\lVert K-A\rVert\le\eta$ supply the direct hypothesis with error $\rho+\eta$.
+
+\section{Formalization}
+The perturbation estimate and its direct viable-set consequence are proved by
+the following declarations.
+\begin{itemize}
+    \footnotesize
+    \item \leanid{TNLean.MPS.AreaLaw.mul_norm_le_norm_inner_of_norm_sub_le}
+    \item \leanid{TNLean.MPS.AreaLaw.IsViable.errorReduction_of_norm_sub_groundProjection_le}
+\end{itemize}
+\bibliographystyle{unsrt}
+\bibliography{references}
+\end{document}

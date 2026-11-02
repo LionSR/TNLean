@@ -14,14 +14,14 @@
     or assumed coefficient identity is needed.
 \end{definition}
 
-\begin{theorem}[Uniformly numbered tensor coefficients]%
+\begin{lemma}[Uniformly numbered tensor coefficients]%
     \label{thm:peps_graph_bond_contraction_tensor}
     \lean{TNLean.PEPS.stateCoeff_groupBondTensor_eq_graphBondNetwork}
     \leanok
     \uses{def:peps_graph_bond_contraction}
     When all physical alphabets are $\{0,\ldots,d-1\}$, numbering the virtual
     alphabet identifies this contraction with the original tensor coefficient.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Reindexing the virtual summation by the product of the alphabet numberings
     yields the original tensor coefficient.
@@ -40,7 +40,7 @@
     corresponding Hilbert-space coordinate isometry.
 \end{definition}
 
-\begin{theorem}[Exact endpoint coordinates and overlap preservation]%
+\begin{lemma}[Exact endpoint coordinates and overlap preservation]%
     \label{thm:peps_graph_physical_bond_coordinates}
     \lean{TNLean.PEPS.graphSiteBondEndpointEquiv_symm_tail,
         TNLean.PEPS.graphSiteBondEndpointEquiv_symm_head,
@@ -51,7 +51,7 @@
     Recovering the site coordinates reads the second endpoint coordinate at
     each tail and the first at each head. Regrouping evaluates the original
     coefficient at these recovered coordinates and preserves every inner product.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Each half-edge occurs once in the endpoint pairs, so reindexing the finite
     inner product by this bijection preserves every inner product.
@@ -76,7 +76,7 @@
     underlying \cite[Section~7]{Schuch2010PEPS}.
 \end{definition}
 
-\begin{theorem}[Weighted graph coefficients]%
+\begin{lemma}[Weighted graph coefficients]%
     \label{thm:peps_graph_weighted_averaging_coherent}
     \lean{TNLean.PEPS.graphDress_one,
         TNLean.PEPS.graphDress_averagingSite,
@@ -95,7 +95,7 @@
     \end{align}
     This includes $W=I$ and the fourth-root operator $W=\Theta$.
     No connectedness, valence, or topological assumption is required.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Expanding the local convolution gives $WU(g^{-1})$ on tail legs and
     $U(g)W$ on head legs; expanding the site averages into one group label per
@@ -105,7 +105,7 @@
     For $W=\Theta$, commutation follows from the character-projector definition.
 \end{proof}
 
-\begin{theorem}[Finite-graph multiplicity restoration]%
+\begin{lemma}[Finite-graph multiplicity restoration]%
     \label{thm:peps_graph_multiplicity_bond_state}
     \lean{TNLean.PEPS.graphBondRegrouping_blockFourthRootWeight}
     \leanok
@@ -126,7 +126,7 @@
     \cite[Section~7]{Schuch2010PEPS} establishes both the support and the
     state equality as conclusions rather than hypotheses, while group-derived
     Fourier choices and full-domain physical isometries are separate consequences.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The two endpoint weights give
     $W^2U(g)=\bigoplus_i\sqrt{d_i}\,D_i(g)$.

@@ -25,13 +25,18 @@ from blueprint_tex_tree import read_tex_tree
 
 EXPECTED_PICTURE_COUNTS = [2] * 9 + [2, 3, 2, 4] + [2, 3, 2, 5, 1, 3, 3] + [2] * 18
 PAGES = (
-    "ch-symmetry.html", "ch-mpdo.html", "ch-mpdo_rfp.html", "ch-mpo_symmetry_basics.html"
+    "ch-symmetry.html",
+    "ch-mpdo.html",
+    "ch-mpdo_rfp_gibbs.html",
+    "ch-mpo_boundaries.html",
+    "ch-mpo_interpolation.html",
 )
 EXPECTED_WRAPPER_COUNTS = {
     "ch-symmetry.html": 9,
     "ch-mpdo.html": 4,
-    "ch-mpdo_rfp.html": 7,
-    "ch-mpo_symmetry_basics.html": 18,
+    "ch-mpdo_rfp_gibbs.html": 7,
+    "ch-mpo_boundaries.html": 5,
+    "ch-mpo_interpolation.html": 13,
 }
 
 
@@ -269,7 +274,7 @@ def _assert_generated_blocks(root: Path, filenames: tuple[str, ...] = PAGES) -> 
             )
         parsers[filename] = parser
 
-    events = parsers["ch-mpdo_rfp.html"].events
+    events = parsers["ch-mpdo_rfp_gibbs.html"].events
     prose_boundaries = (
         (
             "two Kronecker factors are the two bare cups:",

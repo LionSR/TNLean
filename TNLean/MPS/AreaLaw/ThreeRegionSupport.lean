@@ -204,11 +204,7 @@ theorem exists_threeSplit_two_window_factors_with_collars
     (p s : Fin (2 * ℓ)) :
     let T := interval L 0 ((a + p.val) + 1)
     let E := interval L ((a + p.val) + 1) ((b + s.val) + 1)
-    let hTE : Disjoint T E := by
-      rw [Finset.disjoint_left]
-      intro x hx hx'
-      simp only [T, E, mem_interval] at hx hx'
-      omega
+    let hTE : Disjoint T E := disjoint_interval_interval (L := L) 0 _ _
     let g := threeSplit q T E hTE
     let C : Finset E := Finset.univ.filter
       (fun x : E ↦ x.val ∉ interval L (a + 2 * ℓ + 1) b)

@@ -8,70 +8,68 @@ fixed horizon together with the pre-charge histories before that horizon;
 writing $Q_{jg}$ and $Y_{jg}$ for the near and middle regions of terminal
 $j$ in band $g$ gives the far region $(Q_{jg}\cup Y_{jg})^c$.
 
-\begin{theorem}[Scanner-root sharp lower estimate]
+\begin{lemma}[Scanner-root sharp lower estimate]
     \label{thm:actual_scan_sharp_lower_norm}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_actualScan_sharp_lower_norm}
     \leanok
     \uses{def:al_scan_actual_histories,def:al_scan_actual_energy_terms,
         thm:al_scan_literal_scalars}
     Fix a finite lattice domain $\Lambda$, interaction range $R$, term
-    norm bound $J$, positive physical and auxiliary dimensions $q,d$,
-    and $a>0$.
-    There are $c,C_f\geq0$, chosen before the scanner, finite horizon,
-    physical states, moment parameters, copy number, labels and
-    interpolation parameter, with the following property.
-    Let the scanner be indexed by the ordered admissible interaction
-    supports at range $R$, with offset scale $m>0$ and charge capacity $M>0$.
-    Let $\widetilde H$ be the sum of the truncated energy terms,
-    formed from a fixed reference state, and suppose that a unit vector
-    $\widetilde\Omega$ satisfies
+    norm bound $J$, physical and auxiliary dimensions $q,d\ge1$,
+    and $a>0$. There exist $c,C_f\geq0$ (independent of the scanner,
+    horizon, states, moment parameters, copy number $k$, labels, and
+    interpolation parameter) with the following property.
+    Index the scanner by the ordered admissible supports at range $R$
+    with offset scale $m>0$ and charge capacity $M>0$. Let $\widetilde H$
+    be the sum of the truncated energy terms formed from a reference
+    state, and suppose a unit vector $\widetilde\Omega$ satisfies
     \begin{align}
         \widetilde H-e_0 I
         \succeq \gamma
         \bigl(I-|\widetilde\Omega\rangle
         \langle\widetilde\Omega|\bigr),
-        \qquad \gamma>0.
+        \qquad \gamma>0,
+        \label{eq:actual_scan_sharp_lower_gap}
     \end{align}
-    For every terminal and band, assume the original marginal moment
-    estimate
+    and the marginal moment bound for $\widetilde\Omega$ and its spectral
+    surprisal $Z_U$ (with zero weights contributing zero),
     \begin{align}
         \log\mathbb E\exp(vZ_U)
         \leq vS(U)+K_{\rm mom}v^2
-        \qquad (|v|\leq r_{\rm mom})
+        \qquad (|v|\leq r_{\rm mom}),
+        \label{eq:actual_scan_sharp_lower_moment}
     \end{align}
-    for $U=Q_{jg},Y_{jg},(Q_{jg}\cup Y_{jg})^c$, where
-    $K_{\rm mom}\geq0$, $10a\leq r_{\rm mom}$ and $10a\leq1$.
-    Here $Z_U$ is the surprisal under the spectral probability
-    distribution, with zero weights contributing zero.
-    Entropies and moments refer to the same original state
-    $\widetilde\Omega$.
-    Fix $k>0$ and a nonzero prevector of norm at most one,
-    fixed by simultaneous copy symmetry and both auxiliary label
-    projectors $\ell_C,\ell_R$, and assume
+    for $U\in\{Q_{jg},Y_{jg},(Q_{jg}\cup Y_{jg})^c\}$ across all terminals
+    $j$ and bands $g$, where $K_{\rm mom}\geq0$ and
+    $10a\leq\min\{r_{\rm mom},1\}$. Fix $k>0$ and a nonzero prevector
+    $u_k$ with $\|u_k\|\leq1$, fixed by simultaneous copy symmetry and
+    both auxiliary label projectors $\ell_C,\ell_R$, such that
     \begin{align}
         2kS'-\varepsilon
         \leq\log\dim\ell_C+\log\dim\ell_R.
+        \label{eq:actual_scan_sharp_lower_label}
     \end{align}
     Define
     \begin{align}
         g_{jg}
-                 & =S(Q_{jg})+S((Q_{jg}\cup Y_{jg})^c)-S(Y_{jg}),                          \\
-        g_{\max} & =\max\bigl(\{0\}\cup\{g_{jg}\}_{j,g}\bigr),                             \\
-        r_k      & =\log(k+1)+c\log(k+2)+a\varepsilon,
-                 & b_k                                            & =\tfrac12(k+2)^{-C_f}.
+            & =S(Q_{jg})+S((Q_{jg}\cup Y_{jg})^c)-S(Y_{jg}),
+            & g_{\max}                                       & =\max\bigl(\{0\}\cup\{g_{jg}\}_{j,g}\bigr),
+        \label{eq:actual_scan_sharp_lower_g}                                                               \\
+        r_k & =\log(k+1)+c\log(k+2)+a\varepsilon,
+            & b_k                                            & =\tfrac12(k+2)^{-C_f}.
+        \label{eq:actual_scan_sharp_lower_rb}
     \end{align}
-    At every fill or charge interpolation before the horizon, let
-    $N_k$ be its squared filtered norm, $\mu_k$ its
-    mean energy, and $w_j$ its terminal weights under the
-    inclusion into the common terminal family.
-    Its filtered vector has norm one, $N_k>0$, and
-    $\delta_k=(\mu_k-e_0)/\gamma\geq0$.
-    For every $0<\tau\leq\tfrac12$, put
+    At every fill or charge interpolation before the horizon (including a
+    zero-band scanner), let $N_k>0$ be its squared filtered norm, $v_k$
+    its unit filtered vector, $\mu_k$ its mean energy with
+    $\delta_k=(\mu_k-e_0)/\gamma\geq0$, and $w_j$ its terminal weights in
+    the common terminal family. For every $0<\tau\leq\tfrac12$, with
     \begin{align}
         L_g=2S'+(1-\tau)\sum_jw_jg_{jg}
-        -2\tau\log d-(3+a^{-1})h(\tau)-25K_{\rm mom}a.
+        -2\tau\log d-(3+a^{-1})h(\tau)-25K_{\rm mom}a,
+        \label{eq:actual_scan_sharp_lower_Lg}
     \end{align}
-    Then
+    one has
     \begin{align}
         \frac12\sum_g\left[
             ak\left(L_g-\frac{\delta_k}{\tau}
@@ -79,58 +77,59 @@ $j$ in band $g$ gives the far region $(Q_{jg}\cup Y_{jg})^c$.
             -2|r_k|-|\log b_k|-\log2-\log(3/2)
             \right]
         \leq-\log N_k.
+        \label{eq:actual_scan_sharp_lower_bound}
     \end{align}
-    The same prevector, labels, gap and moment data serve all these
-    interpolations, including a scanner with zero bands.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:al_scan_band_nesting,thm:al_augmented_root_compression,
         thm:al_scan_actual_round_global_energy,thm:al_scan_nested_band_metrics,
         thm:al_scan_actual_fill_admission,thm:al_scan_actual_charge_admissible}
-    Because the physical terminal partitions have disjoint near and middle
-    regions that nest across bands, the regional sharp lower norm theorem in
-    original coordinates applies at metric parameter $t=a/2$ and inverse
-    exponent $s=1/4$, where the conditions $20t\leq r_{\rm mom},1$ become
-    $10a\leq r_{\rm mom},1$.
-    Passing an isometric coordinate matrix $Z$ for the simultaneous symmetric
-    subspace through the augmented-site coordinate bijection, the root
-    compression identity expresses the ordered product $M_k$ of compressed
-    band means, its inverse-quarter-power norm and its normalized filtered
-    vector as
+    By Lemmas~\ref{thm:al_scan_band_nesting}
+    and~\ref{thm:al_scan_nested_band_metrics}, the disjoint near and middle
+    terminal regions nest across bands, so the regional sharp lower norm
+    bound applies at $t=a/2$ and $s=1/4$ (where $20t\leq r_{\rm mom},1$
+    becomes $10a\leq r_{\rm mom},1$). For an isometric frame $Z$ of the
+    simultaneous symmetric subspace and the ordered product $M_k$ of
+    compressed band means, Lemma~\ref{thm:al_augmented_root_compression}
+    gives
     \begin{align}
-        w_k & =M_k^{-1/4}Z^*\mathrm{pre}_k,
-            & N_k                           & =\|w_k\|^2,
-            & v_k                           & =Z\frac{w_k}{\|w_k\|}.
+        w_k & =M_k^{-1/4}Z^*u_k,
+            & N_k                & =\|w_k\|^2,
+            & v_k                & =Z\frac{w_k}{\|w_k\|}.
+        \label{eq:actual_scan_root_compression}
     \end{align}
-    Consequently, the fill and charge energy identities equate the regional
-    defect in $v_k$ to $(\mu_k-e_0)/\gamma$ with
-    $\mu_k=\operatorname{Re}\langle v_k,\widetilde H_kv_k\rangle$, while
-    embedding the history tree into the common terminal family preserves the
-    weighted entropy sum $\sum_jw_jg_{jg}$; substituting $2t=a$ and $2s=1/2$
-    then gives the finite-copy lower bound of
-    \cite[Section~8, lower-pin and tree-log-lower estimates]{OpenAI2026AreaLaw}.
+    Lemmas~\ref{thm:al_scan_actual_round_global_energy},
+    \ref{thm:al_scan_actual_fill_admission},
+    and~\ref{thm:al_scan_actual_charge_admissible} identify the regional
+    defect in $v_k$ with $\delta_k=(\mu_k-e_0)/\gamma$ for
+    $\mu_k=\operatorname{Re}\langle v_k,\widetilde H_kv_k\rangle$ and
+    preserve $\sum_jw_jg_{jg}$; substituting $2t=a$ and $2s=1/2$ yields
+    (\ref{eq:actual_scan_sharp_lower_bound})
+    (\cite[Section~8]{OpenAI2026AreaLaw}).
 \end{proof}
 
 \begin{definition}[Lower label defect and replica remainder]
     \label{def:actual_sharp_lower_remainder}
     \lean{TNLean.PEPS.AreaLaw.Scan.sharpLowerLabelDefect,TNLean.PEPS.AreaLaw.Scan.sharpLowerRemainder}
     \leanok
-    For a label sequence $\ell_k$ and a real entropy parameter
-    $S'$, and for fixed $a>0$ and $c,C_f\in\mathbb R$, define
-    $\varepsilon_k$ ($k\in\mathbb N$) and $R_k^-$ ($k>0$) by
+    For a label sequence $\ell_k$, $S'\in\mathbb R$, $a>0$, and
+    $c,C_f\in\mathbb R$, define $\varepsilon_k$ ($k\in\mathbb N$) and
+    $R_k^-$ ($k>0$) by
     \begin{align}
         \varepsilon_k
-              & =2\bigl|\log\dim\ell_k-kS'\bigr|, \\
+              & =2\bigl|\log\dim\ell_k-kS'\bigr|,
+        \label{eq:actual_sharp_lower_defect}      \\
         R_k^- & =\frac{
             2|\log(k+1)+c\log(k+2)+a\varepsilon_k|
             +|\log(\tfrac12(k+2)^{-C_f})|
             +\log2+\log(3/2)}{ak}.
+        \label{eq:actual_sharp_lower_remainder}
     \end{align}
 \end{definition}
 
-\begin{theorem}[Lower label-defect inequality]
+\begin{lemma}[Lower label-defect inequality]
     \label{thm:actual_sharp_lower_label_defect}
     \lean{TNLean.PEPS.AreaLaw.Scan.sharpLowerLabelDefect_label_bound}
     \leanok
@@ -139,68 +138,65 @@ $j$ in band $g$ gives the far region $(Q_{jg}\cup Y_{jg})^c$.
     $\varepsilon_k\geq0$ and
     \begin{align}
         2kS'-\varepsilon_k\leq2\log\dim\ell_k.
+        \label{eq:actual_sharp_lower_label_bound}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{def:actual_sharp_lower_remainder}
-    Apply $kS'-\log\dim\ell_k\leq
-        |\log\dim\ell_k-kS'|$ and multiply by two.
+    By (\ref{eq:actual_sharp_lower_defect}),
+    $2(kS'-\log\dim\ell_k)\leq 2|\log\dim\ell_k-kS'|=\varepsilon_k$.
 \end{proof}
 
-\begin{theorem}[Vanishing lower remainder]
+\begin{lemma}[Vanishing lower remainder]
     \label{thm:actual_sharp_lower_remainder_limit}
     \lean{TNLean.PEPS.AreaLaw.Scan.tendsto_sharpLowerRemainder_of_label_dimension}
     \leanok
     \uses{def:actual_sharp_lower_remainder}
-    Fix $a>0$ and $c,C_f\in\mathbb R$.
-    If a label sequence $\ell_k$ satisfies
-    $\log\dim\ell_k-kS'=o(k)$, then $R_k^-\to0$ as $k\to\infty$
-    through positive integers; in the physical application, this
-    asymptotic holds for the Schmidt--Bell label sequence.
-\end{theorem}
+    For fixed $a>0$ and $c,C_f\in\mathbb R$, if $\log\dim\ell_k-kS'=o(k)$
+    (as holds for the physical Schmidt--Bell label sequence), then
+    $R_k^-\to0$ as $k\to\infty$.
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{def:actual_sharp_lower_remainder}
-    Because $\log\dim\ell_k-kS'=o(k)$, we have $\varepsilon_k/k\to0$.
-    Since $\log(k+1)/k$ and $\log(k+2)/k$ also tend to zero and
+    By (\ref{eq:actual_sharp_lower_defect}), $\varepsilon_k/k\to0$. Since
+    $\log(k+1)/k\to0$, $\log(k+2)/k\to0$, and
     $\log(\tfrac12(k+2)^{-C_f})=-C_f\log(k+2)-\log2$, dividing the
-    numerator of $R_k^-$ by $k$ and by the fixed $a>0$ gives $R_k^-\to0$.
+    numerator of (\ref{eq:actual_sharp_lower_remainder}) by $ak$ gives
+    $R_k^-\to0$.
 \end{proof}
 
-\begin{theorem}[Sharp lower rate for the physical prevector]
+\begin{lemma}[Sharp lower rate for the physical prevector]
     \label{thm:actual_scan_supplied_prevector_sharp_lower}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_actualScan_suppliedPrevector_sharp_lower}
     \leanok
     \uses{thm:actual_scan_sharp_lower_norm,def:actual_sharp_lower_remainder,
         def:al_scan_status_marginals,def:al_scan_auxiliary_coordinates}
-    Under the scanner and gap conditions of
-    Theorem~\ref{thm:actual_scan_sharp_lower_norm}, use the horizon $nm$,
-    fix $K_{\rm mom}\geq0$, $a>0$, $10a\leq r_{\rm mom}$ and $10a\leq1$,
-    and take the augmented replica prevector of a label sequence $\ell_k$
-    whose original-coordinate vectors are nonzero and have norm at most
-    one for every $k>0$, with $\log\dim\ell_k-kS'=o(k)$ (as holds for the
-    physical Schmidt--Bell prevector).
-    Assume the marginal moment estimate of that theorem for all five
-    regions of Definition~\ref{def:al_scan_status_marginals} at every
-    completed status through $nm$ and every pre-charge status before $nm$;
-    these five bounds imply all the near, middle and far marginal bounds.
-    Then there exist $c,C_f\geq0$, fixed before $k$, scan time and
-    interpolation parameter, such that $R_k^-\to0$ and every fill or
-    charge obeys
+    Under the scanner and gap hypotheses of
+    Lemma~\ref{thm:actual_scan_sharp_lower_norm} at horizon $nm$ with
+    $K_{\rm mom}\geq0$, $a>0$, and $10a\leq\min\{r_{\rm mom},1\}$, let
+    $u_k$ be the augmented replica prevector of a label sequence $\ell_k$
+    having nonzero original-coordinate vectors of norm at most one for all
+    $k>0$ and $\log\dim\ell_k-kS'=o(k)$. Assume
+    (\ref{eq:actual_scan_sharp_lower_moment}) for all five regions of
+    Definition~\ref{def:al_scan_status_marginals} at every completed
+    status through $nm$ and every pre-charge status before $nm$. Then there
+    exist $c,C_f\geq0$ (independent of $k$, scan time, and interpolation
+    parameter) such that $R_k^-\to0$ and every fill or charge satisfies
     \begin{align}
         \frac a2\sum_g\left[
             L_g-\frac{\delta_k}{\tau}\max\{0,2S'+g_{\max}\}-R_k^-
             \right]
         \leq\frac{-\log N_k}{k}
-        \qquad(0<\tau\leq\tfrac12).
+        \qquad(0<\tau\leq\tfrac12),
+        \label{eq:actual_scan_supplied_prevector_rate}
     \end{align}
-    Here $N_k>0$, $\delta_k\geq0$, $L_g$, the unit filtered vector and the
-    terminal weights are those of the same interpolation in the previous
-    theorem.
-\end{theorem}
+    with $N_k,\delta_k,L_g$ as in
+    Lemma~\ref{thm:actual_scan_sharp_lower_norm}.
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -208,14 +204,15 @@ $j$ in band $g$ gives the far region $(Q_{jg}\cup Y_{jg})^c$.
         thm:actual_sharp_lower_remainder_limit,thm:al_augmented_prevector_norm,
         thm:al_augmented_prevector_symmetry,
         def:al_scan_auxiliary_coordinates}
-    Because the augmented coordinate bijection preserves nonvanishing and
-    the Euclidean norm while the replica prevector is invariant under
-    simultaneous copy permutations and carries the label $\ell_k$ on both
-    auxiliary factors (giving the two auxiliary singleton projections),
-    Theorem~\ref{thm:actual_scan_sharp_lower_norm} applies with
-    $\varepsilon_k=2|\log\dim\ell_k-kS'|$.
-    Dividing its conclusion by $k>0$ and factoring $ak$ out of the
-    per-band error term yields the displayed lower bound with remainder
-    $R_k^-$, and Theorem~\ref{thm:actual_sharp_lower_remainder_limit}
-    gives $R_k^-\to0$ without requiring $\delta_k$ to be small.
+    By Lemmas~\ref{thm:al_augmented_prevector_norm},
+    \ref{thm:al_augmented_prevector_symmetry},
+    and~\ref{thm:actual_sharp_lower_label_defect}, $u_k$ satisfies the
+    norm, symmetry, and label bound (\ref{eq:actual_scan_sharp_lower_label})
+    with $\varepsilon=\varepsilon_k$ and $\ell_C=\ell_R=\ell_k$, while the
+    five status marginals of Definition~\ref{def:al_scan_status_marginals}
+    cover $Q_{jg},Y_{jg},(Q_{jg}\cup Y_{jg})^c$. Dividing
+    (\ref{eq:actual_scan_sharp_lower_bound}) by $k>0$ gives
+    (\ref{eq:actual_scan_supplied_prevector_rate}), and
+    Lemma~\ref{thm:actual_sharp_lower_remainder_limit} gives
+    $R_k^-\to0$.
 \end{proof}

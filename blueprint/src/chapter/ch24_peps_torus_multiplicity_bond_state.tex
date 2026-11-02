@@ -12,7 +12,7 @@
     The definition itself does not assert that every irreducible occurs.
 \end{definition}
 
-\begin{theorem}[Weighted block identities and the torus state]%
+\begin{lemma}[Weighted block identities and the torus state]%
     \label{thm:peps_torus_weighted_blocks_state}
     \lean{TNLean.PEPS.torusBondRegrouping_dressedAveragingSite_of_weightedBlocks}
     \leanok
@@ -36,7 +36,7 @@
     state of $L(g)=\bigoplus_iD_i(g)\otimes I_{d_i}$.
     This auxiliary assertion assumes a matrix identity, rather than an equality
     of tensor-network states; it applies to both constructions below.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     In the coherent expansion of $H$, each bond factor is $W^2U(r_e(q))$.
@@ -46,7 +46,7 @@
     gives both relations, as both contractions have the same normalization $|G|^{-N}$.
 \end{proof}
 
-\begin{theorem}[Multiplicity restoration of the torus state]%
+\begin{lemma}[Multiplicity restoration of the torus state]%
     \label{thm:peps_torus_multiplicity_bond_state}
     \lean{TNLean.PEPS.physicalProductMap_sum_prod,
         TNLean.PEPS.torusBondRelativeElement,
@@ -98,7 +98,7 @@
         F^{\otimes B}\left(\sum_q w_q\bigotimes_{e\in B}x_{e,q}\right)
         =\sum_q w_q\bigotimes_{e\in B}Fx_{e,q}.
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Expanding the dressed site contraction after physical bond regrouping

@@ -10,7 +10,7 @@
     $i+L,i+L+1,\ldots,i+N-1$, with all indices taken modulo $N$.
 \end{definition}
 
-\begin{theorem}[Cyclic product factorization]
+\begin{lemma}[Cyclic product factorization]
     \label{thm:cyclic_window_complement_product_factorization}
     \lean{MPSTensor.prod_cyclicWindow_complement}
     \leanok
@@ -19,7 +19,7 @@
     $f\colon\Fin{N}\to M$, then the product of $f$ over the chain equals the
     product over the cyclic window beginning at $i$ times the product over its
     ordered complement.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -29,7 +29,7 @@
     over the resulting disjoint union gives the factorization.
 \end{proof}
 
-\begin{theorem}[Three-site anticommutator embedding into cyclic adjacent pairs]
+\begin{lemma}[Three-site anticommutator embedding into cyclic adjacent pairs]
     \label{thm:three_site_anticommutator_cyclic_transport}
     \lean{MPSTensor.re_inner_localTermES_adjacent_twoSite_forward_ge_of_threeSite}
     \lean{MPSTensor.re_inner_localTermES_adjacent_twoSite_backward_ge_of_threeSite}
@@ -66,7 +66,7 @@
     \end{align}
     All site indices are taken modulo $N$, so these conclusions include pairs
     and three-site windows crossing the periodic cut.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -86,7 +86,7 @@
         \label{eq:three_site_anticommutator_fiber_decomposition}
     \end{align}
     The restriction identities in
-    Theorem~\ref{thm:three_site_commutator_chain_transport} intertwine the two
+    Lemma~\ref{thm:three_site_commutator_chain_transport} intertwine the two
     adjacent terms:
     \begin{align}
         R_{i,\tau}^{(3)}h_i^{(N)}

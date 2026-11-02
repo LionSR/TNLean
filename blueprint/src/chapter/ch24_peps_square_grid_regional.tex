@@ -1,6 +1,6 @@
 \section{Physical consequences of the square-grid correspondence}
 
-\begin{theorem}[Equality of physical vectors and errors]
+\begin{lemma}[Equality of physical vectors and errors]
     \label{thm:peps_square_vector_error}
     \lean{TNLean.PEPS.Approximation.squareGridStateIsometry,TNLean.PEPS.Approximation.vector_pinnedTensorToGraphTensor,TNLean.PEPS.Approximation.vector_vectorTensorToGraphTensor,TNLean.PEPS.Approximation.norm_pinnedTensorToGraphTensor,TNLean.PEPS.Approximation.nonzero_pinnedTensorToGraphTensor,TNLean.PEPS.Approximation.normalized_error_pinnedTensorToGraphTensor,TNLean.PEPS.Approximation.normalized_error_vectorTensorToGraphTensor}
     \leanok
@@ -11,7 +11,7 @@
     and so is every error $\|\|\Phi\|^{-1}\Phi-z\Omega\|$, for every vector
     $\Omega$ of the common Euclidean space and every $z\in\C$.
     The equality includes $\Phi=0$ with the convention $0^{-1}=0$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_square_grid_contraction}
@@ -19,7 +19,7 @@
     gives the stated identities.
 \end{proof}
 
-\begin{theorem}[Dimension constraints and crossing edges]
+\begin{lemma}[Dimension constraints and crossing edges]
     \label{thm:peps_square_bonds_boundary}
     \lean{TNLean.PEPS.Approximation.graphBondDim_forall,TNLean.PEPS.Approximation.vectorTensorToGraphTensor_bondDim_pos,TNLean.PEPS.Approximation.maxBondDim_le_iff,TNLean.PEPS.Approximation.maxBondDim_real_le_iff,TNLean.PEPS.Approximation.forwardSquareBoundaryEquiv,TNLean.PEPS.Approximation.forwardSquareBoundary_card}
     \leanok
@@ -32,7 +32,7 @@
     family of edges is taken to be $0$, and both sides of the equivalence hold.
     For every region $R\subseteq\Lambda$, the edge correspondence restricts to
     a bijection of crossing edges and preserves their cardinality.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{def:peps_square_edge_correspondence}
@@ -41,7 +41,7 @@
     gives the equivalence.
 \end{proof}
 
-\begin{theorem}[Number of square-lattice edges]
+\begin{lemma}[Number of square-lattice edges]
     \label{thm:peps_square_edge_count}
     \lean{TNLean.PEPS.card_squareLatticeEdges_le}
     \leanok
@@ -50,7 +50,7 @@
     doubled-Hamiltonian boundary estimate of \cite{OpenAI2026PolynomialPEPS}
     shows that the nearest-neighbor graph on $\{0,\ldots,L-1\}^2$, with open
     boundary, has at most $2L^2$ edges.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Orienting every horizontal edge to the right and every vertical edge upward
     determines each edge by its initial vertex and its orientation.
@@ -58,7 +58,7 @@
     into a set of cardinality $2L^2$.
 \end{proof}
 
-\begin{theorem}[Regional density and entropy]
+\begin{lemma}[Regional density and entropy]
     \label{thm:peps_square_regional_density}
     \lean{TNLean.PEPS.Approximation.squareComplementConfigEquiv,TNLean.PEPS.Approximation.regionReducedDensity_eq_piSubtype,TNLean.PEPS.Approximation.regionReducedDensity_eq_pinnedReducedDensity,TNLean.PEPS.Approximation.regionReducedDensity_pinnedTensorToGraphTensor,TNLean.PEPS.Approximation.regionReducedDensity_vectorTensorToGraphTensor,TNLean.PEPS.Approximation.entropy_pinnedTensorToGraphTensor,TNLean.PEPS.Approximation.entropy_vectorTensorToGraphTensor}
     \leanok
@@ -70,7 +70,7 @@
     Writing the complement as a finite-set difference or as nonmembership gives
     the same partial trace after the coordinatewise identification of complement
     configurations.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_square_grid_contraction,def:peps_pinned_regional_matrix}
@@ -104,7 +104,7 @@
     the contraction are stated separately.
 \end{definition}
 
-\begin{theorem}[Transfer of PEPS approximations]
+\begin{lemma}[Transfer of PEPS approximations]
     \label{thm:peps_square_approximation_transfer}
     \lean{TNLean.PEPS.Approximation.phaseErrorAtMost_vectorTensorToGraphTensor,TNLean.PEPS.Approximation.hasPEPSApproximation_of_pinned,TNLean.PEPS.Approximation.hasPEPSApproximation_of_vector,TNLean.PEPS.Approximation.hasPEPSApproximation_of_vector_max}
     \leanok
@@ -113,7 +113,7 @@
     presentation gives a graph PEPS on the original open square with the same positive dimensions, bound $CL^c$,
     and error $L^{-1}$. The minimizing-phase condition is also preserved in the
     virtual-first presentation.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_square_vector_error,thm:peps_square_bonds_boundary}
@@ -132,5 +132,5 @@
     $R\subseteq\Lambda$. For configurations $x$ on $R$ and $z$ on $R^c$, let
     $x\cup z$ be their joined configuration and set $M_{x,z}=\Omega(x\cup z)$. The
     unnormalized regional density of $\Omega$ is $MM^\dagger$. For $\Omega=\Phi$
-    it equals the partial trace in Theorem~\ref{thm:peps_square_regional_density}.
+    it equals the partial trace in Lemma~\ref{thm:peps_square_regional_density}.
 \end{definition}

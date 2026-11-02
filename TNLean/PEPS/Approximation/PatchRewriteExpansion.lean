@@ -139,16 +139,6 @@ theorem innerUnion_subset_patchSquares :
     · exact Or.inl (p'.inner_subset_tagSample s.1 hx)
     · exact Or.inr (innerUnion_subset_patchSquares l s.2 ⟨p', hp', hx⟩)
 
-theorem exists_mem_tagSample_of_mem_patchSquares {x : ι} :
-    (l : List (SquarePatch pos q)) → (s : PatchTags l) → x ∈ patchSquares l s →
-      ∃ p ∈ l, ∃ j : p.Tag, x ∈ p.tagSample j
-  | [], _, hx => absurd hx (Set.notMem_empty x)
-  | p :: l, s, hx => by
-    rcases hx with hx | hx
-    · exact ⟨p, List.mem_cons_self, s.1, hx⟩
-    · obtain ⟨p', hp', j, hj⟩ := exists_mem_tagSample_of_mem_patchSquares l s.2 hx
-      exact ⟨p', List.mem_cons_of_mem _ hp', j, hj⟩
-
 variable {Party : Type*}
 
 theorem card_tagSpace_le {D : ℕ} :

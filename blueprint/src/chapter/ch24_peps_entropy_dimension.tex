@@ -1,6 +1,6 @@
 \section{Regional entropy dimension bounds}
 
-\begin{theorem}[Entropy bounded by the number of sites]
+\begin{lemma}[Entropy bounded by the number of sites]
     \label{thm:area_law_entropy_dimension}
     \leanok
     \lean{TNLean.Lattice.regionalEntropy_le_card_mul_log}
@@ -10,7 +10,7 @@
     finite, let $q\in\mathbb N$, and let
     $\Omega\in\bigotimes_{v\in\Lambda}\mathbb C^q$ be a unit vector.
     Every region $A\subseteq\Lambda$ satisfies $S_\Omega(A)\le |A|\log q$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     The regional density matrix has trace one and is positive semidefinite,
@@ -19,7 +19,7 @@
     $S_\Omega(A)\le\log(q^{|A|})=|A|\log q$.
 \end{proof}
 
-\begin{theorem}[Boundary estimate from partition bounds]
+\begin{lemma}[Boundary estimate from partition bounds]
     \label{thm:area_law_boundary_assembly}
     \leanok
     \lean{TNLean.PEPS.AreaLaw.regionalEntropy_le_boundary_of_partition_estimates}
@@ -32,7 +32,7 @@
         \left(c_D\log q+\frac{c_E}{2}\right)|\partial_\Lambda A|.
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:area_law_two_family_entropy, thm:area_law_entropy_dimension}

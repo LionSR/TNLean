@@ -1,0 +1,84 @@
+\section{Chebyshev improvement of physical viability}
+
+Use the supplied windows, core tensors and closing matrix of
+Lemma~\ref{thm:physical_polynomial_tensor_family}. In particular,
+$a+2\ell\le b$, $b+2\ell\le L-1$, $\ell\ge1$, $q\ge2$ and $k\ge1$;
+$W^L_r,W^R_r$ have the stated two-site supports. The core is the actual trace
+contraction (\ref{eq:physical_tensor_core}), with arbitrary closing matrix
+and $B\ge0$. Retain $J,D,\mathcal B,\mathcal H_M,\mathcal H_E$ and
+$\mathcal U$ from (\ref{eq:physical_tensor_bounds}) and its context.
+
+A subspace $S\subseteq\mathcal H_M$ is $\delta$-viable for
+$G\subseteq\mathcal H_M\otimes\mathcal H_E$ when
+$\|P_{S\otimes\mathcal H_E}g\|^2\ge(1-\delta)\|g\|^2$ for every $g\in G$.
+The closed spectral conditions and the requirement $\delta<1$ below are
+recorded in \cite{gap:alvv16_spectral_projector_boundary}.
+The norm estimate for the Chebyshev filter requires no positivity of its
+unsquared polynomial~\cite{gap:alvv16_chebyshev_filter_positivity}.
+
+\begin{lemma}[A common family for Chebyshev viability improvement]
+    \label{thm:physical_chebyshev_viability}
+    \lean{TNLean.MPS.AreaLaw.exists_common_physical_chebyshev_viable_family_fin}
+    \leanok
+    \uses{thm:physical_polynomial_tensor_family}
+    There are a nonnegative integer $N\le D^2$ and matrices
+    $W_0,\ldots,W_{N-1}$ on
+    $\mathcal C(J)$, each with natural open-boundary bond bound
+    $\mathcal B$, chosen before every supported exterior pair, every spectral
+    choice and every input subspace below.
+    After supplying $P_L,P_R$ supported on $\lbrack 0,a+1)$ and $\lbrack b+2\ell,L)$,
+    define the actual Hamiltonian $H$ by
+    (\ref{eq:physical_tensor_hamiltonian}) and put
+    $H_m=\mathcal U H\mathcal U^*$.
+    Suppose $H_m$ is self-adjoint and put
+    $d=\dim(\mathcal H_M\otimes\mathcal H_E)$.
+    Let $v_0,\ldots,v_{d-1}$ be its orthonormal eigenbasis, with eigenvalues
+    $\lambda_j$.
+    Supply real numbers $\eta_0<\eta_1\le u$. For every $0\le j<d$,
+    suppose
+    \begin{align}
+        \lambda_j & \le u,\notag                              \\
+        \lambda_j & \le\eta_0\ \text{or}\ \eta_1\le\lambda_j.
+        \label{eq:physical_chebyshev_spectrum}
+    \end{align}
+    Define
+    \begin{align}
+        G      & =\spn_{\C}\{v_j:\lambda_j\le\eta_0\},
+        \label{eq:physical_chebyshev_target}           \\
+        \Delta & =\left(2\exp\left[-2k\sqrt{
+            \frac{\eta_1-\eta_0}{u-\eta_0}}\right]\right)^2.
+        \label{eq:physical_chebyshev_error}
+    \end{align}
+    For every subspace $S\subseteq\mathcal H_M$ and $\delta\in\R$ such
+    that $S$ is $\delta$-viable for $G$ and $\delta<1$, put
+    $V=\sum_{r=0}^{N-1}W_r(S)$. Then
+    \begin{align}
+        \dim V & \le D^2\dim S,\notag                                        \\
+        V      & \text{ is }\frac{\Delta}{(1-\delta)^2}\text{-viable for }G.
+        \label{eq:physical_chebyshev_conclusion}
+    \end{align}
+    These are supporting consequences for the spectral filtering and
+    error-reduction arguments in \cite{Arad2016RigorousRG}.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:physical_polynomial_tensor_family}
+    Choose the common family in
+    Lemma~\ref{thm:physical_polynomial_tensor_family}.
+    The Chebyshev spectral estimate supplies a real polynomial $p$ of degree
+    $k$ whose operator $K=p(H_m)$ preserves $G$ and $G^\perp$ and satisfies
+    \begin{align}
+        \|g\|    & \le\|Kg\|\quad(g\in G),\notag        \\
+        \|Kw\|^2 & \le\Delta\|w\|^2\quad(w\in G^\perp).
+        \label{eq:physical_chebyshev_contract}
+    \end{align}
+    Polynomial evaluation commutes with the matrix-to-operator identification
+    and unitary conjugation. Applying
+    (\ref{eq:physical_tensor_conjugation}) to the complex polynomial obtained
+    from $p$ therefore gives $K=\sum_r W_r\otimes M_r$ with the same middle
+    family. In particular, $K(S\otimes\mathcal H_E)\subseteq
+        V\otimes\mathcal H_E$ and $\dim V\le N\dim S$.
+    The two-factor error-reduction estimate applied to
+    (\ref{eq:physical_chebyshev_contract}) gives viability
+    $\Delta/(1-\delta)^2$ for $V$. Finally $N\le D^2$ gives the dimension
+    bound in (\ref{eq:physical_chebyshev_conclusion}).
+\end{proof}

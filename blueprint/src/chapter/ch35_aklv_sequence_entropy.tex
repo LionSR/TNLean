@@ -1,0 +1,109 @@
+\section{Entropy from the actual changing-target sequence}
+
+\begin{lemma}[Degrees and logarithmic filter costs]
+    \label{thm:aklv_sequence_entropy_cost}
+    \lean{TNLean.MPS.AreaLaw.aklvSequenceDegree_le_linear,
+        TNLean.MPS.AreaLaw.aklvSequenceFilterRank_two_le,
+        TNLean.MPS.AreaLaw.aklvSequenceFilterRank_log_le_initial_rank}
+    \leanok
+    \uses{def:aklv_sequence_parameters,thm:aklv_initial_log_rank_scale}
+    Let $q\ge2$, $0<g\le1$, $s\ge1$, $1/g\le s$, and
+    $T(g)\le1040s$. For the actual selected degrees and filter ranks,
+    \begin{align*}
+        1\le\ell_j & \le240s(j+1),             & F_j & \ge2,\notag \\
+        \log F_j   & \le200000(j+1)^2\log D_0.
+    \end{align*}
+    These estimates are used in the entropy summation of
+    \cite[Section~6]{Arad2013AreaLaw}.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Put $W_j=2t_j+s$. The selected thresholds satisfy
+    $W_j\le2113s(j+1)$, whence
+    $\sqrt{W_j/g}\le46s(j+1)$ and the ceiling gives the degree bound.
+    The exponent in $F_j$ is at most $96\ell_j\le23040s(j+1)$.
+    Writing $b=q(s^2+1)$, one has
+    $q(\ell_j+1)\le241(j+1)b$ and
+    $\log(q(\ell_j+1))\le485(j+1)\log b$.
+    Compare with $\log D_0=32(2s+1)\log b$.
+\end{proof}
+
+\begin{lemma}[Growth of the actual rank products]
+    \label{thm:aklv_sequence_rank_growth}
+    \lean{TNLean.MPS.AreaLaw.aklvSequenceRankBound_growth}
+    \leanok
+    \uses{def:aklv_sequence_rank_product,thm:aklv_sequence_entropy_cost}
+    For $q\ge2$, the actual product ranks satisfy
+    $R_i\le R_{i+1}$ and $R_i\ge2^{i+1}$.
+    Thus $R_N\ge N$ for every finite marginal dimension $N$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    The initial rank is at least two, and each successive multiplier
+    $F_{i+1}$ is at least two. Induction gives both conclusions.
+\end{proof}
+
+\begin{lemma}[Finite entropy summation at the actual ranks]
+    \label{thm:aklv_sequence_finite_entropy}
+    \lean{TNLean.MPS.AreaLaw.probabilityEntropy_le_aklvSequenceRankBound}
+    \leanok
+    \uses{thm:aklv_sequence_entropy_cost,thm:aklv_sequence_rank_growth}
+    Under the preceding scalar hypotheses, let $(p_a)_{a=0}^{N-1}$
+    be a probability vector. Suppose that for every $0\le i<N$,
+    \begin{align*}
+        \sum_{a\ge R_i}p_a\le2^{-i}/16.
+    \end{align*}
+    Then its entropy is at most $300000\log R_0$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    The finite rank-tail entropy inequality, with cutoff $N$, gives
+    \begin{align*}
+        H(p)\le\log R_0+
+        \log2\left(1+\sum_{i<N}\frac{2^{-i}}{16}\right)+
+        \sum_{i<N}\frac{2^{-i}}{16}\log\frac{R_{i+1}}{R_i}.
+    \end{align*}
+    The logarithmic increment is exactly $\log F_{i+1}$.
+    Finite quadratic dyadic moments give
+    $\sum_{i<N}2^{-i}\le2$ and
+    $\sum_{i<N}2^{-i}(i+2)^2\le22$.
+    The last sum is therefore at most $275000\log R_0$.
+    Since $R_0\ge2$, the middle term is at most
+    $(9/8)\log R_0$. The stated coefficient follows.
+\end{proof}
+
+\begin{theorem}[Uniform physical entropy at every cut]
+    \label{thm:aklv_physical_sequence_entropy}
+    \lean{TNLean.MPS.AreaLaw.exists_aklv_physical_entropy_bound}
+    \leanok
+    \uses{thm:aklv_coherent_changing_targets,thm:aklv_sequence_finite_entropy,
+        thm:aklv_initial_log_rank_scale,thm:aklv_sharp_physical_per_cut,
+        thm:aklv_cut_approximation_tail,thm:aklv_exact_boundary_rank}
+    There is a universal $C>0$ with the following property. Let
+    $H=\sum_{i=0}^{L-2}h_i$ be a nearest-neighbour sum of supported
+    positive contractions, with unit ground vector $\Omega$ of energy
+    $\mu$. Suppose $H-\mu I\ge g(I-|\Omega\rangle\langle\Omega|)$,
+    $g>0$, and $\mu+g$ belongs to its spectrum. Then for every cut
+    $0\le k\le L$,
+    \begin{align*}
+        S_k(\Omega)\le\frac{C}{g}
+        (1+\log q+\log(1/g))^3.
+    \end{align*}
+    No fitting-window, local-dimension or upper-gap premise is required.
+    The actual first excited energy and the displayed logarithmic gap
+    dependence are retained explicitly.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Derive $q\ge2$ and $g\le1$ from the original physical data. Choose
+    the universal initial width $s=\lceil Au^2/g\rceil$, where
+    $u=1+\log q+\log(1/g)$.
+    If its centered window fits, use the actual coherent sequence
+    $\psi_i$. Its squared error $2^{-i}/16$ and rank $R_i$ give the
+    required marginal tails. Finite entropy summation and
+    $\log R_0\le C_0(A)u^3/g$ prove the bound.
+    If the window fails to fit, the exact smaller-side estimate gives
+    $S_k(\Omega)\le\min\{k,L-k\}\log q\le s\log q$,
+    which is absorbed by the same uniform bound. This includes endpoint
+    cuts and chains shorter than the initial window.
+\end{proof}

@@ -34,7 +34,7 @@ $N$, and the local labels are $\mathbb Z_d=\{0,\dots,d-1\}$ with $d\ge1$.
     $\pi_i(x_i)$ with $i\in Z$ and $x_i\neq0$ vanishes.
 \end{proof}
 
-\begin{theorem}[Binary trees of gates in depth $5k$ with measurements]
+\begin{lemma}[Binary trees of gates in depth $5k$ with measurements]
     \label{thm:ldp_tree_measurements}
     \lean{MPSPreparation.blockInterior, MPSPreparation.treeInterior,
         MPSPreparation.treeInterior_mono,
@@ -62,7 +62,7 @@ $N$, and the local labels are $\mathbb Z_d=\{0,\dots,d-1\}$ with $d\ge1$.
     the sites of $J_k$. In particular, for a nonzero product vector $\ket\pi$
     whose site vectors on $J_k$ are multiples of $\ket0$, the vector
     $T_k\ket\pi$ is prepared with measurement rounds in depth $5k$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     The gate of the block $p$ of level $i$ is a distant gate with $a=p2^{i+1}$
@@ -84,13 +84,13 @@ $N$, and the local labels are $\mathbb Z_d=\{0,\dots,d-1\}$ with $d\ge1$.
         thm:ldp_loglog_depth_every_length}
     In the tree circuit (\ref{eq:ldp_tree_factorization}) a register above
     the lowest level carries $\mathbb C^{D^2}$, which is a group of sites once
-    $D^2>d$. Theorem~\ref{thm:ldp_loglog_depth} takes registers of $s$
+    $D^2>d$. Lemma~\ref{thm:ldp_loglog_depth} takes registers of $s$
     consecutive sites, $s$ a length at which the blocked tensor is injective,
     and obtains the depth $O(\log\log(N/\varepsilon))$ of
     \cite{Malz2024Preparation} for normal tensors and the chain lengths
     divisible by $s2^{k+1}$ for some $k$ with
     $a\log(N/\varepsilon)+b\le s2^{k+1}\le2(a\log(N/\varepsilon)+b)$; as recorded in
     \cite{gap:mswc24_tree_measurement_scope},
-    Theorem~\ref{thm:ldp_loglog_depth_every_length} extends this depth bound to every chain
+    Lemma~\ref{thm:ldp_loglog_depth_every_length} extends this depth bound to every chain
     length using trees on leaves of unequal widths.
 \end{remark}

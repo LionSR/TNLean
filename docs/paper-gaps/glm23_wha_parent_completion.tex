@@ -194,17 +194,43 @@ is required.\footnote{
     complement, and nonzero-complement results are proved in
     \doclink{TNLean/MPS/Symmetry/BoundaryProjectionAverage}.}
 
-\section{Remaining weak-Hopf construction}
-The source-labelled weak-Hopf assertion remains separate. Its proof requires
-the $C^*$-weak-Hopf representation, its boundary adjoint closure, a represented
-unit satisfying the unit-support condition, and normalized finite boundary
-families from the canonical integral. The positive injectivity and identity
-hypotheses above are not derived from general boundary compatibility.
+\section{The weak-Hopf realization}
+The source-labelled weak-Hopf assertion is now derived from representation
+data rather than assumed. Let $H$ carry a multiplicative, star-preserving
+comultiplication, a unital star representation $\phi$, and a faithful
+representation $\psi$ of the convolution dual, with operator tensor
+$T^{ij}=\psi(f_{ij})$. The represented iterated coproduct
+$\rho_N(x)_{\sigma\tau}=(f_{\sigma_1\tau_1}\cdots f_{\sigma_N\tau_N})(x)$
+is realized by one boundary at all lengths, is multiplicative for $N>0$,
+and satisfies $\rho_1(1)=I$. The counit axiom makes the comultiplication
+injective, so the identity
+$\sum\Delta(\Omega_{(1)})\Delta(T(\Omega_{(2)}))=\Delta(1)$ of Appendix B
+gives $\sum\Omega_{(1)}T(\Omega_{(2)})=1$ and hence the normalized boundary
+family $\sum\rho_n(\Omega_{(1)})\rho_n(T(\Omega_{(2)}))=Q_n$. Adjoint
+closure comes from star compatibility. With the average
+$E_n(B)=\sum\rho_n(\Omega_{(1)})B\rho_n(T(\Omega_{(2)}))$ defined from
+$\Delta(\Omega)$ itself, a compatible state tensor that is injective at one
+site satisfies $E_n(P_n)=P_n$, $E_n(I)=Q_n$ and $E_n(I-P_n)=Q_n-P_n$ for
+every $n>0$.\footnote{
+    \doclink{TNLean/MPS/MPDO/WeakHopfRepresentation} and
+    \doclink{TNLean/MPS/Symmetry/WeakHopfParentAverage}.}
+The weak Hopf algebra of a finite set, with
+$\Delta(\delta_k)=\delta_k\otimes\delta_k$ and $\Omega=1$, is a worked
+instance that is not Hopf; its average is the pinching by the represented
+idempotents.\footnote{\doclink{TNLean/MPS/Examples/FiniteSetWeakHopf}.}
+
+Two restrictions remain. The unit-support step uses injectivity at one
+site, where $\rho_1(1)=I$; this is the setting of the two-site parent term
+of Appendix B. For a tensor injective only after blocking $L>1$ sites the
+result is proved under the extra hypothesis $Q_L=I$, which need not hold for
+weak Hopf algebras with $\Delta(1)\ne1\otimes1$. The elimination plan is
+to derive unit support directly from the module structure of the state
+boundary space. Second, the Bell-pair example of the previous section is
+not yet a formal instance of the representation data.
 
 The periodic-parent results supply tensor cuts and cyclic-window transport
 under explicit local adjoint closure. Wrapping windows require the global
 boundary to commute with each tensor letter. Summand selectors of assembled
 block tensors satisfy this condition and extract the labelled periodic
-operators. These results supply neither the missing weak-Hopf realization
-nor its integral normalization.
+operators.
 \end{document}

@@ -30,9 +30,9 @@ and the transfer-map fixed-point equations used in canonical forms.
 
 open scoped Matrix BigOperators ComplexOrder Kraus
 
-namespace MPSTensor
-
 variable {d D : ℕ}
+
+namespace MPSTensor
 
 /-- Entrywise complex conjugation of every letter of an MPS tensor. -/
 def mapStar (A : MPSTensor d D) : MPSTensor d D :=
@@ -87,7 +87,8 @@ end Kraus
 
 namespace MPSTensor
 
-private theorem evalWord_mapStar (A : MPSTensor d D) (w : List (Fin d)) :
+/-- Word evaluation commutes with entrywise complex conjugation. -/
+theorem evalWord_mapStar (A : MPSTensor d D) (w : List (Fin d)) :
     Kraus.evalWord (mapStar A) w = (Kraus.evalWord A w).map (starRingEnd ℂ) := by
   induction w with
   | nil => simp

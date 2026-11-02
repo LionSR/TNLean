@@ -4,7 +4,7 @@
 %% and a sign-weighted pair used as a test construction.
 %% ==================================================
 
-\chapter{Physics Examples of the Multi-Block Compression Theorem: Supporting Results}%
+\chapter{Physical examples of the multi-block compression theorem: supporting results}%
 \label{ch:asymmetric_examples_supporting}
 
 The compression theorems of Chapter~\ref{ch:asymmetric_examples} rely on
@@ -37,7 +37,7 @@ map is given by an invertible matrix and a labelling of coordinates by slots.
     $(M\mathbin{\cdot}N)^{ik}=\sum_jM^{ij}\otimes N^{jk}$.
 \end{definition}
 
-\begin{theorem}[Conjugation, coercion and the compression pairs of a slot]
+\begin{lemma}[Conjugation, coercion and the compression pairs of a slot]
     \label{thm:asymex_explicit_gauge}
     % Principal declaration: MPSTensor.conjMatrix_gaugeOfMatrix.
     \lean{MPSTensor.conjMatrix_gaugeOfMatrix, MPSTensor.complexOfInt_mul,
@@ -56,7 +56,7 @@ map is given by an invertible matrix and a labelling of coordinates by slots.
     compression maps for slot $s$ are given in coordinates by
     $W_s = \pi_s G$ and $V_s = G^{-1} \iota_s$, where $\pi_s$ selects the rows
     and $\iota_s$ embeds the columns belonging to slot $s$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -96,7 +96,7 @@ map is given by an invertible matrix and a labelling of coordinates by slots.
     datum with three zero slots ($z=3$).
 \end{definition}
 
-\begin{theorem}[The remainder of a conjugate datum vanishes; word traces
+\begin{lemma}[The remainder of a conjugate datum vanishes; word traces
         of a one-slot datum]%
     \label{thm:asymex_one_slot}
     \lean{MPSTensor.MultiBlockCompression.remainder_ofConjMatrix,
@@ -114,7 +114,7 @@ map is given by an invertible matrix and a labelling of coordinates by slots.
     \end{align}
     or $\tr(B^w) = c^{|w|}\tr(C^w)$ when the target is carried with scalar
     weight $c$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -128,7 +128,7 @@ map is given by an invertible matrix and a labelling of coordinates by slots.
     carries across words by the length $|w|$.
 \end{proof}
 
-\begin{theorem}[Stacked products of block-diagonal tensors]%
+\begin{lemma}[Stacked products of block-diagonal tensors]%
     \label{thm:asymex_mul_block_diagonal}
     \lean{MPOTensor.sigmaProdFinEquiv, MPOTensor.mulBond,
         MPOTensor.mulTensor_blockDiagonal'}
@@ -142,7 +142,7 @@ map is given by an invertible matrix and a labelling of coordinates by slots.
     $(M_k\mathbin{\cdot}N_l)^{ij}$ at the pair $(k,l)$. The bond coordinates
     of the block $(k,l)$ are the pairs of a bond coordinate of $M_k$ and a
     bond coordinate of $N_l$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -170,7 +170,7 @@ map is given by an invertible matrix and a labelling of coordinates by slots.
     on the diagonal, and $f(0)=0$ off the diagonal blocks.
 \end{proof}
 
-\begin{theorem}[Direct sums of one-slot compression data]%
+\begin{lemma}[Direct sums of one-slot compression data]%
     \label{thm:asymex_direct_sum_compression}
     \lean{MPSTensor.MultiBlockCompression.directSum,
         MPSTensor.MultiBlockCompression.ofTargetEq,
@@ -195,7 +195,7 @@ map is given by an invertible matrix and a labelling of coordinates by slots.
     and only if $R_k^w=0$ for every $k$: the nilpotency order of the
     remainder of $B$ is the largest nilpotency order of the remainders of the
     blocks.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -208,7 +208,7 @@ map is given by an invertible matrix and a labelling of coordinates by slots.
     remainder is the direct sum of the remainders, and so are its words.
 \end{proof}
 
-\begin{theorem}[Integer certificates for normality and for vanishing
+\begin{lemma}[Integer certificates for normality and for vanishing
         sitewise intertwiners]%
     \label{thm:asymex_int_certificates}
     \lean{MPSTensor.isNBlkInjective_two_of_int,
@@ -232,7 +232,7 @@ map is given by an invertible matrix and a labelling of coordinates by slots.
     Likewise, if a selection of columns from $B_i - c_i \Id_D$ admits an
     integer left inverse up to $m \ne 0$, then every $u \in \C^D$ with
     $u B_i = c_i u$ satisfies $u = 0$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -295,7 +295,7 @@ Reordering the four bond bits separates the two middle bits, which form
 the inner bond, from the two outer bits; the intermediate
 physical-index sum acts on the inner bond. The Bell vectors together with
 the two remaining coordinate vectors form the adapted basis used
-throughout. As in Theorem~\ref{thm:asym_unblocked_coefficients}, each weighted copy of a
+throughout. As in Lemma~\ref{thm:asym_unblocked_coefficients}, each weighted copy of a
 target contributes its weight raised to the number of sites $N$, and weights
 that multiply the same target sum together. The lemmas
 below establish the adapted-basis decompositions and normality criteria used
@@ -319,7 +319,7 @@ for those examples.
     original stacked coordinates by undoing the reordering.
 \end{definition}
 
-\begin{theorem}[The idempotents of an adapted basis are mutually orthogonal]
+\begin{lemma}[The idempotents of an adapted basis are mutually orthogonal]
     \label{thm:asymex_basis_proj}
     \lean{MPSTensor.basisProj_mul_basisProj_self,
         MPSTensor.basisProj_mul_basisProj_of_ne, MPSTensor.mul_basisProj_mul}
@@ -327,14 +327,14 @@ for those examples.
     \uses{def:asymex_basis_proj}
     The idempotents satisfy $\Pi_j^2=\Pi_j$,
     $\Pi_j\Pi_k=0$ for $j\ne k$, and $U\Pi_jU^{-1}=E_{jj}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Conjugation by $U$ returns $E_{jj}$, and products reduce to
     $E_{jj}E_{kk}=\delta_{jk}E_{jj}$.
 \end{proof}
 
-\begin{theorem}[From an integer matrix identity to a weighted direct sum]
+\begin{lemma}[From an integer matrix identity to a weighted direct sum]
     \label{thm:asymex_stacked_pair}
     \lean{P6Compression.stackedPair_letter_identity}
     \leanok
@@ -353,15 +353,15 @@ for those examples.
     where $\widehat\Pi_s=2\Pi_s$ and the right-hand side
     of~(\ref{eq:asymex_stacked_pair_letters}) is in stacked bond
     coordinates. Then in those coordinates, as required by
-    Proposition~\ref{prop:asym_projector_weighted_sum}, the source letters
+    Corollary~\ref{prop:asym_projector_weighted_sum}, the source letters
     decompose as $B^a=\sum_s\mu_s(\Pi_s\otimes C_s^a)$, where $\mu_s$
     denotes a scalar fusion weight rather than a vertical multiplicity
     matrix.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:asymex_basis_proj}
-    Using the idempotents of Theorem~\ref{thm:asymex_basis_proj}, the
+    Using the idempotents of Lemma~\ref{thm:asymex_basis_proj}, the
     $s$-th summand is
     $\mu_sc_C(\widehat\Pi_s\otimes\widehat C_s^a)/2$.
     Multiplying by $n$, substituting~(\ref{eq:asymex_stacked_pair_scalar})
@@ -369,7 +369,7 @@ for those examples.
     scalar $n$ yields the identity for $B^a$.
 \end{proof}
 
-\begin{theorem}[Normality from scaled matrix units]
+\begin{lemma}[Normality from scaled matrix units]
     \label{thm:asymex_normal_units}
     \lean{P6Compression.isNormal_of_single_eq_smul}
     \leanok
@@ -381,7 +381,7 @@ for those examples.
     blocking length one in the sense of Definition~\ref{def:normal}.
     In the renormalization fixed-point canonical form, a normal tensor is
     additionally normalized to unit transfer spectral radius.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Dividing each designated letter by its nonzero factor exhibits every
@@ -394,11 +394,11 @@ for those examples.
 The sign-weighted pair $(A,-A)$ of bond dimension two and a bond-dimension-five
 source $B$ carrying both targets together with a one-dimensional zero slot
 illustrate the sharpness of Theorem~\ref{thm:asym_multiblock}: the remainder
-bound is attained (Theorem~\ref{thm:asymex_parity_compression}), the periodic
+bound is attained (Lemma~\ref{thm:asymex_parity_compression}), the periodic
 trace identity $\tr(B^w)=(1+(-1)^{|w|})\tr(A^w)$~(\ref{eq:asymex_parity_trace})
-acts as an even-length filter (Theorem~\ref{thm:asymex_parity_trace}), and a
+acts as an even-length filter (Lemma~\ref{thm:asymex_parity_trace}), and a
 word-level compression need not arise from sitewise intertwiners
-($B^iV=V(-A^i)\implies V=0$, Theorem~\ref{thm:asymex_parity_no_intertwiner}).
+($B^iV=V(-A^i)\implies V=0$, Lemma~\ref{thm:asymex_parity_no_intertwiner}).
 
 Consider a two-state physical site with basis $\{\ket{0},\ket{1}\}$.
 Define the bond-two MPS tensor by
@@ -482,7 +482,7 @@ nothing to positive-length traces.
 
 \begin{center}
     % Formula: the periodic trace tr(B^w)=(1+(-1)^{|w|})tr(A^w) of
-    % Theorem~\ref{thm:asymex_parity_trace}; the source is not presented
+    % Lemma~\ref{thm:asymex_parity_trace}; the source is not presented
     % as a literal stack of $A$ and $-A$, so the ring carries $B$ with
     % its coefficient, not a two-row stack.
     % Source: Definition~\ref{def:asymex_parity}.
@@ -501,16 +501,16 @@ nothing to positive-length traces.
         \tn[label pos=135, ports={90:physical:$i_N$}]{B}
     \end{tenkz}
     \qquad $\tr(B^w)$, computed in
-    Theorem~\ref{thm:asymex_parity_trace}
+    Lemma~\ref{thm:asymex_parity_trace}
 \end{center}
 
-\begin{theorem}[Normality of the graded block]
+\begin{lemma}[Normality of the graded block]
     \label{thm:asymex_parity_normal}
     \lean{ParityGraded.parA_isNormal}
     \leanok
     \uses{def:asymex_parity, def:normal}
     The block $A$ is normal: its length-two words span $\MN{2}$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -533,7 +533,7 @@ operator has basis action
     \label{eq:asymex_parity_basis}
 \end{align}
 
-\begin{theorem}[Occupation parity]
+\begin{lemma}[Occupation parity]
     \label{thm:asymex_parity_occupation}
     \lean{ParityGraded.pauliZ_mul_parA_mul_pauliZ,
         ParityGraded.trace_evalWord_parA_eq_zero_of_odd,
@@ -550,7 +550,7 @@ operator has basis action
         z^{\otimes N}\ket{V^{(N)}(A)}=\ket{V^{(N)}(A)}.
         \label{eq:asymex_parity_invariance}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -572,7 +572,7 @@ operator has basis action
 The support of the state is further constrained by the relative positions of the
 zeros.
 
-\begin{theorem}[Amplitudes from cyclic runs]
+\begin{lemma}[Amplitudes from cyclic runs]
     \label{thm:asymex_parity_runs}
     \lean{ParityGraded.trace_evalWord_parA_cyclic_runs,
         ParityGraded.exists_parA_cyclic_runs,
@@ -592,7 +592,7 @@ zeros.
         a_N(1,\ldots,1)=1+(-1)^N.
         \label{eq:asymex_parity_all_one}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -620,7 +620,7 @@ $\ket{V^{(N)}(A)}$ is always nonzero in the specified computational basis.
 
 \subsection{Asymmetric compression and length cancellation}
 
-\begin{theorem}[Compression of the graded pair]
+\begin{lemma}[Compression of the graded pair]
     \label{thm:asymex_parity_compression}
     % Principal declaration: ParityGraded.parityGraded_dim_eq.
     \lean{ParityGraded.parityGraded_compression, ParityGraded.parityGraded_dim_eq,
@@ -651,7 +651,7 @@ $\ket{V^{(N)}(A)}$ is always nonzero in the specified computational basis.
     Every product $R^w$ with $|w|\geq3$ vanishes, whereas
     $R^0R^0\neq0$. Thus the bound $|S|+z=3$ in clause (vi) of
     Theorem~\ref{thm:asym_multiblock} is attained.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -706,7 +706,7 @@ $\ket{V^{(N)}(A)}$ is always nonzero in the specified computational basis.
     (\ref{eq:asymex_parity_conj_zero}) and
     (\ref{eq:asymex_parity_conj_one}) are block upper triangular,
     with diagonal blocks $A^i$, $-A^i$, and $0$.
-    As in Theorem~\ref{thm:asymex_explicit_gauge}, take $W_+$ and
+    As in Lemma~\ref{thm:asymex_explicit_gauge}, take $W_+$ and
     $W_-$ to be rows $(0,1)$ and $(2,3)$ of $G$, respectively,
     and $V_+$ and $V_-$ to be the corresponding columns of $G^{-1}$.
     The inverse identities give~(\ref{eq:asymex_parity_biorthogonal}).
@@ -731,7 +731,7 @@ $\ket{V^{(N)}(A)}$ is always nonzero in the specified computational basis.
     Its square has $(0,1)$ entry $2$, so $R^0R^0\neq0$.
 \end{proof}
 
-\begin{theorem}[Periodic trace of the sign-weighted pair]
+\begin{lemma}[Periodic trace of the sign-weighted pair]
     \label{thm:asymex_parity_trace}
     \lean{ParityGraded.parityGraded_trace_evalWord}
     \leanok
@@ -741,13 +741,13 @@ $\ket{V^{(N)}(A)}$ is always nonzero in the specified computational basis.
         \tr(B^w)=(1+(-1)^{|w|})\tr(A^w).
         \label{eq:asymex_parity_trace}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:asymex_parity_compression, prop:asym_compression_trace}
-    Proposition~\ref{prop:asym_compression_trace} applied to the datum of
-    Theorem~\ref{thm:asymex_parity_compression} gives
+    Lemma~\ref{prop:asym_compression_trace} applied to the datum of
+    Lemma~\ref{thm:asymex_parity_compression} gives
     $\tr(B^w)=\tr(A^w)+\tr((-A)^w)$. By
     (\ref{eq:asymex_parity_weight}), the second summand is
     $(-1)^{|w|}\tr(A^w)$, proving~(\ref{eq:asymex_parity_trace}).
@@ -766,7 +766,7 @@ The source acts as a length filter: at odd length the periodic vector
 vanishes, while at even length every amplitude of $A$ is doubled.
 For instance, at odd length the all-zero amplitude of $A$ is one but its
 amplitude in $B$ vanishes; at even length the run restrictions of
-Theorem~\ref{thm:asymex_parity_runs} apply with doubled amplitudes.
+Lemma~\ref{thm:asymex_parity_runs} apply with doubled amplitudes.
 
 The positive-length hypothesis is necessary. The empty-word
 traces are $\tr(\Id_5)=5$ and $\tr(\Id_2)=2$, whereas substituting
@@ -775,7 +775,7 @@ The missing contribution is the empty trace of the
 one-dimensional zero block, which is one; its traces vanish only
 at positive length.
 
-\begin{theorem}[The weight $-1$ block has no sitewise intertwiner]
+\begin{lemma}[The weight $-1$ block has no sitewise intertwiner]
     \label{thm:asymex_parity_no_intertwiner}
     \lean{ParityGraded.parNeg_right_intertwiner_eq_zero,
         ParityGraded.parNeg_left_intertwiner_eq_zero}
@@ -784,7 +784,7 @@ at positive length.
     If $V\in\C^{5\times2}$ satisfies $B^iV=V(-A^i)$ for both letters, then
     $V=0$; if $W\in\C^{2\times5}$ satisfies $WB^i=(-A^i)W$ for both
     letters, then $W=0$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok

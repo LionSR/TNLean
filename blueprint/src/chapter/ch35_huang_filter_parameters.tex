@@ -1,0 +1,169 @@
+\section{Scalar parameters and uniform polynomial bounds}
+\label{sec:huang_filter_parameters}
+
+The following conservative choices support the approximate-energy Gaussian
+construction of \cite[Section~5.4, Lemmas~18--19]{Huang2015GroundState}.
+The constants and gap dependence are chosen for the estimates below; they are
+not assertions of the sharper printed quantitative bounds.
+
+\begin{definition}[Filter parameters]
+    \label{def:huang_filter_parameters}
+    \lean{TNLean.MPS.AreaLaw.huangFilterEta,
+        TNLean.MPS.AreaLaw.huangFilterScale,
+        TNLean.MPS.AreaLaw.huangFilterVariance,
+        TNLean.MPS.AreaLaw.huangFilterTime,
+        TNLean.MPS.AreaLaw.huangEnergyMesh,
+        TNLean.MPS.AreaLaw.huangEnergyCount,
+        TNLean.MPS.AreaLaw.huangFilterSampleCount,
+        TNLean.MPS.AreaLaw.huangFilterRankBound}
+    \leanok
+    Fix $c>0$, $\Delta>0$ and a local dimension $q\ge1$. At length $L$, define
+    \begin{align}
+        \eta_L   & =\frac{c}{64(c+L+1)},                                  &
+        a_L      & =8\log(1/\eta_L)+8,                                      \\
+        \sigma_L & =a_L/\Delta^2,                                         &
+        T_L      & =\sigma_L+\log(2/\eta_L)+1,                              \\
+        \mu_L    & =\frac{\Delta}{a_L+1},                                 &
+        E_L      & =\left\lceil\frac{2L}{\mu_L}\right\rceil_++1,            \\
+        S_L      & =\left\lceil\frac{2T_L(2L+1)}{\eta_L}+2\right\rceil_+, &
+        R_L      & =S_Lq^{8r_L+8}.
+    \end{align}
+    Here $r_L$ is the previously constructed propagation radius at time cutoff
+    $T_L$ and accuracy $\eta_L$. The variance of the time Gaussian is $\sigma_L$.
+\end{definition}
+
+\begin{lemma}[Positivity of the scalar choices]
+    \label{thm:huang_filter_parameter_positivity}
+    \lean{TNLean.MPS.AreaLaw.huangFilterEta_bounds,
+        TNLean.MPS.AreaLaw.huangFilterScale_ge_eight,
+        TNLean.MPS.AreaLaw.huangFilterVariance_coe,
+        TNLean.MPS.AreaLaw.huangFilterVariance_pos,
+        TNLean.MPS.AreaLaw.huangFilterTime_log_pos,
+        TNLean.MPS.AreaLaw.huangFilterTime_pos}
+    \leanok
+    \uses{def:huang_filter_parameters}
+    For every length, $0<\eta_L<1/64$, $a_L\ge8$, $\sigma_L>0$,
+    $\log(2/\eta_L)>0$ and $T_L>0$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    The denominator defining $\eta_L$ exceeds $64c$. Thus $1/\eta_L>1$
+    and $2/\eta_L>1$, giving the logarithmic bounds. The remaining assertions
+    follow from $\Delta>0$ and the definitions.
+\end{proof}
+
+\begin{lemma}[Tail and spectral suppression]
+    \label{thm:huang_filter_scalar_errors}
+    \lean{TNLean.MPS.AreaLaw.huangFilterTime_tail_le,
+        TNLean.MPS.AreaLaw.huangFilterVariance_suppression_le}
+    \leanok
+    \uses{thm:huang_filter_parameter_positivity}
+    The Gaussian tail and excited-spectrum multiplier satisfy
+    \begin{align}
+        2e^{-T_L^2/(2\sigma_L)}\le\eta_L,\qquad
+        e^{-\sigma_L\Delta^2/8}\le\eta_L.
+    \end{align}
+\end{lemma}
+\begin{proof}
+    \leanok
+    Put $s=\log(2/\eta_L)>0$. Since
+    $(\sigma_L+s+1)^2\ge2\sigma_Ls$, the first left side is at most
+    $2e^{-s}=\eta_L$. For the second, substitution gives exponent
+    $-\log(1/\eta_L)-1\le-\log(1/\eta_L)$.
+\end{proof}
+
+\begin{lemma}[Accuracy of the energy mesh]
+    \label{thm:huang_energy_mesh_accuracy}
+    \lean{TNLean.MPS.AreaLaw.huangEnergyMesh_bounds,
+        TNLean.MPS.AreaLaw.huangEnergyMesh_accuracy}
+    \leanok
+    \uses{thm:huang_filter_parameter_positivity}
+    One has $0<\mu_L\le\Delta/2$. If $|E-E_0|\le\mu_L$, then
+    \begin{align}
+        |E-E_0|\le\Delta/2,\qquad
+        \sigma_L(E_0-E)^2\le1.
+    \end{align}
+\end{lemma}
+\begin{proof}
+    \leanok
+    The first assertion follows from $a_L+1\ge9$. For the weighted error,
+    \begin{align}
+        \sigma_L(E_0-E)^2
+        \le\frac{a_L}{\Delta^2}\frac{\Delta^2}{(a_L+1)^2}
+        =\frac{a_L}{(a_L+1)^2}\le1.
+    \end{align}
+\end{proof}
+
+\begin{lemma}[Normalization and final precision budgets]
+    \label{thm:huang_filter_precision_budgets}
+    \lean{TNLean.MPS.AreaLaw.huangFilterEta_length_budget,
+        TNLean.MPS.AreaLaw.huangFilterEta_amplitude_budget}
+    \leanok
+    \uses{thm:huang_filter_parameter_positivity}
+    If $L\ge1$, then $32\eta_L\le c/L$. If $c_0\ge1/2$, then
+    $4\eta_L<c_0/2$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    The first inequality follows from $L\le2(c+L+1)$ after clearing positive
+    denominators. The second follows from $\eta_L<1/64$ and $c_0\ge1/2$.
+\end{proof}
+
+\begin{lemma}[Uniform logarithmic growth]
+    \label{thm:huang_filter_logarithmic_growth}
+    \lean{TNLean.MPS.AreaLaw.exists_huangFilter_log_bounds,
+        TNLean.MPS.AreaLaw.exists_huangFilter_radius_log_bound}
+    \leanok
+    \uses{def:huang_filter_parameters}
+    There are constants $K\ge1$ and $A,B,D>0$, depending on $c,\Delta$ and
+    chosen before $L$, such that
+    \begin{align}
+        1/\eta_L       & \le K(L+1),          &
+        \log(1/\eta_L) & \le\log K+\log(L+1),   \\
+        a_L+1          & \le A(\log(L+1)+1),  &
+        T_L            & \le B(\log(L+1)+1),    \\
+        8r_L+8         & \le D(\log(L+1)+1).
+    \end{align}
+\end{lemma}
+\begin{proof}
+    \leanok
+    Take $K=64(c+1)/c$, $A=8\log K+9$, and
+    $B=A/\Delta^2+\log2+\log K+2$. The inequality
+    $c+L+1\le(c+1)(L+1)$ gives the inverse-precision bound. Apply the
+    monotonicity and product rule of the logarithm to obtain the next three
+    estimates. The propagation width bound gives the last with
+    \begin{align}
+        D=16\bigl((v+1)B+|\log C|+\log K+3\bigr),
+    \end{align}
+    where $v,C$ are the universal propagation constants.
+\end{proof}
+
+\begin{lemma}[Uniform natural-degree polynomials]
+    \label{thm:huang_filter_uniform_polynomial}
+    \lean{TNLean.MPS.AreaLaw.exists_huangFilter_bond_polynomial,
+        TNLean.MPS.AreaLaw.exists_huangFilter_count_polynomials,
+        TNLean.MPS.AreaLaw.exists_huangFilter_uniform_polynomial,
+        TNLean.MPS.AreaLaw.exists_huangFilter_uniform_nat_polynomial}
+    \leanok
+    \uses{thm:huang_filter_logarithmic_growth}
+    For fixed $q\ge1$, $c>0$ and $\Delta>0$, there exist $P>0$ and a natural
+    number $d$, chosen before the length, such that $E_L$, $S_L$, $R_L$ and
+    $E_LR_L$ are all at most $P(L+1)^d$ for every $L$. In particular, these
+    are polynomial bounds with natural degree, uniform in the chain length.
+    The coefficient may also be chosen to be a positive integer.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Since $\log(L+1)+1\le L+1$, the energy count is bounded by
+    $\alpha(L+1)^2$ and the sample count by $\beta(L+1)^3$, with
+    $\alpha=2A/\Delta+2$ and $\beta=4BK+3$.
+    Put $n=\lceil D\log q\rceil_+$. Then
+    \begin{align}
+        q^{8r_L+8}
+        \le e^{n(\log(L+1)+1)}=e^n(L+1)^n.
+    \end{align}
+    Thus $E_LR_L\le\alpha\beta e^n(L+1)^{n+5}$. Both counts and the rank
+    bound are positive integers, so this product also bounds each of them.
+    The choices $P=\alpha\beta e^n$ and $d=n+5$ give the assertion.
+    Replacing $P$ by its natural ceiling gives an integer coefficient.
+\end{proof}

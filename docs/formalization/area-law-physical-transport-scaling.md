@@ -72,24 +72,3 @@ terms such as `n D (log n)^12` and `D² W²`. The weaker premise `r ≤ D` canno
 replace the prescribed rounded logarithmic radius: polynomially growing radii
 have polynomially growing physical dimension caps. No bound on `W` is inferred
 from `W ≥ 1`, and physical energy-ground-state identification remains separate.
-
-## Regressions and validation
-
-The existing strictly registered `TNLeanTest/ActualSubsystemDimension.lean`
-now checks the common quantifier order, dimension one, zero radius coefficient,
-mixed-sign coefficients and exponents, radius-one equality, zero rate and
-threshold, and the eventual rounded-radius composition. Counterexamples cover
-negative-power base monotonicity, bases below one, `n = 1`, an oversized
-admissible transport parameter, radius zero, and a negative rate. The four new
-public theorems have stock-axiom guards in
-`TNLeanTest/ActualSubsystemDimensionAxioms.lean`.
-
-The candidate is source-reviewed only until hosted validation runs. No local
-Lean, Lake, cache, dependency, installation, or overlay operation is required
-or recorded as passing. The existing CI policy and workflow are unchanged:
-strict serial elaboration has a 90-second limit per changed production or test
-module, standard linters, and warnings as errors. Hosted validation must run
-that production check, the shared-geometry fixture prerequisite and regression
-module, both existing physical-dimension axiom audits, the ordinary aggregate
-checks, and blueprint declaration/prose checks. Blueprint completion tags for
-the new results must wait for that validation.

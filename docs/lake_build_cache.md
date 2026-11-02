@@ -209,13 +209,6 @@ After cache setup and provenance pruning, the `build` job runs
 `scripts/ci_lean_checks.py early`, a fail-fast Lake build of the production
 modules changed by the pull request, so their failures surface before the root
 build. After the root build, `scripts/ci_lean_checks.py strict` elaborates the
-changed production files and every affected `TNLeanTest` file with warnings as
-errors. Test objects go to a fresh overlay that precedes every Lake package path,
-so a test may import another test without reading a stale production artifact.
-See `docs/ci-automation.md` for the selection rule.
-
-The collared open-boundary regression `TNLeanTest/LabelledOpenCoefficient.lean`
-pins its eight axiom audits with `#guard_msgs`; any axiom outside `propext`,
-`Classical.choice` and `Quot.sound`, including `sorryAx`, changes the report and
-fails the strict check. All direct Lean regressions run after the full root
-build.
+changed production files and every affected `scripts/*_regression.lean` file
+with warnings as errors. See `docs/ci-automation.md` for the selection rule.
+All direct Lean regressions run after the full root build.

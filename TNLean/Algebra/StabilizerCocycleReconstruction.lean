@@ -347,15 +347,16 @@ theorem isCompatible_iff_exists_actionGauge_mul_inducedLSymbol
 
 /-- **Freeness of the `H²` action.** Multiplying a fixed L-symbol by the L-symbols induced by
 two stabilizer two-cochains gives action-gauge equivalent results exactly when the two-cochains
-are cohomologous.
+differ by a coboundary. This statement allows arbitrary cochains; on genuine cocycles,
+this is equality of their Mathlib `H²` classes.
 
 This is the part of arXiv:2203.12563, line 761, identifying distinct solutions with distinct
 elements of `H²(H, ℂˣ)`. -/
 theorem actionGaugeEquiv_mul_inducedLSymbol_iff (K : StabilizerRepresentatives G X x₀)
     (L₀ : LSymbol G X) (ψ₁ ψ₂ : ScalarCocycle (MulAction.stabilizer G x₀)) :
     LSymbol.ActionGaugeEquiv (L₀ * K.inducedLSymbol ψ₁) (L₀ * K.inducedLSymbol ψ₂) ↔
-      ScalarCocycle.CohomologousTo ψ₁ ψ₂ := by
-  rw [K.cohomologousTo_iff_exists_actionGauge_inducedLSymbol_eq]
+      groupCohomology.IsMulCoboundary₂ (ψ₁ / ψ₂) := by
+  rw [K.isMulCoboundary₂_div_iff_exists_actionGauge_inducedLSymbol_eq]
   simp only [LSymbol.ActionGaugeEquiv, LSymbol.gauge_one_mul, mul_right_inj]
 
 /-- **Classification in a trivializing fusion gauge.** If `ω` is a three-cocycle equal to one at
@@ -421,8 +422,8 @@ private theorem cocycleClass_surjective :
 
 private theorem cocycleClass_eq_iff
     (ψ₁ ψ₂ : {ψ : ScalarCocycle (MulAction.stabilizer G x₀) // groupCohomology.IsMulCocycle₂ ψ}) :
-    cocycleClass ψ₁ = cocycleClass ψ₂ ↔ ψ₁.1.CohomologousTo ψ₂.1 :=
-  (ScalarCocycle.cohomologousTo_iff_H2π_eq ψ₁.2 ψ₂.2).symm
+    cocycleClass ψ₁ = cocycleClass ψ₂ ↔ groupCohomology.IsMulCoboundary₂ (ψ₁.1 / ψ₂.1) :=
+  H2π_eq_iff_isMulCoboundary₂_div ψ₁.2 ψ₂.2
 
 /-- Stabilizer cocycles modulo equality of classes, identified with `H²(H, ℂˣ)`. -/
 private noncomputable def quotientEquivH2 :
@@ -478,7 +479,7 @@ private noncomputable def solutionAction (K : StabilizerRepresentatives G X x₀
     (by
       rintro ψ₁ ψ₂ hψ L₁ L₂ ⟨γ₁, hγ₁⟩
       obtain ⟨γ₂, hγ₂⟩ :=
-        (K.cohomologousTo_iff_exists_actionGauge_inducedLSymbol_eq ψ₁.1 ψ₂.1).1
+        (K.isMulCoboundary₂_div_iff_exists_actionGauge_inducedLSymbol_eq ψ₁.1 ψ₂.1).1
           ((cocycleClass_eq_iff _ _).1 hψ)
       refine ⟨γ₁ * γ₂, ?_⟩
       change L₁.1 * K.inducedLSymbol ψ₁.1 = _

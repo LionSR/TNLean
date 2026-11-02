@@ -107,7 +107,7 @@ $V_{q,\mu}$ has row $s$ and column $(\beta,l)$.
 \end{tenkzequation}
 % TENKZ-MIXED-ACTION-CROSS-END
 
-\begin{theorem}[Biorthogonality and commutation of the bond weight]
+\begin{lemma}[Biorthogonality and commutation of the bond weight]
     \label{thm:mpo_mixed_action_weight}
     \lean{MPSTensor.MPOSymmetry.mixedEndpointAnalysis_mul_synthesis,
         MPSTensor.MPOSymmetry.mixedEndpointMPOAnalysis_mul_synthesis,
@@ -131,7 +131,7 @@ $V_{q,\mu}$ has row $s$ and column $(\beta,l)$.
     $(T\cdot(BH))^x=(T\cdot B)^x(\Id\otimes H)$.
     If $H$ is diagonal with entries $h_i$, its lifted weight is diagonal
     with entry $h_i$ at the acted coordinate $(\alpha,i)$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Expanding each product over the four spaces $K_p\otimes E_q$ leaves
@@ -145,7 +145,7 @@ $V_{q,\mu}$ has row $s$ and column $(\beta,l)$.
     general bond-weight identity.
 \end{proof}
 
-\begin{theorem}[Exact mixed action for every real parameter]
+\begin{lemma}[Exact mixed action for every real parameter]
     \label{thm:mpo_mixed_action_exact}
     \lean{MPSTensor.MPOSymmetry.mixedEndpointMPOLetter_action,
         MPSTensor.MPOSymmetry.actTensor_mixedEndpointBase,
@@ -166,7 +166,7 @@ $V_{q,\mu}$ has row $s$ and column $(\beta,l)$.
     In particular this holds at $\gamma=0,1$. No injectivity,
     nonzero-weight, or identity $\sum_\mu W_\mu V_\mu=\Id_{K\otimes E}$
     is required.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:mpo_mixed_action_weight}
@@ -226,7 +226,7 @@ multiplicity. There is no scalar normalization in the local identity.
 \end{tenkzequation}
 % TENKZ-MIXED-ACTION-LOCAL-END
 
-\begin{theorem}[Length-independent boundary compatibility]
+\begin{lemma}[Length-independent boundary compatibility]
     \label{thm:mpo_mixed_action_boundary}
     \lean{MPSTensor.MPOSymmetry.isBoundaryCompatible_mixedEndpointInterpolation}
     \leanok
@@ -242,7 +242,7 @@ multiplicity. There is no scalar normalization in the local identity.
         =\psi^N_{A(\gamma),Z(X,Y)}$ for every real $\gamma$ and every
     $N>0$. In particular, the output boundary is independent of both
     the positive chain length and the interpolation parameter.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:mpo_mixed_action_exact,thm:glm_boundary_closedness_of_decomposition}
@@ -255,7 +255,7 @@ multiplicity. There is no scalar normalization in the local identity.
     gives (\ref{eq:mpo_mix_action_boundary}).
 \end{proof}
 
-\begin{theorem}[Periodic action with the common multiplicity]
+\begin{lemma}[Periodic action with the common multiplicity]
     \label{thm:mpo_mixed_action_periodic}
     \lean{MPSTensor.MPOSymmetry.mpo_mulVec_mixedEndpointInterpolation}
     \leanok
@@ -270,7 +270,7 @@ multiplicity. There is no scalar normalization in the local identity.
     \end{align}
     The vector is allowed to be zero; if it is nonzero, its eigenvalue
     is $m$. In particular, a multiplicity-one action fixes it.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:mpo_mixed_action_exact,thm:glm_boundary_decomposition}

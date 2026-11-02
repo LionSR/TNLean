@@ -13,7 +13,7 @@
     vertical operators in \cite[Appendix~C.4]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
-\begin{theorem}[Uniqueness of the structure coefficients]%
+\begin{lemma}[Uniqueness of the structure coefficients]%
     \label{thm:mpdo_bnt_label_coeff_unique}
     \lean{MPOTensor.BNTLabelOperatorFamily.HasSameLengthProductForm.%
         coeff_eq_of_linearIndependentAt}
@@ -22,7 +22,7 @@
     Two systems of structure coefficients satisfying the product law for the
     same operator family agree at every positive length at which the
     operators are linearly independent.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Applying the product law to both systems of structure coefficients gives
     \begin{align}
@@ -73,7 +73,7 @@
     For this definition, use the convention $z/0=0$.
 \end{definition}
 
-\begin{theorem}[Product law under a change of vertical representatives]%
+\begin{lemma}[Product law under a change of vertical representatives]%
     \label{thm:mpdo_vertical_bnt_product_transport}
     \lean{MPOTensor.BNTLabelOperatorFamily.ExplicitVerticalTransport.%
         hasSameLengthProductForm_verticalTransport}
@@ -82,7 +82,7 @@
     A change of vertical representatives carries a product law with
     structure coefficients $c^{(L)}_{\alpha,\beta,\gamma}$ to a product law
     with structure coefficients $\widetilde c^{(L)}_{\alpha,\beta,\gamma}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     For every positive length $L$, multiplication of the two new
     representatives and the original product law give
@@ -110,7 +110,7 @@
     \end{align}
 \end{proof}
 
-\begin{theorem}[Covariance of structure coefficients for operator families]%
+\begin{lemma}[Covariance of structure coefficients for operator families]%
     \label{thm:mpdo_vertical_bnt_coefficient_covariance_abstract}
     \lean{MPOTensor.BNTLabelOperatorFamily.ExplicitVerticalTransport.%
         coeff_eq_verticalTransport_of_linearIndependentAt}
@@ -121,10 +121,10 @@
     the operators of the second family are linearly independent, their
     structure coefficients equal the transformed coefficients
     $\widetilde c^{(L)}_{\alpha,\beta,\gamma}$ of the first family.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The product law for the second family and
-    Theorem~\ref{thm:mpdo_vertical_bnt_product_transport} give
+    Lemma~\ref{thm:mpdo_vertical_bnt_product_transport} give
     \begin{align}
         \sum_\gamma c'^{(L)}_{\alpha,\beta,\gamma}O_L(M'_\gamma)
          & =O_L(M'_\alpha)O_L(M'_\beta)
@@ -136,7 +136,7 @@
     systems of structure coefficients term by term.
 \end{proof}
 
-\begin{theorem}[Covariance of structure coefficients for vertical BNT decompositions]%
+\begin{lemma}[Covariance of structure coefficients for vertical BNT decompositions]%
     \label{thm:mpdo_vertical_bnt_coefficient_covariance}
     \lean{MPOTensor.BNTAlgebraTensorClause.%
         coeff_eq_of_explicitVerticalTransport}
@@ -152,10 +152,10 @@
         c^{(L)}_{e(\alpha),e(\beta),e(\gamma)}.
         \notag
     \end{align}
-    Theorem~\ref{thm:mpdo_vertical_coefficients_not_presentation_invariant}
+    Lemma~\ref{thm:mpdo_vertical_coefficients_not_presentation_invariant}
     shows why equality of the horizontal periodic operator families alone
     cannot replace the specified relation between vertical representatives.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The algebra conditions for the two vertical basis-of-normal-tensors decompositions give the
     product laws required by the covariance theorem for operator families.
@@ -169,18 +169,18 @@
     \end{align}
 \end{proof}
 
-\begin{theorem}[Equality of structure coefficients under compatible normalization]%
+\begin{lemma}[Equality of structure coefficients under compatible normalization]%
     \label{thm:mpdo_vertical_bnt_coefficient_transport_exact_abstract}
     \lean{MPOTensor.BNTLabelOperatorFamily.ExplicitVerticalTransport.%
         coeff_eq_of_scale_mul_eq_of_linearIndependentAt}
     \leanok
     \uses{thm:mpdo_vertical_bnt_coefficient_covariance_abstract}
     Under the hypotheses of
-    Theorem~\ref{thm:mpdo_vertical_bnt_coefficient_covariance_abstract}, if
+    Lemma~\ref{thm:mpdo_vertical_bnt_coefficient_covariance_abstract}, if
     $s_\alpha s_\beta=s_\gamma$, then
     ${c'}^{(L)}_{\alpha,\beta,\gamma}
         =c^{(L)}_{e(\alpha),e(\beta),e(\gamma)}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The compatible normalization and $s_\gamma\ne0$ give
     $\left(s_\alpha s_\beta/s_\gamma\right)^L
@@ -188,18 +188,18 @@
     Substitution in the covariance formula gives the result.
 \end{proof}
 
-\begin{theorem}[Equality of vertical BNT structure coefficients under compatible normalization]%
+\begin{lemma}[Equality of vertical BNT structure coefficients under compatible normalization]%
     \label{thm:mpdo_vertical_bnt_coefficient_transport_exact}
     \lean{MPOTensor.BNTAlgebraTensorClause.%
         coeff_eq_of_explicitVerticalTransport_of_scale_mul_eq}
     \leanok
     \uses{def:mpdo_bnt_algebra_tensor_clause, thm:mpdo_vertical_bnt_coefficient_transport_exact_abstract}
     Under the hypotheses of
-    Theorem~\ref{thm:mpdo_vertical_bnt_coefficient_covariance}, if
+    Lemma~\ref{thm:mpdo_vertical_bnt_coefficient_covariance}, if
     $s_\alpha s_\beta=s_\gamma$, then
     ${c'}^{(L)}_{\alpha,\beta,\gamma}
         =c^{(L)}_{e(\alpha),e(\beta),e(\gamma)}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     For the vertical basis-of-normal-tensors decompositions, the covariance formula gives
     \begin{align}
@@ -277,7 +277,7 @@
     on the sheared tensor $M_Q$.
 \end{definition}
 
-\begin{theorem}[Horizontal periodic equality alone does not determine vertical BNT coefficients]%
+\begin{lemma}[Horizontal periodic equality alone does not determine vertical BNT coefficients]%
     \label{thm:mpdo_vertical_coefficients_not_presentation_invariant}
     \lean{MPOTensor.VerticalCoefficientPresentationCounterexample.%
         leftMPO_gaugeEquiv_rightMPO}
@@ -312,11 +312,11 @@
     \end{align}
     Indeed, the two sides at length one are $4/5$ and $1$.
 
-    While Theorem~\ref{thm:mpdo_bnt_label_coeff_unique} guarantees uniqueness of
+    While Lemma~\ref{thm:mpdo_bnt_label_coeff_unique} guarantees uniqueness of
     structure coefficients for a fixed operator family, this counterexample shows
     that periodic operator equality alone does not constrain the structure coefficients
     of independent vertical decompositions across nonunitary gauge changes.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The identities $P^2=P$, $Q^2=Q$, and
     $\tr(P)=\tr(Q)=1$ prove the periodic equality. The Frobenius norms of
@@ -334,7 +334,7 @@
     Their values at $L=1$ exclude the only possible relabelling.
 \end{proof}
 
-\begin{theorem}[Length independence is not preserved by horizontal periodic equality alone]%
+\begin{lemma}[Length independence is not preserved by horizontal periodic equality alone]%
     \label{thm:mpdo_vertical_length_independence_not_presentation_invariant}
     \lean{MPOTensor.VerticalCoefficientPresentationCounterexample.%
         leftClause_lengthIndependent}
@@ -355,12 +355,12 @@
         c_Q^{(2)} & =\frac{16}{25}.
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The first family is constant, whereas $c_Q^{(1)}\ne c_Q^{(2)}$.
 \end{proof}
 
-\begin{theorem}[Associativity constraint on the structure coefficients]%
+\begin{lemma}[Associativity constraint on the structure coefficients]%
     \label{thm:mpdo_bnt_label_coeff_associativity}
     \lean{MPOTensor.BNTLabelOperatorFamily.HasSameLengthProductForm.%
         coeff_assoc_of_linearIndependentAt}
@@ -382,7 +382,7 @@
     As noted in \cite[Section~4.5]{Cirac2016MPDO_arXiv}, these identities are
     the restrictions that associativity of multiplication imposes on the
     structure coefficients.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Applying the product law twice in each order gives
     \begin{align}
@@ -408,7 +408,7 @@
     the corresponding coefficient sums to agree for each $\varepsilon'$.
 \end{proof}
 
-\begin{theorem}[Associativity constraint in trace-power form]%
+\begin{lemma}[Associativity constraint in trace-power form]%
     \label{thm:mpdo_bnt_label_chi_associativity}
     \lean{MPOTensor.BNTLabelOperatorFamily.HasSameLengthProductForm.%
         tracePowerCoeff_assoc_of_linearIndependentAt}
@@ -435,13 +435,13 @@
     to a pentagon-like equation for the fusion isometries. Solutions
     constructed from unitary fusion categories give the family of
     renormalization fixed point MPDOs described there.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Substituting the trace-power form of the coefficients into the label-indexed
     associativity constraint yields the displayed identity.
 \end{proof}
 
-\begin{theorem}[The dimer RFP has length-dependent coefficients in its chosen vertical BNT decomposition]%
+\begin{lemma}[The dimer RFP has length-dependent coefficients in its chosen vertical BNT decomposition]%
     \label{thm:mpdo_bnt_label_rescaling_stable_rfp_capstone}
     \lean{MPOTensor.RescalingStableLengthDependentRFP.%
         exists_isRFPViaTS_not_lengthIndependent_bntCoefficients_R}
@@ -461,17 +461,17 @@
     vertical decomposition of $R$, addressing the question following
     Theorem~4.14 of \cite{Cirac2016MPDO_arXiv} without requiring the unit-weight
     normalization of \cite{gap:cpsv16_unit_weight_rfp_scale_tension}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpdo_bnt_label_rescaling_stable_length_dependence, thm:mpdo_bnt_label_rescaling_stable_cf, thm:mpdo_bnt_label_rescaling_stable_ismpdo, thm:mpdo_bnt_label_rescaling_stable_is_rfp_via_ts, thm:mpdo_bnt_label_rescaling_stable_bnt_algebra_clause}
-    Theorem~\ref{thm:mpdo_bnt_label_rescaling_stable_ismpdo} and
-    Theorem~\ref{thm:mpdo_bnt_label_rescaling_stable_cf} show that $R$ generates
+    Lemma~\ref{thm:mpdo_bnt_label_rescaling_stable_ismpdo} and
+    Lemma~\ref{thm:mpdo_bnt_label_rescaling_stable_cf} show that $R$ generates
     MPDOs and has the direct-sum form with normalized normal tensor blocks.
-    Theorem~\ref{thm:mpdo_bnt_label_rescaling_stable_is_rfp_via_ts} constructs
+    Lemma~\ref{thm:mpdo_bnt_label_rescaling_stable_is_rfp_via_ts} constructs
     the completely positive trace-preserving maps $S,T$ satisfying
     $S[R_2(X)]=R_1(X)$ and $T[R_1(X)]=R_2(X)$ for all $X$, while
-    Theorem~\ref{thm:mpdo_bnt_label_rescaling_stable_bnt_algebra_clause}
+    Lemma~\ref{thm:mpdo_bnt_label_rescaling_stable_bnt_algebra_clause}
     provides its single-element vertical basis-of-normal-tensors decomposition
     satisfying the algebra condition. Its structure coefficients are
     $c^{(L)}_{0,0,0}=1+(7/25)^L$. The values at lengths one and two differ,

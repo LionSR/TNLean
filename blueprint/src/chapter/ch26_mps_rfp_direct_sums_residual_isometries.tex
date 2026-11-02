@@ -42,7 +42,7 @@
     \end{align}
 \end{proof}
 
-\begin{theorem}[Reindexing the direct-sum transfer map]%
+\begin{lemma}[Reindexing the direct-sum transfer map]%
     \label{thm:direct_sum_transfer_reindex}
     \lean{MPSTensor.transferMap_directSumTensor_reindex}
     \leanok
@@ -55,7 +55,7 @@
         \E_{\oplus_k B_k}(\Phi(Y)) & =\Phi(\mathcal S_B(Y)).
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Since $\Phi$ preserves products and adjoints, expanding the transfer map
@@ -74,7 +74,7 @@
     \end{align}
 \end{proof}
 
-\begin{theorem}[Direct-sum quasi-idempotence on the block transfer sum]%
+\begin{lemma}[Direct-sum quasi-idempotence on the block transfer sum]%
     \label{thm:block_transfer_sum_quasi_idempotent_of_direct_sum}
     \lean{MPSTensor.blockTransferSum_blockTransferSum_eq_smul}
     \leanok
@@ -90,18 +90,18 @@
         \mathcal S_B(\mathcal S_B(Y)) & =c\mathcal S_B(Y).
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:direct_sum_transfer_reindex}
     Reindexing the total bond space by its block labels transforms the
     direct-sum transfer map into $\mathcal S_B$
-    (Theorem~\ref{thm:direct_sum_transfer_reindex}), and conjugating the
+    (Lemma~\ref{thm:direct_sum_transfer_reindex}), and conjugating the
     assumed relation $\E_{\oplus_k B_k}^2 = c\E_{\oplus_k B_k}$ by this
     isomorphism gives the displayed identity.
 \end{proof}
 
-\begin{theorem}[Direct-sum quasi-idempotence on every mixed corner]%
+\begin{lemma}[Direct-sum quasi-idempotence on every mixed corner]%
     \label{thm:mixed_transfer_quasi_idempotent_of_direct_sum}
     \lean{MPSTensor.%
         mixedMapLM_comp_self_eq_smul_of_transferMap_comp_self_eq_smul}
@@ -118,7 +118,7 @@
         \E_{j,j'}^2 & =c\E_{j,j'}.
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:block_transfer_sum_quasi_idempotent_of_direct_sum, lem:block_diagonal_transfer_sum_to_block}
@@ -126,7 +126,7 @@
     matrix $Y$ on the total bond space gives
     $[\mathcal S_B(Y)]_{j,j'}=\E_{j,j'}(Z)$ by
     Lemma~\ref{lem:block_diagonal_transfer_sum_to_block}.
-    Theorem~\ref{thm:block_transfer_sum_quasi_idempotent_of_direct_sum} gives
+    Lemma~\ref{thm:block_transfer_sum_quasi_idempotent_of_direct_sum} gives
     $\mathcal S_B^2=c\mathcal S_B$, and hence
     \begin{align}
         \E_{j,j'}(\E_{j,j'}(Z))
@@ -160,7 +160,7 @@
     space.
 \end{proof}
 
-\begin{theorem}[Pairwise mixed-transfer criterion for a direct sum]%
+\begin{lemma}[Pairwise mixed-transfer criterion for a direct sum]%
     \label{thm:direct_sum_transfer_idempotent_iff_pairwise_mixed}
     \lean{MPSTensor.isTransferIdempotent_directSumTensor_iff_pairwise_mixedMapLM_isIdempotentElem}
     \leanok
@@ -174,7 +174,7 @@
         \E_{j,j'}^2=\E_{j,j'}.
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     By Lemma~\ref{lem:block_diagonal_transfer_sum_to_block}, the $(j,j')$
     block of the direct-sum transfer map depends only on the $(j,j')$ block of
@@ -217,7 +217,7 @@
         =c\overline e\sum_iA^iX(B^i)^\dagger$.
 \end{proof}
 
-\begin{theorem}[Phase coherence for repeated blocks]%
+\begin{lemma}[Phase coherence for repeated blocks]%
     \label{thm:literal_repeated_blocks_phase_coherence}
     \lean{MPSTensor.phases_eq_of_isTransferIdempotent_directSum_scaled_self}
     \leanok
@@ -226,10 +226,10 @@
     Let $\mu_q$ have unit modulus. If the bond direct sum
     $\bigoplus_q \mu_qA$ has an idempotent transfer map, then
     $\mu_q=\mu_{q'}$ for every pair $q,q'$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The pairwise criterion
-    (Theorem~\ref{thm:direct_sum_transfer_idempotent_iff_pairwise_mixed})
+    (Lemma~\ref{thm:direct_sum_transfer_idempotent_iff_pairwise_mixed})
     gives that $\E_{\mu_qA,\mu_{q'}A}$ is idempotent.
     Lemma~\ref{lem:mixed_transfer_rect_smul} and
     $\E_{A,A}=\E_A$ give
@@ -262,7 +262,7 @@
     % specified by an equation in that passage.
 \end{proof}
 
-\begin{theorem}[Cross-block transfer vanishing for a direct-sum fixed point]%
+\begin{lemma}[Cross-block transfer vanishing for a direct-sum fixed point]%
     \label{thm:bnt_locally_orthogonal_of_rfp_direct_sum}
     \lean{MPSTensor.isBNTLocallyOrthogonal_of_isTransferIdempotent_directSum}
     \leanok
@@ -278,18 +278,18 @@
     This cross-block orthogonality
     (\cite[Theorem~3.11 and Corollary~3.12]{Cirac2016MPDO_arXiv}) passes to
     the residual isometry tensors $U_j$ in
-    Theorem~\ref{thm:residual_isometry_of_rfp_direct_sum}.
-\end{theorem}
+    Lemma~\ref{thm:residual_isometry_of_rfp_direct_sum}.
+\end{lemma}
 \begin{proof}\leanok
     \uses{lem:block_diagonal_transfer_sum_to_block, thm:transfer_operator_gap_irr_tp, thm:transfer_operator_gap_rect_irr_tp, lem:idempotent_spectral_radius_zero}
     By Lemma~\ref{lem:block_diagonal_transfer_sum_to_block} the $(j,j')$ bond
     block of the direct-sum transfer map acts as $\E_{j,j'}$. Whole-tensor
     idempotence $\E^2=\E$ therefore restricts to each block as
     $\E_{j,j'}^2=\E_{j,j'}$. For distinct irreducible left-canonical blocks,
-    Theorem~\ref{thm:transfer_operator_gap_irr_tp} gives
+    Lemma~\ref{thm:transfer_operator_gap_irr_tp} gives
     $\rho_{\spec}(\E_{j,j'})<1$ when the bond dimensions agree, because the
     blocks are not gauge-phase equivalent;
-    Theorem~\ref{thm:transfer_operator_gap_rect_irr_tp} gives the same
+    Lemma~\ref{thm:transfer_operator_gap_rect_irr_tp} gives the same
     inequality when the bond dimensions differ. Consequently,
     Lemma~\ref{lem:idempotent_spectral_radius_zero} gives
     \begin{align}
@@ -345,7 +345,7 @@
     distinct blocks vanish ($j\ne j'$).
 \end{definition}
 
-\begin{theorem}[One-letter Gram matrix under the joint isometry condition]%
+\begin{lemma}[One-letter Gram matrix under the joint isometry condition]%
     \label{thm:residual_isometry_family_one_gram}
     \lean{MPSTensor.IsResidualIsometryFamily.wordEntryFamily_one_gram}
     \leanok
@@ -354,7 +354,7 @@
     union of the within-sector virtual pairs. For $x=(j,\alpha,\beta)$ in
     $\mathcal V$, set $u_x(i)=(U_j^i)_{\alpha,\beta}$. Then
     $\sum_i u_x(i)\overline{u_y(i)}=\delta_{x,y}$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     If $x$ and $y$ belong to the same sector, the assertion is the
@@ -433,7 +433,7 @@
     renormalization fixed-point condition for $B_j$.
 \end{proof}
 
-\begin{theorem}[Joint isometry condition for a direct-sum fixed point]%
+\begin{lemma}[Joint isometry condition for a direct-sum fixed point]%
     \label{thm:residual_isometry_of_rfp_direct_sum}
     \lean{MPSTensor.exists_residualIsometryFamily_of_isTransferIdempotent_directSum}
     \leanok
@@ -476,16 +476,16 @@
     % explicit hypotheses; extracting these from a single canonical-form RFP
     % predicate is the remaining step
     % (docs/paper-gaps/cpsv16_rfp_isometry_scope.tex).
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:bnt_locally_orthogonal_of_rfp_direct_sum, thm:isometry_canonical_form_of_rfp_nt, lem:mixed_transfer_conj_apply, lem:isrfp_block_of_rfp_direct_sum, lem:mixed_transfer_eq_zero_of_conj, lem:residual_isometry_entry}
     Whole-tensor idempotence makes the diagonal mixed transfer operator of each
     block its own transfer map, so each block is a renormalization fixed
     point; the square-root fixed-point form
-    (Theorem~\ref{thm:isometry_canonical_form_of_rfp_nt}) gives the
+    (Lemma~\ref{thm:isometry_canonical_form_of_rfp_nt}) gives the
     decomposition $A_j^i=X_j\sqrt{\rho_j}U_j^iX_j^{-1}$ with the within-block
     orthonormality, which is the $j=j'$ case. For $j\ne j'$,
-    Theorem~\ref{thm:bnt_locally_orthogonal_of_rfp_direct_sum} gives
+    Lemma~\ref{thm:bnt_locally_orthogonal_of_rfp_direct_sum} gives
     $\E_{A_j,A_{j'}}=0$; by the covariance
     Lemma~\ref{lem:mixed_transfer_conj_apply} and invertibility of the outer
     factors $\E_{U_j,U_{j'}}=0$, and reading the entry of this operator at a
@@ -494,7 +494,7 @@
         \overline{(U_{j'}^i)_{\alpha',\beta'}}=0$.
 \end{proof}
 
-\begin{theorem}[Direct sum of square-root fixed-point blocks]%
+\begin{lemma}[Direct sum of square-root fixed-point blocks]%
     \label{thm:is_rfp_of_isometry_canonical_form_direct_sum}
     \lean{MPSTensor.isTransferIdempotent_directSumTensor_of_isIsometryCanonicalForm}
     \leanok
@@ -507,7 +507,7 @@
     % Scope restriction (multiplicity-one): the source canonical form allows each
     % normal tensor to repeat with a multiplicity and a phase; this is the
     % single-copy case (docs/paper-gaps/cpsv16_rfp_isometry_scope.tex).
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:is_rfp_of_isometry_canonical_form, lem:block_diagonal_transfer_sum_to_block}
     The direct-sum transfer map decouples block by block: by
@@ -515,7 +515,7 @@
     acts as $\E_{j,j'}$ on the $(j,j')$ bond block of the argument. Each diagonal
     block $\E_{j,j}$ is the transfer map of $B_j$, which is idempotent because
     $B_j$ is a renormalization fixed point
-    (Theorem~\ref{thm:is_rfp_of_isometry_canonical_form}); each off-diagonal block
+    (Lemma~\ref{thm:is_rfp_of_isometry_canonical_form}); each off-diagonal block
     $\E_{j,j'}$ with $j\ne j'$ vanishes by hypothesis. Therefore, for every bond
     block,
     \begin{align}
@@ -529,7 +529,7 @@
     sum is a renormalization fixed point.
 \end{proof}
 
-\begin{theorem}[Distinct-block fixed-point characterization]%
+\begin{lemma}[Distinct-block fixed-point characterization]%
     \label{thm:rfp_directSumTensor_iff}
     \lean{MPSTensor.isTransferIdempotent_directSumTensor_iff}
     \leanok
@@ -554,19 +554,19 @@
     % each normal tensor to repeat with multiplicity r_j and a unit-modulus phase
     % mu_{j,q}; this is the single-copy case
     % (docs/paper-gaps/cpsv16_rfp_isometry_scope.tex).
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:isometry_canonical_form_of_rfp_nt, lem:isrfp_block_of_rfp_direct_sum, thm:bnt_locally_orthogonal_of_rfp_direct_sum, thm:is_rfp_of_isometry_canonical_form_direct_sum}
     For the forward direction, whole-tensor idempotence makes each diagonal mixed
     transfer operator the transfer map of its block
     (Lemma~\ref{lem:isrfp_block_of_rfp_direct_sum}), so each block is a
     renormalization fixed point and hence in the square-root fixed-point form
-    (Theorem~\ref{thm:isometry_canonical_form_of_rfp_nt}), while the off-diagonal
+    (Lemma~\ref{thm:isometry_canonical_form_of_rfp_nt}), while the off-diagonal
     operators vanish, $\E_{j,j'}=0$ for $j\ne j'$, by
-    Theorem~\ref{thm:bnt_locally_orthogonal_of_rfp_direct_sum}. Conversely, a
+    Lemma~\ref{thm:bnt_locally_orthogonal_of_rfp_direct_sum}. Conversely, a
     direct sum of square-root fixed-point blocks whose cross-block operators
     vanish is a renormalization fixed point
-    (Theorem~\ref{thm:is_rfp_of_isometry_canonical_form_direct_sum}).
+    (Lemma~\ref{thm:is_rfp_of_isometry_canonical_form_direct_sum}).
 \end{proof}
 
 \begin{corollary}[BNT basis direct-sum characterization]%
@@ -596,7 +596,7 @@
     auxiliary BNT sector hypotheses. If $m_j>0$ is the peripheral period of
     $B_j$, the
     normalized self-overlap hypothesis and the periodic self-overlap formula
-    used in Theorem~\ref{thm:postblocked_representative_grouped_insert_eq} give,
+    used in Lemma~\ref{thm:postblocked_representative_grouped_insert_eq} give,
     along the same subsequence,
     \begin{align}
         \lim_{k\to\infty}O_{B_jB_j}(m_jk) & =1,
@@ -606,16 +606,16 @@
     \end{align}
     Hence $m_j=1$. The transfer map is primitive by
     the corresponding theorem in the companion quantum-channel volume~\cite[``Primitivity equals period one'']{QICLean2026Blueprint}, and normality follows from
-    Theorem~\ref{thm:normal_tp_primitive_irred}. Gauge-phase distinctness is
+    Lemma~\ref{thm:normal_tp_primitive_irred}. Gauge-phase distinctness is
     also part of the auxiliary BNT sector hypotheses. The equivalence now
     follows from
-    Theorem~\ref{thm:rfp_directSumTensor_iff}; the same derived hypotheses in
-    Theorem~\ref{thm:residual_isometry_of_rfp_direct_sum} gives the joint
+    Lemma~\ref{thm:rfp_directSumTensor_iff}; the same derived hypotheses in
+    Lemma~\ref{thm:residual_isometry_of_rfp_direct_sum} gives the joint
     isometry condition.
 \end{proof}
 
 
-\begin{theorem}[Transfer idempotence under coisometric reconstruction]%
+\begin{lemma}[Transfer idempotence under coisometric reconstruction]%
     \label{thm:rfp_coisometry_reconstruction_iff}
     \lean{MPSTensor.isTransferIdempotent_coisometry_reconstruction_iff}
     \leanok
@@ -629,7 +629,7 @@
     \end{align}
     Then $A$ is a renormalization fixed point if and only if $B$ is a
     renormalization fixed point.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     For every bond matrix $X$,
     \begin{align}
@@ -642,7 +642,7 @@
     each implication.
 \end{proof}
 
-\begin{theorem}[A fixed nonzero scaling of a normal tensor]%
+\begin{lemma}[A fixed nonzero scaling of a normal tensor]%
     \label{thm:normal_scaled_rfp}
     \lean{MPSTensor.norm_eq_one_and_isTransferIdempotent_of_isNormalTensor_smul}
     \leanok
@@ -654,13 +654,13 @@
             & \E_B^2 & =\E_B.
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:spectral_radius_smul, thm:idempotent_spectral_radius_one}
     Normality gives $r(\E_B)=1$, while
     $\E_{cB}=|c|^2\E_B$. Since $c\ne0$, this operator is nonzero.
-    Theorem~\ref{thm:idempotent_spectral_radius_one} gives
-    $r(\E_{cB})=1$, and Theorem~\ref{thm:spectral_radius_smul} gives
+    Lemma~\ref{thm:idempotent_spectral_radius_one} gives
+    $r(\E_{cB})=1$, and Lemma~\ref{thm:spectral_radius_smul} gives
     \begin{align}
         1=r(\E_{cB})=|c|^2r(\E_B)=|c|^2.
         \notag
@@ -668,7 +668,7 @@
     Thus $|c|=1$, so $\E_{cB}=\E_B$ and the idempotence of $\E_B$ follows.
 \end{proof}
 
-\begin{theorem}[Blocks of a CPSV fixed point]%
+\begin{lemma}[Blocks of a CPSV fixed point]%
     \label{thm:cpsv_weight_norm_one_and_block_rfp}
     \lean{MPSTensor.CPSVCanonicalFormData.weight_norm_one_and_block_rfp}
     \leanok
@@ -687,21 +687,21 @@
                 & \E_{A_k}^2 & =\E_{A_k}.
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:rfp_coisometry_reconstruction_iff, lem:isrfp_block_of_rfp_direct_sum, thm:normal_scaled_rfp}
-    By Theorem~\ref{thm:rfp_coisometry_reconstruction_iff}, the direct sum
+    By Lemma~\ref{thm:rfp_coisometry_reconstruction_iff}, the direct sum
     $\bigoplus_k\mu_kA_k$ is a renormalization fixed point.
     Lemma~\ref{lem:isrfp_block_of_rfp_direct_sum} implies that each block
     $\mu_kA_k$ is also a renormalization fixed point. Since $\mu_k\ne0$,
-    Theorem~\ref{thm:normal_scaled_rfp} gives both conclusions.
+    Lemma~\ref{thm:normal_scaled_rfp} gives both conclusions.
 \end{proof}
 
 % CPSV16 Corollary 3.12 (`III_cor3`), lines 583--590.
 % Under the nonzero-coefficient convention every basis element occurs with a
 % nonzero weight, so the phase-class statement below is the formalization of
 % the corollary; the square-root diagonal is a local correction.
-\begin{theorem}[Phase-class residual isometries]%
+\begin{lemma}[Phase-class residual isometries]%
     \label{thm:cpsv_phase_class_residual_isometries}
     \lean{MPSTensor.CPSVCanonicalFormData.BNTRefinement.%
         exists_residualIsometryFamily_of_isTransferIdempotent}
@@ -731,17 +731,17 @@
     than the bare diagonal printed in \cite[line~547]{Cirac2016MPDO_arXiv}, as
     required by the reference-tensor construction; documented in
     \cite{gap:cpsv16_rfp_isometry_scope}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:cpsv_canonical_form_bnt_refinement, thm:rfp_coisometry_reconstruction_iff, thm:cpsv_weight_norm_one_and_block_rfp, thm:normal_rfp_iff_isometry_canonical_form, thm:bnt_locally_orthogonal_of_rfp_direct_sum, lem:mixed_transfer_eq_zero_of_conj, lem:residual_isometry_entry}
     The retained weighted direct sum is a renormalization fixed point. For each
-    representative, Theorem~\ref{thm:cpsv_weight_norm_one_and_block_rfp}
+    representative, Lemma~\ref{thm:cpsv_weight_norm_one_and_block_rfp}
     gives $|\mu_j|=1$ and $\E_{C_j}^2=\E_{C_j}$. By
-    Theorem~\ref{thm:normal_rfp_iff_isometry_canonical_form}, each normal fixed
+    Lemma~\ref{thm:normal_rfp_iff_isometry_canonical_form}, each normal fixed
     point $C_j$ admits the displayed square-root form. Putting the
     representatives independently in left-canonical gauge, distinct phase-class
     representatives are not gauge-phase equivalent. Since the direct sum is a
-    fixed point, Theorem~\ref{thm:bnt_locally_orthogonal_of_rfp_direct_sum}
+    fixed point, Lemma~\ref{thm:bnt_locally_orthogonal_of_rfp_direct_sum}
     gives
     \begin{align}
         \E_{\mu_jC_j,\mu_{j'}C_{j'}} & =0

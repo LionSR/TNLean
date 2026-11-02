@@ -11,7 +11,7 @@ The finite counting statements below are those used in the proof of
     \lean{TNLean.Lattice.Compression.sourceEndpoints}
     \lean{TNLean.Lattice.Compression.mem_sourceEndpoints}
     \leanok
-    For an index set of source positions, let $e\mapsto(a_e,b_e)$ assign an ordered pair of parties. Define $E_e=\{a_e,b_e\}$. Thus $p\in E_e$ if and only if $p=a_e$ or $p=b_e$; coincident endpoints are counted once.
+    For source positions $e$ with ordered party pairs $(a_e,b_e)$, set $E_e=\{a_e,b_e\}$.
 \end{definition}
 
 \begin{definition}[Corrected parties]
@@ -19,7 +19,7 @@ The finite counting statements below are those used in the proof of
     \lean{TNLean.Lattice.Compression.correctedParties}
     \lean{TNLean.Lattice.Compression.mem_correctedParties}
     \leanok
-    For a finite set $S$ of source positions, define $A_S=\bigcup_{e\in S}E_e$, the set of parties that are endpoints of some position $e\in S$.
+    For a finite set $S$ of source positions, set $A_S=\bigcup_{e\in S}E_e$.
 \end{definition}
 
 \begin{definition}[Lifetime gate incidence]
@@ -27,7 +27,7 @@ The finite counting statements below are those used in the proof of
     \lean{TNLean.Lattice.Compression.incidentGates}
     \lean{TNLean.Lattice.Compression.mem_incidentGates}
     \leanok
-    Let $G$ be a finite set of nonprivate gate occurrences and let $P_g$ be the finite participant set of occurrence $g$. Identifiers distinguish repeated occurrences of the same operation. Define $G(p)=\{g\in G:p\in P_g\}$ using the entire gate list.
+    For a finite set $G$ of nonprivate gate occurrences $g$ with finite participant sets $P_g$, set $G(p)=\{g\in G:p\in P_g\}$.
 \end{definition}
 
 \begin{definition}[Gates touching a party set]
@@ -35,79 +35,79 @@ The finite counting statements below are those used in the proof of
     \lean{TNLean.Lattice.Compression.gatesTouching}
     \lean{TNLean.Lattice.Compression.mem_gatesTouching}
     \leanok
-    For a finite party set $A$, define $\Gamma(A)=\bigcup_{p\in A}G(p)$. Thus $g\in\Gamma(A)$ precisely when $g\in G$ and some $p\in A$ participates in $g$.
+    For a finite party set $A$, set $\Gamma(A)=\bigcup_{p\in A}G(p)=\{g\in G:P_g\cap A\ne\varnothing\}$.
 \end{definition}
 
-\begin{theorem}[Endpoint count at one source position]
+\begin{lemma}[Endpoint count at one source position]
     \label{thm:compression_endpoint_count}
     \lean{TNLean.Lattice.Compression.card_sourceEndpoints_le}
     \leanok
-    Every source position satisfies $|E_e|\le2$.
-\end{theorem}
+    Every source position $e$ satisfies $|E_e|\le2$.
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:compression_source_endpoints}
-    A set containing two specified elements has cardinality at most two.
+    By Definition~\ref{def:compression_source_endpoints}, $E_e=\{a_e,b_e\}$ has at most two elements.
 \end{proof}
 
-\begin{theorem}[Corrected-party count]
+\begin{lemma}[Corrected-party count]
     \label{thm:compression_corrected_party_count}
     \lean{TNLean.Lattice.Compression.card_correctedParties_le}
     \leanok
     For every finite correction set $S$, $|A_S|\le2|S|$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:compression_corrected_parties,thm:compression_endpoint_count}
-    The cardinality of a finite union is at most the sum of the constituent cardinalities, so $|A_S|\le\sum_{e\in S}|E_e|\le2|S|$.
+    By Definition~\ref{def:compression_corrected_parties} and Lemma~\ref{thm:compression_endpoint_count}, $|A_S|\le\sum_{e\in S}|E_e|\le2|S|$.
 \end{proof}
 
-\begin{theorem}[Lifetime bound for touching gates]
+\begin{lemma}[Lifetime bound for touching gates]
     \label{thm:compression_touching_gate_count}
     \lean{TNLean.Lattice.Compression.card_gatesTouching_le}
     \leanok
     If $|G(p)|\le b$ for every $p\in A$, then $|\Gamma(A)|\le b|A|$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:compression_touching_gates}
-    The union bound gives $|\Gamma(A)|\le\sum_{p\in A}|G(p)|\le b|A|$.
+    By Definition~\ref{def:compression_touching_gates}, $|\Gamma(A)|\le\sum_{p\in A}|G(p)|\le b|A|$.
 \end{proof}
 
-\begin{theorem}[Affected-gate count for corrected positions]
+\begin{lemma}[Affected-gate count for corrected positions]
     \label{thm:compression_affected_gate_count}
     \lean{TNLean.Lattice.Compression.card_gatesTouching_correctedParties_le}
     \leanok
     If $|G(p)|\le b$ for every $p\in A_S$, then $|\Gamma(A_S)|\le2b|S|$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:compression_touching_gate_count,thm:compression_corrected_party_count}
-    The two finite-union bounds give $|\Gamma(A_S)|\le b|A_S|\le2b|S|$.
+    Lemmas~\ref{thm:compression_touching_gate_count} and \ref{thm:compression_corrected_party_count} give $|\Gamma(A_S)|\le b|A_S|\le2b|S|$.
 \end{proof}
 
-\begin{theorem}[Owner of a corrected source position]
+\begin{lemma}[Owner of a corrected source position]
     \label{thm:compression_corrected_owner}
     \lean{TNLean.Lattice.Compression.owner_mem_gatesTouching_correctedParties}
     \leanok
-    Let $o(e)$ be the owner of a source position. If $e\in S$, $o(e)\in G$, and $a_e\in P_{o(e)}$, then $o(e)\in\Gamma(A_S)$.
-\end{theorem}
+    Let $o(e)$ be the owner of $e$. If $e\in S$, $o(e)\in G$, and $a_e\in P_{o(e)}$, then $o(e)\in\Gamma(A_S)$.
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:compression_corrected_parties,def:compression_touching_gates}
-    Since $e\in S$, the party $a_e$ belongs to $A_S$; since $a_e\in P_{o(e)}$, the gate $o(e)$ belongs to $\Gamma(A_S)$.
+    Here $a_e\in E_e\subseteq A_S$ and $o(e)\in G(a_e)\subseteq\Gamma(A_S)$.
 \end{proof}
 
-\begin{theorem}[Exterior gates avoid corrected parties]
+\begin{lemma}[Exterior gates avoid corrected parties]
     \label{thm:compression_exterior_disjoint}
     \lean{TNLean.Lattice.Compression.disjoint_participants_of_not_mem_gatesTouching}
     \leanok
     If $g\in G\setminus\Gamma(A)$, then $P_g\cap A=\varnothing$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:compression_touching_gates}
-    Any party in $P_g\cap A$ would place $g$ in $\Gamma(A)$, a contradiction.
+    Immediate from $\Gamma(A)=\{g\in G:P_g\cap A\ne\varnothing\}$.
 \end{proof}
 
 \begin{definition}[Pair-sample labels]
@@ -116,21 +116,21 @@ The finite counting statements below are those used in the proof of
     \lean{TNLean.Lattice.Compression.mem_pairSampleLabels}
     \lean{TNLean.Lattice.Compression.mk_mem_pairSampleLabels}
     \leanok
-    For a finite party set $P$, let $U(P)$ be the unordered pairs of distinct elements of $P$. Equivalently, an unordered pair belongs to $U(P)$ when both its endpoints lie in $P$ and it is not diagonal. The pair $\{p,q\}$ belongs to $U(P)$ precisely when $p,q\in P$ and $p\ne q$.
+    For a finite party set $P$, set $U(P)=\{\{p,q\}:p,q\in P,\ p\ne q\}$.
 \end{definition}
 
 \begin{definition}[Star and sample label sets]
     \label{def:compression_gate_labels}
     \lean{TNLean.Lattice.Compression.gateLinkLabels}
     \leanok
-    For a specified root $r$, define the disjoint label set $T(P,r)=(P\setminus\{r\})\sqcup U(P)$. The first summand indexes star links and the second indexes sample links.
+    For a root $r$, define the disjoint union $T(P,r)=(P\setminus\{r\})\sqcup U(P)$ of star and sample labels.
 \end{definition}
 
 \begin{definition}[Gate-local link endpoints]
     \label{def:compression_gate_link_parties}
     \lean{TNLean.Lattice.Compression.gateLinkParties}
     \leanok
-    For a star label $q$ put $F(r,q)=\{r,q\}$. For a sample label $\{p,q\}$ put $F(r,\{p,q\})=\{p,q\}$. The two cases retain their disjoint summand labels.
+    Set $F(r,q)=\{r,q\}$ for $q\in P\setminus\{r\}$ and $F(r,\{p,q\})=\{p,q\}$ for $\{p,q\}\in U(P)$.
 \end{definition}
 
 \begin{definition}[Links tagged by gate occurrence]
@@ -138,7 +138,7 @@ The finite counting statements below are those used in the proof of
     \lean{TNLean.Lattice.Compression.linksAtGate}
     \lean{TNLean.Lattice.Compression.mem_linksAtGate}
     \leanok
-    For chosen roots $r_g$, define $\mathcal L_g=\{(g,t):t\in T(P_g,r_g)\}$. The gate tag preserves distinct occurrences even if their participant sets and operations agree.
+    For chosen roots $r_g$, set $\mathcal L_g=\{(g,t):t\in T(P_g,r_g)\}$.
 \end{definition}
 
 \begin{definition}[Distributed link family]
@@ -146,218 +146,222 @@ The finite counting statements below are those used in the proof of
     \lean{TNLean.Lattice.Compression.distributedLinks}
     \lean{TNLean.Lattice.Compression.mem_distributedLinks}
     \leanok
-    Define $\mathcal L=\bigcup_{g\in G}\mathcal L_g$. A pair $(g,t)$ belongs to $\mathcal L$ exactly when $g\in G$ and $t\in T(P_g,r_g)$. Parallel links remain distinct.
+    Set $\mathcal L=\bigcup_{g\in G}\mathcal L_g=\{(g,t):g\in G,\ t\in T(P_g,r_g)\}$.
 \end{definition}
 
 \begin{definition}[Tagged link endpoints]
     \label{def:compression_distributed_link_parties}
     \lean{TNLean.Lattice.Compression.distributedLinkParties}
     \leanok
-    For a tagged link $\ell=(g,t)$ define $V(\ell)=F(r_g,t)$.
+    For $\ell=(g,t)\in\mathcal L$, set $V(\ell)=F(r_g,t)$.
 \end{definition}
 
 \begin{definition}[Distributed party incidence]
     \label{def:compression_distributed_incidence}
     \lean{TNLean.Lattice.Compression.incidentDistributedLinks}
     \leanok
-    Define $I(p)=\{\ell\in\mathcal L:p\in V(\ell)\}$. Parallel links are counted separately.
+    Set $I(p)=\{\ell\in\mathcal L:p\in V(\ell)\}$.
 \end{definition}
 
 \begin{definition}[Gate-local party incidence]
     \label{def:compression_gate_label_incidence}
     \lean{TNLean.Lattice.Compression.incidentGateLinkLabels}
     \leanok
-    Define $T_p(P,r)=\{t\in T(P,r):p\in F(r,t)\}$.
+    Set $T_p(P,r)=\{t\in T(P,r):p\in F(r,t)\}$.
 \end{definition}
 
 \begin{definition}[Tagged incidence at one gate]
     \label{def:compression_gate_incidence}
     \lean{TNLean.Lattice.Compression.incidentLinksAtGate}
     \leanok
-    Define $\mathcal L_g(p)=\{\ell\in\mathcal L_g:p\in V(\ell)\}$.
+    Set $\mathcal L_g(p)=\{\ell\in\mathcal L_g:p\in V(\ell)\}$.
 \end{definition}
 
-\begin{theorem}[Number of pair-sample labels]
+\begin{lemma}[Number of pair-sample labels]
     \label{thm:compression_pair_label_count}
     \lean{TNLean.Lattice.Compression.card_pairSampleLabels}
     \leanok
     If $|P|=n$, then $|U(P)|=\binom n2$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:compression_pair_labels}
-    The off-diagonal ordered pairs map two-to-one onto unordered pairs, giving $|U(P)|=n(n-1)/2=\binom n2$.
+    Off-diagonal ordered pairs in $P^2$ map two-to-one onto $U(P)$, giving $|U(P)|=n(n-1)/2=\binom n2$.
 \end{proof}
 
-\begin{theorem}[Sample links incident to a participant]
+\begin{lemma}[Sample links incident to a participant]
     \label{thm:compression_pair_incidence}
     \lean{TNLean.Lattice.Compression.filter_pairSampleLabels_eq_map}
     \lean{TNLean.Lattice.Compression.card_filter_pairSampleLabels}
     \leanok
-    If $p\in P$, then the sample labels containing $p$ are exactly the image of $P\setminus\{p\}$ under $q\mapsto\{p,q\}$. Consequently their number is $|P|-1$.
-\end{theorem}
+    For $p\in P$, $q\mapsto\{p,q\}$ bijects $P\setminus\{p\}$ onto $\{u\in U(P):p\in u\}$, which has cardinality $|P|-1$.
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:compression_pair_labels}
-    The map is injective. Every distinct unordered pair containing $p$ has a unique other endpoint in $P\setminus\{p\}$.
+    Each $\{p,q\}\in U(P)$ containing $p$ has a unique second endpoint $q\in P\setminus\{p\}$.
 \end{proof}
 
-\begin{theorem}[Number of links at one gate]
+\begin{lemma}[Number of links at one gate]
     \label{thm:compression_gate_label_count}
     \lean{TNLean.Lattice.Compression.card_gateLinkLabels}
     \lean{TNLean.Lattice.Compression.card_gateLinkLabels_le}
     \leanok
-    If $r\in P$ and $|P|=n$, then $|T(P,r)|=n-1+\binom n2$. If $n\le b$, this is at most $b-1+\binom b2$.
-\end{theorem}
+    If $r\in P$ and $|P|=n\le b$, then $|T(P,r)|=n-1+\binom n2\le b-1+\binom b2$.
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:compression_gate_labels,thm:compression_pair_label_count}
-    Adding the cardinalities of the disjoint star and sample summands gives $n-1+\binom n2$, which is monotone in $n$.
+    By Definition~\ref{def:compression_gate_labels} and Lemma~\ref{thm:compression_pair_label_count}, $|T(P,r)|=|P\setminus\{r\}|+|U(P)|=n-1+\binom n2$, which is monotone in $n$.
 \end{proof}
 
-\begin{theorem}[Gate-local incidence bound]
+\begin{lemma}[Gate-local incidence bound]
     \label{thm:compression_gate_incidence_bound}
     \lean{TNLean.Lattice.Compression.card_incidentGateLinkLabels_le}
     \leanok
     If $r,p\in P$, then $|T_p(P,r)|\le2(|P|-1)$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:compression_gate_label_incidence,thm:compression_pair_incidence}
-    The star contribution is at most the whole star size $|P|-1$. The sample contribution is exactly $|P|-1$.
+    The star summand $P\setminus\{r\}$ has size $|P|-1$, and the sample summand contributes $|P|-1$ by Lemma~\ref{thm:compression_pair_incidence}.
 \end{proof}
 
-\begin{theorem}[Gate-local endpoint locality]
+\begin{lemma}[Gate-local endpoint locality]
     \label{thm:compression_gate_locality}
     \lean{TNLean.Lattice.Compression.gateLinkParties_subset}
     \leanok
     If $r\in P$ and $t\in T(P,r)$, then $F(r,t)\subseteq P$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:compression_gate_labels,def:compression_gate_link_parties}
-    A star label lies in $P\setminus\{r\}$, and a sample label has both endpoints in $P$.
+    Immediate from Definitions~\ref{def:compression_gate_labels} and \ref{def:compression_gate_link_parties}.
 \end{proof}
 
-\begin{theorem}[Distinct link endpoints]
+\begin{lemma}[Distinct link endpoints]
     \label{thm:compression_gate_two_endpoints}
     \lean{TNLean.Lattice.Compression.card_gateLinkParties}
     \leanok
     For every $t\in T(P,r)$, $|F(r,t)|=2$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:compression_gate_labels,def:compression_gate_link_parties}
-    Star labels exclude the root; sample labels are off-diagonal.
+    Star labels satisfy $q\ne r$, and sample labels $\{p,q\}\in U(P)$ satisfy $p\ne q$.
 \end{proof}
 
-\begin{theorem}[Tagging preserves cardinalities]
+\begin{lemma}[Tagging preserves cardinalities]
     \label{thm:compression_tagging_cardinality}
     \lean{TNLean.Lattice.Compression.card_linksAtGate}
     \lean{TNLean.Lattice.Compression.card_incidentLinksAtGate}
     \leanok
-    For every gate occurrence $g$ and party $p$, $|\mathcal L_g|=|T(P_g,r_g)|$ and $|\mathcal L_g(p)|=|T_p(P_g,r_g)|$.
-\end{theorem}
+    For every $g$ and $p$, $|\mathcal L_g|=|T(P_g,r_g)|$ and $|\mathcal L_g(p)|=|T_p(P_g,r_g)|$.
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:compression_gate_links,def:compression_gate_incidence}
-    The injection $t\mapsto(g,t)$ preserves cardinality, including after filtering by party incidence.
+    The map $t\mapsto(g,t)$ is injective and commutes with filtering by $p\in F(r_g,t)$.
 \end{proof}
 
-\begin{theorem}[Original-gate locality of distributed links]
+\begin{lemma}[Original-gate locality of distributed links]
     \label{thm:compression_original_gate_locality}
     \lean{TNLean.Lattice.Compression.distributedLinkParties_subset}
     \lean{TNLean.Lattice.Compression.exists_common_gate_of_mem_distributedLinkParties}
     \leanok
-    Suppose $r_g\in P_g$ for every $g\in G$. If $\ell=(g,t)\in\mathcal L$, then $V(\ell)\subseteq P_g$. In particular any two endpoints $p,q\in V(\ell)$ participate in a common original occurrence $g\in G$.
-\end{theorem}
+    Suppose $r_g\in P_g$ for all $g\in G$. Every $\ell=(g,t)\in\mathcal L$ satisfies $V(\ell)\subseteq P_g$, so any $p,q\in V(\ell)$ share $g\in G$.
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:compression_gate_locality,def:compression_distributed_links}
-    The gate tag gives $g\in G$, and gate-local endpoint locality gives $V(\ell)\subseteq P_g$.
+    Combine Definition~\ref{def:compression_distributed_links} with Lemma~\ref{thm:compression_gate_locality}.
 \end{proof}
 
-\begin{theorem}[Two endpoints of each distributed link]
+\begin{lemma}[Two endpoints of each distributed link]
     \label{thm:compression_distributed_two_endpoints}
     \lean{TNLean.Lattice.Compression.card_distributedLinkParties}
     \leanok
     Every $\ell\in\mathcal L$ satisfies $|V(\ell)|=2$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:compression_gate_two_endpoints,def:compression_distributed_links}
-    Membership in $\mathcal L$ places the link label in $T(P_g,r_g)$, where the gate-local count gives $|V(\ell)|=2$.
+    Combine Definition~\ref{def:compression_distributed_links} with Lemma~\ref{thm:compression_gate_two_endpoints}.
 \end{proof}
 
-\begin{theorem}[Lifetime containment of incident links]
+\begin{lemma}[Lifetime containment of incident links]
     \label{thm:compression_incidence_containment}
     \lean{TNLean.Lattice.Compression.incidentDistributedLinks_subset}
     \leanok
-    Suppose $r_g\in P_g$ for every $g\in G$. Then $I(p)\subseteq\bigcup_{g\in G(p)}\mathcal L_g(p)$.
-\end{theorem}
+    If $r_g\in P_g$ for all $g\in G$, then $I(p)\subseteq\bigcup_{g\in G(p)}\mathcal L_g(p)$.
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:compression_original_gate_locality,def:compression_gate_incidence}
-    For an incident link the original gate tag belongs to $G$, and locality puts $p$ in that gate's participant set.
+    If $\ell=(g,t)\in I(p)$, Lemma~\ref{thm:compression_original_gate_locality} gives $p\in V(\ell)\subseteq P_g$, so $g\in G(p)$ and $\ell\in\mathcal L_g(p)$.
 \end{proof}
 
-\begin{theorem}[Bounded distributed incidence]
+\begin{lemma}[Bounded distributed incidence]
     \label{thm:compression_distributed_incidence_bound}
     \lean{TNLean.Lattice.Compression.card_incidentDistributedLinks_le}
     \leanok
-    Suppose $r_g\in P_g$ and $|P_g|\le b$ for every $g\in G$. For a party $p$ with $|G(p)|\le b$, the constructed link family satisfies $|I(p)|\le2b(b-1)$.
-\end{theorem}
+    If $r_g\in P_g$ and $|P_g|\le b$ for all $g\in G$, and $|G(p)|\le b$, then $|I(p)|\le2b(b-1)$.
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:compression_incidence_containment,thm:compression_gate_incidence_bound,thm:compression_tagging_cardinality}
-    Each participating gate contributes at most $2(b-1)$ links incident to $p$. Taking their union gives $|I(p)|\le\sum_{g\in G(p)}|\mathcal L_g(p)|\le2b(b-1)$.
+    By Lemmas~\ref{thm:compression_incidence_containment}, \ref{thm:compression_tagging_cardinality}, and \ref{thm:compression_gate_incidence_bound}, $|I(p)|\le\sum_{g\in G(p)}|\mathcal L_g(p)|\le2b(b-1)$.
 \end{proof}
 
 \begin{definition}[Ket and bra coefficient cost]
     \label{def:compression_coefficient_cost}
     \lean{TNLean.Lattice.Compression.ketBraCoefficientCost}
     \leanok
-    For a finite label set $\Xi$ and nonnegative coefficient weights $a_\xi$, put $W(\Xi,a)=(\sum_{\xi\in\Xi}a_\xi)^2$.
+    For finite $\Xi$ and $a_\xi\ge0$, set $W(\Xi,a)=(\sum_{\xi\in\Xi}a_\xi)^2$.
 \end{definition}
 
-\begin{theorem}[Double coefficient sum]
+\begin{lemma}[Double coefficient sum]
     \label{thm:compression_double_coefficient_sum}
     \lean{TNLean.Lattice.Compression.ketBraCoefficientCost_eq_sum}
     \leanok
-    The coefficient cost satisfies $W(\Xi,a)=\sum_{\xi\in\Xi}\sum_{\zeta\in\Xi}a_\xi a_\zeta$.
-\end{theorem}
+    $W(\Xi,a)=\sum_{\xi,\zeta\in\Xi}a_\xi a_\zeta$.
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:compression_coefficient_cost}
-    Distributing the product of the two finite sums yields the double sum.
+    Expand the square in Definition~\ref{def:compression_coefficient_cost}.
 \end{proof}
 
 \begin{definition}[Affected-position choice cost]
     \label{def:compression_position_choice_cost}
     \lean{TNLean.Lattice.Compression.correctedPositionChoiceCost}
     \leanok
-    For finite gate label sets $\Xi_g$, nonnegative weights $a_{g,\xi}$, and physical dimensions $n_p\in\mathbb N$, define\begin{align}\mathcal C(S)=\left(\prod_{g\in\Gamma(A_S)}W(\Xi_g,a_g)\right)\left(\prod_{p\in A_S}n_p^2\right).\label{eq:compression_incidence_choice_cost}\end{align}
+    For finite $\Xi_g$, weights $a_{g,\xi}\ge0$, and dimensions $n_p\in\mathbb N$, define
+    \begin{align}
+        \mathcal C(S) & =\left(\prod_{g\in\Gamma(A_S)}W(\Xi_g,a_g)\right)\left(\prod_{p\in A_S}n_p^2\right).
+        \label{eq:compression_incidence_choice_cost}
+    \end{align}
 \end{definition}
 
-\begin{theorem}[Corrected-position weighted choice bound]
+\begin{lemma}[Corrected-position weighted choice bound]
     \label{thm:compression_position_choice_bound}
     \lean{TNLean.Lattice.Compression.correctedPositionChoiceCost_le}
     \leanok
-    Suppose $B,d\ge1$, $|G(p)|\le b$ for every $p\in A_S$, $\sum_{\xi\in\Xi_g}a_{g,\xi}\le B$ for every $g\in\Gamma(A_S)$, and $n_p\le d$ for every $p\in A_S$. Then $\mathcal C(S)\le(B^{4b}d^4)^{|S|}$.
-\end{theorem}
+    If $B,d\ge1$, $|G(p)|\le b$ and $n_p\le d$ for all $p\in A_S$, and $\sum_{\xi\in\Xi_g}a_{g,\xi}\le B$ for all $g\in\Gamma(A_S)$, then $\mathcal C(S)\le(B^{4b}d^4)^{|S|}$.
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:compression_position_choice_cost,thm:compression_affected_gate_count,thm:compression_corrected_party_count}
-    The coefficient product is at most $B^{2|\Gamma(A_S)|}\le B^{4b|S|}$, and the physical-entry product is at most $d^{2|A_S|}\le d^{4|S|}$, so multiplying the two bounds and collecting the common exponent $|S|$ gives $(B^{4b}d^4)^{|S|}$.
+    In (\ref{eq:compression_incidence_choice_cost}), Lemmas~\ref{thm:compression_affected_gate_count} and \ref{thm:compression_corrected_party_count} yield $\mathcal C(S)\le B^{2|\Gamma(A_S)|}d^{2|A_S|}\le(B^{4b}d^4)^{|S|}$.
 \end{proof}
 
-\begin{theorem}[Explicit monomial enclosure of the choice base]
+\begin{lemma}[Explicit monomial enclosure of the choice base]
     \label{thm:compression_choice_monomial_bound}
     \lean{TNLean.Lattice.Compression.compressionChoiceBase_le_of_monomial_bounds}
     \leanok
-    Let $L,B,d,C,D$ be nonnegative real numbers and $a,c,b\in\mathbb N$. If $B\le CL^a$ and $d\le DL^c$, then $B^{4b}d^4\le C^{4b}D^4L^{4ba+4c}$.
-\end{theorem}
+    For $L,B,d,C,D\ge0$ and $a,c,b\in\mathbb N$, if $B\le CL^a$ and $d\le DL^c$, then $B^{4b}d^4\le C^{4b}D^4L^{4ba+4c}$.
+\end{lemma}
 
 \begin{proof}\leanok
-    Raising each monomial bound to its nonnegative integer power and multiplying adds the exponents of $L$.
+    Multiply $(CL^a)^{4b}$ and $(DL^c)^4$.
 \end{proof}
