@@ -136,6 +136,7 @@ import TNLean.MPS.AreaLaw.ProtocolUniformPreparation
 import TNLean.MPS.AreaLaw.RangeOneCut
 import TNLean.MPS.AreaLaw.RangeOneSupport
 import TNLean.MPS.AreaLaw.RegionalMiddleFactors
+import TNLean.MPS.AreaLaw.RegionalSoftTruncationMPO
 import TNLean.MPS.AreaLaw.RegionalTruncationResidual
 import TNLean.MPS.AreaLaw.RelativeGeneratorLocalization
 import TNLean.MPS.AreaLaw.RenyiEntropy
