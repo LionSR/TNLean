@@ -1864,3 +1864,15 @@ The corrected interval rank bound `d²+3` and the prefix/suffix bound `d²+2`
 are proved in `ALVV/FrustrationFreeRank.lean` for actual supported chain matrices.
 The note records the distinction between the source's site endpoints and its
 selected bond indices.
+
+
+## Independent scales and the ground-space recursive witness
+
+[`alvv16_approximation_parameters.tex`](alvv16_approximation_parameters.tex)
+records the nonuniform parameter prescription in the proof of ALVV Theorem 4.9
+and the correction using independent clipping and polynomial scales. The explicit
+rank bound uses the capped gap, preserves one factor of the original ground-space
+dimension and supplies a common reference space for interval trimming. The note
+separates the actual recursive witness and its native root MPS bound from adaptive
+probability, the final filter-and-trim iteration, Ritz extraction and running time.
+The source algorithm remains open while those further steps are unproved.

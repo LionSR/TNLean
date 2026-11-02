@@ -11518,3 +11518,18 @@ removed after the dependency audit exposed it.
   selected. No logarithmic absorption or ceiling proof is repeated.
 - **Scope:** The coefficient retains its fixed-bandwidth dependence and
   precedes every count base and width. No new tactic is needed.
+
+
+### Original spectral coordinates after regional clipping — candidate (2026-11-02)
+
+- **Seen:** the two physical low-cluster proofs in
+  `MPS/AreaLaw/FiveRegionTruncationResidual.lean` and the independent-cutoff
+  proof in `MPS/AreaLaw/IndependentFiveRegionCluster.lean`.
+- **Pattern:** identify the actual centered original ground energy, transport
+  its Hermitian eigenbasis and identify its closed ground spectral subspace.
+- **Decision:** The three occurrences across two files meet the promotion
+  threshold. The natural shared result is the existing independent-cutoff
+  cluster theorem itself: specialize its real cutoff to the window length
+  in the coupled scaled-cluster theorem, preserving the latter statement.
+  That removes the duplicate complete cluster proof without a new tactic.
+  This follow-up remains separate from the checked recursive-tree port.

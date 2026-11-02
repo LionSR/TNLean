@@ -1,0 +1,274 @@
+\section{Normalized approximation with independent scales}
+
+\begin{lemma}[An improving family at independent scales]
+    \label{thm:independent_long_middle_actual_dg_family}
+    \lean{TNLean.MPS.AreaLaw.exists_independent_long_middle_actual_dg_family}
+    \leanok
+    Let $m\ge q\ge2$, $\ell\ge1$, $t\ge21$, $0<g\le1$ and $0<\varepsilon\le1$.
+    Suppose
+    \begin{align}
+        288e^{11/8}e^{-(t-g)/8} & \le\varepsilon g/10^6,
+        \label{eq:independent_family_tail}
+    \end{align}
+    and suppose that a real number $\Delta$ bounds
+    $(2e^{-2\ell^2\sqrt{(4g/5)/R}})^2$ for every $0<R\le3t+4\ell$.
+    Put $D=(m\ell^2)^{22\ell}$.
+    Let $J=[p,r)$ have length greater than $4\ell$, and let $H$ be an
+    original nearest-neighbour Hamiltonian with positive contraction terms with full ground
+    space $G$ at energy $\mu$ and spectrum in $\{\mu\}\cup[\mu+g,\infty)$.
+    There are a target $T$ and $D^2$ operators $F_i$ on $\mathcal H_J$,
+    chosen before every viable subspace below, such that $\dim T=\dim G$
+    and $T,G$ are mutually $\varepsilon/200$-close.
+    If $S\subseteq\mathcal H_J$ is $\eta$-viable for $T$ and $\eta<1$, then
+    \begin{align}
+        V=\operatorname{span}_i F_iS,
+        \qquad \dim V\le D^2\dim S,
+        \qquad V\text{ is }\frac{\Delta}{(1-\eta)^2}\text{-viable for }T.
+        \label{eq:independent_family_improvement}
+    \end{align}
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{lem:independent_physical_dg_word_family}
+    Take words of length one in the preceding theorem. Their image sum
+    is the original family image sum. Extend this family by zero to
+    exactly $D^2$ operators, preserving the image subspace.
+\end{proof}
+
+\begin{lemma}[The squared filter error]
+    \label{thm:squared_chebyshev_error_eq}
+    \lean{Real.squared_chebyshev_error_eq}
+    \leanok
+    For all real $\ell,\eta,R$,
+    $(2e^{-2\ell^2\sqrt{\eta/R}})^2=4e^{-4\ell^2\sqrt{\eta/R}}$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Apply $(e^x)^2=e^{2x}$ and expand the scalar square.
+\end{proof}
+
+\begin{lemma}[An error proportional to the requested accuracy]
+    \label{thm:squared_chebyshev_error_le_accuracy}
+    \lean{Real.squared_chebyshev_error_le_accuracy}
+    \leanok
+    Let $\delta>0$, $a\ge16$, $\log(1/\delta)\le a$ and
+    $a\le\ell^2\sqrt{\eta/R}$. Then
+    $(2e^{-2\ell^2\sqrt{\eta/R}})^2\le\delta/8$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{thm:squared_chebyshev_error_eq}
+    One has $e^{-a}\le\delta$ and $e^{3a}\ge1+3a\ge49$.
+    Hence $4e^{-4a}=(4e^{-3a})e^{-a}\le\delta/8$.
+\end{proof}
+
+\begin{lemma}[One scalar choice for physical approximation]
+    \label{thm:sharp_approximation_scalar_parameters}
+    \lean{Real.exists_sharp_approximation_scalar_parameters}
+    \leanok
+    There is a universal constant $C\ge21$ such that, for every
+    $0<g\le1$ and $0<\delta\le1$, putting
+    $a=16+\log(1/g)+\log(1/\delta)$ and $t=Ca$, there is an integer
+    $\ell\ge1$ with
+    \begin{align}
+        \ell & \le\frac{8}{4g/5}+(7C)^{1/4}(4g/5)^{-1/4}a^{3/4},
+        \label{eq:sharp_approximation_window}
+    \end{align}
+    such that $t\ge21$, $288e^{11/8}e^{-(t-g)/8}\le\delta g/10^6$,
+    and $(2e^{-2\ell^2\sqrt{(4g/5)/R}})^2\le\delta/8$ for every
+    $0<R\le3t+4\ell$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{thm:independent_truncation_threshold_constant,
+        thm:quarter_power_truncation_filter_scale,
+        thm:squared_chebyshev_error_le_accuracy}
+    Use the universal threshold constant. Increasing its logarithmic
+    variable from $1+\log(1/g)+\log(1/\delta)$ to $a$ decreases the tail.
+    Apply the quarter-power window choice with gap $4g/5$ and exponent $a$,
+    then the preceding squared-error estimate.
+\end{proof}
+
+\begin{lemma}[The logarithm of the independent family count]
+    \label{thm:sharp_polynomial_family_log_count}
+    \lean{Real.sharp_polynomial_family_log_count}
+    \leanok
+    Let $q,\ell\ge1$, $0<g\le1$, $a\ge1$, $b\ge0$ and
+    $\ell\le10/g+bg^{-1/4}a^{3/4}$.
+    Put $u=1+\log q+\log(1/g)$ and $D_1=(q\ell^2)^{22\ell}$.
+    Then
+    \begin{align}
+        \log D_1\le44(1+\log(11+b))
+        (10/g+bg^{-1/4}a^{3/4})u(1+\log a).
+        \label{eq:sharp_polynomial_log_count}
+    \end{align}
+\end{lemma}
+\begin{proof}
+    \leanok
+    The window bound implies $\ell\le(11+b)a/g$, so
+    $\log\ell\le\log(11+b)+\log(1/g)+\log a$.
+    Thus $\log q+2\log\ell\le2(1+\log(11+b))u(1+\log a)$.
+    Multiply by $22\ell$ and apply the sharper window bound once more.
+\end{proof}
+
+\begin{lemma}[A rank budget with one ground-space factor]
+    \label{thm:sharp_approximation_log_rank_budget}
+    \lean{Real.sharp_approximation_log_rank_budget}
+    \leanok
+    Under the hypotheses of Lemma~\ref{thm:sharp_polynomial_family_log_count},
+    let $r,D_0\ge1$, $K_0\ge0$ and $\log D_0\le K_0u^3/g$.
+    Then
+    \begin{align}
+        \log(rD_0^{24}D_1^2)
+         & \le\log r+
+        \bigl(24K_0+88(1+\log(11+b))(11+b)\bigr)
+        \bigl(u^3/g+g^{-1/4}a^{3/4}u\bigr)(1+\log a).
+        \label{eq:sharp_log_rank_budget}
+    \end{align}
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{thm:sharp_polynomial_family_log_count}
+    Expand the left side as $\log r+24\log D_0+2\log D_1$.
+    Since $u\ge1$, one has $u/g\le u^3/g$.
+    Apply the two logarithmic count bounds and use $1+\log a\ge1$.
+\end{proof}
+
+\begin{lemma}[Normalized physical approximation with an integer rank budget]
+    \label{thm:physical_dg_normalized_approximation_independent}
+    \lean{TNLean.MPS.AreaLaw.exists_physical_dg_normalized_approximation_of_independent_scales}
+    \leanok
+    There are universal constants $A\ge1$ and $C\ge21$ with the following
+    property. Let $H,q,\mu,\nu,\gamma,G,J$ satisfy the physical hypotheses
+    of Lemma~\ref{thm:physical_interval_bootstrap}, and put
+    \begin{align}
+        g      & =\min(\gamma,1),      & u   & =1+\log q+\log(1/g),\notag \\
+        \ell_0 & =\lceil Au^2/g\rceil, & D_0 & =(q\ell_0^2)^{22\ell_0}.
+    \end{align}
+    Then $D_0\ge2$ and
+    $\log D_0\le22(A+1)(6+2\log(A+1))u^3/g$.
+    For every $0<\delta\le1$, put $a=16+\log(1/g)+\log(1/\delta)$.
+    There is an integer $\ell_1\ge1$ satisfying
+    (\ref{eq:sharp_approximation_window}), chosen before the vector below.
+    Put $D_1=(q\ell_1^2)^{22\ell_1}$.
+    Every unit $\psi\in G$ has a unit approximant $\phi$ in the original
+    Hilbert space with
+    $|\langle\phi,\psi\rangle|\ge1-\delta$ and Schmidt rank at most
+    $(\dim G)D_0^{24}D_1^2$ across $J,J^c$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{thm:physical_interval_all_accuracy_family,
+        thm:sharp_approximation_scalar_parameters,
+        thm:independent_long_middle_actual_dg_family}
+    The bootstrap gives a fixed $0.015$-viable $W_0$ with
+    $\dim W_0<(\dim G)D_0^{24}$ before the accuracy or vector is chosen.
+    If $|J|\le4\ell_1$, use $\phi=\psi$; the full regional dimension
+    is at most $D_1^2$.
+    Otherwise apply the independent family. Transfer $W_0$ to its target
+    with viability error $0.04$, improve to error at most $\delta/5$,
+    and transfer back to $G$ with error at most $\delta/2$.
+    The enlarged space has dimension at most $D_1^2\dim W_0$.
+    Its normalized projection witness, transported back by the actual
+    cut isometry, has squared overlap at least $1-\delta/2$ and the stated
+    rank bound. Since $0<\delta\le1$, its absolute overlap is at least
+    $1-\delta$.
+\end{proof}
+
+\begin{lemma}[Normalized approximation with the sharp logarithmic rank bound]
+    \label{thm:physical_dg_interval_normalized_approximation}
+    \lean{TNLean.MPS.AreaLaw.exists_physical_dg_interval_normalized_approximation}
+    \leanok
+    There is a universal constant $K>0$ with the following property.
+    Let $H,q,\mu,\nu,\gamma,G,J$ satisfy the physical hypotheses of
+    Lemma~\ref{thm:physical_interval_bootstrap}.
+    Set $r=\dim G$, $g=\min(\gamma,1)$ and $u=1+\log q+\log(1/g)$.
+    For every $0<\delta\le1$, put $a=16+\log(1/g)+\log(1/\delta)$.
+    Every unit $\psi\in G$ has a unit vector $\phi$ in the original
+    Hilbert space such that $|\langle\phi,\psi\rangle|\ge1-\delta$ and
+    \begin{align}
+        \log\operatorname{SR}_{J:J^c}(\phi)
+         & \le\log r+K\bigl(u^3/g+g^{-1/4}a^{3/4}u\bigr)(1+\log a).
+        \label{eq:physical_sharp_log_rank}
+    \end{align}
+    Taking $J$ to be a prefix gives the fixed-cut conclusion of
+    \cite[Theorem~4.9]{Arad2016RigorousRG} for $0<\gamma\le1$,
+    with explicit logarithmic factors.
+    For larger supplied gaps, this assertion uses $g=1$.
+    The normalization and the independent parameter choice are recorded in
+    \cite{gap:alvv16_approximation_parameters}.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{thm:physical_dg_normalized_approximation_independent,
+        thm:sharp_approximation_log_rank_budget}
+    Use the integer rank budget and set
+    $K_0=22(A+1)(6+2\log(A+1))$ and
+    $b=(7C)^{1/4}(5/4)^{1/4}$.
+    The window bound becomes $\ell_1\le10/g+bg^{-1/4}a^{3/4}$.
+    Apply (\ref{eq:sharp_log_rank_budget}) and monotonicity of the logarithm
+    to the actual Schmidt rank of the normalized vector.
+\end{proof}
+
+\begin{lemma}[One normalized matrix product state at all cuts]
+    \label{thm:physical_dg_normalized_mps_approximation}
+    \lean{TNLean.MPS.AreaLaw.exists_physical_dg_normalized_isOpenMPS_approximation}
+    \leanok
+    There is a universal constant $K>0$ with the following property.
+    Let $H,q,\mu,\nu,\gamma,G$ satisfy the physical hypotheses of
+    Lemma~\ref{thm:physical_interval_bootstrap} on a chain of $N$ sites.
+    Put $r=\dim G$, $g=\min(\gamma,1)$ and $u=1+\log q+\log(1/g)$.
+    For every $0<\delta\le1$, set
+    \begin{align}
+        b=16+\log(1/g)+\log\bigl(16(N+1)/\delta\bigr).
+        \label{eq:physical_global_accuracy}
+    \end{align}
+    There is an integer $B\ge1$, chosen before the ground vector, with
+    \begin{align}
+        \log B\le K\bigl(u^3/g+g^{-1/4}b^{3/4}u\bigr)(1+\log b).
+        \label{eq:physical_global_bond}
+    \end{align}
+    Every unit $\psi\in G$ has a unit open-boundary matrix product state
+    $\Phi$ of bond dimension at most $rB$ such that
+    $|\langle\Phi,\psi\rangle|\ge1-\delta$ and
+    $\|\Phi-\psi\|^2\le\delta/2$.
+    This gives the global approximation conclusion of
+    \cite[Theorem~4.9]{Arad2016RigorousRG} for $0<\gamma\le1$, with
+    explicit logarithmic factors. The capped gap for larger supplied gaps
+    is as described in \cite{gap:alvv16_approximation_parameters}.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{thm:physical_dg_interval_normalized_approximation,
+        thm:chain_sequential_truncation_eigen,
+        thm:chain_sequential_truncation_sq}
+    Set $\delta_c=\delta/(16(N+1))$.
+    The fixed-cut bound gives a common logarithmic rank budget
+    $\log r+E$ for every prefix cut, where
+    $E=K_0(u^3/g+g^{-1/4}b^{3/4}u)(1+\log b)$ and $K_0$ is universal.
+    Choose $B=\lceil e^E\rceil$ and $D=rB$.
+    At cut $k$, the normalized approximant of rank at most $D$ has overlap
+    at least $1-\delta_c$. The maximal Schmidt-overlap bound therefore gives
+    \begin{align}
+        \epsilon_k(D)=1-\sum_{i=1}^D\lambda_i(\rho_k)
+        \le1-(1-\delta_c)^2\le2\delta_c,
+        \label{eq:physical_global_prefix_tail}
+    \end{align}
+    where $\rho_k$ is the original state's prefix marginal and eigenvalues
+    beyond its dimension contribute zero.
+    Let $\Pi_k$ project onto its leading $D$ eigenvectors, and define one vector
+    \begin{align}
+        \Phi_0=(\Pi_1\otimes\Id)\cdots(\Pi_{N-1}\otimes\Id)\psi.
+        \label{eq:physical_global_projection_product}
+    \end{align}
+    The sequential-truncation theorem makes $\Phi_0$ an open-boundary matrix
+    product state of bond dimension at most $D$, with
+    $\|\Phi_0-\psi\|^2\le\sum_k\epsilon_k(D)\le\delta/8$.
+    Thus $\Phi_0\ne0$. Put $\Phi=\Phi_0/\|\Phi_0\|$.
+    Normalization at most doubles the norm error, so
+    $\|\Phi-\psi\|^2\le\delta/2$ and
+    $|\langle\Phi,\psi\rangle|\ge1-\delta$.
+    Scalar multiplication preserves the same bond bound.
+    Finally $\log B\le E+1$; the extra one is absorbed into the universal
+    constant in (\ref{eq:physical_global_bond}).
+\end{proof}
