@@ -150,7 +150,7 @@ finite chain. Subtraction of natural numbers is truncated at zero.
     interval.
 \end{proof}
 
-\begin{theorem}[A trace-chain representation on a supported interval]
+\begin{lemma}[A trace-chain representation on a supported interval]
     \label{thm:supported_interval_trace_chain}
     \lean{TNLean.MPS.AreaLaw.exists_traceChainOperator_of_supported_interval}
     \leanok
@@ -161,7 +161,7 @@ finite chain. Subtraction of natural numbers is truncated at zero.
     on a chain of $d-c$ sites and a closing matrix whose trace contraction,
     transported by $i\mapsto c+i$ and extended by the identity outside $J$,
     equals $A$. Empty intervals and zero local dimension are included.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:finite_matrix_trace_chain,def:physical_interval_increasing_coordinates}
@@ -171,7 +171,7 @@ finite chain. Subtraction of natural numbers is truncated at zero.
     This supplies no efficient bond bound.
 \end{proof}
 
-\begin{theorem}[Inward effective cuts with a bounded collar]
+\begin{lemma}[Inward effective cuts with a bounded collar]
     \label{thm:inward_effective_cuts}
     \lean{TNLean.MPS.AreaLaw.inward_effective_cuts}
     \uses{def:chain_model}
@@ -188,7 +188,7 @@ finite chain. Subtraction of natural numbers is truncated at zero.
     Also $(p'-p)+(r-r')\le2\ell$ and, for
     $J_0=\{p',\ldots,r'-1\}$ and $J=\{p,\ldots,r-1\}$,
     $J_0\subseteq J$ and $|J\setminus J_0|\le2\ell$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     The long-interval assumption allows moving each endpoint inward by at
