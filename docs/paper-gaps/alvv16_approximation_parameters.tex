@@ -216,8 +216,9 @@ tree, not a joint probability theorem for the adaptive algorithm. A
 pointwise choice of a measurable hull of each bad set does not by itself
 supply measurable dependence on the earlier spaces. The source theorem
 \texttt{t:alg1} remains separate: its full parameter selection, modified
-merge analysis, adaptive probability, energy-estimation invariant, final
-spectral extraction and computational cost require their own proofs.
+merge analysis, adaptive probability, energy-estimation invariant and
+computational cost remain separate. The final spectral extraction for
+the modified witness is established in the refinement below.
 
 
 \section*{Automatic parameters for this witness}
@@ -244,8 +245,10 @@ sampling size and child space.
 This parameter substitution does not identify the witness with the
 printed modified merge procedure. Its block leaves, final trim, capped
 gap and ranks of recorded generators remain as stated above. It does
-not prove an adaptive joint success probability, the energy-estimation
-invariant, final spectral extraction or the claimed running time.
+not by itself prove an adaptive joint success probability, the
+energy-estimation invariant, final spectral extraction or the claimed
+running time. The separate refinement below supplies the spectral
+extraction for a common-threshold version of the modified tree.
 
 
 \section*{Native matrix product states at the actual root}
@@ -263,10 +266,10 @@ span. The families, actual recursive operations and original-ground-space
 viability at every intermediate interval are the same as above. No
 independent matrix product approximation is substituted for the root.
 
-This conclusion does not perform the source's final spectral extraction
-or establish its running time or adaptive joint success probability.
-Any later normalized witness must be obtained from whole-region viability
-of this actual root, with its coordinate and norm identifications proved.
+This constant-accuracy conclusion alone does not perform final spectral
+extraction or establish running time or adaptive joint success probability.
+The normalized witness below uses whole-region viability of this actual
+root, with its coordinate and norm identifications proved.
 
 \section*{Normalized witnesses in this same root}
 
@@ -283,10 +286,74 @@ $3/100$, with $\langle\phi,\Gamma\rangle=\|P_S\Gamma\|$ real and
 nonnegative. It retains the all-span native MPS bound
 $10^6D_{\rm ref}^2(n+1)M^2$.
 The operator families and root precede the choice of $\Gamma$.
-This is an existential constant-accuracy witness in that root. Computing
-an accurate ground-space basis without knowing $\Gamma$, including the
-source's final filter-and-trim iteration and Ritz extraction, remains a
-separate obligation; constant viability alone gives no such algorithm.
+This is an existential constant-accuracy witness in that root. Constant
+viability alone does not give an accurate ground-space basis without
+knowing $\Gamma$. The following construction supplies the required
+refinement and extraction for the modified common-threshold tree.
+
+
+\section*{Refinement and Ritz extraction at one common threshold}
+
+Let $\mu$ be the original ground energy, $\gamma$ the gap, and $r$ the
+actual ground-space dimension. The same physical improving families can
+be selected before every requested accuracy $\eta>0$. Put
+\[
+  A=\|H\|-\mu,\qquad c=\gamma/A,\qquad
+  \rho=\frac{\eta\gamma}{2A+\eta\gamma},\qquad
+  \varepsilon=\frac{c^2\rho}{32768}.
+\]
+Choose the physical reference space at accuracy $\varepsilon$, with
+all-span MPS bond bound $b$, and let $b_0$ be the reference bound used in
+the tree. With $D$ the common filter count parameter, choose
+\[
+  b_* =\max\{b_0,b\},\qquad
+  N=\left\lceil\frac{100D^{12}}{c\rho}\right\rceil,\qquad
+  \xi=\frac1{1000b_*N\sqrt{n+1}}.
+\]
+This threshold satisfies both the tree bound and the final refinement
+budgets, including the strict inequality
+$\sqrt{nrb}\,\xi<\eta/(10000D^{12})$.
+Fix $0<\beta<1$, and put
+\[
+  s=\left\lceil4096r\bigl(1+\log r+\log D+\log(1/\beta)\bigr)\right\rceil,
+  \qquad M=D^6s^3.
+\]
+Construct the actual balanced tree using this same $\xi$ at every long
+parent. Write $S_0$ for its root; $M$ bounds the number of its recorded
+generators.
+
+Starting from this actual root, apply the literal raw filter
+$K=I-H/\|H\|$ followed by collective trimming at $\xi$, for
+\[
+   j_* =\left\lceil(4/c)\log(1/\rho)\right\rceil+1
+\]
+steps. The retained space $W$ is $\rho$-close to the original full ground
+space, and its dimension is at most $M$. Let $R$ be the actual lowest
+$r$-dimensional Ritz space of the compression of the original $H$ to
+$W$. Then $R\subseteq W$, $\dim R=r$, and its two projection errors
+relative to the original ground space are at most $\eta/2$.
+Indeed the projected trial space has excess energy at most
+\[
+   \frac{A\rho}{1-\rho}=\frac{\eta\gamma}{2},
+\]
+and the original gap and the variational principle give the Ritz bounds.
+Every vector in $R$ has native MPS bond at most
+$10^6(b_*N)^2(n+1)M^2$. The factor $M^2$ is retained for the whole span.
+
+The formal statement is
+
+\noindent\leanid{TNLean.MPS.AreaLaw.exists_physical_dg_tree_ritz_approximation}.\par
+It has no supplied initial viable space, reference, improving family or
+trial-energy bound. The tree and final iteration use one common threshold;
+an unrelated MPS approximant is not substituted for the root.
+
+This completes the final spectral extraction for the stated modified
+construction. It does not identify $j_*$ with the printed iteration
+count in terms of $\eta$, prove the interleaved merge procedure or the
+energy-estimation invariant, or establish adaptive success probability
+or running time. The correction to the printed final-filter gain is
+recorded in
+\href{https://sirui-lu.com/TNLean/paper-gaps/alvv16_final_filter_gain.pdf}{the final-filter note}.
 
 \bibliographystyle{unsrt}
 \bibliography{references}
