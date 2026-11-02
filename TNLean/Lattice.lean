@@ -100,6 +100,7 @@ import TNLean.Lattice.TranslationSupercellDecay
 import TNLean.Lattice.TranslationSupercellSpacing
 import TNLean.Lattice.TranslationSupercellTruncated
 import TNLean.Lattice.TreeBasisCounterexample
+import TNLean.Lattice.TrotterActiveIndices
 import TNLean.Lattice.TrotterIndexCount
 import TNLean.Lattice.VariationalLowerBound
 import TNLean.Lattice.ZeroEntropy

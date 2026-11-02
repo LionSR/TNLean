@@ -1,5 +1,8 @@
 # Non-QCA issue triage, 30 October 2026
 
+Historical snapshot. The refreshed queue and follow-up routing are in the
+[31 October audit](2026-10-31_non_qca_triage.md).
+
 Published evening refresh: **2026-10-30 20:41 UTC**. Frozen inspected main: `37efd4d6d81d3aae155c632fa5baf44d96e542ea`.
 Frozen repository inventory: **183 open issues and 103 open PRs**.
 The refreshed scope contains **66 open issues and 73 open PRs**.
@@ -83,11 +86,15 @@ Three no-open-base PRs retain verified divergent candidate pins:
 
 | TNLean owner | Candidate pin | Candidate-only / missing accepted commits |
 |---|---|---:|
-| [#10399](https://github.com/LionSR/TNLean/pull/10399) | `8774105cf88a452a92e3c03de664733e7a15caca` | 28 / 1 |
-| [#10248](https://github.com/LionSR/TNLean/pull/10248) | `23d79b77661607507875d4d0527eeab4e041542c` | 37 / 10 |
-| [#10302](https://github.com/LionSR/TNLean/pull/10302) | `7a1bc0928756ff239bb2db76d9996c0483bf1b37` | 27 / 5 |
+| [#10399](https://github.com/LionSR/TNLean/pull/10399) | `8774105cf88a452a92e3c03de664733e7a15caca` | 1 / 28 |
+| [#10248](https://github.com/LionSR/TNLean/pull/10248) | `23d79b77661607507875d4d0527eeab4e041542c` | 10 / 37 |
+| [#10302](https://github.com/LionSR/TNLean/pull/10302) | `7a1bc0928756ff239bb2db76d9996c0483bf1b37` | 5 / 27 |
 
 Comparisons use accepted QIC main `d219aa20cb8e51d46fa41304b30e7d1b5abf8432`.
+Correction, 2 November: the original table reversed the comparison direction.
+For `compare/<candidate>...<accepted>`, `behind_by` is candidate-only and
+`ahead_by` is accepted-only. These are commit-graph counts, not proof counts;
+the divergence conclusion is unchanged.
 Reconcile required candidate changes before coherently changing all three
 dependency records; a pin replacement must preserve required results. The
 separate #10277/#10302 candidate-pin gate also remains after merged QIC #987.
