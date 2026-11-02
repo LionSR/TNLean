@@ -1876,3 +1876,12 @@ dimension and supplies a common reference space for interval trimming. The note
 separates the actual recursive witness and its native root MPS bound from adaptive
 probability, the final filter-and-trim iteration, Ritz extraction and running time.
 The source algorithm remains open while those further steps are unproved.
+
+### Final error reduction for ALVV
+
+[`alvv16_final_filter_gain.tex`](alvv16_final_filter_gain.tex) records an
+exact two-qubit failure of the intermediate multiplicative fidelity gain
+in the proof of Theorem t:alg1. Normalized error contraction, a quantitative
+reference-space trimming budget and the projected trial-space energy
+estimate give a corrected route. The actual final iteration and its
+quantitative comparison remain open.
