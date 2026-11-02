@@ -50,13 +50,39 @@ and an exact real scalar shift.
     $s\delta\leq\xi$. The definition of $\delta$ also covers $s=0$.
 \end{proof}
 
+
+\begin{lemma}[An MPO for the selected regional replacements]
+    \label{lem:selected_regional_soft_mpo}
+    \lean{TNLean.MPS.AreaLaw.exists_selected_regional_softTruncations_hermitian_mpo_of_accuracy}
+    \leanok
+    \uses{lem:regional_soft_hermitian_mpo}
+    Retain the original interactions and parameters of
+    Lemma~\ref{lem:regional_soft_hermitian_mpo}. Let $I_j$, $0\leq j<v$,
+    be regional bond sets, let $S\subseteq\{0,\ldots,v-1\}$, and require
+    $p_jI\leq R_j$ only for $j\in S$. The same bond formula, with
+    $s=|S|$, gives actual Hermitian tensors approximating
+    \begin{align}
+        G=H+zI+\sum_{j\in S}
+          \bigl(p_jI+h_{m,t}(R_j-p_jI)-R_j\bigr)
+    \end{align}
+    to norm error at most $\xi$. An empty selected set is included.
+\end{lemma}
+\begin{proof}\leanok
+    Enumerate the selected set by $\{0,\ldots,|S|-1\}$ and apply
+    Lemma~\ref{lem:regional_soft_hermitian_mpo} to those actual
+    regional sums and lower energies. Reindexing the finite sum
+    identifies exactly the displayed matrix.
+\end{proof}
+
 For fixed $q$, the logarithm of the bond is
 $O_q(m+\log_+t+\log(N+1)+\log(s+1)+\log_+(\xi^{-1}))$.
 Thus logarithmic Taylor order, polynomial scale and region count, and
 inverse-polynomial accuracy give polynomial bond. All regional energies
 and the scalar shift remain explicit; no small norm of the uncentered
-operator is inferred. The simultaneous spectral comparisons and the
-filter construction are subsequent steps. The approximation uses the
+operator is inferred. For five consecutive physical regions, the
+same-operator spectral comparison is proved in
+Lemma~ef{lem:alvv_same_soft_representation}. The final filter
+construction requires further arguments. The approximation uses the
 corrected interaction-label estimate; the printed physical-support
 estimate and its counterexamples remain recorded in
 \cite{gap:alvv16_cluster_approximation}.

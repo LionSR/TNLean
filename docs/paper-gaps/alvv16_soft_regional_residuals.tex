@@ -131,14 +131,29 @@ Empty intervals, repeated cuts and an empty selected set are included.
 The exact-center specialization no longer prevents a simultaneous
 estimated-center comparison. The open qualification concerns the
 explicit scale and cutoff conditions and the subsequent conclusions:
-the corrected residuals must be composed with the actual spectral
-comparison, the same represented soft Hamiltonian and the source's
-filter parameter choices. They do not by themselves assert the printed
+the corrected residuals are now composed with the actual spectral
+comparison and an actual Hermitian MPO for the same soft Hamiltonian.
+The source's final filter parameter choices require further arguments.
+The corrected results do not assert the printed
 uniform energy estimate, its spectral enlargement, a polynomial
 construction with the source's dependence on varying parameters, or a
 running-time theorem. In particular, a bound polynomial in the chain
 length for fixed order cannot substitute for a bound uniform in an
 order chosen as a function of that length.
+
+For the same actual $G$, write $\rho_H,\rho_G$ for the corrected
+original and reverse residual bounds at width $\eta$. Its normalized
+ground vector gives $0\leq E-\mu\leq\rho_G$. For positive window width
+$h$ and buffer $w$, the count $k=\lceil(\eta+h)/(2h)\rceil$ gives losses
+$k(\rho_H+h)^2/(w+h)^2$ and $k(\rho_G+h)^2/(w+h)^2$ in the two
+directions. The forward target cutoff is $\mu+\eta+\rho_G+w$; the
+reverse target cutoff is $E+\eta+w$. An arbitrary requested operator
+accuracy also gives actual Hermitian MPO tensors for this exact $G$
+when $t\geq3m$, with the explicit corrected cluster bond. These
+conclusions are stated in
+\leanid{TNLean.MPS.AreaLaw.ALVV.exists_five_region_soft_representation}.
+They make no numerical small-loss or efficient-GEN claim without the
+remaining parameter derivations.
 
 The source's GEN input at lines 1360--1362 permits a symmetric estimate
 $|\varepsilon'_M-\varepsilon_M|\leq10$, whereas Definition

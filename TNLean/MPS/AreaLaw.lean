@@ -170,6 +170,7 @@ import TNLean.MPS.AreaLaw.RetainedCoreTracePresentation
 import TNLean.MPS.AreaLaw.SelectedCoefficientDecomposition
 import TNLean.MPS.AreaLaw.SelectedMiddleData
 import TNLean.MPS.AreaLaw.SelectedMiddleMPOFamily
+import TNLean.MPS.AreaLaw.SelectedRegionalSoftMPO
 import TNLean.MPS.AreaLaw.SequentialTruncation
 import TNLean.MPS.AreaLaw.SharpApproximationParameters
 import TNLean.MPS.AreaLaw.SharpChainCompression
