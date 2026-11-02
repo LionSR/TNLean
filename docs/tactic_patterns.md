@@ -11500,3 +11500,16 @@ removed after the dependency audit exposed it.
 - **Decision:** These two sites remain below the rule of three. The entropy
   development also reuses `aklv_regionEntropy_le_short_side` by exposing its
   existing proof unchanged, rather than copying that dimension argument.
+
+### Weighted soft remainders and finite operator sums — promoted (2026-11-02)
+
+- **Pattern:** Apply a scalar remainder through an exponential of the same
+  matrix, then restrict to the original or truncated low-energy space.
+- **Reuse:** QICLean's `SoftTruncationScaling` and `SoftTruncationRemainder`
+  provide the independent-scale estimate. `PhysicalScaledSoftTruncationResidual`
+  and `PhysicalScaledSoftTruncationReverse` use this common estimate with
+  their respective regional exponential moments.
+- **Finite sums:** `TraceChainLinearCombination` proves the varying-dimension
+  block sum once. Its equal-dimension and binary versions specialize that
+  theorem, and both the heat expansion and exact exterior construction use it.
+- **Mechanism:** Mathematical lemmas suffice; no custom tactic is introduced.

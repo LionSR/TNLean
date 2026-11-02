@@ -1,0 +1,76 @@
+\section{Regional exponential moments on the original spectral window}
+
+\begin{lemma}[An actual exponentially weighted restriction]
+    \label{thm:nearest_neighbour_weighted_low_restriction}
+    \lean{TNLean.MPS.AreaLaw.exists_nearestNeighbour_weighted_low_restriction}
+    \leanok
+    Let $0\le h_i\le\Id$ be the original supported nearest-neighbour terms.
+    For finite bond sets $I,J$, put $A=\sum_{i\in I}h_i$,
+    $Y=\sum_{j\in J}h_j$ and $C=2|J|$. Let $X$ commute with $A$, and let
+    $G$ be the actual closed spectral space of $X+Y$ below $e$.
+    Set $Q=\mathbf1_{[r+u,\infty)}(A)$, and suppose $uQ\le X$.
+    If $0<s\le1/8$ and $C<u-e$, then the actual map
+    $e^{s(A-(r+u)\Id)}Q|_G$ takes values in $\operatorname{ran}Q$ and has
+    norm at most $C/(u-e-C)$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:chain_local_imaginary_time}
+    The original-bond imaginary-time estimate bounds both the conjugated
+    boundary operator and its forcing term by $C$. Restriction to the
+    actual high projection range and the actual low spectral space gives
+    the weighted Sylvester equation of
+    \cite[``Restricted weighted Sylvester equation'']{QICLean2026Blueprint}.
+    The lower and upper quadratic bounds are $u$ and $e$; the perturbation
+    has norm at most $C$. Its norm estimate gives the claimed map and bound.
+\end{proof}
+
+\begin{lemma}[A physical interval exponential moment]
+    \label{thm:interval_regional_exponential_moment}
+    \lean{TNLean.MPS.AreaLaw.exists_interval_regional_exponential_moment}
+    \leanok
+    Let $q\ge1$, $0\le p\le r\le L$, and let
+    $H=\sum_i h_i$ have supported positive unit nearest-neighbour terms.
+    Partition the sites into the left interval $[0,p)$, the prescribed
+    interval $[p,r)$, and the right interval $[r,L)$. Let $A_J$ be the
+    literal internal sum on $[p,r)$.
+
+    These actual regional sums have attained minima $e_i$ and a common
+    unit minimizing vector. With $S=\sum_i e_i$, the centered original
+    Hamiltonian $H_c=H-S\Id$ has an attained ground energy $E_0\in[0,2]$.
+    The choices precede every approximate regional energy
+    $e_J-10\le\varepsilon'_J\le e_J$ and every $\eta\ge0$.
+    On the actual closed original spectral window
+    $G_\eta=\mathbf1_{(-\infty,E_0+\eta]}(H_c)\mathcal H$,
+    \begin{align}
+        \left\|\left.e^{(A_J-\varepsilon'_J\Id)/8}
+        \right|_{G_\eta}\right\|
+        \le5e^{(17+\eta)/8}.
+        \label{eq:interval_regional_exponential_moment}
+    \end{align}
+    The bound is independent of the chain length, local dimension and
+    ground-space dimension. No spectral gap is assumed. Empty intervals,
+    endpoint intervals and the whole chain are included.
+
+    This is an auxiliary bound for the physical soft-truncation comparison
+    of \cite{Arad2016RigorousRG}. The first printed uniform energy estimate
+    is addressed separately in
+    \cite{gap:alvv16_soft_truncation_energy_estimate}.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{def:five_region_bond_partition,thm:disjoint_regional_clipping,
+        thm:nearest_neighbour_weighted_low_restriction}
+    Use repeated cuts to realize the three intervals as a consecutive
+    five-region partition with two empty regions. Its actual crossing
+    set has at most two bonds. Disjoint regional minimizers give
+    $0\le E_0\le2$.
+
+    Put $C=2|J_{\mathrm{cross}}|\le4$,
+    $e=E_0+\eta$, $u=e+C+1$, and $s=1/8$.
+    The preceding theorem bounds the high part of
+    $W=e^{s(A_J-(e_J+u)\Id)}$ on $G_\eta$ by $C$.
+    Its low part has norm at most one. Thus
+    $\|W|_{G_\eta}\|\le1+C\le5$.
+    Since $u\le7+\eta$ and $e_J-\varepsilon'_J\le10$, scalar shifting
+    contributes at most $e^{(17+\eta)/8}$, proving
+    (\ref{eq:interval_regional_exponential_moment}).
+\end{proof}
