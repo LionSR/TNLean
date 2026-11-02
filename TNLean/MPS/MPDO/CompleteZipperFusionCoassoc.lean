@@ -51,7 +51,7 @@ is the argument of `mpo.tex`, lines 940--945 and 2001--2003, run backwards.
 
 ## References
 
-* arXiv:2204.05940, `mpo.tex`, lines 866--875, 1409--1419, 1655, 1732--1787, and 2003--2006.
+* arXiv:2204.05940, `mpo.tex`, lines 866--875, 1409--1414, 1655, 1732--1787, and 2003--2006.
 * arXiv:2509.03600, section "MPO representations of bialgebras".
 -/
 
@@ -91,7 +91,7 @@ theorem tensorPairEquiv_tmul (X Y : Fus.BoundarySpace) (a b : Λ) :
 $\Delta(X)_{ab}=\sum_{c,\mu}X^c_{ab,\mu}X_cX^{c+}_{ab,\mu}$ of `coproduct`, read in
 $\mathcal B\otimes\mathcal B$ through `tensorPairEquiv`.  It is multiplicative but not unital.
 
-Source: arXiv:2204.05940, `mpo.tex`, lines 1409--1419 and 1655 (equation
+Source: arXiv:2204.05940, `mpo.tex`, lines 1409--1414 and 1655 (equation
 `eq:splitting_algebraic`). -/
 noncomputable def comul :
     Fus.BoundarySpace →ₙₐ[ℂ] Fus.BoundarySpace ⊗[ℂ] Fus.BoundarySpace where
