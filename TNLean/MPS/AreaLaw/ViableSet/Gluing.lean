@@ -9,6 +9,8 @@ import QICLean.Channel.LeadingEigenvector
 import QICLean.Entropy.ThreeWayCut
 import QICLean.Entropy.RegionSplit
 import QICLean.Analysis.RectangularTraceNormAlgebra
+import QICLean.Analysis.EuclideanReindex
+import QICLean.Analysis.KroneckerOperatorNorm
 
 /-!
 # Gluing a left state at a cut of the chain
@@ -105,56 +107,6 @@ theorem reindex_gluingCut_eq [NeZero q] {k : ℕ} {HL K : Matrix (Fin L → Fin 
     hK.reindex_threeCutEquiv_eq_one_kronecker _ hDA (fun _ ↦ 0)]
   rfl
 
-/-- Expectations are invariant under a change of coordinates. -/
-private theorem inner_toEuclideanLin_reindex {X Y : Type*} [Fintype X] [Fintype Y]
-    [DecidableEq X] [DecidableEq Y] (e : X ≃ Y) (M : Matrix X X ℂ) (ψ : EuclideanSpace ℂ X) :
-    ⟪WithLp.toLp 2 (WithLp.ofLp ψ ∘ e.symm),
-        toEuclideanLin (reindex e e M) (WithLp.toLp 2 (WithLp.ofLp ψ ∘ e.symm))⟫_ℂ =
-      ⟪ψ, toEuclideanLin M ψ⟫_ℂ := by
-  simp only [EuclideanSpace.inner_eq_star_dotProduct, toLpLin_apply, reindex_apply]
-  rw [dotProduct_comm, dotProduct_comm (M *ᵥ _)]
-  exact Entropy.star_dotProduct_submatrix_mulVec e M (WithLp.ofLp ψ)
-
-/-- Inner products are invariant under a change of coordinates. -/
-private theorem inner_comp_symm {X Y : Type*} [Fintype X] [Fintype Y] (e : X ≃ Y)
-    (φ ψ : EuclideanSpace ℂ X) :
-    ⟪WithLp.toLp 2 (WithLp.ofLp φ ∘ e.symm), WithLp.toLp 2 (WithLp.ofLp ψ ∘ e.symm)⟫_ℂ =
-      ⟪φ, ψ⟫_ℂ := by
-  simp only [EuclideanSpace.inner_eq_star_dotProduct, dotProduct, Function.comp_apply,
-    Pi.star_apply]
-  exact Fintype.sum_equiv e.symm _ _ fun _ ↦ rfl
-
-/-- `‖K‖ ≤ ‖1 ⊗ K‖` when the first factor is nonempty: `K` is a corner of `1 ⊗ K`. -/
-private theorem l2_opNorm_le_one_kronecker {X Y : Type*} [Fintype X] [Fintype Y]
-    [DecidableEq X] [DecidableEq Y] (x₀ : X) (K : Matrix Y Y ℂ) :
-    ‖K‖ ≤ ‖(1 : Matrix X X ℂ) ⊗ₖ K‖ := by
-  set V := Matrix.basisRegisterInjection (a := Y) x₀
-  have hV : Vᴴ * V = 1 := Matrix.basisRegisterInjection_conjTranspose_mul_self x₀
-  have hKV : (1 : Matrix X X ℂ) ⊗ₖ K * V = V * K := by
-    ext ⟨x, i⟩ j
-    simp [V, Matrix.basisRegisterInjection, Matrix.mul_apply, Fintype.sum_prod_type,
-      one_apply]
-  have hK : K = Vᴴ * ((1 : Matrix X X ℂ) ⊗ₖ K) * V := by
-    rw [Matrix.mul_assoc, hKV, ← Matrix.mul_assoc, hV, Matrix.one_mul]
-  have hVn : ‖V‖ ≤ 1 := l2_opNorm_le_one_of_conjTranspose_mul_self_eq_one hV
-  have hVhn : ‖Vᴴ‖ ≤ 1 := by rwa [l2_opNorm_conjTranspose]
-  calc ‖K‖ = ‖Vᴴ * ((1 : Matrix X X ℂ) ⊗ₖ K) * V‖ := by rw [← hK]
-    _ ≤ ‖Vᴴ‖ * ‖(1 : Matrix X X ℂ) ⊗ₖ K‖ * ‖V‖ :=
-        (l2_opNorm_mul _ _).trans (mul_le_mul_of_nonneg_right (l2_opNorm_mul _ _)
-          (norm_nonneg _))
-    _ ≤ 1 * ‖(1 : Matrix X X ℂ) ⊗ₖ K‖ * 1 := by gcongr
-    _ = _ := by ring
-
-/-- The energy of a rank-one matrix: `tr(|v⟩⟨v| M) = ⟨v, M v⟩`. -/
-private theorem trace_vecMulVec_star_mul {X : Type*} [Fintype X] [DecidableEq X] (v : X → ℂ)
-    (M : Matrix X X ℂ) :
-    (vecMulVec v (star v) * M).trace =
-      ⟪WithLp.toLp 2 v, toEuclideanLin M (WithLp.toLp 2 v)⟫_ℂ := by
-  simp only [EuclideanSpace.inner_eq_star_dotProduct, toLpLin_apply, trace, diag, mul_apply,
-    vecMulVec_apply, dotProduct, mulVec, Pi.star_apply, Finset.sum_mul]
-  rw [Finset.sum_comm]
-  exact Finset.sum_congr rfl fun i _ ↦ Finset.sum_congr rfl fun j _ ↦ by ring
-
 /-- **Lemma `l:leading` on the chain** (arXiv:1307.5143v1, `algo53.tex`, lines 493–505). Let
 `H = H_L + K` with `H_L` supported on the first `k` sites and `K` supported off the first
 `k - 1` sites, with gapped ground state `Γ`, energy `E₀` and gap `Δ`. Let `W` be an isometry
@@ -206,12 +158,8 @@ theorem exists_leading_eigenvector_chain [NeZero q] {k : ℕ}
   have hsplit := reindex_gluingCut_eq hHL hK hDA
   obtain ⟨hΓ, -, hgap⟩ := isGappedGroundState_iff.mp hgs
   -- The ground state and the gap in the cut coordinates.
-  have hΓ' : ‖Γ'‖ = 1 := by
-    have h := inner_comp_symm E Γ Γ
-    have h' : ‖Γ'‖ ^ 2 = ‖Γ‖ ^ 2 := by
-      rw [@norm_sq_eq_re_inner ℂ, @norm_sq_eq_re_inner ℂ, ← h]
-    rw [hΓ, one_pow] at h'
-    nlinarith [norm_nonneg Γ']
+  have hΓ' : ‖Γ'‖ = 1 :=
+    ((LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ E).norm_map Γ).trans hΓ
   have hgap' : (reindex E E (HL + K) - (E₀ : ℂ) • 1 -
       (Δ : ℂ) • (1 - vecMulVec (WithLp.ofLp Γ') (star (WithLp.ofLp Γ')))).PosSemidef := by
     have h := hgap.submatrix E.symm
@@ -224,8 +172,9 @@ theorem exists_leading_eigenvector_chain [NeZero q] {k : ℕ}
       (leftCutOperator k HL ⊗ₖ (1 : Matrix (CutRight L q k) (CutRight L q k) ℂ) +
         reindex (Equiv.prodAssoc _ _ _).symm (Equiv.prodAssoc _ _ _).symm
           ((1 : Matrix (CutLeft L q k) (CutLeft L q k) ℂ) ⊗ₖ K'))).trace.re ≤ E₀ + e := by
-    rw [← hsplit, ← hwx, trace_vecMulVec_star_mul]
+    rw [← hsplit, ← hwx, trace_mul_comm, mul_vecMulVec, trace_vecMulVec]
     have h := inner_toEuclideanLin_reindex E (HL + K) w
+    simp only [EuclideanSpace.inner_eq_star_dotProduct, toLpLin_apply] at h
     rw [h]
     exact hwE
   -- `‖K'‖ ≤ ‖K‖`.
@@ -234,7 +183,7 @@ theorem exists_leading_eigenvector_chain [NeZero q] {k : ℕ}
       (fun _ ↦ 0)
     have hn : ‖reindex E E K‖ = ‖K‖ := l2_opNorm_reindex_equiv E K
     rw [show reindex E E K = _ from hr, l2_opNorm_reindex_equiv] at hn
-    exact (l2_opNorm_le_one_kronecker (fun _ ↦ 0) K').trans hn.le
+    exact (l2_opNorm_one_kronecker (X := CutLeft L q k) K').symm.le.trans hn.le
   have hτ0 : 0 ≤ τ := (rectangularTraceNorm_nonneg _).trans hτ
   have he' : 4 * (e + ‖K'‖ * τ) < Δ := by nlinarith [mul_le_mul_of_nonneg_right hKK hτ0]
   obtain ⟨u, μ, hu1, hueig, hμ, huE, huov⟩ :=
@@ -252,7 +201,10 @@ theorem exists_leading_eigenvector_chain [NeZero q] {k : ℕ}
   · have hback : WithLp.toLp 2 (WithLp.ofLp (WithLp.toLp 2 ((J *ᵥ WithLp.ofLp u) ∘ E)) ∘ E.symm) =
         toEuclideanLin J u := by
       simp [toLpLin_apply, Function.comp_assoc]
-    have h := inner_comp_symm E Γ (WithLp.toLp 2 ((J *ᵥ WithLp.ofLp u) ∘ E))
+    have h := (LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ E).inner_map_map Γ
+      (WithLp.toLp 2 ((J *ᵥ WithLp.ofLp u) ∘ E))
+    change (LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ E)
+      (WithLp.toLp 2 ((J *ᵥ WithLp.ofLp u) ∘ E)) = toEuclideanLin J u at hback
     rw [hback] at h
     rw [← h]
     refine le_trans ?_ huov

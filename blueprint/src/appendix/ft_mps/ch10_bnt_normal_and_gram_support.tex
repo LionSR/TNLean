@@ -83,7 +83,7 @@ arguments.
     linear independence depend only on the family $(A_j)_{j=1}^{g}$.
 \end{proof}
 
-\begin{corollary}[Positive-length geometric proportionality phase]
+\begin{lemma}[Positive-length geometric proportionality phase]
     \label{cor:normal_positive_proportional_mpv_geometric_phase}
     \lean{MPSTensor.NonzeroProportionalMPV₂.%
         exists_unit_phase_power_of_isNormalTensor}
@@ -95,13 +95,13 @@ arguments.
     matrix product vectors are proportional by a nonzero scalar at every
     positive length $N$. Then there is $a\in\C$, with $|a|=1$, such that
     $\ket{V^{(N)}(A)}=a^N\ket{V^{(N)}(B)}$ for every positive $N$.
-\end{corollary}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{lem:nonzero_proportional_mpv_basic, thm:normal_proportional_mpv_geometric_phase}
     Positive-length nonzero proportionality implies eventual nonzero
     proportionality, so
-    Theorem~\ref{thm:normal_proportional_mpv_geometric_phase} yields the
+    Lemma~\ref{thm:normal_proportional_mpv_geometric_phase} yields the
     unit-modulus phase $a$.
 \end{proof}
 
@@ -125,7 +125,7 @@ arguments.
 
 Stating the threshold explicitly yields an existential formulation.
 
-\begin{theorem}[Existential BNT independence from overlap limits]%
+\begin{lemma}[Existential BNT independence from overlap limits]%
     \label{thm:bnt_li_from_overlap_limits_exists}
     \lean{MPSTensor.exists_eventually_linearIndependent_of_overlap_tendsto_orthonormal}
     \leanok
@@ -133,7 +133,7 @@ Stating the threshold explicitly yields an existential formulation.
     If the self-overlaps of a finite block family tend to $1$ and the
     cross-overlaps of distinct blocks tend to $0$, then the MPV states are
     linearly independent for all sufficiently large system sizes.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{lem:bnt_finite_index_overlap_orthonormal_li}

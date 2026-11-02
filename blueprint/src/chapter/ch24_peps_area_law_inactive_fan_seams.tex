@@ -1,7 +1,7 @@
-The connected pieces of Theorem~\ref{thm:area_law_fan_cut_piece_connected}
+The connected pieces of Lemma~\ref{thm:area_law_fan_cut_piece_connected}
 are formed from fan triangles whose base and radial directions are given by
-Theorem~\ref{thm:area_law_fan_base_radial_directions} and whose radial
-contacts are described in Theorem~\ref{thm:area_law_fan_triangle_contact}.
+Lemma~\ref{thm:area_law_fan_base_radial_directions} and whose radial
+contacts are described in Lemma~\ref{thm:area_law_fan_triangle_contact}.
 
 \begin{definition}[Retained fan pieces]
     \label{def:area_law_fan_cut_piece}
@@ -27,7 +27,7 @@ contacts are described in Theorem~\ref{thm:area_law_fan_triangle_contact}.
     initial-star construction of \cite[Section~11]{OpenAI2026AreaLaw}.
 \end{definition}
 
-\begin{theorem}[Intersection across an inactive radial]
+\begin{lemma}[Intersection across an inactive radial]
     \label{thm:area_law_fan_inactive_radial_intersection}
     \lean{TNLean.PEPS.AreaLaw.Geometry.cellFanPolygon_cut_inter_nonempty_of_adj}
     \leanok
@@ -36,12 +36,12 @@ contacts are described in Theorem~\ref{thm:area_law_fan_triangle_contact}.
     Definition~\ref{def:area_law_fan_cut_piece}.
     If $i,j\in\mathcal J$ satisfy $j=\tau(i)$ or $i=\tau(j)$ and $f_i=f_j$, then
     $S_i\cap S_j$ is nonempty.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{def:area_law_fan_closed_half_piece,
         thm:area_law_fan_closed_half_intersection}
-    Theorem~\ref{thm:area_law_fan_closed_half_intersection} gives
+    Lemma~\ref{thm:area_law_fan_closed_half_intersection} gives
     $K_i\cap K_j\ne\varnothing$. By
     Definition~\ref{def:area_law_fan_closed_half_piece}, $K_i\subseteq S_i$
     and $K_j\subseteq S_j$, so $S_i\cap S_j\ne\varnothing$.

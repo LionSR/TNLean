@@ -27,7 +27,7 @@ trivial scalar character. These restrictions are documented in
 `docs/paper-gaps/rmp_spt_fixed_point_trivial_character.tex`.
 -/
 
-open scoped Matrix
+open scoped Matrix TNLean.Algebra.ScalarCohomology
 
 namespace MPSTensor
 
@@ -115,7 +115,10 @@ theorem exists_commonPhysicalInjectiveGappedPath_of_cohomologous
     (hCov₁ : ∀ g, rotatePhysical (U₁ g) A₁ =
       fun i => (sptGauge ρ₁ g : Matrix (Fin D₁) (Fin D₁) ℂ) * A₁ i *
         (sptGauge ρ₁ g : Matrix (Fin D₁) (Fin D₁) ℂ)ᴴ)
-    (hCoh : ω₁.CohomologousTo ω₀) :
+    (hCoh : groupCohomology.H2π _ (groupCohomology.cocyclesOfIsMulCocycle₂
+        (TNLean.Algebra.ScalarCocycle.isMulCocycle₂_of_projRep ρ₁ (NeZero.pos D₁))) =
+      groupCohomology.H2π _ (groupCohomology.cocyclesOfIsMulCocycle₂
+        (TNLean.Algebra.ScalarCocycle.isMulCocycle₂_of_projRep ρ₀ (NeZero.pos D₀)))) :
     ∃ V : G →* Matrix.unitaryGroup
         (Fin (((D₀ + D₁) * (D₀ + D₁) + d₀) + d₁)) ℂ,
       Nonempty (SymmetricGappedInteractionPath V

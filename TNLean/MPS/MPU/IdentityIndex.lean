@@ -34,11 +34,6 @@ namespace MPOTensor
 
 variable {d D : ℕ}
 
-private theorem blockTensor_one_eq_reindexPhysical (U : MPOTensor d D) :
-    blockTensor U 1 = reindexPhysical (Kraus.singleBlockEquiv d) U := by
-  ext i j
-  simp [blockTensor, reindexPhysical, MPSTensor.wordOfBlock, Kraus.wordOfBlock_one]
-
 /-- The bond-one identity tensor has a full-support canonical-form-II
 presentation with the one-by-one fixed matrix `ρ = 1`.
 

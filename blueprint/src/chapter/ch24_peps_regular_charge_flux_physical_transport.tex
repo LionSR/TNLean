@@ -1,4 +1,4 @@
-\begin{theorem}[Diagonal weights in the regular bond contraction]
+\begin{lemma}[Diagonal weights in the regular bond contraction]
     \label{thm:peps_regular_weighted_bond_contraction}
     \lean{TNLean.PEPS.graphInsertedBondNetwork_leftRegular_mul_diagonal}
     \leanok
@@ -15,7 +15,7 @@
     the head. This is an auxiliary coefficient identity for the diagonal
     charge insertions of \cite{Schuch2010PEPS}, lines 2449--2486 and
     2569--2581. No expansion of diagonal matrices into group matrices is used.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Summing the independent head labels in the inserted contraction,
     the regular permutation matrix enforces head $=u_e$ times tail while
@@ -46,7 +46,7 @@
     of lines 1765--1920.
 \end{definition}
 
-\begin{theorem}[Weighted common-translation formula]
+\begin{lemma}[Weighted common-translation formula]
     \label{thm:peps_regular_weighted_projector_coordinates}
     \lean{TNLean.PEPS.regularProjectorWeightedTwistedRegionMatrix_apply,
         TNLean.PEPS.regularProjectorWeightedTwistedRegionMatrix_coordinates}
@@ -64,7 +64,7 @@
     \]
     This is an auxiliary weighted extension of the finite-block
     calculation, without an assumed coefficient or Gram identity.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The original compatibility equations determine every surviving incident
     configuration and every vertex translation from the root translation $x$.
@@ -83,7 +83,7 @@
     $\Psi_R(u,F;\theta)$.
 \end{definition}
 
-\begin{theorem}[Recovery of the original weighted physical coefficients]
+\begin{lemma}[Recovery of the original weighted physical coefficients]
     \label{thm:peps_regular_weighted_open_recovery}
     \lean{TNLean.PEPS.regularWeightedOpenRegionWeight_one,
         TNLean.PEPS.regionPhysicalMap_regularProjectorWeightedTwistedRegionMatrix}
@@ -97,7 +97,7 @@
         A_R M_R(u,F)_{\cdot,\theta}=\Psi_R(u,F;\theta)
     \]
     for every scalar weight and every boundary column.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Interchanging the finite sums and using $A_vP_v=A_v$ at each vertex gives the identity,
     and numbering group labels by their finite coordinate bijection yields the
@@ -113,7 +113,7 @@
     physical half-edge permutation to be $E^{-1}CE$.
 \end{definition}
 
-\begin{theorem}[Translation-equivariant permutations preserve local support]
+\begin{lemma}[Translation-equivariant permutations preserve local support]
     \label{thm:peps_regular_coordinate_permutation_support}
     \lean{TNLean.PEPS.regularRegionCoordinatePhysicalPermutation_commute_vertexTranslation,
         TNLean.PEPS.regularRegionCoordinatePhysicalPermutation_commute_localProjector}
@@ -124,7 +124,7 @@
     accessible coordinates, its permutation matrix commutes with every
     original half-edge translation and with the product
     of the local regular invariant projectors.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Conjugating the commutation relation by $E$ and averaging over all independent
     vertex translations gives commutation with the product projector.
@@ -146,7 +146,7 @@
     The shifted charge parameter is $p'=pK_{u,e,b}^{-1}$.
 \end{definition}
 
-\begin{theorem}[Weighted columns under reference-cycle multiplication]
+\begin{lemma}[Weighted columns under reference-cycle multiplication]
     \label{thm:peps_regular_charge_flux_weighted_columns}
     \lean{TNLean.PEPS.regularProjectorWeightedTwistedRegionMatrix_internalCharge_coordinates,
         TNLean.PEPS.regularProjectorWeightedTwistedRegionMatrix_chargeFlux_coordinates,
@@ -162,7 +162,7 @@
     commutes with independent vertex translations. Its permutation matrix
     sends the weighted column with parameter $p$ to the column with
     parameter $pK_{u,e,b}^{-1}$, retaining $u$, $\chi$ and $\theta$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     On each surviving term, $z_b=x\rho_bx^{-1}$; substituting this equality
     into $a_e\mapsto z_ba_e$ and canceling adjacent group inverses shifts the parameter.
@@ -171,7 +171,7 @@
     is translation-equivariant.
 \end{proof}
 
-\begin{theorem}[One original-spin unitary for the weighted charge parameter]
+\begin{lemma}[One original-spin unitary for the weighted charge parameter]
     \label{thm:peps_regular_charge_flux_physical_transport}
     \lean{TNLean.PEPS.exists_unitary_regularChargeFluxPhysicalTransport}
     \leanok
@@ -191,7 +191,7 @@
     change in \cite{Schuch2010PEPS}, lines 2569--2581. It is not the full
     geometric charge--flux braid; that scope remains recorded in
     \cite{gap:rmp_peps_quantum_double_g_isometry}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Local $G$-isometry gives the derived product Gram identity $A_R^\dagger A_R=cP$.
     Because the native permutation is unitary and commutes with $P$, it has a

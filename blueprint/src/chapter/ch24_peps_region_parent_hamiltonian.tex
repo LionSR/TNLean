@@ -15,7 +15,7 @@ tensors. Different interaction terms may act on different regions.
     $\ker h_R=\mathcal G_R$. It need not be an orthogonal projector.
 \end{definition}
 
-\begin{theorem}[Canonical regional parent interaction]%
+\begin{lemma}[Canonical regional parent interaction]%
     \label{thm:peps_canonical_region_interaction}
     \lean{TNLean.PEPS.regionGroundSpaceES,
         TNLean.PEPS.canonicalRegionParentInteraction,
@@ -26,7 +26,7 @@ tensors. Different interaction terms may act on different regions.
     \uses{def:peps_region_parent_interaction}
     The orthogonal projector onto $\mathcal G_R^\perp$ is a regional
     parent interaction.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Orthogonal projections are positive semidefinite, and the kernel
@@ -62,7 +62,7 @@ tensors. Different interaction terms may act on different regions.
     \end{align}
 \end{definition}
 
-\begin{theorem}[Positivity and the common kernel]%
+\begin{lemma}[Positivity and the common kernel]%
     \label{thm:peps_region_parent_common_kernel}
     \lean{TNLean.PEPS.regionLocalTerm_posSemidef,
         TNLean.PEPS.regionLocalTerm_mulVec_assemble,
@@ -79,7 +79,7 @@ tensors. Different interaction terms may act on different regions.
     \end{align}
     Thus its kernel depends only on the regional PEPS spaces, rather
     than on the choice of positive interactions with those kernels.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Positivity is preserved by tensoring with the identity and by

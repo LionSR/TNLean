@@ -8,8 +8,8 @@ import Mathlib.Data.Fin.VecNotation
 import QICLean.Analysis.MatrixTensorCoordinates
 import TNLean.Algebra.MatrixFactorExchange
 import TNLean.Algebra.TwoWindowSum
+import TNLean.Circuit.SupportedFunctionalCalculus
 import TNLean.MPS.AreaLaw.FiveRegionHamiltonian
-import TNLean.MPS.AreaLaw.LocalSolution.SupersiteHierarchy
 import TNLean.MPS.AreaLaw.PhysicalIntervalTransport
 import TNLean.MPS.AreaLaw.PhysicalPolynomialTensorFamily
 import TNLean.MPS.AreaLaw.RegionalMiddleFactors
@@ -94,7 +94,7 @@ private theorem actual_clipped_two_window_alphabet
     intro i hi
     exact (hs i).mono (internal_bond_support_subset hi)
   have hC (j : Fin 5) : C j ∈ supportedOperators q (R j : Set (Fin L)) :=
-    LocalSolution.cfc_mem_supportedOperators _
+    QuantumCircuit.cfc_mem_supportedOperators _
       (mem_supportedOperators_of_isSupportedOn (hA j))
   have hPL : PL ∈ supportedOperators q (R 0 : Set (Fin L)) :=
     Submodule.sub_mem _ (hC 0)

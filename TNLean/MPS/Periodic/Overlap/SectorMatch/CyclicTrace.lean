@@ -169,7 +169,7 @@ private lemma trace_prod_corner_compression
 /-- The cyclic trace against linked matrix units is the product of the selected
 matrix coefficients. -/
 private lemma trace_cyclic_matrix_single_chain
-    {m : ℕ} [NeZero m] {D : ℕ} [NeZero D]
+    {m : ℕ} [NeZero m] {D : ℕ}
     (M : Fin m → MatrixAlg D) (p : Fin m → Fin D × Fin D) :
     Matrix.trace
         (List.ofFn
@@ -226,7 +226,7 @@ corners determines the corresponding product-tensor identity.
 This is `eq:resultprop` in arXiv:1708.00029, Appendix A, lines 1063--1067,
 with the open virtual indices read through the corner trace pairing. -/
 lemma piTensorProduct_eq_smul_of_corner_cyclic_products
-    {m : ℕ} [NeZero m] {D : ℕ} [NeZero D]
+    {m : ℕ} [NeZero m] {D : ℕ}
     (P : Fin m → MatrixAlg D)
     (A B : Fin m → MatrixAlg D) (z : ℂ)
     (hP : ∀ k, IsOrthogonalProjection (P k))

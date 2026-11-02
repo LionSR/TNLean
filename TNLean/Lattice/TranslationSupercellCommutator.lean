@@ -32,6 +32,9 @@ formalized separately, for the filtered terms `H_tilde_i`:
   low-energy commutator at `i` and `j` obeys the bound of eq. `blecm` at every separation `l`
   with `2R + l + N ≤ n / 2`. Taking `l = n / 2 - N - 2R` makes it exponentially small in `n`.
   This is the statement for the filtered terms `H_tilde_i`.
+* `TNLean.Lattice.norm_groundCompression_commutator_le_of_momenta_exp`: the filtered-term
+  bound with explicit exponential rate and prefactor, including system sizes for which
+  `n / 2 - N - 2R` is nonpositive.
 * `TNLean.Lattice.norm_groundCompression_commutator_le_of_norm_sub_le`: the commutator moves by
   at most `2 ε_i ‖h_j‖ + 2 ‖h_i‖ ε_j` when the filtered terms are replaced by operators within
   `ε_i`, `ε_j` of them.
@@ -94,28 +97,10 @@ theorem norm_groundCompression_commutator_le_of_momenta [NeZero d]
             2 * ‖h i‖ * Real.exp (-(T * ΔE) ^ 2 / (2 * q))) +
         2 * ‖h i‖ * ‖h j‖ * Real.exp (-q / 2) := by
   have hInv := isSiteInvariant_sum_of_covariant d h hcov
-  obtain ⟨g, hg, hdist⟩ : ∃ g ∈ supercell Γ d (∑ k, h k) E₀,
-      ((n / 2 : ℕ) : ℕ∞) < G.edist i (g • j) + N := by
-    simpa only [Nat.cast_one, one_mul] using
-      exists_mem_supercell_lt_edist_add hN hden G (R := 1) Nat.zero_lt_one π hπ e he i j
-  have hsep : Disjoint (((X i).biUnion fun x => graphBall G x l : Finset ι) : Set ι)
-      (X (g • j) : Set ι) := by
-    refine Set.disjoint_left.mpr fun z hz hz' ↦ ?_
-    obtain ⟨x, hx, hzx⟩ := Finset.mem_biUnion.mp (Finset.mem_coe.mp hz)
-    have h1 := hDiam i i (hX i) x hx
-    have h2 := mem_graphBall.mp hzx
-    have h3 := hDiam (g • j) z (Finset.mem_coe.mp hz') (g • j) (hX _)
-    have hle : G.edist i (g • j) ≤ ((2 * R + l : ℕ) : ℕ∞) :=
-      calc G.edist i (g • j) ≤ G.edist i x + G.edist x z + G.edist z (g • j) :=
-            SimpleGraph.edist_triangle.trans (by gcongr; exact SimpleGraph.edist_triangle)
-        _ ≤ R + l + R := add_le_add (add_le_add h1 h2) h3
-        _ = ((2 * R + l : ℕ) : ℕ∞) := by push_cast; ring
-    have hlt : ((n / 2 : ℕ) : ℕ∞) < ((2 * R + l + N : ℕ) : ℕ∞) := by
-      calc ((n / 2 : ℕ) : ℕ∞) < G.edist i (g • j) + N := hdist
-        _ ≤ ((2 * R + l : ℕ) : ℕ∞) + N := by gcongr
-        _ = ((2 * R + l + N : ℕ) : ℕ∞) := by push_cast; ring
-    have := ENat.natCast_lt_natCast.mp hlt
-    omega
+  obtain ⟨g, hg, hfar⟩ :=
+    exists_mem_supercell_lt_edist hN hden G π hπ e he (2 * R + l) hl i j
+  have hsep := disjoint_biUnion_graphBall_of_lt_edist G X id hX R hDiam
+    (g • j) i l hfar
   have hmain := norm_groundCompression_commutator_le_of_supercell_separation G X id hX h hHerm
     hSupport R hDiam vR hCard b₀ hBudget hcov Kg kg hGrowth hr hq hΔE hH hgap
     (supercell Γ d (∑ k, h k) E₀)
@@ -222,5 +207,93 @@ theorem norm_groundCompression_commutator_truncated_le_of_momenta [NeZero d]
     (norm_groundCompression_commutator_le_of_momenta G X hX h hHerm hSupport R hDiam vR hCard b₀
       hBudget hcov Kg kg hGrowth hr hq hΔE hH hgap hN hden π hπ e he i j l hl hT) hεi hεj
     (norm_gaussianFilteredTerm_le _ _ (Matrix.isHermitian_sum _ fun k _ ↦ hHerm k) _)
+
+
+/-- A closed exponential bound for the low-energy commutator of the
+Gaussian-filtered local terms. The rate is `commutatorRate`, and the
+constant is `commutatorConst`; the exponent uses real subtraction.
+The estimate includes systems with fewer than `2 * (N + 2 * R)` cells,
+where the trivial commutator bound suffices. All original nonnegative
+Gaussian parameters are retained because their ground-space compressions
+agree. Hastings, arXiv:cond-mat/0508554v3, `proj3new.tex`, eq. `blecm`,
+lines 1562–1601, and the supercell argument, lines 1620–1641.
+The filtered-term scope is recorded in
+`docs/paper-gaps/hastings05_translation_supercell.tex`. -/
+theorem norm_groundCompression_commutator_le_of_momenta_exp [NeZero d]
+    (G : SimpleGraph ι) (X : ι → Finset ι) (hX : ∀ k, k ∈ X k)
+    (h : ι → Matrix (ι → Fin d) (ι → Fin d) ℂ) (hHerm : ∀ k, (h k).IsHermitian)
+    (hSupport : ∀ k, h k ∈ supportedOperators d (X k : Set ι))
+    (R : ℕ) (hDiam : ∀ k, ∀ x ∈ X k, ∀ z ∈ X k, G.edist x z ≤ R)
+    (vR : ℕ) (hCard : ∀ k, (X k).card ≤ vR)
+    (b₀ : ℝ) (hBudget : ∀ x, ∑ j ∈ Finset.univ.filter (fun j => x ∈ X j), ‖h j‖ ≤ b₀)
+    {Γ : Type*} [CommGroup Γ] [MulAction Γ ι]
+    (hcov : ∀ (g : Γ) k, h (g • k) = sitePermMatrix d g * h k * (sitePermMatrix d g)ᴴ)
+    (Kg : ℝ) (kg : ℕ)
+    (hGrowth : ∀ x (r : ℕ),
+      ((Finset.univ.filter fun y => G.edist x y = r).card : ℝ) ≤ Kg * ((r : ℝ) + 1) ^ kg)
+    {r ΔE : ℝ} (hr : 0 ≤ r) (hΔE : 0 < ΔE) (hH : (∑ k, h k).IsHermitian)
+    {E₀ : ℝ} (hgap : ∀ k, hH.eigenvalues k = E₀ ∨ E₀ + ΔE ≤ hH.eigenvalues k)
+    {N : ℕ} (hN : 0 < N)
+    (hden : ∀ χ : Γ →* ℂ, momentumSector Γ d (∑ k, h k) E₀ χ ≠ ⊥ → ∀ g, χ g ^ N = 1)
+    {n : ℕ} [NeZero n] (π : ι → ZMod n)
+    (hπ : ∀ u v, G.Adj u v → (π v - π u).valMinAbs.natAbs ≤ 1)
+    (e : Γ) (he : ∀ v, π (e • v) = π v + 1)
+    (i j : ι) :
+    ‖groundCompression (∑ k, h k) E₀ (gaussianFilteredTerm r ΔE (∑ k, h k) (h i)) *
+          groundCompression (∑ k, h k) E₀ (gaussianFilteredTerm r ΔE (∑ k, h k) (h j)) -
+        groundCompression (∑ k, h k) E₀ (gaussianFilteredTerm r ΔE (∑ k, h k) (h j)) *
+          groundCompression (∑ k, h k) E₀ (gaussianFilteredTerm r ΔE (∑ k, h k) (h i))‖ ≤
+      commutatorConst R vR b₀ Kg kg * ‖h i‖ * ‖h j‖ *
+        Real.exp (-(commutatorRate R vR b₀ ΔE *
+          (((n / 2 : ℕ) : ℝ) - N - 2 * R))) := by
+  have hInv := isSiteInvariant_sum_of_covariant d h hcov
+  by_cases hsize : N + 2 * R ≤ n / 2
+  · let l := n / 2 - (N + 2 * R)
+    have hl : 2 * R + l + N ≤ n / 2 := by
+      dsimp only [l]
+      omega
+    obtain ⟨g, hg, hfar⟩ :=
+      exists_mem_supercell_lt_edist hN hden G π hπ e he (2 * R + l) hl i j
+    have hsep := disjoint_biUnion_graphBall_of_lt_edist G X id hX R hDiam
+      (g • j) i l hfar
+    have hnorm : ‖h (g • j)‖ = ‖h j‖ := by
+      rw [hcov, Matrix.norm_sitePermMatrix_mul_mul_conjTranspose]
+    have hcast : (l : ℝ) = ((n / 2 : ℕ) : ℝ) - N - 2 * R := by
+      dsimp only [l]
+      rw [Nat.cast_sub hsize]
+      push_cast
+      ring
+    have hmain := norm_groundCompression_commutator_le_exp G X id hX h hHerm hSupport R
+      hDiam vR hCard b₀ hBudget Kg kg hGrowth hΔE hH hgap (g • j) i l hsep
+    rw [← groundCompression_commutator_eq_of_mem_supercell r ΔE hInv hH hcov
+      (supercell Γ d (∑ k, h k) E₀)
+      (fun g hg v hv ↦ sitePermMatrix_mulVec_eq_of_mem_supercell hInv hg v hv) hg i j]
+    simpa only [groundCompression_gaussianFilteredTerm hr hH, hnorm, hcast] using hmain
+  · have hKg : 0 ≤ Kg := by
+      have hzero := hGrowth i 0
+      simp only [CharP.cast_eq_zero, zero_add, one_pow, mul_one] at hzero
+      exact (Nat.cast_nonneg _).trans hzero
+    have hC6 := six_le_commutatorConst R vR b₀ hKg kg
+    have hC2 : (2 : ℝ) ≤ commutatorConst R vR b₀ Kg kg := by linarith
+    have hC0 : 0 ≤ commutatorConst R vR b₀ Kg kg := by linarith
+    have hγ := commutatorRate_pos hΔE R vR b₀
+    have hlength : ((n / 2 : ℕ) : ℝ) - N - 2 * R ≤ 0 := by
+      have hnat : n / 2 ≤ N + 2 * R := by omega
+      have hreal : ((n / 2 : ℕ) : ℝ) ≤ (N : ℝ) + 2 * R := by
+        exact_mod_cast hnat
+      linarith
+    have hexp : 1 ≤ Real.exp (-(commutatorRate R vR b₀ ΔE *
+        (((n / 2 : ℕ) : ℝ) - N - 2 * R))) :=
+      Real.one_le_exp (by nlinarith)
+    have hpref : 0 ≤ commutatorConst R vR b₀ Kg kg * ‖h i‖ * ‖h j‖ := by positivity
+    calc
+      _ ≤ 2 * ‖h i‖ * ‖h j‖ := by
+        simpa only [groundCompression_gaussianFilteredTerm hr hH] using
+          norm_groundCompression_commutator_le_two_mul (∑ k, h k) E₀ (h i) (h j)
+      _ ≤ commutatorConst R vR b₀ Kg kg * ‖h i‖ * ‖h j‖ :=
+        mul_le_mul_of_nonneg_right
+          (mul_le_mul_of_nonneg_right hC2 (norm_nonneg _)) (norm_nonneg _)
+      _ ≤ _ := by
+        simpa only [mul_one] using mul_le_mul_of_nonneg_left hexp hpref
 
 end TNLean.Lattice

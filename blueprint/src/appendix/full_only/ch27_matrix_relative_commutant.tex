@@ -4,7 +4,7 @@
 %% product unitary and cellular automaton chapter.
 %% ==================================================
 
-\chapter{Relative Commutants of Full Matrix Algebras: Supporting Results}%
+\chapter{Relative commutants of full matrix algebras: supporting results}%
 \label{ch:matrix_relative_commutant}
 
 The index argument for matrix product unitaries and cellular automata in
@@ -74,14 +74,14 @@ $\alpha$ is surjective.
     $I\cong J$ and composing gives $M\cong N$.
 \end{proof}
 
-\begin{theorem}[Equal matrix sizes from a scalar relative commutant]
+\begin{lemma}[Equal matrix sizes from a scalar relative commutant]
     \label{thm:matalg_size_eq}
     \lean{Matrix.AlgHom.size_eq_of_centralizer_range_eq_bot}
     \leanok
     Let $p,q\geq1$ and let $\Phi:\MN{p}\to\MN{q}$ be a homomorphism of
     complex algebras with $\Phi(\Id_p)=\Id_q$.  If
     $\Phi(\MN{p})^{\prime}\cap\MN{q}=\C\Id_q$, then $p=q$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{lem:matalg_defining_module_simple,
@@ -107,26 +107,26 @@ $\alpha$ is surjective.
     $q=p$.
 \end{proof}
 
-\begin{theorem}[Scalar relative commutant forces surjectivity]
+\begin{lemma}[Scalar relative commutant forces surjectivity]
     \label{thm:matalg_surjective_of_scalar_relative_commutant}
     \lean{Matrix.AlgHom.surjective_of_centralizer_range_eq_bot}
     \leanok
     Let $p,q\geq1$ and let $\Phi:\MN{p}\to\MN{q}$ be a homomorphism of
     complex algebras with $\Phi(\Id_p)=\Id_q$.  If
     $\Phi(\MN{p})^{\prime}\cap\MN{q}=\C\Id_q$, then $\Phi$ is onto.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:matalg_size_eq}
     The kernel of $\Phi$ is a two-sided ideal of the simple algebra
     $\MN{p}$, and it is not all of $\MN{p}$ because
     $\Phi(\Id_p)=\Id_q\neq0$; hence $\Phi$ is injective.  By
-    Theorem~\ref{thm:matalg_size_eq}, $p=q$, so $\MN{p}$ and $\MN{q}$ have
+    Lemma~\ref{thm:matalg_size_eq}, $p=q$, so $\MN{p}$ and $\MN{q}$ have
     the same finite complex dimension, and an injective complex-linear map
     between complex vector spaces of equal finite dimension is onto.
 \end{proof}
 
-\begin{theorem}[Scalar relative commutant forces surjectivity of a star
+\begin{lemma}[Scalar relative commutant forces surjectivity of a star
         homomorphism]
     \label{thm:matalg_surjective_star}
     \lean{Matrix.StarAlgHom.surjective_of_centralizer_range_eq_bot}
@@ -136,16 +136,16 @@ $\alpha$ is surjective.
     $\Phi:\MN{p}\to\MN{q}$ be a homomorphism of complex matrix algebras with
     $\Phi(A^\dagger)=\Phi(A)^\dagger$ and $\Phi(\Id_p)=\Id_q$.  If
     $\Phi(\MN{p})^{\prime}\cap\MN{q}=\C\Id_q$, then $\Phi$ is onto.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:matalg_surjective_of_scalar_relative_commutant}
     The involution plays no part in the argument, so
-    Theorem~\ref{thm:matalg_surjective_of_scalar_relative_commutant}
+    Lemma~\ref{thm:matalg_surjective_of_scalar_relative_commutant}
     applies to $\Phi$ read as a homomorphism of complex algebras.
 \end{proof}
 
-\begin{theorem}[Non-scalar relative commutant of a proper image]
+\begin{lemma}[Non-scalar relative commutant of a proper image]
     \label{thm:matalg_nonscalar_relative_commutant}
     \lean{Matrix.AlgHom.exists_commute_notMem_bot_of_not_surjective}
     \leanok
@@ -153,12 +153,12 @@ $\alpha$ is surjective.
     complex algebras with $\Phi(\Id_p)=\Id_q$ that is not onto.  Then there
     is $T\in\MN{q}$ with $T\Phi(A)=\Phi(A)T$ for every $A\in\MN{p}$ and
     $T\notin\C\Id_q$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:matalg_surjective_of_scalar_relative_commutant}
     If every $T$ commuting with the whole image of $\Phi$ were scalar, then
     (\ref{eq:matalg_relative_commutant}) would equal $\C\Id_q$ and
-    Theorem~\ref{thm:matalg_surjective_of_scalar_relative_commutant} would
+    Lemma~\ref{thm:matalg_surjective_of_scalar_relative_commutant} would
     make $\Phi$ onto.
 \end{proof}

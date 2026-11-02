@@ -1,7 +1,7 @@
 \subsection{Critical One-Particle Dynamics and the Thermodynamic Gap}
 \label{sec:pvbs_critical_gap}
 
-\begin{theorem}[Critical PVBS one-particle dynamics]
+\begin{lemma}[Critical PVBS one-particle dynamics]
     \label{thm:pvbs_one_particle_dynamics}
     \lean{MPSTensor.localTermES_pvbs_critical_oneMagnon,
         MPSTensor.parentHamiltonianES_pvbs_critical_oneMagnon,
@@ -19,7 +19,7 @@
     \end{align}
     The indices are cyclic, with both oriented edges retained for $N=2$.
     In particular, the constant-amplitude W vector is a zero-energy state.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:pvbs_periodic_occupation, lem:pvbs_cyclic_geometry,
@@ -31,7 +31,7 @@
     annihilates constant coefficients.
 \end{proof}
 
-\begin{theorem}[Positive low-energy Fourier magnons]
+\begin{lemma}[Positive low-energy Fourier magnons]
     \label{thm:pvbs_critical_fourier_magnon}
     \lean{MPSTensor.pvbs_fourierMagnon_ne_zero,
         MPSTensor.parentHamiltonianES_pvbs_critical_fourierMagnon,
@@ -47,7 +47,7 @@
     \end{align}
     The vector $\psi_N$ is orthogonal to the whole kernel of $H_1$,
     including the uniform W state, rather than only to the vacuum.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:pvbs_one_particle_dynamics, lem:pvbs_cyclic_geometry,
@@ -59,7 +59,7 @@
     orthogonality to the full kernel.
 \end{proof}
 
-\begin{theorem}[No uniform critical periodic gap]
+\begin{lemma}[No uniform critical periodic gap]
     \label{thm:pvbs_critical_gaplessness}
     \lean{MPSTensor.not_exists_eventual_uniform_gap_pvbs_critical}
     \leanok
@@ -70,7 +70,7 @@
     This is thermodynamic gaplessness in the finite-periodic-volume
     criterion; no zero gap above the enlarged kernel of a fixed finite
     ring is asserted.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:pvbs_critical_fourier_magnon, thm:short_range_parent_gap_counterexample}

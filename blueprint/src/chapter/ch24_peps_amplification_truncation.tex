@@ -7,173 +7,156 @@
 \section{Truncating the retained constraint product}
 
 The local constraint products lemma of \cite[Section~10]{OpenAI2026AreaLaw}
-has two estimates. This section proves the first one: replacing every
-retained factor by its radius-$r$ local version costs little in
-expectation. The second estimate, which removes distant events, is
-treated in Section~\ref{sec:al_channel_word_omission}, where the two are
-combined.
+has two estimates: this section bounds the expected error of replacing
+each retained factor by its radius-$r$ local version, and
+Section~\ref{sec:al_channel_word_omission} removes distant events and
+combines the two.
 
-\begin{theorem}[Products of roots are contractions and telescope]
+\begin{lemma}[Products of roots are contractions and telescope]
     \label{thm:al_contraction_word_telescope}
     \lean{TNLean.PEPS.AreaLaw.norm_contractionWord_le_one,
         TNLean.PEPS.AreaLaw.norm_contractionWord_sub_le}
     \leanok
-    Let $k_i$ and $k_i'$ be positive operators on a finite-dimensional
-    space, indexed by a common alphabet. For a word
-    $w=(i_0,\ldots,i_{m-1})$ put
-    $D_w=(I-k_{i_{m-1}})^{1/2}\cdots(I-k_{i_0})^{1/2}$, and define
-    $D_w'$ in the same way from the $k_i'$. Then $\|D_w\|\le1$. If
-    $\|(I-k_i)^{1/2}-(I-k_i')^{1/2}\|\le\varepsilon$ for every label
-    $i$, then $\|D_w-D_w'\|\le m\varepsilon$.
-\end{theorem}
+    For positive contractions $k_i,k_i'\le I$ on a finite-dimensional
+    space and a word $w=(i_0,\ldots,i_{m-1})$, set
+    $D_w=(I-k_{i_{m-1}})^{1/2}\cdots(I-k_{i_0})^{1/2}$ and define
+    $D_w'$ from $k_i'$. Then $\|D_w\|\le1$, and
+    $\|(I-k_i)^{1/2}-(I-k_i')^{1/2}\|\le\varepsilon$ for all $i$ implies
+    $\|D_w-D_w'\|\le m\varepsilon$.
+\end{lemma}
 \begin{proof}\leanok
-    Each root $(I-k_i)^{1/2}$ is a positive contraction, so $D_w$ is a
-    contraction. For the second claim, factoring $D_w=GX$ and $D_w'=G'X'$
-    with last factors $G,G'$ gives
-    $GX-G'X'=G(X-X')+(G-G')X'$, and induction on $m$ yields the bound.
+    Each $(I-k_i)^{1/2}$ is a contraction, so $\|D_w\|\le1$; telescoping
+    $GX-G'X'=G(X-X')+(G-G')X'$ by induction on $m$ gives
+    $\|D_w-D_w'\|\le m\varepsilon$.
 \end{proof}
 
-\begin{theorem}[Expected truncation error on retained events]
+\begin{lemma}[Expected truncation error on retained events]
     \label{thm:al_contraction_word_expected_truncation}
     \lean{TNLean.PEPS.AreaLaw.integrable_and_integral_norm_contractionWord_sub_le,
         TNLean.PEPS.AreaLaw.integrable_and_integral_norm_contractionWord_retained_sub_le}
     \leanok
     \uses{thm:al_contraction_word_telescope}
-    In the setting of Theorem~\ref{thm:al_contraction_word_telescope},
-    let the alphabet be finite and let $\mu_t$ be the Poisson-word law
-    at time $t\ge0$. Fix a set $P$ of retained labels, and for a full
-    word $w$ let $w_P$ be its subword of retained letters, in their
-    original order. Let $k_i,k_i'$ be given for $i\in P$, with roots
-    within $\varepsilon$ of each other. Then
-    $w\mapsto\|D_{w_P}-D_{w_P}'\|$ is integrable and
-    \begin{align*}
+    In the setting of Lemma~\ref{thm:al_contraction_word_telescope},
+    let the alphabet be finite, let $\mu_t$ be the Poisson-word law at
+    $t\ge0$, and for a subset $P$ of retained labels let $w_P$ be the
+    retained subword of $w$. If
+    $\|(I-k_i)^{1/2}-(I-k_i')^{1/2}\|\le\varepsilon$ for all $i\in P$,
+    then $w\mapsto\|D_{w_P}-D_{w_P}'\|$ is $\mu_t$-integrable and
+    \begin{align}
         \int\|D_{w_P}-D_{w_P}'\|\,d\mu_t(w)\le\varepsilon\,|P|\,t.
-    \end{align*}
-\end{theorem}
+        \label{eq:al_contraction_word_expected_truncation}
+    \end{align}
+\end{lemma}
 \begin{proof}\leanok
-    The integrand is at most $2$, hence integrable. By
-    Theorem~\ref{thm:al_contraction_word_telescope} it is at most
-    $\varepsilon$ times the length of $w_P$. The retained subword has
-    the Poisson-word law of the alphabet $P$, whose expected length is
-    $|P|\,t$.
+    By Lemma~\ref{thm:al_contraction_word_telescope},
+    $\|D_{w_P}-D_{w_P}'\|\le2$ (giving integrability) and
+    $\|D_{w_P}-D_{w_P}'\|\le\varepsilon|w_P|$; since $w_P$ has the
+    Poisson-word law on $P$ with mean length $|P|t$, integrating yields
+    (\ref{eq:al_contraction_word_expected_truncation}).
 \end{proof}
 
-\begin{theorem}[Labels anchored near a set]
+\begin{lemma}[Labels anchored near a set]
     \label{thm:al_retained_anchor_count}
     \lean{TNLean.PEPS.AreaLaw.graphBall_subset_graphNeighborhood_two_mul,
         TNLean.PEPS.AreaLaw.card_filter_anchor_mem_graphNeighborhood_le,
         TNLean.PEPS.AreaLaw.card_anchor_graphNeighborhood_le}
     \leanok
     \uses{thm:al_lattice_counts}
-    Let $\Lambda$ be a finite induced lattice domain, and let finitely
-    many labels carry anchors $a_i\in\Lambda$, with at most $\mu\ge0$
-    labels per site. For every $S\subseteq\Lambda$ and $r\ge0$, if
-    $d_\Lambda(a_i,S)\le r$ then $N_r(a_i)\subseteq N_{2r}(S)$, and at
-    most $2\mu|S|(1+r)^2$ labels satisfy $d_\Lambda(a_i,S)\le r$. In
-    particular this holds with $\mu=\mu_R$, the anchor multiplicity bound
-    of Theorem~\ref{thm:al_lattice_counts}, for anchors $a_i\in X_i$ of
-    the admissible supports of range $R$.
-\end{theorem}
+    On a finite induced lattice domain $\Lambda$, if finitely many labels
+    carry anchors $a_i\in\Lambda$ with at most $\mu\ge0$ labels per site,
+    then for every $S\subseteq\Lambda$ and $r\ge0$, $d_\Lambda(a_i,S)\le r$
+    implies $N_r(a_i)\subseteq N_{2r}(S)$, and at most $2\mu|S|(1+r)^2$
+    labels satisfy $d_\Lambda(a_i,S)\le r$ (in particular with $\mu=\mu_R$
+    of Lemma~\ref{thm:al_lattice_counts} for range-$R$ admissible
+    supports).
+\end{lemma}
 \begin{proof}\leanok
-    The inclusion is the triangle inequality. A retained anchor lies in
-    a ball $N_r(s)$ with $s\in S$, which has at most $2(1+r)^2$ sites,
-    and at most $\mu$ labels share each anchor.
+    The triangle inequality gives $N_r(a_i)\subseteq N_{2r}(S)$. Each
+    retained $a_i$ lies in some $N_r(s)$ ($s\in S$) of cardinality at most
+    $2(1+r)^2$ (Lemma~\ref{thm:al_lattice_counts}), with at most $\mu$
+    labels per site.
 \end{proof}
 
-\begin{theorem}[Support of the truncated products]
+\begin{lemma}[Support of the truncated products]
     \label{thm:al_truncated_product_support}
     \lean{TNLean.PEPS.AreaLaw.contractionWord_siteExpectation_mem_supportedOperators}
     \leanok
-    In the setting of Theorem~\ref{thm:al_retained_anchor_count}, let
-    $k_i\le I$ be given for the labels with $d_\Lambda(a_i,S)\le r$, and
-    let $E_{i,r}$ be the conditional expectation onto $N_r(a_i)$. Every
-    product of the roots $(I-E_{i,r}k_i)^{1/2}$ over such labels is
-    supported on $N_{2r}(S)$.
-\end{theorem}
+    In the setting of Lemma~\ref{thm:al_retained_anchor_count}, for
+    $0\le k_i\le I$ with $d_\Lambda(a_i,S)\le r$ and conditional
+    expectations $E_{i,r}$ onto $N_r(a_i)$, every product of
+    $(I-E_{i,r}k_i)^{1/2}$ is supported on $N_{2r}(S)$.
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:al_retained_anchor_count}
-    Each root is a function of an operator supported on
-    $N_r(a_i)\subseteq N_{2r}(S)$, and products of operators supported on
-    a set stay supported on it.
+    Each $(I-E_{i,r}k_i)^{1/2}$ is supported on
+    $N_r(a_i)\subseteq N_{2r}(S)$ by
+    Lemma~\ref{thm:al_retained_anchor_count}.
 \end{proof}
 
-\begin{theorem}[Truncation of the retained product for general constraints]
+\begin{lemma}[Truncation of the retained product for general constraints]
     \label{thm:al_domain_product_truncation}
     \lean{TNLean.PEPS.AreaLaw.exists_domainConstraintWord_truncation}
     \leanok
-    Let $C,\mu\ge0$, $c>0$ and $\alpha\in\R$. There are $A\ge0$ and
-    $\gamma>0$ with the following property. Let $0\le k_i\le I$ be
-    finitely many operators on a finite induced lattice domain $\Lambda$
-    with local dimension $q\ge1$, anchored at $a_i$ with at most $\mu$
-    labels per site, and with $\|k_i-E_{i,l}k_i\|\le Ce^{-cl^\alpha}$ for
-    every $l\ge0$, where $E_{i,l}$ is the conditional expectation onto
-    $N_l(a_i)$. Fix $S\subseteq\Lambda$, an integer $r\ge0$ and $t\ge0$,
-    and retain the labels with $d_\Lambda(a_i,S)\le r$. For a full Poisson
-    word $w$, let $D_{\rm ret}(w)$ be the chronological product of the
-    roots $(I-k_i)^{1/2}$ over its retained events, and let $L(w)$ be the
-    same product of $(I-E_{i,r}k_i)^{1/2}$. Then $\|D_{\rm ret}-L\|$ is
-    integrable for the Poisson-word law $\mu_t$,
-    \begin{align*}
+    For $C,\mu\ge0$, $c>0$, and $\alpha\in\R$, there exist $A\ge0$ and
+    $\gamma>0$ (depending only on $C,c,\alpha,\mu$) with the following
+    property. Let $0\le k_i\le I$ be finitely many operators on $\Lambda$
+    (local dimension $q\ge1$) anchored at $a_i$ with at most $\mu$ labels
+    per site and $\|k_i-E_{i,l}k_i\|\le Ce^{-cl^\alpha}$ for all $l\ge0$.
+    For $S\subseteq\Lambda$, integer $r\ge0$, and $t\ge0$, retain the
+    labels with $d_\Lambda(a_i,S)\le r$, and for a Poisson word $w$ let
+    $D_{\rm ret}(w)$ and $L(w)$ be the chronological products of
+    $(I-k_i)^{1/2}$ and $(I-E_{i,r}k_i)^{1/2}$ over its retained events.
+    Then every $L(w)$ is a contraction supported on $N_{2r}(S)$,
+    $\|D_{\rm ret}-L\|$ is $\mu_t$-integrable, and
+    \begin{align}
         \int\|D_{\rm ret}(w)-L(w)\|\,d\mu_t(w)
-        \le At\,|S|\,(1+r)^2e^{-\gamma r^\alpha},
-    \end{align*}
-    and every $L(w)$ is a contraction supported on $N_{2r}(S)$. The
-    constants depend only on $C,c,\alpha,\mu$.
-\end{theorem}
+        \le At\,|S|\,(1+r)^2e^{-\gamma r^\alpha}.
+        \label{eq:al_domain_product_truncation}
+    \end{align}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:al_contraction_word_expected_truncation,
         thm:al_retained_anchor_count,thm:al_truncated_product_support}
-    Operator monotonicity of the square root gives
-    $\|(I-k_i)^{1/2}-(I-E_{i,r}k_i)^{1/2}\|\le\|k_i-E_{i,r}k_i\|^{1/2}
-        \le C^{1/2}e^{-cr^\alpha/2}$. Applying
-    Theorem~\ref{thm:al_contraction_word_expected_truncation} and bounding
-    the number of retained labels by
-    Theorem~\ref{thm:al_retained_anchor_count} yields the integral estimate with
-    $A=2\mu C^{1/2}$ and $\gamma=c/2$, while
-    Theorem~\ref{thm:al_truncated_product_support} gives the support.
+    Since $\|(I-k_i)^{1/2}-(I-E_{i,r}k_i)^{1/2}\|\le\|k_i-E_{i,r}k_i\|^{1/2}
+        \le C^{1/2}e^{-cr^\alpha/2}$, combining
+    (\ref{eq:al_contraction_word_expected_truncation}) with
+    Lemmas~\ref{thm:al_retained_anchor_count}
+    and~\ref{thm:al_truncated_product_support} gives
+    (\ref{eq:al_domain_product_truncation}) with $A=2\mu C^{1/2}$ and
+    $\gamma=c/2$.
 \end{proof}
 
-\begin{theorem}[Truncation of the retained constraint product]
+\begin{lemma}[Truncation of the retained constraint product]
     \label{thm:al_lattice_product_truncation}
     \lean{TNLean.PEPS.AreaLaw.exists_latticeConstraintWord_truncation}
     \leanok
     \uses{thm:al_lattice_positive_replacement}
-    Fix an integer $p\ge1$, a range $R$, a strength $J\ge0$ and a gap
-    $\Delta>0$, and put $\alpha=p/(p+1)$. Specializing the
-    first estimate of \cite[Lemma~10.1]{OpenAI2026AreaLaw} (stated for
-    general constraints in
-    Theorem~\ref{thm:al_domain_product_truncation}) to the exact positive
-    constraints without requiring $S$ to be nonempty or $r\ge1$ gives constants
-    $C\ge0$ and $c>0$, depending only on $p,R,J,\Delta$, with the following property.
-    Let $\Lambda$ be a finite
-    induced lattice domain with local dimension $q\ge1$, let $H$ be a
-    range-$R$ interaction of strength $J$, and let $\Omega$ be a ground
-    vector with full-system gap $\Delta$. Let $k_i$ be the exact
-    positive constraints of
-    Theorem~\ref{thm:al_lattice_positive_replacement}, anchored at
-    $a_i\in X_i$, and let $E_{i,r}$ be the conditional expectation onto
-    $N_r(a_i)$. Fix $S\subseteq\Lambda$, an integer $r\ge0$ and
-    $t\ge0$, and retain the labels with $d_\Lambda(a_i,S)\le r$. For a
-    full Poisson word $w$, let $D_{\rm ret}(w)$ be the chronological
-    product of the roots $(I-k_i)^{1/2}$ over its retained events, and
-    let $L(w)$ be the same product of $(I-E_{i,r}k_i)^{1/2}$. Then
-    $\|D_{\rm ret}-L\|$ is integrable for the Poisson-word law $\mu_t$,
-    \begin{align*}
+    For integer $p\ge1$, range $R$, strength $J\ge0$, gap $\Delta>0$, and
+    $\alpha=p/(p+1)$, there exist $C\ge0$ and $c>0$ (depending only on
+    $p,R,J,\Delta$) such that for any range-$R$, strength-$J$ interaction
+    $H$ on $\Lambda$ ($q\ge1$) with ground vector $\Omega$ of gap $\Delta$,
+    the exact positive constraints $k_i$ of
+    Theorem~\ref{thm:al_lattice_positive_replacement} (anchored at
+    $a_i\in X_i$) satisfy the conclusion of
+    Lemma~\ref{thm:al_domain_product_truncation} for all
+    $S\subseteq\Lambda$, integers $r\ge0$, and $t\ge0$
+    (\cite[Lemma~10.1]{OpenAI2026AreaLaw}): every $L(w)$ is a contraction
+    supported on $N_{2r}(S)$, $\|D_{\rm ret}-L\|$ is $\mu_t$-integrable,
+    and
+    \begin{align}
         \int\|D_{\rm ret}(w)-L(w)\|\,d\mu_t(w)
-        \le Ct\,|S|\,(1+r)^2e^{-cr^\alpha},
-    \end{align*}
-    and every $L(w)$ is a contraction supported on $N_{2r}(S)$.
-\end{theorem}
+        \le Ct\,|S|\,(1+r)^2e^{-cr^\alpha}.
+        \label{eq:al_lattice_product_truncation}
+    \end{align}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:al_lattice_quasilocal_roots,
         thm:al_contraction_word_expected_truncation,
         thm:al_retained_anchor_count,thm:al_truncated_product_support}
-    By Theorem~\ref{thm:al_lattice_quasilocal_roots} each retained root
-    changes by at most $Ce^{-cr^\alpha}$ under the radius-$r$
-    approximation. Theorem~\ref{thm:al_contraction_word_expected_truncation}
-    bounds the expectation by this error times $t$ times the number of
-    retained labels, and Theorem~\ref{thm:al_retained_anchor_count}
-    bounds that number by $2\mu_R|S|(1+r)^2$. Each local root
-    $(I-E_{i,r}k_i)^{1/2}$ is a positive contraction acting on
-    $N_r(a_i)\subseteq N_{2r}(S)$, and so is each product of them.
+    Lemma~\ref{thm:al_lattice_quasilocal_roots} bounds each root error
+    by $Ce^{-cr^\alpha}$, and combining
+    (\ref{eq:al_contraction_word_expected_truncation}) with
+    Lemmas~\ref{thm:al_retained_anchor_count}
+    and~\ref{thm:al_truncated_product_support} yields
+    (\ref{eq:al_lattice_product_truncation}).
 \end{proof}

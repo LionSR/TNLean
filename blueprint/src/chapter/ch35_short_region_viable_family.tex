@@ -4,6 +4,7 @@
     \label{thm:short_actual_region_improving_family}
     \lean{TNLean.MPS.AreaLaw.exists_short_actual_region_improving_family}
     \uses{def:chain_model}
+    \leanok
     Let $q\ge2$, $\ell\ge1$, and let $J$ contain at most $4\ell$ sites
     of a chain of $L$ sites. Set $E=\mathcal H_J$ and
     $\mathcal D=(q\ell^2)^{22\ell}$. For every finite-dimensional complex
@@ -17,6 +18,7 @@
     Hamiltonian or nonzero-target hypothesis is required.
 \end{theorem}
 \begin{proof}
+    \leanok
     The matrix units of $E$ give at most $q^{2|J|}\le\mathcal D^2$ operators.
     For $T\ne0$, viability with $\delta<1$ implies $S\ne0$; all matrix units
     applied to $S$ then span $E$, giving zero viability error.
@@ -30,6 +32,7 @@
     \label{thm:short_region_larger_count_base}
     \lean{TNLean.MPS.AreaLaw.exists_short_actual_region_improving_family_of_count_base}
     \uses{def:chain_model}
+    \leanok
     Let $2\le q\le m$, $\ell\ge1$, and let $J$ be a site set with
     $|J|\le4\ell$. Put $E=\mathcal H_J$ and
     $\mathcal D=(m\ell^2)^{22\ell}$.
@@ -43,6 +46,7 @@
     Physical configurations remain $q$-valued, including when $m>q$.
 \end{theorem}
 \begin{proof}
+    \leanok
     Use the same actual configuration matrix-unit construction as for the
     short-region family. From every viable $S$ for a nonzero target it spans
     all of $E$; the zero-target case is automatic. Extend this family by zero

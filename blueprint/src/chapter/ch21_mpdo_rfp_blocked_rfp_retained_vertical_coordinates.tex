@@ -354,7 +354,7 @@
     right-associated regrouping.
 \end{proof}
 
-\begin{theorem}[General and right-associated four-site closures]
+\begin{lemma}[General and right-associated four-site closures]
     \label{thm:mpdo_phys_close_four}
     \lean{MPOTensor.physCloseN_four_eq_physClose4}
     \leanok
@@ -366,14 +366,14 @@
          & =\tr\!\left(K^{i_0j_0}K^{i_1j_1}K^{i_2j_2}K^{i_3j_3}X\right).
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Expanding the general four-site closure in the right-associated coordinates
     gives the displayed trace.
 \end{proof}
 
-\begin{theorem}[One-site closure of the two-site blocking]
+\begin{lemma}[One-site closure of the two-site blocking]
     \label{thm:mpdo_one_site_closure_two_site_blocking}
     \lean{MPOTensor.physClose1_blockTwo_eq_physClose2}
     \lean{MPOTensor.physClose1_blockTwo_eq_physClose2_apply}
@@ -382,7 +382,7 @@
     \uses{def:phys_close, def:mpdo_two_site_blocking}
     After identifying one blocked physical index with two original indices,
     $(K^{[2]})_1(X)=K_2(X)$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Expanding one blocked tensor matrix and decoding its two physical indices
@@ -416,7 +416,7 @@
     yet been composed with them.
 \end{definition}
 
-\begin{theorem}[Action of the vertical-coordinate physical maps]
+\begin{lemma}[Action of the vertical-coordinate physical maps]
     \label{thm:mpdo_vertical_coordinate_map_transport}
     \lean{MPOTensor.transportTToVerticalCoordinates_contractBondMatrix}
     \lean{MPOTensor.transportSToVerticalCoordinates_contractBondMatrix}
@@ -455,7 +455,7 @@
     with $R_1,R_2,\widetilde R_1,\widetilde R_2$, give the two displayed
     identities for $\widetilde T$ and $\widetilde S$ in
     \cite[Appendix~C.4, lines~1955--1979]{Cirac2016MPDO_arXiv}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     The reverse one-site canonical-form identity gives
@@ -686,7 +686,7 @@
 % Local fix (zero-sector complement): the transported maps come from
 % arXiv:1606.00608, Appendix C.4, lines 1955--1980, but the corrective trace-loss
 % statement is recorded in docs/paper-gaps/cpgsv17_vertical_isometry_zero_sector.tex.
-\begin{theorem}[Positivity and trace loss of the vertical-sector maps]
+\begin{lemma}[Positivity and trace loss of the vertical-sector maps]
     \label{thm:mpdo_transported_vertical_sector_trace_loss}
     \lean{MPOTensor.transportedVerticalSectorT_posSemidef}
     \lean{MPOTensor.transportedVerticalSectorS_posSemidef}
@@ -723,7 +723,7 @@
 
     The condition on vanishing trace loss characterizes when the vertical-sector
     maps preserve the total sector trace.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     The normalized diagonal embedding and the sectorwise partial trace

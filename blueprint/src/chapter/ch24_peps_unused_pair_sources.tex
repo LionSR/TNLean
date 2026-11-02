@@ -17,7 +17,7 @@
     \texttt{04-compression.tex}, lines 242--246.
 \end{definition}
 
-\begin{theorem}[Removing a trivial pair source]
+\begin{lemma}[Removing a trivial pair source]
     \label{thm:peps_remove_unit_pair_source}
     \lean{TNLean.Lattice.PartyCircuit.Word.eraseUnitPair}
     \lean{TNLean.Lattice.PartyCircuit.Word.eraseUnitPair_spec}
@@ -29,7 +29,7 @@
     source list $S$ and any original memory $\mathcal H$, this composition
     recovers $P_{S,\mathcal H}$ exactly from the preparation with the
     trivial source placed before $S$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     At each endpoint, apply the unit-multiplication isometry
@@ -48,7 +48,7 @@
     $P_{S,\mathcal H}$.
 \end{proof}
 
-\begin{theorem}[A source on every pair]
+\begin{lemma}[A source on every pair]
     \label{thm:peps_complete_pair_sources}
     \lean{TNLean.Lattice.PartyCircuit.SourceInventory.exists_complete_extension}
     \lean{TNLean.Lattice.PartyCircuit.SourceInventory.exists_complete}
@@ -66,7 +66,7 @@
     and list order unchanged. For every original memory, an allowed
     composition containing no sources recovers its preparation by $S$
     from its preparation by $T$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_remove_unit_pair_source}
@@ -74,12 +74,12 @@
     $S$. For each such pair, choose either endpoint order and adjoin the
     corresponding trivial source. The pairs are distinct, and every pair
     occurs in exactly one of the original and added lists. Repeatedly
-    apply Theorem~\ref{thm:peps_remove_unit_pair_source} to remove the
+    apply Lemma~\ref{thm:peps_remove_unit_pair_source} to remove the
     added sources. This also covers empty and singleton party sets,
     for which no distinct pair exists.
 \end{proof}
 
-\begin{theorem}[Local factorization with every pair present]
+\begin{lemma}[Local factorization with every pair present]
     \label{thm:peps_complete_prepared_party_maps}
     \lean{TNLean.Lattice.PartyCircuit.Word.exists_complete_source_preparation}
     \lean{TNLean.Lattice.PartyCircuit.Word.exists_complete_prepared_tensorPartyMaps}
@@ -103,15 +103,15 @@
     party's original output registers. A source in $T$ whose pair does not
     occur among the original sources of $F$ has one-dimensional endpoint
     spaces.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_grouped_sources,thm:peps_complete_pair_sources,thm:peps_party_factorization}
     First prepare and combine the sources of $F$ to obtain
     $F=V\circ P_{S,\mathcal H_{\rm in}}$, with $V$ allowed and containing
     no sources. Complete $S$ to $T$ by
-    Theorem~\ref{thm:peps_complete_pair_sources}. The local maps removing
+    Lemma~\ref{thm:peps_complete_pair_sources}. The local maps removing
     the added sources, followed by $V$, form another allowed composition
     containing no sources. Collect its local maps by party using
-    Theorem~\ref{thm:peps_party_factorization}.
+    Lemma~\ref{thm:peps_party_factorization}.
 \end{proof}

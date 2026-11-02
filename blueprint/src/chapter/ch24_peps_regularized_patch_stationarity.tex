@@ -1,12 +1,11 @@
 \section{Coordinate variation and final-state marginals}
 \label{sec:peps_regularized_patch_stationarity}
 
-Retain the regions, identity extensions, and ordered product of
-Definition~\ref{def:peps_regularized_patch_objective}.
-Write $K_j=(x_j+bI_{X_j})^{-a_j/2}$, so $L_j=\widehat{K_j}_{X_j}$.
+Retain the notation of Definition~\ref{def:peps_regularized_patch_objective}
+and write $K_j=(x_j+bI_{X_j})^{-a_j/2}$, so $L_j=\widehat{K_j}_{X_j}$.
 The coordinate variation below is the unstripped first variation in the
-\href{https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex\#L134-L149}{proof of the regularized patch estimate}.
-Its marginals are those of the same final normalized vector defined in
+\href{https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex\#L134-L149}{proof of the regularized patch estimate},
+with marginals taken in the final normalized vector of
 \href{https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex\#L91-L99}{the variational problem}.
 
 \begin{definition}[One-coordinate variation and insertion]
@@ -20,22 +19,19 @@ Its marginals are those of the same final normalized vector defined in
     }
     \leanok
     \uses{def:peps_regularized_patch_objective}
-    Fix an index $j$ and a unitary $U$ on $\mathcal H_{X_j}$.
-    Define $x^{j,U}$ by replacing $x_j$ with $Ux_jU^*$ and leaving every
-    other coordinate unchanged. Put
+    Fix $0\le j<m$ and a unitary $U$ on $\mathcal H_{X_j}$.
+    Define $x^{j,U}$ by $(x^{j,U})_j=Ux_jU^*$ and $(x^{j,U})_k=x_k$ for $k\ne j$, and set
     \begin{align}
         P_j^+           & =L_{m-1}\cdots L_{j+1},            &
         P_j^-           & =L_{j-1}\cdots L_0,\notag            \\
-        \mathcal I_j(K) & =P_j^+\widehat K_{X_j}P_j^-\Omega.
+        \mathcal I_j(K) & =P_j^+\widehat K_{X_j}P_j^-\Omega,
         \label{eq:peps_coordinate_insertion}
     \end{align}
-    Empty products are identities. The map $\mathcal I_j$ is complex linear,
-    and $\mathcal I_j(K_j)=\Psi(x)$.
-    For $B^*=-B$ and real $t$, the exponential $U(t)=e^{tB}$ is unitary.
-    Equal regions at different indices still have independent coordinates.
+    with empty products equal to $I$. Then $\mathcal I_j$ is $\C$-linear,
+    $\mathcal I_j(K_j)=\Psi(x)$, and $U(t)=e^{tB}$ is unitary for $B^*=-B$ and $t\in\R$.
 \end{definition}
 
-\begin{theorem}[Feasibility and covariance]
+\begin{lemma}[Feasibility and covariance]
     \label{thm:peps_patch_coordinate_covariance}
     \lean{
         TNLean.PEPS.regularizedPatchCoordinateUpdate_mem,
@@ -44,7 +40,7 @@ Its marginals are those of the same final normalized vector defined in
     }
     \leanok
     \uses{def:peps_patch_coordinate_insertion}
-    For $x\in\mathcal D$, $b>0$, arbitrary real weights, and a unitary $U$
+    For $x\in\mathcal D$, $b>0$, $a_j\in\R$, and a unitary $U$
     on $\mathcal H_{X_j}$, one has $x^{j,U}\in\mathcal D$ and
     \begin{align}
         (Ux_jU^*+bI)^{-a_j/2} & =UK_jU^*,
@@ -52,18 +48,15 @@ Its marginals are those of the same final normalized vector defined in
         \Psi(x^{j,U})         & =\mathcal I_j(UK_jU^*).
         \label{eq:peps_coordinate_covariance_apply}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
-    Unitary conjugation preserves positivity and trace. It fixes the identity,
-    so $Ux_jU^*+bI=U(x_j+bI)U^*$. Unitary covariance of the real power gives
-    (\ref{eq:peps_coordinate_covariance_rpow}). Every factor except the one at
-    index $j$ is unchanged, giving~(\ref{eq:peps_coordinate_covariance_apply}).
-    The argument also applies to singular $x_j$ because $x_j+bI$ is positive
-    definite on the full regional space.
+    Unitary conjugation preserves $x_j\ge0$, $\tr x_j=1$, and $I$,
+    so $Ux_jU^*+bI=U(x_j+bI)U^*>0$. Unitary covariance of $t\mapsto t^{-a_j/2}$ gives
+    (\ref{eq:peps_coordinate_covariance_rpow}), and substituting into (\ref{eq:peps_coordinate_insertion}) gives~(\ref{eq:peps_coordinate_covariance_apply}).
 \end{proof}
 
-\begin{theorem}[Ordered first variation]
+\begin{lemma}[Ordered first variation]
     \label{thm:peps_patch_first_variation}
     \lean{
         TNLean.PEPS.hasDerivAt_regularizedPatchOutput_coordinateUpdate,
@@ -71,49 +64,43 @@ Its marginals are those of the same final normalized vector defined in
     }
     \leanok
     \uses{def:peps_patch_coordinate_insertion}
-    Let $x\in\mathcal D$, $b>0$, and $B^*=-B$ on $\mathcal H_{X_j}$.
-    For arbitrary real weights, the filtered output satisfies
+    Let $x\in\mathcal D$, $b>0$, $a_j\in\R$, and $B^*=-B$ on $\mathcal H_{X_j}$. Then
     \begin{align}
         \left.\frac{d}{dt}\Psi(x^{j,e^{tB}})\right|_{t=0}
          & =\mathcal I_j(BK_j-K_jB).
         \label{eq:peps_coordinate_derivative}
     \end{align}
-    If $F(x)\le F(y)$ for every $y\in\mathcal D$, then
+    If $F(x)\le F(y)$ for all $y\in\mathcal D$, then
     \begin{align}
         \operatorname{Re}\langle\Psi(x),\mathcal I_j(BK_j-K_jB)\rangle=0.
         \label{eq:peps_coordinate_first_variation}
     \end{align}
 
-    Set $D_j=\widehat{BK_j-K_jB}_{X_j}$ and
-    $\Delta_j=P_j^+D_jP_j^-\Omega$. Every line in the following diagram
-    carries the full space $\mathcal H_V$.
+    With $D_j=\widehat{BK_j-K_jB}_{X_j}$ and
+    $\Delta_j=P_j^+D_jP_j^-\Omega$, every line below carries the full space $\mathcal H_V$:
     \input{figures/peps_patch_first_variation}
     Starting at $\Omega$ on the right, $P_j^-$ acts first, $D_j$ second,
-    and $P_j^+$ last. The two outer products need not be supported on $X_j$.
-\end{theorem}
+    and $P_j^+$ last ($P_j^\pm$ need not be supported on $X_j$).
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_patch_coordinate_covariance}
-    Differentiate $e^{tB}K_je^{-tB}$ at zero to obtain $BK_j-K_jB$.
-    Apply the continuous linear map $\mathcal I_j$ to obtain
-    (\ref{eq:peps_coordinate_derivative}). The entire real curve is feasible.
-    Thus $t\mapsto\|\Psi(x^{j,e^{tB}})\|^2$ has a local minimum at zero,
-    and its derivative there is
-    $2\operatorname{Re}\langle\Psi(x),\mathcal I_j(BK_j-K_jB)\rangle$.
-    Fermat's theorem gives~(\ref{eq:peps_coordinate_first_variation}).
+    Differentiating $e^{tB}K_je^{-tB}$ at $t=0$ gives $BK_j-K_jB$, so linearity of $\mathcal I_j$ and (\ref{eq:peps_coordinate_covariance_apply}) yield
+    (\ref{eq:peps_coordinate_derivative}). Since $x^{j,e^{tB}}\in\mathcal D$ for all $t\in\R$,
+    $t\mapsto\|\Psi(x^{j,e^{tB}})\|^2$ is minimized at $t=0$, where its derivative
+    $2\operatorname{Re}\langle\Psi(x),\mathcal I_j(BK_j-K_jB)\rangle$ vanishes.
 \end{proof}
 
-\begin{theorem}[Radius derivative of the ordered patch output]
+\begin{lemma}[Radius derivative of the ordered patch output]
     \label{thm:peps_patch_radius_derivative}
     \lean{TNLean.PEPS.hasDerivAt_regularizedPatchOutput_exp_neg}
     \leanok
     \uses{def:peps_patch_coordinate_insertion}
-    Let $V$ be a finite ordered set with finite local configuration sets $A_v$,
-    and write $\mathcal H_X=\ell^2(\prod_{v\in X}A_v;\C)$.
-    Fix regions $X_0,\ldots,X_{m-1}\subseteq V$, real weights $a_j$,
-    positive semidefinite matrices $x_j$ on $\mathcal H_{X_j}$, and
-    $\Omega\in\mathcal H_V$. A hat denotes extension by the identity
-    outside the indicated region. For $r\in\R$, put $K_j(r)=(x_j+e^{-r}I_{X_j})^{-a_j/2}$ and define
+    Let $V$ be a finite ordered set with finite local alphabets $A_v$
+    and $\mathcal H_X=\ell^2(\prod_{v\in X}A_v;\C)$.
+    Fix $X_0,\ldots,X_{m-1}\subseteq V$, $a_j\in\R$,
+    $x_j\ge0$ on $\mathcal H_{X_j}$, and $\Omega\in\mathcal H_V$.
+    For $r\in\R$, set $K_j(r)=(x_j+e^{-r}I_{X_j})^{-a_j/2}$ and
     \begin{align}
         \Psi(r)             & =\widehat K_{m-1}(r)\cdots\widehat K_0(r)\Omega,\notag \\
         \mathcal I_{j,r}(H) & =
@@ -130,20 +117,13 @@ Its marginals are those of the same final normalized vector defined in
         (x_j+e^{-R}I_{X_j})^{-a_j/2-1}\right).
         \label{eq:peps_patch_radius_derivative}
     \end{align}
-    The matrices $x_j$ need not have trace one, and the weights may have
-    either sign. Regions may repeat and need not be nested. For $m=0$,
-    the product is the identity, the sum is zero, and $\Psi(r)=\Omega$.
     This is the ordered product rule underlying the
     \href{https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex\#L425-L437}{radius derivative estimate for regularized patches}.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
-    Since $x_j+e^{-R}I$ is positive definite, differentiating its real power
-    gives $K_j'(R)=(a_j/2)e^{-R}(x_j+e^{-R}I)^{-a_j/2-1}$.
-    Extension by the identity is linear. Apply the product rule in the
-    fixed order $m-1,\ldots,0$ and then apply each term to $\Omega$.
-    The term indexed by $j$ replaces only that occurrence of the factor,
-    giving (\ref{eq:peps_patch_radius_derivative}).
+    Since $x_j+e^{-R}I>0$, $K_j'(R)=\frac{a_j}{2}e^{-R}(x_j+e^{-R}I)^{-a_j/2-1}$.
+    Linearity of $H\mapsto\widehat H_{X_j}$ and the Leibniz rule on (\ref{eq:peps_patch_radius_output}) yield (\ref{eq:peps_patch_radius_derivative}).
 \end{proof}
 
 \begin{definition}[Canonical global coordinates and marginals]
@@ -156,19 +136,13 @@ Its marginals are those of the same final normalized vector defined in
     }
     \leanok
     \uses{def:peps_regularized_patch_minimum}
-    Identify configurations indexed by the full region $V$ with global
-    configurations by forgetting the redundant membership condition. This
-    bijection induces a unitary coordinate identification $J$.
-    For the same final vector $\phi=\widehat\Psi(x)$ and every region
-    $X\subseteq V$, define
+    Let $J$ be the unitary coordinate identification induced by forgetting the redundant membership condition $v\in V$ on configurations indexed by $V$.
+    For $\phi=\widehat\Psi(x)$ from Definition~\ref{def:peps_regularized_patch_minimum} and $X\subseteq V$, define
     \begin{align}
         \rho_X=\operatorname{Tr}_{V\setminus X}
         \ketbra{J\phi}{J\phi}.
         \label{eq:peps_canonical_marginal}
     \end{align}
-    At a feasible minimizer with nonnegative weights,
-    $\phi=N^{-1}M(x)\Omega$. No intermediate filtered vector enters
-    (\ref{eq:peps_canonical_marginal}).
 \end{definition}
 
 % Source: polynomial-PEPS Proposition 4.1, 03-patches.tex, lines 68--99.
@@ -177,48 +151,32 @@ Its marginals are those of the same final normalized vector defined in
     \label{def:peps_ordered_patch_factor_list}
     \lean{TNLean.PEPS.regularizedPatchFactorList}
     \leanok
-    Let $V$ be a finite ordered set, let $n_v\in\N$, and write
-    $\mathcal H_X=\ell^2(\prod_{v\in X}[n_v];\C)$.
-    For regions $X_0,\ldots,X_{m-1}\subseteq V$, real numbers $a_j$,
-    and matrices $x_j\in\operatorname{End}(\mathcal H_{X_j})$, define
-    \begin{align*}
-        \mathcal L(x) & =[(X_{m-1},a_{m-1},x_{m-1}),\ldots,(X_0,a_0,x_0)].
-    \end{align*}
-    Every occurrence of a region is retained independently.
-    When $m=0$, the list is empty.
+    For a finite ordered set $V$, $n_v\in\N$, $\mathcal H_X=\ell^2(\prod_{v\in X}[n_v];\C)$,
+    $X_0,\ldots,X_{m-1}\subseteq V$, $a_j\in\R$,
+    and $x_j\in\operatorname{End}(\mathcal H_{X_j})$, define
+    $\mathcal L(x)=[(X_{m-1},a_{m-1},x_{m-1}),\ldots,(X_0,a_0,x_0)]$.
 \end{definition}
 
 % Source: polynomial-PEPS Proposition 4.1, 03-patches.tex, lines 68--99.
 % Source revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
-\begin{theorem}[The ordered list of regularized filters]
+\begin{lemma}[The ordered list of regularized filters]
     \label{thm:peps_patch_factor_chain_list}
     \lean{TNLean.PEPS.map_filter_regularizedPatchFactorList_eq_chainList}
     \leanok
     \uses{def:peps_ordered_patch_factor_list}
-    Let $V$ be a set, let $n_v\in\N$, and let $D_j\subseteq V$ be finite
-    for $0\leq j<m$. Write $\mathcal H_{D_j}=\ell^2(\prod_{v\in D_j}[n_v];\C)$.
-    For $a_j,b\in\R$ and $x_j\in\operatorname{End}(\mathcal H_{D_j})$, put
-    $K_j=(x_j+bI)^{-a_j/2}$ and
+    For finite $D_j\subseteq V$ ($0\le j<m$), $a_j,b\in\R$, and $x_j\in\operatorname{End}(\mathcal H_{D_j})$, set
+    $K_j=(x_j+bI)^{-a_j/2}$ (defined by nonnegative spectral functional calculus, and $0$ when $x_j+bI\not\ge0$) and
     $\mathcal L=[(D_{m-1},a_{m-1},x_{m-1}),\ldots,(D_0,a_0,x_0)]$.
-    Real matrix powers use the nonnegative spectral functional calculus,
-    with value zero when the matrix is not positive semidefinite.
-    If $F_b(D,a,x)=(D,(x+bI)^{-a/2})$ and $F_b[\mathcal L]$ denotes
-    application to each entry in its given order, then
-    \begin{align*}
-        F_b[\mathcal L] & =[(D_{m-1},K_{m-1}),\ldots,(D_0,K_0)].
-    \end{align*}
-    Thus this is the list of all filters in decreasing index order.
-    Repeated regions retain their separate occurrences, and both lists
-    are empty when $m=0$.
-\end{theorem}
+    With $F_b(D,a,x)=(D,(x+bI)^{-a/2})$ applied entrywise,
+    $F_b[\mathcal L]=[(D_{m-1},K_{m-1}),\ldots,(D_0,K_0)]$.
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{def:peps_ordered_patch_factor_list}
-    Applying a function to each entry commutes with reversing a finite list.
-    The entry with index $j$ is $(D_j,K_j)$ on both sides.
+    Entrywise map commutes with list reversal, matching $(D_j,K_j)$ at each index $j$.
 \end{proof}
 
-\begin{theorem}[Canonical coordinates for the ordered output]
+\begin{lemma}[Canonical coordinates for the ordered output]
     \label{thm:peps_ordered_patch_output_coordinates}
     \lean{
         TNLean.PEPS.dependentGlobalConfigIsometry_regularizedPatchOutput,
@@ -227,122 +185,72 @@ Its marginals are those of the same final normalized vector defined in
     \leanok
     \uses{def:peps_ordered_patch_factor_list,def:peps_patch_canonical_marginal,
         def:peps_regularized_patch_objective}
-    Let $J$ be the canonical unitary identification of full-region and global
-    configurations. For arbitrary $b\in\R$ and an arbitrary vector $\Omega$,
-    put $K_j=(x_j+bI)^{-a_j/2}$.
-    Real powers use the nonnegative spectral functional calculus, with value
-    zero when the matrix is not positive semidefinite. Let $\widehat K_j$ and
-    $\widetilde K_j$ be the identity extensions in the two coordinate spaces.
-    Then
-    \begin{align*}
+    With $J$ as in Definition~\ref{def:peps_patch_canonical_marginal}, $b\in\R$, $\Omega\in\mathcal H_V$, and $K_j=(x_j+bI)^{-a_j/2}$, let $\widehat K_j$ and $\widetilde K_j$ be the identity extensions in the two coordinate spaces. Then
+    \begin{align}
         J(\widehat K_{m-1}\cdots\widehat K_0\Omega)
-         & =\widetilde K_{m-1}\cdots\widetilde K_0(J\Omega).
-    \end{align*}
-    In particular, the two ordered outputs have the same norm.
-    Empty products are identities. The regions need not be nested or distinct,
-    and the vector need not have unit norm.
-    This identifies the two coordinate descriptions of the ordered product in the
+         & =\widetilde K_{m-1}\cdots\widetilde K_0(J\Omega),\notag
+    \end{align}
+    and the two ordered outputs have equal norm, identifying the two coordinate descriptions in the
     \href{https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex\#L68-L99}{regularized patch problem}.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_regional_basis_relabelling}
-    Regional basis relabelling gives
-    $J\widehat K_jJ^{-1}=\widetilde K_j$ for each $j$.
-    Conjugation preserves the ordered matrix product. Applying the resulting
-    identity to $J\Omega$ proves the vector identity. Taking norms and using
-    unitarity of $J$ gives equality of the objectives.
+    Lemma~\ref{thm:peps_regional_basis_relabelling} gives
+    $J\widehat K_jJ^{-1}=\widetilde K_j$ for each $j$; multiplying in order, applying to $J\Omega$, and using unitarity of $J$ gives the claims.
 \end{proof}
 
 % Source: polynomial-PEPS Proposition 4.1, 03-patches.tex, lines 68--99 and 130--205.
 % Source revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
-\begin{theorem}[Minimization over ordered patch lists]
+\begin{lemma}[Minimization over ordered patch lists]
     \label{thm:peps_ordered_patch_minimizer}
     \lean{TNLean.PEPS.isPatchMinimizer_regularizedPatchFactorList}
     \leanok
     \uses{def:peps_ordered_patch_factor_list,def:peps_regularized_patch_objective}
-    Fix regions $X_0,\ldots,X_{m-1}\subseteq V$, real numbers $a_j,b$,
-    and a vector $\Omega$. Write $F(y)$ for the ordered patch objective
-    and let $x_j\in\operatorname{End}(\mathcal H_{X_j})$ be arbitrary matrices.
-    Suppose that $F(x)\le F(y)$ for every tuple of density matrices $y_j$
-    on the corresponding regions. For a list $\mathcal L$ of patch factors,
-    let $P_b(\mathcal L)$ denote the ordered product of its extended filters.
-    Then every list $\mathcal L'$ of density-matrix factors with the same
-    regions and exponents as $\mathcal L(x)$, in the same positions, satisfies
-    \begin{align*}
-        \|P_b(\mathcal L(x))J\Omega\|
-         & \le \|P_b(\mathcal L')J\Omega\|.
-    \end{align*}
-    Repeated regions retain independent density matrices. The assertion
-    includes the empty list and vanishing outputs.
-    This is the ordered-list form of the minimization in the
+    Fix $X_0,\ldots,X_{m-1}\subseteq V$, $a_j,b\in\R$, $\Omega\in\mathcal H_V$, and $x_j\in\operatorname{End}(\mathcal H_{X_j})$ with $F(x)\le F(y)$ for all $y\in\mathcal D$.
+    Writing $P_b(\mathcal L)$ for the ordered product of extended filters of a factor list $\mathcal L$, every list $\mathcal L'$ of density-matrix factors with the same regions and exponents as $\mathcal L(x)$ satisfies
+    $\|P_b(\mathcal L(x))J\Omega\|\le\|P_b(\mathcal L')J\Omega\|$.
+    This is the ordered-list form of minimization in the
     \href{https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex\#L68-L99}{regularized patch problem}.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_ordered_patch_output_coordinates}
-    Enumerate $\mathcal L'$ in reverse order. Equality of the region lists
-    first gives its length $m$, and equality of the region and exponent
-    lists then identifies each position. Thus
-    $\mathcal L'=\mathcal L(y)$ for a tuple of density matrices $y_j$.
-    Equality of the objective norms gives
-    \begin{align*}
-        \|P_b(\mathcal L(x))J\Omega\|
-         & =F(x)\le F(y)=\|P_b(\mathcal L')J\Omega\|.
-    \end{align*}
+    Reversing $\mathcal L'$ identifies $\mathcal L'=\mathcal L(y)$ for some $y\in\mathcal D$. By Lemma~\ref{thm:peps_ordered_patch_output_coordinates},
+    $\|P_b(\mathcal L(x))J\Omega\|=F(x)\le F(y)=\|P_b(\mathcal L')J\Omega\|$.
 \end{proof}
 
 % Source: polynomial-PEPS Proposition 4.1, 03-patches.tex, lines 91--99.
-\begin{theorem}[Canonical coordinates for the normalized output]
+\begin{lemma}[Canonical coordinates for the normalized output]
     \label{thm:peps_ordered_patch_normalized_coordinates}
     \lean{TNLean.PEPS.dependentGlobalConfigIsometry_normalizedRegularizedPatchOutput}
     \leanok
     \uses{def:peps_ordered_patch_factor_list,def:peps_patch_canonical_marginal,
         def:peps_regularized_patch_minimum}
-    Retain arbitrary matrices $x_j$, real exponents $a_j$, a real shift $b$,
-    and an arbitrary input $\Omega$. Let $\Psi$ and $\widetilde\Psi=J\Psi$
-    be the two ordered outputs. Define $\widehat\Psi=\|\Psi\|^{-1}\Psi$
-    and $\widehat{\widetilde\Psi}=\|\widetilde\Psi\|^{-1}\widetilde\Psi$,
-    with both normalizations equal to zero when the output vanishes.
-    Then $J\widehat\Psi=\widehat{\widetilde\Psi}$.
-\end{theorem}
+    For the ordered outputs $\Psi$ and $\widetilde\Psi=J\Psi$, their normalizations $\widehat\Psi=\|\Psi\|^{-1}\Psi$ and $\widehat{\widetilde\Psi}=\|\widetilde\Psi\|^{-1}\widetilde\Psi$ (set to $0$ when the output vanishes) satisfy $J\widehat\Psi=\widehat{\widetilde\Psi}$.
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_ordered_patch_output_coordinates}
-    Linearity and preservation of the norm give
-    \begin{align*}
-        J(\|\Psi\|^{-1}\Psi)
-         & =\|\Psi\|^{-1}J\Psi
-        =\|\widetilde\Psi\|^{-1}\widetilde\Psi.
-    \end{align*}
-    The identity also holds at zero.
+    By Lemma~\ref{thm:peps_ordered_patch_output_coordinates}, $\|\widetilde\Psi\|=\|\Psi\|$, so $J(\|\Psi\|^{-1}\Psi)=\|\widetilde\Psi\|^{-1}\widetilde\Psi$.
 \end{proof}
 
 % Source: polynomial-PEPS Proposition 4.1, 03-patches.tex, lines 91--99 and 130--205.
-\begin{theorem}[Regional marginals in the ordered coordinates]
+\begin{lemma}[Regional marginals in the ordered coordinates]
     \label{thm:peps_ordered_patch_marginal_coordinates}
     \lean{TNLean.PEPS.normalizedRegularizedPatchMarginal_eq_regionState_patchState}
     \leanok
     \uses{thm:peps_ordered_patch_normalized_coordinates,def:peps_patch_canonical_marginal}
-    For the same arbitrary data and every region $R\subseteq V$, the canonical
-    marginal of the normalized ordered output satisfies
-    \begin{align*}
-        \rho_R
-        =\operatorname{Tr}_{V\setminus R}
-        \ketbra{\widehat{\widetilde\Psi}}{\widehat{\widetilde\Psi}}.
-    \end{align*}
-    The identity includes the empty region and a vanishing output.
-\end{theorem}
+    For every $R\subseteq V$, the canonical marginal (\ref{eq:peps_canonical_marginal}) satisfies
+    $\rho_R=\operatorname{Tr}_{V\setminus R}\ketbra{\widehat{\widetilde\Psi}}{\widehat{\widetilde\Psi}}$.
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_ordered_patch_normalized_coordinates,thm:peps_patch_basis_relabelling}
-    Apply the regional coordinate identity with the identity relabelling at
-    every site. The normalized vectors agree by
-    Theorem~\ref{thm:peps_ordered_patch_normalized_coordinates}, and taking
-    their reduced density matrices preserves this equality.
+    Substitute $J\widehat\Psi=\widehat{\widetilde\Psi}$ from Lemma~\ref{thm:peps_ordered_patch_normalized_coordinates} into (\ref{eq:peps_canonical_marginal}).
 \end{proof}
 
-\begin{theorem}[Regional expectation and density properties]
+\begin{lemma}[Regional expectation and density properties]
     \label{thm:peps_patch_marginal_expectation}
     \lean{
         TNLean.PEPS.inner_dependentRegionOperatorLift_eq_trace_reducedPure,
@@ -352,56 +260,42 @@ Its marginals are those of the same final normalized vector defined in
     }
     \leanok
     \uses{def:peps_patch_canonical_marginal}
-    For every global vector $\xi$, region $X$, and arbitrary complex
-    operator $K$ on $\mathcal H_X$,
+    For every $\xi\in\mathcal H_V$, $X\subseteq V$, and $K\in\operatorname{End}(\mathcal H_X)$,
     \begin{align}
         \langle\xi,\widehat K_X\xi\rangle
          & =\tr\left(\operatorname{Tr}_{V\setminus X}
         \ketbra{J\xi}{J\xi}\,K\right).
         \label{eq:peps_complex_expectation}
     \end{align}
-    In particular, $\langle\phi,\widehat K_X\phi\rangle=\tr(\rho_XK)$.
-    Each $\rho_X$ is positive semidefinite. If $a_j\ge0$, $b>0$,
+    In particular, $\langle\phi,\widehat K_X\phi\rangle=\tr(\rho_XK)$ and $\rho_X\ge0$; if $a_j\ge0$, $b>0$,
     $\|\Omega\|=1$, and $x\in\mathcal D$, then $\tr\rho_X=1$.
-    These assertions include the empty region.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_regularized_patch_minimum}
-    In regional coordinates, $\widehat K_X=K\otimes I$ and the reduced
-    matrix is the partial trace of $\ketbra{J\xi}{J\xi}$ over the second
-    factor. The partial-trace identity gives
-    $\tr(\operatorname{Tr}_{V\setminus X}(P)K)=\tr(P(K\otimes I))$.
-    For $P=\ketbra{J\xi}{J\xi}$ this is
-    (\ref{eq:peps_complex_expectation}); no real part or Hermiticity
-    assumption is needed. Partial trace preserves positivity and trace.
-    Finally $J$ preserves the norm and $\|\phi\|=1$, so $\tr\rho_X=1$.
+    Under $J$, $\widehat K_X$ corresponds to $K\otimes I_{V\setminus X}$, so $\tr(\operatorname{Tr}_{V\setminus X}(P)K)=\tr(P(K\otimes I))$ for $P=\ketbra{J\xi}{J\xi}$ gives (\ref{eq:peps_complex_expectation}). Partial trace preserves positivity and trace, and $\|\phi\|=1$ by Lemma~\ref{thm:peps_regularized_patch_minimum}.
 \end{proof}
 
-\begin{theorem}[Relabelling the final-state marginal]
+\begin{lemma}[Relabelling the final-state marginal]
     \label{thm:peps_patch_basis_relabelling}
     \lean{TNLean.PEPS.reindex_normalizedRegularizedPatchMarginal}
     \leanok
     \uses{def:peps_patch_canonical_marginal,
         thm:peps_regional_basis_relabelling}
-    For the sitewise basis relabellings of
-    Theorem~\ref{thm:peps_regional_basis_relabelling}, the marginal
-    $\rho_X$ of the same final vector $\phi=\widehat\Psi(x)$ satisfies
+    Under the sitewise relabellings $E_X$ of Lemma~\ref{thm:peps_regional_basis_relabelling}, the marginal $\rho_X$ of the same final vector $\phi=\widehat\Psi(x)$ satisfies
     \begin{align}
         E_X\rho_XE_X^*
          & =\operatorname{Tr}_{V\setminus X}
-        \ketbra{E_V\phi}{E_V\phi}.
+        \ketbra{E_V\phi}{E_V\phi}
         \label{eq:peps_patch_marginal_relabelling}
     \end{align}
-    This identity holds for every tuple $x$ and every choice of weights and regulator.
-\end{theorem}
+    for every tuple $x$ and every choice of weights and regulator.
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{def:peps_patch_canonical_marginal,
         thm:peps_regional_basis_relabelling}
-    Apply~(\ref{eq:peps_marginal_basis_relabelling}) to $\xi=\phi$,
-    using the identification $J$ in
-    Definition~\ref{def:peps_patch_canonical_marginal}.
+    Apply~(\ref{eq:peps_marginal_basis_relabelling}) to $\xi=\phi$ via Definition~\ref{def:peps_patch_canonical_marginal}.
 \end{proof}
 
 % Source: OpenAI, Polynomial PEPS approximation of gapped square-grid ground states,
@@ -410,179 +304,107 @@ Its marginals are those of the same final normalized vector defined in
 % (eq:patch-simplex-derivative).
 % Source revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 
-\begin{theorem}[Trace pairing for an insertion in a nested product]
+\begin{lemma}[Trace pairing for an insertion in a nested product]
     \label{thm:peps_patch_insertion_trace}
     \lean{TNLean.PEPS.inner_regularizedPatchInsertion_eq_trace_of_outer_commute}
     \leanok
     \uses{def:peps_patch_coordinate_insertion,
         def:peps_patch_canonical_marginal}
-    Let $V$ be a finite set with finite-dimensional complex Hilbert spaces
-    $\mathcal H_v$, and let $X_0\subseteq\cdots\subseteq X_{m-1}\subseteq V$.
-    For each $k$, let $x_k$ be a positive semidefinite operator on
-    $\mathcal H_{X_k}$ and let $a_k\in\R$. Fix $b>0$ and an arbitrary
-    vector $\Omega\in\mathcal H_V$. Set
-    \begin{align*}
-        K_k     & =(x_k+bI_{X_k})^{-a_k/2}, & L_k & =\widehat{K_k}_{X_k}, \\
-        \Psi(x) & =L_{m-1}\cdots L_0\Omega, & F   & =\|\Psi(x)\|.
-    \end{align*}
-    Put $\phi=F^{-1}\Psi(x)$ when $F>0$, and $\phi=0$ when $F=0$.
-    Let $\rho_k$ be the canonical marginal of $\phi$ on $X_k$.
-    Fix $0\leq j<m$ and suppose that $[K_k,\rho_k]=0$ for every $k>j$.
-    For every complex operator $H$ on $\mathcal H_{X_j}$, the insertion
-    \begin{align*}
-        \mathcal I_j(H)
-         & =L_{m-1}\cdots L_{j+1}\widehat H_{X_j}L_{j-1}\cdots L_0\Omega
-    \end{align*}
-    satisfies
+    Let $X_0\subseteq\cdots\subseteq X_{m-1}\subseteq V$, $x_k\ge0$ on
+    $\mathcal H_{X_k}$, $a_k\in\R$, $b>0$, and $\Omega\in\mathcal H_V$. Set
+    $K_k=(x_k+bI_{X_k})^{-a_k/2}$, $L_k=\widehat{K_k}_{X_k}$,
+    $\Psi(x)=L_{m-1}\cdots L_0\Omega$, $F=\|\Psi(x)\|$,
+    and $\phi=F^{-1}\Psi(x)$ ($0$ if $F=0$), with canonical marginal $\rho_k$ on $X_k$.
+    Fix $0\le j<m$ and suppose $[K_k,\rho_k]=0$ for all $k>j$.
+    Then for every $H\in\operatorname{End}(\mathcal H_{X_j})$, the insertion $\mathcal I_j(H)$ of (\ref{eq:peps_coordinate_insertion}) satisfies
     \begin{align}
         \langle\Psi(x),\mathcal I_j(H)\rangle
          & =F^2\operatorname{Tr}(\rho_j H K_j^{-1}).
         \label{eq:peps_patch_insertion_trace}
     \end{align}
-    Empty products are identities. The operators $x_k$ need only be
-    positive semidefinite, and the weights $a_k$ may be arbitrary real numbers.
-    This is the trace calculation used in the proof of
-    \cite[Proposition~4.1]{OpenAI2026PolynomialPEPS}, before taking the real
-    part in the unitary and diagonal variations.
-\end{theorem}
+    This is the trace calculation in the proof of
+    \cite[Proposition~4.1]{OpenAI2026PolynomialPEPS}.
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:peps_patch_marginal_expectation,
         thm:peps_patch_basis_relabelling}
-    If $F=0$, then $\Psi(x)=0$ and both sides of
-    (\ref{eq:peps_patch_insertion_trace}) vanish. Suppose that $F>0$.
-    Every $K_k$ is positive definite and invertible, and so is its identity
-    extension $L_k$. Set $A=L_{m-1}\cdots L_{j+1}$ and
-    $Y=\widehat{H K_j^{-1}}_{X_j}$. Cancellation in the ordered product gives
-    $\mathcal I_j(H)=A Y A^{-1}\Psi(x)$. Since $\Psi(x)=F\phi$ and $F$ is real,
-    \begin{align*}
-        \langle\Psi(x),\mathcal I_j(H)\rangle
-         & =F^2\langle\phi,A Y A^{-1}\phi\rangle.
-    \end{align*}
-    Choose sitewise orthonormal coordinates; the marginal transforms by the
-    same unitary relabelling, preserving the trace pairing. If $T$ is an
-    operator on $\mathcal H_{X_k}$ and $k>j$, the regional expectation identity,
-    cyclicity of the trace, and $[K_k,\rho_k]=0$ give
-    \begin{align*}
+    If $F=0$, both sides of (\ref{eq:peps_patch_insertion_trace}) vanish. Assume $F>0$.
+    Since $L_k$ is invertible, setting $A=L_{m-1}\cdots L_{j+1}$ and
+    $Y=\widehat{H K_j^{-1}}_{X_j}$ gives $\mathcal I_j(H)=A Y A^{-1}\Psi(x)$ and
+    $\langle\Psi(x),\mathcal I_j(H)\rangle=F^2\langle\phi,A Y A^{-1}\phi\rangle$.
+    For any $T\in\operatorname{End}(\mathcal H_{X_k})$ with $k>j$, (\ref{eq:peps_complex_expectation}), trace cyclicity, and $[K_k,\rho_k]=0$ give
+    \begin{align}
         \langle\phi,L_k\widehat T_{X_k}L_k^{-1}\phi\rangle
          & =\operatorname{Tr}(K_k^{-1}\rho_k K_k T)
         =\operatorname{Tr}(\rho_k T)
-        =\langle\phi,\widehat T_{X_k}\phi\rangle.
-    \end{align*}
-    Apply this identity successively for $k=m-1,m-2,\ldots,j+1$.
-    At each step the remaining conjugated operator is supported on $X_k$,
-    because all its factors are supported on regions contained in $X_k$.
-    It follows that
-    $\langle\phi,A Y A^{-1}\phi\rangle
-        =\langle\phi,Y\phi\rangle
-        =\operatorname{Tr}(\rho_j H K_j^{-1})$, which proves the assertion.
+        =\langle\phi,\widehat T_{X_k}\phi\rangle.\notag
+    \end{align}
+    Since $X_j\subseteq\cdots\subseteq X_k$, descending induction on $k=m-1,\ldots,j+1$ gives
+    $\langle\phi,A Y A^{-1}\phi\rangle=\langle\phi,Y\phi\rangle=\operatorname{Tr}(\rho_j H K_j^{-1})$.
 \end{proof}
 
 
-\begin{theorem}[Logarithmic radius derivative under outer commutations]
+\begin{lemma}[Logarithmic radius derivative under outer commutations]
     \label{thm:peps_patch_log_radius_derivative_of_outer_commute}
     \lean{TNLean.PEPS.hasDerivAt_log_regularizedPatchObjective_exp_neg_of_outer_commute}
     \leanok
     \uses{thm:peps_patch_radius_derivative,thm:peps_patch_insertion_trace,
         def:peps_patch_canonical_marginal}
-    Let $V$ be a finite ordered set with finite local configuration sets $A_v$,
-    and put $\mathcal H_X=\ell^2(\prod_{v\in X}A_v;\C)$.
-    Let $X_0\subseteq\cdots\subseteq X_{m-1}\subseteq V$, let $a_j\geq0$,
-    and let $x_j$ be density matrices on $\mathcal H_{X_j}$.
-    Fix a unit vector $\Omega\in\mathcal H_V$.
-    For $r\in\R$, define
-    \[
-        K_j(r)=(x_j+e^{-r}I_{X_j})^{-a_j/2},\qquad
-        \Psi(r)=\widehat K_{m-1}(r)\cdots\widehat K_0(r)\Omega,
-        \qquad F(r)=\|\Psi(r)\|,
-    \]
-    where a hat denotes extension by the identity.
-    Let $\rho_j(r)$ be the reduced density matrix of
-    $\Psi(r)/F(r)$ on $X_j$.
-    Suppose that, at a fixed $R\in\R$,
-    \[
-        K_k(R)\rho_k(R)=\rho_k(R)K_k(R)
-        \qquad\text{for all }0\leq j<k<m.
-    \]
-    Then
-    \begin{equation}
+    Let $X_0\subseteq\cdots\subseteq X_{m-1}\subseteq V$, $a_j\ge0$,
+    $x_j\in\mathcal D_{X_j}$, and $\|\Omega\|=1$.
+    For $r\in\R$, set $K_j(r)=(x_j+e^{-r}I_{X_j})^{-a_j/2}$,
+    $\Psi(r)=\widehat K_{m-1}(r)\cdots\widehat K_0(r)\Omega$,
+    and $F(r)=\|\Psi(r)\|$, with reduced density matrix $\rho_j(r)$ of $\Psi(r)/F(r)$ on $X_j$.
+    If $[K_k(R),\rho_k(R)]=0$ for all $0\le j<k<m$ at a fixed $R\in\R$, then
+    \begin{align}
         \left.\frac{d}{dr}\log F(r)\right|_{r=R}
         =\sum_{j=0}^{m-1}\frac{a_j}{2}
         \operatorname{Re}\Tr\!\left(
         \rho_j(R)e^{-R}(x_j+e^{-R}I_{X_j})^{-1}\right).
         \label{eq:peps_patch_log_radius_derivative}
-    \end{equation}
-    Regions may repeat, the matrices $x_j$ may be singular, and zero weights
-    and the empty product are allowed. The tuple $(x_j)$ is fixed as $r$ varies.
-    This conditional identity is the trace computation in the
+    \end{align}
+    This is the trace computation in the
     \href{https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex\#L453-L466}{radius argument for regularized patches}.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
-    The positive shifts make every factor invertible, so $F(r)>0$.
-    Differentiate $\frac12\log\|\Psi(r)\|^2$ and apply the ordered
-    insertion formula. For the term at position $j$, the assumed commutations
-    and nested regions give the insertion trace identity. Writing $b=e^{-R}$,
-    the inserted local derivative followed by $K_j(R)^{-1}$ is
-    $(a_j/2)b(x_j+bI)^{-1}$. The common factor $F(R)^2$ cancels
-    the denominator from differentiating the logarithm, yielding
-    (\ref{eq:peps_patch_log_radius_derivative}).
+    Since $K_j(r)$ is invertible, $F(r)>0$.
+    Differentiating $\frac12\log\|\Psi(r)\|^2$ via (\ref{eq:peps_patch_radius_derivative}) and applying (\ref{eq:peps_patch_insertion_trace}) with $b=e^{-R}$ and $H K_j(R)^{-1}=\frac{a_j}{2}b(x_j+bI)^{-1}$ cancels $F(R)^2$ and yields (\ref{eq:peps_patch_log_radius_derivative}).
 \end{proof}
 
-\begin{theorem}[Uniform bound for the logarithmic radius derivative]
+\begin{lemma}[Uniform bound for the logarithmic radius derivative]
     \label{thm:peps_patch_uniform_log_radius_derivative}
     \lean{TNLean.PEPS.exists_hasDerivAt_log_regularizedPatchObjective_exp_neg_uniform}
-    Let $V$ be a finite ordered set with finite local configuration sets $A_v$,
-    and write $\mathcal H_X=\ell^2(\prod_{v\in X}A_v;\C)$.
-    Fix regions $X_0,\ldots,X_{m-1}\subseteq V$, nonnegative weights $a_j$,
-    and a unit vector $\Omega\in\mathcal H_V$. Put $\kappa=\sum_j a_j$.
-    For density matrices $x_j$ on $\mathcal H_{X_j}$, define
-    \begin{align}
-        \Psi_x(r) & =\widehat{(x_{m-1}+e^{-r}I)^{-a_{m-1}/2}}
-        \cdots\widehat{(x_0+e^{-r}I)^{-a_0/2}}\Omega,         \\
-        F_x(r)    & =\|\Psi_x(r)\|,
-    \end{align}
-    where a hat denotes extension by the identity outside the indicated region.
-    If $T\geq0$, then for every feasible tuple $x$ and every $R\in[0,T]$,
-    the derivative of $\log F_x$ exists at $R$ and satisfies
+    Fix $X_0,\ldots,X_{m-1}\subseteq V$, $a_j\ge0$ with $\kappa=\sum_j a_j$,
+    and a unit vector $\Omega\in\mathcal H_V$.
+    For $x\in\mathcal D$, set
+    $\Psi_x(r)=\widehat{(x_{m-1}+e^{-r}I)^{-a_{m-1}/2}}\cdots\widehat{(x_0+e^{-r}I)^{-a_0/2}}\Omega$
+    and $F_x(r)=\|\Psi_x(r)\|$.
+    Then for every $T\ge0$, $x\in\mathcal D$, and $R\in[0,T]$,
     \begin{align}
         \left|\frac{d}{dr}\log F_x(r)\bigg|_{r=R}\right|
          & \leq \frac{\kappa}{2}\,2^{\kappa/2}e^{\kappa T/2}.
         \label{eq:peps_patch_uniform_log_radius_derivative}
     \end{align}
-    No nesting or commutation is required. The bound includes repeated regions,
-    singular densities, zero weights and the empty product.
     Source: the
     \href{https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex\#L433-L451}{uniform local Lipschitz estimate for regularized patches}.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \uses{thm:peps_patch_radius_derivative,thm:peps_regularized_patch_bounds}
-    Fix $x$ and $R$, and put $b=e^{-R}$ and $c=\kappa/2$.
-    The positive shift makes all filters invertible, so $F_x(R)>0$.
-    For $K_j=(x_j+bI)^{-a_j/2}$ and
-    $D_j=(a_j/2)b(x_j+bI)^{-a_j/2-1}$, the spectral bounds give
-    \begin{align}
-        \|K_j\| & \leq b^{-a_j/2},        \\
-        \|D_j\| & \leq (a_j/2)b^{-a_j/2}.
-    \end{align}
-    Extension by the identity preserves these upper bounds.
-    Apply the ordered insertion formula and estimate each product in its
-    original order. Summing over its positions yields
-    $\|\Psi_x'(R)\|\leq c b^{-c}$.
-    The lower norm bound is $F_x(R)\geq(1+b)^{-c}$.
-    Differentiating $\frac12\log\|\Psi_x(r)\|^2$ and using
-    Cauchy--Schwarz therefore gives
+    Set $b=e^{-R}$ and $c=\kappa/2$.
+    For $K_j=(x_j+bI)^{-a_j/2}$ and $D_j=\frac{a_j}{2}b(x_j+bI)^{-a_j/2-1}$, Lemma~\ref{thm:peps_regularized_patch_bounds} gives
+    $\|K_j\|\le b^{-a_j/2}$, $\|D_j\|\le\frac{a_j}{2}b^{-a_j/2}$, and $F_x(R)\ge(1+b)^{-c}$.
+    Summing over $j$ in (\ref{eq:peps_patch_radius_derivative}) yields $\|\Psi_x'(R)\|\le c b^{-c}$.
+    By Cauchy--Schwarz and $0\le R\le T$,
     \begin{align}
         |(\log F_x)'(R)|
          & \leq\frac{\|\Psi_x'(R)\|}{F_x(R)}
         \leq c\frac{b^{-c}}{(1+b)^{-c}}
-        =c(1+e^R)^c.
+        =c(1+e^R)^c
+        \le c(2e^T)^c.\notag
     \end{align}
-    Since $R\leq T$ and $T\geq0$, one has $1+e^R\leq2e^T$.
-    Raising this inequality to the nonnegative power $c$ proves
-    (\ref{eq:peps_patch_uniform_log_radius_derivative}).
-    No division by a weight is used.
 \end{proof}
 
 \begin{definition}[Diagonal coordinate objective]
@@ -593,101 +415,76 @@ Its marginals are those of the same final normalized vector defined in
     }
     \leanok
     \uses{def:peps_regularized_patch_objective}
-    Fix a coordinate $j$ and a unitary $U$ on $\mathcal H_{X_j}$.
-    For a real vector $y=(y_i)$ indexed by an orthonormal basis of this
-    space, let $x[y]$ agree with $x$ at every coordinate except $j$, and set
+    Fix $0\le j<m$ and a unitary $U$ on $\mathcal H_{X_j}$.
+    For a real vector $y=(y_i)$ indexed by an orthonormal basis of $\mathcal H_{X_j}$,
+    define $x[y]$ by $x[y]_k=x_k$ for $k\ne j$ and
     \begin{align}
         x[y]_j & =U\operatorname{diag}(y)U^*, &
         f(y)   & =F(x[y])^2.
         \label{eq:peps_patch_diagonal_objective}
     \end{align}
-    The factors in $F$ retain their original order and act on the original
-    vector $\Omega$. This is the diagonal variation in the
+    This is the diagonal variation in the
     \href{https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex\#L170-L191}{proof of Proposition~4.1}.
 \end{definition}
 
-\begin{theorem}[Restriction of a patch minimum to the diagonal simplex]
+\begin{lemma}[Restriction of a patch minimum to the diagonal simplex]
     \label{thm:peps_patch_diagonal_minimum}
     \lean{TNLean.PEPS.isMinOn_regularizedPatchDiagonalObjective}
     \leanok
     \uses{def:peps_patch_diagonal_objective}
-    Let $b>0$, let $x\in\mathcal D$ minimize $F$ on $\mathcal D$, and
-    suppose that $x_j=U\operatorname{diag}(s)U^*$. For every $y$ with
-    $y_i\ge0$ for all $i$ and $\sum_i y_i=1$, one has
+    If $b>0$, $x\in\mathcal D$ minimizes $F$ on $\mathcal D$, and
+    $x_j=U\operatorname{diag}(s)U^*$, then for every $y$ with
+    $y_i\ge0$ and $\sum_i y_i=1$,
     \begin{align}
         f(s) & \le f(y).
         \label{eq:peps_patch_diagonal_minimum}
     \end{align}
-    The weights may be arbitrary real numbers, and $\Omega$ may be any
-    vector, including zero.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{def:peps_patch_diagonal_objective}
-    If $y$ belongs to the probability simplex, then
-    $U\operatorname{diag}(y)U^*$ is positive semidefinite and has trace
-    $\sum_i y_i=1$. Hence $x[y]\in\mathcal D$. The diagonal expression
-    for $x_j$ gives $x[s]=x$, so minimality yields
-    $0\le F(x[s])=F(x)\le F(x[y])$. Squaring gives
-    (\ref{eq:peps_patch_diagonal_minimum}).
+    Since $y_i\ge0$ and $\sum_i y_i=1$, $x[y]_j\ge0$ and $\tr x[y]_j=1$, so $x[y]\in\mathcal D$.
+    From $x[s]=x$ and minimality of $x$, $0\le F(x[s])=F(x)\le F(x[y])$, which squares to (\ref{eq:peps_patch_diagonal_minimum}).
 \end{proof}
 
-\begin{theorem}[Clipped spectra at a regularized patch minimum]
+\begin{lemma}[Clipped spectra at a regularized patch minimum]
     \label{thm:peps_patch_minimum_clipped}
     \leanok
     \lean{TNLean.PEPS.exists_unitary_diagonal_clipped_of_isMinOn_regularizedPatchObjective}
     \uses{def:peps_regularized_patch_objective,def:peps_patch_canonical_marginal}
-    Let $X_0\subseteq\cdots\subseteq X_{m-1}$, let $a_j>0$ and $b>0$,
-    and let $\Omega$ be a unit vector. Suppose that $x\in\mathcal D$
-    minimizes $F$ on $\mathcal D$. Write $\rho_j$ for the marginal on $X_j$
-    of the normalized output $\Psi(x)/\|\Psi(x)\|$.
-    For every $j$, there are a unitary $U_j$, real families $s_j,p_j$,
-    and a scalar $0<\lambda_j\leq1$ such that
+    Let $X_0\subseteq\cdots\subseteq X_{m-1}$, $a_j>0$, $b>0$,
+    and $\|\Omega\|=1$. If $x\in\mathcal D$
+    minimizes $F$ on $\mathcal D$ and $\rho_j$ is the marginal on $X_j$
+    of $\Psi(x)/\|\Psi(x)\|$, then for each $j$ there exist a unitary $U_j$, real tuples $s_j,p_j$,
+    and $0<\lambda_j\le1$ such that
     \begin{align}
         x_j       & = U_j\operatorname{diag}(s_j)U_j^*, \notag \\
         \rho_j    & = U_j\operatorname{diag}(p_j)U_j^*, \notag \\
         s_{j,i}+b & = \max\{p_{j,i}/\lambda_j,b\}.
         \label{eq:peps_minimum_clipped}
     \end{align}
-    Repeated regions retain independent density variables.
     This is the clipped spectral formula in the
     \href{https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex\#L170-L200}{proof of Proposition 4.1}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_ordered_patch_minimizer,thm:peps_ordered_patch_marginal_coordinates,thm:peps_patch_marginal_expectation}
-    The indexed minimum gives a minimum over ordered factor lists by
-    Theorem~\ref{thm:peps_ordered_patch_minimizer}, and
-    Theorem~\ref{thm:peps_ordered_patch_marginal_coordinates} identifies their
-    normalized marginals. Stationarity of the ordered patch objective and the
-    first-order inequalities for normalized patch outputs in the companion
-    volume~\cite[``Stationarity of the ordered patch objective'' and
-        ``First-order inequalities for normalized patch outputs'']{QICLean2026Blueprint}
-    therefore give $x_j\rho_j=\rho_jx_j$ and
+    By Lemmas~\ref{thm:peps_ordered_patch_minimizer} and~\ref{thm:peps_ordered_patch_marginal_coordinates}, $x$ minimizes the ordered-list objective and shares the normalized marginals $\rho_j$. Stationarity and the first-order inequalities in~\cite[``Stationarity of the ordered patch objective'' and ``First-order inequalities for normalized patch outputs'']{QICLean2026Blueprint} yield $[x_j,\rho_j]=0$ and, for every density matrix $y$ commuting with $x_j$,
     \begin{align}
         \operatorname{Re}\tr\bigl(\rho_j(x_j+bI)^{-1}y\bigr)
-         & \leq \operatorname{Re}\tr\bigl(\rho_j(x_j+bI)^{-1}x_j\bigr)
+         & \leq \operatorname{Re}\tr\bigl(\rho_j(x_j+bI)^{-1}x_j\bigr).
         \label{eq:peps_minimum_density_variation}
     \end{align}
-    for every density matrix $y$ commuting with $x_j$.
-    Both $x_j$ and $\rho_j$ are positive semidefinite with trace one.
-    The clipped joint-eigenvalue theorem in the companion
-    volume~\cite[``Clipped joint eigenvalues'']{QICLean2026Blueprint}, applied
-    to~(\ref{eq:peps_minimum_density_variation}), gives
-    (\ref{eq:peps_minimum_clipped}) and $0<\lambda_j\leq1$.
+    Applying~\cite[``Clipped joint eigenvalues'']{QICLean2026Blueprint} to $x_j,\rho_j\ge0$ of trace $1$ and~(\ref{eq:peps_minimum_density_variation}) gives (\ref{eq:peps_minimum_clipped}) with $0<\lambda_j\le1$.
 \end{proof}
 
-\begin{theorem}[Logarithmic filter ratios at a patch minimum]
+\begin{lemma}[Logarithmic filter ratios at a patch minimum]
     \label{thm:peps_patch_minimum_filter_log_ratio}
     \lean{TNLean.PEPS.exists_clipped_filter_of_isMinOn_regularizedPatchObjective}
     \leanok
     \uses{def:peps_regularized_patch_objective,def:peps_patch_canonical_marginal}
-    Let $X_0\subseteq\cdots\subseteq X_{m-1}$, let $a_j>0$ and $b>0$,
-    and let $\Omega$ be a unit vector. Suppose that $x\in\mathcal D$
-    minimizes $F$ on $\mathcal D$, and write $\rho_j$ for the marginal on
-    $X_j$ of the normalized output $\Psi(x)/\|\Psi(x)\|$. For every $j$,
-    the filter $K_j=(x_j+bI_{X_j})^{-a_j/2}$ commutes with $\rho_j$, and
-    there are a unitary $W_j$ and real families $l_j,p_j$ with all
-    $l_{j,i}>0$ such that
+    Under the hypotheses of Lemma~\ref{thm:peps_patch_minimum_clipped},
+    for each $j$ the filter $K_j=(x_j+bI_{X_j})^{-a_j/2}$ satisfies $[K_j,\rho_j]=0$, and
+    there exist a unitary $W_j$ and real tuples $l_j,p_j$ with $l_{j,i}>0$ such that
     \begin{align}
         K_j & =W_j\operatorname{diag}(l_j)W_j^*,\qquad
         \rho_j=W_j\operatorname{diag}(p_j)W_j^*, \notag           \\
@@ -695,50 +492,39 @@ Its marginals are those of the same final normalized vector defined in
             & \le\frac{a_j}2\bigl|\log p_{j,i}-\log p_{j,k}\bigr|
         \label{eq:peps_patch_filter_log_ratio}
     \end{align}
-    whenever $p_{j,i}>0$ and $p_{j,k}>0$. Repeated and empty regions are
-    admitted. This is the logarithmic ratio estimate in the
+    whenever $p_{j,i},p_{j,k}>0$. This is the logarithmic ratio estimate in the
     \href{https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex\#L201-L212}{proof of Proposition 4.1}.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_patch_minimum_clipped,
         thm:peps_ordered_patch_normalized_coordinates,
         thm:peps_ordered_patch_marginal_coordinates}
-    Theorem~\ref{thm:peps_patch_minimum_clipped} gives a unitary $U_j$
-    diagonalizing $x_j$ and $\rho_j$ together, with
-    $s_{j,i}+b=\max\{p_{j,i}/\lambda_j,b\}$ and $0<\lambda_j\le1$.
-    Hence $K_j$ is diagonal in the same basis with positive eigenvalues
-    $l_{j,i}=(s_{j,i}+b)^{-a_j/2}$, and it commutes with $\rho_j$. The
-    function $t\mapsto\log\max\{t/\lambda_j,b\}$ changes by at most
-    $|\log t-\log t'|$ between positive arguments $t,t'$. Multiplying by
-    $a_j/2$ gives (\ref{eq:peps_patch_filter_log_ratio}).
+    By (\ref{eq:peps_minimum_clipped}), $K_j$ is diagonal in the basis $W_j=U_j$ with eigenvalues
+    $l_{j,i}=(s_{j,i}+b)^{-a_j/2}=\max\{p_{j,i}/\lambda_j,b\}^{-a_j/2}>0$, so $[K_j,\rho_j]=0$. Since $t\mapsto\log\max\{t/\lambda_j,b\}$ is $1$-Lipschitz in $\log t$ on $(0,\infty)$, multiplying by $a_j/2$ gives (\ref{eq:peps_patch_filter_log_ratio}).
 \end{proof}
 
-\begin{theorem}[Energy of a minimizing nested patch output]
+\begin{lemma}[Energy of a minimizing nested patch output]
     \label{thm:peps_nested_patch_minimizer_energy}
     \lean{TNLean.PEPS.Approximation.SquareHamiltonian.nestedPatch_minimizer_energy_le}
     \leanok
     \uses{def:polynomial_peps_model,def:square_area_law_hamiltonian,
         def:square_area_law_state,def:peps_nested_patches,
         def:peps_regularized_patch_objective,def:peps_regularized_patch_minimum}
-    Let $H$ be an original square Hamiltonian with interaction bound
-    $J\ge0$, and let $\Delta>0$. Let $\Omega$ be a unit vector and $E_0$ a
-    real number with $H\Omega=E_0\Omega$ and
-    $H-E_0I\ge\Delta(I-|\Omega\rangle\langle\Omega|)$. Fix an order on the
-    sites of the integer domain, a centre $c$, and reals $u\ge4$,
-    $0<\kappa\le1$ and $b>0$. Use the nested patches $X_j=K(c,r_j)$, $0\le j<m$,
-    with the equal weights $a_j=\kappa/m$ and the input vector $U\Omega$.
-    If $x\in\mathcal D$ minimizes $F$ on $\mathcal D$ and
-    $\phi=\widehat\Psi(x)$, then
+    Let $H$ be an original square Hamiltonian with interaction bound $J\ge0$,
+    $\Delta>0$, and $\Omega$ a unit vector satisfying (\ref{eq:polynomial_peps_projector_gap}).
+    Fix a site order on $\Lambda_L$, a centre $c$, $u\ge4$,
+    $0<\kappa\le1$, and $b>0$, and use the nested patches $X_j=K(c,r_j)$ ($0\le j<m$) of Definition~\ref{def:peps_nested_patches}
+    with weights $a_j=\kappa/m$ and input $U\Omega$.
+    If $x\in\mathcal D$ minimizes $F$ on $\mathcal D$ and $\phi=\widehat\Psi(x)$, then
     \begin{align}
         \operatorname{Re}\langle\phi,H_{\mathrm{int}}\phi\rangle-E_0
          & \le36q^2J\kappa^2.
         \label{eq:peps_nested_patch_minimizer_energy}
     \end{align}
-    Repeated clipped patches retain independent densities, and no density
-    is assumed nonsingular. This is the energy bound in the
+    This is the energy bound in the
     \href{https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex\#L213-L336}{proof of Proposition 4.1}.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_regularized_patch_minimum,thm:peps_nested_patch_sizes,
@@ -749,42 +535,25 @@ Its marginals are those of the same final normalized vector defined in
         thm:peps_nested_patch_crossing,thm:area_law_nearest_neighbor_budget,
         thm:area_law_crossing_support_count,
         thm:peps_nested_patch_quadratic_sum}
-    The weights are positive, so $\phi$ is a unit vector, and they are at
-    most one. Write $H_{\mathrm{int}}$ as a sum of Hermitian site and edge
-    terms $T_i$, supported on single sites or edges $D_i$, with
-    $\|T_i\|\le J$. The filters are invertible, so
-    $\phi$ is the normalized image of the gapped ground vector $U\Omega$
-    under the ordered filter product. Each site term crosses no patch, and
-    each edge crosses at most one selected patch. For a term $T_i$ crossing
-    $X_j$, let $d_{ij}=q^{|D_i\cap X_j|}$ be the dimension of its support
-    inside $X_j$. The logarithmic ratio estimate of
-    Theorem~\ref{thm:peps_patch_minimum_filter_log_ratio} at that single
-    index, together with $a_j\le1$, gives
+    Here $0<a_j\le1$ and $\|\phi\|=1$. By Lemmas~\ref{thm:square_nearest_neighbor_terms} and~\ref{thm:peps_nested_patch_crossing}, $H_{\mathrm{int}}=\sum_i T_i$ with $\|T_i\|\le J$, where each support $D_i$ crosses at most one $X_j$. With $d_{ij}=q^{|D_i\cap X_j|}$, (\ref{eq:peps_patch_filter_log_ratio}) and $a_j\le1$ yield
     \begin{align}
         \operatorname{Re}\langle\phi,H_{\mathrm{int}}\phi\rangle-E_0
          & \le\sum_{j=0}^{m-1}a_j^2
         \sum_{T_i\text{ crossing }X_j}d_{ij}^2J.
         \label{eq:peps_nested_patch_single_crossing_energy}
     \end{align}
-    A crossing edge has exactly one endpoint in $X_j$, so $d_{ij}=q$ and the
-    inner sum equals $q^2J|\partial_\Lambda X_j|$. Hence the right side of
-    (\ref{eq:peps_nested_patch_single_crossing_energy}) equals
-    $q^2J\sum_ja_j^2|\partial_\Lambda X_j|$, and the quadratic boundary sum
-    bounds this by $36q^2J\kappa^2$.
+    Every crossing edge has $|D_i\cap X_j|=1$, so $d_{ij}=q$ and the inner sum is $q^2J|\partial_\Lambda X_j|$ by Lemma~\ref{thm:area_law_nearest_neighbor_budget}. Applying (\ref{eq:peps_nested_patch_quadratic_sum}) bounds (\ref{eq:peps_nested_patch_single_crossing_energy}) by $36q^2J\kappa^2$.
 \end{proof}
 
-The source treats on-site and nearest-neighbour interactions. The next three
-entries extend the energy bound to interactions of range $R\ge1$, using the
-patches of Definition~\ref{def:peps_range_nested_patches}; they are not in
-the source. Put $s_R=2\lceil R/2\rceil$, $v_R=1+2R(R+1)$ and
-$\mu_R=2^{v_R-1}$.
+The source treats on-site and nearest-neighbour interactions; the next three
+entries extend the energy bound to range $R\ge1$ using Definition~\ref{def:peps_range_nested_patches} (not in the source), with $s_R=2\lceil R/2\rceil$, $v_R=1+2R(R+1)$, and $\mu_R=2^{v_R-1}$.
 
 \begin{definition}[Energy coefficient at range $R$]
     \label{def:peps_range_patch_energy_constant}
     \lean{TNLean.PEPS.Approximation.rangePatchEnergyConstant}
     \leanok
     \uses{def:peps_range_nested_patches}
-    For integers $q,R\ge0$ and real $J$, put
+    For integers $q,R\ge0$ and $J\in\R$, set
     \begin{align}
         C_E(q,R,J)=18\,s_R\,R\,\mu_R\,q^{2(v_R-1)}J.
         \label{eq:peps_range_patch_energy_constant}
@@ -797,14 +566,12 @@ $\mu_R=2^{v_R-1}$.
         TNLean.PEPS.Approximation.rangePatchEnergyConstant_pos}
     \leanok
     \uses{def:peps_range_patch_energy_constant}
-    If $J\ge0$, then $C_E(q,R,J)\ge0$. If $q,R\ge1$ and $J>0$, then
-    $C_E(q,R,J)>0$.
+    For $J\ge0$, $C_E(q,R,J)\ge0$; if $q,R\ge1$ and $J>0$, then $C_E(q,R,J)>0$.
 \end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_range_nested_patch_sizes}
-    Every factor is nonnegative, and positive under the second set of
-    hypotheses, because $s_R\ge2$ for $R\ge1$.
+    Immediate from (\ref{eq:peps_range_patch_energy_constant}) and $s_R\ge2$ for $R\ge1$.
 \end{proof}
 
 \begin{lemma}[Crossing sum of one patch at range $R$]
@@ -812,8 +579,7 @@ $\mu_R=2^{v_R-1}$.
     \lean{TNLean.PEPS.Approximation.sum_crossingTerms_rangeNestedPatch_le}
     \leanok
     \uses{def:area_law_hamiltonian,def:peps_range_nested_patches}
-    Let $J\ge0$, $u\ge0$ and $0\le j<m_R$, and index the terms by the
-    nonempty supports $D$ of graph diameter at most $R$. Then
+    For $J\ge0$, $u\ge0$, and $0\le j<m_R$, summing over nonempty supports $D$ of graph diameter at most $R$ gives
     \begin{align}
         \sum_{D\text{ crossing }K_j}\bigl(q^{|D\cap K_j|}\bigr)^2J
          & \le R(16u+4)\,\mu_R\,q^{2(v_R-1)}J.
@@ -824,14 +590,10 @@ $\mu_R=2^{v_R-1}$.
     \leanok
     \uses{thm:peps_square_layer,thm:peps_range_nested_patch_split,
         thm:area_diamond_budget,thm:area_law_crossing_supports}
-    A support $D$ crossing $K_j$ has a site inside and a site outside, so
-    $1\le|D\cap K_j|\le|D|-1\le v_R-1$ and
-    $q^{|D\cap K_j|}\le q^{v_R-1}$, also when $q=0$. Each of its sites
-    inside $K_j$ lies in the inner layer $\mathcal N(c,r_j,R)$, which has at most
-    $R(16u+4)$ sites, and at most $\mu_R$ supports contain a given site.
+    If $D$ crosses $K_j$, then $1\le|D\cap K_j|\le|D|-1\le v_R-1$, so $q^{|D\cap K_j|}\le q^{v_R-1}$. By Lemma~\ref{thm:peps_range_nested_patch_split}, Lemma~\ref{thm:peps_square_layer}, and Theorem~\ref{thm:area_diamond_budget}, $D\cap K_j\subseteq\mathcal N(c,r_j,R)$ with $|\mathcal N(c,r_j,R)|\le R(16u+4)$, and at most $\mu_R$ supports contain any given site.
 \end{proof}
 
-\begin{theorem}[Energy of a minimizing patch output at range $R$]
+\begin{lemma}[Energy of a minimizing patch output at range $R$]
     \label{thm:peps_range_nested_patch_minimizer_energy}
     \lean{TNLean.Lattice.LocalHamiltonian.rangeNestedPatch_minimizer_energy_le}
     \leanok
@@ -839,25 +601,14 @@ $\mu_R=2^{v_R-1}$.
         def:peps_range_nested_patches,def:peps_regularized_patch_objective,
         def:peps_regularized_patch_minimum,
         def:peps_range_patch_energy_constant}
-    Let $\Lambda$ be a finite induced lattice domain, $R\ge1$ and $J\ge0$, and
-    let $H$ be a Hamiltonian on $\Lambda$ with one Hermitian term of norm at
-    most $J$ on each nonempty support of graph diameter at most $R$. Let
-    $\Psi$ be a unit vector and $E_0$ a real number with $H\Psi=E_0\Psi$ and
-    $H-E_0I\ge\Delta(I-|\Psi\rangle\langle\Psi|)$. Fix an order on the sites,
-    a centre $c$, and reals $u\ge0$, $0<\kappa\le1$ and $b>0$. Use the
-    patches $X_j=K(c,r_j)$, $0\le j<m_R$, of
-    Definition~\ref{def:peps_range_nested_patches}, with the equal weights
-    $a_j=\kappa/m_R$ and the input vector $\Psi$. If $x\in\mathcal D$
-    minimizes $F$ on $\mathcal D$ and $\phi=\widehat\Psi(x)$, then
+    Let $\Lambda$ be a finite induced lattice domain, $R\ge1$, $J\ge0$, and
+    $H$ a range-$R$ Hamiltonian on $\Lambda$ with term bound $J$ (Definition~\ref{def:area_law_hamiltonian}), and let $\Psi$ be a unit vector satisfying (\ref{eq:area_law_projector_gap}). Fix a site order, a centre $c$, $u\ge0$, $0<\kappa\le1$, and $b>0$, and use the patches $X_j=K(c,r_j)$ ($0\le j<m_R$) of Definition~\ref{def:peps_range_nested_patches} with weights $a_j=\kappa/m_R$ and input $\Psi$. If $x\in\mathcal D$ minimizes $F$ on $\mathcal D$ and $\phi=\widehat\Psi(x)$, then
     \begin{align}
         \operatorname{Re}\langle\phi,H\phi\rangle-E_0
          & \le C_E(q,R,J)\,\kappa^2.
         \label{eq:peps_range_nested_patch_minimizer_energy}
     \end{align}
-    At $R=1$ the patches are those of
-    Theorem~\ref{thm:peps_nested_patch_minimizer_energy}, which keeps the
-    sharper coefficient $36q^2J$ for nearest-neighbour interactions.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_regularized_patch_minimum,
@@ -868,42 +619,24 @@ $\mu_R=2^{v_R-1}$.
         thm:peps_range_nested_patch_split,
         lem:peps_range_patch_crossing_sum,
         thm:peps_range_nested_patch_quadratic_sum}
-    The argument of Theorem~\ref{thm:peps_nested_patch_minimizer_energy}
-    applies to the terms of $H$, since each support of graph diameter at most
-    $R$ is split by at most one patch. It gives
-    (\ref{eq:peps_nested_patch_single_crossing_energy}) with
-    $d_{ij}=q^{|D_i\cap X_j|}$. Lemma~\ref{lem:peps_range_patch_crossing_sum}
-    bounds each inner sum by $R(16u+4)\mu_Rq^{2(v_R-1)}J$, and
-    (\ref{eq:peps_range_nested_patch_budget}) bounds
-    $(16u+4)\sum_ja_j^2$ by $18s_R\kappa^2$.
+    By Lemma~\ref{thm:peps_range_nested_patch_split}, each support of diameter at most $R$ crosses at most one $X_j$, so the proof of Lemma~\ref{thm:peps_nested_patch_minimizer_energy} gives (\ref{eq:peps_nested_patch_single_crossing_energy}) with $d_{ij}=q^{|D_i\cap X_j|}$. Combining (\ref{eq:peps_range_patch_crossing_sum}) and (\ref{eq:peps_range_nested_patch_budget}) yields (\ref{eq:peps_range_nested_patch_minimizer_energy}).
 \end{proof}
 
-\begin{theorem}[Marginal closeness at an admissible filter parameter]
+\begin{lemma}[Marginal closeness at an admissible filter parameter]
     \label{thm:peps_nested_patch_minimizer_marginal_closeness_explicit}
     \lean{TNLean.PEPS.Approximation.nestedPatch_minimizer_marginal_closeness}
     \leanok
     \uses{def:polynomial_peps_model,def:square_area_law_state,
         def:peps_nested_patches,def:peps_regularized_patch_objective,
         def:peps_patch_canonical_marginal}
-    Let $q\ge0$ be an integer, $J\ge0$ and $\Delta>0$, and let $\kappa$
-    satisfy $0<\kappa\le\tfrac12$ and $36q^2J\kappa^2\le\Delta/1024$. For every
-    $L$, every original square Hamiltonian $H$ with interaction bound $J$,
-    every unit vector $\Omega$ and real $E_0$ with $H\Omega=E_0\Omega$ and
-    $H-E_0I\ge\Delta(I-|\Omega\rangle\langle\Omega|)$, every centre $c$, and
-    all reals $u\ge4$ and $b>0$, use the nested patches with equal weights
-    $a_j=\kappa/m$ and input vector $U\Omega$. If $x\in\mathcal D$ minimizes
-    $F$ on $\mathcal D$, then every region $X$ of the integer domain satisfies
+    Let $q\ge0$, $J\ge0$, $\Delta>0$, and $0<\kappa\le\tfrac12$ satisfy $36q^2J\kappa^2\le\Delta/1024$. For every $L$, original square Hamiltonian $H$ with bound $J$, unit vector $\Omega$ satisfying (\ref{eq:polynomial_peps_projector_gap}), centre $c$, $u\ge4$, and $b>0$, let $x\in\mathcal D$ minimize $F$ on $\mathcal D$ for the nested patches with $a_j=\kappa/m$ and input $U\Omega$. Then the marginal $\rho_X$ of $\widehat\Psi(x)$ on any $X\subseteq\Lambda_L$ satisfies
     \begin{align}
-        \|\rho_X-\rho_X^{U\Omega}\|_1 & \le\frac1{16},
+        \|\rho_X-\rho_X^{U\Omega}\|_1 & \le\frac1{16}.
         \label{eq:peps_nested_patch_marginal_closeness_explicit}
     \end{align}
-    where $\rho_X$ is the marginal of $\widehat\Psi(x)$. By
-    Lemma~\ref{lem:peps_patch_energy_parameter_choice}, the filter exponent
-    $\kappa(q,J,\Delta)$ of Definition~\ref{def:peps_patch_filter_exponent}
-    is such a parameter when $q\ge1$ and $J>0$. This is the marginal estimate
-    in the
+    By Lemma~\ref{lem:peps_patch_energy_parameter_choice}, $\kappa(q,J,\Delta)$ of (\ref{eq:peps_patch_filter_exponent}) is admissible when $q\ge1$ and $J>0$. This is the marginal estimate in the
     \href{https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex\#L338-L365}{proof of Proposition 4.1}.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_nested_patch_minimizer_energy,
@@ -911,56 +644,33 @@ $\mu_R=2^{v_R-1}$.
         thm:square_area_law_ground_gap,
         thm:peps_gap_marginal_one_sixteenth,
         thm:peps_regional_basis_relabelling}
-    The energy bound of
-    Theorem~\ref{thm:peps_nested_patch_minimizer_energy} gives
-    $\operatorname{Re}\langle\phi,H_{\mathrm{int}}\phi\rangle-E_0\le
-        36q^2J\kappa^2\le\Delta/1024$
-    for the unit vector $\phi=\widehat\Psi(x)$. The vector $U\Omega$ is a
-    gapped ground vector of $H_{\mathrm{int}}$, so the marginal trace-norm
-    estimate of Theorem~\ref{thm:peps_gap_marginal_one_sixteenth} gives
-    (\ref{eq:peps_nested_patch_marginal_closeness_explicit}) after the
-    regional coordinate identification.
+    For $\phi=\widehat\Psi(x)$, (\ref{eq:peps_nested_patch_minimizer_energy}) gives
+    $\operatorname{Re}\langle\phi,H_{\mathrm{int}}\phi\rangle-E_0\le 36q^2J\kappa^2\le\Delta/1024$, so Lemmas~\ref{thm:square_area_law_ground_gap} and~\ref{thm:peps_gap_marginal_one_sixteenth} yield (\ref{eq:peps_nested_patch_marginal_closeness_explicit}).
 \end{proof}
 
-\begin{theorem}[Uniform marginal closeness at a minimizing nested patch]
+\begin{lemma}[Uniform marginal closeness at a minimizing nested patch]
     \label{thm:peps_nested_patch_minimizer_marginal_closeness}
     \lean{TNLean.PEPS.Approximation.exists_uniform_nestedPatch_minimizer_marginal_closeness}
     \leanok
     \uses{def:polynomial_peps_model,def:square_area_law_state,
         def:peps_nested_patches,def:peps_regularized_patch_objective,
         def:peps_patch_canonical_marginal}
-    Let $q\ge0$ be an integer, $J\ge0$ and $\Delta>0$. There is
-    $0<\kappa\le\tfrac12$ with the following property. For every $L$, every
-    original square Hamiltonian $H$ with interaction bound $J$, every unit
-    vector $\Omega$ and real $E_0$ with $H\Omega=E_0\Omega$ and
-    $H-E_0I\ge\Delta(I-|\Omega\rangle\langle\Omega|)$, every centre $c$, and
-    all reals $u\ge4$ and $b>0$, use the nested patches with equal weights
-    $a_j=\kappa/m$ and input vector $U\Omega$. If $x\in\mathcal D$
-    minimizes $F$ on $\mathcal D$, then every region $X$ of the integer
-    domain satisfies
+    For every integer $q\ge0$, $J\ge0$, and $\Delta>0$, there exists $0<\kappa\le\tfrac12$ (depending only on $q,J,\Delta$) such that under the hypotheses of Lemma~\ref{thm:peps_nested_patch_minimizer_marginal_closeness_explicit}, every $X\subseteq\Lambda_L$ satisfies
     \begin{align}
-        \|\rho_X-\rho_X^{U\Omega}\|_1 & \le\frac1{16},
+        \|\rho_X-\rho_X^{U\Omega}\|_1 & \le\frac1{16}.
         \label{eq:peps_nested_patch_marginal_closeness}
     \end{align}
-    where $\rho_X$ is the marginal of $\widehat\Psi(x)$. The choice of
-    $\kappa$ depends only on $q$, $J$ and $\Delta$. This is the marginal
-    estimate in the
+    This is the marginal estimate in the
     \href{https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex\#L335-L365}{proof of Proposition 4.1}.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{lem:peps_patch_energy_parameter_choice,
         thm:peps_nested_patch_minimizer_marginal_closeness_explicit}
-    If $36q^2J>0$, take $\kappa$ to be the filter exponent
-    $\kappa(q,J,\Delta)$, which is positive, at most $\tfrac12$ and satisfies
-    $36q^2J\kappa^2\le\Delta/1024$ by
-    Lemma~\ref{lem:peps_patch_energy_parameter_choice}. If $36q^2J=0$, take
-    $\kappa=\tfrac12$. In both cases
-    Theorem~\ref{thm:peps_nested_patch_minimizer_marginal_closeness_explicit}
-    gives (\ref{eq:peps_nested_patch_marginal_closeness}).
+    Take $\kappa=\kappa(q,J,\Delta)$ if $36q^2J>0$ (by Lemma~\ref{lem:peps_patch_energy_parameter_choice}) and $\kappa=\tfrac12$ if $36q^2J=0$, then apply Lemma~\ref{thm:peps_nested_patch_minimizer_marginal_closeness_explicit}.
 \end{proof}
 
-\begin{theorem}[Marginal closeness at range $R$]
+\begin{lemma}[Marginal closeness at range $R$]
     \label{thm:peps_range_nested_patch_minimizer_marginal_closeness}
     \lean{TNLean.PEPS.Approximation.rangeNestedPatch_minimizer_marginal_closeness,
         TNLean.PEPS.Approximation.exists_uniform_rangeNestedPatch_minimizer_marginal_closeness}
@@ -968,24 +678,9 @@ $\mu_R=2^{v_R-1}$.
     \uses{def:area_law_hamiltonian,def:peps_range_nested_patches,
         def:peps_regularized_patch_objective,def:peps_patch_canonical_marginal,
         def:peps_range_patch_energy_constant}
-    Let $q\ge0$ and $R\ge1$ be integers, $J\ge0$ and $\Delta>0$, and let
-    $0<\kappa\le\tfrac12$ satisfy $C_E(q,R,J)\kappa^2\le\Delta/1024$. For every
-    finite induced lattice domain $\Lambda$, every Hamiltonian $H$ on $\Lambda$
-    with one Hermitian term of norm at most $J$ on each nonempty support of
-    graph diameter at most $R$, every unit vector $\Psi$ and real $E_0$ with
-    $H\Psi=E_0\Psi$ and $H-E_0I\ge\Delta(I-|\Psi\rangle\langle\Psi|)$, every
-    centre $c$, and all reals $u\ge0$ and $b>0$, use the patches of
-    Definition~\ref{def:peps_range_nested_patches} with equal weights
-    $a_j=\kappa/m_R$ and input vector $\Psi$. If $x\in\mathcal D$ minimizes
-    $F$ on $\mathcal D$, then every region $X$ of $\Lambda$ satisfies
-    $\|\rho_X-\rho_X^{\Psi}\|_1\le\tfrac1{16}$, where $\rho_X$ is the marginal
-    of $\widehat\Psi(x)$. Such a $\kappa$ exists and depends only on $q$, $R$,
-    $J$ and $\Delta$; when $C_E(q,R,J)>0$ the filter exponent $\kappa_R$ of
-    Definition~\ref{def:peps_range_patch_filter_exponent} is such a
-    parameter. This extends
-    Theorem~\ref{thm:peps_nested_patch_minimizer_marginal_closeness} to
-    interactions of range $R$ and is not in the source.
-\end{theorem}
+    Let $q\ge0$, $R\ge1$, $J\ge0$, $\Delta>0$, and $0<\kappa\le\tfrac12$ satisfy $C_E(q,R,J)\kappa^2\le\Delta/1024$. Under the hypotheses of Lemma~\ref{thm:peps_range_nested_patch_minimizer_energy}, the marginal $\rho_X$ of $\widehat\Psi(x)$ on any $X\subseteq\Lambda$ satisfies
+    $\|\rho_X-\rho_X^{\Psi}\|_1\le\tfrac1{16}$. Such a $\kappa$ depending only on $q,R,J,\Delta$ always exists (namely $\kappa_R$ of (\ref{eq:peps_range_patch_filter_exponent}) when $C_E(q,R,J)>0$).
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_range_nested_patch_minimizer_energy,
@@ -994,11 +689,7 @@ $\mu_R=2^{v_R-1}$.
         thm:peps_regularized_patch_minimum,
         thm:peps_regional_basis_relabelling,
         thm:peps_gap_marginal_one_sixteenth}
-    Theorem~\ref{thm:peps_range_nested_patch_minimizer_energy} and the choice
-    of $\kappa$ give $\operatorname{Re}\langle\phi,H\phi\rangle-E_0\le
-        \Delta/1024$, and the full-system gap converts this into the marginal
-    bound by Theorem~\ref{thm:peps_gap_marginal_one_sixteenth}.
-    If $C_E(q,R,J)=0$, take $\kappa=\tfrac12$.
+    Combine (\ref{eq:peps_range_nested_patch_minimizer_energy}) with Lemma~\ref{thm:peps_gap_marginal_one_sixteenth}, taking $\kappa=\kappa_R$ when $C_E(q,R,J)>0$ (Lemma~\ref{lem:peps_range_patch_energy_parameter_choice}) and $\kappa=\tfrac12$ when $C_E(q,R,J)=0$.
 \end{proof}
 
 \begin{definition}[The radius exponent at an area-law constant]
@@ -1006,12 +697,10 @@ $\mu_R=2^{v_R-1}$.
     \lean{TNLean.PEPS.Approximation.nestedPatchRadiusExponent}
     \leanok
     \uses{def:peps_patch_radius_exponent,def:peps_patch_filter_exponent}
-    For an integer $q$ and reals $J,\Delta,B_0,p,C_A$, put
-    $C_S=\max\{1,16C_A\}$ and $C_0=16C_S+\log8$, and let
-    $R_0(q,J,\Delta,B_0,p,C_A)$ be the radius exponent
-    (\ref{eq:peps_patch_radius_exponent}) at the constants $C_0$, $B_0$, $p$
-    and at the filter exponent $\kappa=\kappa(q,J,\Delta)$. These are the
-    choices of $C_S$, $C_Q=16C_S$, $C_0=C_Q+\log8$ and $R_0$ in the
+    For $q\in\Z$ and $J,\Delta,B_0,p,C_A\in\R$, set
+    $C_S=\max\{1,16C_A\}$, $C_0=16C_S+\log8$, and let
+    $R_0(q,J,\Delta,B_0,p,C_A)$ be $R_0(C_0,B_0,p,\kappa(q,J,\Delta))$ from
+    (\ref{eq:peps_patch_radius_exponent}), matching the constants in the
     \href{https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex\#L362-L411}{proof of Proposition 4.1}.
 \end{definition}
 
@@ -1023,31 +712,20 @@ $\mu_R=2^{v_R-1}$.
         def:peps_patch_canonical_marginal,def:peps_regional_cylinder,
         def:peps_patch_radius_exponent}
     Let $\Lambda$ be a finite induced lattice domain, $L\ge2$, $B_0,p,\kappa,C>0$,
-    $\Psi$ a unit vector, $c$ a centre, $0\le u\le B_0\log L$, and
-    $r_0\le\dots\le r_{m-1}$ with $m\ge1$. Put $X_j=K(c,r_j)$ and
-    $a_j=\kappa/m$. Assume $S_\Psi(X_j)\le C(1+u)$ for every $j$, and that for
-    every $b>0$ every minimizer of $F$ on $\mathcal D$ has all marginals
-    within trace distance $\tfrac1{16}$ of those of $\Psi$. Then there are
-    subspaces $S_j$ of the states on $X_j$ with $\dim S_j\le L^{R_0}$, where
-    $R_0$ is the radius exponent at $C_0=16C+\log8$, and a vector $v$ in the
-    sum of the cylinders $S_j\otimes\mathcal H_{X_j^c}$ with
-    $\|\Psi-v\|\le L^{-p}$.
+    $\|\Psi\|=1$, $c$ a centre, $0\le u\le B_0\log L$, and
+    $r_0\le\dots\le r_{m-1}$ ($m\ge1$). Set $X_j=K(c,r_j)$ and
+    $a_j=\kappa/m$. If $S_\Psi(X_j)\le C(1+u)$ for all $j$ and, for every $b>0$, every minimizer of $F$ on $\mathcal D$ satisfies $\|\rho_{X_j}-\rho_{X_j}^\Psi\|_1\le\tfrac1{16}$, then there exist
+    subspaces $S_j\subseteq\mathcal H_{X_j}$ with $\dim S_j\le L^{R_0}$ (where $R_0=R_0(16C+\log8,B_0,p,\kappa)$ from (\ref{eq:peps_patch_radius_exponent})) and $v\in\sum_j S_j\otimes\mathcal H_{X_j^c}$ such that $\|\Psi-v\|\le L^{-p}$.
 \end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_patch_radius_bounds,
         thm:peps_patch_minimum_growth_entropy_distance,
         thm:peps_regularized_patch_minimum,thm:peps_patch_inverse_cylinder}
-    Set $R=R_0\log L$ and $b=e^{-R}$. The entropy bound and the marginal
-    closeness give $\log N(R)\le\frac\kappa2\bigl(C_0(1+u)+R/4\bigr)$. At a
-    minimizer, the first-head expansion of
-    Theorem~\ref{thm:peps_patch_inverse_cylinder} produces subspaces of
-    dimension at most $1/b=L^{R_0}$ and a vector in the sum of their
-    cylinders within $N(R)(2b)^{\kappa/2}$ of $\Psi$, and the radius bounds of
-    Theorem~\ref{thm:peps_patch_radius_bounds} turn this into $L^{-p}$.
+    Set $R=R_0\log L$ and $b=e^{-R}$. By Lemma~\ref{thm:peps_patch_minimum_growth_entropy_distance}, $\log N(R)\le\frac\kappa2\bigl(C_0(1+u)+R/4\bigr)$ with $C_0=16C+\log8$. At a minimizer, Lemma~\ref{thm:peps_patch_inverse_cylinder} yields $S_j$ with $\dim S_j\le b^{-1}=L^{R_0}$ and $v\in\sum_j S_j\otimes\mathcal H_{X_j^c}$ satisfying $\|\Psi-v\|\le N(R)(2b)^{\kappa/2}\le L^{-p}$ by Lemma~\ref{thm:peps_patch_radius_bounds}.
 \end{proof}
 
-\begin{theorem}[Nested cylinders at a given area-law constant]
+\begin{lemma}[Nested cylinders at a given area-law constant]
     \label{thm:peps_nested_patch_cylinder_approximation_explicit}
     \lean{TNLean.PEPS.Approximation.nestedPatchRadiusExponent_pos,
         TNLean.PEPS.Approximation.SquareEntropyAreaLawAt.uniform_nestedPatch_cylinders}
@@ -1056,22 +734,14 @@ $\mu_R=2^{v_R-1}$.
         def:area_law_ground_entropy,def:square_area_law_state,
         def:peps_nested_patches,def:peps_regional_cylinder,
         def:peps_nested_patch_radius_exponent}
-    Let $q\ge2$ be an integer, $J,\Delta>0$ and $B_0,p>0$, and assume the
-    square-grid entropy area law for the ground states of the model at $J$ and
-    $\Delta$ with constant $C_A$.
-    Put $R_0=R_0(q,J,\Delta,B_0,p,C_A)$; then $R_0>0$. For every $L\ge2$,
-    every original square Hamiltonian $H$ with interaction bound $J$, every
-    unit vector $\Omega$ and real $E_0$ with $H\Omega=E_0\Omega$ and
-    $H-E_0I\ge\Delta(I-|\Omega\rangle\langle\Omega|)$, every centre $c$, and
-    every real $u$ with $4\le u\le B_0\log L$, let
-    $K_0\subseteq\dots\subseteq K_{m-1}$ be the nested patches about $c$ in the
-    integer square of side $L$. Then there are subspaces $S_j$ of the states
-    on $K_j$ with $\dim S_j\le L^{R_0}$, and a vector $v$ in the sum of the
-    cylinders $S_j\otimes\mathcal H_{K_j^c}$, such that
-    $\|U\Omega-v\|\le L^{-p}$. This is the cylinder estimate
-    \href{https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex\#L484-L563}{in the proof of Proposition 4.1}
-    with all constants explicit.
-\end{theorem}
+    Let $q\ge2$, $J,\Delta,B_0,p>0$, and assume the
+    square-grid entropy area law at $(J,\Delta)$ with constant $C_A$ (Definition~\ref{def:square_entropy_area_law_at}).
+    Then $R_0=R_0(q,J,\Delta,B_0,p,C_A)>0$, and for every $L\ge2$,
+    original square Hamiltonian $H$ with bound $J$, unit vector $\Omega$ satisfying (\ref{eq:polynomial_peps_projector_gap}), centre $c$, and $4\le u\le B_0\log L$, the nested patches
+    $K_0\subseteq\dots\subseteq K_{m-1}$ about $c$ in $\Lambda_L$ admit subspaces $S_j\subseteq\mathcal H_{K_j}$ with $\dim S_j\le L^{R_0}$ and $v\in\sum_j S_j\otimes\mathcal H_{K_j^c}$ such that
+    $\|U\Omega-v\|\le L^{-p}$. This is the explicit cylinder estimate
+    \href{https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex\#L484-L563}{in the proof of Proposition 4.1}.
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{lem:peps_closed_square_cylinder_core,
@@ -1079,47 +749,26 @@ $\mu_R=2^{v_R-1}$.
         lem:peps_patch_energy_parameter_choice,
         thm:peps_nested_patch_entropy_explicit,
         thm:peps_nested_patch_sizes}
-    Take $\kappa=\kappa(q,J,\Delta)$, which is admissible in
-    Theorem~\ref{thm:peps_nested_patch_minimizer_marginal_closeness_explicit}
-    by Lemma~\ref{lem:peps_patch_energy_parameter_choice}, and
-    $C_S=\max\{1,16C_A\}$ from
-    Theorem~\ref{thm:peps_nested_patch_entropy_explicit}. Positivity of $R_0$
-    follows from $\kappa>0$ and $C_0\ge0$. The radii are nondecreasing, so
-    Lemma~\ref{lem:peps_closed_square_cylinder_core} applies to the vector
-    $U\Omega$.
+    Apply Lemma~\ref{lem:peps_closed_square_cylinder_core} to $U\Omega$ with $\kappa=\kappa(q,J,\Delta)$ (via Lemma~\ref{lem:peps_patch_energy_parameter_choice} and Lemma~\ref{thm:peps_nested_patch_minimizer_marginal_closeness_explicit}) and $C=C_S=\max\{1,16C_A\}$ (from Lemma~\ref{thm:peps_nested_patch_entropy_explicit}).
 \end{proof}
 
-\begin{theorem}[Uniform approximation in the selected nested cylinders]
+\begin{lemma}[Uniform approximation in the selected nested cylinders]
     \label{thm:peps_nested_patch_cylinder_approximation}
     \lean{TNLean.PEPS.Approximation.SquareEntropyAreaLaw.exists_uniform_nestedPatch_cylinders}
     \leanok
     \uses{def:square_entropy_area_law,def:polynomial_peps_model,
         def:area_law_ground_entropy,def:square_area_law_state,
         def:peps_nested_patches,def:peps_regional_cylinder}
-    Assume the square-grid entropy area law. Let $q\ge2$ be an integer,
-    $J,\Delta>0$ and $B_0,p>0$. There is $R_0>0$ with the following property.
-    For every $L\ge2$, every original square Hamiltonian $H$ with interaction
-    bound $J$, every unit vector $\Omega$ and real $E_0$ with
-    $H\Omega=E_0\Omega$ and $H-E_0I\ge\Delta(I-|\Omega\rangle\langle\Omega|)$,
-    every centre $c$, and every real $u$ with $4\le u\le B_0\log L$, let
-    $K_0\subseteq\dots\subseteq K_{m-1}$ be the nested patches about $c$ in the
-    integer square of side $L$. Then there are subspaces $S_j$ of the states
-    on $K_j$ with $\dim S_j\le L^{R_0}$, and a vector $v$ in the sum of the
-    cylinders $S_j\otimes\mathcal H_{K_j^c}$, such that
+    Assume the square-grid entropy area law (Definition~\ref{def:square_entropy_area_law}). For every $q\ge2$ and $J,\Delta,B_0,p>0$, there exists $R_0>0$ (chosen before $L,H,\Omega,c,u$) such that under the hypotheses of Lemma~\ref{thm:peps_nested_patch_cylinder_approximation_explicit}, there exist subspaces $S_j\subseteq\mathcal H_{K_j}$ with $\dim S_j\le L^{R_0}$ and $v\in\sum_j S_j\otimes\mathcal H_{K_j^c}$ satisfying
     \begin{align}
         \|U\Omega-v\| & \le L^{-p}.
         \label{eq:peps_nested_patch_cylinder_approximation}
     \end{align}
-    The exponent $R_0$ is chosen before $L$, $H$, $\Omega$, $c$ and $u$. The
-    area law is a hypothesis here; its derivation from the spectral gap is
-    the separate rectangular specialization of the finite-domain area law,
-    which is not yet established. This is the cylinder estimate
+    This is the cylinder estimate
     \href{https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex\#L484-L563}{in the proof of Proposition 4.1}.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_nested_patch_cylinder_approximation_explicit}
-    The area law supplies a constant $C_A\ge0$ at $q$, $J$, $\Delta$. Take
-    $R_0=R_0(q,J,\Delta,B_0,p,C_A)$ and apply
-    Theorem~\ref{thm:peps_nested_patch_cylinder_approximation_explicit}.
+    Choose $C_A\ge0$ from Definition~\ref{def:square_entropy_area_law}, set $R_0=R_0(q,J,\Delta,B_0,p,C_A)$, and apply Lemma~\ref{thm:peps_nested_patch_cylinder_approximation_explicit}.
 \end{proof}

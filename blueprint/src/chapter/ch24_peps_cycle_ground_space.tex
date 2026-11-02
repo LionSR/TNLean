@@ -52,9 +52,10 @@
     assignment count.
 \end{proof}
 
-\begin{theorem}[The regional ground space on a cycle arc]%
+\begin{lemma}[The regional ground space on a cycle arc]%
     \label{thm:peps_cycle_region_ground_space}
-    \lean{TNLean.PEPS.map_regionGroundSpace_cycleTensorOfMPS}
+    \lean{TNLean.PEPS.map_regionGroundSpace_cycleTensorOfMPS,
+        TNLean.PEPS.mem_regionGroundSpace_cycleTensorOfMPS_iff}
     \leanok
     \uses{def:peps_region_ground_space, def:ground_space_parent,
         def:peps_cycle_arc_coordinates}
@@ -67,11 +68,13 @@
         =\mathcal G_L(A).
         \label{eq:peps_cycle_ground_space}
     \end{align}
+    Equivalently, $\phi\in\mathcal G_R$ if and only if
+    $E_R\phi\in\mathcal G_L(A)$.
     No injectivity assumption is needed. This identifies the
     one-dimensional and graph definitions in
     \cite[Section~IV.C.1]{Cirac2021Matrix}, local source lines
     1987--2011.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{lem:peps_cycle_arc_boundary_matrix}
@@ -81,4 +84,137 @@
     For $D=0$, the nonempty arc has an empty boundary-configuration
     space, while the matrix boundary space has only the zero matrix.
     Both ground spaces are therefore zero.
+\end{proof}
+
+\begin{lemma}[Regional slices and cyclic restrictions]
+    \label{thm:peps_cycle_slice_restriction}
+    \lean{TNLean.PEPS.assembleRegion_cycleArc_eq_cyclicCfg,
+        TNLean.PEPS.cycleArcPhysical_regionSliceMap,
+        TNLean.PEPS.exists_cycleArc_complement_extension}
+    \leanok
+    \uses{def:peps_cycle_arc_coordinates, def:chain_ground_space,
+        def:peps_region_parent_hamiltonian}
+    Let $R_s=\{s,s+1,\ldots,s+L-1\}$ be the arc of length $0<L<n$
+    starting at $s$. For a word $\sigma$ on $R_s$ and a full
+    background $\tau$, write $\sigma\sqcup\tau$ for the configuration
+    equal to $\sigma$ on $R_s$, read in cyclic order, and to $\tau$
+    outside $R_s$. Then for every full physical vector $\psi$,
+    \begin{align}
+        E_{R_s}\bigl(\psi(\cdot,\tau|_{R_s^c})\bigr)(\sigma)
+         & =\psi(\sigma\sqcup\tau),
+        \label{eq:peps_cycle_slice_restriction}
+    \end{align}
+    so ordering a regional slice gives the cyclic restriction
+    $\psi|_{[s,s+L-1]}$ at background $\tau$.
+    Every configuration on $R_s^c$ is the restriction of a full
+    background.
+\end{lemma}
+
+\begin{proof}\leanok
+    A site $v$ belongs to $R_s$ exactly when its cyclic offset
+    satisfies
+    \begin{align}
+        (v-s)\bmod n=(v+n-s)\bmod n<L,
+    \end{align}
+    and then it carries the letter $\sigma_{(v-s)\bmod n}$ in both
+    assemblies. Outside $R_s$ both assemblies read $\tau_v$. Hence
+    the regional assembly of $\sigma$ with $\tau|_{R_s^c}$ is
+    $\sigma\sqcup\tau$, which is
+    (\ref{eq:peps_cycle_slice_restriction}). To extend a configuration
+    $\kappa$ on $R_s^c$, fill every site of $R_s$ with the value of
+    $\kappa$ at the exterior site $s+L$. This also applies when the
+    physical alphabet is empty, since $\kappa$ then cannot exist.
+\end{proof}
+
+\begin{lemma}[The common parent space of proper cycle arcs]
+    \label{thm:peps_cycle_parent_ground_space}
+    \lean{TNLean.PEPS.regionParentGroundSpace_cycleTensorOfMPS}
+    \leanok
+    \uses{def:peps_region_parent_hamiltonian, def:chain_ground_space,
+        def:cycleTensorOfMPS}
+    Let $n\ge3$ and $0<L<n$, and let $T_A$ be the cycle tensor of a
+    matrix product family $A$. Write $\mathcal G(T_A)$ for the common
+    regional parent ground space of $T_A$ over the arcs
+    $R_s$, $s\in\{0,\ldots,n-1\}$. Then
+    \begin{align}
+        \mathcal G(T_A) & =\mathcal G_{n,L}(A).
+    \end{align}
+    No injectivity or positive physical or bond dimension is required.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:peps_cycle_slice_restriction,
+        thm:peps_cycle_region_ground_space}
+    By (\ref{eq:peps_parent_common_kernel}),
+    Lemma~\ref{thm:peps_cycle_region_ground_space} and
+    (\ref{eq:peps_cycle_slice_restriction}),
+    \begin{align}
+        \psi\in\mathcal G(T_A)
+         & \iff\forall s,\ \forall\kappa\text{ on }R_s^c:\
+        E_{R_s}\bigl(\psi(\cdot,\kappa)\bigr)\in\mathcal G_L(A)
+        \notag                                             \\
+         & \iff\forall s,\ \forall\tau:\
+        \psi|_{[s,s+L-1]}\text{ at }\tau\in\mathcal G_L(A)
+        \iff\psi\in\mathcal G_{n,L}(A).
+        \notag
+    \end{align}
+    The second equivalence uses that a full background $\tau$
+    restricts to $\kappa=\tau|_{R_s^c}$, and that every $\kappa$ is
+    such a restriction.
+\end{proof}
+
+\begin{lemma}[Physical maps in the cycle coordinates]
+    \label{thm:peps_cycle_physical_coordinates}
+    \lean{TNLean.PEPS.physicalDeform_cycleTensorOfMPS,
+        TNLean.PEPS.globalPhysicalMap_const_eq_onSiteTensorPow}
+    \leanok
+    \uses{def:cycleTensorOfMPS, def:peps_global_physical_map}
+    Applying the same physical matrix $\Lambda$ at each vertex of the
+    cycle gives the cycle tensor of $\Lambda A$. On the full physical
+    space the constant graph product map is exactly $\Lambda^{\otimes n}$.
+\end{lemma}
+
+\begin{proof}\leanok
+    Both tensor entries are
+    $\sum_j\Lambda_{ij}(A^j)_{ab}$. Both full physical maps have
+    coefficient $\prod_v\Lambda_{\sigma_v\tau_v}$ between
+    configurations $\tau$ and $\sigma$.
+\end{proof}
+
+\begin{lemma}[Chain deformation as a graph specialization]
+    \label{thm:peps_cycle_physical_parent_specialization}
+    \lean{TNLean.PEPS.map_chainGroundSpace_physicalEquiv_of_cycle}
+    \leanok
+    \uses{thm:peps_cycle_parent_ground_space,
+        thm:peps_cycle_physical_coordinates}
+    Let $n\ge3$, $0<L<n$, and let $\Lambda$ be an invertible
+    $d\times d$ matrix. Then the graph parent-space correspondence
+    specializes to
+    \begin{align}
+        \Lambda^{\otimes n}\mathcal G_{n,L}(A)
+         & =\mathcal G_{n,L}(\Lambda A).
+    \end{align}
+    This is the identity of
+    Lemma~\ref{thm:chain_ground_space_physical_rotation}, which holds
+    for all $n$ and $L$; here it is derived from the graph theorem.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:peps_region_parent_ground_space_physical_transport,
+        thm:peps_cycle_parent_ground_space,
+        thm:peps_cycle_physical_coordinates}
+    Take $F_v=\Lambda$ at every vertex in the graph correspondence
+    $\mathcal G(A^F)=F_V\mathcal G(A)$, applied to $T_A$ and the arcs
+    $R_s$. Lemma~\ref{thm:peps_cycle_physical_coordinates} gives
+    $T_A^F=T_{\Lambda A}$ and $F_V=\Lambda^{\otimes n}$, and
+    Lemma~\ref{thm:peps_cycle_parent_ground_space} identifies both
+    common parent spaces:
+    \begin{align}
+        \mathcal G_{n,L}(\Lambda A)
+         & =\mathcal G(T_{\Lambda A})
+        =\mathcal G(T_A^F)
+        =\Lambda^{\otimes n}\mathcal G(T_A)
+        =\Lambda^{\otimes n}\mathcal G_{n,L}(A).
+        \notag
+    \end{align}
 \end{proof}

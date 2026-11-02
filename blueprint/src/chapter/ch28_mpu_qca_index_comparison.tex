@@ -1,0 +1,259 @@
+\section{Finite support factors in the MPU--QCA index comparison}
+
+\begin{lemma}[Least left support of the actual two-link output family]
+    \label{lem:mpu_actual_two_link_left_support}
+    \lean{Matrix.IsUnitaryBetween.conjStarAlgEquiv,
+        Matrix.IsUnitaryBetween.conjStarAlgEquiv_apply,
+        MPOTensor.twoLinkMiddleLift,
+        MPOTensor.twoLinkOutputMap,
+        MPOTensor.twoLinkOutputMap_apply,
+        MPOTensor.twoLinkLeftOutputMap,
+        MPOTensor.twoLinkRightOutputMap,
+        MPOTensor.twoLinkOutputMap_inverse_conj_kronecker,
+        MPOTensor.leftSupportAlgebra_twoLinkOutputMap,
+        MPOTensor.twoLinkLeftSupportEquiv,
+        MPOTensor.TwoSiteStandardFormData.left_div_phys_eq_phys_div_right}
+    \leanok
+    Let $d,r,\ell$ be positive and let
+    $u:\mathbb C^d\otimes\mathbb C^d\to\mathbb C^\ell\otimes\mathbb C^r$
+    and $v:\mathbb C^r\otimes\mathbb C^\ell\to\mathbb C^d\otimes\mathbb C^d$
+    be unitary. The actual output family
+    \begin{align}
+        A & \longmapsto(v\otimes v)
+        (I_r\otimes uAu^\dagger\otimes I_\ell)(v\otimes v)^\dagger
+        \label{eq:mpu_actual_two_link_output_family}
+    \end{align}
+    is a star-homomorphism. The dimensions satisfy $\ell r=d^2$, so
+    $\ell/d=d/r$. Its least left support algebra is
+    $v(I_r\otimes M_\ell)v^\dagger$, and hence has matrix size $\ell$.
+    This is the finite output-family step in
+    \cite[Appendix, lines~2322--2334]{Cirac2017MPU}.
+    The adjoint order follows the main-text direction of $v$; the
+    Appendix correction and its distinct logarithmic factor-of-two
+    correction are recorded in \cite{gap:mpu_qca_index_normalization}.
+\end{lemma}
+\begin{proof}\leanok
+    Change the arbitrary input by the inverse of $u$. An intermediate
+    product $A_\ell\otimes B_r$ then gives exactly
+    $v(I_r\otimes A_\ell)v^\dagger\otimes
+        v(B_r\otimes I_\ell)v^\dagger$. Matrix units span the intermediate
+    algebra, so every left coefficient belongs to the first factor.
+    Conversely choose $B_r=I_r$; a diagonal right coefficient recovers
+    every element of the first factor. Leastness gives equality.
+    Conjugation by $v$ and the faithful identity-tensor embedding
+    identify it with $M_\ell$.
+\end{proof}
+
+\begin{lemma}[Coordinate transport of least finite left support]
+    \label{lem:mpu_qca_left_support_coordinate_transport}
+    \lean{Matrix.bipartiteSlice_reindex_prod,
+        Matrix.leftSupportAlgebra_map_matrixReindexStarAlgEquiv}
+    \leanok
+    Independent coordinate bijections on the two factors transport the
+    least left support algebra by the first-factor bijection.
+\end{lemma}
+\begin{proof}\leanok
+    A left coefficient in the new coordinates is exactly the
+    first-factor coordinate transport of the old coefficient, with
+    its two right indices relabelled. Apply the least-support
+    characterization in both directions.
+\end{proof}
+
+\begin{lemma}[Intersection of finite quasi-local supports]
+    \label{lem:mpu_qca_support_intersection}
+    \lean{SpinChain.commute_map_localObservable_of_singletons,
+        SpinChain.QuasiLocalSupportedIn.inter}
+    \leanok
+    An observable supported on two finite regions $\Lambda$ and $\Gamma$
+    is supported on $\Lambda\cap\Gamma$.
+\end{lemma}
+\begin{proof}\leanok
+    Any site outside the intersection lies outside at least one
+    of the two supports. The observable therefore commutes with
+    its one-site algebra. Finite one-site generation gives commutation
+    with every algebra disjoint from the intersection, and the
+    outside-commutant characterization recovers exact support.
+\end{proof}
+
+\begin{lemma}[Actual complete-interval action and its four-block output]
+    \label{lem:mpu_actual_complete_interval_four_output}
+    \lean{SpinChain.bufferedMPUQuasiLocalAut_central_interval,
+        SpinChain.bufferedMPUQuasiLocalAut_central_interval_four_output}
+    \leanok
+    \uses{lem:mpu_supplied_standard_form_actual_qca,thm:quasi_local_bulk_inclusion}
+    Under the supplied positive-block standard-form hypotheses, the
+    actual completed action sends every matrix on the complete
+    original-site interval $[a+2k,a+4k)$ to the two-link output matrix
+    on $[a+k,a+5k)$, with the indicated block-coordinate identifications.
+    In particular, its output support is this four-block interval.
+\end{lemma}
+\begin{proof}\leanok
+    Choose the actual ambient chain $[a,a+8k)$ so that every input
+    site has the required buffers. The finite-chain evaluation of
+    the completed action and the actual standard-form identity give
+    the fixed six-block output. Remove the two identity exterior
+    blocks using its exact four-block placement and canonical
+    interval inclusions.
+\end{proof}
+
+
+\begin{lemma}[Actual nearest-neighbour action after the supplied blocking]
+    \label{lem:mpu_actual_blocked_nearest_neighbour}
+    \lean{MPOTensor.originalSiteHeisenbergCentreEquiv_eq_blockedConfigEquiv,
+        MPOTensor.originalSiteHeisenbergOutputBlockEquiv,
+        SpinChain.blocked_bufferedMPUQuasiLocalAut_pair_interval,
+        SpinChain.blocked_bufferedMPUQuasiLocalAut_pair_supportedIn,
+        SpinChain.blocked_bufferedMPUQuasiLocalAut_singleton_supportedIn,
+        SpinChain.blocked_bufferedMPUQuasiLocalAut_propagatesWithin}
+    \leanok
+    \uses{lem:mpu_actual_complete_interval_four_output,
+        lem:mpu_qca_support_intersection}
+    Let $\omega$ be the actual supplied-standard-form automorphism and
+    group its original sites in blocks of length $k>0$. The resulting
+    automorphism has physical cell size $d_k=d^k$. Its actual action
+    on every two-cell interval $[a,a+2)$ is the two-link output matrix
+    on $[a-1,a+3)$. It has nearest-neighbour propagation on the blocked
+    chain, without a supplied locality hypothesis.
+\end{lemma}
+\begin{proof}\leanok
+    The actual blocking equivalence transports the complete two-block
+    input and four-block output matrices to consecutive cell coordinates.
+    A singleton belongs to either of its two adjacent input pairs.
+    Intersecting their output regions gives exactly its three-cell
+    neighbourhood. Finite one-site generation then gives this same
+    nearest-neighbour propagation for every finite support.
+\end{proof}
+
+\begin{lemma}[The actual blocked MPU has GNVW index $\ell/d_k$]
+    \label{lem:mpu_actual_blocked_gnvw_index}
+    \lean{SpinChain.blocked_bufferedMPUQuasiLocalAut_evenSupportEquiv_zero,
+        SpinChain.blocked_bufferedMPUQuasiLocalAut_supportAlgebraMatrixSize_zero,
+        SpinChain.coe_gnvwIndex_blocked_bufferedMPUQuasiLocalAut,
+        SpinChain.coe_gnvwIndex_blocked_bufferedMPUQuasiLocalAut_eq_phys_div_right}
+    \leanok
+    \uses{def:qca_consecutive_pair_coordinates,lem:star_subalgebra_coordinate_equivalences,
+        lem:mpu_actual_blocked_nearest_neighbour,
+        lem:mpu_actual_two_link_left_support,
+        lem:mpu_qca_left_support_coordinate_transport,
+        thm:qca_gnvw_index_dimtransfer}
+    Under the supplied positive-block standard-form hypotheses, the
+    actual blocked automorphism has canonical even support factor
+    $\mathcal R_0$ on the cell pair $\{-1,0\}$ isomorphic to $M_\ell$.
+    Its chosen matrix size at this cut is therefore $\ell$, and its
+    positive rational GNVW index is
+    \begin{align}
+        \operatorname{ind}_{\mathrm{QCA}}
+         & =\frac{\ell}{d_k}=\frac{d_k}{r},\qquad d_k=d^k.
+        \label{eq:mpu_qca_blocked_index_ratio}
+    \end{align}
+    This is the actual support-factor comparison after the source's
+    grouping of sites in \cite[Appendix, lines~2313--2334]{Cirac2017MPU}.
+    Independence of arbitrary regrouping is not asserted here. The
+    Appendix normalization correction is recorded in
+    \cite{gap:mpu_qca_index_normalization}.
+\end{lemma}
+\begin{proof}\leanok
+    The exact finite action identifies the canonical ordered even-pair
+    image with the actual two-link family in its left and right
+    configuration coordinates. The canonical bipartite embedding is
+    faithful, so this is an equality of finite image algebras. Transport
+    the derived least left support through those independent coordinate
+    bijections to obtain its full-matrix presentation of size $\ell$.
+    Matrix-size uniqueness computes the chosen GNVW size and ratio.
+    The actual supplied gate identity $\ell r=d_k^2$ gives the second
+    ratio presentation.
+\end{proof}
+
+
+\begin{lemma}[The periodic physical family determines the induced QCA]
+    \label{lem:mpu_actual_qca_family_independence}
+    \lean{SpinChain.mpuQuasiLocalEquiv_eq_of_mpo_eq,
+        SpinChain.mpuQuasiLocalEquiv_eq_bufferedMPUQuasiLocalAut}
+    \leanok
+    \uses{thm:mpu_actual_qca,lem:mpu_actual_blocked_nearest_neighbour}
+    Two MPU tensors on the same positive physical alphabet, possibly
+    with different bond dimensions, induce identical actual quasi-local
+    automorphisms if their periodic physical operators agree at every
+    length greater than one. The named actual automorphism also equals
+    the completed automorphism from any supplied standard form of any
+    positive block of that same tensor.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Let $U$ and $V$ be the two tensors, with bond dimensions $D$ and
+    $D'$, and let $A\in\mathcal A_\Lambda$ for a finite region
+    $\Lambda$. Choose one anchored interval $I_{b,N}$, $N>1$, containing
+    $\Lambda+\mathcal N_D$ and $\Lambda+\mathcal N_{D'}$, and write
+    $\iota_{\Lambda,I_{b,N}}$ for the canonical inclusion. Equality of
+    the periodic physical operators gives $U_b^{(N)}=V_b^{(N)}$, hence
+    \begin{align}
+        U_b^{(N)}\,\iota_{\Lambda,I_{b,N}}(A)\,U_b^{(N)\dagger}
+         & =V_b^{(N)}\,\iota_{\Lambda,I_{b,N}}(A)\,V_b^{(N)\dagger}.
+    \end{align}
+    By the finite-chain formula of Theorem~\ref{thm:mpu_actual_qca},
+    the two sides are $\Phi_U(A)$ and $\Phi_V(A)$ in the quasi-local
+    algebra. Thus $\Phi_U$ and $\Phi_V$ agree on every local algebra,
+    and continuity and completion density give $\Phi_U=\Phi_V$. The
+    supplied standard-form automorphism has the same finite evaluation
+    formula on sufficiently buffered intervals, so the same argument
+    identifies it with $\Phi_U$.
+\end{proof}
+
+\begin{lemma}[The canonical MPU index is the logarithm of its actual QCA index]
+    \label{lem:mpu_canonical_actual_log_index}
+    \lean{SpinChain.canonicalMPU_blocked_propagatesWithin,
+        SpinChain.canonicalMPU_index_eq_neg_logb_gnvwIndex}
+    \leanok
+    \uses{lem:mpu_actual_blocked_gnvw_index,lem:mpu_actual_qca_family_independence}
+    Let an MPU be in canonical form II, and let its positive-length
+    $k$-block tensor be simple. Its named actual induced automorphism,
+    grouped in cells of length $k$, has nearest-neighbour propagation.
+    At this scale its positive rational index satisfies
+    \begin{align}
+        \operatorname{ind}_{\rm MPU}
+         & =-\log_2\!\left(\operatorname{ind}_{\rm QCA}\right).
+    \end{align}
+    The canonical source gates, least support algebra, matrix size and
+    nearest-neighbour propagation are derived.
+\end{lemma}
+\begin{proof}
+    \leanok
+    The actual support formula gives
+    $\operatorname{ind}_{\rm QCA}=\ell_k/d^k$.
+    The canonical MPU index at that same simple block is
+    $-\log_2(\ell_k/d^k)$. Equality with the actual named automorphism
+    is Lemma~\ref{lem:mpu_actual_qca_family_independence}.
+\end{proof}
+
+\begin{theorem}[The actual MPU--QCA index comparison after a derived blocking]
+    \label{thm:mpu_actual_log_index_comparison}
+    \lean{SpinChain.exists_blocked_mpu_index_comparison}
+    \leanok
+    \uses{lem:mpu_canonical_actual_log_index,lem:mpu_actual_qca_family_independence}
+    Every MPU on positive physical and bond dimensions $d,D$ has a
+    positive block length $k\le D^2$ such that its actual induced QCA,
+    grouped in blocks of length $k$, has nearest-neighbour propagation
+    and
+    \begin{align}
+        \operatorname{ind}_{\rm MPU}
+         & =-\log_2\!\left(\operatorname{ind}_{\rm QCA}\right).
+    \end{align}
+    Here the left side is the public MPU index, chosen through a reduced
+    canonical representative; the right side is the positive rational
+    index of the actual blocked automorphism. No canonical datum,
+    support-factor presentation or index identity is an input.
+    This is the corrected normalization of
+    \cite[Appendix, lines~2329--2334]{Cirac2017MPU}, recorded in
+    \cite{gap:mpu_qca_index_normalization}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Choose a reduced canonical representative of bond dimension
+    $E\le D$ with the same positive-length periodic operators.
+    It has a simple block of length $k\le E^2\le D^2$.
+    Lemma~\ref{lem:mpu_canonical_actual_log_index} gives the comparison
+    for that representative. The public MPU index agrees with its
+    canonical index. Lemma~\ref{lem:mpu_actual_qca_family_independence}
+    identifies the actual quasi-local automorphisms, and therefore also
+    the actual blocked automorphisms and their positive rational indices.
+\end{proof}

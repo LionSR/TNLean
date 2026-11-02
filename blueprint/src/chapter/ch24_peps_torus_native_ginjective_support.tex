@@ -29,7 +29,7 @@
     closed contraction agrees with the ordinary graph contraction.
 \end{proof}
 
-\begin{theorem}[Single-site support of a native regular injective tensor]%
+\begin{lemma}[Single-site support of a native regular injective tensor]%
     \label{thm:peps_native_regular_singleton_support}
     \lean{TNLean.PEPS.IsGInjective.range_regionReducedDensity_torus_singleton,
         TNLean.PEPS.IsGInjective.rank_regionReducedDensity_torus_singleton}
@@ -44,7 +44,7 @@
         \operatorname{ran}\rho_{\{v\}}=\mathcal G_{\{v\}},
         \qquad \operatorname{rank}\rho_{\{v\}}=|G|^3.
     \]
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_regular_torus_singleton_support,
@@ -53,7 +53,7 @@
     apply the single-site support and rank statements.
 \end{proof}
 
-\begin{theorem}[Local relations forced by equal native regular closures]%
+\begin{lemma}[Local relations forced by equal native regular closures]%
     \label{thm:peps_native_regular_closure_local_rigidity}
     \lean{TNLean.PEPS.regionGroundSpace_torus_singleton_eq_of_torusGClosure_one_eq,
         TNLean.PEPS.card_group_eq_of_torusGClosure_one_eq}
@@ -70,7 +70,7 @@
     These are necessary local relations toward a Fundamental Theorem;
     neither a group isomorphism nor a product of individual bond
     gauges is asserted.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_regular_torus_local_rigidity,

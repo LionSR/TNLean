@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Algebra.CoalgebraDualStar
 import TNLean.MPS.MPDO.BoundaryAdjointClosed
-import TNLean.MPS.SharedInfra.MatrixFamilyTracePairing
+import QICLean.Algebra.TraceFormDuality
 
 /-!
 # Arbitrary-boundary adjoints from a coalgebra representation
@@ -114,7 +114,9 @@ theorem exists_boundary_trace_dualStar
       map_smul' := by intro c f; simp [Matrix.trace_smul] }
   obtain ⟨θ, hθ⟩ := LinearMap.dualMap_surjective_of_injective
     (f := ψ.toLinearMap) hψ ℓ
-  obtain ⟨Y, hY⟩ := Matrix.exists_trace_representation θ
+  let Y := ((Matrix.traceBilinForm (Fin D)).toDual Matrix.traceBilinForm_nondegenerate).symm θ
+  have hY (M : Matrix (Fin D) (Fin D) ℂ) : θ M = Matrix.trace (Y * M) := by
+    rw [← Matrix.traceBilinForm_apply, LinearMap.BilinForm.apply_toDual_symm_apply]
   refine ⟨Y, fun f ↦ ?_⟩
   exact (hY (ψ f)).symm.trans (LinearMap.congr_fun hθ f)
 

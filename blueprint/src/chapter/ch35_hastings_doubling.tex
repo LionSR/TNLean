@@ -59,7 +59,7 @@ corrected constants.
     sum $\sum_{n}2^{-n}\le2$ together with $l_1\ge\xi_0$.
 \end{proof}
 
-\begin{theorem}[Iterated doubling bound]
+\begin{lemma}[Iterated doubling bound]
     \label{thm:hastings_doubling_iteration}
     \lean{TNLean.MPS.AreaLaw.Hastings.le_of_doubling}
     \leanok
@@ -81,7 +81,7 @@ corrected constants.
     This is the bound of~\cite[lines 221--224]{Hastings2007AreaLaw} with
     the decrease per doubling corrected, as recorded
     in~\cite{gap:hastings07_doubling_constants}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{lem:hastings_doubling_error_sums}
     Dividing~(\ref{eq:hastings_doubling_claim}) by $2l$ shows that one
@@ -93,12 +93,12 @@ corrected constants.
     $1/\xi_0$ and $(\ln C_1+C_2)/\xi_0$.
 \end{proof}
 
-\begin{theorem}[Length of the window]
+\begin{lemma}[Length of the window]
     \label{thm:hastings_doubling_window}
     \lean{TNLean.MPS.AreaLaw.Hastings.lt_of_doubling}
     \leanok
     \uses{def:hastings_doubling_constants,thm:hastings_doubling_iteration}
-    Under the hypotheses of Theorem~\ref{thm:hastings_doubling_iteration},
+    Under the hypotheses of Lemma~\ref{thm:hastings_doubling_iteration},
     assume moreover $S_l\ge0$ whenever $l\le l_0$. Then
     \begin{align*}
         l_0<\lceil\xi_0\rceil\,2^M .
@@ -108,12 +108,12 @@ corrected constants.
     of~\cite[line 229]{Hastings2007AreaLaw}; the exponent is doubled and the
     prefactor is the starting length, as recorded
     in~\cite{gap:hastings07_doubling_constants}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:hastings_doubling_iteration}
     Suppose $l_0\ge l_12^M$ with $l_1=\lceil\xi_0\rceil$. Since
     $\ln C_1<\ln(2C_1)$, we have $\ln C_1/\xi_0<1/(2\xi')$, and the choice
     of $M$ makes $\ln D-M/(2\xi')+(2+\ln C_1+C_2)/\xi_0$ negative.
-    Theorem~\ref{thm:hastings_doubling_iteration} at $N=M$ then gives
+    Lemma~\ref{thm:hastings_doubling_iteration} at $N=M$ then gives
     $S_{l_12^M}<0$, contradicting positivity of entropy.
 \end{proof}

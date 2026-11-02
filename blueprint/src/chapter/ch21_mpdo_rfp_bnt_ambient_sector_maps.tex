@@ -114,7 +114,7 @@
     (\ref{eq:mpdo_bnt_ambient_sector_trace_weights}).
 \end{definition}
 
-\begin{theorem}[Complete positivity of the ambient sector maps]
+\begin{lemma}[Complete positivity of the ambient sector maps]
     \label{thm:mpdo_bnt_ambient_sector_complete_positivity}
     \lean{MPOTensor.BNTAlgebraTensorClause.oneSiteAmbientSectorRetractionExtension_isKrausCP}
     \lean{MPOTensor.BNTAlgebraTensorClause.oneSiteAmbientSectorRetractionExtension}
@@ -142,7 +142,7 @@
     from an arbitrary matrix, the resulting canonical full-matrix
     representatives of $R_1$, $R_2$, $\widetilde R_1$, and $\widetilde R_2$
     are completely positive.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpdo_vertical_sector_partial_trace_kraus}
@@ -160,7 +160,7 @@
 % ambient support, so the raw maps are trace-nonincreasing rather than
 % trace-preserving. Documented in
 % docs/paper-gaps/cpgsv17_vertical_isometry_zero_sector.tex.
-\begin{theorem}[Trace of the ambient sector maps]
+\begin{lemma}[Trace of the ambient sector maps]
     \label{thm:mpdo_bnt_ambient_sector_trace}
     \lean{MPOTensor.BNTAlgebraTensorClause.verticalSectorTrace_oneSiteAmbientSectorRetraction}
     \lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteMultiplicitySpectrum.%
@@ -217,7 +217,7 @@
     strict: $W_i^\dagger W_i$ projects onto the retained nonzero sectors, so
     positive elements supported on the discarded orthogonal complement lose
     trace under the compression.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{lem:mpdo_normalized_vertical_sector_positive_trace, lem:mpdo_coisometric_compression_trace}
@@ -237,10 +237,10 @@
     $W_i W_i^\dagger=I$ gives
     $\tr(W_i^\dagger BW_i)=\tr(B)$.  This proves
     (\ref{eq:mpdo_bnt_ambient_sector_embedding_trace}); complete positivity
-    follows from Theorem~\ref{thm:mpdo_bnt_ambient_sector_complete_positivity}.
+    follows from Lemma~\ref{thm:mpdo_bnt_ambient_sector_complete_positivity}.
 \end{proof}
 
-\begin{theorem}[Retraction identities for the ambient sector maps]
+\begin{lemma}[Retraction identities for the ambient sector maps]
     \label{thm:mpdo_bnt_ambient_sector_retractions}
     \lean{MPOTensor.BNTAlgebraTensorClause.%
         oneSiteAmbientSectorRetraction_comp_normalizedRestoration}
@@ -258,7 +258,7 @@
          & =\id_{\mathcal A_2^\sigma}.
         \label{eq:mpdo_bnt_ambient_sector_retractions}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{lem:mpdo_retained_vertical_sector_retraction}
@@ -280,7 +280,7 @@
     (\ref{eq:mpdo_bnt_ambient_sector_retractions}).
 \end{proof}
 
-\begin{theorem}[Action on the weighted tensor letters]
+\begin{lemma}[Action on the weighted tensor letters]
     \label{thm:mpdo_bnt_ambient_sector_tensor_letters}
     \lean{MPOTensor.BNTAlgebraTensorClause.oneSiteAmbientSectorRetraction_verticalTensor}
     \lean{MPOTensor.BNTAlgebraTensorClause.%
@@ -325,7 +325,7 @@
     Identity~(\ref{eq:mpdo_bnt_ambient_sector_two_site_rev}) combines the same sector form with the normalized map
     $\widetilde R_2$ of
     \cite[Appendix~C.4, lines~2070--2071]{Cirac2016MPDO_arXiv}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{lem:mpdo_normalized_retained_vertical_sector_embedding, lem:mpdo_retained_vertical_sector_partial_trace, thm:mpdo_bnt_multiplicity_trace_normalization}

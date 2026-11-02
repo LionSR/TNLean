@@ -93,7 +93,7 @@
     The definition does not require $Z_\gamma$ to be unitary.
 \end{definition}
 
-\begin{theorem}[Two-site multiplicity spectrum from the BNT algebra
+\begin{lemma}[Two-site multiplicity spectrum from the BNT algebra
         condition]%
     \label{thm:mpdo_bnt_algebra_tensor_clause_spectrum}
     \lean{MPOTensor.BNTAlgebraTensorClause.%
@@ -136,7 +136,7 @@
     \end{align}
     This statement asserts exact invertible conjugacy, without requiring
     the matrices $Z_\gamma$ to be unitary.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpdo_literal_cpsv_vertical_decomposition}
@@ -163,7 +163,7 @@
     the multiset equality~(\ref{eq:rfp_multiplicity_spectrum}).
 \end{proof}
 
-\begin{theorem}[Physical compression onto a conjugate two-site sector]
+\begin{lemma}[Physical compression onto a conjugate two-site sector]
     \label{thm:mpdo_bnt_exact_sector_gauge_blocked_corner}
     \lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge.%
         exists_blockTwo_gauge_sector_corner}
@@ -236,7 +236,7 @@
     \cite{gap:cpsv16_two_site_sector_unitary_gauge_gap}.
     The comparison with a common unblocked tail below proves the Gram
     identity without requiring such a compression of the two-site blocking.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpdo_blocked_reference_corners, thm:mpdo_gram_dressed_reflected_marked_chain}
@@ -251,7 +251,7 @@
     coefficients; the gauge factors cancel on the reflected side.
 \end{proof}
 
-\begin{theorem}[Physical compression onto a matched one-site sector]
+\begin{lemma}[Physical compression onto a matched one-site sector]
     \label{thm:mpdo_bnt_exact_sector_one_site_raw_corner}
     \lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge.%
         exists_oneSite_raw_sector_corner}
@@ -270,7 +270,7 @@
     selects a positive-weight copy in the one-site vertical decomposition of
     \cite[Proposition~4.13, statement lines~943--951, and Appendix~C.4,
         lines~2046--2057]{Cirac2016MPDO_arXiv}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpdo_retained_product_spectral_family_exists}
@@ -283,7 +283,7 @@
     dimensions.
 \end{proof}
 
-\begin{theorem}[Reflected marked chains with a two-site initial block]
+\begin{lemma}[Reflected marked chains with a two-site initial block]
     \label{thm:mpdo_two_site_prefix_gram_reflected_marked_chain}
     \lean{MPOTensor.IsMPDO.%
         markedChainCoefficient_blockTwoPrefix_gramDressing_eq_reflectedAdjoint}
@@ -314,7 +314,7 @@
     in~\cite[Appendix~C.4, lines~2048--2057]{Cirac2016MPDO_arXiv}.
     This correction to the direct two-site comparison is recorded in
     \cite{gap:cpsv16_two_site_sector_unitary_gauge_gap}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpdo_reflected_marked_chain}
@@ -326,7 +326,7 @@
     $X^\dagger X$, while the gauge factors cancel on the reflected side.
 \end{proof}
 
-\begin{theorem}[Two-sided compression onto a matched two-site sector]
+\begin{lemma}[Two-sided compression onto a matched two-site sector]
     \label{thm:mpdo_bnt_exact_sector_identity_oblique_physical_span}
     \lean{MPOTensor.twoSidedCompressionCoefficients}
     \lean{MPOTensor.linearMarkedTensor_twoSidedCompressionCoefficients}
@@ -422,7 +422,7 @@
     identity. The theorem below instead compares the one-site compression
     onto $M_\gamma$ with the two-site compression onto
     $Z_\gamma M_\gamma Z_\gamma^{-1}$, keeping the same unblocked tail.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Taking adjoints in the left factor of
@@ -449,14 +449,14 @@
     (\ref{eq:mpdo_bnt_identity_physical_span}).
 \end{proof}
 
-\begin{theorem}[Normalization of conjugation by a scalar Gram matrix]
+\begin{lemma}[Normalization of conjugation by a scalar Gram matrix]
     \label{thm:normalized_conjugation_of_scalar_gram}
     \lean{Matrix.normalized_conj_eq_conj_inv_of_gram_eq_smul_one}
     \leanok
     If an invertible matrix $Z$ satisfies
     $Z^\dagger Z=\omega\Id$ with $\omega>0$, then conjugation by
     $\omega^{-1/2}Z$ equals conjugation by $Z$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     The Gram identity identifies $Z^{-1}$ with
@@ -465,7 +465,7 @@
         =ZBZ^{-1}$.
 \end{proof}
 
-\begin{theorem}[Unitary sector conjugacy from a positive scalar Gram matrix]
+\begin{lemma}[Unitary sector conjugacy from a positive scalar Gram matrix]
     \label{thm:mpdo_bnt_conditional_identity_marked_unitary_conjugacy}
     \lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge.%
         exists_unitary_sector_conjugacy_of_gauge_gram_eq_pos_smul_one}
@@ -483,7 +483,7 @@
          & =U_\gamma M_\gamma^v U_\gamma^\dagger.
         \label{eq:mpdo_bnt_conditional_unitary_conjugacy}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:normalize_scalar_gram_matrix, thm:normalized_conjugation_of_scalar_gram}
@@ -496,7 +496,7 @@
     (\ref{eq:mpdo_bnt_conditional_unitary_conjugacy}).
 \end{proof}
 
-\begin{theorem}[Gram identity and unitary sector conjugacy]
+\begin{lemma}[Gram identity and unitary sector conjugacy]
     \label{thm:mpdo_bnt_mixed_prefix_unitary_sector_conjugacy}
     \lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge.%
         gramDressing_gauge_eq_one}
@@ -560,7 +560,7 @@
     in~\cite[Appendix~C.4, lines~2048--2057]{Cirac2016MPDO_arXiv}.
     The correction to the direct two-site argument is recorded in
     \cite{gap:cpsv16_two_site_sector_unitary_gauge_gap}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpdo_bnt_exact_sector_one_site_raw_corner, thm:mpdo_bnt_exact_sector_gauge_blocked_corner, thm:mpdo_bnt_exact_sector_identity_oblique_physical_span, thm:mpdo_two_site_prefix_gram_reflected_marked_chain, thm:mpdo_reflected_marked_chain, thm:cpsv_original_coordinate_marked_lemma_l, thm:normal_tensor_gram_rigidity, thm:mpdo_bnt_conditional_identity_marked_unitary_conjugacy}

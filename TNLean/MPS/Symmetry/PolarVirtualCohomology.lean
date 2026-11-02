@@ -23,7 +23,7 @@ gap are proved in the single-block, one-site injective case. The several-block
 case is documented in `docs/paper-gaps/spc11_uniform_gap_injective_scope.tex`.
 -/
 
-open scoped Matrix
+open scoped Matrix TNLean.Algebra.ScalarCohomology
 open TNLean.Algebra
 
 namespace MPSTensor
@@ -80,7 +80,10 @@ theorem cohomologousTo_polarIsometricTensor_of_isInjective_unital
       ((Matrix.unitaryGroup (Fin d) ℂ).subtype.comp U) g i =
       (ρ₁.X (g⁻¹) : Matrix (Fin D) (Fin D) ℂ) * A i *
         (((ρ₁.X (g⁻¹))⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)) :
-    ω₁.CohomologousTo ω₀ := by
+    groupCohomology.H2π _ (groupCohomology.cocyclesOfIsMulCocycle₂
+      (TNLean.Algebra.ScalarCocycle.isMulCocycle₂_of_projRep ρ₁ (NeZero.pos D))) =
+    groupCohomology.H2π _ (groupCohomology.cocyclesOfIsMulCocycle₂
+      (TNLean.Algebra.ScalarCocycle.isMulCocycle₂_of_projRep ρ₀ (NeZero.pos D))) := by
   obtain ⟨ω, ρ, _, hρ⟩ := exists_unitary_virtualRep_polarDeformation A hA hNorm U hSym
   have h₀ := cohomologousTo_of_isInjective (polarIsometricTensor A)
     (by simpa using isInjective_polarDeformation hA (γ := 0) (by simp))
@@ -109,7 +112,10 @@ theorem exists_prepared_polarGappedInteractionPath_with_virtual_class
       c ≠ 0 ∧ GaugeEquiv (c • A) B ∧ Kraus.IsInjective B ∧
       Kraus.transferMap B 1 = 1 ∧
       (∀ L, parentInteraction A L = parentInteraction B L) ∧
-      ω.CohomologousTo ωA ∧
+      groupCohomology.H2π _ (groupCohomology.cocyclesOfIsMulCocycle₂
+        (TNLean.Algebra.ScalarCocycle.isMulCocycle₂_of_projRep ρ (NeZero.pos D))) =
+      groupCohomology.H2π _ (groupCohomology.cocyclesOfIsMulCocycle₂
+        (TNLean.Algebra.ScalarCocycle.isMulCocycle₂_of_projRep ρA (NeZero.pos D))) ∧
       (∀ g, (ρ.X g : Matrix (Fin D) (Fin D) ℂ) ∈ Matrix.unitaryGroup (Fin D) ℂ) ∧
       (∀ (γ : ℝ) g i, twistedTensor (polarDeformation B γ)
         ((Matrix.unitaryGroup (Fin d) ℂ).subtype.comp U) g i =

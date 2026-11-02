@@ -115,10 +115,12 @@
         {
           "title": "Finite subsets of the integers",
           "issues": [
-            9548
+            9548,
+            9739,
+            9741
           ],
           "physics": "Theorem A is stated for every finite set Λ of integers, with an edge between two consecutive integers when both lie in Λ. Such a set may have gaps. Numbering its points in increasing order turns the model into a chain whose interaction terms never act across a gap. Across a gap the ground state is a product state, so the part of the chain to the left of the gap has zero entropy. Replacing a region <i>A</i> by its symmetric difference with that left part then leaves the entropy unchanged, by the Araki–Lieb inequality and strong subadditivity, and adds or removes only the chain edge at the gap. Doing this at each gap where <i>A</i> changes produces a region with the entropy of <i>A</i> whose boundary on the chain consists exactly of the edges of Λ leaving <i>A</i>.",
-          "delivers": "Theorem A in the generality of the note: <i>S</i>(<i>A</i>) ≤ <i>C</i><sub>0</sub>(<i>q</i>, <i>R</i>)(1 + <i>J</i>/Δ)|∂<sub>Λ</sub><i>A</i>| for every finite Λ ⊂ ℤ and every <i>A</i> ⊆ Λ, with the constant of the chain. The note instead factors the ground state over the connected pieces of Λ; the formal proof avoids that factorization."
+          "delivers": "Theorem A in the generality of the note: <i>S</i>(<i>A</i>) ≤ <i>C</i><sub>0</sub>(<i>q</i>, <i>R</i>)(1 + <i>J</i>/Δ)|∂<sub>Λ</sub><i>A</i>| for every finite Λ ⊂ ℤ and every <i>A</i> ⊆ Λ, with the constant of the chain. The note instead factors the ground state over the connected pieces of Λ; the formal proof avoids that factorization. Beyond what the note needs, the Lieb–Robinson bound, the information reset and information at logarithmic separation of Part II, which the note uses only on the chain, are also proved on every finite Λ."
         }
       ]
     },
@@ -140,7 +142,7 @@
             "thm:B"
           ],
           "physics": "A matrix product state with open boundary conditions is a vector assembled from one tensor per site, contracted along the chain. Its bond dimension is the largest dimension of the contracted indices; equivalently, it is the largest Schmidt rank of the vector across a cut of the chain into a left and a right part. Cut the chain after site <i>k</i> and keep, on the left part, only the eigenvectors of its reduced density matrix with eigenvalue at least exp(−(<i>S<sub>k</sub></i> + <i>w</i>)), where <i>S<sub>k</sub></i> is the entropy of the left part and <i>w</i> ≥ 0. At most exp(<i>S<sub>k</sub></i> + <i>w</i>) eigenvectors are kept, and by the marginal tail bound the discarded weight is at most 2e<sup>e/2</sup> exp(−<i>w</i>/(32<i>s</i>)). Applying these projections at all <i>L</i> − 1 cuts gives a vector with bounded Schmidt rank at every cut, at distance from Ω at most the sum of the square roots of the discarded weights. Theorem A bounds every <i>S<sub>k</sub></i> by <i>C</i><sub>int</sub>, and the choice <i>w</i> = 64<i>s</i> log(2<i>L</i><sup>2</sup><i>c</i><sub>0</sub>) with <i>c</i><sub>0</sub> = √(2e<sup>e/2</sup>) makes the total error at most 1/<i>L</i>.",
-          "delivers": "Theorem B: a normalized matrix product state within 1/<i>L</i> of Ω whose bond dimension is at most ⌊exp(<i>C</i><sub>int</sub> + <i>w</i>)⌋ ≤ e<sup><i>C</i><sub>int</sub></sup>(2<i>c</i><sub>0</sub>)<sup>64<i>s</i></sup><i>L</i><sup>128<i>s</i></sup>, a polynomial in <i>L</i>. The note keeps a prescribed number of eigenvectors at each cut; the formal proof keeps those above a threshold, which is the form the proof of Theorem B uses.",
+          "delivers": "Theorem B: a normalized matrix product state within 1/<i>L</i> of Ω whose bond dimension is at most ⌊exp(<i>C</i><sub>int</sub> + <i>w</i>)⌋ ≤ e<sup><i>C</i><sub>int</sub></sup>(2<i>c</i><sub>0</sub>)<sup>64<i>s</i></sup><i>L</i><sup>128<i>s</i></sup>, a polynomial in <i>L</i>. The note keeps a prescribed number of eigenvectors at each cut, and this form is formalized for every prescribed bond dimension; the proof of Theorem B uses the variant that keeps the eigenvectors above a threshold, which is formalized as well.",
           "figure": "truncation",
           "caption": "Sequential truncation on a chain of <i>L</i> = 6 sites. At each of the <i>L</i> − 1 cuts the left part is projected onto its eigenvectors above a threshold; the bar over a cut is the number kept, at most exp(<i>S<sub>k</sub></i> + <i>w</i>), which bounds the bond dimension there."
         },
@@ -177,15 +179,15 @@
       "paper": "chain",
       "eyebrow": "Corollary of the two-dimensional area law",
       "heading": "Matrix product states on the square grid",
-      "intro": "This statement is not part of the one-dimensional argument. It assumes the two-dimensional area law (Theorem 1.1 of the area-law manuscript, followed on the other tab) and combines it with the sequential truncation above.",
+      "intro": "This statement is not part of the one-dimensional argument. It uses the two-dimensional area law (Theorem 1.1 of the area-law manuscript, proved on the other tab) and combines it with the sequential truncation above.",
       "stages": [
         {
           "title": "A snake matrix product state on the square grid",
           "issues": [
             9553
           ],
-          "physics": "Order the sites of an <i>L</i> × <i>L</i> square grid row by row, reversing direction on alternate rows, so that consecutive sites are always neighbours. Every cut of this ordering into an initial and a final segment is crossed by at most <i>L</i> + 1 lattice edges, so the two-dimensional area law bounds the entropy of every initial segment by a constant times <i>L</i>, and the number of interaction terms crossing the cut is also of order <i>L</i>. Sequential truncation along the ordering then gives a matrix product state. Every ordering of the grid has a cut crossed by about <i>L</i> edges, so this argument cannot give a bond dimension polynomial in <i>L</i>; that requires the PEPS construction of the other tab. The work is on hold until the two-dimensional area law is formalized.",
-          "delivers": "Assuming the two-dimensional area law, a matrix product state along the snake ordering within 1/<i>L</i> of the ground state, with bond dimension at most exp(<i>C</i>′<i>L</i>) for a constant <i>C</i>′ depending on <i>q</i>, <i>R</i>, <i>J</i> and Δ."
+          "physics": "Order the sites of an <i>L</i> × <i>L</i> square grid row by row, reversing direction on alternate rows, so that consecutive sites are always neighbours. Every cut of this ordering into an initial and a final segment is crossed by at most <i>L</i> + 1 lattice edges, so the two-dimensional area law bounds the entropy of every initial segment by a constant times <i>L</i>, and the number of interaction terms crossing the cut is also of order <i>L</i>. Sequential truncation along the ordering then gives a matrix product state. Every ordering of the grid has a cut crossed by about <i>L</i> edges, so this argument cannot give a bond dimension polynomial in <i>L</i>; that requires the PEPS construction of the other tab. The two-dimensional area law is now formalized, so the statement no longer rests on an unproved input; the work itself is on hold.",
+          "delivers": "From the two-dimensional area law, a matrix product state along the snake ordering within 1/<i>L</i> of the ground state, with bond dimension at most exp(<i>C</i>′<i>L</i>) for a constant <i>C</i>′ depending on <i>q</i>, <i>R</i>, <i>J</i> and Δ."
         }
       ]
     }

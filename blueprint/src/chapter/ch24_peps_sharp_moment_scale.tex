@@ -13,13 +13,13 @@ the integer scales of \cite[Section~9, lines~32--41]{OpenAI2026AreaLaw}:
 Set $\alpha=1-\ell_{\rm s}-\mu>0$. Only $\ell_{\rm s}$, $\mu$, and $\kappa$ enter
 (\ref{eq:al_moment_rounded_scales}).
 
-\begin{theorem}[Quantitative growth of the integer band count]
+\begin{lemma}[Quantitative growth of the integer band count]
     \label{thm:al_moment_band_power}
     \lean{TNLean.PEPS.AreaLaw.Scan.ScannerExponents.exists_eventually_rpow_le_mul_K}
     \leanok
     There is a constant $C_K\ge1$ such that all sufficiently large
     integers $n$ satisfy $n\ge2$, $K\ge1$, and $n^\alpha\le C_KK$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{lem:al_scanner_scale_facts}
     The scale estimates give $m,K,D\ge 1$ and
@@ -32,7 +32,7 @@ Set $\alpha=1-\ell_{\rm s}-\mu>0$. Only $\ell_{\rm s}$, $\mu$, and $\kappa$ ente
     Dividing by $n^{\ell_{\rm s}+\mu}$ gives $n^\alpha\le C_K K$.
 \end{proof}
 
-\begin{theorem}[Square root of the rounded marginal scale]
+\begin{lemma}[Square root of the rounded marginal scale]
     \label{thm:al_moment_sqrt_budget}
     \lean{TNLean.PEPS.AreaLaw.Scan.ScannerExponents.sqrt_budget_le}
     \leanok
@@ -42,14 +42,14 @@ Set $\alpha=1-\ell_{\rm s}-\mu>0$. Only $\ell_{\rm s}$, $\mu$, and $\kappa$ ente
         \sqrt B & \le\sqrt{2C_B}\,n^{(1+\kappa)/2}(\log n)^6,
     \end{align}
     with $\sqrt B = 0$ when $B\le 0$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Since $n^\kappa\ge1$, rounding gives
     $D\le n^\kappa+1\le2n^\kappa$, and hence
     $B\le2C_Bn^{1+\kappa}(\log n)^{12}$. Taking square roots gives the bound.
 \end{proof}
 
-\begin{theorem}[Uniform threshold for bounded weights and marginal scales]
+\begin{lemma}[Uniform threshold for bounded weights and marginal scales]
     \label{thm:al_moment_weight_smallness}
     \lean{TNLean.PEPS.AreaLaw.Scan.ScannerExponents.eventually_mul_a_sqrt_budget_le,
         TNLean.PEPS.AreaLaw.Scan.ScannerExponents.exists_a_le_moment_radius}
@@ -63,10 +63,10 @@ Set $\alpha=1-\ell_{\rm s}-\mu>0$. Only $\ell_{\rm s}$, $\mu$, and $\kappa$ ente
     and for every $0\le W\le n^\omega$ and $B\le C_BnD(\log n)^{12}$,
     setting $a=W/K$ yields $Aa\sqrt B\le c$. If in addition $B\ge1$, then
     $Aa\le c/\sqrt B$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:al_moment_band_power,thm:al_moment_sqrt_budget}
-    Theorems~\ref{thm:al_moment_band_power}
+    Lemmas~\ref{thm:al_moment_band_power}
     and~\ref{thm:al_moment_sqrt_budget} give, with $C_K$ as above,
     \begin{align}
         Aa\sqrt B
@@ -79,7 +79,7 @@ Set $\alpha=1-\ell_{\rm s}-\mu>0$. Only $\ell_{\rm s}$, $\mu$, and $\kappa$ ente
     by $\sqrt B$ gives $Aa\le c/\sqrt B$.
 \end{proof}
 
-\begin{theorem}[Moment-radius bound at the final collar scales]
+\begin{lemma}[Moment-radius bound at the final collar scales]
     \label{thm:al_moment_final_scales}
     \lean{TNLean.PEPS.AreaLaw.Scan.final_scanner_moment_margin,
         TNLean.PEPS.AreaLaw.Scan.exists_final_a_le_moment_radius}
@@ -103,11 +103,11 @@ Set $\alpha=1-\ell_{\rm s}-\mu>0$. Only $\ell_{\rm s}$, $\mu$, and $\kappa$ ente
     (\ref{eq:al_moment_rounded_scales}) satisfy $K\ge1$ and, with
     $a=n^\omega/K$, every $1\le B\le C_BnD(\log n)^{12}$ satisfies
     $|ta|\le c/\sqrt B$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:al_moment_weight_smallness}
     Direct computation gives the positive margin and the required exponent
-    inequalities. Applying Theorem~\ref{thm:al_moment_weight_smallness} with
+    inequalities. Applying Lemma~\ref{thm:al_moment_weight_smallness} with
     $A=|t|$ and $W=n^\omega$, together with $|ta|=|t|a$ for $a\ge0$, yields
     the bound.
 \end{proof}

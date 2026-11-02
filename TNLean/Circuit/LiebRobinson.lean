@@ -14,4 +14,5 @@ import TNLean.Circuit.LiebRobinson.GraphBallStabilization
 import TNLean.Circuit.LiebRobinson.GraphLocalization
 import TNLean.Circuit.LiebRobinson.GraphPropagation
 import TNLean.Circuit.LiebRobinson.SupportSeparation
+import TNLean.Circuit.LiebRobinson.TimeScaling
 import TNLean.Circuit.LiebRobinson.Volterra

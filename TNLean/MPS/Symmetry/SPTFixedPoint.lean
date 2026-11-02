@@ -361,7 +361,10 @@ theorem cohomologousTo_of_sptFixedPointTensor [NeZero D]
     (hρ' : ∀ g i, twistedTensor (sptFixedPointTensor D) (sptFixedPointAction ρ φ) g i =
       φ g • ((ρ'.X (g⁻¹) : Matrix (Fin D) (Fin D) ℂ) * sptFixedPointTensor D i *
         (((ρ'.X (g⁻¹))⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ))) :
-    ScalarCocycle.CohomologousTo ω' ω := by
+    groupCohomology.H2π _ (groupCohomology.cocyclesOfIsMulCocycle₂
+      (TNLean.Algebra.ScalarCocycle.isMulCocycle₂_of_projRep ρ' (NeZero.pos D))) =
+    groupCohomology.H2π _ (groupCohomology.cocyclesOfIsMulCocycle₂
+      (TNLean.Algebra.ScalarCocycle.isMulCocycle₂_of_projRep ρ (NeZero.pos D))) := by
   refine cohomologousTo_of_isInjective _ sptFixedPointTensor_isInjective
     (sptFixedPointAction ρ 1) (Nat.pos_of_ne_zero (NeZero.ne D))
     (ρ₁ := ρ) (ρ₂ := ρ')
@@ -384,8 +387,11 @@ theorem exists_virtualRep_sptFixedPointTensor [NeZero D]
       (∀ g i, twistedTensor (sptFixedPointTensor D) (sptFixedPointAction ρ φ) g i =
         φ g • ((ρ'.X (g⁻¹) : Matrix (Fin D) (Fin D) ℂ) * sptFixedPointTensor D i *
           (((ρ'.X (g⁻¹))⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ))) ∧
-      ScalarCocycle.CohomologousTo ω' ω :=
-  ⟨ω, ρ, twistedTensor_sptFixedPointTensor ρ φ, ScalarCocycle.CohomologousTo.refl ω⟩
+      groupCohomology.H2π _ (groupCohomology.cocyclesOfIsMulCocycle₂
+        (TNLean.Algebra.ScalarCocycle.isMulCocycle₂_of_projRep ρ' (NeZero.pos D))) =
+      groupCohomology.H2π _ (groupCohomology.cocyclesOfIsMulCocycle₂
+        (TNLean.Algebra.ScalarCocycle.isMulCocycle₂_of_projRep ρ (NeZero.pos D))) :=
+  ⟨ω, ρ, twistedTensor_sptFixedPointTensor ρ φ, rfl⟩
 
 /-- **A unitary virtual action and unit-modulus character give a unitary physical action.**
 The action `U(g) = φ(g) (W_gᵀ ⊗ W_g⁻¹)` is unitary because `W_g⁻¹ = W_g†` and `|φ(g)| = 1`.
@@ -427,7 +433,9 @@ its values is a root of unity. -/
 theorem exists_unitary_sptFixedPoint_of_isCocycle [Fintype G] (hω : groupCohomology.IsMulCocycle₂ ω)
     (φ : G →* ℂ) :
     ∃ (η : ScalarCocycle G) (ρ : ProjectiveRepresentation (D := Fintype.card G) η),
-      η.CohomologousTo ω ∧
+      groupCohomology.H2π _ (groupCohomology.cocyclesOfIsMulCocycle₂
+        (TNLean.Algebra.ScalarCocycle.isMulCocycle₂_of_projRep ρ Fintype.card_pos)) =
+        groupCohomology.H2π _ (groupCohomology.cocyclesOfIsMulCocycle₂ hω) ∧
       (∀ g, (ρ.X g : Matrix (Fin (Fintype.card G)) (Fin (Fintype.card G)) ℂ) ∈
         Matrix.unitaryGroup (Fin (Fintype.card G)) ℂ) ∧
       (∀ g, sptFixedPointAction ρ φ g ∈
@@ -441,11 +449,12 @@ theorem exists_unitary_sptFixedPoint_of_isCocycle [Fintype G] (hω : groupCohomo
             sptFixedPointTensor (Fintype.card G) i *
             (((ρ'.X (g⁻¹))⁻¹ : GL (Fin (Fintype.card G)) ℂ) :
               Matrix (Fin (Fintype.card G)) (Fin (Fintype.card G)) ℂ))) →
-        ω'.CohomologousTo ω := by
+        groupCohomology.H2π _ (groupCohomology.cocyclesOfIsMulCocycle₂
+          (TNLean.Algebra.ScalarCocycle.isMulCocycle₂_of_projRep ρ' Fintype.card_pos)) =
+          groupCohomology.H2π _ (groupCohomology.cocyclesOfIsMulCocycle₂ hω) := by
   classical
   have : NeZero (Fintype.card G) := ⟨Fintype.card_ne_zero⟩
-  have hη : ω.circlePhaseInclusion.CohomologousTo ω :=
-    (ScalarCocycle.cohomologousTo_circlePhaseInclusion hω).symm
+  have hη := (ScalarCocycle.H2π_circlePhaseInclusion hω).symm
   have hu := ω.regularProjectiveForClass_mem_unitaryGroup hω
   have hφ : ∀ g, ‖φ g‖ = 1 := fun g =>
     Complex.norm_eq_one_of_pow_eq_one

@@ -23,9 +23,10 @@ Fundamental Theorem forces equality of the corresponding bond dimensions.
 Transitivity of torus translations on each orientation class then gives one
 horizontal and one vertical dimension.
 
-No site-independent tensor is constructed here.  The source states that second
-conclusion without a two-dimensional proof; its unresolved status is recorded
-in `docs/paper-gaps/peps_normal_ft_section3_route.tex`.
+The repeated injective tensor representing the same state is constructed in
+`TNLean.PEPS.TorusCommonTensor` when both torus periods are at least three,
+as in the source's simple square lattice. The derivation is recorded in
+`docs/paper-gaps/peps_normal_ft_section3_route.tex`.
 
 ## Reference
 

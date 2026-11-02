@@ -10,6 +10,7 @@ with the interval factor first.
     \label{thm:physical_dg_viable_family}
     \lean{TNLean.MPS.AreaLaw.exists_physical_dg_viable_family}
     \uses{def:chain_model}
+    \leanok
     There is a universal real constant $A\ge21$ with the following property.
     Let $H=\sum_{i\in\mathcal B_L}h_i$ be an original nearest-neighbour
     Hamiltonian on $(\C^q)^{\otimes L}$, where each $h_i$ is supported on
@@ -55,6 +56,7 @@ with the interval factor first.
     entropy consequence and approximation theorem are separate assertions.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{thm:short_actual_region_improving_family,thm:inward_effective_cuts,
         thm:five_region_dg_cluster_parameters,thm:actual_clipped_polynomial_family,
         thm:physical_dg_collar_budget}
@@ -81,6 +83,7 @@ with the interval factor first.
     \label{thm:physical_interval_bootstrap}
     \lean{TNLean.MPS.AreaLaw.exists_physical_interval_viable_subspace}
     \uses{def:chain_model}
+    \leanok
     There is a universal real constant $A\ge21$ with the following property.
     Let $H=\sum_{i\in\mathcal B_L}h_i$ be the original nearest-neighbour
     Hamiltonian on $(\C^q)^{\otimes L}$, with $h_i$ supported on
@@ -107,6 +110,7 @@ with the interval factor first.
     are recorded in~\cite{gap:alvv16_bootstrap_constants}.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{thm:physical_dg_viable_family}
     The actual improving family gives a target $T$ mutually $0.005$-close
     to $G$ and satisfies $\mathcal D^{12}\Delta\le10^{-5}$.
@@ -123,6 +127,7 @@ with the interval factor first.
     \label{thm:physical_interval_all_accuracy_family}
     \lean{TNLean.MPS.AreaLaw.exists_accuracy_physical_interval_family_and_bootstrap}
     \uses{def:chain_model}
+    \leanok
     There is a universal real constant $A\ge21$ with the following property.
     Let $H,q,\mu,\nu,\gamma,G,J$ satisfy the physical hypotheses of
     Theorem~\ref{thm:physical_interval_bootstrap}. Set $g=\min(\gamma,1)$,
@@ -162,6 +167,7 @@ with the interval factor first.
     \cite[Proposition 4.10]{Arad2016RigorousRG}; it supplies no entropy theorem.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{thm:dg_accuracy_scalar_parameters,thm:five_region_scaled_low_cluster,
         thm:actual_clipped_polynomial_family,thm:collar_larger_count_base,
         thm:short_region_larger_count_base,thm:inward_effective_cuts}

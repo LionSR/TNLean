@@ -20,8 +20,8 @@ basic tensor properties used by blocking and canonical-form arguments.
   `isPrimitive_transferMap_reindexPhysical_equiv` — left-canonical normalization and
   transfer-map primitivity are preserved.
 * `hasInvariantProj_reindexPhysical_equiv`, `isIrreducibleTensor_reindexPhysical_equiv`,
-  and `isInjective_reindexPhysical_equiv` — invariant projections, irreducibility, and
-  one-site injectivity are preserved.
+  `isInjective_reindexPhysical_equiv`, and `isNormal_reindexPhysical_equiv` — invariant
+  projections, irreducibility, one-site injectivity, and normality are preserved.
 * `gaugePhaseEquiv_reindexPhysical_equiv` — gauge-phase equivalence is preserved
   when both tensors are reindexed by the same physical alphabet bijection.
 * `linearIndependent_mpvState_of_configEquiv` transports linear independence
@@ -114,6 +114,25 @@ theorem isInjective_reindexPhysical_equiv {d₁ d₂ D : ℕ} (e : Fin d₁ ≃ 
     · rintro ⟨i, rfl⟩
       exact ⟨e.symm i, by simp [Kraus.reindexPhysical]⟩
   simp [Kraus.IsInjective, hRange]
+
+/-- Reindexing by a physical-index equivalence preserves normality: the words of each length
+range over the same matrices. -/
+theorem isNormal_reindexPhysical_equiv {d₁ d₂ D : ℕ} (e : Fin d₁ ≃ Fin d₂)
+    (A : MPSTensor d₂ D) :
+    Kraus.IsNormal (Kraus.reindexPhysical e A) ↔ Kraus.IsNormal A := by
+  have hr : ∀ N : ℕ, Set.range (fun σ : Fin N → Fin d₁ ↦
+      Kraus.evalWord (Kraus.reindexPhysical e A) (List.ofFn σ)) =
+      Set.range (fun σ : Fin N → Fin d₂ ↦ Kraus.evalWord A (List.ofFn σ)) := by
+    intro N
+    ext X
+    constructor
+    · rintro ⟨σ, rfl⟩
+      exact ⟨fun i ↦ e (σ i), by
+        simp [Kraus.evalWord_reindexPhysical, List.map_ofFn, Function.comp_def]⟩
+    · rintro ⟨σ, rfl⟩
+      exact ⟨fun i ↦ e.symm (σ i), by
+        simp [Kraus.evalWord_reindexPhysical, List.map_ofFn, Function.comp_def]⟩
+  simp only [Kraus.IsNormal, Kraus.IsNBlkInjective, Kraus.wordSpan, hr]
 
 /-- Reindexing both tensors by a physical-index equivalence preserves gauge-phase equivalence. -/
 theorem gaugePhaseEquiv_reindexPhysical_equiv {d₁ d₂ D : ℕ}

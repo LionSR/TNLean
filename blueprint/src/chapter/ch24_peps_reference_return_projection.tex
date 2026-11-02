@@ -1,5 +1,5 @@
 
-\begin{theorem}[Adjoints and products on the internal references]
+\begin{lemma}[Adjoints and products on the internal references]
     \label{thm:peps_reference_projection_extension}
     \lean{TNLean.PEPS.regularRegionChargeReferenceMatrix_conjTranspose,
         TNLean.PEPS.regularRegionChargeReferenceMatrix_mul,
@@ -18,14 +18,14 @@
     measurement in \cite[Section~6.6]{Schuch2010PEPS} (source lines
     2582--2615), Hermitian idempotents on the two references extend to
     Hermitian idempotents on the canonical block coordinates.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The extension is $Q\otimes I$ conjugated through two coordinate
     equivalences. Kronecker multiplication and reindexing preserve both
     the adjoint and composition.
 \end{proof}
 
-\begin{theorem}[Return projection inside the correlated bond sum]
+\begin{lemma}[Return projection inside the correlated bond sum]
     \label{thm:peps_reference_return_actual_column}
     \lean{TNLean.PEPS.regularRegionChargeReferenceMatrix_mulVec_braided}
     \leanok
@@ -47,7 +47,7 @@
     \cite[Section~6.6]{Schuch2010PEPS}, source lines 2582--2615. It does not
     assume a decomposition of the physical state or a completed geometric braid; see
     \cite{gap:rmp_peps_quantum_double_g_isometry}.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_reference_projection_extension,

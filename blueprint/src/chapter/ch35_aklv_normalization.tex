@@ -1,0 +1,101 @@
+\section{The three AKLV energy normalizations}
+
+\begin{definition}[The original reference regions]
+    \label{def:aklv_normalization_regions}
+    \lean{TNLean.MPS.AreaLaw.aklvNormalizationEndpoints,
+        TNLean.MPS.AreaLaw.aklvNormalizationHamiltonians}
+    \leanok
+    Let $q\ge1$, $s\ge6$ and $a+s+1\le L$. Let $0\le h_i\le\Id$ be
+    supported on $\{i,i+1\}$, and put
+    \begin{align}
+        R_0 & ={\lbrack 0,a+1)},                 & R_1 & ={\lbrack a+3,a+s-2)}, & R_2 & ={\lbrack a+s,L)},
+        \label{eq:aklv_reference_regions}                                                                  \\
+        A_j & =\sum_{\{i,i+1\}\subseteq R_j}h_i.
+        \label{eq:aklv_reference_sums}
+    \end{align}
+    The remaining interaction starts are
+    $a,a+1,a+2,a+s-3,a+s-2,a+s-1$.
+    These are the three reference sums normalized in
+    \cite[Section~6.1, before (5)]{Arad2013AreaLaw}.
+\end{definition}
+
+\begin{lemma}[Original regional minima and bounded relative ground energy]
+    \label{thm:aklv_energy_normalization}
+    \lean{TNLean.MPS.AreaLaw.exists_aklv_energy_normalization}
+    \leanok
+    \uses{def:aklv_normalization_regions}
+    There exist real numbers $e_0,e_1,e_2\ge0$ and a common unit vector $x$
+    such that $A_jx=e_jx$ and $A_j-e_j\Id\ge0$ for each $j$.
+    The centered full Hamiltonian
+    $H=\sum_i h_i-(e_0+e_1+e_2)\Id$ has a unit eigenvector $z$ of
+    energy $E_0$ satisfying $H-E_0\Id\ge0$ and $0\le E_0\le6$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{def:aklv_normalization_regions}
+    The three regions in (\ref{eq:aklv_reference_regions}) are pairwise disjoint.
+    Take the genuine lowest energy of each supported $A_j$ and form a common
+    unit ground vector on the disjoint factors. Set
+    $X=\sum_j(A_j-e_j\Id)$ and let $Y$ be the sum of the remaining six bonds.
+    Then $X\ge0$, $Xx=0$, $0\le Y\le6\Id$, and $H=X+Y$.
+    The variational principle gives $0\le E_0\le\langle x,Hx\rangle\le6$.
+\end{proof}
+
+\begin{lemma}[The enlarged exterior sums and their supports]
+    \label{thm:aklv_two_block_exterior_data}
+    \lean{TNLean.MPS.AreaLaw.aklv_two_block_exterior_data,
+        TNLean.MPS.AreaLaw.aklv_normalization_le_two_block_regions}
+    \leanok
+    \uses{def:aklv_normalization_regions,def:aklv_two_block_truncation}
+    In Definition~\ref{def:aklv_two_block_truncation}, take
+    $l=a+2$ and $r=a+s-1$, and denote its three regional sums by $C_j$.
+    Then $C_0=A_0+h_a$ and $C_2=h_{a+s-1}+A_2$.
+    For arbitrary real $u,v$, the operators $C_0-u\Id$ and $C_2-v\Id$
+    are supported on $[0,a+2)$ and ${[a+s-1,L)}$, respectively.
+    If all bonds are positive, lower bounds $e_j\Id\le A_j$ remain
+    lower bounds for the corresponding enlarged regional sums $C_j$.
+    These are the two enlarged exterior sums clipped after (5) in
+    \cite[Section~6.1]{Arad2013AreaLaw}.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{def:aklv_normalization_regions,def:aklv_two_block_truncation}
+    The left enlarged bond set is obtained by adjoining the start $a$ to the
+    left reference bond set. The right enlarged set similarly adjoins
+    $a+s-1$. The sums therefore have the stated forms. Each bond lies in
+    the stated enlarged region, and subtracting a scalar identity preserves support.
+\end{proof}
+
+\begin{lemma}[A normalized physical two-block residual]
+    \label{thm:aklv_normalized_two_block_residual}
+    \lean{TNLean.MPS.AreaLaw.exists_aklv_normalized_two_block_residual}
+    \leanok
+    \uses{def:aklv_normalization_regions,def:aklv_two_block_truncation}
+    The minima, vectors and energy of Lemma~\ref{thm:aklv_energy_normalization}
+    may be chosen before the real parameters $\eta,t$.
+    For every $\eta\ge0$ and $t\ge\eta+11$, form the two-block family $B_T$
+    with cuts $a+2,a+s-1$ and the same shifts $e_j$.
+    Then $B_\varnothing=H$. For every partial exterior clipping $T$, let
+    $G_T(E_0+\eta)$ be the actual spectral subspace of $B_T$ below $E_0+\eta$.
+    One has
+    \begin{align}
+        \bigl\|(H-B_{\{0,1\}})|_{G_T(E_0+\eta)}\bigr\|
+        \le64e^{3/4}e^{-(t-\eta)/8}.
+        \label{eq:aklv_normalized_residual}
+    \end{align}
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{thm:aklv_energy_normalization,thm:aklv_two_block_truncation_low}
+    Each reference bond set is contained in the corresponding enlarged
+    regional bond set. Positivity of the remaining bonds gives
+    $e_j\Id\le C_j$. Apply Lemma~\ref{thm:aklv_two_block_truncation_low}
+    with $\varepsilon=E_0+\eta$. The bounds $0\le E_0\le6$ imply
+    $t\ge\varepsilon+5$ and
+    $64e^{-(t-E_0-\eta)/8}\le64e^{3/4}e^{-(t-\eta)/8}$.
+\end{proof}
+
+% The inclusive middle range 4,...,s-3 has s-6 terms. The source's printed
+% denominator s-7 is corrected by subtracting the true aggregate middle minimum;
+% see docs/paper-gaps/aklv13_two_block_robustness.tex. Theorem 6.1's gap and
+% normalized ground-vector comparison remain separate assertions.

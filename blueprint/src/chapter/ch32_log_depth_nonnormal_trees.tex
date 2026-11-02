@@ -10,7 +10,7 @@ measurement-assisted depth bound to the canonical non-normal class below.
 This is an enhancement of those constructions, not a claim that the source
 already proves the all-length statement in this form.
 
-\begin{theorem}[Inequivalence gives the mixed eigenvalue gap]
+\begin{lemma}[Inequivalence gives the mixed eigenvalue gap]
     \label{thm:ldp_inequivalent_mixed_gap}
     \lean{MPSTensor.mixedMap_eigenvalue_norm_lt_one_of_spectralRadius_lt_one,
         MPSTensor.mixedMap_eigenvalue_norm_lt_one_of_normal_inequivalent}
@@ -18,7 +18,7 @@ already proves the all-length statement in this form.
     Let $A_j,A_k$ be normal left-canonical blocks of positive bond dimensions.
     If their dimensions agree, assume they are not gauge-phase equivalent.
     Every eigenvalue of their mixed transfer map has modulus less than one.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Normality implies irreducibility. The mixed-transfer spectral-radius
@@ -27,7 +27,7 @@ already proves the all-length statement in this form.
     the mixed map and hence its modulus is bounded by that spectral radius.
 \end{proof}
 
-\begin{theorem}[Coherent supported block trees from sparse labels]
+\begin{lemma}[Coherent supported block trees from sparse labels]
     \label{thm:ldp_coherent_supported_blocks}
     \lean{QuantumCircuit.IsPreparedWithMeasurementRoundsInDepth.apply_implementation,
         MPSPreparation.exists_pairFamilyUnitary,
@@ -53,7 +53,7 @@ already proves the all-length statement in this form.
         \bigotimes_k\ket{\omega_j}_{R_kL_{k+1}}
     \end{align*}
     is prepared in quantum depth at most $C(h+1)$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     The sparse GHZ construction has depth independent of the block lengths.
@@ -68,7 +68,7 @@ already proves the all-length statement in this form.
     subspace. The endpoint specifies every physical site.
 \end{proof}
 
-\begin{theorem}[All-length compilation of exponential block approximations]
+\begin{lemma}[All-length compilation of exponential block approximations]
     \label{thm:ldp_supported_loglog_compilation}
     \lean{MPSPreparation.exists_log_log_preparation_of_supported_block_approximation,
         MPSPreparation.natCast_mul_succ_le_mul_log,
@@ -76,7 +76,7 @@ already proves the all-length statement in this form.
     \leanok
     \uses{thm:ldp_coherent_supported_blocks, lem:ldp_block_length_threshold_error}
     Under the fixed tensor, support and eventual support-injectivity
-    assumptions of Theorem~\ref{thm:ldp_coherent_supported_blocks},
+    assumptions of Lemma~\ref{thm:ldp_coherent_supported_blocks},
     suppose a normalized target family has coherent supported block
     approximations of error at most $KM e^{-rq}$ for block lengths
     $\ell_k\ge q\ge L$, with $K,r>0$ independent of the amplitudes and
@@ -88,7 +88,7 @@ already proves the all-length statement in this form.
         T\le c\log\bigl(1+\log(N/\varepsilon)\bigr).
     \end{align*}
     The one-block support assumption is required only for $M=1$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     With $q=\lceil a\log(N/\varepsilon)+b\rceil$, where $a=1/r$ and
@@ -131,7 +131,7 @@ already proves the all-length statement in this form.
     denotes the entire bounded-leaf tree, not one free $N$-site gate.
 \end{proof}
 
-\begin{theorem}[Non-normal canonical preparation in double-logarithmic depth]
+\begin{lemma}[Non-normal canonical preparation in double-logarithmic depth]
     \label{thm:ldp_nonnormal_loglog}
     \lean{MPSPreparation.exists_isPreparedWithMeasurementRoundsInDepth_le_log_log_of_mpv_eq_sum,
         MPSPreparation.exists_isPreparedWithMeasurementRoundsInDepth_repeatedBlockSum_le_log_log,
@@ -160,7 +160,7 @@ already proves the all-length statement in this form.
     The protocol prepares $\psi$ in measurement rounds of quantum depth $T$.
     Finite-block physical ranges may overlap. Individual sums
     $\beta_j(N)=\sum_k\mu_{j,k}^N$ may vanish.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     For the unweighted direct sum $B=\bigoplus_jA_j$ and its
@@ -171,7 +171,7 @@ already proves the all-length statement in this form.
     requiring each coefficient to be nonzero. The embedded fixed-point
     pairs are orthonormal, their cyclic products have the required
     support, and the exact one-block pair gives the short accuracy branch,
-    so Theorem~\ref{thm:ldp_supported_loglog_compilation} applies.
+    so Lemma~\ref{thm:ldp_supported_loglog_compilation} applies.
 
     The intermediate theorem accepts any identity
     $\phi_N(A)=\sum_j\beta_j(N)\phi_N(A_j)$, so the coefficients need not

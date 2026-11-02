@@ -43,7 +43,7 @@
     $(M-1)q+(q+r)=N$, and the final block satisfies $q\leq q'<2q$.
 \end{proof}
 
-\begin{theorem}[All-length polynomial accuracy and logarithmic depth]%
+\begin{lemma}[All-length polynomial accuracy and logarithmic depth]%
     \label{thm:ldp_all_length_polynomial_accuracy}
     \lean{MPSPreparation.exists_isPreparedInDepth_allLengthPolynomialState}
     \leanok
@@ -68,7 +68,7 @@
     As recorded in \cite{gap:mswc24_polynomial_accuracy_uniform_blocks}, this establishes the $\xi>0$ case of the polynomial accuracy asserted after
     Lemma~1 of \cite{Malz2024Preparation} without a divisibility
     restriction, whereas zero correlation length remains outside this construction.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{def:ldp_all_length_polynomial_state,

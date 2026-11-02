@@ -19,7 +19,7 @@ No commutation condition is imposed on $X$ or $Y$. Cyclicity of trace
 identifies $\psi^N_{A,Y}$ with the usual boundary parametrization
 $\Gamma_N(Y)$ of the MPS ground space.
 
-\begin{theorem}[Stacking arbitrary boundaries]
+\begin{lemma}[Stacking arbitrary boundaries]
     \label{thm:glm_boundary_stack}
     \lean{MPOTensor.productBoundary,
         MPSTensor.mpvWithBoundary_eq_groundSpaceMap,
@@ -37,7 +37,7 @@ $\Gamma_N(Y)$ of the MPS ground space.
         O^N_{T,X}\psi^N_{A,Y} & =\psi^N_{T\cdot A,X\otimes Y}.
         \label{eq:glm_boundary_action}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Expanding the product letters over the intermediate physical configuration
@@ -96,7 +96,7 @@ For the diagram, write $R=PQ$ and $C=X\otimes Y$.
     multiplication, and every operator preserves the state ground space.
 \end{definition}
 
-\begin{theorem}[Separation by product boundaries]
+\begin{lemma}[Separation by product boundaries]
     \label{thm:glm_boundary_separation}
     \lean{MPOTensor.productBoundary_single, MPOTensor.eq_iff_trace_productBoundary}
     \leanok
@@ -104,7 +104,7 @@ For the diagram, write $R=PQ$ and $C=X\otimes Y$.
     They are equal if and only if
     $\tr((X\otimes Y)U)=\tr((X\otimes Y)V)$ for all matrices $X,Y$
     on the two factors.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Taking $X=E_{ji}$ and $Y=E_{lk}$ identifies the
@@ -112,7 +112,7 @@ For the diagram, write $R=PQ$ and $C=X\otimes Y$.
     $E_{ji}\otimes E_{lk}=E_{(j,l),(i,k)}$.
 \end{proof}
 
-\begin{theorem}[Linear boundary maps]
+\begin{lemma}[Linear boundary maps]
     \label{thm:glm_boundary_linear}
     \lean{MPOTensor.isBoundaryClosed_iff_exists_linearMap,
         MPOTensor.isBoundaryCompatible_iff_exists_linearMap}
@@ -125,7 +125,7 @@ For the diagram, write $R=PQ$ and $C=X\otimes Y$.
     Compatibility is likewise equivalent to the existence of a linear boundary
     map $b:\MN{\chi D}\to\MN{D}$ satisfying
     $\psi^N_{T\cdot A,C}=\psi^N_{A,b(C)}$ for every $C$ and $N\geq1$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:glm_boundary_stack}
@@ -156,7 +156,7 @@ For the diagram, write $R=PQ$ and $C=X\otimes Y$.
     where the index $c$ may combine a block label with its multiplicity index.
 \end{definition}
 
-\begin{theorem}[Boundary evaluation under an exact decomposition]
+\begin{lemma}[Boundary evaluation under an exact decomposition]
     \label{thm:glm_boundary_decomposition}
     \lean{MPSTensor.IsBiorthogonalDecomposition.sum_mul_sum,
         MPSTensor.IsBiorthogonalDecomposition.evalWord,
@@ -184,7 +184,7 @@ For the diagram, write $R=PQ$ and $C=X\otimes Y$.
     \end{align}
     for $N\geq1$, where the second identity uses an exact action
     decomposition of $T\cdot A$ into the tensors $B_c$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:glm_boundary_stack}
@@ -196,7 +196,7 @@ For the diagram, write $R=PQ$ and $C=X\otimes Y$.
     yields the operator and state decompositions.
 \end{proof}
 
-\begin{theorem}[Closedness from copies of one target]
+\begin{lemma}[Closedness from copies of one target]
     \label{thm:glm_boundary_closedness_of_decomposition}
     \lean{MPOTensor.isBoundaryClosed_of_biorthogonalDecomposition,
         MPOTensor.isBoundaryCompatible_of_biorthogonalDecomposition}
@@ -207,7 +207,7 @@ For the diagram, write $R=PQ$ and $C=X\otimes Y$.
     into copies of $A$, then $T$ and $A$ are boundary compatible.
     In either case the output boundary is
     $Z=\sum_cV_c(X\otimes Y)W_c$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:glm_boundary_decomposition}
@@ -217,14 +217,14 @@ For the diagram, write $R=PQ$ and $C=X\otimes Y$.
     $Z$.
 \end{proof}
 
-\begin{theorem}[The empty-word condition]
+\begin{lemma}[The empty-word condition]
     \label{thm:glm_boundary_empty_word}
     \lean{MPSTensor.IsBiorthogonalDecomposition.evalWord_of_complete}
     \leanok
     \uses{def:glm_boundary_decomposition}
     If in addition $\sum_cW_cV_c=\Id_D$, then
     $B^w=\sum_cW_cA_c^wV_c$ also holds for the empty word.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:glm_boundary_decomposition}

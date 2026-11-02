@@ -1,0 +1,112 @@
+\section{Positive lifting and hard-core particle sectors}
+\label{sec:hastings05_tree_sector_gap}
+
+The following estimates enter the many-body part of the tree example
+concerning the unrestricted metric-lattice summability assertion in equation
+(oibu) of \cite[lines 1690--1694]{Hastings2006Solving}. They apply to an
+arbitrary coefficient matrix satisfying the stated one-particle lower bound.
+The specific tree incidence estimate and its complete ground-space
+classification are discussed in \cite{gap:hastings05_tree_basis_counterexample}.
+
+\begin{lemma}[Positive quadratic lifting]
+    \label{thm:hastings05_positive_quadratic_lift}
+    \lean{TNLean.Lattice.TreeBasisCounterexample.quadraticLift,
+        TNLean.Lattice.TreeBasisCounterexample.modeOperator,
+        TNLean.Lattice.TreeBasisCounterexample.quadraticLift_outer,
+        TNLean.Lattice.TreeBasisCounterexample.quadraticLift_gram,
+        TNLean.Lattice.TreeBasisCounterexample.posSemidef_quadraticLift,
+        TNLean.Lattice.TreeBasisCounterexample.quadraticLift_one,
+        TNLean.Lattice.TreeBasisCounterexample.quadraticLift_gap}
+    \leanok
+    For a finite family of operators $s_v$, define
+    $\mathcal L(A)=\sum_{u,v}A_{uv}s_u^*s_v$ and
+    $B_w=\sum_vw_vs_v$. This linear map preserves positivity. More
+    precisely, for every rectangular matrix $D$,
+    \begin{align*}
+        \mathcal L(D^*D)=\sum_k B_{D_k}^*B_{D_k}.
+    \end{align*}
+    Also $\mathcal L(1)=\sum_vs_v^*s_v$ and
+    $\mathcal L(\overline w w^{\mathsf T})=B_w^*B_w$.
+    Consequently
+    \begin{align*}
+        A\ge\delta(1-\overline w w^{\mathsf T})
+        \quad\Longrightarrow\quad
+        \mathcal L(A)\ge\delta\Bigl(\sum_vs_v^*s_v-B_w^*B_w\Bigr).
+    \end{align*}
+\end{lemma}
+\begin{proof}\leanok
+    Expand the matrix products and the finite sums. Every positive
+    coefficient matrix has a factorization $D^*D$, and each lifted
+    row contributes the positive operator $B_{D_k}^*B_{D_k}$.
+\end{proof}
+
+\begin{lemma}[Actual hard-core particle number]
+    \label{thm:hastings05_hard_core_number}
+    \lean{TNLean.Lattice.TreeBasisCounterexample.qubitLowering,
+        TNLean.Lattice.TreeBasisCounterexample.qubitLowering_number,
+        TNLean.Lattice.TreeBasisCounterexample.lowering,
+        TNLean.Lattice.TreeBasisCounterexample.numberOperator,
+        TNLean.Lattice.TreeBasisCounterexample.occupation,
+        TNLean.Lattice.TreeBasisCounterexample.lowering_number,
+        TNLean.Lattice.TreeBasisCounterexample.numberOperator_eq_diagonal,
+        TNLean.Lattice.TreeBasisCounterexample.isStarProjection_lowering_number,
+        TNLean.Lattice.TreeBasisCounterexample.norm_lowering_le_one,
+        TNLean.Lattice.TreeBasisCounterexample.norm_lowering_apply_le,
+        TNLean.Lattice.TreeBasisCounterexample.IsParticleSector,
+        TNLean.Lattice.TreeBasisCounterexample.re_inner_numberOperator,
+        TNLean.Lattice.TreeBasisCounterexample.sum_norm_lowering_sq_of_sector}
+    \leanok
+    Let $s_v$ be the qubit lowering matrix $|0\rangle\langle1|$ at site
+    $v$ on the physical configuration space $\{0,1\}^V$.
+    The number operator $\mathcal N=\sum_vs_v^*s_v$ is exactly diagonal
+    with value $\sum_v\sigma_v$ on configuration $\sigma$.
+    Every $s_v$ is a contraction. If $\mathcal N\phi=m\phi$, then
+    \begin{align*}
+        \sum_v\|s_v\phi\|^2=m\|\phi\|^2.
+    \end{align*}
+\end{lemma}
+\begin{proof}\leanok
+    For one qubit, $s^*s=\operatorname{diag}(0,1)$ is an orthogonal
+    projection. The single-site embedding preserves products and adjoints,
+    so summing gives the asserted physical diagonal. Taking its quadratic
+    form gives the sector identity. The projection identity also implies
+    $\|s_v\|\le1$.
+\end{proof}
+
+\begin{lemma}[The multi-particle sector energy bound]
+    \label{thm:hastings05_hard_core_sector_gap}
+    \lean{TNLean.Lattice.TreeBasisCounterexample.norm_mode_apply_le,
+        TNLean.Lattice.TreeBasisCounterexample.norm_mode_apply_sq_le,
+        TNLean.Lattice.TreeBasisCounterexample.norm_hardCoreMode_apply_sq_le,
+        TNLean.Lattice.TreeBasisCounterexample.hardCore_sector_energy_ge}
+    \leanok
+    \uses{thm:hastings05_positive_quadratic_lift,
+        thm:hastings05_hard_core_number}
+    Let $\sum_v|w_v|^2=1$ and choose a site $r$ with
+    $\sum_{v\ne r}|w_v|^2\le1/64$. For the actual qubit lowerings,
+    every $m$-particle vector $\phi$, with $m\ge2$, satisfies
+    \begin{align*}
+        \|B_w\phi\|   & \le\tfrac78\sqrt m\,\|\phi\|, \\
+        \|B_w\phi\|^2 & \le\tfrac{49}{64}m\|\phi\|^2.
+    \end{align*}
+    If the coefficient matrix satisfies
+    $A\ge\tfrac{49}{64}(1-\overline w w^{\mathsf T})$, then
+    \begin{align*}
+        \operatorname{Re}\langle\phi,\mathcal L(A)\phi\rangle
+        \ge\tfrac{735}{2048}\|\phi\|^2.
+    \end{align*}
+    The assumed inequality is solely on the one-particle coefficient
+    matrix; the multi-particle energy bound is derived.
+\end{lemma}
+\begin{proof}\leanok
+    Separate the site $r$ and apply Cauchy--Schwarz to the tail:
+    \begin{align*}
+        \|B_w\phi\|\le\|\phi\|+
+        \tfrac18\Bigl(\sum_{v\ne r}\|s_v\phi\|^2\Bigr)^{1/2}
+        \le(1+\sqrt m/8)\|\phi\|.
+    \end{align*}
+    Since $m\ge2$, $\sqrt m\ge4/3$, giving the stated contraction.
+    Positive lifting then gives energy at least
+    $(49/64)(15m/64)\|\phi\|^2$, whose minimum for $m\ge2$ is
+    $735\|\phi\|^2/2048$.
+\end{proof}

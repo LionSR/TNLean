@@ -25,7 +25,7 @@ involve the matrices on the second factor.
     places the displayed pair before the list $s$.
 \end{definition}
 
-\begin{theorem}[Expansion over interior words]
+\begin{lemma}[Expansion over interior words]
     \label{thm:core_word_product}
     \lean{Matrix.prod_coreStep_eq_sum}
     \leanok
@@ -43,7 +43,7 @@ involve the matrices on the second factor.
     Every displayed product is taken in increasing order. Empty products are
     identity matrices, and the empty alphabet and empty matrix index sets are
     included. No commutativity assumption is made on the matrices.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{def:core_word_coefficients}
     Introduce a central formal variable $X$ and the matrix polynomial

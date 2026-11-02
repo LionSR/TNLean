@@ -54,7 +54,7 @@
     for the two bonds on sites $(0,1)$ and $(1,2)$.
 \end{definition}
 
-\begin{theorem}[Adjacent translates are the two overlapping lifts]
+\begin{lemma}[Adjacent translates are the two overlapping lifts]
     \label{thm:mpdo_eta_bond_overlapping_lifts}
     \lean{MPOTensor.reindex_embedLocalOperator_zero_eq_leftOverlappingLift}
     \lean{MPOTensor.reindex_embedLocalOperator_one_eq_rightOverlappingLift}
@@ -83,7 +83,7 @@
     lifts commute. These are exactly the local hypotheses needed for the
     Bravyi--Vyalyi decomposition invoked at
     \cite[Appendix~C.2, lines~1599--1605]{Cirac2016MPDO_arXiv}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Let $\Phi$ be the matrix reindexing induced by the common three-site
@@ -121,7 +121,7 @@
     overlapping lifts commute.
 \end{proof}
 
-\begin{theorem}[$\eta$-local structure carries single-bond commuting form]
+\begin{lemma}[$\eta$-local structure carries single-bond commuting form]
     \label{thm:mpdo_eta_local_structure_has_commuting_form}
     \lean{MPOTensor.EtaLocalStructureData.hasCommutingForm}
     \lean{MPOTensor.EtaLocalStructureData.formAt_realizes}
@@ -142,14 +142,14 @@
         \notag
     \end{align}
     % Gap documented in docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     At length $N$, the commuting two-site bond and realization identity
     carried by the $\eta$-local structure give the product form directly.
 \end{proof}
 
-\begin{theorem}[A commuting bond admits unitary block actions]
+\begin{lemma}[A commuting bond admits unitary block actions]
     \label{thm:mpdo_eta_local_pair_bond_unitary_block_actions}
     \lean{MPOTensor.TranslationInvariantBondData.%
         exists_unitary_blockActions_of_pairBond}
@@ -191,7 +191,7 @@
     \end{align}
     Hence the tensor factors in the displayed block actions occur in
     left--right order.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpdo_eta_bond_overlapping_lifts}
@@ -201,7 +201,7 @@
     gives the unitary decomposition and block actions.
 \end{proof}
 
-\begin{theorem}[Positive neighboring operators from the commuting bond]
+\begin{lemma}[Positive neighboring operators from the commuting bond]
     \label{thm:mpdo_commuting_bond_positive_eta_decomposition}
     \lean{MPOTensor.TranslationInvariantBondData.%
         exists_positive_eta_pairBond_decomposition}
@@ -225,7 +225,7 @@
     \end{align}
     The unitary and the neighboring operators depend only on the fixed bond,
     and hence are independent of a chain length or bond position.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpdo_eta_local_pair_bond_unitary_block_actions}
@@ -245,7 +245,7 @@
     $B'$, and is therefore positive semidefinite.
 \end{proof}
 
-\begin{theorem}[Cyclic product of a locally decomposed bond]
+\begin{lemma}[Cyclic product of a locally decomposed bond]
     \label{thm:mpdo_eta_pair_bond_cyclic_product_transport}
     \lean{MPOTensor.%
         reindex_product_embedLocalOperator_of_etaPair_decomposition}
@@ -279,7 +279,7 @@
     At $N=2$, the two translated windows have the opposite orders $(0,1)$
     and $(1,0)$ and give the two oriented factors
     $\eta_{k_0,k_1}$ and $\eta_{k_1,k_0}$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     In a fixed sector configuration, the cyclic regrouping sends the factors
@@ -290,7 +290,7 @@
     direct sum of tensor products.
 \end{proof}
 
-\begin{theorem}[Periodic commuting products under an isometric inclusion]
+\begin{lemma}[Periodic commuting products under an isometric inclusion]
     \label{thm:mpdo_isometric_commuting_bond_product}
     \lean{MPOTensor.isometricBondProduct_left_supported,
         MPOTensor.singleKrausMap_bondProduct_of_isometry}
@@ -307,7 +307,7 @@
         =\prod_{n=0}^{N-1}\widetilde B_{n,n+1}.
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Each lifted bond is supported on the included physical space at
@@ -324,7 +324,7 @@
 % 1603--1605 invokes the coefficient-free equation sigmaNK2 after assuming
 % only proportionality to the commuting-bond product.  The statement below
 % retains that scalar.  See docs/paper-gaps/cpsv16_commuting_form_to_sal.tex.
-\begin{theorem}[Scaled finite-chain cyclic neighboring-operator form]
+\begin{lemma}[Scaled finite-chain cyclic neighboring-operator form]
     \label{thm:mpdo_eta_local_sigma_nk2}
     \lean{MPOTensor.sitewisePhysicalMatrix_conjTranspose}
     \lean{MPOTensor.reindex_sitewisePhysicalMatrix_two}
@@ -356,7 +356,7 @@
     subsequent passage at
     \cite[Appendix~C.2, lines~1603--1605]{Cirac2016MPDO_arXiv} suppresses this
     factor when invoking equation \emph{sigmaNK2}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpdo_commuting_bond_positive_eta_decomposition, thm:mpdo_eta_pair_bond_cyclic_product_transport}
@@ -405,7 +405,7 @@
     following physical pair.
 \end{definition}
 
-\begin{theorem}[Closed cyclic edge-weight identity]
+\begin{lemma}[Closed cyclic edge-weight identity]
     \label{thm:mpdo_cyclic_edge_weight_tensor}
     \lean{MPOTensor.mpo_cyclicEdgeWeightTensor}
     \leanok
@@ -422,7 +422,7 @@
     \end{align}
     In the virtual trace there is precisely one potentially nonzero cyclic
     virtual configuration.
-\end{theorem}
+\end{lemma}
 
 \begin{definition}[Fixed tensor for a bond-product family]
     \label{def:mpdo_fixed_bond_product_tensor}
@@ -444,7 +444,7 @@
     product gives such a tensor with positive virtual dimension $d^2$.
 \end{definition}
 
-\begin{theorem}[Fixed tensor representation of a commuting bond]
+\begin{lemma}[Fixed tensor representation of a commuting bond]
     \label{thm:mpdo_eta_fixed_bond_product_tensor}
     \lean{MPOTensor.%
         reindex_mpo_cyclicEdgeWeightTensor_etaCyclicEdgeWeight}
@@ -466,7 +466,7 @@
     \end{align}
     The construction gives a positive $R$ independent of $N$. No normality,
     zero-correlation-length, or scalar normalization hypothesis is required.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpdo_commuting_bond_positive_eta_decomposition}
@@ -493,7 +493,7 @@
     then gives the product of the translates of $B$ at every length $N\ge2$.
 \end{proof}
 
-\begin{theorem}[Positive physical sectors of the selected fixed tensor]
+\begin{lemma}[Positive physical sectors of the selected fixed tensor]
     \label{thm:mpdo_fixed_bond_positive_physical_sector_representative}
     \lean{MPOTensor.TranslationInvariantBondData.%
         exists_positive_physicalSectorFactorization_fixedProductTensorData}
@@ -515,7 +515,7 @@
     \leanok
     \uses{thm:mpdo_eta_fixed_bond_product_tensor}
     Let $C$ be the selected fixed tensor of
-    Theorem~\ref{thm:mpdo_eta_fixed_bond_product_tensor}. There are
+    Lemma~\ref{thm:mpdo_eta_fixed_bond_product_tensor}. There are
     physical sectors
     $\C^d\cong\bigoplus_{q=0}^{K-1}H_q^L\otimes H_q^R$,
     a unitary $U$, and matrices $L_\beta(q)$ and $R_\alpha(q)$ such that,
@@ -543,7 +543,7 @@
     \end{align}
     Thus the physical-sector factorization belongs to the same tensor $C$
     whose closed operators are the fixed products of $B$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     The physical-sector factorization retained with $C$ satisfies the defining
@@ -589,7 +589,7 @@
     after the one-site unitary coordinate change, as used in the theorem.
 \end{remark}
 
-\begin{theorem}[Eventual proportionality from a fixed product tensor]
+\begin{lemma}[Eventual proportionality from a fixed product tensor]
     \label{thm:mpdo_eta_fixed_product_tensor_eventual_proportionality}
     \lean{MPOTensor.EtaLocalStructureData.%
         eventuallyNonzeroProportionalMPV₂_fixedProductTensor}
@@ -599,7 +599,7 @@
     by an eta-local structure. Then the doubled-index tensors of $M$ and
     $C$ are eventually nonzero proportional. The proof uses only lengths
     $N\ge2$ and therefore assumes no relation at length one.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     At every $N\ge2$, substituting the exact tensor representation into the
@@ -609,7 +609,7 @@
     doubled-index vectors.
 \end{proof}
 
-\begin{theorem}[A normal rescaling gives a geometric phase]
+\begin{lemma}[A normal rescaling gives a geometric phase]
     \label{thm:mpdo_eta_normal_rescaling_geometric_phase}
     \lean{MPOTensor.EtaLocalStructureData.%
         exists_unit_phase_power_mpo_eq_product_of_normal_smul}
@@ -625,7 +625,7 @@
         (\zeta s)^N\prod_{n=0}^{N-1}B_{n,n+1}.
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpdo_eta_fixed_product_tensor_eventual_proportionality, lem:mpv_smul, thm:normal_proportional_mpv_geometric_phase, lem:mpdo_three_first_site_contraction_coefficients}
@@ -651,7 +651,7 @@
     \end{align}
 \end{proof}
 
-\begin{theorem}[A normal rescaling forces the positive geometric law]
+\begin{lemma}[A normal rescaling forces the positive geometric law]
     \label{thm:mpdo_eta_normal_rescaling_positive_geometric_law}
     \lean{MPOTensor.EtaLocalStructureData.%
         mpo_eq_positive_power_product_of_normal_smul}
@@ -669,7 +669,7 @@
     \end{align}
     Thus a positive normal rescaling of the fixed product tensor already
     gives the positive geometric realization law.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpdo_eta_normal_rescaling_geometric_phase, thm:cpsv_normal_mpv_phase_gauge}

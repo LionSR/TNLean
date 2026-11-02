@@ -1,6 +1,6 @@
 \subsection{Geometric finite-size estimates}
 
-\begin{theorem}[Contracting physical strings]
+\begin{lemma}[Contracting physical strings]
     \label{thm:physical_string_geometric_decay}
     \lean{MPSTensor.physicalStringOrderParam_le_geometric}
     \leanok
@@ -10,7 +10,7 @@
     middle length $N\geq0$ satisfies $|S_N(x,y,u)|\leq Cr^N$;
     as in \cite[lines~241--243]{PerezGarcia2008StringOrder}, this bound
     gives exponential decay whenever $r<1$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     With $Y=\E_y(\Id)$ and $\ell(X)=\tr(\Lambda\E_x(X))$, the correlator
     takes the form $S_N=\ell(\E_u^N(Y))$.
@@ -23,7 +23,7 @@ $\tr\Lambda=1$, and $\E_A^*(\Lambda)=\Lambda$, with
 $\E_A$ irreducible and peripheral-primitive, and let
 $P(X)=\tr(\Lambda X)\Id$.
 
-\begin{theorem}[Canonical geometric remainder]
+\begin{lemma}[Canonical geometric remainder]
     \label{thm:canonical_string_geometric_remainder}
     \lean{MPSTensor.canonical_transfer_pow_sub_stationary_le_geometric,
         MPSTensor.canonical_trace_mul_transfer_pow_le_geometric}
@@ -39,7 +39,7 @@ $P(X)=\tr(\Lambda X)\Id$.
          & \leq C_F r^N.
         \label{eq:string_geometric_trace}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     Applying the complementary-remainder argument to the adjoint Kraus family
     gives $\rho(\E_A-P)<1$. Unitality and stationarity give
@@ -50,7 +50,7 @@ $P(X)=\tr(\Lambda X)\Id$.
     (\ref{eq:string_geometric_trace}) without assuming diagonalizability.
 \end{proof}
 
-\begin{theorem}[Geometric physical endpoint error]
+\begin{lemma}[Geometric physical endpoint error]
     \label{thm:physical_string_geometric_phase_error}
     \lean{MPSTensor.physicalStringOrderParam_phase_adjusted_le_geometric}
     \leanok
@@ -69,16 +69,16 @@ $P(X)=\tr(\Lambda X)\Id$.
         \beta_x  & =\tr(\Lambda\E_x(V)).
         \label{eq:string_geometric_phase_error}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     The exact identity $\mu^{-N}\E_u^N(Y)=V\E_A^N(V^\dagger Y)$
     expresses the error as
     $\ell((\E_A^N-P)(V^\dagger\E_y(\Id)))$, with
     $\ell(X)=\tr(\Lambda\E_x(VX))$, so
-    Theorem~\ref{thm:canonical_string_geometric_remainder} yields the bound.
+    Lemma~\ref{thm:canonical_string_geometric_remainder} yields the bound.
 \end{proof}
 
-\begin{theorem}[Normalized periodic finite-size error]
+\begin{lemma}[Normalized periodic finite-size error]
     \label{thm:periodic_string_geometric_expectations}
     \lean{MPSTensor.pureCanonical_periodic_expectations_le_geometric,
         MPSTensor.pureCanonical_mpvExpectation_fullRing_le_geometric}
@@ -86,7 +86,7 @@ $P(X)=\tr(\Lambda X)\Id$.
     \uses{thm:canonical_string_geometric_remainder,
         thm:periodic_string_trace_ratio, thm:periodic_string_normalization}
     Assume the faithful canonical purity hypotheses stated before
-    Theorem~\ref{thm:periodic_string_normalization}. There exist
+    Lemma~\ref{thm:periodic_string_normalization}. There exist
     $C_0>0$, $0<r<1$, and an integer $N_0\geq1$ such that, for
     $L\geq N_0$, the periodic vector is nonzero, $|Z_L|\geq1/2$,
     and $|Z_L-1|\leq C_0r^L$.
@@ -102,7 +102,7 @@ $P(X)=\tr(\Lambda X)\Id$.
     $L_0$ such that $|\langle u^{\otimes L}\rangle_L|\leq C_u q^L$
     whenever $L\geq L_0$; it decays when $q<1$.
     No prefactor uniform over growing supports is asserted.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     Applying (\ref{eq:string_geometric_trace}) to the identity insertion
     and to $F=\E_O$ provides a tail on which $|Z_L|\geq1/2$.

@@ -74,7 +74,7 @@ theorem card_internal_bonds_le (L lo hi : ℕ) :
 /-- The sum of the actual internal bonds is supported on its site interval.
 Auxiliary to ALVV's regional hard truncation, `def:hard-trunc`, lines 873–886.
 This is only a support statement and requires no local dimension hypothesis. -/
-private theorem isSupportedOn_sum_internal_bonds (L q lo hi : ℕ)
+theorem isSupportedOn_sum_internal_bonds (L q lo hi : ℕ)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
       (h i) (interval L i.val (i.val + 2))) :
@@ -160,7 +160,7 @@ end Fin
 
 namespace Finset
 
-/-- Four cut positions admit at most four actual crossing bonds.
+/-- Four cut positions give at most four actual crossing bonds.
 Auxiliary geometry for ALVV, arXiv:1602.08828v2, `def:hard-trunc`,
 lines 873–886, and `t:ais`, lines 1010–1024. -/
 private theorem card_four_cut_crossing_le (L k1 k2 k3 k4 : ℕ) :
@@ -313,17 +313,17 @@ open scoped BigOperators
 
 namespace Real
 
-/-- Clipping three bulks at `ell` and retaining two windows with at most
-`2*ell-2` original internal bonds gives a total centered norm budget at most
-`7*ell`, including all crossing bonds. Auxiliary to ALVV,
+/-- Clipping three bulks at an independent real threshold `t` and retaining
+two windows with at most `2*ell-2` original internal bonds gives a total
+centered norm budget at most `3*t + 4*ell`, including all crossing bonds. Auxiliary to ALVV,
 arXiv:1602.08828v2, `def:hard-trunc`, lines 873–886, and the spectral
 radius estimate in Theorem `t:ais`, lines 1010–1024.
 No additional crossing-bond constant is added after this budget. -/
 theorem five_region_final_clipping_budget_le
-    (ell C : ℕ) (c : Fin 5 → ℕ) (hell : 1 ≤ ell)
+    (ell C : ℕ) (c : Fin 5 → ℕ) (t : ℝ) (hell : 1 ≤ ell)
     (hc1 : c 1 ≤ 2 * ell - 2) (hc3 : c 3 ≤ 2 * ell - 2) (hC : C ≤ 4) :
-    (∑ i : Fin 5, if i ∈ ({0, 2, 4} : Finset (Fin 5)) then (ell : ℝ)
-      else (c i : ℝ)) + (C : ℝ) ≤ 7 * (ell : ℝ) := by
+    (∑ i : Fin 5, if i ∈ ({0, 2, 4} : Finset (Fin 5)) then t
+      else (c i : ℝ)) + (C : ℝ) ≤ 3 * t + 4 * (ell : ℝ) := by
   have hnat : c 1 + c 3 + C ≤ 4 * ell := by omega
   have hreal : (c 1 : ℝ) + (c 3 : ℝ) + (C : ℝ) ≤ 4 * (ell : ℝ) := by
     exact_mod_cast hnat
