@@ -38,7 +38,8 @@ private theorem softHeat_base_bounds :
 
 /-- A completely specified logarithmic cluster order gives actual soft-truncation tensors at
 any prescribed accuracy, using any scale at least three times the positive order. All heat
-approximants and tensors are constructed from the original local interactions. Supporting a corrected ALVV,
+approximants and tensors are constructed from the original local interactions.
+Supporting a corrected ALVV,
 arXiv:1602.08828v2, `lem:exp-approx-eff`, lines 1262–1268. -/
 theorem exists_softTruncation_mpo_of_accuracy {N q m : ℕ} (hq : 1 ≤ q) (hm : 0 < m)
     (h : Fin N → Matrix (Fin (N + 1) → Fin q) (Fin (N + 1) → Fin q) ℂ)
@@ -74,6 +75,8 @@ theorem exists_softTruncation_mpo_of_accuracy {N q m : ℕ} (hq : 1 ≤ q) (hm :
         ≤ W * (Real.exp ((N : ℝ) ^ 2 * b ^ r) - 1) := by
           dsimp only [W]
           gcongr
+          exact mul_nonneg (by norm_num)
+            (sub_nonneg.mpr (Real.one_le_exp (by positivity)))
     _ ≤ xi := hbudget.2
 
 end TNLean.MPS.AreaLaw

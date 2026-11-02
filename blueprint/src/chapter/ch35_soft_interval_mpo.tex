@@ -1,4 +1,4 @@
-% Source-only port: fresh verification is pending.
+% Fresh strict module checks passed; canonical integration gates remain pending.
 \section{A matrix product approximation to one soft-truncated interval}
 \label{sec:soft_interval_mpo}
 
@@ -16,6 +16,7 @@ bound or the unrestricted soft-truncation lemma of
     \lean{MPOTensor.exists_traceChainOperator_linearCombination_varying,
         MPOTensor.exists_traceChainOperator_linearCombination,
         MPOTensor.exists_traceChainOperator_add}
+    \leanok
 
     On a nonempty physical chain, a finite weighted sum of
     site-dependent matrix product operators with virtual dimensions
@@ -25,7 +26,7 @@ bound or the unrestricted soft-truncation lemma of
     of common dimension $D$ give dimension $sD$, and adding two
     chains of dimensions $D,E$ gives dimension $D+E$.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     Put the site tensors on diagonal blocks. Their ordered product
     has the corresponding products on its diagonal blocks. Put the
     coefficients in the same blocks of the closing matrix. Taking
@@ -37,6 +38,7 @@ bound or the unrestricted soft-truncation lemma of
 \begin{lemma}[Exact local sum and scalar]
     \label{lem:local_sum_scalar_mpo}
     \lean{TNLean.MPS.AreaLaw.exists_local_sum_add_scalar_mpo}
+    \leanok
 
     \uses{thm:operator_chain_from_all_cut_ranks}
     Let $q\geq1$ and let $h_i$, $0\leq i<N$, act on the designated
@@ -45,7 +47,7 @@ bound or the unrestricted soft-truncation lemma of
     tensors of virtual dimension $1+Nq^2$. Hermiticity and
     positivity are unnecessary for this statement.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:operator_chain_from_all_cut_ranks}
     At every cut, each designated pair contributes rank at most
     $q^2$, and the scalar identity contributes at most one.
@@ -56,6 +58,7 @@ bound or the unrestricted soft-truncation lemma of
 \begin{lemma}[Constructed heat approximants after the energy shift]
     \label{thm:shifted_regional_heat_mpo}
     \lean{TNLean.MPS.AreaLaw.exists_shifted_heat_mpo}
+    \leanok
 
     \uses{thm:physical_cluster_label_mpo}
     Let $A=\sum_i h_i$ be an actual nearest-neighbour sum of
@@ -69,7 +72,7 @@ bound or the unrestricted soft-truncation lemma of
         \label{eq:soft_interval_shifted_heat}
     \end{align}
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:physical_cluster_label_mpo}
     Apply the normalized cluster theorem at the lower energy
     $\epsilon$ and multiply its actual tensors by
@@ -82,6 +85,7 @@ bound or the unrestricted soft-truncation lemma of
 \begin{lemma}[Actual soft tensors at a specified cluster order]
     \label{thm:soft_mpo_cluster_order}
     \lean{TNLean.MPS.AreaLaw.exists_softTruncation_mpo_of_cluster_order}
+    \leanok
 
     \uses{thm:shifted_regional_heat_mpo, lem:trace_chain_linear_combination}
     Let $U=A-\epsilon I\geq0$ have the preceding actual local
@@ -94,7 +98,7 @@ bound or the unrestricted soft-truncation lemma of
         \label{eq:soft_interval_soft_cluster_error}
     \end{align}
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:shifted_regional_heat_mpo, lem:trace_chain_linear_combination}
     Expand $h_{m,t}$ as the finite heat sum with coefficients
     $c_a$. Construct each heat approximant directly at time $a/t$,
@@ -108,11 +112,15 @@ bound or the unrestricted soft-truncation lemma of
     \label{thm:soft_hamiltonian_mpo_accuracy}
     \lean{TNLean.MPS.AreaLaw.exists_softTruncation_mpo_of_accuracy,
         TNLean.MPS.AreaLaw.exists_softTruncatedHamiltonian_mpo_of_accuracy}
+    \leanok
 
     \uses{thm:soft_mpo_cluster_order, lem:local_sum_scalar_mpo,
         lem:trace_chain_linear_combination}
+    Let $h_i$, $0\leq i<N$, be Hermitian matrices on a chain of
+    $N+1$ sites of local dimension $q\geq1$. Suppose $h_i$ is supported
+    on $\{i,i+1\}$ and $\|h_i\|\leq1$, and write $H=\sum_i h_i$.
     Let $m\geq1$, $t\geq3m$, $\xi>0$, and let $I$ be a set of the
-    actual bond labels. Write $A=\sum_{i\in I}h_i$, suppose
+    bond labels. Write $A=\sum_{i\in I}h_i$, suppose
     $\epsilon I\leq A$, and put
     \begin{align}
         W&=t2^{m+1},&b&=2(e^{1/3}-1),\\
@@ -136,7 +144,7 @@ bound or the unrestricted soft-truncation lemma of
         \label{eq:soft_interval_full_error}
     \end{align}
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:soft_mpo_cluster_order, lem:local_sum_scalar_mpo,
         lem:trace_chain_linear_combination}
     The hypotheses give $m/t\leq1/3$. The strict inequality
@@ -155,12 +163,12 @@ For $0<\xi\leq W$, put $c=-\log b$ and
 $E=2\max\{1,N\}^2W/\xi$. The elementary bound
 $\log(1+\xi/W)\geq\xi/(2W)$ gives
 \begin{align}
-    \ell&\leq1+\frac{\log E}{c},&
+    \ell&\leq1+\frac{\log E}{c},\\
     (m+1)\ell^2q^\ell
       &\leq q(m+1)\left(1+\frac{\log E}{c}\right)^2
           E^{\log q/c}.
 \end{align}
-Thus, for fixed $q$, the logarithm of the bond is
+Here $\log_+u=\max\{0,\log u\}$. Thus, for fixed $q$, the logarithm of the bond is
 $O_q(m+\log_+t+\log(N+1)+\log_+(\xi^{-1}))$.
 In particular, $m=O(\log(N+2))$, polynomially bounded $t$, and
 inverse-polynomial accuracy give a polynomial bond. Polylogarithmic

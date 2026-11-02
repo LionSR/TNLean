@@ -1,96 +1,87 @@
 # A corrected one-interval soft-truncation MPO
 
-The proposed contribution constructs an operator approximation for one
-regional soft replacement, including the exterior sum and scalar shift.
-Its parameters satisfy t >= 3m, with m >= 1. The interactions are the actual
-nearest-neighbour matrices, Hermitian and of norm at most one. An explicit
-lower energy epsilon I <= A is assumed for the regional sum A; the source's
-regional energy bracket supplies this lower bound.
+This contribution constructs an operator approximation for one regional soft
+replacement, including the exterior sum and scalar shift. Its independent
+parameters satisfy t >= 3m and m >= 1. The interactions are the actual
+nearest-neighbour Hermitian matrices of norm at most one. For the regional
+sum A an explicit lower energy epsilon I <= A is retained.
 
-With W = t 2^(m+1), b = 2(exp(1/3) - 1) in (0,1), and the displayed
-logarithmic cluster order r, the constructed site-dependent operator tensors
-have virtual dimension
+Put W=t 2^(m+1) and b=2(exp(1/3)-1), so 0<b<1. The displayed logarithmic
+cluster order r determines actual site-dependent operator tensors of dimension
 
     D = 1 + N q^2 + (m+1) r^2 q^r
 
-and operator-norm error at most the requested xi > 0. The physical chain has
-N+1 sites and q >= 1. The heat operators are approximated separately, then
-combined by diagonal blocks. An approximate heat operator is not raised to
-power m. The scalar shift stays outside the norm-one local terms.
+and error at most every requested xi>0. The physical chain has N+1 sites
+and q>=1. The heat operators are approximated separately and combined by
+diagonal blocks; no approximate heat operator is raised to power m. The
+regional energy shift remains outside the norm-one local terms, and its
+normalization cancels exactly from the error bound.
 
-The cluster estimate uses connected components of interaction labels and
-retains the explicit energy normalization. The existing positive two-qubit
-and negative forty-qubit counterexamples, and the `false-source/open` record,
-are preserved. The added mathematical statement is the corrected estimate,
-not the printed physical-support theorem.
+For fixed q, the logarithm of this dimension is
 
-This contribution does not prove the low-energy spectral comparisons, a
-multiple-region construction, the unrestricted t,m approximation lemma, or
-a computational running-time bound. It therefore does not close issue 9847.
+    O_q(m + log_+ t + log(N+1) + log_+(1/xi)).
+
+Thus m=O(log(N+2)), polynomially bounded t, and inverse-polynomial accuracy
+give a polynomial bond. Polylogarithmic bounds on m, log_+ t and log_+(1/xi)
+give a quasipolynomial bond. The dependence on m(N) and t(N) is not discarded.
+The source GEN choice m=4 and t proportional to a buffer width is covered
+at the representation level once t>=12.
+
+The cluster selector counts connected components of interaction labels and
+retains the lower-energy normalization. The existing positive two-qubit and
+negative forty-qubit counterexamples, together with the false-source/open
+record, remain unchanged. The new statement is the corrected estimate,
+not the printed physical-support theorem. This contribution does not prove
+multi-region spectral comparisons, the unrestricted parameter statement,
+GEN, the final algorithm, or a computational running-time bound. It does
+not close issue 9847.
 
 ## Source selection
 
-The source-only worktree starts at exact TNLean revision
+The source-only worktree starts at TNLean revision
 `5fc343a57d70eefd2902780107851ab9b0753a82` and retains its QICLean pin.
 Twenty-five previously absent production modules are selected individually
 from the preserved cluster/MPO and soft-MPO sources. Existing mathematical
-files, including `ProductForm` and `TraceChainOperator`, are retained.
-Their current interfaces must be used during verification. No old branch,
-old generated import file, or old complete blueprint chapter is restored.
+files, including `ProductForm` and `TraceChainOperator`, are retained and
+used by the verified port. No old branch, old generated import file, or
+old complete blueprint chapter is restored.
 
-The four shared prerequisites are a separate QICLean contribution based on
-`ba01733099b5a18bed5c9bfb62f95f175b4c9b57`. Importing the scalar soft definition
-directly removes the unnecessary soft-versus-hard dependency. The complete
-selected production-source import graph contains 147 modules and no missing
-imports. All 61 new public declarations across the two contributions have
-matching mathematical book entries, with no missing local references.
-No matching declaration headers already exist on either current base.
+The four shared prerequisites form a separate QICLean contribution based on
+`ba01733099b5a18bed5c9bfb62f95f175b4c9b57`. The finite heat expansion imports
+the existing scalar soft definition directly; it does not require the
+separate soft-versus-hard comparison. All 61 new public declarations across
+the two contributions have mathematical book entries. No matching declaration
+headers already exist on either current base. The accuracy signatures are
+generalized directly, without compatibility aliases.
 
-## Verification status and order
+## Verification
 
-The TNLean modules have not been elaborated in the refreshed environment.
-The preserved 2026-10-29 private evidence is historical evidence only.
-New book completion markers are withheld. The worktree has no `.lake`
-directory, and no ordinary build or cache mutation is performed here.
+All 25 TNLean production modules passed fresh strict actual-name checks
+against exact, clean, fully warmed TNLean revision `5fc343a57d` and its own
+QICLean package `ba017330`. The largest module time is 36.126 seconds. The
+generalized soft accuracy and full-Hamiltonian modules passed in 5.167 and
+5.169 seconds respectively. A separate imported audit of all 54 new TNLean
+public declarations passed in 16.150 seconds, guarding 147 selected source
+and object pairs. Every declaration uses only `propext`, `Classical.choice`
+and `Quot.sound`.
 
-The verification order is:
+The four new QICLean leaves and all seven public foundations had already
+passed fresh guarded checks. Their temporary objects are the only new QIC
+objects used by the TNLean checks. The old private copies of four existing
+QIC dependencies were independently confirmed source- and object-identical
+to the fully warmed current package and omitted from the overrides.
 
-1. Shared mandatory-label, union-coefficient, finite heat and scalar order
-   estimates, followed by their imported foundation audit.
-2. Label-path geometry, mandatory windows and the normalized tail.
-3. Separated component sums, actual nearest-neighbour supports, both interval
-   rank bounds, crossing-interval counting and all-cut ranks.
-4. The operator-chain constructor, exact cluster MPO and normalized error.
-5. Weighted operator sums, exact local sums, shifted heat approximation,
-   soft approximation and the complete one-interval replacement.
+All selected sources, imported objects, build inputs and the warmed Mathlib
+object were hashed before and after each check. The only proof correction
+needed by the parameter generalization is the explicit nonnegativity of
+2(exp(m/t)-1); overlong docstrings were wrapped. No provider or dependency
+cache was changed, no Mathlib source was rebuilt, and the isolated worktree
+has no `.lake` directory. Foundation commands are confined to a temporary
+audit; no Lean test fixture is added.
 
-The new sections satisfy their selected theorem roles. The full current-base
-role checker reports 41 pre-existing mismatches outside these new sections;
-those unrelated entries are not changed. No Lean test fixture is added.
-
-The four QIC prerequisites and all seven public foundations have now passed
-fresh guarded private checks. All selected existing importers above changed
-current-source dependencies were re-elaborated as well. The TNLean checks
-remain pending. Focused mathematical PDF excerpts were rendered twice and
-visually inspected; the complete compiled-book gate remains pending.
-For fixed q, the logarithm of the displayed dimension is
-O_q(m + log_+ t + log(N+1) + log_+(1/xi)). Thus m=O(log(N+2)),
-polynomially bounded t, and inverse-polynomial accuracy give polynomial bond.
-Polylogarithmic bounds on m, log_+ t and log_+(1/xi) give quasipolynomial bond.
-Neither conclusion discards m(N) or t(N) dependence.
-
-## Independent scale generalization
-
-A source-only successor to revision `2f1f697598` generalizes both accuracy
-statements to independent scale t >= 3m. It retains the fixed strict heat
-base b=2(exp(1/3)-1) and changes the coefficient budget to W=t 2^(m+1).
-All heat factors are still constructed directly from the original local
-terms. The source GEN choice m=4, t=Theta(buffer width) is covered at the
-representation level once t>=12. This says nothing about the printed
-spectral estimates or the complete GEN algorithm.
-
-Only the two unpublished accuracy signatures and their single production
-consumer are generalized; there are no compatibility aliases. This successor
-has not been elaborated. Its source-only mathematical entries have no
-completion markers. The previous focused PDF inspection predates this
-parameter generalization and is not verification of the successor.
+Added prose, whitespace, generated imports, declaration links and selected
+new-section theorem roles pass static checks. The full current-base role
+checker has 41 pre-existing mismatches outside the new sections; those
+unrelated entries are not changed. The updated seven-page mathematical excerpt rendered twice without TeX warnings;
+the changed pages were visually inspected. The ordinary integrated full build
+and complete compiled-book gates remain pending.

@@ -15,7 +15,8 @@ Supporting a corrected ALVV, arXiv:1602.08828v2, `lem:exp-approx-eff`, lines 126
 
 **Local fix (cutoff and parameter choice):** this is the corrected interaction-label construction
 at scale at least three times the order, with the original local terms and scalar shift kept
-separate. It asserts no computational running time; see `docs/paper-gaps/alvv16_cluster_approximation.tex`.
+separate. It asserts no computational running time; see
+`docs/paper-gaps/alvv16_cluster_approximation.tex`.
 -/
 
 open Matrix Finset
