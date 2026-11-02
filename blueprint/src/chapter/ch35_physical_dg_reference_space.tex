@@ -1,0 +1,425 @@
+\section{A fixed reference space for collective trimming}
+
+\begin{lemma}[A reference span from approximants to a basis]
+    \label{thm:mps_basis_reference_subspace}
+    \lean{TNLean.MPS.AreaLaw.exists_reference_subspace_of_isOpenMPS_basis_approximations}
+    \leanok
+    Let $T\subseteq(\C^q)^{\otimes N}$ have dimension $r$, and let
+    $(u_i)_{i=1}^r$ be an orthonormal basis of $T$.
+    Let $0\le\varepsilon\le1$ and suppose that vectors $\phi_i$ have matrix
+    product bond dimension at most $D$ and satisfy
+    \begin{align}
+        \sum_{i=1}^r\|\phi_i-u_i\|^2\le\varepsilon/4.
+        \label{eq:basis_reference_total_error}
+    \end{align}
+    There is a fixed subspace $U$ of dimension $r$, mutually
+    $\varepsilon$-close to $T$, such that every vector of $U$ has exact
+    matrix product bond dimension at most $rD$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{thm:open_mps_finite_span,thm:chain_cut_rank_of_mps}
+    Define $F:T\to(\C^q)^{\otimes N}$ by $Fu_i=\phi_i$ and put $U=FT$.
+    The coefficient Cauchy--Schwarz inequality gives
+    \begin{align}
+        \|Fx-x\|^2\le\frac{\varepsilon}{4}\|x\|^2\qquad(x\in T).
+        \label{eq:basis_reference_operator_error}
+    \end{align}
+    Since $\varepsilon\le1$, the triangle inequality implies
+    $\|Fx\|\ge\|x\|/2$, so $F$ is injective and $\dim U=r$.
+    Best approximation by orthogonal projection and
+    (\ref{eq:basis_reference_operator_error}) give the closeness of $U$ to $T$.
+    For the reverse direction, write $y=Fx$ and use
+    $\|x\|\le2\|y\|$. Its squared distance from $T$ is at most
+    $\|Fx-x\|^2\le\varepsilon\|y\|^2$.
+    The finite-span matrix product estimate gives the exact bond bound $rD$
+    throughout this one space $U$. No orthogonality of the $\phi_i$ is needed.
+\end{proof}
+
+\begin{lemma}[A physical ground-space reference for trimming]
+    \label{thm:physical_dg_mps_reference_subspace}
+    \lean{TNLean.MPS.AreaLaw.exists_physical_dg_isOpenMPS_reference_subspace}
+    \leanok
+    There is a universal constant $K>0$ with the following property.
+    Let $H,q,\mu,\nu,\gamma,G$ satisfy the physical hypotheses of
+    Lemma~\ref{thm:physical_interval_bootstrap} on $N$ sites.
+    Put $r=\dim G$, $g=\min(\gamma,1)$ and $u=1+\log q+\log(1/g)$.
+    For $0<\varepsilon\le1$, set
+    \begin{align}
+        b=16+\log(1/g)+\log\bigl(32r(N+1)/\varepsilon\bigr).
+        \label{eq:physical_reference_accuracy}
+    \end{align}
+    There are an integer $B\ge1$ and a fixed subspace $U$ such that
+    \begin{align}
+        \log B & \le K\bigl(u^3/g+g^{-1/4}b^{3/4}u\bigr)(1+\log b),
+        \label{eq:physical_reference_bond}
+    \end{align}
+    $\dim U=r$, the spaces $U$ and $G$ are mutually $\varepsilon$-close,
+    and every vector in $U$ has an exact matrix product representation of
+    bond dimension at most $r^2B$.
+    The capped gap is as described in
+    \cite{gap:alvv16_approximation_parameters}.
+
+    This is a reference space for the trimming analysis in
+    \cite[proof for degenerate ground spaces, lines 1801--1805]{Arad2016RigorousRG}.
+    The viable spaces of the merge tree remain to be constructed by
+    tensoring, sampling, filtering and trimming. The coefficient-one
+    entropy theorem remains a statement about the original space $G$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{thm:physical_dg_normalized_mps_approximation,
+        thm:mps_basis_reference_subspace}
+    Choose an actual orthonormal basis $u_1,\ldots,u_r$ of $G$.
+    Apply the global approximation theorem at
+    $\delta_{\mathrm{basis}}=\varepsilon/(2r)$.
+    Its integer $B$ is chosen before the basis vector, so every $u_i$ has
+    an approximant $\phi_i$ with bond at most $rB$ and
+    \begin{align*}
+        \|\phi_i-u_i\|^2\le\delta_{\mathrm{basis}}/2
+        =\varepsilon/(4r).
+    \end{align*}
+    Their total squared error is at most $\varepsilon/4$.
+    The preceding lemma gives $U$ with bond bound $r(rB)=r^2B$.
+    Substitution of $\delta_{\mathrm{basis}}$ into the global logarithmic
+    bound gives (\ref{eq:physical_reference_accuracy}) and
+    (\ref{eq:physical_reference_bond}).
+\end{proof}
+
+
+
+
+
+\begin{lemma}[Collective trimming on an arbitrary interval]
+    \label{thm:interval_trimming_reference}
+    \lean{TNLean.MPS.AreaLaw.intervalTrimCut,
+        TNLean.MPS.AreaLaw.intervalTrimCut_mono,
+        TNLean.MPS.AreaLaw.schmidtRank_cutEnvVector_interval_le,
+        TNLean.MPS.AreaLaw.intervalTrimVector,
+        TNLean.MPS.AreaLaw.intervalTrimSubspace,
+        TNLean.MPS.AreaLaw.intervalTrimSubspace_eq_span,
+        TNLean.MPS.AreaLaw.finrank_intervalTrimSubspace_le,
+        TNLean.MPS.AreaLaw.schmidtRank_cutVector_intervalTrimVector_le,
+        TNLean.MPS.AreaLaw.isCloseTo_prodExt_intervalTrimSubspace_of_reference,
+        TNLean.MPS.AreaLaw.isViable_intervalTrimSubspace_of_reference}
+    \leanok
+    Let $J=[p,r)$ and $m=\max\{r-p-1,0\}$. Suppose $D\ge1$,
+    $G,U\subseteq\mathcal H_V$ are mutually $\varepsilon$-close, and
+    every vector of $U$ is an open matrix product state of bond at most
+    $D$. If $S\subseteq\mathcal H_J$ is $\delta$-viable for $G$, then
+    its actual collective trim at threshold $\xi>0$ is
+    \begin{align}
+        4\delta+6\varepsilon+4\xi\sqrt{mD^2}
+        \label{eq:interval_reference_trimming_error}
+    \end{align}
+    viable for $G$, where $\delta,\varepsilon\ge0$.
+    For any recorded orthonormal basis of $S$ with $s$ members, the trim
+    has dimension at most $s$, and each recorded trimmed vector has
+    Schmidt rank at most $s/\xi^2$ across every internal interval cut.
+    These statements retain the whole exterior of $J$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:alvv_collective_trim}
+    An internal prefix of $J$ has at most two global boundaries, hence
+    every vector of $U$ has rank at most $D^2$ across that cut with the
+    whole exterior kept. Transfer from $G$ to $U$, apply collective
+    trimming with this rank bound, and transfer back. The resulting error
+    is $2\bigl(2(\delta+\varepsilon)+2\xi\sqrt{mD^2}+\varepsilon\bigr)$.
+    The actual projections also give the dimension and recorded-vector
+    rank bounds.
+\end{proof}
+
+\begin{lemma}[One physical reference for all interval trims]
+    \label{thm:physical_dg_interval_trimming}
+    \lean{TNLean.MPS.AreaLaw.exists_physical_dg_interval_collective_trimming_bound}
+    \leanok
+    Under the hypotheses of Lemma~\ref{thm:physical_dg_mps_reference_subspace},
+    let $0<\varepsilon\le1$. The same universal constant and integer
+    $B\ge1$ satisfying (\ref{eq:physical_reference_bond}) can be chosen
+    before every interval $J=[p,r)\subseteq[0,N)$ and every
+    $\delta$-viable subspace $S\subseteq\mathcal H_J$.
+    Put $D_{\rm ref}=r_G^2B$, where $r_G=\dim G$.
+    The collective trim formed from an internally chosen orthonormal
+    basis of $S$ is
+    $4\delta+6\varepsilon+4\xi\sqrt{\max\{|J|-1,0\}D_{\rm ref}^2}$-viable
+    for $G$.
+    The capped-gap dependence is unchanged. This two-boundary estimate
+    does not identify the trimming radius with the printed tree parameters
+    in~\cite[lines 1801--1805]{Arad2016RigorousRG}.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:physical_dg_mps_reference_subspace,thm:interval_trimming_reference}
+    Choose the one common reference before the interval and $S$, and
+    apply the preceding lemma with $D=D_{\rm ref}$.
+\end{proof}
+
+\begin{lemma}[Merging adjacent interval spaces for one global target]
+    \label{thm:actual_adjacent_interval_merge}
+    \lean{TNLean.MPS.AreaLaw.adjacentIntervalMerge,
+        TNLean.MPS.AreaLaw.isViable_adjacentIntervalMerge,
+        TNLean.MPS.AreaLaw.finrank_adjacentIntervalMerge_le}
+    \leanok
+    Let $p\le k\le r$ and fix an arbitrary global target
+    $G\subseteq\mathcal H_{[0,N)}$. Suppose that
+    $S_1\subseteq\mathcal H_{[p,k)}$ and
+    $S_2\subseteq\mathcal H_{[k,r)}$ are respectively
+    $\delta_1$-viable and $\delta_2$-viable for $G$ in their actual
+    interval/exterior splits. The tensor product of $S_1,S_2$, carried
+    back to the parent configuration space $\mathcal H_{[p,r)}$, is
+    $(\delta_1+\delta_2)$-viable for the same $G$ and has dimension at
+    most $(\dim S_1)(\dim S_2)$.
+    Empty child intervals are included, and no product structure of $G$
+    is assumed. This is the chain-coordinate form of
+    \cite[Lemma on tensoring, lines 500--523]{Arad2016RigorousRG}.
+\end{lemma}
+\begin{proof}\leanok
+    The actual restrictions to the two disjoint intervals and their full
+    common exterior give one three-factor image of $G$. Tensoring the
+    two child viability inequalities in this image gives the sum of
+    errors. The union of the two adjacent intervals is $[p,r)$, so the
+    canonical configuration identification carries the constructed
+    candidate to the stated parent interval and preserves dimension.
+\end{proof}
+
+
+\begin{lemma}[One sampled and trimmed physical parent interval]
+    \label{thm:physical_dg_sampled_node}
+    \lean{TNLean.MPS.AreaLaw.exists_measurable_interval_word_image_event,
+        TNLean.MPS.AreaLaw.exists_physical_dg_sampled_interval_node_event}
+    \leanok
+    \uses{thm:actual_adjacent_interval_merge,thm:physical_dg_interval_trimming}
+    Under the physical hypotheses of the common-reference theorem,
+    fix the actual full ground space $G$ and let $r_G=\dim G$.
+    Choose its common reference at error $10^{-4}$, with
+    $D_{\rm ref}=r_G^2B$, before all intervals, and put
+    $\xi=(1000D_{\rm ref}\sqrt{L+1})^{-1}$.
+    Suppose the physical filter parameters satisfy $m\ge\max\{q,50\}$,
+    $\ell\ge1$, $t\ge21$, the inequalities
+    \[
+        288e^{11/8}e^{-(t-g)/8}\le {g\over10^6m},\qquad
+        \bigl(2e^{-2\ell^2\sqrt{(4g/5)/R}}\bigr)^2\le\Delta
+        \quad(0<R\le3t+4\ell),
+    \]
+    and $D^{12}\Delta\le10^{-5}$, where
+    $D=(m\ell^2)^{22\ell}$.
+    For every parent $[p,r)$ of length greater than $4\ell$, the physical
+    construction chooses a target of dimension $r_G$ and an operator
+    family of size at most $D^2$, before the child spaces and $s\ge1$.
+
+    Let both adjacent children be $3/200$-viable for the same global $G$
+    and have dimension at most $D^6s^3$. Form their actual tensor merge
+    $W$ in the parent interval, and write $Q=\dim W$ and
+    $a=\lceil\log_D(D^2s)\rceil$.
+    There is a measurable event of Haar unitaries whose failure measure
+    is at most
+    \[
+        \eta=\begin{cases}
+            0,                                                & Q\le s, \\
+            \bigl(1+2/\sqrt{3s/(32Q)}\bigr)^{2r_G}Qe^{-s/16}, & s<Q.
+        \end{cases}
+    \]
+    For every unitary in this event, sample $\min\{s,Q\}$ basis vectors,
+    apply all actual length-$a$ operator words, and collectively trim
+    their image at threshold $\xi$. The resulting space has dimension
+    at most $D^6s^3$ and is $3/200$-viable for the original global $G$,
+    with the whole exterior retained.
+
+    This is a long-interval, capped-gap auxiliary construction. It does
+    not include the short-interval branch, a uniform choice of $s$,
+    adaptive measurability, or a recursively selected tree. It uses one
+    final collective trim rather than identifying this operation with
+    the source's interleaved trims.
+\end{lemma}
+\begin{proof}\leanok
+    The merge is $3/100$-viable for $G$. Transfer to the constructed
+    target costs at most $2(3/100+10^{-4})<1/4$.
+    The actual Haar sample and word images give dimension at most
+    $D^6s^3$ and target error at most
+    $(1024/9)10^{-5}s^{-2}$. Transfer back to $G$ bounds the error by
+    $1/400$. Collective trimming then gives error at most
+    $4/400+6/10000+1/250<3/200$.
+    The reference uses the genuine two-boundary rank $D_{\rm ref}^2$.
+\end{proof}
+
+
+\begin{definition}[Balanced recursive interval spaces]
+    \label{def:balanced_interval_spaces}
+    \lean{TNLean.MPS.AreaLaw.LongIntervalIndex,
+        TNLean.MPS.AreaLaw.IntervalMergeOperation,
+        TNLean.MPS.AreaLaw.balancedIntervalSpace}
+    \leanok
+    Fix an integer leaf width $w\ge1$ and an operation on pairs of spaces
+    on adjacent intervals. On $[p,r)$, retain the full local space if
+    $r-p\le w$. Otherwise put $k=p+\lfloor(r-p)/2\rfloor$, recursively
+    construct the spaces on $[p,k)$ and $[k,r)$, and apply the fixed
+    operation to these actual child spaces. A long interval is a valid
+    interval of length greater than $w$.
+\end{definition}
+
+\begin{lemma}[Induction for the actual interval recursion]
+    \label{lem:balanced_interval_invariant}
+    \lean{TNLean.MPS.AreaLaw.balancedIntervalSpace_of_short,
+        TNLean.MPS.AreaLaw.balancedIntervalSpace_invariant}
+    \leanok
+    \uses{def:balanced_interval_spaces}
+    Any property of interval spaces that holds at the short leaves and
+    is preserved by the chosen parent operation holds at every actual
+    recursively constructed space.
+\end{lemma}
+\begin{proof}\leanok
+    Induct on the interval length. Both children of a long interval have
+    strictly smaller positive length, and their lengths sum to the
+    parent length.
+\end{proof}
+
+\begin{lemma}[Recorded generators of the actual trimmed image]
+    \label{lem:interval_recorded_generator_bounds}
+    \lean{TNLean.MPS.AreaLaw.IsIntervalSpanWithRankBound,
+        TNLean.MPS.AreaLaw.IsIntervalSpanWithRankBound.finrank_le,
+        TNLean.MPS.AreaLaw.isIntervalSpanWithRankBound_intervalTrimSubspace,
+        TNLean.MPS.AreaLaw.isIntervalSpanWithRankBound_top,
+        TNLean.MPS.AreaLaw.sampledIntervalTrim,
+        TNLean.MPS.AreaLaw.isIntervalSpanWithRankBound_sampledIntervalTrim}
+    \leanok
+    \uses{thm:interval_trimming_reference}
+    A space spanned by at most $M$ recorded vectors has dimension at most
+    $M$. Collective trimming of an orthonormal family of at most $M$
+    vectors produces a spanning family of at most $M$ vectors satisfying
+    $\xi^2\operatorname{SR}(u_i)\le M$ at every internal interval cut.
+    In particular this applies to the literal sampled-word image at the
+    cubic count $M=D^6s^3$.
+    The full local space also admits this bound whenever its dimension
+    is at most $M$ and $0<\xi\le1$.
+    These rank bounds concern the recorded vectors; the same bound is
+    not asserted for every vector in their span.
+\end{lemma}
+\begin{proof}\leanok
+    Use the actual trimmed orthonormal basis as the recorded spanning
+    family and apply the collective rank estimate at each cut.
+    For the full local space, every vector has rank at most its local
+    dimension, and an orthonormal basis spans it.
+\end{proof}
+
+\begin{lemma}[A recursive witness tree from fixed-input node events]
+    \label{thm:sampled_interval_witness_tree}
+    \lean{TNLean.MPS.AreaLaw.exists_balanced_sampled_interval_tree}
+    \leanok
+    \uses{lem:balanced_interval_invariant,lem:interval_recorded_generator_bounds}
+    Fix the same arbitrary global target $G$ at every interval. Suppose
+    a family of at most $D^2$ operators is fixed at each long parent,
+    before choosing the child spaces and the sampling size. Let $r_G\ge1$,
+    $D\ge2$, $0<\beta<1$, and choose
+    \[
+        A=1+\log r_G+\log D+\log(1/\beta),\quad
+        s=\lceil4096r_GA\rceil,\quad M=D^6s^3.
+    \]
+    Assume $q^w\le M$ and $0<\xi\le1$.
+    Suppose that, for every pair of $3/200$-viable child spaces of
+    dimensions at most $M$, the actual sampled-word image and final
+    collective trim is $3/200$-viable on a fixed-input Haar event with
+    the corrected failure bound above.
+    Then one operation can be selected whose values on all such inputs
+    are literal sampled and trimmed outputs for actual unitaries.
+    Its actual balanced recursion is $3/200$-viable for the same $G$ at
+    every interval, has dimension at most $M$, and retains at most $M$
+    generators with $\xi^2\operatorname{SR}(u_i)\le M$.
+    This auxiliary theorem assumes the certified node events; it does
+    not assume final viable spaces or assert an adaptive probability.
+\end{lemma}
+\begin{proof}\leanok
+    The actual merged dimension is at most $M^2=D^{12}s^6$. The uniform
+    failure bound is at most $\beta<1$, hence every certified Haar event
+    contains a unitary. Choose such a unitary for each admissible input.
+    The resulting parent space is the literal sampled-word image and
+    collective trim. At the leaves the full local dimension is at most
+    $q^w\le M$. The preceding induction proves all three bounds for the
+    actual recursion.
+\end{proof}
+
+\begin{lemma}[An actual recursive tree for the physical ground space]
+    \label{thm:physical_dg_recursive_interval_spaces}
+    \lean{TNLean.MPS.AreaLaw.exists_physical_dg_recursive_interval_spaces}
+    \leanok
+    \uses{thm:physical_dg_sampled_node,thm:sampled_interval_witness_tree}
+    Under the physical hypotheses and explicit scalar conditions of
+    Lemma~\ref{thm:physical_dg_sampled_node}, choose the same common
+    reference bound $B$ and put $D_{\rm ref}=r_G^2B$ and
+    $\xi=(1000D_{\rm ref}\sqrt{L+1})^{-1}$.
+    The Hamiltonian constructs one family of at most $D^2$ operators for
+    every valid interval of length greater than $4\ell$, before every
+    $\beta$, sampling size and child space.
+    For $0<\beta<1$, take
+    \[
+        A=1+\log r_G+\log D+\log(1/\beta),\qquad
+        s=\lceil4096r_GA\rceil,\qquad M=D^6s^3.
+    \]
+    Then $s\le4097r_GA$. There is one parent operation whose values on
+    all admissible children are the literal sampled-word image and final
+    collective trim for an actual unitary. Its actual balanced recursion,
+    with full local spaces at leaves of length at most $4\ell$, is
+    $3/200$-viable for the same original global ground space $G$ at
+    every interval and has dimension at most $M$.
+    Each such space has at most $M$ recorded spanning vectors, with
+    internal-cut Schmidt ranks at most
+    \[
+        10^6D_{\rm ref}^2(L+1)M.
+    \]
+    The whole exterior is retained in the viability statements.
+
+    This is a recursive witness theorem with block leaves, capped gap
+    $g=\min\{\gamma,1\}$, independent scalar tail/filter conditions and
+    one final trim at a long node. It does not assert the printed
+    interleaved-trim algorithm, adaptive joint probability, energy
+    estimation, final spectral extraction or running time; these
+    distinctions are recorded in~\cite{gap:alvv16_approximation_parameters}.
+\end{lemma}
+\begin{proof}\leanok
+    Choose the physical reference and all fixed parent families before
+    the sampling size. The uniform failure estimate makes every
+    certified fixed-input node event nonempty. Since $q\le m$,
+    $\ell\ge1$ and $D=(m\ell^2)^{22\ell}$, the full short-leaf dimension
+    $q^{4\ell}$ is at most $D^6\le M$. Apply the preceding actual-tree
+    theorem. Finally divide each recorded weighted rank estimate by
+    $\xi^2$ to obtain the displayed integer bound. The invariant keeps
+    the same original $G$ at every step.
+\end{proof}
+
+
+\begin{theorem}[Automatic parameters for the physical witness tree]
+    \label{thm:physical_dg_interval_tree_parameters}
+    \lean{TNLean.MPS.AreaLaw.exists_physical_dg_interval_tree}
+    \leanok
+    \uses{thm:physical_dg_recursive_interval_spaces,thm:dg_accuracy_scalar_parameters}
+    There are universal constants $C\ge1$ and $K>0$, chosen before the
+    chain and Hamiltonian, with the following property. Under the physical
+    hypotheses of the preceding lemma put
+    \[
+        g=\min\{\gamma,1\},\quad m=\max\{q,50\},\quad
+        v=1+\log m+\log(1/g),\quad
+        \ell=\lceil Cv^2/g\rceil,\quad D=(m\ell^2)^{22\ell}.
+    \]
+    Then $\ell\ge21$ and
+    \[
+        \log D\le {22(C+1)(6+2\log(C+1))\over g}\,v^3.
+    \]
+    The common reference and the actual parent families of the preceding lemma can be constructed with these parameters, before every
+    sampling size and child space. For every $0<\beta<1$, its actual
+    balanced recursion has the same original-ground-space viability
+    $3/200$, dimension bound $M=D^6s^3$, recorded-generator count $M$
+    and recorded-generator rank bound $10^6D_{\rm ref}^2(L+1)M$.
+    No numerical tail or filter estimate is assumed.
+
+    The capped gap, block leaves, one final trim and distinction from the
+    printed adaptive algorithm remain those of the preceding lemma and
+    \cite{gap:alvv16_approximation_parameters}. The recorded-generator
+    rank bound is not assigned unchanged to their entire span.
+\end{theorem}
+\begin{proof}\leanok
+    Apply the uniform scalar theorem with $m=\max\{q,50\}$.
+    Set $t=\ell$ and $\Delta=10^{-5}D^{-12}$. Its uniform tradeoff for
+    $R\le8\ell$ implies the required filter estimate for
+    $R\le3t+4\ell=7\ell$, and its tail estimate is at most
+    $g/(10^6m)$. Since $m\ge50$, all hypotheses of the conditional
+    recursive-witness theorem follow. Its actual families, operation and
+    recorded spanning vectors give the conclusion.
+\end{proof}

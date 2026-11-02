@@ -557,7 +557,9 @@
         "thm:lvv_successive_arbitrary_accuracy",
         "thm:lvv_sampled_ground_state",
         "thm:alvv_ff_chain_replacement",
-        "thm:alvv_ff_corrected_rank"
+        "thm:alvv_ff_corrected_rank",
+        "thm:physical_dg_interval_tree_parameters",
+        "thm:physical_dg_normalized_mps_approximation"
       ],
       "corollaries": [],
       "notes": {
@@ -1134,7 +1136,6 @@
       "notes": {
         "thm:quasi_local_interval_observable": "Quasi-local interval observables, the structure used across chapters"
       }
-
     },
     "ch:aklv_entropy_approximation": {
       "theorems": [
