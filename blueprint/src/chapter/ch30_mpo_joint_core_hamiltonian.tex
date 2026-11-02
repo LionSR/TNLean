@@ -8,7 +8,7 @@ Write $A_x=A_x^0$ and $D_x=D_x^0$ in this subsection. The exterior
 multiplicities $E_x,F_x$ are arbitrary nonnegative integers. The shared
 physical alphabet remains $\Fin{d_0}$ throughout the interior.
 
-\begin{theorem}[Dependent orthogonal projections]
+\begin{lemma}[Dependent orthogonal projections]
     \label{thm:mpo_dependent_orthogonal_projections}
     \lean{ContinuousLinearMap.isSymmetricProjection_sigmaFiberwiseMap,
         ContinuousLinearMap.isSymmetricProjection_dependentRightFiberwiseMap,
@@ -22,7 +22,7 @@ physical alphabet remains $\Fin{d_0}$ throughout the interior.
     $v\in\ker P$ exactly when $(Uv)_{q,s}\in\ker P_q$ for every $q,s$,
     then $UPU^{-1}=\bigoplus_q(P_q\otimes I_{S_q})$.
     Empty label sets and empty spectator fibers are allowed.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     The inner product is the sum of the fiber inner products, so symmetry
@@ -65,7 +65,7 @@ physical alphabet remains $\Fin{d_0}$ throughout the interior.
     $(i,(x,c,e))\mapsto(x,(i,c),e)$.
 \end{definition}
 
-\begin{theorem}[The one-sided ranges split over exterior fibers]
+\begin{lemma}[The one-sided ranges split over exterior fibers]
     \label{thm:mpo_joint_core_edge_fibers}
     \lean{MPSTensor.MPOSymmetry.mem_jointEndpointFirstEdgeCoreSupportES_iff_fibers,
         MPSTensor.MPOSymmetry.mem_jointEndpointLastEdgeCoreSupportES_iff_fibers}
@@ -79,7 +79,7 @@ physical alphabet remains $\Fin{d_0}$ throughout the interior.
         w\in\operatorname{ran}\Phi_{R,E}
          & \iff w_{x,e}\in S_{R,x}\text{ for every }x,e.
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     In the first identity a rectangular boundary $Y_x$ gives
@@ -91,7 +91,7 @@ physical alphabet remains $\Fin{d_0}$ throughout the interior.
     empty set.
 \end{proof}
 
-\begin{theorem}[Exact normalized edge projector identities]
+\begin{lemma}[Exact normalized edge projector identities]
     \label{thm:mpo_joint_core_edge_projectors}
     \lean{MPSTensor.MPOSymmetry.jointEndpointFirstEdgeCoreConstraint_conj_spectators,
         MPSTensor.MPOSymmetry.jointEndpointLastEdgeCoreConstraint_conj_spectators,
@@ -104,13 +104,13 @@ physical alphabet remains $\Fin{d_0}$ throughout the interior.
     become respectively
     $\bigoplus_x(p_{L,x}\otimes I_{E_x})$ and
     $\bigoplus_x(p_{R,x}\otimes I_{E_x})$ under the edge regroupings.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:mpo_joint_core_edge_fibers,thm:mpo_dependent_orthogonal_projections}
     Because their kernels are the ranges in
-    Theorem~\ref{thm:mpo_joint_core_edge_fibers},
-    Theorem~\ref{thm:mpo_dependent_orthogonal_projections} gives both
+    Lemma~\ref{thm:mpo_joint_core_edge_fibers},
+    Lemma~\ref{thm:mpo_dependent_orthogonal_projections} gives both
     identities.
 \end{proof}
 
@@ -192,21 +192,21 @@ physical alphabet remains $\Fin{d_0}$ throughout the interior.
     alphabet, including any unused directions, remains in every core.
 \end{definition}
 
-\begin{theorem}[The shortest supported chain has no middle edge]
+\begin{lemma}[The shortest supported chain has no middle edge]
     \label{thm:mpo_joint_three_site_middle}
     \lean{MPSTensor.MPOSymmetry.jointEndpointNormalizedBulkTerm_one_eq_zero}
     \leanok
     \uses{def:mpo_joint_common_core_sum}
     At $m=1$, the middle sum vanishes. The total length is three and
     the first and last edges are distinct.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     No two-site window fits inside a single middle site, so the middle
     sum is indexed by the empty set.
 \end{proof}
 
-\begin{theorem}[Termwise identification on every ordered pair]
+\begin{lemma}[Termwise identification on every ordered pair]
     \label{thm:mpo_joint_core_term_fibers}
     \lean{MPSTensor.MPOSymmetry.jointEndpointNormalizedFirstTerm_apply_fiber,
         MPSTensor.MPOSymmetry.jointEndpointNormalizedLastTerm_apply_fiber,
@@ -218,7 +218,7 @@ physical alphabet remains $\Fin{d_0}$ throughout the interior.
     (\ref{eq:mpo_joint_normalized_sum}) act on $v_{x,y;a,e}$ as the
     corresponding three terms in (\ref{eq:mpo_joint_core_sum}). Hence
     $(K_{E,F,m}v)_{x,y;a,e}=G_{x,y,m}v_{x,y;a,e}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:mpo_joint_core_edge_projectors,def:mpo_joint_core_placements}
@@ -229,7 +229,7 @@ physical alphabet remains $\Fin{d_0}$ throughout the interior.
     gives the result.
 \end{proof}
 
-\begin{theorem}[Exact dependent spectator operator identification]
+\begin{lemma}[Exact dependent spectator operator identification]
     \label{thm:mpo_joint_core_operator_identity}
     \lean{MPSTensor.MPOSymmetry.jointEndpointNormalizedSum_intertwines_coreSpectators,
         MPSTensor.MPOSymmetry.jointEndpointNormalizedSum_conj_coreSpectators}
@@ -244,12 +244,12 @@ physical alphabet remains $\Fin{d_0}$ throughout the interior.
     Thus the choices $E=F=D^0$ and $E=F=D^0+D^1$ use the same concrete
     family $G_{x,y,m}$. Empty labels, zero dimensions, and distinct
     boundary labels are included.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:mpo_joint_core_term_fibers}
     Evaluating both sides at an arbitrary $(x,y),(b,\sigma,c),(a,e)$ and
-    applying Theorem~\ref{thm:mpo_joint_core_term_fibers} gives the
+    applying Lemma~\ref{thm:mpo_joint_core_term_fibers} gives the
     identity.
 \end{proof}
 
@@ -257,7 +257,7 @@ physical alphabet remains $\Fin{d_0}$ throughout the interior.
 % remains a separate reducing-frame and compressed-kernel obligation.
 % Equation (eq:mpo_joint_core_identity) alone makes no physical gap claim.
 
-\begin{theorem}[Identical gaps for the two exterior multiplicities]
+\begin{lemma}[Identical gaps for the two exterior multiplicities]
     \label{thm:mpo_joint_normalized_gap_equivalence}
     \lean{MPSTensor.MPOSymmetry.jointEndpointNormalizedSum_norm_gap_iff_enlarged}
     \leanok
@@ -273,7 +273,7 @@ physical alphabet remains $\Fin{d_0}$ throughout the interior.
         \quad(w\perp\ker K_{\widetilde D,\widetilde D,m}).
     \end{align}
     Each side quantifies over its entire indicated kernel complement.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:mpo_joint_core_operator_identity,thm:mpo_joint_boundary_spectator_gap,
@@ -281,6 +281,6 @@ physical alphabet remains $\Fin{d_0}$ throughout the interior.
     The coordinate unitaries preserve norms, kernels, and their orthogonal
     complements, so applying (\ref{eq:mpo_joint_core_identity}) on each
     side reduces the equivalence to
-    Theorem~\ref{thm:mpo_joint_boundary_spectator_gap} for the common
+    Lemma~\ref{thm:mpo_joint_boundary_spectator_gap} for the common
     family $G_{x,y,m}$; the exterior fibers are nonempty because $D_x^0>0$.
 \end{proof}

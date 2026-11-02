@@ -1,4 +1,4 @@
-\begin{theorem}[Flat torus connections and commuting seams]%
+\begin{lemma}[Flat torus connections and commuting seams]%
     \label{thm:peps_torus_flat_connection_gauge}
     \lean{TNLean.PEPS.zmodTransport_step,
         TNLean.PEPS.IsTorusFlat.zmodTransport_rectangle,
@@ -38,7 +38,7 @@
     horizontal closure element $A_w$. This group-valued seam deformation
     of \cite[Section~5]{Schuch2010PEPS} makes no trivial-holonomy
     assumption.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Induction across a rectangle gives
@@ -89,7 +89,7 @@
     claimed closure assignment.
 \end{proof}
 
-\begin{theorem}[Flat insertions give commuting closure states]%
+\begin{lemma}[Flat insertions give commuting closure states]%
     \label{thm:peps_flat_insertion_closure_state}
     \lean{TNLean.PEPS.exists_sameState_torusClosure_of_isTorusFlat,
         TNLean.PEPS.exists_stateCoeff_eq_torusGClosure_of_isTorusFlat}
@@ -105,14 +105,14 @@
     this is the closure vector $\psi_{g,h}$ of
     \cite[Section~5]{Schuch2010PEPS}. Neither injectivity nor
     isometry is needed for this equality.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
-    By Theorem~\ref{thm:peps_torus_flat_connection_gauge}, the flat
+    By Lemma~\ref{thm:peps_torus_flat_connection_gauge}, the flat
     connection is gauge-equivalent to the closure assignment, and vertex
     gauges leave the closed contraction unchanged by
-    Theorem~\ref{thm:peps_regular_closed_gauge}.
-    Theorem~\ref{thm:peps_regular_torus_closure_cut_identification} then
+    Lemma~\ref{thm:peps_regular_closed_gauge}.
+    Lemma~\ref{thm:peps_regular_torus_closure_cut_identification} then
     identifies the resulting ordered-edge contraction with the
     four-leg closure vector.
 \end{proof}

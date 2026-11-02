@@ -13,8 +13,8 @@ import QICLean.Analysis.EnergyTruncation
 import QICLean.Analysis.GroundEnergyBounds
 import QICLean.Analysis.LowEnergyCluster
 import QICLean.Analysis.LowEnergyPerturbation
-import TNLean.Lattice.DisjointRegionalGround
 import TNLean.Algebra.ExpMulSubMonotone
+import TNLean.Lattice.DisjointRegionalGround
 import TNLean.MPS.AreaLaw.FiveRegionHamiltonian
 import TNLean.MPS.AreaLaw.PolynomialFilterParameters
 import TNLean.MPS.AreaLaw.RegionalTruncationResidual
@@ -162,8 +162,9 @@ private theorem exists_five_region_physical_truncation_residual
     omega
   have hFinalNorm : ‖B K‖ ≤ 7 * (ell : ℝ) := by
     obtain ⟨_, _, _, _, _, hnorm, _⟩ := hclip (ell : ℝ) hell0 K
-    exact hnorm.trans (Real.five_region_final_clipping_budget_le
-      ell J.card (fun j ↦ (I j).card) hell1 hc1 hc3 hJ)
+    have hbudget := Real.five_region_final_clipping_budget_le
+      ell J.card (fun j ↦ (I j).card) (ell : ℝ) hell1 hc1 hc3 hJ
+    exact hnorm.trans (hbudget.trans_eq (by ring))
   refine ⟨e, E0, x, z, hxunit, hx, hlo, hcenter, hzunit, hz, hE0low,
     hE0ge, hE0le4, hFinalNorm, ?_⟩
   intro T eta heta0 heta1 v lam hEigen

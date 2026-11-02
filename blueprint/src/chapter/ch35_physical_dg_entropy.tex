@@ -3,6 +3,7 @@
 \begin{theorem}[Interval entropy bound for a degenerate ground space]
     \label{thm:physical_dg_interval_entropy_bound}
     \lean{TNLean.MPS.AreaLaw.exists_physical_dg_interval_entropy_bound}
+    \leanok
     There is a universal constant $C>0$ with the following property.
     Let $N,d$ be nonnegative integers and let $H=\sum_{i=0}^{N-2}h_i$ act on
     $\mathcal H=(\C^d)^{\otimes N}$, with the sum empty when $N<2$.
@@ -31,6 +32,7 @@
 \end{theorem}
 
 \begin{proof}
+    \leanok
     \uses{thm:physical_interval_all_accuracy_family,
         thm:dg_logarithmic_rank_tail_entropy, thm:dg_entropy_coefficient_bound}
     The spectral assumptions imply $d\ge2$ and $r\ge1$.

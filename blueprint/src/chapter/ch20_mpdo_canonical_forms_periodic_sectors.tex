@@ -21,7 +21,7 @@
     identity at lines 1890--1891.
 \end{definition}
 
-\begin{theorem}[No periodic-sector projector for a matrix product density
+\begin{lemma}[No periodic-sector projector for a matrix product density
         operator]
     \label{thm:mpdo_no_periodic_sector_projector}
     \lean{MPOTensor.isEmpty_periodicSectorProjector}
@@ -29,7 +29,7 @@
     \uses{def:mpdo, def:mpdo_periodic_sector_projector, thm:psd_commute_of_commute_pow}
     Let $M$ generate matrix product density operators. Then $M$ admits no
     periodic-sector projector.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -38,7 +38,7 @@
     \cite[Proposition~4.13]{Cirac2016MPDO_arXiv}, lines 1892--1893, if $Q$
     were such a projector, positive semidefiniteness of $H^{(N+1)}$ and
     commutation of $Q_1$ with $[H^{(N+1)}]^p$ would imply commutation with
-    $H^{(N+1)}$ by Theorem~\ref{thm:psd_commute_of_commute_pow},
+    $H^{(N+1)}$ by Lemma~\ref{thm:psd_commute_of_commute_pow},
     contradicting $Q_1H^{(N+1)}\ne H^{(N+1)}Q_1$.
 \end{proof}
 
@@ -61,7 +61,7 @@
     argument. The projector, its word invariance, and its single-letter
     displacement are constructed from the cyclic decomposition of the
     peripheral spectrum
-    (Theorem~\ref{thm:mpdo_displaced_invariant_projector}); the single
+    (Lemma~\ref{thm:mpdo_displaced_invariant_projector}); the single
     non-commutation instance suffices for the periodic-sector contradiction
     below.
     % Gap recorded in docs/paper-gaps/cpgsv17_periodic_sector_projector.tex.
@@ -87,7 +87,7 @@
     \uses{def:mpdo_periodic_vector_yields_projector, thm:mpdo_no_periodic_sector_projector}
     A nontrivial $p$-periodic vector of $\widetilde M$ yields a
     periodic-sector projector for $M$, and
-    Theorem~\ref{thm:mpdo_no_periodic_sector_projector} shows that no such
+    Lemma~\ref{thm:mpdo_no_periodic_sector_projector} shows that no such
     projector exists.
 \end{proof}
 
@@ -109,7 +109,7 @@
     size.
 \end{definition}
 
-\begin{theorem}[Stacked layers generate powers of the density operator]
+\begin{lemma}[Stacked layers generate powers of the density operator]
     \label{thm:mpo_stacked_layers_power}
     \lean{MPOTensor.mpo_layerMul}
     \lean{MPOTensor.mpo_stackedTensor}
@@ -126,7 +126,7 @@
     density operators of stacked layers. In particular, the vertical stack
     of a tensor generating matrix product density operators again generates
     matrix product density operators on every nonempty chain.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -143,7 +143,7 @@
     $H^{(N)}$.
 \end{proof}
 
-\begin{theorem}[Vertical letters of the stacked tensor]
+\begin{lemma}[Vertical letters of the stacked tensor]
     \label{thm:mpo_stacked_vertical_letters}
     \lean{MPOTensor.verticalTensor_layerMul}
     \lean{MPOTensor.exists_word_verticalTensor_stackedTensor}
@@ -158,7 +158,7 @@
     one-sided invariance $QA_w=QA_wQ$ for every product $A_w$ of $p$ letters
     of $\widetilde M$, then $QM^{[p]}=QM^{[p]}Q$ in the sense of
     Definition~\ref{def:mpdo_vertical_one_site_actions}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -189,11 +189,11 @@
 \begin{proof}
     \leanok
     \uses{thm:mpo_stacked_vertical_letters, thm:mpo_stacked_layers_power, thm:mpdo_first_site_invariant_comm}
-    By Theorem~\ref{thm:mpo_stacked_vertical_letters} the word invariance
+    By Lemma~\ref{thm:mpo_stacked_vertical_letters} the word invariance
     gives $QM^{[p]}=QM^{[p]}Q$ on the stacked tensor, which generates matrix
     product density operators by
-    Theorem~\ref{thm:mpo_stacked_layers_power}.
-    Theorem~\ref{thm:mpdo_first_site_invariant_comm} applied to $M^{[p]}$
+    Lemma~\ref{thm:mpo_stacked_layers_power}.
+    Lemma~\ref{thm:mpdo_first_site_invariant_comm} applied to $M^{[p]}$
     yields $Q_1H^{(N)}(M^{[p]})=H^{(N)}(M^{[p]})Q_1$ for every length, and
     $H^{(N)}(M^{[p]})=[H^{(N)}]^p$ by the stacked-layers identity. Together
     with the assumed non-commutation family this is exactly the
@@ -225,7 +225,7 @@
     derived through the stacked-layers identity.
 \end{definition}
 
-\begin{theorem}[Reduction of the periodic-sector step to the cyclic
+\begin{lemma}[Reduction of the periodic-sector step to the cyclic
         decomposition]
     \label{thm:mpdo_cyclic_projector_reduction}
     \lean{MPOTensor.periodicVectorYieldsProjector_of_cyclic}
@@ -238,7 +238,7 @@
     \cite[Proposition~4.13, lines~1888--1893]{Cirac2016MPDO_arXiv} to the
     cyclic decomposition of the peripheral spectrum of the vertical
     transfer map.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -248,7 +248,7 @@
     Definition~\ref{def:mpdo_periodic_sector_projector_of_cyclic}.
 \end{proof}
 
-\begin{theorem}[The displaced invariant projector of a nontrivial periodic
+\begin{lemma}[The displaced invariant projector of a nontrivial periodic
         vector]
     \label{thm:mpdo_displaced_invariant_projector}
     \lean{MPOTensor.exists_displaced_invariant_projector_of_periodic_vector}
@@ -266,14 +266,14 @@
     physical space such that $QA_w=QA_wQ$ for every product $A_w$ of $q$
     letters of $\widetilde M$, while $Q\widetilde M\ne Q\widetilde MQ$ in
     the sense of Definition~\ref{def:mpdo_vertical_one_site_actions}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:spectral_unital_gauge_schwarz_setup, lem:eigenvalue_transport_unital_gauge, lem:kraus_cyclic_shift, lem:support_proj_range_factorization}
     The rescaled unital gauge $K$ of the corner satisfies the hypotheses of
     the cyclic decomposition of the peripheral spectrum
-    (Theorem~\ref{thm:spectral_unital_gauge_schwarz_setup}), and the
+    (Lemma~\ref{thm:spectral_unital_gauge_schwarz_setup}), and the
     eigenvalue $\mu/r\ne 1$ of modulus one
     (Lemma~\ref{lem:eigenvalue_transport_unital_gauge}) forces the
     peripheral cyclic group to have order $m\ge 2$.
@@ -297,7 +297,7 @@
     projections.
 \end{proof}
 
-\begin{theorem}[A displaced idempotent fails to commute at some length]
+\begin{lemma}[A displaced idempotent fails to commute at some length]
     \label{thm:cpsv_literal_displaced_noncommutation}
     \lean{MPSTensor.IsCPSVCanonicalForm.exists_not_commute_of_displaced}
     \leanok
@@ -312,7 +312,7 @@
         Q_1H^{(N+1)} & \ne H^{(N+1)}Q_1.
         \label{eq:cpsv_literal_displaced_noncommutation}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -327,13 +327,13 @@
     \end{align}
     Taking matrix coefficients yields equality of the one-sided first-site
     contractions. The CPSV canonical-form case of Lemma~L in
-    Theorem~\ref{thm:representative_one_sub_mp_zero} identifies the two
+    Lemma~\ref{thm:representative_one_sub_mp_zero} identifies the two
     inserted tensors on the original bond space. By
     Lemma~\ref{lem:mpdo_first_site_insertions_vertical_mul}, this equality is
     $Q\widetilde M=Q\widetilde M Q$, contradicting the displacement.
 \end{proof}
 
-\begin{theorem}[CPSV canonical form excludes vertical periodic sectors]
+\begin{lemma}[CPSV canonical form excludes vertical periodic sectors]
     \label{thm:mpdo_vertical_no_periodic_vectors_literal_cpsv}
     \lean{MPOTensor.hasNoPeriodicVectors_verticalTensor_of_cpsvCanonicalForm}
     \leanok
@@ -342,7 +342,7 @@
     doubled-index MPS tensor is in CPSV canonical form. Then the
     vertically viewed tensor $\widetilde M$ has no nontrivial periodic
     vectors.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -351,8 +351,8 @@
     orthogonal projector $Q$ such that every word $A_w$ of length $p$ in the
     letters of $\widetilde M$ satisfies $QA_w=QA_wQ$, while
     $Q\widetilde M\ne Q\widetilde M Q$
-    (Theorem~\ref{thm:mpdo_displaced_invariant_projector}). By
-    Theorem~\ref{thm:cpsv_literal_displaced_noncommutation}, there is a length
+    (Lemma~\ref{thm:mpdo_displaced_invariant_projector}). By
+    Lemma~\ref{thm:cpsv_literal_displaced_noncommutation}, there is a length
     $N+1$ for which
     \begin{align}
         Q_1H^{(N+1)} & \ne H^{(N+1)}Q_1.
@@ -364,14 +364,14 @@
         \notag
     \end{align}
     Because $H^{(N+1)}$ is positive semidefinite,
-    Theorem~\ref{thm:psd_commute_of_commute_pow} then forces
+    Lemma~\ref{thm:psd_commute_of_commute_pow} then forces
     $Q_1H^{(N+1)}=H^{(N+1)}Q_1$, completing the periodic-exclusion
     contradiction of
     \cite[Proposition~4.13, lines~1888--1893]{Cirac2016MPDO_arXiv} at the
     noncommuting length obtained from Lemma~L.
 \end{proof}
 
-\begin{theorem}[BNT-refined horizontal form excludes vertical periodic sectors]
+\begin{lemma}[BNT-refined horizontal form excludes vertical periodic sectors]
     \label{thm:mpdo_vertical_no_periodic_vectors_horizontal_cf}
     \lean{MPOTensor.IsHorizontalCF.exists_not_commute_of_displaced}
     \lean{MPOTensor.hasNoPeriodicVectors_verticalTensor_of_horizontalCF}
@@ -388,7 +388,7 @@
     The normalized BNT-refined horizontal hypothesis is stronger than the
     CPSV canonical-form hypothesis; documented in
     \cite{gap:cpgsv17_vertical_cf_grouping}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -396,25 +396,25 @@
     Suppose first that $Q_1$ commutes with $H^{(N+1)}$ for every $N$.
     Since $Q^2=Q$, this gives
     $Q_1H^{(N+1)}=Q_1H^{(N+1)}Q_1$ at every positive length.
-    Theorem~\ref{thm:representative_one_sub_mp_zero} and
+    Lemma~\ref{thm:representative_one_sub_mp_zero} and
     Lemma~\ref{lem:mpdo_first_site_insertions_vertical_mul} then imply
     $Q\widetilde M=Q\widetilde MQ$, a contradiction. Thus a displaced
     idempotent has a noncommuting length $N+1$.
 
     A nontrivial periodic vector gives the orthogonal projector $Q$ of
-    Theorem~\ref{thm:mpdo_displaced_invariant_projector}, invariant under
+    Lemma~\ref{thm:mpdo_displaced_invariant_projector}, invariant under
     every word of some full period $p\ge1$. At the noncommuting length just
     obtained, the stacked-layer identity and the invariant-projection
     calculation give
     $Q_1[H^{(N+1)}]^p=[H^{(N+1)}]^pQ_1$.
     Positive semidefiniteness and
-    Theorem~\ref{thm:psd_commute_of_commute_pow} imply that $Q_1$ commutes
+    Lemma~\ref{thm:psd_commute_of_commute_pow} imply that $Q_1$ commutes
     with $H^{(N+1)}$, which yields the contradiction in
     \cite[Proposition~4.13, lines~1888--1893]{Cirac2016MPDO_arXiv} using a
     single noncommuting length.
 \end{proof}
 
-\begin{theorem}[Commutation at chain length two forces letter invariance, for
+\begin{lemma}[Commutation at chain length two forces letter invariance, for
         an injective tensor]
     \label{thm:mpdo_commute_of_isInjective}
     \lean{MPOTensor.ketLeftMul_eq_braRightMul_of_commute_of_isInjective}
@@ -424,7 +424,7 @@
     let $Q$ be an idempotent on the physical space (Hermiticity is not
     needed). If $Q_1H^{(2)}=H^{(2)}Q_1$, then
     $Q\widetilde M=Q\widetilde MQ$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -437,7 +437,7 @@
     force the two matrices to agree.
 \end{proof}
 
-\begin{theorem}[No periodic vectors for an injective matrix product density
+\begin{lemma}[No periodic vectors for an injective matrix product density
         operator]
     \label{thm:mpdo_vertical_no_periodic_vectors_injective}
     \lean{MPOTensor.hasNoPeriodicVectors_verticalTensor_of_isInjective}
@@ -446,18 +446,18 @@
     Let $M$ generate matrix product density operators and let $M$'s
     doubled-index tensor be injective. Then the vertically viewed tensor
     $\widetilde M$ has no nontrivial periodic vectors, unconditionally.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
-    Whereas Theorem~\ref{thm:mpdo_vertical_no_periodic_vectors_horizontal_cf}
+    Whereas Lemma~\ref{thm:mpdo_vertical_no_periodic_vectors_horizontal_cf}
     treats normalized BNT-refined horizontal form, here a nontrivial periodic
     vector gives the invariant, displaced projector $Q$ of
-    Theorem~\ref{thm:mpdo_displaced_invariant_projector}. Its word
+    Lemma~\ref{thm:mpdo_displaced_invariant_projector}. Its word
     invariance transfers to the stacked tensor, giving commutation with
     $[H^{(2)}]^p$ unconditionally through the invariant-projection step
     applied to the stack; positive semidefiniteness of the density operators
-    removes the power, and Theorem~\ref{thm:mpdo_commute_of_isInjective}
+    removes the power, and Lemma~\ref{thm:mpdo_commute_of_isInjective}
     turns the resulting commutation with $H^{(2)}$ into the letter-level
     invariance that the displacement forbids.
 \end{proof}

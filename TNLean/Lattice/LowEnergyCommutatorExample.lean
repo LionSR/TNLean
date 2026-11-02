@@ -4,6 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Circuit.Gates.Controlled
+import TNLean.Lattice.GaussianFilteredTerm
+import Mathlib.Data.Nat.Dist
 
 /-!
 # Low-energy commutators need not vanish without translation invariance
@@ -18,14 +20,13 @@ fail to commute, while `P H_0 P` commutes with `P H_i P` for every `i ≥ 3`. So
 compressions of local terms to a degenerate ground space need not commute without
 translation invariance, and the failure is localized near site `0`.
 
-**Scope restriction (the terms `H_i`, not their filtered versions):** the source's claim
-(line 1656) is that the filtered local approximations `M_i` need not commute in the low-energy
-sector. It reaches this from the `H_i` by the unargued remark that for large `q` and `l_proj`
-the low-energy commutators of the `M_i` are close to those of the `H_i` (lines 1665–1667).
-The theorems here concern the compressions of the `H_i` themselves; that step to the `M_i` is
-not formalized. The source's chain is not specified beyond site `0`; sites left of `0`, with
-`H_i = S^z_i`, would only add scalars on the ground space, so the chain starts at site `0`.
-Documented in `docs/paper-gaps/hastings05_low_energy_example.tex`.
+Every term commutes with `H`, since its non-diagonal part acts only on spin `0`.
+Consequently Gaussian filtering fixes each term at every variance. The source's truncated
+dynamics includes all terms when `l_proj ≥ m + 4` (interaction range `2`), and hence
+`M_i = H_i` exactly. This proves the claim about the actual truncated approximations in
+lines 1665–1667, with an explicit sufficient radius. The source's chain is not specified
+beyond site `0`; sites left of `0`, with `H_i = S^z_i`, would only add scalars on the
+ground space, so the chain starts at site `0`.
 
 **Local fix (source slips):** the source writes `H = ∑_{i ≠ 0} S^z_i` (line 1660); the sum of
 the printed terms is `−S^z_1 + ∑_{i ≥ 2} S^z_i`. The ground space is still two-dimensional,
@@ -45,6 +46,10 @@ Spins are encoded by `Fin 2`, with `0` for up and `1` for down.
 * `not_commute_compress_term_zero_one`, `not_commute_compress_term_one_two`,
   `not_commute_compress_term_zero_two`: the three compressions pairwise fail to commute.
 * `commute_compress_term_zero_of_three_le`: `P H_0 P` commutes with `P H_i P` for `i ≥ 3`.
+* `gaussianFilteredTerm_term_eq`, `truncatedTerm_eq`: the Gaussian and sufficiently
+  large-radius truncated filters fix every term exactly.
+* `not_commute_compress_truncatedTerm`, `commute_compress_truncatedTerm_zero_of_three_le`:
+  the same commutator conclusions for the source's truncated terms.
 -/
 
 open Matrix Complex
@@ -136,6 +141,70 @@ theorem hamiltonian_eq_diagonal :
   split_ifs with h
   · push_cast; ring
   · simp only [Finset.sum_const_zero]; ring
+
+/-- The Hamiltonian does not act on spin `0`, so it commutes with every operator on that
+spin. Hastings, arXiv:cond-mat/0508554v3, lines 1657–1667. -/
+theorem hamiltonian_commute_siteOp_zero (X : Matrix (Fin 2) (Fin 2) ℂ) :
+    Commute (hamiltonian m) (siteOp 0 X) := by
+  ext σ τ
+  simp only [hamiltonian_eq_diagonal, diagonal_mul, mul_diagonal, siteOp_apply]
+  by_cases hστ : ∀ i, i ≠ 0 → σ i = τ i
+  · have he : energy m σ = energy m τ := by
+      simp [energy, hστ]
+    simp only [ite_eq_left hστ, he, mul_comm]
+  · simp [hστ]
+
+/-- Each local term commutes with the full Hamiltonian in Hastings' example.
+The non-diagonal part of each term acts only on the free spin `0`.
+Hastings, arXiv:cond-mat/0508554v3, lines 1657–1667. -/
+theorem hamiltonian_commute_term (i : Fin (m + 3)) :
+    Commute (hamiltonian m) (term m i) := by
+  have hz (j : Fin (m + 3)) : Commute (hamiltonian m) (siteOp j spinZ) := by
+    rw [hamiltonian_eq_diagonal, siteOp_spinZ]
+    exact commute_diagonal _ _
+  unfold term
+  split_ifs
+  · exact (hamiltonian_commute_siteOp_zero m spinX).add_right
+      (hamiltonian_commute_siteOp_zero m spinY)
+  · exact (hamiltonian_commute_siteOp_zero m spinX).neg_right.sub_right (hz 1)
+  · exact (hamiltonian_commute_siteOp_zero m spinY).neg_right.add_right (hz 2)
+  · exact hz i
+
+/-- Gaussian filtering fixes every term of the example, at every variance: each term
+commutes with the Hamiltonian. Hastings, arXiv:cond-mat/0508554v3, lines 1665–1667. -/
+theorem gaussianFilteredTerm_term_eq (q ΔE : ℝ) (i : Fin (m + 3)) :
+    gaussianFilteredTerm q ΔE (hamiltonian m) (term m i) = term m i := by
+  have hconst (t : ℝ) :
+      hermitianUnitaryPath (hamiltonian m) t * term m i *
+        hermitianUnitaryPath (hamiltonian m) (-t) = term m i := by
+    have hc : Commute (term m i) (hermitianUnitaryPath (hamiltonian m) t) := by
+      unfold hermitianUnitaryPath
+      exact Commute.exp_right
+        (((hamiltonian_commute_term m i).symm.smul_right Complex.I).smul_right t)
+    rw [← hc.eq, Matrix.mul_assoc, SpectralFilter.hermitianUnitaryPath_mul_neg, Matrix.mul_one]
+  simp [gaussianFilteredTerm, GaussianFilter.gaussianIntertwiner, hconst]
+
+/-- The source's truncated local term, with projection radius `l_proj` and interaction
+range `2`: its generator contains precisely those `H_j` with `|i-j| ≤ l_proj - 2`.
+Hastings, arXiv:cond-mat/0508554v3, eq. `mid` (lines 285–297) and lines 1665–1667. -/
+noncomputable def truncatedTerm (q ΔE : ℝ) (l_proj : ℕ) (i : Fin (m + 3)) :
+    Matrix (Fin (m + 3) → Fin 2) (Fin (m + 3) → Fin 2) ℂ :=
+  gaussianFilteredTerm q ΔE
+    (∑ j ∈ Finset.univ.filter (fun j : Fin (m + 3) ↦ Nat.dist i.val j.val ≤ l_proj - 2),
+      term m j) (term m i)
+
+/-- At every projection radius containing the finite chain, the truncated term equals
+`H_i` exactly, at every filtering variance. This proves the large-radius assertion in
+Hastings, arXiv:cond-mat/0508554v3, lines 1665–1667. -/
+theorem truncatedTerm_eq (q ΔE : ℝ) {l_proj : ℕ} (hl : m + 4 ≤ l_proj)
+    (i : Fin (m + 3)) : truncatedTerm m q ΔE l_proj i = term m i := by
+  have hfull : Finset.univ.filter
+      (fun j : Fin (m + 3) ↦ Nat.dist i.val j.val ≤ l_proj - 2) = Finset.univ := by
+    apply Finset.filter_eq_self.mpr
+    intro j _
+    simp only [Nat.dist]
+    omega
+  simpa only [truncatedTerm, hfull, hamiltonian] using gaussianFilteredTerm_term_eq m q ΔE i
 
 /-! ### The ground space -/
 
@@ -419,5 +488,29 @@ theorem commute_compress_term_zero_of_three_le {i : Fin (m + 3)} (hi : 3 ≤ i.v
     ⟨⟨i.val - 3, by omega⟩, Fin.ext (by simp; omega)⟩
   rw [term_succ_succ_succ, compress_siteOp_spinZ m (Fin.succ_ne_zero _)]
   exact commute_compress_smul_groundProj m _ _
+
+/-- The three truncated filtered terms at sites `0`, `1`, `2` have pairwise noncommuting
+compressions whenever the projection radius contains the finite chain. This holds for
+every filtering variance. Hastings, arXiv:cond-mat/0508554v3, lines 1655–1668. -/
+theorem not_commute_compress_truncatedTerm (q ΔE : ℝ) {l_proj : ℕ}
+    (hl : m + 4 ≤ l_proj) :
+    ¬Commute (compress m (truncatedTerm m q ΔE l_proj 0))
+        (compress m (truncatedTerm m q ΔE l_proj 1)) ∧
+      ¬Commute (compress m (truncatedTerm m q ΔE l_proj 1))
+        (compress m (truncatedTerm m q ΔE l_proj 2)) ∧
+      ¬Commute (compress m (truncatedTerm m q ΔE l_proj 0))
+        (compress m (truncatedTerm m q ΔE l_proj 2)) := by
+  simpa only [truncatedTerm_eq m q ΔE hl] using
+    And.intro (not_commute_compress_term_zero_one m)
+      ⟨not_commute_compress_term_one_two m, not_commute_compress_term_zero_two m⟩
+
+/-- Away from the first three sites the truncated terms commute with the term at `0`
+on the ground space. Hastings, arXiv:cond-mat/0508554v3, line 1670, with the corrected
+range `i ≥ 3` recorded in the module docstring. -/
+theorem commute_compress_truncatedTerm_zero_of_three_le (q ΔE : ℝ) {l_proj : ℕ}
+    (hl : m + 4 ≤ l_proj) {i : Fin (m + 3)} (hi : 3 ≤ i.val) :
+    Commute (compress m (truncatedTerm m q ΔE l_proj 0))
+      (compress m (truncatedTerm m q ΔE l_proj i)) := by
+  simpa only [truncatedTerm_eq m q ΔE hl] using commute_compress_term_zero_of_three_le m hi
 
 end TNLean.Lattice.LowEnergyExample

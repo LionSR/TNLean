@@ -3,6 +3,7 @@
 \begin{definition}[Trace contraction with a closing matrix]
     \label{def:trace_chain_operator}
     \lean{MPOTensor.traceChainOperator}
+    \leanok
     Let $n,q,\chi$ be nonnegative integers. Supply matrices
     $A_v(i,j)\in\C^{\chi\times\chi}$ for $0\le v<n$ and $0\le i,j<q$,
     together with $C\in\C^{\chi\times\chi}$. Their trace contraction is
@@ -17,9 +18,10 @@
     $\operatorname{tr}(C)$.
 \end{definition}
 
-\begin{theorem}[Absorption of a closing matrix on a nonempty chain]
+\begin{lemma}[Absorption of a closing matrix on a nonempty chain]
     \label{thm:trace_chain_closing_absorption}
     \lean{MPOTensor.exists_traceChainOperator_one}
+    \leanok
     Let $n,q,\chi$ be nonnegative integers with $n\ge1$.
     Supply matrices $A_v(x,y)\in\C^{\chi\times\chi}$ for
     $0\le v<n$ and $0\le x,y<q$, and a matrix
@@ -32,8 +34,8 @@
         \label{eq:trace_chain_closing_absorption}
     \end{align}
     The dimensions $q$ and $\chi$ may vanish.
-\end{theorem}
-\begin{proof}
+\end{lemma}
+\begin{proof}\leanok
     Set $A'_0(x,y)=CA_0(x,y)$ and $A'_v(x,y)=A_v(x,y)$ for $1\le v<n$.
     Associativity gives (\ref{eq:trace_chain_closing_absorption}).
 \end{proof}
@@ -42,6 +44,7 @@
     \label{thm:finite_matrix_trace_chain}
     \lean{MPOTensor.exists_traceChainOperator_of_finite_matrix}
     \uses{def:trace_chain_operator}
+    \leanok
     For every matrix $M$ on $(\C^q)^{\otimes n}$ there are a natural number
     $B$, site-dependent tensors $A_v(i,j)\in\C^{B\times B}$ and a closing
     matrix $C\in\C^{B\times B}$ with $M=\mathcal T(A,C)$.
@@ -49,6 +52,7 @@
     bound on $B$ or procedure for finding the tensors is asserted.
 \end{theorem}
 \begin{proof}
+    \leanok
     Index the bond by pairs of full configurations. Diagonal entries of
     each site tensor select their two physical coordinates; put the
     coefficient of $M$ in a diagonal closing matrix. The trace selects the

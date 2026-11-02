@@ -12,7 +12,7 @@ $n$ factors \cite[lines 1334--1341]{Hastings2006Solving}, and it is estimated
 estimate. Throughout, $y=(e^{J\beta/n}-1)e^{SJ\beta/n}$ and
 $Z=\operatorname{tr}e^{-\beta H}$.
 
-\begin{theorem}[The error of the product of truncated factors]
+\begin{lemma}[The error of the product of truncated factors]
     \label{thm:hastings_temperature_error}
     \lean{TNLean.Lattice.ClusterExpansion.sum_prod_le_exp_of_subset_powerset,
         TNLean.Lattice.ClusterExpansion.norm_trace_mul_exp_sub_truncatedExp_pow_le}
@@ -28,28 +28,28 @@ $Z=\operatorname{tr}e^{-\beta H}$.
         \label{eq:hastings_temperature_error}
     \end{align}
     summed over the large connected sets $C$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:hastings_truncation_inclusion_exclusion,
         thm:hastings_words_inclusion_exclusion, thm:hastings_cluster_part_product,
         thm:hastings_percolation_exp, thm:hastings_clusters_meet}
-    By Theorem~\ref{thm:hastings_truncation_inclusion_exclusion} at the inverse
+    By Lemma~\ref{thm:hastings_truncation_inclusion_exclusion} at the inverse
     temperature $\beta/n$, each factor is $\sum_U(-1)^{|U|}\rho(\beta/n,U)$ over
     the admissible families $U$ of large connected sets, and the empty family
     gives $e^{-\beta H/n}$. Expanding the $n$-th power gives a sum over the
     sequences $(U_0,\dots,U_{n-1})$ of admissible families of the ordered
     products $\prod_j(-1)^{|U_j|}\rho(\beta/n,U_j)$, and the sequence of empty
     families gives $e^{-\beta H}$. The members of an admissible family are
-    pairwise disjoint (Theorem~\ref{thm:hastings_clusters_meet}), so the union
+    pairwise disjoint (Lemma~\ref{thm:hastings_clusters_meet}), so the union
     of $U_j$ has $\sum_{C\in U_j}n_C$ terms and satisfies the hypothesis of
-    Theorem~\ref{thm:hastings_cluster_part_product}, which bounds the term of
+    Lemma~\ref{thm:hastings_cluster_part_product}, which bounds the term of
     every other sequence by $\|O\|Z\prod_jf(U_j)$ with
     $f(U)=\prod_{C\in U}y^{n_C}$. Summing over the sequences other than the
     empty one gives $\|O\|Z\bigl((\sum_Uf(U))^n-1\bigr)$. The nonempty admissible
     families are among the nonempty sets of large connected sets, so
-    Theorem~\ref{thm:hastings_percolation_exp} gives
+    Lemma~\ref{thm:hastings_percolation_exp} gives
     $\sum_Uf(U)\le\exp(\sum_Cy^{n_C})$, and the $n$-th power of this is the
     exponential in~(\ref{eq:hastings_temperature_error}).
 \end{proof}
@@ -58,13 +58,13 @@ Grouping the sequences by their total number $m$ of large clusters recovers the
 bound $(1/m!)(n\sum_Cy^{n_C})^m$ on the operator $\rho_m$
 of~\cite[lines 1334--1341]{Hastings2006Solving}.
 
-\begin{theorem}[The error at every temperature, percolation form]
+\begin{lemma}[The error at every temperature, percolation form]
     \label{thm:hastings_temperature_error_percolation}
     \lean{TNLean.Lattice.ClusterExpansion.norm_trace_mul_exp_sub_truncatedExp_pow_le_percolation}
     \leanok
     \uses{thm:hastings_temperature_error, thm:hastings_percolation_cluster_sum,
         thm:hastings_percolation}
-    In the setting of Theorem~\ref{thm:hastings_temperature_error}, let every
+    In the setting of Lemma~\ref{thm:hastings_temperature_error}, let every
     large connected set have at least $l+1$ terms, let at most $Nx^k$ large
     connected sets have $k$ terms, for every $k$, where $N,x\ge0$, and let
     $0<xy\le1/2$. Put $\xi=1/\ln(1/(xy))$. Then for every operator $O$
@@ -81,17 +81,39 @@ of~\cite[lines 1334--1341]{Hastings2006Solving}.
     on $\rho_m$ gives the exponent with $n$, which is the bound proved here
     \cite{gap:hastings05_temperature_factor_count}. The threshold $l$ counts the
     terms of a large connected set rather than its diameter, as in
-    Theorem~\ref{thm:hastings_percolation}
+    Lemma~\ref{thm:hastings_percolation}
     \cite{gap:hastings05_percolation_cluster_size}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:hastings_temperature_error, thm:hastings_percolation_cluster_sum,
         thm:hastings_percolation}
-    Theorem~\ref{thm:hastings_percolation_cluster_sum} bounds
+    Lemma~\ref{thm:hastings_percolation_cluster_sum} bounds
     $\sum_Cy^{n_C}$ by $N(xy)^{l+1}/(1-xy)$, which is at most
     $N(xy)^l=Ne^{-l/\xi}$ since $xy\le1/2$, as in
-    Theorem~\ref{thm:hastings_percolation}. Insert this into
-    Theorem~\ref{thm:hastings_temperature_error}.
+    Lemma~\ref{thm:hastings_percolation}. Insert this into
+    Lemma~\ref{thm:hastings_temperature_error}.
+\end{proof}
+
+\begin{lemma}[The corrected temperature-ratio bound]
+    \label{cor:hastings_temperature_error_add_two}
+    \lean{TNLean.Lattice.ClusterExpansion.norm_trace_mul_exp_sub_truncatedExp_pow_le_percolation_add_two}
+    \leanok
+    \uses{thm:hastings_temperature_error_percolation,
+        thm:hastings_even_temperature_factors}
+    In Lemma~\ref{thm:hastings_temperature_error_percolation}, take
+    $\beta>0$, $\beta_0>0$ and
+    $n=2\lceil\beta/(2\beta_0)\rceil$. Then
+    \begin{align*}
+        \bigl|\operatorname{tr}\bigl(O(e^{-\beta H}-\rho(\beta/n,l)^n)\bigr)\bigr|
+        \le\|O\|\bigl(\exp[(\beta/\beta_0+2)Ne^{-l/\xi}]-1\bigr)Z.
+    \end{align*}
+    This is the explicit correction to the printed temperature factor
+    in \cite[lines 1342--1347]{Hastings2006Solving}
+    recorded in \cite{gap:hastings05_temperature_factor_count}.
+\end{lemma}
+\begin{proof}\leanok
+    Apply $n<\beta/\beta_0+2$ in the percolation bound; the other
+    factors and $Ne^{-l/\xi}$ are nonnegative.
 \end{proof}

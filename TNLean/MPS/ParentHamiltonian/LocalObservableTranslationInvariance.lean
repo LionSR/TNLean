@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.LocalObservableQuasiLocalState
-import TNLean.QCA.QuasiLocalTranslation
+import TNLean.QCA.IntervalTranslation
 
 /-!
 # Translation invariance of the quasi-local MPS state
@@ -20,15 +20,6 @@ No purity assertion is made.
 -/
 
 namespace SpinChain
-
-/-- Translating a consecutive interval shifts its left endpoint and preserves
-its length. Source: Nachtergaele, arXiv:cond-mat/9410110, Section 3,
-integer interval convention. -/
-theorem translateRegion_finiteChainRegion (a b : ℤ) (N : ℕ) :
-    translateRegion b (finiteChainRegion a N) = finiteChainRegion (a + b) N := by
-  ext x
-  simp only [mem_translateRegion, finiteChainRegion, Finset.mem_Ico]
-  omega
 
 private theorem finiteChainConfigEquiv_translation_restrict (d : ℕ) (a b : ℤ) (N : ℕ)
     (σ : Fin N → Fin d) :

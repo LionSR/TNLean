@@ -1,8 +1,9 @@
 \section{A regional clipping error on the actual low spectral space}
 
-\begin{theorem}[Restricted error of clipping one original regional sum]
+\begin{lemma}[Restricted error of clipping one original regional sum]
     \label{thm:consecutive_regional_truncation_low}
     \lean{TNLean.MPS.AreaLaw.norm_consecutive_regional_truncation_low_le}
+    \leanok
     \uses{def:chain_model,def:five_region_bond_partition}
     Let $k_0\le\cdots\le k_m$ be natural cut positions, and let
     $0\le h_i\le\Id$ be supported on the original bond $\{i,i+1\}$.
@@ -22,8 +23,9 @@
         \frac{2|J|}{u-\varepsilon-2|J|}.
     \end{align}
     The $e_j$ need only be lower bounds; their attainment is not assumed.
-\end{theorem}
+\end{lemma}
 \begin{proof}
+    \leanok
     \uses{thm:consecutive_internal_sums_commute,thm:chain_local_imaginary_time}
     Consecutive regional sums commute, and the centered partial-clipping
     inequalities give $uQ\le X$ for

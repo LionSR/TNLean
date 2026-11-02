@@ -61,7 +61,7 @@
     preserves all three conditions.
 \end{definition}
 
-\begin{theorem}[Product and idempotent equations for BNT operators]%
+\begin{lemma}[Product and idempotent equations for BNT operators]%
     \label{thm:mpdo_has_bnt_label_theorem_witness_source_equations}
     \lean{MPOTensor.HasBNTLabelTheoremWitness.exists_source_chi_trace_equations}
     \lean{MPOTensor.BNTLabelTheoremWitness.coeff_eq_trace_pow}
@@ -116,7 +116,7 @@
         = \tr\!\left(\chi_{\sigma_n(i),\sigma_n(j),\tau_n(k)}^{\,n}\right).
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     For the assumed operators, scalars, coefficients, and diagonal matrices,
     the product and idempotent identities give
@@ -128,7 +128,7 @@
     The blocked-basis comparison gives the final coefficient formula.
 \end{proof}
 
-\begin{theorem}[Positive diagonal matrices for blocked coefficients]%
+\begin{lemma}[Positive diagonal matrices for blocked coefficients]%
     \label{thm:mpdo_bnt_label_theorem_witness_to_positive_blocked_chi_trace_power_form}
     \lean{MPOTensor.BNTLabelTheoremWitness.toPositiveBlockedStructureChiTracePowerForm}
     \lean{MPOTensor.BNTLabelTheoremWitness.positiveBlockedChi_toDiagonal_of_pos}
@@ -163,7 +163,7 @@
     traces of powers agree with those of the selected matrices.
     The same construction proves existence when the BNT operators,
     scalars, and matrices are assumed to exist without a fixed choice.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Applying the blocked-basis trace-power consequence to the chosen
     operators, scalars, coefficients, and diagonal matrices yields the

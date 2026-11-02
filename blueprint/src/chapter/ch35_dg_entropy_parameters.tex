@@ -3,6 +3,7 @@
 \begin{theorem}[Entropy from logarithmic approximation ranks]
     \label{thm:dg_logarithmic_rank_tail_entropy}
     \lean{Entropy.probabilityEntropy_le_of_logarithmic_rank_tail_bounds}
+    \leanok
     Let $q\ge2,r\ge1$ be integers, let $0<g\le1$ and $K\ge0$, and let
     $D_i\ge1$ be integers indexed by $i\ge0$. Suppose that
     \begin{align}
@@ -25,6 +26,7 @@
     \cite[proof of Theorem~4.9]{Arad2016RigorousRG}.
 \end{theorem}
 \begin{proof}
+    \leanok
     Put $x=26Ku^3/\log2$ and $B=\lceil x\rceil+1$.
     Since $u\ge1$ and $\log2\le1$,
     $1+\log(q2^i)+\log(1/g)\le u(i+1)$.
@@ -43,6 +45,7 @@
 \begin{theorem}[A uniform entropy coefficient]
     \label{thm:dg_entropy_coefficient_bound}
     \lean{Real.dg_entropy_coefficient_bound}
+    \leanok
     Let $A,S,u$ be real numbers, let $r\ge0$ be an integer, and let $0<g\le1$.
     Suppose that $u\ge1$ and
     \begin{align*}
@@ -58,6 +61,7 @@
     \end{align}
 \end{theorem}
 \begin{proof}
+    \leanok
     Since $\log2\le1\le u^3/g$, one has $54\log2\le54u^3/g$.
     Add this inequality to the assumed bound.
 \end{proof}

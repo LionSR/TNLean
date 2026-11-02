@@ -1,4 +1,4 @@
-\begin{theorem}[Scalar calculus of character projectors]
+\begin{lemma}[Scalar calculus of character projectors]
     \label{thm:peps_weighted_character_projectors}
     \lean{Representation.sum_smul_charProjector_apply_of_mem,
         Representation.sum_smul_charProjector_commute,
@@ -13,7 +13,7 @@
     Each projector $P_\chi$ is idempotent.
     These formulas express the isotypic decomposition used in
     \cite[Lemma~4.4]{Schuch2010PEPS}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     On the summand with character $\psi$, the projector $P_\chi$ is the
     identity if $\chi=\psi$ and zero otherwise. Thus only its recorded
@@ -37,7 +37,7 @@
     in \cite[Lemma~4.4]{Schuch2010PEPS}.
 \end{definition}
 
-\begin{theorem}[Invertibility of the weighted trace operator]
+\begin{lemma}[Invertibility of the weighted trace operator]
     \label{thm:peps_delta_inverse}
     \lean{Representation.deltaOperatorInverse_apply_of_mem,
         Representation.deltaOperatorInverse_mul,
@@ -54,7 +54,7 @@
     group operator. These assertions hold without semi-regularity or
     unitarity, for every finite-dimensional complex representation of a
     finite group.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The dimensions and multiplicities of the occurring summands are
     positive. On each irreducible summand the two coefficients multiply
@@ -65,7 +65,7 @@
     the scalar calculus of the character projectors.
 \end{proof}
 
-\begin{theorem}[Positive weighted trace operator]
+\begin{lemma}[Positive weighted trace operator]
     \label{thm:peps_delta_positive}
     \lean{Representation.adjoint_subrepresentation_of_unitary,
         Representation.charProjector_adjoint_of_unitary,
@@ -82,7 +82,7 @@
     More generally, every nonnegative weighted sum of the occurring
     character projectors is positive. This gives the positive bond weights
     appearing in \cite[Lemma~4.4]{Schuch2010PEPS}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Unitarity gives $\chi(g^{-1})=\overline{\chi(g)}$. Hence the character
     projectors of the occurring summands are self-adjoint. They are also

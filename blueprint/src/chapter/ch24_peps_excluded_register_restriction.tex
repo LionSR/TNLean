@@ -1,119 +1,67 @@
 \subsection{Restrictions with excluded registers}
 
-Let $P,Q$ be arbitrary sets of party labels. A register consists of
-an owner and a complex inner product space. For an ordered finite
-register list $\ell$, let $\mathcal H_\ell$ be its right-associated tensor memory,
-including a terminal factor $\C$; the empty list has memory $\C$.
-For a selection $s:Q\to\{0,1\}$, let $A=\{p\in Q:s(p)=1\}$ and
-write $\ell|_A$ for the ordered sublist of registers whose owners lie in $A$.
-An owner map $q:P\to Q$ changes the labels in $\ell$, retaining its
-spaces and order; denote the resulting list by $\ell^q$.
+For party label sets $P,Q$, an ordered finite register list $\ell$ (each register consisting of an owner and a complex inner product space) has right-associated tensor memory $\mathcal H_\ell$ with terminal factor $\C$ ($\mathcal H_\varnothing=\C$; Definition~\ref{def:peps_party_registers}).
+For a selection $s:Q\to\{0,1\}$ with $A=\{p\in Q:s(p)=1\}$ (Definition~\ref{def:peps_party_partition}) and an owner map $q:P\to Q$ (Definition~\ref{def:peps_owner_layout}), let $\ell|_A$ be the ordered sublist with owners in $A$ and $\ell^q$ the list obtained by relabeling owners via $q$.
 
-\begin{theorem}[An owner map with no selected image]
+\begin{lemma}[An owner map with no selected image]
     \label{thm:peps_excluded_mapped_owners}
     \lean{TNLean.Lattice.PartyCircuit.Layout.restrict_mapOwner_eq_nil}
     \leanok
     \uses{def:peps_party_registers,def:peps_owner_layout,def:peps_party_partition}
-    Let $q:P\to Q$ be any map and $s:Q\to\{0,1\}$ any selection.
-    Suppose $s(q(p))=0$ for every $p\in P$. Then, for every register
-    list $\ell$ with owners in $P$, the selected sublist $(\ell^q)|_A$
-    is empty.
-\end{theorem}
+    If $q:P\to Q$ and $s:Q\to\{0,1\}$ satisfy $s(q(p))=0$ for all $p\in P$, then $(\ell^q)|_A=\varnothing$ for every register list $\ell$ with owners in $P$.
+\end{lemma}
 
 \begin{proof}\leanok
-    If a register belonged to the selected sublist, it would come
-    from a register with some original owner $p\in P$ and would
-    satisfy $s(q(p))=1$. This contradicts the hypothesis.
+    Any register in $(\ell^q)|_A$ has an original owner $p\in P$ with $s(q(p))=1$, contradicting $s\circ q=0$.
 \end{proof}
 
-A source-free composition is a finite composite of local linear operations,
-register exchanges, and identities, containing no pair-source
-preparations. Its restriction to selected parties retains their local
-operations and registers and restricts the exchanges accordingly.
-For a source-free composition $W$ from register list $\ell$ to register list $m$,
-write $W|_A:\mathcal H_{\ell|_A}\to\mathcal H_{m|_A}$ for its selected
-operator. If $\rho$ is a spectator register list, write $\widetilde W$
-for the composition obtained by adjoining $\rho$ unchanged to every step of $W$,
-from $\rho\ell$ to $\rho m$.
-Concatenation of register lists is denoted by juxtaposition.
+A source-free composition $W:\ell\to m$ is a finite composite of local linear operations, register exchanges, and identities without pair-source preparations; write $W|_A:\mathcal H_{\ell|_A}\to\mathcal H_{m|_A}$ for its restriction to $A$ (Lemma~\ref{thm:peps_party_restriction}), and for a spectator list $\rho$ write $\widetilde W:\rho\ell\to\rho m$ for $W$ framed by $\rho$ (with list concatenation denoted by juxtaposition).
 
-\begin{theorem}[Excluded spectator registers preserve the restriction]
+\begin{lemma}[Excluded spectator registers preserve the restriction]
     \label{thm:peps_excluded_spectator_restriction}
     \lean{TNLean.Lattice.PartyCircuit.Word.restrict_frameList_eval_heq_of_eq_nil}
     \leanok
     \uses{def:peps_party_registers,def:peps_party_partition,
         thm:peps_party_restriction}
-    Let $s:Q\to\{0,1\}$ be any selection, let $\rho$ be a register
-    list with $\rho|_A=\varnothing$, and let $W:\ell\to m$ be any
-    source-free composition with owners in $Q$. Under the
-    identifications $(\rho\ell)|_A=\ell|_A$ and $(\rho m)|_A=m|_A$,
-    $\widetilde W|_A=W|_A$.
-\end{theorem}
+    For any selection $s:Q\to\{0,1\}$, spectator list $\rho$ with $\rho|_A=\varnothing$, and source-free composition $W:\ell\to m$ with owners in $Q$, under $(\rho\ell)|_A=\ell|_A$ and $(\rho m)|_A=m|_A$, one has $\widetilde W|_A=W|_A$.
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_party_restriction}
-    By induction on the spectator list $\rho$, for the empty list the two
-    compositions coincide. Writing a nonempty list as $r\sigma$, let
-    $W_\sigma$ denote $W$ with the remaining spectators $\sigma$.
-    The owner of $r$ is excluded because $\rho|_A=\varnothing$.
-    If $H_r$ is the register space, adjoining $r$ acts as
-    $\operatorname{id}_{H_r}\otimes W_\sigma$, and restriction gives
+    Proceed by induction on $\rho$: for $\rho=\varnothing$, $\widetilde W=W$; for $\rho=r\sigma$ with $\rho|_A=\varnothing$, the owner of $r$ lies outside $A$, so framing by $r$ acts as $\operatorname{id}_{H_r}\otimes W_\sigma$ and Lemma~\ref{thm:peps_party_restriction} gives
     \begin{align}
         (\operatorname{id}_{H_r}\otimes W_\sigma)|_A
-         & =W_\sigma|_A.
+         & =W_\sigma|_A = W|_A.
         \label{eq:peps_excluded_head}
     \end{align}
-    Applying the induction hypothesis to the remaining spectator registers then
-    completes the induction.
 \end{proof}
 
-These identities concern the register selections used in
-\cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
-\texttt{04-compression.tex}, lines 233--267 and 351--381.
+These register-selection identities underlie \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}, \texttt{04-compression.tex}, lines 233--267 and 351--381.
 
-
-\begin{theorem}[Successive restrictions to nested party sets]
+\begin{lemma}[Successive restrictions to nested party sets]
     \label{thm:peps_nested_party_restrictions}
     \lean{TNLean.Lattice.PartyCircuit.Word.restrict_restrict_heq_of_implies,
         TNLean.Lattice.PartyCircuit.Word.restrict_restrict_eval_heq_of_implies}
     \leanok
     \uses{thm:peps_party_restriction}
-    Let $P$ be any set of parties and let $W:\ell\to m$ be a
-    source-free composition. Let $A,B\subseteq P$ with $B\subseteq A$.
-    Under the natural identifications of the selected register lists,
-    restricting first to $A$ and then to $B$ gives the same composition
-    as restricting directly to $B$:
+    For any source-free composition $W:\ell\to m$ and $B\subseteq A\subseteq P$, under the natural register-list identifications $(\tau|_A)|_B=\tau|_B$, both as compositions and as linear operators,
     \begin{align}
         (W|_A)|_B=W|_B.
         \label{eq:peps_nested_party_restrictions}
     \end{align}
-    In particular, their linear operators coincide.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_party_restriction}
-    A register retained by $B$ is also retained by $A$, so its
-    position and space are identical after either selection:
-    $(\tau|_A)|_B=\tau|_B$ for every register list $\tau$.
-    By induction on the composition, identities and composition respect
-    this equality of selected lists. Writing $\Lambda_p(M;\tau)$ for a
-    local map $M$ at party $p$ beside the unchanged registers $\tau$,
-    its restriction to $C$ is $\Lambda_p(M;\tau|_C)$ when $p\in C$ and
-    $\operatorname{id}_{\tau|_C}$ otherwise. Since $p\in B$ implies
-    $p\in A$, and $(\tau|_A)|_B=\tau|_B$,
+    Since $B\subseteq A$, $(\tau|_A)|_B=\tau|_B$ for every list $\tau$.
+    By structural induction on $W$ (using Lemma~\ref{thm:peps_party_restriction}), identities and compositions preserve (\ref{eq:peps_nested_party_restrictions}), while for a local map $\Lambda_p(M;\tau)$, exchange $S_{r,s}(\tau)$ with owners $o(r),o(s)$, and framed word $F_r(w)$ satisfying $(w|_A)|_B=w|_B$:
     \begin{align}
         (\Lambda_p(M;\tau)|_A)|_B
          & =\begin{cases}
                 \Lambda_p(M;\tau|_B),        & p\in B,    \\
                 \operatorname{id}_{\tau|_B}, & p\notin B,
             \end{cases}
-        =\Lambda_p(M;\tau)|_B.
-    \end{align}
-    Writing $S_{r,s}(\tau)$ for the exchange of registers $r,s$ with owners
-    $o(r),o(s)$ before $\tau$, its restriction to $C$ keeps the exchange
-    when both owners lie in $C$, and otherwise is the identity on the
-    retained registers among $r,s$ followed by $\tau|_C$. Hence
-    \begin{align}
+        =\Lambda_p(M;\tau)|_B, \notag                                   \\
         (S_{r,s}(\tau)|_A)|_B
          & =\begin{cases}
                 S_{r,s}(\tau|_B),               & o(r),o(s)\in B,           \\
@@ -121,13 +69,7 @@ These identities concern the register selections used in
                 \operatorname{id}_{s\,\tau|_B}, & o(r)\notin B,\ o(s)\in B, \\
                 \operatorname{id}_{\tau|_B},    & o(r),o(s)\notin B,
             \end{cases}
-        =S_{r,s}(\tau)|_B.
-    \end{align}
-    Writing $F_r(w)$ for a composition $w$ beside an unchanged register $r$,
-    its restriction to $C$ is $F_r(w|_C)$ when $o(r)\in C$ and $w|_C$
-    otherwise. Since $o(r)\in B$ implies $o(r)\in A$, the induction
-    hypothesis $(w|_A)|_B=w|_B$ gives
-    \begin{align}
+        =S_{r,s}(\tau)|_B, \notag                                       \\
         (F_r(w)|_A)|_B
          & =\begin{cases}
                 F_r((w|_A)|_B), & o(r)\in B,    \\
@@ -137,86 +79,46 @@ These identities concern the register selections used in
              F_r(w|_B), & o(r)\in B,    \\
              w|_B,      & o(r)\notin B,
          \end{cases}
-        =F_r(w)|_B.
+        =F_r(w)|_B. \notag
     \end{align}
-    This proves
-    (\ref{eq:peps_nested_party_restrictions}) as an identity of
-    compositions and hence of their operators.
 \end{proof}
 
-\begin{theorem}[A singleton restriction after excluding another party]
+\begin{lemma}[A singleton restriction after excluding another party]
     \label{thm:peps_singleton_after_excluded_party}
     \lean{TNLean.Lattice.PartyCircuit.Word.restrict_withoutParty_atParty_eval_heq}
     \leanok
     \uses{thm:peps_nested_party_restrictions,def:peps_single_party_selector}
-    Let $p,q\in P$ be distinct and let $W$ be any source-free
-    composition. Under the natural register identifications,
+    For distinct $p\neq q$ in $P$ and any source-free composition $W$, under the natural register identifications,
     \begin{align}
-        (W|_{P\setminus\{p\}})|_{\{q\}}=W|_{\{q\}}
+        (W|_{P\setminus\{p\}})|_{\{q\}}=W|_{\{q\}}.
         \label{eq:peps_singleton_after_excluded_party}
     \end{align}
-    as linear operators.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_nested_party_restrictions,def:peps_single_party_selector}
-    Since $q\ne p$, the set $\{q\}$ is contained in
-    $P\setminus\{p\}$, so (\ref{eq:peps_nested_party_restrictions}) gives the
-    claim.
+    Since $q\ne p$ implies $\{q\}\subseteq P\setminus\{p\}$, (\ref{eq:peps_nested_party_restrictions}) of Lemma~\ref{thm:peps_nested_party_restrictions} yields (\ref{eq:peps_singleton_after_excluded_party}).
 \end{proof}
 
-
-\begin{theorem}[Scalar restrictions under composition and framing]
+\begin{lemma}[Scalar restrictions under composition and framing]
     \label{thm:peps_scalar_residual_composition}
     \lean{TNLean.Lattice.PartyCircuit.Word.restrict_localPart_comp_scalar}
     \lean{TNLean.Lattice.PartyCircuit.Word.restrict_localPart_frame_scalar}
     \leanok
     \uses{def:peps_canonical_source_residual,thm:peps_party_restriction}
-    In the scalar-restriction identities used in
-    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
-    \texttt{04-compression.tex}, lines 246--251 and 351--381, let $W:\ell\to m$
-    and $V:m\to n$ be chronological compositions,
-    possibly containing pair preparations. Fix a selection for which
-    $\ell,m,n$ and both source-register lists restrict to the empty list.
-    Suppose the corresponding remaining operations restrict to
-    $\alpha\operatorname{id}_{\mathbb C}$ and
-    $\beta\operatorname{id}_{\mathbb C}$.
-    The remaining operations of $VW$ then restrict to
-    $\alpha\beta\operatorname{id}_{\mathbb C}$.
-
-    If $W$ instead is extended by an untouched register whose owner is
-    excluded, its remaining operations have the same scalar restriction
-    $\alpha\operatorname{id}_{\mathbb C}$.
-\end{theorem}
+    In \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS} (\texttt{04-compression.tex}, lines 246--251 and 351--381), let $W:\ell\to m$ and $V:m\to n$ be chronological compositions with source-free residuals $W^{\mathrm r},V^{\mathrm r}$ (Definition~\ref{def:peps_canonical_source_residual}).
+    If a selection $A$ satisfies $\ell|_A=m|_A=n|_A=\varnothing$, excludes all source registers of $W$ and $V$, and satisfies $W^{\mathrm r}|_A=\alpha\operatorname{id}_{\mathbb C}$ and $V^{\mathrm r}|_A=\beta\operatorname{id}_{\mathbb C}$, then $(VW)^{\mathrm r}|_A=\alpha\beta\operatorname{id}_{\mathbb C}$, and framing $W$ by an untouched register $r$ with $o(r)\notin A$ yields $\widetilde W^{\mathrm r}|_A=\alpha\operatorname{id}_{\mathbb C}$.
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:peps_canonical_source_residual,
         thm:peps_excluded_spectator_restriction,thm:peps_party_restriction}
-    Writing $A$ for the selected registers and $W^{\mathrm r},V^{\mathrm r}$
-    for the remaining operations of $W,V$, in the remaining operations
-    of $VW$ the sources of $V$ are untouched registers beside those of
-    $W$, and every one of them is excluded. By
-    Theorem~\ref{thm:peps_excluded_spectator_restriction} they
-    disappear under restriction, and restriction of a composition is
-    the composition of the restrictions, so
+    In $(VW)^{\mathrm r}$, the excluded source registers of $V$ act as spectators alongside $W^{\mathrm r}$, so Lemma~\ref{thm:peps_excluded_spectator_restriction} and Lemma~\ref{thm:peps_party_restriction} give
     \begin{align}
         (VW)^{\mathrm r}|_A
          & =V^{\mathrm r}|_A\circ W^{\mathrm r}|_A
         =\beta\operatorname{id}_{\mathbb C}\circ\alpha\operatorname{id}_{\mathbb C}
-        =\alpha\beta\operatorname{id}_{\mathbb C}.
+        =\alpha\beta\operatorname{id}_{\mathbb C}. \notag
     \end{align}
-
-    Let $\widetilde W$ be $W$ extended by an untouched register $r$
-    with excluded owner and register space $H_r$. Its remaining
-    operations first move $r$ past the prepared sources by an exchange
-    $E$ and then adjoin $r$ unchanged, so
-    $\widetilde W^{\mathrm r}=(\operatorname{id}_{H_r}\otimes W^{\mathrm r})\circ E$.
-    Every register in $E$ is excluded, so $E|_A=\operatorname{id}_{\mathbb C}$,
-    and (\ref{eq:peps_excluded_head}) gives
-    \begin{align}
-        \widetilde W^{\mathrm r}|_A
-         & =(\operatorname{id}_{H_r}\otimes W^{\mathrm r})|_A\circ E|_A
-        =W^{\mathrm r}|_A
-        =\alpha\operatorname{id}_{\mathbb C}.
-    \end{align}
+    For $\widetilde W$, moving $r$ past the excluded sources via an exchange $E$ gives $\widetilde W^{\mathrm r}=(\operatorname{id}_{H_r}\otimes W^{\mathrm r})\circ E$ with $E|_A=\operatorname{id}_{\mathbb C}$, so (\ref{eq:peps_excluded_head}) yields $\widetilde W^{\mathrm r}|_A=W^{\mathrm r}|_A\circ E|_A=\alpha\operatorname{id}_{\mathbb C}$.
 \end{proof}

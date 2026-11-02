@@ -28,9 +28,6 @@ The supporting code is split into four modules:
   by at most two per radius step, the single-piece layer count, and the scale
   argument for arbitrary unions.
 
-The regression file `TNLeanTest/TemplateRows.lean` checks the exported
-statements on actual template models.
-
 ## Mathematical derivation
 
 For each actual polygon, take the minimum and maximum of each of the forms

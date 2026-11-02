@@ -16,7 +16,7 @@ distance from $a$ to an unreachable vertex.
 All distances are measured in $G$ itself; when $G$ is an induced-domain
 graph, no ambient distance is substituted.
 
-\begin{theorem}[Stabilization of graph balls]
+\begin{lemma}[Stabilization of graph balls]
     \label{thm:qc_graph_ball_stabilization}
     \lean{QuantumCircuit.graphBall_mono,
         QuantumCircuit.notMem_graphBall_of_edist_eq_top,
@@ -26,7 +26,7 @@ graph, no ambient distance is substituted.
     The balls $N_l(a)$ increase with $l$. Every $n\ge R_a$ satisfies
     $N_n(a)=C(a)$. If $d_G(a,y)=\infty$, then $y\notin N_n(a)$ for
     every finite $n$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     The implication $d_G(a,x)\le m\le n\Rightarrow d_G(a,x)\le n$
@@ -53,7 +53,7 @@ The local channels are $\mathcal E_{k,l}=\mathcal E_{E_{N_l(a)}(k)}$.
 Their shells are $\Delta_0=\mathcal E_{k,0}-\mathrm{id}$ and
 $\Delta_{l+1}=\mathcal E_{k,l+1}-\mathcal E_{k,l}$.
 
-\begin{theorem}[Exact component localization]
+\begin{lemma}[Exact component localization]
     \label{thm:qc_component_channel_stabilization}
     \uses{def:qc_site_expectation}
     \lean{TNLean.PEPS.AreaLaw.siteExpectation_graphBall_eq_of_component_support,
@@ -68,7 +68,7 @@ $\Delta_{l+1}=\mathcal E_{k,l+1}-\mathcal E_{k,l}$.
     then $\mathcal E_{k,n}(B)=\mathcal E_k(B)$ and
     $\Delta_{n+1}(B)=0$ for all $n\ge R_a$ and all $B$.
     The same radius works for every observable.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:qc_graph_ball_stabilization,lem:qc_site_expectation_properties}
@@ -84,7 +84,7 @@ $b_{l+1}=4(\sqrt{\varepsilon_{l+1}}+\sqrt{\varepsilon_l})$.
 Write $d_y(B)$ for the physical-site oscillation of
 Definition~\ref{def:qc_site_oscillation}.
 
-\begin{theorem}[Finite-shell bound for the full channel]
+\begin{lemma}[Finite-shell bound for the full channel]
     \label{thm:qc_component_channel_increment}
     \uses{def:qc_site_oscillation,thm:qc_component_channel_stabilization}
     \lean{TNLean.PEPS.AreaLaw.siteOscillation_spectatorRootChannel_le_of_component_support}
@@ -99,33 +99,33 @@ Definition~\ref{def:qc_site_oscillation}.
          & \le d_y(B)+2\sum_{0\le l\le n,\ d_G(a,y)\le l}
         b_l\sum_{z\in N_l(a)}d_z(B).
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:qc_graph_ball_stabilization,thm:qc_component_channel_stabilization,
         thm:al_channel_finite_increment}
-    Applying Theorem~\ref{thm:al_channel_finite_increment} to the increasing
+    Applying Lemma~\ref{thm:al_channel_finite_increment} to the increasing
     regions $N_l(a)$ bounds $d_y(\mathcal E_{k,n}(B))$ by the right-hand side
     of~(\ref{eq:qc_component_increment}).
     Component localization then identifies $\mathcal E_{k,n}$ with
     $\mathcal E_k$, while the condition $y\in N_l(a)$ is $d_G(a,y)\le l$.
 \end{proof}
 
-\begin{theorem}[No increase across components]
+\begin{lemma}[No increase across components]
     \label{thm:qc_component_channel_disconnected}
     \uses{def:qc_site_oscillation,thm:qc_component_channel_stabilization}
     \lean{TNLean.PEPS.AreaLaw.siteOscillation_spectatorRootChannel_le_of_edist_eq_top}
     \leanok
     If $0\le k\le1$, $k$ is supported on $C(a)$, and
     $d_G(a,y)=\infty$, then $d_y(\mathcal E_k(B))\le d_y(B)$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:qc_graph_ball_stabilization,thm:qc_component_channel_stabilization,
         thm:al_root_channel_outside_oscillation}
     At radius $R_a$, the local channel $\mathcal E_{k,R_a}$ equals the full
     channel $\mathcal E_k$ and $y\notin N_{R_a}(a)$. By
-    Theorem~\ref{thm:al_root_channel_outside_oscillation}, $\mathcal E_{k,R_a}$
+    Lemma~\ref{thm:al_root_channel_outside_oscillation}, $\mathcal E_{k,R_a}$
     commutes with on-site unitary conjugation at $y$, and its contractivity
     bounds each resulting commutator by its original norm, so taking the
     supremum over unitaries at $y$ gives $d_y(\mathcal E_k(B))\le d_y(B)$.

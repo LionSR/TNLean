@@ -1,7 +1,7 @@
 \section{Entropy cost of a partial rectangle layer}
 
 % Derived rectangle auxiliary for the partial-row argument of Lemma 9.4.
-\begin{theorem}[Entropy cost of a partial rectangle row]
+\begin{lemma}[Entropy cost of a partial rectangle row]
     \label{thm:area_law_rectangle_partial_row}
     \lean{TNLean.PEPS.AreaLaw.IntRect.partial_row_entropy_le}
     \leanok
@@ -23,14 +23,14 @@
     rectangle covering argument in the proof of Proposition~9.5,
     lines~717--729. It includes an empty $Y$, thin rectangles and missing
     lattice sites in the domain.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:area_law_buffer_contours,thm:area_partial_row_increment,
         thm:area_law_entropy_dimension}
     Put $B=A\cap Y$. Then $R$ and $B$ are disjoint and $R_Y=R\cup B$.
     The boundary-layer count recorded in the proof of
-    Theorem~\ref{thm:area_law_buffer_contours} gives
+    Lemma~\ref{thm:area_law_buffer_contours} gives
     \begin{align}
         |B|\le|Y|\le|Q^{+j}\setminus Q^{+(j-1)}|
         \le4(s+2j)\le12s.

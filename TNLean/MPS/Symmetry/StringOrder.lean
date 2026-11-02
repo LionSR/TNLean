@@ -51,7 +51,7 @@ string-order universality theorems that use them.
   arXiv:1010.3732, Section II.F — SPT classification (not formalized here)
 -/
 
-open scoped Matrix BigOperators ComplexOrder MatrixOrder Kraus
+open scoped Matrix BigOperators ComplexOrder MatrixOrder Kraus TNLean.Algebra.ScalarCohomology
 
 namespace MPSTensor
 
@@ -378,8 +378,9 @@ open TNLean.Algebra
 variable {G : Type} [Group G]
 
 /-- Two MPS tensors with the same on-site symmetry are in the **same SPT phase** if
-there exist virtual representation cocycles that intertwine the respective tensors
-and are cohomologous.
+there exist virtual factor systems that intertwine the respective tensors
+and whose ratio is a coboundary. No positive bond dimension is assumed, so
+this definition does not impose a cocycle condition on the factor systems.
 
 The cocycle-class label is taken here as the *definition* of SPT-phase
 equality.  Its identification with phase equivalence under symmetric gapped
@@ -397,7 +398,7 @@ def IsSameSPTPhase (A B : MPSTensor d D)
     (∀ g i, twistedTensor B U g i =
       (ρB.X (g⁻¹) : Matrix (Fin D) (Fin D) ℂ) * B i *
         (((ρB.X (g⁻¹))⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)) ∧
-    ScalarCocycle.CohomologousTo ωA ωB
+    groupCohomology.IsMulCoboundary₂ (ωA / ωB)
 
 /-- For an injective symmetric MPS with canonical FCS data, the twisted transfer
 map has the virtual representation gauge matrix as a fixed point (eigenvalue 1).

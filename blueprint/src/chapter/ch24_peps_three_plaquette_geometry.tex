@@ -1,4 +1,4 @@
-\begin{theorem}[Ordered edges and pushforward subgraphs]%
+\begin{lemma}[Ordered edges and pushforward subgraphs]%
     \label{thm:peps_edge_map_subgraph}
     \lean{TNLean.PEPS.Edge.comap_adj_map_iff}
     \leanok
@@ -10,7 +10,7 @@
     are adjacent in $T$. In particular, a non-tree bond remains outside
     the image tree. This elementary assertion is used in the finite
     blocking and flux geometries of \cite{Schuch2010PEPS}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     The mapped endpoints occur in their original order or in the reverse
@@ -40,7 +40,7 @@
     in \cite[braiding passage]{Schuch2010PEPS}.
 \end{definition}
 
-\begin{theorem}[The induced strip and its explicit spanning tree]%
+\begin{lemma}[The induced strip and its explicit spanning tree]%
     \label{thm:peps_three_plaquette_geometry}
     \lean{TNLean.PEPS.translatedThreePlaquetteTree_isTree,
         TNLean.PEPS.translatedThreePlaquetteTree_le,
@@ -57,7 +57,7 @@
     tree. The three selected non-tree bonds are distinct and are exactly
     the native ordered upward steps at $x$, $x+1$, and $x+2$ in row $y$.
     These assertions hold at every position, including both periodic seams.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     On eight labels, take the path graph and add the three chords

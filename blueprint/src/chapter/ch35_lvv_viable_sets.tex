@@ -28,7 +28,7 @@ whose range is the span of the columns of $M_i(\psi)$.
     Definition~def:viable of~\cite[lines 240--242]{Landau2015Polynomial}.
 \end{definition}
 
-\begin{theorem}[Support through the projection onto the span]
+\begin{lemma}[Support through the projection onto the span]
     \label{thm:lvv_viable_projection}
     \lean{TNLean.MPS.AreaLaw.spanProjection,
         TNLean.MPS.AreaLaw.isStarProjection_spanProjection,
@@ -48,7 +48,7 @@ whose range is the span of the columns of $M_i(\psi)$.
     $P_S\rho=\rho$ for the reduced state $\rho=M_i(\psi)M_i(\psi)^*$ of $\psi$ on
     the first $i$ sites; $(P_S\otimes I)\psi=\psi$, with $\psi$ written in the
     coordinates of the cut after the first $i$ sites.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -58,7 +58,7 @@ whose range is the span of the columns of $M_i(\psi)$.
     vector, and $(P\otimes I)\psi$ is $PM_i(\psi)$, for every matrix $P$.
 \end{proof}
 
-\begin{theorem}[Viable sets and viable subspaces]
+\begin{lemma}[Viable sets and viable subspaces]
     \label{thm:lvv_viable_closeness}
     \lean{TNLean.MPS.AreaLaw.IsViable.le_norm_starProjection,
         TNLean.MPS.AreaLaw.isViable_iff_le_norm_starProjection,
@@ -76,7 +76,7 @@ whose range is the span of the columns of $M_i(\psi)$.
     of Arad, Landau, Vazirani and
     Vidick~\cite[lines 433--440]{Arad2016RigorousRG}, with $\delta'$ in place of
     $\delta$, since $\delta$ bounds an overlap and $\delta'$ a squared overlap.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -101,7 +101,7 @@ whose range is the span of the columns of $M_i(\psi)$.
     sites~\cite{gap:lvv13_bond_dimension_zero}.
 \end{definition}
 
-\begin{theorem}[Extending a viable set by one site]
+\begin{lemma}[Extending a viable set by one site]
     \label{thm:lvv_viable_extension}
     \lean{TNLean.MPS.AreaLaw.IsOpenMPS.snoc,
         TNLean.MPS.AreaLaw.restrictLeft,
@@ -126,7 +126,7 @@ whose range is the span of the columns of $M_i(\psi)$.
     $(i,qs,b,\delta)$-viable for $\Gamma$, with the same witness. This is
     Claim~c:ext of~\cite[lines 379--400]{Landau2015Polynomial}, stated there
     for $\delta=c_\varepsilon/n$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -134,24 +134,24 @@ whose range is the span of the columns of $M_i(\psi)$.
     $S'$ has at most $q|S|$ members. Let $w$ be an open matrix product state on
     $n$ sites with bond dimension at most $b'=\max(1,b)$, and let $f$ be a
     vector on one site. For a cut after $j<n$ sites,
-    \[
-        M_j(w\otimes f)=M_j(w)\,R_j,\qquad
-        (R_j)_{z',(z,x)}=\delta_{z'z}\,f(x),
-    \]
+    \begin{align}
+        M_j(w\otimes f)  & =M_j(w)\,R_j,              &
+        (R_j)_{z',(z,x)} & =\delta_{z'z}\,f(x),\notag
+    \end{align}
     so $\operatorname{rank}M_j(w\otimes f)\le\operatorname{rank}M_j(w)\le b'$,
     while the new cut after $n$ sites gives $M_n(w\otimes f)=wf^{\mathsf T}$, of
     rank at most $1\le b'$. With $f=|k\rangle$, every member of $S'$ has bond
     dimension at most $b'$. For the witness, decomposing site $i$ on the basis
     gives, for each configuration $\beta$ of the sites after $i$,
-    \[
-        M_i(\phi)_{\cdot,\beta}=\sum_k M_{i-1}(\phi)_{\cdot,(k,\beta)}\otimes|k\rangle.
-    \]
+    \begin{align}
+        M_i(\phi)_{\cdot,\beta}=\sum_k M_{i-1}(\phi)_{\cdot,(k,\beta)}\otimes|k\rangle.\notag
+    \end{align}
     When the columns of $M_{i-1}(\phi)$ lie in $\operatorname{Span}(S)$, each
     summand lies in $\operatorname{Span}(S')$, so the columns of $M_i(\phi)$ do as
     well; the witness $\phi$ is unchanged.
 \end{proof}
 
-\begin{theorem}[Bond dimensions in a finite span]
+\begin{lemma}[Bond dimensions in a finite span]
     \label{thm:open_mps_finite_span}
     \lean{TNLean.MPS.AreaLaw.isOpenMPS_of_mem_span}
     \leanok
@@ -163,7 +163,7 @@ whose range is the span of the columns of $M_i(\psi)$.
     open-boundary matrix product state of bond dimension at most $|S|D$.
     This is the finite-span estimate used
     in~\cite[Claim~2.7, source lines 520--527]{Landau2015Polynomial}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:chain_cut_rank_of_mps}
     Write $v=\sum_{w\in S}a_w w$. At every internal cut $j$,
@@ -176,7 +176,7 @@ whose range is the span of the columns of $M_i(\psi)$.
     including empty and one-site chains and $D=0$.
 \end{proof}
 
-\begin{theorem}[Bond dimensions in a left span]
+\begin{lemma}[Bond dimensions in a left span]
     \label{thm:left_mps_finite_span}
     \lean{TNLean.MPS.AreaLaw.isLeftOpenMPS_of_mem_span}
     \leanok
@@ -189,11 +189,11 @@ whose range is the span of the columns of $M_i(\psi)$.
     $\beta$. For every $v\in\operatorname{Span}(S)$, the vector $Rv$ is a
     matrix product state of bond dimension at most $\max\{1,|S|\beta\}$.
     When $S$ is nonempty and $b\ge1$, this bound is $|S|b$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:open_mps_finite_span,thm:chain_cut_rank_of_mps}
     The map $R$ is linear, so $Rv\in\operatorname{Span}(R(S))$ and
-    $|R(S)|\le |S|$. Theorem~\ref{thm:open_mps_finite_span} gives a bond
+    $|R(S)|\le |S|$. Lemma~\ref{thm:open_mps_finite_span} gives a bond
     bound $|R(S)|\beta\le |S|\beta\le\max\{1,|S|\beta\}$.
 \end{proof}
 
@@ -201,6 +201,7 @@ whose range is the span of the columns of $M_i(\psi)$.
     \label{def:lvv_finite_left_columns}
     \lean{TNLean.MPS.AreaLaw.leftColumns}
     \leanok
+    \uses{def:chain_model}
     Let $I$ be a finite index set and let $m$ be a natural number. Write
     $\mathcal L$ for the Hilbert space of configurations on the left block
     of a cut. For vectors $u_i\in\mathcal L\otimes\mathbb C^m$, write
@@ -213,7 +214,7 @@ whose range is the span of the columns of $M_i(\psi)$.
     of~\cite[Claim~2.7, source lines 472--477 and 520--527]{Landau2015Polynomial}.
 \end{definition}
 
-\begin{theorem}[Number and support of the left columns]
+\begin{lemma}[Number and support of the left columns]
     \label{thm:lvv_finite_left_columns}
     \lean{TNLean.MPS.AreaLaw.card_leftColumns_le,
         TNLean.MPS.AreaLaw.leftColumns_subset_span}
@@ -223,11 +224,40 @@ whose range is the span of the columns of $M_i(\psi)$.
     Let $S\subseteq\mathcal L$, and let $P_S$ be the orthogonal projection
     onto $\operatorname{Span}(S)$. If $(P_S\otimes I_m)u_i=u_i$ for every
     $i\in I$, then $T\subseteq\operatorname{Span}(S)$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:lvv_viable_projection}
     The set $T$ is the image of $I\times\{0,\ldots,m-1\}$, so its cardinality
     is at most $|I|m$. Let $C_i$ have columns $u_{i,j}$. The fixed-vector
     identity gives $P_SC_i=C_i$, hence $P_Su_{i,j}=u_{i,j}$ for every
     retained column. The range of $P_S$ is $\operatorname{Span}(S)$.
+\end{proof}
+
+
+\begin{lemma}[Left support after extending the right factor]
+    \label{thm:lvv_left_columns_right_extension}
+    \lean{TNLean.MPS.AreaLaw.rightApply_mem_leftSupportSubmodule_leftColumns,
+        TNLean.MPS.AreaLaw.rightApply_mem_leftSupportSubmodule_of_columns}
+    \leanok
+    \uses{def:lvv_finite_left_columns,def:lvv_viable_set}
+    Let $T$ be the finite set of left columns in
+    Definition~\ref{def:lvv_finite_left_columns}.
+    For every $i\in I$ and every linear map $W:\mathbb C^m\to\mathcal H_R$,
+    the chain vector obtained from $(I_{\mathcal L}\otimes W)u_i$ by the
+    cut identification belongs to $\operatorname{Span}(T)\otimes\mathcal H_R$.
+    More generally, an arbitrary finite environment and right extension
+    preserve this support whenever every left column lies in
+    $\operatorname{Span}(T)$.
+    This is the support step used
+    in~\cite[Claim~2.7, source lines 520--527]{Landau2015Polynomial}.
+\end{lemma}
+\begin{proof}\leanok
+    Let $C_i$ be the coefficient matrix of $u_i$. The extended vector has
+    coefficient matrix $C_iW^{\mathsf T}$. Its column at a right
+    configuration $b$ is
+    \begin{align}
+        \sum_{j<m}W_{b,j}u_{i,j}.\notag
+    \end{align}
+    Each $u_{i,j}$ belongs to $T$, so every such column lies in
+    $\operatorname{Span}(T)$.
 \end{proof}

@@ -40,19 +40,23 @@ theorem ScalarCocycle.isMulCocycle₂_comap {ω : ScalarCocycle G}
   simpa only [ScalarCocycle.comap_apply, map_mul] using
     (isMulCocycle₂_iff _).mp hω (f a) (f b) (f c)
 
-/-- Precomposing the witnessing cochain makes pullback respect cohomology. -/
-theorem ScalarCocycle.CohomologousTo.comap {ω₁ ω₂ : ScalarCocycle G}
-    (h : ω₁.CohomologousTo ω₂) (f : K →* G) :
-    (ω₁.comap f).CohomologousTo (ω₂.comap f) := by
-  obtain ⟨φ, hφ⟩ := h
+/-- Pullback preserves a coboundary ratio between arbitrary scalar cochains. -/
+theorem isMulCoboundary₂_div_comap {ω₁ ω₂ : G × G → ℂˣ}
+    (h : groupCohomology.IsMulCoboundary₂ (ω₁ / ω₂)) (f : K →* G) :
+    groupCohomology.IsMulCoboundary₂
+      ((ω₁ ∘ Prod.map f f) / (ω₂ ∘ Prod.map f f)) := by
+  obtain ⟨φ, hφ⟩ := (isMulCoboundary₂_div_iff ω₁ ω₂).mp h
+  apply (isMulCoboundary₂_div_iff _ _).mpr
   refine ⟨φ ∘ f, fun a b ↦ ?_⟩
-  simpa only [ScalarCocycle.comap_apply, Function.comp_apply, map_mul] using hφ (f a) (f b)
+  change ω₁ (f a, f b) = φ (f a) * φ (f b) * (φ (f (a * b)))⁻¹ * ω₂ (f a, f b)
+  simpa only [map_mul] using hφ (f a) (f b)
 
 /-- Multiplying a genuine cocycle by a cochain coboundary preserves its equation. -/
 theorem ScalarCocycle.isMulCocycle₂_coboundary_mul {ω : ScalarCocycle G}
     (hω : groupCohomology.IsMulCocycle₂ ω) (φ : G → ℂˣ) :
     groupCohomology.IsMulCocycle₂ (fun p ↦ φ p.1 * φ p.2 * (φ (p.1 * p.2))⁻¹ * ω p) := by
-  exact ScalarCocycle.isMulCocycle₂_of_cohomologousTo hω ⟨φ, fun _ _ ↦ rfl⟩
+  apply isMulCocycle₂_of_isMulCoboundary₂_div hω
+  exact (isMulCoboundary₂_div_iff _ ω).mpr ⟨φ, fun _ _ ↦ rfl⟩
 
 /-- Mathlib's restriction of cocycles along `f` sends the cocycle of `ω` to the cocycle of
 its pullback `ω.comap f`. -/
@@ -91,10 +95,10 @@ theorem ScalarCocycle.H2π_mem_range_map_subtype_iff (H : Subgroup G)
   · rintro ⟨q, hq⟩
     obtain ⟨ω, hω, rfl⟩ := ScalarCocycle.exists_H2π_eq q
     rw [ScalarCocycle.map_H2π hω] at hq
-    have hcoh : ψ.CohomologousTo (ω.comap H.subtype) :=
-      (ScalarCocycle.cohomologousTo_iff_H2π_eq hψ
-        (ScalarCocycle.isMulCocycle₂_comap hω H.subtype)).mpr hq.symm
-    obtain ⟨φ, hφ⟩ := hcoh
+    have hB : groupCohomology.IsMulCoboundary₂ (ψ / ω.comap H.subtype) :=
+      (H2π_eq_iff_isMulCoboundary₂_div hψ
+        (ScalarCocycle.isMulCocycle₂_comap hω H.subtype)).mp hq.symm
+    obtain ⟨φ, hφ⟩ := (isMulCoboundary₂_div_iff _ _).mp hB
     let Φ : G → ℂˣ := Function.extend Subtype.val φ (fun _ ↦ 1)
     have hΦ (a : H) : Φ (a : G) = φ a :=
       Subtype.val_injective.extend_apply φ (fun _ ↦ 1) a

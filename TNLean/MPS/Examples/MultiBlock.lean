@@ -9,10 +9,21 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.MPS.Examples.MultiBlock
 
 import TNLean.MPS.Examples.MultiBlock.ElementaryStates
+import TNLean.MPS.Examples.MultiBlock.FlagVectors
 import TNLean.MPS.Examples.MultiBlock.GHZSectors
 import TNLean.MPS.Examples.MultiBlock.JordanBoundary
+import TNLean.MPS.Examples.MultiBlock.Multiplicity
+import TNLean.MPS.Examples.MultiBlock.NoGauge
+import TNLean.MPS.Examples.MultiBlock.OneBlock
 import TNLean.MPS.Examples.MultiBlock.OneSlotGauge
 import TNLean.MPS.Examples.MultiBlock.ParityAmplitudes
 import TNLean.MPS.Examples.MultiBlock.ParityGraded
+import TNLean.MPS.Examples.MultiBlock.Periodic
 import TNLean.MPS.Examples.MultiBlock.RepeatedBlock
+import TNLean.MPS.Examples.MultiBlock.Running
+import TNLean.MPS.Examples.MultiBlock.RunningFactorization
+import TNLean.MPS.Examples.MultiBlock.SharpnessOneBlock
+import TNLean.MPS.Examples.MultiBlock.SharpnessOneBlockGeneral
 import TNLean.MPS.Examples.MultiBlock.StackedPairGauge
+import TNLean.MPS.Examples.MultiBlock.Worked
+import TNLean.MPS.Examples.MultiBlock.WorkedAdaptedBasis

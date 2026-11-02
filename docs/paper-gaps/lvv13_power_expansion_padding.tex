@@ -1,0 +1,59 @@
+\documentclass{article}
+\usepackage[margin=28mm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\input{command}
+\providecommand{\gapnote}[2]{\par\noindent\textbf{Verdict:} #1 (#2).\par}
+\providecommand{\leanid}[1]{\textsf{\detokenize{#1}}}
+\title{The Padding Letter in the Power Expansion of Landau, Vazirani and Vidick}
+\author{}
+\date{2026-10-28}
+\begin{document}
+\maketitle
+\gapnote{local-correction}{resolved}
+
+\section{The source statement}
+Landau, Vazirani and Vidick~\cite{Landau2015Polynomial},
+\href{https://arxiv.org/abs/1307.5143v1}{arXiv:1307.5143v1}, source
+\path{algo53.tex}, consider $H=\sum_{i=1}^{n-1}H_i$ on $n$ qudits, with $H_i$
+acting on the qudits $i$ and $i+1$ and $0\le H_i\le 1$ (lines 283--284). They
+define $A=\bigl((1-H/n)/(1-\varepsilon_0/n)\bigr)^m$ (line 600), and with
+$P_i=1-H_i$ and $C=1/(1-\varepsilon_0/n)$ they write (equation
+\texttt{eq:a-exp}, lines 606--609)
+\begin{align*}
+  A=C^m\frac{1}{n^m}\sum_{I=(i_1,\ldots,i_m)\in\{1,\ldots,n\}^m}P_I,
+  \qquad P_I=\prod_{j=1}^mP_{i_j}.
+\end{align*}
+
+\section{The point at issue}
+The sum runs over words in the $n$ letters $1,\ldots,n$, but $H$ has only the
+$n-1$ terms $H_1,\ldots,H_{n-1}$, so $P_n$ is not defined. Expanding the power
+gives $\sum_IP_I=\bigl(\sum_{i=1}^nP_i\bigr)^m$, and the identity holds exactly
+when $\sum_{i=1}^nP_i=n-H$.
+
+\section{The convention}
+The expansion is read with $H_n=0$, so that $P_n=1$. Then
+$\sum_{i=1}^nP_i=(n-1)-H+1=n-H$, hence
+$C^mn^{-m}\sum_IP_I=\bigl(C(1-H/n)\bigr)^m=A$. The padding letter is the
+identity and acts on no site, so it never crosses a cut and does not change the
+rank estimate of equation \texttt{e:decomp} (lines 584--588). The same count
+$n$ is the one used in the spectral estimates (lines 602--603): since
+$H\le(n-1)$, the operator $1-H/n$ is positive and the denominator
+$1-\varepsilon_0/n$ is positive.
+
+The normalization divides by the number $n$ of qudits, so the statements are
+made for chains with at least one site, as in the source, whose qudits are
+numbered from $1$ to $n$.
+
+\section{Formalization}
+The padded bond terms and the letters are
+\leanid{TNLean.MPS.AreaLaw.paddedBond} and
+\leanid{TNLean.MPS.AreaLaw.bondComplement}, indexed by the $L$ sites of the
+chain, with the last letter the identity. The expansion is
+\leanid{TNLean.MPS.AreaLaw.powerProjector_eq_sum_bondComplementWord}, and the
+rank estimate is
+\leanid{TNLean.MPS.AreaLaw.operatorSchmidtRank_cutOperator_bondComplementWord_le}.
+\bibliographystyle{unsrt}
+\bibliography{references}
+\end{document}

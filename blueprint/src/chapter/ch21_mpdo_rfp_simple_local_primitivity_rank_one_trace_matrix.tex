@@ -1,4 +1,4 @@
-\begin{theorem}[Positivity of bipartite partial traces]
+\begin{lemma}[Positivity of bipartite partial traces]
     \label{thm:matrix_possemidef_partial_traces}
     \lean{Matrix.PosSemidef.traceLeft}
     \lean{Matrix.PosSemidef.traceRight}
@@ -6,7 +6,7 @@
     If $\rho$ is positive semidefinite on a bipartite space $A \otimes B$, then
     both reduced operators $\tr_A \rho$ and $\tr_B \rho$ are positive
     semidefinite.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -39,7 +39,7 @@
     construction in the original simple-MPDO tensor coordinates.
 \end{definition}
 
-\begin{theorem}[Trace matrix of the Hayashi--Markov $\eta$-operators]
+\begin{lemma}[Trace matrix of the Hayashi--Markov $\eta$-operators]
     \label{thm:mpdo_eta_of_hayashi_markov_trace_matrix}
     \lean{MPOTensor.ExplicitEtaOperators.traceMatrix_ofHayashiMarkov}
     \lean{MPOTensor.ExplicitEtaOperators.traceMatrixRe_ofHayashiMarkov}
@@ -50,7 +50,7 @@
     $T_{k,h}=1$ in both its complex-valued form and its real-valued form.
     If there are $m$ sectors, then
     $T=\mathbf{1}\mathbf{1}^{\mathsf T}$ and $\tr(T)=m$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -63,14 +63,14 @@
     $\tr(T)=m$.
 \end{proof}
 
-\begin{theorem}[Positive semidefiniteness of the Hayashi--Markov trace matrix]
+\begin{lemma}[Positive semidefiniteness of the Hayashi--Markov trace matrix]
     \label{thm:mpdo_eta_of_hayashi_markov_trace_matrix_psd}
     \lean{MPOTensor.ExplicitEtaOperators.traceMatrixRe_ofHayashiMarkov_posSemidef}
     \leanok
     \uses{thm:mpdo_eta_of_hayashi_markov_trace_matrix}
     The real trace matrix of the sector-reduced family is positive
     semidefinite.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -79,7 +79,7 @@
     $\mathbf{1}\mathbf{1}^{\mathsf T}$, hence is positive semidefinite.
 \end{proof}
 
-\begin{theorem}[Entrywise nonnegativity of the real trace matrix]
+\begin{lemma}[Entrywise nonnegativity of the real trace matrix]
     \label{thm:mpdo_explicit_eta_trace_matrix_nonneg}
     \lean{MPOTensor.ExplicitEtaOperators.traceMatrixRe_nonneg}
     \leanok
@@ -87,7 +87,7 @@
     Positivity of the neighboring operators gives entrywise nonnegativity of
     the real trace matrix. Matrix-level positive semidefiniteness of $T$ is a
     separate structural condition.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -116,14 +116,14 @@
 % The deviation from the source is documented in
 % docs/paper-gaps/cpgsv17_pf_rank_one.tex.
 
-\begin{theorem}[Trace square of a Hermitian matrix]
+\begin{lemma}[Trace square of a Hermitian matrix]
     \label{thm:matrix_hermitian_trace_square_eigenvalues}
     \lean{Matrix.IsHermitian.trace_sq_eq_sum_eigenvalues_sq}
     \leanok
     Let $T$ be a finite Hermitian matrix over a real or complex scalar field,
     with Hermitian eigenvalues $\lambda_i$. Then
     $\tr(T^2)=\sum_i\lambda_i^2$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -133,7 +133,7 @@
     diagonal matrix.
 \end{proof}
 
-\begin{theorem}[Rank-one eigenvector resolution of a Hermitian matrix]
+\begin{lemma}[Rank-one eigenvector resolution of a Hermitian matrix]
     \label{thm:matrix_hermitian_rank_one_eigenvector_resolution}
     \lean{Matrix.IsHermitian.eq_sum_eigenvalues_smul_eigenvectorProjection}
     \leanok
@@ -141,7 +141,7 @@
     $(u_k)_k$ with eigenvalues $(\lambda_k)_k$, and let
     $E_k=\ketbra{u_k}{u_k}$ be the rank-one projection onto $u_k$. Then
     $A=\sum_k\lambda_kE_k$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -151,7 +151,7 @@
     rank-one coordinate projections gives the stated identity.
 \end{proof}
 
-\begin{theorem}[PSD trace-power rank-one criterion]
+\begin{lemma}[PSD trace-power rank-one criterion]
     \label{thm:matrix_psd_trace_power_rank_one}
     \lean{Matrix.PosSemidef.trace_powers_constant_implies_rank_one}
     \leanok
@@ -159,7 +159,7 @@
     Let $T$ be a finite real square matrix. If $T$ is positive semidefinite,
     normalized by $\tr(T)=1$, and has constant traces on all positive powers,
     then $T$ has a rank-one factorization.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -172,13 +172,13 @@
     outer-product factorization.
 \end{proof}
 
-\begin{theorem}[Idempotent trace-one criterion]
+\begin{lemma}[Idempotent trace-one criterion]
     \label{thm:matrix_idempotent_trace_one_rank_one}
     \lean{Matrix.hasRankOneFactorization_of_mul_self_eq_self}
     \leanok
     Let $T$ be a finite real square matrix. If $T^2=T$ and $\tr(T)=1$, then
     there are real vectors $a,b$ such that $T=ab^\top$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -189,7 +189,7 @@
     $b_j a$ for a scalar $b_j$, and therefore $T=ab^\top$.
 \end{proof}
 
-\begin{theorem}[Constant trace powers of an idempotent matrix]
+\begin{lemma}[Constant trace powers of an idempotent matrix]
     \label{thm:matrix_idempotent_trace_powers_constant}
     \lean{Matrix.tracePowersConstant_of_mul_self_eq_self}
     \leanok
@@ -198,7 +198,7 @@
     \cite[Appendix~C.2, Lemma~C.5]{Cirac2016MPDO_arXiv} from idempotence, a
     finite real square matrix $T$ with $T^2=T$ satisfies $\tr(T^N)=\tr(T)$ for
     every positive integer $N$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -206,14 +206,14 @@
     $T^{N+1}=T^NT=TT=T$, so every positive power of $T$ equals $T$.
 \end{proof}
 
-\begin{theorem}[Positive entries in every row and column of a primitive matrix]
+\begin{lemma}[Positive entries in every row and column of a primitive matrix]
     \label{thm:matrix_primitive_row_col_pos}
     \lean{Matrix.IsPrimitive.exists_row_pos}
     \lean{Matrix.IsPrimitive.exists_col_pos}
     \leanok
     Let $T$ be a primitive non-negative matrix. Then every row of $T$ contains
     a strictly positive entry, and so does every column.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -233,14 +233,14 @@
     again contradicting the strict positivity of some power of $T$.
 \end{proof}
 
-\begin{theorem}[Rank of a strictly positive idempotent]
+\begin{lemma}[Rank of a strictly positive idempotent]
     \label{thm:matrix_positive_idempotent_rank_one}
     \lean{Matrix.rank_eq_one_of_pos_of_mul_self_eq_self}
     \leanok
     Let $I$ be a nonempty finite index set, and let $P$ be a real matrix
     indexed by $I\times I$. Suppose that $P^2=P$ and $P_{i,j}>0$ for every
     $i,j\in I$. Then $\rank(P)=1$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -257,7 +257,7 @@
     is its fixed space, so it is one-dimensional.
 \end{proof}
 
-\begin{theorem}[Rank and factorization of a stationary primitive square]
+\begin{lemma}[Rank and factorization of a stationary primitive square]
     \label{thm:matrix_primitive_pow_two_rank_one}
     \lean{Matrix.IsPrimitive.smul_of_pos}
     \lean{Matrix.IsPrimitive.rank_pow_two_eq_one_of_pow_two_eq_pow_three}
@@ -275,7 +275,7 @@
     This finite-dimensional matrix lemma supports the argument sought at
     \cite[Appendix~C.2, line~1613]{Cirac2016MPDO_arXiv}; it is not a theorem
     asserted there.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -295,7 +295,7 @@
     the trace yields $\sum_i a_i b_i=1$.
 \end{proof}
 
-\begin{theorem}[Idempotence of the sector trace matrix]
+\begin{lemma}[Idempotence of the sector trace matrix]
     \label{thm:matrix_pairing_idempotent}
     \lean{Matrix.mul_self_eq_self_of_pairing_idempotent}
     \lean{Matrix.mul_self_eq_self_of_pairing_idempotent_dual}
@@ -315,7 +315,7 @@
     $l_1,\ldots,l_n$ are linearly independent, then $T^2=T$.
     The same conclusion holds if instead the functionals
     $r_1,\ldots,r_n$ are linearly independent.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -345,7 +345,7 @@ Equivalently, the zero-correlation-length identity is the algebraic equality
 which is the displayed identity of
 \cite[Appendix~C.2, lines~1490--1493]{Cirac2016MPDO_arXiv}.
 
-\begin{theorem}[Unconditional constant trace powers of the pairing matrix]
+\begin{lemma}[Unconditional constant trace powers of the pairing matrix]
     \label{thm:matrix_pairing_sq_eq_cube}
     \lean{Matrix.pow_two_eq_pow_three_of_pairing_idempotent}
     \lean{Matrix.trace_eq_trace_sq_of_pairing_idempotent}
@@ -356,7 +356,7 @@ which is the displayed identity of
     Let $V$ be a real vector space, let $l_1,\ldots,l_n\in V$, let
     $r_1,\ldots,r_n$ be real linear functionals on $V$, and let
     $T_{k,h}=(r_k|l_h)$ be the pairing matrix, as in
-    Theorem~\ref{thm:matrix_pairing_idempotent}. Assuming only the identity
+    Lemma~\ref{thm:matrix_pairing_idempotent}. Assuming only the identity
     $M^2=M$ for the operator $M=\sum_k|l_k)(r_k|$, without assuming linear
     independence of $l_1,\ldots,l_n$ or of $r_1,\ldots,r_n$, one has the
     following identities: the first unconditionally, the second for every
@@ -369,7 +369,7 @@ which is the displayed identity of
         \tr(T^N) & =\tr(T).
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -394,12 +394,12 @@ which is the displayed identity of
 % primitivity does not entail the independence. The hypothesis below remains
 % to be discharged at the matrix product density operator call site.
 % Recorded in docs/paper-gaps/cpgsv17_pf_rank_one.tex.
-\begin{theorem}[Rank-one factorization of the sector trace matrix]
+\begin{lemma}[Rank-one factorization of the sector trace matrix]
     \label{thm:matrix_pairing_rank_one}
     \lean{Matrix.hasRankOneFactorization_of_pairing_idempotent}
     \leanok
     \uses{def:matrix_trace_rankone_predicates}
-    In the setting of Theorem~\ref{thm:matrix_pairing_idempotent} with real
+    In the setting of Lemma~\ref{thm:matrix_pairing_idempotent} with real
     scalars and linearly independent vectors $l_1,\ldots,l_n$, if in addition
     $\tr(T)=1$, then there are real vectors $a,b$ such that $T=ab^\top$.
     This is the factorization $T_{k,h}=a_kb_h$ obtained in the proof of
@@ -407,18 +407,18 @@ which is the displayed identity of
     matrix, derived here from the displayed zero-correlation-length identity
     together with the linear independence of the $l_k$, instead of the
     Perron--Frobenius trace-power argument of the source.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:matrix_pairing_idempotent, thm:matrix_idempotent_trace_one_rank_one}
-    Theorem~\ref{thm:matrix_pairing_idempotent} gives $T^2=T$, and the
+    Lemma~\ref{thm:matrix_pairing_idempotent} gives $T^2=T$, and the
     idempotent trace-one criterion of
-    Theorem~\ref{thm:matrix_idempotent_trace_one_rank_one} gives the
+    Lemma~\ref{thm:matrix_idempotent_trace_one_rank_one} gives the
     factorization $T=ab^\top$.
 \end{proof}
 
-\begin{theorem}[PSD-corrected rank-one $T$ criterion]
+\begin{lemma}[PSD-corrected rank-one $T$ criterion]
     \label{thm:psd_trace_powers_rank_one_t}
     \lean{MPOTensor.sal_zcl_implies_rank_one_T_of_posSemidef}
     \leanok
@@ -427,7 +427,7 @@ which is the displayed identity of
     positive semidefinite, normalized by $\tr(T)=1$, and has constant traces on
     all positive powers. Then $T=ab^\top$ for some vectors $a$ and $b$, with
     $a\cdot b=1$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -459,7 +459,7 @@ which is the displayed identity of
     splitting of an injective simple tensor.
 \end{definition}
 
-\begin{theorem}[Idempotence of the sector trace matrix from the zero-correlation-length identity]
+\begin{lemma}[Idempotence of the sector trace matrix from the zero-correlation-length identity]
     \label{thm:mpdo_sector_pairing_idempotent}
     \lean{MPOTensor.SectorPairingData.pairing_operator_idempotent}
     \lean{MPOTensor.SectorPairingData.mul_self_eq_self}
@@ -469,7 +469,7 @@ which is the displayed identity of
     Definition~\ref{def:mpdo_sector_pairing_data}, the operator
     $M=\sum_k|l_k)(r_k|$ satisfies $M^2=M$. If in addition the vectors
     $|l_0),\ldots,|l_{n-1})$ are linearly independent, then $T^2=T$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -484,10 +484,10 @@ which is the displayed identity of
         \notag
     \end{align}
     so $M^2=M$. Linear independence of the $|l_k)$ then gives $T^2=T$ by
-    Theorem~\ref{thm:matrix_pairing_idempotent}.
+    Lemma~\ref{thm:matrix_pairing_idempotent}.
 \end{proof}
 
-\begin{theorem}[Unconditional constant trace powers of the sector trace matrix]
+\begin{lemma}[Unconditional constant trace powers of the sector trace matrix]
     \label{thm:mpdo_sector_pairing_trace_powers}
     \lean{MPOTensor.SectorPairingData.pairing_sq_eq_pairing_cube}
     \lean{MPOTensor.SectorPairingData.tracePowersConstant}
@@ -498,14 +498,14 @@ which is the displayed identity of
     hypothesis on the closed sector tensors or the functionals, one has
     $T^2=T^3$, and, for every positive integer $N$,
     $\tr(T^N)=\tr(T)$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:mpdo_sector_pairing_idempotent, thm:matrix_pairing_sq_eq_cube}
     The operator identity $M^2=M$ established in the proof of
-    Theorem~\ref{thm:mpdo_sector_pairing_idempotent} gives $T^2=T^3$ and
-    the constant trace powers by Theorem~\ref{thm:matrix_pairing_sq_eq_cube},
+    Lemma~\ref{thm:mpdo_sector_pairing_idempotent} gives $T^2=T^3$ and
+    the constant trace powers by Lemma~\ref{thm:matrix_pairing_sq_eq_cube},
     with no independence hypothesis.
 \end{proof}
 
@@ -515,7 +515,7 @@ which is the displayed identity of
 % sector legs are contracted. Whether the inverse-map construction supplies
 % such supports, or the linear independence by other means, remains open.
 % Recorded in docs/paper-gaps/cpgsv17_pf_rank_one.tex.
-\begin{theorem}[Nonvanishing and independence of the sector tensors]
+\begin{lemma}[Nonvanishing and independence of the sector tensors]
     \label{thm:mpdo_sector_tensors_independent}
     \lean{MPOTensor.SectorPairingData.l_ne_zero}
     \lean{MPOTensor.SectorPairingData.linearIndependent_l}
@@ -526,18 +526,18 @@ which is the displayed identity of
     closed sector tensor satisfies $|l_k)\neq0$. If, in addition, each
     $|l_k)$ lies in its own member of an independent family of subspaces of
     $V$, then the vectors $|l_0),\ldots,|l_{n-1})$ are linearly independent.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:matrix_primitive_row_col_pos}
-    By Theorem~\ref{thm:matrix_primitive_row_col_pos}, some entry of the
+    By Lemma~\ref{thm:matrix_primitive_row_col_pos}, some entry of the
     $k$-th column of $T$ is positive, and that entry is the pairing
     $(r_j|l_k)$, so $|l_k)\neq0$. Nonzero vectors chosen from an independent
     family of subspaces, one from each member, are linearly independent.
 \end{proof}
 
-\begin{theorem}[Rank one from sector-pairing idempotence under linear independence]
+\begin{lemma}[Rank one from sector-pairing idempotence under linear independence]
     \label{thm:pairing_idempotent_rank_one_t}
     \lean{MPOTensor.sal_zcl_implies_rank_one_T_of_pairing_idempotent}
     \lean{MPOTensor.sal_zcl_implies_rank_one_T_of_sector_supports}
@@ -558,20 +558,20 @@ which is the displayed identity of
     primitive and the closed sector tensors lie in distinct members of an
     independent family of subspaces. In contrast with the
     positive-semidefinite criterion of
-    Theorem~\ref{thm:psd_trace_powers_rank_one_t}, the constant trace powers
+    Lemma~\ref{thm:psd_trace_powers_rank_one_t}, the constant trace powers
     are derived rather than assumed.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:mpdo_sector_pairing_idempotent, thm:mpdo_sector_pairing_trace_powers, thm:mpdo_sector_tensors_independent, thm:matrix_idempotent_trace_one_rank_one}
-    Theorem~\ref{thm:mpdo_sector_pairing_idempotent} gives $T^2=T$, and
-    Theorem~\ref{thm:mpdo_sector_pairing_trace_powers} gives the constant
+    Lemma~\ref{thm:mpdo_sector_pairing_idempotent} gives $T^2=T$, and
+    Lemma~\ref{thm:mpdo_sector_pairing_trace_powers} gives the constant
     trace powers unconditionally. The idempotent trace-one criterion of
-    Theorem~\ref{thm:matrix_idempotent_trace_one_rank_one} yields the
+    Lemma~\ref{thm:matrix_idempotent_trace_one_rank_one} yields the
     factorization $T=ab^\top$, and taking traces gives
     $\sum_k a_kb_k=\tr(T)=1$. When the independence is not
-    assumed directly, Theorem~\ref{thm:mpdo_sector_tensors_independent}
+    assumed directly, Lemma~\ref{thm:mpdo_sector_tensors_independent}
     derives it from primitivity once each sector tensor lies in its own member
     of an independent family of subspaces.
 \end{proof}

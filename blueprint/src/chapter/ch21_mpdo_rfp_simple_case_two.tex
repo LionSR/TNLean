@@ -25,7 +25,7 @@
     (\ref{eq:rfp_block_zcl}).
 \end{proof}
 
-\begin{theorem}[Copy independence for a non-nilpotent sector decomposition]
+\begin{lemma}[Copy independence for a non-nilpotent sector decomposition]
     \label{thm:mpdo_simple_weight_copy_independent}
     \lean{MPOTensor.weight_copy_independent_of_isPhysicalTraceIdempotent}
     \leanok
@@ -36,7 +36,7 @@
     transfer. Then the weights do not depend on the copy index:
     $\mu_{j,q}=\mu_{j}$
     \cite[Appendix~C.2, lines~1646--1661]{Cirac2016MPDO_arXiv}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Unscaled zero correlation length states
@@ -75,7 +75,7 @@
 \end{corollary}
 
 \begin{proof}\leanok
-    Applying Theorem~\ref{thm:mpdo_simple_weight_copy_independent} to the
+    Applying Lemma~\ref{thm:mpdo_simple_weight_copy_independent} to the
     sector decomposition given by the simple canonical-form condition yields
     the claim.
 \end{proof}
@@ -103,7 +103,7 @@
     the block relation.
 \end{proof}
 
-\begin{theorem}[Scale-invariant copy-independence generalization]
+\begin{lemma}[Scale-invariant copy-independence generalization]
     \label{thm:mpdo_scale_invariant_weight_copy_independent}
     \lean{MPOTensor.weight_copy_independent_of_isSourceZCL}
     \leanok
@@ -117,7 +117,7 @@
     Under the same canonical-form and non-nilpotency conditions, the weights
     remain independent of the copy index for every positive scaling factor
     $\lambda$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     The weighted block equation gives
@@ -139,7 +139,7 @@
 \end{corollary}
 
 \begin{proof}\leanok
-    Applying Theorem~\ref{thm:mpdo_scale_invariant_weight_copy_independent} to the
+    Applying Lemma~\ref{thm:mpdo_scale_invariant_weight_copy_independent} to the
     sector decomposition given by the simple canonical-form condition yields the
     claim.
 \end{proof}
@@ -174,7 +174,7 @@
     $\mu_j$ gives $\mu_{j,q}=\mu_j$.
 \end{proof}
 
-\begin{theorem}[Coefficient after common-weight absorption]
+\begin{lemma}[Coefficient after common-weight absorption]
     \label{thm:mpdo_common_weight_coefficient}
     \lean{MPSTensor.SectorDecomposition.coeff_eq_copies_mul_commonWeight_pow}
     \leanok
@@ -186,13 +186,13 @@
         \notag
     \end{align}
     Thus the natural multiplicity is the horizontal copy count $r_j$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Every term in the copy sum equals $\mu_j^N$, and there are $r_j$ terms.
 \end{proof}
 
-\begin{theorem}[Nonvanishing of the common-weight coefficient]
+\begin{lemma}[Nonvanishing of the common-weight coefficient]
     \label{thm:mpdo_common_weight_coefficient_ne_zero}
     \lean{MPSTensor.SectorDecomposition.commonWeight_ne_zero}
     \lean{MPSTensor.SectorDecomposition.coeff_ne_zero_of_weight_copy_independent}
@@ -206,14 +206,14 @@
         q_j=\sum_q\mu_{j,q}^{N} & =r_j\mu_j^{N}\ne0.
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     The distinguished copy weight is nonzero by the sector data. Since
     $r_j>0$, both factors in $r_j\mu_j^N$ are nonzero.
 \end{proof}
 
-\begin{theorem}[Common nonzero BNT tail selection]
+\begin{lemma}[Common nonzero BNT tail selection]
     \label{thm:mpdo_common_nonzero_bnt_tail_selection}
     \lean{MPSTensor.SectorDecomposition.%
         exists_common_nonzero_physicalTraceTail_entry}
@@ -240,7 +240,7 @@
             & =q_j\widetilde m_j\ne0.
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Since $\mathcal B_j$ is not nilpotent, every positive power of
@@ -250,7 +250,7 @@
     entry of $\mathcal B_j^L$ is nonzero.
 \end{proof}
 
-\begin{theorem}[Canonical form with natural multiplicities]
+\begin{lemma}[Canonical form with natural multiplicities]
     \label{thm:mpdo_common_weight_absorbed_mpv}
     \lean{MPSTensor.SectorDecomposition.mpv_toTensor_eq_sum_copies_mul_commonWeightAbsorbedBasis}
     \leanok
@@ -264,11 +264,11 @@
         \mathcal V_N(S) & =\sum_j r_j\mathcal V_N(\mathcal K_j).
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Expanding the direct-sum tensor by representatives, using
-    Theorem~\ref{thm:mpdo_common_weight_coefficient}, and absorbing
+    Lemma~\ref{thm:mpdo_common_weight_coefficient}, and absorbing
     $\mu_j^N$ into the length-$N$ matrix product vector of $A_j$ yields the
     sum.
 \end{proof}
@@ -288,7 +288,7 @@
         \notag
     \end{align}
     Given a simultaneous left inverse $C$ as in
-    Theorem~\ref{thm:mpdo_one_letter_simultaneous_inverse}, contracting $C$
+    Lemma~\ref{thm:mpdo_one_letter_simultaneous_inverse}, contracting $C$
     against the first and third physical sites of $\rho$ defines the outer
     inverse contraction
     \begin{align}
@@ -308,7 +308,7 @@
     construction is used with sector projectors at lines~1719--1725.
 \end{definition}
 
-\begin{theorem}[Normalized three-site BNT family closure]
+\begin{lemma}[Normalized three-site BNT family closure]
     \label{thm:mpdo_normalized_three_site_bnt_family_closure}
     \lean{MPSTensor.SectorDecomposition.basisMPOTensor}
     \lean{MPSTensor.SectorDecomposition.normalizedThreeSiteClosingMatrix}
@@ -342,7 +342,7 @@
     traced-tail expansion of
     \cite[Appendix~C.2, lines~1714--1732]{Cirac2016MPDO_arXiv}, a tail of length
     $L$ gives $\widehat R_j=\tr(\rho^{(L+3)})^{-1}q_j\mathcal B_j^L$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Equality of the positive-length matrix-product-vector families expands every
@@ -354,7 +354,7 @@
     nonnilpotence makes $\mathcal B_j$ nonzero.
 \end{proof}
 
-\begin{theorem}[Collapse of the outer inverse contraction]
+\begin{lemma}[Collapse of the outer inverse contraction]
     \label{thm:mpdo_bnt_three_site_outer_inverse_collapse}
     \lean{MPOTensor.%
         isMPOBlockLeftInverse_outer_inverse_threeSite_collapse}
@@ -376,7 +376,7 @@
     The closing entry $R_s(\beta_3,\alpha_1)$ is the corrected tail-index
     orientation of the display at lines~1422--1438, recorded in
     \cite{gap:cpgsv17_mpdo_sal_zcl_eta_local_structure}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Expanding the family closure and interchanging the finite sector and physical
@@ -414,7 +414,7 @@
 
 \begin{proof}\leanok
     Choosing the simultaneous left inverse from
-    Theorem~\ref{thm:mpdo_one_letter_simultaneous_inverse} and applying
-    Theorem~\ref{thm:mpdo_bnt_three_site_outer_inverse_collapse} yields the
+    Lemma~\ref{thm:mpdo_one_letter_simultaneous_inverse} and applying
+    Lemma~\ref{thm:mpdo_bnt_three_site_outer_inverse_collapse} yields the
     collapse.
 \end{proof}

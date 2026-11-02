@@ -43,7 +43,7 @@ and set $\tau_0(M)=0$.
     $((\alpha,\beta),\gamma)$, with the usual product-basis ordering.
 \end{definition}
 
-\begin{theorem}[Three-leg contraction and normalized trace]
+\begin{lemma}[Three-leg contraction and normalized trace]
     \label{thm:mpo_mixed_triple_trace}
     \lean{MPSTensor.MPOSymmetry.mixedEndpointTripleAnalysis_mul_synthesis,
         MPSTensor.MPOSymmetry.mixedEndpointTripleAnalysis_trace_mul_synthesis,
@@ -69,7 +69,7 @@ and set $\tau_0(M)=0$.
     \end{align}
     Here the inverse at zero is zero. For every $n\geq0$ and
     $M\in\End(\C^n)$, $n\tau_n(M)=\tr(M)$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Expanding the product over the three independent sector choices
@@ -83,7 +83,7 @@ and set $\tau_0(M)=0$.
     (\ref{eq:mpo_mix_symbols_triple_weight}).
 \end{proof}
 
-\begin{theorem}[Inheritance of the action comparison matrix]
+\begin{lemma}[Inheritance of the action comparison matrix]
     \label{thm:mpo_mixed_l_symbols}
     \lean{MPSTensor.MPOSymmetry.mixedEndpoint_sequentialActionAnalysis,
         MPSTensor.MPOSymmetry.mixedEndpoint_fusionThenActionSynthesis,
@@ -118,7 +118,7 @@ and set $\tau_0(M)=0$.
     The inverse at zero in (\ref{eq:mpo_mix_symbols_l_weight}) is
     defined to be zero. If $L_0=L_1$, then $\widetilde L=L_0$,
     including when $D_0+D_1=0$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:mpo_mixed_triple_trace}
@@ -126,7 +126,7 @@ and set $\tau_0(M)=0$.
     direct-sum coordinate gives zero unless all three incoming legs
     and the outgoing leg have the same sector $p$. On that sector,
     the expansion is $H_{p,ij}$ or $R_{p,ck\mu}$.
-    Theorem~\ref{thm:mpo_mixed_triple_trace} therefore gives
+    Lemma~\ref{thm:mpo_mixed_triple_trace} therefore gives
     (\ref{eq:mpo_mix_symbols_l_cross}) and, after taking normalized
     traces, (\ref{eq:mpo_mix_symbols_l_weight}). When $L_0=L_1$ and
     $D_0+D_1>0$, cancelling the total dimension gives $\widetilde L=L_0$;
@@ -167,7 +167,7 @@ the $b$ bond, and the state bond, in that order.
 
 The mixed action and fusion maps contain no $\gamma$. Whenever the
 chosen maps give the action decomposition of
-Theorem~\ref{thm:mpo_mixed_action_exact}, they therefore give this same
+Lemma~\ref{thm:mpo_mixed_action_exact}, they therefore give this same
 $\widetilde L$ on $A(\gamma)$ for every real $\gamma$. In particular,
 common coefficients persist on $[0,1]$ without injectivity of the mixed
 state at either end.
@@ -210,7 +210,7 @@ state at either end.
     sectors all equal $p$, and is zero otherwise.
 \end{definition}
 
-\begin{theorem}[Inheritance of the fusion comparison matrix]
+\begin{lemma}[Inheritance of the fusion comparison matrix]
     \label{thm:mpo_mixed_f_symbols}
     \lean{MPSTensor.MPOSymmetry.mixedEndpointMPOFusion_leftTreeAnalysis,
         MPSTensor.MPOSymmetry.mixedEndpointMPOFusion_rightTreeAnalysis,
@@ -231,7 +231,7 @@ state at either end.
     \end{align}
     The inverse at zero is defined to be zero. If $F_0=F_1$, then
     $\widetilde F=F_0$, including when both final bonds are zero.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:mpo_mixed_triple_trace}
@@ -239,7 +239,7 @@ state at either end.
     all three incoming sectors to equal the outgoing sector. Thus
     the mixed trees agree with the corresponding trees at $p=0,1$
     on the two matching sectors and vanish elsewhere.
-    Theorem~\ref{thm:mpo_mixed_triple_trace} gives
+    Lemma~\ref{thm:mpo_mixed_triple_trace} gives
     (\ref{eq:mpo_mix_symbols_f_cross}); its normalized-trace
     identity and (\ref{eq:mpo_mix_symbols_f_trace}) give
     (\ref{eq:mpo_mix_symbols_f_weight}). When the final total
@@ -247,7 +247,7 @@ state at either end.
     is zero, $F_0,F_1,\widetilde F$ all vanish.
 \end{proof}
 
-\begin{theorem}[The common analysis recoupling relation]
+\begin{lemma}[The common analysis recoupling relation]
     \label{thm:mpo_mixed_f_move}
     \lean{MPSTensor.MPOSymmetry.mixedEndpointMPOFusion_fusionFMatrix_analysis}
     \leanok
@@ -261,11 +261,11 @@ state at either end.
         =\sum_tF_{q,t}\widetilde H^r_t.
         \label{eq:mpo_mix_symbols_f_move}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:mpo_mixed_f_symbols}
-    Theorem~\ref{thm:mpo_mixed_f_symbols} identifies
+    Lemma~\ref{thm:mpo_mixed_f_symbols} identifies
     $\widetilde F=F$. On the sector where all four external indices
     belong to $p$, (\ref{eq:mpo_mix_symbols_f_move}) is the assumed
     relation for $H^\ell_{p,q}$. Every other sector is zero on both

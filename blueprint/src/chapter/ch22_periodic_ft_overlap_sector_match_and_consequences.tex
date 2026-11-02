@@ -159,7 +159,7 @@
     $A^i=\xi UB^iU^\dagger$ for every physical index $i$.
 \end{lemma}
 
-\begin{theorem}[Sector match yields repeated-block equivalence]%
+\begin{lemma}[Sector match yields repeated-block equivalence]%
     \label{thm:periodic_overlap_gauge_equiv_sector_match}
     \lean{MPSTensor.periodicOverlap_gaugeEquiv_of_sector_match}
     \leanok
@@ -175,18 +175,18 @@
     $u_0,v_0$ with $d_{u_0}=e_{v_0}$ and
     $A_{u_0}\sim_{\mathrm{gp}}B_{v_0}$ after identifying their virtual spaces,
     then $A$ and $B$ are repeated blocks.
-\end{theorem}
+\end{lemma}
 
-\begin{theorem}[Different bond dimensions imply asymptotic orthogonality]%
+\begin{lemma}[Different bond dimensions imply asymptotic orthogonality]%
     \label{thm:periodic_overlap_zero_ne_dim}
     \lean{MPSTensor.periodicOverlap_tendsto_zero_of_ne_dim}
     \leanok
     \uses{def:periodic_tensor}
     If two periodic tensors have different bond dimensions, then
     $\braket{V^{(N)}(A)}{V^{(N)}(B)} \to 0$ as $N\to\infty$.
-\end{theorem}
+\end{lemma}
 
-\begin{theorem}[Periodic overlap dichotomy]\label{thm:periodic_overlap_dichotomy}
+\begin{lemma}[Periodic overlap dichotomy]\label{thm:periodic_overlap_dichotomy}
     \lean{MPSTensor.periodicOverlapDichotomy}
     \leanok
     \uses{thm:periodic_overlap_zero_ne_period, thm:periodic_overlap_zero_no_sector_match, thm:periodic_overlap_zero_ne_dim, thm:periodic_overlap_gauge_equiv_sector_match}
@@ -197,15 +197,15 @@
         \item $A$ and $B$ are related by the repeated-block relation, i.e. they
               differ by a unit-modulus phase and an invertible gauge.
     \end{enumerate}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:periodic_overlap_zero_ne_period, thm:periodic_overlap_zero_no_sector_match, thm:periodic_overlap_zero_ne_dim, thm:periodic_overlap_gauge_equiv_sector_match}
     If $m_A\ne m_B$, then
     $\lim_{N\to\infty}O_{AB}(N)=0$ by
-    Theorem~\ref{thm:periodic_overlap_zero_ne_period}. Assume $m_A=m_B=m$.
+    Lemma~\ref{thm:periodic_overlap_zero_ne_period}. Assume $m_A=m_B=m$.
     If $D_A\ne D_B$, then
     $\lim_{N\to\infty}O_{AB}(N)=0$ by
-    Theorem~\ref{thm:periodic_overlap_zero_ne_dim}. Assume $D_A=D_B$.
+    Lemma~\ref{thm:periodic_overlap_zero_ne_dim}. Assume $D_A=D_B$.
 
     Choose period-blocked sector decompositions
     \begin{align}
@@ -216,17 +216,17 @@
     \end{align}
     If no pair $(u,v)$ satisfies
     $d_u=e_v$ and $A_u\sim_{\mathrm{gp}}B_v$, then
-    Theorem~\ref{thm:periodic_overlap_zero_no_sector_match} gives
+    Lemma~\ref{thm:periodic_overlap_zero_no_sector_match} gives
     $\lim_{N\to\infty}O_{AB}(N)=0$.
 
     Otherwise there are $u_0,v_0\in\mathbb Z_m$ such that
     $d_{u_0}=e_{v_0}$ and
     $A_{u_0}\sim_{\mathrm{gp}}B_{v_0}$.
-    Theorem~\ref{thm:periodic_overlap_gauge_equiv_sector_match} then gives
+    Lemma~\ref{thm:periodic_overlap_gauge_equiv_sector_match} then gives
     repeated-block equivalence between $A$ and $B$.
 \end{proof}
 
-\begin{theorem}[Gram criterion for a periodic family]
+\begin{lemma}[Gram criterion for a periodic family]
     \label{thm:periodic_family_li_of_cross_overlap_decay}
     \lean{MPSTensor.%
         periodicFamily_eventuallyLinearlyIndependent_of_cross_overlap_tendsto_zero}
@@ -241,7 +241,7 @@
     \end{align}
     then the vectors $\{\ket{V^{(pN)}(A_j)}\}_{j\in J}$ are linearly
     independent for every sufficiently large $N$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:periodic_bond_dimension_pos, thm:periodic_self_overlap_tendsto}
     The Gram matrix converges to the diagonal matrix whose $j$-th diagonal
@@ -250,7 +250,7 @@
     large $N$.
 \end{proof}
 
-\begin{theorem}[Eventual linear independence of periodic vectors]%
+\begin{lemma}[Eventual linear independence of periodic vectors]%
     \label{thm:periodic_basis_eventually_li}
     \lean{MPSTensor.periodicBasis_eventuallyLinearlyIndependent}
     \leanok
@@ -270,19 +270,19 @@
     is injective, so following \cite[lines~589--609]{DeLasCuevas2017Irreducible}
     (\cite{gap:dccsp17_periodic_overlap_route_alignment}) the periodic vectors
     $\{\ket{V^{(pN)}(A_j)}\}_{j\in J}$ are linearly independent.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:periodic_bond_dimension_pos, thm:periodic_family_li_of_cross_overlap_decay, thm:periodic_overlap_dichotomy}
     Periodicity makes every bond dimension positive. For distinct $i,j$, the
     repeated-block alternative in
-    Theorem~\ref{thm:periodic_overlap_dichotomy} contradicts pairwise
+    Lemma~\ref{thm:periodic_overlap_dichotomy} contradicts pairwise
     non-repetition, so the cross overlap tends to zero.
-    Theorem~\ref{thm:periodic_family_li_of_cross_overlap_decay} now gives the
+    Lemma~\ref{thm:periodic_family_li_of_cross_overlap_decay} now gives the
     claimed independence along the common-period subsequence.
 \end{proof}
 
-\begin{theorem}[Independence of the non-zero periodic vectors]%
+\begin{lemma}[Independence of the non-zero periodic vectors]%
     \label{thm:periodic_basis_nonzero_subfamily_li}
     \lean{MPSTensor.periodicBasis_nonzero_subfamily_eventuallyLinearlyIndependent}
     \leanok
@@ -299,15 +299,15 @@
     the family and establishes their linear independence beyond length $N_0$,
     as required at \cite[lines~604--608]{DeLasCuevas2017Irreducible} and in
     the equal-case proof at \cite[lines~677--679]{DeLasCuevas2017Irreducible}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:periodic_bond_dimension_pos, thm:periodic_family_li_of_cross_overlap_decay, thm:periodic_overlap_dichotomy}
     There are finitely many subfamilies. For each subfamily $S\subseteq J$
-    apply Theorem~\ref{thm:periodic_family_li_of_cross_overlap_decay} at the
+    apply Lemma~\ref{thm:periodic_family_li_of_cross_overlap_decay} at the
     least common multiple $p_S$ of the periods occurring in $S$, the
     cross-overlap decay coming as before from
-    Theorem~\ref{thm:periodic_overlap_dichotomy} and pairwise non-repetition;
+    Lemma~\ref{thm:periodic_overlap_dichotomy} and pairwise non-repetition;
     this gives a threshold $M_S$. Let $L$ be the least common multiple of all
     the periods and take $N_0$ to be the largest of the numbers $L\,M_S$.
     Given $N\ge N_0$, let $S$ be the set of indices whose period divides $N$.
@@ -316,7 +316,7 @@
     and the subfamily is independent at the length $N=p_Sn$.
 \end{proof}
 
-\begin{theorem}[Spanning by the nonzero periodic basis vectors]
+\begin{lemma}[Spanning by the nonzero periodic basis vectors]
     \label{thm:periodic_basis_nonzero_spanning}
     \lean{MPSTensor.SectorDecomposition.mpvState_mem_span_nonzero}
     \leanok
@@ -327,7 +327,7 @@
     This establishes the spanning property in
     \cite[Proposition~3.3, lines~604--608]{DeLasCuevas2017Irreducible} without
     assuming periodicity or normalization of the blocks.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{lem:paper_decomp_formula}
@@ -398,7 +398,7 @@
     Fundamental Theorem. The periodic extension treats periodic blocks directly.
 \end{remark}
 
-\begin{theorem}[Peripheral proportional case from positive-length MPV equality]
+\begin{lemma}[Peripheral proportional case from positive-length MPV equality]
     \label{thm:peripheral_periodic_ft_proportional_same}
     \lean{MPSTensor.peripheralProportionalCase_periodicFT_of_sameMPV₂Pos}
     \leanok
@@ -407,9 +407,9 @@
     at every positive length.
     Then their bond dimensions agree, and after identifying the bond spaces,
     $A$ and $B$ are repeated blocks.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
-    By Theorem~\ref{thm:periodic_overlap_dichotomy}, either the overlap
+    By Lemma~\ref{thm:periodic_overlap_dichotomy}, either the overlap
     $\braket{V^{(N)}(A)}{V^{(N)}(B)}$ tends to $0$ or the bond dimensions agree
     and $A$ and $B$ are repeated blocks. In the decay case,
     equality of the MPV families gives, for every $N>0$,
@@ -446,7 +446,7 @@
     Invert the pure gauge and take the repeated-block phase to be one.
 \end{proof}
 
-\begin{theorem}[Repeated blocks scale their vectors by a phase power]
+\begin{lemma}[Repeated blocks scale their vectors by a phase power]
     \label{thm:repeated_blocks_phase_power_mpv}
     \lean{MPSTensor.HetRepeatedBlocks.exists_unit_phase_power_mpv}
     \leanok
@@ -460,7 +460,7 @@
     one-dimensional blocks with a single physical index, $B^0=1$ and
     $A^0=\zeta$, satisfy $\ket{V^{(N)}(A)}=\zeta^{N}\ket{V^{(N)}(B)}$, so no
     scalar independent of the length works unless $\zeta=1$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \uses{thm:gauge_phase_mpv_scaling}
     \leanok
@@ -470,7 +470,7 @@
     conjugation, while each site contributes one factor $\zeta$.
 \end{proof}
 
-\begin{theorem}[Absorbing the phase of a repeated-block relation]
+\begin{lemma}[Absorbing the phase of a repeated-block relation]
     \label{thm:repeated_blocks_phase_absorption}
     \lean{MPSTensor.HetRepeatedBlocks.exists_phase_rescaling_sameMPV₂Pos}
     \leanok
@@ -485,23 +485,23 @@
     bases of periodic tensors may require distinct phases, so no single phase
     is asserted for the direct-sum tensors
     (\cite[lines~286--305, 625--627]{DeLasCuevas2017Irreducible}).
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \uses{thm:repeated_blocks_phase_power_mpv, thm:gauge_phase_mpv_scaling}
     \leanok
     Take $\xi$ to be the reciprocal of the phase from
-    Theorem~\ref{thm:repeated_blocks_phase_power_mpv}, which
+    Lemma~\ref{thm:repeated_blocks_phase_power_mpv}, which
     is nonzero because it has modulus one.  Rescaling every matrix of a block
     by $\xi$ multiplies its length-$N$ vector by $\xi^{N}$, and the two powers
     cancel.
 \end{proof}
 
-\begin{theorem}[Unit-norm scaling preserves the transfer map]
+\begin{lemma}[Unit-norm scaling preserves the transfer map]
     \label{thm:transfer_map_smul_unit_norm}
     \lean{MPSTensor.transferMap_smul_eq_of_norm_eq_one}
     \leanok
     If $|c|=1$, then the tensors $A$ and $cA$ have the same transfer map.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \uses{lem:transfer_map_smul}
     \leanok
@@ -509,13 +509,13 @@
     $c\overline c=|c|^2=1$.
 \end{proof}
 
-\begin{theorem}[Repeated blocks share a peripheral spectrum]
+\begin{lemma}[Repeated blocks share a peripheral spectrum]
     \label{thm:repeated_blocks_peripheral_spectrum}
     \lean{MPSTensor.RepeatedBlocks.peripheralEigenvalues_transferMap_eq}
     \leanok
     If $A$ and $B$ are repeated blocks, then their transfer maps have the same
     unit-circle eigenvalues.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \uses{thm:transfer_map_smul_unit_norm, thm:cpsv_gauge_transfer_similarity, %
         lem:peripheral_spectrum_similarity}
@@ -528,48 +528,48 @@
     unchanged.
 \end{proof}
 
-\begin{theorem}[A root-of-unity set determines its positive exponent]
+\begin{lemma}[A root-of-unity set determines its positive exponent]
     \label{thm:roots_of_unity_determine_period}
     \lean{MPSTensor.period_eq_of_setOf_pow_eq_one}
     \leanok
     Let $m,n>0$. If
     $\{z\in\C:z^m=1\}=\{z\in\C:z^n=1\}$, then $m=n$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     A primitive $m$-th root belongs to the second set, so $m$ divides $n$.
     Interchanging $m$ and $n$ gives the reverse divisibility.
 \end{proof}
 
-\begin{theorem}[A common peripheral spectrum determines the period]
+\begin{lemma}[A common peripheral spectrum determines the period]
     \label{thm:spectral_period_eq_of_peripheral_spectrum}
     \lean{MPSTensor.IsSpectrallyPeriodic.period_eq_of_peripheralEigenvalues_eq}
     \leanok
     \uses{def:spectral_periodic_tensor}
     Let $A$ and $B$ be spectrally periodic tensors of periods $m$ and $n$. If
     their transfer maps have the same peripheral spectrum, then $m=n$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \uses{thm:roots_of_unity_determine_period}
     \leanok
     The two spectra are respectively the sets of $m$-th and $n$-th roots of
-    unity, so Theorem~\ref{thm:roots_of_unity_determine_period} applies.
+    unity, so Lemma~\ref{thm:roots_of_unity_determine_period} applies.
 \end{proof}
 
-\begin{theorem}[Repeated periodic blocks have the same period]
+\begin{lemma}[Repeated periodic blocks have the same period]
     \label{thm:repeated_blocks_period_eq}
     \lean{MPSTensor.IsSpectrallyPeriodic.period_eq_of_hetRepeatedBlocks}
     \leanok
     \uses{def:spectral_periodic_tensor}
     Let $A$ and $B$ be spectrally periodic tensors of periods $m$ and $n$.  If
     $A$ and $B$ are repeated blocks, then $m=n$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \uses{thm:repeated_blocks_peripheral_spectrum, %
         thm:spectral_period_eq_of_peripheral_spectrum}
     \leanok
     Repeated blocks have the same peripheral spectrum by
-    Theorem~\ref{thm:repeated_blocks_peripheral_spectrum}.
-    Theorem~\ref{thm:spectral_period_eq_of_peripheral_spectrum} then
+    Lemma~\ref{thm:repeated_blocks_peripheral_spectrum}.
+    Lemma~\ref{thm:spectral_period_eq_of_peripheral_spectrum} then
     identifies their periods.
 \end{proof}
 
@@ -593,7 +593,7 @@
     repeated-block relation with the two pure similarities.
 \end{proof}
 
-\begin{theorem}[Non-decaying mixed overlaps for normalized bases of periodic
+\begin{lemma}[Non-decaying mixed overlaps for normalized bases of periodic
         tensors]
     \label{thm:periodic_multiplicity_nondecaying_overlap}
     \lean{MPSTensor.PeriodicOverlapHypothesis.ofSectorDecompositions}
@@ -636,9 +636,9 @@
     the trace-preserving normalization is obtained via a block-diagonal
     similarity from irreducible transfer maps of spectral radius one. Here,
     the basis tensors are taken to be normalized in advance;
-    Theorem~\ref{thm:periodic_spectral_multiplicity_nondecaying_overlap} transfers
+    Lemma~\ref{thm:periodic_spectral_multiplicity_nondecaying_overlap} transfers
     the result to unnormalized spectrally periodic blocks.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{lem:finite_coefficient_isolation, lem:nonzero_proportional_mpv_basic, thm:gauge_phase_mpv_scaling, thm:mpv_decomposition, thm:periodic_bond_dimension_pos, thm:periodic_family_li_of_cross_overlap_decay, thm:periodic_overlap_dichotomy, lem:sector_decomposition_coeff_not_eventually_zero}
     Fix $j_0\in J$ and suppose that its overlap with every $B_k$ tends to
@@ -677,7 +677,7 @@
     alternative and gives the repeated-block relation.
 \end{proof}
 
-\begin{theorem}[Non-decaying mixed overlaps for spectrally periodic bases]
+\begin{lemma}[Non-decaying mixed overlaps for spectrally periodic bases]
     \label{thm:periodic_spectral_multiplicity_nondecaying_overlap}
     \lean{MPSTensor.PeriodicOverlapHypothesis.%
         ofSpectrallyPeriodicSectorDecompositions}
@@ -704,7 +704,7 @@
     other family whose mixed overlap does not tend to zero.  Every such pair
     has equal bond dimension and differs by an invertible similarity and a
     unit-modulus scalar.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \uses{lem:periodic_overlap_hypothesis_gauge_transport, lem:pure_gauge_het_repeated_blocks, thm:gauge_invariance, thm:periodic_multiplicity_nondecaying_overlap, thm:spectral_periodic_sector_normalization}
     \leanok
@@ -712,12 +712,12 @@
     the gauges block diagonally.  The multiplicity matrices and their grouped
     coefficients remain unchanged.  Pure similarity preserves the total
     positive-length proportionality and pairwise non-repetition, so
-    Theorem~\ref{thm:periodic_multiplicity_nondecaying_overlap} applies to the
+    Lemma~\ref{thm:periodic_multiplicity_nondecaying_overlap} applies to the
     normalized families.  Finally apply
     Lemma~\ref{lem:periodic_overlap_hypothesis_gauge_transport}.
 \end{proof}
 
-\begin{theorem}[Scalar-weight specialization of the mixed-overlap theorem]
+\begin{lemma}[Scalar-weight specialization of the mixed-overlap theorem]
     \label{thm:periodic_scalar_weight_nondecaying_overlap}
     \lean{MPSTensor.PeriodicOverlapHypothesis.ofIsIrreducibleForm}
     \leanok
@@ -737,19 +737,19 @@
     equal bond dimension and differs by an invertible similarity and a
     unit-modulus scalar.
 
-    This specializes Theorem~\ref{thm:periodic_multiplicity_nondecaying_overlap}
+    This specializes Lemma~\ref{thm:periodic_multiplicity_nondecaying_overlap}
     to block-diagonal tensors with a single scalar weight per block.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Repeat the argument of
-    Theorem~\ref{thm:periodic_multiplicity_nondecaying_overlap} with the
+    Lemma~\ref{thm:periodic_multiplicity_nondecaying_overlap} with the
     singleton coefficients $\mu_j^N$ and $\nu_k^N$.  Their nonvanishing at
     every length replaces the geometric-extrapolation step.  Equality with the
     two scalar-weight direct sums carries the positive-length
     proportionality relation over to the corresponding block-diagonal tensors.
 \end{proof}
 
-\begin{theorem}[Finite matching from the periodic overlap dichotomy]
+\begin{lemma}[Finite matching from the periodic overlap dichotomy]
     \label{thm:periodic_conditional_block_matching}
     \lean{MPSTensor.fundamentalTheorem_periodic_proportional}
     \leanok
@@ -760,7 +760,7 @@
     \cite[Theorem~3.4]{DeLasCuevas2017Irreducible}, there is a bijection
     $\pi\colon J\to K$ such that $A_j$ and $B_{\pi(j)}$ are repeated for every
     $j\in J$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Choose a non-decaying partner $f(j)\in K$ for every $j\in J$. If
     $f(j_1)=f(j_2)$, the two repeated-block relations compose to show that
@@ -808,13 +808,13 @@
     \uses{thm:spectral_periodic_period_existence,
         thm:periodic_ft_proportional_supplied_periods}
     \leanok
-    Theorem~\ref{thm:spectral_periodic_period_existence} produces a positive
+    Lemma~\ref{thm:spectral_periodic_period_existence} produces a positive
     period for each block of either family, and
-    Theorem~\ref{thm:periodic_ft_proportional_supplied_periods} applied to
+    Corollary~\ref{thm:periodic_ft_proportional_supplied_periods} applied to
     those periods gives the matching.
 \end{proof}
 
-\begin{theorem}[Proportional Fundamental Theorem, periods given]%
+\begin{corollary}[Proportional Fundamental Theorem, periods given]%
     \label{thm:periodic_ft_proportional_supplied_periods}
     \lean{MPSTensor.fundamentalTheorem_periodic_proportional_sectorDecomposition}
     \leanok
@@ -824,20 +824,20 @@
     $A_j$ is spectrally $m_j$-periodic and each $B_k$ is spectrally $n_k$-periodic
     (Definition~\ref{def:spectral_periodic_tensor}). Then the conclusions of
     Theorem~\ref{thm:periodic_ft_proportional} hold for these specified periods.
-\end{theorem}
+\end{corollary}
 \begin{proof}
     \uses{thm:repeated_blocks_period_eq, thm:periodic_conditional_block_matching, thm:periodic_spectral_multiplicity_nondecaying_overlap}
     \leanok
-    Theorem~\ref{thm:periodic_spectral_multiplicity_nondecaying_overlap}
+    Lemma~\ref{thm:periodic_spectral_multiplicity_nondecaying_overlap}
     gives non-decaying partners in both directions and classifies every
     such pair as repeated. Applying
-    Theorem~\ref{thm:periodic_conditional_block_matching} gives a bijection
+    Lemma~\ref{thm:periodic_conditional_block_matching} gives a bijection
     $\pi\colon J\to K$ of repeated pairs. Finally,
-    Theorem~\ref{thm:repeated_blocks_period_eq} gives $m_j=n_{\pi(j)}$ for every
+    Lemma~\ref{thm:repeated_blocks_period_eq} gives $m_j=n_{\pi(j)}$ for every
     matched pair.
 \end{proof}
 
-\begin{theorem}[Proportional periodic blocks]
+\begin{lemma}[Proportional periodic blocks]
     \label{thm:periodic_proportional_single_block}
     \lean{MPSTensor.hetRepeatedBlocks_of_nonzeroProportionalMPV₂,
         MPSTensor.MPVBlockPhaseEquiv.hetRepeatedBlocks_of_isSpectrallyPeriodic,
@@ -852,18 +852,18 @@
     This single-block case of \cite[Theorem~3.4]{DeLasCuevas2017Irreducible}
     applies directly to left-canonical periodic blocks, which satisfy the
     spectral-radius-one hypothesis automatically.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:periodic_ft_proportional_supplied_periods,thm:transfer_channel}
     Regard each tensor as a one-block decomposition with one copy of
-    weight one. Theorem~\ref{thm:periodic_ft_proportional_supplied_periods}
+    weight one. Corollary~\ref{thm:periodic_ft_proportional_supplied_periods}
     matches the two blocks. A left-canonical tensor defines a
     trace-preserving completely positive map, whose spectral radius is one.
 \end{proof}
 
-\begin{theorem}[Unitary matching of periodic phase classes]
+\begin{lemma}[Unitary matching of periodic phase classes]
     \label{thm:periodic_phase_class_unitary_match}
     \lean{MPSTensor.exists_unitary_conj_of_isPeriodic_of_hetRepeatedBlocks,
         MPSTensor.MPVPhaseClassData.not_hetRepeatedBlocks,
@@ -887,13 +887,13 @@
         Theorem~3.4]{DeLasCuevas2017Irreducible}, any two repeated left-canonical
     periodic blocks are related by a unitary similarity and a unit-modulus
     phase.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:periodic_proportional_single_block,thm:repeated_blocks_period_eq,
         lem:left_canonical_irreducible_same_phase_unitary_gauge,lem:gauge_phase_equiv_cast_compose}
-    Theorem~\ref{thm:periodic_proportional_single_block} makes each member
+    Lemma~\ref{thm:periodic_proportional_single_block} makes each member
     repeated with its representative, giving equal dimensions and periods.
     Lemma~\ref{lem:left_canonical_irreducible_same_phase_unitary_gauge}
     replaces the similarity by a unitary matrix while keeping its phase.
@@ -901,7 +901,7 @@
     phase class, contrary to their choice.
 \end{proof}
 
-\begin{theorem}[Global similarity between matched block sums]
+\begin{lemma}[Global similarity between matched block sums]
     \label{thm:periodic_matched_blocks_global_similarity}
     \lean{MPSTensor.toTensorFromBlocks_conj_of_matched_blocks,
         MPSTensor.toTensorFromBlocks_conj_of_matched_blocks_smul}
@@ -921,7 +921,7 @@
     \begin{align}
         \bigoplus_kc_k\mu_kA_k^i & =Y\Bigl(\bigoplus_tc_{e^{-1}(t)}\mu'_tB_t^i\Bigr)Y'. \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -948,7 +948,7 @@
     \uses{def:mpv_phase_class_data}
     Write $\rho_j$ and $e(j,q)$ for the representatives and the enumeration of
     the phase-class data of Definition~\ref{def:mpv_phase_class_data}, as in
-    Theorem~\ref{thm:periodic_phase_class_unitary_match}. Given nonzero
+    Lemma~\ref{thm:periodic_phase_class_unitary_match}. Given nonzero
     weights $\mu_k$ and unit-modulus phases $\xi_{j,q}$, let $n_j$ be
     the number of copies in class $j$ and define
     \begin{align}
@@ -960,7 +960,7 @@
     This is the multiplicity form of \cite[Section~2.1]{DeLasCuevas2017Irreducible}.
 \end{definition}
 
-\begin{theorem}[Unitary grouping of periodic blocks]
+\begin{lemma}[Unitary grouping of periodic blocks]
     \label{thm:periodic_grouped_unitary}
     \lean{MPSTensor.MPVPhaseClassData.exists_unitary_sectorDecomposition}
     \leanok
@@ -984,14 +984,14 @@
     \end{align}
     This gives the grouping of \cite[Section~2.1 and the paragraph after
         Theorem~3.4]{DeLasCuevas2017Irreducible} in a unitary gauge.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:periodic_phase_class_unitary_match,thm:coisometry_reconstruction_same_mpv_pos,
         thm:periodic_matched_blocks_global_similarity}
     Choose the phases and unitaries of
-    Theorem~\ref{thm:periodic_phase_class_unitary_match}. Multiplying
+    Lemma~\ref{thm:periodic_phase_class_unitary_match}. Multiplying
     (\ref{eq:periodic_phase_class_unitary}) by $\mu_{e(j,q)}$ and using
     Definition~\ref{def:periodic_grouped_multiplicities} gives
     \begin{align}
@@ -1026,7 +1026,7 @@
     \end{align}
 \end{proof}
 
-\begin{theorem}[Unit weight moduli before grouping]
+\begin{lemma}[Unit weight moduli before grouping]
     \label{thm:periodic_ungrouped_weight_moduli}
     \lean{MPSTensor.weight_norm_eq_one_of_block_sum_sameMPV₂Pos}
     \leanok
@@ -1040,21 +1040,21 @@
     \cite[Theorem~4.1]{DeLasCuevas2017Irreducible}
     (\cite{gap:dccsp17_thm41_forward_trace_preservation}), this identity
     forces every ungrouped block weight to have unit modulus.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:periodic_grouped_unitary,thm:periodic_equalcase_unit_weights}
-    Group the blocks of $T$ as in Theorem~\ref{thm:periodic_grouped_unitary}.
+    Group the blocks of $T$ as in Lemma~\ref{thm:periodic_grouped_unitary}.
     For every $N>0$, the resulting decomposition $P$ satisfies
     $V^{(N)}(P)=V^{(N)}(T)=V^{(N)}(Q)$.
-    Theorem~\ref{thm:periodic_equalcase_unit_weights} matches the
+    Corollary~\ref{thm:periodic_equalcase_unit_weights} matches the
     multiplicities of $P$ and $Q$ up to unit-modulus factors. Hence, for every
     grouped copy,
     \begin{align}
         |\mu_{e(j,q)}| & =|\mu'_{j,q}|=1. \notag
     \end{align}
     The first equality is the modulus statement of
-    Theorem~\ref{thm:periodic_grouped_unitary}. Since $e$ enumerates every
+    Lemma~\ref{thm:periodic_grouped_unitary}. Since $e$ enumerates every
     original block, $|\mu_k|=1$ for every $k$.
 \end{proof}

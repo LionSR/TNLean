@@ -27,6 +27,7 @@ Appendix C, are recorded in
 `docs/paper-gaps/spc11_spt_interpolation_upper_range.tex`.
 -/
 
+open scoped TNLean.Algebra.ScalarCohomology
 open scoped Matrix
 
 namespace MPSTensor
@@ -232,10 +233,13 @@ theorem cohomologousTo_of_continuous_isOnSiteSymmetric_tensorPath
     (hρ₁ : ∀ g i, twistedTensor (A 1) U g i =
       (ρ₁.X (g⁻¹) : Matrix (Fin D) (Fin D) ℂ) * A 1 i *
         (((ρ₁.X (g⁻¹))⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)) :
-    ω₁.CohomologousTo ω₀ := by
+    groupCohomology.H2π _ (groupCohomology.cocyclesOfIsMulCocycle₂
+      (TNLean.Algebra.ScalarCocycle.isMulCocycle₂_of_projRep ρ₁ hD)) =
+      groupCohomology.H2π _ (groupCohomology.cocyclesOfIsMulCocycle₂
+        (TNLean.Algebra.ScalarCocycle.isMulCocycle₂_of_projRep ρ₀ hD)) := by
   obtain ⟨ω, ρ, hcont, _, hCov⟩ :=
     exists_continuous_projectiveRepresentation_of_isOnSiteSymmetric hD A hA hInj U hSym
-  have hpath : (ω 1).CohomologousTo (ω 0) :=
+  have hpath :=
     invertible_projectivePath_factor_endpoints_cohomologous hD
       (fun t g => ((ρ t).X g : Matrix (Fin D) (Fin D) ℂ)) ω hcont
       (fun t g => ((ρ t).X g).det_ne_zero) (fun t => (ρ t).map_mul)

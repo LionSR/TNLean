@@ -8,6 +8,8 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.MPS.AreaLaw
 
+import TNLean.MPS.AreaLaw.AKLV
+import TNLean.MPS.AreaLaw.ALVV
 import TNLean.MPS.AreaLaw.ActualClippedPolynomialFamily
 import TNLean.MPS.AreaLaw.AreaLaw
 import TNLean.MPS.AreaLaw.BandDissolution
@@ -47,6 +49,7 @@ import TNLean.MPS.AreaLaw.FixedConfigurationExtension
 import TNLean.MPS.AreaLaw.GluingHamiltonian
 import TNLean.MPS.AreaLaw.Hamiltonian
 import TNLean.MPS.AreaLaw.Hastings
+import TNLean.MPS.AreaLaw.Huang
 import TNLean.MPS.AreaLaw.InformationReset
 import TNLean.MPS.AreaLaw.InteractionBudget
 import TNLean.MPS.AreaLaw.IntervalMPOTransfer
@@ -61,6 +64,7 @@ import TNLean.MPS.AreaLaw.MPSApproximation
 import TNLean.MPS.AreaLaw.NearestNeighbourImaginaryTime
 import TNLean.MPS.AreaLaw.OpenMPS
 import TNLean.MPS.AreaLaw.OpenMPSCutRank
+import TNLean.MPS.AreaLaw.OpenMPSOperatorAction
 import TNLean.MPS.AreaLaw.OpenMPSProduct
 import TNLean.MPS.AreaLaw.OpenMPSRank
 import TNLean.MPS.AreaLaw.OpenMPSSpan
@@ -112,6 +116,13 @@ import TNLean.MPS.AreaLaw.SequentialTruncation
 import TNLean.MPS.AreaLaw.SharpChainCompression
 import TNLean.MPS.AreaLaw.SharpPhysicalCompression
 import TNLean.MPS.AreaLaw.ShortRegionViableFamily
+import TNLean.MPS.AreaLaw.SnakeGridApproximation
+import TNLean.MPS.AreaLaw.SnakeGridAreaLaw
+import TNLean.MPS.AreaLaw.SnakeGridGeometry
+import TNLean.MPS.AreaLaw.SnakeGridParameters
+import TNLean.MPS.AreaLaw.StripApproximation
+import TNLean.MPS.AreaLaw.StripBufferDiscount
+import TNLean.MPS.AreaLaw.StripGeometry
 import TNLean.MPS.AreaLaw.SupportedCutRank
 import TNLean.MPS.AreaLaw.SupportedGaussianIntegral
 import TNLean.MPS.AreaLaw.SwappedDoubledHamiltonian
@@ -123,5 +134,6 @@ import TNLean.MPS.AreaLaw.TwoCutOperatorForms
 import TNLean.MPS.AreaLaw.TwoWindowFamilyCardinality
 import TNLean.MPS.AreaLaw.TwoWindowOperatorForms
 import TNLean.MPS.AreaLaw.TwoWindowPolynomialMPOFamily
+import TNLean.MPS.AreaLaw.TwoWindowPolynomialRank
 import TNLean.MPS.AreaLaw.ViableSet
 import TNLean.MPS.AreaLaw.WindowCounting

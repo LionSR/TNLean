@@ -1,10 +1,10 @@
-\begin{theorem}[Positive trace of nonzero positive semidefinite matrices]
+\begin{lemma}[Positive trace of nonzero positive semidefinite matrices]
     \label{thm:psd_trace_pos}
     \lean{Matrix.PosSemidef.trace_pos_of_ne_zero}
     \leanok
     A nonzero positive semidefinite matrix has positive trace: the trace is
     a positive real.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -12,7 +12,7 @@
     it vanishes only if the matrix itself is zero.
 \end{proof}
 
-\begin{theorem}[Nonzero sector compressions have positive trace]
+\begin{lemma}[Nonzero sector compressions have positive trace]
     \label{thm:mpdo_sector_compression_trace_pos}
     \lean{MPOTensor.mpo_compress_posSemidef}
     \lean{MPOTensor.mpo_compress_trace_pos}
@@ -28,15 +28,15 @@
     $\tr(P_{\alpha,k}H^{(N)}P_{\alpha,k})>0$ from which the proof of
     \cite[Proposition~4.13]{Cirac2016MPDO_arXiv} concludes
     $\mu_{\alpha,k}d_\alpha>0$; the identification of the trace with
-    $\mu_{\alpha,k}d_\alpha$ is Theorem~\ref{thm:mpdo_sector_trace_identity}.
-\end{theorem}
+    $\mu_{\alpha,k}d_\alpha$ is Lemma~\ref{thm:mpdo_sector_trace_identity}.
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:psd_trace_pos, def:mpdo_vertical_one_site_actions}
     Compression by a Hermitian matrix preserves positive semidefiniteness,
     since $PH^{(N)}P=PH^{(N)}P^\dagger$. By
-    Theorem~\ref{thm:psd_trace_pos}, a nonzero compression therefore has
+    Lemma~\ref{thm:psd_trace_pos}, a nonzero compression therefore has
     positive trace. The first-site case follows because
     $P_1=P\otimes\Id^{\otimes N}$ is Hermitian whenever $P$ is.
 \end{proof}
@@ -100,7 +100,7 @@
     $H^{(N)}$ gives the trace identity.
 \end{proof}
 
-\begin{theorem}[Trace of a first-site compression]
+\begin{lemma}[Trace of a first-site compression]
     \label{thm:mpdo_first_site_compression_trace}
     \lean{MPOTensor.trace_firstSiteMatrix_mul_mpo}
     \lean{MPOTensor.trace_sectorCompression_of_idempotent}
@@ -115,7 +115,7 @@
     The marked site closes to the loop with $P$ inserted, and the remaining
     $N$ sites close to plain loops. If $P$ is idempotent, then also
     $\tr(P_1H^{(N+1)}P_1)=\tr(E_P E^N)$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{lem:mpdo_trace_loop_chain, def:mpdo_vertical_one_site_actions}
@@ -163,7 +163,7 @@
     the projector and proves its loop identity.
 \end{definition}
 
-\begin{theorem}[Sector-compression separation in CPSV canonical form]
+\begin{lemma}[Sector-compression separation in CPSV canonical form]
     \label{thm:cpsv_literal_sector_compression_nonzero}
     \lean{MPSTensor.IsCPSVCanonicalForm.exists_sectorCompression_ne_zero_of_corner}
     \leanok
@@ -182,7 +182,7 @@
     Lemma~L in \cite[Appendix~C.3, lines~1835--1858]{Cirac2016MPDO_arXiv}.
     It uses neither positivity of $H^{(N+1)}$ nor a grouping of the vertical
     sectors.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -201,7 +201,7 @@
     (\ref{eq:cpsv_literal_sector_compression_separation}).
 \end{proof}
 
-\begin{theorem}[A gauge corner gives a nonzero range-projector corner]
+\begin{lemma}[A gauge corner gives a nonzero range-projector corner]
     \label{thm:mpdo_range_projection_corner_nonzero}
     \lean{MPOTensor.exists_rangeProjection_corner_ne_zero}
     \leanok
@@ -223,7 +223,7 @@
         (VV^\dagger)\widetilde M_v(VV^\dagger) & \ne 0.
         \label{eq:mpdo_range_projector_corner}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:cpsv_normal_nonzero_letter}
@@ -235,7 +235,7 @@
     (\ref{eq:mpdo_gauge_corner}).
 \end{proof}
 
-\begin{theorem}[A nonzero vertical corner has a nonzero sector compression]
+\begin{lemma}[A nonzero vertical corner has a nonzero sector compression]
     \label{thm:mpdo_grouped_sector_compression_nonzero}
     \lean{MPOTensor.IsHorizontalCF.exists_sectorCompression_ne_zero_of_corner}
     \leanok
@@ -243,11 +243,11 @@
     In the separation step of
     \cite[Proposition~4.13, line 1898]{Cirac2016MPDO_arXiv} under normalized
     BNT-refined horizontal form (with the CPSV canonical-form counterpart given
-    in Theorem~\ref{thm:cpsv_literal_sector_compression_nonzero}), let $M$ be in
+    in Lemma~\ref{thm:cpsv_literal_sector_compression_nonzero}), let $M$ be in
     normalized BNT-refined horizontal form and let $P$ be a matrix for which
     $P\widetilde M_vP$ is nonzero for some vertical letter $v$. Then the
     first-site compression $P_1H^{(N+1)}P_1$ is nonzero for some $N$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     If every compression vanished, its matrix entries would say that the
@@ -256,7 +256,7 @@
     inserted tensor itself to vanish, contrary to the assumed nonzero corner.
 \end{proof}
 
-\begin{theorem}[The sector trace identity]
+\begin{lemma}[The sector trace identity]
     \label{thm:mpdo_sector_trace_identity}
     \lean{MPOTensor.SectorProjectorData.trace_sectorCompression}
     \leanok
@@ -275,16 +275,16 @@
     $\tr(P_{\alpha,k}H^{(N)}P_{\alpha,k})=\mu_{\alpha,k}d_\alpha$ used in
     the proof of \cite[Proposition~4.13]{Cirac2016MPDO_arXiv}; the source
     states it at the particular length where the compression does not vanish.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpdo_first_site_compression_trace}
-    By Theorem~\ref{thm:mpdo_first_site_compression_trace} the trace of the
+    By Lemma~\ref{thm:mpdo_first_site_compression_trace} the trace of the
     compression is $\tr(E_P E^N)$, and the sector-projector property
     replaces $E_P$ by $\mu E_\alpha$.
 \end{proof}
 
-\begin{theorem}[Positivity of the vertical weights]
+\begin{lemma}[Positivity of the vertical weights]
     \label{thm:mpdo_sector_weight_pos}
     \lean{MPOTensor.SectorProjectorData.weight_mul_blockChainTrace_pos}
     \lean{MPOTensor.blockChainTrace_pos}
@@ -308,13 +308,13 @@
     \cite[Proposition~4.13]{Cirac2016MPDO_arXiv}: since w.l.o.g.\
     $\mu_{\alpha,0}>0$, the positive trace forces $d_\alpha>0$ and hence
     $\mu_{\alpha,k}>0$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpdo_sector_trace_identity, thm:mpdo_sector_compression_trace_pos}
-    By Theorem~\ref{thm:mpdo_sector_compression_trace_pos} the nonzero
+    By Lemma~\ref{thm:mpdo_sector_compression_trace_pos} the nonzero
     compression has positive trace, which
-    Theorem~\ref{thm:mpdo_sector_trace_identity} identifies with
+    Lemma~\ref{thm:mpdo_sector_trace_identity} identifies with
     $\mu_{\alpha,k}d_\alpha^{(N+1)}$. In particular
     $d_\alpha^{(N+1)}\ne 0$, so the trace of the compression by the sector
     projector of $(\alpha,0)$ at the same length equals
@@ -324,20 +324,20 @@
     inequality by $d_\alpha^{(N+1)}$ gives $\mu_{\alpha,k}>0$.
 \end{proof}
 
-\begin{theorem}[Unitary normalization of a scalar Gram matrix]
+\begin{lemma}[Unitary normalization of a scalar Gram matrix]
     \label{thm:normalize_scalar_gram_matrix}
     \lean{Matrix.smul_mem_unitaryGroup_of_conjTranspose_mul_self_eq_smul_one}
     \leanok
     If $\omega>0$ and $X^\dagger X=\omega\Id$, then
     $\omega^{-1/2}X$ is unitary.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Dividing the Gram identity by $\omega$ gives
     $(\omega^{-1/2}X)^\dagger(\omega^{-1/2}X)=\Id$.
 \end{proof}
 
-\begin{theorem}[Gram rigidity of normal tensors]
+\begin{lemma}[Gram rigidity of normal tensors]
     \label{thm:normal_tensor_gram_rigidity}
     \lean{Kraus.IsNormal.eq_smul_one_of_commute}
     \lean{Kraus.IsNormal.conjTranspose_mul_self_eq_smul_one_of_commute}
@@ -357,7 +357,7 @@
     $U_{\alpha,k}=\omega_{\alpha,k}^{-1/2}X_{\alpha,k}$. Deriving the
     commutation from self-adjointness of the sector compressions is a
     separate step.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -369,7 +369,7 @@
     Gram matrix the identity.
 \end{proof}
 
-\begin{theorem}[Reflected marked-chain identity]
+\begin{lemma}[Reflected marked-chain identity]
     \label{thm:mpdo_reflected_marked_chain}
     \lean{MPOTensor.horizontalSlice}
     \lean{MPOTensor.reflectedAdjoint}
@@ -395,7 +395,7 @@
     \end{align}
     Adjunction exchanges the oriented horizontal bond pair and reverses the
     unmarked tail, without identifying $A$ with $A^\sharp$ letterwise.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -407,7 +407,7 @@
     positivity of $c$ permits cancellation without a phase.
 \end{proof}
 
-\begin{theorem}[Gram-dressed reflected marked-chain identity]
+\begin{lemma}[Gram-dressed reflected marked-chain identity]
     \label{thm:mpdo_gram_dressed_reflected_marked_chain}
     \lean{MPOTensor.gramDressing}
     \lean{MPOTensor.IsMPDO.%
@@ -428,7 +428,7 @@
     $(X^\dagger X)A^v(X^\dagger X)^{-1}$ then equals the reflected-adjoint
     marked-chain coefficient of $A$ in the adjoint tensor, with the two tail
     words reversed.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -440,7 +440,7 @@
     reflected adjoint of $A$.
 \end{proof}
 
-\begin{theorem}[Pairwise Gram conjugation of grouped vertical corners]
+\begin{lemma}[Pairwise Gram conjugation of grouped vertical corners]
     \label{thm:mpdo_pairwise_vertical_gram_conjugation}
     \lean{MPOTensor.cornerGramCoefficients}
     \lean{MPOTensor.IsMPDO.markedChainCoefficient_gramDressing_eq_of_two_corners}
@@ -479,7 +479,7 @@
     The normalized BNT-refined horizontal hypothesis is stronger than the
     CPSV canonical-form hypothesis; documented in
     \cite{gap:cpgsv17_vertical_cf_grouping}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -529,7 +529,7 @@
     \end{align}
 \end{definition}
 
-\begin{theorem}[Distinguished reference corner of a grouped phase class]
+\begin{lemma}[Distinguished reference corner of a grouped phase class]
     \label{thm:distinguished_grouped_reference_corner}
     \lean{MPOTensor.exists_distinguished_grouped_reference_corner}
     \leanok
@@ -550,7 +550,7 @@
          & =c_{\alpha,0}A_{\alpha,q}^v.
         \label{eq:distinguished_grouped_reference_corner}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:mpv_phase_class_data}
@@ -565,7 +565,7 @@
     yielding~(\ref{eq:distinguished_grouped_reference_corner}) because $c_{\alpha,0}>0$.
 \end{proof}
 
-\begin{theorem}[Gram conjugation from grouped-corner dressing]
+\begin{lemma}[Gram conjugation from grouped-corner dressing]
     \label{thm:grouped_sector_gram_conj_of_dressing}
     \lean{MPOTensor.grouped_sector_gram_conj_eq_of_dressing}
     \leanok
@@ -587,11 +587,11 @@
          & =A_{\alpha,q}^v.
         \label{eq:grouped_sector_gram_conj_of_dressing}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:grouped_corner_gram_dressing, thm:distinguished_grouped_reference_corner}
-    Theorem~\ref{thm:distinguished_grouped_reference_corner} carries the
+    Lemma~\ref{thm:distinguished_grouped_reference_corner} carries the
     distinguished identity-gauge corner to the bond space of copy $q$. The
     grouped-corner Gram-dressing property gives
     \begin{align}
@@ -604,7 +604,7 @@
     (\ref{eq:grouped_sector_gram_conj_of_dressing}).
 \end{proof}
 
-\begin{theorem}[Gram conjugation from the adjoint dressing]
+\begin{lemma}[Gram conjugation from the adjoint dressing]
     \label{thm:gram_conj_of_dressed_adjoint}
     \lean{Matrix.gram_conj_eq_of_dressed_target}
     \lean{Matrix.gram_conj_eq_gram_conj_of_common_dressed_target}
@@ -634,7 +634,7 @@
     target appears via the reflected marked-chain argument without separate
     identification for either sector; the specializations $C=B^\dagger$ and
     $B^\dagger=B$ follow as corollaries.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -681,14 +681,14 @@
             (X_{\alpha,k}^{\dagger}X_{\alpha,k})^{-1}
             =(X_{\alpha,0}^{\dagger}X_{\alpha,0})M_\alpha
             (X_{\alpha,0}^{\dagger}X_{\alpha,0})^{-1}$.
-        Theorem~\ref{thm:mpdo_pairwise_vertical_gram_conjugation} gives this
+        Lemma~\ref{thm:mpdo_pairwise_vertical_gram_conjugation} gives this
         equality from self-adjointness of the corresponding sector compressions
         and horizontal marked separation; normality enters only in the
         subsequent proportionality argument.}
     \label{fig:mpdo_vertical_gauge_gram_comparison}
 \end{figure}
 
-\begin{theorem}[Gram-matrix proportionality from relative Gram conjugations]
+\begin{lemma}[Gram-matrix proportionality from relative Gram conjugations]
     \label{thm:eq3_of_dressed_adjoint}
     \lean{Kraus.IsNormal.gram_eq_pos_smul_gram_of_gram_conj_eq}
     \lean{Kraus.IsNormal.gram_eq_pos_smul_one_of_gram_conj_eq}
@@ -707,7 +707,7 @@
         \label{eq:mpdo_gram_proportionality}
     \end{align}
     and $\omega^{-1/2}XY^{-1}$ is unitary.
-    Theorem~\ref{thm:mpdo_pairwise_vertical_gram_conjugation} gives the
+    Lemma~\ref{thm:mpdo_pairwise_vertical_gram_conjugation} gives the
     Figure~8 comparison in
     \cite[Proposition~4.13, lines 1909--1921]{Cirac2016MPDO_arXiv}. This
     comparison gives precisely the relative hypothesis for a sector and
@@ -715,14 +715,14 @@
     unitary is $\omega^{-1/2}X$. The common-target declarations attached to
     this entry are conditional algebraic corollaries, not the reflected
     marked-chain statement itself.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:gram_conj_of_dressed_adjoint, thm:normal_tensor_gram_rigidity}
-    By Theorem~\ref{thm:gram_conj_of_dressed_adjoint}, the ratio
+    By Lemma~\ref{thm:gram_conj_of_dressed_adjoint}, the ratio
     $(Y^\dagger Y)^{-1}(X^\dagger X)$ commutes with every letter of
-    $M_\alpha$. Theorem~\ref{thm:normal_tensor_gram_rigidity} makes this
+    $M_\alpha$. Lemma~\ref{thm:normal_tensor_gram_rigidity} makes this
     ratio scalar. When the matrix dimension is positive, positive
     definiteness of the two Gram matrices makes the scalar a positive real
     number $\omega$. In dimension zero the equality is vacuous and one may
@@ -731,14 +731,14 @@
     $\sqrt{\omega}$ makes it unitary.
 \end{proof}
 
-\begin{theorem}[Positive scalar Gram matrix and unitary normalization from grouped-corner dressing]
+\begin{lemma}[Positive scalar Gram matrix and unitary normalization from grouped-corner dressing]
     \label{thm:grouped_sector_gram_scalar_of_dressing}
     \lean{MPOTensor.grouped_sector_gram_eq_pos_smul_one_of_dressing}
     \lean{MPOTensor.grouped_sector_exists_unitary_normalization_of_dressing}
     \leanok
     \uses{def:normal, thm:grouped_sector_gram_conj_of_dressing}
     Under the hypotheses of
-    Theorem~\ref{thm:grouped_sector_gram_conj_of_dressing}, suppose in
+    Lemma~\ref{thm:grouped_sector_gram_conj_of_dressing}, suppose in
     addition that every representative $A_{\alpha,q}$ is normal and has
     positive bond dimension. Then for every class $\alpha$ and copy $q$
     there is a real number $\omega_{\alpha,q}>0$ such that
@@ -752,14 +752,14 @@
     \cite[Proposition~4.13, lines~1903--1921]{Cirac2016MPDO_arXiv}. Both
     CPSV canonical form and normalized BNT-refined horizontal form give
     the Gram-dressing hypothesis on their own.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:grouped_sector_gram_conj_of_dressing, thm:eq3_of_dressed_adjoint}
-    Theorem~\ref{thm:grouped_sector_gram_conj_of_dressing} shows that
+    Lemma~\ref{thm:grouped_sector_gram_conj_of_dressing} shows that
     conjugation by $X_{\alpha,q}^\dagger X_{\alpha,q}$ fixes every letter of
     the normal representative. Applying the identity-gauge specialization of
-    Theorem~\ref{thm:eq3_of_dressed_adjoint} then yields a real number
+    Lemma~\ref{thm:eq3_of_dressed_adjoint} then yields a real number
     $\omega_{\alpha,q}>0$ with
     $X_{\alpha,q}^\dagger X_{\alpha,q}=\omega_{\alpha,q}\Id$, and dividing
     each gauge by $\sqrt{\omega_{\alpha,q}}$ gives the unitary normalization.
@@ -778,7 +778,7 @@
     \end{align}
 \end{definition}
 
-\begin{theorem}[Normalized grouped-sector maps from Gram scalars]
+\begin{lemma}[Normalized grouped-sector maps from Gram scalars]
     \label{thm:normalized_grouped_sector_maps_of_gram}
     \lean{MPOTensor.normalizedGroupedSectorMap_isometry}
     \lean{MPOTensor.normalizedGroupedSectorMap_orthogonal}
@@ -818,7 +818,7 @@
         W_{\alpha,q}(c_{\alpha,q}M_\alpha^v)W_{\alpha,q}^\dagger.
         \label{eq:normalized_grouped_sector_maps_of_gram}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:normalized_grouped_sector_map, thm:normal_tensor_gram_rigidity, thm:mpdo_bnt_conditional_identity_marked_unitary_conjugacy}
@@ -869,7 +869,7 @@
     (\ref{eq:normalized_grouped_sector_maps_of_gram}).
 \end{proof}
 
-\begin{theorem}[Normalized grouped-sector maps from grouped-corner dressing]
+\begin{lemma}[Normalized grouped-sector maps from grouped-corner dressing]
     \label{thm:normalized_grouped_sector_maps_of_dressing}
     \lean{MPOTensor.exists_normalized_grouped_sector_maps_of_dressing}
     \leanok
@@ -911,14 +911,14 @@
     \cite[Proposition~4.13, lines~1895--1921]{Cirac2016MPDO_arXiv}. Both
     CPSV canonical form and normalized BNT-refined horizontal form give
     the Gram-dressing hypothesis on their own.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:normalized_grouped_sector_maps_of_gram, thm:grouped_sector_gram_scalar_of_dressing}
-    Applying Theorem~\ref{thm:normalized_grouped_sector_maps_of_gram} to the
+    Applying Lemma~\ref{thm:normalized_grouped_sector_maps_of_gram} to the
     phase-class grouping with the positive Gram scalars from
-    Theorem~\ref{thm:grouped_sector_gram_scalar_of_dressing} preserves the
+    Lemma~\ref{thm:grouped_sector_gram_scalar_of_dressing} preserves the
     grouped reconstruction through its corner identity and gives
     (\ref{eq:normalized_grouped_sector_maps_of_dressing}).
 \end{proof}

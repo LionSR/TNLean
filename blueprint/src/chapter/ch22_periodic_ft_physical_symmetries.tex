@@ -1,4 +1,4 @@
-\begin{theorem}[Matching weighted sums of periodic blocks]%
+\begin{lemma}[Matching weighted sums of periodic blocks]%
     \label{thm:periodic_block_families_unitary_matching}
     \lean{MPSTensor.exists_unitary_matching_of_periodic_block_families}
     \leanok
@@ -13,19 +13,19 @@
     \begin{align}
         \bigoplus_jc_j\mu_jA_j^i & =W\Bigl(\bigoplus_k\nu_kB_k^i\Bigr)W^\dagger. \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:periodic_grouped_unitary, thm:periodic_ft_equal_case_trace_preserving}
-    Theorem~\ref{thm:periodic_grouped_unitary} groups both sums into
+    Lemma~\ref{thm:periodic_grouped_unitary} groups both sums into
     multiplicity forms $P$ and $Q$ over bases of periodic tensors without
     repetition, with unitaries $Y_A$ and $Y_B$. The two forms generate the
     same vectors at every positive length, so
     Theorem~\ref{thm:periodic_ft_equal_case_trace_preserving} gives
     multiplicity scalars $z_{j,q}$ with $z_{j,q}^{m_{\rho_j}}=1$ and a unitary
     $Y$ with $Z_zP^i=YQ^iY^\dagger$. Conjugating $Z_z$ back by $Y_A$ as in
-    Theorem~\ref{thm:periodic_grouped_unitary} gives the scalars
+    Lemma~\ref{thm:periodic_grouped_unitary} gives the scalars
     $c_{e(j,q)}=z_{j,q}$ and $W=Y_AYY_B^\dagger$. Each original block has
     the period of its representative, so $c_k^{m_k}=1$.
 \end{proof}
@@ -60,13 +60,13 @@
     \uses{thm:spectral_periodic_period_existence,
         thm:periodic_block_families_unitary_matching,
         thm:pgvwc07_normalized_periodic_state_vector_decomposition}
-    Theorem~\ref{thm:spectral_periodic_period_existence} gives the periods
+    Lemma~\ref{thm:spectral_periodic_period_existence} gives the periods
     $m_j$. Mixing the physical index commutes with the direct sum:
     $\sum_iu^{i',i}A^i=\bigoplus_j\mu_jC_j^{i'}$ with
     $C_j^{i'}=\sum_iu^{i',i}A_j^i$. Since $u$ is unitary, $\E_{C_j}=\E_{A_j}$,
     so $C_j$ is periodic with the same period. By hypothesis
     $\bigoplus_j\mu_jC_j$ and $A$ generate the same vectors at every positive
-    length, so Theorem~\ref{thm:periodic_block_families_unitary_matching} gives
+    length, so Lemma~\ref{thm:periodic_block_families_unitary_matching} gives
     $c_j$ with $c_j^{m_j}=1$ and a unitary $U$ with
     $\bigoplus_jc_j\mu_jC_j^{i'}=UA^{i'}U^\dagger$. With $z_j=c_j^{-1}$ and
     $Z=\bigoplus_jz_j\Id$ this is $\sum_iu^{i',i}A^i=ZUA^{i'}U^\dagger$.
@@ -78,7 +78,7 @@
     Hence $\mc V(A)=\mc V(ZA)$.
 \end{proof}
 
-\begin{theorem}[Conditional group-action $Z$-gauge reformulation of the symmetry corollary]%
+\begin{corollary}[Conditional group-action $Z$-gauge reformulation of the symmetry corollary]%
     \label{cor:cor_4_1_physical_symmetry_zgauge}
     \lean{MPSTensor.cor_4_1_physical_symmetry_zgauge}
     \lean{MPSTensor.PeriodicEqualCaseFT}
@@ -112,13 +112,13 @@
     % not assert the diagonal normalization of $Z_g$ or the exact displayed
     % source equation; the source corollary itself is
     % Theorem~\ref{thm:irreducible_form_physical_symmetry}.
-\end{theorem}
+\end{corollary}
 
 \begin{proof}\leanok
     \uses{def:rotate_physical, thm:periodic_ft, thm:irreducible_form_rotate_physical, cor:symmetry_periodic_assembly}
     The twisted tensor $\widetilde{A}_g$ coincides with the physical-index
     rotation $A_{U(g)}$ of Definition~\ref{def:rotate_physical}.
-    By Theorem~\ref{thm:irreducible_form_rotate_physical} the rotated
+    By Lemma~\ref{thm:irreducible_form_rotate_physical} the rotated
     tensor remains in irreducible form~II, and the on-site symmetry
     hypothesis gives the equality $\mc{V}(A) = \mc{V}(A_{U(g)})$.
     The periodic equal-case Fundamental Theorem
@@ -157,7 +157,7 @@
     factor system $u$ is an independent analytic assumption.
 \end{definition}
 
-\begin{theorem}[Conditional projective representation from symmetry gauges]%
+\begin{lemma}[Conditional projective representation from symmetry gauges]%
     \label{thm:cor_4_1_projective_rep}
     \lean{MPSTensor.cor_4_1_projective_rep}
     \leanok
@@ -173,7 +173,7 @@
     $X(g^{-1})$ still realizes the pointwise
     $\Z_{m_g}$-intertwining, encoded in the rigidity hypothesis, between $A$
     and the twisted tensor $\widetilde{A}_g$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:periodic_projective_rigidity}
@@ -186,16 +186,16 @@
     relation between $A$ and $\widetilde{A}_g$ carries over unchanged.
 \end{proof}
 
-\begin{theorem}[Cocycle identity for the upgraded factor system]%
+\begin{lemma}[Cocycle identity for the upgraded factor system]%
     \label{thm:cor_4_1_projective_rep_cocycle}
     \lean{MPSTensor.cor_4_1_projective_rep_cocycle}
     \leanok
     \uses{thm:cor_4_1_projective_rep}
     If the bond dimension $D$ is positive, the factor system $\omega$
-    produced by Theorem~\ref{thm:cor_4_1_projective_rep} satisfies the
+    produced by Lemma~\ref{thm:cor_4_1_projective_rep} satisfies the
     multiplicative $2$-cocycle identity
     $\omega(g,h)\omega(gh,k) = \omega(g,hk)\omega(h,k)$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:cor_4_1_projective_rep}
@@ -218,7 +218,7 @@
 \begin{remark}[External cohomological interpretation]%
     \label{rem:cor_4_1_projective_rep_spt}
     \uses{thm:cor_4_1_projective_rep_cocycle}
-    Theorem~\ref{thm:cor_4_1_projective_rep_cocycle} establishes a $\C^\times$-valued
+    Lemma~\ref{thm:cor_4_1_projective_rep_cocycle} establishes a $\C^\times$-valued
     $2$-cocycle under the conditional periodic projective-rigidity hypothesis of
     Definition~\ref{def:periodic_projective_rigidity}. In the broader SPT
     literature \cite{PerezGarcia2008StringOrder,Schuch2011Phases}, this factor
@@ -227,7 +227,7 @@
     here.
 \end{remark}
 
-\begin{theorem}[Conditional projective representation and cocycle from symmetry]%
+\begin{lemma}[Conditional projective representation and cocycle from symmetry]%
     \label{thm:projectiveRep_of_symmetry}
     \lean{MPSTensor.projectiveRep_of_symmetry}
     \leanok
@@ -236,4 +236,4 @@
     (Definition~\ref{def:periodic_projective_rigidity}), if $D>0$, then the
     virtual gauge family defines a projective representation of $G$ on the bond
     space whose factor system is a $2$-cocycle.
-\end{theorem}
+\end{lemma}

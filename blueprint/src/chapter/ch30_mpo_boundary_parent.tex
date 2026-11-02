@@ -26,7 +26,7 @@ Following \cite[Section~5 and Appendix~B]{GarreRubio2023MPOSym}, the
 periodic parent Hamiltonian is $H_{L,N}=\sum_{i=0}^{N-1}h_L^{(i)}$, where
 each local term $h_L^{(i)}$ acts on a cyclic window of length $L\leq N$.
 
-\begin{theorem}[Finite boundary cuts]
+\begin{lemma}[Finite boundary cuts]
     \label{thm:glm_boundary_cut}
     \lean{MPOTensor.mpoWithBoundary_reindex_blockSplit,
         MPOTensor.trace_mul_evalWord_rotate,
@@ -46,7 +46,7 @@ each local term $h_L^{(i)}$ acts on a cyclic window of length $L\leq N$.
     and $i\in\{0,\ldots,N-1\}$, the same cut formula holds in the coordinates
     of the cyclic window starting at $i$ and its ordered complement,
     with $K=N-L$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{lem:mpo_eval_word_append}
@@ -99,7 +99,7 @@ each local term $h_L^{(i)}$ acts on a cyclic window of length $L\leq N$.
     \end{tenkz}
 \end{center}
 
-\begin{theorem}[Commutation from an invariant star algebra]
+\begin{lemma}[Commutation from an invariant star algebra]
     \label{thm:glm_parent_invariant_star_algebra}
     \lean{MPSTensor.parentInteractionES_commute_of_starAlgebra_invariant}
     \leanok
@@ -108,7 +108,7 @@ each local term $h_L^{(i)}$ acts on a cyclic window of length $L\leq N$.
     $L$-site physical space, and suppose that $\mathcal S_A^L$ is invariant
     under $\mathcal B$. Then $[h_L,B]=0$ for every $B\in\mathcal B$.
     This statement also holds at $L=0$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     For $v\in(\mathcal S_A^L)^\perp$ and $w\in\mathcal S_A^L$,
@@ -117,7 +117,7 @@ each local term $h_L^{(i)}$ acts on a cyclic window of length $L\leq N$.
     and its orthogonal projection satisfies $h_LBv=Bh_Lv$ for every $v$.
 \end{proof}
 
-\begin{theorem}[Local commutation from an adjoint-closed range]
+\begin{lemma}[Local commutation from an adjoint-closed range]
     \label{thm:glm_boundary_parent_local}
     \lean{MPOTensor.IsBoundaryCompatible.parentInteractionES_commute_mpoWithBoundary,
         MPOTensor.IsBoundaryCompatible.groundSpaceES_mem_invtSubmodule,
@@ -137,7 +137,7 @@ each local term $h_L^{(i)}$ acts on a cyclic window of length $L\leq N$.
     $[h_L,O^L_{T,Y}]=[P_L,O^L_{T,Y}]=0$ for every virtual boundary $Y$.
     Equivalently, $h_L(O^L_{T,Y}v)=O^L_{T,Y}(h_Lv)$ for every physical
     vector $v$, in either the configuration or orthonormal coordinates.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{def:glm_boundary_closedness, thm:glm_parent_invariant_star_algebra}
@@ -145,7 +145,7 @@ each local term $h_L^{(i)}$ acts on a cyclic window of length $L\leq N$.
     Adjoint closure gives the same invariance for every adjoint generator.
     Sums, products, and scalar multiples of the identity preserve this
     invariant subspace, so the generated unital $*$-algebra preserves it.
-    Apply Theorem~\ref{thm:glm_parent_invariant_star_algebra} to obtain
+    Apply Lemma~\ref{thm:glm_parent_invariant_star_algebra} to obtain
     $h_LO^L_{T,Y}=O^L_{T,Y}h_L$. The same orthogonal reduction gives
     $P_LO^L_{T,Y}=O^L_{T,Y}P_L$. Identifying the configuration space
     with the orthonormal basis gives the stated coordinate forms.
@@ -153,7 +153,7 @@ each local term $h_L^{(i)}$ acts on a cyclic window of length $L\leq N$.
     projection to equal the ambient identity.
 \end{proof}
 
-\begin{theorem}[A boundary unit from one injective length]
+\begin{lemma}[A boundary unit from one injective length]
     \label{thm:glm_boundary_unit_support}
     \lean{MPOTensor.IsBoundaryCompatible.mpoWithBoundary_mulVec_eq_of_one_length_eq_one,
         MPOTensor.IsBoundaryCompatible.mpoWithBoundary_mulVec_eq_of_one_site_eq_one,
@@ -173,7 +173,7 @@ each local term $h_L^{(i)}$ acts on a cyclic window of length $L\leq N$.
     \cite[Appendix~B]{GarreRubio2023MPOSym}, this condition requires neither
     a comparison between $n$ and $L_0$ nor adjoint closure of the boundary
     range.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{def:glm_boundary_closedness, thm:ground_space_map_injective_blk}
@@ -181,14 +181,14 @@ each local term $h_L^{(i)}$ acts on a cyclic window of length $L\leq N$.
     state boundary $Z$ such that $O^k_{T,U}\Gamma_k(X)=\Gamma_k(Z)$
     for every $k>0$. At $k=L_0$ this gives
     $\Gamma_{L_0}(Z)=O^{L_0}_{T,U}\Gamma_{L_0}(X)=\Gamma_{L_0}(X)$.
-    Theorem~\ref{thm:ground_space_map_injective_blk} implies $Z=X$.
+    Lemma~\ref{thm:ground_space_map_injective_blk} implies $Z=X$.
     The same equality therefore holds at every positive $n$.
     Since $\mathcal S_A^n=\operatorname{ran}\Gamma_n$, the operator
     $Q_n$ fixes the whole support, including every vector $P_nv$.
     The one-site case takes $L_0=1$.
 \end{proof}
 
-\begin{theorem}[Periodic placement of a commuting local operator]
+\begin{lemma}[Periodic placement of a commuting local operator]
     \label{thm:glm_boundary_embed_commutation}
     \lean{MPOTensor.embedLocalOperator_commute_mpoWithBoundary}
     \leanok
@@ -198,12 +198,12 @@ each local term $h_L^{(i)}$ acts on a cyclic window of length $L\leq N$.
     boundary $Y$. Its placement $B^{(i)}$ on the cyclic window starting
     at $i$ satisfies $[B^{(i)},O^N_{T,X}]=0$ for every
     $X\in\mathcal C(T)$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:glm_boundary_cut, thm:mpdo_cyclic_local_embedding_reindex}
     In window--complement coordinates, $B^{(i)}=B\otimes I$ by
-    Theorem~\ref{thm:mpdo_cyclic_local_embedding_reindex}. Each summand
+    Lemma~\ref{thm:mpdo_cyclic_local_embedding_reindex}. Each summand
     of (\ref{eq:glm_parent_cut}) satisfies
     \begin{align}
         (B\otimes I)(O^L_{T,E_{ba}X}\otimes O^{N-L}_{T,E_{ab}})
@@ -217,7 +217,7 @@ each local term $h_L^{(i)}$ acts on a cyclic window of length $L\leq N$.
     commutation condition on the local boundaries $E_{ba}X$.
 \end{proof}
 
-\begin{theorem}[Periodic commutation]
+\begin{lemma}[Periodic commutation]
     \label{thm:glm_boundary_parent_periodic}
     \lean{MPOTensor.IsBoundaryCompatible.parentHamiltonianES_commute_mpoWithBoundary,
         MPOTensor.IsBoundaryCompatible.localTermES_commute_mpoWithBoundary,
@@ -229,14 +229,14 @@ each local term $h_L^{(i)}$ acts on a cyclic window of length $L\leq N$.
     $\mathcal R_L(T)^*=\mathcal R_L(T)$. Then, for every cyclic
     placement $i$ and every $X\in\mathcal C(T)$, one has
     $[h_L^{(i)},O^N_{T,X}]=0$ and $[H_{L,N},O^N_{T,X}]=0$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:glm_boundary_parent_local, thm:glm_boundary_embed_commutation,
         lem:local_term_es_average, def:parent_hamiltonian}
-    Since Theorem~\ref{thm:glm_boundary_parent_local} gives
+    Since Lemma~\ref{thm:glm_boundary_parent_local} gives
     $[h_L,O^L_{T,Y}]=0$ for every $Y$,
-    Theorem~\ref{thm:glm_boundary_embed_commutation} with $B=h_L$ yields
+    Lemma~\ref{thm:glm_boundary_embed_commutation} with $B=h_L$ yields
     $[h_L^{(i)},O^N_{T,X}]=0$ at each cyclic placement, and summing over $i$
     gives $[H_{L,N},O^N_{T,X}]=\sum_{i=0}^{N-1}[h_L^{(i)},O^N_{T,X}]=0$.
 \end{proof}
@@ -255,7 +255,7 @@ each local term $h_L^{(i)}$ acts on a cyclic window of length $L\leq N$.
     with the unweighted direct sum of the corresponding state tensors.
 \end{definition}
 
-\begin{theorem}[Selection of a periodic block]
+\begin{lemma}[Selection of a periodic block]
     \label{thm:glm_boundary_block_selector}
     \lean{MPOTensor.mpoWithBoundary_blockSum_blockBoundarySelector,
         MPOTensor.evalWord_blockSum,
@@ -266,7 +266,7 @@ each local term $h_L^{(i)}$ acts on a cyclic window of length $L\leq N$.
     component word matrices. Each $Q_a$ commutes with every letter
     $T^{ij}$, so $Q_a\in\mathcal C(T)$, and
     $O^N_{T,Q_a}=O^N_{T_a,I}$ for every $N\geq0$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{def:glm_boundary_block_sum, lem:eval_word_block_diagonal_tensor}
@@ -283,7 +283,7 @@ each local term $h_L^{(i)}$ acts on a cyclic window of length $L\leq N$.
     The asserted selector identity follows coefficientwise.
 \end{proof}
 
-\begin{theorem}[Individual periodic block symmetries]
+\begin{lemma}[Individual periodic block symmetries]
     \label{thm:glm_boundary_parent_blocks}
     \lean{MPOTensor.IsBoundaryCompatible.parentHamiltonianES_commute_mpo_block}
     \leanok
@@ -294,17 +294,17 @@ each local term $h_L^{(i)}$ acts on a cyclic window of length $L\leq N$.
     then $[H_{L,N},O^N_{T_a,I}]=0$ for every $a$.
     Adjoint closure is required only of the full direct-sum boundary range;
     taking adjoints may exchange summand labels.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:glm_boundary_block_selector, thm:glm_boundary_parent_periodic}
-    Since Theorem~\ref{thm:glm_boundary_block_selector} gives
+    Since Lemma~\ref{thm:glm_boundary_block_selector} gives
     $Q_a\in\mathcal C(T)$ and $O^N_{T,Q_a}=O^N_{T_a,I}$,
-    Theorem~\ref{thm:glm_boundary_parent_periodic} applied to $X=Q_a$ yields
+    Lemma~\ref{thm:glm_boundary_parent_periodic} applied to $X=Q_a$ yields
     $[H_{L,N},O^N_{T_a,I}]=0$.
 \end{proof}
 
-\begin{theorem}[Nonzero canonical interaction]
+\begin{lemma}[Nonzero canonical interaction]
     \label{thm:glm_boundary_parent_nonzero}
     \lean{MPSTensor.parentInteractionES_ne_zero,
         MPSTensor.parentInteraction_ne_zero,
@@ -317,7 +317,7 @@ each local term $h_L^{(i)}$ acts on a cyclic window of length $L\leq N$.
     $\mathcal R_L(T)^*=\mathcal R_L(T)$, this nonzero canonical
     interaction defines a periodic parent commuting with every
     $O^N_{T,X}$ for $X\in\mathcal C(T)$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{lem:ground_space_ne_top, lem:parent_interaction_es_kernel,
@@ -329,11 +329,11 @@ each local term $h_L^{(i)}$ acts on a cyclic window of length $L\leq N$.
     $\ker h_L=\mathcal S_A^L$ from
     Lemma~\ref{lem:parent_interaction_es_kernel}. The unitary identification
     of the two coordinate spaces preserves this nonvanishing, while
-    Theorem~\ref{thm:glm_boundary_parent_periodic} shows that the resulting
+    Lemma~\ref{thm:glm_boundary_parent_periodic} shows that the resulting
     periodic parent commutes with every $O^N_{T,X}$ for $X\in\mathcal C(T)$.
 \end{proof}
 
-\begin{theorem}[Normalized boundary averages of the support]
+\begin{lemma}[Normalized boundary averages of the support]
     \label{thm:glm_boundary_projection_average}
     \lean{MPOTensor.IsBoundaryCompatible.sum_mpoWithBoundary_groundSpaceES_starProjection,
         MPOTensor.IsBoundaryCompatible.sum_mpoWithBoundary_parentInteractionES,
@@ -361,13 +361,13 @@ each local term $h_L^{(i)}$ acts on a cyclic window of length $L\leq N$.
     \cite[Appendix~B]{GarreRubio2023MPOSym}, these identities hold even when
     $J$ is empty or the physical and virtual dimensions vanish, and require
     neither $Q_n=I$ nor $O^n_{T,Y_j}=(O^n_{T,X_j})^*$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:glm_boundary_parent_local, thm:glm_boundary_unit_support}
-    Theorem~\ref{thm:glm_boundary_parent_local} gives
+    Lemma~\ref{thm:glm_boundary_parent_local} gives
     $P_nO^n_{T,Y_j}=O^n_{T,Y_j}P_n$, while
-    Theorem~\ref{thm:glm_boundary_unit_support} gives $Q_nP_n=P_n$.
+    Lemma~\ref{thm:glm_boundary_unit_support} gives $Q_nP_n=P_n$.
     Thus (\ref{eq:glm_boundary_average_unit}) implies
     \begin{align}
         E_n(P_n)
@@ -379,21 +379,21 @@ each local term $h_L^{(i)}$ acts on a cyclic window of length $L\leq N$.
     $I-E_n(P_n)=I-P_n=h_n$.
 \end{proof}
 
-\begin{theorem}[Nonzero ambient complement of the averaged support]
+\begin{lemma}[Nonzero ambient complement of the averaged support]
     \label{thm:glm_boundary_average_nonzero}
     \lean{MPOTensor.IsBoundaryCompatible.one_sub_sum_mpoWithBoundary_groundSpaceES_starProjection_ne_zero}
     \leanok
     \uses{thm:glm_boundary_projection_average}
     Under the hypotheses of
-    Theorem~\ref{thm:glm_boundary_projection_average}, if $d^n>D^2$,
+    Lemma~\ref{thm:glm_boundary_projection_average}, if $d^n>D^2$,
     then $I-E_n(P_n)\ne0$. This does not imply $E_n(h_n)\ne0$:
     if $Q_n=P_n$, then $E_n(h_n)=0$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:glm_boundary_projection_average, thm:glm_boundary_parent_nonzero}
     By (\ref{eq:glm_boundary_ambient_complement}), the ambient complement
-    is $h_n$. Theorem~\ref{thm:glm_boundary_parent_nonzero} gives
+    is $h_n$. Lemma~\ref{thm:glm_boundary_parent_nonzero} gives
     $h_n\ne0$ from $d^n>D^2$. The final assertion follows from
     (\ref{eq:glm_boundary_parent_average}) when $Q_n=P_n$.
 \end{proof}
@@ -408,13 +408,13 @@ Its normalization is $E(I)=Q$, so for the two-site support projection $P_2$,
     I-E(P_2) & =E(I-P_2)+(I-Q).
     \label{eq:glm_parent_wha_complement}
 \end{align}
-Theorem~\ref{thm:glm_boundary_projection_average} gives $E(P_2)=P_2$
+Lemma~\ref{thm:glm_boundary_projection_average} gives $E(P_2)=P_2$
 when its positive-length identity, injectivity, adjoint closure, and
 finite-family normalization hypotheses hold for this representation.
 The ambient complement then equals $h_2$, whereas the averaged
 parent $E(I-P_2)$ is $Q-P_2$. The dimension inequality proves that $I-P_2$ is nonzero;
 it does not prove that $Q-P_2$ is nonzero. Compatibility alone gives
 invariance of $\mathcal S_A^2$. The additional identity and normalization
-hypotheses must be established for the represented weak-Hopf unit and
-canonical integral; they are not consequences of invariance alone
-\cite{gap:glm23_wha_parent_completion}.
+hypotheses are not consequences of invariance alone
+\cite{gap:glm23_wha_parent_completion}; for the represented weak-Hopf unit
+and canonical integral they are derived in Section~\ref{sec:glm_wha_average}.

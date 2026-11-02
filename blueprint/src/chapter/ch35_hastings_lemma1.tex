@@ -4,46 +4,132 @@
 % Hastings, arXiv:0705.2024v4, law16.tex: statement of Lemma 1 at lines 246--267,
 % proof in the appendix at lines 763--910, note added on positivity at lines 912--1003.
 
-Lemma~1 of \cite{Hastings2007AreaLaw} writes the projector $P_0$ onto the
-ground state of a gapped finite-range chain approximately as a product
-$O_BO_LO_R$ of three operators of norm at most one: $O_L$ acts on the sites
-left of a cut, $O_R$ on the sites right of it, and $O_B$ on the $2l$ sites
-around it. This section records the steps of the proof in the order of the
-appendix of \cite{Hastings2007AreaLaw}. The first step, the splitting of the
-Hamiltonian at the cut into a left, a buffer and a right part, is
-Section~\ref{sec:hastings_three_way_splitting}. Throughout, $H$ is Hermitian
-with ground energy $E_0$, every other eigenvalue is at least $E_0+\Delta E$
-with $\Delta E>0$, and norms are operator norms. As in the source, the
-sites are numbered $1,\dots,N$, $X_{a,b}$ is the set of sites $i$ with
-$a\le i\le b$, and the cut $j$ separates $X_{1,j}$ from $X_{j+1,N}$; on the
-chain of $L$ sites numbered $0,\dots,L-1$ of
-Section~\ref{sec:hastings_three_way_splitting}, where the cut $j$ has the
-sites $i<j$ on its left, this is the shift of every site down by one, with
-$N=L$, so $X_{1,j}$ becomes $\{0,\dots,j-1\}$ and $X_{j+1,N}$ becomes
-$\{j,\dots,L-1\}$. The main theorem of
-\cite[lines 124--144]{Hastings2007AreaLaw} uses the decay length
-\begin{align*}
-    \xi=\max(2v/\Delta E,\xi_C),
-\end{align*}
-where $v$ and $\xi_C$ are the velocity and length scale of the Lieb--Robinson
-bound \cite[lines 96--112]{Hastings2007AreaLaw}. The source puts $\xi'=6\xi$.
-For a fixed length $\xi$, the argument below gives the factorization at
-every rate $\xi'>6\xi$ but does not reach $\xi'=6\xi$ itself, so in this
-chapter $\xi'$ denotes any number with $\xi'>6\xi$, except in
-Lemma~\ref{lem:hastings_lemma1}, which is stated as printed with
-$\xi'=6\xi$, and in Theorem~\ref{thm:hastings_lemma1_endpoint}, which reaches
-$\xi'=6\xi$ for a length obtained by raising the velocity.
+Lemma~1 of \cite{Hastings2007AreaLaw} approximates the ground-state projector
+$P_0$ of a gapped finite-range chain by a product $O_BO_LO_R$ of contractions
+supported on the $2l$ sites around a cut $j$, the left sites $X_{1,j}$, and
+the right sites $X_{j+1,N}$. Following the appendix of
+\cite{Hastings2007AreaLaw} and the three-way Hamiltonian splitting of
+Section~\ref{sec:hastings_three_way_splitting}, let $H=H^\dagger$ have ground
+energy $E_0$ and spectral gap $\Delta E>0$, with operator norm $\|\cdot\|$.
+Under the index shift $\{1,\dots,N\}\mapsto\{0,\dots,L-1\}$ ($N=L$) of
+Section~\ref{sec:hastings_three_way_splitting}, $X_{1,j}=\{0,\dots,j-1\}$ and
+$X_{j+1,N}=\{j,\dots,L-1\}$. For the Lieb--Robinson parameters $(v,\xi_C)$ of
+\cite[lines 96--112]{Hastings2007AreaLaw}, \cite[lines 124--144]{Hastings2007AreaLaw} sets
+\begin{align}
+    \xi & =\max(2v/\Delta E,\xi_C)
+    \label{eq:hastings_lemma1_xi}
+\end{align}
+and $\xi'=6\xi$. For fixed $\xi$, the appendix argument yields every rate
+$\xi'>6\xi$ rather than $\xi'=6\xi$; below $\xi'>6\xi$, except in
+Lemma~\ref{lem:hastings_lemma1} ($\xi'=6\xi$ as printed) and
+Lemma~\ref{thm:hastings_lemma1_endpoint} ($\xi'=6\xi$ for a raised velocity).
 
-From the filtering on, $H_L$, $H_B$, $H_R$ denote the parts of
-Section~\ref{sec:hastings_three_way_splitting} centered by their ground-state
-expectations, $H_\bullet-\langle\Psi_0,H_\bullet\Psi_0\rangle$, as the source
-does before filtering them \cite[lines 781--782]{Hastings2007AreaLaw}.
-Centering subtracts a multiple of the identity, which commutes with $H$ and
-is fixed by the filter below. It therefore changes neither $[H,H_\bullet]$ nor
-$\widetilde H_\bullet-H_\bullet$, and the bounds on the localized parts below
-hold for the centered and the uncentered parts alike.
+Henceforth $H_L,H_B,H_R$ denote the centered parts
+$H_\bullet-\langle\Psi_0,H_\bullet\Psi_0\rangle$ of
+Section~\ref{sec:hastings_three_way_splitting}
+\cite[lines 781--782]{Hastings2007AreaLaw}. Since scalar multiples of $1$
+commute with $H$ and are fixed by the Gaussian filter, centering leaves
+$[H,H_\bullet]$ and $\widetilde H_\bullet-H_\bullet$ unchanged.
 % Lean: TNLean.Lattice.gaussianFilteredTerm_sub_smul_one and
 % TNLean.Lattice.gaussianFilteredTerm_sub_smul_one_sub (filtering fixes scalars).
+
+\subsection*{Velocity, length and energy units}
+
+\begin{lemma}[The chain commutator bound with a numerical prefactor]
+    \label{thm:hastings_chain_lieb_robinson}
+    \lean{TNLean.MPS.AreaLaw.ChainSupport.edist_le,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.norm_heisenberg_commutator_le_numeric,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.norm_heisenberg_commutator_le_hastings,
+        TNLean.MPS.AreaLaw.chainLRVelocity_sub_one_pos}
+    \leanok
+    \uses{def:chain_model,thm:qc_lr_finsets_numeric}
+    Let $H$ be a range-$R$ chain Hamiltonian with term norms at most $J\ge0$.
+    Put $c_R=2(R+1)2^{2R+1}e^{2R}$. Let $A$ and $B$ act on finite sets
+    $X$ and $Y$, and let the integer $d\ge0$ be a lower bound for every
+    distance between a site in $X$ and a site in $Y$. Then
+    \begin{align}
+        \|[e^{itH}Ae^{-itH},B]\|
+         & \le4|X|\,\|A\|\,\|B\|e^{2c_RJ|t|-d}.
+        \label{eq:hastings_numeric_chain_bound}
+    \end{align}
+    Consequently, every positive $v\ge8c_RJ$ and every $\xi_C\ge8$ satisfy
+    \begin{align}
+        \|[e^{itH}Ae^{-itH},B]\|
+         & \le4|X|\,\|A\|\,\|B\|e^{-d/\xi_C}
+        \label{eq:hastings_chain_time_cone}
+    \end{align}
+    whenever $|t|\le d/v$. The distance condition is vacuous for an empty
+    support. These are the velocity and length estimates used in
+    \cite[lines 96--112]{Hastings2007AreaLaw}, with the reciprocal-length
+    convention of~\cite{gap:hastings07_lemma1_decay_length}.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:qc_lr_finsets_numeric}
+    Each interaction support contains at most $R+1$ sites, has diameter at
+    most $R$, and the sum of the interaction norms meeting a site is at most
+    $2^{2R+1}J$. Substitute these bounds and $\mu=1$ into
+    Lemma~\ref{thm:qc_lr_finsets_numeric}. If $|t|\le d/v$, then
+    $2c_RJ|t|\le d/4$, while $d/\xi_C\le d/8$; hence
+    $2c_RJ|t|-d\le-d/\xi_C$.
+\end{proof}
+
+\begin{lemma}[Energy and time rescaling]
+    \label{thm:hastings_energy_time_rescaling}
+    \lean{QuantumCircuit.heisenbergEvolution_smul,
+        QuantumCircuit.heisenbergEvolution_inv_smul_mul}
+    \leanok
+    For every real $c$ and every pair of operators $H,A$,
+    \begin{align}
+        e^{it(cH)}Ae^{-it(cH)}=e^{i(ct)H}Ae^{-i(ct)H}.
+        \label{eq:hastings_energy_time_rescaling}
+    \end{align}
+    In particular, if $\Delta E\ne0$, evolution under $H/\Delta E$ at time
+    $\Delta E\,t$ agrees with evolution under $H$ at time $t$.
+\end{lemma}
+\begin{proof}\leanok
+    Both exponential generators in
+    (\ref{eq:hastings_energy_time_rescaling}) agree by associativity of
+    scalar multiplication.
+\end{proof}
+
+\begin{lemma}[The factorization lengths and admissible velocities]
+    \label{thm:hastings_source_lengths}
+    \lean{TNLean.MPS.AreaLaw.lemmaOneLength_eq_sourceLength,
+        TNLean.MPS.AreaLaw.lemmaOneEndpointLength_eq_sourceLength,
+        TNLean.MPS.AreaLaw.chainLRVelocity_gapRescaling,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.norm_heisenberg_commutator_le_hastings_rescaled,
+        TNLean.MPS.AreaLaw.two_mul_lemmaOneEndpointLength_le_sourceLength}
+    \leanok
+    \uses{thm:hastings_chain_lieb_robinson}
+    For $\Delta E>0$ and $J\ge0$, put $u_0=1+c_RJ/\Delta E$, with $c_R$ as
+    in Lemma~\ref{thm:hastings_chain_lieb_robinson}. For every $\kappa\ge8$,
+    the pair $(\kappa\Delta E\,u_0,8)$ satisfies
+    (\ref{eq:hastings_chain_time_cone}). The two lengths of the
+    factorization are therefore
+    \begin{align}
+        \hat\xi   & =16u_0=\max\{2(8\Delta E\,u_0)/\Delta E,8\},
+        \label{eq:hastings_source_length_normalized}              \\
+        \tilde\xi & =20u_0=\max\{2(10\Delta E\,u_0)/\Delta E,8\}.
+        \label{eq:hastings_source_length_enlarged}
+    \end{align}
+    For $J>0$ the gap-independent pair $(v_*,\xi_{C,*})=(40c_RJ,80)$ is
+    also admissible. Its source length satisfies
+    \begin{align}
+        \max\{2v_*/\Delta E,80\}\ge2\tilde\xi.
+        \label{eq:hastings_source_length_comparison}
+    \end{align}
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:hastings_chain_lieb_robinson}
+    The identity $\Delta E(u_0-1)=c_RJ$ gives
+    $\kappa\Delta E\,u_0\ge8c_RJ$. Apply
+    Lemma~\ref{thm:hastings_chain_lieb_robinson}; cancellation of
+    $\Delta E$ gives (\ref{eq:hastings_source_length_normalized}) and
+    (\ref{eq:hastings_source_length_enlarged}). The maximum in
+    (\ref{eq:hastings_source_length_comparison}) is at least each of
+    $80c_RJ/\Delta E$ and $80$, and hence at least their average
+    $40(1+c_RJ/\Delta E)=2\tilde\xi$.
+\end{proof}
 
 \subsection*{Gaussian-filtered operators}
 
@@ -52,18 +138,18 @@ hold for the centered and the uncentered parts alike.
     \lean{TNLean.Lattice.gaussianFilteredTerm}
     \leanok
     For $q>0$ and a matrix $W$, the \emph{Gaussian-filtered operator} is
-    \begin{align*}
-        \widetilde W=\frac{\Delta E}{\sqrt{2\pi q}}\int_{-\infty}^{\infty}
+    \begin{align}
+        \widetilde W & =\frac{\Delta E}{\sqrt{2\pi q}}\int_{-\infty}^{\infty}
         e^{iHt}We^{-iHt}\,e^{-(t\Delta E)^2/(2q)}\,dt,
-    \end{align*}
-    the Heisenberg evolution of $W$ averaged against the centered Gaussian of
-    variance $q/\Delta E^2$. For $q=0$ the Gaussian is the point mass at
-    $t=0$ and $\widetilde W=W$. These are the operators $\tilde H_L^0$,
-    $\tilde H_B^0$, $\tilde H_R^0$ of \cite[lines 783--793]{Hastings2007AreaLaw}
-    for $W$ one of the three centered parts of the Hamiltonian.
+        \label{eq:hastings_gaussian_filtered_term}
+    \end{align}
+    and $\widetilde W=W$ for $q=0$. Applied to the centered parts
+    $W\in\{H_L,H_B,H_R\}$, (\ref{eq:hastings_gaussian_filtered_term}) gives
+    $\tilde H_L^0,\tilde H_B^0,\tilde H_R^0$ of
+    \cite[lines 783--793]{Hastings2007AreaLaw}.
 \end{definition}
 
-\begin{theorem}[Spectral properties of filtered operators]
+\begin{lemma}[Spectral properties of filtered operators]
     \label{thm:hastings_gaussian_filtered_spectral}
     \lean{
         TNLean.Lattice.inner_gaussianFilteredTerm,
@@ -78,29 +164,30 @@ hold for the centered and the uncentered parts alike.
     }
     \leanok
     \uses{def:hastings_gaussian_filtered_term}
-    Let $v$ and $w$ be eigenvectors of $H$ with eigenvalues $E$ and $E'$. Then
-    \begin{align*}
+    If $Hv=Ev$ and $Hw=E'w$, then
+    \begin{align}
         \langle v,\widetilde Ww\rangle
-        =e^{-q((E-E')/\Delta E)^2/2}\,\langle v,Ww\rangle,
-    \end{align*}
-    so $\widetilde W$ and $W$ have the same matrix elements between ground
-    vectors. Filtering is additive in $W$, does not increase the norm, and
-    returns $H$ when $W=H$; in particular, if $H=\sum_iH_i$ then
-    $\sum_i\widetilde H_i=H$, as in
-    \cite[line 793]{Hastings2007AreaLaw}. For a ground vector $\psi$, the
-    component of $\widetilde W\psi$ orthogonal to the ground space has norm at
-    most $\|W\|e^{-q/2}\|\psi\|$.
-\end{theorem}
+         & =e^{-q((E-E')/\Delta E)^2/2}\,\langle v,Ww\rangle,
+        \label{eq:hastings_gaussian_filtered_matrix_element}
+    \end{align}
+    so $\langle v,\widetilde Ww\rangle=\langle v,Ww\rangle$ when $E=E'=E_0$.
+    The map $W\mapsto\widetilde W$ is linear, satisfies
+    $\|\widetilde W\|\le\|W\|$ and $\widetilde H=H$, and thus
+    $\sum_i\widetilde H_i=H$ whenever $\sum_iH_i=H$
+    \cite[line 793]{Hastings2007AreaLaw}. For a ground vector $\psi$ and the
+    ground-space projection $P_{\mathrm{gs}}$,
+    $\|(1-P_{\mathrm{gs}})\widetilde W\psi\|\le\|W\|e^{-q/2}\|\psi\|$.
+\end{lemma}
 \begin{proof}\leanok
-    In the eigenbasis of $H$ the evolution multiplies the matrix element
-    between energies $E$ and $E'$ by $e^{i(E-E')t}$, and the Gaussian average
-    of this phase is $e^{-q((E-E')/\Delta E)^2/2}$. Each conjugate of $W$ has
-    the norm of $W$, and $H$ commutes with its own evolution. An excited
-    eigenvector has energy at least $\Delta E$ above a ground vector, so its
-    coefficient in $\widetilde W\psi$ carries a factor at most $e^{-q/2}$.
+    In the $H$-eigenbasis, $\langle v,e^{iHt}We^{-iHt}w\rangle
+        =e^{i(E-E')t}\langle v,Ww\rangle$, whose Gaussian integral is
+    (\ref{eq:hastings_gaussian_filtered_matrix_element}). Unitaries preserve
+    $\|W\|$, and $e^{iHt}He^{-iHt}=H$. Since $|E-E_0|\ge\Delta E$ on the
+    excited subspace, each excited coefficient of $\widetilde W\psi$ is scaled
+    by at most $e^{-q/2}$.
 \end{proof}
 
-\begin{theorem}[Filtered operators without ground components]
+\begin{lemma}[Filtered operators without ground components]
     \label{thm:hastings_filtered_no_ground_component}
     \lean{
         TNLean.Lattice.norm_gaussianFilteredTerm_apply_le_commutator,
@@ -109,27 +196,26 @@ hold for the centered and the uncentered parts alike.
     }
     \leanok
     \uses{thm:hastings_gaussian_filtered_spectral}
-    Let $\psi$ be a ground vector of $H$ such that $W\psi$ is orthogonal to the
-    ground space. Then
-    \begin{align*}
-        \|\widetilde W\psi\|\le\Delta E^{-1}e^{-q/2}\,\|[H,W]\psi\|.
-    \end{align*}
-    In particular this holds when $\Psi_0$ is a unique gapped ground vector
-    and $\langle\Psi_0,W\Psi_0\rangle=0$, as for each of the centered parts
-    $H_L$, $H_B$, $H_R$. For these parts this is
-    \cite[lines 794--815]{Hastings2007AreaLaw}: the bound
-    depends on $W$ only through its commutator with $H$,
-    which lives near the boundary of its support.
-\end{theorem}
+    If $H\psi=E_0\psi$ and $P_{\mathrm{gs}}W\psi=0$, then
+    \begin{align}
+        \|\widetilde W\psi\| & \le\Delta E^{-1}e^{-q/2}\,\|[H,W]\psi\|.
+        \label{eq:hastings_filtered_no_ground_component}
+    \end{align}
+    In particular, (\ref{eq:hastings_filtered_no_ground_component}) holds for a
+    unique gapped ground state $\Psi_0$ when $\langle\Psi_0,W\Psi_0\rangle=0$,
+    hence for the centered parts $H_L,H_B,H_R$
+    \cite[lines 794--815]{Hastings2007AreaLaw}.
+\end{lemma}
 \begin{proof}\leanok
-    Expand in the eigenbasis of $H$. The coefficient of $[H,W]\psi$ on an
-    eigenvector of energy $E$ is $(E-E_0)$ times that of $W\psi$. Ground
-    coefficients of $W\psi$ vanish, and for an excited eigenvector
-    $E-E_0\ge\Delta E$ while the filter contributes at most $e^{-q/2}$.
-    Summing the squared coefficients gives the bound.
+    For an $H$-eigenvector $v_E$ with eigenvalue $E$,
+    $\langle v_E,[H,W]\psi\rangle=(E-E_0)\langle v_E,W\psi\rangle$. Since
+    $\langle v_{E_0},W\psi\rangle=0$ and $E-E_0\ge\Delta E$ on the excited
+    subspace, (\ref{eq:hastings_gaussian_filtered_matrix_element}) gives
+    $|\langle v_E,\widetilde W\psi\rangle|
+        \le\Delta E^{-1}e^{-q/2}|\langle v_E,[H,W]\psi\rangle|$.
 \end{proof}
 
-\begin{theorem}[Locality of filtered operators]
+\begin{lemma}[Locality of filtered operators]
     \label{thm:hastings_filtered_locality}
     \lean{
         TNLean.Lattice.norm_map_gaussianFilteredTerm_le_mass,
@@ -141,27 +227,24 @@ hold for the centered and the uncentered parts alike.
     }
     \leanok
     \uses{def:hastings_gaussian_filtered_term}
-    Let $q>0$, $T\ge0$ and $\varepsilon\ge0$, and suppose that
-    $\|[e^{iHt}We^{-iHt},O]\|\le\varepsilon$ for all $|t|\le T$. Then
-    \begin{align*}
-        \|[\widetilde W,O]\|\le\varepsilon
+    If $q>0$, $T,\varepsilon\ge0$, and
+    $\|[e^{iHt}We^{-iHt},O]\|\le\varepsilon$ for all $|t|\le T$, then
+    \begin{align}
+        \|[\widetilde W,O]\| & \le\varepsilon
         +2\|W\|\,\|O\|\,e^{-(T\Delta E)^2/(2q)}.
-    \end{align*}
-    For $q=0$ the filtered operator is $W$, and the hypothesis at $t=0$ gives
-    $\|[W,O]\|\le\varepsilon$.
-    With the Lieb--Robinson bound for $\varepsilon$ and $T$ proportional to
-    $l$, this is the locality of the filtered parts used at
+        \label{eq:hastings_filtered_locality}
+    \end{align}
+    For $q=0$, $\widetilde W=W$ and $\|[W,O]\|\le\varepsilon$ from $t=0$
     \cite[lines 816--828]{Hastings2007AreaLaw}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
-    Split the time integral at $|t|=T$. On $[-T,T]$ the commutator is at most
-    $\varepsilon$ and the Gaussian has mass at most one. Outside, the
-    commutator is at most $2\|W\|\,\|O\|$, and the Gaussian of variance
-    $h=q/\Delta E^2$ gives the complement of $[-T,T]$ mass at most $e^{-T^2/(2h)}$, by the shift
-    $t=T+s$ and $(T+s)^2\ge T^2+s^2$.
+    Split (\ref{eq:hastings_gaussian_filtered_term}) at $|t|=T$. On $[-T,T]$
+    the integrand norm is at most $\varepsilon$; on $\mathbb R\setminus[-T,T]$
+    it is at most $2\|W\|\,\|O\|$, and with $h=q/\Delta E^2$ the substitution
+    $t=T+s$ and $(T+s)^2\ge T^2+s^2$ bound the tail mass by $e^{-T^2/(2h)}$.
 \end{proof}
 
-\begin{theorem}[Localization of filtered operators by partial trace]
+\begin{lemma}[Localization of filtered operators by partial trace]
     \label{thm:hastings_filtered_partial_trace}
     \lean{
         TNLean.Lattice.norm_sub_siteExpectation_gaussianFilteredTerm_le_mass,
@@ -169,33 +252,32 @@ hold for the centered and the uncentered parts alike.
     }
     \leanok
     \uses{thm:hastings_filtered_locality}
-    For a set $K$ of sites, let $\mathbb E_K$ be the normalized partial trace
-    over the sites outside $K$, tensored with the identity there. Let $q>0$,
-    $T\ge0$ and $\varepsilon\ge0$. If
+    Let $\mathbb E_K$ be the normalized partial trace over $K^c$ tensored with
+    $1_{K^c}$. If $q>0$, $T,\varepsilon\ge0$, and
     $\|e^{iHt}We^{-iHt}-\mathbb E_K(e^{iHt}We^{-iHt})\|\le\varepsilon$ for all
-    $|t|\le T$, then
-    \begin{align*}
-        \|\widetilde W-\mathbb E_K(\widetilde W)\|\le\varepsilon
+    $|t|\le T$, then $\mathbb E_K(\widetilde W)$ is supported on $K$, satisfies
+    $\|\mathbb E_K(\widetilde W)\|\le\|W\|$, and
+    \begin{align}
+        \|\widetilde W-\mathbb E_K(\widetilde W)\| & \le\varepsilon
         +2\|W\|\,e^{-(T\Delta E)^2/(2q)}.
-    \end{align*}
-    The operator $\mathbb E_K(\widetilde W)$ acts on $K$ and has norm at most
-    $\|W\|$. For $q=0$ the filtered operator is $W$, and the hypothesis at
-    $t=0$ gives the bound $\varepsilon$. It replaces the truncated evolution by which
-    \cite[lines 816--828]{Hastings2007AreaLaw} approximates the filtered parts.
-\end{theorem}
+        \label{eq:hastings_filtered_partial_trace}
+    \end{align}
+    For $q=0$, $\|\widetilde W-\mathbb E_K(\widetilde W)\|\le\varepsilon$. This
+    replaces the truncated-evolution approximation of
+    \cite[lines 816--828]{Hastings2007AreaLaw}.
+\end{lemma}
 \begin{proof}\leanok
-    The map $M\mapsto M-\mathbb E_K(M)$ is linear and continuous, so it
-    commutes with the time integral. Split the integral at $|t|=T$ as in
-    Theorem~\ref{thm:hastings_filtered_locality}; outside $[-T,T]$ the
-    integrand is at most $2\|W\|$, since the partial trace does not increase
-    the norm.
+    Since $\mathrm{id}-\mathbb E_K$ is continuous and linear with
+    $\|(\mathrm{id}-\mathbb E_K)(M)\|\le2\|M\|$, splitting the time integral at
+    $|t|=T$ as in Lemma~\ref{thm:hastings_filtered_locality} gives
+    (\ref{eq:hastings_filtered_partial_trace}).
 \end{proof}
 
 \subsection*{The localized parts and the cut-offs}
 
 % The source prints the bound J^2 (line 794), which fails already for
 % nearest-neighbour terms; the entry states the corrected constant.
-\begin{theorem}[Commutators of the parts with the Hamiltonian]
+\begin{lemma}[Commutators of the parts with the Hamiltonian]
     \label{thm:hastings_part_commutators}
     \lean{
         TNLean.MPS.AreaLaw.ChainHamiltonian.norm_commutator_leftPart_le,
@@ -207,23 +289,25 @@ hold for the centered and the uncentered parts alike.
     }
     \leanok
     \uses{def:hastings_three_way_splitting}
-    Let $H$ be a finite-range Hamiltonian of range $R$ on the chain of $L$
-    sites with terms of norm at most $J$, and let $H_L$, $H_B$, $H_R$ be its
-    parts at the cut $j$ with buffer width $m$. Then
-    \begin{align*}
-        \|[H,H_L]\|\le c_RJ^2,\qquad\|[H,H_R]\|\le c_RJ^2, \\
-        [H,H_B]=-([H,H_L]+[H,H_R]),\qquad\|[H,H_B]\|\le2c_RJ^2,
-    \end{align*}
-    with $c_R=2N_R(R+1)2^{2R+1}$, where $N_R$ bounds the number of terms
-    that cross a cut. The commutator $[H,H_L]$ acts on the sites
-    $\{j-m-2R,\dots,j-m+R-1\}$ and $[H,H_R]$ on $\{j+m-R,\dots,j+m+2R-1\}$,
-    intersected with the chain. The source states $\|[H,H_L]\|\le J^2$
-    \cite[line 794]{Hastings2007AreaLaw}; this fails already for
-    nearest-neighbour terms, and the constant $c_R$ is the correction
-    recorded in~\cite{gap:hastings07_commutator_constant}.
-\end{theorem}
+    Let $H$ have range $R$ and term norm bound $J$ on $L$ sites, with
+    three-way splitting $H_L,H_B,H_R$ at cut $j$ and buffer width $m$. With
+    $c_R=2N_R(R+1)2^{2R+1}$, where $N_R$ bounds the number of terms crossing a
+    cut,
+    \begin{align}
+        \|[H,H_L]\|,\ \|[H,H_R]\| & \le c_RJ^2,          &
+        [H,H_B]                   & =-([H,H_L]+[H,H_R]), &
+        \|[H,H_B]\|               & \le2c_RJ^2.
+        \label{eq:hastings_part_commutators}
+    \end{align}
+    Moreover, $[H,H_L]$ is supported on
+    $S_L=\{j-m-2R,\dots,j-m+R-1\}\cap\{0,\dots,L-1\}$ and $[H,H_R]$ on
+    $S_R=\{j+m-R,\dots,j+m+2R-1\}\cap\{0,\dots,L-1\}$. The factor $c_R$
+    corrects the printed bound $\|[H,H_L]\|\le J^2$ of
+    \cite[line 794]{Hastings2007AreaLaw}; see
+    \cite{gap:hastings07_commutator_constant}.
+\end{lemma}
 
-\begin{theorem}[Localized filtered parts]
+\begin{lemma}[Localized filtered parts]
     \label{thm:hastings_localized_parts}
     \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.norm_gaussianFilteredTerm_leftPart_sub_localized_le,
         TNLean.MPS.AreaLaw.ChainHamiltonian.norm_gaussianFilteredTerm_rightPart_sub_localized_le,
@@ -236,86 +320,74 @@ hold for the centered and the uncentered parts alike.
     \uses{thm:hastings_filtered_partial_trace, thm:hastings_part_commutators,
         thm:chain_lieb_robinson, thm:hastings_gaussian_filtered_spectral,
         thm:hastings_three_way_splitting_sum}
-    Let $H$ be a finite-range Hamiltonian of range $R$ on the chain of $L$
-    sites with terms of norm at most $J$, let $H_L$, $H_B$, $H_R$ be its
-    parts at the cut $j$ with buffer width $m$, filtered with parameter $q>0$,
-    and put $h=q/\Delta E^2$. Let $S_L=\{j-m-2R,\dots,j-m+R-1\}$ and
-    $S_R=\{j+m-R,\dots,j+m+2R-1\}$, intersected with the chain, be the windows
-    on which $[H,H_L]$ and $[H,H_R]$ act, and put $S_B=S_L\cup S_R$. For
-    $\ell\ge0$ let $K_\bullet$ be the set of sites within distance $\ell$ of
-    $S_\bullet$, and
-    \begin{align*}
-        M_\bullet=H_\bullet+\mathbb E_{K_\bullet}(\widetilde H_\bullet-H_\bullet)
-    \end{align*}
-    for $\bullet$ one of $L$, $B$, $R$. Then $M_\bullet$ is Hermitian and
-    $M_\bullet-H_\bullet$ acts on $K_\bullet$. With $C'$ and $v$ the constants
-    of Theorem~\ref{thm:chain_lieb_robinson} for $b_0=2^{2R+1}J$ and $c_R$ the
-    constant of Theorem~\ref{thm:hastings_part_commutators}, for every
-    $T\ge0$
-    \begin{align*}
+    In the setting of Lemma~\ref{thm:hastings_part_commutators}, let $q>0$,
+    $h=q/\Delta E^2$, $S_B=S_L\cup S_R$, and for $\ell\ge0$ let $K_\bullet$ be
+    the $\ell$-neighbourhood of $S_\bullet$ ($\bullet\in\{L,B,R\}$). Define
+    \begin{align}
+        M_\bullet & =H_\bullet+\mathbb E_{K_\bullet}(\widetilde H_\bullet-H_\bullet).
+        \label{eq:hastings_localized_part_def}
+    \end{align}
+    Then $M_\bullet=M_\bullet^\dagger$ and $M_\bullet-H_\bullet$ is supported
+    on $K_\bullet$. With $(C',v)$ from Lemma~\ref{thm:chain_lieb_robinson} at
+    $b_0=2^{2R+1}J$ and $c_R$ from Lemma~\ref{thm:hastings_part_commutators},
+    for all $T\ge0$,
+    \begin{align}
         \|\widetilde H_L-M_L\|,\ \|\widetilde H_R-M_R\|
          & \le T\,C'(3R)^2c_RJ^2e^{vT-\ell/2}
-        +2c_RJ^2\sqrt{2h/\pi}\,e^{-T^2/(2h)},    \\
+        +2c_RJ^2\sqrt{2h/\pi}\,e^{-T^2/(2h)},
+        \label{eq:hastings_localized_parts_lr}   \\
         \|\widetilde H_B-M_B\|
          & \le T\,C'(6R)^2\,2c_RJ^2e^{vT-\ell/2}
-        +4c_RJ^2\sqrt{2h/\pi}\,e^{-T^2/(2h)}.
-    \end{align*}
-    The bounds do not depend on $L$. This is
-    \cite[lines 816--828]{Hastings2007AreaLaw} with the error measured from
-    the filtered parts: the source prints the bound
-    $\mathcal O(\Delta E^{-1}J^2e^{-l/(3\xi)})$ on $\|M_\bullet-H_\bullet\|$,
-    which cannot hold in general, while its next step uses the distance
-    $\|\widetilde H_\bullet-M_\bullet\|$
+        +4c_RJ^2\sqrt{2h/\pi}\,e^{-T^2/(2h)},
+        \label{eq:hastings_localized_parts_b}
+    \end{align}
+    independently of $L$. This is
+    \cite[lines 816--828]{Hastings2007AreaLaw} measured from
+    $\widetilde H_\bullet$ rather than $H_\bullet$
     \cite{gap:hastings07_filtered_part_localization}. Since
     $\widetilde H_L+\widetilde H_B+\widetilde H_R=H-E_0$, the sum
-    $M=M_L+M_B+M_R$ satisfies $\|M-(H-E_0)\|\le\|\widetilde H_L-M_L\|
-        +\|\widetilde H_B-M_B\|+\|\widetilde H_R-M_R\|$; with the ground energy
-    set to zero, as in \cite[lines 766--767]{Hastings2007AreaLaw}, this is
-    the estimate of \cite[lines 849--850]{Hastings2007AreaLaw}.
-\end{theorem}
+    $M=M_L+M_B+M_R$ satisfies
+    $\|M-(H-E_0)\|\le\sum_{\bullet\in\{L,B,R\}}\|\widetilde H_\bullet-M_\bullet\|$
+    \cite[lines 766--767, 849--850]{Hastings2007AreaLaw}.
+\end{lemma}
 
-\begin{theorem}[The cut-offs $O_L$ and $O_R$]
+\begin{lemma}[The cut-offs $O_L$ and $O_R$]
     \label{thm:hastings_cutoffs}
     \uses{thm:hastings_localized_parts, thm:hastings_filtered_no_ground_component,
         def:hastings_spectral_cutoff, thm:hastings_spectral_cutoff_obd,
         thm:hastings_spectral_cutoff_norm, thm:hastings_spectral_cutoff_support,
         thm:hastings_spectral_cutoff_commute}
-    Let $\theta>0$, and let $O_L$ and $O_R$ be the spectral projections of
-    the Hermitian operators $M_L$ and $M_R$ onto the eigenvectors whose
-    eigenvalues have absolute value at most $\theta$. Suppose that $M_L$ acts
-    on $X_{1,j}$ and $M_R$ on
-    $X_{j+1,N}$. Then $O_L$ and $O_R$ are commuting orthogonal projections,
-    $O_L$ acts on $X_{1,j}$ and $O_R$ on $X_{j+1,N}$, and
-    \begin{align*}
-        \|(O_L-1)\Psi_0\|\le\frac{\|M_L\Psi_0\|}{\theta},\qquad
-        \|(O_R-1)\Psi_0\|\le\frac{\|M_R\Psi_0\|}{\theta},\qquad
-        \|M_LO_L\|,\ \|M_RO_R\|\le\theta.
-    \end{align*}
-    With the parameters of the source, $q=(l/3)\Delta E/v$ and the buffer
-    width and localization radius proportional to $l$,
-    Theorems~\ref{thm:hastings_filtered_no_ground_component}
-    and~\ref{thm:hastings_localized_parts} give
-    $\|M_L\Psi_0\|,\|M_R\Psi_0\|\le\mathcal O(\mathrm{poly}(l)\,e^{-l/(3\xi)})$,
-    and the threshold $\theta=\Delta E^{-1}J^2e^{-l/(6\xi)}$ then gives
-    $\|(O_L-1)\Psi_0\|,\|(O_R-1)\Psi_0\|\le\mathcal O(\mathrm{poly}(l)\,
-        e^{-l/(6\xi)})$, which is \cite[lines 829--841]{Hastings2007AreaLaw}
-    with the polynomial factor kept. The source cuts off
-    at the eigenvalues at most $\theta$, not at their absolute values. The
-    bound $\|e^{i(M_L+M_R)t}O_LO_R-O_LO_R\|\le2|t|\theta$ used at
-    \cite[lines 879--880]{Hastings2007AreaLaw} needs the cut-off on the
-    absolute value: with the printed cut-off, $M_L$ may have eigenvalues far
-    below $-\theta$ on the range of $O_L$
+    For $\theta>0$ and Hermitian $M_L,M_R$ supported on $X_{1,j}$ and
+    $X_{j+1,N}$, let $O_L=1_{[-\theta,\theta]}(M_L)$ and
+    $O_R=1_{[-\theta,\theta]}(M_R)$. Then $O_L,O_R$ are commuting orthogonal
+    projections supported on $X_{1,j}$ and $X_{j+1,N}$, and
+    \begin{align}
+        \|(O_L-1)\Psi_0\|       & \le\frac{\|M_L\Psi_0\|}{\theta}, &
+        \|(O_R-1)\Psi_0\|       & \le\frac{\|M_R\Psi_0\|}{\theta}, &
+        \|M_LO_L\|,\ \|M_RO_R\| & \le\theta.
+        \label{eq:hastings_cutoffs_bounds}
+    \end{align}
+    For $q=(l/3)\Delta E/v$, buffer width and localization radius $\propto l$,
+    and $\theta=\Delta E^{-1}J^2e^{-l/(6\xi)}$,
+    Lemmas~\ref{thm:hastings_filtered_no_ground_component}
+    and~\ref{thm:hastings_localized_parts} yield
+    $\|M_\bullet\Psi_0\|\le\mathcal O(\mathrm{poly}(l)e^{-l/(3\xi)})$ and
+    $\|(O_\bullet-1)\Psi_0\|\le\mathcal O(\mathrm{poly}(l)e^{-l/(6\xi)})$
+    \cite[lines 829--841]{Hastings2007AreaLaw}. Cutting off $|\lambda|\le\theta$
+    rather than $\lambda\le\theta$ is required for
+    $\|e^{i(M_L+M_R)t}O_LO_R-O_LO_R\|\le2|t|\theta$ at
+    \cite[lines 879--880]{Hastings2007AreaLaw}; see
     \cite{gap:hastings07_spectral_cutoff_threshold}.
-\end{theorem}
+\end{lemma}
 \begin{proof}
-    The spectral projection of a Hermitian operator is an orthogonal
-    projection, and it is supported where the operator is. Projections of
-    operators on disjoint sets of sites commute.
-    Theorems~\ref{thm:hastings_spectral_cutoff_obd}
-    and~\ref{thm:hastings_spectral_cutoff_norm} give the two bounds.
+    Spectral projections of Hermitian operators on disjoint supports are
+    commuting orthogonal projections on those supports;
+    Lemmas~\ref{thm:hastings_spectral_cutoff_obd}
+    and~\ref{thm:hastings_spectral_cutoff_norm} give
+    (\ref{eq:hastings_cutoffs_bounds}).
 \end{proof}
 
-\begin{theorem}[The cut-offs on the chain]
+\begin{lemma}[The cut-offs on the chain]
     \label{thm:hastings_cutoff_pair}
     \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.exists_cutoffPair,
         TNLean.MPS.AreaLaw.ChainHamiltonian.localizedPart,
@@ -329,127 +401,110 @@ hold for the centered and the uncentered parts alike.
     \leanok
     \uses{thm:hastings_localized_parts, thm:hastings_cutoffs,
         thm:hastings_filtered_no_ground_component, thm:hastings_part_commutators}
-    Let $\Psi_0$ be a gapped ground vector of a finite-range Hamiltonian $H$ of
-    range $R$ with terms of norm at most $J\ge0$, with ground energy $E_0$ and
-    gap $\Delta E>0$. Split $H$ at the cut $j$ with buffer width $m$, center
-    the left and right parts at their ground-state expectations, and localize
-    them as in Theorem~\ref{thm:hastings_localized_parts}, with filter
-    parameter $q\ge0$ and radius $k$, where $R+k\le m$. Let $O_L$, $O_R$ be
-    their cut-offs at $\theta>0$ and $H_0=M_L+M_R$. Then $M_L$ acts on
-    $X_{1,j}$ and $M_R$ on $X_{j+1,N}$, so Theorem~\ref{thm:hastings_cutoffs}
-    applies, and for every $T\ge0$
-    \begin{align*}
+    Let $\Psi_0$ be a gapped ground vector of $H$ (range $R$, term norm bound
+    $J\ge0$, ground energy $E_0$, gap $\Delta E>0$). For cut $j$, buffer width
+    $m$, filter parameter $q\ge0$, and localization radius $k$ with
+    $R+k\le m$, let $M_L,M_R$ be the localized centered parts of
+    Lemma~\ref{thm:hastings_localized_parts} ($\ell=k$), $O_L,O_R$ their
+    cut-offs at $\theta>0$, and $H_0=M_L+M_R$. Then $M_L,O_L$ act on $X_{1,j}$,
+    $M_R,O_R$ act on $X_{j+1,N}$, and for every $T\ge0$,
+    \begin{align}
         \|\Psi_0-O_LO_R\Psi_0\|
-         & \le\frac2\theta\bigl(\Delta E^{-1}e^{-q/2}c_RJ^2+\delta\bigr), \\
+         & \le\frac2\theta\bigl(\Delta E^{-1}e^{-q/2}c_RJ^2+\delta\bigr), &
         \|H_0O_LO_R\|
          & \le2\theta,
-    \end{align*}
-    where $\delta$ is the bound of Theorem~\ref{thm:hastings_localized_parts}
-    for $M_L$ and $M_R$ with $\ell=k$. Moreover $H-E_0-H_0$ acts on the
-    sites within $m+2R+k$ of the cut, with
-    \begin{align*}
-        \|H-E_0-H_0\|\le4(m+R)2^{2R+1}J+2\sqrt{2h/\pi}\,c_RJ^2,
-        \qquad h=q/\Delta E^2,
-    \end{align*}
-    a bound that does not depend on the length of the chain. This assembles
+        \label{eq:hastings_cutoff_pair}
+    \end{align}
+    where $\delta$ is the right-hand side of
+    (\ref{eq:hastings_localized_parts_lr}) at $\ell=k$. Moreover,
+    $H-E_0-H_0$ is supported within distance $m+2R+k$ of $j$ and satisfies,
+    uniformly in $L$,
+    \begin{align}
+        \|H-E_0-H_0\| & \le4(m+R)2^{2R+1}J+2\sqrt{2h/\pi}\,c_RJ^2,
+        \qquad h=q/\Delta E^2
+        \label{eq:hastings_cutoff_pair_remainder}
+    \end{align}
     \cite[lines 766--842]{Hastings2007AreaLaw}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
-    Centering subtracts a multiple of the identity, which changes neither
-    $[H,H_\bullet]$ nor $\widetilde H_\bullet-H_\bullet$. Hence
+    By Lemmas~\ref{thm:hastings_filtered_no_ground_component}
+    and~\ref{thm:hastings_localized_parts},
     $\|M_\bullet\Psi_0\|\le\|\widetilde H_\bullet\Psi_0\|
-        +\|\widetilde H_\bullet-M_\bullet\|\le\Delta E^{-1}e^{-q/2}c_RJ^2+\delta$
-    by Theorems~\ref{thm:hastings_filtered_no_ground_component}
-    and~\ref{thm:hastings_localized_parts}, and
-    Theorem~\ref{thm:hastings_cutoffs} gives the first two bounds. The
-    centered parts sum to $H-E_0$, so $H-E_0-H_0$ is the centered buffer part
-    minus the two partial-trace corrections. The centered buffer part has norm
-    at most twice $\|H_B\|$, and each correction is at most
-    $\|\widetilde H_\bullet-H_\bullet\|\le\sqrt{2h/\pi}\,\|[H,H_\bullet]\|$,
-    by the Duhamel formula and the first absolute moment of the Gaussian.
+        +\|\widetilde H_\bullet-M_\bullet\|\le\Delta E^{-1}e^{-q/2}c_RJ^2+\delta$,
+    so Lemma~\ref{thm:hastings_cutoffs} gives (\ref{eq:hastings_cutoff_pair}).
+    Since $H-E_0-H_0=H_B-\sum_{\bullet\in\{L,R\}}\mathbb E_{K_\bullet}(\widetilde H_\bullet-H_\bullet)$,
+    using $\|H_B\|\le4(m+R)2^{2R+1}J$ and the Duhamel bound
+    $\|\widetilde H_\bullet-H_\bullet\|\le\sqrt{2h/\pi}\,\|[H,H_\bullet]\|$
+    yields (\ref{eq:hastings_cutoff_pair_remainder}).
 \end{proof}
 
 \subsection*{The Gaussian time average and the boundary operator}
 
-For $q>0$, $P_q$ is the Gaussian time average of
-Definition~\ref{def:hastings_gaussian_time_average}. With ground energy zero,
-Theorems~\ref{thm:hastings_gaussian_time_average_gap}
-and~\ref{thm:hastings_gaussian_time_average_stability} give
-$\|P_q(H)-P_0\|\le e^{-q/2}$ and
-$\|P_q(M)-P_q(H)\|\le\sqrt q\,\Delta E^{-1}\|M-H\|$ for Hermitian $M$, the gap
-bound and the first inequality of the display in
-\cite[lines 843--864]{Hastings2007AreaLaw}, with $M=M_L+M_B+M_R$.
+For $q>0$, the Gaussian time average $P_q$ of
+Definition~\ref{def:hastings_gaussian_time_average} with $E_0=0$ and
+$M=M_L+M_B+M_R=M^\dagger$ satisfies $\|P_q(H)-P_0\|\le e^{-q/2}$ and
+$\|P_q(M)-P_q(H)\|\le\sqrt q\,\Delta E^{-1}\|M-H\|$ by
+Lemmas~\ref{thm:hastings_gaussian_time_average_gap}
+and~\ref{thm:hastings_gaussian_time_average_stability}
+\cite[lines 843--864]{Hastings2007AreaLaw}. If $\|M-H\|\le\delta$ and
+$\|\Psi_0-O_LO_R\Psi_0\|\le\eta$, Lemma~\ref{thm:hastings_moved_estimate}
+gives $\|P_q(M)O_LO_R-P_0\|\le e^{-q/2}+\sqrt q\,\Delta E^{-1}\delta+\eta$
+\cite[lines 865--876]{Hastings2007AreaLaw}. Writing
+$e^{i(A+B)t}=U(t)e^{iAt}$ and averaging $U(t)$ to $P_B$
+(Definitions~\ref{def:hastings_interaction_propagator}
+and~\ref{def:hastings_interaction_average}) with $A=M_L+M_R$, $B=M_B$, and
+$X=O_LO_R$, Lemma~\ref{thm:hastings_interaction_average_last} bounds
+$\|P_BX-P_0\|$ \cite[lines 877--905]{Hastings2007AreaLaw}.
 
-For $M$ Hermitian with $\|M-H\|\le\delta$ and commuting orthogonal projections
-$O_L$, $O_R$ with $\|\Psi_0-O_LO_R\Psi_0\|\le\eta$,
-Theorem~\ref{thm:hastings_moved_estimate} gives
-$\|P_q(M)\,O_LO_R-P_0\|\le e^{-q/2}+\sqrt q\,\Delta E^{-1}\delta+\eta$, which is
-\cite[lines 865--876]{Hastings2007AreaLaw}; the cut-offs of
-Theorem~\ref{thm:hastings_cutoffs} supply $\eta$.
-
-The interaction picture $e^{i(A+B)t}=U(t)e^{iAt}$ and the Gaussian average
-$P_B$ of $U(t)$ are Definitions~\ref{def:hastings_interaction_propagator}
-and~\ref{def:hastings_interaction_average}. With $A=M_L+M_R$, $B=M_B$ and
-$X=O_LO_R$, Theorem~\ref{thm:hastings_interaction_average_last} is the bound of
-\cite[lines 877--905]{Hastings2007AreaLaw} on $\|P_BX-P_0\|$.
-
-\begin{theorem}[Localization of the boundary average]
+\begin{lemma}[Localization of the boundary average]
     \label{thm:hastings_boundary_localization}
     \lean{TNLean.MPS.AreaLaw.Hastings.exists_supported_interactionAverage_approx,
         TNLean.MPS.AreaLaw.Hastings.exists_supported_interactionAverage_approx_exp}
     \leanok
     \uses{def:hastings_interaction_average, thm:chain_lieb_robinson}
-    Let $H$ be a finite-range Hamiltonian of range $R$ on the chain of $L$
-    sites with local dimension $d\ge1$ and terms of norm at most $J$. Let $H_0$,
-    $A$ and $B$ be Hermitian, with $H-H_0$ supported on a set of sites $Z$, and
-    let $P_B$ be the Gaussian average of
-    Definition~\ref{def:hastings_interaction_average} for $A$, $B$ and a
-    variance $h>0$. Let $C'$ and $v$ be the constants of
-    Theorem~\ref{thm:chain_lieb_robinson} for $b_0=2^{2R+1}J$. Then for every
-    $\ell\ge0$ and $T\ge0$ there is an operator $O_B$ supported on the sites
-    within distance $\ell$ of $Z$, with $\|O_B\|\le1$ and
+    Let $H$ have range $R$, local dimension $d\ge1$, and term norm bound $J$ on
+    $L$ sites. Let $H_0,A,B$ be Hermitian with $H-H_0$ supported on $Z$, and let
+    $P_B$ be the interaction average of
+    Definition~\ref{def:hastings_interaction_average} for $(A,B,h)$ with $h>0$.
+    With $(C',v)$ from Lemma~\ref{thm:chain_lieb_robinson} at
+    $b_0=2^{2R+1}J$, for every $\ell,T\ge0$ there exists $O_B$ supported within
+    distance $\ell$ of $Z$ such that $\|O_B\|\le1$ and
     \begin{align}
         \|P_B-O_B\| & \le\sqrt h\,\bigl(\|A+B-H\|+\|A-H_0\|
         +C'|Z|^2\|H-H_0\|e^{vT-\ell/2}\bigr)+4e^{-T^2/(2h)}.
         \label{eq:hastings_boundary_localization}
     \end{align}
-    For $T=\ell/(4v)$ the last two terms are
-    $\sqrt h\,C'|Z|^2\|H-H_0\|e^{-\ell/4}$ and $4e^{-\ell^2/(32v^2h)}$.
-    No positivity of $O_B$ is claimed, as in the note added
-    to~\cite{Hastings2007AreaLaw}.
-\end{theorem}
+    At $T=\ell/(4v)$, the last two terms become
+    $\sqrt h\,C'|Z|^2\|H-H_0\|e^{-\ell/4}+4e^{-\ell^2/(32v^2h)}$.
+    No positivity of $O_B$ is claimed \cite[note added]{Hastings2007AreaLaw}.
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:qc_supported_projected_relative_evolution}
-    Write $V(t)=e^{iHt}e^{-iH_0t}$. Its generator is the Heisenberg evolution
-    of $H-H_0$, which Theorem~\ref{thm:chain_lieb_robinson} approximates by
-    an operator supported within distance $\ell$ of $Z$ up to
-    $C'|Z|^2\|H-H_0\|e^{v|s|-\ell/2}$ at time $s$. The evolution generated by
-    the projected generator is a unitary $\widetilde V(t)$ supported there,
-    within $|t|\,C'|Z|^2\|H-H_0\|e^{vT-\ell/2}$ of $V(t)$ for $|t|\le T$. The
-    propagator $U(t)$ is within $|t|(\|A+B-H\|+\|A-H_0\|)$ of $V(t)$. Put
-    $O_B=\int\widetilde V(t)\,d\gamma_h(t)$. Integrating against $\gamma_h$
-    with $\int|t|\,d\gamma_h\le\sqrt h$, and using the bound $2$ on
-    $\|U(t)-\widetilde V(t)\|$ where $|t|>T$, whose Gaussian mass is at most
-    $2e^{-T^2/(2h)}$, gives~(\ref{eq:hastings_boundary_localization}).
+    The relative evolution $V(t)=e^{iHt}e^{-iH_0t}$ has generator
+    $e^{iHs}(H-H_0)e^{-iHs}$, which Lemma~\ref{thm:chain_lieb_robinson}
+    approximates within distance $\ell$ of $Z$ up to
+    $C'|Z|^2\|H-H_0\|e^{v|s|-\ell/2}$. By
+    Lemma~\ref{thm:qc_supported_projected_relative_evolution}, the projected
+    generator integrates to a unitary $\widetilde V(t)$ supported there with
+    $\|V(t)-\widetilde V(t)\|\le|t|C'|Z|^2\|H-H_0\|e^{vT-\ell/2}$ for
+    $|t|\le T$, while $\|U(t)-V(t)\|\le|t|(\|A+B-H\|+\|A-H_0\|)$. Setting
+    $O_B=\int\widetilde V(t)\,d\gamma_h(t)$ and using
+    $\int|t|\,d\gamma_h\le\sqrt h$ on $[-T,T]$ and $\|U(t)-\widetilde V(t)\|\le2$
+    with tail mass $2e^{-T^2/(2h)}$ on $\mathbb R\setminus[-T,T]$ gives
+    (\ref{eq:hastings_boundary_localization}).
 \end{proof}
 
-In the source's application $A=H_0=M_L+M_R$ and $B=M_B$, so $\|A-H_0\|=0$,
-while $\|A+B-H\|$, with the ground energy set to zero, is the error of the
-localized parts of Theorem~\ref{thm:hastings_localized_parts}, exponentially
-small in $l$ \cite[lines 849--850]{Hastings2007AreaLaw}. Alternatively, take
-$B=H-E_0-H_0$. Adding $E_0$ to $A$ does not change $P_B$, since the two
-phases $e^{\pm iE_0t}$ cancel, so the theorem may be applied with $A$ and the
-comparison operator both equal to $H_0+E_0$; then $A+B=H$ and both norms
-vanish. $Z$ is
-the window of width proportional to $l$ that carries $H-H_0$. With $h=q/\Delta E^2$,
-$q$ proportional to $l$, and $\ell$ proportional to $l$, the bound becomes
-the $\mathcal O(\Delta E^{-1}J\sqrt q\,e^{-l/(6\xi)})$
-of~\cite[lines 896--905]{Hastings2007AreaLaw}, and $O_B$ acts on
+With $A=H_0+E_0$ and $B=H-E_0-H_0$ (which leaves $P_B$ unchanged since
+$e^{\pm iE_0t}$ cancel), $\|A-H_0\|=\|A+B-H\|=0$, $|Z|=\mathcal O(l)$, and
+$h=q/\Delta E^2$ with $q,\ell\propto l$, so
+(\ref{eq:hastings_boundary_localization}) yields the
+$\mathcal O(\Delta E^{-1}J\sqrt q\,e^{-l/(6\xi)})$ bound of
+\cite[lines 896--905]{Hastings2007AreaLaw} with $O_B$ supported on
 $X_{j-l+1,j+l}$.
 
 \subsection*{The factorization and its positive version}
 
-\begin{theorem}[Approximate factorization without positivity]
+\begin{lemma}[Approximate factorization without positivity]
     \label{thm:hastings_projector_factorization}
     \lean{TNLean.MPS.AreaLaw.exists_projectorFactorization,
         TNLean.MPS.AreaLaw.exists_projectorFactorization_posSemidef,
@@ -473,27 +528,25 @@ $X_{j-l+1,j+l}$.
         thm:hastings_cutoffs, thm:hastings_gaussian_time_average_stability,
         thm:hastings_moved_estimate, thm:hastings_interaction_average_last,
         thm:hastings_boundary_localization}
-    Let $H$ be a finite-range Hamiltonian of range $R$ with terms of norm at
-    most $J$, with a unique ground state $\Psi_0$ and a gap $\Delta E>0$ to
-    the first excited state, and let $P_0=|\Psi_0\rangle\langle\Psi_0|$.
-    Set $\xi=8\max(2v_0/\Delta E,1)$, where $v_0$ is the velocity in the
-    chain localization estimate. Take the variance parameter
-    \begin{align*}
-        q=\frac{2l}{3\xi}
-    \end{align*}
-    in the filtered parts and in the time averages. When $\xi=2v/\Delta E$
-    this is $(l/3)\Delta E/v$, twice the value printed in
-    \cite[line 792]{Hastings2007AreaLaw}. It gives $q/2=l/(3\xi)$, so
-    $e^{-q/2}=e^{-l/(3\xi)}$, the bound used for $\|P_q-P_0\|$ in
-    \cite[line 848]{Hastings2007AreaLaw}; the printed value gives only
-    $e^{-q/2}\le e^{-l/(6\xi)}$. Let $\xi'>6\xi$. Then there is a constant
-    $C_1$, depending only on $\xi'-6\xi$ and on $R$, $J$ and $\Delta E$, such
-    that for every cut $j$ and every $l$ there are
-    operators $O_B$, $O_L$, $O_R$ with the following properties:
+    Let $H$ have range $R$, term norm bound $J$, unique ground state $\Psi_0$,
+    gap $\Delta E>0$, and ground projector
+    $P_0=|\Psi_0\rangle\langle\Psi_0|$. Set $\xi=8\max(2v_0/\Delta E,1)$, where
+    $v_0$ is the chain localization velocity, and choose
+    \begin{align}
+        q & =\frac{2l}{3\xi},
+        \label{eq:hastings_lemma1_q}
+    \end{align}
+    which doubles the printed value of \cite[line 792]{Hastings2007AreaLaw} so
+    that $e^{-q/2}=e^{-l/(3\xi)}$ as used in
+    \cite[line 848]{Hastings2007AreaLaw}
+    \cite{gap:hastings07_gaussian_average_exponent}. For every $\xi'>6\xi$
+    there exists $C_1=C_1(R,J,\Delta E,\xi'-6\xi)\ge0$, independent of $L$, the
+    local dimension, and $\Psi_0$, such that for every cut $j$ and every $l$
+    there exist $O_B,O_L,O_R$ satisfying:
     \begin{enumerate}
-        \item $O_L$ and $O_R$ are commuting orthogonal projections, $O_L$
-              acting on $X_{1,j}$ and $O_R$ on $X_{j+1,N}$;
-        \item $\|O_B\|\le1$, and $O_B$ acts on $X_{j-l+1,j+l}$;
+        \item $O_L,O_R$ are commuting orthogonal projections supported on
+              $X_{1,j}$ and $X_{j+1,N}$;
+        \item $\|O_B\|\le1$ and $O_B$ is supported on $X_{j-l+1,j+l}$;
         \item $\|O_BO_LO_R-P_0\|\le C_1e^{-l/\xi'}$.
     \end{enumerate}
     The argument of the appendix gives the error
@@ -517,38 +570,34 @@ $X_{j-l+1,j+l}$.
     quadratic factor of the localization enters with supports of at most $6R$
     sites for the parts and of $O(R+l)$ sites for the boundary operator, where
     the faster decay of that term absorbs the resulting polynomial in $l$; it
-    changes the constant, not the length or the rate. It differs from the source's Lieb--Robinson bound in that its
-    prefactor grows with $J$ and the second operator acts on one site, so
-    $(v_0,2)$ is not shown to be a Lieb--Robinson pair in the source's
-    sense~\cite{gap:hastings07_lemma1_decay_length}. The constant $C_1$
+    changes the constant, not the length or the rate.
+    The numerical finite-support estimate of
+    Lemma~\ref{thm:hastings_chain_lieb_robinson} shows that the physical
+    pair $(8v_0,8)$ is admissible. The constant $C_1$
     depends only on $R$, $J$, $\Delta E$ and $\xi'$: it is the same for every
     length of the chain, every local dimension and every gapped ground state.
     No polynomial bound on $C_1$ in $\xi$ alone is asserted here, unlike
     Lemma~\ref{lem:hastings_lemma1}.
     Replacing $O_B$ by $O_B^\dagger O_B$ gives the positive version at the rate
-    $e^{-l/(2\xi')}$, as in Theorem~\ref{thm:hastings_positive_factorization}.
-\end{theorem}
+    $e^{-l/(2\xi')}$, as in Lemma~\ref{thm:hastings_positive_factorization}.
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:hastings_cutoff_pair, thm:hastings_moved_estimate,
         thm:hastings_boundary_factorization, thm:hastings_decay_slack,
         thm:hastings_positive_factorization, thm:hastings_factorization_rate,
         thm:hastings_positive_factorization_rate}
-    Shift $H$ by its ground energy. For $l\ge12R+8$ take $s=2l/(3\xi)$,
-    $\theta=e^{-s/4}$, $T=s/\Delta E$, $k=\lceil l/4\rceil$, $m=R+k$ and
-    $\ell'=l-3R-2k$. Theorem~\ref{thm:hastings_cutoff_pair} gives $O_L$,
-    $O_R$ and $H_0=M_L+M_R$. Theorem~\ref{thm:hastings_moved_estimate}, with
-    the shifted Hamiltonian in both places, bounds the time average next to
-    $O_LO_R$, and Theorem~\ref{thm:hastings_boundary_factorization} produces
-    $O_B$ on the sites within $m+2R+k+\ell'=l$ of the cut. Each of the
-    resulting error terms is at most $(a+b\sqrt l)e^{-l/(6\xi)}$ with $a$,
-    $b$ depending only on $R$, $J$ and $\Delta E$; the polynomial factors are
-    absorbed by the slack between the rates $l/8$ and $l/(6\xi)\le l/48$. For
-    $l<12R+8$ the factorization $O_B=0$, $O_L=O_R=1$ has error $1$, which the
-    constant absorbs. Theorem~\ref{thm:hastings_decay_slack} converts the
-    square-root bound into $C_1e^{-l/\xi'}$ for every $\xi'>6\xi$.
+    Shift $H$ so that $E_0=0$. For $l\ge12R+8$, set $s=2l/(3\xi)$,
+    $\theta=e^{-s/4}$, $T=s/\Delta E$, $k=\lceil l/4\rceil$, $m=R+k$, and
+    $\ell'=l-3R-2k$. Combining Lemmas~\ref{thm:hastings_cutoff_pair},
+    \ref{thm:hastings_moved_estimate}, and
+    \ref{thm:hastings_boundary_factorization} produces $O_L,O_R,O_B$ with $O_B$
+    supported within $m+2R+k+\ell'=l$ of $j$ and total error bounded by
+    $(a+b\sqrt l)e^{-l/(6\xi)}$ for $a,b$ depending only on $(R,J,\Delta E)$.
+    For $l<12R+8$, take $O_B=0$ and $O_L=O_R=1$. Lemma~\ref{thm:hastings_decay_slack}
+    absorbs $\sqrt l$ into $C_1e^{-l/\xi'}$ for $\xi'>6\xi$.
 \end{proof}
 
-\begin{theorem}[Approximate factorization in units of the gap]
+\begin{lemma}[Approximate factorization in units of the gap]
     \label{thm:hastings_projector_factorization_scaled}
     \lean{TNLean.MPS.AreaLaw.exists_projectorFactorization_div,
         TNLean.MPS.AreaLaw.lemmaOneLength_div,
@@ -557,35 +606,28 @@ $X_{j-l+1,j+l}$.
         Entropy.IsSupportedOn.smul}
     \leanok
     \uses{thm:hastings_projector_factorization}
-    Under the assumptions of
-    Theorem~\ref{thm:hastings_projector_factorization}, let
-    $c_R=2(R+1)2^{2R+1}e^{2R}$, so that $v_0=1+c_RJ$, and set
-    \begin{align*}
-        \hat\xi=16\Bigl(1+\frac{c_RJ}{\Delta E}\Bigr)
-        \le2\max\Bigl(\frac{2v}{\Delta E},16\Bigr),\qquad v=8c_RJ.
-    \end{align*}
-    For every $\xi'>6\hat\xi$ there is a constant $C_1$, depending only on
-    $R$, $J/\Delta E$ and $\xi'$, such that for every cut $j$ and every $l$
-    there are operators $O_B$, $O_L$, $O_R$ with the properties of
-    Theorem~\ref{thm:hastings_projector_factorization} and
-    $\|O_BO_LO_R-P_0\|\le C_1e^{-l/\xi'}$. The length $\hat\xi$, unlike the
-    length of Theorem~\ref{thm:hastings_projector_factorization}, depends on
-    $J$ and $\Delta E$ only through $J/\Delta E$, as the source's
-    $\max(2v/\Delta E,\xi_C)$ with $v$ proportional to $J$ does
-    \cite[lines 96--112, 139--142]{Hastings2007AreaLaw}. The other
-    restrictions of Theorem~\ref{thm:hastings_projector_factorization}
-    remain~\cite{gap:hastings07_lemma1_decay_length}.
-\end{theorem}
+    Under the assumptions of Lemma~\ref{thm:hastings_projector_factorization},
+    set $c_R=2(R+1)2^{2R+1}e^{2R}$, $v=8c_RJ$, and
+    \begin{align}
+        \hat\xi & =16\Bigl(1+\frac{c_RJ}{\Delta E}\Bigr)
+        \le2\max\Bigl(\frac{2v}{\Delta E},16\Bigr).
+        \label{eq:hastings_lemma1_hat_xi}
+    \end{align}
+    For every $\xi'>6\hat\xi$ there exists $C_1=C_1(R,J/\Delta E,\xi')\ge0$
+    such that for every $j$ and $l$ there exist $O_B,O_L,O_R$ satisfying items
+    1--2 of Lemma~\ref{thm:hastings_projector_factorization} and
+    $\|O_BO_LO_R-P_0\|\le C_1e^{-l/\xi'}$
+    \cite[lines 96--112, 139--142]{Hastings2007AreaLaw},
+    \cite{gap:hastings07_lemma1_decay_length}.
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:hastings_projector_factorization}
-    The operators $O_B$, $O_L$, $O_R$ and the error do not involve the
-    Hamiltonian. The Hamiltonian $H/\Delta E$ has range $R$, terms of norm at
-    most $J/\Delta E$, the same ground state and gap $1$, so
-    Theorem~\ref{thm:hastings_projector_factorization} applies to it with the
-    length $8\max(2(1+c_RJ/\Delta E),1)=\hat\xi$.
+    Apply Lemma~\ref{thm:hastings_projector_factorization} to $H/\Delta E$,
+    which has range $R$, term norm bound $J/\Delta E$, gap $1$, and length
+    $8\max(2(1+c_RJ/\Delta E),1)=\hat\xi$.
 \end{proof}
 
-\begin{theorem}[A polynomial bound on the constant of the factorization]
+\begin{lemma}[A polynomial bound on the constant of the factorization]
     \label{thm:hastings_lemma1_polynomial_constant}
     \lean{TNLean.MPS.AreaLaw.exists_projectorFactorization_pow,
         TNLean.MPS.AreaLaw.exists_projectorFactorization_posSemidef_pow,
@@ -596,46 +638,43 @@ $X_{j-l+1,j+l}$.
         thm:hastings_positive_factorization}
     Let $\kappa>6$. There is a constant $K\ge0$, depending only on $R$ and
     $\kappa$, with the following property. Under the assumptions of
-    Theorem~\ref{thm:hastings_projector_factorization}, with $\hat\xi$ the
-    length of Theorem~\ref{thm:hastings_projector_factorization_scaled}, for
+    Lemma~\ref{thm:hastings_projector_factorization}, with $\hat\xi$ the
+    length of Lemma~\ref{thm:hastings_projector_factorization_scaled}, for
     every cut $j$ and every $l$ there are operators $O_B$, $O_L$, $O_R$ with
-    the properties of Theorem~\ref{thm:hastings_projector_factorization} and
-    \begin{align*}
+    the properties of Lemma~\ref{thm:hastings_projector_factorization} and
+    \begin{align}
         \|O_BO_LO_R-P_0\|\le K\hat\xi^3e^{-l/(\kappa\hat\xi)}.
-    \end{align*}
+        \label{eq:hastings_lemma1_polynomial_constant}
+    \end{align}
     The same holds with $O_B$ positive semidefinite, with another such constant
     and the rate $e^{-l/(2\kappa\hat\xi)}$, as in
-    Theorem~\ref{thm:hastings_positive_factorization}
+    Lemma~\ref{thm:hastings_positive_factorization}
     and~\cite{gap:hastings07_lemma1_positivity_rate}.
     So the constant of the factorization at the rate $\xi'=\kappa\hat\xi$ is
     bounded by a polynomial in $\hat\xi$, as Lemma~\ref{lem:hastings_lemma1}
     requires~\cite[lines 258--262]{Hastings2007AreaLaw}. For the source's
     nearest-neighbour terms ($R=1$) the constant $K$ depends only on
-    $\kappa$. The rate $\xi'=6\hat\xi$ is not reached at $\hat\xi$ itself, and
-    $\hat\xi$ is not shown to come from a Lieb--Robinson pair in the source's
-    sense~\cite{gap:hastings07_lemma1_decay_length,
-        gap:hastings07_gaussian_average_exponent}.
-\end{theorem}
+    $\kappa$. The rate $\xi'=6\hat\xi$ is not reached at $\hat\xi$ itself.
+    The physical pair giving $\hat\xi$ is identified in
+    Lemma~\ref{thm:hastings_source_lengths}; the fixed-length restriction is
+    recorded in~\cite{gap:hastings07_gaussian_average_exponent}.
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:hastings_projector_factorization_scaled,
         thm:hastings_projector_factorization,
         thm:hastings_positive_factorization_rate,
         thm:hastings_factorization_mono}
-    Apply Theorem~\ref{thm:hastings_projector_factorization} to $H/\Delta E$
-    at the rate $\kappa\hat\xi$, and write $x=J/\Delta E$. The constant is
-    $a+b/\sqrt{2e(1/(6\hat\xi)-1/(\kappa\hat\xi))}$, where $a$ is the larger
-    of the constant term of the error budget and $e^{(12R+8)/(6\hat\xi)}$,
-    and $b$ is the coefficient of $\sqrt l$. Since $\hat\xi\ge16$ and
-    $x\le\hat\xi$, the Lieb--Robinson prefactor is at most a multiple of
-    $\hat\xi$ and the commutator constant at most a multiple of $\hat\xi^2$.
-    So the constant term of the budget is at most a multiple of $\hat\xi^3$,
-    $e^{(12R+8)/(6\hat\xi)}\le e^{(12R+8)/6}$, and $b$ is at most a multiple of
-    $\hat\xi^2$. Finally,
-    $1/\sqrt{2e(1/(6\hat\xi)-1/(\kappa\hat\xi))}=\sqrt{\hat\xi/\beta}\le\hat\xi/\sqrt\beta$
-    with $\beta=2e(\kappa-6)/(6\kappa)$.
+    In Lemma~\ref{thm:hastings_projector_factorization} applied to
+    $H/\Delta E$ at $\xi'=\kappa\hat\xi$ with $x=J/\Delta E\le\hat\xi$ and
+    $\hat\xi\ge16$, the budget parameters satisfy $a=\mathcal O_R(\hat\xi^3)$,
+    $b=\mathcal O_R(\hat\xi^2)$, and
+    $\bigl(2e(1/(6\hat\xi)-1/(\kappa\hat\xi))\bigr)^{-1/2}
+        =\sqrt{\hat\xi/\beta}\le\hat\xi/\sqrt\beta$ for
+    $\beta=2e(\kappa-6)/(6\kappa)$, giving
+    $C_1=a+b\sqrt{\hat\xi/\beta}\le K\hat\xi^3$.
 \end{proof}
 
-\begin{theorem}[The factorization at the printed rate, for a raised velocity]
+\begin{lemma}[The factorization at the printed rate, for a raised velocity]
     \label{thm:hastings_lemma1_endpoint}
     \lean{TNLean.MPS.AreaLaw.exists_projectorFactorization_endpoint,
         TNLean.MPS.AreaLaw.exists_projectorFactorization_posSemidef_endpoint,
@@ -648,12 +687,13 @@ $X_{j-l+1,j+l}$.
     $\tilde\xi=8\max(2v',1)$ be the length for the raised velocity
     $v'=\tfrac54v_0$; thus $\tilde\xi=\tfrac54\hat\xi$. There is a constant
     $K\ge0$, depending only on $R$, with the following property. Under the
-    assumptions of Theorem~\ref{thm:hastings_projector_factorization}, for
+    assumptions of Lemma~\ref{thm:hastings_projector_factorization}, for
     every cut $j$ and every $l$ there are operators $O_B$, $O_L$, $O_R$ with
-    the properties of Theorem~\ref{thm:hastings_projector_factorization} and
-    \begin{align*}
+    the properties of Lemma~\ref{thm:hastings_projector_factorization} and
+    \begin{align}
         \|O_BO_LO_R-P_0\|\le K\tilde\xi^3e^{-l/(6\tilde\xi)}.
-    \end{align*}
+        \label{eq:hastings_lemma1_endpoint}
+    \end{align}
     The same holds with $O_B$ positive semidefinite, with another such
     constant and the rate $e^{-l/(12\tilde\xi)}$. This is the printed rate
     $\xi'=6\xi$ of \cite[lines 141--142]{Hastings2007AreaLaw} for the length
@@ -662,56 +702,43 @@ $X_{j-l+1,j+l}$.
     $\xi=\max(2v/\Delta E,\xi_C)$ only through some Lieb--Robinson pair
     $(v,\xi_C)$ \cite[lines 96--112]{Hastings2007AreaLaw}, and a bound valid
     for $|t|\le l/v$ remains valid for $|t|\le l/v'$ when
-    $v'\ge v$~\cite{gap:hastings07_lemma1_decay_length}. The same holds for
-    the chain estimate, so $\tilde\xi$ carries the restriction of $\hat\xi$:
-    the chain estimate is not shown to give a Lieb--Robinson pair in the
-    source's sense.
-\end{theorem}
+    $v'\ge v$. Lemma~\ref{thm:hastings_source_lengths} identifies the
+    physical pair for $\tilde\xi$ as
+    $(10\Delta E(1+c_RJ/\Delta E),8)$, with the length convention of
+    \cite{gap:hastings07_lemma1_decay_length}.
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:hastings_lemma1_polynomial_constant}
-    Since $6\tilde\xi=\tfrac{15}2\hat\xi$, this is
-    Theorem~\ref{thm:hastings_lemma1_polynomial_constant} with
-    $\kappa=15/2$, together with $\hat\xi^3\le\tilde\xi^3$.
+    Apply Lemma~\ref{thm:hastings_lemma1_polynomial_constant} at
+    $\kappa=15/2$, using $6\tilde\xi=\tfrac{15}2\hat\xi$ and
+    $\hat\xi^3\le\tilde\xi^3$.
 \end{proof}
 
-\begin{theorem}[An effect operator from an approximate factorization]
+\begin{lemma}[An effect operator from an approximate factorization]
     \label{thm:hastings_effect_from_factorization}
     \lean{Matrix.norm_mul_conjTranspose_mul_self_mul_sub_le}
     \leanok
-    Let $B$ be a matrix and $P$, $Q$ orthogonal projections with
-    $\|BQ-P\|\le\varepsilon$. Then
-    \begin{align*}
-        \|QB^\dagger BQ-P\|\le2\varepsilon+\varepsilon^2.
-    \end{align*}
-    No bound on $\|B\|$ is needed. This is the bound of
-    \cite[lines 916--925]{Hastings2007AreaLaw} with $B=O_B$, $P=P_0$ and
-    $Q=O_LO_R$.
-\end{theorem}
+    For any matrix $B$ and orthogonal projections $P,Q$ with
+    $\|BQ-P\|\le\varepsilon$,
+    \begin{align}
+        \|QB^\dagger BQ-P\| & \le2\varepsilon+\varepsilon^2
+        \label{eq:hastings_effect_from_factorization}
+    \end{align}
+    \cite[lines 916--925]{Hastings2007AreaLaw}.
+\end{lemma}
 \begin{proof}\leanok
-    Write $BQ=P+E$ with $\|E\|\le\varepsilon$. Since $Q$ is self-adjoint,
-    $QB^\dagger BQ=(BQ)^\dagger(BQ)=(P+E^\dagger)(P+E)$, and $P^2=P$ gives
-    $QB^\dagger BQ-P=E^\dagger P+PE+E^\dagger E$. The triangle inequality and
-    $\|P\|\le1$ finish the proof.
+    Put $E=BQ-P$. Since $Q=Q^\dagger$ and $P^2=P=P^\dagger$,
+    $QB^\dagger BQ-P=(P+E^\dagger)(P+E)-P=E^\dagger P+PE+E^\dagger E$, and
+    $\|P\|\le1$ gives (\ref{eq:hastings_effect_from_factorization}).
 \end{proof}
 
-The note added to \cite{Hastings2007AreaLaw} observes that the operator $O_B$
-constructed in the appendix need not be Hermitian or positive, and offers two
-ways around this. The area-law proof uses Lemma~\ref{lem:hastings_lemma1} only
-through the expectation of $O_B$, or of the positive operator $O_B^\dagger O_B$,
-in the ground state and in a product of marginals, and by
-Theorem~\ref{thm:hastings_effect_from_factorization} this expectation
-corollary holds at the rate $e^{-l/\xi'}$ of
-Theorem~\ref{thm:hastings_projector_factorization}, for every $\xi'>6\xi$,
-with $\varepsilon$ replaced by $2\varepsilon+\varepsilon^2$; this is the
-first of the two routes of the note, and it is all that the area law needs. The positive operator
-$O_B^+=O_B^\dagger O_B$ of the note satisfies the factorization only with the
-error of Theorem~\ref{thm:hastings_positive_repair}, of order $\sqrt{\varepsilon}$,
-so the positive version of Lemma~\ref{lem:hastings_lemma1} holds with a positive
-semidefinite $O_B^+$ and the rate $e^{-l/(2\xi')}$ in place of $e^{-l/\xi'}$.
-The note itself states both changes: it calls $O_B^+$ positive semidefinite and
-bounds its error by a multiple of $\sqrt{\varepsilon(l)}$
-\cite[lines 932--940]{Hastings2007AreaLaw}. The entry below states the lemma as
-printed in the body of the paper.
+By Lemma~\ref{thm:hastings_effect_from_factorization} with $B=O_B$, $P=P_0$,
+and $Q=O_LO_R$, the positive operator $O_B^\dagger O_B$ suffices for all
+ground-state and marginal expectation estimates in the area-law proof at rate
+$e^{-l/\xi'}$ ($\xi'>6\xi$), whereas the direct factorization with
+$O_B^+=O_B^\dagger O_B\ge0$ has error $\mathcal O(\sqrt{\varepsilon(l)})$ and
+rate $e^{-l/(2\xi')}$ by Lemma~\ref{thm:hastings_positive_repair}
+\cite[lines 932--940]{Hastings2007AreaLaw}.
 
 % Lean statement pending.
 \begin{lemma}[Approximate factorization of the ground-state projector]
@@ -721,40 +748,85 @@ printed in the body of the paper.
         thm:hastings_positive_factorization,
         thm:hastings_lemma1_polynomial_constant,
         thm:hastings_lemma1_endpoint}
-    This is Lemma~1 of \cite{Hastings2007AreaLaw}. Let $H$ be a Hamiltonian
-    that satisfies the finite range, finite interaction strength, and gap
-    conditions. Then for any $j$ and any $l$
-    there exist Hermitian, positive definite operators $O_B(j,l)$, $O_L(j,l)$,
-    $O_R(j,l)$ with the following properties. First, $\|O_B(j,l)\|\le1$,
-    $\|O_L(j,l)\|\le1$ and $\|O_R(j,l)\|\le1$. Second,
-    \begin{align*}
-        \|O_B(j,l)O_L(j,l)O_R(j,l)-P_0\|\le C_1(\xi)e^{-l/\xi'}
-        \equiv\varepsilon(l),\qquad\xi'=6\xi,
-    \end{align*}
-    where $P_0=|\Psi_0\rangle\langle\Psi_0|$ is the projector onto the ground
-    state and $C_1(\xi)$ is bounded by a polynomial in $\xi$. Finally,
-    $O_L(j,l)$ is supported on $X_{1,j}$, $O_R(j,l)$ on $X_{j+1,N}$, and
-    $O_B(j,l)$ on $X_{j-l+1,j+l}$
-    \cite[lines 246--267]{Hastings2007AreaLaw}.
+    Let $H$ satisfy the finite-range, finite-strength, and gap conditions of
+    \cite[Lemma~1, lines 246--267]{Hastings2007AreaLaw}. For any $j$ and $l$
+    there exist Hermitian positive definite $O_B(j,l),O_L(j,l),O_R(j,l)$ of
+    norm at most $1$, supported on $X_{j-l+1,j+l}$, $X_{1,j}$, and
+    $X_{j+1,N}$, such that for $P_0=|\Psi_0\rangle\langle\Psi_0|$ and a
+    polynomial $C_1(\xi)$,
+    \begin{align}
+        \|O_B(j,l)O_L(j,l)O_R(j,l)-P_0\| & \le C_1(\xi)e^{-l/\xi'}
+        \equiv\varepsilon(l),\qquad\xi'=6\xi.
+        \notag
+    \end{align}
 \end{lemma}
 
-The argument of the appendix does not prove the lemma as printed; it gives
-two weaker statements. Theorem~\ref{thm:hastings_projector_factorization} gives the
-factorization with the bound $\varepsilon(l)=C_1e^{-l/\xi'}$ for every
-$\xi'>6\xi$, with $C_1$ depending on $\xi'-6\xi$, rather than at
-$\xi'=6\xi$; it gives the supports and the norms as stated, and $O_L$, $O_R$
-commuting orthogonal projections, but with an operator $O_B$ that need not
-be Hermitian or positive. If $O_B$ is replaced by $O_B^\dagger O_B$, which is positive
-semidefinite, has norm at most one and keeps the support, then
-Theorem~\ref{thm:hastings_positive_repair} bounds the new error by
-$\mathcal O(\sqrt{\varepsilon(l)})$, which decays only at the rate
-$e^{-l/(2\xi')}$; this is the version of the note added
-\cite[lines 932--940]{Hastings2007AreaLaw}. Neither statement gives
-positive definite operators or a positive $O_B$ at the rate $e^{-l/\xi'}$.
-At a fixed length neither reaches the rate $\xi'=6\xi$; that rate is reached
-only after the length is raised, as in
-Theorem~\ref{thm:hastings_lemma1_endpoint}. In units of the gap the constant
-is bounded by a polynomial in the length, as the lemma requires, at every rate
-$\xi'=\kappa\hat\xi$ with $\kappa>6$
-(Theorem~\ref{thm:hastings_lemma1_polynomial_constant}). The printed version does not
-follow from this argument.
+As recorded in Lemmas~\ref{thm:hastings_projector_factorization}--\ref{thm:hastings_lemma1_endpoint}
+and Lemma~\ref{thm:hastings_positive_repair}, the appendix proof yields the
+non-positive factorization at $\xi'>6\xi$ (or $\xi'=6\tilde\xi$ for the raised
+length $\tilde\xi=\tfrac54\hat\xi$) and the positive semidefinite
+replacement $O_B^\dagger O_B$ at rate $e^{-l/(2\xi')}$, rather than
+Lemma~\ref{lem:hastings_lemma1} as printed.
+
+\begin{lemma}[An interaction-proportional Lieb--Robinson velocity]
+    \label{thm:hastings_source_pair}
+    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.norm_heisenberg_commutator_le_hastings_source}
+    \leanok
+    \uses{thm:hastings_chain_lieb_robinson}
+    Let $H$ be a range-$R$ chain Hamiltonian with interaction norms at most
+    $J>0$, and put $c_R=2(R+1)2^{2R+1}e^{2R}$. Then $v=40c_RJ$ and
+    $\xi_C=80$ form a Lieb--Robinson pair: for operators $A,B$ supported on
+    finite sets $X,Y$ whose mutual distances are at least the integer
+    $d\ge0$, and for $|t|\le d/v$,
+    \begin{align}
+        \|[e^{itH}Ae^{-itH},B]\|
+        \le4|X|\,\|A\|\,\|B\|e^{-d/80}.
+        \label{eq:hastings_interaction_proportional_pair}
+    \end{align}
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:hastings_chain_lieb_robinson}
+    The coefficient $c_RJ$ is positive. Apply
+    Lemma~\ref{thm:hastings_chain_lieb_robinson} with $v=40c_RJ\ge8c_RJ$
+    and $\xi_C=80\ge8$.
+\end{proof}
+
+\begin{lemma}[Positive factorization at the source length]
+    \label{thm:hastings_source_factorization}
+    \lean{TNLean.MPS.AreaLaw.exists_projectorFactorization_posSemidef_source,
+        TNLean.MPS.AreaLaw.exists_projectorFactorization_source}
+    \leanok
+    \uses{thm:hastings_lemma1_endpoint,thm:hastings_source_pair}
+    For each range $R$ there is a constant $K\ge0$, depending only on $R$,
+    with the following property. Let $H$ be a range-$R$ chain Hamiltonian
+    with interaction norms at most $J\ge0$ and a unit ground vector
+    $\Omega$ separated from the remaining spectrum by $\Delta E>0$.
+    Set $v=40c_RJ$, $s=\max\{2v/\Delta E,80\}$ and $\xi'=6s$. At every
+    cut $j$ and length $l$ there are operators $O_B,O_L,O_R$ satisfying
+    the support conditions of Lemma~\ref{lem:hastings_lemma1}, such that
+    $O_B$ is a positive semidefinite contraction, $O_L,O_R$ are commuting
+    orthogonal projections, and
+    \begin{align}
+        \|O_BO_LO_R-|\Omega\rangle\langle\Omega|\|
+        \le Ks^3e^{-l/\xi'}.
+        \label{eq:hastings_positive_source_factorization}
+    \end{align}
+    Thus the positive and contraction forms have the same source rate
+    at this choice of length. The fixed-length correction and the
+    distinction between positive semidefinite and positive definite
+    operators remain as recorded in
+    \cite{gap:hastings07_lemma1_positivity_rate}.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:hastings_lemma1_endpoint,thm:hastings_factorization_mono}
+    The source length satisfies $s\ge2\zeta$, where
+    $\zeta=20(1+c_RJ/\Delta E)$. The positive form of
+    Lemma~\ref{thm:hastings_lemma1_endpoint} supplies the required
+    operators with error at most $K\zeta^3e^{-l/(12\zeta)}$. Since
+    $\zeta\le s$ and $12\zeta\le6s$,
+    \begin{align}
+        K\zeta^3e^{-l/(12\zeta)}\le Ks^3e^{-l/(6s)}.
+        \label{eq:hastings_positive_source_comparison}
+    \end{align}
+    Increase the error bound without changing any of the operators.
+\end{proof}

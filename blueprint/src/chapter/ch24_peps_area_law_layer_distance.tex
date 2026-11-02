@@ -7,7 +7,7 @@ arbitrary, $Z\subset\mathbb Z^2$ is finite, and $C_0\ge0$ is an integer.
 All scale indices are nonnegative integers. Distances in the plane are taken
 in the sup metric, so $d_\infty(x,y)=\max\{|x_1-y_1|,|x_2-y_2|\}$.
 
-\begin{theorem}[Distances between closed cells]
+\begin{lemma}[Distances between closed cells]
     \label{thm:area_law_dyadic_cell_distance}
     \lean{TNLean.PEPS.AreaLaw.Geometry.dyadicCell_dist_le,
         TNLean.PEPS.AreaLaw.Geometry.dyadicCell_dist_lower}
@@ -23,7 +23,7 @@ in the sup metric, so $d_\infty(x,y)=\max\{|x_1-y_1|,|x_2-y_2|\}$.
     \begin{align}
         C_0 2^k & \le d_\infty(x,y).
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_dyadic_closures}
     Each coordinate of a closed cell lies in its closed interval of length
@@ -35,7 +35,7 @@ in the sup metric, so $d_\infty(x,y)=\max\{|x_1-y_1|,|x_2-y_2|\}$.
 \end{proof}
 
 % Source: geometry:layer-distance in Section 11.
-\begin{theorem}[Distance from a layer to the endpoints]
+\begin{lemma}[Distance from a layer to the endpoints]
     \label{thm:area_law_dyadic_layer_distance}
     \lean{TNLean.PEPS.AreaLaw.Geometry.dyadicLayer_dist_lower,
         TNLean.PEPS.AreaLaw.Geometry.dyadicLayer_exists_dist_le,
@@ -56,7 +56,7 @@ in the sup metric, so $d_\infty(x,y)=\max\{|x_1-y_1|,|x_2-y_2|\}$.
     \end{align}
     This is the layer-distance estimate in
     \cite[Section~11]{OpenAI2026AreaLaw}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_dyadic_closures,thm:area_law_dyadic_indices,
         thm:area_law_dyadic_cell_distance}
@@ -73,7 +73,7 @@ in the sup metric, so $d_\infty(x,y)=\max\{|x_1-y_1|,|x_2-y_2|\}$.
 \end{proof}
 
 % Source: geometry:nonadjacent in Section 11.
-\begin{theorem}[Separation of nonadjacent layers]
+\begin{lemma}[Separation of nonadjacent layers]
     \label{thm:area_law_dyadic_nonadjacent}
     \lean{TNLean.PEPS.AreaLaw.Geometry.dyadicLayer_dist_separation,
         TNLean.PEPS.AreaLaw.Geometry.dyadicLayer_dist_nonadjacent}
@@ -90,7 +90,7 @@ in the sup metric, so $d_\infty(x,y)=\max\{|x_1-y_1|,|x_2-y_2|\}$.
     \end{align}
     This is the nonadjacent-layer estimate in
     \cite[Section~11]{OpenAI2026AreaLaw}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_dyadic_layer_distance}
     Choose $z\in Z$ with $d_\infty(x,z)\le2(C_0+1)2^k$. Since

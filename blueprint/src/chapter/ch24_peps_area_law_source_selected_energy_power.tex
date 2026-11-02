@@ -23,7 +23,7 @@ at rate $8\nu$ suffices to put that term at rate $\nu$.
     Here $x$ denotes the normalized entropy defect.
 \end{definition}
 
-\begin{theorem}[Exact energy exponents]
+\begin{lemma}[Exact energy exponents]
     \label{thm:arealaw-selected-energy-margins}
     \lean{TNLean.PEPS.AreaLaw.Scan.final_selectedEnergy_margins}
     \leanok
@@ -35,14 +35,14 @@ at rate $8\nu$ suffices to put that term at rate $\nu$.
                                  & =\frac{97}{250000}.
         \label{eq:selected_energy_margins}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     Substituting the displayed rational values and simplifying gives the three identities.
 \end{proof}
 
-\begin{theorem}[Pointwise charge energy bound]
+\begin{lemma}[Pointwise charge energy bound]
     \label{thm:arealaw-selected-energy-pointwise}
     \lean{TNLean.PEPS.AreaLaw.Scan.finalSelectedEnergyCap_le}
     \leanok
@@ -55,7 +55,7 @@ at rate $8\nu$ suffices to put that term at rate $\nu$.
         E_n(W,x,p) & \leq16C n^{-111/125000}(\log n)^{C_\ell}.
         \label{eq:selected_energy_pointwise}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -74,7 +74,7 @@ at rate $8\nu$ suffices to put that term at rate $\nu$.
     (\ref{eq:selected_energy_pointwise}).
 \end{proof}
 
-\begin{theorem}[Uniform normalized energy decay]
+\begin{lemma}[Uniform normalized energy decay]
     \label{thm:arealaw-selected-energy-decay}
     \lean{TNLean.PEPS.AreaLaw.Scan.eventually_final_selectedEnergy_le_rpow,TNLean.PEPS.AreaLaw.Scan.exists_final_selectedEnergy_le_rpow}
     \leanok
@@ -87,7 +87,7 @@ at rate $8\nu$ suffices to put that term at rate $\nu$.
         \label{eq:selected_energy_decay}
     \end{align}
     The threshold is chosen before $n,W,x,p,e$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -106,18 +106,18 @@ at rate $8\nu$ suffices to put that term at rate $\nu$.
     (\ref{eq:selected_energy_absorption}), and dividing by $g/2>0$ gives the bound.
 \end{proof}
 
-\begin{theorem}[Separate replica remainder]
+\begin{lemma}[Separate replica remainder]
     \label{thm:arealaw-selected-energy-remainder}
     \lean{TNLean.PEPS.AreaLaw.Scan.selectedEnergy_add_remainder_le,TNLean.PEPS.AreaLaw.Scan.exists_final_selectedEnergy_add_remainder_le_rpow}
     \leanok
-    Under the hypotheses of Theorem~\ref{thm:arealaw-selected-energy-decay},
+    Under the hypotheses of Lemma~\ref{thm:arealaw-selected-energy-decay},
     the same threshold works for every additional real remainder $r$:
     \begin{align}
         \frac{e+E_n(W,x,p)+r}{g/2}
          & \leq n^{-1/2000}+\frac r{g/2}.
         \label{eq:selected_energy_remainder}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok

@@ -5,15 +5,15 @@ Authors: TNLean contributors
 -/
 import QICLean.Analysis.ChebyshevViability
 import QICLean.Analysis.LowEnergyCoordinates
+import QICLean.Analysis.ViableSubspaceBootstrap
 import QICLean.Analysis.ViableSubspaceCoordinates
+import QICLean.Analysis.ViableSubspaceDimension
 import TNLean.MPS.AreaLaw.ActualClippedPolynomialFamily
 import TNLean.MPS.AreaLaw.Basic
 import TNLean.MPS.AreaLaw.FiveRegionTruncationResidual
 import TNLean.MPS.AreaLaw.PhysicalIntervalTransport
 import TNLean.MPS.AreaLaw.PolynomialFilterParameters
 import TNLean.MPS.AreaLaw.ShortRegionViableFamily
-import QICLean.Analysis.ViableSubspaceBootstrap
-import QICLean.Analysis.ViableSubspaceDimension
 
 /-!
 # A common viable-space enlargement for a gapped chain

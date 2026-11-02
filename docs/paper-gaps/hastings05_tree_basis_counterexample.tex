@@ -1,0 +1,293 @@
+\documentclass{article}
+\usepackage[margin=25mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\input{./command}
+\providecommand{\gapnote}[2]{\par\noindent\textbf{Verdict:} #1 (#2).\par}
+\newtheorem{proposition}{Proposition}
+\providecommand{\C}{\mathbb C}
+\providecommand{\cH}{\mathcal H}
+\newcommand{\vac}{\mathrm{vac}}
+\newcommand{\dep}{\mathrm{depth}}
+\title{A Tree Counterexample to the Unrestricted Summed Basis Bound in Hastings}
+\author{}
+\date{October 28, 2026}
+\begin{document}
+\maketitle
+\gapnote{false-source}{resolved}
+
+\section{The assertion and the counterexample}
+
+Hastings, \emph{Solving gapped Hamiltonians locally}~\cite{Hastings2006Solving},
+\href{https://arxiv.org/abs/cond-mat/0508554v3}{arXiv:cond-mat/0508554v3},
+source \path{proj3new.tex}, lines 169--190, assumes a metric lattice,
+interaction range $R$, term norm bound $J$, and at most $S$ sites within
+distance $R$ of a site. Appendix B assumes a ground-space dimension and a
+positive gap bounded uniformly in system size (lines 1535--1538).
+For the localized terms $M_i$, lines 1678--1694 assert that one can choose a
+ground-space basis with $\sum_i o(i)$ bounded independently of system size,
+where $o(i)$ is the norm of the off-diagonal part of $PM_iP$. The printed
+bound (oibu) also contains the reciprocal of the largest compressed
+spectral spread.
+
+The following construction disproves this assertion for general metric
+lattices. It does not disprove the version with polynomial volume growth.
+
+\begin{proposition}
+For every integer $L\ge2$ there is a qubit Hamiltonian
+$H_L=\sum_{v\in T_L}h_v$ on a finite rooted tree, with its graph metric, such
+that:
+\begin{enumerate}
+\item every $h_v$ is Hermitian, supported in the radius-one ball about $v$,
+  and has norm at most $769$; every radius-one ball has at most $258$ sites;
+\item the ground energy is zero, the ground space has dimension two, and
+  the spectral gap is at least $735/2048$;
+\item for the actual normalized Gaussian construction (mid) with
+  $l_{\rm proj}=R=1$, one has $M_v=h_v$ for every positive filter parameter;
+\item in every orthonormal ground-space basis,
+  \begin{equation}
+    \sum_{v\in T_L}o(v)\ge2^{L-2};
+    \label{eq:hastings05_tree_basis_counterexample_lower}
+  \end{equation}
+  the largest compressed spectral spread belongs to the root and lies
+  between $3$ and $4$.
+\end{enumerate}
+The number of sites is comparable to $256^L$, so the lower bound is of
+order $N_L^{1/8}$.
+\end{proposition}
+
+\section{The positive Hamiltonian and its one-particle operator}
+
+Put $b=256$ and $a=1/128$. Let $T_L$ be the complete rooted $b$-ary tree
+of depth $L$, with root $r$. Thus
+\[
+ N_L=\sum_{j=0}^Lb^j=\frac{b^{L+1}-1}{b-1}.
+\]
+On $\cH_L=\bigotimes_{v\in T_L}\C^2$, write
+$s_v=|0\rangle\langle1|_v$ and $n_v=s_v^*s_v$.
+The occupation vectors $|A\rangle$, indexed by subsets $A\subseteq T_L$,
+form an orthonormal basis. The number operator
+$\widehat N=\sum_v n_v$ has eigenspaces $\cH_m$ spanned by the subsets of
+cardinality $m$.
+For an oriented edge $(p,c)$ from parent to child, set
+\begin{equation}
+ d_{pc}=s_c-a s_p,\qquad
+ H_L=\sum_{(p,c)}d_{pc}^*d_{pc}.
+ \label{eq:hastings05_tree_basis_counterexample_H}
+\end{equation}
+This Hamiltonian is positive and preserves every number sector.
+
+Identify the one-particle space with $\ell^2(T_L)$, and define
+\[
+ D:\ell^2(T_L)\longrightarrow\ell^2(T_L\setminus\{r\}),\qquad
+ (Df)(c)=f(c)-a f(p(c)).
+\]
+The one-particle restriction of $H_L$ is $D^*D$.
+Write $D^*=J-aP$, where $Jy$ places $y_c$ at each non-root vertex and zero
+at the root, and $(Py)_p=\sum_{c:\,p(c)=p}y_c$.
+The map $J$ is isometric. Cauchy--Schwarz, followed by the disjointness of
+the sets of children, gives
+\[
+ \|Py\|^2\le b\sum_c|y_c|^2.
+\]
+Consequently
+\begin{equation}
+ \|D^*y\|\ge(1-a\sqrt b)\|y\|=\frac78\|y\|.
+ \label{eq:hastings05_tree_basis_counterexample_Dgap}
+\end{equation}
+The kernel of $D$ is one-dimensional, since its equations require
+$f(v)=a^{\dep(v)}f(r)$. Its positive normalized generator is
+\[
+ \psi_v=c_La^{\dep(v)},\qquad
+ c_L^2=\left(\sum_{j=0}^L(ba^2)^j\right)^{-1}.
+\]
+Since $ba^2=1/64$,
+\begin{equation}
+ \frac{63}{64}\le c_L^2\le1,
+ \qquad \sum_{v\ne r}\psi_v^2\le\frac1{64}.
+ \label{eq:hastings05_tree_basis_counterexample_tail}
+\end{equation}
+By \eqref{eq:hastings05_tree_basis_counterexample_Dgap},
+$DD^*\ge(49/64)I$. The nonzero eigenvalues of $D^*D$ and $DD^*$ coincide:
+an eigenvector of either matrix with positive eigenvalue is carried to
+one of the other by $D$ or $D^*$. Hence, with $\delta=49/64$,
+\begin{equation}
+ D^*D\ge\delta(I-|\psi\rangle\langle\psi|).
+ \label{eq:hastings05_tree_basis_counterexample_oneparticle}
+\end{equation}
+
+\section{A gap in every number sector}
+
+For a coefficient matrix $A$ on $\ell^2(T_L)$ define
+\[
+ \mathcal L(A)=\sum_{u,v}A_{uv}s_u^*s_v.
+\]
+This linear map preserves positivity. Indeed, if $A=C^*C$, then
+\[
+ \mathcal L(A)=\sum_k\left(\sum_v C_{kv}s_v\right)^*
+                         \left(\sum_v C_{kv}s_v\right)\ge0.
+\]
+This argument uses only products in the indicated order; it makes no
+assumption of canonical bosonic or fermionic commutation relations.
+Since the coordinates of $\psi$ are real, putting $B=\sum_v\psi_vs_v$
+in \eqref{eq:hastings05_tree_basis_counterexample_oneparticle} gives
+\begin{equation}
+ H_L\ge\delta(\widehat N-B^*B).
+ \label{eq:hastings05_tree_basis_counterexample_lift}
+\end{equation}
+
+For $\Phi\in\cH_m$ one has
+$\sum_v\|s_v\Phi\|^2=m\|\Phi\|^2$. Vector-valued Cauchy--Schwarz and
+\eqref{eq:hastings05_tree_basis_counterexample_tail} therefore imply
+\[
+ \|B\Phi\|\le\|\psi_rs_r\Phi\|
+       +\left\|\sum_{v\ne r}\psi_vs_v\Phi\right\|
+       \le\left(1+\frac{\sqrt m}{8}\right)\|\Phi\|.
+\]
+For $m\ge2$, the elementary inequality $1/\sqrt m\le3/4$ gives
+$\|B\Phi\|\le(7/8)\sqrt m\,\|\Phi\|$.
+Combining this with \eqref{eq:hastings05_tree_basis_counterexample_lift},
+\[
+ \langle\Phi,H_L\Phi\rangle
+ \ge\frac{49}{64}\frac{15m}{64}\|\Phi\|^2
+ \ge\frac{735}{2048}\|\Phi\|^2\qquad(m\ge2).
+\]
+In the one-particle sector, the kernel is $\C\psi$ and its orthogonal
+complement has energy at least $49/64$. The zero-particle sector is the
+vacuum and has energy zero. The number sectors are orthogonal invariant
+subspaces, so the ground space is exactly
+\begin{equation}
+ \mathcal G_L=\operatorname{span}\{|\vac\rangle,|\psi\rangle\},
+ \label{eq:hastings05_tree_basis_counterexample_ground}
+\end{equation}
+and the asserted uniform many-body gap follows.
+
+\section{A local decomposition with cancelling fields}
+
+Let $X_v,Y_v$ denote the usual Pauli matrices, with
+$Y=\left(\begin{smallmatrix}0&-i\\i&0\end{smallmatrix}\right)$.
+Put $V_v=X_v$ at even depth and $V_v=Y_v$ at odd depth. Define
+\[
+ T_r=-\sum_{c:\,p(c)=r}V_c,\qquad
+ T_v=V_v-\sum_{c:\,p(c)=v}V_c\quad(v\ne r),
+\]
+and
+\begin{equation}
+ h_v=\sum_{c:\,p(c)=v}d_{vc}^*d_{vc}+T_v.
+ \label{eq:hastings05_tree_basis_counterexample_terms}
+\end{equation}
+Every non-root field occurs once with each sign, so $\sum_vT_v=0$ and
+$\sum_vh_v=H_L$. Each $h_v$ is Hermitian and supported at $v$ and its
+children, hence in the radius-one ball about $v$. There are at most
+$b+2=258$ sites in any radius-one ball. Moreover,
+$\|d_{vc}^*d_{vc}\|\le(1+a)^2<2$ and $\|T_v\|\le b+1$, whence
+\[
+ \|h_v\|\le2b+(b+1)=769.
+\]
+The source imposes no positivity condition on the individual interaction
+terms. Thus these cancelling fields do not violate its hypotheses.
+
+Let $P_0$ be the projection onto \eqref{eq:hastings05_tree_basis_counterexample_ground}.
+In the ordered basis $(|\vac\rangle,|\psi\rangle)$, put
+$\sigma_j=\sigma_x$ for even $j$ and $\sigma_j=\sigma_y$ for odd $j$.
+The edge operators annihilate both ground vectors, and a direct matrix
+element calculation gives
+$P_0V_vP_0=c_La^{\dep(v)}\sigma_{\dep(v)}$.
+The compressed interaction terms are therefore
+\begin{align}
+ P_0h_rP_0&=-2c_L\sigma_y,\label{eq:hastings05_tree_basis_counterexample_root}\\
+ P_0h_vP_0&=c_La^j(\sigma_j-2\sigma_{j+1})
+       &&(1\le j=\dep(v)<L),\label{eq:hastings05_tree_basis_counterexample_internal}\\
+ P_0h_vP_0&=c_La^L\sigma_L
+       &&(\dep(v)=L).\label{eq:hastings05_tree_basis_counterexample_leaf}
+\end{align}
+The spectral spread of the root compression is $4c_L\in[3,4]$.
+For another internal vertex it is $2\sqrt5\,c_La^j<4c_L$, since
+the two Pauli matrices anticommute; at a leaf it is $2c_La^L<4c_L$.
+Thus the largest compressed spectral spread is uniformly positive and
+is attained at the root.
+
+\section{The lower bound in every ground-space basis}
+
+For an orthonormal basis $\mathcal B$ of the two-dimensional ground space,
+write $o_{\mathcal B}(A)$ for the operator norm of its off-diagonal part.
+This operation is linear before taking the norm, so $o_{\mathcal B}$ is
+subadditive and absolutely homogeneous. A qubit basis has a unit Bloch
+axis $u\in\mathbb R^3$. Its off-diagonal norms satisfy
+\[
+ o_{\mathcal B}(\sigma_x)=\sqrt{1-u_x^2},\qquad
+ o_{\mathcal B}(\sigma_y)=\sqrt{1-u_y^2},\qquad
+ o_{\mathcal B}(\sigma_x)+o_{\mathcal B}(\sigma_y)\ge1.
+\]
+For the last inequality, the sum of the squares of the two nonnegative
+terms is $2-u_x^2-u_y^2\ge1$.
+Put $P=\sigma_L$, $Q=\sigma_{L-1}$ and
+$x=o_{\mathcal B}(P)$, $y=o_{\mathcal B}(Q)$,
+$z=o_{\mathcal B}(Q-2P)$. Then $x+y\ge1$ and $y\le z+2x$.
+The quantity $A=2x+z$ is at least $2x$ and at least $y$, so
+$3A\ge2(x+y)\ge2$.
+There are $b^L$ leaves and $b^{L-1}$ vertices in the preceding level.
+Since $L\ge2$, this preceding level does not include the root, and
+\eqref{eq:hastings05_tree_basis_counterexample_internal} applies there.
+Keeping only these two levels in the nonnegative sum gives
+\begin{align*}
+ \sum_v o_{\mathcal B}(P_0h_vP_0)
+ &\ge c_L(ba)^Lx+c_L(ba)^{L-1}z\\
+ &=c_L2^{L-1}(2x+z)
+ \ge\frac23c_L2^{L-1}\ge2^{L-2},
+\end{align*}
+where the last step uses $c_L\ge3/4$.
+Finally $b^L\le N_L\le2b^L$ and $b=2^8$, so this bound grows at least
+as a positive constant times $N_L^{1/8}$.
+
+\section{The actual localized operators and the source scope}
+
+Take $R=l_{\rm proj}=1$. In the graph metric, the source's truncated
+generator at $v$ is exactly
+\[
+ H_{{\rm loc},v}=\sum_{w:\,d(v,w)\le l_{\rm proj}-R}h_w=h_v.
+\]
+For every $q>0$ and every $\Delta E>0$, its normalized Gaussian filter is
+\[
+ M_v=\frac{\Delta E}{\sqrt{2\pi q}}
+       \int_{\mathbb R}e^{-(t\Delta E)^2/(2q)}
+           e^{ith_v}h_ve^{-ith_v}\,dt=h_v.
+\]
+Indeed the conjugated operator is constant and the scalar Gaussian has
+integral one. This includes the source choice $q=c_1l_{\rm proj}\Delta E$
+for any fixed $c_1>0$. The normalization is the intended one of (thd);
+the missing $q$ in the printed (mid) is discussed in
+\path{hastings05_truncated_dynamics.tex}.
+Thus \eqref{eq:hastings05_tree_basis_counterexample_lower} concerns the
+actual $M_v$, not a replacement by first filters under $H_L$.
+
+All local bounds, the ground-space dimension, and a positive lower bound
+on the gap are independent of $L$. A Lieb--Robinson time-window slope may
+also be chosen uniformly from these local bounds. The maximal compressed
+spectral spread is bounded away from zero. Nevertheless the summed
+off-diagonal norm diverges in every basis.
+Appendix B does not impose a lower bound on $l_{\rm proj}/l_{\rm fac}$
+before asserting (oibu) at lines 1678--1694. The later choice of a
+size-dependent projection radius for a good global approximation is a
+different requirement. No counterexample along that coupled choice of
+radius is asserted here.
+
+\section{Formalization status and corrected statement}
+
+The family and its many-body gap proof above are mathematical arguments;
+they have not been formalized in Lean. The verdict records the failure of
+the unrestricted printed claim, not a kernel-verified counterexample.
+The separately verified construction of a basis under polynomial
+sphere growth remains valid. That additional hypothesis makes the
+exponential anchor sums finite uniformly in system size, as recorded in
+\path{hastings05_geometric_growth_scope.tex} and
+\path{hastings05_two_dim_ground_basis.tex}.
+The exponential truncated-term estimate (facld) is a separate statement;
+this counterexample does not refute it. The actual physical metric truncation
+estimate is now proved without polynomial growth, by the weighted-tail
+argument documented in \path{hastings05_geometric_growth_scope.tex}.
+
+\bibliographystyle{unsrt}
+\bibliography{references}
+\end{document}

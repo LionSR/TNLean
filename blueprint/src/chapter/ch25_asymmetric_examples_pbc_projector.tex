@@ -28,7 +28,7 @@ $\omega:G^3\to\C^\times$; neither normalization nor unit modulus is needed.
     Thus $P_{g,h}$ is independent of $g$ and $\omega$.
 \end{definition}
 
-\begin{theorem}[The projected factorization and right zipper]
+\begin{lemma}[The projected factorization and right zipper]
     \label{thm:asymex_pbc_projected_zipper}
     \lean{MPOTensor.GroupCocycle.fusionProjector_mul_self,
         MPOTensor.GroupCocycle.fusionProjector_conjTranspose,
@@ -51,7 +51,7 @@ $\omega:G^3\to\C^\times$; neither normalization nor unit modulus is needed.
         P_{g,h}B^{ij}W & =WT^{ij}.
         \label{eq:asymex_pbc_zipper}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -69,7 +69,7 @@ $\omega:G^3\to\C^\times$; neither normalization nor unit modulus is needed.
     \end{align}
     Its outgoing pair is $(hj,j)$, proving $B^{ij}P_{g,h}=B^{ij}$.
     The left zipper and $VW=1$ from
-    Theorem~\ref{thm:asymex_group_cocycle_fusion} give
+    Lemma~\ref{thm:asymex_group_cocycle_fusion} give
     $P_{g,h}B^{ij}=WVB^{ij}=WT^{ij}V$ and
     $P_{g,h}B^{ij}W=WT^{ij}VW=WT^{ij}$.
 \end{proof}
@@ -115,7 +115,7 @@ $\omega:G^3\to\C^\times$; neither normalization nor unit modulus is needed.
     \end{tenkz}
 \end{tenkzequation}
 
-\begin{theorem}[The projector disappears on closing the chain]
+\begin{lemma}[The projector disappears on closing the chain]
     \label{thm:asymex_pbc_projector_closure}
     \lean{MPOTensor.GroupCocycle.fusionProjector_mul_evalWord,
         MPOTensor.GroupCocycle.evalWord_mul_fusionProjector,
@@ -130,7 +130,7 @@ $\omega:G^3\to\C^\times$; neither normalization nor unit modulus is needed.
     $P_{g,h}B^{\mathbf w}=WT^{\mathbf w}V$ for every word, including the
     empty word. Consequently $\tr(B^{\mathbf w})=\tr(T^{\mathbf w})$
     whenever $\mathbf w$ is nonempty.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -144,7 +144,7 @@ $\omega:G^3\to\C^\times$; neither normalization nor unit modulus is needed.
     $\tr(WT^{\mathbf w}V)=\tr(VWT^{\mathbf w})=\tr(T^{\mathbf w})$.
 \end{proof}
 
-\begin{theorem}[Failure of the unprojected right identities]
+\begin{lemma}[Failure of the unprojected right identities]
     \label{thm:asymex_pbc_unprojected_failure}
     \lean{MPOTensor.GroupCocycle.exists_mulTensor_mul_fusionW_ne,
         MPOTensor.GroupCocycle.exists_mulTensor_ne_fusionW_mul_tensor_mul_fusionV}
@@ -153,7 +153,7 @@ $\omega:G^3\to\C^\times$; neither normalization nor unit modulus is needed.
     If $G$ is nontrivial, then for every three-cochain and every $g,h\in G$
     there are physical indices $(i,j)$ such that $B^{ij}W\ne WT^{ij}$.
     There are also physical indices for which $B^{ij}\ne WT^{ij}V$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok

@@ -1,4 +1,4 @@
-\subsection{Changing the middle tensor factor}
+\section{Changing the middle tensor factor}
 
 The change of cuts in~\cite[Proposition~5.7]{Arad2016RigorousRG}
 uses only matrix units to transfer the sites removed from, or added to, the
@@ -29,7 +29,7 @@ algebra; they impose no ordering or bond bound on the matrices.
     The resulting family depends only on the original middle matrices.
 \end{definition}
 
-\begin{theorem}[Matrix-unit expansion after exchanging the middle]
+\begin{lemma}[Matrix-unit expansion after exchanging the middle]
     \label{thm:chain_middle_factor_exchange}
     \lean{Matrix.reindex_kronecker_middleFactorExchange,Matrix.reindex_sum_kronecker_middleFactorExchange}
     \leanok
@@ -46,7 +46,7 @@ algebra; they impose no ordering or bond bound on the matrices.
     family $(V_{t,a,a',b,b'})$ therefore gives such a decomposition of
     $(\sum_{t\in I}M_t\otimes V_t)^\Phi$ for every family $(M_t)$.
     No commutativity of $R$ or nonemptiness of the index sets is required.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     At row $((a,o),(b,c))$ and column $((a',o'),(b',c'))$, the matrix
     units leave exactly the summand with these four transferred labels.
@@ -59,14 +59,14 @@ algebra; they impose no ordering or bond bound on the matrices.
     $t$ proves the finite-family assertion.
 \end{proof}
 
-\begin{theorem}[Number of exchanged middle factors]
+\begin{lemma}[Number of exchanged middle factors]
     \label{thm:chain_middle_factor_exchange_card}
     \lean{Matrix.card_exchangedMiddleFamily_index}
     \leanok
     \uses{def:chain_middle_factor_exchange}
     If $I,A,B$ are finite, the prescribed family has $|I|\,|A|^2|B|^2$ indexed
     terms, including repetitions and zero matrices.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Its index set is $I\times(A\times A)\times(B\times B)$; take cardinalities.
 \end{proof}

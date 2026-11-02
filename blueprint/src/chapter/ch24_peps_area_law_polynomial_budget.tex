@@ -17,7 +17,7 @@ initial mark and relating the initial marks to the sparse belts.
 % the repairs, and the full statement geometry:total-repairs,
 % are treated separately.
 
-\begin{theorem}[Eventual absorption of a polynomial factor]
+\begin{lemma}[Eventual absorption of a polynomial factor]
     \label{thm:area_law_polynomial_absorption}
     \lean{TNLean.PEPS.AreaLaw.Geometry.exists_polynomial_dyadic_absorption}
     \leanok
@@ -27,7 +27,7 @@ initial mark and relating the initial marks to the sparse belts.
     \begin{align}
         (k+1)^p2^{-\delta_0 k/2} & \le2^{-\delta_0 k/4}.
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_exponent_gaps}
     Set $a=\delta_0\log2/4>0$. Since $(k+1)^p\exp(-ak)\to0$ as $k\to\infty$,
@@ -35,7 +35,7 @@ initial mark and relating the initial marks to the sparse belts.
     $k\ge K$. Multiplying by $2^{-\delta_0 k/4}$ gives the inequality.
 \end{proof}
 
-\begin{theorem}[Summability of the polynomially weighted decay]
+\begin{lemma}[Summability of the polynomially weighted decay]
     \label{thm:area_law_polynomial_summability}
     \lean{TNLean.PEPS.AreaLaw.Geometry.summable_polynomial_dyadic_decay}
     \leanok
@@ -45,7 +45,7 @@ initial mark and relating the initial marks to the sparse belts.
         \sum_{k=0}^{\infty}(k+1)^p2^{-\delta_0 k/2}
     \end{align}
     converges.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_polynomial_absorption,thm:area_law_exponent_gaps}
     Set $q=2^{-\delta_0/4}\in(0,1)$. By the preceding theorem,
@@ -53,7 +53,7 @@ initial mark and relating the initial marks to the sparse belts.
     comparison with the geometric series $\sum_{k\ge0}q^k$.
 \end{proof}
 
-\begin{theorem}[Uniform bound on finite scale sums]
+\begin{lemma}[Uniform bound on finite scale sums]
     \label{thm:area_law_polynomial_finite_sums}
     \lean{TNLean.PEPS.AreaLaw.Geometry.exists_uniform_polynomial_dyadic_sum_bound}
     \leanok
@@ -63,7 +63,7 @@ initial mark and relating the initial marks to the sparse belts.
     \begin{align}
         \sum_{k\in F}(k+1)^p2^{-\delta_0 k/2} & \le B.
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_polynomial_summability}
     Let $S\ge0$ be the sum of the series $\sum_{k=0}^\infty w_p(k)$ and set

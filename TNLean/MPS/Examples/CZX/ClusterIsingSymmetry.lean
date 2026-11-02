@@ -224,9 +224,13 @@ theorem czxDecorated_phase_flipAt (hN : 2 ≤ N) (j : Fin N) (t : Fin N → Fin 
 
 /-! ### The local conjugation relations -/
 
+private theorem neg_one_pow_rev_add (a b : Fin 2) :
+    (-1 : ℂ) ^ (a.rev.val + b.rev.val) = (-1) ^ a.val * (-1) ^ b.val := by
+  fin_cases a <;> fin_cases b <;> simp [Fin.rev]
+
 private theorem neg_one_pow_rev_add_rev (a b : Fin 2) :
     (-1 : ℂ) ^ (a.rev.val + b.rev.val) = (-1) ^ (a.val + b.val) := by
-  fin_cases a <;> fin_cases b <;> simp [Fin.rev]
+  simpa only [pow_add] using neg_one_pow_rev_add a b
 
 /-- **`U X_j = −Z_{j−1} X_j Z_{j+1} U`.** Project result. -/
 theorem czxDecorated_mul_pauliXAt (hN : 2 ≤ N) (j : Fin N) :
@@ -344,10 +348,6 @@ theorem czxDecorated_conj_clusterIsingHamiltonian_one (hN : 2 ≤ N) :
     neg_sub, sub_neg_eq_add, add_comm]
 
 /-! ### The undecorated CZX operator of the review -/
-
-private theorem neg_one_pow_rev_add (a b : Fin 2) :
-    (-1 : ℂ) ^ (a.rev.val + b.rev.val) = (-1) ^ a.val * (-1) ^ b.val := by
-  fin_cases a <;> fin_cases b <;> simp [Fin.rev]
 
 /-- **`O_Z X_j = Z_{j−1} X_j Z_{j+1} O_Z`** for the periodic operator of the undecorated CZX
 tensor, `X^{⊗N} D_N`, which is the operator `O_Z = D_N X^{⊗N}` of arXiv:2011.12127, line 1472,

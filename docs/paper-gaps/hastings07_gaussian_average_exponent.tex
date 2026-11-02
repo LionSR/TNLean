@@ -6,10 +6,10 @@
 \setlength{\emergencystretch}{2em}
 \title{The Exponent of Hastings' Gaussian Time Average}
 \author{}
-\date{October 22, 2026}
+\date{October 28, 2026}
 \begin{document}
 \maketitle
-\gapnote{false-source}{open}
+\gapnote{false-source}{resolved}
 
 \section{The source statement}
 
@@ -99,11 +99,17 @@ Indeed, with $\delta=1/(6\xi)-1/\xi'>0$,
 \end{align}
 the supremum being attained at $l=1/(2\delta)$, while no constant independent of
 $l$ absorbs $\sqrt l$ at $\delta=0$. Lemma~1 is therefore stated with
-$6\xi<\xi'$ at a fixed length. The printed endpoint is reached instead at the
-length $\tfrac54\hat\xi$ obtained by raising the velocity of the chain
-Lieb--Robinson estimate, which the source allows because it fixes $\xi$ only
-through some Lieb--Robinson pair; that length carries the same restriction on
-the pair as $\hat\xi$; see \path{hastings07_lemma1_decay_length.tex}. The printed claim (\ref{eq:hastings07_gaussian_average_source})
+$6\xi<\xi'$ at a fixed length. An endpoint estimate holds at the auxiliary
+length $\zeta=\tfrac54\hat\xi$, associated with an admissible physical
+Lieb--Robinson pair whose velocity includes the gap. To retain a velocity
+proportional to the interaction strength, one may instead choose
+$(v,\xi_C)=(40c_RJ,80)$, with
+$c_R=2(R+1)2^{2R+1}e^{2R}$. Its length
+$s=\max(80c_RJ/\Delta E,80)$ satisfies $s\ge2\zeta$, and both the contraction
+and positive factorization estimates hold with $\xi'=6s$; see
+\path{hastings07_lemma1_decay_length.tex} and
+\path{hastings07_lemma1_positivity_rate.tex}.
+The printed claim (\ref{eq:hastings07_gaussian_average_source})
 is false for the printed $q$, while the corrected statement follows from the
 source's own estimates, with the larger $q$ and any decay length $\xi'>6\xi$.
 
@@ -111,7 +117,7 @@ This is the rate of the product $O_BO_LO_R$ as constructed in the appendix.
 The note added after it observes that $O_B$ need not be positive, that the
 argument of the paper goes through without positivity, and that $O_B$ may be
 replaced by a positive operator at the cost $\epsilon\mapsto O(\sqrt\epsilon)$,
-which halves the decay rate again.\footnote{\path{References/0705.2024/law16.tex},
+which halves the decay rate at a fixed length.\footnote{\path{References/0705.2024/law16.tex},
     lines~912--943.}
 That positive version is treated where Lemma~1 is assembled.
 

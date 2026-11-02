@@ -20,7 +20,7 @@ the resulting splitting decomposes any tensor into irreducible blocks.
 \end{proof}
 
 
-\begin{theorem}[Invariant projection gives a two-block decomposition]\label{thm:lowerzero_two_block}
+\begin{lemma}[Invariant projection gives a two-block decomposition]\label{thm:lowerzero_two_block}
     \lean{MPSTensor.exists_twoBlock_decomp_of_lowerZero}
     \leanok
     \uses{def:same_mpv2}
@@ -30,14 +30,14 @@ the resulting splitting decomposes any tensor into irreducible blocks.
     dimensions $n$ and $m$ such that, in the sense of
     Definition~\ref{def:same_mpv2}, $A$ and the two-block tensor
     $A_1\oplus A_2$ generate the same MPV family.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:samempv_unitary}
     A unitary $U$ diagonalizes $P$; since $P^2=P$, the diagonal form of $P$
     has only $0$- and $1$-eigenvalues, splitting the basis as $n+m=D$.
-    By Theorem~\ref{thm:samempv_unitary}, conjugating $A$ by $U$ preserves the
+    By Lemma~\ref{thm:samempv_unitary}, conjugating $A$ by $U$ preserves the
     MPV family, and in this basis the relation $(\Id-P)A^iP=0$ puts each
     conjugated letter in the upper block-triangular form
     \begin{align}
@@ -73,7 +73,7 @@ the resulting splitting decomposes any tensor into irreducible blocks.
     no nontrivial invariant projection (Definition~\ref{def:irreducible_tensor}).
 \end{definition}
 
-\begin{theorem}[PSD fixed point gives invariant projection]\label{thm:fp_inv_proj}
+\begin{lemma}[PSD fixed point gives invariant projection]\label{thm:fp_inv_proj}
     \lean{Kraus.lowerZero_of_posSemidef_fixedPoint}
     \leanok
     \uses{def:transfer_map}
@@ -83,7 +83,7 @@ the resulting splitting decomposes any tensor into irreducible blocks.
     Let $\rho\ge0$ be a fixed point of $\E_A$, and let $P$ be its support
     projection. Then $(\Id-P)A^iP=0$ for all~$i$: the range of $P$ is
     invariant under every $A^i$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -101,7 +101,7 @@ the resulting splitting decomposes any tensor into irreducible blocks.
     projections.
 \end{proof}
 
-\begin{theorem}[Two-block decomposition]\label{thm:two_block_decomp}
+\begin{lemma}[Two-block decomposition]\label{thm:two_block_decomp}
     \lean{MPSTensor.exists_twoBlock_decomp_of_posSemidef_fixedPoint_strict}
     \leanok
     \uses{def:transfer_map, def:same_mpv2}
@@ -110,17 +110,17 @@ the resulting splitting decomposes any tensor into irreducible blocks.
     If $\E_A$ has a nonzero PSD fixed point $\rho$ that is not positive definite,
     then there exist MPS tensors $A_1,A_2$ of smaller bond dimensions with
     $\mc{V}(A)=\mc{V}(A_1\oplus A_2)$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:fp_inv_proj, thm:samempv_unitary}
     The support projection $P$ of $\rho$ is neither $0$ nor $\Id$, since
     $\rho\neq0$ and $\rho$ is not positive definite.
-    Theorem~\ref{thm:fp_inv_proj} gives $(\Id-P)A^iP=0$, so a unitary
+    Lemma~\ref{thm:fp_inv_proj} gives $(\Id-P)A^iP=0$, so a unitary
     change of basis diagonalizing $P$ puts $A^i$ in upper-triangular block
     form with diagonal blocks $B_{11}^i,B_{22}^i$.
-    Theorem~\ref{thm:samempv_unitary} preserves the MPV under the conjugation,
+    Lemma~\ref{thm:samempv_unitary} preserves the MPV under the conjugation,
     and the trace identity (\ref{eq:canonical_two_block_trace}) shows that
     deleting the off-diagonal blocks preserves all MPV coefficients.
 \end{proof}
@@ -138,7 +138,7 @@ of strictly smaller bond dimensions.
     projection.
 \end{definition}
 
-\begin{theorem}[Irreducible block decomposition]\label{thm:irred_decomp}
+\begin{lemma}[Irreducible block decomposition]\label{thm:irred_decomp}
     \lean{MPSTensor.exists_irreducible_blockDecomp}
     \leanok
     \uses{def:irreducible_tensor}
@@ -146,14 +146,14 @@ of strictly smaller bond dimensions.
     $\bigoplus_{k=1}^r A_k$ with each $A_k$ irreducible,
     $\mc{V}(A)=\mc{V}(\bigoplus_k A_k)$, and
     $\sum_{k=1}^rD_k=D$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:two_block_decomp}
     By strong induction on $D$, if $A$ is irreducible, $r=1$ suffices. Otherwise a
     nontrivial invariant projection $P$ gives the upper-triangular splitting of
-    Theorem~\ref{thm:two_block_decomp}; deleting the off-diagonal part preserves
+    Lemma~\ref{thm:two_block_decomp}; deleting the off-diagonal part preserves
     the MPV family and yields two blocks of strictly smaller bond dimension, to
     which the induction hypothesis applies.
 
@@ -173,7 +173,7 @@ using an empty-word coefficient. Each retained block is then placed in the
 trace-preserving gauge.
 
 
-\begin{theorem}[Blockwise TP-gauge normalization of irreducible blocks]%
+\begin{lemma}[Blockwise TP-gauge normalization of irreducible blocks]%
     \label{thm:blockwise_tp_gauge}
     \lean{MPSTensor.exists_tp_gauge_blockwise}
     \leanok
@@ -193,7 +193,7 @@ trace-preserving gauge.
     \end{align}
     each $C_k$ is irreducible and left-canonical,
     $\sum_i(C_k^i)^\dagger C_k^i=\Id$, with positive bond dimension.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     The Perron--Frobenius TP-gauge construction is applied to each irreducible
@@ -205,7 +205,7 @@ trace-preserving gauge.
 \subsection{Trace-preserving gauge for arbitrary tensors}%
 \label{sec:tp_gauge_arbitrary}
 
-\begin{theorem}[TP-gauge reduction for arbitrary tensors]%
+\begin{lemma}[TP-gauge reduction for arbitrary tensors]%
     \label{thm:tp_gauge_arbitrary}
     \lean{MPSTensor.exists_tp_gauge_from_arbitrary}
     \leanok
@@ -222,11 +222,11 @@ trace-preserving gauge.
         \label{eq:canonical_arbitrary_tp}
     \end{align}
     and $\sum_{k=1}^rD_k\le D$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:nonzero_irreducible_block_decomposition, thm:tp_data_irreducible}
-    Theorem~\ref{thm:nonzero_irreducible_block_decomposition} gives the
+    Lemma~\ref{thm:nonzero_irreducible_block_decomposition} gives the
     nonzero irreducible blocks $(C_k)_{k=1}^r$, with
     $V^{(N)}(A)_\sigma
         =V^{(N)}(\bigoplus_{k=1}^rC_k)_\sigma$ for every $N\ge1$ and every
@@ -264,7 +264,7 @@ projections from \cite[Theorem~6.6]{Wolf2012Quantum}, compressing to their
 corners, and proving that each corner restriction is irreducible. Only then
 does the peripheral set $\{1\}$ imply primitivity of the sector maps.
 
-\begin{theorem}[Period removal by blocking]%
+\begin{lemma}[Period removal by blocking]%
     \label{thm:cyclic_sector_decomp_after_blocking}
     \lean{MPSTensor.exists_cyclic_sector_decomp_after_blocking_of_TP_of_isIrreducibleTensor}
     \leanok
@@ -296,7 +296,7 @@ does the peripheral set $\{1\}$ imply primitivity of the sector maps.
     and \cite[Theorem~6.6]{Wolf2012Quantum}, this decomposition extracts the
     cyclic-sector projections $P_k$ from the peripheral spectrum of the
     adjoint transfer map.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:adjoint_fixed_projection_block_decomp_isometry}
@@ -311,7 +311,7 @@ does the peripheral set $\{1\}$ imply primitivity of the sector maps.
     stated sector tensors and compression maps.
 \end{proof}
 
-\begin{theorem}[Unconditional primitive blocked sectors]%
+\begin{lemma}[Unconditional primitive blocked sectors]%
     \label{thm:blocked_sector_unconditional}
     \lean{MPSTensor.primitive_and_irreducible_sectorBlocks_of_cyclic_decomp_after_blocking}
     \leanok
@@ -343,11 +343,11 @@ does the peripheral set $\{1\}$ imply primitivity of the sector maps.
     $P_u(A^{[m]})^\alpha$.
     Then every sector tensor satisfies
     $\sigma_\partial(\E_{C_u})=\{1\}$ and is tensor-irreducible.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:sector_irred_unconditional, thm:primitive_adjoint_equiv}
-    Theorem~\ref{thm:sector_irred_unconditional} gives irreducibility of
+    Lemma~\ref{thm:sector_irred_unconditional} gives irreducibility of
     $(\E_A^\dagger)^m$ on each corner $P_u$. The compression equivalences
     in (\ref{eq:canonical_sector_compression}) intertwine the adjoint transfer
     map of $C_u$ with the corresponding corner restriction of
@@ -363,11 +363,11 @@ does the peripheral set $\{1\}$ imply primitivity of the sector maps.
     because $\gamma$ is a primitive $m$th root of unity. Hence each nonzero
     irreducible corner restriction is primitive. Primitivity and irreducibility
     are preserved across $\varphi_u$, and
-    Theorem~\ref{thm:primitive_adjoint_equiv} then passes from the adjoint blocked
+    Lemma~\ref{thm:primitive_adjoint_equiv} then passes from the adjoint blocked
     map to the primal transfer map of $C_u$.
 \end{proof}
 
-\begin{theorem}[Period removal with primitive irreducible sectors]%
+\begin{lemma}[Period removal with primitive irreducible sectors]%
     \label{thm:cyclic_sector_decomp_irr_tp_prim_irr}
     \lean{MPSTensor.exists_primitive_irreducible_cyclic_sector_decomp_of_TP_of_isIrreducibleTensor}
     \leanok
@@ -376,21 +376,21 @@ does the peripheral set $\{1\}$ imply primitivity of the sector maps.
     $m\ge1$ and a unit-weight decomposition of $A^{[m]}$ into sector blocks
     $(C_k)_{k=1}^m$, each of which is left-canonical, has primitive transfer map,
     is tensor-irreducible, and has nonzero bond dimension.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:cyclic_sector_decomp_after_blocking, thm:blocked_sector_unconditional}
     Left-canonicality makes $K_i:=(A^i)^\dagger$ unital, irreducibility passes
     to the adjoint map, and the quantum Perron--Frobenius theorem provides a
     positive-definite fixed point; the cyclic peripheral-spectrum theorem and
-    Theorem~\ref{thm:cyclic_sector_decomp_after_blocking} then produce the
+    Lemma~\ref{thm:cyclic_sector_decomp_after_blocking} then produce the
     cyclic-sector decomposition. Retaining the projections and compression
-    equivalences, Theorem~\ref{thm:blocked_sector_unconditional} then
+    equivalences, Lemma~\ref{thm:blocked_sector_unconditional} then
     establishes primitivity and tensor-irreducibility of the sector blocks.
 \end{proof}
 
 
-\begin{theorem}[Common blocking length for cyclic sectors]%
+\begin{lemma}[Common blocking length for cyclic sectors]%
     \label{thm:ft_after_blocking_common_length_common_sector_theorem}
     \lean{MPSTensor.afterBlocking_commonLengthCommonSectorData_of_sameMPV₂Pos}
     \leanok
@@ -416,11 +416,11 @@ does the peripheral set $\{1\}$ imply primitivity of the sector maps.
         V^{(N)}\!\left(\bigoplus_k(\mu_k^B)^p(B_k)^{[p]}\right)_\sigma.
         \label{eq:canonical_powered_parts_equal}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:ft_after_blocking_per_block_cyclic_nonzero_blocks, thm:exists_common_blocked_cyclic_sector_family_common_multiple, thm:same_mpv2_pos_block_tensor_to_tensor_from_blocks, thm:same_mpv2_pos_to_tensor_from_blocks_block_power, thm:common_blocked_cyclic_sector_derived_properties}
-    In Theorem~\ref{thm:ft_after_blocking_per_block_cyclic_nonzero_blocks}, let
+    In Lemma~\ref{thm:ft_after_blocking_per_block_cyclic_nonzero_blocks}, let
     $p_A,p_B$ be the least common multiples of the period-removal lengths on the
     two sides and set $p=\lcm(p_A,p_B)$. The prescribed-common-multiple
     lemma constructs both one-sided sector families at this length, and the
@@ -438,7 +438,7 @@ does the peripheral set $\{1\}$ imply primitivity of the sector maps.
 The powered transfer map is analyzed on each corner projection before the
 sector families are placed over a common blocked alphabet.
 
-\begin{theorem}[Fixed-point upgrade on an invariant corner]%
+\begin{lemma}[Fixed-point upgrade on an invariant corner]%
     \label{thm:adjoint_corner_fixed_of_preserved}
     \lean{MPSTensor.hFixUpgrade_of_peripheral}
     \leanok
@@ -451,7 +451,7 @@ sector families are placed over a common blocked alphabet.
         (\E_{A^\dagger})^m(Q) & =Q.
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Since $\E_A$ is irreducible and trace-preserving on a positive bond
@@ -467,7 +467,7 @@ sector families are placed over a common blocked alphabet.
     zero. Since $\rho>0$, the difference vanishes.
 \end{proof}
 
-\begin{theorem}[Fixed-point algebra rigidity on cyclic sectors]%
+\begin{lemma}[Fixed-point algebra rigidity on cyclic sectors]%
     \label{thm:sector_fixed_point_algebra_rigidity}
     \lean{MPSTensor.sectorFixedPointAlgebraRigidity_of_irreducible_tp}
     \leanok
@@ -486,7 +486,7 @@ sector families are placed over a common blocked alphabet.
          & =\E_{A^\dagger}(X)\E_{A^\dagger}(Y).
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:irreducible_unital_scalar_fixed_point}
@@ -516,7 +516,7 @@ sector families are placed over a common blocked alphabet.
         \notag
     \end{align}
     is fixed by $\E_{A^\dagger}$. By
-    Theorem~\ref{thm:irreducible_unital_scalar_fixed_point}, $R_X=c\Id$.
+    Lemma~\ref{thm:irreducible_unital_scalar_fixed_point}, $R_X=c\Id$.
     Orthogonality of the cyclic sectors and the multiplicative-domain
     identities give $X=P_kR_XP_k=cP_k$. Similarly, $Y=c'P_k$. Since
     $\E_{A^\dagger}(P_k)=P_{k-1}$, both sides of the required identity equal

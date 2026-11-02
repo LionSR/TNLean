@@ -31,14 +31,16 @@ open Matrix
 
 namespace MPOTensor
 
-/-- The doubled matrix associated with a rectangular bond map. -/
-private noncomputable def doubledBondMap {D E : ℕ}
+/-- The doubled matrix associated with a rectangular bond map.
+Source: arXiv:1703.09188, Definition III.2 and Proposition IV.5,
+lines 363--374 and 773--804. -/
+noncomputable def doubledBondMap {D E : ℕ}
     (A : Matrix (Fin E) (Fin D) ℂ) : Matrix (Fin (E * E)) (Fin (D * D)) ℂ :=
   ((A.map (starRingEnd ℂ)) ⊗ₖ A).submatrix finProdFinEquiv.symm finProdFinEquiv.symm
 
 /-- Rectangular multiplication of bond matrices induces the corresponding
 doubled multiplication. Source: CPSV17, Proposition IV.5, lines 773–804. -/
-private theorem doubleLayer_rectangularSandwich {d D E : ℕ}
+theorem doubleLayer_rectangularSandwich {d D E : ℕ}
     (W : MPOTensor d D) (A : Matrix (Fin E) (Fin D) ℂ)
     (B : Matrix (Fin D) (Fin E) ℂ) (i j : Fin d) :
     doubleLayerTensor (fun i j ↦ A * W i j * B) i j =

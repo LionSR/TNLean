@@ -43,7 +43,6 @@ on:
       - 'scripts/ci_compatible_cache.py'
       - 'scripts/test_ci_compatible_cache.py'
       - 'scripts/test_ci_cache_lake_invalidation.py'
-      - 'scripts/test_ci_fixture_overlay.py'
       - 'docs/ci-automation.md'
       - 'docs/CONTRIBUTING.md'
       - '.github/workflows/**'
@@ -148,7 +147,6 @@ on:
       - 'scripts/ci_compatible_cache.py'
       - 'scripts/test_ci_compatible_cache.py'
       - 'scripts/test_ci_cache_lake_invalidation.py'
-      - 'scripts/test_ci_fixture_overlay.py'
       - 'docs/ci-automation.md'
       - 'docs/CONTRIBUTING.md'
       - '.github/workflows/**'
@@ -303,7 +301,6 @@ jobs:
               - 'scripts/ci_compatible_cache.py'
               - 'scripts/test_ci_compatible_cache.py'
               - 'scripts/test_ci_cache_lake_invalidation.py'
-              - 'scripts/test_ci_fixture_overlay.py'
               - 'docs/ci-automation.md'
               - 'docs/CONTRIBUTING.md'
               - 'scripts/generate_import_aggregators.py'
@@ -558,11 +555,12 @@ jobs:
             lake build lint_style
           } 2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
 
-      # Elaborate changed production files and every affected TNLeanTest file
-      # with warnings as errors. A test is affected when it changed or its
-      # import closure contains a changed module; every test runs when a
-      # dependency pin, the toolchain or this workflow changes. New modules and
-      # tests need no workflow edit. Selection: scripts/ci_lean_checks.py.
+      # Elaborate changed production files and every affected
+      # scripts/*_regression.lean file with warnings as errors. A regression is
+      # affected when it changed or its import closure contains a changed
+      # module; every regression runs when a dependency pin, the toolchain or
+      # this workflow changes. New modules need no workflow edit. Selection:
+      # scripts/ci_lean_checks.py.
       - name: Check changed Lean files and affected tests strictly
         timeout-minutes: 60
         env:
@@ -700,7 +698,7 @@ jobs:
       - uses: actions/setup-python@v7
         with:
           python-version: '3.12'
-      - uses: actions/setup-node@v6
+      - uses: actions/setup-node@v7
         with:
           node-version: '22'
       - name: Check campaign JavaScript syntax
@@ -759,9 +757,6 @@ jobs:
           python3 scripts/test_pr_ci_base_snapshot.py
           python3 -m py_compile scripts/test_ci_cache_lake_invalidation.py
 
-      - name: Test CI fixture import overlay
-        run: python3 scripts/test_ci_fixture_overlay.py
-
       - name: Test changed-file Lean check selection
         run: python3 scripts/test_ci_lean_checks.py
 
@@ -778,6 +773,17 @@ jobs:
       # the same revisions or the weekly API docs build checks out stale ones.
       - name: Check docbuild manifest against the root manifest
         run: python3 scripts/check_docbuild_manifest.py --root .
+
+      # The repository keeps no Lean test fixtures (per-theorem axiom
+      # printouts and the like) under TNLeanTest/; see
+      # docs/project_conventions.md.
+      - name: Reject test fixture files
+        run: |
+          files=$(git ls-files -- TNLeanTest)
+          if [ -n "$files" ]; then
+            printf '::error file=%s::Do not add files under TNLeanTest/; see docs/project_conventions.md.\n' $files
+            exit 1
+          fi
 
       # Ordinary Lean modules over 1000 lines fail. The exact root aggregator
       # exemption is accepted only while its uncommented content is import-only.

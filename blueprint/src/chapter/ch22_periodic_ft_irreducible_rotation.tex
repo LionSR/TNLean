@@ -14,7 +14,7 @@
     \cite[lines~248--261 and 313--332]{DeLasCuevas2017Irreducible}.
 \end{definition}
 
-\begin{theorem}[The period of an irreducible-form block]
+\begin{lemma}[The period of an irreducible-form block]
     \label{thm:spectral_periodic_period_existence}
     \lean{MPSTensor.exists_isSpectrallyPeriodic_of_irreducible_of_spectralRadius_one}
     \leanok
@@ -24,7 +24,7 @@
     there exists a positive integer $m$ such that $A$ is spectrally $m$-periodic,
     so that the peripheral eigenvalues of $\E_A$ are precisely the
     $m$-th roots of unity (\cite[lines~257--258]{DeLasCuevas2017Irreducible}).
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \uses{thm:pure_perron_tp_gauge, thm:cpsv_spectral_radius_similarity, lem:peripheral_spectrum_similarity, lem:irreducible_transfer_perron_pair, thm:transfer_map_irreducible_of_tensor}
     \leanok
@@ -56,13 +56,13 @@
     $\operatorname{Spec}_{\mathrm{per}}(\E_A)=\operatorname{Spec}_{\mathrm{per}}(\E_B)$.
 \end{proof}
 
-\begin{theorem}[A spectrally periodic tensor has positive bond dimension]
+\begin{lemma}[A spectrally periodic tensor has positive bond dimension]
     \label{thm:spectral_periodic_bond_dimension_pos}
     \lean{MPSTensor.IsSpectrallyPeriodic.bondDim_ne_zero}
     \leanok
     \uses{def:spectral_periodic_tensor}
     If $A$ is spectrally periodic, then its bond dimension satisfies $D\geq1$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     In bond dimension zero the matrix space and its endomorphism algebra are
@@ -100,7 +100,7 @@
     primitive transfer map (the corresponding definition in the companion quantum-channel volume~\cite[``Primitive map'']{QICLean2026Blueprint}).
 \end{definition}
 
-\begin{theorem}[Irreducible left-canonical tensors are periodic]
+\begin{lemma}[Irreducible left-canonical tensors are periodic]
     \label{thm:irreducible_left_canonical_periodic}
     \lean{MPSTensor.exists_isPeriodic_of_irreducible_of_isLeftCanonical}
     \leanok
@@ -108,19 +108,19 @@
     Every irreducible left-canonical MPS tensor $A$ of positive bond dimension
     is $m$-periodic for some $m\ge1$
     \cite[lines~248--258 and eq.~\emph{unital}]{DeLasCuevas2017Irreducible}.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \uses{thm:spectral_periodic_period_existence}
     \leanok
     The transfer map $\E_A$ is positive and trace-preserving on a nonzero
     matrix space, so $\rho_{\spec}(\E_A)=1$. By
-    Theorem~\ref{thm:spectral_periodic_period_existence},
+    Lemma~\ref{thm:spectral_periodic_period_existence},
     $\operatorname{Spec}_{\mathrm{per}}(\E_A)=\{\mu\in\C:\mu^m=1\}$ for some
     $m\ge1$, which together with irreducibility and left-canonicity is the
     definition of an $m$-periodic tensor.
 \end{proof}
 
-\begin{theorem}[Perron normalization of spectrally periodic tensors]
+\begin{lemma}[Perron normalization of spectrally periodic tensors]
     \label{thm:spectral_periodic_normalization}
     \lean{MPSTensor.IsSpectrallyPeriodic.exists_isPeriodic_tpGauge}
     \leanok
@@ -134,11 +134,11 @@
     is a left-canonical $m$-periodic tensor.  The similarity is pure, so it
     leaves every matrix-product vector unchanged and introduces no scalar
     weight into the normalization.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \uses{lem:peripheral_spectrum_similarity, thm:pure_perron_tp_gauge}
     \leanok
-    Theorem~\ref{thm:pure_perron_tp_gauge} provides $\sigma$ and makes $B$
+    Lemma~\ref{thm:pure_perron_tp_gauge} provides $\sigma$ and makes $B$
     left-canonical; because the transfer map of $B$ is similar to that of $A$,
     Lemma~\ref{lem:peripheral_spectrum_similarity} preserves the prescribed
     set of $m$-th roots of unity.
@@ -170,7 +170,7 @@
     \end{align}
 \end{definition}
 
-\begin{theorem}[Similarity of sector-decomposed tensors]
+\begin{lemma}[Similarity of sector-decomposed tensors]
     \label{thm:periodic_sector_basis_replacement_gauge}
     \lean{MPSTensor.SectorDecomposition.gaugeEquiv_toTensor_replaceBasis}
     \leanok
@@ -188,7 +188,7 @@
         X     & =\bigoplus_{j\in J}(I_{r_j}\otimes X_j).
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \uses{def:ft_matched_flat_data, lem:tensor_from_blocks_globalGauge_conj}
     \leanok
@@ -197,7 +197,7 @@
     block conjugation by $X$ sends $\mu_{j,q}A_j^i$ to $\mu_{j,q}B_j^i$.
 \end{proof}
 
-\begin{theorem}[Sectorwise Perron normalization]
+\begin{lemma}[Sectorwise Perron normalization]
     \label{thm:spectral_periodic_sector_normalization}
     \lean{MPSTensor.SectorDecomposition.exists_isPeriodic_replaceBasis}
     \leanok
@@ -206,36 +206,36 @@
     are left-canonical $m_j$-periodic representatives $B_j$, each purely
     similar to $A_j$, such that the two full multiplicity-bearing tensors are
     purely similar.  Every multiplicity matrix $R_j$ is unchanged.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \uses{thm:spectral_periodic_normalization, thm:periodic_sector_basis_replacement_gauge}
     \leanok
     Applying the positive Perron gauge to each representative and combining
-    them via Theorem~\ref{thm:periodic_sector_basis_replacement_gauge} yields
+    them via Lemma~\ref{thm:periodic_sector_basis_replacement_gauge} yields
     the left-canonical representatives $B_j$; since every spectral radius is
     already one, no representative is rescaled.
 \end{proof}
 
-\begin{theorem}[A periodic tensor has positive bond dimension]
+\begin{lemma}[A periodic tensor has positive bond dimension]
     \label{thm:periodic_bond_dimension_pos}
     \lean{MPSTensor.IsPeriodic.bondDim_ne_zero}
     \leanok
     \uses{def:periodic_tensor}
     If $A$ is periodic, then its bond dimension satisfies $D\geq1$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The prescribed peripheral spectrum contains the eigenvalue $1$. In bond
     dimension zero the matrix space is zero-dimensional and admits no
     eigenvector, which is a contradiction.
 \end{proof}
 
-\begin{theorem}[A periodic tensor has positive physical dimension]
+\begin{lemma}[A periodic tensor has positive physical dimension]
     \label{thm:periodic_physical_dimension_pos}
     \lean{MPSTensor.IsPeriodic.physDim_ne_zero}
     \leanok
     \uses{def:periodic_tensor}
     If $A$ is a normalized periodic tensor, then $d\geq1$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:periodic_bond_dimension_pos,thm:left_canonical_physical_dimension}
     The bond dimension of $A$ is positive. A left-canonical tensor on a
@@ -300,14 +300,14 @@
 Physical-index rotations act on periodic tensors and their transfer maps as
 follows.
 
-\begin{theorem}[Transfer map preserved by physical rotation]%
+\begin{lemma}[Transfer map preserved by physical rotation]%
     \label{thm:transfer_map_rotate_physical}
     \lean{MPSTensor.transferMap_rotatePhysical}
     \leanok
     \uses{def:rotate_physical, def:transfer_map}
     If $uu^\dagger=\Id$, then the transfer map is invariant under
     physical-index rotation: $\E_{A_u}=\E_A$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{lem:unitary_kraus_mixing}
@@ -315,14 +315,14 @@ follows.
     \cite[Theorem~2.1(4)]{Wolf2012Quantum}.
 \end{proof}
 
-\begin{theorem}[Left-canonical preserved by physical rotation]%
+\begin{lemma}[Left-canonical preserved by physical rotation]%
     \label{thm:left_canonical_rotate_physical}
     \lean{MPSTensor.isLeftCanonical_rotatePhysical}
     \leanok
     \uses{def:rotate_physical}
     If $uu^\dagger=\Id$ and $A$ is left-canonical, then
     $A_u$ is left-canonical.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:rotate_physical}
@@ -331,14 +331,14 @@ follows.
     the sum to $\sum_j(A^j)^\dagger A^j=\Id$.
 \end{proof}
 
-\begin{theorem}[Irreducibility preserved by physical rotation]%
+\begin{lemma}[Irreducibility preserved by physical rotation]%
     \label{thm:irreducible_tensor_rotate_physical}
     \lean{MPSTensor.isIrreducibleTensor_rotatePhysical}
     \leanok
     \uses{def:rotate_physical}
     If $uu^\dagger=\Id$ and $A$ is irreducible, then
     $A_u$ is irreducible.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:rotate_physical}
@@ -347,31 +347,31 @@ follows.
     orthogonality of~$u$, contradicting irreducibility of~$A$.
 \end{proof}
 
-\begin{theorem}[Periodicity preserved by physical rotation]%
+\begin{lemma}[Periodicity preserved by physical rotation]%
     \label{thm:periodic_rotate_physical}
     \lean{MPSTensor.isPeriodic_rotatePhysical}
     \leanok
     \uses{def:rotate_physical, thm:transfer_map_rotate_physical, thm:left_canonical_rotate_physical, thm:irreducible_tensor_rotate_physical}
     If $uu^\dagger=\Id$ and $A$ is periodic with period~$m$, then
     $A_u$ is periodic with the same period.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:transfer_map_rotate_physical, thm:left_canonical_rotate_physical, thm:irreducible_tensor_rotate_physical}
-    Theorem~\ref{thm:transfer_map_rotate_physical} preserves the transfer map
-    and its peripheral spectrum, Theorem~\ref{thm:left_canonical_rotate_physical}
+    Lemma~\ref{thm:transfer_map_rotate_physical} preserves the transfer map
+    and its peripheral spectrum, Lemma~\ref{thm:left_canonical_rotate_physical}
     preserves left-canonicity, and
-    Theorem~\ref{thm:irreducible_tensor_rotate_physical} preserves
+    Lemma~\ref{thm:irreducible_tensor_rotate_physical} preserves
     irreducibility.
 \end{proof}
 
-\begin{theorem}[Equality of MPV families preserved by physical rotation]%
+\begin{lemma}[Equality of MPV families preserved by physical rotation]%
     \label{thm:same_mpv_rotate_physical}
     \lean{MPSTensor.sameMPV₂_rotatePhysical}
     \leanok
     \uses{def:rotate_physical, def:same_mpv}
     If $\mc{V}(A)=\mc{V}(B)$, then $\mc{V}(A_u)=\mc{V}(B_u)$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:rotate_physical, def:same_mpv}
@@ -380,7 +380,7 @@ follows.
     the induction hypothesis via word concatenation.
 \end{proof}
 
-\begin{theorem}[Physical rotation distributes over block-diagonal composition]%
+\begin{lemma}[Physical rotation distributes over block-diagonal composition]%
     \label{thm:rotate_physical_blocks}
     \lean{MPSTensor.rotatePhysical_toTensorFromBlocks}
     \leanok
@@ -391,7 +391,7 @@ follows.
          & =\bigoplus_k\mu_k(A_k)_u.
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:rotate_physical}
@@ -399,7 +399,7 @@ follows.
     the identity entrywise.
 \end{proof}
 
-\begin{theorem}[Irreducible form preserved by physical rotation]%
+\begin{lemma}[Irreducible form preserved by physical rotation]%
     \label{thm:irreducible_form_rotate_physical}
     \lean{MPSTensor.isIrreducibleForm_rotatePhysical}
     \leanok
@@ -407,13 +407,13 @@ follows.
     If $uu^\dagger=\Id$ and $A$ is in irreducible form, then
     $A_u$ is in irreducible form with the same block structure and
     rotated blocks.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:periodic_rotate_physical, thm:same_mpv_rotate_physical, thm:rotate_physical_blocks}
-    By Theorem~\ref{thm:periodic_rotate_physical} each block remains periodic,
-    by Theorem~\ref{thm:same_mpv_rotate_physical} equality of the MPV families
-    is preserved, and by Theorem~\ref{thm:rotate_physical_blocks} physical
+    By Lemma~\ref{thm:periodic_rotate_physical} each block remains periodic,
+    by Lemma~\ref{thm:same_mpv_rotate_physical} equality of the MPV families
+    is preserved, and by Lemma~\ref{thm:rotate_physical_blocks} physical
     rotation distributes over the block-diagonal sum.
 \end{proof}
 

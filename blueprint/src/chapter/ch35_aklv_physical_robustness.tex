@@ -1,0 +1,100 @@
+\section{Physical robustness at logarithmic and polynomial thresholds}
+
+\begin{definition}[A logarithmic truncation threshold]
+    \label{def:aklv_logarithmic_threshold}
+    \lean{TNLean.MPS.AreaLaw.aklvLogarithmicThreshold,
+        TNLean.MPS.AreaLaw.aklvLogarithmicThreshold_le_div}
+    \leanok
+    For $g>0$, put
+    \begin{align*}
+        T(g)=1024+16\log(1/g).
+    \end{align*}
+    If $g\le1$, then $0\le T(g)\le1024/g$.
+    Indeed, $\log(1/g)\le1/g-1$ and $1/g\ge1$.
+\end{definition}
+
+\begin{lemma}[Robustness above a logarithmic threshold]
+    \label{thm:aklv_logarithmic_robustness}
+    \lean{TNLean.MPS.AreaLaw.exists_aklv_logarithmic_robustness}
+    \leanok
+    \uses{def:aklv_normalization_regions,def:aklv_two_block_truncation,
+        def:aklv_logarithmic_threshold}
+    Let $s\ge6$, $a+s+1\le L$, and let $0\le h_i\le\Id$ act on
+    $\{i,i+1\}$. Suppose the unit ground vector $\Omega$ of
+    $H'=\sum_i h_i$ has energy $\mu$, actual first excited energy
+    $\mu+g$, and
+    $H'-\mu\Id\ge g(\Id-|\Omega\rangle\langle\Omega|)$, where $g>0$.
+    Then $q\ge2$ and $g\le1$.
+    The genuine reference minima can be chosen before $t$, with
+    $E_0+\sum_j e_j=\mu$ and $0\le E_0\le6$.
+    For every $t\ge T(g)$, the actual two-exterior truncation at
+    $a+2,a+s-1$ has a phase-aligned unit ground vector $\phi$,
+    gap at least $9g/10$, and
+    \begin{align*}
+        \|\phi-\Omega\|^2\le e^{-t/16}/100.
+    \end{align*}
+    This strengthens the sufficient threshold in
+    \cite[Theorem~6.1]{Arad2013AreaLaw} within the stated window range.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{thm:aklv_two_block_scaled_low_cluster,
+        thm:chain_positive_nearest_neighbor_gap_upper}
+    The ground eigenvalue belongs to the spectrum because its unit
+    eigenvector is nonzero. The two distinct spectral values force $q\ge2$,
+    and the endpoint trial vector gives $g\le1$.
+    Set $C_1=10^6\cdot64e^{3/4}$ and $\tau=e^{-t/16}$.
+    The inequalities $\log C_1\le61$ and $t\ge1024-16\log g$ give
+    \begin{align*}
+        g+11 & \le t,                               &
+        g+8\log\frac{C_1}{\tau g}
+             & =\frac t2+g+8(\log C_1-\log g)\le t.
+    \end{align*}
+    Hence $0<\tau\le1$ and $t\ge\Theta(g,\tau)$.
+    The actual spectral comparison supplies the required gap and squared
+    phase error at most $\tau/100$. Multiplication by the inverse phase
+    preserves the norm and eigenvalue and gives the asserted vector.
+\end{proof}
+
+\begin{lemma}[Robustness for a window with at least six interactions]
+    \label{thm:aklv_physical_robustness}
+    \lean{TNLean.MPS.AreaLaw.exists_aklv_physical_robustness}
+    \leanok
+    \uses{def:aklv_normalization_regions,def:aklv_two_block_truncation}
+    Let $s\ge6$, $a+s+1\le L$, and let $0\le h_i\le\Id$ be supported on
+    $\{i,i+1\}$. Suppose $\Omega$ is a unit ground vector of
+    $H'=\sum_i h_i$ with energy $\mu$ and actual first excited energy
+    $\mu+g$, where $g>0$, and suppose
+    $H'-\mu\Id\ge g(\Id-|\Omega\rangle\langle\Omega|)$.
+    The genuine reference minima $e_j$ can be chosen before $t$, with
+    $E_0+\sum_j e_j=\mu$ and $0\le E_0\le6$.
+    For every
+    \begin{align}
+        t\ge\frac{1024}{g}\left(\frac{E_0}{g}+1\right),
+        \label{eq:aklv_physical_polynomial_threshold}
+    \end{align}
+    form the actual two-exterior truncation $B$ at cuts $a+2,a+s-1$
+    with those same minima. It has an actual phase-aligned unit ground
+    vector $\phi$, its gap is at least $9g/10$, and
+    \begin{align}
+        \|\phi-\Omega\|^2\le\frac{e^{-t/16}}{100}.
+        \label{eq:aklv_physical_robustness_error}
+    \end{align}
+    This gives the polynomial-threshold and exponential conclusions of
+    \cite[Theorem~6.1]{Arad2013AreaLaw} for the original bounded-term setting
+    and the stated window range. The support and normalization corrections
+    are recorded in \cite{gap:aklv13_two_block_robustness}.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{thm:aklv_logarithmic_robustness}
+    Lemma~\ref{thm:aklv_logarithmic_robustness} gives $g\le1$ and
+    the actual truncated ground vector above $T(g)$.
+    Since $E_0\ge0$, the polynomial threshold implies
+    $t\ge1024/g\ge T(g)$, so the conclusion follows.
+\end{proof}
+
+% The original nearest-neighbour/norm-one context is retained from source
+% lines879--925. Theorem6.1 does not explicitly quantify over arbitrary independent
+% exterior matrices. The present statement keeps s>=6 explicit; smaller windows
+% remain separate, as documented by the cited source note.

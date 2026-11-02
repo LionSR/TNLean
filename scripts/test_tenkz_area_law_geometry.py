@@ -31,7 +31,7 @@ ENTRIES = {
                 "def:area_law_primary_regions", "definition"),
     "fan": ("ch24_peps_area_law_cell_fans.tex", "def:area_law_cell_fan", "definition"),
     "rays": ("ch24_peps_area_law_initial_active_rays.tex",
-             "thm:area_law_initial_active_radial", "theorem"),
+             "thm:area_law_initial_active_radial", "lemma"),
 }
 CORNERS = {(1, 1), (1, 9), (9, 9), (9, 1)}
 MIDPOINTS = {(1, 5), (5, 9), (9, 5), (5, 1)}

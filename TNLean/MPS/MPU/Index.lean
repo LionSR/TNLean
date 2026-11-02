@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.MPU.AdjointSimpleContraction
+import TNLean.MPS.MPU.SourceFactorsPhysicalAdjoint
 import TNLean.MPS.MPU.CanonicalFormBlocking
 import TNLean.MPS.MPU.SimpleTensorEquivalence
 import TNLean.MPS.MPU.SourceIndexValue
@@ -200,13 +201,7 @@ lines 1196--1207. -/
 theorem IsMPUCanonicalFormII.index_physicalAdjointTensor
     (hU : IsMPUCanonicalFormII U) : hU.physicalAdjointTensor.index = -hU.index := by
   obtain ⟨k, hk, _, hS, _⟩ := hU.exists_sourceV_blockTensor_isIsometry
-  have hprod : r[MPOTensor.blockTensor U k] * ℓ[MPOTensor.blockTensor U k] =
-      MPSTensor.blockPhysDim d k * MPSTensor.blockPhysDim d k :=
-    ((hU.blockTensor k hk).isMPUSimple_tfae.out 1 2).mp hS
-  have hSad : IsMPUSimple (MPOTensor.physicalAdjointTensor (MPOTensor.blockTensor U k)) :=
-    (((hU.blockTensor k hk).physicalAdjointTensor).isMPUSimple_tfae.out 1 2).mpr
-      (by simpa only [rightRank_physicalAdjointTensor, leftRank_physicalAdjointTensor,
-        mul_comm] using hprod)
+  have hSad := (hU.blockTensor k hk).isMPUSimple_physicalAdjointTensor hS
   rw [hU.index_eq_neg_logb_leftRank_div hk hS, neg_neg,
     hU.physicalAdjointTensor.index_eq_logb_rightRank_div hk
       (by simpa only [physicalAdjointTensor_blockTensor] using hSad),

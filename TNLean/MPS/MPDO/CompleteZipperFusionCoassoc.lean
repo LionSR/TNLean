@@ -3,47 +3,54 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.PreBialgebra
 import TNLean.MPS.MPDO.CompleteZipperFusionCoproduct
+import Mathlib.RingTheory.MatrixAlgebra
+import Mathlib.RingTheory.TensorProduct.Pi
 
 /-!
-# Coassociativity of the fusion coproduct
+# The fusion coproduct as a pre-bialgebra
 
-The fusion coproduct of a complete zipper fusion family is coassociative:
-$(\Delta\otimes\mathrm{id})\circ\Delta=(\mathrm{id}\otimes\Delta)\circ\Delta$.  This is the
-coassociativity axiom of a coalgebra (arXiv:2204.05940, `mpo.tex`, lines 866--875).  The source
-starts from a coassociative coproduct and derives the associativity of the fusion trees
-(`mpo.tex`, lines 1732--1787, equation `eq:associative`).  Here the direction is reversed.  The
-coproduct is built from the fusion tensors and its coassociativity is proved.
-
-The two iterated maps are written in Kronecker coordinates on the triple bond space
-$(\mathbb C^{\chi_a}\otimes\mathbb C^{\chi_b})\otimes\mathbb C^{\chi_c}$:
+The pair space $\bigoplus_{a,b}M_{\chi_a}\otimes M_{\chi_b}$, on which the fusion coproduct of
+a complete zipper fusion family takes values, is the tensor square of the boundary space
+$\mathcal B=\bigoplus_cM_{\chi_c}$: the tensor product distributes over the two finite direct
+sums, and $M_{\chi_a}\otimes M_{\chi_b}\cong M_{\chi_a\chi_b}$ by the Kronecker product.  Read
+through this identification, the fusion coproduct is a comultiplication
+$\Delta:\mathcal B\to\mathcal B\otimes\mathcal B$ with
 \[
-  (\Delta\otimes\mathrm{id})(Y)_{abc}
-    =\sum_{e,\mu}(X^e_{ab,\mu}\otimes1)\,Y_{ec}\,(X^{e+}_{ab,\mu}\otimes1),\qquad
-  (\mathrm{id}\otimes\Delta)(Y)_{abc}
-    =\sum_{f,\lambda}(1\otimes X^f_{bc,\lambda})\,Y_{af}\,(1\otimes X^{f+}_{bc,\lambda}),
+  \Delta\big((T_c^{ik})_c\big)=\sum_j(T_c^{ij})_c\otimes(T_c^{jk})_c.
 \]
-where the second is reassociated to the same triple bond space.
+It is multiplicative and coassociative, but it has no counit and $\Delta(1)$ is only the
+support projector of the fusion tensors.  This is a pre-bialgebra in the sense of
+arXiv:2204.05940, `mpo.tex`, lines 1409--1419, realized on the dual algebra.
 
-The proof does not use the $F$-move.  Both iterated coproducts are linear, and on a letter both
-equal the letter of the triple product $T_aT_bT_c$.  The letters span the boundary space.  This
+The source starts from a coassociative coproduct and derives the associativity of the fusion
+trees (`mpo.tex`, lines 1732--1787, equation `eq:associative`).  Here the direction is
+reversed.  The coproduct is built from the fusion tensors and its coassociativity is proved
+without the $F$-move: both iterated coproducts are linear, both send a letter to
+$\sum_{j,k}T^{ij}\otimes T^{jk}\otimes T^{kl}$, and the letters span the boundary space.  This
 is the argument of `mpo.tex`, lines 940--945 and 2001--2003, run backwards.
 
 ## Main definitions
 
-* `CompleteZipperFusionFamily.coproductLeft`: the map $\Delta\otimes\mathrm{id}$.
-* `CompleteZipperFusionFamily.coproductRight`: the map $\mathrm{id}\otimes\Delta$.
+* `CompleteZipperFusionFamily.tensorPairEquiv`: the algebra equivalence
+  $\mathcal B\otimes\mathcal B\cong\bigoplus_{a,b}M_{\chi_a\chi_b}$.
+* `CompleteZipperFusionFamily.comul`: the fusion coproduct with values in
+  $\mathcal B\otimes\mathcal B$, a non-unital algebra homomorphism.
+* `CompleteZipperFusionFamily.toPreBialgebra`: the resulting pre-bialgebra structure.
 
 ## Main statements
 
-* `coproduct_coassoc`: coassociativity of the fusion coproduct.
+* `comul_letter`: $\Delta(T^{ik})=\sum_jT^{ij}\otimes T^{jk}$.
+* `comul_coassoc`: coassociativity of the fusion coproduct.
 
 ## References
 
-* arXiv:2204.05940, `mpo.tex`, lines 866--875, 1655, 1732--1787, and 2003--2006.
+* arXiv:2204.05940, `mpo.tex`, lines 866--875, 1409--1419, 1655, 1732--1787, and 2003--2006.
+* arXiv:2509.03600, section "MPO representations of bialgebras".
 -/
 
-open scoped Matrix BigOperators Kronecker
+open scoped Matrix BigOperators Kronecker TensorProduct
 open Matrix
 
 namespace MPOTensor
@@ -55,131 +62,85 @@ universe u
 variable {Λ : Type u} [Fintype Λ] [DecidableEq Λ] {p : ℕ}
 variable (Fus : CompleteZipperFusionFamily Λ p)
 
-/-- The map $\Delta\otimes\mathrm{id}$ on pairs of blocks, with values on the triple bond space
-of `(a, b, c)`.
+/-- The tensor square of the boundary space is the pair space:
+$\big(\bigoplus_aM_{\chi_a}\big)\otimes\big(\bigoplus_bM_{\chi_b}\big)\cong
+\bigoplus_{a,b}M_{\chi_a}\otimes M_{\chi_b}$, with each summand written through the Kronecker
+product.  This identifies the codomain of the coproduct of arXiv:2204.05940, `mpo.tex`,
+line 1655, with $\mathcal A^*\otimes\mathcal A^*$. -/
+noncomputable def tensorPairEquiv :
+    Fus.BoundarySpace ⊗[ℂ] Fus.BoundarySpace ≃ₐ[ℂ] Fus.PairSpace :=
+  (Algebra.TensorProduct.comm ℂ _ _).trans <|
+    (Algebra.TensorProduct.piRight ℂ ℂ Fus.BoundarySpace
+      fun a => Matrix (Fin (Fus.bondDim a)) (Fin (Fus.bondDim a)) ℂ).trans <|
+    AlgEquiv.piCongrRight fun _ => (Algebra.TensorProduct.comm ℂ _ _).trans <|
+      (Algebra.TensorProduct.piRight ℂ ℂ _
+        fun b => Matrix (Fin (Fus.bondDim b)) (Fin (Fus.bondDim b)) ℂ).trans <|
+      AlgEquiv.piCongrRight fun _ => Matrix.kroneckerAlgEquiv _ _ ℂ
 
-Source: arXiv:2204.05940, `mpo.tex`, lines 866--875 and 1655. -/
-noncomputable def coproductLeft (Y : Fus.PairSpace) (a b c : Λ) :
-    Matrix (Fus.TripleBond a b c) (Fus.TripleBond a b c) ℂ :=
-  ∑ e, ∑ μ, (Fus.fusionTensor a b e μ ⊗ₖ
-      (1 : Matrix (Fin (Fus.bondDim c)) (Fin (Fus.bondDim c)) ℂ)) * Y e c *
-    (Fus.fusionTensorLeftInverse a b e μ ⊗ₖ
-      (1 : Matrix (Fin (Fus.bondDim c)) (Fin (Fus.bondDim c)) ℂ))
+@[simp]
+theorem tensorPairEquiv_tmul (X Y : Fus.BoundarySpace) (a b : Λ) :
+    Fus.tensorPairEquiv (X ⊗ₜ Y) a b = X a ⊗ₖ Y b := by
+  simp [tensorPairEquiv, Algebra.TensorProduct.piRight_tmul]
 
-/-- The map $\mathrm{id}\otimes\Delta$ on pairs of blocks, reassociated to the triple bond space
-of `(a, b, c)`.
+/-- **The fusion coproduct on the tensor square.**  The coproduct
+$\Delta(X)_{ab}=\sum_{c,\mu}X^c_{ab,\mu}X_cX^{c+}_{ab,\mu}$ of `coproduct`, read in
+$\mathcal B\otimes\mathcal B$ through `tensorPairEquiv`.  It is multiplicative but not unital.
 
-Source: arXiv:2204.05940, `mpo.tex`, lines 866--875 and 1655. -/
-noncomputable def coproductRight (Y : Fus.PairSpace) (a b c : Λ) :
-    Matrix (Fus.TripleBond a b c) (Fus.TripleBond a b c) ℂ :=
-  (∑ f, ∑ l, ((1 : Matrix (Fin (Fus.bondDim a)) (Fin (Fus.bondDim a)) ℂ) ⊗ₖ
-      Fus.fusionTensor b c f l) * Y a f *
-    ((1 : Matrix (Fin (Fus.bondDim a)) (Fin (Fus.bondDim a)) ℂ) ⊗ₖ
-      Fus.fusionTensorLeftInverse b c f l)).submatrix
-    (Equiv.prodAssoc _ _ _) (Equiv.prodAssoc _ _ _)
+Source: arXiv:2204.05940, `mpo.tex`, lines 1409--1419 and 1655 (equation
+`eq:splitting_algebraic`). -/
+noncomputable def comul :
+    Fus.BoundarySpace →ₙₐ[ℂ] Fus.BoundarySpace ⊗[ℂ] Fus.BoundarySpace where
+  toFun X := Fus.tensorPairEquiv.symm (Fus.coproduct X)
+  map_smul' r X := by simp
+  map_zero' := by simp
+  map_add' X Y := by simp
+  map_mul' X Y := by simp [coproduct_mul]
 
-private theorem sum_kronecker {ι l m n q : Type*} (s : Finset ι) (A : ι → Matrix l m ℂ)
-    (B : Matrix n q ℂ) : (∑ i ∈ s, A i) ⊗ₖ B = ∑ i ∈ s, A i ⊗ₖ B := by
-  ext x y
-  simp [Matrix.sum_apply, Finset.sum_mul]
+@[simp]
+theorem tensorPairEquiv_comul (X : Fus.BoundarySpace) :
+    Fus.tensorPairEquiv (Fus.comul X) = Fus.coproduct X :=
+  Fus.tensorPairEquiv.apply_symm_apply _
 
-private theorem kronecker_sum {ι l m n q : Type*} (s : Finset ι) (A : Matrix l m ℂ)
-    (B : ι → Matrix n q ℂ) : A ⊗ₖ (∑ i ∈ s, B i) = ∑ i ∈ s, A ⊗ₖ B i := by
-  ext x y
-  simp [Matrix.sum_apply, Finset.mul_sum]
+/-- **Letter formula.**  $\Delta(T^{ik})=\sum_jT^{ij}\otimes T^{jk}$ in
+$\mathcal B\otimes\mathcal B$.
 
-private theorem kronecker_one_conj {l m n : Type*} [Fintype m] [Fintype n] [DecidableEq n]
-    (V : Matrix l m ℂ) (A : Matrix m m ℂ) (W : Matrix m l ℂ) (B : Matrix n n ℂ) :
-    (V ⊗ₖ (1 : Matrix n n ℂ)) * (A ⊗ₖ B) * (W ⊗ₖ (1 : Matrix n n ℂ)) = (V * A * W) ⊗ₖ B := by
-  rw [← mul_kronecker_mul, ← mul_kronecker_mul, Matrix.one_mul, Matrix.mul_one]
-
-private theorem one_kronecker_conj {l m n : Type*} [Fintype l] [Fintype m] [DecidableEq l]
-    (A : Matrix l l ℂ) (V : Matrix n m ℂ) (B : Matrix m m ℂ) (W : Matrix m n ℂ) :
-    ((1 : Matrix l l ℂ) ⊗ₖ V) * (A ⊗ₖ B) * ((1 : Matrix l l ℂ) ⊗ₖ W) = A ⊗ₖ (V * B * W) := by
-  rw [← mul_kronecker_mul, ← mul_kronecker_mul, Matrix.one_mul, Matrix.mul_one]
-
-/-- The sum over fusion channels of a conjugated letter is the letter of the stacked tensor. -/
-private theorem sum_fusion_conj_letter (a b : Λ) (i k : Fin p) :
-    ∑ e, ∑ μ, Fus.fusionTensor a b e μ * Fus.tensor e i k *
-        Fus.fusionTensorLeftInverse a b e μ =
-      ∑ j, Fus.tensor a i j ⊗ₖ Fus.tensor b j k := by
-  rw [← Fus.coproduct_letter i k a b, Fus.coproduct_apply_eq_sum]
-  rfl
-
-omit [DecidableEq Λ] in
-private theorem sum_sum_sum_comm {β : Type*} [AddCommMonoid β] {κ : Λ → Type*}
-    [∀ e, Fintype (κ e)] (F : ∀ e, κ e → Fin p → β) :
-    ∑ e, ∑ μ, ∑ j, F e μ j = ∑ j, ∑ e, ∑ μ, F e μ j :=
-  calc _ = ∑ e, ∑ j, ∑ μ, F e μ j := Finset.sum_congr rfl fun _ _ => Finset.sum_comm
-    _ = _ := Finset.sum_comm
-
-/-- $(\Delta\otimes\mathrm{id})\Delta(T^{il})$ is the letter of the triple product. -/
-theorem coproductLeft_coproduct_letter (i l : Fin p) (a b c : Λ) :
-    Fus.coproductLeft (Fus.coproduct (Fus.letter i l)) a b c =
-      Fus.tripleProductLetter a b c i l := by
-  simp only [coproductLeft, coproduct_letter, Matrix.mul_sum, Matrix.sum_mul,
-    kronecker_one_conj]
-  rw [sum_sum_sum_comm]
-  simp only [← sum_kronecker, Fus.sum_fusion_conj_letter]
-  rw [tripleProductLetter]
-  simp only [sum_kronecker]
-  exact Finset.sum_comm
-
-/-- $(\mathrm{id}\otimes\Delta)\Delta(T^{il})$ is the letter of the triple product. -/
-theorem coproductRight_coproduct_letter (i l : Fin p) (a b c : Λ) :
-    Fus.coproductRight (Fus.coproduct (Fus.letter i l)) a b c =
-      Fus.tripleProductLetter a b c i l := by
-  simp only [coproductRight, coproduct_letter, Matrix.mul_sum, Matrix.sum_mul,
-    one_kronecker_conj]
-  rw [sum_sum_sum_comm]
-  simp only [← kronecker_sum, Fus.sum_fusion_conj_letter]
-  ext ⟨⟨xa, xb⟩, xc⟩ ⟨⟨ya, yb⟩, yc⟩
-  simp [tripleProductLetter, Matrix.sum_apply, Finset.mul_sum, mul_assoc]
-
-theorem coproductLeft_add (Y Y' : Fus.PairSpace) (a b c : Λ) :
-    Fus.coproductLeft (Y + Y') a b c = Fus.coproductLeft Y a b c + Fus.coproductLeft Y' a b c := by
-  simp [coproductLeft, Matrix.mul_add, Matrix.add_mul, Finset.sum_add_distrib]
-
-theorem coproductLeft_smul (r : ℂ) (Y : Fus.PairSpace) (a b c : Λ) :
-    Fus.coproductLeft (r • Y) a b c = r • Fus.coproductLeft Y a b c := by
-  simp [coproductLeft, Finset.smul_sum]
-
-theorem coproductRight_add (Y Y' : Fus.PairSpace) (a b c : Λ) :
-    Fus.coproductRight (Y + Y') a b c =
-      Fus.coproductRight Y a b c + Fus.coproductRight Y' a b c := by
-  ext x y
-  simp [coproductRight, Matrix.mul_add, Matrix.add_mul, Finset.sum_add_distrib]
-
-theorem coproductRight_smul (r : ℂ) (Y : Fus.PairSpace) (a b c : Λ) :
-    Fus.coproductRight (r • Y) a b c = r • Fus.coproductRight Y a b c := by
-  ext x y
-  simp only [coproductRight, submatrix_apply, Matrix.smul_apply, Matrix.sum_apply,
-    Pi.smul_apply, Matrix.mul_smul, Matrix.smul_mul, smul_eq_mul, Finset.mul_sum]
+Source: arXiv:2204.05940, `mpo.tex`, lines 2003--2006 (equation `eq:MPO_tensor_product`). -/
+theorem comul_letter (i k : Fin p) :
+    Fus.comul (Fus.letter i k) = ∑ j, Fus.letter i j ⊗ₜ[ℂ] Fus.letter j k := by
+  apply Fus.tensorPairEquiv.injective
+  funext a b
+  rw [tensorPairEquiv_comul, coproduct_letter, map_sum]
+  simp [Finset.sum_apply, letter]
 
 /-- **Coassociativity of the fusion coproduct.**
 $(\Delta\otimes\mathrm{id})\circ\Delta=(\mathrm{id}\otimes\Delta)\circ\Delta$ on the boundary
-space of a complete zipper fusion family.
+space of a complete zipper fusion family, after reassociating the triple tensor product.
 
 Source: arXiv:2204.05940, `mpo.tex`, lines 866--875 (coassociativity of a coalgebra), with the
 coproduct of line 1655 and the letter identity of lines 2003--2006. -/
-theorem coproduct_coassoc (Z : Fus.BoundarySpace) (a b c : Λ) :
-    Fus.coproductLeft (Fus.coproduct Z) a b c = Fus.coproductRight (Fus.coproduct Z) a b c := by
-  have hZ : Z ∈ Submodule.span ℂ (Set.range fun ik : Fin p × Fin p => Fus.letter ik.1 ik.2) := by
-    rw [Fus.span_letter_eq_top]
-    exact Submodule.mem_top
-  induction hZ using Submodule.span_induction with
-  | mem x hx =>
-    obtain ⟨⟨i, l⟩, rfl⟩ := hx
-    rw [coproductLeft_coproduct_letter, coproductRight_coproduct_letter]
-  | zero =>
-    have hL := Fus.coproductLeft_smul 0 0 a b c
-    have hR := Fus.coproductRight_smul 0 0 a b c
-    simp only [zero_smul, map_zero] at hL hR ⊢
-    rw [hL, hR]
-  | add x y _ _ hx hy =>
-    rw [map_add, coproductLeft_add, coproductRight_add, hx, hy]
-  | smul r x _ hx =>
-    rw [map_smul, coproductLeft_smul, coproductRight_smul, hx]
+theorem comul_coassoc :
+    TensorProduct.assoc ℂ Fus.BoundarySpace Fus.BoundarySpace Fus.BoundarySpace ∘ₗ
+        (Fus.comul : Fus.BoundarySpace →ₗ[ℂ] Fus.BoundarySpace ⊗[ℂ] Fus.BoundarySpace).rTensor
+          Fus.BoundarySpace ∘ₗ
+        (Fus.comul : Fus.BoundarySpace →ₗ[ℂ] Fus.BoundarySpace ⊗[ℂ] Fus.BoundarySpace) =
+      (Fus.comul : Fus.BoundarySpace →ₗ[ℂ] Fus.BoundarySpace ⊗[ℂ] Fus.BoundarySpace).lTensor
+          Fus.BoundarySpace ∘ₗ
+        (Fus.comul : Fus.BoundarySpace →ₗ[ℂ] Fus.BoundarySpace ⊗[ℂ] Fus.BoundarySpace) := by
+  refine LinearMap.ext_on_range Fus.span_letter_eq_top fun ⟨i, l⟩ => ?_
+  simp only [LinearMap.coe_comp, Function.comp_apply, LinearMap.coe_ofClass,
+    comul_letter, map_sum, LinearMap.rTensor_tmul, LinearMap.lTensor_tmul,
+    TensorProduct.sum_tmul, TensorProduct.tmul_sum]
+  exact Finset.sum_comm
+
+/-- **The fusion pre-bialgebra.**  The boundary space of a complete zipper fusion family with
+the fusion coproduct is a pre-bialgebra: the coproduct is multiplicative and coassociative,
+while `coproduct_one` shows that it is not unital in general.
+
+Source: arXiv:2204.05940, `mpo.tex`, lines 1409--1419, 1655 and 1708. -/
+@[instance_reducible]
+noncomputable def toPreBialgebra : PreBialgebra ℂ Fus.BoundarySpace where
+  comul := Fus.comul
+  coassoc := Fus.comul_coassoc
 
 end CompleteZipperFusionFamily
 
