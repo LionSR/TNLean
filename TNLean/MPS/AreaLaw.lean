@@ -91,7 +91,10 @@ import TNLean.MPS.AreaLaw.LocalSumMPO
 import TNLean.MPS.AreaLaw.LogarithmicAreaLaw
 import TNLean.MPS.AreaLaw.LogarithmicSeparation
 import TNLean.MPS.AreaLaw.LongIntervalLowDensityFamily
+import TNLean.MPS.AreaLaw.LowDensityAccurateViability
 import TNLean.MPS.AreaLaw.LowDensityBufferedTargets
+import TNLean.MPS.AreaLaw.LowDensityEntropy
+import TNLean.MPS.AreaLaw.LowDensityEntropyBound
 import TNLean.MPS.AreaLaw.LowDensityFilterParameters
 import TNLean.MPS.AreaLaw.LowDensityLogDimension
 import TNLean.MPS.AreaLaw.LowDensityMinimumDimension
