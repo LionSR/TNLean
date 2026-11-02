@@ -19,21 +19,21 @@ The minimum is defined by spectral calculus. Write $E_0=\min\sigma(H_0)$,
 $G(c)=\mathbf1_{(-\infty,E_0+c]}(H_0)\mathcal H$ and
 $F(c)=\mathbf1_{(-\infty,E_0+c]}(B)\mathcal H$.
 
-\begin{lemma}[Buffered targets from a physical residual budget]
-    \label{lem:ld_buffered_targets}
-    \lean{TNLean.MPS.AreaLaw.exists_five_region_low_energy_targets_of_residual_budget}
+\begin{lemma}[Buffered targets at a prescribed error]
+    \label{lem:ld_buffered_targets_at_error}
+    \lean{TNLean.MPS.AreaLaw.exists_five_region_low_energy_targets_of_residual_budget_at_error}
     \leanok
-    Let $w>0$, $19+\eta_{\rm LD}\le\ell$, and put
+    Let $w>0$, $\nu\ge0$, $19+\eta_{\rm LD}\le\ell$, and put
     $\xi=288e^{11/8}e^{-(\ell-\eta_{\rm LD})/8}$.
     Suppose that $\xi\le1$ and
-    $2(6+\eta_{\rm LD})\xi\le w^2/200$.
+    $2(6+\eta_{\rm LD})\xi\le\nu w^2$.
     The original regional minima, common regional ground vector and
     centered ground vector can be chosen so that $0\le E_0\le4$,
     $\|B\|\le7\ell$, and the following hold for every
     $6w\le\eta\le\eta_{\rm LD}$. Set
     $T_-=F(\eta-2w)$ and $T_+=F(\eta-w)$.
-    Then $T_-\subseteq T_+$, $G(\eta)$ is $1/200$-close to $T_+$,
-    and $T_-$ is $1/200$-close to $G(\eta-3w)$.
+    Then $T_-\subseteq T_+$, $G(\eta)$ is $\nu$-close to $T_+$,
+    and $T_-$ is $\nu$-close to $G(\eta-3w)$.
 \end{lemma}
 \begin{proof}\leanok
     The actual three-region truncation gives a residual bounded by $\xi$
@@ -44,13 +44,26 @@ $F(c)=\mathbf1_{(-\infty,E_0+c]}(B)\mathcal H$.
         \left\lceil\frac{E_0+c}{2\xi}\right\rceil(2\xi)^2
         &\le 2(E_0+c)\xi+4\xi^2
         \le2(6+c)\xi
-        \le\frac{w^2}{200}
-        \le\frac{(w+\xi)^2}{200}.
+        \le\nu w^2
+        \le\nu(w+\xi)^2.
         \label{eq:ld_family_window_budget}
     \end{align}
     Apply the perturbation comparison in both directions, first at
     $c=\eta-w$ and then at $c=\eta-3w$.
     Both are positive because $\eta\ge6w$.
+\end{proof}
+
+\begin{lemma}[Buffered targets from a physical residual budget]
+    \label{lem:ld_buffered_targets}
+    \lean{TNLean.MPS.AreaLaw.exists_five_region_low_energy_targets_of_residual_budget}
+    \leanok
+    If $\xi\le1$ and $2(6+\eta_{\rm LD})\xi\le w^2/200$, the
+    targets in Lemma~\ref{lem:ld_buffered_targets_at_error} have the
+    stated comparisons with $\nu=1/200$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:ld_buffered_targets_at_error}
+    Set $\nu=1/200$.
 \end{proof}
 
 \begin{theorem}[One physical family with a common count and suppression bound]
