@@ -582,7 +582,8 @@
         "thm:physical_low_density_minimum_dimension"
       ],
       "corollaries": [
-        "cor:canonical_low_energy_family"
+        "cor:canonical_low_energy_family",
+        "cor:physical_low_density_log_dimension"
       ],
       "notes": {
         "thm:alvv_ff_chain_replacement": "ALVV Theorem 5.14 with the corrected rank bound: regional replacement of a frustration-free chain",

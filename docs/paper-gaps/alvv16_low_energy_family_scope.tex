@@ -68,9 +68,20 @@ and applies the corrected sample of size
 $\lfloor p/(2D^2)\rfloor$ inside the next optimal space. Its image has
 dimension strictly below the preceding minimum $p$; the companion
 sampling note records the correction\footnote{\url{https://sirui-lu.com/QICLean/paper-gaps/alvv16_low_density_sampling.pdf}}.
-This exact natural count estimate does not yet prove its printed
-logarithmic simplification, an entropy bound, a low-energy basis of
-matrix product states or a running-time bound. Closed spectral
+Choosing the numerical count base $m=q\lceil e^{100}\rceil$ before
+the physical construction gives
+\begin{align*}
+ \dim W\le\dim G(\eta_{\rm LD})\exp\!\left[
+ \frac{K_{\eta_{\rm LD}}}{v}
+ \bigl(1+\log q+\log(1+1/v)\bigr)^3\right],
+\end{align*}
+where $K_{\eta_{\rm LD}}$ precedes the chain, local dimension,
+interactions, interval and deficit. For $0<v\le\eta_{\rm LD}$,
+the cap satisfies $v/2\le\min(v,\eta_{\rm LD}/2)$; larger deficits
+give the zero target. Thus the logarithmic count estimate introduces
+no additional upper bound on the requested positive deficit.
+An entropy bound, a low-energy basis of matrix product states and a
+running-time bound remain separate. Closed spectral
 cutoffs and the absence of a positivity claim for the Chebyshev polynomial
 follow the companion spectral-projector and positivity notes.
 
