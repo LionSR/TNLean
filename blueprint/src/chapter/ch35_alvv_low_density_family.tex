@@ -113,3 +113,32 @@ $F(c)=\mathbf1_{(-\infty,E_0+c]}(B)\mathcal H$.
     Since $w\ge g>4g/5$, its suppression is bounded by the scalar
     estimate with numerator $4g/5$, using the same count envelope $D$.
 \end{proof}
+
+
+\begin{corollary}[One canonical original target for every scale]
+    \label{cor:canonical_low_energy_family}
+    \lean{TNLean.MPS.AreaLaw.exists_fixed_bandwidth_five_region_canonical_low_energy_family}
+    \leanok
+    In Theorem~\ref{thm:fixed_bandwidth_low_energy_family}, write
+    $\lambda_0=\min\sigma(H)$ for the actual minimum of the original
+    Hamiltonian. The same chosen family, actual polynomial and tensor
+    factors satisfy all the stated conclusions with
+    $G(c)=\mathbf1_{(-\infty,\lambda_0+c]}(H)\mathcal H$.
+    The constructed energy shifts satisfy $\lambda_0=E_0+\sum_j e_j$,
+    and the original centered spectral space below $E_0+c$ equals this
+    canonical $G(c)$ for every real $c$.
+    Thus the original target spaces are independent of the regional
+    shifts and clipping scale. The fixed-bandwidth and interior-window
+    conditions are unchanged.
+\end{corollary}
+\begin{proof}\leanok
+    \uses{thm:fixed_bandwidth_low_energy_family}
+    The construction supplies a normalized $z$ with $H_0z=E_0z$ and
+    $H_0-E_0I\ge0$. Since $H_0=H-(\sum_j e_j)I$, the eigenvector attains
+    the lower bound $E_0+\sum_j e_j$ for $H$, which is therefore its
+    minimum. A scalar shift moves every eigenvalue and cutoff by the
+    same amount; the resulting spectral subspaces do not depend on the
+    chosen complete eigenbases. Substitute these identities into the
+    two spectral comparisons, retaining the constructed filter and its
+    actual middle factors.
+\end{proof}

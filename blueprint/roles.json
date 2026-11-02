@@ -579,7 +579,9 @@
         "thm:alvv_ff_corrected_rank",
         "thm:fixed_bandwidth_low_energy_family"
       ],
-      "corollaries": [],
+      "corollaries": [
+        "cor:canonical_low_energy_family"
+      ],
       "notes": {
         "thm:alvv_ff_chain_replacement": "ALVV Theorem 5.14 with the corrected rank bound: regional replacement of a frustration-free chain",
         "thm:alvv_ff_corrected_rank": "Corrected regional rank bound d^2+3, replacing the false unrestricted claim of ALVV Theorem 5.14(2)",

@@ -20,6 +20,7 @@ import TNLean.MPS.AreaLaw.Basic
 import TNLean.MPS.AreaLaw.BoundaryCounting
 import TNLean.MPS.AreaLaw.BoundaryGap
 import TNLean.MPS.AreaLaw.BufferDiscount
+import TNLean.MPS.AreaLaw.CanonicalLowDensityFamily
 import TNLean.MPS.AreaLaw.ChainNeighborhood
 import TNLean.MPS.AreaLaw.ChainStageIncidence
 import TNLean.MPS.AreaLaw.ClusterTruncationCutRank

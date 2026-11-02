@@ -11545,3 +11545,16 @@ removed after the dependency audit exposed it.
   decomposition. No new approximate-projector predicate or copied
   canonical-eigenvector calculation is introduced. The same degree and
   numerical count base are retained in the suppression estimate.
+
+### Canonical original targets — reuse the companion shift identity (2026-11-02)
+
+- **Seen:** The physical centered matrix is presented as a regional sum,
+  whereas the canonical scalar-shift statement uses the raw matrix minus
+  a scalar identity.
+- **Reuse:** Apply the companion centered-presentation identity, retaining
+  the actual normalized ground vector and positive-semidefinite lower
+  bound from the physical construction. This gives one minimum identity
+  and all real cutoff identifications together.
+- **Decision:** No second eigenbasis calculation or original-target
+  definition is added. The actual polynomial and middle family from the
+  physical construction remain unchanged.
