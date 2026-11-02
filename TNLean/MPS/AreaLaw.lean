@@ -10,6 +10,7 @@ Authors: TNLean contributors
 
 import TNLean.MPS.AreaLaw.AKLV
 import TNLean.MPS.AreaLaw.ALVV
+import TNLean.MPS.AreaLaw.ActualClippedPolynomialFamily
 import TNLean.MPS.AreaLaw.AreaLaw
 import TNLean.MPS.AreaLaw.BandDissolution
 import TNLean.MPS.AreaLaw.BandInformation
@@ -42,6 +43,7 @@ import TNLean.MPS.AreaLaw.DoubledHamiltonian
 import TNLean.MPS.AreaLaw.EntropyInequalities
 import TNLean.MPS.AreaLaw.EntropyScaling
 import TNLean.MPS.AreaLaw.FiveRegionHamiltonian
+import TNLean.MPS.AreaLaw.FiveRegionTruncationResidual
 import TNLean.MPS.AreaLaw.FixedConfigurationExtension
 import TNLean.MPS.AreaLaw.GluingHamiltonian
 import TNLean.MPS.AreaLaw.Hamiltonian
@@ -68,6 +70,7 @@ import TNLean.MPS.AreaLaw.OpenMPSSpan
 import TNLean.MPS.AreaLaw.OverlapEnergy
 import TNLean.MPS.AreaLaw.PartialSwap
 import TNLean.MPS.AreaLaw.PhysicalChebyshevViability
+import TNLean.MPS.AreaLaw.PhysicalDGViability
 import TNLean.MPS.AreaLaw.PhysicalIntervalTransport
 import TNLean.MPS.AreaLaw.PhysicalPeriodicPolynomialFamily
 import TNLean.MPS.AreaLaw.PhysicalPolynomialTensorFamily
@@ -110,6 +113,7 @@ import TNLean.MPS.AreaLaw.SelectedMiddleMPOFamily
 import TNLean.MPS.AreaLaw.SequentialTruncation
 import TNLean.MPS.AreaLaw.SharpChainCompression
 import TNLean.MPS.AreaLaw.SharpPhysicalCompression
+import TNLean.MPS.AreaLaw.ShortRegionViableFamily
 import TNLean.MPS.AreaLaw.SnakeGridApproximation
 import TNLean.MPS.AreaLaw.SnakeGridAreaLaw
 import TNLean.MPS.AreaLaw.SnakeGridGeometry
