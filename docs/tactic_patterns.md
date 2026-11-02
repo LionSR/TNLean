@@ -11599,3 +11599,20 @@ removed after the dependency audit exposed it.
   family results. Rewrite the two exact scalar identities at the hypothesis;
   do not simplify the full dependent matrix statement by expanding its local
   definitions. No new tactic or parallel family predicate is introduced.
+
+### Original-band entropy — reuse actual images and the finite entropy estimate (2026-11-02)
+
+- **Seen:** The gapped and buffered-band entropy arguments both require tails
+  of one physical marginal, followed by the same finite-probability estimate.
+- **Reuse:** The buffered-band proof fixes its constant-viable outer-band space,
+  uses the actual dyadic image families and restricts the lower target by
+  spectral cutoff inclusion. It applies the existing logarithmic-rank entropy
+  estimate at the actual initial rank, including its harmless initial-count
+  factor. The separate logarithmic dimension bound then contributes exactly
+  one copy of the full-band logarithmic dimension.
+- **Decision:** No entropy summation, marginal-coordinate proof or minimum
+  construction is duplicated. The existing private inverse-scale improving
+  error is exposed unchanged in the companion library and reused. Explicitly
+  rewriting the scalar identity lambda+eta-3w=lambda+(eta-3w) before transferring
+  spectral closeness avoids expanding dependent matrix coordinates during
+  unification; no heartbeat limit is increased.

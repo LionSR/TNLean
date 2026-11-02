@@ -67,9 +67,10 @@ $D_i^{12}\Delta_i\le10^{-5}$. Long intervals retain the actual clipped
 polynomial and regional factors; short intervals use actual matrix units.
 The physical local dimension and interactions remain unchanged.
 Thus the fixed comparison floor of the index-zero construction is not
-being iterated as if it vanished. Converting these families to arbitrarily
-accurate raw-target spaces, entropy bounds and the sharper source
-approximation rate are subsequent arguments.
+being iterated as if it vanished. The actual images of one fixed constant-viable original upper-band
+space now give arbitrarily accurate original lower-band spaces.
+Their tails yield the entropy bound stated below. The sharper source
+approximation rate remains separate.
 
 \paragraph{Remaining conclusions.}
 The long-interval construction assumes no global spectral gap and supplies
@@ -96,8 +97,19 @@ interactions, interval and deficit. For $0<v\le\eta_{\rm LD}$,
 the cap satisfies $v/2\le\min(v,\eta_{\rm LD}/2)$; larger deficits
 give the zero target. Thus the logarithmic count estimate introduces
 no additional upper bound on the requested positive deficit.
-An entropy bound, a low-energy basis of matrix product states and a
-running-time bound remain separate. Closed spectral
+The accurate interval families now give, for every unit vector
+$\psi\in G(\eta_{\rm LD}-v)$, the actual regional entropy bound
+\begin{align*}
+ S(\psi_J)\le\log\dim G(\eta_{\rm LD})+\frac{K_{\eta_{\rm LD}}}{v}
+ \bigl(1+\log q+\log(1+1/v)\bigr)^3.
+\end{align*}
+The coefficient on the full-band logarithmic dimension is exactly one.
+The proof fixes one viable outer-band space before all accuracy choices,
+then controls tails of one actual reduced state by its image spaces.
+No spectral gap or invariance of an original band under a clipped polynomial
+is assumed. Every positive deficit and every interval is included.
+The sharper accuracy-dependent MPS approximation rate, a low-energy basis
+of matrix product states and a running-time bound remain separate. Closed spectral
 cutoffs and the absence of a positivity claim for the Chebyshev polynomial
 follow the companion spectral-projector and positivity notes.
 
