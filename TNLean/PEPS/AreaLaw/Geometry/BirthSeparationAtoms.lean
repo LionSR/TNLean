@@ -544,7 +544,7 @@ theorem exists_pos_common_contact_dichotomy {X Y : Set (ℝ × ℝ)}
           (isOpen_lt (continuous_norm.comp (continuous_snd.sub continuous_const))
             continuous_const)
       simpa only [Set.compl_ofPred] using ho.isClosed_compl
-    show IsCompact ((X ×ˢ Y) ∩ ⋂ q ∈ X ∩ Y,
+    change IsCompact ((X ×ˢ Y) ∩ ⋂ q ∈ X ∩ Y,
       {p : (ℝ × ℝ) × (ℝ × ℝ) | ¬ (‖p.1 - q‖ < 1 / 4 ∧ ‖p.2 - q‖ < 1 / 4)})
     exact (hX.prod hY).inter_right (isClosed_biInter fun q _ ↦ hcl q)
   have hnear : ∀ x ∈ X, ∀ y ∈ Y, (x, y) ∉ K → ∃ q ∈ X ∩ Y,
