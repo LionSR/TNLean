@@ -52,6 +52,7 @@ import TNLean.MPS.AreaLaw.FiveRegionHamiltonian
 import TNLean.MPS.AreaLaw.FiveRegionTruncationResidual
 import TNLean.MPS.AreaLaw.FixedBandwidthLowEnergyFamily
 import TNLean.MPS.AreaLaw.FixedConfigurationExtension
+import TNLean.MPS.AreaLaw.FullIntervalFilterIteration
 import TNLean.MPS.AreaLaw.FullIntervalFilterTrimming
 import TNLean.MPS.AreaLaw.FullIntervalMPS
 import TNLean.MPS.AreaLaw.FullIntervalViability
@@ -100,6 +101,7 @@ import TNLean.MPS.AreaLaw.PartialSwap
 import TNLean.MPS.AreaLaw.PhysicalChebyshevViability
 import TNLean.MPS.AreaLaw.PhysicalDGApproximation
 import TNLean.MPS.AreaLaw.PhysicalDGEntropy
+import TNLean.MPS.AreaLaw.PhysicalDGFilterIteration
 import TNLean.MPS.AreaLaw.PhysicalDGFilterTrimming
 import TNLean.MPS.AreaLaw.PhysicalDGGlobalApproximation
 import TNLean.MPS.AreaLaw.PhysicalDGIntervalTree

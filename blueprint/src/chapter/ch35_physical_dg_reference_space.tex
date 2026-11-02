@@ -679,3 +679,55 @@ gives the recorded-vector rank bound.
     The normalized recurrence replaces the printed multiplicative overlap
     gain as described in~\cite{gap:alvv16_final_filter_gain}.
 \end{proof}
+
+
+\begin{lemma}[Literal finite filter-and-trim iterates]
+    \label{lem:full_interval_filter_trim_iterates}
+    \lean{TNLean.MPS.AreaLaw.fullIntervalFilterTrimIterate,
+        TNLean.MPS.AreaLaw.fullIntervalFilterTrimIterate_zero,
+        TNLean.MPS.AreaLaw.fullIntervalFilterTrimIterate_succ,
+        TNLean.MPS.AreaLaw.finrank_fullIntervalFilterTrimIterate_le,
+        TNLean.MPS.AreaLaw.isIntervalSpanWithRankBound_fullIntervalFilterTrimIterate_succ}
+    \leanok
+    Fix a full-interval candidate $S_0$, a native operator $K$ and a
+    threshold $\xi>0$. Define $S_{n+1}$ by applying $K$ to $S_n$ and
+    collectively trimming the orthonormal basis of that actual image.
+    Then $\dim S_n\le\dim S_0$ for every $n$. For every $n\ge1$,
+    $S_n$ has at most $\dim S_0$ recorded spanning vectors, each of whose
+    internal Schmidt ranks, multiplied by $\xi^2$, is at most $\dim S_0$.
+    The latter is a bound for each recorded vector, not for the entire span.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:alvv-native-root-filter-trim}
+    Induct on the actual repeated operation. A linear image does not
+    increase dimension, and collective trimming retains the span of at
+    most that many actual trimmed basis vectors. At every positive
+    iterate the collective-trimming rank theorem applies to those vectors.
+\end{proof}
+
+\begin{lemma}[Finite refinement of the same physical candidate]
+    \label{lem:physical_dg_finite_filter_trim}
+    \lean{TNLean.MPS.AreaLaw.exists_physical_dg_filterTrimIterate_isCloseTo}
+    \leanok
+    Retain the physical hypotheses and raw filter of
+    Lemma~\ref{lem:physical_dg_native_root_filter_trim}. Fix $0<\rho\le1$
+    and one common reference and threshold satisfying its budgets with
+    $\eta=\rho$. Suppose the native initial candidate is
+    $\delta_0$-close to $G$, where $0\le\delta_0\le\tfrac12$.
+    Some positive literal iterate of that same candidate is $\rho$-close
+    to the same original full ground space. Its dimension and recorded
+    generators satisfy Lemma~\ref{lem:full_interval_filter_trim_iterates}.
+    The reference and threshold remain explicit; this lemma does not
+    identify the threshold with one previously used to build the initial
+    candidate, choose the physical reference, or give the iteration
+    count printed in the source.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:physical_dg_native_root_filter_trim,lem:full_interval_filter_trim_iterates}
+    Set $u_0=\delta_0$ and
+    $u_{n+1}=(1-c/4)u_n+c\rho/8$. The sequence is nonnegative, stays
+    at most one half, and controls the closeness of every actual iterate.
+    Moreover $u_n\le(1-c/4)^nu_0+\rho/2$, so eventually $u_n\le\rho$.
+    One further step preserves that upper bound and ensures a positive
+    iterate, to which the recorded-generator conclusion applies.
+\end{proof}
