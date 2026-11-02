@@ -22,7 +22,7 @@ with Erickson and were not modified.
   Actual-base merge checks: **24 conflicting, 11 clean**. CI, review,
   conflicts and mathematical acceptance are separate gates.
 - **35 merged PRs still have current unresolved review findings.**
-  22 explicit open follow-ups are linked across 17 merged PRs, including the
+  18 explicit open follow-ups are linked across 14 merged PRs, including the
   new original-chain formula-display task #10493. Merge does not erase this debt.
 - New correctness priority **#10483** concerns a false optional periodic-gauge
   hypothesis. Its reported counterexample matches the current definitions;
