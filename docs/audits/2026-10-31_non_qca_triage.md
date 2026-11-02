@@ -1,5 +1,8 @@
 # Non-QCA triage refresh, 31 October 2026
 
+Historical snapshot. The [2 November refresh](2026-11-02_non_qca_triage.md)
+supersedes its pending-owner and CI statements.
+
 Published refresh: **2026-10-31 19:11 UTC**. Frozen inspected main: `1c7d75bf87b037ed9d1fdf7e376b64eb47789e6b`.
 Inventory captured after this refresh's issue changes: **207 open issues and 49 open PRs**,
 before opening the documentation PR for this audit. The audited open scope is
