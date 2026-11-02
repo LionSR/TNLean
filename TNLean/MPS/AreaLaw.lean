@@ -55,6 +55,7 @@ import TNLean.MPS.AreaLaw.FixedConfigurationExtension
 import TNLean.MPS.AreaLaw.FullIntervalFilterIteration
 import TNLean.MPS.AreaLaw.FullIntervalFilterTrimming
 import TNLean.MPS.AreaLaw.FullIntervalMPS
+import TNLean.MPS.AreaLaw.FullIntervalTrimmingMPS
 import TNLean.MPS.AreaLaw.FullIntervalViability
 import TNLean.MPS.AreaLaw.GluingHamiltonian
 import TNLean.MPS.AreaLaw.Hamiltonian
@@ -102,6 +103,7 @@ import TNLean.MPS.AreaLaw.OverlapEnergy
 import TNLean.MPS.AreaLaw.PartialSwap
 import TNLean.MPS.AreaLaw.PhysicalChebyshevViability
 import TNLean.MPS.AreaLaw.PhysicalDGApproximation
+import TNLean.MPS.AreaLaw.PhysicalDGAutomaticRefinement
 import TNLean.MPS.AreaLaw.PhysicalDGEntropy
 import TNLean.MPS.AreaLaw.PhysicalDGFilterIteration
 import TNLean.MPS.AreaLaw.PhysicalDGFilterTrimming
@@ -111,6 +113,7 @@ import TNLean.MPS.AreaLaw.PhysicalDGIntervalTrimming
 import TNLean.MPS.AreaLaw.PhysicalDGReferenceSpace
 import TNLean.MPS.AreaLaw.PhysicalDGSampledNode
 import TNLean.MPS.AreaLaw.PhysicalDGSharpApproximation
+import TNLean.MPS.AreaLaw.PhysicalDGTreeApproximation
 import TNLean.MPS.AreaLaw.PhysicalDGTreeMPS
 import TNLean.MPS.AreaLaw.PhysicalDGTreeParameters
 import TNLean.MPS.AreaLaw.PhysicalDGTreeWitness
