@@ -82,7 +82,6 @@ theorem tendsto_transferMap_blockTensor_of_spectralRadius_lt_one
       simp only [Function.comp_apply, ← map_pow]
       rfl
     · simp only [map_zero]
-      rfl
   have hTP : IsTracePreservingMap E := Kraus.isTracePreservingMap_mapLM_of_isTP A hA
   have hlim : Tendsto (fun q : ℕ => P X + ((E - P) ^ q) X) atTop (nhds (P X)) := by
     simpa using (tendsto_const_nhds (x := P X)).add happ
