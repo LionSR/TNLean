@@ -28,7 +28,7 @@ isometry. This also applies to the dependent configuration embedding of an
 entire finite chain. -/
 noncomputable def euclideanExtendByZero (e : I ↪ J) :
     EuclideanSpace ℂ I →ₗᵢ[ℂ] EuclideanSpace ℂ J where
-  toLinearMap := LinearMap.withLpMap 2 (Function.ExtendByZero.linearMap ℂ e)
+  toLinearMap := LinearMap.withLpMap 2 (Function.ExtendByZero.linearMap ℂ ℂ e)
   norm_map' v := by
     classical
     have hsum := Fintype.sum_of_injective e e.injective
@@ -38,8 +38,8 @@ noncomputable def euclideanExtendByZero (e : I ↪ J) :
         rw [Function.extend_apply' _ _ j hj]
         simp)
       (fun i ↦ by rw [e.injective.extend_apply])
-    have hsq :
-        ‖LinearMap.withLpMap 2 (Function.ExtendByZero.linearMap ℂ e) v‖ ^ 2 = ‖v‖ ^ 2 := by
+    have hsq : ‖LinearMap.withLpMap 2 (Function.ExtendByZero.linearMap ℂ ℂ e) v‖ ^ 2 =
+        ‖v‖ ^ 2 := by
       rw [EuclideanSpace.norm_sq_eq, EuclideanSpace.norm_sq_eq]
       exact hsum.symm
     exact (sq_eq_sq₀ (norm_nonneg _) (norm_nonneg _)).1 hsq
