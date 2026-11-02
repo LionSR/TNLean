@@ -355,6 +355,39 @@ or running time. The correction to the printed final-filter gain is
 recorded in
 \href{https://sirui-lu.com/TNLean/paper-gaps/alvv16_final_filter_gain.pdf}{the final-filter note}.
 
+\section*{The interleaved assignment and integer round count}
+
+In Figure~\texttt{fig:merge-prime}, source lines 1668--1670, the procedure
+initializes $V=W'$ and then prints the same assignment
+$V=\operatorname{Trim}_{\xi}(\operatorname{span}\{A_iW':i\})$ in every
+round. Its right-hand side is independent of the current $V$, so every
+positive number of repetitions returns the same subspace. The subsequent
+analysis, which compounds the error reduction and the dimension growth
+across rounds, requires the intended recursive assignment
+\[
+  V_0=W',\qquad
+  V_{j+1}=\operatorname{Trim}_{\xi}
+    \bigl(\operatorname{span}\{A_iV_j:i\}\bigr).
+\]
+This is a local correction of the assignment, not an identification of a
+single trim after an operator-word image with those interleaved trims.
+An analysis of the corrected procedure must control the actual trim and
+viability at every round. In particular, a constant reference error that
+is sufficient after a complete powered-image improvement need not suffice
+immediately after a random sample with very small target overlap.
+
+There is a separate integer-round issue in
+\texttt{eq:algo-sk-dg}, source line 1797: the printed choice
+$k=\tfrac12\lceil\log_Ds\rceil$ need not be an integer, although the
+procedure declares $k\in\mathbb N$. For example, $s=D>1$ gives
+$k=1/2$. Rounding instead to $\lceil\tfrac12\log_Ds\rceil$ gives the
+honest dimension range $s^2\le D^{2k}s<D^2s^2$, with the larger upper
+factor $D^2$. The previously constructed witness uses the explicitly
+larger integer power $\lceil\log_D(D^2s)\rceil$ and its own cubic count;
+its stated bounds are not the printed count with a missing rounding
+argument. Neither correction alone establishes the adaptive probability,
+energy-estimation invariant or computational cost of the source algorithm.
+
 \bibliographystyle{unsrt}
 \bibliography{references}
 \end{document}
