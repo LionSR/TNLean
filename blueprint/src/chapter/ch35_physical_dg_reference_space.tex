@@ -731,3 +731,47 @@ gives the recorded-vector rank bound.
     One further step preserves that upper bound and ensures a positive
     iterate, to which the recorded-generator conclusion applies.
 \end{proof}
+
+
+\begin{lemma}[One physical family for every smaller common threshold]
+    \label{lem:physical_dg_interval_tree_common_radius}
+    \lean{TNLean.MPS.AreaLaw.exists_physical_dg_sampled_interval_node_event_of_le_radius,
+        TNLean.MPS.AreaLaw.exists_physical_dg_recursive_interval_spaces_of_le_radius,
+        TNLean.MPS.AreaLaw.exists_physical_dg_interval_tree_of_le_radius}
+    \leanok
+    Retain the physical hypotheses, universal constants and automatic
+    scalar parameters of Theorem~\ref{thm:physical_dg_interval_tree_parameters}.
+    The one reference bound $D_{\rm tree}=r^2B$ determines
+    \[
+        \xi_{\rm tree}=\frac1{1000D_{\rm tree}\sqrt{L+1}}.
+    \]
+    The actual parent operator families can be chosen before every
+    threshold $0<\xi\le\xi_{\rm tree}$, sampling size and child space.
+    For every such threshold, the same dimension count and sampling-size
+    bounds hold. There is an actual recursive merge operation using that
+    threshold at every long parent, whose spaces remain $3/200$-viable
+    for the same original full global ground space.
+
+    At every interval, the actual space has at most
+    $\mathrm{count}=D^6s^3$ recorded generators. Each satisfies
+    $\xi^2\operatorname{SR}(v)\le\mathrm{count}$ at every internal cut.
+    These weighted bounds retain their dependence on the chosen threshold;
+    the fixed-threshold integer rank cap is not assigned to an arbitrarily
+    smaller threshold. The block leaves, final-trim convention and capped
+    gap remain those of the cited theorem. No adaptive joint probability
+    or running-time claim is added.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:interval_trimming_reference,thm:sampled_interval_witness_tree,
+        thm:dg_accuracy_scalar_parameters}
+    The physical improving families do not use the trimming threshold.
+    Choose them first. For fixed child spaces their measurable sampling
+    success event gives the same improved image. If the threshold is
+    decreased, the reference trimming estimate stays within its original
+    error budget. The actual trim therefore remains $3/200$-viable and
+    does not increase dimension. Apply the same recursive selection
+    argument to these actual operations. The collective trimming theorem
+    retains the weighted rank of each recorded vector at the chosen
+    threshold. The automatic numerical parameters are chosen exactly as
+    before and impose no further hypotheses.
+\end{proof}
