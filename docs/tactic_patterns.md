@@ -11520,16 +11520,14 @@ removed after the dependency audit exposed it.
   precedes every count base and width. No new tactic is needed.
 
 
-### Original spectral coordinates after regional clipping — candidate (2026-11-02)
+### Original spectral coordinates after regional clipping — existing shared theorem (2026-11-02)
 
-- **Seen:** the two physical low-cluster proofs in
-  `MPS/AreaLaw/FiveRegionTruncationResidual.lean` and the independent-cutoff
-  proof in `MPS/AreaLaw/IndependentFiveRegionCluster.lean`.
-- **Pattern:** identify the actual centered original ground energy, transport
-  its Hermitian eigenbasis and identify its closed ground spectral subspace.
-- **Decision:** The three occurrences across two files meet the promotion
-  threshold. The natural shared result is the existing independent-cutoff
-  cluster theorem itself: specialize its real cutoff to the window length
-  in the coupled scaled-cluster theorem, preserving the latter statement.
-  That removes the duplicate complete cluster proof without a new tactic.
-  This follow-up remains separate from the checked recursive-tree port.
+- **Seen:** the former two coupled physical cluster proofs and the
+  independent-cutoff cluster proof in `MPS/AreaLaw/`.
+- **Promotion:** `exists_five_region_independent_scaled_low_cluster` is the
+  shared physical construction. The existing coupled scaled-cluster theorem
+  specializes it at `t = ell`, preserving its complete public statement.
+- **Effect:** The duplicate full cluster proof is removed. The remaining
+  unscaled construction and independent scaled construction contain only
+  two copies of the short original spectral-coordinate identification;
+  they do not meet the three-occurrence threshold. No tactic is introduced.

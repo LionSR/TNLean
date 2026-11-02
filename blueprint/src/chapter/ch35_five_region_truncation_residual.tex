@@ -98,17 +98,12 @@
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:disjoint_regional_clipping,thm:five_region_original_bond_bounds,
-        thm:five_region_independent_budget,thm:consecutive_regional_truncation_low}
-    The disjoint regional minima and the original crossing budget give
-    $E_0\in[0,4]$ and $\|B\|\le7\ell$.
-    The original-bond restricted estimates bound both actual residuals,
-    at the centered original cutoff $E_0+g/40$ and the clipped cutoff
-    $E_0+19g/20$, by $288e^{11/8}e^{-(\ell-g)/8}\le\xi$.
-    Apply the scaled restricted-residual cluster theorem of
-    \cite[``A low cluster with a scaled projection error'']{QICLean2026Blueprint}.
-    All cutoffs use the original ground-energy shift, as in
-    \cite{gap:alvv16_spectral_projector_boundary}.
+    \uses{lem:five_region_independent_scaled_cluster}
+    Apply the independent-cutoff physical cluster lemma with $t=\ell$.
+    Its hypotheses hold because $\ell\ge21$, and its norm budget is
+    $3\ell+4\ell=7\ell$. The constructed minima, centered original
+    energy, closed cutoffs, full ground-space dimension and both
+    projection errors are unchanged.
 \end{proof}
 
 

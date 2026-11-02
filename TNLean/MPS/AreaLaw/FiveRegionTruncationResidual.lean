@@ -16,7 +16,7 @@ import QICLean.Analysis.LowEnergyPerturbation
 import TNLean.Algebra.ExpMulSubMonotone
 import TNLean.Lattice.DisjointRegionalGround
 import TNLean.MPS.AreaLaw.FiveRegionHamiltonian
-import TNLean.MPS.AreaLaw.IndependentFiveRegionResidual
+import TNLean.MPS.AreaLaw.IndependentFiveRegionCluster
 import TNLean.MPS.AreaLaw.PolynomialFilterParameters
 import TNLean.MPS.AreaLaw.RegionalTruncationResidual
 
@@ -449,113 +449,11 @@ theorem exists_five_region_physical_scaled_low_cluster
         Submodule.IsCloseTo (tau / 200 : ℝ) T G ∧
         Submodule.IsCloseTo (tau / 200 : ℝ) G T ∧
         ∀ j, lam j ≤ E0 + g / 10 ∨ E0 + 9 * g / 10 ≤ lam j := by
-  intro H hH G hmu hgap k A J Y
-  have : Nonempty (Fin L → Fin q) := ⟨fun _ ↦ ⟨0, hq⟩⟩
-  obtain ⟨e, E0, x, z, hxunit, hx, hlo, hcenter, hzunit, hz, hE0low,
-    hE0ge, hE0le, hnorm, hres⟩ :=
-    exists_five_region_physical_truncation_residual L q a b ell hq hell hab hbL
-      h hs h0 h1
-  let S : ℝ := ∑ j, e j
-  let K : Finset (Fin 5) := {0, 2, 4}
-  let Bcur : Finset (Fin 5) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := fun T ↦
-    (∑ j, ((if j ∈ T then cfc (fun r : ℝ ↦ min r (e j + (ell : ℝ)))
-      (A j) else A j) - (e j : ℂ) • 1)) + Y
-  let B : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := Bcur K
-  let ι := Matrix.toEuclideanCLM (n := Fin L → Fin q) (𝕜 := ℂ)
-  have hcenter' : Bcur ∅ = H - (S : ℂ) • 1 := hcenter
-  have hzeigen : (H - (S : ℂ) • 1) *ᵥ z = (E0 : ℂ) • z := by
-    rw [← hcenter']
-    exact hz
-  have hlow : ((H - (S : ℂ) • 1) - (E0 : ℂ) • 1).PosSemidef := by
-    rw [← hcenter']
-    exact hE0low
-  obtain ⟨hmuE, hOldEigen, hOldGap⟩ := hH.original_basis_centered_gap_data
-    mu g S E0 hmu hgap hg z hzunit hzeigen hlow
-  let b0 := hH.eigenvectorBasis
-  let a0 : (Fin L → Fin q) → ℝ := fun j ↦ hH.eigenvalues j - S
-  have h0Eigen (j : Fin L → Fin q) :
-      ι (Bcur ∅) (b0 j) = (a0 j : ℂ) • b0 j := by
-    rw [hcenter']
-    exact hOldEigen j
-  have hA (j : Fin 5) : (A j).IsHermitian := by
-    have hAj : 0 ≤ A j := Finset.sum_nonneg fun i _ ↦ h0 i
-    exact (IsSelfAdjoint.of_nonneg hAj).isHermitian
-  have he (j : Fin 5) : (e j : ℂ) •
-      (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) ≤ A j :=
-    Matrix.le_iff.mpr (hlo j)
-  obtain ⟨hXpos, _hXzero⟩ :=
-    Matrix.centered_partially_clipped_sum_posSemidef_and_mulVec_eq_zero
-      A e (ell : ℝ) K hA he x hx (Nat.cast_nonneg ell)
-  have hYnonneg : 0 ≤ Y := Finset.sum_nonneg fun i _ ↦ h0 i
-  have hBpos : B.PosSemidef := hXpos.add (Matrix.nonneg_iff_posSemidef.mp hYnonneg)
-  have hB : B.IsHermitian := hBpos.isHermitian
-  let v := hB.eigenvectorBasis
-  let lam := hB.eigenvalues
-  have hBEigen (j : Fin L → Fin q) : ι B (v j) = (lam j : ℂ) • v j := by
-    apply (WithLp.ofLp_injective 2)
-    simpa only [ι, v, lam, ofLp_toEuclideanCLM, WithLp.ofLp_smul,
-      Complex.coe_smul] using hB.mulVec_eigenvectorBasis j
-  have hC : 0 ≤ (288 : ℝ) * Real.exp (11 / 8) :=
-    mul_nonneg (by norm_num) (Real.exp_nonneg _)
-  have hxi0 : 0 ≤ xi :=
-    (mul_nonneg hC (Real.exp_nonneg _)).trans htail
-  have htailEta (eta : ℝ) (heta : eta ≤ g) :
-      (288 * Real.exp (11 / 8)) * Real.exp (-((ell : ℝ) - eta) / 8) ≤ xi := by
-    have hexp := Real.exp_mul_sub_le_exp_mul_sub
-      (v := (1 / 8 : ℝ)) (x := eta) (T := g) (c := (ell : ℝ) / 8)
-      (by norm_num) heta
-    have harg (r : ℝ) : -((ell : ℝ) - r) / 8 =
-        (1 / 8 : ℝ) * r - (ell : ℝ) / 8 := by ring
-    rw [← harg eta, ← harg g] at hexp
-    exact (mul_le_mul_of_nonneg_left hexp hC).trans htail
-  have hsmall (Tcur : Finset (Fin 5)) (eta : ℝ) (heta0 : 0 ≤ eta) (heta : eta ≤ g)
-      (w : OrthonormalBasis (Fin L → Fin q) ℂ (EuclideanSpace ℂ (Fin L → Fin q)))
-      (d : (Fin L → Fin q) → ℝ)
-      (hEigen : ∀ j, ι (Bcur Tcur) (w j) = (d j : ℂ) • w j) :
-      ‖(ι (Bcur ∅) - ι B).domRestrict
-        (Submodule.spectralSpanLE w d (E0 + eta))‖ ≤ xi := by
-    have hr := (hres Tcur eta heta0 (heta.trans hg1) w d hEigen).trans
-      (htailEta eta heta)
-    simpa only [map_sub] using hr
-  have hres0 := hsmall ∅ (g / 40) (by linarith) (by linarith) b0 a0 h0Eigen
-  have hresK := hsmall K (19 * g / 20) (by linarith) (by linarith) v lam hBEigen
-  obtain ⟨_hUV, hdim, hUG, hGU, hwindow, hNewGap⟩ :=
-    Submodule.low_spectral_cluster_of_scaled_restricted_residuals
-      (ι (Bcur ∅)) (ι B) b0 v a0 lam h0Eigen hBEigen E0 g xi tau hg htau htau1 hxi0 hxi
-      hOldGap hres0 hresK
-  let G0 := Submodule.spectralSpanLE b0 a0 E0
-  have hG : G0 = G := by
-    ext w
-    change w ∈ Submodule.spectralSpanLE b0 a0 E0 ↔
-      w ∈ Submodule.spectralSpanLE hH.eigenvectorBasis hH.eigenvalues mu
-    simp only [Submodule.mem_spectralSpanLE_iff]
-    constructor
-    · intro hw j hj
-      apply hw j
-      change E0 < hH.eigenvalues j - S
-      linarith
-    · intro hw j hj
-      apply hw j
-      change E0 < hH.eigenvalues j - S at hj
-      linarith
-  let U := Submodule.spectralSpanLE v lam (E0 + g / 20)
-  let Tlow := Submodule.spectralSpanLE v lam (E0 + g / 10)
-  have hTU : Tlow = U :=
-    (hwindow (E0 + g / 10) (by linarith) (by linarith)).1
-  have hupper : Submodule.spectralSpanLE v lam (E0 + 9 * g / 10) = U :=
-    (hwindow (E0 + 9 * g / 10) (by linarith) (by linarith)).1
-  refine ⟨e, E0, ⟨x, hxunit, hx, hlo⟩, hmuE.symm, hE0ge, hE0le, hnorm,
-    v, lam, hBEigen, hTU.trans hupper.symm, ?_, ?_, ?_, ?_, hNewGap⟩
-  · intro tau htaulo htauhi
-    exact (hwindow tau htaulo htauhi).1.trans hTU.symm
-  · change Module.finrank ℂ Tlow = Module.finrank ℂ G
-    rw [hTU, ← hG]
-    exact hdim
-  · change Submodule.IsCloseTo (tau / 200 : ℝ) Tlow G
-    rw [hTU, ← hG]
-    exact hUG
-  · change Submodule.IsCloseTo (tau / 200 : ℝ) G Tlow
-    rw [hTU, ← hG]
-    exact hGU
+  have hellR : (21 : ℝ) ≤ ell := by exact_mod_cast hell
+  simpa only [show 3 * (ell : ℝ) + 4 * (ell : ℝ) = 7 * (ell : ℝ) by ring] using
+    exists_five_region_independent_scaled_low_cluster L q a b ell (ell : ℝ)
+      hq (by omega) hellR hab hbL h hs h0 h1 mu g xi tau
+      hg hg1 htau htau1 htail hxi
+
 end TNLean.MPS.AreaLaw
 end
