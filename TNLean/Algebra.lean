@@ -130,6 +130,7 @@ import TNLean.Algebra.MatrixReindexGap
 import TNLean.Algebra.MatrixScalarIdentity
 import TNLean.Algebra.MatrixSingleSpan
 import TNLean.Algebra.MatrixStarEquivSpatial
+import TNLean.Algebra.MatrixSubspaceFactorization
 import TNLean.Algebra.MatrixSylvesterBound
 import TNLean.Algebra.MatrixTensorPower
 import TNLean.Algebra.MatrixUnitFactorization
@@ -169,6 +170,7 @@ import TNLean.Algebra.ProjectionDefectIsometry
 import TNLean.Algebra.ProjectiveCommutantEigenspace
 import TNLean.Algebra.ProjectiveRepresentation
 import TNLean.Algebra.PureStateTraceNorm
+import TNLean.Algebra.QuadraticFormRadical
 import TNLean.Algebra.RankOneFactorization
 import TNLean.Algebra.RectangularUnitaryConjugation
 import TNLean.Algebra.RegularRepresentationBlocking

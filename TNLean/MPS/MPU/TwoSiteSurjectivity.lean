@@ -32,43 +32,6 @@ open Fin.CommRing
 
 namespace SpinChain
 
-/-- A buffered target has no wraparound in its fixed-radius ring
-neighbourhood. Source context: arXiv:1703.09188, eq:appendix-1,
-lines 2300–2306. -/
-theorem finiteRingNeighbourhood_subset_regionSumset
-    {a : ℤ} {N : ℕ} [NeZero N] (J : Finset ℤ) (R : ℕ)
-    (hbuffer : ∀ x ∈ J, a + R ≤ x ∧ x + R < a + N) :
-    finiteRingNeighbourhood a N J R ⊆
-      regionSumset J (Finset.Icc (-(R : ℤ)) R) := by
-  classical
-  intro y hy
-  obtain ⟨i, hi, rfl⟩ := Finset.mem_image.mp hy
-  obtain ⟨j, hj, m, hm, hij⟩ := Set.mem_toFinset.mp hi
-  have hbounds := hbuffer (finiteChainSiteEquiv a N j).val hj
-  simp only [finiteChainSiteEquiv_val] at hbounds
-  have hm' := abs_le.mp hm
-  let z : ℤ := j.val + m
-  have hz₀ : 0 ≤ z := by dsimp [z]; omega
-  have hzN : z < N := by dsimp [z]; omega
-  have hcast : (z.toNat : Fin N) = (z : Fin N) := by
-    have h := congrArg (fun t : ℤ => (t : Fin N)) (Int.toNat_of_nonneg hz₀)
-    simpa only [Int.cast_natCast] using h
-  have hiCast : i = (z.toNat : Fin N) := by
-    calc
-      i = j + (m : Fin N) := hij
-      _ = (z : Fin N) := by simp only [z, Int.cast_add, Int.cast_natCast, Fin.cast_val_eq_self]
-      _ = (z.toNat : Fin N) := hcast.symm
-  have hiVal : (i.val : ℤ) = z := by
-    have hzlt : z.toNat < N := by omega
-    rw [hiCast, Fin.val_natCast, Nat.mod_eq_of_lt hzlt]
-    exact Int.toNat_of_nonneg hz₀
-  apply (mem_regionSumset _ J _).mpr
-  refine ⟨(finiteChainSiteEquiv a N j).val, hj, m, ?_, ?_⟩
-  · simpa only [Finset.mem_Icc] using hm'
-  · simp only [finiteChainSiteEquiv_val, hiVal]
-    dsimp [z]
-    omega
-
 variable {d D ℓ r : ℕ} [NeZero d] {U : MPOTensor d D}
   (hU : U.IsMPU) (k : ℕ) (hk : 0 < k)
   {u : Matrix (Fin ℓ × Fin r)

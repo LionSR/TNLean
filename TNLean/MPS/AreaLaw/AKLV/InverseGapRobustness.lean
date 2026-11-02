@@ -270,7 +270,7 @@ theorem normalized_chain_robustness_of_inverse_gap_cutoff {L q : ℕ}
       (K - (e' : ℂ) • 1 - ((g / 2 : ℝ) : ℂ) •
         (1 - Matrix.vecMulVec (WithLp.ofLp φ) (star (WithLp.ofLp φ)))).PosSemidef ∧
       ∃ θ : ℝ, ‖Ω - Complex.exp (θ * Complex.I) • φ‖ ^ 2 ≤ Real.exp (-t / 16) := by
-  intro ι X N Y H K heig hgap
+  intro ι X N Y H _ heig hgap
   obtain ⟨I, hB⟩ := exists_normalizedCutBlock_eq_sum_sub h a b hab x m y
   obtain ⟨hXN, hXY, hNY⟩ := normalizedCutBlock_commutations h hs a b hab x m y
   have hH : X + N + Y + (h a + h b) = H := normalizedCutBlock_sum h a b hab x m y
@@ -284,15 +284,10 @@ theorem normalized_chain_robustness_of_inverse_gap_cutoff {L q : ℕ}
       rw [← Matrix.coe_toEuclideanCLM_eq_toEuclideanLin H] at hv
       change g * (‖v‖ ^ 2 - ‖⟪Ω, v⟫_ℂ‖ ^ 2) ≤ (⟪v, ι H v⟫_ℂ).re - e * ‖v‖ ^ 2 at hv
       simpa only [hH] using hv)
-  refine ⟨e', φ, hφ, hφeig, he'0, he'e, ?_, θ, hθ⟩
   have hAHerm : (h a + h b).IsHermitian := IsSelfAdjoint.of_nonneg
     (add_nonneg (h0 a) (h0 b))
-  have hKHerm : K.IsHermitian :=
-    ((Matrix.isHermitian_energyTruncation X t).add (hN.isHermitian.add hAHerm)).add
-      (Matrix.isHermitian_energyTruncation Y t)
-  apply (hKHerm.posSemidef_gap_iff e' (g / 2) φ).mpr
-  intro v
-  rw [← Matrix.coe_toEuclideanCLM_eq_toEuclideanLin K]
-  exact hquad v
+  exact ⟨e', φ, hφ, hφeig, he'0, he'e,
+    posSemidef_gap_twoSidedEnergyTruncation_of_quadratic X N Y (h a + h b) hN.isHermitian
+      hAHerm t e' (g / 2) φ hquad, θ, hθ⟩
 
 end TNLean.MPS.AreaLaw.AKLV

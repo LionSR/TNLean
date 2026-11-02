@@ -5185,6 +5185,9 @@ three-plaquette output measurement, and the routed reunion measurement.
   from the orthogonal energy bound), `robust_ground_of_clipped_ground_gap` (residual,
   tail and phase assembly, with the now public `phase_budget_le_exp`), and
   `exists_normalizedCutBlock_eq_sum_sub` (regional sums away from the removed bonds).
+  A fourth extraction, `posSemidef_gap_twoSidedEnergyTruncation_of_quadratic` in
+  `NormalizedChain.lean`, turns the quadratic gap bound of the clipping into the
+  operator gap inequality for both normalized-chain theorems.
   Each cutoff proves only its orthogonal energy bound. No new tactic is needed.
 
 ### Boundary operator norm from its positive cap — promoted (2026-10-30)
@@ -10828,8 +10831,11 @@ removed after the dependency audit exposed it.
   zero and the closed-subspace interior theorem for open dense complement.
 - **Seen:** `MPS/ParentHamiltonian/UncleWallGramGeneric.lean`.
 - **Abstraction:** Existing Mathlib quadratic and Haar APIs provide the
-  structures and final measure statement. The private scalar test is
-  shared within this source calculation; no genericity premise is added.
+  structures and final measure statement. The scalar test is public in
+  `TNLean/Algebra/QuadraticFormRadical.lean`:
+  `QuadraticForm.polar_eq_zero_of_nonneg`,
+  `QuadraticForm.mem_radical_iff_of_nonneg` and
+  `QuadraticForm.radical_ne_top_of_ne_zero`; no genericity premise is added.
 - **Notes:** This establishes the one-wall coefficient's exceptional set,
   independently of the unresolved actual two-wall norm factorization.
 
