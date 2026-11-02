@@ -380,8 +380,9 @@ There is a separate integer-round issue in
 \texttt{eq:algo-sk-dg}, source line 1797: the printed choice
 $k=\tfrac12\lceil\log_Ds\rceil$ need not be an integer, although the
 procedure declares $k\in\mathbb N$. For example, $s=D>1$ gives
-$k=1/2$. Rounding instead to $\lceil\tfrac12\log_Ds\rceil$ gives the
-honest dimension range $s^2\le D^{2k}s<D^2s^2$, with the larger upper
+$k=1/2$. For $D>1$ and $s\ge1$, rounding instead to
+$\lceil\tfrac12\log_Ds\rceil$ gives the honest dimension range
+$s^2\le D^{2k}s<D^2s^2$, with the larger upper
 factor $D^2$. The previously constructed witness uses the explicitly
 larger integer power $\lceil\log_D(D^2s)\rceil$ and its own cubic count;
 its stated bounds are not the printed count with a missing rounding
