@@ -11586,3 +11586,16 @@ removed after the dependency audit exposed it.
 - **Related promotion:** The spectral cutoff-order proof is already
   shared as `Submodule.spectralSpanLE_mono_cutoff`; the physical proof
   imports the thin companion order module instead of copying that proof.
+
+### Accurate interval families — separate numerical estimates from physical data (2026-11-02)
+
+- **Seen:** The dyadic original/clipped comparison budget depends only on the
+  count base, width and index. Introducing the Hamiltonian and its dependent
+  configuration types first made elaboration unnecessarily expensive.
+- **Reuse:** Prove the two numerical residual inequalities before introducing
+  physical data, then apply the single arbitrary-error buffered-target theorem.
+  The companion dyadic ceiling/residual estimate supplies the accuracy decay.
+- **Decision:** The three index-zero statements specialize the three accurate
+  family results. Rewrite the two exact scalar identities at the hypothesis;
+  do not simplify the full dependent matrix statement by expanding its local
+  definitions. No new tactic or parallel family predicate is introduced.

@@ -55,6 +55,22 @@ Only this numerical count base is enlarged; the physical dimension and
 Hamiltonian are unchanged. Increasing an upper bound on $D$ after choosing
 a filter would not justify the latter inequality and is not used.
 
+\paragraph{Decreasing the comparison loss.}
+For each integer $i\ge0$, replace only the numerical count base by
+$m_i=m2^i$ and use the same fixed-bandwidth constant $C$.
+The resulting scale satisfies $\ell_i\ge\ell_0+64i$, and hence the
+physical truncation residual decreases by at least $2^{-4i}$.
+The original-to-clipped comparisons on every prescribed interval have
+loss $\nu_i=1/(200\,2^{4i})$, with
+$D_i=(m_i\ell_i^2)^{22\ell_i}$ and the same-degree inequality
+$D_i^{12}\Delta_i\le10^{-5}$. Long intervals retain the actual clipped
+polynomial and regional factors; short intervals use actual matrix units.
+The physical local dimension and interactions remain unchanged.
+Thus the fixed comparison floor of the index-zero construction is not
+being iterated as if it vanished. Converting these families to arbitrarily
+accurate raw-target spaces, entropy bounds and the sharper source
+approximation rate are subsequent arguments.
+
 \paragraph{Remaining conclusions.}
 The long-interval construction assumes no global spectral gap and supplies
 the actual polynomial and tensor factors of one global clipped matrix.

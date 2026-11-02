@@ -3,10 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.AreaLaw.RegionalLowDensityFamily
-import TNLean.MPS.AreaLaw.PhysicalIntervalTransport
-import QICLean.Analysis.ShiftedLowEnergyCoordinates
-import QICLean.Analysis.ViableSubspaceCoordinates
+import TNLean.MPS.AreaLaw.DyadicLongIntervalLowDensityFamily
 
 /-!
 # Low-energy improving families on long prescribed intervals
@@ -87,63 +84,13 @@ theorem exists_fixed_bandwidth_long_interval_low_energy_family
             Module.finrank ℂ grow ≤ D ^ 2 * Module.finrank ℂ S ∧
               Submodule.IsViable (F := EE) (Delta / (1 - delta) ^ 2)
                 grow (Tlo.map Tm.toLinearEquiv.toLinearMap) := by
-  classical
-  obtain ⟨C, hC, hCeta, hregional⟩ :=
-    exists_fixed_bandwidth_five_region_regional_low_energy_family etaLD hLD
+  obtain ⟨C, hC, hCeta, hlong⟩ :=
+    exists_fixed_bandwidth_long_interval_dyadic_low_energy_family etaLD hLD
   refine ⟨C, hC, hCeta, ?_⟩
-  intro L q m p r w hq hqm hpr hrL hw g u ell D h hs h0 h1 config H hRaw
-  let : Nonempty (Fin L → Fin q) := config
-  obtain ⟨hell, hlogD, _⟩ := hregional L q m 0 0 w hq hqm hw
-  refine ⟨hell, hlogD, ?_⟩
-  intro hlong J beta tau U Phi Tm EM EE
-  have hell1 : 1 ≤ ell := (by decide : 1 ≤ 21).trans hell
-  let a := max p ell - ell
-  let b := min r (L - ell) - ell - 1
-  obtain ⟨_ha, _hb, hab, hbL, _hpp, _hpq, _hqq, _hlen,
-    _hleft, _hright, _htotal, hsub, hcollar⟩ :=
-    inward_effective_cuts L ell p r hell1 hpr hrL hlong
-  have hcost :
-      (interval L (a + ell) (b + ell + 1) \ J).card +
-        (J \ interval L (a + ell) (b + ell + 1)).card ≤ 2 * ell := by
-    have hsub' : interval L (a + ell) (b + ell + 1) ⊆ J := hsub
-    rw [Finset.sdiff_eq_empty_iff_subset.mpr hsub', Finset.card_empty, zero_add]
-    exact hcollar
-  obtain ⟨_, _, hphysical⟩ := hregional L q m a b w hq hqm hw
-  obtain ⟨e, E0, _x, z, hO, hClip, _hxunit, _hx, _hlo, hcenter, hzunit, hz, hE0low,
-    _hE0, _hE04, _hnorm, hfamilies⟩ := hphysical hab hbL J hcost h hs h0 h1
-  obtain ⟨_hminimum, hidentity⟩ :=
-    hRaw.spectralSpanLE_centered_ground_of_eq hO (∑ j, e j) E0 z
-      hcenter hzunit hz hE0low
-  obtain ⟨N, W, hN, hfilters⟩ := hfamilies
-  let A0 : Fin N → EM →L[ℂ] EM := fun i ↦
-    Matrix.toEuclideanCLM (𝕜 := ℂ) (n := J → Fin q) (W i)
-  have hcard : Fintype.card (Fin N) ≤ D ^ 2 := by simpa only [Fintype.card_fin] using hN
-  obtain ⟨_f, A, _hA, _hzero, hspan⟩ :=
-    Submodule.exists_clm_family_extension_of_card_le hcard A0
-  refine ⟨A, ?_⟩
-  intro eta hbuffer hetaLD
-  let lower := Submodule.spectralSpanLE hClip.eigenvectorBasis hClip.eigenvalues
-    (E0 + eta - 2 * w)
-  let higher := Submodule.spectralSpanLE hClip.eigenvectorBasis hClip.eigenvalues
-    (E0 + eta - w)
-  let Delta := (2 * Real.exp (-2 * ((ell ^ 2 : ℕ) : ℝ) *
-    Real.sqrt (w / (7 * (ell : ℝ) - (E0 + eta - 2 * w))))) ^ 2
-  obtain ⟨hnest, hupper, hlower, htrade, _poly, _hdegree, _hp0, _M, _hM, himprove⟩ :=
-    hfilters eta hbuffer hetaLD
-  have hidentityLower :
-      Submodule.spectralSpanLE hO.eigenvectorBasis hO.eigenvalues (E0 + eta - 3 * w) =
-        Submodule.spectralSpanLE hRaw.eigenvectorBasis hRaw.eigenvalues
-          (minEigenvalue hRaw + eta - 3 * w) := by
-    simpa only [add_sub_assoc] using hidentity (eta - 3 * w)
-  refine ⟨lower, higher, Delta, hnest, ?_, ?_, by dsimp only [Delta]; positivity, htrade, ?_⟩
-  · simpa only [hidentity eta] using hupper
-  · simpa only [hidentityLower] using hlower
-  · intro S delta hS hdelta
-    obtain ⟨_hdim, hviable⟩ := himprove S delta hS hdelta
-    refine ⟨?_, ?_⟩
-    · simpa only [Fintype.card_fin] using
-        Submodule.finrank_iSup_map_le_card_mul S (fun i ↦ (A i).toLinearMap)
-    · rw [hspan S]
-      exact hviable
+  intro L q m p r w hq hqm hpr hrL hw
+  have h := hlong L q m p r 0 w hq hqm hpr hrL hw
+  rw [show m * 2 ^ (0 : ℕ) = m by simp] at h
+  rw [show (1 / 200 : ℝ) / 2 ^ (4 * (0 : ℕ)) = 1 / 200 by norm_num] at h
+  exact h
 
 end TNLean.MPS.AreaLaw

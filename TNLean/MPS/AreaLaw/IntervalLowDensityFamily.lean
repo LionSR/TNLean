@@ -3,9 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.AreaLaw.LongIntervalLowDensityFamily
-import TNLean.MPS.AreaLaw.ShortRegionViableFamily
-import QICLean.Analysis.ViableSubspaceOrder
+import TNLean.MPS.AreaLaw.DyadicIntervalLowDensityFamily
 
 /-!
 # Low-energy improving families on every prescribed interval
@@ -91,39 +89,13 @@ theorem exists_fixed_bandwidth_interval_low_energy_family
             Module.finrank ℂ grow ≤ D ^ 2 * Module.finrank ℂ S ∧
               Submodule.IsViable (F := EE) (Delta / (1 - delta) ^ 2)
                 grow (Tlo.map Tm.toLinearEquiv.toLinearMap) := by
-  classical
-  obtain ⟨C, hC, hCeta, hlong⟩ :=
-    exists_fixed_bandwidth_long_interval_low_energy_family etaLD hLD
+  obtain ⟨C, hC, hCeta, hfamily⟩ :=
+    exists_fixed_bandwidth_interval_dyadic_low_energy_family etaLD hLD
   refine ⟨C, hC, hCeta, ?_⟩
-  intro L q m p r w hq hqm hpr hrL hw g u ell D h hs h0 h1 config H hRaw
-  let : Nonempty (Fin L → Fin q) := config
-  obtain ⟨hell, hlogD, hfamily⟩ := hlong L q m p r w hq hqm hpr hrL hw h hs h0 h1
-  refine ⟨hell, hlogD, ?_⟩
-  intro J beta tau U Phi Tm EM EE
-  by_cases hshort : r - p ≤ 4 * ell
-  · have hJ : J.card ≤ 4 * ell := (card_interval_le (L := L) p r).trans hshort
-    obtain ⟨A, Delta, hDelta, htrade, himprove⟩ :=
-      exists_short_actual_region_improving_family_of_count_base (F := EE)
-        L q m ell J hq hqm ((by decide : 1 ≤ 21).trans hell) hJ
-    refine ⟨A, ?_⟩
-    intro eta _hbuffer _hetaLD
-    let Gup := Submodule.spectralSpanLE hRaw.eigenvectorBasis hRaw.eigenvalues
-      (minEigenvalue hRaw + eta)
-    let Glow := Submodule.spectralSpanLE hRaw.eigenvectorBasis hRaw.eigenvalues
-      (minEigenvalue hRaw + eta - 3 * w)
-    have hle : Glow ≤ Gup := Submodule.span_mono
-      (Set.image_mono (fun _ hi ↦ hi.trans
-        (show minEigenvalue hRaw + eta - 3 * w ≤ minEigenvalue hRaw + eta by
-          linarith only [hw])))
-    have hGG : Submodule.IsCloseTo (1 / 200) Gup Gup :=
-      Submodule.isCloseTo_of_le (by norm_num) le_rfl
-    have hGL : Submodule.IsCloseTo (1 / 200) Gup Glow :=
-      Submodule.isCloseTo_of_le (by norm_num) hle
-    refine ⟨Gup, Gup, Delta, le_rfl, hGG, hGL, hDelta, htrade, ?_⟩
-    intro S delta hS hdelta
-    refine ⟨?_, himprove (Gup.map Tm.toLinearEquiv.toLinearMap) S delta hS hdelta⟩
-    simpa only [Fintype.card_fin] using
-      Submodule.finrank_iSup_map_le_card_mul S (fun i ↦ (A i).toLinearMap)
-  · exact hfamily (Nat.lt_of_not_ge hshort)
+  intro L q m p r w hq hqm hpr hrL hw
+  have h := hfamily L q m p r 0 w hq hqm hpr hrL hw
+  rw [show m * 2 ^ (0 : ℕ) = m by simp] at h
+  rw [show (1 / 200 : ℝ) / 2 ^ (4 * (0 : ℕ)) = 1 / 200 by norm_num] at h
+  exact h
 
 end TNLean.MPS.AreaLaw
