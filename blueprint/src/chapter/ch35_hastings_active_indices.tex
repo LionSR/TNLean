@@ -1,0 +1,58 @@
+\section{Counting the indices of a finite Trotter product}
+\label{sec:hastings_active_indices}
+
+Let $V$ be a finite set of sites, with a local dimension $d_j$ at each site
+$j\in V$. The construction of~\cite[lines 1069--1077]{Hastings2006Solving}
+assigns indices only to the sites in the support of each factor of a Trotter
+product. This section counts these indices; the local dimension may vary
+from site to site.
+
+\begin{definition}[Active factor occurrences]
+    \label{def:hastings_active_occurrences}
+    \lean{TNLean.Lattice.trotterActiveOccurrences}
+    \leanok
+    Let $X_i\subseteq V$ be the support assigned to the factor centred at $i$.
+    In $n$ sweeps, each containing one factor per centre, the active occurrences
+    at $j$ form
+    \begin{align}
+        \mathcal A_j=\{(s,i):0\le s<n,\ j\in X_i\}.
+        \label{eq:hastings_active_occurrences}
+    \end{align}
+\end{definition}
+
+\begin{theorem}[Local index cardinalities]
+    \label{thm:hastings_active_cardinality}
+    \lean{
+        TNLean.Lattice.card_trotterActiveOccurrences,
+        TNLean.Lattice.card_trotterActiveIndices,
+        TNLean.Lattice.card_trotterActiveOccurrences_le
+    }
+    \leanok
+    \uses{def:hastings_active_occurrences}
+    Put $c_j=\#\{i:j\in X_i\}$. Then $|\mathcal A_j|=nc_j$, and assigning
+    one pair of physical indices at $j$ to each occurrence gives an index set
+    of cardinality $(d_j^2)^{nc_j}$. A zero exponent gives cardinality one,
+    including when $d_j=0$.
+    On a finite planar domain with walk distance, if $X_i$ lies in the
+    radius-$R$ ball about $i$, then $|\mathcal A_j|$ is at most $n$ times
+    the cardinality of the radius-$R$ ball about $j$.
+\end{theorem}
+\begin{proof}\leanok
+    The set in (\ref{eq:hastings_active_occurrences}) is the product of the
+    $n$ sweeps and the $c_j$ contributing centres. Each component has $d_j^2$
+    choices. Reversing a walk from $i$ to $j$ places every contributing
+    centre in the ball about $j$.
+\end{proof}
+
+When every site has the same local dimension $q$, these index sets are the
+site index sets of a matrix product form of the Trotter product: by
+Lemma~\ref{thm:hastings_trotter_index_count}, the index set at $j$ then has
+at most $(q^2)^{nS}$ elements, where $S$ bounds the number of sites in a
+radius-$R$ ball. A matrix product form whose index set at $j$ has exactly
+$(d_j^2)^{nc_j}$ elements for site-dependent dimensions $d_j$ is not
+established here.
+
+This is the count asserted at lines 1069--1077 of
+\cite{Hastings2006Solving}. It does not establish convergence to the Gibbs
+operator or the separate approximation and percolation estimates for
+$\rho(\beta,l_{\mathrm{proj}})$.
