@@ -66,6 +66,7 @@ import TNLean.MPS.AreaLaw.Hastings
 import TNLean.MPS.AreaLaw.Huang
 import TNLean.MPS.AreaLaw.IndependentFiveRegionCluster
 import TNLean.MPS.AreaLaw.IndependentFiveRegionResidual
+import TNLean.MPS.AreaLaw.IndependentLowDensityBufferedTargets
 import TNLean.MPS.AreaLaw.IndependentPhysicalDGPower
 import TNLean.MPS.AreaLaw.IndependentPhysicalDGViability
 import TNLean.MPS.AreaLaw.IndependentTruncationParameters
@@ -181,8 +182,10 @@ import TNLean.MPS.AreaLaw.SelectedRegionalSoftMPO
 import TNLean.MPS.AreaLaw.SequentialTruncation
 import TNLean.MPS.AreaLaw.SharpApproximationParameters
 import TNLean.MPS.AreaLaw.SharpChainCompression
+import TNLean.MPS.AreaLaw.SharpLowDensityParameters
 import TNLean.MPS.AreaLaw.SharpPhysicalCompression
 import TNLean.MPS.AreaLaw.SharpRankCount
+import TNLean.MPS.AreaLaw.SharpRegionalLowDensityFamily
 import TNLean.MPS.AreaLaw.ShiftedHeatMPO
 import TNLean.MPS.AreaLaw.ShortRegionViableFamily
 import TNLean.MPS.AreaLaw.SnakeGridApproximation
