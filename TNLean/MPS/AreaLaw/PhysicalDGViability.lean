@@ -8,6 +8,7 @@ import QICLean.Analysis.LowEnergyCoordinates
 import QICLean.Analysis.ViableSubspaceBootstrap
 import QICLean.Analysis.ViableSubspaceCoordinates
 import QICLean.Analysis.ViableSubspaceDimension
+import QICLean.Analysis.ViableSubspaceOrder
 import TNLean.MPS.AreaLaw.ActualClippedPolynomialFamily
 import TNLean.MPS.AreaLaw.Basic
 import TNLean.MPS.AreaLaw.FiveRegionTruncationResidual
@@ -283,11 +284,8 @@ theorem exists_physical_dg_viable_family :
     obtain ⟨W, Delta, hDelta, hbudget, himprove⟩ :=
       exists_short_actual_region_improving_family (F := EE) L q ell J hq
         (Nat.le_trans (by decide : 1 ≤ 21) hell) hJ
-    have hGG : Submodule.IsCloseTo (1 / 200 : ℝ) G G := by
-      apply Submodule.isCloseTo_iff.mpr
-      intro x hx
-      rw [G.starProjection_eq_self_iff.mpr hx]
-      nlinarith [sq_nonneg ‖x‖]
+    have hGG : Submodule.IsCloseTo (1 / 200 : ℝ) G G :=
+      Submodule.isCloseTo_of_le (by norm_num) le_rfl
     refine ⟨W, G, Delta, hGG, hGG, hDelta, hbudget, ?_⟩
     intro S delta hS hdelta
     exact himprove (G.map (Tm.toLinearEquiv :
@@ -696,13 +694,8 @@ private theorem exists_accuracy_physical_dg_viable_family :
     obtain ⟨W, Delta, hDelta, hbudget, himprove⟩ :=
       exists_short_actual_region_improving_family_of_count_base (F := EE)
         L q m ell J hq hqm (Nat.le_trans (by decide : 1 ≤ 21) hell) hJ
-    have hmR : (0 : ℝ) < (m : ℝ) := by exact_mod_cast (by omega : 0 < m)
-    have hGG : Submodule.IsCloseTo (1 / (200 * (m : ℝ)) : ℝ) G G := by
-      apply Submodule.isCloseTo_iff.mpr
-      intro x hx
-      rw [G.starProjection_eq_self_iff.mpr hx]
-      have herr : 0 ≤ (1 / (200 * (m : ℝ)) : ℝ) := by positivity
-      nlinarith [sq_nonneg ‖x‖]
+    have hGG : Submodule.IsCloseTo (1 / (200 * (m : ℝ)) : ℝ) G G :=
+      Submodule.isCloseTo_of_le (by positivity) le_rfl
     refine ⟨W, G, Delta, hGG, hGG, rfl, hDelta, hbudget, ?_⟩
     intro S delta hS hdelta
     exact himprove (G.map (Tm.toLinearEquiv :

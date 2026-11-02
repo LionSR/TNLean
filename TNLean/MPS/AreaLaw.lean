@@ -68,6 +68,7 @@ import TNLean.MPS.AreaLaw.InformationReset
 import TNLean.MPS.AreaLaw.InteractionBudget
 import TNLean.MPS.AreaLaw.IntervalCollectiveTrimming
 import TNLean.MPS.AreaLaw.IntervalGenerators
+import TNLean.MPS.AreaLaw.IntervalLowDensityFamily
 import TNLean.MPS.AreaLaw.IntervalMPOTransfer
 import TNLean.MPS.AreaLaw.IntervalNeighborhoodEntropy
 import TNLean.MPS.AreaLaw.IntervalReferenceTrimming
@@ -81,6 +82,7 @@ import TNLean.MPS.AreaLaw.LocalSolution
 import TNLean.MPS.AreaLaw.LocalSumMPO
 import TNLean.MPS.AreaLaw.LogarithmicAreaLaw
 import TNLean.MPS.AreaLaw.LogarithmicSeparation
+import TNLean.MPS.AreaLaw.LongIntervalLowDensityFamily
 import TNLean.MPS.AreaLaw.LowDensityBufferedTargets
 import TNLean.MPS.AreaLaw.LowDensityFilterParameters
 import TNLean.MPS.AreaLaw.MPSApproximation
@@ -137,6 +139,7 @@ import TNLean.MPS.AreaLaw.ProtocolTerminalWord
 import TNLean.MPS.AreaLaw.ProtocolUniformPreparation
 import TNLean.MPS.AreaLaw.RangeOneCut
 import TNLean.MPS.AreaLaw.RangeOneSupport
+import TNLean.MPS.AreaLaw.RegionalLowDensityFamily
 import TNLean.MPS.AreaLaw.RegionalMiddleFactors
 import TNLean.MPS.AreaLaw.RegionalSoftSpectralApproximation
 import TNLean.MPS.AreaLaw.RegionalSoftTruncationMPO

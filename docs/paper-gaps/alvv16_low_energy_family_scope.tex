@@ -24,14 +24,22 @@ A stronger estimate uniform in an arbitrary variable bandwidth is not
 asserted. The explicit logarithmic local-dimension dependence is retained.
 
 \paragraph{Geometry and buffers.}
-The current result constructs the three clipped bulks and two retained
-windows when $\ell\ge1$, $a+2\ell\le b$ and $b+2\ell\le L-1$.
-The represented interval is $[a+\ell,b+\ell+1)$.
-The source permits any contiguous interval. Short intervals, boundary
-intervals and the cost of moving this family to an arbitrary prescribed
-interval remain separate steps; this interior result is not marked as
-the unrestricted theorem.
-Its buffered cutoffs satisfy $6w\le\eta_1\le\eta_{\rm LD}$.
+The common five-region intermediate construction uses
+$\ell\ge1$, $a+2\ell\le b$ and $b+2\ell\le L-1$, with native interval
+$J_0=[a+\ell,b+\ell+1)$.
+For a prescribed interval $J=[p,r)$ longer than $4\ell$, inward effective
+cuts give $J_0\subseteq J$ with $|J\setminus J_0|\le2\ell$.
+The exact regional polynomial decomposition absorbs this collar cost into
+the same squared count. If $r-p\le4\ell$, actual configuration matrix
+units give the required improving family directly, including the zero
+target. Thus the new prescribed-interval family covers empty intervals,
+short intervals and intervals meeting either chain endpoint, without an
+assumed partition or fit condition. Its original targets use the same raw
+Hamiltonian's canonical minimum at every scale.
+The statement retains $q\ge2$; the scalar local space is a separate
+elementary case. This restriction is displayed in the theorem and is not
+claimed to be a counterexample to the source.
+The buffered cutoffs satisfy $6w\le\eta_1\le\eta_{\rm LD}$.
 The source condition $\eta_1\ge2\mu/\log n$ gives exactly this condition
 under $w=\mu/(3\log n)$ for $n\ge2$. The lower original cutoff is then
 $\eta_1-3w=\eta_1-\mu/\log n$, as in the source.
@@ -48,8 +56,10 @@ Hamiltonian are unchanged. Increasing an upper bound on $D$ after choosing
 a filter would not justify the latter inequality and is not used.
 
 \paragraph{Remaining conclusions.}
-This construction assumes no global spectral gap and supplies actual
-polynomials and tensor factors. It does not prove the subsequent
+The long-interval construction assumes no global spectral gap and supplies
+the actual polynomial and tensor factors of one global clipped matrix.
+The short-interval branch uses actual matrix units and does not assert a
+polynomial filter with an independently supplied suppression bound. It does not prove the subsequent
 low-density minimal-dimension argument, an entropy bound, a low-energy
 basis of matrix product states or a running-time bound. Closed spectral
 cutoffs and the absence of a positivity claim for the Chebyshev polynomial

@@ -3,10 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.AreaLaw.LowDensityBufferedTargets
-import TNLean.MPS.AreaLaw.LowDensityFilterParameters
-import TNLean.MPS.AreaLaw.ActualClippedPolynomialFamily
-import QICLean.Analysis.NestedChebyshevViability
+import TNLean.MPS.AreaLaw.RegionalLowDensityFamily
 
 /-!
 # Physical improving families at a fixed low-density bandwidth
@@ -122,79 +119,16 @@ theorem exists_fixed_bandwidth_five_region_low_energy_family
               Module.finrank ℂ grow ≤ N * Module.finrank ℂ S ∧
                 Submodule.IsViable (F := EuclideanSpace ℂ (↥(Jᶜ) → Fin q))
                   (Delta / (1 - delta) ^ 2) grow (lower.map Tm.toLinearEquiv.toLinearMap) := by
-  classical
-  obtain ⟨C, hC, hCeta, hparams⟩ :=
-    Real.exists_fixed_bandwidth_low_density_filter_parameters etaLD hLD
+  obtain ⟨C, hC, hCeta, hregional⟩ :=
+    exists_fixed_bandwidth_five_region_regional_low_energy_family etaLD hLD
   refine ⟨C, hC, hCeta, ?_⟩
   intro L q m a b w hq hqm hw g u ell D hab hbL h hs h0 h1
-  obtain ⟨hell, hcut, hlogD, hresBudget, htrade⟩ := hparams m w (hq.trans hqm) hw
-  have hell1 : 1 ≤ ell := (by decide : 1 ≤ 21).trans hell
-  refine ⟨hell, hlogD, ?_⟩
-  intro k A Cross Y K B
-  obtain ⟨hxi1, hsmall⟩ := hresBudget etaLD hLD.le le_rfl
-  obtain ⟨e, E0, x, z, hO, hC, hxunit, hx, hlo, hcenter, hzunit, hz, hE0low,
-    hE0, hE04, hnorm, htargets⟩ :=
-    exists_five_region_low_energy_targets_of_residual_budget L q a b ell etaLD w
-      hw hcut hxi1 hsmall hq hell1 hab hbL h hs h0 h1
-  refine ⟨e, E0, x, z, hO, hC, hxunit, hx, hlo, hcenter, hzunit, hz, hE0low,
-    hE0, hE04, hnorm, ?_⟩
-  intro J beta tau U Phi Tm
-  have hdegree : 1 ≤ ell ^ 2 := by
-    rw [pow_two]
-    simpa only [Nat.one_mul] using Nat.mul_le_mul hell1 hell1
-  obtain ⟨N, W, hNraw, hdecomp⟩ :=
-    exists_actual_regional_clipped_polynomial_family_fin
-      L q a b ell (ell ^ 2) hell1 hq hdegree hab hbL h hs e (ell : ℝ) J
-  have hNnative : N ≤ ((q * ell ^ 2) ^ (18 * ell + 2 * (ell ^ 2 / ell))) ^ 2 := by
-    simpa only [J, Finset.sdiff_self, Finset.card_empty, Nat.mul_zero, Nat.zero_add,
-      pow_zero, mul_one] using hNraw
-  have hN : N ≤ D ^ 2 := by
-    simpa only [Nat.mul_zero, pow_zero, mul_one] using
-      collar_card_le_square_of_larger_count_base q m ell 0 N hq hqm hell1
-        (by omega) hNnative
-  refine ⟨N, W, hN, ?_⟩
-  intro eta hbuffer hetaLD lower higher Delta
-  obtain ⟨hnest, hupperClose, hlowerClose⟩ := htargets eta hbuffer hetaLD
-  have hupper : E0 + eta - w ≤ 7 * (ell : ℝ) := by
-    linarith only [hE04, hcut, hetaLD, hw, (Nat.cast_nonneg ell : (0 : ℝ) ≤ ell)]
-  have hR : 0 < 7 * (ell : ℝ) - (E0 + eta - 2 * w) := by
-    linarith only [hupper, hw]
-  have hRup : 7 * (ell : ℝ) - (E0 + eta - 2 * w) ≤ 7 * (ell : ℝ) := by
-    linarith only [hE0, hbuffer, hw]
-  have heigen (j : Fin L → Fin q) :
-      Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)
-          (B (ell : ℝ) e K) (hC.eigenvectorBasis j) =
-        (hC.eigenvalues j : ℂ) • hC.eigenvectorBasis j :=
-    hC.toEuclideanCLM_eigenvectorBasis j
-  obtain ⟨p, hpdegree, hp0, M, hM, himprove⟩ :=
-    Matrix.exists_chebyshev_nested_viability_of_polynomial_family
-      (B (ell : ℝ) e K) hC hC.eigenvectorBasis hC.eigenvalues heigen W Tm
-      (fun Q hQ ↦ (hdecomp Q hQ).imp fun M hM ↦ hM.2)
-      (E0 + eta - 2 * w) (E0 + eta - w) (7 * (ell : ℝ))
-      (by linarith only [hw]) hupper hnorm
-  refine ⟨hnest, hupperClose, hlowerClose, ?_, p, hpdegree, hp0, M, hM, ?_⟩
-  · have hgs : 4 * g / 5 ≤ w := by
-      have hg : 0 < g := lt_min hw zero_lt_one
-      have hgw : g ≤ w := min_le_left _ _
-      linarith only [hg, hgw]
-    have hsqrt := Real.sqrt_le_sqrt (div_le_div_of_nonneg_right hgs hR.le)
-    have hDelta : Delta ≤
-        4 * Real.exp (-4 * (ell : ℝ) ^ 2 * Real.sqrt
-          ((4 * g / 5) / (7 * (ell : ℝ) - (E0 + eta - 2 * w)))) := by
-      have heq : Delta = 4 * Real.exp (-4 * (ell : ℝ) ^ 2 * Real.sqrt
-          (w / (7 * (ell : ℝ) - (E0 + eta - 2 * w)))) := by
-        dsimp only [Delta]
-        rw [Nat.cast_pow]
-        rw [mul_pow, ← Real.exp_nat_mul]
-        norm_num only [Nat.cast_ofNat]
-        congr 2
-        ring
-      rw [heq]
-      apply mul_le_mul_of_nonneg_left (Real.exp_le_exp.mpr ?_) (by norm_num)
-      nlinarith only [mul_nonneg (sq_nonneg (ell : ℝ)) (sub_nonneg.mpr hsqrt)]
-    apply (mul_le_mul_of_nonneg_left hDelta (by positivity)).trans
-    simpa only [neg_mul] using htrade _ hR hRup
-  · simpa only [Delta,
-      show (E0 + eta - w) - (E0 + eta - 2 * w) = w by ring] using himprove
+  obtain ⟨hell, hlogD, hphysical⟩ := hregional L q m a b w hq hqm hw
+  have hcollar :
+      (interval L (a + ell) (b + ell + 1) \ interval L (a + ell) (b + ell + 1)).card +
+        (interval L (a + ell) (b + ell + 1) \ interval L (a + ell) (b + ell + 1)).card ≤
+          2 * ell := by simp
+  exact ⟨hell, hlogD, hphysical hab hbL
+    (interval L (a + ell) (b + ell + 1)) hcollar h hs h0 h1⟩
 
 end TNLean.MPS.AreaLaw

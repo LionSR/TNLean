@@ -97,9 +97,9 @@ $F(c)=\mathbf1_{(-\infty,E_0+c]}(B)\mathcal H$.
     in~\cite{gap:alvv16_low_energy_family_scope}.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{lem:fixed_bandwidth_low_density_filter_parameters,
-        lem:ld_buffered_targets,thm:actual_clipped_polynomial_family,
-        thm:collar_larger_count_base}
+    \uses{lem:regional_low_energy_family}
+    Apply Lemma~\ref{lem:regional_low_energy_family} with $J=J_0$,
+    so both differences of regions are empty.
     Choose $C$ from the fixed-bandwidth scalar estimate.
     It supplies the residual budget and the suppression inequality at
     this same $\ell$ and $D$. The previous theorem constructs $B$ and
@@ -141,4 +141,113 @@ $F(c)=\mathbf1_{(-\infty,E_0+c]}(B)\mathcal H$.
     chosen complete eigenbases. Substitute these identities into the
     two spectral comparisons, retaining the constructed filter and its
     actual middle factors.
+\end{proof}
+
+
+\subsection{A prescribed interval at every window scale}
+
+For $J=[p,r)\subseteq[0,L)$, split physical configurations to identify
+$\mathcal H$ isometrically with $\mathcal H_J\otimes\mathcal H_{J^c}$.
+This identification depends only on $J$, not on the selected window scale.
+Write $\lambda_0=\min\sigma(H)$ and
+$G(c)=\mathbf1_{(-\infty,\lambda_0+c]}(H)\mathcal H$.
+
+\begin{theorem}[An improving family on every prescribed interval]
+    \label{thm:interval_low_energy_family}
+    \lean{TNLean.MPS.AreaLaw.exists_fixed_bandwidth_interval_low_energy_family}
+    \leanok
+    For every $\eta_{\rm LD}>0$ there is a constant
+    $C\ge\max\{100,19+\eta_{\rm LD}\}$ with the following property.
+    Let $q\ge2$, $m\ge q$, $w>0$, and choose $g,u,\ell,D$ by
+    (\ref{eq:ld_family_parameters}). Let $H$ be an actual chain of
+    supported positive-contraction bonds, and let $0\le p\le r\le L$.
+    Then $\ell\ge21$, the bound (\ref{eq:ld_family_log_count}) holds,
+    and there is a family $A_0,\ldots,A_{D^2-1}$ acting on $\mathcal H_J$,
+    chosen before every cutoff and every viable subspace, with the
+    following property. For every $6w\le\eta\le\eta_{\rm LD}$ there are
+    $T_-\subseteq T_+\subseteq\mathcal H$ and $\Delta>0$ such that
+    $G(\eta)$ is $1/200$-close to $T_+$, $T_-$ is $1/200$-close to
+    $G(\eta-3w)$, and $D^{12}\Delta\le10^{-5}$.
+    If $S\subseteq\mathcal H_J$ is $\delta$-viable for $T_+$ with
+    $\delta<1$, then $V=\sum_i A_iS$ satisfies
+    \begin{align}
+        \dim V&\le D^2\dim S,&
+        V&\text{ is }\frac{\Delta}{(1-\delta)^2}\text{-viable for }T_-.
+        \label{eq:ld_interval_improvement}
+    \end{align}
+    Short intervals, empty intervals and intervals meeting the chain
+    endpoints are included. The local dimension is restricted to
+    $q\ge2$, as recorded in~\cite{gap:alvv16_low_energy_family_scope}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{lem:long_interval_low_energy_family,thm:short_region_larger_count_base}
+    The same scalar choice of $C$ works in both cases.
+    If $r-p\le4\ell$, use the actual configuration matrix units on $J$,
+    extended by zero to $D^2$ operators. Their images span
+    $\mathcal H_J$ for every nonzero viable source subspace. The zero
+    target is immediate. Take $T_-=T_+=G(\eta)$; equality gives the
+    upper comparison and $G(\eta-3w)\subseteq G(\eta)$ gives the lower
+    comparison. The matrix-unit construction permits
+    $\Delta=(100000D^{12})^{-1}$ and gives
+    (\ref{eq:ld_interval_improvement}).
+    If $r-p>4\ell$, apply Lemma~\ref{lem:long_interval_low_energy_family}.
+\end{proof}
+
+\begin{lemma}[Changing the retained region within the count reserve]
+    \label{lem:regional_low_energy_family}
+    \lean{TNLean.MPS.AreaLaw.exists_fixed_bandwidth_five_region_regional_low_energy_family}
+    \leanok
+    The scalar choice of $C$ in the five-region construction can be made
+    before the geometry. Its bounds on $\ell$ and $\log D$ hold
+    unconditionally. When the five regions fit, put
+    $J_0=[a+\ell,b+\ell+1)$. For every set of sites $J$ satisfying
+    $|J_0\setminus J|+|J\setminus J_0|\le2\ell$, the construction has
+    a common family on $J$ with $N\le D^2$ and all the polynomial,
+    spectral comparison and viability conclusions of
+    Theorem~\ref{thm:fixed_bandwidth_low_energy_family}, with the same
+    actual global clipped matrix. The family precedes the cutoff and
+    the viable subspace.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:fixed_bandwidth_low_density_filter_parameters,
+        lem:ld_buffered_targets,thm:actual_clipped_polynomial_family,
+        thm:collar_larger_count_base}
+    At degree $\ell^2$, put $D_0=(q\ell^2)^{20\ell}$.
+    The exact regional polynomial decomposition supplies a common family
+    of cardinality
+    \begin{align}
+        N&\le D_0^2 q^{2|J_0\setminus J|+2|J\setminus J_0|}
+          \le(m\ell^2)^{44\ell}=D^2.
+        \label{eq:ld_regional_count_reserve}
+    \end{align}
+    The polynomial is still evaluated at the same global clipped matrix.
+    Its norm, the two spectral comparisons and its suppression estimate
+    are unchanged. The scalar estimate was chosen for $D$ at this same
+    degree, so no enlargement of the count is made after choosing the filter.
+\end{proof}
+
+\begin{lemma}[Long intervals with inward effective cuts]
+    \label{lem:long_interval_low_energy_family}
+    \lean{TNLean.MPS.AreaLaw.exists_fixed_bandwidth_long_interval_low_energy_family}
+    \leanok
+    The constant and all the improving-family bounds of
+    Theorem~\ref{thm:interval_low_energy_family} can be obtained whenever
+    $r-p>4\ell$, including intervals that meet a chain endpoint.
+    The original targets are the canonical $G(\eta)$ and $G(\eta-3w)$
+    of the same raw Hamiltonian. The family is extended by zero to exactly
+    $D^2$ operators, preserving every actual image span.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:inward_effective_cuts,lem:regional_low_energy_family}
+    Set $p'=\max\{p,\ell\}$, $r'=\min\{r,L-\ell\}$,
+    $a=p'-\ell$ and $b=r'-\ell-1$. The long-interval condition gives
+    $a+2\ell\le b$ and $b+2\ell\le L-1$.
+    The interval $J_0=[p',r')$ is contained in $J$, and at most
+    $2\ell$ sites are removed. Apply
+    Lemma~\ref{lem:regional_low_energy_family} and
+    (\ref{eq:ld_regional_count_reserve}).
+    The constructed normalized ground vector identifies every original
+    target with the canonical raw-Hamiltonian target. Extending the
+    actual regional operators by zero preserves every image span,
+    hence also the viability conclusion and its dimension bound.
 \end{proof}

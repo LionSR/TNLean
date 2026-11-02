@@ -11558,3 +11558,18 @@ removed after the dependency audit exposed it.
 - **Decision:** No second eigenbasis calculation or original-target
   definition is added. The actual polynomial and middle family from the
   physical construction remain unchanged.
+
+### One regional low-energy construction — share the exact collar count (2026-11-02)
+
+- **Seen:** The native and prescribed-interval low-energy families use the
+  same physical clipping, polynomial degree and scalar suppression estimate.
+- **Reuse:** A single regional theorem derives the exact decomposition on
+  any target differing from the native region by at most two window lengths.
+  The native statement specializes it at zero collar cost. Inward cuts
+  derive the collar bound for long prescribed intervals.
+- **Promotion:** Inclusion/self-closeness and error monotonicity belong to
+  the companion order module. The two existing gapped short-interval proofs
+  and the low-energy short branch use these shared projection facts.
+- **Decision:** No duplicated matrix-eigenbasis argument, viable-subspace
+  predicate or supplied partition is introduced. Configuration matrix units
+  handle short regions; zero extension preserves each actual image span.
