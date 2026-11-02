@@ -31,6 +31,25 @@
     \cite[Section~6.1, after (5)]{Arad2013AreaLaw}.
 \end{definition}
 
+\begin{lemma}[Three regional sums and the crossing bonds]
+    \label{lem:three_region_sum_crossings}
+    \lean{TNLean.MPS.AreaLaw.sum_three_regions_add_crossings}
+    \leanok
+    Let $l\leq r$ be natural numbers and let $h_i$, $0\leq i<L-1$,
+    be arbitrary matrices on the chain. With the regional sums $A_j$
+    and the crossing sum $Y$ defined above,
+    \begin{align}
+        \sum_i h_i=A_0+A_1+A_2+Y.
+    \end{align}
+    This identity requires neither positivity nor support hypotheses.
+    It also holds when a region is empty or the two cuts coincide.
+\end{lemma}
+\begin{proof}\leanok
+    Apply the five-region partition at the four cuts $(l,l,r,r)$.
+    The two intervening regions are empty. The remaining three internal
+    sums are $A_0,A_1,A_2$, and the crossing set retains each bond once.
+\end{proof}
+
 \begin{lemma}[Exponential residual on each partially truncated low-energy space]
     \label{thm:aklv_two_block_truncation_low}
     \lean{TNLean.MPS.AreaLaw.norm_aklv_two_block_truncation_low_le}

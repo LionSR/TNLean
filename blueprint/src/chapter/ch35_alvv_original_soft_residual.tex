@@ -1,0 +1,63 @@
+\section{The original-side residual of an actual soft replacement}
+\label{sec:alvv_original_soft_residual}
+
+A hard-tail estimate on the original low-energy space also controls the
+soft residual, with an additional error from the low-energy band.
+The scale and Taylor order need not agree. The following auxiliary
+concerns the original-side part of the soft-truncation argument in
+Arad, Landau, Vazirani and Vidick~\cite[lines 1195--1255 and 1373--1420]{Arad2016RigorousRG}.
+
+\begin{lemma}[One physical regional replacement on the original low-energy space]
+    \label{lem:alvv_original_soft_residual}
+    \lean{TNLean.MPS.AreaLaw.ALVV.exists_single_region_original_soft_truncation_residual}
+    \leanok
+    \uses{lem:alvv_single_region_residuals,lem:three_region_sum_crossings}
+    Let $q\geq1$, let $0\leq l\leq r\leq L$, and let
+    $0\leq h_i\leq I$ be supported on the designated neighbouring
+    sites of an $L$-site chain. Let $A_0,A_1,A_2$ be the actual internal
+    regional sums for the intervals $[0,l)$, $[l,r)$ and $[r,L)$.
+    There exist regional minimum energies $e_j$, one common unit vector
+    attaining them, and an attained ground energy $E\in[0,2]$ of
+    \begin{align}
+        H=\sum_i h_i-\Bigl(\sum_j e_j\Bigr)I.
+    \end{align}
+    These choices precede every width $\eta>0$, hard cutoff
+    $T\geq\eta+7$, soft scale $t>0$ and order $m\geq1$.
+    For every such choice put
+    \begin{align}
+        X&=A_1-e_1I,&G&=H-X+h_{m,t}(X).
+    \end{align}
+    Then $G$ is Hermitian, $G\leq H$, and its actual restricted error
+    on the original closed low-energy space satisfies
+    \begin{align}
+        \|(H-G)|_{E_H(E+\eta)}\|
+        \leq 32e^{-(T-\eta)/8}
+            +\frac{t}{m}\left(\frac{T}{t}\right)^m.
+    \end{align}
+    Empty regions, coincident cuts, endpoint cuts and $q=1$ are allowed.
+\end{lemma}
+\begin{proof}\leanok
+    Construct the regional minima and the original ground energy using
+    Lemma~\ref{lem:alvv_single_region_residuals}. The same lemma supplies
+    the original-side restricted residual for the actual hard replacement
+    \begin{align}
+        F=\min\{A_1,(e_1+T)I\}+A_0+A_2+Y-\Bigl(\sum_j e_j\Bigr)I.
+    \end{align}
+    The regional decomposition and the scalar-shift identity for hard
+    clipping give $H-F=X-\min\{X,T\}$. Also
+    $H-G=X-h_{m,t}(X)$. Apply the companion soft--hard restricted
+    residual comparison to the actual positive matrix $X$ and the
+    original low-energy space. The two stated errors add.
+    Finally, $h_{m,t}(X)\leq X$ gives $G\leq H$; functional calculus
+    gives Hermiticity.
+\end{proof}
+
+The hard cutoff $T$ is an auxiliary parameter in the error estimate;
+the constructed soft operator $G$ depends on $t,m$ and the original
+local data. In particular, order four gives the additional error
+$T^4/(4t^3)$ and is compatible with an independently large scale.
+No residual on a low-energy space of $G$, reverse spectral comparison,
+or efficient-filter conclusion is asserted. The false printed cluster
+estimate and its counterexamples remain recorded in
+\cite{gap:alvv16_cluster_approximation}; the qualified physical hard-tail
+estimate is recorded in \cite{gap:alvv16_hard_truncation_windows}.
