@@ -45,6 +45,17 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Lower bound for the interleaved logarithmic scale — promoted (2026-11-03)
+
+- **Pattern:** Derive `1 ≤ 1 + log m + log (1/g) + log (1+w)` from
+  `m ≥ 2`, `0 < g ≤ 1`, and `w ≥ 1` by logarithm monotonicity.
+- **Helper:** `Real.one_le_interleaved_log_scale` in
+  `MPS/AreaLaw/InterleavedFilterParameters.lean`, previously private.
+- **Occurrences:** the count and width estimates in that module and the
+  actual cutoff estimate in `InterleavedFilterSuppression.lean`.
+- **Decision:** Expose the existing mathematical lemma with its unchanged
+  statement and proof; the new consumer reuses it directly.
+
 ### Nonempty bond from a trace-one matrix — promoted (2026-10-31)
 
 - **Pattern:** `have ha : a ≠ 0 := by intro ha; subst a; simp at htr` followed by

@@ -72,6 +72,8 @@ import TNLean.MPS.AreaLaw.IndependentTruncationParameters
 import TNLean.MPS.AreaLaw.InformationReset
 import TNLean.MPS.AreaLaw.InteractionBudget
 import TNLean.MPS.AreaLaw.InterleavedFilterParameters
+import TNLean.MPS.AreaLaw.InterleavedFilterSuppression
+import TNLean.MPS.AreaLaw.InterleavedTruncationCalibration
 import TNLean.MPS.AreaLaw.IntervalCollectiveTrimming
 import TNLean.MPS.AreaLaw.IntervalFamilyTrimming
 import TNLean.MPS.AreaLaw.IntervalFamilyTrimmingBudget
@@ -114,10 +116,12 @@ import TNLean.MPS.AreaLaw.PartialSwap
 import TNLean.MPS.AreaLaw.PhysicalChebyshevViability
 import TNLean.MPS.AreaLaw.PhysicalDGApproximation
 import TNLean.MPS.AreaLaw.PhysicalDGAutomaticRefinement
+import TNLean.MPS.AreaLaw.PhysicalDGClippedReference
 import TNLean.MPS.AreaLaw.PhysicalDGEntropy
 import TNLean.MPS.AreaLaw.PhysicalDGFilterIteration
 import TNLean.MPS.AreaLaw.PhysicalDGFilterTrimming
 import TNLean.MPS.AreaLaw.PhysicalDGGlobalApproximation
+import TNLean.MPS.AreaLaw.PhysicalDGInterleavedFamily
 import TNLean.MPS.AreaLaw.PhysicalDGIntervalTree
 import TNLean.MPS.AreaLaw.PhysicalDGIntervalTrimming
 import TNLean.MPS.AreaLaw.PhysicalDGReferenceSpace

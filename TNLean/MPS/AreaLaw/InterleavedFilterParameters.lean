@@ -71,7 +71,7 @@ theorem interleaved_log_polynomial_base_le (C m g w v e : ℝ)
 
 /-- The logarithmic scale is at least one in the physical parameter range.
 Scalar auxiliary for ALVV, arXiv:1602.08828v2, lines 1797–1805. -/
-private theorem one_le_interleaved_log_scale (m g w : ℝ)
+theorem one_le_interleaved_log_scale (m g w : ℝ)
     (hm : 2 ≤ m) (hg : 0 < g) (hg1 : g ≤ 1) (hw : 1 ≤ w) :
     1 ≤ 1 + log m + log (1 / g) + log (1 + w) := by
   have hmLog : 0 ≤ log m := log_nonneg (by linarith)
