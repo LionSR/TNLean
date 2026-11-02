@@ -494,3 +494,62 @@
     for every vector in their span. The literal parent identities and all
     intermediate viability conclusions are retained unchanged.
 \end{proof}
+
+
+\begin{lemma}[Whole-interval viability in native coordinates]
+    \label{lem:full_interval_viability}
+    \lean{TNLean.MPS.AreaLaw.fullIntervalEquiv,
+        TNLean.MPS.AreaLaw.fullIntervalEquiv_apply,
+        TNLean.MPS.AreaLaw.nativeFullIntervalSpace,
+        TNLean.MPS.AreaLaw.isViable_fullInterval_iff_isCloseTo}
+    \leanok
+    Let $S$ be a subspace on $[0,L)$ and $G$ a subspace of the original
+    chain Hilbert space. Reading the coefficients of $S$ on native chain
+    configurations is a linear isometry; denote its image by $S_{\rm nat}$.
+    Then $S$ is $\delta$-viable for $G$ in the full-interval split if and
+    only if $S_{\rm nat}$ is $\delta$-close to $G$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:full_interval_mps_span}
+    The full interval has empty exterior, so its exterior configuration
+    space has one element. Under the coefficient-reading isometry the
+    extended interval subspace is exactly the image of $S_{\rm nat}$.
+    Transport the orthogonal-projection inequality through that isometry.
+\end{proof}
+
+\begin{lemma}[A normalized witness in the same recursive root]
+    \label{lem:physical_dg_tree_unit_mps}
+    \lean{TNLean.MPS.AreaLaw.exists_physical_dg_interval_tree_unit_mps}
+    \leanok
+    Retain the physical hypotheses, automatic parameters, families and
+    recursive operation of Lemma~\ref{thm:physical_dg_interval_tree_mps}.
+    Let $S_{\rm nat}$ be the native image of its actual root and
+    $P$ its orthogonal projection. The same families and recursive spaces
+    can be chosen before every unit $\Gamma\in G$ so that
+    $S_{\rm nat}$ is $3/200$-close to $G$, and
+    \begin{align}
+        \phi&=\frac{P\Gamma}{\|P\Gamma\|}\in S_{\rm nat}, &
+        \|\phi\|&=1,\notag\\
+        |\langle\phi,\Gamma\rangle|^2&\ge\frac{197}{200}, &
+        \|\phi-\Gamma\|^2&\le\frac3{100}.
+    \end{align}
+    Moreover $\langle\phi,\Gamma\rangle=\|P\Gamma\|$ is a nonnegative
+    real number, and $\phi$ has native MPS bond at most
+    $10^6D_{\rm ref}^2(L+1)M^2$.
+    All intermediate viability statements and literal parent operations
+    remain those of the same recursive construction. The witness depends
+    on $\Gamma$; it does not perform final spectral extraction or establish
+    adaptive joint probability or computational cost. The precise scope
+    remains that of~\cite{gap:alvv16_approximation_parameters}.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:physical_dg_interval_tree_mps,lem:full_interval_viability}
+    Whole-region viability gives closeness of the same native root to $G$.
+    Its projection of $\Gamma$ has squared norm at least $197/200$ and
+    is nonzero. Normalization gives the stated phase and overlap. Since
+    both vectors are unit, their squared distance is
+    $2-2\|P\Gamma\|$. Orthogonal projection is a contraction, so
+    $\|P\Gamma\|\ge\|P\Gamma\|^2\ge197/200$ and the distance
+    bound follows. Membership in the actual native root
+    retains its all-span MPS bound.
+\end{proof}

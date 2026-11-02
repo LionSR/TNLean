@@ -51,6 +51,7 @@ import TNLean.MPS.AreaLaw.FiveRegionHamiltonian
 import TNLean.MPS.AreaLaw.FiveRegionTruncationResidual
 import TNLean.MPS.AreaLaw.FixedConfigurationExtension
 import TNLean.MPS.AreaLaw.FullIntervalMPS
+import TNLean.MPS.AreaLaw.FullIntervalViability
 import TNLean.MPS.AreaLaw.GluingHamiltonian
 import TNLean.MPS.AreaLaw.Hamiltonian
 import TNLean.MPS.AreaLaw.Hastings
@@ -100,6 +101,7 @@ import TNLean.MPS.AreaLaw.PhysicalDGSampledNode
 import TNLean.MPS.AreaLaw.PhysicalDGSharpApproximation
 import TNLean.MPS.AreaLaw.PhysicalDGTreeMPS
 import TNLean.MPS.AreaLaw.PhysicalDGTreeParameters
+import TNLean.MPS.AreaLaw.PhysicalDGTreeWitness
 import TNLean.MPS.AreaLaw.PhysicalDGViability
 import TNLean.MPS.AreaLaw.PhysicalIntervalTransport
 import TNLean.MPS.AreaLaw.PhysicalPeriodicPolynomialFamily

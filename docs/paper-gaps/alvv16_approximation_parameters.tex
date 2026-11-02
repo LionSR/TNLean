@@ -268,6 +268,26 @@ or establish its running time or adaptive joint success probability.
 Any later normalized witness must be obtained from whole-region viability
 of this actual root, with its coordinate and norm identifications proved.
 
+\section*{Normalized witnesses in this same root}
+
+The full interval has an empty exterior. Its viability inequality is
+therefore exactly the closeness inequality for the native image $S$ of
+the same recursively constructed root. Let $P_S$ be its orthogonal
+projection. For every unit $\Gamma\in G$, this gives
+$\|P_S\Gamma\|^2\ge197/200$. The actual normalized projection
+\[
+  \phi=\frac{P_S\Gamma}{\|P_S\Gamma\|}\in S
+\]
+has squared overlap at least $197/200$ and squared distance at most
+$3/100$, with $\langle\phi,\Gamma\rangle=\|P_S\Gamma\|$ real and
+nonnegative. It retains the all-span native MPS bound
+$10^6D_{\rm ref}^2(n+1)M^2$.
+The operator families and root precede the choice of $\Gamma$.
+This is an existential constant-accuracy witness in that root. Computing
+an accurate ground-space basis without knowing $\Gamma$, including the
+source's final filter-and-trim iteration and Ritz extraction, remains a
+separate obligation; constant viability alone gives no such algorithm.
+
 \bibliographystyle{unsrt}
 \bibliography{references}
 \end{document}
