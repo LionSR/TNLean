@@ -104,13 +104,14 @@ declarations.
 
 ## Verification
 
-The local target build passes (9,695 jobs), including the independent-threshold
-residual, both filter constructions and the final recursive theorem. All 48
-added or relocated public declarations depend only on the standard kernel
-axioms `propext`, `Classical.choice` and `Quot.sound`. The full local build,
-strict Lean checks and whole-library compiled declaration check remain in
-progress. These checks concern the extracted contribution, not the old
-local source.
+At mathematical revision `32c17b7554`, the local target build (9,695 jobs)
+and full library build (15,545 jobs) pass. Strict checks pass for all 25
+changed Lean files and seven discovered regression files. The compiled
+whole-library blueprint declaration check also passes. All 48 added or
+relocated public declarations depend only on the standard kernel axioms
+`propext`, `Classical.choice` and `Quot.sound`. These checks include the
+independent-threshold residual, both filter constructions and the final
+recursive theorem. Hosted checks of this revision remain in progress.
 
 The blueprint/source check passes against the exact submitted QICLean
 revision and the pinned Mathlib sources. All 48 added or relocated public declarations have active mathematical
@@ -125,4 +126,4 @@ The tactic-pattern scan identified three repeated Hermiticity proofs.
 They now use the shared QICLean lemma. Elementary gap, finite-set and
 existential transports use existing lemmas, as recorded in the tactic
 ledger. The two existing filter constructions are included in the changed
-Lean modules to be compiled.
+Lean modules that passed compilation and strict checks.
