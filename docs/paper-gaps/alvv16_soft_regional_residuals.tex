@@ -5,7 +5,7 @@
 \usepackage[hidelinks]{hyperref}
 \setlength{\emergencystretch}{2em}
 \input{command}
-\title{Energy centers in the corrected regional soft-truncation residuals}
+\title{Corrected regional soft-truncation residuals and parameter bounds}
 \author{}
 \date{2026-11-02}
 \begin{document}
@@ -76,24 +76,76 @@ printed uniform energy estimate, its printed spectral enlargement, or the
 complete efficient-filter construction. The separate counterexamples to the printed cluster estimate are recorded in
 \href{https://sirui-lu.com/TNLean/paper-gaps/alvv16_cluster_approximation.pdf}{the cluster-approximation note}.
 
-\section{Extending the energy-center range}
+\section{Estimated centers and simultaneous replacements}
 
-The remaining center-uniform statement must handle every
-$e'_1\in[e_1-10,e_1]$ in the same physical construction, with
+The energy-center restriction is removed in a further corrected auxiliary
+statement. Four ordered cuts determine five consecutive regions with
+internal sums $A_j$ and an actual crossing set $J$. Put $C=|J|\leq4$.
+The original interactions determine attained regional minima $e_j$ and
+an attained original ground energy $E\in[0,C]$ before every selected set
+$S$, every family of estimates $p_j\in[e_j-10,e_j]$ on $S$, and every
+scale $t>0$ and order $m\geq2$. Define
 \begin{align}
- G'=H-A_1+e'_1I+h_{m,t}(A_1-e'_1I).
+ B&=\sum_j\left(
+  \begin{cases}
+   p_jI+h_{m,t}(A_j-p_jI),&j\in S,\\
+   A_j,&j\notin S
+  \end{cases}-e_jI\right),\\
+ D&=10|S|,\qquad G=B+\sum_{i\in J}h_i.
 \end{align}
-Exact minimum energies are existentially constructed in the current result;
-the construction does not give an efficient procedure for computing them.
-This distinction matters when assembling the source's algorithm.
+The actual common interior satisfies $B+DI\geq0$ and commutes with
+every $A_j$. The attained soft ground energy obeys
+$-D\leq\mu\leq E\leq C$. For $\eta\geq0$,
+\begin{align}
+ \|(H-G)|_{V_H(E+\eta)}\|
+ &\leq |S|\left(8Ce^{-(T-\eta-3C-12)/8}+\varepsilon_{m,t}(T)\right),
+ &&T\geq\eta+3C+12,\\
+ \|(H-G)|_{V_G(\mu+\eta)}\|
+ &\leq |S|\left(8Ce^{-(T-U)/8}+\varepsilon_{m,t}(T)\right),
+ &&U=2(\eta+D+3C+2),\quad t,T\geq U.
+\end{align}
+The same $G$, ground data and actual orthonormal eigenbases precede
+$\eta,T$. The boundary count, positivity correction, commutation and
+projection floors are derived from the original local terms.
 
-A concrete next step is to compare the positive shifted operator
-$G'+10I$ with the original regional sum. Its ground energy has the target
-upper bound $\mu'+10\leq12$, obtained from $G'\leq H$ and $E\leq2$;
-positivity follows from $e'_1-e_1+10\geq0$.
-A sufficient proposed reverse barrier is $U=2(\eta+18)$, so that the
-half-threshold floor leaves a denominator of two after the twelve-unit
-energy bound and the four-unit boundary contribution. This shifted
-center-uniform argument remains to be proved. Multiple regional
-replacements and the final source parameter bounds remain separate.
+In the reverse argument the shifted soft energy is at most $C+D+\eta$,
+while the high-energy floor is at least $U/2=\eta+D+3C+2$.
+Consequently the actual denominator is at least two after subtracting
+the boundary contribution $2C$. No positivity or spectral gap of $G$
+is assumed. If the source's three bulk regions are selected, then
+$|S|\leq3$, $D\leq30$ and $U\leq2(\eta+44)$.
+
+The public physical statement is
+\leanid{TNLean.MPS.AreaLaw.ALVV.exists_five_region_soft_residuals}.
+The accompanying regional construction is
+\leanid{TNLean.MPS.AreaLaw.ALVV.exists_five_region_soft_structure}.
+The two restricted-norm estimates for a general common regional
+interior are
+\leanid{TNLean.MPS.AreaLaw.ALVV.norm_simultaneous_soft_original_residual}
+and
+\leanid{TNLean.MPS.AreaLaw.ALVV.norm_simultaneous_soft_reverse_residual}.
+Empty intervals, repeated cuts and an empty selected set are included.
+
+\section{The remaining source comparison}
+
+The exact-center specialization no longer prevents a simultaneous
+estimated-center comparison. The open qualification concerns the
+explicit scale and cutoff conditions and the subsequent conclusions:
+the corrected residuals must be composed with the actual spectral
+comparison, the same represented soft Hamiltonian and the source's
+filter parameter choices. They do not by themselves assert the printed
+uniform energy estimate, its spectral enlargement, a polynomial
+construction with the source's dependence on varying parameters, or a
+running-time theorem. In particular, a bound polynomial in the chain
+length for fixed order cannot substitute for a bound uniform in an
+order chosen as a function of that length.
+
+The source's GEN input at lines 1360--1362 permits a symmetric estimate
+$|\varepsilon'_M-\varepsilon_M|\leq10$, whereas Definition
+\texttt{def:soft-trunc} uses a lower estimate in a ten-unit interval.
+The present statement has exactly the latter one-sided range. Passing
+from the GEN input to suitable actual regional lower centers remains
+part of the algorithmic argument; it is not inferred from the existence
+of the true minimum energies. The separate false cluster estimate and
+its counterexamples are unchanged.
 \end{document}
