@@ -86,6 +86,7 @@ import TNLean.MPS.AreaLaw.LogarithmicSeparation
 import TNLean.MPS.AreaLaw.LongIntervalLowDensityFamily
 import TNLean.MPS.AreaLaw.LowDensityBufferedTargets
 import TNLean.MPS.AreaLaw.LowDensityFilterParameters
+import TNLean.MPS.AreaLaw.LowDensityLogDimension
 import TNLean.MPS.AreaLaw.LowDensityMinimumDimension
 import TNLean.MPS.AreaLaw.MPSApproximation
 import TNLean.MPS.AreaLaw.MPSReferenceSpace
