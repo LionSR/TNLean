@@ -7,7 +7,7 @@
 \providecommand{\gapnote}[2]{\par\noindent\textbf{Verdict:} #1 (#2).\par}
 \title{Independent Parameters in the ALVV Ground-State Approximation}
 \author{}
-\date{November 2, 2026}
+\date{November 3, 2026}
 \begin{document}
 \maketitle
 \gapnote{local-correction}{wip}
@@ -354,6 +354,30 @@ energy-estimation invariant, or establish adaptive success probability
 or running time. The correction to the printed final-filter gain is
 recorded in
 \href{https://sirui-lu.com/TNLean/paper-gaps/alvv16_final_filter_gain.pdf}{the final-filter note}.
+
+\section*{A uniform polynomial bound for that same output}
+
+For fixed local dimension $q$ and gap lower bound $\gamma>0$, the
+recorded bond of the same modified-tree Ritz output is now bounded by
+$CZ^k$, where $C>0$ and $k\in\mathbb N$ precede all physical inputs and
+$Z=(L+1)(r+1)(1+\eta^{-1})$. The two actual reference bounds have
+profiles at most $b_0+\log(Z^5)$; the inverse refinement parameters have
+cubic and quartic bounds in $Z$. With $\beta=1/2$, the actual sample
+bound is quadratic in $r$, so the recorded generator count is at most
+a constant times $Z^6$. The final natural bond is therefore bounded
+by a constant times $Z^{10p_0+23}$, for an integer $p_0$ depending only
+on the fixed physical parameters and universal reference constants.
+
+The formal statement is
+\leanid{TNLean.MPS.AreaLaw.exists_physical_dg_tree_ritz_polynomial_approximation}.
+Its proof extracts the actual operation, balanced root, final literal
+iterates and compressed Ritz space from the explicit parent theorem.
+It does not replace that output by an independent MPS approximation.
+The same space has dimension $r$, mutual error parameter $\eta/2$ and
+one MPS bound for its entire span. This is a polynomial bound on the
+output witnesses of the stated modified construction; the source
+energy-estimation invariant, adaptive probability, source-sharp
+parameter dependence and computational running time remain separate.
 
 \section*{The interleaved assignment and integer round count}
 

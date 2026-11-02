@@ -130,6 +130,7 @@ import TNLean.MPS.AreaLaw.PhysicalDGSharpApproximation
 import TNLean.MPS.AreaLaw.PhysicalDGTreeApproximation
 import TNLean.MPS.AreaLaw.PhysicalDGTreeMPS
 import TNLean.MPS.AreaLaw.PhysicalDGTreeParameters
+import TNLean.MPS.AreaLaw.PhysicalDGTreePolynomialBond
 import TNLean.MPS.AreaLaw.PhysicalDGTreeWitness
 import TNLean.MPS.AreaLaw.PhysicalDGViability
 import TNLean.MPS.AreaLaw.PhysicalIntervalTransport
