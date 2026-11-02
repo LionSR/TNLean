@@ -11655,3 +11655,10 @@ removed after the dependency audit exposed it.
   propositions with an explicitly typed congrArg. The polynomial witnesses are
   not unpacked and rebuilt merely to change band notation. The default heartbeat
   budget suffices; experimental diagnostics and transparency options are removed.
+
+
+### Nonzero projection into a close candidate — candidate (2026-11-03)
+
+- **Seen:** `QICLean/Analysis/ProjectedTrialSpaceEnergy.lean` and `MPS/AreaLaw/RegionalGroundEnergy.lean`.
+- **Pattern:** A projection lower norm bound with error below one forces the projection of a nonzero target vector to be nonzero. The first use proves injectivity; the second applies it to an actual unit ground vector.
+- **Decision:** There are two uses of this geometric implication. A third use should promote the nonzero-projection consequence in the common closeness module.

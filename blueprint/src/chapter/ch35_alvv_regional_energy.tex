@@ -1,0 +1,61 @@
+\section{Regional energy in a close candidate space}
+
+The regional excitation energy of a global ground vector is controlled
+by the bonds crossing the region boundary. An orthogonal projection
+preserves a constant energy bound when its loss is small enough. These
+estimates support the energy-estimation step of~\cite{Arad2016RigorousRG}.
+
+\begin{lemma}[Regional ground energy and its projected image]
+    \label{lem:regional_ground_energy_bound}
+    \lean{TNLean.MPS.AreaLaw.exists_regional_ground_energy_bound}
+    \leanok
+    Let $H=\sum_i h_i$ be a chain Hamiltonian with $0\le h_i\le I$
+    supported on sites $i,i+1$, and let the local dimension be positive.
+    Fix an interval $J$. Let $A_J$ be the sum of the bonds wholly inside
+    $J$, and let $G$ be the full ground space of $H$. The regional minimum
+    $e_J$ is attained, and the operator $C=A_J-e_JI$ satisfies
+    \[
+       C\ge0,\qquad \|C\|\le L,\qquad
+       \operatorname{Re}\langle Cg,g\rangle\le2\|g\|^2
+       \quad(g\in G).
+    \]
+    These data are chosen before every candidate subspace $U$ and every
+    $0\le\delta\le[100(L+1)]^{-1}$. If
+    $\|P_Ug\|^2\ge(1-\delta)\|g\|^2$ for every $g\in G$, then
+    \[
+       \operatorname{Re}\langle Cv,v\rangle\le3\|v\|^2
+       \quad(v\in P_U G).
+    \]
+    There is also a nonzero $v\in U$ satisfying this energy bound.
+    The statement includes empty intervals and chain endpoints, and
+    makes no assumption of a gap or a unique ground vector.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:alvv_single_region_residuals}
+    Let $e_0,e_1,e_2$ be the actual minima on the three disjoint regions,
+    with $e_1=e_J$. The original regional ground data give
+    \[
+       0\le\lambda_0-(e_0+e_1+e_2)\le2,
+       \qquad C\le H-(e_0+e_1+e_2)I,
+    \]
+    where $\lambda_0$ is the least eigenvalue of $H$. The upper bound
+    two is the norm bound for the two crossing bonds. Apply this order
+    inequality on $G$ to obtain the first energy bound. Positivity of
+    $e_J$ and the bond count give $0\le C\le LI$ and hence $\|C\|\le L$.
+
+    For $v=P_Ug$, positivity at $g-8(v-g)$ gives
+    \[
+       \operatorname{Re}\langle Cv,v\rangle
+       \le\frac98\operatorname{Re}\langle Cg,g\rangle
+          +9\operatorname{Re}\langle C(v-g),v-g\rangle.
+    \]
+    Pythagoras gives $\|v-g\|^2\le\delta\|g\|^2$, and the assumed
+    projection inequality bounds the projected norm from below. Thus
+    the energy on the image is at most
+    $(9/4+9L\delta)/(1-\delta)$ per unit squared norm, which is at
+    most three. Project an actual unit ground eigenvector to obtain
+    the nonzero candidate vector; $\delta<1$ ensures it does not vanish.
+\end{proof}
+
+The compressed regional minimum and the recursive update of its energy
+estimate are subsequent conclusions.
