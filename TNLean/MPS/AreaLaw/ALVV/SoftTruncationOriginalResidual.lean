@@ -17,6 +17,10 @@ physical hard tail and the explicit independent-scale polynomial remainder.
 This is a one-direction auxiliary for ALVV, arXiv:1602.08828v2, `lem:exp-approx`,
 lines 1195–1255, and `t:aisefficient`, lines 1373–1420.
 
+**Scope restriction (attained energy centers):** the regional centers are constructed exact
+minimum energies. The result does not treat every estimated center allowed by the source's
+interval of width ten; see `docs/paper-gaps/alvv16_soft_regional_residuals.tex`.
+
 **Local fix (cutoff and residual):** the hard cutoff is at least the original low-energy
 width plus seven, and the additional soft error is `(t/m)*(T/t)^m`. No printed uniform
 energy estimate, reverse soft-to-original comparison, efficient filter or running-time

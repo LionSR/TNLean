@@ -55,7 +55,10 @@ noncomputable def aklvTwoBlockHamiltonian {L q : ℕ} (l r : ℕ)
     ∑ i ∈ Finset.univ.filter
       (fun i : Fin (L - 1) ↦ i.val + 1 ∈ ({l, r} : Finset ℕ)), h i
 
-private theorem card_two_cut_crossing_le (L l r : ℕ) :
+/-- At most two original neighbouring-site bonds cross two prescribed cuts, with a
+coincident crossing counted once. Auxiliary to ALVV, arXiv:1602.08828v2,
+`def:hard-trunc`, lines 873–886. -/
+theorem card_two_cut_crossing_le (L l r : ℕ) :
     ((Finset.univ : Finset (Fin (L - 1))).filter
       (fun i ↦ i.val + 1 ∈ ({l, r} : Finset ℕ))).card ≤ 2 := by
   have hcard := Finset.card_le_card_of_injOn (fun i : Fin (L - 1) ↦ i.val + 1)

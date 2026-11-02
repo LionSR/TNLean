@@ -1,0 +1,99 @@
+\documentclass{article}
+\usepackage[margin=25mm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+\input{command}
+\title{Energy centers in the corrected regional soft-truncation residuals}
+\author{}
+\date{2026-11-02}
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+\section{The source permits an estimated regional energy}
+
+Definition \texttt{def:soft-trunc} of
+\href{https://arxiv.org/abs/1602.08828v2}{ALVV, arXiv:1602.08828v2},
+source lines 1178--1185, defines the regional replacement as
+\begin{align}
+ \widetilde A=e'I+h_{m,t}(A-e'I),\qquad e-10\leq e'\leq e,
+\end{align}
+where $e$ is the actual minimum energy of the regional Hamiltonian $A$.
+Lemma \texttt{lem:exp-approx}, beginning at line 1195, allows $t\geq m\geq2$.
+The ten-unit interval is part of the source statement; replacing $e'$ by
+$e$ proves a specialization, not uniformity over all allowed estimates.
+
+\section{The corrected bounds presently proved}
+
+For positive-contraction nearest-neighbour interactions, the formalization
+constructs the genuine minimum energies $e_0,e_1,e_2$ of three consecutive
+internal regional sums $A_0,A_1,A_2$, together with normalized attaining
+vectors. It centers the full original Hamiltonian by their sum:
+\begin{align}
+ H=\sum_i h_i-\Bigl(\sum_j e_j\Bigr)I,
+ \qquad X=A_1-e_1I,
+ \qquad G=H-X+h_{m,t}(X).
+\end{align}
+The attained original and soft ground energies $E$ and $\mu$ satisfy
+$0\leq\mu\leq E\leq2$. Positivity of the actual regional sums and the
+actual crossing bonds gives $G\geq0$; functional calculus gives $G\leq H$.
+No gap or simplicity assumption is imposed.
+
+Write $V_M(c)$ for the closed spectral space of $M$ below $c$, and put
+$\varepsilon_{m,t}(T)=(t/m)(T/t)^m$. For $m\geq2$ and $t>0$, the same
+constructed $G$ satisfies the following two statements:
+\begin{align}
+ \|(H-G)|_{V_H(E+\eta)}\|
+ &\leq32e^{-(T-\eta)/8}+\varepsilon_{m,t}(T),
+ &&\eta>0,\quad T\geq\eta+7,\\
+ \|(H-G)|_{V_G(\mu+\eta)}\|
+ &\leq16e^{-(T-U)/8}+\varepsilon_{m,t}(T),
+ &&\eta\geq0,\quad U=2(\eta+8),\quad t,T\geq U.
+\end{align}
+The regional minima are selected before $t,m$; the actual soft operator and
+its ground energy are selected before $\eta,T$.
+
+The reverse proof obtains its coercive floor from
+$h_{m,t}(x)\geq U-\varepsilon_{m,t}(U)$ for $x\geq U$.
+Since $t\geq U$ and $m\geq2$,
+$\varepsilon_{m,t}(U)\leq U/m\leq U/2$.
+The floor is therefore at least $\eta+8$. The actual boundary contains at
+most two bonds, so the Sylvester denominator is at least
+$(\eta+8)-(\mu+\eta)-4\geq2$.
+The boundary count, energy bound, commutation and projection inequality
+are derived from the original interactions. They are not supplied as
+hypotheses of the physical theorem.
+
+The corresponding formal statements are
+\leanid{TNLean.MPS.AreaLaw.ALVV.exists_single_region_original_soft_truncation_residual}
+and
+\leanid{TNLean.MPS.AreaLaw.ALVV.exists_single_region_soft_truncation_residuals}.
+
+These are separate corrected auxiliary statements. They do not assert the
+printed uniform energy estimate, its printed spectral enlargement, or the
+complete efficient-filter construction. The separate counterexamples to the printed cluster estimate are recorded in
+\href{https://sirui-lu.com/TNLean/paper-gaps/alvv16_cluster_approximation.pdf}{the cluster-approximation note}.
+
+\section{Extending the energy-center range}
+
+The remaining center-uniform statement must handle every
+$e'_1\in[e_1-10,e_1]$ in the same physical construction, with
+\begin{align}
+ G'=H-A_1+e'_1I+h_{m,t}(A_1-e'_1I).
+\end{align}
+Exact minimum energies are existentially constructed in the current result;
+the construction does not give an efficient procedure for computing them.
+This distinction matters when assembling the source's algorithm.
+
+A concrete next step is to compare the positive shifted operator
+$G'+10I$ with the original regional sum. Its ground energy has the target
+upper bound $\mu'+10\leq12$, obtained from $G'\leq H$ and $E\leq2$;
+positivity follows from $e'_1-e_1+10\geq0$.
+A sufficient proposed reverse barrier is $U=2(\eta+18)$, so that the
+half-threshold floor leaves a denominator of two after the twelve-unit
+energy bound and the four-unit boundary contribution. This shifted
+center-uniform argument remains to be proved. Multiple regional
+replacements and the final source parameter bounds remain separate.
+\end{document}
