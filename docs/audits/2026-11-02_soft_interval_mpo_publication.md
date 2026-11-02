@@ -82,10 +82,18 @@ perturbation, the exact heat expansion, and the inclusion–exclusion bounds.
 
 ## Verification
 
-Compilation is pending completion of the canonical main-cache build and the
-QICLean prerequisite checks. No current compiler pass is claimed here.
+At revision `95e559a90d`, the local target build (4,017 jobs) and the
+full library build (15,554 jobs) pass. The compiled whole-library
+blueprint declaration check also passes.
+Strict Lean checks pass for all 34 changed Lean files and the seven
+discovered regression files. Each of the 60 new public declarations
+depends only on the standard kernel axioms `propext`, `Classical.choice`
+and `Quot.sound`. The QICLean prerequisite has passed its full local build,
+hosted checks and 32-declaration axiom audit.
+
 The active blueprint has no duplicate labels, and all references in the new
-sections resolve. Further verification is recorded below when completed.
+sections resolve. Hosted policy, inline-diagram, blueprint web and full blueprint PDF
+checks pass. The hosted full Lean build remains in progress.
 
 The added chapter sections and the energy-estimate note compile as PDF
 excerpts. The chapter excerpt has no overfull boxes; its main estimates and
