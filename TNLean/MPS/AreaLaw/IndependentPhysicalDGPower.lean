@@ -150,9 +150,10 @@ theorem exists_independent_long_middle_actual_dg_word_family :
       L q a b ell (ell ^ 2) hell hq hdegree hab hb h hs e t Jtarget
   change N ≤ D0 ^ 2 * q ^
     (2 * (J0 \ Jtarget).card + 2 * (Jtarget \ J0).card) at hNraw
+  have hdiff : J0 \ Jtarget = ∅ := Finset.sdiff_eq_empty_iff_subset.mpr hsub
   have hN : N ≤ D ^ 2 := by
     have hN' : N ≤ D0 ^ 2 * q ^ (2 * (Jtarget \ J0).card) := by
-      simpa only [Finset.sdiff_eq_empty_iff_subset.mpr hsub,
+      simpa only [hdiff,
         Finset.card_empty, Nat.mul_zero, Nat.zero_add] using hNraw
     exact hN'.trans (collar_card_le_square_of_larger_count_base
       q m ell (Jtarget \ J0).card (D0 ^ 2) hq hqm hell hcollar le_rfl)

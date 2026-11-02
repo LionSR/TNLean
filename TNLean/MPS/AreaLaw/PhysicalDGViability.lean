@@ -146,9 +146,10 @@ private theorem exists_long_middle_actual_dg_family :
       L q a b ell (ell ^ 2) hell1 hq hdegree hab hb h hs e (ell : ℝ) Jtarget
   change N ≤ D0 ^ 2 * q ^
     (2 * (J0 \ Jtarget).card + 2 * (Jtarget \ J0).card) at hNraw
+  have hdiff : J0 \ Jtarget = ∅ := Finset.sdiff_eq_empty_iff_subset.mpr hsub
   have hN : N ≤ D ^ 2 := by
     have hN' : N ≤ D0 ^ 2 * q ^ (2 * (Jtarget \ J0).card) := by
-      simpa only [Finset.sdiff_eq_empty_iff_subset.mpr hsub,
+      simpa only [hdiff,
         Finset.card_empty, Nat.mul_zero, Nat.zero_add] using hNraw
     exact hN'.trans (collar_card_le_square_at_square_degree
       q ell (Jtarget \ J0).card (D0 ^ 2) hq hell1 hcollar le_rfl)
@@ -261,7 +262,7 @@ theorem exists_physical_dg_viable_family :
   have hg1 : g ≤ 1 := min_le_right gamma 1
   have hgapg : ∀ z ∈ spectrum ℝ H, z = mu ∨ mu + g ≤ z :=
     fun z hz ↦ (hgap z hz).imp_right
-      ((add_le_add_left (min_le_left gamma 1) mu).trans ·)
+      ((add_le_add le_rfl (min_le_left gamma 1)).trans ·)
   obtain ⟨hell, _hD, hlogD, hlong⟩ := hall q g hq hg hg1
   refine ⟨hlogD, ?_⟩
   by_cases hshort : r - p ≤ 4 * ell
@@ -502,9 +503,12 @@ private theorem exists_accuracy_long_middle_actual_dg_family :
     rw [div_mul_eq_mul_div, one_mul, div_div, mul_comm (m : ℝ) 1000000]
   obtain ⟨e, E0, _hground, _horigin, hE0, hE4, hnorm,
     v, lam, heigen, hclosed, _hband, hdim, hTG, hGT, _hnewgap⟩ :=
-    exists_five_region_physical_scaled_low_cluster L q a b ell (by omega) hell
+    exists_five_region_physical_scaled_low_cluster L q a b ell (ell : ℝ)
+      (by omega) hell1 (by exact_mod_cast hell)
       (hab.trans (Nat.le_succ b)) (hb.trans (Nat.sub_le L 1))
       h hs h0 h1 mu g xi scale hg hg1 hscale0 hscale1 htail hxi.le hmu hgap
+  have hnorm' : 3 * (ell : ℝ) + 4 * (ell : ℝ) = 7 * (ell : ℝ) := by ring
+  rw [hnorm'] at hnorm
   have herror : scale / 200 = 1 / (200 * (m : ℝ)) := by
     dsimp only [scale]
     rw [div_div, mul_comm (m : ℝ) 200]
@@ -554,9 +558,10 @@ private theorem exists_accuracy_long_middle_actual_dg_family :
       L q a b ell (ell ^ 2) hell1 hq hdegree hab hb h hs e (ell : ℝ) Jtarget
   change N ≤ D0 ^ 2 * q ^
     (2 * (J0 \ Jtarget).card + 2 * (Jtarget \ J0).card) at hNraw
+  have hdiff : J0 \ Jtarget = ∅ := Finset.sdiff_eq_empty_iff_subset.mpr hsub
   have hN : N ≤ D ^ 2 := by
     have hN' : N ≤ D0 ^ 2 * q ^ (2 * (Jtarget \ J0).card) := by
-      simpa only [Finset.sdiff_eq_empty_iff_subset.mpr hsub,
+      simpa only [hdiff,
         Finset.card_empty, Nat.mul_zero, Nat.zero_add] using hNraw
     exact hN'.trans (collar_card_le_square_of_larger_count_base
       q m ell (Jtarget \ J0).card (D0 ^ 2) hq hqm hell1 hcollar le_rfl)
@@ -661,7 +666,7 @@ private theorem exists_accuracy_physical_dg_viable_family :
   have hg1 : g ≤ 1 := min_le_right gamma 1
   have hgapg : ∀ z ∈ spectrum ℝ H, z = mu ∨ mu + g ≤ z :=
     fun z hz ↦ (hgap z hz).imp_right
-      ((add_le_add_left (min_le_left gamma 1) mu).trans ·)
+      ((add_le_add le_rfl (min_le_left gamma 1)).trans ·)
   obtain ⟨hell, hmD, hD, hlogD, hlong⟩ := hall m q g hq hqm hg hg1
   refine ⟨hell, hmD, hD, hlogD, ?_⟩
   by_cases hshort : r - p ≤ 4 * ell

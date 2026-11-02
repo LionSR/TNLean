@@ -88,24 +88,33 @@ Twenty-one missing modules are extracted from revision
 `9ad6cdd3c23da0ce9b5e6cc36edfec99f0211ff7` onto main
 `5fc343a57d70eefd2902780107851ab9b0753a82`. They contain 46 new public
 declarations and the adjacent-interval union lemma relocated from the
-Hastings namespace. The old declaration is removed, all uses resolve to the
+Hastings namespace. The existing five-region residual theorem is also
+generalized to an independent real threshold and made public. Its norm
+bound is \(3t+4\ell\), and its residual bound permits every bandwidth
+\(\eta\ge0\) with \(19+\eta\le t\), without a gap assumption.
+The existing equal-scale construction specializes \(t=\ell\). The old declaration is removed, all uses resolve to the
 general lemma, and its existing blueprint entry is updated. No compatibility
 alias is retained for this elementary fact shared by both arguments.
 
 The finite-dimensional prerequisites are in
 [QICLean #1017](https://github.com/LionSR/QICLean/pull/1017), pinned at
-`000d65159e3f737730a3f6c718584300456b3440` in both manifests.
+`000d65159e3f737730a3f6c718584300456b3440` in both manifests. That revision
+passes all hosted checks and a local axiom audit of its 56 new public
+declarations.
 
 ## Verification
 
-Compilation, strict Lean checks, compiled declaration and axiom checks,
-and rendered blueprint inspection are pending. The verification record
-will distinguish checks of the extracted revision from checks of the old
+The local target build passes (9,695 jobs), including the independent-threshold
+residual, both filter constructions and the final recursive theorem. All 48
+added or relocated public declarations depend only on the standard kernel
+axioms `propext`, `Classical.choice` and `Quot.sound`. The full local build,
+strict Lean checks and whole-library compiled declaration check remain in
+progress. These checks concern the extracted contribution, not the old
 local source.
 
 The blueprint/source check passes against the exact submitted QICLean
-revision and the pinned Mathlib sources. All 47 declarations in the new
-modules have active mathematical references, labels are unique, and the
+revision and the pinned Mathlib sources. All 48 added or relocated public declarations have active mathematical
+references, labels are unique, and the
 new sections have no unresolved references. The theorem-role check has
 identical output to frozen main's 41 pre-existing mismatches. Forbidden
 proof-token and whitespace checks pass. The mathematical sections compile

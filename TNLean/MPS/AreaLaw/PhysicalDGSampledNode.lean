@@ -125,7 +125,7 @@ theorem exists_physical_dg_sampled_interval_node_event :
   have hg1 : g ≤ 1 := min_le_right gamma 1
   have hgapg : ∀ z ∈ spectrum ℝ H, z = mu ∨ mu + g ≤ z :=
     fun z hz ↦ (hgap z hz).imp_right
-      ((add_le_add_left (min_le_left gamma 1) mu).trans ·)
+      ((add_le_add le_rfl (min_le_left gamma 1)).trans ·)
   intro m ell t Delta hqm hm hell ht htail hfilter D htrade p r hpr hrL hlong
   have hmR : (50 : ℝ) ≤ m := by exact_mod_cast hm
   have hm0 : (0 : ℝ) < m := by linarith only [hmR]
