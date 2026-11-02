@@ -5,7 +5,7 @@
 For $t>0$ and an integer $m\geq0$, write
 $h_{m,t}(x)=t\sum_{j=1}^m(1-e^{-x/t})^j/j$.
 This section constructs an approximation to one regional replacement,
-including its exterior and scalar shift, at the choice $t=3m$.
+including its exterior and scalar shift, for independent parameters $m\geq1$ and $t\geq3m$.
 It uses the corrected label estimate, and does not assert a running-time
 bound or the unrestricted soft-truncation lemma of
 \cite[lines 1262--1268]{Arad2016RigorousRG}.
@@ -111,21 +111,21 @@ bound or the unrestricted soft-truncation lemma of
 
     \uses{thm:soft_mpo_cluster_order, lem:local_sum_scalar_mpo,
         lem:trace_chain_linear_combination}
-    Let $m\geq1$, $t=3m$, $\xi>0$, and let $I$ be a set of the
+    Let $m\geq1$, $t\geq3m$, $\xi>0$, and let $I$ be a set of the
     actual bond labels. Write $A=\sum_{i\in I}h_i$, suppose
     $\epsilon I\leq A$, and put
     \begin{align}
-        W&=3m2^{m+1},&b&=2(e^{1/3}-1),\\
+        W&=t2^{m+1},&b&=2(e^{1/3}-1),\\
         \ell&=\max\left\{1,
           \left\lceil\frac{\log\max\{1,N^2\}
                     -\log\log(1+\xi/W)}{-\log b}\right\rceil\right\}.
         \label{eq:soft_interval_cluster_order}
     \end{align}
-    Then $0<b<1$. The actual regional soft term $h_{m,3m}(A-\epsilon I)$
+    Then $0<b<1$. The actual regional soft term $h_{m,t}(A-\epsilon I)$
     has a norm approximation of error at most $\xi$ with virtual
     dimension $(m+1)\ell^2q^\ell$. The full replacement
     \begin{align}
-        \widetilde H=H-A+\epsilon I+h_{m,3m}(A-\epsilon I)
+        \widetilde H=H-A+\epsilon I+h_{m,t}(A-\epsilon I)
         \label{eq:soft_interval_full_operator}
     \end{align}
     has actual approximating tensors of dimension
@@ -139,7 +139,9 @@ bound or the unrestricted soft-truncation lemma of
 \begin{proof}
     \uses{thm:soft_mpo_cluster_order, lem:local_sum_scalar_mpo,
         lem:trace_chain_linear_combination}
-    The strict inequality $1/3<\log(3/2)$ gives $b<1$.
+    The hypotheses give $m/t\leq1/3$. The strict inequality
+    $1/3<\log(3/2)$ gives $b<1$, and every required heat time
+    lies in $[0,1/3]$.
     The logarithmic ceiling ensures
     $W(e^{N^2b^\ell}-1)\leq\xi$. Apply the preceding constructed
     approximation to the original terms masked by $I$.
@@ -149,7 +151,22 @@ bound or the unrestricted soft-truncation lemma of
     exterior or scalar term.
 \end{proof}
 
-For fixed $q$ and $m$, the displayed bond bound is polynomial in $N$
-and $\xi^{-1}$. Its dependence on $m$ is retained explicitly through
-$W=3m2^{m+1}$ and the cluster order. This statement is an existence result
-with explicit dimensions; a computational running-time claim is not included.
+For $0<\xi\leq W$, put $c=-\log b$ and
+$E=2\max\{1,N\}^2W/\xi$. The elementary bound
+$\log(1+\xi/W)\geq\xi/(2W)$ gives
+\begin{align}
+    \ell&\leq1+\frac{\log E}{c},&
+    (m+1)\ell^2q^\ell
+      &\leq q(m+1)\left(1+\frac{\log E}{c}\right)^2
+          E^{\log q/c}.
+\end{align}
+Thus, for fixed $q$, the logarithm of the bond is
+$O_q(m+\log_+t+\log(N+1)+\log_+(\xi^{-1}))$.
+In particular, $m=O(\log(N+2))$, polynomially bounded $t$, and
+inverse-polynomial accuracy give a polynomial bond. Polylogarithmic
+bounds for $m$, $\log_+t$ and $\log_+(\xi^{-1})$ give a
+quasipolynomial bond. These consequences retain the parameter growth;
+they do not assert a polynomial bound for arbitrary $m$.
+The source's choice $m=4$ is covered whenever $t\geq12$.
+This is an existence result with explicit dimensions; a computational
+running-time claim and the multi-region spectral argument are not included.

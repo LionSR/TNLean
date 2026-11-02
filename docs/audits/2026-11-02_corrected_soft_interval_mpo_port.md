@@ -2,12 +2,12 @@
 
 The proposed contribution constructs an operator approximation for one
 regional soft replacement, including the exterior sum and scalar shift.
-Its parameter choice is t = 3m, with m >= 1. The interactions are the actual
+Its parameters satisfy t >= 3m, with m >= 1. The interactions are the actual
 nearest-neighbour matrices, Hermitian and of norm at most one. An explicit
 lower energy epsilon I <= A is assumed for the regional sum A; the source's
 regional energy bracket supplies this lower bound.
 
-With W = 3m 2^(m+1), b = 2(exp(1/3) - 1) in (0,1), and the displayed
+With W = t 2^(m+1), b = 2(exp(1/3) - 1) in (0,1), and the displayed
 logarithmic cluster order r, the constructed site-dependent operator tensors
 have virtual dimension
 
@@ -73,5 +73,24 @@ fresh guarded private checks. All selected existing importers above changed
 current-source dependencies were re-elaborated as well. The TNLean checks
 remain pending. Focused mathematical PDF excerpts were rendered twice and
 visually inspected; the complete compiled-book gate remains pending.
-The displayed dimension is polynomial in N and inverse accuracy for fixed
-q and m; the dependence on m remains explicit and is not suppressed.
+For fixed q, the logarithm of the displayed dimension is
+O_q(m + log_+ t + log(N+1) + log_+(1/xi)). Thus m=O(log(N+2)),
+polynomially bounded t, and inverse-polynomial accuracy give polynomial bond.
+Polylogarithmic bounds on m, log_+ t and log_+(1/xi) give quasipolynomial bond.
+Neither conclusion discards m(N) or t(N) dependence.
+
+## Independent scale generalization
+
+A source-only successor to revision `2f1f697598` generalizes both accuracy
+statements to independent scale t >= 3m. It retains the fixed strict heat
+base b=2(exp(1/3)-1) and changes the coefficient budget to W=t 2^(m+1).
+All heat factors are still constructed directly from the original local
+terms. The source GEN choice m=4, t=Theta(buffer width) is covered at the
+representation level once t>=12. This says nothing about the printed
+spectral estimates or the complete GEN algorithm.
+
+Only the two unpublished accuracy signatures and their single production
+consumer are generalized; there are no compatibility aliases. This successor
+has not been elaborated. Its source-only mathematical entries have no
+completion markers. The previous focused PDF inspection predates this
+parameter generalization and is not verification of the successor.
