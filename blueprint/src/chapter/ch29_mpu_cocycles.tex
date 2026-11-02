@@ -768,7 +768,7 @@ space of $(MN)P$.
     $T T^\dagger=\Id$.
 \end{proof}
 
-\begin{theorem}[Daggered fusion tensors are fusion tensors]
+\begin{lemma}[Daggered fusion tensors are fusion tensors]
     \label{thm:mpug_dagger_fusion_reduction}
     \lean{MPOTensor.GroupFamily.FusionData.isReduction_daggerFusion}
     \leanok
@@ -777,7 +777,7 @@ space of $(MN)P$.
     For every $g,h\in G$ the daggered fusion tensors
     $(\widetilde F^<_{g,h},\widetilde F^>_{g,h})$ reduce
     $\mathcal U_g\mathcal U_h$ onto $\mathcal U_{gh}$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     By Lemma~\ref{thm:mpug_reduction_dagger}, the conjugates of
@@ -792,7 +792,7 @@ space of $(MN)P$.
     by a gauge and its inverse, as in Lemma~\ref{thm:mpug_reduction_dagger}.
 \end{proof}
 
-\begin{theorem}[The scalars comparing daggered and chosen fusion tensors]
+\begin{lemma}[The scalars comparing daggered and chosen fusion tensors]
     \label{thm:mpug_dagger_zeta}
     \lean{MPOTensor.GroupFamily.FusionData.daggerZeta,
         MPOTensor.GroupFamily.FusionData.daggerZeta_defzeta}
@@ -807,11 +807,11 @@ space of $(MN)P$.
     This is the defining equation of the scalars $\zeta_{g,h}$ in
     \cite[lines~1570--1637]{FrancoRubio2025MPUGauging}, in boundary-dressed
     form. The relation of $\zeta_{g,h}\overline{\zeta_{h^{-1},g^{-1}}}$ to the
-    dagger-inverse signs is Theorem~\ref{thm:mpug_dagger_zeta_relation}.
-\end{theorem}
+    dagger-inverse signs is Lemma~\ref{thm:mpug_dagger_zeta_relation}.
+\end{lemma}
 
 \begin{proof}\leanok
-    By Theorem~\ref{thm:mpug_dagger_fusion_reduction} both pairs reduce $B$
+    By Lemma~\ref{thm:mpug_dagger_fusion_reduction} both pairs reduce $B$
     onto the normal tensor $\mathcal U_{gh}$, and $B$ and $\mathcal U_{gh}$
     have the same periodic operators on nonempty chains. The two-sided
     comparison of reductions gives one nonzero scalar $z$ with both identities
@@ -902,7 +902,7 @@ space of $(MN)P$.
     elements compose to the identity.
 \end{proof}
 
-\begin{theorem}[The relation between $\zeta$ and the dagger-inverse signs]
+\begin{lemma}[The relation between $\zeta$ and the dagger-inverse signs]
     \label{thm:mpug_dagger_zeta_relation}
     \lean{MPOTensor.GroupFamily.FusionData.daggerZeta_mul_star_daggerZeta_inv}
     \leanok
@@ -916,14 +916,14 @@ space of $(MN)P$.
     \end{align}
     This is the first identity of the proposition on the scalars $\zeta$ in
     \cite[lines~1570--1678]{FrancoRubio2025MPUGauging}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
-    By Theorem~\ref{thm:mpug_dagger_zeta} at $(h^{-1},g^{-1})$ and
+    By Lemma~\ref{thm:mpug_dagger_zeta} at $(h^{-1},g^{-1})$ and
     Lemma~\ref{thm:mpug_dagger_dressed_transport}, the double dagger of
     Lemma~\ref{thm:mpug_double_dagger_fusion} equals
     $\overline{\zeta_{h^{-1},g^{-1}}}\,\widetilde F^<_{g,h}$ against long words, and
-    by Theorem~\ref{thm:mpug_dagger_zeta} at $(g,h)$ this is
+    by Lemma~\ref{thm:mpug_dagger_zeta} at $(g,h)$ this is
     $\overline{\zeta_{h^{-1},g^{-1}}}\,\zeta_{g,h}F^<_{g,h}$. The left boundary
     $F^<_{g,h}$ is nonzero against arbitrarily long words, so
     $\zeta_{g,h}\overline{\zeta_{h^{-1},g^{-1}}}
@@ -956,8 +956,8 @@ space of $(MN)P$.
 \end{lemma}
 
 \begin{proof}\leanok
-    By Theorem~\ref{thm:mpug_dagger_fusion_reduction} the daggered tensors are
-    reductions, and by Theorem~\ref{thm:mpug_dagger_zeta} they are compared with
+    By Lemma~\ref{thm:mpug_dagger_fusion_reduction} the daggered tensors are
+    reductions, and by Lemma~\ref{thm:mpug_dagger_zeta} they are compared with
     the chosen ones by $\zeta$; Lemma~\ref{thm:mpug_anomaly_three_cocycle_gauge}
     gives the change of the three-cocycle.
 \end{proof}

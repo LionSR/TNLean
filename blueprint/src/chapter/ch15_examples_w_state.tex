@@ -492,39 +492,18 @@ trace illustrates this failure.
 
 \begin{proof}
     \leanok
-    \uses{thm:w_state_canonical_bound, thm:pgvwc07_positive_length_witness,
-        thm:pgvwc07_normalized_periodic_state_vector_decomposition, def:mpv_phase_class_data,
-        thm:periodic_period_le_bondDim, lem:pgvwc07_block_irreducible,
-        lem:periodic_scale_of_irreducible, thm:wielandt_general}
-    The periodic vector decomposes as $\sum_j\lambda_j^N\ket{\phi_{A^j}}$ with
-    unital irreducible blocks $A^j$. By
-    Lemma~\ref{lem:pgvwc07_block_irreducible},
-    Lemma~\ref{lem:periodic_scale_of_irreducible}, and
-    Lemma~\ref{thm:periodic_period_le_bondDim}, each block is irreducible
-    and, after rescaling and gauging, periodic with period $m_j\leq D_j\leq D$.
-    If $m_j\neq1$, then $2\leq m_j\leq D$, so the divisor assumption gives
-    $m_j\nmid N$ and
-    Theorem~\ref{thm:pgvwc07_normalized_periodic_state_vector_decomposition}
-    shows that the block state vanishes. If $m_j=1$ the
-    block is primitive, and the general quantum Wielandt bound of
-    Theorem~\ref{thm:wielandt_general} gives injectivity after
-    $L_0=(D^2+1)^2$ sites. Grouping the blocks into the phase classes of
-    Definition~\ref{def:mpv_phase_class_data}, the $q$-th member $A^{(j,q)}$ of
-    class $j$ satisfies
-    $\ket{\phi_{A^{(j,q)}}}=\xi_{j,q}^N\ket{\phi_{A^{(j,0)}}}$, with $A^{(j,0)}$
-    the class representative. Then
+    \uses{lem:normal_blocks_no_small_divisor, thm:w_state_canonical_bound}
+    By Lemma~\ref{lem:normal_blocks_no_small_divisor}, there are at most $D$
+    unital irreducible blocks $B_j$ with positive definite dual fixed points,
+    each injective after $L_0=(D^2+1)^2$ sites, no two of them related by a
+    gauge transformation and a phase, and nonzero coefficients $c_j$ with
     \begin{align}
-        \sum_k\lambda_k^N\ket{\phi_{A^k}}
-         & =\sum_jc_j\ket{\phi_{A^{(j,0)}}},
-         &
-        c_j
-         & =\sum_q\lambda_{j,q}^N\,\xi_{j,q}^N,
-        \label{eq:w_state_phase_regrouping}
+        \sum_jc_j\ket{\phi_{B_j}} & =\ket{\phi_A}=c\ket{W_N}.
     \end{align}
-    and no two representatives are related by a gauge transformation and a
-    phase. Dropping the classes with $c_j=0$ or
-    period other than one leaves at most $D$ blocks. The generalized first item of
-    Lemma~\ref{thm:w_state_canonical_bound} then gives~(\ref{eq:w_state_no_small_divisor_bound}).
+    The generalized first item of
+    Lemma~\ref{thm:w_state_canonical_bound} with $L_0=(D^2+1)^2$ gives
+    $N<2\max\bigl(L_0,\,3(b-1)(L_0+1)\bigr)$ for the number $b\le D$ of
+    blocks, which implies~(\ref{eq:w_state_no_small_divisor_bound}).
 \end{proof}
 
 \begin{lemma}[Single-length bound at prime length]%

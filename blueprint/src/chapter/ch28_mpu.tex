@@ -5778,7 +5778,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     $\mathcal U$ is simple.
 \end{proof}
 
-\begin{theorem}[Three-legged decomposition of a simple tensor]
+\begin{lemma}[Three-legged decomposition of a simple tensor]
     \label{thm:mpu_three_legged_decomposition}
     \lean{MPOTensor.SourceFactors.IsThreeLegged,
         MPOTensor.SourceFactors.X₁_leftInverse,
@@ -5812,7 +5812,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     unitarity on every nonempty chain; that convention implies the one used
     here.
     % Source lines: 2502.20257/main.tex 657--809.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{ThmFund1, def:mpu_weighted_source_factors}
@@ -10680,13 +10680,15 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 
 \begin{lemma}[Physical transposition of normalized source factors]
     \label{lem:mpu_physical_transpose_source_factors}
-    \lean{MPOTensor.physicalTransposeTensor, MPOTensor.physicalTransposeTensor_apply, MPOTensor.physicalTransposeTensor_physicalTransposeTensor, MPOTensor.mpo_physicalTransposeTensor, MPOTensor.source_ranks_physicalTransposeTensor, MPOTensor.IsMPUCanonicalFormII.physicalTransposeTensor, MPOTensor.IsMPUCanonicalFormII.isMPUSimple_physicalTransposeTensor, MPOTensor.IsMPUCanonicalFormII.sourceRanks_eq_phys_of_even_mpo_eq_transpose, MPOTensor.SourceFactors.physicalTranspose, MPOTensor.SourceFactors.sourceU_physicalTranspose, MPOTensor.SourceFactors.sourceV_physicalTranspose, MPOTensor.IsMPUCanonicalFormII.sourceFactors_physicalTranspose_of_even_mpo_eq_transpose}
+    \lean{MPOTensor.physicalTransposeTensor, MPOTensor.physicalTransposeTensor_apply, MPOTensor.physicalTransposeTensor_physicalTransposeTensor, MPOTensor.mpo_physicalTransposeTensor, MPOTensor.sourceCutM₁_physicalTransposeTensor, MPOTensor.sourceCutM₂_physicalTransposeTensor, MPOTensor.source_ranks_physicalTransposeTensor, MPOTensor.IsMPUCanonicalFormII.physicalTransposeTensor, MPOTensor.IsMPUCanonicalFormII.isMPUSimple_physicalTransposeTensor, MPOTensor.IsMPUCanonicalFormII.sourceRanks_eq_phys_of_even_mpo_eq_transpose, MPOTensor.SourceFactors.physicalTranspose, MPOTensor.SourceFactors.sourceU_physicalTranspose, MPOTensor.SourceFactors.sourceV_physicalTranspose, MPOTensor.IsMPUCanonicalFormII.sourceFactors_physicalTranspose_of_even_mpo_eq_transpose}
     \leanok
     Physical transposition replaces $U^{ij}$ by $U^{ji}$ without reflecting
     its virtual indices. It is an involution, and its periodic operators are
-    $(U^{(N)})^T$ at every length. It exchanges the two source ranks and
-    preserves simplicity and a reduced canonical-form-II presentation with
-    its real diagonal weight $\rho$.
+    $(U^{(N)})^T$ at every length. Its source cuts are
+    $M_1(\mathcal U^T)=M_2(\mathcal U)^T$ and
+    $M_2(\mathcal U^T)=M_1(\mathcal U)^T$, so it exchanges the two source
+    ranks. It preserves simplicity and a reduced canonical-form-II
+    presentation with its real diagonal weight $\rho$.
 
     For a simple tensor in this presentation, take any normalized source
     factorization at $\rho$. If $r=\ell=d$, normalized factors for the
