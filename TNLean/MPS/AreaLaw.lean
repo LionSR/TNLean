@@ -69,6 +69,9 @@ import TNLean.MPS.AreaLaw.IndependentTruncationParameters
 import TNLean.MPS.AreaLaw.InformationReset
 import TNLean.MPS.AreaLaw.InteractionBudget
 import TNLean.MPS.AreaLaw.IntervalCollectiveTrimming
+import TNLean.MPS.AreaLaw.IntervalFamilyTrimming
+import TNLean.MPS.AreaLaw.IntervalFamilyTrimmingBudget
+import TNLean.MPS.AreaLaw.IntervalFamilyTrimmingIteration
 import TNLean.MPS.AreaLaw.IntervalGenerators
 import TNLean.MPS.AreaLaw.IntervalLowDensityFamily
 import TNLean.MPS.AreaLaw.IntervalMPOTransfer

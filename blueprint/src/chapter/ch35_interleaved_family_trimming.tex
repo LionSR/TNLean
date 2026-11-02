@@ -1,0 +1,119 @@
+\section{Actual interleaved family applications and collective trims}
+
+The lemmas below construct the current-space operation at every round and
+bound its viability, dimension and recorded ranks under explicit numerical
+budgets. The physical filter and reference construction, the original-to-clipped
+comparison, and the successful initial sample remain separate.
+
+\begin{lemma}[One actual family image and interval trim]
+    \label{lem:interval_family_trim_step}
+    \lean{TNLean.MPS.AreaLaw.intervalFamilyTrimStep,
+        TNLean.MPS.AreaLaw.finrank_intervalFamilyTrimStep_le,
+        TNLean.MPS.AreaLaw.isIntervalSpanWithRankBound_intervalFamilyTrimStep,
+        TNLean.MPS.AreaLaw.isViable_intervalFamilyTrimStep_of_tensor_decomposition}
+    \leanok
+    Fix an interval $[p,r)$, retaining its whole exterior. Let $T$ be a
+    full-chain target and let $K=\sum_{i=1}^N F_i\otimes R_i$ in these
+    interval/exterior coordinates. Suppose $K$ preserves $T$ and $T^\perp$,
+    has minimum norm gain one on $T$, and squared contraction at most
+    $\Delta\ge0$ on $T^\perp$. It need not be the identity on $T$.
+    Let $U$ be mutually $\varepsilon$-close to $T$, with every vector of
+    $U$ an MPS of bond at most $D\ge1$. Suppose $S$ is $\delta$-viable for
+    $T$, where $0\le\delta<1$.
+
+    Apply the actual family to $S$, giving $V=\sum_iF_iS$, and collectively
+    trim an orthonormal basis of that actual space at threshold $\xi>0$.
+    Write $S'$ for the resulting space. It has dimension at most
+    $N\dim S$ and at most that many recorded spanning vectors, each with
+    weighted internal-cut rank $\xi^2\operatorname{SR}(v)\le N\dim S$.
+    For every $\theta>0$, put $m=\max\{r-p-1,0\}$ and
+    \begin{align}
+        f(\delta)&=\frac{\Delta\delta}{1-\delta+\Delta\delta},&
+        E(\delta)&=(1+\theta)\bigl((1+\theta)f(\delta)
+          +(1+\theta^{-1})\varepsilon+2\xi\sqrt{mD^2}\bigr)
+          +(1+\theta^{-1})\varepsilon.
+        \label{eq:interval_family_trim_error}
+    \end{align}
+    The actual space $S'$ is $E(\delta)$-viable for that same $T$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:alvv-interval-reference-weighted,lem:interval_recorded_generator_bounds}
+    The exact tensor decomposition gives
+    $K(S\otimes\mathcal H_{\rm out})\subseteq
+      V\otimes\mathcal H_{\rm out}$.
+    Normalized projection error reduction therefore makes $V$
+    $f(\delta)$-viable. Apply the weighted target-relative reference
+    estimate to its actual orthonormal basis and actual trim. The reference
+    rank is $D^2$, since the whole exterior is retained. The image span
+    has dimension at most $N\dim S$, and trimming does not increase it.
+    The recorded-rank theorem applies to the actual trimmed basis vectors.
+\end{proof}
+
+\begin{lemma}[Every round of the literal interleaved iteration]
+    \label{lem:interval_family_trim_iterates}
+    \lean{TNLean.MPS.AreaLaw.intervalFamilyTrimIterate,
+        TNLean.MPS.AreaLaw.intervalFamilyTrimIterate_zero,
+        TNLean.MPS.AreaLaw.intervalFamilyTrimIterate_succ,
+        TNLean.MPS.AreaLaw.finrank_intervalFamilyTrimIterate_le,
+        TNLean.MPS.AreaLaw.isIntervalSpanWithRankBound_intervalFamilyTrimIterate_succ,
+        TNLean.MPS.AreaLaw.isViable_intervalFamilyTrimIterate_of_tensor_decomposition}
+    \leanok
+    Retain one fixed target, reference, operator family and threshold as
+    in Lemma~\ref{lem:interval_family_trim_step}. Starting at the actual
+    initial space $S_0$, define
+    \begin{align}
+        S_{j+1}=\operatorname{Trim}_{\xi}
+          \bigl(\operatorname{span}\{F_iS_j:i\}\bigr).
+        \label{eq:interval_family_actual_iterates}
+    \end{align}
+    Then $\dim S_j\le N^j\dim S_0$. Every positive iterate has at most
+    $N^j\dim S_0$ recorded spanning vectors, each satisfying the same
+    bound on its weighted internal-cut rank. These are bounds for the
+    recorded vectors, not for their entire span.
+
+    Suppose $0\le\delta_j<1$ and $E(\delta_j)\le\delta_{j+1}$ for every
+    $j$, and suppose $S_0$ is $\delta_0$-viable for $T$. Then every actual
+    $S_j$ is $\delta_j$-viable for the same target.
+    The recursive assignment in (\ref{eq:interval_family_actual_iterates})
+    is the local correction documented in
+    \cite{gap:alvv16_approximation_parameters}; it does not reapply the
+    family to the unchanged initial sample.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:interval_family_trim_step}
+    Induct on $j$, applying the actual one-step theorem each time.
+    Dimension multiplies by at most $N$; the positive-iterate recorded
+    vectors are exactly the output of the last collective trim.
+    Viability follows from $E(\delta_j)\le\delta_{j+1}$ and monotonicity
+    in the allowed error.
+\end{proof}
+
+\begin{lemma}[Reference budgets for every actual interleaved round]
+    \label{lem:interval_family_trim_reference_budget}
+    \lean{TNLean.MPS.AreaLaw.isViable_intervalFamilyTrimIterate_of_reference_budgets}
+    \leanok
+    In Lemma~\ref{lem:interval_family_trim_iterates}, suppose $0<a\le1$,
+    $\varepsilon\le a^2/16384$ and
+    $\xi\sqrt{mD^2}\le a/256$. Set $\theta=a/64$. It suffices to verify
+    the simpler numerical envelope
+    \begin{align}
+        0\le\delta_j<1,\qquad
+        \frac{\Delta\delta_j}{1-\delta_j+\Delta\delta_j}+a/16
+          \le\delta_{j+1}.
+        \label{eq:interval_family_reference_envelope}
+    \end{align}
+    Every literal iterate then has the viability and dimension bounds
+    of that lemma, with its actual weighted recorded ranks.
+
+    These are target-relative reference budgets. If $T$ is a clipped
+    low-energy space, its comparison with the original ground space is a
+    separate accuracy condition. No fixed constant comparison error is
+    silently absorbed into these small-overlap budgets.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:interval_family_trim_iterates}
+    Since $0\le\delta_j<1$ and $\Delta\ge0$, the normalized filtered error
+    belongs to $[0,1]$. At $\theta=a/64$, the weighted reference and
+    threshold terms give $E(\delta_j)\le f(\delta_j)+a/16$.
+    Substitute (\ref{eq:interval_family_reference_envelope}).
+\end{proof}
