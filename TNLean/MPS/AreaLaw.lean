@@ -20,6 +20,8 @@ import TNLean.MPS.AreaLaw.BoundaryGap
 import TNLean.MPS.AreaLaw.BufferDiscount
 import TNLean.MPS.AreaLaw.ChainNeighborhood
 import TNLean.MPS.AreaLaw.ChainStageIncidence
+import TNLean.MPS.AreaLaw.ClusterTruncationCutRank
+import TNLean.MPS.AreaLaw.ClusterTruncationMPO
 import TNLean.MPS.AreaLaw.CommonMiddleMPOFamily
 import TNLean.MPS.AreaLaw.ComponentReduction
 import TNLean.MPS.AreaLaw.CompressedBlockColumn
@@ -61,6 +63,7 @@ import TNLean.MPS.AreaLaw.IntervalSlice
 import TNLean.MPS.AreaLaw.IntervalSymmDiff
 import TNLean.MPS.AreaLaw.LiebRobinson
 import TNLean.MPS.AreaLaw.LocalSolution
+import TNLean.MPS.AreaLaw.LocalSumMPO
 import TNLean.MPS.AreaLaw.LogarithmicAreaLaw
 import TNLean.MPS.AreaLaw.LogarithmicSeparation
 import TNLean.MPS.AreaLaw.MPSApproximation
@@ -71,6 +74,7 @@ import TNLean.MPS.AreaLaw.OpenMPSOperatorAction
 import TNLean.MPS.AreaLaw.OpenMPSProduct
 import TNLean.MPS.AreaLaw.OpenMPSRank
 import TNLean.MPS.AreaLaw.OpenMPSSpan
+import TNLean.MPS.AreaLaw.OperatorMPOFromCutRank
 import TNLean.MPS.AreaLaw.OverlapEnergy
 import TNLean.MPS.AreaLaw.PartialSwap
 import TNLean.MPS.AreaLaw.PhysicalChebyshevViability
@@ -118,11 +122,15 @@ import TNLean.MPS.AreaLaw.SelectedMiddleMPOFamily
 import TNLean.MPS.AreaLaw.SequentialTruncation
 import TNLean.MPS.AreaLaw.SharpChainCompression
 import TNLean.MPS.AreaLaw.SharpPhysicalCompression
+import TNLean.MPS.AreaLaw.ShiftedHeatMPO
 import TNLean.MPS.AreaLaw.ShortRegionViableFamily
 import TNLean.MPS.AreaLaw.SnakeGridApproximation
 import TNLean.MPS.AreaLaw.SnakeGridAreaLaw
 import TNLean.MPS.AreaLaw.SnakeGridGeometry
 import TNLean.MPS.AreaLaw.SnakeGridParameters
+import TNLean.MPS.AreaLaw.SoftTruncatedHamiltonianMPO
+import TNLean.MPS.AreaLaw.SoftTruncationMPO
+import TNLean.MPS.AreaLaw.SoftTruncationMPOAccuracy
 import TNLean.MPS.AreaLaw.StripApproximation
 import TNLean.MPS.AreaLaw.StripBufferDiscount
 import TNLean.MPS.AreaLaw.StripGeometry

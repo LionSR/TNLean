@@ -168,6 +168,52 @@ is a separate algebraic question. The correction is tracked by
 \href{https://github.com/LionSR/TNLean/issues/9854}{issue 9854} and
 \href{https://github.com/LionSR/TNLean/issues/9847}{issue 9847}.
 
+
+\section{A normalized interaction-label replacement}
+\label{sec:alvv_normalized_label_replacement}
+
+A corrected estimate can retain words according to their interaction labels,
+with the lower energy made explicit. Let the labels be the vertices of the
+path $\{0,\ldots,N-1\}$. Let $M_r^{\mathrm{lab}}$ retain the words whose label
+supports have no connected component of cardinality at least $r$.
+For Hermitian terms $\|h_i\|\leq1$, write $H=\sum_i h_i$ and assume
+$H\geq\lambda I$. For $\beta\geq0$ and $b=2(e^\beta-1)\leq1$, the corrected
+estimate is
+\begin{align}
+ e^{\beta\lambda}\|e^{-\beta H}-M_r^{\mathrm{lab}}\|
+ &\leq \exp(N^2b^r)-1.
+ \label{eq:alvv_normalized_label_replacement}
+\end{align}
+The lower energy is unrestricted. The factor $2$ comes from bounding the
+finite inclusion--exclusion coefficients by $2^{|U|}$ after grouping them by
+the union $U$ of mandatory windows. The estimate for each mandatory-label
+sum is $e^{\beta\lambda}\|R_U^H(\beta)\|\leq(e^\beta-1)^{|U|}$.
+
+For actual nearest-neighbour supports on $N+1$ sites of local dimension
+$q\geq1$, this label truncation has a site-dependent matrix product
+representation of bond dimension at most $r^2q^r$. Its proof separates the
+unique retained label component crossing a cut, derives the operator Schmidt
+ranks of the actual terms, and constructs the operator tensors from these
+ranks.
+
+If $A$ is a regional sum and $\epsilon I\leq A$, multiplying the constructed
+heat approximant by $e^{\beta\epsilon}$ yields the bound in
+(\ref{eq:alvv_normalized_label_replacement}) for
+$e^{-\beta(A-\epsilon I)}$, with the energy normalization cancelled exactly.
+The scalar shift is kept outside the local interactions.
+Expanding the finite soft series as a sum of heat operators and using
+$t=3m$ puts all the required times in $[0,1/3]$, where
+$2(e^{1/3}-1)<1$. A logarithmic cluster order then gives a norm approximation
+to one complete soft replacement, including its exterior and scalar term.
+
+This replacement changes both the cutoff and normalization of the printed
+estimate. The two counterexamples above continue to refute the printed
+statement. The one-interval construction at $t=3m$ does not supply the
+unrestricted parameter or computational running-time claim of
+the efficient approximation lemma of ALVV.
+
+% This section accompanies a source-only port; fresh verification is pending.
+
 \bibliographystyle{unsrt}
 \bibliography{references}
 \end{document}

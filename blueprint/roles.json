@@ -1148,6 +1148,19 @@
         "thm:aklv_sharp_sequential_mps": "Accuracy-dependent physical matrix product approximation with the fourth-root rank bound",
         "thm:aklv_frustration_free_entropy": "Uniform entropy of the original frustration-free ground vector from a projector gap lower bound"
       }
+    },
+    "sec:corrected_cluster_mpo": {
+      "theorems": [
+        "thm:normalized_cluster_label_tail",
+        "thm:physical_cluster_label_mpo",
+        "thm:soft_hamiltonian_mpo_accuracy"
+      ],
+      "corollaries": [],
+      "notes": {
+        "thm:normalized_cluster_label_tail": "The corrected path estimate specifies interaction labels and retains the lower-energy normalization.",
+        "thm:physical_cluster_label_mpo": "The finite label truncation has constructed operator tensors of dimension r squared times q to the r.",
+        "thm:soft_hamiltonian_mpo_accuracy": "One complete regional soft replacement at scale three times the order has an explicit bond bound at every norm accuracy."
+      }
     }
   }
 }
