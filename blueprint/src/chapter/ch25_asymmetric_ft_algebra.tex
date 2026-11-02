@@ -205,14 +205,14 @@ tensor $A_{(k)}$ and $\mu_k\in\C^\times$ remains a simple $F$-module.
     $\C$-vector space forces dimension one.
 \end{proof}
 
-\begin{theorem}[Burnside's theorem at module level]
+\begin{lemma}[Burnside's theorem at module level]
     \label{thm:asym_burnside}
     \lean{WordAlgebra.exists_smul_eq_of_isSimpleModule}
     \leanok
     \uses{def:asym_word_module}
     Every $\C$-linear endomorphism of a finite-dimensional simple
     $F$-module $Q$ is the action of some element of $F$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -222,7 +222,7 @@ tensor $A_{(k)}$ and $\mu_k\in\C^\times$ remains a simple $F$-module.
     map $F\to\End_{\C}(Q)$ surjective.
 \end{proof}
 
-\begin{theorem}[Separating a simple module from a finite non-isomorphic
+\begin{lemma}[Separating a simple module from a finite non-isomorphic
         family]
     \label{thm:asym_separation}
     \lean{WordAlgebra.exists_aug_eq_zero_smul_eq_self,
@@ -238,7 +238,7 @@ tensor $A_{(k)}$ and $\mu_k\in\C^\times$ remains a simple $F$-module.
     word-algebra modules of tensors, each simple and none isomorphic to
     $Q$, there is $p\in F_+$ acting as the identity on $Q$ and as zero on
     every $C_s$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -274,13 +274,13 @@ tensor $A_{(k)}$ and $\mu_k\in\C^\times$ remains a simple $F$-module.
     and its quotient.
 \end{proof}
 
-\begin{theorem}[Nilpotency from vanishing trace powers]
+\begin{lemma}[Nilpotency from vanishing trace powers]
     \label{thm:asym_nilpotent_trace_powers}
     \lean{LinearMap.isNilpotent_of_forall_trace_pow_eq_zero}
     \leanok
     An endomorphism of a finite-dimensional complex vector space, all of
     whose positive powers have vanishing trace, is nilpotent.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -289,7 +289,7 @@ tensor $A_{(k)}$ and $\mu_k\in\C^\times$ remains a simple $F$-module.
     equal $X^{\dim}$; the Cayley--Hamilton theorem then gives nilpotency.
 \end{proof}
 
-\begin{theorem}[Identification of a simple quotient with a target block]
+\begin{lemma}[Identification of a simple quotient with a target block]
     \label{thm:asym_identification}
     \lean{MPSTensor.exists_linearEquiv_wordModule_of_isSimpleModule_quotient}
     \leanok
@@ -299,19 +299,19 @@ tensor $A_{(k)}$ and $\mu_k\in\C^\times$ remains a simple $F$-module.
     simple tensor modules $C_s$, $s\in S$. Let $K\leq M$ have simple
     quotient $M/K$ on which some generator acts nontrivially. Then $M/K$ is
     isomorphic to $C_s$ for some $s\in S$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:asym_separation, lem:asym_ker_aug_separation,
         thm:asym_nilpotent_trace_powers}
-    If $M/K$ were isomorphic to no $C_s$, Theorem~\ref{thm:asym_separation}
+    If $M/K$ were isomorphic to no $C_s$, Lemma~\ref{thm:asym_separation}
     would give $p\in F_+$ acting as the identity on $M/K$ and as zero on
     every $C_s$. Since the word trace of $M$ agrees with the sum of the
     word traces of the $C_s$ on every nonempty word, and $p\in F_+$,
     Lemma~\ref{lem:asym_ker_aug_separation} shows that every positive power
     of the action of $p$ on $M$ has vanishing trace, so this action is
-    nilpotent by Theorem~\ref{thm:asym_nilpotent_trace_powers}. A nilpotent
+    nilpotent by Lemma~\ref{thm:asym_nilpotent_trace_powers}. A nilpotent
     action of $p$ on $M$ descends to a nilpotent action on the quotient
     $M/K$, contradicting that $p$ acts there as the identity on a nonzero
     module.
@@ -373,16 +373,16 @@ tensor $A_{(k)}$ and $\mu_k\in\C^\times$ remains a simple $F$-module.
 \begin{proof}
     \leanok
     \uses{thm:asym_separation, thm:asym_nilpotent_trace_powers}
-    Otherwise Theorem~\ref{thm:asym_separation} applied to one member $C_{s_0}$
+    Otherwise Lemma~\ref{thm:asym_separation} applied to one member $C_{s_0}$
     of the family gives $u\in F_+$ acting as the identity on $C_{s_0}$;
     vanishing total word trace forces every positive power of the action of
     $u$ on the product of the modules in the family to have trace zero, so
-    this action is nilpotent by Theorem~\ref{thm:asym_nilpotent_trace_powers}.
+    this action is nilpotent by Lemma~\ref{thm:asym_nilpotent_trace_powers}.
     A nilpotent action of $u$ contradicts its action as the identity on the
     nonzero summand $C_{s_0}$.
 \end{proof}
 
-\begin{theorem}[The flag theorem]
+\begin{lemma}[The flag theorem]
     \label{thm:asym_flag_theorem}
     \lean{MPSTensor.exists_flagData}
     \leanok
@@ -392,7 +392,7 @@ tensor $A_{(k)}$ and $\mu_k\in\C^\times$ remains a simple $F$-module.
     word traces agree, on every nonempty word, with the sum of the word
     traces of the $C_s$. Then $M$ carries a labelled invariant flag over
     $(S,C)$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -403,7 +403,7 @@ tensor $A_{(k)}$ and $\mu_k\in\C^\times$ remains a simple $F$-module.
     $M\neq0$, its finite-dimensional invariant-submodule lattice has a
     maximal proper submodule $K\leq M$, so the quotient $M/K$ is simple. If
     some generator acts nontrivially on $M/K$,
-    Theorem~\ref{thm:asym_identification} identifies $M/K$ with some block
+    Lemma~\ref{thm:asym_identification} identifies $M/K$ with some block
     $C_{s_0}$; Lemma~\ref{lem:asym_trace_additivity} then shows that the word
     trace of $K$ agrees with the sum over the remaining blocks
     $S\setminus\{s_0\}$, and the induction hypothesis on $K$ gives a flag
@@ -508,7 +508,7 @@ tensor $A_{(k)}$ and $\mu_k\in\C^\times$ remains a simple $F$-module.
     \leanok
     \uses{thm:asym_flag_theorem, lem:asym_composition_gauge,
         lem:asym_triangular}
-    By Theorem~\ref{thm:asym_flag_theorem}, applied with $M$ the
+    By Lemma~\ref{thm:asym_flag_theorem}, applied with $M$ the
     word-algebra module of $B$, whose word traces agree with the sum of
     those of the $C_s$ by hypothesis, $\C^{D_B}$ carries a labelled
     invariant flag over $(S,C)$: an invariant chain $0=H_0\leq\cdots\leq
@@ -538,7 +538,7 @@ tensor $A_{(k)}$ and $\mu_k\in\C^\times$ remains a simple $F$-module.
     each zero-module step contributes dimension one, giving (vii).
 \end{proof}
 
-\begin{theorem}[Weighted canonical-form compression]
+\begin{lemma}[Weighted canonical-form compression]
     \label{thm:asym_weighted_compression}
     \lean{MPSTensor.exists_weightedMultiBlockCompression_of_isNormal,
         MPSTensor.MultiBlockCompression.left_mul_evalWord_mul_right_smul}
@@ -558,7 +558,7 @@ tensor $A_{(k)}$ and $\mu_k\in\C^\times$ remains a simple $F$-module.
         \label{eq:asym_weighted_compression}
     \end{align}
     for every $N\geq1$ and every word.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -579,7 +579,7 @@ tensor $A_{(k)}$ and $\mu_k\in\C^\times$ remains a simple $F$-module.
 % series identifies each matched subquotient with the block's own
 % word-algebra module, not merely with an isomorphic copy.
 
-\begin{proposition}[Periodic data of a compression]
+\begin{lemma}[Periodic data of a compression]
     \label{prop:asym_compression_trace}
     \lean{MPSTensor.MultiBlockCompression.trace_evalWord_eq_sum,
         MPSTensor.MultiBlockCompression.trace_evalWord_eq_sum_smul,
@@ -593,7 +593,7 @@ tensor $A_{(k)}$ and $\mu_k\in\C^\times$ remains a simple $F$-module.
     is, $\ket{V^{(N)}(B)}=\ket{V^{(N)}(\bigoplus_sC_s)}$ for every $N\geq1$.
     When the blocks are rescaled tensors $C_s=\mu_sA_s$, this reads
     $\tr(B^w)=\sum_{s\in S}\mu_s^{|w|}\tr(A_s^w)$.
-\end{proposition}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -606,7 +606,7 @@ tensor $A_{(k)}$ and $\mu_k\in\C^\times$ remains a simple $F$-module.
     $C_s^w=\mu_s^{|w|}A_s^w$.
 \end{proof}
 
-\begin{proposition}[A vanishing remainder gives sitewise intertwiners]
+\begin{corollary}[A vanishing remainder gives sitewise intertwiners]
     \label{prop:asym_split_intertwiners}
     \lean{MPSTensor.MultiBlockCompression.mul_right_eq_right_mul,
         MPSTensor.MultiBlockCompression.left_mul_eq_mul_left}
@@ -619,7 +619,7 @@ tensor $A_{(k)}$ and $\mu_k\in\C^\times$ remains a simple $F$-module.
         B^iV_s & =V_sC_s^i, &
         W_sB^i & =C_s^iW_s.
     \end{align}
-\end{proposition}
+\end{corollary}
 
 \begin{proof}
     \leanok
@@ -629,7 +629,7 @@ tensor $A_{(k)}$ and $\mu_k\in\C^\times$ remains a simple $F$-module.
     only the term $t=s$.
 \end{proof}
 
-\begin{proposition}[Projector-weighted direct sums]
+\begin{corollary}[Projector-weighted direct sums]
     \label{prop:asym_projector_weighted_sum}
     \lean{MPSTensor.MultiBlockCompression.ofProjectorSum,
         MPSTensor.MultiBlockCompression.remainder_ofProjectorSum}
@@ -645,7 +645,7 @@ tensor $A_{(k)}$ and $\mu_k\in\C^\times$ remains a simple $F$-module.
     with $z=(m-|S|)D$ zero factors, the remainder $R^i=0$, and sitewise
     intertwiners $B^iV_s=V_s\,\mu_sC_s^i$ and $W_sB^i=\mu_sC_s^iW_s$ for
     every slot: the extension splits.
-\end{proposition}
+\end{corollary}
 
 \begin{proof}
     \leanok
@@ -654,7 +654,7 @@ tensor $A_{(k)}$ and $\mu_k\in\C^\times$ remains a simple $F$-module.
     unit, so every letter becomes block diagonal with the blocks
     $\mu_sC_s^i$ at the positions $j(s)$ and zero blocks elsewhere; block
     diagonality gives the triangular form and the vanishing remainder, and
-    Proposition~\ref{prop:asym_split_intertwiners} gives the intertwining
+    Corollary~\ref{prop:asym_split_intertwiners} gives the intertwining
     relations.
 \end{proof}
 

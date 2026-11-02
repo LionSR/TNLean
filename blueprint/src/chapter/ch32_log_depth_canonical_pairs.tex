@@ -43,7 +43,7 @@
     \end{center}
 \end{definition}
 
-\begin{theorem}[Orthonormal canonical block pairs]
+\begin{lemma}[Orthonormal canonical block pairs]
     \label{thm:ldp_canonical_block_pair_isometry}
     \lean{MPSTensor.IsBNTCanonicalForm.inner_basisFixedPointPair,
         MPSTensor.IsBNTCanonicalForm.isIsometry_pairIsometry_basisFixedPointPair}
@@ -52,14 +52,14 @@
         thm:ldp_ghz_form}
     The block pairs satisfy $\langle\omega_j|\omega_{j'}\rangle
         =\delta_{jj'}$. Consequently $W\ket{j}=\ket{\omega_j}$ is an isometry.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Each diagonal inner product is $\operatorname{tr}\sigma_j=1$, while
     distinct blocks occupy disjoint virtual coordinates.
 \end{proof}
 
-\begin{theorem}[Canonical copy coordinates and weights]
+\begin{lemma}[Canonical copy coordinates and weights]
     \label{thm:ldp_canonical_copy_coordinates}
     \lean{MPSTensor.SectorDecomposition.copyWeights,
         MPSTensor.SectorDecomposition.bntWeight_copyWeights,
@@ -98,7 +98,7 @@
             \end{tenkz}
         \end{tenkzequation}
     \end{center}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Expanding the block-diagonal matrix as the sum of its inclusions and reindexing
@@ -122,7 +122,7 @@
     $\beta'_j=|\mu_j|^{qM}$.
 \end{definition}
 
-\begin{theorem}[Canonical GHZ form and normalization]
+\begin{lemma}[Canonical GHZ form and normalization]
     \label{thm:ldp_corrected_canonical_ghz}
     \lean{MPSTensor.IsBNTCanonicalForm.oneCopyFixedPointState_eq_tensorPower_mulVec_ghzState,
         MPSTensor.IsBNTCanonicalForm.oneCopyFixedPointState_norm_sq}
@@ -165,7 +165,7 @@
             \end{tenkz}
         \end{tenkzequation}
     \end{center}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Expanding the tensor power on the GHZ state gives the bond-coordinate formula, and orthonormality of the pairs gives
@@ -173,7 +173,7 @@
     $(\beta'_j)_j$ vanishes exactly when $(\beta_j)_j$ does.
 \end{proof}
 
-\begin{theorem}[Physical identification for the canonical tensor]
+\begin{lemma}[Physical identification for the canonical tensor]
     \label{thm:ldp_corrected_canonical_physical}
     \lean{MPSTensor.IsBNTCanonicalForm.nonNormalApproxVector_oneCopyFixedPoint,
         MPSTensor.IsBNTCanonicalForm.nonNormalApproxOverlap_oneCopyFixedPoint}
@@ -232,7 +232,7 @@
             \end{tenkz}
         \end{tenkzequation}
     \end{center}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     The relations $VK_{j,k_j}=(\mu_{j,k_j}^q/c_j)VL_j$ and

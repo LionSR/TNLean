@@ -1,0 +1,52 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+% Fallbacks keep this note compilable when a different command.tex is found first.
+\providecommand{\leanid}[1]{\textsf{\detokenize{#1}}}
+\providecommand{\gapnote}[2]{\par\noindent\textbf{Verdict:} #1 (#2).\par}
+
+\title{Nontrivial Chains in the Viable Leading Step of Landau, Vazirani and Vidick}
+\author{}
+\date{2026-10-27}
+
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+\section{The source statement}
+
+The size-trimming step of Landau, Vazirani and Vidick~\cite{Landau2015Polynomial}
+(arXiv:1307.5143v1, \path{algo53.tex}, equation \path{eq:conv}, lines~472--476,
+and Lemma \path{l:leading}, lines~493--505) is stated for every chain of $n$
+qudits of local dimension $d$.
+
+\section{What is formalized}
+
+Write $L$ for the number of sites and $q$ for the local dimension. The
+viable-witness and leading-vector theorems assume $L\ge1$ and $q\ge2$. These
+restrictions are separate from the constant bond dimension, which is
+recorded in the note on the constant bond dimension. They give the estimate
+$\Delta\le4$ for a range-one Hamiltonian with interaction norm at most one,
+which in turn controls $c=(\Delta/169)^2$ and the energy error in the
+leading-vector argument.
+
+\section{Elimination}
+
+For $q=1$, the chain Hilbert space is one-dimensional and the state and
+energy conclusions can be proved directly, without a gap upper bound; such a
+statement must also specify a bond cutoff of at least one. The empty chain
+requires a separate formulation of the quantities $c/L$ and $c/(2L)$. These
+separate statements remain to be proved as part of the viable-set
+construction tracked in
+issue~\href{https://github.com/LionSR/TNLean/issues/9820}{9820}.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}

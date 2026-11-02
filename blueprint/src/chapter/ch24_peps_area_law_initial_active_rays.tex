@@ -15,7 +15,7 @@ $\overline B_\infty(v,r)$. Let $\mathcal J$ index those bases, write
 $P_s$ for the corresponding closed triangle, and write $b_s^-$ and
 $b_s^+$ for its initial and final base endpoints in the perimeter
 orientation. Let $\sigma:\mathcal J\to\mathcal I$ be the unique sector
-assignment of Theorem~\ref{thm:area_law_actual_sector_assignment}.
+assignment of Lemma~\ref{thm:area_law_actual_sector_assignment}.
 Thus, for every $i\in\mathcal I$,
 \begin{align}
     X_i^0\cap\overline B_\infty(v,r)
@@ -32,7 +32,7 @@ $b_s^+=b_t^-$ and $\sigma(s)\ne\sigma(t)$; let $\mathcal A$ be the set of such p
 % These are the open-radius and closed-half-radius local assertions.
 % No full isolated-star theorem or active-ray enumeration is asserted.
 
-\begin{theorem}[Region boundaries and active radial segments]
+\begin{lemma}[Region boundaries and active radial segments]
     \label{thm:area_law_initial_active_radial}
     \lean{TNLean.PEPS.AreaLaw.Geometry.initialRegion_frontier_near_mark_iff_active_radial}
     \leanok
@@ -48,7 +48,7 @@ $b_s^+=b_t^-$ and $\sigma(s)\ne\sigma(t)$; let $\mathcal A$ be the set of such p
     the solid radial segments are the active ones, and they are exactly the
     boundary points of the birth regions inside the open square.
     \input{figures/area_law_initial_active_radial}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_actual_sector_assignment,
         thm:area_law_finite_cover_frontier,
@@ -103,7 +103,7 @@ $b_s^+=b_t^-$ and $\sigma(s)\ne\sigma(t)$; let $\mathcal A$ be the set of such p
     $x\in\partial X_{\sigma(s)}^0$, as required.
 \end{proof}
 
-\begin{theorem}[Active radial description on a smaller closed square]
+\begin{lemma}[Active radial description on a smaller closed square]
     \label{thm:area_law_initial_active_radial_closed}
     \lean{TNLean.PEPS.AreaLaw.Geometry.initialRegion_frontier_small_closedBall_iff_active_radial}
     \leanok
@@ -117,7 +117,7 @@ $b_s^+=b_t^-$ and $\sigma(s)\ne\sigma(t)$; let $\mathcal A$ be the set of such p
     \end{align}
     The closed half-side is $r/2=t_k/128$. If the reference cell
     realizes the smallest incident side $S_v=t_k$, it is $S_v/128$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_initial_active_radial}
     The fan radius is positive. Consequently,
@@ -130,7 +130,7 @@ $b_s^+=b_t^-$ and $\sigma(s)\ne\sigma(t)$; let $\mathcal A$ be the set of such p
 % revision adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 % This is the local closed-half-radius assertion for arbitrary valid shifts.
 
-\begin{theorem}[Region boundaries as restricted directed rays]
+\begin{lemma}[Region boundaries as restricted directed rays]
     \label{thm:area_law_initial_active_ray_closed}
     \lean{TNLean.PEPS.AreaLaw.Geometry.initialRegion_frontier_small_closedBall_iff_active_ray}
     \leanok
@@ -155,7 +155,7 @@ $b_s^+=b_t^-$ and $\sigma(s)\ne\sigma(t)$; let $\mathcal A$ be the set of such p
     union is empty and no birth-region boundary meets this closed square.
     Indices may occur in several separated sectors; the change set
     records successive sectors without identifying such occurrences.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_initial_active_radial_closed,
         thm:area_law_cell_fan_successor_iff,

@@ -138,7 +138,7 @@ class ScanTransportDiagram(unittest.TestCase):
             r"relabels $(h,c)$ by $h\frown c$, giving $T_{k+1}$",
             "No reassociation or replacement by an independent uniform average",
             r"T_k\bigl[{C[A_{h\frown c}]}\bigr] =T_{k+1}[A_{h\frown c}]",
-            r"Theorem~\ref{thm:al_scan_actual_fill_endpoints}",
+            r"Lemma~\ref{thm:al_scan_actual_fill_endpoints}",
         ):
             self.assertIn(phrase, compact)
 

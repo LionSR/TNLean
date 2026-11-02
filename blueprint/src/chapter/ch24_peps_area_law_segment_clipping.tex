@@ -6,7 +6,7 @@ intersects the segments incident to a mark with a small closed square.
 After normalization, the following lemma determines their endpoints in
 any real normed space, and in particular for the planar maximum norm.
 
-\begin{theorem}[Clipping a unit segment]
+\begin{lemma}[Clipping a unit segment]
     \label{thm:area_law_unit_segment_ball_clipping}
     \lean{TNLean.PEPS.AreaLaw.Geometry.segment_inter_closedBall_of_dist_eq_one}
     \leanok
@@ -16,7 +16,7 @@ any real normed space, and in particular for the planar maximum norm.
         [a,b]\cap\overline B(a,\eta)
          & = [a,(1-\eta)a+\eta b].
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Write a point of $[a,b]$ as $(1-t)a+tb$, where $0\le t\le1$.
     Its distance from $a$ is $t\|b-a\|=t$. It therefore belongs to

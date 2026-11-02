@@ -33,6 +33,7 @@ see `docs/paper-gaps/spc11_spt_interpolation_upper_range.tex`. The preceding
 finite-chain character results do not carry this restriction.
 -/
 
+open scoped TNLean.Algebra.ScalarCohomology
 open scoped Matrix Matrix.Norms.L2Operator ComplexConjugate
 
 namespace Matrix
@@ -288,7 +289,10 @@ theorem ExactMPSGroundPath.exists_continuous_virtual_data_of_isInjective
         ((ρ t).X (g⁻¹) : Matrix (Fin Q.bondDimension) (Fin Q.bondDimension) ℂ) * Q.tensor t i *
           ((((ρ t).X (g⁻¹))⁻¹ : GL (Fin Q.bondDimension) ℂ) :
             Matrix (Fin Q.bondDimension) (Fin Q.bondDimension) ℂ)) ∧
-      (ω 1).CohomologousTo (ω 0) := by
+      groupCohomology.H2π _ (groupCohomology.cocyclesOfIsMulCocycle₂
+        (TNLean.Algebra.ScalarCocycle.isMulCocycle₂_of_projRep (ρ 1) Q.bondDimension_pos)) =
+        groupCohomology.H2π _ (groupCohomology.cocyclesOfIsMulCocycle₂
+          (TNLean.Algebra.ScalarCocycle.isMulCocycle₂_of_projRep (ρ 0) Q.bondDimension_pos)) := by
   obtain ⟨χ, hχ, hSym⟩ := Q.exists_exact_symmetry_of_isInjective hInj
   obtain ⟨ω, ρ, hcont, hfactor, hCov⟩ :=
     exists_continuous_projectiveRepresentation_of_isOnSiteSymmetric Q.bondDimension_pos
@@ -326,7 +330,10 @@ theorem ExactMPSGroundPath.exists_rephasing_endpoint_cohomology_of_isInjective
           (ρ₁.X (g⁻¹) : Matrix (Fin Q.bondDimension) (Fin Q.bondDimension) ℂ) * Q.tensor 1 i *
             (((ρ₁.X (g⁻¹))⁻¹ : GL (Fin Q.bondDimension) ℂ) :
               Matrix (Fin Q.bondDimension) (Fin Q.bondDimension) ℂ)) →
-        ω₁.CohomologousTo ω₀ := by
+        groupCohomology.H2π _ (groupCohomology.cocyclesOfIsMulCocycle₂
+          (TNLean.Algebra.ScalarCocycle.isMulCocycle₂_of_projRep ρ₁ Q.bondDimension_pos)) =
+          groupCohomology.H2π _ (groupCohomology.cocyclesOfIsMulCocycle₂
+            (TNLean.Algebra.ScalarCocycle.isMulCocycle₂_of_projRep ρ₀ Q.bondDimension_pos)) := by
   obtain ⟨χ, hχ, hSym⟩ := Q.exists_exact_symmetry_of_isInjective hInj
   refine ⟨χ, hχ, ?_⟩
   intro ω₀ ω₁ ρ₀ ρ₁ hρ₀ hρ₁

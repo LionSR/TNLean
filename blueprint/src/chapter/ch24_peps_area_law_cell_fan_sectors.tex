@@ -15,7 +15,7 @@ through $c$.
 % revision adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 % This is the actual single-fan assertion, without a region assignment.
 
-\begin{theorem}[Allowed lines miss open fan triangles]
+\begin{lemma}[Allowed lines miss open fan triangles]
     \label{thm:area_law_cell_fan_sector_directions}
     \lean{TNLean.PEPS.AreaLaw.Geometry.cellFanPolygon_interior_not_isAllowedSlope_sub_center}
     \leanok
@@ -28,7 +28,7 @@ through $c$.
     \end{align}
     Equivalently, for every $x\in\operatorname{int}(P_e)$, the displacement
     $x-c$ has none of the slopes $0,\infty,1,-1$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_unsplit_side_endpoints,
         thm:area_law_elementary_side_geometry}

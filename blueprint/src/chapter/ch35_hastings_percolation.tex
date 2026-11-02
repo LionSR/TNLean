@@ -4,173 +4,131 @@
 % Hastings, arXiv:cond-mat/0508554v3, proj3new.tex, lines 1196--1254 (the
 % inclusion--exclusion sum over large clusters and eq. perc2).
 
-At high temperature \cite{Hastings2006Solving} compares the thermal operator
-$\rho(\beta)$ with its truncation $\rho(\beta,l_{\rm proj})$, which keeps the
-terms of the power series of $e^{-\beta H}$ whose clusters of active bonds all
-have diameter at most $l_{\rm proj}$. The difference is an inclusion--exclusion
-sum over families of clusters of diameter larger than $l_{\rm proj}$
-\cite[lines 1196--1225]{Hastings2006Solving}. A family of $m$ such clusters
-$C_1,\dots,C_m$ contributes at most $\prod_iy^{n_{C_i}}$ times $\|O\|$, where
-$n_C$ is the number of sites of $C$ and $y=(e^{J\beta}-1)e^{SJ\beta}$. This
-section bounds the resulting sum over families of clusters. The weights are
-kept abstract: a weight $a_C$ with $0\le a_C\le y^{n_C}$ stands for the
-contribution of the cluster $C$, and a family $U$ of clusters contributes
-$\prod_{C\in U}a_C$. Every cluster is assumed to have at least $l+1$ sites,
-for a size threshold $l$.
-
-The source starts the sum over cluster sizes at $n=l_{\rm proj}+1$
-\cite[line 1240]{Hastings2006Solving}, which is right for nearest-neighbour
-bonds only. With terms of range $R$, a cluster of $n$ sites spans a distance
-of at most $2Rn$, so a cluster of diameter larger than $l_{\rm proj}$ has
-at least $\lfloor l_{\rm proj}/(2R)\rfloor+1$ sites, and no more is true in
-general: on a chain the cluster $\{0,2R\}$ has two sites and spans $4R$.
-The size threshold for the application is therefore
-$l=\lfloor l_{\rm proj}/(2R)\rfloor$
+At high temperature, \cite[lines 1196--1225]{Hastings2006Solving} bounds
+$e^{-\beta H}-\rho(\beta,l_{\rm proj})$ via an inclusion--exclusion sum over
+families $U$ of clusters of diameter $>l_{\rm proj}$, where each $U$ contributes
+at most $\|O\|\prod_{C\in U}a_C$ with $0\le a_C\le y^{n_C}$ and
+$y=(e^{J\beta}-1)e^{SJ\beta}$. For terms of range $R$, a cluster of $n$ terms
+has diameter at most $2Rn$, so diameter $>l_{\rm proj}$ implies
+$n_C\ge l+1$ with $l=\lfloor l_{\rm proj}/(2R)\rfloor$, correcting the
+nearest-neighbour threshold $l_{\rm proj}+1$ of
+\cite[line 1240]{Hastings2006Solving}; see
 \cite{gap:hastings05_percolation_cluster_size}.
 
-\begin{theorem}[Families of a given number of clusters]
+\begin{lemma}[Families of a given number of clusters]
     \label{thm:hastings_percolation_families}
     \lean{TNLean.Lattice.sum_powersetCard_prod_le}
     \leanok
-    Let $T$ be a finite set with nonnegative weights $a_C$, $C\in T$, and let
-    $m$ be a natural number. Then
+    For a finite set $T$ with weights $a_C\ge0$ ($C\in T$) and $m\in\mathbb N$,
     \begin{align}
         \sum_{U\subseteq T,\ |U|=m}\ \prod_{C\in U}a_C
-        \le\frac1{m!}\Bigl(\sum_{C\in T}a_C\Bigr)^m.
+        \le\frac1{m!}\Bigl(\sum_{C\in T}a_C\Bigr)^m
+        \label{eq:hastings_percolation_families}
     \end{align}
-    This is the bound on $\rho_m$ in \cite[line 1210]{Hastings2006Solving}.
-\end{theorem}
-
+    \cite[line 1210]{Hastings2006Solving}.
+\end{lemma}
 \begin{proof}
     \leanok
-    Induction on $T$. Write $s=\sum_{C\in T}a_C$ and add an element $b\notin T$
-    with weight $a_b$. The $(m+1)$-element subsets of $T\cup\{b\}$ are the
-    $(m+1)$-element subsets of $T$ and the sets $U\cup\{b\}$ with $U$ an
-    $m$-element subset of $T$. By the inductive hypothesis their sum is at most
-    $s^{m+1}/(m+1)!+a_bs^m/m!$, which is at most $(s+a_b)^{m+1}/(m+1)!$ since
-    $s^{m+1}+(m+1)a_bs^m\le(s+a_b)^{m+1}$ for $s,a_b\ge0$.
+    Induct on $|T|$: for $b\notin T$ and $s=\sum_{C\in T}a_C$,
+    $s^{m+1}/(m+1)!+a_bs^m/m!\le(s+a_b)^{m+1}/(m+1)!$.
 \end{proof}
 
-\begin{theorem}[All nonempty families of clusters]
+\begin{lemma}[All nonempty families of clusters]
     \label{thm:hastings_percolation_exp}
     \lean{TNLean.Lattice.sum_nonempty_powerset_prod_eq,
         TNLean.Lattice.sum_nonempty_powerset_prod_le_exp}
     \leanok
-    Let $T$ be a finite set with nonnegative weights $a_C$, $C\in T$. Then
+    For a finite set $T$ with weights $a_C\ge0$ ($C\in T$),
     \begin{align}
         \sum_{\emptyset\ne U\subseteq T}\ \prod_{C\in U}a_C
         =\prod_{C\in T}(1+a_C)-1
-        \le\exp\Bigl(\sum_{C\in T}a_C\Bigr)-1.
+        \le\exp\Bigl(\sum_{C\in T}a_C\Bigr)-1
+        \label{eq:hastings_percolation_exp}
     \end{align}
-    Grouped by the number $m$ of clusters, the left side is the sum over
-    $m\ge1$ of the left sides of Theorem~\ref{thm:hastings_percolation_families},
-    and the right side is $\sum_{m\ge1}(1/m!)(\sum_Ca_C)^m$, as in
     \cite[lines 1238--1241]{Hastings2006Solving}.
-\end{theorem}
-
+\end{lemma}
 \begin{proof}
     \leanok
-    Expanding the product gives the sum over all subsets, the empty one
-    contributing $1$. Then $1+a_C\le e^{a_C}$ for each $C$.
+    Expand $\prod_{C\in T}(1+a_C)$ and use $1+a_C\le e^{a_C}$.
 \end{proof}
 
-\begin{theorem}[The sum over large clusters]
+\begin{lemma}[The sum over large clusters]
     \label{thm:hastings_percolation_cluster_sum}
     \lean{TNLean.Lattice.sum_pow_le_of_forall_lt,
         TNLean.Lattice.sum_pow_le_of_card_le}
     \leanok
-    Let $T$ be a finite family of clusters, where the cluster $C$ has
-    $n_C\ge l+1$ sites, and suppose that at most $Nx^k$ clusters of $T$ have
-    $k$ sites, for every $k$, where $N\ge0$. Let $x,y\ge0$ with $xy<1$. Then
+    If every $C\in T$ has $n_C\ge l+1$, $|\{C\in T:n_C=k\}|\le Nx^k$ for all
+    $k$ ($N\ge0$), and $x,y\ge0$ with $xy<1$, then
     \begin{align}
         \sum_{C\in T}y^{n_C}
-        \le N\frac{(xy)^{l+1}}{1-xy}.
+        \le N\frac{(xy)^{l+1}}{1-xy}
+        \label{eq:hastings_percolation_cluster_sum}
     \end{align}
-    The right side is $N$ times the geometric tail $\sum_{k\ge l+1}(xy)^k$, the
-    inner sum of \cite[lines 1238--1241]{Hastings2006Solving}.
-\end{theorem}
-
+    \cite[lines 1238--1241]{Hastings2006Solving}.
+\end{lemma}
 \begin{proof}
     \leanok
-    Group the clusters by their number of sites $k\ge l+1$: the clusters with
-    $k$ sites contribute at most $Nx^ky^k$. For a finite set $K$ of exponents
-    $k\ge l+1$ and $0\le r<1$, the sum is at most the geometric series starting
-    at $k=l+1$,
+    Group by $k=n_C\ge l+1$ and bound
     \begin{align}
-        \sum_{k\in K}r^k\le\sum_{k\ge l+1}r^k=\frac{r^{l+1}}{1-r},
+        \sum_{k\ge l+1}N(xy)^k=N\frac{(xy)^{l+1}}{1-xy}.
+        \notag
     \end{align}
-    which with $r=xy$ gives the bound.
 \end{proof}
 
-\begin{theorem}[The percolation bound]
+\begin{lemma}[The percolation bound]
     \label{thm:hastings_percolation}
     \lean{TNLean.Lattice.sum_nonempty_powerset_prod_le_percolation,
         TNLean.Lattice.pow_succ_div_one_sub_le,
         TNLean.Lattice.pow_eq_exp_neg_div}
     \leanok
     \uses{thm:hastings_percolation_exp, thm:hastings_percolation_cluster_sum}
-    In the setting of Theorem~\ref{thm:hastings_percolation_cluster_sum}, let
-    the weights satisfy $0\le a_C\le y^{n_C}$, let $N\ge0$, and let
-    $0<xy\le1/2$. Put $\xi=1/\ln(1/(xy))$, a decay length in units of
-    cluster size. Then
+    In the setting of Lemma~\ref{thm:hastings_percolation_cluster_sum}, if
+    $0\le a_C\le y^{n_C}$, $0<xy\le1/2$, and $\xi=1/\ln(1/(xy))$, then
     \begin{align}
         \sum_{\emptyset\ne U\subseteq T}\ \prod_{C\in U}a_C
-        \le\exp\bigl(Ne^{-l/\xi}\bigr)-1.
+        \le\exp\bigl(Ne^{-l/\xi}\bigr)-1
         \label{eq:hastings_percolation}
     \end{align}
-    With the weights $a_C$ bounding the contributions of the clusters, this
-    is eq.~(perc2) of \cite[lines 1227--1254]{Hastings2006Solving} for the
-    size threshold $l$. With $l=\lfloor l_{\rm proj}/(2R)\rfloor$,
-    $e^{-l/\xi}\le(xy)^{-1}e^{-l_{\rm proj}/\xi_{\rm perc}}$ with
-    $\xi_{\rm perc}=2R/\ln(1/(xy))$ in units of distance; this is the
-    source's decay length of order the interaction range
+    \cite[eq.~(perc2), lines 1227--1254]{Hastings2006Solving},
     \cite{gap:hastings05_percolation_cluster_size}.
-\end{theorem}
-
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:hastings_percolation_exp, thm:hastings_percolation_cluster_sum}
-    By Theorem~\ref{thm:hastings_percolation_exp} the left side is at most
-    $\exp(\sum_Ca_C)-1$, and $\sum_Ca_C\le\sum_Cy^{n_C}\le
-        N(xy)^{l+1}/(1-xy)$ by
-    Theorem~\ref{thm:hastings_percolation_cluster_sum}. For $xy\le1/2$,
-    $(xy)^{l+1}/(1-xy)\le2(xy)^{l+1}\le(xy)^l$, and
-    $(xy)^l=e^{-l\ln(1/(xy))}=e^{-l/\xi}$.
+    Combine (\ref{eq:hastings_percolation_exp}) and
+    (\ref{eq:hastings_percolation_cluster_sum}) with
+    $(xy)^{l+1}/(1-xy)\le(xy)^l=e^{-l/\xi}$ for $0<xy\le1/2$.
 \end{proof}
 
-\begin{theorem}[The percolation bound for connected clusters]
+\begin{lemma}[The percolation bound for connected clusters]
     \label{thm:hastings_percolation_connected}
     \lean{TNLean.Lattice.sum_nonempty_powerset_prod_le_percolation_connected}
     \leanok
     \uses{thm:hastings_percolation, thm:hastings_connected_set_count}
-    Let $G$ be a simple graph on $N$ vertices in which every vertex has degree
-    at most $\Delta$, and put $x=\max(1,\Delta^2)$. Let $T$ be a finite family
-    of sets of at least $l+1$ vertices, each inducing a connected subgraph,
-    with weights $0\le a_C\le y^{|C|}$, and let $0<xy\le1/2$. Then
+    Let $G$ be a simple graph on $N$ vertices of maximum degree $\Delta$,
+    $x=\max(1,\Delta^2)$, and $T$ be a family of connected vertex sets $C$ with
+    $|C|\ge l+1$ and weights $0\le a_C\le y^{|C|}$. If $0<xy\le1/2$, then
     (\ref{eq:hastings_percolation}) holds with $\xi=1/\ln(1/(xy))$.
-\end{theorem}
-
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:hastings_percolation, thm:hastings_connected_set_count}
-    The clusters of $T$ with $k$ vertices are among the connected sets of $k$
-    vertices, of which there are at most $Nx^k$ by
-    Theorem~\ref{thm:hastings_connected_set_count}. Apply
-    Theorem~\ref{thm:hastings_percolation}.
+    Combine Lemma~\ref{thm:hastings_connected_set_count}
+    ($|\{C\in T:|C|=k\}|\le Nx^k$) with Lemma~\ref{thm:hastings_percolation}.
 \end{proof}
 
-\begin{theorem}[A percolation temperature]
+\begin{lemma}[A percolation temperature]
     \label{thm:hastings_percolation_temperature}
     \lean{TNLean.Lattice.exists_percolation_temperature}
     \leanok
-    For real $J$, $S$ and $x$ there is $\beta_0>0$ such that
-    $x(e^{J\beta}-1)e^{SJ\beta}\le1/2$ for every $0\le\beta\le\beta_0$. This
-    is the choice of $\beta_0$ in \cite[lines 1242--1245]{Hastings2006Solving}.
-\end{theorem}
-
+    For any $J,S,x\in\mathbb R$ there exists $\beta_0>0$ such that
+    $x(e^{J\beta}-1)e^{SJ\beta}\le1/2$ for all $0\le\beta\le\beta_0$
+    \cite[lines 1242--1245]{Hastings2006Solving}.
+\end{lemma}
 \begin{proof}
     \leanok
-    The left side is continuous in $\beta$ and vanishes at $\beta=0$.
+    The function $\beta\mapsto x(e^{J\beta}-1)e^{SJ\beta}$ is continuous and
+    vanishes at $\beta=0$.
 \end{proof}
 
 \begin{definition}[Clusters of large diameter]
@@ -178,15 +136,12 @@ $l=\lfloor l_{\rm proj}/(2R)\rfloor$
     \lean{TNLean.Lattice.ClusterExpansion.IsLargeDiam}
     \leanok
     \uses{def:hastings_cluster_of_terms}
-    Let the terms $H_k$ act on supports in a metric space of sites. A set $C$
-    of terms is large when the support of $H_C$ contains two sites at distance
-    larger than $l_{\mathrm{proj}}$. The truncated operator for this notion of
-    large keeps the terms of the power series of $e^{-\beta H}$ in which no
-    cluster contains two sites at distance larger than $l_{\mathrm{proj}}$, as
-    in~\cite[lines 1104--1107]{Hastings2006Solving}.
+    For terms $H_k$ supported in a metric space of sites, a set $C$ of terms has
+    \emph{large diameter} if the support of $H_C$ contains two sites at distance
+    $>l_{\mathrm{proj}}$ \cite[lines 1104--1107]{Hastings2006Solving}.
 \end{definition}
 
-\begin{theorem}[Size and number of clusters of large diameter]
+\begin{lemma}[Size and number of clusters of large diameter]
     \label{thm:hastings_large_diameter_count}
     \lean{TNLean.Lattice.ClusterExpansion.dist_le_of_walk,
         TNLean.Lattice.ClusterExpansion.dist_le_of_mem_biUnion_of_connected,
@@ -194,25 +149,22 @@ $l=\lfloor l_{\rm proj}/(2R)\rfloor$
         TNLean.Lattice.ClusterExpansion.card_add_card_boundary_le}
     \leanok
     \uses{def:hastings_large_diameter}
-    Let every support have diameter at most $2R$, with $R>0$, and let every
-    term overlap at most $\Delta$ others. Then a connected set of $n$ terms has
-    support of diameter at most $2Rn$, so a connected set of large diameter has
-    at least $\lfloor l_{\mathrm{proj}}/(2R)\rfloor+1$ terms. A set $C$ of terms and its boundary
-    together have at most $(\Delta+1)n_C$ terms. The size threshold replaces
-    the start $l_{\mathrm{proj}}+1$ of the sum
-    in~\cite[line 1235]{Hastings2006Solving}
+    If every term support has diameter at most $2R$ ($R>0$) and overlaps at most
+    $\Delta$ other terms, then any connected set of $n$ terms has support
+    diameter at most $2Rn$, every large-diameter connected set $C$ satisfies
+    $n_C\ge\lfloor l_{\mathrm{proj}}/(2R)\rfloor+1$, and
+    $n_C+n_{\partial C}\le(\Delta+1)n_C$
+    \cite[line 1235]{Hastings2006Solving},
     \cite{gap:hastings05_percolation_cluster_size}.
-\end{theorem}
-
+\end{lemma}
 \begin{proof}
     \leanok
-    Two sites of the support lie in supports of terms joined by a walk of
-    length at most $n-1$ in the overlap graph; consecutive supports share a
-    site, so the distance is at most $2R$ times the number of supports on the
-    walk. Every boundary term overlaps a term of $C$.
+    Any two sites in the support of $C$ are connected by an overlap walk of at
+    most $n$ supports of diameter $\le2R$, giving distance $\le2Rn$, and each
+    $k\in\partial C$ overlaps some $c\in C$.
 \end{proof}
 
-\begin{theorem}[The percolation bound for clusters of large diameter]
+\begin{lemma}[The percolation bound for clusters of large diameter]
     \label{thm:hastings_percolation_large_diameter}
     \lean{TNLean.Lattice.ClusterExpansion.norm_trace_mul_exp_sub_truncatedExp_le_isLargeDiam,
         TNLean.Lattice.ClusterExpansion.exp_neg_floor_div_le,
@@ -220,38 +172,28 @@ $l=\lfloor l_{\rm proj}/(2R)\rfloor$
     \leanok
     \uses{thm:hastings_large_diameter_count, thm:hastings_truncation_trace_bound,
         thm:hastings_percolation_connected}
-    In the setting of Theorem~\ref{thm:hastings_large_diameter_count}, let
-    $H=\sum_kH_k$ be Hermitian with Hermitian terms of norm at most $J$, let
-    $\beta\ge0$, put $N$ for the number of terms, $x=\max(1,\Delta^2)$ and
-    $y=(e^{J\beta}-1)e^{(\Delta+1)J\beta}$, and let
-    $0<xy\le1/2$. Then for every operator $O$, with
-    $\rho(\beta,l_{\mathrm{proj}})$ the truncated operator for clusters of
-    large diameter,
-    \begin{align*}
+    In the setting of Lemma~\ref{thm:hastings_large_diameter_count}, let
+    $H=\sum_kH_k$ have $N$ Hermitian terms with $\|H_k\|\le J$, $\beta\ge0$,
+    $x=\max(1,\Delta^2)$, $y=(e^{J\beta}-1)e^{(\Delta+1)J\beta}$, and
+    $0<xy\le1/2$. With $Z=\operatorname{tr}e^{-\beta H}$,
+    $l=\lfloor l_{\mathrm{proj}}/(2R)\rfloor$, $\xi=1/\ln(1/(xy))$, and
+    $\xi_{\mathrm{perc}}=2R/\ln(1/(xy))$, for every $O$,
+    \begin{align}
         \bigl|\operatorname{tr}\bigl(O(e^{-\beta H}-\rho(\beta,l_{\mathrm{proj}}))\bigr)\bigr|
-        \le\|O\|\bigl(\exp(Ne^{-l/\xi})-1\bigr)Z
-        \le\|O\|\bigl(\exp(N(xy)^{-1}e^{-l_{\mathrm{proj}}/\xi_{\mathrm{perc}}})-1\bigr)Z,
-    \end{align*}
-    with $Z=\operatorname{tr}e^{-\beta H}$, $l=\lfloor l_{\mathrm{proj}}/(2R)\rfloor$,
-    $\xi=1/\ln(1/(xy))$ and
-    $\xi_{\mathrm{perc}}=2R/\ln(1/(xy))$. This is eq.~(perc2)
-    of~\cite[lines 1227--1254]{Hastings2006Solving}, with the constant
-    $N(xy)^{-1}$ in place of $N$ \cite{gap:hastings05_percolation_cluster_size}
-    and the boundary of
-    Definition~\ref{def:hastings_cluster_of_terms}
-    \cite{gap:hastings05_cluster_boundary}.
-\end{theorem}
-
+         & \le\|O\|\bigl(\exp(Ne^{-l/\xi})-1\bigr)Z
+        \notag                                                                               \\
+         & \le\|O\|\bigl(\exp(N(xy)^{-1}e^{-l_{\mathrm{proj}}/\xi_{\mathrm{perc}}})-1\bigr)Z
+        \label{eq:hastings_percolation_large_diameter}
+    \end{align}
+    \cite[eq.~(perc2), lines 1227--1254]{Hastings2006Solving},
+    \cite{gap:hastings05_percolation_cluster_size,gap:hastings05_cluster_boundary}.
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:hastings_large_diameter_count, thm:hastings_truncation_trace_bound,
         thm:hastings_percolation_connected}
-    Theorem~\ref{thm:hastings_truncation_trace_bound} with $S=\Delta+1$ bounds
-    the left side by $\|O\|Z$ times the sum over the nonempty admissible
-    families of large connected sets of $\prod_{C\in U}y^{n_C}$. These families
-    are among the nonempty sets of large connected sets, each connected, and
-    Theorem~\ref{thm:hastings_percolation_connected}, with the size threshold of
-    Theorem~\ref{thm:hastings_large_diameter_count}, bounds that sum by
-    $\exp(Ne^{-l/\xi})-1$. Since $l\ge l_{\mathrm{proj}}/(2R)-1$, $e^{-l/\xi}\le
-        (xy)^{-1}e^{-l_{\mathrm{proj}}/\xi_{\mathrm{perc}}}$.
+    Combine Lemma~\ref{thm:hastings_truncation_trace_bound} ($S=\Delta+1$),
+    Lemma~\ref{thm:hastings_large_diameter_count}, and
+    Lemma~\ref{thm:hastings_percolation_connected}, using
+    $l\ge l_{\mathrm{proj}}/(2R)-1$.
 \end{proof}

@@ -22,6 +22,7 @@ is not asserted here.
 set_option relaxedAutoImplicit false
 set_option maxSynthPendingDepth 3
 set_option linter.mathlibStandardSet true
+open scoped TNLean.Algebra.ScalarCohomology
 open scoped Matrix Matrix.Norms.Frobenius Topology
 
 namespace MPSTensor
@@ -44,7 +45,11 @@ theorem eventually_cohomologousTo_of_continuousAt_exact_unitary_covariance
     (hCov : ∀ t g i, ∑ j, (U g : Matrix (Fin d) (Fin d) ℂ) i j • C t j =
       ((ρ t).X g⁻¹ : Matrix (Fin D) (Fin D) ℂ) * C t i *
         ((ρ t).X g⁻¹ : Matrix (Fin D) (Fin D) ℂ)ᴴ) :
-    ∀ᶠ t in 𝓝 t₀, (ω t).CohomologousTo (ω t₀) := by
+    ∀ᶠ t in 𝓝 t₀,
+      groupCohomology.H2π _ (groupCohomology.cocyclesOfIsMulCocycle₂
+        (TNLean.Algebra.ScalarCocycle.isMulCocycle₂_of_projRep (ρ t) (NeZero.pos D))) =
+        groupCohomology.H2π _ (groupCohomology.cocyclesOfIsMulCocycle₂
+          (TNLean.Algebra.ScalarCocycle.isMulCocycle₂_of_projRep (ρ t₀) (NeZero.pos D))) := by
   obtain ⟨δ, hδ, hRigidity⟩ :=
     TNLean.Algebra.ProjectiveRepresentation.exists_uniform_adjoint_rigidity_radius (D := D)
   have hEstimate := eventually_uniform_conjugationEuclideanCLM_of_covariance

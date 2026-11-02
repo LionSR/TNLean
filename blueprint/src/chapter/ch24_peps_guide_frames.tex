@@ -10,10 +10,11 @@ a hypothesis; its proof is not part of this section.
 
 We keep the setting of Section~\ref{sec:peps_encoded_frames}. For square cylinder
 data with radii $r_1,\ldots,r_n$ and vectors $v_{j\ell}$, write
-\[
+\begin{align}
     \Pi=\sum_{j=1}^{n}\sum_{\ell=1}^{d_j}
     \bigl(\ket{v_{j\ell}}\bra{v_{j\ell}}\bigr)_{D_j}\otimes\id
-\]
+    \label{eq:peps_guide_frames_cyl_sum}
+\end{align}
 for the sum of the cylinder projectors, without the convention for an empty
 outer sample.
 
@@ -34,14 +35,14 @@ outer sample.
     every $L\ge2$, every square Hamiltonian with local bounds $J$ and every
     unit ground vector $\Omega$ with gap $\Delta$, every center $z\in\R^2$ and
     every $0<u\le B_0\log L$ admit square cylinder data at $(z,u)$ with
-    \[
+    \begin{align}
         \sum_{j}d_j\le CL^c,
         \qquad
         \lVert(\id-\Pi)\Omega\rVert\le L^{-p}.
-    \]
+        \label{eq:peps_adaptive_patch_constraint}
+    \end{align}
     The sum
-    $\Pi$ is an orthogonal projection supported on the sample of the square of
-    radius $2u$ because the cylinder projectors have orthogonal ranges.
+    $\Pi$ in~(\ref{eq:peps_guide_frames_cyl_sum}) is an orthogonal projection supported on the sample of $Q^+(z,u)$ because the cylinder projectors have orthogonal ranges.
 \end{definition}
 
 \begin{lemma}[Adaptive patches on cell centers]
@@ -63,29 +64,26 @@ outer sample.
         def:peps_frame_hole_encoder,
         def:peps_angular_information_bound,
         def:peps_squareLatticeCoordinateRegions}
-    If the outer sample of square cylinder data is nonempty, its projector
-    $P_{c,h}$ is $\Pi$; in all cases
+    If the outer sample of square cylinder data is nonempty, its projector is
+    $P_{c,h}=\Pi$; in all cases
     $\lVert(\id-P_{c,h})\Omega\rVert\le\lVert(\id-\Pi)\Omega\rVert$ and the
     number of tags is at most $\max\{1,\sum_jd_j\}$. Translating the site
     positions and the center by one vector does not change the samples, so the
-    conclusion of the adaptive patch constraint is translation invariant. Hence,
+    conclusion~(\ref{eq:peps_adaptive_patch_constraint}) of Definition~\ref{def:peps_adaptive_patch_constraint} is translation invariant. Hence,
     if the adaptive patch constraint holds, then with the same constants it holds
-    on the sites placed at the cell centers $(i+\tfrac12,j+\tfrac12)$,
+    on the sites placed at the cell centers $p_x-(1/2,1/2)=(i+\tfrac12,j+\tfrac12)$,
     $0\le i,j<L$, as in \texttt{06-geometry.tex}, lines 62--63. Fixing one
-    such patch for each center and scale, the projector of the patch at
-    $(z,u)$ has error at most $L^{-p}$ on $\Omega$ and at most $\max\{1,CL^c\}$
-    tags. The patch depends only on the center and the scale, so a given center
+    such patch for each $(z,u)$, its projector $P_{z,u}$ satisfies
+    $\lVert(\id-P_{z,u})\Omega\rVert\le L^{-p}$ and has at most $\max\{1,CL^c\}$
+    tags. Because the patch depends only on $(z,u)$, a given center
     and radius receive the same patch on every sheet, as required at
     \texttt{06-geometry.tex}, lines 114--118.
-    For every natural $L$ and every site of the $L\times L$ lattice,
-    its cell-center position is its integer site position minus $(1/2,1/2)$.
 \end{lemma}
 
 \begin{proof}\leanok
-    With a nonempty outer sample the tags are the pairs $(j,\ell)$; with an
-    empty one the projector is the identity. A translation preserves sup-norm
-    distances, and the coordinate identity is the pointwise form of the translation between
-    integer lattice positions and cell centers.
+    With a nonempty outer sample the tags are the pairs $(j,\ell)$ and $P_{c,h}=\Pi$; with an
+    empty one $P_{c,h}=\id$. Translation preserves sup-norm
+    distances and shifts each integer site position $p_x$ to $p_x-(1/2,1/2)$.
 \end{proof}
 
 \begin{definition}[Canonical tag holder and the frame of a guide]
@@ -95,35 +93,34 @@ outer sample.
     \leanok
     \uses{def:peps_dyadic_incident_labels, def:peps_frame}
     In the construction of \cite[Section~7]{OpenAI2026PolynomialPEPS} (\texttt{06-geometry.tex},
-    lines 69--80 and 109--125), fix a ranking of the labels by natural numbers and a placeholder label. The
+    lines 69--80 and 109--125), fix a ranking of the labels by natural numbers and a placeholder label $\ast$. The
     canonical tag holder of a point $c$ of a guide is the incident label at $c$
-    other than the placeholder of least rank. Given a guide read at the sites, an
-    assignment of parties to labels, a finite set $V$ of centers and a square
-    patch at each center, with pairwise disjoint outer samples, the frame of the
-    guide assigns to each site the initial owner equal to the party of the label read at its
-    position, and has one hole at each center of $V$, carrying its patch, with tag
-    held by the party of the canonical tag holder.
+    other than $\ast$ of least rank. Given a guide $g$ read at the sites, an
+    owner map $\varpi$ from labels to parties, a finite set $V$ of centers and a square
+    patch $P_c$ at each $c\in V$ with pairwise disjoint outer samples, the frame $\mathcal F(g,V)$ of the
+    guide assigns to each site $x$ the initial owner $\varpi(g(p_x))$ and has one hole at each $c\in V$, carrying $P_c$, with tag
+    held by $\varpi$ applied to the canonical tag holder at $c$.
 \end{definition}
 
-\begin{theorem}[Guide frames with equal patches at their centers]
+\begin{lemma}[Guide frames with equal patches at their centers]
     \label{thm:peps_guide_frame_patch_congruence}
     \lean{TNLean.PEPS.Approximation.guideFrame_congr_patch,
         TNLean.PEPS.Approximation.guideFrame_congr}
     \leanok
     \uses{def:peps_guide_frame}
-    Fix finite physical sites, their positions and local dimension, a guide,
-    an assignment of owners to labels, a placeholder and a label ranking.
-    Two patch families on the same finite set $V$ of hole centers give equal
-    guide frames if they agree at every point of $V$ and each family has
-    pairwise disjoint outer physical samples. In particular, equal sets of
-    centers and equal patch functions give equal guide frames, with the same
+    Fix finite physical sites, their positions and local dimension, a guide $g$,
+    an owner map $\varpi$, a placeholder $\ast$ and a label ranking.
+    Two patch families $(P_c)_{c\in V}$ and $(P'_c)_{c\in V}$ on the same finite set $V$ of hole centers give equal
+    guide frames if $P_c=P'_c$ for every $c\in V$ and each family has
+    pairwise disjoint outer physical samples. In particular, equal sets $V=V'$ of
+    centers and equal patch functions $P=P'$ give equal guide frames, with the same
     remaining data, regardless of the chosen disjointness proofs.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:peps_guide_frame}
-    The initial site owners agree, and the lists of holes agree term by term because every
-    center receives the same patch and canonical tag holder. Equality of
+    The initial site owners $\varpi(g(p_x))$ agree, and the lists of holes agree term by term because every
+    $c\in V$ receives the same patch $P_c=P'_c$ and canonical tag holder. Equality of
     center sets and patch functions then gives the second conclusion from the first.
 \end{proof}
 
@@ -135,20 +132,18 @@ outer sample.
         TNLean.PEPS.Approximation.tagHolder_congr}
     \leanok
     \uses{def:peps_guide_frame, lem:peps_dyadic_tags}
-    At a true vertex the canonical tag holder is an incident label other than the
-    placeholder, and it has least rank among such labels. Guides with the same
-    incident labels at a point have the same canonical tag holder there, so the
-    tag of a hole accompanies it through every change that keeps the incident
+    At a true vertex $c$, the canonical tag holder is an incident label other than $\ast$ of least rank among such labels. Guides with the same
+    incident labels at $c$ have the same canonical tag holder there, so the
+    tag of a hole accompanies it through every change that preserves the incident
     labels, as at \texttt{06-geometry.tex}, lines 123--125.
 \end{lemma}
 
 \begin{proof}\leanok
-    A true vertex has an incident label other than the placeholder, so the set
-    of candidates is nonempty and has an element of least rank. The set of
-    candidates depends only on the incident labels.
+    A true vertex has an incident label other than $\ast$, so the set
+    of non-placeholder incident labels is nonempty and has an element of least rank; this set depends only on the incident labels at $c$.
 \end{proof}
 
-\begin{theorem}[Reference vectors of guide frames]
+\begin{lemma}[Reference vectors of guide frames]
     \label{thm:peps_guide_frame_norm}
     \lean{TNLean.PEPS.Approximation.disjoint_outer_of_disjoint_closedBall,
         TNLean.PEPS.Approximation.pairwise_disjoint_outer_patchAt,
@@ -160,26 +155,25 @@ outer sample.
         TNLean.PEPS.Approximation.guideFrame_unitLevel}
     \leanok
     \uses{def:peps_guide_frame, thm:peps_frame_norm, lem:peps_adaptive_patch_supply}
-    Patches whose closed outer squares are disjoint in the plane have disjoint
-    outer samples. Let $\lVert\Omega\rVert=1$. If every patch at a center of $V$
-    has projector error at most $\varepsilon$ on $\Omega$, the reference vector of
-    the frame of a guide satisfies
+    Patches whose closed outer squares $Q^+(c,h)$ are disjoint in $\R^2$ have disjoint
+    outer samples. Let $\lVert\Omega\rVert=1$. If every patch at $c\in V$
+    has projector error $\lVert(\id-P_{c,h})\Omega\rVert\le\varepsilon$, the reference vector $\Omega_{\mathcal F}$ of
+    the frame $\mathcal F$ of a guide satisfies
     $1-\lvert V\rvert\varepsilon\le\lVert\Omega_{\mathcal F}\rVert\le1$; with
-    adaptive patches one may take $\varepsilon=L^{-p}$. At the last level
+    adaptive patches (Lemma~\ref{lem:peps_adaptive_patch_supply}) one may take $\varepsilon=L^{-p}$. At the last level
     $n=1$ of \texttt{06-geometry.tex}, lines 669--672, where
     $2h_1\le2\epsilon_0<\tfrac12$, if the sites lie at cell
-    centers, every center of $V$ is a corner of a unit block, and every outer
-    radius is less than $\tfrac12$, then every hole has empty physical outer
-    sample, the encoding is an isometry, and
+    centers, $V\subseteq\Z^2$, and every outer
+    radius satisfies $2h_c<\tfrac12$, then every hole has empty physical outer
+    sample, $K_{\mathcal F}$ is an isometry, and
     $\lVert\Omega_{\mathcal F}\rVert=\lVert\Omega\rVert$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
-    The first claim is the definition of the outer samples. The bound is
-    Theorem~\ref{thm:peps_frame_norm}, since the frame has $\lvert V\rvert$ holes.
-    A cell center is at sup distance at least $\tfrac12$ from every integer
-    point, so the outer samples at $n=1$ are empty and every hole projector is
-    the identity.
+    Disjoint closed outer squares have disjoint site samples by Definition~\ref{def:peps_frame_square_patch}. The norm bound is
+    Lemma~\ref{thm:peps_frame_norm} with $r=\lvert V\rvert$.
+    Every cell center $(i+\tfrac12,j+\tfrac12)$ is at sup distance at least $\tfrac12>2h_c$ from every $c\in\Z^2$, so at $n=1$ the outer samples are empty and every hole projector is
+    $\id$.
 \end{proof}
 
 \begin{lemma}[Sites separated from the holes of a guide]
@@ -189,27 +183,23 @@ outer sample.
     \uses{def:peps_frame_square_patch, def:peps_frame_rewrite_data,
         def:peps_guide_frame}
     Let $I$ be a finite set of sites with positions $p_x\in\mathbb R^2$, and
-    let $q$ be any natural local dimension. Fix any guide, owner map,
-    placeholder label and ranking of the labels. Let $V$ be a finite indexing
-    set of plane points, and assign a square patch $P_z$ to each $z\in V$,
-    with pairwise-disjoint outer samples. Write $c_z$ and $r_z$ for the center
-    and scale of $P_z$; the center $c_z$ need not equal its index $z$.
-    For any set $T\subseteq I$, if
-    $2r_z<\operatorname{dist}(c_z,p_x)$ for every $z\in V$ and $x\in T$,
-    then $T$ is disjoint from the union of the outer samples of all holes
-    of the guide frame.
+    let $q\in\N$ be the local dimension. Fix a guide, owner map,
+    placeholder label and label ranking. Let $V$ be a finite indexing
+    set of plane points, and assign a square patch $P_z$ with center $c_z$ and scale $r_z$ to each $z\in V$,
+    with pairwise-disjoint outer samples (where $c_z$ need not equal $z$).
+    For any $T\subseteq I$, if
+    $2r_z<\operatorname{dist}(c_z,p_x)$ for all $z\in V$ and $x\in T$,
+    then $T\cap H^+(\mathcal F)=\emptyset$ for the resulting guide frame $\mathcal F$.
 \end{lemma}
 
 \begin{proof}\leanok
     \uses{def:peps_frame_square_patch, def:peps_frame_rewrite_data,
         thm:peps_guide_frame_norm}
-    Every hole is the patch assigned to some $z\in V$. A site in its outer
-    sample satisfies $\operatorname{dist}(p_x,c_z)\le2r_z$, contradicting
-    the strict separation when $x\in T$. Thus each outer sample is disjoint
-    from $T$, and taking their union proves the claim.
+    Every hole of $\mathcal F$ is $P_z$ for some $z\in V$, whose outer
+    sample consists of sites $x$ with $\operatorname{dist}(p_x,c_z)\le2r_z$, disjoint from $T$ by hypothesis.
 \end{proof}
 
-\begin{theorem}[Small-patch rewrites between frames of guides]
+\begin{lemma}[Small-patch rewrites between frames of guides]
     \label{thm:peps_guide_frame_rewrite}
     \lean{TNLean.PEPS.Approximation.GuideFrameRewrite,
         TNLean.PEPS.Approximation.GuideFrameRewrite.PlaneConditions,
@@ -219,38 +209,23 @@ outer sample.
     \leanok
     \uses{def:peps_guide_frame, lem:peps_guide_frame_tags,
         thm:peps_frame_small_rewrite_gate}
-    Consider an old and a new guide with one assignment of parties to labels, a
-    finite set of untouched hole centers, finite sets of old and new affected
-    hole centers, hole patches of the two frames, finitely many additional
-    patches and a specified list of parties. The old frame is the frame of the
-    old guide with holes at the untouched and the old affected centers, and
-    similarly for the new frame. Suppose the following conditions in the plane.
-    The untouched holes have the same patches and the same incident labels in
-    the two guides. Every outer patch square and every affected outer hole
-    square is disjoint from every untouched outer hole square. The inner patch
-    squares cover every point at which the owner changes and every affected
-    outer hole square. In every outer patch square, the points outside the open
-    inner holes of a frame carry at most two labels of its guide. The owners on
-    the outer patch squares and on the affected outer hole squares, and the
-    affected tag holders, are specified parties. Then the four conditions of
-    \cite[Lemma~6.3]{OpenAI2026PolynomialPEPS} hold on the sampled sites. Under
-    the bounds of Theorem~\ref{thm:peps_frame_small_rewrite_gate}, the rewrite
-    is a circuit from the registers of the old frame to those of the new frame
-    with at most one gate that is not private to one party, every participant a
-    specified party, and reference-vector error at most $(2b+1)L^{-20}$.
-\end{theorem}
+    Consider old and new guides $g_{\rm old},g_{\rm new}$ with one owner map $\varpi$, a
+    finite set $V_{\rm unt}$ of untouched hole centers, finite sets $V_{\rm old},V_{\rm new}$ of old and new affected
+    hole centers, hole patches of the two frames $\mathcal F_{\rm old}=\mathcal F(g_{\rm old},V_{\rm unt}\cup V_{\rm old})$ and $\mathcal F_{\rm new}=\mathcal F(g_{\rm new},V_{\rm unt}\cup V_{\rm new})$, additional
+    patches $(c_i,u_i)_{i=1}^m$, and a specified list $S$ of at most $b$ parties. Suppose in $\R^2$ that:
+    (i) at each $c\in V_{\rm unt}$ the two frames share the same patch and the same incident labels in $g_{\rm old}$ and $g_{\rm new}$;
+    (ii) every $Q^+(c_i,u_i)$ and every affected outer hole square $Q^+(c,h_c)$ ($c\in V_{\rm old}\cup V_{\rm new}$) is disjoint from every untouched outer hole square $Q^+(c',h_{c'})$ ($c'\in V_{\rm unt}$);
+    (iii) $\bigcup_{i=1}^m Q^-(c_i,u_i)$ contains $\{p\in\R^2:\varpi(g_{\rm old}(p))\ne\varpi(g_{\rm new}(p))\}$ and every affected $Q^+(c,h_c)$;
+    (iv) in each $Q^+(c_i,u_i)$, the points outside the open inner holes of $g_{\rm old}$ (respectively $g_{\rm new}$) carry at most two labels of $g_{\rm old}$ (respectively $g_{\rm new}$); and
+    (v) the owners $\varpi(g_{\rm old}(p)),\varpi(g_{\rm new}(p))$ on the outer patch and affected outer hole squares, and the
+    affected tag holders, lie in $S$. Then conditions (1)--(4) of Definition~\ref{def:peps_frame_rewrite_data} (\cite[Lemma~6.3]{OpenAI2026PolynomialPEPS}) hold on the sampled sites. Under
+    the bounds of Lemma~\ref{thm:peps_frame_small_rewrite_gate}, the rewrite
+    is a circuit from the registers of $\mathcal F_{\rm old}$ to those of $\mathcal F_{\rm new}$
+    with at most one nonprivate gate, every participant in $S$, and reference-vector error at most $(2b+1)L^{-20}$.
+\end{lemma}
 
 \begin{proof}\leanok
-    A site lies in a sampled square exactly when its position lies in the
-    closed square, so each condition in the plane gives the corresponding
-    condition on the sites. A site outside the inner hole samples lies outside
-    the open inner hole squares, and a function that takes at most two values
-    on every three points takes at most two values. The frame form of
-    Lemma~6.3 lists the untouched holes first, while a frame of a guide lists
-    its holes in a fixed order of the centers; the two listings are identified
-    by exchanges of tag registers, which preserve norms and carry the
-    reference vector of one listing to that of the other. Composing these
-    exchanges with the circuit of Theorem~\ref{thm:peps_frame_small_rewrite_gate} yields the rewrite circuit.
+    A site $x$ lies in a sampled square $Q^\pm(c,h)$ if and only if $p_x\in Q^\pm(c,h)$, and by Lemma~\ref{lem:peps_guide_frame_tags} matching incident labels on $V_{\rm unt}$ give matching canonical tag holders, so (i)--(v) imply conditions (1)--(4) of Definition~\ref{def:peps_frame_rewrite_data}. While Definition~\ref{def:peps_frame_rewrite_data} lists $V_{\rm unt}$ first and Definition~\ref{def:peps_guide_frame} orders $V_{\rm unt}\cup V_{\rm old}$ and $V_{\rm unt}\cup V_{\rm new}$ in a fixed center order, the two listings are intertwined by tag-register permutations that preserve norms and carry one reference vector to the other; composing with Lemma~\ref{thm:peps_frame_small_rewrite_gate} yields the circuit.
 \end{proof}
 
 \begin{lemma}[Patch data of adaptive small-patch rewrites]
@@ -265,30 +240,22 @@ outer sample.
     \leanok
     \uses{lem:peps_adaptive_patch_supply, thm:peps_guide_frame_rewrite}
     Let $\lVert\Omega\rVert=1$ and $L\ge2$, and let every additional patch and
-    every hole patch of a rewrite between frames of guides be a patch provided
-    by the adaptive patch constraint with test exponent $60$ and constants
+    every hole patch of a rewrite between guide frames be supplied by Lemma~\ref{lem:peps_adaptive_patch_supply} at test exponent $p=60$ with constants
     $C,c$, as at \cite[Section~7]{OpenAI2026PolynomialPEPS},
-    \texttt{06-geometry.tex}, lines 109--118. Let $C'\ge\max\{1,C\}$ and
-    $c'\ge c$ be natural numbers. Then every affected hole and every additional
-    patch has at most $C'L^{c'}$ tags, every additional patch and every old
-    affected hole has projector error at most $L^{-60}$ on $\Omega$, and every
-    hole of the old frame has at least one tag. Hence, under the plane
-    conditions and the counting bounds of
-    Theorem~\ref{thm:peps_guide_frame_rewrite}, the rewrite is a circuit with
-    at most one gate that is not private to one party, every participant a
-    specified party, and reference-vector error at most $(2b+1)L^{-20}$, the
-    constants $C,c$ of that theorem being $C',c'$.
+    \texttt{06-geometry.tex}, lines 109--118. For integers $C'\ge\max\{1,C\}$ and
+    $c'\ge c$, every affected hole and additional
+    patch has at most $C'L^{c'}$ tags, projector error at most $L^{-60}$ on $\Omega$, and at least one tag. Hence, under the plane
+    conditions and counting bounds of
+    Lemma~\ref{thm:peps_guide_frame_rewrite}, the rewrite is a circuit with
+    at most one nonprivate gate, participants in $S$, and reference-vector error at most $(2b+1)L^{-20}$ with constants $C',c'$.
 \end{lemma}
 
 \begin{proof}\leanok
-    The error and the tag count are those of the adaptive patches, with
-    $\max\{1,CL^c\}\le C'L^{c'}$ for $L\ge1$. A patch with empty outer sample has
-    its one identity tag. If an adaptive patch with nonempty outer sample had no
-    tag, its cylinder sum would vanish, and its error on $\Omega$ would be
-    $\lVert\Omega\rVert=1>L^{-60}$.
+    Lemma~\ref{lem:peps_adaptive_patch_supply} gives error at most $L^{-60}$ and tag count at most $\max\{1,CL^c\}\le C'L^{c'}$. A patch with empty outer sample has one identity tag; if a patch with nonempty outer sample had no
+    tag, then $\Pi=0$ and $\lVert(\id-\Pi)\Omega\rVert=\lVert\Omega\rVert=1>L^{-60}$, a contradiction.
 \end{proof}
 
-\begin{theorem}[Direct repaintings, resizes and point treatments as small-patch rewrites]
+\begin{lemma}[Direct repaintings, resizes and point treatments as small-patch rewrites]
     \label{thm:peps_guide_frame_rewrite_events}
     \lean{TNLean.PEPS.Approximation.exists_directRepainting_planeConditions,
         TNLean.PEPS.Approximation.directRepainting_step,
@@ -298,51 +265,43 @@ outer sample.
         TNLean.PEPS.Approximation.exists_pointTreatment_planeConditions}
     \leanok
     \uses{thm:peps_guide_frame_rewrite}
-    The plane conditions of Theorem~\ref{thm:peps_guide_frame_rewrite} hold in
-    the following three cases, with the patches on a square net of mesh $u$.
+    The plane conditions of Lemma~\ref{thm:peps_guide_frame_rewrite} hold in
+    the following three cases, with patches on a square net of mesh $u$:
     \begin{enumerate}
-        \item Direct repainting \cite[Section~7]{OpenAI2026PolynomialPEPS},
-              \texttt{06-geometry.tex}, lines 507--527. The two guides are the
-              readings of guides uniform on the $n$-blocks that differ only on
-              one block, with holes of radius $r$ at their true vertices and
-              $3u+4r<n$. The affected holes are those at the corners of the
-              block, and the specified parties are those of the labels of the
-              nine blocks around it.
-        \item Resize, lines 529--541. The guide is a reading of a guide
-              uniform on the $N$-blocks. Only the hole at one grid corner
-              changes, all radii are at most $R$, and $4R+3u<N$.
-        \item Local rewrite, such as a point treatment, lines 481--505. The
-              two guides agree outside a ball of radius $\rho_0$, the affected
-              holes lie within $\rho_1$ of its center and the untouched ones at
+        \item Direct repainting (\cite[Section~7]{OpenAI2026PolynomialPEPS},
+              \texttt{06-geometry.tex}, lines 507--527): $g_{\rm old},g_{\rm new}$ are
+              readings of guides uniform on $n$-blocks that differ only on
+              one block $S$, with holes of radius $r$ at their true vertices and
+              $3u+4r<n$; the affected holes lie at the four corners of $S$, and $S$ has specified parties from the nine blocks around $S$.
+        \item Resize (lines 529--541): $g_{\rm old}=g_{\rm new}$ is a reading of a guide
+              uniform on $N$-blocks, only the hole at one grid corner
+              changes, all hole radii are at most $R$, and $4R+3u<N$.
+        \item Local rewrite, such as a point treatment (lines 481--505):
+              $g_{\rm old}=g_{\rm new}$ outside a closed sup ball of radius $\rho_0$ about $Q_0$, the affected
+              holes lie within $\rho_1$ of $Q_0$ and the untouched ones at
               distance at least $\rho_2$, with
-              $\max(\rho_0,\rho_1+2r)+3u+4r<\rho_2$. For the point treatment, or its removal, of
-              a grid corner $Q_0$ of the repainting of a block, every true vertex of
-              a treated guide is within $t$ of $Q_0$ or at distance at least $n-t$
-              from it, since it is a grid corner or lies on the rim of a treated
-              square, so one may take $\rho_0=\rho_1=t$ and $\rho_2=n-t$ when
+              $\max(\rho_0,\rho_1+2r)+3u+4r<\rho_2$. For the point treatment or its removal at
+              a grid corner $Q_0$ of a repainted block of side $n$, every true vertex of
+              a treated guide lies within $t$ of $Q_0$ or at distance at least $n-t$
+              from $Q_0$, so $(\rho_0,\rho_1,\rho_2)=(t,t,n-t)$ applies whenever
               $2t+6r+3u<n$.
     \end{enumerate}
-    In each case the two-owner condition near the event, for footprints of
-    radius $2u$, is a hypothesis; for the readings it is the footprint-ratio
-    theorems of Section~\ref{sec:peps_dyadic_geometry} with $2u=\nu n$. In the
-    first case the rewrite is a circuit as in
-    Theorem~\ref{thm:peps_guide_frame_rewrite}, between the frames with holes at
-    the true vertices, whose participants lie among at most $18$ parties.
-\end{theorem}
+    In each case the two-owner condition for footprints of
+    radius $2u$ is assumed as a hypothesis (supplied for readings by Section~\ref{sec:peps_dyadic_geometry} with $2u=\nu n$). In item~1 the rewrite is a circuit as in
+    Lemma~\ref{thm:peps_guide_frame_rewrite} between the frames with holes at
+    the true vertices, involving at most $18$ parties.
+\end{lemma}
 
 \begin{proof}\leanok
-    Readings of two guides differ only in the closure of the set where the
-    guides differ, so the owner changes only on the closed block, or in the
-    closed ball of radius $\rho_0$. The net covers that set and the affected
-    outer holes. An outer patch square lies within $3u$ of the covered set,
-    while every untouched hole is at distance at least $n$, $N$ or $\rho_2$
-    from it, which gives the avoidance. The two-owner condition applies because
-    every hole center of the frame near the event is one of its centers, and a
-    point within $n$ of a closed block carries the label of one of the nine
-    blocks around it.
+    By Lemma~\ref{lem:peps_dyadic_sampled_guides}, readings of two guides differ only in the closure of the set where the
+    guides differ, so the owner changes only on the closed block $S$ or the closed ball of radius $\rho_0$. The net covers that set and the affected
+    outer holes. Each outer patch square lies within $3u$ of the covered set,
+    while every untouched hole is at distance at least $n$, $N$ or $\rho_2$, ensuring disjointness from untouched outer holes. The two-owner condition applies because
+    every hole center near the event belongs to the frame, and any
+    point within $n$ of $S$ lies in one of the nine surrounding blocks by Lemma~\ref{thm:peps_dyadic_block_index_near}.
 \end{proof}
 
-\begin{theorem}[The constants of the protocol and the separations of its steps]
+\begin{lemma}[The constants of the protocol and the separations of its steps]
     \label{thm:peps_protocol_constants}
     \lean{TNLean.PEPS.Approximation.patchRadius,
         TNLean.PEPS.Approximation.protocolPatchBound,
@@ -355,43 +314,29 @@ outer sample.
     \uses{thm:peps_guide_frame_rewrite_events, lem:peps_dyadic_small_radius,
         lem:peps_dyadic_choice_K0}
     Fix the constants in the order of~\cite[Section~7]{OpenAI2026PolynomialPEPS},
-    \texttt{06-geometry.tex}, lines 559--570: after the clearance constant $a_0$
-    of the band templates, choose $K_0\ge20$, then $\epsilon_0>0$ with
+    \texttt{06-geometry.tex}, lines 559--570: given the clearance constant $a_0$, choose $K_0\ge20$, then $\epsilon_0>0$ with
     $2\epsilon_0(a_0+1)\le a_0/2$, then $\nu>0$ with $2\epsilon_0+3\nu<1$, then
-    $0<a\le a_0/2$, then $D>0$, and finally $B_0\ge K_0D$. Any further
-    conditions of the same kind, each a largeness condition on $K_0$ or $B_0$, a
-    smallness condition on $\epsilon_0$, $\nu$ or $a$, or the existence of a
-    positive $D$ for each positive $a$, and each depending only on the earlier
-    constants, can be met in this order.
+    $0<a\le a_0/2$, then $D>0$, and finally $B_0\ge K_0D$; any further bounds on each constant depending only on earlier constants in this chain can be satisfied simultaneously.
 
-    Let $t=D\log L$ with $L\ge2$, let $r=h_n=\epsilon_0\min(n,t)$ be the hole
-    radius at scale $n$, let $u=\nu s/2$ be the inner patch radius at scale $s$,
-    so that $2u=\nu s$, and let
+    Let $t=D\log L$ with $L\ge2$, $r=h_n=\epsilon_0\min(n,t)$, $u=\nu s/2$ (so $2u=\nu s$), and
     $b=\max\bigl(18,\lceil((4+8\epsilon_0+2\nu)/\nu+1)^2\rceil\bigr)$. Then
-    the separations of Theorem~\ref{thm:peps_guide_frame_rewrite_events} hold at
-    every scale at once:
+    the separations of Lemma~\ref{thm:peps_guide_frame_rewrite_events} hold at
+    every scale:
     \begin{enumerate}
-        \item for a direct repainting at level $n>0$, with $s=n$:
+        \item for a direct repainting at level $n>0$ with $s=n$:
               $3u+4r<n$ and $(2(n/2+2r+u)/u+1)^2\le b$;
-        \item for the resize of a hole of a guide uniform on the $N$-blocks,
-              with $R=h_N$ and $s=N$: $4R+3u<N$ and $(2(2R+u)/u+1)^2\le b$;
-        \item for a point treatment at a level $n>K_0t$, with $s=t$:
+        \item for a resize on $N$-blocks with $R=h_N$ and $s=N$: $4R+3u<N$ and $(2(2R+u)/u+1)^2\le b$;
+        \item for a point treatment at level $n>K_0t$ with $s=t$:
               $2t+6r+3u<n$, $\max(t,t+2r)+3u+4r<n-t$ and
               $(2(t+2r+u)/u+1)^2\le b$;
-        \item $18\le b$, every outer hole radius $2h_n$ is at most $B_0\log L$,
-              and so is every outer patch radius $\nu s$ with $s\le K_0t$.
+        \item $18\le b$, $2h_n\le B_0\log L$, and $\nu s\le B_0\log L$ whenever $s\le K_0t$.
     \end{enumerate}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
-    The order is met by taking $K_0$ the larger of the given bound and $20$,
-    and each of $\epsilon_0$, $\nu$ and $a$ the smaller of the given bound and
-    a fixed small number. For the separations, $h_n\le\epsilon_0n$,
-    $h_n\le\epsilon_0t$, and $h_n=\epsilon_0t$ when $t\le n$. Then
-    $3u+4r\le(3\nu/2+4\epsilon_0)n<n$, and similarly for the resize. For a
-    point treatment $(2+6\epsilon_0+3\nu/2)t<20t\le K_0t<n$. Each patch count
-    is the square of a number at most $(4+8\epsilon_0+2\nu)/\nu+1$. Finally
-    $2h_n\le t\le K_0t\le B_0\log L$ and $\nu s\le K_0t$.
+    Taking $K_0,B_0$ as the maxima of the prescribed lower bounds and $\epsilon_0,\nu,a$ as the minima of the prescribed upper bounds satisfies the chain. Since $h_n\le\epsilon_0n$,
+    $h_n\le\epsilon_0t$, and $2\epsilon_0+3\nu<1$, we have
+    $3u+4r\le(3\nu/2+4\epsilon_0)n<n$ and $4R+3u\le(4\epsilon_0+3\nu/2)N<N$. For $n>K_0t\ge20t$, $(2+6\epsilon_0+3\nu/2)t<20t<n$. Each patch count is at most $((4+8\epsilon_0+2\nu)/\nu+1)^2\le b$, and $2h_n\le t\le K_0t\le B_0\log L$ as well as $\nu s\le K_0t\le B_0\log L$.
 \end{proof}
 
 \begin{lemma}[True vertices of a level guide]
@@ -400,7 +345,7 @@ outer sample.
         TNLean.PEPS.Approximation.mem_levelTrueVertices}
     \leanok
     \uses{def:peps_guide_frame}
-    Let a guide be uniform on the $n$-blocks and carry the placeholder on every
+    Let a guide be uniform on the $n$-blocks and carry the placeholder $\ast$ on every
     block outside the root square of $M\times M$ blocks. Then every true vertex
     of its reading along a small displacement is a grid corner $(na,nb)$ with
     $0\le a,b\le M+1$. The true vertices therefore form a finite set, the set of
@@ -409,9 +354,8 @@ outer sample.
 \end{lemma}
 
 \begin{proof}\leanok
-    A true vertex of the reading is a true vertex of the guide, hence a grid
-    corner. Near a grid corner outside this range the reading carries only
-    labels of blocks outside the root square, which are all the placeholder.
+    Every true vertex of the reading is a true vertex of the guide, hence a grid
+    corner $(na,nb)$. Outside $0\le a,b\le M+1$, the surrounding blocks all lie outside the root square and carry only $\ast$.
 \end{proof}
 
 \begin{lemma}[True vertices of a temporary guide]
@@ -426,40 +370,30 @@ outer sample.
         TNLean.PEPS.Approximation.isTrueVertex_reading_homogenize_iff}
     \leanok
     \uses{lem:peps_level_true_vertices}
-    Let $2t<n$, let the labels of the level be the placeholder on every block
+    Let $2t<n$, let the level labels equal $\ast$ on every block
     outside the root square of $M\times M$ blocks, and let $S$ be a block of
     the root square. Consider an unmodified guide of the repainting of $S$,
-    homogenized to one label on the open squares of radius $t$ about finitely
-    many grid corners, the marks, and its reading along a small displacement
-    (\texttt{06-geometry.tex}, lines 328--351).
+    homogenized to one label on the open squares of radius $t$ about a finite set of grid-corner marks, and its reading along a small displacement
+    (\texttt{06-geometry.tex}, lines 328--351):
     \begin{enumerate}
         \item Every true vertex of the reading is a grid corner $(na,nb)$ with
-              $0\le a,b\le M+1$ or a point of the rim pattern of a mark, which
-              has at most $52$ points. The true vertices therefore form a finite
-              set, the set of hole centers of the frame of the temporary guide.
-        \item A true vertex within $t$ of a mark is the mark or a point of its
-              rim pattern; there are at most $53$ of them.
-        \item If two sets of marks differ at most at one mark, the two readings
-              agree at every point at distance more than $t$ from it, and have
-              the same true vertices there.
+              $0\le a,b\le M+1$ or a point of the rim pattern of a mark (at most $52$ points per mark), so the true vertices form a finite set.
+        \item At most $53$ true vertices lie within $t$ of any mark $Q_0$ (namely $Q_0$ and its rim pattern).
+        \item If two mark sets differ at most at $Q_0$, their readings
+              and true vertices coincide at distance strictly greater than $t$ from $Q_0$.
     \end{enumerate}
 \end{lemma}
 
 \begin{proof}\leanok
-    By the true-vertex dichotomy for treated guides, a true vertex is a grid
-    corner or lies on the rim of a treated square, in the rim pattern of its
-    mark. Outside the $n/2$-neighbourhood of the square, an unmodified guide is
-    the starting guide or the uniform auxiliary label. Near a grid corner
-    outside the box, the starting guide carries only labels of blocks outside
-    the root square, which are the placeholder; so the homogenized guide carries
-    at most two labels there and the corner is not a true vertex. Distinct grid
-    corners are at distance at least $n$, and a rim point of another mark is at
-    distance at least $n-t>t$ from the given mark. Away from the closed square of
-    radius $t$ about the mark the two homogenized guides coincide, so their
-    readings agree near every such point.
+    By Lemma~\ref{thm:peps_dyadic_temporary_holes}, every true vertex is a grid
+    corner or lies in the rim pattern of a mark. Outside the $n/2$-neighbourhood of $S$, an unmodified guide agrees with
+    the starting guide or the uniform auxiliary label, so grid corners outside $0\le a,b\le M+1$ see only $\ast$ and the homogenizing label (at most two labels) and are not true vertices. Distinct grid
+    corners are at distance at least $n$, so any rim point of another mark lies at
+    distance at least $n-t>t$ from $Q_0$. Outside the closed square of
+    radius $t$ about $Q_0$, the two homogenized guides and hence their local readings coincide.
 \end{proof}
 
-\begin{theorem}[Resizes and point treatments as one gate]
+\begin{lemma}[Resizes and point treatments as one gate]
     \label{thm:peps_guide_frame_resize_treatment_gates}
     \lean{TNLean.PEPS.Approximation.resize_step,
         TNLean.PEPS.Approximation.RepaintingBaseline.IsUnmodifiedGuide.apply_mem,
@@ -472,54 +406,32 @@ outer sample.
         TNLean.PEPS.Approximation.pointTreatment_step}
     \leanok
     \uses{thm:peps_guide_frame_rewrite_events, lem:peps_treated_true_vertices}
-    Assume the bounds of Theorem~\ref{thm:peps_frame_small_rewrite_gate} on the
-    holes and the patches: at most $CL^c$ cylinder terms, error at most
-    $L^{-60}$ on $\Omega$ with $\lVert\Omega\rVert\le1$, and a tag for every
-    hole.
+    Assume the hole and patch bounds of Lemma~\ref{thm:peps_frame_small_rewrite_gate}: at most $CL^c$ cylinder terms, projector error at most
+    $L^{-60}$ on $\Omega$ with $\lVert\Omega\rVert\le1$, and at least one tag per hole.
     \begin{enumerate}
-        \item In the setting of the resize in
-              Theorem~\ref{thm:peps_guide_frame_rewrite_events}, with $b$ at
-              least $9$ and the number of net patches, the resize is a circuit
-              as in Theorem~\ref{thm:peps_guide_frame_rewrite} from the frame
-              with the old hole patches to the frame with the new ones, whose
-              participants lie among the parties of the labels of the nine
+        \item In item~2 of
+              Lemma~\ref{thm:peps_guide_frame_rewrite_events}, with $b\ge 9$ and $b$ at least the net patch count, the resize is a circuit
+              as in Lemma~\ref{thm:peps_guide_frame_rewrite} from the old-hole frame to the new-hole frame, with participants among the parties of the nine
               blocks around the block below and to the left of the resized
               corner.
-        \item Every value of an unmodified guide of a repainting is a value of
-              its starting guide, the old label, the final label $B$ or a
-              label across an edge. For the repainting of a block $S$ of a
-              block guide, the labels of a treated guide within $n$ of the
-              closed block $S$, and its tag holders there, are therefore $B$ or
-              labels of the nine blocks around $S$, provided the homogenizing
-              label is one of these.
-        \item In the setting of the point treatment in
-              Theorem~\ref{thm:peps_guide_frame_rewrite_events}, for a mark at a
-              corner of $S$, a homogenizing label as in the second item, and $b$
-              at least $53$ and the number of net patches, the point treatment
+        \item Every value of an unmodified guide of the repainting of a block $S$ is a starting-guide value, the old label, the final label $B$, or an edge-neighbor label; if the homogenizing label is among $B$ and the nine blocks around $S$, then all labels and tag holders of the treated guide within $n$ of $S$ lie among $B$ and those nine block labels.
+        \item In item~3 of
+              Lemma~\ref{thm:peps_guide_frame_rewrite_events}, for a mark at a
+              corner of $S$, a homogenizing label as in item~2, and $b\ge 53$ and at least the net patch count, the point treatment
               or its removal is a circuit as in
-              Theorem~\ref{thm:peps_guide_frame_rewrite}, whose participants lie
-              among the at most ten parties of $B$ and of the nine blocks around
+              Lemma~\ref{thm:peps_guide_frame_rewrite} with participants among the at most ten parties of $B$ and the nine blocks around
               $S$ (\texttt{06-geometry.tex}, lines 481--505).
     \end{enumerate}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
-    The plane conditions of Theorem~\ref{thm:peps_guide_frame_rewrite_events}
-    give the circuit of Theorem~\ref{thm:peps_guide_frame_rewrite}, between the
-    frames of the rewrite, which are the frames of the guides with holes at the
-    given centers. For the resize there is one affected hole in each frame and
-    at most nine specified parties. For a point treatment the affected holes are
-    true vertices within $t$ of the mark, at most $53$ of them by
-    Lemma~\ref{lem:peps_treated_true_vertices}. The unmodified guides are built
-    from the starting guide by band updates with normal words, whose letters
-    are the old, final and neighbouring labels, so the second item follows; a
-    point within $n$ of the closed block lies in one of the nine blocks around
-    it, and a tag holder is a label of the reading at points arbitrarily close
-    to the vertex. Since $t+2r+3u<n$, the owners within $t+2r+3u$ of the mark
-    and the tag holders within $t$ of it are specified parties.
+    Lemma~\ref{thm:peps_guide_frame_rewrite_events} verifies the plane conditions of
+    Lemma~\ref{thm:peps_guide_frame_rewrite}. A resize has one affected hole per frame and
+    at most $9$ specified parties; a point treatment has at most $53$ affected holes within $t$ of the mark by
+    Lemma~\ref{lem:peps_treated_true_vertices}. Item~2 follows from Lemma~\ref{lem:peps_dyadic_active_labels} and Lemma~\ref{thm:peps_dyadic_block_index_near}; since $t+2r+3u<n$, all owners within $t+2r+3u$ of the mark and tag holders within $t$ of it belong to the ten specified parties.
 \end{proof}
 
-\begin{theorem}[An explicit footprint ratio near a mark]
+\begin{lemma}[An explicit footprint ratio near a mark]
     \label{thm:peps_guide_frame_mark_ratio}
     \lean{TNLean.PEPS.Approximation.pointTreatmentRatio,
         TNLean.PEPS.Approximation.pointTreatmentRatio_pos,
@@ -542,11 +454,11 @@ outer sample.
     working set the closed square of radius $2$, holes of radius $\epsilon_0$
     at its true vertices within $3$, and every footprint radius at most
     $\nu_2$. Hence the ratio of
-    Theorem~\ref{thm:peps_dyadic_sampled_ratio} for the guides near a mark can
+    Lemma~\ref{thm:peps_dyadic_sampled_ratio} for the guides near a mark can
     be taken equal to $\nu_2$, in place of the minimum given by the compactness
     observation of \cite[Section~7]{OpenAI2026PolynomialPEPS}, lines 447--479
     and 481--505.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Near the mark a template is constant along the rays from the mark, and
@@ -572,7 +484,7 @@ outer sample.
     $11\nu_2<\epsilon_0$ of it, and so in its hole.
 \end{proof}
 
-\begin{theorem}[Resizes and point treatments with one footprint ratio]
+\begin{lemma}[Resizes and point treatments with one footprint ratio]
     \label{thm:peps_guide_frame_reading_gates}
     \lean{TNLean.PEPS.Approximation.resize_step_reading_of_le,
         TNLean.PEPS.Approximation.homogenize_iUnion_eq_of_notMem,
@@ -588,42 +500,42 @@ outer sample.
     is $\nu'=\min(\epsilon_0,1)/20000$. For
     every ratio $0<\nu\le\nu'$ and every generic small displacement, with
     the bounds on the holes and the patches of
-    Theorem~\ref{thm:peps_guide_frame_resize_treatment_gates} and every $b$
+    Lemma~\ref{thm:peps_guide_frame_resize_treatment_gates} and every $b$
     at least an explicit bound depending only on $\epsilon_0$ and $\nu$,
     \begin{enumerate}
         \item For $0<n<t$, the resize of the hole at a grid corner of a reading
-              of a guide uniform on the $2n$-blocks, between hole radii
-              $\epsilon_0\min(n,t)$ and $\epsilon_0\min(2n,t)$, with patches of
+              of a guide uniform on $2n$-blocks, between hole radii
+              $\epsilon_0\min(n,t)$ and $\epsilon_0\min(2n,t)$ with patches of
               radius $\nu n$, is one gate as in
-              Theorem~\ref{thm:peps_guide_frame_resize_treatment_gates}
+              Lemma~\ref{thm:peps_guide_frame_resize_treatment_gates}
               (\texttt{06-geometry.tex}, lines 529--541).
-        \item For $0<t$ and $8t<n$, the point treatment, or its removal, of a
-              corner of the repainted block, with holes of radius $\epsilon_0t$
-              at sets of true vertices of the two readings that contain those
-              within $3t$ of the mark and agree at distance at least $n-t$ from
-              it, and patches of radius $\nu t/2$, is one gate as in
-              Theorem~\ref{thm:peps_guide_frame_resize_treatment_gates}
+        \item For $0<t$ and $8t<n$, the point treatment or its removal at a
+              corner $Q_0$ of the repainted block, with holes of radius $\epsilon_0t$
+              at true-vertex sets of the two readings that contain all true vertices
+              within $3t$ of $Q_0$ and agree at distance at least $n-t$ from
+              $Q_0$, and patches of radius $\nu t/2$, is one gate as in
+              Lemma~\ref{thm:peps_guide_frame_resize_treatment_gates}
               (lines 481--505).
     \end{enumerate}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     The compactness observation gives one footprint ratio for the readings of
     block guides at every intermediate radius, and one for the readings of the
     temporary guides near a corner of the block; by
-    Theorem~\ref{thm:peps_dyadic_block_reading_ratio} the former is
+    Lemma~\ref{thm:peps_dyadic_block_reading_ratio} the former is
     $\min(\epsilon_0,1)/8$, and by
-    Theorem~\ref{thm:peps_guide_frame_mark_ratio} the latter is
+    Lemma~\ref{thm:peps_guide_frame_mark_ratio} the latter is
     $\min(\epsilon_0,1)/20000$. Near a corner that is not a
     mark, the homogenization about the marks changes nothing, since the other
     marks are at distance at least $n>8t$. Every smaller ratio, at most
     $\tfrac14$, keeps the two-owner condition and gives the separations required
-    by Theorem~\ref{thm:peps_guide_frame_resize_treatment_gates}. The number of
+    by Lemma~\ref{thm:peps_guide_frame_resize_treatment_gates}. The number of
     net patches is then bounded by a constant depending only on $\epsilon_0$
     and the ratio.
 \end{proof}
 
-\begin{theorem}[Resizes and point treatments with adaptive patches]
+\begin{lemma}[Resizes and point treatments with adaptive patches]
     \label{thm:peps_guide_frame_supplied_gates}
     \lean{TNLean.PEPS.EncodedFrame.suppliedPatch,
         TNLean.PEPS.EncodedFrame.suppliedPatch_center,
@@ -635,27 +547,24 @@ outer sample.
         TNLean.PEPS.Approximation.pointTreatment_step_supplied_of_le}
     \leanok
     \uses{thm:peps_guide_frame_reading_gates, lem:peps_guide_frame_patch_data}
-    Assume the conclusion of Proposition~4.1 at test exponent $60$ on the sheet,
-    and choose every hole patch and every net patch as the patch it provides at
-    its center and its radius, which must lie in $(0,B_0\log L]$. Let
+    Assume the adaptive patch constraint (Definition~\ref{def:peps_adaptive_patch_constraint}) at test exponent $p=60$ on the sheet,
+    and choose every hole patch and net patch as the supplied patch of Lemma~\ref{lem:peps_adaptive_patch_supply} at
+    its center and radius in $(0,B_0\log L]$. Let
     $\lVert\Omega\rVert=1$, $L\ge2$, and let $C'\ge\max(1,C)$ and $c'\ge c$ be
-    natural numbers. Then the two statements of
-    Theorem~\ref{thm:peps_guide_frame_reading_gates} hold, with the same
-    thresholds, with constants $C'$ and $c'$ and without the hypotheses on the
-    tags and the errors of the patches. For the resize, the old and the new hole
-    radii are chosen among $\epsilon_0\min(n,t)$ and $\epsilon_0\min(2n,t)$ and
+    natural numbers. Then items~1 and~2 of
+    Lemma~\ref{thm:peps_guide_frame_reading_gates} hold with the same
+    threshold $\nu'$ and constants $C',c'$, without separate hypotheses on patch tags or errors. For the resize, the old and new hole
+    radii lie in $\{\epsilon_0\min(n,t),\epsilon_0\min(2n,t)\}$ and
     agree away from the resized corner. Every monomial of these gates has at most
     $2b$ pair sources (\texttt{06-geometry.tex}, lines 109--133, 481--505 and
     529--541; \texttt{04-compression.tex}, lines 143--147).
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{lem:peps_guide_frame_patch_data, lem:peps_adaptive_patch_supply,
         thm:peps_frame_small_rewrite_gate_sources}
-    The chosen patch at a center depends only on the center and the radius, so
-    the old and new holes agree where their radii do. Each such patch has at most
-    $C'L^{c'}$ tags, error at most $L^{-60}$ on $\Omega$, and a tag. These data
-    discharge the patch hypotheses of the source-bounded reading-step results in
-    Theorem~\ref{thm:peps_frame_small_rewrite_gate_sources}. The same gates retain
-    at most $2b$ pair sources in every monomial.
+    By Lemma~\ref{lem:peps_adaptive_patch_supply}, the supplied patch at $(z,u)$ depends only on $(z,u)$, so
+    the old and new holes agree wherever their radii agree. By Lemma~\ref{lem:peps_guide_frame_patch_data}, each patch has at most
+    $C'L^{c'}$ tags, projector error at most $L^{-60}$ on $\Omega$, and at least one tag, discharging the hypotheses of
+    Lemma~\ref{thm:peps_frame_small_rewrite_gate_sources} and bounding the pair sources by $2b$.
 \end{proof}

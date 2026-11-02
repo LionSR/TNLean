@@ -7,7 +7,7 @@ uses the Bell condition on each original graph edge. Here this condition
 is derived from the regional virtual bond maps, before any
 physical injectivity assumption is imposed.
 
-\begin{theorem}[Internal endpoint consistency and label symmetry]%
+\begin{lemma}[Internal endpoint consistency and label symmetry]%
     \label{thm:peps_region_virtual_internal_bond}
     \lean{TNLean.PEPS.edgeLabelPerm,
         TNLean.PEPS.regionVertexEdgeLabelPerm,
@@ -23,7 +23,7 @@ physical injectivity assumption is imposed.
     are unchanged when the same permutation of the bond alphabet
     is applied to both labels. The assertion includes arbitrary
     boundary coefficients and vanishing bond dimensions.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Each incident-edge assignment uses one common label at the two
@@ -35,7 +35,7 @@ physical injectivity assumption is imposed.
     regional virtual map.
 \end{proof}
 
-\begin{theorem}[An internal edge satisfies every Bell slice condition]%
+\begin{lemma}[An internal edge satisfies every Bell slice condition]%
     \label{thm:peps_region_virtual_bell_slice}
     \lean{TNLean.PEPS.vertexVirtual_edgeLabelPerm_of_regionSlices,
         TNLean.PEPS.vertexVirtual_eq_zero_of_regionSlices_off_diagonal,
@@ -62,7 +62,7 @@ physical injectivity assumption is imposed.
     In particular, the assertion applies to the two-vertex region
     formed by the endpoints of $e$. No bond dimension is assumed
     positive.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Restrict a global configuration to $R$ and its complement.
@@ -74,7 +74,7 @@ physical injectivity assumption is imposed.
     constant on it is a scalar multiple of the Bell vector.
 \end{proof}
 
-\begin{theorem}[Regional virtual conditions imply all bond conditions]%
+\begin{lemma}[Regional virtual conditions imply all bond conditions]%
     \label{thm:peps_regional_virtual_conditions_bell}
     \lean{TNLean.PEPS.edgePair_mem_virtualBondGroundSpace_of_vertexVirtualParentGroundSpace}
     \leanok
@@ -86,7 +86,7 @@ physical injectivity assumption is imposed.
     If every complementary slice of $x$ on every $R_i$ belongs to
     its regional virtual bond range, then its edge-pair
     coefficient vector belongs to the common Bell-bond ground space.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     For each edge choose a region containing both endpoints and apply

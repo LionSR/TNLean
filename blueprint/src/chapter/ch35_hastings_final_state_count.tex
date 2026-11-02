@@ -10,7 +10,7 @@ being the number of ground states \cite[lines 722--730]{Hastings2006Solving}.
 The source gives no argument; the following one rests only on the gap and on
 Bessel's inequality \cite{gap:hastings05_final_state_count}.
 
-\begin{theorem}[Bessel's inequality against a projection]
+\begin{lemma}[Bessel's inequality against a projection]
     \label{thm:hastings_final_state_bessel}
     \lean{TNLean.MPS.AreaLaw.LocalSolution.inner_toEuclideanCLM_eq_inner_self,
         TNLean.MPS.AreaLaw.LocalSolution.re_inner_toEuclideanCLM_eq_norm_sq,
@@ -22,7 +22,7 @@ Bessel's inequality \cite{gap:hastings05_final_state_count}.
     \begin{align}
         \sum_{k\in S}\|P\phi_k\|^2\le\operatorname{tr}P.
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -33,7 +33,7 @@ Bessel's inequality \cite{gap:hastings05_final_state_count}.
     $\sum_k\|P\phi_k\|^2\le\sum_j\|Pe_j\|^2=\sum_jP_{jj}=\operatorname{tr}P$.
 \end{proof}
 
-\begin{theorem}[Orthonormal states of low energy]
+\begin{lemma}[Orthonormal states of low energy]
     \label{thm:hastings_final_state_count}
     \lean{TNLean.MPS.AreaLaw.LocalSolution.one_sub_mul_card_le_re_trace,
         TNLean.MPS.AreaLaw.LocalSolution.card_le_two_mul_re_trace}
@@ -52,7 +52,7 @@ Bessel's inequality \cite{gap:hastings05_final_state_count}.
     states this is the count of \cite[lines 722--730]{Hastings2006Solving},
     for final states whose energy under $H$ is within $\Delta E/2$ of the
     ground energy \cite{gap:hastings05_final_state_count}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -60,7 +60,7 @@ Bessel's inequality \cite{gap:hastings05_final_state_count}.
     For each $k$ the gap gives
     $\Delta E\,(1-\|P\phi_k\|^2)\le\theta\Delta E$, so
     $\|P\phi_k\|^2\ge1-\theta$. Summing over $k$ and applying
-    Theorem~\ref{thm:hastings_final_state_bessel} gives
+    Lemma~\ref{thm:hastings_final_state_bessel} gives
     $(1-\theta)|S|\le\operatorname{tr}P$; take $\theta=1/2$ for the second
     statement.
 \end{proof}

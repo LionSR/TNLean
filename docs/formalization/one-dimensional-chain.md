@@ -6,7 +6,11 @@ spectral gap* and *Polynomial PEPS approximation of gapped square-grid ground
 states*, following the repository note
 [`docs/notes/one_dimensional_note`](../notes/one_dimensional_note/one_dimensional_area_law_and_mps.tex)
 (Theorems A and B there). The modules live in `TNLean/MPS/AreaLaw/` and
-the blueprint chapter is `blueprint/src/chapter/ch35_one_dimensional_chain.tex`.
+the blueprint chapters are `blueprint/src/chapter/ch35_one_dimensional_preliminaries.tex`
+(chains and local Hamiltonians), `ch35_one_dimensional_open_mps.tex` (open-boundary
+matrix product states and sequential truncation), `ch35_one_dimensional_chain.tex`
+(Theorems A and B) and `ch35_one_dimensional_protocol.tex` (the second proof of
+Theorem B by the preparation protocol).
 
 The model is stated natively on the chain of `L` sites (`Fin L`), with local
 dimension `q`, supports of range `R` (nonempty sets of sites of diameter at most
@@ -15,8 +19,7 @@ off its support, and a gapped ground vector in the sense of
 `Matrix.IsGappedGroundState`. Regional entropies are QICLean's
 `Entropy.regionEntropy`. The chain proof uses only the site-generic layer
 `TNLean/Lattice/` and QICLean: no module of `TNLean/MPS/AreaLaw/` imports
-`TNLean.PEPS`, directly or transitively, which is checked by
-`TNLeanTest/MPS/AreaLaw/ChainImportBoundary.lean`. The two finite-dimensional cores (the
+`TNLean.PEPS`, directly or transitively. The two finite-dimensional cores (the
 marginal tail bound `Entropy.surprisalTail_cut_le` and the buffered discount
 `Entropy.two_mul_condEntropy_le`) are QICLean lemmas stated on an arbitrary
 finite set of sites, instantiated here on the chain. The registers of the

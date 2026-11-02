@@ -40,17 +40,29 @@ support of `B`. Its closed `l`-neighbourhood must be disjoint from that support:
 integer support separation `s ≥ 1`, take `l = s - 1`. Documented in
 `docs/paper-gaps/hastings05_filtered_term_approximation.tex`.
 
+**Scope restriction (geometric growth):** the two graph-neighbourhood commutator
+estimates use polynomial sphere growth through partial-trace localization. This is
+not a hypothesis of source lines 169–190. `LowEnergyMetricCommutator.lean` proves the
+general metric version of eq. `blecm` directly from propagation between finite supports,
+without this growth assumption. The algebraic compression and matrix-element
+inequalities in the present module are unrestricted. See
+`docs/paper-gaps/hastings05_geometric_growth_scope.tex`.
+
 The operators `W` and `B` are arbitrary operators acting on the given sets; in the source they
 are the approximations `M_i` and `M_j`, and the filter on `M_i` uses a parameter `q` chosen
 afresh (line 1551). The statements keep `q` and the splitting time `T` free. For `l > 0`,
 `T = c₁ l` and `q = c₁ l ΔE` give an analogue of the exponential decay in eq. `blecm`
 provided `c₁ > 0` and `v c₁ < 1/2`, with the localization constants used here.
 
-Not formalized here: the translation-invariant case (lines 1603–1642), the example of
-lines 1655–1676, and the summed bound `∑ᵢ o(i) ≤ O(J² / (c₁ l ΔE δλ_j))` of eq. `oibu`, which
-the source states only to order of magnitude. The basis construction for more than two ground
-states (lines 1700–1708) is only sketched in the source; the pairwise matrix-element bound
-proved here is its basic step.
+The translation argument is developed in `TranslationSupercellCommutator.lean` and
+`TranslationFiniteOrbit.lean`; the explicit example of lines 1655–1676 is in
+`LowEnergyCommutatorExample.lean`. The recursive construction of a basis in every finite
+ground-space dimension is in `LowEnergyBasisRecursive.lean`. Uniform summed bounds are
+proved under polynomial sphere growth in `LowEnergyBasisUniformGeneral.lean` and
+`LowEnergyBasisTruncatedUniform.lean`. The unrestricted assertion (oibu) is false on general
+metric lattices; the counterexample and corrected geometric scope are documented in
+`docs/paper-gaps/hastings05_tree_basis_counterexample.tex` and
+`docs/paper-gaps/hastings05_geometric_growth_scope.tex`.
 
 ## References
 

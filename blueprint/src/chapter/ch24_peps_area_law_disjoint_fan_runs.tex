@@ -1,7 +1,7 @@
 \section{Disjoint runs after radial deletion}
 \label{sec:area_law_disjoint_fan_runs}
 
-\begin{theorem}[Disjointness of distinct runs after radial deletion]
+\begin{lemma}[Disjointness of distinct runs after radial deletion]
     \label{thm:area_law_fan_cut_runs_disjoint}
     \lean{TNLean.PEPS.AreaLaw.Geometry.cellFanRunRegion_sdiff_radials_pairwise_disjoint}
     \leanok
@@ -28,7 +28,7 @@
     \end{align}
     The change set $A$ may be empty. Distinct components of the
     retained graph remain distinct runs even when their colors agree.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{def:area_law_cell_fan,def:area_law_fan_runs,
         thm:area_law_cell_fan_successor_iff,
@@ -47,20 +47,20 @@
     The endpoint-successor equivalence then makes the colors equal
     across every perimeter adjacency.
     With constant color zero, the full perimeter graph is connected
-    by Theorem~\ref{thm:area_law_fan_run_monochromatic}.
+    by Lemma~\ref{thm:area_law_fan_run_monochromatic}.
     Each of its edges is also retained under the coloring $f$.
     Thus $i$ and $j$ are connected in the retained graph, contradicting
     their membership in distinct components.
 
     Now suppose that $x\ne c$.
-    By Theorem~\ref{thm:area_law_cell_fan_intersections}, both triangles
+    By Lemma~\ref{thm:area_law_cell_fan_intersections}, both triangles
     contain $c$. Thus $P_i\cap P_j$ contains two distinct points.
     The contact classification gives either
     $b_i=a_j$ and $P_i\cap P_j=[c,b_i]$, or the reverse orientation
     $b_j=a_i$ and $P_i\cap P_j=[c,b_j]$.
     In the first case, $j=\tau(i)$.
     Since the adjacent triangles belong to distinct runs,
-    Theorem~\ref{thm:area_law_fan_run_opposite} gives $f_i\ne f_j$.
+    Lemma~\ref{thm:area_law_fan_run_opposite} gives $f_i\ne f_j$.
     Hence $i\in A$ and $x\in[c,b_i]\subset K$, a contradiction.
     In the reverse orientation, the same argument gives $j\in A$
     and $x\in[c,b_j]\subset K$.

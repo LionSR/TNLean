@@ -22,7 +22,7 @@
     \cite{gap:rmp_peps_quantum_double_g_isometry}.
 \end{definition}
 
-\begin{theorem}[The normalized interference amplitude]
+\begin{lemma}[The normalized interference amplitude]
     \label{thm:peps_regular_charge_pair_interference_overlap}
     \lean{TNLean.PEPS.regularChargePairCoefficient_braided_overlap,
         TNLean.PEPS.normalizedRegularChargePairCoefficient_braided_overlap,
@@ -38,7 +38,7 @@
     Equivalently, the overlap before normalization is
     $|G|^2\chi(k^{-1})/d$. In particular, the amplitude is independent of
     the internal parameter $p$ and common translation $x$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Fix $h$ and apply translated character orthogonality with
@@ -48,7 +48,7 @@
     each fixed-$h$ translate gives unit norm.
 \end{proof}
 
-\begin{theorem}[Action of the return projector]
+\begin{lemma}[Action of the return projector]
     \label{thm:peps_regular_charge_pair_return_projection}
     \lean{TNLean.PEPS.regularChargePairReturnProjection_conjTranspose,
         TNLean.PEPS.regularChargePairReturnProjection_mul_self,
@@ -62,7 +62,7 @@
         D^*=D,\qquad D^2=D,\qquad
         Dv_k^x=\frac{\chi(k^{-1})}{d}v.
     \]
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     The outer product is Hermitian, and $\|v\|=1$ gives idempotence.
@@ -70,7 +70,7 @@
     calculation to $w=v_k^x$.
 \end{proof}
 
-\begin{theorem}[Complete accessible measurement and return probability]
+\begin{lemma}[Complete accessible measurement and return probability]
     \label{thm:peps_regular_charge_pair_return_probability}
     \lean{TNLean.PEPS.regularChargePairReturnMeasurement_complete,
         TNLean.PEPS.regularChargePairReturnProjection_probability}
@@ -82,7 +82,7 @@
     \[
         \|Dv_k^x\|^2=\left|\frac{\chi(k)}{d}\right|^2.
     \]
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Idempotence gives $D(1-D)=(1-D)D=0$ and $(1-D)^2=1-D$.

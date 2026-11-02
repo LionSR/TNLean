@@ -1,6 +1,6 @@
 \section{Initial-exponent entropy of safe rectangle shells}
 
-\begin{theorem}[Uniform physical shell entropy at the initial exponent]
+\begin{lemma}[Uniform physical shell entropy at the initial exponent]
     \label{thm:area_law_initial_rectangle_shell_entropy}
     \lean{TNLean.PEPS.AreaLaw.exists_regionalEntropy_weak_rectangle_shell_le_rpow}
     \leanok
@@ -30,13 +30,13 @@
     independent of the safety
     parameter, domain, Hamiltonian, ground energy, ground vector, cut,
     rectangle, and shell scales.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:area_law_initial_safe_rectangle_entropy,
         thm:area_law_rectangle_shell_entropy,thm:area_law_regional_state_identities}
     With $C\ge0$ and $e_0\in(0,1)$ from
-    Theorem~\ref{thm:area_law_initial_safe_rectangle_entropy},
+    Lemma~\ref{thm:area_law_initial_safe_rectangle_entropy},
     under the hypotheses of the theorem every safe integer rectangle $P$
     satisfies
     \begin{align}
@@ -46,7 +46,7 @@
     If $L=0$, then $j=0$, the shell is empty, and both sides of the
     desired inequality vanish. If $L>0$, setting
     $K=\lfloor\log_2L\rfloor$ gives $2^K\le L<2^{K+1}$, and
-    applying Theorem~\ref{thm:area_law_rectangle_shell_entropy} with this
+    applying Lemma~\ref{thm:area_law_rectangle_shell_entropy} with this
     dyadic cap, the pointwise estimate, the normalization of $\Omega$,
     and the stated clearance conditions yields the asserted bound with
     the same $C$ and $e_0$.

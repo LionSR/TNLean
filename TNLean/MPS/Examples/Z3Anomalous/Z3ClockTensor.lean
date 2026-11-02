@@ -36,8 +36,9 @@ periodic operators, `U` is the operator `U_g` of `ω_0` for the generator `g`, t
 `∏_k CZ²_{k,k+1} Z²_k` (`mpo_clockTensor_eq_cocycle`). The operators `U_g` of `ω_0` alone form an
 exact representation; the controlled-phase circuits produce the phases `ω^N`.
 
-The symmetry is not anomalous: its Else–Nayak class is trivial. This is recorded, with the
-cohomology computation, in the verification record below and is not formalized here.
+The symmetry is not anomalous. After rescaling every site by a cube root `α` of `ω`, the
+tensors `α U` and `α² ω V` represent `ℤ₃` exactly, and the Else–Nayak class of that
+representation vanishes (`Z3Clock.clockFamily_anomalyClass_eq_zero` in `Z3ClockAnomalyClass`).
 
 ## Main definitions
 

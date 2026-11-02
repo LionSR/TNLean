@@ -342,13 +342,9 @@ theorem exists_dg_scalar_parameters (C_H M : ℝ) (hC : 0 < C_H) :
 
 end Real
 
-
-section
-
 section
 
 open Filter
-
 open scoped Topology
 
 namespace Real
@@ -408,12 +404,6 @@ theorem exists_physical_dg_scalar_parameters :
         -((ell : ℝ) - g) / 8 := by ring
     rw [harg, rpow_one] at h
     simpa only [div_mul_eq_mul_div, one_mul] using h
-end Real
-end
-
-section
-
-namespace Real
 
 /-- The physical spectral endpoints give a positive Chebyshev width within
 the joint scalar budget. The squared filter error has exactly the decay
@@ -448,11 +438,8 @@ theorem physical_chebyshev_endpoints
     _ = 4 * (exp z * exp z) := by ring
     _ = 4 * exp (z + z) := by rw [exp_add]
     _ = _ := by congr 2; dsimp only [z]; ring
-end Real
-end
-end
 
-section
+end Real
 
 namespace TNLean.MPS.AreaLaw
 
@@ -497,5 +484,7 @@ theorem collar_card_le_square_at_square_degree (q ell d n : ℕ)
       congr 1
       omega
     _ = (b ^ (22 * ell)) ^ 2 := pow_mul b (22 * ell) 2
+
 end TNLean.MPS.AreaLaw
+
 end

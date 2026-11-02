@@ -13,20 +13,20 @@
 \label{sec:ldp_overlapping_second_order}
 
 For blocks of multiplicity one and weight one whose states overlap,
-Theorem~\ref{thm:ldp_approximation_error_overlapping_corrected} bounds the error at the
+Lemma~\ref{thm:ldp_approximation_error_overlapping_corrected} bounds the error at the
 rate $e^{-\gamma q/\xi}$ with $\gamma<1$. The positive part $P$ converges to $P_\infty$
 only to first order in the overlaps of distinct blocks, but the overlaps
 $z_j=\braket{\phi_M(P_{\infty,\tilde\rho_j})}{\phi_M(P)}$ depend on $P$ only to second order
 around $P_\infty$, as in the normal case
-(Theorem~\ref{thm:ldp_positive_part_overlap_second_order}). This subsection proves the rate
+(Lemma~\ref{thm:ldp_positive_part_overlap_second_order}). This subsection proves the rate
 $e^{-2\gamma q/\xi}$ for every $0<\gamma<1$, the rate of the normal case
-(Theorem~\ref{thm:ldp_approximation_error_normal}). For the blocks of
-Theorem~\ref{thm:ldp_approximation_error_overlapping_blocks} the error is at least
+(Lemma~\ref{thm:ldp_approximation_error_normal}). For the blocks of
+Lemma~\ref{thm:ldp_approximation_error_overlapping_blocks} the error is at least
 $(9/25)^q/16$ for $M\geq3$, with $3/5$ the eigenvalue of their mixed transfer map; since
 $\lambda_2=3/5$ is admissible there, the exponent $2\gamma q/\xi$ cannot be replaced by $cq/\xi$
 with $c>2$ \cite{gap:mswc24_block_form_mixed_overlap}.
 
-\begin{theorem}[Powers of an element compressed by an idempotent]
+\begin{lemma}[Powers of an element compressed by an idempotent]
     \label{thm:ldp_idempotent_compressed_second_order}
     \lean{IsIdempotentElem.exists_norm_trace_pow_sub_one_le_sq}
     \leanok
@@ -39,14 +39,14 @@ with $c>2$ \cite{gap:mswc24_block_form_mixed_overlap}.
     \begin{align*}
         \bigl\lvert\Tr T^M-1\bigr\rvert\le C(M\delta^2)\,e^{CM\delta^2}.
     \end{align*}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     From $CM\delta^2<1$ with $C\ge4$ one gets $\delta\le1$ and $\alpha\ge3/4$. For
     $Z=\alpha^{-1}T-e$, one has $eZe=0$, $T=\alpha(e+Z)$, and
     $\lVert Z\rVert\le\alpha^{-1}(\lVert T-e\rVert+(1-\alpha)\lVert e\rVert)
         \le2(1+\lVert e\rVert)\delta$, so the blocks of $Z$ are bounded by a multiple $z$ of
-    $\delta$ with $z\le1/2$. Theorem~\ref{thm:ldp_idempotent_second_order} bounds
+    $\delta$ with $z\le1/2$. Lemma~\ref{thm:ldp_idempotent_second_order} bounds
     $\lvert\Tr(e+Z)^M-1\rvert$ by a multiple of $M\delta^2e^{cM\delta^2}$. Finally
     $\Tr T^M-1=\alpha^M(\Tr(e+Z)^M-1)+(\alpha^M-1)$, with $0\le\alpha^M\le1$ and
     $1-\alpha^M\le M(1-\alpha)\le M\delta^2$.
@@ -139,7 +139,7 @@ with $c>2$ \cite{gap:mswc24_block_form_mixed_overlap}.
     $\tilde\rho_j$ are Hermitian, at most one, and
     $1-\alpha=\tfrac12\lVert\iota(P)-\iota(P_{\infty,\tilde\rho_j})\rVert^2$. With
     $\lVert\tau-R_j\rVert\le K_3e^{-\gamma q/\xi}$ and $z_j=\Tr\tau^M$,
-    Theorem~\ref{thm:ldp_idempotent_compressed_second_order} with
+    Lemma~\ref{thm:ldp_idempotent_compressed_second_order} with
     $\delta$ a multiple of $e^{-\gamma q/\xi}$ gives the bound.
 \end{proof}
 
@@ -189,7 +189,7 @@ with $c>2$ \cite{gap:mswc24_block_form_mixed_overlap}.
 % arXiv:2307.01696 is corrected by including the correlation lengths of the
 % mixed transfer maps; scope restriction to multiplicity one and weight one;
 % docs/paper-gaps/mswc24_block_form_mixed_overlap.tex.
-\begin{theorem}[Approximation error for overlapping blocks at the second-order rate]
+\begin{lemma}[Approximation error for overlapping blocks at the second-order rate]
     \label{thm:ldp_approximation_error_overlapping_second_order}
     \lean{MPSTensor.exists_approximationError_le_overlappingBlockSum_sq,
         MPSTensor.exists_approximationError_le_mul_overlappingBlockSum_sq,
@@ -199,7 +199,7 @@ with $c>2$ \cite{gap:mswc24_block_form_mixed_overlap}.
     \uses{def:ldp_non_normal_fixed_point, lem:ldp_overlapping_overlaps,
         lem:ldp_overlapping_overlaps_second_order,
         lem:ldp_overlapping_one_block_second_order, def:correlation_length}
-    In the setting of Theorem~\ref{thm:ldp_approximation_error_overlapping_corrected}, let
+    In the setting of Lemma~\ref{thm:ldp_approximation_error_overlapping_corrected}, let
     $0<\gamma<1$. There are constants $C,C'>0$ such that for every
     block length $q$ and every $M\ge1$, with $N=qM$ and $y=Me^{-2\gamma q/\xi}$, which is
     $(N/q)e^{-2\gamma q/\xi}$ for $q\ge1$,
@@ -213,7 +213,7 @@ with $c>2$ \cite{gap:mswc24_block_form_mixed_overlap}.
     blocks of multiplicity one and weight one with $\xi_{\mathrm{diag}}$ replaced by
     $\max(\xi_{\mathrm{diag}},\xi_{\mathrm{off\text{-}diag}})$ and the exponent $\gamma q/\xi$
     sharpened to $2\gamma q/\xi$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     If $e^{-\gamma/\xi}\ge1$, if $q=0$, or if $Cy\ge1$, the bound holds because

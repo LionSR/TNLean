@@ -1,0 +1,29 @@
+\chapter{Filtered local terms of a gapped Hamiltonian}
+\label{ch:hastings_local_terms}
+
+In an earlier paper, Hastings~\cite{Hastings2006Solving} describes the ground
+states of a gapped Hamiltonian with finite-range interactions on a finite
+lattice or graph by local data. Each term $H_i$ is replaced by its
+Gaussian-filtered version, the Gaussian time average of
+$e^{iHt}H_ie^{-iHt}$, and then by an operator $M_i$ supported near the
+support of $H_i$. Every ground state is nearly an eigenvector of each $M_i$,
+and the sum of the $M_i$ approximates the Hamiltonian on the ground space.
+This chapter proves these estimates, with $M_i$ obtained either by a partial
+trace or by evolving under the terms near $H_i$ only. When the ground space
+is degenerate, the compressions of the $M_i$ to it must nearly commute. The
+remaining sections prove this for translation-invariant systems, give the
+source's example of terms whose compressions fail to commute without
+translation invariance, and prove a variational lower bound on the ground
+energy of a translation-invariant Hamiltonian.
+
+\input{chapter/ch35_hastings_local_projective_form}
+\input{chapter/ch35_hastings_metric_interaction_graph}
+\input{chapter/ch35_hastings_truncated_dynamics}
+\input{chapter/ch35_hastings_metric_localization}
+\input{chapter/ch35_hastings_zero_range}
+\input{chapter/ch35_hastings_site_symmetry}
+\input{chapter/ch35_hastings_translation_supercell}
+\input{chapter/ch35_hastings_translation_finite_orbit}
+\input{chapter/ch35_hastings_low_energy_example}
+\input{chapter/ch35_hastings_tree_sector_gap}
+\input{chapter/ch35_hastings_variational_lower_bound}

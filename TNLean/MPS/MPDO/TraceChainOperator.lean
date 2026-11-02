@@ -9,7 +9,6 @@ import Mathlib.Data.Fin.Tuple.Basic
 import Mathlib.Algebra.BigOperators.GroupWithZero.Finset
 import Mathlib.Data.Matrix.Basic
 import Mathlib.LinearAlgebra.Matrix.Trace
-import Mathlib.Tactic.Abel
 
 /-!
 # Trace contraction of a site-dependent operator chain
@@ -74,14 +73,10 @@ theorem exists_traceChainOperator_one {L q D : ℕ}
 
 end MPOTensor
 
-
 section
 
 open Matrix
-
 open scoped BigOperators Kronecker
-
-noncomputable section
 
 namespace MPOTensor
 
@@ -130,6 +125,7 @@ theorem exists_traceChainOperator_of_finite_matrix {n q : ℕ}
     (Matrix.diagonal c * (List.ofFn (fun u ↦ A u (σ u) (τ u))).prod)
   rw [hp, Matrix.diagonal_mul_diagonal, Matrix.trace_diagonal]
   simp [c, mul_ite]
+
 end MPOTensor
-end
+
 end

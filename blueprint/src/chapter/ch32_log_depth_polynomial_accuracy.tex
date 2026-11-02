@@ -1,4 +1,4 @@
-\begin{theorem}[Polynomial accuracy at a prescribed exponential rate]%
+\begin{lemma}[Polynomial accuracy at a prescribed exponential rate]%
     \label{thm:ldp_polynomial_accuracy_of_rate}
     \lean{MPSTensor.exists_approximationError_le_polynomial_of_rate}
     \leanok
@@ -22,7 +22,7 @@
     The coefficient $2\xi$ printed after Lemma~1 of~\cite{Malz2024Preparation}
     is the case $\gamma=1/2$; every coefficient larger than $\xi/2$ is
     admissible.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:ldp_approximation_error_normal}
     Since $\gamma/2<1$, the second-order estimate at rate $\gamma/2$ gives
@@ -33,7 +33,7 @@
         =C_\gamma N^{-\eta}$.
 \end{proof}
 
-\begin{theorem}[Polynomial approximation accuracy under uniform blocking]%
+\begin{lemma}[Polynomial approximation accuracy under uniform blocking]%
     \label{thm:ldp_polynomial_accuracy_uniform_blocks}
     \lean{MPSTensor.exists_approximationError_le_polynomial_of_uniformBlocks}
     \leanok
@@ -58,7 +58,7 @@
     (which also treats other chain lengths and zero correlation length),
     this establishes the uniform-blocking, positive-correlation-length case of
     the paragraph following Lemma~1 of~\cite{Malz2024Preparation}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:ldp_approximation_error_normal}
     The second-order approximation estimate at the fixed rate

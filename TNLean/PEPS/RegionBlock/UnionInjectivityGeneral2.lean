@@ -733,6 +733,26 @@ theorem ThreeBlockGeometry.regionBlockedTensorInjective_union
     rw [← e1]
   · intro h; exact absurd (Finset.mem_univ _) h
 
+/-- **Every block has an injective complement.** When all three blocks of the
+geometry are blocked-tensor injective, the complement of each block, the union of
+the other two, is blocked-tensor injective. This applies
+`regionBlockedTensorInjective_union` to the geometry and to its two cyclic
+rotations.
+
+Source: arXiv:1804.04964, Section 3, Lemma `injective_union`, lines 1324--1400 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem ThreeBlockGeometry.regionBlockedTensorInjective_compl
+    (hred : RegionBlockedTensorInjective (G := G) A g.red)
+    (hblue : RegionBlockedTensorInjective (G := G) A g.blue)
+    (hcompl : RegionBlockedTensorInjective (G := G) A g.complement)
+    (hpos : ∀ eg : Edge G, 0 < A.bondDim eg) :
+    RegionBlockedTensorInjective (G := G) A (Finset.univ \ g.red) ∧
+      RegionBlockedTensorInjective (G := G) A (Finset.univ \ g.blue) ∧
+        RegionBlockedTensorInjective (G := G) A (Finset.univ \ g.complement) :=
+  ⟨g.regionBlockedTensorInjective_union hblue hcompl hpos,
+    g.rotate.regionBlockedTensorInjective_union hcompl hred hpos,
+    g.rotate.rotate.regionBlockedTensorInjective_union hred hblue hpos⟩
+
 /-! ### The disjoint two-region union lemma
 
 Specializing the three-block geometry to `blue := S`, `complement := T`, and

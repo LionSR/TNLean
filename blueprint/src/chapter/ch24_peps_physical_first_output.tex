@@ -25,7 +25,7 @@ from this memory to $\mathcal H\otimes(\mathcal A\otimes\mathcal E)$.
     \end{align}
 \end{definition}
 
-\begin{theorem}[Preservation of gate and source occurrences]
+\begin{lemma}[Preservation of gate and source occurrences]
     \label{thm:peps_physical_first_occurrences}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sourceOrder_physicalFirstOutput}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.physicalFirstLocationsEquiv}
@@ -43,7 +43,7 @@ from this memory to $\mathcal H\otimes(\mathcal A\otimes\mathcal E)$.
     vectors of $R$. It preserves source order, each party's total number
     of participating occurrences, and the bounds on monomial counts and
     coefficient sums.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.branchLabels_physicalFirstLocationsEquiv}
@@ -68,7 +68,7 @@ from this memory to $\mathcal H\otimes(\mathcal A\otimes\mathcal E)$.
     to the full operator identity.
 \end{proof}
 
-\begin{theorem}[Finite-dimensional discarded registers]
+\begin{lemma}[Finite-dimensional discarded registers]
     \label{thm:peps_auxiliary_register_finiteness}
     \uses{thm:peps_circuit_effect_error}
     \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.finiteDimensional_auxiliary_registers}
@@ -79,7 +79,7 @@ from this memory to $\mathcal H\otimes(\mathcal A\otimes\mathcal E)$.
     finite-dimensional. If every original discarded private register is
     finite-dimensional, the same holds for every register of
     $\mathcal A\otimes\mathcal E$ and for their tensor product.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \uses{thm:peps_finite_register_memories}
@@ -99,7 +99,7 @@ from this memory to $\mathcal H\otimes(\mathcal A\otimes\mathcal E)$.
     finite-dimensional.
 \end{proof}
 
-\begin{theorem}[Physical partial trace after the exchange]
+\begin{lemma}[Physical partial trace after the exchange]
     \label{thm:peps_physical_first_trace}
     \lean{TNLean.Lattice.PartyCircuit.physicalFirstReadout_exchange_apply}
     \lean{TNLean.Lattice.PartyCircuit.physicalFirstReadout_exchange_outerProduct}
@@ -120,7 +120,7 @@ from this memory to $\mathcal H\otimes(\mathcal A\otimes\mathcal E)$.
         |z\rangle\langle z|.
         \label{eq:peps_physical_first_trace}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.physicalDensity_pure_input}
@@ -141,7 +141,7 @@ from this memory to $\mathcal H\otimes(\mathcal A\otimes\mathcal E)$.
     the composed circuit proves the final assertion.
 \end{proof}
 
-\begin{theorem}[Exact sources recover the replacement physical state]
+\begin{lemma}[Exact sources recover the replacement physical state]
     \label{thm:peps_physical_first_exact_sources}
     \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.physicalDensity_physicalFirstReplacement}
     \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.physicalSourceReplacedDensity_physicalFirstReplacement_exact}
@@ -159,12 +159,12 @@ from this memory to $\mathcal H\otimes(\mathcal A\otimes\mathcal E)$.
     $\|\rho_R-\rho_W\|_1\le\varepsilon/2$.
     The physical coordinates may be the labelled tensor coordinates with
     an arbitrary original local dimension $d_p$ at each party $p$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Exact source operators recover the output operator of the source-only
     circuit. Formula~(\ref{eq:peps_physical_first_trace}) identifies its
     physical partial trace with $\rho_R$, and applying
-    Theorem~\ref{thm:peps_source_only_density_error} at the original
+    Lemma~\ref{thm:peps_source_only_density_error} at the original
     gate-count bound $M$ gives the trace-norm bound.
 \end{proof}

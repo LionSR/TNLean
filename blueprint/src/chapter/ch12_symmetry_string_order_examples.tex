@@ -38,7 +38,7 @@ theorems.
     gauge $V=\sigma_z$ implements $u$ on the printed letters.
 \end{definition}
 
-\begin{theorem}[The AKLT physical string-order value]
+\begin{lemma}[The AKLT physical string-order value]
     \label{thm:aklt_physical_string_order_value}
     \lean{MPSTensor.twistedTransferMap_akltPGWSVC08_diagonal,
         MPSTensor.twistedTransferMap_aklt_diagonal,
@@ -64,7 +64,7 @@ theorems.
     limiting absolute value $4/9$ and a nonscalar physical unitary.
     For the representative $A$ of Definition~\ref{def:aklt_tensor}, the
     correlator takes the same value.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Diagonal insertions are invariant under the physical rephasing. Direct
     calculation gives
@@ -93,7 +93,7 @@ theorems.
     requires this normalization correction.
 \end{remark}
 
-\begin{theorem}[The cluster state with one-site physical endpoints]
+\begin{lemma}[The cluster state with one-site physical endpoints]
     \label{thm:cluster_one_site_physical_string_obstruction}
     \lean{MPSTensor.clusterTensorRMP_twistedTransferMap,
         MPSTensor.clusterTensorRMP_transferMap_one,
@@ -125,7 +125,7 @@ theorems.
     this fixed twist; as recorded in
     \path{docs/paper-gaps/pgwsvc08_string_order_virtual_boundary.tex},
     this exclusion does not quantify over other possible twists.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Every $\mathcal E_y(\Id)$ is diagonal. The twist sends $\Id$ to zero,
     $\sigma_z$ to $-\sigma_x$, and $\sigma_x$ to zero. Thus two iterations
@@ -150,7 +150,7 @@ theorems.
     two-site blocked chain the twist is $u\otimes u$.
 \end{definition}
 
-\begin{theorem}[The cluster physical string-order value]
+\begin{lemma}[The cluster physical string-order value]
     \label{thm:cluster_two_site_physical_string_order_value}
     \lean{MPSTensor.clusterBlockedRMP_twistedTransferMap_right,
         MPSTensor.clusterBlockedRMP_twistedTransferMap_left,
@@ -173,7 +173,7 @@ theorems.
     Odd middle lengths are included. The two-site blocked tensor also has
     physical string-order parameter one and satisfies the positive-limit
     projective predicate with the nonscalar unitary $u\otimes u$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:cluster_one_site_physical_string_obstruction}
     The explicit endpoint maps satisfy
@@ -239,7 +239,7 @@ theorems.
     $\langle(i\Id)^{\otimes L}\rangle_L=i^L$ whenever the periodic vector
     is nonzero. The twist $-\Id$ has no complex full-ring limit, despite
     unit magnitude on the eventual nonzero tail. By the periodic closure of
-    Theorem~\ref{thm:periodic_string_exact_phase} and the qualification of
+    Lemma~\ref{thm:periodic_string_exact_phase} and the qualification of
     display RL in~\cite{gap:pgwsvc08_string_order_virtual_boundary}, these
     phase-sensitive statements hold for the same tensor.
     \lean{MPSTensor.stringPhaseTensor_fullRing_I_eq_pow,
@@ -252,7 +252,7 @@ evaluate the full-ring observable of
 Definition~\ref{def:source_periodic_string_overlap}. The following formulas
 include the short lengths under the trace convention for the periodic vector.
 
-\begin{theorem}[Exact periodic AKLT normalization and symmetry overlap]
+\begin{lemma}[Exact periodic AKLT normalization and symmetry overlap]
     \label{thm:aklt_periodic_string_exact}
     \lean{MPSTensor.akltPGWSVC08_transferMap_pow,
         MPSTensor.akltPGWSVC08_mpvState_inner_self,
@@ -278,7 +278,7 @@ include the short lengths under the trace convention for the periodic vector.
     coefficient two, and every length at least two has positive squared norm,
     making explicit the admissible lengths for the overlap $R_L(u)=1$
     of~\cite[line~399]{PerezGarcia2008StringOrder}.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \uses{thm:aklt_physical_string_order_value, thm:periodic_string_exact_phase,
         thm:periodic_string_trace_ratio}
@@ -289,11 +289,11 @@ include the short lengths under the trace convention for the periodic vector.
     of the correction to one is at most $1/3$, so the norm is nonzero.
     Direct substitution gives $Z_0=4$ and $Z_1=0$.
     The virtual symmetry $V=\sigma_z$ has phase one, so
-    Theorem~\ref{thm:periodic_string_exact_phase} applies at all the nonzero
+    Lemma~\ref{thm:periodic_string_exact_phase} applies at all the nonzero
     lengths. At length one the normalized expectation is zero.
 \end{proof}
 
-\begin{theorem}[Exact periodic cluster normalization and symmetry overlap]
+\begin{lemma}[Exact periodic cluster normalization and symmetry overlap]
     \label{thm:cluster_periodic_string_exact}
     \lean{MPSTensor.clusterTensorRMP_mpvState_norm_sq,
         MPSTensor.clusterTensorRMP_mpvState_ne_zero,
@@ -314,7 +314,7 @@ include the short lengths under the trace convention for the periodic vector.
     At positive lengths the vector is the cyclic product of controlled-$Z$
     gates applied to $\ket+^{\otimes L}$. This convention gives $\ket-$ at
     length one and $\ket+\otimes\ket+$ at length two.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \uses{thm:cluster_one_site_physical_string_obstruction,
         thm:periodic_string_exact_phase}
@@ -322,5 +322,5 @@ include the short lengths under the trace convention for the periodic vector.
     squared modulus $2^{-L}$, and there are $2^L$ such coefficients.
     The empty product has trace two. The virtual symmetry $V=\sigma_y$
     implements $u=-\sigma_x$ with phase one, so
-    Theorem~\ref{thm:periodic_string_exact_phase} gives the overlap.
+    Lemma~\ref{thm:periodic_string_exact_phase} gives the overlap.
 \end{proof}

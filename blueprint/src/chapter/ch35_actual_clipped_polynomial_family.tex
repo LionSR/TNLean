@@ -10,6 +10,7 @@ All matrices in the later physical application are Hermitian.
     \label{thm:actual_clipped_polynomial_family}
     \lean{TNLean.MPS.AreaLaw.exists_actual_regional_clipped_polynomial_family_fin}
     \uses{def:chain_model,def:five_region_bond_partition}
+    \leanok
     Let $q\ge2$, $\ell,k\ge1$, $a+2\ell\le b$ and $b+2\ell\le L-1$.
     Let $h_i$ be supported on $\{i,i+1\}$, with no positivity assumption.
     Use the five cuts $(0,a+1,a+2\ell,b+1,b+2\ell,L)$ and their original
@@ -39,6 +40,7 @@ All matrices in the later physical application are Hermitian.
     matrix-product bond bound is asserted.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{thm:actual_two_window_alphabet_sum,thm:physical_aeval_fin_middle_family,
         thm:supported_interval_trace_chain,thm:changing_regional_family_fin}
     Each clipped bulk sum remains supported on its original region, hence

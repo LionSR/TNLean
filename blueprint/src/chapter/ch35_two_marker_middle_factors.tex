@@ -16,7 +16,7 @@ blocks and left coefficient slices
 Here $a,b\in m$ and $x,y\in n$; the right blocks are indexed by $n$
 and the left slices by $m$.
 
-\begin{theorem}[Prescribed factors from operator blocks]
+\begin{lemma}[Prescribed factors from operator blocks]
     \label{thm:two_marker_prescribed_span}
     \lean{Matrix.exists_left_factors_of_operatorBlock_mem_span,Matrix.exists_right_factors_of_left_blocks_mem_span}
     \leanok
@@ -34,7 +34,7 @@ and the left slices by $m$.
     for every $x,y\in n$, then
     $M=\sum_{\alpha\in\mathcal I}C_\alpha\otimes R_\alpha$ for suitable
     matrices $R_\alpha$ indexed by $n$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     For each $a,b$, choose coefficients $\lambda_{ab,\alpha}$ with
     $M^{\mathrm R}_{ab}=\sum_\alpha\lambda_{ab,\alpha}C_\alpha$, and set
@@ -91,7 +91,7 @@ and the left slices by $m$.
     need not commute.
 \end{definition}
 
-\begin{theorem}[Operator blocks of sums and tensor products]
+\begin{lemma}[Operator blocks of sums and tensor products]
     \label{thm:two_marker_block_identities}
     \lean{TNLean.MPS.AreaLaw.operatorBlock_sum,TNLean.MPS.AreaLaw.operatorBlock_kronecker_eq_smul}
     \leanok
@@ -104,12 +104,12 @@ and the left slices by $m$.
         \label{eq:two_marker_block_identities}
     \end{align}
     No finiteness assumption on $m$ or $n$ is required.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Both identities follow by comparing the entry indexed by $x,y\in n$.
 \end{proof}
 
-\begin{theorem}[A common prescribed middle family through a degree bound]
+\begin{lemma}[A common prescribed middle family through a degree bound]
     \label{thm:two_marker_common_middle}
     \lean{TNLean.MPS.AreaLaw.exists_sum_twoMarkerCoefficient_decomposition}
     \leanok
@@ -132,7 +132,7 @@ and the left slices by $m$.
         \label{eq:two_marker_common_middle}
     \end{align}
     The displayed middle family depends only on $A,U^M,V^M,k,i,j$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:two_marker_prescribed_span,thm:two_marker_block_identities,def:two_marker_middle_index,def:two_marker_middle_product,def:two_marker_coefficient}
     Induction on $r$ shows that every right operator block of
@@ -149,18 +149,18 @@ and the left slices by $m$.
     its degree bound. Right multiplication by $I\otimes A$ increases its final
     ordinary run. The $U$ and $V$ terms append the corresponding crossing
     letter, retaining the order in (\ref{eq:two_marker_middle_product}).
-    Theorem~\ref{thm:two_marker_prescribed_span} and
+    Lemma~\ref{thm:two_marker_prescribed_span} and
     (\ref{eq:two_marker_block_identities}) justify these span operations.
 
     If $r\le k$, the same crossing letters and run lengths define an element
     of $\mathcal I_{k,i,j}^{u,v}$ with the same ordered product. Thus all the
     right operator blocks in the left side of
     (\ref{eq:two_marker_common_middle}) belong to the span of the one displayed
-    middle family. Apply Theorem~\ref{thm:two_marker_prescribed_span} once more
+    middle family. Apply Lemma~\ref{thm:two_marker_prescribed_span} once more
     to obtain the matrices $B_{w,g}$.
 \end{proof}
 
-\begin{theorem}[Number of prescribed middle factors]
+\begin{lemma}[Number of prescribed middle factors]
     \label{thm:two_marker_middle_cardinality}
     \lean{TNLean.MPS.AreaLaw.card_twoMarkerMiddleIndex_square_le}
     \leanok
@@ -171,7 +171,7 @@ and the left slices by $m$.
         \le 2^{i+j}q^{2(i+j)}(r+1)^{i+j+1}.
         \label{eq:two_marker_middle_cardinality}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{def:two_marker_middle_index}
     There are at most $(2q^2)^{i+j}$ choices for the decorated word and

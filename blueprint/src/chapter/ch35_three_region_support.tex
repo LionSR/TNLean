@@ -10,7 +10,7 @@ means that the operator acts trivially on the sites outside $D$.
 The statements below give supporting locality algebra for
 \cite[Proposition~5.7]{Arad2016RigorousRG}.
 
-\begin{theorem}[Support of partial matrix elements]
+\begin{lemma}[Support of partial matrix elements]
     \label{thm:three_region_partial_support}
     \lean{TNLean.MPS.AreaLaw.operatorBlock_isSupportedOn_of_threeSplit_left,
         TNLean.MPS.AreaLaw.leftBlock_isSupportedOn_of_threeSplit_right}
@@ -31,7 +31,7 @@ The statements below give supporting locality algebra for
     \end{align}
     has the same support conclusion. The two fixed configurations in either
     statement need not agree outside $D$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     For $q>0$, choose one fixed configuration on the unused region.
     The displayed partial matrix element is then an entry of $P$ with that
@@ -42,7 +42,7 @@ The statements below give supporting locality algebra for
     the support assertion follows directly in both cases.
 \end{proof}
 
-\begin{theorem}[Equality from a middle identity lift]
+\begin{lemma}[Equality from a middle identity lift]
     \label{thm:three_region_middle_lift_equality}
     \lean{TNLean.MPS.AreaLaw.eq_of_threeSplit_middle_lift_eq}
     \leanok
@@ -53,7 +53,7 @@ The statements below give supporting locality algebra for
         \label{eq:three_region_middle_lift_equality}
     \end{align}
     then $W=M$. No positive-local-dimension assumption is required.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     For $q>0$, evaluate the identity at equal fixed configurations on $T$ and
     $R$. For $q=0$, a configuration on $E$ would assign an element of the empty
@@ -61,7 +61,7 @@ The statements below give supporting locality algebra for
     sets and are equal.
 \end{proof}
 
-\begin{theorem}[Canonical placement in the middle region]
+\begin{lemma}[Canonical placement in the middle region]
     \label{thm:three_region_middle_embedding}
     \lean{TNLean.MPS.AreaLaw.embedOp_subtype_val_submatrix_threeSplit}
     \leanok
@@ -72,7 +72,7 @@ The statements below give supporting locality algebra for
         \label{eq:three_region_middle_embedding}
     \end{align}
     This includes empty regions and zero local dimension.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The extension has entry $W(x,y)$ when the two configurations agree off
     $E$, and zero otherwise. In three-region coordinates, agreement off $E$
@@ -80,7 +80,7 @@ The statements below give supporting locality algebra for
     equalities give the entries of the two identity matrices.
 \end{proof}
 
-\begin{theorem}[Two-window factors with their collars]
+\begin{lemma}[Two-window factors with their collars]
     \label{thm:three_region_two_window_collars}
     \lean{TNLean.MPS.AreaLaw.exists_threeSplit_two_window_factors_with_collars}
     \leanok
@@ -131,7 +131,7 @@ The statements below give supporting locality algebra for
     \end{align}
     The three bulk operators are supplied independently; no identity with
     complementary sums of bond terms is assumed.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:chain_two_cut_edge_supports,lem:peps_frame_split_forms,
         thm:peps_supported_left_factor_rank,thm:peps_supported_right_factor_rank,
@@ -151,7 +151,7 @@ The statements below give supporting locality algebra for
     support in $C$. Monotonicity of support gives the last two assertions.
 \end{proof}
 
-\begin{theorem}[The weighted middle sum and its supported remainder]
+\begin{lemma}[The weighted middle sum and its supported remainder]
     \label{thm:three_region_weighted_middle_remainder}
     \lean{TNLean.MPS.AreaLaw.exists_weighted_ordinary_middle_eq_central_add_supported}
     \leanok
@@ -166,7 +166,7 @@ The statements below give supporting locality algebra for
         \sum_{i\in O}z_iH_i^M=z_{B_1}H^M_{B_1}+K.
         \label{eq:three_region_weighted_middle_remainder}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Take
     \begin{align}

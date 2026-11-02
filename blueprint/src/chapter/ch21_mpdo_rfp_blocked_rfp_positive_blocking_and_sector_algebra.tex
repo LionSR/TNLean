@@ -53,7 +53,7 @@ physical indices, as in
     \cite[lines~962--967]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
-\begin{theorem}[Doubled-index form of MPO blocking]
+\begin{lemma}[Doubled-index form of MPO blocking]
     \label{thm:mpdo_blocking_doubled_index}
     \lean{MPOTensor.blockedDoubledIndexEquiv}
     \lean{MPOTensor.decodeBlock_blockedDoubledIndexEquiv}
@@ -73,7 +73,7 @@ physical indices, as in
     Under this identification, the doubled-index MPS tensor of $M^{[L]}$
     is the physical reindexing of the $L$-blocked doubled-index MPS tensor
     of $M$. In particular, one is injective if and only if the other is.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Decode the blocked ket and bra words, pair their letters at each site,
@@ -82,7 +82,7 @@ physical indices, as in
     bijection preserves the span of the tensor matrices.
 \end{proof}
 
-\begin{theorem}[Blocking commutes with the MPO product]
+\begin{lemma}[Blocking commutes with the MPO product]
     \label{thm:mpdo_blocking_product}
     \lean{MPOTensor.blockTensor_mulTensor}
     \leanok
@@ -93,7 +93,7 @@ physical indices, as in
     $(MN)^{[L]}=M^{[L]}N^{[L]}$. For $L=0$, each blocked tensor is the unique
     empty-word local matrix, namely the identity, so the equality reduces to
     the product of two identity local tensors.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Expand the product tensor and sum over its length-$L$ intermediate
@@ -102,7 +102,7 @@ physical indices, as in
     is empty and all three blocked tensors are identities.
 \end{proof}
 
-\begin{theorem}[Blocked word evaluation of an MPO tensor]
+\begin{lemma}[Blocked word evaluation of an MPO tensor]
     \label{thm:mpo_eval_word_block}
     \lean{MPOTensor.evalWord_blockTensor_ofFn}
     \leanok
@@ -122,7 +122,7 @@ physical indices, as in
     This is the counterpart for MPO tensors of
     Lemma~\ref{lem:eval_word_block}, with the ket and bra words blocked
     separately.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{lem:mpo_eval_word_append}
@@ -137,7 +137,7 @@ physical indices, as in
     remaining words $\sigma',\tau'$.
 \end{proof}
 
-\begin{theorem}[Closed MPO chains under physical blocking]
+\begin{lemma}[Closed MPO chains under physical blocking]
     \label{thm:mpdo_closed_chain_physical_blocking}
     \lean{MPOTensor.mpo_blockTensor_eq_reindex}
     \lean{MPOTensor.IsMPDO.blockTensor}
@@ -164,7 +164,7 @@ physical indices, as in
     when the one-site tensor and its two-site blocking are placed in vertical
     canonical form in
     \cite[Appendix~C.4, lines~1952--2017]{Cirac2016MPDO_arXiv}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpo_eval_word_block, lem:eval_word_block}
@@ -172,7 +172,7 @@ physical indices, as in
     has concatenation $\Phi_{N,L}(\sigma)$, and similarly for $\tau$; this
     concatenation is the blocked-configuration bijection of
     Lemma~\ref{lem:eval_word_block}. By
-    Theorem~\ref{thm:mpo_eval_word_block},
+    Lemma~\ref{thm:mpo_eval_word_block},
     \begin{align}
         (M^{[L]})^{\sigma,\tau}
          & =M^{\Phi_{N,L}(\sigma),\Phi_{N,L}(\tau)}.
@@ -213,7 +213,7 @@ physical indices, as in
     the flattened blocked configurations by Lemma~\ref{lem:eval_word_block}.
     Applying word concatenation at the two boundaries
     (Lemma~\ref{lem:mpo_eval_word_append}) and then evaluating the middle
-    segment as a word of blocked matrices (Theorem~\ref{thm:mpo_eval_word_block})
+    segment as a word of blocked matrices (Lemma~\ref{thm:mpo_eval_word_block})
     gives
     \begin{align}
         M^{i^-\widetilde\sigma i^+,\,j^-\widetilde\tau j^+}
@@ -241,7 +241,7 @@ physical indices, as in
     \cite[Theorem~4.9, lines~851--856]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
-\begin{theorem}[Concrete two-site blocking as length-two blocking]
+\begin{lemma}[Concrete two-site blocking as length-two blocking]
     \label{thm:mpdo_block_two_as_positive_blocking}
     \lean{MPOTensor.blockTwo_eq_blockTensor_reindex}
     \lean{MPOTensor.mpo_blockTwo_eq_reindex_blockTensor}
@@ -257,7 +257,7 @@ physical indices, as in
     applying $\varphi$ independently at every ket and bra site. In
     particular, if $K$ generates matrix product density operators, then so
     does $K^{[2]}$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Decode a blocked index as an ordered pair. The two local tensors are
@@ -266,7 +266,7 @@ physical indices, as in
     column reindexing preserves positive semidefiniteness.
 \end{proof}
 
-\begin{theorem}[MPO blocking preserves CPSV doubled-index form]
+\begin{lemma}[MPO blocking preserves CPSV doubled-index form]
     \label{thm:mpdo_literal_cpsv_positive_blocking}
     \lean{MPOTensor.IsCPSVCanonicalForm_toMPSTensor_blockTensor}
     \lean{MPOTensor.IsCPSVCanonicalForm_toMPSTensor_blockTwo}
@@ -277,7 +277,7 @@ physical indices, as in
     doubled-index MPS tensor associated to $M^{[L]}$ is again in CPSV
     canonical form. The same conclusion holds for the concrete two-site
     blocking $M^{[2]}$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:mpdo_physical_blocking, def:mpdo_two_site_blocking, thm:mpdo_blocking_doubled_index, thm:mpdo_block_two_as_positive_blocking, thm:cpsv_physical_reindexing, thm:cpsv_literal_canonical_form_positive_blocking}
@@ -288,16 +288,16 @@ physical indices, as in
          & =\psi_L^*(A_M^{[L]}).
         \label{eq:mpdo_cpsv_block_tensor_reindex}
     \end{align}
-    Theorem~\ref{thm:cpsv_literal_canonical_form_positive_blocking} gives
+    Lemma~\ref{thm:cpsv_literal_canonical_form_positive_blocking} gives
     CPSV canonical form for $A_M^{[L]}$, and
-    Theorem~\ref{thm:cpsv_physical_reindexing} carries it across
+    Lemma~\ref{thm:cpsv_physical_reindexing} carries it across
     $\psi_L$. For two-site blocking one takes $L=2$ and uses the concrete
-    identification of Theorem~\ref{thm:mpdo_block_two_as_positive_blocking}.
+    identification of Lemma~\ref{thm:mpdo_block_two_as_positive_blocking}.
 \end{proof}
 
 % This is the vertical-decomposition input to Appendix C.4, not the later
 % positive-fusion or Gibbs conclusion.
-\begin{theorem}[Vertical decomposition from grouped sectors]
+\begin{lemma}[Vertical decomposition from grouped sectors]
     \label{thm:mpdo_literal_cpsv_vertical_decomposition}
     \lean{MPOTensor.HasVerticalBNTGroupingInputs.exists_cpsvVerticalDecomposition}
     \leanok
@@ -325,7 +325,7 @@ physical indices, as in
         \widetilde M_v           & =U^\dagger B_vU.
         \label{eq:mpdo_literal_cpsv_vertical_decomposition}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:normalized_grouped_sector_maps_of_dressing, lem:same_mpv_exact_isometric_decomposition}
@@ -342,7 +342,7 @@ physical indices, as in
 
 For a matrix product density operator, either CPSV canonical form
 or normalized BNT-refined horizontal form gives both hypotheses of
-Theorem~\ref{thm:mpdo_literal_cpsv_vertical_decomposition}.
+Lemma~\ref{thm:mpdo_literal_cpsv_vertical_decomposition}.
 Each canonical form and positivity are preserved by two-site blocking.
 Applying the theorem to $M$ and $M^{[2]}$ therefore gives their vertical
 decompositions simultaneously.
@@ -375,7 +375,7 @@ decompositions simultaneously.
     normalized BNT-refined horizontal form for $K^{[2]}$.
 \end{proof}
 
-\begin{theorem}[One-site and two-site vertical canonical forms]
+\begin{lemma}[One-site and two-site vertical canonical forms]
     \label{thm:mpdo_vertical_cf_before_after_block_two}
     \lean{MPOTensor.verticalCF_and_blockTwo_of_horizontalCF}
     \leanok
@@ -387,13 +387,13 @@ decompositions simultaneously.
     Definition~\ref{def:vertical_cf_mpdo}.
     This is the initial canonical-form step in
     \cite[Appendix~C.4, lines~1951--1956]{Cirac2016MPDO_arXiv}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
-    By Theorem~\ref{thm:mpdo_block_two_as_positive_blocking} and
+    By Lemma~\ref{thm:mpdo_block_two_as_positive_blocking} and
     Lemma~\ref{lem:mpdo_horizontal_cf_block_two}, $K^{[2]}$ is in normalized
     BNT-refined horizontal form and generates matrix product density operators. Apply
-    Theorem~\ref{thm:vertical_cf_of_horizontal_cf} first to $K$ and then to
+    Lemma~\ref{thm:vertical_cf_of_horizontal_cf} first to $K$ and then to
     $K^{[2]}$.
 \end{proof}
 
@@ -433,7 +433,7 @@ decompositions simultaneously.
     \cite[Appendix~C.4, lines~1957--1971]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
-\begin{theorem}[Complete positivity of the normalized vertical-sector maps]
+\begin{lemma}[Complete positivity of the normalized vertical-sector maps]
     \label{thm:mpdo_vertical_sector_partial_trace_kraus}
     \lean{MPOTensor.verticalSectorSwapEquiv}
     \lean{MPOTensor.normalizedVerticalSectorEmbedding_isKrausDirectSumMap}
@@ -464,7 +464,7 @@ decompositions simultaneously.
     is a direct-sum Kraus map. Its restriction to the weighted sectors is
     the retraction in
     \cite[Appendix~C.4, lines~1961--1970]{Cirac2016MPDO_arXiv}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
 
@@ -647,7 +647,7 @@ decompositions simultaneously.
     $C_L(V_c)=\prod_\alpha M_{d_\alpha}$.
 \end{lemma}
 
-\begin{theorem}[Nonzero-weight vertical bond contractions generate the sector algebra]
+\begin{lemma}[Nonzero-weight vertical bond contractions generate the sector algebra]
     \label{thm:mpdo_nonzero_weight_vertical_bond_contractions_generate_sector_algebra}
     \lean{MPOTensor.%
         exists_positive_weightedVerticalBondContractionProductSpanTop_of_bnt}
@@ -657,7 +657,7 @@ decompositions simultaneously.
     $(c_\alpha)_\alpha$ is any family of nonzero complex scalars. Then there
     is a positive integer $L$ such that
     $C_L(V_c)=\prod_\alpha M_{d_\alpha}$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{lem:mpdo_weighted_contraction_span_transfer, thm:cpsv_bnt_blocked_simultaneous_span}
@@ -668,7 +668,7 @@ decompositions simultaneously.
     full sector algebra.
 \end{proof}
 
-\begin{theorem}[Vertical bond contractions generate the sector algebra]
+\begin{lemma}[Vertical bond contractions generate the sector algebra]
     \label{thm:mpdo_vertical_bond_contractions_generate_sector_algebra}
     \lean{MPOTensor.%
         exists_positive_verticalMultiplicityTraceBondContractionProductSpanTop_of_bnt}
@@ -680,7 +680,7 @@ decompositions simultaneously.
     \cite[Appendix~C.4, lines~1980--1990]{Cirac2016MPDO_arXiv}, there is a
     positive integer $L$ such that
     $C_L(V_m)=\prod_\alpha M_{d_\alpha}=:\mathcal A_1$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{lem:mpdo_vertical_sector_retraction, thm:mpdo_nonzero_weight_vertical_bond_contractions_generate_sector_algebra}
@@ -689,11 +689,11 @@ decompositions simultaneously.
     $m_\alpha
         =\sum_{q=0}^{\mult(\alpha)-1}\mu_{\alpha,q}>0$,
     so applying
-    Theorem~\ref{thm:mpdo_nonzero_weight_vertical_bond_contractions_generate_sector_algebra}
+    Lemma~\ref{thm:mpdo_nonzero_weight_vertical_bond_contractions_generate_sector_algebra}
     to the nonzero family $c_\alpha=m_\alpha=\tr(\mu_\alpha)$ gives the result.
 \end{proof}
 
-\begin{theorem}[Fixed spanning contraction products determine an endomorphism]
+\begin{lemma}[Fixed spanning contraction products determine an endomorphism]
     \label{thm:mpdo_fixed_spanning_vertical_contraction_products}
     \lean{MPOTensor.eq_id_of_weightedVerticalBondContractionProducts_fixed}
     \leanok
@@ -708,7 +708,7 @@ decompositions simultaneously.
         \notag
     \end{align}
     Then $F$ is the identity.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Since the displayed products span the domain, every
@@ -742,7 +742,7 @@ decompositions simultaneously.
     \end{align}
 \end{definition}
 
-\begin{theorem}[Density blocks of a faithful fixed family bound products]
+\begin{lemma}[Density blocks of a faithful fixed family bound products]
     \label{thm:mpdo_density_blocks_fixed_point_product_dimension}
     \lean{MPOTensor.fixedPointProductSpan_finrank_le_of_densityBlocks}
     \leanok
@@ -760,7 +760,7 @@ decompositions simultaneously.
     % \cite[Appendix~C.4, lines~1980--1995]{Cirac2016MPDO_arXiv} after such a
     % family is obtained.  See
     % docs/paper-gaps/cpsv16_vertical_sector_invertibility.tex.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
 
@@ -798,7 +798,7 @@ decompositions simultaneously.
     \end{align}
 \end{proof}
 
-\begin{theorem}[Fixed contractions and the dimension of their fixed-point space]
+\begin{lemma}[Fixed contractions and the dimension of their fixed-point space]
     \label{thm:mpdo_fixed_contractions_product_dimension}
     \lean{MPOTensor.%
         eq_id_of_weightedVerticalBondContractions_fixed_of_productSpan_finrank_le}
@@ -824,7 +824,7 @@ decompositions simultaneously.
     assume that the products $V_c(X_1)\cdots V_c(X_L)$ are fixed.
     % The displayed dimension inequality is the remaining consequence of the
     % density-weighted fixed-point theorem for the transported maps.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Since every $V_c(X)$ belongs to $\mathcal F$, every product occurring in
@@ -843,7 +843,7 @@ decompositions simultaneously.
     Thus $\mathcal F=\mathcal A$, and $F$ is the identity.
 \end{proof}
 
-\begin{theorem}[Faithful fixed family in a finite product]
+\begin{lemma}[Faithful fixed family in a finite product]
     \label{thm:mpdo_direct_sum_faithful_fixed_family}
     \lean{Matrix.IsPositiveDirectSumMap.%
         exists_posDef_fixedFamily_of_fixed_product_span}
@@ -861,14 +861,14 @@ decompositions simultaneously.
     \cite[Appendix~C.4, lines~1980--1993]{Cirac2016MPDO_arXiv}, there is a
     fixed family $\rho=(\rho_\alpha)_\alpha$ such that every $\rho_\alpha$
     is positive definite.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Extending $F$ to the full matrix algebra by diagonal compression followed
     by block-diagonal embedding yields a positive trace-preserving map. Since
     block-diagonal embedding preserves the identity and every product
     $V_{j_1}\cdots V_{j_L}$,
-    Theorem~\ref{thm:positive_map_faithful_fixed_point_from_product_span}
+    Lemma~\ref{thm:positive_map_faithful_fixed_point_from_product_span}
     gives a positive-definite fixed point $\widehat\rho$ of the extension.
     Fixed points of the extension are block diagonal. Thus
     \begin{align}
@@ -883,7 +883,7 @@ decompositions simultaneously.
     $\widehat\rho$ is positive definite.
 \end{proof}
 
-\begin{theorem}[Identity criterion from fixed contractions]
+\begin{lemma}[Identity criterion from fixed contractions]
     \label{thm:mpdo_fixed_contractions_trace_adjoint_schwarz_identity}
     \lean{MPOTensor.%
         eq_id_of_weightedVerticalBondContractions_fixed_of_traceAdjointSchwarz}
@@ -897,15 +897,15 @@ decompositions simultaneously.
     \cite[Appendix~C.4, lines~1980--1995]{Cirac2016MPDO_arXiv}, this forces
     $F=\id_{\mathcal A}$ without assuming that any product
     $V_c(X_1)\cdots V_c(X_L)$ is fixed.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     The fixed contractions and their positive-length product span give a
     positive-definite fixed family $\rho=(\rho_\alpha)_\alpha$. Hence
-    Theorem~\ref{thm:mpdo_density_blocks_fixed_point_product_dimension}
+    Lemma~\ref{thm:mpdo_density_blocks_fixed_point_product_dimension}
     gives
     $\dim C_L(\mathcal F)\leq\dim\mathcal F$, where
     $\mathcal F=\Fix(F)$.
     Since $C_L(V_c)=\mathcal A$ and $V_c(X)\in\mathcal F$,
-    Theorem~\ref{thm:mpdo_fixed_contractions_product_dimension} gives $F=\id_{\mathcal A}$.
+    Lemma~\ref{thm:mpdo_fixed_contractions_product_dimension} gives $F=\id_{\mathcal A}$.
 \end{proof}
