@@ -578,7 +578,8 @@
         "thm:alvv_ff_chain_replacement",
         "thm:alvv_ff_corrected_rank",
         "thm:fixed_bandwidth_low_energy_family",
-        "thm:interval_low_energy_family"
+        "thm:interval_low_energy_family",
+        "thm:physical_low_density_minimum_dimension"
       ],
       "corollaries": [
         "cor:canonical_low_energy_family"
@@ -587,7 +588,8 @@
         "thm:alvv_ff_chain_replacement": "ALVV Theorem 5.14 with the corrected rank bound: regional replacement of a frustration-free chain",
         "thm:alvv_ff_corrected_rank": "Corrected regional rank bound d^2+3, replacing the false unrestricted claim of ALVV Theorem 5.14(2)",
         "thm:fixed_bandwidth_low_energy_family": "Actual buffered low-energy improving family with one common count and suppression bound, without a global spectral gap",
-        "thm:interval_low_energy_family": "One actual low-energy improving family on every prescribed interval, with canonical original targets and a common count-suppression envelope"
+        "thm:interval_low_energy_family": "One actual low-energy improving family on every prescribed interval, with canonical original targets and a common count-suppression envelope",
+        "thm:physical_low_density_minimum_dimension": "Actual original-window viable space on every interval from attained minima and calibrated nested sampling, with a fixed-bandwidth natural count bound"
       }
     },
     "ch:peps_ft": {

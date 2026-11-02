@@ -11573,3 +11573,16 @@ removed after the dependency audit exposed it.
 - **Decision:** No duplicated matrix-eigenbasis argument, viable-subspace
   predicate or supplied partition is introduced. Configuration matrix units
   handle short regions; zero extension preserves each actual image span.
+
+### Halving a dyadic width — candidate (2026-11-02)
+
+- **Seen:** The companion dyadic minimum argument and the physical
+  low-density minimum theorem both use `pow_succ` and the field identity
+  to rewrite `v / (6 * 2^(j+1))` as `(v / (6 * 2^j)) / 2`.
+- **Reuse:** Keep the ordinary power and division lemmas; a new tactic
+  is unnecessary. If a third independent consumer needs a named width
+  identity, promote the weakest shared scalar lemma in the companion
+  library and replace these two local calculations.
+- **Related promotion:** The spectral cutoff-order proof is already
+  shared as `Submodule.spectralSpanLE_mono_cutoff`; the physical proof
+  imports the thin companion order module instead of copying that proof.
