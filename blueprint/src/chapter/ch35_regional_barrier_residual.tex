@@ -1,0 +1,62 @@
+\section{Regional residuals with a commuting interior}
+\label{sec:regional_barrier_residual}
+
+The following two lemmas allow the interior Hamiltonian to contain
+functions of other regional Hamiltonians. Only the boundary interactions
+remain nearest-neighbour terms. The projection threshold and its lower
+energy bound are kept distinct.
+
+\begin{lemma}[A hard residual above a projection threshold]
+    \label{lem:regional_barrier_hard_residual}
+    \lean{TNLean.MPS.AreaLaw.norm_hard_residual_low_of_barrier}
+    \leanok
+    Let $I,J$ be finite sets of bonds of an $L$-site qudit chain, and
+    let $0\leq h_i\leq I$ be supported on their designated neighbouring
+    sites. Put $A=\sum_{i\in I}h_i$, $Y=\sum_{i\in J}h_i$ and $C=|J|$.
+    Let $B$ commute with $A$, and suppose that
+    $b\mathbf1_{[c,\infty)}(A)\leq B$.
+    Fix an orthonormal eigenbasis of $B+Y$ with real eigenvalues, and
+    let $V_E$ be its spectral span below $E$. If $0<s\leq1/8$,
+    $c\leq K$ and $2C<b-E$, then
+    \begin{align}
+        \|(A-\min(A,K))|_{V_E}\|
+        \leq \frac{e^{-s(K-c)-1}}{s}\frac{2C}{b-E-2C}.
+    \end{align}
+\end{lemma}
+\begin{proof}\leanok
+    Apply the weighted restriction estimate to the same $A,B,Y$,
+    with parameters $r=c-b$ and $u=b$; thus $r+u=c$.
+    The conjugation estimate uses only the original bonds in $I\cup J$.
+    Factoring the hard excess above $K$ through the resulting weighted
+    restriction gives the displayed bound. The weighted Sylvester
+    estimate is developed in
+    \cite[``Restricted weighted Sylvester equation'']{QICLean2026Blueprint}.
+\end{proof}
+
+\begin{lemma}[A soft residual with the same interior]
+    \label{lem:regional_barrier_soft_residual}
+    \lean{TNLean.MPS.AreaLaw.norm_soft_residual_low_of_barrier}
+    \leanok
+    \uses{lem:regional_barrier_hard_residual}
+    Retain the preceding hypotheses on $A,B,Y,c,b,E,s$.
+    Suppose that $pI\leq A$, $t>0$, $m\geq1$, $T\geq0$ and
+    $c\leq p+T$. For the soft function $h_{m,t}$,
+    \begin{align}
+        \|(A-pI-h_{m,t}(A-pI))|_{V_E}\|
+        \leq \frac{e^{-s(p+T-c)-1}}{s}\frac{2C}{b-E-2C}
+          +\frac{t}{m}\left(\frac{T}{t}\right)^m.
+    \end{align}
+\end{lemma}
+\begin{proof}\leanok
+    The positive matrix $X=A-pI$ obeys the soft--hard restricted-norm
+    comparison with error $(t/m)(T/t)^m$. The scalar shift identity gives
+    $X-\min(X,T)=A-\min(A,p+T)$. Apply
+    Lemma~\ref{lem:regional_barrier_hard_residual} at $K=p+T$.
+\end{proof}
+
+These are conditional auxiliary estimates for the regional soft
+truncation argument in
+\cite[lines 1195--1255 and 1373--1392]{Arad2016RigorousRG}.
+Their physical applications must derive the common interior,
+commutation, projection lower bound and denominator from the original
+Hamiltonian. No spectral gap is required here.

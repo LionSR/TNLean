@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.ALVV.SoftTruncationOriginalResidual
+import TNLean.MPS.AreaLaw.RegionalBarrierResidual
 import QICLean.Analysis.SoftTruncationHighProjection
 
 /-!
@@ -103,44 +104,6 @@ private theorem three_region_soft_order {L q l r : ℕ} (hlr : l ≤ r) (hrL : r
     exact (le_add_of_nonneg_left (he 0).nonneg).trans
       (le_add_of_nonneg_right (he 2).nonneg)
   exact hproj.trans hfB
-
-/-- A high-projection floor can differ from its energy threshold in the existing weighted
-restriction argument. The boundary forcing is still derived from the original bonds.
-Auxiliary to ALVV, arXiv:1602.08828v2, `lem:exp-approx`, lines 1195–1255. -/
-private theorem norm_hard_residual_low_of_barrier
-    {L q : ℕ} (I J : Finset (Fin (L - 1)))
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i ∈ I ∪ J, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
-      (h i) (interval L i.val (i.val + 2)))
-    (h0 : ∀ i ∈ I ∪ J, 0 ≤ h i) (h1 : ∀ i ∈ I ∪ J, h i ≤ 1)
-    (B : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (c b0 energy s cut : ℝ) (hs0 : 0 < s) (hs1 : s ≤ 1 / 8) (hcut : c ≤ cut)
-    (hBA : Commute B (∑ i ∈ I, h i))
-    (hproj : b0 • spectralProjectionGE (∑ i ∈ I, h i) c ≤ B)
-    (basis : OrthonormalBasis (Fin L → Fin q) ℂ (EuclideanSpace ℂ (Fin L → Fin q)))
-    (a : (Fin L → Fin q) → ℝ)
-    (hEigen : ∀ v, toEuclideanCLM (n := Fin L → Fin q) (𝕜 := ℂ)
-      (B + ∑ i ∈ J, h i) (basis v) = (a v : ℂ) • basis v)
-    (hgap : 2 * (J.card : ℝ) < b0 - energy) :
-    let A := ∑ i ∈ I, h i
-    let S := Submodule.spectralSpanLE basis a energy
-    ‖(toEuclideanCLM (n := Fin L → Fin q) (𝕜 := ℂ)
-      (A - energyTruncation A cut)).domRestrict S‖ ≤
-      (Real.exp (-s * (cut - c) - 1) / s) *
-        ((2 * (J.card : ℝ)) / (b0 - energy - 2 * (J.card : ℝ))) := by
-  intro A S
-  have hproj' : b0 • spectralProjectionGE A ((c - b0) + b0) ≤ B := by
-    simpa only [sub_add_cancel] using hproj
-  obtain ⟨Z, hZ, hZn⟩ := exists_nearestNeighbour_weighted_low_restriction
-    I J h hs h0 h1 B (c - b0) b0 energy s hs0 hs1 hBA hproj' basis a hEigen hgap
-  have hA : A.IsHermitian :=
-    (isSelfAdjoint_sum I fun i hi ↦
-      IsSelfAdjoint.of_nonneg (h0 i (Finset.mem_union_left J hi))).isHermitian
-  have hcut' : (c - b0) + b0 ≤ cut := by simpa only [sub_add_cancel] using hcut
-  have htail := hA.norm_excess_domRestrict_le_actual_weighted_map
-    s cut ((c - b0) + b0) hs0 hcut' Z hZ
-  have hfinal := htail.trans (mul_le_mul_of_nonneg_left hZn (by positivity))
-  simpa only [sub_add_cancel, energyTruncation] using hfinal
 
 /-- The actual two-boundary budget and a derived denominator at least two give the
 sixteen-unit exponential coefficient. Auxiliary to ALVV, arXiv:1602.08828v2,

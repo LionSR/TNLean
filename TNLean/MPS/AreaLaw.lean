@@ -147,6 +147,7 @@ import TNLean.MPS.AreaLaw.ProtocolTerminalWord
 import TNLean.MPS.AreaLaw.ProtocolUniformPreparation
 import TNLean.MPS.AreaLaw.RangeOneCut
 import TNLean.MPS.AreaLaw.RangeOneSupport
+import TNLean.MPS.AreaLaw.RegionalBarrierResidual
 import TNLean.MPS.AreaLaw.RegionalLowDensityFamily
 import TNLean.MPS.AreaLaw.RegionalMiddleFactors
 import TNLean.MPS.AreaLaw.RegionalSoftSpectralApproximation
