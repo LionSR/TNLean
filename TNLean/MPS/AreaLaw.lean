@@ -52,6 +52,7 @@ import TNLean.MPS.AreaLaw.FiveRegionHamiltonian
 import TNLean.MPS.AreaLaw.FiveRegionTruncationResidual
 import TNLean.MPS.AreaLaw.FixedBandwidthLowEnergyFamily
 import TNLean.MPS.AreaLaw.FixedConfigurationExtension
+import TNLean.MPS.AreaLaw.FullIntervalFilterTrimming
 import TNLean.MPS.AreaLaw.FullIntervalMPS
 import TNLean.MPS.AreaLaw.FullIntervalViability
 import TNLean.MPS.AreaLaw.GluingHamiltonian
@@ -69,6 +70,7 @@ import TNLean.MPS.AreaLaw.IntervalCollectiveTrimming
 import TNLean.MPS.AreaLaw.IntervalGenerators
 import TNLean.MPS.AreaLaw.IntervalMPOTransfer
 import TNLean.MPS.AreaLaw.IntervalNeighborhoodEntropy
+import TNLean.MPS.AreaLaw.IntervalReferenceTrimming
 import TNLean.MPS.AreaLaw.IntervalSampledImage
 import TNLean.MPS.AreaLaw.IntervalSamplingTree
 import TNLean.MPS.AreaLaw.IntervalSlice

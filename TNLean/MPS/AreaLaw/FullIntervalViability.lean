@@ -68,7 +68,13 @@ private theorem fullInterval_slice_regionConfigurationSplit {L q : ℕ}
     (mem_interval.mpr ⟨Nat.zero_le _, v.isLt⟩)]
   rfl
 
-private theorem map_nativeFullIntervalSpace_regionConfigurationSplit {L q : ℕ}
+/-- The full-interval coefficient isometry identifies the actual native
+subspace with its interval/exterior extension in the original configuration
+coordinates. The full interval has empty exterior. Supporting ALVV,
+arXiv:1602.08828v2,
+Definition `d:vs`, lines 433–440, and the final step of Figure `fig:algo1`,
+lines 1634–1643. -/
+theorem map_nativeFullIntervalSpace_regionConfigurationSplit {L q : ℕ}
     (S : Submodule ℂ (EuclideanSpace ℂ (interval L 0 L → Fin q))) :
     (nativeFullIntervalSpace L q S).map
       (Entropy.regionConfigurationSplit q (interval L 0 L)).toLinearEquiv.toLinearMap =

@@ -501,6 +501,7 @@
     \lean{TNLean.MPS.AreaLaw.fullIntervalEquiv,
         TNLean.MPS.AreaLaw.fullIntervalEquiv_apply,
         TNLean.MPS.AreaLaw.nativeFullIntervalSpace,
+        TNLean.MPS.AreaLaw.map_nativeFullIntervalSpace_regionConfigurationSplit,
         TNLean.MPS.AreaLaw.isViable_fullInterval_iff_isCloseTo}
     \leanok
     Let $S$ be a subspace on $[0,L)$ and $G$ a subspace of the original
@@ -562,3 +563,72 @@ counterexample. The corrected normalized error, trimming budgets and
 variational trial-space comparison are recorded in
 \cite{gap:alvv16_final_filter_gain}. Their composition with the actual
 recursive root remains a separate step.
+
+\begin{lemma}[A weighted reference bound for the actual interval trim]
+\label{lem:alvv-interval-reference-weighted}
+\lean{TNLean.MPS.AreaLaw.schmidtRank_cutEnvVector_interval_reference_le,
+    TNLean.MPS.AreaLaw.isCloseTo_prodExt_intervalTrimSubspace_of_reference_weighted}
+\leanok
+Let $G$ and $U$ be subspaces of the full-chain Hilbert space that are mutually
+$\varepsilon$-close. Suppose every vector of $U$ has an open-boundary matrix
+product representation of bond dimension at most $D\geq 1$. Let $S$ be a
+$\delta$-viable subspace on an interval $[p,r)$, and let $S'$ be its actual
+collective trim at threshold $\xi>0$. For every $\theta>0$, the subspace $S'$
+is viable for the same global target with error at most
+\[
+ (1+\theta)\bigl((1+\theta)\delta+(1+\theta^{-1})\varepsilon
+       +2\xi\sqrt{\max\{r-p-1,0\}D^2}\bigr)
+       +(1+\theta^{-1})\varepsilon.
+\]
+The whole exterior of the interval is retained; the reference rank is $D^2$.
+\end{lemma}
+\begin{proof}\leanok
+\uses{thm:interval_trimming_reference}
+Use the interval/exterior coefficient isometry. A whole-chain matrix product
+vector has Schmidt rank at most $D^2$ across each internal interval cut
+with the exterior retained. Apply the weighted reference estimate for the
+actual collective trimming projections.
+\end{proof}
+
+\begin{lemma}[One actual filter and trim at the native root]
+\label{lem:alvv-native-root-filter-trim}
+\lean{TNLean.MPS.AreaLaw.fullIntervalFilter,
+    TNLean.MPS.AreaLaw.fullIntervalFilter_apply,
+    TNLean.MPS.AreaLaw.fullIntervalFilterTrimStep,
+    TNLean.MPS.AreaLaw.finrank_fullIntervalFilterTrimStep_le,
+    TNLean.MPS.AreaLaw.isIntervalSpanWithRankBound_fullIntervalFilterTrimStep,
+    TNLean.MPS.AreaLaw.isCloseTo_nativeFullIntervalSpace_filterTrimStep}
+\leanok
+Let $S$ be a subspace on the full interval and suppose its native image is
+$\delta$-close to a target $G$, where $0\leq\delta\leq\tfrac12$.
+Let $K$ preserve $G$ and $G^\perp$, satisfy $\|Kx\|\geq\|x\|$ on $G$, and
+satisfy $\|Kx\|^2\leq(1-c)\|x\|^2$ on $G^\perp$, where $0<c\leq1$.
+Suppose a fixed reference subspace is mutually $\varepsilon$-close to $G$
+and every vector of the reference is a matrix product vector of bond at most
+$D\geq1$. Assume
+\[
+ \varepsilon\leq\frac{c^2\eta}{1024},\qquad
+ \xi\sqrt{\max\{L-1,0\}D^2}\leq\frac{c\eta}{48},\qquad \xi>0.
+\]
+Conjugate $K$ to the full-interval coordinates, apply it to $S$, choose the
+standard orthonormal basis of this actual image, and collectively trim that
+basis at threshold $\xi$. The native image of the resulting actual space
+is close to the same $G$ with error at most
+\[
+ (1-c/4)\delta+c\eta/8.
+\]
+Its dimension does not exceed $\dim S$. It has at most $\dim S$ recorded
+spanning vectors, each with internal Schmidt rank at most $\dim S/\xi^2$.
+This statement is an auxiliary with explicit normalized-filter premises;
+it does not supply the physical filter or the complete algorithm.
+\end{lemma}
+\begin{proof}\leanok
+\uses{lem:full_interval_viability,lem:alvv-interval-reference-weighted}
+The full-interval coordinate isometry identifies the literal image with
+$K(S)$ and leaves the full global target fixed up to this same isometry.
+Apply sharp normalized error reduction followed by the weighted-reference
+collective trimming estimate with $\theta=c/16$. The stated budgets give
+the displayed stable recurrence. Linear images and the span of the actual
+trimmed basis do not increase dimension; the collective trimming theorem
+gives the recorded-vector rank bound.
+\end{proof}
