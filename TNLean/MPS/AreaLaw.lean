@@ -100,6 +100,7 @@ import TNLean.MPS.AreaLaw.PartialSwap
 import TNLean.MPS.AreaLaw.PhysicalChebyshevViability
 import TNLean.MPS.AreaLaw.PhysicalDGApproximation
 import TNLean.MPS.AreaLaw.PhysicalDGEntropy
+import TNLean.MPS.AreaLaw.PhysicalDGFilterTrimming
 import TNLean.MPS.AreaLaw.PhysicalDGGlobalApproximation
 import TNLean.MPS.AreaLaw.PhysicalDGIntervalTree
 import TNLean.MPS.AreaLaw.PhysicalDGIntervalTrimming

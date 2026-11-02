@@ -632,3 +632,50 @@ the displayed stable recurrence. Linear images and the span of the actual
 trimmed basis do not increase dimension; the collective trimming theorem
 gives the recorded-vector rank bound.
 \end{proof}
+
+
+\begin{lemma}[The physical raw-filter step at the same root]
+    \label{lem:physical_dg_native_root_filter_trim}
+    \lean{TNLean.MPS.AreaLaw.fullIntervalFilterTrimStep_normalized_affine_eq_raw,
+        TNLean.MPS.AreaLaw.physical_dg_normalized_ground_filter_spec,
+        TNLean.MPS.AreaLaw.isCloseTo_nativeFullIntervalSpace_filterTrimStep_of_physical_dg}
+    \leanok
+    Let $H=\sum_i h_i$ be the actual positive chain Hamiltonian. Suppose
+    $\mu,\nu\in\operatorname{spec}(H)$, $\mu<\nu$, $\gamma>0$, and every
+    spectral value is either $\mu$ or at least $\mu+\gamma$. Let $G$ be
+    the full original ground space. Put
+    \[
+        M=\|H\|,\qquad c=\frac{\gamma}{M-\mu},\qquad
+        K_{\rm raw}=1-H/M.
+    \]
+    Then $M>0$, $M-\mu>0$ and $0<c\le1$.
+    Let one reference $U$ be mutually $\varepsilon$-close to $G$, with
+    every vector of $U$ having MPS bond at most $D\ge1$. Assume the
+    reference and threshold budgets of
+    Lemma~\ref{lem:alvv-native-root-filter-trim}.
+    For any actual full-interval candidate $S$ whose native image is
+    $\delta$-close to $G$, $0\le\delta\le\tfrac12$, apply $K_{\rm raw}$,
+    choose the orthonormal basis of its actual image, and collectively
+    trim at threshold $\xi$. The native image of this actual next space
+    is close to the same $G$ with error at most
+    \[
+        (1-c/4)\delta+c\eta/8.
+    \]
+    No simple ground state or gap cap is assumed. The reference and
+    threshold budgets remain explicit; an automatic repeated refinement
+    and final spectral extraction are separate results.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:alvv-native-root-filter-trim}
+    Positivity and the actual second spectral value give $M>\mu\ge0$.
+    The actual gap gives $\mu+\gamma\le\nu\le M$.
+    The normalized affine filter
+    $B=(M1-H)/(M-\mu)$ fixes the full $G$ and contracts squared norms
+    on $G^\perp$ by at most $1-c$. It is the nonzero scalar multiple
+    $(1-\mu/M)^{-1}K_{\rm raw}$. Scalar normalization leaves each image
+    subspace unchanged, hence leaves its chosen orthonormal basis and
+    the actual collective trim unchanged. Apply
+    Lemma~\ref{lem:alvv-native-root-filter-trim} to $B$.
+    The normalized recurrence replaces the printed multiplicative overlap
+    gain as described in~\cite{gap:alvv16_final_filter_gain}.
+\end{proof}
