@@ -130,6 +130,25 @@ most one, so empty chains and endpoint cuts are included. This is a
 joint construction, rather than an identification of two separate
 existential witnesses.
 
+\paragraph{A mathematical MPS basis.}
+Let $n=\dim G(\eta_{\rm LD}-v)$ and $r=\dim G(\eta_{\rm LD})$.
+A common global factor $B$ is chosen before the actual orthonormal basis
+of the inner band, at accuracy $\epsilon=\delta/[8(n+1)]$.
+Choose its actual normalized MPS approximants $\phi_i$ and define $F$
+by sending the target basis vectors to these recorded vectors.
+Their summed squared error is at most $\delta/16<1$, so $F$ is
+injective and its actual range $V=\operatorname{span}\{\phi_i\}$
+has dimension exactly $n\le r$. The range and inner band are close in
+both directions; enlarging the projecting space gives the required
+outer-band closeness to $V$. All vectors of $V$ have native MPS bond
+at most $nrB$, hence so does its actual standard orthonormal basis.
+The zero inner band gives the zero range and empty bases with no
+separate nonzero-space premise. This is a mathematical basis-existence
+consequence of the source introduction, line 288. It makes no claim that
+the probabilistic algorithm in Theorem~t:alg2 computes these vectors,
+returns this number of states, attains its advertised energy threshold,
+or satisfies its running-time bound.
+
 \paragraph{Remaining conclusions.}
 The long-interval construction assumes no global spectral gap and supplies
 the actual polynomial and tensor factors of one global clipped matrix.
@@ -167,8 +186,11 @@ then controls tails of one actual reduced state by its image spaces.
 No spectral gap or invariance of an original band under a clipped polynomial
 is assumed. Every positive deficit and every interval is included.
 The sharper accuracy-dependent MPS approximation now follows from the
-independent-scale families as above. A low-energy basis of matrix product
-states and a running-time bound remain separate. Closed spectral
+independent-scale families as above. An actual inner-band basis image now
+also has the exact inner dimension,
+approximates that band in both directions, and admits a standard
+orthonormal basis of MPS. A running-time bound and identification with the
+source algorithm remain separate. Closed spectral
 cutoffs and the absence of a positivity claim for the Chebyshev polynomial
 follow the companion spectral-projector and positivity notes.
 

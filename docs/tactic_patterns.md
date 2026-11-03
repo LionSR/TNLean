@@ -11755,3 +11755,20 @@ removed after the dependency audit exposed it.
   existing regional energy estimate and an actual minimum shift; a more
   general order-to-quadratic-form lemma can be considered if that remaining
   expansion recurs in several files.
+
+
+### Actual approximate-band bases — share the finite image and squared-error estimates (2026-11-03)
+
+- **Promotion:** An indexed-family corollary of the finite MPS-span theorem
+  handles its finite image and cardinality once. The existing full-interval
+  span consumer and the physical low-energy basis proof both use it. Existing
+  public signatures stay unchanged and no compatibility alias is introduced.
+- **Reuse:** Construct the actual map on the target orthonormal basis. The
+  companion summed-squared-error estimate proves injectivity and two-sided
+  subspace closeness; no Gram conditioning premise is supplied. The native
+  Euclidean-to-function linear equivalence transports the same coefficient
+  span, avoiding a second hand-built linear map for reading coefficients.
+- **Decision:** Choose common approximation accuracy before the basis and
+  vectors, with the harmless factor n+1 to include the zero inner band.
+  Every vector in the actual image has the finite-span MPS bound, so taking
+  its standard orthonormal basis does not need another approximation oracle.

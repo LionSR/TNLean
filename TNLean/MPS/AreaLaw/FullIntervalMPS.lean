@@ -104,27 +104,15 @@ theorem isOpenMPS_fullIntervalRead_of_mem_span {L q n D : ℕ}
     (hv : v ∈ Submodule.span ℂ (Set.range u)) :
     IsOpenMPS L q (n * D) (fullIntervalRead L q v) := by
   classical
-  let A : Finset ((Fin L → Fin q) → ℂ) := Finset.univ.image (fun i ↦ fullIntervalRead L q (u i))
-  have hcard : A.card ≤ n := by
-    calc
-      A.card ≤ (Finset.univ : Finset (Fin n)).card := Finset.card_image_le
-      _ = n := by simp
-  have hA : ∀ w ∈ A, IsOpenMPS L q D w := by
-    intro w hw
-    obtain ⟨i, _hi, rfl⟩ := Finset.mem_image.mp hw
-    exact isOpenMPS_fullIntervalRead_of_rank_le (u i) (hrank i)
   let R : EuclideanSpace ℂ (interval L 0 L → Fin q) →ₗ[ℂ] ((Fin L → Fin q) → ℂ) :=
     { toFun := fullIntervalRead L q
       map_add' := by intro a b; ext x; rfl
       map_smul' := by intro c a; ext x; rfl }
-  have himage : R '' Set.range u = (A : Set ((Fin L → Fin q) → ℂ)) := by
-    rw [← Set.range_comp]
-    change Set.range (fun i ↦ fullIntervalRead L q (u i)) = _
-    simp only [A, Finset.coe_image, Finset.coe_univ, Set.image_univ]
-  have hv' : fullIntervalRead L q v ∈ Submodule.span ℂ (A : Set ((Fin L → Fin q) → ℂ)) := by
-    change R v ∈ _
-    rw [← himage]
-    exact Submodule.apply_mem_span_image_of_mem_span R hv
-  exact (isOpenMPS_of_mem_span A hA hv').mono (Nat.mul_le_mul_right D hcard)
+  have hv' : R v ∈ Submodule.span ℂ (Set.range (fun i ↦ R (u i))) := by
+    simpa only [← Set.range_comp, Function.comp_def] using
+      Submodule.apply_mem_span_image_of_mem_span R hv
+  simpa [R] using
+    isOpenMPS_of_mem_span_range (fun i ↦ R (u i))
+      (fun i ↦ isOpenMPS_fullIntervalRead_of_rank_le (u i) (hrank i)) hv'
 
 end TNLean.MPS.AreaLaw

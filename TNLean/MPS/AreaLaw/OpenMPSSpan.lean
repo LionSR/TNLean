@@ -60,4 +60,25 @@ theorem isOpenMPS_of_mem_span {L q D : ℕ}
     Matrix.toLin'_apply', Cardinal.toNat_natCast]
   congr 3
 
+/-- A vector in the span of a finite indexed family of MPS has the family
+cardinality times their common bond bound. Repeated and zero family members
+are allowed. LVV13, arXiv:1307.5143v1, Claim `c:2`, lines 520–527. -/
+theorem isOpenMPS_of_mem_span_range {L q D : ℕ} {ι : Type*} [Fintype ι]
+    (u : ι → ((Fin L → Fin q) → ℂ)) (hu : ∀ i, IsOpenMPS L q D (u i))
+    {v : (Fin L → Fin q) → ℂ} (hv : v ∈ Submodule.span ℂ (Set.range u)) :
+    IsOpenMPS L q (Fintype.card ι * D) v := by
+  classical
+  let S : Finset ((Fin L → Fin q) → ℂ) := Finset.univ.image u
+  have hset : (S : Set ((Fin L → Fin q) → ℂ)) = Set.range u := by
+    simp only [S, Finset.coe_image, Finset.coe_univ, Set.image_univ]
+  have hS : ∀ w ∈ S, IsOpenMPS L q D w := by
+    intro w hw
+    obtain ⟨i, _hi, rfl⟩ := Finset.mem_image.mp hw
+    exact hu i
+  have hcard : S.card ≤ Fintype.card ι := by
+    simpa only [Finset.card_univ] using (Finset.card_image_le (s := Finset.univ) (f := u))
+  have hv' : v ∈ Submodule.span ℂ (S : Set ((Fin L → Fin q) → ℂ)) := by
+    simpa only [hset] using hv
+  exact (isOpenMPS_of_mem_span S hS hv').mono (Nat.mul_le_mul_right D hcard)
+
 end TNLean.MPS.AreaLaw
