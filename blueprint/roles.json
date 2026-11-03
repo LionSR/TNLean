@@ -342,7 +342,15 @@
     },
     "ch:mpu": {
       "theorems": [
-        "thm:mpu_bounded_simple_blocking",
+        "thm:mpu_bounded_simple_blocking"
+      ],
+      "corollaries": [],
+      "notes": {
+        "thm:mpu_bounded_simple_blocking": "Simplicity after blocking D^2 sites (Sahinoglu et al. Theorem 2; Cirac et al. Proposition III.3)"
+      }
+    },
+    "ch:mpu_fundamental_theorem": {
+      "theorems": [
         "ThmFund1",
         "FundamentalMPU",
         "IndexTh"
@@ -350,18 +358,28 @@
       "corollaries": [
         "thm:mpu_admissible_index",
         "coruvSF",
-        "cor:mpu_admissible_continuous_standard_form",
+        "cor:mpu_admissible_continuous_standard_form"
+      ],
+      "notes": {
+        "ThmFund1": "Simple-tensor equivalence theorem (Cirac et al. 2017, Theorem III.8)",
+        "FundamentalMPU": "Source theorem: the Fundamental Theorem of MPU as printed in Cirac et al. 2017",
+        "IndexTh": "Index theorem for matrix product unitaries (Cirac et al. 2017, Theorem IV.6)"
+      }
+    },
+    "ch:mpu_symmetries": {
+      "theorems": [],
+      "corollaries": [
         "cor:all-equivalent-under-conjugation",
         "cor:mpu_admissible_all_conjugation_equivalent",
         "cor:sigma-equivalence-necessary",
         "cor:mpu_admissible_sigma_equivalence_necessary"
       ],
-      "notes": {
-        "thm:mpu_bounded_simple_blocking": "Simplicity after blocking D^2 sites (Sahinoglu et al. Theorem 2; Cirac et al. Proposition III.3)",
-        "ThmFund1": "Simple-tensor equivalence theorem (Cirac et al. 2017, Theorem III.8)",
-        "FundamentalMPU": "Source theorem: the Fundamental Theorem of MPU as printed in Cirac et al. 2017",
-        "IndexTh": "Index theorem for matrix product unitaries (Cirac et al. 2017, Theorem IV.6)"
-      }
+      "notes": {}
+    },
+    "ch:mpu_symmetry_examples": {
+      "theorems": [],
+      "corollaries": [],
+      "notes": {}
     },
     "ch:asymmetric_ft": {
       "theorems": [
