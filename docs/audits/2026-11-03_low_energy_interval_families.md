@@ -86,3 +86,12 @@ warnings treated as errors. All twelve newly public TNLean declarations
 and the four QICLean lemmas depend only on `propext`, `Classical.choice`
 and `Quot.sound`. This checks the actual extracted proofs; the full modular
 build and compiled blueprint declaration checks are still pending.
+
+## Mathlib 4.36 integration
+
+The main-branch upgrade to Mathlib 4.36 is incorporated through the
+recursive viable-tree contribution. The current QICLean revision is
+`8af1f77d468fed30b84644f923b8ae319a2bc432` (QICLean #1020), which includes
+the nested-cutoff lemmas and the accepted soft-truncation estimates on
+that toolchain. The TNLean proofs are unchanged. The direct proof and
+axiom checks above used Mathlib 4.35; verification on 4.36 is pending.

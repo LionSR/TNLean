@@ -24,7 +24,7 @@ namespace TNLean.PEPS.AreaLaw.Geometry
 
 /-- A whole side of the actual translated dyadic cell, oriented by its fan
 endpoints. Source: area-law Section 11, lines 299–306. -/
-def dyadicCellSide (o : ℝ × ℝ) (ℓ : ℕ) (z : ℤ × ℤ) (s : Fin 4) : Set (ℝ × ℝ) :=
+noncomputable def dyadicCellSide (o : ℝ × ℝ) (ℓ : ℕ) (z : ℤ × ℤ) (s : Fin 4) : Set (ℝ × ℝ) :=
   segment ℝ (cellFanStart o ℓ z (fun _ ↦ false) ⟨s, 0⟩)
     (cellFanEnd o ℓ z (fun _ ↦ false) ⟨s, 0⟩)
 

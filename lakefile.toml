@@ -17,17 +17,18 @@ git = "https://github.com/PatrickMassot/checkdecls.git"
 [[require]]
 name = "Gametheory"
 git = "https://github.com/LionSR/Brouwer.git"
-rev = "ec93e4daed4ad8b4784a9d760e492832e7711433"
+rev = "439aaeb9caa7a7f943f9e72afc77751cbc5b0098"
 
 [[require]]
 name = "mathlib"
 scope = "leanprover-community"
-rev = "v4.35.0-rc3"
+rev = "v4.36.0-rc1"
 
 [[require]]
 name = "qiclean"
 git = "https://github.com/LionSR/QICLean.git"
-rev = "965d1bb07d4903785411cb7b95a5e866a243fd0d"
+# Includes QICLean #1020, the nested-cutoff viability estimates.
+rev = "8af1f77d468fed30b84644f923b8ae319a2bc432"
 
 [[lean_lib]]
 name = "TNLean"
