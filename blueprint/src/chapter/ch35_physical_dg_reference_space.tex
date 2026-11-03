@@ -314,6 +314,33 @@
     $(k-p-1)+(r-k-1)+1=r-p-1$ merges.
 \end{proof}
 
+\begin{definition}[Independent interval sampling choices]
+    \label{def:interval_sampling_choices}
+    \lean{TNLean.MPS.AreaLaw.IntervalSamplingChoices,
+        TNLean.MPS.AreaLaw.intervalSamplingMeasure,
+        TNLean.MPS.AreaLaw.instIsProbabilityMeasureIntervalSamplingMeasure}
+    \leanok
+    For each pair $J=(p,r)$ of endpoints in $\{0,\ldots,L\}$, let $d_J$
+    be the dimension of its physical configuration space and set
+    $\Omega_J=\prod_{a=0}^{d_J}\mathrm U(a)$. Give $\Omega_J$ its product
+    Haar probability measure. The interval sampling space is
+    $\Omega=\prod_J\Omega_J$, with the product probability law.
+    A balanced root uses only the coordinates of its internal intervals.
+\end{definition}
+
+\begin{lemma}[The law of an interval coordinate]
+    \label{lem:interval_sampling_marginal}
+    \lean{TNLean.MPS.AreaLaw.measurePreserving_intervalSamplingChoice}
+    \leanok
+    For each endpoint pair $J$, the coordinate map
+    $\Omega\to\Omega_J$ preserves the prescribed probability law.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{def:interval_sampling_choices}
+    This is the marginal formula for a finite product of probability
+    measures.
+\end{proof}
+
 \begin{lemma}[Recorded generators of the actual trimmed image]
     \label{lem:interval_recorded_generator_bounds}
     \lean{TNLean.MPS.AreaLaw.IsIntervalSpanWithRankBound,

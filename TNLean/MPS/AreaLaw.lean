@@ -91,6 +91,7 @@ import TNLean.MPS.AreaLaw.IntervalMergeChoice
 import TNLean.MPS.AreaLaw.IntervalNeighborhoodEntropy
 import TNLean.MPS.AreaLaw.IntervalReferenceTrimming
 import TNLean.MPS.AreaLaw.IntervalSampledImage
+import TNLean.MPS.AreaLaw.IntervalSamplingChoices
 import TNLean.MPS.AreaLaw.IntervalSamplingTree
 import TNLean.MPS.AreaLaw.IntervalSlice
 import TNLean.MPS.AreaLaw.IntervalSymmDiff
