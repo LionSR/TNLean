@@ -2,7 +2,7 @@
   "slug": "hastings-area-law",
   "pageTitle": "Hastings' Area Law · TNLean",
   "heading": "Hastings' area law for gapped one-dimensional ground states",
-  "lede": "Hastings' 2007 argument for the one-dimensional area law and polynomial matrix product state approximation is now fully proved and verified locally in Lean, with one common Lieb–Robinson pair throughout. The new contributions have been submitted for review; local verification and merged coverage are distinguished below. The proof factors the ground-state projector near a cut and uses the resulting mutual-information gain to bound the entanglement entropy independently of chain length.",
+  "lede": "Hastings' 2007 argument for the one-dimensional area law and polynomial matrix product state approximation is now fully proved in Lean, with one common Lieb–Robinson pair throughout, and the whole argument is on the main branch of TNLean. The proof factors the ground-state projector near a cut and uses the resulting mutual-information gain to bound the entanglement entropy independently of chain length.",
   "description": "Hastings' one-dimensional area law in Lean 4: verified proofs, review status and corrections to the printed argument.",
   "tabs": [
     {
