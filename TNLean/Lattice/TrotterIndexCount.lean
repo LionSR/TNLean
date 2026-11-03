@@ -169,7 +169,7 @@ theorem exists_productForm_list_prod_card_index {κ : Type*}
         P.Index i) = _
       rw [Fintype.card_prod, ProductForm.card_index_ofSupported, hP]
       by_cases hi : i ∈ X k <;> simp [hi, pow_succ, Nat.mul_comm]
-  · haveI : IsEmpty ((j : ι) → Fin (d j)) := not_nonempty_iff.mp hconfig
+  · have : IsEmpty ((j : ι) → Fin (d j)) := not_nonempty_iff.mp hconfig
     exact ⟨{ Index := fun i ↦ Fin ((d i * d i) ^ seq.countP (fun k ↦ decide (i ∈ X k)))
              siteOp := fun _ _ ↦ 0
              coeff := fun _ _ ↦ 0

@@ -52,7 +52,8 @@ theorem prod_ofFn_mul_eq_mul_prod_mul :
       List.ofFn_succ (f := fun k : Fin (n + 1) ↦ l k.castSucc * r k.succ), List.prod_cons]
     -- The two sides now differ only by `castSucc 0 = 0`, `(last n).succ = last (n + 1)` and
     -- `k.castSucc.succ = k.succ.castSucc`, which hold by definition.
-    simp only [Matrix.mul_assoc] <;> rfl
+    simp only [Matrix.mul_assoc]
+    rfl
 
 /-- **The split-index presentation of a periodic amplitude** (arXiv:2502.20257, lines
 3970–4001). If every letter factors as `A^i = R^i L^i` through an intermediate bond, the

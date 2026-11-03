@@ -152,8 +152,12 @@ theorem bellComul_single_mul_single_of_ne {p q p' q' : Fin r × Fin r} (h : q �
   by_cases h1 : (q.1, c.2) = (p'.1, c'.1)
   · have h2 : (c.2, q.2) ≠ (c'.1, p'.2) := fun e ↦
       h (Prod.ext (Prod.ext_iff.mp h1).1 (Prod.ext_iff.mp e).2)
-    simp only [Matrix.single_mul_single_of_ne (h := h2), TensorProduct.tmul_zero]
-  · simp only [Matrix.single_mul_single_of_ne (h := h1), TensorProduct.zero_tmul]
+    rw [show (single (c.1, p.2) (c.2, q.2) 1 : BellPairAlgebra r) *
+        single (c'.1, p'.2) (c'.2, q'.2) 1 = 0 from
+        Matrix.single_mul_single_of_ne _ _ _ _ h2 _, TensorProduct.tmul_zero]
+  · rw [show (single (p.1, c.1) (q.1, c.2) 1 : BellPairAlgebra r) *
+        single (p'.1, c'.1) (q'.1, c'.2) 1 = 0 from
+        Matrix.single_mul_single_of_ne _ _ _ _ h1 _, TensorProduct.zero_tmul]
 
 /-- The dual matrix of a functional, \(\psi(f)_{(i,k),(j,l)}=r^{-1}f(e_{ij,kl})\). -/
 def dualMatrix (f : WithConv (BellPairAlgebra r →ₗ[ℂ] ℂ)) :
@@ -198,10 +202,10 @@ theorem rTensor_bellCounit_comp_bellComul :
   rw [TensorProduct.mk_apply, Matrix.stdBasis_eq_single, LinearMap.comp_apply, bellComul_single,
     comulSingle, map_smul, map_sum, Finset.sum_eq_single (p.1, q.1)]
   · dsimp only
-    rw [LinearMap.rTensor_tmul, bellCounit_single, if_pos rfl, TensorProduct.smul_tmul',
+    rw [LinearMap.rTensor_tmul, bellCounit_single, ite_eq_left rfl, TensorProduct.smul_tmul',
       smul_eq_mul, inv_mul_cancel₀ hr]
   · rintro c - hc
-    rw [LinearMap.rTensor_tmul, bellCounit_single, if_neg, TensorProduct.zero_tmul]
+    rw [LinearMap.rTensor_tmul, bellCounit_single, ite_eq_right, TensorProduct.zero_tmul]
     exact fun h ↦ hc h.symm
   · intro h
     exact absurd (Finset.mem_univ _) h
@@ -216,10 +220,10 @@ theorem lTensor_bellCounit_comp_bellComul :
     LinearMap.comp_apply, bellComul_single, comulSingle, map_smul, map_sum,
     Finset.sum_eq_single (p.2, q.2)]
   · dsimp only
-    rw [LinearMap.lTensor_tmul, bellCounit_single, if_pos rfl, ← TensorProduct.tmul_smul,
+    rw [LinearMap.lTensor_tmul, bellCounit_single, ite_eq_left rfl, ← TensorProduct.tmul_smul,
       smul_eq_mul, inv_mul_cancel₀ hr]
   · rintro c - hc
-    rw [LinearMap.lTensor_tmul, bellCounit_single, if_neg, TensorProduct.tmul_zero]
+    rw [LinearMap.lTensor_tmul, bellCounit_single, ite_eq_right, TensorProduct.tmul_zero]
     exact fun h ↦ hc h
   · intro h
     exact absurd (Finset.mem_univ _) h
@@ -396,8 +400,7 @@ theorem mul'_map_comul_comp_bellAntipode (t : BellPairAlgebra r ⊗[ℂ] BellPai
       Coalgebra.comul (R := ℂ)
         (LinearMap.mul' ℂ (BellPairAlgebra r)
           (TensorProduct.map LinearMap.id (bellAntipode r) t)) := by
-  induction t using TensorProduct.induction_on with
-  | zero => simp only [map_zero]
+  induction t using TensorProduct.inductionOn with
   | tmul a b =>
     simp only [TensorProduct.map_tmul, LinearMap.mul'_apply, LinearMap.comp_apply,
       LinearMap.id_apply, comul_mul]
