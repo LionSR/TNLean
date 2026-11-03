@@ -6,6 +6,8 @@ Authors: TNLean contributors
 import TNLean.MPS.AreaLaw.FiveRegionTruncationResidual
 import QICLean.Analysis.SpectralWindowCount
 
+import TNLean.MPS.AreaLaw.IndependentFiveRegionResidual
+
 /-!
 # Closeness at shifted physical low-energy cutoffs
 
@@ -117,8 +119,8 @@ theorem exists_five_region_physical_low_energy_closeness
   let xi := (288 * Real.exp (11 / 8)) * Real.exp (-(t - eta) / 8)
   obtain ⟨e, E0, x, z, hxunit, hx, hlo, hcenter, hzunit, hz, hE0low,
     hE0, hE04, hnorm, hres⟩ :=
-    exists_five_region_physical_truncation_residual L q a b ell t
-      hq hell ht hab hbL h hs h0 h1
+    exists_five_region_independent_truncation_residual L q a b ell t
+      hq hell (by linarith only [ht]) hab hbL h hs h0 h1
   have hA (j : Fin 5) : (A j).IsHermitian :=
     (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
   have he (j : Fin 5) : (e j : ℂ) •

@@ -168,141 +168,52 @@ is a separate algebraic question. The correction is tracked by
 \href{https://github.com/LionSR/TNLean/issues/9854}{issue 9854} and
 \href{https://github.com/LionSR/TNLean/issues/9847}{issue 9847}.
 
-\section{A corrected normalized interaction-label estimate}
 
-Let $K=\{0,\ldots,N-1\}$ be the path of interaction labels, let
-$H=\sum_{i\in K}h_i$, and suppose the $h_i$ are Hermitian with
-$\|h_i\|\leq1$. Let $\lambda$ be any real number with $H\geq\lambda I$.
-For an integer $r\geq1$, denote by $M_r^{\mathrm{lab}}$ the same word
-expansion as in (\ref{eq:alvv_cluster_word}), retaining the words whose
-label supports have no path component of at least $r$ labels. If
-$\beta\geq0$ and $b=2(e^\beta-1)\leq1$, then
+\section{A normalized interaction-label replacement}
+\label{sec:alvv_normalized_label_replacement}
+
+A corrected estimate can retain words according to their interaction labels,
+with the lower energy made explicit. Let the labels be the vertices of the
+path $\{0,\ldots,N-1\}$. Let $M_r^{\mathrm{lab}}$ retain the words whose label
+supports have no connected component of cardinality at least $r$.
+For Hermitian terms $\|h_i\|\leq1$, write $H=\sum_i h_i$ and assume
+$H\geq\lambda I$. For $\beta\geq0$ and $b=2(e^\beta-1)\leq1$, the corrected
+estimate is
 \begin{align}
-    e^{\beta\lambda}\|e^{-\beta H}-M_r^{\mathrm{lab}}\|
-    \leq\exp(N^2b^r)-1.
-    \label{eq:alvv_cluster_normalized_correction}
+ e^{\beta\lambda}\|e^{-\beta H}-M_r^{\mathrm{lab}}\|
+ &\leq \exp(N^2b^r)-1.
+ \label{eq:alvv_normalized_label_replacement}
 \end{align}
-This estimate is proved for the existing selected word expansion. Neither
-positivity of the terms nor commutation between different terms is needed
-for (\ref{eq:alvv_cluster_normalized_correction}).
+The lower energy is unrestricted. The factor $2$ comes from bounding the
+finite inclusion--exclusion coefficients by $2^{|U|}$ after grouping them by
+the union $U$ of mandatory windows. The estimate for each mandatory-label
+sum is $e^{\beta\lambda}\|R_U^H(\beta)\|\leq(e^\beta-1)^{|U|}$.
 
-Here is a proof. For a finite set $U$ of required labels define
-\begin{align}
-    R_U^H(\beta)
-    =\sum_{D\subseteq U}(-1)^{|D|}e^{-\beta(H-H_D)},
-    \qquad H_D=\sum_{i\in D}h_i.
-    \label{eq:alvv_cluster_mandatory_labels}
-\end{align}
-The normalized mandatory-label estimate gives
-$e^{\beta\lambda}\|R_U^H(\beta)\|\leq(e^\beta-1)^{|U|}$.
-Let $\mathcal W_r$ be the family of intervals of exactly $r$ labels.
-A support has a component of size at least $r$ exactly when it contains
-one of these windows. Finite inclusion and exclusion, followed by grouping
-according to $U=\bigcup F$, therefore gives
-\begin{align}
-    e^{-\beta H}-M_r^{\mathrm{lab}}
-        & =\sum_{U\in\mathcal U_r}c_UR_U^H(\beta),
-        & \mathcal U_r                                           & =\{\bigcup F:\varnothing\ne F\subseteq\mathcal W_r\},
-    \label{eq:alvv_cluster_mandatory_union}                                                                              \\
-    c_U & =\sum_{\substack{\varnothing\ne F\subseteq\mathcal W_r                                                         \\
-            \bigcup F=U}}(-1)^{|F|+1},
-        & |c_U|                                                  & \leq2^{|U|}.
-    \label{eq:alvv_cluster_union_coefficient}
-\end{align}
-The coefficient bound holds because distinct length-$r$ windows have
-distinct left endpoints. At most $|U|$ windows are contained in $U$,
-so at most $2^{|U|}$ families can contribute to $c_U$.
+For actual nearest-neighbour supports on $N+1$ sites of local dimension
+$q\geq1$, this label truncation has a site-dependent matrix product
+representation of bond dimension at most $r^2q^r$. Its proof separates the
+unique retained label component crossing a cut, derives the operator Schmidt
+ranks of the actual terms, and constructs the operator tensors from these
+ranks.
 
-Every component of $U\in\mathcal U_r$ is an interval of at least $r$
-labels. Its component family determines $U$, and its components are
-disjoint. Let $\mathcal I_r$ denote all nonempty intervals of at least
-$r$ labels. An interval is determined by its endpoints, so
-$|\mathcal I_r|\leq N^2$. Consequently
-\begin{align}
-    \sum_{U\in\mathcal U_r}b^{|U|}
-     & \leq\sum_{\varnothing\ne F\subseteq\mathcal I_r}
-    \prod_{C\in F}b^{|C|}
-    =\prod_{C\in\mathcal I_r}(1+b^{|C|})-1                  \\
-     & \leq\exp\Bigl(\sum_{C\in\mathcal I_r}b^{|C|}\Bigr)-1
-    \leq\exp(N^2b^r)-1.
-    \label{eq:alvv_cluster_interval_weight}
-\end{align}
-The triangle inequality in (\ref{eq:alvv_cluster_mandatory_union}), the
-mandatory-label estimate, and (\ref{eq:alvv_cluster_union_coefficient})
-now imply (\ref{eq:alvv_cluster_normalized_correction}). Empty chains
-and cutoffs longer than the label chain have no discarded support.
+If $A$ is a regional sum and $\epsilon I\leq A$, multiplying the constructed
+heat approximant by $e^{\beta\epsilon}$ yields the bound in
+(\ref{eq:alvv_normalized_label_replacement}) for
+$e^{-\beta(A-\epsilon I)}$, with the energy normalization cancelled exactly.
+The scalar shift is kept outside the local interactions.
+Expanding the finite soft series as a sum of heat operators and using
+$t\geq3m$ puts all the required times in $[0,1/3]$, where
+$2(e^{1/3}-1)<1$. A logarithmic cluster order then gives a norm approximation
+to one complete soft replacement, including its exterior and scalar term.
 
-The normalization by a lower energy, the interaction-label cutoff and
-the factor two are explicit changes from the printed assertion. Thus
-(\ref{eq:alvv_cluster_normalized_correction}) does not establish
-(\ref{eq:alvv_cluster_printed}). It also supplies no bond-dimension
-bound or exact matrix product operator factorization.
+This replacement changes both the cutoff and normalization of the printed
+estimate. The two counterexamples above continue to refute the printed
+statement. The one-interval construction at $t\geq3m$ does not supply the
+unrestricted parameter or computational running-time claim of
+the efficient approximation lemma of ALVV.
 
-
-\section{The soft interval at compatible heat times}
-
-The corrected label estimate also yields an actual matrix product
-operator approximation for one soft-truncated interval. This is a
-restricted corrected version of the soft-truncation MPO lemma in ALVV, source lines 1262--1268. It does not replace
-the false printed physical-support assertion.
-
-For $t>0$, the defining finite sum has the exact heat expansion
-\begin{align*}
-    h_{m,t}(x)        & =\sum_{a=0}^m c_a e^{-ax/t},             &
-    c_a               & =t(-1)^a\sum_{j=1}^m\frac{\binom ja}{j}, &
-    \sum_{a=0}^m|c_a| & \leq t2^{m+1}.
-\end{align*}
-The constant term is included. The scale factor $t$ is retained in the
-coefficient budget.
-Let $A=H_J$, and let $e$ be its actual minimum eigenvalue, with
-$e-10\leq\epsilon\leq e$. The positive matrix to be truncated is
-$U=A-\epsilon I$. For each $\beta=a/t$, set
-$Q_a=e^{\beta\epsilon}M_\ell^{\mathrm{lab}}(A;\beta)$.
-The normalized estimate at $e$ gives
-\begin{align*}
-    \|e^{-\beta U}-Q_a\|
-     & \leq e^{-\beta(e-\epsilon)}
-    (e^{N^2[2(e^\beta-1)]^\ell}-1)        \\
-     & \leq e^{N^2[2(e^\beta-1)]^\ell}-1.
-\end{align*}
-Thus the large scalar in the shifted exponential cancels the
-normalization. It is not distributed among the original positive local
-terms.
-
-Choose $t=3m$ and $m\geq1$. Then
-$b=2(e^{1/3}-1)\in(0,1)$ and every required heat time is at most $1/3$.
-Writing $W=3m2^{m+1}$, choose the explicit order
-\begin{align*}
-    \ell=\max\left\{1,\left\lceil
-    \frac{\log\max\{1,N^2\}-\log\log(1+\xi/W)}{-\log b}
-    \right\rceil\right\}.
-\end{align*}
-Then $W(e^{N^2b^\ell}-1)\leq\xi$. Each heat operator is approximated
-directly by its actual cluster tensors. Diagonal blocks combine these
-heat tensors with dimension $(m+1)\ell^2q^\ell$; an approximate heat MPO
-is never raised to the power $m$. The exterior local sum and scalar
-identity have an exact representation of dimension $1+Nq^2$.
-Consequently the full actual replacement
-\begin{align*}
-    \widetilde H=H-A+\epsilon I+h_{m,3m}(A-\epsilon I)
-\end{align*}
-has actual site-dependent operator tensors $T$ with
-\begin{align*}
-    \|\widetilde H-T\|\leq\xi,\qquad
-    D\leq1+Nq^2+(m+1)\ell^2q^\ell.
-\end{align*}
-For fixed local dimension and soft order $m$, this dimension bound is
-polynomial in the chain length and the inverse accuracy $\xi^{-1}$. The formal result constructs the tensors and the
-norm estimate; it does not establish a computational running time or the
-full multi-region algorithm.
-
-The same scale $t=3m$ also permits the corrected physical residual/window
-comparisons: the exact scaling identity gives a remainder bounded by
-$16e^{x/8-t/16}$ when $0<t\leq4m$, using the already constructed
-physical exponential moment of $U/8$. Thus the approximation and both
-directed comparisons can be obtained for one literal physical soft
-Hamiltonian. This does not prove the false printed uniform energy
-estimate or its claimed gap prescription.
+% The corrected construction passed fresh strict and imported foundation checks;
+% canonical integration gates remain pending.
 
 \bibliographystyle{unsrt}
 \bibliography{references}

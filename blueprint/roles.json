@@ -1426,6 +1426,24 @@
       "notes": {
         "thm:peps_protocol_from_angular_and_patch_bounds": "The dyadic distribution protocol from the angular and patch bounds"
       }
+    },
+    "sec:corrected_cluster_mpo": {
+      "theorems": [
+        "thm:normalized_cluster_label_tail",
+        "thm:physical_cluster_label_mpo",
+        "thm:soft_hamiltonian_mpo_accuracy"
+      ],
+      "corollaries": [],
+      "notes": {
+        "thm:normalized_cluster_label_tail": "The corrected path estimate specifies interaction labels and retains the lower-energy normalization.",
+        "thm:physical_cluster_label_mpo": "The finite label truncation has constructed operator tensors of dimension r squared times q to the r.",
+        "thm:soft_hamiltonian_mpo_accuracy": "One complete regional soft replacement at scale at least three times the order has an explicit bond bound at every norm accuracy."
+      }
+    },
+    "sec:physical_soft_resampling_tree": {
+      "theorems": [],
+      "corollaries": [],
+      "notes": {}
     }
   }
 }

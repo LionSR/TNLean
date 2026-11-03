@@ -27,8 +27,8 @@ rev = "v4.36.0-rc1"
 [[require]]
 name = "qiclean"
 git = "https://github.com/LionSR/QICLean.git"
-# Includes QICLean #1020, the nested-cutoff viability estimates.
-rev = "8af1f77d468fed30b84644f923b8ae319a2bc432"
+# Draft-only candidate; replace with the validated immutable semver release tag before merge.
+rev = "97ba0ff724d935929202d037207e4d7a1a29a614"
 
 [[lean_lib]]
 name = "TNLean"
