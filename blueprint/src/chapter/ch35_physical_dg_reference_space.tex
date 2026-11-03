@@ -480,6 +480,53 @@ not assume a measurable subspace family, an independent replacement for
 an actual child, or a local probability bound. Summing conditional failure
 probabilities remains a separate argument.
 
+
+\begin{lemma}[A conditional bound for guarded and root failures]
+    \label{thm:balanced_interval_failure_probability}
+    \lean{TNLean.MPS.AreaLaw.balancedIntervalMergeCoordinate,
+        TNLean.MPS.AreaLaw.intervalSamplingMeasure_guarded_failure_union_le,
+        TNLean.MPS.AreaLaw.intervalSamplingMeasure_root_failure_le}
+    \leanok
+    Use the fixed product Haar law of
+    Definition~\ref{def:interval_sampling_choices}. Let each whole choice
+    $\omega$ determine an arbitrary merge operation and its actual
+    balanced spaces $S_\omega$. Fix $p\le r\le L$ and $w\ge1$.
+    For each $J=(a,b)\in\mathcal I_w(p,r)$, the bounds
+    $p\le a\le b\le r\le L$ identify its actual finite endpoint
+    coordinate $c(J)=(a,b)$. Let $E_J$ be the guarded event from
+    Definition~\ref{def:guarded_interval_failure}.
+
+    Suppose that each listed $E_J$ is measurable and, for every whole
+    choice $\omega$, changing its own coordinate satisfies
+    \begin{align}
+        h_J\{u:\omega[c(J)\leftarrow u]\in E_J\}\le\beta,
+    \end{align}
+    where $h_J$ is the prescribed product Haar law for that interval.
+    Then
+    \begin{align}
+        \mu\left(\bigcup_{J\in\mathcal I_w(p,r)}E_J\right)
+            \le \max\{r-p-1,0\}\beta.
+    \end{align}
+    If the full local space satisfies the property at every valid short
+    leaf, then the same bound holds for
+    $\mu\{\omega:\neg P_{p,r}(S_\omega(p,r))\}$.
+    The section bounds and measurability are hypotheses of this
+    conditional measure estimate; no physical section estimate is
+    asserted here.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:balanced_interval_merge_bounds,lem:balanced_interval_merge_count,
+        def:interval_sampling_choices,lem:balanced_interval_failure_ancestry}
+    Each listed interval has valid endpoint coordinates by
+    Lemma~\ref{thm:balanced_interval_merge_bounds}.
+    Apply the finite-list coordinate-section bound to the actual merge
+    list. Subadditivity bounds the union by its length times $\beta$,
+    counting repeated occurrences if any. Lemma~\ref{lem:balanced_interval_merge_count}
+    bounds that length by $\max\{r-p-1,0\}$.
+    Under the leaf hypothesis, Lemma~\ref{lem:balanced_interval_failure_ancestry}
+    includes root failure in this same guarded union.
+\end{proof}
+
 \begin{lemma}[Recorded generators of the actual trimmed image]
     \label{lem:interval_recorded_generator_bounds}
     \lean{TNLean.MPS.AreaLaw.IsIntervalSpanWithRankBound,

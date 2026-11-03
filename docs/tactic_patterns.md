@@ -11794,3 +11794,15 @@ removed after the dependency audit exposed it.
 - **Reuse:** `List.mem_append`, `List.mem_singleton`, and `omega` finish the
   interval arithmetic without an independent tree representation.
 - **Decision:** Preserve the existing list and its midpoint subdivision.
+
+## Candidate: sum failures only over actual recursive descendants (2026-11-03)
+
+- **Seen:** `MPS/AreaLaw/BalancedIntervalFailureProbability.lean`.
+- **Pattern:** Derive endpoint coordinates from actual list membership,
+  apply the shared finite-list section estimate, and use deterministic
+  ancestry only after the guarded-union estimate is established.
+- **Reuse:** `bounds_of_mem_balancedIntervalMergeList`,
+  `Measure.pi_biUnion_list_le_of_update_sections`, the existing merge count,
+  and the existing failure-ancestry inclusion.
+- **Decision:** Prove the guarded-union bound once. The root estimate is an
+  active corollary, and failure at other nodes may use the same union bound.

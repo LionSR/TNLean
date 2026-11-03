@@ -15,6 +15,7 @@ import TNLean.MPS.AreaLaw.AdjacentIntervalMerge
 import TNLean.MPS.AreaLaw.AdjacentIntervalMergeMeasurable
 import TNLean.MPS.AreaLaw.AreaLaw
 import TNLean.MPS.AreaLaw.BalancedIntervalFailure
+import TNLean.MPS.AreaLaw.BalancedIntervalFailureProbability
 import TNLean.MPS.AreaLaw.BalancedIntervalMergeBounds
 import TNLean.MPS.AreaLaw.BalancedIntervalMergeList
 import TNLean.MPS.AreaLaw.BalancedIntervalTree
