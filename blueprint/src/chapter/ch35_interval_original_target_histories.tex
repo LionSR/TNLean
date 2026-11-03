@@ -1,0 +1,68 @@
+\section{Original-target histories of the actual interval recursion}
+
+Fix the original ground space and all families, thresholds and trimming
+parameters before sampling. The following events record the successive
+spaces in the repeated-sampling construction of
+\cite{Arad2016RigorousRG}, rather than just its final retained space.
+
+\begin{definition}[Original-target history on an interval]
+    \label{def:interval_original_target_history}
+    \lean{TNLean.MPS.AreaLaw.canonicalHalfSampledIntervalHistory,
+        TNLean.MPS.AreaLaw.canonicalIntervalResamplingHistory}\leanok
+    For the interval $J=[p,r)$, identify the full chain with
+    $\mathcal H_J\otimes\mathcal H_{J^c}$ and write $G_J$ for the original
+    global ground space in these coordinates. Given a candidate $W$, let
+    $Q_j(W,u)$ be the actual stopped projection after $j$ of the $R$
+    prescribed unitary coordinates. Put
+    $V_j(W,u)=I_J\operatorname{ran}Q_j(W,u)$, with the coordinate isometry
+    $I_J$ from Definition~\ref{def:complete_interval_resampling_parent}.
+    The event $H_J(W)$ consists of the sequences $u$ such that every
+    $V_j(W,u)\otimes\mathcal H_{J^c}$, $0\le j\le R$, is $0.04$-close to
+    $G_J$, and every active next space
+    $V_{j+1}(W,u)\otimes\mathcal H_{J^c}$ is $3/200$-close to $G_J$.
+    Here the step $j<R$ is active when
+    $\operatorname{rank}Q_j(W,u)\ge\theta_J$.
+
+    For the balanced recursion $S_\omega$, let $W_J(\omega)$ be the actual
+    adjacent merge of the two child spaces of $J$. Its original-target
+    history event is $\{\omega:\omega_J\in H_J(W_J(\omega))\}$.
+\end{definition}
+
+\begin{lemma}[Joint measurability of the original-target history]
+    \label{lem:interval_original_target_history_measurable}
+    \lean{TNLean.MPS.AreaLaw.measurableSet_canonicalHalfSampledIntervalHistory,
+        TNLean.MPS.AreaLaw.measurableSet_canonicalIntervalResamplingHistory}\leanok
+    If $x\mapsto P_{W(x)}$ is measurable, then
+    $\{(x,u):u\in H_J(W(x))\}$ is measurable. In particular, the
+    original-target history event of each actual long parent is measurable
+    in the full collection of interval sequences.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{def:interval_original_target_history,
+        lem:actual_interval_resampling_tree_probability}
+    Reindex the candidate projection into the fixed finite coordinates.
+    The stopped projections, their ranks and their full-exterior
+    closeness tests are jointly measurable. The history event is a finite
+    intersection of these tests and of the active-step implications.
+    For the actual parent, both child projections and their adjacent
+    merge projection are measurable; compose with
+    $\omega\mapsto(\omega,\omega_J)$.
+\end{proof}
+
+\begin{lemma}[The true section at a parent's own coordinate]
+    \label{lem:interval_original_target_history_section}
+    \lean{TNLean.MPS.AreaLaw.canonicalIntervalResamplingHistory_update_parent}\leanok
+    Fix a baseline collection $\omega$. Replacing only $\omega_J$ by $u$
+    leaves both actual child spaces unchanged. The resulting global
+    history condition at $J$ is therefore exactly
+    $u\in H_J(W_J(\omega))$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{def:interval_original_target_history,
+        lem:independent_interval_tree_sections}
+    Both children are strictly shorter than $J$. Their projections depend
+    only on coordinates of intervals no longer than themselves, so the
+    coordinate replacement leaves them unchanged. Substitution into
+    Definition~\ref{def:interval_original_target_history} gives the stated
+    equivalence.
+\end{proof}

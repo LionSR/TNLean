@@ -12141,3 +12141,15 @@ same operator equality. The four operator bounds use the shared QIC theorem
   introduced. The attached-list specialization of the product-section estimate
   also occurs in `BalancedIntervalFailureProbability.lean`; these are its two
   current interval consumers, so no additional abstraction is introduced.
+
+### Joint stopped-history events at an interval coordinate — existing composition (2026-11-03)
+
+- **Seen:** `CanonicalIntervalRawHistory.lean`.
+- **Pattern:** Reindex the actual projection, name its product input map, and
+  pull back the existing joint event. The actual tree uses measurable child
+  merge projections and the evaluation of its own coordinate.
+- **Reuse:** QICLean's joint original-target history theorem and
+  `independentIntervalTree_update_of_length_lt` supply the analytic and
+  dependence arguments. No recursive proof or basis-selection argument is
+  repeated.
+- **Decision:** Compose the existing mathematical results; no new tactic is needed.
