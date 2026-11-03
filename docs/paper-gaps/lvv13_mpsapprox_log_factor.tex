@@ -40,21 +40,26 @@ polynomial bound on the Schmidt rank is needed for its algorithm.
 The cited work, arXiv:1301.1162v1, \path{1dfrustrated34.tex}, treats $d$ as a
 constant and states the bond dimension as
 $B=e^{\tilde O(\log^{3/4}n/\varepsilon^{1/4})}$, both in its introduction
-(line~176) and in the derivation (lines~1503--1517). There the rank of the
-approximate ground-state projector is $\tilde O(\exp(\ell/s+s))$ with
+(line~176) and in the derivation (lines~1503--1517). The derivation writes
+the rank of the approximate ground-state projector as
+$\tilde O(\exp(\ell/s+s))$, with
 $\ell=O(\log n\sqrt{(s+\log n)/\varepsilon})$, and the choice
-$s=\log^{3/4}n/\varepsilon^{1/4}$ balances the two terms. The tilde hides
-factors logarithmic in the exponent; the quotation in the source omits it.
+$s=\log^{3/4}n/\varepsilon^{1/4}$ balances the two terms. The stated bond
+dimension places the tilde in the exponent, $\exp(\tilde O(\ell/s+s))$, so
+it hides factors logarithmic in $n$ that multiply
+$\log^{3/4}n/\varepsilon^{1/4}$ in $\log B$. The quotation in the source
+omits the tilde.
 
 \section{What is formalized}
 
 For a nearest-neighbour chain of $L$ sites of dimension $q$ with terms
 $0\le h_j\le1$, a unit ground vector $\Omega$ of energy $\mu$ and an actual
 first excited energy $\mu+g$ with $g>0$, and for $0<\epsilon\le1$, put
-\begin{align*}
+\begin{align}
     u=1+\log q+\log\frac1g,\qquad
     z=\log\frac{2048(L+1)}{\epsilon^2}.
-\end{align*}
+    \label{eq:lvv13_mpsapprox_parameters}
+\end{align}
 There are universal constants $C>0$ and a bond dimension $D$ with
 \begin{align}
     \log D\le C\Bigl[\frac{u^3}{g}
@@ -77,11 +82,13 @@ underlying construction are recorded in
 
 \section{Comparison}
 
-Take $\epsilon=n^{-c/2}$ with $n=L$. Then $z=O(\log n)$, and for fixed $q$ and
+Take $\epsilon=n^{-c/2}$ with $n=L$. Then $z$ in
+(\ref{eq:lvv13_mpsapprox_parameters}) is $O(\log n)$, and for fixed $q$ and
 $g$ the bound (\ref{eq:lvv13_mpsapprox_formal}) reads
-\begin{align*}
+\begin{align}
     \log D=O\bigl(g^{-1/4}(\log n)^{3/4}\log\log n\bigr),
-\end{align*}
+    \label{eq:lvv13_mpsapprox_asymptotic}
+\end{align}
 with overlap at least $1-n^{-c}/2$. This is the cited bound
 $e^{\tilde O(\log^{3/4}n/\varepsilon^{1/4})}$, with the hidden factor
 written out as $\log\log n$. It is smaller than any positive power of $n$,
