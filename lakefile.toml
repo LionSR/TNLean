@@ -17,17 +17,18 @@ git = "https://github.com/PatrickMassot/checkdecls.git"
 [[require]]
 name = "Gametheory"
 git = "https://github.com/LionSR/Brouwer.git"
-rev = "ec93e4daed4ad8b4784a9d760e492832e7711433"
+rev = "439aaeb9caa7a7f943f9e72afc77751cbc5b0098"
 
 [[require]]
 name = "mathlib"
 scope = "leanprover-community"
-rev = "v4.35.0-rc3"
+rev = "v4.36.0-rc1"
 
 [[require]]
 name = "qiclean"
 git = "https://github.com/LionSR/QICLean.git"
-rev = "ba01733099b5a18bed5c9bfb62f95f175b4c9b57"
+# Draft-only candidate; replace with the validated immutable semver release tag before merge.
+rev = "8ff407ca3a2189b75b2d71a5c6a5442027ce1ee5"
 
 [[lean_lib]]
 name = "TNLean"
