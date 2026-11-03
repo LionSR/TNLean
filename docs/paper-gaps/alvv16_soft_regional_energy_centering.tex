@@ -105,9 +105,9 @@ Lines 1793--1807 combine its viability for a generated soft target with
 a norm estimate for the same generated operator. The original-ground estimate above alone does not bound this candidate.
 A further conditional theorem now performs the quantitative energy
 transfer for a specified calibrated target and its own actual word
-family, as described below. Substitution of the actual tree data, the
-recursive one-sided energy assignment and the source running-time bound
-remain separate.
+family, as described below. The same-family node update is now substituted into the actual
+interleaved tree, as described below. The simultaneous recursive one-sided
+energy assignment and the source running-time bound remain separate.
 
 \section{Raw compression on the specified family's child image}
 
@@ -173,3 +173,28 @@ and
 \href{https://sirui-lu.com/TNLean/paper-gaps/alvv16_cluster_approximation.pdf}{the cluster-approximation note}.
 No printed approximation estimate is assumed in the construction above.
 \end{document}
+
+
+\section{Node updates on the same actual tree}
+
+The corrected node estimate retains width $49/16$, rather than replacing
+it by the coarser width four. The original positive connecting bond gives
+\[
+ e_{[l,k)}+e_{[k,r)}\le e_{[l,r)}
+ \le e_{[l,k)}+e_{[k,r)}+1.
+\]
+Thus two child estimates of width $49/16$ have sum within $57/8<8$
+below the parent minimum. The proved collar conversion supplies a middle
+center in the full required interval $[e_M-10,e_M]$. The actual compressed
+minimum on the same family's one-word child image, minus three, again
+has width $49/16$ since $\rho<1/16$.
+
+The theorem
+\leanid{TNLean.MPS.AreaLaw.exists_physical_dg_interleaved_tree_with_energy_updates}
+selects the original calibrated tree once, retaining its literal targets,
+operator families, child spaces and interleaved merge identities. The
+energy update is attached to those objects without selecting a second
+family. This is a node assertion for all admissible child scalar estimates;
+a simultaneous recursive assignment, with attained minima at the leaves,
+remains to be constructed. The hard-clipped family is still not identified
+with the source's literal soft Generate, and no running-time claim follows.

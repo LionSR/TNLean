@@ -86,10 +86,109 @@ It supports the separate energy-estimation image in
 \end{proof}
 
 The properties of the target and family above hold for the same objects
-in the calibrated hard-truncation construction. Applying this conditional
-lemma to its actual tree families and assigning the resulting estimates
-recursively are separate steps. The downward bias by three is a
+in the calibrated hard-truncation construction. The following results apply the conditional lemma to those actual tree
+families. A simultaneous recursive assignment of estimates remains a
+separate step. The downward bias by three is a
 correction for the one-sided center interface; the source's printed
 energy update uses the raw compressed minimum. No literal soft-Generate,
 MPO implementation of this energy routine, or running-time conclusion
 is asserted; see \cite{gap:alvv16_soft_regional_energy_centering}.
+
+
+\begin{definition}[Certified one-sided regional updates]
+    \label{def:soft_word_energy_update}
+    \lean{TNLean.MPS.AreaLaw.ALVV.IsRegionalLowerEnergyEstimate}
+    \lean{TNLean.MPS.AreaLaw.ALVV.IsSoftWordEnergyUpdate}
+    \lean{TNLean.MPS.AreaLaw.ALVV.HasSoftWordNodeEnergyUpdate}
+    \leanok
+    A lower energy estimate of width $c$ on an original regional operator
+    $A$ is a scalar $p$ for which there exist a scalar $e$ and a unit
+    vector $x$ such that $Ax=ex$, $A-eI\ge0$ and $e-c\le p\le e$.
+    For fixed child spaces and a fixed family, a soft word energy update
+    at center $p_M$ is the scalar $\lambda-3$, where $\lambda$ is the
+    last eigenvalue in an actual complete orthonormal eigenbasis, ordered
+    by decreasing eigenvalues, of the raw native soft operator compressed
+    to the literal one-word child image.
+
+    The node update property means that attained collar minima $c_L,c_R$
+    can be selected before the child estimates, so that every pair of
+    lower child estimates of width $49/16$ haves such an update at center
+    $p_1+p_2-c_L-c_R-2$, again of width $49/16$ for the parent.
+\end{definition}
+
+\begin{lemma}[A one-sided node energy update]
+    \label{lem:soft_word_node_energy_update}
+    \lean{TNLean.MPS.AreaLaw.ALVV.exists_soft_word_node_energy_update}
+    \leanok
+    Retain the physical hypotheses, parameters, specified target and its
+    own family from Lemma~\ref{lem:soft_same_word_compressed_energy}.
+    Fix a split $l\le k\le r$ and child spaces that are $3/200$-viable
+    for the original ground space. The actual collar minima $c_L,c_R$
+    can be chosen before the child estimates. If
+    \[
+       e_{[l,k)}-\frac{49}{16}\le p_1\le e_{[l,k)},\qquad
+       e_{[k,r)}-\frac{49}{16}\le p_2\le e_{[k,r)},
+    \]
+    where each regional minimum is attained, put
+    \[
+       p_M=p_1+p_2-c_L-c_R-2.
+    \]
+    Then $e_M-10\le p_M\le e_M$. Form the same raw soft operator
+    and its actual compression on the same one-word child image as
+    in~(\ref{eq:soft_word_raw_operator}). Its least compressed eigenvalue
+    $\lambda$ determines
+    \[
+       p=\lambda-3,\qquad e_P-\frac{49}{16}\le p\le e_P.
+    \]
+    An actual complete orthonormal eigenbasis of the compression, with
+    eigenvalues in decreasing order, is constructed as part of this assertion.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:soft_same_word_compressed_energy,lem:regional_central_energy_estimate,thm:actual_adjacent_interval_merge}
+    The single connecting bond gives
+    $e_{[l,k)}+e_{[k,r)}\le e_P\le
+    e_{[l,k)}+e_{[k,r)}+1$. Consequently
+    \[
+       e_P-\frac{57}{8}\le p_1+p_2\le e_P.
+    \]
+    Since $57/8\le8$, subtracting the two actual collar minima and two
+    gives the stated middle center. Apply the same-family compression
+    estimate with that center. Its bound $e_P-3-\rho\le\lambda-3\le e_P$
+    and $\rho<1/16$ imply the asserted width $49/16$.
+    Attained minima chosen in the two arguments agree by their positive
+    spectral shifts and normalized eigenvectors; no common minimizing
+    vector for the different decompositions is needed.
+\end{proof}
+
+\begin{lemma}[Energy updates for the actual interleaved tree]
+    \label{thm:physical_interleaved_tree_energy_updates}
+    \lean{TNLean.MPS.AreaLaw.exists_physical_dg_interleaved_tree_with_energy_updates}
+    \leanok
+    The calibrated interleaved interval-tree construction may retain
+    exactly its same targets, operator families, retained spaces, dimension
+    bounds and generator rank bounds, while also satisfying the following
+    assertion. For every long parent $[l,r)$, take collars $[l,l+\ell)$
+    and $[r-\ell,r)$. For every split and the actual two child spaces
+    of that tree, all one-sided child estimates of width $49/16$ have
+    the same-family node update of Lemma~\ref{lem:soft_word_node_energy_update}.
+    The constants remain uniform in the chain length, local dimension,
+    ground-space dimension and trimming accuracy. The explicit parameter
+    formulas and their dependence on these data are unchanged.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:physical_interleaved_same_word_family,lem:soft_word_node_energy_update}
+    Choose the interleaved tree once, including its targets and word
+    families. Its actual child spaces are $3/200$-viable for the full
+    original ground space. The spectral-gap assumption identifies the
+    specified lowest spectral value with the canonical minimum. The
+    actual count satisfies $D\ge50\ell^2$, and the retained word estimate
+    at power one is exactly the hypothesis of the node lemma. Since a
+    long parent has length greater than $4\ell$, the displayed collars
+    are disjoint and satisfy the required width bounds. Apply the node
+    lemma to these same targets, families and child spaces.
+\end{proof}
+
+The result provides the node update on the actual retained-space tree.
+It does not yet choose one simultaneous recursive family of scalar energy
+estimates. The distinction between the calibrated hard-clipped family and
+literal soft Generate, and the absence of a running-time conclusion, remain.

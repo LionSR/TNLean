@@ -17,9 +17,11 @@ import TNLean.MPS.AreaLaw.ALVV.FrustrationFreeGap
 import TNLean.MPS.AreaLaw.ALVV.FrustrationFreeRank
 import TNLean.MPS.AreaLaw.ALVV.HardTruncation
 import TNLean.MPS.AreaLaw.ALVV.HardTruncationResidual
+import TNLean.MPS.AreaLaw.ALVV.PhysicalDGTreeEnergyUpdates
 import TNLean.MPS.AreaLaw.ALVV.SoftFamilyResiduals
 import TNLean.MPS.AreaLaw.ALVV.SoftParentEnergy
 import TNLean.MPS.AreaLaw.ALVV.SoftParentStructure
 import TNLean.MPS.AreaLaw.ALVV.SoftTruncationOriginalResidual
 import TNLean.MPS.AreaLaw.ALVV.SoftTruncationReverseResidual
 import TNLean.MPS.AreaLaw.ALVV.SoftWordEnergyEstimate
+import TNLean.MPS.AreaLaw.ALVV.SoftWordNodeEnergy
