@@ -355,6 +355,50 @@
     Definition~\ref{def:balanced_interval_spaces} to this operation.
 \end{definition}
 
+
+\begin{definition}[Guarded failure at an actual node]
+    \label{def:guarded_interval_failure}
+    \lean{TNLean.MPS.AreaLaw.guardedIntervalFailure}
+    \leanok
+    Let a choice $\omega\in\Omega$ determine a merge operation, and write
+    $S_\omega(p,r)$ for its actual balanced interval space with fixed
+    positive leaf width $w$. Fix an arbitrary property $P_{p,r}$ of
+    interval spaces. For $J=(p,r)$ and $k=p+\lfloor(r-p)/2\rfloor$, define
+    \begin{align}
+       E_J=\{\omega:\;&P_{p,k}(S_\omega(p,k)),\quad
+                        P_{k,r}(S_\omega(k,r)),\nonumber\\
+                     &\neg P_{p,r}(S_\omega(p,r))\}.
+    \end{align}
+    Thus both actual children satisfy the property, while the same actual
+    parent fails it. No probability measure is involved in this definition.
+\end{definition}
+
+\begin{lemma}[A failed root has a guarded failed descendant]
+    \label{lem:balanced_interval_failure_ancestry}
+    \lean{TNLean.MPS.AreaLaw.exists_guardedIntervalFailure_of_root_failure,
+        TNLean.MPS.AreaLaw.root_failure_subset_iUnion_guardedIntervalFailure}
+    \leanok
+    Suppose $P_{p,r}(\mathcal H_{[p,r)})$ holds for every valid short
+    interval. For every valid root $p\le r\le L$,
+    \begin{align}
+       \{\omega:\neg P_{p,r}(S_\omega(p,r))\}
+       \subseteq\bigcup_{J\in\mathcal I_w(p,r)}E_J.
+    \end{align}
+    In particular every failed root has a guarded failed descendant in
+    the actual root merge list. There is no hypothesis on long-node success,
+    the law of the choices, or measurability.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{def:balanced_interval_spaces,def:balanced_interval_merge_list,def:guarded_interval_failure}
+    Fix $\omega$ and induct on the root length. A short root is the full
+    local space and therefore cannot fail. At a long root, if either
+    midpoint child fails, apply the induction to that child. Its merge
+    list is contained in the root list. If both children satisfy the
+    property, the failed root itself lies in its guarded failure set and
+    is the last member of the root list. This gives the witness and hence
+    the set inclusion. Only descendants of the specified root are used.
+\end{proof}
+
 \begin{lemma}[Recorded generators of the actual trimmed image]
     \label{lem:interval_recorded_generator_bounds}
     \lean{TNLean.MPS.AreaLaw.IsIntervalSpanWithRankBound,
