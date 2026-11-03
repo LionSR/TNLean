@@ -153,7 +153,8 @@ theorem mem_centralRegion_of_forall_notMem {n : ℝ} {p : ℝ × ℝ} (hp : p �
 /-- A lower bound on the distance from a point to every point of a set extends to its closure. -/
 theorem le_dist_of_mem_closure {X : Type*} [PseudoMetricSpace X] {s : Set X} {y : X} {c : ℝ}
     (h : ∀ z ∈ s, c ≤ dist y z) {z : X} (hz : z ∈ closure s) : c ≤ dist y z :=
-  closure_minimal h (isClosed_le continuous_const (continuous_const.dist continuous_id)) hz
+  closure_minimal (t := {z | c ≤ dist y z}) h
+    (isClosed_le continuous_const (continuous_const.dist continuous_id)) hz
 
 /-- Two points of the closure of a subset of the lens are at sup distance at most `n`.
 
@@ -279,7 +280,7 @@ uniform word `C` of the fresh auxiliary sheet, the auxiliary word `eq:geometry-a
 word `eq:geometry-main-word` and the final word `C | B`.
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:160–221`. -/
-def edgeWords : Set (ℝ → ι) :=
+noncomputable def edgeWords : Set (ℝ → ι) :=
   insert (edgeStartWord A B C)
     {W | ∃ op ∈ edgeOperations A B C, W = op.before ∨ W = op.after ∨ W = op.surrounding}
 
@@ -661,7 +662,7 @@ theorem dist_le_exchange (E : List SquareEdge) (e : SquareEdge) {y z : ℝ × �
       (R.mainGuide E e (edgeStartWord R.oldLabel R.finalLabel (R.nbrLabel e)) p ≠ R.nbrLabel e ∨
         R.auxGuide e (auxWord R.oldLabel R.finalLabel (R.nbrLabel e)) p ≠ R.nbrLabel e)}) :
     dist y z ≤ R.n :=
-  dist_le_of_mem_closure_edgeLens (fun _ hp => hp.1) hy hz
+  dist_le_of_mem_closure_edgeLens (Set.sep_subset (edgeLens R.n e) _) hy hz
 
 /-! ### The labels of the main guides -/
 

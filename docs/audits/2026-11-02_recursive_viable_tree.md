@@ -138,3 +138,12 @@ which combines the accepted pre-upgrade revisions of QICLean #1016 and
 #1017. Their proofs are unchanged. QICLean main has moved to Mathlib 4.36;
 this compatible revision retains TNLean's Mathlib 4.35 toolchain.
 The integrated full build and declaration checks are in progress.
+
+## Mathlib 4.36 integration
+
+Main revision `bcbaffef857d28e783e71ae6a72ed4f82f720634` upgrades the project to Mathlib
+4.36. This contribution follows that toolchain and pins QICLean to
+`c457682404aa548b4acd16ac27be5d3835e68892`, which contains the accepted
+soft-truncation and viable-subspace estimates on Mathlib 4.36. The proofs
+added by this contribution are unchanged. The checks recorded above used
+Mathlib 4.35; verification of the updated dependency combination is pending.
