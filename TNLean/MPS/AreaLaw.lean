@@ -27,6 +27,7 @@ import TNLean.MPS.AreaLaw.BoundaryCounting
 import TNLean.MPS.AreaLaw.BoundaryGap
 import TNLean.MPS.AreaLaw.BufferDiscount
 import TNLean.MPS.AreaLaw.CanonicalIntervalSamplingOperation
+import TNLean.MPS.AreaLaw.CanonicalIntervalSamplingSections
 import TNLean.MPS.AreaLaw.CanonicalIntervalSamplingTree
 import TNLean.MPS.AreaLaw.CanonicalLowDensityFamily
 import TNLean.MPS.AreaLaw.CanonicalSampledIntervalBounds

@@ -565,6 +565,41 @@ probabilities remains a separate argument.
     $P$, giving the required guarded failure in the unchanged union.
 \end{proof}
 
+
+\begin{lemma}[The section at an actual parent]
+    \label{lem:canonical_interval_sampling_parent_section}
+    \lean{TNLean.MPS.AreaLaw.canonicalIntervalSamplingTree_update_parent}
+    \leanok
+    Fix a valid long parent $[p,r)$ in the sampled balanced construction,
+    and put $k=p+\lfloor(r-p)/2\rfloor$. Replacing the coordinate
+    $\omega_{(p,r)}$ by $u$ leaves both actual child spaces unchanged.
+    The new retained parent is exactly the canonical sampled interleaved
+    parent of those same two child spaces, with choice $u$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:canonical_interval_sampling_tree_coordinate_dependence,
+        def:canonical_interval_sampling_operation,def:balanced_interval_spaces}
+    Each child is strictly shorter than the parent, so its retained space
+    is unchanged by the coordinate replacement. Unfold the defining
+    parent operation and use these two equalities. Its coordinate is now
+    precisely $u$.
+\end{proof}
+
+\begin{lemma}[Measurability of the actual guarded failure]
+    \label{lem:borel_guarded_canonical_interval_failure}
+    \lean{TNLean.MPS.AreaLaw.measurableSet_guardedIntervalFailure_canonicalSamplingTree}
+    \leanok
+    Fix a global target $G$ and real viability error $\delta$. For every
+    valid parent interval, the event that both actual midpoint children
+    are $\delta$-viable for $G$ and the actual parent is not is Borel.
+    Each regional target retains its full exterior.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:borel_canonical_interval_sampling_tree,def:guarded_interval_failure}
+    Intersect the two Borel child-success events with the complement of
+    the Borel parent-success event.
+\end{proof}
+
 \begin{lemma}[Recorded generators of the actual trimmed image]
     \label{lem:interval_recorded_generator_bounds}
     \lean{TNLean.MPS.AreaLaw.IsIntervalSpanWithRankBound,
