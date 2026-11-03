@@ -399,6 +399,24 @@
     the set inclusion. Only descendants of the specified root are used.
 \end{proof}
 
+
+\begin{lemma}[Geometry of the listed internal intervals]
+    \label{thm:balanced_interval_merge_bounds}
+    \lean{TNLean.MPS.AreaLaw.bounds_of_mem_balancedIntervalMergeList}
+    \leanok
+    Let $p\le r$ and $w\ge1$. Every interval $[a,b)$ occurring in
+    $\mathcal I_w(p,r)$ satisfies
+    $p\le a\le b\le r$ and $w<b-a$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{def:balanced_interval_merge_list}
+    Induct on $r-p$. A short root contributes no interval. Otherwise
+    every listed interval belongs to one child list or is the root
+    itself. Each child has smaller length and lies inside the root;
+    apply the induction hypothesis to its list. The root has length
+    greater than $w$ by the subdivision rule.
+\end{proof}
+
 \begin{lemma}[Recorded generators of the actual trimmed image]
     \label{lem:interval_recorded_generator_bounds}
     \lean{TNLean.MPS.AreaLaw.IsIntervalSpanWithRankBound,

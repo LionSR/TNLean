@@ -11784,3 +11784,13 @@ removed after the dependency audit exposed it.
 - **Seen:** `BalancedIntervalTree.lean` and `BalancedIntervalMergeList.lean`.
 - **Pattern:** Strong induction on the length supplies both shorter midpoint children; natural-number arithmetic proves their strict decrease.
 - **Decision:** Two mathematical uses retain their different invariants. Reuse the existing recursive definition when counting its internal intervals; no new tactic or second tree structure is introduced.
+
+## Candidate: geometry of an actual recursive interval list (2026-11-03)
+
+- **Seen:** `MPS/AreaLaw/BalancedIntervalMergeBounds.lean`.
+- **Pattern:** Prove bounds by the same length induction that defines the
+  existing midpoint merge list; split membership between both child lists
+  and the root singleton.
+- **Reuse:** `List.mem_append`, `List.mem_singleton`, and `omega` finish the
+  interval arithmetic without an independent tree representation.
+- **Decision:** Preserve the existing list and its midpoint subdivision.
