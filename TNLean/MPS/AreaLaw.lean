@@ -31,6 +31,7 @@ import TNLean.MPS.AreaLaw.CanonicalIntervalJointProbability
 import TNLean.MPS.AreaLaw.CanonicalIntervalSamplingOperation
 import TNLean.MPS.AreaLaw.CanonicalIntervalSamplingSections
 import TNLean.MPS.AreaLaw.CanonicalIntervalSamplingTree
+import TNLean.MPS.AreaLaw.CanonicalIntervalSamplingTreeProfile
 import TNLean.MPS.AreaLaw.CanonicalLowDensityFamily
 import TNLean.MPS.AreaLaw.CanonicalSampledIntervalBounds
 import TNLean.MPS.AreaLaw.CanonicalSampledIntervalInterleaved
@@ -94,6 +95,7 @@ import TNLean.MPS.AreaLaw.IntervalFamilyTrimming
 import TNLean.MPS.AreaLaw.IntervalFamilyTrimmingBudget
 import TNLean.MPS.AreaLaw.IntervalFamilyTrimmingIteration
 import TNLean.MPS.AreaLaw.IntervalFamilyTrimmingMeasurable
+import TNLean.MPS.AreaLaw.IntervalFullSpaceProfile
 import TNLean.MPS.AreaLaw.IntervalGenerators
 import TNLean.MPS.AreaLaw.IntervalLowDensityFamily
 import TNLean.MPS.AreaLaw.IntervalMPOTransfer
@@ -139,6 +141,7 @@ import TNLean.MPS.AreaLaw.PhysicalChebyshevViability
 import TNLean.MPS.AreaLaw.PhysicalDGApproximation
 import TNLean.MPS.AreaLaw.PhysicalDGAutomaticRefinement
 import TNLean.MPS.AreaLaw.PhysicalDGCanonicalParentFailure
+import TNLean.MPS.AreaLaw.PhysicalDGCanonicalSamplingData
 import TNLean.MPS.AreaLaw.PhysicalDGClippedReference
 import TNLean.MPS.AreaLaw.PhysicalDGEntropy
 import TNLean.MPS.AreaLaw.PhysicalDGFilterIteration

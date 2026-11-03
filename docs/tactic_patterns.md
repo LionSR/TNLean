@@ -45,6 +45,24 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Full short-interval size bounds — promoted (2026-11-03)
+
+- **Pattern:** Bound the full interval dimension by `q ^ width`, then use
+  its orthonormal basis to obtain the recorded weighted-rank bound. The
+  physical leaf count also compares `q ^ (4 * ell)` with `D ^ 6 * s ^ 3`.
+- **Helpers:** `interval_top_dimension_and_rank_bounds` in
+  `MPS/AreaLaw/IntervalFullSpaceProfile.lean` and the Mathlib-only
+  `Nat.viable_tree_leaf_count_le` in QICLean's `Analysis/ViableNodeLeafCount.lean`.
+- **Refactored occurrences:** `IntervalSamplingTree.lean`,
+  `PhysicalDGIntervalTree.lean` and `PhysicalDGInterleavedTree.lean` use the
+  corresponding helper without changing public signatures. The actual
+  canonical sampled-tree invariant and its physical data construction
+  reuse these same lemmas.
+- **Decision:** Physical-coordinate dimension and recorded-rank reasoning
+  stays in TNLean; pure natural-number arithmetic belongs to QICLean.
+  Neither helper assumes viability, and no new tactic is needed.
+
+
 ### Retaining the same calibrated physical parameters — existing construction (2026-11-03)
 
 - **Seen:** `PhysicalDGInterleavedFamily.lean`, `PhysicalDGInterleavedIteration.lean`,

@@ -5,6 +5,8 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.PhysicalDGInterleavedNode
 import TNLean.MPS.AreaLaw.IntervalMergeChoice
+import TNLean.MPS.AreaLaw.IntervalFullSpaceProfile
+import QICLean.Analysis.ViableNodeLeafCount
 
 /-!
 # An actual balanced tree with interleaved collective trims
@@ -174,18 +176,8 @@ theorem exists_physical_dg_interleaved_interval_tree_with_word_powers :
       apply (div_le_one (by positivity)).mpr
       nlinarith only [haSmall, hprod]
     have hxi1 : xi ≤ 1 := hxiMax.trans hxiMax1
-    have hell2 : 1 ≤ ell ^ 2 := Nat.one_le_pow 2 ell (by omega)
-    have hmBase : m ≤ m * ell ^ 2 := by
-      simpa only [mul_one] using Nat.mul_le_mul_left m hell2
-    have hqmBase : q ≤ m * ell ^ 2 := (Nat.le_max_left q 50).trans hmBase
-    have hbase : 2 ≤ m * ell ^ 2 := (by omega : 2 ≤ m).trans hmBase
-    have hleafCount : q ^ width ≤ count := by
-      calc
-        q ^ width ≤ (m * ell ^ 2) ^ (4 * ell) := Nat.pow_le_pow_left hqmBase _
-        _ ≤ (m * ell ^ 2) ^ ((22 * ell) * 6) := Nat.pow_le_pow_right (by omega) (by omega)
-        _ = D ^ 6 := pow_mul (m * ell ^ 2) (22 * ell) 6
-        _ ≤ D ^ 6 * s ^ 3 := by
-          simpa only [mul_one] using Nat.mul_le_mul_left (D ^ 6) (Nat.one_le_pow 3 s hs)
+    have hleafCount : q ^ width ≤ count :=
+      Nat.viable_tree_leaf_count_le (Nat.le_max_left q 50) (by omega) (by omega) hs
     let P := fun (p r : ℕ) (S : Submodule ℂ
         (EuclideanSpace ℂ (interval L p r → Fin q))) ↦
       Submodule.IsViable (3 / 200 : ℝ) S
@@ -206,15 +198,9 @@ theorem exists_physical_dg_interleaved_interval_tree_with_word_powers :
         (adjacentIntervalMerge L q J.val.1 k J.val.2 hpk hkr S1 S2) U
     have hleaf (p r : ℕ) (_hpr : p ≤ r) (_hrL : r ≤ L) (hshort : r - p ≤ width) :
         P p r ⊤ := by
-      have hdim : Module.finrank ℂ
-          (EuclideanSpace ℂ (interval L p r → Fin q)) ≤ count := by
-        calc
-          _ = q ^ (interval L p r).card := by
-            rw [finrank_euclideanSpace, Fintype.card_fun, Fintype.card_fin, Fintype.card_coe]
-          _ ≤ q ^ width := Nat.pow_le_pow_right hq ((card_interval_le _ _).trans hshort)
-          _ ≤ count := hleafCount
-      exact ⟨Submodule.isViable_top _ (by norm_num) _, by simpa only [finrank_top] using hdim,
-        isIntervalSpanWithRankBound_top hq hdim hxi.le hxi1⟩
+      have hprofile := interval_top_dimension_and_rank_bounds (L := L)
+        hq hxi.le hxi1 hleafCount hshort
+      exact ⟨Submodule.isViable_top _ (by norm_num) _, hprofile⟩
     have hchoice (J : LongIntervalIndex L width) (k : ℕ)
         (hpk : J.val.1 ≤ k) (hkr : k ≤ J.val.2)
         (S1 : Submodule ℂ (EuclideanSpace ℂ (interval L J.val.1 k → Fin q)))

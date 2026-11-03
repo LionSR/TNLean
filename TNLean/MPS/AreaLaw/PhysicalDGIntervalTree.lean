@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.AreaLaw.PhysicalDGSampledNode
 import TNLean.MPS.AreaLaw.IntervalSamplingTree
 import QICLean.Analysis.ViableTrimmingRank
+import QICLean.Analysis.ViableNodeLeafCount
 
 /-!
 # An actual recursive viable tree for the full physical ground space
@@ -146,13 +147,8 @@ theorem exists_physical_dg_recursive_interval_spaces_of_le_radius :
   have hxi1 : xi ≤ 1 := hxiMax.trans hxiMax1
   obtain ⟨hs, hscount, _htail, _hfailure⟩ :=
     Real.viable_node_uniform_sampling_size hD hrG hbeta hbeta1.le
-  have hleaf : q ^ width ≤ count := by
-    calc
-      q ^ width ≤ (m * ell ^ 2) ^ (4 * ell) := Nat.pow_le_pow_left (hqm.trans hmBase) _
-      _ ≤ (m * ell ^ 2) ^ ((22 * ell) * 6) := Nat.pow_le_pow_right (by omega) (by omega)
-      _ = D ^ 6 := by dsimp only [D]; rw [pow_mul]
-      _ ≤ D ^ 6 * s ^ 3 := by
-        simpa only [mul_one] using Nat.mul_le_mul_left (D ^ 6) (Nat.one_le_pow 3 s hs)
+  have hleaf : q ^ width ≤ count :=
+    Nat.viable_tree_leaf_count_le hqm (by omega) hell hs
   have hselected := exists_balanced_sampled_interval_tree hwidth hq hD hrG G hxi hxi1
     N F hN hbeta hbeta1
   obtain ⟨operation, hliteral, htree⟩ := hselected hleaf (by

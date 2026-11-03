@@ -802,3 +802,73 @@ running-time bound.
 This is a uniform one-parent result. Combining the actual balanced tree's
 conditionally fresh coordinates into a whole-tree probability estimate
 remains a separate argument; no running-time assertion follows here.
+
+\subsection{Unconditional profiles throughout the sampled tree}
+
+\begin{lemma}[The full short-interval profile]
+    \label{lem:full_short_interval_dimension_rank_bounds}
+    \lean{TNLean.MPS.AreaLaw.interval_top_dimension_and_rank_bounds}
+    \leanok
+    Suppose $q\ge1$, $0\le\xi\le1$, and $q^{\mathrm{width}}\le M$.
+    The full space on an interval of length at most $\mathrm{width}$ has
+    dimension at most $M$ and an orthonormal recorded spanning family with
+    weighted internal-cut Schmidt ranks at most $M$. No viability premise
+    is required.
+\end{lemma}
+\begin{proof}\leanok
+    The number of sites in the interval is at most its length, so the
+    full dimension is at most $q^{\mathrm{width}}$. Use its orthonormal
+    basis and $\xi^2\le1$ in the existing full-space rank bound.
+\end{proof}
+
+\begin{lemma}[Every space of the actual canonical sampled recursion]
+    \label{lem:canonical_sampled_tree_unconditional_profile}
+    \lean{TNLean.MPS.AreaLaw.canonicalIntervalSamplingTree_profile}
+    \leanok
+    Fix a positive leaf width, $q\ge1$, $D\ge2$, $s\ge1$ and
+    $0<\xi\le1$. Let $M=D^6s^3$, suppose $q^{\mathrm{width}}\le M$,
+    and fix one family of at most $D^2$ operators for each long interval.
+    For every global choice of interval unitaries, every retained space
+    of the existing canonical sampled balanced recursion has dimension at
+    most $M$ and the recorded weighted-rank bound $M$.
+    This holds on every history, including those where viability fails.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:canonical_interleaved_parent_unconditional_profile,
+        lem:full_short_interval_dimension_rank_bounds}
+    Apply the existing balanced-recursion invariant. A short leaf is its
+    actual full space. Every long parent is its actual canonical sample
+    and literal interleaved trim, which has the unconditional profile for
+    arbitrary children. No separate tree recursion is introduced.
+\end{proof}
+
+\begin{lemma}[One physical collection of data for all histories]
+    \label{lem:physical_canonical_interval_sampling_data}
+    \lean{TNLean.MPS.AreaLaw.exists_physical_dg_canonical_interval_sampling_data}
+    \leanok
+    Under the physical hypotheses and calibrated parameters of
+    Lemma~\ref{lem:physical_canonical_interleaved_parent_true_failure},
+    choose the common reference and the actual clipped target and operator
+    family of every long interval before the radius and all global unitary
+    choices. Retain their target comparisons and ordered-word certificates.
+    The same data give the preceding unconditional recorded profile on
+    every valid interval for every global choice. Each long parent also
+    retains its true original-ground-space failure bound $(L+1)^{-2}$
+    under bounded viable children.
+    The leaf width is $4\ell$, and the capped-gap, fixed failure scale and
+    hard-clipped-family qualifications remain unchanged.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:physical_canonical_interleaved_parent_true_failure,
+        lem:canonical_sampled_tree_unconditional_profile}
+    Select the data once from the physical parent theorem. The original
+    spectral hypotheses give $q\ge2$ and nonzero ground-space dimension.
+    The actual common radius is at most one. The shared numerical leaf
+    estimate gives $q^{4\ell}\le D^6s^3$, so the deterministic invariant
+    applies. The selected families still satisfy their same local true
+    failure bounds; they are not selected again for different histories.
+\end{proof}
+
+Only the recorded size bounds are asserted on all intervals here.
+Simultaneous viability for one sampled root hierarchy and its joint
+probability estimate are separate conclusions.
