@@ -1,0 +1,169 @@
+\section{Sharp approximation of an original low-energy band}
+
+Fix a bandwidth $\eta>0$. Let $H=\sum_i h_i$ be an open chain of $L$
+sites of local dimension $q\ge2$, where each $h_i$ is a positive
+contraction supported on its two adjacent sites. Write
+\[
+  \lambda_0=\min\sigma(H),\qquad
+  G(c)=\mathbf1_{(-\infty,\lambda_0+c]}(H)\mathcal H,\qquad
+  r_\eta=\dim G(\eta).
+\]
+For a deficit $v>0$, put
+\[
+ b=\min\{v,\eta/2\},\qquad g=\min\{b/6,1\},\qquad
+ u=1+\log q+\log(1/g).
+\]
+The results below concern the actual original bands. They assume neither
+an internal gap nor invariance of these bands under a clipped filter.
+The fixed-bandwidth and nontrivial-local-dimension conventions are stated
+in~\cite{gap:alvv16_low_energy_family_scope}. These are scoped consequences
+supporting the approximation conclusion of
+\cite[Theorem~thm:al-ld, lines 1096--1105]{Arad2016RigorousRG}.
+
+\begin{lemma}[A fixed initial space and the actual refined images]
+    \label{lem:ld_sharp_normalized_independent_scales}
+    \lean{TNLean.MPS.AreaLaw.exists_fixed_bandwidth_normalized_low_energy_approximation_of_independent_scales}
+    \leanok
+    There are $K_b>0$ and $C\ge21$, depending only on $\eta$, with
+    the following property for every prescribed interval $J$.
+    One regional space $W_0$ can be chosen before the accuracy so that
+    it is $3/200$-viable for $G(\eta-b/2)$ and
+    \[
+      \dim W_0\le r_\eta\exp\!\left[
+        \frac{K_b}{b/2}
+        \bigl(1+\log q+\log(1+1/(b/2))\bigr)^3\right].
+    \]
+    For each $0<\delta\le1$, put
+    $a=16+\log(1/g)+\log(1/\delta)$.
+    An integer $\ell\ge1$ can be chosen before the vector, with
+    \[
+       \ell\le8/g+(7C)^{1/4}g^{-1/4}a^{3/4}.
+    \]
+    Every unit $\psi\in G(\eta-v)$ then has a unit approximation
+    $\phi$ satisfying
+    \[
+      |\langle\phi,\psi\rangle|\ge1-\delta,\qquad
+      \operatorname{SR}_{J:J^c}(\phi)
+        \le\dim W_0\,(q\ell^2)^{44\ell}.
+    \]
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:ld_sharp_regional_polynomial_family}
+    Select the initial viable space at deficit $b/2$ before $\delta$.
+    A long interval is moved inward by the actual collar construction;
+    the regional polynomial family is taken at buffer $b/6$.
+    Transport only the two closeness assertions by the canonical
+    original-band identities. Their losses are each $\delta/100$.
+    The original initial space is therefore $1/20$-viable for the
+    upper clipped target. Its actual polynomial image has viability
+    error at most $\delta/5$ for the lower clipped target.
+    Returning to the original lower band gives error at most
+    $21\delta/50\le\delta/2$.
+    Normalize a vector in this same image and use its dimension bound.
+    For a short interval, take $\phi=\psi$ and bound its exact cut rank
+    by $q^{|J|}$. Boundary and empty intervals are included.
+\end{proof}
+
+\begin{lemma}[The sharp logarithmic cut-rank bound]
+    \label{lem:ld_sharp_logarithmic_cut_rank}
+    \lean{TNLean.MPS.AreaLaw.exists_fixed_bandwidth_interval_low_energy_normalized_approximation}
+    \leanok
+    There is $K_\eta>0$, chosen before the chain, interval, deficit,
+    accuracy and vector, such that the preceding $\phi$ may be chosen with
+    \[
+      \log\operatorname{SR}_{J:J^c}(\phi)
+      \le\log r_\eta+
+       K_\eta\left(\frac{u^3}{g}
+         +g^{-1/4}a^{3/4}u\right)(1+\log a).
+    \]
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:ld_sharp_normalized_independent_scales}
+    Since $g\le b/6$ and $g\le1$,
+    the initial exponent is at most $8K_bu^3/g$.
+    The actual polynomial count has logarithm at most
+    \[
+      44(1+\log(11+\beta))
+      \bigl(10/g+\beta g^{-1/4}a^{3/4}\bigr)u(1+\log a),
+      \qquad\beta=(7C)^{1/4}.
+    \]
+    Add twice this logarithm to that of the initial dimension.
+    This retains exactly one $\log r_\eta$.
+\end{proof}
+
+\begin{lemma}[From one cut approximation to marginal mass]
+    \label{lem:regional_overlap_to_missing_mass}
+    \lean{TNLean.MPS.AreaLaw.one_sub_regional_kyFanNorm_le_twice_error}
+    \leanok
+    If a unit vector $\phi$ has cut rank at most $D$ and
+    $|\langle\phi,\psi\rangle|\ge1-\epsilon$, where $\epsilon\le1$,
+    then the marginal of $\psi$ has missing leading $D$-eigenvalue
+    mass at most $2\epsilon$.
+\end{lemma}
+\begin{proof}\leanok
+    The overlap squared is bounded by the leading marginal mass.
+    Use $(1-\epsilon)^2\ge1-2\epsilon$.
+\end{proof}
+
+\begin{lemma}[One normalized sequential approximation]
+    \label{lem:normalized_sequential_prefix_mass}
+    \lean{TNLean.MPS.AreaLaw.exists_unit_mps_of_uniform_prefix_mass}
+    \leanok
+    Let $\psi$ be a unit vector and $0<\delta\le1$.
+    If every internal prefix marginal has missing leading
+    $D$-eigenvalue mass at most $\delta/[8(L+1)]$, then there is
+    one unit open-boundary MPS $\Phi$ of bond dimension at most $D$
+    with $|\langle\Phi,\psi\rangle|\ge1-\delta$ and
+    $\|\Phi-\psi\|^2\le\delta/2$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:variable_normalized_sequential}
+    Project successively onto the actual leading marginal eigenspaces.
+    The total missing mass is at most $\delta/8$.
+    The sequential projection estimate gives that squared error for the
+    resulting vector, which is nonzero. Normalization increases the
+    distance by a factor at most two, so the squared error is at most
+    $\delta/2$. The product retains rank at most $D$ at every cut.
+\end{proof}
+
+\begin{lemma}[Sharp simultaneous MPS approximation]
+    \label{lem:ld_sharp_global_mps}
+    \lean{TNLean.MPS.AreaLaw.exists_fixed_bandwidth_low_energy_normalized_isOpenMPS_approximation}
+    \leanok
+    There is $K_\eta>0$, depending only on the fixed bandwidth,
+    with the following property. For $0<\delta\le1$, put
+    \[
+      A=16+\log(1/g)+\log\frac{16(L+1)}\delta.
+    \]
+    There is an integer $B\ge1$, selected before the vector, satisfying
+    \[
+      \log B\le K_\eta
+         \left(\frac{u^3}{g}+g^{-1/4}A^{3/4}u\right)(1+\log A).
+    \]
+    Every unit $\psi\in G(\eta-v)$ has one unit open-boundary MPS
+    approximation $\Phi$ of bond dimension at most $r_\eta B$,
+    with $|\langle\Phi,\psi\rangle|\ge1-\delta$ and
+    $\|\Phi-\psi\|^2\le\delta/2$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:ld_sharp_logarithmic_cut_rank,
+      lem:regional_overlap_to_missing_mass,lem:normalized_sequential_prefix_mass}
+    Apply the cut-rank bound at accuracy $\delta/[16(L+1)]$ to each
+    prefix. Round the same exponential rank factor upward once,
+    independently of the vector. Every prefix then has missing mass
+    at most $\delta/[8(L+1)]$. Apply the normalized sequential
+    construction. The rounding adds at most one to the logarithm,
+    which is absorbed by increasing $K_\eta$.
+\end{proof}
+
+For the source range $0<v\le\eta$, the already proved capped-width
+estimate gives, with $B_\eta=\max\{12,\eta\}$,
+\[
+  1/g\le B_\eta/v,\qquad
+  \log(1/g)\le\log B_\eta+\log(1+1/v).
+\]
+Thus the displayed ranks have the source's
+$v^{-1/4}\log(1/\delta)^{3/4}$ accuracy dependence, with only
+logarithmic factors in the regularized parameters and a bandwidth-dependent
+constant. Substituting $v=\mu/\log L$ gives its low-density scale.
+The statement is an existence theorem and asserts no running time.
