@@ -96,7 +96,8 @@ private theorem triangle_mem_of_normal_bounds (a b c p : ℝ × ℝ)
       simp only [Set.mem_insert_iff, Set.mem_singleton_iff] at hq <;>
       rcases hq with rfl | rfl | rfl <;> first
         | (left; simp [planeCross]; done) | (left; dsimp [planeCross]; ring1)
-        | (right; dsimp [d, planeCross] <;> ring1)
+        | (right; dsimp [d, planeCross]; done)
+        | (right; dsimp [d, planeCross]; ring1)
   have hd' : d ≠ 0 := hd
   have hsum : γ + α + β = 1 := by
     dsimp [α, β, γ]
@@ -230,7 +231,8 @@ theorem TemplatePolygon.mem_region_iff_normal_bounds (P : TemplatePolygon) (p : 
       change Convex ℝ (f ⁻¹' Set.Icc l r)
       exact (convex_Icc l r).linear_preimage f
     rw [P.region_eq_convexHull_vertices] at hp
-    exact convexHull_min hv hc hp
+    apply convexHull_min ?_ hc hp
+    exact fun q hq ↦ hv q hq
   · intro h
     cases P with
     | triangle a b c hd hab hbc hca =>

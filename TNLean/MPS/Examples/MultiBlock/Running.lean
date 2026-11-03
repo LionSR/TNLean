@@ -399,7 +399,7 @@ theorem flagVec_eq_of_ord (P : MultiBlockCompression tensorB labels blocks)
           Matrix.cons_val_one, Pi.smul_apply, Pi.single_apply, smul_eq_mul, mul_ite, mul_one,
           mul_zero, zero_mul, one_mul, zero_add, Finset.sum_ite_eq', Finset.mem_univ, ↓reduceIte,
           CharP.cast_eq_zero, Nat.cast_one, zero_ne_one, one_ne_zero, mul_eq_mul_right_iff]
-      first | ring1 | (left; norm_num)
+      left; norm_num
     have hW := leftRow_mulVec_mulVec_of_mem_flagVec P (b := Sum.inl s) 0 (hks.symm ▸ hu)
     rw [hBu, Matrix.mulVec_smul, hWu] at hW
     have h0 : (j.val : ℂ) + 1 = (s.1.val : ℂ) + 1 := by

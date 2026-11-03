@@ -95,7 +95,7 @@ lemma errorBudget_boundary_le {ΔE a C L ℓ' η Zc ν E : ℝ} (hΔ : 0 < ΔE) 
   calc sqrt η * (a * Zc ^ 2 * ν * exp (-(ℓ' / 4))) ≤
         L / ΔE * (a * (3 * L) ^ 2 * (C * L) * exp (-(L / 16))) := by
         gcongr ?_ * (a * ?_ ^ 2 * ?_ * ?_)
-        all_goals first | linarith | exact Real.exp_le_exp.mpr (by linarith)
+        all_goals exact Real.exp_le_exp.mpr (by linarith)
     _ = 9 * a * C / ΔE * (L ^ 4 * exp (-(L / 16))) := by ring
     _ ≤ 9 * a * C / ΔE * (48 ^ 4 * 24 * exp (-(L / 48))) := by gcongr
     _ ≤ _ := by rw [mul_assoc _ (48 ^ 4 * 24 : ℝ)]; gcongr
