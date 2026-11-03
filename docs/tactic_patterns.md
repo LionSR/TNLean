@@ -12181,3 +12181,16 @@ same operator equality. The four operator bounds use the shared QIC theorem
   when proving measurability of intersections.
 - **Decision:** This is the actual-construction application of the existing
   product-measure result; no second induction or probability estimate is copied.
+
+### Local coordinate definitions inside matrix-action instances
+
+A finite regional matrix action may contain local region definitions inside
+its `Fintype` and `DecidableEq` arguments. In the new natural soft-filter
+corollary, a bounded comparison confirms definitional equality after
+substituting those local definitions. Core `unfold` on the named local
+coordinate definitions performs that substitution before converting the
+matrix-action equality or an orthogonal-complement bound. This avoids
+unfolding the full Euclidean matrix-action equivalence. Ordinary numerical
+bounds should likewise use their specific monotonicity lemmas after a large
+operator certificate is in context, rather than a general arithmetic scan.
+No custom tactic or resource option is introduced.

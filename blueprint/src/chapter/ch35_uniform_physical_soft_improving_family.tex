@@ -146,3 +146,124 @@ centers. The statement retains explicit residual conditions and does
 not identify the source's fixed fourth-order choice. Adaptive selection
 of centers, the complete generating algorithm and its running time
 are separate conclusions.
+
+\begin{lemma}[Retaining the represented matrix and its filter]
+    \label{lem:uniform_physical_soft_filter_family}
+    \lean{TNLean.MPS.AreaLaw.ALVV.exists_uniform_physical_soft_filter_family}
+    \leanok
+    Under the hypotheses and notation of
+    Theorem~\ref{thm:uniform_physical_soft_improving_family}, one may
+    retain just the five attained regional minima, their common unit
+    minimizing vector, $E\in[0,4]$, and one core family $W$ with count
+    at most $D$ and the same member bond bound.
+
+    For every admissible triple of regional estimates, there is a
+    Hermitian matrix $\widehat G_p$ with
+    $\|G_p-\widehat G_p\|\le\xi$ and
+    $\|\widehat G_p\|\le M+\xi$. For every original ground energy
+    with spectral gap at least $\gamma$, this same matrix has the
+    closed spectral target, rank equality and both $3\tau/200$
+    comparisons of~(\ref{eq:uniform_soft_own_cluster}). Its original
+    filter, tensor decomposition, four operator bounds and all
+    ordered-word conclusions are retained unchanged.
+    The family precedes all three estimates; the local tensor
+    representation need not be specified again.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:uniform_physical_soft_improving_family}
+    Use the preceding construction once, retain its represented
+    Hermitian matrix as a witness for each triple of estimates, and
+    keep its complete spectral and filter conclusions. No second
+    approximant or filter is chosen.
+\end{proof}
+
+\begin{lemma}[One soft improving family on a prescribed long interval]
+    \label{lem:uniform_long_interval_soft_improving_family}
+    \lean{TNLean.MPS.AreaLaw.ALVV.exists_uniform_long_interval_soft_improving_family}
+    \leanok
+    Fix the numerical parameters and residual budgets
+    of~(\ref{eq:uniform_soft_residual_budgets})--(\ref{eq:uniform_soft_family_budgets}).
+    Let $h_i$, $0\le i<N$, be positive-contraction nearest-neighbour
+    interactions on $N+1$ sites of dimension $q\ge2$. Prescribe
+    $J=[p,r)$ with $0\le p\le r\le N+1$ and $4\ell<r-p$.
+
+    There are integers $a,b$ with
+    \begin{align}
+      a+2\ell&\le b, & b+2\ell&\le N,\notag\\
+      p&\le a+\ell, & b+\ell+1&\le r,\notag\\
+      (a+2\ell)-p&\le2\ell, & r-(b+1)&\le2\ell.
+      \label{eq:uniform_long_soft_middle_collars}
+    \end{align}
+    Moreover $J_0=[a+\ell,b+\ell+1)\subseteq J$ and
+    $|J\setminus J_0|\le2\ell$.
+    Form the five internal Hamiltonians $A_j$ and crossing sum $Y$
+    at these cuts as in the preceding theorem. There are five attained
+    minima $e_j$, one common unit minimizing vector $x$, $E\in[0,4]$,
+    and a family $W_1,\ldots,W_n$ on $J$, chosen before every admissible
+    triple of center estimates, such that
+    \begin{align}
+      A_jx&=e_jx, & A_j-e_jI&\ge0, & n&\le D^2.
+    \end{align}
+    In increasing site order, each $W_i$ has open matrix product bond
+    bound $\max\{1,(\max\{1,B\})^{2k}\}$, with the same $B$ as
+    in~(\ref{eq:uniform_soft_native_family}).
+
+    For every admissible triple $p_j\in[e_j-10,e_j]$ on
+    $j\in\{0,2,4\}$, define the actual soft matrix $G_p$ by
+    (\ref{eq:uniform_soft_same_approximant}). There is a Hermitian
+    $\widehat G_p$ with
+    $\|G_p-\widehat G_p\|\le\xi$ and
+    $\|\widehat G_p\|\le M+\xi$.
+    For every ground energy $\mu_0$ of $H_0=\sum_i h_i$ separated
+    from the rest of its spectrum by at least $\gamma$,
+    $\mu_0=E+\sum_j e_j$. Let $G_0$ be the full ground space of $H_0$.
+    The same matrix $\widehat G_p$ has
+    \begin{align}
+      T_p&=\operatorname{ran}\mathbf1_{(-\infty,E+\gamma/4]}(\widehat G_p)
+          =\operatorname{ran}\mathbf1_{(-\infty,E+3\gamma/4]}(\widehat G_p),\notag\\
+      \dim T_p&=\dim G_0,
+    \end{align}
+    and $T_p,G_0$ are mutually $3\tau/200$-close.
+
+    Write $\Psi_J$ for the canonical unitary placing $J$ first, and
+    set $T_{p,J}=\Psi_JT_p$. The original factory's filter, pulled
+    back to the whole chain, is an operator $K_*$ with
+    \begin{align}
+      K_J=\Psi_JK_*\Psi_J^{-1}=\sum_{i=1}^n W_i\otimes R_i.
+    \end{align}
+    Its whole-chain matrix is unchanged. The conjugated operator $K_J$ preserves
+    $T_{p,J}$ and its orthogonal complement, has minimum gain one
+    on $T_{p,J}$, and has squared contraction at most $\Delta$ on
+    $T_{p,J}^\perp$.
+    For every $\nu\ge0$, $\delta<1$, and $\delta$-viable $S$ for
+    $T_{p,J}$, the ordered-word image
+    \begin{align}
+      S_\nu=\sum_{w\in\{1,\ldots,n\}^\nu}W_{w_1}\cdots W_{w_\nu}S
+    \end{align}
+    has dimension at most $n^\nu\dim S$ and is
+    $\Delta^\nu/(1-\delta)^2$-viable for $T_{p,J}$.
+    No viability assertion is transferred directly between distinct
+    tensor splits.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:uniform_physical_soft_filter_family,
+      thm:common_collar_mpo_tensor_family,thm:precenter_collar_count,
+      lem:common_collar_filter_words}
+    Take the inward cuts of $J$. Their two added collars have total
+    length at most $2\ell$, and they give
+    (\ref{eq:uniform_long_soft_middle_collars}). Use the natural
+    physical construction once on $J_0$, keeping its attained minima
+    and its one common family before all three center estimates.
+    Enlarge that family once by the collar matrix units.
+    Its count is at most $Dq^{2|J\setminus J_0|}\le D^2$,
+    and the member bond bound changes only by the displayed maximum.
+
+    For each triple, keep the represented matrix and its own spectral
+    target from the same construction. Pull its original filter back
+    to the whole chain by the inverse canonical unitary. Its actual
+    whole-matrix decomposition supplies the old-region input of
+    Lemma~\ref{lem:common_collar_filter_words}. That lemma derives the
+    decomposition, operator bounds and word estimate on $J$ using the
+    already chosen enlarged family. The target rank and both original
+    comparisons are unchanged throughout.
+\end{proof}
