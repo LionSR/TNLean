@@ -57,7 +57,8 @@ theorem hasProductForm_truncatedExp_pow_of_even [Nonempty σ] (acts : κ → Fin
     (hh : ∀ k, h k ∈ supportedOperators q (acts k : Set σ))
     (hherm : ∀ k, (h k).IsHermitian) (near : σ → σ → Prop) (hnear : ∀ i, near i i)
     (β : ℝ) {m : ℕ} (hm : Even m) :
-    HasProductForm q near ((truncatedExp (overlapGraph acts) (IsLargeSupport near acts) h β) ^ m) ∧
+    HasProductForm (fun _ ↦ q) near
+        ((truncatedExp (overlapGraph acts) (IsLargeSupport near acts) h β) ^ m) ∧
       ((truncatedExp (overlapGraph acts) (IsLargeSupport near acts) h β) ^ m).PosSemidef :=
   (hasProductForm_truncatedExp acts h hh near hnear β).pow_of_even
     (isHermitian_truncatedExp _ _ hherm β) hm
@@ -68,7 +69,7 @@ theorem hasProductForm_truncatedExp_of_dist_le [PseudoMetricSpace σ] [Nonempty 
     (acts : κ → Finset σ) (h : κ → Matrix (σ → Fin q) (σ → Fin q) ℂ)
     (hh : ∀ k, h k ∈ supportedOperators q (acts k : Set σ))
     {l : ℝ} (hl : 0 ≤ l) (β : ℝ) :
-    HasProductForm q (fun i j ↦ dist i j ≤ l)
+    HasProductForm (fun _ ↦ q) (fun i j ↦ dist i j ≤ l)
       (truncatedExp (overlapGraph acts) (IsLargeDiam acts l) h β) := by
   have hlarge : IsLargeSupport (fun i j ↦ dist i j ≤ l) acts = IsLargeDiam acts l := by
     funext C
@@ -86,7 +87,7 @@ theorem hasProductForm_truncatedExp_pow_of_even_of_dist_le
     (hh : ∀ k, h k ∈ supportedOperators q (acts k : Set σ))
     (hherm : ∀ k, (h k).IsHermitian) {l : ℝ} (hl : 0 ≤ l) (β : ℝ)
     {m : ℕ} (hm : Even m) :
-    HasProductForm q (fun i j ↦ dist i j ≤ l)
+    HasProductForm (fun _ ↦ q) (fun i j ↦ dist i j ≤ l)
         ((truncatedExp (overlapGraph acts) (IsLargeDiam acts l) h β) ^ m) ∧
       ((truncatedExp (overlapGraph acts) (IsLargeDiam acts l) h β) ^ m).PosSemidef :=
   (hasProductForm_truncatedExp_of_dist_le acts h hh hl β).pow_of_even

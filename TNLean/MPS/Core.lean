@@ -46,6 +46,7 @@ import TNLean.MPS.Core.ReductionResidualComposition
 import TNLean.MPS.Core.ReductionUniqueness
 import TNLean.MPS.Core.RepeatedWord
 import TNLean.MPS.Core.ScaledNormality
+import TNLean.MPS.Core.SplitIndexTrace
 import TNLean.MPS.Core.SquarePhysicalCoordinates
 import TNLean.MPS.Core.StationaryPhysicalDensity
 import TNLean.MPS.Core.StationaryPhysicalOverlap
