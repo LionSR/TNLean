@@ -23,6 +23,7 @@ import TNLean.MPS.AreaLaw.ALVV.FrustrationFreeRank
 import TNLean.MPS.AreaLaw.ALVV.HardTruncation
 import TNLean.MPS.AreaLaw.ALVV.HardTruncationResidual
 import TNLean.MPS.AreaLaw.ALVV.LongIntervalSoftImprovingFamily
+import TNLean.MPS.AreaLaw.ALVV.NativeLongIntervalSoftFamily
 import TNLean.MPS.AreaLaw.ALVV.PhysicalDGRootEnergyAssignment
 import TNLean.MPS.AreaLaw.ALVV.PhysicalDGTreeEnergyAssignment
 import TNLean.MPS.AreaLaw.ALVV.PhysicalDGTreeEnergyUpdates

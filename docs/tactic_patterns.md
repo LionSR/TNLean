@@ -12249,3 +12249,12 @@ No custom tactic or resource option is introduced.
   are added.
 - **Decision:** Compose the existing theorems. No new tactic, reference
   construction, sampled tree or candidate-dimension factor is introduced.
+
+### Identical coordinate maps and a retained filter packet
+
+`NativeLongIntervalSoftFamily` uses the existing regional coordinate equality
+on a single local proposition containing the tensor decomposition and four
+operator bounds. Typed `congrArg` followed by `Eq.mp` preserves the actual
+whole-chain filter and coefficients. The literal one-step image estimate
+then calls `IsViable.map_of_tensor_decomposition` directly; no conversion of
+length-one word indices is needed.

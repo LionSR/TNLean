@@ -267,3 +267,55 @@ are separate conclusions.
     already chosen enlarged family. The target rank and both original
     comparisons are unchanged throughout.
 \end{proof}
+
+\begin{lemma}[One-step improvement in the native regional coordinates]
+    \label{lem:uniform_native_long_interval_soft_improving_family}
+    \lean{TNLean.MPS.AreaLaw.ALVV.exists_uniform_native_long_interval_soft_improving_family}
+    \leanok
+    Under the hypotheses of
+    Lemma~\ref{lem:uniform_long_interval_soft_improving_family}, retain
+    the same attained regional minima, common minimizing vector,
+    residual energy, and family $W_1,\ldots,W_n$ before all three
+    admissible center estimates. The count and member bond bounds
+    are unchanged. For each center, retain the same represented
+    Hermitian matrix $\widehat G_p$, its own global spectral target
+    $T_p$, its rank and both comparisons with the original ground space.
+
+    Let $\mathcal R_J$ be the canonical retained-region/exterior unitary,
+    which sends the coordinate vector at a configuration $\sigma$ to
+    $e_{\sigma|_J}\otimes e_{\sigma|_{J^c}}$, and put
+    $T_{p,J}=\mathcal R_JT_p$.
+    The same whole-chain filter and exterior coefficients satisfy
+    \begin{align}
+      K_J=\mathcal R_JK_*\mathcal R_J^{-1}
+          =\sum_{i=1}^n W_i\otimes R_i,
+    \end{align}
+    with target and complement invariant, minimum gain one on the
+    target, and squared contraction at most $\Delta$ on its complement.
+    For every $\delta$-viable regional subspace $S$ for $T_{p,J}$,
+    where $\delta<1$, define the literal sum of images
+    \begin{align}
+      \mathcal V(S)=\sum_{i=1}^n W_iS.
+    \end{align}
+    Then $\dim\mathcal V(S)\le n\dim S$ and
+    $\mathcal V(S)$ is $\Delta/(1-\delta)^2$-viable for $T_{p,J}$.
+    All global matrix identities and the two individual middle-collar
+    bounds of the preceding lemma are retained.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:uniform_long_interval_soft_improving_family}
+    Apply the preceding physical family construction once.
+    Its exterior-first coordinate expression followed by factor
+    exchange equals $\mathcal R_J$: both send each coordinate vector
+    to the same tensor of its two restrictions. Express the original
+    filter and target in these identical coordinates, keeping the
+    whole-chain operator and all coefficient matrices unchanged.
+
+    The tensor decomposition places the filtered extension of $S$
+    inside $\mathcal V(S)$ tensored with the full exterior.
+    Minimum gain on the target and contraction on its complement
+    therefore give the stated one-step error bound. The sum of $n$
+    image spaces, each of dimension at most $\dim S$, gives the
+    dimension estimate. No additional approximant, filter or family
+    is selected.
+\end{proof}
