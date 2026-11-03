@@ -27,14 +27,23 @@ functional-calculus bounds must first derive a suitable one-sided center.
 The regions in \texttt{eq:defjgapped}, lines 1380--1384, omit collars of
 width $\ell$ at the boundaries of the parent region. Thus a rough
 estimate for the parent minimum is not, without further argument, a
-width-ten estimate for the middle minimum. One possible corrected route
-uses the actual minima $c_L,c_R$ of the two short collars. The elementary
-three-region comparison
-$e_{\mathrm{mid}}+c_L+c_R\le e_M\le e_{\mathrm{mid}}+c_L+c_R+2$
-would turn a parent estimate $p_M\in[e_M-8,e_M]$ into
+width-ten estimate for the middle minimum. A corrected route
+now constructs the actual minima $c_L,c_R$ of the two collars, the
+middle minimum and the parent minimum directly from the original bonds.
+Two adjacent-interval comparisons give
+$e_{\mathrm{mid}}+c_L+c_R\le e_M\le e_{\mathrm{mid}}+c_L+c_R+2$.
+Hence every parent estimate $p_M\in[e_M-8,e_M]$ gives
 $p_M-c_L-c_R-2\in[e_{\mathrm{mid}}-10,e_{\mathrm{mid}}]$.
-This conversion, including the construction of the collar minima, is
-separate from the results recorded here.
+The actual attained minima are chosen before $p_M$; no minimum or
+energy witness is supplied. Empty collars and endpoint cuts are included.
+The formal statement is
+\leanid{TNLean.MPS.AreaLaw.exists_regional_central_energy_estimate}.
+The collar-length bound is not needed for this comparison. When each
+collar has at most $2\ell$ sites, its internal operator has exactly that
+short support. No running-time statement about obtaining its minimum
+is a conclusion of this auxiliary result. The width-eight one-sided
+parent estimate remains to be derived in the intended recursive
+application; it is not inferred from the broader absolute-error input.
 
 The raw soft replacement retains $p_JI$. Its norm can therefore contain
 an extensive scalar energy. The uniform norm conclusion in

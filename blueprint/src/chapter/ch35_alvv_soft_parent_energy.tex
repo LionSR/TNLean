@@ -108,3 +108,43 @@ scalar-centering distinctions are recorded in
 The energy bound concerns the original ground space. Applying it to the
 separate untrimmed energy candidate in the generation procedure requires
 an additional quantitative transfer to the same generated soft target.
+
+\begin{lemma}[A middle center from a parent estimate]
+    \label{lem:regional_central_energy_estimate}
+    \lean{TNLean.MPS.AreaLaw.exists_regional_central_energy_estimate}
+    \leanok
+    \uses{lem:adjacent_interval_energy_merge}
+    Let $0\le h_i\le I$ have their designated nearest-neighbour supports
+    on a chain of positive local dimension, and fix
+    $l\le u\le v\le r\le L$. The actual internal Hamiltonians on
+    $[l,u)$, $[u,v)$, $[v,r)$ and $[l,r)$ have attained minima
+    $e_{\mathrm L},e_{\mathrm M},e_{\mathrm R},e_{\mathrm P}$, respectively,
+    with normalized attaining vectors and positive centered matrices.
+    These data are chosen before every parent estimate, and satisfy
+    \begin{align}
+       e_{\mathrm L}+e_{\mathrm M}+e_{\mathrm R}
+       \le e_{\mathrm P}
+       \le e_{\mathrm L}+e_{\mathrm M}+e_{\mathrm R}+2.
+    \end{align}
+    If $e_{\mathrm P}-8\le p_{\mathrm P}\le e_{\mathrm P}$, then
+    $p_{\mathrm M}=p_{\mathrm P}-e_{\mathrm L}-e_{\mathrm R}-2$
+    satisfies $e_{\mathrm M}-10\le p_{\mathrm M}\le e_{\mathrm M}$.
+    Empty intervals and endpoint cuts are included.
+\end{lemma}
+\begin{proof}\leanok
+    Join $[l,u)$ to $[u,r)$, and then join $[u,v)$ to $[v,r)$.
+    Each joining raises the sum of the two minima by a number in $[0,1]$.
+    The two constructions of the minimum on $[u,r)$ agree, since both
+    are attained positive-semidefinite lower bounds for the same matrix.
+    Adding the two comparisons proves the bound with two. Substitution
+    of the stated parent-estimate interval gives the middle-estimate
+    interval.
+\end{proof}
+
+The middle-center conversion does not require a collar-length bound.
+When the two collars have length at most $2\ell$, their original internal
+matrices act on those short regional Hilbert spaces; their minima are
+exactly those used here. No running-time conclusion for computing these
+minima is asserted. This gives a corrected one-sided route to the soft
+center, without identifying it with the source's broader absolute-error
+input.
