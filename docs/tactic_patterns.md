@@ -1,5 +1,17 @@
 # Tactic Pattern Ledger
 
+### Regional lift and inclusion of sites — promoted (2026-11-03)
+
+- **Seen:** `Circuit/EntropySupport.lean`, `MPS/AreaLaw/SelectedMiddleData.lean`,
+  and the native middle approximation in `MPS/AreaLaw/ALVV/SoftGeneratedMiddleApproximation.lean`.
+- **Pattern:** Compare the entries of a regional local lift with placement
+  along the inclusion of the same sites, then identify the exterior matching
+  condition with agreement away from the inclusion.
+- **Helper:** `QuantumCircuit.localLift_eq_embedOp` in `Circuit/EntropySupport.lean`.
+- **Decision:** The existing coordinate identity is stated once and reused;
+  the support characterization and selected singleton calculation retain their
+  mathematical statements.
+
 ### Matrix positivity on the Euclidean operator space — promoted (2026-10-29)
 
 - **Seen:** `MPS/AreaLaw/AKLV/HighEnergyMass.lean`, `ProjectionEnergy.lean`,
