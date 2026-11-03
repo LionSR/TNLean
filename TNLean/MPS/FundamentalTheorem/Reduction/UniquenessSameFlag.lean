@@ -593,9 +593,6 @@ noncomputable def conjTriangular : MultiBlockCompression B S C :=
         Matrix.smul_mul, Matrix.one_mul, Matrix.mul_smul, Matrix.mul_one, smul_smul,
         inv_mul_cancel₀ (hμ b), one_smul])
 
-theorem conjTriangular_gauge :
-    (P.conjTriangular ht hμ hdiag).gauge = P.conjTriangularGauge ht hμ hdiag := rfl
-
 /-- **The reduction `(σ, h g)` has the flag of `(σ, g)`** (blueprint `thm:asym_uniq_same_flag`, *Two
 compressions with the same flag*, converse): `(h g)⁻¹ E_k = g⁻¹ h⁻¹ E_k = g⁻¹ E_k`, because `h` and
 `h⁻¹` are block upper triangular. -/

@@ -221,6 +221,14 @@ live mathematics. Tracked under [#4529](https://github.com/LionSR/TNLean/issues/
   `docs/audits/2026-10-29_zero_reference_implementation_helpers.md`.
   This is separate from #10296; local Lean verification was not run, and hosted
   acceptance and integration remain pending.
+- **Written helper slice (2026-11-03)**: at `5a13935af` the scan reports 41
+  candidates. Eighteen unused implementation helpers in thirteen files are
+  removed, minus 98 production Lean lines, and the edited scan reports 23. They
+  are `rfl` projections, restatements of a neighbouring lemma, or a
+  `positivity` or `fin_cases` check that nothing calls. The 23 retained
+  candidates either cite a source, are listed main results, or are kept by an
+  earlier decision. See `docs/audits/2026-11-03_zero_reference_helpers.md`.
+  Local Lean verification was not run.
 - **What**: top-level declarations whose name appears exactly once
   repo-wide (their own definition), including attribute-carrying
   declarations and instances cleared by a root build. Largest

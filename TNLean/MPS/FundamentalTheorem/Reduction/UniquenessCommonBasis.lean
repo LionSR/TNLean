@@ -322,10 +322,6 @@ theorem sup_matchedCompl (k : Fin (S.card + P.z)) :
   (Classical.choose_spec (IsModularLattice.exists_disjoint_and_sup_eq
     (Submodule.restrictScalars_mono ℂ (P.matchedKer_le_matchedInter Q hC hD hC' hD' k)))).2
 
-theorem matchedCompl_le (k : Fin (S.card + P.z)) :
-    P.matchedCompl Q hC hD hC' hD' k ≤ (P.matchedInter Q hC hD hC' hD' k).restrictScalars ℂ :=
-  P.sup_matchedCompl Q hC hD hC' hD' k ▸ le_sup_right
-
 /-- **Equal subspaces give equal complements** (*The asymmetric fundamental theorem of matrix
 product states*, Theorem 6.5, last sentence): the complement `L_k` is a choice depending only on the
 two subspaces `K_k ⊆ U_k`, so two pairs of reductions, possibly with different numbers of zero slots
@@ -661,20 +657,6 @@ noncomputable def matchedIntertwiner (b : BlockIndex S P.z) :
     Matrix (Fin (slotSize D' (P.slotMatching Q hC hD hC' hD' b))) (Fin (slotSize D b)) ℂ :=
   Classical.choose (P.exists_intertwiner_of_matching Q hC hD hC' hD' (P.ord b) rfl
     (P.ord_slotMatching Q hC hD hC' hD' b))
-
-/-- The intertwiner `X_j` is invertible and intertwines the diagonal blocks of the matched slots
-(blueprint `thm:asym_uniq_different_flags`, *Two compressions with different flags*). -/
-theorem matchedIntertwiner_spec (b : BlockIndex S P.z) :
-    ∃ Y : Matrix (Fin (slotSize D b)) (Fin (slotSize D' (P.slotMatching Q hC hD hC' hD' b))) ℂ,
-      P.matchedIntertwiner Q hC hD hC' hD' b * Y = 1 ∧
-      Y * P.matchedIntertwiner Q hC hD hC' hD' b = 1 ∧
-      ∀ i, P.matchedIntertwiner Q hC hD hC' hD' b * slotTensor C b i =
-        slotTensor C' (P.slotMatching Q hC hD hC' hD' b) i *
-          P.matchedIntertwiner Q hC hD hC' hD' b := by
-  obtain ⟨Y, hXY, hYX, hint, -, -⟩ := Classical.choose_spec
-    (P.exists_intertwiner_of_matching Q hC hD hC' hD' (P.ord b) rfl
-      (P.ord_slotMatching Q hC hD hC' hD' b))
-  exact ⟨Y, hXY, hYX, hint⟩
 
 /-- On `U_j` the reading map of the matched slot of `Q` is `X_j` times the reading map of the slot
 of `P` (blueprint `thm:asym_uniq_different_flags`, *Two compressions with different flags*). -/
