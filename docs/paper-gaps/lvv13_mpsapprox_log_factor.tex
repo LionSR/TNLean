@@ -1,0 +1,99 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+% Fallbacks keep this note compilable when a different command.tex is found first.
+\providecommand{\leanid}[1]{\textsf{\detokenize{#1}}}
+\providecommand{\gapnote}[2]{\par\noindent\textbf{Verdict:} #1 (#2).\par}
+
+\title{The Logarithmic Factor in the Matrix Product State Approximation Quoted by Landau, Vazirani and Vidick}
+\author{}
+\date{2026-11-03}
+
+\begin{document}
+\maketitle
+\gapnote{local-correction}{resolved}
+
+\section{The source statement}
+
+Landau, Vazirani and Vidick~\cite{Landau2015Polynomial},
+arXiv:1307.5143v1, \path{algo53.tex}, lines~325--328, state the following
+lemma for a nearest-neighbour chain of $n$ qudits of dimension $d$ with
+$0\le H_i\le1$, unique ground state $\Gamma$ and gap $\varepsilon$.
+\begin{quote}
+    For any constant $c>0$ there is a constant $C\ge1$ such that for every
+    $n$ there is a vector $v$ with Schmidt rank bounded by
+    $\exp(C(\ln n)^{3/4}\varepsilon^{-1/4})$ across every cut such that
+    $\lvert\langle\Gamma,v\rangle\rvert\ge1-n^{-c}$.
+\end{quote}
+No proof is given. The lemma is quoted from Arad, Kitaev, Landau and
+Vazirani~\cite{Arad2013AreaLaw}, and the source adds (line~325) that only a
+polynomial bound on the Schmidt rank is needed for its algorithm.
+
+\section{The cited bound}
+
+The cited work, arXiv:1301.1162v1, \path{1dfrustrated34.tex}, treats $d$ as a
+constant and states the bond dimension as
+$B=e^{\tilde O(\log^{3/4}n/\varepsilon^{1/4})}$, both in its introduction
+(line~176) and in the derivation (lines~1503--1517). There the rank of the
+approximate ground-state projector is $\tilde O(\exp(\ell/s+s))$ with
+$\ell=O(\log n\sqrt{(s+\log n)/\varepsilon})$, and the choice
+$s=\log^{3/4}n/\varepsilon^{1/4}$ balances the two terms. The tilde hides
+factors logarithmic in the exponent; the quotation in the source omits it.
+
+\section{What is formalized}
+
+For a nearest-neighbour chain of $L$ sites of dimension $q$ with terms
+$0\le h_j\le1$, a unit ground vector $\Omega$ of energy $\mu$ and an actual
+first excited energy $\mu+g$ with $g>0$, and for $0<\epsilon\le1$, put
+\begin{align*}
+    u=1+\log q+\log\frac1g,\qquad
+    z=\log\frac{2048(L+1)}{\epsilon^2}.
+\end{align*}
+There are universal constants $C>0$ and a bond dimension $D$ with
+\begin{align}
+    \log D\le C\Bigl[\frac{u^3}{g}
+        +\Bigl(\frac{z^3}{g}\Bigr)^{1/4}\bigl(u+\log(z+1)\bigr)\Bigr]
+    \label{eq:lvv13_mpsapprox_formal}
+\end{align}
+and a normalized open-boundary matrix product state $\Phi$ of bond dimension
+at most $D$ with $\lVert\Phi-\Omega\rVert\le\epsilon$.\footnote{%
+    \leanid{TNLean.MPS.AreaLaw.exists_aklv_sharp_physical_sequential_mps_approximation}
+    in \doclink{TNLean/MPS/AreaLaw/AKLV/SharpMPSApproximation}.}
+The overlap then satisfies
+$\lvert\langle\Omega,\Phi\rangle\rvert\ge1-\epsilon^2/2$.
+
+\section{Comparison}
+
+Take $\epsilon=n^{-c/2}$ with $n=L$. Then $z=O(\log n)$, and for fixed $q$ and
+$g$ the bound (\ref{eq:lvv13_mpsapprox_formal}) reads
+\begin{align*}
+    \log D=O\bigl(g^{-1/4}(\log n)^{3/4}\log\log n\bigr),
+\end{align*}
+with overlap at least $1-n^{-c}/2$. This is the cited bound
+$e^{\tilde O(\log^{3/4}n/\varepsilon^{1/4})}$, with the hidden factor
+written out as $\log\log n$. It is smaller than any positive power of $n$,
+so it is sub-polynomial. The printed lemma, without the factor
+$\log\log n$, is not formalized and is not claimed by the cited work. The
+gap enters (\ref{eq:lvv13_mpsapprox_formal}) also through $u$ and the term
+$u^3/g$, which are independent of $n$.
+
+The algorithm of the source uses only a polynomial bound on the Schmidt
+rank, so no later step depends on the factor. The viable-set construction
+uses the polynomial bound of the library's one-dimensional area law.
+
+\section{Verdict}
+
+A local correction, resolved: Lemma \path{l:mpsapprox} is read with the
+$\tilde O$ of its cited source, and in that form it is formalized under the
+source's hypotheses.
+
+\bibliographystyle{plain}
+\bibliography{references}
+
+\end{document}
