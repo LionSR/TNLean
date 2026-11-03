@@ -8,6 +8,7 @@ import TNLean.MPS.AreaLaw.AKLV.Truncation
 import QICLean.Analysis.GroundEnergyBounds
 import QICLean.Analysis.LowEnergyPerturbation
 import QICLean.Analysis.ProjectedPositiveEnergy
+import QICLean.Analysis.ViableProjectionNonzero
 
 /-!
 # Regional excitation energy on the full original ground space
@@ -148,12 +149,8 @@ theorem exists_regional_ground_energy_bound {L q l r : ℕ}
     obtain ⟨j, hj⟩ := minEigenvalue_achieved hH
     exact ⟨hH.eigenvectorBasis j, Submodule.subset_span ⟨j, hj.le, rfl⟩,
       hH.eigenvectorBasis.norm_eq_one j⟩
-  have hvnz : U.starProjection g0 ≠ 0 := by
-    intro hz
-    have hh := (Submodule.isCloseTo_iff.mp hclose) g0 hg0
-    rw [hz, hg0norm, norm_zero] at hh
-    norm_num at hh
-    linarith only [hh, hδ1]
+  have hvnz : U.starProjection g0 ≠ 0 :=
+    hclose.starProjection_ne_zero hδ1 hg0 (norm_ne_zero_iff.mp (hg0norm.trans_ne one_ne_zero))
   exact ⟨U.starProjection g0, U.starProjection_apply_mem g0, hvnz,
     hfinal _ (Submodule.mem_map_of_mem hg0)⟩
 

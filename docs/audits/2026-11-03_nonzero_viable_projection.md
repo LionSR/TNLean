@@ -1,0 +1,5 @@
+# Nonzero projection into a close candidate
+
+A subspace U which is delta-close to T, with delta<1, has nonzero orthogonal projection on every nonzero vector of T. The vector characterization of closeness gives the strictly positive lower bound (1-delta)||t||^2. This consequence is now stated once in the companion module ViableProjectionNonzero. The projected trial-space injectivity proof and the actual regional ground-vector construction call it directly. Their public signatures remain byte-identical. The untrimmed energy-candidate argument uses the same geometric implication.
+
+All three production modules pass strict actual-name checking at default options: 4.506 seconds for the shared helper, 5.079 seconds for the projected trial-space proof and 6.482 seconds for the regional ground-vector proof. Fresh unchanged consumers pass for RitzGroundSpaceCloseness (7.043 seconds), RegionalEnergyEstimate (15.956 seconds) and SoftParentEnergy (8.925 seconds). All three inspected declarations use only propext, Classical.choice and Quot.sound. The temporary inspection source is deleted. Combined ordinary-build and blueprint adoption checks remain pending.

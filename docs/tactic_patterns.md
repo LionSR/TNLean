@@ -11673,11 +11673,11 @@ removed after the dependency audit exposed it.
   budget suffices; experimental diagnostics and transparency options are removed.
 
 
-### Nonzero projection into a close candidate — candidate (2026-11-03)
+### Nonzero projection into a close candidate — promoted (2026-11-03)
 
-- **Seen:** `QICLean/Analysis/ProjectedTrialSpaceEnergy.lean` and `MPS/AreaLaw/RegionalGroundEnergy.lean`.
-- **Pattern:** A projection lower norm bound with error below one forces the projection of a nonzero target vector to be nonzero. The first use proves injectivity; the second applies it to an actual unit ground vector.
-- **Decision:** There are two uses of this geometric implication. A third use should promote the nonzero-projection consequence in the common closeness module.
+- **Helper:** `Submodule.IsCloseTo.starProjection_ne_zero` in the companion module `QICLean/Analysis/ViableProjectionNonzero.lean`.
+- **Uses:** The common projected trial-space injectivity proof and the actual unit ground-vector projection in `MPS/AreaLaw/RegionalGroundEnergy.lean` now call the helper. The untrimmed energy-candidate argument uses the same nonzero-projection implication.
+- **Decision:** State the geometric implication once, with loss below one and a nonzero target vector. No separate norm calculation or nonnegative-loss hypothesis is repeated at a call site.
 
 
 ### Ground data from the empty clipping subset — candidate (2026-11-03)
