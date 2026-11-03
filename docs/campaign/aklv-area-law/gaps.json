@@ -1,0 +1,114 @@
+{
+  "reviewedAt": "2026-11-03T00:00:00Z",
+  "checked": [
+    {
+      "result": "Lemma lem:mu1",
+      "what": "A favorable approximate projector gives a product state with good overlap",
+      "repo": "QICLean",
+      "pr": 885,
+      "note": "Proved as stated for a unique ground state; the product state is constructed, not assumed."
+    },
+    {
+      "result": "Corollary col:half",
+      "what": "A favorable approximate projector bounds the entropy by a constant times log D",
+      "repo": "QICLean",
+      "pr": 902,
+      "note": "Proved directly with the explicit bound S ≤ 4 log D, without the general entropy lemma."
+    }
+  ],
+  "entries": [
+    {
+      "id": "docs/paper-gaps/aklv13_entropy_small_shrinking.tex",
+      "repo": "QICLean",
+      "kind": "error",
+      "status": "resolved",
+      "paper": "aklv",
+      "result": "Lemma 2.3, entropy from a projector and a product overlap",
+      "issue": 9836,
+      "stage": "ff:1",
+      "prs": {
+        "QICLean": [
+          1010
+        ]
+      },
+      "title": "The general entropy bound fails for small shrinking",
+      "summary": "The printed entropy bound fails on a two-qubit example; a corrected bound with an additive log <i>D</i> term is proved. The area-law corollary used in the rest of the paper is unaffected.",
+      "context": "An approximate ground-state projector <i>K</i> fixes the ground state Γ, multiplies the squared norm of every vector orthogonal to Γ by at most Δ, and has operator Schmidt rank at most <i>D</i> across the cut. Together with a product state of overlap μ with Γ, it is meant to bound the entanglement entropy <i>S</i> of Γ across the cut.",
+      "claims": "Lemma 2.3 (lines 339–348 of the source) states <i>S</i> ≤ <i>O</i>(log μ<sup>−1</sup>/log Δ<sup>−1</sup>) log <i>D</i>, with an absolute constant in the <i>O</i>.",
+      "found": "Let Γ be a Bell state of two qubits, the ground state of <i>H</i> = 1 − |Γ⟩⟨Γ|, and <i>K<sub>s</sub></i> = <i>s</i> + (1 − <i>s</i>)|Γ⟩⟨Γ| for small <i>s</i> > 0. Then Δ = <i>s</i><sup>2</sup>, <i>D</i> = 4, the product state |00⟩ has μ = 1/√2, and <i>S</i> = log 2, while the printed right-hand side tends to zero as <i>s</i> → 0. All parameters are positive, the ground state is unique and the shrinking bound is attained.",
+      "impact": "None for the area law: the corollary <i>S</i> ≤ <i>O</i>(1) log <i>D</i> when <i>D</i>Δ ≤ 1/2, which the rest of the paper uses, is consistent with the example and is proved with <i>S</i> ≤ 4 log <i>D</i>.",
+      "plan": "The replacement <i>S</i> ≤ 12(1 + log μ<sup>−1</sup>/log Δ<sup>−1</sup>) log <i>D</i>, for 0 < Δ < 1, is proved for a unique ground state, together with <i>S</i> ≤ log <i>D</i> when Δ = 0. The note keeps the counterexample to the printed form."
+    },
+    {
+      "id": "docs/paper-gaps/aklv13_interpolation_and_word_count.tex",
+      "repo": "QICLean",
+      "kind": "local-correction",
+      "status": "resolved",
+      "paper": "aklv",
+      "result": "Lemma 4.2, interpolation and the count of collected words",
+      "issue": 9835,
+      "stage": "ff:3",
+      "prs": {
+        "QICLean": [
+          861,
+          868,
+          1005
+        ],
+        "TNLean": [
+          10390
+        ]
+      },
+      "title": "Interpolation needs only a spanning family, and one more word",
+      "summary": "Two small slips in the proof of the rank lemma: the interpolation needs a spanning family rather than a basis, and the count of collected words carries an extra one. Both corrections are proved, and so is the lemma.",
+      "context": "The rank bound for a polynomial of the Hamiltonian groups the words in the expansion of <i>H</i><sup>ℓ</sup> by how often each term occurs. Each group is recovered from evaluations of a generating polynomial in commuting variables, and the words with exactly <i>k</i> occurrences of one window term <i>H<sub>i</sub></i> are collected into products <i>A</i><sup><i>a</i><sub>0</sub></sup><i>B</i><sup><i>b</i><sub>0</sub></sup><i>H<sub>i</sub></i> ⋯ <i>H<sub>i</sub>A</i><sup><i>a<sub>k</sub></i></sup><i>B</i><sup><i>b<sub>k</sub></i></sup>, where <i>A</i> and <i>B</i> collect the terms left and right of <i>H<sub>i</sub></i>.",
+      "claims": "Lines 637–643 of the source say that suitable evaluations of the generating polynomial form a basis of the space spanned by the coefficient operators, and lines 651 and 657 count binom(ℓ + <i>k</i>, 2<i>k</i> + 1) collected words.",
+      "found": "The coefficient operators need not be linearly independent, so the evaluations can only be required to span; spanning is all the proof uses. The collected words are indexed by 2<i>k</i> + 2 nonnegative exponents with sum ℓ − <i>k</i>, which gives binom(ℓ + <i>k</i> + 1, 2<i>k</i> + 1): already for <i>k</i> = 0 there are ℓ + 1 words <i>A<sup>a</sup>B</i><sup>ℓ−<i>a</i></sup>, not ℓ. The same count appears in the two-cut version of Arad, Landau, Vazirani and Vidick.",
+      "impact": "None. The corrections change no exponent of the lemma.",
+      "plan": "Both corrections are proved, and the lemma is proved with explicit constants: rank at most (<i>d</i>(ℓ + 1))<sup>16(⌊ℓ/<i>s</i>⌋ + ⌊√ℓ⌋ + 1)</sup> for every polynomial of degree at most ℓ."
+    },
+    {
+      "id": "docs/paper-gaps/aklv13_robustness_constants.tex",
+      "kind": "local-correction",
+      "status": "resolved",
+      "paper": "aklv",
+      "result": "Theorem 6.1, constants of the robustness theorem",
+      "issue": 9837,
+      "stage": "fr:1",
+      "prs": {
+        "TNLean": [
+          10327,
+          10371
+        ]
+      },
+      "title": "Constants in the robustness theorem",
+      "summary": "Nothing in the robustness theorem is wrong; a shift denominator, a squared cross term and a coefficient in the proof are corrected, and the theorem is proved with explicit constants.",
+      "context": "The robustness theorem compares the Hamiltonian <i>H</i> of the chain with its truncation <i>H</i><sup>(<i>t</i>)</sup>, in which the two exterior blocks are capped at height <i>t</i>. Before truncating, constants are subtracted from the terms so that the exterior blocks and the middle of the window have ground energy zero and <i>H</i> has ground energy between 0 and 6.",
+      "claims": "Section 6.1 shifts each of the middle terms <i>H</i><sub>4</sub>, …, <i>H</i><sub><i>s</i>−3</sub> by <i>d</i>/(<i>s</i> − 7), where <i>d</i> is their joint ground energy. The proof of Lemma 6.5 bounds the square of a cross term by 2√(⟨<i>v</i>, <i>H</i><sup>(<i>t</i>)</sup><i>v</i>⟩/<i>t</i>), and the proof of Lemma 6.6 sums its commutator series to 4 while stating the coefficient 2.",
+      "found": "The range 4 ≤ <i>i</i> ≤ <i>s</i> − 3 has <i>s</i> − 6 terms, so the printed shift makes the middle ground energy −<i>d</i>/(<i>s</i> − 7) instead of zero; the shift is <i>d</i>/(<i>s</i> − 6), or <i>d</i> subtracted once from the whole middle sum. The Cauchy–Schwarz step bounds the cross term itself, not its square, by 2√(⟨<i>v</i>, <i>H</i><sup>(<i>t</i>)</sup><i>v</i>⟩/<i>t</i>). Replacing each boundary term <i>h</i> by <i>h</i> − 1/2, which has norm at most 1/2, recovers the coefficient 2. The proof of Lemma 6.6(1) writes ε for ε<sub>0</sub>.",
+      "impact": "None. The corrected steps give the printed conclusions.",
+      "plan": "The theorem is proved from the original nearest-neighbour terms: the gap of the truncated Hamiltonian is at least ε/2 and its ground state is within squared distance e<sup>−<i>t</i>/16</sup> of Γ once <i>t</i> ≥ 32768(6 + ε)/ε<sup>2</sup>. The weight of Γ above height <i>t</i> is bounded by 2e<sup>−(<i>t</i>−20)/8</sup> directly, without the paper's shell-by-shell induction."
+    },
+    {
+      "id": "docs/paper-gaps/aklv13_two_block_robustness.tex",
+      "kind": "narrower",
+      "status": "open",
+      "paper": "aklv",
+      "result": "Theorem 6.1, windows of at least six terms",
+      "issue": 9837,
+      "stage": "fr:1",
+      "prs": {
+        "TNLean": [
+          10331,
+          10404
+        ]
+      },
+      "title": "Robustness for windows of at least six terms",
+      "summary": "Nothing is wrong with the paper; the robustness theorem is proved for windows of at least six terms, which is all the area law uses, and windows with fewer terms remain to be stated separately.",
+      "context": "The window around the cut has <i>s</i> nearest-neighbour terms. Six of them play special roles in the normalization and the truncation: the three nearest each exterior block. The area-law argument chooses <i>s</i> of order log<sup>2</sup> <i>d</i>/ε with a large constant.",
+      "claims": "Theorem 6.1 (lines 949–963 of the source) states, for <i>t</i> of order (1/ε)(ε<sub>0</sub>/ε + 1), that the truncated Hamiltonian keeps a gap of order ε and has a ground state within 2<sup>−Ω(<i>t</i>)</sup> of Γ. It names no lower bound on <i>s</i>.",
+      "found": "The proof needs the six special terms to be distinct, so <i>s</i> ≥ 6. With <i>s</i> ≥ 6 the theorem is proved with explicit constants: for <i>t</i> ≥ (1024/ε)(ε<sub>0</sub>/ε + 1), and also for the smaller threshold <i>t</i> ≥ 1024 + 16 log(1/ε), the gap is at least 9ε/10 and the squared distance at most e<sup>−<i>t</i>/16</sup>/100. The note also records that the source's left block includes the site next to the window, that the initial product overlap at line 1023 is printed with ≤ for ≥, and that the Schmidt ranks in the sequence of Lemma 6.3 multiply rather than add.",
+      "impact": "None for the area law and the matrix product state approximation, whose windows have at least 21 terms. The area-law bounds keep a logarithm of 1/ε and assume that ε is the distance to the next eigenvalue.",
+      "plan": "State and prove the theorem for windows with fewer than six terms, which needs a different arrangement of the special terms."
+    }
+  ]
+}
