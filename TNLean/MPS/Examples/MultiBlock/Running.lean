@@ -136,8 +136,6 @@ variable (ord : BlockIndex labels 0 ≃ Fin 2) (τ : BlockSpace dims labels 0 �
   (hdiag : ∀ s : {s // s ∈ labels},
     (G * tensorB 0 * Ginv) (ord (Sum.inl s)) (ord (Sum.inl s)) = s.1.val + 1)
 
-theorem red_z : (red ord τ hτ G Ginv hG hG' h10 hdiag).z = 0 := rfl
-
 theorem red_left (s : {s // s ∈ labels}) :
     (red ord τ hτ G Ginv hG hG' h10 hdiag).left s =
       Matrix.of fun (_ : Fin 1) j => G (ord (Sum.inl s)) j := by

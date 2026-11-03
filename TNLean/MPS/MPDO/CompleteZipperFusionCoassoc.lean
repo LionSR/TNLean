@@ -21,12 +21,25 @@ $\Delta:\mathcal B\to\mathcal B\otimes\mathcal B$ with
   \Delta\big((T_c^{ik})_c\big)=\sum_j(T_c^{ij})_c\otimes(T_c^{jk})_c.
 \]
 It is multiplicative and coassociative, and $\Delta(1)$ is only the support projector of the
-fusion tensors.  These are the coproduct axioms of a pre-bialgebra in the sense of
-arXiv:2204.05940, `mpo.tex`, Definition 4.1 (lines 1409--1414), realized on the dual algebra.
+fusion tensors.
 
-**Scope restriction (no counit):** the source's pre-bialgebra is also a coalgebra with a counit
-(Definition 3.1, lines 866--875).  No counit is constructed for the fusion coproduct, so the
-boundary space is not shown to be a pre-bialgebra in the source's sense.  Documented in
+The source's pre-bialgebra (arXiv:2204.05940, `mpo.tex`, Definition 4.1, lines 1409--1414) is
+also a coalgebra with a counit (Definition 3.1, lines 866--875).  In the source the boundary
+space is the dual algebra $\mathcal A^*$, whose counit is evaluation at the unit of
+$\mathcal A$ (lines 880 and 1419), and the letters are the images of the matrix coefficients
+$x\mapsto\phi(x)_{ik}$ of the physical representation $\phi$, which is a representation of the
+unital algebra $\mathcal A$, so $\phi(1)=1$ (line 1421).  The counit is therefore the
+functional with $\varepsilon(T^{ik})=\phi(1)_{ik}=\delta_{ik}$, and both counit laws follow
+from the letter formula.  Any such functional is unique, since the letters span the boundary
+space, and it exists when one block is the identity operator, as for a bialgebra.
+
+**Scope restriction (counit existence):** a complete zipper fusion family records the tensors
+of arXiv:1511.08090, not the unital algebra $\mathcal A$, and its fields do not force the
+functional $\varepsilon(T^{ik})=\delta_{ik}$ to be well defined; for instance, one block of
+bond dimension one whose letters form a nonzero matrix $(T^{ik})_{ik}$ of square zero, with no
+fusion channel, satisfies every field and has zero coproduct, which admits no counit.  The
+pre-bialgebra structure `CompleteZipperFusionFamily.toPreBialgebra` therefore takes the
+functional and its letter values as arguments.  Documented in
 `docs/paper-gaps/mrgscp22_pre_bialgebra_counit_scope.tex`.
 
 The source starts from a coassociative coproduct and derives the associativity of the fusion
@@ -42,16 +55,23 @@ is the argument of `mpo.tex`, lines 940--945 and 2001--2003, run backwards.
   $\mathcal B\otimes\mathcal B\cong\bigoplus_{a,b}M_{\chi_a\chi_b}$.
 * `CompleteZipperFusionFamily.comul`: the fusion coproduct with values in
   $\mathcal B\otimes\mathcal B$, a non-unital algebra homomorphism.
-* `CompleteZipperFusionFamily.toPreBialgebra`: the resulting pre-bialgebra structure.
+* `CompleteZipperFusionFamily.identityBlockCounit`: the normalized trace of one block, a counit
+  when that block is the identity operator.
+* `CompleteZipperFusionFamily.toPreBialgebra`: the resulting pre-bialgebra structure, given a
+  functional with $\varepsilon(T^{ik})=\delta_{ik}$.
 
 ## Main statements
 
 * `comul_letter`: $\Delta(T^{ik})=\sum_jT^{ij}\otimes T^{jk}$.
 * `comul_coassoc`: coassociativity of the fusion coproduct.
+* `rTensor_counit_comp_comul`, `lTensor_counit_comp_comul`: the two counit laws for a functional
+  with $\varepsilon(T^{ik})=\delta_{ik}$.
+* `counit_unique`: such a functional is unique.
 
 ## References
 
-* arXiv:2204.05940, `mpo.tex`, lines 866--875, 1409--1414, 1655, 1732--1787, and 2003--2006.
+* arXiv:2204.05940, `mpo.tex`, lines 866--875, 880, 1409--1421, 1655, 1732--1787, and
+  2003--2006.
 * arXiv:2509.03600, section "MPO representations of bialgebras".
 -/
 
@@ -137,16 +157,97 @@ theorem comul_coassoc :
     TensorProduct.sum_tmul, TensorProduct.tmul_sum]
   exact Finset.sum_comm
 
-/-- **The fusion comultiplication.**  The boundary space of a complete zipper fusion family
-with the fusion coproduct carries a `PreBialgebra` structure: the coproduct is multiplicative
-and coassociative, while `coproduct_one` shows that it is not unital in general.  No counit is
-constructed (see the module docstring).
+/-- **Left counit law.**  If a linear functional $\varepsilon$ on the boundary space takes the
+values $\varepsilon(T^{ik})=\delta_{ik}$ on the letters, then
+$(\varepsilon\otimes\mathrm{id})\circ\Delta=\mathrm{id}$.
 
-Source: arXiv:2204.05940, `mpo.tex`, lines 1409--1414, 1655 and 1708. -/
+In the source the boundary space is the dual algebra $\mathcal A^*$, its counit is
+$f\mapsto f(1)$, and the letters are the matrix coefficients of the unital physical
+representation, so this functional is the source's counit.
+
+Source: arXiv:2204.05940, `mpo.tex`, lines 866--875 (Definition 3.1), 880 and 1419 (the counit
+of $\mathcal A^*$ is evaluation at the unit), and 2003--2006 (equation
+`eq:MPO_tensor_product`). -/
+theorem rTensor_counit_comp_comul (ε : Fus.BoundarySpace →ₗ[ℂ] ℂ)
+    (hε : ∀ i k : Fin p, ε (Fus.letter i k) = if i = k then 1 else 0) :
+    ε.rTensor Fus.BoundarySpace ∘ₗ
+        (Fus.comul : Fus.BoundarySpace →ₗ[ℂ] Fus.BoundarySpace ⊗[ℂ] Fus.BoundarySpace) =
+      TensorProduct.mk ℂ ℂ Fus.BoundarySpace 1 := by
+  refine LinearMap.ext_on_range Fus.span_letter_eq_top fun ⟨i, k⟩ => ?_
+  simp [comul_letter, hε, TensorProduct.ite_tmul]
+
+/-- **Right counit law.**  If a linear functional $\varepsilon$ on the boundary space takes the
+values $\varepsilon(T^{ik})=\delta_{ik}$ on the letters, then
+$(\mathrm{id}\otimes\varepsilon)\circ\Delta=\mathrm{id}$.
+
+Source: arXiv:2204.05940, `mpo.tex`, lines 866--875 (Definition 3.1), 880 and 1419, and
+2003--2006 (equation `eq:MPO_tensor_product`). -/
+theorem lTensor_counit_comp_comul (ε : Fus.BoundarySpace →ₗ[ℂ] ℂ)
+    (hε : ∀ i k : Fin p, ε (Fus.letter i k) = if i = k then 1 else 0) :
+    ε.lTensor Fus.BoundarySpace ∘ₗ
+        (Fus.comul : Fus.BoundarySpace →ₗ[ℂ] Fus.BoundarySpace ⊗[ℂ] Fus.BoundarySpace) =
+      (TensorProduct.mk ℂ Fus.BoundarySpace ℂ).flip 1 := by
+  refine LinearMap.ext_on_range Fus.span_letter_eq_top fun ⟨i, k⟩ => ?_
+  simp [comul_letter, hε, TensorProduct.tmul_ite]
+
+/-- **Uniqueness of the counit.**  A linear functional on the boundary space is determined by
+its values on the letters; in particular there is at most one functional with
+$\varepsilon(T^{ik})=\delta_{ik}$.
+
+Source: arXiv:2204.05940, `mpo.tex`, lines 1182 (injectivity of the physical representation)
+and 1419. -/
+theorem counit_unique (ε ε' : Fus.BoundarySpace →ₗ[ℂ] ℂ)
+    (hε : ∀ i k : Fin p, ε (Fus.letter i k) = if i = k then 1 else 0)
+    (hε' : ∀ i k : Fin p, ε' (Fus.letter i k) = if i = k then 1 else 0) :
+    ε = ε' :=
+  LinearMap.ext_on_range Fus.span_letter_eq_top fun ⟨i, k⟩ => by
+    simp only [hε, hε']
+
+/-- The normalized trace $X\mapsto\chi_{c_0}^{-1}\operatorname{tr}X_{c_0}$ of the block with
+label $c_0$. -/
+noncomputable def identityBlockCounit (c₀ : Λ) : Fus.BoundarySpace →ₗ[ℂ] ℂ where
+  toFun X := (Fus.bondDim c₀ : ℂ)⁻¹ * (X c₀).trace
+  map_add' X Y := by simp [Matrix.trace_add, mul_add]
+  map_smul' r X := by
+    simp only [Pi.smul_apply, Matrix.trace_smul, smul_eq_mul, RingHom.id_apply]
+    ring
+
+/-- **A counit from an identity block.**  If the block with label $c_0$ is the identity operator,
+$T_{c_0}^{ik}=\delta_{ik}\mathbb 1$, then its normalized trace takes the values
+$\delta_{ik}$ on the letters.  For a bialgebra, the evaluation at the unit is a one-dimensional
+representation of the dual algebra, and its block is such an identity block.
+
+Source: arXiv:2204.05940, `mpo.tex`, lines 880 and 1419. -/
+theorem identityBlockCounit_letter (c₀ : Λ)
+    (h : ∀ i k : Fin p, Fus.tensor c₀ i k = if i = k then 1 else 0) (i k : Fin p) :
+    Fus.identityBlockCounit c₀ (Fus.letter i k) = if i = k then 1 else 0 := by
+  have hD : (Fus.bondDim c₀ : ℂ) ≠ 0 := Nat.cast_ne_zero.2 (Fus.bondDim_pos c₀).ne'
+  change (Fus.bondDim c₀ : ℂ)⁻¹ * (Fus.tensor c₀ i k).trace = _
+  rw [h]
+  split_ifs <;> simp [hD]
+
+/-- **The fusion pre-bialgebra.**  The boundary space of a complete zipper fusion family, with
+the fusion coproduct and a linear functional $\varepsilon$ taking the values
+$\varepsilon(T^{ik})=\delta_{ik}$ on the letters as counit, is a pre-bialgebra: the coproduct is
+coassociative and multiplicative and $\varepsilon$ satisfies both counit laws, while
+`coproduct_one` shows that the coproduct is not unital in general.  By `counit_unique` the
+counit is determined by the family.
+
+**Scope restriction (counit existence):** the functional is an argument, because the fields of
+the family do not force it to exist; in the source it is evaluation at the unit of
+$\mathcal A$.  Documented in `docs/paper-gaps/mrgscp22_pre_bialgebra_counit_scope.tex`.
+
+Source: arXiv:2204.05940, `mpo.tex`, lines 866--875, 1409--1421, 1655 and 1708. -/
 @[instance_reducible]
-noncomputable def toPreBialgebra : PreBialgebra ℂ Fus.BoundarySpace where
-  comul := Fus.comul
+noncomputable def toPreBialgebra (ε : Fus.BoundarySpace →ₗ[ℂ] ℂ)
+    (hε : ∀ i k : Fin p, ε (Fus.letter i k) = if i = k then 1 else 0) :
+    PreBialgebra ℂ Fus.BoundarySpace where
+  comul := (Fus.comul : Fus.BoundarySpace →ₗ[ℂ] Fus.BoundarySpace ⊗[ℂ] Fus.BoundarySpace)
+  counit := ε
   coassoc := Fus.comul_coassoc
+  rTensor_counit_comp_comul := Fus.rTensor_counit_comp_comul ε hε
+  lTensor_counit_comp_comul := Fus.lTensor_counit_comp_comul ε hε
+  comul_mul := map_mul Fus.comul
 
 end CompleteZipperFusionFamily
 

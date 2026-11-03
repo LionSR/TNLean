@@ -71,12 +71,6 @@ theorem kwTensor_mpo_eq_pow_sum {L : ℕ} [NeZero L] (a b : Fin L → Fin 2) :
       (-1 : ℂ) ^ (∑ j : Fin L, (a j).val * ((b j).val + (b (j + 1)).val)) := by
   rw [kwTensor_mpo_eq_prod, Finset.prod_pow_eq_pow_sum]
 
-/-- The empty periodic contraction is the trace of the virtual identity of
-size two. It is not the empty product of the positive-length phase formula. -/
-theorem kwTensor_mpo_zero (a b : Fin 0 → Fin 2) : kwTensor.mpo 0 a b = 2 := by
-  norm_num [MPOTensor.mpo, MPOTensor.mpoMatrixEntry, MPOTensor.evalWord,
-    Matrix.trace, Matrix.diag, Fin.sum_univ_two]
-
 /-- Complement every physical bit. On `Fin 2`, `Fin.rev` exchanges zero and one. -/
 def flipConfig {L : ℕ} (b : Fin L → Fin 2) : Fin L → Fin 2 := fun j => (b j).rev
 

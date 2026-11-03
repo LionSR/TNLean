@@ -750,7 +750,10 @@ For the matrix product operator symmetries of arXiv:2203.12563:
   of the canonical support projection from averaging its complement. It
   records the explicit adjoint-closure, positive-length unit-calibration,
   and finite-family normalization hypotheses under which the support is
-  fixed, and the still-open physical weak-Hopf realization.
+  fixed, their derivation from weak-Hopf representation data for any
+  compatible tensor injective after blocking (unit support comes from the
+  ideal structure of the state boundary space, without the identity at the
+  injectivity length), and the still-open formal Bell-pair instance.
 
 - `glm23_reps3_z3_table.tex` records that the printed action of `ψ` in the
   `ℤ₃` phase of `Rep(S₃)` fails the representation identity, and that the
@@ -776,10 +779,12 @@ For the matrix product operator symmetries of arXiv:2203.12563:
 For the matrix product operator algebras of arXiv:2204.05940:
 
 - `mrgscp22_pre_bialgebra_counit_scope.tex` (scope restriction, open) records
-  that the source's pre-bialgebra (Definition 4.1) is also a coalgebra with a
-  counit (Definition 3.1), while the formal pre-bialgebra structure records
-  only a multiplicative coassociative coproduct; no counit is constructed for
-  the fusion coproduct of a complete zipper fusion family.
+  that the formal pre-bialgebra structure now carries the source's counit
+  (Definitions 3.1 and 4.1), and that the fusion coproduct of a complete
+  zipper fusion family satisfies both counit laws for the functional taking
+  the Kronecker delta on the letters; that functional is the source's
+  evaluation at the unit, but its existence is not forced by the fields of
+  the family and is taken as an argument.
 
 For the strong and weak symmetries of matrix product density operators in
 arXiv:2504.16985:

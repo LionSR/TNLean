@@ -239,11 +239,6 @@ noncomputable def jumpEquiv [IsModularLattice α] (c : CoveringChain α r)
   left_inv := jump_jump c c'
   right_inv := jump_jump c' c
 
-/-- The matching is a bijection (blueprint `prop:asym_uniq_matching`, *The matching*). -/
-theorem jump_bijective [IsModularLattice α] (c : CoveringChain α r) (c' : CoveringChain α r') :
-    Function.Bijective (jump c c') :=
-  (jumpEquiv c c').bijective
-
 /-- Two covering chains have the same length (blueprint `prop:asym_uniq_matching`, *The matching*).
 -/
 theorem length_eq [IsModularLattice α] (c : CoveringChain α r) (c' : CoveringChain α r') :

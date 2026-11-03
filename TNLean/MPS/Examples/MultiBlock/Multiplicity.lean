@@ -158,14 +158,6 @@ def kronRowMat (a : Fin 2 → ℂ) (M : Matrix (Fin 2) (Fin 2) ℂ) : Matrix (Fi
 def oneKron (M : Matrix (Fin 2) (Fin 2) ℂ) : Matrix (Fin 4) (Fin 4) ℂ :=
   !![M 0 0, M 0 1, 0, 0; M 1 0, M 1 1, 0, 0; 0, 0, M 0 0, M 0 1; 0, 0, M 1 0, M 1 1]
 
-/-- `kronMat A` is the Kronecker product `A ⊗ 1₂`, read through the bond index `2a + b`. -/
-theorem kronMat_eq_kronecker (A : Matrix (Fin 2) (Fin 2) ℂ) :
-    kronMat A = Matrix.reindex finProdFinEquiv finProdFinEquiv
-      (A ⊗ₖ (1 : Matrix (Fin 2) (Fin 2) ℂ)) := by
-  ext x y
-  fin_cases x <;> fin_cases y <;>
-    simp [kronMat, Matrix.kroneckerMap_apply, finProdFinEquiv, Fin.divNat, Fin.modNat]
-
 theorem tensorB_eq_oneKron (i : Fin 2) : tensorB i = oneKron (tensorC i) := by
   ext x y
   fin_cases i <;> fin_cases x <;> fin_cases y <;> simp [tensorB, tensorC, oneKron]

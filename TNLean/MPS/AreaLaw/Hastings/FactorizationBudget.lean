@@ -209,10 +209,6 @@ noncomputable def lemmaOneBudgetA (R : ℕ) (ΔE a cR J : ℝ) : ℝ :=
 /-- The coefficient `B` of `√l` in the error budget of Lemma 1. -/
 noncomputable def lemmaOneBudgetB (ΔE cR : ℝ) : ℝ := 4 * cR / ΔE + 2 / ΔE
 
-theorem lemmaOneBudgetA_nonneg (R : ℕ) {ΔE a cR J : ℝ} (hΔ : 0 < ΔE) (ha : 0 ≤ a)
-    (hcR : 0 ≤ cR) (hJ : 0 ≤ J) : 0 ≤ lemmaOneBudgetA R ΔE a cR J := by
-  unfold lemmaOneBudgetA; positivity
-
 theorem lemmaOneBudgetB_nonneg {ΔE cR : ℝ} (hΔ : 0 < ΔE) (hcR : 0 ≤ cR) :
     0 ≤ lemmaOneBudgetB ΔE cR := by
   unfold lemmaOneBudgetB; positivity

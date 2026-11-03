@@ -91,12 +91,6 @@ noncomputable def subquotEquivOfSupEq {K U P Q : Submodule R M} (hUQ : U ≤ Q) 
     exact ⟨fun h => ⟨x.2, h⟩, fun h => h.2⟩
   (Submodule.quotEquivOfEq _ _ hker.symm).trans (f.quotKerEquivOfSurjective hf)
 
-/-- The isomorphism `U / K ≅ Q / P` is induced by the inclusion. -/
-theorem subquotEquivOfSupEq_mk {K U P Q : Submodule R M} (hUQ : U ≤ Q) (hsup : P ⊔ U = Q)
-    (hinf : U ⊓ P = K) (x : U) :
-    subquotEquivOfSupEq hUQ hsup hinf (Submodule.Quotient.mk x) =
-      Submodule.Quotient.mk ⟨x, hUQ x.2⟩ := rfl
-
 /-- The isomorphism `U / K ≅ Q / P` of the step lemma (blueprint `lem:asym_uniq_step`, *One step
 against another*) for a step `P ⋖ Q` against `P'`, `Q'` with `P ⊔ (Q ⊓ P') < P ⊔ (Q ⊓ Q')`, where
 `U = Q ⊓ Q'` and `K = P ⊓ Q'`. -/
