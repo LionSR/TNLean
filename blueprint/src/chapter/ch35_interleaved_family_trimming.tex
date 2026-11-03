@@ -728,3 +728,77 @@ These results prove measurability of the actual finite parent construction.
 They do not assume that an arbitrary varying orthonormal-basis selection
 is measurable, and do not assert an adaptive success probability or a
 running-time bound.
+
+\subsection{Unconditional output size and uniform true parent failure}
+
+\begin{lemma}[Every canonical parent seed satisfies the recorded size bounds]
+    \label{lem:canonical_interleaved_parent_unconditional_profile}
+    \lean{TNLean.MPS.AreaLaw.canonicalSampledIntervalInterleavedTrim_profile}
+    \leanok
+    Let $D\ge2$, $s\ge1$, $N\le D^2$ and $\xi>0$. For any interval
+    candidate $W$ and every seed, the canonical sampled interleaved parent
+    has dimension at most $M=D^6s^3$. It has at most $M$ recorded generators,
+    each with weighted internal-cut Schmidt rank at most $M$.
+    No viability assumption on $W$ or its sample is needed. This is a
+    bound on the recorded generators, not on the Schmidt rank of their
+    entire span.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{def:canonical_sampled_interval_interleaved_parent,
+        lem:interval_family_trim_iterates}
+    The transported sample has dimension at most $s$ for every seed.
+    At the fixed count $k=\lceil\log_D(D^2s)\rceil$, the numerical profile
+    gives $N^ks\le D^6s^3$. Apply the existing dimension and recorded-rank
+    bounds of the literal iteration. The count is positive, so the final
+    recorded family has undergone an actual collective trim.
+\end{proof}
+
+\begin{lemma}[Uniform true failure of the physical canonical parent]
+    \label{lem:physical_canonical_interleaved_parent_true_failure}
+    \lean{TNLean.MPS.AreaLaw.exists_physical_dg_canonical_interval_parent_failure}
+    \leanok
+    Retain the physical hypotheses, universal constants, calibrated
+    parameters, common reference and ordered-word family of
+    Lemma~\ref{lem:physical_interleaved_iterates}. The actual clipped
+    target $T$, number of operators $N$ and family $(F_i)$ are chosen
+    before the radius, child spaces and seed. For every admissible radius,
+    the preceding dimension and recorded-rank bounds hold for every
+    candidate and seed.
+
+    Let two actual adjacent children be $3/200$-viable for the same
+    original full ground space $G$, with dimensions at most $M=D^6s^3$.
+    Form their actual adjacent-coordinate tensor merge $W$. On the fixed
+    product Haar space for the parent configuration space, the true event
+    that its canonical sampled interleaved output fails to be
+    $3/200$-viable for $G$ is Borel and has probability at most
+    \begin{align}
+        \beta=(L+1)^{-2}.
+    \end{align}
+    The entire parent exterior is retained. The block-leaf, fixed failure
+    scale, capped-gap and hard-clipped-family qualifications are unchanged;
+    see \cite{gap:alvv16_approximation_parameters}.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:physical_interleaved_iterates,
+        lem:canonical_interleaved_parent_unconditional_profile,
+        lem:borel_canonical_sampled_interval_interleaved_parent,
+        thm:actual_adjacent_interval_merge}
+    The merged input has dimension at most $M^2=D^{12}s^6$. Actual target
+    closeness transfers its original-ground-space viability to
+    quarter-viability for the chosen clipped target. The native canonical
+    Haar estimate then gives failure at most $\beta$ at the common overlap
+    $a=3/(32D^{12}s^5)$. The calibrated nominal sample bound is exactly
+    the one required by this estimate, since
+    $\log(1/\beta)=2\log(L+1)$.
+
+    For every successful sample, its dimension is at most $s$ and the
+    existing deterministic arbitrary-initial-space iteration proves the
+    desired output viability for the original $G$. Thus the true parent
+    failure set is contained in the true sample failure set. Monotonicity
+    of measure proves the bound. The actual Borel parent projection gives
+    measurability of the true failure event.
+\end{proof}
+
+This is a uniform one-parent result. Combining the actual balanced tree's
+conditionally fresh coordinates into a whole-tree probability estimate
+remains a separate argument; no running-time assertion follows here.
