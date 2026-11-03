@@ -154,7 +154,8 @@
       "stage": "al:3",
       "prs": {
         "TNLean": [
-          10523
+          10523,
+          10541
         ]
       },
       "title": "Buffers in the low-energy improving families",
@@ -163,7 +164,7 @@
       "claims": "Theorem 4.8 (lines 1027–1041 of the source) asserts, for η ≥ η<sub>1</sub> ≥ 2μ/log <i>n</i>, a family of <i>D</i><sup>2</sup> operators with <i>D</i> = e<sup>Õ((log <i>n</i>/μ) log<sup>3</sup> <i>d</i>)</sup>, <i>D</i><sup>12</sup>Δ < 10<sup>−5</sup>, and both window comparisons with error 0.005.",
       "found": "The buffer is positive only for <i>n</i> ≥ 2, the source's own regime. The construction in review proves the family for every interval, including empty intervals and the ends of the chain, with an explicit bound on log <i>D</i> of the source's form and <i>D</i><sup>12</sup>Δ < 10<sup>−5</sup>, and with comparison errors 1/200 each. After transferring back to the original windows the total error is 2(Δ/[1 − 2(δ + 1/200)]<sup>2</sup> + 1/200), which is not identified with the clipped-window error.",
       "impact": "None for the source regime. The restrictions exclude only chains of one site and qudits of dimension one.",
-      "plan": "Review and merge the construction. The low-density bootstrap and area law that use it are not yet formalized."
+      "plan": "Review and merge the construction. The low-density bootstrap and area law that use it are proved in the same series of drafts, under the scope restrictions recorded there, and are also in review."
     },
     {
       "id": "docs/paper-gaps/alvv16_approximation_parameters.tex",
@@ -328,7 +329,7 @@
       "summary": "Nothing is wrong with the paper; the low-density improving families, area law and matrix product state bounds in review have constants that depend on the fixed window η, as assumption (LD) allows, and are not claimed uniformly in a varying window.",
       "context": "Under (LD) the eigenvectors with energy within η of the ground energy span a space of dimension <i>r</i>. The improving families work between windows separated by buffers of width <i>w</i> = μ/(3 log <i>n</i>), and the area law concerns the window shortened by μ/log <i>n</i>.",
       "claims": "Theorem 4.8 (lines 1027–1041 of the source) gives the family for a constant η > 0, and Theorem 4.11 (lines 1096–1105) the entropy bound ln <i>r</i> + Õ((log <i>n</i>/μ) log<sup>3</sup> <i>d</i>) and the approximations, with constants hidden in the Õ.",
-      "found": "The construction chooses its constants after η and before the chain, the local dimension, the interactions and μ. On every interval, including empty intervals and the ends of the chain, it gives a family with comparison losses 1/(200·2<sup>4<i>i</i></sup>) for every <i>i</i>; a 3/200-viable subspace and the entropy bound ln <i>r</i> + (<i>K</i>/<i>v</i>)(1 + log <i>d</i> + log(1 + 1/<i>v</i>))<sup>3</sup> with <i>v</i> = μ/log <i>n</i>; approximations at one cut and by one matrix product state; and a basis of matrix product states for the shortened window. The family itself needs qudits of dimension at least two; the final statements also cover dimension one.",
+      "found": "The construction chooses its constants after η and before the chain, the local dimension, the interactions and μ. On every interval, including empty intervals and the ends of the chain, it gives a family with comparison losses 1/(200·2<sup>4<i>i</i></sup>) for every <i>i</i>; a 3/200-viable subspace and the entropy bound ln <i>r</i> + (<i>K</i>/<i>v</i>)(1 + log <i>d</i> + log(1 + 1/<i>v</i>))<sup>3</sup> with <i>v</i> = μ/log <i>n</i>; approximations at one cut and by one matrix product state; and a basis of matrix product states for a space of the same dimension as the shortened window and close to it in both directions. The family itself needs qudits of dimension at least two; the final statements also cover dimension one.",
       "impact": "None for the paper's setting, which fixes η. A bound uniform in a varying window is not asserted.",
       "plan": "Review and merge. The low-density algorithm of Theorem 6.3 is not addressed: the basis is shown to exist, not to be computed."
     },
