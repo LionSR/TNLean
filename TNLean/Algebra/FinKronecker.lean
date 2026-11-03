@@ -134,7 +134,7 @@ theorem rectKronecker_conjTranspose (K : ν → Matrix ι κ ℂ) :
 /-- Every tensor power of a rectangular physical isometry is an isometry.
 Source context: arXiv:1010.3732, Section II.F.2,
 `eq:1d-sym:jointsym`, physical endpoint embeddings on finite chains. -/
-theorem rectKronecker_conjTranspose_mul_self [Fintype ι] [Finite κ] [DecidableEq κ]
+theorem rectKronecker_conjTranspose_mul_self {N : ℕ} [Fintype ι] [Finite κ] [DecidableEq κ]
     {u : Matrix ι κ ℂ} (hu : uᴴ * u = 1) :
     (rectKronecker fun _ : Fin N => u)ᴴ * rectKronecker (fun _ : Fin N => u) = 1 := by
   let : Fintype κ := Fintype.ofFinite κ
