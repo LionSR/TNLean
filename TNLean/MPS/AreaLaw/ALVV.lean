@@ -25,6 +25,7 @@ import TNLean.MPS.AreaLaw.ALVV.HardTruncationResidual
 import TNLean.MPS.AreaLaw.ALVV.PhysicalDGRootEnergyAssignment
 import TNLean.MPS.AreaLaw.ALVV.PhysicalDGTreeEnergyAssignment
 import TNLean.MPS.AreaLaw.ALVV.PhysicalDGTreeEnergyUpdates
+import TNLean.MPS.AreaLaw.ALVV.PhysicalSoftMiddleCluster
 import TNLean.MPS.AreaLaw.ALVV.SoftClusterPrecision
 import TNLean.MPS.AreaLaw.ALVV.SoftFamilyResiduals
 import TNLean.MPS.AreaLaw.ALVV.SoftGeneratedMiddleApproximation

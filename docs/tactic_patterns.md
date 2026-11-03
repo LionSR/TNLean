@@ -11979,3 +11979,16 @@ mathematical arguments and avoids compiling both in the long corollary.
   and native restriction are performed once per atom, before the estimate.
 - **Decision:** The native-slice proof is shared unchanged in
   `NativeIntervalMPOApproximation.lean`; no coordinate proof is copied.
+
+
+### Retaining a native approximation in a spectral comparison — candidate (2026-11-03)
+
+- **Seen:** `ALVV/SoftGeneratedMiddleApproximation.lean` and
+  `ALVV/PhysicalSoftMiddleCluster.lean`.
+- **Pattern:** Retain the actual native tensors and their placement, use
+  `Ghat = G-F2+Zphys`, and transfer the middle error to that same matrix.
+- **Reuse:** The existing native constructor, elementary additive identities,
+  and Mathlib's `norm_le_norm_add_norm_sub`.
+- **Decision:** The exact represented-matrix identity is retained. Distinct
+  approximants are not identified merely from a common norm-error bound;
+  no additional tactic is needed for the two present occurrences.
