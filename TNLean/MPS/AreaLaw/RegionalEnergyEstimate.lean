@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.AreaLaw.RegionalGroundEnergy
 import TNLean.Lattice.ZeroEntropy
 import QICLean.Analysis.TensorEnergyMinimum
+import QICLean.Entropy.RegionalOperatorCoordinates
 import QICLean.Analysis.CompressionEnergyBounds
 import QICLean.Analysis.MatrixTensorCoordinates
 import QICLean.Analysis.ViableSubspaceCoordinates
@@ -34,61 +35,6 @@ open scoped BigOperators InnerProductSpace ComplexOrder MatrixOrder
 namespace TNLean.MPS.AreaLaw
 
 open Matrix
-
-private theorem localLift_eq_middleFirst {L q : ℕ} (J : Finset (Fin L))
-    (K : Matrix (J → Fin q) (J → Fin q) ℂ) :
-    let tau := (FiniteProduct.splitEquiv (fun _ : Fin L ↦ Fin q) J).trans
-      (Equiv.prodComm _ _)
-    Entropy.localLift (n := fun _ : Fin L ↦ q) J K =
-      ((1 : Matrix (↥(Jᶜ) → Fin q) (↥(Jᶜ) → Fin q) ℂ) ⊗ₖ K).submatrix tau tau := by
-  classical
-  intro tau
-  ext σ ρ
-  rw [Entropy.localLift_apply]
-  simp only [submatrix_apply, kroneckerMap_apply, one_apply,
-    tau, Equiv.trans_apply, Equiv.prodComm_apply, Prod.fst_swap, Prod.snd_swap]
-  have hfst (ξ : Fin L → Fin q) :
-      ((FiniteProduct.splitEquiv (fun _ : Fin L ↦ Fin q) J) ξ).1 = (fun v : J ↦ ξ v) := rfl
-  have hsnd (ξ : Fin L → Fin q) :
-      ((FiniteProduct.splitEquiv (fun _ : Fin L ↦ Fin q) J) ξ).2 =
-        (fun v : ↥(Jᶜ) ↦ ξ v) := rfl
-  have hrest : ((fun v : ↥(Jᶜ) ↦ σ v) = (fun v : ↥(Jᶜ) ↦ ρ v)) ↔
-      ∀ v ∉ J, σ v = ρ v := by
-    constructor
-    · intro heq v hv
-      exact congrFun heq ⟨v, Finset.mem_compl.mpr hv⟩
-    · intro heq
-      funext v
-      exact heq v (Finset.mem_compl.mp v.property)
-  simp only [hfst, hsnd, hrest, ite_mul, one_mul, zero_mul]
-  split_ifs <;> rfl
-
-private theorem localLift_middleFirst_conjugation {L q : ℕ} (J : Finset (Fin L))
-    (K : Matrix (J → Fin q) (J → Fin q) ℂ) :
-    let beta := fun _ : Fin L ↦ Fin q
-    let tau := (FiniteProduct.splitEquiv beta J).trans (Equiv.prodComm _ _)
-    let U := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ tau
-    let Phi := ((EuclideanSpace.basisFun (FiniteProduct.Configuration beta Jᶜ) ℂ).tensorProduct
-      (EuclideanSpace.basisFun (FiniteProduct.Configuration beta J) ℂ)).repr
-    let Tm := (U.trans Phi.symm).trans (TensorProduct.commIsometry ℂ
-      (EuclideanSpace ℂ (FiniteProduct.Configuration beta Jᶜ))
-      (EuclideanSpace ℂ (FiniteProduct.Configuration beta J)))
-    Tm.toContinuousLinearEquiv.toContinuousLinearMap ∘L
-        toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)
-          (Entropy.localLift (n := fun _ : Fin L ↦ q) J K) ∘L
-        Tm.symm.toContinuousLinearEquiv.toContinuousLinearMap =
-      TensorProduct.mapL (toEuclideanCLM (𝕜 := ℂ) (n := J → Fin q) K)
-        (1 : EuclideanSpace ℂ (↥(Jᶜ) → Fin q) →L[ℂ]
-          EuclideanSpace ℂ (↥(Jᶜ) → Fin q)) := by
-  intro beta tau U Phi Tm
-  have hmatrix : Entropy.localLift (n := fun _ : Fin L ↦ q) J K =
-      (∑ _i : Unit, (1 : Matrix (↥(Jᶜ) → Fin q) (↥(Jᶜ) → Fin q) ℂ) ⊗ₖ K).submatrix
-        tau tau := by
-    simpa only [Fintype.sum_unique] using localLift_eq_middleFirst J K
-  have hconj := toEuclideanCLM_middleFirst_conjugation_of_kronecker_sum
-    tau (fun _ : Unit ↦ (1 : Matrix (↥(Jᶜ) → Fin q) (↥(Jᶜ) → Fin q) ℂ))
-    (fun _ : Unit ↦ K) (Entropy.localLift (n := fun _ : Fin L ↦ q) J K) hmatrix
-  simpa only [Fintype.sum_unique, map_one] using hconj
 
 /-- The native interval operator and its minimum are chosen before every
 candidate. A candidate viable for the full original ground space has an
@@ -193,7 +139,7 @@ theorem exists_native_regional_compressed_energy_estimate {L q l r : ℕ}
         (1 : EuclideanSpace ℂ (↥(Jᶜ) → Fin q) →L[ℂ]
           EuclideanSpace ℂ (↥(Jᶜ) → Fin q)) := by
       rw [hAK]
-      exact localLift_middleFirst_conjugation J K
+      exact Entropy.localLift_middleFirst_conjugation J K
     have hv := congrArg (fun f ↦ f (Tm v)) hh
     change Tm (toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q) A (Tm.symm (Tm v))) = _ at hv
     rw [Tm.symm_apply_apply] at hv
