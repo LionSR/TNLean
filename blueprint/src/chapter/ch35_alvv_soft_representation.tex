@@ -91,3 +91,45 @@ MPO bond, window count and losses are retained. No efficient GEN,
 source-sharp parameter choice or running-time theorem is asserted.
 The false printed cluster estimate and its counterexamples remain
 recorded in \cite{gap:alvv16_cluster_approximation}.
+
+\begin{lemma}[Norm of the complete three-bulk soft Hamiltonian]
+    \label{lem:alvv_five_soft_norm}
+    \lean{TNLean.MPS.AreaLaw.ALVV.norm_five_region_soft_three_bulk_le}
+    \leanok
+    Let $0\le k_1\le k_2\le k_3\le k_4\le L$ be the four cuts of
+    a positive-contraction nearest-neighbour chain. Suppose the two
+    intervening windows satisfy $k_2-k_1\le2\ell$ and
+    $k_4-k_3\le2\ell$. Let $A_j$ be its five original internal
+    Hamiltonians and $Y$ its crossing-bond sum. Retain actual regional
+    minima $e_j$ and a common unit vector $x$ satisfying
+    $A_jx=e_jx$ and $A_j-e_jI\ge0$.
+
+    Choose $e_j-10\le p_j\le e_j$ for $j\in\{0,2,4\}$, $t>0$,
+    and $m\ge1$. Put $F_j=p_jI+h_{m,t}(A_j-p_jI)$ and
+    \begin{align}
+        G=(F_0-e_0I)+(A_1-e_1I)+(F_2-e_2I)
+          +(A_3-e_3I)+(F_4-e_4I)+Y.
+    \end{align}
+    Then the same estimated-center Hamiltonian satisfies
+    \begin{align}
+        \|G\|\le3t(1+\log m)+4\ell+34.
+        \label{eq:alvv_five_soft_norm}
+    \end{align}
+    All original regional shifts are retained. The corrected harmonic
+    cap is recorded in \cite{gap:alvv16_soft_truncation_log_bound}.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:five_region_original_bond_bounds}
+    Positivity of each $A_j$ and the normalized attaining vector give
+    $e_j\ge0$. Each softened centered summand lies between $-10I$
+    and $t(1+\log m)I$. The unchanged centered windows are nonnegative
+    and at most $2\ell I$ each. Finally $0\le Y\le4I$. Consequently,
+    \begin{align}
+        -30I\le G\le\bigl(3t(1+\log m)+4\ell+4\bigr)I.
+    \end{align}
+    For a self-adjoint operator between scalar bounds, its norm is at
+    most the larger absolute endpoint. Bounding that maximum by
+    $30+3t(1+\log m)+4\ell+4$ proves
+    (\ref{eq:alvv_five_soft_norm}). The regional minimum certificates
+    used in the two bounds are the same supplied certificates.
+\end{proof}

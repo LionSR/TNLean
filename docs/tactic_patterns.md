@@ -11922,3 +11922,19 @@ opaque proposition, rather than repeating its vector-wise conjunction.
   inequality were placed in their natural owners in separate contributions.
   The interval argument remains a private helper because it currently has
   one mathematical consumer.
+
+
+### A soft Hamiltonian between two scalar bounds — existing C-star order theorem (2026-11-03)
+
+- **Pattern:** Center three softened regional terms by their original minima,
+  retain two bounded windows and crossing bonds, then convert the derived
+  lower and upper order bounds into one operator-norm ceiling.
+- **Reuse:** `IsSelfAdjoint.norm_le_max_of_le_of_le` gives the norm bound directly.
+  The finite selected-family theorem supplies the common positive correction;
+  `PosSemidef.nonneg_of_normalized_eigenvector` derives the signs of the SAME
+  supplied regional energies. No new spectral norm proof is needed.
+- **Decision:** Keep the matrices named in intermediate types, and rewrite only
+  the numerical correction and scalar endpoint. The existing upper-cap proof
+  uses direct five-case simplification. Import only the original region data,
+  commuting soft-family bounds and actual soft operator cap; residual estimates
+  and their spectral comparisons are not dependencies of this norm bound.

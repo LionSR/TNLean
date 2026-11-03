@@ -7,7 +7,7 @@
 \input{command}
 \title{Corrected regional soft-truncation residuals and parameter bounds}
 \author{}
-\date{2026-11-02}
+\date{2026-11-03}
 \begin{document}
 \maketitle
 \gapnote{scope-restriction}{open}
@@ -163,4 +163,28 @@ from the GEN input to suitable actual regional lower centers remains
 part of the algorithmic argument; it is not inferred from the existence
 of the true minimum energies. The separate false cluster estimate and
 its counterexamples are unchanged.
+
+\section{A full-operator norm ceiling with the original regional shifts}
+
+For the five-region construction, let the two intervening site windows
+have widths at most $2\ell$. Retain the same attained original minima
+$e_j$ and the estimates $e_j-10\le p_j\le e_j$ on the three bulks
+$j\in\{0,2,4\}$. The actual softened Hamiltonian retains the entire
+shift $-\sum_j e_jI$. Each softened centered term is at least $-10I$
+and at most $t(1+\log m)I$; the two unchanged centered windows are at
+most $2\ell I$ each, and the actual crossing sum is at most $4I$.
+Thus
+\begin{align}
+ -30I\le G\le\bigl(3t(1+\log m)+4\ell+4\bigr)I,
+ \qquad
+ \|G\|\le3t(1+\log m)+4\ell+34.
+\end{align}
+This norm estimate selects no new regional minima or soft ground energy.
+It is proved by
+\leanid{TNLean.MPS.AreaLaw.ALVV.norm_five_region_soft_three_bulk_le}.
+The factor $1+\log m$ is the corrected harmonic cap; see the
+\href{https://sirui-lu.com/QICLean/paper-gaps/alvv16_soft_truncation_log_bound.pdf}
+{companion note on the soft-truncation logarithmic bound}.
+The later precision and filter calibration remain separate statements.
+
 \end{document}
