@@ -1128,10 +1128,11 @@ with the corresponding composite embeddings.
 
 \begin{proof}
     \leanok
-    Given $\epsilon$, let $E^c_{xy}\in\mathcal B$ be the matrix unit of the
-    block $c$ and put $(Y_c)_{yx}=\epsilon(E^c_{xy})$. Expanding
-    $X=\sum_{c,x,y}(X_c)_{xy}E^c_{xy}$ gives
-    $\epsilon(X)=\sum_{c,x,y}(Y_c)_{yx}(X_c)_{xy}=\sum_c\tr(Y_cX_c)$. On the
+    \uses{thm:matrix_family_trace_duality}
+    The block trace pairing $(Y,X)\mapsto\sum_c\tr(Y_cX_c)$ on $\mathcal B$
+    is nondegenerate, so by Lemma~\ref{thm:matrix_family_trace_duality} every
+    functional $\epsilon$ is $X\mapsto\sum_c\tr(Y_cX_c)$ for the element $Y$
+    that the pairing assigns to $\epsilon$. On the
     elements $(B_c^{ik})_c$ this pairing is the left side of
     (\ref{eq:mpoalg_fusion_unit_witness}), so (\ref{eq:mpoalg_fusion_counit})
     and (\ref{eq:mpoalg_fusion_unit_witness}) are the same condition.

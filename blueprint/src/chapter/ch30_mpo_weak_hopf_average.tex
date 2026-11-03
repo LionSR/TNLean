@@ -235,8 +235,8 @@ No other weak-Hopf axiom is used.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:glm_wha_unit_support,thm:glm_boundary_parent_local,
-        thm:glm_boundary_parent_nonzero}
+    \uses{thm:glm_wha_integral_normalization,thm:glm_wha_unit_support,
+        thm:glm_boundary_parent_local,thm:glm_boundary_parent_nonzero}
     Choose a finite expansion $\Delta(\Omega)=\sum_{j\in J}a_j\otimes b_j$.
     Lemma~\ref{thm:glm_wha_integral_normalization} gives adjoint closure,
     so Lemma~\ref{thm:glm_boundary_parent_local} makes $P_n$ commute with
@@ -525,8 +525,10 @@ No other weak-Hopf axiom is used.
         MPOTensor.BellPairWeakHopf.weakHopfAverage_parentInteractionES_stateTensor,
         MPOTensor.BellPairWeakHopf.parentInteractionES_stateTensor_ne_zero}
     \leanok
-    \uses{thm:glm_wha_bell_pair_compatible,thm:glm_wha_parent_average,
-        thm:glm_wha_integral_normalization,def:parent_interaction}
+    \uses{thm:glm_wha_bell_pair_represented,thm:glm_wha_bell_pair_compatible,
+        thm:glm_wha_unit_support,thm:glm_wha_parent_average,
+        thm:glm_wha_integral_normalization,thm:glm_boundary_parent_nonzero,
+        def:parent_interaction}
     For the Bell-pair state tensor and every $n>0$, the support projection is
     the represented unit, $P_n=Q_n$; at two sites
     $P=Q=I_K\otimes|\Phi\rangle\langle\Phi|\otimes I_K$. Hence
@@ -540,15 +542,17 @@ No other weak-Hopf axiom is used.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:glm_wha_bell_pair_compatible,thm:glm_wha_parent_average,
-        thm:glm_wha_integral_normalization}
+    \uses{thm:glm_wha_bell_pair_represented,thm:glm_wha_bell_pair_compatible,
+        thm:glm_wha_unit_support,thm:glm_wha_parent_average,
+        thm:glm_wha_integral_normalization,thm:glm_boundary_parent_nonzero}
     Each $u_p$ is the state with boundary $r^{n/2}E_{ji}$, so by
     Lemma~\ref{thm:glm_wha_bell_pair_represented} the range of $Q_n$ lies in
-    the support and $P_nQ_n=Q_n$. Lemma~\ref{thm:glm_wha_parent_average}
+    the support and $P_nQ_n=Q_n$. Lemma~\ref{thm:glm_wha_unit_support}
     gives $Q_nP_n=P_n$, and $Q_n=\rho_n(1^*)=Q_n^\dagger$ by
     Lemma~\ref{thm:glm_wha_integral_normalization}. Taking adjoints,
     $P_n=P_n^\dagger=(Q_nP_n)^\dagger=P_nQ_n=Q_n$. The identities
     $E_n(P_n)=P_n$ and $E_n(I-P_n)=Q_n-P_n=0$ are
-    Lemma~\ref{thm:glm_wha_parent_average}. The support has dimension at
-    most $r^2<r^{2n}$, so $P_n\neq I$.
+    Lemma~\ref{thm:glm_wha_parent_average}. For $r\geq2$ and $n\geq2$ the
+    physical dimension $r^{2n}$ exceeds $r^2$, the square of the bond
+    dimension, so $I-P_n\neq0$ by Lemma~\ref{thm:glm_boundary_parent_nonzero}.
 \end{proof}

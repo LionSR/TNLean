@@ -763,7 +763,8 @@ For the matrix product operator symmetries of arXiv:2203.12563:
   injectivity length). For the Bell-pair state tensor, compatible with its
   operator tensor and injective at one site, the average is
   `E_n(X) = r⁻² tr(Q_n X) Q_n` and the support projection is `P_n = Q_n`, so
-  the uncompleted average `E_n(I − P_n)` vanishes while `I − P_n ≠ 0`.
+  the uncompleted average `E_n(I − P_n)` vanishes at every positive length,
+  while `I − P_n ≠ 0` for `r ≥ 2` and `n ≥ 2`.
 
 - `glm23_reps3_z3_table.tex` records that the printed action of `ψ` in the
   `ℤ₃` phase of `Rep(S₃)` fails the representation identity, and that the

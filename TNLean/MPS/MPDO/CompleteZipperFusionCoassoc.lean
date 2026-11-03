@@ -81,8 +81,8 @@ is the argument of `mpo.tex`, lines 940--945 and 2001--2003, run backwards.
   with $\varepsilon(T^{ik})=\delta_{ik}$.
 * `counit_unique`: such a functional is unique.
 * `exists_tracePairing_eq`: every functional on the boundary space is a trace pairing.
-* `exists_counit_iff`: the counit exists if and only if the identity operator on one site is a
-  one-site operator of the family.
+* `exists_counit_iff`: a functional with $\varepsilon(T^{ik})=\delta_{ik}$ exists if and only if
+  the identity operator on one site is a one-site operator of the family.
 * `dualRepresentationCounit_letter`: the counit $\psi(f)\mapsto f(1)$ takes the values
   $\delta_{ik}$ on the letters.
 
