@@ -551,7 +551,9 @@
         "thm:chain_boundary_net_polynomial",
         "thm:alvv_collective_trim"
       ],
-      "corollaries": [],
+      "corollaries": [
+        "cor:physical_interleaved_ritz_polynomial"
+      ],
       "notes": {
         "thm:chain_boundary_net_polynomial": "Boundary net of polynomial size used to glue a left state at a cut",
         "thm:alvv_collective_trim": "Trimming a viable subspace on the chain (Arad et al.), the step the opening names"

@@ -529,3 +529,48 @@ probability for an adaptively sampled tree remains separate.
     $A\rho/((1-\rho)\gamma)=\eta/2$. The terminal trimming generators
     give the same all-span bond bound.
 \end{proof}
+
+
+\begin{corollary}[Uniform polynomial bond for the same interleaved Ritz space]
+    \label{cor:physical_interleaved_ritz_polynomial}
+    \lean{TNLean.MPS.AreaLaw.exists_physical_dg_interleaved_ritz_polynomial_approximation}
+    \leanok
+    Fix the local dimension $q$ and a positive spectral gap $\gamma$.
+    There are $C>0$ and $k\in\mathbb N$, depending only on these two
+    parameters, with the following property. For every length $L$ and
+    positive nearest-neighbour contraction Hamiltonian satisfying the
+    degenerate-ground-space hypotheses above, let $r$ be its full ground
+    multiplicity. For every $\eta>0$, the actual interleaved tree,
+    common-radius refinement and compressed Ritz construction of
+    Lemma~\ref{lem:physical_interleaved_tree_ritz} yield an $r$-dimensional
+    space $R$, mutually $\eta/2$-close to the original ground space.
+    Every vector of this same $R$ is an open MPS of bond at most
+    \begin{align}
+        C\bigl((L+1)(r+1)(1+\eta^{-1})\bigr)^k.
+        \label{eq:interleaved_ritz_uniform_polynomial}
+    \end{align}
+    The calibrated count is allowed to vary with $L$ and $r$.
+    The block leaves, fixed failure target, capped-gap dependence and
+    modified integer counts remain those of the preceding construction.
+    This is a coarse uniform polynomial bound, with no claim about the
+    printed sharp dependence on $q,\gamma$, adaptive joint probability,
+    energy estimation or running time.
+\end{corollary}
+\begin{proof}\leanok
+    \uses{lem:physical_interleaved_tree_ritz}
+    Put $w=1+\log r+2\log(L+1)$ and
+    $U=1+\log\max\{q,50\}+\log(1/\min\{\gamma,1\})$.
+    The bounds for $v=U+\log(1+w)$ give
+    $v^7\le(U+17)^7w$ and
+    $\sqrt w\,v^4\le(U+17)^4w$. Thus the actual calibrated count satisfies
+    $\log D\le K_Dw$ for a constant depending only on $q,\gamma$;
+    it has not been replaced by a fixed count. Its sample ceiling,
+    inverse reference accuracies and common-radius ceilings consequently
+    have polynomial bounds in $(L+1)(r+1)(1+\eta^{-1})$.
+    Apply the reference logarithmic profile at both actual accuracies.
+    The positive-contraction bound gives $\|H\|-\mu\le L+1$.
+    Substituting all these estimates in
+    (\ref{eq:interleaved_root_final_bond}) proves
+    (\ref{eq:interleaved_ritz_uniform_polynomial}) for the very same Ritz
+    space supplied by Lemma~\ref{lem:physical_interleaved_tree_ritz}.
+\end{proof}

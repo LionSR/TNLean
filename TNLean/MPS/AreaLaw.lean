@@ -128,6 +128,7 @@ import TNLean.MPS.AreaLaw.PhysicalDGInterleavedApproximation
 import TNLean.MPS.AreaLaw.PhysicalDGInterleavedFamily
 import TNLean.MPS.AreaLaw.PhysicalDGInterleavedIteration
 import TNLean.MPS.AreaLaw.PhysicalDGInterleavedNode
+import TNLean.MPS.AreaLaw.PhysicalDGInterleavedPolynomialBond
 import TNLean.MPS.AreaLaw.PhysicalDGInterleavedTree
 import TNLean.MPS.AreaLaw.PhysicalDGIntervalTree
 import TNLean.MPS.AreaLaw.PhysicalDGIntervalTrimming
