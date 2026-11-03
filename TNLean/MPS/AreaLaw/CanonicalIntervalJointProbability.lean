@@ -81,9 +81,9 @@ theorem intervalSamplingMeasure_canonical_tree_joint_failure_le
       (hfixed J.val.1 J.val.2 hb.2.1 (hb.2.2.1.trans hrL) hb.2.2.2 U)
   have hleaf (a b : ℕ) (_hab : a ≤ b) (_hbL : b ≤ L) (_hshort : b - a ≤ width) :
       P a b ⊤ := Submodule.isViable_top delta hdelta _
-  exact (measure_mono (joint_failure_subset_iUnion_guardedIntervalFailure
-    operation width hwidth P hleaf p r hpr hrL)).trans
-    (intervalSamplingMeasure_guarded_failure_union_le
-      operation width hwidth P p r hpr hrL beta hE hsections)
+  simpa only [intervalSamplingMeasure] using pi_balancedIntervalSpace_joint_failure_le
+    (fun K : Fin (L + 1) × Fin (L + 1) ↦
+      Matrix.rankUnitaryHaar (Fintype.card (interval L K.1.val K.2.val → Fin q)))
+    operation width hwidth P hleaf p r hpr hrL beta hE hsections
 
 end TNLean.MPS.AreaLaw

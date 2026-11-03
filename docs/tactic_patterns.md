@@ -12020,3 +12020,16 @@ mathematical arguments and avoids compiling both in the long corollary.
   theorem rather than rewriting a long expression of isometries.
 - **Decision:** Two private mathematical lemmas keep the same witnesses and
   default proof limits; no new predicate, structure or resource setting.
+
+### Independent coordinate laws for the same interval failure bound (2026-11-03)
+
+- **Pattern:** Sum actual guarded failure sections over the listed internal
+  intervals, then use deterministic root or joint failure ancestry.
+- **Reuse:** The generic pi_guardedIntervalFailure_union_le uses the existing
+  finite-list product-measure estimate. List.mem_attach and Set.iUnion_subtype
+  identify the listed union directly, so no separate containment argument is
+  copied. Root and joint ancestry give two consequences.
+- **Consumers:** The existing Haar union/root bounds and canonical joint
+  bound become active special cases, retaining their signatures and actual
+  operations. Finite products of repeated samples use the same generic result.
+- **Decision:** No second tree, probability law or success predicate is defined.

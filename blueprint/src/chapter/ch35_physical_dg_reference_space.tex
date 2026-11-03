@@ -504,12 +504,16 @@ probabilities remains a separate argument.
 \begin{lemma}[A conditional bound for guarded and root failures]
     \label{thm:balanced_interval_failure_probability}
     \lean{TNLean.MPS.AreaLaw.balancedIntervalMergeCoordinate,
+        TNLean.MPS.AreaLaw.pi_guardedIntervalFailure_union_le,
+        TNLean.MPS.AreaLaw.pi_balancedIntervalSpace_root_failure_le,
         TNLean.MPS.AreaLaw.intervalSamplingMeasure_guarded_failure_union_le,
         TNLean.MPS.AreaLaw.intervalSamplingMeasure_root_failure_le}
     \leanok
-    Use the fixed product Haar law of
-    Definition~\ref{def:interval_sampling_choices}. Let each whole choice
-    $\omega$ determine an arbitrary merge operation and its actual
+    At each finite endpoint coordinate $I$, fix a probability space
+    $(\Omega_I,\mu_I)$, and put
+    $\Omega=\prod_I\Omega_I$ and $\mu=\bigotimes_I\mu_I$.
+    Let each whole choice $\omega\in\Omega$ determine an arbitrary
+    merge operation and its actual
     balanced spaces $S_\omega$. Fix $p\le r\le L$ and $w\ge1$.
     For each $J=(a,b)\in\mathcal I_w(p,r)$, the bounds
     $p\le a\le b\le r\le L$ identify its actual finite endpoint
@@ -519,34 +523,37 @@ probabilities remains a separate argument.
     Suppose that each listed $E_J$ is measurable and, for every whole
     choice $\omega$, changing its own coordinate satisfies
     \begin{align}
-        h_J\{u:\omega[c(J)\leftarrow u]\in E_J\}\le\beta,
+        \mu_{c(J)}\{u:\omega[c(J)\leftarrow u]\in E_J\}\le\beta,
     \end{align}
-    where $h_J$ is the prescribed product Haar law for that interval.
-    Then
+    where $\beta\in[0,\infty]$. Then
     \begin{align}
         \mu\left(\bigcup_{J\in\mathcal I_w(p,r)}E_J\right)
             \le \max\{r-p-1,0\}\beta.
     \end{align}
     If the full local space satisfies the property at every valid short
-    leaf, then the same bound holds for
-    $\mu\{\omega:\neg P_{p,r}(S_\omega(p,r))\}$.
+    leaf, then the same outer-measure bound holds for
+    $\mu^*\{\omega:\neg P_{p,r}(S_\omega(p,r))\}$.
     The section bounds and measurability are hypotheses of this
     conditional measure estimate; no physical section estimate is
     asserted here.
 \end{lemma}
 \begin{proof}\leanok
     \uses{thm:balanced_interval_merge_bounds,lem:balanced_interval_merge_count,
-        def:interval_sampling_choices,lem:balanced_interval_failure_ancestry}
+        lem:balanced_interval_failure_ancestry}
     Each listed interval has valid endpoint coordinates by
     Lemma~\ref{thm:balanced_interval_merge_bounds}.
-    Apply the finite-list coordinate-section bound to the actual merge
-    list. Subadditivity bounds the union by its length times $\beta$,
+    Integrate each coordinate-section bound against the remaining
+    probability laws to obtain $\mu(E_J)\le\beta$.
+    Subadditivity bounds the union by its length times $\beta$,
     counting repeated occurrences if any. Lemma~\ref{lem:balanced_interval_merge_count}
     bounds that length by $\max\{r-p-1,0\}$.
     Under the leaf hypothesis, Lemma~\ref{lem:balanced_interval_failure_ancestry}
     includes root failure in this same guarded union.
 \end{proof}
 
+The product Haar law of Definition~\ref{def:interval_sampling_choices}
+is a special case. An interval coordinate may also contain a fixed
+finite product of samples; the same estimate applies.
 
 \begin{lemma}[Joint failure on the actual root tree]
     \label{lem:balanced_interval_joint_failure_ancestry}
@@ -585,6 +592,29 @@ probabilities remains a separate argument.
     $P$, giving the required guarded failure in the unchanged union.
 \end{proof}
 
+
+\begin{lemma}[Joint failure under independent coordinate laws]
+    \label{lem:independent_interval_joint_failure_probability}
+    \lean{TNLean.MPS.AreaLaw.pi_balancedIntervalSpace_joint_failure_le}\leanok
+    Under the hypotheses of
+    Lemma~\ref{thm:balanced_interval_failure_probability}, including
+    the short-leaf property, the outer measure of simultaneous failure
+    at the root or one of its actual listed internal intervals is at most
+    $\max\{r-p-1,0\}\beta$:
+    \begin{align*}
+        \mu^*\bigl\{\omega:\neg\bigl(&P_{p,r}(S_\omega(p,r))\ \land\\
+          &\forall J\in\mathcal I_w(p,r),\ P_J(S_\omega(J))\bigr)\bigr\}
+        \le\max\{r-p-1,0\}\beta.
+    \end{align*}
+    No union over other overlapping intervals is taken.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:balanced_interval_failure_probability,
+        lem:balanced_interval_joint_failure_ancestry}
+    The preceding deterministic ancestry result contains this joint
+    failure in the same union of guarded events. Apply monotonicity
+    of outer measure and the guarded-union estimate.
+\end{proof}
 
 \begin{lemma}[The section at an actual parent]
     \label{lem:canonical_interval_sampling_parent_section}
