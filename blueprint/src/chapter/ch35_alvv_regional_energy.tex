@@ -88,3 +88,31 @@ estimate are subsequent conclusions.
     This is auxiliary to the energy-estimation argument in
     \cite[Figure \texttt{fig:algo1}, lines 1627--1632]{Arad2016RigorousRG}.
 \end{proof}
+
+\begin{lemma}[Actual adjacent-interval energy estimates]
+    \label{lem:adjacent_interval_energy_merge}
+    \lean{TNLean.MPS.AreaLaw.exists_adjacent_interval_energy_merge}
+    \leanok
+    Let $H=\sum_i h_i$ be a nearest-neighbour chain with $0\le h_i\le I$
+    and positive local dimension. Fix $0\le l\le m\le r\le L$.
+    Write $A,B,P$ for the internal bond sums on $[l,m)$, $[m,r)$,
+    and $[l,r)$, respectively. Their attained minima satisfy
+    \[
+       e_A+e_B\le e_P\le e_A+e_B+1.
+    \]
+    A common unit vector attains the two child minima. If
+    $p_A\in[e_A-3,e_A]$ and $p_B\in[e_B-3,e_B]$, then
+    \[
+       p_A+p_B\in[e_P-7,e_P].
+    \]
+    Empty children, empty parents and chain endpoints are included.
+    No gap, energy witness, or separate regional decomposition is assumed.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:disjoint_regional_energy_merge}
+    Partition the parent bonds into the two internal child families and
+    the bonds crossing the cut at $m$ while remaining internal to the parent.
+    There is at most one such bond. Its sum $Y$ satisfies $0\le Y\le I$
+    and $P=A+B+Y$. The two child operators are supported on disjoint site
+    sets, so the preceding lemma applies.
+\end{proof}

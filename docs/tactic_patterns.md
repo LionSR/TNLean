@@ -11669,3 +11669,10 @@ removed after the dependency audit exposed it.
 - **Seen:** `MPS/AreaLaw/RegionalGroundEnergy.lean` and `MPS/AreaLaw/RegionalEnergyMerge.lean`.
 - **Pattern:** The common regional minimum and centered minimum for an original positive Hamiltonian are the clipping construction at the empty subset; the residual conclusions are discarded.
 - **Decision:** Reuse the existing construction. If a third independent consumer needs only the original ground data, expose that prefix as a common theorem rather than duplicating disjoint-support or minimum-energy arguments.
+
+
+### Internal bond sums under subdivision — candidate (2026-11-03)
+
+- **Seen:** `MPS/AreaLaw/FiveRegionHamiltonian.lean` and `MPS/AreaLaw/RegionalEnergyMergePhysical.lean`.
+- **Pattern:** Partition an internal bond set into consecutive internal subregions and the intervening crossing bonds; inject the crossing set into the prescribed cuts to bound its cardinality.
+- **Decision:** Reuse Mathlib's finite-sum and cardinality lemmas. The two-child identity currently remains local to the energy estimate; expose it if another consumer needs that exact subdivision.
