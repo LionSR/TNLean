@@ -198,3 +198,51 @@
     proves admissibility of $c$. Apply the retained terminal theorem at
     this derived center to the same target and untrimmed image.
 \end{proof}
+
+
+\begin{lemma}[Energy estimation on a selected interval family]
+    \label{lem:selected_soft_terminal_node_energy}
+    \lean{TNLean.MPS.AreaLaw.ALVV.exists_selected_soft_terminal_node_energy_update}
+    \leanok
+    Retain the interaction, geometry and numerical assumptions of
+    Lemma~\ref{thm:calibrated_soft_terminal_node_update}. Let $H$ be the
+    original chain Hamiltonian, let $\mu\in\operatorname{spec}(H)$, and
+    suppose every spectral value is at least $\mu$. Write $G_\mu$ for its
+    full ground space. Fix a family $A_i$ on the retained interval and an
+    attained middle minimum $e_2$, with a unit vector $x_2$ satisfying
+    $Mx_2=e_2x_2$ and $M-e_2I\ge0$.
+
+    The original parent and collar minima can be chosen before every child
+    split and its one-sided estimates $p_1,p_2$ of width $49/16$.
+    The resulting center $c=p_1+p_2-e_{\mathrm L}-e_{\mathrm R}-2$ lies
+    in $[e_2-10,e_2]$. The same soft regional operator
+    $R_c=P-M+cI+h_{m,t}(M-cI)$ and its native restriction have the
+    minimum and norm bounds of
+    Lemma~\ref{thm:calibrated_soft_terminal_node_update}.
+
+    For any native coordinate identification $I_e$ and any matrix $Q$,
+    retain the actual untrimmed image
+    $Y=\sum_i A_i I_e(\operatorname{range}Q)$.
+    Suppose $T$ has the dimension of $G_\mu$, is within directed squared
+    error $3\tau/200$ from $G_\mu$, and $Y$ is
+    $\Delta/(91/100)^2$-viable for $T$ in the canonical interval/exterior
+    tensor coordinates. Then the compression of the same native $R_c$
+    to $Y$ has an ordered orthonormal eigenbasis and least eigenvalue
+    $\lambda$ satisfying
+    \begin{align}
+      e_{\mathrm s}\le\lambda\le e_{\mathrm s}+3,\qquad
+      e_P-49/16\le\lambda-3\le e_P.
+    \end{align}
+    The family and terminal image are unchanged; the conclusion concerns
+    this untrimmed image, rather than the final trimmed output.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:calibrated_soft_terminal_node_update,
+      lem:ground_spectrum_minimum,thm:normalized_eigenvector_energies,
+      thm:regional_tensor_viability}
+    The attained spectral lower bound gives $\lambda_{\min}(H)=\mu$.
+    Uniqueness of the attained minimum of $M$ identifies $e_2$ with the
+    middle minimum in the terminal node estimate. The exterior-first
+    tensor coordinates are the canonical interval coordinates. Apply that
+    estimate to the fixed family and the same matrix $Q$.
+\end{proof}
