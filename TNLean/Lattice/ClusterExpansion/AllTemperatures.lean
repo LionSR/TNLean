@@ -80,10 +80,10 @@ the power `ρ^m` is positive semidefinite and again in product form of range `l`
 indices at each site being grouped into one. Hastings, arXiv:cond-mat/0508554v3,
 `proj3new.tex`, lines 1303–1317. -/
 theorem _root_.TNLean.Lattice.HasProductForm.pow_of_even
-    {ι : Type*} [Fintype ι] [DecidableEq ι] {q : ℕ} {near : ι → ι → Prop}
-    {ρ : Matrix (ι → Fin q) (ι → Fin q) ℂ} (hρ : HasProductForm q near ρ)
+    {ι : Type*} [Fintype ι] [DecidableEq ι] {d : ι → ℕ} {near : ι → ι → Prop}
+    {ρ : Matrix ((j : ι) → Fin (d j)) ((j : ι) → Fin (d j)) ℂ} (hρ : HasProductForm d near ρ)
     (hH : ρ.IsHermitian) {m : ℕ} (hm : Even m) :
-    HasProductForm q near (ρ ^ m) ∧ (ρ ^ m).PosSemidef :=
+    HasProductForm d near (ρ ^ m) ∧ (ρ ^ m).PosSemidef :=
   ⟨hρ.pow m, posSemidef_pow_of_even hH hm⟩
 
 /-- The least even integer not below the temperature ratio. For positive temperatures

@@ -40,8 +40,10 @@ The nonzeroness of this complement additionally needs $P\ne I$.
 
 \section{An elementary fusion-compatible test}
 The following example is a mathematical derivation, independently checked
-at the level of the displayed formulas; it is not a Lean weak-Hopf
-algebra instance or a formal certificate of the complete weak-Hopf axioms.
+at the level of the displayed formulas. Its representation data, the
+integral normalization and the average at every length are formalized as
+recorded in the final section; the weak-unit, weak-counit and antipode
+identities and the two-site evaluation of the average are not.
 Fix $r\ge2$, put $K=\mathbb C^r$, $V=K\otimes K$ and
 $\mathcal A=\operatorname{End}(V)$. For matrix units
 $e_{ij,kl}=|i,j\rangle\langle k,l|$, define
@@ -219,14 +221,26 @@ $\Delta(\delta_k)=\delta_k\otimes\delta_k$ and $\Omega=1$, is a worked
 instance that is not Hopf; its average is the pinching by the represented
 idempotents.\footnote{\doclink{TNLean/MPS/Examples/FiniteSetWeakHopf}.}
 
-Two restrictions remain. The unit-support step uses injectivity at one
+The Bell-pair weak Hopf algebra of the elementary fusion-compatible test
+is a second instance. Its comultiplication is coassociative with counit $\epsilon$,
+multiplicative and star preserving, $f\mapsto\psi(f)$ with
+$\psi(f)_{(i,k),(j,l)}=r^{-1}f(e_{ij,kl})$ is a faithful representation of the
+convolution dual, and $\Omega$ with $T=S$ satisfies the normalization of
+Appendix B. Its average is
+$E_n(B)=r^{-2}\sum_{p,q}\rho_n(e_{pq})B\rho_n(e_{qp})$ at every length, with
+$p,q$ ranging over pairs of indices.\footnote{
+    \doclink{TNLean/MPS/Examples/BellPairWeakHopf}.}
+The two-site evaluation $E(X)=r^{-2}\operatorname{Tr}(QX)Q$ and the
+compatibility of the Bell-pair state tensor with its operator tensor are not
+formalized.
+
+One restriction remains. The unit-support step uses injectivity at one
 site, where $\rho_1(1)=I$; this is the setting of the two-site parent term
 of Appendix B. For a tensor injective only after blocking $L>1$ sites the
 result is proved under the extra hypothesis $Q_L=I$, which need not hold for
 weak Hopf algebras with $\Delta(1)\ne1\otimes1$. The elimination plan is
 to derive unit support directly from the module structure of the state
-boundary space. Second, the Bell-pair example of the previous section is
-not yet a formal instance of the representation data.
+boundary space.
 
 The periodic-parent results supply tensor cuts and cyclic-window transport
 under explicit local adjoint closure. Wrapping windows require the global

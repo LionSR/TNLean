@@ -20,15 +20,20 @@ relation is `dist i j ≤ l`; on a finite graph it may instead mean that a walk 
 at most `l` joins the sites. The construction and its closure under products use no
 embedding or particular metric.
 
+The physical dimension `d j` may vary with the site `j`; a common dimension `q` is the
+constant family `fun _ ↦ q`. The definition, the identity, and closure under products and
+powers are stated for every dimension family.
+
 An operator supported in the neighborhood of a specified centre has this form. Applying
 this to each exponential in a finite Trotter product and grouping the indices at each
-site proves the product form for an arbitrary finite metric lattice. Empty supports and
-zero Trotter steps are included. The planar local-Hamiltonian result is a specialization.
+site proves the product form for an arbitrary finite metric lattice with a common
+dimension. Empty supports and zero Trotter steps are included. The planar
+local-Hamiltonian result is a specialization.
 
 The index type may depend on the site, as in the source's indices `α_i`. A supported
-factor can therefore carry a matrix-unit index only on its support. The construction and
-the source's bound of `n S` index components at each site are proved in
-`TNLean/Lattice/TrotterIndexCount.lean`.
+factor can therefore carry a matrix-unit index only on its support. The construction, the
+source's bound of `n S` index components at each site, and the exact index count for
+site-dependent dimensions are proved in `TNLean/Lattice/TrotterIndexCount.lean`.
 
 ## Main results
 
@@ -81,7 +86,7 @@ end QuantumCircuit
 
 namespace TNLean.Lattice
 
-variable {ι : Type*} [Fintype ι] [DecidableEq ι] {q : ℕ} {near : ι → ι → Prop}
+variable {ι : Type*} [Fintype ι] [DecidableEq ι] {d : ι → ℕ} {q : ℕ} {near : ι → ι → Prop}
 
 /-- A coefficient function at site `i` that depends only on indices at the sites `j`
 with `near i j`. On a metric lattice of range `l`, this means `dist i j ≤ l`.
@@ -92,30 +97,31 @@ def IsLocalCoefficient (near : ι → ι → Prop) (i : ι) {A : ι → Type*} (
 
 /-- **Matrix product form.** The data of eq. `mpf`: an index type at each site and operators
 `siteOp j a`, and coefficient functions `coeff i` depending only on `near i`, with
-`ρ = ∑_α (∏ᵢ coeff i α) • ⊗ⱼ siteOp j (α j)`.
+`ρ = ∑_α (∏ᵢ coeff i α) • ⊗ⱼ siteOp j (α j)`. The site `j` carries the physical
+dimension `d j`; a common dimension `q` is the family `fun _ ↦ q`.
 Source: Hastings, arXiv:cond-mat/0508554v3, eq. `mpf`, lines 1024–1039. -/
-structure ProductForm (q : ℕ) (near : ι → ι → Prop)
-    (ρ : Matrix (ι → Fin q) (ι → Fin q) ℂ) where
+structure ProductForm (d : ι → ℕ) (near : ι → ι → Prop)
+    (ρ : Matrix ((j : ι) → Fin (d j)) ((j : ι) → Fin (d j)) ℂ) where
   /-- The values of the index carried by each site; the type may vary with the site. -/
   Index : ι → Type
   /-- The index at each site takes finitely many values. -/
   [fintype : ∀ j, Fintype (Index j)]
   /-- The operator `ρⱼ(a)` acting only on site `j`. -/
-  siteOp : (j : ι) → Index j → Matrix (Fin q) (Fin q) ℂ
+  siteOp : (j : ι) → Index j → Matrix (Fin (d j)) (Fin (d j)) ℂ
   /-- The coefficient function `Fᵢ` attached to site `i`. -/
   coeff : ι → (∀ j, Index j) → ℂ
   /-- Each `Fᵢ` depends only on the indices at sites `j` with `near i j`. -/
   coeff_local : ∀ i, IsLocalCoefficient near i (coeff i)
   /-- The expansion of eq. `mpf`. -/
-  eq_sum : ρ = ∑ α : (∀ j, Index j), (∏ i, coeff i α) • rectKronecker fun j ↦ siteOp j (α j)
+  eq_sum : ρ = ∑ α : (∀ j, Index j), (∏ i, coeff i α) • piKronecker fun j ↦ siteOp j (α j)
 
 attribute [instance] ProductForm.fintype
 
 /-- An operator has a matrix product form with coefficient neighborhoods `near`.
 Source: Hastings, arXiv:cond-mat/0508554v3, eq. `mpf`, lines 1024–1039. -/
-def HasProductForm (q : ℕ) (near : ι → ι → Prop)
-    (ρ : Matrix (ι → Fin q) (ι → Fin q) ℂ) : Prop :=
-  Nonempty (ProductForm q near ρ)
+def HasProductForm (d : ι → ℕ) (near : ι → ι → Prop)
+    (ρ : Matrix ((j : ι) → Fin (d j)) ((j : ι) → Fin (d j)) ℂ) : Prop :=
+  Nonempty (ProductForm d near ρ)
 
 omit [Fintype ι] [DecidableEq ι] in
 /-- A coefficient depending only on `near i` also depends only on any larger set. -/
@@ -127,14 +133,14 @@ theorem IsLocalCoefficient.mono {near' : ι → ι → Prop}
 /-- Enlarging the allowed neighborhoods preserves a product form. -/
 theorem HasProductForm.mono {near' : ι → ι → Prop}
     (hnear : ∀ i j, near i j → near' i j)
-    {ρ : Matrix (ι → Fin q) (ι → Fin q) ℂ} (hρ : HasProductForm q near ρ) :
-    HasProductForm q near' ρ := by
+    {ρ : Matrix ((j : ι) → Fin (d j)) ((j : ι) → Fin (d j)) ℂ} (hρ : HasProductForm d near ρ) :
+    HasProductForm d near' ρ := by
   obtain ⟨P⟩ := hρ
   exact ⟨{ P with coeff_local := fun i ↦ (P.coeff_local i).mono hnear }⟩
 
 /-- The product form of the identity with one index value at every site.
 Source: Hastings, arXiv:cond-mat/0508554v3, eq. `mpf`, lines 1024–1039. -/
-noncomputable def ProductForm.one (near : ι → ι → Prop) : ProductForm q near 1 where
+noncomputable def ProductForm.one (near : ι → ι → Prop) : ProductForm d near 1 where
   Index := fun _ ↦ Unit
   siteOp := fun _ _ ↦ 1
   coeff := fun _ _ ↦ 1
@@ -142,15 +148,15 @@ noncomputable def ProductForm.one (near : ι → ι → Prop) : ProductForm q ne
   eq_sum := by simp
 
 /-- The identity has a product form for every locality relation. -/
-theorem hasProductForm_one (near : ι → ι → Prop) : HasProductForm q near 1 :=
+theorem hasProductForm_one (near : ι → ι → Prop) : HasProductForm d near 1 :=
   ⟨ProductForm.one near⟩
 
 /-- **Products.** Product forms with the same coefficient neighborhoods are closed under
 multiplication: pair the two indices at each site and multiply the coefficient functions.
 Source: Hastings, arXiv:cond-mat/0508554v3, lines 1068–1077. -/
-noncomputable def ProductForm.mul {ρ σ : Matrix (ι → Fin q) (ι → Fin q) ℂ}
-    (P : ProductForm q near ρ) (Q : ProductForm q near σ) :
-    ProductForm q near (ρ * σ) := by
+noncomputable def ProductForm.mul {ρ σ : Matrix ((j : ι) → Fin (d j)) ((j : ι) → Fin (d j)) ℂ}
+    (P : ProductForm d near ρ) (Q : ProductForm d near σ) :
+    ProductForm d near (ρ * σ) := by
   refine {
     Index := fun j ↦ P.Index j × Q.Index j
     siteOp := fun j a ↦ P.siteOp j a.1 * Q.siteOp j a.2
@@ -163,40 +169,42 @@ noncomputable def ProductForm.mul {ρ σ : Matrix (ι → Fin q) (ι → Fin q) 
   · refine (congrArg₂ (· * ·) P.eq_sum Q.eq_sum).trans ?_
     rw [Finset.sum_mul_sum, ← Fintype.sum_prod_type']
     refine Fintype.sum_equiv (Equiv.arrowProdEquivProdArrow _ _ _).symm _ _ fun x ↦ ?_
-    simp [rectKronecker_mul, Finset.prod_mul_distrib, Equiv.arrowProdEquivProdArrow, smul_smul,
+    simp [piKronecker_mul, Finset.prod_mul_distrib, Equiv.arrowProdEquivProdArrow, smul_smul,
       mul_comm]
 
 /-- Products preserve coefficient neighborhoods. -/
-theorem HasProductForm.mul {ρ σ : Matrix (ι → Fin q) (ι → Fin q) ℂ}
-    (hρ : HasProductForm q near ρ) (hσ : HasProductForm q near σ) :
-    HasProductForm q near (ρ * σ) := by
+theorem HasProductForm.mul {ρ σ : Matrix ((j : ι) → Fin (d j)) ((j : ι) → Fin (d j)) ℂ}
+    (hρ : HasProductForm d near ρ) (hσ : HasProductForm d near σ) :
+    HasProductForm d near (ρ * σ) := by
   obtain ⟨P⟩ := hρ
   obtain ⟨Q⟩ := hσ
   exact ⟨P.mul Q⟩
 
 /-- Repeated multiplication groups the per-site indices in the product form of a power.
 Source: Hastings, arXiv:cond-mat/0508554v3, eq. `mplt`, lines 1303–1317. -/
-noncomputable def ProductForm.pow {ρ : Matrix (ι → Fin q) (ι → Fin q) ℂ}
-    (P : ProductForm q near ρ) : (n : ℕ) → ProductForm q near (ρ ^ n)
+noncomputable def ProductForm.pow {ρ : Matrix ((j : ι) → Fin (d j)) ((j : ι) → Fin (d j)) ℂ}
+    (P : ProductForm d near ρ) : (n : ℕ) → ProductForm d near (ρ ^ n)
   | 0 => ProductForm.one near
   | n + 1 => (P.pow n).mul P
 
 /-- The index of the identity product form has one value at each site. -/
 @[simp] theorem ProductForm.card_index_one (near : ι → ι → Prop) (i : ι) :
-    Fintype.card ((ProductForm.one (q := q) near).Index i) = 1 := by
+    Fintype.card ((ProductForm.one (d := d) near).Index i) = 1 := by
   change Fintype.card Unit = 1
   exact Fintype.card_unique
 
 /-- Multiplying product forms multiplies the numbers of index values at each site. -/
-@[simp] theorem ProductForm.card_index_mul {ρ σ : Matrix (ι → Fin q) (ι → Fin q) ℂ}
-    (P : ProductForm q near ρ) (Q : ProductForm q near σ) (i : ι) :
+@[simp] theorem ProductForm.card_index_mul
+    {ρ σ : Matrix ((j : ι) → Fin (d j)) ((j : ι) → Fin (d j)) ℂ}
+    (P : ProductForm d near ρ) (Q : ProductForm d near σ) (i : ι) :
     Fintype.card ((P.mul Q).Index i) = Fintype.card (P.Index i) * Fintype.card (Q.Index i) := by
   exact Fintype.card_prod _ _
 
 /-- The index count in a power is the corresponding power of the original count.
 Source: Hastings, arXiv:cond-mat/0508554v3, lines 1072–1075 and 1318–1320. -/
-@[simp] theorem ProductForm.card_index_pow {ρ : Matrix (ι → Fin q) (ι → Fin q) ℂ}
-    (P : ProductForm q near ρ) (n : ℕ) (i : ι) :
+@[simp] theorem ProductForm.card_index_pow
+    {ρ : Matrix ((j : ι) → Fin (d j)) ((j : ι) → Fin (d j)) ℂ}
+    (P : ProductForm d near ρ) (n : ℕ) (i : ι) :
     Fintype.card ((P.pow n).Index i) = Fintype.card (P.Index i) ^ n := by
   induction n with
   | zero => exact card_index_one near i
@@ -205,8 +213,9 @@ Source: Hastings, arXiv:cond-mat/0508554v3, lines 1072–1075 and 1318–1320. -
     rw [Fintype.card_prod, ih, pow_succ]
 
 /-- Finite ordered products preserve the coefficient neighborhoods of a product form. -/
-theorem hasProductForm_list_prod (L : List (Matrix (ι → Fin q) (ι → Fin q) ℂ))
-    (hL : ∀ ρ ∈ L, HasProductForm q near ρ) : HasProductForm q near L.prod := by
+theorem hasProductForm_list_prod
+    (L : List (Matrix ((j : ι) → Fin (d j)) ((j : ι) → Fin (d j)) ℂ))
+    (hL : ∀ ρ ∈ L, HasProductForm d near ρ) : HasProductForm d near L.prod := by
   induction L with
   | nil => exact hasProductForm_one near
   | cons ρ L ih =>
@@ -214,8 +223,8 @@ theorem hasProductForm_list_prod (L : List (Matrix (ι → Fin q) (ι → Fin q)
     exact (hL ρ (by simp)).mul (ih fun σ hσ ↦ hL σ (by simp [hσ]))
 
 /-- Powers preserve the coefficient neighborhoods of a product form. -/
-theorem HasProductForm.pow {ρ : Matrix (ι → Fin q) (ι → Fin q) ℂ}
-    (hρ : HasProductForm q near ρ) (n : ℕ) : HasProductForm q near (ρ ^ n) := by
+theorem HasProductForm.pow {ρ : Matrix ((j : ι) → Fin (d j)) ((j : ι) → Fin (d j)) ℂ}
+    (hρ : HasProductForm d near ρ) (n : ℕ) : HasProductForm d near (ρ ^ n) := by
   obtain ⟨P⟩ := hρ
   exact ⟨P.pow n⟩
 
@@ -228,7 +237,7 @@ Source: Hastings, arXiv:cond-mat/0508554v3, lines 1053–1061. -/
 theorem hasProductForm_of_mem_supportedOperators_radius {X : Finset ι}
     (hnear : ∀ i, near i i) (i₀ : ι) (hX : ∀ j ∈ X, near i₀ j)
     {ρ : Matrix (ι → Fin q) (ι → Fin q) ℂ}
-    (hρ : ρ ∈ supportedOperators q (X : Set ι)) : HasProductForm q near ρ := by
+    (hρ : ρ ∈ supportedOperators q (X : Set ι)) : HasProductForm (fun _ ↦ q) near ρ := by
   classical
   /- The configurations read off the indices: their labels on `X`, and one common label
   (the row label at `i₀`) off `X`. -/
@@ -258,7 +267,7 @@ theorem hasProductForm_of_mem_supportedOperators_radius {X : Finset ι}
       simp only [hrow, hcol, hnil]
     · simp [hi, hnil]
   · ext u v
-    simp only [Matrix.sum_apply, Matrix.smul_apply, rectKronecker_apply, smul_eq_mul]
+    simp only [Matrix.sum_apply, Matrix.smul_apply, piKronecker_apply, smul_eq_mul]
     rw [Finset.sum_eq_single (fun j ↦ (u j, v j))]
     · simp only [single_apply_same, Finset.prod_const_one, mul_one, Finset.prod_mul_distrib,
         Fintype.prod_ite_eq']
@@ -293,7 +302,7 @@ theorem hasProductForm_of_mem_supportedOperators {X : Finset ι}
     (hnear : ∀ i, near i i)
     (hX : X.Nonempty ∧ ∀ i ∈ X, ∀ j ∈ X, near i j)
     {ρ : Matrix (ι → Fin q) (ι → Fin q) ℂ}
-    (hρ : ρ ∈ supportedOperators q (X : Set ι)) : HasProductForm q near ρ := by
+    (hρ : ρ ∈ supportedOperators q (X : Set ι)) : HasProductForm (fun _ ↦ q) near ρ := by
   obtain ⟨i₀, hi₀⟩ := hX.1
   exact hasProductForm_of_mem_supportedOperators_radius hnear i₀ (hX.2 i₀ hi₀) hρ
 
@@ -306,7 +315,7 @@ theorem hasProductForm_trotterProduct_of_radius
     (X : ι → Finset ι) (hX : ∀ i j, j ∈ X i → near i j)
     (hH : ∀ i, H i ∈ supportedOperators q (X i : Set ι))
     (seq : List ι) (β : ℝ) (n : ℕ) :
-    HasProductForm q near
+    HasProductForm (fun _ ↦ q) near
       (((seq.map fun i ↦ NormedSpace.exp ((-((β : ℂ) / n)) • H i)).prod) ^ n) := by
   refine HasProductForm.pow (hasProductForm_list_prod _ fun ρ hρ ↦ ?_) n
   obtain ⟨i, _, rfl⟩ := List.mem_map.mp hρ
@@ -321,7 +330,7 @@ theorem hasProductForm_trotterProduct_of_dist_le [PseudoMetricSpace ι] {R : ℝ
     (X : ι → Finset ι) (hX : ∀ i j, j ∈ X i → dist i j ≤ R)
     (hH : ∀ i, H i ∈ supportedOperators q (X i : Set ι))
     (seq : List ι) (β : ℝ) (n : ℕ) :
-    HasProductForm q (fun i j ↦ dist i j ≤ R)
+    HasProductForm (fun _ ↦ q) (fun i j ↦ dist i j ≤ R)
       (((seq.map fun i ↦ NormedSpace.exp ((-((β : ℂ) / n)) • H i)).prod) ^ n) := by
   exact hasProductForm_trotterProduct_of_radius (fun i ↦ by simpa using hR)
     H X hX hH seq β n
@@ -341,7 +350,7 @@ product form of range `R`, exactly.
 Source: Hastings, arXiv:cond-mat/0508554v3, lines 1053–1077. -/
 theorem LocalHamiltonian.hasProductForm_trotterProduct {R : ℕ} {J : ℝ}
     (h : LocalHamiltonian Λ q R J) (seq : List (AdmissibleSupport Λ R)) (β : ℝ) (n : ℕ) :
-    HasProductForm q (fun i j : Site Λ ↦
+    HasProductForm (fun _ ↦ q) (fun i j : Site Λ ↦
       ∃ p : (domainGraph Λ).Walk i j, p.length ≤ R) (h.trotterProduct seq β n) := by
   refine HasProductForm.pow (hasProductForm_list_prod _ fun ρ hρ ↦ ?_) n
   obtain ⟨X, _, rfl⟩ := List.mem_map.mp hρ

@@ -18,14 +18,15 @@ open Matrix QuantumCircuit
 
 namespace TNLean.Lattice
 
-variable {ι : Type*} [Fintype ι] [DecidableEq ι] {q : ℕ} {near : ι → ι → Prop}
+variable {ι : Type*} [Fintype ι] [DecidableEq ι] {d : ι → ℕ} {near : ι → ι → Prop}
 
 /-- Removing index values that force the coefficient at their site to vanish preserves
 the represented operator and the coefficient neighborhoods.
 Source: Hastings, arXiv:cond-mat/0508554v3, lines 1259–1279. -/
-noncomputable def ProductForm.restrict {ρ : Matrix (ι → Fin q) (ι → Fin q) ℂ}
-    (P : ProductForm q near ρ) (s : ∀ i, Finset (P.Index i))
-    (hs : ∀ i α, α i ∉ s i → P.coeff i α = 0) : ProductForm q near ρ := by
+noncomputable def ProductForm.restrict
+    {ρ : Matrix ((j : ι) → Fin (d j)) ((j : ι) → Fin (d j)) ℂ}
+    (P : ProductForm d near ρ) (s : ∀ i, Finset (P.Index i))
+    (hs : ∀ i α, α i ∉ s i → P.coeff i α = 0) : ProductForm d near ρ := by
   classical
   refine {
     Index := fun i ↦ {a : P.Index i // a ∈ s i}
@@ -35,7 +36,7 @@ noncomputable def ProductForm.restrict {ρ : Matrix (ι → Fin q) (ι → Fin q
     eq_sum := ?_ }
   refine P.eq_sum.trans ?_
   let f (α : ∀ i, P.Index i) :=
-    (∏ i, P.coeff i α) • rectKronecker fun j ↦ P.siteOp j (α j)
+    (∏ i, P.coeff i α) • piKronecker fun j ↦ P.siteOp j (α j)
   change (∑ α, f α) = ∑ α : (∀ i, {a : P.Index i // a ∈ s i}), f (fun i ↦ (α i).1)
   calc
     (∑ α, f α) = ∑ α ∈ Finset.univ.filter (fun α ↦ ∀ i, α i ∈ s i), f α := by
@@ -52,8 +53,9 @@ noncomputable def ProductForm.restrict {ρ : Matrix (ι → Fin q) (ι → Fin q
     _ = _ := Fintype.sum_equiv Equiv.subtypePiEquivPi _ _ fun _ ↦ rfl
 
 /-- The index count after restriction is the cardinality of the allowed set at that site. -/
-theorem ProductForm.card_index_restrict {ρ : Matrix (ι → Fin q) (ι → Fin q) ℂ}
-    (P : ProductForm q near ρ) (s : ∀ i, Finset (P.Index i))
+theorem ProductForm.card_index_restrict
+    {ρ : Matrix ((j : ι) → Fin (d j)) ((j : ι) → Fin (d j)) ℂ}
+    (P : ProductForm d near ρ) (s : ∀ i, Finset (P.Index i))
     (hs : ∀ i α, α i ∉ s i → P.coeff i α = 0) (i : ι) :
     Fintype.card ((P.restrict s hs).Index i) = (s i).card := by
   classical
