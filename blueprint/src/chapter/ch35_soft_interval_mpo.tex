@@ -13,12 +13,27 @@ bound or the unrestricted soft-truncation lemma of
 
 \begin{lemma}[Weighted sums of operator chains]
     \label{lem:trace_chain_linear_combination}
-    \lean{MPOTensor.exists_traceChainOperator_linearCombination_varying,
+    \lean{MPOTensor.traceChainOperator_sum_smul_closing,
+        MPOTensor.exists_traceChainOperator_common_linearCombination_varying,
+        MPOTensor.exists_traceChainOperator_common_linearCombination,
+        MPOTensor.exists_traceChainOperator_linearCombination_varying,
         MPOTensor.exists_traceChainOperator_linearCombination,
         MPOTensor.exists_traceChainOperator_add}
     \leanok
 
-    On a nonempty physical chain, a finite weighted sum of
+    \uses{def:trace_chain_operator}
+    For fixed site tensors $A$, the trace contraction
+    $\mathcal T(A,\sum_a c_aC_a)=\sum_a c_a\mathcal T(A,C_a)$
+    is linear in its closing matrix. Fix site-dependent operator tensors $A_a$ of virtual dimension $D_a$
+    and arbitrary fixed closing matrices $Q_a$. There are site tensors $B$
+    of dimension $\sum_aD_a$ and fixed matrices $C_a$, before all complex
+    weights $c_a$, such that
+    \begin{align}
+        \sum_a c_a\,\mathcal T(A_a,Q_a)
+        =\mathcal T\!\left(B,\sum_a c_aC_a\right).
+        \label{eq:trace_chain_common_closing}
+    \end{align}
+    The physical chain may be empty. On a nonempty physical chain, a finite weighted sum of
     site-dependent matrix product operators with virtual dimensions
     $D_a$ has actual operator tensors of dimension $\sum_aD_a$.
     The coefficients may be arbitrary complex numbers, and zero
@@ -32,7 +47,10 @@ bound or the unrestricted soft-truncation lemma of
     coefficients in the same blocks of the closing matrix. Taking
     the trace gives the required weighted sum. Reindex the virtual
     coordinates by a finite interval and absorb the closing matrix
-    into the first site tensor.
+    into the first site tensor when the chain is nonempty. Before this
+    last absorption, diagonal caps with only one nonzero block give the
+    fixed coefficient matrices $C_a$ in
+    (\ref{eq:trace_chain_common_closing}).
 \end{proof}
 
 \begin{lemma}[Exact local sum and scalar]
@@ -110,7 +128,8 @@ bound or the unrestricted soft-truncation lemma of
 
 \begin{theorem}[A complete soft Hamiltonian at prescribed norm accuracy]
     \label{thm:soft_hamiltonian_mpo_accuracy}
-    \lean{TNLean.MPS.AreaLaw.exists_softTruncation_mpo_of_accuracy,
+    \lean{TNLean.MPS.AreaLaw.softHeat_base_bounds,
+        TNLean.MPS.AreaLaw.exists_softTruncation_mpo_of_accuracy,
         TNLean.MPS.AreaLaw.exists_softTruncatedHamiltonian_mpo_of_accuracy}
     \leanok
 

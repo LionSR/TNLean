@@ -23,7 +23,10 @@ open scoped Matrix.Norms.L2Operator MatrixOrder ComplexOrder
 
 namespace TNLean.MPS.AreaLaw
 
-private theorem softHeat_base_bounds :
+/-- The common heat-time ceiling is strictly inside the cluster-expansion
+regime. Numerical auxiliary to ALVV, arXiv:1602.08828v2,
+`lem:exp-approx-eff`, lines 1262–1268. -/
+theorem softHeat_base_bounds :
     0 < 2 * (Real.exp (1 / 3 : ℝ) - 1) ∧ 2 * (Real.exp (1 / 3 : ℝ) - 1) < 1 := by
   have hl : (1 / 3 : ℝ) < Real.log (3 / 2) := by
     have h := Real.log_lt_sub_one_of_pos (x := (3 / 2 : ℝ)⁻¹)

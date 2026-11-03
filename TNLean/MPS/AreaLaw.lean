@@ -127,6 +127,7 @@ import TNLean.MPS.AreaLaw.LowDensityMinimumDimension
 import TNLean.MPS.AreaLaw.LowEnergyMPSBasis
 import TNLean.MPS.AreaLaw.MPSApproximation
 import TNLean.MPS.AreaLaw.MPSReferenceSpace
+import TNLean.MPS.AreaLaw.NativeIntervalMPOApproximation
 import TNLean.MPS.AreaLaw.NearestNeighbourImaginaryTime
 import TNLean.MPS.AreaLaw.NormalizedSequentialApproximation
 import TNLean.MPS.AreaLaw.NormalizedVariableTruncation

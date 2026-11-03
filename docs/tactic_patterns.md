@@ -11955,3 +11955,27 @@ mathematical arguments and avoids compiling both in the long corollary.
 - **Decision:** The common scalar calculations are lemmas. The two closeness
   estimates use ordinary arithmetic with their respective window bounds;
   no tactic or parallel family of spectral definitions is introduced.
+
+
+## Promoted: closing coefficients before weighted operator chains (2026-11-03)
+
+- **Pattern:** Combine the same actual site tensors with changing scalar weights.
+- **Reuse:** `MPOTensor.exists_traceChainOperator_common_linearCombination_varying`
+  keeps fixed arbitrary input caps and coefficient matrices before all weights.
+  The existing weighted-sum theorems specialize at identity caps and absorb the
+  resulting cap only on a nonempty chain. `traceChainOperator_sum_smul_closing`
+  records the existing trace linearity for subsequent polynomial composition.
+- **Consumers:** The existing soft-truncation sum, its Hermitian construction,
+  and the new uniform native soft middle use the same shared block algebra.
+- **Decision:** A mathematical strengthening of the existing proof suffices;
+  no new tactic or parallel tensor representation is introduced.
+
+## Candidate: fixed-center heat atoms for every lower estimate (2026-11-03)
+
+- **Pattern:** Choose actual heat approximants at one regional lower energy,
+  then vary an estimated energy only through geometric scalar weights.
+- **Use:** `ALVV/UniformSoftMiddleMPO.lean` reuses the exact finite heat
+  expansion and its existing absolute coefficient bound. Hermitianization
+  and native restriction are performed once per atom, before the estimate.
+- **Decision:** The native-slice proof is shared unchanged in
+  `NativeIntervalMPOApproximation.lean`; no coordinate proof is copied.

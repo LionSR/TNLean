@@ -34,3 +34,4 @@ import TNLean.MPS.AreaLaw.ALVV.SoftTruncationOriginalResidual
 import TNLean.MPS.AreaLaw.ALVV.SoftTruncationReverseResidual
 import TNLean.MPS.AreaLaw.ALVV.SoftWordEnergyEstimate
 import TNLean.MPS.AreaLaw.ALVV.SoftWordNodeEnergy
+import TNLean.MPS.AreaLaw.ALVV.UniformSoftMiddleMPO
