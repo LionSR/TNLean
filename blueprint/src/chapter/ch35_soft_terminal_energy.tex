@@ -1,6 +1,6 @@
 \section{Energy of the last untrimmed family image}
 
-\begin{theorem}[A terminal compressed soft-energy estimate]
+\begin{lemma}[A terminal compressed soft-energy estimate]
     \label{thm:soft_terminal_compressed_energy}
     \lean{TNLean.MPS.AreaLaw.ALVV.exists_native_soft_terminal_compressed_energy_estimate}
     \leanok
@@ -54,7 +54,7 @@
     It concerns the last untrimmed image, not the final collectively
     trimmed space. The physical calibration and the successful complete
     parent event must supply the two comparison bounds.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{lem:native_soft_parent_energy}
     The actual regional construction gives the positive operator
@@ -71,12 +71,12 @@
     $\rho\le1/16$ give the remaining assertions.
 \end{proof}
 
-\begin{theorem}[The calibrated terminal energy estimate]
+\begin{lemma}[The calibrated terminal energy estimate]
     \label{thm:calibrated_soft_terminal_compressed_energy}
     \lean{TNLean.MPS.AreaLaw.ALVV.exists_calibrated_native_soft_terminal_compressed_energy_estimate}
     \leanok
     Retain the original chain, intervals and untrimmed image of
-    Theorem~\ref{thm:soft_terminal_compressed_energy}. Let $g>0$,
+    Lemma~\ref{thm:soft_terminal_compressed_energy}. Let $g>0$,
     $m,D\ge2$, $t,T_0\ge156+2g$, and set
     \begin{align}
       M_*&=3t(1+\log m)+4\ell+34,&
@@ -93,12 +93,12 @@
     actual image with viability loss $\Delta/(91/100)^2$ for that target.
     The actual regional soft matrix, its attained minimum and its
     compression then satisfy all the conclusions of
-    Theorem~\ref{thm:soft_terminal_compressed_energy}, including the
+    Lemma~\ref{thm:soft_terminal_compressed_energy}, including the
     one-sided update of width $49/16$.
     No upper bound on $g$ is imposed. The scalar assumptions are the
     same calibrated scales; the target and image certificates must be
     supplied by that same physical family and complete parent event.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:soft_terminal_compressed_energy}
     The two norm formulas give $0\le A_*\le M_*$, $3t\le M_*$ and
@@ -112,7 +112,7 @@
     family image, matrix and regional minima.
 \end{proof}
 
-\begin{theorem}[An admissible middle center from the actual children]
+\begin{lemma}[An admissible middle center from the actual children]
     \label{thm:regional_middle_center_from_children}
     \lean{TNLean.MPS.AreaLaw.ALVV.exists_regional_middle_center_of_child_estimates}
     \leanok
@@ -133,10 +133,10 @@
     Both estimates retain attained eigenvector and positive-shift
     certificates for their original parent and middle Hamiltonians.
     Thus the same child-dependent center is admissible in
-    Theorem~\ref{thm:calibrated_soft_terminal_compressed_energy}.
+    Lemma~\ref{thm:calibrated_soft_terminal_compressed_energy}.
     This is a regional auxiliary to
     \cite[Figure~\texttt{fig:algo1}, line 1631, and line 1807]{Arad2016RigorousRG}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{lem:regional_central_energy_estimate,lem:adjacent_interval_energy_merge}
     The original parent minimum lies between the sum of the two child
