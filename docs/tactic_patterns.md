@@ -12207,3 +12207,16 @@ No custom tactic or resource option is introduced.
 - **Decision:** These existing mathematical identities already remove the
   coordinate calculation; no new projection-coordinate theorem, alternative
   candidate, sampled process or measurable-basis assumption is introduced.
+
+### Energy relations restricted to one root subdivision — promoted (2026-11-03)
+
+- **Pattern:** Extend a specified local energy relation by attained original
+  minima outside the actual root subdivision, then use the existing scalar
+  recursion and restrict its result to the listed parents.
+- **Helper:** `TNLean.MPS.AreaLaw.ALVV.exists_root_energy_with_node_relation`
+  in `MPS/AreaLaw/ALVV/BalancedRegionalEnergy.lean`.
+- **Application:** The existing word-family root assignment now invokes this
+  lemma with its actual node relation and unchanged public statement.
+- **Decision:** The same lemma accepts the corrected terminal-image energy
+  relation and variable collars. No second recursion or realization predicate
+  is needed, and no relation is required on unlisted overlapping intervals.

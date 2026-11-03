@@ -31,3 +31,43 @@
     those assigned child values. Extend the function by zero to invalid
     endpoint pairs.
 \end{proof}
+
+\begin{lemma}[A node relation on one balanced root subdivision]
+    \label{lem:root_energy_node_relation_assignment}
+    \lean{TNLean.MPS.AreaLaw.ALVV.exists_root_energy_with_node_relation}
+    \leanok
+    Retain the regional energy certificates $E_{l,r}$ and $E^0_{l,r}$
+    of Lemma~\ref{thm:regional_energy_node_relation_assignment}.
+    Fix a positive leaf width $w$ and a valid root $[p_0,r_0)$.
+    Let $\mathcal B$ be its actual balanced subdivision's internal intervals.
+    Suppose each valid interval has an attained original minimum certificate.
+    For every long valid interval $J=[l,r)$, let
+    $\mathcal R_J(p_1,p_2,p)$ be a specified relation.
+
+    Require a node condition only when $J\in\mathcal B$: putting
+    $k=l+\lfloor(r-l)/2\rfloor$, every pair satisfying
+    $E_{l,k}(p_1)$ and $E_{k,r}(p_2)$ admits a $p$ satisfying
+    $E_{l,r}(p)$ and $\mathcal R_J(p_1,p_2,p)$.
+    Then there is one assignment $(l,r)\mapsto p_{l,r}$ such that the
+    root and each listed internal interval have error at most $49/16$,
+    the root and listed children use exact minima whenever short, and
+    \begin{align}
+      \mathcal R_J(p_{l,k},p_{k,r},p_{l,r})
+    \end{align}
+    holds at every $J\in\mathcal B$ with its actual assigned child values.
+    No node condition is imposed on overlapping intervals outside this
+    subdivision. The relation may describe variable collars and the actual
+    last untrimmed image of a repeated-sampling parent; neither is prescribed
+    by this conditional scalar auxiliary to
+    \cite[Figure~\texttt{fig:algo1}, line 1631, and line 1807]{Arad2016RigorousRG}.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:regional_energy_node_relation_assignment}
+    Extend the relation to all long intervals by requiring an attained
+    original minimum outside $\mathcal B$. For a listed interval use the
+    given node condition; for an unlisted interval choose its original
+    minimum, independently of the two child estimates. Both choices preserve
+    the error width $49/16$. Apply the existing scalar recursion once and
+    restrict its conclusion to the root, the listed parents and their short
+    children. The node relations on $\mathcal B$ are unchanged.
+\end{proof}
