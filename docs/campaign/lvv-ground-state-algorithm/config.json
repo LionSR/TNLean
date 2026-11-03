@@ -20,6 +20,14 @@
     {
       "slug": "lvv-ground-state-algorithm",
       "label": "Ground states in polynomial time"
+    },
+    {
+      "slug": "aklv-area-law",
+      "label": "Sharper area law"
+    },
+    {
+      "slug": "alvv-rg-algorithm",
+      "label": "Rigorous renormalization group"
     }
   ],
   "label": "1307.5143",
