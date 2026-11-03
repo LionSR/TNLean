@@ -12129,3 +12129,15 @@ This avoids reducing the entire canonical coordinate isometry to prove the
 same operator equality. The four operator bounds use the shared QIC theorem
 `invariant_subspace_bounds_conj`; the word estimate uses
 `word_power_of_tensor_decomposition`. No new proof automation is introduced.
+
+### Listed history failures on the existing interval tree — reuse (2026-11-03)
+
+- **Pattern:** Simultaneous retained properties and local histories are reduced
+  to one guarded failure union, then bounded by the existing merge-list count.
+- **Reuse:** `joint_failure_subset_iUnion_guardedIntervalFailure` is applied to
+  a proof-local conjunction with a history implication at long intervals.
+  `Measure.pi_biUnion_list_le_of_update_sections` controls the same union.
+- **Decision:** No second recursion, global predicate family or success event is
+  introduced. The attached-list specialization of the product-section estimate
+  also occurs in `BalancedIntervalFailureProbability.lean`; these are its two
+  current interval consumers, so no additional abstraction is introduced.
