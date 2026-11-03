@@ -57,8 +57,7 @@ Trotter product, for every choice of the local dimensions.
     \uses{
         def:hastings_active_occurrences,
         thm:hastings_active_cardinality,
-        def:hastings_product_form,
-        thm:hastings_product_form_mul
+        def:hastings_product_form
     }
     Prescribe a neighborhood $N_i\subseteq V$ at every site $i$, and let each
     $H_i$ act on the sites of $X_i\subseteq N_i$. Let $i_1,\dots,i_m$ list
@@ -74,6 +73,7 @@ Trotter product, for every choice of the local dimensions.
     $(d_j^2)^{nc_j}$.
 \end{lemma}
 \begin{proof}\leanok
+    \uses{thm:hastings_product_form_mul}
     The exponential of an operator acting on $X_i$ again acts on $X_i$,
     since these operators form a closed algebra. Expand each factor in
     matrix units at the sites of its support, with a one-element index set

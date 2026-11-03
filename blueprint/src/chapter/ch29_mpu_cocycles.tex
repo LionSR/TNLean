@@ -7673,7 +7673,7 @@ $s(a,b)$ is the phase of $\mathrm{CZ}\ket{a,b}$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:gauge_equiv}
+    \uses{def:gauge_equiv, thm:gauge_invariance}
     The twisted letters are $Z_{ii}A^i=(-1)^iA^i$. Conjugation by $V$
     multiplies the entry $(r,c)$ of a matrix by $V_{rr}V_{cc}$; the nonzero
     entries of $A^0$ sit at $(0,0)$, $(2,1)$ and $(2,2)$, and those of $A^1$
@@ -7711,7 +7711,7 @@ $s(a,b)$ is the phase of $\mathrm{CZ}\ket{a,b}$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:cluster_nontrivial_spt, thm:cluster_gauge_anticomm}
+    \uses{thm:cluster_nontrivial_spt}
     By Lemma~\ref{lem:mpug_controlled_z_simps_trace}, $S^{ab}=X^aZ^{ab}$, so
     (\ref{eq:mpug_controlled_z_combined_class}) is an identity of integer
     matrices, checked on the generators, on their product and on the bits

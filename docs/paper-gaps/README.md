@@ -756,7 +756,9 @@ For the matrix product operator symmetries of arXiv:2203.12563:
   of the canonical support projection from averaging its complement. It
   records the explicit adjoint-closure, positive-length unit-calibration,
   and finite-family normalization hypotheses under which the support is
-  fixed, and the still-open physical weak-Hopf realization.
+  fixed, the weak-Hopf realization with its finite-set and Bell-pair
+  instances, and the open unit-support step for tensors injective only after
+  blocking.
 
 - `glm23_reps3_z3_table.tex` records that the printed action of `ψ` in the
   `ℤ₃` phase of `Rep(S₃)` fails the representation identity, and that the
