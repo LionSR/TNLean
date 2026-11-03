@@ -318,14 +318,20 @@
       }
     },
     "ch:mpdo_rfp_algebraic": {
+      "theorems": [],
+      "corollaries": [
+        "cor:mpdo_bnt_label_theorem_data_blocked_coeff_eq_positive_blocked_chi_trace_pow",
+        "cor:mpdo_bnt_label_theorem_witness_blocked_coeff_eq_positive_blocked_chi_trace_pow"
+      ],
+      "notes": {}
+    },
+    "ch:mpdo_rfp_algebraic_fusion": {
       "theorems": [
         "thm:cpsv_theorem414_printed_status",
         "thm:mpdo_cpsv_bnt_rfp_equivalence",
         "thm:mpdo_literal_cpsv_physical_coordinate_gibbs_at_least_two"
       ],
       "corollaries": [
-        "cor:mpdo_bnt_label_theorem_data_blocked_coeff_eq_positive_blocked_chi_trace_pow",
-        "cor:mpdo_bnt_label_theorem_witness_blocked_coeff_eq_positive_blocked_chi_trace_pow",
         "cor:mpdo_topological_density_factor_commutator"
       ],
       "notes": {
@@ -1000,20 +1006,37 @@
       }
     },
     "ch:mpdo_rfp_gibbs": {
-      "theorems": [
-        "thm:mpdo_theorem49_iv_to_v_counterexample"
-      ],
+      "theorems": [],
       "corollaries": [
         "cor:mpdo_bnt_orthogonal_sector_sum_sal",
         "cor:mpdo_bnt_sector_sal_gsnnch",
         "cor:mpdo_simple_zcl_weight_copy_independent",
         "cor:mpdo_simple_scale_invariant_zcl_weight_copy_independent",
-        "cor:mpdo_bnt_three_site_outer_inverse_collapse",
+        "cor:mpdo_bnt_three_site_outer_inverse_collapse"
+      ],
+      "notes": {}
+    },
+    "ch:mpdo_rfp_gibbs_blocking": {
+      "theorems": [],
+      "corollaries": [],
+      "notes": {}
+    },
+    "ch:mpdo_rfp_gibbs_neighboring": {
+      "theorems": [],
+      "corollaries": [
         "cor:mpdo_sector_eta_cycle_positive_rescaling",
         "cor:mpdo_normal_fixed_product_tensor_of_is_sal",
         "cor:mpdo_sal_positive_cyclic_sector_products",
         "cor:mpdo_doubled_overlap_trace_sq",
-        "cor:mpdo_doubled_overlap_frobenius",
+        "cor:mpdo_doubled_overlap_frobenius"
+      ],
+      "notes": {}
+    },
+    "ch:mpdo_rfp_gibbs_local_structure": {
+      "theorems": [
+        "thm:mpdo_theorem49_iv_to_v_counterexample"
+      ],
+      "corollaries": [
         "cor:mpdo_sal_zcl_local_sector_structure",
         "cor:mpdo_common_weight_bnt_layer_supports"
       ],
