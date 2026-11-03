@@ -42,8 +42,8 @@ The collar-length bound is not needed for this comparison. When each
 collar has at most $2\ell$ sites, its internal operator has exactly that
 short support. No running-time statement about obtaining its minimum
 is a conclusion of this auxiliary result. The width-eight one-sided
-parent estimate remains to be derived in the intended recursive
-application; it is not inferred from the broader absolute-error input.
+parent estimate is derived for the corrected recursive hard-clipped
+construction below; it is not inferred from the broader absolute-error input.
 
 The raw soft replacement retains $p_JI$. Its norm can therefore contain
 an extensive scalar energy. The uniform norm conclusion in
@@ -105,9 +105,9 @@ Lines 1793--1807 combine its viability for a generated soft target with
 a norm estimate for the same generated operator. The original-ground estimate above alone does not bound this candidate.
 A further conditional theorem now performs the quantitative energy
 transfer for a specified calibrated target and its own actual word
-family, as described below. The same-family node update is now substituted into the actual
-interleaved tree, as described below. The simultaneous recursive one-sided
-energy assignment and the source running-time bound remain separate.
+family. The same-family node update is substituted into the actual
+interleaved tree, and a simultaneous recursive one-sided assignment is
+proved in the last section. The source running-time bound remains separate.
 
 \section{Raw compression on the specified family's child image}
 
@@ -155,14 +155,16 @@ compressed minimum itself, whereas Definition \texttt{def:soft-trunc}
 requires a center below the true minimum.
 
 The given target and family bounds here belong to the existing
-hard-truncation construction. This theorem does not identify it with the literal soft
-Generate family or its printed word count. The node theorem in the final section applies it to the returned
-actual tree family. A simultaneous recursive energy assignment remains
-a subsequent construction. Two errors of size $3+\rho\le49/16$ and one
+hard-truncation construction. This theorem does not identify it with the
+literal soft Generate family or its printed word count. The node theorem
+applies it to the returned actual tree family, and the last section
+constructs a simultaneous recursive energy assignment. Two errors of size $3+\rho\le49/16$ and one
 connecting positive contraction give a parent error at most $57/8<8$;
-the collar conversion above then fits the one-sided width ten. The same-tree node theorem proves this correction for admissible child
-estimates; it does not yet construct the full recursive energy assignment. No efficient collar
-minimum calculation, matrix product implementation of the energy routine,
+the collar conversion above then fits the one-sided width ten. The
+same-tree node theorem proves this correction for admissible child
+estimates; the recursion below assigns such estimates simultaneously.
+No efficient collar minimum calculation, matrix product implementation of
+the energy routine,
 adaptive sampling law or running time is asserted.
 
 The false printed soft-energy and cluster estimates retain their
@@ -193,9 +195,37 @@ The theorem
 selects the original calibrated tree once, retaining its literal targets,
 operator families, child spaces and interleaved merge identities. The
 energy update is attached to those objects without selecting a second
-family. This is a node assertion for all admissible child scalar estimates;
-a simultaneous recursive assignment, with attained minima at the leaves,
-remains to be constructed. The hard-clipped family is still not identified
-with the source's literal soft Generate, and no running-time claim follows.
+family. This node assertion holds for all admissible child scalar estimates
+and supplies the simultaneous recursion below. The hard-clipped family
+is still not identified with the source's literal soft Generate, and no
+running-time claim follows.
+
+
+\section{Simultaneous recursive scalar estimates}
+
+The theorem
+\leanid{TNLean.MPS.AreaLaw.exists_physical_dg_interleaved_tree_with_recursive_energy}
+now assigns one scalar $p_{l,r}$ to every valid interval of that same
+physical tree. At a short leaf it is an actual attained minimum of the
+original regional Hamiltonian. At a long node, the interval is divided at
+its balanced midpoint. The already-assigned child estimates determine the
+middle center through the actual collar minima, and the parent value is
+the actual least raw compressed eigenvalue on the same family's one-word
+child image, minus three. Every assigned value satisfies
+\begin{align}
+ e_{[l,r)}-\frac{49}{16}\le p_{l,r}\le e_{[l,r)}.
+\end{align}
+The defining recursion proves that each node uses exactly its assigned
+child values, rather than separately chosen witnesses. The full original
+space, rank, word and sampled-merge conclusions are retained for the same
+chosen targets, families and retained spaces.
+
+This establishes a corrected one-sided energy invariant for the existing
+hard-clipped construction. It does not identify that construction with
+literal soft Generate or the source's printed energy-power count. The
+exact collar minima and compressed eigenspaces are mathematical existence
+constructions; no efficient computation or running-time conclusion is
+asserted. The false printed soft-energy and cluster estimates, with their
+counterexamples and separate corrected theorems, are unchanged.
 
 \end{document}

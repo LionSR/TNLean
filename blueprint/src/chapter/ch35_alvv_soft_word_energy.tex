@@ -87,8 +87,7 @@ It supports the separate energy-estimation image in
 
 The properties of the target and family above hold for the same objects
 in the calibrated hard-truncation construction. The following results apply the conditional lemma to those actual tree
-families. A simultaneous recursive assignment of estimates remains a
-separate step. The downward bias by three is a
+families and construct one simultaneous recursive assignment of estimates. The downward bias by three is a
 correction for the one-sided center interface; the source's printed
 energy update uses the raw compressed minimum. No literal soft-Generate,
 MPO implementation of this energy routine, or running-time conclusion
@@ -188,7 +187,83 @@ is asserted; see \cite{gap:alvv16_soft_regional_energy_centering}.
     lemma to these same targets, families and child spaces.
 \end{proof}
 
-The result provides the node update on the actual retained-space tree.
-It does not yet choose one simultaneous recursive family of scalar energy
-estimates. The distinction between the calibrated hard-clipped family and
-literal soft Generate, and the absence of a running-time conclusion, remain.
+The node update now supplies a simultaneous recursive scalar assignment
+on that same tree, as proved below. The distinction between the calibrated
+hard-clipped family and literal soft Generate, and the absence of a
+running-time conclusion, remain.
+
+
+\begin{definition}[A realized recursive energy assignment]
+    \label{def:balanced_regional_energy_assignment}
+    \lean{TNLean.MPS.AreaLaw.ALVV.IsSoftWordNodeEnergyRealization}
+    \lean{TNLean.MPS.AreaLaw.ALVV.IsBalancedRegionalEnergyAssignment}
+    \leanok
+    Fix the physical interactions, the operator families on long intervals,
+    and the retained-space tree. A realized node update consists of attained
+    collar minima $c_L,c_R$, a valid middle center
+    \begin{align}
+       p_M=p_1+p_2-c_L-c_R-2\in[e_M-10,e_M],
+    \end{align}
+    and the actual raw-compression update $p=\lambda_V-3$ using the
+    specified word family and actual child spaces.
+
+    A balanced regional energy assignment is one function $(l,r)\mapsto p_{l,r}$
+    with the following properties. For every valid interval,
+    \begin{align}
+       e_{[l,r)}-\frac{49}{16}\le p_{l,r}\le e_{[l,r)}.
+    \end{align}
+    If $r-l\le4\ell$, then $p_{l,r}=e_{[l,r)}$ and this minimum is
+    attained by a normalized eigenvector with positive spectral shift.
+    Otherwise, put $k=l+\lfloor(r-l)/2\rfloor$. The value $p_{l,r}$
+    realizes the node update with child values $p_{l,k},p_{k,r}$ and
+    with the actual retained spaces on those two children.
+\end{definition}
+
+\begin{lemma}[Recursive estimates on a fixed physical tree]
+    \label{lem:balanced_regional_energy_assignment}
+    \lean{TNLean.MPS.AreaLaw.ALVV.exists_balanced_regional_energy_assignment}
+    \leanok
+    Let $0\le h_i\le I$ have the designated nearest-neighbour supports,
+    with positive local dimension. Fix a balanced retained-space tree of
+    positive leaf width $4\ell$ and fixed operator families at its long
+    intervals. Suppose that the same-family node update property of
+    Definition~\ref{def:soft_word_energy_update} holds at each balanced split.
+    Then one balanced regional energy assignment exists on this fixed tree.
+    No regional minimum or scalar estimate is supplied as an input.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{def:soft_word_energy_update,def:balanced_regional_energy_assignment,thm:actual_adjacent_interval_merge}
+    Recurse on the interval length. At a short leaf, choose an actual
+    attained minimum of its original regional Hamiltonian. At a long node,
+    first compute the two shorter child estimates. Their certified errors
+    permit the fixed node update, which constructs a parent value of the
+    same width $49/16$ and its literal compression certificate.
+
+    The recursion returns each value together with its error certificate.
+    Its defining equation proves that every long-node value uses precisely
+    the two values already assigned to its children. Thus the same function
+    works simultaneously on all valid intervals, including endpoints and
+    intervals of length zero.
+\end{proof}
+
+\begin{lemma}[Recursive energy estimates for the actual interleaved tree]
+    \label{lem:physical_interleaved_tree_recursive_energy}
+    \lean{TNLean.MPS.AreaLaw.exists_physical_dg_interleaved_tree_with_recursive_energy}
+    \leanok
+    The calibrated physical interleaved tree can retain its same targets,
+    operator families, retained spaces and literal merge identities while
+    carrying one balanced regional energy assignment. All the original
+    parameter formulas, dimension bounds, generator rank bounds and
+    ordered-word conclusions remain valid for those same objects.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:physical_interleaved_tree_energy_updates,lem:balanced_regional_energy_assignment}
+    Construct the physical tree once. Its actual node updates hold for
+    every split and hence for each balanced split. Apply the preceding
+    recursion to these same families and retained spaces.
+\end{proof}
+
+This construction proves the corrected simultaneous one-sided energy
+invariant on the existing hard-clipped interval tree. It does not identify
+its family with literal soft Generate, establish the source's printed
+energy-power count, or prove a running-time bound.
