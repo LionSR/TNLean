@@ -1,0 +1,259 @@
+{
+  "slug": "alvv-rg-algorithm",
+  "pageTitle": "Rigorous Renormalization Group · TNLean",
+  "heading": "A rigorous renormalization group for low-energy states of chains, after Arad, Landau, Vazirani and Vidick",
+  "lede": "In 2016 Arad, Landau, Vazirani and Vidick extended the area law and the efficient computation of ground states from chains with a unique gapped ground state to two wider classes: chains whose gapped ground space has polynomial dimension, and gapless chains with polynomially many states in a fixed low-energy window. Their tool is a viable subspace: a small space of states on a block of sites that, tensored with everything outside the block, nearly contains the target space. Random sampling makes a viable subspace smaller at a controlled loss, an approximate projector built from a Chebyshev polynomial makes it better at a controlled growth, and trimming keeps its states simple. Merging blocks pairwise along a binary tree, as in a renormalization-group step, gives the algorithms. In Lean the calculus of viable subspaces, hard truncation for chains, the corrected frustration-free construction and the entropy bound for degenerate gapped ground spaces are proved. In review are soft truncation and its matrix product operators, the matrix product state bounds for degenerate ground spaces, the low-density area law, and a corrected merge tree that succeeds with high probability and, after refinement, yields a space of matrix product states close to the ground space. The energy induction along the sampled tree and the frustration-free and low-density algorithms remain open. Running times are outside the scope.",
+  "description": "Progress of the Lean 4 formalization of the rigorous renormalization-group algorithm and area laws of Arad, Landau, Vazirani and Vidick, arXiv:1602.08828.",
+  "tabs": [
+    {
+      "slug": "openai-area-law-peps-proof",
+      "label": "Two-dimensional area law and PEPS"
+    },
+    {
+      "slug": "one-dimensional-area-law-mps",
+      "label": "One-dimensional area law and MPS"
+    },
+    {
+      "slug": "hastings-area-law",
+      "label": "One-dimensional area law after Hastings"
+    },
+    {
+      "slug": "lvv-ground-state-algorithm",
+      "label": "Ground states in polynomial time"
+    },
+    {
+      "slug": "aklv-area-law",
+      "label": "Sharper area law"
+    },
+    {
+      "slug": "alvv-rg-algorithm",
+      "label": "Rigorous renormalization group"
+    }
+  ],
+  "label": "1602.08828",
+  "since": "2026-10-21",
+  "scope": "tracker",
+  "repos": [
+    {
+      "name": "TNLean",
+      "slug": "LionSR/TNLean",
+      "checkout": ".",
+      "primary": true,
+      "homepage": "https://sirui-lu.com/TNLean/",
+      "description": "Tensor-network theory in Lean 4: the fundamental theorem of matrix product states, canonical forms, parent Hamiltonians, matrix-product density operators, projected entangled pair states and local circuits."
+    },
+    {
+      "name": "QICLean",
+      "slug": "LionSR/QICLean",
+      "checkout": "../QICLean",
+      "checkoutEnv": "QICLEAN_DIR",
+      "prefix": "Q",
+      "homepage": "https://sirui-lu.com/QICLean/",
+      "description": "Quantum information and channels in Lean 4, following Wolf's Quantum Channels & Operations: channel representations, Kadison–Schwarz theory, quantum Perron–Frobenius and spectral theory, GKSL semigroups and entropy."
+    }
+  ],
+  "tracker": 9833,
+  "streams": [
+    9833,
+    10533
+  ],
+  "streamNames": {
+    "9833": "Rigorous renormalization group",
+    "10533": "Low-energy spaces and the merge tree"
+  },
+  "papers": {
+    "alvv": {
+      "name": "Arad, Landau, Vazirani and Vidick 2016",
+      "stream": 9833
+    }
+  },
+  "sources": "https://arxiv.org/abs/1602.08828v2",
+  "citationPattern": "alvv16|1602\\.08828|Arad2016RigorousRG|\\bALVV\\b",
+  "excludePathPattern": "(?:^|/)(?:lvv13|aklv13)_[a-z0-9_]*\\.tex$|ch35_(?:one_dimensional|lvv|aklv|core_word)_[a-z0-9_]*\\.tex$|ch24_[a-z0-9_]*\\.tex$",
+  "includePRs": {
+    "TNLean": [
+      10248,
+      10250,
+      10253,
+      10256
+    ]
+  },
+  "excludePRs": {
+    "TNLean": [
+      10182,
+      10423,
+      10495
+    ]
+  },
+  "leanDirs": [
+    "TNLean/MPS/AreaLaw/ALVV",
+    "TNLean/MPS/AreaLaw/PhysicalDGEntropy.lean",
+    "TNLean/MPS/AreaLaw/PhysicalDGViability.lean",
+    "TNLean/MPS/AreaLaw/DGEntropyParameters.lean",
+    "TNLean/MPS/AreaLaw/PhysicalChebyshevViability.lean",
+    "TNLean/MPS/AreaLaw/FiveRegionHamiltonian.lean",
+    "TNLean/MPS/AreaLaw/FiveRegionTruncationResidual.lean",
+    "TNLean/MPS/AreaLaw/RegionalTruncationResidual.lean",
+    "TNLean/MPS/AreaLaw/ShortRegionViableFamily.lean",
+    "TNLean/MPS/AreaLaw/PolynomialFilterParameters.lean",
+    "TNLean/MPS/AreaLaw/TwoWindowPolynomialRank.lean",
+    "TNLean/MPS/AreaLaw/TwoWindowPolynomialMPOFamily.lean",
+    "TNLean/MPS/AreaLaw/ViableSet/CollectiveTrimming.lean"
+  ],
+  "routes": [
+    {
+      "id": "vs",
+      "paper": "alvv",
+      "eyebrow": "Part I · Section 2",
+      "heading": "Viable subspaces and the three procedures",
+      "intro": "The chain has <i>n</i> sites of dimension <i>d</i> and nearest-neighbour terms 0 ≤ <i>h<sub>i</sub></i> ≤ 1. The target <i>T</i> is a space of states on the whole chain, such as the ground space or the span of the eigenvectors in a low-energy window. Split the sites into a block <i>A</i> and the rest <i>B</i>. A subspace <i>S</i> of states on <i>A</i> is δ-viable for <i>T</i> if every unit vector of <i>T</i> has squared overlap at least 1 − δ with <i>S</i> ⊗ (all states on <i>B</i>). Its dimension and δ measure its cost and its quality. This part is proved in full, in a general setting that the later parts apply to the chain.",
+      "stages": [
+        {
+          "title": "Viable subspaces, closeness and error reduction",
+          "issues": [
+            9841
+          ],
+          "physics": "Viability is a special case of closeness: a subspace <i>T</i> is δ-close to <i>T</i>′ if every unit vector of <i>T</i>′ has squared overlap at least 1 − δ with <i>T</i>. Closeness composes with a factor two, δ and δ′ giving 2(δ + δ′), and viable subspaces of two adjacent blocks tensor to a viable subspace of their union, with the errors adding. The error-reduction lemma is the key estimate: if an operator <i>K</i> = ∑<sub><i>i</i>≤<i>D</i><sup>2</sup></sub> <i>L<sub>i</sub></i> ⊗ <i>A<sub>i</sub></i> ⊗ <i>R<sub>i</sub></i> maps the target and its orthogonal complement into themselves, shortens no vector of the target and shrinks the complement by √Δ, then the span of the images <i>A<sub>i</sub>S</i> of a δ-viable <i>S</i> has dimension at most <i>D</i><sup>2</sup> dim <i>S</i> and is Δ/(1 − δ)<sup>2</sup>-viable. As printed, with strict spectral conditions, the lemma fails for an eigenvalue sitting exactly at the edge of the target window; with closed conditions it holds, and the positivity of <i>K</i> that the paper requires is not needed.",
+          "delivers": "Viability and closeness, preimages under the projection, the composition of closeness, tensoring, and error reduction by a spectral projector with closed spectral conditions."
+        },
+        {
+          "title": "Random sampling",
+          "issues": [
+            9842
+          ],
+          "physics": "A uniformly random subspace of dimension <i>s</i> inside a δ-viable subspace of dimension <i>q</i> is still viable, with squared overlap about (1 − δ)<i>s</i>/(8<i>q</i>): the overlap shrinks only in proportion to the dimension. The proof bounds the projection of one fixed vector onto a random subspace and takes a union bound over a net of the unit sphere of <i>T</i>. That sphere is a real sphere of dimension 2<i>r</i> for a complex <i>r</i>-dimensional <i>T</i>, so the net is larger than printed and the failure probability carries the exponent 2<i>r</i> and a factor √2. Only the existence of a good subspace is used later.",
+          "delivers": "For a Haar-random subspace, the corrected failure probability (1 + 4√(2<i>q</i>/((1 − δ)<i>s</i>)))<sup>2<i>r</i></sup> <i>q</i>e<sup>−<i>s</i>/16</sup>, and the existence of a viable sample whenever it is below one."
+        },
+        {
+          "title": "Collective trimming",
+          "issues": [
+            9843
+          ],
+          "physics": "Trimming replaces every vector of a viable subspace by one of bounded Schmidt rank at every cut. Put an orthonormal basis <i>u</i><sub>1</sub>, …, <i>u<sub>s</sub></i> of <i>S</i> into one vector ∑ <i>u<sub>i</sub></i> ⊗ |<i>i</i>⟩ and, cut by cut from the left, discard its Schmidt components below a threshold ξ. If every vector of <i>T</i> has Schmidt rank at most <i>b</i> at each of the ℓ − 1 cuts, the trimmed subspace stays viable. The printed loss √(ℓ<i>bs</i>) ξ does not follow from the printed argument, which gives 2√((ℓ − 1)<i>b</i>) ξ instead; the factor two is absorbed by rescaling ξ wherever the lemma is applied.",
+          "delivers": "Viability δ + 2√((ℓ − 1)<i>b</i>) ξ after trimming, for any nested family of cuts, and Schmidt rank at most <i>s</i>ξ<sup>−2</sup> for every trimmed basis vector."
+        }
+      ]
+    },
+    {
+      "id": "al",
+      "paper": "alvv",
+      "eyebrow": "Part II · Section 4",
+      "heading": "Approximate projectors and the area laws",
+      "intro": "Two assumptions are treated. Under (DG) the ground space has dimension <i>r</i>, polynomial in <i>n</i>, and a gap γ to the next eigenvalue. Under (LD) the eigenvectors with energy in a window [ε<sub>0</sub>, ε<sub>0</sub> + η] span a space of dimension <i>r</i>, polynomial in <i>n</i>, and no gap is assumed. The area laws come from a bootstrap: a viable subspace of minimal dimension is sampled and then improved, which would contradict minimality unless its dimension is already small. The improving operators come from a Chebyshev polynomial of a Hamiltonian truncated away from the block. For (DG) the improving family, the bootstrap on intervals and the entropy bound are proved; its matrix product state bounds are in review. For (LD) the improving family, the bootstrap, the entropy bound and the matrix product state approximations are in review, with constants that depend on the fixed window η.",
+      "stages": [
+        {
+          "title": "Hard truncation",
+          "issues": [
+            9844
+          ],
+          "physics": "Hard truncation caps the energy of a region <i>J</i> at height <i>t</i>: the sum of the terms inside <i>J</i> is replaced by its truncation, which keeps the eigenvectors and replaces every eigenvalue above <i>t</i> by <i>t</i>, while the terms crossing the boundary of <i>J</i> are kept. A theorem of Arad, Kuwahara and Landau, which the paper quotes, says that low-energy states of the full Hamiltonian have exponentially little weight at high energy of the region. It follows that the low eigenvalues move by at most ξ = e<sup>−Ω(<i>t</i>−η)</sup> and that the low-energy spaces of the two Hamiltonians are close. The paper prints ξ with the wrong sign in the exponent and asks only <i>t</i> > η. That is not enough: a chain of <i>K</i> + 2 qubits with <i>t</i> = 3/2 and η = 1 has a truncated low-energy state on which the two Hamiltonians differ by <i>K</i> − 3/2. For chains, an explicit sufficient height <i>t</i> ≥ η + 7 gives both comparisons.",
+          "delivers": "For a chain and one interval, with ξ = 32e<sup>−(<i>t</i>−η)/8</sup> and <i>t</i> ≥ η + 7: eigenvalue shifts at most ξ, the ground-energy shift, and closeness of the two low-energy spaces in both directions after enlarging the window by an explicit amount; and the chain on which <i>t</i> > η fails. The general lattice theorem that the paper quotes is not formalized."
+        },
+        {
+          "title": "Chebyshev projectors at two cuts",
+          "issues": [
+            9845
+          ],
+          "results": [
+            "def:Cheby-AGSP",
+            "thm:Cheby-AGSP",
+            "prop:Cheby-AGSP-eff"
+          ],
+          "physics": "The Chebyshev polynomial of degree <i>k</i>, rescaled to the window [η<sub>0</sub>, η<sub>1</sub>] as in Arad, Kitaev, Landau and Vazirani, keeps every eigenvalue below η<sub>0</sub> at least one and shrinks those above η<sub>1</sub> by 2e<sup>−2<i>k</i>√(γ/(‖<i>H</i>‖ − η<sub>0</sub>))</sup>. Applied to a Hamiltonian that is local in two windows of 2ℓ terms around two cuts, and arbitrary between and outside them, it has operator Schmidt rank (<i>dk</i>)<sup><i>O</i>(ℓ + <i>k</i>/ℓ)</sup> across the two cuts. The paper also calls this unsquared polynomial positive, which fails already in degree one; the formalization uses only its spectral properties.",
+          "delivers": "The Chebyshev spectral projector for ground spaces of any dimension, rank at most (<i>dk</i>)<sup>17(ℓ + <i>k</i>/(2ℓ))</sup> at both cuts for every polynomial of degree <i>k</i> in a two-window family, and one fixed physical family of middle operators that improves every viable subspace of the block. The printed clause on eigenvalues near η<sub>0</sub> and the sharp bond-dimension estimate at the other cuts are not yet formalized."
+        },
+        {
+          "title": "Good improving families",
+          "issues": [
+            9845
+          ],
+          "results": [
+            "c:goodagsphardtrunc",
+            "t:ais",
+            "t:aisgapless"
+          ],
+          "physics": "Hard-truncate the three bulks to the left of, between and to the right of two windows of length 2ℓ, and apply the Chebyshev projector of degree ℓ<sup>2</sup>. Its norm is then of order <i>t</i> + ℓ, so it shrinks by e<sup>−Ω(ℓ<sup>2</sup>√γ/√(<i>t</i>+ℓ))</sup> while its rank at the cuts is (<i>d</i>ℓ)<sup><i>O</i>(ℓ)</sup>. Its middle factors <i>A<sub>i</sub></i> form the improving family. Under (DG) a suitable ℓ of order (1 + log <i>d</i> + log(1/γ))<sup>2</sup>/γ makes <i>D</i><sup>12</sup>Δ ≤ 10<sup>−5</sup> with <i>D</i> = e<sup>Õ(log<sup>3</sup> <i>d</i>/γ)</sup>. Under (LD) the gap is replaced by a buffer μ/log <i>n</i> between two nested windows, and the family improves viability from the larger to the smaller window. The comparison space under (DG) is the whole ground space; the printed cutoff adds ε<sub>0</sub> twice.",
+          "delivers": "Under (DG), for every interval of every chain, one family of at most <i>D</i><sup>2</sup> middle operators with log <i>D</i> ≤ <i>C</i>(1 + log <i>d</i> + log(1/<i>g</i>))<sup>3</sup>/<i>g</i>, <i>g</i> = min(γ, 1), improving viability for a space mutually close to the ground space. In review: the same with the truncation height and the window length chosen independently, and the (LD) family on every interval of a chain of at least two sites with qudits of dimension at least two, with constants depending on the fixed window η and comparison losses that can be made as small as required."
+        },
+        {
+          "title": "Area laws for degenerate and low-density spectra",
+          "issues": [
+            9846
+          ],
+          "physics": "Take a 0.015-viable subspace <i>W</i> of minimal dimension <i>q</i> on an interval. Sample a random subspace of dimension about <i>q</i>/(2<i>D</i><sup>2</sup>) and apply the improving family: the result is still viable and has dimension at most <i>q</i>/2, so <i>q</i> cannot exceed <i>r</i>e<sup>Õ(log<sup>3</sup> <i>d</i>/γ)</sup>. Viable subspaces on the two sides of a cut then tensor to states of small Schmidt rank that approximate every ground state, and a projector of higher degree improves the approximation as far as needed. The proposition is printed for arbitrary sets of sites; for a set that is not an interval it fails, as a chain of disjoint Bell pairs shows, and the interval case is all the area law uses. Its constants are corrected without changing the bound. Under (LD) the same argument compares the least dimensions of viable subspaces for nested windows separated by buffers of width <i>v</i> = μ/log <i>n</i>. There the sample must have dimension ⌊<i>p</i>/(2<i>D</i><sup>2</sup>)⌋ rather than <i>p</i>/<i>D</i><sup>2</sup>, so that its image is strictly smaller than the least dimension <i>p</i>.",
+          "delivers": "Under (DG), on every interval, a 0.015-viable subspace of dimension <i>r</i>e<sup><i>O</i>(<i>u</i><sup>3</sup>/<i>g</i>)</sup> and, for every unit ground state, entanglement entropy at most ln <i>r</i> + <i>C</i>(1 + log <i>d</i> + log(1/<i>g</i>))<sup>3</sup>/<i>g</i>, with <i>u</i> = 1 + log <i>d</i> + log(1/<i>g</i>). The Schmidt-rank and matrix product state bounds of the theorem are in review. In review under (LD), with constants <i>K</i> depending only on the fixed window η: for the window shortened by <i>v</i>, a 3/200-viable subspace on every interval of dimension at most <i>r</i> exp[(<i>K</i>/<i>v</i>)(1 + log <i>d</i> + log(1 + 1/<i>v</i>))<sup>3</sup>], entropy at most ln <i>r</i> + (<i>K</i>/<i>v</i>)(1 + log <i>d</i> + log(1 + 1/<i>v</i>))<sup>3</sup> for every state in that window, approximations by states of small Schmidt rank and by matrix product states, and a basis of matrix product states for the window. Here <i>r</i> is the dimension of the full window η. The paper omits the last step of this proof."
+        }
+      ]
+    },
+    {
+      "id": "alg",
+      "paper": "alvv",
+      "eyebrow": "Part III · Sections 5 and 6",
+      "heading": "Efficient constructions and the merge tree",
+      "intro": "The algorithms need the improving operators as matrix product operators of polynomial bond dimension, which hard truncation does not provide. Soft truncation replaces the cap by a smooth function computable from a few imaginary-time evolutions, and a cluster expansion writes each evolution as a matrix product operator. For frustration-free chains the detectability lemma gives a simpler replacement. The merge tree then combines blocks pairwise from single sites to the whole chain. The frustration-free replacement is proved with a corrected rank. Soft truncation, its matrix product operators, a common soft improving family, and a corrected merge tree with its success probability, final refinement and node energy estimates are in review. The three algorithm theorems remain open: the energy estimates are not yet combined with the sampled tree, the improving families are not identified with the paper's construction, and the frustration-free and low-density algorithms are not treated. Running times are not formalized, since TNLean has no model of computation.",
+      "stages": [
+        {
+          "title": "Soft truncation and the cluster expansion",
+          "issues": [
+            9847
+          ],
+          "physics": "Soft truncation replaces the regional energy <i>x</i> by <i>h</i>(<i>x</i>) = <i>t</i> ∑<sub><i>j</i>≤<i>m</i></sub> (1 − e<sup>−<i>x</i>/<i>t</i></sup>)<sup><i>j</i></sup>/<i>j</i>, which is close to <i>x</i> for small <i>x</i> and bounded for large <i>x</i>. The paper bounds it by <i>t</i> log <i>m</i>; the sum is the harmonic number, so the bound is <i>t</i>(1 + log <i>m</i>). Its first energy estimate fails uniformly: on a three-qubit chain with gap 1/2, the energy lost in the ground state is not bounded by the printed power of the energy, because two noncommuting positive operators are compared through their powers. The cluster expansion keeps the words of local terms whose support has no connected piece of <i>r</i> or more sites. Its printed error bound fails on two qubits, because the proof counts terms where the statement counts sites, and on forty qubits with negative terms, because the proof bounds the operator e<sup>−β<i>H</i></sup> of the remaining terms by one, which needs positive terms.",
+          "delivers": "On the formal side, the scalar soft truncation with the harmonic bound and the matrix comparisons with hard truncation. In review: a corrected cluster bound that counts terms and is normalized by a lower bound on the energy, and for one interval a soft Hamiltonian with both spectral comparisons and a matrix product operator approximation of bond dimension 1 + <i>Nd</i><sup>2</sup> + (<i>m</i> + 1)ℓ<sup>2</sup><i>d</i><sup>ℓ</sup>, where <i>N</i> is the number of terms and ℓ the cluster cutoff. Also in review: a matrix product operator of bond dimension at most <i>r</i><sup>2</sup><i>d</i><sup><i>r</i></sup> for the expansion truncated by terms; residual bounds for soft truncation at any estimated regional energy in [<i>e</i> − 10, <i>e</i>]; and one common physical improving family for three soft-truncated bulks, chosen before those estimates, with soft order, filter degree and window fixed before the chain length and bond dimension polynomial in the chain length. The paper's own parameter choices for the efficient constructions remain open."
+        },
+        {
+          "title": "Frustration-free chains and the detectability lemma",
+          "issues": [
+            9849
+          ],
+          "physics": "For a frustration-free chain whose terms are projections, replace the terms inside a region by two projections, onto the span of the ranges of the even terms and of the odd terms. The new Hamiltonian is frustration-free with the same ground state, and the detectability lemma and its converse show that its gap is of the same order as the original. The paper states operator Schmidt rank <i>d</i><sup>2</sup> + 2 at every cut. For a region in the interior of the chain that fails: an eight-qubit chain with a unique ground state has rank 7 = <i>d</i><sup>2</sup> + 3 at an interior cut. The gap comparison must also use squared norms throughout.",
+          "delivers": "The detectability lemma and its converse, the latter for every unit vector with constant three; frustration freedom and the kernel of the replacement; gap at least γ/15 for 0 < γ ≤ 1; and operator Schmidt rank at most <i>d</i><sup>2</sup> + 3 at every cut and <i>d</i><sup>2</sup> + 2 for regions at an end of the chain. The efficient frustration-free projector is open."
+        },
+        {
+          "title": "The merge tree",
+          "issues": [
+            9848,
+            10533,
+            10534,
+            10535
+          ],
+          "physics": "Start with the full space on every site. Merge adjacent blocks along a binary tree: tensor their viable subspaces, sample a random subspace to cut the dimension back, apply the improving operators of a Chebyshev projector to restore the quality, and trim the bond dimension. After about log <i>n</i> levels the root holds a viable subspace for the target on the whole chain, from which the low-energy states are extracted. The construction in review changes the procedure in three places. Leaves are blocks of bounded length. Sampling is repeated, halving the dimension each time, until it falls below a threshold. Trimming follows every application of the improving family, since the printed loop reassigns the same subspace in every round; the printed round count is also not always an integer. One version uses hard-truncated families: its sampled tree succeeds at every node used by the root with probability at least 1 − (<i>n</i> − 1)/(<i>n</i> + 1)<sup>2</sup>, and iterating <i>I</i> − <i>H</i>/‖<i>H</i>‖ with trimming on the root and then taking the lowest <i>r</i>-dimensional subspace of <i>H</i> compressed there gives a space close to the ground space. The printed gain of that final iteration fails on two qubits; a normalized contraction replaces it. A second version builds soft-truncated families directly from the chain and succeeds with probability at least 1 − (<i>n</i> + 1)<sup>−2</sup>. The algorithm also estimates the energy of every block: one-sided estimates of width 49/16 are proved node by node, with the estimate taken 3 below the least compressed energy, but are not yet combined with the sampled soft tree.",
+          "delivers": "In review, under (DG): with probability at least 1 − (<i>n</i> − 1)/(<i>n</i> + 1)<sup>2</sup> over the sampling, an <i>r</i>-dimensional space of matrix product states within η/2 of the ground space whose bond dimension is at most <i>C</i>((<i>n</i> + 1)(<i>r</i> + 1)(1 + 1/η))<sup><i>k</i></sup>, with <i>C</i> and <i>k</i> depending only on <i>d</i> and γ; a sampled soft-truncated tree with failure probability at most (<i>n</i> + 1)<sup>−2</sup>; and node energy estimates of width 49/16. Open: the energy induction on the sampled soft tree, and Theorems 6.1–6.3 as stated, including the frustration-free and low-density algorithms."
+        }
+      ]
+    }
+  ],
+  "glossary": [
+    [
+      "Viable subspace",
+      "A subspace S of states on a block of sites such that every unit vector of the target T has squared overlap at least 1 − δ with S tensored with all states on the remaining sites."
+    ],
+    [
+      "Closeness",
+      "A subspace T is δ-close to T′ if every unit vector of T′ has squared overlap at least 1 − δ with T. Viability of S is closeness of S tensored with the rest to T."
+    ],
+    [
+      "(DG)",
+      "The ground space has dimension r polynomial in n and a gap γ to the next eigenvalue."
+    ],
+    [
+      "(LD)",
+      "The eigenvectors with energy in [ε<sub>0</sub>, ε<sub>0</sub> + η] span a space of dimension r polynomial in n; no gap is assumed."
+    ],
+    [
+      "Spectral projector",
+      "An operator with the eigenvectors of H that keeps eigenvalues below η<sub>0</sub> at least one and shrinks those above η<sub>1</sub> by √Δ, written as a sum of D<sup>2</sup> products of operators on the left, middle and right blocks."
+    ],
+    [
+      "Hard and soft truncation",
+      "Replacing the energy of a region by its cap at height t (hard) or by a smooth bounded function of it (soft), while keeping the terms that cross the region's boundary."
+    ],
+    [
+      "Detectability lemma",
+      "For commuting groups of projections, the product of the complementary projections shrinks every state of energy E above the ground energy, by a factor depending on E and on how many terms each term fails to commute with."
+    ],
+    [
+      "Matrix product operator",
+      "An operator on a chain written as a contraction of one tensor per site with an input and an output leg, the operator analogue of a matrix product state."
+    ]
+  ]
+}

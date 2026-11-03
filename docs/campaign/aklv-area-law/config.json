@@ -1,0 +1,209 @@
+{
+  "slug": "aklv-area-law",
+  "pageTitle": "Sharper Area Law · TNLean",
+  "heading": "A sharper area law for gapped chains, after Arad, Kitaev, Landau and Vazirani",
+  "lede": "In 2013 Arad, Kitaev, Landau and Vazirani gave a new proof of the one-dimensional area law. Their entanglement bound grows as log<sup>3</sup> <i>d</i>/ε in the local dimension <i>d</i> and the gap ε, exponentially better than Hastings' bound e<sup><i>O</i>(log <i>d</i>/ε)</sup>, and it gives matrix product state approximations whose bond dimension grows more slowly than any power of the chain length. The proof applies a Chebyshev polynomial of the Hamiltonian to a product state. The terms far from the cut are first replaced by bounded truncations, which keep the ground state nearly unchanged, so that a low-degree polynomial already projects well onto the ground state while creating little entanglement. In Lean the polynomial rank estimate, the robustness of the ground state under truncation, the area law with one extra logarithm of 1/ε, and the sub-polynomial matrix product state approximation for general chains are proved. The printed rate without that extra logarithm and the faster bond dimension for frustration-free chains remain open.",
+  "description": "Progress of the Lean 4 formalization of the improved one-dimensional area law of Arad, Kitaev, Landau and Vazirani, arXiv:1301.1162.",
+  "tabs": [
+    {
+      "slug": "openai-area-law-peps-proof",
+      "label": "Two-dimensional area law and PEPS"
+    },
+    {
+      "slug": "one-dimensional-area-law-mps",
+      "label": "One-dimensional area law and MPS"
+    },
+    {
+      "slug": "hastings-area-law",
+      "label": "One-dimensional area law after Hastings"
+    },
+    {
+      "slug": "lvv-ground-state-algorithm",
+      "label": "Ground states in polynomial time"
+    },
+    {
+      "slug": "aklv-area-law",
+      "label": "Sharper area law"
+    },
+    {
+      "slug": "alvv-rg-algorithm",
+      "label": "Rigorous renormalization group"
+    }
+  ],
+  "label": "1301.1162",
+  "since": "2026-10-21",
+  "scope": "tracker",
+  "repos": [
+    {
+      "name": "TNLean",
+      "slug": "LionSR/TNLean",
+      "checkout": ".",
+      "primary": true,
+      "homepage": "https://sirui-lu.com/TNLean/",
+      "description": "Tensor-network theory in Lean 4: the fundamental theorem of matrix product states, canonical forms, parent Hamiltonians, matrix-product density operators, projected entangled pair states and local circuits."
+    },
+    {
+      "name": "QICLean",
+      "slug": "LionSR/QICLean",
+      "checkout": "../QICLean",
+      "checkoutEnv": "QICLEAN_DIR",
+      "prefix": "Q",
+      "homepage": "https://sirui-lu.com/QICLean/",
+      "description": "Quantum information and channels in Lean 4, following Wolf's Quantum Channels & Operations: channel representations, Kadison–Schwarz theory, quantum Perron–Frobenius and spectral theory, GKSL semigroups and entropy."
+    }
+  ],
+  "tracker": 9831,
+  "streams": [
+    9831
+  ],
+  "streamNames": {
+    "9831": "Sharper area law"
+  },
+  "papers": {
+    "aklv": {
+      "name": "Arad, Kitaev, Landau and Vazirani 2013",
+      "stream": 9831
+    }
+  },
+  "sources": "https://arxiv.org/abs/1301.1162v1",
+  "citationPattern": "aklv13|1301\\.1162|Arad2013AreaLaw|\\bAKLV\\b",
+  "excludePathPattern": "(?:^|/)(?:lvv13|alvv16)_[a-z0-9_]*\\.tex$|ch35_(?:one_dimensional|lvv|chain_gluing|chain_trimming|two_window|two_marker|gapped_chain)_?[a-z0-9_]*\\.tex$",
+  "excludePRs": {
+    "TNLean": [
+      10032,
+      10164,
+      10183,
+      10188,
+      10189,
+      10190,
+      10191,
+      10193,
+      10194,
+      10195,
+      10201,
+      10214,
+      10223,
+      10226,
+      10227,
+      10229,
+      10236,
+      10241,
+      10243,
+      10244,
+      10248,
+      10250,
+      10256,
+      10423,
+      10495
+    ]
+  },
+  "leanDirs": [
+    "TNLean/MPS/AreaLaw/AKLV"
+  ],
+  "routes": [
+    {
+      "id": "ff",
+      "paper": "aklv",
+      "eyebrow": "Part I · Sections 2–5",
+      "heading": "Approximate projectors and the frustration-free area law",
+      "intro": "The chain has <i>n</i> sites of dimension <i>d</i> and nearest-neighbour terms 0 ≤ <i>H<sub>i</sub></i> ≤ 1. Its ground state Γ is unique, with ground energy ε<sub>0</sub> and gap ε. An approximate ground-state projector <i>K</i> at a cut fixes Γ, shrinks every vector orthogonal to Γ by a factor √Δ, and has operator Schmidt rank at most <i>D</i> across the cut, so applying it raises the Schmidt rank of a state at most <i>D</i>-fold. When <i>D</i>Δ ≤ 1/2 such an operator bounds the entanglement entropy of Γ by a constant times log <i>D</i>. The work is to build one with that tradeoff. In a frustration-free chain the terms far from the cut can be truncated without moving Γ; a Chebyshev polynomial of the truncated Hamiltonian then gives the projector. All the general tools of this part are proved. The frustration-free area law is proved with one extra logarithm of 1/ε.",
+      "stages": [
+        {
+          "title": "Approximate projectors give an area law",
+          "issues": [
+            9836
+          ],
+          "physics": "If an approximate projector with <i>D</i>Δ ≤ 1/2 exists, some product state has overlap at least 1/√(2<i>D</i>) with Γ. Applying the projector <i>j</i> times to this product state gives a state of Schmidt rank at most <i>D<sup>j</sup></i> whose distance to Γ shrinks geometrically in <i>j</i>, which bounds the Schmidt coefficients of Γ beyond rank <i>D<sup>j</sup></i> and hence its entropy. The paper also states a general bound <i>S</i> ≤ <i>O</i>(log μ<sup>−1</sup>/log Δ<sup>−1</sup>) log <i>D</i> for a product overlap μ. That bound fails as printed: on two qubits, with Γ a Bell state, a family of projectors keeps μ = 1/√2 and <i>S</i> = log 2 while the right-hand side tends to zero. The bound with an extra additive log <i>D</i>, <i>S</i> ≤ 12(1 + log μ<sup>−1</sup>/log Δ<sup>−1</sup>) log <i>D</i>, holds and is proved.",
+          "delivers": "The product-overlap lemma, the corrected general entropy bound, and the area law <i>S</i> ≤ 4 log <i>D</i> whenever <i>D</i>Δ ≤ 1/2, all for a unique ground state, which is the setting of every application in the paper."
+        },
+        {
+          "title": "Rescaled Chebyshev polynomials",
+          "issues": [
+            9834
+          ],
+          "physics": "The Chebyshev polynomial <i>T</i><sub>ℓ</sub> is bounded by one on [−1, 1] and grows like e<sup>ℓ<i>t</i></sup>/2 at cosh <i>t</i>. Rescaling it so that the excited spectrum [ε<sub>1</sub>, <i>u</i>] maps onto [−1, 1] and dividing by its value at ε<sub>0</sub> gives a polynomial <i>C</i><sub>ℓ</sub> of degree ℓ with <i>C</i><sub>ℓ</sub>(ε<sub>0</sub>) = 1 and |<i>C</i><sub>ℓ</sub>(<i>x</i>)| ≤ 2 exp(−2ℓ √((ε<sub>1</sub> − ε<sub>0</sub>)/(<i>u</i> − ε<sub>0</sub>))) on [ε<sub>1</sub>, <i>u</i>]. Applied to a Hamiltonian with spectrum in {ε<sub>0</sub>} ∪ [ε<sub>1</sub>, <i>u</i>], it fixes the ground space and shrinks its orthogonal complement. The dependence on the square root of gap over norm is what makes a small norm <i>u</i> valuable.",
+          "delivers": "The scalar bound and its operator form for every degree, including degree zero and ground spaces of any dimension."
+        },
+        {
+          "title": "Operator Schmidt rank of a polynomial of the Hamiltonian",
+          "issues": [
+            9835
+          ],
+          "physics": "Write the Hamiltonian near the cut as <i>H</i> = <i>H<sub>L</sub></i> + <i>H</i><sub>1</sub> + ⋯ + <i>H<sub>s</sub></i> + <i>H<sub>R</sub></i>, with <i>s</i> nearest-neighbour terms in a window around the cut and arbitrary terms <i>H<sub>L</sub></i>, <i>H<sub>R</sub></i> to the left and right of it. Expanding <i>H</i><sup>ℓ</sup> gives too many words to count one by one. The paper groups them by how often each term occurs, using commuting formal variables, and recovers each group from finitely many evaluations of the generating polynomial. In every group some window term occurs at most ℓ/<i>s</i> times, so the group has small rank across that term's cut. The recovery needs only a spanning family of evaluations, not a basis as printed, and the number of collected words carries an extra one, binom(ℓ + <i>k</i> + 1, 2<i>k</i> + 1) in place of binom(ℓ + <i>k</i>, 2<i>k</i> + 1).",
+          "delivers": "For every polynomial of degree at most ℓ, operator Schmidt rank at most (<i>d</i>(ℓ + 1))<sup>16(⌊ℓ/<i>s</i>⌋ + ⌊√ℓ⌋ + 1)</sup> across the central cut, and (<i>d</i>ℓ)<sup>96 max(⌊ℓ/<i>s</i>⌋, ⌊√ℓ⌋)</sup> for ℓ ≥ 1, the paper's (<i>d</i>ℓ)<sup><i>O</i>(max(ℓ/<i>s</i>, √ℓ))</sup> with explicit constants."
+        },
+        {
+          "title": "The frustration-free area law",
+          "issues": [
+            9838
+          ],
+          "physics": "For a frustration-free chain, ε<sub>0</sub> = 0 and Γ is annihilated by every term. Truncating the left and right sums at height <i>t</i> keeps Γ as the ground state and, for <i>t</i> of order 1/ε, keeps a gap of the same order, while the truncated Hamiltonian has norm at most <i>s</i> + 2<i>t</i>. The Chebyshev polynomial of degree of order <i>s</i><sup>2</sup> of the truncated Hamiltonian is then an approximate projector with <i>D</i>Δ ≤ 1/2 once <i>s</i> is of order log<sup>2</sup> <i>d</i>/ε, and log <i>D</i> = <i>O</i>(log<sup>3</sup> <i>d</i>/ε). The formal proof constructs that polynomial for the original ground vector, with the window chosen uniformly in the chain, and bounds the entropy at every cut, including cuts too close to the ends for the window to fit. Its parameter choice keeps logarithms of 1/ε that the printed rate omits.",
+          "delivers": "Entanglement entropy at most <i>C</i>(1 + log <i>d</i> + log(1/ε))<sup>3</sup>/ε at every cut of a frustration-free chain, for 0 < ε ≤ 1, with one universal constant <i>C</i>. The printed rate <i>O</i>(log<sup>3</sup> <i>d</i>/ε), without the logarithm of 1/ε, is open."
+        }
+      ]
+    },
+    {
+      "id": "fr",
+      "paper": "aklv",
+      "eyebrow": "Part II · Sections 6 and 7",
+      "heading": "Frustrated chains: robustness, the general area law and matrix product states",
+      "intro": "In a frustrated chain the truncated Hamiltonian no longer has Γ as its ground state. The robustness theorem shows that its ground state is exponentially close to Γ in the truncation height <i>t</i> and that its gap stays of order ε. A sequence of truncations at growing heights then guides a sequence of states of controlled Schmidt rank towards Γ, and the entropy is bounded by summing the contributions of this sequence. The robustness theorem, the sequence and the entropy bound are proved, the last with one extra logarithm of 1/ε; so is the sub-polynomial matrix product state approximation. The faster bond dimension printed for frustration-free chains is open.",
+      "stages": [
+        {
+          "title": "Truncation and the robustness theorem",
+          "issues": [
+            9837
+          ],
+          "physics": "Shift the terms so that the left block, the right block and the middle of the window each have ground energy zero; the shifted Hamiltonian <i>H</i> then has ground energy ε<sub>0</sub> ≤ 6. The truncation <i>A</i><sup>≤<i>t</i></sup> of a Hermitian <i>A</i> keeps its eigenvectors and replaces every eigenvalue above <i>t</i> by <i>t</i>. Truncating the two exterior blocks, each together with its neighbouring window term, gives <i>H</i><sup>(<i>t</i>)</sup> ≤ <i>H</i> with norm at most 2<i>t</i> + <i>s</i>. Let <i>A</i> be the sum of the two window terms that join these blocks to the rest of the window, and <i>P<sub>t</sub></i> the spectral projection of <i>H</i> − <i>A</i> below <i>t</i>; then <i>H</i><sup>(<i>t</i>)</sup><i>P<sub>t</sub></i> = <i>HP<sub>t</sub></i>. The ground state of <i>H</i> has exponentially small weight outside the range of <i>P<sub>t</sub></i>, because <i>A</i> couples the spectral subspaces of <i>H</i> − <i>A</i> below <i>u</i> and above <i>t</i> only with a factor 2e<sup>−(<i>t</i>−<i>u</i>)/8</sup>. The formal proof replaces the paper's shell-by-shell induction for this weight by a single exponential-moment estimate, recovers the coefficient 2 by centring the boundary terms, and corrects the shift of the middle terms, whose denominator is <i>s</i> − 6 rather than <i>s</i> − 7. Windows with fewer than six terms are not covered.",
+          "delivers": "For windows of at least six terms and <i>t</i> ≥ 1024 + 16 log(1/ε), the truncated Hamiltonian has gap at least 9ε/10 and a ground state φ with ‖φ − Γ‖<sup>2</sup> ≤ e<sup>−<i>t</i>/16</sup>/100 after a choice of phase. This improves the printed threshold of order (1/ε)(ε<sub>0</sub>/ε + 1), which is also proved."
+        },
+        {
+          "title": "The general area law",
+          "issues": [
+            9839
+          ],
+          "physics": "Choose heights <i>t<sub>i</sub></i> growing linearly in <i>i</i>, so that the ground state of <i>H</i><sup>(<i>t<sub>i</sub></i>)</sup> has squared distance at most 2<sup>−(<i>i</i>+4)</sup> from Γ. Start from a product state with good overlap with the first truncated ground state and apply, at step <i>i</i>, a Chebyshev projector of <i>H</i><sup>(<i>t<sub>i</sub></i>)</sup> of degree ℓ<sub><i>i</i></sub> of order √((<i>t<sub>i</sub></i> + <i>s</i>)/ε). Each step multiplies the Schmidt rank by a factor whose logarithm is of order ℓ<sub><i>i</i></sub> log <i>d</i>, and brings the state within squared distance 2<sup>−(<i>i</i>+4)</sup> of the current target. The printed summary adds these logarithms to the rank itself; the ranks multiply. Summing 2<sup>−<i>i</i></sup> times the logarithm of the rank over <i>i</i> bounds the entropy of Γ.",
+          "delivers": "Entanglement entropy at most <i>C</i>(1 + log <i>d</i> + log(1/ε))<sup>3</sup>/ε at every cut of a frustrated chain whose gap ε is the distance from ε<sub>0</sub> to the next eigenvalue. The printed rate <i>O</i>(log<sup>3</sup> <i>d</i>/ε) is open, as in the frustration-free case."
+        },
+        {
+          "title": "Sub-polynomial matrix product states",
+          "issues": [
+            9840
+          ],
+          "physics": "A matrix product state of bond dimension <i>B</i> within δ of Γ exists as soon as, at every cut, some state of Schmidt rank <i>B</i> is within about δ/<i>n</i> of Γ. Taking <i>t</i> of order log <i>n</i> in the robustness theorem and a Chebyshev projector of degree ℓ of order log <i>n</i> √((<i>s</i> + log <i>n</i>)/ε), with window <i>s</i> = log<sup>3/4</sup> <i>n</i>/ε<sup>1/4</sup>, gives such states with <i>B</i> = exp(Õ(log<sup>3/4</sup> <i>n</i>/ε<sup>1/4</sup>)), smaller than any power of <i>n</i>. For frustration-free chains the paper prints the faster bond dimension exp(<i>O</i>(ε<sup>−1/3</sup> log<sup>2/3</sup> <i>n</i>)).",
+          "delivers": "For every accuracy δ, a matrix product state within δ of Γ whose bond dimension <i>B</i> satisfies log <i>B</i> ≤ <i>C</i>[<i>u</i><sup>3</sup>/ε + (<i>z</i><sup>3</sup>/ε)<sup>1/4</sup>(<i>u</i> + log(<i>z</i> + 1))], with <i>u</i> = 1 + log <i>d</i> + log(1/ε) and <i>z</i> = log(2048(<i>n</i> + 1)/δ<sup>2</sup>). The frustration-free rate is open."
+        }
+      ]
+    }
+  ],
+  "glossary": [
+    [
+      "Spectral gap",
+      "The ground state Γ is unique and every other eigenvalue of H exceeds the ground energy ε<sub>0</sub> by at least ε."
+    ],
+    [
+      "Frustration-free",
+      "Every local term annihilates the ground state, so the ground energy is zero."
+    ],
+    [
+      "Approximate ground-state projector",
+      "An operator K that fixes the ground state, shrinks every orthogonal vector by a factor √Δ, and has operator Schmidt rank at most D across a cut."
+    ],
+    [
+      "Operator Schmidt rank",
+      "The least number of terms A<sub>j</sub> ⊗ B<sub>j</sub>, with A<sub>j</sub> acting left of a cut and B<sub>j</sub> right of it, whose sum is a given operator. Applying the operator multiplies the Schmidt rank of a state across the cut by at most this number."
+    ],
+    [
+      "Truncation",
+      "For a Hermitian operator A and a height t, the operator A<sup>≤t</sup> with the same eigenvectors, whose eigenvalues above t are replaced by t."
+    ],
+    [
+      "Chebyshev polynomial",
+      "The polynomial T<sub>ℓ</sub> of degree ℓ with T<sub>ℓ</sub>(cos θ) = cos(ℓθ). It is bounded by one on [−1, 1] and grows exponentially outside it."
+    ],
+    [
+      "Matrix product state",
+      "A vector on a chain written as a contraction of one tensor per site along the chain. Every Schmidt rank across a cut is at most the bond dimension there."
+    ]
+  ]
+}
