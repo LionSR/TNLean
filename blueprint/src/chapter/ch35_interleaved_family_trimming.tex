@@ -293,3 +293,48 @@ The successful initial sample and stopping bound remain separate.
     Apply the weighted reference estimate with error $4\tau\le a^2/16384$
     and $\theta=a/64$, then transfer viability from $T$ to $G$.
 \end{proof}
+
+
+\begin{lemma}[Actual interleaved rounds at the calibrated stopping count]
+    \label{lem:physical_interleaved_iterates}
+    \lean{TNLean.MPS.AreaLaw.exists_physical_dg_interleaved_interval_iterates}
+    \leanok
+    Use the physical hypotheses, constants, parameters, common reference and
+    interval families of Lemma~\ref{lem:physical_interleaved_family}.
+    Fix one long interval, its actual clipped target $T$, and a threshold
+    $0<\xi\le\xi_{\max}$. Let $S_0$ have dimension at most $s$ and be
+    $(1-a)$-viable for this $T$. Define the literal spaces
+    $S_{j+1}=\operatorname{Trim}_{\xi}(\operatorname{span}\{F_iS_j:i\})$ and
+    the scalar errors
+    \begin{align}
+        e_0&=1-a,&
+        e_{j+1}&=\frac{\Delta e_j}{1-e_j+\Delta e_j}+a/16,&
+        k&=\left\lceil\log_D(D^2s)\right\rceil,
+        \label{eq:physical_interleaved_stopping}
+    \end{align}
+    where $k$ is the upper integer logarithm. Every $0\le e_j<1$, and
+    the actual $S_j$ is $e_j$-viable for the same clipped target.
+    The actual output $S_k$ is $1/200$-viable for $T$ and $3/200$-viable
+    for the original full ground space. It has dimension at most $D^6s^3$
+    and at most that many recorded spanning vectors, each of weighted
+    internal-cut rank at most $D^6s^3$.
+
+    The initial successful sample is a separate hypothesis here. The
+    conclusion concerns the literal current-space iteration and does not
+    assert an adaptive probability or a printed running time.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:physical_interleaved_family,lem:interval_family_trim_iterates}
+    Put $R=D^6$ and $\beta=\sqrt\Delta$. For success $b=1-e$ and
+    denominator $d=b+\Delta e$, the next success is $b/d-a/16$.
+    When $b\le\beta$, the calibrated bounds give $2Rd\le1$ and
+    $(Rb+a/16)d\le b$. Otherwise the next error is at most
+    $\beta+a/16<1/200$. Small error persists. Inductively either error
+    is at most $1/200$ or success is at least $R^ja$.
+    The inequality $D^k\ge D^2s$ implies
+    $R^{k-1}a\ge3s/(32R)>\beta$, leaving one final exit round.
+    Apply the actual one-step viability estimate at every successor.
+    Dimension and recorded weighted ranks are bounded by
+    $N^k\dim S_0\le(D^k)^2s\le D^6s^3$.
+    Finally $2(1/200+\tau)\le3/200$ transfers to the original ground space.
+\end{proof}
