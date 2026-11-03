@@ -213,4 +213,33 @@ parameter choice or assert the complete adaptive generating algorithm.
 The counterexamples to the printed cluster estimate and the original
 uniform soft-energy estimate remain unchanged.
 
+\section{Calibrating the actual common family before the volume}
+
+For fixed local dimension $q\ge2$ and positive gap $\gamma$, the
+corrected construction now selects one natural $u\ge2$ before the
+chain length. It uses $\ell=u^8$, $m=u^{10}$, $k=u^{16}$,
+$t=3m$ and $T=u^9$. With the actual common count $D$ and norm ceiling
+$M$, put $\tau=(D^{24}M^{10})^{-1}$ and retain the same precision
+$\xi=\min\{1,\tau\gamma^2/[20000(M+\gamma+8)]\}$.
+Both residual budgets are derived, as are
+\begin{align}
+ \Delta\le (D^{12}M^{10})^{-1},\qquad
+ \frac{3\tau}{200}\le\frac1{100}
+      \left(\frac{3}{100D^2}\right)^2,\qquad
+ D^{12}\Delta\le10^{-5}.
+\end{align}
+The logarithmic cluster order also gives natural constants
+$C_{\rm pol},p_{\rm pol}$ before the volume, bounding the actual
+member-bond allowance by $C_{\rm pol}(N+1)^{p_{\rm pol}}$.
+The original common family, its represented matrices, derived targets,
+filters and all ordered-word powers are retained in
+\leanid{TNLean.MPS.AreaLaw.ALVV.exists_calibrated_uniform_physical_soft_improving_family}.
+
+This is a fixed-parameter polynomial bound: the soft order $m$ and filter
+degree $k$ are selected before $N$, while the cluster order varies with
+$N$ according to its specified logarithmic formula. The result does not identify the printed fourth-order
+choice, establish sharp inverse-gap dependence, or prove the full adaptive
+soft generating algorithm and its running time. The existing false-source
+claims and counterexamples are unchanged.
+
 \end{document}
