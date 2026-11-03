@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.CanonicalIntervalSamplingSections
+import TNLean.MPS.AreaLaw.IndependentIntervalProbability
 
 /-!
 # True guarded sections of the actual sampled parent
@@ -60,42 +61,16 @@ theorem rankUnitaryHaar_guarded_canonicalIntervalSamplingTree_update_le
     Matrix.rankUnitaryHaar (Fintype.card (interval L p r → Fin q))
       {v | Function.update U coord v ∈ guardedIntervalFailure operation width hwidth P (p, r)} ≤
         beta := by
-  intro k hpk hkr J coord operation left right P hfixed
-  have hleft (v : Matrix.rankUnitaryProduct (Fintype.card (interval L p r → Fin q))) :
-      balancedIntervalSpace (operation (Function.update U coord v)) width hwidth p k = left :=
-    canonicalIntervalSamplingTree_update_of_length_lt D s hwidth N F xi
-      p k hpk (hkr.trans hrL) U coord v (by dsimp only [k, coord]; omega)
-  have hright (v : Matrix.rankUnitaryProduct (Fintype.card (interval L p r → Fin q))) :
-      balancedIntervalSpace (operation (Function.update U coord v)) width hwidth k r = right :=
-    canonicalIntervalSamplingTree_update_of_length_lt D s hwidth N F xi
-      k r hkr hrL U coord v (by dsimp only [k, coord]; omega)
-  have hparent (v : Matrix.rankUnitaryProduct (Fintype.card (interval L p r → Fin q))) :
-      balancedIntervalSpace (operation (Function.update U coord v)) width hwidth p r =
-        canonicalSampledIntervalInterleavedTrim L q p r D s (F J) xi
-          (adjacentIntervalMerge L q p k r hpk hkr left right) v :=
-    canonicalIntervalSamplingTree_update_parent D s hwidth N F xi p r hpr hrL hlong U v
-  by_cases hchildren : P p k left ∧ P k r right
-  · apply (measure_mono ?_).trans (hfixed hchildren.1 hchildren.2)
-    intro v hfailure
-    change P p k (balancedIntervalSpace (operation (Function.update U coord v))
-      width hwidth p k) ∧ P k r (balancedIntervalSpace
-        (operation (Function.update U coord v)) width hwidth k r) ∧
-      ¬P p r (balancedIntervalSpace (operation (Function.update U coord v))
-        width hwidth p r) at hfailure
-    simpa only [Set.mem_ofPred_eq, hparent] using hfailure.2.2
-  · have hempty :
-        {v | Function.update U coord v ∈ guardedIntervalFailure operation width hwidth P (p, r)} =
-          ∅ := by
-      apply Set.eq_empty_iff_forall_notMem.mpr
-      intro v hfailure
-      apply hchildren
-      change P p k (balancedIntervalSpace (operation (Function.update U coord v))
-        width hwidth p k) ∧ P k r (balancedIntervalSpace
-          (operation (Function.update U coord v)) width hwidth k r) ∧
-        ¬P p r (balancedIntervalSpace (operation (Function.update U coord v))
-          width hwidth p r) at hfailure
-      exact ⟨(hleft v) ▸ hfailure.1, (hright v) ▸ hfailure.2.1⟩
-    rw [hempty, measure_empty]
-    exact bot_le
+  unfold canonicalIntervalSamplingOperation
+  exact measure_guarded_independentIntervalTree_update_le
+    (Ω := fun J ↦ Matrix.rankUnitaryProduct
+      (Fintype.card (interval L J.1.val J.2.val → Fin q)))
+    (fun J W v ↦ canonicalSampledIntervalInterleavedTrim L q J.val.1 J.val.2 D s
+      (F J) xi W v)
+    (fun J W hW ↦ measurable_projectionMatrix_canonicalSampledIntervalInterleavedTrim
+      D s (F J) xi W hW) hwidth
+    (fun J ↦ Matrix.rankUnitaryHaar
+      (Fintype.card (interval L J.1.val J.2.val → Fin q)))
+    G delta p r hpr hrL hlong U beta
 
 end TNLean.MPS.AreaLaw

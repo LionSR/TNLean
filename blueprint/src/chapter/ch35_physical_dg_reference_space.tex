@@ -361,6 +361,65 @@
     measures.
 \end{proof}
 
+\begin{definition}[Interval operations with independent coordinates]
+    \label{def:independent_interval_operation}
+    \lean{TNLean.MPS.AreaLaw.LongIntervalIndex.coordinate,
+        TNLean.MPS.AreaLaw.independentIntervalOperation}\leanok
+    Fix a positive leaf width $w$ and a space $\Omega_I$ at each finite
+    endpoint pair $I$. Put $\Omega=\prod_I\Omega_I$. For each valid long
+    interval $J=[p,r)$, prescribe a map $\mathcal M_J(W,u)$ from a candidate
+    subspace $W\subseteq\mathcal H_J$ and $u\in\Omega_{(p,r)}$ to a subspace
+    of $\mathcal H_J$. At a long parent and midpoint $k$, define
+    \begin{align}
+        S_\omega(p,r)=\mathcal M_{[p,r)}
+        \bigl(S_\omega(p,k)\otimes S_\omega(k,r),\omega_{(p,r)}\bigr),
+        \label{eq:independent_interval_parent}
+    \end{align}
+    where the child tensor product is identified with the actual adjacent
+    interval space. At short leaves retain $\mathcal H_J$. This is the
+    balanced recursion of Definition~\ref{def:balanced_interval_spaces}.
+    Coordinates of invalid or unused intervals remain unused. Each
+    $\Omega_I$ may contain a whole finite sequence of sampling variables.
+\end{definition}
+
+\begin{lemma}[Measurable projections and actual parent sections]
+    \label{lem:independent_interval_tree_sections}
+    \lean{TNLean.MPS.AreaLaw.measurable_projectionMatrix_and_dependsOn_independentIntervalTree,
+        TNLean.MPS.AreaLaw.independentIntervalTree_update_of_length_lt,
+        TNLean.MPS.AreaLaw.independentIntervalTree_update_parent,
+        TNLean.MPS.AreaLaw.measurableSet_isViable_independentIntervalTree,
+        TNLean.MPS.AreaLaw.measurableSet_guardedIntervalFailure_independentIntervalTree}\leanok
+    Give the coordinate spaces measurable structures. Suppose that for
+    every long $J$ and every candidate family $W:\Omega\to\operatorname{Sub}(\mathcal H_J)$
+    with measurable orthogonal projection, the projection onto
+    $\mathcal M_J(W(\omega),u)$ is measurable in $(\omega,u)$.
+    Then every valid $S_\omega(p,r)$ has measurable orthogonal projection and
+    depends only on coordinates $I=(a,b)$ with $b-a\le r-p$.
+    Its viability event for any fixed global target and the full exterior
+    is measurable, as is the guarded failure event of its two actual children
+    and parent.
+
+    If $J=[p,r)$ is long, changing only $\omega_J$ leaves both shorter
+    child spaces unchanged. For every replacement $u\in\Omega_J$,
+    \begin{align}
+        S_{\omega[J\leftarrow u]}(p,r)
+        =\mathcal M_J\bigl(S_\omega(p,k)\otimes S_\omega(k,r),u\bigr).
+        \label{eq:independent_interval_section}
+    \end{align}
+\end{lemma}
+\begin{proof}\leanok
+    \uses{def:independent_interval_operation,lem:borel_actual_adjacent_interval_merge}
+    Induct on the interval length. A short interval is the constant full
+    space. For a long interval, the actual adjacent child merge has measurable
+    projection by induction. Apply the parent hypothesis and compose with
+    coordinate evaluation. Both child lengths are smaller than the
+    parent length, so equality on all no longer coordinates fixes both
+    children and the parent coordinate. This proves dependence and
+    (\ref{eq:independent_interval_section}). The projection criterion for
+    viability gives its true event, and intersection with the two child
+    events gives the guarded event.
+\end{proof}
+
 \begin{definition}[The interval operation for fixed sampling choices]
     \label{def:canonical_interval_sampling_operation}
     \lean{TNLean.MPS.AreaLaw.canonicalIntervalSamplingOperation}
@@ -614,6 +673,42 @@ finite product of samples; the same estimate applies.
     The preceding deterministic ancestry result contains this joint
     failure in the same union of guarded events. Apply monotonicity
     of outer measure and the guarded-union estimate.
+\end{proof}
+
+\begin{lemma}[Fixed-child estimates for independent interval parents]
+    \label{lem:independent_interval_parent_probability}
+    \lean{TNLean.MPS.AreaLaw.measure_guarded_independentIntervalTree_update_le,
+        TNLean.MPS.AreaLaw.pi_independentIntervalTree_joint_failure_le}\leanok
+    Assume the measurability hypothesis of
+    Lemma~\ref{lem:independent_interval_tree_sections}. Fix a global target,
+    a nonnegative viability error $\delta$, and coordinate probability
+    laws $\mu_J$. Suppose that whenever the two actual child spaces of a
+    long $J$ are $\delta$-viable, its true fixed-child parent failure has
+    $\mu_J$-measure at most $\beta$.
+    Then the guarded own-coordinate failure section of $J$ has measure
+    at most $\beta$. This section conclusion also holds for arbitrary
+    coordinate measures.
+
+    Under the independent product probability law $\mu=\bigotimes_J\mu_J$,
+    the same root and its actual internal merge list satisfy
+    \begin{align}
+        \mu^*\bigl\{\omega:\neg\bigl(&S_\omega(p,r)\text{ is $\delta$-viable}\ \land\nonumber\\
+        &\forall J\in\mathcal I_w(p,r),\ S_\omega(J)
+        \text{ is $\delta$-viable}\bigr)\bigr\}
+        \le\max\{r-p-1,0\}\beta.
+    \end{align}
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:independent_interval_tree_sections,lem:independent_interval_joint_failure_probability}
+    By (\ref{eq:independent_interval_section}), fixing the other coordinates
+    gives the actual prescribed parent of the unchanged children.
+    If both children are viable, the guarded section is contained in
+    that parent's true failure event. Otherwise the guarded section is
+    empty. Its measure is therefore at most $\beta$ in either case.
+    All guarded events are measurable by
+    Lemma~\ref{lem:independent_interval_tree_sections}, and full short leaves
+    are viable because $\delta\ge0$. Apply the independent-coordinate
+    joint failure estimate to the actual root merge list.
 \end{proof}
 
 \begin{lemma}[The section at an actual parent]

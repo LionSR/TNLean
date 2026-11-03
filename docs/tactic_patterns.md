@@ -12053,3 +12053,18 @@ mathematical arguments and avoids compiling both in the long corollary.
   inequality together.
 - **Decision:** The local function introduces no global predicate or
   additional hypothesis, and keeps all original witnesses unchanged.
+
+
+### Independent parent maps in the same interval recursion (2026-11-03)
+
+- **Pattern:** Prove Borel retained projections and dependence only on no longer
+  coordinates, then identify actual own-coordinate failure sections.
+- **Reuse:** The existing strong induction is generalized once to arbitrary
+  coordinate spaces and parent maps. The canonical Haar statements actively
+  specialize it, preserving their public statements. The same generic joint
+  estimate admits a finite sequence of samples at each interval coordinate.
+- **Decision:** No second balanced tree or success predicate is introduced.
+  Supplying the coordinate type family explicitly, and unfolding only the
+  concrete operation, avoids a default-limit definitional-equality timeout.
+  The parent measurability and fixed-child failure estimates remain explicit
+  analytic hypotheses until the concrete physical caller discharges them.

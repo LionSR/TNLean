@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.CanonicalIntervalSamplingTree
-import TNLean.MPS.AreaLaw.BalancedIntervalFailure
+import TNLean.MPS.AreaLaw.IndependentIntervalSections
 
 /-!
 # Sections of the actual sampled interval recursion
@@ -44,15 +44,14 @@ theorem canonicalIntervalSamplingTree_update_parent {L q width : ℕ}
             width hwidth p k)
           (balancedIntervalSpace (canonicalIntervalSamplingOperation D s N F xi U)
             width hwidth k r)) v := by
-  classical
-  intro k hpk hkr J coord U v
-  have hleft := canonicalIntervalSamplingTree_update_of_length_lt D s hwidth N F xi
-    p k hpk (hkr.trans hrL) U coord v (by dsimp only [k, coord]; omega)
-  have hright := canonicalIntervalSamplingTree_update_of_length_lt D s hwidth N F xi
-    k r hkr hrL U coord v (by dsimp only [k, coord]; omega)
-  rw [balancedIntervalSpace, dite_eq_right (Nat.not_le.mpr hlong)]
-  simp only [canonicalIntervalSamplingOperation, dite_eq_left hrL, dite_eq_left hlong]
-  rw [hleft, hright, Function.update_self]
+  unfold canonicalIntervalSamplingOperation
+  exact independentIntervalTree_update_parent
+    (Ω := fun J ↦ Matrix.rankUnitaryProduct
+      (Fintype.card (interval L J.1.val J.2.val → Fin q)))
+    (fun J W v ↦ canonicalSampledIntervalInterleavedTrim L q J.val.1 J.val.2 D s
+      (F J) xi W v)
+    (fun J W hW ↦ measurable_projectionMatrix_canonicalSampledIntervalInterleavedTrim
+      D s (F J) xi W hW) hwidth p r hpr hrL hlong
 
 /-- The actual guarded failure event is Borel for the specified global
 target and its entire regional exterior. Supporting ALVV,
@@ -70,14 +69,13 @@ theorem measurableSet_guardedIntervalFailure_canonicalSamplingTree {L q width : 
         (G.map (Entropy.regionTensorCoordinates q (interval L a b)).toLinearEquiv.toLinearMap)
     MeasurableSet (guardedIntervalFailure
       (canonicalIntervalSamplingOperation D s N F xi) width hwidth P (p, r)) := by
-  intro P
-  dsimp only [guardedIntervalFailure]
-  have hleft := measurableSet_isViable_canonicalIntervalSamplingTree D s hwidth N F xi G
-    delta p (p + (r - p) / 2) (by omega) (by omega)
-  have hright := measurableSet_isViable_canonicalIntervalSamplingTree D s hwidth N F xi G
-    delta (p + (r - p) / 2) r (by omega) hrL
-  have hparent := measurableSet_isViable_canonicalIntervalSamplingTree D s hwidth N F xi G
-    delta p r hpr hrL
-  exact hleft.inter (hright.inter hparent.compl)
+  unfold canonicalIntervalSamplingOperation
+  exact measurableSet_guardedIntervalFailure_independentIntervalTree
+    (Ω := fun J ↦ Matrix.rankUnitaryProduct
+      (Fintype.card (interval L J.1.val J.2.val → Fin q)))
+    (fun J W v ↦ canonicalSampledIntervalInterleavedTrim L q J.val.1 J.val.2 D s
+      (F J) xi W v)
+    (fun J W hW ↦ measurable_projectionMatrix_canonicalSampledIntervalInterleavedTrim
+      D s (F J) xi W hW) hwidth G delta p r hpr hrL
 
 end TNLean.MPS.AreaLaw

@@ -64,26 +64,16 @@ theorem intervalSamplingMeasure_canonical_tree_joint_failure_le
         ∀ J ∈ balancedIntervalMergeList width hwidth p r,
           P J.1 J.2 (balancedIntervalSpace (operation U) width hwidth J.1 J.2))} ≤
       ((r - p - 1 : ℕ) : ℝ≥0∞) * beta := by
-  intro operation P hfixed
-  have hE (J : {J : ℕ × ℕ // J ∈ balancedIntervalMergeList width hwidth p r}) :
-      MeasurableSet (guardedIntervalFailure operation width hwidth P J.val) := by
-    have hb := bounds_of_mem_balancedIntervalMergeList width hwidth p r hpr J.property
-    exact measurableSet_guardedIntervalFailure_canonicalSamplingTree D s hwidth N F xi G delta
-      J.val.1 J.val.2 hb.2.1 (hb.2.2.1.trans hrL)
-  have hsections (J : {J : ℕ × ℕ // J ∈ balancedIntervalMergeList width hwidth p r})
-      (U : IntervalSamplingChoices L q) :
-      Matrix.rankUnitaryHaar (Fintype.card (interval L J.val.1 J.val.2 → Fin q))
-        {v | Function.update U (balancedIntervalMergeCoordinate width hwidth p r hpr hrL J) v ∈
-          guardedIntervalFailure operation width hwidth P J.val} ≤ beta := by
-    have hb := bounds_of_mem_balancedIntervalMergeList width hwidth p r hpr J.property
-    exact rankUnitaryHaar_guarded_canonicalIntervalSamplingTree_update_le D s hwidth N F xi G
-      delta J.val.1 J.val.2 hb.2.1 (hb.2.2.1.trans hrL) hb.2.2.2 U beta
-      (hfixed J.val.1 J.val.2 hb.2.1 (hb.2.2.1.trans hrL) hb.2.2.2 U)
-  have hleaf (a b : ℕ) (_hab : a ≤ b) (_hbL : b ≤ L) (_hshort : b - a ≤ width) :
-      P a b ⊤ := Submodule.isViable_top delta hdelta _
-  simpa only [intervalSamplingMeasure] using pi_balancedIntervalSpace_joint_failure_le
-    (fun K : Fin (L + 1) × Fin (L + 1) ↦
-      Matrix.rankUnitaryHaar (Fintype.card (interval L K.1.val K.2.val → Fin q)))
-    operation width hwidth P hleaf p r hpr hrL beta hE hsections
+  unfold canonicalIntervalSamplingOperation intervalSamplingMeasure
+  exact pi_independentIntervalTree_joint_failure_le
+    (Ω := fun J ↦ Matrix.rankUnitaryProduct
+      (Fintype.card (interval L J.1.val J.2.val → Fin q)))
+    (fun J W v ↦ canonicalSampledIntervalInterleavedTrim L q J.val.1 J.val.2 D s
+      (F J) xi W v)
+    (fun J W hW ↦ measurable_projectionMatrix_canonicalSampledIntervalInterleavedTrim
+      D s (F J) xi W hW) hwidth
+    (fun J ↦ Matrix.rankUnitaryHaar
+      (Fintype.card (interval L J.1.val J.2.val → Fin q)))
+    G delta hdelta beta p r hpr hrL
 
 end TNLean.MPS.AreaLaw

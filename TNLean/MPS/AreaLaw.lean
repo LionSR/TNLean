@@ -85,6 +85,10 @@ import TNLean.MPS.AreaLaw.Hastings
 import TNLean.MPS.AreaLaw.Huang
 import TNLean.MPS.AreaLaw.IndependentFiveRegionCluster
 import TNLean.MPS.AreaLaw.IndependentFiveRegionResidual
+import TNLean.MPS.AreaLaw.IndependentIntervalOperation
+import TNLean.MPS.AreaLaw.IndependentIntervalProbability
+import TNLean.MPS.AreaLaw.IndependentIntervalSections
+import TNLean.MPS.AreaLaw.IndependentIntervalTree
 import TNLean.MPS.AreaLaw.IndependentLowDensityBufferedTargets
 import TNLean.MPS.AreaLaw.IndependentPhysicalDGPower
 import TNLean.MPS.AreaLaw.IndependentPhysicalDGViability

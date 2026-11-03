@@ -4,8 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.IntervalSamplingChoices
-import TNLean.MPS.AreaLaw.BalancedIntervalTree
-import TNLean.MPS.AreaLaw.AdjacentIntervalMerge
+import TNLean.MPS.AreaLaw.IndependentIntervalOperation
 import TNLean.MPS.AreaLaw.CanonicalSampledIntervalInterleaved
 
 /-!
@@ -31,15 +30,8 @@ noncomputable def canonicalIntervalSamplingOperation {L q width : ℕ}
       Fin (N J) → EuclideanSpace ℂ (interval L J.val.1 J.val.2 → Fin q) →L[ℂ]
         EuclideanSpace ℂ (interval L J.val.1 J.val.2 → Fin q))
     (xi : ℝ) (U : IntervalSamplingChoices L q) : IntervalMergeOperation L q :=
-  fun p k r hpk hkr S1 S2 ↦
-    if hrL : r ≤ L then
-      if hlong : width < r - p then
-        canonicalSampledIntervalInterleavedTrim L q p r D s
-          (F ⟨(p, r), hpk.trans hkr, hrL, hlong⟩) xi
-          (adjacentIntervalMerge L q p k r hpk hkr S1 S2)
-          (U (⟨p, Nat.lt_succ_of_le ((hpk.trans hkr).trans hrL)⟩,
-            ⟨r, Nat.lt_succ_of_le hrL⟩))
-      else ⊤
-    else ⊤
+  independentIntervalOperation
+    (fun J W v ↦ canonicalSampledIntervalInterleavedTrim L q J.val.1 J.val.2 D s
+      (F J) xi W v) U
 
 end TNLean.MPS.AreaLaw

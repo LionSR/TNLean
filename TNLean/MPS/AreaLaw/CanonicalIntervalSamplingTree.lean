@@ -4,8 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.CanonicalIntervalSamplingOperation
-import TNLean.MPS.AreaLaw.AdjacentIntervalMergeMeasurable
-import Mathlib.Logic.Function.DependsOn
+import TNLean.MPS.AreaLaw.IndependentIntervalTree
 
 /-!
 # Joint measurability and coordinate dependence of the actual sampled tree
@@ -37,67 +36,14 @@ private theorem sampled_tree_measurable_and_dependsOn {L q width : ℕ}
     Measurable (fun U ↦ (Matrix.toEuclideanCLM
       (n := interval L p r → Fin q) (𝕜 := ℂ)).symm (S U).starProjection) ∧
     DependsOn S {J : Fin (L + 1) × Fin (L + 1) | J.2.val - J.1.val ≤ r - p} := by
-  classical
-  intro retained
-  let S := fun (p r : ℕ) (U : IntervalSamplingChoices L q) ↦
-    balancedIntervalSpace (canonicalIntervalSamplingOperation D s N F xi U) width hwidth p r
-  suffices ∀ n p r : ℕ, r - p = n → p ≤ r → r ≤ L →
-      Measurable (fun U ↦ (Matrix.toEuclideanCLM
-        (n := interval L p r → Fin q) (𝕜 := ℂ)).symm (S p r U).starProjection) ∧
-      DependsOn (S p r)
-        {J : Fin (L + 1) × Fin (L + 1) | J.2.val - J.1.val ≤ r - p} from
-    this (r - p) p r rfl hpr hrL
-  intro n
-  induction n using Nat.strong_induction_on with
-  | h n ih =>
-    intro p r hlen hpr hrL
-    by_cases hshort : r - p ≤ width
-    · have hS : S p r = fun _ ↦ ⊤ := by
-        funext U
-        exact balancedIntervalSpace_of_short _ hwidth hshort
-      constructor
-      · rw [hS]
-        exact measurable_const
-      · intro U V _hcoords
-        rw [hS]
-    · let k := p + (r - p) / 2
-      have hpk : p ≤ k := by dsimp only [k]; omega
-      have hkr : k ≤ r := by dsimp only [k]; omega
-      have hlong : width < r - p := by omega
-      obtain ⟨hleft, hleft_dep⟩ := ih (k - p) (by dsimp only [k]; omega)
-        p k rfl hpk (hkr.trans hrL)
-      obtain ⟨hright, hright_dep⟩ := ih (r - k) (by dsimp only [k]; omega)
-        k r rfl hkr hrL
-      let J : LongIntervalIndex L width := ⟨(p, r), hpr, hrL, hlong⟩
-      let coord : Fin (L + 1) × Fin (L + 1) :=
-        (⟨p, Nat.lt_succ_of_le (hpr.trans hrL)⟩, ⟨r, Nat.lt_succ_of_le hrL⟩)
-      let W := fun U ↦ adjacentIntervalMerge L q p k r hpk hkr (S p k U) (S k r U)
-      have hW := measurable_projectionMatrix_adjacentIntervalMerge hpk hkr
-        (S p k) (S k r) hleft hright
-      have hparent := measurable_projectionMatrix_canonicalSampledIntervalInterleavedTrim
-        D s (F J) xi W hW
-      have hsample := hparent.comp (measurable_id.prodMk (measurable_pi_apply coord))
-      have hvalue (U : IntervalSamplingChoices L q) : S p r U =
-          canonicalSampledIntervalInterleavedTrim L q p r D s (F J) xi (W U) (U coord) := by
-        change balancedIntervalSpace
-          (canonicalIntervalSamplingOperation D s N F xi U) width hwidth p r = _
-        rw [balancedIntervalSpace, dite_eq_right hshort]
-        simp only [canonicalIntervalSamplingOperation, dite_eq_left hrL, dite_eq_left hlong]
-        rfl
-      constructor
-      · simpa only [Function.comp_def, id_eq, hvalue] using hsample
-      · intro U V hcoords
-        have hleft_eq : S p k U = S p k V := hleft_dep fun I hI ↦
-          hcoords I (hI.trans (by omega : k - p ≤ r - p))
-        have hright_eq : S k r U = S k r V := hright_dep fun I hI ↦
-          hcoords I (hI.trans (by omega : r - k ≤ r - p))
-        have hcoord : U coord = V coord := hcoords coord (by
-          change r - p ≤ r - p
-          exact le_rfl)
-        have hW_eq : W U = W V := by
-          dsimp only [W]
-          rw [hleft_eq, hright_eq]
-        rw [hvalue U, hvalue V, hW_eq, hcoord]
+  unfold canonicalIntervalSamplingOperation
+  exact measurable_projectionMatrix_and_dependsOn_independentIntervalTree
+    (Ω := fun J ↦ Matrix.rankUnitaryProduct
+      (Fintype.card (interval L J.1.val J.2.val → Fin q)))
+    (fun J W v ↦ canonicalSampledIntervalInterleavedTrim L q J.val.1 J.val.2 D s
+      (F J) xi W v)
+    (fun J W hW ↦ measurable_projectionMatrix_canonicalSampledIntervalInterleavedTrim
+      D s (F J) xi W hW) hwidth p r hpr hrL
 
 /-- The actual balanced sampled tree has a jointly Borel ambient projection.
 The family and parameters are fixed before all interval coordinates.

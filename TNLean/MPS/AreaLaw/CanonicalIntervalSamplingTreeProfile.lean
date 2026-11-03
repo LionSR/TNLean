@@ -53,8 +53,9 @@ theorem canonicalIntervalSamplingTree_profile {L q width D s : ℕ}
           (adjacentIntervalMerge L q p k r hpk hkr S1 S2)
           (U (⟨p, Nat.lt_succ_of_le ((hpk.trans hkr).trans hrL)⟩,
             ⟨r, Nat.lt_succ_of_le hrL⟩)) := by
-      dsimp only [canonicalIntervalSamplingOperation]
+      dsimp only [canonicalIntervalSamplingOperation, independentIntervalOperation]
       rw [dite_eq_left hrL, dite_eq_left hlong]
+      rfl
     rw [hop]
     exact canonicalSampledIntervalInterleavedTrim_profile hD hs (hN J) (F J) hxi _ _
 
