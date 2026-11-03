@@ -160,11 +160,26 @@
       }
     },
     "ch:parent_hamiltonian": {
+      "theorems": [],
+      "corollaries": [],
+      "notes": {}
+    },
+    "ch:parent_hamiltonian_unique_ground_states": {
       "theorems": [
-        "thm:half_chain_source_limit",
         "thm:parent_hamiltonian_unique_gs",
         "thm:unique_gs_injective",
-        "thm:unique_gs_normal",
+        "thm:unique_gs_normal"
+      ],
+      "corollaries": [],
+      "notes": {
+        "thm:parent_hamiltonian_unique_gs": "Source theorem: Perez-Garcia et al. Theorem 10, uniqueness throughout the interaction range",
+        "thm:unique_gs_injective": "Unique ground state for injective tensors, stated in the opening",
+        "thm:unique_gs_normal": "Unique ground state for normal tensors at range L_0+1, stated in the opening"
+      }
+    },
+    "ch:parent_hamiltonian_half_chain_uncle": {
+      "theorems": [
+        "thm:half_chain_source_limit",
         "thm:uncle_periodic_ground_space",
         "thm:uncle_generic_finite_volume_gaplessness",
         "thm:half_chain_general_c2_source"
@@ -172,9 +187,6 @@
       "corollaries": [],
       "notes": {
         "thm:half_chain_source_limit": "Source theorem: Perez-Garcia et al. Theorem 6, half-chain interpretation",
-        "thm:parent_hamiltonian_unique_gs": "Source theorem: Perez-Garcia et al. Theorem 10, uniqueness throughout the interaction range",
-        "thm:unique_gs_injective": "Unique ground state for injective tensors, stated in the opening",
-        "thm:unique_gs_normal": "Unique ground state for normal tensors at range L_0+1, stated in the opening",
         "thm:uncle_periodic_ground_space": "Full actual finite uncle-Hamiltonian ground-space theorem, Fernández-González et al. Theorem thm:gs-subspace-uncle",
         "thm:uncle_generic_finite_volume_gaplessness": "Generic finite-volume uncle gaplessness via actual two-wall trials and the full actual ground-space projection; the infinite-volume claim remains separate",
         "thm:half_chain_general_c2_source": "PGVWC07 Theorem 6: half-chain spectrum of the actual general weighted canonical tensor under normalized generic C2"
