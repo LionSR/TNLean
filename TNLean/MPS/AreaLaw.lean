@@ -35,6 +35,7 @@ import TNLean.MPS.AreaLaw.CopyRegionEntropy
 import TNLean.MPS.AreaLaw.Counting
 import TNLean.MPS.AreaLaw.CutMatrixGrowth
 import TNLean.MPS.AreaLaw.DGEntropyParameters
+import TNLean.MPS.AreaLaw.DesignatedCutTruncation
 import TNLean.MPS.AreaLaw.DomainGraphGeometry
 import TNLean.MPS.AreaLaw.DomainInformationReset
 import TNLean.MPS.AreaLaw.DomainInteractionBudget
@@ -98,15 +99,18 @@ import TNLean.MPS.AreaLaw.LogarithmicSeparation
 import TNLean.MPS.AreaLaw.LongIntervalLowDensityFamily
 import TNLean.MPS.AreaLaw.LowDensityAccurateViability
 import TNLean.MPS.AreaLaw.LowDensityBufferedTargets
+import TNLean.MPS.AreaLaw.LowDensityDesignatedApproximation
 import TNLean.MPS.AreaLaw.LowDensityEntropy
 import TNLean.MPS.AreaLaw.LowDensityEntropyBound
 import TNLean.MPS.AreaLaw.LowDensityFilterParameters
 import TNLean.MPS.AreaLaw.LowDensityLogDimension
 import TNLean.MPS.AreaLaw.LowDensityMinimumDimension
+import TNLean.MPS.AreaLaw.LowEnergyMPSBasis
 import TNLean.MPS.AreaLaw.MPSApproximation
 import TNLean.MPS.AreaLaw.MPSReferenceSpace
 import TNLean.MPS.AreaLaw.NearestNeighbourImaginaryTime
 import TNLean.MPS.AreaLaw.NormalizedSequentialApproximation
+import TNLean.MPS.AreaLaw.NormalizedVariableTruncation
 import TNLean.MPS.AreaLaw.OpenMPS
 import TNLean.MPS.AreaLaw.OpenMPSCutRank
 import TNLean.MPS.AreaLaw.OpenMPSOperatorAction
