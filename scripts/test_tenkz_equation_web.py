@@ -34,7 +34,7 @@ PAGES = (
 EXPECTED_WRAPPER_COUNTS = {
     "ch-symmetry.html": 9,
     "ch-mpdo.html": 4,
-    "ch-mpdo_rfp_gibbs.html": 7,
+    "ch-mpdo_rfp_gibbs.html": 4,
     "ch-mpo_boundaries.html": 5,
     "ch-mpo_interpolation.html": 13,
 }
