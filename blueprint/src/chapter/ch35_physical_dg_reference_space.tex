@@ -417,6 +417,69 @@
     greater than $w$ by the subdivision rule.
 \end{proof}
 
+
+\begin{lemma}[Joint Borel projection of the actual sampled tree]
+    \label{lem:borel_canonical_interval_sampling_tree}
+    \lean{TNLean.MPS.AreaLaw.measurable_projectionMatrix_canonicalIntervalSamplingTree,
+        TNLean.MPS.AreaLaw.measurableSet_isViable_canonicalIntervalSamplingTree}
+    \leanok
+    Fix the families and parameters of
+    Definition~\ref{def:canonical_interval_sampling_operation}, and a
+    positive leaf width $w$. Write $S_\omega(p,r)$ for the existing
+    balanced interval space of that operation. For every valid interval
+    $p\le r\le L$, its actual ambient orthogonal projection is jointly
+    Borel in the entire family of interval choices $\omega$.
+
+    For any fixed full-chain target $G$ and real $\delta$, the event that
+    this same space is $\delta$-viable for $G$ is Borel. The target is
+    expressed in the original regional tensor coordinates, retaining the
+    whole exterior of $[p,r)$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{def:canonical_interval_sampling_operation,
+        lem:borel_actual_adjacent_interval_merge,
+        lem:borel_canonical_sampled_interval_interleaved_parent}
+    Induct on the interval length, simultaneously with the dependence
+    assertion below. A short interval is the constant full local space.
+    At a long interval, the child projections are jointly Borel by the
+    induction hypothesis. Their actual adjacent merge therefore has a
+    Borel projection. The canonical sampled parent is jointly Borel in
+    that constructed candidate and its own unitary-product coordinate.
+    Compose with the Borel coordinate evaluation
+    $\omega\mapsto\omega_{(p,r)}$ to obtain the actual parent projection.
+    The existing projection test for viability gives the stated event
+    for the fixed global target and full exterior.
+\end{proof}
+
+\begin{lemma}[Dependence only on no longer interval coordinates]
+    \label{lem:canonical_interval_sampling_tree_coordinate_dependence}
+    \lean{TNLean.MPS.AreaLaw.dependsOn_canonicalIntervalSamplingTree,
+        TNLean.MPS.AreaLaw.canonicalIntervalSamplingTree_update_of_length_lt}
+    \leanok
+    In the same construction, $S_\omega(p,r)$ depends only on the
+    coordinates $J=(a,b)$ satisfying $b-a\le r-p$, with natural-number
+    subtraction. Thus replacing any coordinate whose interval length
+    is strictly greater than $r-p$ leaves this actual retained space
+    unchanged. In particular, the actual two children of a long parent
+    are unchanged when the parent's own sampling coordinate is replaced.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{def:canonical_interval_sampling_operation,def:balanced_interval_spaces}
+    For a short interval the retained space is constant. At a long
+    interval, two choice families agreeing on all coordinates of length
+    at most $r-p$ agree on those used by either child, by induction.
+    They also agree on the parent coordinate $(p,r)$. The child merge
+    and canonical sampled parent are therefore identical. A coordinate
+    of strictly greater length is outside this set of possible
+    dependencies, giving the replacement assertion. Both children have
+    strictly smaller length than their long parent.
+\end{proof}
+
+These statements concern the literal existing sampled recursion. They do
+not assume a measurable subspace family, an independent replacement for
+an actual child, or a local probability bound. Summing conditional failure
+probabilities remains a separate argument.
+
 \begin{lemma}[Recorded generators of the actual trimmed image]
     \label{lem:interval_recorded_generator_bounds}
     \lean{TNLean.MPS.AreaLaw.IsIntervalSpanWithRankBound,
