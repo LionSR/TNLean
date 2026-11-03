@@ -31,7 +31,7 @@ namespace TNLean.Lattice.PartyCircuit.SourceCircuit
 variable {P : Type} {a b : Layout P}
 
 local instance {m n : Type*} [Fintype m] [Fintype n] : ContinuousENorm (Matrix m n ℂ) :=
-  SeminormedAddGroup.toContinuousENorm
+  SeminormedAddGroup.toESeminormedAddMonoid.toContinuousENorm
 
 /-- The centered correction of the actual sampled source operator in the original
 endpoint coordinates, indexed by original positions and local ket–bra labels.
