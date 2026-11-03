@@ -11891,8 +11891,11 @@ The final composition also exhibits the distinction between a local numerical
 alias and the fully substituted type of an imported theorem. Only the
 numerical aliases in the terminal goal are unfolded before applying the
 unchanged terminal proof; the chosen targets and operator families remain
-fixed. The abstract energy lemma carries the terminal proposition as an
-opaque proposition, rather than repeating its vector-wise conjunction.
+fixed. The calibrated spectral-minimum and word argument is proved separately in
+`ALVV/CalibratedRootEnergy.lean`, without an arbitrary terminal proposition.
+The corollary retains the resulting energy function together with the
+unchanged refinement and Ritz conclusions. This separates two independent
+mathematical arguments and avoids compiling both in the long corollary.
 
 ## Candidate: restricted norms under spectral-space identities (2026-11-03)
 

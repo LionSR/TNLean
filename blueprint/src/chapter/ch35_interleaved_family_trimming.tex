@@ -1019,6 +1019,41 @@ sampled root hierarchy.
 \end{proof}
 
 
+\begin{lemma}[Root energy from calibrated words]
+    \label{lem:calibrated_root_energy}
+    \lean{TNLean.MPS.AreaLaw.exists_canonical_root_energy_of_calibrated_words}
+    \leanok
+    Let $q\ge1$ and let $H=\sum_i h_i$ be a nearest-neighbour chain
+    of positive contractions. Let $\mu\in\operatorname{spec}(H)$, and suppose that
+    every spectral value is either $\mu$ or at least $\mu+\gamma$,
+    where $\gamma>0$. Let $G$ be its full ground space. Suppose that
+    $\ell\ge21$, $s\ge1$, $D\ge2$, and
+    $D=(\max(q,50)\ell^2)^{22\ell}$.
+    Put $a=3/(32D^{12}s^5)$, $\tau=a^2/1048576$, and
+    $\Delta=1/(200000D^{12})$.
+
+    Fix interval targets $T_J$ of dimension $\dim G$ and families
+    $\mathcal F_J$ such that $G$ is $\tau$-close to $T_J$.
+    For every $\delta<1$, every $\delta$-viable space $S$ for $T_J$,
+    and every integer $p\ge0$, suppose that the span $S_p$ of its
+    images under all length-$p$ words satisfies
+    $\dim S_p\le D^{2p}\dim S$ and is
+    $\Delta^p/(1-\delta)^2$-viable for $T_J$.
+    At any trimming radius, every seed for which the root and its listed internal intervals
+    are $3/200$-viable for $G$ then admits one energy function on
+    that subtree, with the bounds and updates of
+    Lemma~\ref{lem:canonical_interval_root_energy_assignment}.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:canonical_interval_root_energy_assignment}
+    The spectral assumptions give $\mu=\min\operatorname{spec}(H)$.
+    Since $\ell\ge1$, the formula for $D$ gives $50\ell^2\le D$.
+    At $p=1$ and $\delta=1/4$, the word bound gives dimension
+    at most $D^2\dim S$ and error $\Delta/(1-1/4)^2$.
+    Lemma~\ref{lem:canonical_interval_root_energy_assignment} applies
+    to these same targets, families and successful seed.
+\end{proof}
+
 \begin{corollary}[Energy and Ritz output from one successful tree]
     \label{cor:canonical_ritz_energy}
     \lean{TNLean.MPS.AreaLaw.exists_physical_dg_canonical_ritz_polynomial_approximation_with_energy}
@@ -1047,15 +1082,12 @@ sampled root hierarchy.
     retained. No second physical family or sampled tree is selected.
 \end{corollary}
 \begin{proof}\leanok
-    \uses{thm:physical_canonical_ritz_polynomial,lem:canonical_interval_root_energy_assignment}
+    \uses{thm:physical_canonical_ritz_polynomial,lem:calibrated_root_energy}
     Select the data of
     Theorem~\ref{thm:physical_canonical_ritz_polynomial} once.
-    The gap hypothesis and the actual ground spectral value identify
-    $\mu$ with the minimum eigenvalue. The same ordered-word certificate
-    at power one gives the one-word error
-    $\Delta/(1-1/4)^2$. Also $D\ge50\ell^2$.
-    For each successful seed, its root and listed intervals satisfy the
-    joint viability required by Lemma~\ref{lem:canonical_interval_root_energy_assignment}.
-    That lemma gives one energy function on this tree. Retain it together
-    with the unchanged terminal refinement and Ritz conclusions.
+    Its spectral assumptions and retained word certificates satisfy
+    Lemma~\ref{lem:calibrated_root_energy}. For each successful seed,
+    that lemma gives one energy function on the same root subtree.
+    Retain it together with the unchanged terminal refinement and
+    Ritz conclusions.
 \end{proof}
