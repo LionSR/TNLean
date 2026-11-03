@@ -50,8 +50,10 @@ All polynomial bounds have the quantitative scope specified in those constructio
     \begin{align}
         \max\{1,s_L\}    & \le P(L+1)^d, &
         \max\{1,b_L\}    & \le P(L+1)^d, &
-        s_L\max\{1,b_L\} & \le P(L+1)^d.
+        s_L\max\{1,b_L\} & \le P(L+1)^d,
     \end{align}
+    and the selection budget $C_sL^p$, the factor budget $E_LR_L$ and the
+    rank budget $R_L$ of one step are at most $P(L+1)^d$ as well.
 \end{lemma}
 \begin{proof}
     \leanok
@@ -63,12 +65,73 @@ All polynomial bounds have the quantitative scope specified in those constructio
     maxima with one also covers the scalar initial family.
 \end{proof}
 
+\begin{definition}[One step of the sweep with its selections named]
+    \label{def:lvv_successive_step}
+    \lean{TNLean.MPS.AreaLaw.successiveStep,
+        TNLean.MPS.AreaLaw.card_successiveStep_le,
+        TNLean.MPS.AreaLaw.isLeftOpenMPS_of_mem_successiveStep}
+    \leanok
+    \uses{def:lvv_bond_trimmed_family, def:lvv_error_reduction_family}
+    Let $i\le L$, let $m$ be a trimming radius, let $(A_j)_{j\in J}$ be a
+    finite family of left factors at the cut after $i$ sites, and let $T_0$
+    be a finite family of left vectors at that cut. The step applied to
+    $T_0$ is the family
+    \begin{align}
+        \{A_j\,\mathcal T_m(u) : j\in J,\ u\in T_0\}
+    \end{align}
+    of the factors applied to the independent trimmings of
+    Definition~\ref{def:lvv_bond_trimmed_family}. It has at most $|J||T_0|$
+    members, and its members have bond bound $D\max\{1,m\}$ when every
+    factor has operator-Schmidt rank at most $D$ at every internal left cut.
+    In the algorithm, $T_0$ is the family of leading vectors of the convex
+    programs over the net of boundary contractions, drawn from the span of
+    the extension $S\otimes\{|1\rangle,\ldots,|q\rangle\}$ of the family
+    $S$ at the previous cut, and the factors are those of the Gaussian
+    filters, indexed by themselves, or those of the sampled projector.
+\end{definition}
+
+\begin{lemma}[The complete step with its selections named]
+    \label{thm:lvv_complete_successive_step_factors}
+    \lean{TNLean.MPS.AreaLaw.exists_positive_chain_successive_step_factors}
+    \leanok
+    \uses{def:lvv_successive_budgets, def:lvv_successive_step,
+        thm:lvv_size_trimmed_family_bond_trim_set,
+        thm:huang_positive_chain_operator,
+        thm:huang_positive_chain_error_reduction_factors,
+        thm:lvv_viable_extension}
+    Let $L\ge1$ and $1\le i\le L$. Let
+    $H=\sum_{j=0}^{L-2}h_j$, where $h_j$ is supported on sites $j,j+1$ and
+    $0\le h_j\le I$. There is a finite set $F$ of Gaussian left filter
+    factors at the cut after $i$ sites, chosen from the interaction, the
+    gap and the cut before every family and every ground pair, with
+    $|F|\le E_LR_L$ and every member of operator-Schmidt rank at most $R_L$
+    at every internal left cut. For every finite family $S$ on the first
+    $i-1$ sites whose members have a common finite MPS bond bound, there
+    is a size-trimming selection $T_0$ of at most $C_sL^p$ vectors in the
+    span of $S\otimes\{|1\rangle,\ldots,|q\rangle\}$ such that, for every
+    unit ground vector $\Gamma$ with projector gap $\Delta$,
+    $(i-1,c_\Delta/L)$-viability of $S$ implies $(i,c_\Delta/L)$-viability
+    of the step of Definition~\ref{def:lvv_successive_step} applied to
+    $T_0$ with the factors $F$ and the radius $m_L$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Choose the factors $F$ by
+    Lemma~\ref{thm:huang_positive_chain_error_reduction_factors}. Extend
+    each member of $S$ by the one-site basis; extension preserves
+    viability. Apply the size-trimming selection of
+    Lemma~\ref{thm:lvv_size_trimmed_family_bond_trim_set} to the extended
+    family, using the exact adjacent-pair embedding of $H$; its trimmed
+    family is half-viable. The factors then restore viability precision
+    $c_\Delta/L$ on the family of factors applied to the trimmed family,
+    which is the step.
+\end{proof}
+
 \begin{lemma}[A complete successive step]
     \label{thm:lvv_complete_successive_step}
     \lean{TNLean.MPS.AreaLaw.exists_positive_chain_successive_step}
     \leanok
-    \uses{def:lvv_successive_budgets, thm:lvv_size_bond_trimmed_family,
-        thm:huang_positive_chain_operator, thm:huang_positive_chain_viable_filter}
+    \uses{thm:lvv_complete_successive_step_factors}
     Let $L\ge1$ and $1\le i\le L$. Let
     $H=\sum_{j=0}^{L-2}h_j$, where $h_j$ is supported on sites $j,j+1$ and
     $0\le h_j\le I$. Given a finite family $S$ on the first $i-1$ sites whose
@@ -77,39 +140,52 @@ All polynomial bounds have the quantitative scope specified in those constructio
     bound $b_L$, before any ground energy or ground vector is supplied.
     For every unit ground vector $\Gamma$ with projector gap $\Delta$,
     $(i-1,c_\Delta/L)$-viability of $S$ implies $(i,c_\Delta/L)$-viability of $T$.
+    This is the existence form of
+    Lemma~\ref{thm:lvv_complete_successive_step_factors}, with the step
+    left unnamed.
 \end{lemma}
 \begin{proof}
     \leanok
-    Extend each member by the one-site basis. Apply the actual size-trimming
-    construction to this extended family, using the exact adjacent-pair
-    embedding of $H$. Independently trim every retained vector to bond $m_L$.
-    The resulting family has cardinality at most $C_sL^p$ and is half-viable.
-    Apply the finite Gaussian filter family. Its cardinality multiplier is
-    $E_LR_L$, its individual bond multiplier is $R_L$, and it restores
-    viability precision $c_\Delta/L$. Each family is selected before the
-    ground pair, so the composition has the same quantifier order.
+    Take $T$ to be the step of
+    Lemma~\ref{thm:lvv_complete_successive_step_factors}. Its cardinality
+    multiplier is $E_LR_L$ and its individual bond multiplier is $R_L$, by
+    Definition~\ref{def:lvv_successive_step}.
 \end{proof}
 
 \begin{lemma}[One recursively chosen viable sequence]
     \label{thm:lvv_coherent_successive_sequence}
     \lean{TNLean.MPS.AreaLaw.exists_positive_chain_successive_viable_sets}
     \leanok
-    \uses{thm:lvv_complete_successive_step}
-    Under the physical hypotheses of the preceding theorem, there is one
-    sequence $S_0,\ldots,S_L$, chosen before every ground pair, with $S_0$ the
-    scalar singleton. For each positive cut, $|S_i|\le s_L$ and every member
-    has effective MPS bond bound $b_L$. For every unit ground vector $\Gamma$
-    with projector gap $\Delta$, all these same families are
-    $(i,c_\Delta/L)$-viable.
+    \uses{thm:lvv_complete_successive_step_factors, def:lvv_successive_step,
+        lem:lvv_initial_scalar_family}
+    Under the physical hypotheses of the preceding theorem, there are
+    families $F_1,\ldots,F_L$ of Gaussian left filter factors, one at each
+    cut, chosen before every family and every ground pair, with
+    $|F_i|\le E_LR_L$ and every member of operator-Schmidt rank at most
+    $R_L$ at every internal left cut; and there is one sequence
+    $S_0,\ldots,S_L$, chosen before every ground pair, with $S_0$ the
+    scalar singleton, in which each $S_{i+1}$ is the step of
+    Definition~\ref{def:lvv_successive_step} applied, with the factors
+    $F_{i+1}$ and the radius $m_L$, to a size-trimming selection of at most
+    $C_sL^p$ vectors in the span of
+    $S_i\otimes\{|1\rangle,\ldots,|q\rangle\}$. For each positive cut,
+    $|S_i|\le s_L$ and every member has effective MPS bond bound $b_L$. For
+    every unit ground vector $\Gamma$ with projector gap $\Delta$, all these
+    same families are $(i,c_\Delta/L)$-viable.
 \end{lemma}
 \begin{proof}
     \leanok
-    Carry a family together with its cardinality, individual bond and all-ground
-    viability assertions. At zero take the scalar singleton, whose viable
-    witness is $\Gamma$ itself. Define the successor by choosing the complete
-    step applied to the actual preceding family. Its viability assertion follows
-    from that of its predecessor. Natural-number recursion therefore gives a
-    single successive run. No ground pair enters any successor choice.
+    Choose the factors at every cut first. Carry a family, together with
+    its size-trimming selection, its cardinality, individual bond and
+    all-ground viability assertions. At zero take the scalar singleton,
+    whose viable witness is $\Gamma$ itself. Define the successor by
+    choosing the selection of the complete step applied to the actual
+    preceding family and taking the step; its viability assertion follows
+    from that of its predecessor, and its cardinality and bond bounds from
+    Definition~\ref{def:lvv_successive_step}. Natural-number recursion
+    therefore gives a single successive run in which each family is the
+    step applied to the previous one. No ground pair enters any successor
+    choice.
 \end{proof}
 
 \begin{theorem}[Uniform polynomial successive families and final-span MPS]
@@ -121,9 +197,15 @@ All polynomial bounds have the quantitative scope specified in those constructio
     Fix $q\ge2$ and $\Delta>0$. There exist natural numbers $P,d$, with $P\ge1$,
     chosen before $L$ and the interaction, such that the following holds.
     For every $L\ge1$ and every adjacent-pair positive-contraction interaction,
-    one can choose a single successive sequence $S_0,\ldots,S_L$ with scalar
-    initial family, cardinalities and individual effective bond bounds at most
-    $P(L+1)^d$, before every ground pair.
+    one can choose families of Gaussian left filter factors at every cut,
+    of cardinality and operator-Schmidt rank at most $P(L+1)^d$, and then
+    a single successive sequence $S_0,\ldots,S_L$ with scalar initial
+    family, each $S_{i+1}$ the step of Definition~\ref{def:lvv_successive_step}
+    applied with those factors and the radius $m_L$ to a size-trimming
+    selection of at most $P(L+1)^d$ vectors in the span of
+    $S_i\otimes\{|1\rangle,\ldots,|q\rangle\}$, with cardinalities and
+    individual effective bond bounds at most $P(L+1)^d$, before every
+    ground pair.
 
     Suppose $\|\Gamma\|=1$, $H\Gamma=E_0\Gamma$ and
     $H-E_0I\ge\Delta(I-|\Gamma\rangle\langle\Gamma|)$. Then every $S_i$ is
@@ -138,7 +220,8 @@ All polynomial bounds have the quantitative scope specified in those constructio
 \begin{proof}
     \leanok
     Choose the polynomial budgets first and then the recursively constructed
-    sequence. Enlarge the explicit budgets to this polynomial at each cut.
+    sequence. Enlarge the explicit budgets, including the selection and
+    factor budgets of one step, to this polynomial at each cut.
     At the final cut, the right configuration space is one-dimensional. Thus
     a normalized viable witness belongs to the span of the actual $S_L$ in
     full-left coordinates. Pull it back by the coordinate isometry, preserving

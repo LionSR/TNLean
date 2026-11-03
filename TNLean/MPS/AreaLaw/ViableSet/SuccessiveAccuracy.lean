@@ -76,7 +76,7 @@ theorem exists_uniform_positive_chain_successive_accuracy {q : ℕ} (hq : 2 ≤ 
   have hi : L ≤ N := Nat.le_add_right _ _
   have hN : 1 ≤ N := hL.trans hi
   let z : Fin q := ⟨0, by omega⟩
-  obtain ⟨S, hS0, hS, _⟩ := hrun N hN (paddedInteraction hi z h)
+  obtain ⟨_, _, S, _, hS0, _, hS, _⟩ := hrun N hN (paddedInteraction hi z h)
     (paddedInteraction_supported hi z h hs)
     (fun j ↦ (paddedInteraction_nonneg_le_one hi z h h0 h1 j).1)
     (fun j ↦ (paddedInteraction_nonneg_le_one hi z h h0 h1 j).2)

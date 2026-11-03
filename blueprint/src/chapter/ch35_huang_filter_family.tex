@@ -89,13 +89,44 @@ the inverse gap is asserted.
     $M$ resulting sets of left factors.
 \end{proof}
 
+\begin{lemma}[The left filter factors of the Gaussian error reduction]
+    \label{thm:huang_positive_chain_error_reduction_factors}
+    \lean{TNLean.MPS.AreaLaw.exists_positive_chain_error_reduction_factors,
+        TNLean.MPS.AreaLaw.isLeftOpenMPS_of_mem_errorReductionSet}
+    \leanok
+    \uses{lem:huang_finite_left_filter_factors,
+        thm:huang_positive_chain_ground_filter_family,
+        thm:lvv_scaled_projection_error_reduction, def:lvv_error_reduction_family}
+    Let $L\ge1$ and $i\le L$. Under the physical assumptions of
+    Lemma~\ref{thm:huang_positive_chain_ground_filter_family}, there is a
+    finite set $F$ of left factors at the cut after $i$ sites, chosen from
+    the interaction, the gap, the precision and the cut before every ground
+    pair and before every input family, with $|F|\le MR$ and every member
+    of operator-Schmidt rank at most $R$ at every internal left cut, where
+    $M$ is the energy-mesh cardinality and $R$ is the uniform filter rank
+    bound. For every finite set $S$ of left vectors that is half-viable for
+    a unit ground vector satisfying the gap assumption, the set
+    $\{Au : A\in F,\ u\in S\}$ is $(i,c/L)$-viable for that vector. The
+    set has at most $|F||S|$ members, and its members have bond bound
+    $R\max\{1,b\}$ when the members of $S$ have bond bound $b$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Collect the left factors of the finite Gaussian family by
+    Lemma~\ref{lem:huang_finite_left_filter_factors}. Given a ground pair,
+    one member of the family is within $4\eta$ of
+    $a|\Gamma\rangle\langle\Gamma|$ with $a\ge1/2$, and its left factors
+    lie in $F$. The deterministic error-reduction step applied to that
+    member gives a viable witness supported on the span of its factors
+    applied to $S$, which is contained in the span of the larger set. The
+    cardinality and bond bounds are those of the error-reduced set.
+\end{proof}
+
 \begin{lemma}[Error reduction chosen before the ground pair]
     \label{thm:huang_positive_chain_viable_filter}
     \lean{TNLean.MPS.AreaLaw.exists_positive_chain_error_reduced_set}
     \leanok
-    \uses{lem:huang_finite_left_filter_factors,
-        thm:huang_positive_chain_ground_filter_family,
-        thm:lvv_scaled_projection_error_reduction}
+    \uses{thm:huang_positive_chain_error_reduction_factors}
     Let $L\ge1$, $i\le L$, and let $S$ be a finite set of left vectors,
     with $|S|\le s$ and individual MPS bond bound $b$. Under the physical
     assumptions of Lemma~\ref{thm:huang_positive_chain_ground_filter_family},
@@ -107,13 +138,12 @@ the inverse gap is asserted.
     where $M$ is the energy-mesh cardinality and $R$ is the uniform filter
     rank bound. Whenever $S$ is half-viable for a unit ground vector
     satisfying the gap assumption, $T$ is $(i,c/L)$-viable for that vector.
+    This is the existence form of
+    Lemma~\ref{thm:huang_positive_chain_error_reduction_factors}, with the
+    set $\{Au : A\in F,\ u\in S\}$ left unnamed.
 \end{lemma}
 \begin{proof}
     \leanok
-    Form $T=\{Av:A\in F,\ v\in S\}$ from the common collection of left
-    factors. This gives both the cardinality and individual bond bounds.
-    One Gaussian approximant is within $4\eta$ of $a|\Gamma\rangle\langle\Gamma|$
-    with $a\ge1/2$. Applying its left factors to $S$ gives a subset of $T$ with viability
-    error at most $16\eta/a\le32\eta\le c/L$. The same witness is therefore
-    supported on the span of $T$.
+    Take $T=\{Au : A\in F,\ u\in S\}$ for the factors $F$ of
+    Lemma~\ref{thm:huang_positive_chain_error_reduction_factors}.
 \end{proof}
