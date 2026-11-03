@@ -12068,3 +12068,15 @@ mathematical arguments and avoids compiling both in the long corollary.
   concrete operation, avoids a default-limit definitional-equality timeout.
   The parent measurability and fixed-child failure estimates remain explicit
   analytic hypotheses until the concrete physical caller discharges them.
+
+### Exact full-space matrix product bounds — candidate (2026-11-03)
+
+- **Seen:** the finite-length argument in `ProtocolMPSApproximation.lean` and
+  the flat-spectrum branch in `PhysicalGroundReference.lean`.
+- **Pattern:** Bound the cut-matrix rank by its row dimension, compare the
+  number of left configurations with `q^L`, then apply the exact cut-rank
+  characterization.
+- **Decision:** Two occurrences. The flat-spectrum proof additionally identifies
+  the whole ground-space dimension with `q^L`; no new automation is introduced.
+  The reference loss and rank profiles reuse the existing scalar logarithmic
+  profile and uniform-radius lemmas.
