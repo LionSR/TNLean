@@ -106,6 +106,7 @@ import TNLean.MPS.AreaLaw.LowDensityMinimumDimension
 import TNLean.MPS.AreaLaw.MPSApproximation
 import TNLean.MPS.AreaLaw.MPSReferenceSpace
 import TNLean.MPS.AreaLaw.NearestNeighbourImaginaryTime
+import TNLean.MPS.AreaLaw.NormalizedSequentialApproximation
 import TNLean.MPS.AreaLaw.OpenMPS
 import TNLean.MPS.AreaLaw.OpenMPSCutRank
 import TNLean.MPS.AreaLaw.OpenMPSOperatorAction
@@ -139,6 +140,9 @@ import TNLean.MPS.AreaLaw.PhysicalDGTreePolynomialBond
 import TNLean.MPS.AreaLaw.PhysicalDGTreeWitness
 import TNLean.MPS.AreaLaw.PhysicalDGViability
 import TNLean.MPS.AreaLaw.PhysicalIntervalTransport
+import TNLean.MPS.AreaLaw.PhysicalLowDensityApproximation
+import TNLean.MPS.AreaLaw.PhysicalLowDensityGlobalApproximation
+import TNLean.MPS.AreaLaw.PhysicalLowDensitySharpApproximation
 import TNLean.MPS.AreaLaw.PhysicalPeriodicPolynomialFamily
 import TNLean.MPS.AreaLaw.PhysicalPolynomialTensorFamily
 import TNLean.MPS.AreaLaw.PolynomialFilterParameters
