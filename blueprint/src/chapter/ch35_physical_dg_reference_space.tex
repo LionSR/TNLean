@@ -341,6 +341,20 @@
     measures.
 \end{proof}
 
+\begin{definition}[The interval operation for fixed sampling choices]
+    \label{def:canonical_interval_sampling_operation}
+    \lean{TNLean.MPS.AreaLaw.canonicalIntervalSamplingOperation}
+    \leanok
+    Fix the interval families, trimming threshold, sample size and
+    number of rounds. Given $\omega\in\Omega$, the operation at a valid
+    long parent $[p,r)$ first forms the tensor merge of its adjacent
+    children. It samples that merge using the coordinate $\omega_{(p,r)}$
+    and applies the specified family's literal interleaved iteration.
+    At short or out-of-range parents set the operation to the full
+    space. Apply the balanced recursion of
+    Definition~\ref{def:balanced_interval_spaces} to this operation.
+\end{definition}
+
 \begin{lemma}[Recorded generators of the actual trimmed image]
     \label{lem:interval_recorded_generator_bounds}
     \lean{TNLean.MPS.AreaLaw.IsIntervalSpanWithRankBound,
