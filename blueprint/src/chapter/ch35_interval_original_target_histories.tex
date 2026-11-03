@@ -101,3 +101,47 @@ spaces in the repeated-sampling construction of
     actual events. Full short leaves are viable, and the internal-node
     list has at most $\max\{r-p-1,0\}$ members.
 \end{proof}
+
+\begin{definition}[The actual joint success event]
+    \label{def:canonical_interval_resampling_good}
+    \lean{TNLean.MPS.AreaLaw.canonicalIntervalResamplingGood}\leanok
+    Fix the original target $G$, the interval families, scalar parameters
+    and finite-sequence spaces of the repeated-sampling construction.
+    Let $S_{a,b}(U)$ be its actual retained interval space and let
+    $\mathcal B_{p,r}$ be the internal intervals of the balanced root
+    subdivision of $[p,r)$. Write $P_{a,b}(U)$ for $3/200$-viability of
+    $S_{a,b}(U)$ for that same original global target, retaining the full
+    exterior, and let $H_J$ be its literal original-target history event
+    from Definition~\ref{def:interval_original_target_history}.
+    The joint success event is
+    \begin{align}
+      \mathcal G_{p,r}
+        &=\{U:P_{p,r}(U)\}\cap
+          \bigcap_{J\in\mathcal B_{p,r}}\bigl(\{U:P_J(U)\}\cap H_J\bigr).
+    \end{align}
+    Its complement is exactly the failure event in
+    Lemma~\ref{lem:actual_interval_original_target_joint_probability}.
+    No condition is imposed on overlapping intervals outside the actual
+    root subdivision.
+\end{definition}
+
+\begin{lemma}[Measurability of the same joint success event]
+    \label{lem:canonical_interval_resampling_good_measurable}
+    \lean{TNLean.MPS.AreaLaw.measurableSet_canonicalIntervalResamplingGood}\leanok
+    For $p\le r\le L$, the event $\mathcal G_{p,r}$ of
+    Definition~\ref{def:canonical_interval_resampling_good} is measurable.
+    No initial viability, success probability or measurable eigenbasis
+    selection is assumed.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{def:canonical_interval_resampling_good,
+      lem:actual_interval_resampling_tree_probability,
+      lem:interval_original_target_history_measurable}
+    The actual root and retained-parent viability events are measurable,
+    as are the literal history events. Express the listed-parent condition
+    as an intersection over all valid long intervals: its factor is
+    $P_J\cap H_J$ when $J$ belongs to the actual subdivision and the whole
+    sequence space otherwise. The long interval index is a subtype of
+    $\mathbb N^2$, hence countable. A countable intersection, followed by
+    intersection with the root event, proves the assertion.
+\end{proof}
