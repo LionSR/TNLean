@@ -67,6 +67,28 @@ contraction of local tensors is proved separately.
     $\|x_p\|=1$.
 \end{proof}
 
+\begin{lemma}[The original physical density in grouped coordinates]
+    \label{thm:peps_distributed_grouped_physical_trace}
+    \lean{TNLean.Lattice.PartyCircuit.DistributedConstruction.physicalDensity_eq_grouped_partialTrace}
+    \leanok
+    \uses{def:peps_distributed_construction_density,
+        thm:peps_selected_physical_private_trace}
+    For a distributed construction with circuit output $v$ and grouped
+    coordinates $b_v$, in the notation of
+    Lemma~\ref{thm:peps_selected_physical_private_trace} and
+    Definition~\ref{def:peps_distributed_construction_density},
+    $\rho=\operatorname{tr}_{\mathrm{private}}((b_vb_v^\dagger)^\chi)$.
+    % Source: 04-compression.tex, lines 137--153 and 574--579.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:peps_distributed_construction_density,
+        thm:peps_selected_physical_private_trace}
+    Set $t=v$ in~(\ref{eq:peps_original_physical_mixed_trace}) of
+    Lemma~\ref{thm:peps_selected_physical_private_trace} using the reference
+    private basis of Definition~\ref{def:peps_distributed_construction_density}.
+\end{proof}
+
 \begin{lemma}[A fixed inverse power meets the per-gate error tolerance]
     \label{thm:peps_fixed_power_gate_budget}
     \lean{TNLean.Lattice.PartyCircuit.inversePower_le_sourceGateBudget_half}

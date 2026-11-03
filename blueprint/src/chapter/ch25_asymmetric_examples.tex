@@ -1,14 +1,13 @@
 %% =========================================================
 %% Chapter: Physics examples of the multi-block asymmetric
-%% compression theorem.
+%% compression theorem, first of three chapters.
 %% Structure: a chapter heading and conventions paragraph, an
-%% overview naming each example with its sources, then nine
-%% physical examples (elementary states, CZX, Kramers--Wannier,
-%% Fibonacci, Ising, group cocycle MPOs, Z2 x Z2, Z3, and Bell-bond fixed points),
-%% each in its own file holding one \section with its definition,
-%% properties, compression results, and remarks. The Fibonacci
-%% anomaly file is input right after the Fibonacci file and
-%% supplies the closing \subsection of that section.
+%% overview of the three example chapters, then the elementary
+%% states (GHZ and product states) and the mixed Bell-bond fixed
+%% points, each in its own file holding one \section with its
+%% definition, properties, compression results, and remarks.
+%% The non-invertible symmetries and the group symmetries follow
+%% in the next two chapters.
 %% Provenance (not sources): the worked data were first
 %% assembled in Notes/OpenProblemsTN/strategies/
 %% p5_asymmetric_compression_theorem.tex, Examples A--E, and in
@@ -45,51 +44,16 @@ trace.
 
 Physical examples of matrix product operators, topological symmetries, and
 fixed points illustrate the multi-block asymmetric compression theorem
-(Theorem~\ref{thm:asym_multiblock}). The cases treated here, in chapter
-order, are the GHZ and product
+(Theorem~\ref{thm:asym_multiblock}) in this chapter and the next two. This
+chapter treats states: the GHZ and product
 states~\cite{GreenbergerHorneZeilinger1989,Greenberger1990Bell} in the
-conventions of Ref.~\cite[Appendix~A]{Cirac2021Matrix};
-the CZX symmetry of Chen, Liu, and Wen~\cite{ChenLiuWen2011CZX}, whose
-matrix product unitary is displayed in
-Ref.~\cite[Appendix~A, ``The CZX MPU'']{Cirac2021Matrix}, together with its
-decorated form~\cite{GarreRubioSchuch2024DomainWall}, whose anomaly class is
-shown here to be nontrivial;
-Kramers--Wannier
-duality~\cite{KramersWannier1941,Aasen2016Topological,Seiberg2024Majorana,Lootens2023Dualities};
-the Fibonacci~\cite[Appendix~D.1]{Bultinck2017Anyons} and
-Ising~\cite[Appendix~D.2]{Bultinck2017Anyons} fusion categories and their
-anyon chains~\cite{Feiguin2007GoldenChain}, together with the review's
-Fibonacci operator~\cite[Appendix~A, ``The MPO for the Fibonacci model'']{Cirac2021Matrix};
-the periodic group matrix product operators built from a normalized
-three-cocycle~\cite{GarreRubio2023MPOSym}, evaluated for the group of order
-two, for the cyclic groups with the cocycles
-of~\cite{GarreRubioSchuch2024DomainWall}, and for $\Z_2\times\Z_2$;
-symmetry tensors for $\Z_2\times\Z_2$ and $\Z_3$ with their condensation
-defects, following the anomalous group symmetries of
-Refs.~\cite{GarreRubio2023MPOSym,GarreRubioSchuch2024DomainWall,Roumpedakis2023Condensation}
-(the anomaly class is nontrivial for $\Z_3$ and for the full dressed
-$\Z_2\times\Z_2$ representation, where the invariant detectors match the
-type-II class~\cite{gap:glm23_z2z2_anomaly_detector_scope});
-and mixed Bell-bond fixed points addressing the length-dependence question
-of Ref.~\cite[Theorem~4.14]{Cirac2016MPDO_arXiv}. Building on the general
-definitions of Chapter~\ref{ch:mpo_symmetry_basics} (fusion rules, units,
-invertible and non-invertible labels, Perron--Frobenius dimensions,
-symmetric matrix product states with their nonnegative integer
-representations, and the zipper condition), each section below constructs
-the explicit local tensors, evaluates their fusion tables, and computes
-their periodic compressions and anomaly invariants.
+conventions of Ref.~\cite[Appendix~A]{Cirac2021Matrix}, and mixed Bell-bond
+fixed points addressing the length-dependence question
+of Ref.~\cite[Theorem~4.14]{Cirac2016MPDO_arXiv}. The next chapter treats
+non-invertible symmetries, and the one after it group symmetries with their
+anomalies and condensation defects. Each section constructs the explicit
+local tensors and computes their periodic compressions.
 
 
 \input{chapter/ch25_asymmetric_examples_elementary_states.tex}%
-\input{chapter/ch25_asymmetric_examples_czx.tex}%
-\input{chapter/ch25_asymmetric_examples_czy.tex}%
-\input{chapter/ch25_asymmetric_examples_kramers_wannier.tex}%
-\input{chapter/ch25_asymmetric_examples_fibonacci.tex}%
-\input{chapter/ch25_asymmetric_examples_fibonacci_anomaly.tex}%
-\input{chapter/ch25_asymmetric_examples_ising.tex}%
-\input{chapter/ch25_asymmetric_examples_ising_three.tex}%
-\input{chapter/ch25_asymmetric_examples_group_cocycle.tex}%
-\input{chapter/ch25_asymmetric_examples_z2z2.tex}%
-\input{chapter/ch25_asymmetric_examples_z3.tex}%
-\input{chapter/ch25_asymmetric_examples_z3clock.tex}%
 \input{chapter/ch25_asymmetric_examples_rfp.tex}%

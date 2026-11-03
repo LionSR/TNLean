@@ -7,8 +7,12 @@ $\Lambda$ be a finite set of sites of local dimension $q$, with
 $\mathcal H_\Lambda=(\C^q)^{\otimes\Lambda}$. A sheet is one copy of
 this tensor product. Write $\mathcal X_D=[q]^D$ for configurations on a
 region $D$ and $F_R$ for the swap of the two sheets on $R$.
-The information reset follows \cite{OpenAI2026PolynomialPEPS}; the product
-ground-state result is Lemma~2.2 of \cite{OpenAI2026AreaLaw}.
+The chapter proves the two-sided Gaussian filter of the information reset
+(Theorem~\ref{thm:peps_reset_regional_filter_explicit}), following
+\cite{OpenAI2026PolynomialPEPS}, and shows that a gapped ground vector of a
+sum of Hamiltonians on two factors is a product vector
+(Theorem~\ref{thm:area_law_product_ground_state}), which is Lemma~2.2 of
+\cite{OpenAI2026AreaLaw}.
 
 \section{Sheet swaps and supported operators}
 
@@ -313,7 +317,7 @@ ground-state result is Lemma~2.2 of \cite{OpenAI2026AreaLaw}.
     Direct computation from (\ref{eq:lattice_reset_constants}).
 \end{proof}
 
-\begin{lemma}[The two-sided Gaussian filter, with explicit constants]
+\begin{theorem}[The two-sided Gaussian filter, with explicit constants]
     \label{thm:peps_reset_regional_filter_explicit}
     \lean{TNLean.Lattice.regional_physicalBuffer_filter}
     \leanok
@@ -323,23 +327,23 @@ ground-state result is Lemma~2.2 of \cite{OpenAI2026AreaLaw}.
         M                                   & =\int_{[-T,T]}g_h(t)e^{it\mathbb H'}(\id\otimes W)e^{-it\mathbb H}\,dt, \label{eq:peps_reset_regional_filter} \\
         \|M\Psi-z\Phi\|,\ \|M^*\Phi-z\Psi\| & \le3e^{-10b}L^{-r}. \label{eq:peps_reset_regional_filter_err}
     \end{align}
-\end{lemma}
+\end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:peps_reset_regional_coordinates,def:lattice_reset_constants}
     By Lemma~\ref{thm:peps_reset_regional_coordinates}, $D(\rho_{RC}\,\|\,\rho_R\otimes\rho_C)=I_\Omega(R:C)\le b$, so the purified relative-entropy overlap bound gives a Hermitian contraction $W$ on the buffer with $z=\langle\Phi,(\id\otimes W)\Psi\rangle\ge e^{-2b}$. Since $\mathbb H,\mathbb H'$ have ground vectors $\Psi,\Phi$ at $2E_0$ with gap $\Delta$ and $A\Delta^2/2=T_0^2/(2A)=30+r$ (Definition~\ref{def:lattice_reset_constants}), the full Gaussian filter residual is at most $e^{-h\Delta^2/2}\le e^{-10b}L^{-r}$ and truncation at $T$ adds at most $2e^{-T^2/(2h)}\le 2e^{-10b}L^{-r}$, giving (\ref{eq:peps_reset_regional_filter_err}).
 \end{proof}
 
-\begin{lemma}[The two-sided Gaussian filter of the physical buffer]
+\begin{corollary}[The two-sided Gaussian filter of the physical buffer]
     \label{thm:peps_reset_regional_filter}
     \lean{TNLean.Lattice.exists_regional_physicalBuffer_filter}
     \leanok
-    For every $\Delta>0$ and $r\ge0$, there exist $A,T_0>0$ such that under the hypotheses of Lemma~\ref{thm:peps_reset_regional_filter_explicit}, some buffer contraction $W$ and $z\ge e^{-2b}$ make $M$ in (\ref{eq:peps_reset_regional_filter}) satisfy (\ref{eq:peps_reset_regional_filter_err}) for all $L\ge1$.
-\end{lemma}
+    For every $\Delta>0$ and $r\ge0$, there exist $A,T_0>0$ such that under the hypotheses of Theorem~\ref{thm:peps_reset_regional_filter_explicit}, some buffer contraction $W$ and $z\ge e^{-2b}$ make $M$ in (\ref{eq:peps_reset_regional_filter}) satisfy (\ref{eq:peps_reset_regional_filter_err}) for all $L\ge1$.
+\end{corollary}
 \begin{proof}
     \leanok
     \uses{thm:peps_reset_regional_filter_explicit,def:lattice_reset_constants}
-    Take $A=A(\Delta,r)>0$ and $T_0=T_0(\Delta,r)>0$ from Definition~\ref{def:lattice_reset_constants} in Lemma~\ref{thm:peps_reset_regional_filter_explicit}.
+    Take $A=A(\Delta,r)>0$ and $T_0=T_0(\Delta,r)>0$ from Definition~\ref{def:lattice_reset_constants} in Theorem~\ref{thm:peps_reset_regional_filter_explicit}.
 \end{proof}
 
 \begin{lemma}[The polar step of the information reset]
@@ -410,7 +414,7 @@ ground-state result is Lemma~2.2 of \cite{OpenAI2026AreaLaw}.
 
 \section{Product ground states}
 
-\begin{lemma}[Gapped ground vectors of a sum of factor Hamiltonians]
+\begin{theorem}[Gapped ground vectors of a sum of factor Hamiltonians]
     \label{thm:area_law_product_ground_state}
     \lean{TNLean.Lattice.exists_isGappedGroundState_factors_of_kronecker_sum, TNLean.Lattice.exists_eq_mul_of_gap, TNLean.Lattice.vonNeumannEntropy_partialTraceRight_eq_zero_of_gap}
     \leanok
@@ -433,7 +437,7 @@ ground-state result is Lemma~2.2 of \cite{OpenAI2026AreaLaw}.
     is exact. Both factors retain the same lower gap bound $\Delta$.
     These factor gap inequalities are the spectral step in the reduction
     to connected domains in \cite[Part~I]{TNLean2026OneDimensional}.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
     Let $a,b$ be the least eigenvalues of $H_A,H_B$ with unit eigenvectors

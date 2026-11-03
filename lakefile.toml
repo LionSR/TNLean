@@ -27,7 +27,7 @@ rev = "v4.36.0-rc1"
 [[require]]
 name = "qiclean"
 git = "https://github.com/LionSR/QICLean.git"
-# Includes the accepted soft-truncation and viable-subspace estimates.
+# Draft-only candidate; replace with the validated immutable semver release tag before merge.
 rev = "c457682404aa548b4acd16ac27be5d3835e68892"
 
 [[lean_lib]]

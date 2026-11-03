@@ -58,7 +58,7 @@ Grouping the sequences by their total number $m$ of large clusters recovers the
 bound $(1/m!)(n\sum_Cy^{n_C})^m$ on the operator $\rho_m$
 of~\cite[lines 1334--1341]{Hastings2006Solving}.
 
-\begin{lemma}[The error at every temperature, percolation form]
+\begin{theorem}[The error at every temperature, percolation form]
     \label{thm:hastings_temperature_error_percolation}
     \lean{TNLean.Lattice.ClusterExpansion.norm_trace_mul_exp_sub_truncatedExp_pow_le_percolation}
     \leanok
@@ -83,7 +83,7 @@ of~\cite[lines 1334--1341]{Hastings2006Solving}.
     terms of a large connected set rather than its diameter, as in
     Lemma~\ref{thm:hastings_percolation}
     \cite{gap:hastings05_percolation_cluster_size}.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}
     \leanok
@@ -96,13 +96,13 @@ of~\cite[lines 1334--1341]{Hastings2006Solving}.
     Lemma~\ref{thm:hastings_temperature_error}.
 \end{proof}
 
-\begin{lemma}[The corrected temperature-ratio bound]
+\begin{corollary}[The corrected temperature-ratio bound]
     \label{cor:hastings_temperature_error_add_two}
     \lean{TNLean.Lattice.ClusterExpansion.norm_trace_mul_exp_sub_truncatedExp_pow_le_percolation_add_two}
     \leanok
     \uses{thm:hastings_temperature_error_percolation,
         thm:hastings_even_temperature_factors}
-    In Lemma~\ref{thm:hastings_temperature_error_percolation}, take
+    In Theorem~\ref{thm:hastings_temperature_error_percolation}, take
     $\beta>0$, $\beta_0>0$ and
     $n=2\lceil\beta/(2\beta_0)\rceil$. Then
     \begin{align*}
@@ -112,7 +112,7 @@ of~\cite[lines 1334--1341]{Hastings2006Solving}.
     This is the explicit correction to the printed temperature factor
     in \cite[lines 1342--1347]{Hastings2006Solving}
     recorded in \cite{gap:hastings05_temperature_factor_count}.
-\end{lemma}
+\end{corollary}
 \begin{proof}\leanok
     Apply $n<\beta/\beta_0+2$ in the percolation bound; the other
     factors and $Ne^{-l/\xi}$ are nonnegative.

@@ -185,7 +185,7 @@ no holes, this is the normalization of $\Omega$.
 
 \begin{proof}\leanok
     \uses{thm:peps_sheet_raw_initialization, thm:peps_dyadic_protocol_schedule_counts}
-    Every initial sheet is hole-free and held by a single party, so Lemma~\ref{thm:peps_sheet_raw_initialization} applies; Lemma~\ref{thm:peps_dyadic_protocol_schedule_counts} bounds the auxiliary initializations by $4(\#\text{squares}+\#\text{junctions})$.
+    Every initial sheet is hole-free and held by a single party, so Lemma~\ref{thm:peps_sheet_raw_initialization} applies; Theorem~\ref{thm:peps_dyadic_protocol_schedule_counts} bounds the auxiliary initializations by $4(\#\text{squares}+\#\text{junctions})$.
 \end{proof}
 
 \begin{lemma}[The final step of the dyadic protocol]
@@ -362,7 +362,7 @@ no holes, this is the normalization of $\Omega$.
 
 \begin{proof}\leanok
     \uses{thm:peps_dyadic_protocol_lifetime}
-    Contractivity of original circuits sums the per-step errors over the $\le5040L^3$ changes, and $\le1$ gate per change gives $\le189$ gates per event, so Lemma~\ref{thm:peps_dyadic_protocol_lifetime} bounds the per-party gate participation by $64\cdot189$.
+    Contractivity of original circuits sums the per-step errors over the $\le5040L^3$ changes, and $\le1$ gate per change gives $\le189$ gates per event, so Theorem~\ref{thm:peps_dyadic_protocol_lifetime} bounds the per-party gate participation by $64\cdot189$.
 \end{proof}
 
 \begin{lemma}[A protocol from a bounded trajectory of sheets]
@@ -409,7 +409,7 @@ no holes, this is the normalization of $\Omega$.
         thm:peps_dyadic_protocol_lifetime,
         thm:peps_dyadic_protocol_schedule_counts,
         thm:peps_original_produced_resource_bounds}
-    A square repainting uses $\le 18$ neighbor block parties plus its placeholder ($19$ total); a junction resize uses $\le 9$. Combining exact private initialization (Lemma~\ref{thm:peps_dyadic_protocol_initial_step}), the $\le 5040L^3$ schedule changes (Lemmas~\ref{thm:peps_protocol_bounded_trajectory}, \ref{thm:peps_dyadic_protocol_schedule_counts}, and~\ref{thm:peps_dyadic_protocol_locality}), and the exact final regrouping (Lemma~\ref{thm:peps_dyadic_protocol_final_step}) yields all bounds of Definition~\ref{def:peps_dyadic_protocol}.
+    A square repainting uses $\le 18$ neighbor block parties plus its placeholder ($19$ total); a junction resize uses $\le 9$. Combining exact private initialization (Lemma~\ref{thm:peps_dyadic_protocol_initial_step}), the $\le 5040L^3$ schedule changes (Lemmas~\ref{thm:peps_protocol_bounded_trajectory} and~\ref{thm:peps_dyadic_protocol_locality} and Theorem~\ref{thm:peps_dyadic_protocol_schedule_counts}), and the exact final regrouping (Lemma~\ref{thm:peps_dyadic_protocol_final_step}) yields all bounds of Definition~\ref{def:peps_dyadic_protocol}.
 \end{proof}
 
 \begin{lemma}[Joining the changes of the events]
@@ -638,7 +638,7 @@ no holes, this is the normalization of $\Omega$.
         lem:peps_adaptive_patch_supply, lem:peps_level_true_vertices,
         thm:peps_protocol_bounded_changes, lem:peps_protocol_junction_resize_parties,
         def:peps_frame}
-    Rank monotonicity and coverage follow from Lemma~\ref{thm:peps_dyadic_protocol_schedule_counts}, and when the rank increases the completed block guide of level $j$ equals the starting guide of level $j-1$ (Lemma~\ref{lem:peps_dyadic_active_labels}). Frame congruence (Lemma~\ref{thm:peps_protocol_level_frame_facts}) identifies the transitions across rank boundaries. The root guide has no true vertices (Lemma~\ref{thm:peps_protocol_level_events}) and cell centers lie in $(0,2^k)^2$ (Lemma~\ref{thm:peps_protocol_party_map_switch}), giving the initial raw frame; at the unit level, $2h_1\le 2\epsilon_0<1/2$ gives empty outer physical squares by Lemmas~\ref{thm:peps_guide_frame_norm} and~\ref{thm:peps_dyadic_protocol_final_step}.
+    Rank monotonicity and coverage follow from Theorem~\ref{thm:peps_dyadic_protocol_schedule_counts}, and when the rank increases the completed block guide of level $j$ equals the starting guide of level $j-1$ (Lemma~\ref{lem:peps_dyadic_active_labels}). Frame congruence (Lemma~\ref{thm:peps_protocol_level_frame_facts}) identifies the transitions across rank boundaries. The root guide has no true vertices (Lemma~\ref{thm:peps_protocol_level_events}) and cell centers lie in $(0,2^k)^2$ (Lemma~\ref{thm:peps_protocol_party_map_switch}), giving the initial raw frame; at the unit level, $2h_1\le 2\epsilon_0<1/2$ gives empty outer physical squares by Lemmas~\ref{thm:peps_guide_frame_norm} and~\ref{thm:peps_dyadic_protocol_final_step}.
 \end{proof}
 
 \begin{lemma}[The dyadic protocol from its large-scale repaintings]
@@ -700,7 +700,7 @@ no holes, this is the normalization of $\Omega$.
     \uses{thm:peps_protocol_main_frame_schedule, thm:peps_protocol_level_events,
         thm:peps_protocol_event_segments, thm:peps_dyadic_protocol_schedule_counts,
         def:peps_dyadic_protocol_schedule, def:peps_frame, thm:peps_protocol_constants}
-    By Lemma~\ref{thm:peps_protocol_main_frame_schedule}, the main frame follows the schedule transitions from the initial raw copy to the final unit-square frame. Resizes and direct repaintings ($2^j\le K_0t$) act on the main frame by a single rewrite of Lemma~\ref{thm:peps_protocol_level_events} and freeze no auxiliary sheet, while large repaintings ($2^j>K_0t$) use the assumed $189$-step segments (matching the operation count of Lemma~\ref{thm:peps_dyadic_protocol_schedule_counts}). Lemma~\ref{thm:peps_protocol_event_segments} joins all segments into the protocol.
+    By Lemma~\ref{thm:peps_protocol_main_frame_schedule}, the main frame follows the schedule transitions from the initial raw copy to the final unit-square frame. Resizes and direct repaintings ($2^j\le K_0t$) act on the main frame by a single rewrite of Lemma~\ref{thm:peps_protocol_level_events} and freeze no auxiliary sheet, while large repaintings ($2^j>K_0t$) use the assumed $189$-step segments (matching the operation count of Theorem~\ref{thm:peps_dyadic_protocol_schedule_counts}). Lemma~\ref{thm:peps_protocol_event_segments} joins all segments into the protocol.
 \end{proof}
 
 \begin{lemma}[The side of a non-root dyadic square]
@@ -2190,7 +2190,7 @@ no holes, this is the normalization of $\Omega$.
         def:peps_protocol_event_auxiliary_indices,
         thm:peps_dyadic_protocol_schedule_counts,
         thm:peps_protocol_from_large_repaintings}
-    By Lemma~\ref{thm:peps_dyadic_protocol_schedule_counts}, each large repainting contributes its $4$ distinct edge initializations and the schedule has no repeated events, so the concatenation is duplicate-free.
+    By Theorem~\ref{thm:peps_dyadic_protocol_schedule_counts}, each large repainting contributes its $4$ distinct edge initializations and the schedule has no repeated events, so the concatenation is duplicate-free.
 \end{proof}
 
 \begin{lemma}[The chain of a large repainting]
@@ -2340,7 +2340,7 @@ no holes, this is the normalization of $\Omega$.
 
 \begin{proof}\leanok
     \uses{thm:peps_dyadic_protocol_schedule_counts}
-    Since the event schedule is duplicate-free (Lemma~\ref{thm:peps_dyadic_protocol_schedule_counts}), $i(E_i)=i$, so evaluating at $E_i=S$ recovers $A_e$ and the party of $C_e$ at stage $\mathcal D_{k,i,j}$.
+    Since the event schedule is duplicate-free (Theorem~\ref{thm:peps_dyadic_protocol_schedule_counts}), $i(E_i)=i$, so evaluating at $E_i=S$ recovers $A_e$ and the party of $C_e$ at stage $\mathcal D_{k,i,j}$.
 \end{proof}
 
 \begin{lemma}[The holes of the frozen auxiliary frames]

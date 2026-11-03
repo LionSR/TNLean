@@ -1,0 +1,4008 @@
+\section{The GHZ--blocked-cluster tensor}
+\label{sec:mpug_ghz_blocked_cluster}
+
+\begin{definition}[GHZ--blocked-cluster tensor and its two blocks]
+    \label{def:mpug_ghz_blocked_cluster_tensor}
+    \lean{MPSTensor.clusterBlocked,
+        MPSTensor.ghzSectorTensor,
+        MPSTensor.ghzSectorTensor_apply_same,
+        MPSTensor.z4z2GHZClusterTensor,
+        MPSTensor.z4z2GHZClusterBlock,
+        MPSTensor.z4z2GHZClusterBlock_apply,
+        MPSTensor.z4z2GHZClusterDirectSum}
+    \leanok
+    \discussion{7699}
+    \uses{def:ghz_tensor, def:cluster_tensor,
+        def:mps_independent_tensor_product}
+    Let $C=\{C^q\}_{q=0}^3$ be the once-blocked cluster-state tensor. The tensor
+    obtained by taking its independent tensor product with the GHZ tensor has
+    physical dimension $8$ and bond dimension $4$:
+    \begin{align}
+        A & =A^{\mathrm{GHZ}}\boxtimes C.
+        \label{eq:mpug_ghz_blocked_cluster_tensor}
+    \end{align}
+    For $x\in\{0,1\}$, let $E_x$ be the one-dimensional GHZ sector supported
+    at the physical value $x$. The two bond-dimension-$2$ tensors
+    \begin{align}
+        A_x & =E_x\boxtimes C
+    \end{align}
+    satisfy, for $p,x\in\{0,1\}$ and $q\in\{0,1,2,3\}$,
+    \begin{align}
+        A_x^{(p,q)} & =\delta_{p,x}C^q.
+        \label{eq:mpug_ghz_blocked_cluster_blocks}
+    \end{align}
+    As in \cite[lines~4427--4479]{FrancoRubio2025MPUGauging}, their canonical
+    direct sum is denoted $A_0\oplus A_1$.
+    % Source anchor: arXiv:2502.20257, example:z4z2, eq:z4z2MPS and
+    % lines 4427--4479.
+\end{definition}
+
+\begin{lemma}[Injective and locally orthogonal GHZ--cluster blocks]
+    \label{thm:mpug_ghz_blocked_cluster_blocks}
+    \lean{MPSTensor.ghzSectorTensor_isInjective,
+        MPSTensor.z4z2GHZClusterBlock_isInjective,
+        MPSTensor.z4z2GHZClusterBlocks_isBNTLocallyOrthogonal,
+        MPSTensor.z4z2GHZClusterDirectSum_eq_tensor}
+    \leanok
+    \discussion{7699}
+    \uses{def:mpug_ghz_blocked_cluster_tensor, def:injective,
+        def:is_bnt_locally_orthogonal}
+    Each tensor $A_x$ is injective. For $x\neq y$ and every
+    $X\in\operatorname{Mat}_2(\C)$, their one-site mixed transfer map satisfies
+    \begin{align}
+        \mathcal E_{x,y}(X)
+         & =\sum_{p=0}^1\sum_{q=0}^3
+        A_x^{(p,q)}X\bigl(A_y^{(p,q)}\bigr)^\dagger
+        =0.
+        \label{eq:mpug_ghz_blocked_cluster_local_orthogonality}
+    \end{align}
+    Thus the two blocks are locally orthogonal as observed at
+    \cite[line~4481]{FrancoRubio2025MPUGauging}, and
+    \begin{align}
+        A_0\oplus A_1 & =A
+        \label{eq:mpug_ghz_blocked_cluster_direct_sum}
+    \end{align}
+    after identifying the direct-sum and product bond
+    coordinates.
+    % The Z4 x Z2 action, its action tensors and L-symbols are treated in the
+    % lemmas below; the modified fusion operators and gauging are not.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:mpug_ghz_blocked_cluster_tensor, def:injective,
+        def:is_bnt_locally_orthogonal, thm:mps_word_span_tensor_product,
+        thm:cluster_normal}
+    The one-dimensional sector $E_x$ is injective, and injectivity is preserved
+    by independent tensor products, so $A_x=E_x\boxtimes C$ is injective.
+    If $x\neq y$, formula~(\ref{eq:mpug_ghz_blocked_cluster_blocks}) makes
+    every summand in
+    (\ref{eq:mpug_ghz_blocked_cluster_local_orthogonality}) vanish: a physical
+    value $p$ cannot equal both $x$ and $y$. For $p,x,y\in\{0,1\}$,
+    $q\in\{0,1,2,3\}$, and $a,b\in\{0,1\}$, the direct-sum and product tensors
+    have the same entry in their canonical bond coordinates:
+    \begin{align}
+        (A_0\oplus A_1)^{(p,q)}_{(x,a),(y,b)}
+         & =A^{(p,q)}_{(x,a),(y,b)}
+        =\delta_{x,y}\delta_{p,x}C^q_{a,b}.
+    \end{align}
+    Equality of all entries proves
+    (\ref{eq:mpug_ghz_blocked_cluster_direct_sum}).
+\end{proof}
+
+\begin{lemma}[GHZ--cluster physical representation and virtual action table]
+    \label{thm:mpug_ghz_cluster_action_table}
+    % Principal declaration: MPSTensor.z4z2GHZClusterBlock_covariance.
+    \lean{MPSTensor.z4z2GHZClusterBlock_covariance,
+        MPSTensor.z4z2GHZClusterAction,
+        MPSTensor.z4z2GHZClusterAction_unitary,
+        MPSTensor.z4z2GHZClusterAction_generators,
+        MPSTensor.z4z2GHZClusterIndex,
+        MPSTensor.z4z2GHZClusterBlockAction,
+        MPSTensor.z4z2GHZClusterVirtual,
+        MPSTensor.z4z2GHZClusterVirtual_table,
+        MPSTensor.z4z2GHZClusterVirtual_adjoint,
+        MPSTensor.z4z2GHZClusterVirtual_sq,
+        MPSTensor.z4z2GHZClusterVirtual_stabilizer}
+    \leanok
+    \discussion{7747}
+    \uses{def:mpug_ghz_blocked_cluster_tensor}
+    As in \cite[lines~4481--4489]{FrancoRubio2025MPUGauging}, write the
+    physical basis as $|p,s,r\rangle$, with integer index $4p+2s+r$ for
+    $p,s,r\in\{0,1\}$. Thus the blocked cluster index is $q=2s+r$. The
+    operators
+    $U_{(1,0)}=(X_1\otimes X_2)\mathrm{CNOT}_{1\to2}$ and
+    $U_{(0,1)}=X_3$ generate a unitary representation of
+    $G=\Z_4\times\Z_2$, with $U_{(2,0)}=X_2$.
+    Put $g\cdot x=x+a\pmod 2$ for $g=(a,b)$ and $x\in\{0,1\}$.
+    Let $V_{g,x}$ be given by the following table, where
+    $Y=\left(\begin{smallmatrix}0&-i\\i&0\end{smallmatrix}\right)$:
+    \begin{center}
+        \begin{tabular}{ccccccccc}
+            $g$   & $(0,0)$ & $(2,0)$ & $(0,1)$ & $(2,1)$
+                  & $(1,0)$ & $(3,0)$ & $(1,1)$ & $(3,1)$                             \\
+            $x=0$ & $\Id$   & $X$     & $Z$     & $Y$     & $X$   & $\Id$ & $Y$ & $Z$ \\
+            $x=1$ & $\Id$   & $X$     & $Z$     & $Y$     & $\Id$ & $X$   & $Z$ & $Y$ \\
+        \end{tabular}
+    \end{center}
+    Every $V_{g,x}$ is Hermitian and squares to the identity. For every
+    physical index $i$, the blocks satisfy
+    \begin{align}
+        \sum_j (U_g)_{i,j} A_x^j
+         & =V_{g,x}A_{g\cdot x}^iV_{g,x}^{\dagger}.
+        \label{eq:mpug_ghz_cluster_block_covariance}
+    \end{align}
+    On the subgroup $H=\{(2a,b):a,b\in\{0,1\}\}$, the comparison with the
+    cluster virtual representatives $W_{(b,a)}=Z^bX^a$ is
+    $V_{(2a,b),x}=(-i)^{ab}W_{(b,a)}$.
+    The $L$-symbols, the nonextension of the stabilizer class and the failure
+    of block independence are treated in
+    Lemma~\ref{thm:mpug_ghz_cluster_l_symbols} and
+    Lemma~\ref{thm:mpug_ghz_cluster_not_block_independent}.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:mpug_ghz_blocked_cluster_tensor, thm:mpug_monomial_matrix_laws}
+    On basis vectors the generators send $(p,s,r)$ to $(p+1,s+p+1,r)$
+    and $(p,s,r+1)$, with coordinates added modulo two. Their permutations
+    have orders four and two and commute. The corresponding permutation
+    matrices are unitary and preserve multiplication.
+    Substituting $A_x^{(p,q)}=\delta_{p,x}C^q$ into
+    (\ref{eq:mpug_ghz_cluster_block_covariance}) and multiplying the matrices
+    for each of the eight group elements and two block labels gives the
+    displayed table. Hermiticity and $V_{g,x}^2=\Id$ turn the forward action
+    on the physical index into the stated conjugation identity.
+    Finally, $ZX=iY$, so the only phase needed to compare the restriction
+    with $Z^bX^a$ is $-i$ when $a=b=1$.
+\end{proof}
+
+\begin{lemma}[L-symbols of matrix action tensors]
+    \label{thm:mpug_l_symbols_action_matrices}
+    \lean{TNLean.Algebra.LSymbol.isCompatible_one_of_mul_eq_smul,
+        TNLean.Algebra.LSymbol.isNormalized_of_mul_eq_smul}
+    \leanok
+    \uses{def:mpug_l_symbols, def:mpug_l_normalized}
+    Let $G$ act on $\mathsf X$, and let $S_{g,x}$ be nonzero square matrices
+    and $L^x_{g,h}$ nonzero scalars with
+    \begin{align}
+        S_{g,hx}S_{h,x} & =L^x_{g,h}S_{gh,x}
+        \label{eq:mpug_action_matrix_l_symbols}
+    \end{align}
+    for all $g,h\in G$ and $x\in\mathsf X$, as for an onsite symmetry moved to
+    the virtual level of each block
+    \cite[lines~4363--4368]{FrancoRubio2025MPUGauging}. Then $L$ is compatible
+    with the trivial three-cochain. If in addition $S_{e,x}=\Id$ for every $x$,
+    then $L$ is normalized.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:mpug_l_symbols}
+    Both bracketings of $S_{g,hkx}S_{h,kx}S_{k,x}$ are evaluated with
+    (\ref{eq:mpug_action_matrix_l_symbols}). One gives
+    $L^{kx}_{g,h}L^x_{gh,k}S_{ghk,x}$ and the other gives
+    $L^x_{g,hk}L^x_{h,k}S_{ghk,x}$. Since $S_{ghk,x}\neq0$, the scalars agree.
+    With $S_{e,x}=\Id$, the relation at $(g,e)$ and at $(e,g)$ reads
+    $S_{g,x}=L^x_{g,e}S_{g,x}$ and $S_{g,x}=L^x_{e,g}S_{g,x}$.
+\end{proof}
+
+\begin{lemma}[L-symbols of the GHZ--cluster state]
+    \label{thm:mpug_ghz_cluster_l_symbols}
+    \lean{MPSTensor.z4z2GHZClusterBlockMulAction,
+        MPSTensor.z4z2_smul_def,
+        MPSTensor.z4z2ActionMatrix,
+        MPSTensor.twistedTensor_z4z2GHZClusterBlock,
+        MPSTensor.z4z2ActionMatrix_one,
+        MPSTensor.z4z2ActionMatrix_mul_conjTranspose,
+        MPSTensor.z4z2ActionMatrix_ne_zero,
+        MPSTensor.z4z2PauliWord,
+        MPSTensor.z4z2XCode,
+        MPSTensor.z4z2PauliPhase,
+        MPSTensor.z4z2ActionMatrix_eq_pauliWord,
+        MPSTensor.z4z2PauliWord_mul,
+        MPSTensor.z4z2XCode_mul,
+        MPSTensor.z4z2IUnit,
+        MPSTensor.z4z2LSymbol,
+        MPSTensor.coe_z4z2LSymbol,
+        MPSTensor.z4z2ActionMatrix_mul,
+        MPSTensor.z4z2LSymbol_isCompatible,
+        MPSTensor.z4z2LSymbol_isNormalized,
+        MPSTensor.z4z2LSymbol_pow_four,
+        MPSTensor.z4z2U,
+        MPSTensor.z4z2V,
+        MPSTensor.z4z2LSymbol_zero_sq_v}
+    \leanok
+    \uses{thm:mpug_ghz_cluster_action_table, thm:mpug_l_symbols_action_matrices,
+        def:mpug_l_symbols, def:mpug_l_normalized}
+    In the setting of Lemma~\ref{thm:mpug_ghz_cluster_action_table}, put
+    $S_{g,x}=V_{g,x}$, the action tensors $A^\Gamma_{g,x}$ of
+    \cite[lines~4482--4487]{FrancoRubio2025MPUGauging}. Then
+    \begin{align}
+        \sum_j (U_g)_{i,j}A_x^j & =S_{g,x}^\dagger A_{g\cdot x}^iS_{g,x},
+        \qquad S_{e,x}=\Id,
+    \end{align}
+    each $S_{g,x}$ is unitary, and each is a Pauli word
+    $i^{\alpha\beta}X^\alpha Z^\beta$, with $\beta=b$ for $g=(a,b)$. There are
+    scalars $L^x_{g,h}$ with
+    \begin{align}
+        S_{g,h\cdot x}S_{h,x} & =L^x_{g,h}S_{gh,x},
+        \label{eq:mpug_ghz_cluster_l_symbols}
+    \end{align}
+    as at \cite[line~4366]{FrancoRubio2025MPUGauging}. They are compatible with
+    the trivial three-cochain, normalized, and fourth roots of unity, so they
+    take values in $\{\pm1,\pm i\}$ as stated at
+    \cite[line~4495]{FrancoRubio2025MPUGauging}. With $u=(1,0)$ and $v=(0,1)$,
+    \begin{align}
+        L^0_{u^2,v} & =-i, & L^0_{v,u^2} & =i.
+        \label{eq:mpug_ghz_cluster_l_values}
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_ghz_cluster_action_table, thm:mpug_l_symbols_action_matrices}
+    The conjugation identity is the covariance of
+    Lemma~\ref{thm:mpug_ghz_cluster_action_table}, since every $V_{g,x}$ is
+    Hermitian. In the table, $\Id$, $X$, $Z$ and $Y=iXZ$ are the Pauli words
+    with exponents $(0,0)$, $(1,0)$, $(0,1)$ and $(1,1)$. Using $X^2=Z^2=\Id$
+    and $ZX=-XZ$,
+    \begin{align}
+        \bigl(i^{\alpha\beta}X^\alpha Z^\beta\bigr)
+        \bigl(i^{\alpha'\beta'}X^{\alpha'}Z^{\beta'}\bigr)
+         & =i^{\alpha\beta+\alpha'\beta'+2\beta\alpha'
+                -(\alpha+\alpha')(\beta+\beta')}\,
+        i^{(\alpha+\alpha')(\beta+\beta')}X^{\alpha+\alpha'}Z^{\beta+\beta'},
+        \notag
+    \end{align}
+    with exponents of $X$ and $Z$ added modulo two. The $X$ exponent of
+    $S_{g,x}$ is additive along the action,
+    $\alpha(gh,x)=\alpha(g,h\cdot x)+\alpha(h,x)$, as one checks on the
+    sixteen pairs, and the $Z$ exponent is additive. This gives
+    (\ref{eq:mpug_ghz_cluster_l_symbols}) with $L^x_{g,h}$ the displayed power
+    of $i$. Lemma~\ref{thm:mpug_l_symbols_action_matrices} gives compatibility
+    and normalization. Finally $S_{u^2,0}=X$ and $S_{v,0}=Z$, and
+    $XZ=-iY$ while $ZX=iY$.
+\end{proof}
+
+\begin{lemma}[Block independence fails for the GHZ--cluster state]
+    \label{thm:mpug_ghz_cluster_not_block_independent}
+    \lean{MPSTensor.z4z2Unbroken,
+        MPSTensor.z4z2StabilizerCocycle,
+        MPSTensor.z4z2StabilizerCocycle_isMulCocycle₂,
+        MPSTensor.z4z2StabilizerCocycle_H2π_ne_zero,
+        MPSTensor.commPhase_z4z2U_sq_z4z2V,
+        MPSTensor.z4z2StabilizerCocycle_not_extends,
+        MPSTensor.z4z2StabilizerCocycle_H2π_not_mem_range,
+        MPSTensor.z4z2LSymbol_not_isBlockIndependent}
+    \leanok
+    \uses{thm:mpug_ghz_cluster_l_symbols, lem:mpug_bi_basepoint_extension,
+        thm:comm_phase_bicharacter, thm:nontrivial_of_comm_phase,
+        thm:mpug_h2_exact_extension, def:mpug_block_independence_gauge_forms}
+    Let $H=\{(2a,b)\}$ be the stabilizer of the block $0$, the unbroken
+    subgroup of \cite[line~4489]{FrancoRubio2025MPUGauging}, and let
+    $\psi(a,b)=L^0_{a,b}$ for $a,b\in H$. Then $\psi$ is a two-cocycle with
+    nonzero class in $H^2(H,\C^\times)$. No two-cocycle of
+    $G=\Z_4\times\Z_2$ restricts to $\psi$, so $[\psi]$ is not in the image of
+    the restriction map $H^2(G,\C^\times)\to H^2(H,\C^\times)$
+    \cite[line~4385]{FrancoRubio2025MPUGauging}. Consequently the $L$-symbols
+    of Lemma~\ref{thm:mpug_ghz_cluster_l_symbols} are not block independent
+    after any joint scalar gauge, as asserted at
+    \cite[line~4490]{FrancoRubio2025MPUGauging}. Block independence is meant
+    here as the scalar condition on these $L$-symbols, with coefficients in
+    $\C^\times$; see \cite{gap:fbc25_mpu_action_stabilizer_source_audit}. The
+    modified fusion operators and the state-level gauging are not treated.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_ghz_cluster_l_symbols, lem:mpug_bi_basepoint_extension,
+        thm:comm_phase_bicharacter, thm:nontrivial_of_comm_phase,
+        thm:mpug_h2_exact_extension}
+    Compatibility of $L$ with $\omega=1$ at the block $0$ and arguments in $H$
+    is the cocycle equation of $\psi$, because $H$ fixes the block $0$. By
+    (\ref{eq:mpug_ghz_cluster_l_values}), the commutator phase of $\psi$ at the
+    commuting pair $(u^2,v)$ is $(-i)/i=-1$, so the class of $\psi$ is
+    nonzero by Lemma~\ref{thm:nontrivial_of_comm_phase}. If a two-cocycle
+    $\Psi$ of $G$ restricted to $\psi$, then, $G$ being commutative,
+    Lemma~\ref{thm:comm_phase_bicharacter} would give
+    \begin{align}
+        \beta_\Psi(u^2,v) & =\beta_\Psi(u,v)^2=\beta_\Psi(u,v^2)
+        =\beta_\Psi(u,e)=1,
+        \notag
+    \end{align}
+    against $\beta_\Psi(u^2,v)=\beta_\psi(u^2,v)=-1$. The class statement
+    follows by Lemma~\ref{thm:mpug_h2_exact_extension}. Finally, block
+    independence would produce such a $\Psi$ by
+    Lemma~\ref{lem:mpug_bi_basepoint_extension}.
+\end{proof}
+
+\section{The controlled-\texorpdfstring{$Z$}{Z} symmetry and its gauging}
+\label{sec:mpug_controlled_z}
+
+The simplest symmetry that is not onsite is the ring of controlled-$Z$ gates
+$U=\prod_j\mathrm{CZ}_{j,j+1}$ on a chain of qubits
+\cite[lines~3794--3968]{FrancoRubio2025MPUGauging}. Write
+$s(a,b)=(-1)^{ab}$ for bits $a,b$; these are the entries of $\sqrt2H$, and
+$s(a,b)$ is the phase of $\mathrm{CZ}\ket{a,b}$.
+
+\begin{definition}[The controlled-\texorpdfstring{$Z$}{Z} matrix product unitary]
+    \label{def:mpug_controlled_z_tensor}
+    \lean{ControlledZGauging.czSign,
+        ControlledZGauging.czMPUTensor,
+        ControlledZGauging.czMPUTensor_apply,
+        ControlledZGauging.czPhase,
+        ControlledZGauging.czBondDim,
+        ControlledZGauging.czRepTensor,
+        ControlledZGauging.czFamily}
+    \leanok
+    \uses{def:mpo_tensor}
+    Following \cite[eq.~(CZ) and eq.~(deltas)]{FrancoRubio2025MPUGauging}, the
+    gate is a copy tensor $\delta_{ijr}$ on each qubit joined along the bond by
+    $\sqrt2H$. Absorbing each $\sqrt2H$ into the site on its right gives the
+    bond-two tensor
+    \begin{align}
+        M^{ij}_{lr} & =\delta_{ij}\,\delta_{rj}\,s(l,j),
+        \label{eq:mpug_controlled_z_tensor}
+    \end{align}
+    with output index $i$ and input index $j$. Together with the identity
+    tensor of bond dimension one, it gives the family $\{\Id,M\}$ over $\Z_2$.
+\end{definition}
+
+\begin{lemma}[Tensors with a forced outgoing bond]
+    \label{thm:mps_forced_column_normality}
+    \lean{MPSTensor.isNBlkInjective_two_of_forced_column,
+        MPSTensor.isNormal_of_forced_column,
+        MPSTensor.mpv_of_forced_right_bond}
+    \leanok
+    \uses{def:mps_tensor}
+    Let $A$ be a tensor of bond dimension $D$. Suppose that for every bond
+    label $j$ some letter $\ell_j$ has the single nonzero column $j$, equal to
+    a vector $v_j$ with no vanishing entry, and that $v_1,\dots,v_D$ are the
+    columns of an invertible matrix. Then the words of length two span all
+    $D\times D$ matrices, so $A$ is normal. If every entry $A^i_{lr}$ vanishes
+    unless $r=\beta(i)$, and then equals $\varphi(i,l)$, the periodic amplitude
+    on a ring is $\prod_n\varphi(\sigma_{n+1},\beta(\sigma_n))$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:mps_tensor}
+    The product $A^{\ell_j}A^{\ell_k}$ is $v_k(j)\,v_je_k^{T}$, so the matrix
+    unit $e_le_k^T$ is the combination
+    $\sum_j P_{jl}\,v_k(j)^{-1}A^{\ell_j}A^{\ell_k}$, where $P$ is the inverse
+    of the matrix with columns $v_j$. For the amplitude, only the closed bond
+    configuration with bond $\beta(\sigma_n)$ after site $n$ contributes.
+\end{proof}
+
+\begin{lemma}[The controlled-\texorpdfstring{$Z$}{Z} symmetry is not anomalous]
+    \label{thm:mpug_controlled_z_not_anomalous}
+    \lean{ControlledZGauging.mpo_czMPUTensor,
+        ControlledZGauging.mulVec_mpo_czMPUTensor,
+        ControlledZGauging.mpo_czMPUTensor_mul_self,
+        ControlledZGauging.czSign_mul_self,
+        ControlledZGauging.czSign_ne_zero,
+        ControlledZGauging.toMPSTensor_czMPUTensor,
+        ControlledZGauging.czMPUTensor_isNormal,
+        ControlledZGauging.czFamily_isNormalRepresentation,
+        ControlledZGauging.zeroState,
+        ControlledZGauging.zeroState_isNormal,
+        ControlledZGauging.mpv_zeroState,
+        ControlledZGauging.fixesMPV_zeroState,
+        ControlledZGauging.isTrivialGaugeClass_omega_czFamily,
+        ControlledZGauging.czFamily_anomalyClass_eq_zero}
+    \leanok
+    \uses{def:mpug_controlled_z_tensor, thm:mpug_anomaly_obstruction,
+        def:mpug_anomaly_class, thm:mps_forced_column_normality}
+    On every ring of $N\geq1$ qubits the periodic operator of $M$ is the
+    diagonal matrix with entries $\prod_ks(t_k,t_{k+1})$, that is,
+    $U=\prod_j\mathrm{CZ}_{j,j+1}$, and $U^2=\Id$. The tensor $M$ is normal, so
+    $\{\Id,M\}$ represents $\Z_2$ exactly by normal tensors. The product state
+    $\ket{0\cdots0}$ is normal and fixed by $U$. Hence, for every choice of
+    fusion tensors, the anomaly three-cocycle has trivial gauge class and the
+    anomaly class in $H^3(\Z_2,\C^\times)$ vanishes, as stated at
+    \cite[line~3873]{FrancoRubio2025MPUGauging}.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_anomaly_obstruction, thm:mps_forced_column_normality}
+    The outgoing bond of $M$ copies the input, so the periodic operator is the
+    product of the entries along the forced bonds, $s(t_k,t_{k+1})$ at each
+    site, and squares to the identity since $s^2=1$. The letter $(j,j)$ of $M$
+    has the single nonzero column $j$, equal to the column $j$ of $\sqrt2H$, an
+    invertible matrix with no vanishing entry, so $M$ is normal by
+    Lemma~\ref{thm:mps_forced_column_normality}. Every entry
+    $\prod_ks(0,0)=1$ fixes $\ket{0\cdots0}$, and
+    Theorem~\ref{thm:mpug_anomaly_obstruction} applies.
+\end{proof}
+
+\begin{definition}[The invariant state, its defect, and the gauged tensor]
+    \label{def:mpug_controlled_z_defect}
+    \lean{ControlledZGauging.stateInt,
+        ControlledZGauging.defectInt,
+        ControlledZGauging.stateTensor,
+        ControlledZGauging.defectTensor,
+        ControlledZGauging.gaugedLetter,
+        ControlledZGauging.gaugedTensor,
+        ControlledZGauging.gaugedTensor_finProdFinEquiv,
+        ControlledZGauging.twoSite,
+        ControlledZGauging.gaussPerm,
+        ControlledZGauging.gaussOperator}
+    \leanok
+    \uses{def:mpug_controlled_z_tensor}
+    As in \cite[lines~3874--3896]{FrancoRubio2025MPUGauging}, let
+    \begin{align}
+        A^0   & =\begin{pmatrix}1&0&0\\0&0&0\\0&1&1\end{pmatrix},    &
+        A^1   & =\begin{pmatrix}0&1&-1\\-1&0&0\\0&0&0\end{pmatrix},
+        \notag                                                         \\
+        A_g^0 & =\begin{pmatrix}0&-1&-1\\0&0&0\\-1&0&0\end{pmatrix}, &
+        A_g^1 & =\begin{pmatrix}1&0&0\\0&-1&1\\0&0&0\end{pmatrix}.
+        \notag
+    \end{align}
+    The gauged tensor has letters $C^{ie}=A^i$ and $C^{ig}=A_g^i$, with the
+    gauge label written as a bit \cite[line~3966]{FrancoRubio2025MPUGauging}.
+    The Gauss operator $\mathcal G_g=\mathrm{CZ}\otimes X\otimes X$ acts on two
+    gauged sites by $\mathrm{CZ}$ on the two matter labels and $X$ on each
+    gauge label \cite[line~3968]{FrancoRubio2025MPUGauging}.
+\end{definition}
+
+\begin{lemma}[Defect identities and the Gauss law of the controlled-\texorpdfstring{$Z$}{Z} gauging]
+    \label{thm:mpug_controlled_z_gauss_law}
+    \lean{ControlledZGauging.sign_smul_state_mul_state,
+        ControlledZGauging.sign_smul_defect_mul_state,
+        ControlledZGauging.stateTensor_isNormal,
+        ControlledZGauging.czSign_smul_gaugedLetter_mul,
+        ControlledZGauging.gaussOperator_mul_self,
+        ControlledZGauging.sum_gaussOperator_smul_twoSite}
+    \leanok
+    \uses{def:mpug_controlled_z_defect}
+    The tensor $A$ is normal \cite[line~3885]{FrancoRubio2025MPUGauging}, and
+    for all bits $i,j$ \cite[eq.~(Z2\_def)]{FrancoRubio2025MPUGauging},
+    \begin{align}
+        s(i,j)\,A^iA^j   & =A_g^iA_g^j, &
+        s(i,j)\,A_g^iA^j & =A^iA_g^j.
+        \label{eq:mpug_controlled_z_defect}
+    \end{align}
+    The Gauss operator satisfies $\mathcal G_g^2=\Id$ and fixes the two-site
+    contraction of the gauged tensor:
+    $\sum_x(\mathcal G_g)_{y,x}C^{x_1}C^{x_2}=C^{y_1}C^{y_2}$ for every pair
+    $y=(y_1,y_2)$ of gauged labels.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:mpug_controlled_z_defect}
+    The identities (\ref{eq:mpug_controlled_z_defect}) are identities of
+    integer matrices, checked on the four pairs $(i,j)$. Twice every matrix
+    unit is a signed sum of at most four words of $A$ of length four, so the
+    words of length four span all matrices and $A$ is normal. By
+    (\ref{eq:mpug_controlled_z_defect}) and $s^2=1$, flipping both gauge labels
+    multiplies $C^{ia}C^{jb}$ by $s(i,j)$, which is the Gauss law in letters.
+    The operator $\mathcal G_g$ is the monomial matrix of the double gauge
+    flip with phases $s(i,j)$, so it is an involution, and its single nonzero
+    entry in each row turns the Gauss law in letters into the stated
+    invariance.
+\end{proof}
+
+\begin{lemma}[The split-index form of the gauged tensor]
+    \label{thm:mpug_controlled_z_split_index}
+    \lean{ControlledZGauging.simpsRInt,
+        ControlledZGauging.simpsLInt,
+        ControlledZGauging.xInt,
+        ControlledZGauging.simpsR,
+        ControlledZGauging.simpsL,
+        ControlledZGauging.simpsGauge,
+        ControlledZGauging.simpsTensor,
+        ControlledZGauging.stateTensor_eq_simpsR_mul_simpsL,
+        ControlledZGauging.defectTensor_eq_simpsR_mul_mul_simpsL,
+        ControlledZGauging.gaugedLetter_eq_simps,
+        ControlledZGauging.xInt_mul_simpsTensor_mul_xInt}
+    \leanok
+    \uses{def:mpug_controlled_z_defect}
+    Let
+    \begin{align}
+        R^0 & =\begin{pmatrix}1&0\\0&0\\0&-1\end{pmatrix}, &
+        R^1 & =\begin{pmatrix}1&0\\0&-1\\0&0\end{pmatrix}, &
+        L^0 & =\begin{pmatrix}1&0&0\\0&-1&-1\end{pmatrix}, &
+        L^1 & =\begin{pmatrix}0&1&-1\\1&0&0\end{pmatrix}.
+        \notag
+    \end{align}
+    Then $A^i=R^iL^i$, $A_g^i=R^iXL^i$, and $C^{ia}=R^iX^aL^i$, the internal
+    tensor of the virtual representation $S_e=\Id$, $S_g=X$ of
+    \cite[lines~4073--4209]{FrancoRubio2025MPUGauging}. The split-index tensor
+    $S^{ab}=L^aR^b$ satisfies $XS^{ab}X=s(a,b)\,S^{ab}$, the identity of
+    \cite[lines~4002--4072]{FrancoRubio2025MPUGauging}. The source draws $L$
+    and $R$ without listing their entries; the matrices above are one choice
+    realizing the displayed identities.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:mpug_controlled_z_defect}
+    Each identity is an identity of integer matrices, checked on the finitely
+    many values of the bits. For instance $S^{00}=S^{01}=\Id$, $S^{10}=X$ and
+    $S^{11}=\left(\begin{smallmatrix}0&-1\\1&0\end{smallmatrix}\right)$, which
+    anticommutes with $X$.
+\end{proof}
+
+\begin{lemma}[Split-index presentation of a periodic amplitude]
+    \label{lem:mps_split_index_trace}
+    \lean{MPSTensor.prod_ofFn_mul_eq_mul_prod_mul,
+        MPSTensor.mpv_eq_trace_prod_ofFn_of_eq_mul,
+        MPSTensor.mul_prod_ofFn_mul_eq_smul,
+        MPSTensor.prod_mul_trace_prod_ofFn_eq}
+    \leanok
+    \uses{def:mps_tensor}
+    Let $A$ be a tensor of bond dimension $D$ whose letters factor as
+    $A^i=R^iL^i$ through an intermediate bond of dimension $m$, with $R^i$ a
+    $D\times m$ and $L^i$ an $m\times D$ matrix, and let
+    $S^{ab}=L^aR^b$. On a ring of $N\geq1$ sites,
+    \begin{align}
+        \tr\bigl(A^{\sigma_0}A^{\sigma_1}\cdots A^{\sigma_{N-1}}\bigr)
+         & =\tr\bigl(S^{\sigma_0\sigma_1}S^{\sigma_1\sigma_2}\cdots
+        S^{\sigma_{N-1}\sigma_0}\bigr).
+        \label{eq:mps_split_index_trace}
+    \end{align}
+    If $XY=YX=\Id$ and $XS_kY=c_kS_k$ for matrices $S_1,\dots,S_N$ and scalars
+    $c_1,\dots,c_N$, then $X(S_1\cdots S_N)Y=(c_1\cdots c_N)\,S_1\cdots S_N$,
+    and hence $c_1\cdots c_N\tr(S_1\cdots S_N)=\tr(S_1\cdots S_N)$.
+\end{lemma}
+
+\begin{proof}\leanok
+    The product $A^{\sigma_0}\cdots A^{\sigma_{N-1}}$ regroups as
+    $R^{\sigma_0}\bigl(L^{\sigma_0}R^{\sigma_1}\bigr)\cdots
+        \bigl(L^{\sigma_{N-2}}R^{\sigma_{N-1}}\bigr)L^{\sigma_{N-1}}$, and the
+    trace is invariant under moving the rectangular factor $R^{\sigma_0}$ to
+    the end. For the second statement insert $YX=\Id$ between consecutive
+    factors, and then use $YX=\Id$ once more after moving $X$ to the end
+    inside the trace.
+\end{proof}
+
+\begin{lemma}[The controlled-\texorpdfstring{$Z$}{Z} state as a split-index state]
+    \label{lem:mpug_controlled_z_simps_trace}
+    \lean{ControlledZGauging.zInt,
+        ControlledZGauging.simpsTensor_eq,
+        ControlledZGauging.mpv_stateTensor_eq_trace_simpsTensor,
+        ControlledZGauging.czPhase_mul_mpv_stateTensor,
+        ControlledZGauging.fixesMPV_czMPUTensor_stateTensor,
+        ControlledZGauging.fixesMPV_stateTensor}
+    \leanok
+    \uses{thm:mpug_controlled_z_split_index, thm:mpug_controlled_z_not_anomalous,
+        def:mpug_single_block_l_symbol}
+    The split-index tensor of Lemma~\ref{thm:mpug_controlled_z_split_index} is
+    $S^{ab}=X^aZ^{ab}$, and on a ring of $N\geq1$ qubits the amplitude of the
+    state generated by $A$ is
+    $\tr\bigl(S^{\sigma_0\sigma_1}S^{\sigma_1\sigma_2}\cdots
+        S^{\sigma_{N-1}\sigma_0}\bigr)$, the split-index presentation drawn in
+    \cite[lines~3970--4001]{FrancoRubio2025MPUGauging}. Every amplitude is
+    fixed by the controlled-$Z$ phase,
+    $\prod_ks(\sigma_k,\sigma_{k+1})\,\psi(\sigma)=\psi(\sigma)$, so the state
+    is fixed by $U$ and by every operator of the family $\{\Id,M\}$ on every
+    ring of $N\geq1$ qubits.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:mps_split_index_trace, thm:mpug_controlled_z_split_index,
+        thm:mpug_controlled_z_not_anomalous}
+    The formula for $S^{ab}$ is an identity of integer matrices. The
+    amplitude is the case $A^i=R^iL^i$ of
+    Lemma~\ref{lem:mps_split_index_trace}. Since $XS^{ab}X=s(a,b)\,S^{ab}$
+    and $X^2=\Id$, the second part of that lemma gives the invariance of each
+    amplitude under the phase, and the periodic operator of $M$ is the
+    diagonal matrix of these phases.
+\end{proof}
+
+\begin{lemma}[The onsite symmetry \texorpdfstring{$\prod_jZ_j$}{prod Z}]
+    \label{lem:mpug_controlled_z_onsite_z}
+    \lean{ControlledZGauging.zSign,
+        ControlledZGauging.zAction,
+        ControlledZGauging.zAction_ofAdd_one,
+        ControlledZGauging.stateZGaugeInt,
+        ControlledZGauging.stateZGauge,
+        ControlledZGauging.twistedTensor_stateTensor_zAction,
+        ControlledZGauging.stateZGauge_mul_stateTensor_mul_inv,
+        ControlledZGauging.stateTensor_isOnSiteSymmetric_zAction}
+    \leanok
+    \uses{def:mpug_controlled_z_defect, def:twisted_tensor, def:on_site_symmetric}
+    Let $\Z_2$ act on a qubit by $g\mapsto Z^g$, with
+    $Z=\operatorname{diag}(1,-1)$. Then
+    $\sum_jZ_{ij}A^j=(-1)^iA^i=VA^iV^{-1}$ for
+    $V=\operatorname{diag}(1,-1,-1)$, so the state generated by $A$ has the
+    onsite symmetry $\prod_jZ_j$ stated in
+    \cite[line~3970]{FrancoRubio2025MPUGauging}.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:gauge_equiv, thm:gauge_invariance}
+    The twisted letters are $Z_{ii}A^i=(-1)^iA^i$. Conjugation by $V$
+    multiplies the entry $(r,c)$ of a matrix by $V_{rr}V_{cc}$; the nonzero
+    entries of $A^0$ sit at $(0,0)$, $(2,1)$ and $(2,2)$, and those of $A^1$
+    at $(0,1)$, $(0,2)$ and $(1,0)$, which gives the signs $+1$ and $-1$.
+    Gauge-equivalent tensors generate the same states.
+\end{proof}
+
+\begin{lemma}[The combined \texorpdfstring{$\Z_2\times\Z_2$}{Z2 x Z2} symmetry on the split-index bond]
+    \label{lem:mpug_controlled_z_combined_class}
+    \lean{ControlledZGauging.splitLegPhase,
+        ControlledZGauging.clusterProjRep_mul_simpsTensor,
+        ControlledZGauging.simpsTensor_isNontrivialClass}
+    \leanok
+    \uses{lem:mpug_controlled_z_simps_trace, def:cluster_omega}
+    Let $g=(g_1,g_2)\in\Z_2\times\Z_2$ act on the two legs $(a,b)$ of a
+    split-index tensor by the phase
+    $\chi_g(a,b)=(-1)^{g_1a}\,s(a,b)^{g_2}$: the first generator is the onsite
+    symmetry $\prod_jZ_j$, whose factor at each site is assigned to the left
+    leg of the split-index tensor at that site, and the second is $U$. Let
+    $V_g$ be the projective representation of $\Z_2\times\Z_2$ on the
+    split-index bond with $V_{(1,0)}=Z$ and $V_{(0,1)}=X$, whose factor
+    system is that of Definition~\ref{def:cluster_omega}. Then
+    \begin{align}
+        V_gS^{ab} & =\chi_g(a,b)\,S^{ab}V_g
+        \label{eq:mpug_controlled_z_combined_class}
+    \end{align}
+    for all $g$, $a$, $b$, and the class of this factor system in
+    $H^2(\Z_2\times\Z_2,\C^\times)$ is nontrivial. This is the invariant
+    behind the remark of \cite[line~3970]{FrancoRubio2025MPUGauging} that the
+    state lies in the nontrivial symmetry-protected phase of the combined
+    $\Z_2\times\Z_2$ symmetry. That this class labels the phase of a state
+    protected by a symmetry that is not onsite is the classification of
+    \cite{Stephen2024SIMPS}, which is not proved here; see
+    \cite{gap:fbc25_controlled_z_split_index_class_scope}.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:cluster_nontrivial_spt}
+    By Lemma~\ref{lem:mpug_controlled_z_simps_trace}, $S^{ab}=X^aZ^{ab}$, so
+    (\ref{eq:mpug_controlled_z_combined_class}) is an identity of integer
+    matrices, checked on the generators, on their product and on the bits
+    $a,b$. The matrices $Z$ and $X$ anticommute, so the commutator phase of
+    the factor system on the two generators is $-1$, and the class is
+    nontrivial by Lemma~\ref{thm:cluster_nontrivial_spt}.
+\end{proof}
+
+\section{The gauge-invariant subspace of the CZX circuit tuple}
+\label{sec:mpug_czx_gauge_invariant}
+
+The CZX model of \cite[lines~4503--5183]{FrancoRubio2025MPUGauging} is the
+anomalous $\Z_2=\{e,g\}$ matrix product unitary acting on the GHZ state.
+After blocking, one site carries two matter qubits, and the fusion operators on
+two neighboring blocked sites are $\lambda^R_{e,e}=\lambda^R_{e,g}=\Id$,
+$\lambda^R_{g,e}=w_R$, together with the modified fusion operator
+$\tilde\lambda^R_{g,g}=\lambda^R_{g,g}Z_1$ introduced at the end of that
+passage.
+For the displayed circuit tuple $(\Id,\Id,w,\tilde\lambda)$, the common $+1$
+eigenspace of the resulting Gauss projectors has dimension $2^N$ on
+$N\geq3$ blocked sites, answering the scaling question of
+\cite[lines~5198--5204]{FrancoRubio2025MPUGauging} for this tuple only. The
+displayed tuple is not identified with a member of the full physical
+completion class of the CZX defect data; that identification requires the
+three defect domains and maps, which the displayed matrices do not specify.
+
+\subsection{Monomial operators and their common fixed space}
+
+\begin{definition}[Monomial matrix]
+    \label{def:mpug_monomial_matrix}
+    \lean{Matrix.monomial,
+        Matrix.monomial_apply,
+        Matrix.monomial_apply_perm,
+        Matrix.monomial_apply_of_ne}
+    \leanok
+    Let $\sigma$ be a permutation of a finite index set $S$ and let
+    $\varphi\colon S\to\C$. The monomial matrix $M(\sigma,\varphi)$ is the
+    operator on $\C^S$ with
+    \begin{align}
+        M(\sigma,\varphi)\ket{s} & =\varphi(s)\ket{\sigma(s)}.
+        \label{eq:mpug_monomial_matrix}
+    \end{align}
+    Its entry in row $\sigma(s)$ and column $s$ is $\varphi(s)$, and every
+    other entry vanishes.
+\end{definition}
+
+\begin{lemma}[Calculus of monomial matrices]
+    \label{thm:mpug_monomial_matrix_laws}
+    \lean{Matrix.monomial_mulVec,
+        Matrix.monomial_mulVec_eq_self_iff,
+        Matrix.monomial_mul_monomial,
+        Matrix.conjTranspose_monomial,
+        Matrix.smul_monomial,
+        Matrix.neg_monomial,
+        Matrix.monomial_one,
+        Matrix.reindex_monomial,
+        Matrix.monomial_mem_unitaryGroup,
+        Matrix.trace_monomial,
+        Matrix.trace_monomial_eq_zero}
+    \leanok
+    \uses{def:mpug_monomial_matrix}
+    A vector $v\in\C^S$ is fixed by $M(\sigma,\varphi)$ if and only if
+    $v_{\sigma(s)}=\varphi(s)v_s$ for every $s\in S$. Products, adjoints,
+    scalar multiples, negatives, and simultaneous relabellings of monomial
+    matrices are monomial:
+    \begin{align}
+        M(\sigma,\varphi)M(\tau,\psi)
+         & =M\bigl(\sigma\tau,\ s\mapsto\varphi(\tau(s))\psi(s)\bigr),
+        \label{eq:mpug_monomial_mul}                                               \\
+        M(\sigma,\varphi)^\dagger
+         & =M\bigl(\sigma^{-1},\ t\mapsto\overline{\varphi(\sigma^{-1}(t))}\bigr).
+        \label{eq:mpug_monomial_adjoint}
+    \end{align}
+    The identity is $M(\id,1)$, and $M(\sigma,\varphi)$ is unitary when
+    $|\varphi(s)|=1$ for every $s$. The trace is
+    $\tr M(\sigma,\varphi)=\sum_{s:\,\sigma(s)=s}\varphi(s)$, which vanishes
+    when $\sigma$ has no fixed point.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:mpug_monomial_matrix}
+    The action of $M(\sigma,\varphi)$ on a vector is
+    $(M(\sigma,\varphi)v)_t=\varphi(\sigma^{-1}(t))v_{\sigma^{-1}(t)}$, which
+    gives the fixed-vector criterion after the substitution $t=\sigma(s)$.
+    The remaining identities are entrywise: in a product only the column
+    $\tau(s)$ of the first factor meets the row $\tau(s)$ of the second, the
+    adjoint transposes the single nonzero entry of each column, and a
+    relabelling conjugates the permutation. For unitarity,
+    (\ref{eq:mpug_monomial_mul}) and (\ref{eq:mpug_monomial_adjoint}) give
+    $M(\sigma,\varphi)^\dagger M(\sigma,\varphi)=M(\id,|\varphi|^2)=\Id$.
+    The diagonal entry at $s$ is $\varphi(s)$ if $\sigma(s)=s$ and zero
+    otherwise, which gives the trace.
+\end{proof}
+
+\begin{lemma}[Flat phases on the hypercube have a potential]
+    \label{thm:mpug_hypercube_potential}
+    \lean{TNLean.Algebra.hypercube_induction,
+        TNLean.Algebra.exists_potential_of_flat}
+    \leanok
+    Let $M$ be a commutative group and let
+    $\varphi_j\colon\mathbb F_2^r\to M$ for $0\leq j<r$ be phases attached
+    to the edges $(\gamma,\gamma+e_j)$ of the hypercube. Assume that
+    \begin{align}
+        \varphi_j(\gamma)\varphi_j(\gamma+e_j)
+         & =1,
+        \label{eq:mpug_hypercube_involutive}       \\
+        \varphi_j(\gamma)\varphi_k(\gamma+e_j)
+         & =\varphi_k(\gamma)\varphi_j(\gamma+e_k)
+        \label{eq:mpug_hypercube_flat}
+    \end{align}
+    for all $j,k$ and $\gamma$. Then there is $\Phi\colon\mathbb F_2^r\to M$
+    with $\Phi(0)=1$ and $\Phi(\gamma+e_j)=\varphi_j(\gamma)\Phi(\gamma)$ for
+    every $j$ and $\gamma$. In addition, a property of vectors of
+    $\mathbb F_2^r$ that holds at $0$ and is preserved by every coordinate
+    flip holds everywhere.
+\end{lemma}
+
+\begin{proof}\leanok
+    For the connectivity claim, every $\gamma$ is the sum of the $e_j$ over
+    its support, so induction on the support carries the property from $0$ to
+    $\gamma$.
+
+    The potential is constructed by induction on $r$. Writing
+    $\gamma=(a,\gamma')$ with $a\in\mathbb F_2$ and
+    $\gamma'\in\mathbb F_2^{r-1}$, the phases
+    $\gamma'\mapsto\varphi_{j+1}(0,\gamma')$ for $0\leq j<r-1$ satisfy
+    (\ref{eq:mpug_hypercube_involutive}) and (\ref{eq:mpug_hypercube_flat})
+    on $\mathbb F_2^{r-1}$, so the induction hypothesis gives a potential
+    $\Phi'$ for them. Setting
+    \begin{align}
+        \Phi(0,\gamma') & =\Phi'(\gamma'),
+        \qquad
+        \Phi(1,\gamma')=\varphi_0(0,\gamma')\Phi'(\gamma'),
+        \label{eq:mpug_hypercube_potential_step}
+    \end{align}
+    the edge relation in direction $0$ at $(0,\gamma')$ holds by definition,
+    and at $(1,\gamma')$ it follows from
+    (\ref{eq:mpug_hypercube_involutive}). The edge relation in a direction
+    $j+1$ at $(0,\gamma')$ is the relation for $\Phi'$, and at $(1,\gamma')$
+    it is the relation for $\Phi'$ combined with
+    (\ref{eq:mpug_hypercube_flat}) for the square spanned by the directions
+    $0$ and $j+1$ at $(0,\gamma')$.
+\end{proof}
+
+\begin{definition}[Trivial holonomy on a fiber]
+    \label{def:mpug_trivial_holonomy}
+    \lean{TNLean.Algebra.fiberFlip,
+        TNLean.Algebra.fiberFlip_apply,
+        TNLean.Algebra.IsTrivialHolonomy}
+    \leanok
+    Let $X$ be a finite set and consider the basis $X\times\mathbb F_2^r$.
+    For $0\leq j<r$ let $\sigma_j$ be the coordinate flip
+    $(x,\gamma)\mapsto(x,\gamma+e_j)$ and let
+    $\varphi_j\colon X\times\mathbb F_2^r\to\C$. The phases have trivial
+    holonomy on the fiber over $x\in X$ when
+    \begin{align}
+        \varphi_j(x,\gamma)\varphi_k(x,\gamma+e_j)
+         & =\varphi_k(x,\gamma)\varphi_j(x,\gamma+e_k)
+        \label{eq:mpug_trivial_holonomy}
+    \end{align}
+    for all $j,k$ and $\gamma\in\mathbb F_2^r$.
+\end{definition}
+
+\begin{lemma}[Monomial fixed-space criterion]
+    \label{thm:mpug_monomial_fixed_space_criterion}
+    \lean{TNLean.Algebra.reindex_mulVec,
+        TNLean.Algebra.commonFixedSubmodule_reindex,
+        TNLean.Algebra.finrank_commonFixedSubmodule_reindex,
+        TNLean.Algebra.add_self_eq_zero_pi_zmod_two,
+        TNLean.Algebra.eq_zero_of_mem_commonFixedSubmodule_monomial_fiberFlip,
+        TNLean.Algebra.finrank_commonFixedSubmodule_monomial_fiberFlip}
+    \leanok
+    \uses{def:mpug_monomial_matrix, def:mpug_trivial_holonomy,
+        def:mpug_common_fixed_subspace}
+    In the setting of Definition~\ref{def:mpug_trivial_holonomy}, let
+    $T_j=M(\sigma_j,\varphi_j)$ and assume that every $T_j$ is an involution,
+    that is, $\varphi_j(s)\varphi_j(\sigma_j(s))=1$ for every basis element
+    $s$. Then
+    \begin{align}
+        \dim\mathcal V(T)
+         & =\#\{x\in X:\text{the phases have trivial holonomy on the fiber over }x\}.
+        \label{eq:mpug_monomial_fixed_space_count}
+    \end{align}
+    The dimension of a common fixed subspace is also unchanged by a
+    simultaneous relabelling of the basis.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_monomial_matrix_laws, thm:mpug_hypercube_potential,
+        thm:mpug_mem_common_fixed_subspace}
+    By Lemma~\ref{thm:mpug_monomial_matrix_laws}, a vector $v$ lies in
+    $\mathcal V(T)$ exactly when
+    $v_{(x,\gamma+e_j)}=\varphi_j(x,\gamma)v_{(x,\gamma)}$ for all $j$, $x$,
+    and $\gamma$. Let $X_0$ be the set of fibers with trivial holonomy and
+    consider the linear map $E\colon\mathcal V(T)\to\C^{X_0}$,
+    $v\mapsto(v_{(x,0)})_{x\in X_0}$.
+
+    The map $E$ is injective: if $v\in\mathcal V(T)$ vanishes at one point
+    of a fiber, the edge relation and the connectivity statement of
+    Lemma~\ref{thm:mpug_hypercube_potential} make it vanish on the whole
+    fiber. On a fiber with trivial holonomy, $v$ therefore vanishes as soon
+    as $v_{(x,0)}=0$. On a fiber where (\ref{eq:mpug_trivial_holonomy})
+    fails at some $(j,k,\gamma_0)$, the two paths from $(x,\gamma_0)$ to
+    $(x,\gamma_0+e_j+e_k)$ give
+    \begin{align}
+        v_{(x,\gamma_0+e_j+e_k)} & =\varphi_j(x,\gamma_0)\varphi_k(x,\gamma_0+e_j)\,v_{(x,\gamma_0)}, \\
+        v_{(x,\gamma_0+e_j+e_k)} & =\varphi_k(x,\gamma_0)\varphi_j(x,\gamma_0+e_k)\,v_{(x,\gamma_0)}.
+    \end{align}
+    The two phase products differ, so $v_{(x,\gamma_0)}=0$ and again $v$
+    vanishes on the fiber.
+
+    The map $E$ is also surjective: given $w\in\C^{X_0}$,
+    Lemma~\ref{thm:mpug_hypercube_potential} provides a potential $\Phi_x$
+    on each fiber with trivial holonomy for the invertible phases
+    $\gamma\mapsto\varphi_j(x,\gamma)$, and setting
+    $v_{(x,\gamma)}=w_x\Phi_x(\gamma)$ there and $v=0$ on the other fibers
+    satisfies the potential edge relation, so $v\in\mathcal V(T)$,
+    and $\Phi_x(0)=1$ gives $Ev=w$.
+
+    Hence $\dim\mathcal V(T)=\dim\C^{X_0}=\#X_0$. For the relabelling
+    statement, a relabelled matrix acts by relabelling the vector, acting,
+    and relabelling back, so the common fixed subspace is the image of the
+    original one under the coordinate relabelling.
+\end{proof}
+
+\begin{lemma}[Local Gauss operator of monomial matter unitaries]
+    \label{thm:mpug_gauss_operator_monomial}
+    \lean{TNLean.Algebra.gaussMonomialPerm,
+        TNLean.Algebra.gaussMonomialPerm_apply,
+        TNLean.Algebra.gaussMonomialPhase,
+        TNLean.Algebra.gaussOperator_eq_monomial}
+    \leanok
+    \uses{def:mpug_gauss_operator, def:mpug_monomial_matrix}
+    Suppose that every matter unitary of the tuple $R$ is monomial,
+    $R_{a,b}=M(\sigma_{a,b},\varphi_{a,b})$. Then the local Gauss operator
+    of Definition~\ref{def:mpug_gauss_operator} is the monomial operator
+    \begin{align}
+        \mathcal G_g\ket{i,(a,b)}
+         & =\overline{\varphi_{T_g(a,b)}\bigl(\sigma_{T_g(a,b)}^{-1}\sigma_{a,b}(i)\bigr)}\,
+        \varphi_{a,b}(i)\,
+        \ket{\sigma_{T_g(a,b)}^{-1}\sigma_{a,b}(i),\ T_g(a,b)}.
+        \label{eq:mpug_gauss_operator_monomial}
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_monomial_matrix_laws, def:mpug_gauss_operator}
+    The block of $\mathcal G_g$ from $(a,b)$ to $T_g(a,b)$ is
+    $R_{T_g(a,b)}^\dagger R_{a,b}$, which is monomial by
+    (\ref{eq:mpug_monomial_mul}) and (\ref{eq:mpug_monomial_adjoint}); all
+    other blocks vanish.
+\end{proof}
+
+\begin{lemma}[Periodic placement of monomial operators]
+    \label{thm:mpug_embed_monomial}
+    \lean{MPOTensor.windowPerm,
+        MPOTensor.windowPerm_apply,
+        MPOTensor.embedLocalOperator_monomial,
+        MPOTensor.extractWindow_two,
+        MPOTensor.replaceWindow_two_apply}
+    \leanok
+    \uses{def:mpug_monomial_matrix}
+    Let $M(\sigma,\varphi)$ be a monomial operator on $L$ consecutive sites.
+    Its placement on the periodic window beginning at site $i$ of an $N$-site
+    chain is the monomial operator whose permutation replaces the window of a
+    configuration $s$ by $\sigma$ applied to that window and whose phase is
+    $\varphi$ evaluated on the window of $s$. For $L=2$ and $N\geq2$ the
+    window at $j$ is $(s_j,s_{j+1})$, and replacing it changes exactly the
+    sites $j$ and $j+1$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:mpug_monomial_matrix}
+    The placed operator has entry $(t,s)$ equal to the window entry
+    $M(\sigma,\varphi)_{t_W,s_W}$ when $t$ and $s$ agree outside the window
+    and $0$ otherwise. Both conditions together say that $t$ is $s$ with its
+    window replaced by $\sigma(s_W)$, and the entry is then
+    $\varphi(s_W)$. The two-site statements are the cyclic offset
+    computations $(j+N-j)\bmod N=0$ and $(j+1+N-j)\bmod N=1$.
+\end{proof}
+
+\subsection{The exact CZX matrix product unitary}
+
+\begin{definition}[The once-blocked CZX tensor]
+    \label{def:mpug_czx_exact_tensor}
+    % Principal declaration: MPOTensor.CZX.tensor.
+    \lean{MPOTensor.CZX.decoratedSiteTensor, MPOTensor.CZX.tensor,
+        MPOTensor.CZX.complementSite, MPOTensor.CZX.complement,
+        MPOTensor.CZX.edgeExponent, MPOTensor.CZX.cyclicExponent}
+    \leanok
+    \uses{def:mpdo_two_site_blocking}
+    Write a physical index as $2a+b$, with $a,b\in\{0,1\}$, and let
+    $\overline{(a,b)}=(1-a,1-b)$. The tensor in
+    \cite[lines~4503--4547]{FrancoRubio2025MPUGauging}
+    is the two-site block $B^{ab,cd}=C^{a,c}C^{b,d}$ of the bond-two tensor
+    \begin{align}
+        C^{u,d}_{\ell r}
+         & =\delta_{u,1-d}\delta_{\ell,u}(-1)^{u+\ell r}.
+    \end{align}
+    Here the constituent indices $u,d,\ell,r$ are binary, the weight is
+    $W_{\ell r}=(-1)^{\ell r}=\sqrt{2}H_{\ell r}$, where $H$ is the
+    normalized Hadamard matrix, and the factor $(-1)^u$ is the output
+    Pauli $Z$. Thus, if $P$ denotes the normalized tensor printed in
+    \cite[lines~1906--1943]{Cirac2017MPU}, then
+    $B=(Z\otimes Z)\operatorname{block}_2(\sqrt{2}P)$, not
+    $\operatorname{block}_2(P)$.
+    Define the local integer exponent $e((a,b),r)=a+b+ab+br$.
+    For a periodic configuration $s_j=(a_j,b_j)$ of positive length $N$,
+    let $\kappa_N(s)_j=\overline{s_j}$ and set
+    \begin{align}
+        E(s) & =\sum_{j=0}^{N-1}e(s_j,a_{j+1})
+        =\sum_{j=0}^{N-1}(a_j+b_j+a_jb_j+b_ja_{j+1}),
+    \end{align}
+    where $j+1$ is interpreted modulo $N$ and the bit values in the sum
+    are integers.
+\end{definition}
+
+\begin{lemma}[Coordinates and unitarity of the exact CZX tensor]
+    \label{thm:mpug_czx_exact_tensor_unitary}
+    % Principal declaration: MPOTensor.CZX.tensor_isMPU.
+    \lean{MPOTensor.CZX.tensor_apply, MPOTensor.CZX.tensor_apply_bits,
+        MPOTensor.CZX.mpo_tensor_apply, MPOTensor.CZX.mpo_tensor,
+        MPOTensor.CZX.mpo_tensor_mem_unitaryGroup, MPOTensor.CZX.tensor_isMPU}
+    \leanok
+    \uses{def:mpug_czx_exact_tensor, def:mpug_monomial_matrix, def:mpu}
+    The tensor $B$ has bond dimension two and coordinates
+    \begin{align}
+        B^{ab,cd}_{\ell r}
+         & =\delta_{a,1-c}\delta_{b,1-d}\delta_{\ell,a}
+        (-1)^{a+b+ab+br}.
+    \end{align}
+    Its periodic operator is unitary for every $N>0$, with entries and
+    monomial form
+    \begin{align}
+        O_N(B)_{s,t} & =\delta_{s,\kappa_N(t)}(-1)^{E(s)},                     \\
+        O_N(B)       & =M\bigl(\kappa_N,\ t\mapsto(-1)^{E(\kappa_N(t))}\bigr).
+    \end{align}
+    In particular, $B$ is a matrix product unitary. This assertion does
+    not include its phase classification, GHZ action, or defect data.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{thm:trace_eval_word_eq_sum_cyclic, thm:mpug_monomial_matrix_laws}
+    The two-site block is the matrix product contracted over a binary
+    intermediate bond $m$. The second factor vanishes unless $m=b$, so
+    \begin{align}
+        B^{ab,cd}_{\ell r}
+         & =\sum_{m\in\{0,1\}}C^{a,c}_{\ell m}C^{b,d}_{mr} \\
+         & =C^{a,c}_{\ell b}C^{b,d}_{br}                   \\
+         & =\delta_{a,1-c}\delta_{b,1-d}\delta_{\ell,a}
+        (-1)^{a+\ell b+b+br}                               \\
+         & =\delta_{a,1-c}\delta_{b,1-d}\delta_{\ell,a}
+        (-1)^{a+b+ab+br}.
+    \end{align}
+    For the periodic contraction with $s_j=(a_j,b_j)$ and
+    $t_j=(c_j,d_j)$, the cyclic trace expansion is
+    \begin{align}
+        O_N(B)_{s,t}
+         & =\sum_{g:\Z/N\Z\to\{0,1\}}
+        \prod_{j=0}^{N-1}B^{s_j,t_j}_{g_j,g_{j+1}}.
+    \end{align}
+    The factor at $j$ vanishes unless $g_j=a_j$, so only the path
+    $g_j=a_j$ can contribute. Substituting it gives
+    \begin{align}
+        O_N(B)_{s,t}
+         & =\prod_{j=0}^{N-1}B^{s_j,t_j}_{a_j,a_{j+1}} \\
+         & =\prod_{j=0}^{N-1}
+        \delta_{a_j,1-c_j}\delta_{b_j,1-d_j}
+        (-1)^{a_j+b_j+a_jb_j+b_ja_{j+1}}               \\
+         & =\delta_{s,\kappa_N(t)}(-1)^{E(s)}.
+    \end{align}
+    Thus the operator is the monomial matrix for complementation, with
+    column phase $(-1)^{E(\kappa_N(t))}$. Each phase has absolute value one,
+    so Lemma~\ref{thm:mpug_monomial_matrix_laws} proves unitarity.
+\end{proof}
+
+\begin{lemma}[Injectivity of the once-blocked CZX tensor]
+    \label{thm:mpug_czx_exact_tensor_injective}
+    \lean{MPOTensor.CZX.tensor_isInjective}
+    \leanok
+    \discussion{7354}
+    \uses{def:mpug_czx_exact_tensor, def:injective}
+    As in \cite[lines~4505--4547]{FrancoRubio2025MPUGauging}, the
+    once-blocked CZX tensor $B$ of Definition~\ref{def:mpug_czx_exact_tensor},
+    with the unnormalized Hadamard weights, both output $Z$ gates, and
+    physical indexing $B^{2a+b,2c+d}=B^{ab,cd}$ for binary $a,b,c,d$, is
+    injective:
+    \begin{align}
+        \operatorname{span}_{\C}\{B^{i,j}:0\leq i,j<4\}
+         & =\operatorname{Mat}_2(\C).
+    \end{align}
+    % Source: eq:MPU_CZX. This proves only injectivity of the shared tensor;
+    % it does not complete the GHZ, fusion, or action-data scope of #7354.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_czx_exact_tensor_unitary}
+    Let $E_{ab}$ be the bond matrix units, with $a,b\in\{0,1\}$.
+    The coordinate formula in
+    Lemma~\ref{thm:mpug_czx_exact_tensor_unitary} gives
+    \begin{align}
+        E_{00}
+         & =\tfrac12(B^{0,3}-B^{1,2}),  \\
+        E_{01}
+         & =\tfrac12(B^{0,3}+B^{1,2}),  \\
+        E_{10}
+         & =-\tfrac12(B^{2,1}+B^{3,0}), \\
+        E_{11}
+         & =\tfrac12(B^{3,0}-B^{2,1}).
+    \end{align}
+    Thus every bond matrix unit lies in the span of the physical letters.
+    Since every $2\times2$ matrix is a linear combination of these units,
+    the letters span the full bond matrix algebra.
+\end{proof}
+
+\subsection{The explicit CZX adjoint gauge}
+
+\begin{definition}[The Pauli adjoint gauge]
+    \label{def:mpug_czx_dagger_gauge}
+    \lean{MPOTensor.CZX.daggerGauge}
+    \leanok
+    \discussion{7354}
+    On the bond space $\C^2$, with basis indexed by $0,1$, the matrix on
+    both virtual legs in the adjoint diagram of
+    \cite[lines~4547--4559]{FrancoRubio2025MPUGauging} is the Pauli matrix
+    \begin{align}
+        Y & =\begin{pmatrix}0&-\mathrm{i}\\ \mathrm{i}&0\end{pmatrix}.
+    \end{align}
+\end{definition}
+
+\begin{lemma}[Elementary identities for the Pauli adjoint gauge]
+    \label{thm:mpug_czx_dagger_gauge_laws}
+    \lean{MPOTensor.CZX.daggerGauge_conjTranspose,
+        MPOTensor.CZX.daggerGauge_mul_self,
+        MPOTensor.CZX.daggerGauge_mem_unitaryGroup}
+    \leanok
+    \uses{def:mpug_czx_dagger_gauge}
+    As used for the unitary gauge in
+    \cite[lines~4547--4559]{FrancoRubio2025MPUGauging}, the matrix $Y$ of
+    Definition~\ref{def:mpug_czx_dagger_gauge} satisfies
+    \begin{align}
+        Y^\dagger & =Y,   \\
+        Y^2       & =I_2,
+    \end{align}
+    and in particular $Y\in\mathrm{U}(2)$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:mpug_czx_dagger_gauge}
+    Conjugate-transposing the displayed matrix gives $Y^\dagger=Y$, and
+    the Pauli multiplication rule $Y^2=I_2$ then yields $YY^\dagger=I_2$.
+\end{proof}
+
+\begin{lemma}[The physical adjoint of the exact CZX tensor]
+    \label{thm:mpug_czx_physical_adjoint}
+    \lean{MPOTensor.CZX.physicalAdjointTensor_tensor}
+    \leanok
+    \discussion{7354}
+    \uses{def:mpug_czx_exact_tensor, def:mpug_czx_dagger_gauge,
+        def:mpdo_physical_adjoint}
+    Let $B$ be the exact once-blocked CZX tensor of
+    Definition~\ref{def:mpug_czx_exact_tensor}, with physical adjoint
+    $(B^\dagger)^{u,v}_{\ell r}=\overline{B^{v,u}_{\ell r}}$ in which the
+    virtual indices are not transposed. As in the adjoint diagram of
+    \cite[lines~4547--4559]{FrancoRubio2025MPUGauging} with no scalar
+    prefactor, for $0\leq u,v<4$,
+    \begin{align}
+        (B^\dagger)^{u,v} & =YB^{u,v}Y.
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_czx_exact_tensor_unitary,
+        def:mpug_czx_dagger_gauge, def:mpdo_physical_adjoint}
+    Inserting the coordinate formula from
+    Lemma~\ref{thm:mpug_czx_exact_tensor_unitary} on both sides, expanding
+    the two matrix products over the binary bond indices, and substituting
+    the four physical values and the two bond values verifies each entry.
+\end{proof}
+
+\begin{lemma}[An explicit unitary adjoint gauge for CZX]
+    \label{thm:mpug_czx_unitary_dagger_gauge}
+    \lean{MPOTensor.CZX.daggerGaugeUnitary,
+        MPOTensor.CZX.physicalAdjointTensor_tensor_eq_unitaryGauge}
+    \leanok
+    \uses{def:mpug_czx_exact_tensor, def:mpug_czx_dagger_gauge,
+        def:mpdo_physical_adjoint}
+    In the unitary gauge convention of
+    \cite[lines~1552--1557 and 4547--4559]{FrancoRubio2025MPUGauging}, for
+    the exact once-blocked CZX tensor $B$, the matrix $T=Y$, regarded as an
+    element of $\mathrm{U}(2)$, satisfies, for $0\leq u,v<4$,
+    \begin{align}
+        (B^\dagger)^{u,v} & =T^\dagger B^{u,v}T.
+    \end{align}
+    % This exhibits the explicit witness, not an identification with the
+    % choice-selected generic dagger-inverse gauge.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_czx_dagger_gauge_laws, thm:mpug_czx_physical_adjoint}
+    Lemma~\ref{thm:mpug_czx_dagger_gauge_laws} gives $Y\in\mathrm{U}(2)$
+    and $Y^\dagger=Y$, and substituting these identities into
+    Lemma~\ref{thm:mpug_czx_physical_adjoint} yields the claim.
+\end{proof}
+
+\begin{lemma}[The CZX adjoint-gauge sign]
+    \label{thm:mpug_czx_dagger_sign}
+    \lean{MPOTensor.CZX.daggerGauge_map_star,
+        MPOTensor.CZX.daggerGauge_mul_map_star}
+    \leanok
+    \discussion{7354}
+    \uses{def:mpug_czx_dagger_gauge}
+    For the Pauli adjoint gauge $Y$, entrywise complex conjugation gives
+    \begin{align}
+        \overline{Y}  & =-Y,   \\
+        Y\overline{Y} & =-I_2.
+    \end{align}
+    Hence, as stated in \cite[lines~4547--4559]{FrancoRubio2025MPUGauging},
+    the sign in $Y\overline{Y}=\sigma_g I_2$ is $\sigma_g=-1$.
+    % These entries do not determine fusion tensors, local action tensors,
+    % L-symbols, or a gauge selected by the generic existence theorem.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:mpug_czx_dagger_gauge, thm:mpug_czx_dagger_gauge_laws}
+    Conjugating each entry of the displayed Pauli matrix gives
+    $\overline{Y}=-Y$. Then $Y\overline{Y}=-Y^2=-I_2$ by
+    Lemma~\ref{thm:mpug_czx_dagger_gauge_laws}.
+\end{proof}
+
+\subsection{The displayed CZX source factors}
+
+\begin{definition}[Four explicit CZX source factors]
+    \label{def:mpug_czx_displayed_factors}
+    \lean{MPOTensor.CZX.displayedX₂, MPOTensor.CZX.displayedY₂,
+        MPOTensor.CZX.displayedX₁, MPOTensor.CZX.displayedY₁}
+    \leanok
+    \discussion{7354}
+    \uses{def:mpug_czx_dagger_gauge}
+    For $0\leq i<4$, write $i=2a(i)+b(i)$ with $a(i),b(i)\in\{0,1\}$,
+    and put $\overline i=3-i$. Let $Y$ be the Pauli matrix of
+    Definition~\ref{def:mpug_czx_dagger_gauge}. Define matrices
+    $X_2\in\operatorname{Mat}_{(2\times4)\times4}(\C)$ and
+    $Y_2\in\operatorname{Mat}_{4\times(4\times2)}(\C)$ by
+    \begin{align}
+        (X_2)_{(\alpha,i),k}
+         & =\delta_{i,k}\delta_{\alpha,a(i)}(-1)^{a(i)+b(i)}, \\
+        (Y_2)_{k,(j,\beta)}
+         & =\delta_{k,\overline j}(-1)^{a(k)b(k)+b(k)\beta},
+    \end{align}
+    where $0\leq i,j,k<4$ and $\alpha,\beta\in\{0,1\}$. Define
+    $X_1\in\operatorname{Mat}_{(4\times2)\times4}(\C)$ and
+    $Y_1\in\operatorname{Mat}_{4\times(2\times4)}(\C)$ by
+    \begin{align}
+        (X_1)_{(i,\beta),k}
+         & =\sum_{t=0}^1Y_{\beta t}\overline{(Y_2)_{k,(i,t)}}, \\
+        (Y_1)_{k,(\alpha,j)}
+         & =\sum_{t=0}^1\overline{(X_2)_{(t,j),k}}Y_{t\alpha}.
+    \end{align}
+    Product indices in these matrix spaces retain their displayed order.
+    As in the filled and empty factors of
+    \cite[lines~4559--4659]{FrancoRubio2025MPUGauging}, the weights
+    $(-1)^{ab}$ are unnormalized Hadamard weights, $(-1)^{a(i)+b(i)}$
+    includes both output $Z$ gates, and the Pauli entry in the formula for
+    $X_1$ is $Y_{\beta t}$ rather than $Y_{t\beta}$.
+\end{definition}
+
+\begin{lemma}[The displayed factors recover both CZX cuts]
+    \label{thm:mpug_czx_displayed_cuts}
+    \lean{MPOTensor.CZX.displayed_cuts}
+    \leanok
+    \uses{def:mpug_czx_displayed_factors, def:mpug_czx_exact_tensor,
+        def:mpu_source_matrix_one, def:mpu_source_matrix_two}
+    As in the two decompositions of
+    \cite[lines~4559--4659]{FrancoRubio2025MPUGauging}, for the exact
+    once-blocked CZX tensor $B$ with source matrices
+    $(M_1(B))_{(i,\beta),(\alpha,j)}=B^{i,j}_{\alpha\beta}$ and
+    $(M_2(B))_{(\alpha,i),(j,\beta)}=B^{i,j}_{\alpha\beta}$, the factors of
+    Definition~\ref{def:mpug_czx_displayed_factors} satisfy
+    \begin{align}
+        X_1Y_1 & =M_1(B), \\
+        X_2Y_2 & =M_2(B).
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:mpug_czx_displayed_factors, def:mpug_czx_dagger_gauge,
+        thm:mpug_czx_exact_tensor_unitary,
+        def:mpu_source_matrix_one, def:mpu_source_matrix_two}
+    Expanding each matrix product over its four-dimensional factor index,
+    substituting the displayed formulas and the coordinate formula from
+    Lemma~\ref{thm:mpug_czx_exact_tensor_unitary}, and evaluating the
+    binary bond indices and the four physical values proves both entry
+    identities.
+\end{proof}
+
+\begin{lemma}[Four Gram matrices of the displayed CZX factors]
+    \label{thm:mpug_czx_displayed_grams}
+    \lean{MPOTensor.CZX.displayed_grams}
+    \leanok
+    \uses{def:mpug_czx_displayed_factors}
+    With the factors of two retaining the unnormalized Hadamard weights of
+    \cite[lines~4559--4659]{FrancoRubio2025MPUGauging}, the four explicit
+    factors of Definition~\ref{def:mpug_czx_displayed_factors} satisfy
+    \begin{align}
+        X_1^\dagger X_1 & =2I_4,
+        \label{eq:mpug_czx_displayed_gram_x1} \\
+        X_2^\dagger X_2 & =I_4,
+        \label{eq:mpug_czx_displayed_gram_x2} \\
+        Y_1Y_1^\dagger  & =I_4,               \\
+        Y_2Y_2^\dagger  & =2I_4.
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:mpug_czx_displayed_factors, thm:mpug_czx_dagger_gauge_laws}
+    The empty factors are Pauli-gauge contractions of the filled factors,
+    $X_1=(I_4\otimes Y)Y_2^\dagger$ and $Y_1=X_2^\dagger(Y\otimes I_4)$.
+    By Lemma~\ref{thm:mpug_czx_dagger_gauge_laws}, $Y$ is unitary, hence so
+    are $I_4\otimes Y$ and $Y\otimes I_4$; composing a unitary matrix with
+    $Y_2^\dagger$, respectively with $X_2^\dagger$, leaves the Gram matrix
+    unchanged, so $X_1^\dagger X_1=Y_2Y_2^\dagger$ and
+    $Y_1Y_1^\dagger=X_2^\dagger X_2$. Expanding the two filled
+    Gram matrices $X_2^\dagger X_2$ and $Y_2Y_2^\dagger$ over their
+    product-index spaces and substituting the factor coordinates at each
+    pair of factor indices gives the two displayed scalar identities.
+\end{proof}
+
+\begin{definition}[Right inverses of the displayed CZX factors]
+    \label{def:mpug_czx_displayed_right_inverses}
+    \lean{MPOTensor.CZX.displayedZ₁, MPOTensor.CZX.displayedZ₂}
+    \leanok
+    \uses{def:mpug_czx_displayed_factors}
+    For the factors of Definition~\ref{def:mpug_czx_displayed_factors}, the
+    right inverses associated with the explicit decompositions in
+    \cite[lines~4559--4659]{FrancoRubio2025MPUGauging} are
+    \begin{align}
+        Z_1 & =Y_1^\dagger,         \\
+        Z_2 & =\tfrac12Y_2^\dagger.
+    \end{align}
+\end{definition}
+
+\begin{lemma}[Right inverses and weighted normalization]
+    \label{thm:mpug_czx_displayed_normalizations}
+    \lean{MPOTensor.CZX.displayed_normalizations}
+    \leanok
+    \uses{def:mpug_czx_displayed_factors,
+        def:mpug_czx_displayed_right_inverses, def:mpu_source_weight}
+    Set $\rho=I_2/2$. The displayed factors and right inverses satisfy
+    \begin{align}
+        Y_1Z_1                         & =I_4,
+        \label{eq:mpug_czx_displayed_right_inverse_y1} \\
+        Y_2Z_2                         & =I_4,
+        \label{eq:mpug_czx_displayed_right_inverse_y2} \\
+        X_1^\dagger(I_4\otimes\rho)X_1 & =I_4.
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_czx_displayed_grams,
+        def:mpug_czx_displayed_right_inverses, def:mpu_source_weight}
+    The two inverse identities follow directly from
+    Lemma~\ref{thm:mpug_czx_displayed_grams}. Since
+    $I_4\otimes\rho=I_8/2$, the weighted identity is
+    $\tfrac12X_1^\dagger X_1=I_4$.
+\end{proof}
+
+\begin{lemma}[Both CZX source-cut ranks are four]
+    \label{thm:mpug_czx_displayed_ranks}
+    \lean{MPOTensor.CZX.displayed_ranks}
+    \leanok
+    \uses{def:mpug_czx_exact_tensor, def:mpu_source_matrix_one,
+        def:mpu_source_matrix_two}
+    For the exact once-blocked CZX tensor $B$,
+    \begin{align}
+        d_r=\operatorname{rank}M_1(B) & =4, \\
+        d_l=\operatorname{rank}M_2(B) & =4.
+    \end{align}
+    Thus the four-dimensional legs in
+    \cite[lines~4559--4659]{FrancoRubio2025MPUGauging} have the
+    source-cut dimensions.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_czx_displayed_cuts, thm:mpug_czx_displayed_grams,
+        thm:mpug_czx_displayed_normalizations}
+    Each cut factors through a four-dimensional space, so its rank is at
+    most four. Setting $L_1=X_1^\dagger/2$ for the first cut and
+    $L_2=X_2^\dagger$ for the second, (\ref{eq:mpug_czx_displayed_gram_x1})
+    and (\ref{eq:mpug_czx_displayed_gram_x2}) give $L_iX_i=I_4$, while
+    (\ref{eq:mpug_czx_displayed_right_inverse_y1}) and
+    (\ref{eq:mpug_czx_displayed_right_inverse_y2}) give $Y_iZ_i=I_4$, hence
+    $L_i(X_iY_i)Z_i=I_4$. Multiplication cannot increase rank, so each cut
+    has rank at least four.
+\end{proof}
+
+\begin{definition}[The displayed factors in source-rank coordinates]
+    \label{def:mpug_czx_displayed_source_factors}
+    \lean{MPOTensor.CZX.displayedRightEquiv, MPOTensor.CZX.displayedLeftEquiv,
+        MPOTensor.CZX.displayedSourceFactors,
+        MPOTensor.CZX.displayedSourceFactors_coordinates,
+        MPOTensor.CZX.displayedSourceFactors_inverse_coordinates}
+    \leanok
+    \uses{def:mpug_czx_displayed_factors,
+        def:mpug_czx_displayed_right_inverses, thm:mpug_czx_displayed_ranks,
+        def:mpug_czx_exact_tensor, def:mpu_weighted_source_factors,
+        def:mpug_czx_dagger_gauge}
+    Let $d_r,d_l$ be the two source-cut ranks of the exact CZX tensor $B$.
+    By Lemma~\ref{thm:mpug_czx_displayed_ranks}, both are four. Let
+    \begin{align}
+        e_r & :\{0,\ldots,d_r-1\}\longrightarrow\{0,1,2,3\}, \\
+        e_l & :\{0,\ldots,d_l-1\}\longrightarrow\{0,1,2,3\}
+    \end{align}
+    be the bijections that preserve each integer index. Pulling back the
+    four-dimensional factor index of $X_1,Y_1,Z_1$ along $e_r$ and that
+    of $X_2,Y_2,Z_2$ along $e_l$ yields matrices
+    $\widehat X_i,\widehat Y_i,\widehat Z_i$. Together with $\rho=I_2/2$,
+    these give source factors for $B$ in the sense of
+    Definition~\ref{def:mpu_weighted_source_factors}, satisfying both cut
+    factorizations, the two left-factor normalizations, and both
+    right-inverse identities.
+
+    Explicitly, for $0\leq k,i<4$ and $\alpha,\beta\in\{0,1\}$, evaluating
+    the pullbacks gives
+    \begin{align}
+        (\widehat X_1)_{(i,\alpha),e_r^{-1}(k)} & =(X_1)_{(i,\alpha),k}, \\
+        (\widehat Y_1)_{e_r^{-1}(k),(\alpha,i)} & =(Y_1)_{k,(\alpha,i)}, \\
+        (\widehat Z_1)_{(\alpha,i),e_r^{-1}(k)} & =(Z_1)_{(\alpha,i),k}, \\
+        (\widehat X_2)_{(\alpha,i),e_l^{-1}(k)} & =(X_2)_{(\alpha,i),k}, \\
+        (\widehat Y_2)_{e_l^{-1}(k),(i,\alpha)} & =(Y_2)_{k,(i,\alpha)}, \\
+        (\widehat Z_2)_{(i,\alpha),e_l^{-1}(k)} & =(Z_2)_{(i,\alpha),k},
+    \end{align}
+    and substituting the definitions of $X_1,Y_1,Z_1,Z_2$ gives the
+    Pauli and inverse coordinates
+    \begin{align}
+        (\widehat X_1)_{(i,\beta),e_r^{-1}(k)}
+         & =\sum_{t=0}^1Y_{\beta t}
+        \overline{(\widehat Y_2)_{e_l^{-1}(k),(i,t)}},                           \\
+        (\widehat Y_1)_{e_r^{-1}(k),(\beta,i)}
+         & =\sum_{t=0}^1\overline{(\widehat X_2)_{(t,i),e_l^{-1}(k)}}Y_{t\beta}, \\
+        (\widehat Z_1)_{(\beta,i),e_r^{-1}(k)}
+         & =\overline{(\widehat Y_1)_{e_r^{-1}(k),(\beta,i)}},                   \\
+        (\widehat Z_2)_{(i,\beta),e_l^{-1}(k)}
+         & =\tfrac12\overline{(\widehat Y_2)_{e_l^{-1}(k),(i,\beta)}}.
+    \end{align}
+    In particular, as in the first factor of
+    \cite[lines~4611--4659]{FrancoRubio2025MPUGauging}, pulling back
+    preserves the Pauli orientation $Y_{\beta t}$.
+    % This is an explicit SourceFactors witness, not an equality with the
+    % choice-selected compact SVD factors. It supplies no canonical-form-II
+    % presentation, fusion tensors, local action tensors, or anomaly data.
+\end{definition}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_czx_displayed_cuts, thm:mpug_czx_displayed_grams,
+        thm:mpug_czx_displayed_normalizations, def:mpug_czx_displayed_factors,
+        def:mpug_czx_displayed_right_inverses}
+    Pulling back the cut factorizations and inverse identities along the
+    two index bijections preserves products, conjugate transposes, and
+    identities, so the weighted first normalization and the ordinary
+    second normalization hold in the source-rank coordinates.
+    Evaluating the pullbacks, using $e_r(e_r^{-1}(k))=k$ and
+    $e_l(e_l^{-1}(k))=k$, gives the coordinate identities; substituting
+    the definitions of $X_1,Y_1,Z_1,Z_2$ and cancelling the inverse
+    bijections gives the Pauli and inverse coordinates.
+\end{proof}
+
+\subsection{Normalization of the displayed CZX comparison}
+
+\begin{definition}[Reflected candidates and the two displayed comparisons]
+    \label{def:mpug_czx_displayed_comparison}
+    \lean{MPOTensor.CZX.displayedReflectedX₁, MPOTensor.CZX.displayedReflectedY₁,
+        MPOTensor.CZX.displayedRawComparison,
+        MPOTensor.CZX.displayedWeightedComparison}
+    \leanok
+    \uses{def:mpug_czx_displayed_factors, def:mpug_czx_dagger_gauge,
+        def:mpu_source_weight}
+    Let $Y$ be the Pauli adjoint gauge of
+    Definition~\ref{def:mpug_czx_dagger_gauge} and let
+    $X_1,Y_1,X_2,Y_2$ be the displayed factors of
+    Definition~\ref{def:mpug_czx_displayed_factors}, with $d=4$ and $D=2$.
+    Put $A=I_4\otimes\overline Y$ and $B=Y^{\mathsf T}\otimes I_4$, and
+    define the reflected candidates
+    \begin{align}
+        \widehat X_1 & =AY_2^\dagger,  \\
+        \widehat Y_1 & =X_2^\dagger B.
+    \end{align}
+    Evaluating the candidates and comparison of
+    \cite[lines~5432--5441]{FrancoRubio2025MPUGauging} on the explicit
+    factors of lines~4559--4659 with $\rho=I_2/2$ defines the unweighted
+    and the density-weighted comparisons
+    \begin{align}
+        K_{\mathrm{unw}} & =X_1^\dagger\widehat X_1,                 \\
+        K_\rho           & =X_1^\dagger(I_4\otimes\rho)\widehat X_1.
+    \end{align}
+\end{definition}
+
+\begin{lemma}[The reflected candidates are the negatives of the displayed factors]
+    \label{thm:mpug_czx_reflected_neg}
+    \lean{MPOTensor.CZX.displayedReflected_eq_neg}
+    \leanok
+    \uses{def:mpug_czx_displayed_comparison, def:mpug_czx_displayed_factors}
+    For the maintained Pauli gauge,
+    \begin{align}
+        \widehat X_1 & =-X_1, \\
+        \widehat Y_1 & =-Y_1.
+    \end{align}
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:mpug_czx_dagger_gauge_laws, thm:mpug_czx_dagger_sign,
+        def:mpug_czx_displayed_factors, def:mpug_czx_displayed_comparison}
+    Lemma~\ref{thm:mpug_czx_dagger_sign} gives $\overline Y=-Y$, and
+    $Y^{\mathsf T}=\overline{Y^\dagger}=\overline Y=-Y$ by
+    Lemma~\ref{thm:mpug_czx_dagger_gauge_laws}. Expanding both entries
+    of the displayed factors against these two gauges gives the sign.
+\end{proof}
+
+\begin{lemma}[Coordinates of the two comparisons and the right overlap]
+    \label{thm:mpug_czx_comparison_coordinates}
+    \lean{MPOTensor.CZX.displayedComparison_coordinates,
+        MPOTensor.CZX.displayedRawComparison_gram,
+        MPOTensor.CZX.displayedRawComparison_not_isUnitaryBetween,
+        MPOTensor.CZX.displayedRawComparison_ne_rightOverlap}
+    \leanok
+    \uses{def:mpug_czx_displayed_comparison}
+    On the displayed factors,
+    \begin{align}
+        K_{\mathrm{unw}}        & =-2I_4,
+        \label{eq:mpug_czx_raw_comparison}      \\
+        K_\rho                  & =-I_4,
+        \label{eq:mpug_czx_weighted_comparison} \\
+        Y_1\widehat Y_1^\dagger & =-I_4.
+        \label{eq:mpug_czx_right_overlap}
+    \end{align}
+    Consequently $K_{\mathrm{unw}}^\dagger K_{\mathrm{unw}}=4I_4$, so
+    $K_{\mathrm{unw}}$ is not unitary, and
+    $K_{\mathrm{unw}}\neq Y_1\widehat Y_1^\dagger$: the unweighted left
+    overlap and the right overlap of
+    \cite[lines~5438--5441]{FrancoRubio2025MPUGauging} disagree on these
+    factors.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:mpug_czx_reflected_neg, thm:mpug_czx_displayed_grams,
+        thm:mpug_czx_displayed_normalizations,
+        def:mpug_czx_displayed_comparison}
+    Substituting Lemma~\ref{thm:mpug_czx_reflected_neg} turns each
+    overlap into the negative of a Gram matrix of the displayed factors.
+    The unweighted Gram $X_1^\dagger X_1=2I_4$ of
+    Lemma~\ref{thm:mpug_czx_displayed_grams} gives
+    (\ref{eq:mpug_czx_raw_comparison}); the weighted normalization
+    $X_1^\dagger(I_4\otimes\rho)X_1=I_4$ of
+    Lemma~\ref{thm:mpug_czx_displayed_normalizations} gives
+    (\ref{eq:mpug_czx_weighted_comparison}); and $Y_1Y_1^\dagger=I_4$ gives
+    (\ref{eq:mpug_czx_right_overlap}). Squaring
+    (\ref{eq:mpug_czx_raw_comparison}) gives the Gram matrix $4I_4$, whose
+    diagonal entry $4$ differs from $1$, and comparing the diagonal entries
+    of (\ref{eq:mpug_czx_raw_comparison}) and
+    (\ref{eq:mpug_czx_right_overlap}) separates the two overlaps.
+\end{proof}
+
+\begin{lemma}[The weighted comparison is unitary and recovers both factors]
+    \label{thm:mpug_czx_weighted_comparison_spec}
+    \lean{MPOTensor.CZX.displayedWeightedComparison_spec}
+    \leanok
+    \uses{def:mpug_czx_displayed_comparison}
+    The weighted comparison $K_\rho$ is unitary, and
+    \begin{align}
+        X_1 & =\widehat X_1K_\rho^\dagger, \\
+        Y_1 & =K_\rho\widehat Y_1.
+    \end{align}
+    The weight is the one carried by the normalization of the first left
+    factor. This calculation concerns the explicit displayed factors of
+    Definition~\ref{def:mpug_czx_displayed_factors}, not choice-selected
+    factors, so the unequal overlaps of
+    Lemma~\ref{thm:mpug_czx_comparison_coordinates} diagnose the
+    intermediate formula of
+    \cite[lines~5438--5441]{FrancoRubio2025MPUGauging} on these factors
+    rather than contradicting the proposition being proved there. The
+    weighted comparison is the one retained in
+    \cite{gap:fbc25_inverse_compatible_tilde_omission}; no gauge phase is
+    changed.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:mpug_czx_comparison_coordinates, thm:mpug_czx_reflected_neg}
+    By (\ref{eq:mpug_czx_weighted_comparison}), $K_\rho=-I_4$, which is
+    unitary. Lemma~\ref{thm:mpug_czx_reflected_neg} then gives
+    $\widehat X_1K_\rho^\dagger=(-X_1)(-I_4)=X_1$ and
+    $K_\rho\widehat Y_1=(-I_4)(-Y_1)=Y_1$.
+\end{proof}
+
+\subsection{The blocked GHZ state and its CZX invariance}
+
+\begin{definition}[The GHZ tensor in the blocked CZX alphabet]
+    \label{def:mpug_czx_blocked_ghz}
+    \lean{MPOTensor.CZX.blockedGHZTensor}
+    \leanok
+    \discussion{7354}
+    \uses{def:ghz_tensor, def:blocked_tensor}
+    Let $A^0=\ketbra{0}{0}$ and $A^1=\ketbra{1}{1}$ be the GHZ tensor,
+    and identify the blocked physical alphabet with $\{0,1,2,3\}$ by
+    $\varphi(2a+b)=(a,b)$ for $a,b\in\{0,1\}$. As in
+    \cite[lines~4660--4670]{FrancoRubio2025MPUGauging}, with the same
+    physical-index order as the CZX tensor $B$, the once-blocked GHZ
+    tensor is
+    \begin{align}
+        \widehat A^{2a+b} & =A^aA^b=(A^{[2]})^{\varphi(2a+b)}.
+    \end{align}
+\end{definition}
+
+\begin{lemma}[The two blocked GHZ sectors]
+    \label{thm:mpug_czx_blocked_ghz_sectors}
+    \lean{MPOTensor.CZX.blockTensor_ghzSectorTensor_apply}
+    \leanok
+    \uses{def:mpug_ghz_blocked_cluster_tensor, def:blocked_tensor}
+    For $x\in\{0,1\}$, let $A_x^a=\delta_{a,x}$ be the
+    bond-one GHZ sector. Under $\varphi(2a+b)=(a,b)$ its two-site block is
+    \begin{align}
+        (A_x^{[2]})^{\varphi(i)} & =\delta_{i,3x},
+        \qquad i\in\{0,1,2,3\}.
+    \end{align}
+    Thus, as in \cite[lines~4660--4670]{FrancoRubio2025MPUGauging}, the
+    blocked sector vectors are $\ket{00}$ and $\ket{11}$.
+\end{lemma}
+
+\begin{proof}\leanok
+    For $i=2a+b$, the block coefficient is
+    $A_x^aA_x^b=\delta_{a,x}\delta_{b,x}$, which equals one exactly when
+    $a=b=x$, or equivalently $i=3x$.
+\end{proof}
+
+\begin{lemma}[The matrix product vector of the blocked GHZ tensor]
+    \label{thm:mpug_czx_blocked_ghz_mpv}
+    \lean{MPOTensor.CZX.mpv_blockedGHZTensor}
+    \leanok
+    \uses{def:mpug_czx_blocked_ghz, def:mpv}
+    For every $N\geq0$, the periodic matrix product vector of
+    $\widehat A$ is
+    \begin{align}
+        \ket{\psi_N}
+         & =\ket{0}^{\otimes N}+\ket{3}^{\otimes N}.
+        \label{eq:mpug_czx_blocked_ghz_mpv}
+    \end{align}
+    In the original two-qubit alphabet the two summands are
+    $\ket{00}^{\otimes N}$ and $\ket{11}^{\otimes N}$.
+    At $N=0$ they are the same empty configuration, with total coefficient
+    two.
+\end{lemma}
+
+\begin{proof}\leanok
+    The blocked letters are diagonal, with
+    $\widehat A^i=\operatorname{diag}(\delta_{i,0},\delta_{i,3})$.
+    Hence, for $s\in\{0,1,2,3\}^N$,
+    \begin{align}
+        \operatorname{tr}\bigl(\widehat A^{s_1}\cdots
+        \widehat A^{s_N}\bigr)
+         & =\prod_{j=1}^N\delta_{s_j,0}
+        +\prod_{j=1}^N\delta_{s_j,3}.
+    \end{align}
+    These are the coefficients of the two constant configurations.
+\end{proof}
+
+\begin{lemma}[CZX invariance of the blocked GHZ state]
+    \label{thm:mpug_czx_blocked_ghz_invariant}
+    \lean{MPOTensor.CZX.mpo_tensor_mulVec_blockedGHZ}
+    \leanok
+    \discussion{7354}
+    \uses{def:mpug_czx_exact_tensor, def:mpug_czx_blocked_ghz, def:mpv}
+    Let $B$ be the once-blocked CZX tensor, with both output $Z$ gates and
+    the unnormalized Hadamard weights, and let $N>0$.
+    Reindex the matrix product vector of the two-site-blocked GHZ tensor
+    $A^{[2]}$ by the alphabet bijection $\varphi(2a+b)=(a,b)$:
+    \begin{align}
+        \psi_N(s) & =V^{(N)}(A^{[2]})_{(\varphi(s_1),\ldots,\varphi(s_N))},
+        \qquad s\in\{0,1,2,3\}^N.
+    \end{align}
+    Then, as in the GHZ-invariance assertion of
+    \cite[lines~4660--4670]{FrancoRubio2025MPUGauging}, the periodic CZX
+    operator satisfies
+    \begin{align}
+        O_N(B)\ket{\psi_N} & =\ket{\psi_N}.
+    \end{align}
+    % Only the actual blocked GHZ MPV and its positive-length invariance
+    % are asserted. Fusion, action tensors, and classification remain open.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_czx_blocked_ghz_mpv, thm:mpug_czx_exact_tensor_unitary}
+    Reindexing the alphabet gives the vector in
+    (\ref{eq:mpug_czx_blocked_ghz_mpv}). The CZX operator complements
+    every matter bit. Its phase on either constant configuration is one:
+    the cyclic exponent is zero on $0^N$ and $4N$ on $3^N$.
+    Consequently
+    \begin{align}
+        O_N(B)\ket{0}^{\otimes N} & =\ket{3}^{\otimes N}, &
+        O_N(B)\ket{3}^{\otimes N} & =\ket{0}^{\otimes N}.
+    \end{align}
+    Their sum is invariant.
+\end{proof}
+
+\subsection{The printed CZX action pair and its empty-word boundary}
+
+The action tensors displayed in
+\cite[lines~4690--4694]{FrancoRubio2025MPUGauging} satisfy the interior
+identity for nonempty words and the exterior identity with nonempty buffers.
+Their empty contraction is one half, whereas the general interior identity
+in \cite[lines~1841--1870]{FrancoRubio2025MPUGauging} includes length zero.
+The distinction and a local replacement are recorded in
+\cite{gap:fbc25_czx_action_empty_word}. The replacement below is a different
+pair, not a scalar gauge of the printed pair or a substitution in the
+unbuffered defect formulas.
+
+\begin{definition}[The acted GHZ sectors]
+    \label{def:mpug_czx_acted_sectors}
+    \lean{MPOTensor.CZX.blockedSector, MPOTensor.CZX.actedSector,
+        MPOTensor.CZX.actionTarget, MPOTensor.CZX.actionLetter,
+        MPOTensor.CZX.actionMatrix}
+    \leanok
+    \uses{def:mpug_czx_exact_tensor, def:mpug_ghz_blocked_cluster_tensor,
+        def:blocked_tensor}
+    For $x\in\{0,1\}$, let $A_x$ be the two-site block of the
+    bond-one GHZ sector, with physical indices identified by
+    $\varphi(2a+b)=(a,b)$. Thus $A_x^i=\delta_{i,3x}$.
+    Write $B^{i,j}$ for the CZX tensor and define
+    \begin{align}
+        B_x^i & =\sum_{j=0}^3 B^{i,j}A_x^j, \\
+        k_x   & =3(1-x),                    \\
+        C_x   & =B^{k_x,3x}.
+        \label{eq:mpug_czx_acted_sectors}
+    \end{align}
+    As in the physical contraction and exchanged GHZ blocks of
+    \cite[lines~4660--4694]{FrancoRubio2025MPUGauging}, the target sector
+    is $A_{1-x}$.
+\end{definition}
+
+\begin{lemma}[Coordinates of the acted sectors]
+    \label{thm:mpug_czx_acted_sector_coordinates}
+    \lean{MPOTensor.CZX.actedSector_apply, MPOTensor.CZX.actionTarget_apply,
+        MPOTensor.CZX.actionMatrix_coordinates}
+    \leanok
+    \uses{def:mpug_czx_acted_sectors}
+    For $x\in\{0,1\}$ and $i\in\{0,1,2,3\}$,
+    \begin{align}
+        B_x^i     & =\delta_{i,k_x}C_x,                     \\
+        A_{1-x}^i & =\delta_{i,k_x},                        \\
+        C_0       & =\begin{pmatrix}0&0\\-1&1\end{pmatrix}, \\
+        C_1       & =\begin{pmatrix}1&1\\0&0\end{pmatrix}.
+        \label{eq:mpug_czx_action_matrices}
+    \end{align}
+\end{lemma}
+\begin{proof}\leanok
+    \uses{def:mpug_czx_acted_sectors, thm:mpug_czx_blocked_ghz_sectors,
+        def:mpug_czx_exact_tensor}
+    Since $A_x^j=\delta_{j,3x}$, the defining sum of
+    Definition~\ref{def:mpug_czx_acted_sectors} collapses to
+    $B_x^i=\sum_{j=0}^3 B^{i,j}A_x^j=B^{i,3x}$. The exact CZX tensor of
+    Definition~\ref{def:mpug_czx_exact_tensor} vanishes off its support,
+    giving
+    \begin{align}
+        B^{i,3x} & =\delta_{i,3(1-x)}B^{3(1-x),3x}=\delta_{i,k_x}C_x,
+    \end{align}
+    so $B_x^i=\delta_{i,k_x}C_x$; likewise $A_x^j=\delta_{j,3x}$ at
+    $x\mapsto1-x$ gives $A_{1-x}^i=\delta_{i,k_x}$. Expanding the defining
+    CZX matrices at $B^{k_x,3x}$ evaluates the two displayed matrices
+    $C_0,C_1$.
+\end{proof}
+
+\begin{definition}[The printed action pair]
+    \label{def:mpug_czx_printed_action_pair}
+    \lean{MPOTensor.CZX.printedActionBra, MPOTensor.CZX.printedActionKet}
+    \leanok
+    For $x\in\{0,1\}$, denote the printed left and right action tensors
+    by $p_x$ and $q_x$. With $|\pm\rangle=(|0\rangle\pm|1\rangle)/\sqrt2$,
+    the formulas of \cite[lines~4690--4694]{FrancoRubio2025MPUGauging} read
+    \begin{align}
+        p_0 & =(0,-i),                                    \\
+        p_1 & =(1,0),                                     \\
+        q_0 & =\tfrac12\begin{pmatrix}-i\\i\end{pmatrix}, \\
+        q_1 & =\tfrac12\begin{pmatrix}1\\1\end{pmatrix}.
+        \label{eq:mpug_czx_printed_action_pair}
+    \end{align}
+    The normalization of the kets is not specified explicitly in that
+    passage. These coordinates agree with the later defect evaluations;
+    see \cite{gap:fbc25_czx_action_empty_word}.
+\end{definition}
+
+\begin{lemma}[Finite contractions of the printed action pair]
+    \label{thm:mpug_czx_printed_action_contractions}
+    \lean{MPOTensor.CZX.printedAction_finite_identities}
+    \leanok
+    \uses{def:mpug_czx_acted_sectors, def:mpug_czx_printed_action_pair}
+    For each $x\in\{0,1\}$,
+    \begin{align}
+        C_x^2        & =C_x,      \\
+        p_xq_x       & =\tfrac12, \\
+        p_xC_xq_x    & =1,        \\
+        C_xq_xp_xC_x & =C_x.
+        \label{eq:mpug_czx_printed_action_contractions}
+    \end{align}
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:mpug_czx_acted_sector_coordinates, def:mpug_czx_printed_action_pair}
+    Multiplying the two-by-two matrices and the printed rows and columns
+    yields the four identities.
+\end{proof}
+
+\begin{lemma}[Nonempty acted and target words]
+    \label{thm:mpug_czx_action_words}
+    \lean{MPOTensor.CZX.evalWord_actedSector, MPOTensor.CZX.evalWord_actionTarget}
+    \leanok
+    \uses{def:mpug_czx_acted_sectors}
+    For a word $\mathbf a$ in $\{0,1,2,3\}$, write $B_x^{\mathbf a}$
+    and $A_{1-x}^{\mathbf a}$ for ordered products of letters. If
+    $|\mathbf a|>0$, then
+    \begin{align}
+        B_x^{\mathbf a}     & =
+        \begin{cases}C_x&\text{if every letter is }k_x,\\0&\text{otherwise},\end{cases} \\
+        A_{1-x}^{\mathbf a} & =
+        \begin{cases}1&\text{if every letter is }k_x,\\0&\text{otherwise}.\end{cases}
+        \label{eq:mpug_czx_action_words}
+    \end{align}
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:mpug_czx_acted_sector_coordinates, thm:mpug_czx_printed_action_contractions}
+    An unsupported letter makes the product zero. Otherwise every acted
+    letter is $C_x$, whose positive powers equal $C_x$ by idempotency.
+\end{proof}
+
+\begin{lemma}[Printed interior and buffered exterior identities]
+    \label{thm:mpug_czx_printed_action_words}
+    \lean{MPOTensor.CZX.printedAction_interior, MPOTensor.CZX.printedAction_exterior}
+    \leanok
+    \uses{def:mpug_czx_acted_sectors, def:mpug_czx_printed_action_pair}
+    Let $x\in\{0,1\}$. For every nonempty word $\mathbf c$,
+    \begin{align}
+        p_xB_x^{\mathbf c}q_x & =A_{1-x}^{\mathbf c}.
+        \label{eq:mpug_czx_printed_interior}
+    \end{align}
+    If $\mathbf a,\mathbf b$ are also nonempty, then
+    \begin{align}
+        B_x^{\mathbf a}q_xA_{1-x}^{\mathbf c}p_xB_x^{\mathbf b}
+         & =B_x^{\mathbf a\mathbf c\mathbf b}.
+        \label{eq:mpug_czx_printed_exterior}
+    \end{align}
+    No equality of buffer lengths is needed: while the equal-length case
+    matches the exterior diagram of
+    \cite[lines~1788--1838]{FrancoRubio2025MPUGauging}, the interior
+    equation covers only the nonempty part of that source assertion; see
+    \cite{gap:fbc25_czx_action_empty_word}.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:mpug_czx_action_words, thm:mpug_czx_printed_action_contractions}
+    If an unsupported letter occurs, both sides vanish. Otherwise the
+    interior is $p_xC_xq_x=1$ and the exterior is $C_xq_xp_xC_x=C_x$.
+\end{proof}
+
+\begin{lemma}[The printed pair is not an all-word reduction]
+    \label{thm:mpug_czx_printed_action_empty}
+    \lean{MPOTensor.CZX.printedAction_empty_ne, MPOTensor.CZX.printedAction_not_isReduction}
+    \leanok
+    \uses{def:mpug_czx_acted_sectors, def:mpug_czx_printed_action_pair,
+        def:mps_rectangular_reduction}
+    As recorded in the empty-word obstruction of
+    \cite{gap:fbc25_czx_action_empty_word}, for each $x\in\{0,1\}$, the
+    printed pair $(p_x,q_x)$ is not a reduction from $B_x$ to $A_{1-x}$.
+    Indeed, if $\varepsilon$ is the empty word, then
+    \begin{align}
+        p_xB_x^{\varepsilon}q_x & =\tfrac12\ne1=A_{1-x}^{\varepsilon}.
+        \label{eq:mpug_czx_printed_action_empty}
+    \end{align}
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:mpug_czx_printed_action_contractions}
+    Empty products are identities, whereas $p_xq_x=1/2$.
+\end{proof}
+
+\begin{definition}[A separately dressed left action tensor]
+    \label{def:mpug_czx_dressed_action}
+    \lean{MPOTensor.CZX.dressedActionBra}
+    \leanok
+    \uses{def:mpug_czx_acted_sectors, def:mpug_czx_printed_action_pair}
+    As the local replacement of \cite{gap:fbc25_czx_action_empty_word}
+    rather than the printed pair, for $x\in\{0,1\}$, define $V_x=p_xC_x$
+    and retain $W_x=q_x$. In coordinates $V_0=(i,-i)$ and
+    $V_1=(1,1)$, so neither is a scalar multiple of the corresponding
+    printed row. No replacement in an unbuffered defect formula is asserted.
+\end{definition}
+
+\begin{lemma}[Dressing is absorbed by a nonempty buffer]
+    \label{thm:mpug_czx_dressed_action_absorption}
+    \lean{MPOTensor.CZX.dressedActionBra_absorption}
+    \leanok
+    \uses{def:mpug_czx_dressed_action}
+    For $x\in\{0,1\}$ and every nonempty word $\mathbf b$,
+    \begin{align}
+        V_xB_x^{\mathbf b} & =p_xB_x^{\mathbf b}.
+        \label{eq:mpug_czx_dressed_action_absorption}
+    \end{align}
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:mpug_czx_action_words, thm:mpug_czx_printed_action_contractions,
+        def:mpug_czx_dressed_action}
+    The word evaluates to either zero or $C_x$, and in the latter case
+    $C_x^2=C_x$ gives the equality.
+\end{proof}
+
+\begin{lemma}[An all-word reduction with exterior buffer length one]
+    \label{thm:mpug_czx_dressed_action_reduction}
+    \lean{MPOTensor.CZX.dressedAction_isReduction,
+        MPOTensor.CZX.dressedAction_isReductionExteriorBufferLength}
+    \leanok
+    \uses{def:mpug_czx_dressed_action, def:mps_rectangular_reduction,
+        def:mps_reduction_exterior_buffer_length}
+    For each $x\in\{0,1\}$, $(V_x,W_x)$ is a reduction from $B_x$
+    to $A_{1-x}$ with exterior buffer length one. The reduction identity
+    holds for every word $\mathbf c$, including the empty word; the exterior
+    identity holds for nonempty words $\mathbf a$, $\mathbf b$, and
+    $\mathbf c$. Thus
+    \begin{align}
+        V_xW_x                & =1,                                 \\
+        V_xB_x^{\mathbf c}W_x & =A_{1-x}^{\mathbf c},               \\
+        B_x^{\mathbf a}W_xA_{1-x}^{\mathbf c}V_xB_x^{\mathbf b}
+                              & =B_x^{\mathbf a\mathbf c\mathbf b}.
+        \label{eq:mpug_czx_dressed_action_reduction}
+    \end{align}
+    This proves the all-word relation for the separately dressed pair,
+    not the empty-word claim for the printed pair.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:mpug_czx_printed_action_contractions,
+        thm:mpug_czx_printed_action_words, thm:mpug_czx_dressed_action_absorption,
+        def:mpug_czx_dressed_action}
+    The empty contraction is $V_xW_x=p_xC_xq_x=1$. For a nonempty
+    interior word, absorbing $C_x$ and applying the printed interior
+    identity yields the second equation, while in the exterior identity,
+    absorbing $C_x$ into the right buffer and applying
+    (\ref{eq:mpug_czx_printed_exterior}) completes the proof.
+\end{proof}
+
+\subsection{The CZX \texorpdfstring{$g,g$}{g,g} fusion caps}
+
+\begin{definition}[The CZX $g,g$ fusion caps]
+    \label{def:mpug_czx_fusion_caps}
+    \lean{MPOTensor.CZX.fusionV, MPOTensor.CZX.fusionW}
+    \leanok
+    As in the concrete caps of
+    \cite[lines~4671--4689]{FrancoRubio2025MPUGauging} (the $g=h=g^{-1}$
+    specialization of the general fusion-tensor display in
+    \cite[lines~2000--2037]{FrancoRubio2025MPUGauging}), in the ordered bond
+    coordinates $0,1,2,3$, define the row vector
+    $F^<_{g,g}\colon\C^4\to\C$ and the column vector
+    $F^>_{g,g}\colon\C\to\C^4$ by
+    \begin{align}
+        F^<_{g,g} & =(0,-i,i,0),                     \\
+        F^>_{g,g} & =\tfrac12(0,i,-i,0)^{\mathsf T}.
+    \end{align}
+    % Only the concrete g,g slice of #7354 is covered here.
+\end{definition}
+
+\begin{lemma}[Product coordinates of the CZX fusion caps]
+    \label{thm:mpug_czx_fusion_caps_apply}
+    \lean{MPOTensor.CZX.fusion_caps_apply}
+    \leanok
+    \uses{def:mpug_czx_fusion_caps, def:mpug_czx_dagger_gauge}
+    Let $F^<_{g,g},F^>_{g,g}$ be the caps of
+    Definition~\ref{def:mpug_czx_fusion_caps}, and let $Y$ be the Pauli
+    matrix of Definition~\ref{def:mpug_czx_dagger_gauge}. Identify the
+    product-bond coordinate $(a,b)$ with $2a+b$. For all bond bits
+    $a,b\in\{0,1\}$,
+    \begin{align}
+        F^<_{g,g}(a,b) & =Y_{a,b},
+        \label{eq:mpug_czx_fusion_caps_apply} \\
+        F^>_{g,g}(a,b) & =\tfrac12Y_{b,a}.
+        \label{eq:mpug_czx_fusion_caps_apply_right}
+    \end{align}
+    Thus, as in the printed diagram of
+    \cite[lines~4671--4689]{FrancoRubio2025MPUGauging}, both caps vanish at
+    the diagonal bond coordinates and carry $Y$ in opposite orientations.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{def:mpug_czx_fusion_caps, def:mpug_czx_dagger_gauge}
+    Evaluating both caps at $2a+b$ for the four pairs $(a,b)$ and comparing
+    with the entries of $Y$ yields
+    (\ref{eq:mpug_czx_fusion_caps_apply}) and
+    (\ref{eq:mpug_czx_fusion_caps_apply_right}).
+\end{proof}
+
+\begin{lemma}[The CZX fusion reduction]
+    \label{thm:mpug_czx_fusion_reduction}
+    \lean{MPOTensor.CZX.fusion_isReduction,
+        MPOTensor.CZX.fusion_isReductionExteriorBufferLength_one}
+    \leanok
+    \uses{def:mpug_czx_fusion_caps, def:mpdo_operator_product,
+        def:mpug_czx_exact_tensor, threeMPU, def:mpo_to_mps,
+        def:mps_rectangular_reduction,
+        def:mps_reduction_exterior_buffer_length}
+    Let $B$ be the doubled-index tensor of the product
+    $\mathcal U_g\cdot\mathcal U_g$
+    (Definition~\ref{def:mpdo_operator_product} applied to
+    Definition~\ref{def:mpug_czx_exact_tensor} with itself, viewed
+    through Definition~\ref{def:mpo_to_mps}), and let $I$ be the
+    doubled-index bond-one identity tensor of
+    Definition~\ref{threeMPU}. Then $(F^<_{g,g},F^>_{g,g})$ is a
+    reduction from $B$ to $I$ with exterior buffer length one. For every
+    word $\mathbf c$, including the empty word,
+    \begin{align}
+        F^<_{g,g}F^>_{g,g}              & =1,             \\
+        F^<_{g,g}B^{\mathbf c}F^>_{g,g} & =I^{\mathbf c}.
+    \end{align}
+    For nonempty words $\mathbf p,\mathbf q,\mathbf c$, this gives the
+    concrete $g,g$ instance of the fusion reduction
+    \cite[lines~1405--1498]{FrancoRubio2025MPUGauging} with the fusion
+    tensors of \cite[lines~2000--2037]{FrancoRubio2025MPUGauging}
+    specialized to the CZX display
+    \cite[lines~4671--4689]{FrancoRubio2025MPUGauging}:
+    \begin{align}
+        B^{\mathbf p}F^>_{g,g}I^{\mathbf c}F^<_{g,g}B^{\mathbf q}
+         & =B^{\mathbf p\mathbf c\mathbf q}.
+        \label{eq:mpug_czx_fusion_reduction}
+    \end{align}
+\end{lemma}
+\begin{proof}\leanok
+    \uses{def:mpug_czx_fusion_caps, def:mpug_czx_exact_tensor,
+        def:mpdo_operator_product, def:mpo_to_mps, threeMPU}
+    With $V=F^<_{g,g}$ and $W=F^>_{g,g}$, substituting the cap and
+    tensor coordinates gives the three local identities
+    \begin{align}
+        VW       & =1,
+        \label{eq:mpug_czx_fusion_cap_product} \\
+        VB^iW    & =I^i,
+        \label{eq:mpug_czx_fusion_letter}      \\
+        B^iWVB^j & =B^iB^j.
+        \label{eq:mpug_czx_fusion_letter_insertion}
+    \end{align}
+    The all-word identity $VB^{\mathbf c}W=I^{\mathbf c}$ follows by
+    induction on $\mathbf c$, removing its first letter. The empty word
+    is (\ref{eq:mpug_czx_fusion_cap_product}) and a single letter is
+    (\ref{eq:mpug_czx_fusion_letter}). For $\mathbf c=ij\mathbf c'$,
+    inserting $WV$ after the first letter by
+    (\ref{eq:mpug_czx_fusion_letter_insertion}), splitting the caps off both
+    factors, and applying (\ref{eq:mpug_czx_fusion_letter}) together with
+    the induction hypothesis for $j\mathbf c'$ gives
+    \begin{align}
+        VB^{ij\mathbf c'}W
+         & =(VB^iW)(VB^{j\mathbf c'}W)
+        =I^iI^{j\mathbf c'}=I^{ij\mathbf c'}.
+    \end{align}
+    For nonempty words $\mathbf p,\mathbf q$, a second induction on the left
+    word $\mathbf p$, again removing its first letter, gives
+    \begin{align}
+        B^{\mathbf p}WVB^{\mathbf q} & =B^{\mathbf p\mathbf q}.
+        \label{eq:mpug_czx_fusion_word_insertion}
+    \end{align}
+    For the singleton case $\mathbf p=i$ and
+    $\mathbf q=j\mathbf q'$,
+    (\ref{eq:mpug_czx_fusion_letter_insertion}) gives
+    \begin{align}
+        B^iWVB^{j\mathbf q'}
+         & =(B^iWVB^j)B^{\mathbf q'}
+        =B^iB^jB^{\mathbf q'}=B^{i j\mathbf q'}.
+    \end{align}
+    If $\mathbf p=i\mathbf p'$ with $\mathbf p'$ nonempty, the induction
+    hypothesis applied to the tail gives
+    \begin{align}
+        B^{i\mathbf p'}WVB^{\mathbf q}
+         & =B^i(B^{\mathbf p'}WVB^{\mathbf q})
+        =B^iB^{\mathbf p'\mathbf q}=B^{i\mathbf p'\mathbf q}.
+    \end{align}
+    For nonempty buffers and middle word, substituting
+    $I^{\mathbf c}=VB^{\mathbf c}W$ and applying
+    (\ref{eq:mpug_czx_fusion_word_insertion}) twice yields
+    \begin{align}
+        B^{\mathbf p}WI^{\mathbf c}VB^{\mathbf q}
+         & =B^{\mathbf p}WVB^{\mathbf c}WVB^{\mathbf q}
+        =B^{\mathbf p\mathbf c\mathbf q}.
+    \end{align}
+\end{proof}
+
+\subsection{Printed fusion--action coordinate contractions}
+
+The contractions below evaluate the printed action pair and right fusion
+cap of \cite[lines~4671--4694]{FrancoRubio2025MPUGauging} in fixed product-bond
+order. They are compared with the fusion--action relation of
+\cite[lines~1875--1913]{FrancoRubio2025MPUGauging}; the next subsection
+identifies these coefficients with the $L$-symbols of two generators, up to the
+orientation of the caps \cite{gap:fbc25_czx_fusion_coordinate_compatibility}.
+No cap, action tensor, block label, or physical gate is changed.
+
+\begin{definition}[Sequential action covector]
+    \label{def:mpug_czx_sequential_action_bra}
+    \lean{MPOTensor.CZX.sequentialActionBra}
+    \leanok
+    \uses{def:mpug_czx_printed_action_pair}
+    For $x\in\{0,1\}$, let $p_x$ be the printed action row of
+    Definition~\ref{def:mpug_czx_printed_action_pair}. Define the row
+    $P_x\colon\C^4\to\C$ by the following coordinates, for
+    $\alpha,\gamma\in\{0,1\}$:
+    \begin{align}
+        P_x                    & =p_{1-x}\otimes p_x,         &
+        (P_x)_{2\alpha+\gamma} & =p_{1-x}(\alpha)p_x(\gamma).
+    \end{align}
+    The first action factor occupies the first product-bond coordinate.
+\end{definition}
+
+\begin{definition}[Sequential action vector]
+    \label{def:mpug_czx_sequential_action_ket}
+    \lean{MPOTensor.CZX.sequentialActionKet}
+    \leanok
+    \uses{def:mpug_czx_printed_action_pair}
+    For $x\in\{0,1\}$, let $q_x$ be the printed action column of
+    Definition~\ref{def:mpug_czx_printed_action_pair}. Define the column
+    $Q_x\colon\C\to\C^4$ by the following coordinates, for
+    $\alpha,\gamma\in\{0,1\}$:
+    \begin{align}
+        Q_x                    & =q_{1-x}\otimes q_x,         &
+        (Q_x)_{2\alpha+\gamma} & =q_{1-x}(\alpha)q_x(\gamma).
+    \end{align}
+    Rows contract with columns by ordinary matrix multiplication, with no
+    additional complex conjugation.
+\end{definition}
+
+\begin{definition}[Supported product letter]
+    \label{def:mpug_czx_fusion_action_letter}
+    \lean{MPOTensor.CZX.fusionActionLetter}
+    \leanok
+    \uses{def:mpug_czx_exact_tensor, def:mpdo_operator_product}
+    Let $T$ be the exact blocked CZX tensor of
+    Definition~\ref{def:mpug_czx_exact_tensor}. For $x\in\{0,1\}$, define
+    $B_x\in\operatorname{Mat}_4(\C)$ to be the physical $(3x,3x)$ letter
+    of $T\mathbin{\cdot}T$. Explicitly, for
+    $\alpha,\gamma,\beta,\delta\in\{0,1\}$,
+    \begin{align}
+        (B_x)_{2\alpha+\gamma,2\beta+\delta}
+         & =\sum_{j=0}^3 T^{3x,j}_{\alpha\beta}T^{j,3x}_{\gamma\delta}.
+    \end{align}
+    The physical index $3x$ encodes the two bits $(x,x)$.
+\end{definition}
+
+\begin{lemma}[Coordinates of the supported product letters]
+    \label{thm:mpug_czx_supported_letter_coordinates}
+    \lean{MPOTensor.CZX.mulTensor_diagonal_letter_coordinates}
+    \leanok
+    \uses{def:mpug_czx_fusion_action_letter}
+    The two supported product letters have coordinates
+    \begin{align}
+        B_0 & =\begin{pmatrix}
+                   0 & 0 & 0 & 0 \\-1&1&-1&1\\0&0&0&0\\0&0&0&0
+               \end{pmatrix}, \\
+        B_1 & =\begin{pmatrix}
+                   0 & 0 & 0 & 0 \\0&0&0&0\\-1&-1&1&1\\0&0&0&0
+               \end{pmatrix}.
+        \label{eq:mpug_czx_supported_letters}
+    \end{align}
+\end{lemma}
+\begin{proof}\leanok
+    \uses{def:mpug_czx_exact_tensor, def:mpdo_operator_product}
+    The letter of $T\mathbin{\cdot}T$ at a physical pair $(i,i')$ vanishes
+    unless $i=i'$, because the blocked tensor complements the physical index
+    it carries. At $i=i'=3x$ the summation index of
+    Definition~\ref{def:mpug_czx_fusion_action_letter} retains the single
+    term $j=3(1-x)$, whose two factors force the left virtual pair
+    $(\alpha,\gamma)=(x,1-x)$, the row of index $x+1$. On that row the
+    surviving sign is $(-1)^{1+(1-x)\delta+x\beta}$, which is the row
+    displayed above.
+\end{proof}
+
+\begin{definition}[Printed fusion--action coefficient]
+    \label{def:mpug_czx_fusion_action_coefficient}
+    \lean{MPOTensor.CZX.fusionActionCoefficient}
+    \leanok
+    \uses{def:mpug_czx_sequential_action_bra,
+        def:mpug_czx_fusion_action_letter, def:mpug_czx_fusion_caps}
+    For $x\in\{0,1\}$, let $P_x$ and $B_x$ be the sequential action row
+    and supported product letter, and put
+    $W=F^>_{g,g}=\tfrac12(0,i,-i,0)^{\mathsf T}$, in the product-bond
+    order of Definition~\ref{def:mpug_czx_fusion_caps}. Define
+    \begin{align}
+        c_x & =P_xB_xW\in\C.
+    \end{align}
+    The one-by-one matrix on the right is identified with its sole entry.
+\end{definition}
+
+\begin{lemma}[Values of the printed coefficient]
+    \label{thm:mpug_czx_fusion_action_coefficient_coordinates}
+    \lean{MPOTensor.CZX.fusionActionCoefficient_coordinates}
+    \leanok
+    \uses{def:mpug_czx_fusion_action_coefficient}
+    The printed coefficients satisfy $c_0=1$ and $c_1=-1$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:mpug_czx_supported_letter_coordinates,
+        def:mpug_czx_sequential_action_bra, def:mpug_czx_printed_action_pair,
+        def:mpug_czx_fusion_caps}
+    The printed rows are $P_0=(0,-i,0,0)$ and $P_1=(0,0,-i,0)$, and the
+    column is $W=\tfrac12(0,i,-i,0)^{\mathsf T}$. With $e_0,\dots,e_3$ the
+    standard basis of the product bond, the single nonzero row of each
+    supported letter of (\ref{eq:mpug_czx_supported_letters}) contracts with
+    $W$ as
+    \begin{align}
+        B_0W & =\tfrac12(i+i)e_1=ie_1,   \\
+        B_1W & =\tfrac12(-i-i)e_2=-ie_2,
+    \end{align}
+    so the two finite matrix products are
+    \begin{align}
+        c_0 & =P_0B_0W=(0,-i,0,0)\,ie_1=1,     \\
+        c_1 & =P_1B_1W=(0,0,-i,0)\,(-ie_2)=-1.
+    \end{align}
+\end{proof}
+
+\begin{lemma}[Normalization, proportionality, and idempotence]
+    \label{thm:mpug_czx_fusion_action_finite_identities}
+    \lean{MPOTensor.CZX.fusionAction_finite_identities}
+    \leanok
+    \uses{def:mpug_czx_sequential_action_bra,
+        def:mpug_czx_sequential_action_ket, def:mpug_czx_fusion_action_letter,
+        def:mpug_czx_fusion_action_coefficient, def:mpug_czx_fusion_caps}
+    For each $x\in\{0,1\}$, the printed rows, columns, and supported
+    product letter satisfy
+    \begin{align}
+        P_xB_xQ_x & =1, & B_xW & =c_xB_xQ_x, & B_x^2 & =B_x.
+    \end{align}
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:mpug_czx_supported_letter_coordinates,
+        def:mpug_czx_fusion_action_letter,
+        def:mpug_czx_sequential_action_bra, def:mpug_czx_sequential_action_ket,
+        def:mpug_czx_printed_action_pair, def:mpug_czx_fusion_caps,
+        def:mpug_czx_fusion_action_coefficient}
+    Substituting the printed action columns gives
+    $Q_0=\tfrac14(-i,i,-i,i)^{\mathsf T}$ and
+    $Q_1=\tfrac14(-i,-i,i,i)^{\mathsf T}$. With $e_0,\dots,e_3$ the standard
+    basis of the product bond, the two supported letters of
+    (\ref{eq:mpug_czx_supported_letters}) contract with these columns and
+    with the cap $W$ as
+    \begin{align}
+        B_0Q_0 & =ie_1,  \\
+        B_0W   & =ie_1,  \\
+        B_1Q_1 & =ie_2,  \\
+        B_1W   & =-ie_2.
+        \label{eq:mpug_czx_fusion_action_contractions}
+    \end{align}
+    The printed rows are $P_0=(0,-i,0,0)$ and $P_1=(0,0,-i,0)$, so applying
+    $P_x$ to (\ref{eq:mpug_czx_fusion_action_contractions}) gives
+    $P_xB_xQ_x=1$ and $P_xB_xW=c_x$, with $c_0=1$ and $c_1=-1$. Comparing
+    the two right-hand sides for each $x$ gives $B_xW=c_xB_xQ_x$. Each
+    matrix of (\ref{eq:mpug_czx_supported_letters}) has a single nonzero row,
+    whose entry in the supporting column is $1$, so $B_x^2=B_x$.
+\end{proof}
+
+\begin{lemma}[Positive repetitions of the supported letter]
+    \label{thm:mpug_czx_fusion_action_positive_power}
+    \lean{MPOTensor.CZX.fusionAction_positive_power}
+    \leanok
+    \uses{def:mpug_czx_sequential_action_bra,
+        def:mpug_czx_sequential_action_ket, def:mpug_czx_fusion_action_letter,
+        def:mpug_czx_fusion_action_coefficient, def:mpug_czx_fusion_caps}
+    For every $x\in\{0,1\}$ and every integer $n\geq0$,
+    \begin{align}
+        B_x^{n+1}       & =B_x, & P_xB_x^{n+1}W & =c_x,             \\
+        P_xB_x^{n+1}Q_x & =1,   & B_x^{n+1}W    & =c_xB_x^{n+1}Q_x.
+    \end{align}
+    These statements concern repetitions of this single supported letter,
+    not arbitrary words or an identification with the source $L$-symbol.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:mpug_czx_fusion_action_finite_identities,
+        def:mpug_czx_fusion_action_coefficient}
+    By induction on $n$, the first power is $B_x$, and multiplication by
+    $B_x$ together with idempotence proves the successor step.
+    Substituting $B_x^{n+1}=B_x$ into the remaining three identities and
+    applying the definition of $c_x$ along with the normalization and
+    proportionality of
+    Lemma~\ref{thm:mpug_czx_fusion_action_finite_identities} completes
+    the proof.
+\end{proof}
+\subsection{The CZX anomaly and its \texorpdfstring{$L$}{L}-symbols}
+
+The once-blocked CZX operators, the fusion caps of
+Definition~\ref{def:mpug_czx_fusion_caps}, and the dressed action tensors of
+Definition~\ref{def:mpug_czx_dressed_action} supply all data of the anomaly and
+of the $L$-symbols on the two blocked GHZ sectors. The computation below
+identifies the coefficients of
+Lemma~\ref{thm:mpug_czx_fusion_action_coefficient_coordinates} with the
+$L$-symbols of two generators. With the caps read in the product-bond order of
+the stacked tensor, $L^0_{g,g}=1$ and $L^1_{g,g}=-1$; the source states
+$L^0_{g,g}=-1$ \cite[line~4699]{FrancoRubio2025MPUGauging}. The two values are
+related by the fusion gauge $\beta_{g,g}=-1$, which transposes both caps, since
+$Y^{\mathsf T}=-Y$, and leaves the anomaly unchanged
+\cite{gap:fbc25_czx_fusion_coordinate_compatibility}. The gauge-invariant ratio
+$L^0_{g,g}/L^1_{g,g}=-1$ agrees with the source.
+
+\begin{lemma}[The CZX representation of \texorpdfstring{$\Z_2$}{Z2}]
+    \label{thm:mpug_czx_z2_representation}
+    \lean{MPOTensor.CZX.mpo_tensor_mul_self,
+        MPOTensor.CZX.family,
+        MPOTensor.CZX.family_isNormalRepresentation}
+    \leanok
+    \discussion{7354}
+    \uses{def:mpug_czx_exact_tensor, thm:mpug_czx_exact_tensor_injective,
+        def:mpug_anomaly_three_cochain, threeMPU}
+    Let $\mathcal U_g$ be the periodic operator of the once-blocked CZX tensor
+    of Definition~\ref{def:mpug_czx_exact_tensor} on $N\geq1$ blocked sites.
+    Then $\mathcal U_g^2=\Id$. Consequently the bond-one identity tensor for
+    $e$ and the CZX tensor for $g$ represent $\Z_2=\{e,g\}$ by normal
+    tensors, with $\mathcal U_e\mathcal U_h=\mathcal U_h\mathcal U_e=\mathcal U_h$
+    and $\mathcal U_g\mathcal U_g=\mathcal U_e$ on every nonempty chain
+    \cite[lines~4503--4547]{FrancoRubio2025MPUGauging}.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_czx_exact_tensor_unitary, thm:mpug_czx_exact_tensor_injective}
+    The periodic operator is the monomial operator of the complement of every
+    matter bit, with a sign given by a cyclic sum of edge exponents. The
+    complement is an involution, and the edge exponents of a configuration and
+    of its complement differ by the sum of the leading bits of the two sites
+    of the edge, modulo two. Summed around the ring these differences cancel,
+    so the two signs multiply to one and $\mathcal U_g^2=\Id$. The identity
+    tensor is normal, and the CZX tensor is injective, hence normal.
+\end{proof}
+
+\begin{lemma}[The displayed CZX anomaly]
+    \label{thm:mpug_czx_anomaly}
+    \lean{MPOTensor.CZX.fusionData,
+        MPOTensor.CZX.tensorInt,
+        MPOTensor.CZX.tensor_eq_complexOfInt,
+        MPOTensor.CZX.fusionVInt,
+        MPOTensor.CZX.fusionV_eq_smul,
+        MPOTensor.CZX.mulTensor_tensor_eq_complexOfInt,
+        MPOTensor.CZX.cubeInt,
+        MPOTensor.CZX.tensorIntMPS,
+        MPOTensor.CZX.fusionData_isAssociator,
+        MPOTensor.CZX.fusionData_omega_gen_gen_gen,
+        MPOTensor.CZX.kronId_fusionV_one,
+        MPOTensor.CZX.fusionData_omega}
+    \leanok
+    \discussion{7354}
+    \uses{thm:mpug_czx_z2_representation, thm:mpug_czx_fusion_reduction,
+        def:mpug_anomaly_three_cochain, thm:mpug_anomaly_three_cochain_spec}
+    Take the fusion tensors to be trivial whenever a factor is the identity
+    and to be the caps $(F^<_{g,g},F^>_{g,g})$ of
+    Definition~\ref{def:mpug_czx_fusion_caps} for two generators. Then, as
+    displayed in \cite[lines~4695--4698]{FrancoRubio2025MPUGauging},
+    \begin{align}
+        \omega(h_1,h_2,h_3)
+         & =(-1)^{\delta_{h_1,g}\delta_{h_2,g}\delta_{h_3,g}}.
+        \label{eq:mpug_czx_anomaly}
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_czx_fusion_reduction, thm:mpug_anomaly_three_cochain_spec}
+    When one of $h_1,h_2,h_3$ is $e$, both fusion trees are built from the
+    trivial fusion tensors and the cap of the remaining pair, and they agree,
+    so $\omega(h_1,h_2,h_3)=1$. For three generators the two trees are
+    $F^<_{g,g}\otimes\Id$ and $\Id\otimes F^<_{g,g}$. Both caps are $-i$ times
+    an integer row, and the letters of the threefold product are images of
+    integer matrices. On every letter $R^a$ of the threefold product the
+    integer identity $(F\otimes\Id)R^a=-(\Id\otimes F)R^a$ holds, and both
+    trees intertwine two letters with the target. Induction on the word gives
+    the dressed identity with scalar $-1$, so $\omega(g,g,g)=-1$.
+\end{proof}
+
+\begin{lemma}[The CZX anomaly class is nonzero]
+    \label{thm:mpug_czx_anomaly_class}
+    \lean{MPOTensor.CZX.cyclicInvariant_omega,
+        MPOTensor.CZX.not_isTrivialGaugeClass_omega,
+        MPOTensor.CZX.family_anomalyClass_ne_zero}
+    \leanok
+    \discussion{7354}
+    \uses{thm:mpug_czx_anomaly, def:mpug_anomaly_class,
+        cor:mpug_anomaly_class}
+    For every choice of fusion tensors of the CZX representation,
+    $\omega(g,e,g)\,\omega(g,g,g)=-1$. Hence the anomaly three-cocycle is not
+    cohomologous to the constant cochain one, and the anomaly class in
+    $H^3(\Z_2,\C^\times)$ is nonzero.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_czx_anomaly, cor:mpug_anomaly_class}
+    The product $\omega(g,e,g)\,\omega(g,g,g)$ is invariant under the scalar
+    gauge action of the fusion tensors because $g^2=e$, and every two choices
+    of fusion tensors differ by that action. For the fusion tensors of
+    Lemma~\ref{thm:mpug_czx_anomaly} it equals $1\cdot(-1)$. A trivial gauge
+    class would make it one.
+\end{proof}
+
+\begin{lemma}[The two blocked GHZ sectors are permuted]
+    \label{thm:mpug_czx_ghz_blocks}
+    \lean{MPOTensor.CZX.blockedGHZTensor_apply,
+        MPOTensor.CZX.cyclicPhase_ghz_constant,
+        MPOTensor.CZX.block,
+        MPOTensor.CZX.block_apply,
+        MPOTensor.CZX.block_isNormal,
+        MPOTensor.CZX.carriesMPV}
+    \leanok
+    \discussion{7354}
+    \uses{thm:mpug_czx_blocked_ghz_sectors, thm:mpug_czx_blocked_ghz_invariant,
+        thm:mpug_czx_z2_representation, def:mpug_permuted_block_l_symbol}
+    Index the two bond-one blocked GHZ sectors $\ket{00}$ and $\ket{11}$ of
+    Lemma~\ref{thm:mpug_czx_blocked_ghz_sectors} by $\Z_2$ acting on itself.
+    Both are normal, and for every $h,x\in\Z_2$ and $N\geq1$ the CZX
+    representation carries the periodic vector of the sector $x$ to that of
+    the sector $hx$, with phase one.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_czx_blocked_ghz_invariant}
+    One letter of each sector is the scalar one, so the sector is normal. The
+    identity tensor acts trivially. The CZX operator is monomial; it carries
+    the constant configuration $x$ to the constant configuration $1-x$, and
+    the cyclic sign of a constant configuration is one.
+\end{proof}
+
+\begin{definition}[Action tensors on the two blocked GHZ sectors]
+    \label{def:mpug_czx_block_action_data}
+    \lean{MPOTensor.CZX.actTensor_tensor_blockedSector,
+        MPOTensor.CZX.actionV,
+        MPOTensor.CZX.actionW,
+        MPOTensor.CZX.blockActionData}
+    \leanok
+    \discussion{7354}
+    \uses{def:mpug_czx_acted_sectors, def:mpug_czx_dressed_action,
+        thm:mpug_czx_dressed_action_reduction, thm:mpug_czx_ghz_blocks,
+        def:mpug_permuted_block_l_symbol, thm:mpug_permuted_block_l_symbol_spec}
+    For the identity the action tensors are the identification of the bond
+    spaces. For the generator, the CZX tensor acting on the sector $x$ is the
+    acted sector of Definition~\ref{def:mpug_czx_acted_sectors}, and the action
+    tensors are the dressed pair $(V_x,W_x)$ of
+    Definition~\ref{def:mpug_czx_dressed_action}, which reduces it onto the
+    sector $1-x$ and agrees with the printed action covector of
+    \cite[lines~4690--4694]{FrancoRubio2025MPUGauging} against every nonempty
+    word.
+\end{definition}
+
+\begin{lemma}[The CZX \texorpdfstring{$L$}{L}-symbols]
+    \label{thm:mpug_czx_l_symbols}
+    \lean{MPOTensor.CZX.blockInt,
+        MPOTensor.CZX.pairActionInt,
+        MPOTensor.CZX.actTensor_mulTensor_blockedSector,
+        MPOTensor.CZX.successiveActionInt,
+        MPOTensor.CZX.actV_gen_gen,
+        MPOTensor.CZX.fuseV_gen_gen,
+        MPOTensor.CZX.isDressedProportional_actV_fuseV_gen_gen,
+        MPOTensor.CZX.lSymbol_one_one,
+        MPOTensor.CZX.blockActionData_isCompatible,
+        MPOTensor.CZX.blockActionData_lSymbol}
+    \leanok
+    \discussion{7354}
+    \uses{def:mpug_czx_block_action_data, thm:mpug_czx_anomaly,
+        thm:mpug_permuted_block_l_symbol_spec,
+        thm:mpug_permuted_block_l_compatibility,
+        thm:mpug_czx_fusion_action_coefficient_coordinates}
+    With the fusion tensors of Lemma~\ref{thm:mpug_czx_anomaly} and the action
+    tensors of Definition~\ref{def:mpug_czx_block_action_data}, the
+    $L$-symbols on the two blocked GHZ sectors are
+    \begin{align}
+        L^x_{h,k} & =
+        \begin{cases}
+            (-1)^x & \text{if } h=k=g, \\
+            1      & \text{otherwise},
+        \end{cases}
+        \label{eq:mpug_czx_l_symbols}
+    \end{align}
+    for $x\in\{0,1\}$. The source states $L^0_{g,g}=-1$
+    \cite[line~4699]{FrancoRubio2025MPUGauging}; with both caps transposed,
+    which is the fusion gauge $\beta_{g,g}=-1$, the two values $L^x_{g,g}$
+    change sign and the printed value is obtained
+    \cite{gap:fbc25_czx_fusion_coordinate_compatibility}.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_permuted_block_l_symbol_spec,
+        thm:mpug_permuted_block_l_compatibility, thm:mpug_czx_anomaly}
+    An $L$-symbol is the unique scalar relating the two left boundaries against
+    long words, because the target sector is normal. For two generators the
+    boundary of two successive actions is $i$ times the integer row
+    $(1,-1,1,-1)$ on $\ket{00}$ and $(1,1,-1,-1)$ on $\ket{11}$, and the
+    boundary of the fusion followed by the trivial action is the cap
+    $F^<_{g,g}=-i\,(0,1,-1,0)$. On every letter of the stacked action, which
+    is the image of an integer matrix, the first row is $\mp1$ times the
+    second; since a nonempty word begins with a letter, the dressed identity
+    holds on every nonempty word with scalar $(-1)^x$. At two identity
+    elements the two boundaries coincide, so $L^x_{e,e}=1$. The compatibility
+    relation (\ref{eq:mpug_l_compatibility}) at $(e,e,g)$ and $(g,e,e)$, with
+    $\omega=1$ there by (\ref{eq:mpug_czx_anomaly}), gives
+    $L^x_{e,g}=L^{gx}_{e,e}$ and $L^x_{g,e}=L^x_{e,e}$.
+\end{proof}
+
+\begin{lemma}[The anomaly from the \texorpdfstring{$L$}{L}-symbols]
+    \label{thm:mpug_czx_l_symbol_ratio}
+    \lean{MPOTensor.CZX.omega_eq_lSymbol_ratio,
+        MPOTensor.CZX.lSymbol_ratio_mul_omega_eq_neg_one}
+    \leanok
+    \discussion{7354}
+    \uses{thm:mpug_czx_ghz_blocks, thm:mpug_permuted_block_l_compatibility,
+        thm:mpug_involution_anomaly_ratio, thm:mpug_czx_anomaly_class}
+    For every choice of fusion tensors and every choice of action tensors on
+    the two blocked GHZ sectors,
+    \begin{align}
+        \omega(g,g,g)
+         & =\frac{L^x_{g,g}L^x_{g,e}}{L^{gx}_{g,g}L^x_{e,g}},
+         &
+        \frac{L^0_{g,g}L^0_{g,e}}{L^1_{g,g}L^0_{e,g}}\,\omega(g,e,g)
+         & =-1,
+    \end{align}
+    as in \cite[line~5121]{FrancoRubio2025MPUGauging}. When the fusion and
+    action tensors are trivial at the identity this is
+    $L^0_{g,g}/L^1_{g,g}=-1$, so no gauge makes every $L$-symbol one.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_involution_anomaly_ratio, thm:mpug_czx_anomaly_class}
+    The compatibility of
+    Lemma~\ref{thm:mpug_permuted_block_l_compatibility} holds for every choice
+    of action tensors, so Lemma~\ref{thm:mpug_involution_anomaly_ratio} gives
+    the first identity. Multiplying by $\omega(g,e,g)$ and using
+    Lemma~\ref{thm:mpug_czx_anomaly_class} gives the second.
+\end{proof}
+
+\subsection{The displayed CZX circuit tuple}
+
+\begin{definition}[The displayed CZX circuit tuple]
+    \label{def:mpug_czx_circuit_tuple}
+    \lean{MPOTensor.CZX.bitFlip,
+        MPOTensor.CZX.pauliX,
+        MPOTensor.CZX.pauliZ,
+        MPOTensor.CZX.controlledZ,
+        MPOTensor.CZX.w,
+        MPOTensor.CZX.lambda,
+        MPOTensor.CZX.tildeLambda,
+        MPOTensor.CZX.siteBits,
+        MPOTensor.CZX.localBits,
+        MPOTensor.CZX.localBits_apply_zero,
+        MPOTensor.CZX.localBits_apply_one,
+        MPOTensor.CZX.localBits_apply_two,
+        MPOTensor.CZX.localBits_apply_three,
+        MPOTensor.CZX.matterMatrix,
+        MPOTensor.CZX.gen,
+        MPOTensor.CZX.circuitTuple,
+        MPOTensor.CZX.circuitTuple_one,
+        MPOTensor.CZX.circuitTuple_gen_one,
+        MPOTensor.CZX.circuitTuple_gen_gen}
+    \leanok
+    \uses{def:mpug_monomial_matrix}
+    Number the four matter qubits of two neighboring blocked sites by
+    $0,1,2,3$, so that $(x_0,x_1)$ are the qubits of the first site and
+    $(x_2,x_3)$ those of the second, and write
+    $\ket{x}=\ket{x_0}\otimes\ket{x_1}\otimes\ket{x_2}\otimes\ket{x_3}$ for
+    $x\in\mathbb F_2^4$. The elementary gates act by
+    \begin{align}
+        X_r\ket{x}              & =\ket{x+e_r},          \\
+        Z_r\ket{x}              & =(-1)^{x_r}\ket{x},    \\
+        \mathrm{CZ}_{rs}\ket{x} & =(-1)^{x_rx_s}\ket{x},
+    \end{align}
+    and operator products act from right to left. In this qubit
+    numbering, the fusion operators $\lambda^R_{g,e}=w_R$ and
+    $\lambda^R_{g,g}$ and the modified fusion operator
+    $\tilde\lambda^R_{g,g}=\lambda^R_{g,g}Z_1$ of
+    \cite[lines~4503--5183]{FrancoRubio2025MPUGauging} are
+    \begin{align}
+        w             & =(X_0X_1)\,\mathrm{CZ}_{01}\mathrm{CZ}_{12}\,(Z_2Z_3),
+        \label{eq:mpug_czx_w}                                                       \\
+        \lambda       & =-i\,(X_0X_1X_2Z_3)\,\mathrm{CZ}_{01}\mathrm{CZ}_{12}\,X_2,
+        \label{eq:mpug_czx_lambda}                                                  \\
+        \tilde\lambda & =\lambda Z_0.
+        \label{eq:mpug_czx_tilde_lambda}
+    \end{align}
+    The displayed circuit tuple, indexed by the ordered pair of
+    gauge labels in $\Z_2$ with $e\leftrightarrow0$ and $g\leftrightarrow1$,
+    is
+    \begin{align}
+        R^{\mathrm{CZX}}
+         & =\bigl(U_{0,0},U_{0,1},U_{1,0},U_{1,1}\bigr)
+        =\bigl(\Id,\Id,w,\tilde\lambda\bigr).
+        \label{eq:mpug_czx_tuple}
+    \end{align}
+    Each site index in $\{0,1,2,3\}$ is read as the pair of matter bits
+    $(m^{(1)},m^{(2)})$ with $m^{(1)}$ the leading binary digit, and the
+    four-qubit operators are reindexed to the two-site matter space by
+    this identification.
+    % Source anchor: arXiv:2502.20257, lines 4503--5183 (CZX model and modified
+    % fusion operator).
+\end{definition}
+
+\begin{lemma}[Phase tables of the CZX fusion operators]
+    \label{thm:mpug_czx_phase_tables}
+    \lean{MPOTensor.CZX.barFlip,
+        MPOTensor.CZX.barFlip_apply,
+        MPOTensor.CZX.barFlip_mul_barFlip,
+        MPOTensor.CZX.barFlip_symm,
+        MPOTensor.CZX.eExponent,
+        MPOTensor.CZX.hExponent,
+        MPOTensor.CZX.fExponent,
+        ZMod.neg_one_pow_val_add,
+        MPOTensor.CZX.w_eq,
+        MPOTensor.CZX.lambda_eq,
+        MPOTensor.CZX.tildeLambda_eq,
+        MPOTensor.CZX.fExponent_barFlip,
+        MPOTensor.CZX.eExponent_barFlip,
+        MPOTensor.CZX.matterBarFlip,
+        MPOTensor.CZX.matterBarFlip_symm,
+        MPOTensor.CZX.localBits_matterBarFlip,
+        MPOTensor.CZX.matterMatrix_monomial,
+        MPOTensor.CZX.w_mem_unitaryGroup,
+        MPOTensor.CZX.tildeLambda_mem_unitaryGroup}
+    \leanok
+    \uses{def:mpug_czx_circuit_tuple}
+    Write $\overline x=(x_0+1,x_1+1,x_2,x_3)$ and
+    \begin{align}
+        e(x) & =x_0x_1+x_1x_2+x_2+x_3,     \\
+        h(x) & =x_0x_1+x_1x_2+x_1+x_3,     \\
+        f(x) & =x_0x_1+x_1x_2+x_0+x_1+x_3.
+    \end{align}
+    Then
+    \begin{align}
+        w\ket{x}             & =(-1)^{e(x)}\ket{\overline x},
+        \label{eq:mpug_czx_w_action}                            \\
+        \lambda\ket{x}       & =-i(-1)^{h(x)}\ket{\overline x},
+        \label{eq:mpug_czx_lambda_action}                       \\
+        \tilde\lambda\ket{x} & =-i(-1)^{f(x)}\ket{\overline x},
+        \label{eq:mpug_czx_tilde_lambda_action}
+    \end{align}
+    the exponents satisfy $f(\overline x)=e(x)+1$ and
+    $e(\overline x)=f(x)+1$. After reindexing to the two-site matter coordinates,
+    $w$ and $\tilde\lambda$ are unitary.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_monomial_matrix_laws, def:mpug_czx_circuit_tuple}
+    Each gate is monomial, so (\ref{eq:mpug_monomial_mul}) expresses each
+    product as a monomial operator. Reading (\ref{eq:mpug_czx_w}) from right
+    to left, the diagonal gates contribute the phase
+    $(-1)^{x_0x_1+x_1x_2+x_2+x_3}$ and the two bit flips send $x$ to
+    $\overline x$. In (\ref{eq:mpug_czx_lambda}) the first $X_2$ replaces
+    $x_2$ by $x_2+1$ in the phase of $\mathrm{CZ}_{12}$, giving
+    $x_1(x_2+1)=x_1x_2+x_1$, and the second $X_2$ restores $x_2$, so the
+    permutation is again $\overline{\,\cdot\,}$. The factor $Z_0$ in
+    (\ref{eq:mpug_czx_tilde_lambda}) adds $x_0$ to the exponent. The
+    identities between $e$ and $f$ are checked on the sixteen bit strings.
+    After relabelling the computational basis as two four-level matter sites,
+    unitarity follows from Lemma~\ref{thm:mpug_monomial_matrix_laws} because
+    all phases are unimodular.
+\end{proof}
+
+\begin{lemma}[Right movement coordinates of the displayed CZX factors]
+    \label{thm:mpug_czx_displayed_right_movement_coordinates}
+    \lean{MPOTensor.CZX.displayedSourceFactors_sourceWR_coordinates}
+    \leanok
+    \discussion{7355}
+    \uses{def:mpug_czx_displayed_source_factors, def:mpug_staircase_gates,
+        def:mpug_czx_circuit_tuple}
+    Let $w_R$ be the crossed contraction of the displayed source factors
+    of the exact CZX tensor $B$, and let $e_r$ be their right-rank
+    identification with $\{0,1,2,3\}$. Let $W$ denote the matrix of
+    $w=(X_0X_1)\mathrm{CZ}_{01}\mathrm{CZ}_{12}(Z_2Z_3)$ on two
+    four-level matter sites, with each site read in leading-bit-first
+    binary order. Identifying the right movement contraction in
+    \cite[lines~811--869, 4559--4659, 4860--4888]{FrancoRubio2025MPUGauging}
+    without additional hypotheses, for every $i,r,a,j\in\{0,1,2,3\}$,
+    \begin{align}
+        (w_R)_{(i,e_r^{-1}(r)),(e_r^{-1}(a),j)}
+         & =W_{(i,r),(a,j)}.
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:mpug_czx_displayed_source_factors, def:mpug_staircase_gates,
+        def:mpug_czx_displayed_factors, def:mpug_czx_circuit_tuple,
+        thm:mpug_czx_phase_tables}
+    Pulling back the rank indices expands the crossed contraction as
+    $\sum_{\beta=0}^1(X_1)_{(i,\beta),a}(Y_1)_{r,(\beta,j)}$.
+    The sparse action (\ref{eq:mpug_czx_w_action}) gives
+    \begin{align}
+        W_{(i,r),(a,j)}
+         & =\begin{cases}
+                (-1)^{e(x)}, & i=3-a\text{ and }r=j, \\
+                0,           & \text{otherwise},
+            \end{cases}
+    \end{align}
+    where $x=(x_0,x_1,x_2,x_3)\in\{0,1\}^4$ satisfies
+    $a=2x_0+x_1$ and $j=2x_2+x_3$.
+    Substituting the displayed factors and first discarding the zero
+    entries of the empty factor $X_1$ by comparing $i$ and $a$ leaves
+    only the comparison of $r$ and $j$, and on the surviving support the
+    phases agree.
+\end{proof}
+
+\begin{lemma}[Left movement coordinates of the displayed CZX factors]
+    \label{thm:mpug_czx_displayed_left_movement_coordinates}
+    \lean{MPOTensor.CZX.displayedSourceFactors_sourceWL_coordinates}
+    \leanok
+    \discussion{7355}
+    \uses{def:mpug_czx_displayed_source_factors, def:mpug_staircase_gates,
+        def:mpug_czx_circuit_tuple}
+    Let $w_L$ be the crossed contraction of the displayed source factors
+    of the exact CZX tensor $B$, and let $e_l$ be their left-rank
+    identification with $\{0,1,2,3\}$. Let $W$ denote the matrix of
+    $w=(X_0X_1)\mathrm{CZ}_{01}\mathrm{CZ}_{12}(Z_2Z_3)$ on two
+    four-level matter sites, with each site read in leading-bit-first
+    binary order. In the same matter coordinates and without additional
+    hypotheses, the left movement identification in
+    \cite[lines~811--869, 4559--4659, 4860--4888]{FrancoRubio2025MPUGauging}
+    holds for every $l,i,j,k\in\{0,1,2,3\}$:
+    \begin{align}
+        (w_L)_{(e_l^{-1}(l),i),(j,e_l^{-1}(k))}
+         & =(W^\dagger)_{(l,i),(j,k)}.
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:mpug_czx_displayed_source_factors, def:mpug_staircase_gates,
+        def:mpug_czx_displayed_factors, def:mpug_czx_circuit_tuple,
+        thm:mpug_czx_phase_tables}
+    Pulling back the rank indices expands the crossed contraction as
+    $\sum_{\beta=0}^1(Y_2)_{l,(j,\beta)}(X_2)_{(\beta,i),k}$, while the
+    conjugated reversed entry is
+    $(W^\dagger)_{(l,i),(j,k)}=\overline{W_{(j,k),(l,i)}}$.
+    By (\ref{eq:mpug_czx_w_action}), it vanishes unless $j=3-l$ and
+    $k=i$; on this support it is $\overline{(-1)^{e(x)}}$, where
+    $x=(x_0,x_1,x_2,x_3)\in\{0,1\}^4$ satisfies
+    $l=2x_0+x_1$ and $i=2x_2+x_3$.
+    Substituting the displayed factors and first discarding the zero
+    entries of the filled factor $Y_2$ by comparing $l$ and $j$ leaves
+    the comparison of $i$ and $k$, on which the remaining phases agree.
+\end{proof}
+
+% Scope of #7355 here: only the two displayed movement-coordinate identities.
+% No full truncated-symmetry formula, associator, sign, or parent issue
+% completion is asserted.
+
+\begin{lemma}[Local monomial action of the CZX Gauss operator]
+    \label{thm:mpug_czx_local_monomial_action}
+    \lean{MPOTensor.CZX.iPow,
+        MPOTensor.CZX.iPow_add,
+        MPOTensor.CZX.iPow_natCast,
+        MPOTensor.CZX.iPow_zero,
+        MPOTensor.CZX.iPow_two,
+        MPOTensor.CZX.iPow_three,
+        MPOTensor.CZX.iPow_two_mul_val,
+        MPOTensor.CZX.iPow_two_mul_cast,
+        MPOTensor.CZX.uExponent,
+        MPOTensor.CZX.phaseExponent,
+        MPOTensor.CZX.phaseExponent_zero_zero,
+        MPOTensor.CZX.phaseExponent_zero_one,
+        MPOTensor.CZX.phaseExponent_one_zero,
+        MPOTensor.CZX.phaseExponent_one_one,
+        MPOTensor.CZX.localPerm,
+        MPOTensor.CZX.localPhase,
+        MPOTensor.CZX.gen_inv,
+        MPOTensor.CZX.gen_mul_gen,
+        MPOTensor.CZX.toAdd_gen_ne_zero,
+        MPOTensor.CZX.gaussOperator_circuitTuple_gen}
+    \leanok
+    \uses{def:mpug_czx_circuit_tuple, def:mpug_gauss_operator}
+    Let $a,a'\in\mathbb F_2$ be the two gauge bits and write
+    $s=(x_0,x_1,a,x_2,x_3,a')$ and
+    $\sigma(s)=(x_0+1,x_1+1,a+1,x_2,x_3,a'+1)$. The nontrivial local Gauss
+    operator obtained from (\ref{eq:mpug_czx_tuple}) and
+    (\ref{eq:mpug_gauss_operator}) is the monomial operator
+    \begin{align}
+        G\ket{s} & =i^{q(s)}\ket{\sigma(s)}
+        \label{eq:mpug_czx_monomial_action}
+    \end{align}
+    with, for $u(x)=2(x_0x_1+x_1x_2+x_3)\bmod4$, the phase table
+    \begin{align}
+        q(x_0,x_1,0,x_2,x_3,0) & =3+u(x)+2x_2,      \\
+        q(x_0,x_1,0,x_2,x_3,1) & =2+u(x)+2x_0+2x_1, \\
+        q(x_0,x_1,1,x_2,x_3,0) & =u(x)+2x_2,        \\
+        q(x_0,x_1,1,x_2,x_3,1) & =3+u(x)+2x_0+2x_1
+        \label{eq:mpug_czx_phase_table}
+    \end{align}
+    modulo $4$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_gauss_operator_monomial, thm:mpug_czx_phase_tables}
+    By Lemma~\ref{thm:mpug_gauss_operator_monomial} applied to the monomial
+    unitaries of Lemma~\ref{thm:mpug_czx_phase_tables}, the operator
+    $\mathcal G_g$ is monomial. The permutation part is
+    $\overline{\,\cdot\,}$ on the matter bits in all four gauge sectors,
+    since $\overline{\,\cdot\,}$ is an involution, and $T_g$ flips both
+    gauge bits. The phases are read off
+    (\ref{eq:mpug_czx_w_action})--(\ref{eq:mpug_czx_tilde_lambda_action})
+    and the adjoint formula (\ref{eq:mpug_monomial_adjoint}) together with
+    $f(\overline x)=e(x)+1$ and $e(\overline x)=f(x)+1$: for example the
+    first row is $-i(-1)^{e(x)}=i^{3+2e(x)}=i^{3+u(x)+2x_2}$, and the other
+    three rows follow in the same way. The four identities between the phase
+    table and $e$, $f$ are checked on the sixteen bit strings.
+\end{proof}
+
+\subsection{Orbits, holonomy, and the exact dimension}
+
+\begin{definition}[Chain configurations, bond flips, and labels]
+    \label{def:mpug_czx_chain_labels}
+    \lean{MPOTensor.CZX.Site,
+        MPOTensor.CZX.siteDecode,
+        MPOTensor.CZX.siteDecode_equivFin,
+        MPOTensor.CZX.chainDecode,
+        MPOTensor.CZX.chainDecode_apply,
+        MPOTensor.CZX.flipPattern,
+        MPOTensor.CZX.chainFlip,
+        MPOTensor.CZX.chainFlip_apply,
+        MPOTensor.CZX.succ_ne_self,
+        MPOTensor.CZX.succ_succ_ne_self,
+        MPOTensor.CZX.flipPattern_apply_self,
+        MPOTensor.CZX.flipPattern_apply_succ,
+        MPOTensor.CZX.flipPattern_apply_of_ne,
+        MPOTensor.CZX.bondExponent,
+        MPOTensor.CZX.bLabel,
+        MPOTensor.CZX.pLabel}
+    \leanok
+    \uses{thm:mpug_czx_local_monomial_action}
+    A computational-basis configuration of the periodic chain of $N$ blocked
+    sites is
+    \begin{align}
+        s & =\bigl(m^{(1)}_k,m^{(2)}_k,g_k\bigr)_{k\in\Z/N\Z}\in S_N:=(\mathbb F_2^3)^N,
+        \label{eq:mpug_czx_configuration}
+    \end{align}
+    read from the enumerated site indices of the placed Gauss projector. The
+    bond-$j$ flip $\sigma_j$ adds $1$ to $m^{(1)}_j$, $m^{(2)}_j$, $g_j$, and
+    $g_{j+1}$. The bond-$j$ phase exponent $q_j(s)$ is the table
+    (\ref{eq:mpug_czx_phase_table}) evaluated at
+    $x=(m^{(1)}_j,m^{(2)}_j,m^{(1)}_{j+1},m^{(2)}_{j+1})$ and
+    $(a,a')=(g_j,g_{j+1})$. The affine labels are
+    \begin{align}
+        p_k(s) & =m^{(1)}_k+m^{(2)}_k,
+        \label{eq:mpug_czx_p_label}            \\
+        b_k(s) & =g_k+m^{(1)}_k+m^{(1)}_{k-1}.
+        \label{eq:mpug_czx_b_label}
+    \end{align}
+\end{definition}
+
+\begin{lemma}[Permutation-orbit classification]
+    \label{thm:mpug_czx_orbit_classification}
+    \lean{MPOTensor.CZX.fiberEquiv,
+        MPOTensor.CZX.fiberEquiv_apply,
+        MPOTensor.CZX.pLabel_fiberEquiv,
+        MPOTensor.CZX.bLabel_fiberEquiv,
+        MPOTensor.CZX.chainFlip_fiberEquiv}
+    \leanok
+    \uses{def:mpug_czx_chain_labels}
+    For $N\geq2$, the map
+    \begin{align}
+        \bigl((p,b),\gamma\bigr)
+         & \longmapsto
+        \bigl(m^{(1)}_k,m^{(2)}_k,g_k\bigr)_k
+        =\bigl(\gamma_k,\ p_k+\gamma_k,\ b_k+\gamma_k+\gamma_{k-1}\bigr)_k
+        \label{eq:mpug_czx_fiber_coordinates}
+    \end{align}
+    is a bijection $\mathbb F_2^N\times\mathbb F_2^N\times\mathbb F_2^N\to S_N$
+    whose inverse reads off $p(s)$, $b(s)$, and $\gamma=m^{(1)}$. In these
+    coordinates $\sigma_j$ is $\gamma\mapsto\gamma+e_j$ and leaves $(p,b)$
+    unchanged.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:mpug_czx_chain_labels}
+    Both compositions of (\ref{eq:mpug_czx_fiber_coordinates}) with the
+    label map are the identity, by the identity $a+a=0$ in $\mathbb F_2$.
+    The flip $\sigma_j$ adds $((1,1),1)$ at site $j$ and $((0,0),1)$ at
+    site $j+1$; in fiber coordinates this is $\gamma_j\mapsto\gamma_j+1$
+    because $k-1=j$ exactly when $k=j+1$.
+\end{proof}
+
+\begin{lemma}[Involution and neighboring holonomy]
+    \label{thm:mpug_czx_holonomy}
+    \lean{MPOTensor.CZX.bondExponent_add_bondExponent_chainFlip,
+        MPOTensor.CZX.bondExponent_holonomy,
+        MPOTensor.CZX.bondExponent_chainFlip_of_disjoint,
+        MPOTensor.CZX.fiberPhase,
+        MPOTensor.CZX.fiberPhase_mul_fiberPhase_flip,
+        MPOTensor.CZX.fiberPhase_flip_of_disjoint,
+        MPOTensor.CZX.fiberPhase_holonomy,
+        MPOTensor.CZX.fiberPhase_ne_zero}
+    \leanok
+    \uses{def:mpug_czx_chain_labels}
+    For every $N\geq3$, every bond $j$, and every configuration $s$,
+    \begin{align}
+        q_j(s)+q_j(\sigma_js)
+         & =0,
+        \label{eq:mpug_czx_involution}                \\
+        q_j(s)+q_{j+1}(\sigma_js)
+         & =q_{j+1}(s)+q_j(\sigma_{j+1}s)+2b_{j+1}(s)
+        \label{eq:mpug_czx_holonomy}
+    \end{align}
+    modulo $4$, and $q_j(\sigma_ks)=q_j(s)$ whenever
+    $k\notin\{j-1,j,j+1\}$. For the phases
+    $\varphi_j(s)=i^{q_j(s)}$, (\ref{eq:mpug_czx_involution}) gives
+    $\varphi_j(s)\varphi_j(\sigma_js)=1$, while
+    (\ref{eq:mpug_czx_holonomy}) gives the neighboring square relation with
+    factor $(-1)^{b_{j+1}(s)}$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:mpug_czx_chain_labels}
+    The exponent $q_j$ depends only on the six bits at the sites $j$ and
+    $j+1$, and $\sigma_k$ changes only the sites $k$ and $k+1$; this gives
+    the disjoint-bond statement. For (\ref{eq:mpug_czx_involution}) the
+    flip $\sigma_j$ changes $x_0$, $x_1$, $a$, and $a'$, and the identity is
+    verified on the $64$ values of the six bits. For
+    (\ref{eq:mpug_czx_holonomy}) the sites $j$, $j+1$, $j+2$ are distinct
+    because $N\geq3$; $\sigma_j$ changes the left gauge bit seen by the bond
+    $(j+1,j+2)$, and $\sigma_{j+1}$ changes $x_2$, $x_3$, and $a'$ seen by
+    the bond $(j,j+1)$, so the identity is verified on the $512$ values of
+    the nine bits at the three sites.
+\end{proof}
+
+\begin{lemma}[Fixed spaces on the orbit fibers]
+    \label{thm:mpug_czx_good_fibers}
+    \lean{MPOTensor.CZX.isTrivialHolonomy_fiberPhase_iff}
+    \leanok
+    \uses{def:mpug_trivial_holonomy, thm:mpug_czx_orbit_classification}
+    Let $N\geq3$. In the fiber coordinates
+    (\ref{eq:mpug_czx_fiber_coordinates}), the phases $i^{q_j}$ have trivial
+    holonomy on the fiber over $(p,b)$ if and only if $b=0$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_czx_holonomy, thm:mpug_czx_orbit_classification}
+    If $b=0$, then for $k=j+1$ or $j=k+1$ the square identity is
+    (\ref{eq:mpug_czx_holonomy}) with $b_{j+1}=0$, for $k=j$ it is trivial,
+    and otherwise the bonds are disjoint and both sides agree. Conversely,
+    trivial holonomy at the square spanned by the bonds $k-1$ and $k$ at
+    $\gamma=0$ gives $(-1)^{b_k}=1$ by (\ref{eq:mpug_czx_holonomy}), since the
+    phases are nonzero, hence $b_k=0$ for every $k$.
+\end{proof}
+
+\begin{lemma}[The placed CZX Gauss operators]
+    \label{thm:mpug_czx_placed_operators}
+    \lean{MPOTensor.CZX.windowCoordinates,
+        MPOTensor.CZX.placedGaussOperator,
+        MPOTensor.CZX.sum_multiplicative_zmod_two,
+        MPOTensor.CZX.gaussProjector_circuitTuple,
+        MPOTensor.CZX.placedGaussProjector_circuitTuple,
+        MPOTensor.CZX.inv_two_smul_add_mulVec_eq_iff,
+        MPOTensor.CZX.commonFixedSubmodule_placedGaussProjector_circuitTuple,
+        MPOTensor.CZX.placedGaussOperator_eq_monomial,
+        MPOTensor.CZX.siteBits_eq_localBits_zero,
+        MPOTensor.CZX.siteBits_eq_localBits_one,
+        MPOTensor.CZX.barFlip_apply_zero,
+        MPOTensor.CZX.barFlip_apply_one,
+        MPOTensor.CZX.barFlip_apply_two,
+        MPOTensor.CZX.barFlip_apply_three,
+        MPOTensor.CZX.toAdd_mul_gen_inv,
+        MPOTensor.CZX.toAdd_gen_mul,
+        MPOTensor.CZX.gaussLegAction_fst,
+        MPOTensor.CZX.gaussLegAction_snd,
+        MPOTensor.CZX.chainDecode_window,
+        MPOTensor.CZX.chainDecode_windowPerm,
+        MPOTensor.CZX.localPhase_window,
+        MPOTensor.CZX.fiberCoordinates,
+        MPOTensor.CZX.placedGaussOperator_eq_reindex}
+    \leanok
+    \uses{def:mpug_placed_gauss_projector, def:mpug_czx_circuit_tuple,
+        def:mpug_czx_chain_labels, def:mpug_common_fixed_subspace}
+    Let $N\geq2$ and let $G_j$ be the local Gauss operator
+    (\ref{eq:mpug_czx_monomial_action}) placed on the bond $(j,j+1)$. For
+    $\Z_2$ the placed Gauss projector of
+    Definition~\ref{def:mpug_placed_gauss_projector} is
+    \begin{align}
+        \widetilde P_j & =\tfrac12\bigl(\Id+G_j\bigr),
+        \label{eq:mpug_czx_placed_projector}
+    \end{align}
+    so the common fixed subspace $\mathcal V_N(R^{\mathrm{CZX}})$ of the
+    $\widetilde P_j$ is the common fixed subspace of the $G_j$. In the
+    coordinates (\ref{eq:mpug_czx_configuration}), $G_j$ is the monomial
+    operator $G_j\ket{s}=i^{q_j(s)}\ket{\sigma_js}$, and in the fiber
+    coordinates (\ref{eq:mpug_czx_fiber_coordinates}) it is the monomial
+    operator with permutation $\gamma\mapsto\gamma+e_j$ and phase
+    $i^{q_j}$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:mpug_gauss_projector, thm:mpug_gauss_representation,
+        thm:mpug_czx_local_monomial_action, thm:mpug_embed_monomial,
+        thm:mpug_czx_orbit_classification, thm:mpug_mem_common_fixed_subspace}
+    The average over $\Z_2=\{e,g\}$ is $\frac12(\mathcal G_e+\mathcal G_g)$
+    with $\mathcal G_e=\Id$, and relabelling and placement are linear and
+    unital, which gives (\ref{eq:mpug_czx_placed_projector}). A vector $v$
+    satisfies $\frac12(v+G_jv)=v$ exactly when $G_jv=v$.
+    Lemma~\ref{thm:mpug_czx_local_monomial_action} and
+    Lemma~\ref{thm:mpug_embed_monomial} express $G_j$ as a monomial
+    operator; decoding the two-site window at $j$ into the bits of the sites
+    $j$ and $j+1$ identifies its permutation with $\sigma_j$ and its phase
+    with $i^{q_j(s)}$. Finally
+    Lemma~\ref{thm:mpug_czx_orbit_classification} reindexes both to the
+    fiber coordinates.
+\end{proof}
+
+\begin{lemma}[Exact dimension for the displayed CZX circuit tuple]
+    \label{thm:mpug_czx_dimension}
+    \lean{MPOTensor.CZX.finrank_commonFixedSubmodule_placedGaussProjector_circuitTuple}
+    \leanok
+    \uses{def:mpug_placed_gauss_projector, def:mpug_czx_circuit_tuple,
+        def:mpug_common_fixed_subspace}
+    Answering the growth question of
+    \cite[lines~5198--5204]{FrancoRubio2025MPUGauging} for the displayed
+    circuit tuple, on a periodic chain of $N\geq3$ blocked sites,
+    \begin{align}
+        \dim\mathcal V_N(R^{\mathrm{CZX}}) & =2^N.
+        \label{eq:mpug_czx_dimension}
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_czx_placed_operators,
+        thm:mpug_monomial_fixed_space_criterion,
+        thm:mpug_czx_holonomy, thm:mpug_czx_good_fibers}
+    By Lemma~\ref{thm:mpug_czx_placed_operators},
+    $\mathcal V_N(R^{\mathrm{CZX}})$ is the common fixed subspace of monomial
+    operators which, in fiber coordinates, have permutations
+    $\gamma\mapsto\gamma+e_j$ on the fibers over
+    $(p,b)\in\mathbb F_2^N\times\mathbb F_2^N$, and by
+    (\ref{eq:mpug_czx_involution}) these operators are involutions. The
+    monomial fixed-space criterion
+    (\ref{eq:mpug_monomial_fixed_space_count}) counts the fibers with trivial
+    holonomy, which by Lemma~\ref{thm:mpug_czx_good_fibers} are exactly
+    the fibers with $b=0$. There is one such $b$ and there are $2^N$ values
+    of $p$, so
+    \begin{align}
+        \dim\mathcal V_N(R^{\mathrm{CZX}})
+         & =\sum_{p\in\mathbb F_2^N}1=2^N.
+    \end{align}
+\end{proof}
+
+\begin{lemma}[The CZX dimension in the gauge-invariant subspace of the displayed tuple]
+    \label{thm:mpug_czx_dimension_of_completion}
+    \lean{MPOTensor.CZX.finrank_gaugeInvariantSubspace_circuitTuple}
+    \leanok
+    \uses{def:mpug_gauge_invariant_subspace, def:mpug_czx_circuit_tuple}
+    For the gauge-invariant subspace~(\ref{eq:mpug_gauge_invariant_subspace}) at
+    $R=R^{\mathrm{CZX}}$ and $N\geq3$,
+    $\dim_{\C}\mathcal V_N(R^{\mathrm{CZX}})\allowbreak=2^N$. The value is thereby
+    recorded for the subspace that
+    Definition~\ref{def:mpug_gauge_invariant_subspace} attaches to an arbitrary
+    tuple, so exhibiting $R^{\mathrm{CZX}}$ as a completion of prescribed
+    defect maps with matter defect states satisfying local defect support,
+    exact defect covariance, and nonvanishing of the gauged vector would put
+    the exact value beside the lower bound $\dim_{\C}\mathcal V_N(R)\geq1$ of
+    Lemma~\ref{thm:mpug_gauge_invariant_subspace_finrank}. None of those
+    hypotheses is established here. The statement is about the displayed
+    circuit tuple and asserts no membership in the full physical completion
+    class of the CZX defect data.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_czx_dimension, def:mpug_placed_gauss_projector}
+    Both subspaces are the common fixed subspace of the placed Gauss
+    projectors $\widetilde P_j(R^{\mathrm{CZX}})$ of
+    Definition~\ref{def:mpug_placed_gauss_projector} acting on the
+    configuration space of the chain, so
+    Lemma~\ref{thm:mpug_czx_dimension} gives the value.
+\end{proof}
+
+\subsection{A second displayed circuit tuple at three and four sites}
+
+Constraining the block $U_{1,1}$ of (\ref{eq:mpug_czx_tuple}) on the defect
+subspace $\spn_{\C}\{\ket{0011},\ket{1100}\}$ leaves gauge freedom in
+$\tilde\lambda$. Replacing $\tilde\lambda$ by another unitary with identical
+action on this subspace yields an alternate circuit tuple whose common $+1$
+eigenspace dimension differs at three and four blocked sites.
+
+\begin{definition}[The second displayed circuit tuple]
+    \label{def:mpug_czx_star_tuple}
+    \lean{MPOTensor.CZX.rStarExponent,
+        MPOTensor.CZX.rStar,
+        MPOTensor.CZX.rStar_eq,
+        MPOTensor.CZX.rStarExponent_zero_zero_one_one,
+        MPOTensor.CZX.rStarExponent_one_one_zero_zero,
+        MPOTensor.CZX.rStar_mulVec_eq_self,
+        MPOTensor.CZX.tildeLambdaStar,
+        MPOTensor.CZX.tildeLambdaStar_eq,
+        MPOTensor.CZX.tildeLambdaStar_mem_unitaryGroup,
+        MPOTensor.CZX.circuitTupleStar,
+        MPOTensor.CZX.circuitTupleStar_one,
+        MPOTensor.CZX.circuitTupleStar_gen_one,
+        MPOTensor.CZX.circuitTupleStar_gen_gen}
+    \leanok
+    \uses{def:mpug_czx_circuit_tuple, thm:mpug_czx_phase_tables}
+    In the qubit numbering of Definition~\ref{def:mpug_czx_circuit_tuple}, set
+    \begin{align}
+        r_\star(x) & =x_1+x_3+x_0x_1+x_0x_3+x_1x_2+x_2x_3,
+        \label{eq:mpug_czx_star_phase}                                         \\
+        R_\star    & =Z_1Z_3\,\mathrm{CZ}_{01}\mathrm{CZ}_{03}\mathrm{CZ}_{12}
+        \mathrm{CZ}_{23}.
+        \label{eq:mpug_czx_star_gate}
+    \end{align}
+    Then $R_\star\ket{x}=(-1)^{r_\star(x)}\ket{x}$, and
+    $r_\star(0011)=r_\star(1100)=0$, so $R_\star$ fixes the prescribed defect
+    subspace $\spn_{\C}\{\ket{0011},\ket{1100}\}$ pointwise. The second
+    displayed circuit tuple is
+    \begin{align}
+        R^\star
+         & =\bigl(U^\star_{0,0},U^\star_{0,1},U^\star_{1,0},U^\star_{1,1}\bigr)
+        =\bigl(\Id,\Id,w,\tilde\lambda R_\star\bigr),
+        \label{eq:mpug_czx_star_tuple}
+    \end{align}
+    with
+    $\tilde\lambda R_\star\ket{x}=-i(-1)^{f(x)+r_\star(x)}\ket{\overline x}$;
+    after reindexing to the two-site matter coordinates it is unitary. It has the
+    same action as $R^{\mathrm{CZX}}$ on that defect subspace. The four defect
+    domains and prescribed maps of
+    Definition~\ref{def:mpug_czx_defect_maps} determine a four-sector
+    completion class, and both tuples extend all four prescribed maps: the
+    first by Lemma~\ref{thm:mpug_czx_tuple_completion} and the second by
+    Lemma~\ref{thm:mpug_czx_star_tuple_completion}, because $R_\star$ fixes
+    the defect domain of the pair $(g,g)$ pointwise and the other three
+    operators are those of $R^{\mathrm{CZX}}$.
+    % Source anchor: arXiv:2502.20257, lines 4503--5183 (CZX model, defect and
+    % fusion data, modified Gauss law).
+\end{definition}
+
+\begin{lemma}[Local monomial action of the second tuple's Gauss operator]
+    \label{thm:mpug_czx_star_local_monomial_action}
+    \lean{MPOTensor.CZX.rStarExponent_barFlip,
+        MPOTensor.CZX.starDefect,
+        MPOTensor.CZX.phaseExponentStar,
+        MPOTensor.CZX.phaseExponentStar_zero_zero,
+        MPOTensor.CZX.phaseExponentStar_zero_one,
+        MPOTensor.CZX.phaseExponentStar_one_zero,
+        MPOTensor.CZX.phaseExponentStar_one_one,
+        MPOTensor.CZX.localPhaseStar,
+        MPOTensor.CZX.gaussOperator_circuitTupleStar_gen}
+    \leanok
+    \uses{def:mpug_czx_star_tuple, def:mpug_gauss_operator}
+    The nontrivial local Gauss operator obtained from
+    (\ref{eq:mpug_czx_star_tuple}) and (\ref{eq:mpug_gauss_operator}) is the
+    monomial operator $G^\star\ket{s}=i^{q^\star(s)}\ket{\sigma(s)}$ with the
+    same permutation part $\sigma$ as in
+    (\ref{eq:mpug_czx_monomial_action}) and with
+    \begin{align}
+        q^\star(x_0,x_1,a,x_2,x_3,a') & =q(x_0,x_1,a,x_2,x_3,a')
+        +2\delta_\star(x,a,a')
+        \label{eq:mpug_czx_star_phase_table}
+    \end{align}
+    modulo $4$, where $\delta_\star(x,0,0)=r_\star(\overline x)$,
+    $\delta_\star(x,1,1)=r_\star(x)$, and $\delta_\star$ vanishes in the two
+    remaining gauge sectors. The phase polynomial satisfies
+    \begin{align}
+        r_\star(\overline x) & =r_\star(x)+x_0+x_1+x_2+x_3.
+        \label{eq:mpug_czx_star_bar}
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_gauss_operator_monomial, thm:mpug_czx_phase_tables,
+        def:mpug_czx_star_tuple}
+    By Lemma~\ref{thm:mpug_gauss_operator_monomial} the operator is monomial,
+    and the two blocks $U^\star_{0,1}=\Id$ and $U^\star_{1,0}=w$ agree with
+    those of (\ref{eq:mpug_czx_tuple}), so the $(0,1)$ and $(1,0)$ rows of the
+    phase table are unchanged. In the $(1,1)$ sector the phase acquires the
+    factor $(-1)^{r_\star(x)}$ from
+    $\tilde\lambda R_\star\ket{x}=-i(-1)^{f(x)+r_\star(x)}\ket{\overline x}$; in
+    the $(0,0)$ sector the adjoint formula
+    (\ref{eq:mpug_monomial_adjoint}) evaluates that phase at $\overline x$ and
+    conjugates it, which contributes $(-1)^{r_\star(\overline x)}$. Since
+    $R_\star$ is diagonal, the permutation part is that of
+    (\ref{eq:mpug_czx_monomial_action}). Identity
+    (\ref{eq:mpug_czx_star_bar}) and the four rows of
+    (\ref{eq:mpug_czx_star_phase_table}) are checked on the sixteen bit
+    strings.
+\end{proof}
+
+\begin{lemma}[Involution and neighboring holonomy for the second tuple]
+    \label{thm:mpug_czx_star_holonomy}
+    \lean{MPOTensor.CZX.bondExponentStar,
+        MPOTensor.CZX.starHolonomyLabel,
+        MPOTensor.CZX.bondExponentStar_add_bondExponentStar_chainFlip,
+        MPOTensor.CZX.bondExponentStar_holonomy,
+        MPOTensor.CZX.bondExponentStar_chainFlip_of_disjoint,
+        MPOTensor.CZX.starFiberLabel,
+        MPOTensor.CZX.starHolonomyLabel_fiberEquiv,
+        MPOTensor.CZX.fiberPhaseStar,
+        MPOTensor.CZX.fiberPhaseStar_mul_fiberPhaseStar_flip,
+        MPOTensor.CZX.fiberPhaseStar_flip_of_disjoint,
+        MPOTensor.CZX.fiberPhaseStar_holonomy,
+        MPOTensor.CZX.fiberPhaseStar_ne_zero}
+    \leanok
+    \uses{def:mpug_czx_chain_labels, def:mpug_czx_star_tuple}
+    Let $q^\star_j(s)$ be the table (\ref{eq:mpug_czx_star_phase_table})
+    evaluated on the bond $(j,j+1)$ as in
+    Definition~\ref{def:mpug_czx_chain_labels}, and set
+    \begin{align}
+        c_j(s) & =b_{j+1}(s)\bigl(1+p_j(s)+p_{j+1}(s)\bigr)
+        +b_{j+2}(s)\bigl(p_{j+1}(s)+p_{j+2}(s)\bigr).
+        \label{eq:mpug_czx_star_holonomy_label}
+    \end{align}
+    For every $N\geq3$, every bond $j$, and every configuration $s$,
+    \begin{align}
+        q^\star_j(s)+q^\star_j(\sigma_js)
+         & =0,
+        \label{eq:mpug_czx_star_involution}                   \\
+        q^\star_j(s)+q^\star_{j+1}(\sigma_js)
+         & =q^\star_{j+1}(s)+q^\star_j(\sigma_{j+1}s)+2c_j(s)
+        \label{eq:mpug_czx_star_holonomy}
+    \end{align}
+    modulo $4$, and $q^\star_j(\sigma_ks)=q^\star_j(s)$ whenever
+    $k\notin\{j-1,j,j+1\}$. In the fiber coordinates
+    (\ref{eq:mpug_czx_fiber_coordinates}) the label $c_j$ depends only on the
+    orbit labels, $c_j(p,b)=b_{j+1}(1+p_j+p_{j+1})+b_{j+2}(p_{j+1}+p_{j+2})$,
+    and the phases $\varphi^\star_j=i^{q^\star_j}$ are involutive and satisfy
+    the neighboring square relation with factor $(-1)^{c_j(p,b)}$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_czx_star_local_monomial_action,
+        thm:mpug_czx_orbit_classification}
+    The exponent $q^\star_j$ depends only on the six bits at the sites $j$ and
+    $j+1$, which gives the disjoint-bond statement. For
+    (\ref{eq:mpug_czx_star_involution}) the flip $\sigma_j$ changes $x_0$,
+    $x_1$, $a$, and $a'$, and the identity is verified on the $64$ values of
+    those six bits. For (\ref{eq:mpug_czx_star_holonomy}) the sites $j$,
+    $j+1$, $j+2$ are distinct because $N\geq3$, and the identity is verified on
+    the $512$ values of the nine bits at those three sites. In fiber
+    coordinates $p$ and $b$ are read off by
+    Lemma~\ref{thm:mpug_czx_orbit_classification}, which turns $c_j$ into the
+    displayed polynomial in the orbit labels alone.
+\end{proof}
+
+\begin{lemma}[Fixed spaces on the orbit fibers for the second tuple]
+    \label{thm:mpug_czx_star_good_fibers}
+    \lean{MPOTensor.CZX.isTrivialHolonomy_fiberPhaseStar_iff}
+    \leanok
+    \uses{def:mpug_trivial_holonomy, thm:mpug_czx_orbit_classification,
+        thm:mpug_czx_star_holonomy}
+    Let $N\geq3$. In the fiber coordinates
+    (\ref{eq:mpug_czx_fiber_coordinates}), the phases $i^{q^\star_j}$ have
+    trivial holonomy on the fiber over $(p,b)$ if and only if $c_j(p,b)=0$ for
+    every $j\in\Z/N\Z$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_czx_star_holonomy, thm:mpug_czx_orbit_classification}
+    If all $c_j(p,b)$ vanish, then for $k=j+1$ or $j=k+1$ the square identity is
+    (\ref{eq:mpug_czx_star_holonomy}) with vanishing correction, for $k=j$ it is
+    trivial, and otherwise the bonds are disjoint and both sides agree.
+    Conversely, trivial holonomy at the square spanned by the bonds $j$ and
+    $j+1$ at $\gamma=0$ gives $(-1)^{c_j(p,b)}=1$ by
+    (\ref{eq:mpug_czx_star_holonomy}), since the phases are nonzero, hence
+    $c_j(p,b)=0$.
+\end{proof}
+
+\begin{lemma}[The placed Gauss operators of the second tuple]
+    \label{thm:mpug_czx_star_placed_operators}
+    \lean{MPOTensor.CZX.placedGaussOperatorStar,
+        MPOTensor.CZX.gaussProjector_circuitTupleStar,
+        MPOTensor.CZX.placedGaussProjector_circuitTupleStar,
+        MPOTensor.CZX.commonFixedSubmodule_placedGaussProjector_circuitTupleStar,
+        MPOTensor.CZX.placedGaussOperatorStar_eq_monomial,
+        MPOTensor.CZX.localPhaseStar_window,
+        MPOTensor.CZX.placedGaussOperatorStar_eq_reindex}
+    \leanok
+    \uses{def:mpug_placed_gauss_projector, def:mpug_czx_star_tuple,
+        def:mpug_czx_chain_labels, def:mpug_common_fixed_subspace}
+    Let $N\geq2$ and let $G^\star_j$ be the local Gauss operator of
+    Lemma~\ref{thm:mpug_czx_star_local_monomial_action} placed on the bond
+    $(j,j+1)$. The placed Gauss projector of
+    Definition~\ref{def:mpug_placed_gauss_projector} is
+    $\widetilde P^\star_j=\tfrac12(\Id+G^\star_j)$, so the common fixed subspace
+    $\mathcal V_N(R^\star)$ of the $\widetilde P^\star_j$ is the common fixed
+    subspace of the $G^\star_j$. In the coordinates
+    (\ref{eq:mpug_czx_configuration}), $G^\star_j$ is the monomial operator
+    $G^\star_j\ket{s}=i^{q^\star_j(s)}\ket{\sigma_js}$, and in the fiber
+    coordinates (\ref{eq:mpug_czx_fiber_coordinates}) it is the monomial
+    operator with permutation $\gamma\mapsto\gamma+e_j$ and phase
+    $i^{q^\star_j}$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:mpug_gauss_projector, thm:mpug_czx_star_local_monomial_action,
+        thm:mpug_embed_monomial, thm:mpug_czx_orbit_classification,
+        thm:mpug_czx_placed_operators}
+    The average over $\Z_2=\{e,g\}$ is $\frac12(\mathcal G_e+\mathcal G_g)$ with
+    $\mathcal G_e=\Id$, and relabelling and placement are linear and unital. A
+    vector $v$ satisfies $\frac12(v+G^\star_jv)=v$ exactly when
+    $G^\star_jv=v$. Lemma~\ref{thm:mpug_czx_star_local_monomial_action} and
+    Lemma~\ref{thm:mpug_embed_monomial} express $G^\star_j$ as a monomial
+    operator; the permutation part is that of
+    Lemma~\ref{thm:mpug_czx_placed_operators}, and decoding the two-site
+    window at $j$ identifies the phase with $i^{q^\star_j(s)}$. Finally
+    Lemma~\ref{thm:mpug_czx_orbit_classification} reindexes both to the
+    fiber coordinates.
+\end{proof}
+
+\begin{lemma}[Reduction of the dimension to a finite count]
+    \label{thm:mpug_czx_star_reduction}
+    \lean{MPOTensor.CZX.finrank_commonFixedSubmodule_placedGaussProjector_circuitTupleStar}
+    \leanok
+    \uses{def:mpug_placed_gauss_projector, def:mpug_czx_star_tuple,
+        def:mpug_common_fixed_subspace}
+    On a periodic chain of $N\geq3$ blocked sites,
+    \begin{align}
+        \dim\mathcal V_N(R^\star)
+         & =\#\bigl\{(p,b)\in\mathbb F_2^N\times\mathbb F_2^N:
+        c_j(p,b)=0\text{ for all }j\in\Z/N\Z\bigr\}.
+        \label{eq:mpug_czx_star_count}
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_czx_star_placed_operators,
+        thm:mpug_monomial_fixed_space_criterion,
+        thm:mpug_czx_star_holonomy, thm:mpug_czx_star_good_fibers}
+    By Lemma~\ref{thm:mpug_czx_star_placed_operators},
+    $\mathcal V_N(R^\star)$ is the common fixed subspace of monomial operators
+    which, in fiber coordinates, have permutations $\gamma\mapsto\gamma+e_j$ on
+    the fibers over $(p,b)$, and by (\ref{eq:mpug_czx_star_involution}) these
+    operators are involutions. The monomial fixed-space criterion
+    (\ref{eq:mpug_monomial_fixed_space_count}) counts the fibers with trivial
+    holonomy, which by Lemma~\ref{thm:mpug_czx_star_good_fibers} are exactly
+    the fibers whose labels satisfy the $N$ equations $c_j(p,b)=0$.
+\end{proof}
+
+\begin{lemma}[Dimensions for the second displayed tuple at three and four sites]
+    \label{thm:mpug_czx_star_dimension}
+    \lean{MPOTensor.CZX.finrank_commonFixedSubmodule_placedGaussProjector_circuitTupleStar_three,
+        MPOTensor.CZX.finrank_commonFixedSubmodule_placedGaussProjector_circuitTupleStar_four}
+    \leanok
+    \uses{def:mpug_placed_gauss_projector, def:mpug_czx_star_tuple,
+        def:mpug_common_fixed_subspace}
+    On periodic chains of three and four blocked sites,
+    \begin{align}
+        \dim\mathcal V_3(R^\star) & =14,
+        \label{eq:mpug_czx_star_dim_three} \\
+        \dim\mathcal V_4(R^\star) & =36.
+        \label{eq:mpug_czx_star_dim_four}
+    \end{align}
+    These two values are certificates at two system sizes. They carry no
+    asymptotic content, and no growth law for $\dim\mathcal V_N(R^\star)$
+    follows from them. Since $R^\star$ extends the four prescribed maps of
+    Definition~\ref{def:mpug_czx_defect_maps} by
+    Lemma~\ref{thm:mpug_czx_star_tuple_completion}, these are two values of
+    the dimension on that completion class, recorded as lower bounds on its
+    supremum in Lemma~\ref{thm:mpug_czx_star_class_values}; they give no
+    value for the minimum or the maximum of the dimension over completions.
+    Compared with
+    (\ref{eq:mpug_czx_dimension}), which gives $8$ and $16$ at the same two
+    sizes, they exhibit dependence of the dimension on the displayed circuit
+    data at those two sizes.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_czx_star_reduction}
+    Evaluating the right-hand side of (\ref{eq:mpug_czx_star_count}) by
+    exhaustive enumeration gives the two dimensions: at $N=3$ the $64$
+    pairs $(p,b)$ yield $14$ solutions of the three equations
+    $c_j(p,b)=0$, and at $N=4$ the $256$ pairs yield $36$ solutions of
+    the four equations.
+\end{proof}
+
+\section{The CZX defect domains and prescribed defect maps}
+\label{sec:mpug_czx_defect_maps}
+
+The modified-fusion lemma of
+\cite[lines~4215--4254]{FrancoRubio2025MPUGauging} attaches to each pair
+$(a,b)$ of gauge labels and each injective block $x$ a two-site defect vector
+$v(a,b,x)$ mapped unitarily to $v(e,ab,x)$. For the CZX model, the defect
+subspaces and prescribed maps are evaluated by finite contraction in
+\cite{gap:fbc25_czx_defect_domains}.
+
+\begin{definition}[Single-site CZX defects]
+    \label{def:mpug_czx_site_defects}
+    \lean{MPOTensor.CZX.identityDefect,
+        MPOTensor.CZX.flipDefect,
+        MPOTensor.CZX.siteDefect,
+        MPOTensor.CZX.identityDefect_zero,
+        MPOTensor.CZX.identityDefect_one,
+        MPOTensor.CZX.flipDefect_zero,
+        MPOTensor.CZX.flipDefect_one,
+        MPOTensor.CZX.siteDefect_one,
+        MPOTensor.CZX.siteDefect_gen}
+    \leanok
+    \discussion{7739}
+    One blocked site of the CZX model carries two matter qubits, and the two
+    injective blocks of the once-blocked GHZ state are the product vectors
+    $\ket{\circ}=\ket{00}$ and $\ket{\bullet}=\ket{11}$
+    \cite[lines~4660--4670]{FrancoRubio2025MPUGauging}, both of bond dimension
+    one. Writing $e\leftrightarrow0$ and $g\leftrightarrow1$ for the labels of
+    $\Z_2=\{e,g\}$, the identity defect and the domain-wall defect of
+    \cite[lines~2831--2845]{FrancoRubio2025MPUGauging} at the block
+    $x\in\mathbb F_2$ are
+    \begin{align}
+        e[x] & =\ket{xx},   \label{eq:mpug_czx_identity_defect}  \\
+        g[0] & =\ket{00},   \label{eq:mpug_czx_flip_defect_zero} \\
+        g[1] & =-i\ket{11}. \label{eq:mpug_czx_flip_defect_one}
+    \end{align}
+    As carried out in~\cite{gap:fbc25_czx_defect_domains} and displayed
+    in \cite[lines~4800--4859]{FrancoRubio2025MPUGauging}, contracting the
+    action tensors $A^{\Gamma}_{g,0}=-i\bra{1}$ and
+    $A^{\Gamma}_{g,1}=\bra{0}$ of
+    \cite[lines~4690--4694]{FrancoRubio2025MPUGauging} against the defect
+    diagram gives (\ref{eq:mpug_czx_flip_defect_zero}) and
+    (\ref{eq:mpug_czx_flip_defect_one}).
+\end{definition}
+
+\begin{definition}[Two-site CZX defect vectors]
+    \label{def:mpug_czx_defect_vectors}
+    \lean{MPOTensor.CZX.defectVector,
+        MPOTensor.CZX.defectVector_one_one,
+        MPOTensor.CZX.defectVector_one_gen,
+        MPOTensor.CZX.defectVector_gen_one,
+        MPOTensor.CZX.defectVector_gen_gen}
+    \leanok
+    \uses{def:mpug_czx_site_defects}
+    The two-site defect vector of the label pair $(a,b)$ and the block $x$ is
+    the left defect $a[bx]$ tensored with the right defect $b[x]$, in that
+    order \cite[lines~4234--4245]{FrancoRubio2025MPUGauging},
+    \begin{align}
+        v(a,b,x) & =a[bx]\otimes b[x].
+        \label{eq:mpug_czx_defect_vector}
+    \end{align}
+    The four qubits of two neighboring blocked sites are numbered $0,1$ on the
+    left site and $2,3$ on the right, and the computational basis of the
+    sixteen-dimensional two-site matter space is written $\ket{x_0x_1x_2x_3}$.
+\end{definition}
+
+\begin{lemma}[The eight CZX defect vectors]
+    \label{thm:mpug_czx_defect_vector_values}
+    \lean{MPOTensor.CZX.defectVector_one_one_zero,
+        MPOTensor.CZX.defectVector_one_one_one,
+        MPOTensor.CZX.defectVector_one_gen_zero,
+        MPOTensor.CZX.defectVector_one_gen_one,
+        MPOTensor.CZX.defectVector_gen_one_zero,
+        MPOTensor.CZX.defectVector_gen_one_one,
+        MPOTensor.CZX.defectVector_gen_gen_zero,
+        MPOTensor.CZX.defectVector_gen_gen_one,
+        MPOTensor.CZX.star_defectVector_dotProduct_defectVector}
+    \leanok
+    \uses{def:mpug_czx_defect_vectors}
+    The eight two-site defect vectors of the CZX model are
+    \begin{align}
+        v(e,e,0) & =\ket{0000},   & v(e,e,1) & =\ket{1111},
+        \label{eq:mpug_czx_v_ee}                              \\
+        v(e,g,0) & =\ket{1100},   & v(e,g,1) & =-i\ket{0011},
+        \label{eq:mpug_czx_v_eg}                              \\
+        v(g,e,0) & =\ket{0000},   & v(g,e,1) & =-i\ket{1111},
+        \label{eq:mpug_czx_v_ge}                              \\
+        v(g,g,0) & =-i\ket{1100}, & v(g,g,1) & =-i\ket{0011}.
+        \label{eq:mpug_czx_v_gg}
+    \end{align}
+    For every label pair the two vectors $v(a,b,0)$ and $v(a,b,1)$ are
+    orthonormal.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:mpug_czx_site_defects, def:mpug_czx_defect_vectors}
+    Substituting (\ref{eq:mpug_czx_identity_defect}),
+    (\ref{eq:mpug_czx_flip_defect_zero}), and
+    (\ref{eq:mpug_czx_flip_defect_one}) into
+    (\ref{eq:mpug_czx_defect_vector}), with $bx=x+b$ in $\mathbb F_2$, gives
+    the eight values. The two vectors of a label pair differ in the last two
+    bits, hence are orthogonal, and each carries a scalar of modulus one,
+    hence is a unit vector.
+\end{proof}
+
+\begin{lemma}[Reindexed monomial operators on the computational basis]
+    \label{lem:mpug_czx_matter_monomial_action}
+    \lean{MPOTensor.CZX.matterKet,
+        MPOTensor.CZX.matterMatrix_monomial_mulVec_matterKet}
+    \leanok
+    \uses{def:mpug_monomial_matrix, def:mpug_czx_circuit_tuple,
+        def:mpug_czx_defect_vectors}
+    Write $\ket{x}$ for the computational basis vector of the two-site matter
+    space attached to $x\in\mathbb F_2^4$ by the qubit numbering of
+    Definition~\ref{def:mpug_czx_defect_vectors}. After reindexing to that
+    space a monomial four-qubit operator still acts on the computational basis
+    by its phase and its permutation, so that for every $x\in\mathbb F_2^4$
+    \begin{align}
+        M(\sigma,\varphi)\ket{x} & =\varphi(x)\ket{\sigma(x)}.
+        \label{eq:mpug_czx_matter_monomial_action}
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_monomial_matrix_laws, def:mpug_czx_circuit_tuple}
+    Reindexing is the simultaneous relabelling of rows and columns along the
+    qubit numbering. It carries $M(\sigma,\varphi)$ to the monomial matrix of
+    the relabelled permutation and phase, and carries the basis vector of $x$
+    to $\ket{x}$, so reading (\ref{eq:mpug_monomial_matrix}) in the new labels
+    gives (\ref{eq:mpug_czx_matter_monomial_action}).
+\end{proof}
+
+\begin{lemma}[Unmodified CZX fusion contractions]
+    \label{thm:mpug_czx_unmodified_fusion}
+    \lean{MPOTensor.CZX.matterMatrix_lambda_mulVec_defectVector_zero,
+        MPOTensor.CZX.matterMatrix_lambda_mulVec_defectVector_one}
+    \leanok
+    \discussion{7355}
+    \uses{def:mpug_czx_circuit_tuple, def:mpug_czx_defect_vectors}
+    Let $\Z_2=\{e,g\}$, and let $v(a,b,x)$ be the two-site defect vectors
+    of Definition~\ref{def:mpug_czx_defect_vectors}, where $x\in\{0,1\}$.
+    As in the two contractions displayed in
+    \cite[lines~4989--5067]{FrancoRubio2025MPUGauging}, on the four matter
+    qubits numbered $0,1,2,3$, the unmodified operator (as distinct from
+    $\tilde\lambda=\lambda Z_0$ used in the displayed circuit tuple)
+    \begin{align}
+        \lambda & =\lambda^R_{g,g}
+        =-i\,(X_0X_1X_2Z_3) \mathrm{CZ}_{01}\mathrm{CZ}_{12}\,X_2
+    \end{align}
+    satisfies
+    \begin{align}
+        \lambda\,v(g,g,0) & =-v(e,e,0), \\
+        \lambda\,v(g,g,1) & =v(e,e,1).
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_czx_phase_tables, thm:mpug_czx_defect_vector_values,
+        lem:mpug_czx_matter_monomial_action}
+    The phase formula~(\ref{eq:mpug_czx_lambda_action}), read on the two-site
+    matter space through (\ref{eq:mpug_czx_matter_monomial_action}), gives
+    \begin{align}
+        \lambda\ket{1100} & =-i\ket{0000},
+        \label{eq:mpug_czx_lambda_ket_even} \\
+        \lambda\ket{0011} & =i\ket{1111},
+        \label{eq:mpug_czx_lambda_ket_odd}
+    \end{align}
+    since $h(1100)=0$ and $h(0011)=1$.
+    By Lemma~\ref{thm:mpug_czx_defect_vector_values}, the input defect
+    vectors are $-i\ket{1100}$ and $-i\ket{0011}$, while the target
+    vectors are $\ket{0000}$ and $\ket{1111}$. Multiplying
+    (\ref{eq:mpug_czx_lambda_ket_even}) and
+    (\ref{eq:mpug_czx_lambda_ket_odd}) by $-i$ gives the claimed signs.
+\end{proof}
+
+\begin{definition}[CZX defect domains]
+    \label{def:mpug_czx_defect_domains}
+    \lean{MPOTensor.CZX.defectDomain,
+        MPOTensor.CZX.evenTarget,
+        MPOTensor.CZX.oddTarget}
+    \leanok
+    \uses{def:mpug_czx_defect_vectors}
+    The defect domain of the label pair $(a,b)$ and the two target planes are
+    \begin{align}
+        \mathcal K_{a,b} & =\spn_{\C}\{v(a,b,x):x\in\mathbb F_2\},
+        \label{eq:mpug_czx_domain}                                 \\
+        \mathcal L_0     & =\spn_{\C}\{\ket{0000},\ket{1111}\},
+        \label{eq:mpug_czx_even_target}                            \\
+        \mathcal L_1     & =\spn_{\C}\{\ket{1100},\ket{0011}\}.
+        \label{eq:mpug_czx_odd_target}
+    \end{align}
+\end{definition}
+
+\begin{lemma}[The four CZX defect domains]
+    \label{thm:mpug_czx_defect_domains}
+    \lean{MPOTensor.CZX.defectDomain_one_one,
+        MPOTensor.CZX.defectDomain_gen_one,
+        MPOTensor.CZX.defectDomain_one_gen,
+        MPOTensor.CZX.defectDomain_gen_gen,
+        MPOTensor.CZX.defectDomain_eq,
+        MPOTensor.CZX.star_dotProduct_eq_zero_of_mem_evenTarget_of_mem_oddTarget,
+        MPOTensor.CZX.finrank_evenTarget,
+        MPOTensor.CZX.finrank_oddTarget,
+        MPOTensor.CZX.finrank_defectDomain}
+    \leanok
+    \uses{def:mpug_czx_defect_domains}
+    The four CZX defect domains are
+    \begin{align}
+        \mathcal K_{e,e}=\mathcal K_{g,e} & =\mathcal L_0,
+        \label{eq:mpug_czx_even_domains}                   \\
+        \mathcal K_{e,g}=\mathcal K_{g,g} & =\mathcal L_1,
+        \label{eq:mpug_czx_odd_domains}
+    \end{align}
+    so the domain depends only on the right label. The two planes are
+    orthogonal, $\mathcal L_0\perp\mathcal L_1$, and each has dimension two.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_czx_defect_vector_values, def:mpug_czx_defect_domains}
+    By (\ref{eq:mpug_czx_v_ee})--(\ref{eq:mpug_czx_v_gg}) the two spanning
+    vectors of $\mathcal K_{a,b}$ are the two spanning vectors of
+    $\mathcal L_b$ up to nonzero scalars, and rescaling a spanning vector by a
+    nonzero scalar leaves the span unchanged, which gives
+    (\ref{eq:mpug_czx_even_domains}) and (\ref{eq:mpug_czx_odd_domains}). The
+    four basis vectors occurring in (\ref{eq:mpug_czx_even_target}) and
+    (\ref{eq:mpug_czx_odd_target}) are pairwise distinct members of the
+    computational basis, so expanding a vector of $\mathcal L_0$ and a vector
+    of $\mathcal L_1$ in that basis makes every one of the four cross terms of
+    their inner product vanish, and the two spanning vectors of each plane are
+    linearly independent.
+\end{proof}
+
+\begin{definition}[The prescribed CZX defect maps]
+    \label{def:mpug_czx_prescribed_maps}
+    \lean{MPOTensor.CZX.prescribedMap}
+    \leanok
+    \uses{def:mpug_czx_defect_vectors, def:mpug_czx_defect_domains}
+    The prescribed defect map of the label pair $(a,b)$ is the partial
+    isometry
+    \begin{align}
+        D_{a,b} & =\sum_{x\in\mathbb F_2}\ketbra{v(e,ab,x)}{v(a,b,x)}
+        \label{eq:mpug_czx_prescribed_map}
+    \end{align}
+    of the two-site matter space. It is formed from the defect vectors
+    (\ref{eq:mpug_czx_v_ee})--(\ref{eq:mpug_czx_v_gg}) and not from the
+    circuits $w$ and $\tilde\lambda$ of
+    Definition~\ref{def:mpug_czx_circuit_tuple}.
+\end{definition}
+
+\begin{lemma}[Action of the prescribed CZX defect maps]
+    \label{thm:mpug_czx_prescribed_action}
+    \lean{MPOTensor.CZX.prescribedMap_mulVec_defectVector,
+        MPOTensor.CZX.prescribedMap_mem_defectDomain,
+        MPOTensor.CZX.isometry_on_defectDomain,
+        MPOTensor.CZX.prescribedMap_one_one_mulVec,
+        MPOTensor.CZX.prescribedMap_one_gen_mulVec,
+        MPOTensor.CZX.prescribedMap_gen_one_mulVec_zero,
+        MPOTensor.CZX.prescribedMap_gen_one_mulVec_one,
+        MPOTensor.CZX.prescribedMap_gen_gen_mulVec_zero,
+        MPOTensor.CZX.prescribedMap_gen_gen_mulVec_one}
+    \leanok
+    \uses{def:mpug_czx_prescribed_maps}
+    For every label pair and every block,
+    \begin{align}
+        D_{a,b}v(a,b,x) & =v(e,ab,x),
+        \label{eq:mpug_czx_prescription}
+    \end{align}
+    the map $D_{a,b}$ carries $\mathcal K_{a,b}$ into $\mathcal K_{e,ab}$, and
+    it is an isometry on $\mathcal K_{a,b}$, that is,
+    $D_{a,b}^{\dagger}D_{a,b}\ket{\xi}=\ket{\xi}$ for every
+    $\ket{\xi}\in\mathcal K_{a,b}$. In the computational basis,
+    \begin{align}
+        D_{e,e} & =\Id_{\mathcal L_0},
+        \label{eq:mpug_czx_map_ee}                     \\
+        D_{e,g} & =\Id_{\mathcal L_1},
+        \label{eq:mpug_czx_map_eg}                     \\
+        D_{g,e}\ket{0000}=\ket{1100},
+                & \quad D_{g,e}\ket{1111}=\ket{0011},
+        \label{eq:mpug_czx_map_ge}                     \\
+        D_{g,g}\ket{1100}=i\ket{0000},
+                & \quad D_{g,g}\ket{0011}=i\ket{1111}.
+        \label{eq:mpug_czx_map_gg}
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_czx_defect_vector_values, def:mpug_czx_prescribed_maps}
+    Applying (\ref{eq:mpug_czx_prescribed_map}) to $v(a,b,x)$ and using the
+    orthonormality of $v(a,b,0)$ and $v(a,b,1)$ of
+    Lemma~\ref{thm:mpug_czx_defect_vector_values} leaves the single term
+    $v(e,ab,x)$, which is (\ref{eq:mpug_czx_prescription}). The same
+    computation for the adjoint gives
+    $D_{a,b}^{\dagger}v(e,ab,x)=v(a,b,x)$, and composing the two identities on
+    a linear combination of $v(a,b,0)$ and $v(a,b,1)$ gives the isometry
+    property and the inclusion of the images. Substituting
+    (\ref{eq:mpug_czx_v_ee})--(\ref{eq:mpug_czx_v_gg}) into
+    (\ref{eq:mpug_czx_prescription}) and cancelling the scalars of modulus one
+    gives (\ref{eq:mpug_czx_map_ee})--(\ref{eq:mpug_czx_map_gg}).
+\end{proof}
+
+\begin{definition}[Prescribed defect maps of the CZX model]
+    \label{def:mpug_czx_defect_maps}
+    \lean{MPOTensor.CZX.defectMaps,
+        MPOTensor.CZX.defectMaps_domain,
+        MPOTensor.CZX.defectMaps_prescribed}
+    \leanok
+    \uses{def:mpug_defect_maps, def:mpug_czx_defect_domains,
+        def:mpug_czx_prescribed_maps, thm:mpug_czx_prescribed_action}
+    The four domains (\ref{eq:mpug_czx_even_domains}) and
+    (\ref{eq:mpug_czx_odd_domains}) together with the four maps
+    (\ref{eq:mpug_czx_prescribed_map}) are prescribed defect maps in the sense
+    of Definition~\ref{def:mpug_defect_maps} for the group $\Z_2$ and the
+    two-site matter space of the CZX model, the isometry condition
+    (\ref{eq:mpug_defect_isometry}) being
+    Lemma~\ref{thm:mpug_czx_prescribed_action}. That the circuit tuple
+    $R^{\mathrm{CZX}}$ lies in the resulting completion class
+    (\ref{eq:mpug_completion_class}) is proved unconditionally in
+    Lemma~\ref{thm:mpug_czx_tuple_completion} below.
+\end{definition}
+
+\section{The displayed CZX tuple as a completion}
+\label{sec:mpug_czx_completion}
+
+The four defect domains and four prescribed maps of
+Section~\ref{sec:mpug_czx_defect_maps} constrain each fusion operator on one
+plane of the two-site matter space. The operators
+$(\Id,\Id,w,\tilde\lambda)$ of Definition~\ref{def:mpug_czx_circuit_tuple}
+satisfy these constraints, so the displayed tuple belongs to the completion
+class of the CZX prescribed defect maps $D^{\mathrm{CZX}}$, and
+(\ref{eq:mpug_czx_dimension}) lower-bounds the supremum of the gauge-invariant
+dimension over the full class.
+
+\begin{lemma}[The displayed CZX tuple is a completion]
+    \label{thm:mpug_czx_tuple_completion}
+    \lean{MPOTensor.CZX.circuitTuple_one_mulVec_defectVector,
+        MPOTensor.CZX.circuitTuple_gen_one_mulVec_defectVector_zero,
+        MPOTensor.CZX.circuitTuple_gen_one_mulVec_defectVector_one,
+        MPOTensor.CZX.circuitTuple_gen_gen_mulVec_defectVector_zero,
+        MPOTensor.CZX.circuitTuple_gen_gen_mulVec_defectVector_one,
+        MPOTensor.CZX.circuitTuple_mulVec_defectVector,
+        MPOTensor.CZX.isCompletion_circuitTuple,
+        MPOTensor.CZX.circuitTuple_mem_completionClass}
+    \leanok
+    \uses{def:mpug_czx_defect_maps, def:mpug_czx_circuit_tuple,
+        def:mpug_completion_class}
+    For every ordered pair $(a,b)$ of labels of $\Z_2$ and every injective
+    block $x$, the displayed operator of the pair carries the defect vector of
+    the pair to the defect vector of the product label,
+    \begin{align}
+        U^{\mathrm{CZX}}_{a,b}v(a,b,x) & =v(e,ab,x),
+        \label{eq:mpug_czx_tuple_fusion}
+    \end{align}
+    that is,
+    \begin{align}
+        \Id\,v(e,b,x)           & =v(e,b,x),
+        \label{eq:mpug_czx_tuple_fusion_trivial}  \\
+        w\,v(g,e,x)             & =v(e,g,x),
+        \label{eq:mpug_czx_tuple_fusion_movement} \\
+        \tilde\lambda\,v(g,g,x) & =v(e,e,x).
+        \label{eq:mpug_czx_tuple_fusion_modified}
+    \end{align}
+    Consequently the displayed operator of every pair agrees on
+    $\mathcal K_{a,b}$ with the prescribed map $D_{a,b}$, and the displayed
+    tuple lies in the full completion class,
+    \begin{align}
+        R^{\mathrm{CZX}} & \in\mathfrak C(D^{\mathrm{CZX}}).
+        \label{eq:mpug_czx_tuple_completion}
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_czx_phase_tables, thm:mpug_czx_defect_vector_values,
+        thm:mpug_czx_defect_domains, thm:mpug_czx_prescribed_action}
+    The phase tables (\ref{eq:mpug_czx_w_action}) and
+    (\ref{eq:mpug_czx_tilde_lambda_action}), evaluated at the four
+    computational basis states carrying the defect vectors of
+    Lemma~\ref{thm:mpug_czx_defect_vector_values}, give
+    \begin{align}
+        w\ket{0000}             & =\ket{1100},
+                                & w\ket{1111}
+                                & =\ket{0011},
+        \label{eq:mpug_czx_w_basis_action}                \\
+        \tilde\lambda\ket{1100} & =i\ket{0000},
+                                & \tilde\lambda\ket{0011}
+                                & =i\ket{1111},
+        \label{eq:mpug_czx_tilde_lambda_basis_action}
+    \end{align}
+    because $e(0000)=e(1111)=0$ and $f(1100)=f(0011)=1$. Substituting
+    (\ref{eq:mpug_czx_v_ee})--(\ref{eq:mpug_czx_v_gg}) and cancelling the
+    factors $-i$ gives (\ref{eq:mpug_czx_tuple_fusion_movement}) and
+    (\ref{eq:mpug_czx_tuple_fusion_modified}); the pairs with left label $e$
+    carry the identity operator, so
+    (\ref{eq:mpug_czx_tuple_fusion_trivial}) is immediate. The two defect
+    vectors of a pair span $\mathcal K_{a,b}$ by (\ref{eq:mpug_czx_domain}),
+    and the prescribed map obeys the same identity
+    (\ref{eq:mpug_czx_prescription}), so the displayed operator and the
+    prescribed map agree on the whole plane, which is
+    (\ref{eq:mpug_czx_tuple_completion}).
+\end{proof}
+
+\begin{lemma}[Lower bound on the supremum over the CZX completion class]
+    \label{thm:mpug_czx_class_maximum}
+    \lean{MPOTensor.CZX.bddAbove_range_finrank_gaugeInvariantSubspace,
+        MPOTensor.CZX.two_pow_le_iSup_finrank_gaugeInvariantSubspace_completionClass}
+    \leanok
+    \uses{def:mpug_czx_defect_maps, def:mpug_czx_circuit_tuple,
+        def:mpug_completion_class, def:mpug_gauge_invariant_subspace,
+        thm:mpug_czx_dimension_of_completion}
+    On a periodic chain of $N\geq3$ blocked sites the gauge-invariant
+    dimensions of the members of the CZX completion class are bounded above by
+    the dimension of the chain space, so their supremum is finite, and
+    \begin{align}
+        \sup_{R\in\mathfrak C(D^{\mathrm{CZX}})}\dim\mathcal V_N(R) & \geq2^N.
+        \label{eq:mpug_czx_class_maximum}
+    \end{align}
+    Nothing is asserted about the minimum of $\dim\mathcal V_N(R)$ over the
+    class, about the exact value of the supremum, or about which completion
+    attains it. With the domains and maps entering the class derived
+    in~\cite{gap:fbc25_czx_defect_domains}, those extrema are questions about
+    this completion class, not questions the source raises;
+    \cite[lines~5198--5204]{FrancoRubio2025MPUGauging} asks only whether the
+    gauge-invariant subspace of the state-level gauging stays bounded or grows
+    with the system size, and nothing is asserted about that growth either.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_czx_tuple_completion, thm:mpug_czx_dimension_of_completion}
+    Every gauge-invariant subspace (\ref{eq:mpug_gauge_invariant_subspace}) is
+    a subspace of the chain space, so the dimensions of the members of the
+    class are bounded above by the dimension of that space and their supremum
+    is finite. By Lemma~\ref{thm:mpug_czx_tuple_completion} the displayed
+    tuple lies in the class, and by
+    Lemma~\ref{thm:mpug_czx_dimension_of_completion} its gauge-invariant
+    subspace has dimension $2^N$, which is therefore at most the supremum.
+\end{proof}
+
+\begin{lemma}[The second displayed CZX tuple is a completion]
+    \label{thm:mpug_czx_star_tuple_completion}
+    \lean{MPOTensor.CZX.matterMatrix_tildeLambdaStar_mulVec_matterKet_zero,
+        MPOTensor.CZX.matterMatrix_tildeLambdaStar_mulVec_matterKet_one,
+        MPOTensor.CZX.circuitTupleStar_gen_gen_mulVec_defectVector_zero,
+        MPOTensor.CZX.circuitTupleStar_gen_gen_mulVec_defectVector_one,
+        MPOTensor.CZX.circuitTupleStar_mulVec_defectVector,
+        MPOTensor.CZX.isCompletion_circuitTupleStar,
+        MPOTensor.CZX.circuitTupleStar_mem_completionClass}
+    \leanok
+    \uses{def:mpug_czx_defect_maps, def:mpug_czx_star_tuple,
+        def:mpug_completion_class}
+    The second displayed tuple obeys the same prescription
+    (\ref{eq:mpug_czx_tuple_fusion}) as the first,
+    \begin{align}
+        U^\star_{a,b}v(a,b,x) & =v(e,ab,x),
+        \label{eq:mpug_czx_star_tuple_fusion}
+    \end{align}
+    and therefore lies in the full completion class,
+    \begin{align}
+        R^\star & \in\mathfrak C(D^{\mathrm{CZX}}).
+        \label{eq:mpug_czx_star_tuple_completion}
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_czx_tuple_completion, thm:mpug_czx_defect_domains,
+        def:mpug_czx_star_tuple}
+    The pairs $(e,e)$, $(e,g)$, and $(g,e)$ carry the same operators in
+    $R^\star$ as in $R^{\mathrm{CZX}}$, so
+    Lemma~\ref{thm:mpug_czx_tuple_completion} gives
+    (\ref{eq:mpug_czx_star_tuple_fusion}) there. For the pair $(g,g)$ the
+    operator is $\tilde\lambda R_\star$, and the defect domain is
+    $\mathcal K_{g,g}=\mathcal L_1=\spn_{\C}\{\ket{1100},\ket{0011}\}$ by
+    (\ref{eq:mpug_czx_odd_domains}). Since
+    $r_\star(1100)=r_\star(0011)=0$, the factor $R_\star$ fixes both spanning
+    vectors, so $\tilde\lambda R_\star$ has the same values there as
+    $\tilde\lambda$, namely $i\ket{0000}$ and $i\ket{1111}$. The two defect
+    vectors of the pair span its domain, which gives
+    (\ref{eq:mpug_czx_star_tuple_completion}).
+\end{proof}
+
+\begin{lemma}[Two further values of the dimension on the CZX completion
+        class]
+    \label{thm:mpug_czx_star_class_values}
+    \lean{MPOTensor.CZX.finrank_gaugeInvariantSubspace_circuitTupleStar_three,
+        MPOTensor.CZX.finrank_gaugeInvariantSubspace_circuitTupleStar_four,
+        MPOTensor.CZX.fourteen_le_iSup_finrank_gaugeInvariantSubspace_completionClass,
+        MPOTensor.CZX.thirtySix_le_iSup_finrank_gaugeInvariantSubspace_completionClass}
+    \leanok
+    \uses{def:mpug_czx_defect_maps, def:mpug_completion_class,
+        def:mpug_gauge_invariant_subspace, thm:mpug_czx_star_tuple_completion,
+        thm:mpug_czx_star_dimension}
+    The dimensions $14$ at three sites and $36$ at four sites are values of the
+    gauge-invariant dimension on the CZX completion class, so
+    \begin{align}
+        \sup_{R\in\mathfrak C(D^{\mathrm{CZX}})}\dim\mathcal V_3(R) & \geq14,
+        \label{eq:mpug_czx_star_class_three}                                  \\
+        \sup_{R\in\mathfrak C(D^{\mathrm{CZX}})}\dim\mathcal V_4(R) & \geq36.
+        \label{eq:mpug_czx_star_class_four}
+    \end{align}
+    Beside the values $8$ and $16$ of the first displayed tuple at the same two
+    chain lengths, these exhibit two different values of the dimension on the
+    class at each of those lengths. Nothing follows about the minimum, the
+    exact supremum, which completion attains it, or the behaviour of any of
+    these as $N$ grows.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_czx_star_tuple_completion, thm:mpug_czx_star_dimension}
+    By Lemma~\ref{thm:mpug_czx_star_tuple_completion} the second displayed
+    tuple lies in the class, and by
+    Lemma~\ref{thm:mpug_czx_star_dimension} its gauge-invariant subspace has
+    dimensions $14$ and $36$ at three and four sites. Each value is therefore
+    at most the supremum over the class at that chain length, by the same
+    boundedness argument as in
+    Lemma~\ref{thm:mpug_czx_class_maximum}.
+\end{proof}
+
+\section{The gauged CZX state and the modified Gauss law}
+\label{sec:mpug_czx_gauged_state}
+
+The state-level gauging of \cite[lines~5121--5183]{FrancoRubio2025MPUGauging}
+promotes the symmetry defects of the once-blocked GHZ state to gauge degrees of
+freedom. Each site of the gauged chain carries one blocked matter index in
+$\{0,1,2,3\}$ and one gauge label in $\Z_2=\{e,g\}$. The local Gauss operator
+of the unmodified fusion operators does not fix the gauged state. After the
+modification $\lambda^R_{g,g}\mapsto\lambda^R_{g,g}Z_1$ the gauged state is
+fixed, at the cost of neighbouring Gauss projectors that do not commute. The
+modified operators $\widetilde{\mathcal G}_h$ form a representation of $\Z_2$
+by Lemma~\ref{thm:mpug_gauss_representation}, as every local Gauss operator
+does. The source does not determine the common fixed subspace of the modified
+projectors beyond the gauged state; its dimension for the displayed tuple is
+Lemma~\ref{thm:mpug_czx_dimension}.
+
+\begin{definition}[The gauged CZX tensor]
+    \label{def:mpug_czx_gauged_tensor}
+    \lean{MPOTensor.CZX.gaugeLabelMatrix,
+        MPOTensor.CZX.gaugedSite,
+        MPOTensor.CZX.gaugedTensor,
+        MPOTensor.CZX.gaugedMPS,
+        MPOTensor.CZX.gaugedDefectState}
+    \leanok
+    \discussion{7356}
+    \uses{def:mpug_czx_blocked_ghz, def:mpv}
+    Let $\widehat A$ be the once-blocked GHZ tensor of
+    Definition~\ref{def:mpug_czx_blocked_ghz}, and let
+    \begin{align}
+        G_e & =\Id,                                   &
+        G_g & =\begin{pmatrix}0&1\\-i&0\end{pmatrix}.
+        \label{eq:mpug_czx_gauge_matrices}
+    \end{align}
+    The gauged tensor of \cite[lines~5129--5178]{FrancoRubio2025MPUGauging}
+    has, at a site with blocked matter index $m$ and gauge label $a$, the
+    letter $G_a\widehat A^m$: the gauge matrix sits on the bond to the left of
+    the site. Its periodic matrix product vector on $N$ sites is the gauged
+    CZX state $\ket{\Phi_N}$. For a configuration $\alpha$ of gauge labels, let
+    $\ket{\Psi_\alpha}$ be the periodic GHZ state with $G_{\alpha_k}$ inserted
+    on the bond to the left of the site $k$.
+\end{definition}
+
+\begin{lemma}[The gauged CZX state as a product of nearest-neighbour factors]
+    \label{thm:mpug_czx_gauged_state_product}
+    \lean{MPOTensor.CZX.gaugedMPS_eq_gaugedVector,
+        MPOTensor.CZX.gaugedLeftBond,
+        MPOTensor.CZX.gaugedBondWeightZ,
+        MPOTensor.CZX.gaugedBondFactorZ,
+        MPOTensor.CZX.gaugedTensor_apply,
+        MPOTensor.CZX.gaugedMPS_eq_prod,
+        MPOTensor.CZX.gaugedMPS_replaceWindow}
+    \leanok
+    \discussion{7356}
+    \uses{def:mpug_czx_gauged_tensor, def:mpug_gauged_vector}
+    The gauged CZX state is the gauged vector
+    $\sum_\alpha\ket{\Psi_\alpha}\otimes\ket{\alpha}$ of
+    Definition~\ref{def:mpug_gauged_vector}, the form of
+    \cite[lines~3511--3530]{FrancoRubio2025MPUGauging}. For a site $u=(m,a)$
+    with $m=2y+y'$, identify $e,g$ with $0,1$, let $\ell(u)=y+a$ modulo two,
+    and for $r\in\{0,1\}$ let
+    \begin{align}
+        c_u(r) & =\delta_{m,3r}\cdot
+        \begin{cases}
+            -i & \text{if } a=g \text{ and } r=0, \\
+            1  & \text{otherwise}.
+        \end{cases}
+    \end{align}
+    Then every letter satisfies
+    $(G_a\widehat A^m)_{lr}=\delta_{l,\ell(u)}c_u(r)$, and
+    \begin{align}
+        \braket{s|\Phi_N}
+         & =\prod_{n=1}^Nc_{s_n}\bigl(\ell(s_{n+1})\bigr),
+        \label{eq:mpug_czx_gauged_product}
+    \end{align}
+    with the indices read cyclically. Replacing the sites $j$ and $j+1$
+    without changing $\ell$ at $j$ changes only the factors at $n=j$ and
+    $n=j+1$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:mpug_czx_gauged_tensor}
+    The letter $\widehat A^m$ is the diagonal projector onto the GHZ sector of
+    $m$, and $G_a$ shifts the bond by $a$ with the weights
+    (\ref{eq:mpug_czx_gauge_matrices}); comparing the entries of the eight
+    letters gives the entry formula. Since the incoming bond of every letter is forced by the
+    letter, the trace of a product of letters is the product of the entries
+    along the forced bonds. Replacing the window changes the bond forced at
+    $j+1$, which enters only the factors at $j$ and $j+1$.
+\end{proof}
+
+\begin{definition}[The unmodified CZX fusion operators]
+    \label{def:mpug_czx_unmodified_tuple}
+    \lean{MPOTensor.CZX.lambda_mem_unitaryGroup,
+        MPOTensor.CZX.unmodifiedCircuitTuple}
+    \leanok
+    \discussion{7356}
+    \uses{def:mpug_czx_circuit_tuple, def:mpug_gauss_operator}
+    The unmodified fusion operators are
+    $(\lambda^R_{e,e},\lambda^R_{e,g},\lambda^R_{g,e},\lambda^R_{g,g})
+        =(\Id,\Id,w,\lambda)$, with $w$ and $\lambda$ the unitaries
+    (\ref{eq:mpug_czx_w}) and (\ref{eq:mpug_czx_lambda}). Their local Gauss
+    operator of the generator is
+    \begin{align}
+        \mathcal G_g
+         & =\lambda^\dagger\otimes\ketbra{g,g}{e,e}
+        +w^\dagger\otimes\ketbra{g,e}{e,g}
+        +w\otimes\ketbra{e,g}{g,e}
+        +\lambda\otimes\ketbra{e,e}{g,g},
+        \label{eq:mpug_czx_unmodified_gauss}
+    \end{align}
+    the operator of \cite[lines~5121--5128]{FrancoRubio2025MPUGauging}.
+\end{definition}
+
+\begin{lemma}[The unmodified Gauss law does not fix the gauged state]
+    \label{thm:mpug_czx_unmodified_not_invariant}
+    \lean{MPOTensor.CZX.unmodifiedPlacedGaussOperator_mulVec_gaugedMPS_ne}
+    \leanok
+    \discussion{7356}
+    \uses{def:mpug_czx_unmodified_tuple, def:mpug_placed_gauss_operator,
+        thm:mpug_czx_gauged_state_product}
+    For every $N\geq2$ and every window $(j,j+1)$, the unmodified Gauss
+    operator (\ref{eq:mpug_czx_unmodified_gauss}) placed on the window does not
+    fix $\ket{\Phi_N}$, as stated in
+    \cite[line~5179]{FrancoRubio2025MPUGauging}.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_czx_gauged_state_product, thm:mpug_embed_monomial}
+    The unmodified fusion operators are monomial, so the placed operator is
+    monomial and fixes a vector $v$ exactly when $v(\sigma s)=\varphi(s)v(s)$
+    for every configuration $s$. Take $s$ with matter $\ket{00}$ and label $e$
+    at every site, so that $\braket{s|\Phi_N}=1$. The operator sends $s$ to the
+    configuration with $(\ket{11},g)$ at $j$ and $(\ket{00},g)$ at $j+1$, with
+    phase $i$. By (\ref{eq:mpug_czx_gauged_product}) the gauged state has
+    coefficient $-i$ there, and $-i\neq i$.
+\end{proof}
+
+\begin{lemma}[The modified Gauss law fixes the gauged state]
+    \label{thm:mpug_czx_modified_invariant}
+    \lean{MPOTensor.CZX.iPowZ,
+        MPOTensor.CZX.toComplex_iPowZ,
+        MPOTensor.CZX.gaussWindowImage,
+        MPOTensor.CZX.placedGaussOperator_mulVec_gaugedMPS,
+        MPOTensor.CZX.gaugedMPS_mem_gaugeInvariantSubspace}
+    \leanok
+    \discussion{7356}
+    \uses{def:mpug_czx_circuit_tuple, thm:mpug_czx_placed_operators,
+        thm:mpug_czx_gauged_state_product, def:mpug_gauge_invariant_subspace}
+    Replace $\lambda^R_{g,g}$ by $\tilde\lambda^R_{g,g}=\lambda^R_{g,g}Z_1$ and
+    keep the other three fusion operators, as in
+    \cite[lines~5179--5183]{FrancoRubio2025MPUGauging}. For every $N\geq2$,
+    every placed modified Gauss operator $G_j$ fixes $\ket{\Phi_N}$, and hence
+    so does every placed modified Gauss projector
+    $\widetilde P_j=\frac12(\Id+G_j)$. Thus $\ket{\Phi_N}$ lies in the
+    gauge-invariant subspace $\mathcal V_N(R^{\mathrm{CZX}})$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_czx_local_monomial_action, thm:mpug_czx_placed_operators,
+        thm:mpug_czx_gauged_state_product}
+    By Lemma~\ref{thm:mpug_czx_placed_operators} the operator $G_j$ is
+    monomial: it complements the matter bits at $j$, moves the two labels of
+    the window by the Gauss leg action, and multiplies by $i^{q(s)}$. It does
+    not change $\ell$ at the site $j$. By
+    Lemma~\ref{thm:mpug_czx_gauged_state_product} the claim reduces to
+    \begin{align}
+        c_{u_0'}\bigl(\ell(u_1')\bigr)\,c_{u_1'}(b)
+         & =i^{q(u_0,u_1)}\,c_{u_0}\bigl(\ell(u_1)\bigr)\,c_{u_1}(b)
+    \end{align}
+    for every window $(u_0,u_1)$ with image $(u_0',u_1')$ and every bond
+    $b\in\{0,1\}$. All values are Gaussian integers, and the identity is
+    checked over the $128$ cases.
+\end{proof}
+
+\begin{lemma}[Neighbouring modified projectors do not commute]
+    \label{thm:mpug_czx_projectors_noncommuting}
+    \lean{MPOTensor.CZX.not_commute_placedGaussOperator,
+        MPOTensor.CZX.not_commute_placedGaussProjector}
+    \leanok
+    \discussion{7356}
+    \uses{thm:mpug_czx_placed_operators, thm:mpug_czx_modified_invariant}
+    For every $N\geq3$ and every $j$, the modified Gauss operators $G_j$ and
+    $G_{j+1}$ do not commute, and neither do the projectors $\widetilde P_j$
+    and $\widetilde P_{j+1}$. This is the cost stated in
+    \cite[line~5183]{FrancoRubio2025MPUGauging}.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_czx_placed_operators}
+    Both products $G_jG_{j+1}$ and $G_{j+1}G_j$ are monomial. Let $s$ be the
+    configuration with matter $\ket{00}$ and label $g$ at every site. Since
+    $N\geq3$, the windows at $j$ and $j+1$ share only the site $j+1$, and the
+    phases of the two products at $s$ are read off the phase table of
+    Lemma~\ref{thm:mpug_czx_local_monomial_action}: they differ by a sign.
+    The column of $s$ therefore differs in the two products, whether or not
+    their permutations agree at $s$. Since $G_k=2\widetilde P_k-\Id$,
+    commuting projectors would give commuting operators.
+\end{proof}
