@@ -360,7 +360,7 @@ norm of matrices, rectangular ones included.
     \end{enumerate}
     Patches may overlap, and affected old holes may overlap affected new
     holes. In the canonical coordinates below, the tags of the untouched
-    holes come first in both frames; Lemma~\ref{thm:peps_frame_small_rewrite}
+    holes come first in both frames; Theorem~\ref{thm:peps_frame_small_rewrite}
     also covers arbitrary tag orderings.
 \end{definition}
 
@@ -434,7 +434,7 @@ norm of matrices, rectangular ones included.
         =U_uQ_1\cdots Q_{r_{\rm old}}$, and commuting $U_u$ past $B_aP_m\cdots P_1$ yields the identity.
 \end{proof}
 
-\begin{lemma}[Small-patch rewrite: canonical contraction]
+\begin{theorem}[Small-patch rewrite: canonical contraction]
     \label{thm:peps_frame_small_rewrite}
     \lean{TNLean.PEPS.EncodedFrame.SmallPatchRewrite.norm_rewrite_le_one_and_refVec_sub_le,
         TNLean.PEPS.EncodedFrame.SmallPatchRewrite.norm_rewrite_refVec_sub_le,
@@ -453,7 +453,7 @@ norm of matrices, rectangular ones included.
     \end{align}
     The same holds for arbitrary tag orderings after relabelling $M$ along the tag permutation. In this
     first assertion of \cite[Lemma~6.3]{OpenAI2026PolynomialPEPS}, the error bound~(\ref{eq:peps_frame_small_rewrite_err}) uses condition~(1) only, without assuming small errors on untouched holes or commuting patch projectors.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
     By Lemma~\ref{lem:peps_frame_rewrite_intertwining},
@@ -550,7 +550,7 @@ norm of matrices, rectangular ones included.
 \end{lemma}
 
 \begin{proof}\leanok
-    By Lemma~\ref{thm:peps_frame_small_rewrite} and $\lVert\Omega_{\mathcal F_{\rm old}}\rVert\le1$,
+    By Theorem~\ref{thm:peps_frame_small_rewrite} and $\lVert\Omega_{\mathcal F_{\rm old}}\rVert\le1$,
     $\lVert M_a\Omega_{\mathcal F_{\rm old}}-\Omega_{\mathcal F_{\rm new}}\rVert\le\lVert M_a-M\rVert\lVert\Omega_{\mathcal F_{\rm old}}\rVert+\lVert M\Omega_{\mathcal F_{\rm old}}-\Omega_{\mathcal F_{\rm new}}\rVert\le\delta+(m+r_{\rm old})\varepsilon\le(1+m+r_{\rm old})L^{-30}\le L^{-20}$.
 \end{proof}
 
