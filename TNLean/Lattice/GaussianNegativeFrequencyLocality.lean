@@ -62,7 +62,7 @@ theorem norm_commutator_gaussianNegativeFrequencyOperator_le
         (2 * ‖A‖ * ‖B‖ / T) * Real.exp (-T ^ 2 / (2 * (h : ℝ)))) := by
   let μ : Measure ℝ := gaussianReal 0 h
   let f := gaussianNegativeFrequencyIntegrand H A ε
-  let L := commutatorCLM B
+  let L := GaussianFilter.commutatorCLM B
   let a : ℝ → Matrix n n ℂ := fun t ↦
     hermitianUnitaryPath H t * A * hermitianUnitaryPath H (-t)
   let M := C * v * Real.exp (v * T)
@@ -71,7 +71,8 @@ theorem norm_commutator_gaussianNegativeFrequencyOperator_le
   have hnorm (t : ℝ) : ‖L (f t)‖ =
       ‖((ε : ℂ) - Complex.I * t)⁻¹‖ * ‖a t * B - B * a t‖ := by
     simp only [L, f, gaussianNegativeFrequencyIntegrand, map_smul, norm_smul,
-      commutatorCLM_apply, a]
+      GaussianFilter.commutatorCLM_apply, a]
+    rw [norm_sub_rev]
   have hglob (t : ℝ) : ‖a t * B - B * a t‖ ≤ D := by
     calc
       _ ≤ ‖a t * B‖ + ‖B * a t‖ := norm_sub_le _ _
@@ -129,6 +130,7 @@ theorem norm_commutator_gaussianNegativeFrequencyOperator_le
         add_le_add (norm_setIntegral_le_of_norm_le_const (by finiteness) hshort)
           (norm_setIntegral_le_of_norm_le_const (by finiteness) hlong)
       _ ≤ _ := add_le_add (mul_le_of_le_one_right hM measureReal_le_one) le_rfl
+  rw [norm_sub_rev]
   change ‖L (gaussianNegativeFrequencyOperator h ε H A)‖ ≤ _
   rw [gaussianNegativeFrequencyOperator, map_smul, norm_smul, Complex.norm_real,
     Real.norm_of_nonneg (kernel_nonneg _ _), ← L.integral_comp_comm hint]

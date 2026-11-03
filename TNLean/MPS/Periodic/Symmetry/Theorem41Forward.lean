@@ -289,30 +289,6 @@ theorem thm_4_1_p_refinement_forward_witness
   ⟨Kraus.transferMap A, Kraus.isChannel_mapLM A hA_norm, by
     rw [hTransferEq, transferMap_blockTensor]⟩
 
-/-- **Scope-restricted blocked \(Z\)-gauge extraction from the periodic equal-case FT.**
-
-Applying the periodic equal-case Fundamental Theorem at the blocked physical
-dimension `blockPhysDim d p` gives the blocked \(Z\)-gauge once both tensors are
-already known to be in irreducible form. The irreducible-form hypothesis for
-the \(p\)-blocked tensor is an explicit input here; it is not obtained from
-equality of MPV families.
-
-This is only the equal-case FT application step. The corrected forward
-implication with explicit unit-modulus block weights is proved without a
-canonicalization premise by
-`isPDivisibleChannel_of_isPRefinable_toTensorFromBlocks` in
-`Theorem41ForwardBlockForm`. Source: arXiv:1708.00029, Theorem 4.1,
-lines 735--810, with the correction documented in
-`docs/paper-gaps/dccsp17_thm41_forward_trace_preservation.tex`. -/
-theorem zGaugeEquiv_of_periodicEqualCaseFT_of_irreducibleForm
-    (p : ℕ) (hFT : PeriodicEqualCaseFT (blockPhysDim d p) D)
-    {A : MPSTensor d D} {C : MPSTensor (blockPhysDim d p) D}
-    (hC : IsIrreducibleForm C)
-    (hBlock : IsIrreducibleForm (blockTensor A p))
-    (hSame : SameMPV C (blockTensor A p)) :
-    ∃ m : ℕ, 0 < m ∧ ZGaugeEquiv m C (blockTensor A p) :=
-  hFT hC hBlock hSame
-
 end Theorem41Forward
 
 end MPSTensor
