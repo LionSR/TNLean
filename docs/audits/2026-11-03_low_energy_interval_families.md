@@ -64,6 +64,8 @@ extracted from local revision `9ad6cdd3c23da0ce9b5e6cc36edfec99f0211ff7`.
 They extend the independent-threshold residual in TNLean #10515. The
 finite-dimensional estimates come from the accepted QICLean #1016 and
 #1017 contributions on their common Mathlib 4.35-compatible revision.
+The nested-cutoff viability theorem additionally uses QICLean #1020;
+revision `965d1bb07d4903785411cb7b95a5e866a243fd0d` includes that proof.
 The existing private short-region spanning lemma is exposed as
 `exists_short_actual_region_spanning_family`, with its proof unchanged and
 its two existing callers updated. It also receives a mathematical blueprint
