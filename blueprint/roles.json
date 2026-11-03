@@ -1169,7 +1169,8 @@
         "thm:aklv_sharp_sequential_mps",
         "thm:aklv_frustration_free_entropy",
         "thm:physical_dg_interval_entropy_bound",
-        "thm:physical_canonical_ritz_polynomial"
+        "thm:physical_canonical_ritz_polynomial",
+        "thm:physical_canonical_tree_joint_probability"
       ],
       "corollaries": [],
       "notes": {
@@ -1177,7 +1178,8 @@
         "thm:aklv_sharp_sequential_mps": "Accuracy-dependent physical matrix product approximation with the fourth-root rank bound",
         "thm:aklv_frustration_free_entropy": "Uniform entropy of the original frustration-free ground vector from a projector gap lower bound",
         "thm:physical_dg_interval_entropy_bound": "Interval entropy bound for a degenerate gapped ground space, the interval version of ALVV Theorem 4.9",
-        "thm:physical_canonical_ritz_polynomial": "Joint success of the actual canonical hierarchy and its same-root literal Ritz/MPS output"
+        "thm:physical_canonical_ritz_polynomial": "Joint success of the actual canonical hierarchy and its same-root literal Ritz/MPS output",
+        "thm:physical_canonical_tree_joint_probability": "Joint original-ground-space viability on the actual sampled root hierarchy, with an unconditional failure bound."
       }
     },
     "sec:corrected_cluster_mpo": {
