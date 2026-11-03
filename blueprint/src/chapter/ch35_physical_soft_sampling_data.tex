@@ -1,0 +1,102 @@
+\section{Common numerical data, an original reference, and interval sampling}
+\label{sec:physical_soft_sampling_data}
+
+The next lemma assembles numerical and reference data for the corrected
+soft construction. The reference is obtained from the original ground space,
+independently of every sampled space. The corrections to the soft and cluster
+estimates remain those of
+\cite{gap:alvv16_soft_regional_residuals,gap:alvv16_cluster_approximation};
+the sampling threshold uses the corrected complex sphere count in
+\cite{gap:alvv16_random_sampling_net_count}.
+
+\begin{lemma}[Uniform physical reference and sampling data]
+    \label{lem:physical_soft_sampling_data}
+    \lean{TNLean.MPS.AreaLaw.ALVV.exists_physical_soft_sampling_data}\leanok
+    Fix $q\ge2$ and $\gamma>0$, and put $g=\min\{\gamma,1\}$.
+    All numerical choices of Lemma~\ref{lem:uniform_soft_parameters},
+    evaluated at $g$, can be made simultaneously with natural
+    $K,C_{\rm count}\ge1$, a positive real $C_{\rm ref}$ and a natural
+    $P_{\rm ref}$, before the chain length and interactions.
+    Write $w=4\ell$ and retain the same $D$ from that lemma. Then
+    \begin{align}
+      C_{\rm count}=q^w+4D^2K.
+      \label{eq:physical_soft_common_count_constant}
+    \end{align}
+    For all natural $d,n,Q$,
+    \begin{align}
+      K(d+1)(n+2)^2\le Q\quad\Longrightarrow\quad
+      Q\ge4D^2,\qquad f_D(Q,d)\le\frac{1/q}{(n+2)^4},
+      \label{eq:physical_soft_common_threshold}
+    \end{align}
+    where $f_D$ is the corrected bootstrap failure bound.
+
+    Let $H=\sum_i h_i$ on $L$ sites, with nearest-neighbour supports and
+    $0\le h_i\le I$. Suppose $\mu\in\operatorname{spec}H$ and every
+    spectral value equals $\mu$ or is at least $\mu+\gamma$.
+    Let $G=\ker(H-\mu I)$ and $r=\dim G$. Set $Z=(L+1)(r+1)$.
+    The same constants admit an integer $B\ge1$ and a reference $U$ of
+    dimension $r$, with $U,G$ mutually $10^{-5}$-close, such that every
+    vector in $U$ has open matrix product bond at most $d=r^2B$.
+    Define
+    \begin{align}
+      b_{\rm ref}&=d^2,&
+      \xi_{\rm init}&=\frac1{1000d\sqrt{L+1}}.
+      \label{eq:physical_soft_common_reference}
+    \end{align}
+    These choices precede every interval, candidate space and sample.
+    They satisfy
+    \begin{align}
+      b_{\rm ref}&\le C_{\rm ref}Z^{P_{\rm ref}},&
+      0<\xi_{\rm init}&\le1,\notag\\
+      \xi_{\rm init}\sqrt{k_{\rm cuts}b_{\rm ref}}&\le10^{-3}
+          \quad(0\le k_{\rm cuts}\le L),&
+      \xi_{\rm init}^{-2}&\le10^6C_{\rm ref}Z^{P_{\rm ref}+1}.
+      \label{eq:physical_soft_common_radius}
+    \end{align}
+    In the coordinates $\mathcal H_J\otimes\mathcal H_{J^c}$ of every
+    interval $J$, the same two closeness estimates hold. Every vector of
+    the mapped reference has Schmidt rank at most $b_{\rm ref}$ across
+    each internal cut, with the full exterior retained.
+    For every separately bounded candidate count $M_*$,
+    \begin{align}
+      10^6b_{\rm ref}(L+1)M_*^2
+       \le10^6C_{\rm ref}Z^{P_{\rm ref}+1}M_*^2.
+      \label{eq:physical_soft_common_output_profile}
+    \end{align}
+    There is no candidate-dimension factor in the exact loss in
+    (\ref{eq:physical_soft_common_radius}).
+
+    Set
+    \begin{align}
+      \theta&=K(r+1)(L+2)^2,& R&=qL,&
+      M_{\rm common}&=\max\{q^w,D^2\theta\}.
+      \label{eq:physical_soft_common_schedule}
+    \end{align}
+    Then $\theta\ge\max\{2,4D^2\}$, every interval configuration space
+    has dimension at most $q^L\le2^R$, and
+    \begin{align}
+      M_{\rm common}&\le C_{\rm count}Z^2,\notag\\
+      (L-1)_+R\frac{1/q}{(L+2)^4}&\le\frac1{(L+1)^2}.
+      \label{eq:physical_soft_common_sampling_profile}
+    \end{align}
+    The latter inequality also holds in the extended nonnegative reals.
+    The empty and one-site chains and flat spectra are included.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:uniform_soft_parameters,cor:original_ground_reference_trimming_profile}
+    First choose the numerical soft parameters. Their bound $D\ge2$
+    permits the uniform scalar resampling schedule with exponent four
+    and coefficient $1/q$, which fixes $K$ and
+    (\ref{eq:physical_soft_common_count_constant}). Independently choose
+    the original-ground reference constants. Apply the reference theorem
+    to the supplied interactions and ground energy, retaining its same
+    space and all interval estimates. Since $r\ge1$ and $B\ge1$, one has
+    $d\ge1$; therefore $\sqrt{L+1}\ge1$ gives $\xi_{\rm init}\le1$.
+    Finally, an interval has at most $L$ sites, so its configuration
+    dimension is at most $q^L$. The scalar schedule gives all remaining
+    threshold, count and failure bounds, including the endpoints.
+\end{proof}
+
+This is a simultaneous choice of deterministic data. It asserts neither
+sampling success nor a generating algorithm. Its polynomial bounds keep
+$q$ and $\gamma$ fixed; no sharp inverse-gap dependence is asserted.

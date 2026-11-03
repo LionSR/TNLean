@@ -12236,3 +12236,16 @@ No custom tactic or resource option is introduced.
   analytic estimates. `norm_sum_le_of_le` and the positive-contraction
   norm criterion supply the spectral-width ceiling, as in the existing
   candidate-independent refinement entry. No new tactic is needed.
+
+### Uniform soft data and an independent original reference — reuse (2026-11-03)
+
+- **Seen:** `ALVV/PhysicalSoftSamplingData.lean`.
+- **Pattern:** Choose uniform numerical constants before the volume, then keep
+  one original-ground reference and a scalar sampling schedule together.
+- **Reuse:** The existing soft calibration, original-ground reference profile
+  and interval sampling schedule provide the three independent existence
+  results. Their full conclusions are retained rather than reproved; only the
+  elementary upper bound on the common radius and interval configuration count
+  are added.
+- **Decision:** Compose the existing theorems. No new tactic, reference
+  construction, sampled tree or candidate-dimension factor is introduced.
