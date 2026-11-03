@@ -12194,3 +12194,16 @@ unfolding the full Euclidean matrix-action equivalence. Ordinary numerical
 bounds should likewise use their specific monotonicity lemmas after a large
 operator certificate is in context, rather than a general arithmetic scan.
 No custom tactic or resource option is introduced.
+
+### Exact initial range and full-exterior sampling coordinates — reuse (2026-11-03)
+
+- **Pattern:** Express an actual candidate projection in finite coordinates,
+  identify its transported range, and convert global target/reference data to
+  the same regional tensor split.
+- **Reuse:** `Matrix.map_range_toEuclideanLin_submatrix` followed by
+  `Submodule.range_starProjection` gives the initial range exactly.
+  `Entropy.isCloseTo_prodExt_region_iff_isViable` and
+  `Submodule.isCloseTo_map_iff` perform all subsequent conversions.
+- **Decision:** These existing mathematical identities already remove the
+  coordinate calculation; no new projection-coordinate theorem, alternative
+  candidate, sampled process or measurable-basis assumption is introduced.
