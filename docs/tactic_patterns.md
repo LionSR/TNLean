@@ -11905,3 +11905,20 @@ opaque proposition, rather than repeating its vector-wise conjunction.
   restriction domain before simplifying with `map_sub`.
 - **Decision:** These are two occurrences in one file. No tactic or new
   general transport theorem is introduced; ordinary equality rewriting suffices.
+
+
+## Candidate: a supported approximation in native interval coordinates (2026-11-03)
+
+- **Seen:** `MPS/AreaLaw/ALVV/SoftGeneratedMiddleApproximation.lean`.
+- **Pattern:** Restrict one actual global operator-tensor family at a fixed
+  exterior configuration, retaining its closing product. Reconstruct the
+  supported target by placement and bound the error first by principal
+  compression, then by placement contractivity.
+- **Reuse:** The actual retained-interval trace identity, the shared
+  supported-operator characterization, `Matrix.l2_opNorm_principal_submatrix_le`
+  and `QuantumCircuit.norm_embedOp_le` give the argument without a second
+  coordinate calculation. Nested placements use `embedOp_embedOp`.
+- **Decision:** The shared coordinate identity and principal-compression
+  inequality were placed in their natural owners in separate contributions.
+  The interval argument remains a private helper because it currently has
+  one mathematical consumer.

@@ -1,0 +1,98 @@
+\section{A native approximation of the soft middle term}
+\label{sec:soft_generated_middle}
+
+The middle term of the same regional soft Hamiltonian admits an approximation
+in its native interval coordinates. Lemma~\ref{lem:native_soft_middle_mpo}
+constructs its operator tensors, and
+Lemma~\ref{lem:five_region_soft_middle_mpo} places them back on the original
+chain while retaining every other term exactly. These are operator
+constructions supporting \cite[Proposition~5.7 and Theorem~5.8]{Arad2016RigorousRG};
+they assert neither a spectral gap nor an improving family.
+
+\begin{lemma}[Native tensors for a regional soft term]
+    \label{lem:native_soft_middle_mpo}
+    \lean{TNLean.MPS.AreaLaw.ALVV.exists_native_soft_middle_mpo_approximation}
+    \leanok
+    Let $h_0,\ldots,h_{N-1}$ be positive-contraction nearest-neighbour terms on
+    $N+1$ sites of dimension $q\geq1$. Let $0\leq l\leq r\leq N+1$, and put
+    $R=\sum_{l\leq i<i+1<r}h_i$. Suppose $pI\leq R$, $m\geq1$, $t\geq3m$
+    and $\xi>0$. Define $P=pI+h_{m,t}(R-pI)$ and
+    \begin{align}
+        W&=t2^{m+1},\qquad b=2(e^{1/3}-1),\notag\\
+        a&=\max\left\{1,
+          \left\lceil\frac{\log\max\{1,N^2\}
+            -\log\log(1+\xi/W)}{-\log b}\right\rceil\right\},\notag\\
+        B&=2\bigl(1+Nq^2+(m+1)a^2q^a\bigr).
+        \label{eq:soft_middle_bond}
+    \end{align}
+    There are site-dependent operator tensors on $[l,r)$ with virtual
+    dimension $B$ and a closing matrix $C$, representing a Hermitian matrix
+    $Z$ on that interval. Write $\iota$ for inclusion of the interval sites,
+    and let $P_{\mathrm{nat}}$ be the principal slice of $P$ obtained by fixing
+    one exterior basis configuration. Then
+    \begin{align}
+        P&=\iota(P_{\mathrm{nat}}),\qquad
+        \|P_{\mathrm{nat}}-Z\|\leq\xi,\qquad
+        \|P-\iota(Z)\|\leq\xi.
+        \label{eq:soft_middle_native_error}
+    \end{align}
+    The placement $\iota(Z)$ is Hermitian. Empty intervals are included;
+    their scalar is represented by $\operatorname{Tr}C$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{thm:soft_hamiltonian_mpo_accuracy,lem:hermitian_trace_chain_approximation,
+        thm:actual_retained_interval_trace,lem:qc_placement_norm}
+    Mask the original interaction family outside $[l,r)$, and apply the
+    corrected heat-expansion construction to its soft replacement. Taking
+    the Hermitian part doubles the virtual dimension without increasing
+    the approximation error. Restrict these very same operator tensors at
+    a fixed exterior configuration; the ordered exterior products are
+    absorbed into $C$, so the virtual dimension is unchanged.
+
+    Principal compression is contractive. Placement on idle sites is a
+    star-algebra homomorphism and is contractive as well. Since $P$ acts
+    trivially outside the interval, its slice reconstructs $P$ exactly.
+    These two contractions give~(\ref{eq:soft_middle_native_error}).
+\end{proof}
+
+\begin{lemma}[Only the middle soft term is replaced]
+    \label{lem:five_region_soft_middle_mpo}
+    \lean{TNLean.MPS.AreaLaw.ALVV.exists_five_region_soft_middle_mpo_approximation}
+    \leanok
+    In the five-region notation, let $A_j$ be the actual internal sums,
+    $Y$ the crossing-bond sum and $e_j,p_j\in\mathbb R$. For a selected set
+    $S\subseteq\{0,\ldots,4\}$ containing $2$, put
+    \begin{align}
+        F_j&=p_jI+h_{m,t}(A_j-p_jI),\notag\\
+        G&=\sum_{j=0}^4
+          \left(\begin{cases}F_j,&j\in S,\\A_j,&j\notin S\end{cases}
+          -e_jI\right)+Y.
+        \label{eq:soft_middle_same_matrix}
+    \end{align}
+    Assume $p_2I\leq A_2$, $m\geq1$, $t\geq3m$ and $\xi>0$.
+    There are native middle tensors as in
+    Lemma~\ref{lem:native_soft_middle_mpo} such that the matrix obtained by
+    replacing only $F_2$ by their placement satisfies
+    \begin{align}
+        \widehat G=G-F_2+\iota(Z),\qquad
+        G=G^*,\qquad \widehat G=\widehat G^*,\qquad
+        \|G-\widehat G\|\leq\xi.
+        \label{eq:soft_middle_full_error}
+    \end{align}
+    The other soft terms, all scalar shifts and the original crossing
+    bonds are retained exactly.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{lem:native_soft_middle_mpo}
+    Apply Lemma~\ref{lem:native_soft_middle_mpo} to the actual middle sum.
+    All summands in~(\ref{eq:soft_middle_same_matrix}) are Hermitian.
+    Since $2\in S$, cancellation of every unchanged term gives
+    $G-\widehat G=F_2-\iota(Z)$, whose norm is at most $\xi$.
+\end{proof}
+
+The interaction-label cutoff and energy normalization are the corrected
+ones in \cite{gap:alvv16_cluster_approximation}. The tensors may depend on
+the supplied middle energy estimate. No independence of that estimate,
+adaptive measurability or running-time conclusion is asserted.

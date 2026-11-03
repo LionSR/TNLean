@@ -23,6 +23,7 @@ import TNLean.MPS.AreaLaw.ALVV.PhysicalDGRootEnergyAssignment
 import TNLean.MPS.AreaLaw.ALVV.PhysicalDGTreeEnergyAssignment
 import TNLean.MPS.AreaLaw.ALVV.PhysicalDGTreeEnergyUpdates
 import TNLean.MPS.AreaLaw.ALVV.SoftFamilyResiduals
+import TNLean.MPS.AreaLaw.ALVV.SoftGeneratedMiddleApproximation
 import TNLean.MPS.AreaLaw.ALVV.SoftParentEnergy
 import TNLean.MPS.AreaLaw.ALVV.SoftParentStructure
 import TNLean.MPS.AreaLaw.ALVV.SoftTruncationOriginalResidual
