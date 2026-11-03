@@ -12093,3 +12093,16 @@ mathematical arguments and avoids compiling both in the long corollary.
 - **Decision:** The common variational statement replaces the repeated pair
   of lower and upper eigenvalue arguments. The existing public physical
   statements remain unchanged.
+
+### Child estimates and actual collar centers — candidate (2026-11-03)
+
+- **Pattern:** Identify specified attained parent and middle minima with the
+  three-piece regional minima; use adjacent-child spectral bounds to obtain
+  a parent-sum estimate, then subtract the actual collar minima and two.
+- **Seen:** `ALVV/SoftWordNodeEnergy.lean` and
+  `ALVV/RegionalChildEnergyCenter.lean`.
+- **Notes:** The new independent theorem retains the exact sum width `57/8`
+  and does not select a filter or image. Both proofs reuse the existing
+  minimum-uniqueness, adjacent-merge and central-energy theorems. If a third
+  physical energy construction needs this argument, use the new theorem
+  and refactor the old word-energy construction to share it.
