@@ -175,7 +175,7 @@
         "thm:parent_hamiltonian_unique_gs": "Source theorem: Perez-Garcia et al. Theorem 10, uniqueness throughout the interaction range",
         "thm:unique_gs_injective": "Unique ground state for injective tensors, stated in the opening",
         "thm:unique_gs_normal": "Unique ground state for normal tensors at range L_0+1, stated in the opening",
-        "thm:uncle_periodic_ground_space": "Full actual finite uncle-Hamiltonian ground-space theorem, Fern\u00e1ndez-Gonz\u00e1lez et al. Theorem thm:gs-subspace-uncle",
+        "thm:uncle_periodic_ground_space": "Full actual finite uncle-Hamiltonian ground-space theorem, Fernández-González et al. Theorem thm:gs-subspace-uncle",
         "thm:uncle_generic_finite_volume_gaplessness": "Generic finite-volume uncle gaplessness via actual two-wall trials and the full actual ground-space projection; the infinite-volume claim remains separate",
         "thm:half_chain_general_c2_source": "PGVWC07 Theorem 6: half-chain spectrum of the actual general weighted canonical tensor under normalized generic C2"
       }
@@ -529,7 +529,7 @@
       ],
       "corollaries": [],
       "notes": {
-        "thm:hastings_area_law_source": "Hastings' printed entropy bound at an admissible interaction-proportional Lieb\u2013Robinson pair",
+        "thm:hastings_area_law_source": "Hastings' printed entropy bound at an admissible interaction-proportional Lieb–Robinson pair",
         "thm:hastings_mps_source": "Matrix product state approximation at the same admissible source length"
       }
     },
@@ -1202,6 +1202,15 @@
         "thm:normalized_cluster_label_tail": "The corrected path estimate specifies interaction labels and retains the lower-energy normalization.",
         "thm:physical_cluster_label_mpo": "The finite label truncation has constructed operator tensors of dimension r squared times q to the r.",
         "thm:soft_hamiltonian_mpo_accuracy": "One complete regional soft replacement at scale at least three times the order has an explicit bond bound at every norm accuracy."
+      }
+    },
+    "sec:physical_soft_resampling_tree": {
+      "theorems": [
+        "thm:physical_soft_resampling_tree"
+      ],
+      "corollaries": [],
+      "notes": {
+        "thm:physical_soft_resampling_tree": "Constructs the actual corrected resampling tree from primitive chain data, with one original-target joint history event and unconditional size bounds."
       }
     }
   }

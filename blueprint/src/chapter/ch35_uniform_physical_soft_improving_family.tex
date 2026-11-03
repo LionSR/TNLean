@@ -319,3 +319,86 @@ are separate conclusions.
     dimension estimate. No additional approximant, filter or family
     is selected.
 \end{proof}
+
+\begin{lemma}[Physical families and original-ground histories on one interval]
+    \label{lem:physical_soft_interval_history}
+    \lean{TNLean.MPS.AreaLaw.ALVV.exists_physical_soft_interval_history}\leanok
+    Assume the hypotheses of
+    Lemma~\ref{lem:uniform_native_long_interval_soft_improving_family}
+    on a chain of $N+1$ sites and a long interval $J=[p,r)$.
+    Write $G$ for the original ground space at a spectral minimum $\mu$,
+    separated from the remaining spectrum by at least $g$.
+    Suppose $D\ge2$ and $K\ge1$, and assume the numerical sampling bound
+    \begin{align}
+      K(\rho'+1)(s+2)^2\le Q\quad\Longrightarrow\quad
+      4D^2\le Q,\qquad
+      \operatorname{Fail}(D,Q,\rho')\le\frac{1}{q(s+2)^4}
+      \label{eq:physical_interval_sampling_threshold}
+    \end{align}
+    for all natural $\rho',s,Q$. Assume also
+    \begin{align}
+      D^{12}\Delta\le10^{-5},\qquad
+      \frac{3\tau}{200}\le
+        \frac1{100}\left(\frac{3}{100D^2}\right)^2,
+      \qquad \frac{3\tau}{200}\le\frac1{200}.
+    \end{align}
+    Fix an original-ground reference $R_0$ that is mutually
+    $\varepsilon_0$-close to $G$, where
+    $0\le\varepsilon_0\le10^{-5}$. Suppose its full-exterior Schmidt ranks
+    across every internal cut of $J$ are at most $b_0$.
+    Let $\zeta>0$ satisfy
+    $\zeta\sqrt{(r-p-1)b_0}\le10^{-3}$, let $\dim G\le\rho$,
+    and choose a number of rounds $R$ such that
+    $q^{|J|}\le2^R$.
+
+    The same five attained regional minima, common minimizing vector,
+    residual energy and common family $W_1,\ldots,W_n$ may be chosen
+    with the count and member bond bounds of the preceding lemma.
+    These choices precede all admissible center triples, all regional
+    candidates and all sample sequences. Put
+    $\theta=K(\rho+1)(N+3)^2$. For each candidate $S$ that is
+    $0.04$-viable for $G$, use the actual stopped half-sampling iteration
+    with threshold $\theta$, trimming radius $\zeta$, and this family.
+    Give its $R$ seeds the product Haar law $\mathbb P$.
+    Let $\mathcal H_S$ be the event that every actual state through
+    round $R$ remains $0.04$-viable for $G$, let $V_S$ be its terminal
+    parent, and let $Y_S$ be its last untrimmed family image.
+    Then $\mathcal H_S$ and the true $0.015$-viability event for $V_S$
+    are measurable, and
+    \begin{align}
+      \mathbb P(\mathcal H_S^c)&\le\frac{R}{q(N+3)^4},&
+      \mathbb P\{V_S\text{ is not }0.015\text{-viable for }G\}
+        &\le\frac{R}{q(N+3)^4}.
+    \end{align}
+    On $\mathcal H_S$, the same $Y_S$ is $27/2500$-viable for $G$
+    and the same $V_S$ is $3/200$-viable for $G$.
+
+    For each admissible center triple, its represented Hermitian matrix
+    and own global target $T$ may be fixed before all candidates and
+    sample sequences. They retain the matrix approximation bounds,
+    target rank $\dim T=\dim G$, both $3\tau/200$ comparisons with $G$,
+    the equality of the two closed spectral cutoffs and
+    $E+\sum_j e_j=\mu$. For every $S$ and every sequence in the same
+    event $\mathcal H_S$, its same last untrimmed image $Y_S$ is
+    $\Delta/(91/100)^2$-viable for $T$ in the canonical regional
+    coordinates. Both individual middle-collar bounds are retained.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:uniform_native_long_interval_soft_improving_family,
+      lem:fixed_interval_raw_history_probability}
+    Choose the native physical family once. For a fixed admissible
+    center triple, retain its represented matrix and target, and use
+    the preceding one-step image estimate as the improvement input to
+    Lemma~\ref{lem:fixed_interval_raw_history_probability}.
+    Its other inputs are exactly the reference and numerical bounds
+    stated here. Apply that lemma with a single target.
+
+    The history event depends only on $G$, the common family, the
+    candidate and the fixed trimming radius. It therefore agrees for
+    every center triple. The choice of the represented matrix remains
+    before every candidate and sample sequence. In particular, the
+    admissible triple $p_j=e_j$ gives the standalone original-ground
+    history and parent probability bounds. Applying the same argument
+    to any other triple gives its target estimate on that identical
+    event; no intersection over targets is used for measurability.
+\end{proof}

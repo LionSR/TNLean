@@ -12258,3 +12258,30 @@ operator bounds. Typed `congrArg` followed by `Eq.mp` preserves the actual
 whole-chain filter and coefficients. The literal one-step image estimate
 then calls `IsViable.map_of_tensor_decomposition` directly; no conversion of
 length-one word indices is needed.
+
+### One original-target history for many represented targets — candidate (2026-11-03)
+
+- **Seen:** `CanonicalIntervalRawProbability.lean` and
+  `ALVV/PhysicalSoftIntervalHistory.lean`.
+- **Pattern:** Apply the fixed-input history theorem to a single improving
+  target. Its literal original-ground event does not depend on that target,
+  so the same event supports the pointwise conclusions for all centers.
+- **Decision:** Reuse the existing probability theorem and its exact event;
+  no measurable intersection over the center family is introduced. Typed local
+  target comparisons avoid unfolding the represented matrix during application.
+
+### Physical interval selection and one joint history event — reuse (2026-11-03)
+
+- **Seen:** `CanonicalIntervalResamplingSelection.lean` and
+  `ALVV/PhysicalSoftResampling.lean`.
+- **Pattern:** Select one proven family per long interval, preserve its
+  associated minimum and spectral data, and apply the existing joint-history
+  and unconditional profile theorems to those same choices.
+- **Reuse:** The physical interval-history construction and the canonical
+  complete-parent event provide all analytic estimates. The new generic
+  selection lemma preserves an arbitrary additional assertion; the primitive
+  chain theorem discharges it by the actual physical construction. The same
+  terminal image uses its shared existing definition.
+- **Decision:** Separate the numerical/physical argument from the common
+  interval selection argument. No second recursion, target approximation or
+  repeated matrix-coordinate proof is introduced.

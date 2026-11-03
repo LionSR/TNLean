@@ -28,6 +28,18 @@ spaces in the repeated-sampling construction of
     history event is $\{\omega:\omega_J\in H_J(W_J(\omega))\}$.
 \end{definition}
 
+\begin{lemma}[Initial viability recorded by the history]
+    \label{lem:interval_history_initial_viability}
+    \lean{TNLean.MPS.AreaLaw.isViable_of_mem_canonicalHalfSampledIntervalHistory}\leanok
+    If $u\in H_J(W)$, then $W$ is $0.04$-viable for the original
+    ground space, with the whole exterior of $J$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{def:interval_original_target_history}
+    Take $j=0$ in the defining history condition. The transported range
+    of the orthogonal projection onto $W$ is precisely $W$.
+\end{proof}
+
 \begin{lemma}[Joint measurability of the original-target history]
     \label{lem:interval_original_target_history_measurable}
     \lean{TNLean.MPS.AreaLaw.measurableSet_canonicalHalfSampledIntervalHistory,
