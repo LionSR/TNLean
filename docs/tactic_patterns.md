@@ -11992,3 +11992,20 @@ mathematical arguments and avoids compiling both in the long corollary.
 - **Decision:** The exact represented-matrix identity is retained. Distinct
   approximants are not identified merely from a common norm-error bound;
   no additional tactic is needed for the two present occurrences.
+
+
+## Candidate: a finite union of common operator families (2026-11-03)
+
+- **Seen:** `MPS/AreaLaw/CommonClosingPolynomialFamily.lean`.
+- **Pattern:** Choose an actual physical family at each fixed interpolation
+  node, flatten their dependent disjoint union, and absorb scalar node
+  weights into the exterior Kronecker factors only.
+- **Reuse:** Mathlib's `Fintype.sum_equiv`, `Fintype.sum_sigma`,
+  `Matrix.smul_kronecker`, and finite-sum monotonicity give the enumeration,
+  exact representation and count. Existing common physical families supply
+  each member's unchanged open bond; no representation is reconstructed.
+- **Decision:** The matrix-only degree and parameter interpolation arguments
+  live in QICLean. The finite enumeration remains a private helper for this
+  one actual physical construction. Placement reuses its existing linear
+  maps and the shared closing-linearity theorem, rather than another
+  matrix-entry calculation.
