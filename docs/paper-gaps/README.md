@@ -230,6 +230,12 @@ For the MPU symmetry-defect gauging paper:
   or a replacement in unbuffered defect formulas. This local correction is
   formally verified and resolved; the literal printed pair still fails at
   empty length.
+- `fbc25_controlled_z_split_index_class_scope.tex` records that for the
+  controlled-`Z` example the formal statement is the invariant behind the
+  source's remark on the combined `ℤ₂ × ℤ₂` phase: the bond implementation of
+  the two symmetries on the split-index tensor is by anticommuting matrices,
+  so its projective class is nontrivial. The identification of this class with
+  the phase, from the cited split-index classification, is not formalized.
 - `fbc25_truncated_symmetry_endpoint_unitarity_scope.tex` records that the
   all-length truncated-symmetry theorem proves unitarity between endpoint
   coordinate spaces, while the finite-group endpoint identifications

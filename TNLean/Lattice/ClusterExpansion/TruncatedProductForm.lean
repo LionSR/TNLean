@@ -405,13 +405,13 @@ theorem isLocalCoefficient_clusterCoeff
 
 /-- The entries of a sum `∑_α F(α) ⊗_j |a_j⟩⟨b_j|` over indices carrying a matrix-unit label:
 the labels are forced to be the row and column configurations. -/
-theorem sum_smul_rectKronecker_single_apply {I : Type*} [Fintype I]
+theorem sum_smul_piKronecker_single_apply {I : Type*} [Fintype I]
     (F : (σ → I × (Fin q × Fin q)) → ℂ) (u v : σ → Fin q) :
-    (∑ α, F α • rectKronecker fun j ↦ single (α j).2.1 (α j).2.2 (1 : ℂ)) u v =
+    (∑ α, F α • piKronecker fun j ↦ single (α j).2.1 (α j).2.2 (1 : ℂ)) u v =
       ∑ c : σ → I, F fun j ↦ (c j, (u j, v j)) := by
   classical
   rw [Matrix.sum_apply]
-  simp only [Matrix.smul_apply, rectKronecker_apply, smul_eq_mul]
+  simp only [Matrix.smul_apply, piKronecker_apply, smul_eq_mul]
   rw [← (Equiv.arrowProdEquivProdArrow _ _ _).symm.sum_comp, Fintype.sum_prod_type]
   refine Fintype.sum_congr _ _ fun c ↦ ?_
   rw [Finset.sum_eq_single (fun j ↦ (u j, v j))]
@@ -595,7 +595,7 @@ label. Hastings, arXiv:cond-mat/0508554v3, lines 1259–1272. -/
 noncomputable def clusterProductForm (acts : κ → Finset σ) (near : σ → σ → Prop)
     (hnear : ∀ i, near i i) {h : κ → Matrix (σ → Fin q) (σ → Fin q) ℂ}
     (hh : ∀ k, h k ∈ supportedOperators q (acts k : Set σ)) (β : ℝ) :
-    open Classical in ProductForm q near
+    open Classical in ProductForm (fun _ ↦ q) near
       (∑ A with (∀ k ∈ A, (acts k).Nonempty) ∧
         NoLargeCluster (overlapGraph acts) (IsLargeSupport near acts) A, clusterOp h A β) := by
   classical
@@ -609,7 +609,7 @@ noncomputable def clusterProductForm (acts : κ → Finset σ) (near : σ → σ
     eq_sum := ?_ }
   ext u v
   rw [sum_clusterOp_apply hh β u v, ← sum_prod_clusterCoeff hh β u v,
-    sum_smul_rectKronecker_single_apply]
+    sum_smul_piKronecker_single_apply]
   exact (Fintype.sum_equiv (Equiv.arrowCongr (Equiv.refl _) (Equiv.optionCongr e.symm)) _ _
     fun c ↦ rfl).symm
 
@@ -620,7 +620,7 @@ and a matrix-unit label. Hastings, arXiv:cond-mat/0508554v3, `proj3new.tex`, lin
 theorem hasProductForm_sum_clusterOp (hnear : ∀ i, near i i)
     {h : κ → Matrix (σ → Fin q) (σ → Fin q) ℂ}
     (hh : ∀ k, h k ∈ supportedOperators q (acts k : Set σ)) (β : ℝ) :
-    open Classical in HasProductForm q near
+    open Classical in HasProductForm (fun _ ↦ q) near
       (∑ A with (∀ k ∈ A, (acts k).Nonempty) ∧
         NoLargeCluster (overlapGraph acts) (IsLargeSupport near acts) A, clusterOp h A β) :=
   ⟨clusterProductForm acts near hnear hh β⟩
@@ -641,7 +641,8 @@ theorem hasProductForm_truncatedExp [Nonempty σ] (acts : κ → Finset σ)
     (h : κ → Matrix (σ → Fin q) (σ → Fin q) ℂ)
     (hh : ∀ k, h k ∈ supportedOperators q (acts k : Set σ))
     (near : σ → σ → Prop) (hnear : ∀ i, near i i) (β : ℝ) :
-    HasProductForm q near (truncatedExp (overlapGraph acts) (IsLargeSupport near acts) h β) := by
+    HasProductForm (fun _ ↦ q) near
+      (truncatedExp (overlapGraph acts) (IsLargeSupport near acts) h β) := by
   classical
   rw [truncatedExp_eq_mul acts h hh near β]
   refine HasProductForm.mul ?_ (hasProductForm_sum_clusterOp hnear hh β)

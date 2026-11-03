@@ -44,13 +44,55 @@ from site to site.
     centre in the ball about $j$.
 \end{proof}
 
-When every site has the same local dimension $q$, these index sets are the
-site index sets of a matrix product form of the Trotter product: by
-Lemma~\ref{thm:hastings_trotter_index_count}, the index set at $j$ then has
-at most $(q^2)^{nS}$ elements, where $S$ bounds the number of sites in a
-radius-$R$ ball. A matrix product form whose index set at $j$ has exactly
-$(d_j^2)^{nc_j}$ elements for site-dependent dimensions $d_j$ is not
-established here.
+These index sets are the site index sets of a matrix product form of the
+Trotter product, for every choice of the local dimensions.
+
+\begin{lemma}[Matrix product form with the counted index sets]
+    \label{lem:hastings_active_index_product_form}
+    \lean{
+        TNLean.Lattice.exists_productForm_trotterProduct_card_index_eq,
+        TNLean.Lattice.isSupportedOn_exp_smul
+    }
+    \leanok
+    \uses{
+        def:hastings_active_occurrences,
+        thm:hastings_active_cardinality,
+        def:hastings_product_form,
+        thm:hastings_product_form_mul
+    }
+    Prescribe a neighborhood $N_i\subseteq V$ at every site $i$, and let each
+    $H_i$ act on the sites of $X_i\subseteq N_i$. Let $i_1,\dots,i_m$ list
+    every site of $V$ exactly once. For $\beta\in\mathbb R$ and
+    $n\in\mathbb N$, with the zero-step product equal to $1$, the Trotter
+    product
+    \begin{align*}
+        \Bigl[\prod_{k=1}^m\exp\bigl(-\tfrac\beta nH_{i_k}\bigr)\Bigr]^n
+    \end{align*}
+    has a matrix product form with neighborhoods $N_i$ whose index set at
+    every site $j$ has as many elements as the set of maps assigning a pair
+    of physical indices at $j$ to each occurrence in $\mathcal A_j$, namely
+    $(d_j^2)^{nc_j}$.
+\end{lemma}
+\begin{proof}\leanok
+    The exponential of an operator acting on $X_i$ again acts on $X_i$,
+    since these operators form a closed algebra. Expand each factor in
+    matrix units at the sites of its support, with a one-element index set
+    elsewhere, and attach the matrix-element coefficient to its centre
+    $i$; this coefficient reads only indices in $X_i\subseteq N_i$.
+    Multiplying such forms pairs the indices at each site, so an ordered
+    product carries one pair of physical indices at $j$ for every factor
+    acting at $j$. A sweep contains $c_j$ such factors, and $n$ sweeps give
+    $nc_j$ pairs, which is the cardinality of
+    Lemma~\ref{thm:hastings_active_cardinality}. If some local dimension is
+    zero there are no configurations, and index sets of these cardinalities
+    with vanishing coefficients give a matrix product form.
+\end{proof}
+
+On a finite metric lattice in which every radius-$R$ ball contains at
+most $S$ sites, every $c_j$ is at most $S$; for positive local dimensions
+this recovers the bound $(d_j^2)^{nS}$ of
+Lemma~\ref{thm:hastings_trotter_index_count}, which needs only distinct
+centres.
 
 This is the count asserted at lines 1069--1077 of
 \cite{Hastings2006Solving}. It does not establish convergence to the Gibbs
