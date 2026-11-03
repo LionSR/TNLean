@@ -314,6 +314,26 @@
     $(k-p-1)+(r-k-1)+1=r-p-1$ merges.
 \end{proof}
 
+\begin{lemma}[Closure of the actual merge list under descendants]
+    \label{lem:balanced_interval_merge_closure}
+    \lean{TNLean.MPS.AreaLaw.self_mem_balancedIntervalMergeList,
+        TNLean.MPS.AreaLaw.mem_balancedIntervalMergeList_trans}
+    \leanok
+    Every long interval belongs to its own internal merge list.
+    If $J\in\mathcal I_w(p,r)$ and $K\in\mathcal I_w(J)$, then
+    $K\in\mathcal I_w(p,r)$. In particular, each long midpoint child
+    of a listed interval is itself in that same root list.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{def:balanced_interval_merge_list}
+    The parent is the final entry of a long interval's list.
+    For transitivity, induct on the root length and split its list into
+    the two child lists and the parent. A listed interval in either
+    child has all its internal descendants in that child list by
+    induction. If the listed interval is the parent itself, the
+    assertion is immediate.
+\end{proof}
+
 \begin{definition}[Independent interval sampling choices]
     \label{def:interval_sampling_choices}
     \lean{TNLean.MPS.AreaLaw.IntervalSamplingChoices,

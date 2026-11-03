@@ -267,3 +267,79 @@ This construction proves the corrected simultaneous one-sided energy
 invariant on the existing hard-clipped interval tree. It does not identify
 its family with literal soft Generate, establish the source's printed
 energy-power count, or prove a running-time bound.
+
+
+\begin{lemma}[Scalar estimates restricted to one actual root]
+    \label{lem:balanced_root_regional_energy_assignment}
+    \lean{TNLean.MPS.AreaLaw.ALVV.exists_balanced_root_regional_energy_assignment}
+    \leanok
+    Fix a valid root, the operator families and the retained-space
+    operation as in Lemma~\ref{lem:balanced_regional_energy_assignment}.
+    It suffices that the certified node update hold at each internal
+    interval in that root's actual merge list. There is then one
+    scalar function with one-sided error at most $49/16$ at the root
+    and those listed internal nodes, attained minima at their actual
+    short leaves, and the literal same-family raw update at each
+    listed internal node.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{def:soft_word_energy_update,def:balanced_interval_merge_list,
+        thm:actual_adjacent_interval_merge}
+    Use the same well-founded scalar recursion. Its node relation
+    requires the actual raw update when the interval belongs to the
+    root list and an original attained minimum otherwise. Thus the
+    extension outside the chosen root depends on the fixed interval
+    geometry, with no test against an unknown ground space. The shared
+    recursive construction proves the lower-energy bound and its
+    defining node relation. Restrict the conclusions to the root and
+    its listed nodes. The original minima at short leaves are unchanged.
+\end{proof}
+
+\begin{lemma}[Energy estimates on the actual jointly viable sampled root]
+    \label{lem:canonical_interval_root_energy_assignment}
+    \lean{TNLean.MPS.AreaLaw.ALVV.exists_canonical_interval_root_energy_assignment}
+    \leanok
+    Retain the physical interactions and count bounds of
+    Lemma~\ref{lem:soft_same_word_compressed_energy}, and its fixed
+    calibrated targets and one-word families on each long interval.
+    The target and family bounds are fixed before the threshold and
+    all sampling choices. For a choice $\omega$, let $S_\omega$ be
+    the existing balanced tree of
+    Definition~\ref{def:canonical_interval_sampling_operation}.
+    Suppose its actual root and all listed internal intervals are
+    $3/200$-viable for the same full original ground space.
+
+    There is one scalar function $E$ with
+    \begin{align}
+       e_J-\frac{49}{16}\le E(J)\le e_J
+    \end{align}
+    at the root and each of its listed internal intervals. At an
+    actual short root or a short child of a listed interval, $E$
+    is the attained original regional minimum. At every listed long
+    node, take the actual balanced children and their already-assigned
+    scalar values. The parent value is the actual raw compressed
+    minimum on the \emph{same} family's one-word child image, minus
+    three. Its middle center is obtained from those child values and
+    the two attained collar minima, and lies in $[e_M-10,e_M]$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:balanced_interval_merge_closure,lem:soft_word_node_energy_update,
+        lem:balanced_root_regional_energy_assignment,
+        def:canonical_interval_sampling_operation}
+    A short child is the full local space and hence viable. A long
+    child is in its parent's merge list and therefore in the original
+    root list by closure. Its actual viability is among the stated
+    joint-success conditions. Thus both children of every used long
+    node satisfy exactly the viability hypotheses of the proved
+    physical energy update. Apply that result to its fixed target and
+    own family. The preceding scalar recursion now applies to these
+    used node updates, without selecting a second family or retained
+    space.
+\end{proof}
+
+The last conclusion is restricted to the actual root subtree. It does
+not infer viability or raw energy updates at all overlapping intervals
+from a joint-success event on one root. Values on other valid intervals are
+only a mathematical minimum extension. Literal soft Generate, its
+printed energy-power count and the source running time remain separate;
+see \cite{gap:alvv16_soft_regional_energy_centering}.

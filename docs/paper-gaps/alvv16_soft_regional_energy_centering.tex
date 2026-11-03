@@ -228,4 +228,40 @@ constructions; no efficient computation or running-time conclusion is
 asserted. The false printed soft-energy and cluster estimates, with their
 counterexamples and separate corrected theorems, are unchanged.
 
+
+\section{Energy estimates on a jointly successful sampled root}
+
+The all-valid-interval theorem above selects an operation satisfying the
+interval conditions at all valid pairs, including overlaps. Its global
+conclusion is not inferred from joint success on only one random root.
+For that random realization the actual root subtree is the relevant domain.
+
+The theorem
+\leanid{TNLean.MPS.AreaLaw.ALVV.exists_canonical_interval_root_energy_assignment}
+uses the literal canonical sampled operation with the same fixed targets
+and families. Its hypothesis is original-ground viability at error $3/200$
+for the actual root and the intervals in its actual root merge list.
+There is no viability assumption for other overlapping intervals and no
+supplied node-energy or callback hypothesis. Every used node update is
+derived from the existing physical word-energy theorem.
+
+A long child of a listed interval is also in the root list; a short child
+is the full local space. Hence the actual joint-success event supplies
+both child viability statements at every used long node. One scalar
+function then has original-regional lower error at most $49/16$ at the
+root and each listed internal node. It uses true attained minima at actual
+short leaves and the actual raw compressed minimum minus three at used
+long nodes, with the already-assigned child values and the exact collar
+conversion. On other valid intervals the scalar function is extended by original
+attained minima. This extension is a mathematical device, not an additional
+algorithmic computation or a claim about raw updates outside the used tree.
+
+The same shared scalar recursion proves both the earlier all-interval
+existence result and this root-restricted result. There is no second tree
+or operator-family construction, and no additional union over all possible
+subintervals is required. The theorem is conditional on the stated actual
+joint event; its probability is a separate assertion. Identification with
+literal soft Generate, the printed energy-power count and the source
+running-time statement remain unproved by this scalar construction.
+
 \end{document}

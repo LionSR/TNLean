@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.ALVV.SoftWordNodeEnergy
 import TNLean.MPS.AreaLaw.BalancedIntervalTree
+import TNLean.MPS.AreaLaw.BalancedIntervalMergeList
 
 /-!
 # Recursive energy estimates on a fixed interval tree
@@ -143,6 +144,53 @@ private theorem recursiveEnergy_node {L q : ℕ}
   rw [hvalue]
   exact (Classical.choose_spec choice).2
 
+private theorem exists_energy_with_node_relation {L q : ℕ}
+    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
+    (width : ℕ) (hwidth : 1 ≤ width)
+    (R : ∀ (l r : ℕ), l ≤ r → r ≤ L → width < r - l → ℝ → ℝ → ℝ → Prop)
+    (hleaf : ∀ (l r : ℕ), l ≤ r → r ≤ L →
+      ∃ p : ℝ, IsRegionalLowerEnergyEstimate h l r 0 p)
+    (hnode : ∀ (l r : ℕ) (hlr : l ≤ r) (hrL : r ≤ L) (hlong : width < r - l),
+      let k := l + (r - l) / 2
+      ∀ p1 p2 : ℝ,
+        IsRegionalLowerEnergyEstimate h l k (49 / 16) p1 →
+        IsRegionalLowerEnergyEstimate h k r (49 / 16) p2 →
+        ∃ p : ℝ, IsRegionalLowerEnergyEstimate h l r (49 / 16) p ∧
+          R l r hlr hrL hlong p1 p2 p)
+ :
+    ∃ estimate : ℕ → ℕ → ℝ,
+      (∀ (l r : ℕ), l ≤ r → r ≤ L →
+        IsRegionalLowerEnergyEstimate h l r (49 / 16) (estimate l r)) ∧
+      (∀ (l r : ℕ), l ≤ r → r ≤ L → r - l ≤ width →
+        IsRegionalLowerEnergyEstimate h l r 0 (estimate l r)) ∧
+      ∀ (l r : ℕ) (hlr : l ≤ r) (hrL : r ≤ L) (hlong : width < r - l),
+        let k := l + (r - l) / 2
+        R l r hlr hrL hlong (estimate l k) (estimate k r) (estimate l r) := by
+  classical
+  let values := recursiveEnergy h width hwidth R hleaf hnode
+  let estimate := fun l r : ℕ ↦ if valid : l ≤ r ∧ r ≤ L then
+    (values l r valid.1 valid.2).val else 0
+  have heval (l r : ℕ) (hlr : l ≤ r) (hrL : r ≤ L) :
+      estimate l r = (values l r hlr hrL).val := by
+    simp only [estimate, dite_eq_left (show l ≤ r ∧ r ≤ L from ⟨hlr, hrL⟩)]
+  refine ⟨estimate, ?_, ?_, ?_⟩
+  · intro l r hlr hrL
+    rw [heval l r hlr hrL]
+    exact (values l r hlr hrL).property
+  · intro l r hlr hrL hshort
+    rw [heval l r hlr hrL]
+    change IsRegionalLowerEnergyEstimate h l r 0
+      (recursiveEnergy h width hwidth R hleaf hnode l r hlr hrL).val
+    rw [recursiveEnergy]
+    split
+    · exact Classical.choose_spec (hleaf l r hlr hrL)
+    · contradiction
+  · intro l r hlr hrL hlong k
+    have hpk : l ≤ k := by dsimp only [k]; omega
+    have hkr : k ≤ r := by dsimp only [k]; omega
+    rw [heval l k hpk (hkr.trans hrL), heval k r hkr hrL, heval l r hlr hrL]
+    exact recursiveEnergy_node h width hwidth R hleaf hnode l r hlr hrL hlong
+
 /-- A simultaneous scalar assignment on a fixed balanced interval tree.
 Every valid interval has lower error at most 49/16; short leaves use actual
 minima, and long nodes realize the same-family update at their actual
@@ -219,28 +267,97 @@ theorem exists_balanced_regional_energy_assignment {L q ell : ℕ}
     intro k p1 p2 hp1 hp2
     exact realize_node_update hq (by dsimp only [k]; omega) (by dsimp only [k]; omega)
       h _ _ _ (hcallbacks ⟨(l, r), hlr, hrL, hlong⟩) p1 p2 hp1 hp2
-  let values := recursiveEnergy h (4 * ell) hwidth R hleaf hnode
-  let estimate := fun l r : ℕ ↦ if valid : l ≤ r ∧ r ≤ L then
-    (values l r valid.1 valid.2).val else 0
-  have heval (l r : ℕ) (hlr : l ≤ r) (hrL : r ≤ L) :
-      estimate l r = (values l r hlr hrL).val := by
-    simp only [estimate, dite_eq_left (show l ≤ r ∧ r ≤ L from ⟨hlr, hrL⟩)]
-  refine ⟨estimate, ?_, ?_, ?_⟩
-  · intro l r hlr hrL
-    rw [heval l r hlr hrL]
-    exact (values l r hlr hrL).property
-  · intro l r hlr hrL hshort
-    rw [heval l r hlr hrL]
-    change IsRegionalLowerEnergyEstimate h l r 0
-      (recursiveEnergy h (4 * ell) hwidth R hleaf hnode l r hlr hrL).val
-    rw [recursiveEnergy]
-    split
-    · exact Classical.choose_spec (hleaf l r hlr hrL)
-    · contradiction
-  · intro J l r k hpk hkr S1 S2
-    rw [heval l k hpk (hkr.trans J.property.2.1), heval k r hkr J.property.2.1,
-      heval l r J.property.1 J.property.2.1]
-    exact recursiveEnergy_node h (4 * ell) hwidth R hleaf hnode l r
-      J.property.1 J.property.2.1 J.property.2.2
+  obtain ⟨estimate, hgood, hshort, hlong⟩ :=
+    exists_energy_with_node_relation h (4 * ell) hwidth R hleaf hnode
+  refine ⟨estimate, hgood, hshort, ?_⟩
+  intro J l r k hpk hkr S1 S2
+  exact hlong l r J.property.1 J.property.2.1 J.property.2.2
+
+/-- Node callbacks are required only on the actual root merge list.
+One scalar function then has the certified lower energy at the root and
+those internal nodes, true minima at their short children, and literal
+same-family raw updates at exactly those listed nodes. Outside this root
+subtree, the construction uses original attained minima as a mathematical
+extension. Auxiliary to ALVV, arXiv:1602.08828v2, lines 1631 and 1807. -/
+theorem exists_balanced_root_regional_energy_assignment {L q ell : ℕ}
+    (hq : 0 < q) (hwidth : 1 ≤ 4 * ell)
+    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
+    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+      (h i) (interval L i.val (i.val + 2)))
+    (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1)
+    (N : LongIntervalIndex L (4 * ell) → ℕ)
+    (F : ∀ J : LongIntervalIndex L (4 * ell),
+      Fin (N J) → EuclideanSpace ℂ (interval L J.val.1 J.val.2 → Fin q) →L[ℂ]
+        EuclideanSpace ℂ (interval L J.val.1 J.val.2 → Fin q))
+    (operation : IntervalMergeOperation L q) (p0 r0 : ℕ)
+    (hp0r0 : p0 ≤ r0) (hr0L : r0 ≤ L)
+    (hcallbacks : ∀ J : LongIntervalIndex L (4 * ell),
+      J.val ∈ balancedIntervalMergeList (4 * ell) hwidth p0 r0 →
+      let l := J.val.1
+      let r := J.val.2
+      let k := l + (r - l) / 2
+      let hpk : l ≤ k := by dsimp only [k]; omega
+      let hkr : k ≤ r := by dsimp only [k]; omega
+      HasSoftWordNodeEnergyUpdate (u := l + ell) (v := r - ell) hq hpk hkr h (F J)
+        (balancedIntervalSpace operation (4 * ell) hwidth l k)
+        (balancedIntervalSpace operation (4 * ell) hwidth k r)) :
+    ∃ estimate : ℕ → ℕ → ℝ,
+      IsRegionalLowerEnergyEstimate h p0 r0 (49 / 16) (estimate p0 r0) ∧
+      (r0 - p0 ≤ 4 * ell → IsRegionalLowerEnergyEstimate h p0 r0 0 (estimate p0 r0)) ∧
+      ∀ J : LongIntervalIndex L (4 * ell),
+        J.val ∈ balancedIntervalMergeList (4 * ell) hwidth p0 r0 →
+        let l := J.val.1
+        let r := J.val.2
+        let k := l + (r - l) / 2
+        let hpk : l ≤ k := by dsimp only [k]; omega
+        let hkr : k ≤ r := by dsimp only [k]; omega
+        IsRegionalLowerEnergyEstimate h l r (49 / 16) (estimate l r) ∧
+        (k - l ≤ 4 * ell → IsRegionalLowerEnergyEstimate h l k 0 (estimate l k)) ∧
+        (r - k ≤ 4 * ell → IsRegionalLowerEnergyEstimate h k r 0 (estimate k r)) ∧
+        IsSoftWordNodeEnergyRealization (u := l + ell) (v := r - ell) hq hpk hkr h (F J)
+          (balancedIntervalSpace operation (4 * ell) hwidth l k)
+          (balancedIntervalSpace operation (4 * ell) hwidth k r)
+          (estimate l k) (estimate k r) (estimate l r) := by
+  classical
+  let rootList := balancedIntervalMergeList (4 * ell) hwidth p0 r0
+  let R := fun (l r : ℕ) (hlr : l ≤ r) (hrL : r ≤ L) (hlong : 4 * ell < r - l)
+      (p1 p2 p : ℝ) ↦
+    let J : LongIntervalIndex L (4 * ell) := ⟨(l, r), hlr, hrL, hlong⟩
+    let k := l + (r - l) / 2
+    let hpk : l ≤ k := by dsimp only [k]; omega
+    let hkr : k ≤ r := by dsimp only [k]; omega
+    if (l, r) ∈ rootList then
+      IsSoftWordNodeEnergyRealization (u := l + ell) (v := r - ell) hq hpk hkr h (F J)
+        (balancedIntervalSpace operation (4 * ell) hwidth l k)
+        (balancedIntervalSpace operation (4 * ell) hwidth k r) p1 p2 p
+    else IsRegionalLowerEnergyEstimate h l r 0 p
+  have hleaf := exists_leaf_energy hq h hs h0 h1
+  have hnode (l r : ℕ) (hlr : l ≤ r) (hrL : r ≤ L) (hlong : 4 * ell < r - l) :
+      let k := l + (r - l) / 2
+      ∀ p1 p2 : ℝ,
+        IsRegionalLowerEnergyEstimate h l k (49 / 16) p1 →
+        IsRegionalLowerEnergyEstimate h k r (49 / 16) p2 →
+        ∃ p : ℝ, IsRegionalLowerEnergyEstimate h l r (49 / 16) p ∧
+          R l r hlr hrL hlong p1 p2 p := by
+    intro k p1 p2 hp1 hp2
+    by_cases hmem : (l, r) ∈ rootList
+    · obtain ⟨p, hp, hraw⟩ := realize_node_update hq
+        (by dsimp only [k]; omega) (by dsimp only [k]; omega) h _ _ _
+        (hcallbacks ⟨(l, r), hlr, hrL, hlong⟩ hmem) p1 p2 hp1 hp2
+      exact ⟨p, hp, by simpa only [R, ite_eq_left hmem] using hraw⟩
+    · obtain ⟨p, hp0⟩ := hleaf l r hlr hrL
+      have hp : IsRegionalLowerEnergyEstimate h l r (49 / 16) p := by
+        obtain ⟨e, x, hx, hAx, hA, hplower, hpupper⟩ := hp0
+        exact ⟨e, x, hx, hAx, hA, by linarith only [hplower], hpupper⟩
+      exact ⟨p, hp, by simpa only [R, ite_eq_right hmem] using hp0⟩
+  obtain ⟨estimate, hgood, hshort, hlong⟩ :=
+    exists_energy_with_node_relation h (4 * ell) hwidth R hleaf hnode
+  refine ⟨estimate, hgood p0 r0 hp0r0 hr0L, hshort p0 r0 hp0r0 hr0L, ?_⟩
+  intro J hJ l r k hpk hkr
+  refine ⟨hgood l r J.property.1 J.property.2.1,
+    hshort l k hpk (hkr.trans J.property.2.1), hshort k r hkr J.property.2.1, ?_⟩
+  have hraw := hlong l r J.property.1 J.property.2.1 J.property.2.2
+  have hmem : (l, r) ∈ rootList := hJ
+  simpa only [R, ite_eq_left hmem] using hraw
 
 end TNLean.MPS.AreaLaw.ALVV
