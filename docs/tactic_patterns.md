@@ -45,6 +45,20 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Retaining the same calibrated physical parameters — existing construction (2026-11-03)
+
+- **Seen:** `PhysicalDGInterleavedFamily.lean`, `PhysicalDGInterleavedIteration.lean`,
+  `PhysicalDGInterleavedNode.lean` and `PhysicalDGInterleavedTree.lean`.
+- **Pattern:** Unpack the shared scalar and reference data, retain their bounds,
+  and introduce the local names for the reference estimate. The scanner matches
+  the type exposure and tuple introduction in the earlier three consumers.
+- **Reuse:** `exists_physical_dg_interleaved_filter_family` constructs the analytic
+  parameters once. The iteration, sampled node and tree retain those same data;
+  none repeats the tail, suppression or reference proof.
+- **Decision:** This is forwarding through different mathematical conclusions,
+  not repeated analytic reasoning. No tactic is introduced. The tree omits
+  unnecessary type-exposure steps for the count and sampling size.
+
 ### Lower bound for the interleaved logarithmic scale — promoted (2026-11-03)
 
 - **Pattern:** Derive `1 ≤ 1 + log m + log (1/g) + log (1+w)` from

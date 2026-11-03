@@ -389,3 +389,73 @@ probability for an adaptively sampled tree remains separate.
     $s$ and $(1-a)$-viability. Apply the literal-iteration theorem.
     The whole exterior is retained throughout.
 \end{proof}
+
+
+\begin{lemma}[A balanced recursion from successful local choices]
+    \label{lem:balanced_interval_choice}
+    \lean{TNLean.MPS.AreaLaw.exists_balanced_interval_tree_of_choices}
+    \leanok
+    Fix a positive leaf width and a property $P_{[p,r)}$ of interval
+    subspaces. Suppose the full local space has this property at every
+    short leaf. At each long interval and split, fix a family of candidate
+    parent spaces indexed by $I_{J,k,S_1,S_2}$. Suppose whenever both
+    children have their respective properties, at least one candidate has
+    the parent property.
+
+    There is one fixed merge operation whose value at every such pair of
+    children is an actual successful candidate. Its balanced interval
+    recursion has $P_{[p,r)}$ at every valid interval. The candidate index
+    and the equality with the chosen parent operation are retained.
+    No measurable dependence on the children is asserted.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:balanced_interval_invariant}
+    Choose one successful candidate for every valid pair of children
+    satisfying $P$. Define the operation by that candidate on such pairs,
+    and arbitrarily outside them. The candidate identity and parent
+    property follow from the chosen witness. Apply the interval induction.
+\end{proof}
+
+\begin{lemma}[An actual balanced tree with interleaved parent trims]
+    \label{lem:physical_interleaved_tree}
+    \lean{TNLean.MPS.AreaLaw.exists_physical_dg_interleaved_interval_tree}
+    \leanok
+    Under the physical hypotheses and calibrated parameter choices of
+    Lemma~\ref{lem:physical_interleaved_node_event}, choose the physical
+    family on every interval longer than $4\ell$, before the child spaces.
+    One common reference and radius bound $\xi_{\max}$ serve every
+    interval. For each fixed $0<\xi\le\xi_{\max}$ there is one actual
+    balanced interval recursion with full local spaces at leaves of
+    length at most $4\ell$.
+
+    Every retained space is $3/200$-viable for the same original full
+    ground space, has dimension at most $M=D^6s^3$, and has at most $M$
+    recorded spanning vectors of weighted internal-cut rank at most $M$.
+    At each long parent, retain an actual chosen Haar unitary. The parent
+    operation equals the sample of its actual recursive children followed
+    by the literal $k=\lceil\log_D(D^2s)\rceil$ rounds of family application
+    and collective trimming. The family, clipped target and reference
+    stay fixed during those rounds.
+
+    This is an existential recursive construction with the fixed nominal
+    sample scale and failure target $(L+1)^{-2}$. It does not assert a
+    jointly measurable adaptive sampling procedure, an energy-estimation
+    invariant, final spectral extraction or a running-time bound. The
+    block leaves, capped-gap dependence and larger integer round count
+    remain as in \cite{gap:alvv16_approximation_parameters}.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:physical_interleaved_node_event,lem:balanced_interval_choice}
+    Choose every physical interval family first. The count satisfies
+    $q^{4\ell}\le D^6\le M$, so full leaves satisfy the dimension and
+    recorded-rank bounds; their viability is immediate. Also
+    $\xi\le\xi_{\max}\le1$, which controls the weighted leaf ranks.
+    At a parent whose children satisfy the invariant, the nonempty
+    fixed-child Haar event supplies an actual successful unitary and
+    the interleaved output. Use that unitary as the candidate index in
+    Lemma~\ref{lem:balanced_interval_choice}, with $P$ equal to the
+    conjunction of same-ground-space viability, dimension and recorded-rank
+    bounds. Its balanced recursion proves the invariant without assuming
+    any final viable spaces. Apply the candidate identity to the actual
+    recursively constructed children to record the chosen unitary.
+\end{proof}

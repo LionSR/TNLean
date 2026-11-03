@@ -82,6 +82,7 @@ import TNLean.MPS.AreaLaw.IntervalFamilyTrimmingIteration
 import TNLean.MPS.AreaLaw.IntervalGenerators
 import TNLean.MPS.AreaLaw.IntervalLowDensityFamily
 import TNLean.MPS.AreaLaw.IntervalMPOTransfer
+import TNLean.MPS.AreaLaw.IntervalMergeChoice
 import TNLean.MPS.AreaLaw.IntervalNeighborhoodEntropy
 import TNLean.MPS.AreaLaw.IntervalReferenceTrimming
 import TNLean.MPS.AreaLaw.IntervalSampledImage
@@ -125,6 +126,7 @@ import TNLean.MPS.AreaLaw.PhysicalDGGlobalApproximation
 import TNLean.MPS.AreaLaw.PhysicalDGInterleavedFamily
 import TNLean.MPS.AreaLaw.PhysicalDGInterleavedIteration
 import TNLean.MPS.AreaLaw.PhysicalDGInterleavedNode
+import TNLean.MPS.AreaLaw.PhysicalDGInterleavedTree
 import TNLean.MPS.AreaLaw.PhysicalDGIntervalTree
 import TNLean.MPS.AreaLaw.PhysicalDGIntervalTrimming
 import TNLean.MPS.AreaLaw.PhysicalDGReferenceSpace
