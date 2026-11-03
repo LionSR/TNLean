@@ -949,6 +949,11 @@
         "thm:peps_separate_arity_compression": "Uniform compression, Theorem 5.2 of the source"
       }
     },
+    "ch:party_circuit_sampling_sources": {
+      "theorems": [],
+      "corollaries": [],
+      "notes": {}
+    },
     "ch:aklv_polynomial_filters": {
       "theorems": [
         "thm:aklv_polynomial_rank",
@@ -1148,6 +1153,16 @@
       }
     },
     "ch:peps_frames": {
+      "theorems": [],
+      "corollaries": [],
+      "notes": {}
+    },
+    "ch:peps_frames_dyadic_geometry": {
+      "theorems": [],
+      "corollaries": [],
+      "notes": {}
+    },
+    "ch:peps_frames_protocol": {
       "theorems": [
         "thm:peps_protocol_from_angular_and_patch_bounds"
       ],
