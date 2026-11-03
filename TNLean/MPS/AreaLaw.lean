@@ -23,6 +23,7 @@ import TNLean.MPS.AreaLaw.BoundaryCounting
 import TNLean.MPS.AreaLaw.BoundaryGap
 import TNLean.MPS.AreaLaw.BufferDiscount
 import TNLean.MPS.AreaLaw.CanonicalLowDensityFamily
+import TNLean.MPS.AreaLaw.CanonicalSampledIntervalInterleaved
 import TNLean.MPS.AreaLaw.ChainNeighborhood
 import TNLean.MPS.AreaLaw.ChainStageIncidence
 import TNLean.MPS.AreaLaw.ClusterTruncationCutRank
@@ -82,6 +83,7 @@ import TNLean.MPS.AreaLaw.IntervalCollectiveTrimming
 import TNLean.MPS.AreaLaw.IntervalFamilyTrimming
 import TNLean.MPS.AreaLaw.IntervalFamilyTrimmingBudget
 import TNLean.MPS.AreaLaw.IntervalFamilyTrimmingIteration
+import TNLean.MPS.AreaLaw.IntervalFamilyTrimmingMeasurable
 import TNLean.MPS.AreaLaw.IntervalGenerators
 import TNLean.MPS.AreaLaw.IntervalLowDensityFamily
 import TNLean.MPS.AreaLaw.IntervalMPOTransfer

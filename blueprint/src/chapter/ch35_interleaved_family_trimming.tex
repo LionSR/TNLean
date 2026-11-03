@@ -653,3 +653,78 @@ can therefore support a separate energy candidate formed from its child
 product. It does not identify the family with the soft-truncated family
 of the printed generation procedure, or establish the printed word count
 or running time; see \cite{gap:alvv16_approximation_parameters}.
+
+\subsection{Borel projections of the literal finite iteration}
+
+\begin{lemma}[The actual step and every finite iterate are Borel]
+    \label{lem:borel_literal_interval_family_trim_iterates}
+    \lean{TNLean.MPS.AreaLaw.intervalFamilyTrimStep_eq_trimMatrixRange,
+        TNLean.MPS.AreaLaw.measurable_projectionMatrix_intervalFamilyTrimStep,
+        TNLean.MPS.AreaLaw.measurable_projectionMatrix_intervalFamilyTrimIterate,
+        TNLean.MPS.AreaLaw.measurableSet_isViable_intervalFamilyTrimIterate}
+    \leanok
+    Fix an interval, an operator family and the collective-trimming
+    threshold. The actual orthonormal-basis step of
+    Lemma~\ref{lem:interval_family_trim_step} agrees with the canonical
+    range trim of its actual family-image projection. Hence a constructed
+    initial space with Borel actual projection has a Borel actual
+    projection after every finite number of literal rounds. Its true
+    viability event is Borel for every fixed global target and real
+    error, retaining the whole interval exterior. Empty families, zero
+    spaces and zero rounds are included.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:interval_family_trim_step,lem:interval_family_trim_iterates}
+    The actual family-image projection is the joint support of the
+    operators times the current projection, and is Borel. The canonical
+    range trim is Borel across rank changes. Basis invariance identifies
+    this trim with the original step using its chosen orthonormal basis.
+    Apply induction to the existing recursion, which uses the preceding
+    current space and trims at every successor. The true tensor-coordinate
+    viability test gives the final event assertion.
+\end{proof}
+
+\begin{definition}[Canonical sampling followed by the literal iteration]
+    \label{def:canonical_sampled_interval_interleaved_parent}
+    \lean{TNLean.MPS.AreaLaw.canonicalSampledIntervalInterleavedTrim}
+    \leanok
+    Fix the interval configuration space $\C^C$, where $d=|C|$, and the
+    prescribed coordinate equivalence $e:\{1,\ldots,d\}\simeq C$.
+    Let $\Omega_C=\prod_{j=0}^d U(j)$. For an actual candidate space $W$,
+    relabel its actual orthogonal projection to a matrix on $\C^d$ and
+    take the canonical range-basis sample using the actual-rank coordinate
+    of $\omega\in\Omega_C$. Retain its first $\min(s,\dim W)$ columns and
+    carry this sample back through $e$. Apply the existing literal
+    interleaved iteration, with fixed family and threshold, for
+    $\lceil\log_D(D^2s)\rceil$ rounds when $D\ge2$ and $s\ge1$.
+    This retains the corrected integer count and current-space assignment
+    documented in \cite{gap:alvv16_approximation_parameters}.
+\end{definition}
+
+\begin{lemma}[The actual canonical sampled parent is jointly Borel]
+    \label{lem:borel_canonical_sampled_interval_interleaved_parent}
+    \lean{TNLean.MPS.AreaLaw.measurable_projectionMatrix_canonicalSampledIntervalInterleavedTrim,
+        TNLean.MPS.AreaLaw.measurableSet_isViable_canonicalSampledIntervalInterleavedTrim}
+    \leanok
+    Fix the family, threshold, nominal sample bound and number of rounds
+    before the candidate and unitary variables. If the actual projection
+    of $W(x)$ is Borel, then the actual projection of the preceding
+    canonical sampled parent is jointly Borel in $(x,\omega)$. For every
+    fixed global target $G$ and real error $\delta$, the event that this
+    exact parent is $\delta$-viable for $G$ is Borel, with the whole parent
+    exterior retained. The true failure event is Borel as well.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{def:canonical_sampled_interval_interleaved_parent,
+        lem:borel_literal_interval_family_trim_iterates}
+    Fixed coordinate relabeling of the actual candidate projection is
+    continuous. The canonical sampled projection is jointly Borel across
+    rank changes, and its transport back to the interval is a fixed
+    coordinate isometry. Apply the preceding finite-iteration theorem
+    and the original viability test to the fixed global target.
+\end{proof}
+
+These results prove measurability of the actual finite parent construction.
+They do not assume that an arbitrary varying orthonormal-basis selection
+is measurable, and do not assert an adaptive success probability or a
+running-time bound.
