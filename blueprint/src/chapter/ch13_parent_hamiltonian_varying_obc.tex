@@ -39,7 +39,6 @@ the adjacent-pair conditions with the kernel of the open parent Hamiltonian.
     \lean{Matrix.obc_three_site_boundary_reconstruction,
         Matrix.obc_three_site_trace_reconstruction}
     \leanok
-    \uses{lem:varying_obc_overlap_boundary_products}
     In addition assume the canonical row-isometry identity
     $\sum_iA_iA_i^\dagger=I_a$. Define the common boundary
     \begin{align}
@@ -52,7 +51,10 @@ the adjacent-pair conditions with the kernel of the open parent Hamiltonian.
     for every $i,j,k$.
 \end{lemma}
 \begin{proof}\leanok
-    The preceding overlap identity and the canonical normalization give
+    \uses{lem:varying_obc_overlap_boundary_products}
+    The overlap identity $X_kA_i=C_kY_i$ of
+    Lemma~\ref{lem:varying_obc_overlap_boundary_products} and the canonical
+    normalization give
     \begin{align}
         X_k & =X_k\sum_iA_iA_i^\dagger
         =\sum_iC_kY_iA_i^\dagger=C_kZ.
@@ -70,7 +72,6 @@ the adjacent-pair conditions with the kernel of the open parent Hamiltonian.
     \label{lem:varying_obc_pair_sections_reconstruct}
     \lean{Matrix.obc_three_site_reconstruction_of_pair_sections}
     \leanok
-    \uses{lem:varying_obc_three_site_reconstruction}
     Assume the same row-isometry and middle-site spanning conditions.
     Let $\phi:I\times J\times K\to\mathbb C$. Suppose that for every
     fixed $k$ there is a matrix $X_k$ with
@@ -84,9 +85,20 @@ the adjacent-pair conditions with the kernel of the open parent Hamiltonian.
     simultaneously for every $i,j,k$.
 \end{lemma}
 \begin{proof}\leanok
-    Choose boundary matrices from the two local section conditions. Their
-    trace representations agree because they both give $\phi$.
-    The canonical adjoint reconstruction supplies the common boundary.
+    \uses{lem:varying_obc_three_site_reconstruction}
+    Choose $X_k$ for each $k$ and $Y_i$ for each $i$ from the two local
+    section conditions. Both trace representations equal $\phi$, so
+    \begin{align}
+        \operatorname{tr}(X_kA_iB_j) & =\phi(i,j,k)
+        =\operatorname{tr}(Y_iB_jC_k)
+    \end{align}
+    for every $i,j,k$. This is the overlap hypothesis of
+    Lemma~\ref{lem:varying_obc_three_site_reconstruction}, which gives, for
+    $Z=\sum_iY_iA_i^\dagger$,
+    \begin{align}
+        \phi(i,j,k) & =\operatorname{tr}(X_kA_iB_j)
+        =\operatorname{tr}(ZA_iB_jC_k).
+    \end{align}
 \end{proof}
 
 \begin{lemma}[Blocking preserves the rectangular row isometry]

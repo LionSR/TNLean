@@ -491,21 +491,6 @@
     irreducible-form decomposition of $C$.
 \end{proof}
 
-\begin{corollary}[$Z$-gauge equivalence from the periodic theorem]
-    \label{thm:zgauge_equiv_periodicFT_irreducible_form}
-    \lean{MPSTensor.zGaugeEquiv_of_periodicEqualCaseFT_of_irreducibleForm}
-    \leanok
-    \uses{thm:periodic_ft, def:irreducible_form, def:blocked_tensor, def:same_mpv, def:z_gauge_equiv}
-    Assume the periodic equal-case Fundamental Theorem at the blocked physical
-    dimension. Let $C$ and $A^{[p]}$ be MPS tensors of the same bond dimension,
-    both in irreducible form~II, and suppose that they have the same MPV family.
-    Then there exists an integer $m \ge 1$ and a $\Z_m$-gauge equivalence
-    between $C$ and $A^{[p]}$.
-    % Scope restriction: this is only the equal-case application of the periodic
-    % Fundamental Theorem; the irreducible-form hypothesis on $A^{[p]}$ is an
-    % explicit assumption, not a consequence of equality of MPV families.
-\end{corollary}
-
 The corrected forward implication for unit-modulus block weights is
 Theorem~\ref{thm:thm_4_1_p_refinement_forward_unit_weights}. The reverse
 implication remains conditional on compatible root selection, as in

@@ -768,7 +768,7 @@ space of $(MN)P$.
     $T T^\dagger=\Id$.
 \end{proof}
 
-\begin{theorem}[Daggered fusion tensors are fusion tensors]
+\begin{lemma}[Daggered fusion tensors are fusion tensors]
     \label{thm:mpug_dagger_fusion_reduction}
     \lean{MPOTensor.GroupFamily.FusionData.isReduction_daggerFusion}
     \leanok
@@ -777,7 +777,7 @@ space of $(MN)P$.
     For every $g,h\in G$ the daggered fusion tensors
     $(\widetilde F^<_{g,h},\widetilde F^>_{g,h})$ reduce
     $\mathcal U_g\mathcal U_h$ onto $\mathcal U_{gh}$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     By Lemma~\ref{thm:mpug_reduction_dagger}, the conjugates of
@@ -792,7 +792,7 @@ space of $(MN)P$.
     by a gauge and its inverse, as in Lemma~\ref{thm:mpug_reduction_dagger}.
 \end{proof}
 
-\begin{theorem}[The scalars comparing daggered and chosen fusion tensors]
+\begin{lemma}[The scalars comparing daggered and chosen fusion tensors]
     \label{thm:mpug_dagger_zeta}
     \lean{MPOTensor.GroupFamily.FusionData.daggerZeta,
         MPOTensor.GroupFamily.FusionData.daggerZeta_defzeta}
@@ -807,11 +807,11 @@ space of $(MN)P$.
     This is the defining equation of the scalars $\zeta_{g,h}$ in
     \cite[lines~1570--1637]{FrancoRubio2025MPUGauging}, in boundary-dressed
     form. The relation of $\zeta_{g,h}\overline{\zeta_{h^{-1},g^{-1}}}$ to the
-    dagger-inverse signs is Theorem~\ref{thm:mpug_dagger_zeta_relation}.
-\end{theorem}
+    dagger-inverse signs is Lemma~\ref{thm:mpug_dagger_zeta_relation}.
+\end{lemma}
 
 \begin{proof}\leanok
-    By Theorem~\ref{thm:mpug_dagger_fusion_reduction} both pairs reduce $B$
+    By Lemma~\ref{thm:mpug_dagger_fusion_reduction} both pairs reduce $B$
     onto the normal tensor $\mathcal U_{gh}$, and $B$ and $\mathcal U_{gh}$
     have the same periodic operators on nonempty chains. The two-sided
     comparison of reductions gives one nonzero scalar $z$ with both identities
@@ -902,7 +902,7 @@ space of $(MN)P$.
     elements compose to the identity.
 \end{proof}
 
-\begin{theorem}[The relation between $\zeta$ and the dagger-inverse signs]
+\begin{lemma}[The relation between $\zeta$ and the dagger-inverse signs]
     \label{thm:mpug_dagger_zeta_relation}
     \lean{MPOTensor.GroupFamily.FusionData.daggerZeta_mul_star_daggerZeta_inv}
     \leanok
@@ -916,14 +916,14 @@ space of $(MN)P$.
     \end{align}
     This is the first identity of the proposition on the scalars $\zeta$ in
     \cite[lines~1570--1678]{FrancoRubio2025MPUGauging}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
-    By Theorem~\ref{thm:mpug_dagger_zeta} at $(h^{-1},g^{-1})$ and
+    By Lemma~\ref{thm:mpug_dagger_zeta} at $(h^{-1},g^{-1})$ and
     Lemma~\ref{thm:mpug_dagger_dressed_transport}, the double dagger of
     Lemma~\ref{thm:mpug_double_dagger_fusion} equals
     $\overline{\zeta_{h^{-1},g^{-1}}}\,\widetilde F^<_{g,h}$ against long words, and
-    by Theorem~\ref{thm:mpug_dagger_zeta} at $(g,h)$ this is
+    by Lemma~\ref{thm:mpug_dagger_zeta} at $(g,h)$ this is
     $\overline{\zeta_{h^{-1},g^{-1}}}\,\zeta_{g,h}F^<_{g,h}$. The left boundary
     $F^<_{g,h}$ is nonzero against arbitrarily long words, so
     $\zeta_{g,h}\overline{\zeta_{h^{-1},g^{-1}}}
@@ -956,8 +956,8 @@ space of $(MN)P$.
 \end{lemma}
 
 \begin{proof}\leanok
-    By Theorem~\ref{thm:mpug_dagger_fusion_reduction} the daggered tensors are
-    reductions, and by Theorem~\ref{thm:mpug_dagger_zeta} they are compared with
+    By Lemma~\ref{thm:mpug_dagger_fusion_reduction} the daggered tensors are
+    reductions, and by Lemma~\ref{thm:mpug_dagger_zeta} they are compared with
     the chosen ones by $\zeta$; Lemma~\ref{thm:mpug_anomaly_three_cocycle_gauge}
     gives the change of the three-cocycle.
 \end{proof}
@@ -7583,6 +7583,141 @@ $s(a,b)$ is the phase of $\mathrm{CZ}\ket{a,b}$.
     many values of the bits. For instance $S^{00}=S^{01}=\Id$, $S^{10}=X$ and
     $S^{11}=\left(\begin{smallmatrix}0&-1\\1&0\end{smallmatrix}\right)$, which
     anticommutes with $X$.
+\end{proof}
+
+\begin{lemma}[Split-index presentation of a periodic amplitude]
+    \label{lem:mps_split_index_trace}
+    \lean{MPSTensor.prod_ofFn_mul_eq_mul_prod_mul,
+        MPSTensor.mpv_eq_trace_prod_ofFn_of_eq_mul,
+        MPSTensor.mul_prod_ofFn_mul_eq_smul,
+        MPSTensor.prod_mul_trace_prod_ofFn_eq}
+    \leanok
+    \uses{def:mps_tensor}
+    Let $A$ be a tensor of bond dimension $D$ whose letters factor as
+    $A^i=R^iL^i$ through an intermediate bond of dimension $m$, with $R^i$ a
+    $D\times m$ and $L^i$ an $m\times D$ matrix, and let
+    $S^{ab}=L^aR^b$. On a ring of $N\geq1$ sites,
+    \begin{align}
+        \tr\bigl(A^{\sigma_0}A^{\sigma_1}\cdots A^{\sigma_{N-1}}\bigr)
+         & =\tr\bigl(S^{\sigma_0\sigma_1}S^{\sigma_1\sigma_2}\cdots
+        S^{\sigma_{N-1}\sigma_0}\bigr).
+        \label{eq:mps_split_index_trace}
+    \end{align}
+    If $XY=YX=\Id$ and $XS_kY=c_kS_k$ for matrices $S_1,\dots,S_N$ and scalars
+    $c_1,\dots,c_N$, then $X(S_1\cdots S_N)Y=(c_1\cdots c_N)\,S_1\cdots S_N$,
+    and hence $c_1\cdots c_N\tr(S_1\cdots S_N)=\tr(S_1\cdots S_N)$.
+\end{lemma}
+
+\begin{proof}\leanok
+    The product $A^{\sigma_0}\cdots A^{\sigma_{N-1}}$ regroups as
+    $R^{\sigma_0}\bigl(L^{\sigma_0}R^{\sigma_1}\bigr)\cdots
+        \bigl(L^{\sigma_{N-2}}R^{\sigma_{N-1}}\bigr)L^{\sigma_{N-1}}$, and the
+    trace is invariant under moving the rectangular factor $R^{\sigma_0}$ to
+    the end. For the second statement insert $YX=\Id$ between consecutive
+    factors, and then use $YX=\Id$ once more after moving $X$ to the end
+    inside the trace.
+\end{proof}
+
+\begin{lemma}[The controlled-\texorpdfstring{$Z$}{Z} state as a split-index state]
+    \label{lem:mpug_controlled_z_simps_trace}
+    \lean{ControlledZGauging.zInt,
+        ControlledZGauging.simpsTensor_eq,
+        ControlledZGauging.mpv_stateTensor_eq_trace_simpsTensor,
+        ControlledZGauging.czPhase_mul_mpv_stateTensor,
+        ControlledZGauging.fixesMPV_czMPUTensor_stateTensor,
+        ControlledZGauging.fixesMPV_stateTensor}
+    \leanok
+    \uses{thm:mpug_controlled_z_split_index, thm:mpug_controlled_z_not_anomalous,
+        def:mpug_single_block_l_symbol}
+    The split-index tensor of Lemma~\ref{thm:mpug_controlled_z_split_index} is
+    $S^{ab}=X^aZ^{ab}$, and on a ring of $N\geq1$ qubits the amplitude of the
+    state generated by $A$ is
+    $\tr\bigl(S^{\sigma_0\sigma_1}S^{\sigma_1\sigma_2}\cdots
+        S^{\sigma_{N-1}\sigma_0}\bigr)$, the split-index presentation drawn in
+    \cite[lines~3970--4001]{FrancoRubio2025MPUGauging}. Every amplitude is
+    fixed by the controlled-$Z$ phase,
+    $\prod_ks(\sigma_k,\sigma_{k+1})\,\psi(\sigma)=\psi(\sigma)$, so the state
+    is fixed by $U$ and by every operator of the family $\{\Id,M\}$ on every
+    ring of $N\geq1$ qubits.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:mps_split_index_trace, thm:mpug_controlled_z_split_index,
+        thm:mpug_controlled_z_not_anomalous}
+    The formula for $S^{ab}$ is an identity of integer matrices. The
+    amplitude is the case $A^i=R^iL^i$ of
+    Lemma~\ref{lem:mps_split_index_trace}. Since $XS^{ab}X=s(a,b)\,S^{ab}$
+    and $X^2=\Id$, the second part of that lemma gives the invariance of each
+    amplitude under the phase, and the periodic operator of $M$ is the
+    diagonal matrix of these phases.
+\end{proof}
+
+\begin{lemma}[The onsite symmetry \texorpdfstring{$\prod_jZ_j$}{prod Z}]
+    \label{lem:mpug_controlled_z_onsite_z}
+    \lean{ControlledZGauging.zSign,
+        ControlledZGauging.zAction,
+        ControlledZGauging.zAction_ofAdd_one,
+        ControlledZGauging.stateZGaugeInt,
+        ControlledZGauging.stateZGauge,
+        ControlledZGauging.twistedTensor_stateTensor_zAction,
+        ControlledZGauging.stateZGauge_mul_stateTensor_mul_inv,
+        ControlledZGauging.stateTensor_isOnSiteSymmetric_zAction}
+    \leanok
+    \uses{def:mpug_controlled_z_defect, def:twisted_tensor, def:on_site_symmetric}
+    Let $\Z_2$ act on a qubit by $g\mapsto Z^g$, with
+    $Z=\operatorname{diag}(1,-1)$. Then
+    $\sum_jZ_{ij}A^j=(-1)^iA^i=VA^iV^{-1}$ for
+    $V=\operatorname{diag}(1,-1,-1)$, so the state generated by $A$ has the
+    onsite symmetry $\prod_jZ_j$ stated in
+    \cite[line~3970]{FrancoRubio2025MPUGauging}.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:gauge_equiv, thm:gauge_invariance}
+    The twisted letters are $Z_{ii}A^i=(-1)^iA^i$. Conjugation by $V$
+    multiplies the entry $(r,c)$ of a matrix by $V_{rr}V_{cc}$; the nonzero
+    entries of $A^0$ sit at $(0,0)$, $(2,1)$ and $(2,2)$, and those of $A^1$
+    at $(0,1)$, $(0,2)$ and $(1,0)$, which gives the signs $+1$ and $-1$.
+    Gauge-equivalent tensors generate the same states.
+\end{proof}
+
+\begin{lemma}[The combined \texorpdfstring{$\Z_2\times\Z_2$}{Z2 x Z2} symmetry on the split-index bond]
+    \label{lem:mpug_controlled_z_combined_class}
+    \lean{ControlledZGauging.splitLegPhase,
+        ControlledZGauging.clusterProjRep_mul_simpsTensor,
+        ControlledZGauging.simpsTensor_isNontrivialClass}
+    \leanok
+    \uses{lem:mpug_controlled_z_simps_trace, def:cluster_omega}
+    Let $g=(g_1,g_2)\in\Z_2\times\Z_2$ act on the two legs $(a,b)$ of a
+    split-index tensor by the phase
+    $\chi_g(a,b)=(-1)^{g_1a}\,s(a,b)^{g_2}$: the first generator is the onsite
+    symmetry $\prod_jZ_j$, whose factor at each site is assigned to the left
+    leg of the split-index tensor at that site, and the second is $U$. Let
+    $V_g$ be the projective representation of $\Z_2\times\Z_2$ on the
+    split-index bond with $V_{(1,0)}=Z$ and $V_{(0,1)}=X$, whose factor
+    system is that of Definition~\ref{def:cluster_omega}. Then
+    \begin{align}
+        V_gS^{ab} & =\chi_g(a,b)\,S^{ab}V_g
+        \label{eq:mpug_controlled_z_combined_class}
+    \end{align}
+    for all $g$, $a$, $b$, and the class of this factor system in
+    $H^2(\Z_2\times\Z_2,\C^\times)$ is nontrivial. This is the invariant
+    behind the remark of \cite[line~3970]{FrancoRubio2025MPUGauging} that the
+    state lies in the nontrivial symmetry-protected phase of the combined
+    $\Z_2\times\Z_2$ symmetry. That this class labels the phase of a state
+    protected by a symmetry that is not onsite is the classification of
+    \cite{Stephen2024SIMPS}, which is not proved here; see
+    \cite{gap:fbc25_controlled_z_split_index_class_scope}.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:cluster_nontrivial_spt}
+    By Lemma~\ref{lem:mpug_controlled_z_simps_trace}, $S^{ab}=X^aZ^{ab}$, so
+    (\ref{eq:mpug_controlled_z_combined_class}) is an identity of integer
+    matrices, checked on the generators, on their product and on the bits
+    $a,b$. The matrices $Z$ and $X$ anticommute, so the commutator phase of
+    the factor system on the two generators is $-1$, and the class is
+    nontrivial by Lemma~\ref{thm:cluster_nontrivial_spt}.
 \end{proof}
 
 \section{The gauge-invariant subspace of the CZX circuit tuple}

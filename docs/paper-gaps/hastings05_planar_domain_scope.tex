@@ -83,15 +83,16 @@ the lattice; that growth is not implied by the axioms of a metric.
 \section{The Trotter index count}
 
 The index type may now depend on the site, as in the source's indices
-$\alpha_i$. For an operator supported on $X$, the construction assigns a
-matrix-unit label with $q^2$ values at sites in $X$ and a one-element index
-set at every other site. The coefficient at the centre reads only the labels
-on $X$; labels outside $X$ are unnecessary. If $a_j$ factors of one Trotter
-step act on site $j$, their product therefore has exactly $(q^2)^{a_j}$
-index values there. With a repetition-free list of centres and supports
-within their radius-$R$ balls, symmetry of the metric and the ball count
-imply $a_j\le S$. After $n$ Trotter steps the index range is consequently
-at most $(q^2)^{nS}$.\footnote{Declarations:
+$\alpha_i$, and so may the local dimension $d_j$. For an operator supported
+on $X$, the construction assigns a matrix-unit label with $d_j^2$ values at
+each site $j\in X$ and a one-element index set at every other site. The
+coefficient at the centre reads only the labels on $X$; labels outside $X$
+are unnecessary. If $a_j$ factors of one Trotter step act on site $j$, their
+product therefore has exactly $(d_j^2)^{a_j}$ index values there. With a
+repetition-free list of centres and supports within their radius-$R$ balls,
+symmetry of the metric and the ball count imply $a_j\le S$. After $n$
+Trotter steps the index range is consequently at most
+$(d_j^2)^{nS}$.\footnote{Declarations:
 \leanid{TNLean.Lattice.ProductForm.ofSupported},
 \leanid{TNLean.Lattice.ProductForm.card_index_ofSupported}, and
 \leanid{TNLean.Lattice.exists_productForm_trotterProduct_card_index_of_dist_le},

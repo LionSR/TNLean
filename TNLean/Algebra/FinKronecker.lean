@@ -11,7 +11,8 @@ import TNLean.Algebra.ListProduct
 
 The finite Kronecker product `⊗_k A_k` of `Matrix.finKronecker` is multiplicative, unital,
 and compatible with the transpose and the conjugate transpose, and so is its rectangular
-version `Matrix.rectKronecker`, which takes the product over any finite type of sites. For a
+version `Matrix.rectKronecker`, which takes the product over any finite type of sites, and
+`Matrix.piKronecker`, whose row and column labels may vary with the site. For a
 constant family `u^{⊗N}`, it maps diagonal matrices to diagonal matrices, preserves the
 relation `u^† u = 1`, and, when `u` is the matrix of a map on basis labels, acts on configurations
 by applying that map at every site. The trace of an ordered product of linear combinations
@@ -23,6 +24,8 @@ expands as a sum over choice functions.
   `Matrix.finKronecker_conjTranspose`, `Matrix.finKronecker_transpose`.
 * `Matrix.rectKronecker_mul`, `Matrix.rectKronecker_one`, `Matrix.rectKronecker_conjTranspose`,
   `Matrix.sum_rectKronecker` for the product `Matrix.rectKronecker` of rectangular matrices.
+* `Matrix.piKronecker_mul`, `Matrix.piKronecker_one` for the product `Matrix.piKronecker` of
+  matrices whose labels vary with the site.
 * `Matrix.finKronecker_diagonal`, `Matrix.finKronecker_conjTranspose_mul_self`.
 * `Matrix.finKronecker_mul_apply_of_eq_ite`, `Matrix.mul_finKronecker_apply_of_eq_ite`.
 * `Matrix.trace_prod_ofFn_sum_smul`.
@@ -131,7 +134,7 @@ theorem rectKronecker_conjTranspose (K : ν → Matrix ι κ ℂ) :
 /-- Every tensor power of a rectangular physical isometry is an isometry.
 Source context: arXiv:1010.3732, Section II.F.2,
 `eq:1d-sym:jointsym`, physical endpoint embeddings on finite chains. -/
-theorem rectKronecker_conjTranspose_mul_self [Fintype ι] [Finite κ] [DecidableEq κ]
+theorem rectKronecker_conjTranspose_mul_self {N : ℕ} [Fintype ι] [Finite κ] [DecidableEq κ]
     {u : Matrix ι κ ℂ} (hu : uᴴ * u = 1) :
     (rectKronecker fun _ : Fin N => u)ᴴ * rectKronecker (fun _ : Fin N => u) = 1 := by
   let : Fintype κ := Fintype.ofFinite κ
@@ -147,6 +150,43 @@ theorem sum_rectKronecker [DecidableEq ν] {r : ν → ℕ} (K : (k : ν) → Fi
   exact (Fintype.prod_sum fun k j ↦ K k j (x k) (y k)).symm
 
 end Rectangular
+
+section Dependent
+
+variable {ν : Type*} [Fintype ν] {ι κ μ : ν → Type*}
+
+/-- The product operator `⊗ₖ Kₖ` of rectangular matrices `Kₖ : ι k × κ k` whose row and column
+labels may vary with the site `k`, a matrix from `(k : ν) → κ k` to `(k : ν) → ι k`. For a
+constant family of labels it is `Matrix.rectKronecker`. -/
+def piKronecker (K : (k : ν) → Matrix (ι k) (κ k) ℂ) :
+    Matrix ((k : ν) → ι k) ((k : ν) → κ k) ℂ :=
+  Matrix.of fun x y ↦ ∏ k, K k (x k) (y k)
+
+@[simp] theorem piKronecker_apply (K : (k : ν) → Matrix (ι k) (κ k) ℂ) (x : (k : ν) → ι k)
+    (y : (k : ν) → κ k) : piKronecker K x y = ∏ k, K k (x k) (y k) :=
+  rfl
+
+theorem piKronecker_mul [∀ k, Fintype (κ k)] [DecidableEq ν]
+    (K : (k : ν) → Matrix (ι k) (κ k) ℂ) (L : (k : ν) → Matrix (κ k) (μ k) ℂ) :
+    piKronecker K * piKronecker L = piKronecker fun k ↦ K k * L k := by
+  ext x y
+  simp only [mul_apply, piKronecker_apply]
+  rw [Fintype.prod_sum]
+  exact Finset.sum_congr rfl fun z _ ↦ (Finset.prod_mul_distrib).symm
+
+/-- The product of identities over a finite set of sites is the identity. -/
+@[simp] theorem piKronecker_one [∀ k, DecidableEq (ι k)] :
+    piKronecker (fun k ↦ (1 : Matrix (ι k) (ι k) ℂ)) = 1 := by
+  ext x y
+  simp only [piKronecker_apply]
+  by_cases hxy : x = y
+  · subst hxy
+    simp
+  · obtain ⟨k, hk⟩ := Function.ne_iff.mp hxy
+    rw [one_apply_ne hxy]
+    exact Finset.prod_eq_zero (Finset.mem_univ k) (one_apply_ne hk)
+
+end Dependent
 
 section ConstantFamily
 

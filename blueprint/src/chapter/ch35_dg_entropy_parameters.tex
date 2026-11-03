@@ -1,6 +1,6 @@
 \section{Dyadic ranks and entropy parameters}
 
-\begin{theorem}[Entropy from logarithmic approximation ranks]
+\begin{lemma}[Entropy from logarithmic approximation ranks]
     \label{thm:dg_logarithmic_rank_tail_entropy}
     \lean{Entropy.probabilityEntropy_le_of_logarithmic_rank_tail_bounds}
     \leanok
@@ -24,7 +24,7 @@
     \end{align}
     This is a scalar estimate for the entropy sum in
     \cite[proof of Theorem~4.9]{Arad2016RigorousRG}.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Put $x=26Ku^3/\log2$ and $B=\lceil x\rceil+1$.
@@ -43,7 +43,7 @@
     (\ref{eq:dg_entropy_logarithmic_bound}).
 \end{proof}
 
-\begin{theorem}[A uniform entropy coefficient]
+\begin{lemma}[A uniform entropy coefficient]
     \label{thm:dg_entropy_coefficient_bound}
     \lean{Real.dg_entropy_coefficient_bound}
     \leanok
@@ -60,7 +60,7 @@
         \frac{14872(A+1)(6+2\log|A+1|)+54}{g}u^3.
         \label{eq:dg_entropy_uniform_coefficient}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Since $\log2\le1\le u^3/g$, one has $54\log2\le54u^3/g$.

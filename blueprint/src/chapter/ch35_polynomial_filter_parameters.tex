@@ -59,7 +59,7 @@
     Exponentiation proves the tail estimate with the same $A$.
 \end{proof}
 
-\begin{theorem}[One parameter choice for contraction and the physical tail]
+\begin{lemma}[One parameter choice for contraction and the physical tail]
     \label{thm:physical_dg_scalar_parameters}
     \lean{Real.exists_physical_dg_scalar_parameters}
     \leanok
@@ -85,7 +85,7 @@
         \mathcal D^{12}\,4e^{-4\ell^2\sqrt{(4g/5)/R}}\le10^{-5}.
     \end{align}
     The same $A$ gives both estimates for all $d,g,R$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:chain_polynomial_filter_parameters}
@@ -97,7 +97,7 @@
     \cite[Theorem t:ais, lines 1010--1024]{Arad2016RigorousRG}.
 \end{proof}
 
-\begin{theorem}[Endpoints for the five-region Chebyshev interval]
+\begin{lemma}[Endpoints for the five-region Chebyshev interval]
     \label{thm:physical_chebyshev_endpoints}
     \lean{Real.physical_chebyshev_endpoints}
     \leanok
@@ -109,14 +109,14 @@
         \bigl(2e^{-2\ell^2\sqrt{(\eta_1-\eta_0)/R}}\bigr)^2
         =4e^{-4\ell^2\sqrt{(4g/5)/R}}.
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Substitute the definitions. The bounds on $E_0,g,\ell$ make the interval
     nonempty and give the upper bound for $R$. Square the exponential.
 \end{proof}
 
-\begin{theorem}[Absorbing a collar at square polynomial degree]
+\begin{lemma}[Absorbing a collar at square polynomial degree]
     \label{thm:physical_dg_collar_budget}
     \lean{TNLean.MPS.AreaLaw.collar_card_le_square_at_square_degree}
     \leanok
@@ -125,7 +125,7 @@
     \begin{align}
         nq^{2d}\le((q\ell^2)^{22\ell})^2.
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Since $\ell>0$, the original exponent is $20\ell$.
@@ -133,7 +133,7 @@
     by the difference between $40\ell$ and $44\ell$ in the squared bound.
 \end{proof}
 
-\begin{theorem}[One scalar choice for all accuracy parameters]
+\begin{lemma}[One scalar choice for all accuracy parameters]
     \label{thm:dg_accuracy_scalar_parameters}
     \lean{Real.exists_dg_accuracy_scalar_parameters}
     \leanok
@@ -155,7 +155,7 @@
     $\mathcal D_m^{12}\,4e^{-4\ell_m^2\sqrt{(4g/5)/R}}\le10^{-5}$.
     One also has $20\ell_m+2\lfloor\ell_m^2/\ell_m\rfloor=22\ell_m$.
     The same $A$ works for all $m,g,R$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:chain_polynomial_filter_parameters}
@@ -171,7 +171,7 @@
     it does not change the on-site Hilbert space.
 \end{proof}
 
-\begin{theorem}[A collar count with a larger numerical base]
+\begin{lemma}[A collar count with a larger numerical base]
     \label{thm:collar_larger_count_base}
     \lean{TNLean.MPS.AreaLaw.collar_card_le_square_of_larger_count_base}
     \leanok
@@ -182,7 +182,7 @@
     \end{align}
     Only the numerical bound uses $m$; the physical collar still has $q$
     states per site.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:physical_dg_collar_budget}

@@ -127,3 +127,14 @@ They now use the shared QICLean lemma. Elementary gap, finite-set and
 existential transports use existing lemmas, as recorded in the tactic
 ledger. The two existing filter constructions are included in the changed
 Lean modules that passed compilation and strict checks.
+
+## Integration with main on 2026-11-03
+
+The contribution incorporates TNLean main `729589b6e9`, preserving its
+three-chapter organization of the viable-set development. New sections
+remain in the chapter containing their mathematical construction.
+Both area-law submissions use QICLean revision `128648d4b81e81eff6704be68afd45e1a81b6b9c`,
+which combines the accepted pre-upgrade revisions of QICLean #1016 and
+#1017. Their proofs are unchanged. QICLean main has moved to Mathlib 4.36;
+this compatible revision retains TNLean's Mathlib 4.35 toolchain.
+The integrated full build and declaration checks are in progress.

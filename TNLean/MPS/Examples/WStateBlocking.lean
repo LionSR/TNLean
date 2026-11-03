@@ -98,22 +98,24 @@ private theorem vacuum_eq_count_zero {N : ℕ} (σ : Cfg 2 N) :
       simp
   simp only [pvbsVacuum, Pi.single_apply, h]
 
-private theorem count_flatten_cons {m k : ℕ} (I : Fin (blockPhysDim 2 k))
+private theorem ofFn_blockedConfigEquiv_cons {m k : ℕ} (I : Fin (blockPhysDim 2 k))
     (σ : Fin m → Fin (blockPhysDim 2 k)) :
-    (List.ofFn (blockedConfigEquiv 2 (m + 1) k (Fin.cons I σ))).count 1 =
-      (List.ofFn (decodeBlock 2 k I)).count 1 +
-        (List.ofFn (blockedConfigEquiv 2 m k σ)).count 1 := by
-  simp only [ofFn_blockedConfigEquiv, List.ofFn_succ, flattenBlockedWord_cons,
-    List.count_append, wordOfBlock, Kraus.wordOfBlock, Fin.cons_zero, Fin.cons_succ]
+    List.ofFn (blockedConfigEquiv 2 (m + 1) k (Fin.cons I σ)) =
+      List.ofFn (Fin.append (decodeBlock 2 k I) (blockedConfigEquiv 2 m k σ)) := by
+  simp only [List.ofFn_fin_append, ofFn_blockedConfigEquiv, List.ofFn_succ,
+    flattenBlockedWord_cons, wordOfBlock, Kraus.wordOfBlock, Fin.cons_zero, Fin.cons_succ]
 
 private theorem vacuum_flatten_cons {m k : ℕ} (I : Fin (blockPhysDim 2 k))
     (σ : Fin m → Fin (blockPhysDim 2 k)) :
     pvbsVacuum ((m + 1) * k) (blockedConfigEquiv 2 (m + 1) k (Fin.cons I σ)) =
       pvbsVacuum k (decodeBlock 2 k I) *
         pvbsVacuum (m * k) (blockedConfigEquiv 2 m k σ) := by
-  simp only [vacuum_eq_count_zero, count_flatten_cons, Nat.add_eq_zero_iff]
+  simp only [vacuum_eq_count_zero, ofFn_blockedConfigEquiv_cons, List.ofFn_fin_append,
+    List.count_append, Nat.add_eq_zero_iff]
   split_ifs <;> simp_all
 
+/-- The single-excitation splitting `wIndicator_append` at the cut of a blocked word into its
+first block and the remaining blocks. -/
 private theorem wIndicator_flatten_cons {m k : ℕ} (I : Fin (blockPhysDim 2 k))
     (σ : Fin m → Fin (blockPhysDim 2 k)) :
     wIndicator ((m + 1) * k) (blockedConfigEquiv 2 (m + 1) k (Fin.cons I σ)) =
@@ -121,9 +123,14 @@ private theorem wIndicator_flatten_cons {m k : ℕ} (I : Fin (blockPhysDim 2 k))
         pvbsVacuum (m * k) (blockedConfigEquiv 2 m k σ) +
       pvbsVacuum k (decodeBlock 2 k I) *
         wIndicator (m * k) (blockedConfigEquiv 2 m k σ) := by
-  simp only [wIndicator_apply, vacuum_eq_count_zero, count_flatten_cons]
-  rcases (List.ofFn (decodeBlock 2 k I)).count 1 with _ | _ | a <;>
-    rcases (List.ofFn (blockedConfigEquiv 2 m k σ)).count 1 with _ | _ | b <;> (simp; try omega)
+  calc
+    wIndicator ((m + 1) * k) (blockedConfigEquiv 2 (m + 1) k (Fin.cons I σ)) =
+        wIndicator (k + m * k)
+          (Fin.append (decodeBlock 2 k I) (blockedConfigEquiv 2 m k σ)) := by
+      simp only [wIndicator_apply, ofFn_blockedConfigEquiv_cons]
+    _ = _ := by
+      rw [wIndicator_append]
+      simp only [weightIndicator, vacuum_eq_count_zero, wIndicator_apply]
 
 /-- Encode one qubit into the vacuum and normalized W vector of a physical block.
 The row alphabet is the existing blocked physical alphabet. -/
