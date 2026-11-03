@@ -73,8 +73,10 @@ private theorem sampling_budgets_of_soft_profile {D M Delta : ℝ}
       _ ≤ _ := one_div_le_one_div_of_le (by norm_num) hM10large
 
 /-- The corrected soft residuals, sampling losses and tensor-bond polynomial
-can be chosen uniformly before the chain length. -/
-private theorem exists_uniform_soft_parameters (q : ℕ) (hq : 2 ≤ q)
+can be chosen uniformly before the chain length, without an input Hamiltonian
+or sampled family. Numerical auxiliary to ALVV, arXiv:1602.08828v2,
+`prop:Cheby-AGSP-eff` and `t:aisefficient`, lines 1311–1420. -/
+theorem exists_uniform_soft_parameters (q : ℕ) (hq : 2 ≤ q)
     (g : ℝ) (hg : 0 < g) :
     ∃ u : ℕ, 2 ≤ u ∧
       let ell := u ^ 8
