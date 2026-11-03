@@ -502,7 +502,8 @@ probability for an adaptively sampled tree remains separate.
 \begin{corollary}[Uniform polynomial bond for the same interleaved Ritz space]
     \label{cor:physical_interleaved_ritz_polynomial}
     \lean{TNLean.MPS.AreaLaw.exists_physical_dg_interleaved_ritz_polynomial_approximation,
-        TNLean.MPS.AreaLaw.exists_physical_dg_interleaved_ritz_polynomial_approximation_with_degree}
+        TNLean.MPS.AreaLaw.exists_physical_dg_interleaved_ritz_polynomial_approximation_with_degree,
+        TNLean.MPS.AreaLaw.exists_physical_dg_interleaved_ritz_polynomial_approximation_with_constants}
     \leanok
     Fix the local dimension $q$ and a positive spectral gap $\gamma$.
     There are $C>0$ and $k\in\mathbb N$, depending only on these two
@@ -526,8 +527,14 @@ probability for an adaptively sampled tree remains separate.
         \qquad g=\min\{\gamma,1\}.
         \label{eq:interleaved_ritz_gap_degree}
     \end{align}
-    The prefactor $C$ remains a finite function of $q,\gamma$;
-    (\ref{eq:interleaved_ritz_gap_degree}) bounds the degree alone.
+    The same universal constant may be enlarged so that also
+    \begin{align}
+        \log\max\{C,1\}\le C_{\rm deg}\frac{
+          (1+\log\max\{q,50\}+\log(1/g))^{10}}{g^2}.
+        \label{eq:interleaved_ritz_log_coefficient}
+    \end{align}
+    Thus both estimates apply to the coefficient and degree selected for
+    this same output. The raw gap continues to enter through its cap.
     The calibrated count is allowed to vary with $L$ and $r$.
     The block leaves, fixed failure target, capped-gap dependence and
     modified integer counts remain those of the preceding construction.
@@ -560,7 +567,14 @@ probability for an adaptively sampled tree remains separate.
     $C_D$, so $p\le(2C_D+1)U^7/g$ and
     $p_0\le(6K+1)U^3/g$. The actual degree
     $10(24p+21)p_0+60p+43$ therefore has the bound
-    (\ref{eq:interleaved_ritz_gap_degree}).
+    (\ref{eq:interleaved_ritz_gap_degree}). For the selected prefactor,
+    its factored logarithmic estimate is at most
+    $10^7(K+1)(u^3/g+5g^{-1/4}u+1)
+      (1+K_D+\log(1/g)+\log(1+\gamma^{-1}))$.
+    Since $g\le\gamma$ and $\log(1/g)\le U$, its last two factors are
+    bounded by $7U^3/g$ and $(C_D+4)U^7/g$, respectively.
+    This gives (\ref{eq:interleaved_ritz_log_coefficient}), after enlarging
+    the same universal constant.
 \end{proof}
 
 \begin{lemma}[Ordered words in the same interleaved family]
