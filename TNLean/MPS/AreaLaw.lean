@@ -196,6 +196,7 @@ import TNLean.MPS.AreaLaw.PhysicalLowDensityGlobalApproximation
 import TNLean.MPS.AreaLaw.PhysicalLowDensitySharpApproximation
 import TNLean.MPS.AreaLaw.PhysicalPeriodicPolynomialFamily
 import TNLean.MPS.AreaLaw.PhysicalPolynomialTensorFamily
+import TNLean.MPS.AreaLaw.PhysicalSameRootPolynomialRefinement
 import TNLean.MPS.AreaLaw.PolynomialFilterParameters
 import TNLean.MPS.AreaLaw.PositiveDimensionLowDensityApproximation
 import TNLean.MPS.AreaLaw.PositiveDimensionLowDensityEntropy

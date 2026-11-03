@@ -11,17 +11,19 @@
     Let $G$ be the full spectral space of energies at most $\mu$,
     and write $r=\dim G$.
 
-    Let $S_0$ be a specified subspace in full-interval coordinates,
-    with $\dim S_0\le M$. Suppose its native image is $\delta$-close
-    to $G$ for some $\delta<1$. For any real threshold $\xi$, put
+    Let $I$ identify the full-interval configuration space with the chain
+    space. Let $S_0$ be a specified subspace with $\dim S_0\le M$, and
+    suppose $I S_0$ is $\delta$-close to $G$ for some $\delta<1$.
+    For any real threshold $\xi$, take the zeroth filter-and-trim iterate:
     \begin{align}
-      K_{\mathrm{raw}}&=I-\|H\|^{-1}H,&
-      S&=\operatorname{FilterTrimIterate}(K_{\mathrm{raw}},\xi,S_0,0),\\
-      W&=\operatorname{native}(S),&
-      R&=\operatorname{Ritz}_r(H|_W).
+      K_{\mathrm{raw}}&=I_{\mathcal H}-\|H\|^{-1}H,&
+      S^{(0)}&=S_0,\\
+      W&=I S^{(0)},&
+      R&=\operatorname{Ritz}_r(P_W H|_W).
     \end{align}
-    Then $G$ is the whole native Hilbert space, $S_0$ is the whole
-    full-interval space, $S=S_0$ and $R=W=G$. In particular
+    Here $P_W$ is the orthogonal projection onto $W$.
+    Then $G$ is the whole chain Hilbert space, $S_0$ is the whole
+    full-interval space, $S^{(0)}=S_0$ and $R=W=G$. In particular
     $\dim R=r\le M$, both projection errors between $R$ and $G$ are
     zero, and every vector of this actual Ritz space has matrix product
     bond dimension at most $r$, hence at most $M$.
@@ -36,9 +38,9 @@
     \uses{lem:full_interval_viability,thm:chain_cut_rank_of_mps}
     The spectral alternative and absence of an excited value force every
     eigenvalue to equal $\mu$, so $G$ is the whole space. Closeness with
-    loss below one gives $\dim G\le\dim\operatorname{native}(S_0)$.
-    Equality with the ambient dimension follows, forcing both native
-    and interval versions of the given root to be whole spaces.
+    loss below one gives $\dim G\le\dim(I S_0)$.
+    Equality with the ambient dimension follows, forcing both spaces
+    related by $I$ to be whole spaces.
 
     The zero-th iterate is exactly $S_0$. The actual Ritz space lies in
     $W$ and has dimension $r=\dim W$, hence equals $W$. Both errors
@@ -47,4 +49,72 @@
     The cut-rank characterization gives the two bond bounds. If there
     is an internal cut, spectral membership supplies a configuration
     and therefore $q\ge1$; an empty chain has no internal cuts.
+\end{proof}
+
+
+\section{Polynomial refinement of a prescribed viable root}
+
+The following lemma gives final refinement parameters simultaneously for
+all viable initial candidates with the stated dimension bound. It supports
+the final extraction in \cite{Arad2016RigorousRG}.
+
+\begin{lemma}[Polynomial refinement and actual Ritz extraction]
+    \label{lem:same_root_polynomial_refinement}
+    \lean{TNLean.MPS.AreaLaw.exists_physical_same_root_polynomial_refinement}\leanok
+    Fix integers $q,D\ge1$ and $\gamma>0$. There are constants $C>0$ and
+    $k\in\mathbb N$ with the following property. Let
+    $H=\sum_i h_i$ be a chain of $L$ sites of local dimension $q$, with
+    positive-contraction nearest-neighbour terms. Suppose
+    $\mu\in\sigma(H)$ and every $z\in\sigma(H)$ satisfies
+    $z=\mu$ or $z\ge\mu+\gamma$. Let $G$ be the full spectral space
+    below or at $\mu$, and put $r=\dim G$.
+
+    For every $\eta>0$, there are $n,b\in\mathbb N$ and $\xi>0$, chosen
+    before every $M\in\mathbb N$ and initial subspace $S_0$, such that
+    \begin{align}
+      b\le C\bigl[(L+1)(r+1)(1+\eta^{-1})\bigr]^k.
+    \end{align}
+    Let $I$ identify the full-interval configuration space with the chain
+    space. Define $K=I_{\mathcal H}-\|H\|^{-1}H$ and, for the actual
+    collective trim $\mathcal T_\xi$ at the internal cuts, define
+    \begin{align}
+      S^{(0)}&=S_0,&
+      S^{(j+1)}&=\mathcal T_\xi\bigl(I^{-1}K I S^{(j)}\bigr),\\
+      W&=I S^{(n)},& R&=\operatorname{Ritz}_r(P_W H|_W).
+    \end{align}
+    Here $P_W H|_W$ is the orthogonal compression to $W$.
+    Whenever $\dim S_0\le M$ and $I S_0$ is $3/200$-close to $G$,
+    one has $\dim S^{(n)}\le M$, $R\subseteq W$, $\dim R=r$, and both
+    directed errors between $R$ and $G$ are at most $\eta/2$.
+    Every vector in this actual Ritz space has matrix product bond
+    dimension at most $bM^2$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:physical_dg_automatic_refinement,thm:flat_ground_same_root_ritz}
+    In the presence of an excited spectral value, apply
+    Lemma~\ref{lem:physical_dg_automatic_refinement} with
+    $D_{\mathrm{tree}}=1$ and $D_{\mathrm{filter}}=D$. Write
+    $A=\|H\|-\mu$, $c=\gamma/A$ and
+    $\rho=\eta\gamma/(2A+\eta\gamma)$. Positivity and contractivity give
+    $\gamma\le A\le L+1$. The constructed reference has bond
+    $b_{\mathrm{ref}}=r^2B\ge1$, and the chosen parameters are
+    \begin{align}
+      N_{\mathrm{ref}}&=\left\lceil\frac{100D^{12}}{c\rho}\right\rceil,&
+      \xi&=\frac{1}{1000b_{\mathrm{ref}}N_{\mathrm{ref}}\sqrt{L+1}},\\
+      n&=\left\lceil\frac4c\log\frac1\rho\right\rceil+1,&
+      b&=10^6(b_{\mathrm{ref}}N_{\mathrm{ref}})^2(L+1).
+    \end{align}
+    The uniform scalar refinement estimate, evaluated at the numerical
+    comparison values $B_{\mathrm{tree}}=1$, $s=1$ and coefficient zero
+    for the first reference profile, bounds $bD^{12}$ by
+    $C_0[(L+1)(r+1)(1+\eta^{-1})]^k$. Since $D\ge1$, this bounds $b$.
+    These are scalar comparison values; the prescribed initial subspace
+    remains $S_0$. The terminal conclusion of
+    Lemma~\ref{lem:physical_dg_automatic_refinement} supplies the stated
+    Ritz space and bond $bM^2$ simultaneously for all such candidates.
+
+    In the absence of an excited value, take $n=0$, $\xi=1$ and $b=1$.
+    Lemma~\ref{thm:flat_ground_same_root_ritz} gives $R=G$ from the same
+    $S_0$, with both errors zero and bond at most $M\le M^2$.
+    Enlarging $C_0$ to $\max\{C_0,1\}$ covers this branch as well.
 \end{proof}

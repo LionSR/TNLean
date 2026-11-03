@@ -12220,3 +12220,19 @@ No custom tactic or resource option is introduced.
 - **Decision:** The same lemma accepts the corrected terminal-image energy
   relation and variable collars. No second recursion or realization predicate
   is needed, and no relation is required on unlisted overlapping intervals.
+
+### Polynomial refinement of an arbitrary actual root — reuse (2026-11-03)
+
+- **Seen:** `PhysicalSameRootPolynomialRefinement.lean`.
+- **Pattern:** Retain the actual candidate in the existing automatic
+  refinement theorem, and bound the coefficient of its squared count
+  before choosing that candidate.
+- **Reuse:** The existing scalar refinement-cost theorem is evaluated at
+  numerical comparison values `Btree=1`, `s=1`, and zero first-profile
+  coefficient. Its bound contains the extra factor `Dfilter^12>=1`,
+  which may be discarded. No old tree or independent approximation
+  subspace is used. The flat branch calls the exact same-root Ritz lemma.
+- **Decision:** Existing scalar/reference/refinement results supply all
+  analytic estimates. `norm_sum_le_of_le` and the positive-contraction
+  norm criterion supply the spectral-width ceiling, as in the existing
+  candidate-independent refinement entry. No new tactic is needed.
