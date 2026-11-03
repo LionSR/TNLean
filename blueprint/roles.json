@@ -1470,9 +1470,13 @@
       }
     },
     "sec:physical_soft_resampling_tree": {
-      "theorems": [],
+      "theorems": [
+        "thm:physical_soft_resampling_tree"
+      ],
       "corollaries": [],
-      "notes": {}
+      "notes": {
+        "thm:physical_soft_resampling_tree": "Constructs the actual corrected resampling tree from primitive chain data, with one original-target joint history event and unconditional size bounds."
+      }
     }
   }
 }

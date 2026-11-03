@@ -14,6 +14,16 @@ For a frustration-free vector, Theorem~\ref{thm:aklv_frustration_free_entropy}
 gives a uniform entropy bound from the original projector gap lower bound,
 with the inverse-gap logarithm retained.
 
+Theorem~\ref{thm:physical_canonical_ritz_polynomial} also follows the
+actual jointly successful canonical sampled root through literal final
+refinement and compressed Ritz extraction. At fixed local dimension and
+gap, one polynomial controls every vector in its output space, uniformly
+before length, multiplicity, accuracy and random seeds. The corrected
+hard-clipped construction and capped-gap qualifications are stated there;
+no running time is asserted. Corollary~\ref{cor:canonical_ritz_energy}
+retains a single regional energy function on each of these same successful
+original trees, together with the unchanged final Ritz output.
+
 \begin{lemma}[Gap normalization for positive nearest-neighbour interactions]
     \label{thm:chain_positive_nearest_neighbor_gap_upper}
     \lean{TNLean.MPS.AreaLaw.gap_le_one_of_positive_nearest_neighbor_terms}
@@ -50,9 +60,31 @@ with the inverse-gap logarithm retained.
 \input{chapter/ch35_actual_clipped_polynomial_family}
 \input{chapter/ch35_short_region_viable_family}
 \input{chapter/ch35_physical_dg_viability}
+\input{chapter/ch35_independent_truncation_parameters}
+\input{chapter/ch35_sharp_physical_approximation}
+\input{chapter/ch35_physical_dg_reference_space}
+\input{chapter/ch35_flat_ground_ritz}
+\input{chapter/ch35_original_ground_reference}
+\input{chapter/ch35_physical_tree_polynomial}
+\input{chapter/ch35_interleaved_family_trimming}
 \input{chapter/ch35_dg_entropy_parameters}
 \input{chapter/ch35_physical_dg_entropy}
 \input{chapter/ch35_alvv_hard_truncation}
+\input{chapter/ch35_alvv_original_soft_residual}
+\input{chapter/ch35_regional_barrier_residual}
+\input{chapter/ch35_alvv_reverse_soft_residual}
+\input{chapter/ch35_alvv_simultaneous_soft_residuals}
+\input{chapter/ch35_alvv_soft_representation}
+\input{chapter/ch35_alvv_soft_clusters}
+\input{chapter/ch35_alvv_soft_uniform_clusters}
+\input{chapter/ch35_soft_generated_middle}
+\input{chapter/ch35_physical_soft_middle_cluster}
+\input{chapter/ch35_alvv_regional_energy}
+\input{chapter/ch35_alvv_native_regional_energy}
+\input{chapter/ch35_alvv_soft_parent_energy}
+\input{chapter/ch35_soft_terminal_energy}
+\input{chapter/ch35_regional_energy_recursion}
+\input{chapter/ch35_alvv_soft_word_energy}
 \input{chapter/ch35_aklv_two_block_truncation}
 \input{chapter/ch35_aklv_normalization}
 \input{chapter/ch35_aklv_spectral_cluster}
