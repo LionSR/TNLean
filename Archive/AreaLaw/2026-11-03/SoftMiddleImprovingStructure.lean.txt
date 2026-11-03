@@ -1,0 +1,294 @@
+import TNLean.Algebra.TwoWindowSum
+import TNLean.MPS.AreaLaw.FiveRegionHamiltonian
+import TNLean.Circuit.SupportedFunctionalCalculus
+import TNLean.MPS.AreaLaw.PhysicalPolynomialTensorFamily
+import TNLean.MPS.AreaLaw.ALVV.SoftGeneratedMiddleApproximation
+import QICLean.Analysis.ChebyshevWordPower
+
+/-! Private caller helper for the raw soft three-bulk replacement. -/
+
+open Matrix QuantumCircuit
+open scoped BigOperators Kronecker TensorProduct Matrix.Norms.L2Operator
+
+namespace TNLean.MPS.AreaLaw.ALVV
+
+/-- Additive identity for replacing three bulks and then the middle one.
+Auxiliary to ALVV, arXiv:1602.08828v2, Proposition 5.7, lines 1311–1333. -/
+private theorem actual_three_bulk_replacement_sum {M : Type*} [AddCommGroup M]
+    (L a b ell : ℕ) (hell : 1 ≤ ell) (hab : a + 2 * ell ≤ b)
+    (hb : b + 2 * ell ≤ L - 1) (h : Fin (L - 1) → M)
+    (F shifts : Fin 5 → M) (Z : M) :
+    let k : Fin 6 → ℕ := ![0, a + 1, a + 2 * ell, b + 1, b + 2 * ell, L]
+    let A : Fin 5 → M := fun j ↦ ∑ i ∈ Finset.univ.filter
+      (fun i : Fin (L - 1) ↦ k j.castSucc ≤ i.val ∧ i.val + 1 < k j.succ), h i
+    let Y := ∑ i ∈ Finset.univ.filter
+      (fun i : Fin (L - 1) ↦ i.val + 1 ∈
+        ({a + 1, a + 2 * ell, b + 1, b + 2 * ell} : Finset ℕ)), h i
+    let WL : Fin (2 * ell) → M := fun r ↦ h ⟨a + r.val, by omega⟩
+    let WR : Fin (2 * ell) → M := fun r ↦ h ⟨b + r.val, by omega⟩
+    let PL := F 0 - ∑ j, shifts j
+    let G := (∑ j, ((if j ∈ ({0, 2, 4} : Finset (Fin 5)) then F j else A j) -
+      shifts j)) + Y
+    (∑ i, Sum.elim (Sum.elim WL WR) ![PL, Z, F 4] i) = G - F 2 + Z := by
+  classical
+  intro k A Y WL WR PL G
+  have htotal : (∑ i, h i) = (∑ j, A j) + Y := by
+    have hh := Finset.sum_five_internal_regions_add_crossings
+      (A := M) (L := L) (k1 := a + 1) (k2 := a + 2 * ell)
+      (k3 := b + 1) (k4 := b + 2 * ell)
+      (by omega) (by omega) (by omega) h
+    rw [Fin.sum_univ_five]
+    change (∑ i, h i) =
+      (∑ i ∈ Finset.univ.filter
+        (fun i : Fin (L - 1) ↦ 0 ≤ i.val ∧ i.val + 1 < a + 1), h i) +
+      (∑ i ∈ Finset.univ.filter
+        (fun i : Fin (L - 1) ↦ a + 1 ≤ i.val ∧ i.val + 1 < a + 2 * ell), h i) +
+      (∑ i ∈ Finset.univ.filter
+        (fun i : Fin (L - 1) ↦ a + 2 * ell ≤ i.val ∧ i.val + 1 < b + 1), h i) +
+      (∑ i ∈ Finset.univ.filter
+        (fun i : Fin (L - 1) ↦ b + 1 ≤ i.val ∧ i.val + 1 < b + 2 * ell), h i) +
+      (∑ i ∈ Finset.univ.filter
+        (fun i : Fin (L - 1) ↦ b + 2 * ell ≤ i.val ∧ i.val + 1 < L), h i) +
+      (∑ i ∈ Finset.univ.filter
+        (fun i : Fin (L - 1) ↦ i.val + 1 ∈
+          ({a + 1, a + 2 * ell, b + 1, b + 2 * ell} : Finset ℕ)), h i)
+    exact hh
+  have hwin : (∑ i, h i) = A 0 + (∑ r, WL r) + A 2 + (∑ r, WR r) + A 4 :=
+    Fin.sum_univ_eq_actual_two_window_alphabet L a b ell hab hb h
+  have hbulk : (∑ r, WL r) + (∑ r, WR r) = A 1 + A 3 + Y := by
+    apply add_left_cancel (a := A 0 + A 2 + A 4)
+    calc
+      _ = A 0 + (∑ r, WL r) + A 2 + (∑ r, WR r) + A 4 := by abel
+      _ = (∑ j, A j) + Y := hwin.symm.trans htotal
+      _ = _ := by rw [Fin.sum_univ_five]; abel
+  have hG : G = F 0 + A 1 + F 2 + A 3 + F 4 - (∑ j, shifts j) + Y := by
+    simp only [G, Finset.sum_sub_distrib, Fin.sum_univ_five]
+    simp
+  simp only [Fintype.sum_sumElim, Fin.sum_univ_three]
+  change ((∑ r, WL r) + (∑ r, WR r)) + (PL + Z + F 4) = G - F 2 + Z
+  rw [hbulk, hG]
+  dsimp only [PL]
+  abel
+
+
+/-- Private common polynomial family for the same raw soft middle.
+The actual native tensors and the exact represented-matrix identity are
+intermediate data supplied by the physical constructor. ALVV,
+arXiv:1602.08828v2, Proposition 5.7, lines 1311–1333. -/
+private theorem exists_soft_middle_polynomial_family
+    {L q ell a b B degree : ℕ}
+    (hell : 1 ≤ ell) (hab : a + 2 * ell ≤ b) (hb : b + 2 * ell ≤ L - 1)
+    (hq : 2 ≤ q) (hdegree : 1 ≤ degree)
+    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
+    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+      (h i) (interval L i.val (i.val + 2)))
+    (e p : Fin 5 → ℝ) (t : ℝ) (m : ℕ)
+    (Bhat : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
+    (Acore : Fin ((b + 1) - (a + 2 * ell)) → MPOTensor q B)
+    (C0 : Matrix (Fin B) (Fin B) ℂ) :
+    let k : Fin 6 → ℕ := ![0, a + 1, a + 2 * ell, b + 1, b + 2 * ell, L]
+    let Hreg := fun j : Fin 5 ↦ ∑ i ∈ Finset.univ.filter
+      (fun i : Fin (L - 1) ↦ k j.castSucc ≤ i.val ∧ i.val + 1 < k j.succ), h i
+    let Y := ∑ i ∈ Finset.univ.filter
+      (fun i : Fin (L - 1) ↦ i.val + 1 ∈
+        ({a + 1, a + 2 * ell, b + 1, b + 2 * ell} : Finset ℕ)), h i
+    let F := fun j : Fin 5 ↦ (p j : ℂ) • 1 +
+      cfc (Real.softTruncation t m) (Hreg j - (p j : ℂ) • 1)
+    let G := (∑ j, ((if j ∈ ({0, 2, 4} : Finset (Fin 5)) then F j else Hreg j) -
+      (e j : ℂ) • 1)) + Y
+    let Ksites := interval L (a + 2 * ell) (b + 1)
+    let eK := intervalShiftOrderIso
+      (show a + 2 * ell ≤ b + 1 by omega) (show b + 1 ≤ L by omega)
+    let Zphys := QuantumCircuit.embedOp (Subtype.val : Ksites → Fin L)
+      (QuantumCircuit.embedOp eK (MPOTensor.traceChainOperator Acore C0))
+    Bhat = G - F 2 + Zphys →
+    let J := interval L (a + ell) (b + ell + 1)
+    let eJ := intervalShiftOrderIso
+      (show a + ell ≤ b + ell + 1 by omega) (show b + ell + 1 ≤ L by omega)
+    let D := (q * degree) ^ (18 * ell + 2 * (degree / ell))
+    let beta := fun _ : Fin L ↦ Fin q
+    let tau := (FiniteProduct.splitEquiv beta J).trans (Equiv.prodComm _ _)
+    let U := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ tau
+    let Phi := ((EuclideanSpace.basisFun (FiniteProduct.Configuration beta Jᶜ) ℂ).tensorProduct
+      (EuclideanSpace.basisFun (FiniteProduct.Configuration beta J) ℂ)).repr
+    let T : EuclideanSpace ℂ (Fin L → Fin q) ≃ₗᵢ[ℂ]
+        (EuclideanSpace ℂ (FiniteProduct.Configuration beta Jᶜ) ⊗[ℂ]
+          EuclideanSpace ℂ (FiniteProduct.Configuration beta J)) := U.trans Phi.symm
+    let Tm := T.trans (TensorProduct.commIsometry ℂ
+      (EuclideanSpace ℂ (FiniteProduct.Configuration beta Jᶜ))
+      (EuclideanSpace ℂ (FiniteProduct.Configuration beta J)))
+    ∃ (N : ℕ) (W : Fin N → Matrix (FiniteProduct.Configuration beta J) (FiniteProduct.Configuration beta J) ℂ),
+      N ≤ D ^ 2 ∧
+      (∀ i, IsOpenMPS ((b + ell + 1) - (a + ell)) (q * q)
+        ((max 1 B) ^ (2 * degree)) (fun w ↦ W i
+          (fun v ↦ ((finProdFinEquiv (m := q) (n := q)).symm (w (eJ.symm v))).1)
+          (fun v ↦ ((finProdFinEquiv (m := q) (n := q)).symm (w (eJ.symm v))).2))) ∧
+      (∀ Q : Polynomial ℂ, Q.natDegree ≤ degree →
+        ∃ M : Fin N → Matrix (FiniteProduct.Configuration beta Jᶜ) (FiniteProduct.Configuration beta Jᶜ) ℂ,
+          Polynomial.aeval Bhat Q = (∑ i, M i ⊗ₖ W i).submatrix tau tau ∧
+          Tm.toContinuousLinearEquiv.toContinuousLinearMap ∘L
+              Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q) (Polynomial.aeval Bhat Q) ∘L
+              Tm.symm.toContinuousLinearEquiv.toContinuousLinearMap =
+            ∑ i, TensorProduct.mapL (Matrix.toEuclideanCLM (𝕜 := ℂ)
+              (n := FiniteProduct.Configuration beta J) (W i))
+              (Matrix.toEuclideanCLM (𝕜 := ℂ)
+                (n := FiniteProduct.Configuration beta Jᶜ) (M i))) := by
+  classical
+  intro k Hreg Y F G Ksites eK Zphys hBhat J eJ D beta tau U Phi T Tm
+  let WL : Fin (2 * ell) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ :=
+    fun r ↦ h ⟨a + r.val, by omega⟩
+  let WR : Fin (2 * ell) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ :=
+    fun r ↦ h ⟨b + r.val, by omega⟩
+  have hWL (r : Fin (2 * ell)) : Entropy.IsSupportedOn (WL r)
+      (interval L (a + r.val) (a + r.val + 2)) := hs ⟨a + r.val, by omega⟩
+  have hWR (r : Fin (2 * ell)) : Entropy.IsSupportedOn (WR r)
+      (interval L (b + r.val) (b + r.val + 2)) := hs ⟨b + r.val, by omega⟩
+  have hfamily :=
+    exists_common_physical_aeval_mpo_middleFirst_family_fin
+      (L := L) (q := q) (ell := ell) (a := a) (b := b) (B := B) (k := degree)
+      WL WR hWL hWR hab hb hell hq hdegree Acore C0
+  obtain ⟨N, W, hN, hW, hdecomp⟩ := hfamily
+  let R := fun j : Fin 5 ↦ interval L (k j.castSucc) (k j.succ)
+  have hFmem (j : Fin 5) : F j ∈ supportedOperators q (R j : Set (Fin L)) := by
+    let V := supportedOperators q (R j : Set (Fin L))
+    have hAmem : Hreg j ∈ V := mem_supportedOperators_of_isSupportedOn
+      (isSupportedOn_sum_internal_bonds L q (k j.castSucc) (k j.succ) h hs)
+    have hp : (p j : ℂ) • (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) ∈ V :=
+      V.smul_mem _ (one_mem_supportedOperators _)
+    exact V.add_mem hp (cfc_mem_supportedOperators _ (V.sub_mem hAmem hp))
+  let PL := F 0 - ((∑ j, e j : ℝ) : ℂ) • 1
+  let PR := F 4
+  have hPL : Entropy.IsSupportedOn PL (interval L 0 (a + 1)) :=
+    isSupportedOn_of_mem_supportedOperators
+      (Submodule.sub_mem _ (hFmem 0)
+        (Submodule.smul_mem _ _ (one_mem_supportedOperators _)))
+  have hPR : Entropy.IsSupportedOn PR (interval L (b + 2 * ell) L) :=
+    isSupportedOn_of_mem_supportedOperators (hFmem 4)
+  have hsumc : (∑ j, (e j : ℂ) •
+      (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)) = ((∑ j, e j : ℝ) : ℂ) • 1 := by
+    simp only [Complex.coe_smul, ← Finset.sum_smul]
+  have halphabet : (∑ i, Sum.elim (Sum.elim WL WR) ![PL, Zphys, PR] i) = Bhat := by
+    have hh := actual_three_bulk_replacement_sum L a b ell hell hab hb h F
+      (fun j ↦ (e j : ℂ) • 1) Zphys
+    have hh' : (∑ i, Sum.elim (Sum.elim WL WR) ![PL, Zphys, PR] i) =
+        G - F 2 + Zphys := by
+      simpa only [hsumc] using hh
+    exact hh'.trans hBhat.symm
+  have hpoly : ∀ Q : Polynomial ℂ, Q.natDegree ≤ degree →
+      ∃ M : Fin N → Matrix (FiniteProduct.Configuration beta Jᶜ)
+          (FiniteProduct.Configuration beta Jᶜ) ℂ,
+        Polynomial.aeval Bhat Q = (∑ i, M i ⊗ₖ W i).submatrix tau tau ∧
+        Tm.toContinuousLinearEquiv.toContinuousLinearMap ∘L
+            Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)
+              (Polynomial.aeval Bhat Q) ∘L
+            Tm.symm.toContinuousLinearEquiv.toContinuousLinearMap =
+          ∑ i, TensorProduct.mapL
+            (Matrix.toEuclideanCLM (𝕜 := ℂ) (n := FiniteProduct.Configuration beta J) (W i))
+            (Matrix.toEuclideanCLM (𝕜 := ℂ) (n := FiniteProduct.Configuration beta Jᶜ) (M i)) := by
+    rw [← halphabet]
+    intro Q hQ
+    have hd := hdecomp PL PR hPL hPR Q hQ
+    exact ⟨hd.choose, hd.choose_spec.1, hd.choose_spec.2.2⟩
+  exact ⟨N, W, hN, hW, hpoly⟩
+
+/-- Private physical structural composition for the same raw soft middle.
+The cluster and upper bound are intermediate data; the physical caller derives
+these separately. ALVV, arXiv:1602.08828v2, Proposition 5.7, lines 1311–1333,
+and Theorem `thm:Cheby-AGSP`, lines 809–853. -/
+private theorem exists_soft_middle_structural_family
+    {L q ell a b B degree : ℕ} {iota : Type*} [Fintype iota]
+    (hell : 1 ≤ ell) (hab : a + 2 * ell ≤ b) (hb : b + 2 * ell ≤ L - 1)
+    (hq : 2 ≤ q) (hdegree : 1 ≤ degree)
+    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
+    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+      (h i) (interval L i.val (i.val + 2)))
+    (e p : Fin 5 → ℝ) (t : ℝ) (m : ℕ)
+    (Bhat : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
+    (Acore : Fin ((b + 1) - (a + 2 * ell)) → MPOTensor q B)
+    (C0 : Matrix (Fin B) (Fin B) ℂ) :
+    let k : Fin 6 → ℕ := ![0, a + 1, a + 2 * ell, b + 1, b + 2 * ell, L]
+    let Hreg := fun j : Fin 5 ↦ ∑ i ∈ Finset.univ.filter
+      (fun i : Fin (L - 1) ↦ k j.castSucc ≤ i.val ∧ i.val + 1 < k j.succ), h i
+    let Y := ∑ i ∈ Finset.univ.filter
+      (fun i : Fin (L - 1) ↦ i.val + 1 ∈
+        ({a + 1, a + 2 * ell, b + 1, b + 2 * ell} : Finset ℕ)), h i
+    let F := fun j : Fin 5 ↦ (p j : ℂ) • 1 +
+      cfc (Real.softTruncation t m) (Hreg j - (p j : ℂ) • 1)
+    let G := (∑ j, ((if j ∈ ({0, 2, 4} : Finset (Fin 5)) then F j else Hreg j) -
+      (e j : ℂ) • 1)) + Y
+    let Ksites := interval L (a + 2 * ell) (b + 1)
+    let eK := intervalShiftOrderIso
+      (show a + 2 * ell ≤ b + 1 by omega) (show b + 1 ≤ L by omega)
+    let Zphys := QuantumCircuit.embedOp (Subtype.val : Ksites → Fin L)
+      (QuantumCircuit.embedOp eK (MPOTensor.traceChainOperator Acore C0))
+    Bhat = G - F 2 + Zphys →
+    let J := interval L (a + ell) (b + ell + 1)
+    let eJ := intervalShiftOrderIso
+      (show a + ell ≤ b + ell + 1 by omega) (show b + ell + 1 ≤ L by omega)
+    let D := (q * degree) ^ (18 * ell + 2 * (degree / ell))
+    let beta := fun _ : Fin L ↦ Fin q
+    let tau := (FiniteProduct.splitEquiv beta J).trans (Equiv.prodComm _ _)
+    let U := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ tau
+    let Phi := ((EuclideanSpace.basisFun (FiniteProduct.Configuration beta Jᶜ) ℂ).tensorProduct
+      (EuclideanSpace.basisFun (FiniteProduct.Configuration beta J) ℂ)).repr
+    let T : EuclideanSpace ℂ (Fin L → Fin q) ≃ₗᵢ[ℂ]
+        (EuclideanSpace ℂ (FiniteProduct.Configuration beta Jᶜ) ⊗[ℂ]
+          EuclideanSpace ℂ (FiniteProduct.Configuration beta J)) := U.trans Phi.symm
+    let Tm := T.trans (TensorProduct.commIsometry ℂ
+      (EuclideanSpace ℂ (FiniteProduct.Configuration beta Jᶜ))
+      (EuclideanSpace ℂ (FiniteProduct.Configuration beta J)))
+    ∃ (N : ℕ) (W : Fin N → Matrix (FiniteProduct.Configuration beta J) (FiniteProduct.Configuration beta J) ℂ),
+      N ≤ D ^ 2 ∧
+      (∀ i, IsOpenMPS ((b + ell + 1) - (a + ell)) (q * q)
+        ((max 1 B) ^ (2 * degree)) (fun w ↦ W i
+          (fun v ↦ ((finProdFinEquiv (m := q) (n := q)).symm (w (eJ.symm v))).1)
+          (fun v ↦ ((finProdFinEquiv (m := q) (n := q)).symm (w (eJ.symm v))).2))) ∧
+      (∀ Q : Polynomial ℂ, Q.natDegree ≤ degree →
+        ∃ M : Fin N → Matrix (FiniteProduct.Configuration beta Jᶜ) (FiniteProduct.Configuration beta Jᶜ) ℂ,
+          Polynomial.aeval Bhat Q = (∑ i, M i ⊗ₖ W i).submatrix tau tau ∧
+          Tm.toContinuousLinearEquiv.toContinuousLinearMap ∘L
+              Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q) (Polynomial.aeval Bhat Q) ∘L
+              Tm.symm.toContinuousLinearEquiv.toContinuousLinearMap =
+            ∑ i, TensorProduct.mapL (Matrix.toEuclideanCLM (𝕜 := ℂ)
+              (n := FiniteProduct.Configuration beta J) (W i))
+              (Matrix.toEuclideanCLM (𝕜 := ℂ)
+                (n := FiniteProduct.Configuration beta Jᶜ) (M i))) ∧
+      ∀ (hBhat : Bhat.IsHermitian)
+        (v : OrthonormalBasis iota ℂ (EuclideanSpace ℂ (Fin L → Fin q))) (lam : iota → ℝ),
+        (∀ i, Bhat.toEuclideanLin (v i) = (lam i : ℂ) • v i) →
+        ∀ eta0 eta1 upper : ℝ, eta0 < eta1 → eta1 ≤ upper →
+        Submodule.spectralSpanLE v lam eta0 = Submodule.spectralSpanLE v lam eta1 →
+        ‖Bhat‖ ≤ upper →
+        let A := fun i : Fin N ↦ Matrix.toEuclideanCLM (𝕜 := ℂ)
+              (n := FiniteProduct.Configuration beta J) (W i)
+        let Target := (Submodule.spectralSpanLE v lam eta0).map Tm.toLinearEquiv.toLinearMap
+        let Delta := (2 * Real.exp
+          (-2 * (degree : ℝ) * Real.sqrt ((eta1 - eta0) / (upper - eta0)))) ^ 2
+        ∃ (K : (EuclideanSpace ℂ (FiniteProduct.Configuration beta J) ⊗[ℂ] EuclideanSpace ℂ (FiniteProduct.Configuration beta Jᶜ)) →L[ℂ]
+            (EuclideanSpace ℂ (FiniteProduct.Configuration beta J) ⊗[ℂ] EuclideanSpace ℂ (FiniteProduct.Configuration beta Jᶜ)))
+          (Rop : Fin N → EuclideanSpace ℂ (FiniteProduct.Configuration beta Jᶜ) →L[ℂ] EuclideanSpace ℂ (FiniteProduct.Configuration beta Jᶜ)),
+          K = ∑ i, TensorProduct.mapL (A i) (Rop i) ∧
+          (∀ x ∈ Target, K x ∈ Target) ∧ (∀ x ∈ Targetᗮ, K x ∈ Targetᗮ) ∧
+          (∀ x ∈ Target, ‖x‖ ≤ ‖K x‖) ∧
+          (∀ x ∈ Targetᗮ, ‖K x‖ ^ 2 ≤ Delta * ‖x‖ ^ 2) ∧
+          ∀ (r : ℕ) (S : Submodule ℂ (EuclideanSpace ℂ (FiniteProduct.Configuration beta J))) (delta : ℝ),
+            Submodule.IsViable delta S Target → delta < 1 →
+            let grow := ⨆ w : Fin r → Fin N,
+              S.map ((List.ofFn (fun j ↦ A (w j))).prod : _ →ₗ[ℂ] _)
+            Module.finrank ℂ grow ≤ (D ^ 2) ^ r * Module.finrank ℂ S ∧
+              Submodule.IsViable (Delta ^ r / (1 - delta) ^ 2) grow Target := by
+  classical
+  intro k Hreg Y F G Ksites eK Zphys hBhat J eJ D beta tau U Phi T Tm
+  have hpackage := exists_soft_middle_polynomial_family
+    hell hab hb hq hdegree h hs e p t m Bhat Acore C0 hBhat
+  obtain ⟨N, W, hN, hW, hpoly⟩ := hpackage
+  refine ⟨N, W, hN, hW, hpoly, ?_⟩
+  intro hHerm v lam hv eta0 eta1 upper hsep hendpoint hcluster hnorm
+  exact Matrix.exists_chebyshev_tensor_family_of_actual_cluster
+    Bhat hHerm v lam hv W Tm (by
+      intro Q hQ
+      obtain ⟨M, _hmatrix, hconj⟩ := hpoly Q hQ
+      exact ⟨M, hconj⟩)
+    (D ^ 2) hN eta0 eta1 upper hsep hendpoint hcluster hnorm
+
+end TNLean.MPS.AreaLaw.ALVV
