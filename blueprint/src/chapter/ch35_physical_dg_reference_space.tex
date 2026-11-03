@@ -932,3 +932,31 @@ gives the recorded-vector rank bound.
     Lemma~\ref{lem:physical_dg_automatic_refinement} to that root.
     The output is the Ritz space of its own literal refined space.
 \end{proof}
+
+\begin{lemma}[Borel actual adjacent-interval merge and its true viability event]
+    \label{lem:borel_actual_adjacent_interval_merge}
+    \lean{TNLean.MPS.AreaLaw.measurable_projectionMatrix_adjacentIntervalMerge,
+        TNLean.MPS.AreaLaw.measurableSet_isViable_adjacentIntervalMerge}
+    \leanok
+    Fix $p\le k\le r$ and an arbitrary global target
+    $G\subseteq\mathcal H_{[0,N)}$. Suppose that the actual orthogonal
+    projections of constructed child spaces
+    $S_1(x)\subseteq\mathcal H_{[p,k)}$ and
+    $S_2(x)\subseteq\mathcal H_{[k,r)}$ are Borel in $x$. Then the actual
+    adjacent-interval merge has a Borel orthogonal projection in the parent
+    configuration space. For every real $\delta$, the event that this same
+    parent is $\delta$-viable for $G$ is Borel. Its target is expressed in
+    the original parent/exterior coordinates, with the whole complement of
+    $[p,r)$ retained. Empty child intervals and zero-dimensional spaces are
+    included. This is a measurability auxiliary to the tensoring step in
+    \cite[lines 500--523]{Arad2016RigorousRG}, not an adaptive probability
+    assertion.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:actual_adjacent_interval_merge}
+    The actual regional tensor merge has a Borel projection, and the fixed
+    union-configuration equivalence relabels this projection continuously.
+    The tensor-coordinate projection test then makes the original viability
+    event Borel for the same fixed global target. No measurable comparison
+    target or separately chosen measurable hull is used.
+\end{proof}
