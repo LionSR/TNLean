@@ -11726,3 +11726,18 @@ removed after the dependency audit exposed it.
 - **Boundary:** A zero local dimension gives no nonzero vector only on a
   positive-length chain; the empty-chain configuration space is a singleton.
   The positive-dimension statements avoid conflating these two cases.
+
+### Distinct cut budgets — generalize the actual sequential product (2026-11-03)
+
+- **Promotion:** The normalized sequential argument now accepts a rank for
+  every cut and the sum of their actual missing marginal masses. The existing
+  public uniform theorem specializes this same construction at constant rank;
+  its signature is unchanged and its separate normalization proof is removed.
+- **Reuse:** The lower arbitrary-projection rank and squared-error estimates
+  are reused. The physical designated-cut theorem converts actual fixed-cut
+  approximants to marginal masses, then applies the one normalized product.
+  It does not identify independently selected approximation vectors.
+- **Decision:** The designated cut receives constant-fraction accuracy and
+  the other cuts share a length-dependent accuracy. The two natural rank
+  factors are ordered by the same proved monotone profile before the cut and
+  vector are specified. Boundary ranks use the existing exact rank-one bounds.

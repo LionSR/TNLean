@@ -4,19 +4,18 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.Basic
-import TNLean.MPS.AreaLaw.SequentialTruncation
-import QICLean.Analysis.UnitNormalizationDistance
+import TNLean.MPS.AreaLaw.NormalizedVariableTruncation
 import QICLean.Analysis.ViableSubspaceEntropy
 import QICLean.Channel.MaximalOverlap
 
 /-!
 # One normalized sequential MPS from actual marginal tails
 
-The existing regional overlap-to-tail and sequential approximation proofs
-are moved unchanged from PhysicalDGGlobalApproximation. They require only
-actual vectors, their marginal spectra and missing-mass bounds. No spectral
-gap or independent area law is used. The same helpers can therefore serve
-both the gapped and buffered low-energy approximations.
+The regional overlap-to-tail estimate uses the actual vectors and marginal
+spectra. The uniform normalized approximation is an active specialization
+of the sequential construction with variable cut ranks. No spectral gap
+or independent area law is used. The same helpers therefore serve both
+the gapped and buffered low-energy approximations.
 
 The construction projects onto the leading marginal eigenspaces in sequence
 and normalizes the one resulting vector. It supports ALVV,
@@ -98,31 +97,9 @@ theorem exists_unit_mps_of_uniform_prefix_mass
       _ ≤ ((L : ℝ) + 1) * (delta / (8 * ((L : ℝ) + 1))) :=
         mul_le_mul_of_nonneg_right hcard (by positivity)
       _ = delta / 8 := by field_simp
-  let P : ∀ k : ℕ, LeftBlockMatrix L q k := fun k ↦
-    (Entropy.regionState_isHermitian (n := fun _ : Fin L ↦ q)
-      (leftBlock L k) ψ).leadingEigenprojection D
-  let Φ0 := sequentialTruncation P (L - 1) ψ
-  have hmps0 : IsOpenMPS L q D (fun x ↦ Φ0 x) :=
-    (isOpenMPS_sequentialTruncation_leadingEigenprojection ψ hψ D).1
-  have herr : ‖Φ0 - ψ‖ ^ 2 ≤ delta / 8 :=
-    (norm_sequentialTruncation_leadingEigenprojection_sub_sq_le ψ hψ D).trans hsum
-  have hdistlt : ‖Φ0 - ψ‖ < 1 := by nlinarith only [herr, hdelta1, norm_nonneg (Φ0 - ψ)]
-  have hpos : 0 < ‖Φ0‖ := by
-    have hn := norm_sub_norm_le ψ Φ0
-    rw [hψ, norm_sub_rev] at hn
-    linarith only [hn, hdistlt]
-  let Φ : EuclideanSpace ℂ (Fin L → Fin q) := (‖Φ0‖ : ℂ)⁻¹ • Φ0
-  have hΦ : ‖Φ‖ = 1 := norm_smul_inv_norm (𝕜 := ℂ) (norm_pos_iff.mp hpos)
-  have hdist : ‖Φ - ψ‖ ≤ 2 * ‖Φ0 - ψ‖ :=
-    norm_inv_norm_smul_sub_le_two_mul hψ (norm_pos_iff.mp hpos)
-  have hsq : ‖Φ - ψ‖ ^ 2 ≤ delta / 2 := by
-    have hs := pow_le_pow_left₀ (norm_nonneg _) hdist 2
-    nlinarith only [hs, herr]
-  have hoverlap : 1 - delta ≤ ‖⟪Φ, ψ⟫_ℂ‖ := by
-    have heq := norm_sub_sq (𝕜 := ℂ) Φ ψ
-    simp only [hΦ, hψ, one_pow, RCLike.re_to_complex] at heq
-    have hre := Complex.re_le_norm (⟪Φ, ψ⟫_ℂ)
-    nlinarith only [heq, hre, hsq, hdelta]
-  exact ⟨Φ, hΦ, hmps0.smul (‖Φ0‖ : ℂ)⁻¹, hoverlap, hsq⟩
+  obtain ⟨_hpos, hΦ, hrank, hoverlap, hsq⟩ :=
+    normalized_sequentialTruncation_of_prefix_mass ψ hψ (fun _ ↦ D)
+      delta hdelta hdelta1 hsum
+  exact ⟨_, hΦ, isOpenMPS_of_internal_cutMatrix_rank_le _ hrank, hoverlap.le, hsq⟩
 
 end TNLean.MPS.AreaLaw

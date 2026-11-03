@@ -1,0 +1,146 @@
+\section{One sharp designated-cut and global low-energy approximation}
+
+The fixed-cut and global bounds in
+\cite[Theorem~thm:al-ld, lines 1096--1105]{Arad2016RigorousRG}
+refer to one approximation vector. To retain both, use a distinct
+truncation rank at the designated cut. The error assigned to that cut
+is a constant fraction of the requested error; the other cuts share a
+budget inversely proportional to the chain length.
+
+\begin{lemma}[Scaling the cut coefficient matrix]
+    \label{lem:cut_matrix_scalar}
+    \lean{TNLean.MPS.AreaLaw.cutMatrix_smul}
+    \leanok
+    For any chain vector $\psi$, complex scalar $c$ and cut $k$,
+    the cut coefficient matrices satisfy $C_k(c\psi)=cC_k(\psi)$.
+\end{lemma}
+\begin{proof}\leanok
+    The identity holds at each pair of left and right configurations.
+\end{proof}
+
+\begin{lemma}[Normalized sequential truncation with variable ranks]
+    \label{lem:variable_normalized_sequential}
+    \lean{TNLean.MPS.AreaLaw.normalized_sequentialTruncation_of_prefix_mass}
+    \leanok
+    Let $\psi$ be a unit chain vector, let $D_k$ be a natural rank
+    assigned to each prefix, and let $0<\delta\le1$.
+    Write $P_k$ for the actual projection onto the leading $D_k$
+    eigenvectors of its original prefix marginal $\rho_k$.
+    If
+    \[
+       \sum_{k=1}^{L-1}\bigl(1-S_{D_k}(\rho_k)\bigr)\le\delta/8,
+    \]
+    then the reverse-prefix projection product $\Phi_0$ is nonzero.
+    Its normalization $\Phi=\Phi_0/\|\Phi_0\|$ satisfies
+    \[
+      \operatorname{SR}_k(\Phi)\le D_k\quad(0<k<L),\qquad
+      |\langle\Phi,\psi\rangle|>1-\delta,\qquad
+      \|\Phi-\psi\|^2\le\delta/2.
+    \]
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:cut_matrix_scalar}
+    The existing sequential projection estimate bounds
+    $\|\Phi_0-\psi\|^2$ by the actual missing marginal masses,
+    hence by $\delta/8$. The product has cut rank at most
+    $\operatorname{rank}P_k\le D_k$ at each internal cut.
+    Its distance from the unit vector is less than one, so it is nonzero.
+    Normalization increases the distance by a factor at most two and,
+    being multiplication by a nonzero scalar, preserves every cut rank.
+    The unit-vector distance identity gives the strict overlap.
+\end{proof}
+
+\begin{lemma}[A designated marginal-mass budget]
+    \label{lem:designated_sequential_mass}
+    \lean{TNLean.MPS.AreaLaw.exists_unit_mps_of_designated_prefix_mass}
+    \leanok
+    Let $1\le D_s\le D_g$ and fix a cut $k_0$.
+    Suppose the missing leading $D_s$-eigenvalue mass at $k_0$, when
+    internal, is at most $\delta/32$, while every other internal cut
+    has missing leading $D_g$-eigenvalue mass at most
+    $\delta/[32(L+1)]$.
+    Then there is one unit open-boundary MPS $\Phi$ of bond dimension
+    at most $D_g$, with designated-cut rank at most $D_s$, strict
+    overlap greater than $1-\delta$, and squared distance at most
+    $\delta/2$ from the original unit vector.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:variable_normalized_sequential}
+    Set $D_k=D_s$ at $k_0$ and $D_k=D_g$ elsewhere. The sum of the
+    actual missing masses is at most
+    $\delta/32+(L+1)\delta/[32(L+1)]=\delta/16\le\delta/8$.
+    Apply the variable-rank normalized construction.
+    Every internal cut has rank at most $D_g$, so the exact cut-rank
+    characterization gives the global MPS representation. A boundary
+    cut has exact rank at most one, hence at most $D_s$; empty and
+    one-site chains are included.
+\end{proof}
+
+\begin{theorem}[One low-energy approximant with both sharp rank bounds]
+    \label{thm:ld_sharp_single_witness}
+    \lean{TNLean.MPS.AreaLaw.exists_fixed_bandwidth_low_energy_designated_isOpenMPS_approximation}
+    \leanok
+    Fix a bandwidth $\eta>0$. There is $K_\eta>0$, chosen before
+    the physical chain, local dimension and deficit, with the following
+    property. Let $q>0$, let $H$ be the actual sum of supported
+    positive-contraction nearest-neighbour terms, and put
+    \[
+       \lambda_0=\min\sigma(H),\quad
+       G(c)=\mathbf1_{(-\infty,\lambda_0+c]}(H)\mathcal H,\quad
+       r_\eta=\dim G(\eta).
+    \]
+    For $v>0$ and $0<\delta\le1$, set
+    \begin{align*}
+       g&=\min\{\min(v,\eta/2)/6,1\},&
+       u&=1+\log q+\log(1/g),\\
+       a&=16+\log(1/g)+\log(128/\delta),&
+       b&=16+\log(1/g)+\log(128(L+1)/\delta),\\
+       F(x)&=\left(u^3/g+g^{-1/4}x^{3/4}u\right)(1+\log x).
+    \end{align*}
+    There are integers $1\le B_s\le B_g$, selected before the
+    designated cut and vector, such that
+    \[
+       \log B_s\le K_\eta F(a),\qquad
+       \log B_g\le K_\eta F(b).
+    \]
+    For every designated cut $k_0$ and every unit
+    $\psi\in G(\eta-v)$, there is one unit vector $\Phi$ with
+    \[
+       \operatorname{SR}_{k_0}(\Phi)\le r_\eta B_s,\qquad
+       \Phi\text{ is an open-boundary MPS of bond dimension at most }r_\eta B_g,
+    \]
+    $|\langle\Phi,\psi\rangle|>1-\delta$ and
+    $\|\Phi-\psi\|^2\le\delta/2$.
+    No spectral gap, original-band invariance or supplied improving
+    family is assumed.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{lem:ld_sharp_strict_cut_positive_dimension,
+      lem:designated_sequential_mass,lem:regional_overlap_to_missing_mass}
+    Let $K$ be the existing sharp fixed-cut coefficient. Round
+    $e^{KF(a)}$ and $e^{KF(b)}$ upward once, before the cut and vector
+    are specified. Since $a\le b$ and $F$ is increasing on $[1,\infty)$,
+    the rounded integers satisfy $B_s\le B_g$.
+    Their logarithms are at most $KF(a)+1$ and $KF(b)+1$; each
+    profile is at least one, so increase the coefficient to $K+1$.
+    The original positive-band spectral space contains a ground
+    eigenvector, hence $r_\eta\ge1$.
+
+    At the designated cut, apply the actual fixed-cut approximation at
+    accuracy $\delta/64$. At every other internal cut, use accuracy
+    $\delta/[64(L+1)]$. The fixed-cut theorem in positive local dimension
+    has logarithmic accuracy variable $16+\log(1/g)+\log(2/\epsilon)$,
+    giving exactly $a$ and $b$. The overlap-to-marginal-mass estimate
+    gives the two missing-mass bounds of
+    Lemma~\ref{lem:designated_sequential_mass}. Its one normalized
+    projection product is the required vector. Scalar local spaces,
+    endpoint cuts and short chains require no further physical premise.
+\end{proof}
+
+For $0<v\le\eta$, the proved capped-width estimates give
+$1/g\le\max(12,\eta)/v$ and
+$\log(1/g)\le\log\max(12,\eta)+\log(1+1/v)$.
+Thus both bounds retain the source's fourth-root inverse-deficit and
+three-quarter-power logarithmic-accuracy terms, with explicit logarithmic
+regularizations. For $L\ge2$, the substitution $v=\mu/\log L$
+gives its low-density variables. No running-time assertion is made.

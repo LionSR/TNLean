@@ -108,18 +108,27 @@ The logarithmic bond bound has the displayed form with
 $a=16+\log(1/g)+\log(16(L+1)/\delta)$ and coefficient exactly one
 on $\log\dim G(\eta_{\rm LD})$.
 
-\paragraph{Strict overlap and separate approximation conclusions.}
+\paragraph{Strict overlap and a single approximation vector.}
 For local dimension at least two, apply the same proved constructions at
 half the requested accuracy. This gives overlap strictly greater than
 $1-\delta$, as printed, without a new physical hypothesis. The fixed-cut
 accuracy variable becomes $16+\log(1/g)+\log(2/\delta)$ and the global
 one becomes $16+\log(1/g)+\log(32(L+1)/\delta)$, retaining the same
 three-quarter power and the same fixed-bandwidth coefficients.
-The fixed-cut and global statements currently supply separate witnesses.
-If the source's repeated notation for the approximation is read as one
-vector satisfying both the sharper designated-cut bound and all global
-bonds, that joint conclusion requires nonuniform sequential rank budgets.
-It is not inferred by equating the two existential choices.
+The source's one approximation vector is now obtained by nonuniform
+sequential rank budgets. The designated cut uses fixed-cut accuracy
+$\delta/64$ and all other internal cuts use $\delta/[64(L+1)]$.
+Their actual missing marginal masses sum to at most $\delta/16$.
+One ordered product of the corresponding leading marginal projections,
+followed by normalization, retains the sharp designated-cut rank and
+all global MPS bonds simultaneously. Both rounded integer factors are
+chosen before the designated cut and vector. The two logarithmic
+accuracy variables are $16+\log(1/g)+\log(128/\delta)$ and
+$16+\log(1/g)+\log(128(L+1)/\delta)$, with the same three-quarter
+power and a fixed-bandwidth coefficient. Boundary cuts have rank at
+most one, so empty chains and endpoint cuts are included. This is a
+joint construction, rather than an identification of two separate
+existential witnesses.
 
 \paragraph{Remaining conclusions.}
 The long-interval construction assumes no global spectral gap and supplies
