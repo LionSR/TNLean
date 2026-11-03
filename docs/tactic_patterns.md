@@ -12033,3 +12033,12 @@ mathematical arguments and avoids compiling both in the long corollary.
   bound become active special cases, retaining their signatures and actual
   operations. Finite products of repeated samples use the same generic result.
 - **Decision:** No second tree, probability law or success predicate is defined.
+||||||| parent of fecf9579c8 (feat(MPS/AreaLaw): transport one common family through interval collars)
+
+
+
+### One collar family before exterior coefficients (2026-11-03)
+
+- **Pattern:** Number a common physical operator family after moving the retained interval, preserving every member's bond bound and the same whole-operator decomposition.
+- **Reuse:** `exists_common_collar_mpo_tensor_family` reuses `changingRegionalMiddleFamily_mpo_and_global_decomposition` and one `Fintype.equivFin` enumeration. The existing middle-first Kronecker coordinate theorem supplies the final continuous tensor identity.
+- **Decision:** The original family determines the enlarged family before the whole matrix and exterior coefficients. No pointwise selection in an energy center, duplicate matrix-unit construction or new decomposition predicate is introduced. The count estimate is a separate natural-number lemma for the same calibrated parameter.

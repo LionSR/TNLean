@@ -42,6 +42,7 @@ import TNLean.MPS.AreaLaw.ChainStageIncidence
 import TNLean.MPS.AreaLaw.ClusterTruncationCutRank
 import TNLean.MPS.AreaLaw.ClusterTruncationMPO
 import TNLean.MPS.AreaLaw.CommonClosingPolynomialFamily
+import TNLean.MPS.AreaLaw.CommonCollarMPOFamily
 import TNLean.MPS.AreaLaw.CommonMiddleMPOFamily
 import TNLean.MPS.AreaLaw.ComponentReduction
 import TNLean.MPS.AreaLaw.CompressedBlockColumn
@@ -181,6 +182,7 @@ import TNLean.MPS.AreaLaw.PolynomialFilterParameters
 import TNLean.MPS.AreaLaw.PositiveDimensionLowDensityApproximation
 import TNLean.MPS.AreaLaw.PositiveDimensionLowDensityEntropy
 import TNLean.MPS.AreaLaw.PositiveDimensionLowDensityGlobalApproximation
+import TNLean.MPS.AreaLaw.PrecenterCollarCount
 import TNLean.MPS.AreaLaw.ProductCutIteration
 import TNLean.MPS.AreaLaw.ProductReplacement
 import TNLean.MPS.AreaLaw.ProtocolConditionalPreparation
