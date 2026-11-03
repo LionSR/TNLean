@@ -200,7 +200,7 @@ operator by
     $\|h_i\|C e^{-\delta\ell/2}$.
 \end{proof}
 
-\begin{lemma}[Exponential localization of actual truncated terms]
+\begin{theorem}[Exponential localization of actual truncated terms]
     \label{thm:hastings05_metric_facld}
     \lean{TNLean.Lattice.exists_metric_truncated_filter_localization}
     \leanok
@@ -230,7 +230,7 @@ operator by
     \cite[lines 322--348]{Hastings2006Solving}. The printed minimum of
     decay lengths is read as a minimum of decay rates, as explained in
     \cite{gap:hastings05_truncated_dynamics}.
-\end{lemma}
+\end{theorem}
 \begin{proof}\leanok
     \uses{thm:hastings05_metric_filter_budget,
         thm:hastings05_metric_filter_properties,thm:hastings05_facld}
@@ -241,7 +241,7 @@ operator by
     $P_0\phi=\langle\Omega,\phi\rangle\Omega$.
 \end{proof}
 
-\begin{lemma}[The sum of the physical metric approximations]
+\begin{theorem}[The sum of the physical metric approximations]
     \label{thm:hastings05_metric_filter_sum}
     \lean{TNLean.Lattice.exists_metric_truncated_filter_sum_bound}
     \leanok
@@ -254,7 +254,7 @@ operator by
          & \le|\Lambda|JC e^{-\lambda\ell}.
         \label{eq:hastings05_metric_filter_sum}
     \end{align}
-\end{lemma}
+\end{theorem}
 \begin{proof}\leanok
     \uses{thm:hastings05_metric_facld,thm:hastings05_sum_approximation}
     The full filtered terms sum to $H$. The finite-sum triangle

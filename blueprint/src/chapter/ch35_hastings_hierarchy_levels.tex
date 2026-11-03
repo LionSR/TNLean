@@ -55,7 +55,7 @@ $2^m-1$~\cite{gap:hastings05_hierarchical_projection}.
     \end{align}
 \end{definition}
 
-\begin{lemma}[All levels]
+\begin{theorem}[All levels]
     \label{thm:hastings05_hierarchy_levels}
     \lean{TNLean.MPS.AreaLaw.LocalSolution.isStarProjection_hierarchy,
         TNLean.MPS.AreaLaw.LocalSolution.norm_sub_hierarchy_le}
@@ -70,7 +70,7 @@ $2^m-1$~\cite{gap:hastings05_hierarchical_projection}.
     $\lVert\psi-P_k^m\psi\rVert\le D_m$ (with $\psi=\Psi_a$ and
     $c_k^m=\langle\Psi_a,M_k^m\Psi_a\rangle$ in
     \cite[lines 668--707]{Hastings2006Solving}).
-\end{lemma}
+\end{theorem}
 \begin{proof}\leanok
     Induct on $m$, applying Lemma~\ref{thm:hastings05_level_against_ground_state}
     to $P_{2k}^m,P_{2k+1}^m$ and comparing with
@@ -179,7 +179,7 @@ supersites $k,k+1$~\cite[lines 609--628]{Hastings2006Solving}.
     \leanok
     \uses{thm:hastings05_hierarchy_levels,thm:hastings05_window_support,
         thm:hastings05_level_block_halves}
-    In Lemma~\ref{thm:hastings05_hierarchy_levels}, if each $M_k^m$ is
+    In Theorem~\ref{thm:hastings05_hierarchy_levels}, if each $M_k^m$ is
     supported on $B_k^{m+1}$, then $P_k^m$ is supported on $B_k^m$,
     $[P_{2k}^m,P_{2k+1}^m]=0$, and $\lVert\psi-P_k^m\psi\rVert\le D_m$.
 \end{lemma}
@@ -187,7 +187,7 @@ supersites $k,k+1$~\cite[lines 609--628]{Hastings2006Solving}.
     By induction on $m$ using Lemmas~\ref{thm:hastings05_window_support}
     and~\ref{thm:hastings05_level_block_halves}, $P_{2k}^m$ and $P_{2k+1}^m$
     have disjoint supports $B_{2k}^m$ and $B_{2k+1}^m$, hence commute, and
-    Lemma~\ref{thm:hastings05_hierarchy_levels} applies.
+    Theorem~\ref{thm:hastings05_hierarchy_levels} applies.
 \end{proof}
 
 \begin{lemma}[The residual of a sum]

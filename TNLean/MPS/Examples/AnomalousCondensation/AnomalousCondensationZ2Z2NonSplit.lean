@@ -179,10 +179,6 @@ theorem xX_evalWord_remainder_eq_zero (w : List (Fin 16)) (hw : 4 ≤ w.length) 
     Kraus.evalWord xXCompression.remainder w = 0 :=
   xXCompression.evalWord_remainder_eq_zero w (by change (1 : ℕ) + 3 ≤ w.length; omega)
 
-/-- **The dimension count of the block `(x, x)`**: `4 = 1 + 3`. -/
-theorem xX_dim_eq : (4 : ℕ) = ∑ _s ∈ oneSlot, 1 + 3 :=
-  xXCompression.dim_eq
-
 /-- **No nonzero right sitewise intertwiner in the block `(x, x)`** (data file, Section 5). -/
 theorem xX_right_intertwiner_eq_zero (v : Fin 4 → ℂ)
     (h : ∀ i, xXStacked i *ᵥ v = eMPS i 0 0 • v) : v = 0 :=
