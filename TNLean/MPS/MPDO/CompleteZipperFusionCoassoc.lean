@@ -20,9 +20,14 @@ $\Delta:\mathcal B\to\mathcal B\otimes\mathcal B$ with
 \[
   \Delta\big((T_c^{ik})_c\big)=\sum_j(T_c^{ij})_c\otimes(T_c^{jk})_c.
 \]
-It is multiplicative and coassociative, but it has no counit and $\Delta(1)$ is only the
-support projector of the fusion tensors.  This is a pre-bialgebra in the sense of
-arXiv:2204.05940, `mpo.tex`, lines 1409--1419, realized on the dual algebra.
+It is multiplicative and coassociative, and $\Delta(1)$ is only the support projector of the
+fusion tensors.  These are the coproduct axioms of a pre-bialgebra in the sense of
+arXiv:2204.05940, `mpo.tex`, Definition 4.1 (lines 1409--1414), realized on the dual algebra.
+
+**Scope restriction (no counit):** the source's pre-bialgebra is also a coalgebra with a counit
+(Definition 3.1, lines 866--875).  No counit is constructed for the fusion coproduct, so the
+boundary space is not shown to be a pre-bialgebra in the source's sense.  Documented in
+`docs/paper-gaps/mrgscp22_pre_bialgebra_counit_scope.tex`.
 
 The source starts from a coassociative coproduct and derives the associativity of the fusion
 trees (`mpo.tex`, lines 1732--1787, equation `eq:associative`).  Here the direction is
@@ -46,7 +51,7 @@ is the argument of `mpo.tex`, lines 940--945 and 2001--2003, run backwards.
 
 ## References
 
-* arXiv:2204.05940, `mpo.tex`, lines 866--875, 1409--1419, 1655, 1732--1787, and 2003--2006.
+* arXiv:2204.05940, `mpo.tex`, lines 866--875, 1409--1414, 1655, 1732--1787, and 2003--2006.
 * arXiv:2509.03600, section "MPO representations of bialgebras".
 -/
 
@@ -86,7 +91,7 @@ theorem tensorPairEquiv_tmul (X Y : Fus.BoundarySpace) (a b : Λ) :
 $\Delta(X)_{ab}=\sum_{c,\mu}X^c_{ab,\mu}X_cX^{c+}_{ab,\mu}$ of `coproduct`, read in
 $\mathcal B\otimes\mathcal B$ through `tensorPairEquiv`.  It is multiplicative but not unital.
 
-Source: arXiv:2204.05940, `mpo.tex`, lines 1409--1419 and 1655 (equation
+Source: arXiv:2204.05940, `mpo.tex`, lines 1409--1414 and 1655 (equation
 `eq:splitting_algebraic`). -/
 noncomputable def comul :
     Fus.BoundarySpace →ₙₐ[ℂ] Fus.BoundarySpace ⊗[ℂ] Fus.BoundarySpace where
@@ -132,11 +137,12 @@ theorem comul_coassoc :
     TensorProduct.sum_tmul, TensorProduct.tmul_sum]
   exact Finset.sum_comm
 
-/-- **The fusion pre-bialgebra.**  The boundary space of a complete zipper fusion family with
-the fusion coproduct is a pre-bialgebra: the coproduct is multiplicative and coassociative,
-while `coproduct_one` shows that it is not unital in general.
+/-- **The fusion comultiplication.**  The boundary space of a complete zipper fusion family
+with the fusion coproduct carries a `PreBialgebra` structure: the coproduct is multiplicative
+and coassociative, while `coproduct_one` shows that it is not unital in general.  No counit is
+constructed (see the module docstring).
 
-Source: arXiv:2204.05940, `mpo.tex`, lines 1409--1419, 1655 and 1708. -/
+Source: arXiv:2204.05940, `mpo.tex`, lines 1409--1414, 1655 and 1708. -/
 @[instance_reducible]
 noncomputable def toPreBialgebra : PreBialgebra ℂ Fus.BoundarySpace where
   comul := Fus.comul

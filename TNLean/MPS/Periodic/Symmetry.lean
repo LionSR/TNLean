@@ -8,8 +8,6 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.MPS.Periodic.Symmetry
 
-import TNLean.MPS.Periodic.Symmetry.Corollary41
-import TNLean.MPS.Periodic.Symmetry.EqualCaseFTHyp
 import TNLean.MPS.Periodic.Symmetry.PhysicalSymmetry
 import TNLean.MPS.Periodic.Symmetry.RefinementFromInjectiveTransfer
 import TNLean.MPS.Periodic.Symmetry.RefinementFromInvertibleWordSpan

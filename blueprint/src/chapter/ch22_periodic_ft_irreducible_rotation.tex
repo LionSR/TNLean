@@ -416,26 +416,3 @@ follows.
     is preserved, and by Lemma~\ref{thm:rotate_physical_blocks} physical
     rotation distributes over the block-diagonal sum.
 \end{proof}
-
-\begin{corollary}[Periodic symmetry yields finite-order $Z$-gauge equivalence]%
-    \label{cor:symmetry_periodic_assembly}
-    \lean{MPSTensor.zGaugeEquiv_of_isIrreducibleForm_sameMPV_rotatePhysical}
-    \leanok
-    \uses{def:rotate_physical, def:same_mpv, def:z_gauge_equiv}
-    Assume the periodic equal-case theorem: tensors in irreducible form~II
-    with equal MPV families are $Z$-gauge equivalent.  Let $A$ be in
-    irreducible form~II, and suppose $B:=A_M$ is also in irreducible form~II
-    with $\mc V(A)=\mc V(B)$. Then there are $m>0$, an invertible matrix $Y$,
-    and a matrix $Z\in\MN D$ such that, for every physical index $i$,
-    \begin{align}
-        [Z,A^i] & =0, & Z^m & =\Id_D, & ZA^i & =YB^iY^{-1}.
-        \notag
-    \end{align}
-    Hence $A$ and $B$ are related by a $\mathbb Z_m$ virtual gauge.
-\end{corollary}
-
-\begin{proof}\leanok
-    Applying the assumed periodic equal-case theorem to $A$ and $B$ and
-    unfolding Definition~\ref{def:z_gauge_equiv} yields $m$, $Y$, and $Z$ with
-    the three displayed identities.
-\end{proof}

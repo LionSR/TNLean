@@ -69,9 +69,11 @@ private theorem uncleBoundary_separating_coefficients
 
 /-- The full perturbation span and unital canonical blocks imply
 strict mixed-transfer damping. Faithful stationary dual densities suffice;
-their trace normalization is not needed for this implication.
+their trace normalization is not needed for this implication. No
+nonvanishing of the block dimensions is assumed: when one of them vanishes,
+the mixed map acts on the zero space and its spectral radius is zero.
 Source: arXiv:1210.6613, Lemma exptransferoperator. -/
-theorem uncleBoundaryLetter_mixedMapSpectralRadius_lt_one [NeZero a] [NeZero b]
+theorem uncleBoundaryLetter_mixedMapSpectralRadius_lt_one
     (A : MPSTensor d a) (B : MPSTensor d b)
     (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
     (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
@@ -82,6 +84,10 @@ theorem uncleBoundaryLetter_mixedMapSpectralRadius_lt_one [NeZero a] [NeZero b]
     (hFA : Kraus.adjointMap A ρA = ρA) (hFB : Kraus.adjointMap B ρB = ρB) :
     Kraus.mixedMapSpectralRadius A B < 1 := by
   classical
+  rcases subsingleton_or_nontrivial (Matrix (Fin a) (Fin b) ℂ) with hV | hV
+  · unfold Kraus.mixedMapSpectralRadius
+    rw [spectrum.SpectralRadius.of_subsingleton]
+    exact zero_lt_one
   let K : Fin d → Matrix (Fin a ⊕ Fin b) (Fin a ⊕ Fin b) ℂ :=
     fun i ↦ Matrix.fromBlocks (A i) 0 0 (B i)
   let ρ : Matrix (Fin a ⊕ Fin b) (Fin a ⊕ Fin b) ℂ :=
@@ -164,7 +170,7 @@ theorem uncleBoundaryLetter_mixedMapSpectralRadius_lt_one [NeZero a] [NeZero b]
 reverse orientation. The conjugate-transpose mixed eigenvector reduces
 this to the preceding block-separation argument.
 Source: arXiv:1210.6613, Lemma exptransferoperator. -/
-theorem uncleBoundaryLetter_mixedMapSpectralRadius_reverse_lt_one [NeZero a] [NeZero b]
+theorem uncleBoundaryLetter_mixedMapSpectralRadius_reverse_lt_one
     (A : MPSTensor d a) (B : MPSTensor d b)
     (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
     (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
@@ -176,6 +182,10 @@ theorem uncleBoundaryLetter_mixedMapSpectralRadius_reverse_lt_one [NeZero a] [Ne
     Kraus.mixedMapSpectralRadius B A < 1 := by
   have hgap := uncleBoundaryLetter_mixedMapSpectralRadius_lt_one
     A B R L hPert hUA hUB ρA hρA ρB hρB hFA hFB
+  rcases subsingleton_or_nontrivial (Matrix (Fin b) (Fin a) ℂ) with hV | hV
+  · unfold Kraus.mixedMapSpectralRadius
+    rw [spectrum.SpectralRadius.of_subsingleton]
+    exact zero_lt_one
   unfold Kraus.mixedMapSpectralRadius
   apply spectralRadius_lt_one_of_eigenvalues_lt_one
   intro μ hμ

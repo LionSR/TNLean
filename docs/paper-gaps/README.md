@@ -773,6 +773,14 @@ For the matrix product operator symmetries of arXiv:2203.12563:
   representations with trivial unit action are classified directly, and
   sketches the Perron--Frobenius argument for any number of blocks.
 
+For the matrix product operator algebras of arXiv:2204.05940:
+
+- `mrgscp22_pre_bialgebra_counit_scope.tex` (scope restriction, open) records
+  that the source's pre-bialgebra (Definition 4.1) is also a coalgebra with a
+  counit (Definition 3.1), while the formal pre-bialgebra structure records
+  only a multiplicative coassociative coproduct; no counit is constructed for
+  the fusion coproduct of a complete zipper fusion family.
+
 For the strong and weak symmetries of matrix product density operators in
 arXiv:2504.16985:
 
