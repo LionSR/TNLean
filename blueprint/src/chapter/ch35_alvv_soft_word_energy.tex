@@ -232,7 +232,8 @@ running-time conclusion, remain.
     No regional minimum or scalar estimate is supplied as an input.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{def:soft_word_energy_update,def:balanced_regional_energy_assignment,thm:actual_adjacent_interval_merge}
+    \uses{def:soft_word_energy_update,def:balanced_regional_energy_assignment,
+      thm:regional_energy_node_relation_assignment,thm:actual_adjacent_interval_merge}
     Recurse on the interval length. At a short leaf, choose an actual
     attained minimum of its original regional Hamiltonian. At a long node,
     first compute the two shorter child estimates. Their certified errors

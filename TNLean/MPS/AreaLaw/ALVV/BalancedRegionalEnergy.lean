@@ -144,7 +144,11 @@ private theorem recursiveEnergy_node {L q : ℕ}
   rw [hvalue]
   exact (Classical.choose_spec choice).2
 
-private theorem exists_energy_with_node_relation {L q : ℕ}
+/-- Actual short-leaf minima and an explicit energy-preserving node relation
+construct one simultaneous scalar assignment at the balanced children. The
+relation is arbitrary; no particular filtering or sampling construction is
+assumed. Auxiliary to ALVV, arXiv:1602.08828v2, Figure `fig:algo1`, line 1631. -/
+theorem exists_energy_with_node_relation {L q : ℕ}
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (width : ℕ) (hwidth : 1 ≤ width)
     (R : ∀ (l r : ℕ), l ≤ r → r ≤ L → width < r - l → ℝ → ℝ → ℝ → Prop)

@@ -1,0 +1,33 @@
+\section{Recursive scalar estimates with a specified node relation}
+
+\begin{theorem}[A simultaneous energy assignment with a node relation]
+    \label{thm:regional_energy_node_relation_assignment}
+    \lean{TNLean.MPS.AreaLaw.ALVV.exists_energy_with_node_relation}
+    \leanok
+    Fix a chain Hamiltonian and a positive integer leaf width $w$.
+    Write $E_{l,r}(p)$ for an attained original regional minimum $e_{l,r}$
+    with positive scalar shift and $e_{l,r}-49/16\le p\le e_{l,r}$.
+    Write $E^0_{l,r}(p)$ for the same certificate with $p=e_{l,r}$.
+    Suppose each valid interval has an estimate satisfying $E^0_{l,r}$.
+    For each valid long interval $[l,r)$, let
+    $\mathcal R_{l,r}(p_1,p_2,p)$ be a specified relation and put
+    $k=l+\lfloor(r-l)/2\rfloor$. Assume that whenever
+    $E_{l,k}(p_1)$ and $E_{k,r}(p_2)$ hold, there is a $p$ satisfying
+    $E_{l,r}(p)$ and $\mathcal R_{l,r}(p_1,p_2,p)$.
+
+    There is one function $(l,r)\mapsto p_{l,r}$ such that $E_{l,r}(p_{l,r})$
+    holds on every valid interval, $E^0_{l,r}(p_{l,r})$ holds when $r-l\le w$,
+    and $\mathcal R_{l,r}(p_{l,k},p_{k,r},p_{l,r})$ holds at every valid
+    long interval. The relation need not describe any particular family,
+    sampling step or compressed operator. This recursion is an auxiliary to
+    \cite[Figure~\texttt{fig:algo1}, line 1631]{Arad2016RigorousRG}.
+\end{theorem}
+\begin{proof}\leanok
+    Recurse on interval length, returning the scalar together with its
+    regional-energy certificate. At a short interval choose its attained
+    minimum. At a long interval first construct the two strictly shorter
+    child estimates, then choose a parent estimate certified by the node
+    hypothesis. The recursive equation gives the relation with precisely
+    those assigned child values. Extend the function by zero to invalid
+    endpoint pairs.
+\end{proof}

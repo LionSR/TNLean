@@ -148,3 +148,53 @@
     $57/8\le8$. Uniqueness of attained minima identifies the parent and
     middle values with the already specified $e_P,e_M$.
 \end{proof}
+
+\begin{theorem}[A terminal node update from the actual child estimates]
+    \label{thm:calibrated_soft_terminal_node_update}
+    \lean{TNLean.MPS.AreaLaw.ALVV.exists_calibrated_soft_terminal_node_energy_update}
+    \leanok
+    Retain the primitive interaction assumptions, arbitrary retained interval
+    and calibrated scalar hypotheses of
+    Theorem~\ref{thm:calibrated_soft_terminal_compressed_energy}.
+    The actual attained parent and middle minima $e_P,e_M$ and the actual
+    collar minima $e_{\mathrm L},e_{\mathrm R}$ can all be chosen before
+    the child split and its energy estimates, with unit eigenvectors and
+    positive scalar shifts for the original regional Hamiltonians.
+
+    For every $l\le k\le r$ and one-sided child estimates $p_1,p_2$ of
+    width $49/16$, form
+    \begin{align}
+      c&=p_1+p_2-e_{\mathrm L}-e_{\mathrm R}-2,\\
+      R_c&=P-M+cI+h_{m,t}(M-cI).
+    \end{align}
+    Then $c\in[e_M-10,e_M]$, with an attained original-middle energy
+    certificate. Define the native soft matrix by the same fixed-complement
+    restriction of $R_c$. Its actual soft minimum precedes every target
+    and terminal image.
+
+    For each target and the same untrimmed family image satisfying the
+    comparison and exact viability certificates of
+    Theorem~\ref{thm:calibrated_soft_terminal_compressed_energy}, the actual
+    compression has an ordered orthonormal eigenbasis and least eigenvalue
+    $\lambda$ satisfying
+    \begin{align}
+      e_{\mathrm s}\le\lambda\le e_{\mathrm s}+3,\qquad
+      e_P-49/16\le\lambda-3\le e_P.
+    \end{align}
+    Thus $\lambda-3$ is an original-parent lower energy estimate of the
+    same width as the children. The original parent eigenvector and positive
+    scalar shift have been retained; no new family, terminal matrix or
+    candidate is selected. The image certificate must come from the actual
+    successful repeated-sampling history, rather than final retained-space
+    viability alone. This is an auxiliary node estimate for
+    \cite[Figure~\texttt{fig:algo1}, line 1631, and line 1807]{Arad2016RigorousRG}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:calibrated_soft_terminal_compressed_energy,
+      thm:regional_middle_center_from_children}
+    Choose the actual regional minima once using the calibrated terminal
+    theorem. Apply the child-center theorem to those same parent and middle
+    certificates; it chooses the collars before all child estimates and
+    proves admissibility of $c$. Apply the retained terminal theorem at
+    this derived center to the same target and untrimmed image.
+\end{proof}
