@@ -533,7 +533,8 @@ probability for an adaptively sampled tree remains separate.
 
 \begin{corollary}[Uniform polynomial bond for the same interleaved Ritz space]
     \label{cor:physical_interleaved_ritz_polynomial}
-    \lean{TNLean.MPS.AreaLaw.exists_physical_dg_interleaved_ritz_polynomial_approximation}
+    \lean{TNLean.MPS.AreaLaw.exists_physical_dg_interleaved_ritz_polynomial_approximation,
+        TNLean.MPS.AreaLaw.exists_physical_dg_interleaved_ritz_polynomial_approximation_with_degree}
     \leanok
     Fix the local dimension $q$ and a positive spectral gap $\gamma$.
     There are $C>0$ and $k\in\mathbb N$, depending only on these two
@@ -549,6 +550,16 @@ probability for an adaptively sampled tree remains separate.
         C\bigl((L+1)(r+1)(1+\eta^{-1})\bigr)^k.
         \label{eq:interleaved_ritz_uniform_polynomial}
     \end{align}
+    More precisely, there is a universal $C_{\rm deg}>0$, chosen before
+    $q,\gamma$, such that the chosen degree satisfies
+    \begin{align}
+        k\le C_{\rm deg}\frac{
+          (1+\log\max\{q,50\}+\log(1/g))^{10}}{g^2},
+        \qquad g=\min\{\gamma,1\}.
+        \label{eq:interleaved_ritz_gap_degree}
+    \end{align}
+    The prefactor $C$ remains a finite function of $q,\gamma$;
+    (\ref{eq:interleaved_ritz_gap_degree}) bounds the degree alone.
     The calibrated count is allowed to vary with $L$ and $r$.
     The block leaves, fixed failure target, capped-gap dependence and
     modified integer counts remain those of the preceding construction.
@@ -573,4 +584,13 @@ probability for an adaptively sampled tree remains separate.
     (\ref{eq:interleaved_root_final_bond}) proves
     (\ref{eq:interleaved_ritz_uniform_polynomial}) for the very same Ritz
     space supplied by Lemma~\ref{lem:physical_interleaved_tree_ritz}.
+    To bound its exact degree, write
+    $p=\lceil2K_D\rceil$ and
+    $p_0=\lceil K(u^3/g+5g^{-1/4}u)\rceil$, where
+    $K=\max\{K_{\rm t},K_{\rm f}\}$ and $u\le U$.
+    The preceding count estimate gives $K_D\le C_DU^7/g$ with a universal
+    $C_D$, so $p\le(2C_D+1)U^7/g$ and
+    $p_0\le(6K+1)U^3/g$. The actual degree
+    $10(24p+21)p_0+60p+43$ therefore has the bound
+    (\ref{eq:interleaved_ritz_gap_degree}).
 \end{proof}

@@ -40,9 +40,12 @@ all-span MPS bond at fixed local dimension and gap. Its count depends on
 length and ground multiplicity, and every numerical condition is derived.
 The proof extracts that SAME previously constructed Ritz output. Supporting
 ALVV, arXiv:1602.08828v2, `t:alg1`, lines 1777–1817, in the stated scope. -/
-theorem exists_physical_dg_interleaved_ritz_polynomial_approximation
-    (q : ℕ) (gamma : ℝ) (hgamma : 0 < gamma) :
-    ∃ C : ℝ, 0 < C ∧ ∃ k : ℕ, ∀ (L : ℕ)
+theorem exists_physical_dg_interleaved_ritz_polynomial_approximation_with_degree :
+    ∃ Cdegree : ℝ, 0 < Cdegree ∧ ∀ (q : ℕ) (gamma : ℝ), 0 < gamma →
+    ∃ C : ℝ, 0 < C ∧ ∃ k : ℕ,
+      (k : ℝ) ≤ Cdegree *
+        (1 + Real.log (max q 50 : ℕ) + Real.log (1 / min gamma 1)) ^ 10 /
+          (min gamma 1) ^ 2 ∧ ∀ (L : ℕ)
       (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
       (_hsupp : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
         (h i) (interval L i.val (i.val + 2)))
@@ -63,11 +66,21 @@ theorem exists_physical_dg_interleaved_ritz_polynomial_approximation
   classical
   obtain ⟨Ctail, Cscale, Ktree, Kref, _hCtail, hCscale, hKtree, hKref, hconstruct⟩ :=
     exists_physical_dg_interleaved_tree_ritz_approximation
+  let Alog := 22 * (Cscale + 1) * (14 + 2 * Real.log (Cscale + 1))
+  let CK := Alog * (18 ^ 7 + 18 ^ 4)
+  let K := max Ktree Kref
+  let Cdegree := 10 * (24 * (2 * CK + 1) + 21) * (6 * K + 1) + 60 * (2 * CK + 1) + 43
+  have hlogC : 0 ≤ Real.log (Cscale + 1) := Real.log_nonneg (by linarith only [hCscale])
+  have hAlog : 0 ≤ Alog := by dsimp only [Alog]; positivity
+  have hCK : 0 ≤ CK := by dsimp only [CK]; positivity
+  have hK : 0 ≤ K := hKtree.le.trans (le_max_left Ktree Kref)
+  have hCdegree : 0 < Cdegree := by dsimp only [Cdegree]; positivity
+  refine ⟨Cdegree, hCdegree, ?_⟩
+  intro q gamma hgamma
   let g := min gamma 1
   let m := max q 50
   let u := 1 + Real.log (q : ℝ) + Real.log (1 / g)
   let U0 := 1 + Real.log (m : ℝ) + Real.log (1 / g)
-  let Alog := 22 * (Cscale + 1) * (14 + 2 * Real.log (Cscale + 1))
   let KD := Alog * ((U0 + 17) ^ 7 / g + (U0 + 17) ^ 4 / Real.sqrt g)
   have hg : 0 < g := lt_min hgamma (by norm_num)
   have hg1 : g ≤ 1 := min_le_right gamma 1
@@ -78,15 +91,24 @@ theorem exists_physical_dg_interleaved_ritz_polynomial_approximation
   have hU0 : 1 ≤ U0 := by
     dsimp only [U0]
     linarith [Real.log_natCast_nonneg m, Real.log_nonneg hgInv]
-  have hlogC : 0 ≤ Real.log (Cscale + 1) := Real.log_nonneg (by linarith only [hCscale])
-  have hAlog : 0 ≤ Alog := by
-    dsimp only [Alog]
-    positivity
   have hU17 : 0 ≤ U0 + 17 := by linarith only [hU0]
   have hKD : 0 ≤ KD := by dsimp only [KD]; positivity
-  obtain ⟨C, hC, k, hpoly⟩ := Real.exists_interleaved_output_polynomial_bound
+  have huU : u ≤ U0 := by
+    have hqm : Real.log (q : ℝ) ≤ Real.log (m : ℝ) := by
+      by_cases hq : q = 0
+      · simpa only [hq, Nat.cast_zero, Real.log_zero] using Real.log_natCast_nonneg m
+      · exact Real.log_le_log (by exact_mod_cast Nat.pos_of_ne_zero hq)
+          (by exact_mod_cast Nat.le_max_left q 50)
+    dsimp only [u, U0]
+    linarith only [hqm]
+  have hcount : KD ≤ CK * U0 ^ 7 / g :=
+    Real.interleaved_count_coefficient_le Alog U0 g hAlog hU0 hg hg1
+  obtain ⟨C, hC, k, hk, hpoly⟩ := Real.exists_interleaved_output_polynomial_bound_with_degree
     gamma g u Ktree Kref KD hgamma hg hg1 hu hKtree.le hKref.le hKD
-  refine ⟨C, hC, k, ?_⟩
+  refine ⟨C, hC, k, ?_, ?_⟩
+  · rw [hk]
+    exact Real.interleaved_output_polynomial_degree_le
+      U0 u g K KD CK hU0 hu huU hg hg1 hK hKD hCK hcount
   intro L h hsupp h0 h1 mu nu H hH hmu hnu hmunu hgap G r eta heta
   let w := 1 + Real.log (r : ℝ) + 2 * Real.log ((L : ℝ) + 1)
   let v := U0 + Real.log (1 + w)
@@ -152,5 +174,35 @@ theorem exists_physical_dg_interleaved_ritz_polynomial_approximation
     hpoly L r D s A eta hr hD hs hgammaA hAL heta hlogD hsUpper
       Btree Bfinal hBtree hBfinal hlogBtree hlogBfinal
   exact ⟨Bout, hbound, R, hdimR, hGR, hRG, hMPS⟩
+
+/-- The actual interleaved-tree Ritz output has one uniform polynomial
+all-span MPS bond at fixed local dimension and gap. Its count depends on
+length and ground multiplicity, and every numerical condition is derived.
+The proof extracts that SAME previously constructed Ritz output. Supporting
+ALVV, arXiv:1602.08828v2, `t:alg1`, lines 1777–1817, in the stated scope. -/
+theorem exists_physical_dg_interleaved_ritz_polynomial_approximation
+    (q : ℕ) (gamma : ℝ) (hgamma : 0 < gamma) :
+    ∃ C : ℝ, 0 < C ∧ ∃ k : ℕ, ∀ (L : ℕ)
+      (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
+      (_hsupp : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+        (h i) (interval L i.val (i.val + 2)))
+      (h0 : ∀ i, 0 ≤ h i) (_h1 : ∀ i, h i ≤ 1) (mu nu : ℝ),
+      let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := ∑ i, h i
+      let hH : H.IsHermitian :=
+        (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
+      mu ∈ spectrum ℝ H → nu ∈ spectrum ℝ H → mu < nu →
+      (∀ z ∈ spectrum ℝ H, z = mu ∨ mu + gamma ≤ z) →
+      let G := Submodule.spectralSpanLE hH.eigenvectorBasis hH.eigenvalues mu
+      let r := Module.finrank ℂ G
+      ∀ eta : ℝ, 0 < eta → ∃ B : ℕ,
+        (B : ℝ) ≤ C * (((L : ℝ) + 1) * ((r : ℝ) + 1) * (1 + 1 / eta)) ^ k ∧
+        ∃ R : Submodule ℂ (EuclideanSpace ℂ (Fin L → Fin q)),
+          Module.finrank ℂ R = r ∧ Submodule.IsCloseTo (eta / 2) G R ∧
+          Submodule.IsCloseTo (eta / 2) R G ∧
+          ∀ z ∈ R, IsOpenMPS L q B (fun x ↦ z x) := by
+  obtain ⟨_Cdegree, _hCdegree, houtput⟩ :=
+    exists_physical_dg_interleaved_ritz_polynomial_approximation_with_degree
+  obtain ⟨C, hC, k, _hk, hbound⟩ := houtput q gamma hgamma
+  exact ⟨C, hC, k, hbound⟩
 
 end TNLean.MPS.AreaLaw
