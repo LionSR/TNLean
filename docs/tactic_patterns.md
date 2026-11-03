@@ -11938,3 +11938,17 @@ opaque proposition, rather than repeating its vector-wise conjunction.
   uses direct five-case simplification. Import only the original region data,
   commuting soft-family bounds and actual soft operator cap; residual estimates
   and their spectral comparisons are not dependencies of this norm bound.
+
+### Scalar ceilings before physical spectral-window comparisons (2026-11-03)
+
+- **Seen:** `ALVV/SoftClusterPrecision.lean` and
+  `ALVV/FiveRegionSoftUniformClusters.lean`.
+- **Pattern:** Bound the actual residual threshold by one prescribed ceiling,
+  then apply a numerical finite-window precision estimate at both actual
+  cutoffs. Retain the selected physical data rather than reconstructing it.
+- **Reuse:** QICLean's `Real.finite_window_loss_le_envelope` and
+  `Real.soft_cluster_window_precision_parameters`; the existing physical
+  cluster and three-bulk norm theorems; `Submodule.IsCloseTo.of_le`.
+- **Decision:** The common scalar calculations are lemmas. The two closeness
+  estimates use ordinary arithmetic with their respective window bounds;
+  no tactic or parallel family of spectral definitions is introduced.

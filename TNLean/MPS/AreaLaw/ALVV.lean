@@ -14,6 +14,7 @@ import TNLean.MPS.AreaLaw.ALVV.FiveRegionSoftNorm
 import TNLean.MPS.AreaLaw.ALVV.FiveRegionSoftRepresentation
 import TNLean.MPS.AreaLaw.ALVV.FiveRegionSoftResiduals
 import TNLean.MPS.AreaLaw.ALVV.FiveRegionSoftStructure
+import TNLean.MPS.AreaLaw.ALVV.FiveRegionSoftUniformClusters
 import TNLean.MPS.AreaLaw.ALVV.FrustrationFree
 import TNLean.MPS.AreaLaw.ALVV.FrustrationFreeChain
 import TNLean.MPS.AreaLaw.ALVV.FrustrationFreeGap
@@ -23,6 +24,7 @@ import TNLean.MPS.AreaLaw.ALVV.HardTruncationResidual
 import TNLean.MPS.AreaLaw.ALVV.PhysicalDGRootEnergyAssignment
 import TNLean.MPS.AreaLaw.ALVV.PhysicalDGTreeEnergyAssignment
 import TNLean.MPS.AreaLaw.ALVV.PhysicalDGTreeEnergyUpdates
+import TNLean.MPS.AreaLaw.ALVV.SoftClusterPrecision
 import TNLean.MPS.AreaLaw.ALVV.SoftFamilyResiduals
 import TNLean.MPS.AreaLaw.ALVV.SoftGeneratedMiddleApproximation
 import TNLean.MPS.AreaLaw.ALVV.SoftParentEnergy
