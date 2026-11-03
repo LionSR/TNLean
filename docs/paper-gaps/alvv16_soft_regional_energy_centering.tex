@@ -156,13 +156,12 @@ requires a center below the true minimum.
 
 The given target and family bounds here belong to the existing
 hard-truncation construction. This theorem does not identify it with the literal soft
-Generate family or its printed word count. Applying it to the returned
-actual tree family and assigning energy estimates recursively remain
-subsequent constructions. Two errors of size $3+\rho\le49/16$ and one
+Generate family or its printed word count. The node theorem in the final section applies it to the returned
+actual tree family. A simultaneous recursive energy assignment remains
+a subsequent construction. Two errors of size $3+\rho\le49/16$ and one
 connecting positive contraction give a parent error at most $57/8<8$;
-the collar conversion above then fits the one-sided width ten. This
-arithmetic explains the intended correction; it is not yet a theorem
-constructing the full recursive energy assignment. No efficient collar
+the collar conversion above then fits the one-sided width ten. The same-tree node theorem proves this correction for admissible child
+estimates; it does not yet construct the full recursive energy assignment. No efficient collar
 minimum calculation, matrix product implementation of the energy routine,
 adaptive sampling law or running time is asserted.
 
@@ -172,17 +171,17 @@ counterexamples and separate corrections; see
 and
 \href{https://sirui-lu.com/TNLean/paper-gaps/alvv16_cluster_approximation.pdf}{the cluster-approximation note}.
 No printed approximation estimate is assumed in the construction above.
-\end{document}
+
 
 
 \section{Node updates on the same actual tree}
 
 The corrected node estimate retains width $49/16$, rather than replacing
 it by the coarser width four. The original positive connecting bond gives
-\[
+\begin{align}
  e_{[l,k)}+e_{[k,r)}\le e_{[l,r)}
  \le e_{[l,k)}+e_{[k,r)}+1.
-\]
+\end{align}
 Thus two child estimates of width $49/16$ have sum within $57/8<8$
 below the parent minimum. The proved collar conversion supplies a middle
 center in the full required interval $[e_M-10,e_M]$. The actual compressed
@@ -198,3 +197,5 @@ family. This is a node assertion for all admissible child scalar estimates;
 a simultaneous recursive assignment, with attained minima at the leaves,
 remains to be constructed. The hard-clipped family is still not identified
 with the source's literal soft Generate, and no running-time claim follows.
+
+\end{document}
