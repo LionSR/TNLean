@@ -527,6 +527,44 @@ probabilities remains a separate argument.
     includes root failure in this same guarded union.
 \end{proof}
 
+
+\begin{lemma}[Joint failure on the actual root tree]
+    \label{lem:balanced_interval_joint_failure_ancestry}
+    \lean{TNLean.MPS.AreaLaw.joint_failure_subset_iUnion_guardedIntervalFailure}
+    \leanok
+    Retain the hypotheses of
+    Lemma~\ref{lem:balanced_interval_failure_ancestry}. The failure of
+    simultaneous success at the root and all its listed internal nodes
+    satisfies
+    \begin{align}
+       \bigl\{\omega:\neg\bigl(&P_{p,r}(S_\omega(p,r))\ \land\nonumber\\
+         &\forall J\in\mathcal I_w(p,r),\ P_J(S_\omega(J))\bigr)\bigr\}
+       \subseteq\bigcup_{J\in\mathcal I_w(p,r)}E_J.
+    \end{align}
+    The covering family is the same actual root merge list as before.
+    Only the short-leaf property is assumed; no probability or
+    long-node success estimate enters this assertion.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:balanced_interval_failure_ancestry,def:balanced_interval_merge_list,
+        def:guarded_interval_failure}
+    Fix $\omega$. Strengthen the property on each interval by setting
+    \begin{align}
+       Q_{a,b}(S)&=P_{a,b}(S)\ \land
+       \bigl(\forall K\in\mathcal I_w(a,b),\ P_K(S_\omega(K))\bigr).
+    \end{align}
+    A short interval has empty merge list, so the assumed leaf property
+    also holds for $Q$. Joint failure is precisely failure of $Q$ at
+    the root. Apply the preceding ancestry lemma to obtain a guarded
+    $Q$-failure at some listed node. Both children satisfy $Q$.
+
+    If that parent satisfied $P$, its entire internal list would satisfy
+    $P$: its two child lists do so by the child $Q$ statements, and the
+    remaining entry is the parent itself. This contradicts the parent
+    $Q$-failure. Thus its two children satisfy $P$ and the parent fails
+    $P$, giving the required guarded failure in the unchanged union.
+\end{proof}
+
 \begin{lemma}[Recorded generators of the actual trimmed image]
     \label{lem:interval_recorded_generator_bounds}
     \lean{TNLean.MPS.AreaLaw.IsIntervalSpanWithRankBound,
