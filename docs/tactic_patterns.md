@@ -11849,3 +11849,16 @@ removed after the dependency audit exposed it.
   theorems supply the complete argument.
 - **Decision:** No copied probability summation or assumed freshness/Borel
   invariant is added. The analytic fixed-child callback remains explicit.
+
+## Candidate: literal successful roots and candidate-independent refinement (2026-11-03)
+
+- **Seen:** `MPS/AreaLaw/PhysicalDGCanonicalApproximation.lean`.
+- **Pattern:** Choose one physical family, select the accuracy-dependent
+  common threshold before seeds, and pass each actual successful root to
+  the existing arbitrary-candidate refinement theorem.
+- **Reuse:** `exists_physical_dg_automatic_same_candidate_refinement`,
+  the QIC uniform polynomial-cost theorem, and native trimming-rank bounds.
+- **Decision:** No second root or operation is selected. Existing Mathlib
+  `norm_sum_le_of_le` and the positive-contraction norm criterion supply the
+  spectral-width estimate; no repeated specialized norm-sum proof is added.
+  The tree-radius comparison reuses the ceiling inequality directly.

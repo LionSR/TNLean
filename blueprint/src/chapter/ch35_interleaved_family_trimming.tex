@@ -938,3 +938,80 @@ probability estimate are separate conclusions.
     has at most $L-1$ members. Measurability of true joint success and
     the probability of its complement give the lower bound.
 \end{proof}
+
+
+\section{Probabilistic Ritz output from the same canonical root}
+
+\begin{theorem}[The same successful root yields a polynomial MPS Ritz space]
+    \label{thm:physical_canonical_ritz_polynomial}
+    \lean{TNLean.MPS.AreaLaw.exists_physical_dg_canonical_ritz_polynomial_approximation}
+    \leanok
+    Let $H=\sum_i h_i$ be an open nearest-neighbour chain of positive
+    contractions. Let $\mu<\nu$ be actual spectral values, with
+    $\mu$ the ground energy and every other spectral value at least
+    $\mu+\gamma$, where $\gamma>0$. Write $G$ for the full ground space
+    and $r=\dim G$.
+
+    For fixed local dimension $q$ and gap lower bound $\gamma$, there
+    are $C>0$ and $k\in\mathbb N$, chosen before the length, interaction,
+    multiplicity, accuracy and seeds, with the following property.
+    Choose the physical targets, references and families once as in
+    Theorem~\ref{thm:physical_canonical_tree_joint_probability}, retaining
+    all their ordered-word certificates. These choices precede the
+    requested accuracy $\eta>0$.
+
+    Put $A=\|H\|-\mu$, $c=\gamma/A$, and use the reference and final
+    refinement parameters of Lemma~\ref{lem:physical_dg_automatic_refinement},
+    with $D_{\rm tree}=D_{\rm ref}\lceil1/a\rceil$ and
+    $D_{\rm filter}=D$. Its common radius $\xi$ is admissible for the
+    same canonical tree. The actual event $\mathcal G_\eta$ of joint
+    $3/200$-viability at its root and internal intervals is Borel and
+    satisfies
+    \begin{align}
+        \mathbb P(\mathcal G_\eta^c)
+          &\le\frac{\max\{L-1,0\}}{(L+1)^2}, &
+        \mathbb P(\mathcal G_\eta)
+          &\ge1-\frac{\max\{L-1,0\}}{(L+1)^2}.
+    \end{align}
+    The dimension and recorded-rank profiles hold on every seed.
+
+    For every $U\in\mathcal G_\eta$, let $S_0$ be that seed's actual
+    full-interval root. Apply the literal raw filter and collective trim
+    $n=\lceil(4/c)\log(1/\rho)\rceil+1$ times to this same $S_0$,
+    where $\rho=\eta\gamma/(2A+\eta\gamma)$, and let $W$ be its
+    terminal native space. Its actual compressed Ritz space $R$ has
+    dimension $r$, lies in $W$, and is mutually $\eta/2$-close to $G$.
+    Every vector in $R$ and every vector in the native initial root has
+    the same bond bound
+    \begin{align}
+        B_{\rm out}
+          &=10^6(D_*N_*)^2(L+1)(D^6s^3)^2,\notag\\
+        B_{\rm out}
+          &\le C\bigl((L+1)(r+1)(1+1/\eta)\bigr)^k.
+        \label{eq:canonical_ritz_polynomial_bond}
+    \end{align}
+    The constants and radii are common to all successful seeds at that
+    accuracy. The block leaves, capped gap, hard-clipped family and
+    corrected integer counts remain as in
+    \cite{gap:alvv16_approximation_parameters,gap:alvv16_final_filter_gain}.
+    No measurability of a chosen Ritz basis or running time is asserted.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:physical_canonical_tree_joint_probability,
+        lem:physical_dg_automatic_refinement,lem:full_interval_trim_native_mps,
+        lem:interleaved_filter_scale_count}
+    Select the physical data once. The scalar reference and refinement
+    estimates choose $C,k$ before length and accuracy. The inequality
+    $a\lceil1/a\rceil\ge1$ places the automatic radius below the same
+    physical tree radius. Apply the joint probability theorem at this
+    radius, preserving the chosen families and every actual root.
+
+    For each successful seed, full-interval viability is native closeness
+    to $G$, and its unconditional dimension bound is $D^6s^3$.
+    Lemma~\ref{lem:physical_dg_automatic_refinement} therefore applies to
+    this exact $S_0$. Its terminal space and Ritz space are the stated
+    literal constructions. The recorded initial generators and the
+    terminal trimming generators give the same all-span bond bound.
+    The count and reference estimates give
+    (\ref{eq:canonical_ritz_polynomial_bond}) independently of the seed.
+\end{proof}
