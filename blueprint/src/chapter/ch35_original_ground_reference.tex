@@ -1,0 +1,121 @@
+\section{An original-ground reference and one common trimming radius}
+\label{sec:original_ground_reference}
+
+Corollary~\ref{cor:original_ground_reference_trimming_profile} constructs
+one reference from the original ground space and chooses one radius for all
+interval trims. Its loss bound retains the whole exterior and is independent
+of the candidate dimension. These are auxiliaries to the reference argument
+in \cite[lines 1801--1805]{Arad2016RigorousRG}; the polynomial dependence
+below is at fixed local dimension and gap. The weighted loss is the corrected
+collective-trimming estimate in~\cite{gap:alvv16_trimming_constant}.
+
+\begin{lemma}[A reference including flat spectra]
+    \label{lem:original_ground_reference}
+    \lean{TNLean.MPS.AreaLaw.exists_physical_ground_isOpenMPS_reference_subspace}
+    \leanok
+    There is a universal $K>0$ with the following property. Let $q\ge1$,
+    $\gamma>0$, and let $H=\sum_i h_i$ on $N$ sites, where
+    $0\le h_i\le I$ and $h_i$ is supported on sites $i,i+1$.
+    Suppose $\mu\in\operatorname{spec}H$ and every spectral value $z$
+    satisfies $z=\mu$ or $z\ge\mu+\gamma$. Put
+    $G=\ker(H-\mu I)$, $r=\dim G$, $g=\min(\gamma,1)$, and
+    $u=1+\log q+\log(1/g)$. For $0<\varepsilon\le1$, define
+    $b=16+\log(1/g)+\log(32r(N+1)/\varepsilon)$.
+    There are an integer $B\ge1$ and a subspace $U$ of dimension $r$ such
+    that $U$ and $G$ are mutually $\varepsilon$-close, every vector of $U$
+    has matrix product bond at most $r^2B$, and
+    \begin{align}
+        \log B\le K\bigl(u^3/g+g^{-1/4}b^{3/4}u\bigr)(1+\log b).
+        \label{eq:original_reference_log_profile}
+    \end{align}
+    No distinct excited spectral value is required. The gap convention
+    in this estimate is recorded in
+    \cite{gap:alvv16_approximation_parameters}.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:physical_dg_mps_reference_subspace}
+    If a spectral value exceeds $\mu$, apply the physical reference
+    construction. Otherwise the gap condition forces every eigenvalue
+    to equal $\mu$, so $G$ is the whole Hilbert space. Take $U=G$ and
+    $B=1$. Every coefficient matrix has rank at most $q^N=r\le r^2$,
+    hence every vector has the required exact matrix product
+    representation. All terms on the right of
+    (\ref{eq:original_reference_log_profile}) are nonnegative.
+\end{proof}
+
+\begin{lemma}[A polynomial bound for the reference rank]
+    \label{lem:original_ground_reference_polynomial}
+    \lean{TNLean.MPS.AreaLaw.exists_physical_ground_reference_polynomial}
+    \leanok
+    Fix $q\ge1$ and $\gamma>0$. There are $C>0$ and an integer $P\ge0$,
+    before every chain and Hamiltonian satisfying
+    Lemma~\ref{lem:original_ground_reference}, such that its reference can
+    be chosen at error $\varepsilon=10^{-5}$ with
+    \begin{align}
+        d=r^2B,\qquad b_{\rm ref}=d^2\le C Z^P,
+        \qquad Z=(N+1)(r+1).
+        \label{eq:original_reference_polynomial}
+    \end{align}
+    Its dimension, mutual closeness, and all-vector bond bound $d$ are
+    retained.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:original_ground_reference}
+    At the fixed accuracy, $b\le b_0+\log Z$, where
+    $b_0=16+\log(1/g)+\log(3200000)$ depends only on the gap.
+    Put $a_0=u^3/g$ and $a_1=g^{-1/4}u$. The logarithmic reference
+    estimate gives
+    \begin{align*}
+        B&\le C_0 Z^{p_0},
+        &C_0&=\exp\bigl(K(a_0+5a_1)b_0\bigr),
+        &p_0&=\lceil K(a_0+5a_1)\rceil.
+    \end{align*}
+    Since $r\le Z$, one may take $C=1+C_0^2$ and $P=4+2p_0$.
+    These choices also cover the exact flat-spectrum reference.
+\end{proof}
+
+\begin{corollary}[One reference and radius for all interval trims]
+    \label{cor:original_ground_reference_trimming_profile}
+    \lean{TNLean.MPS.AreaLaw.exists_physical_ground_reference_trimming_profile}
+    \leanok
+    Retain the hypotheses and constants of
+    Lemma~\ref{lem:original_ground_reference_polynomial}. The same
+    reference $U$ and integer $B$ can be chosen before every interval,
+    candidate space, and sample. Define
+    \begin{align}
+        \xi=\frac{1}{1000d\sqrt{N+1}}>0,
+        \qquad d=r^2B,\qquad b_{\rm ref}=d^2.
+        \label{eq:original_reference_radius}
+    \end{align}
+    For every interval $J$, map $U$ and $G$ to
+    $\mathcal H_J\otimes\mathcal H_{J^c}$. They remain mutually
+    $10^{-5}$-close, and every vector of the mapped reference has Schmidt
+    rank at most $b_{\rm ref}$ across every internal interval cut with
+    the whole exterior retained. For every integer $k_{\rm cuts}\le N$,
+    \begin{align}
+        \xi\sqrt{k_{\rm cuts}b_{\rm ref}}&\le10^{-3},\notag\\
+        \xi^{-2}&\le10^6 C Z^{P+1}.
+        \label{eq:original_reference_radius_budget}
+    \end{align}
+    For each separately bounded candidate count $M$, the numerical
+    ceiling $B_{\rm out}(M)=10^6b_{\rm ref}(N+1)M^2$ satisfies
+    \begin{align}
+        B_{\rm out}(M)\le10^6 C Z^{P+1}M^2.
+        \label{eq:original_reference_output_profile}
+    \end{align}
+    The loss in (\ref{eq:original_reference_radius_budget}) has no factor
+    depending on $M$. Empty intervals and intervals without internal
+    cuts are included.
+\end{corollary}
+\begin{proof}\leanok
+    \uses{lem:original_ground_reference_polynomial,
+        lem:alvv-interval-reference-weighted}
+    An internal interval prefix has at most two boundaries against the
+    full chain. Its reference rank is therefore at most $d^2$.
+    The interval/exterior coefficient isometry preserves both closeness
+    estimates. Since $k_{\rm cuts}\le N$, substitution into
+    (\ref{eq:original_reference_radius}) gives the first bound in
+    (\ref{eq:original_reference_radius_budget}). Finally
+    $\xi^{-2}=10^6b_{\rm ref}(N+1)$ and $N+1\le Z$ give the remaining
+    polynomial bounds.
+\end{proof}

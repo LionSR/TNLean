@@ -119,3 +119,120 @@ use the paired row and column alphabet, in increasing site order.
     (\ref{eq:interval_mpo_transfer_decomposition}), with the prescribed
     middle factors and the exterior coefficients chosen afterwards.
 \end{proof}
+
+
+\begin{lemma}[A numbered collar family before every whole operator]
+    \label{thm:common_collar_mpo_tensor_family}
+    \lean{TNLean.MPS.AreaLaw.exists_common_collar_mpo_tensor_family}
+    \leanok
+    Let $q\ge1$ and $0\le p\le c\le d\le r\le L$ be integers.
+    Put $E=[c,d)$ and $J=[p,r)$. Supply a family
+    $W^0_1,\ldots,W^0_n$ on $\mathcal C(E)$, each with open matrix
+    product bond bound $B$ in increasing site order. There is one
+    numbered family $(W_j)_{j=1}^{n'}$ on $\mathcal C(J)$, chosen
+    before every whole-chain operator and its exterior coefficients,
+    such that
+    \begin{align}
+        n'&=nq^{2|J\setminus E|}.
+    \end{align}
+    Each $W_j$ has open matrix product bond bound $\max(1,B)$ in
+    increasing site order.
+
+    For a region $S$, let $\Gamma_S$ denote the canonical unitary
+    separating exterior and retained configurations, in that order.
+    Every whole-chain matrix $Z$ that admits a decomposition
+    \begin{align}
+        Z&=\Gamma_E^*\left(\sum_{j=1}^nM^0_j\otimes W^0_j\right)\Gamma_E
+    \end{align}
+    admits exterior matrices $M_j$ on $\mathcal C(J^c)$ satisfying
+    \begin{align}
+        Z&=\Gamma_J^*\left(\sum_{j=1}^{n'}M_j\otimes W_j\right)\Gamma_J,\notag\\
+        \Psi_J Z\Psi_J^*&=\sum_{j=1}^{n'}W_j\otimes M_j,
+    \end{align}
+    where $\Psi_J$ is the same canonical configuration identification
+    followed by tensor exchange. No Hermiticity or spectral assumption
+    on $Z$ is required. In particular the family is unchanged when a
+    later estimated energy center changes $Z$ or its old exterior
+    coefficients.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:interval_mpo_common_family_transfer}
+    Apply the prescribed changing-region construction to $E\subseteq J$.
+    The configuration space on $E\setminus J$ consists of the one
+    empty configuration; the remaining labels are pairs of configurations
+    on $J\setminus E$.
+    Choose a finite enumeration of this one family before supplying
+    any exterior coefficients. The count is $nq^{2|J\setminus E|}$,
+    and each member retains the preceding bond bound. Transport the
+    existing matrix identity by the canonical tensor-coordinate
+    isometry to obtain the middle-first identity for the same $Z$.
+\end{proof}
+
+\begin{lemma}[Collar count within the fixed soft-family parameter]
+    \label{thm:precenter_collar_count}
+    \lean{TNLean.MPS.AreaLaw.precenter_count_ge_collar_factor,
+        TNLean.MPS.AreaLaw.common_collar_count_le_precenter_square}
+    \leanok
+    Let $q,k\ge1$ and let $m,\ell,n,c$ be nonnegative integers. Put
+    \begin{align}
+        D=(mk+1)(qk)^{36\ell+4\lfloor k/\ell\rfloor},
+    \end{align}
+    with natural-number division when $\ell=0$. Then $q^{8\ell}\le D$.
+    If $n\le D$ and $c\le4\ell$, then $nq^{2c}\le D^2$.
+    Consequently the enlarged common family may still use the same
+    parameter $D$ in any estimate requiring family cardinality at most
+    $D^2$; its suppression budget is unchanged.
+\end{lemma}
+\begin{proof}\leanok
+    Since $q\le qk$, $qk\ge1$ and
+    $8\ell\le36\ell+4\lfloor k/\ell\rfloor$, monotonicity of powers
+    gives $q^{8\ell}\le(qk)^{36\ell+4\lfloor k/\ell\rfloor}\le D$.
+    Hence $nq^{2c}\le Dq^{8\ell}\le D^2$.
+\end{proof}
+
+\begin{lemma}[The same filter through one common collar family]
+    \label{lem:common_collar_filter_words}
+    \lean{TNLean.MPS.AreaLaw.exists_common_collar_filter_family}
+    \leanok
+    Let $q\ge1$ and $0\le p\le c\le d\le r\le L$, and put
+    $E=[c,d)$ and $J=[p,r)$. Supply $n_0$ matrices $W_i^0$ on
+    $\mathcal C(E)$, each with open matrix product bond bound $B$.
+    There is one family $(W_i)_{i=1}^n$ on $\mathcal C(J)$, chosen
+    before every global operator and target, with
+    \begin{align}
+        n=n_0q^{2|J\setminus E|},
+        \qquad \text{member bond bound }\max(1,B).
+    \end{align}
+    Suppose a supplied global operator $K_*$ has a decomposition through
+    $W^0$ in the original configuration split. Let $T$ be any global
+    subspace and let $\Delta\ge0$. Assume $K_*$ preserves $T,T^\perp$,
+    has minimum gain one on $T$, and satisfies
+    $\|K_*v\|^2\le\Delta\|v\|^2$ on $T^\perp$.
+
+    With $\Psi_J$ placing the retained factor first, the same operator
+    $K=\Psi_JK_*\Psi_J^{-1}$ has an actual decomposition
+    \begin{align}
+        K=\sum_{i=1}^n W_i\otimes M_i.
+    \end{align}
+    Its whole-chain matrix is unchanged, and its four operator bounds
+    hold on $T_J=\Psi_JT$ and $T_J^\perp$. For every $a\ge0$ and
+    every $\delta$-viable subspace $S$ for $T_J$, where $\delta<1$,
+    \begin{align}
+        S_a=\sum_{w\in\{1,\ldots,n\}^a}W_{w_1}\cdots W_{w_a}S
+    \end{align}
+    has dimension at most $n^a\dim S$ and is
+    $\Delta^a/(1-\delta)^2$-viable for $T_J$.
+    The original decomposition is an intermediate hypothesis of this
+    algebraic lemma. No decomposition on $J$ is assumed, and no
+    viability statement is transferred between distinct tensor splits.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:common_collar_mpo_tensor_family}
+    Choose the collar family before the whole operator. Apply its
+    matrix identity to the actual matrix of $K_*$, and conjugate that
+    identity by $\Psi_J$. Unitary conjugation preserves the target,
+    its orthogonal complement, and the two norm inequalities. The
+    tensor decomposition then gives the ordered-word error estimate;
+    its $n^a$ products give the dimension bound. This is supporting
+    algebra for \cite[Proposition~5.7]{Arad2016RigorousRG}.
+\end{proof}

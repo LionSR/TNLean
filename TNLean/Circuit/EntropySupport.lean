@@ -56,6 +56,23 @@ theorem isSupportedOn_of_mem_supportedOperators {S : Finset ι}
   | add A B _ _ hA hB => simp [hA, hB]
   | smul c A _ hA => simp [hA]
 
+/-- The local lift of a regional matrix is its placement on the subtype of
+the designated sites. This identifies the tensor-factor and matrix-entry
+descriptions of a supported operator, including an empty region. -/
+theorem localLift_eq_embedOp (S : Finset ι)
+    (K : Matrix (S → Fin q) (S → Fin q) ℂ) :
+    Entropy.localLift (n := fun _ ↦ q) S K =
+      embedOp (Subtype.val : S → ι) K := by
+  ext σ τ
+  rw [Entropy.localLift_apply, embedOp_apply]
+  congr 1
+  simp only [AgreeOff, eq_iff_iff]
+  constructor
+  · intro h v hv
+    exact h v fun hvS ↦ hv ⟨v, hvS⟩ rfl
+  · intro h v hv
+    exact h v fun w hw ↦ hv (hw ▸ w.2)
+
 omit [DecidableEq ι] in
 /-- An operator satisfying the matrix-entry support condition belongs to the
 algebra of operators acting on its support. -/
@@ -66,18 +83,7 @@ theorem mem_supportedOperators_of_isSupportedOn {S : Finset ι}
   classical
   by_cases hconfig : Nonempty (ι → Fin q)
   · obtain ⟨K, rfl⟩ := hA.exists_localLift (Classical.choice hconfig)
-    have hembed : Entropy.localLift (n := fun _ ↦ q) S K =
-        embedOp (Subtype.val : ↥S → ι) K := by
-      ext σ τ
-      rw [Entropy.localLift_apply, embedOp_apply]
-      congr 1
-      simp only [AgreeOff, eq_iff_iff]
-      constructor
-      · intro h v hv
-        exact h v fun hvS ↦ hv ⟨v, hvS⟩ rfl
-      · intro h v hv
-        exact h v fun w hw ↦ hv (hw ▸ w.2)
-    rw [hembed]
+    rw [localLift_eq_embedOp]
     simpa only [Subtype.range_val_subtype, Finset.setOfPred_mem] using
       embedOp_mem_supportedOperators (e := (Subtype.val : ↥S → ι)) Subtype.val_injective K
   · have : IsEmpty (ι → Fin q) := ⟨fun σ ↦ hconfig ⟨σ⟩⟩

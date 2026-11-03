@@ -1,0 +1,97 @@
+\section{Fixed-input history probability and the same terminal image}
+
+The following conditional estimate applies the corrected finite-resampling
+argument to an actual interval candidate and its prescribed finite sequence.
+It retains the last untrimmed image on the same original-target history,
+as required for the energy estimate in
+\cite[lines 1801--1813]{Arad2016RigorousRG}. The repeated-sampling
+qualification remains that of~\cite{gap:alvv16_bootstrap_constants}.
+
+\begin{lemma}[History probability for one actual interval candidate]
+    \label{lem:fixed_interval_raw_history_probability}
+    \lean{TNLean.MPS.AreaLaw.canonicalHalfSampledIntervalHistory_probability}\leanok
+    Fix natural numbers $D\ge2$, $a$, $K\ge1$ and a real $\eta$ such that,
+    for all natural $r_*,n,Q$,
+    \begin{align}
+        K(r_*+1)(n+2)^2\le Q\quad\Longrightarrow\quad
+        Q\ge4D^2,\qquad f_D(Q,r_*)\le\frac{\eta}{(n+2)^a}.
+        \label{eq:fixed_interval_scalar_threshold}
+    \end{align}
+    Here $s_Q=\lfloor Q/(2D^2)\rfloor$ and the corrected failure bound is
+    \begin{align}
+        f_D(Q,r_*)=
+        \left(1+\frac{2}{\sqrt{(24/25)s_Q/(8Q)}}\right)^{2r_*}
+            Qe^{-s_Q/16},
+        \label{eq:fixed_interval_bootstrap_failure}
+    \end{align}
+    as in~\cite{gap:alvv16_random_sampling_net_count}.
+    Let $J=[p,s)$ be an interval of an $N$-site chain, $d=\dim\mathcal H_J$,
+    and $k=\max\{s-p-1,0\}$. Let $G,\mathcal R$ be global subspaces and
+    $(T_x)_{x\in X}$ a nonempty family of global targets.
+    All regional viability statements below use $\mathcal H_J$ and its
+    whole exterior $\mathcal H_{J^c}$.
+
+    Let $F_1,\ldots,F_n$ be fixed operators on $\mathcal H_J$, with
+    $n\le D^2$, and put $\mathcal A(S)=\sum_iF_iS$. Suppose that for
+    every $x$, $G$ is $\varepsilon$-close to $T_x$ and $T_x$ is
+    $1/200$-close to $G$, in the directed sense of closeness. Suppose also
+    that for every real $\delta<1$ and every regional subspace $S$,
+    \begin{align}
+        S\text{ is $\delta$-viable for }T_x
+        \quad\Longrightarrow\quad
+        \mathcal A(S)\text{ is $\Delta/(1-\delta)^2$-viable for }T_x.
+        \label{eq:fixed_interval_family_improvement}
+    \end{align}
+    The real parameters satisfy
+    \begin{align}
+        D^{12}\Delta&\le10^{-5},&
+        \varepsilon&\le\frac1{100}\left(\frac{3/100}{D^2}\right)^2,\notag\\
+        0\le\varepsilon_{\rm ref}&\le10^{-5},&
+        \xi&>0,\qquad \xi\sqrt{k b_{\rm ref}}\le10^{-3}.
+        \label{eq:fixed_interval_precision_budgets}
+    \end{align}
+    Assume $G$ and $\mathcal R$ are mutually $\varepsilon_{\rm ref}$-close,
+    and every reference vector has Schmidt rank at most $b_{\rm ref}$
+    across every internal cut of $J$, with the whole exterior retained.
+    Choose natural $r_*\ge\dim G$ and $R$ with $d\le2^R$, and put
+    $\theta=K(r_*+1)(N+2)^2$.
+
+    Let $W\subseteq\mathcal H_J$ be $0.04$-viable for $G$. For this
+    actual candidate, let $H_J(W)$ be its literal original-target history
+    event from Definition~\ref{def:interval_original_target_history}.
+    Let $Q_R(W,u)$ be its actual terminal stopped matrix, and set
+    \begin{align}
+        Y(u)&=\mathcal A\bigl(I_J\operatorname{ran}Q_R(W,u)\bigr),\notag\\
+        V(u)&=\text{the complete interval parent of }W\text{ on }u.
+        \label{eq:fixed_interval_terminal_images}
+    \end{align}
+    Under the prescribed finite product Haar law $\nu_J$, the history
+    event and the event that $V(u)$ is $3/200$-viable for $G$ are measurable,
+    and each complement has probability at most
+    \begin{align}
+        R\,\frac{\eta}{(N+2)^a}.
+        \label{eq:fixed_interval_history_failure}
+    \end{align}
+    On the single event $H_J(W)$, the same $Y(u)$ is
+    $\Delta/(91/100)^2$-viable for every $T_x$, it is $27/2500$-viable
+    for $G$, and the same $V(u)$ is $3/200$-viable for $G$.
+    No event is intersected over the target index set $X$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{def:interval_original_target_history,
+        def:complete_interval_resampling_parent}
+    Express $W$ by its actual orthogonal projection in the fixed finite
+    configuration coordinates. Transporting that matrix range back by
+    $I_J$ gives exactly $W$, since the range of an orthogonal projection
+    is its original subspace. Thus the initial full-exterior hypothesis
+    is precisely the stated viability of $W$.
+    Apply the fixed-threshold complete-parent resampling estimate in these
+    coordinates. The configuration split preserves global closeness and
+    dimension, and identifies product-coordinate closeness with native
+    regional viability. It gives the literal history probability and
+    the same parent's probability bound. Its deterministic terminal-image
+    estimate, on that original-target history, holds for every $T_x$.
+    The image in (\ref{eq:fixed_interval_terminal_images}) is the range
+    of the same joint family-support projection, not an independently
+    selected approximation.
+\end{proof}
