@@ -752,14 +752,18 @@ For the matrix product operator symmetries of arXiv:2203.12563:
   pairs in the printed coupled pentagon, the missing summed primed fusion
   indices in the gauge display, and the analysis/synthesis convention. The
   general coupled pentagon and multiplicity gauge law remain proof obligations.
-- `glm23_wha_parent_completion.tex` distinguishes the weak-Hopf average
-  of the canonical support projection from averaging its complement. It
-  records the explicit adjoint-closure, positive-length unit-calibration,
-  and finite-family normalization hypotheses under which the support is
-  fixed, the weak-Hopf realization with its finite-set and Bell-pair
-  instances, and its derivation for any compatible tensor injective after
-  blocking (unit support comes from the ideal structure of the state boundary
-  space, without the identity at the injectivity length).
+- `glm23_wha_parent_completion.tex` (scope restriction, resolved)
+  distinguishes the weak-Hopf average of the canonical support projection
+  from averaging its complement. It records the explicit adjoint-closure,
+  positive-length unit-calibration, and finite-family normalization
+  hypotheses under which the support is fixed, the weak-Hopf realization with
+  its finite-set and Bell-pair instances, and its derivation for any
+  compatible tensor injective after blocking (unit support comes from the
+  ideal structure of the state boundary space, without the identity at the
+  injectivity length). For the Bell-pair state tensor, compatible with its
+  operator tensor and injective at one site, the average is
+  `E_n(X) = r⁻² tr(Q_n X) Q_n` and the support projection is `P_n = Q_n`, so
+  the uncompleted average `E_n(I − P_n)` vanishes while `I − P_n ≠ 0`.
 
 - `glm23_reps3_z3_table.tex` records that the printed action of `ψ` in the
   `ℤ₃` phase of `Rep(S₃)` fails the representation identity, and that the
@@ -789,8 +793,12 @@ For the matrix product operator algebras of arXiv:2204.05940:
   (Definitions 3.1 and 4.1), and that the fusion coproduct of a complete
   zipper fusion family satisfies both counit laws for the functional taking
   the Kronecker delta on the letters; that functional is the source's
-  evaluation at the unit, but its existence is not forced by the fields of
-  the family and is taken as an argument.
+  evaluation at the unit.  It exists exactly when the one-site identity is a
+  one-site operator of the family, and it is constructed for every family
+  whose letters are the images of the matrix coefficients of a unital
+  representation; for an arbitrary family its existence is not forced by the
+  fields and is taken as an argument, until the construction of the family
+  from a pre-bialgebra is formalized.
 
 For the strong and weak symmetries of matrix product density operators in
 arXiv:2504.16985:
