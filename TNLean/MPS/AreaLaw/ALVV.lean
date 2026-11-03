@@ -29,6 +29,7 @@ import TNLean.MPS.AreaLaw.ALVV.PhysicalDGTreeEnergyAssignment
 import TNLean.MPS.AreaLaw.ALVV.PhysicalDGTreeEnergyUpdates
 import TNLean.MPS.AreaLaw.ALVV.PhysicalSoftIntervalHistory
 import TNLean.MPS.AreaLaw.ALVV.PhysicalSoftMiddleCluster
+import TNLean.MPS.AreaLaw.ALVV.PhysicalSoftResampling
 import TNLean.MPS.AreaLaw.ALVV.PhysicalSoftSamplingData
 import TNLean.MPS.AreaLaw.ALVV.RegionalChildEnergyCenter
 import TNLean.MPS.AreaLaw.ALVV.SoftClusterPrecision

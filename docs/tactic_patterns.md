@@ -12269,3 +12269,19 @@ length-one word indices is needed.
 - **Decision:** Reuse the existing probability theorem and its exact event;
   no measurable intersection over the center family is introduced. Typed local
   target comparisons avoid unfolding the represented matrix during application.
+
+### Physical interval selection and one joint history event — reuse (2026-11-03)
+
+- **Seen:** `CanonicalIntervalResamplingSelection.lean` and
+  `ALVV/PhysicalSoftResampling.lean`.
+- **Pattern:** Select one proven family per long interval, preserve its
+  associated minimum and spectral data, and apply the existing joint-history
+  and unconditional profile theorems to those same choices.
+- **Reuse:** The physical interval-history construction and the canonical
+  complete-parent event provide all analytic estimates. The new generic
+  selection lemma preserves an arbitrary additional assertion; the primitive
+  chain theorem discharges it by the actual physical construction. The same
+  terminal image uses its shared existing definition.
+- **Decision:** Separate the numerical/physical argument from the common
+  interval selection argument. No second recursion, target approximation or
+  repeated matrix-coordinate proof is introduced.
