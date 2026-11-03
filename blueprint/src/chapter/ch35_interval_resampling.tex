@@ -1,0 +1,125 @@
+\section{Finite repeated sampling on actual intervals}
+
+The operation below uses a fresh coordinate at every active round and a
+terminal full-family image and trim. It follows the resampling description
+in \cite{Arad2016RigorousRG}; its distinction from the printed sample-once
+procedure and the corrected constants are recorded in
+\cite{gap:alvv16_bootstrap_constants}.
+
+\begin{definition}[The complete finite-resampling interval parent]
+    \label{def:complete_interval_resampling_parent}
+    \lean{TNLean.MPS.AreaLaw.canonicalHalfSampledIntervalParent}\leanok
+    Fix an interval $J=[p,r)$, operators $F_1,\ldots,F_n$ on
+    $\mathcal H_J$, a threshold $\theta$, a trimming radius $\xi$, a
+    parameter $D\ge2$ and a number of rounds $R$. Fix a coordinate isometry $I_J:\C^{d_J}\to\mathcal H_J$.
+    Given a candidate $W$, start from its
+    actual orthogonal projection $Q_0$ in those coordinates. At an active
+    round $j$, where $\operatorname{rank}Q_j\ge\theta$, sample
+    $\lfloor\operatorname{rank}Q_j/(2D^2)\rfloor$ dimensions of its actual
+    range using the prescribed unitary coordinate for its actual rank. Apply the family
+    to that sampled space and collectively trim at the actual internal
+    cuts of $J$; let $Q_{j+1}$ be the resulting projection in the same
+    finite coordinates. At an inactive round set $Q_{j+1}=Q_j$.
+
+    After the $R$ prescribed coordinates, extend the sequence by identities.
+    Transport the range of $Q_R$ to $\mathcal H_J$ and take its full family
+    image $V_R=\sum_i F_i I_J\operatorname{ran}Q_R$. The complete parent is
+    the collective trim of an orthonormal basis of this same $V_R$.
+    In particular the terminal full image and trim are performed even
+    when the initial candidate is already below the stopping threshold.
+\end{definition}
+
+\begin{lemma}[Measurability of the parent with a finite sequence]
+    \label{lem:complete_interval_resampling_parent_measurable}
+    \lean{TNLean.MPS.AreaLaw.measurable_projectionMatrix_canonicalHalfSampledIntervalParent}\leanok
+    For every measurable candidate family with measurable orthogonal
+    projection, the actual complete parent projection is jointly
+    measurable in the candidate parameter and its finite seed sequence.
+    No sampling-success hypothesis is required.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{def:complete_interval_resampling_parent}
+    Reindex the actual candidate projection into the fixed finite
+    coordinates. This is a continuous matrix reindexing. Extension of the
+    finite sequence by identities is measurable, so composition with the
+    joint measurable native parent projection proves the assertion.
+\end{proof}
+
+\begin{definition}[Independent finite sequences on the balanced tree]
+    \label{def:interval_resampling_choices}
+    \lean{TNLean.MPS.AreaLaw.IntervalResamplingChoices,
+        TNLean.MPS.AreaLaw.intervalResamplingMeasure,
+        TNLean.MPS.AreaLaw.instIsProbabilityMeasureIntervalResamplingMeasure,
+        TNLean.MPS.AreaLaw.canonicalIntervalResamplingOperation}\leanok
+    For each possible endpoint pair $I$, let $d_I=\dim\mathcal H_I$ and
+    set $\Omega_I=(\prod_{a=0}^{d_I}\mathrm U(a))^R$, with its finite
+    product Haar probability law $\mu_I$. Put
+    $\Omega=\prod_I\Omega_I$ and $\mu=\bigotimes_I\mu_I$.
+    Fix all interval families, thresholds and scalar parameters before
+    $\omega\in\Omega$. At a valid long parent $J$, apply
+    Definition~\ref{def:complete_interval_resampling_parent} to the actual
+    adjacent child merge and the coordinate $\omega_J$.
+    Full short leaves and the existing balanced recursion determine
+    $S_\omega(p,r)$. No coordinate of an invalid endpoint pair is used.
+\end{definition}
+
+\begin{lemma}[Measurability and joint failure for the actual resampling tree]
+    \label{lem:actual_interval_resampling_tree_probability}
+    \lean{TNLean.MPS.AreaLaw.measurable_projectionMatrix_and_dependsOn_canonicalIntervalResamplingTree,
+        TNLean.MPS.AreaLaw.measurableSet_isViable_canonicalIntervalResamplingTree,
+        TNLean.MPS.AreaLaw.intervalResamplingMeasure_canonical_tree_joint_failure_le}\leanok
+    Every valid $S_\omega(p,r)$ has measurable orthogonal projection and
+    depends only on coordinates of no longer intervals. Its true viability
+    event for a fixed global target and the whole exterior is measurable.
+
+    Fix $\delta\ge0$. Suppose that for each long parent and every fixed
+    baseline seed, viability of both actual children implies that the
+    literal complete parent's failure has $\mu_J$-measure at most $\beta$.
+    Then simultaneous failure of $\delta$-viability at a valid root or one
+    of its actual listed internal intervals has outer measure at most
+    $\max\{r-p-1,0\}\beta$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{def:interval_resampling_choices,
+        lem:complete_interval_resampling_parent_measurable,
+        lem:independent_interval_tree_sections,
+        lem:independent_interval_parent_probability}
+    The actual complete parent satisfies the measurable-composition
+    hypothesis by
+    Lemma~\ref{lem:complete_interval_resampling_parent_measurable}.
+    Apply the independent-coordinate projection and section estimates to
+    this same parent and its finite sequence coordinate. Full short
+    leaves are viable, and the guarded failure argument uses only the
+    actual root merge list.
+\end{proof}
+
+\begin{lemma}[Unconditional recorded-rank bounds on the same tree]
+    \label{lem:actual_interval_resampling_tree_profile}
+    \lean{TNLean.MPS.AreaLaw.isIntervalSpanWithRankBound_canonicalHalfSampledIntervalParent,
+        TNLean.MPS.AreaLaw.canonicalIntervalResamplingTree_profile}\leanok
+    Fix $\xi>0$. For one parent, suppose $n\le D^2$, $\theta\ge2$ and
+    $d_J\le2^R$. On every finite sequence, its output has at most
+    $n\theta$ recorded generators, each having internal-cut Schmidt rank
+    at most $n\theta/\xi^2$. Any larger count has the same corresponding
+    bounds.
+
+    For the balanced tree, suppose $q\ge1$, $0<\xi\le1$, the leaf width
+    is positive, and a common $C$ satisfies $q^w\le C$ and
+    $n_J\theta_J\le C$ at every valid long interval. Suppose also
+    $n_J\le D^2$, $\theta_J\ge2$ and $d_J\le2^R$ there. Then every actual
+    retained interval space has dimension at most $C$ and at most $C$
+    recorded generators with weighted internal-cut ranks at most $C$,
+    for every whole seed sequence.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{def:complete_interval_resampling_parent,def:interval_resampling_choices}
+    The initial projection rank is at most $d_J\le2^R$. The stopped
+    halving bound gives $\operatorname{rank}Q_R<\theta_J$ on every
+    sequence. Thus the same full-family image has dimension at most
+    $n_J\theta_J$. Identify that range with the actual sum of native
+    family images and trim its standard orthonormal basis. The collective
+    trimming estimate bounds both the recorded generator count and their
+    weighted ranks by this image dimension. For the tree, induct on the
+    balanced subdivision: a full short leaf fits the $q^w$ bound, and
+    every actual parent satisfies the preceding unconditional estimate.
+\end{proof}

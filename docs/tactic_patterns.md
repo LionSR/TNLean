@@ -12106,3 +12106,17 @@ mathematical arguments and avoids compiling both in the long corollary.
   minimum-uniqueness, adjacent-merge and central-energy theorems. If a third
   physical energy construction needs this argument, use the new theorem
   and refactor the old word-energy construction to share it.
+
+
+### The same terminal image before a uniform interval profile (2026-11-03)
+
+- **Pattern:** Bound the stopped terminal range, identify its actual native
+  family image, then trim the standard basis of that exact image.
+- **Reuse:** The QICLean stopping theorem, shared family-range identity and
+  basis-independent native trim theorem supply the count. The existing
+  interval trim profile and balanced induction transfer it to every seed.
+- **Decision:** No product of one-round bond bounds is accumulated. An explicit
+  change of the current range, followed by rewriting the subspace equality
+  before its finite dimension, avoids dependent-instance rewriting. The
+  actual native trim is named before substituting its basis-independent
+  identity. Candidate reindexing reuses Mathlib's Continuous.matrix_reindex.
