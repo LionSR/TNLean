@@ -12080,3 +12080,16 @@ mathematical arguments and avoids compiling both in the long corollary.
   the whole ground-space dimension with `q^L`; no new automation is introduced.
   The reference loss and rank profiles reuse the existing scalar logarithmic
   profile and uniform-radius lemmas.
+
+### An interval for a compressed minimum — promoted (2026-11-03)
+
+- **Pattern:** Use a nonzero tensor trial for the compressed minimum upper bound,
+  and the positive scalar shift for its lower bound.
+- **Helper:** `Matrix.IsHermitian.exists_compression_min_between_of_tensor_energy`
+  in QICLean `Analysis/CompressionEnergyInterval.lean`.
+- **Occurrences:** `MPS/AreaLaw/RegionalEnergyEstimate.lean`,
+  `MPS/AreaLaw/ALVV/SoftWordEnergyEstimate.lean`, and the terminal
+  soft-energy argument under construction.
+- **Decision:** The common variational statement replaces the repeated pair
+  of lower and upper eigenvalue arguments. The existing public physical
+  statements remain unchanged.

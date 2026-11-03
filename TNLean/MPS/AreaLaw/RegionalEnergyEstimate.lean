@@ -5,10 +5,9 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.RegionalGroundEnergy
 import TNLean.Lattice.ZeroEntropy
-import QICLean.Analysis.TensorEnergyMinimum
 import QICLean.Analysis.QuadraticScalarShift
 import QICLean.Entropy.RegionalOperatorCoordinates
-import QICLean.Analysis.CompressionEnergyBounds
+import QICLean.Analysis.CompressionEnergyInterval
 import QICLean.Analysis.MatrixTensorCoordinates
 import QICLean.Analysis.ViableSubspaceCoordinates
 import QICLean.Channel.FiniteProduct
@@ -174,10 +173,8 @@ theorem exists_native_regional_compressed_energy_estimate {L q l r : ℕ}
   have hwne : Tm v ≠ 0 := by
     intro heq
     exact hvne (Tm.injective (heq.trans Tm.map_zero.symm))
-  obtain ⟨n, hn, hlam⟩ := S.exists_compression_min_eigenvalue_le_of_tensor_energy
-    (toEuclideanCLM (𝕜 := ℂ) (n := J → Fin q) K)
-    (isSymmetric_toEuclideanLin_iff.mpr hK) hv hwne hwenergy
-  have hlower := hK.orthogonalCompression_eigenvalue_ge e hKmin S hn (Fin.last n)
+  obtain ⟨n, hn, hlower, hlam⟩ := hK.exists_compression_min_between_of_tensor_energy
+    S e (e + 3) hKmin hv hwne hwenergy
   refine ⟨n, hn, hlower, hlam, ?_, ?_⟩
   · exact sub_le_sub_right hlower 3
   · exact (sub_le_iff_le_add).mpr hlam

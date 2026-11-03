@@ -9,8 +9,7 @@ import QICLean.Analysis.SoftRegionalEnergyParameters
 import QICLean.Analysis.RegionalEnergyCalibration
 import QICLean.Analysis.ViableProjectionNonzero
 import QICLean.Analysis.ViableSubspaceOrder
-import QICLean.Analysis.TensorEnergyMinimum
-import QICLean.Analysis.CompressionEnergyBounds
+import QICLean.Analysis.CompressionEnergyInterval
 import QICLean.Analysis.QuadraticScalarShift
 import QICLean.Entropy.RegionalOperatorCoordinates
 
@@ -251,10 +250,8 @@ theorem exists_native_soft_word_compressed_energy_estimate
   have hTensorNe : coords z ≠ 0 := by
     intro hz
     exact hzne (coords.injective (hz.trans coords.map_zero.symm))
-  obtain ⟨n, hn, hupper⟩ := V.exists_compression_min_eigenvalue_le_of_tensor_energy
-    (toEuclideanCLM (𝕜 := ℂ) (n := J → Fin q) Kraw)
-    (isSymmetric_toEuclideanLin_iff.mpr hKraw) hzU hTensorNe hTensorEnergy
-  have hlower := hKraw.orthogonalCompression_eigenvalue_ge eSoft hRawLower V hn (Fin.last n)
+  obtain ⟨n, hn, hlower, hupper⟩ := hKraw.exists_compression_min_between_of_tensor_energy
+    V eSoft (eSoft + 3) hRawLower hzU hTensorNe hTensorEnergy
   let hSym := V.orthogonalCompression_isSymmetric
     (isSymmetric_toEuclideanLin_iff.mpr hKraw)
   change hSym.eigenvalues hn (Fin.last n) ≤ eSoft + 3 at hupper
