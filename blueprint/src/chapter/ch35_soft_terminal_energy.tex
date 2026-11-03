@@ -1,0 +1,72 @@
+\section{Energy of the last untrimmed family image}
+
+\begin{theorem}[A terminal compressed soft-energy estimate]
+    \label{thm:soft_terminal_compressed_energy}
+    \lean{TNLean.MPS.AreaLaw.ALVV.exists_native_soft_terminal_compressed_energy_estimate}
+    \leanok
+    Let $H=\sum_i h_i$ be a chain of positive local dimension, with
+    $0\le h_i\le I$ and the designated nearest-neighbour supports.
+    Let $G$ be its full ground space. Fix $l\le u\le v\le r\le L$,
+    with $u-l,r-v\le2\ell$, and let $P,M$ be the original internal
+    interaction sums on $J=[l,r)$ and $[u,v)$, respectively.
+    Their actual attained minima $e_P,e_M$ are chosen before the
+    center and every terminal candidate.
+
+    Suppose $e_M-10\le p\le e_M$, $t,T_0\ge48$, and $m\ge2$.
+    Define
+    \begin{align}
+      R&=P-M+pI+h_{m,t}(M-pI),&
+      A_*&=t(1+\log m)+4\ell+14,\label{eq:terminal_soft_operator}\\
+      \rho&=32e^{-(T_0-48)/8}+\frac tm\left(\frac{T_0}t\right)^m,&
+      \delta&=\frac{\Delta}{(91/100)^2}.\label{eq:terminal_soft_losses}
+    \end{align}
+    Assume $\tau,\Delta\ge0$, $\rho\le1/16$,
+    $\tau\le1/[1024(A_*+1)]$ and $\delta\le1/[100(A_*+1)]$.
+    Restrict $R$ to a fixed complementary configuration to obtain
+    $R_{\mathrm{nat}}$ on $\mathcal H_J$. Then
+    $R=R_{\mathrm{nat}}\otimes I$ in the explicit regional tensor
+    coordinates. There is an actual attained minimum $e_{\mathrm s}$,
+    chosen before the target and candidate, such that
+    $R_{\mathrm{nat}}-e_{\mathrm s}I\ge0$,
+    $\|R-e_{\mathrm s}I\|\le A_*$ and
+    $e_{\mathrm s}\le e_P\le e_{\mathrm s}+\rho$.
+
+    Let $T$ be a full-chain space with $\dim T=\dim G$ and
+    $\|(I-P_G)t_0\|^2\le\tau\|t_0\|^2$ for $t_0\in T$.
+    Let $I_e:\mathbb C^d\to\mathcal H_J$ be the coordinate isometry,
+    let $(A_i)_i$ be a finite operator family on $\mathcal H_J$,
+    and let $Q$ be any $d\times d$ matrix. No projection assumption
+    on $Q$ is imposed. Form the same untrimmed family image
+    $Y=\sum_i A_i I_e\operatorname{range}Q$.
+    Suppose $Y$ is $\delta$-viable for $T$ in the explicit regional
+    coordinates, retaining the whole exterior of $J$.
+    Then $Y$ has positive dimension, and the actual orthogonal
+    compression of $R_{\mathrm{nat}}$ to $Y$ has an orthonormal
+    eigenbasis with decreasing eigenvalues. Its least eigenvalue
+    $\lambda$ satisfies
+    \begin{align}
+      e_{\mathrm s}\le\lambda\le e_{\mathrm s}+3,\qquad
+      e_P-3-\rho\le\lambda-3\le e_P,\qquad
+      e_P-49/16\le\lambda-3.\label{eq:terminal_soft_update}
+    \end{align}
+    This is an explicit-budget auxiliary to
+    \cite[Figure~\texttt{fig:algo1}, line 1631, and lines 1793--1807]{Arad2016RigorousRG}.
+    It concerns the last untrimmed image, not the final collectively
+    trimmed space. The physical calibration and the successful complete
+    parent event must supply the two comparison bounds.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{lem:native_soft_parent_energy}
+    The actual regional construction gives the positive operator
+    $C=R-e_{\mathrm s}I$, with norm at most $A_*$ and energy at most
+    $2+\rho$ on $G$. The first comparison transfers this energy to $T$.
+    Projecting $T$ onto $Y\otimes\mathcal H_{J^c}$ then gives energy
+    at most three under the stated budgets. The target has positive
+    dimension, and the second loss is less than one, so some projected
+    vector is nonzero. The exact regional tensor identity turns it
+    into a tensor trial for $R_{\mathrm{nat}}$ of energy at most
+    $e_{\mathrm s}+3$. The compression variational bound and
+    $R_{\mathrm{nat}}-e_{\mathrm s}I\ge0$ give the first interval in
+    (\ref{eq:terminal_soft_update}). The actual minimum comparison and
+    $\rho\le1/16$ give the remaining assertions.
+\end{proof}
