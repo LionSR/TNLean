@@ -242,7 +242,7 @@
       "corollaries": [],
       "notes": {
         "thm:spt_classification": "Classification of SPT phases along symmetric parent-Hamiltonian paths by the cocycle class",
-        "thm:has_string_order_of_symmetric_injective": "Virtual-boundary nondecay for injective symmetric tensors, named in the chapter title",
+        "thm:has_string_order_of_symmetric_injective": "Virtual-boundary nondecay (string order) for injective symmetric tensors",
         "thm:spt_exact_ground_physical_class": "Physical-gap converse across changes of minimal MPS bond dimension, derived without a supplied transfer bound",
         "thm:spt_exact_phase_injective_classification": "Phase/cohomology equivalence for one-site injective endpoints with prescribed exact virtual covariance, combining physical forward and converse directions"
       }
