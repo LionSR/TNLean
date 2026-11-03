@@ -1,6 +1,6 @@
 # LVV and ALVV: completed arguments and remaining conclusions
 
-The mathematical conclusions below distinguish merged results from the checked local continuation. Upstream main was checked at `bcbaffef857d28e783e71ae6a72ed4f82f720634` on 3 November 2026. The latest merge upgrades the coordinated dependencies to Lean/Mathlib 4.36.0-rc1; it does not add an LVV or ALVV construction. The continuation below retains its separately verified 4.35.0-rc3 dependency pair until a version-specific integration is checked. The open trackers therefore do not, by themselves, describe which construction steps remain.
+The mathematical conclusions below distinguish merged results from the checked local continuation. Upstream main was checked at `6945bf105fbad9904491d6e5885bbf34c54f44ac` on 3 November 2026. The latest merge, #10520, concerns weak-Hopf symmetry and counits; the preceding #10246 upgrades the coordinated dependencies to Lean/Mathlib 4.36.0-rc1. Neither adds an LVV or ALVV construction. The continuation below retains its separately verified 4.35.0-rc3 dependency pair until a version-specific integration is checked. The open trackers therefore do not, by themselves, describe which construction steps remain.
 
 ## Successive viable sets
 
