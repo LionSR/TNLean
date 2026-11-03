@@ -285,14 +285,10 @@ probability for an adaptively sampled tree remains separate.
     $D_{\rm ref}^2$. No sampling or stopping assertion is included.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{lem:interleaved_actual_suppression,lem:interleaved_common_clipped_reference,
-        lem:interval_family_trim_step}
-    The derived physical tail and polynomial bound construct the actual
-    clipped target, operator and tensor factors. Their minimum target
-    norm gain is one; no identity action on a nonconstant band is used.
-    The chosen radius gives $\xi\sqrt{(r-p-1)D_{\rm ref}^2}\le a/256$.
-    Apply the weighted reference estimate with error $4\tau\le a^2/16384$
-    and $\theta=a/64$, then transfer viability from $T$ to $G$.
+    \uses{lem:physical_interleaved_same_word_family}
+    Retain the same constructed targets, families and operation of
+    Lemma~\ref{lem:physical_interleaved_same_word_family}, and forget
+    its additional ordered-word conclusion.
 \end{proof}
 
 
@@ -325,19 +321,10 @@ probability for an adaptively sampled tree remains separate.
     assert an adaptive probability or a printed running time.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{lem:physical_interleaved_family,lem:interval_family_trim_iterates}
-    Put $R=D^6$ and $\beta=\sqrt\Delta$. For success $b=1-e$ and
-    denominator $d=b+\Delta e$, the next success is $b/d-a/16$.
-    When $b\le\beta$, the calibrated bounds give $2Rd\le1$ and
-    $(Rb+a/16)d\le b$. Otherwise the next error is at most
-    $\beta+a/16<1/200$. Small error persists. Inductively either error
-    is at most $1/200$ or success is at least $R^ja$.
-    The inequality $D^k\ge D^2s$ implies
-    $R^{k-1}a\ge3s/(32R)>\beta$, leaving one final exit round.
-    Apply the actual one-step viability estimate at every successor.
-    Dimension and recorded weighted ranks are bounded by
-    $N^k\dim S_0\le(D^k)^2s\le D^6s^3$.
-    Finally $2(1/200+\tau)\le3/200$ transfers to the original ground space.
+    \uses{lem:physical_interleaved_same_word_family}
+    Retain the same constructed targets, families and operation of
+    Lemma~\ref{lem:physical_interleaved_same_word_family}, and forget
+    its additional ordered-word conclusion.
 \end{proof}
 
 
@@ -374,20 +361,10 @@ probability for an adaptively sampled tree remains separate.
     not asserted to be measurable as the children vary.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{lem:physical_interleaved_iterates}
-    Tensoring the viable children gives error $3/100$. The actual
-    original-to-clipped comparison makes $W$ $1/4$-viable for its clipped
-    target. Also $1\le Q\le D^{12}s^6$. The corrected complex-sphere
-    sampling estimate gives a measurable event on which the sampled
-    success is at least $3\min(s,Q)/(32Q)\ge a$.
-    Its failure is bounded by
-    $\exp(32r\log D+12r\log s-s/16)\le e^{-s/64}\le(L+1)^{-2}$.
-    Here $s$ is the already fixed ceiling, since
-    $\log((L+1)^2)=2\log(L+1)$.
-    A long parent has $L>0$, so the lower probability is positive and
-    the event is nonempty. Each successful sample has dimension at most
-    $s$ and $(1-a)$-viability. Apply the literal-iteration theorem.
-    The whole exterior is retained throughout.
+    \uses{lem:physical_interleaved_same_word_family}
+    Retain the same constructed targets, families and operation of
+    Lemma~\ref{lem:physical_interleaved_same_word_family}, and forget
+    its additional ordered-word conclusion.
 \end{proof}
 
 
@@ -445,19 +422,10 @@ probability for an adaptively sampled tree remains separate.
     remain as in \cite{gap:alvv16_approximation_parameters}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{lem:physical_interleaved_node_event,lem:balanced_interval_choice}
-    Choose every physical interval family first. The count satisfies
-    $q^{4\ell}\le D^6\le M$, so full leaves satisfy the dimension and
-    recorded-rank bounds; their viability is immediate. Also
-    $\xi\le\xi_{\max}\le1$, which controls the weighted leaf ranks.
-    At a parent whose children satisfy the invariant, the nonempty
-    fixed-child Haar event supplies an actual successful unitary and
-    the interleaved output. Use that unitary as the candidate index in
-    Lemma~\ref{lem:balanced_interval_choice}, with $P$ equal to the
-    conjunction of same-ground-space viability, dimension and recorded-rank
-    bounds. Its balanced recursion proves the invariant without assuming
-    any final viable spaces. Apply the candidate identity to the actual
-    recursively constructed children to record the chosen unitary.
+    \uses{lem:physical_interleaved_same_word_family}
+    Retain the same constructed targets, families and operation of
+    Lemma~\ref{lem:physical_interleaved_same_word_family}, and forget
+    its additional ordered-word conclusion.
 \end{proof}
 
 
@@ -594,3 +562,80 @@ probability for an adaptively sampled tree remains separate.
     $10(24p+21)p_0+60p+43$ therefore has the bound
     (\ref{eq:interleaved_ritz_gap_degree}).
 \end{proof}
+
+\begin{lemma}[Ordered words in the same interleaved family]
+    \label{lem:physical_interleaved_same_word_family}
+    \lean{TNLean.MPS.AreaLaw.exists_physical_dg_interleaved_filter_family_with_word_powers,
+        TNLean.MPS.AreaLaw.exists_physical_dg_interleaved_interval_iterates_with_word_powers,
+        TNLean.MPS.AreaLaw.exists_physical_dg_interleaved_interval_node_event_with_word_powers,
+        TNLean.MPS.AreaLaw.exists_physical_dg_interleaved_interval_tree_with_word_powers}
+    \leanok
+    The physical families, iterations, fixed-child events and balanced
+    recursion of Lemmas~\ref{lem:physical_interleaved_family}--\ref{lem:physical_interleaved_tree}
+    may be chosen with the following additional property of their same
+    actual interval family $F_1,\ldots,F_N$ and clipped target $T$.
+    For every $n\ge0$ and every $\delta$-viable regional space $S$ for $T$
+    with $\delta<1$, form the untrimmed space
+    \begin{align}
+      W_n(F,S)&=\operatorname{span}\{
+          F_{i_1}\cdots F_{i_n}s:i_1,\ldots,i_n\in\{1,\ldots,N\},\ s\in S\}.
+      \label{eq:interleaved_same_word_image}
+    \end{align}
+    Then $\dim W_n(F,S)\le(D^2)^n\dim S$, and this actual space is
+    $\Delta^n/(1-\delta)^2$-viable for the same $T$. The choices of
+    $T,N,F$ precede the power, input space and threshold.
+
+    In the balanced recursion, the actual target $T_J$ and its mutual
+    $\tau$-closeness to the original ground space are retained for every
+    long interval $J$, along with its actual family $F_J$ and these word
+    bounds. The merge operation still equals sampling followed by the
+    recorded interleaved rounds with that same $F_J$. The targets and
+    families are chosen before the radius and recursive operation.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:independent_physical_dg_word_family,
+        lem:interleaved_actual_suppression,lem:interleaved_common_clipped_reference,
+        lem:interval_family_trim_step,lem:interval_family_trim_iterates,
+        lem:balanced_interval_choice}
+    The actual physical filter supplies its tensor factors, minimum
+    target gain one, squared complementary contraction $\Delta$, and
+    every ordered-word estimate. The regional coordinate identity
+    places all these conclusions in the same coordinates. The common
+    reference and $\xi\sqrt{(r-p-1)D_{\rm ref}^2}\le a/256$ give the
+    actual trim-step error $f(\delta)+a/16$.
+
+    For the finite iteration, write $R=D^6$ and $b=1-e$ for success.
+    The calibrated scalar recurrence gives either $e_j\le1/200$ or
+    $b_j\ge R^ja$. The count
+    $k=\lceil\log_D(D^2s)\rceil$ reserves a final exit round and
+    gives $e_k\le1/200$. Apply the trim-step estimate at every actual
+    successor. The dimension and recorded weighted ranks are at most
+    $N^k\dim S_0\le(D^k)^2s\le D^6s^3$, while
+    $2(1/200+\tau)\le3/200$ transfers viability to the original ground
+    space. The word conclusion for $F,T$ is retained unchanged.
+
+    At a fixed parent, the tensor product $W$ of the two children is
+    $1/4$-viable for this same clipped $T$, with
+    $1\le Q=\dim W\le D^{12}s^6$. The corrected sphere-net bound
+    yields the actual measurable Haar event; its failure is bounded by
+    $\exp(32(\dim G)\log D+12(\dim G)\log s-s/16)\le e^{-s/64}\le(L+1)^{-2}$.
+    Each successful sample has dimension at most $s$ and
+    $(1-a)$-viability, so the actual iteration applies with the same
+    $F,T$. Its ordered-word estimate remains available for the original
+    child product as well as for other viable input spaces.
+
+    Choose the targets, families and word bounds together for all long
+    intervals before choosing the recursive operation. Full leaves obey
+    $q^{4\ell}\le D^6\le D^6s^3$ and the weighted-rank bound since
+    $\xi\le1$. The nonempty fixed-child event supplies each actual
+    successful unitary and parent. Apply the balanced interval induction
+    and retain its literal operation identity. No second family is
+    chosen for the untrimmed image.
+\end{proof}
+
+The family here is polynomial in the actual hard-clipped Hamiltonian.
+Its word property concerns the same target as the interleaved merge, and
+can therefore support a separate energy candidate formed from its child
+product. It does not identify the family with the soft-truncated family
+of the printed generation procedure, or establish the printed word count
+or running time; see \cite{gap:alvv16_approximation_parameters}.

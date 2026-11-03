@@ -57,7 +57,9 @@ abstracted — record why, so it is not re-proposed).
   none repeats the tail, suppression or reference proof.
 - **Decision:** This is forwarding through different mathematical conclusions,
   not repeated analytic reasoning. No tactic is introduced. The tree omits
-  unnecessary type-exposure steps for the count and sampling size.
+  unnecessary type-exposure steps for the count and sampling size. The stronger
+  constructions also retain the ordered-word bounds of their same family;
+  the former public conclusions are projections of those shared proofs.
 
 ### Lower bound for the interleaved logarithmic scale — promoted (2026-11-03)
 
