@@ -231,11 +231,9 @@ the fusion coproduct and a linear functional $\varepsilon$ taking the values
 $\varepsilon(T^{ik})=\delta_{ik}$ on the letters as counit, is a pre-bialgebra: the coproduct is
 coassociative and multiplicative and $\varepsilon$ satisfies both counit laws, while
 `coproduct_one` shows that the coproduct is not unital in general.  By `counit_unique` the
-counit is determined by the family.
-
-**Scope restriction (counit existence):** the functional is an argument, because the fields of
-the family do not force it to exist; in the source it is evaluation at the unit of
-$\mathcal A$.  Documented in `docs/paper-gaps/mrgscp22_pre_bialgebra_counit_scope.tex`.
+counit is determined by the family.  The functional is an argument, because the fields of the
+family do not force it to exist, as the module docstring records; in the source it is
+evaluation at the unit of $\mathcal A$.
 
 Source: arXiv:2204.05940, `mpo.tex`, lines 866--875, 1409--1421, 1655 and 1708. -/
 @[instance_reducible]
