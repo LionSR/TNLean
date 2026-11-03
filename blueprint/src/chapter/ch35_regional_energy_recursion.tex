@@ -1,6 +1,6 @@
 \section{Recursive scalar estimates with a specified node relation}
 
-\begin{theorem}[A simultaneous energy assignment with a node relation]
+\begin{lemma}[A simultaneous energy assignment with a node relation]
     \label{thm:regional_energy_node_relation_assignment}
     \lean{TNLean.MPS.AreaLaw.ALVV.exists_energy_with_node_relation}
     \leanok
@@ -21,7 +21,7 @@
     long interval. The relation need not describe any particular family,
     sampling step or compressed operator. This recursion is an auxiliary to
     \cite[Figure~\texttt{fig:algo1}, line 1631]{Arad2016RigorousRG}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Recurse on interval length, returning the scalar together with its
     regional-energy certificate. At a short interval choose its attained

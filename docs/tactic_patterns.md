@@ -12167,3 +12167,17 @@ same operator equality. The four operator bounds use the shared QIC theorem
   characterization. A third use should extract a general flat spectral
   lemma in QICLean and a universal configuration-dimension MPS bound in
   TNLean, then refactor these known occurrences.
+
+### Fixed-candidate histories on the actual resampling tree — reuse (2026-11-03)
+
+- **Seen:** `CanonicalIntervalRawTreeProbability.lean`.
+- **Pattern:** Viable children imply a viable fixed candidate; its actual
+  original-target history gives the same retained parent's viability.
+  Guarded history sections are empty for nonviable baseline children and
+  otherwise lie in the same fixed-input history complement.
+- **Reuse:** The existing adjacent-merge error addition, coordinate-dependence
+  theorem, exact history section, and one-union joint-history theorem carry
+  the argument. Named set equalities avoid unfolding stopped iterations
+  when proving measurability of intersections.
+- **Decision:** This is the actual-construction application of the existing
+  product-measure result; no second induction or probability estimate is copied.

@@ -66,3 +66,38 @@ spaces in the repeated-sampling construction of
     Definition~\ref{def:interval_original_target_history} gives the stated
     equivalence.
 \end{proof}
+
+
+\begin{lemma}[One joint history bound for the actual resampling tree]
+    \label{lem:actual_interval_original_target_joint_probability}
+    \lean{TNLean.MPS.AreaLaw.intervalResamplingMeasure_canonical_tree_joint_history_failure_le}\leanok
+    Suppose that for every long $J$ and every fixed candidate $W$ that is
+    $0.04$-viable for the original global ground space, the true sequence
+    law satisfies $\mu_J(H_J(W)^c)\le\beta$. Suppose also that on $H_J(W)$
+    the actual complete parent is $3/200$-viable for that same ground
+    space. Then failure of simultaneous $3/200$-viability at a valid
+    root $[p,r)$, $3/200$-viability at every interval in its actual
+    internal-node list, and the original-target history condition at
+    each of those listed parents has outer measure at most
+    $\max\{r-p-1,0\}\beta$ under the fixed independent product law.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:interval_original_target_history_measurable,
+        lem:interval_original_target_history_section,
+        lem:balanced_interval_joint_history_probability,
+        thm:actual_adjacent_interval_merge}
+    Two $3/200$-viable adjacent child spaces merge to a $3/100$-viable
+    candidate, which is $0.04$-viable. Thus a successful history implies
+    viability of the same retained parent. The guarded history failure
+    consists of two viable actual children and a failed parent history.
+    This event is measurable by
+    Lemma~\ref{lem:interval_original_target_history_measurable}.
+    In its own-coordinate section, both child spaces remain fixed by
+    Lemma~\ref{lem:interval_original_target_history_section}. The section
+    is empty if a baseline child is not viable; otherwise it is contained
+    in $H_J(W_J(\omega))^c$ and has measure at most $\beta$.
+    Apply the single-union estimate of
+    Lemma~\ref{lem:balanced_interval_joint_history_probability} to these
+    actual events. Full short leaves are viable, and the internal-node
+    list has at most $\max\{r-p-1,0\}$ members.
+\end{proof}

@@ -34,6 +34,7 @@ import TNLean.MPS.AreaLaw.CanonicalHalfSampledIntervalProfile
 import TNLean.MPS.AreaLaw.CanonicalIntervalGuardedProbability
 import TNLean.MPS.AreaLaw.CanonicalIntervalJointProbability
 import TNLean.MPS.AreaLaw.CanonicalIntervalRawHistory
+import TNLean.MPS.AreaLaw.CanonicalIntervalRawTreeProbability
 import TNLean.MPS.AreaLaw.CanonicalIntervalResampling
 import TNLean.MPS.AreaLaw.CanonicalIntervalResamplingProfile
 import TNLean.MPS.AreaLaw.CanonicalIntervalSamplingOperation

@@ -149,13 +149,13 @@
     middle values with the already specified $e_P,e_M$.
 \end{proof}
 
-\begin{theorem}[A terminal node update from the actual child estimates]
+\begin{lemma}[A terminal node update from the actual child estimates]
     \label{thm:calibrated_soft_terminal_node_update}
     \lean{TNLean.MPS.AreaLaw.ALVV.exists_calibrated_soft_terminal_node_energy_update}
     \leanok
     Retain the primitive interaction assumptions, arbitrary retained interval
     and calibrated scalar hypotheses of
-    Theorem~\ref{thm:calibrated_soft_terminal_compressed_energy}.
+    Lemma~\ref{thm:calibrated_soft_terminal_compressed_energy}.
     The actual attained parent and middle minima $e_P,e_M$ and the actual
     collar minima $e_{\mathrm L},e_{\mathrm R}$ can all be chosen before
     the child split and its energy estimates, with unit eigenvectors and
@@ -174,7 +174,7 @@
 
     For each target and the same untrimmed family image satisfying the
     comparison and exact viability certificates of
-    Theorem~\ref{thm:calibrated_soft_terminal_compressed_energy}, the actual
+    Lemma~\ref{thm:calibrated_soft_terminal_compressed_energy}, the actual
     compression has an ordered orthonormal eigenbasis and least eigenvalue
     $\lambda$ satisfying
     \begin{align}
@@ -188,7 +188,7 @@
     successful repeated-sampling history, rather than final retained-space
     viability alone. This is an auxiliary node estimate for
     \cite[Figure~\texttt{fig:algo1}, line 1631, and line 1807]{Arad2016RigorousRG}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:calibrated_soft_terminal_compressed_energy,
       thm:regional_middle_center_from_children}
