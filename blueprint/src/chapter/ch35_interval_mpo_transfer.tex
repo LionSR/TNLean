@@ -189,3 +189,50 @@ use the paired row and column alphabet, in increasing site order.
     gives $q^{8\ell}\le(qk)^{36\ell+4\lfloor k/\ell\rfloor}\le D$.
     Hence $nq^{2c}\le Dq^{8\ell}\le D^2$.
 \end{proof}
+
+\begin{lemma}[The same filter through one common collar family]
+    \label{lem:common_collar_filter_words}
+    \lean{TNLean.MPS.AreaLaw.exists_common_collar_filter_family}
+    \leanok
+    Let $q\ge1$ and $0\le p\le c\le d\le r\le L$, and put
+    $E=[c,d)$ and $J=[p,r)$. Supply $n_0$ matrices $W_i^0$ on
+    $\mathcal C(E)$, each with open matrix product bond bound $B$.
+    There is one family $(W_i)_{i=1}^n$ on $\mathcal C(J)$, chosen
+    before every global operator and target, with
+    \begin{align}
+        n=n_0q^{2|J\setminus E|},
+        \qquad \text{member bond bound }\max(1,B).
+    \end{align}
+    Suppose a supplied global operator $K_*$ has a decomposition through
+    $W^0$ in the original configuration split. Let $T$ be any global
+    subspace and let $\Delta\ge0$. Assume $K_*$ preserves $T,T^\perp$,
+    has minimum gain one on $T$, and satisfies
+    $\|K_*v\|^2\le\Delta\|v\|^2$ on $T^\perp$.
+
+    With $\Psi_J$ placing the retained factor first, the same operator
+    $K=\Psi_JK_*\Psi_J^{-1}$ has an actual decomposition
+    \begin{align}
+        K=\sum_{i=1}^n W_i\otimes M_i.
+    \end{align}
+    Its whole-chain matrix is unchanged, and its four operator bounds
+    hold on $T_J=\Psi_JT$ and $T_J^\perp$. For every $a\ge0$ and
+    every $\delta$-viable subspace $S$ for $T_J$, where $\delta<1$,
+    \begin{align}
+        S_a=\sum_{w\in\{1,\ldots,n\}^a}W_{w_1}\cdots W_{w_a}S
+    \end{align}
+    has dimension at most $n^a\dim S$ and is
+    $\Delta^a/(1-\delta)^2$-viable for $T_J$.
+    The original decomposition is an intermediate hypothesis of this
+    algebraic lemma. No decomposition on $J$ is assumed, and no
+    viability statement is transferred between distinct tensor splits.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:common_collar_mpo_tensor_family}
+    Choose the collar family before the whole operator. Apply its
+    matrix identity to the actual matrix of $K_*$, and conjugate that
+    identity by $\Psi_J$. Unitary conjugation preserves the target,
+    its orthogonal complement, and the two norm inequalities. The
+    tensor decomposition then gives the ordered-word error estimate;
+    its $n^a$ products give the dimension bound. This is supporting
+    algebra for \cite[Proposition~5.7]{Arad2016RigorousRG}.
+\end{proof}

@@ -46,6 +46,7 @@ import TNLean.MPS.AreaLaw.ChainStageIncidence
 import TNLean.MPS.AreaLaw.ClusterTruncationCutRank
 import TNLean.MPS.AreaLaw.ClusterTruncationMPO
 import TNLean.MPS.AreaLaw.CommonClosingPolynomialFamily
+import TNLean.MPS.AreaLaw.CommonCollarFilterFamily
 import TNLean.MPS.AreaLaw.CommonCollarMPOFamily
 import TNLean.MPS.AreaLaw.CommonMiddleMPOFamily
 import TNLean.MPS.AreaLaw.ComponentReduction

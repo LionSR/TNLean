@@ -12120,3 +12120,12 @@ mathematical arguments and avoids compiling both in the long corollary.
   before its finite dimension, avoids dependent-instance rewriting. The
   actual native trim is named before substituting its basis-independent
   identity. Candidate reindexing reuses Mathlib's Continuous.matrix_reindex.
+
+### Changing retained intervals without reducing their coordinate formulas
+
+`CommonCollarFilterFamily` transports the equality of the Euclidean matrix
+action by a typed `congrArg` on one composition of continuous linear maps.
+This avoids reducing the entire canonical coordinate isometry to prove the
+same operator equality. The four operator bounds use the shared QIC theorem
+`invariant_subspace_bounds_conj`; the word estimate uses
+`word_power_of_tensor_decomposition`. No new proof automation is introduced.
