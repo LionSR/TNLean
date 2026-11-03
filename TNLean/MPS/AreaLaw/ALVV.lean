@@ -22,3 +22,4 @@ import TNLean.MPS.AreaLaw.ALVV.SoftParentEnergy
 import TNLean.MPS.AreaLaw.ALVV.SoftParentStructure
 import TNLean.MPS.AreaLaw.ALVV.SoftTruncationOriginalResidual
 import TNLean.MPS.AreaLaw.ALVV.SoftTruncationReverseResidual
+import TNLean.MPS.AreaLaw.ALVV.SoftWordEnergyEstimate

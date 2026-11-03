@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.AreaLaw.ALVV.SoftParentStructure
 import TNLean.MPS.AreaLaw.RegionalGroundEnergy
 import TNLean.Circuit.SupportedFunctionalCalculus
+import QICLean.Analysis.QuadraticScalarShift
 import QICLean.Entropy.PositiveLocalLift
 
 /-!
@@ -193,10 +194,7 @@ theorem exists_native_soft_parent_energy_bound {L q l u v r ell : ℕ}
           (P - (eP : ℂ) • 1) g) g).re ≤ 2 * ‖g‖ ^ 2 := by
         rw [← heP]
         exact hGenergy g hg
-      simp only [map_sub, map_smul, map_one, _root_.sub_apply, _root_.smul_apply,
-        one_apply_eq_self, inner_sub_left, inner_smul_left, Complex.conj_ofReal,
-        Complex.sub_re, Complex.re_ofReal_mul] at horiginal
-      rw [hself] at horiginal
+      rw [Matrix.re_inner_toEuclideanCLM_sub_ofReal_smul_one P eP g] at horiginal
       rw [← hLift]
       nlinarith only [hform, horiginal,
         mul_le_mul_of_nonneg_right hrho (sq_nonneg ‖g‖)]

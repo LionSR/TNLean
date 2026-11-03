@@ -1,0 +1,95 @@
+\section{Raw compressed energy of the specified word family}
+
+The following conditional lemma uses a specified target and its own
+family with stated bounds. It constructs the soft regional operator and its actual
+compression; no candidate quadratic-energy bound or compressed minimum is assumed.
+It supports the separate energy-estimation image in
+\cite[Figure \texttt{fig:algo1}, line 1631]{Arad2016RigorousRG}.
+
+\begin{lemma}[A regional energy estimate from the same word family]
+    \label{lem:soft_same_word_compressed_energy}
+    \lean{TNLean.MPS.AreaLaw.ALVV.exists_native_soft_word_compressed_energy_estimate}
+    \leanok
+    Let $H=\sum_i h_i$ be a chain with positive local dimension,
+    $0\le h_i\le I$ and the designated nearest-neighbour supports.
+    Write $G$ for its full ground space. Fix $l\le u\le v\le r\le L$
+    with $u-l,r-v\le2\ell$, and integers
+    $\ell\ge21$, $D\ge2$, $s\ge1$, $50\ell^2\le D$. Put
+    \begin{align}
+       a&=\frac{3}{32D^{12}s^5},&
+       \tau&=\frac{a^2}{2^{20}},&
+       \Delta&=\frac{1}{200000D^{12}}.
+    \end{align}
+    Let $T$ be a specified full-chain space of dimension $\dim G$,
+    with $G$ $\tau$-close to $T$. Let $F_1,\ldots,F_N$ be a specified
+    family on the native Hilbert space of $[l,r)$. Assume that it satisfies the following
+    bounds: for every $1/4$-viable $S$ for $T$, the actual one-word
+    image $\sum_iF_iS$ has dimension at most $D^2\dim S$ and is
+    $\Delta/(3/4)^2$-viable for that same $T$. All viability statements
+    use the canonical regional tensor coordinates and retain the full
+    environment.
+
+    Let $P,M$ be the original internal sums on $[l,r)$ and $[u,v)$.
+    Their actual attained minima $e_P,e_M$ are chosen before $p$ and the
+    child spaces. For $e_M-10\le p\le e_M$, define
+    \begin{align}
+       R&=P-M+pI+h_{12,768}(M-pI),&
+       \rho&=32e^{-42}+\frac1{64}<\frac1{16}.
+       \label{eq:soft_word_raw_operator}
+    \end{align}
+    Define $K_{\rm raw}$ by restricting $R$ to one fixed complementary
+    configuration. It is Hermitian and $R=K_{\rm raw}\otimes I$.
+    Its matrix is defined before the attained minimum $e_{\rm s}$ of
+    $R$, which satisfies $e_{\rm s}\le e_P\le e_{\rm s}+\rho$.
+
+    Fix any split $l\le k\le r$ and child spaces $S_1,S_2$ that are
+    $3/200$-viable for the original $G$ on their respective intervals.
+    Let $W$ be their actual tensor merge in $[l,r)$ coordinates and
+    let $V=\sum_iF_iW$. Then $\dim V\le D^2\dim W$ and $V\ne\{0\}$.
+    The actual orthogonal compression of $K_{\rm raw}$ to $V$ has a
+    constructed orthonormal eigenbasis, with eigenvalues in decreasing
+    order. Its last eigenvalue $\lambda_V$ satisfies
+    \begin{align}
+       e_{\rm s}\le\lambda_V\le e_{\rm s}+3,\\
+       e_P-3-\rho\le\lambda_V-3\le e_P.
+       \label{eq:soft_word_raw_energy}
+    \end{align}
+    The definition of the estimate $p_V=\lambda_V-3$ does not use the
+    unknown scalar $e_{\rm s}$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:native_soft_parent_energy,thm:actual_adjacent_interval_merge}
+    The actual central replacement gives $C=R-e_{\rm s}I\ge0$ with
+    norm at most $A=768(1+\log12)+4\ell+14$, and energy at most
+    $2+\rho$ on $G$. The scalar estimates give $A+1\le D$,
+    $\tau\le1/[1024(D+1)]$, and
+    $\Delta/(3/4)^2\le1/[100(D+1)]$.
+
+    The child merge is $3/100$-viable for $G$. Transport through the
+    $\tau$-comparison makes it $1/4$-viable for the same $T$.
+    Apply the word bound for that same family to this actual $W$ to obtain
+    $V$. Pull $V\otimes\mathcal H_{[l,r)^c}$ back to a physical
+    subspace $U$. The positive-energy transfer gives energy at most
+    $9/4$ on $T$, and its actual projection onto $U$ gives energy
+    at most three. Since $\dim T=\dim G>0$ and the projection loss
+    is less than one, some such projected vector is nonzero.
+
+    The exact regional tensor identity carries $R$ to
+    $K_{\rm raw}\otimes I$. Adding the scalar $e_{\rm s}$ to its
+    centered energy gives a nonzero tensor trial vector of raw energy
+    at most $e_{\rm s}+3$ times its squared norm. An environmental
+    slice gives a local unit trial vector in $V$, so the actual least
+    compressed energy is at most $e_{\rm s}+3$. The positive shift
+    $K_{\rm raw}-e_{\rm s}I\ge0$ gives its lower bound. Choose the
+    actual ordered eigenbasis of that compression and apply the
+    minimum comparison to obtain (\ref{eq:soft_word_raw_energy}).
+\end{proof}
+
+The properties of the target and family above hold for the same objects
+in the calibrated hard-truncation construction. Applying this conditional
+lemma to its actual tree families and assigning the resulting estimates
+recursively are separate steps. The downward bias by three is a
+correction for the one-sided center interface; the source's printed
+energy update uses the raw compressed minimum. No literal soft-Generate,
+MPO implementation of this energy routine, or running-time conclusion
+is asserted; see \cite{gap:alvv16_soft_regional_energy_centering}.

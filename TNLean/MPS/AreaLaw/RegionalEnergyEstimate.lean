@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.AreaLaw.RegionalGroundEnergy
 import TNLean.Lattice.ZeroEntropy
 import QICLean.Analysis.TensorEnergyMinimum
+import QICLean.Analysis.QuadraticScalarShift
 import QICLean.Entropy.RegionalOperatorCoordinates
 import QICLean.Analysis.CompressionEnergyBounds
 import QICLean.Analysis.MatrixTensorCoordinates
@@ -161,11 +162,7 @@ theorem exists_native_regional_compressed_energy_estimate {L q l r : ℕ}
     change (inner ℂ (toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)
       (A - (e0 : ℂ) • 1) v) v).re ≤ 3 * ‖v‖ ^ 2 at hvenergy
     rw [he0] at hvenergy
-    simp only [map_sub, map_smul, map_one, _root_.sub_apply, _root_.smul_apply,
-      one_apply_eq_self, inner_sub_left, inner_smul_left, Complex.conj_ofReal,
-      Complex.sub_re, Complex.re_ofReal_mul] at hvenergy
-    have hself : (inner ℂ v v).re = ‖v‖ ^ 2 := inner_self_eq_norm_sq (𝕜 := ℂ) v
-    rw [hself] at hvenergy
+    rw [Matrix.re_inner_toEuclideanCLM_sub_ofReal_smul_one A e v] at hvenergy
     nlinarith only [hvenergy]
   have hwenergy : (inner ℂ
       (TensorProduct.mapL (toEuclideanCLM (𝕜 := ℂ) (n := J → Fin q) K)

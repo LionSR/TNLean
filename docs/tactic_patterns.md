@@ -11744,19 +11744,22 @@ removed after the dependency audit exposed it.
   factors are ordered by the same proved monotone profile before the cut and
   vector are specified. Boundary ranks use the existing exact rank-one bounds.
 
-### Quadratic forms of scalar-shifted order bounds — candidate (2026-11-03)
+### Real scalar shifts of quadratic energy — promoted (2026-11-03)
 
-- **Seen:** `MPS/AreaLaw/ALVV/SoftParentEnergy.lean`.
-- **Pattern:** Apply the promoted positive-matrix-to-Euclidean-operator lemma
-  to the difference in an order inequality, then expand its quadratic form
-  and use the squared-norm identity for the scalar identity term.
-- **Reuse:** The positivity transport uses the existing
-  `Matrix.PosSemidef.isPositive_toEuclideanCLM` and Mathlib's
-  `ContinuousLinearMap.IsPositive.re_inner_nonneg_left`.
-- **Decision:** No new tactic is needed. The final scalar bound combines an
-  existing regional energy estimate and an actual minimum shift; a more
-  general order-to-quadratic-form lemma can be considered if that remaining
-  expansion recurs in several files.
+- **Seen:** `MPS/AreaLaw/RegionalEnergyEstimate.lean`,
+  `MPS/AreaLaw/ALVV/SoftParentEnergy.lean`, and
+  `MPS/AreaLaw/ALVV/SoftWordEnergyEstimate.lean`.
+- **Pattern:** Remove a real multiple of the identity from a regional matrix
+  energy by expanding the Euclidean operator and inner product, then identify
+  the diagonal inner product with the squared norm.
+- **Abstraction:** `QICLean/Analysis/QuadraticScalarShift.lean` owns the general
+  real-or-complex operator/matrix identities and the concrete complex form
+  `Matrix.re_inner_toEuclideanCLM_sub_ofReal_smul_one`. The three consumers
+  use that complex form; real-to-complex normalization is proved once there.
+- **Decision:** No new tactic is needed. Positivity transport and the separate
+  order-difference argument continue to use the existing promoted
+  `Matrix.PosSemidef.isPositive_toEuclideanCLM` and Mathlib's positive-form
+  lemma. No functional-calculus or spectral calculation is duplicated.
 
 
 ### Actual approximate-band bases — share the finite image and squared-error estimates (2026-11-03)

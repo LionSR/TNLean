@@ -102,11 +102,69 @@ At source line 1631, Figure \texttt{fig:algo1} uses the separate
 untrimmed powered family image of the two child spaces as the energy
 candidate, rather than the retained, trimmed output of the tree.
 Lines 1793--1807 combine its viability for a generated soft target with
-a norm estimate for the same generated operator. The estimate above is
-on the original ground space. It must be transferred quantitatively to
-that actual soft target before it can be applied to this candidate.
-Neither that transfer, the recursive one-sided energy invariant, nor a
-running-time bound is a conclusion of the present auxiliary theorem.
+a norm estimate for the same generated operator. The original-ground estimate above alone does not bound this candidate.
+A further conditional theorem now performs the quantitative energy
+transfer for a specified calibrated target and its own actual word
+family, as described below. Substitution of the actual tree data, the
+recursive one-sided energy assignment and the source running-time bound
+remain separate.
+
+\section{Raw compression on the specified family's child image}
+
+A further corrected auxiliary uses order $m=12$, soft scale $t=768$ and
+tail cutoff $T=384$. Its actual residual is
+$\rho=32e^{-42}+1/64<1/16$. The centered regional norm is bounded by
+$A=768(1+\log12)+4\ell+14$. For the calibrated count
+$D\ge50\ell^2$, $\ell\ge21$, one has $A+1\le D$.
+
+The target and family in this auxiliary are specified together with
+their proved closeness and word bounds: the target has the original
+ground-space dimension, its comparison loss is
+$\tau=a^2/2^{20}$ with $a=3/(32D^{12}s^5)$, and the same family has
+one-word loss $\Delta/(3/4)^2$, where $\Delta=1/(200000D^{12})$.
+The scalar bounds give
+$\tau\le1/[1024(D+1)]$ and
+$\Delta/(3/4)^2\le1/[100(D+1)]$. These hypotheses are explicit properties of those given operators;
+no candidate energy bound, actual minimum or successful projection
+is supplied.
+
+For every allowed middle center $p$, the literal raw $R$ is formed and
+its native matrix $K_{\rm raw}$ is defined by one fixed-complement
+principal slice, before its unknown true minimum $e_{\rm s}$ is chosen.
+For any two $3/200$-viable children, form their actual tensor merge $W$
+and the untrimmed one-word image $V=\sum_iF_iW$ using the \emph{same}
+family as in the merge construction. The positive-energy comparison first
+bounds energy on that nearby target and then on its actual projection
+into $V\otimes\mathcal H_{J^c}$. It gives a nonzero trial of centered
+energy at most three. Tensor slicing bounds the actual raw compressed
+minimum $\lambda_V$, and positivity gives
+\begin{align}
+ e_{\rm s}\le\lambda_V\le e_{\rm s}+3,\qquad
+ e_P-3-\rho\le\lambda_V-3\le e_P.
+\end{align}
+The actual ordered orthonormal eigenbasis of the compression is
+constructed as a conclusion, not supplied as spectral data. The formal
+statement is
+\leanid{TNLean.MPS.AreaLaw.ALVV.exists_native_soft_word_compressed_energy_estimate}.
+
+The corrected one-sided estimate is $p_V=\lambda_V-3$. It depends only
+on the raw regional matrix and the actual candidate; the unknown
+$e_{\rm s}$ is used only in its proof. The downward bias by three is a
+local correction to the interface: source line 1631 records the raw
+compressed minimum itself, whereas Definition \texttt{def:soft-trunc}
+requires a center below the true minimum.
+
+The given target and family bounds here belong to the existing
+hard-truncation construction. This theorem does not identify it with the literal soft
+Generate family or its printed word count. Applying it to the returned
+actual tree family and assigning energy estimates recursively remain
+subsequent constructions. Two errors of size $3+\rho\le49/16$ and one
+connecting positive contraction give a parent error at most $57/8<8$;
+the collar conversion above then fits the one-sided width ten. This
+arithmetic explains the intended correction; it is not yet a theorem
+constructing the full recursive energy assignment. No efficient collar
+minimum calculation, matrix product implementation of the energy routine,
+adaptive sampling law or running time is asserted.
 
 The false printed soft-energy and cluster estimates retain their
 counterexamples and separate corrections; see
