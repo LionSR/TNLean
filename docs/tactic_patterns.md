@@ -12153,3 +12153,17 @@ same operator equality. The four operator bounds use the shared QIC theorem
   dependence arguments. No recursive proof or basis-selection argument is
   repeated.
 - **Decision:** Compose the existing mathematical results; no new tactic is needed.
+
+### Flat spectra and full-space matrix product bounds — candidate (2026-11-03)
+
+- **Seen:** `MPS/AreaLaw/PhysicalGroundReference.lean` and
+  `MPS/AreaLaw/PhysicalFlatGroundRitz.lean`.
+- **Pattern:** The gap alternative and absence of an excited value imply
+  that every eigenvalue equals the ground energy; the full low spectral
+  space is then top. Bound arbitrary cut ranks by the number of rows,
+  then by the full configuration dimension.
+- **Notes:** Both proofs use the existing spectral-coordinate membership
+  criterion, Mathlib rank/cardinality bounds and the native cut-rank MPS
+  characterization. A third use should extract a general flat spectral
+  lemma in QICLean and a universal configuration-dimension MPS bound in
+  TNLean, then refactor these known occurrences.

@@ -184,6 +184,7 @@ import TNLean.MPS.AreaLaw.PhysicalDGTreeParameters
 import TNLean.MPS.AreaLaw.PhysicalDGTreePolynomialBond
 import TNLean.MPS.AreaLaw.PhysicalDGTreeWitness
 import TNLean.MPS.AreaLaw.PhysicalDGViability
+import TNLean.MPS.AreaLaw.PhysicalFlatGroundRitz
 import TNLean.MPS.AreaLaw.PhysicalGroundReference
 import TNLean.MPS.AreaLaw.PhysicalGroundReferencePolynomial
 import TNLean.MPS.AreaLaw.PhysicalGroundReferenceTrimming
