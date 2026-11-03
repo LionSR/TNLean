@@ -27,6 +27,7 @@ import TNLean.MPS.AreaLaw.BoundaryCounting
 import TNLean.MPS.AreaLaw.BoundaryGap
 import TNLean.MPS.AreaLaw.BufferDiscount
 import TNLean.MPS.AreaLaw.CanonicalIntervalGuardedProbability
+import TNLean.MPS.AreaLaw.CanonicalIntervalJointProbability
 import TNLean.MPS.AreaLaw.CanonicalIntervalSamplingOperation
 import TNLean.MPS.AreaLaw.CanonicalIntervalSamplingSections
 import TNLean.MPS.AreaLaw.CanonicalIntervalSamplingTree

@@ -624,7 +624,8 @@ probabilities remains a separate argument.
     an explicit analytic hypothesis.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{def:guarded_interval_failure}
+    \uses{lem:canonical_interval_sampling_parent_section,
+        lem:canonical_interval_sampling_tree_coordinate_dependence,def:guarded_interval_failure}
     Replacing the longer parent coordinate leaves each shorter child
     space equal to its baseline value. The updated parent is the same
     canonical sampled merge of $S_1,S_2$, evaluated at $v$.
@@ -632,6 +633,48 @@ probabilities remains a separate argument.
     empty. Otherwise guarded failure implies failure of this actual
     fixed-child parent. Monotonicity of measure and the given estimate
     prove the bound. The seed and original target are unchanged throughout.
+\end{proof}
+
+
+\begin{lemma}[Conditional joint success of the actual canonical hierarchy]
+    \label{thm:canonical_interval_joint_probability}
+    \lean{TNLean.MPS.AreaLaw.intervalSamplingMeasure_canonical_tree_joint_failure_le}
+    \leanok
+    Fix the actual canonical sampled operation, all its interval families
+    and parameters, one original global target $G$, a nonnegative
+    error $\delta$, and $\beta\in[0,\infty]$. Suppose that for every valid long parent and every
+    fixed whole seed, viability of its actual baseline children implies
+    a true failure bound $\beta$ for their same canonical sampled parent
+    under its own fresh seed.
+
+    Write $S_U(a,b)$ for the actual balanced spaces and $V_U(a,b)$ for
+    their $\delta$-viability for $G$, in the original regional coordinates
+    with the whole complement retained. For every $p\le r\le L$,
+    \begin{align}
+        \mu\left\{U:\neg\left(
+          V_U(p,r)\ \land
+          \bigl(\forall J\in\mathcal I_w(p,r),\ V_U(J)\bigr)
+        \right)\right\}
+        \le\max\{r-p-1,0\}\beta.
+    \end{align}
+    This is a conditional analytic implication. The fixed-child bound
+    remains an explicit premise, while event measurability, freshness,
+    and short-leaf viability are derived.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:borel_guarded_canonical_interval_failure,thm:canonical_guarded_sampling_section,
+        thm:balanced_interval_failure_probability,
+        lem:balanced_interval_joint_failure_ancestry}
+    The actual constructed projections make each listed guarded event
+    Borel. The fixed-child estimates and
+    Lemma~\ref{thm:canonical_guarded_sampling_section} bound every true
+    own-coordinate section by $\beta$. The guarded-union estimate in
+    Lemma~\ref{thm:balanced_interval_failure_probability} therefore
+    bounds their union by $\max\{r-p-1,0\}\beta$.
+    Since $\delta\ge0$, every full short leaf is viable. Joint failure
+    ancestry then includes failure at the root or any of its actual
+    listed descendants in this same guarded union. No additional union
+    over unrelated intervals is taken.
 \end{proof}
 
 \begin{lemma}[Recorded generators of the actual trimmed image]

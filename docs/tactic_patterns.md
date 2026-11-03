@@ -11819,3 +11819,15 @@ removed after the dependency audit exposed it.
   event is unfolded at the boundary.
 - **Decision:** Retain the true event and fixed whole seed. No chosen
   comparison hull or basis-law equality enters the reduction.
+
+## Candidate: joint success from actual fixed-child estimates (2026-11-03)
+
+- **Seen:** `MPS/AreaLaw/CanonicalIntervalJointProbability.lean`.
+- **Pattern:** Derive listed guarded measurability and true sections for
+  the canonical tree, then combine the shared guarded-union measure bound
+  with deterministic joint ancestry.
+- **Reuse:** The true guarded-section lemma, the actual guarded Borel
+  lemma, `Submodule.isViable_top`, and the existing union and joint-ancestry
+  theorems supply the complete argument.
+- **Decision:** No copied probability summation or assumed freshness/Borel
+  invariant is added. The analytic fixed-child callback remains explicit.
