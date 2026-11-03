@@ -36,9 +36,13 @@ target. Thus the new prescribed-interval family covers empty intervals,
 short intervals and intervals meeting either chain endpoint, without an
 assumed partition or fit condition. Its original targets use the same raw
 Hamiltonian's canonical minimum at every scale.
-The statement retains $q\ge2$; the scalar local space is a separate
-elementary case. This restriction is displayed in the theorem and is not
-claimed to be a counterexample to the source.
+The intermediate improving-family statement retains $q\ge2$.
+The final entropy, fixed-cut approximation and global MPS consequences now
+include every positive local dimension. For $q=1$, the regional dimension
+bound gives zero entropy and every cut matrix has rank at most one; the
+original unit vector is its own exact bond-one approximation. This
+algebraic branch also covers the empty chain. It changes no physical
+construction for $q\ge2$ and is not a counterexample to the source.
 The buffered cutoffs satisfy $6w\le\eta_1\le\eta_{\rm LD}$.
 The source condition $\eta_1\ge2\mu/\log n$ gives exactly this condition
 under $w=\mu/(3\log n)$ for $n\ge2$. The lower original cutoff is then
@@ -104,6 +108,19 @@ The logarithmic bond bound has the displayed form with
 $a=16+\log(1/g)+\log(16(L+1)/\delta)$ and coefficient exactly one
 on $\log\dim G(\eta_{\rm LD})$.
 
+\paragraph{Strict overlap and separate approximation conclusions.}
+For local dimension at least two, apply the same proved constructions at
+half the requested accuracy. This gives overlap strictly greater than
+$1-\delta$, as printed, without a new physical hypothesis. The fixed-cut
+accuracy variable becomes $16+\log(1/g)+\log(2/\delta)$ and the global
+one becomes $16+\log(1/g)+\log(32(L+1)/\delta)$, retaining the same
+three-quarter power and the same fixed-bandwidth coefficients.
+The fixed-cut and global statements currently supply separate witnesses.
+If the source's repeated notation for the approximation is read as one
+vector satisfying both the sharper designated-cut bound and all global
+bonds, that joint conclusion requires nonuniform sequential rank budgets.
+It is not inferred by equating the two existential choices.
+
 \paragraph{Remaining conclusions.}
 The long-interval construction assumes no global spectral gap and supplies
 the actual polynomial and tensor factors of one global clipped matrix.
@@ -145,14 +162,6 @@ independent-scale families as above. A low-energy basis of matrix product
 states and a running-time bound remain separate. Closed spectral
 cutoffs and the absence of a positivity claim for the Chebyshev polynomial
 follow the companion spectral-projector and positivity notes.
-
-\paragraph{Witness and scalar conventions.}
-The sharper global bound uses $g=\min\{\min(v,\eta_{\rm LD}/2)/6,1\}$
-and chooses its integer bond before the vector. These statements retain
-$q\ge2$. The scalar case, the source's strict rather than nonstrict overlap,
-and a single approximant satisfying both the sharp bound at a designated
-cut and the global bond bound remain separate. The fixed-cut witnesses
-are not identified with the sequential global one.
 
 \bibliographystyle{plain}
 \bibliography{../../blueprint/src/references}

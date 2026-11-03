@@ -11712,3 +11712,17 @@ removed after the dependency audit exposed it.
   closeness assertions. The actual refined space is the image of the same
   initially chosen viable space. The final MPS is the one normalized sequential
   projection product, rather than independent choices at different cuts.
+
+### Positive local dimension — separate the scalar state once (2026-11-03)
+
+- **Reuse:** The physical low-energy entropy and approximation constructions
+  remain unchanged in local dimension at least two. Their positive-dimension
+  consequences split off the scalar local space using ordinary cardinality,
+  cut-rank and regional entropy bounds. No second spectral, polynomial-family
+  or sampling argument is introduced.
+- **Decision:** Strict overlap is obtained by requesting half the accuracy
+  from the existing construction and retaining the resulting exact accuracy
+  logarithm. This avoids a separate constant-absorption calculation.
+- **Boundary:** A zero local dimension gives no nonzero vector only on a
+  positive-length chain; the empty-chain configuration space is a singleton.
+  The positive-dimension statements avoid conflating these two cases.
