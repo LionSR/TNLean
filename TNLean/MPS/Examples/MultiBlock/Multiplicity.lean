@@ -271,7 +271,7 @@ theorem eq_kronCol_of_intertwines (V : Matrix (Fin 4) (Fin 2) ℂ)
       Matrix.cons_val', Matrix.cons_val_zero, Matrix.cons_val_fin_one, Matrix.cons_val_one,
       Matrix.cons_val] <;>
     first
-      | exact h01.symm | exact h21.symm | exact h10 | exact h30 | exact h11.symm
+      | exact h11.symm
       | exact h31.symm | exact h01 | exact h21 | exact h10.symm | exact h30.symm
 
 /-- The two copies of `C` as a family. -/
