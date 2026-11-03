@@ -1,0 +1,148 @@
+\section{One physical soft improving family before all energy estimates}
+\label{sec:uniform_physical_soft_improving_family}
+
+Theorem~\ref{thm:uniform_physical_soft_improving_family} combines the
+uniform regional comparison with fixed middle tensors and a common
+polynomial family. It constructs an improving operator for the very
+same represented soft Hamiltonian, uniformly over the three estimated
+regional energies. The numerical residual conditions remain explicit.
+This is a corrected auxiliary to
+\cite[Proposition~5.7 and Theorem~5.8]{Arad2016RigorousRG}; the source
+qualifications remain those of
+\cite{gap:alvv16_soft_regional_residuals,gap:alvv16_cluster_approximation}.
+
+\begin{theorem}[A common physical family for all lower regional estimates]
+    \label{thm:uniform_physical_soft_improving_family}
+    \lean{TNLean.MPS.AreaLaw.ALVV.exists_uniform_physical_soft_improving_family}
+    \leanok
+    Fix $q\ge2$, $\ell,k\ge1$, $m\ge2$, $\gamma>0$, $0<\tau\le1$,
+    $t\ge3m$, and real $T_0,T_1$ such that
+    $T_0\ge\gamma/40+24$ and $t,T_1\ge156+2\gamma$.
+    Suppose the corrected residuals satisfy
+    \begin{align}
+      3\left(32e^{-(T_0-\gamma/40-24)/8}
+        +\frac{t}{m}(T_0/t)^m\right)&\le\tau\gamma/10^6,\notag\\
+      3\left(32e^{-(T_1-156-2\gamma)/8}
+        +\frac{t}{m}(T_1/t)^m\right)&\le\tau\gamma/10^6.
+      \label{eq:uniform_soft_residual_budgets}
+    \end{align}
+    Set
+    \begin{align}
+      M&=3t(1+\log m)+4\ell+34, &
+      \xi&=\min\left\{1,\frac{\tau\gamma^2}{20000(M+\gamma+8)}\right\},\notag\\
+      U&=M+\xi+4+\gamma, &
+      D&=(mk+1)(qk)^{36\ell+4\lfloor k/\ell\rfloor},\notag\\
+      \Delta&=4\exp\left(-4k\sqrt{\frac{\gamma}{2U}}\right).
+      \label{eq:uniform_soft_family_budgets}
+    \end{align}
+    Let $h_i$, $0\le i<N$, be positive-contraction nearest-neighbour
+    interactions on $N+1$ sites of dimension $q$. Choose
+    $a+2\ell\le b$ and $b+2\ell\le N$, and cut the chain at
+    $0,a+1,a+2\ell,b+1,b+2\ell,N+1$. Denote the five internal
+    Hamiltonians by $A_j$ and their crossing sum by $Y$.
+
+    One can choose their minima $e_j$, a common unit minimizing vector
+    $x$, and $E\in[0,4]$. They satisfy $A_jx=e_jx$ and $A_j-e_jI\ge0$.
+    Thereafter one can choose native middle tensors $A_*$ and closing
+    coefficients $C_0,\ldots,C_m$, and a family $W_0,\ldots,W_{n-1}$
+    on $J=[a+\ell,b+\ell+1)$, before every estimated center below.
+    The count satisfies $n\le D$.
+
+    Write $b_*=2(e^{1/3}-1)$ and define
+    \begin{align}
+      s&=\max\left\{1,
+        \left\lceil
+          \frac{\log\max\{1,N^2\}-\log\log(1+\xi/(t2^{m+1}))}
+               {-\log b_*}
+        \right\rceil_+\right\},\notag\\
+      B&=2s^2q^s(m+1), &
+      Z(z)&=\mathcal T\left(A_*,\sum_{j=0}^{m}z^j C_j\right).
+      \label{eq:uniform_soft_native_family}
+    \end{align}
+    The tensors $A_*$ have virtual dimension $B$. Each $W_i$ has an
+    open-boundary matrix product representation in the paired physical
+    alphabet, with all bonds at most $(\max\{1,B\})^{2k}$.
+
+    For every $p_j\in[e_j-10,e_j]$ on $j\in\{0,2,4\}$, put
+    \begin{align}
+      F_j&=p_jI+h_{m,t}(A_j-p_jI),\notag\\
+      G_p&=\sum_{j=0}^4
+        \bigl(\mathbf1_{j\in\{0,2,4\}}F_j+
+              \mathbf1_{j\notin\{0,2,4\}}A_j-e_jI\bigr)+Y,\notag\\
+      z_p&=e^{(p_2-e_2)/t}, &
+      \widehat G_p&=G_p-F_2+p_2I+\iota(Z(z_p)).
+      \label{eq:uniform_soft_same_approximant}
+    \end{align}
+    Here $\iota$ is identity extension from the native middle interval
+    $[a+2\ell,b+1)$. The matrix $\widehat G_p$ is Hermitian and
+    \begin{align}
+      \|h_{m,t}(A_2-p_2I)-\iota(Z(z_p))\|&\le\xi,\notag\\
+      \|G_p-\widehat G_p\|&\le\xi, &
+      \|\widehat G_p\|&\le M+\xi.
+      \label{eq:uniform_soft_same_error}
+    \end{align}
+
+    Suppose $\mu_0$ is a spectral value of $H_0=\sum_i h_i$ and every
+    spectral value is either $\mu_0$ or at least $\mu_0+\gamma$.
+    Let $G_0$ be its ground space and let
+    $T_p=\operatorname{ran}\mathbf1_{(-\infty,E+\gamma/4]}(\widehat G_p)$.
+    Then $\mu_0=E+\sum_j e_j$, and
+    \begin{align}
+      T_p&=\operatorname{ran}
+          \mathbf1_{(-\infty,E+3\gamma/4]}(\widehat G_p), &
+      \dim T_p&=\dim G_0.
+      \label{eq:uniform_soft_own_cluster}
+    \end{align}
+    The spaces $T_p,G_0$ are mutually $3\tau/200$-close.
+
+    Let $\mathcal U$ be the canonical isometry placing $J$ first and
+    put $T_p^c=\mathcal U T_p$. There are complementary operators
+    $R_{p,i}$ and an actual operator
+    $K_p=\sum_{i=0}^{n-1}W_i\otimes R_{p,i}$ that preserve
+    $T_p^c$ and its orthogonal complement. They satisfy
+    $\|K_pv\|\ge\|v\|$ on $T_p^c$ and
+    $\|K_pv\|^2\le\Delta\|v\|^2$ on $(T_p^c)^\perp$.
+    For every $r\ge0$ and every $\delta$-viable subspace $S$ for
+    $T_p^c$, where $\delta<1$, the literal ordered-word image
+    \begin{align}
+      S_r&=\sum_{w\in\{0,\ldots,n-1\}^r}
+           W_{w_0}\cdots W_{w_{r-1}}S
+      \label{eq:uniform_soft_word_image}
+    \end{align}
+    has dimension at most $D^r\dim S$ and is
+    $\Delta^r/(1-\delta)^2$-viable for $T_p^c$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{lem:alvv_five_soft_uniform_clusters,lem:uniform_native_soft_middle,
+      thm:common_closing_polynomial_family}
+    Choose the regional minima once by the uniform physical comparison.
+    At the true lower center $e_2$, construct the fixed heat atoms and
+    native tensors of Lemma~\ref{lem:uniform_native_soft_middle}.
+    Their closing matrix is polynomial in $z$.
+    Lemma~\ref{thm:common_closing_polynomial_family} chooses one left
+    family before $z$, the supported exterior pair, and the polynomial.
+
+    Keep the two windows exact. With exterior terms
+    $P_L=F_0+(p_2-\sum_j e_j)I$ and $P_R=F_4$, their alphabet sums
+    exactly to $\widehat G_p$ in~(\ref{eq:uniform_soft_same_approximant}).
+    Cancellation gives~(\ref{eq:uniform_soft_same_error}); the uniform
+    comparison gives the cluster of this very same approximant in
+    (\ref{eq:uniform_soft_own_cluster}).
+
+    Apply the actual-cluster Chebyshev construction with lower cutoff
+    $E+\gamma/4$, upper cutoff $E+3\gamma/4$, and spectrum ceiling $U$.
+    Its polynomial decomposition uses the unchanged left family.
+    Since $E\ge0$, the denominator $U-E-\gamma/4$ is at most $U$;
+    monotonicity of the square root and exponential yields the
+    contraction bound in~(\ref{eq:uniform_soft_family_budgets}).
+    The minimum gain and complementary contraction give the ordered-word
+    estimate in~(\ref{eq:uniform_soft_word_image}); its dimension is
+    bounded by $n^r\dim S\le D^r\dim S$.
+\end{proof}
+
+The parameters in~(\ref{eq:uniform_soft_family_budgets}) precede the
+chain length; the tensors and left family precede all three estimated
+centers. The statement retains explicit residual conditions and does
+not identify the source's fixed fourth-order choice. Adaptive selection
+of centers, the complete generating algorithm and its running time
+are separate conclusions.

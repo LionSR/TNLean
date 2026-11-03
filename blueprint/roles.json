@@ -581,7 +581,8 @@
         "thm:physical_low_density_minimum_dimension",
         "thm:physical_low_density_entropy",
         "thm:ld_sharp_single_witness",
-        "thm:low_energy_orthonormal_mps_basis"
+        "thm:low_energy_orthonormal_mps_basis",
+        "thm:uniform_physical_soft_improving_family"
       ],
       "corollaries": [
         "cor:canonical_low_energy_family",
@@ -595,7 +596,8 @@
         "thm:physical_low_density_minimum_dimension": "Actual original-window viable space on every interval from attained minima and calibrated nested sampling, with a fixed-bandwidth natural count bound",
         "thm:physical_low_density_entropy": "Actual original-band regional entropy with coefficient one on the full-band logarithmic dimension and a fixed-bandwidth regularized cubic remainder",
         "thm:ld_sharp_single_witness": "One actual normalized low-energy MPS with the sharper designated-cut rank and simultaneous global bond bound in every positive local dimension",
-        "thm:low_energy_orthonormal_mps_basis": "Actual linear image of an original inner-band orthonormal basis, with exact dimension, two-sided closeness and an orthonormal native MPS basis"
+        "thm:low_energy_orthonormal_mps_basis": "Actual linear image of an original inner-band orthonormal basis, with exact dimension, two-sided closeness and an orthonormal native MPS basis",
+        "thm:uniform_physical_soft_improving_family": "One actual pre-center physical soft family, its same represented matrix cluster and actual Chebyshev word powers under explicit corrected residual budgets"
       }
     },
     "ch:peps_ft": {

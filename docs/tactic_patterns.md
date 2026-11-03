@@ -12009,3 +12009,14 @@ mathematical arguments and avoids compiling both in the long corollary.
   one actual physical construction. Placement reuses its existing linear
   maps and the shared closing-linearity theorem, rather than another
   matrix-entry calculation.
+
+### Fixed physical matrix family and fixed-center spectral argument — candidate (2026-11-03)
+
+- **Seen:** `MPS/AreaLaw/ALVV/UniformPhysicalSoftImprovingFamily.lean`,
+  with the generic actual-cluster construction in QICLean.
+- **Pattern:** Separate the once-chosen physical polynomial matrix family
+  from the closed-cluster Chebyshev and ordered-word argument. Keep the
+  matrix Kronecker equality, and use the existing canonical conjugation
+  theorem rather than rewriting a long expression of isometries.
+- **Decision:** Two private mathematical lemmas keep the same witnesses and
+  default proof limits; no new predicate, structure or resource setting.
