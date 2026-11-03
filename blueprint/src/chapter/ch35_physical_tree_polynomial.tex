@@ -1,0 +1,69 @@
+\section{A polynomial bond for the actual recursive Ritz output}
+\label{sec:physical_tree_polynomial}
+
+For fixed local dimension and gap, the recorded bond of the actual
+modified-tree Ritz output is uniformly polynomial in the length, ground
+multiplicity and inverse requested accuracy. The space is the same
+literal output as in Lemma~\ref{lem:physical_dg_tree_ritz_approximation}.
+
+\begin{lemma}[A uniform polynomial bound for the same Ritz space]
+    \label{lem:physical_tree_ritz_polynomial}
+    \lean{TNLean.MPS.AreaLaw.exists_physical_dg_tree_ritz_polynomial_approximation}
+    \leanok
+    \uses{lem:physical_dg_tree_ritz_approximation}
+    Fix a local dimension $q$ and a gap lower bound $\gamma>0$.
+    There are $C>0$ and $k\in\mathbb N$, chosen before the chain,
+    Hamiltonian, ground multiplicity and accuracy, with the following
+    property. Let $H=\sum_i h_i$ on an $L$-site chain satisfy the
+    physical hypotheses of
+    Lemma~\ref{lem:physical_dg_tree_ritz_approximation}, including
+    $0\leq h_i\leq I$, the designated nearest-neighbour supports,
+    an attained ground energy $\mu$, a second distinct spectral value,
+    and the gap lower bound $\gamma$. Write $G$ for its full ground
+    space and $r=\dim G$.
+    For every $\eta>0$, there are an integer $B$ and a space $R$ such that
+    \begin{align}
+        B&\leq C\bigl((L+1)(r+1)(1+\eta^{-1})\bigr)^k,&
+        \dim R&=r.
+    \end{align}
+    The spaces $R,G$ are mutually $\eta/2$-close, and every vector
+    of $R$ has MPS bond at most $B$.
+    The space $R$ is obtained from the actual balanced root by its
+    literal raw-filter-and-trim iterates and the actual compressed
+    Ritz extraction of
+    Lemma~\ref{lem:physical_dg_tree_ritz_approximation}.
+
+    The construction retains full block leaves of length at most
+    $4\ell$, one final collective trim per long node and the capped
+    gap $g=\min\{\gamma,1\}$. It asserts existence of these recursive
+    witnesses, without an adaptive sampling probability or running time.
+\end{lemma}
+\begin{proof}\leanok
+    Fix the universal constants of
+    Lemma~\ref{lem:physical_dg_tree_ritz_approximation}. Its filter
+    count $D$ depends only on $q,\gamma$ and those constants.
+    The original positive unit interactions give $\mu\geq0$ and
+    $\|H\|\leq\max\{L-1,0\}\leq L+1$.
+    The actual normalized-filter calculation gives
+    $0<\gamma\leq A=\|H\|-\mu\leq L+1$.
+
+    Apply the common polynomial-cost estimate in
+    \cite[``A polynomial bound for the complete refinement cost'']{QICLean2026Blueprint}.
+    It chooses its coefficient and integer exponent before $L,r,A,\eta$.
+    The actual reference profiles, inverse accuracies and ceiling
+    parameters of the recursive construction satisfy its hypotheses.
+    Fix the sampling parameter $\beta=1/2$; its recorded sample bound
+    is $s\leq4097r(1+\log r+\log D+\log2)$.
+    The resulting estimate applies to the actual recorded bond
+    $10^6(B_*N)^2(L+1)M^2$.
+    Choose exactly that integer as $B$ and retain the same Ritz
+    space, dimension, two approximation bounds and all-span MPS
+    statement of the parent construction.
+\end{proof}
+
+This polynomial output bound retains the modified-construction scope in
+\cite{gap:alvv16_approximation_parameters}. It does not supply the
+source energy-estimation invariant, the printed final iteration count,
+adaptive joint success probability, or the computational running time
+of the printed algorithm. The final-filter normalization correction
+remains recorded in \cite{gap:alvv16_final_filter_gain}.
