@@ -12258,3 +12258,14 @@ operator bounds. Typed `congrArg` followed by `Eq.mp` preserves the actual
 whole-chain filter and coefficients. The literal one-step image estimate
 then calls `IsViable.map_of_tensor_decomposition` directly; no conversion of
 length-one word indices is needed.
+
+### One original-target history for many represented targets — candidate (2026-11-03)
+
+- **Seen:** `CanonicalIntervalRawProbability.lean` and
+  `ALVV/PhysicalSoftIntervalHistory.lean`.
+- **Pattern:** Apply the fixed-input history theorem to a single improving
+  target. Its literal original-ground event does not depend on that target,
+  so the same event supports the pointwise conclusions for all centers.
+- **Decision:** Reuse the existing probability theorem and its exact event;
+  no measurable intersection over the center family is introduced. Typed local
+  target comparisons avoid unfolding the represented matrix during application.
