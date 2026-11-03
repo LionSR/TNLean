@@ -25,7 +25,7 @@
     (\ref{eq:rfp_block_zcl}).
 \end{proof}
 
-\begin{lemma}[Copy independence for a non-nilpotent sector decomposition]
+\begin{theorem}[Copy independence for a non-nilpotent sector decomposition]
     \label{thm:mpdo_simple_weight_copy_independent}
     \lean{MPOTensor.weight_copy_independent_of_isPhysicalTraceIdempotent}
     \leanok
@@ -36,7 +36,7 @@
     transfer. Then the weights do not depend on the copy index:
     $\mu_{j,q}=\mu_{j}$
     \cite[Appendix~C.2, lines~1646--1661]{Cirac2016MPDO_arXiv}.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
     Unscaled zero correlation length states
@@ -75,7 +75,7 @@
 \end{corollary}
 
 \begin{proof}\leanok
-    Applying Lemma~\ref{thm:mpdo_simple_weight_copy_independent} to the
+    Applying Theorem~\ref{thm:mpdo_simple_weight_copy_independent} to the
     sector decomposition given by the simple canonical-form condition yields
     the claim.
 \end{proof}
@@ -271,6 +271,56 @@
     Lemma~\ref{thm:mpdo_common_weight_coefficient}, and absorbing
     $\mu_j^N$ into the length-$N$ matrix product vector of $A_j$ yields the
     sum.
+\end{proof}
+
+\begin{definition}[Simultaneous MPO block left inverse]
+    \label{def:mpdo_block_left_inverse}
+    \lean{MPSTensor.IsMPOBlockLeftInverse}
+    \leanok
+    Following the common block-inverse condition of
+    \cite[Appendix~C.2, lines~1666--1676]{Cirac2016MPDO_arXiv} and
+    \cite[lines~269--277]{Bultinck2017Anyons}, for a finite family of MPO
+    tensors $M_c^{il}\in \MN{D_c}$, a simultaneous block left inverse
+    consists of coefficients $C_{(c,x,y),(i,l)}$ such that
+    \begin{align}
+        \sum_{i,l}C_{(c,x,y),(i,l)}(M_d^{il})_{x'y'}
+         & =\delta_{cd}\delta_{xx'}\delta_{yy'}.
+        \notag
+    \end{align}
+\end{definition}
+
+\begin{lemma}[Simultaneous inverse from a one-letter product-algebra span]%
+    \label{thm:mpdo_one_letter_simultaneous_inverse}
+    \lean{MPSTensor.WordTupleSpanTop.%
+        exists_one_letter_simultaneous_left_inverse}
+    \lean{MPSTensor.WordTupleSpanTop.exists_mpo_block_left_inverse}
+    \leanok
+    \uses{def:mpdo_block_left_inverse, thm:cpsv_bnt_blocked_simultaneous_span}
+    Let $A_c^q\in \MN{D_c}$ be a finite family of tensors. If
+    the one-letter tuples $(A_c^q)_c$, indexed by $q$, span the full product
+    algebra $\prod_c \MN{D_c}$, then there are coefficients
+    $C_{(c,x,y),q}$ such that
+    \begin{align}
+        \sum_q C_{(c,x,y),q}(A_d^q)_{x'y'}
+         & =\delta_{cd}\delta_{xx'}\delta_{yy'}.
+        \notag
+    \end{align}
+    For an MPO tensor the letter is the ket--bra pair $q=(i,k)$, so the same
+    coefficients form the simultaneous block left inverse used in
+    \cite[lines~269--277]{Bultinck2017Anyons}. For a BNT, the full
+    product-algebra span is obtained after the common blocking described in
+    \cite[lines~427--431]{Bultinck2017Anyons}.
+\end{lemma}
+
+\begin{proof}\leanok
+    Fix $(c,x,y)$ and consider the product-algebra element which is the matrix
+    unit $E_{xy}$ in block $c$ and zero in every other block. By the spanning
+    hypothesis it is a linear combination of the one-letter tuples. Reading
+    its $(x',y')$ entry in block $d$ gives
+    $\sum_q C_{(c,x,y),q}(A_d^q)_{x'y'}
+        =\delta_{cd}\delta_{xx'}\delta_{yy'}$.
+    Reindexing the doubled physical letter by the ket--bra pair gives the
+    MPO form.
 \end{proof}
 
 \begin{definition}[Three-site family closure and outer inverse contraction]
