@@ -1,4 +1,4 @@
-\chapter{Parent Hamiltonians of injective and normal matrix product states}\label{ch:parent_hamiltonian}
+\chapter{Parent Hamiltonians and the intersection property}\label{ch:parent_hamiltonian}
 
 Following~\cite{PerezGarcia2007Matrix,Cirac2021Matrix}, for a
 translation-invariant matrix product state with tensor $A$, the \emph{parent
@@ -9,37 +9,13 @@ $\Gamma_L(X)(\sigma)=\tr(A^\sigma X)$. On $N$ sites, the state space is
 identified with functions $\{0,\ldots,d{-}1\}^N\to\C$ on the computational
 basis.
 
-The local ground spaces satisfy an intersection property that ensures
-uniqueness of the periodic ground state $V^{(N)}(A)$ for injective and normal
-matrix product states. For injective tensors with positive bond dimension
-$D\ge1$, system size $N\ge2$, and interaction range $1<L\le N$, the parent
-Hamiltonian is frustration-free with unique ground state $V^{(N)}(A)$.
-For normal tensors with positive bond dimension $D \ge 1$ and injectivity length
-$L_0$, uniqueness holds whenever $L_0 < L \le N$ with $N \ge L_0 + 1$;
-word-span injectivity after blocking determines the boundary-closure identities
-that match open-interval restrictions to the periodic chain.
+This chapter defines the local ground spaces and the parent Hamiltonian. It
+proves the projector estimate of Fannes, Nachtergaele and
+Werner~\cite{Fannes1992Finitely} for the local ground spaces of primitive
+tensors, in the geometric form used by Nachtergaele~\cite{Nachtergaele1996Spectral}
+(Theorem~\ref{thm:primitive_fnw_projector_defect_geometric}), and the
+intersection property
+$G_L^{\mathrm{left}}\cap G_L^{\mathrm{right}}=G_{L+1}(A)$ for injective
+tensors (Theorem~\ref{thm:ground_space_iff}). The next chapter uses the intersection property to prove uniqueness of the periodic ground state.
 
 \input{chapter/ch13_parent_hamiltonian_injective_ground_spaces}
-\input{chapter/ch13_parent_hamiltonian_injective_boundary}
-\input{chapter/ch13_parent_hamiltonian_varying_obc}
-\input{chapter/ch13_parent_hamiltonian_physical_embeddings}
-\input{chapter/ch13_parent_hamiltonian_varying_physical_uniqueness}
-\input{chapter/ch13_parent_hamiltonian_spectator_embeddings}
-\input{chapter/ch13_parent_hamiltonian_physical_deformation}
-\input{chapter/ch13_parent_hamiltonian_normal_boundary}
-\input{chapter/ch13_parent_hamiltonian_normal_closing}
-\input{chapter/ch13_parent_hamiltonian_normal_closing_reverse}
-\input{chapter/ch13_parent_hamiltonian_blocking_transport}
-\input{chapter/ch13_parent_hamiltonian_half_chain_schmidt}
-
-\input{chapter/ch13_parent_hamiltonian_uncle}
-\input{chapter/ch13_parent_hamiltonian_uncle_closure}
-\input{chapter/ch13_parent_hamiltonian_uncle_trial}
-
-\input{chapter/ch13_parent_hamiltonian_uncle_gram}
-\input{chapter/ch13_parent_hamiltonian_uncle_transfer_norm}
-\input{chapter/ch13_parent_hamiltonian_uncle_norm_growth}
-\input{chapter/ch13_parent_hamiltonian_uncle_energy_bound}
-\input{chapter/ch13_parent_hamiltonian_uncle_overlap}
-\input{chapter/ch13_parent_hamiltonian_uncle_variational}
-\input{chapter/ch13_parent_hamiltonian_uncle_gaplessness}

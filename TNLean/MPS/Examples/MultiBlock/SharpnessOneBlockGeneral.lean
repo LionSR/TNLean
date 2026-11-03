@@ -216,14 +216,6 @@ noncomputable def compressionGen (ord : BlockIndex oneSlot z ≃ Fin (1 + z))
     rw [Matrix.blockDiag'_apply, conjMatrix_gaugeOfMatrix, Matrix.submatrix_apply, hK]
     exact hzero t
 
-theorem gauge_compressionGen (ord : BlockIndex oneSlot z ≃ Fin (1 + z))
-    (G Ginv K : Matrix (Fin (1 + z)) (Fin (1 + z)) ℂ) (hG : G * Ginv = 1) (hG' : Ginv * G = 1)
-    (hK : G * tensorBGen z 0 * Ginv = K) (htri : ∀ a b, b < a → K a b = 0)
-    (hblock : K (ord (Sum.inl oneSlotMem)) (ord (Sum.inl oneSlotMem)) = 1)
-    (hzero : ∀ t, K (ord (Sum.inr t)) (ord (Sum.inr t)) = 0) :
-    (compressionGen ord G Ginv K hG hG' hK htri hblock hzero).gauge =
-      gaugeOfMatrix (coordOfOrd ord) G Ginv hG hG' := rfl
-
 theorem tensorBGen_apply (a b : Fin (1 + z)) :
     tensorBGen z 0 a b = if (a.val = 0 ∧ b.val = 0) ∨ b.val = a.val + 1 then 1 else 0 := rfl
 
@@ -363,17 +355,10 @@ theorem gauge_lastCompressionGen :
       gaugeOfMatrix (coordOfOrd lastOrdGen) gGen gInvGen gGen_mul_gInvGen
         (mul_eq_one_comm.1 gGen_mul_gInvGen) := rfl
 
-theorem coordOfOrd_apply (ord : BlockIndex oneSlot z ≃ Fin (1 + z))
-    (x : BlockSpace (fun _ : Unit => 1) oneSlot z) : coordOfOrd ord x = ord x.1 := rfl
-
 theorem firstOrdGen_inl (s : {s // s ∈ oneSlot}) : (firstOrdGen (z := z) (Sum.inl s)).val = 0 :=
   rfl
 
-theorem firstOrdGen_inr (t : Fin z) : (firstOrdGen (z := z) (Sum.inr t)).val = t.val + 1 := rfl
-
 theorem lastOrdGen_inl (s : {s // s ∈ oneSlot}) : (lastOrdGen (z := z) (Sum.inl s)).val = z := rfl
-
-theorem lastOrdGen_inr (t : Fin z) : (lastOrdGen (z := z) (Sum.inr t)).val = t.val := rfl
 
 /-- **The first reduction** (*The asymmetric fundamental theorem of matrix product states*, Example
 6.10): `g = 1` is a reduction onto `C = (1)` with the block first and `z` zero blocks, `W = e₀ᵀ`,

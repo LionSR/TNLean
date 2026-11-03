@@ -25,7 +25,8 @@ pinching
 \[
   E_n(P)=\sum_k\rho_n(\delta_k)\,P\,\rho_n(\delta_k).
 \]
-For a compatible one-site injective MPS it fixes the support projection.
+For a compatible MPS that is injective after blocking some number of sites,
+it fixes the support projection.
 
 ## References
 
@@ -40,7 +41,7 @@ noncomputable section
 
 namespace MPOTensor.FiniteSetWeakHopf
 
-variable {m d Dₐ n : ℕ}
+variable {m d Dₐ L n : ℕ}
 
 /-- The comultiplication of a standard idempotent is \(\delta_k\otimes\delta_k\)
 times its coefficient. -/
@@ -197,13 +198,13 @@ theorem weakHopfAverage_eq_sum (φ : (Fin m → ℂ) →ₐ[ℂ] Matrix (Fin d) 
 attribute [local instance] MPSTensor.groundSpaceES_hasOrthogonalProjection
 
 /-- The pinching by the represented idempotents fixes the support projection
-of a one-site injective MPS compatible with the MPO, at every positive
-length: an instance of the weak-Hopf average of GLM23 Appendix B,
+of an MPS compatible with the MPO and injective after blocking, at every
+positive length: an instance of the weak-Hopf average of GLM23 Appendix B,
 lines 2463--2466. -/
 theorem sum_rep_single_mul_starProjection_mul (φ : (Fin m → ℂ) →ₐ[ℂ] Matrix (Fin d) (Fin d) ℂ)
     (hφ : ∀ x, φ (star x) = (φ x)ᴴ) {A : MPSTensor d Dₐ}
     (h : IsBoundaryCompatible (weakHopfRepresentation φ hφ).tensor A)
-    (hInj : Kraus.IsInjective A) (hn : 0 < n) :
+    (hInj : Kraus.IsNBlkInjective A L) (hn : 0 < n) :
     ∑ k, Matrix.toEuclideanLin ((weakHopfRepresentation φ hφ).rep n (Pi.single k 1)) *
         (MPSTensor.groundSpaceES A n).starProjection.toLinearMap *
         Matrix.toEuclideanLin ((weakHopfRepresentation φ hφ).rep n (Pi.single k 1)) =

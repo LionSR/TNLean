@@ -278,7 +278,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     Follows directly from~(\ref{eq:peps_frame_birth_partition}).
 \end{proof}
 
-\begin{lemma}[Homogeneous birth and death: sheet map]
+\begin{theorem}[Homogeneous birth and death: sheet map]
     \label{thm:peps_frame_birth}
     \lean{TNLean.PEPS.EncodedFrame.Frame.birth,
         TNLean.PEPS.EncodedFrame.Frame.death}
@@ -300,7 +300,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     (\cite[Lemma~6.5]{OpenAI2026PolynomialPEPS}). The death map is the same
     operator $B$ from $\mathcal F'$ to $\mathcal F$ when the hypotheses hold in
     the post-death frame $\mathcal F$.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
     \uses{lem:peps_frame_splitting,lem:peps_frame_birth_map,
@@ -470,7 +470,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     \leanok
     \uses{thm:peps_frame_birth,lem:peps_frame_birth_partition_owners,
         lem:peps_frame_birth_monomial_operators}
-    Under the hypotheses of Lemma~\ref{thm:peps_frame_birth}, on grouped
+    Under the hypotheses of Theorem~\ref{thm:peps_frame_birth}, on grouped
     registers $\mathcal H_T,\mathcal H_U$ followed by arbitrary untouched
     registers, the birth and death monomials of
     Lemma~\ref{lem:peps_frame_birth_monomial_operators} are allowed monomials
@@ -483,7 +483,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 \begin{proof}\leanok
     \uses{thm:peps_frame_birth,lem:peps_frame_birth_monomial_operators,
         lem:peps_frame_birth_partition_owners}
-    Combine Lemma~\ref{thm:peps_frame_birth},
+    Combine Theorem~\ref{thm:peps_frame_birth},
     Lemma~\ref{lem:peps_frame_birth_partition_owners}, and
     Lemma~\ref{lem:peps_frame_birth_monomial_operators}.
 \end{proof}
@@ -752,21 +752,21 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     unitary.
 \end{proof}
 
-\begin{lemma}[Homogeneous birth and death: bounded change]
+\begin{corollary}[Homogeneous birth and death: bounded change]
     \label{thm:peps_frame_birth_bounded}
     \lean{TNLean.PEPS.EncodedFrame.Frame.birth_bounded,
         TNLean.PEPS.EncodedFrame.Frame.death_bounded}
     \leanok
     \uses{thm:peps_frame_birth,def:peps_frame_registers,lem:peps_frame_registers_coordinates,
         def:peps_monomial_parties,lem:lattice_front_births}
-    Under the hypotheses of Lemma~\ref{thm:peps_frame_birth}, there exists an
+    Under the hypotheses of Theorem~\ref{thm:peps_frame_birth}, there exists an
     allowed monomial between the frame registers of $\mathcal F$ and
     $\mathcal F'$ (Definition~\ref{def:peps_frame_registers}) using only
     $\{P_\circ,Q_\circ\}$, with $(s,e)\le(1,0)$ for birth and $(s,e)\le(0,1)$
     for death, whose operator in product coordinates is $\id_{\rm tags}\otimes B$
     and satisfies~(\ref{eq:peps_frame_birth_bound})
     (\cite[Lemma~6.5]{OpenAI2026PolynomialPEPS}, \texttt{05-frames.tex}, lines 396--410).
-\end{lemma}
+\end{corollary}
 
 \begin{proof}\leanok
     \uses{thm:peps_frame_birth,lem:peps_frame_birth_partition_owners,
@@ -778,7 +778,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     via Lemma~\ref{thm:peps_monomial_composition_counts}; the resulting
     operator is $\id_{\rm tags}\otimes(\id_E\otimes K^\dagger K)=\id_{\rm tags}\otimes B$,
     which satisfies~(\ref{eq:peps_frame_birth_bound}) by
-    Lemma~\ref{thm:peps_frame_birth}.
+    Theorem~\ref{thm:peps_frame_birth}.
 \end{proof}
 
 \subsection{Exchanging assignments between two sheets}
@@ -1049,7 +1049,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     Definition~\ref{def:peps_frame_exchange_data}.
 \end{proof}
 
-\begin{lemma}[Two-sheet exchange: implemented map]
+\begin{theorem}[Two-sheet exchange: implemented map]
     \label{thm:peps_frame_exchange}
     \lean{TNLean.PEPS.EncodedFrame.TwoSheetExchange.exchange,
         TNLean.PEPS.EncodedFrame.TwoSheetExchange.exchangeOp_mul_encoder,
@@ -1072,7 +1072,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
         \label{eq:peps_frame_exchange_bound}
     \end{align}
     (\cite[Lemma~6.6]{OpenAI2026PolynomialPEPS}).
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
     \uses{lem:peps_frame_splitting,lem:peps_frame_exchange_intertwining,
@@ -1114,11 +1114,11 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 \begin{proof}\leanok
     \uses{thm:peps_frame_exchange,thm:peps_frame_small_rewrite,
         lem:peps_frame_exchange_error}
-    By Lemma~\ref{thm:peps_frame_small_rewrite} (\texttt{05-frames.tex},
+    By Theorem~\ref{thm:peps_frame_small_rewrite} (\texttt{05-frames.tex},
     lines 84--85), reordering holes with disjoint outer footprints yields a tag
     relabelling unitary $G$ satisfying
     $G(K_{\mathcal F_1}\otimes K_{\mathcal F_2})=K_{\rm in}$; composing with
-    $C$ from Lemma~\ref{thm:peps_frame_exchange} gives~(\ref{eq:peps_frame_exchange_any_order}).
+    $C$ from Theorem~\ref{thm:peps_frame_exchange} gives~(\ref{eq:peps_frame_exchange_any_order}).
 \end{proof}
 
 \begin{lemma}[The corrections of an exchange on the two copies of the remainder]
@@ -1329,7 +1329,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     via~(\ref{eq:peps_two_region_basis})--(\ref{eq:peps_two_region_inverse}).
 \end{proof}
 
-\begin{lemma}[Two-sheet exchange: bounded change]
+\begin{corollary}[Two-sheet exchange: bounded change]
     \label{thm:peps_frame_exchange_bounded}
     \lean{TNLean.PEPS.EncodedFrame.TwoSheetExchange.exchange_bounded,
         TNLean.PEPS.EncodedFrame.TwoSheetExchange.exchange_ofFrames_bounded,
@@ -1337,7 +1337,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     \leanok
     \uses{thm:peps_frame_exchange,thm:peps_frame_exchange_any_order,
         def:peps_frame_registers,def:peps_monomial_parties}
-    Under the hypotheses of Lemma~\ref{thm:peps_frame_exchange} (or
+    Under the hypotheses of Theorem~\ref{thm:peps_frame_exchange} (or
     Lemma~\ref{thm:peps_frame_exchange_any_order} for arbitrary hole
     orderings), the two-sheet exchange is realized by an allowed monomial
     between the registers of $(\mathcal F_1,\mathcal F_2)$ and
@@ -1345,7 +1345,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     with operator $C=D_UF_A\mathcal R$ (or $CG$) and reference-vector error
     $\le 4L^{-30}$ (\cite[Lemma~6.6 and Theorem~5.2]{OpenAI2026PolynomialPEPS},
     \texttt{05-frames.tex}, lines 460--479).
-\end{lemma}
+\end{corollary}
 
 \begin{proof}\leanok
     \uses{thm:peps_frame_exchange,thm:peps_frame_exchange_any_order,
@@ -1355,7 +1355,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     Compose the tag-reordering word of Lemma~\ref{lem:peps_register_reorderings}
     (if needed), the renaming word of Lemma~\ref{lem:peps_exchange_renaming_word},
     and the correction word of Lemma~\ref{lem:peps_exchange_correction_word};
-    the operator and error bound follow from Lemma~\ref{thm:peps_frame_exchange}
+    the operator and error bound follow from Theorem~\ref{thm:peps_frame_exchange}
     and Lemma~\ref{thm:peps_frame_exchange_any_order}.
 \end{proof}
 
