@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.Lattice.ClusterExpansion.TruncatedAllTemperatures
 import TNLean.Lattice.ProductFormIndexRestriction
 import TNLean.Lattice.TrotterIndexCount
+import TNLean.Circuit.EntropySupport
 
 /-!
 # Local index ranges of the truncated cluster expansion
@@ -71,7 +72,7 @@ Source: Hastings, arXiv:cond-mat/0508554v3, lines 1259–1279. -/
 noncomputable def localClusterProductForm (acts : κ → Finset σ) (near : σ → σ → Prop)
     (hnear : ∀ i, near i i) {h : κ → Matrix (σ → Fin q) (σ → Fin q) ℂ}
     (hh : ∀ k, h k ∈ supportedOperators q (acts k : Set σ)) (β : ℝ) :
-    open Classical in ProductForm q near
+    open Classical in ProductForm (fun _ ↦ q) near
       (∑ A with (∀ k ∈ A, (acts k).Nonempty) ∧
         NoLargeCluster (overlapGraph acts) (IsLargeSupport near acts) A, clusterOp h A β) :=
   (clusterProductForm acts near hnear hh β).restrict (clusterIndexSet acts near)
@@ -165,7 +166,7 @@ theorem exists_productForm_truncatedExp_card_index [PseudoMetricSpace σ]
     (hR : ∀ k j, j ∈ acts k → dist (c k) j ≤ R) (hl : 0 ≤ l)
     (h : κ → Matrix (σ → Fin q) (σ → Fin q) ℂ)
     (hh : ∀ k, h k ∈ supportedOperators q (acts k : Set σ)) (β : ℝ) :
-    ∃ P : ProductForm q (fun i j ↦ dist i j ≤ l)
+    ∃ P : ProductForm (fun _ ↦ q) (fun i j ↦ dist i j ≤ l)
         (truncatedExp (overlapGraph acts) (IsLargeDiam acts l) h β),
       ∀ i, Fintype.card (P.Index i) ≤
         (2 ^ (Finset.univ.filter (fun k ↦ dist i (c k) ≤ l + R)).card + 1) * (q * q) := by
@@ -184,16 +185,18 @@ theorem exists_productForm_truncatedExp_card_index [PseudoMetricSpace σ]
     intro x hx
     obtain ⟨k, hk, hxk⟩ := mem_biUnion.1 hx
     exact absurd ⟨x, hxk⟩ ((mem_filter.1 hA).2 k hk)
-  let P₀ := ProductForm.ofSupported (near := near) (X := ∅) (Classical.arbitrary σ)
-    (by simp) h₀
+  let P₀ := ProductForm.ofSupported (d := fun _ ↦ q) (near := near) (X := ∅)
+    (fun _ ↦ (0 : Fin q)) (Classical.arbitrary σ) (by simp)
+    (isSupportedOn_of_mem_supportedOperators h₀)
   let P₁ := localClusterProductForm acts near hnear hh β
   refine ⟨P₀.mul P₁, fun i ↦ ?_⟩
   change Fintype.card (P₀.Index i × P₁.Index i) ≤ _
   rw [Fintype.card_prod]
   have hP₀ : Fintype.card (P₀.Index i) = 1 := by
     simpa only [Finset.notMem_empty, ite_false] using
-      ProductForm.card_index_ofSupported (near := near) (X := ∅) (Classical.arbitrary σ)
-        (by simp) h₀ i
+      ProductForm.card_index_ofSupported (d := fun _ ↦ q) (near := near) (X := ∅)
+        (fun _ ↦ (0 : Fin q)) (Classical.arbitrary σ) (by simp)
+        (isSupportedOn_of_mem_supportedOperators h₀) i
   rw [hP₀, one_mul]
   exact card_index_localClusterProductForm_le acts near hnear hh β i _
     fun _ hC hi ↦ hC.subset_centres_ball hR hi
@@ -207,7 +210,7 @@ theorem exists_productForm_truncatedExp_pow_card_index [PseudoMetricSpace σ]
     (h : κ → Matrix (σ → Fin q) (σ → Fin q) ℂ)
     (hh : ∀ k, h k ∈ supportedOperators q (acts k : Set σ))
     (hHerm : ∀ k, (h k).IsHermitian) (β : ℝ) {m : ℕ} (hm : Even m) :
-    ∃ P : ProductForm q (fun i j ↦ dist i j ≤ l)
+    ∃ P : ProductForm (fun _ ↦ q) (fun i j ↦ dist i j ≤ l)
         ((truncatedExp (overlapGraph acts) (IsLargeDiam acts l) h β) ^ m),
       ((truncatedExp (overlapGraph acts) (IsLargeDiam acts l) h β) ^ m).PosSemidef ∧
         ∀ i, Fintype.card (P.Index i) ≤
@@ -230,7 +233,7 @@ theorem exists_productForm_truncatedExp_card_index_of_polynomial_growth
       C * (⌈l + R⌉₊ + 1) ^ D)
     (h : κ → Matrix (σ → Fin q) (σ → Fin q) ℂ)
     (hh : ∀ k, h k ∈ supportedOperators q (acts k : Set σ)) (β : ℝ) :
-    ∃ P : ProductForm q (fun i j ↦ dist i j ≤ l)
+    ∃ P : ProductForm (fun _ ↦ q) (fun i j ↦ dist i j ≤ l)
         (truncatedExp (overlapGraph acts) (IsLargeDiam acts l) h β),
       ∀ i, Fintype.card (P.Index i) ≤
         (q * q) * (1 + 2 ^ (C * (⌈l + R⌉₊ + 1) ^ D)) := by
@@ -253,7 +256,7 @@ theorem exists_productForm_truncatedExp_pow_card_index_of_polynomial_growth
     (h : κ → Matrix (σ → Fin q) (σ → Fin q) ℂ)
     (hh : ∀ k, h k ∈ supportedOperators q (acts k : Set σ))
     (hHerm : ∀ k, (h k).IsHermitian) (β : ℝ) {m : ℕ} (hm : Even m) :
-    ∃ P : ProductForm q (fun i j ↦ dist i j ≤ l)
+    ∃ P : ProductForm (fun _ ↦ q) (fun i j ↦ dist i j ≤ l)
         ((truncatedExp (overlapGraph acts) (IsLargeDiam acts l) h β) ^ m),
       ((truncatedExp (overlapGraph acts) (IsLargeDiam acts l) h β) ^ m).PosSemidef ∧
         ∀ i, Fintype.card (P.Index i) ≤

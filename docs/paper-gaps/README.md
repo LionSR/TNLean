@@ -230,6 +230,12 @@ For the MPU symmetry-defect gauging paper:
   or a replacement in unbuffered defect formulas. This local correction is
   formally verified and resolved; the literal printed pair still fails at
   empty length.
+- `fbc25_controlled_z_split_index_class_scope.tex` records that for the
+  controlled-`Z` example the formal statement is the invariant behind the
+  source's remark on the combined `ℤ₂ × ℤ₂` phase: the bond implementation of
+  the two symmetries on the split-index tensor is by anticommuting matrices,
+  so its projective class is nontrivial. The identification of this class with
+  the phase, from the cited split-index classification, is not formalized.
 - `fbc25_truncated_symmetry_endpoint_unitarity_scope.tex` records that the
   all-length truncated-symmetry theorem proves unitarity between endpoint
   coordinate spaces, while the finite-group endpoint identifications
@@ -750,10 +756,10 @@ For the matrix product operator symmetries of arXiv:2203.12563:
   of the canonical support projection from averaging its complement. It
   records the explicit adjoint-closure, positive-length unit-calibration,
   and finite-family normalization hypotheses under which the support is
-  fixed, their derivation from weak-Hopf representation data for any
-  compatible tensor injective after blocking (unit support comes from the
-  ideal structure of the state boundary space, without the identity at the
-  injectivity length), and the still-open formal Bell-pair instance.
+  fixed, the weak-Hopf realization with its finite-set and Bell-pair
+  instances, and its derivation for any compatible tensor injective after
+  blocking (unit support comes from the ideal structure of the state boundary
+  space, without the identity at the injectivity length).
 
 - `glm23_reps3_z3_table.tex` records that the printed action of `ψ` in the
   `ℤ₃` phase of `Rep(S₃)` fails the representation identity, and that the

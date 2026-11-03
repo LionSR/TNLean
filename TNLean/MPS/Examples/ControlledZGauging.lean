@@ -7,6 +7,7 @@ import TNLean.Algebra.ComplexOfInt
 import TNLean.Algebra.MonomialMatrix
 import TNLean.MPS.Core.CyclicTraceForcedBond
 import TNLean.MPS.Core.ForcedColumnNormality
+import TNLean.MPS.Core.SplitIndexTrace
 import TNLean.MPS.Examples.ClusterReview
 import TNLean.MPS.FundamentalTheorem.Reduction.RingEmbedding
 import TNLean.MPS.MPDO.BondOneOperator
@@ -42,8 +43,23 @@ and `A` is normal (line 3885). The gauged tensor `C^{i e} = A^i`, `C^{i g} = A_g
 has the two-site contraction fixed by the Gauss operator `𝒢_g = CZ ⊗ X ⊗ X`, with `CZ` on the
 two matter indices and `X` on each gauge index (line 3968, and `eq:mcG`, line 3385, with
 `λ_{g₁,g₂} = CZ`). Finally, `A` factors through a split-index tensor (lines 3970–4209):
-`A^i = R^i L^i`, `A_g^i = R^i X L^i` and `C^{i a} = R^i X^a L^i`, for explicit `R`, `L`. The
-remarks on the combined `ℤ₂ × ℤ₂` phase at lines 3970–3971 are not treated here.
+`A^i = R^i L^i`, `A_g^i = R^i X L^i` and `C^{i a} = R^i X^a L^i`, for explicit `R`, `L`.
+
+The remark at line 3970 and the display that follows (lines 3970–4001) are treated as follows.
+The amplitude of `A` on a ring is the trace of a ring of split-index tensors
+`S^{ab} = L^a R^b = X^a Z^{ab}`, each carrying the labels of two neighbouring qubits. Since
+`X S^{ab} X = (-1)^{ab} S^{ab}`, the state is invariant under `U`. It also has the on-site
+symmetry `∏_j Z_j`, implemented on `A` by the bond matrix `diag(1, -1, -1)`. On the split-index
+bond the two symmetries are implemented by `Z` and `X`, which anticommute; they form the
+projective representation of `ℤ₂ × ℤ₂` whose class in `H²(ℤ₂ × ℤ₂, ℂˣ)` is nontrivial.
+
+**Scope restriction (split-index invariant):** the source states that the state belongs to
+the nontrivial symmetry-protected phase of the combined `ℤ₂ × ℤ₂` symmetry, citing
+arXiv:2404.15883. What is proved here is the invariant: the projective class of the
+implementation of `ℤ₂ × ℤ₂` on the split-index bond is nontrivial. That this class labels
+the phase of a state protected by a symmetry that is not on-site is the result of
+arXiv:2404.15883, which is not formalized here; documented in
+`docs/paper-gaps/fbc25_controlled_z_split_index_class_scope.tex`.
 
 ## Main definitions
 
@@ -54,6 +70,10 @@ remarks on the combined `ℤ₂ × ℤ₂` phase at lines 3970–3971 are not tr
 * `ControlledZGauging.gaussOperator`: the Gauss operator `CZ ⊗ X ⊗ X` on two gauged sites.
 * `ControlledZGauging.simpsR`, `ControlledZGauging.simpsL`, `ControlledZGauging.simpsTensor`:
   the split-index factorization.
+* `ControlledZGauging.zAction`, `ControlledZGauging.stateZGauge`: the on-site action of `Z` and
+  the bond matrix `diag(1, -1, -1)` implementing it on `A`.
+* `ControlledZGauging.splitLegPhase`: the phase by which `g ∈ ℤ₂ × ℤ₂` acts on the two legs of a
+  split-index tensor.
 
 ## Main results
 
@@ -70,6 +90,15 @@ remarks on the combined `ℤ₂ × ℤ₂` phase at lines 3970–3971 are not tr
   the Gauss operator is an involution and fixes the two-site contraction of the gauged tensor.
 * `ControlledZGauging.gaugedLetter_eq_simps`, `ControlledZGauging.xInt_mul_simpsTensor_mul_xInt`:
   the gauged tensor in split-index form, and the sign carried by the split-index tensor.
+* `ControlledZGauging.simpsTensor_eq`, `ControlledZGauging.mpv_stateTensor_eq_trace_simpsTensor`:
+  `S^{ab} = X^a Z^{ab}`, and the amplitude of `A` is the trace of the ring of split-index tensors.
+* `ControlledZGauging.fixesMPV_stateTensor`: the state is fixed by every operator of `{1, U}`.
+* `ControlledZGauging.stateTensor_isOnSiteSymmetric_zAction`: the state has the on-site symmetry
+  `∏_j Z_j`.
+* `ControlledZGauging.clusterProjRep_mul_simpsTensor`,
+  `ControlledZGauging.simpsTensor_isNontrivialClass`: on the split-index bond the combined
+  `ℤ₂ × ℤ₂` symmetry is implemented by anticommuting matrices `Z` and `X`, whose projective
+  class is nontrivial.
 -/
 
 noncomputable section
@@ -379,7 +408,7 @@ tensors `R^i` and `L^i`, joined by a bond of dimension two, with `A^i = R^i L^i`
 `S^{ab} = L^a R^b` carries the controlled-`Z` sign as `X S^{ab} X = (-1)^{ab} S^{ab}`. The source
 draws `L` and `R` without giving their entries; the matrices below are one choice satisfying all
 the displayed identities. The rewriting of the periodic amplitude as a trace of products of
-split-index tensors (lines 3972–3993) is not stated here. -/
+split-index tensors (lines 3970–4001) is in the next section. -/
 
 /-- The integer matrices `R^0`, `R^1` (three rows, two columns) of the factorization. -/
 def simpsRInt : Fin 2 → Matrix (Fin 3) (Fin 2) ℤ :=
@@ -444,5 +473,242 @@ theorem xInt_mul_simpsTensor_mul_xInt (a b : Fin 2) :
     complexOfInt xInt * simpsTensor a b * complexOfInt xInt = czSign a b • simpsTensor a b := by
   rw [simpsTensor, simpsL, simpsR, ← complexOfInt_mul, ← complexOfInt_mul, ← complexOfInt_mul,
     (simps_int 0 a b).2.2, czSign_eq_cast, complexOfInt_zsmul]
+
+/-! ### The periodic amplitude as a ring of split-index tensors
+
+arXiv:2502.20257, lines 3970–4001, draws the state generated by `A` as a ring of split-index
+tensors, each carrying the labels of two neighbouring qubits, joined by copy tensors. In
+formulas, the amplitude of a configuration `σ` on a ring of `N` qubits is
+`tr (S^{σ_0 σ_1} S^{σ_1 σ_2} ⋯ S^{σ_{N-1} σ_0})`, and `S^{ab} = X^a Z^{ab}`. Since
+`X S^{ab} X = (-1)^{ab} S^{ab}`, conjugating the ring by `X` multiplies the amplitude by the
+controlled-`Z` phase `∏_k (-1)^{σ_k σ_{k+1}}` and leaves the trace unchanged, so the state is
+invariant under `U`. -/
+
+/-- The Pauli matrix `Z` with integer entries. -/
+def zInt : Matrix (Fin 2) (Fin 2) ℤ := !![1, 0; 0, -1]
+
+private theorem xInt_mul_xInt : xInt * xInt = 1 := by decide
+
+private theorem simpsInt_eq (a b : Fin 2) :
+    simpsLInt a * simpsRInt b = xInt ^ (a : ℕ) * zInt ^ ((a : ℕ) * (b : ℕ)) := by
+  revert a b
+  decide
+
+/-- **The split-index tensor is a Pauli word**: `S^{ab} = X^a Z^{ab}`, so `S^{00} = S^{01} = 1`,
+`S^{10} = X` and `S^{11} = X Z` (arXiv:2502.20257, lines 4002–4100). -/
+theorem simpsTensor_eq (a b : Fin 2) :
+    simpsTensor a b = complexOfInt (xInt ^ (a : ℕ) * zInt ^ ((a : ℕ) * (b : ℕ))) := by
+  rw [simpsTensor, simpsL, simpsR, ← complexOfInt_mul, simpsInt_eq]
+
+/-- **The split-index presentation of the state** (arXiv:2502.20257, lines 3970–4001): on a
+ring of `n + 1` qubits the amplitude of `A` is the trace of the ring of split-index tensors,
+`tr (A^{σ_0} ⋯ A^{σ_n}) = tr (S^{σ_0 σ_1} S^{σ_1 σ_2} ⋯ S^{σ_n σ_0})`. -/
+theorem mpv_stateTensor_eq_trace_simpsTensor {n : ℕ} (σ : Fin (n + 1) → Fin 2) :
+    mpv stateTensor σ = (List.ofFn fun k ↦ simpsTensor (σ k) (σ (k + 1))).prod.trace :=
+  mpv_eq_trace_prod_ofFn_of_eq_mul stateTensor simpsR simpsL stateTensor_eq_simpsR_mul_simpsL σ
+
+/-- **The controlled-`Z` phase fixes every amplitude of `A`**: on a ring of `n + 1` qubits,
+`∏_k (-1)^{t_k t_{k+1}} ψ(t) = ψ(t)`. Conjugating the split-index ring by `X` multiplies it by
+the phase and does not change its trace. -/
+theorem czPhase_mul_mpv_stateTensor {n : ℕ} (t : Fin (n + 1) → Fin 2) :
+    czPhase t * mpv stateTensor t = mpv stateTensor t := by
+  rw [mpv_stateTensor_eq_trace_simpsTensor]
+  exact prod_mul_trace_prod_ofFn_eq (complexOfRing_mul_eq_one (Int.castRingHom ℂ) xInt_mul_xInt)
+    (complexOfRing_mul_eq_one (Int.castRingHom ℂ) xInt_mul_xInt)
+    (fun k ↦ simpsTensor (t k) (t (k + 1))) (fun k ↦ czSign (t k) (t (k + 1)))
+    fun k ↦ xInt_mul_simpsTensor_mul_xInt _ _
+
+/-- **The state is invariant under `U`**: on every nonempty ring,
+`U |ψ_N(A)⟩ = |ψ_N(A)⟩` (arXiv:2502.20257, lines 3874–3900, where `A` is the invariant state
+that is gauged). -/
+theorem fixesMPV_czMPUTensor_stateTensor : GroupFamily.FixesMPV czMPUTensor stateTensor := by
+  intro N hN
+  obtain ⟨n, rfl⟩ : ∃ n, N = n + 1 := ⟨N - 1, by omega⟩
+  rw [mpo_czMPUTensor]
+  funext t
+  rw [Matrix.mulVec_diagonal]
+  exact czPhase_mul_mpv_stateTensor t
+
+/-- **The state is fixed by every operator of `{1, U}`.** -/
+theorem fixesMPV_stateTensor : ∀ g, GroupFamily.FixesMPV (czFamily.tensor g) stateTensor := by
+  refine Multiplicative.forall_zmod_two ?_ ?_
+  · intro N _
+    change mpo (idTensor 2) N *ᵥ _ = _
+    rw [mpo_idTensor, Matrix.one_mulVec]
+  · intro N hN
+    change mpo czMPUTensor N *ᵥ _ = _
+    exact fixesMPV_czMPUTensor_stateTensor N hN
+
+/-! ### The on-site symmetry `∏_j Z_j`
+
+The remark of arXiv:2502.20257, line 3970, states that the state also has the on-site `ℤ₂`
+symmetry `∏_j Z_j`. On the tensor `A` it acts by `A^i ↦ (-1)^i A^i`, which is the conjugation by
+the bond matrix `V = diag(1, -1, -1)`. -/
+
+/-- The sign `(-1)^a` of a bit: the eigenvalue of `Z` on `|a⟩`. -/
+def zSign (a : Fin 2) : ℂ := (-1) ^ (a : ℕ)
+
+private theorem zSign_eq_cast (a : Fin 2) : zSign a = (((-1 : ℤ) ^ (a : ℕ) : ℤ) : ℂ) := by
+  simp [zSign]
+
+/-- The on-site representation `g ↦ Z^g` of `ℤ₂` on a qubit: the identity acts as `1` and the
+generator as `Z = diag(1, -1)`. It is the homomorphism `ghzVirtualZ2Action`, used here on the
+physical qubit. -/
+def zAction : Multiplicative (ZMod 2) →* Matrix (Fin 2) (Fin 2) ℂ := ghzVirtualZ2Action
+
+theorem zAction_ofAdd_one : zAction (Multiplicative.ofAdd 1) = pauliZ := by
+  simp [zAction, ghzVirtualZ2Action]
+
+/-- The integer matrix `diag(1, -1, -1)`. -/
+def stateZGaugeInt : Matrix (Fin 3) (Fin 3) ℤ := !![1, 0, 0; 0, -1, 0; 0, 0, -1]
+
+private theorem stateZGaugeInt_mul_self : stateZGaugeInt * stateZGaugeInt = 1 := by decide
+
+private theorem stateZGaugeInt_conj (i : Fin 2) :
+    stateZGaugeInt * stateInt i * stateZGaugeInt = (-1 : ℤ) ^ (i : ℕ) • stateInt i := by
+  revert i
+  decide
+
+/-- The bond matrix `V = diag(1, -1, -1)` implementing `Z` on the tensor `A`; it is its own
+inverse. -/
+def stateZGauge : GL (Fin 3) ℂ :=
+  ⟨complexOfInt stateZGaugeInt, complexOfInt stateZGaugeInt,
+    complexOfRing_mul_eq_one _ stateZGaugeInt_mul_self,
+    complexOfRing_mul_eq_one _ stateZGaugeInt_mul_self⟩
+
+/-- **`Z` acts on the letters of `A` by a sign**: `∑_j Z_{ij} A^j = (-1)^i A^i`. -/
+theorem twistedTensor_stateTensor_zAction (i : Fin 2) :
+    twistedTensor stateTensor zAction (Multiplicative.ofAdd 1) i = zSign i • stateTensor i := by
+  simp only [twistedTensor, zAction_ofAdd_one, Fin.sum_univ_two]
+  fin_cases i <;> simp [pauliZ, zSign]
+
+/-- **The bond matrix `V = diag(1, -1, -1)` implements the sign**:
+`V A^i V⁻¹ = (-1)^i A^i`. -/
+theorem stateZGauge_mul_stateTensor_mul_inv (i : Fin 2) :
+    (stateZGauge : Matrix (Fin 3) (Fin 3) ℂ) * stateTensor i *
+        ((stateZGauge⁻¹ : GL (Fin 3) ℂ) : Matrix (Fin 3) (Fin 3) ℂ) =
+      zSign i • stateTensor i := by
+  change complexOfInt stateZGaugeInt * complexOfInt (stateInt i) * complexOfInt stateZGaugeInt =
+    zSign i • complexOfInt (stateInt i)
+  rw [← complexOfInt_mul, ← complexOfInt_mul, stateZGaugeInt_conj i, complexOfInt_zsmul,
+    zSign_eq_cast]
+
+/-- **The state has the on-site symmetry `∏_j Z_j`** (arXiv:2502.20257, line 3970): the tensor
+`A` twisted by `Z` is the conjugation of `A` by `V = diag(1, -1, -1)`, so both generate the same
+periodic vectors. -/
+theorem stateTensor_isOnSiteSymmetric_zAction : IsOnSiteSymmetric stateTensor zAction := by
+  intro g
+  rcases zmod2_cases g with rfl | rfl
+  · rw [twistedTensor_one]
+    exact fun _ _ ↦ rfl
+  · exact GaugeEquiv.sameMPV ⟨stateZGauge, fun i ↦
+      (twistedTensor_stateTensor_zAction i).trans (stateZGauge_mul_stateTensor_mul_inv i).symm⟩
+
+/-! ### The combined `ℤ₂ × ℤ₂` symmetry on the split-index bond
+
+In the split-index presentation both symmetries act on the two legs of each split-index tensor
+by a phase: the generator `(1, 0)`, the symmetry `∏_j Z_j`, by `(-1)^a` on the left leg `a`,
+and the generator `(0, 1)`, the symmetry `U`, by `(-1)^{ab}` on the pair of legs `(a, b)`. On
+the intermediate bond these phases are implemented by `Z` and by `X`, as
+`Z S^{ab} = (-1)^a S^{ab} Z` and `X S^{ab} = (-1)^{ab} S^{ab} X`. The two bond matrices
+anticommute, so they form the projective representation `clusterProjRep` of `ℤ₂ × ℤ₂`, whose
+class in `H²(ℤ₂ × ℤ₂, ℂˣ)` is the nontrivial one. This is the invariant behind the remark of
+arXiv:2502.20257, line 3970, that the state belongs to the nontrivial symmetry-protected phase
+of the combined `ℤ₂ × ℤ₂` symmetry, as pointed out in arXiv:2404.15883. That this projective
+class labels the phase of a state protected by a symmetry that is not on-site is the result
+of arXiv:2404.15883 and is not formalized here. -/
+
+/-- The phase by which `g ∈ ℤ₂ × ℤ₂` acts on the legs `(a, b)` of a split-index tensor: the
+generator `(1, 0)` acts by `(-1)^a`, the factor `Z` on the left leg, and the generator `(0, 1)`
+by `(-1)^{ab}`, the controlled-`Z` phase of the pair of legs. -/
+def splitLegPhase (g : Multiplicative (ZMod 2 × ZMod 2)) (a b : Fin 2) : ℂ :=
+  (if (Multiplicative.toAdd g).1 = 0 then 1 else zSign a) *
+    if (Multiplicative.toAdd g).2 = 0 then 1 else czSign a b
+
+private theorem simpsInt_sign (a b : Fin 2) :
+    zInt * (simpsLInt a * simpsRInt b) =
+        (-1 : ℤ) ^ (a : ℕ) • (simpsLInt a * simpsRInt b * zInt) ∧
+      xInt * (simpsLInt a * simpsRInt b) =
+        (-1 : ℤ) ^ ((a : ℕ) * (b : ℕ)) • (simpsLInt a * simpsRInt b * xInt) ∧
+      zInt * xInt * (simpsLInt a * simpsRInt b) =
+        ((-1 : ℤ) ^ (a : ℕ) * (-1) ^ ((a : ℕ) * (b : ℕ))) •
+          (simpsLInt a * simpsRInt b * (zInt * xInt)) := by
+  revert a b
+  decide
+
+private theorem complexOfInt_zInt : complexOfInt zInt = !![(1 : ℂ), 0; 0, -1] := by
+  ext i j
+  fin_cases i <;> fin_cases j <;> simp [zInt]
+
+private theorem complexOfInt_xInt : complexOfInt xInt = pauliX := by
+  ext i j
+  fin_cases i <;> fin_cases j <;> simp [xInt, pauliX]
+
+private theorem clusterProjRep_X_ofAdd_10 :
+    (clusterProjRep.X (Multiplicative.ofAdd ((1, 0) : ZMod 2 × ZMod 2)) :
+      Matrix (Fin 2) (Fin 2) ℂ) = complexOfInt zInt := by
+  rw [complexOfInt_zInt]
+  simp [clusterProjRep, clusterRepX]
+
+private theorem clusterProjRep_X_ofAdd_01 :
+    (clusterProjRep.X (Multiplicative.ofAdd ((0, 1) : ZMod 2 × ZMod 2)) :
+      Matrix (Fin 2) (Fin 2) ℂ) = complexOfInt xInt := by
+  rw [complexOfInt_xInt]
+  simp [clusterProjRep, clusterRepX]
+
+private theorem clusterProjRep_X_ofAdd_11 :
+    (clusterProjRep.X (Multiplicative.ofAdd ((1, 1) : ZMod 2 × ZMod 2)) :
+      Matrix (Fin 2) (Fin 2) ℂ) = complexOfInt (zInt * xInt) := by
+  rw [complexOfInt_mul, complexOfInt_zInt, complexOfInt_xInt]
+  simp [clusterProjRep, clusterRepX]
+
+private theorem splitLegPhase_ofAdd_10 (a b : Fin 2) :
+    splitLegPhase (Multiplicative.ofAdd ((1, 0) : ZMod 2 × ZMod 2)) a b = zSign a := by
+  simp only [splitLegPhase, toAdd_ofAdd, show (1 : ZMod 2) ≠ 0 from by decide, ↓reduceIte,
+    mul_one]
+
+private theorem splitLegPhase_ofAdd_01 (a b : Fin 2) :
+    splitLegPhase (Multiplicative.ofAdd ((0, 1) : ZMod 2 × ZMod 2)) a b = czSign a b := by
+  simp only [splitLegPhase, toAdd_ofAdd, show (1 : ZMod 2) ≠ 0 from by decide, ↓reduceIte,
+    one_mul]
+
+private theorem splitLegPhase_ofAdd_11 (a b : Fin 2) :
+    splitLegPhase (Multiplicative.ofAdd ((1, 1) : ZMod 2 × ZMod 2)) a b =
+      zSign a * czSign a b := by
+  simp only [splitLegPhase, toAdd_ofAdd, show (1 : ZMod 2) ≠ 0 from by decide, ↓reduceIte]
+
+/-- **The combined `ℤ₂ × ℤ₂` symmetry is implemented on the split-index bond** by the
+projective representation `clusterProjRep`, with `Z` for `∏_j Z_j` and `X` for `U`:
+`V_g S^{ab} = χ_g(a, b) S^{ab} V_g`, with `χ_g` the phase `splitLegPhase g` by which `g` acts on
+the two legs (arXiv:2502.20257, line 3970, and the identity of lines 4002–4072). -/
+theorem clusterProjRep_mul_simpsTensor (g : Multiplicative (ZMod 2 × ZMod 2)) (a b : Fin 2) :
+    (clusterProjRep.X g : Matrix (Fin 2) (Fin 2) ℂ) * simpsTensor a b =
+      splitLegPhase g a b •
+        (simpsTensor a b * (clusterProjRep.X g : Matrix (Fin 2) (Fin 2) ℂ)) := by
+  have hS : simpsTensor a b = complexOfInt (simpsLInt a * simpsRInt b) := by
+    rw [simpsTensor, simpsL, simpsR, complexOfInt_mul]
+  obtain ⟨h10, h01, h11⟩ := simpsInt_sign a b
+  revert g
+  refine Multiplicative.forall_zmod_two_prod ?_ ?_ ?_ ?_
+  · simp [clusterProjRep, clusterRepX, splitLegPhase]
+  · rw [clusterProjRep_X_ofAdd_01, splitLegPhase_ofAdd_01, hS, ← complexOfInt_mul,
+      ← complexOfInt_mul, h01, complexOfInt_zsmul, czSign_eq_cast]
+  · rw [clusterProjRep_X_ofAdd_10, splitLegPhase_ofAdd_10, hS, ← complexOfInt_mul,
+      ← complexOfInt_mul, h10, complexOfInt_zsmul, zSign_eq_cast]
+  · rw [clusterProjRep_X_ofAdd_11, splitLegPhase_ofAdd_11, hS, ← complexOfInt_mul,
+      ← complexOfInt_mul, h11, complexOfInt_zsmul, zSign_eq_cast, czSign_eq_cast, Int.cast_mul]
+
+open scoped TNLean.Algebra.ScalarCohomology in
+/-- **The state lies in the nontrivial class of the combined `ℤ₂ × ℤ₂` symmetry**
+(arXiv:2502.20257, line 3970): on the split-index bond the symmetries `∏_j Z_j` and `U` are
+implemented by the projective representation `clusterProjRep`, generated by the anticommuting
+matrices `Z` and `X`, and its factor system `clusterOmega` represents the nontrivial element of
+`H²(ℤ₂ × ℤ₂, ℂˣ)`. -/
+theorem simpsTensor_isNontrivialClass :
+    (∀ g a b, (clusterProjRep.X g : Matrix (Fin 2) (Fin 2) ℂ) * simpsTensor a b =
+      splitLegPhase g a b •
+        (simpsTensor a b * (clusterProjRep.X g : Matrix (Fin 2) (Fin 2) ℂ))) ∧
+    groupCohomology.H2π _ (groupCohomology.cocyclesOfIsMulCocycle₂ clusterOmega_isCocycle) ≠ 0 :=
+  ⟨clusterProjRep_mul_simpsTensor, cluster_isNontrivialSPT⟩
 
 end ControlledZGauging
