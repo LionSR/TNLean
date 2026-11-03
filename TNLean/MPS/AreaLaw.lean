@@ -20,6 +20,7 @@ import TNLean.MPS.AreaLaw.BalancedIntervalHistoryFailure
 import TNLean.MPS.AreaLaw.BalancedIntervalHistoryProbability
 import TNLean.MPS.AreaLaw.BalancedIntervalJointFailure
 import TNLean.MPS.AreaLaw.BalancedIntervalMergeBounds
+import TNLean.MPS.AreaLaw.BalancedIntervalMergeClosure
 import TNLean.MPS.AreaLaw.BalancedIntervalMergeList
 import TNLean.MPS.AreaLaw.BalancedIntervalTree
 import TNLean.MPS.AreaLaw.BandDissolution
@@ -166,6 +167,7 @@ import TNLean.MPS.AreaLaw.PhysicalChebyshevViability
 import TNLean.MPS.AreaLaw.PhysicalDGApproximation
 import TNLean.MPS.AreaLaw.PhysicalDGAutomaticRefinement
 import TNLean.MPS.AreaLaw.PhysicalDGCanonicalApproximation
+import TNLean.MPS.AreaLaw.PhysicalDGCanonicalEnergyApproximation
 import TNLean.MPS.AreaLaw.PhysicalDGCanonicalJointProbability
 import TNLean.MPS.AreaLaw.PhysicalDGCanonicalParentFailure
 import TNLean.MPS.AreaLaw.PhysicalDGCanonicalSamplingData
@@ -241,7 +243,12 @@ import TNLean.MPS.AreaLaw.RangeOneCut
 import TNLean.MPS.AreaLaw.RangeOneSupport
 import TNLean.MPS.AreaLaw.RegionalBarrierResidual
 import TNLean.MPS.AreaLaw.RegionalBondRestriction
+import TNLean.MPS.AreaLaw.RegionalCentralEnergyEstimate
+import TNLean.MPS.AreaLaw.RegionalEnergyEstimate
+import TNLean.MPS.AreaLaw.RegionalEnergyMerge
+import TNLean.MPS.AreaLaw.RegionalEnergyMergePhysical
 import TNLean.MPS.AreaLaw.RegionalExponentialMoment
+import TNLean.MPS.AreaLaw.RegionalGroundEnergy
 import TNLean.MPS.AreaLaw.RegionalLowDensityFamily
 import TNLean.MPS.AreaLaw.RegionalMiddleFactors
 import TNLean.MPS.AreaLaw.RegionalSoftSpectralApproximation

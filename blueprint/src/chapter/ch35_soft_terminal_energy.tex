@@ -1,0 +1,248 @@
+\section{Energy of the last untrimmed family image}
+
+\begin{lemma}[A terminal compressed soft-energy estimate]
+    \label{thm:soft_terminal_compressed_energy}
+    \lean{TNLean.MPS.AreaLaw.ALVV.exists_native_soft_terminal_compressed_energy_estimate}
+    \leanok
+    Let $H=\sum_i h_i$ be a chain of positive local dimension, with
+    $0\le h_i\le I$ and the designated nearest-neighbour supports.
+    Let $G$ be its full ground space. Fix $l\le u\le v\le r\le L$,
+    with $u-l,r-v\le2\ell$, and let $P,M$ be the original internal
+    interaction sums on $J=[l,r)$ and $[u,v)$, respectively.
+    Their actual attained minima $e_P,e_M$ are chosen before the
+    center and every terminal candidate.
+
+    Suppose $e_M-10\le p\le e_M$, $t,T_0\ge48$, and $m\ge2$.
+    Define
+    \begin{align}
+      R&=P-M+pI+h_{m,t}(M-pI),&
+      A_*&=t(1+\log m)+4\ell+14,\label{eq:terminal_soft_operator}\\
+      \rho&=32e^{-(T_0-48)/8}+\frac tm\left(\frac{T_0}t\right)^m,&
+      \delta&=\frac{\Delta}{(91/100)^2}.\label{eq:terminal_soft_losses}
+    \end{align}
+    Assume $\tau,\Delta\ge0$, $\rho\le1/16$,
+    $\tau\le1/[1024(A_*+1)]$ and $\delta\le1/[100(A_*+1)]$.
+    Restrict $R$ to a fixed complementary configuration to obtain
+    $R_{\mathrm{nat}}$ on $\mathcal H_J$. Then
+    $R=R_{\mathrm{nat}}\otimes I$ in the explicit regional tensor
+    coordinates. There is an actual attained minimum $e_{\mathrm s}$,
+    chosen before the target and candidate, such that
+    $R_{\mathrm{nat}}-e_{\mathrm s}I\ge0$,
+    $\|R-e_{\mathrm s}I\|\le A_*$ and
+    $e_{\mathrm s}\le e_P\le e_{\mathrm s}+\rho$.
+
+    Let $T$ be a full-chain space with $\dim T=\dim G$ and
+    $\|(I-P_G)t_0\|^2\le\tau\|t_0\|^2$ for $t_0\in T$.
+    Let $I_e:\mathbb C^d\to\mathcal H_J$ be the coordinate isometry,
+    let $(A_i)_i$ be a finite operator family on $\mathcal H_J$,
+    and let $Q$ be any $d\times d$ matrix. No projection assumption
+    on $Q$ is imposed. Form the same untrimmed family image
+    $Y=\sum_i A_i I_e\operatorname{range}Q$.
+    Suppose $Y$ is $\delta$-viable for $T$ in the explicit regional
+    coordinates, retaining the whole exterior of $J$.
+    Then $Y$ has positive dimension, and the actual orthogonal
+    compression of $R_{\mathrm{nat}}$ to $Y$ has an orthonormal
+    eigenbasis with decreasing eigenvalues. Its least eigenvalue
+    $\lambda$ satisfies
+    \begin{align}
+      e_{\mathrm s}\le\lambda\le e_{\mathrm s}+3,\qquad
+      e_P-3-\rho\le\lambda-3\le e_P,\qquad
+      e_P-49/16\le\lambda-3.\label{eq:terminal_soft_update}
+    \end{align}
+    This is an explicit-budget auxiliary to
+    \cite[Figure~\texttt{fig:algo1}, line 1631, and lines 1793--1807]{Arad2016RigorousRG}.
+    It concerns the last untrimmed image, not the final collectively
+    trimmed space. The physical calibration and the successful complete
+    parent event must supply the two comparison bounds.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:native_soft_parent_energy}
+    The actual regional construction gives the positive operator
+    $C=R-e_{\mathrm s}I$, with norm at most $A_*$ and energy at most
+    $2+\rho$ on $G$. The first comparison transfers this energy to $T$.
+    Projecting $T$ onto $Y\otimes\mathcal H_{J^c}$ then gives energy
+    at most three under the stated budgets. The target has positive
+    dimension, and the second loss is less than one, so some projected
+    vector is nonzero. The exact regional tensor identity turns it
+    into a tensor trial for $R_{\mathrm{nat}}$ of energy at most
+    $e_{\mathrm s}+3$. The compression variational bound and
+    $R_{\mathrm{nat}}-e_{\mathrm s}I\ge0$ give the first interval in
+    (\ref{eq:terminal_soft_update}). The actual minimum comparison and
+    $\rho\le1/16$ give the remaining assertions.
+\end{proof}
+
+\begin{lemma}[The calibrated terminal energy estimate]
+    \label{thm:calibrated_soft_terminal_compressed_energy}
+    \lean{TNLean.MPS.AreaLaw.ALVV.exists_calibrated_native_soft_terminal_compressed_energy_estimate}
+    \leanok
+    Retain the original chain, intervals and untrimmed image of
+    Lemma~\ref{thm:soft_terminal_compressed_energy}. Let $g>0$,
+    $m,D\ge2$, $t,T_0\ge156+2g$, and set
+    \begin{align}
+      M_*&=3t(1+\log m)+4\ell+34,&
+      \tau&=(D^{24}M_*^{10})^{-1}.
+    \end{align}
+    Suppose $0\le\Delta\le(D^{12}M_*^{10})^{-1}$ and
+    \begin{align}
+      3\left(32e^{-(T_0-156-2g)/8}
+        +\frac tm\left(\frac{T_0}t\right)^m\right)
+        \le\frac{\tau g}{10^6}.
+    \end{align}
+    For each admissible center, use a target of dimension $\dim G$,
+    with directed comparison loss $3\tau/200$ from $G$, and the same
+    actual image with viability loss $\Delta/(91/100)^2$ for that target.
+    The actual regional soft matrix, its attained minimum and its
+    compression then satisfy all the conclusions of
+    Lemma~\ref{thm:soft_terminal_compressed_energy}, including the
+    one-sided update of width $49/16$.
+    No upper bound on $g$ is imposed. The scalar assumptions are the
+    same calibrated scales; the target and image certificates must be
+    supplied by that same physical family and complete parent event.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:soft_terminal_compressed_energy}
+    The two norm formulas give $0\le A_*\le M_*$, $3t\le M_*$ and
+    $M_*\ge34$. In particular $g\le M_*$. The calibrated denominators
+    give $\tau M_*\le1/64$,
+    $3\tau/200\le1/[1024(A_*+1)]$ and
+    $\Delta/(91/100)^2\le1/[100(A_*+1)]$.
+    The exponential with shift $48$ is at most the one with shift
+    $156+2g$, and $\tau g\le1$, so the middle residual is at most
+    $1/16$. Apply the explicit-budget theorem to the same target,
+    family image, matrix and regional minima.
+\end{proof}
+
+\begin{lemma}[An admissible middle center from the actual children]
+    \label{thm:regional_middle_center_from_children}
+    \lean{TNLean.MPS.AreaLaw.ALVV.exists_regional_middle_center_of_child_estimates}
+    \leanok
+    Retain the original interaction assumptions and geometry
+    $l\le u\le v\le r\le L$. Suppose the actual attained parent and
+    middle minima $e_P,e_M$ are already specified with unit eigenvectors
+    and positive scalar shifts. There are actual attained collar minima
+    $e_{\mathrm L},e_{\mathrm R}$, with unit eigenvectors and positive
+    shifts on $[l,u)$ and $[v,r)$, chosen before the child estimates.
+
+    For every $l\le k\le r$, suppose $p_1,p_2$ are one-sided lower
+    estimates of the actual minima on $[l,k)$ and $[k,r)$, each with
+    error at most $49/16$. Then
+    \begin{align}
+      e_P-57/8&\le p_1+p_2\le e_P,\\
+      e_M-10&\le p_1+p_2-e_{\mathrm L}-e_{\mathrm R}-2\le e_M.
+    \end{align}
+    Both estimates retain attained eigenvector and positive-shift
+    certificates for their original parent and middle Hamiltonians.
+    Thus the same child-dependent center is admissible in
+    Lemma~\ref{thm:calibrated_soft_terminal_compressed_energy}.
+    This is a regional auxiliary to
+    \cite[Figure~\texttt{fig:algo1}, line 1631, and line 1807]{Arad2016RigorousRG}.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:regional_central_energy_estimate,lem:adjacent_interval_energy_merge}
+    The original parent minimum lies between the sum of the two child
+    minima and that sum plus one. Adding the two child errors therefore
+    gives $1+2(49/16)=57/8$. The actual three-piece regional decomposition
+    places $e_P$ between
+    $e_{\mathrm L}+e_M+e_{\mathrm R}$ and that sum plus two.
+    Apply its middle-center estimate with the parent-sum width
+    $57/8\le8$. Uniqueness of attained minima identifies the parent and
+    middle values with the already specified $e_P,e_M$.
+\end{proof}
+
+\begin{lemma}[A terminal node update from the actual child estimates]
+    \label{thm:calibrated_soft_terminal_node_update}
+    \lean{TNLean.MPS.AreaLaw.ALVV.exists_calibrated_soft_terminal_node_energy_update}
+    \leanok
+    Retain the primitive interaction assumptions, arbitrary retained interval
+    and calibrated scalar hypotheses of
+    Lemma~\ref{thm:calibrated_soft_terminal_compressed_energy}.
+    The actual attained parent and middle minima $e_P,e_M$ and the actual
+    collar minima $e_{\mathrm L},e_{\mathrm R}$ can all be chosen before
+    the child split and its energy estimates, with unit eigenvectors and
+    positive scalar shifts for the original regional Hamiltonians.
+
+    For every $l\le k\le r$ and one-sided child estimates $p_1,p_2$ of
+    width $49/16$, form
+    \begin{align}
+      c&=p_1+p_2-e_{\mathrm L}-e_{\mathrm R}-2,\\
+      R_c&=P-M+cI+h_{m,t}(M-cI).
+    \end{align}
+    Then $c\in[e_M-10,e_M]$, with an attained original-middle energy
+    certificate. Define the native soft matrix by the same fixed-complement
+    restriction of $R_c$. Its actual soft minimum precedes every target
+    and terminal image.
+
+    For each target and the same untrimmed family image satisfying the
+    comparison and exact viability certificates of
+    Lemma~\ref{thm:calibrated_soft_terminal_compressed_energy}, the actual
+    compression has an ordered orthonormal eigenbasis and least eigenvalue
+    $\lambda$ satisfying
+    \begin{align}
+      e_{\mathrm s}\le\lambda\le e_{\mathrm s}+3,\qquad
+      e_P-49/16\le\lambda-3\le e_P.
+    \end{align}
+    Thus $\lambda-3$ is an original-parent lower energy estimate of the
+    same width as the children. The original parent eigenvector and positive
+    scalar shift have been retained; no new family, terminal matrix or
+    candidate is selected. The image certificate must come from the actual
+    successful repeated-sampling history, rather than final retained-space
+    viability alone. This is an auxiliary node estimate for
+    \cite[Figure~\texttt{fig:algo1}, line 1631, and line 1807]{Arad2016RigorousRG}.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:calibrated_soft_terminal_compressed_energy,
+      thm:regional_middle_center_from_children}
+    Choose the actual regional minima once using the calibrated terminal
+    theorem. Apply the child-center theorem to those same parent and middle
+    certificates; it chooses the collars before all child estimates and
+    proves admissibility of $c$. Apply the retained terminal theorem at
+    this derived center to the same target and untrimmed image.
+\end{proof}
+
+
+\begin{lemma}[Energy estimation on a selected interval family]
+    \label{lem:selected_soft_terminal_node_energy}
+    \lean{TNLean.MPS.AreaLaw.ALVV.exists_selected_soft_terminal_node_energy_update}
+    \leanok
+    Retain the interaction, geometry and numerical assumptions of
+    Lemma~\ref{thm:calibrated_soft_terminal_node_update}. Let $H$ be the
+    original chain Hamiltonian, let $\mu\in\operatorname{spec}(H)$, and
+    suppose every spectral value is at least $\mu$. Write $G_\mu$ for its
+    full ground space. Fix a family $A_i$ on the retained interval and an
+    attained middle minimum $e_2$, with a unit vector $x_2$ satisfying
+    $Mx_2=e_2x_2$ and $M-e_2I\ge0$.
+
+    The original parent and collar minima can be chosen before every child
+    split and its one-sided estimates $p_1,p_2$ of width $49/16$.
+    The resulting center $c=p_1+p_2-e_{\mathrm L}-e_{\mathrm R}-2$ lies
+    in $[e_2-10,e_2]$. The same soft regional operator
+    $R_c=P-M+cI+h_{m,t}(M-cI)$ and its native restriction have the
+    minimum and norm bounds of
+    Lemma~\ref{thm:calibrated_soft_terminal_node_update}.
+
+    For any native coordinate identification $I_e$ and any matrix $Q$,
+    retain the actual untrimmed image
+    $Y=\sum_i A_i I_e(\operatorname{range}Q)$.
+    Suppose $T$ has the dimension of $G_\mu$, is within directed squared
+    error $3\tau/200$ from $G_\mu$, and $Y$ is
+    $\Delta/(91/100)^2$-viable for $T$ in the canonical interval/exterior
+    tensor coordinates. Then the compression of the same native $R_c$
+    to $Y$ has an ordered orthonormal eigenbasis and least eigenvalue
+    $\lambda$ satisfying
+    \begin{align}
+      e_{\mathrm s}\le\lambda\le e_{\mathrm s}+3,\qquad
+      e_P-49/16\le\lambda-3\le e_P.
+    \end{align}
+    The family and terminal image are unchanged; the conclusion concerns
+    this untrimmed image, rather than the final trimmed output.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:calibrated_soft_terminal_node_update,
+      lem:ground_spectrum_minimum,thm:normalized_eigenvector_energies,
+      thm:regional_tensor_viability}
+    The attained spectral lower bound gives $\lambda_{\min}(H)=\mu$.
+    Uniqueness of the attained minimum of $M$ identifies $e_2$ with the
+    middle minimum in the terminal node estimate. The exterior-first
+    tensor coordinates are the canonical interval coordinates. Apply that
+    estimate to the fixed family and the same matrix $Q$.
+\end{proof}
