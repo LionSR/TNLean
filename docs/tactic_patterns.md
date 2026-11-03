@@ -11676,3 +11676,25 @@ removed after the dependency audit exposed it.
 - **Seen:** `MPS/AreaLaw/FiveRegionHamiltonian.lean` and `MPS/AreaLaw/RegionalEnergyMergePhysical.lean`.
 - **Pattern:** Partition an internal bond set into consecutive internal subregions and the intervening crossing bonds; inject the crossing set into the prescribed cuts to bound its cardinality.
 - **Decision:** Reuse Mathlib's finite-sum and cardinality lemmas. The two-child identity currently remains local to the energy estimate; expose it if another consumer needs that exact subdivision.
+
+### Sharp original-band MPS — share normalization and sequential projections (2026-11-03)
+
+- **Promotion:** The normalization-distance inequality previously lived in
+  MPSApproximation and was used by four different approximation arguments.
+  Its unchanged proof now belongs to the companion UnitNormalizationDistance
+  module. The actual regional overlap-to-mass and normalized sequential
+  projection proofs are shared in NormalizedSequentialApproximation; the
+  gapped and buffered-band global theorems both use them.
+- **Reuse:** The interval identity for a prefix is moved unchanged to that thin
+  sequential module. The two logarithmic rounding proofs also move unchanged
+  to the companion LogRankRounding module. No compatibility alias or second
+  normalization/projection proof is retained.
+- **Candidate:** SharpRankCount and the new low-energy logarithmic estimate
+  both bound the polynomial-count contribution by the sum of a cubic initial
+  term and a fourth-root accuracy term. These two count calculations currently
+  use ordinary monotonicity and ring identities. A third use should promote
+  their scalar combination, rather than copying another calculation.
+- **Decision:** Apply the existing canonical-band identities only to the two
+  closeness assertions. The actual refined space is the image of the same
+  initially chosen viable space. The final MPS is the one normalized sequential
+  projection product, rather than independent choices at different cuts.
