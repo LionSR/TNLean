@@ -1849,6 +1849,14 @@ and [#9847](https://github.com/LionSR/TNLean/issues/9847).
   `E₀ + 6√δ` and bond dimension `B_{min(δ, 1/12)}`. The energy bound after
   trimming a general low-energy vector is corrected in the QICLean note
   `lvv13_trimming_energy`.
+- [`lvv13_mpsapprox_log_factor.tex`](lvv13_mpsapprox_log_factor.tex)
+  (local correction, resolved) records that Lemma `l:mpsapprox`
+  (arXiv:1307.5143v1, lines 325–328) quotes the bond dimension
+  `exp(C (ln n)^{3/4} ε^{-1/4})` of Arad, Kitaev, Landau and Vazirani without
+  the tilde of their `e^{Õ(log^{3/4} n/ε^{1/4})}` (arXiv:1301.1162v1, lines 176
+  and 1503–1517). The formalized bound is that of the cited work, with the
+  hidden factor written out as `log log n`; the algorithm uses only a
+  polynomial bound.
 - [`lvv13_power_expansion_padding.tex`](lvv13_power_expansion_padding.tex)
   (local correction, resolved) records that the expansion `eq:a-exp`
   (arXiv:1307.5143v1, lines 606–609) of the power projector sums over words in
@@ -1861,7 +1869,9 @@ and [#9847](https://github.com/LionSR/TNLean/issues/9847).
   a chain of qubits with `ε₀ = (n - 1)/2` and gap `1/4` is an example. The
   corollary is formalized with the number of sampled words explicit in `C^m`,
   and `C^m ≤ n (1/η)^{ε₀/ε}` at the logarithmic power, which is polynomial
-  when `ε₀/ε` is bounded.
+  when `ε₀/ε` is bounded. The viable-set induction holds under that bound with
+  the sampled projector, and without it with Huang's Gaussian filter
+  (arXiv:1406.6355v6, §5.4) as the error-reduction operator.
 - [`lvv13_error_reduction_witness_norm.tex`](lvv13_error_reduction_witness_norm.tex)
   (local correction, resolved) records that the step from `A v` to `K v` in the
   proof of Claim `c:errorreduction` (arXiv:1307.5143v1, line 589) needs a lower
