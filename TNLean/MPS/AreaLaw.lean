@@ -33,6 +33,7 @@ import TNLean.MPS.AreaLaw.CanonicalIntervalSamplingOperation
 import TNLean.MPS.AreaLaw.CanonicalIntervalSamplingSections
 import TNLean.MPS.AreaLaw.CanonicalIntervalSamplingTree
 import TNLean.MPS.AreaLaw.CanonicalIntervalSamplingTreeProfile
+import TNLean.MPS.AreaLaw.CanonicalIntervalTreeSuccessEvent
 import TNLean.MPS.AreaLaw.CanonicalLowDensityFamily
 import TNLean.MPS.AreaLaw.CanonicalSampledIntervalBounds
 import TNLean.MPS.AreaLaw.CanonicalSampledIntervalInterleaved
@@ -141,6 +142,7 @@ import TNLean.MPS.AreaLaw.PartialSwap
 import TNLean.MPS.AreaLaw.PhysicalChebyshevViability
 import TNLean.MPS.AreaLaw.PhysicalDGApproximation
 import TNLean.MPS.AreaLaw.PhysicalDGAutomaticRefinement
+import TNLean.MPS.AreaLaw.PhysicalDGCanonicalJointProbability
 import TNLean.MPS.AreaLaw.PhysicalDGCanonicalParentFailure
 import TNLean.MPS.AreaLaw.PhysicalDGCanonicalSamplingData
 import TNLean.MPS.AreaLaw.PhysicalDGClippedReference

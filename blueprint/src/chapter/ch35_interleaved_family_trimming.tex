@@ -872,3 +872,69 @@ remains a separate argument; no running-time assertion follows here.
 Only the recorded size bounds are asserted on all intervals here.
 Simultaneous viability for one sampled root hierarchy and its joint
 probability estimate are separate conclusions.
+
+\subsection{Joint success for the actual physical sampled tree}
+
+\begin{definition}[The true joint event of one hierarchy]
+    \label{def:canonical_interval_sampling_tree_good}
+    \lean{TNLean.MPS.AreaLaw.canonicalIntervalSamplingTreeGood}
+    \leanok
+    For fixed families, radius, global target and root interval $[p,r)$,
+    let $\mathcal G$ be the event that the literal sampled retained space
+    is $\delta$-viable at the root and at every internal interval of its
+    actual midpoint subdivision. No condition is imposed on other
+    overlapping intervals.
+\end{definition}
+
+\begin{lemma}[Measurability of true joint success]
+    \label{lem:borel_canonical_interval_sampling_tree_good}
+    \lean{TNLean.MPS.AreaLaw.measurableSet_canonicalIntervalSamplingTreeGood}
+    \leanok
+    For a valid root interval, the event $\mathcal G$ is Borel.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{def:canonical_interval_sampling_tree_good,
+        lem:borel_canonical_interval_sampling_tree}
+    Each actual retained-space viability event is Borel. Intersect the
+    root event with those for the finite list of its internal intervals.
+\end{proof}
+
+\begin{theorem}[Joint success of the actual physical sampled hierarchy]
+    \label{thm:physical_canonical_tree_joint_probability}
+    \lean{TNLean.MPS.AreaLaw.exists_physical_dg_canonical_tree_joint_probability}
+    \leanok
+    Under the physical hypotheses and calibrated parameters of
+    Lemma~\ref{lem:physical_canonical_interval_sampling_data}, choose the
+    same common reference, clipped targets and operator families before
+    the common radius and all global seeds. Retain all their target
+    comparisons and ordered-word certificates. For every admissible
+    radius, every retained space satisfies the unconditional dimension
+    and recorded-rank profile on every seed.
+
+    Let $\mathcal G$ require $3/200$-viability for the original full ground
+    space at the full-chain root and all internal intervals in that
+    root's actual subdivision. Under the specified finite product Haar
+    law,
+    \begin{align}
+        \mathbb P(\mathcal G^c)&\le\frac{L-1}{(L+1)^2},
+        &\mathbb P(\mathcal G)&\ge1-\frac{L-1}{(L+1)^2}.
+    \end{align}
+    Here the numerator is read as zero at $L=0$. The event is Borel.
+    The block-leaf, fixed failure scale, capped-gap and hard-clipped-family
+    qualifications remain explicit; see
+    \cite{gap:alvv16_approximation_parameters}. No running-time or
+    soft-Hamiltonian energy assertion is made by this theorem.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{lem:physical_canonical_interval_sampling_data,
+        lem:borel_canonical_interval_sampling_tree_good,
+        thm:canonical_interval_joint_probability}
+    Select the physical data once. At every fixed baseline history, the
+    actual two children satisfy the common size bounds, independently of
+    whether previous viability conditions succeeded. When they are
+    viable, the retained physical parent estimate therefore bounds its
+    true failure probability by $(L+1)^{-2}$. Apply the joint conditional
+    estimate to the existing recursion. Its actual internal-interval list
+    has at most $L-1$ members. Measurability of true joint success and
+    the probability of its complement give the lower bound.
+\end{proof}
