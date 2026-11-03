@@ -4,7 +4,8 @@ The lemmas below construct the current-space operation at every round and
 bound its viability, dimension and recorded ranks under explicit numerical
 budgets. Independent truncation and polynomial scales also construct actual
 physical families and a common reference at the required small accuracy.
-The successful initial sample and stopping bound remain separate.
+The fixed-child sampling event and finite stopping bound are also proved below;
+probability for an adaptively sampled tree remains separate.
 
 \begin{lemma}[One actual family image and interval trim]
     \label{lem:interval_family_trim_step}
@@ -337,4 +338,54 @@ The successful initial sample and stopping bound remain separate.
     Dimension and recorded weighted ranks are bounded by
     $N^k\dim S_0\le(D^k)^2s\le D^6s^3$.
     Finally $2(1/200+\tau)\le3/200$ transfers to the original ground space.
+\end{proof}
+
+
+\begin{lemma}[A measurable event for one actual interleaved parent]
+    \label{lem:physical_interleaved_node_event}
+    \lean{TNLean.MPS.AreaLaw.sampledIntervalInterleavedTrim,
+        TNLean.MPS.AreaLaw.exists_physical_dg_interleaved_interval_node_event}
+    \leanok
+    Use the chain, constants and nominal sample bound $s$ of
+    Lemma~\ref{lem:physical_interleaved_iterates}. The physical families
+    and common reference are chosen before the child spaces and actual
+    sample dimension. Fix one long parent interval, its split point and
+    $0<\xi\le\xi_{\max}$. Let each child space be $3/200$-viable for
+    the same original full ground space and have dimension at most
+    $M=D^6s^3$. Form their actual adjacent-coordinate tensor merge $W$;
+    write $Q=\dim W$.
+
+    For each Haar unitary $U$ on $\C^Q$, let $S(U)$ be the span of the
+    first $\min(s,Q)$ columns of the rotated orthonormal basis of $W$.
+    Starting at this actual sample, apply the same family and collective
+    trim for $k=\lceil\log_D(D^2s)\rceil$ rounds, as in
+    (\ref{eq:physical_interleaved_stopping}). This defines the output.
+    There is a nonempty measurable event $\mathcal E$ with
+    \begin{align}
+        \Pr(\mathcal E^c)&\le(L+1)^{-2},&
+        \Pr(\mathcal E)&\ge1-(L+1)^{-2}.
+        \label{eq:physical_interleaved_parent_probability}
+    \end{align}
+    Every unitary in $\mathcal E$ gives that literal output with
+    dimension at most $M$, at most $M$ recorded spanning vectors of
+    weighted internal-cut rank at most $M$, viability $1/200$ for the
+    actual clipped target and viability $3/200$ for the original ground
+    space. The event is for this fixed pair of children; its choice is
+    not asserted to be measurable as the children vary.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:physical_interleaved_iterates}
+    Tensoring the viable children gives error $3/100$. The actual
+    original-to-clipped comparison makes $W$ $1/4$-viable for its clipped
+    target. Also $1\le Q\le D^{12}s^6$. The corrected complex-sphere
+    sampling estimate gives a measurable event on which the sampled
+    success is at least $3\min(s,Q)/(32Q)\ge a$.
+    Its failure is bounded by
+    $\exp(32r\log D+12r\log s-s/16)\le e^{-s/64}\le(L+1)^{-2}$.
+    Here $s$ is the already fixed ceiling, since
+    $\log((L+1)^2)=2\log(L+1)$.
+    A long parent has $L>0$, so the lower probability is positive and
+    the event is nonempty. Each successful sample has dimension at most
+    $s$ and $(1-a)$-viability. Apply the literal-iteration theorem.
+    The whole exterior is retained throughout.
 \end{proof}
