@@ -600,6 +600,40 @@ probabilities remains a separate argument.
     the Borel parent-success event.
 \end{proof}
 
+
+\begin{lemma}[A true guarded section of the canonical sampled parent]
+    \label{thm:canonical_guarded_sampling_section}
+    \lean{TNLean.MPS.AreaLaw.rankUnitaryHaar_guarded_canonicalIntervalSamplingTree_update_le}
+    \leanok
+    Fix the actual canonical sampled interval operation, its families and
+    parameters, a whole seed $U$, and a valid long parent $[p,r)$.
+    Put $k=p+\lfloor(r-p)/2\rfloor$ and let
+    $S_1=S_U(p,k)$ and $S_2=S_U(k,r)$ be its actual two baseline
+    child spaces. Viability is measured for one original global target
+    $G$, with the whole regional exterior retained at each interval.
+
+    Suppose that whenever both $S_1$ and $S_2$ are $\delta$-viable, the
+    actual canonical sampled parent of this same pair, using its specified
+    family and fresh seed $v$, fails $\delta$-viability with probability
+    at most $\beta$. Then the true guarded section satisfies
+    \begin{align}
+        h_{p,r}\{v:U[(p,r)\leftarrow v]\in E_{p,r}\}\le\beta.
+    \end{align}
+    No measurability premise or comparison event is required.
+    This is a conditional section estimate; the fixed-child bound is
+    an explicit analytic hypothesis.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{def:guarded_interval_failure}
+    Replacing the longer parent coordinate leaves each shorter child
+    space equal to its baseline value. The updated parent is the same
+    canonical sampled merge of $S_1,S_2$, evaluated at $v$.
+    If either baseline child fails viability, the guarded section is
+    empty. Otherwise guarded failure implies failure of this actual
+    fixed-child parent. Monotonicity of measure and the given estimate
+    prove the bound. The seed and original target are unchanged throughout.
+\end{proof}
+
 \begin{lemma}[Recorded generators of the actual trimmed image]
     \label{lem:interval_recorded_generator_bounds}
     \lean{TNLean.MPS.AreaLaw.IsIntervalSpanWithRankBound,

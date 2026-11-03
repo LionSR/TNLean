@@ -11806,3 +11806,16 @@ removed after the dependency audit exposed it.
   and the existing failure-ancestry inclusion.
 - **Decision:** Prove the guarded-union bound once. The root estimate is an
   active corollary, and failure at other nodes may use the same union bound.
+
+## Candidate: guarded sections with fixed actual children (2026-11-03)
+
+- **Seen:** `MPS/AreaLaw/CanonicalIntervalGuardedProbability.lean`.
+- **Pattern:** Use actual coordinate freshness to identify the children
+  after an update, then split on their baseline property. A bad child
+  makes the guarded section empty; good children reduce it to the same
+  fixed-child parent failure event.
+- **Reuse:** Existing `canonicalIntervalSamplingTree_update_of_length_lt`
+  and `canonicalIntervalSamplingTree_update_parent`; only the guarded
+  event is unfolded at the boundary.
+- **Decision:** Retain the true event and fixed whole seed. No chosen
+  comparison hull or basis-law equality enters the reduction.
