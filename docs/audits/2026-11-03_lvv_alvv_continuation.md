@@ -18,7 +18,7 @@ The same interleaved root now has a native MPS bound, literal final filter-and-t
 
     bond <= C [(L+1)(r+1)(1+1/eta)]^k.
 
-There is a universal Cdeg such that k <= Cdeg U^10/g^2, where g=min(gamma,1) and U=1+log(max(q,50))+log(1/g). The prefactor C still depends on q and gamma. The proof concerns this actual recursive output, not a separately chosen approximating MPS. The common family parameter depends on L and r through its explicit calibration. These conclusions are in [PhysicalDGInterleavedPolynomialBond.lean](../../TNLean/MPS/AreaLaw/PhysicalDGInterleavedPolynomialBond.lean).
+There is one universal C0, chosen before q and gamma, such that both k and log(max(C,1)) are at most C0 U^10/g^2, where g=min(gamma,1) and U=1+log(max(q,50))+log(1/g). The proof concerns this actual recursive output, not a separately chosen approximating MPS. The common family parameter depends on L and r through its explicit calibration. These conclusions are in [PhysicalDGInterleavedPolynomialBond.lean](../../TNLean/MPS/AreaLaw/PhysicalDGInterleavedPolynomialBond.lean).
 
 The printed unchanged-sample assignment requires the documented current-space correction. The printed integer count, adaptive success probability, energy-estimation invariant, source-sharp parameter dependence and running time remain separate obligations. A polynomial bound on output size is not a proof of polynomial running time.
 
@@ -49,12 +49,12 @@ The actual left, middle, right and parent minima satisfy
 
 Thus a parent estimate pParent in [eParent-8,eParent] gives the required middle center pParent-eLeft-eRight-2 in [eMiddle-10,eMiddle]. The derivation of that parent-estimate window from the actual recursive candidate remains open.
 
-The companion energy-transfer theorem gives energy at most three on the actual projected target when the residual is at most 1/16, the original-to-target loss is at most 1/[1024(A+1)] and the candidate loss is at most 1/[100(A+1)], for centered norm bound A. These quantitative losses still need to be discharged for the same family used by the merge. Independently choosing an energy family would not establish that identification. See [the centering note](../paper-gaps/alvv16_soft_regional_energy_centering.tex).
+The companion energy-transfer theorem gives energy at most three on the actual projected target when the residual is at most 1/16, the original-to-target loss is at most 1/[1024(A+1)] and the candidate loss is at most 1/[100(A+1)], for centered norm bound A. The calibrated family, iterations, sampled node and tree now retain the ordered-word estimates for their same chosen target and operator family. In particular, the tree retains the target and its mutual comparison with the original ground space before choosing the threshold and operation. The remaining quantitative losses must be discharged for these actual witnesses; independently choosing an energy family would not establish their identification. See [the centering note](../paper-gaps/alvv16_soft_regional_energy_centering.tex).
 
 ## Verification
 
 The combined continuation at TNLean `20cad76ebfa6e770263c4a5d5333917c5b226ed9` and QICLean `98ba564e3c9603dc93d2173e3dc87a85ce750456` passed a locked full build of 15,701 jobs, both complete blueprint declaration lists, paper-gap declaration resolution, strict changed-module checks and foundation inspection of 507 public declarations. No Mathlib source was compiled. Strict checks covered eight companion modules and twenty-one tensor-network modules or existing regression sources.
 
-The later same-root Ritz, polynomial degree, single-witness low-energy approximation, actual low-energy MPS basis, soft-parent energy, central-center conversion and quantitative energy-transfer contributions passed individual strict checks and imported foundation inspections. Their combined adoption checks remain pending. Numerical modules above the 25-second warning threshold retain those warnings; none exceeded the 50-second limit in the recorded checks.
+The later same-root Ritz, polynomial coefficient and degree, same-family ordered words, single-witness low-energy approximation, actual low-energy MPS basis, soft-parent energy, central-center conversion and quantitative energy-transfer contributions passed individual strict checks and imported foundation inspections. Their combined adoption checks remain pending. Numerical modules above the 25-second warning threshold retain those warnings; none exceeded the 50-second limit in the recorded checks.
 
 No proof placeholders, additional axioms or permanent Lean test fixtures were introduced. Temporary inspection sources were deleted. Unrelated primary-worktree changes are preserved. The continuation has not been pushed or merged.
