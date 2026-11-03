@@ -221,21 +221,28 @@
     },
     "ch:symmetry": {
       "theorems": [
-        "thm:spt_classification",
-        "thm:has_string_order_of_symmetric_injective",
         "thm:pgwsvc08_physical_string_order",
-        "thm:virtual_rep_injective",
-        "thm:spt_exact_ground_physical_class",
-        "thm:spt_exact_phase_injective_classification"
+        "thm:virtual_rep_injective"
       ],
       "corollaries": [
         "cor:virtual_rep_cocycle"
       ],
       "notes": {
+        "thm:pgwsvc08_physical_string_order": "Physical string-order criterion of Perez-Garcia et al. 2008, named in the chapter title",
+        "thm:virtual_rep_injective": "On-site symmetries of injective tensors induce projective virtual representations, the first result of the opening"
+      }
+    },
+    "ch:symmetry_spt": {
+      "theorems": [
+        "thm:spt_classification",
+        "thm:has_string_order_of_symmetric_injective",
+        "thm:spt_exact_ground_physical_class",
+        "thm:spt_exact_phase_injective_classification"
+      ],
+      "corollaries": [],
+      "notes": {
         "thm:spt_classification": "Classification of SPT phases along symmetric parent-Hamiltonian paths by the cocycle class",
         "thm:has_string_order_of_symmetric_injective": "Virtual-boundary nondecay for injective symmetric tensors, named in the chapter title",
-        "thm:pgwsvc08_physical_string_order": "Physical string-order criterion of Perez-Garcia et al. 2008, named in the chapter title",
-        "thm:virtual_rep_injective": "On-site symmetries of injective tensors induce projective virtual representations, the first result of the opening",
         "thm:spt_exact_ground_physical_class": "Physical-gap converse across changes of minimal MPS bond dimension, derived without a supplied transfer bound",
         "thm:spt_exact_phase_injective_classification": "Phase/cohomology equivalence for one-site injective endpoints with prescribed exact virtual covariance, combining physical forward and converse directions"
       }
@@ -375,15 +382,26 @@
       "notes": {}
     },
     "ch:asymmetric_examples": {
+      "theorems": [],
+      "corollaries": [],
+      "notes": {}
+    },
+    "ch:asymmetric_examples_non_invertible": {
+      "theorems": [],
+      "corollaries": [
+        "cor:asymex_ising_fermion_partial_isometry",
+        "cor:asymex_ising_sigma_fusion_unscaled",
+        "cor:asymex_kw_exchange",
+        "cor:asymex_kw_square"
+      ],
+      "notes": {}
+    },
+    "ch:asymmetric_examples_group_symmetries": {
       "theorems": [
         "thm:asymex_klein_printed_anomaly_class"
       ],
       "corollaries": [
         "cor:asymex_czx_decorated_no_invariant",
-        "cor:asymex_ising_fermion_partial_isometry",
-        "cor:asymex_ising_sigma_fusion_unscaled",
-        "cor:asymex_kw_exchange",
-        "cor:asymex_kw_square",
         "cor:asymex_z3anomalous_domain_wall"
       ],
       "notes": {
