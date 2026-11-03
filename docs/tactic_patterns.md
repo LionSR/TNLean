@@ -11893,3 +11893,15 @@ numerical aliases in the terminal goal are unfolded before applying the
 unchanged terminal proof; the chosen targets and operator families remain
 fixed. The abstract energy lemma carries the terminal proposition as an
 opaque proposition, rather than repeating its vector-wise conjunction.
+
+## Candidate: restricted norms under spectral-space identities (2026-11-03)
+
+- **Seen:** The original and reverse directions in
+  `MPS/AreaLaw/ALVV/FiveRegionSoftClusters.lean`.
+- **Pattern:** Transport a restricted operator norm across an eigenbasis
+  identity or an exact energy-cutoff equality before using operator linearity.
+- **Reuse:** Existing `Submodule.spectralSpanLE_eq_of_eigenbases` and scalar
+  shift lemmas supply the space identities. Explicitly rewrite the target
+  restriction domain before simplifying with `map_sub`.
+- **Decision:** These are two occurrences in one file. No tactic or new
+  general transport theorem is introduced; ordinary equality rewriting suffices.

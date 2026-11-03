@@ -9,6 +9,7 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.MPS.AreaLaw.ALVV
 
 import TNLean.MPS.AreaLaw.ALVV.BalancedRegionalEnergy
+import TNLean.MPS.AreaLaw.ALVV.FiveRegionSoftClusters
 import TNLean.MPS.AreaLaw.ALVV.FiveRegionSoftRepresentation
 import TNLean.MPS.AreaLaw.ALVV.FiveRegionSoftResiduals
 import TNLean.MPS.AreaLaw.ALVV.FiveRegionSoftStructure

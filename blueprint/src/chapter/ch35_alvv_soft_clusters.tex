@@ -1,0 +1,83 @@
+\section{The low cluster of the physical soft matrix and its approximant}
+
+The following auxiliary retains the actual five-region minima and both
+restricted residual estimates. It first derives a soft low cluster from
+the original gap, then identifies the invariant target of a Hermitian
+approximating matrix. The two stages have distinct errors; see
+\cite[lines 1195--1255 and 1373--1420]{Arad2016RigorousRG} and
+\cite{gap:alvv16_soft_regional_residuals,gap:alvv16_cluster_approximation}.
+
+\begin{lemma}[Physical soft and approximating spectral clusters]
+    \label{lem:five_region_soft_and_hermitian_clusters}
+    \lean{TNLean.MPS.AreaLaw.ALVV.exists_five_region_soft_clusters}
+    \leanok
+    Start from the same positive nearest-neighbour interactions,
+    five-region minima and simultaneous estimated-center soft matrix
+    $G$ of Lemma~\ref{lem:alvv_five_soft_residuals}. Retain all its
+    ground data, eigenbases and both residual conclusions. Write
+    $C\le4$ for its actual number of crossing bonds and
+    $d=10|S|$ for its selected-region correction. The original centered
+    matrix has ground energy $E$ and the soft matrix has its attained
+    ground energy $\mu$. Suppose the original full ground space $T_0$
+    is separated from every other spectral value by $g>0$.
+
+    Let $0<\tau\le1$, set
+    $\eta_R=E-\mu+19g/20$ and
+    $U_R=2(\eta_R+d+3C+2)$, and suppose
+    $T_0'\ge g/40+3C+12$ and $U_R\le t,T_1'$.
+    Define
+    \begin{align}
+        \rho_O&=|S|\left(8C e^{-(T_0'-g/40-3C-12)/8}
+                    +\frac{t}{m}(T_0'/t)^m\right),\\
+        \rho_R&=|S|\left(8C e^{-(T_1'-U_R)/8}
+                    +\frac{t}{m}(T_1'/t)^m\right).
+    \end{align}
+    If both are at most $\tau g/10^6$, then
+    \begin{align}
+        T_s=E_G(E+g/20)&=E_G(E+19g/20),
+        &\dim T_s&=\dim T_0,
+    \end{align}
+    and $T_s,T_0$ are mutually $\tau/200$-close. Here
+    $E_A(c)$ denotes the closed spectral space of $A$ below $c$.
+    The original uncentered ground energy is $E+\sum_j e_j$.
+
+    For any Hermitian $\widehat G$ with $\|G-\widehat G\|\le\xi$,
+    $\xi>0$, put $V=\|G\|+\xi$ and
+    \begin{align}
+        n_-&=\left\lceil\frac{E+g/20-\min\{E+g/20-1,-V\}}{2\xi}\right\rceil,\\
+        n_+&=\left\lceil\frac{E+3g/4-\min\{E+3g/4-1,-V\}}{2\xi}\right\rceil,\\
+        \delta_-&=\frac{n_-(2\xi)^2}{(g/5+\xi)^2},
+        &\delta_+&=\frac{n_+(2\xi)^2}{(g/5+\xi)^2}.
+    \end{align}
+    If $\delta_-,\delta_+<1$, then
+    \begin{align}
+        \widehat T=E_{\widehat G}(E+g/4)
+          &=E_{\widehat G}(E+3g/4),
+        &\dim\widehat T&=\dim T_0.
+    \end{align}
+    The space $\widehat T$ is $2(\delta_-+\tau/200)$-close to $T_0$,
+    while $T_0$ is $2(\delta_++\tau/200)$-close to $\widehat T$.
+    The actual minima are chosen before the auxiliary cutoffs.
+    No gap or target comparison for either softened matrix is assumed.
+
+    The estimates retain the one-sided ten-unit centers, order $m\ge2$
+    and explicit numerical precision conditions. They do not assert a
+    uniform parameter choice, measurable adaptive centers or running time.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:alvv_five_soft_residuals}
+    Select the physical residual data once. The attained centered ground
+    vector identifies the original energy shift and the full ground space
+    independently of the eigenbasis. The forward residual is evaluated at
+    width $g/40$. The reverse width is exactly $E-\mu+19g/20$, so its
+    cutoff is $E+19g/20$. Apply the scaled restricted-residual cluster
+    comparison, giving $T_s$ and both errors $\tau/200$.
+
+    Apply low-cluster norm stability to $G,\widehat G$ at the four
+    cutoffs $E+g/20,E+g/4,E+3g/4,E+19g/20$. Both inward buffers are
+    $g/5$. It gives the approximant's own cluster and the two directed
+    losses $\delta_-,\delta_+$. Compose each with the corresponding
+    comparison to the original ground space, using equal weights in the
+    projection-distance estimate. No residual on a new spectral space
+    is inferred from one on a different space.
+\end{proof}
