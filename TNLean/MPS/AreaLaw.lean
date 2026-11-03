@@ -124,6 +124,7 @@ import TNLean.MPS.AreaLaw.PhysicalDGEntropy
 import TNLean.MPS.AreaLaw.PhysicalDGFilterIteration
 import TNLean.MPS.AreaLaw.PhysicalDGFilterTrimming
 import TNLean.MPS.AreaLaw.PhysicalDGGlobalApproximation
+import TNLean.MPS.AreaLaw.PhysicalDGInterleavedApproximation
 import TNLean.MPS.AreaLaw.PhysicalDGInterleavedFamily
 import TNLean.MPS.AreaLaw.PhysicalDGInterleavedIteration
 import TNLean.MPS.AreaLaw.PhysicalDGInterleavedNode

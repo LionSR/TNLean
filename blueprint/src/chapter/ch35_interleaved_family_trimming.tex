@@ -459,3 +459,73 @@ probability for an adaptively sampled tree remains separate.
     any final viable spaces. Apply the candidate identity to the actual
     recursively constructed children to record the chosen unitary.
 \end{proof}
+
+
+\begin{lemma}[Native MPS and Ritz extraction from the same interleaved root]
+    \label{lem:physical_interleaved_tree_ritz}
+    \lean{TNLean.MPS.AreaLaw.exists_physical_dg_interleaved_tree_ritz_approximation}
+    \leanok
+    Use the physical hypotheses and calibrated parameters of
+    Lemma~\ref{lem:physical_interleaved_tree}, retaining its common reference
+    bound $D_{\rm ref}$ and radius bound $\xi_{\max}$.
+    Before the requested accuracy, put
+    $N_{\rm tree}=\lceil1/a\rceil$ and $E_{\rm tree}=D_{\rm ref}N_{\rm tree}$.
+    Let $A=\|H\|-\mu>0$, $c=\gamma/A$, and
+    $K_{\rm raw}=I-\|H\|^{-1}H$. For every $\eta>0$, set
+    \begin{align}
+        \rho&=\frac{\eta\gamma}{2A+\eta\gamma},&
+        n&=\left\lceil\frac4c\log\frac1\rho\right\rceil+1,&
+        \varepsilon_{\rm f}&=\frac{c^2\rho}{32768}.
+        \label{eq:interleaved_final_accuracy}
+    \end{align}
+    Choose the actual physical final reference of dimension $r$, mutually
+    $\varepsilon_{\rm f}$-close to $G$, with all-span MPS bound
+    $b=r^2B_{\rm f}$ and the reference logarithmic estimate at that accuracy.
+    Define
+    \begin{align}
+        D_{\rm c}&=\max\{E_{\rm tree},b\},&
+        N_{\rm f}&=\left\lceil\frac{100D^{12}}{c\rho}\right\rceil,&
+        \xi&=\frac1{1000D_{\rm c}N_{\rm f}\sqrt{L+1}}.
+        \label{eq:interleaved_final_common_radius}
+    \end{align}
+    Then $0<\xi\le\xi_{\max}$ and
+    $\sqrt{Lrb}\,\xi<\eta/(10000D^{12})$.
+    Construct the actual interleaved tree at this same $\xi$, retaining
+    its interval invariants and chosen parent unitaries. Let $S_0$ be its
+    full-chain root and $W_0$ its native coefficient image. With $M=D^6s^3$,
+    every vector of $W_0$ is an open MPS of bond at most
+    \begin{align}
+        B_{\rm out}=10^6(D_{\rm c}N_{\rm f})^2(L+1)M^2.
+        \label{eq:interleaved_root_final_bond}
+    \end{align}
+    The space $W_0$ is $3/200$-close to the original full ground space.
+
+    Starting from this very $S_0$, form its literal $n$ raw-filter and
+    collective-trim iterates at the same radius. Write $S$ for the terminal
+    space, $W$ for its native image and $R$ for the actual lowest-$r$
+    compressed Ritz space of $H$ on $W$. Then $n>0$, $W$ is $\rho$-close
+    to $G$, $\dim S\le M$, $R\subseteq W$, $\dim R=r$, and $R,G$ are
+    mutually $\eta/2$-close. Every vector of $R$ has the same MPS bound
+    (\ref{eq:interleaved_root_final_bond}).
+
+    The old one-final-trim root is not used. The capped-gap, block-leaf,
+    fixed-sampling and length-dependent count qualifications remain.
+    The final count in (\ref{eq:interleaved_final_accuracy}) is not identified
+    with the printed count; see \cite{gap:alvv16_final_filter_gain}.
+    No adaptive probability, source energy-estimation invariant or running
+    time is asserted.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:physical_interleaved_tree,lem:physical_dg_automatic_refinement,
+        lem:full_interval_viability,lem:full_interval_trim_native_mps}
+    The ceiling gives $aN_{\rm tree}\ge1$, hence
+    $1/(1000E_{\rm tree}\sqrt{L+1})\le\xi_{\max}$.
+    The automatic reference and radius choice therefore serves the new
+    interleaved tree and all final trims simultaneously. Whole-region
+    viability is closeness of the same native root. Its actual recorded
+    generators give the native MPS bound, including the extra count factor.
+    Apply the actual same-candidate raw-filter refinement to this root.
+    The projected trial energy and Ritz comparison give both errors, since
+    $A\rho/((1-\rho)\gamma)=\eta/2$. The terminal trimming generators
+    give the same all-span bond bound.
+\end{proof}
