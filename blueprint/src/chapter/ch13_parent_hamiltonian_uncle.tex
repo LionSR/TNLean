@@ -268,12 +268,14 @@ infinite-volume Hamiltonian is included here.
 
 \begin{definition}[The four boundary sectors]
     \label{def:uncle_boundary_space}
+    \lean{MPSTensor.uncleBoundaryLetter}
     \lean{MPSTensor.uncleBoundaryWord}
     \lean{MPSTensor.uncleDomainWallWord_eq_sum}
     \lean{MPSTensor.uncleBoundaryWord_block}
+    \lean{MPSTensor.uncleBoundaryMap}
     \lean{MPSTensor.uncleBoundarySpace}
     \leanok
-    \uses{def:two_block_uncle_tensor}
+    \uses{def:two_block_uncle_tensor, def:uncle_boundary_product}
     Write $T_i=\left(\begin{smallmatrix}A_i&R_i\\L_i&B_i\end{smallmatrix}\right)$.
     For a word $w=(i_1,\ldots,i_n)$, let $F(w)$ have diagonal blocks
     $A_{i_1}\cdots A_{i_n}$ and $B_{i_1}\cdots B_{i_n}$ and off-diagonal blocks
@@ -308,7 +310,7 @@ infinite-volume Hamiltonian is included here.
     \lean{MPSTensor.uncleBoundaryMul}
     \lean{MPSTensor.uncleBoundaryMul_block}
     \leanok
-    \uses{def:uncle_boundary_space}
+    \uses{def:two_block_uncle_tensor}
     On block matrices in $\mathcal M_{a+b}$ define
     \begin{align}
         (A,R,L,B)\star(A',R',L',B')
@@ -354,9 +356,10 @@ infinite-volume Hamiltonian is included here.
     and induction gives the full coefficient span at every positive length.
     Given the two overlapping descriptions, write their boundary matrices
     as $X_k$ and $Y_i$, with $i$ and $k$ the first and last physical labels.
-    Compatibility and the same contraction give, for every middle word $w$,
+    Put $Z=\sum_i c_iY_i$. Compatibility and the same contraction give, for
+    every middle word $w$,
     \begin{align}
-        \tr(F(w)X_k) & =\tr(F(wk)Z), & Z & =\sum_i c_iY_i.
+        \tr(F(w)X_k) & =\tr(F(wk)Z).
     \end{align}
     The positive-length middle words span all matrices. Thus this equality
     extends to every middle coefficient, and evaluation on each longer

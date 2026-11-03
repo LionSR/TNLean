@@ -241,16 +241,16 @@ $\mathcal U_g$. Throughout this section the chain length is positive: $N\geq1$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:mpug_group_representation}
-    We proceed by induction on $n$. For $n=0$, the identity law gives
-    $U_e^{(N)}=\Id$. For the induction step, multiplying the induction
-    hypothesis by $U_g^{(N)}$ and applying the representation multiplication law
-    gives
+    \uses{def:mpug_group_representation, def:mpug_operator_representation}
+    A representation consists of matrix product unitaries on nonempty chains
+    satisfying the identity and multiplication laws, so for fixed $N\geq1$
+    Definition~\ref{def:mpug_operator_representation} gives a group
+    homomorphism $\pi_N\colon G\to\mathrm U\bigl((\C^d)^{\otimes N}\bigr)$ with
+    $\pi_N(g)=U_g^{(N)}$. A monoid homomorphism preserves natural powers, so
     \begin{align}
-        \bigl(U_g^{(N)}\bigr)^{n+1}
-         & =U_{g^n}^{(N)}U_g^{(N)}
-        =U_{g^{n+1}}^{(N)}.
+        \bigl(U_g^{(N)}\bigr)^n & =\pi_N(g)^n=\pi_N(g^n)=U_{g^n}^{(N)}.
     \end{align}
+    Powers in the unitary group are computed as matrix powers.
 \end{proof}
 
 \begin{lemma}[Finite order of represented operators]
@@ -3761,7 +3761,7 @@ the disjoint complement of the first.
     Exactly one phase occurs, independently of $n$ and $m$. The two
     endpoint-inclusive arcs share both marked sites; in terms of the
     inverse-compatible source factors this is the relation between truncated
-    symmetries of Theorem~\ref{thm:mpug_inverse_complementary_truncation}.
+    symmetries of Lemma~\ref{thm:mpug_inverse_complementary_truncation}.
 \end{lemma}
 \begin{proof}\leanok
     \uses{thm:mpug_inverse_periodic_factorization,
@@ -3944,7 +3944,7 @@ the disjoint complement of the first.
     $\mathcal U^\dagger$, which is simple by Theorem~\ref{ThmFund1}.
 \end{proof}
 
-\begin{theorem}[The chosen source factors have the pleasant properties]
+\begin{lemma}[The chosen source factors have the pleasant properties]
     \label{thm:mpug_source_pleasant_properties}
     \lean{MPOTensor.IsMPUCanonicalFormII.sourceFactors_pleasantProperties}
     \leanok
@@ -3957,11 +3957,11 @@ the disjoint complement of the first.
     Let $\mathcal U$ be a simple MPU tensor in canonical form II with recorded
     fixed point $\rho$. Its weighted source factors for $\rho$ have the
     pleasant properties.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     The gates and the dimension identity are
-    Theorem~\ref{thm:mpu_three_legged_decomposition}; the staircase gates are
+    Lemma~\ref{thm:mpu_three_legged_decomposition}; the staircase gates are
     unitary by Lemma~\ref{thm:mpug_staircase_gates_unitary}, and the closures
     of the $Y$ factors by Lemma~\ref{thm:mpug_source_y_physical_contractions}.
     The adjoint is simple by Lemma~\ref{thm:mpug_canonical_adjoint_simple},
@@ -4014,7 +4014,7 @@ the disjoint complement of the first.
     \cite{gap:fbc25_complementary_truncation_shared_endpoints}.
 \end{definition}
 
-\begin{theorem}[Complementary truncated symmetries]
+\begin{lemma}[Complementary truncated symmetries]
     \label{thm:mpug_inverse_complementary_truncation}
     \lean{MPOTensor.inverseCompatibleSourceFactors_truncatedSymmetry_mul_groupedMPO}
     \leanok
@@ -4038,7 +4038,7 @@ the disjoint complement of the first.
     short, since the complementary truncated symmetry shares both endpoint
     sites with $U^L$
     \cite{gap:fbc25_complementary_truncation_shared_endpoints}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpug_inverse_periodic_one_phase, thm:mpug_inverse_word_unitary}
@@ -4051,7 +4051,7 @@ the disjoint complement of the first.
     $((l,p,e^{-1}(t)),q)$.
 \end{proof}
 
-\begin{theorem}[Pleasant properties of the inverse-compatible decomposition]
+\begin{lemma}[Pleasant properties of the inverse-compatible decomposition]
     \label{thm:mpug_inverse_pleasant_properties}
     \lean{MPOTensor.inverseCompatibleSourceFactors_pleasantProperties,
         MPOTensor.exists_inverseCompatible_pleasantProperties,
@@ -4076,7 +4076,7 @@ the disjoint complement of the first.
     where the intermediate space of the right-hand sides, of dimension $d_l$,
     is identified with that of $X_1,Y_1$, of dimension $d_r$, along the
     equality $d_r=d_l$, and whose truncated symmetries satisfy the relation of
-    Theorem~\ref{thm:mpug_inverse_complementary_truncation}. In particular this
+    Lemma~\ref{thm:mpug_inverse_complementary_truncation}. In particular this
     holds at every element $g=g^{-1}$
     of a group represented by simple tensors in canonical form, with the
     dagger-inverse gauge $T_g$ and sign $\sigma_g$.
@@ -4090,7 +4090,7 @@ the disjoint complement of the first.
     written $T^{\mathsf T}\otimes I_d$ because the first source cut orders its
     column coordinate as (virtual, physical)
     \cite{gap:mpu_source_cut_orientation}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Take the inverse-compatible source factors; the modified compatibility
@@ -4109,5 +4109,5 @@ the disjoint complement of the first.
     equation and the sign equation are
     Lemmas~\ref{thm:mpug_involutive_adjoint_gauge} and
     \ref{thm:mpug_dagger_inverse_scalar}. The relation between truncated
-    symmetries is Theorem~\ref{thm:mpug_inverse_complementary_truncation}.
+    symmetries is Lemma~\ref{thm:mpug_inverse_complementary_truncation}.
 \end{proof}

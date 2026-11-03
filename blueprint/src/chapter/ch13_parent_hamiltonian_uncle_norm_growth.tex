@@ -30,15 +30,16 @@ limit and its generic quadratic growth.
         MPSTensor.uncleBoundaryLetter_mixedMapSpectralRadius_reverse_lt_one}
     \leanok
     \uses{def:uncle_boundary_space}
-    Suppose that both block dimensions are positive, the one-site
-    perturbation letters span the full block algebra, the diagonal
-    transfers are unital, and they have faithful stationary dual
-    densities. Both mixed transfers have spectral radius strictly below
-    one.
+    Suppose that the one-site perturbation letters span the full block
+    algebra, the diagonal transfers are unital, and they have faithful
+    stationary dual densities. Both mixed transfers have spectral radius
+    strictly below one.
 \end{lemma}
 \begin{proof}
     \leanok
-    Embed a mixed eigenvector as the upper off-diagonal block of the
+    If one of the block dimensions is zero, the mixed transfers act on
+    the zero space, so their spectral radii vanish. Otherwise, embed a
+    mixed eigenvector as the upper off-diagonal block of the
     block-diagonal channel. Unital contractivity bounds its eigenvalue
     modulus by one. If equality holds, the faithful stationary density
     forces equality in the Schwarz inequality and hence an intertwining

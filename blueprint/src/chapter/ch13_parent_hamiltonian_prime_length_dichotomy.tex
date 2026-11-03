@@ -11,6 +11,8 @@ recorded in \cite{gap:spwc10_ground_state_dichotomy_quantifiers}.
     \label{lem:normal_blocks_no_small_divisor}
     \lean{MPSTensor.exists_normal_blocks_of_no_small_divisor}
     \leanok
+    \uses{def:irreducible_tensor, def:l_blk_injective,
+        def:blocks_not_gauge_phase_equiv}
     Let $A$ have physical dimension $d$, bond dimension $D$, and chain length
     $N\ge2$. Suppose no integer $m$ with $2\le m\le D$ divides $N$. There
     exist $b\le D$ blocks $B_j$ of positive bond dimensions $D_j\le D$ and
@@ -25,11 +27,40 @@ recorded in \cite{gap:spwc10_ground_state_dichotomy_quantifiers}.
     The decomposition and all these properties are derived from $A$.
 \end{lemma}
 \begin{proof}\leanok
-    Reduce $A$ to canonical blocks and choose their periodic representatives.
-    Each nontrivial period is at most $D$ and does not divide $N$, so its
-    periodic vector vanishes. The general Wielandt bound gives injectivity
-    at $q(D)$ for every period-one block. Group phase-equivalent blocks,
-    sum their length-$N$ coefficients, and retain the nonzero terms.
+    \uses{thm:pgvwc07_positive_length_witness, lem:pgvwc07_block_irreducible,
+        lem:periodic_scale_of_irreducible, thm:periodic_period_le_bondDim,
+        thm:pgvwc07_normalized_periodic_state_vector_decomposition,
+        thm:wielandt_general, lem:gauge_invariance_block_injective,
+        thm:normality_rescaling_invariance, def:mpv_phase_class_data,
+        thm:mpv_decomposition}
+    Lemma~\ref{thm:pgvwc07_positive_length_witness} reduces $A$ to unital
+    canonical blocks $A^k$ with positive definite dual fixed points, weights
+    $\mu_k$, and $\sum_k\dim A^k\le D$; in particular there are at most $D$
+    blocks. By Lemma~\ref{lem:pgvwc07_block_irreducible} every block is
+    irreducible, and Lemma~\ref{lem:periodic_scale_of_irreducible} rescales
+    and gauges it to a periodic tensor of period $m_k$, whose period is at
+    most $D$ by Lemma~\ref{thm:periodic_period_le_bondDim}. If $m_k\ne1$,
+    then $2\le m_k\le D$, so $m_k\nmid N$ and
+    Theorem~\ref{thm:pgvwc07_normalized_periodic_state_vector_decomposition}
+    gives $V^{(N)}(A^k)=0$. If $m_k=1$, the representative is primitive, and
+    the general Wielandt bound of Theorem~\ref{thm:wielandt_general} gives
+    injectivity at $q(D)$; it transfers to $A^k$ through
+    Lemma~\ref{lem:gauge_invariance_block_injective} and
+    Lemma~\ref{thm:normality_rescaling_invariance}. Group the blocks into
+    the phase classes of Definition~\ref{def:mpv_phase_class_data}. The
+    $s$-th member $A^{(j,s)}$ of class $j$, with weight $\mu_{j,s}$, satisfies
+    $V^{(N)}(A^{(j,s)})=\xi_{j,s}^NV^{(N)}(A^{(j,0)})$ for some
+    $\xi_{j,s}\ne0$. Put $\gamma_j=\sum_s\mu_{j,s}^N\xi_{j,s}^N$. By
+    Theorem~\ref{thm:mpv_decomposition},
+    \begin{align}
+        V^{(N)}(A) & =\sum_k\mu_k^NV^{(N)}(A^k)
+        =\sum_j\gamma_jV^{(N)}(A^{(j,0)}).
+    \end{align}
+    Discard the classes with $\gamma_j=0$ and those whose representative
+    has period other than one, whose vectors vanish. The remaining
+    representatives and coefficients are the blocks $B_j$ and the
+    coefficients $c_j$ of~(\ref{eq:normal_blocks_no_small_divisor}); no two
+    of them are related by a gauge transformation and a phase.
 \end{proof}
 
 \begin{lemma}[One small prime-length representation gives a fixed eventual tensor]

@@ -126,10 +126,7 @@
       "corollaries": [
         "thm:periodic_ft_supplied_periods",
         "thm:periodic_equalcase_unit_weights",
-        "cor:symmetry_periodic_assembly",
         "thm:periodic_ft_proportional_supplied_periods",
-        "cor:cor_4_1_physical_symmetry_zgauge",
-        "thm:zgauge_equiv_periodicFT_irreducible_form",
         "cor:z_gauge_blockTensor_same_mpv"
       ],
       "notes": {
@@ -552,21 +549,35 @@
     "ch:gapped_chain_algorithms": {
       "theorems": [
         "thm:chain_boundary_net_polynomial",
-        "thm:alvv_collective_trim",
+        "thm:alvv_collective_trim"
+      ],
+      "corollaries": [],
+      "notes": {
+        "thm:chain_boundary_net_polynomial": "Boundary net of polynomial size used to glue a left state at a cut",
+        "thm:alvv_collective_trim": "Trimming a viable subspace on the chain (Arad et al.), the step the opening names"
+      }
+    },
+    "ch:gapped_chain_construction": {
+      "theorems": [
         "thm:lvv_uniform_successive_approximation",
         "thm:lvv_successive_arbitrary_accuracy",
-        "thm:lvv_sampled_ground_state",
+        "thm:lvv_sampled_ground_state"
+      ],
+      "corollaries": [],
+      "notes": {
+        "thm:lvv_uniform_successive_approximation": "Uniform polynomial successive viable families and final approximation from their retained span",
+        "thm:lvv_successive_arbitrary_accuracy": "Arbitrary accuracy with polynomial size and bond bounds via product-state extension",
+        "thm:lvv_sampled_ground_state": "Polynomial final bond from sampled successive families with bounded ground-energy-to-gap ratio"
+      }
+    },
+    "ch:gapped_chain_polynomial_filters": {
+      "theorems": [
         "thm:alvv_ff_chain_replacement",
         "thm:alvv_ff_corrected_rank",
         "thm:physical_soft_windows_and_mpo"
       ],
       "corollaries": [],
       "notes": {
-        "thm:chain_boundary_net_polynomial": "Boundary net of polynomial size used to glue a left state at a cut",
-        "thm:alvv_collective_trim": "Trimming a viable subspace on the chain (Arad et al.), the step the opening names",
-        "thm:lvv_uniform_successive_approximation": "Uniform polynomial successive viable families and final approximation from their retained span",
-        "thm:lvv_successive_arbitrary_accuracy": "Arbitrary accuracy with polynomial size and bond bounds via product-state extension",
-        "thm:lvv_sampled_ground_state": "Polynomial final bond from sampled successive families with bounded ground-energy-to-gap ratio",
         "thm:alvv_ff_chain_replacement": "ALVV Theorem 5.14 with the corrected rank bound: regional replacement of a frustration-free chain",
         "thm:alvv_ff_corrected_rank": "Corrected regional rank bound d^2+3, replacing the false unrestricted claim of ALVV Theorem 5.14(2)",
         "thm:physical_soft_windows_and_mpo": "One physical soft truncation has both low-energy spectral comparisons and constructed operator tensors at prescribed norm accuracy"
@@ -1141,13 +1152,15 @@
       "theorems": [
         "thm:aklv_physical_sequence_entropy",
         "thm:aklv_sharp_sequential_mps",
-        "thm:aklv_frustration_free_entropy"
+        "thm:aklv_frustration_free_entropy",
+        "thm:physical_dg_interval_entropy_bound"
       ],
       "corollaries": [],
       "notes": {
         "thm:aklv_physical_sequence_entropy": "Uniform physical entropy bound obtained from the coherent AKLV sequence",
         "thm:aklv_sharp_sequential_mps": "Accuracy-dependent physical matrix product approximation with the fourth-root rank bound",
-        "thm:aklv_frustration_free_entropy": "Uniform entropy of the original frustration-free ground vector from a projector gap lower bound"
+        "thm:aklv_frustration_free_entropy": "Uniform entropy of the original frustration-free ground vector from a projector gap lower bound",
+        "thm:physical_dg_interval_entropy_bound": "Interval entropy bound for a degenerate gapped ground space, the interval version of ALVV Theorem 4.9"
       }
     }
   }

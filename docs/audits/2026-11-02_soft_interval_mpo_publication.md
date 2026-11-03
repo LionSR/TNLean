@@ -100,3 +100,14 @@ excerpts. The chapter excerpt has no overfull boxes; its main estimates and
 operator construction were inspected visually. LaTeX lint and prose checks
 pass for the changed sections. The theorem-role check reports the same 41
 pre-existing mismatches as the frozen main revision, with identical output.
+
+## Integration with main on 2026-11-03
+
+The contribution incorporates TNLean main `729589b6e9`, preserving its
+three-chapter organization of the viable-set development. New sections
+remain in the chapter containing their mathematical construction.
+Both area-law submissions use QICLean revision `128648d4b81e81eff6704be68afd45e1a81b6b9c`,
+which combines the accepted pre-upgrade revisions of QICLean #1016 and
+#1017. Their proofs are unchanged. QICLean main has moved to Mathlib 4.36;
+this compatible revision retains TNLean's Mathlib 4.35 toolchain.
+The integrated full build and declaration checks are in progress.

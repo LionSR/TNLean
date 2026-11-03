@@ -3,8 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.QuadraticFormRadical
 import TNLean.MPS.ParentHamiltonian.UncleWallGramQuadratic
-import Mathlib.LinearAlgebra.QuadraticForm.Radical
 import Mathlib.LinearAlgebra.Prod
 import Mathlib.MeasureTheory.Measure.Lebesgue.EqHaar
 import Mathlib.Analysis.Matrix.MeasurableSpace
@@ -49,49 +49,6 @@ private theorem wallFamily_borelSpace (d a b : ℕ) :
   let : BorelSpace (Matrix (Fin a) (Fin b) ℂ) := Pi.borelSpace
   exact Pi.borelSpace
 
-private theorem wallQuadratic_polar_eq_zero {V : Type*} [AddCommGroup V] [Module ℝ V]
-    (Q : QuadraticForm ℝ V) (hQ : ∀ x, 0 ≤ Q x) {x : V} (hx : Q x = 0) (y : V) :
-    QuadraticMap.polar Q x y = 0 := by
-  let p := QuadraticMap.polar Q x y
-  let t := -p / (Q y + 1)
-  have hd : 0 < Q y + 1 := by linarith [hQ y]
-  have heq : Q (x + t • y) = -(p * p) / (Q y + 1) ^ 2 := by
-    rw [QuadraticMap.map_add (Q : V → ℝ) x (t • y), Q.map_smul,
-      QuadraticMap.polar_smul_right, hx]
-    simp only [zero_add, smul_eq_mul]
-    change (t * t) * Q y + t * p = _
-    dsimp [t]
-    field_simp [ne_of_gt hd]
-    ring
-  have hnonneg := hQ (x + t • y)
-  rw [heq] at hnonneg
-  have hscaled := mul_nonneg hnonneg (le_of_lt (sq_pos_of_pos hd))
-  have hp : p * p = 0 := by
-    have hden : (Q y + 1) ^ 2 ≠ 0 := ne_of_gt (sq_pos_of_pos hd)
-    rw [div_mul_cancel₀ _ hden] at hscaled
-    nlinarith [sq_nonneg p]
-  exact (mul_self_eq_zero.mp hp : p = 0)
-
-private theorem wallQuadratic_mem_radical_iff {V : Type*} [AddCommGroup V] [Module ℝ V]
-    (Q : QuadraticForm ℝ V) (hQ : ∀ x, 0 ≤ Q x) (x : V) :
-    x ∈ Q.radical ↔ Q x = 0 := by
-  constructor
-  · exact fun hx ↦ hx.1
-  · intro hx
-    change Q x = 0 ∧ QuadraticMap.polarBilin Q x = 0
-    refine ⟨hx, ?_⟩
-    apply LinearMap.ext
-    intro y
-    exact wallQuadratic_polar_eq_zero Q hQ hx y
-
-private theorem wallQuadratic_radical_ne_top {V : Type*} [AddCommGroup V] [Module ℝ V]
-    (Q : QuadraticForm ℝ V) (hQ : Q ≠ 0) : Q.radical ≠ ⊤ := by
-  intro htop
-  apply hQ
-  ext x
-  have hx : x ∈ Q.radical := by rw [htop]; trivial
-  exact hx.1
-
 /-- The zero set of the source quadratic coefficient is its real
 linear radical. This is derived from nonnegative finite Gram
 weights, not assumed as a genericity premise; arXiv:1210.6613,
@@ -104,7 +61,7 @@ theorem uncleWallSlopeQuadratic_mem_radical_iff
     (R : Fin d → Matrix (Fin a) (Fin b) ℂ) :
     R ∈ (uncleWallSlopeQuadratic A B ρ hSpect).radical ↔
       uncleWallSlopeQuadratic A B ρ hSpect R = 0 :=
-  wallQuadratic_mem_radical_iff _ (uncleWallSlopeQuadratic_nonneg A B ρ hρ hA hB hSpect) R
+  QuadraticForm.mem_radical_iff_of_nonneg _ (uncleWallSlopeQuadratic_nonneg A B ρ hρ hA hB hSpect) R
 
 /-- The exceptional subspace of zero wall coefficients is proper in
 the source full-perturbation setting; arXiv:1210.6613, proof of Lemma
@@ -117,7 +74,7 @@ theorem uncleWallSlopeQuadratic_radical_ne_top [NeZero a] [NeZero b]
     (ρ : Matrix (Fin a) (Fin a) ℂ) (hρ : ρ.PosDef)
     (hSpect : Kraus.mixedMapSpectralRadius A B < 1) :
     (uncleWallSlopeQuadratic A B ρ hSpect).radical ≠ ⊤ :=
-  wallQuadratic_radical_ne_top _
+  QuadraticForm.radical_ne_top_of_ne_zero _
     (uncleWallSlopeQuadratic_ne_zero A B R₀ L₀ hPert ρ hρ hSpect)
 
 private theorem wallQuadratic_positive_set_eq_compl_radical {V : Type*}
@@ -125,7 +82,7 @@ private theorem wallQuadratic_positive_set_eq_compl_radical {V : Type*}
     {x | 0 < Q x} = (Q.radical : Set V)ᶜ := by
   ext x
   change 0 < Q x ↔ ¬ x ∈ Q.radical
-  rw [wallQuadratic_mem_radical_iff Q hQ x]
+  rw [QuadraticForm.mem_radical_iff_of_nonneg Q hQ x]
   exact ⟨ne_of_gt, fun hx ↦ lt_of_le_of_ne (hQ x) (Ne.symm hx)⟩
 
 /-- Positive wall slopes form an open dense set under the source
@@ -254,9 +211,9 @@ theorem uncleWallNormSlope_pair_ae_pos [NeZero a] [NeZero b]
     uncleWallSlopeQuadratic_nonneg A B ρA hρA.posSemidef hA hUB hAB
   have hQ₂ : ∀ L, 0 ≤ Q₂ L :=
     uncleWallSlopeQuadratic_nonneg B A ρB hρB.posSemidef hB hUA hBA
-  have hS₁ : S₁ ≠ ⊤ := wallQuadratic_radical_ne_top Q₁
+  have hS₁ : S₁ ≠ ⊤ := QuadraticForm.radical_ne_top_of_ne_zero Q₁
     (uncleWallSlopeQuadratic_ne_zero_of_bond_sq_lt A B ρA hρA hdB hAB)
-  have hS₂ : S₂ ≠ ⊤ := wallQuadratic_radical_ne_top Q₂
+  have hS₂ : S₂ ≠ ⊤ := QuadraticForm.radical_ne_top_of_ne_zero Q₂
     (uncleWallSlopeQuadratic_ne_zero_of_bond_sq_lt B A ρB hρB hdA hBA)
   have hprod₁ : S₁.prod (⊤ : Submodule ℝ (Fin d → Matrix (Fin b) (Fin a) ℂ)) ≠ ⊤ := by
     intro h
@@ -306,9 +263,9 @@ theorem uncleWallNormSlope_pair_ae_pos [NeZero a] [NeZero b]
     simpa only [not_not, hset] using hnull₂
   filter_upwards [hae₁, hae₂] with P hP₁ hP₂
   have hp₁ : 0 < Q₁ P.1 := lt_of_le_of_ne (hQ₁ P.1)
-    (fun h ↦ hP₁ ((wallQuadratic_mem_radical_iff Q₁ hQ₁ P.1).mpr h.symm))
+    (fun h ↦ hP₁ ((QuadraticForm.mem_radical_iff_of_nonneg Q₁ hQ₁ P.1).mpr h.symm))
   have hp₂ : 0 < Q₂ P.2 := lt_of_le_of_ne (hQ₂ P.2)
-    (fun h ↦ hP₂ ((wallQuadratic_mem_radical_iff Q₂ hQ₂ P.2).mpr h.symm))
+    (fun h ↦ hP₂ ((QuadraticForm.mem_radical_iff_of_nonneg Q₂ hQ₂ P.2).mpr h.symm))
   change 0 < uncleWallSlopeQuadratic A B ρA hAB P.1 at hp₁
   change 0 < uncleWallSlopeQuadratic B A ρB hBA P.2 at hp₂
   rw [uncleWallSlopeQuadratic_apply] at hp₁ hp₂

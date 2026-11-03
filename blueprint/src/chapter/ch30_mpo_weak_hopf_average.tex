@@ -245,3 +245,88 @@ No other weak-Hopf axiom is used.
     $1\otimes1$. The last assertion is
     Lemma~\ref{thm:glm_wha_parent_average}.
 \end{proof}
+
+\begin{definition}[The Bell-pair weak Hopf algebra]
+    \label{def:glm_wha_bell_pair}
+    \lean{MPOTensor.BellPairWeakHopf.BellPairAlgebra,
+        MPOTensor.BellPairWeakHopf.comulSingle,
+        MPOTensor.BellPairWeakHopf.bellComul,
+        MPOTensor.BellPairWeakHopf.bellCounit,
+        MPOTensor.BellPairWeakHopf.bellAntipode,
+        MPOTensor.BellPairWeakHopf.bellIntegral,
+        MPOTensor.BellPairWeakHopf.instCoalgebra,
+        MPOTensor.BellPairWeakHopf.phys,
+        MPOTensor.BellPairWeakHopf.dualMatrix,
+        MPOTensor.BellPairWeakHopf.dualAlgHom,
+        MPOTensor.BellPairWeakHopf.virt,
+        MPOTensor.BellPairWeakHopf.weakHopfRepresentation,
+        MPOTensor.BellPairWeakHopf.integralRepr}
+    \leanok
+    \uses{def:glm_wha_representation}
+    Let $r\geq1$, $V=\mathbb C^r\otimes\mathbb C^r$ and $H=\operatorname{End}(V)$,
+    with matrix units $e_{ij,kl}=|i,j\rangle\langle k,l|$. Put
+    \begin{align*}
+        \Delta(e_{ij,kl})   & =\frac1r\sum_{a,b}e_{ia,kb}\otimes e_{aj,bl}, \\
+        \epsilon(e_{ij,kl}) & =r\,\delta_{ij}\delta_{kl},                   \\
+        S(e_{ij,kl})        & =e_{lk,ji},
+    \end{align*}
+    let $\Omega=\frac1r\sum_{i,k}e_{ii,kk}$ be the projection onto the
+    normalized Bell pair, and put $T_\Omega=S$. Let $\phi$ be the defining
+    representation of $H$ on $V$, and let
+    $\psi(f)_{(i,k),(j,l)}=r^{-1}f(e_{ij,kl})$ for $f\in H^*$
+    \cite{gap:glm23_wha_parent_completion}.
+\end{definition}
+
+\begin{lemma}[The Bell-pair weak Hopf algebra and its average]
+    \label{thm:glm_wha_bell_pair}
+    \lean{MPOTensor.BellPairWeakHopf.bellComul_single,
+        MPOTensor.BellPairWeakHopf.bellCounit_single,
+        MPOTensor.BellPairWeakHopf.bellAntipode_single,
+        MPOTensor.BellPairWeakHopf.bellComul_coassoc,
+        MPOTensor.BellPairWeakHopf.rTensor_bellCounit_comp_bellComul,
+        MPOTensor.BellPairWeakHopf.lTensor_bellCounit_comp_bellComul,
+        MPOTensor.BellPairWeakHopf.bellComul_single_mul_single,
+        MPOTensor.BellPairWeakHopf.comul_mul,
+        MPOTensor.BellPairWeakHopf.comul_star,
+        MPOTensor.BellPairWeakHopf.phys_star,
+        MPOTensor.BellPairWeakHopf.dualMatrix_one,
+        MPOTensor.BellPairWeakHopf.dualMatrix_mul,
+        MPOTensor.BellPairWeakHopf.virt_injective,
+        MPOTensor.BellPairWeakHopf.comul_bellIntegral,
+        MPOTensor.BellPairWeakHopf.mul'_map_bellAntipode_comul_bellIntegral,
+        MPOTensor.BellPairWeakHopf.mul'_map_comul_bellIntegral,
+        MPOTensor.BellPairWeakHopf.weakHopfAverage_eq_sum_single}
+    \leanok
+    \uses{def:glm_wha_bell_pair,def:glm_wha_average}
+    The data of Definition~\ref{def:glm_wha_bell_pair} form a weak-Hopf
+    representation with physical and bond dimension $r^2$: $\Delta$ is
+    coassociative with counit $\epsilon$, multiplicative and star preserving,
+    $\psi$ is a faithful unital representation of the convolution dual, and
+    $\sum\Omega_{(1)}S(\Omega_{(2)})=1$, so that
+    (\ref{eq:glm_wha_integral_normalization}) holds. For every $n\geq0$ its
+    average is
+    \begin{align*}
+        E_n(B) & =\frac1{r^2}\sum_{p,q}\rho_n(e_{pq})\,B\,\rho_n(e_{qp}),
+    \end{align*}
+    where $p$ and $q$ range over pairs of indices.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{def:glm_wha_average}
+    Each identity is linear in its arguments, so it suffices to check it on
+    matrix units. Both iterated coproducts of $e_{ij,kl}$ equal
+    $r^{-2}\sum e_{ia,kb}\otimes e_{aa',bb'}\otimes e_{a'j,b'l}$, and
+    contracting the Kronecker deltas of $\epsilon$ gives the counit laws. In
+    $\Delta(e_{ij,kl})\Delta(e_{i'j',k'l'})$ the inner indices force
+    $(k,l)=(i',j')$, and the remaining free index contributes a factor $r$,
+    which gives $\Delta(e_{ij,kl}e_{i'j',k'l'})$. The adjoint of
+    $\Delta(e_{ij,kl})$ is $\Delta(e_{kl,ij})$ after exchanging $a$ and $b$.
+    Convolution of functionals becomes the matrix product of the $\psi(f)$,
+    the counit is sent to the identity, and the entries of $\psi(f)$ are the
+    values of $f$ on the matrix units. Finally,
+    $\Delta(\Omega)=r^{-2}\sum_{p,q}e_{pq}\otimes e_{\bar p\bar q}$ with
+    $\overline{(i,a)}=(a,i)$, and $S(e_{\bar p\bar q})=e_{qp}$, so
+    $\sum\Omega_{(1)}S(\Omega_{(2)})=r^{-2}\sum_{p,q}e_{pp}=1$; multiplicativity
+    of $\Delta$ gives (\ref{eq:glm_wha_integral_normalization}), and the same
+    expansion computes $E_n$.
+\end{proof}

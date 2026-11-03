@@ -21,6 +21,7 @@ import TNLean.MPS.Examples.AKLTSpinSectors
 import TNLean.MPS.Examples.AKLTStringOrder
 import TNLean.MPS.Examples.AKLTTimeReversal
 import TNLean.MPS.Examples.AnomalousCondensation
+import TNLean.MPS.Examples.BellPairWeakHopf
 import TNLean.MPS.Examples.CZX
 import TNLean.MPS.Examples.CZY
 import TNLean.MPS.Examples.Cluster

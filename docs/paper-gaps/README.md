@@ -230,6 +230,12 @@ For the MPU symmetry-defect gauging paper:
   or a replacement in unbuffered defect formulas. This local correction is
   formally verified and resolved; the literal printed pair still fails at
   empty length.
+- `fbc25_controlled_z_split_index_class_scope.tex` records that for the
+  controlled-`Z` example the formal statement is the invariant behind the
+  source's remark on the combined `ℤ₂ × ℤ₂` phase: the bond implementation of
+  the two symmetries on the split-index tensor is by anticommuting matrices,
+  so its projective class is nontrivial. The identification of this class with
+  the phase, from the cited split-index classification, is not formalized.
 - `fbc25_truncated_symmetry_endpoint_unitarity_scope.tex` records that the
   all-length truncated-symmetry theorem proves unitarity between endpoint
   coordinate spaces, while the finite-group endpoint identifications
@@ -629,6 +635,14 @@ non-periodic FT cleanup loop unless explicitly brought back into scope.
   printed comparison of two cut matrices, derived by a single-letter route
   that is an alternative proof on the printed range and a TNLean
   reconstruction on the short rings below twice the injectivity length).
+- `cpgsv21_physical_deformation_general_graph.tex` (clarification, resolved)
+  records that the ground-space correspondence of arXiv:2011.12127,
+  Section IV.C, under invertible on-site maps is formalized on every finite
+  simple graph, and that on a cycle with `N ≥ 3` and `0 < L < N` the common
+  parent space of the arcs is the periodic matrix-product ground space, so the
+  periodic-chain correspondence follows from the graph theorem. For `L = N`
+  the closed graph region and the chain construction use different boundary
+  prescriptions, and the one- and two-site rings are not simple cycles.
 - `cpgsv21_block_diagonal_parent_ground_space.tex` records the degenerate
   parent-Hamiltonian block-diagonal boundary-condition theorem behind the
   periodic block decomposition and the BNT ground-space span. The fixed-window
@@ -742,7 +756,9 @@ For the matrix product operator symmetries of arXiv:2203.12563:
   of the canonical support projection from averaging its complement. It
   records the explicit adjoint-closure, positive-length unit-calibration,
   and finite-family normalization hypotheses under which the support is
-  fixed, and the still-open physical weak-Hopf realization.
+  fixed, the weak-Hopf realization with its finite-set and Bell-pair
+  instances, and the open unit-support step for tensors injective only after
+  blocking.
 
 - `glm23_reps3_z3_table.tex` records that the printed action of `ψ` in the
   `ℤ₃` phase of `Rep(S₃)` fails the representation identity, and that the
@@ -764,6 +780,14 @@ For the matrix product operator symmetries of arXiv:2203.12563:
   formalized for at most two blocks, where the nonnegative integer
   representations with trivial unit action are classified directly, and
   sketches the Perron--Frobenius argument for any number of blocks.
+
+For the matrix product operator algebras of arXiv:2204.05940:
+
+- `mrgscp22_pre_bialgebra_counit_scope.tex` (scope restriction, open) records
+  that the source's pre-bialgebra (Definition 4.1) is also a coalgebra with a
+  counit (Definition 3.1), while the formal pre-bialgebra structure records
+  only a multiplicative coassociative coproduct; no counit is constructed for
+  the fusion coproduct of a complete zipper fusion family.
 
 For the strong and weak symmetries of matrix product density operators in
 arXiv:2504.16985:
@@ -1104,10 +1128,15 @@ For the finite-round extension of arXiv:2103.13367:
   One source block may already contain sequential measurements at many sites;
   the adaptive tree does not record the required source-block decomposition.
 
-- `pgvwc07_half_chain_spectrum_conventions.tex` records the boundary-index
-  convention in the half-chain calculation, normalization by the actual
-  finite-ring norm, exact finite-size zero padding, and the non-sharp geometric
-  transfer-error estimate used for ordered physical eigenvalue convergence.
+- `pgvwc07_half_chain_spectrum_conventions.tex` (scope restriction, resolved)
+  records the boundary-index convention in the half-chain calculation,
+  normalization by the actual finite-ring norm, exact finite-size zero
+  padding, and the non-sharp geometric transfer-error estimate used for
+  ordered physical eigenvalue convergence. It also records that Condition C2
+  counts the peripheral eigenvalue with algebraic multiplicity (with distinct
+  values only, the two-block GHZ tensor violates Theorem 6), and that under
+  this reading Theorem 6 is formalized for weighted canonical forms with any
+  number of blocks.
 
 For the periodic decomposition in PGVWC07 Theorem 5:
 

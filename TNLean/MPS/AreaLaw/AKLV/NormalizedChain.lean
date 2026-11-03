@@ -165,6 +165,27 @@ theorem exists_normalizedCutBlock_eq_sum_sub {L q : ℕ}
   simp only [Complex.ofReal_add, add_smul]
   abel
 
+/-- The quadratic gap bound of a two-sided clipping is the operator gap inequality
+`K - e' I ≥ g' (I - |φ⟩⟨φ|)`. The clipping is Hermitian because its middle block and the
+removed bonds are, so this repackaging does not depend on the cutoff that produced the
+bound. Auxiliary to AKLV, arXiv:1301.1162v1, Theorem 6.1. -/
+theorem posSemidef_gap_twoSidedEnergyTruncation_of_quadratic {n : Type*} [Fintype n]
+    [DecidableEq n] (X N Y A : Matrix n n ℂ) (hN : N.IsHermitian) (hA : A.IsHermitian)
+    (t e' g' : ℝ) (φ : EuclideanSpace ℂ n)
+    (hquad : ∀ v : EuclideanSpace ℂ n,
+      g' * (‖v‖ ^ 2 - ‖⟪φ, v⟫_ℂ‖ ^ 2) ≤
+        (⟪v, Matrix.toEuclideanCLM (n := n) (𝕜 := ℂ)
+          (twoSidedEnergyTruncation X (N + A) Y t) v⟫_ℂ).re - e' * ‖v‖ ^ 2) :
+    (twoSidedEnergyTruncation X (N + A) Y t - (e' : ℂ) • 1 - (g' : ℂ) •
+      (1 - Matrix.vecMulVec (WithLp.ofLp φ) (star (WithLp.ofLp φ)))).PosSemidef := by
+  have hKHerm : (twoSidedEnergyTruncation X (N + A) Y t).IsHermitian :=
+    ((Matrix.isHermitian_energyTruncation X t).add (hN.add hA)).add
+      (Matrix.isHermitian_energyTruncation Y t)
+  apply (hKHerm.posSemidef_gap_iff e' g' φ).mpr
+  intro v
+  rw [← Matrix.coe_toEuclideanCLM_eq_toEuclideanLin (twoSidedEnergyTruncation X (N + A) Y t)]
+  exact hquad v
+
 /-- **AKLV Theorem 6.1 on the normalized nearest-neighbour chain.**
 For `t ≥ 32768 (e+g)/g²`, separate clipping of the exterior blocks has
 an actual unit ground vector, gap at least `g/2`, and phase-aligned
@@ -198,7 +219,7 @@ theorem normalized_chain_robustness {L q : ℕ}
       (K - (e' : ℂ) • 1 - ((g / 2 : ℝ) : ℂ) •
         (1 - Matrix.vecMulVec (WithLp.ofLp φ) (star (WithLp.ofLp φ)))).PosSemidef ∧
       ∃ θ : ℝ, ‖Ω - Complex.exp (θ * Complex.I) • φ‖ ^ 2 ≤ Real.exp (-t / 16) := by
-  intro ι X N Y H K heig hgap
+  intro ι X N Y H _ heig hgap
   obtain ⟨I, hB⟩ := exists_normalizedCutBlock_eq_sum_sub h a b hab x m y
   obtain ⟨hXN, hXY, hNY⟩ := normalizedCutBlock_commutations h hs a b hab x m y
   have hH : X + N + Y + (h a + h b) = H := normalizedCutBlock_sum h a b hab x m y
@@ -211,15 +232,10 @@ theorem normalized_chain_robustness {L q : ℕ}
       rw [← Matrix.coe_toEuclideanCLM_eq_toEuclideanLin H] at hv
       change g * (‖v‖ ^ 2 - ‖⟪Ω, v⟫_ℂ‖ ^ 2) ≤ (⟪v, ι H v⟫_ℂ).re - e * ‖v‖ ^ 2 at hv
       simpa only [hH] using hv)
-  refine ⟨e', φ, hφ, hφeig, he'0, he'e, ?_, θ, hθ⟩
   have hAHerm : (h a + h b).IsHermitian := IsSelfAdjoint.of_nonneg
     (add_nonneg (h0 a) (h0 b))
-  have hKHerm : K.IsHermitian :=
-    ((Matrix.isHermitian_energyTruncation X t).add (hN.isHermitian.add hAHerm)).add
-      (Matrix.isHermitian_energyTruncation Y t)
-  apply (hKHerm.posSemidef_gap_iff e' (g / 2) φ).mpr
-  intro v
-  rw [← Matrix.coe_toEuclideanCLM_eq_toEuclideanLin K]
-  exact hquad v
+  exact ⟨e', φ, hφ, hφeig, he'0, he'e,
+    posSemidef_gap_twoSidedEnergyTruncation_of_quadratic X N Y (h a + h b) hN.isHermitian
+      hAHerm t e' (g / 2) φ hquad, θ, hθ⟩
 
 end TNLean.MPS.AreaLaw.AKLV
