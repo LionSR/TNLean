@@ -21,9 +21,9 @@ Writing \(K=22(A+1)[6+2\log(A+1)]\), the count satisfies
 \log D\le3K\max\{1,\eta_{\mathrm{LD}}/6\}\frac{\log L}{\mu}
 \left[1+\log q+\max\left\{\log\frac{3\log L}{\mu},0\right\}\right]^3.
 \]
-For each prescribed interval, the actual regional ground energies and a
-common minimizing vector determine a centered original Hamiltonian with
-attained minimum \(E_0\). There are nested auxiliary subspaces
+For each prescribed interval, a scalar shift gives a centered original
+Hamiltonian with attained minimum \(E_0\). For long intervals the shift
+is the sum of the regional ground energies; short intervals use zero shift. There are nested auxiliary subspaces
 \(T_-\subseteq T_+\), a family of \(D^2\) regional operators, and
 \(\Delta>0\) with \(D^{12}\Delta<10^{-5}\). The original spectral
 space below \(E_0+\eta\) is \(1/200\)-close to \(T_+\), and \(T_-\)
@@ -80,6 +80,9 @@ new mathematical sections and the three-page paper-gap note compile;
 their rendered statements have been inspected. The tactic-pattern scan
 finds no new repeated pattern requiring a separate abstraction.
 
-Compilation and compiled declaration checks are pending. Verification
-records refer to this extracted contribution, not merely to the earlier
-local source.
+Strict read-only elaboration of the extracted interval proofs and the four
+required nested-cutoff lemmas passes with the Mathlib standard linters and
+warnings treated as errors. All twelve newly public TNLean declarations
+and the four QICLean lemmas depend only on `propext`, `Classical.choice`
+and `Quot.sound`. This checks the actual extracted proofs; the full modular
+build and compiled blueprint declaration checks are still pending.
