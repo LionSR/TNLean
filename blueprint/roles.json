@@ -160,9 +160,15 @@
       }
     },
     "ch:parent_hamiltonian": {
-      "theorems": [],
+      "theorems": [
+        "thm:primitive_fnw_projector_defect_geometric",
+        "thm:ground_space_iff"
+      ],
       "corollaries": [],
-      "notes": {}
+      "notes": {
+        "thm:primitive_fnw_projector_defect_geometric": "Geometric projector estimate of Fannes, Nachtergaele and Werner for primitive tensors, used for the spectral gaps of later chapters",
+        "thm:ground_space_iff": "Intersection property of the local ground spaces of an injective tensor, the basis of the uniqueness proofs in the next chapter"
+      }
     },
     "ch:parent_hamiltonian_unique_ground_states": {
       "theorems": [
@@ -367,14 +373,22 @@
       }
     },
     "ch:mpu_symmetries": {
-      "theorems": [],
+      "theorems": [
+        "conjphs",
+        "prop:conjsym-strict-equiv",
+        "prop:sigma1-and-sigma2-equal"
+      ],
       "corollaries": [
         "cor:all-equivalent-under-conjugation",
         "cor:mpu_admissible_all_conjugation_equivalent",
         "cor:sigma-equivalence-necessary",
         "cor:mpu_admissible_sigma_equivalence_necessary"
       ],
-      "notes": {}
+      "notes": {
+        "conjphs": "Classification under conjugation when one source rank is odd (Cirac et al. 2017, Section V)",
+        "prop:conjsym-strict-equiv": "Classification under conjugation when both source ranks are even (Cirac et al. 2017, Section V)",
+        "prop:sigma1-and-sigma2-equal": "Blocking parity of the time-reversal sign, the invariant of equivalent time-reversal-invariant MPUs"
+      }
     },
     "ch:mpu_symmetry_examples": {
       "theorems": [
@@ -580,6 +594,17 @@
         "thm:chain_protocol_mps_approximation": "Theorem B by the sequential protocol, named in the chapter title"
       }
     },
+    "ch:hastings_factorization": {
+      "theorems": [
+        "lem:hastings_lemma1",
+        "thm:hastings_source_factorization"
+      ],
+      "corollaries": [],
+      "notes": {
+        "lem:hastings_lemma1": "Approximate factorization of the ground-state projector (Hastings 2007, Lemma 1)",
+        "thm:hastings_source_factorization": "Positive factorization at the source decay length, the form used by the area law"
+      }
+    },
     "ch:hastings_window": {
       "theorems": [
         "thm:hastings_area_law_source",
@@ -589,6 +614,47 @@
       "notes": {
         "thm:hastings_area_law_source": "Hastings' printed entropy bound at an admissible interaction-proportional Lieb–Robinson pair",
         "thm:hastings_mps_source": "Matrix product state approximation at the same admissible source length"
+      }
+    },
+    "ch:hastings_local_terms": {
+      "theorems": [
+        "thm:hastings05_metric_facld",
+        "thm:hastings05_metric_filter_sum",
+        "thm:hastings_supercell_truncated_small"
+      ],
+      "corollaries": [],
+      "notes": {
+        "thm:hastings05_metric_facld": "Ground states are nearly eigenvectors of the localized filtered terms (Hastings 2006, eq. facld)",
+        "thm:hastings05_metric_filter_sum": "The localized filtered terms sum to the Hamiltonian up to an exponentially small error",
+        "thm:hastings_supercell_truncated_small": "Compressions of the filtered terms nearly commute for translation-invariant systems (Hastings 2006)"
+      }
+    },
+    "ch:hastings_hierarchy": {
+      "theorems": [
+        "thm:hastings05_hierarchy_levels",
+        "thm:hastings05_final_state_count_hierarchy",
+        "thm:hastings05_hchy_every_state"
+      ],
+      "corollaries": [],
+      "notes": {
+        "thm:hastings05_hierarchy_levels": "Loss of the ground state over all levels of the hierarchy (Hastings 2006)",
+        "thm:hastings05_final_state_count_hierarchy": "At most twice the ground-space dimension of final states (Hastings 2006)",
+        "thm:hastings05_hchy_every_state": "Every final state has nearly the ground-state energy (Hastings 2006, eq. hchy)"
+      }
+    },
+    "ch:hastings_cluster_expansion": {
+      "theorems": [
+        "thm:hastings_thermal_trace_norm",
+        "thm:hastings_thermal_all_temperatures",
+        "thm:hastings_temperature_error_percolation"
+      ],
+      "corollaries": [
+        "cor:hastings_temperature_error_add_two"
+      ],
+      "notes": {
+        "thm:hastings_thermal_trace_norm": "Trace-norm bound for the truncated cluster expansion at high temperature (Hastings 2006)",
+        "thm:hastings_thermal_all_temperatures": "Matrix product form of the truncated thermal operator at every temperature (Hastings 2006, eq. mplt)",
+        "thm:hastings_temperature_error_percolation": "Error of the truncated thermal operator at every temperature (Hastings 2006)"
       }
     },
     "ch:entropy_scaling": {
@@ -1002,6 +1068,32 @@
         "thm:compact_parent_gap": "Uniform parent gap on compact parameter sets (Schuch et al., Appendix A)"
       }
     },
+    "ch:parent_hamiltonian_long_range_gaps_primitive_sectors": {
+      "theorems": [
+        "thm:primitive_multiblock_quasi_local_ground_state_classification",
+        "thm:eventual_kernel_pure_ground_state_gap"
+      ],
+      "corollaries": [
+        "thm:primitive_multiblock_pure_ground_state_classification"
+      ],
+      "notes": {
+        "thm:primitive_multiblock_quasi_local_ground_state_classification": "Zero-energy states are the convex combinations of the primitive block states (Nachtergaele 1996, Theorems 1.1--1.2)",
+        "thm:eventual_kernel_pure_ground_state_gap": "Uniform finite-chain gap and infinite-volume gap in every pure ground state (Nachtergaele 1996, Theorem 1.2)"
+      }
+    },
+    "ch:parent_hamiltonian_long_range_gaps_periodic": {
+      "theorems": [
+        "thm:periodic_parent_finite_quasi_local_gap",
+        "thm:periodic_family_constructed_finite_quasi_local_gap",
+        "thm:stationary_generators_finite_quasi_local_gap"
+      ],
+      "corollaries": [],
+      "notes": {
+        "thm:periodic_parent_finite_quasi_local_gap": "One positive parent interaction of a periodic tensor with finite-volume and infinite-volume gaps",
+        "thm:periodic_family_constructed_finite_quasi_local_gap": "The same two gaps for a finite family of periodic tensors",
+        "thm:stationary_generators_finite_quasi_local_gap": "The same two gaps for the infinite-chain state of a tensor with a stationary density matrix"
+      }
+    },
     "ch:parent_hamiltonian_martingale": {
       "theorems": [
         "thm:primitive_parent_hamiltonian_finite_range_knabe_gap"
@@ -1026,7 +1118,11 @@
       }
     },
     "ch:mpdo_rfp_gibbs": {
-      "theorems": [],
+      "theorems": [
+        "thm:mpdo_canonical_bnt_proportional_sectors_zcl_sal",
+        "thm:mpdo_simple_weight_copy_independent",
+        "thm:mpdo_exists_sector_factorization"
+      ],
       "corollaries": [
         "cor:mpdo_bnt_orthogonal_sector_sum_sal",
         "cor:mpdo_bnt_sector_sal_gsnnch",
@@ -1034,15 +1130,30 @@
         "cor:mpdo_simple_scale_invariant_zcl_weight_copy_independent",
         "cor:mpdo_bnt_three_site_outer_inverse_collapse"
       ],
-      "notes": {}
+      "notes": {
+        "thm:mpdo_canonical_bnt_proportional_sectors_zcl_sal": "Commuting sector sums with zero correlation length saturate the area law (CPSV16 Proposition C.14)",
+        "thm:mpdo_simple_weight_copy_independent": "Weights of the simple canonical form do not depend on the copy index; its corollaries follow in this chapter",
+        "thm:mpdo_exists_sector_factorization": "Sector factorization of the three-site reduced state through the Markov decomposition (CPSV16 Lemma C.4)"
+      }
     },
     "ch:mpdo_rfp_gibbs_blocking": {
-      "theorems": [],
+      "theorems": [
+        "thm:mpdo_closed_chain_physical_blocking",
+        "thm:mpdo_transported_vertical_sector_composites_identity",
+        "thm:mpdo_vertical_product_positive_fusion_decomposition"
+      ],
       "corollaries": [],
-      "notes": {}
+      "notes": {
+        "thm:mpdo_closed_chain_physical_blocking": "Blocking commutes with closed chains, so blocking an MPDO gives an MPDO (CPSV16 Appendix C.4)",
+        "thm:mpdo_transported_vertical_sector_composites_identity": "Refinement and coarse-graining on the vertical sectors are mutually inverse (CPSV16 Appendix C.4)",
+        "thm:mpdo_vertical_product_positive_fusion_decomposition": "Positive fusion decomposition of products of vertical sectors of a renormalization fixed point"
+      }
     },
     "ch:mpdo_rfp_gibbs_neighboring": {
-      "theorems": [],
+      "theorems": [
+        "cor:mpdo_eta_local_structure_of_is_sal",
+        "thm:mpdo_casei_all_sector_rank_one_coefficients_of_is_sal"
+      ],
       "corollaries": [
         "cor:mpdo_sector_eta_cycle_positive_rescaling",
         "cor:mpdo_normal_fixed_product_tensor_of_is_sal",
@@ -1050,7 +1161,10 @@
         "cor:mpdo_doubled_overlap_trace_sq",
         "cor:mpdo_doubled_overlap_frobenius"
       ],
-      "notes": {}
+      "notes": {
+        "cor:mpdo_eta_local_structure_of_is_sal": "An injective tensor saturating the area law has commuting neighboring bonds (CPSV16 Proposition C.8)",
+        "thm:mpdo_casei_all_sector_rank_one_coefficients_of_is_sal": "The trace matrix of the neighboring operators has rank one (CPSV16 Lemma C.5)"
+      }
     },
     "ch:mpdo_rfp_gibbs_local_structure": {
       "theorems": [
@@ -1108,6 +1222,19 @@
       "corollaries": [],
       "notes": {
         "thm:ldp_all_ti_measurement_source": "All translation-invariant MPS with measurements (Malz et al., long-range paragraph)"
+      }
+    },
+    "ch:finite_site_reset": {
+      "theorems": [
+        "thm:peps_reset_regional_filter_explicit",
+        "thm:area_law_product_ground_state"
+      ],
+      "corollaries": [
+        "thm:peps_reset_regional_filter"
+      ],
+      "notes": {
+        "thm:peps_reset_regional_filter_explicit": "The two-sided Gaussian filter of the information reset (OpenAI 2026)",
+        "thm:area_law_product_ground_state": "Gapped ground vectors of a sum of factor Hamiltonians are product vectors (OpenAI 2026 area law, Lemma 2.2)"
       }
     },
     "ch:peps_ft_normal": {
@@ -1168,6 +1295,30 @@
       ],
       "notes": {}
     },
+    "ch:peps_anyons_bond_states": {
+      "theorems": [
+        "thm:peps_torus_multiplicity_one_semiregular_equivalence",
+        "thm:peps_graph_minimal_semiregular_equivalence"
+      ],
+      "corollaries": [],
+      "notes": {
+        "thm:peps_torus_multiplicity_one_semiregular_equivalence": "On the torus the multiplicity-one semi-regular state is related to the regular state by physical isometries",
+        "thm:peps_graph_minimal_semiregular_equivalence": "The same equivalence on every finite simple graph"
+      }
+    },
+    "ch:peps_anyons_fluxes": {
+      "theorems": [
+        "thm:peps_regular_cycle_global_flux_creation",
+        "thm:peps_torus_translated_global_flux_move",
+        "thm:peps_dual_flux_deformation"
+      ],
+      "corollaries": [],
+      "notes": {
+        "thm:peps_regular_cycle_global_flux_creation": "Coherent creation of a flux by a physical unitary (Schuch et al. 2010, Theorem 6.17)",
+        "thm:peps_torus_translated_global_flux_move": "A flux moves between neighbouring plaquettes by a physical operation (Schuch et al. 2010, Theorem 6.16)",
+        "thm:peps_dual_flux_deformation": "Deforming a flux string across invariant tensors leaves the state unchanged (Schuch et al. 2010, Lemma 6.14)"
+      }
+    },
     "ch:two_dimensional_main_results": {
       "theorems": [
         "thm:openai_uniform_area_law",
@@ -1196,14 +1347,33 @@
       }
     },
     "ch:peps_frames": {
-      "theorems": [],
-      "corollaries": [],
-      "notes": {}
+      "theorems": [
+        "thm:peps_frame_small_rewrite",
+        "thm:peps_frame_birth",
+        "thm:peps_frame_exchange"
+      ],
+      "corollaries": [
+        "thm:peps_frame_birth_bounded",
+        "thm:peps_frame_exchange_bounded"
+      ],
+      "notes": {
+        "thm:peps_frame_small_rewrite": "Small-patch rewrites of an encoded frame (OpenAI 2026, Lemma 6.3)",
+        "thm:peps_frame_birth": "Homogeneous birth and death of a party (OpenAI 2026, Lemma 6.5)",
+        "thm:peps_frame_exchange": "Exchange of regions between two sheets (OpenAI 2026, Lemma 6.6)"
+      }
     },
     "ch:peps_frames_dyadic_geometry": {
-      "theorems": [],
+      "theorems": [
+        "thm:peps_dyadic_angular_separation_sampled",
+        "thm:peps_dyadic_protocol_schedule_counts",
+        "thm:peps_dyadic_protocol_lifetime"
+      ],
       "corollaries": [],
-      "notes": {}
+      "notes": {
+        "thm:peps_dyadic_angular_separation_sampled": "Angular separation of the sampled guides (OpenAI 2026, Lemma 7.2)",
+        "thm:peps_dyadic_protocol_schedule_counts": "Counts of the changes in the protocol schedule (OpenAI 2026, Proposition 7.1, item 2)",
+        "thm:peps_dyadic_protocol_lifetime": "Bounded lifetime participation of every party (OpenAI 2026, Proposition 7.1, item 2)"
+      }
     },
     "ch:peps_frames_protocol": {
       "theorems": [

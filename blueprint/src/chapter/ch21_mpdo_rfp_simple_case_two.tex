@@ -25,7 +25,7 @@
     (\ref{eq:rfp_block_zcl}).
 \end{proof}
 
-\begin{lemma}[Copy independence for a non-nilpotent sector decomposition]
+\begin{theorem}[Copy independence for a non-nilpotent sector decomposition]
     \label{thm:mpdo_simple_weight_copy_independent}
     \lean{MPOTensor.weight_copy_independent_of_isPhysicalTraceIdempotent}
     \leanok
@@ -36,7 +36,7 @@
     transfer. Then the weights do not depend on the copy index:
     $\mu_{j,q}=\mu_{j}$
     \cite[Appendix~C.2, lines~1646--1661]{Cirac2016MPDO_arXiv}.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
     Unscaled zero correlation length states
@@ -75,7 +75,7 @@
 \end{corollary}
 
 \begin{proof}\leanok
-    Applying Lemma~\ref{thm:mpdo_simple_weight_copy_independent} to the
+    Applying Theorem~\ref{thm:mpdo_simple_weight_copy_independent} to the
     sector decomposition given by the simple canonical-form condition yields
     the claim.
 \end{proof}

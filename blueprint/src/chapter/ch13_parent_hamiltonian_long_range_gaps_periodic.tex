@@ -3632,7 +3632,7 @@
     exactly the canonical parent Hamiltonian at every volume.
 \end{proof}
 
-\begin{lemma}[One periodic parent interaction with finite and infinite-volume gaps]
+\begin{theorem}[One periodic parent interaction with finite and infinite-volume gaps]
     \label{thm:periodic_parent_finite_quasi_local_gap}
     \lean{MPSTensor.IsPeriodic.exists_positive_parent_interaction_finite_and_quasiLocal_gap}
     \leanok
@@ -3656,7 +3656,7 @@
     \cite{Nachtergaele1996Spectral} in the explicit normalized periodic tensor
     setting. The general GVBS presentation remains separate; see
     \cite{gap:nachtergaele96_infinite_volume_ground_projection}.
-\end{lemma}
+\end{theorem}
 \begin{proof}\leanok
     \uses{thm:periodic_positive_parent_gap_all_volumes,thm:periodic_quasi_local_ground_state_gap}
     Choose the positive canonical interaction and its range from the all-volume
@@ -5322,7 +5322,7 @@
     canonical gap to the original weighted family.
 \end{proof}
 
-\begin{lemma}[A periodic-family interaction with finite and infinite gaps]
+\begin{theorem}[A periodic-family interaction with finite and infinite gaps]
     \label{thm:periodic_family_constructed_finite_quasi_local_gap}
     \lean{MPSTensor.exists_positive_parent_interaction_finite_quasiLocal_gap_of_periodic_family}
     \leanok
@@ -5342,7 +5342,7 @@
     Both constants precede the states, observables, filters, and margins.
     No translation invariance of a classified state is assumed.
     The general GVBS presentation step remains separate.
-\end{lemma}
+\end{theorem}
 \begin{proof}\leanok
     \uses{thm:periodic_family_uniform_original_open_gap,
         lem:positive_canonical_interaction_exact_open_kernels,
@@ -5354,7 +5354,7 @@
     periodic-family commutator theorem.
 \end{proof}
 
-\begin{lemma}[Constructed finite and infinite gaps for stationary MPS states]
+\begin{theorem}[Constructed finite and infinite gaps for stationary MPS states]
     \label{thm:stationary_generators_finite_quasi_local_gap}
     \lean{MPSTensor.exists_positive_parent_finite_and_quasiLocal_gap_of_leftCanonical_of_posSemidef_fixedPoint}
     \leanok
@@ -5402,7 +5402,7 @@
     \cite[Section~3]{Nachtergaele1996Spectral}. Their construction from
     arbitrary GVBS boundary limits remains separate, as documented in
     \cite{gap:nachtergaele96_infinite_volume_ground_projection}.
-\end{lemma}
+\end{theorem}
 \begin{proof}\leanok
     \uses{thm:stationary_support_quasi_local_state_equality,
         thm:faithful_generators_constructed_finite_quasi_local_gap}

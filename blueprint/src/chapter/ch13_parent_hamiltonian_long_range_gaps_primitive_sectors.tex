@@ -2060,7 +2060,7 @@
     gives one constant for every volume.
 \end{proof}
 
-\begin{lemma}[Classification of the zero-energy state face for primitive sectors]
+\begin{theorem}[Classification of the zero-energy state face for primitive sectors]
     \label{thm:primitive_multiblock_quasi_local_ground_state_classification}
     \lean{MPSTensor.mem_parentGroundStateFace_iff_convex_combination_of_eventually_open_kernel}
     \leanok
@@ -2083,7 +2083,7 @@
     \cite[Theorems~1.1--1.2]{Nachtergaele1996Spectral} for the stated
     primitive sector family. More general periodic presentations remain
     separate \cite{gap:nachtergaele96_infinite_volume_ground_projection}.
-\end{lemma}
+\end{theorem}
 \begin{proof}\leanok
     \uses{thm:quasi_local_zero_energy_support_eventual_kernel,thm:multiblock_supported_quasi_local_state_convex_combination,thm:quasi_local_parent_ground_state_face_properties,thm:sector_local_zero_from_eventual_open_kernel}
     Zero local energy and the eventual kernel identity give expectation
@@ -2094,14 +2094,14 @@
     summand has the same expectation. Convexity preserves this property.
 \end{proof}
 
-\begin{lemma}[Pure ground states are precisely the primitive sectors]
+\begin{corollary}[Pure ground states are precisely the primitive sectors]
     \label{thm:primitive_multiblock_pure_ground_state_classification}
     \lean{MPSTensor.isPure_mem_parentGroundStateFace_iff_sector_of_eventually_open_kernel}
     \leanok
     Under the preceding hypotheses, a state $\varphi$ is a pure element of
     $\mathcal F_h$ if and only if $\varphi=\omega_j$ for some $j$.
     Purity is extremality among all states of the quasi-local algebra.
-\end{lemma}
+\end{corollary}
 \begin{proof}\leanok
     \uses{thm:primitive_multiblock_quasi_local_ground_state_classification,thm:finite_pure_state_decomposition,thm:primitive_quasi_local_purity}
     A pure state in a finite convex combination equals one of the
@@ -2255,7 +2255,7 @@
     classifications to this normalized family and the unchanged interaction.
 \end{proof}
 
-\begin{lemma}[Finite and infinite-volume gaps in every pure ground state]
+\begin{theorem}[Finite and infinite-volume gaps in every pure ground state]
     \label{thm:eventual_kernel_pure_ground_state_gap}
     \lean{MPSTensor.exists_pos_pure_ground_state_commutator_limit_gap_of_eventual_kernel}
     \leanok
@@ -2283,7 +2283,7 @@
     the stated primitive family; the original range has no injectivity
     lower bound. General periodic presentations remain separate
     \cite{gap:nachtergaele96_infinite_volume_ground_projection}.
-\end{lemma}
+\end{theorem}
 \begin{proof}\leanok
     \uses{thm:eventual_kernel_sector_literal_gap,thm:primitive_multiblock_pure_ground_state_classification}
     The sector gap theorem gives one constant for both conclusions.

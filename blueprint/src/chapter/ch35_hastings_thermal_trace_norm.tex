@@ -32,7 +32,7 @@ $\|D\|_1=\operatorname{Tr}\sqrt{D^\dagger D}$, and $\|O\|$ is the operator norm.
     the polar decomposition removes the need for $D$ to be Hermitian.
 \end{proof}
 
-\begin{lemma}[The trace-norm form of the cluster-expansion bound]
+\begin{theorem}[The trace-norm form of the cluster-expansion bound]
     \label{thm:hastings_thermal_trace_norm}
     \lean{TNLean.Lattice.ClusterExpansion.re_trace_sqrt_sub_le_of_forall_norm_trace_mul_sub_le}
     \leanok
@@ -52,7 +52,7 @@ $\|D\|_1=\operatorname{Tr}\sqrt{D^\dagger D}$, and $\|O\|$ is the operator norm.
     The factor $(xy)^{-1}$ is the size-threshold correction to eq.~(perc2)
     \cite{gap:hastings05_percolation_cluster_size}. The conclusion is the
     corresponding trace-norm bound of \cite[lines 1281--1299]{Hastings2006Solving}.
-\end{lemma}
+\end{theorem}
 \begin{proof}\leanok
     \uses{thm:hastings_thermal_trace_norm_duality}
     For $\|O\|\le1$ the hypothesis gives
@@ -61,7 +61,7 @@ $\|D\|_1=\operatorname{Tr}\sqrt{D^\dagger D}$, and $\|O\|$ is the operator norm.
     Lemma~\ref{thm:hastings_thermal_trace_norm_duality} to $D=\rho-\sigma$.
 \end{proof}
 
-\begin{lemma}[The matrix product form at every temperature]
+\begin{theorem}[The matrix product form at every temperature]
     \label{thm:hastings_thermal_all_temperatures}
     \lean{TNLean.Lattice.HasProductForm.pow_of_even,
         TNLean.Lattice.ClusterExpansion.posSemidef_pow_of_even,
@@ -82,7 +82,7 @@ $\|D\|_1=\operatorname{Tr}\sqrt{D^\dagger D}$, and $\|O\|$ is the operator norm.
     invertible~\cite{gap:hastings05_mplt_positivity}. The local index ranges
     and their growth under powers are proved in
     Lemma~\ref{thm:hastings_truncated_index_count}.
-\end{lemma}
+\end{theorem}
 \begin{proof}\leanok
     \uses{thm:hastings_product_form_mul}
     For $m=2k$, $\rho^m=(\rho^k)^\dagger\rho^k$ since $\rho^k$ is Hermitian, and
@@ -115,7 +115,7 @@ $\|D\|_1=\operatorname{Tr}\sqrt{D^\dagger D}$, and $\|O\|$ is the operator norm.
     Hermitian operators with coefficients $\pm1$, hence Hermitian. By
     Lemma~\ref{thm:hastings_truncation_inclusion_exclusion}, $\rho(\beta,l)$ is a
     sum of the $\rho(\beta,U)$ with coefficients $\pm1$, hence Hermitian, and
-    Lemma~\ref{thm:hastings_thermal_all_temperatures} gives the positivity of
+    Theorem~\ref{thm:hastings_thermal_all_temperatures} gives the positivity of
     its even powers.
 \end{proof}
 
@@ -143,7 +143,7 @@ $\|D\|_1=\operatorname{Tr}\sqrt{D^\dagger D}$, and $\|O\|$ is the operator norm.
     The truncated operator is in matrix product form of range $l$ by
     Lemma~\ref{thm:hastings_truncated_product_form} and Hermitian by
     Lemma~\ref{thm:hastings_truncated_positivity}, so
-    Lemma~\ref{thm:hastings_thermal_all_temperatures} applies.
+    Theorem~\ref{thm:hastings_thermal_all_temperatures} applies.
 \end{proof}
 
 \begin{lemma}[The least sufficient even number of factors]
