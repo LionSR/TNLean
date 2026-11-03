@@ -11662,3 +11662,10 @@ removed after the dependency audit exposed it.
 - **Seen:** `QICLean/Analysis/ProjectedTrialSpaceEnergy.lean` and `MPS/AreaLaw/RegionalGroundEnergy.lean`.
 - **Pattern:** A projection lower norm bound with error below one forces the projection of a nonzero target vector to be nonzero. The first use proves injectivity; the second applies it to an actual unit ground vector.
 - **Decision:** There are two uses of this geometric implication. A third use should promote the nonzero-projection consequence in the common closeness module.
+
+
+### Ground data from the empty clipping subset — candidate (2026-11-03)
+
+- **Seen:** `MPS/AreaLaw/RegionalGroundEnergy.lean` and `MPS/AreaLaw/RegionalEnergyMerge.lean`.
+- **Pattern:** The common regional minimum and centered minimum for an original positive Hamiltonian are the clipping construction at the empty subset; the residual conclusions are discarded.
+- **Decision:** Reuse the existing construction. If a third independent consumer needs only the original ground data, expose that prefix as a common theorem rather than duplicating disjoint-support or minimum-energy arguments.

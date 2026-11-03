@@ -59,3 +59,32 @@ estimates support the energy-estimation step of~\cite{Arad2016RigorousRG}.
 
 The compressed regional minimum and the recursive update of its energy
 estimate are subsequent conclusions.
+
+\begin{lemma}[Energy estimates under joining disjoint regions]
+    \label{lem:disjoint_regional_energy_merge}
+    \lean{TNLean.MPS.AreaLaw.exists_disjoint_regional_energy_merge}
+    \leanok
+    Let $A,B\ge0$ be supported on disjoint site sets, and let
+    $0\le Y\le I$. There are attained minimum energies $e_A,e_B,e_P$
+    of $A,B,A+B+Y$, respectively, with a common unit minimizing vector
+    for $A$ and $B$. They satisfy
+    \[
+       e_A+e_B\le e_P\le e_A+e_B+1.
+    \]
+    Consequently, if $p_A\in[e_A-3,e_A]$ and
+    $p_B\in[e_B-3,e_B]$, then
+    \[
+       p_A+p_B\in[e_P-7,e_P].
+    \]
+    No gap, unique ground vector, or minimum-energy witness is assumed.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:disjoint_regional_clipping}
+    Choose a common regional minimizing vector using disjoint supports.
+    The centered operator $X=A-e_AI+B-e_BI$ is positive and vanishes
+    on that vector. The minimum $E$ of $X+Y$ therefore belongs to $[0,1]$.
+    Adding back the two regional energies gives
+    $e_P=e_A+e_B+E$. The estimate for $p_A+p_B$ follows by addition.
+    This is auxiliary to the energy-estimation argument in
+    \cite[Figure \texttt{fig:algo1}, lines 1627--1632]{Arad2016RigorousRG}.
+\end{proof}
