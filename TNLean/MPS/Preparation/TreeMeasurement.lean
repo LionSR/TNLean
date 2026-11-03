@@ -139,7 +139,7 @@ def levelGates (i : ℕ) : List (LongRangeGate d N) :=
 private theorem val_of_mem_span {i p : ℕ} {hp : p < N / 2 ^ (i + 1)} {x : Fin N}
     (hx : x ∈ (treeGate u hu i p hp).span) :
     ∃ t, t + 1 ≤ 2 ^ (i + 1) ∧ x.val = p * 2 ^ (i + 1) + t ∧
-      ((treeGate u hu i p hp).interior x → 1 ≤ t ∧ t + 2 ≤ 2 ^ (i + 1)) := by
+      (x ∈ (treeGate u hu i p hp).interior → 1 ≤ t ∧ t + 2 ≤ 2 ^ (i + 1)) := by
   have h1 := succ_mul_le_of_lt_div hp
   have h2 : 2 ^ (i + 1) = 2 * 2 ^ i := pow_succ' 2 i
   have h3 := Nat.one_le_two_pow (n := i)

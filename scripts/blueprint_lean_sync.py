@@ -24,6 +24,7 @@ import os
 import re
 import subprocess
 import sys
+import tempfile
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -212,10 +213,150 @@ class SyncReport:
 # Parse Lean source tree
 # ---------------------------------------------------------------------------
 
-def collect_file_lean_decls(lean_file: Path, lean_root: Path) -> list[LeanDecl]:
+def _mask_lean_noncode(text: str) -> str:
+    """Mask nested comments/string contents, preserving line/column positions.
+
+    String delimiters remain as invalid attribute syntax, so a string cannot
+    accidentally turn an unsupported attribute into a bare to_additive.
+    """
+    out = list(text)
+    i, depth, string = 0, 0, False
+    while i < len(text):
+        if depth:
+            if text.startswith("/-", i):
+                depth += 1
+                out[i:i + 2] = "  "
+                i += 2
+            elif text.startswith("-/", i):
+                depth -= 1
+                out[i:i + 2] = "  "
+                i += 2
+            else:
+                if text[i] != "\n":
+                    out[i] = " "
+                i += 1
+        elif string:
+            if text[i] == "\\":
+                out[i] = " "
+                if i + 1 < len(text) and text[i + 1] != "\n":
+                    out[i + 1] = " "
+                i += 2
+            elif text[i] == '"':
+                string = False
+                i += 1
+            else:
+                if text[i] != "\n":
+                    out[i] = " "
+                i += 1
+        elif text.startswith("/-", i):
+            depth = 1
+            out[i:i + 2] = "  "
+            i += 2
+        elif text.startswith("--", i):
+            end = text.find("\n", i)
+            end = len(text) if end < 0 else end
+            out[i:end] = " " * (end - i)
+            i = end
+        elif text[i] == '"':
+            string = True
+            i += 1
+        else:
+            i += 1
+    return "".join(out)
+
+
+_ADDITIVE_ATTACHED_RE = re.compile(
+    r"(?P<attrs>(?:@\[[^\[\]]*\]\s*)+)"
+    r"(?P<mods>(?:(?:private|protected|noncomputable)\s+)*)"
+    r"(?:theorem|lemma|def|abbrev|instance|structure|class)\s+"
+    r"(?P<name>[\w']+(?:\.[\w']+)*)", re.MULTILINE,
+)
+
+
+@dataclass
+class AdditiveRules:
+    words: dict[str, list[str]]
+    abbreviations: set[str]
+    blocked_prefixes: set[str] = field(default_factory=set)
+    hinted_words: set[str] = field(default_factory=set)
+
+
+def _native_additive_rules(mathlib_root: Path) -> AdditiveRules | None:
+    """Read the literal native dictionaries from the verified Mathlib source.
+
+    Translate/GuessName.lean splits snake_case at underscores and applies
+    nameDict word-by-word. We decline mixed-case names, name hints and every
+    candidate potentially affected by abbreviationDict, rather than emulate
+    Lean's environment or its complete naming algorithm.
+    """
+    try:
+        text = (mathlib_root / "Tactic/Translate/ToAdditive.lean").read_text()
+        words_block = text.split("def nameDict :", 1)[1].split("def abbreviationDict :", 1)[0]
+        abbrev_block = text.split("def abbreviationDict :", 1)[1].split("initialize guessNameExt", 1)[0]
+        words = {key: re.findall(r'"([^"\n]+)"', values)
+                 for key, values in re.findall(r'\("([^"\n]+)", \[([^\]]+)\]\)', words_block)}
+        abbreviations = {key.replace("_", "").lower()
+                         for key in re.findall(r'\("([^"\n]+)", "[^"\n]+"\)', abbrev_block)}
+        if not words or not abbreviations:
+            return None
+        return AdditiveRules(words, abbreviations)
+    except (OSError, IndexError):
+        return None
+
+
+def _additive_target(source: str, attrs: str, rules: AdditiveRules) -> str | None:
+    attrs = re.findall(r"@\[([^\[\]]*)\]", attrs)
+    additive = [a.strip() for a in attrs if re.match(r"\s*to_additive\b", a)]
+    if len(additive) != 1:
+        return None
+    match = re.fullmatch(r"to_additive(?:\s+([\w']+(?:\.[\w']+)*))?", additive[0])
+    if not match:
+        return None  # options, chained attributes, self/none/existing: unsupported
+    explicit = match.group(1)
+    if explicit in {"self", "none", "existing"}:
+        return None
+    if explicit and explicit.startswith("_root_."):
+        return explicit.removeprefix("_root_.")
+    namespace, _, name = source.rpartition(".")
+    prefixes = [".".join(namespace.split(".")[:i])
+                for i in range(1, len(namespace.split(".")) + 1)]
+    if any(".".join(p.split(".")[i:]) in rules.blocked_prefixes
+           for p in prefixes for i in range(len(p.split(".")))):
+        return None  # namespace translation requires the elaborated environment
+    if explicit:
+        # Core.targetName replaces as many trailing namespace components as
+        # the explicit target supplies; _root_ disables that heuristic above.
+        parts = namespace.split(".") if namespace else []
+        count = len(explicit.split(".")) - 1
+        return ".".join(parts[:max(0, len(parts) - count)] + [explicit])
+    if not re.fullmatch(r"[a-z]+(?:_[a-z]+)+", name):
+        return None
+    tokens = name.split("_")
+    if any(h in name.replace("_", "") for h in rules.hinted_words):
+        return None
+    translated = []
+    for token in tokens:
+        values = rules.words.get(token, [token])
+        if len(values) != 1:
+            return None
+        value = values[0][:1].lower() + values[0][1:]
+        if not value.islower() or not value.isalpha():
+            return None
+        translated.append(value)
+    target = "_".join(translated)
+    if target == name or any(a in target.replace("_", "") for a in rules.abbreviations):
+        return None
+    return ".".join(filter(None, (namespace, target)))
+
+
+def collect_file_lean_decls(
+    lean_file: Path, lean_root: Path, *, additive_rules: AdditiveRules | None = None,
+) -> list[LeanDecl]:
     """Parse one Lean file and return its declarations with approximate spans."""
     text = lean_file.read_text(errors="replace")
-    lines = text.splitlines()
+    source_code = _mask_lean_noncode(text)
+    lines = source_code.splitlines()
+    raw_lines = text.splitlines()
     rel = str(lean_file.relative_to(lean_root.parent))
 
     # Track namespace and section stacks separately.
@@ -331,7 +472,7 @@ def collect_file_lean_decls(lean_file: Path, lean_root: Path) -> list[LeanDecl]:
             # Comment stripping concatenates the surviving fragments and does
             # not preserve source columns. Lean layout uses the original line's
             # leading indentation, including for an inline field doc comment.
-            indent = len(raw) - len(raw.lstrip())
+            indent = len(raw_lines[line_no - 1]) - len(raw_lines[line_no - 1].lstrip())
             if field_indent is None:
                 field_indent = indent
             elif indent != field_indent:
@@ -348,23 +489,64 @@ def collect_file_lean_decls(lean_file: Path, lean_root: Path) -> list[LeanDecl]:
                     kind="field",
                     short_name=field_name,
                     end_line=line_no,
+                    is_private=decl.is_private,
                 )
             )
 
-    return decls + field_decls
+    generated: list[LeanDecl] = []
+    if additive_rules is not None:
+        for attached in _ADDITIVE_ATTACHED_RE.finditer(source_code):
+            name_line = source_code.count("\n", 0, attached.start("name")) + 1
+            decl = next((d for d in decls if d.line <= name_line <= d.end_line
+                         and d.short_name == attached.group("name").removeprefix("_root_.")), None)
+            if decl is None or decl.is_private or "private" in attached.group("mods").split():
+                continue
+            target = _additive_target(decl.fqn, attached.group("attrs"), additive_rules)
+            if target and target != decl.fqn:
+                generated.append(LeanDecl(rel, decl.line, target, "generated", target,
+                                          decl.end_line))
+    return decls + field_decls + generated
 
 
-def collect_lean_decls(lean_root: Path) -> dict[str, LeanDecl]:
+def collect_lean_decls(
+    lean_root: Path, *, tracked_only: bool = False,
+    additive_rules: AdditiveRules | None = None,
+) -> dict[str, LeanDecl]:
     """Walk all .lean files and return {fqn: LeanDecl}."""
     decls: dict[str, LeanDecl] = {}
 
-    for lean_file in sorted(lean_root.rglob("*.lean")):
-        for decl in collect_file_lean_decls(lean_file, lean_root):
-            decls[decl.fqn] = decl
-            # Also store without namespace prefix if the name already contains
-            # dots (e.g. `Foo.bar` at top level), so both spellings match.
-            if "." in decl.short_name and decl.fqn != decl.short_name:
-                decls[decl.short_name] = decl
+    if tracked_only:
+        tracked = _git_output(lean_root.parent, "ls-files", "-z", "--", lean_root.name)
+        files = [lean_root.parent / name for name in tracked.split("\0")
+                 if name.endswith(".lean")]
+    else:
+        files = list(lean_root.rglob("*.lean"))
+    if additive_rules is not None:
+        # Conservatively block every source namespace with an attached
+        # translation, plus explicit namespace registrations/name hints.
+        for path in files:
+            if path.is_symlink() or not path.is_file():
+                continue
+            code = _mask_lean_noncode(path.read_text())
+            declarations = collect_file_lean_decls(path, lean_root)
+            attached_names = {m.group("name").removeprefix("_root_.")
+                              for m in _ADDITIVE_ATTACHED_RE.finditer(code)
+                              if "to_additive" in m.group("attrs")}
+            additive_rules.blocked_prefixes.update(
+                d.fqn for d in declarations if d.short_name in attached_names)
+            additive_rules.blocked_prefixes.update(re.findall(
+                r"(?m)^\s*insert_to_additive_translation\s+([\w.]+)", code))
+            for targets in re.findall(
+                r"(?m)^\s*attribute\s*\[[^\]\n]*\bto_additive\b[^\]\n]*\]([^\n]*)", code):
+                additive_rules.blocked_prefixes.update(re.findall(r"[\w.]+", targets))
+            additive_rules.hinted_words.update(w.lower() for w in re.findall(
+                r"(?m)^\s*to_additive_name_hint\s+(\w+)", code))
+    for lean_file in sorted(files):
+        if lean_file.is_symlink() or not lean_file.is_file():
+            continue
+        for decl in collect_file_lean_decls(lean_file, lean_root, additive_rules=additive_rules):
+            if not decl.is_private:
+                decls[decl.fqn] = decl
 
     return decls
 
@@ -674,136 +856,89 @@ def print_missing_blueprint_warnings(missing: list[LeanDecl]) -> None:
 
 
 def _dependency_fetch_enabled() -> bool:
-    """Whether a missing dependency's Lean sources may be fetched over the network.
-
-    The TeX-only "Check blueprint compiles without errors" CI job has no Lean
-    toolchain and never runs ``lake exe cache get``, so a cross-volume citation
-    into the QICLean dependency (LionSR/TNLean#6622) has no checkout to resolve
-    against and reads as missing. Enabling a lightweight, source-only fetch in
-    that environment lets the sync check resolve those citations without a full
-    Lean build. Off by default locally so a plain checker run never touches the
-    network; opt in with ``BLUEPRINT_SYNC_FETCH_DEPS=1``.
-    """
-    return (
-        os.getenv("GITHUB_ACTIONS") == "true"
-        or os.getenv("BLUEPRINT_SYNC_FETCH_DEPS") == "1"
-    )
+    """Network access requires an explicit opt-in, including on CI."""
+    return os.getenv("BLUEPRINT_SYNC_FETCH_DEPS") == "1"
 
 
-def _fetch_dependency_sources(
-    package_dir: Path, url: str, rev: str, input_rev: str | None
-) -> bool:
-    """Shallow-fetch a Lake git dependency's sources at the manifest-pinned rev.
+def _git_output(package_dir: Path, *args: str) -> str:
+    return subprocess.check_output(
+        ["git", "-C", str(package_dir), *args], stderr=subprocess.DEVNULL,
+        text=True, timeout=30,
+    ).strip()
 
-    Only the Lean sources are needed (the sync checker greps declarations, it
-    does not build), so this checks the repository out without invoking Lake.
-    Returns ``True`` on success; on any failure it prints a one-line reason and
-    returns ``False`` so the caller degrades gracefully.
-    """
-    package_dir.mkdir(parents=True, exist_ok=True)
 
-    def git(*args: str) -> int:
-        return subprocess.run(
-            ["git", *args],
-            cwd=package_dir,
-            stdout=subprocess.DEVNULL,
-            stderr=subprocess.DEVNULL,
-        ).returncode
-
-    if git("init", "-q") != 0:
-        print(f"  (could not initialise git repository in {package_dir})")
+def _verified_dependency(package_dir: Path, rev: str) -> bool:
+    """Require an independent Git checkout at the exact clean manifest commit."""
+    try:
+        return (
+            Path(_git_output(package_dir, "rev-parse", "--show-toplevel")).resolve()
+            == package_dir.resolve()
+            and _git_output(package_dir, "rev-parse", "HEAD") == rev
+            and not _git_output(package_dir, "status", "--porcelain", "--untracked-files=all")
+        )
+    except (OSError, subprocess.SubprocessError):
         return False
-    git("remote", "remove", "origin")
-    if git("remote", "add", "origin", url) != 0:
-        print(f"  (could not add remote {url})")
+
+
+def _fetch_dependency_sources(package_dir: Path, url: str, rev: str) -> bool:
+    """Stage an exact commit; never use a branch fallback or alter an existing checkout."""
+    if package_dir.exists() or package_dir.is_symlink() or not re.fullmatch(r"[0-9a-f]{40}", rev):
         return False
-    # Prefer the pinned commit; fall back to the input ref (tag/branch) when the
-    # host refuses a bare-SHA fetch, then check the exact commit out.
-    for ref in (rev, input_rev):
-        if not ref:
-            continue
-        if git("fetch", "-q", "--depth", "1", "origin", ref) == 0:
-            if git("checkout", "-q", "FETCH_HEAD") == 0:
-                return True
-    print(f"  (could not fetch {url} at {rev})")
-    return False
+    package_dir.parent.mkdir(parents=True, exist_ok=True)
+    try:
+        with tempfile.TemporaryDirectory(dir=package_dir.parent) as tmp:
+            staged = Path(tmp) / "source"
+            subprocess.run(["git", "init", "-q", str(staged)], check=True,
+                           stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            for args in (("fetch", "--depth", "1", "--", url, rev),
+                         ("checkout", "--detach", rev)):
+                subprocess.run(["git", "-C", str(staged), *args], check=True,
+                               stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+                               timeout=120)
+            if not _verified_dependency(staged, rev):
+                return False
+            if package_dir.exists() or package_dir.is_symlink():
+                return False
+            staged.rename(package_dir)
+            return True
+    except (OSError, subprocess.SubprocessError):
+        return False
 
 
 def _resolve_dependency_lean_root(root: Path, package_name: str) -> Path | None:
-    """Resolve a Lake dependency's own Lean source root from lake-manifest.json.
-
-    Blueprint entries may cite declarations supplied by QICLean or Mathlib,
-    rather than retained as local wrappers. The declarations exist in TNLean's
-    build environment, just not under ``TNLean/``. This resolves the checked-out
-    dependency's library root so ``collect_lean_decls`` can scan its source.
-
-    Returns ``None`` and prints a one-line explanation whenever the manifest,
-    the package checkout, or its Lean library directory cannot be found --
-    for example before ``lake update``/``lake exe cache get`` has run. This
-    is a normal, expected condition (not every checkout has resolved every
-    dependency), so callers should degrade gracefully rather than fail.
-    """
-    manifest_path = root / "lake-manifest.json"
-    if not manifest_path.is_file():
-        print(f"  (dependency '{package_name}' skipped: no lake-manifest.json)")
+    """Resolve only the two named libraries, at clean exact manifest Git SHAs."""
+    library = {"qiclean": "QICLean", "mathlib": "Mathlib"}.get(package_name)
+    if library is None:
         return None
     try:
-        manifest = json.loads(manifest_path.read_text())
-    except (OSError, json.JSONDecodeError) as error:
-        print(
-            f"  (dependency '{package_name}' skipped: cannot parse "
-            f"lake-manifest.json: {error})"
-        )
+        manifest = json.loads((root / "lake-manifest.json").read_text())
+        entries = [p for p in manifest["packages"] if p.get("name") == package_name]
+        if len(entries) != 1:
+            raise ValueError("expected one manifest entry")
+        entry = entries[0]
+        rev = entry.get("rev", "")
+        if entry.get("type") != "git" or not re.fullmatch(r"[0-9a-f]{40}", rev):
+            raise ValueError("dependency must have an exact Git commit")
+        packages_dir = manifest.get("packagesDir", ".lake/packages")
+        if (not isinstance(packages_dir, str) or not packages_dir
+                or Path(packages_dir).is_absolute() or ".." in Path(packages_dir).parts):
+            raise ValueError("packagesDir must be a relative path without '..'")
+        if entry.get("subDir") not in (None, ""):
+            raise ValueError("dependency subDir is unsupported")
+        package_dir = root / packages_dir / package_name
+        if not package_dir.exists() and _dependency_fetch_enabled():
+            url = entry.get("url")
+            if not isinstance(url, str) or not _fetch_dependency_sources(package_dir, url, rev):
+                raise ValueError("exact source fetch failed")
+        if not _verified_dependency(package_dir, rev):
+            raise ValueError("checkout unavailable, dirty, not independent, or at the wrong commit")
+        library_root = package_dir / library
+        if not library_root.is_dir() or library_root.is_symlink():
+            raise ValueError("expected library directory unavailable")
+        return library_root
+    except (OSError, ValueError, KeyError, TypeError, AttributeError) as error:
+        print(f"  (dependency '{package_name}' skipped: {error})")
         return None
-    packages_dir = manifest.get("packagesDir", ".lake/packages")
-    entry = next(
-        (p for p in manifest.get("packages", []) if p.get("name") == package_name),
-        None,
-    )
-    if entry is None:
-        print(f"  (dependency '{package_name}' skipped: not in lake-manifest.json)")
-        return None
-    package_dir = root / packages_dir / package_name
-    if not package_dir.is_dir():
-        url = entry.get("url")
-        rev = entry.get("rev")
-        if _dependency_fetch_enabled() and entry.get("type") == "git" and url and rev:
-            print(
-                f"  (dependency '{package_name}' not checked out; fetching "
-                f"sources from {url})"
-            )
-            if not _fetch_dependency_sources(
-                package_dir, url, rev, entry.get("inputRev")
-            ):
-                return None
-        else:
-            print(
-                f"  (dependency '{package_name}' skipped: {package_dir} is not "
-                "checked out yet -- run `lake exe cache get` first)"
-            )
-            return None
-
-    lib_name: str | None = None
-    lakefile = package_dir / "lakefile.toml"
-    if lakefile.is_file():
-        match = re.search(
-            r"\[\[lean_lib\]\]\s*\n\s*name\s*=\s*\"([^\"]+)\"", lakefile.read_text()
-        )
-        if match:
-            lib_name = match.group(1)
-    candidates = [lib_name] if lib_name else []
-    for child in sorted(package_dir.iterdir()):
-        if child.is_dir() and child.name.lower() == package_name.lower():
-            candidates.append(child.name)
-    for candidate in candidates:
-        candidate_dir = package_dir / candidate
-        if candidate_dir.is_dir():
-            return candidate_dir
-    print(
-        f"  (dependency '{package_name}' skipped: no Lean library directory "
-        f"found under {package_dir})"
-    )
-    return None
 
 
 # ---------------------------------------------------------------------------
@@ -839,7 +974,9 @@ def run_sync(
         dependency_root = _resolve_dependency_lean_root(root, package_name)
         if dependency_root is None:
             continue
-        dependency_decls = collect_lean_decls(dependency_root)
+        rules = _native_additive_rules(dependency_root) if package_name == "mathlib" else None
+        dependency_decls = collect_lean_decls(
+            dependency_root, tracked_only=True, additive_rules=rules)
         added = 0
         for fqn, decl in dependency_decls.items():
             if fqn not in report.lean_decls:
