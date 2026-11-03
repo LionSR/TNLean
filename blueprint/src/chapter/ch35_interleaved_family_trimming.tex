@@ -1017,3 +1017,45 @@ sampled root hierarchy.
     The count and reference estimates give
     (\ref{eq:canonical_ritz_polynomial_bond}) independently of the seed.
 \end{proof}
+
+
+\begin{corollary}[Energy and Ritz output from one successful tree]
+    \label{cor:canonical_ritz_energy}
+    \lean{TNLean.MPS.AreaLaw.exists_physical_dg_canonical_ritz_polynomial_approximation_with_energy}
+    \leanok
+    Under the hypotheses and with the same choices as
+    Theorem~\ref{thm:physical_canonical_ritz_polynomial}, every seed
+    $U\in\mathcal G_\eta$ admits one function $E_U(l,r)$ on interval
+    endpoints. It satisfies
+    $e_{[l,r)}-49/16\le E_U(l,r)\le e_{[l,r)}$ at the root and
+    each listed internal interval, where $e_{[l,r)}$ is the actual
+    minimum of the original regional Hamiltonian. At used short leaves
+    the value is exactly $e_{[l,r)}$.
+
+    At each listed long parent $[l,r)$, put $k=l+\lfloor(r-l)/2\rfloor$,
+    $u=l+\ell$, $v=r-\ell$, and let $e_L,e_R$ be the attained
+    minima on its two collars. The middle center is
+    $E_U(l,k)+E_U(k,r)-e_L-e_R-2$. The parent estimate is the minimum
+    of the actual raw soft matrix compressed to the one-word image of
+    these same two children under the selected family, minus three.
+    These are the updates of Lemma~\ref{lem:canonical_interval_root_energy_assignment}.
+
+    The function $E_U$ belongs to the original canonical tree and is
+    chosen once for that seed. The same original root, literal final
+    refinement, Ritz space, two-sided errors, and polynomial all-span
+    bound of Theorem~\ref{thm:physical_canonical_ritz_polynomial} are
+    retained. No second physical family or sampled tree is selected.
+\end{corollary}
+\begin{proof}\leanok
+    \uses{thm:physical_canonical_ritz_polynomial,lem:canonical_interval_root_energy_assignment}
+    Select the data of
+    Theorem~\ref{thm:physical_canonical_ritz_polynomial} once.
+    The gap hypothesis and the actual ground spectral value identify
+    $\mu$ with the minimum eigenvalue. The same ordered-word certificate
+    at power one gives the one-word error
+    $\Delta/(1-1/4)^2$. Also $D\ge50\ell^2$.
+    For each successful seed, its root and listed intervals satisfy the
+    joint viability required by Lemma~\ref{lem:canonical_interval_root_energy_assignment}.
+    That lemma gives one energy function on this tree. Retain it together
+    with the unchanged terminal refinement and Ritz conclusions.
+\end{proof}

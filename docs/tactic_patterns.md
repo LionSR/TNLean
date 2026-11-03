@@ -11874,3 +11874,22 @@ removed after the dependency audit exposed it.
   `norm_sum_le_of_le` and the positive-contraction norm criterion supply the
   spectral-width estimate; no repeated specialized norm-sum proof is added.
   The tree-radius comparison reuses the ceiling inequality directly.
+
+
+### Same-family terminal energy attachment (2026-11-03)
+
+A pointwise certificate on a selected family should be attached to its
+retained witnesses before taking vector-wise terminal conclusions. The
+canonical energy/Ritz composition reuses the existing root energy theorem
+and the frozen terminal theorem directly. It transports only the ground
+target and true-event membership along the equality of the prescribed
+ground energy with the minimum; it does not rewrite through the nested
+family tuple. This is the existing targeted dependent-transport pattern,
+with no new tactic or parallel construction.
+
+The final composition also exhibits the distinction between a local numerical
+alias and the fully substituted type of an imported theorem. Only the
+numerical aliases in the terminal goal are unfolded before applying the
+unchanged terminal proof; the chosen targets and operator families remain
+fixed. The abstract energy lemma carries the terminal proposition as an
+opaque proposition, rather than repeating its vector-wise conjunction.

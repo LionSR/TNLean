@@ -143,6 +143,7 @@ import TNLean.MPS.AreaLaw.PhysicalChebyshevViability
 import TNLean.MPS.AreaLaw.PhysicalDGApproximation
 import TNLean.MPS.AreaLaw.PhysicalDGAutomaticRefinement
 import TNLean.MPS.AreaLaw.PhysicalDGCanonicalApproximation
+import TNLean.MPS.AreaLaw.PhysicalDGCanonicalEnergyApproximation
 import TNLean.MPS.AreaLaw.PhysicalDGCanonicalJointProbability
 import TNLean.MPS.AreaLaw.PhysicalDGCanonicalParentFailure
 import TNLean.MPS.AreaLaw.PhysicalDGCanonicalSamplingData
