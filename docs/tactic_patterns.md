@@ -11741,3 +11741,17 @@ removed after the dependency audit exposed it.
   the other cuts share a length-dependent accuracy. The two natural rank
   factors are ordered by the same proved monotone profile before the cut and
   vector are specified. Boundary ranks use the existing exact rank-one bounds.
+
+### Quadratic forms of scalar-shifted order bounds — candidate (2026-11-03)
+
+- **Seen:** `MPS/AreaLaw/ALVV/SoftParentEnergy.lean`.
+- **Pattern:** Apply the promoted positive-matrix-to-Euclidean-operator lemma
+  to the difference in an order inequality, then expand its quadratic form
+  and use the squared-norm identity for the scalar identity term.
+- **Reuse:** The positivity transport uses the existing
+  `Matrix.PosSemidef.isPositive_toEuclideanCLM` and Mathlib's
+  `ContinuousLinearMap.IsPositive.re_inner_nonneg_left`.
+- **Decision:** No new tactic is needed. The final scalar bound combines an
+  existing regional energy estimate and an actual minimum shift; a more
+  general order-to-quadratic-form lemma can be considered if that remaining
+  expansion recurs in several files.
