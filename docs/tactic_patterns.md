@@ -11777,3 +11777,10 @@ removed after the dependency audit exposed it.
   vectors, with the harmless factor n+1 to include the zero inner band.
   Every vector in the actual image has the finite-span MPS bound, so taking
   its standard orthonormal basis does not need another approximation oracle.
+
+
+### Candidate: midpoint induction on an interval length (2026-11-03)
+
+- **Seen:** `BalancedIntervalTree.lean` and `BalancedIntervalMergeList.lean`.
+- **Pattern:** Strong induction on the length supplies both shorter midpoint children; natural-number arithmetic proves their strict decrease.
+- **Decision:** Two mathematical uses retain their different invariants. Reuse the existing recursive definition when counting its internal intervals; no new tactic or second tree structure is introduced.

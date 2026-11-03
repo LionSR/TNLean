@@ -286,6 +286,34 @@
     parent length.
 \end{proof}
 
+\begin{definition}[Internal intervals of the balanced recursion]
+    \label{def:balanced_interval_merge_list}
+    \lean{TNLean.MPS.AreaLaw.balancedIntervalMergeList}
+    \leanok
+    Fix a leaf width $w\ge1$. Let $\mathcal I_w(p,r)$ be the ordered
+    list of internal intervals obtained by the subdivision in
+    Definition~\ref{def:balanced_interval_spaces}. A short interval
+    contributes the empty list. Otherwise, with
+    $k=p+\lfloor(r-p)/2\rfloor$, concatenate the lists for $[p,k)$ and
+    $[k,r)$, followed by the single parent $[p,r)$.
+\end{definition}
+
+\begin{lemma}[Number of merges below one root]
+    \label{lem:balanced_interval_merge_count}
+    \lean{TNLean.MPS.AreaLaw.length_balancedIntervalMergeList_le}
+    \leanok
+    For $p\le r$, the list $\mathcal I_w(p,r)$ has length at most
+    $\max\{r-p-1,0\}$. In particular, a root of $L$ sites has at most
+    $\max\{L-1,0\}$ merges.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{def:balanced_interval_merge_list}
+    Induct on $r-p$. A short interval has no merge. At a long interval,
+    both child lengths are positive and sum to $r-p$, so the inductive
+    bounds and the parent contribute at most
+    $(k-p-1)+(r-k-1)+1=r-p-1$ merges.
+\end{proof}
+
 \begin{lemma}[Recorded generators of the actual trimmed image]
     \label{lem:interval_recorded_generator_bounds}
     \lean{TNLean.MPS.AreaLaw.IsIntervalSpanWithRankBound,
