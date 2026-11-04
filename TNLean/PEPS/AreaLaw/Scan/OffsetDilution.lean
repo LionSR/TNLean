@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.PEPS.AreaLaw.Scan.ActualHistory
 import Mathlib.Data.Int.Interval
 import Mathlib.Tactic.Linarith
+import TNLean.Algebra.FinSumPermutation
 
 /-!
 # Uniform-offset dilution for actual scanner fronts
@@ -40,10 +41,7 @@ theorem sum_historyWeight_mul_eq_sum_extendHistory {K m M k : ℕ}
         historyWeight (e x) * f (e x) := (e.sum_comp _).symm
     _ = _ := by
       rw [Fintype.sum_prod_type]
-      apply Finset.sum_congr rfl
-      intro h _
-      apply Finset.sum_congr rfl
-      intro c _
+      refine Finset.sum_congr₂ fun h _ c _ ↦ ?_
       change historyWeight (extendHistory h c) * f (extendHistory h c) = _
       rw [historyWeight_extendHistory]
 

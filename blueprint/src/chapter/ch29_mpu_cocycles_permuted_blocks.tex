@@ -1,0 +1,1567 @@
+\section{\texorpdfstring{$L$}{L}-symbols of invariant states and permuted blocks}
+
+\subsection{\texorpdfstring{$L$}{L}-symbols and their scalar gauges}
+
+\begin{definition}[L-symbols and compatibility]
+    \label{def:mpug_l_symbols}
+    \lean{TNLean.Algebra.LSymbol,
+        TNLean.Algebra.LSymbol.IsCompatible}
+    \leanok
+    \uses{def:mpug_scalar_cochains}
+    Let $G$ act on a set $\mathsf X$. An $L$-symbol is a function
+    $L\colon \mathsf X\times G^2\to\C^\times$, written $L^x_{g,h}$.
+    It is compatible with a scalar $3$-cochain $\omega$ when, for every
+    $x\in\mathsf X$ and $g,h,k\in G$,
+    \begin{align}
+        L^x_{g,hk}L^x_{h,k}
+         & =\omega(g,h,k)L^{k x}_{g,h}L^x_{gh,k}.
+        \label{eq:mpug_l_compatibility}
+    \end{align}
+    The $L$-symbols were introduced by
+    \cite{GarreRubio2023MPOSym}; this is the scalar compatibility relation of
+    \cite{FrancoRubio2025MPUGauging}. No transitivity or finiteness assumption
+    is imposed on the action.
+    % Source anchor: arXiv:2502.20257, eq:omega_and_Ls.
+\end{definition}
+
+\begin{definition}[Joint scalar gauge of L-symbols]
+    \label{def:mpug_l_gauge}
+    \lean{TNLean.Algebra.ActionTensorGauge,
+        TNLean.Algebra.LSymbol.gauge}
+    \leanok
+    \uses{def:mpug_l_symbols, def:mpug_fusion_gauge}
+    An action-tensor scalar gauge is a function
+    $\gamma\colon G\times\mathsf X\to\C^\times$, written $\gamma^x_g$.
+    Together with a fusion-tensor scalar gauge $\beta\colon G^2\to\C^\times$,
+    it changes an $L$-symbol by
+    \begin{align}
+        (\beta,\gamma)\mathbin{\triangleright}L^x_{g,h}
+         & =\frac{\gamma^x_{gh}\beta_{g,h}}
+        {\gamma^{h x}_g\gamma^x_h}L^x_{g,h}.
+        \label{eq:mpug_l_gauge}
+    \end{align}
+    This is the joint fusion-tensor and action-tensor gauge freedom in
+    \cite{FrancoRubio2025MPUGauging}, written with the block label as a
+    superscript throughout, as that source does for its block-dependent
+    cochains.
+    % Source anchor: arXiv:2502.20257, eq:Lsymbgauge (which spells the block
+    %   label as a second subscript); the superscript spelling gamma^x_g is
+    %   the paper's own at lines 5908 and 5988--5990.
+\end{definition}
+
+\begin{lemma}[Identity and composition of joint scalar gauges]
+    \label{thm:mpug_l_gauge_composition}
+    \lean{TNLean.Algebra.LSymbol.gauge_one,
+        TNLean.Algebra.LSymbol.gauge_comp}
+    \leanok
+    \uses{def:mpug_l_gauge}
+    The constant fusion and action gauges leave every $L$-symbol unchanged.
+    Successive joint gauges compose by pointwise multiplication:
+    \begin{align}
+        (\delta,\varepsilon)\mathbin{\triangleright}
+        \bigl((\beta,\gamma)\mathbin{\triangleright}L\bigr)
+         & = (\beta\delta,\gamma\varepsilon)
+        \mathbin{\triangleright}L.
+        \label{eq:mpug_l_gauge_composition}
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:mpug_l_gauge}
+    Substituting (\ref{eq:mpug_l_gauge}) twice and cancelling the intermediate
+    factors yields the composition law, and the identity case
+    follows by taking all four cochains equal to $1$.
+\end{proof}
+
+\begin{definition}[Normalized L-symbols and action-tensor gauges]
+    \label{def:mpug_l_normalized}
+    \lean{TNLean.Algebra.LSymbol.IsNormalized,
+        TNLean.Algebra.ActionTensorGauge.IsNormalized}
+    \leanok
+    \uses{def:mpug_l_symbols, def:mpug_l_gauge}
+    As in \cite{FrancoRubio2025MPUGauging}, the $L$-symbol is normalized when,
+    for every $x\in\mathsf X$ and $g\in G$,
+    \begin{align}
+        L^x_{g,e} & =1.
+        \label{eq:mpug_l_normalized_right}
+    \end{align}
+    \begin{align}
+        L^x_{e,g} & =1.
+        \label{eq:mpug_l_normalized_left}
+    \end{align}
+    Alongside (\ref{eq:mpug_l_normalized_right}) and
+    (\ref{eq:mpug_l_normalized_left}), the action-tensor gauge is normalized
+    when
+    \begin{align}
+        \gamma^x_e & =1
+        \label{eq:mpug_action_gauge_normalized}
+    \end{align}
+    for every $x\in\mathsf X$. This last condition is not a displayed
+    equation of the source: it is the scalar shadow of the standing
+    convention that every action tensor involving the identity is trivial.
+    % Source anchor: arXiv:2502.20257, eq:triv_Ls for the L-symbol axes;
+    %   gamma^x_e = 1 is not a labelled source equation but the standing
+    %   convention at lines 1936--1937 that any fusion or action tensor
+    %   involving e is trivial, applied to the action-tensor gauge scalar of
+    %   eq:scalar_act_ten.
+\end{definition}
+
+\begin{definition}[Restricted scalar gauges]
+    \label{def:mpug_restricted_scalar_gauge}
+    \lean{TNLean.Algebra.ScalarCocycle.IsInverseNormalized,
+        TNLean.Algebra.RestrictedFusionGauge,
+        TNLean.Algebra.RestrictedScalarGauge}
+    \leanok
+    \discussion{7700}
+    \uses{def:mpug_fusion_gauge, def:mpug_l_gauge, def:mpug_l_normalized}
+    A fusion scalar $\beta\colon G^2\to\C^\times$ is
+    \emph{inverse-normalized} when, for every $g\in G$,
+    \begin{align}
+        \beta_{g,e}=\beta_{e,g}=\beta_{g,g^{-1}}
+         & =1.
+        \label{eq:mpug_restricted_fusion_gauge}
+    \end{align}
+    Following the standing restriction imposed at
+    \cite[lines~2050--2054]{FrancoRubio2025MPUGauging} after fixing the
+    fusion and action gauges of Definition~\ref{def:mpug_l_gauge}, a
+    restricted scalar gauge is a pair $(\beta,\gamma)$ in which $\beta$ is
+    inverse-normalized and, for every $x\in\mathsf X$,
+    \begin{align}
+        \gamma^x_e & =1.
+        \label{eq:mpug_restricted_action_gauge}
+    \end{align}
+    % Source anchor: arXiv:2502.20257, unlabelled display at lines 2050--2054,
+    % immediately after eq:zetas_in_gauge.
+\end{definition}
+
+\begin{lemma}[Joint scalar gauges preserve L-symbol compatibility]
+    \label{thm:mpug_l_gauge_preservation}
+    \lean{TNLean.Algebra.LSymbol.IsCompatible.gauge,
+        TNLean.Algebra.LSymbol.gauge_apply_right_one,
+        TNLean.Algebra.LSymbol.gauge_apply_left_one,
+        TNLean.Algebra.LSymbol.isNormalized_gauge_iff,
+        TNLean.Algebra.LSymbol.IsNormalized.gauge}
+    \leanok
+    \uses{def:mpug_fusion_gauge, def:mpug_l_symbols,
+        def:mpug_l_gauge, def:mpug_l_normalized}
+    If $L$ is compatible with $\omega$, then
+    $(\beta,\gamma)\mathbin{\triangleright}L$ is compatible with
+    $\beta\mathbin{\triangleright}\omega$. On the identity axes, the gauge
+    formula is
+    \begin{align}
+        ((\beta,\gamma)\mathbin{\triangleright}L)^x_{g,e}
+         & =\frac{\beta_{g,e}}{\gamma^x_e}L^x_{g,e}.
+        \label{eq:mpug_l_gauge_right}
+    \end{align}
+    \begin{align}
+        ((\beta,\gamma)\mathbin{\triangleright}L)^x_{e,g}
+         & =\frac{\beta_{e,g}}{\gamma^{g x}_e}L^x_{e,g}.
+        \label{eq:mpug_l_gauge_left}
+    \end{align}
+    Thus the gauged $L$-symbol is normalized exactly when
+    $\beta_{g,e}L^x_{g,e}=\gamma^x_e$ and
+    $\beta_{e,g}L^x_{e,g}=\gamma^{g x}_e$ for all $x$ and $g$. In particular,
+    normalized $\beta$, $\gamma$, and $L$ give a normalized gauged $L$-symbol.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:mpug_fusion_gauge, def:mpug_l_symbols, def:mpug_l_gauge,
+        def:mpug_l_normalized}
+    With $L'=(\beta,\gamma)\mathbin{\triangleright}L$, substituting
+    (\ref{eq:mpug_l_gauge}) into the left side of
+    (\ref{eq:mpug_l_compatibility}) for $L'$ cancels the factor
+    $\gamma^x_{hk}$ and leaves
+    \begin{align}
+        {L'}^x_{g,hk}{L'}^x_{h,k}
+         & =\frac{\gamma^x_{ghk}}
+        {\gamma^{(hk)x}_g\gamma^{k x}_h\gamma^x_k}\,
+        \beta_{g,hk}\beta_{h,k}\,L^x_{g,hk}L^x_{h,k}.
+        \label{eq:mpug_l_gauge_left_side}
+    \end{align}
+    The same substitution on the right side cancels
+    $\gamma^{k x}_{gh}$ and leaves
+    \begin{align}
+        {L'}^{k x}_{g,h}{L'}^x_{gh,k}
+         & =\frac{\gamma^x_{ghk}}
+        {\gamma^{h(k x)}_g\gamma^{k x}_h\gamma^x_k}\,
+        \beta_{g,h}\beta_{gh,k}\,L^{k x}_{g,h}L^x_{gh,k}.
+        \label{eq:mpug_l_gauge_right_side}
+    \end{align}
+    The action law $h(k x)=(hk)x$ makes the two action-tensor prefactors of
+    (\ref{eq:mpug_l_gauge_left_side}) and
+    (\ref{eq:mpug_l_gauge_right_side}) equal. Applying
+    (\ref{eq:mpug_l_compatibility}) for $L$ and $\omega$ to the right of
+    (\ref{eq:mpug_l_gauge_left_side}) therefore gives
+    \begin{align}
+        {L'}^x_{g,hk}{L'}^x_{h,k}
+         & =\frac{\beta_{g,hk}\beta_{h,k}}
+        {\beta_{g,h}\beta_{gh,k}}\,\omega(g,h,k)\,
+        {L'}^{k x}_{g,h}{L'}^x_{gh,k},
+        \label{eq:mpug_l_gauge_compatibility}
+    \end{align}
+    whose scalar factor is
+    $(\beta\mathbin{\triangleright}\omega)(g,h,k)$ by
+    (\ref{eq:mpug_coboundary}) and
+    (\ref{eq:mpug_gauge_action}). Setting either group argument equal
+    to $e$ in (\ref{eq:mpug_l_gauge}) gives
+    (\ref{eq:mpug_l_gauge_right}) and
+    (\ref{eq:mpug_l_gauge_left}), from which the normalization statements
+    follow.
+\end{proof}
+
+\begin{lemma}[A block fixed by a subgroup trivializes the restricted three-cocycle]
+    \label{thm:mpug_fixed_block_trivializes}
+    \lean{TNLean.Algebra.LSymbol.isTrivialGaugeClass_comap_of_isCompatible,
+        TNLean.Algebra.LSymbol.isTrivialGaugeClass_of_isCompatible_of_forall_smul_eq}
+    \leanok
+    \uses{def:mpug_l_symbols, def:mpug_cochain_restriction,
+        def:mpug_fusion_gauge, def:mpug_trivial_gauge_class}
+    Let $L$ be compatible with $\omega$, let $f\colon H\to G$ be a group
+    homomorphism, and let $x\in\mathsf X$ satisfy $f(a)x=x$ for every
+    $a\in H$. Then $f^*\omega$ has trivial gauge class; explicitly,
+    $f^*\omega=d\lambda$ with $\lambda(a,b)=L^x_{f(a),f(b)}$. In particular,
+    if some $x$ is fixed by all of $G$, then $\omega$ has trivial gauge class.
+    This provides the scalar step both for the statement of
+    \cite[lines~740--745]{GarreRubio2023MPOSym} that a subgroup leaving a block
+    invariant trivializes the three-cocycle and for the statement of
+    \cite[line~1925]{FrancoRubio2025MPUGauging} that a single invariant block
+    reduces (\ref{eq:mpug_l_compatibility}) to the three-coboundary condition.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:mpug_l_symbols, def:mpug_fusion_gauge,
+        def:mpug_cochain_restriction, def:mpug_trivial_gauge_class}
+    For $a,b,c\in H$, with $g=f(a)$, $h=f(b)$, and $k=f(c)$, the invariance
+    $kx=x$ turns (\ref{eq:mpug_l_compatibility}) into
+    \begin{align}
+        \omega(g,h,k)
+         & =\frac{L^x_{g,hk}L^x_{h,k}}{L^x_{g,h}L^x_{gh,k}},
+    \end{align}
+    which is $(d\lambda)(a,b,c)$ by (\ref{eq:mpug_coboundary}) and the
+    multiplicativity of $f$. Thus
+    $f^*\omega=\lambda\mathbin{\triangleright}1$. For a block fixed by all
+    of $G$, taking $f$ to be the identity completes the proof.
+\end{proof}
+
+\begin{lemma}[Action of the restricted scalar gauge group]
+    \label{thm:mpug_restricted_scalar_gauge_action}
+    \lean{TNLean.Algebra.ScalarCocycle.isInverseNormalized_one,
+        TNLean.Algebra.ScalarCocycle.IsInverseNormalized.mul,
+        TNLean.Algebra.ScalarCocycle.IsInverseNormalized.inv,
+        TNLean.Algebra.ActionTensorGauge.isNormalized_one,
+        TNLean.Algebra.ActionTensorGauge.IsNormalized.mul,
+        TNLean.Algebra.ActionTensorGauge.IsNormalized.inv,
+        TNLean.Algebra.RestrictedFusionGauge.one,
+        TNLean.Algebra.RestrictedFusionGauge.mul,
+        TNLean.Algebra.RestrictedFusionGauge.inv,
+        TNLean.Algebra.RestrictedScalarGauge.one,
+        TNLean.Algebra.RestrictedScalarGauge.mul,
+        TNLean.Algebra.RestrictedScalarGauge.inv,
+        TNLean.Algebra.RestrictedFusionGauge.fusionGauge_one,
+        TNLean.Algebra.RestrictedFusionGauge.isNormalized_fusionGauge,
+        TNLean.Algebra.RestrictedFusionGauge.isCocycle_fusionGauge,
+        TNLean.Algebra.RestrictedFusionGauge.fusionGauge_mul,
+        TNLean.Algebra.RestrictedFusionGauge.fusionGauge_inv,
+        TNLean.Algebra.RestrictedScalarGauge.gauge_one,
+        TNLean.Algebra.RestrictedScalarGauge.isNormalized_gauge,
+        TNLean.Algebra.RestrictedScalarGauge.isCompatible_gauge,
+        TNLean.Algebra.RestrictedScalarGauge.gauge_mul,
+        TNLean.Algebra.RestrictedScalarGauge.gauge_inv}
+    \leanok
+    \discussion{7700}
+    \uses{def:mpug_restricted_scalar_gauge}
+    Let $\kappa=(\beta,\gamma)$ be a restricted scalar gauge. If $\omega$ is
+    a normalized scalar $3$-cocycle and $L$ is a normalized $L$-symbol
+    compatible with $\omega$, then
+    \begin{align}
+        \omega' & =\beta\mathbin{\triangleright}\omega,     \\
+        L'      & =(\beta,\gamma)\mathbin{\triangleright}L.
+        \label{eq:mpug_restricted_gauge_action}
+    \end{align}
+    are again normalized, $\omega'$ is a scalar $3$-cocycle, and $L'$ is
+    compatible with $\omega'$. The identity gauge acts trivially, successive
+    restricted gauges compose by pointwise multiplication, and applying
+    $\kappa^{-1}$ after $\kappa$ recovers $(\omega,L)$.
+    These are scalar statements only.
+    % The theorem does not choose fusion tensors, action tensors, or
+    % tensor-level gauges satisfying the same normalization. Tensor-level
+    % restricted gauge choices remain issue #7325.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:mpug_restricted_scalar_gauge,
+        thm:mpug_gauge_preserves_cocycle,
+        thm:mpug_gauge_preserves_normalization,
+        thm:mpug_l_gauge_composition,
+        thm:mpug_l_gauge_preservation}
+    The three specified values of $\beta$ and the identity value of $\gamma$
+    remain equal to $1$ under pointwise products and inverses, so the general
+    preservation laws apply to~(\ref{eq:mpug_restricted_gauge_action}).
+    The group laws and the composition formulas for the two gauge actions then
+    give the identity, composition, and inverse assertions.
+\end{proof}
+
+\subsection{An anomaly obstructs invariant normal states}
+
+\begin{definition}[L-symbol of an invariant normal state]
+    \label{def:mpug_single_block_l_symbol}
+    \lean{MPOTensor.GroupFamily.FixesMPV,
+        MPOTensor.GroupFamily.ActionData,
+        MPOTensor.GroupFamily.ActionData.actV,
+        MPOTensor.GroupFamily.ActionData.fuseV,
+        MPOTensor.GroupFamily.ActionData.lSymbol}
+    \leanok
+    \uses{def:mpug_anomaly_three_cochain, def:mpug_l_symbols, def:mpv_state}
+    Let $\{O_g\}$ be as in Definition~\ref{def:mpug_anomaly_three_cochain},
+    and let $A$ be a matrix product state tensor with
+    $O_g\ket{V^{(N)}(A)}=\ket{V^{(N)}(A)}$ for every $g$ and every $N\geq1$.
+    Action tensors for $A$ are, for every $g$, a reduction $(V_g,W_g)$ of
+    $O_g\cdot A$ onto $A$. The stacked action $(O_gO_h)\cdot A$ then has the
+    two left boundaries
+    \begin{align}
+        \alpha_{g,h}  & =V_g(\mathbf 1\otimes V_h)\,\mathsf a^{-1}, &
+        \varphi_{g,h} & =V_{gh}(F^<_{g,h}\otimes\mathbf 1),
+        \notag
+    \end{align}
+    and the $L$-symbol of a single invariant block in
+    \cite{FrancoRubio2025MPUGauging} is a nonzero scalar $L_{g,h}=z$ with
+    $\alpha_{g,h}B^{\mathbf w}=z\,\varphi_{g,h}B^{\mathbf w}$ for all long
+    words $\mathbf w$ of $B=(O_gO_h)\cdot A$, or $1$ if there is none.
+\end{definition}
+
+\begin{center}
+    % Formula: \alpha_{g,h}B^{\mathbf w}=L_{g,h}\,\varphi_{g,h}B^{\mathbf w}
+    % with \alpha_{g,h}=V_g(\mathbf 1\otimes V_h)\mathsf a^{-1},
+    % \varphi_{g,h}=V_{gh}(F^<_{g,h}\otimes\mathbf 1), and
+    % B=(O_gO_h)\cdot A; source: arXiv:2502.20257, eq:defL, lines 1875--1914
+    % (drawn there with right boundaries).
+    % Ink-to-index map: the bracketed column stands for the word \mathbf w
+    % of B, with rows O_g, O_h and the state tensor A from top to bottom;
+    % each pill has its single side west.  On the left, V_h reduces
+    % O_h\cdot A and V_g then reduces O_g\cdot A; on the right, F^<_{g,h}
+    % fuses O_gO_h and V_{gh} reduces O_{gh}\cdot A.  The associator is
+    % not drawn.
+    % Contraction set: the physical indices between the rows, the bonds
+    % between the pills, and the bonds into the word; the three east virtual
+    % legs, the west leg, and the upper physical leg remain open.
+    % Boundary signature: (virtual-west=1 | virtual-east=3 |
+    % physical-up=1 | physical-down=0) on both sides.
+    \tenkzkernel
+    \begin{tenkz}[rows={op,op,ket}, cols=3, bonds=none]
+        \tnfuse[at=(1,1), name=Fo, skin=pill, wires=3]{V_g}
+        \tnfuse[at=(2,2), name=Fi, skin=pill]{V_h}
+        \tn[at=(1,2), void=sealed]{}
+        \tn[at=(1,3), name=Tg, skin=mpo, ports={90:physical, 270:physical, 180:virtual, 0:virtual}]{O_g}
+        \tn[at=(2,3), name=Th, skin=mpo, ports={90:physical, 270:physical, 180:virtual, 0:virtual}]{O_h}
+        \tn[at=(3,3), name=A, label pos=s, ports={90:physical, 180:virtual, 0:virtual}]{A}
+        \tnwire{Tg.270}{Th.90}
+        \tnwire{Th.270}{A.90}
+        \tnwire{open w}{Fo.180}
+        \tnwire{Fo.0@1}{Tg.180}
+        \tnwire{Fo.0@2}{Fi.180}
+        \tnwire{Fi.0@1}{Th.180}
+        \tnwire{Fi.0@2}{A.180}
+        \tnwire{Tg.0}{open e}
+        \tnwire{Th.0}{open e}
+        \tnwire{A.0}{open e}
+        \tnmark[form=bracket, label pos=90]{Tg}{\mathbf w}
+    \end{tenkz}
+    \quad $=L_{g,h}$ \quad
+    \begin{tenkz}[rows={op,op,ket}, cols=3, bonds=none]
+        \tnfuse[at=(1,1), name=Fo, skin=pill, wires=3]{V_{gh}}
+        \tnfuse[at=(1,2), name=Fi, skin=pill]{F^<_{g,h}}
+        \tn[at=(3,2), void=sealed]{}
+        \tn[at=(1,3), name=Tg, skin=mpo, ports={90:physical, 270:physical, 180:virtual, 0:virtual}]{O_g}
+        \tn[at=(2,3), name=Th, skin=mpo, ports={90:physical, 270:physical, 180:virtual, 0:virtual}]{O_h}
+        \tn[at=(3,3), name=A, label pos=s, ports={90:physical, 180:virtual, 0:virtual}]{A}
+        \tnwire{Tg.270}{Th.90}
+        \tnwire{Th.270}{A.90}
+        \tnwire{open w}{Fo.180}
+        \tnwire{Fo.0@1}{Fi.180}
+        \tnwire{Fo.0@3}{A.180}
+        \tnwire{Fi.0@1}{Tg.180}
+        \tnwire{Fi.0@2}{Th.180}
+        \tnwire{Tg.0}{open e}
+        \tnwire{Th.0}{open e}
+        \tnwire{A.0}{open e}
+        \tnmark[form=bracket, label pos=90]{Tg}{\mathbf w}
+    \end{tenkz}
+\end{center}
+
+\begin{lemma}[Characterization of the single-block L-symbol]
+    \label{thm:mpug_single_block_l_symbol_spec}
+    \lean{MPOTensor.GroupFamily.nonempty_actionData,
+        MPOTensor.GroupFamily.ActionData.isDressedProportional_lSymbol}
+    \leanok
+    \uses{def:mpug_single_block_l_symbol}
+    If $A$ in Definition~\ref{def:mpug_single_block_l_symbol} is normal
+    of positive bond dimension, then action tensors for $A$ exist
+    \cite[lines~1064--1090]{GarreRubio2023MPOSym}, and for every choice of
+    them $\alpha_{g,h}B^{\mathbf w}=L_{g,h}\,\varphi_{g,h}B^{\mathbf w}$ for
+    all long words $\mathbf w$ of $B=(O_gO_h)\cdot A$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{cor:asym_action_tensors, thm:mpug_action_tensor_reductions,
+        thm:mpug_reduction_composition, thm:mpug_dressed_proportionality}
+    Existence is Corollary~\ref{cor:asym_action_tensors}. By
+    Lemmas~\ref{thm:mpug_action_tensor_reductions}
+    and~\ref{thm:mpug_reduction_composition}, both $\alpha_{g,h}$ and
+    $\varphi_{g,h}$ are left boundaries of reductions of $B$ onto $A$, and
+    $B$ generates the same vectors as $A$, so
+    Lemma~\ref{thm:mpug_dressed_proportionality} gives a nonzero scalar
+    relating them against long words.
+\end{proof}
+
+\begin{lemma}[Compatibility of the L-symbol with the anomaly]
+    \label{thm:mpug_single_block_l_compatibility}
+    \lean{MPOTensor.GroupFamily.ActionData.isCompatible_lSymbol}
+    \leanok
+    \uses{def:mpug_single_block_l_symbol, thm:mpug_single_block_l_symbol_spec,
+        def:mpug_anomaly_three_cochain, def:mpug_l_symbols}
+    In the setting of Lemma~\ref{thm:mpug_single_block_l_symbol_spec},
+    (\ref{eq:mpug_l_compatibility}) for a one-point set of blocks holds for
+    all $g,h,k\in G$:
+    \begin{align}
+        L_{g,hk}L_{h,k}
+         & =\omega(g,h,k)\,L_{g,h}L_{gh,k}.
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_single_block_l_symbol_spec,
+        thm:mpug_action_tensor_reductions, thm:mpug_reduction_composition,
+        thm:mpug_anomaly_three_cochain_spec, thm:mpug_dressed_proportionality}
+    For the triple action $B=((O_gO_h)O_k)\cdot A$ and the two fusion trees
+    $V^L$, $V^R$ of $(g,h,k)$ in
+    Definition~\ref{def:mpug_anomaly_three_cochain}, the naturality and
+    pentagon identities of $\mathsf a$ give five identities between left
+    boundaries of reductions of $B$ onto $A$:
+    \begin{align}
+        \alpha_{g,h}(\mathbf 1\otimes V_k)\,\mathsf a^{-1}
+         & =V_g(\mathbf 1\otimes\alpha_{h,k})\,\mathsf a^{-1}
+        (\mathsf a^{-1}\otimes\mathbf 1),
+        \label{eq:mpug_l_compat_first_boundary}               \\
+        V_g(\mathbf 1\otimes\varphi_{h,k})\,\mathsf a^{-1}
+        (\mathsf a^{-1}\otimes\mathbf 1)
+         & =\alpha_{g,hk}
+        \bigl((\mathbf 1\otimes F^<_{h,k})\,\mathsf a^{-1}\otimes\mathbf 1\bigr),
+        \notag                                                \\
+        \varphi_{g,h}(\mathbf 1\otimes V_k)\,\mathsf a^{-1}
+         & =\alpha_{gh,k}
+        \bigl((F^<_{g,h}\otimes\mathbf 1)\otimes\mathbf 1\bigr),
+        \notag                                                \\
+        \varphi_{gh,k}\bigl((F^<_{g,h}\otimes\mathbf 1)\otimes\mathbf 1\bigr)
+         & =V_{ghk}(V^L\otimes\mathbf 1),
+        \notag                                                \\
+        \varphi_{g,hk}
+        \bigl((\mathbf 1\otimes F^<_{h,k})\,\mathsf a^{-1}\otimes\mathbf 1\bigr)
+         & =V_{ghk}(V^R\otimes\mathbf 1).
+        \notag
+    \end{align}
+    Starting from $\alpha_{g,h}(\mathbf 1\otimes V_k)\mathsf a^{-1}B^{\mathbf w}$,
+    replacing $\alpha_{g,h}$ by $L_{g,h}\varphi_{g,h}$, $\alpha_{gh,k}$ by
+    $L_{gh,k}\varphi_{gh,k}$, and $V^L$ by $\omega(g,h,k)V^R$ along one
+    path, or applying (\ref{eq:mpug_l_compat_first_boundary}) and replacing
+    $\alpha_{h,k}$ by $L_{h,k}\varphi_{h,k}$ inside the action of $g$ and
+    $\alpha_{g,hk}$ by $L_{g,hk}\varphi_{g,hk}$ along the other, uses only
+    replacements that hold against long words by
+    Lemma~\ref{thm:mpug_single_block_l_symbol_spec}, lifted through the
+    action tensors by Lemma~\ref{thm:mpug_action_tensor_reductions} and
+    pulled back along the reductions by
+    Lemma~\ref{thm:mpug_dressed_proportionality}. For all long words,
+    \begin{align}
+        \alpha_{g,h}(\mathbf 1\otimes V_k)\,\mathsf a^{-1}B^{\mathbf w}
+         & =L_{g,h}L_{gh,k}\,\omega(g,h,k)\,V_{ghk}(V^R\otimes\mathbf 1)
+        B^{\mathbf w}
+        =L_{h,k}L_{g,hk}\,V_{ghk}(V^R\otimes\mathbf 1)B^{\mathbf w}.
+        \notag
+    \end{align}
+    The boundary $V_{ghk}(V^R\otimes\mathbf 1)$ belongs to a reduction onto
+    the normal tensor $A$, so it is nonzero against arbitrarily long words,
+    and the two scalars agree.
+\end{proof}
+
+\begin{theorem}[An anomaly obstructs invariant normal states]
+    \label{thm:mpug_anomaly_obstruction}
+    \lean{MPOTensor.GroupFamily.IsNormalRepresentation.isTrivialGaugeClass_omega_of_invariant,
+        MPOTensor.GroupFamily.IsNormalRepresentation.not_exists_invariant_of_not_isTrivialGaugeClass}
+    \leanok
+    \uses{def:mpug_anomaly_three_cochain, def:mpug_trivial_gauge_class,
+        def:mpv_state}
+    Let $\{O_g\}$ be matrix product operator tensors with normal
+    doubled-index tensors and $O_gO_h=O_{gh}$ on every nonempty chain. If a
+    normal matrix product state tensor of positive bond dimension satisfies
+    $O_g\ket{V^{(N)}(A)}=\ket{V^{(N)}(A)}$ for every $g$ and every $N\geq1$, then
+    the anomaly three-cocycle has trivial gauge class. Equivalently, as in
+    \cite[line~1545]{FrancoRubio2025MPUGauging} and
+    \cite[line~738]{GarreRubio2023MPOSym} with normal in place of injective
+    and without unitarity or simplicity of the operators, a group with
+    nontrivial anomaly has no invariant normal matrix product state.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_single_block_l_symbol_spec,
+        thm:mpug_single_block_l_compatibility,
+        thm:mpug_fixed_block_trivializes}
+    Action tensors exist by
+    Lemma~\ref{thm:mpug_single_block_l_symbol_spec}, so
+    Lemma~\ref{thm:mpug_single_block_l_compatibility} applies, and Lemma~\ref{thm:mpug_fixed_block_trivializes} for the
+    single block gives $\omega=dL$.
+\end{proof}
+
+\subsection{Blocks permuted by the group}
+
+Let $\{O_g\}$ be as in Definition~\ref{def:mpug_anomaly_three_cochain}, and
+let $G$ act on a set $\mathsf X$. Following
+\cite[line~1064]{GarreRubio2023MPOSym}, consider normal matrix product
+state tensors $A_x$, $x\in\mathsf X$, of positive bond dimensions, possibly
+different for different $x$, with
+$O_g\ket{V^{(N)}(A_x)}=\ket{V^{(N)}(A_{gx})}$ for every $g$, $x$ and
+$N\geq1$.
+
+\begin{definition}[L-symbols of permuted blocks]
+    \label{def:mpug_permuted_block_l_symbol}
+    \lean{MPOTensor.GroupFamily.CarriesMPV,
+        MPOTensor.GroupFamily.castIndex,
+        MPOTensor.GroupFamily.BlockActionData,
+        MPOTensor.GroupFamily.BlockActionData.actV,
+        MPOTensor.GroupFamily.BlockActionData.fuseV,
+        MPOTensor.GroupFamily.BlockActionData.lSymbol}
+    \leanok
+    \uses{def:mpug_anomaly_three_cochain, def:mpug_l_symbols,
+        def:mpug_single_block_l_symbol}
+    Action tensors for the family $(A_x)$ are, for every $g$ and $x$, a
+    reduction $(V_{g,x},W_{g,x})$ of $O_g\cdot A_x$ onto $A_{gx}$. The stacked
+    action $B=(O_gO_h)\cdot A_x$ then reduces onto $A_{g(hx)}=A_{(gh)x}$ along
+    two trees, with left boundaries
+    \begin{align}
+        V_{g,hx}(\mathbf 1\otimes V_{h,x})\,\mathsf a^{-1}, &  &
+        V_{gh,x}(F^<_{g,h}\otimes\mathbf 1),
+        \notag
+    \end{align}
+    and $L^x_{g,h}$ is a nonzero scalar relating them against all long
+    words of $B$, or $1$ if there is none, as in
+    Definition~\ref{def:mpug_single_block_l_symbol}.
+\end{definition}
+
+\begin{lemma}[Characterization of the L-symbols of permuted blocks]
+    \label{thm:mpug_permuted_block_l_symbol_spec}
+    \lean{MPOTensor.GroupFamily.nonempty_blockActionData,
+        MPOTensor.GroupFamily.BlockActionData.isDressedProportional_lSymbol,
+        MPOTensor.GroupFamily.BlockActionData.eq_lSymbol_of_isDressedProportional,
+        MPOTensor.GroupFamily.actTensor_idTensor_apply,
+        MPOTensor.GroupFamily.isReduction_actTensor_idTensor}
+    \leanok
+    \uses{def:mpug_permuted_block_l_symbol}
+    Action tensors for the family $(A_x)$ of
+    Definition~\ref{def:mpug_permuted_block_l_symbol} exist; for the bond-one
+    identity tensor they are the identification of the bond spaces. For
+    every choice of them, $L^x_{g,h}$ relates the two left boundaries against
+    all long words of $(O_gO_h)\cdot A_x$, and it is the only scalar that
+    does.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{cor:asym_action_tensors, thm:mpug_action_tensor_reductions,
+        thm:mpug_reduction_composition, thm:mpug_dressed_proportionality}
+    As in Lemma~\ref{thm:mpug_single_block_l_symbol_spec}: existence is
+    Corollary~\ref{cor:asym_action_tensors} applied to $O_g\cdot A_x$ and
+    $A_{gx}$, which generate the same vectors. By
+    Lemmas~\ref{thm:mpug_action_tensor_reductions}
+    and~\ref{thm:mpug_reduction_composition} both boundaries are left
+    boundaries of reductions of $(O_gO_h)\cdot A_x$ onto the normal tensor
+    $A_{(gh)x}$, so Lemma~\ref{thm:mpug_dressed_proportionality} gives a
+    nonzero scalar relating them against long words. The boundary of two
+    successive actions is nonzero against arbitrarily long words, since it is
+    the left boundary of a reduction onto a normal tensor, so the scalar is
+    unique.
+\end{proof}
+
+\input{chapter/ch29_mpu_action_common_blocking}
+
+\begin{lemma}[Compatibility for permuted blocks]
+    \label{thm:mpug_permuted_block_l_compatibility}
+    \lean{MPOTensor.GroupFamily.BlockActionData.isCompatible_lSymbol,
+        MPOTensor.GroupFamily.IsNormalRepresentation.isTrivialGaugeClass_comap_omega_of_fixed}
+    \leanok
+    \uses{def:mpug_permuted_block_l_symbol, thm:mpug_anomaly_three_cochain_spec,
+        thm:mpug_permuted_block_l_symbol_spec,
+        thm:mpug_dressed_proportionality, thm:mpug_fixed_block_trivializes}
+    For all $x\in\mathsf X$ and $g,h,k\in G$,
+    \begin{align}
+        L^x_{g,hk}L^x_{h,k}
+         & =\omega(g,h,k)\,L^{kx}_{g,h}L^x_{gh,k},
+    \end{align}
+    which is (\ref{eq:mpug_l_compatibility}). Consequently, as in
+    \cite[lines~740--745]{GarreRubio2023MPOSym}, the restriction of
+    $\omega$ to any subgroup fixing one block has trivial gauge class.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_permuted_block_l_symbol_spec,
+        thm:mpug_anomaly_three_cochain_spec,
+        thm:mpug_fixed_block_trivializes}
+    Write
+    \begin{align}
+        \alpha^x_{g,h}  & =V_{g,hx}(\mathbf 1\otimes V_{h,x})\,\mathsf a^{-1}, &
+        \varphi^x_{g,h} & =V_{gh,x}(F^<_{g,h}\otimes\mathbf 1)
+        \notag
+    \end{align}
+    for the two left boundaries of Definition~\ref{def:mpug_permuted_block_l_symbol},
+    so that $\alpha^x_{g,h}=L^x_{g,h}\varphi^x_{g,h}$ against long words of
+    $(O_gO_h)\cdot A_x$ by Lemma~\ref{thm:mpug_permuted_block_l_symbol_spec}.
+    The block labels $h(kx)$ and $(hk)x$ are equal, and so are $g(h(kx))$ and
+    $(ghk)x$, and the bond spaces of blocks with equal labels are identified,
+    so that $V_{g,h(kx)}=V_{g,(hk)x}$. With this identification, the
+    naturality and
+    pentagon identities of $\mathsf a$ give, for $B=((O_gO_h)O_k)\cdot A_x$
+    and the fusion trees $V^L$, $V^R$ of $(g,h,k)$, the five identities
+    \begin{align}
+        \alpha^{kx}_{g,h}(\mathbf 1\otimes V_{k,x})\,\mathsf a^{-1}
+         & =V_{g,(hk)x}(\mathbf 1\otimes\alpha^x_{h,k})\,\mathsf a^{-1}
+        (\mathsf a^{-1}\otimes\mathbf 1),
+        \label{eq:mpug_permuted_l_compat_first_boundary}                \\
+        V_{g,(hk)x}(\mathbf 1\otimes\varphi^x_{h,k})\,\mathsf a^{-1}
+        (\mathsf a^{-1}\otimes\mathbf 1)
+         & =\alpha^x_{g,hk}
+        \bigl((\mathbf 1\otimes F^<_{h,k})\,\mathsf a^{-1}\otimes\mathbf 1\bigr),
+        \notag                                                          \\
+        \varphi^{kx}_{g,h}(\mathbf 1\otimes V_{k,x})\,\mathsf a^{-1}
+         & =\alpha^x_{gh,k}
+        \bigl((F^<_{g,h}\otimes\mathbf 1)\otimes\mathbf 1\bigr),
+        \notag                                                          \\
+        \varphi^x_{gh,k}\bigl((F^<_{g,h}\otimes\mathbf 1)\otimes\mathbf 1\bigr)
+         & =V_{ghk,x}(V^L\otimes\mathbf 1),
+        \notag                                                          \\
+        \varphi^x_{g,hk}
+        \bigl((\mathbf 1\otimes F^<_{h,k})\,\mathsf a^{-1}\otimes\mathbf 1\bigr)
+         & =V_{ghk,x}(V^R\otimes\mathbf 1).
+        \notag
+    \end{align}
+    The first factor $\alpha^{kx}_{g,h}$ acts on the block $kx$ reached by
+    $O_k$, which is why $L^{kx}_{g,h}$ appears. Replacing, as in the proof of
+    Lemma~\ref{thm:mpug_single_block_l_compatibility}, $\alpha^{kx}_{g,h}$,
+    $\alpha^x_{gh,k}$ and $V^L$ along one route, and
+    (\ref{eq:mpug_permuted_l_compat_first_boundary}), $\alpha^x_{h,k}$ and
+    $\alpha^x_{g,hk}$ along the other, gives for all long words
+    \begin{align}
+        \alpha^{kx}_{g,h}(\mathbf 1\otimes V_{k,x})\,\mathsf a^{-1}B^{\mathbf w}
+         & =L^{kx}_{g,h}L^x_{gh,k}\,\omega(g,h,k)\,
+        V_{ghk,x}(V^R\otimes\mathbf 1)B^{\mathbf w}
+        \notag                                                                \\
+         & =L^x_{h,k}L^x_{g,hk}\,V_{ghk,x}(V^R\otimes\mathbf 1)B^{\mathbf w}.
+        \notag
+    \end{align}
+    The boundary $V_{ghk,x}(V^R\otimes\mathbf 1)$ belongs to a reduction onto
+    the normal tensor $A_{(ghk)x}$, so it is nonzero against arbitrarily long
+    words, and the two scalars agree. The second statement is
+    Lemma~\ref{thm:mpug_fixed_block_trivializes}.
+\end{proof}
+
+\begin{lemma}[The anomaly at an involution]
+    \label{thm:mpug_involution_anomaly_ratio}
+    \lean{TNLean.Algebra.LSymbol.eq_div_of_isCompatible_of_mul_self_eq_one}
+    \leanok
+    \uses{def:mpug_l_symbols}
+    If $L$ is compatible with $\omega$ and $g^2=e$, then for every
+    $x\in\mathsf X$ the formula of
+    \cite[line~5121]{FrancoRubio2025MPUGauging} holds:
+    \begin{align}
+        \omega(g,g,g)
+         & =\frac{L^x_{g,g}L^x_{g,e}}{L^{gx}_{g,g}L^x_{e,g}}.
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    Setting $h=k=g$ in (\ref{eq:mpug_l_compatibility}) and using $gg=e$
+    gives the ratio.
+\end{proof}
+
+\begin{lemma}[The involution ratio from the self-pair and identity L-symbols]
+    \label{thm:mpug_involution_anomaly_identity_ratio}
+    \lean{TNLean.Algebra.LSymbol.div_eq_mul_of_isCompatible_of_mul_self_eq_one}
+    \leanok
+    \uses{def:mpug_l_symbols}
+    If $L$ is compatible with $\omega$ and $g^2=e$, then for every
+    $x\in\mathsf X$
+    \begin{align}
+        \frac{L^x_{g,g}L^x_{e,e}}{L^{gx}_{g,g}L^{gx}_{e,e}}
+         & =\omega(g,g,g)\,\omega(g,e,g).
+        \notag
+    \end{align}
+    For L-symbols and cocycles that are trivial when an argument is the
+    identity, this recovers the relation $L_A/L_B=\omega$ of
+    \cite[Section~III.C]{GarreRubioSchuch2024DomainWall} in the form
+    $L^x_{g,g}/L^{gx}_{g,g}=\omega(g,g,g)$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_involution_anomaly_ratio}
+    Compatibility at $(g,e,g)$ gives $L^x_{e,g}=\omega(g,e,g)L^{gx}_{g,e}$,
+    and at $(g,e,e)$ it gives $L^z_{e,e}=\omega(g,e,e)L^z_{g,e}$ for $z=x$ and
+    $z=gx$. Substituting into the formula of
+    Lemma~\ref{thm:mpug_involution_anomaly_ratio} gives the claim.
+\end{proof}
+
+\begin{lemma}[Gauge law for the L-symbols of permuted blocks]
+    \label{lem:mpug_permuted_block_l_gauge}
+    \lean{MPOTensor.GroupFamily.FusionData.rescale,
+        MPOTensor.GroupFamily.FusionData.isDressedProportional_rescale,
+        MPOTensor.GroupFamily.FusionData.relativeScalar_rescale,
+        MPOTensor.GroupFamily.FusionData.omega_rescale,
+        MPOTensor.GroupFamily.BlockActionData.relativeScalar,
+        MPOTensor.GroupFamily.BlockActionData.isDressedProportional_relativeScalar,
+        MPOTensor.GroupFamily.BlockActionData.rescale,
+        MPOTensor.GroupFamily.BlockActionData.relativeScalar_rescale,
+        MPOTensor.GroupFamily.BlockActionData.lSymbol_eq_gauge,
+        MPOTensor.GroupFamily.BlockActionData.lSymbol_rescale}
+    \leanok
+    \uses{def:mpug_permuted_block_l_symbol,
+        thm:mpug_permuted_block_l_symbol_spec,
+        thm:mpug_anomaly_three_cocycle_gauge, def:mpug_l_gauge,
+        thm:mpug_dressed_proportionality}
+    Keep the setting of Definition~\ref{def:mpug_permuted_block_l_symbol}
+    and let the doubled-index tensors be normal. Take two choices of fusion
+    tensors and two choices of action tensors, with $L$ and $L'$ the
+    corresponding $L$-symbols. Let $\beta_{g,h}$ be the nonzero scalar with
+    $F^<_{g,h}B^{\mathbf w}=\beta_{g,h}F'^<_{g,h}B^{\mathbf w}$ for all long
+    words of $B=O_gO_h$, as in
+    Lemma~\ref{thm:mpug_anomaly_three_cocycle_gauge}, and let $\gamma^x_g$ be
+    the nonzero scalar with
+    $V_{g,x}C^{\mathbf w}=\gamma^x_gV'_{g,x}C^{\mathbf w}$ for all long words
+    of $C=O_g\cdot A_x$. Then
+    \begin{align}
+        L'^x_{g,h}
+         & =\frac{\gamma^x_{gh}\beta_{g,h}}{\gamma^{hx}_g\gamma^x_h}L^x_{g,h},
+        \notag
+    \end{align}
+    which is the joint gauge (\ref{eq:mpug_l_gauge}). Conversely,
+    multiplying $F^>_{g,h}$ by $\beta_{g,h}$ and $F^<_{g,h}$ by
+    $\beta_{g,h}^{-1}$, and $W_{g,x}$ by $\gamma^x_g$ and $V_{g,x}$ by
+    $(\gamma^x_g)^{-1}$, gives fusion and action tensors whose comparison
+    scalars with the original ones are exactly $\beta$ and $\gamma$, so every
+    joint scalar gauge of the $L$-symbols is realized by tensors, and the
+    rescaled fusion tensors have anomaly three-cocycle
+    $\beta\mathbin{\triangleright}\omega$.
+
+    This is the gauge law \cite[line~1918]{FrancoRubio2025MPUGauging}, with
+    the scalars of
+    \cite[lines~1500--1504, 1871--1873]{FrancoRubio2025MPUGauging}.
+    As recorded in
+    \cite{gap:fbc25_boundary_dressed_l_symbols}, all three families of scalars
+    relate the tensors against long words rather than as bare matrices,
+    because the uniqueness of reductions onto a normal tensor holds only in
+    that form.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_permuted_block_l_symbol_spec,
+        thm:mpug_dressed_proportionality}
+    As in the proof of Lemma~\ref{thm:mpug_permuted_block_l_compatibility},
+    write $\alpha^x_{g,h}$ and $\varphi^x_{g,h}$ for the two left boundaries
+    of Definition~\ref{def:mpug_permuted_block_l_symbol}, and
+    $\alpha'^x_{g,h}$, $\varphi'^x_{g,h}$ for those of the primed choice.
+    Comparing the action tensors of $h$ on the block $x$ and lifting through
+    the operator $O_g$, then pulling the comparison for $g$ on the block $hx$
+    back along the reduction by the primed action of $h$, and comparing the
+    fusion tensors in the same way, gives for all long words of
+    $C=(O_gO_h)\cdot A_x$
+    \begin{align}
+        \alpha^x_{g,h}C^{\mathbf w}
+         & =\gamma^{hx}_g\gamma^x_h\,\alpha'^x_{g,h}C^{\mathbf w},   &
+        \varphi^x_{g,h}C^{\mathbf w}
+         & =\beta_{g,h}\gamma^x_{gh}\,\varphi'^x_{g,h}C^{\mathbf w}.
+        \label{eq:mpug_permuted_l_gauge_boundaries}
+    \end{align}
+    Since $\alpha=L\varphi$ and $\alpha'=L'\varphi'$ against long words, the
+    first boundary of the original choice equals both
+    $\gamma^{hx}_g\gamma^x_hL'^x_{g,h}\varphi'^x_{g,h}$ and
+    $L^x_{g,h}\beta_{g,h}\gamma^x_{gh}\varphi'^x_{g,h}$ against long words,
+    and $\varphi'^x_{g,h}$ is nonzero against arbitrarily long words because
+    it belongs to a reduction onto a normal tensor. For rescaled tensors the left boundaries
+    differ by the rescaling factor exactly, so the comparison scalars are the
+    rescaling factors, and the statement about the anomaly is
+    Lemma~\ref{thm:mpug_anomaly_three_cocycle_gauge}.
+\end{proof}
+
+\begin{lemma}[A single block is trivial in some gauge]
+    \label{lem:mpug_single_block_gauge_trivial}
+    \lean{MPOTensor.GroupFamily.BlockActionData.exists_rescale_omega_eq_one_lSymbol_eq_one}
+    \leanok
+    \uses{lem:mpug_permuted_block_l_gauge,
+        thm:mpug_permuted_block_l_compatibility}
+    In the setting of Lemma~\ref{lem:mpug_permuted_block_l_gauge}, if the set
+    $\mathsf X$ has exactly one element, some rescaling of the fusion and
+    action tensors gives $\omega(g,h,k)=1$ and $L_{g,h}=1$ for all
+    $g,h,k\in G$, as stated in
+    \cite[lines~1925--1926]{FrancoRubio2025MPUGauging}.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:mpug_permuted_block_l_gauge,
+        thm:mpug_permuted_block_l_compatibility}
+    Rescale the fusion tensors by $\beta_{g,h}=L_{g,h}^{-1}$ and leave the
+    action tensors unchanged. By Lemma~\ref{lem:mpug_permuted_block_l_gauge}
+    the new $L$-symbols are $\beta_{g,h}L_{g,h}=1$, and compatibility,
+    Lemma~\ref{thm:mpug_permuted_block_l_compatibility}, for the new tensors
+    then reads $1=\omega'(g,h,k)$.
+\end{proof}
+
+\subsection{Domain walls between permuted blocks}
+
+Keep the setting of the previous subsection. A domain wall between the
+blocks $x$ and $y$ is a family $e=(e^i)_{i}$ of $D_x\times D_y$ matrices,
+placed between a region of $A_x$ and a region of $A_y$
+\cite[Section~III.B]{GarreRubioSchuch2024DomainWall}. For an operator tensor
+$T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
+
+\begin{definition}[Local action on domain walls]
+    \label{def:mpug_domain_wall_action}
+    \lean{MPOTensor.actRect,
+        MPOTensor.physAct,
+        MPOTensor.wallChain,
+        MPOTensor.GroupFamily.BlockActionData.IsDomainWallAction}
+    \leanok
+    \uses{def:mpug_permuted_block_l_symbol}
+    Let $e$ be a domain wall between $x$ and $y$, and $e'$ a domain wall
+    between $gx$ and $gy$. The element $g$ carries $e$ to $e'$ with phase $c$
+    if $e\neq0$, $e'\neq0$, $c\neq0$, and there is $N$ such that
+    \begin{align}
+        V_{g,x}\,(O_g\cdot A_x)^{\mathbf u}\,(O_g\cdot e)^i\,
+        (O_g\cdot A_y)^{\mathbf v}\,W_{g,y}
+         & =c\,A_{gx}^{\mathbf u}\,{e'}^{i}\,A_{gy}^{\mathbf v}
+        \notag
+    \end{align}
+    for every letter $i$ and all words $\mathbf u,\mathbf v$ of length at
+    least $N$. This is the local relation of
+    \cite[Section~III.B]{GarreRubioSchuch2024DomainWall}, drawn there at the
+    renormalization fixed point with one site on each side of the wall; the
+    words $\mathbf u,\mathbf v$ are the blocked sites of the discussion away
+    from the fixed point \cite{gap:gs24_domain_wall_nondegenerate}.
+\end{definition}
+
+\begin{lemma}[Fractionalization of the symmetry on domain walls]
+    \label{thm:mpug_domain_wall_pentagon}
+    \lean{MPOTensor.GroupFamily.BlockActionData.IsDomainWallAction.mul,
+        MPOTensor.GroupFamily.BlockActionData.IsDomainWallAction.mul_eq,
+        MPOTensor.GroupFamily.BlockActionData.IsDomainWallAction.phase_eq,
+        MPOTensor.GroupFamily.BlockActionData.actW,
+        MPOTensor.GroupFamily.BlockActionData.fuseW,
+        MPOTensor.GroupFamily.BlockActionData.exists_evalWord_mul_actW_eq,
+        MPOTensor.physAct_mulTensor,
+        MPOTensor.physAct_kronId,
+        MPOTensor.physAct_wallChain,
+        MPOTensor.exists_evalWord_mul_mul_evalWord_ne_zero}
+    \leanok
+    \uses{def:mpug_domain_wall_action, def:mpug_permuted_block_l_symbol}
+    Suppose $h$ carries the domain wall $e_1$ between $x$ and $y$ to $e_2$
+    with phase $B^h_{x,y}$ and $g$ carries $e_2$ to $e_3$ with phase
+    $B^g_{hx,hy}$. Then $gh$ carries $e_1$ to $e_3$ with phase
+    $(L^y_{g,h}/L^x_{g,h})\,B^g_{hx,hy}B^h_{x,y}$. Consequently, as in
+    \cite[Section~IV.B]{GarreRubioSchuch2024DomainWall}, if $gh$
+    carries $e_1$ to $e_3$ with phase $B^{gh}_{x,y}$, then
+    \begin{align}
+        B^g_{hx,hy}\,B^h_{x,y}
+         & =\frac{L^x_{g,h}}{L^y_{g,h}}\,B^{gh}_{x,y}.
+        \notag
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_permuted_block_l_symbol_spec, thm:mpug_dressed_proportionality}
+    Acting with $O_g$ on the local relation of $h$, which holds for every
+    configuration of a chain with long regions, passes the boundary matrices
+    $V_{h,x}$, $W_{h,y}$ through as $\mathbf 1\otimes V_{h,x}$ and
+    $\mathbf 1\otimes W_{h,y}$, while the action of $O_g$ on the action of
+    $O_h$ is the action of $O_gO_h$ up to the bond associator. The local
+    relation of $g$ then gives
+    \begin{align}
+        V_{g,hx}(\mathbf 1\otimes V_{h,x})\,\mathsf a^{-1}\,
+        (O_gO_h\cdot\mathsf C)\,\mathsf a\,(\mathbf 1\otimes W_{h,y})\,W_{g,hy}
+         & =B^g_{hx,hy}B^h_{x,y}\,\mathsf C_3
+        \notag
+    \end{align}
+    for the chain $\mathsf C=A_x^{\mathbf u}e_1^iA_y^{\mathbf v}$ and the chain
+    $\mathsf C_3$ with $e_3$. Against long words the left boundary equals
+    $L^x_{g,h}$ times the left boundary through the fusion tensor
+    $F^<_{g,h}$; by the two-sided comparison of reductions onto a normal
+    tensor, the right boundary equals $(L^y_{g,h})^{-1}$ times the right
+    boundary through $F^>_{g,h}$. The fusion tensors reduce
+    $O_gO_h\cdot\mathsf C$ to $O_{gh}\cdot\mathsf C$, which gives the local
+    action of $gh$ with the stated phase. Since $A_{ghx}$ and $A_{ghy}$ are
+    normal and $e_3\neq0$, some chain $\mathsf C_3$ with long regions is
+    nonzero, so the phase of a local action is unique, and the two phases of
+    $gh$ agree.
+\end{proof}
+
+\begin{lemma}[The symmetry on states with two domain walls]
+    \label{thm:mpug_domain_wall_state}
+    \lean{MPOTensor.twoWallChain,
+        MPOTensor.twoWallMPV,
+        MPOTensor.mpo_mulVec_trace,
+        MPOTensor.GroupFamily.BlockActionData.IsDomainWallAction.mpo_mulVec_twoWallMPV}
+    \leanok
+    \uses{def:mpug_domain_wall_action}
+    Let $\ket{\psi(x\text{-}y\text{-}x)}$ be the periodic state with an $A_x$
+    region, a domain wall $e$ between $x$ and $y$, an $A_y$ region, a domain
+    wall $f$ between $y$ and $x$, and a second $A_x$ region. If $g$ carries
+    $e$ to $e'$ with phase $c$ and $f$ to $f'$ with phase $c'$, then
+    \begin{align}
+        O_g\ket{\psi(x\text{-}y\text{-}x)}
+         & =c\,c'\,\ket{\psi(gx\text{-}gy\text{-}gx)}
+        \notag
+    \end{align}
+    whenever the first $A_x$ region and the $A_y$ region are long enough.
+    For $\Z_2$, as in \cite[Section~III.B]{GarreRubioSchuch2024DomainWall},
+    this reduces to $U\ket{\psi(A\text{-}B\text{-}A)}
+        =c_{AB}c_{BA}\ket{\psi(B\text{-}A\text{-}B)}$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mps_reduction_residual_dimension_bound,
+        thm:mps_reduction_exterior_buffer}
+    The coefficient of $O_g\ket{\psi}$ is the trace of the acted chain.
+    Inserting the reduced block $W_{g,z}A_{gz}^{\mathbf c}V_{g,z}$ into each
+    of the two acted regions leaves long words unchanged by the residual
+    nilpotency of a reduction \cite{Molnar2018SemiInjective}. By cyclicity
+    of the trace the chain splits into the two local relations, with phases
+    $c$ and $c'$, and the remaining trace is the coefficient of
+    $\ket{\psi(gx\text{-}gy\text{-}gx)}$.
+\end{proof}
+
+\begin{lemma}[A symmetry string over a pair of domain walls]
+    \label{thm:mpug_domain_wall_pair}
+    \lean{MPOTensor.GroupFamily.BlockActionData.IsDomainWallAction.pair}
+    \leanok
+    \uses{def:mpug_domain_wall_action}
+    If $g$ carries the domain wall $e$ between $x$ and $y$ to $e'$ with phase
+    $c$, and the domain wall $f$ between $y$ and $z$ to $f'$ with phase $c'$,
+    then for all words $\mathbf u,\mathbf v,\mathbf w$ longer than a fixed
+    buffer
+    \begin{align}
+        V_{g,x}\,(O_g\cdot A_x)^{\mathbf u}(O_g\cdot e)^i
+        (O_g\cdot A_y)^{\mathbf v}(O_g\cdot f)^j(O_g\cdot A_z)^{\mathbf w}\,
+        W_{g,z}
+         & =c\,c'\,A_{gx}^{\mathbf u}{e'}^{i}A_{gy}^{\mathbf v}{f'}^{j}
+        A_{gz}^{\mathbf w}.
+        \notag
+    \end{align}
+    In the comparison of two overlapping strings in
+    \cite[Section~III.F]{GarreRubioSchuch2024DomainWall}, this is the
+    tensor-level phase acquired by a symmetry string passing over a pair of
+    domain walls.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mps_reduction_residual_dimension_bound,
+        thm:mps_reduction_exterior_buffer}
+    Splitting the middle word as $\mathbf p\mathbf c\mathbf q$ with long
+    outer parts and inserting the reduced block
+    $W_{g,y}A_{gy}^{\mathbf c}V_{g,y}$ leaves the word unchanged by the
+    residual nilpotency of a reduction \cite{Molnar2018SemiInjective}. The
+    two resulting factors are the local relations of $e$ and $f$.
+\end{proof}
+
+\begin{definition}[Domain-wall string operators]
+    \label{def:mpug_domain_wall_string}
+    \lean{MPOTensor.physPairing,
+        MPOTensor.leftEndpoint,
+        MPOTensor.rightEndpoint,
+        MPOTensor.leftAct,
+        MPOTensor.rightAct,
+        MPOTensor.wallSplit,
+        MPOTensor.wallConfig,
+        MPOTensor.wallConfig_comp_cast,
+        MPOTensor.ofFn_wallConfig,
+        MPOTensor.stringKernel,
+        MPOTensor.stringOperator,
+        MPOTensor.GroupFamily.IsSeparatingLeftInverse,
+        MPOTensor.GroupFamily.BlockActionData.wallLeftEndpoint,
+        MPOTensor.GroupFamily.BlockActionData.wallRightEndpoint,
+        MPOTensor.GroupFamily.BlockActionData.wallString}
+    \leanok
+    \uses{def:mpug_domain_wall_action}
+    Let $g$ exchange the blocks $A=A_x$ and $B=A_y$, with left and right action
+    tensors $V_B=V_{g,x}$, $W_B=W_{g,x}$ on $A$ and $V_A=V_{g,y}$,
+    $W_A=W_{g,y}$ on $B$, and let $e_{AB}$ and $e_{BA}$ be domain walls. Let
+    $\hat A$ and $\hat B$ be left inverses of $A$ and $B$ with separated
+    supports,
+    \begin{align}
+        \sum_\sigma \hat A^\sigma_{\alpha\beta}A^\sigma_{\gamma\delta}
+         & =\delta_{\alpha\gamma}\delta_{\beta\delta},
+         &
+        \sum_\sigma \hat A^\sigma_{\alpha\beta}B^\sigma_{\gamma\delta}
+         & =0,
+        \notag
+    \end{align}
+    and likewise for $\hat B$. The left endpoint tensor is
+    $V_Be_{AB}\hat A+V_Ae_{BA}\hat B$: its input leg is mapped by the left
+    inverse to a pair of virtual indices, which are closed by the domain wall
+    and the left action tensor, leaving the output leg and one bond of the
+    operator string. The right endpoint tensor is
+    $W_Be_{BA}\hat A+W_Ae_{AB}\hat B$. Following
+    \cite[Section~III.E]{GarreRubioSchuch2024DomainWall}, the string
+    operator $O^{[i,j]}$ on the periodic chain acts by the identity outside
+    the sites $i,\dots,j$, by the two endpoint tensors on the sites $i$ and
+    $j$, and by the tensor of $O_g$ on the sites between them.
+\end{definition}
+
+\begin{lemma}[Domain-wall strings create pairs of domain walls]
+    \label{thm:mpug_domain_wall_string_creation}
+    \lean{MPOTensor.stringOperator_mulVec_wallConfig,
+        MPOTensor.stringOperator_mulVec_trace,
+        MPOTensor.mpv_wallConfig,
+        MPOTensor.leftAct_mul_physAct_mul_rightAct,
+        MPOTensor.leftAct_leftEndpoint,
+        MPOTensor.leftAct_leftEndpoint_eq_zero,
+        MPOTensor.rightAct_rightEndpoint,
+        MPOTensor.rightAct_rightEndpoint_eq_zero,
+        MPOTensor.GroupFamily.BlockActionData.wallString_mulVec_mpv_left,
+        MPOTensor.GroupFamily.BlockActionData.wallString_mulVec_mpv_right}
+    \leanok
+    \uses{def:mpug_domain_wall_string, thm:mpug_domain_wall_state}
+    On the periodic chain of every length $L\geq2$ and for all sites $i<j$,
+    \begin{align}
+        O^{[i,j]}\ket{\psi_A}
+         & =\ket{\psi(A\text{-}B\text{-}A)},
+         &
+        O^{[i,j]}\ket{\psi_B}
+         & =\ket{\psi(B\text{-}A\text{-}B)},
+        \notag
+    \end{align}
+    with, as in \cite[Section~III.E]{GarreRubioSchuch2024DomainWall}, the
+    domain walls $e_{AB}$ at $i$ and $e_{BA}$ at $j$ in the first state and
+    $e_{BA}$ at $i$ and $e_{AB}$ at $j$ in the second.
+\end{lemma}
+
+\begin{proof}\leanok
+    On a state given by the trace of a chain, the string operator acts by
+    its endpoint tensors on the letters of the two endpoint sites and by the
+    physical action of $O_g$ on the chain between them. On $A$ the left
+    inverse $\hat A$ turns the left endpoint into $e_{AB}V_B$ and the right
+    endpoint into $W_Be_{BA}$, while the terms with $\hat B$ vanish; the
+    action tensors reduce the string of $O_g\cdot A$ between them to $B$.
+    On $B$ the terms with $\hat B$ act in the same way.
+\end{proof}
+
+\begin{lemma}[Exchange of two domain-wall strings]
+    \label{thm:mpug_domain_wall_string_exchange}
+    \lean{MPOTensor.wallConfig_resplit,
+        MPOTensor.twoWallChain_append,
+        MPOTensor.wallConfig_eq_wallConfig,
+        MPOTensor.twoWallMPV_wallConfig_comp_cast,
+        MPOTensor.fourWallCoeff,
+        MPOTensor.exists_wallConfig_wallSplit,
+        MPOTensor.GroupFamily.BlockActionData.wallString_outer_mul_inner_mulVec_mpv_apply,
+        MPOTensor.GroupFamily.BlockActionData.wallString_inner_mul_outer_mulVec_mpv_apply,
+        MPOTensor.GroupFamily.BlockActionData.wallString_mul_wallString_mulVec_mpv}
+    \leanok
+    \uses{thm:mpug_domain_wall_string_creation, thm:mpug_domain_wall_pair}
+    Suppose $g$ carries $e_{AB}$ to $e_{BA}$ with phase $c_{AB}$ and $e_{BA}$
+    to $e_{AB}$ with phase $c_{BA}$. For sites $i_2<i_1<j_1<j_2$ whose three
+    inner regions are longer than a fixed buffer,
+    \begin{align}
+        O^{[i_2,j_2]}O^{[i_1,j_1]}\ket{\psi_A}
+         & =c_{AB}c_{BA}\,O^{[i_1,j_1]}O^{[i_2,j_2]}\ket{\psi_A}.
+        \notag
+    \end{align}
+    The phase stands on the side where it is acquired; the relation printed
+    in \cite[Section~III.F]{GarreRubioSchuch2024DomainWall} has it on the
+    other side. The buffer is the blocked form of the local action
+    \cite{gap:gs24_domain_wall_nondegenerate}.
+\end{lemma}
+
+\begin{proof}\leanok
+    Both sides are multiples of the state with the domain walls $e_{AB}$,
+    $e_{BA}$, $e_{AB}$, $e_{BA}$ at $i_2,i_1,j_1,j_2$. If the inner string
+    acts first, the outer string passes over its two domain walls, and
+    Lemma~\ref{thm:mpug_domain_wall_pair} gives the phase $c_{AB}c_{BA}$.
+    If the outer string acts first, the inner string acts on the $B$ region
+    it created, and Lemma~\ref{thm:mpug_domain_wall_string_creation} gives
+    no phase.
+\end{proof}
+
+\begin{lemma}[The square of the exchange phase]
+    \label{lem:mpug_domain_wall_exchange_phase_square}
+    \lean{MPOTensor.exists_twoWallMPV_ne_zero,
+        MPOTensor.GroupFamily.BlockActionData.IsDomainWallAction.mul_sq_eq_one_of_mpo_mul_self_eq_one}
+    \leanok
+    \uses{thm:mpug_domain_wall_state}
+    Let $g$ carry $e_{AB}$ to $e_{BA}$ with phase $c_{AB}$ and $e_{BA}$ to
+    $e_{AB}$ with phase $c_{BA}$, where $A$ and $B$ are normal, and suppose
+    that $U=O_g$ satisfies $U^2=\mathbf 1$ on the periodic chain of every
+    length. Then, as in \cite[Section~III.B]{GarreRubioSchuch2024DomainWall},
+    $(c_{AB}c_{BA})^2=1$.
+\end{lemma}
+
+\begin{proof}\leanok
+    By Lemma~\ref{thm:mpug_domain_wall_state},
+    $U\ket{\psi(A\text{-}B\text{-}A)}=c_{AB}c_{BA}\ket{\psi(B\text{-}A\text{-}B)}$
+    and $U\ket{\psi(B\text{-}A\text{-}B)}=c_{BA}c_{AB}\ket{\psi(A\text{-}B\text{-}A)}$
+    whenever the regions are long, so $U^2=\mathbf 1$ gives
+    $\ket{\psi(A\text{-}B\text{-}A)}=(c_{AB}c_{BA})^2\ket{\psi(A\text{-}B\text{-}A)}$.
+    The state is nonzero for suitable long regions: the words of a fixed
+    long length span the full matrix algebras of $A$ and $B$, so if every
+    coefficient vanished, then $\operatorname{tr}(Xe_{AB}^iYe_{BA}^j)=0$ for
+    all matrices $X$ and $Y$, and choosing matrix units for $X$ and $Y$
+    gives $e_{AB}^i=0$ or $e_{BA}^j=0$ for every pair of letters.
+\end{proof}
+
+\begin{corollary}[Exchange of two domain-wall strings, printed orientation]
+    \label{cor:mpug_domain_wall_string_exchange_printed}
+    \lean{MPOTensor.isInjective_of_physPairing_eq_one,
+        MPOTensor.GroupFamily.BlockActionData.wallString_mul_wallString_mulVec_mpv_of_mpo_mul_self_eq_one}
+    \leanok
+    \uses{thm:mpug_domain_wall_string_exchange,
+        lem:mpug_domain_wall_exchange_phase_square}
+    In the setting of Lemma~\ref{thm:mpug_domain_wall_string_exchange},
+    suppose that $U=O_g$ satisfies $U^2=\mathbf 1$ on the periodic chain of
+    every length. Then the relation of
+    \cite[Section~III.F]{GarreRubioSchuch2024DomainWall} holds:
+    \begin{align}
+        O^{[i_1,j_1]}O^{[i_2,j_2]}\ket{\psi_A}
+         & =c_{AB}c_{BA}\,O^{[i_2,j_2]}O^{[i_1,j_1]}\ket{\psi_A}.
+        \notag
+    \end{align}
+\end{corollary}
+
+\begin{proof}\leanok
+    The tensors $A$ and $B$ have left inverses, so their matrices span the
+    full matrix algebras and they are normal. Lemma~\ref{lem:mpug_domain_wall_exchange_phase_square}
+    gives $(c_{AB}c_{BA})^2=1$. Multiplying the identity of
+    Lemma~\ref{thm:mpug_domain_wall_string_exchange} by $c_{AB}c_{BA}$
+    gives the result.
+\end{proof}
+
+\begin{lemma}[Exchange of two left endpoints of domain-wall strings]
+    \label{thm:mpug_domain_wall_endpoint_exchange}
+    \lean{MPOTensor.GroupFamily.BlockActionData.wallString_cross_over_right_mulVec_mpv_apply,
+        MPOTensor.GroupFamily.BlockActionData.wallString_cross_over_left_mulVec_mpv_apply,
+        MPOTensor.GroupFamily.BlockActionData.wallString_mul_wallString_mulVec_mpv_swap_left_far,
+        MPOTensor.GroupFamily.BlockActionData.wallString_mul_wallString_mulVec_mpv_swap_left_near}
+    \leanok
+    \uses{thm:mpug_domain_wall_string_exchange}
+    In the setting of Lemma~\ref{thm:mpug_domain_wall_string_exchange},
+    let $j<i$ and let $r_1\neq r_2$ be two sites to the right of $i$. If the
+    regions between the four sites $j,i,r_1,r_2$ are longer than a fixed
+    buffer, then
+    \begin{align}
+        O^{[j,r_1]}O^{[i,r_2]}\ket{\psi_A}
+         & =c_{AB}\,O^{[i,r_1]}O^{[j,r_2]}\ket{\psi_A}.
+        \notag
+    \end{align}
+    This is the exchange of two left endpoints
+    $O^{[j]}_xO^{[i]}_y\ket{\psi_A}=c_{AB}\,O^{[i]}_xO^{[j]}_y\ket{\psi_A}$
+    of \cite[Section~III.F]{GarreRubioSchuch2024DomainWall}, with the
+    half-chain operators glued with the right endpoints of their strings at
+    $r_1$ and $r_2$; the identity of half-chain objects with open legs is not
+    formalized \cite{gap:gs24_domain_wall_half_string_gluing}.
+\end{lemma}
+
+\begin{proof}\leanok
+    Every side is a multiple of the state with the domain walls $e_{AB}$,
+    $e_{BA}$, $e_{AB}$, $e_{BA}$ at the four sites in increasing order. For
+    $r_2<r_1$ the left side is a nested pair whose outer string acts second,
+    with phase $c_{AB}c_{BA}$ by
+    Lemma~\ref{thm:mpug_domain_wall_string_exchange}; on the right side the
+    string on $[i,r_1]$ starts in the $B$ region, passes over the domain wall
+    $e_{BA}$ at $r_2$ and ends in the $A$ region, so the local action gives
+    $c_{BA}$. For $r_1<r_2$ the string on $[j,r_1]$ on the left side passes
+    over the domain wall $e_{AB}$ at $i$, with phase $c_{AB}$, and the right
+    side is a nested pair whose inner string acts second, with no phase.
+\end{proof}
+
+\begin{lemma}[Rescaling domain walls]
+    \label{thm:mpug_domain_wall_rescaling}
+    \lean{MPOTensor.actRect_smul,
+        MPOTensor.GroupFamily.BlockActionData.IsDomainWallAction.smul_source,
+        MPOTensor.GroupFamily.BlockActionData.IsDomainWallAction.smul_target,
+        MPOTensor.GroupFamily.BlockActionData.IsDomainWallAction.exists_eq_of_mul_self}
+    \leanok
+    \uses{def:mpug_domain_wall_action}
+    If $g$ carries $e$ to $e'$ with phase $c$ and $a\neq0$, then it carries $a\,e$
+    to $e'$ with phase $ac$, and $e$ to $a\,e'$ with phase $c/a$. In
+    particular, as in \cite[Section~III.F]{GarreRubioSchuch2024DomainWall},
+    if an involution $g$ exchanges $e_{AB}$ and $e_{BA}$ with phases $c_{AB}$
+    and $c_{BA}$, then for every $s$ with $s^2=c_{AB}c_{BA}$ the walls
+    $e_{AB}$ and $(c_{AB}/s)\,e_{BA}$ are exchanged with both phases equal
+    to $s$.
+\end{lemma}
+
+\begin{proof}\leanok
+    The rectangular action is linear in the domain wall, and rescaling
+    $e_{BA}$ by $c_{AB}/s$ gives the last claim.
+\end{proof}
+
+\begin{definition}[A family of domain walls permuted by the group]
+    \label{def:mpug_domain_wall_family}
+    \lean{MPOTensor.GroupFamily.BlockActionData.IsDomainWallFamily,
+        MPOTensor.GroupFamily.BlockActionData.IsDomainWallAction.congr_target}
+    \leanok
+    \uses{def:mpug_domain_wall_action}
+    Following \cite[Section~IV.B]{GarreRubioSchuch2024DomainWall}, with
+    nonzero walls and phases by convention
+    \cite{gap:gs24_domain_wall_nondegenerate}, a family of domain walls
+    permuted by the group is a nonzero domain wall $e_{yz}$ between $y$ and
+    $z$ for every ordered pair of blocks, together with nonzero phases
+    $B^g_{y,z}$ such that every $g$ carries $e_{yz}$ to $e_{gy,gz}$ with
+    phase $B^g_{y,z}$.
+\end{definition}
+
+\begin{lemma}[The interchange phase of a family of domain walls]
+    \label{thm:mpug_domain_wall_interchange}
+    \lean{MPOTensor.GroupFamily.BlockActionData.IsDomainWallFamily.mul_eq,
+        MPOTensor.GroupFamily.BlockActionData.IsDomainWallFamily.prod_eq_prod_lSymbol,
+        MPOTensor.GroupFamily.BlockActionData.IsDomainWallFamily.prod_eq_inv_cyclicInvariant,
+        MPOTensor.GroupFamily.BlockActionData.IsDomainWallFamily.prod_eq_domainWallPhase,
+        TNLean.Algebra.LSymbol.prod_div_eq_inv_cyclicInvariant,
+        TNLean.Algebra.LSymbol.prod_Ico_div_eq_inv_cyclicInvariant}
+    \leanok
+    \uses{def:mpug_domain_wall_family, def:mpug_permuted_block_l_symbol,
+        def:mpug_anomaly_three_cochain}
+    As in \cite[Section~IV.C]{GarreRubioSchuch2024DomainWall}, for a family
+    of domain walls permuted by the group, every $g$ with $g^n=e$, and every
+    block $x$, the interchange phase depends only on the anomaly:
+    \begin{align}
+        \prod_{k=0}^{n-1}B^g_{g^k(gx),\,g^kx}
+         & =\prod_{k=0}^{n-1}\frac{L^{gx}_{g,g^k}}{L^x_{g,g^k}}
+        =\Bigl(\prod_{k=0}^{n-1}\omega(g,g^k,g)\Bigr)^{-1}.
+        \notag
+    \end{align}
+    The middle product includes the factor $k=0$, $L^{gx}_{g,e}/L^x_{g,e}$,
+    which is one for normalized L-symbols; the source's middle product runs
+    over $1\leq k<n$, and for normalized L-symbols that product is again
+    $\bigl(\prod_{k=0}^{n-1}\omega(g,g^k,g)\bigr)^{-1}$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_domain_wall_pentagon, thm:mpug_permuted_block_l_compatibility}
+    With $\beta_k=B^{g^k}_{gx,x}$,
+    Lemma~\ref{thm:mpug_domain_wall_pentagon} for $(g,g^k)$ gives
+    $B^g_{g^k(gx),g^kx}\,\beta_k=(L^{gx}_{g,g^k}/L^x_{g,g^k})\,\beta_{k+1}$.
+    Multiplying over $k<n$ and using $\beta_n=\beta_0$ gives the first
+    equality. Compatibility at $(g,g^k,g)$ gives
+    $L^{gx}_{g,g^k}/L^x_{g,g^k}=\omega(g,g^k,g)^{-1}
+        (L^x_{g,g^{k+1}}/L^x_{g,g^k})(L^x_{g^{k+1},g}/L^x_{g^k,g})^{-1}$,
+    and both quotients telescope to one over $k<n$.
+\end{proof}
+
+\begin{lemma}[The stabilizer of two blocks acts projectively]
+    \label{thm:mpug_domain_wall_projective}
+    \lean{TNLean.Algebra.LSymbol.ratioCocycle,
+        TNLean.Algebra.LSymbol.ratioCocycle_isMulCocycle₂,
+        MPOTensor.GroupFamily.BlockActionData.IsDomainWallFamily.mul_eq_of_fixed,
+        MPOTensor.GroupFamily.BlockActionData.IsDomainWallFamily.mul_eq_of_fixed_self}
+    \leanok
+    \uses{def:mpug_domain_wall_family, def:mpug_permuted_block_l_symbol}
+    Let $H_{y,z}$ be the subgroup of elements fixing the blocks $y$ and $z$.
+    For $a,b\in H_{y,z}$,
+    \begin{align}
+        B^a_{y,z}B^b_{y,z}
+         & =\alpha(a,b)\,B^{ab}_{y,z},
+         &
+        \alpha(a,b)
+         & =\frac{L^y_{a,b}}{L^z_{a,b}},
+        \notag
+    \end{align}
+    and $\alpha$ is a two-cocycle on $H_{y,z}$; for $y=z$ the phases form a
+    linear representation. The source states this for the subgroup fixing
+    every block \cite[Section~IV.C]{GarreRubioSchuch2024DomainWall}, which is
+    contained in $H_{y,z}$; see \cite{gap:gs24_unbroken_subgroup_stabilizer}.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_domain_wall_pentagon, thm:mpug_permuted_block_l_compatibility}
+    The first identity is Lemma~\ref{thm:mpug_domain_wall_pentagon} with
+    $by=y$ and $bz=z$. Dividing the compatibility relations at $y$ and at $z$
+    for $(a,b,c)$ with $c\in H_{y,z}$ cancels $\omega(a,b,c)$ and gives the
+    two-cocycle equation.
+\end{proof}
+
+\begin{definition}[Domain-wall strings of a group element]
+    \label{def:mpug_group_domain_wall_string}
+    \lean{MPOTensor.GroupFamily.IsSeparatingLeftInverseFamily,
+        MPOTensor.GroupFamily.BlockActionData.groupWallLeftEndpoint,
+        MPOTensor.GroupFamily.BlockActionData.groupWallRightEndpoint,
+        MPOTensor.GroupFamily.BlockActionData.groupWallString,
+        MPOTensor.nestedWallCoeff}
+    \leanok
+    \uses{def:mpug_domain_wall_string, def:mpug_domain_wall_family}
+    Let the blocks $A_x$ form a finite family with left inverses $\hat A_x$
+    of separated supports: $\hat A_x$ is a left inverse of $A_x$ and
+    $\sum_\sigma(\hat A_x^\sigma)_{\alpha\beta}(A_y^\sigma)_{\gamma\delta}=0$
+    for $y\neq x$. Let $e_{yz}$ be a family of domain walls permuted by the
+    group. Following \cite[Section~IV.B]{GarreRubioSchuch2024DomainWall},
+    the left endpoint tensor of $g$ is
+    $\sum_xV_{g,x}e_{x,gx}\hat A_x$, the right endpoint tensor is
+    $\sum_xW_{g,x}e_{gx,x}\hat A_x$, and the string $O_g^{[i,j]}$ acts by the
+    identity outside the sites $i,\dots,j$, by the two endpoint tensors on
+    the sites $i$ and $j$, and by the tensor of $O_g$ between them.
+\end{definition}
+
+\begin{lemma}[Strings of a group element create pairs of domain walls]
+    \label{lem:mpug_group_domain_wall_string_creation}
+    \lean{MPOTensor.leftAct_zero, MPOTensor.rightAct_zero,
+        MPOTensor.leftAct_sum, MPOTensor.rightAct_sum,
+        MPOTensor.GroupFamily.BlockActionData.leftAct_groupWallLeftEndpoint,
+        MPOTensor.GroupFamily.BlockActionData.rightAct_groupWallRightEndpoint,
+        MPOTensor.GroupFamily.BlockActionData.groupWallString_mulVec_mpv}
+    \leanok
+    \uses{def:mpug_group_domain_wall_string,
+        thm:mpug_domain_wall_string_creation}
+    On the periodic chain of every length $L\geq2$ and for all sites $i<j$,
+    $O_g^{[i,j]}\ket{\psi_{A_x}}=\ket{\psi(x,gx)}$, the state with the domain
+    wall $e_{x,gx}$ at $i$, the block $A_{gx}$ between $i$ and $j$, and the
+    domain wall $e_{gx,x}$ at $j$
+    \cite[Section~IV.B]{GarreRubioSchuch2024DomainWall}.
+\end{lemma}
+
+\begin{proof}\leanok
+    On $A_x$ only the term of $\hat A_x$ in each endpoint survives, leaving
+    $e_{x,gx}V_{g,x}$ and $W_{g,x}e_{gx,x}$; the action tensors reduce the
+    string of $O_g\cdot A_x$ between them to $A_{gx}$.
+\end{proof}
+
+\begin{lemma}[Exchange of two domain walls of a group element]
+    \label{lem:mpug_group_domain_wall_exchange}
+    \lean{MPOTensor.GroupFamily.BlockActionData.groupWallString_outer_mul_inner_mulVec_mpv_apply,
+        MPOTensor.GroupFamily.BlockActionData.groupWallString_inner_mul_outer_mulVec_mpv_apply,
+        MPOTensor.GroupFamily.BlockActionData.groupWallString_mul_groupWallString_mulVec_mpv,
+        MPOTensor.GroupFamily.BlockActionData.groupWallString_cross_mulVec_mpv_apply,
+        MPOTensor.GroupFamily.BlockActionData.groupWallString_mul_groupWallString_mulVec_mpv_swap_left}
+    \leanok
+    \uses{lem:mpug_group_domain_wall_string_creation, thm:mpug_domain_wall_pair}
+    In the setting of Definition~\ref{def:mpug_group_domain_wall_string},
+    let the regions between the sites considered below be longer than a
+    fixed buffer. For sites $i_2<i_1<j_1<j_2$,
+    \begin{align}
+        O_g^{[i_2,j_2]}O_g^{[i_1,j_1]}\ket{\psi_{A_x}}
+         & =B^g_{x,gx}B^g_{gx,x}\,O_g^{[i_1,j_1]}O_g^{[i_2,j_2]}\ket{\psi_{A_x}},
+        \notag
+    \end{align}
+    and for sites $j<i<r_2<r_1$,
+    \begin{align}
+        O_g^{[j,r_1]}O_g^{[i,r_2]}\ket{\psi_{A_x}}
+         & =B^g_{x,gx}\,O_g^{[i,r_1]}O_g^{[j,r_2]}\ket{\psi_{A_x}}.
+        \notag
+    \end{align}
+    The second identity is the exchange of two left endpoints
+    $O^{[j]}_{g,a}O^{[i]}_{g,b}\ket{\psi_x}=B^g_{x,gx}\,O^{[i]}_{g,a}O^{[j]}_{g,b}\ket{\psi_x}$
+    of \cite[Section~IV.B]{GarreRubioSchuch2024DomainWall}, with the
+    half-chain operators glued with the right endpoints of their strings
+    \cite{gap:gs24_domain_wall_half_string_gluing}; the buffer is the blocked
+    form of the local action \cite{gap:gs24_domain_wall_nondegenerate}.
+\end{lemma}
+
+\begin{proof}\leanok
+    Every side is a multiple of the state with the domain walls $e_{x,gx}$,
+    $e_{gx,g^2x}$, $e_{g^2x,gx}$, $e_{gx,x}$ at the four sites in increasing
+    order, between the regions $A_x$, $A_{gx}$, $A_{g^2x}$, $A_{gx}$, $A_x$.
+    In a nested pair whose outer string acts second, the outer string passes
+    over the domain walls $e_{x,gx}$ and $e_{gx,x}$ created by the inner one,
+    with phase $B^g_{x,gx}B^g_{gx,x}$ by
+    Lemma~\ref{thm:mpug_domain_wall_pair}. If the outer string acts first,
+    the inner string acts on the region $A_{gx}$ and creates the walls
+    $e_{gx,g^2x}$ and $e_{g^2x,gx}$ with no phase. In the crossed pair, the
+    string on $[i,r_1]$ acting second starts in the region $A_{gx}$, passes
+    over the domain wall $e_{gx,x}$ at $r_2$ and ends in the region $A_x$,
+    with phase $B^g_{gx,x}$; dividing the two phases gives $B^g_{x,gx}$.
+\end{proof}
+
+\begin{lemma}[Domain walls of an involution detect the anomaly]
+    \label{thm:mpug_domain_wall_involution}
+    \lean{MPOTensor.GroupFamily.BlockActionData.IsDomainWallAction.mul_eq_lSymbol_of_mul_self_eq_one,
+        MPOTensor.GroupFamily.BlockActionData.IsDomainWallAction.mul_eq_omega_of_mul_self_eq_one,
+        MPOTensor.GroupFamily.BlockActionData.IsDomainWallAction.mul_eq_mul_of_mul_self_eq_one,
+        MPOTensor.GroupFamily.BlockActionData.IsDomainWallAction.mpo_mulVec_twoWallMPV_eq_omega,
+        MPOTensor.GroupFamily.BlockActionData.IsDomainWallAction.congr_elem}
+    \leanok
+    \uses{def:mpug_domain_wall_action, def:mpug_permuted_block_l_symbol,
+        def:mpug_anomaly_three_cochain}
+    Let $g^2=e$ exchange the blocks $x$ and $y$, let $g$ carry the domain wall
+    $e_{AB}$ between $x$ and $y$ to $e_{BA}$ with phase $c_{AB}$ and
+    $e_{BA}$ to $e_{AB}$ with phase $c_{BA}$. Then
+    \begin{align}
+        c_{AB}\,c_{BA}
+         & =\frac{L^x_{g,g}L^x_{e,e}}{L^y_{g,g}L^y_{e,e}}
+        =\omega(g,g,g)\,\omega(g,e,g),
+        \notag
+    \end{align}
+    so $c_{AB}c_{BA}$ does not depend on the action tensors, the fusion
+    tensors or the domain walls, and
+    $U\ket{\psi(A\text{-}B\text{-}A)}=\omega(g,g,g)\,\omega(g,e,g)
+        \ket{\psi(B\text{-}A\text{-}B)}$. When the tensors of the identity are
+    trivial, as in \cite[Section~III.C]{GarreRubioSchuch2024DomainWall},
+    $L_{e,e}=1$ and $\omega(g,e,g)=1$, which yields
+    $c_{AB}c_{BA}=L_A/L_B=\omega$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_domain_wall_pentagon, thm:mpug_domain_wall_state,
+        thm:mpug_permuted_block_l_compatibility,
+        thm:mpug_involution_anomaly_identity_ratio}
+    Applying $g$ twice, Lemma~\ref{thm:mpug_domain_wall_pentagon} shows that
+    $g^2=e$ carries $e_{AB}$ to itself with phase
+    $b=(L^y_{g,g}/L^x_{g,g})\,c_{BA}c_{AB}\neq0$. The same theorem for $(e,e)$
+    gives $b^2=(L^x_{e,e}/L^y_{e,e})\,b$, so $b=L^x_{e,e}/L^y_{e,e}$, which is
+    the first equality. The second equality is
+    Lemma~\ref{thm:mpug_involution_anomaly_identity_ratio} for the compatible
+    L-symbols of Lemma~\ref{thm:mpug_permuted_block_l_compatibility}. Its
+    right-hand side involves only the fusion tensors, and it is invariant
+    under their gauge action, so the product is independent of all choices.
+    Finally, by Lemma~\ref{thm:mpug_domain_wall_state},
+    $U\ket{\psi(A\text{-}B\text{-}A)}=c_{AB}c_{BA}\ket{\psi(B\text{-}A\text{-}B)}
+        =\omega(g,g,g)\,\omega(g,e,g)\ket{\psi(B\text{-}A\text{-}B)}$.
+\end{proof}
+
+\subsection{Detecting the anomaly with truncated symmetries}
+
+\begin{lemma}[The commutator of two unitaries on a vector]
+    \label{lem:mpug_truncation_commutator}
+    \lean{Matrix.groupCommutator,
+        Matrix.groupCommutator_mulVec_eq_smul,
+        Matrix.star_dotProduct_groupCommutator_mulVec}
+    \leanok
+    Let $U_1$ and $U_2$ be unitary, let $\psi$ be a vector and $c$ a scalar
+    with $U_2U_1\psi=c\,U_1U_2\psi$. Then
+    \begin{align}
+        U_2^\dagger U_1^\dagger U_2U_1\psi
+         & =c\,\psi,
+         &
+        \langle\psi|\,U_2^\dagger U_1^\dagger U_2U_1\,|\psi\rangle
+         & =c\,\langle\psi|\psi\rangle.
+        \notag
+    \end{align}
+    For two truncations $U_1=U^{[i_1,j_1]}$ and $U_2=U^{[i_2,j_2]}$ of a
+    symmetry whose exchange relation on a ground state has the phase
+    $c=\omega$, this is the last step of the detection of the anomaly in
+    \cite[Section~V]{GarreRubioSchuch2024DomainWall}: the expectation value of
+    the commutator measures the exchange phase.
+\end{lemma}
+
+\begin{proof}\leanok
+    Substituting the exchange relation and canceling $U_1^\dagger U_1$ and
+    $U_2^\dagger U_2$ gives both identities.
+\end{proof}
+
+\begin{lemma}[Truncations of an on-site symmetry]
+    \label{thm:mpug_onsite_truncation_commutator}
+    \lean{Matrix.onSiteTruncation,
+        Matrix.onSiteTruncation_univ,
+        Matrix.onSiteTruncation_conjTranspose_mul_self,
+        Matrix.groupCommutator_onSiteTruncation,
+        Matrix.star_dotProduct_groupCommutator_onSiteTruncation_mulVec}
+    \leanok
+    Let $u$ satisfy $u^\dagger u=\mathbf 1$ and, for a set $S$ of sites of a
+    chain, let $U^S=\bigotimes_{i\in S}u^{[i]}$ act by $u$ on the sites of $S$
+    and by the identity elsewhere. For any two sets $S_1$ and $S_2$,
+    \begin{align}
+        (U^{S_2})^\dagger(U^{S_1})^\dagger U^{S_2}U^{S_1}
+         & =\mathbf 1,
+        \notag
+    \end{align}
+    so, as in \cite[Section~V]{GarreRubioSchuch2024DomainWall} for the
+    trivial anomaly of on-site symmetries, the expectation value of the
+    commutator on every normalized state is $1$.
+\end{lemma}
+
+\begin{proof}\leanok
+    The four operators are tensor products over the sites. On a site in both
+    sets the product of the four factors is
+    $u^\dagger u^\dagger uu=\mathbf 1$, on a site in one set it is
+    $u^\dagger u=\mathbf 1$, and elsewhere all four factors are the
+    identity.
+\end{proof}
+
+\begin{lemma}[The detector depends on the endpoints of the truncations]
+    \label{thm:mpug_truncation_detector_endpoint_dependence}
+    \lean{Matrix.finKronecker_ite_smul_one,
+        Matrix.dressed_onSiteTruncation_conjTranspose_mul_self,
+        Matrix.groupCommutator_dressed_onSiteTruncation_pauliX,
+        Matrix.star_dotProduct_groupCommutator_dressed_onSiteTruncation_pauliX}
+    \leanok
+    Let $X$ and $Z$ be the Pauli matrices, and for sets of sites $S_1$, $S_2$
+    of a chain and sites $j_1\in S_2$, $j_2\notin S_1$ with $j_1\neq j_2$ put
+    $U_1=Z_{j_1}X^{S_1}$ and $U_2=Z_{j_2}X^{S_2}$. Then $U_1$ and $U_2$ are
+    unitary and
+    \begin{align}
+        U_2^\dagger U_1^\dagger U_2U_1
+         & =-\mathbf 1,
+        \notag
+    \end{align}
+    so the expectation value of the commutator on every normalized state is
+    $-1$, although the on-site symmetry $X^{\otimes N}$ has trivial anomaly.
+\end{lemma}
+
+\begin{proof}\leanok
+    The four operators are tensor products over the sites. At $j_1$ the
+    product of the four factors is $X(XZ)X(ZX)=ZXZX=-\mathbf 1$ if $j_1\in S_1$,
+    and $XZXZ=-\mathbf 1$ otherwise. At $j_2$ only $U_2$ acts, and the product is
+    $(ZX)^\dagger(ZX)=\mathbf 1$ or $Z^\dagger Z=\mathbf 1$. At every other site
+    the factors are $X$ or the identity, and they cancel.
+\end{proof}
+
+\begin{remark}[Circuit truncations with a nontrivial detector]
+    \label{rem:mpug_truncation_detector_circuit}
+    \uses{thm:mpug_truncation_detector_endpoint_dependence}
+    The symmetry $X^{\otimes N}$ on a periodic chain of even length is the
+    depth-two circuit whose first layer applies $X\otimes ZX$ to the pairs
+    $(2k,2k+1)$ and whose second layer applies $Z\otimes\mathbf 1$ to the pairs
+    $(2k+1,2k+2)$, since $Z\cdot ZX=X$. For $i$ even and $j$ odd, dropping the
+    gates not contained in $[i,j]$ leaves both factors on every odd site of
+    $[i,j]$ except $j$, which keeps only $ZX$, so the truncation is
+    $Z_jX^{\otimes[i,j]}$. For $i_2<i_1<j_1<j_2$ of these parities,
+    Lemma~\ref{thm:mpug_truncation_detector_endpoint_dependence} applies.
+    The expectation value of the commutator of two circuit truncations on a
+    symmetry-broken ground state is therefore not determined by the anomaly,
+    and the detection asserted in
+    \cite[Section~V]{GarreRubioSchuch2024DomainWall} fails for an arbitrary
+    circuit truncation \cite{gap:gs24_truncation_detector_endpoint_dependence}.
+    The identification of the circuit truncation with $Z_jX^{\otimes[i,j]}$
+    is not formalized.
+\end{remark}
+
+\begin{lemma}[Detection for truncations acting as domain-wall strings]
+    \label{thm:mpug_truncation_detector_wall_strings}
+    \lean{MPOTensor.GroupFamily.BlockActionData.star_dotProduct_groupCommutator_mulVec_mpv_of_wallString,
+        MPOTensor.GroupFamily.BlockActionData.star_dotProduct_groupCommutator_mulVec_mpv_eq_omega}
+    \leanok
+    \uses{lem:mpug_truncation_commutator, thm:mpug_domain_wall_string_exchange,
+        thm:mpug_domain_wall_involution}
+    In the setting of Lemma~\ref{thm:mpug_domain_wall_string_exchange}, let
+    $O_1=O^{[i_1,j_1]}$ and $O_2=O^{[i_2,j_2]}$ be domain-wall strings on
+    sites $i_2<i_1<j_1<j_2$ whose three inner regions are longer than a fixed
+    buffer, and let $U_1$ and $U_2$ be unitary operators with
+    \begin{align}
+        U_2U_1\ket{\psi_A} & =O_2O_1\ket{\psi_A}, &
+        U_1U_2\ket{\psi_A} & =O_1O_2\ket{\psi_A}.
+        \notag
+    \end{align}
+    Then
+    \begin{align}
+        \bra{\psi_A}U_2^\dagger U_1^\dagger U_2U_1\ket{\psi_A}
+         & =c_{AB}c_{BA}\braket{\psi_A}{\psi_A}.
+        \notag
+    \end{align}
+    If in addition $g$ is an involution of a normal representation, then
+    $c_{AB}c_{BA}=\omega(g,g,g)\,\omega(g,e,g)$. This is the detection of the
+    anomaly of \cite[Section~V]{GarreRubioSchuch2024DomainWall} restricted to
+    unitaries whose two ordered products on $\ket{\psi_A}$ agree with the
+    corresponding products of the domain-wall strings. These identities are
+    expected for truncations whose walls on $\ket{\psi_B}$ are the images under
+    $U$ of their walls on $\ket{\psi_A}$, the property the source's argument
+    uses; that implication is not formalized. By
+    Lemma~\ref{thm:mpug_truncation_detector_endpoint_dependence} some
+    restriction of this kind is needed
+    \cite{gap:gs24_truncation_detector_endpoint_dependence}.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:mpug_truncation_commutator, thm:mpug_domain_wall_string_exchange,
+        thm:mpug_domain_wall_involution}
+    By Lemma~\ref{thm:mpug_domain_wall_string_exchange} and the hypotheses,
+    $U_2U_1\ket{\psi_A}=c_{AB}c_{BA}\,U_1U_2\ket{\psi_A}$, and
+    Lemma~\ref{lem:mpug_truncation_commutator} gives the first identity. The
+    second is Lemma~\ref{thm:mpug_domain_wall_involution}.
+\end{proof}

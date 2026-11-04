@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.ViableSet.SampledErrorReduction
 import TNLean.MPS.AreaLaw.ViableSet.SampledProjectorPolynomial
-import TNLean.MPS.AreaLaw.ViableSet.SizeBondTrimming
+import TNLean.MPS.AreaLaw.ViableSet.SuccessiveStep
 import TNLean.MPS.AreaLaw.ViableSet.BondTrimmingBound
 import TNLean.MPS.AreaLaw.ViableSet.FinalMPS
 
@@ -13,8 +13,11 @@ import TNLean.MPS.AreaLaw.ViableSet.FinalMPS
 # The sampled viable-set induction with fixed polynomial bounds
 
 The four operations are extension, size trimming, independent bond trimming and
-sampled error reduction. For each fixed target accuracy, every positive cut has size
-and individual bond bounds chosen before the chain length. The degree may depend on
+sampled error reduction. Each family is the named step `successiveStep` applied to the
+size-trimming selection of the extended previous family, trimmed independently through
+its bonds, then multiplied by the left factors of the cut decomposition of the sampled
+projector. For each fixed target accuracy, every positive
+cut has size and individual bond bounds chosen before the chain length. The degree may depend on
 a fixed upper bound for the ground-energy-to-gap ratio, as required by the power
 normalization.
 
@@ -36,7 +39,7 @@ induction, lines 652–678.
 -/
 
 open Matrix
-open scoped InnerProductSpace Matrix.Norms.L2Operator ComplexOrder MatrixOrder
+open scoped InnerProductSpace Matrix.Norms.L2Operator ComplexOrder MatrixOrder Kronecker
 
 namespace TNLean.MPS.AreaLaw
 
@@ -48,27 +51,34 @@ private theorem lvvViabilityPrecision_pos {Δ η : ℝ} (hΔ : 0 < Δ) (hη : 0 
     0 < lvvViabilityPrecision Δ η :=
   lt_min (lt_min zero_lt_one hη) (sq_pos_of_pos (div_pos hΔ (by norm_num)))
 
-/-- One complete LVV step has size and bond degrees equal to the explicit
-sampled-projector degree plus trimming degrees independent of the ground-energy
-bound. LVV13, `algo53.tex`, the four steps, lines 379–592. -/
-theorem exists_sampled_viable_successor_polynomial_explicit_energy_degree
-    {q : ℕ} (hq : 2 ≤ q) (a : ℕ) (ha : 1 ≤ a)
+/-- **One complete sampled step with its selections named.** The output is the step
+`successiveStep hiL m Finset.univ A` applied to the size-trimming selection of the
+extension of the input family, where `A` are the left factors of the cut decomposition of
+a sampled projector within `δ / 4` of the ground projection. The output has polynomial
+size and bond bounds independent of the input size and bond, with all constants preceding
+the length and the ground energy. LVV13, `algo53.tex`, the four steps, lines 379–592. -/
+theorem exists_sampled_viable_successor_polynomial_explicit_energy_degree {q : ℕ} (hq : 2 ≤ q) (a : ℕ) (ha : 1 ≤ a)
     {Δ B η : ℝ} (hΔ : 0 < Δ) (hη : 0 < η) :
     ∃ C p₀ D r₀ : ℕ, 1 ≤ C ∧ 1 ≤ D ∧ ∀ (L : ℕ), 1 ≤ L →
-      ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ),
-      (∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j)
-        (interval L j (j + 2))) →
-      (∀ j, (h j).PosSemidef) → (∀ j, h j ≤ 1) →
-      ∀ (E₀ : ℝ) (Γ : EuclideanSpace ℂ (Fin L → Fin q)),
+      ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
+      (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j)
+        (interval L j (j + 2)))
+      (h0 : ∀ j, (h j).PosSemidef) (h1 : ∀ j, h j ≤ 1)
+      (E₀ : ℝ) (Γ : EuclideanSpace ℂ (Fin L → Fin q)),
       IsGappedGroundState (∑ j, h j) E₀ Γ Δ → E₀ / Δ ≤ B →
-      ∀ (i b : ℕ), 0 < i → i ≤ L → ∀ S : Finset (LeftBlockVector L q (i - 1)),
-      (∀ v ∈ S, IsLeftOpenMPS b v) →
+      ∀ (i : ℕ), 0 < i → ∀ (hiL : i ≤ L), ∀ S : Finset (LeftBlockVector L q (i - 1)),
       IsViable Γ (lvvViabilityPrecision Δ η / (L : ℝ) ^ a) (S : Set (LeftBlockVector L q (i - 1))) →
-      ∃ T : Finset (LeftBlockVector L q i),
-        IsViableMPS Γ
-          (C * L ^ (sampledProjectorTotalDegree q a Δ B + p₀))
-          (D * L ^ (sampledProjectorTotalDegree q a Δ B + r₀))
-          (lvvViabilityPrecision Δ η / (L : ℝ) ^ a) T := by
+      ∃ (ℓ n N : ℕ) (I : Fin ℓ → Fin n → Fin L)
+        (A : Fin N → LeftBlockMatrix L q i) (B' : Fin N → RightBlockMatrix L q i),
+        ‖sampledProjector h E₀ I - vecMulVec (WithLp.ofLp Γ) (star (WithLp.ofLp Γ))‖ <
+          lvvViabilityPrecision Δ η / (L : ℝ) ^ a / 4 ∧
+        Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L i)
+          (sampledProjector h E₀ I) = ∑ j, A j ⊗ₖ B' j ∧
+        IsViableMPS Γ (C * L ^ (sampledProjectorTotalDegree q a Δ B + p₀))
+          (D * L ^ (sampledProjectorTotalDegree q a Δ B + r₀)) (lvvViabilityPrecision Δ η / (L : ℝ) ^ a)
+          (successiveStep hiL (bondTrimmingRadius L (lvvReferenceBond q Δ L)) Finset.univ A
+            (ChainHamiltonian.sizeTrimmingSelection (ChainHamiltonian.ofBonds h hs h0 h1) hq Δ
+              (AreaLaw.extend i S))) := by
   classical
   let α := lvvViabilityPrecision Δ η
   have hα : 0 < α := lvvViabilityPrecision_pos hΔ hη
@@ -85,7 +95,7 @@ theorem exists_sampled_viable_successor_polynomial_explicit_energy_degree
   let F := (d + 1) * d * (2 * netRadius + 1) ^ k
   refine ⟨max 1 (P * F), k, P * max 1 ⌈M⌉₊, u, le_max_left _ _, ?_, ?_⟩
   · simpa only [one_mul] using Nat.mul_le_mul hP (le_max_left 1 ⌈M⌉₊)
-  · intro L hL h hs h0 h1 E₀ Γ hgs hEB i b hi0 hiL S hS hviable
+  · intro L hL h hs h0 h1 E₀ Γ hgs hEB i hi0 hiL S hviable
     let : NeZero L := ⟨by omega⟩
     have hLp : (0 : ℝ) < L := by exact_mod_cast (show 0 < L by omega)
     have hδ : 0 < α / (L : ℝ) ^ a := div_pos hα (pow_pos hLp a)
@@ -94,13 +104,6 @@ theorem exists_sampled_viable_successor_polynomial_explicit_energy_degree
     let chain := ChainHamiltonian.ofBonds h hs h0 h1
     have hgs' : IsGappedGroundState chain.operator E₀ Γ Δ := by
       simpa only [chain, ChainHamiltonian.ofBonds_operator] using hgs
-    have hExt : ∀ v ∈ AreaLaw.extend i S, IsLeftOpenMPS b v := by
-      intro v hv
-      obtain ⟨w, hw, z, _, rfl⟩ := Finset.mem_image₂.mp hv
-      exact (hS w hw).extendSite hi0 hiL z
-    obtain ⟨T₀, hcard, hbond, hhalf⟩ := chain.exists_size_bond_trimmed_family_polynomial
-      (ChainHamiltonian.posSemidef_ofBonds_term h hs h0 h1) (by omega) hq hiL hΔ
-      (AreaLaw.extend i S) b hExt
     have hsmall : IsViable Γ (c / L)
         (AreaLaw.extend i S : Set (LeftBlockVector L q i)) := by
       obtain ⟨v, hv, hoverlap, hsupport⟩ := hviable.extend hi0 hiL
@@ -112,13 +115,19 @@ theorem exists_sampled_viable_successor_polynomial_explicit_energy_degree
             (min_le_right (min 1 η) c) (pow_nonneg hLp.le a)
           _ ≤ _ := div_le_div_of_nonneg_left (sq_nonneg _) hLp hLpow
       linarith only [hoverlap, hprec]
-    have hT₀ : IsViableMPS Γ (F * L ^ k)
-        (bondTrimmingRadius L (lvvReferenceBond q Δ L)) (1 / 2) T₀ :=
-      ⟨hcard, hbond, hhalf E₀ Γ hgs' hsmall⟩
-    obtain ⟨I, _, hcuts⟩ := exists_sampled_errorReduction (show 1 ≤ q by omega)
+    let m := bondTrimmingRadius L (lvvReferenceBond q Δ L)
+    let T₀ := chain.sizeTrimmingSelection hq Δ (AreaLaw.extend i S)
+    have hT₁ : IsViableMPS Γ (F * L ^ k) m (1 / 2) (bondTrimSet hiL m T₀) :=
+      ⟨(card_bondTrimSet_le hiL m T₀).trans
+        (chain.card_sizeTrimmingSelection_le_polynomial (by omega) hq hΔ _),
+        fun v hv ↦ isLeftOpenMPS_of_mem_bondTrimSet hiL m T₀ hv,
+        chain.isViable_bondTrimSet_sizeTrimmingSelection
+          (ChainHamiltonian.posSemidef_ofBonds_term h hs h0 h1) (by omega) hq hiL hΔ
+          (AreaLaw.extend i S) E₀ Γ hgs' hsmall⟩
+    obtain ⟨I, hproj, hcuts⟩ := exists_sampled_errorReduction (show 1 ≤ q by omega)
       h hs h0 h1 hgs hΔ hδ hδ1
-    obtain ⟨N, A, _, _, _, _, hgood⟩ := hcuts i hiL
-    have hout := hgood _ _ T₀ hT₀
+    obtain ⟨N, A, B', _, hdec, _, hgood⟩ := hcuts i hiL
+    have hout := hgood _ _ (bondTrimSet hiL m T₀) hT₁
     obtain ⟨hE₀, hE₀L⟩ := groundEnergy_nonneg_and_le h h0 h1 hgs
     have hbudgets := hsample L E₀ hL hE₀ hE₀L hEB
     have hηeq : α / (L : ℝ) ^ a / 8 = (α / 8) / (L : ℝ) ^ a := by ring
@@ -131,7 +140,7 @@ theorem exists_sampled_viable_successor_polynomial_explicit_energy_degree
         max 1 ⌈M⌉₊ * L ^ u := max_le
       (by simpa only [one_mul] using Nat.mul_le_mul (le_max_left 1 ⌈M⌉₊) (one_le_pow₀ hL))
       (hradiusNat.trans (Nat.mul_le_mul_right _ (le_max_right 1 ⌈M⌉₊)))
-    refine ⟨_, hout.1.trans ?_, ?_, hout.2.2⟩
+    refine ⟨_, _, N, I, A, B', hproj, hdec, hout.1.trans ?_, ?_, hout.2.2⟩
     · calc
         _ ≤ (P * L ^ t) * (F * L ^ k) := Nat.mul_le_mul_right _ hbudgets.1
         _ = (P * F) * L ^ (t + k) := by rw [pow_add]; ring
@@ -147,48 +156,70 @@ theorem exists_sampled_viable_successor_polynomial_explicit_energy_degree
             _ ≤ (P * L ^ t) * (max 1 ⌈M⌉₊ * L ^ u) := Nat.mul_le_mul hbudgets.2 hmax
             _ = _ := by rw [pow_add]; ring))
 
-/-- Existential-degree form of
-`exists_sampled_viable_successor_polynomial_explicit_energy_degree`. -/
+/-- **One complete sampled step with its selections named.** The output is the step
+`successiveStep hiL m Finset.univ A` applied to the size-trimming selection of the
+extension of the input family, where `A` are the left factors of the cut decomposition of
+a sampled projector within `δ / 4` of the ground projection. The output has polynomial
+size and bond bounds independent of the input size and bond, with all constants preceding
+the length and the ground energy. LVV13, `algo53.tex`, the four steps, lines 379–592. -/
 theorem exists_sampled_viable_successor_polynomial {q : ℕ} (hq : 2 ≤ q) (a : ℕ) (ha : 1 ≤ a)
     {Δ B η : ℝ} (hΔ : 0 < Δ) (hη : 0 < η) :
     ∃ C p D r : ℕ, 1 ≤ C ∧ 1 ≤ D ∧ ∀ (L : ℕ), 1 ≤ L →
-      ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ),
-      (∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j)
-        (interval L j (j + 2))) →
-      (∀ j, (h j).PosSemidef) → (∀ j, h j ≤ 1) →
-      ∀ (E₀ : ℝ) (Γ : EuclideanSpace ℂ (Fin L → Fin q)),
+      ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
+      (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j)
+        (interval L j (j + 2)))
+      (h0 : ∀ j, (h j).PosSemidef) (h1 : ∀ j, h j ≤ 1)
+      (E₀ : ℝ) (Γ : EuclideanSpace ℂ (Fin L → Fin q)),
       IsGappedGroundState (∑ j, h j) E₀ Γ Δ → E₀ / Δ ≤ B →
-      ∀ (i b : ℕ), 0 < i → i ≤ L → ∀ S : Finset (LeftBlockVector L q (i - 1)),
-      (∀ v ∈ S, IsLeftOpenMPS b v) →
+      ∀ (i : ℕ), 0 < i → ∀ (hiL : i ≤ L), ∀ S : Finset (LeftBlockVector L q (i - 1)),
       IsViable Γ (lvvViabilityPrecision Δ η / (L : ℝ) ^ a) (S : Set (LeftBlockVector L q (i - 1))) →
-      ∃ T : Finset (LeftBlockVector L q i),
-        IsViableMPS Γ (C * L ^ p) (D * L ^ r)
-          (lvvViabilityPrecision Δ η / (L : ℝ) ^ a) T := by
+      ∃ (ℓ n N : ℕ) (I : Fin ℓ → Fin n → Fin L)
+        (A : Fin N → LeftBlockMatrix L q i) (B' : Fin N → RightBlockMatrix L q i),
+        ‖sampledProjector h E₀ I - vecMulVec (WithLp.ofLp Γ) (star (WithLp.ofLp Γ))‖ <
+          lvvViabilityPrecision Δ η / (L : ℝ) ^ a / 4 ∧
+        Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L i)
+          (sampledProjector h E₀ I) = ∑ j, A j ⊗ₖ B' j ∧
+        IsViableMPS Γ (C * L ^ p) (D * L ^ r) (lvvViabilityPrecision Δ η / (L : ℝ) ^ a)
+          (successiveStep hiL (bondTrimmingRadius L (lvvReferenceBond q Δ L)) Finset.univ A
+            (ChainHamiltonian.sizeTrimmingSelection (ChainHamiltonian.ofBonds h hs h0 h1) hq Δ
+              (AreaLaw.extend i S))) := by
   obtain ⟨C, p₀, D, r₀, hC, hD, hstep⟩ :=
     exists_sampled_viable_successor_polynomial_explicit_energy_degree
       (B := B) hq a ha hΔ hη
   exact ⟨C, sampledProjectorTotalDegree q a Δ B + p₀,
     D, sampledProjectorTotalDegree q a Δ B + r₀, hC, hD, hstep⟩
 
-
-/-- Starting from the scalar singleton, the four successive operations construct
-viable families whose degrees are the explicit sampled-projector degree plus
-energy-independent trimming degrees. LVV13, `algo53.tex`, induction,
-lines 652–678, in the documented quantitative scope. -/
-theorem exists_sampled_successive_viable_sets_polynomial_explicit_energy_degree
-    {q : ℕ} (hq : 2 ≤ q) (a : ℕ) (ha : 1 ≤ a)
+/-- **The sampled induction with each family obtained from the previous one.** Starting
+from the scalar singleton, the family at the cut after `i + 1` sites is the step
+`successiveStep _ m Finset.univ A` applied to the size-trimming selection of the extension
+of the previous family, with `A` the left factors of the cut decomposition of a sampled
+projector within `δ / 4` of the ground projection. Every family has fixed polynomial size
+and bond bounds. LVV13, `algo53.tex`, induction, lines 652–678, in the documented
+quantitative scope. -/
+theorem exists_sampled_successive_viable_sets_polynomial_explicit_energy_degree {q : ℕ} (hq : 2 ≤ q) (a : ℕ) (ha : 1 ≤ a)
     {Δ B η : ℝ} (hΔ : 0 < Δ) (hη : 0 < η) :
     ∃ C p₀ D r₀ : ℕ, 1 ≤ C ∧ 1 ≤ D ∧ ∀ (L : ℕ), 1 ≤ L →
-      ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ),
-      (∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j)
-        (interval L j (j + 2))) →
-      (∀ j, (h j).PosSemidef) → (∀ j, h j ≤ 1) →
-      ∀ (E₀ : ℝ) (Γ : EuclideanSpace ℂ (Fin L → Fin q)),
+      ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
+      (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j)
+        (interval L j (j + 2)))
+      (h0 : ∀ j, (h j).PosSemidef) (h1 : ∀ j, h j ≤ 1)
+      (E₀ : ℝ) (Γ : EuclideanSpace ℂ (Fin L → Fin q)),
       IsGappedGroundState (∑ j, h j) E₀ Γ Δ → E₀ / Δ ≤ B →
-      ∃ S : (i : ℕ) → Finset (LeftBlockVector L q i), S 0 = {emptyLeftVector L q} ∧
+      ∃ S : (i : ℕ) → Finset (LeftBlockVector L q i),
+        S 0 = {emptyLeftVector L q} ∧
+        (∀ i : ℕ, (hi : i + 1 ≤ L) →
+          ∃ (ℓ n N : ℕ) (I : Fin ℓ → Fin n → Fin L)
+            (A : Fin N → LeftBlockMatrix L q (i + 1))
+            (B' : Fin N → RightBlockMatrix L q (i + 1)),
+            ‖sampledProjector h E₀ I - vecMulVec (WithLp.ofLp Γ) (star (WithLp.ofLp Γ))‖ <
+              lvvViabilityPrecision Δ η / (L : ℝ) ^ a / 4 ∧
+            Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L (i + 1))
+              (sampledProjector h E₀ I) = ∑ j, A j ⊗ₖ B' j ∧
+            S (i + 1) = successiveStep hi (bondTrimmingRadius L (lvvReferenceBond q Δ L))
+              Finset.univ A (ChainHamiltonian.sizeTrimmingSelection
+                (ChainHamiltonian.ofBonds h hs h0 h1) hq Δ (AreaLaw.extend (i + 1) (S i)))) ∧
         ∀ i : ℕ, i ≤ L →
-          IsViableMPS Γ
-            (C * L ^ (sampledProjectorTotalDegree q a Δ B + p₀))
+          IsViableMPS Γ (C * L ^ (sampledProjectorTotalDegree q a Δ B + p₀))
             (D * L ^ (sampledProjectorTotalDegree q a Δ B + r₀))
             (lvvViabilityPrecision Δ η / (L : ℝ) ^ a) (S i) := by
   classical
@@ -211,17 +242,36 @@ theorem exists_sampled_successive_viable_sets_polynomial_explicit_energy_degree
     · have hδ : 0 ≤ lvvViabilityPrecision Δ η / (L : ℝ) ^ a :=
         div_nonneg (lvvViabilityPrecision_pos hΔ hη).le (pow_nonneg (Nat.cast_nonneg L) a)
       linarith only [hoverlap, hδ]
+  let Step := fun (i : ℕ) (S : Finset (LeftBlockVector L q i))
+      (T : Finset (LeftBlockVector L q (i + 1))) ↦
+    ∀ hi : i + 1 ≤ L,
+      ∃ (ℓ n N : ℕ) (I : Fin ℓ → Fin n → Fin L)
+        (A : Fin N → LeftBlockMatrix L q (i + 1))
+        (B' : Fin N → RightBlockMatrix L q (i + 1)),
+        ‖sampledProjector h E₀ I - vecMulVec (WithLp.ofLp Γ) (star (WithLp.ofLp Γ))‖ <
+          lvvViabilityPrecision Δ η / (L : ℝ) ^ a / 4 ∧
+        Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L (i + 1))
+          (sampledProjector h E₀ I) = ∑ j, A j ⊗ₖ B' j ∧
+        T = successiveStep hi (bondTrimmingRadius L (lvvReferenceBond q Δ L)) Finset.univ A
+          (ChainHamiltonian.sizeTrimmingSelection (ChainHamiltonian.ofBonds h hs h0 h1) hq Δ
+            (AreaLaw.extend (i + 1) S))
+  have hadvance : ∀ (i : ℕ) (S : Finset (LeftBlockVector L q i)), (i ≤ L → P i S) →
+      ∃ T : Finset (LeftBlockVector L q (i + 1)), (i + 1 ≤ L → P (i + 1) T) ∧ Step i S T := by
+    intro i S hS
+    by_cases hi : i + 1 ≤ L
+    · obtain ⟨-, -, hviable⟩ := hS (by omega)
+      obtain ⟨ℓ, n, N, I, A, B', hproj, hdec, hT⟩ :=
+        hstep L hL h hs h0 h1 E₀ Γ hgs hEB (i + 1) (by omega) hi S hviable
+      exact ⟨_, fun _ ↦ hT, fun _ ↦ ⟨ℓ, n, N, I, A, B', hproj, hdec, rfl⟩⟩
+    · exact ⟨∅, fun hi' ↦ absurd hi' hi, fun hi' ↦ absurd hi' hi⟩
+  choose! T hT hStep using hadvance
   let State := fun i : ℕ ↦ {S : Finset (LeftBlockVector L q i) // i ≤ L → P i S}
   let initial : State 0 := ⟨{emptyLeftVector L q}, fun _ ↦ hbase⟩
   let advance : (i : ℕ) → State i → State (i + 1) := fun i previous ↦
-    if hi : i + 1 ≤ L then
-      let hprevious := previous.property (by omega)
-      let step := hstep L hL h hs h0 h1 E₀ Γ hgs hEB (i + 1) (D * L ^ r)
-        (by omega) hi previous.val hprevious.2.1 hprevious.2.2
-      ⟨Classical.choose step, fun _ ↦ Classical.choose_spec step⟩
-    else ⟨∅, fun hi' ↦ False.elim (hi hi')⟩
+    ⟨T i previous.val, hT i previous.val previous.property⟩
   let run : (i : ℕ) → State i := Nat.rec initial advance
-  exact ⟨fun i ↦ (run i).val, rfl, fun i hi ↦ (run i).property hi⟩
+  exact ⟨fun i ↦ (run i).val, rfl, fun i hi ↦ hStep i (run i).val (run i).property hi,
+    fun i hi ↦ (run i).property hi⟩
 
 /-- The total number of candidate vectors retained during the whole sampled
 LVV sweep is polynomial with one degree more than the bound for a single
@@ -252,7 +302,7 @@ theorem exists_sampled_successive_viable_sets_polynomial_total_cardinality
       (B := B) hq a ha hΔ hη
   refine ⟨2 * C, p₀, D, r₀, by omega, hD, ?_⟩
   intro L hL h hs h0 h1 E₀ Γ hgs hEB
-  obtain ⟨S, hS0, hS⟩ := hsets L hL h hs h0 h1 E₀ Γ hgs hEB
+  obtain ⟨S, hS0, _, hS⟩ := hsets L hL h hs h0 h1 E₀ Γ hgs hEB
   refine ⟨S, hS0, ?_, ?_⟩
   · intro i hi
     obtain ⟨hcard, hbond, hviable⟩ := hS i hi
@@ -274,18 +324,35 @@ theorem exists_sampled_successive_viable_sets_polynomial_total_cardinality
         rw [pow_succ]
         ring
 
-/-- Existential-degree form of
-`exists_sampled_successive_viable_sets_polynomial_explicit_energy_degree`. -/
-theorem exists_sampled_successive_viable_sets_polynomial {q : ℕ} (hq : 2 ≤ q)
-    (a : ℕ) (ha : 1 ≤ a) {Δ B η : ℝ} (hΔ : 0 < Δ) (hη : 0 < η) :
+/-- **The sampled induction with each family obtained from the previous one.** Starting
+from the scalar singleton, the family at the cut after `i + 1` sites is the step
+`successiveStep _ m Finset.univ A` applied to the size-trimming selection of the extension
+of the previous family, with `A` the left factors of the cut decomposition of a sampled
+projector within `δ / 4` of the ground projection. Every family has fixed polynomial size
+and bond bounds. LVV13, `algo53.tex`, induction, lines 652–678, in the documented
+quantitative scope. -/
+theorem exists_sampled_successive_viable_sets_polynomial {q : ℕ} (hq : 2 ≤ q) (a : ℕ) (ha : 1 ≤ a)
+    {Δ B η : ℝ} (hΔ : 0 < Δ) (hη : 0 < η) :
     ∃ C p D r : ℕ, 1 ≤ C ∧ 1 ≤ D ∧ ∀ (L : ℕ), 1 ≤ L →
-      ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ),
-      (∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j)
-        (interval L j (j + 2))) →
-      (∀ j, (h j).PosSemidef) → (∀ j, h j ≤ 1) →
-      ∀ (E₀ : ℝ) (Γ : EuclideanSpace ℂ (Fin L → Fin q)),
+      ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
+      (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j)
+        (interval L j (j + 2)))
+      (h0 : ∀ j, (h j).PosSemidef) (h1 : ∀ j, h j ≤ 1)
+      (E₀ : ℝ) (Γ : EuclideanSpace ℂ (Fin L → Fin q)),
       IsGappedGroundState (∑ j, h j) E₀ Γ Δ → E₀ / Δ ≤ B →
-      ∃ S : (i : ℕ) → Finset (LeftBlockVector L q i), S 0 = {emptyLeftVector L q} ∧
+      ∃ S : (i : ℕ) → Finset (LeftBlockVector L q i),
+        S 0 = {emptyLeftVector L q} ∧
+        (∀ i : ℕ, (hi : i + 1 ≤ L) →
+          ∃ (ℓ n N : ℕ) (I : Fin ℓ → Fin n → Fin L)
+            (A : Fin N → LeftBlockMatrix L q (i + 1))
+            (B' : Fin N → RightBlockMatrix L q (i + 1)),
+            ‖sampledProjector h E₀ I - vecMulVec (WithLp.ofLp Γ) (star (WithLp.ofLp Γ))‖ <
+              lvvViabilityPrecision Δ η / (L : ℝ) ^ a / 4 ∧
+            Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L (i + 1))
+              (sampledProjector h E₀ I) = ∑ j, A j ⊗ₖ B' j ∧
+            S (i + 1) = successiveStep hi (bondTrimmingRadius L (lvvReferenceBond q Δ L))
+              Finset.univ A (ChainHamiltonian.sizeTrimmingSelection
+                (ChainHamiltonian.ofBonds h hs h0 h1) hq Δ (AreaLaw.extend (i + 1) (S i)))) ∧
         ∀ i : ℕ, i ≤ L →
           IsViableMPS Γ (C * L ^ p) (D * L ^ r)
             (lvvViabilityPrecision Δ η / (L : ℝ) ^ a) (S i) := by

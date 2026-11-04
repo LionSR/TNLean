@@ -120,14 +120,19 @@ Section~\ref{sec:lvv_successive_construction} does not need this bound.
     \lean{TNLean.MPS.AreaLaw.exists_sampled_viable_successor_polynomial_explicit_energy_degree,
         TNLean.MPS.AreaLaw.exists_sampled_viable_successor_polynomial}
     \leanok
-    \uses{def:lvv_successive_precision}
+    \uses{def:lvv_successive_precision, def:lvv_successive_step,
+        def:lvv_size_trimming_selection}
     Fix $q\ge2$, $\Delta>0$, $\eta>0$, an integer $a\ge1$, and an upper bound $B$ for
     $\varepsilon_0/\Delta$. There are natural constants $C,D\ge1$ and
     $p,r$ such that, for every positive chain length and every cut
-    $1\le i\le L$, any finite family of left matrix product states
-    that is $(i-1,\alpha/L^a)$-viable gives an
-    $(i,CL^p,DL^r,\alpha/L^a)$-viable family by extension, size trimming,
-    independent bond trimming and sampled error reduction.
+    $1\le i\le L$, any finite family $S$ of left vectors
+    that is $(i-1,\alpha/L^a)$-viable admits a sampled projector $K$
+    within $\alpha/(4L^a)$ of $|\Gamma\rangle\langle\Gamma|$ in operator
+    norm, with left factors $A_1,\ldots,A_N$ at the cut after $i$ sites,
+    such that the step of Definition~\ref{def:lvv_successive_step}
+    applied, with these factors and the corrected radius, to the
+    size-trimming selection of $S\otimes\{|1\rangle,\ldots,|q\rangle\}$ is
+    $(i,CL^p,DL^r,\alpha/L^a)$-viable.
     The bounds are independent of the size and bond bound of the input family.
     More precisely, there are offsets $p_0,r_0$, independent of $B$, for
     which one may take $p=p_{\rm total}+p_0$ and
@@ -136,14 +141,16 @@ Section~\ref{sec:lvv_successive_construction} does not need this bound.
 \begin{proof}
     \leanok
     \uses{thm:lvv_sampled_error_reduction, thm:lvv_sampled_polynomial_bounds,
-        thm:lvv_size_bond_trimmed_family, lem:lvv_bond_trimming_radius_polynomial}
+        thm:lvv_size_trimmed_family_bond_trim_set, lem:lvv_bond_trimming_radius_polynomial}
     Extension preserves viability. Since $\alpha\le(\Delta/169)^2$ and $L^a\ge L$,
-    size and bond trimming produce a half-viable family of polynomial
-    cardinality and individual bond bound, with the bond trimming radius
-    corrected as in~\cite{gap:lvv13_trimming_radius}. Sampled error reduction restores
-    error $\alpha/L^a$. Multiply its polynomial factor counts and ranks by
-    the corresponding trimming bounds. All coefficients and degrees are
-    chosen before $L$.
+    the trimmed size-trimming selection of the extended family is
+    half-viable, of polynomial cardinality and individual bond
+    bound, with the bond trimming radius corrected as
+    in~\cite{gap:lvv13_trimming_radius}. Sampled error reduction by the
+    left factors of the sampled projector restores error $\alpha/L^a$ on
+    the step. Multiply its polynomial factor counts and ranks by the
+    corresponding trimming bounds. All coefficients and degrees are chosen
+    before $L$.
 \end{proof}
 
 \begin{lemma}[Successive viable families]
@@ -152,6 +159,7 @@ Section~\ref{sec:lvv_successive_construction} does not need this bound.
         TNLean.MPS.AreaLaw.exists_sampled_successive_viable_sets_polynomial_total_cardinality,
         TNLean.MPS.AreaLaw.exists_sampled_successive_viable_sets_polynomial}
     \leanok
+    \uses{def:lvv_successive_step, def:lvv_size_trimming_selection}
     Under the hypotheses of Lemma~\ref{thm:lvv_sampled_successor}, there
     are families $S_i$ at all cuts $0\le i\le L$, beginning with the scalar
     singleton, such that each is $(i,CL^p,DL^r,\alpha/L^a)$-viable, with
@@ -163,12 +171,18 @@ Section~\ref{sec:lvv_successive_construction} does not need this bound.
     \end{align*}
     This counts all retained candidates; it does not include the arithmetic
     cost of the convex minimizations or spectral computations.
+    Moreover, each successor is the step of
+    Definition~\ref{def:lvv_successive_step}, applied to the size-trimming
+    selection of the extended preceding family, with a sampled projector
+    within $\alpha/(4L^a)$ of $|\Gamma\rangle\langle\Gamma|$ and the corrected radius.
 \end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:lvv_sampled_successor, lem:lvv_initial_scalar_family}
-    The scalar singleton is exactly viable. Apply
-    Lemma~\ref{thm:lvv_sampled_successor} inductively at the successive
-    cuts. The same size and bond bounds apply at each step.  Summing the
-    $L+1$ cardinality bounds and using $L+1\le2L$ gives the total count.
+    The scalar singleton is exactly viable. Choose, for every family at a
+    cut, the sampled projector and the step of
+    Lemma~\ref{thm:lvv_sampled_successor}, and apply this choice
+    inductively at the successive cuts. The same size and bond bounds
+    apply at each step.
+    Summing the $L+1$ cardinality bounds and using $L+1\le2L$ gives the total count.
 \end{proof}
