@@ -87,7 +87,10 @@
 \begin{lemma}[The uniform fourth-root logarithmic rank bound]
     \label{thm:aklv_accuracy_fourth_root_log_rank}
     \lean{TNLean.MPS.AreaLaw.aklvAccuracyRankBound_log_le_cost,
-        TNLean.MPS.AreaLaw.aklvAccuracyRankBound_log_le_fourthRoot}
+        TNLean.MPS.AreaLaw.aklvAccuracyRankBound_log_le_fourthRoot,
+        TNLean.MPS.AreaLaw.aklv_fourthRoot_accuracy_cost_le_linear,
+        TNLean.MPS.AreaLaw.aklvAccuracyRankBound_log_le_linear,
+        TNLean.MPS.AreaLaw.aklvAccuracyRankBound_log_le_lvv}
     \leanok
     \uses{thm:aklv_accuracy_rank_log,thm:aklv_accuracy_two_degree_regimes,
         thm:aklv_quadratic_degree_log_rank,thm:aklv_initial_log_rank_scale}
@@ -97,10 +100,13 @@
     Then
     \begin{align*}
         \log B & \le10001\log D_0+
-        400000m(1+\log q+\log(z+1)),\notag    \\
+        400000m(1+\log q+\log(z+1)),\notag                 \\
         \log B & \le C(A)\left[\frac{u^3}{g}+
             \left(\frac{z^3}{g}\right)^{1/4}
-            (u+\log(z+1))\right].
+        (u+\log(z+1))\right],\notag                        \\
+        \log B & \le C(A)\left[\frac{u^3}{g}+
+        \left(\frac{2}{g}\right)^{1/4}(u+4)z\right],\notag \\
+        \log B & \le 11C(A)\frac{u^3}{g}z.
     \end{align*}
 \end{lemma}
 \begin{proof}
@@ -111,6 +117,86 @@
     most $s_0\log q+2m\log q$. The first term is absorbed by
     $\log D_0$. Finally $r\ge1$ and $m<r+1\le2r$.
     The degree remains $\lceil z\sqrt{(2t+s)/g}\rceil$ throughout.
+    For the final estimate use
+    $\log(z+1)\le4(z+1)^{1/4}$ and $z+1\le2z$ for $z\ge1$.
+    Taking fourth powers gives
+    $(z^3/g)^{1/4}\le(2/g)^{1/4}z$ and
+    $(z^3/g)^{1/4}(z+1)^{1/4}\le(2/g)^{1/4}z$.
+    Since $u\ge1$, $g\le1$ and $z\ge1$, the constant term and the
+    remaining coefficient are absorbed into $11u^3z/g$.
+\end{proof}
+
+\begin{lemma}[The separated logarithmic rank budget]
+    \label{thm:aklv_separated_log_rank_budget}
+    \lean{TNLean.MPS.AreaLaw.aklv_initial_width_separated_bounds,
+        TNLean.MPS.AreaLaw.aklvAccuracyRankBound_log_le_fourthRoot_separated,
+        TNLean.MPS.AreaLaw.aklvAccuracyRankBound_log_le_lvv_separated}
+    \leanok
+    \uses{def:aklv_accuracy_log_coefficients,thm:aklv_accuracy_fourth_root_log_rank}
+    Put $v=1+\log q$, $w=\log(1/g)$, and
+    $s_0=\lceil Av^2/g\rceil$.  The rank budget selected with this smaller
+    initial width satisfies
+    \begin{align*}
+        \log D_0 & \le \frac{C_0(A)}{g}(v^3+v^2w),\notag \\
+        \log B   & \le C(A)\left[
+            \frac{v^3+v^2w}{g}
+            +\left(\frac{z^3}{g}\right)^{1/4}
+        (v+\log(z+1))\right],\notag                      \\
+        \log B   & \le 11C(A)\frac{v^3+v^2w}{g}z.
+    \end{align*}
+    These are numerical rank estimates.  They do not assert that the AGSP
+    shrinking--rank inequality holds at the smaller width $s_0$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    The ceiling estimate gives $s_0\le(A+1)v^2/g$.  Taking the logarithm of
+    $q(s_0^2+1)$ retains the term $2\log(1/g)$, which yields
+    $v^3+v^2w$.  The two degree regimes and the fourth-root comparison are
+    unchanged.  Since $v^3/g\le(v^3+v^2w)/g$, the last estimate follows by
+    the same linear-accuracy absorption as in
+    Lemma~\ref{thm:aklv_accuracy_fourth_root_log_rank}.
+\end{proof}
+
+\begin{lemma}[Cubic local-dimension cost at fixed gap]
+    \label{thm:aklv_fixed_gap_cubic_cost}
+    \lean{TNLean.MPS.AreaLaw.aklv_cubic_cost_of_fixed_gap}
+    \leanok
+    Fix $0<g_0\le1$.  If $g_0\le g\le1$ and $q\ge2$, then
+
+    \begin{align*}
+        \frac{(1+\log q+\log(1/g))^3}{g}
+        \le C(g_0)\frac{\log^3q}{g},
+    \end{align*}
+    where
+    \begin{align*}
+        C(g_0)=\left(1+\frac1{\log2}\right)^3
+        \left(1+\log(1/g_0)\right)^3.
+    \end{align*}
+\end{lemma}
+\begin{proof}
+    \leanok
+    Monotonicity gives $\log(1/g)\le\log(1/g_0)$.  Since $q\ge2$,
+    $1\le\log q/\log2$.  These two inequalities bound the base of the
+    cube by
+    $(1+\log(1/g_0))(1+1/\log2)\log q$.
+\end{proof}
+
+\begin{lemma}[The gap logarithm cannot be absorbed uniformly]
+    \label{thm:aklv_gap_logarithm_not_absorbable}
+    \lean{TNLean.MPS.AreaLaw.aklv_gap_logarithm_not_uniformly_absorbable}
+    \leanok
+    For every $K\ge0$, there is $0<g\le1$ such that
+    \begin{align*}
+        K\log^3 2<\bigl(1+\log2+\log(1/g)\bigr)^3.
+    \end{align*}
+    Hence the $\log(1/g)$ term in the proved coefficient cannot be absorbed
+    into a universal multiple of $\log^3q$, even at $q=2$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Put $x=K\log^3 2$ and $g=e^{-(x+1)}$. Then
+    $\log(1/g)=x+1$, while the cubed quantity on the right is larger than
+    its base and hence larger than $x$.
 \end{proof}
 
 \begin{lemma}[Sharp actual approximants at every physical cut]
@@ -125,8 +211,12 @@
     rank-one projector gap $g$ and $\mu+g$ in its spectrum.
     Then $q\ge2$ and $g\le1$. For every $0<\rho\le1$ and every cut,
     the actual filter image or exact boundary alternative has squared
-    error at most $\rho$, rank at most $B$, and the preceding logarithmic
-    rank bound. No fitting window or upper-gap bound is assumed.
+    error at most $\rho$, overlap with $\Omega$ at least $1-\rho/2$,
+    rank at most $B$, and the preceding logarithmic rank bound. No fitting
+    window or upper-gap bound is assumed. In particular,
+    \begin{align*}
+        \log B\le 11C(A)\frac{u^3}{g}\log\frac{128}{\rho}.
+    \end{align*}
 \end{lemma}
 \begin{proof}
     \leanok
@@ -135,6 +225,42 @@
     changing the energy by at most one, giving $g\le1$.
     Apply the actual accuracy-window construction and its uniform rank
     comparison. The failed-window case retains the ground vector itself.
+    For unit vectors,
+    $1-\operatorname{Re}\langle y,\Omega\rangle
+        =\|y-\Omega\|^2/2$, and the modulus of the overlap is at least its
+    real part.
+\end{proof}
+
+\begin{lemma}[Physical per-cut approximation at fixed gap]
+    \label{thm:aklv_fixed_gap_physical_per_cut}
+    \lean{TNLean.MPS.AreaLaw.exists_aklv_fixed_gap_physical_per_cut_approximation}
+    \leanok
+    \uses{thm:aklv_sharp_physical_per_cut,thm:aklv_fixed_gap_cubic_cost}
+    Fix $0<g_0\le1$.  Consider a normalized nearest-neighbour chain whose
+    terms are positive contractions, with a unique normalized ground vector
+    and actual gap $g\ge g_0$.  There are constants $A,C>0$, independent of
+    the chain, such that for every $0<\rho\le1$ and every cut there is a
+    normalized vector $y$ satisfying
+    \begin{align*}
+        \lVert y-\Omega\rVert^2   & \le\rho,     &
+        |\langle y,\Omega\rangle| & \ge1-\rho/2,
+    \end{align*}
+    and whose Schmidt rank at that cut is at most $D$, where
+    \begin{align*}
+        \log D\le 11C C_0(g_0)\frac{\log^3q}{g}\,z(\rho),
+        \qquad
+        C_0(g_0)=\left(1+\frac1{\log2}\right)^3
+        \left(1+\log(1/g_0)\right)^3.
+    \end{align*}
+    Here $D$ is the same explicit AKLV rank budget as in
+    Lemma~\ref{thm:aklv_sharp_physical_per_cut}; in particular, $y$ is
+    either the exact ground vector or an actual filtered output.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Apply Lemma~\ref{thm:aklv_sharp_physical_per_cut}, then use
+    Lemma~\ref{thm:aklv_fixed_gap_cubic_cost} and the nonnegativity of the
+    logarithmic accuracy scale.
 \end{proof}
 
 \begin{lemma}[Discarded mass from a cut approximant]
@@ -167,7 +293,8 @@
 
 \begin{theorem}[Sequential assembly and the sharp MPS bound]
     \label{thm:aklv_sharp_sequential_mps}
-    \lean{TNLean.MPS.AreaLaw.aklvNormalizedSpectralTruncation_spec,
+    \lean{TNLean.MPS.AreaLaw.aklvAccuracyLog_sequential,
+        TNLean.MPS.AreaLaw.aklvNormalizedSpectralTruncation_spec,
         TNLean.MPS.AreaLaw.exists_aklv_sharp_physical_sequential_mps_approximation}
     \leanok
     \uses{thm:aklv_sharp_physical_per_cut,thm:aklv_cut_approximation_tail,
@@ -183,7 +310,10 @@
     with $\|\Phi-\Omega\|\le\epsilon$. Moreover
     \begin{align*}
         \log D\le C\left[\frac{u^3}{g}+
-            \left(\frac{z^3}{g}\right)^{1/4}(u+\log(z+1))\right].
+            \left(\frac{z^3}{g}\right)^{1/4}(u+\log(z+1))\right],
+        \qquad
+        \log D\le 11C\frac{u^3}{g}z
+        =11C\frac{u^3}{g}\log\frac{2048(L+1)}{\epsilon^2}.
     \end{align*}
     The constants precede the chain, gap and accuracy. The actual
     excited spectral value is retained among the physical hypotheses.
@@ -197,4 +327,26 @@
     to the unit vector $\Omega$. The same ordered product has every
     internal cut rank at most $D$ and hence an actual matrix product
     representation. Its scalar normalization preserves that bound.
+\end{proof}
+
+\begin{lemma}[Sequential matrix product approximation at fixed gap]
+    \label{thm:aklv_fixed_gap_sequential_mps}
+    \lean{TNLean.MPS.AreaLaw.exists_aklv_fixed_gap_physical_sequential_mps_approximation}
+    \leanok
+    \uses{thm:aklv_sharp_sequential_mps,thm:aklv_fixed_gap_cubic_cost}
+    Under the hypotheses of
+    Lemma~\ref{thm:aklv_fixed_gap_physical_per_cut}, for every
+    $0<\epsilon\le1$ the sequentially truncated vector $\Phi_0$ is nonzero
+    and its normalization $\Phi$ is an open-boundary matrix product state
+    satisfying $\lVert\Phi-\Omega\rVert\le\epsilon$.  Its explicit bond
+    dimension $D$ obeys
+    \begin{align*}
+        \log D\le 11C C_0(g_0)\frac{\log^3q}{g}
+        \log\frac{2048(L+1)}{\epsilon^2}.
+    \end{align*}
+\end{lemma}
+\begin{proof}
+    \leanok
+    Apply Theorem~\ref{thm:aklv_sharp_sequential_mps} and then
+    Lemma~\ref{thm:aklv_fixed_gap_cubic_cost}.
 \end{proof}

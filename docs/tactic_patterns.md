@@ -45,6 +45,49 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Reduced coordinate heights from a common denominator — promoted (2026-11-04)
+
+- **Pattern:** Convert a common Gaussian-integer denominator and a norm bound
+  into a decoded height bound, then use `decode_height_iff` to obtain heights
+  of the two rational fractions actually stored in the code.
+- **Helper:** `RationalComplexCode.coordinate_heights_of_common_denominator`
+  in `MPS/AreaLaw/ViableSet/BoundarySDP/RationalCodeHeights.lean`.
+- **Occurrences:** Eight conversions in
+  `BoundarySDP/WeightedTransferAccumulationBounds.lean`,
+  `ContractionIntermediateBounds.lean`, `WeightedTransferBounds.lean`,
+  `RationalAccumulationBounds.lean`, `WeightedOverlapBounds.lean`, and
+  `RationalLocalEnergyBounds.lean` now use the helper.
+- **Decision:** The conversion is a mathematical consequence of denominator
+  and norm control, so a lemma replaces the repeated two-step argument.
+
+### Left compressed Hamiltonian norm bound — promoted (2026-11-04)
+
+- **Pattern:** From `h.operator = HL + B`, `‖h.operator‖ ≤ 2L`, and `‖B‖ ≤ 2L`,
+  derive `‖HL‖ ≤ 4L` and pass the bound through restriction to the left cut,
+  tensoring with the bond identity, and isometric compression.
+- **Helper:** `ChainHamiltonian.leftObjective_norm_bounds` in
+  `MPS/AreaLaw/ViableSet/SizeTrimming/CompressedSolutions.lean` returns the
+  full-chain and cut-and-bond objective bounds. Existing
+  `l2_opNorm_isometricCompression_le` gives the compressed bound.
+- **Occurrences:** Seven repeated arguments in the split modules
+  `SizeTrimming/CompressedSolutions.lean`, `ApproximateCertificates.lean`,
+  `RationalSearch.lean`, and `LeadingVectorPrecision.lean` now use the helper.
+- **Decision:** The common content is a norm estimate, so a mathematical lemma
+  removes the duplication without introducing a tactic.
+
+### Spectral tolerances from cone-order bounds — promoted (2026-11-04)
+
+- **Pattern:** Convert tolerances of size
+  `Δ / (129792 * L * nMax)` into the realized inequalities
+  `2 * n * ε ≤ Δ / (64896 * L)`, using `n ≤ nMax`, and similarly for the
+  auxiliary cone order.
+- **Helper:** `fullyApproxSDP_scaled_errors_of_order_bounds` in
+  `MPS/AreaLaw/ViableSet/BoundarySDP/ErrorBudgets.lean`.
+- **Occurrences:** The general LVV margin theorem and the physical uniform-certificate
+  theorem in `SizeTrimming.lean`; the helper treats both cone orders simultaneously.
+- **Decision:** The scaling is a mathematical lemma.  It replaces repeated denominator
+  positivity and nonlinear-arithmetic arguments; no tactic is introduced.
+
 ### Nonempty bond from a trace-one matrix — promoted (2026-10-31)
 
 - **Pattern:** `have ha : a ≠ 0 := by intro ha; subst a; simp at htr` followed by
@@ -5113,6 +5156,21 @@ three-plaquette output measurement, and the routed reunion measurement.
   `isReordering_comp_iff`; apply `IsReordering.comp` as a term instead.
 
 ## Candidates
+
+### Transporting three decoded Gram-factor bounds — candidate (2026-11-04)
+
+- **Pattern:** After identifying decoded rational matrices with the rounded
+  density and two auxiliary Gram factors, rewrite the three identities and
+  discharge their entrywise approximation bounds componentwise.
+- **Seen:** Three occurrences in
+  `MPS/AreaLaw/ViableSet/BoundarySDP/ApproximateCertificates.lean` near the explicit,
+  uniform, and accepted-certificate constructions (scanner output,
+  2026-11-04).
+- **Abstraction:** A mathematical helper packaging the three transported
+  entrywise bounds is preferable if the pattern appears in a second file.
+- **Notes:** All current occurrences are local to one module, so this remains
+  below the project promotion threshold.
+
 ### Entrywise proof that a matrix is diagonal — candidate (2026-11-04)
 
 - **Pattern:** `ext x y`, `by_cases hxy : x = y`, `· subst y`, then a diagonal
@@ -5180,7 +5238,6 @@ three-plaquette output measurement, and the routed reunion measurement.
   line per cast lemma and is left to the owners of those files). Recorded so
   the scanner's top entries are not re-proposed; `apply Units.ext` /
   `push_cast` / `field_simp` is already in the rejected section.
-
 ### Supplied standard-form source-cut contraction — candidate (2026-10-29)
 
 - **Pattern:** Preserve the external physical coordinates by Kronecker deltas,
@@ -11446,17 +11503,22 @@ removed after the dependency audit exposed it.
   the additional hand-written squared-difference nonnegativity argument is
   removed from the initialization proof. No new generic theorem is needed.
 
-### Coherent dependent sequences of normalized images — candidate (2026-10-29)
+### Coherent dependent sequences of normalized images — promoted (2026-11-04)
 
 - **Pattern:** A successor theorem returns a normalized image of its actual
   input together with invariants whose bounds depend on the sequence index.
-- **Reuse:** In `AKLV/ChangingTargets.lean`, `State i` is the subtype carrying
-  the unit, error and product-rank invariant. The existence of a successor
-  is proved for each actual state, and `Nat.rec` iterates its chosen value.
-  The choice specification records the polynomial-image relation on each edge.
-- **Scope:** This is the first such moving-target sequence in this argument.
-  The existing LVV recursion retains its own mathematical invariant; no
-  generic recursion framework or tactic is introduced.
+- **Seen:** `AKLV/ChangingTargets.lean`,
+  `ViableSet/SampledSuccessiveConstruction.lean`, and
+  `ViableSet/RationalSampledSuccessiveConstruction.lean`.
+- **Abstraction:** `Nat.exists_dependent_sequence` in
+  `TNLean/Algebra/DependentSequence.lean` chooses a sequence in indexed types,
+  starting at a prescribed initial value and satisfying every supplied
+  successor relation.
+- **Refactored occurrences:** All three final recurrence constructions use
+  this theorem. Their indexed subtype invariants and actual transition
+  relations remain in their respective mathematical proofs.
+- **Decision:** A theorem expresses the common dependent-choice argument;
+  no new tactic is needed.
 
 ### Reciprocal square-root factors in selected polynomial degrees — candidate (2026-10-29)
 
@@ -11581,3 +11643,29 @@ removed after the dependency audit exposed it.
 - **Decision:** These two sites remain below the rule of three. The entropy
   development also reuses `aklv_regionEntropy_le_short_side` by exposing its
   existing proof unchanged, rather than copying that dimension argument.
+
+### Injectivity of explicit rational complex coordinates — candidate (2026-11-04)
+
+- **Pattern:** Apply real and imaginary coordinate projections to an equality
+  of complex values, then use injectivity of the rational-to-real cast.
+- **Seen:** `RationalMatrixCode.decode_injective` in
+  `ViableSet/BoundarySDP/RationalMatrixCodes.lean` and
+  `RationalComplexCode.decode_injective` in
+  `ViableSet/BoundarySDP/RationalCodeHeights.lean`.
+- **Reuse:** The scalar lemma is already used by the height theorem for
+  computed rational coordinates. No further copy is needed in this argument.
+- **Decision:** Two instances are recorded. If another matrix-decoding proof
+  needs this argument, move the scalar injectivity lemma to the lower-level
+  coordinate module and use it in the matrix proof as well.
+
+### Six-matrix rounded-certificate transport — candidate (2026-11-04)
+
+- **Pattern:** after replacing each of the six rounded certificate matrices by
+  its defining equality, discharge the corresponding entrywise closeness
+  hypothesis.  The three primary and three Gram coordinates produce the same
+  eight-line proof fragment.
+- **Occurrences:** three simultaneous rounding theorems in
+  `MPS/AreaLaw/ViableSet/BoundaryTraceNormSDP.lean`.
+- **Candidate abstraction:** a small product-membership transport lemma should
+  package the six rewrites together.  Promote when the surrounding certificate
+  statements have stabilized; the present repetition is confined to one file.

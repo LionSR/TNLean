@@ -102,7 +102,7 @@
             9820
           ],
           "physics": "A state of Schmidt rank <i>B</i> at a cut is determined, as far as the energy of the left half is concerned, by a small density matrix on the site next to the cut and a <i>B</i>-dimensional bond, its boundary contraction. These contractions are matrices of dimension <i>Bd</i>, with 2(<i>Bd</i>)<sup>2</sup> real coordinates, so a net of about η<sup>−2(<i>Bd</i>)<sup>2</sup></sup> of them contains one within distance η of each; the paper prints the exponent 2<i>Bd</i>, which is too small. At η = <i>c</i><sub>ε</sub>/(2<i>n</i>) the size is still polynomial in <i>n</i>. For each net point the algorithm solves a convex problem over left halves built from the current viable set; the gluing lemma bounds the energy of the result glued to the right half of a good state, and the leading eigenvector of the solution is then a good left half.",
-          "delivers": "Polynomially many left halves, one per net point, at least one of which glues to a low-energy state with good overlap with Γ: a viable set of polynomial size, at the price of a constant overlap 1 − 1/12 instead of 1 − δ. This step is proved for chains with at least one site and two states per site, with the constant rank of the previous stage."
+          "delivers": "Polynomially many left halves, one per net point, at least one of which glues to a low-energy state with good overlap with Γ: a viable set of polynomial size, at the price of a constant overlap 1 − 1/12 instead of 1 − δ. The boundary-contraction proof treats nonempty chains with at least two states per site; a one-state local space and the empty chain have separate exact singleton reductions."
         },
         {
           "title": "An approximate ground-state projector",
