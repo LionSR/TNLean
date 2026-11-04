@@ -70,6 +70,16 @@ UNITS: dict[str, tuple[str, float]] = {
 \end{tenkz}""",
         12.0,
     ),
+    # A two-wire quantikz circuit: optional keys, a gate, a control and its
+    # target, column separators and a row break.  Its labels alone measure
+    # well under 30pt; four drawn columns of wire exceed it.
+    "Q1 quantikz circuit": (
+        r"""\begin{quantikz}[row sep=0.3cm]
+  \lstick{$|0\rangle$} & \gate{H} & \ctrl{1} & \qw \\
+  \lstick{$|0\rangle$} & \qw & \targ{} & \qw
+\end{quantikz}""",
+        30.0,
+    ),
 }
 
 # Both converters serialize the root extent in points, but spell it
