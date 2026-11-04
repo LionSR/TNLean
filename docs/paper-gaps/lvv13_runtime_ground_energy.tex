@@ -1815,10 +1815,47 @@ common denominator \(L>0\) and norms at most \(B\) give denominator
 \(L\), norm at most \(aB\), and coordinate heights at most
 \(L\max\{1,aB\}\) after \(a\) terms. This estimate does not require
 equal arithmetic counts for the summands.
-Completing the bit-cost proof still
-requires one bound covering the remaining scalar intermediate values,
-integer arithmetic and rational reduction, and the numerical routines
-that construct the retained bases and solve the semidefinite programs.
+The physical-pair accumulators are now covered by
+\leanid{TNLean.MPS.AreaLaw.RationalGramContractionCost.weightedTransferEntry\_prefix\_bounds}:
+after \(a\le q^2\) weighted summands, their denominator is \(M^3\),
+their norm is at most \(aC^3\), and their coordinate heights are at most
+\(M^3\max\{1,aC^3\}\). The two levels of local-energy accumulation
+are bounded by
+\leanid{TNLean.MPS.AreaLaw.RationalLocalEnergyCost.twoSiteMatrixElement\_prefix\_bounds}
+and
+\leanid{TNLean.MPS.AreaLaw.RationalLocalEnergyCost.matrixElementOfLocalTerms\_prefix\_bounds}.
+Writing \(Q=D_aD_bq^2C^3\), the common denominator throughout these
+two levels is \(M^{3n+3}\). The norm after \(t\le q^4\)
+matrix-unit contributions is at most \(tC^3Q^n\), and after
+\(a\le m\) local terms it is at most \(aq^4C^3Q^n\).
+
+The input denominator is chosen jointly for both caps, both tensor
+families, and all local coefficient matrices by
+\leanid{TNLean.MPS.AreaLaw.OBCChainTensor.exists\_common\_localEnergy\_parameter\_denominator}.
+For \(P_E=2+nqD_a^2+nqD_b^2+mq^4\), it satisfies
+\(M\le H^{2P_E}\). Consequently, if \(H\le2^h\), every actual
+local-term accumulator and the final computed energy matrix element
+have coordinate heights at most \(2^{E_E}\), where
+\[
+  E_E=6hP_E(n+1)+mq^2+2q+3h+3
+      +(D_aD_b+2q+3h+3)n.
+\]
+These statements are
+\leanid{TNLean.MPS.AreaLaw.RationalLocalEnergyCost.matrixElementOfLocalTerms\_prefix\_coordinate\_heights\_two\_pow}
+and
+\leanid{TNLean.MPS.AreaLaw.RationalLocalEnergyCost.matrixElementOfLocalTerms\_coordinate\_heights\_two\_pow}.
+
+Completing the bit-cost proof still requires a uniform estimate for all
+operands and primitive results in the complete rational calculation.
+The present arithmetic counter records values and numbers of operations;
+it does not retain their operands. An evaluation that records the
+individual operations, with a proof that forgetting those records gives
+the current evaluator, would permit such an estimate to be stated for
+the actual calculation. The existing schoolbook charge is a mathematical
+cost model; it is not a proved runtime bound for integer multiplication,
+division, greatest common divisors, or reduced-rational normalization.
+Those implementation bounds and the numerical routines that construct
+the retained bases and solve the semidefinite programs remain open.
 
 The coordinate storage is counted by
 \leanid{TNLean.MPS.AreaLaw.RationalLeftOpenMPSRepresentationOfHeight.exists\_coordinates\_storage\_le\_polynomial}.

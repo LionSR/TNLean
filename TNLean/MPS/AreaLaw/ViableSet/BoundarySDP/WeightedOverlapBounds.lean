@@ -71,6 +71,6 @@ theorem weightedOverlapOfRationalParameters_bounds {q Da Db n M C : ℕ}
         exact (hrow j).2.1
       _ = (R : ℝ) := by simp [R, pow_two]
   exact ⟨hden, hnorm,
-    (RationalComplexCode.decode_height_iff _).mp (hden.height_of_norm_le hnorm)⟩
+    RationalComplexCode.coordinate_heights_of_common_denominator _ hden hnorm⟩
 
 end TNLean.MPS.AreaLaw.OBCChainTensor

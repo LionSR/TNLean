@@ -174,7 +174,7 @@ theorem weightedTransfer_prefix_bounds {q Da Db n M C t : ℕ}
     simpa only [Nat.one_mul, ← pow_mul] using (hprefix j).1
   have hnorm : ‖decodeRationalComplex (row j)‖ ≤ (R : ℝ) := by
     simpa only [Nat.one_mul] using (hprefix j).2
-  have hheight := (RationalComplexCode.decode_height_iff _).mp (hden.height_of_norm_le hnorm)
+  have hheight := RationalComplexCode.coordinate_heights_of_common_denominator _ hden hnorm
   exact ⟨hden, hnorm, hheight⟩
 
 end OBCChainTensor

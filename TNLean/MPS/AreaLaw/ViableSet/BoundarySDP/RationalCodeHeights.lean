@@ -42,6 +42,14 @@ theorem RationalComplexCode.decode_height_iff {H : ℕ} (z : ℚ × ℚ) :
   · rintro ⟨hx, hy⟩
     exact ⟨z.1, z.2, rfl, hx, hy⟩
 
+/-- A common Gaussian-integer denominator and a norm bound control both
+reduced rational coordinates actually stored in a complex code. -/
+theorem RationalComplexCode.coordinate_heights_of_common_denominator {M R : ℕ}
+    (z : ℚ × ℚ) (hden : HasGaussianIntegerDenominator M (decodeRationalComplex z))
+    (hnorm : ‖decodeRationalComplex z‖ ≤ (R : ℝ)) :
+    rationalHeight z.1 ≤ M * max 1 R ∧ rationalHeight z.2 ≤ M * max 1 R :=
+  (decode_height_iff z).mp (hden.height_of_norm_le hnorm)
+
 /-- A decoded height bound controls the total signed-fraction storage of the
 two rational coordinates actually stored in the code. -/
 theorem RationalComplexCode.bitCount_le_of_decode_height {H : ℕ} {z : ℚ × ℚ}

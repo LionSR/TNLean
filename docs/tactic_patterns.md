@@ -45,6 +45,21 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Reduced coordinate heights from a common denominator — promoted (2026-11-04)
+
+- **Pattern:** Convert a common Gaussian-integer denominator and a norm bound
+  into a decoded height bound, then use `decode_height_iff` to obtain heights
+  of the two rational fractions actually stored in the code.
+- **Helper:** `RationalComplexCode.coordinate_heights_of_common_denominator`
+  in `MPS/AreaLaw/ViableSet/BoundarySDP/RationalCodeHeights.lean`.
+- **Occurrences:** Eight conversions in
+  `BoundarySDP/WeightedTransferAccumulationBounds.lean`,
+  `ContractionIntermediateBounds.lean`, `WeightedTransferBounds.lean`,
+  `RationalAccumulationBounds.lean`, `WeightedOverlapBounds.lean`, and
+  `RationalLocalEnergyBounds.lean` now use the helper.
+- **Decision:** The conversion is a mathematical consequence of denominator
+  and norm control, so a lemma replaces the repeated two-step argument.
+
 ### Left compressed Hamiltonian norm bound — promoted (2026-11-04)
 
 - **Pattern:** From `h.operator = HL + B`, `‖h.operator‖ ≤ 2L`, and `‖B‖ ≤ 2L`,

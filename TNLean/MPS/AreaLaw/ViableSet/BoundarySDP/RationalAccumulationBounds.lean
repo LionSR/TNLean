@@ -63,6 +63,6 @@ theorem sumFin_prefix_bounds {n a L B : ℕ} (f : Fin n → Arithmetic (ℚ × �
       rationalHeight out.2 ≤ L * max 1 (a * B) := by
   have h := sumFin_bounds (fun i : Fin a ↦ f (Fin.castLE ha i)) hL
     (fun i ↦ hden _) (fun i ↦ hnorm _)
-  exact ⟨h.1, h.2, (RationalComplexCode.decode_height_iff _).mp (h.1.height_of_norm_le h.2)⟩
+  exact ⟨h.1, h.2, RationalComplexCode.coordinate_heights_of_common_denominator _ h.1 h.2⟩
 
 end TNLean.MPS.AreaLaw.RationalGramContractionCost

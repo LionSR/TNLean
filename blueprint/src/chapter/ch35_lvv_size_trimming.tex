@@ -209,7 +209,8 @@ a function of the Hamiltonian, the gap parameter and the input set.
         TNLean.MPS.AreaLaw.exists_common_gaussianInteger_denominator,
         TNLean.MPS.AreaLaw.rationalHeight_int_div_nat_le,
         TNLean.MPS.AreaLaw.HasGaussianIntegerDenominator.height_of_norm_le,
-        TNLean.MPS.AreaLaw.HasGaussianIntegerDenominator.height_of_norm_le_real}
+        TNLean.MPS.AreaLaw.HasGaussianIntegerDenominator.height_of_norm_le_real,
+        TNLean.MPS.AreaLaw.RationalComplexCode.coordinate_heights_of_common_denominator}
     \leanok
     A family of $P$ Gaussian-rational numbers of coordinate height at most
     $H$ has a common positive denominator $M\le H^{2P}$.
@@ -942,6 +943,128 @@ a function of the Hamiltonian, the gap parameter and the input set.
     second cap adds two denominator powers and a factor $C^2$ to the
     norm bound. The coordinate-height estimate follows from these
     denominator and norm bounds.
+\end{proof}
+
+\begin{lemma}[Partial sums within a weighted transfer entry]
+    \label{lem:lvv_weighted_transfer_entry_partial_sums}
+    \lean{TNLean.MPS.AreaLaw.RationalGramContractionCost.weightedTerm_firstProduct_bounds,
+        TNLean.MPS.AreaLaw.RationalGramContractionCost.weightedTerm_bounds,
+        TNLean.MPS.AreaLaw.RationalGramContractionCost.weightedTransferEntry_prefix_bounds}
+    \leanok
+    Let $M,C$ be natural numbers with $M>0$. Suppose the two tensor
+    entries and the physical weight have denominator $M$ and norms
+    at most $C$. Multiplying the conjugate first tensor entry by the
+    weight gives denominator $M^2$ and norm at most $C^2$; multiplying
+    by the second entry gives denominator $M^3$ and norm at most $C^3$.
+    The actual accumulator after $a\le q^2$ physical-pair summands
+    has denominator $M^3$, norm at most $aC^3$, and both coordinate
+    heights at most $M^3\max\{1,aC^3\}$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:lvv_rational_accumulation_bounds}
+    Conjugation preserves the denominator and norm. Apply the product
+    denominator formula twice, then apply
+    Lemma~\ref{lem:lvv_rational_accumulation_bounds} to the computed
+    weighted summands in their physical-pair order.
+\end{proof}
+
+\begin{lemma}[A common denominator for all local-energy inputs]
+    \label{lem:lvv_local_energy_common_input_denominator}
+    \lean{TNLean.MPS.AreaLaw.OBCChainTensor.exists_common_localEnergy_parameter_denominator}
+    \leanok
+    Consider two length-$n$ rational open-chain representations with
+    virtual bounds $D_a,D_b$, and $m$ rational two-site coefficient
+    matrices of order $q^2$. Suppose every coordinate of both caps,
+    all local tensor entries, and all local coefficient entries has
+    height at most $H$. Put
+    \[
+      P=2+nqD_a^2+nqD_b^2+mq^4.
+    \]
+    One positive denominator $M\le H^{2P}$ clears all these inputs
+    simultaneously, including coefficient entries from different
+    local terms.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:lvv_common_rational_denominator}
+    There are at most $nqD_a^2$ and $nqD_b^2$ local entries in the
+    two tensor families, two caps, and $mq^4$ local coefficient
+    entries. Apply the finite common-denominator bound to this one
+    family of at most $P$ complex numbers.
+\end{proof}
+
+\begin{lemma}[Partial sums in local-energy evaluation]
+    \label{lem:lvv_local_energy_partial_sum_bounds}
+    \lean{TNLean.MPS.AreaLaw.twoSiteMatrixUnitCodeFactors_bounds,
+        TNLean.MPS.AreaLaw.RationalLocalEnergyCost.twoSiteMatrixElementOfRationalParameters_eq_sumFin,
+        TNLean.MPS.AreaLaw.RationalLocalEnergyCost.weightedMatrixElementTerm_bounds,
+        TNLean.MPS.AreaLaw.RationalLocalEnergyCost.twoSiteMatrixElement_prefix_bounds,
+        TNLean.MPS.AreaLaw.RationalLocalEnergyCost.twoSiteMatrixElementOfRationalParameters_bounds,
+        TNLean.MPS.AreaLaw.RationalLocalEnergyCost.matrixElementOfLocalTerms_prefix_bounds,
+        TNLean.MPS.AreaLaw.RationalLocalEnergyCost.matrixElementOfLocalTerms_bounds}
+    \leanok
+    Let $M,C$ be natural numbers with $M>0$ and $C\ge1$. Suppose
+    both caps, both tensor families, and every local coefficient
+    entry have denominator $M$ and norms at most $C$. Write
+    \[
+      Q=D_aD_bq^2C^3,\qquad R=C^3Q^n.
+    \]
+    Every computed matrix-unit contribution, including its local
+    coefficient, has denominator $M^{3n+3}$ and norm at most $R$.
+    The actual accumulator after $t\le q^4$ contributions to one
+    local matrix element has the same denominator and norm at most
+    $tR$. The full local matrix element has norm at most $q^4R$.
+    After $a\le m$ local terms, the full energy accumulator has
+    denominator $M^{3n+3}$ and norm at most $aq^4R$. In each case,
+    the two coordinate heights are bounded by the displayed common
+    denominator times the maximum of one and the displayed norm bound.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:lvv_capped_weighted_overlap_bounds,
+        lem:lvv_rational_accumulation_bounds}
+    Matrix-unit factors have entries zero or one, so their denominators
+    divide $M$ and their norms are at most $C$. The capped overlap
+    bound gives denominator $M^{3n+2}$ and norm at most $C^2Q^n$.
+    Multiplication by the local coefficient contributes one power of
+    $M$ and one factor $C$. Apply the partial-sum bound first to the
+    $q^4$ matrix-unit contributions, then to the $m$ local terms.
+\end{proof}
+
+\begin{lemma}[Polynomial binary precision in local-energy evaluation]
+    \label{lem:lvv_local_energy_binary_precision}
+    \lean{TNLean.MPS.AreaLaw.localEnergy_height_le_two_pow,
+        TNLean.MPS.AreaLaw.RationalLocalEnergyCost.exists_matrixElementOfLocalTerms_prefix_bounds_of_height,
+        TNLean.MPS.AreaLaw.RationalLocalEnergyCost.matrixElementOfLocalTerms_prefix_coordinate_heights_two_pow,
+        TNLean.MPS.AreaLaw.RationalLocalEnergyCost.matrixElementOfLocalTerms_coordinate_heights_two_pow}
+    \leanok
+    In the setting of
+    Lemma~\ref{lem:lvv_local_energy_common_input_denominator}, suppose
+    $H\le2^h$. Put
+    \begin{align*}
+      P&=2+nqD_a^2+nqD_b^2+mq^4,\\
+      E&=6hP(n+1)+mq^2+2q+3h+3
+          +(D_aD_b+2q+3h+3)n.
+    \end{align*}
+    Both rational coordinates of every actual accumulator after
+    $a\le m$ local terms have height at most $2^E$. The same bound
+    holds for the computed matrix element of the full local operator
+    sum. The exponent is independent of the prefix length $a$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:lvv_local_energy_common_input_denominator,
+        lem:lvv_local_energy_partial_sum_bounds}
+    Coordinate height at most $H$ gives entry norm at most $2H$.
+    Use the one common denominator for all terms and the bounds of
+    Lemma~\ref{lem:lvv_local_energy_partial_sum_bounds} with $C=2H$.
+    For every $a\le m$, the resulting coordinate height is at most
+    \[
+      H^{2P(3n+3)}\max\{1,mq^4(2H)^3Q^n\},\qquad
+      Q=D_aD_bq^2(2H)^3.
+    \]
+    The denominator factor is at most $2^{6hP(n+1)}$.
+    The inequalities $s\le2^s$ for natural $s$ give
+    $mq^4(2H)^3\le2^{mq^2+2q+3h+3}$ and
+    $Q\le2^{D_aD_b+2q+3h+3}$. Multiplying these estimates proves
+    the stated bound, including the empty sum.
 \end{proof}
 
 \begin{definition}[Binary length of a rational coordinate]

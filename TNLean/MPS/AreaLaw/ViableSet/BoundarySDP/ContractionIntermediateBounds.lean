@@ -154,7 +154,7 @@ theorem rowProduct_take_coordinate_heights {D N M R C t : ℕ} (v : Fin D → �
     rationalHeight out.1 ≤ (N * M ^ t) * max 1 (R * (D * C) ^ t) ∧
       rationalHeight out.2 ≤ (N * M ^ t) * max 1 (R * (D * C) ^ t) := by
   have h := rowProduct_take_bounds v As ht hN hM hv hvnorm hAs hAsnorm j
-  exact (RationalComplexCode.decode_height_iff _).mp (h.1.height_of_norm_le h.2)
+  exact RationalComplexCode.coordinate_heights_of_common_denominator _ h.1 h.2
 
 end RationalRectMatrixCode
 
@@ -191,7 +191,7 @@ theorem dot_prefix_coordinate_heights {D a N M R C : ℕ} (ha : a ≤ D)
     rationalHeight out.1 ≤ (N * M) * max 1 (a * R * C) ∧
       rationalHeight out.2 ≤ (N * M) * max 1 (a * R * C) := by
   have h := dot_prefix_bounds ha v w hN hM hv hw hvnorm hwnorm
-  exact (RationalComplexCode.decode_height_iff _).mp (h.1.height_of_norm_le h.2)
+  exact RationalComplexCode.coordinate_heights_of_common_denominator _ h.1 h.2
 
 /-- Every accumulator at the next site of sequential contraction satisfies
 the prefix denominator and norm bounds. This combines the materialized row
