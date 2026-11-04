@@ -253,14 +253,26 @@
     "ch:symmetry_spt": {
       "theorems": [
         "thm:spt_classification",
-        "thm:has_string_order_of_symmetric_injective",
+        "thm:has_string_order_of_symmetric_injective"
+      ],
+      "corollaries": [],
+      "notes": {
+        "thm:spt_classification": "Classification of SPT phases along symmetric parent-Hamiltonian paths by the cocycle class",
+        "thm:has_string_order_of_symmetric_injective": "Virtual-boundary nondecay (string order) for injective symmetric tensors"
+      }
+    },
+    "ch:symmetry_spt_virtual_paths": {
+      "theorems": [],
+      "corollaries": [],
+      "notes": {}
+    },
+    "ch:symmetry_spt_compact_limits": {
+      "theorems": [
         "thm:spt_exact_ground_physical_class",
         "thm:spt_exact_phase_injective_classification"
       ],
       "corollaries": [],
       "notes": {
-        "thm:spt_classification": "Classification of SPT phases along symmetric parent-Hamiltonian paths by the cocycle class",
-        "thm:has_string_order_of_symmetric_injective": "Virtual-boundary nondecay (string order) for injective symmetric tensors",
         "thm:spt_exact_ground_physical_class": "Physical-gap converse across changes of minimal MPS bond dimension, derived without a supplied transfer bound",
         "thm:spt_exact_phase_injective_classification": "Phase/cohomology equivalence for one-site injective endpoints with prescribed exact virtual covariance, combining physical forward and converse directions"
       }
@@ -329,6 +341,11 @@
         "cor:mpdo_bnt_label_theorem_data_blocked_coeff_eq_positive_blocked_chi_trace_pow",
         "cor:mpdo_bnt_label_theorem_witness_blocked_coeff_eq_positive_blocked_chi_trace_pow"
       ],
+      "notes": {}
+    },
+    "ch:mpdo_rfp_algebraic_coefficients": {
+      "theorems": [],
+      "corollaries": [],
       "notes": {}
     },
     "ch:mpdo_rfp_algebraic_fusion": {
@@ -1189,19 +1206,38 @@
     "ch:mpu_cocycles": {
       "theorems": [
         "thm:mpug_anomaly_three_cocycle",
-        "thm:mpug_anomaly_obstruction",
         "thm:mpug_h3_group_cohomology"
       ],
       "corollaries": [
-        "cor:mpug_anomaly_class",
-        "cor:mpug_domain_wall_string_exchange_printed",
-        "cor:mpug_normalized_source_decomposition_gauges"
+        "cor:mpug_anomaly_class"
       ],
       "notes": {
         "thm:mpug_anomaly_three_cocycle": "The anomaly three-cocycle of a finite-group MPU representation",
-        "thm:mpug_anomaly_obstruction": "An anomaly obstructs invariant normal states",
         "thm:mpug_h3_group_cohomology": "Fusion-gauge classes are degree-three cohomology classes"
       }
+    },
+    "ch:mpu_cocycles_permuted_blocks": {
+      "theorems": [
+        "thm:mpug_anomaly_obstruction"
+      ],
+      "corollaries": [
+        "cor:mpug_domain_wall_string_exchange_printed"
+      ],
+      "notes": {
+        "thm:mpug_anomaly_obstruction": "An anomaly obstructs invariant normal states"
+      }
+    },
+    "ch:mpu_cocycles_gauss_law": {
+      "theorems": [],
+      "corollaries": [
+        "cor:mpug_normalized_source_decomposition_gauges"
+      ],
+      "notes": {}
+    },
+    "ch:mpu_cocycles_l_symbol_classification": {
+      "theorems": [],
+      "corollaries": [],
+      "notes": {}
     },
     "ch:mpo_interpolation": {
       "theorems": [
@@ -1245,10 +1281,29 @@
         "thm:area_law_product_ground_state": "Gapped ground vectors of a sum of factor Hamiltonians are product vectors (OpenAI 2026 area law, Lemma 2.2)"
       }
     },
+    "ch:peps_ft_normal_square": {
+      "theorems": [
+        "thm:fundamentalTheorem_normalSquarePEPS"
+      ],
+      "corollaries": [
+        "thm:fundamentalTheorem_normalSquarePEPS_unconditional"
+      ],
+      "notes": {
+        "thm:fundamentalTheorem_normalSquarePEPS": "Fundamental Theorem for normal square-lattice PEPS (Molnar et al., Theorem 3)"
+      }
+    },
+    "ch:peps_ft_normal_torus": {
+      "theorems": [],
+      "corollaries": [
+        "thm:fundamentalTheorem_normalTorusPEPS",
+        "thm:fundamentalTheorem_normalTorusPEPS_unconditional",
+        "cor:peps_lambda_pow_card_torus_eq_one_of_twoBlockProportional"
+      ],
+      "notes": {}
+    },
     "ch:peps_ft_normal": {
       "theorems": [
-        "thm:fundamentalTheorem_normalPEPS",
-        "thm:fundamentalTheorem_normalSquarePEPS"
+        "thm:fundamentalTheorem_normalPEPS"
       ],
       "corollaries": [
         "cor:fundamentalTheorem_normalMPS_cycle",
@@ -1266,15 +1321,10 @@
         "cor:exists_gauge_to_first_of_cyclicShiftInvariantState",
         "cor:exists_constant_injectiveMPS_of_cyclicShiftInvariantState_per_bond_pos",
         "cor:peps_state_translation_bond_uniform",
-        "thm:fundamentalTheorem_normalPEPS_of_vertexInjective",
-        "thm:fundamentalTheorem_normalSquarePEPS_unconditional",
-        "thm:fundamentalTheorem_normalTorusPEPS",
-        "thm:fundamentalTheorem_normalTorusPEPS_unconditional",
-        "cor:peps_lambda_pow_card_torus_eq_one_of_twoBlockProportional"
+        "thm:fundamentalTheorem_normalPEPS_of_vertexInjective"
       ],
       "notes": {
-        "thm:fundamentalTheorem_normalPEPS": "Fundamental Theorem for normal PEPS (Molnar et al., Section 4)",
-        "thm:fundamentalTheorem_normalSquarePEPS": "Fundamental Theorem for normal square-lattice PEPS (Molnar et al., Theorem 3)"
+        "thm:fundamentalTheorem_normalPEPS": "Fundamental Theorem for normal PEPS (Molnar et al., Section 4)"
       }
     },
     "ch:peps_g_injective_regions": {
