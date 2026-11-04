@@ -20,17 +20,17 @@ norm-stability estimates are recorded in
     Suppose also that
     \begin{align}
         3\left(32e^{-(T_0-g/40-24)/8}
-               +\frac{t}{m}(T_0/t)^m\right)&\le\tau g/10^6,\\
+        +\frac{t}{m}(T_0/t)^m\right) & \le\tau g/10^6, \\
         3\left(32e^{-(T_1-156-2g)/8}
-               +\frac{t}{m}(T_1/t)^m\right)&\le\tau g/10^6.
+        +\frac{t}{m}(T_1/t)^m\right) & \le\tau g/10^6.
     \end{align}
     Put $U=2(E-\mu+19g/20+30+3C+2)$. Then
     $T_0\ge g/40+3C+12$, $U\le t,T_1$, and
     \begin{align}
         3\left(8Ce^{-(T_0-g/40-3C-12)/8}
-               +\frac{t}{m}(T_0/t)^m\right)&\le\tau g/10^6,\\
+        +\frac{t}{m}(T_0/t)^m\right) & \le\tau g/10^6, \\
         3\left(8Ce^{-(T_1-U)/8}
-               +\frac{t}{m}(T_1/t)^m\right)&\le\tau g/10^6.
+        +\frac{t}{m}(T_1/t)^m\right) & \le\tau g/10^6.
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
@@ -50,8 +50,8 @@ norm-stability estimates are recorded in
     \]
     and
     \begin{align}
-        n_-&=\left\lceil\frac{E+g/20-\min\{E+g/20-1,-V\}}{2\xi}\right\rceil,\\
-        n_+&=\left\lceil\frac{E+3g/4-\min\{E+3g/4-1,-V\}}{2\xi}\right\rceil.
+        n_- & =\left\lceil\frac{E+g/20-\min\{E+g/20-1,-V\}}{2\xi}\right\rceil, \\
+        n_+ & =\left\lceil\frac{E+3g/4-\min\{E+3g/4-1,-V\}}{2\xi}\right\rceil.
     \end{align}
     Both ceilings are nonnegative, so these are also their natural
     ceilings. Then $0<\xi\le1$ and
@@ -89,11 +89,11 @@ norm-stability estimates are recorded in
     Soften exactly the regions $S=\{0,2,4\}$. For centers
     $e_j-10\le p_j\le e_j$ on $S$, scale $t>0$ and order $m\ge2$, put
     \begin{align}
-        F_j&=p_jI+h_{m,t}(A_j-p_jI),\\
-        G&=\sum_{j=0}^4
-            \bigl((\mathbf1_{j\in S}F_j+
-                    \mathbf1_{j\notin S}A_j)-e_jI\bigr)+Y,\\
-        M&=3t(1+\log m)+4\ell+34.
+        F_j & =p_jI+h_{m,t}(A_j-p_jI),         \\
+        G   & =\sum_{j=0}^4
+        \bigl((\mathbf1_{j\in S}F_j+
+        \mathbf1_{j\notin S}A_j)-e_jI\bigr)+Y, \\
+        M   & =3t(1+\log m)+4\ell+34.
     \end{align}
     Then $G$ is Hermitian and $\|G\|\le M$.
 
@@ -113,7 +113,7 @@ norm-stability estimates are recorded in
     its own invariant cluster
     \[
         \widehat T=E_{\widehat G}(E+g/4)
-                  =E_{\widehat G}(E+3g/4).
+        =E_{\widehat G}(E+3g/4).
     \]
     Its dimension equals that of the full original ground space
     $G_0=E_{H_0}(\mu_0)$, and $\widehat T,G_0$ are mutually
@@ -123,8 +123,8 @@ norm-stability estimates are recorded in
 \end{lemma}
 \begin{proof}\leanok
     \uses{lem:five_region_soft_and_hermitian_clusters,
-      lem:alvv_five_soft_norm,lem:alvv_soft_scalar_residual_budgets,
-      lem:alvv_soft_actual_window_losses}
+        lem:alvv_five_soft_norm,lem:alvv_soft_scalar_residual_budgets,
+        lem:alvv_soft_actual_window_losses}
     Retain the regional minima and centered ground data from the single
     physical residual construction. Apply the three-bulk norm bound to
     these same minima. Its soft ground energy is at least $-30$, so

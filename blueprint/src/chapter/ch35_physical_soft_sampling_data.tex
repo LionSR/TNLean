@@ -19,14 +19,14 @@ the sampling threshold uses the corrected complex sphere count in
     $P_{\rm ref}$, before the chain length and interactions.
     Write $w=4\ell$ and retain the same $D$ from that lemma. Then
     \begin{align}
-      C_{\rm count}=q^w+4D^2K.
-      \label{eq:physical_soft_common_count_constant}
+        C_{\rm count}=q^w+4D^2K.
+        \label{eq:physical_soft_common_count_constant}
     \end{align}
     For all natural $d,n,Q$,
     \begin{align}
-      K(d+1)(n+2)^2\le Q\quad\Longrightarrow\quad
-      Q\ge4D^2,\qquad f_D(Q,d)\le\frac{1/q}{(n+2)^4},
-      \label{eq:physical_soft_common_threshold}
+        K(d+1)(n+2)^2\le Q\quad\Longrightarrow\quad
+        Q\ge4D^2,\qquad f_D(Q,d)\le\frac{1/q}{(n+2)^4},
+        \label{eq:physical_soft_common_threshold}
     \end{align}
     where $f_D$ is the corrected bootstrap failure bound.
 
@@ -39,19 +39,19 @@ the sampling threshold uses the corrected complex sphere count in
     vector in $U$ has open matrix product bond at most $d=r^2B$.
     Define
     \begin{align}
-      b_{\rm ref}&=d^2,&
-      \xi_{\rm init}&=\frac1{1000d\sqrt{L+1}}.
-      \label{eq:physical_soft_common_reference}
+        b_{\rm ref}    & =d^2,                     &
+        \xi_{\rm init} & =\frac1{1000d\sqrt{L+1}}.
+        \label{eq:physical_soft_common_reference}
     \end{align}
     These choices precede every interval, candidate space and sample.
     They satisfy
     \begin{align}
-      b_{\rm ref}&\le C_{\rm ref}Z^{P_{\rm ref}},&
-      0<\xi_{\rm init}&\le1,\notag\\
-      \xi_{\rm init}\sqrt{k_{\rm cuts}b_{\rm ref}}&\le10^{-3}
-          \quad(0\le k_{\rm cuts}\le L),&
-      \xi_{\rm init}^{-2}&\le10^6C_{\rm ref}Z^{P_{\rm ref}+1}.
-      \label{eq:physical_soft_common_radius}
+        b_{\rm ref}                                  & \le C_{\rm ref}Z^{P_{\rm ref}},      &
+        0<\xi_{\rm init}                             & \le1,\notag                            \\
+        \xi_{\rm init}\sqrt{k_{\rm cuts}b_{\rm ref}} & \le10^{-3}
+        \quad(0\le k_{\rm cuts}\le L),               &
+        \xi_{\rm init}^{-2}                          & \le10^6C_{\rm ref}Z^{P_{\rm ref}+1}.
+        \label{eq:physical_soft_common_radius}
     \end{align}
     In the coordinates $\mathcal H_J\otimes\mathcal H_{J^c}$ of every
     interval $J$, the same two closeness estimates hold. Every vector of
@@ -59,25 +59,25 @@ the sampling threshold uses the corrected complex sphere count in
     each internal cut, with the full exterior retained.
     For every separately bounded candidate count $M_*$,
     \begin{align}
-      10^6b_{\rm ref}(L+1)M_*^2
-       \le10^6C_{\rm ref}Z^{P_{\rm ref}+1}M_*^2.
-      \label{eq:physical_soft_common_output_profile}
+        10^6b_{\rm ref}(L+1)M_*^2
+        \le10^6C_{\rm ref}Z^{P_{\rm ref}+1}M_*^2.
+        \label{eq:physical_soft_common_output_profile}
     \end{align}
     There is no candidate-dimension factor in the exact loss in
     (\ref{eq:physical_soft_common_radius}).
 
     Set
     \begin{align}
-      \theta&=K(r+1)(L+2)^2,& R&=qL,&
-      M_{\rm common}&=\max\{q^w,D^2\theta\}.
-      \label{eq:physical_soft_common_schedule}
+        \theta         & =K(r+1)(L+2)^2,         & R & =qL, &
+        M_{\rm common} & =\max\{q^w,D^2\theta\}.
+        \label{eq:physical_soft_common_schedule}
     \end{align}
     Then $\theta\ge\max\{2,4D^2\}$, every interval configuration space
     has dimension at most $q^L\le2^R$, and
     \begin{align}
-      M_{\rm common}&\le C_{\rm count}Z^2,\notag\\
-      (L-1)_+R\frac{1/q}{(L+2)^4}&\le\frac1{(L+1)^2}.
-      \label{eq:physical_soft_common_sampling_profile}
+        M_{\rm common}              & \le C_{\rm count}Z^2,\notag \\
+        (L-1)_+R\frac{1/q}{(L+2)^4} & \le\frac1{(L+1)^2}.
+        \label{eq:physical_soft_common_sampling_profile}
     \end{align}
     The latter inequality also holds in the extended nonnegative reals.
     The empty and one-site chains and flat spectra are included.
