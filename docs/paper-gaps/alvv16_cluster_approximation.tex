@@ -10,7 +10,7 @@
 \date{October 25, 2026}
 \begin{document}
 \maketitle
-\gapnote{false-source}{open}
+\gapnote{false-source}{resolved}
 
 \section{The printed estimate}
 
@@ -161,8 +161,10 @@ cluster estimates retain the partition function and the weight
 $(e^{\beta J}-1)e^{SJ\beta}$; they do not assert
 (\ref{eq:alvv_cluster_printed}). Their formalized statements remain
 unaffected. The efficient soft-truncation approximation in
-Lemma~\texttt{lem:exp-approx-eff}, whose proof invokes this theorem, needs
-a corrected analytic estimate before that argument can be formalized.
+Lemma~\texttt{lem:exp-approx-eff}, whose proof invokes this theorem, is
+formalized instead through the corrected interaction-label estimate of the
+section on the corrected normalized estimate and the section on the soft
+interval at compatible heat times below.
 The exact matrix product operator construction of the selected expansion
 is a separate algebraic question. The correction is tracked by
 \href{https://github.com/LionSR/TNLean/issues/9854}{issue 9854} and

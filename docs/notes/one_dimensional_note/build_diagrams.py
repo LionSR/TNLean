@@ -23,7 +23,7 @@ ROOT = pathlib.Path(__file__).resolve().parents[3]
 TENKZ = ROOT / ".deps" / "tenkz" / "tex" / "tenkz"
 DOCUMENT = r"""\documentclass[varwidth=60cm,border=2pt]{standalone}
 \usepackage{amssymb,amsmath}
-\usepackage{tenkz}
+\usepackage{tikz-tensor-networks}
 \usetikzlibrary{quantikz2}
 \usetikzlibrary{arrows.meta,calc,patterns,positioning,decorations.pathreplacing}
 \begin{document}
