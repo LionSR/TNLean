@@ -6,14 +6,18 @@ Authors: TNLean contributors
 import TNLean.MPS.AreaLaw.Algorithm.ValidOracleCost
 
 /-!
-# Theorem 1 in the form `n^c poly(n/η)`
+# Theorem 1: polynomial time in the chain length and the accuracy
 
 The accuracy parameter `R` of the ground-state program is chosen from the accuracy `η`:
 with `R = max 1 ⌈√(4 L / (Δ η))⌉`, the overlap `1 - 4 L / (R² Δ)` is at least `1 - η`, and
 `L + 2 R² + 1 ≤ 17 L / (Δ η) + 5 L`, so the cost bound `P (L + 2 R² + 1)^d` is a polynomial
-in `L` and `1 / η`, the form `n^{c} poly(n / η)` of Theorem 1 of Landau, Vazirani and
-Vidick, with `c` depending on the local dimension and the gap parameter through `P` and `d`.
-Both statements hold for every valid oracle.
+in `L` and `1 / η`. Both statements hold for every valid oracle.
+
+The degree of `1 / η` is the degree `d` of the whole computation, which depends on the local
+dimension and the gap. The printed `n^{c(d, ε)} poly(n / η)` of Landau, Vazirani and Vidick
+does not say so, but their proof has the same feature: the final error reduction at precision
+`η / n` has `d^{2κ log(n / η)}` terms with `κ = O(1 / ε)` (lines 580--592 and 669--671), so its
+degree in `1 / η` is of order `log d / ε`. Recorded in `docs/paper-gaps/lvv13_cost_model.tex`.
 
 Source: LVV13, arXiv:1307.5143v1, `algo53.tex`, lines 213--216.
 -/
@@ -103,14 +107,15 @@ theorem padded_length_lvvAccuracyParameter_le {L : ℕ} (hL : 1 ≤ L) {Δ η : 
       linarith
     _ = 17 * L / (Δ * η) + 5 * L := by ring
 
-/-- **Theorem 1 in the form of the source**, on the Gaussian route, for every valid oracle.
+/-- **Theorem 1 with a polynomial in the chain length and the accuracy**, on the Gaussian
+route, for every valid oracle.
 Fix `q ≥ 2` and `Δ > 0`. There are `P ≥ 1` and `d` such that for every chain of `L ≥ 1`
 sites, every accuracy `0 < η` with `Δ η ≤ 1`, every valid oracle and every ground pair with
 gap `Δ`, the ground-state program at the accuracy parameter `R = max 1 ⌈√(4L/(Δη))⌉` outputs
 a unit matrix product state with overlap at least `1 - η` with the ground state, and its
 declared cost is at most `P (17 L / (Δ η) + 5 L)^d`, a polynomial in `L` and `1/η` with
-exponent and coefficient depending on `q` and `Δ` alone. LVV13, `algo53.tex`, lines
-213--216. -/
+exponent and coefficient depending on `q` and `Δ` alone, as in the source's proof; see the
+module docstring. LVV13, `algo53.tex`, lines 213--216. -/
 theorem exists_theorem_one_of_valid (hq : 2 ≤ q) {Delta : ℝ} (hDelta : 0 < Delta) :
     ∃ P d : ℕ, 1 ≤ P ∧ ∀ (o : {ι : Type} → LinearAlgebraQuery q ι → ι), IsValidOracle o →
       ∀ (L : ℕ), 1 ≤ L → ∀ {η : ℝ}, 0 < η → Delta * η ≤ 1 →
