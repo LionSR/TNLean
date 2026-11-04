@@ -23,7 +23,8 @@ Theorem 4.9, source lines 1080–1086.
 
 **Scope restriction (gap dependence):** The bound uses `min gamma 1`.
 Comparison with the printed quantitative dependence is for `0 < gamma ≤ 1`;
-the larger-gap comparison remains in the same note.
+the larger-gap comparison remains as recorded in
+`docs/paper-gaps/alvv16_approximation_parameters.tex`.
 
 The distinct spectral values express Assumption (DG) of the source,
 lines 275–279, which requires a second smallest eigenvalue.

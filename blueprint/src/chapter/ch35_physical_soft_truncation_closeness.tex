@@ -91,7 +91,7 @@
     bound. No approximate heat operator is raised to the power $m$.
 \end{proof}
 
-\begin{lemma}[A complete soft Hamiltonian at prescribed norm accuracy]
+\begin{theorem}[A complete soft Hamiltonian at prescribed norm accuracy]
     \label{thm:soft_hamiltonian_mpo_accuracy}
     \lean{TNLean.MPS.AreaLaw.exists_softTruncation_mpo_of_accuracy,
         TNLean.MPS.AreaLaw.exists_softTruncatedHamiltonian_mpo_of_accuracy}
@@ -118,7 +118,7 @@
         D=1+Nq^2+(m+1)\ell^2q^\ell,
         \qquad\|\widetilde H-T\|\leq\xi.
     \end{align*}
-\end{lemma}
+\end{theorem}
 \begin{proof}\leanok
     \uses{thm:soft_mpo_cluster_order, lem:local_sum_scalar_mpo,
         lem:trace_chain_linear_combination}
@@ -212,7 +212,7 @@ a computational running-time claim is not included.
     actual physical $\widetilde H$ has both directed window
     comparisons and, for every $\xi>0$, actual operator tensors
     of the dimension $D$ specified in
-    Lemma~\ref{thm:soft_hamiltonian_mpo_accuracy}, with error
+    Theorem~\ref{thm:soft_hamiltonian_mpo_accuracy}, with error
     $\|\widetilde H-T\|\leq\xi$.
     The regional minima and original ground data are constructed
     before $\epsilon$, and the soft ground energy is its actual

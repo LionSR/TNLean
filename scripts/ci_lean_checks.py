@@ -273,36 +273,12 @@ def select_focused(
     missing = sorted((direct & head_files) - existing)
     if missing:
         raise ValueError("changed PR targets missing from the checkout: " + ", ".join(missing))
-    changed_sources = sorted(p for p in direct & existing if is_production(p))
-    # Defer pure import-only aggregators to the mandatory full build, mirroring
-    # `early_modules`. Such a file declares nothing, so a strict elaboration only
-    # reconfirms that its imports resolve -- which the root build already does --
-    # yet preparing it forces a cold build of its entire import closure. For a
-    # top aggregator that closure can span the whole library (for example
-    # TNLean.MPS.AreaLaw reaches PEPS.AreaLaw and Lattice), which on a cache
-    # invalidated by a toolchain or dependency bump makes this diagnostic step
-    # redo most of the root build. An unreadable file is never safe to defer.
-    sources: list[str] = []
-    deferred: list[str] = []
-    for path in changed_sources:
-        try:
-            text = (root / path).read_text(encoding="utf-8")
-        except (OSError, UnicodeError):
-            sources.append(path)
-            continue
-        imports, error = pure_import_modules(text)
-        if error is None and imports:
-            deferred.append(path)
-        else:
-            sources.append(path)
+    sources = sorted(p for p in direct & existing if is_production(p))
     tests = sorted(p for p in direct & existing if is_test(p))
     graph = import_graph(root, files)
     print(f"Focused PR range: {fork}..{head_commit}; elaborating checkout HEAD.", flush=True)
     print(f"Focused selection: {len(sources)} direct source(s), "
           f"{len(tests)} direct regression script(s).", flush=True)
-    if deferred:
-        print(f"Focused deferral: {len(deferred)} import-only aggregator(s) left "
-              f"to the mandatory full build: {', '.join(deferred)}.", flush=True)
     return sources, tests, graph
 
 
