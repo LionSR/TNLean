@@ -28,7 +28,7 @@ rev = "v4.36.0-rc1"
 name = "qiclean"
 git = "https://github.com/LionSR/QICLean.git"
 # Draft-only candidate; replace with the validated immutable semver release tag before merge.
-rev = "c457682404aa548b4acd16ac27be5d3835e68892"
+rev = "5d6e1c2367637788a1a1889f996785166c2b5093"
 
 [[lean_lib]]
 name = "TNLean"
