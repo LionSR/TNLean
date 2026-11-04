@@ -72,10 +72,13 @@ operator on each side plus the bulk operator.
     bounds the Schmidt rank of the bulk operator of the region containing
     the cut. For $B\ge2$ the right side of
     (\ref{eq:alvv_two_window_interior_cut_rank}) is at most $B^{2k+2}$,
-    the printed form $B^{O(k)}$. For $B\le1$ the printed form fails,
-    because the two boundary terms cannot be absorbed into the base;
-    the bound (\ref{eq:alvv_two_window_interior_cut_rank}) is the corrected
-    statement~\cite{gap:alvv16_chebyshev_near_ground_slope}.
+    the printed form $B^{O(k)}$. For $B\le1$ the printed form fails: if
+    $F_\mu=0$ and the parts of $H$ on the two sides of the cut are diagonal
+    with distinct entries $\alpha_i$ and $\beta_j$, the rank of $P(H)$ at the
+    cut is the rank of the matrix $\bigl(P(\alpha_i+\beta_j)\bigr)_{ij}$,
+    which is $k+1$ for suitable entries. The two boundary terms cannot be
+    absorbed into the base, and
+    (\ref{eq:alvv_two_window_interior_cut_rank}) is the corrected statement.
 \end{lemma}
 \begin{proof}\leanok
     \uses{thm:alvv_bulk_cut_polynomial_rank}
