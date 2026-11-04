@@ -3072,10 +3072,17 @@ involve no boundary.
   cohomology equivalence when the fixed-space and injectivity assumptions hold
   at every parameter; preconnectedness extends the local conclusion.
 - **Caveat:** the relation contains no virtual representation, factor system,
-  or continuous canonical bond data. Its general converse remains open:
-  continuous balanced canonical data and the surviving invariant bond subspace
-  must be derived from the physical gap when minimal bond dimensions change.
-  The obstruction to using raw tensor continuity alone is documented in
+  or continuous canonical bond data. Its converse, the cohomology obstruction
+  `MPSTensor.IsSameExactMPSGappedPhase.cohomologousTo`, is proved through
+  changes of minimal bond dimension. Every clause matches the source's phase
+  relation for paths with unique MPS ground states except the continuous
+  ambient tensor family of `MPSTensor.ExactMPSGroundPath`: arXiv:1010.3732
+  derives that family from the gap (Section II.F.2, lines 938–991) instead
+  of assuming it. The one-site injective endpoint domain of the
+  classification theorems is the source's standard-form convention. The
+  decision and the plan for a pointwise converse are recorded in
+  `docs/paper-gaps/spc11_spt_classification_continuous_realization.tex`;
+  the obstruction to using raw tensor continuity alone is documented in
   `docs/paper-gaps/spc11_spt_interpolation_upper_range.tex`.
 
 ## Exact circuits with initialized auxiliaries
