@@ -1237,10 +1237,29 @@
         "thm:area_law_product_ground_state": "Gapped ground vectors of a sum of factor Hamiltonians are product vectors (OpenAI 2026 area law, Lemma 2.2)"
       }
     },
+    "ch:peps_ft_normal_square": {
+      "theorems": [
+        "thm:fundamentalTheorem_normalSquarePEPS"
+      ],
+      "corollaries": [
+        "thm:fundamentalTheorem_normalSquarePEPS_unconditional"
+      ],
+      "notes": {
+        "thm:fundamentalTheorem_normalSquarePEPS": "Fundamental Theorem for normal square-lattice PEPS (Molnar et al., Theorem 3)"
+      }
+    },
+    "ch:peps_ft_normal_torus": {
+      "theorems": [],
+      "corollaries": [
+        "thm:fundamentalTheorem_normalTorusPEPS",
+        "thm:fundamentalTheorem_normalTorusPEPS_unconditional",
+        "cor:peps_lambda_pow_card_torus_eq_one_of_twoBlockProportional"
+      ],
+      "notes": {}
+    },
     "ch:peps_ft_normal": {
       "theorems": [
-        "thm:fundamentalTheorem_normalPEPS",
-        "thm:fundamentalTheorem_normalSquarePEPS"
+        "thm:fundamentalTheorem_normalPEPS"
       ],
       "corollaries": [
         "cor:fundamentalTheorem_normalMPS_cycle",
@@ -1258,15 +1277,10 @@
         "cor:exists_gauge_to_first_of_cyclicShiftInvariantState",
         "cor:exists_constant_injectiveMPS_of_cyclicShiftInvariantState_per_bond_pos",
         "cor:peps_state_translation_bond_uniform",
-        "thm:fundamentalTheorem_normalPEPS_of_vertexInjective",
-        "thm:fundamentalTheorem_normalSquarePEPS_unconditional",
-        "thm:fundamentalTheorem_normalTorusPEPS",
-        "thm:fundamentalTheorem_normalTorusPEPS_unconditional",
-        "cor:peps_lambda_pow_card_torus_eq_one_of_twoBlockProportional"
+        "thm:fundamentalTheorem_normalPEPS_of_vertexInjective"
       ],
       "notes": {
-        "thm:fundamentalTheorem_normalPEPS": "Fundamental Theorem for normal PEPS (Molnar et al., Section 4)",
-        "thm:fundamentalTheorem_normalSquarePEPS": "Fundamental Theorem for normal square-lattice PEPS (Molnar et al., Theorem 3)"
+        "thm:fundamentalTheorem_normalPEPS": "Fundamental Theorem for normal PEPS (Molnar et al., Section 4)"
       }
     },
     "ch:peps_g_injective_regions": {
