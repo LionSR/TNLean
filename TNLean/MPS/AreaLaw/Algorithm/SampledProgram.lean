@@ -506,14 +506,14 @@ theorem exists_sampled_budgets_polynomial (hq : 2 ≤ q) {Δ B η : ℝ} (hΔ : 
   simp only at this
   simpa only [sampledWordCount, sampledRankBound, sampledLetterBound, sampledPower, hδ] using this
 
-/-- **Theorem 1 on the sampled route, with its success probability.** Fix `q ≥ 2`, `Δ > 0`,
-a bound `B` on the ratio of ground energy to gap, and an accuracy `η > 0`. There are `C ≥ 1`
-and `p`, chosen before the chain, such that for every chain of `L ≥ 1` sites with a ground
-pair `(E₀, Γ)` of gap `Δ` and `E₀ / Δ ≤ B`, with probability at least `1 - 1/(2 L²)` over
-the sampled words, the sampled ground-state program run with the honest oracle outputs a
-unit open-boundary matrix product state of bond dimension at most `C L^p` with overlap at
-least `1 - η` with `Γ`. LVV13, `algo53.tex`, lines 213--216, in the documented scope of the
-ground-energy ratio. -/
+/-- **Theorem 1 on the sampled route, with its success probability.** Fix `q ≥ 2`, `Δ > 0`, a bound
+`B` on the ratio of ground energy to gap, and an accuracy `η > 0`. There are `C ≥ 1` and `p`,
+chosen before the chain, such that for every chain of `L ≥ 1` sites with a ground pair `(E₀, Γ)`
+of gap `Δ` and `E₀ / Δ ≤ B`, with probability at least `1 - 1/(2 L²)` over the sampled words, the
+sampled ground-state program run with the honest oracle, with the bond budget `C L^p` and the
+rank budget of the words declared, outputs a unit open-boundary matrix product state of bond
+dimension at most `C L^p` with overlap at least `1 - η` with `Γ`. LVV13, `algo53.tex`, lines
+213--216, in the documented scope of the ground-energy ratio. -/
 theorem exists_sampledGroundStateProgram_success_polynomial (hq : 2 ≤ q) {Δ B η : ℝ}
     (hΔ : 0 < Δ) (hη : 0 < η) :
     ∃ C p : ℕ, 1 ≤ C ∧ ∀ (L : ℕ) [NeZero L]
@@ -526,7 +526,8 @@ theorem exists_sampledGroundStateProgram_success_polynomial (hq : 2 ≤ q) {Δ B
       1 - 1 / (2 * (L : ℝ) ^ 2) ≤
         (stepWordsMeasure L (sampledWordCount q L E₀ Δ δ) (sampledPower L E₀ Δ δ)).real
           {I | let ψ := FreeM.eval honestOracle
-                (sampledGroundStateProgram hq h hs h0 h1 E₀ Δ I (C * L ^ p) (C * L ^ p))
+                (sampledGroundStateProgram hq h hs h0 h1 E₀ Δ I (C * L ^ p)
+                  (sampledRankBound q L E₀ Δ δ))
             ‖ψ‖ = 1 ∧ 1 - η ≤ ‖⟪Γ, ψ⟫_ℂ‖ ∧ IsOpenMPS L q (C * L ^ p) (fun x ↦ ψ x)} := by
   obtain ⟨C₁, p₁, hC₁, hbud⟩ := exists_sampled_budgets_polynomial (B := B) hq hΔ hη
   obtain ⟨M, u, -, hradius⟩ := exists_bondTrimmingRadius_lvvReferenceBond_polynomial q Δ
@@ -584,7 +585,7 @@ theorem exists_sampledGroundStateProgram_success_polynomial (hq : 2 ≤ q) {Δ B
       _ = C₁ * C₂ * (C₁ * max 1 ⌈M⌉₊) * L ^ p := by rw [hp, pow_add, pow_add]; ring
       _ ≤ C * L ^ p := Nat.mul_le_mul_right _ (le_max_right _ _)
   refine (measureReal_sampledGroundStateProgram_success hq h hs h0 h1 hΔ hgs hδ0 hδ1 hδc
-    (C * L ^ p) (C * L ^ p)).trans (measureReal_mono fun I hI ↦ ?_)
+    (C * L ^ p) (sampledRankBound q L E₀ Δ δ)).trans (measureReal_mono fun I hI ↦ ?_)
   obtain ⟨hψ1, hψover, hψmps⟩ := hI
   exact ⟨hψ1, le_trans (by linarith) hψover, hψmps.mono hbond⟩
 
