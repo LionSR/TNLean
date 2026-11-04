@@ -155,8 +155,19 @@ private theorem mem_span_embedOp_single_of_isSupportedOn_singleton
     obtain ⟨K, hK⟩ := hW.exists_localLift σ₀
     let X : Matrix (Fin 1 → Fin q) (Fin 1 → Fin q) ℂ :=
       fun x y ↦ K (fun _ ↦ x 0) (fun _ ↦ y 0)
+    have hembed : Entropy.localLift (n := fun _ ↦ q) S K =
+        embedOp (Subtype.val : ↥S → E) K := by
+      ext σ τ
+      rw [Entropy.localLift_apply, embedOp_apply]
+      congr 1
+      simp only [AgreeOff, eq_iff_iff]
+      constructor
+      · intro h v hv
+        exact h v fun hvS ↦ hv ⟨v, hvS⟩ rfl
+      · intro h v hv
+        exact h v fun w hw ↦ hv (hw ▸ w.2)
     have hX : W = embedOp e X := by
-      rw [hK, localLift_eq_embedOp]
+      rw [hK, hembed]
       ext σ τ
       rw [embedOp_apply, embedOp_apply]
       have hagree : AgreeOff (Subtype.val : S → E) σ τ ↔ AgreeOff e σ τ := by
