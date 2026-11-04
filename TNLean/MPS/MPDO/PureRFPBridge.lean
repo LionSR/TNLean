@@ -8,6 +8,7 @@ import TNLean.MPS.Core.TransferMatrix
 import TNLean.MPS.MPDO.PureAreaLaw
 import TNLean.MPS.MPDO.RFPViaTS
 import TNLean.MPS.RFP.Defs
+import TNLean.Algebra.FinSumPermutation
 
 /-!
 # Pure-state equivalence for the MPDO renormalization fixed-point condition
@@ -115,10 +116,7 @@ private theorem singleKrausMap_physClose1_doubledTensor
     Finset.sum_mul, Matrix.trace_sum, Matrix.smul_mul,
     Matrix.trace_smul, physClose1_apply, smul_eq_mul]
   rw [Finset.sum_comm]
-  apply Finset.sum_congr rfl
-  intro a _
-  apply Finset.sum_congr rfl
-  intro b _
+  refine Finset.sum_congr₂ fun a _ b _ ↦ ?_
   ring
 
 private theorem doubledTensor_isRFPViaTS_of_hasPhysicalBlockingIsometry

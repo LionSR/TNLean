@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.BiCFDerivation.Core
+import TNLean.Algebra.FinSumPermutation
 
 /-!
 # Three-site contraction of a basis of normal tensors
@@ -188,14 +189,8 @@ theorem isMPOBlockLeftInverse_outer_inverse_threeSite_collapse
     apply Finset.sum_congr rfl
     intro s _
     rw [sum_pair_swap]
-    apply Finset.sum_congr rfl
-    intro i₁ _
-    apply Finset.sum_congr rfl
-    intro j₁ _
-    apply Finset.sum_congr rfl
-    intro i₃ _
-    apply Finset.sum_congr rfl
-    intro j₃ _
+    refine Finset.sum_congr₂ fun i₁ _ j₁ _ ↦ ?_
+    refine Finset.sum_congr₂ fun i₃ _ j₃ _ ↦ ?_
     ring
   rw [hRegroup]
   have hL (z : MPSTensor.BlockEntryIndex dim) (s : Fin g) :
