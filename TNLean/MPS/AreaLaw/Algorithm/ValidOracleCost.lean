@@ -19,6 +19,14 @@ solvers of the convex programs, in the cost model of the query type.
 `FreeM.cost o queryCost`, not on a proved running time of an implementation: each query is
 charged a declared polynomial cost in the dimensions of its arguments, arithmetic is exact, and
 nothing is proved about how a query is answered; see `docs/paper-gaps/lvv13_cost_model.tex`.
+
+**Scope restriction (quantitative constants):** the step budgets use the library constant-cut
+bond `constantCutBond`, the corrected net exponent and the size-trimming budget built from them,
+not the printed quantitative bounds; see `docs/paper-gaps/lvv13_constant_bond.tex`.
+
+**Local fix (trimming radius):** the bond-trimming budget uses the corrected quadratic radius
+`bondTrimmingRadius` recorded at
+<https://sirui-lu.com/QICLean/paper-gaps/lvv13_trimming_radius.pdf>.
 -/
 
 open Matrix Cslib
