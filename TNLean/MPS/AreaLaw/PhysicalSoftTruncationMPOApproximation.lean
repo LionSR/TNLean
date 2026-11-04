@@ -19,6 +19,10 @@ the corrected exponential-moment residual and interaction-label cluster estimate
 false printed estimate nor a computational running time is asserted; see
 `docs/paper-gaps/alvv16_soft_truncation_energy_estimate.tex` and
 `docs/paper-gaps/alvv16_cluster_approximation.tex`.
+
+**Scope restriction (scale three times the order):** ALVV `lem:exp-approx-eff`, lines
+1262–1268, allows any scale with `t′ < (ln 2/2) t`; this module takes `t = 3m`, a sub-case of
+that range. See `docs/paper-gaps/alvv16_cluster_approximation.tex`.
 -/
 
 open Matrix

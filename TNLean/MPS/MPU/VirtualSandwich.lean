@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import Mathlib.LinearAlgebra.Matrix.Kronecker
 import TNLean.MPS.MPU.SourceCuts
 import Mathlib.Topology.Instances.Matrix
+import TNLean.Algebra.FinSumPermutation
 
 /-!
 # Virtual sandwiching of an MPO tensor
@@ -94,10 +95,7 @@ theorem sourceCutM₁_virtualSandwich (A : Matrix (Fin D) (Fin D) ℂ)
       _ = ∑ γ, ∑ δ, (A α γ * U i j γ δ) * B δ β :=
         Finset.sum_comm (s := Finset.univ) (t := Finset.univ)
       _ = ∑ γ, ∑ δ, (B δ β * U i j γ δ) * A α γ := by
-        apply Finset.sum_congr rfl
-        intro γ _
-        apply Finset.sum_congr rfl
-        intro δ _
+        refine Finset.sum_congr₂ fun γ _ δ _ ↦ ?_
         ring
       _ = _ := by
         apply Finset.sum_congr rfl
