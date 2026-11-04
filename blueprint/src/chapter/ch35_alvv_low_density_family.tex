@@ -13,11 +13,11 @@ $0,a+1,a+2\ell,b+1,b+2\ell,L$. Let $A_j$ be the sum of the bonds
 internal to region $j$, and let $Y$ be the sum of the four crossing bonds.
 The regional ground energies $e_j$ determine
 \begin{align}
-    H_0&=\sum_{j=0}^4(A_j-e_jI)+Y=H-\Bigl(\sum_j e_j\Bigr)I,
-    \notag\\
-    B&=\sum_{j\in\{0,2,4\}}
-       \bigl(\min(A_j,(e_j+\ell)I)-e_jI\bigr)
-       +\sum_{j\in\{1,3\}}(A_j-e_jI)+Y.
+    H_0 & =\sum_{j=0}^4(A_j-e_jI)+Y=H-\Bigl(\sum_j e_j\Bigr)I,
+    \notag                                                     \\
+    B   & =\sum_{j\in\{0,2,4\}}
+    \bigl(\min(A_j,(e_j+\ell)I)-e_jI\bigr)
+    +\sum_{j\in\{1,3\}}(A_j-e_jI)+Y.
     \label{eq:ld_family_clipping}
 \end{align}
 The minimum is defined by spectral calculus. Write $E_0=\min\sigma(H_0)$,
@@ -49,10 +49,10 @@ $F(c)=\mathbf1_{(-\infty,E_0+c]}(B)\mathcal H$.
     $\eta_{\rm LD}$. Every partially clipped centered sum is positive.
     For each positive $c\le\eta_{\rm LD}$,
     \begin{align}
-      \left\lceil\frac{E_0+c}{2\xi}\right\rceil(2\xi)^2
-      \le 2(E_0+c)\xi+4\xi^2
-      \le2(6+c)\xi\le\nu w^2\le\nu(w+\xi)^2.
-      \label{eq:ld_family_window_budget}
+        \left\lceil\frac{E_0+c}{2\xi}\right\rceil(2\xi)^2
+        \le 2(E_0+c)\xi+4\xi^2
+        \le2(6+c)\xi\le\nu w^2\le\nu(w+\xi)^2.
+        \label{eq:ld_family_window_budget}
     \end{align}
     Apply the comparison in both directions at $c=\eta-w$ and
     $c=\eta-3w$. The buffer ensures that both cutoffs are positive.
@@ -103,16 +103,16 @@ $F(c)=\mathbf1_{(-\infty,E_0+c]}(B)\mathcal H$.
     $C\ge\max\{100,19+\eta_{\rm LD}\}$ with the following property.
     Choose an integer $m\ge q$, a width $w>0$, and set
     \begin{align}
-        g&=\min\{w,1\},&
-        u&=1+\log m+\log(1/g),&
-        \ell&=\left\lceil Cu^2/g\right\rceil,&
-        D&=(m\ell^2)^{22\ell}.
+        g    & =\min\{w,1\},                    &
+        u    & =1+\log m+\log(1/g),             &
+        \ell & =\left\lceil Cu^2/g\right\rceil, &
+        D    & =(m\ell^2)^{22\ell}.
         \label{eq:ld_family_parameters}
     \end{align}
     Suppose the five regions fit as above. Then $\ell\ge21$ and
     \begin{align}
         \log D
-        &\le\frac{22(C+1)(6+2\log(C+1))}{g}\,u^3.
+         & \le\frac{22(C+1)(6+2\log(C+1))}{g}\,u^3.
         \label{eq:ld_family_log_count}
     \end{align}
     For the actual clipped matrix $B$ of
@@ -124,10 +124,10 @@ $F(c)=\mathbf1_{(-\infty,E_0+c]}(B)\mathcal H$.
     $p$ of degree exactly $\ell^2$, with $p(E_0+\eta-2w)=1$, and matrices
     $M_i$ on $J^c$ such that, in the physical tensor coordinates,
     \begin{align}
-        p(B)&=\sum_{i=1}^N W_i\otimes M_i,&
-        \Delta&=4\exp\left(-4\ell^2
-        \sqrt{\frac{w}{7\ell-(E_0+\eta-2w)}}\right),&
-        D^{12}\Delta&\le10^{-5}.
+        p(B)                                         & =\sum_{i=1}^N W_i\otimes M_i, &
+        \Delta                                       & =4\exp\left(-4\ell^2
+        \sqrt{\frac{w}{7\ell-(E_0+\eta-2w)}}\right), &
+        D^{12}\Delta                                 & \le10^{-5}.
         \label{eq:ld_family_filter}
     \end{align}
     Whenever $S$ is $\delta$-viable for $T_+$ and $\delta<1$,
@@ -213,8 +213,8 @@ $G(c)=\mathbf1_{(-\infty,\lambda_0+c]}(H)\mathcal H$.
     If $S\subseteq\mathcal H_J$ is $\delta$-viable for $T_+$ with
     $\delta<1$, then $V=\sum_i A_iS$ satisfies
     \begin{align}
-        \dim V&\le D^2\dim S,&
-        V&\text{ is }\frac{\Delta}{(1-\delta)^2}\text{-viable for }T_-.
+        \dim V & \le D^2\dim S,                                                &
+        V      & \text{ is }\frac{\Delta}{(1-\delta)^2}\text{-viable for }T_-.
         \label{eq:ld_interval_improvement}
     \end{align}
     Short intervals, empty intervals and intervals meeting the chain
@@ -237,11 +237,11 @@ $G(c)=\mathbf1_{(-\infty,\lambda_0+c]}(H)\mathcal H$.
     $C\ge\max\{100,19+\eta_{\rm LD}\}$ before the physical data.
     Let $q\ge2$, $m\ge q$, $w>0$ and $i\ge0$. Put
     \begin{align*}
-      m_i&=m2^i,&g&=\min\{w,1\},&
-      u_i&=1+\log m_i+\log(1/g),\\
-      \ell_i&=\lceil Cu_i^2/g\rceil,&
-      D_i&=(m_i\ell_i^2)^{22\ell_i},&
-      \nu_i&=\frac1{200\,2^{4i}}.
+        m_i    & =m2^i,                     & g & =\min\{w,1\}, &
+        u_i    & =1+\log m_i+\log(1/g),                           \\
+        \ell_i & =\lceil Cu_i^2/g\rceil,    &
+        D_i    & =(m_i\ell_i^2)^{22\ell_i}, &
+        \nu_i  & =\frac1{200\,2^{4i}}.
     \end{align*}
     Then $\ell_i\ge21$ and the logarithmic count bound holds at
     $(m_i,g,u_i,\ell_i,D_i)$. When the five regions fit at scale $\ell_i$,
@@ -264,8 +264,8 @@ $G(c)=\mathbf1_{(-\infty,\lambda_0+c]}(H)\mathcal H$.
 \end{lemma}
 \begin{proof}\leanok
     \uses{lem:fixed_bandwidth_low_density_filter_parameters,
-      lem:ld_buffered_targets_at_error,thm:actual_clipped_polynomial_family,
-      thm:collar_larger_count_base}
+        lem:ld_buffered_targets_at_error,thm:actual_clipped_polynomial_family,
+        thm:collar_larger_count_base}
     Use the same constant $C$ at every numerical base $m_i$.
     Since $u_i=u_0+i\log2$, $C/g\ge100$, $u_0\ge1$ and
     $\log2\ge1/2$, one has
@@ -277,10 +277,10 @@ $G(c)=\mathbf1_{(-\infty,\lambda_0+c]}(H)\mathcal H$.
     Apply Lemma~\ref{lem:ld_buffered_targets_at_error}.
     At degree $\ell_i^2$, the exact regional polynomial family satisfies
     \begin{align}
-      N&\le(q\ell_i^2)^{40\ell_i}
+        N & \le(q\ell_i^2)^{40\ell_i}
         q^{2|J_0\setminus J|+2|J\setminus J_0|}
         \le(m_i\ell_i^2)^{44\ell_i}=D_i^2.
-      \label{eq:ld_regional_count_reserve}
+        \label{eq:ld_regional_count_reserve}
     \end{align}
     The suppression estimate is calibrated for this same $C,m_i,g$ and
     degree. No count is enlarged after its filter has been chosen.
@@ -362,8 +362,8 @@ $G(c)=\mathbf1_{(-\infty,\lambda_0+c]}(H)\mathcal H$.
     Lemma~\ref{lem:dyadic_regional_low_energy_family}.
     Then $\ell_i\ge21$ and
     \begin{align*}
-      \log D_i\le
-      \frac{22(C+1)(6+2\log(C+1))}{g}\,u_i^3.
+        \log D_i\le
+        \frac{22(C+1)(6+2\log(C+1))}{g}\,u_i^3.
     \end{align*}
     There are operators $A_0,\ldots,A_{D_i^2-1}$ on $\mathcal H_J$,
     chosen before the buffered cutoff and the viable source space.

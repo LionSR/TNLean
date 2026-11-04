@@ -20,20 +20,20 @@ qualifications remain those of
     $T_0\ge\gamma/40+24$ and $t,T_1\ge156+2\gamma$.
     Suppose the corrected residuals satisfy
     \begin{align}
-      3\left(32e^{-(T_0-\gamma/40-24)/8}
-        +\frac{t}{m}(T_0/t)^m\right)&\le\tau\gamma/10^6,\notag\\
-      3\left(32e^{-(T_1-156-2\gamma)/8}
-        +\frac{t}{m}(T_1/t)^m\right)&\le\tau\gamma/10^6.
-      \label{eq:uniform_soft_residual_budgets}
+        3\left(32e^{-(T_0-\gamma/40-24)/8}
+        +\frac{t}{m}(T_0/t)^m\right) & \le\tau\gamma/10^6,\notag \\
+        3\left(32e^{-(T_1-156-2\gamma)/8}
+        +\frac{t}{m}(T_1/t)^m\right) & \le\tau\gamma/10^6.
+        \label{eq:uniform_soft_residual_budgets}
     \end{align}
     Set
     \begin{align}
-      M&=3t(1+\log m)+4\ell+34, &
-      \xi&=\min\left\{1,\frac{\tau\gamma^2}{20000(M+\gamma+8)}\right\},\notag\\
-      U&=M+\xi+4+\gamma, &
-      D&=(mk+1)(qk)^{36\ell+4\lfloor k/\ell\rfloor},\notag\\
-      \Delta&=4\exp\left(-4k\sqrt{\frac{\gamma}{2U}}\right).
-      \label{eq:uniform_soft_family_budgets}
+        M      & =3t(1+\log m)+4\ell+34,                                             &
+        \xi    & =\min\left\{1,\frac{\tau\gamma^2}{20000(M+\gamma+8)}\right\},\notag   \\
+        U      & =M+\xi+4+\gamma,                                                    &
+        D      & =(mk+1)(qk)^{36\ell+4\lfloor k/\ell\rfloor},\notag                    \\
+        \Delta & =4\exp\left(-4k\sqrt{\frac{\gamma}{2U}}\right).
+        \label{eq:uniform_soft_family_budgets}
     \end{align}
     Let $h_i$, $0\le i<N$, be positive-contraction nearest-neighbour
     interactions on $N+1$ sites of dimension $q$. Choose
@@ -50,14 +50,14 @@ qualifications remain those of
 
     Write $b_*=2(e^{1/3}-1)$ and define
     \begin{align}
-      s&=\max\left\{1,
+        s    & =\max\left\{1,
         \left\lceil
-          \frac{\log\max\{1,N^2\}-\log\log(1+\xi/(t2^{m+1}))}
-               {-\log b_*}
-        \right\rceil_+\right\},\notag\\
-      B&=2s^2q^s(m+1), &
-      Z(z)&=\mathcal T\left(A_*,\sum_{j=0}^{m}z^j C_j\right).
-      \label{eq:uniform_soft_native_family}
+        \frac{\log\max\{1,N^2\}-\log\log(1+\xi/(t2^{m+1}))}
+        {-\log b_*}
+        \right\rceil_+\right\},\notag                               \\
+        B    & =2s^2q^s(m+1),                                     &
+        Z(z) & =\mathcal T\left(A_*,\sum_{j=0}^{m}z^j C_j\right).
+        \label{eq:uniform_soft_native_family}
     \end{align}
     The tensors $A_*$ have virtual dimension $B$. Each $W_i$ has an
     open-boundary matrix product representation in the paired physical
@@ -65,21 +65,21 @@ qualifications remain those of
 
     For every $p_j\in[e_j-10,e_j]$ on $j\in\{0,2,4\}$, put
     \begin{align}
-      F_j&=p_jI+h_{m,t}(A_j-p_jI),\notag\\
-      G_p&=\sum_{j=0}^4
+        F_j          & =p_jI+h_{m,t}(A_j-p_jI),\notag      \\
+        G_p          & =\sum_{j=0}^4
         \bigl(\mathbf1_{j\in\{0,2,4\}}F_j+
-              \mathbf1_{j\notin\{0,2,4\}}A_j-e_jI\bigr)+Y,\notag\\
-      z_p&=e^{(p_2-e_2)/t}, &
-      \widehat G_p&=G_p-F_2+p_2I+\iota(Z(z_p)).
-      \label{eq:uniform_soft_same_approximant}
+        \mathbf1_{j\notin\{0,2,4\}}A_j-e_jI\bigr)+Y,\notag \\
+        z_p          & =e^{(p_2-e_2)/t},              &
+        \widehat G_p & =G_p-F_2+p_2I+\iota(Z(z_p)).
+        \label{eq:uniform_soft_same_approximant}
     \end{align}
     Here $\iota$ is identity extension from the native middle interval
     $[a+2\ell,b+1)$. The matrix $\widehat G_p$ is Hermitian and
     \begin{align}
-      \|h_{m,t}(A_2-p_2I)-\iota(Z(z_p))\|&\le\xi,\notag\\
-      \|G_p-\widehat G_p\|&\le\xi, &
-      \|\widehat G_p\|&\le M+\xi.
-      \label{eq:uniform_soft_same_error}
+        \|h_{m,t}(A_2-p_2I)-\iota(Z(z_p))\| & \le\xi,\notag   \\
+        \|G_p-\widehat G_p\|                & \le\xi,       &
+        \|\widehat G_p\|                    & \le M+\xi.
+        \label{eq:uniform_soft_same_error}
     \end{align}
 
     Suppose $\mu_0$ is a spectral value of $H_0=\sum_i h_i$ and every
@@ -88,10 +88,10 @@ qualifications remain those of
     $T_p=\operatorname{ran}\mathbf1_{(-\infty,E+\gamma/4]}(\widehat G_p)$.
     Then $\mu_0=E+\sum_j e_j$, and
     \begin{align}
-      T_p&=\operatorname{ran}
-          \mathbf1_{(-\infty,E+3\gamma/4]}(\widehat G_p), &
-      \dim T_p&=\dim G_0.
-      \label{eq:uniform_soft_own_cluster}
+        T_p                                             & =\operatorname{ran}
+        \mathbf1_{(-\infty,E+3\gamma/4]}(\widehat G_p), &
+        \dim T_p                                        & =\dim G_0.
+        \label{eq:uniform_soft_own_cluster}
     \end{align}
     The spaces $T_p,G_0$ are mutually $3\tau/200$-close.
 
@@ -105,16 +105,16 @@ qualifications remain those of
     For every $r\ge0$ and every $\delta$-viable subspace $S$ for
     $T_p^c$, where $\delta<1$, the literal ordered-word image
     \begin{align}
-      S_r&=\sum_{w\in\{0,\ldots,n-1\}^r}
-           W_{w_0}\cdots W_{w_{r-1}}S
-      \label{eq:uniform_soft_word_image}
+        S_r & =\sum_{w\in\{0,\ldots,n-1\}^r}
+        W_{w_0}\cdots W_{w_{r-1}}S
+        \label{eq:uniform_soft_word_image}
     \end{align}
     has dimension at most $D^r\dim S$ and is
     $\Delta^r/(1-\delta)^2$-viable for $T_p^c$.
 \end{theorem}
 \begin{proof}\leanok
     \uses{lem:alvv_five_soft_uniform_clusters,lem:uniform_native_soft_middle,
-      thm:common_closing_polynomial_family}
+        thm:common_closing_polynomial_family}
     Choose the regional minima once by the uniform physical comparison.
     At the true lower center $e_2$, construct the fixed heat atoms and
     native tensors of Lemma~\ref{lem:uniform_native_soft_middle}.
@@ -189,10 +189,10 @@ are separate conclusions.
 
     There are integers $a,b$ with
     \begin{align}
-      a+2\ell&\le b, & b+2\ell&\le N,\notag\\
-      p&\le a+\ell, & b+\ell+1&\le r,\notag\\
-      (a+2\ell)-p&\le2\ell, & r-(b+1)&\le2\ell.
-      \label{eq:uniform_long_soft_middle_collars}
+        a+2\ell     & \le b,      & b+2\ell  & \le N,\notag \\
+        p           & \le a+\ell, & b+\ell+1 & \le r,\notag \\
+        (a+2\ell)-p & \le2\ell,   & r-(b+1)  & \le2\ell.
+        \label{eq:uniform_long_soft_middle_collars}
     \end{align}
     Moreover $J_0=[a+\ell,b+\ell+1)\subseteq J$ and
     $|J\setminus J_0|\le2\ell$.
@@ -202,7 +202,7 @@ are separate conclusions.
     and a family $W_1,\ldots,W_n$ on $J$, chosen before every admissible
     triple of center estimates, such that
     \begin{align}
-      A_jx&=e_jx, & A_j-e_jI&\ge0, & n&\le D^2.
+        A_jx & =e_jx, & A_j-e_jI & \ge0, & n & \le D^2.
     \end{align}
     In increasing site order, each $W_i$ has open matrix product bond
     bound $\max\{1,(\max\{1,B\})^{2k}\}$, with the same $B$ as
@@ -219,9 +219,9 @@ are separate conclusions.
     $\mu_0=E+\sum_j e_j$. Let $G_0$ be the full ground space of $H_0$.
     The same matrix $\widehat G_p$ has
     \begin{align}
-      T_p&=\operatorname{ran}\mathbf1_{(-\infty,E+\gamma/4]}(\widehat G_p)
-          =\operatorname{ran}\mathbf1_{(-\infty,E+3\gamma/4]}(\widehat G_p),\notag\\
-      \dim T_p&=\dim G_0,
+        T_p      & =\operatorname{ran}\mathbf1_{(-\infty,E+\gamma/4]}(\widehat G_p)
+        =\operatorname{ran}\mathbf1_{(-\infty,E+3\gamma/4]}(\widehat G_p),\notag    \\
+        \dim T_p & =\dim G_0,
     \end{align}
     and $T_p,G_0$ are mutually $3\tau/200$-close.
 
@@ -229,7 +229,7 @@ are separate conclusions.
     set $T_{p,J}=\Psi_JT_p$. The original factory's filter, pulled
     back to the whole chain, is an operator $K_*$ with
     \begin{align}
-      K_J=\Psi_JK_*\Psi_J^{-1}=\sum_{i=1}^n W_i\otimes R_i.
+        K_J=\Psi_JK_*\Psi_J^{-1}=\sum_{i=1}^n W_i\otimes R_i.
     \end{align}
     Its whole-chain matrix is unchanged. The conjugated operator $K_J$ preserves
     $T_{p,J}$ and its orthogonal complement, has minimum gain one
@@ -238,7 +238,7 @@ are separate conclusions.
     For every $\nu\ge0$, $\delta<1$, and $\delta$-viable $S$ for
     $T_{p,J}$, the ordered-word image
     \begin{align}
-      S_\nu=\sum_{w\in\{1,\ldots,n\}^\nu}W_{w_1}\cdots W_{w_\nu}S
+        S_\nu=\sum_{w\in\{1,\ldots,n\}^\nu}W_{w_1}\cdots W_{w_\nu}S
     \end{align}
     has dimension at most $n^\nu\dim S$ and is
     $\Delta^\nu/(1-\delta)^2$-viable for $T_{p,J}$.
@@ -247,8 +247,8 @@ are separate conclusions.
 \end{lemma}
 \begin{proof}\leanok
     \uses{lem:uniform_physical_soft_filter_family,
-      thm:common_collar_mpo_tensor_family,thm:precenter_collar_count,
-      lem:common_collar_filter_words}
+        thm:common_collar_mpo_tensor_family,thm:precenter_collar_count,
+        lem:common_collar_filter_words}
     Take the inward cuts of $J$. Their two added collars have total
     length at most $2\ell$, and they give
     (\ref{eq:uniform_long_soft_middle_collars}). Use the natural
@@ -287,15 +287,15 @@ are separate conclusions.
     $T_{p,J}=\mathcal R_JT_p$.
     The same whole-chain filter and exterior coefficients satisfy
     \begin{align}
-      K_J=\mathcal R_JK_*\mathcal R_J^{-1}
-          =\sum_{i=1}^n W_i\otimes R_i,
+        K_J=\mathcal R_JK_*\mathcal R_J^{-1}
+        =\sum_{i=1}^n W_i\otimes R_i,
     \end{align}
     with target and complement invariant, minimum gain one on the
     target, and squared contraction at most $\Delta$ on its complement.
     For every $\delta$-viable regional subspace $S$ for $T_{p,J}$,
     where $\delta<1$, define the literal sum of images
     \begin{align}
-      \mathcal V(S)=\sum_{i=1}^n W_iS.
+        \mathcal V(S)=\sum_{i=1}^n W_iS.
     \end{align}
     Then $\dim\mathcal V(S)\le n\dim S$ and
     $\mathcal V(S)$ is $\Delta/(1-\delta)^2$-viable for $T_{p,J}$.
@@ -330,17 +330,17 @@ are separate conclusions.
     separated from the remaining spectrum by at least $g$.
     Suppose $D\ge2$ and $K\ge1$, and assume the numerical sampling bound
     \begin{align}
-      K(\rho'+1)(s+2)^2\le Q\quad\Longrightarrow\quad
-      4D^2\le Q,\qquad
-      \operatorname{Fail}(D,Q,\rho')\le\frac{1}{q(s+2)^4}
-      \label{eq:physical_interval_sampling_threshold}
+        K(\rho'+1)(s+2)^2\le Q\quad\Longrightarrow\quad
+        4D^2\le Q,\qquad
+        \operatorname{Fail}(D,Q,\rho')\le\frac{1}{q(s+2)^4}
+        \label{eq:physical_interval_sampling_threshold}
     \end{align}
     for all natural $\rho',s,Q$. Assume also
     \begin{align}
-      D^{12}\Delta\le10^{-5},\qquad
-      \frac{3\tau}{200}\le
+        D^{12}\Delta\le10^{-5},\qquad
+        \frac{3\tau}{200}\le
         \frac1{100}\left(\frac{3}{100D^2}\right)^2,
-      \qquad \frac{3\tau}{200}\le\frac1{200}.
+        \qquad \frac{3\tau}{200}\le\frac1{200}.
     \end{align}
     Fix an original-ground reference $R_0$ that is mutually
     $\varepsilon_0$-close to $G$, where
@@ -367,9 +367,9 @@ are separate conclusions.
     Then $\mathcal H_S$ and the true $0.015$-viability event for $V_S$
     are measurable, and
     \begin{align}
-      \mathbb P(\mathcal H_S^c)&\le\frac{R}{q(N+3)^4},&
-      \mathbb P\{V_S\text{ is not }0.015\text{-viable for }G\}
-        &\le\frac{R}{q(N+3)^4}.
+        \mathbb P(\mathcal H_S^c) & \le\frac{R}{q(N+3)^4}, &
+        \mathbb P\{V_S\text{ is not }0.015\text{-viable for }G\}
+                                  & \le\frac{R}{q(N+3)^4}.
     \end{align}
     On $\mathcal H_S$, the same $Y_S$ is $27/2500$-viable for $G$
     and the same $V_S$ is $3/200$-viable for $G$.
@@ -386,7 +386,7 @@ are separate conclusions.
 \end{lemma}
 \begin{proof}\leanok
     \uses{lem:uniform_native_long_interval_soft_improving_family,
-      lem:fixed_interval_raw_history_probability}
+        lem:fixed_interval_raw_history_probability}
     Choose the native physical family once. For a fixed admissible
     center triple, retain its represented matrix and target, and use
     the preceding one-step image estimate as the improvement input to

@@ -15,11 +15,11 @@ approximation and its global matrix product representation are separate.
     Put $a=16+\log(1/g)+\log(1/\delta)$ and $t=C_\eta a$.
     There is an integer $\ell\ge1$ such that
     \begin{align}
-      \ell&\le\frac8g+(7C_\eta)^{1/4}g^{-1/4}a^{3/4},\notag\\
-      19+\eta&\le t,\notag\\
-      \xi&=288e^{11/8}e^{-(t-\eta)/8}\le1,\notag\\
-      2(6+\eta)\xi&\le\frac\delta{100}g^2.
-      \label{eq:ld_sharp_scales}
+        \ell         & \le\frac8g+(7C_\eta)^{1/4}g^{-1/4}a^{3/4},\notag \\
+        19+\eta      & \le t,\notag                                     \\
+        \xi          & =288e^{11/8}e^{-(t-\eta)/8}\le1,\notag           \\
+        2(6+\eta)\xi & \le\frac\delta{100}g^2.
+        \label{eq:ld_sharp_scales}
     \end{align}
     For every $0<R\le3t+4\ell$ one also has
     $\bigl(2e^{-2\ell^2\sqrt{g/R}}\bigr)^2\le\delta/8$.
@@ -61,10 +61,10 @@ approximation and its global matrix product representation are separate.
     satisfies $\|B_t\|\le3t+4\ell$.
     Writing $\lambda_0=\min\sigma(H)$, the exact identities
     \begin{align}
-      \lambda_0&=E_0+\sum_j e_j,\notag\\
-      \mathbf1_{(-\infty,E_0+c]}(H_0)\mathcal H
-        &=\mathbf1_{(-\infty,\lambda_0+c]}(H)\mathcal H
-      \label{eq:ld_sharp_original_bands}
+        \lambda_0 & =E_0+\sum_j e_j,\notag                         \\
+        \mathbf1_{(-\infty,E_0+c]}(H_0)\mathcal H
+                  & =\mathbf1_{(-\infty,\lambda_0+c]}(H)\mathcal H
+        \label{eq:ld_sharp_original_bands}
     \end{align}
     hold for every real $c$ before the buffered cutoff is chosen.
     There are $N\le D^2$ matrices $W_j$ on $J$, chosen before
@@ -81,10 +81,10 @@ approximation and its global matrix product representation are separate.
     $p(B_t)=\sum_j W_j\otimes M_j$ in the physical tensor coordinates.
     Its squared suppression
     \begin{align}
-      \Delta=\left(2\exp\left[-2\ell^2
-        \sqrt{\frac{w}{3t+4\ell-(E_0+\eta-2w)}}\right]\right)^2
-      \le\epsilon/8
-      \label{eq:ld_sharp_actual_suppression}
+        \Delta=\left(2\exp\left[-2\ell^2
+            \sqrt{\frac{w}{3t+4\ell-(E_0+\eta-2w)}}\right]\right)^2
+        \le\epsilon/8
+        \label{eq:ld_sharp_actual_suppression}
     \end{align}
     gives, for every $\delta<1$ and every $\delta$-viable $S$ for $T_+$,
     an actual image $V=\sum_j W_jS$ of dimension at most $N\dim S$,
@@ -95,7 +95,7 @@ approximation and its global matrix product representation are separate.
 \end{lemma}
 \begin{proof}\leanok
     \uses{lem:ld_sharp_independent_parameters,lem:ld_buffered_targets_independent,
-      thm:actual_clipped_polynomial_family,thm:collar_larger_count_base}
+        thm:actual_clipped_polynomial_family,thm:collar_larger_count_base}
     Apply Lemma~\ref{lem:ld_sharp_independent_parameters} at the capped
     buffer $g$. Since $g\le w$, its squared-buffer residual estimate
     supplies Lemma~\ref{lem:ld_buffered_targets_independent} with

@@ -19,10 +19,10 @@ nearest-neighbour representation of any already softened term.
     $e_j-10\leq p_j\leq e_j$ on a finite selected set $S$.
     For $t>0$ and $m\geq2$, put
     \begin{align}
-        H_0&=\sum_j(A_j-e_jI)+Y,\\
-        G&=\sum_j\bigl(\mathbf1_{j\in S}
-          (p_jI+h_{m,t}(A_j-p_jI))+
-          \mathbf1_{j\notin S}A_j-e_jI\bigr)+Y.
+        H_0 & =\sum_j(A_j-e_jI)+Y,           \\
+        G   & =\sum_j\bigl(\mathbf1_{j\in S}
+        (p_jI+h_{m,t}(A_j-p_jI))+
+        \mathbf1_{j\notin S}A_j-e_jI\bigr)+Y.
     \end{align}
     Fix orthonormal eigenbases with real eigenvalues for the actual
     matrices whose spectral spaces occur below. If $E\leq C$,
@@ -30,14 +30,14 @@ nearest-neighbour representation of any already softened term.
     \begin{align}
         \|(H_0-G)|_{E_{H_0}(E+\eta)}\|
         \leq |S|\left(8Ce^{-(T-\eta-3C-12)/8}
-          +\frac{t}{m}\left(\frac Tt\right)^m\right).
+        +\frac{t}{m}\left(\frac Tt\right)^m\right).
     \end{align}
     If $\mu\leq C$, $\eta\geq0$, $D=10|S|$ and
     $t,T\geq U=2(\eta+D+3C+2)$, then
     \begin{align}
         \|(H_0-G)|_{E_G(\mu+\eta)}\|
         \leq |S|\left(8Ce^{-(T-U)/8}
-          +\frac{t}{m}\left(\frac Tt\right)^m\right).
+        +\frac{t}{m}\left(\frac Tt\right)^m\right).
     \end{align}
     The first inequality also holds at order $m=1$.
 \end{lemma}
@@ -72,10 +72,10 @@ nearest-neighbour representation of any already softened term.
     estimates $e_j-10\leq p_j\leq e_j$ for $j\in S$, scale $t>0$
     and order $m\geq1$. Define
     \begin{align}
-        F_j&=p_jI+h_{m,t}(A_j-p_jI),\qquad
+        F_j & =p_jI+h_{m,t}(A_j-p_jI),\qquad
         B=\sum_j\bigl(\mathbf1_{j\in S}F_j+
-          \mathbf1_{j\notin S}A_j-e_jI\bigr),\\
-        D&=10|S|,\qquad G=B+Y.
+        \mathbf1_{j\notin S}A_j-e_jI\bigr),  \\
+        D   & =10|S|,\qquad G=B+Y.
     \end{align}
     Then $B+DI\geq0$, $G\leq H$, and $B$ commutes with every $A_j$.
     The actual ground energy $\mu$ of $G$ is attained and satisfies
@@ -110,13 +110,13 @@ nearest-neighbour representation of any already softened term.
     \begin{align}
         \|(H-G)|_{E_H(E+\eta)}\|
         \leq |S|\left(8C e^{-(T-\eta-3C-12)/8}
-          +\frac{t}{m}\left(\frac Tt\right)^m\right).
+        +\frac{t}{m}\left(\frac Tt\right)^m\right).
     \end{align}
     Put $U=2(\eta+D+3C+2)$. If $t\geq U$ and $T\geq U$, then
     \begin{align}
         \|(H-G)|_{E_G(\mu+\eta)}\|
         \leq |S|\left(8C e^{-(T-U)/8}
-          +\frac{t}{m}\left(\frac Tt\right)^m\right).
+        +\frac{t}{m}\left(\frac Tt\right)^m\right).
     \end{align}
     Orthonormal eigenbases for $H$ and $G$ are constructed with the
     corresponding ground data, before every $\eta,T$. Empty regional intervals,
@@ -136,7 +136,7 @@ nearest-neighbour representation of any already softened term.
     is at least $U/2=\eta+D+3C+2$. Therefore
     \begin{align}
         U-\frac{t}{m}\left(\frac Ut\right)^m
-          -(\mu+\eta+D)-2C\geq2.
+        -(\mu+\eta+D)-2C\geq2.
     \end{align}
     Lemma~\ref{lem:regional_barrier_soft_residual} applies to the
     original local boundary in both cases. Each denominator is at

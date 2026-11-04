@@ -7,10 +7,10 @@ Lemma~\ref{thm:physical_polynomial_tensor_family}.
 Fix $m\geq0$ and closing matrices $C_0,\ldots,C_m\in\C^{B\times B}$.
 The site tensors are fixed; only their closing matrix varies:
 \begin{align}
-    C(z)&=\sum_{a=0}^m z^a C_a,\notag\\
+    C(z) & =\sum_{a=0}^m z^a C_a,\notag \\
     Z(z)_{\sigma,\tau}
-      &=\operatorname{tr}\left(C(z)
-          \prod_{u=0}^{|K|-1}A_u(\sigma_u,\tau_u)\right).
+         & =\operatorname{tr}\left(C(z)
+    \prod_{u=0}^{|K|-1}A_u(\sigma_u,\tau_u)\right).
     \label{eq:polynomial_closing_matrix}
 \end{align}
 Let $P_M(z)$ be the identity extension of $Z(z)$ to the original chain.
@@ -23,7 +23,7 @@ Let $P_M(z)$ be the identity extension of $Z(z)$ to the original chain.
     (\ref{eq:physical_tensor_hypotheses}), there are a nonnegative integer
     $N$ and matrices $W_0,\ldots,W_{N-1}$ on the retained interval such that
     \begin{align}
-        N&\leq(mk+1)D^2.
+        N & \leq(mk+1)D^2.
         \label{eq:common_closing_family_count}
     \end{align}
     Each $W_i$, in the paired physical alphabet and increasing site order,
@@ -35,15 +35,15 @@ Let $P_M(z)$ be the identity extension of $Z(z)$ to the original chain.
     at most $k$. For
     \begin{align}
         H_z=P_L+P_M(z)+P_R+
-          \sum_{r=0}^{2\ell-1}(W^L_r+W^R_r),
+        \sum_{r=0}^{2\ell-1}(W^L_r+W^R_r),
         \label{eq:common_closing_hamiltonian}
     \end{align}
     there are complementary matrices $M_i$ such that
     \begin{align}
-        P(H_z)&=\left(\sum_{i=0}^{N-1}M_i\otimes W_i\right)^{\mathrm{phys}},
-        \label{eq:common_closing_matrix_decomposition}\\
+        P(H_z) & =\left(\sum_{i=0}^{N-1}M_i\otimes W_i\right)^{\mathrm{phys}},
+        \label{eq:common_closing_matrix_decomposition}                         \\
         \mathcal U P(H_z)\mathcal U^*
-          &=\sum_{i=0}^{N-1}W_i\otimes M_i.
+               & =\sum_{i=0}^{N-1}W_i\otimes M_i.
         \label{eq:common_closing_conjugation}
     \end{align}
     The same canonical coordinate isometry $\mathcal U$ is used for every

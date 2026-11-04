@@ -40,11 +40,11 @@ they assert neither a spectral gap nor an improving family.
     $R=\sum_{l\leq i<i+1<r}h_i$. Suppose $pI\leq R$, $m\geq1$, $t\geq3m$
     and $\xi>0$. Define $P=pI+h_{m,t}(R-pI)$ and
     \begin{align}
-        W&=t2^{m+1},\qquad b=2(e^{1/3}-1),\notag\\
-        a&=\max\left\{1,
-          \left\lceil\frac{\log\max\{1,N^2\}
-            -\log\log(1+\xi/W)}{-\log b}\right\rceil\right\},\notag\\
-        B&=2\bigl(1+Nq^2+(m+1)a^2q^a\bigr).
+        W & =t2^{m+1},\qquad b=2(e^{1/3}-1),\notag              \\
+        a & =\max\left\{1,
+        \left\lceil\frac{\log\max\{1,N^2\}
+        -\log\log(1+\xi/W)}{-\log b}\right\rceil\right\},\notag \\
+        B & =2\bigl(1+Nq^2+(m+1)a^2q^a\bigr).
         \label{eq:soft_middle_bond}
     \end{align}
     There are site-dependent operator tensors on $[l,r)$ with virtual
@@ -53,7 +53,7 @@ they assert neither a spectral gap nor an improving family.
     and let $P_{\mathrm{nat}}$ be the principal slice of $P$ obtained by fixing
     one exterior basis configuration. Then
     \begin{align}
-        P&=\iota(P_{\mathrm{nat}}),\qquad
+        P & =\iota(P_{\mathrm{nat}}),\qquad
         \|P_{\mathrm{nat}}-Z\|\leq\xi,\qquad
         \|P-\iota(Z)\|\leq\xi.
         \label{eq:soft_middle_native_error}
@@ -86,10 +86,10 @@ they assert neither a spectral gap nor an improving family.
     $Y$ the crossing-bond sum and $e_j,p_j\in\mathbb R$. For a selected set
     $S\subseteq\{0,\ldots,4\}$ containing $2$, put
     \begin{align}
-        F_j&=p_jI+h_{m,t}(A_j-p_jI),\notag\\
-        G&=\sum_{j=0}^4
-          \left(\begin{cases}F_j,&j\in S,\\A_j,&j\notin S\end{cases}
-          -e_jI\right)+Y.
+        F_j & =p_jI+h_{m,t}(A_j-p_jI),\notag \\
+        G   & =\sum_{j=0}^4
+        \left(\begin{cases}F_j,&j\in S,\\A_j,&j\notin S\end{cases}
+        -e_jI\right)+Y.
         \label{eq:soft_middle_same_matrix}
     \end{align}
     Assume $p_2I\leq A_2$, $m\geq1$, $t\geq3m$ and $\xi>0$.
@@ -149,7 +149,7 @@ adaptive measurability or running-time conclusion is asserted.
 \end{lemma}
 \begin{proof}\leanok
     \uses{thm:shifted_regional_heat_mpo,
-      lem:trace_chain_linear_combination,lem:native_supported_mpo_restriction}
+        lem:trace_chain_linear_combination,lem:native_supported_mpo_restriction}
     Construct all heat atoms $E_a=e^{-a(A-eI)/t}$ at the fixed lower
     energy $e$. Replace each approximation by its Hermitian part and
     restrict it once to the native interval. The common-closing formula

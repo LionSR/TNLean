@@ -15,10 +15,10 @@
     Suppose $e_M-10\le p\le e_M$, $t,T_0\ge48$, and $m\ge2$.
     Define
     \begin{align}
-      R&=P-M+pI+h_{m,t}(M-pI),&
-      A_*&=t(1+\log m)+4\ell+14,\label{eq:terminal_soft_operator}\\
-      \rho&=32e^{-(T_0-48)/8}+\frac tm\left(\frac{T_0}t\right)^m,&
-      \delta&=\frac{\Delta}{(91/100)^2}.\label{eq:terminal_soft_losses}
+        R      & =P-M+pI+h_{m,t}(M-pI),                                     &
+        A_*    & =t(1+\log m)+4\ell+14,\label{eq:terminal_soft_operator}      \\
+        \rho   & =32e^{-(T_0-48)/8}+\frac tm\left(\frac{T_0}t\right)^m,     &
+        \delta & =\frac{\Delta}{(91/100)^2}.\label{eq:terminal_soft_losses}
     \end{align}
     Assume $\tau,\Delta\ge0$, $\rho\le1/16$,
     $\tau\le1/[1024(A_*+1)]$ and $\delta\le1/[100(A_*+1)]$.
@@ -45,9 +45,9 @@
     eigenbasis with decreasing eigenvalues. Its least eigenvalue
     $\lambda$ satisfies
     \begin{align}
-      e_{\mathrm s}\le\lambda\le e_{\mathrm s}+3,\qquad
-      e_P-3-\rho\le\lambda-3\le e_P,\qquad
-      e_P-49/16\le\lambda-3.\label{eq:terminal_soft_update}
+        e_{\mathrm s}\le\lambda\le e_{\mathrm s}+3,\qquad
+        e_P-3-\rho\le\lambda-3\le e_P,\qquad
+        e_P-49/16\le\lambda-3.\label{eq:terminal_soft_update}
     \end{align}
     This is an explicit-budget auxiliary to
     \cite[Figure~\texttt{fig:algo1}, line 1631, and lines 1793--1807]{Arad2016RigorousRG}.
@@ -79,12 +79,12 @@
     Lemma~\ref{thm:soft_terminal_compressed_energy}. Let $g>0$,
     $m,D\ge2$, $t,T_0\ge156+2g$, and set
     \begin{align}
-      M_*&=3t(1+\log m)+4\ell+34,&
-      \tau&=(D^{24}M_*^{10})^{-1}.
+        M_*  & =3t(1+\log m)+4\ell+34, &
+        \tau & =(D^{24}M_*^{10})^{-1}.
     \end{align}
     Suppose $0\le\Delta\le(D^{12}M_*^{10})^{-1}$ and
     \begin{align}
-      3\left(32e^{-(T_0-156-2g)/8}
+        3\left(32e^{-(T_0-156-2g)/8}
         +\frac tm\left(\frac{T_0}t\right)^m\right)
         \le\frac{\tau g}{10^6}.
     \end{align}
@@ -127,8 +127,8 @@
     estimates of the actual minima on $[l,k)$ and $[k,r)$, each with
     error at most $49/16$. Then
     \begin{align}
-      e_P-57/8&\le p_1+p_2\le e_P,\\
-      e_M-10&\le p_1+p_2-e_{\mathrm L}-e_{\mathrm R}-2\le e_M.
+        e_P-57/8 & \le p_1+p_2\le e_P,                               \\
+        e_M-10   & \le p_1+p_2-e_{\mathrm L}-e_{\mathrm R}-2\le e_M.
     \end{align}
     Both estimates retain attained eigenvector and positive-shift
     certificates for their original parent and middle Hamiltonians.
@@ -164,8 +164,8 @@
     For every $l\le k\le r$ and one-sided child estimates $p_1,p_2$ of
     width $49/16$, form
     \begin{align}
-      c&=p_1+p_2-e_{\mathrm L}-e_{\mathrm R}-2,\\
-      R_c&=P-M+cI+h_{m,t}(M-cI).
+        c   & =p_1+p_2-e_{\mathrm L}-e_{\mathrm R}-2, \\
+        R_c & =P-M+cI+h_{m,t}(M-cI).
     \end{align}
     Then $c\in[e_M-10,e_M]$, with an attained original-middle energy
     certificate. Define the native soft matrix by the same fixed-complement
@@ -178,8 +178,8 @@
     compression has an ordered orthonormal eigenbasis and least eigenvalue
     $\lambda$ satisfying
     \begin{align}
-      e_{\mathrm s}\le\lambda\le e_{\mathrm s}+3,\qquad
-      e_P-49/16\le\lambda-3\le e_P.
+        e_{\mathrm s}\le\lambda\le e_{\mathrm s}+3,\qquad
+        e_P-49/16\le\lambda-3\le e_P.
     \end{align}
     Thus $\lambda-3$ is an original-parent lower energy estimate of the
     same width as the children. The original parent eigenvector and positive
@@ -191,7 +191,7 @@
 \end{lemma}
 \begin{proof}\leanok
     \uses{thm:calibrated_soft_terminal_compressed_energy,
-      thm:regional_middle_center_from_children}
+        thm:regional_middle_center_from_children}
     Choose the actual regional minima once using the calibrated terminal
     theorem. Apply the child-center theorem to those same parent and middle
     certificates; it chooses the collars before all child estimates and
@@ -230,16 +230,16 @@
     to $Y$ has an ordered orthonormal eigenbasis and least eigenvalue
     $\lambda$ satisfying
     \begin{align}
-      e_{\mathrm s}\le\lambda\le e_{\mathrm s}+3,\qquad
-      e_P-49/16\le\lambda-3\le e_P.
+        e_{\mathrm s}\le\lambda\le e_{\mathrm s}+3,\qquad
+        e_P-49/16\le\lambda-3\le e_P.
     \end{align}
     The family and terminal image are unchanged; the conclusion concerns
     this untrimmed image, rather than the final trimmed output.
 \end{lemma}
 \begin{proof}\leanok
     \uses{thm:calibrated_soft_terminal_node_update,
-      lem:ground_spectrum_minimum,thm:normalized_eigenvector_energies,
-      thm:regional_tensor_viability}
+        lem:ground_spectrum_minimum,thm:normalized_eigenvector_energies,
+        thm:regional_tensor_viability}
     The attained spectral lower bound gives $\lambda_{\min}(H)=\mu$.
     Uniqueness of the attained minimum of $M$ identifies $e_2$ with the
     middle minimum in the terminal node estimate. The exterior-first

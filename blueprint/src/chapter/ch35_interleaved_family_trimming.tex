@@ -31,10 +31,10 @@ root then yields the literal refinement and polynomial MPS Ritz conclusion.
     weighted internal-cut rank $\xi^2\operatorname{SR}(v)\le N\dim S$.
     For every $\theta>0$, put $m=\max\{r-p-1,0\}$ and
     \begin{align}
-        f(\delta)&=\frac{\Delta\delta}{1-\delta+\Delta\delta},&
-        E(\delta)&=(1+\theta)\bigl((1+\theta)f(\delta)
-          +(1+\theta^{-1})\varepsilon+2\xi\sqrt{mD^2}\bigr)
-          +(1+\theta^{-1})\varepsilon.
+        f(\delta) & =\frac{\Delta\delta}{1-\delta+\Delta\delta}, &
+        E(\delta) & =(1+\theta)\bigl((1+\theta)f(\delta)
+        +(1+\theta^{-1})\varepsilon+2\xi\sqrt{mD^2}\bigr)
+        +(1+\theta^{-1})\varepsilon.
         \label{eq:interval_family_trim_error}
     \end{align}
     The actual space $S'$ is $E(\delta)$-viable for that same $T$.
@@ -43,7 +43,7 @@ root then yields the literal refinement and polynomial MPS Ritz conclusion.
     \uses{lem:alvv-interval-reference-weighted,lem:interval_recorded_generator_bounds}
     The exact tensor decomposition gives
     $K(S\otimes\mathcal H_{\rm out})\subseteq
-      V\otimes\mathcal H_{\rm out}$.
+        V\otimes\mathcal H_{\rm out}$.
     Normalized projection error reduction therefore makes $V$
     $f(\delta)$-viable. Apply the weighted target-relative reference
     estimate to its actual orthonormal basis and actual trim. The reference
@@ -66,7 +66,7 @@ root then yields the literal refinement and polynomial MPS Ritz conclusion.
     initial space $S_0$, define
     \begin{align}
         S_{j+1}=\operatorname{Trim}_{\xi}
-          \bigl(\operatorname{span}\{F_iS_j:i\}\bigr).
+        \bigl(\operatorname{span}\{F_iS_j:i\}\bigr).
         \label{eq:interval_family_actual_iterates}
     \end{align}
     Then $\dim S_j\le N^j\dim S_0$. Every positive iterate has at most
@@ -102,7 +102,7 @@ root then yields the literal refinement and polynomial MPS Ritz conclusion.
     \begin{align}
         0\le\delta_j<1,\qquad
         \frac{\Delta\delta_j}{1-\delta_j+\Delta\delta_j}+a/16
-          \le\delta_{j+1}.
+        \le\delta_{j+1}.
         \label{eq:interval_family_reference_envelope}
     \end{align}
     Every literal iterate then has the viability and dimension bounds
@@ -134,16 +134,16 @@ root then yields the literal refinement and polynomial MPS Ritz conclusion.
     that threshold with $KJ^3\le C$, where $J=14+2\log(C+1)$.
     Let $m\ge50$, $0<g\le1$, $w\ge1$, and put
     \begin{align}
-        v&=1+\log m+\log(1/g)+\log(1+w),\notag\\
-        \ell&=\left\lceil C(v^6/g+\sqrt w\,v^3/\sqrt g)\right\rceil,\notag\\
-        D&=(m\ell^2)^{22\ell}.\notag
+        v    & =1+\log m+\log(1/g)+\log(1+w),\notag                          \\
+        \ell & =\left\lceil C(v^6/g+\sqrt w\,v^3/\sqrt g)\right\rceil,\notag \\
+        D    & =(m\ell^2)^{22\ell}.\notag
     \end{align}
     Here $v\ge1$. Then $\ell\ge21$, $Cv^6\le g\ell$,
     $C\sqrt w\,v^3\le\sqrt g\,\ell$, and
     $\ell\le(C+1)(v^6/g+\sqrt w\,v^3/\sqrt g)$. Moreover
     \begin{align}
-        \log(m\ell^2)&\le Jv,\notag\\
-        \log D&\le22(C+1)J(v^7/g+\sqrt w\,v^4/\sqrt g).\notag
+        \log(m\ell^2) & \le Jv,\notag                                  \\
+        \log D        & \le22(C+1)J(v^7/g+\sqrt w\,v^4/\sqrt g).\notag
     \end{align}
     If $K\ge1$ and $KJ^3\le C$, the same explicit window satisfies
     $K\log^3(m\ell^2)\le g\ell$ and
@@ -169,9 +169,9 @@ root then yields the literal refinement and polynomial MPS Ritz conclusion.
     \leanok
     Let $r\ge1$, $D\ge2$, $L\ge0$, and set
     \begin{align}
-        w&=1+\log r+2\log(L+1),& A&=\log D+w,\notag\\
-        s&=\lceil4096rA\rceil,&
-        a&=\frac{3}{32D^{12}s^5},& \tau&=\frac{a^2}{2^{20}}.
+        w & =1+\log r+2\log(L+1),   & A    & =\log D+w,\notag     \\
+        s & =\lceil4096rA\rceil,    &
+        a & =\frac{3}{32D^{12}s^5}, & \tau & =\frac{a^2}{2^{20}}.
         \label{eq:interleaved_sample_accuracy}
     \end{align}
     Then $w,s\ge1$, $s\le4097rA$, $\log s\le13A$ and $0<a\le1/100$.
@@ -196,15 +196,15 @@ root then yields the literal refinement and polynomial MPS Ritz conclusion.
     $w,v,\ell,D$ of Lemma~\ref{lem:interleaved_filter_scale_count} and
     $s,a,\tau$ of Lemma~\ref{lem:interleaved_sample_accuracy}. Put
     \begin{align}
-        \varepsilon&=200\tau,&
-        t&=C_{\rm tail}\bigl(1+\log(1/g)+\log(1/\tau)\bigr),&
-        \Delta&=\frac{1}{200000D^{12}}.
+        \varepsilon & =200\tau,                                          &
+        t           & =C_{\rm tail}\bigl(1+\log(1/g)+\log(1/\tau)\bigr), &
+        \Delta      & =\frac{1}{200000D^{12}}.
         \label{eq:interleaved_actual_cutoff}
     \end{align}
     Then $\ell,t\ge21$, $0<\varepsilon\le1$, $D^{12}\Delta<10^{-5}$ and
     \begin{align}
-        288e^{11/8}e^{-(t-g)/8}&\le\varepsilon g/10^6,\notag\\
-        \bigl(2e^{-2\ell^2\sqrt{(4g/5)/R}}\bigr)^2&\le\Delta
+        288e^{11/8}e^{-(t-g)/8}                    & \le\varepsilon g/10^6,\notag \\
+        \bigl(2e^{-2\ell^2\sqrt{(4g/5)/R}}\bigr)^2 & \le\Delta
         \label{eq:interleaved_actual_suppression}
     \end{align}
     for every $0<R\le3t+4\ell$. The logarithmic count bound of
@@ -241,10 +241,10 @@ root then yields the literal refinement and polynomial MPS Ritz conclusion.
     to $G$, whose every vector is an MPS of bond $D_{\rm ref}=r^2B$.
     A universal $K_{\rm ref}>0$ bounds $B\ge1$ by
     \begin{align}
-        \log B&\le K_{\rm ref}
-        \bigl(u^3/g+g^{-1/4}b^{3/4}u\bigr)(1+\log b),\notag\\
-        u&=1+\log q+\log(1/g),&
-        b&=16+\log(1/g)+\log\frac{32r(L+1)}{\tau}.
+        \log B & \le K_{\rm ref}
+        \bigl(u^3/g+g^{-1/4}b^{3/4}u\bigr)(1+\log b),\notag \\
+        u      & =1+\log q+\log(1/g),                     &
+        b      & =16+\log(1/g)+\log\frac{32r(L+1)}{\tau}.
         \label{eq:interleaved_clipped_reference_count}
     \end{align}
     This same $U$ is mutually $4\tau$-close to every full-chain space
@@ -305,9 +305,9 @@ root then yields the literal refinement and polynomial MPS Ritz conclusion.
     $S_{j+1}=\operatorname{Trim}_{\xi}(\operatorname{span}\{F_iS_j:i\})$ and
     the scalar errors
     \begin{align}
-        e_0&=1-a,&
-        e_{j+1}&=\frac{\Delta e_j}{1-e_j+\Delta e_j}+a/16,&
-        k&=\left\lceil\log_D(D^2s)\right\rceil,
+        e_0     & =1-a,                                      &
+        e_{j+1} & =\frac{\Delta e_j}{1-e_j+\Delta e_j}+a/16, &
+        k       & =\left\lceil\log_D(D^2s)\right\rceil,
         \label{eq:physical_interleaved_stopping}
     \end{align}
     where $k$ is the upper integer logarithm. Every $0\le e_j<1$, and
@@ -350,8 +350,8 @@ root then yields the literal refinement and polynomial MPS Ritz conclusion.
     (\ref{eq:physical_interleaved_stopping}). This defines the output.
     There is a nonempty measurable event $\mathcal E$ with
     \begin{align}
-        \Pr(\mathcal E^c)&\le(L+1)^{-2},&
-        \Pr(\mathcal E)&\ge1-(L+1)^{-2}.
+        \Pr(\mathcal E^c) & \le(L+1)^{-2},   &
+        \Pr(\mathcal E)   & \ge1-(L+1)^{-2}.
         \label{eq:physical_interleaved_parent_probability}
     \end{align}
     Every unitary in $\mathcal E$ gives that literal output with
@@ -442,9 +442,9 @@ root then yields the literal refinement and polynomial MPS Ritz conclusion.
     Let $A=\|H\|-\mu>0$, $c=\gamma/A$, and
     $K_{\rm raw}=I-\|H\|^{-1}H$. For every $\eta>0$, set
     \begin{align}
-        \rho&=\frac{\eta\gamma}{2A+\eta\gamma},&
-        n&=\left\lceil\frac4c\log\frac1\rho\right\rceil+1,&
-        \varepsilon_{\rm f}&=\frac{c^2\rho}{32768}.
+        \rho                & =\frac{\eta\gamma}{2A+\eta\gamma},               &
+        n                   & =\left\lceil\frac4c\log\frac1\rho\right\rceil+1, &
+        \varepsilon_{\rm f} & =\frac{c^2\rho}{32768}.
         \label{eq:interleaved_final_accuracy}
     \end{align}
     Choose the actual physical final reference of dimension $r$, mutually
@@ -452,9 +452,9 @@ root then yields the literal refinement and polynomial MPS Ritz conclusion.
     $b=r^2B_{\rm f}$ and the reference logarithmic estimate at that accuracy.
     Define
     \begin{align}
-        D_{\rm c}&=\max\{E_{\rm tree},b\},&
-        N_{\rm f}&=\left\lceil\frac{100D^{12}}{c\rho}\right\rceil,&
-        \xi&=\frac1{1000D_{\rm c}N_{\rm f}\sqrt{L+1}}.
+        D_{\rm c} & =\max\{E_{\rm tree},b\},                         &
+        N_{\rm f} & =\left\lceil\frac{100D^{12}}{c\rho}\right\rceil, &
+        \xi       & =\frac1{1000D_{\rm c}N_{\rm f}\sqrt{L+1}}.
         \label{eq:interleaved_final_common_radius}
     \end{align}
     Then $0<\xi\le\xi_{\max}$ and
@@ -524,14 +524,14 @@ root then yields the literal refinement and polynomial MPS Ritz conclusion.
     $q,\gamma$, such that the chosen degree satisfies
     \begin{align}
         k\le C_{\mathrm{deg}}\frac{
-          (1+\log\max\{q,50\}+\log(1/g))^{10}}{g^2},
+            (1+\log\max\{q,50\}+\log(1/g))^{10}}{g^2},
         \qquad g=\min\{\gamma,1\}.
         \label{eq:interleaved_ritz_gap_degree}
     \end{align}
     The same universal constant may be enlarged so that also
     \begin{align}
         \log\max\{C,1\}\le C_{\mathrm{deg}}\frac{
-          (1+\log\max\{q,50\}+\log(1/g))^{10}}{g^2}.
+            (1+\log\max\{q,50\}+\log(1/g))^{10}}{g^2}.
         \label{eq:interleaved_ritz_log_coefficient}
     \end{align}
     Thus both estimates apply to the coefficient and degree selected for
@@ -571,7 +571,7 @@ root then yields the literal refinement and polynomial MPS Ritz conclusion.
     (\ref{eq:interleaved_ritz_gap_degree}). For the selected prefactor,
     its factored logarithmic estimate is at most
     $10^7(K+1)(u^3/g+5g^{-1/4}u+1)
-      (1+K_D+\log(1/g)+\log(1+\gamma^{-1}))$.
+        (1+K_D+\log(1/g)+\log(1+\gamma^{-1}))$.
     Since $g\le\gamma$ and $\log(1/g)\le U$, its last two factors are
     bounded by $7U^3/g$ and $(C_D+4)U^7/g$, respectively.
     This gives (\ref{eq:interleaved_ritz_log_coefficient}), after enlarging
@@ -592,9 +592,9 @@ root then yields the literal refinement and polynomial MPS Ritz conclusion.
     For every $n\ge0$ and every $\delta$-viable regional space $S$ for $T$
     with $\delta<1$, form the untrimmed space
     \begin{align}
-      W_n(F,S)&=\operatorname{span}\{
-          F_{i_1}\cdots F_{i_n}s:i_1,\ldots,i_n\in\{1,\ldots,N\},\ s\in S\}.
-      \label{eq:interleaved_same_word_image}
+        W_n(F,S) & =\operatorname{span}\{
+        F_{i_1}\cdots F_{i_n}s:i_1,\ldots,i_n\in\{1,\ldots,N\},\ s\in S\}.
+        \label{eq:interleaved_same_word_image}
     \end{align}
     Then $\dim W_n(F,S)\le(D^2)^n\dim S$, and this actual space is
     $\Delta^n/(1-\delta)^2$-viable for the same $T$. The choices of
@@ -918,8 +918,8 @@ sampled root hierarchy.
     root's actual subdivision. Under the specified finite product Haar
     law,
     \begin{align}
-        \mathbb P(\mathcal G^c)&\le\frac{L-1}{(L+1)^2},
-        &\mathbb P(\mathcal G)&\ge1-\frac{L-1}{(L+1)^2}.
+        \mathbb P(\mathcal G^c) & \le\frac{L-1}{(L+1)^2},
+                                & \mathbb P(\mathcal G)   & \ge1-\frac{L-1}{(L+1)^2}.
     \end{align}
     Here the numerator is read as zero at $L=0$. The event is Borel.
     The block-leaf, fixed failure scale, capped-gap and hard-clipped-family
@@ -971,9 +971,9 @@ sampled root hierarchy.
     satisfies
     \begin{align}
         \mathbb P(\mathcal G_\eta^c)
-          &\le\frac{\max\{L-1,0\}}{(L+1)^2}, &
+         & \le\frac{\max\{L-1,0\}}{(L+1)^2},   &
         \mathbb P(\mathcal G_\eta)
-          &\ge1-\frac{\max\{L-1,0\}}{(L+1)^2}.
+         & \ge1-\frac{\max\{L-1,0\}}{(L+1)^2}.
     \end{align}
     The dimension and recorded-rank profiles hold on every seed.
 
@@ -987,9 +987,9 @@ sampled root hierarchy.
     the same bond bound
     \begin{align}
         B_{\rm out}
-          &=10^6(D_*N_*)^2(L+1)(D^6s^3)^2,\notag\\
+         & =10^6(D_*N_*)^2(L+1)(D^6s^3)^2,\notag    \\
         B_{\rm out}
-          &\le C\bigl((L+1)(r+1)(1+1/\eta)\bigr)^k.
+         & \le C\bigl((L+1)(r+1)(1+1/\eta)\bigr)^k.
         \label{eq:canonical_ritz_polynomial_bond}
     \end{align}
     The constants and radii are common to all successful seeds at that
