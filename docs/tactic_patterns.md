@@ -21,6 +21,31 @@
   matrix results to QICLean together with the adjacent weighted-projection API.
 - **Decision:** Mathematical lemmas suffice; no new tactic is needed.
 
+### Overlap and residual of a vector near a unit target — candidate (2026-11-04)
+
+- **Seen:** `MPS/AreaLaw/AKLV/VariableWindowRefinement.lean`,
+  `Initialization.lean` and `FrustrationFreeMPSApproximation.lean`.
+- **Pattern:** From `‖x‖ = ‖φ‖ = 1` and `‖x - φ‖ ^ 2 ≤ c`, expand `norm_sub_sq`,
+  compare the real part with `Complex.re_le_norm`, and conclude
+  `1 / 2 ≤ ‖⟪φ, x⟫_ℂ‖`; bound `‖x - ⟪φ, x⟫_ℂ • φ‖` by the norm of the projection
+  onto `(span {φ})ᗮ`.
+- **Abstraction:** A proposed lemma giving both the overlap lower bound
+  `1 - ‖x - φ‖ ^ 2 / 2 ≤ ‖⟪φ, x⟫_ℂ‖` and the residual bound, for use with
+  `Matrix.exists_phase_normalized_filter_output`.
+- **Notes:** Two occurrences of each half; promote at the third.
+
+### Dimension and gap bounds from an actual excitation — candidate (2026-11-04)
+
+- **Seen:** `MPS/AreaLaw/AKLV/SharpPerCutApproximation.lean`
+  (`aklv_chain_dimension_and_gap_bounds`) and
+  `FrustrationFreeMPSApproximation.lean`
+  (`aklv_frustrationFree_dimension_and_gap_bounds`, ground energy zero).
+- **Pattern:** Two spectral values give `2 ≤ q` and a nonempty chain; the
+  gapped-ground-state predicate then gives `g ≤ 1`.
+- **Abstraction:** Derive the frustration-free statement from the general one at
+  `μ = 0`, or move the general one beside `gap_le_one_of_positive_nearest_neighbor_terms`.
+- **Notes:** Kept separate while the general file was being edited elsewhere.
+
 Living registry of repeated proof patterns, maintained under the process in
 [`docs/tactic_development.md`](tactic_development.md). Agents and contributors:
 **consult the promoted section before writing proofs; append candidates when

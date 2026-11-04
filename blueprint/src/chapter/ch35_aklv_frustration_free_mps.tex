@@ -1,0 +1,256 @@
+\section{Matrix product approximation of a frustration-free ground vector}
+
+The frustration-free argument of \cite[Section~5]{Arad2013AreaLaw} filters a
+state of constant overlap once more, with a projector of degree $s^2$ on a
+window whose width grows like the cube root of the squared logarithm of the
+accuracy. The exponent of the gap in the shrinking factor is $+1/2$; the
+printed bond dimension omits the factor $\log\ell$ of the polynomial rank
+estimate, which is retained here \cite{gap:aklv13_frustration_free_mps_rate}.
+
+\begin{lemma}[A filtered product vector]
+    \label{lem:aklv_ff_product_filtered_output}
+    \lean{TNLean.MPS.AreaLaw.exists_cut_product_filtered_output}
+    \leanok
+    Let $K$ fix a unit vector $\phi$ of an $L$-site chain, preserve
+    $\phi^\perp$, and satisfy $\|Kx\|^2\le\delta$ for every unit
+    $x\perp\phi$, with $\delta\ge0$. Suppose
+    $\operatorname{OSR}_k(K)\le D$ with $D\ge1$ and $D\delta\le1/2$.
+    Then there are a unit vector $\chi$, which is a product across the cut
+    $k$, with $|\langle\phi,\chi\rangle|\ge1/\sqrt{2D}$, and a phase $c$,
+    such that $K\chi\ne0$ and $\psi=cK\chi/\|K\chi\|$ satisfies
+    \begin{align*}
+        \operatorname{SR}_k(\psi) & \le D,       &
+        \|\psi-\phi\|^2           & \le4D\delta.
+    \end{align*}
+    This is \cite[Lemma~2.2]{Arad2013AreaLaw} followed by one application
+    of the filter.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Transport $K$ and $\phi$ along the identification of the chain with
+    the two sides of the cut. The maximal product overlap is at least
+    $1/\sqrt{2D}$. The phase-aligned normalized image has error at most
+    $2\delta\|\chi-\langle\phi,\chi\rangle\phi\|^2/|\langle\phi,\chi\rangle|^2
+        \le4D\delta$, and its Schmidt rank is at most $D$ because $\chi$ is
+    a product.
+\end{proof}
+
+\begin{lemma}[Schmidt rank of a filtered vector]
+    \label{lem:aklv_normalized_cut_schmidt_rank}
+    \lean{TNLean.MPS.AreaLaw.normalized_cut_schmidtRank_le}
+    \leanok
+    If $c\ne0$ and $Kx\ne0$, then
+    $\operatorname{SR}_k(cKx/\|Kx\|)\le\operatorname{OSR}_k(K)\operatorname{SR}_k(x)$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Nonzero scalars do not change the Schmidt rank, and an operator of
+    operator Schmidt rank $D$ multiplies the Schmidt rank by at most $D$.
+\end{proof}
+
+\begin{definition}[Cube-root accuracy parameters]
+    \label{def:aklv_ff_accuracy_parameters}
+    \lean{TNLean.MPS.AreaLaw.aklvFrustrationFreeIncrement,
+        TNLean.MPS.AreaLaw.aklvFrustrationFreeRankBound}
+    \leanok
+    \uses{def:aklv_accuracy_parameters}
+    For $0<g\le1$, squared accuracy $0<\rho\le1$, local dimension $q$ and
+    initial width $s_0$, put $z=\log(128/\rho)$ and
+    \begin{align*}
+        r & =\left(\frac{z^2}{g}\right)^{1/3}, &
+        m & =\lceil6r\rceil,                   &
+        s & =s_0+2m,
+    \end{align*}
+    and define the rank budget
+    \begin{align*}
+        B=\max\Bigl(\bigl(q(s_0^2+1)\bigr)^{32(2s_0+1)}
+        \bigl(q(s^2+1)\bigr)^{32(2s+1)},\ q^{s-\lfloor s/2\rfloor}\Bigr).
+    \end{align*}
+\end{definition}
+
+\begin{lemma}[The cube-root scale]
+    \label{lem:aklv_ff_increment_bounds}
+    \lean{TNLean.MPS.AreaLaw.aklvFrustrationFreeIncrement_bounds}
+    \leanok
+    \uses{def:aklv_ff_accuracy_parameters,thm:aklv_accuracy_parameter_bounds}
+    For $0<g\le1$ and $0<\rho\le1$ one has
+    $r\ge1$, $r^3=z^2/g$, $6r\le m\le7r$ and $r\le z/g$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Since $z\ge1$ and $g\le1$, $z^2/g\ge1$, so its cube root is at least one.
+    The ceiling gives $6r\le m<6r+1\le7r$. Finally
+    $r^3=z^2/g\le z^3/g^3$.
+\end{proof}
+
+\begin{lemma}[Shrinking of the projector of degree $s^2$]
+    \label{lem:aklv_ff_accuracy_shrink}
+    \lean{TNLean.MPS.AreaLaw.aklvFrustrationFree_shrink_le}
+    \leanok
+    \uses{thm:aklv_accuracy_parameter_bounds}
+    Let $0<g$, $0<\rho\le1$, $t=1024/g$ and $z=\log(128/\rho)$. If an
+    integer $s$ satisfies $s\ge1/g$ and $gs^3\ge1728z^2$, then
+    \begin{align*}
+        2\exp\left(-2s^2\sqrt{\frac{g/2}{2t+s}}\right)\le\frac{\rho}{64}.
+    \end{align*}
+    The exponent of the gap is the one of the proof of
+    \cite[Theorem~4.3]{Arad2013AreaLaw}.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Since $s\ge1/g$, $2t+s\le2049s$. Hence the square of the exponent is at
+    least $4s^3g/4098\ge z^2$. The exponential is therefore at most
+    $e^{-z}=\rho/128$.
+\end{proof}
+
+\begin{lemma}[The cube-root logarithmic rank bound]
+    \label{lem:aklv_ff_rank_log}
+    \lean{TNLean.MPS.AreaLaw.aklvFrustrationFreeRankBound_log_le}
+    \leanok
+    \uses{def:aklv_ff_accuracy_parameters,lem:aklv_ff_increment_bounds,
+        thm:aklv_quadratic_degree_log_rank}
+    Let $q\ge2$, $0<g\le1$, $0<\rho\le1$, $s_0\ge1$, $R,W\ge0$, and put
+    $u=1+\log q+\log(1/g)$ and $D_0=(q(s_0^2+1))^{32(2s_0+1)}$. If
+    $\log D_0\le Ru^3/g$ and $s_0\le Wu^2/g$, then
+    \begin{align*}
+        \log B\le(10001R+W)\frac{u^3}{g}
+        +8400000\,r\bigl(u+\log(z+1)\bigr).
+    \end{align*}
+\end{lemma}
+\begin{proof}
+    \leanok
+    Put $D_1=(q(s^2+1))^{32(2s+1)}$, the rank formula at degree $s^2$.
+    If $m\le s_0$, then $s\le3s_0$, so $s^2\le66s_0^2$ and
+    $\log D_1\le10000\log D_0$.
+    If $m>s_0$, then $s\le3m$, so $s^2\le66m^2$, while $m\le7r\le7z/g$.
+    The second quadratic-degree estimate at the accuracy $7z/g$ gives
+    $\log D_1\le400000\,m(1+\log q+\log(7z/g+1))$, and the last factor is at
+    most $3(u+\log(z+1))$. The boundary rank costs at most
+    $(s_0+2m)\log q\le Wu^3/g+14r u$.
+\end{proof}
+
+\begin{lemma}[Normalization of a frustration-free gap]
+    \label{lem:aklv_ff_dimension_gap}
+    \lean{TNLean.MPS.AreaLaw.aklv_frustrationFree_dimension_and_gap_bounds}
+    \leanok
+    \uses{thm:chain_positive_nearest_neighbor_gap_upper}
+    Let $0\le h_j\le I$ be nearest-neighbour terms of an $L$-site chain, and
+    $\Omega$ a unit vector with $H\Omega=0$ and
+    $H\ge g(I-|\Omega\rangle\langle\Omega|)$, where $H=\sum_jh_j$ and $g>0$.
+    If $g$ is an eigenvalue of $H$, then $q\ge2$ and $g\le1$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    The two distinct eigenvalues $0$ and $g$ force $q\ge2$ and $L\ge1$.
+    The endpoint trial vector then gives $g\le1$.
+\end{proof}
+
+\begin{lemma}[Two filters at one cut]
+    \label{lem:aklv_ff_two_filter_approximant}
+    \lean{TNLean.MPS.AreaLaw.exists_aklv_frustrationFree_two_filter_approximant}
+    \leanok
+    \uses{lem:aklv_frustration_free_filter,
+        lem:aklv_ff_product_filtered_output,
+        lem:aklv_normalized_cut_schmidt_rank}
+    Let $q\ge1$, $0<g\le1$, $t=1024/g$, and let $\Omega$ be a unit vector with
+    $H\Omega=0$ and $H\ge g(I-|\Omega\rangle\langle\Omega|)$ for a sum $H$ of
+    nearest-neighbour terms $0\le h_j\le I$ on an $L$-site chain. Let
+    $s_0\ge6$, $s=s_0+2m$ and $a+s+1\le L$, and suppose
+    $D_0\delta_0\le10^{-5}$, where $D_0=(q(s_0^2+1))^{32(2s_0+1)}$ and
+    $\delta_0=4\exp(-4s_0^2\sqrt{(g/2)/(2t+s_0)})$. Put
+    $b=2\exp(-2s^2\sqrt{(g/2)/(2t+s)})$ and
+    $D_1=(q(s^2+1))^{32(2s+1)}$. Then at the cut $k=a+\lfloor s/2\rfloor$
+    there is a unit vector $y$ with
+    \begin{align*}
+        \|y-\Omega\|^2         & \le8b^2,    &
+        \operatorname{SR}_k(y) & \le D_0D_1.
+    \end{align*}
+\end{lemma}
+\begin{proof}
+    \leanok
+    The window of width $s_0$ with left end $a+m$ has the same centre $k$.
+    Its filter of degree $s_0^2$ fixes $\Omega$, and
+    Lemma~\ref{lem:aklv_ff_product_filtered_output} gives a vector $x$ of rank
+    at most $D_0$ with $\|x-\Omega\|^2\le4D_0\delta_0\le1/16$, hence
+    $|\langle\Omega,x\rangle|\ge1/2$. The filter of degree $s^2$ on the
+    window of width $s$ has rank at most $D_1$ and shrinking amplitude $b$.
+    Its phase-aligned normalized image $y$ of $x$ satisfies
+    $\|y-\Omega\|^2\le2b^2\|x\|^2/|\langle\Omega,x\rangle|^2\le8b^2$, and its
+    rank is at most $D_0D_1$ by Lemma~\ref{lem:aklv_normalized_cut_schmidt_rank}.
+\end{proof}
+
+\begin{lemma}[Frustration-free approximants at every cut]
+    \label{lem:aklv_ff_per_cut}
+    \lean{TNLean.MPS.AreaLaw.exists_aklv_frustrationFree_per_cut_approximation}
+    \leanok
+    \uses{lem:aklv_frustration_free_scalar_parameters,
+        lem:aklv_ff_two_filter_approximant,
+        lem:aklv_ff_accuracy_shrink,lem:aklv_ff_rank_log,
+        thm:aklv_exact_boundary_rank}
+    There is a universal $C>0$ with the following property. Let $q\ge2$, let
+    $0\le h_j\le I$ be nearest-neighbour terms on an $L$-site chain, and let
+    $\Omega$ be a unit vector with $H\Omega=0$ and
+    $H\ge g(I-|\Omega\rangle\langle\Omega|)$ for $0<g\le1$. For every
+    $0<\rho\le1$ there is $D$ with
+    \begin{align*}
+        \log D\le C\left[\frac{u^3}{g}+\left(\frac{z^2}{g}\right)^{1/3}
+            \bigl(u+\log(z+1)\bigr)\right],
+    \end{align*}
+    where $u=1+\log q+\log(1/g)$ and $z=\log(128/\rho)$, such that every cut
+    $0\le k\le L$ has a unit vector $y$ with $\|y-\Omega\|^2\le\rho$ and
+    $\operatorname{SR}_k(y)\le D$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Take $s_0$, $t=1024/g$ and $D_0$ from the frustration-free scalar
+    parameters, so $s_0\ge21$, $s_0\ge1/g$, $s_0\le Wu^2/g$,
+    $\log D_0\le Ru^3/g$ and $D_0\delta_0\le10^{-5}$. Let $D=B$.
+    If the window of width $s$ centred at $k$ fits,
+    Lemma~\ref{lem:aklv_ff_two_filter_approximant} gives $y$ of rank at most
+    $D_0D_1$ with $\|y-\Omega\|^2\le8b^2$. Since $s\ge12r$ and $s\ge s_0$,
+    Lemma~\ref{lem:aklv_ff_accuracy_shrink} gives $b\le\rho/64$, so
+    $8b^2\le\rho$. If the window does not fit, take $y=\Omega$, of rank at
+    most $q^{s-\lfloor s/2\rfloor}$.
+    Lemma~\ref{lem:aklv_ff_rank_log} gives the logarithmic bound with
+    $C=10001R+W+8400000$.
+\end{proof}
+
+\begin{theorem}[Frustration-free matrix product approximation]
+    \label{thm:aklv_frustration_free_mps}
+    \lean{TNLean.MPS.AreaLaw.exists_aklv_frustrationFree_sequential_mps_approximation}
+    \leanok
+    \uses{lem:aklv_ff_per_cut,lem:aklv_ff_dimension_gap,
+        thm:aklv_cut_approximation_tail,
+        def:aklv_sequential_spectral_approximant,thm:aklv_sharp_sequential_mps}
+    There is a universal $C>0$ with the following property. Let $0\le h_j\le I$
+    be nearest-neighbour terms on an $L$-site chain of local dimension $q$,
+    and let $\Omega$ be a unit vector with $H\Omega=0$ and
+    $H\ge g(I-|\Omega\rangle\langle\Omega|)$ for $H=\sum_jh_j$ and $g>0$, where
+    $g$ is an eigenvalue of $H$. For $0<\epsilon\le1$ put
+    \begin{align*}
+        u & =1+\log q+\log\frac1g,             &
+        z & =\log\frac{2048(L+1)}{\epsilon^2}.
+    \end{align*}
+    Then there is $D$ with
+    \begin{align*}
+        \log D\le C\left[\frac{u^3}{g}+\left(\frac{z^2}{g}\right)^{1/3}
+            \bigl(u+\log(z+1)\bigr)\right]
+    \end{align*}
+    such that the normalized sequential truncation $\Phi$ of $\Omega$ at bond
+    dimension $D$ is an open-boundary matrix product state with
+    $\|\Phi-\Omega\|\le\epsilon$. For $\epsilon=L^{-c}$ and fixed $q$ and $g$
+    this gives $\log D=O(\log^{2/3}L\,\log\log L)$. The printed bound
+    $\exp(O(g^{-1/3}\log^{2/3}L))$ of \cite[Section~5]{Arad2013AreaLaw} is
+    not asserted: it omits the factor $\log\ell$ of the polynomial rank
+    estimate, as recorded in \cite{gap:aklv13_frustration_free_mps_rate}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    The actual gap gives $q\ge2$ and $g\le1$ by
+    Lemma~\ref{lem:aklv_ff_dimension_gap}. Apply
+    Lemma~\ref{lem:aklv_ff_per_cut} with $\rho=\epsilon^2/(16(L+1))$, so that
+    $z=\log(128/\rho)$. At every cut the discarded mass of $\Omega$ beyond
+    $D$ is at most $\rho$, by Lemma~\ref{thm:aklv_cut_approximation_tail}.
+    The sequential truncation estimate then gives $\Phi$ with
+    $\|\Phi-\Omega\|\le\epsilon$ and every internal cut rank at most $D$.
+\end{proof}

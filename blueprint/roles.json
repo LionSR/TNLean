@@ -1459,6 +1459,7 @@
         "thm:aklv_physical_sequence_entropy",
         "thm:aklv_sharp_sequential_mps",
         "thm:aklv_frustration_free_entropy",
+        "thm:aklv_frustration_free_mps",
         "thm:physical_dg_interval_entropy_bound"
       ],
       "corollaries": [],
@@ -1466,6 +1467,7 @@
         "thm:aklv_physical_sequence_entropy": "Uniform physical entropy bound obtained from the coherent AKLV sequence",
         "thm:aklv_sharp_sequential_mps": "Accuracy-dependent physical matrix product approximation with the fourth-root rank bound",
         "thm:aklv_frustration_free_entropy": "Uniform entropy of the original frustration-free ground vector from a projector gap lower bound",
+        "thm:aklv_frustration_free_mps": "Matrix product approximation of a frustration-free ground vector with the cube-root accuracy dependence",
         "thm:physical_dg_interval_entropy_bound": "Interval entropy bound for a degenerate gapped ground space, the interval version of ALVV Theorem 4.9"
       }
     }
