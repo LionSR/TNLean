@@ -19,6 +19,11 @@ does not say so, but their proof has the same feature: the final error reduction
 `η / n` has `d^{2κ log(n / η)}` terms with `κ = O(1 / ε)` (lines 580--592 and 669--671), so its
 degree in `1 / η` is of order `log d / ε`. Recorded in `docs/paper-gaps/lvv13_cost_model.tex`.
 
+**Scope restriction (cost model):** the bound is on the declared oracle cost
+`FreeM.cost o queryCost`, not a proved running time of an implementation: each query is charged
+a declared polynomial cost in the dimensions of its arguments, arithmetic is exact, and nothing
+is proved about how a query is answered; see `docs/paper-gaps/lvv13_cost_model.tex`.
+
 Source: LVV13, arXiv:1307.5143v1, `algo53.tex`, lines 213--216.
 -/
 
