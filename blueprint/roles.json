@@ -688,7 +688,8 @@
         "thm:lvv_sampled_ground_state",
         "thm:lvv_ground_state_program_spec",
         "thm:lvv_polynomial_running_time",
-        "thm:lvv_sampled_program_success"
+        "thm:lvv_sampled_program_success",
+        "thm:lvv_valid_oracle_correct"
       ],
       "corollaries": [],
       "notes": {
@@ -697,7 +698,8 @@
         "thm:lvv_sampled_ground_state": "Polynomial final bond from sampled successive families with bounded ground-energy-to-gap ratio",
         "thm:lvv_ground_state_program_spec": "The ground-state computation run with honest answers outputs a matrix product state with the required overlap: the approximation part of Theorem 1 as an algorithm",
         "thm:lvv_polynomial_running_time": "Polynomial cost of the ground-state computation in the declared cost model: the running-time part of Theorem 1",
-        "thm:lvv_sampled_program_success": "Theorem 1 on the sampled route as an algorithm, with its success probability over the sampled words"
+        "thm:lvv_sampled_program_success": "Theorem 1 on the sampled route as an algorithm, with its success probability over the sampled words",
+        "thm:lvv_valid_oracle_correct": "The algorithm is correct for every valid oracle, every solver returning optimal solutions, not only the chosen one"
       }
     },
     "ch:gapped_chain_polynomial_filters": {
