@@ -22,6 +22,14 @@ valid, so the earlier statements are instances.
 This lifts the honest-oracle restriction recorded in `docs/paper-gaps/lvv13_cost_model.tex`
 for the correctness of the algorithm.
 
+**Local fix (trimming radius):** bond trimming uses the corrected quadratic radius
+`bondTrimmingRadius` recorded at
+<https://sirui-lu.com/QICLean/paper-gaps/lvv13_trimming_radius.pdf>.
+
+**Scope restriction (quantitative constants):** the size and bond budgets use the library
+constant-cut bond `constantCutBond` and the corrected net exponent, not the printed quantitative
+bounds; see `docs/paper-gaps/lvv13_constant_bond.tex`.
+
 Source: LVV13, arXiv:1307.5143v1, `algo53.tex`, lines 219 and 484--487 (the solver is any
 polynomial-time solver of the convex programs), and the proof of Theorem 1, lines 652--678.
 -/
