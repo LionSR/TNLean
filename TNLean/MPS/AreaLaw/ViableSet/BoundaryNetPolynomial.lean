@@ -69,4 +69,89 @@ theorem exists_finset_boundary_rectangularTraceNorm_net_polynomial {L q k m D : 
     exists_finset_boundary_rectangularTraceNorm_net (L := L) (k := k) hq hη hm
   exact ⟨N, hN.trans (boundaryNet_card_bound_le_polynomial (q := q) (D := D) hL hc), hcover⟩
 
+/-- At radius `c / (2L)`, the boundary net may be chosen with Hermitian centers while
+retaining the same polynomial cardinality bound. This is the form suited to the
+semidefinite-program formulation of LVV13, arXiv:1307.5143v1, Claim 2.7,
+`algo53.tex`, lines 472–478 and 519–527. -/
+theorem exists_finset_hermitian_boundary_rectangularTraceNorm_net_polynomial
+    {L q k m D : ℕ} (hq : 1 ≤ q) (hL : 1 ≤ L) {c : ℝ} (hc : 0 < c) (hm : m ≤ D) :
+    let p := 2 * (q * D) ^ 2
+    let A := ⌈2 * ((q * D : ℕ) : ℝ) ^ 2 / c⌉₊
+    ∃ N : Finset (Matrix (CutSite L q k × Fin m) (CutSite L q k × Fin m) ℂ),
+      N.card ≤ (2 * A + 1) ^ p * L ^ p ∧
+      (∀ X ∈ N, X.IsHermitian) ∧
+      ∀ Y : Matrix (CutSite L q k × Fin m) (CutSite L q k × Fin m) ℂ,
+        Y.IsHermitian → rectangularTraceNorm Y ≤ 1 →
+          ∃ X ∈ N, rectangularTraceNorm (Y - X) ≤ c / (2 * L) := by
+  classical
+  have hη : 0 < c / (2 * L) :=
+    div_pos hc (mul_pos (by norm_num)
+      (Nat.cast_pos.mpr (lt_of_lt_of_le Nat.zero_lt_one hL)))
+  obtain ⟨N, hN, hNherm, hcover⟩ :=
+    exists_finset_hermitian_boundary_rectangularTraceNorm_net
+      (L := L) (k := k) hq hη hm
+  exact ⟨N, hN.trans (boundaryNet_card_bound_le_polynomial (q := q) (D := D) hL hc),
+    hNherm, hcover⟩
+
+/-- Boundary nets for all actual bond dimensions up to `D` can be chosen with
+polynomial total cardinality. Consequently, at a fixed cut, the
+size-trimming construction poses at most this many boundary-constrained
+minimization problems. LVV13, Claim 2.7, `algo53.tex`, lines 472–478 and
+519–527, with the corrected net exponent documented in the module docstring. -/
+theorem exists_boundaryNets_polynomial_total_cardinality {L q k D : ℕ}
+    (hq : 1 ≤ q) (hL : 1 ≤ L) {c : ℝ} (hc : 0 < c) :
+    let p := 2 * (q * D) ^ 2
+    let A := ⌈2 * ((q * D : ℕ) : ℝ) ^ 2 / c⌉₊
+    ∃ N : (m : Fin (D + 1)) →
+        Finset (Matrix (CutSite L q k × Fin m.val) (CutSite L q k × Fin m.val) ℂ),
+      (∀ m, (N m).card ≤ (2 * A + 1) ^ p * L ^ p) ∧
+      (∀ (m) (Y : Matrix (CutSite L q k × Fin m.val)
+          (CutSite L q k × Fin m.val) ℂ),
+        rectangularTraceNorm Y ≤ 1 →
+          ∃ X ∈ N m, rectangularTraceNorm (Y - X) ≤ c / (2 * L)) ∧
+      (∑ m, (N m).card) ≤ (D + 1) * (2 * A + 1) ^ p * L ^ p := by
+  classical
+  intro p A
+  choose N hN hcover using fun m : Fin (D + 1) ↦
+    exists_finset_boundary_rectangularTraceNorm_net_polynomial
+      (L := L) (q := q) (k := k) (D := D) hq hL hc (Nat.le_of_lt_succ m.isLt)
+  refine ⟨N, hN, hcover, ?_⟩
+  calc
+    (∑ m, (N m).card) ≤
+        ∑ _m : Fin (D + 1), (2 * A + 1) ^ p * L ^ p :=
+      Finset.sum_le_sum fun m _ ↦ hN m
+    _ = (D + 1) * (2 * A + 1) ^ p * L ^ p := by
+      simp [Nat.mul_assoc]
+
+/-- Across all positive cuts of a chain, the total number of boundary-net
+points, and hence the number of boundary-constrained minimization problems in
+the size-trimming sweep, has one additional power of the chain length. -/
+theorem exists_boundaryNets_sweep_polynomial_total_cardinality {L q D : ℕ}
+    (hq : 1 ≤ q) (hL : 1 ≤ L) {c : ℝ} (hc : 0 < c) :
+    let p := 2 * (q * D) ^ 2
+    let A := ⌈2 * ((q * D : ℕ) : ℝ) ^ 2 / c⌉₊
+    ∃ N : (i : Fin L) → (m : Fin (D + 1)) →
+        Finset (Matrix (CutSite L q (i.val + 1) × Fin m.val)
+          (CutSite L q (i.val + 1) × Fin m.val) ℂ),
+      (∀ (i) (m) (Y : Matrix (CutSite L q (i.val + 1) × Fin m.val)
+          (CutSite L q (i.val + 1) × Fin m.val) ℂ),
+        rectangularTraceNorm Y ≤ 1 →
+          ∃ X ∈ N i m, rectangularTraceNorm (Y - X) ≤ c / (2 * L)) ∧
+      (∑ i, ∑ m, (N i m).card) ≤
+        (D + 1) * (2 * A + 1) ^ p * L ^ (p + 1) := by
+  classical
+  intro p A
+  choose N _hcard hcover htotal using fun i : Fin L ↦
+    exists_boundaryNets_polynomial_total_cardinality
+      (L := L) (q := q) (k := i.val + 1) (D := D) hq hL hc
+  refine ⟨N, hcover, ?_⟩
+  calc
+    (∑ i, ∑ m, (N i m).card) ≤
+        ∑ _i : Fin L, (D + 1) * (2 * A + 1) ^ p * L ^ p :=
+      Finset.sum_le_sum fun i _ ↦ htotal i
+    _ = (D + 1) * (2 * A + 1) ^ p * L ^ (p + 1) := by
+      rw [pow_succ]
+      simp
+      ring
+
 end TNLean.MPS.AreaLaw

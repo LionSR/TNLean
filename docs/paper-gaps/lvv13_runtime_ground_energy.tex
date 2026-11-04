@@ -63,6 +63,12 @@ The Methods statement of Proposition~1, author PDF page~6, retains the
 ground energy in the sampling complexity. The normalization estimate below
 makes this dependence explicit. The abstract advertises the uniform
 polynomial case with constant ground energy.
+The published Supplementary Information, PDF page~6, confirms the same
+correction in the proof of Proposition~1: it writes
+$C^{2m}=n^{O(\varepsilon_0/\varepsilon)}$ and consequently bounds the
+failure probability using a denominator
+$n^{O(\varepsilon_0/\varepsilon)}q(n)^2$.  Thus the dependence is present
+both in the published Methods statement and in its detailed proof.
 The published theorem treats $\varepsilon_0$ as a complexity parameter;
 it does not impose an unprinted bounded-energy hypothesis. Thus the omission
 of $\varepsilon_0$ in the preprint was corrected in publication. The example below concerns that omitted dependence, and does
@@ -240,6 +246,1602 @@ carry only the source's hypotheses. The statement $\ell=n^{O(1/\varepsilon)}$
 for unbounded $\varepsilon_0$, and the running time of Theorem~1,
 are not formalized. The published article corrects the energy dependence;
 the formalization of its running-time assertion remains open.
+
+The corrected dependence of the sample count is explicit rather than merely
+existential.  For inverse-polynomial accuracy $c/L^s$ and a fixed bound
+$B\ge\varepsilon_0/\Delta$, put $r=\lceil B\rceil$.  The theorem
+\leanid{TNLean.MPS.AreaLaw.exists\_sampledProjectorWordCount\_polynomial\_explicit\_degree}
+uses the degree
+\leanid{TNLean.MPS.AreaLaw.sampledProjectorWordDegree}
+\begin{align*}
+  2(sr+1)+(2s+1)=2sr+2s+3.
+\end{align*}
+Thus the formal sample-count exponent displays the published linear dependence
+on the ground-energy-to-gap ratio.  This dependence also passes through the
+simultaneous cut decomposition.  The declarations
+\leanid{TNLean.MPS.AreaLaw.sampledProjectorLetterSlope},
+\leanid{TNLean.MPS.AreaLaw.sampledProjectorRankDegree}, and
+\leanid{TNLean.MPS.AreaLaw.sampledProjectorTotalDegree} set
+\begin{align*}
+  a_{\rm letter}&=\frac{2s}{\Delta}+2(p_{\rm word}+4), &
+  p_{\rm rank}&=\left\lceil2a_{\rm letter}\log q\right\rceil, &
+  p_{\rm total}&=p_{\rm word}+p_{\rm rank}.
+\end{align*}
+Then
+\leanid{TNLean.MPS.AreaLaw.exists\_sampledProjector\_uniform\_polynomial\_explicit\_degree}
+proves both $\ell D\le CL^{p_{\rm total}}$ and
+$D\le CL^{p_{\rm total}}$.  The scalar theorem
+\leanid{TNLean.MPS.AreaLaw.sampledProjectorTotalDegree\_le\_affine} makes the
+linear dependence precise:
+\begin{align*}
+ p_{\rm total}&\le p_{\rm int}+p_{\rm slope}\lceil B\rceil,\\
+ p_{\rm slope}&=2s+\lceil8s\log q\rceil,\\
+ p_{\rm int}&=2s+3+
+ \left\lceil\left(\frac{4s}{\Delta}+8s+28\right)\log q\right\rceil.
+\end{align*}
+Thus the complete sampled error-reduction factor has a proved exponent affine
+in $\lceil B\rceil$.  The remaining open point
+is not a loss at the later existence steps: the theorems
+\leanid{TNLean.MPS.AreaLaw.exists\_sampled\_viable\_successor\_polynomial\_explicit\_energy\_degree}
+and
+\leanid{TNLean.MPS.AreaLaw.exists\_sampled\_successive\_viable\_sets\_polynomial\_explicit\_energy\_degree}
+give size and bond degrees $p_{\rm total}+p_0$ and
+$p_{\rm total}+r_0$, where the offsets are independent of $B$.  Finally,
+\leanid{TNLean.MPS.AreaLaw.exists\_sampled\_groundState\_openMPS\_polynomial\_explicit\_energy\_degree}
+produces the normalized final MPS with degree $2p_{\rm total}+d_0$, again
+with $d_0$ independent of $B$.  The theorem
+\leanid{TNLean.MPS.AreaLaw.sampledGroundStateDegree\_le\_affine} bounds this by
+$(2p_{\rm int}+d_0)+2p_{\rm slope}\lceil B\rceil$.  What remains open is the cost of an
+implemented algorithm carrying out the successive optimization steps, not the
+energy dependence of the mathematical construction.
+
+One part of that finite work is now counted explicitly.  The theorem
+\leanid{TNLean.MPS.AreaLaw.exists\_sampled\_successive\_viable\_sets\_polynomial\_total\_cardinality}
+chooses the successive families so that, with
+$p=p_{\rm total}+p_0$,
+\begin{align*}
+  \sum_{i=0}^{L}|S_i|\le CL^{p+1}.
+\end{align*}
+Thus the total number of retained candidate vectors over the entire sweep is
+polynomial with the same affine ground-energy dependence, up to one additional
+power of $L$.  The number of boundary-contraction convex programs is also
+finite and polynomial: at one cut,
+\leanid{TNLean.MPS.AreaLaw.exists\_boundaryNets\_polynomial\_total\_cardinality}
+chooses all actual-bond nets with
+\begin{align*}
+  \sum_{m=0}^{D}|N_m|\le(D+1)(2A+1)^pL^p,
+  \qquad p=2(qD)^2.
+\end{align*}
+The sweep theorem
+\leanid{TNLean.MPS.AreaLaw.exists\_boundaryNets\_sweep\_polynomial\_total\_cardinality}
+chooses these nets at every positive cut and proves
+\begin{align*}
+  \sum_{i=1}^{L}\sum_{m=0}^{D}|N_{i,m}|
+  \le(D+1)(2A+1)^pL^{p+1}.
+\end{align*}
+The net used by the size-trimming construction may moreover be chosen with
+Hermitian centers, without changing either the covering radius or this
+cardinality bound. Indeed, replacing a center $X$ by $(X+X^*)/2$ cannot
+increase its trace-norm distance from a Hermitian boundary density. Thus the
+boundary residual belongs to the real space of Hermitian matrices. The theorem
+\leanid{TNLean.MPS.AreaLaw.compressedBoundary\_rectangularTraceNorm\_le\_iff\_exists\_posSemidef\_sub}
+now gives the corresponding semidefinite representation explicitly: there are
+$P,N\ge0$ such that the residual is $P-N$ and
+$\operatorname{tr}P+\operatorname{tr}N\le\eta$. The predicate
+\leanid{TNLean.MPS.AreaLaw.IsCompressedBoundarySDPFeasibleAtEnergy}
+also includes positivity and normalization of the compressed density and its
+linear energy inequality. Its feasibility is proved equivalent to the original
+compressed density problem at every energy threshold. The finite-precision
+interface also controls an inexact boundary-residual equation: trace-norm
+error $\delta$ enlarges the physical boundary tolerance from $\eta$ to
+$\eta+\delta$, without a dimension factor. Approximate positivity is also
+repaired explicitly: for a Hermitian trace-one candidate with least eigenvalue
+at least $-\epsilon$, shifting and normalizing gives an exact density within
+$2n\epsilon$ in trace norm. Combined with the inexact boundary equation, the
+resulting density has boundary tolerance $\eta+\delta+2n\epsilon$ and energy
+threshold enlarged by $2n\epsilon\lVert K\rVert$. The exact-normalization
+assumption has also been removed: trace defect $\kappa$ gives an exact density
+within $\kappa+2n\epsilon$, boundary tolerance
+$\eta+\delta+\kappa+2n\epsilon$, and energy slack
+$\lVert K\rVert(\kappa+2n\epsilon)$. A complete polynomial-time solver
+analysis may also return auxiliary boundary matrices whose least eigenvalues
+are only bounded below by $-\epsilon_b$. Shifting both auxiliary matrices by
+$\epsilon_b I$ preserves their difference exactly and adds
+$2r\epsilon_b$ to the boundary trace budget. Thus all three positive-cone
+constraints now admit explicit spectral repair.  The rational exhaustive
+search described below produces certified $\delta$, $\kappa$, $\epsilon$, and
+$\epsilon_b$ and carries explicit schoolbook arithmetic accounting.  What
+remains is the polynomial bit-complexity estimate asserted by the source.
+The residual norm itself can now be certified from ordinary matrix entries.
+The theorems
+\leanid{TNLean.MPS.AreaLaw.rectangularTraceNorm\_le\_card\_sq\_mul\_of\_entry\_norm\_le}
+and
+\leanid{TNLean.MPS.AreaLaw.IsAllSpectralApproxCompressedBoundarySDPFeasibleAtEnergy.of\_entrywise\_residual}
+show that an order-$r$ residual whose entries have modulus at most $\zeta$ has
+trace norm at most $r^2\zeta$.  Hence certified entrywise arithmetic with
+$r^2\zeta\le\delta$ directly discharges the residual clause of the unified
+solver specification.
+Spectral certification is now reduced to entries as well.  The theorem
+\leanid{TNLean.MPS.AreaLaw.neg\_le\_minEigenvalue\_of\_gershgorin}
+proves that a Hermitian matrix whose Gershgorin row intervals lie to the right
+of $-\epsilon$ has least eigenvalue at least $-\epsilon$.  Its three-variable
+wrapper
+\leanid{TNLean.MPS.AreaLaw.IsAllSpectralApproxCompressedBoundarySDPFeasibleAtEnergy.of\_gershgorin}
+combines these row tests for the density and two auxiliary matrices with the
+entrywise residual test.  Gershgorin is only a sufficient shortcut and imposes
+no condition on the matrices accepted by the general solver interface.  The
+complete alternative is the equivalence
+\leanid{TNLean.MPS.AreaLaw.Matrix.IsHermitian.neg\_le\_minEigenvalue\_iff\_exists\_gram\_factor}:
+$-\epsilon\le\lambda_{\min}(A)$ if and only if
+$A+\epsilon I=RR^*$ for some complex matrix $R$.  The wrapper
+\leanid{TNLean.MPS.AreaLaw.IsAllSpectralApproxCompressedBoundarySDPFeasibleAtEnergy.of\_gram\_factors}
+accepts such factors for all three cone variables and combines them with the
+entrywise residual test.  Thus the nonscalar conditions have a complete
+finite algebraic certificate; trace and energy remain scalar comparisons.
+The factor identities may also be approximate.  The theorem
+\leanid{TNLean.MPS.AreaLaw.neg\_le\_minEigenvalue\_of\_approx\_gram\_factor}
+shows that entrywise factorization error $\zeta$ in order $r$ costs at most
+$(r+1)\zeta$ in the spectral lower bound.  Its unified wrapper
+\leanid{TNLean.MPS.AreaLaw.IsAllSpectralApproxCompressedBoundarySDPFeasibleAtEnergy.of\_approx\_gram\_factors}
+absorbs these errors for all three cone variables into $\epsilon$ and
+$\epsilon_b$.  Exact Gram factors are recovered at $\zeta=0$, so this stable
+certificate does not narrow the feasible cone.  Constructing and encoding
+suitable matrices and factors with polynomial bit complexity remains open.
+The elementary input-size implication is now explicit.  The theorems
+\leanid{TNLean.MPS.AreaLaw.compressedSDPInputBitSizeBound\_le\_of\_height\_le\_two\_pow}
+and
+\leanid{TNLean.MPS.AreaLaw.compressedSDPInputBitSizeBound\_le\_of\_order\_and\_height\_bounds}
+show that a common height at most $2^p$ costs at most $p+1$ bits per rational
+coordinate, and that matrix orders bounded by $M$ give total input size at
+most $2(M^3+2M^2+2)(p+1)$.  Consequently the remaining bit-complexity task is
+sharply separated into proving polynomial bounds for the structured orders and
+their logarithmic coordinate heights.
+For the support isometry itself, this replacement is now formalized at the
+input-counting level.  The definitions
+\leanid{TNLean.MPS.AreaLaw.structuredCompressedSDPInputRationalCoordinateCount}
+and
+\leanid{TNLean.MPS.AreaLaw.structuredCompressedSDPInputBitSizeBound}
+charge the $nm|S|$ expansion coefficients rather than the ambient entries of
+$Z$.  The structure
+\leanid{TNLean.MPS.AreaLaw.RationalStructuredCompressedSDPInputEncoding}
+records the common height of precisely these coefficients, the objective, the
+boundary center, and the two spectral shifts.  This makes the missing
+conditioning estimate an explicit arithmetic hypothesis rather than hiding it
+in the ambient matrix representation.  The constructor
+\leanid{TNLean.MPS.AreaLaw.rationalStructuredCompressedSDPInputEncodingOfHeightBounds}
+combines separate bounds on these five parts at the maximum
+\leanid{TNLean.MPS.AreaLaw.rationalStructuredCompressedSDPInputHeight}.  The
+theorem
+\leanid{TNLean.MPS.AreaLaw.structuredCompressedSDPInputBitSizeBound\_le\_of\_component\_height\_bounds}
+then derives the quadratic input bound directly when each component height is
+at most $2^p$.  By
+\leanid{TNLean.MPS.AreaLaw.structuredCompressedSDPInputBitSizeBound\_le\_max\_order},
+if $n\le |S|m$ and all structured coordinates have height at most $2^p$, this
+input has bit size at most
+\[
+  2\bigl(3\max\{|S|m,r\}^2+2\bigr)(p+1).
+\]
+Thus the ambient factor $q^{|A|}$ has been removed from the support-coordinate
+input count.  The rational construction with polynomial logarithmic height is
+completed below; propagation through the later finite selection steps remains.
+The method
+\leanid{TNLean.MPS.AreaLaw.RationalStructuredCompressedSDPInputEncoding.bitSizeBound\_le\_max\_order}
+applies the same estimate directly to any such encoding whose recorded height
+is at most $2^p$.
+Rational existence is now separated from polynomial conditioning.  The theorem
+\leanid{TNLean.MPS.AreaLaw.exists\_rational\_boundarySupportCoordinates}
+shows that every support isometry has rational support coordinates at every
+positive mesh.  It chooses a finite bound $R$ for the exact coefficients and
+retained-vector norms, obtains rational coefficients with the explicit height
+\leanid{TNLean.MPS.AreaLaw.rationalBoundedMatrixGridHeight} evaluated at
+$(R,\delta)$, and bounds the error in every reconstructed bond slice by
+$|S|\delta R$.
+The component results
+\leanid{TNLean.MPS.AreaLaw.exists\_rational\_boundarySupportCoordinateCoefficientApproximation}
+and
+\leanid{TNLean.MPS.AreaLaw.norm\_boundarySupportCoordinate\_sum\_sub\_le}
+record respectively the entrywise rational approximation and its propagation
+through the retained-vector expansion.  Thus irrationality is no longer an
+obstruction; the remaining runtime issue is a polynomial bound on the chosen
+$R$, equivalently a quantitative conditioning estimate for support coordinates.
+There is now a complete conditional route when the retained family itself is
+orthonormal.  The theorem
+\leanid{TNLean.MPS.AreaLaw.exists\_boundarySupportOrthonormalCoordinateCoefficients}
+chooses the canonical inner-product coordinates and proves that every
+coefficient has modulus at most one.  Here the norm of each bond slice is at
+most the norm of its isometry column, using
+\leanid{TNLean.MPS.AreaLaw.norm\_euclidean\_prod\_slice\_le}.
+Consequently
+\leanid{TNLean.MPS.AreaLaw.exists\_rational\_boundarySupportOrthonormalCoordinates}
+produces rational coefficients of height
+\leanid{TNLean.MPS.AreaLaw.rationalBoundedMatrixGridHeight} evaluated at
+$(1,\delta)$ and reconstructs every slice within $|S|\delta$.  This removes
+the conditioning parameter entirely under orthonormality.  The
+orthonormal-span construction described below applies this route to every
+finite retained MPS family while preserving its span and controlling the bond
+dimension.  This statement is geometric: exact Gram--Schmidt coefficients need
+not be rational.  Consequently the orthonormal route controls the compressed
+SDP input relative to the replacement family, but does not by itself give a
+rational encoding of that replacement family relative to the original rational
+MPS data.
+The theorem
+\leanid{TNLean.MPS.AreaLaw.exists\_rationalStructuredCompressedSDPInputEncoding\_of\_orthonormal}
+now completes the arithmetic assembly for this conditional branch.  Given
+rational objective, boundary-center, and shift data, it returns the rational
+support coefficients, their $|S|\delta$ slice error, a complete structured
+input encoding, and the quadratic bit-size estimate whenever all five component
+heights are bounded by $2^p$.
+The dyadic dependence is explicit rather than asymptotic.  The theorem
+\leanid{TNLean.MPS.AreaLaw.rationalBoundedMatrixGridHeight\_one\_inv\_two\_pow\_le}
+shows that mesh $2^{-t}$ at coefficient radius one has height at most
+$2^{2t+5}$.  Its assembled corollary
+\leanid{TNLean.MPS.AreaLaw.exists\_dyadicRationalStructuredCompressedSDPInputEncoding\_of\_orthonormal}
+therefore gives slice error $|S|2^{-t}$ and total structured input size at
+most
+\[
+  2\bigl(3\max\{|S|m,r\}^2+2\bigr)(2t+6),
+\]
+provided the other four component heights obey the same exponential bound.
+The objective and boundary-center parts now have the required general estimate.
+If their entries are bounded by $2^u$, then
+\leanid{TNLean.MPS.AreaLaw.rationalBoundedMatrixGridHeight\_inv\_two\_pow\_le}
+bounds the height of the radius-$2^u$, mesh-$2^{-t}$ grid by
+$2^{2u+2t+5}$.  The same estimate holds for every larger mesh: if
+$2^{-t}\leq\delta$, then
+\leanid{TNLean.MPS.AreaLaw.rationalMatrixGridOrder\_le\_two\_pow} and
+\leanid{TNLean.MPS.AreaLaw.rationalBoundedMatrixGridHeight\_le\_two\_pow\_of\_inv\_two\_pow\_le}
+give order at most $2^t$ and height at most $2^{2u+2t+5}$ for the
+$\delta$-grid.  The constructive theorem
+\leanid{TNLean.MPS.AreaLaw.exists\_dyadic\_rational\_rectangular\_approximation}
+simultaneously supplies the rational matrix, this height bound, and entrywise
+error at most $2^{-t}$.  Thus polynomial bit complexity for these matrix parts
+reduces to polynomial bounds on the logarithms of their entry radii and on the
+requested precision.
+The theorem
+\leanid{TNLean.MPS.AreaLaw.exists\_dyadicRationalStructuredCompressedSDPInputEncoding\_of\_bounded\_orthonormal}
+performs this construction jointly.  Starting from objective and boundary-center
+entries bounded by $R\le 2^u$, it returns rational approximants with entrywise
+error $2^{-t}$, rational orthonormal-support coordinates with slice error
+$|S|2^{-t}$, and a complete structured encoding of size at most
+\[
+  2\bigl(3\max\{|S|m,r\}^2+2\bigr)(2u+2t+6),
+\]
+assuming the two rational shift heights fit under the same common exponent.
+Those shift assumptions can now be discharged canonically.  The theorem
+\leanid{TNLean.MPS.AreaLaw.rationalPositiveTolerance\_inv\_two\_pow\_hasRationalCoordinatesOfHeight}
+shows that the positive rational tolerance chosen below $2^{-t}$ has height at
+most $2^{t+2}$.  Consequently
+\leanid{TNLean.MPS.AreaLaw.exists\_dyadicStructuredInput\_of\_bounded\_orthonormal\_withCanonicalShifts}
+constructs both cone shifts internally and retains the same matrix errors,
+slice error, and total input-size bound.  No external rational arithmetic data
+remain in this bounded orthonormal branch.
+The orthonormality hypothesis is now connected to the original retained MPS
+family.  The theorems
+\leanid{TNLean.MPS.AreaLaw.exists\_orthonormalBasis\_isLeftOpenMPS\_span}
+and
+\leanid{TNLean.MPS.AreaLaw.exists\_orthonormal\_isLeftOpenMPS\_span\_finset}
+replace a finite family $S$ by an orthonormal family of no larger cardinality
+with exactly the same span; every replacement vector has open-MPS bond at most
+$|S|\max\{1,b\}$.  The boundary bridge
+\leanid{TNLean.MPS.AreaLaw.exists\_orthonormalBoundarySupport\_isLeftOpenMPS}
+also transports the support-isometry identity to this replacement family.
+The rank estimate
+\leanid{TNLean.MPS.AreaLaw.boundarySupport\_isometry\_order\_le}
+derives the required auxiliary-dimension bound directly from the two isometry
+identities.  Consequently
+\leanid{TNLean.MPS.AreaLaw.exists\_dyadicStructuredInput\_of\_bounded\_isLeftOpenMPS\_withCanonicalShifts}
+performs the controlled MPS orthonormalization and the complete dyadic
+arithmetic construction in one theorem.  Thus orthonormality and the auxiliary
+dimension bound are no longer external hypotheses of this branch.
+For the physical compressed objective, the entrywise boundedness hypothesis is
+also immediate from the operator-norm estimate
+\leanid{TNLean.MPS.AreaLaw.norm\_isometricCompression\_apply\_le}:
+every entry of $Z^*HZ$ has modulus at most $\|H\|$.
+Together with the trace-norm bound on the boundary center,
+\leanid{TNLean.MPS.AreaLaw.bounded\_compressedObjective\_and\_boundaryCenter}
+supplies the common radius $R=4L$ and the explicit dyadic exponent $u=L+2$.
+Thus neither matrix contributes a data-dependent radius to the structured
+input bound.
+The composed theorem
+\leanid{TNLean.MPS.AreaLaw.exists\_dyadicStructuredInput\_of\_physical\_isLeftOpenMPS\_withCanonicalShifts}
+therefore starts from an arbitrary finite retained MPS family, a physical
+left observable of norm at most $4L$, and a trace-norm-one boundary center.
+It constructs the orthonormal replacement, both rational matrix
+approximations, rational support coordinates, and canonical positive shifts,
+with total bit bound
+\[
+  2\bigl(3\max\{|S|m,r\}^2+2\bigr)
+    \bigl(2(L+2)+2t+6\bigr).
+\]
+No conditioning, auxiliary-order, entrywise-radius, or rational-height
+hypothesis remains for the compressed SDP input relative to the orthonormal
+replacement.  A fully rational iterative algorithm must still either control
+support coordinates directly over the original retained family or rationally
+approximate the orthonormal replacement while preserving quantitative
+conditioning.
+The structures
+\leanid{TNLean.MPS.AreaLaw.RationalSpanFamilyEncodingOfHeight} and
+\leanid{TNLean.MPS.AreaLaw.RationalSpanViableMPSDataOfHeight} now record the
+needed compact output representation: rational coefficients over the input MPS
+family, rather than exponentially many physical amplitudes.  The constructor
+\leanid{TNLean.MPS.AreaLaw.rationalSpanFamilyEncodingOfCoefficients} turns any
+structured coefficient array into this representation, with at most $nm$
+decoded columns and an explicit coefficient bit-size bound.  Directly over the
+original family,
+\leanid{TNLean.MPS.AreaLaw.exists\_rational\_spanColumnFamily} constructs such a
+finite rational column family unconditionally.  Its height and approximation
+error retain the coordinate radius $R$, making the remaining conditioning
+problem explicit rather than transferring it silently through an irrational
+orthonormal basis.
+The strengthened quantifier form
+\leanid{TNLean.MPS.AreaLaw.exists\_boundarySupportCoordinateRadius}
+chooses $R$ once, independently of the subsequent positive rational mesh.
+Consequently the approximation precision may be selected after the coordinate
+radius is known.  What remains unproved is specifically a polynomial bound on
+this mesh-independent radius in terms of the encoded iterative data.
+Without assuming such a polynomial bound,
+\leanid{TNLean.MPS.AreaLaw.exists\_rationalSpanViableMPSData\_of\_mulVec}
+now chooses the explicit mesh
+\[
+  \bigl(2(1+\sqrt{mn}\,|S|R)\bigr)^{-1}
+\]
+and constructs a compact rational viable-MPS family.  Its accumulated
+approximation factor is strictly below one because it equals
+$A/(2(1+A))$ for $A=\sqrt{mn}\,|S|R$.  Thus existence and proof-theoretic
+soundness of the rational output no longer depend on a conditioning
+hypothesis; conditioning remains only in the quantitative height bound.
+More generally,
+\leanid{TNLean.MPS.AreaLaw.exists\_rationalSpanViableMPSData\_of\_mulVec\_atError}
+accepts any prescribed $0<\xi<1$, chooses
+\[
+  \mathop{\rm mesh}=\frac{\xi}{1+\sqrt{mn}\,|S|R},
+\]
+and returns a compact family viable with error at most $\delta+2\xi$.
+Thus rationalization can be assigned an explicit share of the LVV $1/12$
+overlap budget rather than merely being made small enough for normalization.
+The target-oriented wrapper
+\leanid{TNLean.MPS.AreaLaw.exists\_rationalSpanViableMPSData\_of\_mulVec\_atTarget}
+uses the single budget inequality $\delta+2\xi\leq\delta_{\rm target}$
+and records the output directly at $\delta_{\rm target}$.  In particular,
+$\delta_{\rm target}=1/12$ now matches the size-trimming invariant without
+any external repackaging of its rational MPS data.
+The arithmetic lemma
+\leanid{TNLean.MPS.AreaLaw.density\_and\_rationalization\_overlap\_budget}
+shows that the existing density precision
+$\varepsilon\leq\Delta/(97344L)$ leaves room for the concrete choice
+$\xi=1/8112$: the exact leading-vector error plus $2\xi$ is still at most
+$1/12$.  This fixes the numerical budget required to connect the rational
+column family to the size-trimming conclusion.
+The bridge theorem
+\leanid{TNLean.MPS.AreaLaw.exists\_rationalSpanViableMPSData\_of\_leadingCoordinates}
+now combines this budget with an exact unit leading vector $z$ in compressed
+coordinates.  Using
+\leanid{TNLean.MPS.AreaLaw.physicalRightApply\_gluingLeftCoordinates},
+it identifies the three-cut reconstruction used by the leading-vector theorem
+with the physical right-extension used by rational-column stability, and returns
+compact rational MPS data that is directly $1/12$-viable.
+Finally,
+\leanid{TNLean.MPS.AreaLaw.ChainHamiltonian.exists\_rationalViableMPSData\_of\_approximate\_density}
+performs the complete composition from an approximate compressed density at
+trace-norm precision $\Delta/(97344L)$.  It extracts the exact compressed
+leading coordinates supplied by the spectral argument and returns the compact
+rational $1/12$-viable MPS family without requiring the caller to provide a
+leading vector or a separate overlap proof.
+The stability step for these decoded columns is now formalized as well.
+The theorem
+\leanid{TNLean.MPS.AreaLaw.isViable\_of\_close\_leftColumns} shows that
+uniform column error $\theta$ changes the viable overlap error by at most
+$2\sqrt m\,\theta$.  Its finite-family specialization
+\leanid{TNLean.MPS.AreaLaw.isViable\_spanColumnFamily\_of\_close} proves
+viability of the decoded rational column family itself.  Finally,
+\leanid{TNLean.MPS.AreaLaw.isViable\_spanColumnFamily\_of\_close\_linearCombination}
+extends this conclusion from a single coordinate column to an arbitrary
+linear combination of the compressed columns.  In particular, the exact
+witness may be the leading vector of the compressed density matrix, as in the
+LVV construction.  The present elementary estimate enlarges a uniform column
+error $\theta$ to at most $n\theta$ before assembling the $m$ auxiliary
+columns; this remains polynomial and avoids any hidden conditioning premise.
+The specialization
+\leanid{TNLean.MPS.AreaLaw.isViable\_spanColumnFamily\_of\_close\_mulVec}
+performs the coordinate identification for a compressed vector $Zz$ directly.
+Since $z$ is a unit vector, the Cauchy--Schwarz estimate
+\leanid{TNLean.MPS.AreaLaw.norm\_sum\_smul\_sub\_sum\_smul\_le\_sqrt}
+improves its accumulated column error from $n\theta$ to
+$\sqrt n\,\theta$,
+and
+\leanid{TNLean.MPS.AreaLaw.RationalStructuredCompressedSDPInputEncoding.spanViableMPSDataOfCloseMulVec}
+packages the resulting family with its rational coefficient heights, cardinality
+bound, and finite-span MPS bond bound.  Hence the numerical leading vector
+produced by the power or residual argument now feeds directly into the compact
+rational output invariant.
+Finally,
+\leanid{TNLean.MPS.AreaLaw.RationalStructuredCompressedSDPInputEncoding.spanViableMPSDataOfClose}
+packages this conclusion together with the input rational MPS data, the
+$nm$ cardinality bound, the finite-span bond bound, and the coefficient-height
+encoding.  Thus the remaining gap is no longer stability of viability under
+rational column approximation; it is the polynomial control of $R$ (or a
+rationally controlled replacement basis) needed to make this step uniformly
+polynomial through all iterations.
+The decoder
+\leanid{TNLean.MPS.AreaLaw.boundarySupportMatrixOfCoordinates}
+assembles the ambient support matrix represented by the retained vectors and
+their structured coefficients.  By
+\leanid{TNLean.MPS.AreaLaw.norm\_boundarySupportMatrixOfCoordinates\_sub\_apply\_le},
+a norm error $\theta$ on each reconstructed bond slice gives entrywise ambient
+matrix error at most $\theta$, with no dimension factor.  Both the bounded and
+physical structured-input theorems now return this entrywise estimate.  The
+decoded ambient matrix need not itself have rational entries, since the
+retained MPS vectors need not be rational; subsequent certified evaluation
+must therefore use the structured representation rather than expand it into
+ambient rational coordinates.
+The missing arithmetic invariant is now stated explicitly by
+\leanid{TNLean.MPS.AreaLaw.RationalLeftOpenMPSRepresentation}: it packages an
+open-chain representation whose scalar and every local tensor entry have
+rational real and imaginary parts.  Its contraction has rational physical
+coefficients by
+\leanid{TNLean.MPS.AreaLaw.RationalLeftOpenMPSRepresentation.coordinate\_rational}.
+Consequently
+\leanid{TNLean.MPS.AreaLaw.RationalStructuredCompressedSDPInputEncoding.boundarySupportMatrix\_hasRationalEntries}
+shows that a structured rational input does decode to an ambient rational
+matrix whenever the retained family carries this invariant.  The remaining
+selection-stage task is therefore not an unspecified rationality problem.
+For an initially explicit tensor family, the theorem
+\leanid{TNLean.MPS.AreaLaw.RationalLeftOpenMPSRepresentation.tensor\_snoc\_rational}
+proves that appending a rational one-site factor preserves rationality of all
+local tensor entries, including the dependent endpoint reindexing.  Hence
+\leanid{TNLean.MPS.AreaLaw.RationalLeftOpenMPSRepresentation.extendSite}
+preserves rational data when a computational-basis site is appended.  The
+family-level invariant
+\leanid{TNLean.MPS.AreaLaw.RationalViableMPSData}
+and its extension
+\leanid{TNLean.MPS.AreaLaw.RationalViableMPSData.extend}
+carry these witnesses through the entire one-site extension step.  Rational
+tensor data need not, however, be reconstructed after size trimming: the
+trimmed vectors are retained as compact rational linear combinations.
+The height-controlled refinements
+\leanid{TNLean.MPS.AreaLaw.RationalLeftOpenMPSRepresentationOfHeight}
+and
+\leanid{TNLean.MPS.AreaLaw.RationalViableMPSDataOfHeight}
+make the bit-complexity invariant explicit.  Their extension theorems preserve
+the same common height $H$ whenever $1\le H$; computational-basis extension
+therefore causes no coordinate-height growth.  The remaining height growth is
+confined to the later three operations.
+Initialization is also explicit:
+\leanid{TNLean.MPS.AreaLaw.RationalLeftOpenMPSRepresentationOfHeight.emptyLeftVector}
+constructs height-one tensor data for the scalar vector at the empty cut, and
+\leanid{TNLean.MPS.AreaLaw.RationalViableMPSDataOfHeight.emptyLeftVector}
+packages its singleton as a height-one viable family for every nonnegative
+viability error.  Thus the height-controlled successive invariant is now
+established from the base case through the one-site extension.
+The weaker invariant
+\leanid{TNLean.MPS.AreaLaw.RationalCoordinateViableMPSDataOfHeight}
+records exactly what subsequent numerical steps use: a bond bound and a
+uniform rational-height bound for every queried physical coefficient.  It is
+obtained from explicit rational tensors, is preserved by one-site extension,
+and is transported through compact rational linear combinations by
+\leanid{TNLean.MPS.AreaLaw.RationalSpanFamilyEncodingOfHeight.coordinateViableMPSData}.
+The target-error rationalization theorem
+\leanid{TNLean.MPS.AreaLaw.exists\_rationalCoordinateViableMPSData\_of\_mulVec\_atTarget}
+therefore feeds one trimming output directly into the next iteration.  At the
+fully executable level,
+\leanid{TNLean.MPS.AreaLaw.ChainHamiltonian.exists\_rationalCoordinateData\_of\_canonical\_rational\_search}
+propagates this invariant through certificate repair, finite rational search,
+and canonical size trimming, returning error $1/12$ with an explicit updated
+coordinate height and finite-span bond bound.  Thus the remaining issue is
+polynomial control of those explicit height and conditioning-radius recurrences,
+not closure of the successive representation invariant.
+The one-step flattened-coordinate recurrence is now explicit.  By
+\leanid{TNLean.MPS.AreaLaw.RationalSpanFamilyEncodingOfHeight.linearCombinationCoordinateHeight\_le\_two\_pow},
+coefficient height at most $2^p$ and input-coordinate height at most $2^v$
+give output-coordinate height at most
+\[
+  2^{|S|(2p+2v+2)}.
+\]
+The packaged form
+\leanid{TNLean.MPS.AreaLaw.RationalSpanFamilyEncodingOfHeight.coordinateViableMPSData\_twoPow}
+attaches this bound directly to the viable output family.  This calculation
+also rules out a naive completion of the running-time proof: repeatedly
+flattening the physical coordinates multiplies the preceding bit exponent by
+$|S|$ at every cut, which is not a polynomial bound over $L$ iterations even
+when $|S|$ is polynomial.  The polynomial-time formalization must therefore
+retain the nested span encoding as a directed acyclic computation and charge
+its stored coefficient arrays, rather than flattening every physical
+amplitude after each trimming step.
+The fixed-cut data structure
+\leanid{TNLean.MPS.AreaLaw.RationalSpanEncodingDAGOfHeight} now records this
+representation explicitly.  It stores a sequence of finite families and one
+rational span encoding between each adjacent pair.  Each layer's span lies in
+the preceding span, and if the depth is $d$, every family has cardinality at
+most $s$, and every coefficient height is at most $2^p$, then
+\leanid{TNLean.MPS.AreaLaw.RationalSpanEncodingDAGOfHeight.coefficientBitSizeBound\_le}
+gives the additive storage estimate
+\[
+  2d s^2(p+1).
+\]
+This removes the artificial multiplicative height recurrence from storage at
+a fixed cut.  The indexed variants
+\leanid{TNLean.MPS.AreaLaw.RationalIndexedSpanEncodingOfHeight} and
+\leanid{TNLean.MPS.AreaLaw.RationalIndexedSpanEncodingDAGOfHeight} retain node
+multiplicities explicitly.  Their extension theorems transport one layer, or
+the whole shared DAG, through the one-site map by pairing every node with a
+computational-basis label.  The new coefficients are the old coefficients
+times a Kronecker delta, so their rational height is unchanged.  Thus one-site
+extension is no longer an obstruction to preserving the shared encoding.  The
+constructor
+\leanid{TNLean.MPS.AreaLaw.RationalIndexedSpanEncodingOfHeight.ofFinset}
+also embeds every finite-family encoding returned by size selection into this
+indexed representation without changing its coefficients.  Conversely,
+\leanid{TNLean.MPS.AreaLaw.RationalIndexedSpanEncodingOfHeight.coordinateViableMPSData}
+decodes an indexed terminal layer to the finite-family invariant required by
+the next search: its cardinality is bounded by the terminal index order, its
+vectors have the finite-span bond bound, and its queried physical coordinates
+have the explicit rational height obtained from the indexed coefficients.
+Hence the indexed/finite-family interface is now closed in both directions.
+The remaining integration problem is the rationalized bond- and
+error-reduction steps of the successive construction.
+For bond trimming, the first density input is now formalized:
+\leanid{TNLean.MPS.AreaLaw.exists\_rationalComplex\_close} proves that every
+complex scalar has a Gaussian-rational approximation at any positive norm
+tolerance.  The remaining step is to apply this simultaneously to the finite
+scalar and local-tensor parameter space of an open-boundary MPS.  That space is
+now represented by
+\leanid{TNLean.MPS.AreaLaw.OBCChainTensor.Parameters}; rebuilding from parameters
+preserves the virtual dimensions exactly, recovers the original tensor at its
+canonical parameter point, and
+\leanid{TNLean.MPS.AreaLaw.OBCChainTensor.continuous\_scalar\_mul\_coeff\_ofParameters}
+proves continuity of every contracted physical coefficient.  The remaining
+map
+\leanid{TNLean.MPS.AreaLaw.OBCChainTensor.vectorOfParameters} combines these
+finitely many coefficients into the Euclidean left-block vector, and
+\leanid{TNLean.MPS.AreaLaw.OBCChainTensor.continuous\_vectorOfParameters}
+proves that the resulting vector-valued contraction is continuous.  At the
+canonical parameter point it recovers the represented vector exactly.  The
+remaining topological step is simultaneous Gaussian-rational density in this
+finite parameter space.
+The combined theorem
+\leanid{TNLean.MPS.AreaLaw.exists\_boundarySupportCoordinateCoefficients\_with\_bitSizeBound}
+packages the actual coefficient representation of every support-isometry
+column together with this canonical quadratic bit-size bound.
+Completeness is also recorded directly for the unified predicate.  The theorem
+\leanid{TNLean.MPS.AreaLaw.IsAllSpectralApproxCompressedBoundarySDPFeasibleAtEnergy.exists\_gram\_factors}
+extracts Gram factors for all three shifted cone variables from every accepted
+certificate, and bounds every boundary-residual entry by the certified
+trace-norm residual.  The elementary estimate
+\leanid{TNLean.MPS.AreaLaw.norm\_sq\_apply\_le\_re\_trace\_mul\_conjTranspose}
+also bounds every squared entry of a Gram factor by the trace of its Gram
+matrix.  Consequently the extracted density factor has squared entries at
+most $1+\kappa+n\epsilon$, and the two auxiliary factors have squared entries
+at most $\eta+2r\epsilon_b$.  Thus the factor-and-entry witness format covers
+the full mathematical specification inside explicit bounded regions.  The
+theorems
+\leanid{TNLean.MPS.AreaLaw.exists\_finset\_bounded\_gram\_factor\_net}
+and
+\leanid{TNLean.MPS.AreaLaw.exists\_finset\_bounded\_gram\_certificate\_net}
+now discretize each such region with an explicit cardinality.  For squared-entry
+bound $C$ and factor-grid spacing $\delta$, the induced entrywise Gram error is
+$d\delta(2\sqrt C+\delta)$.  This is precisely the error form accepted by the
+stable approximate-Gram wrapper.  The remaining question concerns effective
+production of the primary matrix variables and polynomial bit complexity of
+the full arithmetic search, not loss of feasible solutions, unbounded
+witnesses, or uncontrolled factor rounding.
+The auxiliary mesh parameter has also been eliminated.  The definition
+\leanid{TNLean.MPS.AreaLaw.gramCertificateMesh} chooses
+\[
+  \delta=\frac{\zeta}{d(2\sqrt C+1)+\zeta},
+\]
+and
+\leanid{TNLean.MPS.AreaLaw.gramCertificateMesh\_error\_le}
+proves $d\delta(2\sqrt C+\delta)\le\zeta$.  Consequently
+\leanid{TNLean.MPS.AreaLaw.IsAllSpectralApproxCompressedBoundarySDPFeasibleAtEnergy.exists\_finite\_gram\_search}
+places the three factors of every accepted certificate in explicit finite
+grids whose representatives satisfy the requested approximate Gram identities.
+The grids are now concrete rather than existential.  The definitions
+\leanid{TNLean.MPS.AreaLaw.unitRealGrid},
+\leanid{TNLean.MPS.AreaLaw.scaledRealGrid}, and
+\leanid{TNLean.MPS.AreaLaw.complexMatrixGrid}
+form finite coordinate products, and
+\leanid{TNLean.MPS.AreaLaw.exists\_mem\_complexMatrixGrid}
+proves their entrywise covering property.  The specialized definition
+\leanid{TNLean.MPS.AreaLaw.gramCertificateGrid} has the explicit cardinality
+bound
+\leanid{TNLean.MPS.AreaLaw.gramCertificateGrid\_card\_le}.  Finally,
+\leanid{TNLean.MPS.AreaLaw.IsAllSpectralApproxCompressedBoundarySDPFeasibleAtEnergy.exists\_explicit\_gram\_search}
+places the three rounded factors in these named grids.  Hence enumeration of
+the factor coordinates is no longer part of the open gap.
+The primary matrices are now bounded and discretized as well.
+\leanid{TNLean.MPS.AreaLaw.IsAllSpectralApproxCompressedBoundarySDPFeasibleAtEnergy.entry\_norm\_bounds}
+derives explicit radii $nC_A+\epsilon$ and $rC_b+\epsilon_b$ from the bounded
+Gram factors.  The concrete grid
+\leanid{TNLean.MPS.AreaLaw.boundedMatrixGrid} has its cardinality controlled by
+\leanid{TNLean.MPS.AreaLaw.boundedMatrixGrid\_card\_le}, and
+\leanid{TNLean.MPS.AreaLaw.IsAllSpectralApproxCompressedBoundarySDPFeasibleAtEnergy.exists\_explicit\_primary\_search}
+places $A,P,N$ in these grids at arbitrary positive entry tolerances.
+Hermiticity and the scalar trace conditions are no longer open:
+\leanid{TNLean.MPS.AreaLaw.hermitianBoundedMatrixGrid} preserves
+Hermiticity without increasing entrywise error, while
+\leanid{TNLean.MPS.AreaLaw.abs\_one\_sub\_re\_trace\_le\_of\_entry\_rounding}
+and
+\leanid{TNLean.MPS.AreaLaw.re\_trace\_add\_le\_of\_entry\_rounding}
+give the sharp losses $n\theta_A$ and $2r\theta_b$.  These conclusions are
+included directly in the explicit primary-search theorem.
+The remaining linear losses are now formalized there as well.  Isometric
+compression gives residual loss
+$n^2\theta_A+2r^2\theta_b$, and the objective loss is
+$\lVert K\rVert n^2\theta_A$.  Finally,
+\leanid{TNLean.MPS.AreaLaw.IsAllSpectralApproxCompressedBoundarySDPFeasibleAtEnergy.exists\_explicit\_rounded\_certificate}
+combines the three primary grids and three Gram grids.  Its rounded matrices
+satisfy the unified predicate with
+\[
+ \kappa'=\kappa+n\theta_A,\quad
+ \epsilon'=\epsilon+(n+1)(\theta_A+\zeta_A),\quad
+ \epsilon_b'=\epsilon_b+(r+1)(\theta_b+\zeta_b),
+\]
+\[
+ \delta'=\delta+n^2\theta_A+2r^2\theta_b,\quad
+ \eta'=\eta+2r\theta_b,\quad
+ E'=E+\lVert K\rVert n^2\theta_A.
+\]
+The canonical allocation
+\leanid{TNLean.MPS.AreaLaw.IsAllSpectralApproxCompressedBoundarySDPFeasibleAtEnergy.exists\_uniformly\_rounded\_certificate}
+removes the four independent mesh choices: for one allowance $\omega>0$, it
+uses $\omega/(2(d+1)^2)$ in matrix order $d$.  All scalar losses are then at
+most $\omega$, except for a boundary-residual loss of at most $2\omega$; the
+objective loss is at most $\lVert K\rVert\omega$.
+The definition \leanid{TNLean.MPS.AreaLaw.uniformCertificateSearchGrid}
+packages the six coordinate grids into a single finite search space, and
+\leanid{TNLean.MPS.AreaLaw.uniformCertificateSearchGrid\_card\_le} bounds its
+cardinality by the product of the six explicit coordinate bounds.  The rounded
+certificate theorem also records membership in this product, so assembling the
+search space and counting its candidates are no longer open parts of the gap.
+An exact-coordinate alternative is now available as well.
+\leanid{TNLean.MPS.AreaLaw.rationalBoundedMatrixGrid} stores the real and
+imaginary parts as rational numbers with a common natural denominator;
+\leanid{TNLean.MPS.AreaLaw.exists\_mem\_rationalBoundedMatrixGrid} proves the
+same entrywise covering property, and
+\leanid{TNLean.MPS.AreaLaw.rationalBoundedMatrixGrid\_card\_le} gives the bound
+$(2BM+1)^{2d^2}$.  Thus irrational coordinate storage is no longer necessary
+for bounded primary matrices.  The Gram factors now have an exact-coordinate
+replacement as well: \leanid{TNLean.MPS.AreaLaw.rationalGramCertificateGrid}
+uses radius $\lceil C\rceil+1$ rather than $\sqrt C$, and
+\leanid{TNLean.MPS.AreaLaw.IsAllSpectralApproxCompressedBoundarySDPFeasibleAtEnergy.exists\_rational\_gram\_search}
+places all three approximate Gram witnesses in these grids.  The ordered-list
+scan \leanid{TNLean.MPS.AreaLaw.firstAcceptedRationalApproxCertificate} now
+returns the first accepted candidate, with separate soundness and completeness
+theorems.  The evaluator
+\leanid{TNLean.MPS.AreaLaw.RationalCertificateCode.testValues} computes the
+complete record directly from a rational certificate code and rational fixed
+data, and its decoding theorem identifies every tested value with the
+corresponding complex matrix expression.  The fully discrete grid
+\leanid{TNLean.MPS.AreaLaw.rationalCertificateCodeGrid} takes its radii and
+denominators as natural-number inputs, while
+\leanid{TNLean.MPS.AreaLaw.searchRationalCertificateCodeGrid} canonically
+selects the least encoded accepted member and certifies its decoded approximate
+semidefinite problem.  The tolerance-driven code grid is exactly this discrete
+grid at the displayed eight parameters.  These parameters are now computed by
+\leanid{TNLean.MPS.AreaLaw.rationalCertificateGridParameters} using rational
+arithmetic and natural ceilings, and the cast-agreement theorem identifies the
+result with the real-valued grid.  End-to-end completeness is now formalized:
+\leanid{TNLean.MPS.AreaLaw.IsAllSpectralApproxCompressedBoundarySDPFeasibleAtEnergy.exists\_accepted\_rational\_code}
+places an accepted code in the tolerance-driven grid, with the explicit
+$r^2(\delta+2\omega)$ trace-norm boundary allowance and objective allowance
+$\lVert K\rVert\omega$, and
+\leanid{TNLean.MPS.AreaLaw.IsAllSpectralApproxCompressedBoundarySDPFeasibleAtEnergy.exists\_search\_result}
+proves that the executable search returns a code.  Finally,
+\leanid{TNLean.MPS.AreaLaw.IsAllSpectralApproxCompressedBoundarySDPFeasibleAtEnergy.exists\_search\_result\_and\_cost\_le}
+pairs this successful run with the established schoolbook bit-cost bound for
+the same grid parameters.  No separate height hypothesis is required:
+\leanid{TNLean.MPS.AreaLaw.rationalCompressedSDPInputCodeHeight} takes the
+maximum coordinate height of the three rational matrix codes and two shifts,
+while
+\leanid{TNLean.MPS.AreaLaw.rationalCompressedSDPInputEncodingOfCodes}
+packages the resulting five bounds.  The returned certificate is now composed
+with the physical viable-vector theorem.  The intervening
+fixed-data step is now complete:
+\leanid{TNLean.MPS.AreaLaw.IsAllSpectralApproxCompressedBoundarySDPFeasibleAtEnergy.exists\_accepted\_approx\_data\_code}
+uses entrywise approximations $QZ,QK,QX$ and rational upper bounds for all
+induced objective and boundary losses, without requiring $QZ$ to be isometric;
+\leanid{TNLean.MPS.AreaLaw.IsAllSpectralApproxCompressedBoundarySDPFeasibleAtEnergy.exists\_approx\_data\_search\_result}
+then proves that the executable search succeeds.  In the reverse direction,
+\leanid{TNLean.MPS.AreaLaw.searchRationalCertificateCodeGridOfTolerances\_exact\_data\_sdp\_sound}
+transfers every returned code back to the exact $Z,K,X$, adding precisely the
+objective, boundary-centre, and coordinate-map losses.  The next physical
+composition can now charge the search rounding increment in the auxiliary
+trace budget, from $\eta$ to $\eta+\rho$, as boundary slack: this is the theorem
+\leanid{TNLean.MPS.AreaLaw.ChainHamiltonian.exists\_viable\_vector\_of\_approx\_sdp\_error\_budget\_with\_trace\_slack},
+whose boundary error contains the additional term $e_\eta$.
+The numerical completeness and soundness directions are packaged together by
+\leanid{TNLean.MPS.AreaLaw.IsAllSpectralApproxCompressedBoundarySDPFeasibleAtEnergy.exists\_approx\_data\_search\_result\_and\_exact\_certificate}:
+it returns one rational code, its executable search equation, and its decoded
+certificate for the exact fixed data.
+The companion theorem
+\leanid{TNLean.MPS.AreaLaw.IsAllSpectralApproxCompressedBoundarySDPFeasibleAtEnergy.exists\_approx\_data\_search\_result\_and\_cost\_le}
+pairs the same approximate-data completeness statement with the explicit
+schoolbook bit-cost bound.  Its operand length is the canonical maximum height
+of the three rational fixed-data codes and the two cone shifts; no separate
+height hypothesis is introduced.
+The rational approximation heights are now connected to this code-level cost
+statement.  The representation theorem
+\leanid{TNLean.MPS.AreaLaw.RationalRectMatrixCode.exists\_code\_of\_hasRationalEntriesOfHeight}
+turns a finite rational-coordinate matrix of height at most $H$ into a code of
+canonical height at most $H$.  Consequently,
+\leanid{TNLean.MPS.AreaLaw.exists\_rational\_fixed\_data\_codes\_with\_common\_height}
+simultaneously approximates $Z,K,X$ at prescribed positive meshes and bounds
+their common code height by the three explicit uniform-grid heights together
+with the exact heights of the two rational shifts.
+This selection is now composed with the executable search in
+\leanid{TNLean.MPS.AreaLaw.IsAllSpectralApproxCompressedBoundarySDPFeasibleAtEnergy.exists\_fixed\_data\_codes\_search\_result\_and\_cost\_le}.
+For bounded exact $K,X$ and an exact coordinate isometry $Z$, it selects the
+three codes internally and returns their common height bound, search success,
+and the schoolbook cost estimate in one statement.  The latter is uniform: its
+operand length is computed from the displayed approximation-grid height, not
+from the unknown exact height of the selected representatives.  The same
+existential statement retains the entrywise approximation witnesses for all
+three codes, which are required by exact-data soundness and the physical
+returned-code theorem.
+The formerly external upper thresholds $E_t,D_t$ now have canonical choices.
+The definitions
+\leanid{TNLean.MPS.AreaLaw.rationalApproxDataEnergyThreshold} and
+\leanid{TNLean.MPS.AreaLaw.rationalApproxDataBoundaryThreshold} round the
+nonnegative part of the exact real loss expressions upward on the rational mesh
+determined by $\rho$.  Their lower comparison theorems discharge the two
+upper-bound assumptions; their upper comparison theorems bound the overshoot by
+$\rho$.  When the loss expression is nonnegative, the specialized
+\texttt{le\_add\_mesh}
+forms remove the truncating maximum and give the direct bound
+$T\le T_{\rm exact}+\rho$.  The theorem
+\leanid{TNLean.MPS.AreaLaw.rationalNonnegativeUpperApproximation\_height\_le}
+gives the corresponding rational-height bound.
+They are substituted into the complete search statement by
+\leanid{TNLean.MPS.AreaLaw.IsAllSpectralApproxCompressedBoundarySDPFeasibleAtEnergy.exists\_fixed\_data\_codes\_search\_result\_and\_cost\_le\_canonical\_thresholds},
+which therefore has no external $E_t$ or $D_t$ hypotheses.
+The companion
+\leanid{TNLean.MPS.AreaLaw.IsAllSpectralApproxCompressedBoundarySDPFeasibleAtEnergy.exists\_fixed\_data\_codes\_and\_search\_result\_canonical\_thresholds}
+extracts the selected codes, approximation witnesses, returned certificate,
+and search equation as a compact package for the physical soundness theorem.
+The final returned-code composition is
+\leanid{TNLean.MPS.AreaLaw.ChainHamiltonian.exists\_viable\_vector\_of\_rational\_search\_result}:
+under its single displayed LVV margin inequality, exact-data soundness of the
+returned code and the trace-slack estimate produce a normalized vector in the
+retained left support with energy at most $E_0+\Delta/12$ and ground-state
+overlap at least $11/12$.
+The canonical end-to-end physical composition is
+\leanid{TNLean.MPS.AreaLaw.ChainHamiltonian.exists\_viable\_vector\_of\_canonical\_rational\_search}.
+Starting from exact feasible compressed data and entrywise bounds on the fixed
+matrices, it selects the rational codes and canonical thresholds, obtains the
+executable search result, transfers the returned certificate back to exact
+data, and produces the normalized viable vector under independent bounds for
+the spectral, residual, auxiliary-trace, and objective errors.
+The canonical rounding estimates reduce the objective and boundary assumptions
+to the corresponding unrounded physical discrepancy, the fixed-data errors,
+and one rational mesh contribution; the theorem no longer exposes the rounded
+thresholds in its numerical hypotheses.
+Feasibility itself supplies nonnegativity of the boundary residual tolerance,
+so no separate sign assumption is required for that reduction.
+The objective estimate uses the nonnegative part of the unrounded threshold;
+it therefore requires no convention fixing the Hamiltonian's energy origin.
+The compact canonical-search package also retains the schoolbook bit-cost
+inequality for the same fixed-data codes and returned certificate used in the
+physical soundness proof.  The canonical physical theorem exposes this bound
+in its conclusion alongside the selected rational codes, returned certificate,
+exact successful-search equation, and normalized viable vector; it also retains
+the common code-height bound, the three fixed-data approximation witnesses, and
+the decoded certificate's exact-data feasibility statement with all transfer
+losses explicit.
+The coordinate-height bounds used in this accounting are now proved monotone
+in the common fixed-data height, componentwise through dense products, traces,
+shifted Gram residuals, and compressed-boundary residuals.  Thus replacing the
+selected codes' height by the canonical uniform upper bound is formally
+compatible with every tested expression.
+Binary logarithm preserves this comparison at the operand-length level, and
+both the per-operation schoolbook charge and the total exhaustive-search charge
+are monotone in that length.  Hence the canonical upper height propagates
+formally through the complete stated cost model.
+At the physical endpoint the selected codes' actual rational-test operand
+length is now explicitly bounded by the canonical operand length appearing in
+the schoolbook cost estimate, and the endpoint propagates this inequality to
+the corresponding actual and canonical schoolbook charges.  It also records
+the transitive direct bound of the selected codes' actual charge by the named
+explicit search-cost expression.
+The endpoint separately bounds the selected compressed input's encoded bit-size
+expression by the canonical input-size bound obtained from the uniform common
+height.
+The primary-grid geometry is complete:
+\leanid{TNLean.MPS.AreaLaw.exists\_mem\_rationalHermitianBoundedMatrixGrid}
+shows that Hermitian projection preserves rational coordinates and entrywise
+accuracy, while
+\leanid{TNLean.MPS.AreaLaw.rationalHermitianBoundedMatrixGrid\_card\_le}
+controls its cardinality.  The simultaneous rounded-certificate theorem and
+\leanid{TNLean.MPS.AreaLaw.uniformCertificateSearchGrid} now use these rational
+primary grids and the rational Gram grids throughout;
+\leanid{TNLean.MPS.AreaLaw.uniformCertificateSearchGrid\_entries\_rational}
+certifies rational real and imaginary parts for every entry of all six search
+matrices.  Exact-coordinate closure is also formalized:
+\leanid{TNLean.MPS.AreaLaw.uniformCertificateSearchGrid\_testExpressions\_rational}
+shows, for rational-coordinate problem data and spectral shifts, that every
+Gram residual, boundary residual, trace, and objective expression has rational
+coordinates.  This uses closure under matrix multiplication, adjoint,
+reindexing, and partial trace, including
+\leanid{TNLean.MPS.AreaLaw.compressedBoundaryLM\_hasRationalEntries}.
+The entrywise norm comparisons are effective as propositions:
+\leanid{TNLean.MPS.AreaLaw.gaussianRational\_norm\_le\_iff} replaces
+$\lVert x+iy\rVert\le q$ by $x^2+y^2\le q^2$ over the rationals, and
+\leanid{TNLean.MPS.AreaLaw.gaussianRationalMatrixEntryNormLEDecidable}
+packages the finite family of such comparisons as a decidable predicate.
+The remaining scalar comparisons have the same exact reduction:
+\leanid{TNLean.MPS.AreaLaw.rationalTraceDefect\_le\_iff} handles the trace
+defect, while \leanid{TNLean.MPS.AreaLaw.rationalTraceSum\_le\_iff} and
+\leanid{TNLean.MPS.AreaLaw.rationalCast\_le\_iff} handle the trace budget and
+energy threshold.  Their corresponding decidability declarations perform all
+three tests in rational arithmetic.  Finally,
+\leanid{TNLean.MPS.AreaLaw.RationalApproxCertificateTestValues} stores all
+four rational scalar values and the rational coordinates of every boundary
+and Gram residual inspected by one candidate.  Its `Accepts` predicate is
+decidable by rational arithmetic and finite iteration, and its `sound` theorem
+derives the complete approximate semidefinite certificate from an accepted
+record.  The theorem
+\leanid{TNLean.MPS.AreaLaw.exists\_rationalApproxCertificateTestValues\_of\_mem\_searchGrid}
+shows that every member of the six-grid search admits such a record.  The
+coordinate-recovery step has now also been removed.  The type
+\leanid{TNLean.MPS.AreaLaw.RationalMatrixCode} retains a rational pair at
+every matrix entry, with rational Hermitian projection before decoding.
+The product
+\leanid{TNLean.MPS.AreaLaw.uniformCertificateCodeSearchGrid} retains these
+codes for all six matrices.  Decoding is injective, every member of the older
+complex grid has a code preimage, and
+\leanid{TNLean.MPS.AreaLaw.uniformCertificateCodeSearchGrid\_card\_eq}
+proves that retaining the coordinates does not enlarge the search.  Its
+cardinality satisfies the same explicit bound as the original grid.
+
+Finally,
+\leanid{TNLean.MPS.AreaLaw.mem\_rationalRealGrid\_iff} represents every grid
+coordinate by an integer index $k<2BM+1$, providing the discrete input for an
+encoding-length estimate.  This estimate is now quantitative.  Writing
+$h(q)=\max\{|\operatorname{num}(q)|,\operatorname{den}(q)\}$,
+\leanid{TNLean.MPS.AreaLaw.rationalHeight\_le\_of\_mem\_rationalRealGrid}
+proves
+\[
+ h(q)\le 2(B+1)(2BM+1)(M+1)
+\]
+for every scalar grid coordinate.  The companion theorem
+\leanid{TNLean.MPS.AreaLaw.numerator\_denominator\_le\_of\_mem\_rationalRealGrid}
+states the resulting numerator and denominator bounds separately, and
+\leanid{TNLean.MPS.AreaLaw.gaussianRationalMatrixGrid\_entry\_height\_le}
+applies them to both coordinates of every matrix entry.  The rational-height
+calculus also gives explicit closure bounds under addition, subtraction,
+multiplication, division, and nonempty finite sums.
+The quantitative closure has now been lifted to complex matrices.  If the
+coordinate heights of two factors are bounded by $H$ and $K$, respectively,
+\leanid{TNLean.MPS.AreaLaw.Matrix.HasRationalEntriesOfHeight.mul} bounds every
+coordinate of their product across an inner dimension $d$ by
+\[
+ \bigl(4(HK)^2\bigr)^d.
+\]
+Consequently its binary length is linear in $d$ and in the input binary
+lengths.  Theorems for traces, Gram matrices, shifted Gram residuals, reindexing,
+and partial traces propagate this estimate through the remaining certificate
+operations.  In particular,
+\leanid{TNLean.MPS.AreaLaw.compressedBoundaryLM\_hasRationalEntriesOfHeight}
+handles the compressed boundary map, while
+\leanid{TNLean.MPS.AreaLaw.compressedBoundaryResidual\_hasRationalEntriesOfHeight}
+bounds its full equality residual.  The objective trace is covered by
+\leanid{TNLean.MPS.AreaLaw.Matrix.HasRationalEntriesOfHeight.trace\_mul}.
+Finally, \leanid{TNLean.MPS.AreaLaw.rationalBitLength} and
+\leanid{TNLean.MPS.AreaLaw.HasRationalComplexCoordinatesOfHeight.exists\_bitLength\_le}
+turn each height bound into an explicit base-two encoding bound.
+The operation counts are explicit as well.  The comparison index type
+\leanid{TNLean.MPS.AreaLaw.ApproxCertificateComparisonIndex} enumerates the
+three scalar tests, the $n^2$ density Gram-residual tests, the two $r^2$
+auxiliary Gram-residual tests, and the $r^2$ boundary-residual tests.  Hence
+\leanid{TNLean.MPS.AreaLaw.approxCertificateComparisonCount\_eq} gives exactly
+\[
+ n^2+3r^2+3
+\]
+rational comparisons per candidate.  Direct dense evaluation of the four Gram
+or objective products and the two products in $ZAZ^*$ contains
+\[
+ 2n^3+2r^3+(ar)n^2+(ar)^2n
+\]
+complex scalar-product terms, as proved by
+\leanid{TNLean.MPS.AreaLaw.approxCertificateDenseProductTermCount\_eq}.
+The two theorems
+\leanid{TNLean.MPS.AreaLaw.uniformCertificateSearchComparisonCount\_le\_explicitBound}
+and
+\leanid{TNLean.MPS.AreaLaw.uniformCertificateSearchDenseProductTermCount\_le\_explicitBound}
+multiply these per-candidate counts by the explicit six-grid cardinality bound.
+For a uniform operand length $L$,
+\leanid{TNLean.MPS.AreaLaw.rationalSchoolbookOperationCost} charges
+$8(L+1)^2$ bit operations to each rational arithmetic operation or comparison.
+The resulting end-to-end accounting theorem
+\leanid{TNLean.MPS.AreaLaw.uniformCertificateSearchSchoolbookBitCost\_le\_explicitBound}
+multiplies this cost by the formal comparison and dense-product counts and by
+the six-grid cardinality bound.
+The final uniformization is also formalized.  The primary Hermitian grids and
+Gram grids carry explicit heights through
+\leanid{TNLean.MPS.AreaLaw.rationalHermitianBoundedMatrixGridHeight} and
+\leanid{TNLean.MPS.AreaLaw.rationalGramCertificateGridHeight}; their maximum is
+\leanid{TNLean.MPS.AreaLaw.uniformCertificateCandidateEntryHeight}.
+For fixed problem data of common height $H_D$,
+\leanid{TNLean.MPS.AreaLaw.uniformCertificateTestExpressionHeight} bounds all
+eight tested matrix or scalar expressions simultaneously, as proved by
+\leanid{TNLean.MPS.AreaLaw.uniformCertificateSearchGrid\_testExpressions\_height\_le}.
+Thus \leanid{TNLean.MPS.AreaLaw.uniformCertificateOperandBitLength} supplies
+one value $L$ for every rational coordinate encountered during testing, and
+\leanid{TNLean.MPS.AreaLaw.uniformCertificateSearchSchoolbookBitCost\_le\_uniformOperandBound}
+substitutes it into the end-to-end bit-cost theorem.
+For the executable rational acceptance test, the comparison thresholds must
+also be charged.  The definition
+\leanid{TNLean.MPS.AreaLaw.rationalCertificateThresholdHeight} takes the maximum
+height of its twelve scalar thresholds, and
+\leanid{TNLean.MPS.AreaLaw.rationalCertificateOperandBitLength} adjoins this to
+the fixed-matrix height before computing $L$.  The exact-rational and
+approximate-data search-and-cost theorems use this enlarged operand bound.
+Thus simultaneous finite rounding, analytic error propagation, search size,
+operand lengths, comparison count, dense arithmetic count, and the schoolbook
+integer-arithmetic cost model are formalized.  The required common
+rational-coordinate height $H_D$ is isolated by
+\leanid{TNLean.MPS.AreaLaw.RationalCompressedSDPInputEncoding}.  The structure
+records exactly the five height certificates required by the arithmetic
+development.  For explicit rational codes it is constructed canonically by
+\leanid{TNLean.MPS.AreaLaw.rationalCompressedSDPInputEncodingOfCodes}.  The
+fixed input contains
+\[
+ 2\bigl((ar)n+n^2+r^2+2\bigr)
+\]
+rational scalar coordinates, as recorded by
+\leanid{TNLean.MPS.AreaLaw.compressedSDPInputRationalCoordinateCount}, and its
+bit size is bounded by this number times $\lfloor\log_2 H_D\rfloor+1$.
+The formal lower bounds
+\leanid{TNLean.MPS.AreaLaw.coordinateMapRationalCoordinateCount\_le\_compressedSDPInput}
+and
+\leanid{TNLean.MPS.AreaLaw.coordinateMapRationalCoordinateCount\_le\_compressedSDPInputBitSizeBound}
+show that the explicit coordinate map alone contributes at least $2arn$
+rational scalar coordinates and hence at least that many units to the stated
+bit-size bound.  In the physical application,
+\leanid{TNLean.MPS.AreaLaw.card\_cutLeft} identifies
+$a=q^{\min\{L,k-1\}}=q^{|A|}$ for $A$ the sites strictly before the cut, and
+\leanid{TNLean.MPS.AreaLaw.cutLeft\_coordinateMapRationalCoordinateCount\_le\_compressedSDPInputBitSizeBound}
+specializes the lower bound to $2q^{|A|}rn$.  At the last cut,
+\leanid{TNLean.MPS.AreaLaw.twoPow\_mul\_le\_cutLeft\_compressedSDPInputBitSizeBound}
+shows directly that this is at least $2\cdot 2^{L-1}rn$ whenever $q\ge2$.
+For positive $r$ and $n$,
+\leanid{TNLean.MPS.AreaLaw.twoPow\_le\_cutLeft\_compressedSDPInputBitSizeBound}
+extracts the simpler lower bound $2^L$.
+Therefore the polynomial bound on the compressed density order
+$n$ does not by itself prove a polynomial input encoding; closing the source's
+runtime claim requires a structured coordinate representation or an argument
+that avoids explicitly encoding all entries of $Z$.
+Given such an encoding,
+\leanid{TNLean.MPS.AreaLaw.RationalCompressedSDPInputEncoding.testExpressions\_height\_le}
+and
+\leanid{TNLean.MPS.AreaLaw.RationalCompressedSDPInputEncoding.searchSchoolbookBitCost\_le}
+close the internal arithmetic and cost accounting.
+
+The dependence of the boundary test on this coordinate map is now controlled
+quantitatively.  If $Q$ approximates $Z$ entrywise within $\theta_Z$, the
+entries of $Z$ have modulus at most $M$, and the tested density entries have
+modulus at most $C$, then
+\[
+ \left|\mathcal B_Z(A)_{ij}-\mathcal B_Q(A)_{ij}\right|
+ \le |A|n^2\theta_Z C(2M+\theta_Z).
+\]
+This is
+\leanid{TNLean.MPS.AreaLaw.norm\_compressedBoundaryLM\_sub\_apply\_le\_of\_entry\_norm\_le'},
+and
+\leanid{TNLean.MPS.AreaLaw.compressedBoundaryResidual\_entry\_norm\_le\_of\_coordinate\_approximation}
+propagates the same quantity into the boundary-residual tolerance.  In
+particular, the rational approximation need not itself be an isometry.
+
+The rational approximation is now constructed explicitly.  The theorem
+\leanid{TNLean.MPS.AreaLaw.exists\_rational\_rectangular\_approximation}
+obtains a rectangular Gaussian-rational matrix by restricting a square grid on
+the disjoint union of the row and column indices, and retains the explicit grid
+height.  Since every entry of an isometry has modulus at most one,
+\leanid{TNLean.MPS.AreaLaw.exists\_rational\_isometry\_approximation} applies
+with unit radius.  For a prescribed positive boundary allowance $\omega$, set
+\[
+ \delta_Z=\min\left\{1,
+   \frac{\omega}{3(|A|n^2+1)}\right\}.
+\]
+Then
+\[
+ |A|n^2\delta_Z(2+\delta_Z)\le\omega,
+\]
+as proved by
+\leanid{TNLean.MPS.AreaLaw.rationalCoordinateMapTolerance\_boundary\_error\_le}.
+Thus
+\leanid{TNLean.MPS.AreaLaw.exists\_rational\_coordinate\_map\_with\_boundary\_allowance}
+constructs rational coordinate data while enlarging every boundary-residual
+entry by at most $\omega$.  Finally,
+\leanid{TNLean.MPS.AreaLaw.exists\_rational\_coordinate\_inputEncoding}
+combines this matrix with rational encodings of $K$, $X$, $\epsilon$, and
+$\epsilon_b$ to produce the complete
+\leanid{TNLean.MPS.AreaLaw.RationalCompressedSDPInputEncoding} required by the
+finite tester.
+
+The former coordinate-isometry input obstruction is therefore removed.  The
+current theorem
+\leanid{TNLean.MPS.AreaLaw.ChainHamiltonian.exists\_coordinate\_finite\_density\_search\_viable\_vector}
+may choose $Z$ classically and then replace it by this rational approximation.
+Soundness retains the exact isometry for physical expansion.  The reverse
+trace-norm transfer
+\leanid{TNLean.MPS.AreaLaw.compressedBoundaryResidual\_rectangularTraceNorm\_le\_of\_coordinate\_approximation\_rev}
+shows that a certificate accepted using the rational matrix is valid for the
+exact isometry after the same perturbation allowance.  The theorem
+\leanid{TNLean.MPS.AreaLaw.exists\_rational\_coordinate\_map\_for\_approximate\_sdp}
+uses the uniform density-entry bound of the finite search to choose one rational
+matrix that is sound for every candidate.
+
+The allowance is now included in the end-to-end LVV budget.  The theorem
+\leanid{TNLean.MPS.AreaLaw.fullyApproxSDP\_errors\_with\_coordinate\_fit\_lvv\_margin}
+requires
+\[
+ \delta+\omega\le \frac{\Delta}{64896L}.
+\]
+Equivalently, the independent targets
+$\delta,\omega\le\Delta/(129792L)$ suffice, by
+\leanid{TNLean.MPS.AreaLaw.fullyApproxSDP\_errors\_with\_coordinate\_fit\_lvv\_margin\_of\_split}.
+The other fixed data are now handled without assuming that the physical
+Hamiltonian or the classically selected boundary-net center has rational
+entries.  The trace-pairing estimate
+\leanid{TNLean.MPS.AreaLaw.abs\_re\_trace\_mul\_sub\_le\_of\_entry\_norm\_le}
+shows that entrywise objective error $\theta_K$ changes the tested energy by at
+most $n^2C\theta_K$ for candidate-entry bound $C$.  Boundary-center error
+$\theta_X$ changes the residual trace norm by at most $r^2\theta_X$.
+Consequently,
+\leanid{TNLean.MPS.AreaLaw.exists\_rational\_fixed\_matrices\_for\_approximate\_sdp}
+constructs rational $Q_K,Q_X$ and transfers every accepted certificate back to
+the exact $K,X$ with precisely these losses.
+
+The spectral shifts are chosen rather than inherited from the physical input.
+For every positive target $t$,
+\leanid{TNLean.MPS.AreaLaw.rationalPositiveTolerance} is a positive rational
+number no larger than $t$, with explicit height.  The theorem
+\leanid{TNLean.MPS.AreaLaw.exists\_rational\_compressedSDPInputEncoding}
+therefore constructs rational approximations of $Z,K,X$, positive rational
+$\epsilon,\epsilon_b$ below their requested targets, and the complete exact
+input encoding, while retaining all approximation witnesses.  The theorem
+\leanid{TNLean.MPS.AreaLaw.fullyApproxSDP\_errors\_with\_fixed\_data\_fit\_lvv\_margin}
+now absorbs all three fixed-data losses into the end-to-end LVV margin.  One
+explicit allocation bounds each of
+$\kappa$, $2n\epsilon$, $2r\epsilon_b$, and $\delta$ by
+$\Delta/(129792L)$, the objective loss $n^2C\theta_K$ by
+$\Delta/16224$, and each of the boundary-center and coordinate losses by
+$\Delta/(64896L)$.  The canonical positive meshes
+\[
+ \theta_K=\frac{\Delta}{16224(n^2C+1)},\qquad
+ \theta_X=\frac{\Delta}{64896L(r^2+1)}
+\]
+satisfy the two matrix-rounding requirements.  These bounds imply the exact
+LVV margin condition
+$2(\xi+\lVert B\rVert\tau)\le\Delta/2028$ after using the established
+objective norm bound $4L$ and boundary-operator norm bound $2L$.
+The chain-level theorem
+\leanid{TNLean.MPS.AreaLaw.ChainHamiltonian.exists\_viable\_vector\_of\_approx\_sdp\_error\_budget}
+states this implication directly for one total error budget.  Finally,
+\leanid{TNLean.MPS.AreaLaw.ChainHamiltonian.exists\_viable\_vector\_of\_rational\_fixed\_data\_sdp\_certificate}
+transfers a certificate tested against rational $Q_Z,Q_K,Q_X$ back to the
+exact support isometry, compressed Hamiltonian and boundary center, applies
+the canonical meshes above, and produces the physical LVV viable vector.
+Equivalently, the spectral tolerances may be chosen as
+$\epsilon\le\Delta/(259584Ln)$ and
+$\epsilon_b\le\Delta/(259584Lr)$.  Thus the rational fixed-data soundness
+bridge is complete.  Completeness is two-sided:
+\leanid{TNLean.MPS.AreaLaw.IsAllSpectralApproxCompressedBoundarySDPFeasibleAtEnergy.to\_fixed\_data\_approximation}
+and
+\leanid{TNLean.MPS.AreaLaw.IsAllSpectralApproxCompressedBoundarySDPFeasibleAtEnergy.to\_coordinate\_approximation}
+transport an exact-data certificate to the rationalized input, while the
+previously cited reverse-transfer theorems transport it back.  Composing the forward maps
+with simultaneous rounding of the three primary matrices and three Gram
+factors gives
+\leanid{TNLean.MPS.AreaLaw.IsAllSpectralApproxCompressedBoundarySDPFeasibleAtEnergy.exists\_rational\_data\_grid\_certificate}:
+the explicit six-grid search contains a rational certificate for the
+rationalized fixed data, with every accumulated tolerance displayed in its
+statement.  The finite instance size is now also
+explicit.  The three Hermitian variables have $n^2+2r^2$ real scalar
+coordinates and total positive-cone order $n+2r$.  The theorem
+\leanid{TNLean.MPS.AreaLaw.chain\_compressedBoundarySDP\_size\_le}
+bounds these by $(|S|m)^2+2(qm)^2$ and $|S|m+2qm$, respectively, using
+$n\le |S|m$ and $r\le qm$.  Thus dimensional reduction of the semidefinite
+program is complete.  Its integration with the rational input encoding and the
+physical LVV construction is given by the executable-search and returned-code
+theorems described below; the unresolved point is the polynomial bit complexity
+of producing sufficiently accurate fixed-data codes and certificates.
+The predicate
+\leanid{TNLean.MPS.AreaLaw.IsAllSpectralApproxCompressedBoundarySDPFeasibleAtEnergy}
+collects the complete numerical conditions: Hermiticity, trace defect, the three
+spectral lower bounds, boundary residual, auxiliary trace budget, and energy
+threshold.  Its `exists\_density` theorem performs all repairs and gives the
+exact density with the established losses.  The grid-completeness theorem now
+produces one instance of this predicate at explicit tolerances.  The executable
+selector, direct rational evaluator, discrete code grid, and returned-certificate
+soundness theorem are now formalized.  The rational-input feasibility theorem
+now also proves effective search completeness, including the explicit rounding
+losses.  Its joint search-and-cost theorem connects that run to the stated
+schoolbook bound, using the canonical height computed from its rational codes.
+The same conclusion now holds for a rational approximation of the generally
+irrational LVV coordinate isometry, using the fixed-data transfer theorem.
+The returned certificate is composed with the viable-vector conclusion by
+\leanid{TNLean.MPS.AreaLaw.ChainHamiltonian.exists\_viable\_vector\_of\_rational\_search\_result}.
+Its expanded margin hypothesis follows from independent scalar bounds via
+\leanid{TNLean.MPS.AreaLaw.fullyApproxSDP\_errors\_with\_trace\_energy\_slack\_fit\_lvv\_margin}.
+The solver tolerances need not depend on these realized orders.  The theorem
+\leanid{TNLean.MPS.AreaLaw.chain\_fullyApproxSDP\_errors\_fit\_lvv\_margin\_of\_support\_bounds}
+shows that the a priori choices
+$\epsilon\le\Delta/(129792L|S|m)$ and
+$\epsilon_b\le\Delta/(129792Lqm)$ already imply the required margin for every
+compressed program satisfying the support and boundary dimension bounds.
+Feasibility now also gives an explicit bounded search region.  The theorem
+\leanid{TNLean.MPS.AreaLaw.IsCompressedBoundarySDPFeasibleAtEnergy.rectangularTraceNorm\_bounds}
+proves $\lVert\tau\rVert_1=1$ and
+$\lVert P\rVert_1,\lVert N\rVert_1\le\eta$; its entrywise companion bounds
+every complex coordinate.  The theorem
+\leanid{TNLean.MPS.AreaLaw.exists\_finset\_rectangularTraceNorm\_ball\_net}
+constructs an explicit finite net for every positive-radius trace-norm ball,
+with the scaled unit-grid cardinality bound.  Hence boundedness and finite
+discretizability of the numerical variables are no longer part of the open
+solver gap.
+Moreover,
+\leanid{TNLean.MPS.AreaLaw.exists\_finset\_density\_rectangularTraceNorm\_net}
+extracts from the ambient grid a finite net whose centers are exact density
+matrices.  It preserves the ambient cardinality bound and has covering radius
+$2\delta$.  Thus positivity and normalization need not be sacrificed merely
+to obtain a finite approximation of the density domain; this selection is an
+existence theorem and does not by itself provide an effective enumeration.
+The exact optimum is attained as well.  The theorem
+\leanid{TNLean.MPS.AreaLaw.exists\_compressed\_boundary\_sdp\_minimizer\_of\_nonempty}
+uses compactness of the compressed density set and continuity of the boundary
+map and objective to produce a global energy minimizer together with explicit
+positive-semidefinite witnesses $P,N$.  Its feasible-threshold corollary
+replaces any feasible certificate below $E$ by a global minimizer which remains
+below $E$.  Thus existence and attainment of the exact finite-dimensional
+optimization problem are also closed.  This compactness argument is not itself
+an effective algorithm; the later rational-grid construction supplies an
+executable certified exhaustive search, while polynomial bit complexity remains
+open.
+Composing the density net with this attained optimum gives
+\leanid{TNLean.MPS.AreaLaw.exists\_finset\_approx\_compressed\_boundary\_minimizer}:
+for every $\delta>0$, a finite family of exact densities contains a candidate
+with boundary tolerance $\eta+2\delta$ and energy at most
+$E_{\min}+2\lVert K\rVert\delta$.  The family has the explicit ambient-grid
+cardinality bound.  This closes the existence and quantitative stability of a
+finite search; making the selected representatives and constraint tests
+into an executable certified search procedure with the proved schoolbook
+bit-cost accounting for this classical exact-density selection is not used.
+The later rational-coordinate search instead provides executable constraint
+tests and an explicit schoolbook bound.
+The threshold form
+\leanid{TNLean.MPS.AreaLaw.exists\_finset\_approx\_compressed\_boundary\_solution\_at\_energy}
+states the solver-facing consequence directly: one feasible density below
+$E$ guarantees a member of the finite family below
+$E+2\lVert K\rVert\delta$, with boundary tolerance $\eta+2\delta$.
+The theorem
+\leanid{TNLean.MPS.AreaLaw.exists\_finset\_minimizing\_approx\_compressed\_boundary\_solution\_at\_energy}
+then filters this family by the enlarged boundary inequality and selects a
+least-energy member.  The filtered family is nonempty, its minimizer retains
+the same energy bound, and it has no larger energy than any other retained
+candidate satisfying the enlarged constraint.  This identifies the finite
+exhaustive minimization mathematically; effective enumeration of the density
+representatives and certified arithmetic comparisons are classical in this
+exact-density construction.  They are replaced below by rational codes and
+decidable exact comparisons.
+The theorem
+\leanid{TNLean.MPS.AreaLaw.ChainHamiltonian.exists\_finite\_density\_search\_viable\_vector}
+now composes this threshold statement with the physical LVV estimate.  If
+$24L\delta\le\Delta/2028$, it selects a least-energy member among the retained
+densities satisfying the enlarged boundary inequality.  This exact density's
+physical expansion yields a unit vector in the retained left support, with
+energy at most $E_0+\Delta/12$ and ground-state overlap at least $11/12$.
+The theorem preserves the explicit cardinality bound on the family.  It does
+not make the classically selected exact-density representatives effectively
+enumerable, so it does not close the solver or bit-complexity gap.
+The canonical radius
+\leanid{TNLean.MPS.AreaLaw.lvvFiniteDensityMesh} is
+$\delta=\Delta/(48672L)$.  It is positive and exactly satisfies
+$24L\delta=\Delta/2028$, so no additional precision choice is needed in an
+application of the finite-search theorem.
+The corollary
+\leanid{TNLean.MPS.AreaLaw.ChainHamiltonian.exists\_canonical\_coordinate\_finite\_density\_search\_viable\_vector}
+therefore constructs the compressed coordinates, bounded finite family,
+least-energy relaxed-feasible density, and physical viable vector directly at
+this radius, with no remaining mesh parameter or margin hypothesis.
+The further composition
+\leanid{TNLean.MPS.AreaLaw.ChainHamiltonian.exists\_coordinate\_finite\_density\_search\_viable\_vector}
+removes the coordinate isometry and initial compressed density from the
+hypotheses.  From the normalized supported glued vector it forms the rank-one
+density, compresses it into coordinates of order $0<n\le |S|m$, and then applies
+the finite search.  Thus the finite candidate family, its least-energy member
+under the enlarged boundary inequality, and the resulting physical viable
+vector follow directly from the data already supplied by the LVV viability
+step.  The coordinate and density representatives remain classical choices,
+so this composition still makes no algorithmic running-time claim.
+The theorem
+\leanid{TNLean.MPS.AreaLaw.ChainHamiltonian.exists\_viable\_vector\_of\_all\_spectral\_approx\_sdp\_certificate}
+composes these repairs and targets with isometric support expansion and the
+LVV leading-vector estimate. Consequently, any numerical matrices carrying
+the stated certified errors already determine a physical unit vector with
+energy at most $E_0+\Delta/12$ and ground-state overlap at least $11/12$.
+Its uniform-order corollary
+\leanid{TNLean.MPS.AreaLaw.ChainHamiltonian.exists\_viable\_vector\_of\_uniformly\_approx\_sdp\_certificate}
+uses $n\le |S|m$ and $r\le qm$ directly.  It therefore derives the same
+physical vector from the a priori tolerances
+$\epsilon\le\Delta/(129792L|S|m)$ and
+$\epsilon_b\le\Delta/(129792Lqm)$, without requiring the solver precision
+to depend on the subsequently chosen coordinate isometry or realized cone
+orders.
+The wrapper
+\leanid{TNLean.MPS.AreaLaw.ChainHamiltonian.exists\_viable\_vector\_of\_uniform\_approx\_sdp\_feasible}
+states this physical conclusion directly from the unified predicate and the
+four a priori tolerance bounds.
+Exact feasibility is compatible with this numerical statement.  The theorem
+\leanid{TNLean.MPS.AreaLaw.IsCompressedBoundarySDPFeasibleAtEnergy.toAllSpectralApprox}
+embeds every exact feasible triple with all four errors equal to zero, while
+\leanid{TNLean.MPS.AreaLaw.exists\_allSpectralApproxCompressedBoundarySDPFeasibleAtEnergy\_zero}
+shows that every exact feasible density for a Hermitian boundary centre has
+positive and negative boundary parts giving such a zero-error triple.  Thus
+the numerical specification is consistent and nonempty whenever the exact
+problem is nonempty.  These existence results do not construct an effective
+semidefinite optimization procedure.
+The theorem
+\leanid{TNLean.MPS.AreaLaw.ChainHamiltonian.exists\_boundary\_coordinates\_with\_uniform\_approx\_sdp\_soundness}
+also constructs $0<n\le |S|m$ and the support isometry from the normalized
+supported LVV vector before accepting any numerical matrices.  In these same
+coordinates it exhibits the compressed rank-one density and its positive and
+negative boundary parts as an exact zero-error feasible triple.  Every
+certificate meeting the uniform bounds is physically sound.  Hence coordinate
+correctness and nonemptiness are no longer additional obligations of the
+numerical solver.  The finite rational search now produces and certifies the
+approximate cone, trace, boundary, and objective conditions, although the
+present completeness proof does not yet give the polynomial bit-complexity
+estimate asserted by LVV.  The
+more general companion theorem
+\leanid{TNLean.MPS.AreaLaw.exists\_boundary\_coordinates\_with\_zero\_error\_sdp\_certificate}
+isolates the zero-error construction for an arbitrary boundary tolerance.
+The remaining gap is the source-level polynomial running-time estimate, not
+existence or correctness of the finite-dimensional formulation or of its
+finite certified search.
+Moreover,
+\leanid{TNLean.MPS.AreaLaw.rank\_boundarySupportProjection\_le}
+proves that the support projection in a program with retained family $S$ and
+actual bond dimension $m$ has rank at most $|S|m$.  Hence the density variable
+is supported on a polynomial-dimensional subspace whenever the retained
+family and bond dimension are polynomially bounded; the exponentially large
+ambient left Hilbert space is not intrinsic to this variable.  The theorem
+\leanid{TNLean.MPS.AreaLaw.exists\_boundarySupportCoordinates}
+constructs this reduction explicitly at the linear-algebraic level: there are
+$n\le |S|m$ and an isometry $Z:\mathbb C^n\to\mathcal H$ with
+$Z^*Z=1$ and $ZZ^*=Q$, where $Q$ is the support projection.  The theorem
+\leanid{TNLean.MPS.AreaLaw.exists\_boundarySupportCoordinateCoefficients}
+further proves that every bond slice of every column of $Z$ is a linear
+combination of the retained vectors in $S$.  Its variable coefficient array
+therefore has $nm|S|$ complex entries.  By
+\leanid{TNLean.MPS.AreaLaw.boundarySupportCoordinateCoefficientCount\_le\_sq},
+this is at most $(|S|m)^2$.  This removes the ambient factor $q^{|A|}$ from
+the coefficient array itself.  The types
+\leanid{TNLean.MPS.AreaLaw.OpenMPSRepresentation},
+\leanid{TNLean.MPS.AreaLaw.LeftOpenMPSRepresentation}, and
+\leanid{TNLean.MPS.AreaLaw.ViableMPSData} now package the varying-bond tensors
+and scalar caps explicitly.  The equivalence
+\leanid{TNLean.MPS.AreaLaw.isViableMPS\_iff\_nonempty\_data} shows that this
+has the same mathematical content as the existing predicate, but its forward
+direction uses choice.  Completing an effective structured encoding still
+requires polynomial bounds for the compact coordinate heights and support-basis
+conditioning radii; the construction no longer recovers tensor data from
+\leanid{TNLean.MPS.AreaLaw.IsLeftOpenMPS} after each trimming step.
+The interface \leanid{TNLean.MPS.AreaLaw.ViableMPSData.extend} now lifts the
+one-site extension to the data-bearing invariant by the direct open-chain
+append \leanid{OBCChainTensor.snoc}; the identity
+\leanid{OBCChainTensor.coeff\_snoc} verifies the represented coefficients.
+The only selection made at this step is a finite preimage pair for a member of
+the image set; no matrix-product representation is recovered from a
+propositional existence theorem.  The coordinate-height invariant and the
+canonical rational-search theorem cited above now close the corresponding
+propagation through size trimming.  Bond trimming and error reduction must be
+connected to the same effective height recurrence in the final running-time
+proof.
+This connection cannot be an exact rationality-preservation lemma for the
+present bond-trimming map: \leanid{TNLean.MPS.AreaLaw.leftSchmidtTrim} is
+defined from spectral Schmidt projections, whose entries need not be rational
+even for rational input data.  The required replacement is a rational
+approximation of the resulting low-bond open-chain tensor, charged against the
+available $1/12$-to-$1/2$ viability margin.  Likewise, sampled error reduction
+must either assume rational local Hamiltonian data or rationalize the sampled
+projector outputs with a reserved error budget.  These are mathematical
+approximation steps, not missing closure lemmas for the coordinate invariant.
+The qualitative approximation step is now formalized by
+\leanid{TNLean.MPS.AreaLaw.IsLeftOpenMPS.exists\_rational\_approximation}.
+It uses the finite parameter space of a fixed open-boundary representation,
+the density of Gaussian-rational parameter points, and continuity of tensor
+contraction to preserve the original bond bound.  What remains for the running
+time theorem is quantitative: choose an explicit mesh whose coordinate height
+is polynomially bounded and charge its contraction error against the stated
+viability reserve.
+The parameter-side mesh is now explicit:
+\leanid{TNLean.MPS.AreaLaw.OBCChainTensor.exists\_dyadic\_parameters\_approximation}
+simultaneously rounds the scalar cap and every local tensor entry at mesh
+$2^{-t}$, with common coordinate height at most $2^{2u+2t+5}$ when their
+norms are bounded by $2^u$.  It remains to combine this with a bounded
+canonical open-chain representation and an explicit perturbation estimate for
+the tensor contraction.
+The first contraction estimate is also formalized:
+\leanid{TNLean.MPS.AreaLaw.OBCChainTensor.norm\_coeff\_ofParameters\_sub\_le\_one}
+bounds the error in each physical coefficient by the number of virtual paths
+times $(1+\delta)^k-1$, assuming unit-bounded reference entries and entrywise
+error at most $\delta$.  The remaining step is to sum this coefficient bound
+in the Euclidean norm and instantiate it with the bounded canonical
+representation.
+The theorem
+\leanid{TNLean.MPS.AreaLaw.rank\_boundarySupportedMatrix\_le}
+also proves directly that every matrix satisfying the support constraint,
+and therefore every feasible density matrix, has rank at most $|S|m$.
+Finally,
+\leanid{TNLean.MPS.AreaLaw.exists\_boundarySupportedDensityCompression}
+proves that every positive-semidefinite supported density has the form
+$\rho=Z\tau Z^*$ for a positive-semidefinite $n\times n$ matrix $\tau$.
+Its trace-one refinement
+\leanid{TNLean.MPS.AreaLaw.exists\_boundarySupportedDensityCompression\_of\_trace\_eq\_one}
+proves simultaneously that $0<n\le |S|m$ and that $\tau$ is itself a
+trace-one density.  Thus the compressed spectral problem is nonempty without
+an additional coordinate-order assumption.
+The specialization
+\leanid{TNLean.MPS.AreaLaw.exists\_boundarySupportedVectorDensityCompression}
+constructs the same data directly from a normalized vector satisfying the
+retained-support equation; its expanded density is exactly the vector's
+rank-one density.  This is the form consumed by the finite-search and
+approximate-solver interfaces.
+The theorem
+\leanid{TNLean.MPS.AreaLaw.isometricDensityExpansion\_trace\_and\_energy}
+proves that this expansion preserves trace and replaces the energy observable
+$H$ by the compressed observable $Z^*HZ$.
+The linear map
+\leanid{TNLean.MPS.AreaLaw.compressedBoundaryLM}
+is the boundary marginal of $Z\tau Z^*$, by
+\leanid{TNLean.MPS.AreaLaw.compressedBoundaryLM\_apply}; the theorem
+\leanid{TNLean.MPS.AreaLaw.isometricDensityExpansion\_boundary\_distance}
+therefore transports the trace-norm boundary constraint without changing its
+value.  The same coordinate reduction applies to the spectral output:
+\leanid{TNLean.MPS.AreaLaw.exists\_boundarySupportedDensity\_eigenvector\_coordinates}
+places every normalized supported eigenvector in the same space
+$\mathbb C^n$, where it satisfies the eigenvalue equation for $\tau$, and
+recovers the ambient vector by the single multiplication $Zv$.  Its algebraic
+core is
+\leanid{TNLean.MPS.AreaLaw.isometricDensityExpansion\_eigenvector\_coordinates}.
+Moreover,
+\leanid{TNLean.MPS.AreaLaw.isometricDensityExpansion\_eigenresidual\_norm}
+proves that expanding an approximate eigenvector preserves its residual norm
+exactly, so the passage back to the physical support space loses no spectral
+precision.
+The linear constraints and objective also have explicit precision bounds.
+The theorem
+\leanid{TNLean.MPS.AreaLaw.compressedDensity\_program\_perturbation}
+proves that a trace-norm error $\epsilon$ in the compressed density produces
+trace error at most $\epsilon$, energy error at most $\lVert K\rVert\epsilon$,
+and enlarges the boundary tolerance by at most $\epsilon$.  Its ingredients
+are the trace--energy duality estimate
+\leanid{TNLean.MPS.AreaLaw.compressedDensity\_trace\_energy\_perturbation}
+and the one-Lipschitz boundary map
+\leanid{TNLean.MPS.AreaLaw.compressedBoundaryLM\_distance\_le}.
+If the numerical output is positive semidefinite with trace one,
+\leanid{TNLean.MPS.AreaLaw.isometricDensityExpansion\_program\_perturbation}
+proves that its expansion is an actual physical density and carries these
+same energy and boundary bounds into the ambient space.
+Exact trace normalization need not be assumed of the numerical output.
+The identity
+\leanid{TNLean.MPS.AreaLaw.rectangularTraceNorm\_normalizePosSemidef\_sub}
+shows that normalizing a positive matrix costs exactly its absolute trace
+defect.  Consequently
+\leanid{TNLean.MPS.AreaLaw.exists\_normalizedPositiveMatrix\_close\_of\_close}
+turns a positive matrix within $\epsilon$ of a trace-one target into an exact
+density within $2\epsilon$.  The composed theorem
+\leanid{TNLean.MPS.AreaLaw.exists\_normalized\_isometricDensityExpansion\_program\_perturbation}
+then expands this repaired density, with energy error
+$2\lVert Z^*HZ\rVert\epsilon$ and boundary tolerance $\eta+2\epsilon$.
+The theorem
+\leanid{TNLean.MPS.AreaLaw.l2\_opNorm\_isometricCompression\_le}
+removes the coordinate dependence from this estimate:
+$\lVert Z^*HZ\rVert\le\lVert H\rVert$.
+At the compressed-program level,
+\leanid{TNLean.MPS.AreaLaw.exists\_normalizedPositiveMatrix\_approximate\_program}
+states the same result in the one-sided form used by the leading-vector
+argument: an exact objective bound $E$ and boundary tolerance $\eta$ become
+$E+2\lVert K\rVert\epsilon$ and $\eta+2\epsilon$.
+The theorem
+\leanid{TNLean.MPS.AreaLaw.exists\_leading\_eigenvector\_chain\_with\_objective\_slack}
+now carries an arbitrary additive objective error $\xi$ through the
+leading-vector argument: the total error becomes
+$e+\xi+\lVert K\rVert\tau$.  Hence the objective error of a supplied
+approximate density solution is no longer required to vanish before the
+leading-vector lemma can be applied.  Its choice-independent companion,
+\leanid{TNLean.MPS.AreaLaw.leading\_eigenvector\_bounds\_chain\_with\_objective\_slack},
+proves these bounds for every unit eigenvector with eigenvalue larger than
+$1/2$; the conclusion therefore does not depend on which dominant
+eigenvector a spectral computation returns.
+The viable-set estimate itself is stable as well.  The theorem
+\leanid{TNLean.MPS.AreaLaw.ChainHamiltonian.leading\_bounds\_of\_approximate\_boundary\_solution}
+allows an objective error $\xi$ and an additional boundary error $\delta$.
+The original energy bound $E_0+\Delta/12$ and overlap bound $11/12$ remain
+valid provided
+\[
+  2\bigl(\xi+\lVert B\rVert\delta\bigr)\le \Delta/2028.
+\]
+The denominator $2028=12\cdot169$ records the exact unused margin between
+the intermediate estimate $14\Delta/169$ and $\Delta/12$.
+For the numerical spectral problem, the general estimate
+\leanid{TNLean.MPS.AreaLaw.Matrix.PosSemidef.one\_sub\_energyExcess\_div\_gap\_le\_maxEigenvalue}
+shows that a density of energy at most $E_0+e$ has maximal eigenvalue at
+least $1-e/\Delta$.  This retains the quantitative dominant-eigenvalue
+information which is hidden by the coarser conclusion that the eigenvalue
+is merely larger than one half.  Its explicit LVV-scale corollary
+\leanid{TNLean.MPS.AreaLaw.Matrix.PosSemidef.twentyThree\_div\_twentyFour\_le\_maxEigenvalue}
+gives $\mu_{\max}\ge23/24$ whenever the energy excess is at most
+$\Delta/24$.  The trace-one spectral estimate
+\leanid{TNLean.MPS.AreaLaw.Matrix.PosSemidef.re\_inner\_le\_one\_sub\_eigenvalue\_of\_orthogonal}
+shows that the density is bounded by $1-\mu_{\max}$ on the orthogonal
+complement of its leading vector.  Hence the resulting separation is at
+least $11/12$, and
+\leanid{TNLean.MPS.AreaLaw.leading\_residual\_div\_separation\_le}
+shows that converting an eigenvalue residual into an orthogonal-component
+bound costs at most the uniform factor $12/11$.
+The residual certification is made explicit by
+\leanid{TNLean.MPS.AreaLaw.Matrix.PosSemidef.norm\_orthogonal\_component\_le\_leading\_residual}
+and its phase-aligned form
+\leanid{TNLean.MPS.AreaLaw.Matrix.PosSemidef.exists\_phase\_sq\_distance\_le\_twelve\_div\_eleven\_residual}.
+In particular,
+\leanid{TNLean.MPS.AreaLaw.Matrix.PosSemidef.exists\_phase\_distance\_le\_of\_residual\_le}
+shows that a residual at most $11\zeta/24$ suffices to obtain a unit leading
+vector within distance $\zeta$, after choosing its physically irrelevant
+phase.
+The packaged conclusion
+\leanid{TNLean.MPS.AreaLaw.Matrix.PosSemidef.exists\_nearby\_unit\_eigenvector\_of\_residual\_le}
+returns that nearby vector together with its exact unit norm, eigenvalue
+equation, and phase relation to the chosen leading vector.  At the allocated
+LVV tolerance $\zeta=\Delta/(16224L)$, the arithmetic theorem
+\leanid{TNLean.MPS.AreaLaw.residual\_precision\_of\_lvv\_vector\_tolerance}
+therefore gives the explicit sufficient residual target
+\[
+  \frac{11\Delta}{389376L}.
+\]
+The solver-facing theorem
+\leanid{TNLean.MPS.AreaLaw.Matrix.PosSemidef.exists\_nearby\_unit\_eigenvector\_of\_lvv\_residual}
+combines these two facts: a numerical unit vector meeting this residual target
+is within $\Delta/(16224L)$ of an exact unit leading eigenvector, with the
+eigenvalue equation and phase relation included in the conclusion.
+The physical gluing map respects this phase by
+\leanid{TNLean.MPS.AreaLaw.gluedVector\_smul}, while
+\leanid{TNLean.MPS.AreaLaw.gluedVector\_phase\_invariants}
+proves that its energy expectation and absolute ground-state overlap are
+unchanged.  Consequently
+\leanid{TNLean.MPS.AreaLaw.ChainHamiltonian.nearby\_glued\_vector\_viable\_of\_density\_and\_vector\_residual}
+feeds a normalized supported numerical eigenvector directly into the LVV
+viability estimate: when $\mu\ge23/24$ and the residual is at most
+$11\zeta/24$, the physical vector retains the required normalization,
+left support, energy, and overlap.
+The end-to-end theorem
+\leanid{TNLean.MPS.AreaLaw.ChainHamiltonian.exists\_viable\_vector\_of\_approximate\_density\_and\_eigenresidual}
+now combines this residual criterion with normalization and isometric expansion
+of the approximate compressed density.  At trace-norm precision
+$\Delta/(97344L)$ it constructs the exact dominant eigenpair used only in the
+proof, and states the numerical interface directly in $\mathbb C^n$: every
+normalized compressed vector with residual at most $11\Delta/(389376L)$
+produces a physical vector with the LVV normalization, support, energy, and
+overlap bounds.  The isometric expansion preserves the residual and norm
+exactly; its range condition supplies the retained-support hypothesis.
+The first deterministic power-method ingredient is also formalized:
+\leanid{TNLean.MPS.AreaLaw.exists\_basisVector\_sq\_overlap\_ge\_inv}
+shows that among the $n$ standard coordinate vectors, one has squared overlap
+at least $1/n$ with the unit dominant eigenvector.  Thus only $n$ starting
+vectors are required; the remaining spectral ratio is at most $1/23$.
+The contraction estimate
+\leanid{TNLean.MPS.AreaLaw.Matrix.PosSemidef.norm\_toEuclideanLin\_apply\_le\_of\_trace\_eq\_one}
+shows that every power iterate has nonincreasing norm before normalization, and
+\leanid{TNLean.MPS.AreaLaw.Matrix.PosSemidef.eigenvalue\_le\_one\_of\_trace\_eq\_one}
+records the corresponding upper bound on every real eigenvalue.  The sharper
+orthogonal-complement estimate
+\leanid{TNLean.MPS.AreaLaw.Matrix.PosSemidef.norm\_toEuclideanLin\_apply\_le\_one\_sub\_eigenvalue\_of\_orthogonal}
+bounds the contraction there by $1-\mu$.  Its LVV specialization and iterated
+form show that, when $\mu\ge23/24$, $t$ power steps suppress every orthogonal
+component by $24^{-t}$.  Scaling each step by $\mu^{-1}$ fixes the dominant
+vector and gives the sharper relative contraction $23^{-t}$.  The normalized
+output is nonzero and, after a unit complex phase, its squared distance from
+the dominant vector is at most $2\cdot23^{-2t}$ times the initial ratio of
+orthogonal mass to dominant mass.  This normalization theorem is composed
+with the deterministic coordinate selection, so one of the $n$ computed
+power sequences carries the full phase-aligned estimate.
+The ratio is bounded explicitly for the selected coordinate start, giving
+squared error at most $2n\,23^{-2t}$.  The elementary choice
+\[
+  t=\left\lceil n/\zeta^2\right\rceil
+\]
+therefore guarantees phase-aligned distance at most $\zeta$.  This deliberately
+nonoptimal count avoids logarithmic arithmetic while remaining polynomial in
+the compressed dimension and inverse precision.
+The distance estimate implies residual at most twice the distance.  A generic
+composition theorem now feeds the normalized coordinate-start power output
+directly into any unit-vector residual certificate.  The end-to-end
+compressed-density theorem also returns the exact normalized leading vector
+in compressed coordinates, its eigenvalue equation, and its reconstruction
+under the support isometry; these are the data needed to instantiate that
+composition with the LVV viable-vector certificate.  This instantiation is
+now part of the theorem itself.  At
+\[
+  \eta=\frac{11\Delta}{778752L},
+  \qquad
+  t=\left\lceil n/\eta^2\right\rceil,
+\]
+one of the $n$ normalized coordinate-start power vectors expands to a physical
+vector with the LVV unit-norm, retained-support, energy, and overlap
+conclusions.  The theorem
+\leanid{TNLean.MPS.AreaLaw.lvvPower\_iterationCount\_lt} makes its polynomial
+dependence explicit:
+\[
+  t<\frac{n(778752L)^2}{(11\Delta)^2}+1.
+\]
+The accompanying theorem
+\leanid{TNLean.MPS.AreaLaw.lvvPower\_totalIterationCount\_lt} bounds the
+number of matrix--vector iterations over all $n$ coordinate starts by
+\[
+  n\left(\frac{n(778752L)^2}{(11\Delta)^2}+1\right).
+\]
+Thus the leading-vector stage no longer assumes an abstract
+eigensolver residual.
+The gluing forms
+\leanid{TNLean.MPS.AreaLaw.maxEigenvalue\_lower\_bound\_of\_gluing\_with\_objective\_slack}
+and
+\leanid{TNLean.MPS.AreaLaw.maxEigenvalue\_lower\_bound\_chain\_with\_objective\_slack}
+identify this excess as $e+\xi+\lVert K\rVert\tau$.  Consequently the
+end-to-end compressed-density theorem retains both the sharper bound
+\[
+  \mu_{\max}\ge
+  1-\frac{7\Delta/169+12L\epsilon}{\Delta}
+\]
+and, under its stated precision hypothesis, the uniform conclusion
+$\mu_{\max}\ge23/24$.
+Finally,
+\leanid{TNLean.MPS.AreaLaw.ChainHamiltonian.exists\_leading\_vector\_of\_approximate\_compressed\_boundary\_solution}
+composes this estimate with normalization and isometric expansion of the
+compressed numerical density.  Writing $H_L$ for the physical objective and
+$Z$ for the coordinate isometry, trace-norm accuracy $\epsilon$ suffices when
+\[
+  24L\epsilon\le \Delta/2028,
+  \qquad\text{or equivalently}\qquad
+  \epsilon\le \Delta/(48672L).
+\]
+Indeed, the range-one norm bound gives $\lVert H\rVert\le2L$ and the gluing
+decomposition gives $\lVert B\rVert\le2L$.  Thus
+$\lVert H_L\rVert=\lVert H-B\rVert\le4L$.  The equalities
+\leanid{TNLean.MPS.AreaLaw.Matrix.l2\_opNorm\_kronecker\_one} and
+\leanid{TNLean.MPS.AreaLaw.norm\_leftCutOperator\_eq}
+show that passing to cut coordinates and adjoining the bond identity does
+not enlarge this bound.
+The theorem constructs an exact physical density, a dominant eigenvector and
+the resulting viable chain vector, retaining the bounds $E_0+\Delta/12$ and
+$11/12$.
+The subsequent stability theorem
+\leanid{TNLean.MPS.AreaLaw.ChainHamiltonian.nearby\_glued\_vector\_viable\_of\_density\_and\_vector\_precision}
+also permits a numerical compressed unit vector at Hilbert-space distance
+$\zeta$ from the exact dominant vector.  The two numerical errors share the
+same margin through
+\[
+  24L\epsilon+4L\zeta\le \Delta/2028.
+\]
+In particular,
+\leanid{TNLean.MPS.AreaLaw.density\_and\_vector\_precision\_of\_separate\_bounds}
+gives the independent sufficient targets
+\[
+  \epsilon\le \Delta/(97344L),
+  \qquad
+  \zeta\le \Delta/(16224L).
+\]
+The unresolved part is now the numerical arithmetic analysis for a
+polynomial-cost approximate solution of each resulting finite-dimensional
+convex program at the explicit trace-norm precision above.  Once such an
+approximate density is supplied, the deterministic coordinate-start power
+method gives its leading vector at the explicit polynomial iteration count
+above; this spectral stage no longer requires a separate numerical oracle.
+The propagation of the supplied density precision through the exact coordinate
+expansion is formalized.
+It is no longer the number of programs, the number of retained candidates, or
+the dimension or mathematical coordinate form of either the supported density
+variable or its spectral output.
 
 The construction with a fixed bound $B$ on $\varepsilon_0/\Delta$ is now
 \leanid{TNLean.MPS.AreaLaw.exists_sampled_successive_viable_sets_polynomial}.

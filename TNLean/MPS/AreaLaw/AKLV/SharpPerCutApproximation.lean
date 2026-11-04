@@ -67,8 +67,9 @@ theorem aklv_chain_dimension_and_gap_bounds {L q : ℕ}
   exact ⟨hL, hq, gap_le_one_of_positive_nearest_neighbor_terms hL hq h hsupp h0 h1 hgs⟩
 
 /-- The actual same-cut physical approximants obey the sharp fourth-root
-logarithmic rank bound, uniformly over cuts and chain lengths. Both the
-filtered and exact boundary alternatives are retained. -/
+logarithmic rank bound, uniformly over cuts and chain lengths. Their overlap
+with the ground vector is at least `1 - rho / 2`. Both the filtered and exact
+boundary alternatives are retained. -/
 theorem exists_aklv_sharp_physical_per_cut_approximation :
     ∃ A C : ℝ, 1 ≤ A ∧ 0 < C ∧
       ∀ (L q : ℕ)
@@ -88,8 +89,11 @@ theorem exists_aklv_sharp_physical_per_cut_approximation :
       2 ≤ q ∧ g ≤ 1 ∧
       Real.log (aklvAccuracyRankBound q s0 g rho : ℝ) ≤
         C * (u ^ 3 / g + Real.sqrt (Real.sqrt (z ^ 3 / g)) * (u + Real.log (z + 1))) ∧
+      Real.log (aklvAccuracyRankBound q s0 g rho : ℝ) ≤
+        11 * C * (u ^ 3 / g) * z ∧
       ∀ k : ℕ, k ≤ L → ∃ y : EuclideanSpace ℂ (Fin L → Fin q),
         ‖y‖ = 1 ∧ ‖y - Ω‖ ^ 2 ≤ rho ∧
+        1 - rho / 2 ≤ ‖⟪y, Ω⟫_ℂ‖ ∧
         (cutMatrix y k).rank ≤ aklvAccuracyRankBound q s0 g rho ∧
         (y = Ω ∨ IsAKLVAccuracyFilteredOutput k s0 h g rho Ω y) := by
   obtain ⟨A, hA, _hA21, haccuracy⟩ := exists_aklv_physical_accuracy_window
@@ -101,8 +105,66 @@ theorem exists_aklv_sharp_physical_per_cut_approximation :
   intro L q h mu g Ω hsupp h0 h1 hΩ hground hgap hg hexcited rho hrho hrho1 u z s0
   obtain ⟨_hL, hq, hg1⟩ :=
     aklv_chain_dimension_and_gap_bounds h hsupp h0 h1 mu g Ω hΩ hground hgap hg hexcited
-  refine ⟨hq, hg1, aklvAccuracyRankBound_log_le_fourthRoot hA hg hg1 hrho hrho1 q hq, ?_⟩
+  refine ⟨hq, hg1, aklvAccuracyRankBound_log_le_fourthRoot hA hg hg1 hrho hrho1 q hq,
+    aklvAccuracyRankBound_log_le_lvv hA hg hg1 hrho hrho1 q hq, ?_⟩
   intro k hk
-  exact haccuracy L q k hq hk h mu g Ω hsupp h0 h1 hΩ hground hgap hg hexcited rho hrho hrho1
+  obtain ⟨y, hy, herror, hrank, hactual⟩ :=
+    haccuracy L q k hq hk h mu g Ω hsupp h0 h1 hΩ hground hgap hg hexcited rho hrho hrho1
+  refine ⟨y, hy, herror, ?_, hrank, hactual⟩
+  have hdist := @norm_sub_sq ℂ _ _ _ _ y Ω
+  rw [hy, hΩ] at hdist
+  norm_num at hdist
+  calc
+    1 - rho / 2 ≤ 1 - ‖y - Ω‖ ^ 2 / 2 := by linarith
+    _ = (⟪y, Ω⟫_ℂ).re := by linarith
+    _ ≤ ‖⟪y, Ω⟫_ℂ‖ := Complex.re_le_norm _
+
+/-- If the physical gap is bounded below by a fixed positive number, the
+same-cut physical approximants have the cubic local-dimension dependence
+printed in the AKLV estimate.  The comparison constant is explicit in the
+chosen lower gap bound.
+
+Source: AKLV, arXiv:1301.1162v1, lines 1503--1517, restricted to a fixed
+positive lower bound for the gap. -/
+theorem exists_aklv_fixed_gap_physical_per_cut_approximation :
+    ∃ A C : ℝ, 1 ≤ A ∧ 0 < C ∧
+      ∀ (g₀ : ℝ), 0 < g₀ → g₀ ≤ 1 →
+      ∀ (L q : ℕ)
+        (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
+        (mu g : ℝ) (Ω : EuclideanSpace ℂ (Fin L → Fin q)),
+      (∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+        (h j) (interval L j.val (j.val + 2))) →
+      (∀ j, 0 ≤ h j) → (∀ j, h j ≤ 1) → ‖Ω‖ = 1 →
+      (∑ j, h j) *ᵥ WithLp.ofLp Ω = (mu : ℂ) • WithLp.ofLp Ω →
+      ((∑ j, h j) - (mu : ℂ) • 1 - (g : ℂ) •
+        (1 - vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω)))).PosSemidef →
+      0 < g → g₀ ≤ g → mu + g ∈ spectrum ℝ (∑ j, h j) →
+      ∀ rho : ℝ, 0 < rho → rho ≤ 1 →
+      let u := 1 + Real.log (q : ℝ) + Real.log (1 / g)
+      let z := aklvAccuracyLog rho
+      let s0 : ℕ := ⌈A * u ^ 2 / g⌉₊
+      let C₀ := ((1 + 1 / Real.log 2) * (1 + Real.log (1 / g₀))) ^ 3
+      Real.log (aklvAccuracyRankBound q s0 g rho : ℝ) ≤
+        11 * C * C₀ * Real.log (q : ℝ) ^ 3 / g * z ∧
+      ∀ k : ℕ, k ≤ L → ∃ y : EuclideanSpace ℂ (Fin L → Fin q),
+        ‖y‖ = 1 ∧ ‖y - Ω‖ ^ 2 ≤ rho ∧
+        1 - rho / 2 ≤ ‖⟪y, Ω⟫_ℂ‖ ∧
+        (cutMatrix y k).rank ≤ aklvAccuracyRankBound q s0 g rho ∧
+        (y = Ω ∨ IsAKLVAccuracyFilteredOutput k s0 h g rho Ω y) := by
+  obtain ⟨A, C, hA, hC, hphysical⟩ := exists_aklv_sharp_physical_per_cut_approximation
+  refine ⟨A, C, hA, hC, ?_⟩
+  intro g₀ hg₀ hg₀one L q h mu g Ω hsupp h0 h1 hΩ hground hgap hg hg₀g hexcited
+    rho hrho hrho1 u z s0 C₀
+  obtain ⟨hq, hg1, _hfourth, hlog, hcut⟩ :=
+    hphysical L q h mu g Ω hsupp h0 h1 hΩ hground hgap hg hexcited rho hrho hrho1
+  have hcubic := aklv_cubic_cost_of_fixed_gap hg₀ hg₀one hg₀g hg hg1 q hq
+  change u ^ 3 / g ≤ C₀ * Real.log (q : ℝ) ^ 3 / g at hcubic
+  have hz : 0 ≤ z := (aklvAccuracyLog_bounds hrho hrho1).1.trans' (by norm_num)
+  have hcoef : 0 ≤ 11 * C := by positivity
+  refine ⟨hlog.trans ?_, hcut⟩
+  calc
+    11 * C * (u ^ 3 / g) * z ≤ 11 * C * (C₀ * Real.log (q : ℝ) ^ 3 / g) * z :=
+      mul_le_mul_of_nonneg_right (mul_le_mul_of_nonneg_left hcubic hcoef) hz
+    _ = 11 * C * C₀ * Real.log (q : ℝ) ^ 3 / g * z := by ring
 
 end TNLean.MPS.AreaLaw

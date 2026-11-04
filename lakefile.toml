@@ -33,6 +33,11 @@ rev = "c457682404aa548b4acd16ac27be5d3835e68892"
 [[lean_lib]]
 name = "TNLean"
 
+[[lean_lib]]
+name = "AreaLawComparator"
+srcDir = "verification/area-law"
+roots = ["Challenge", "Solution"]
+
 # Text-based style linter driver for `Mathlib.Linter.TextBased.lintModules`.
 # Run with `lake exe lint_style` (or `--fix` to auto-correct, `--github` for CI annotations).
 [[lean_exe]]

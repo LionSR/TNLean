@@ -113,7 +113,8 @@ volume~\cite[``Gluing'', ``The leading eigenvector of a near-optimal left state'
 
 \begin{lemma}[A trace-norm net on a chain boundary]
     \label{thm:chain_boundary_trace_norm_net}
-    \lean{TNLean.MPS.AreaLaw.exists_finset_boundary_rectangularTraceNorm_net}
+    \lean{TNLean.MPS.AreaLaw.exists_finset_boundary_rectangularTraceNorm_net,
+        TNLean.MPS.AreaLaw.exists_finset_hermitian_boundary_rectangularTraceNorm_net}
     \leanok
     \uses{def:chain_gluing_left_coordinates}
     Let $L,q,k,m,D$ be natural numbers with $q\ge1$ and $m\le D$, and let
@@ -127,6 +128,8 @@ volume~\cite[``Gluing'', ``The leading eigenvector of a near-optimal left state'
     \end{align}
     Every matrix $Y\in\mathbb C^{K\times K}$ with $\|Y\|_1\le1$ admits an
     $X\in\mathcal N$ with $\|Y-X\|_1\le\eta$.
+    If only Hermitian matrices $Y$ are to be covered, the same cardinality
+    bound holds with every center $X\in\mathcal N$ Hermitian.
     This is the boundary-space specialization of
     \cite[Lemma~2.4, source lines 451--460]{Landau2015Polynomial}, with the
     corrected grid and quadratic exponent recorded in~\cite{gap:lvv13_trace_norm_net}.
@@ -146,6 +149,9 @@ volume~\cite[``Gluing'', ``The leading eigenvector of a near-optimal left state'
     \end{align}
     The second inequality follows from $c^2\le(qD)^2$ and monotonicity of
     the ceiling and of natural powers with base at least one.
+    For the Hermitian form, replace each center $X$ by
+    $(X+X^*)/2$. This operation does not increase its trace-norm distance
+    from a Hermitian target.
 \end{proof}
 
 \begin{lemma}[Polynomial growth of the boundary-net bound]
@@ -175,7 +181,8 @@ volume~\cite[``Gluing'', ``The leading eigenvector of a near-optimal left state'
 
 \begin{theorem}[A boundary net of polynomial size]
     \label{thm:chain_boundary_net_polynomial}
-    \lean{TNLean.MPS.AreaLaw.exists_finset_boundary_rectangularTraceNorm_net_polynomial}
+    \lean{TNLean.MPS.AreaLaw.exists_finset_boundary_rectangularTraceNorm_net_polynomial,
+        TNLean.MPS.AreaLaw.exists_finset_hermitian_boundary_rectangularTraceNorm_net_polynomial}
     \leanok
     \uses{def:chain_gluing_left_coordinates}
     Let $L,q,k,m,D$ be natural numbers with $L\ge1$, $q\ge1$ and $m\le D$,
@@ -188,6 +195,8 @@ volume~\cite[``Gluing'', ``The leading eigenvector of a near-optimal left state'
     \end{align}
     Every $Y\in\mathbb C^{K\times K}$ with $\|Y\|_1\le1$ admits an
     $X\in\mathcal N$ with $\|Y-X\|_1\le c/(2L)$.
+    For Hermitian targets, the centers may all be chosen Hermitian with the
+    same polynomial bound.
 \end{theorem}
 \begin{proof}
     \leanok

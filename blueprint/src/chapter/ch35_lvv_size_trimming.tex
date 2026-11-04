@@ -55,6 +55,48 @@ those whose boundary state is close to that point.
 \end{proof}
 
 
+\begin{lemma}[Size trimming for a one-state local space]
+    \label{thm:lvv_size_trimmed_family_dimension_one}
+    \lean{TNLean.MPS.AreaLaw.exists_size_trimmed_family_localDimension_one}
+    \leanok
+    \uses{def:lvv_viable_set,def:lvv_viable_mps}
+    Suppose the local Hilbert space has dimension one.  If a finite family
+    $S$ is $(k,\delta)$-viable for a normalized chain vector and every member
+    of $S$ has matrix product state bond dimension at most $b$, then some
+    singleton $T\subseteq S$ is $(k,0)$-viable and its member has bond
+    dimension at most $b$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    The chain Hilbert space and the left Hilbert space at every cut are both
+    one-dimensional.  A unit viable witness is therefore a scalar multiple
+    of the normalized chain vector.  Its support condition implies that
+    $S$ contains a nonzero vector, and any such vector spans the left Hilbert
+    space.  Taking this vector as the sole member of $T$ gives exact
+    viability.
+\end{proof}
+
+\begin{lemma}[Size trimming for the empty chain]
+    \label{thm:lvv_size_trimmed_family_empty_chain}
+    \lean{TNLean.MPS.AreaLaw.exists_size_trimmed_family_chainLength_zero}
+    \leanok
+    \uses{def:lvv_viable_set,def:lvv_viable_mps}
+    Suppose the chain has no sites.  If a finite family $S$ is viable for a
+    normalized chain vector and every member of $S$ has matrix product state
+    bond dimension at most $b$, then some singleton $T\subseteq S$ is exactly
+    viable and its member has bond dimension at most $b$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    The configuration space of the empty chain, and that of every left block
+    in it, consists of one point.  Hence the corresponding Hilbert spaces are
+    one-dimensional.  Viability supplies a nonzero member of
+    $\operatorname{Span}(S)$, so $S$ contains a nonzero vector.  Its singleton
+    spans the left Hilbert space and is exactly viable.  This formulation
+    avoids the quotients by the chain length used for nonempty chains.
+\end{proof}
+
+
 \begin{lemma}[A size-trimming family chosen before the ground state]
     \label{thm:lvv_size_trimmed_family}
     \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.exists_size_trimmed_family,
@@ -108,7 +150,8 @@ those whose boundary state is close to that point.
         thm:left_mps_finite_span}
     First fix a decomposition $H=H_L+B$ with the stated left and right
     supports and $\|B\|\le2L$. For every integer $0\le m\le D$, choose an
-    $\eta$-net $N_m$ on the actual boundary space, with $|N_m|\le K$.
+    $\eta$-net $N_m$ with Hermitian centers on the Hermitian part of the
+    actual boundary space, with $|N_m|\le K$.
     Lemma~\ref{thm:lvv_finite_boundary_selection} chooses a global
     minimizer and a leading unit eigenvector at exactly the feasible
     points of $N_m$. Let $T_m$ be their left columns, and put
@@ -146,6 +189,1501 @@ those whose boundary state is close to that point.
     asserted viability. The same selected eigenvector $u_{m,X}$, after
     joining the left coordinates, has all its columns in $T_m\subseteq T$;
     its norm is one and the original right extension $W$ is an isometry.
+\end{proof}
+
+\begin{lemma}[Dimension of the boundary optimization]
+    \label{thm:lvv_boundary_support_rank}
+    \lean{TNLean.MPS.AreaLaw.rank_boundarySupportProjection_le,
+        TNLean.MPS.AreaLaw.exists_boundarySupportCoordinates,
+        TNLean.MPS.AreaLaw.exists_boundarySupportCoordinateCoefficients,
+        TNLean.MPS.AreaLaw.boundarySupportCoordinateCoefficientCount,
+        TNLean.MPS.AreaLaw.boundarySupportCoordinateCoefficientCount_le_sq,
+        TNLean.MPS.AreaLaw.rank_boundarySupportedMatrix_le,
+        TNLean.MPS.AreaLaw.exists_boundarySupportedDensityCompression,
+        TNLean.MPS.AreaLaw.exists_boundarySupportedDensityCompression_of_trace_eq_one,
+        TNLean.MPS.AreaLaw.exists_boundarySupportedVectorDensityCompression,
+        TNLean.MPS.AreaLaw.isometricDensityExpansion_trace_and_energy,
+        TNLean.MPS.AreaLaw.l2_opNorm_isometricCompression_le,
+        TNLean.MPS.AreaLaw.isometricDensityExpansion_eigenvector_coordinates,
+        TNLean.MPS.AreaLaw.isometricDensityExpansion_eigenresidual_norm,
+        TNLean.MPS.AreaLaw.exists_boundarySupportedDensity_eigenvector_coordinates,
+        TNLean.MPS.AreaLaw.compressedDensity_trace_energy_perturbation,
+        TNLean.MPS.AreaLaw.compressedBoundaryLM_distance_le,
+        TNLean.MPS.AreaLaw.compressedDensity_program_perturbation,
+        TNLean.MPS.AreaLaw.isometricDensityExpansion_program_perturbation,
+        TNLean.MPS.AreaLaw.rectangularTraceNorm_normalizePosSemidef_sub,
+        TNLean.MPS.AreaLaw.exists_normalizedPositiveMatrix_close_of_close,
+        TNLean.MPS.AreaLaw.exists_normalizedPositiveMatrix_approximate_program,
+        TNLean.MPS.AreaLaw.exists_normalized_isometricDensityExpansion_program_perturbation,
+        TNLean.MPS.AreaLaw.compressedBoundaryLM_apply,
+        TNLean.MPS.AreaLaw.isometricDensityExpansion_boundary_distance,
+        TNLean.MPS.AreaLaw.Matrix.IsHermitian.rectangularTraceNorm_eq_re_trace_posPart_add_negPart,
+        TNLean.MPS.AreaLaw.hermitian_rectangularTraceNorm_le_iff_exists_posSemidef_sub,
+        TNLean.MPS.AreaLaw.compressedBoundaryLM_isHermitian,
+        TNLean.MPS.AreaLaw.compressedBoundary_rectangularTraceNorm_le_iff_exists_posSemidef_sub,
+        TNLean.MPS.AreaLaw.IsCompressedBoundarySDPFeasibleAtEnergy,
+        TNLean.MPS.AreaLaw.IsCompressedBoundarySDPFeasibleAtEnergy.rectangularTraceNorm_bounds,
+        TNLean.MPS.AreaLaw.IsCompressedBoundarySDPFeasibleAtEnergy.entry_norm_bounds,
+        TNLean.MPS.AreaLaw.exists_finset_rectangularTraceNorm_ball_net,
+        TNLean.MPS.AreaLaw.exists_finset_density_rectangularTraceNorm_net,
+        TNLean.MPS.AreaLaw.exists_finset_approx_compressed_boundary_minimizer,
+        TNLean.MPS.AreaLaw.exists_finset_approx_compressed_boundary_solution_at_energy,
+        TNLean.MPS.AreaLaw.exists_finset_minimizing_approx_compressed_boundary_solution_at_energy,
+        TNLean.MPS.AreaLaw.compressedBoundarySDPRealCoordinateCount,
+        TNLean.MPS.AreaLaw.compressedBoundarySDPTotalConeOrder,
+        TNLean.MPS.AreaLaw.chain_compressedBoundarySDP_size_le,
+        TNLean.MPS.AreaLaw.exists_compressed_boundary_density_iff_exists_sdp_feasible_at_energy,
+        TNLean.MPS.AreaLaw.exists_compressed_boundary_sdp_minimizer_of_nonempty,
+        TNLean.MPS.AreaLaw.exists_compressed_boundary_sdp_minimizer_of_feasible,
+        TNLean.MPS.AreaLaw.rectangularTraceNorm_sub_le_re_trace_add_of_posSemidef,
+        TNLean.MPS.AreaLaw.rectangularTraceNorm_le_add_of_approx_posSemidef_sub,
+        TNLean.MPS.AreaLaw.rectangularTraceNorm_le_card_sq_mul_of_entry_norm_le,
+        TNLean.MPS.AreaLaw.rectangularTraceNorm_le_of_entry_norm_le,
+        TNLean.MPS.AreaLaw.neg_le_minEigenvalue_of_gershgorin,
+        TNLean.MPS.AreaLaw.neg_card_add_one_mul_le_minEigenvalue_of_entry_norm_le,
+        TNLean.MPS.AreaLaw.neg_le_minEigenvalue_of_add_smul_one_posSemidef,
+        TNLean.MPS.AreaLaw.neg_le_minEigenvalue_of_add_smul_one_eq_mul_conjTranspose,
+        TNLean.MPS.AreaLaw.Matrix.IsHermitian.exists_add_smul_one_eq_mul_conjTranspose_of_neg_le_minEigenvalue,
+        TNLean.MPS.AreaLaw.Matrix.IsHermitian.neg_le_minEigenvalue_iff_exists_gram_factor,
+        TNLean.MPS.AreaLaw.neg_le_minEigenvalue_of_approx_gram_factor,
+        TNLean.MPS.AreaLaw.norm_sq_apply_le_re_trace_mul_conjTranspose,
+        TNLean.MPS.AreaLaw.norm_mul_apply_le_card_mul_of_entry_norm_le,
+        TNLean.MPS.AreaLaw.norm_rectangular_mul_apply_le_card_mul_of_entry_norm_le,
+        TNLean.MPS.AreaLaw.norm_trace_mul_le_card_sq_mul_of_entry_norm_le,
+        TNLean.MPS.AreaLaw.abs_re_trace_mul_sub_le_of_entry_norm_le,
+        TNLean.MPS.AreaLaw.norm_mul_conjTranspose_apply_le_card_mul_of_sq_entry_norm_le,
+        TNLean.MPS.AreaLaw.norm_gram_sub_apply_le_of_entry_norm_le,
+        TNLean.MPS.AreaLaw.norm_compressedBoundaryLM_sub_apply_le_of_entry_norm_le,
+        TNLean.MPS.AreaLaw.norm_compressedBoundaryLM_sub_apply_le_of_entry_norm_le',
+        TNLean.MPS.AreaLaw.compressedBoundaryResidual_entry_norm_le_of_coordinate_approximation,
+        TNLean.MPS.AreaLaw.rectangularTraceNorm_compressedBoundaryLM_sub_le_of_entry_norm_le,
+        TNLean.MPS.AreaLaw.compressedBoundaryResidual_rectangularTraceNorm_le_of_coordinate_approximation,
+        TNLean.MPS.AreaLaw.compressedBoundaryResidual_rectangularTraceNorm_le_of_coordinate_approximation_rev,
+        TNLean.MPS.AreaLaw.compressedBoundaryResidual_rectangularTraceNorm_le_of_boundary_center_approximation,
+        TNLean.MPS.AreaLaw.unitRealGrid,
+        TNLean.MPS.AreaLaw.scaledRealGrid,
+        TNLean.MPS.AreaLaw.rationalRealGrid,
+        TNLean.MPS.AreaLaw.mem_rationalRealGrid_iff,
+        TNLean.MPS.AreaLaw.rationalHeight,
+        TNLean.MPS.AreaLaw.rationalBitLength,
+        TNLean.MPS.AreaLaw.num_natAbs_le_rationalHeight,
+        TNLean.MPS.AreaLaw.den_le_rationalHeight,
+        TNLean.MPS.AreaLaw.rationalBitLength_le,
+        TNLean.MPS.AreaLaw.rationalHeight_cast,
+        TNLean.MPS.AreaLaw.rationalHeight_neg,
+        TNLean.MPS.AreaLaw.rationalHeight_mul_le,
+        TNLean.MPS.AreaLaw.rationalHeight_add_le,
+        TNLean.MPS.AreaLaw.rationalHeight_sub_le,
+        TNLean.MPS.AreaLaw.rationalHeight_natCast_le,
+        TNLean.MPS.AreaLaw.rationalHeight_inv,
+        TNLean.MPS.AreaLaw.rationalHeight_div_le,
+        TNLean.MPS.AreaLaw.rationalHeight_finset_sum_le,
+        TNLean.MPS.AreaLaw.rationalGridCoordinate_height_le,
+        TNLean.MPS.AreaLaw.rationalHeight_le_of_mem_rationalRealGrid,
+        TNLean.MPS.AreaLaw.rationalPositiveToleranceOrder,
+        TNLean.MPS.AreaLaw.rationalPositiveTolerance,
+        TNLean.MPS.AreaLaw.rationalNonnegativeUpperBound,
+        TNLean.MPS.AreaLaw.le_rationalNonnegativeUpperBound,
+        TNLean.MPS.AreaLaw.rationalNonnegativeUpperBound_height_le,
+        TNLean.MPS.AreaLaw.rationalNonnegativeUpperApproximation,
+        TNLean.MPS.AreaLaw.le_rationalNonnegativeUpperApproximation,
+        TNLean.MPS.AreaLaw.rationalNonnegativeUpperApproximation_le,
+        TNLean.MPS.AreaLaw.rationalNonnegativeUpperApproximation_height_le,
+        TNLean.MPS.AreaLaw.rationalPositiveToleranceOrder_pos,
+        TNLean.MPS.AreaLaw.rationalPositiveTolerance_pos,
+        TNLean.MPS.AreaLaw.rationalPositiveTolerance_le,
+        TNLean.MPS.AreaLaw.rationalPositiveTolerance_hasRationalCoordinatesOfHeight,
+        TNLean.MPS.AreaLaw.rationalBitLength_le_of_mem_rationalRealGrid,
+        TNLean.MPS.AreaLaw.numerator_denominator_le_of_mem_rationalRealGrid,
+        TNLean.MPS.AreaLaw.HasRationalComplexCoordinates,
+        TNLean.MPS.AreaLaw.HasRationalComplexCoordinatesOfHeight,
+        TNLean.MPS.AreaLaw.HasRationalComplexCoordinatesOfHeight.forget,
+        TNLean.MPS.AreaLaw.HasRationalComplexCoordinatesOfHeight.mono,
+        TNLean.MPS.AreaLaw.HasRationalComplexCoordinatesOfHeight.exists_bitLength_le,
+        TNLean.MPS.AreaLaw.HasRationalComplexCoordinatesOfHeight.zero,
+        TNLean.MPS.AreaLaw.HasRationalComplexCoordinatesOfHeight.one,
+        TNLean.MPS.AreaLaw.HasRationalComplexCoordinatesOfHeight.half,
+        TNLean.MPS.AreaLaw.HasRationalComplexCoordinatesOfHeight.neg,
+        TNLean.MPS.AreaLaw.HasRationalComplexCoordinatesOfHeight.star,
+        TNLean.MPS.AreaLaw.HasRationalComplexCoordinatesOfHeight.add,
+        TNLean.MPS.AreaLaw.HasRationalComplexCoordinatesOfHeight.sub,
+        TNLean.MPS.AreaLaw.HasRationalComplexCoordinatesOfHeight.mul,
+        TNLean.MPS.AreaLaw.HasRationalComplexCoordinatesOfHeight.finset_sum,
+        TNLean.MPS.AreaLaw.HasRationalComplexCoordinates.exists_realPart,
+        TNLean.MPS.AreaLaw.HasRationalComplexCoordinates.zero,
+        TNLean.MPS.AreaLaw.HasRationalComplexCoordinates.one,
+        TNLean.MPS.AreaLaw.HasRationalComplexCoordinates.add,
+        TNLean.MPS.AreaLaw.HasRationalComplexCoordinates.neg,
+        TNLean.MPS.AreaLaw.HasRationalComplexCoordinates.sub,
+        TNLean.MPS.AreaLaw.HasRationalComplexCoordinates.mul,
+        TNLean.MPS.AreaLaw.HasRationalComplexCoordinates.star,
+        TNLean.MPS.AreaLaw.HasRationalComplexCoordinates.finset_sum,
+        TNLean.MPS.AreaLaw.exists_rationalComplex_close,
+        TNLean.MPS.AreaLaw.RationalComplex,
+        TNLean.MPS.AreaLaw.denseRange_rationalComplex_val,
+        TNLean.MPS.AreaLaw.rationalCast_le_iff,
+        TNLean.MPS.AreaLaw.rationalTraceDefect_le_iff,
+        TNLean.MPS.AreaLaw.rationalTraceSum_le_iff,
+        TNLean.MPS.AreaLaw.rationalCastLEDecidable,
+        TNLean.MPS.AreaLaw.rationalTraceDefectLEDecidable,
+        TNLean.MPS.AreaLaw.rationalTraceSumLEDecidable,
+        TNLean.MPS.AreaLaw.complex_norm_le_iff_normSq_le_sq,
+        TNLean.MPS.AreaLaw.gaussianRational_norm_le_iff,
+        TNLean.MPS.AreaLaw.gaussianRationalNormLEDecidable,
+        TNLean.MPS.AreaLaw.gaussianRationalMatrixEntryNormLEDecidable,
+        TNLean.MPS.AreaLaw.RationalMatrixCode,
+        TNLean.MPS.AreaLaw.RationalRectMatrixCode,
+        TNLean.MPS.AreaLaw.decodeRationalComplex,
+        TNLean.MPS.AreaLaw.RationalMatrixCode.decode,
+        TNLean.MPS.AreaLaw.rationalMatrixCodeGrid,
+        TNLean.MPS.AreaLaw.RationalMatrixCode.hermitianPart,
+        TNLean.MPS.AreaLaw.rationalHermitianMatrixCodeGrid,
+        TNLean.MPS.AreaLaw.rationalBoundedMatrixCodeGrid,
+        TNLean.MPS.AreaLaw.rationalGramCertificateCodeGrid,
+        TNLean.MPS.AreaLaw.rationalHermitianBoundedMatrixCodeGrid,
+        TNLean.MPS.AreaLaw.RationalApproxCertificateTestValues,
+        TNLean.MPS.AreaLaw.RationalApproxCertificateTestValues.Accepts,
+        TNLean.MPS.AreaLaw.firstAcceptedRationalApproxCertificate,
+        TNLean.MPS.AreaLaw.firstAcceptedRationalApproxCertificate_sound,
+        TNLean.MPS.AreaLaw.firstAcceptedRationalApproxCertificate_complete,
+        TNLean.MPS.AreaLaw.firstAcceptedInFinset,
+        TNLean.MPS.AreaLaw.firstAcceptedInFinset_sound,
+        TNLean.MPS.AreaLaw.firstAcceptedInFinset_complete,
+        TNLean.MPS.AreaLaw.RationalApproxCertificateTestValues.sound,
+        TNLean.MPS.AreaLaw.RationalCertificateCode.testValues_sound,
+        TNLean.MPS.AreaLaw.Matrix.HasRationalEntries,
+        TNLean.MPS.AreaLaw.Matrix.HasRationalEntriesOfHeight,
+        TNLean.MPS.AreaLaw.Matrix.HasRationalEntriesOfHeight.forget,
+        TNLean.MPS.AreaLaw.Matrix.HasRationalEntriesOfHeight.entry_exists_bitLength_le,
+        TNLean.MPS.AreaLaw.Matrix.HasRationalEntriesOfHeight.mono,
+        TNLean.MPS.AreaLaw.Matrix.HasRationalEntriesOfHeight.one,
+        TNLean.MPS.AreaLaw.Matrix.HasRationalEntriesOfHeight.smul,
+        TNLean.MPS.AreaLaw.Matrix.HasRationalEntriesOfHeight.conjTranspose,
+        TNLean.MPS.AreaLaw.Matrix.HasRationalEntriesOfHeight.add,
+        TNLean.MPS.AreaLaw.hermitianPartHeight,
+        TNLean.MPS.AreaLaw.Matrix.HasRationalEntriesOfHeight.hermitianPart,
+        TNLean.MPS.AreaLaw.Matrix.HasRationalEntriesOfHeight.sub,
+        TNLean.MPS.AreaLaw.Matrix.HasRationalEntriesOfHeight.mul,
+        TNLean.MPS.AreaLaw.Matrix.HasRationalEntriesOfHeight.trace,
+        TNLean.MPS.AreaLaw.Matrix.HasRationalEntriesOfHeight.gram,
+        TNLean.MPS.AreaLaw.Matrix.HasRationalEntriesOfHeight.shiftedGramResidual,
+        TNLean.MPS.AreaLaw.Matrix.HasRationalEntriesOfHeight.reindex,
+        TNLean.MPS.AreaLaw.Matrix.HasRationalEntriesOfHeight.partialTraceLeft,
+        TNLean.MPS.AreaLaw.Matrix.HasRationalEntriesOfHeight.trace_mul,
+        TNLean.MPS.AreaLaw.Matrix.HasRationalEntries.one,
+        TNLean.MPS.AreaLaw.Matrix.HasRationalEntries.smul,
+        TNLean.MPS.AreaLaw.Matrix.HasRationalEntries.add,
+        TNLean.MPS.AreaLaw.Matrix.HasRationalEntries.neg,
+        TNLean.MPS.AreaLaw.Matrix.HasRationalEntries.sub,
+        TNLean.MPS.AreaLaw.Matrix.HasRationalEntries.conjTranspose,
+        TNLean.MPS.AreaLaw.Matrix.HasRationalEntries.mul,
+        TNLean.MPS.AreaLaw.Matrix.HasRationalEntries.trace,
+        TNLean.MPS.AreaLaw.Matrix.HasRationalEntries.reindex,
+        TNLean.MPS.AreaLaw.Matrix.HasRationalEntries.partialTraceLeft,
+        TNLean.MPS.AreaLaw.compressedBoundaryLM_hasRationalEntries,
+        TNLean.MPS.AreaLaw.compressedBoundaryLM_hasRationalEntriesOfHeight,
+        TNLean.MPS.AreaLaw.compressedBoundaryResidual_hasRationalEntriesOfHeight,
+        TNLean.MPS.AreaLaw.matrixProductHeight,
+        TNLean.MPS.AreaLaw.matrixTraceHeight,
+        TNLean.MPS.AreaLaw.matrixTraceProductHeight,
+        TNLean.MPS.AreaLaw.shiftedGramResidualHeight,
+        TNLean.MPS.AreaLaw.compressedBoundaryHeight,
+        TNLean.MPS.AreaLaw.compressedBoundaryResidualHeight,
+        TNLean.MPS.AreaLaw.exists_mem_rationalRealGrid,
+        TNLean.MPS.AreaLaw.gaussianRationalMatrixGrid,
+        TNLean.MPS.AreaLaw.gaussianRationalMatrixGrid_entry_mem,
+        TNLean.MPS.AreaLaw.gaussianRationalMatrixGrid_entry,
+        TNLean.MPS.AreaLaw.gaussianRationalMatrixGrid_entry_height_le,
+        TNLean.MPS.AreaLaw.gaussianRationalMatrixGrid_hasRationalEntriesOfHeight,
+        TNLean.MPS.AreaLaw.gaussianRationalMatrixGrid_card_le,
+        TNLean.MPS.AreaLaw.exists_mem_gaussianRationalMatrixGrid,
+        TNLean.MPS.AreaLaw.rationalMatrixGridRadius,
+        TNLean.MPS.AreaLaw.rationalMatrixGridOrder,
+        TNLean.MPS.AreaLaw.rationalBoundedMatrixGrid,
+        TNLean.MPS.AreaLaw.rationalBoundedMatrixGridHeight,
+        TNLean.MPS.AreaLaw.rationalBoundedMatrixGrid_hasRationalEntriesOfHeight,
+        TNLean.MPS.AreaLaw.rationalMatrixGridOrder_pos,
+        TNLean.MPS.AreaLaw.rationalBoundedMatrixGrid_card_le,
+        TNLean.MPS.AreaLaw.exists_mem_rationalBoundedMatrixGrid,
+        TNLean.MPS.AreaLaw.exists_rational_rectangular_approximation,
+        TNLean.MPS.AreaLaw.norm_apply_le_one_of_conjTranspose_mul_self_eq_one,
+        TNLean.MPS.AreaLaw.exists_rational_isometry_approximation,
+        TNLean.MPS.AreaLaw.exists_rational_coordinate_map_with_boundary_residual,
+        TNLean.MPS.AreaLaw.rationalCoordinateMapTolerance,
+        TNLean.MPS.AreaLaw.rationalCoordinateMapTolerance_pos,
+        TNLean.MPS.AreaLaw.rationalCoordinateMapTolerance_boundary_error_le,
+        TNLean.MPS.AreaLaw.exists_rational_coordinate_map_with_boundary_allowance,
+        TNLean.MPS.AreaLaw.rationalCoordinateMapTraceTolerance,
+        TNLean.MPS.AreaLaw.rationalCoordinateMapTraceTolerance_pos,
+        TNLean.MPS.AreaLaw.rationalCoordinateMapTraceTolerance_boundary_error_le,
+        TNLean.MPS.AreaLaw.rationalCoordinateMapTraceToleranceOfBound,
+        TNLean.MPS.AreaLaw.rationalCoordinateMapTraceToleranceOfBound_pos,
+        TNLean.MPS.AreaLaw.rationalCoordinateMapTraceToleranceOfBound_boundary_error_le,
+        TNLean.MPS.AreaLaw.exists_rational_coordinate_map_with_boundary_trace_allowance,
+        TNLean.MPS.AreaLaw.rationalGramCertificateRadius,
+        TNLean.MPS.AreaLaw.rationalGramCertificateOrder,
+        TNLean.MPS.AreaLaw.rationalGramCertificateGrid,
+        TNLean.MPS.AreaLaw.rationalGramCertificateGridHeight,
+        TNLean.MPS.AreaLaw.rationalGramCertificateGrid_hasRationalEntriesOfHeight,
+        TNLean.MPS.AreaLaw.rationalGramCertificateOrder_pos,
+        TNLean.MPS.AreaLaw.rationalGramCertificateGrid_card_le,
+        TNLean.MPS.AreaLaw.rationalGramCertificateGrid_entry,
+        TNLean.MPS.AreaLaw.exists_mem_rationalGramCertificateGrid,
+        TNLean.MPS.AreaLaw.complexMatrixGrid,
+        TNLean.MPS.AreaLaw.exists_mem_unitRealGrid,
+        TNLean.MPS.AreaLaw.exists_mem_scaledRealGrid,
+        TNLean.MPS.AreaLaw.complexMatrixGrid_card_le,
+        TNLean.MPS.AreaLaw.exists_mem_complexMatrixGrid,
+        TNLean.MPS.AreaLaw.boundedMatrixGridOrder,
+        TNLean.MPS.AreaLaw.boundedMatrixGrid,
+        TNLean.MPS.AreaLaw.boundedMatrixGridOrder_pos,
+        TNLean.MPS.AreaLaw.boundedMatrixGrid_card_le,
+        TNLean.MPS.AreaLaw.exists_mem_boundedMatrixGrid,
+        TNLean.MPS.AreaLaw.matrixHermitianPart,
+        TNLean.MPS.AreaLaw.matrixHermitianPart_isHermitian,
+        TNLean.MPS.AreaLaw.hermitianBoundedMatrixGrid,
+        TNLean.MPS.AreaLaw.hermitianBoundedMatrixGrid_card_le,
+        TNLean.MPS.AreaLaw.matrixHermitianPart_mem_hermitianBoundedMatrixGrid,
+        TNLean.MPS.AreaLaw.norm_sub_matrixHermitianPart_apply_le,
+        TNLean.MPS.AreaLaw.exists_mem_hermitianBoundedMatrixGrid,
+        TNLean.MPS.AreaLaw.rationalHermitianBoundedMatrixGrid,
+        TNLean.MPS.AreaLaw.rationalHermitianBoundedMatrixGridHeight,
+        TNLean.MPS.AreaLaw.rationalHermitianBoundedMatrixGrid_hasRationalEntriesOfHeight,
+        TNLean.MPS.AreaLaw.rationalHermitianBoundedMatrixGrid_card_le,
+        TNLean.MPS.AreaLaw.matrixHermitianPart_hasRationalEntries,
+        TNLean.MPS.AreaLaw.rationalHermitianBoundedMatrixGrid_entry,
+        TNLean.MPS.AreaLaw.exists_mem_rationalHermitianBoundedMatrixGrid,
+        TNLean.MPS.AreaLaw.norm_trace_le_card_mul_of_entry_norm_le,
+        TNLean.MPS.AreaLaw.abs_re_trace_sub_le_card_mul_of_entry_norm_le,
+        TNLean.MPS.AreaLaw.abs_one_sub_re_trace_le_of_entry_rounding,
+        TNLean.MPS.AreaLaw.re_trace_add_le_of_entry_rounding,
+        TNLean.MPS.AreaLaw.exists_finset_bounded_gram_factor_net,
+        TNLean.MPS.AreaLaw.exists_finset_bounded_gram_certificate_net,
+        TNLean.MPS.AreaLaw.gramCertificateMesh,
+        TNLean.MPS.AreaLaw.gramCertificateMesh_pos,
+        TNLean.MPS.AreaLaw.gramCertificateMesh_error_le,
+        TNLean.MPS.AreaLaw.gramCertificateBound,
+        TNLean.MPS.AreaLaw.gramCertificateBound_pos,
+        TNLean.MPS.AreaLaw.le_gramCertificateBound,
+        TNLean.MPS.AreaLaw.approxSDPDensityEntryBound,
+        TNLean.MPS.AreaLaw.approxSDPAuxEntryBound,
+        TNLean.MPS.AreaLaw.approxSDPDensityEntryBound_pos,
+        TNLean.MPS.AreaLaw.approxSDPAuxEntryBound_pos,
+        TNLean.MPS.AreaLaw.gramCertificateNetCard,
+        TNLean.MPS.AreaLaw.gramCertificateGridOrder,
+        TNLean.MPS.AreaLaw.gramCertificateGrid,
+        TNLean.MPS.AreaLaw.gramCertificateGridOrder_pos,
+        TNLean.MPS.AreaLaw.gramCertificateGrid_card_le,
+        TNLean.MPS.AreaLaw.exists_mem_gramCertificateGrid,
+        TNLean.MPS.AreaLaw.exists_finset_bounded_gram_certificate_net_at_error,
+        TNLean.MPS.AreaLaw.IsApproxCompressedBoundarySDPFeasibleAtEnergy,
+        TNLean.MPS.AreaLaw.compressed_boundary_density_of_approx_sdp_feasible_at_energy,
+        TNLean.MPS.AreaLaw.Matrix.IsHermitian.add_smul_one_posSemidef_of_neg_le_minEigenvalue,
+        TNLean.MPS.AreaLaw.exists_density_rectangularTraceNorm_sub_le_of_neg_le_minEigenvalue,
+        TNLean.MPS.AreaLaw.exists_density_rectangularTraceNorm_sub_le_of_trace_defect_of_minEigenvalue,
+        TNLean.MPS.AreaLaw.exists_density_program_of_neg_le_minEigenvalue,
+        TNLean.MPS.AreaLaw.exists_density_program_of_trace_defect_of_minEigenvalue,
+        TNLean.MPS.AreaLaw.exists_density_of_spectral_approx_sdp_certificate,
+        TNLean.MPS.AreaLaw.exists_density_of_fully_approx_sdp_certificate,
+        TNLean.MPS.AreaLaw.exists_posSemidef_pair_same_sub_of_neg_le_minEigenvalue,
+        TNLean.MPS.AreaLaw.IsAllSpectralApproxCompressedBoundarySDPFeasibleAtEnergy,
+        TNLean.MPS.AreaLaw.IsAllSpectralApproxCompressedBoundarySDPFeasibleAtEnergy.mono,
+        TNLean.MPS.AreaLaw.IsAllSpectralApproxCompressedBoundarySDPFeasibleAtEnergy.exists_gram_factors,
+        TNLean.MPS.AreaLaw.IsAllSpectralApproxCompressedBoundarySDPFeasibleAtEnergy.entry_norm_bounds,
+        TNLean.MPS.AreaLaw.IsAllSpectralApproxCompressedBoundarySDPFeasibleAtEnergy.of_fixed_data_approximation,
+        TNLean.MPS.AreaLaw.IsAllSpectralApproxCompressedBoundarySDPFeasibleAtEnergy.to_fixed_data_approximation,
+        TNLean.MPS.AreaLaw.exists_rational_fixed_matrices_for_approximate_sdp,
+        TNLean.MPS.AreaLaw.IsAllSpectralApproxCompressedBoundarySDPFeasibleAtEnergy.of_coordinate_approximation,
+        TNLean.MPS.AreaLaw.IsAllSpectralApproxCompressedBoundarySDPFeasibleAtEnergy.to_coordinate_approximation,
+        TNLean.MPS.AreaLaw.exists_rational_coordinate_map_for_approximate_sdp,
+        TNLean.MPS.AreaLaw.IsAllSpectralApproxCompressedBoundarySDPFeasibleAtEnergy.exists_explicit_primary_search,
+        TNLean.MPS.AreaLaw.IsAllSpectralApproxCompressedBoundarySDPFeasibleAtEnergy.exists_finite_gram_search,
+        TNLean.MPS.AreaLaw.IsAllSpectralApproxCompressedBoundarySDPFeasibleAtEnergy.exists_explicit_gram_search,
+        TNLean.MPS.AreaLaw.IsAllSpectralApproxCompressedBoundarySDPFeasibleAtEnergy.exists_rational_gram_search,
+        TNLean.MPS.AreaLaw.uniformCertificateRoundingMesh,
+        TNLean.MPS.AreaLaw.uniformCertificateRoundingMesh_pos,
+        TNLean.MPS.AreaLaw.uniformCertificateRoundingMesh_bounds,
+        TNLean.MPS.AreaLaw.ApproxCertificateComparisonIndex,
+        TNLean.MPS.AreaLaw.approxCertificateComparisonCount,
+        TNLean.MPS.AreaLaw.approxCertificateComparisonCount_eq,
+        TNLean.MPS.AreaLaw.ApproxCertificateDenseProductTermIndex,
+        TNLean.MPS.AreaLaw.approxCertificateDenseProductTermCount,
+        TNLean.MPS.AreaLaw.approxCertificateDenseProductTermCount_eq,
+        TNLean.MPS.AreaLaw.matrixCoordinateGridCardBound,
+        TNLean.MPS.AreaLaw.uniformCertificateSearchGrid,
+        TNLean.MPS.AreaLaw.RationalCertificateCode,
+        TNLean.MPS.AreaLaw.RationalCertificateCode.decode,
+        TNLean.MPS.AreaLaw.rationalCompressedBoundaryCode,
+        TNLean.MPS.AreaLaw.RationalCertificateCode.testValues,
+        TNLean.MPS.AreaLaw.RationalCertificateCode.testValues_correct,
+        TNLean.MPS.AreaLaw.RationalApproxCertificateTestValues.accepts_of_norm_bounds,
+        TNLean.MPS.AreaLaw.RationalCertificateCode.testValues_accepts_of_bounds,
+        TNLean.MPS.AreaLaw.exists_accepted_rational_code_of_grid_certificate,
+        TNLean.MPS.AreaLaw.firstAcceptedRationalCertificateCode,
+        TNLean.MPS.AreaLaw.rationalNatCeil,
+        TNLean.MPS.AreaLaw.RationalCertificateGridParameters,
+        TNLean.MPS.AreaLaw.rationalCertificateGridParameters,
+        TNLean.MPS.AreaLaw.rationalCertificateCodeGrid,
+        TNLean.MPS.AreaLaw.rationalCertificateCodeGridOfTolerances,
+        TNLean.MPS.AreaLaw.searchRationalCertificateCodeGrid,
+        TNLean.MPS.AreaLaw.searchRationalCertificateCodeGridOfTolerances,
+        TNLean.MPS.AreaLaw.searchRationalCertificateCodeGridOfTolerances_complete,
+        TNLean.MPS.AreaLaw.searchRationalCertificateCodeGrid_sound,
+        TNLean.MPS.AreaLaw.searchRationalCertificateCodeGrid_complete,
+        TNLean.MPS.AreaLaw.searchRationalCertificateCodeGrid_sdp_sound,
+        TNLean.MPS.AreaLaw.searchRationalCertificateCodeGridOfTolerances_sdp_sound,
+        TNLean.MPS.AreaLaw.searchRationalCertificateCodeGridOfTolerances_exact_data_sdp_sound,
+        TNLean.MPS.AreaLaw.uniformCertificateCodeSearchGrid,
+        TNLean.MPS.AreaLaw.uniformCertificateCodeSearchGrid_eq_rationalCertificateCodeGrid,
+        TNLean.MPS.AreaLaw.uniformCertificateCodeSearchGrid_eq_of_rational_tolerances,
+        TNLean.MPS.AreaLaw.mem_uniformCertificateSearchGrid_iff_exists_code,
+        TNLean.MPS.AreaLaw.uniformCertificateCodeSearchGrid_card_eq,
+        TNLean.MPS.AreaLaw.uniformCertificateCandidateEntryHeight,
+        TNLean.MPS.AreaLaw.uniformCertificateSearchGrid_entries_height_le,
+        TNLean.MPS.AreaLaw.uniformCertificateTestExpressionHeight,
+        TNLean.MPS.AreaLaw.matrixProductHeight_mono,
+        TNLean.MPS.AreaLaw.matrixTraceHeight_mono,
+        TNLean.MPS.AreaLaw.shiftedGramResidualHeight_mono_shift,
+        TNLean.MPS.AreaLaw.compressedBoundaryResidualHeight_mono_fixedData,
+        TNLean.MPS.AreaLaw.uniformCertificateTestExpressionHeight_mono_fixedData,
+        TNLean.MPS.AreaLaw.certificateTestOperandBitLength,
+        TNLean.MPS.AreaLaw.certificateTestOperandBitLength_mono_fixedData,
+        TNLean.MPS.AreaLaw.RationalCompressedSDPInputEncoding,
+        TNLean.MPS.AreaLaw.RationalRectMatrixCode.height,
+        TNLean.MPS.AreaLaw.RationalRectMatrixCode.decode_hasRationalEntriesOfHeight,
+        TNLean.MPS.AreaLaw.RationalRectMatrixCode.exists_code_of_hasRationalEntriesOfHeight,
+        TNLean.MPS.AreaLaw.rationalCompressedSDPInputCodeHeight,
+        TNLean.MPS.AreaLaw.rationalCompressedSDPInputEncodingOfCodes,
+        TNLean.MPS.AreaLaw.exists_rational_fixed_data_codes_with_height,
+        TNLean.MPS.AreaLaw.rationalCompressedSDPApproximationCodeHeight,
+        TNLean.MPS.AreaLaw.rationalApproxDataEnergyThreshold,
+        TNLean.MPS.AreaLaw.rationalApproxDataBoundaryThreshold,
+        TNLean.MPS.AreaLaw.le_rationalApproxDataEnergyThreshold,
+        TNLean.MPS.AreaLaw.le_rationalApproxDataBoundaryThreshold,
+        TNLean.MPS.AreaLaw.rationalApproxDataEnergyThreshold_le,
+        TNLean.MPS.AreaLaw.rationalApproxDataBoundaryThreshold_le,
+        TNLean.MPS.AreaLaw.rationalApproxDataEnergyThreshold_le_add_mesh,
+        TNLean.MPS.AreaLaw.rationalApproxDataBoundaryThreshold_le_add_mesh,
+        TNLean.MPS.AreaLaw.rationalApproxDataEnergyThreshold_sub_add_error_le,
+        TNLean.MPS.AreaLaw.rationalApproxDataEnergyThreshold_sub_add_error_le_max,
+        TNLean.MPS.AreaLaw.rationalApproxDataBoundaryTotalError_le,
+        TNLean.MPS.AreaLaw.rationalCompressedSDPInputCodeHeight_le_approximationCodeHeight,
+        TNLean.MPS.AreaLaw.exists_rational_fixed_data_codes_with_common_height,
+        TNLean.MPS.AreaLaw.exists_rational_compressedSDPInputEncoding,
+        TNLean.MPS.AreaLaw.exists_rational_coordinate_inputEncoding,
+        TNLean.MPS.AreaLaw.compressedSDPInputRationalCoordinateCount,
+        TNLean.MPS.AreaLaw.coordinateMapRationalCoordinateCount_le_compressedSDPInput,
+        TNLean.MPS.AreaLaw.compressedSDPInputRationalCoordinateCount_mono,
+        TNLean.MPS.AreaLaw.compressedSDPInputBitSizeBound,
+        TNLean.MPS.AreaLaw.compressedSDPInputRationalCoordinateCount_le_bitSizeBound,
+        TNLean.MPS.AreaLaw.coordinateMapRationalCoordinateCount_le_compressedSDPInputBitSizeBound,
+        TNLean.MPS.AreaLaw.card_leftBlock,
+        TNLean.MPS.AreaLaw.card_cutLeft,
+        TNLean.MPS.AreaLaw.cutLeft_coordinateMapRationalCoordinateCount_le_compressedSDPInputBitSizeBound,
+        TNLean.MPS.AreaLaw.twoPow_mul_le_cutLeft_compressedSDPInputBitSizeBound,
+        TNLean.MPS.AreaLaw.twoPow_le_cutLeft_compressedSDPInputBitSizeBound,
+        TNLean.MPS.AreaLaw.compressedSDPInputBitSizeBound_mono_height,
+        TNLean.MPS.AreaLaw.compressedSDPInputBitSizeBound_le_of_height_le_two_pow,
+        TNLean.MPS.AreaLaw.compressedSDPInputRationalCoordinateCount_le_of_order_bounds,
+        TNLean.MPS.AreaLaw.compressedSDPInputBitSizeBound_le_of_order_and_height_bounds,
+        TNLean.MPS.AreaLaw.rationalMatrixGridRadius_one,
+        TNLean.MPS.AreaLaw.rationalMatrixGridOrder_inv_two_pow,
+        TNLean.MPS.AreaLaw.rationalMatrixGridOrder_le_two_pow,
+        TNLean.MPS.AreaLaw.rationalPositiveToleranceOrder_inv_two_pow,
+        TNLean.MPS.AreaLaw.rationalPositiveTolerance_inv_two_pow_hasRationalCoordinatesOfHeight,
+        TNLean.MPS.AreaLaw.rationalBoundedMatrixGridHeight_one_inv_two_pow_le,
+        TNLean.MPS.AreaLaw.rationalMatrixGridRadius_le_two_pow,
+        TNLean.MPS.AreaLaw.rationalBoundedMatrixGridHeight_inv_two_pow_le,
+        TNLean.MPS.AreaLaw.rationalBoundedMatrixGridHeight_le_two_pow_of_inv_two_pow_le,
+        TNLean.MPS.AreaLaw.exists_dyadic_rational_rectangular_approximation,
+        TNLean.MPS.AreaLaw.exists_dyadic_rational_pi_approximation,
+        TNLean.MPS.AreaLaw.norm_finset_prod_sub_prod_le_one,
+        TNLean.MPS.AreaLaw.structuredCompressedSDPInputRationalCoordinateCount,
+        TNLean.MPS.AreaLaw.structuredCompressedSDPInputBitSizeBound,
+        TNLean.MPS.AreaLaw.RationalStructuredCompressedSDPInputEncoding,
+        TNLean.MPS.AreaLaw.rationalStructuredCompressedSDPInputHeight,
+        TNLean.MPS.AreaLaw.rationalStructuredCompressedSDPInputHeight_le_two_pow,
+        TNLean.MPS.AreaLaw.rationalStructuredCompressedSDPInputEncodingOfHeightBounds,
+        TNLean.MPS.AreaLaw.exists_rational_boundarySupportCoordinateCoefficientApproximation,
+        TNLean.MPS.AreaLaw.norm_boundarySupportCoordinate_sum_sub_le,
+        TNLean.MPS.AreaLaw.exists_rational_boundarySupportCoordinateApproximation,
+        TNLean.MPS.AreaLaw.exists_rational_boundarySupportCoordinates,
+        TNLean.MPS.AreaLaw.exists_orthonormalBasis_isLeftOpenMPS_span,
+        TNLean.MPS.AreaLaw.exists_orthonormal_isLeftOpenMPS_span_finset,
+        TNLean.MPS.AreaLaw.norm_euclidean_prod_slice_le,
+        TNLean.MPS.AreaLaw.boundarySupportMatrixOfCoordinates,
+        TNLean.MPS.AreaLaw.norm_boundarySupportMatrixOfCoordinates_sub_apply_le,
+        TNLean.MPS.AreaLaw.OBCChainTensor.ParameterIndex,
+        TNLean.MPS.AreaLaw.OBCChainTensor.Parameters,
+        TNLean.MPS.AreaLaw.OBCChainTensor.RationalParameters,
+        TNLean.MPS.AreaLaw.OBCChainTensor.rationalParametersVal,
+        TNLean.MPS.AreaLaw.OBCChainTensor.denseRange_rationalParametersVal,
+        TNLean.MPS.AreaLaw.OBCChainTensor.exists_dyadic_parameters_approximation,
+        TNLean.MPS.AreaLaw.OBCChainTensor.ofParameters,
+        TNLean.MPS.AreaLaw.OBCChainTensor.parameters,
+        TNLean.MPS.AreaLaw.OBCChainTensor.ofParameters_parameters,
+        TNLean.MPS.AreaLaw.OBCChainTensor.norm_coeff_ofParameters_sub_le_one,
+        TNLean.MPS.AreaLaw.OBCChainTensor.continuous_coeff_ofParameters,
+        TNLean.MPS.AreaLaw.OBCChainTensor.continuous_scalar_mul_coeff_ofParameters,
+        TNLean.MPS.AreaLaw.OBCChainTensor.vectorOfParameters,
+        TNLean.MPS.AreaLaw.OBCChainTensor.continuous_vectorOfParameters,
+        TNLean.MPS.AreaLaw.OBCChainTensor.exists_rational_parameters_close,
+        TNLean.MPS.AreaLaw.LeftOpenMPSRepresentation.vectorOfParameters_eq,
+        TNLean.MPS.AreaLaw.RationalLeftOpenMPSRepresentation,
+        TNLean.MPS.AreaLaw.RationalLeftOpenMPSRepresentation.vectorOfParameters_eq,
+        TNLean.MPS.AreaLaw.RationalLeftOpenMPSRepresentation.ofParameters,
+        TNLean.MPS.AreaLaw.RationalLeftOpenMPSRepresentation.tensor_snoc_rational,
+        TNLean.MPS.AreaLaw.RationalLeftOpenMPSRepresentation.extendSite,
+        TNLean.MPS.AreaLaw.RationalLeftOpenMPSRepresentation.coordinate_rational,
+        TNLean.MPS.AreaLaw.IsLeftOpenMPS.exists_rational_approximation,
+        TNLean.MPS.AreaLaw.RationalLeftOpenMPSRepresentationOfHeight,
+        TNLean.MPS.AreaLaw.HasRationalComplexCoordinatesOfHeight.productHeight,
+        TNLean.MPS.AreaLaw.HasRationalComplexCoordinatesOfHeight.productHeight_pos,
+        TNLean.MPS.AreaLaw.HasRationalComplexCoordinatesOfHeight.finset_prod,
+        TNLean.MPS.AreaLaw.OBCChainTensor.coeff_height,
+        TNLean.MPS.AreaLaw.OBCChainTensor.virtualPath_card_le,
+        TNLean.MPS.AreaLaw.RationalLeftOpenMPSRepresentationOfHeight.coordinateHeightBound,
+        TNLean.MPS.AreaLaw.RationalLeftOpenMPSRepresentationOfHeight.coordinate_height,
+        TNLean.MPS.AreaLaw.RationalLeftOpenMPSRepresentationOfHeight.coordinate_height_le,
+        TNLean.MPS.AreaLaw.RationalLeftOpenMPSRepresentationOfHeight.emptyLeftVector,
+        TNLean.MPS.AreaLaw.RationalLeftOpenMPSRepresentationOfHeight.tensor_snoc_height,
+        TNLean.MPS.AreaLaw.RationalLeftOpenMPSRepresentationOfHeight.extendSite,
+        TNLean.MPS.AreaLaw.RationalViableMPSData,
+        TNLean.MPS.AreaLaw.RationalViableMPSData.extend,
+        TNLean.MPS.AreaLaw.RationalViableMPSDataOfHeight,
+        TNLean.MPS.AreaLaw.RationalViableMPSDataOfHeight.emptyLeftVector,
+        TNLean.MPS.AreaLaw.RationalViableMPSDataOfHeight.extend,
+        TNLean.MPS.AreaLaw.RationalCoordinateViableMPSDataOfHeight,
+        TNLean.MPS.AreaLaw.RationalCoordinateViableMPSDataOfHeight.isViableMPS,
+        TNLean.MPS.AreaLaw.RationalCoordinateViableMPSDataOfHeight.ofRationalViableMPSData,
+        TNLean.MPS.AreaLaw.RationalCoordinateViableMPSDataOfHeight.extend,
+        TNLean.MPS.AreaLaw.RationalCoordinateViableMPSDataOfHeight.mono_error,
+        TNLean.MPS.AreaLaw.RationalCoordinateViableMPSDataOfHeight.mono_height,
+        TNLean.MPS.AreaLaw.RationalSpanFamilyEncodingOfHeight,
+        TNLean.MPS.AreaLaw.spanColumnFamily,
+        TNLean.MPS.AreaLaw.spanColumnFamily_card_le,
+        TNLean.MPS.AreaLaw.sum_mem_spanColumnFamily,
+        TNLean.MPS.AreaLaw.exists_mem_spanColumnFamily_close,
+        TNLean.MPS.AreaLaw.exists_spanColumnFamily_index,
+        TNLean.MPS.AreaLaw.rationalSpanFamilyEncodingOfCoefficients,
+        TNLean.MPS.AreaLaw.RationalSpanFamilyEncodingOfHeight.linearCombinationCoordinateHeight,
+        TNLean.MPS.AreaLaw.RationalSpanFamilyEncodingOfHeight.linearCombinationCoordinateHeight_le_two_pow,
+        TNLean.MPS.AreaLaw.RationalSpanFamilyEncodingOfHeight.outputCoordinateHeight,
+        TNLean.MPS.AreaLaw.RationalSpanFamilyEncodingOfHeight.rationalCoordinateCount,
+        TNLean.MPS.AreaLaw.RationalSpanFamilyEncodingOfHeight.coefficientBitSizeBound,
+        TNLean.MPS.AreaLaw.RationalSpanFamilyEncodingOfHeight.coefficient_exists_bitLength_le,
+        TNLean.MPS.AreaLaw.RationalSpanFamilyEncodingOfHeight.rationalCoordinateCount_le,
+        TNLean.MPS.AreaLaw.RationalSpanFamilyEncodingOfHeight.coefficientBitSizeBound_le,
+        TNLean.MPS.AreaLaw.RationalSpanFamilyEncodingOfHeight.mem_span,
+        TNLean.MPS.AreaLaw.RationalSpanFamilyEncodingOfHeight.isLeftOpenMPS,
+        TNLean.MPS.AreaLaw.RationalSpanFamilyEncodingOfHeight.coordinate_height_of_input,
+        TNLean.MPS.AreaLaw.RationalSpanFamilyEncodingOfHeight.coordinate_height,
+        TNLean.MPS.AreaLaw.RationalSpanFamilyEncodingOfHeight.coordinate_rational,
+        TNLean.MPS.AreaLaw.RationalSpanFamilyEncodingOfHeight.coordinateViableMPSData,
+        TNLean.MPS.AreaLaw.RationalSpanFamilyEncodingOfHeight.coordinateViableMPSData_twoPow,
+        TNLean.MPS.AreaLaw.RationalSpanEncodingDAGOfHeight,
+        TNLean.MPS.AreaLaw.RationalSpanEncodingDAGOfHeight.rationalCoordinateCount,
+        TNLean.MPS.AreaLaw.RationalSpanEncodingDAGOfHeight.coefficientBitSizeBound,
+        TNLean.MPS.AreaLaw.RationalSpanEncodingDAGOfHeight.mem_span_previous,
+        TNLean.MPS.AreaLaw.RationalSpanEncodingDAGOfHeight.span_le_previous,
+        TNLean.MPS.AreaLaw.RationalSpanEncodingDAGOfHeight.rationalCoordinateCount_le,
+        TNLean.MPS.AreaLaw.RationalSpanEncodingDAGOfHeight.coefficientBitSizeBound_le,
+        TNLean.MPS.AreaLaw.RationalIndexedSpanEncodingOfHeight,
+        TNLean.MPS.AreaLaw.RationalIndexedSpanEncodingOfHeight.decodedFamily,
+        TNLean.MPS.AreaLaw.RationalIndexedSpanEncodingOfHeight.decodedFamily_card_le,
+        TNLean.MPS.AreaLaw.RationalIndexedSpanEncodingOfHeight.exists_decodedFamily_index,
+        TNLean.MPS.AreaLaw.RationalIndexedSpanEncodingOfHeight.ofFinset,
+        TNLean.MPS.AreaLaw.RationalIndexedSpanEncodingOfHeight.mem_span_decodedFamily,
+        TNLean.MPS.AreaLaw.RationalIndexedSpanEncodingOfHeight.coordinate_height,
+        TNLean.MPS.AreaLaw.RationalIndexedSpanEncodingOfHeight.coordinateViableMPSData,
+        TNLean.MPS.AreaLaw.RationalIndexedSpanEncodingOfHeight.extend,
+        TNLean.MPS.AreaLaw.RationalIndexedSpanEncodingDAGOfHeight,
+        TNLean.MPS.AreaLaw.RationalIndexedSpanEncodingDAGOfHeight.extend,
+        TNLean.MPS.AreaLaw.exists_rational_spanColumnFamily,
+        TNLean.MPS.AreaLaw.exists_boundarySupportCoordinateRadius,
+        TNLean.MPS.AreaLaw.exists_rationalSpanViableMPSData_of_mulVec,
+        TNLean.MPS.AreaLaw.exists_rationalSpanViableMPSData_of_mulVec_atError,
+        TNLean.MPS.AreaLaw.exists_rationalSpanViableMPSData_of_mulVec_atTarget,
+        TNLean.MPS.AreaLaw.exists_rationalCoordinateViableMPSData_of_mulVec_atError,
+        TNLean.MPS.AreaLaw.exists_rationalCoordinateViableMPSData_of_mulVec_atTarget,
+        TNLean.MPS.AreaLaw.RationalSpanViableMPSDataOfHeight,
+        TNLean.MPS.AreaLaw.RationalSpanViableMPSDataOfHeight.isViableMPS,
+        TNLean.MPS.AreaLaw.RationalSpanViableMPSDataOfHeight.coordinate_height,
+        TNLean.MPS.AreaLaw.RationalSpanViableMPSDataOfHeight.coordinateViableMPSData,
+        TNLean.MPS.AreaLaw.RationalSpanViableMPSDataOfHeight.mono_error,
+        TNLean.MPS.AreaLaw.isViable_of_close_supported_vector,
+        TNLean.MPS.AreaLaw.IsViable.mono_error,
+        TNLean.MPS.AreaLaw.assembleLeftColumns,
+        TNLean.MPS.AreaLaw.norm_sub_assembleLeftColumns_le,
+        TNLean.MPS.AreaLaw.norm_rightApply_eq_of_isometry,
+        TNLean.MPS.AreaLaw.physicalRightApply,
+        TNLean.MPS.AreaLaw.physicalRightApply_gluingLeftCoordinates,
+        TNLean.MPS.AreaLaw.cutVector_physicalRightApply,
+        TNLean.MPS.AreaLaw.norm_physicalRightApply_eq_of_isometry,
+        TNLean.MPS.AreaLaw.norm_physicalRightApply_sub_eq_of_isometry,
+        TNLean.MPS.AreaLaw.isViable_of_close_leftColumns,
+        TNLean.MPS.AreaLaw.isViable_spanColumnFamily_of_close,
+        TNLean.MPS.AreaLaw.norm_sum_smul_sub_sum_smul_le,
+        TNLean.MPS.AreaLaw.norm_sum_smul_sub_sum_smul_le_sqrt,
+        TNLean.MPS.AreaLaw.isViable_spanColumnFamily_of_close_linearCombination,
+        TNLean.MPS.AreaLaw.isViable_spanColumnFamily_of_close_mulVec,
+        TNLean.MPS.AreaLaw.boundarySupportMatrixOfCoordinates_hasRationalEntries,
+        TNLean.MPS.AreaLaw.RationalStructuredCompressedSDPInputEncoding.boundarySupportMatrix_hasRationalEntries,
+        TNLean.MPS.AreaLaw.boundarySupportMatrixOfCoordinates_hasRationalEntriesOfHeight,
+        TNLean.MPS.AreaLaw.RationalStructuredCompressedSDPInputEncoding.boundarySupportMatrix_height,
+        TNLean.MPS.AreaLaw.RationalStructuredCompressedSDPInputEncoding.spanFamilyEncoding,
+        TNLean.MPS.AreaLaw.RationalStructuredCompressedSDPInputEncoding.spanFamilyBitSizeBound_le,
+        TNLean.MPS.AreaLaw.RationalStructuredCompressedSDPInputEncoding.spanViableMPSData,
+        TNLean.MPS.AreaLaw.RationalStructuredCompressedSDPInputEncoding.spanViableMPSDataOfClose,
+        TNLean.MPS.AreaLaw.RationalStructuredCompressedSDPInputEncoding.spanViableMPSDataOfCloseMulVec,
+        TNLean.MPS.AreaLaw.exists_orthonormalBoundarySupport_isLeftOpenMPS,
+        TNLean.MPS.AreaLaw.boundarySupport_isometry_order_le,
+        TNLean.MPS.AreaLaw.norm_isometricCompression_apply_le,
+        TNLean.MPS.AreaLaw.bounded_compressedObjective_and_boundaryCenter,
+        TNLean.MPS.AreaLaw.exists_boundarySupportOrthonormalCoordinateCoefficients,
+        TNLean.MPS.AreaLaw.exists_rational_boundarySupportOrthonormalCoordinates,
+        TNLean.MPS.AreaLaw.structuredCompressedSDPInputRationalCoordinateCount_le_of_order_bounds,
+        TNLean.MPS.AreaLaw.structuredCompressedSDPInputBitSizeBound_le_of_order_and_height_bounds,
+        TNLean.MPS.AreaLaw.structuredCompressedSDPInputRationalCoordinateCount_le_max_order,
+        TNLean.MPS.AreaLaw.structuredCompressedSDPInputBitSizeBound_le_max_order,
+        TNLean.MPS.AreaLaw.structuredCompressedSDPInputBitSizeBound_le_of_component_height_bounds,
+        TNLean.MPS.AreaLaw.RationalStructuredCompressedSDPInputEncoding.bitSizeBound_le_max_order,
+        TNLean.MPS.AreaLaw.exists_rationalStructuredCompressedSDPInputEncoding_of_orthonormal,
+        TNLean.MPS.AreaLaw.exists_dyadicRationalStructuredCompressedSDPInputEncoding_of_orthonormal,
+        TNLean.MPS.AreaLaw.exists_dyadicRationalStructuredCompressedSDPInputEncoding_of_bounded_orthonormal,
+        TNLean.MPS.AreaLaw.exists_dyadicStructuredInput_of_bounded_orthonormal_withCanonicalShifts,
+        TNLean.MPS.AreaLaw.exists_dyadicStructuredInput_of_bounded_isLeftOpenMPS_withCanonicalShifts,
+        TNLean.MPS.AreaLaw.exists_dyadicStructuredInput_of_physical_isLeftOpenMPS_withCanonicalShifts,
+        TNLean.MPS.AreaLaw.exists_boundarySupportCoordinateCoefficients_with_bitSizeBound,
+        TNLean.MPS.AreaLaw.uniformCertificateSearchGrid_testExpressions_height_le,
+        TNLean.MPS.AreaLaw.RationalCompressedSDPInputEncoding.testExpressions_height_le,
+        TNLean.MPS.AreaLaw.uniformCertificateOperandBitLength,
+        TNLean.MPS.AreaLaw.uniformCertificateOperandBitLength_mono_height,
+        TNLean.MPS.AreaLaw.rationalCertificateOperandBitLength_mono_height,
+        TNLean.MPS.AreaLaw.rationalSchoolbookOperationCost_mono,
+        TNLean.MPS.AreaLaw.uniformCertificateSearchSchoolbookBitCost_mono_operand,
+        TNLean.MPS.AreaLaw.rationalCertificateThresholdHeight,
+        TNLean.MPS.AreaLaw.rationalCertificateThresholdHeight_bounds,
+        TNLean.MPS.AreaLaw.rationalCertificateOperandBitLength,
+        TNLean.MPS.AreaLaw.uniformCertificateSearchComparisonCount,
+        TNLean.MPS.AreaLaw.uniformCertificateSearchDenseProductTermCount,
+        TNLean.MPS.AreaLaw.rationalSchoolbookOperationCost,
+        TNLean.MPS.AreaLaw.uniformCertificateSearchSchoolbookBitCost,
+        TNLean.MPS.AreaLaw.uniformCertificateSearchComparisonCount_le_of_card_le,
+        TNLean.MPS.AreaLaw.uniformCertificateSearchDenseProductTermCount_le_of_card_le,
+        TNLean.MPS.AreaLaw.uniformCertificateSearchSchoolbookBitCost_le_of_card_le,
+        TNLean.MPS.AreaLaw.uniformCertificateSearchCardBound,
+        TNLean.MPS.AreaLaw.uniformCertificateSearchGrid_card_le,
+        TNLean.MPS.AreaLaw.uniformCertificateSearchGrid_card_le_explicitBound,
+        TNLean.MPS.AreaLaw.uniformCertificateCodeSearchGrid_card_le_explicitBound,
+        TNLean.MPS.AreaLaw.uniformCertificateSearchComparisonCount_le_explicitBound,
+        TNLean.MPS.AreaLaw.uniformCertificateSearchDenseProductTermCount_le_explicitBound,
+        TNLean.MPS.AreaLaw.uniformCertificateSearchSchoolbookBitCost_le_explicitBound,
+        TNLean.MPS.AreaLaw.uniformCertificateSearchSchoolbookBitCost_le_uniformOperandBound,
+        TNLean.MPS.AreaLaw.RationalCompressedSDPInputEncoding.searchSchoolbookBitCost_le,
+        TNLean.MPS.AreaLaw.uniformCertificateSearchGrid_entries_rational,
+        TNLean.MPS.AreaLaw.uniformCertificateSearchGrid_testExpressions_rational,
+        TNLean.MPS.AreaLaw.exists_rationalApproxCertificateTestValues_of_mem_searchGrid,
+        TNLean.MPS.AreaLaw.IsAllSpectralApproxCompressedBoundarySDPFeasibleAtEnergy.exists_explicit_rounded_certificate,
+        TNLean.MPS.AreaLaw.IsAllSpectralApproxCompressedBoundarySDPFeasibleAtEnergy.exists_uniformly_rounded_certificate,
+        TNLean.MPS.AreaLaw.IsAllSpectralApproxCompressedBoundarySDPFeasibleAtEnergy.exists_accepted_rational_code,
+        TNLean.MPS.AreaLaw.IsAllSpectralApproxCompressedBoundarySDPFeasibleAtEnergy.exists_search_result,
+        TNLean.MPS.AreaLaw.IsAllSpectralApproxCompressedBoundarySDPFeasibleAtEnergy.exists_search_result_and_cost_le,
+        TNLean.MPS.AreaLaw.IsAllSpectralApproxCompressedBoundarySDPFeasibleAtEnergy.exists_rational_data_grid_certificate,
+        TNLean.MPS.AreaLaw.IsAllSpectralApproxCompressedBoundarySDPFeasibleAtEnergy.exists_accepted_approx_data_code,
+        TNLean.MPS.AreaLaw.IsAllSpectralApproxCompressedBoundarySDPFeasibleAtEnergy.exists_approx_data_search_result,
+        TNLean.MPS.AreaLaw.IsAllSpectralApproxCompressedBoundarySDPFeasibleAtEnergy.exists_approx_data_search_result_and_exact_certificate,
+        TNLean.MPS.AreaLaw.IsAllSpectralApproxCompressedBoundarySDPFeasibleAtEnergy.exists_approx_data_search_result_and_cost_le,
+        TNLean.MPS.AreaLaw.IsAllSpectralApproxCompressedBoundarySDPFeasibleAtEnergy.exists_fixed_data_codes_search_result_and_cost_le,
+        TNLean.MPS.AreaLaw.IsAllSpectralApproxCompressedBoundarySDPFeasibleAtEnergy.exists_fixed_data_codes_search_result_and_cost_le_canonical_thresholds,
+        TNLean.MPS.AreaLaw.IsAllSpectralApproxCompressedBoundarySDPFeasibleAtEnergy.exists_fixed_data_codes_and_search_result_canonical_thresholds,
+        TNLean.MPS.AreaLaw.IsAllSpectralApproxCompressedBoundarySDPFeasibleAtEnergy.of_entrywise_residual,
+        TNLean.MPS.AreaLaw.IsAllSpectralApproxCompressedBoundarySDPFeasibleAtEnergy.of_gershgorin,
+        TNLean.MPS.AreaLaw.IsAllSpectralApproxCompressedBoundarySDPFeasibleAtEnergy.of_gram_factors,
+        TNLean.MPS.AreaLaw.IsAllSpectralApproxCompressedBoundarySDPFeasibleAtEnergy.of_approx_gram_factors,
+        TNLean.MPS.AreaLaw.IsCompressedBoundarySDPFeasibleAtEnergy.toAllSpectralApprox,
+        TNLean.MPS.AreaLaw.exists_allSpectralApproxCompressedBoundarySDPFeasibleAtEnergy_zero,
+        TNLean.MPS.AreaLaw.exists_density_of_all_spectral_approx_sdp_certificate,
+        TNLean.MPS.AreaLaw.IsAllSpectralApproxCompressedBoundarySDPFeasibleAtEnergy.exists_density,
+        TNLean.MPS.AreaLaw.fullyApproxSDP_errors_fit_lvv_margin,
+        TNLean.MPS.AreaLaw.fullyApproxSDP_errors_with_coordinate_fit_lvv_margin,
+        TNLean.MPS.AreaLaw.fullyApproxSDP_errors_with_coordinate_fit_lvv_margin_of_split,
+        TNLean.MPS.AreaLaw.fullyApproxSDP_errors_with_fixed_data_fit_lvv_margin,
+        TNLean.MPS.AreaLaw.fullyApproxSDP_errors_with_trace_energy_slack_fit_lvv_margin,
+        TNLean.MPS.AreaLaw.fullyApproxSDP_errors_with_trace_energy_slack_fit_rationalization_margin,
+        TNLean.MPS.AreaLaw.rationalObjectiveApproximationTarget,
+        TNLean.MPS.AreaLaw.rationalBoundaryCenterApproximationTarget,
+        TNLean.MPS.AreaLaw.fullyApproxSDP_errors_fit_lvv_margin_of_fixed_data_meshes,
+        TNLean.MPS.AreaLaw.fullyApproxSDP_errors_fit_lvv_margin_of_tolerances,
+        TNLean.MPS.AreaLaw.fullyApproxSDP_scaled_errors_of_order_bounds,
+        TNLean.MPS.AreaLaw.fullyApproxSDP_errors_fit_lvv_margin_of_order_bounds,
+        TNLean.MPS.AreaLaw.chain_fullyApproxSDP_errors_fit_lvv_margin_of_support_bounds,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.exists_viable_vector_of_compressed_boundary_solution_with_slack,
+        TNLean.MPS.AreaLaw.lvvFiniteDensityMesh,
+        TNLean.MPS.AreaLaw.lvvFiniteDensityMesh_pos,
+        TNLean.MPS.AreaLaw.lvvFiniteDensityMesh_fits,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.exists_finite_density_search_viable_vector,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.exists_coordinate_finite_density_search_viable_vector,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.exists_canonical_coordinate_finite_density_search_viable_vector,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.exists_viable_vector_of_all_spectral_approx_sdp_certificate,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.exists_viable_vector_of_approx_sdp_error_budget,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.exists_viable_vector_of_approx_sdp_error_budget_with_trace_slack,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.exists_viable_vector_of_rational_search_result,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.exists_viable_vector_of_canonical_rational_search,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.exists_viable_vector_of_rational_fixed_data_sdp_certificate,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.exists_viable_vector_of_uniformly_approx_sdp_certificate,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.exists_viable_vector_of_uniform_approx_sdp_feasible,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.exists_boundary_coordinates_with_uniform_approx_sdp_soundness,
+        TNLean.MPS.AreaLaw.exists_boundary_coordinates_with_zero_error_sdp_certificate}
+    \leanok
+    Let $S$ be the retained finite family on the left block and let $m$ be
+    the actual bond dimension.  The support projection imposed on the
+    density matrix in the boundary-constrained minimization has rank at
+    most $|S|m$.  Every matrix satisfying the support constraint, and hence
+    every feasible density matrix, also has rank at most $|S|m$.
+    Moreover, there are $n\le |S|m$ and an isometry $Z:\mathbb C^n\to
+    \mathcal H$ whose range projection is precisely this support projection.
+    After joining the two left regions, every bond slice of every column of
+    $Z$ is a linear combination of $S$.  Hence its structured coefficient
+    array has $nm|S|\le (|S|m)^2$ complex entries, independently of the
+    ambient left Hilbert-space dimension.
+    Charging these coefficients instead of the ambient entries of $Z$ gives a
+    structured rational input with at most
+    $2(3M^2+2)$ scalar coordinates whenever $|S|m,n,r\le M$.  If the common
+    rational height is at most $2^p$, its bit size is at most
+    $2(3M^2+2)(p+1)$.  Canonically one may take
+    $M=\max\{|S|m,r\}$.
+    Every feasible density matrix has the form $Z\tau Z^*$ for a positive
+    semidefinite $n\times n$ matrix $\tau$.  This expansion preserves trace;
+    for a trace-one density the compressed order is strictly positive, so
+    $0<n\le |S|m$ and $\operatorname{tr}\tau=1$.  An energy observable $H$
+    is replaced by the compressed observable
+    $Z^*HZ$, whose operator norm is at most $\lVert H\rVert$.  Its boundary
+    marginal is the value at $\tau$ of an explicit
+    linear map from $n\times n$ matrices to matrices on the site-and-bond
+    boundary space; consequently the trace-norm boundary constraint is
+    unchanged after this substitution. If the net center $X$ is Hermitian,
+    this constraint has the explicit semidefinite representation
+    \begin{align*}
+       P&\ge0, & N&\ge0, & \mathcal B_Z(\tau)-X&=P-N,
+       & \operatorname{tr}P+\operatorname{tr}N&\le\eta.
+    \end{align*}
+    Together with $\tau\ge0$, $\operatorname{tr}\tau=1$, and the linear
+    objective inequality
+    $\operatorname{tr}(\tau Z^*HZ)\le E$, this is equivalent to feasibility
+    of the original compressed density problem at energy threshold $E$.
+    Writing $r$ for the order of the boundary matrices, the three Hermitian
+    variables require $n^2+2r^2$ real scalar coordinates and their three
+    positive-semidefinite cones have total order $n+2r$.  Since
+    $n\le |S|m$ and $r\le qm$, these quantities are at most
+    $(|S|m)^2+2(qm)^2$ and $|S|m+2qm$, respectively.
+    Every feasible certificate also satisfies
+    $\lVert\tau\rVert_1=1$ and
+    $\lVert P\rVert_1,\lVert N\rVert_1\le\eta$; consequently every matrix
+    entry obeys the same respective bound.  More generally, a trace-norm
+    ball of radius $R>0$ has an explicit finite $\delta$-net obtained by
+    scaling the unit-ball grid.  Thus all three variables lie in explicit
+    finite-dimensional bounded search regions with finite nets.
+    The density matrices themselves admit a finite net with exact positive
+    semidefiniteness and trace one: retain the ambient grid cells meeting the
+    density matrices and choose one density representative in each.  Its
+    cardinality is no larger than the ambient unit-ball grid and its covering
+    radius is $2\delta$.
+    The feasible density set is compact.  Hence, whenever it is nonempty,
+    the compressed energy attains a global minimum; the minimizing density
+    has positive-semidefinite witnesses $P,N$ and therefore is itself an
+    explicit feasible SDP certificate.  Starting from a certificate below
+    an energy threshold $E$, one may choose this global minimizer below the
+    same threshold.
+    Applying the density net to this optimizer gives a finite family
+    containing an exact density with boundary tolerance $\eta+2\delta$ and
+    energy at most $E_{\min}+2\lVert K\rVert\delta$.  Thus a finite-search
+    approximation exists with explicit cardinality, feasibility loss and
+    objective loss.
+    In threshold form, the existence of one feasible density of energy at
+    most $E$ guarantees a member of the same finite family with energy at
+    most $E+2\lVert K\rVert\delta$ and boundary tolerance
+    $\eta+2\delta$.
+    Filtering this family by the enlarged boundary inequality gives a
+    nonempty finite set.  A least-energy member of this filtered set has the
+    same energy bound and is no more energetic than any other retained
+    candidate satisfying that inequality.  Thus the approximation can be
+    characterized as an exhaustive finite minimization, although the chosen
+    representatives are not yet effectively enumerable.
+    For the LVV compressed Hamiltonian, choosing the mesh so that
+    $24L\delta\le\Delta/2028$ makes these two losses fit the unused
+    leading-vector margin.  Consequently the finite family contains an exact
+    density of least compressed energy among all retained densities satisfying
+    the enlarged boundary inequality.  Its physical expansion has a unit
+    vector in the retained left support, energy at most $E_0+\Delta/12$, and
+    ground-state overlap at least $11/12$.  This conclusion retains both the
+    finite family and its explicit cardinality bound; it is an existence
+    statement, not an effective enumeration procedure.
+    The canonical choice
+    $\delta=\Delta/(48672L)$ is positive and saturates this inequality,
+    since $24L\delta=\Delta/2028$.
+    With this choice, the coordinate construction, finite family, least-energy
+    relaxed-feasible member, and physical viable vector require no additional
+    mesh parameter or numerical-margin hypothesis.
+    The coordinate data need not be supplied separately.  The normalized
+    supported glued vector defines a rank-one density.  Compressing this
+    density has been isolated as a reusable construction: it produces an
+    isometry $Z:\mathbb C^n\to\mathcal H$ with $0<n\le |S|m$ and a
+    trace-one compressed density whose expansion is the original rank-one
+    density.
+    If the boundary centre is Hermitian and the original rank-one density
+    obeys the boundary inequality, these same coordinates contain an exact
+    feasible triple with all four error parameters equal to zero.  In
+    particular, the compressed problem constructed from the supported vector
+    is nonempty, while every sufficiently accurate triple in those
+    coordinates is physically sound.
+    Applying the preceding finite search then constructs the finite family
+    and its least-energy relaxed-feasible member directly from the glued
+    vector and its support equation; the physical viable vector is extracted
+    from that member.
+    If the residual identity is satisfied only within trace-norm error
+    $\delta$, while positivity and the trace budget remain exact, then the
+    original boundary inequality holds with tolerance $\eta+\delta$; this
+    estimate has no dimension-dependent factor.
+    More generally, if the returned Hermitian trace-one matrix has least
+    eigenvalue at least $-\epsilon$, shifting and normalizing it produces an
+    exact density within trace-norm distance $2n\epsilon$. Combining both
+    repairs gives boundary tolerance $\eta+\delta+2n\epsilon$ and energy
+    threshold $E+2n\epsilon\lVert Z^*HZ\rVert$.
+    If normalization is also approximate, with
+    $|1-\operatorname{tr}\tau|\le\kappa$, the exact density is within
+    $\kappa+2n\epsilon$ and the corresponding boundary tolerance is
+    $\eta+\delta+\kappa+2n\epsilon$.
+    Finally, if the auxiliary matrices $P,N$ have least eigenvalues at least
+    $-\epsilon_b$, shifting both by $\epsilon_b I$ preserves $P-N$ and adds
+    exactly $2r\epsilon_b$ to the trace budget, where
+    $r=\dim(\mathcal H_{\partial}\otimes\mathbb C^m)$.
+    These Hermiticity, trace-defect, spectral, residual, trace-budget, and
+    objective conditions form one approximate-feasibility statement.  Every
+    triple of matrices satisfying it repairs to an exact density with
+    precisely the displayed losses.  Every exact feasible triple satisfies
+    the same statement with all four error parameters equal to zero.
+    Conversely, each exact feasible density for a Hermitian boundary centre
+    admits positive and negative boundary parts, and hence extends to such a
+    zero-error triple.
+    The residual condition may be certified entrywise: if the boundary matrix
+    has order $r$ and every residual entry has modulus at most $\zeta$, then
+    its trace norm is at most $r^2\zeta$.  Hence an entrywise computation with
+    $r^2\zeta\le\delta$ supplies the trace-norm residual required above.
+    Approximate positivity also admits an entrywise certificate.  For each
+    Hermitian cone variable, if every Gershgorin row interval lies to the
+    right of the allowed negative tolerance, then its least eigenvalue obeys
+    the required lower bound.  Applying this test to all three variables and
+    the preceding entrywise residual test leaves only the scalar trace-budget,
+    normalization, and energy inequalities to be checked.
+    This diagonal-dominance test is optional.  Without any such restriction,
+    the least-eigenvalue lower bound is equivalent to a Gram factorization
+    $A+\epsilon I=RR^*$.  Gram factors for the density and both auxiliary
+    variables, together with the entrywise residual bounds, therefore give a
+    complete algebraic certificate for all nonscalar conditions.
+    This certificate is stable under entrywise error.  If
+    $A+\epsilon_0I-RR^*$ has entries of modulus at most $\zeta$ in order
+    $r$, then the least eigenvalue of $A$ is at least
+    $-\epsilon_0-(r+1)\zeta$.  Applying this estimate to all three cone
+    variables gives a unified certificate from approximate Gram factors, with
+    their dimension-weighted errors absorbed into $\epsilon$ and
+    $\epsilon_b$.
+    Conversely, every triple satisfying the unified predicate admits exact
+    Gram factors for its three shifted cone variables, and its trace-norm
+    residual bounds every residual entry.  Hence this witness format covers
+    every certificate allowed by the original spectral and trace-norm
+    specification.  These factors may moreover be chosen in explicit bounded
+    regions.  Each squared entry of the density factor is at most
+    $1+\kappa+n\epsilon$, while each squared entry of either auxiliary factor
+    is at most $\eta+2r\epsilon_b$.  Thus no unbounded factor variables are
+    needed when the algebraic certificates are discretized.  More precisely,
+    factors with squared-entry bound $C$ admit an explicit finite grid of
+    entrywise spacing $\delta$.  Replacing a factor by its grid representative
+    changes every entry of its Gram matrix by at most
+    $d\delta(2\sqrt C+\delta)$, where $d$ is the matrix order.  This is the
+    precise error accepted by the approximate Gram certificate above.  For a
+    prescribed positive Gram error $\zeta$, the canonical choice
+    \[
+       \delta=\frac{\zeta}{d(2\sqrt C+1)+\zeta}
+    \]
+    makes this error at most $\zeta$.  Hence every unified feasible certificate
+    has representatives in three finite factor grids, with explicit
+    cardinalities, whose rounded Gram identities meet any prescribed positive
+    density and auxiliary tolerances.  These grids are concrete coordinate
+    products: each real and imaginary entry is chosen from a scaled uniform
+    real grid of explicitly specified integer order.  Thus the Gram-factor
+    part of the search is an explicit finite set, rather than a classically
+    selected net.  There is also an exact-arithmetic variant: for natural
+    radius $B$ and denominator $M$, every real and imaginary coordinate is a
+    rational number in $(1/M)\mathbb Z\cap[-B,B]$.  Its cardinality is at most
+    $(2BM+1)^{2d^2}$, and choosing $B=\lceil R\rceil$ and
+    $M=\lceil1/\delta\rceil$ covers every matrix of entry radius $R$ within
+    entrywise error $\delta$.  For Gram factors with squared-entry bound $C$,
+    the square root may be removed entirely: the integer radius
+    $B=\lceil C\rceil+1$ and a denominator chosen from the target error
+    $\zeta$ give a Gaussian-rational factor whose Gram matrix is entrywise
+    $\zeta$-close.  Thus all three Gram witnesses may be searched in named
+    exact-coordinate grids.  Taking Hermitian parts preserves rational real
+    and imaginary coordinates, does not increase the cardinality or the
+    entrywise error, and therefore gives exact-coordinate Hermitian grids for
+    all three primary variables as well.
+    Their shifted Gram factorizations give explicit entry radii
+    $nC_A+\epsilon$ for the density matrix and $rC_b+\epsilon_b$ for each
+    auxiliary matrix.  At any positive entry tolerances, all three therefore
+    have representatives in named finite Hermitian coordinate grids, again
+    with cardinalities bounded by $(2M+1)^{2d^2}$.  Taking the Hermitian part
+    after coordinate rounding does not enlarge the entrywise error.  If the
+    density and auxiliary entry tolerances are $\theta_A$ and $\theta_b$,
+    respectively, then rounding enlarges the trace defect by at most
+    $n\theta_A$ and the auxiliary trace budget by at most $2r\theta_b$.
+    Under the coordinate isometry, it enlarges the boundary residual by at
+    most $n^2\theta_A+2r^2\theta_b$ and the energy threshold by at most
+    $\lVert K\rVert n^2\theta_A$.  Simultaneous factor rounding gives a
+    single certificate in the product of the six concrete grids, with
+    spectral tolerances
+    \[
+      \epsilon+(n+1)(\theta_A+\zeta_A),\qquad
+      \epsilon_b+(r+1)(\theta_b+\zeta_b).
+    \]
+    Hence every unified certificate is covered by the explicit finite product
+    after precisely these displayed tolerance enlargements.
+    The coordinate map itself is stable under entrywise rational
+    approximation.  If its entries have modulus at most $M$, its approximation
+    error is at most $\theta_Z$, and the compressed density entries have
+    modulus at most $C$, then every entry of the compressed boundary marginal
+    changes by at most
+    \[
+      |A|n^2\theta_Z C(2M+\theta_Z).
+    \]
+    The same quantity may therefore be added to the entrywise boundary-residual
+    tolerance.  This estimate does not require the approximating map to remain
+    an exact isometry.
+    Every rectangular isometry has entries of modulus at most one.  Consequently,
+    for any positive allowance $\omega$, the mesh
+    \[
+      \delta_Z=\min\left\{1,
+        \frac{\omega}{3(|A|n^2+1)}\right\}
+    \]
+    produces a Gaussian-rational coordinate map of explicit grid height and
+    increases each boundary-residual entry by at most $\omega$.  Restricting a
+    square rational grid on the disjoint union of the row and column indices
+    supplies the required rectangular approximation.  Together with rational
+    encodings of the objective, boundary target, and spectral shifts, this gives
+    a complete exact input encoding for the finite tester.
+    For soundness, the accepted numerical certificate is transferred back to
+    the exact isometry before physical expansion.  If the boundary matrices
+    have order $r$, an entry perturbation bound $e_Z$ gives trace-norm error at
+    most $r^2e_Z$.  Choosing the mesh with this factor and the common density
+    entry bound already absorbed makes the trace-norm error at most $\omega$,
+    uniformly for every candidate in the finite search.  The original LVV
+    margin remains valid when $\delta+\omega\le\Delta/(64896L)$; in particular,
+    the independent choices
+    $\delta,\omega\le\Delta/(129792L)$ suffice.
+    The remaining fixed matrices need not be rational initially.  Entrywise
+    approximations of the compressed objective and boundary center change the
+    energy comparison by at most $n^2C\theta_K$ and the boundary trace-norm
+    residual by at most $r^2\theta_X$, respectively, when the candidate entries
+    have modulus at most $C$.  These estimates hold uniformly over the finite
+    candidate grid.  Moreover, every positive real precision target admits an
+    explicitly bounded positive rational precision below it.  Hence bounded
+    physical data determine rational approximations of all three fixed matrices
+    and rational spectral shifts, together with a complete exact input encoding
+    and all witnesses needed to transfer accepted certificates back to the
+    physical data.  These two additional rounding losses fit simultaneously
+    with the coordinate error as follows.  Require each of
+    $\kappa,2n\epsilon,2r\epsilon_b,\delta$ to be at most
+    $\Delta/(129792L)$, and require
+    \[
+      n^2C\theta_K\le \frac{\Delta}{16224},\qquad
+      r^2\theta_X\le \frac{\Delta}{64896L},\qquad
+      \omega\le \frac{\Delta}{64896L}.
+    \]
+    Then the complete repaired energy loss is at most $\Delta/2028$.
+    Positive canonical entry meshes satisfying the middle two requirements are
+    \[
+      \theta_K=\frac{\Delta}{16224(n^2C+1)},\qquad
+      \theta_X=\frac{\Delta}{64896L(r^2+1)}.
+    \]
+    The added units in the denominators make these choices valid without
+    separate nonvanishing assumptions on $n^2C$ or $r^2$.
+    The transfer is two-sided.  An exact-data certificate remains feasible
+    after replacing $Z,K,X$ by their rational approximations, with the same
+    three error terms.  After simultaneously rounding the three primary
+    matrices and their three Gram factors, the concrete six-grid search
+    therefore contains a rational candidate accepted for the rationalized
+    data.  Conversely, every such accepted candidate transfers back to the
+    exact physical matrices with precisely the budget displayed above.
+    More canonically, given one positive allowance $\omega$, use the common
+    density and factor mesh
+    \[
+      \theta_d=\frac{\omega}{2(d+1)^2}
+    \]
+    in matrix order $d$ (with $d=n$ for the density variables and $d=r$ for
+    the boundary variables).  The resulting finite product contains a
+    certificate with trace budget, trace defect, and both spectral tolerances
+    enlarged by at most $\omega$, energy threshold enlarged by at most
+    $\lVert K\rVert\omega$, and boundary residual enlarged by at most
+    $2\omega$.  Thus no independent choice of four coordinate precisions is
+    needed.  The six grids form one concrete product search space.  Its
+    cardinality is bounded by the product of the six coordinate bounds
+    $(2BM+1)^{2d^2}$, and the uniformly rounded certificate is explicitly a
+    member of this product.  Every real and imaginary entry of every one of
+    the six matrices is rational.  A representation-preserving version of
+    the same product stores each entry as a pair of rational numbers.
+    Decoding commutes with Hermitian projection, maps this rational-code
+    product onto the complex-valued search, and is injective.  Hence the two
+    searches have the same cardinality and the same explicit bound; rational
+    coordinates need not be recovered from complex entries after enumeration.
+    Rational coordinates are preserved by
+    addition, subtraction, multiplication, conjugate transpose, trace,
+    reindexing, and partial trace.  Consequently, if the compressed isometry,
+    objective, boundary target, and spectral shifts also have rational
+    coordinates, then every Gram residual, boundary residual, trace, and
+    objective value tested by the certificate has rational coordinates.
+    Moreover, each entrywise comparison
+    $\lVert x+iy\rVert\le q$ is equivalent to the rational inequality
+    $x^2+y^2\le q^2$ for $q\ge0$.  Hence all finitely many entrywise norm
+    tests are decidable using rational arithmetic, without evaluating square
+    roots.  More explicitly, a test record stores the rational traces,
+    objective value, and real and imaginary coordinates of every boundary and
+    Gram residual.  Acceptance of such a record is a decidable proposition
+    over the rationals and finite index sets.  If the stored values equal the
+    corresponding matrix expressions, acceptance implies the complete
+    approximate semidefinite certificate.  Every member of the six-grid search
+    admits such a record.  A direct rational evaluator computes this record
+    from rational coordinates for the fixed compressed data and a six-matrix
+    certificate code.  Decoding its output gives exactly the complex traces,
+    objective, boundary residual, and Gram residuals.  Applied to these records,
+    a recursive finite scan returns the first accepted candidate; its soundness
+    and completeness follow from the general finite-scan theorems.  There is
+    also a canonical finite-set selector: it chooses the least natural-number
+    encoding of an accepted candidate.  The eight natural radii and denominators
+    are computed directly from rational tolerances, giving a fully discrete
+    six-matrix grid and an executable search whose returned code certifies the
+    decoded approximate semidefinite problem.
+    The tolerance-driven code grid is proved equal to this discrete grid at its
+    displayed radii and denominators.  For rational fixed data, feasibility now
+    supplies an accepted member of this grid, and the executable search therefore
+    returns a code.  If $r$ is the boundary matrix order, entrywise boundary
+    residual tolerance $\delta+2\omega$ is converted to trace norm with the
+    explicit factor $r^2$; the objective threshold is enlarged by
+    $\lVert K\rVert\omega$.  The rational codes themselves determine a common
+    coordinate height by taking the maximum reduced numerator and denominator
+    height over all fixed-data and shift coordinates.  With this canonical
+    height, the successful search and its explicit schoolbook bit-cost bound
+    hold jointly for the same parameters.  Conversely, every finite matrix
+    whose rational coordinates have height at most $H$ admits a coordinate
+    code of canonical height at most $H$.  Applying this to the three uniform
+    approximation grids produces codes $Q_Z,Q_K,Q_X$ whose common input height
+    is bounded explicitly by the three grid heights and the exact heights of
+    the two rational cone shifts.  More generally, the coordinate
+    isometry need not have rational entries.  If rational codes $Q_Z,Q_K,Q_X$
+    approximate the exact isometry, objective, and boundary centre entrywise,
+    the fixed-data stability estimates supply an accepted code and a successful
+    executable search.  Its rational thresholds $E_t,D_t$ may be any upper
+    bounds for the displayed objective and boundary perturbation losses.  Thus the
+    same successful approximate-data search also satisfies the explicit schoolbook
+    bit-cost bound, with operand length determined canonically by the three rational
+    fixed-data codes and the two cone shifts.  The
+    numerical soundness theorem no longer
+    invokes eigenvalue computation or comparison of arbitrary real numbers.
+    In particular, for bounded exact $K$ and $X$ and an exact isometry $Z$, the
+    rational codes need not be supplied separately: the approximation grids
+    select $Q_Z,Q_K,Q_X$, bound their common canonical height, and give both a
+    successful executable search and its schoolbook bit-cost estimate.  The
+    conclusion retains the three entrywise approximation witnesses, so the
+    returned certificate can be transferred back to the exact physical data.  The
+    operand length in this estimate uses the explicit approximation-grid height,
+    rather than the unknown exact height of the selected codes.  It also includes
+    the maximum rational height of all twelve scalar thresholds inspected by the
+    direct acceptance test; hence the comparison operands are covered together
+    with the matrix expressions.
+    The two enlarged rational thresholds are also canonical: round the
+    nonnegative part of the corresponding exact real objective or boundary-loss
+    expression upward on a rational mesh of spacing at most $\rho$.  These
+    choices dominate the required losses, overshoot by at most $\rho$, and have
+    explicitly bounded rational height.  Substituting
+    these choices yields the complete code-selection, search-success, and cost
+    theorem without external objective or boundary threshold hypotheses.
+    A compact companion packages the same selected codes, their approximation
+    witnesses, the returned certificate code, and its search equation for direct
+    use by physical soundness.
+    Conversely, every returned code transfers from $Q_Z,Q_K,Q_X$ to the exact
+    $Z,K,X$, with the coordinate-map, objective, and boundary-centre losses
+    displayed in its exact-data certificate; $Q_Z$ need not itself be isometric.
+    Combining both directions, exact-data feasibility produces a single code
+    together with its executable search equation and its decoded exact-data
+    certificate.
+    If the finite search enlarges the auxiliary trace allowance from $\eta$ to
+    $\eta+e_\eta$, the physical error-budget theorem charges precisely the
+    additional boundary error $e_\eta$.  In particular, the uniform rounding
+    choice is covered by $e_\eta=\omega$.
+    Consequently, a code returned by the executable rational search yields the
+    physical LVV unit vector under one combined margin inequality.  Here
+    $e_\eta$ is the difference between the rational auxiliary-trace threshold
+    and the physical boundary allowance, while $e_K$ is the corresponding
+    difference between the rational objective threshold and the physical
+    compressed energy, together with objective-matrix approximation loss.
+    Combining this with canonical code and threshold selection gives the full
+    physical statement: exact feasible compressed data with bounded fixed
+    matrices determine the executable rational search, and its returned code
+    produces the physical viable vector under independent precision bounds.
+    The compact canonical-search package retains, for these same selected codes
+    and returned certificate, the explicit schoolbook bit-cost bound; the
+    canonical physical theorem carries this same bound into its conclusion
+    alongside the selected rational codes, the exact successful-search
+    equation, and the viable vector.  The same conclusion records the common
+    code-height bound, all three fixed-data approximation estimates, and the
+    decoded certificate's feasibility for the exact physical matrices with
+    every transfer loss displayed.  It also proves that the selected codes'
+    actual operand length is bounded by the canonical operand length charged
+    in the schoolbook estimate, and consequently that its actual schoolbook
+    charge is bounded both by the canonical charge and directly by the named
+    cardinality-times-per-candidate cost bound.  The selected fixed input's
+    bit-size bound is likewise bounded by the canonical bit-size expression
+    obtained from the uniform code-height bound.
+    This explicit input model also has the lower bound $2arn$, contributed by
+    the coordinate map alone.  Here $a=q^{\min\{L,k-1\}}$; at the last cut and
+    for $q\ge2$, the bound therefore contains the factor $2^{L-1}$; when the
+    compressed and boundary orders are positive, the bit-size bound is at least
+    $2^L$ itself.
+    Conversely, if all three matrix orders are bounded by $M$ and the common
+    rational height is at most $2^p$, then the compressed input has at most
+    $2(M^3+2M^2+2)$ rational scalar coordinates and bit size at most
+    $2(M^3+2M^2+2)(p+1)$.  Thus polynomial matrix orders and polynomial
+    logarithmic height suffice for polynomial input size; the remaining issue
+    is to replace the ambient coordinate-map order by the structured support
+    coordinates.
+    Since $a$ is the ambient left-block dimension,
+    the exhaustive rational construction does not by itself establish the
+    source's polynomial-time claim; a structured representation of the support
+    coordinates would be needed for that conclusion.
+    The residual and $e_\eta$
+    each receive half of one boundary-error share, while $e_K$ receives the
+    allocated direct-energy share.
+    All these losses fit the unused LVV margin if each of
+    $\kappa$, $2n\epsilon$, $2r\epsilon_b$, and $\delta$ is at most
+    $\Delta/(64896L)$.
+    In particular, it suffices to take
+    $\epsilon\le\Delta/(129792Ln)$ and
+    $\epsilon_b\le\Delta/(129792Lr)$, together with the displayed bounds
+    on $\kappa$ and $\delta$.
+    Using the a priori order bounds $n\le |S|m$ and $r\le qm$, the same
+    physical conclusion follows from the uniform choices
+    \begin{align*}
+      \epsilon&\le \frac{\Delta}{129792L|S|m}, &
+      \epsilon_b&\le \frac{\Delta}{129792Lqm}.
+    \end{align*}
+    These tolerances are fixed before the coordinate isometry and the
+    realized cone orders are chosen.
+    Moreover, the coordinate isometry need not be part of the numerical
+    certificate.  The normalized supported glued vector constructs
+    $0<n\le |S|m$ and $Z$ in advance, and every approximate semidefinite
+    certificate satisfying this statement and the uniform bounds in these
+    coordinates yields
+    the same physical unit vector, energy bound, and overlap bound.  Thus the
+    numerical procedure is responsible only for its matrix variables and
+    their certified residuals.
+    These tolerances may be fixed a priori by replacing $n,r$ with their
+    upper bounds $|S|m,qm$.  The resulting stronger requirements still imply
+    the same LVV margin for the actual compressed program.
+    Under these targets, the repaired compressed density expands through the
+    support isometry and its leading eigenvector gives a physical unit vector
+    in the retained left-supported space, of energy at most
+    $E_0+\Delta/12$ and ground-state overlap at least $11/12$.
+    Every normalized eigenvector in the
+    support likewise has normalized coordinates $v\in\mathbb C^n$, satisfies
+    the compressed eigenvalue equation for $\tau$, and is recovered as $Zv$.
+    More generally, the norm of every approximate eigenvalue residual is
+    preserved exactly by this expansion.  If a compressed density is changed
+    by at most $\epsilon$ in trace norm, its trace changes by at most
+    $\epsilon$, its energy against $K$ changes by at most
+    $\lVert K\rVert\epsilon$, and its boundary distance increases by at most
+    $\epsilon$.  If the perturbed compressed matrix is positive semidefinite
+    with trace one, its isometric expansion is a genuine physical density
+    with precisely these energy and boundary guarantees.  If its trace is
+    only approximate, positive trace normalization changes it by exactly the
+    absolute trace defect.  Relative to a trace-one target within
+    $\epsilon$, normalization therefore gives an exact density within
+    $2\epsilon$, and the expanded energy and boundary bounds hold with this
+    doubled error.  In particular, if the target satisfies a one-sided
+    objective bound $E$ and boundary tolerance $\eta$, the normalized
+    numerical density satisfies the objective bound
+    $E+2\lVert K\rVert\epsilon$ and boundary tolerance $\eta+2\epsilon$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    The projection onto $\operatorname{Span}(S)$ has rank at most $|S|$.
+    Reindexing does not change rank, while tensoring with the identity on
+    an $m$-dimensional space multiplies rank by $m$.  Finally, the rank of
+    $Q\rho$ is at most the rank of $Q$, and the support constraint is
+    $Q\rho=\rho$.  Factoring the orthogonal projection $Q$ as $ZZ^*$ gives
+    the asserted coordinates, with $Z^*Z=1$; comparison of ranks gives the
+    same bound on $n$.  For a positive semidefinite $\rho$ satisfying
+    $Q\rho=\rho$, taking adjoints also gives $\rho Q=\rho$.  Hence, with
+    $\tau=Z^*\rho Z$, positivity is preserved and
+    $Z\tau Z^*=Q\rho Q=\rho$.  Cyclicity of the trace gives
+    $\operatorname{tr}(\rho H)=\operatorname{tr}(\tau Z^*HZ)$ and, on taking
+    $H=1$, preservation of normalization.  Composing the linear expansion
+    $\tau\mapsto Z\tau Z^*$ with the partial trace gives the boundary map,
+    and its evaluation identity gives the equality of the two boundary
+    trace-norm distances. The boundary map preserves Hermiticity. The Jordan
+    decomposition of the Hermitian residual gives the displayed positive
+    matrices $P,N$; conversely, the trace-norm triangle inequality proves
+    that any such pair implies the original trace-norm bound. The same
+    argument with an inexact residual identity gives the additive error
+    $\delta$, since
+    $\lVert P-N\rVert_1\le\operatorname{tr}P+\operatorname{tr}N$.
+    If the least eigenvalue is at least $-\epsilon$, adding $\epsilon I$
+    restores positivity at trace cost $n\epsilon$; normalization costs at
+    most the same amount. The trace-norm perturbation estimates for the
+    boundary map and energy objective then give the stated combined bounds.
+    With trace defect $\kappa$, normalization instead costs at most
+    $\kappa+n\epsilon$, giving the fully approximate estimate.
+    Applying the same spectral shift to both auxiliary matrices leaves their
+    difference unchanged; the two identity traces give the additional
+    $2r\epsilon_b$ boundary loss.
+    Under the displayed independent targets, the density-repair radius is at
+    most twice the common target and the total boundary enlargement at most
+    four times it. Substitution into the objective and boundary norm bounds
+    gives the margin because $64896=32\cdot2028$.
+    The compressed-to-physical bridge preserves positivity, trace, boundary
+    distance, and the linear objective under isometric expansion. The
+    leading-vector theorem then supplies the asserted physical witness.
+    Multiplying a
+    supported eigenvalue equation on the
+    left by $Z^*$ gives the compressed equation; $Z^*Z=1$ preserves its norm,
+    while $ZZ^*=Q$ reconstructs the original vector.
+    Applying the same isometry directly to an arbitrary residual proves the
+    exact residual-norm identity.  Trace-norm duality gives the trace and
+    energy perturbation bounds.  The boundary map is one-Lipschitz because
+    isometric expansion and partial trace are both trace-norm contractions;
+    the triangle inequality then gives the enlarged boundary tolerance.
+    Positivity is preserved by congruence with $Z$, while cyclicity of trace
+    and $Z^*Z=1$ preserve normalization and identify the physical energy.
+    For a positive matrix the trace norm equals its trace; scalar homogeneity
+    then shows that trace normalization costs exactly the trace defect.  The
+    trace perturbation estimate bounds this defect by $\epsilon$, and one
+    triangle inequality gives the factor two.  Applying the preceding
+    objective and boundary perturbation bounds at radius $2\epsilon$ gives
+    the one-sided approximate-program statement.
+\end{proof}
+
+\begin{lemma}[Stability of the leading vector under objective error]
+    \label{thm:lvv_leading_objective_slack}
+    \lean{TNLean.MPS.AreaLaw.exists_leading_eigenvector_of_gluing_with_objective_slack,
+        TNLean.MPS.AreaLaw.exists_leading_eigenvector_chain_with_objective_slack,
+        TNLean.MPS.AreaLaw.leading_eigenvector_bounds_chain_with_objective_slack,
+        TNLean.MPS.AreaLaw.nearby_unit_vector_energy_and_overlap_bounds,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.nearby_unit_vector_energy_and_overlap_bounds,
+        TNLean.MPS.AreaLaw.norm_glued_vectors_sub_eq,
+        TNLean.MPS.AreaLaw.Matrix.PosSemidef.one_sub_energyExcess_div_gap_le_maxEigenvalue,
+        TNLean.MPS.AreaLaw.Matrix.PosSemidef.twentyThree_div_twentyFour_le_maxEigenvalue,
+        TNLean.MPS.AreaLaw.Matrix.PosSemidef.re_inner_le_one_sub_eigenvalue_of_orthogonal,
+        TNLean.MPS.AreaLaw.leading_residual_div_separation_le,
+        TNLean.MPS.AreaLaw.Matrix.PosSemidef.norm_orthogonal_component_le_shifted_residual,
+        TNLean.MPS.AreaLaw.Matrix.PosSemidef.norm_orthogonal_component_le_leading_residual,
+        TNLean.MPS.AreaLaw.Matrix.PosSemidef.exists_phase_sq_distance_le_leading_residual,
+        TNLean.MPS.AreaLaw.Matrix.PosSemidef.exists_phase_sq_distance_le_twelve_div_eleven_residual,
+        TNLean.MPS.AreaLaw.Matrix.PosSemidef.exists_phase_distance_le_of_residual_le,
+        TNLean.MPS.AreaLaw.Matrix.PosSemidef.exists_nearby_unit_eigenvector_of_residual_le,
+        TNLean.MPS.AreaLaw.residual_precision_of_lvv_vector_tolerance,
+        TNLean.MPS.AreaLaw.Matrix.PosSemidef.exists_nearby_unit_eigenvector_of_lvv_residual,
+        TNLean.MPS.AreaLaw.exists_basisVector_sq_overlap_ge_inv,
+        TNLean.MPS.AreaLaw.Matrix.toEuclideanLin_pow_apply,
+        TNLean.MPS.AreaLaw.Matrix.PosSemidef.norm_toEuclideanLin_apply_le_of_trace_eq_one,
+        TNLean.MPS.AreaLaw.Matrix.PosSemidef.eigenvalue_le_one_of_trace_eq_one,
+        TNLean.MPS.AreaLaw.Matrix.PosSemidef.norm_toEuclideanLin_apply_le_one_sub_eigenvalue_of_orthogonal,
+        TNLean.MPS.AreaLaw.Matrix.PosSemidef.norm_toEuclideanLin_apply_le_one_div_twentyFour_of_orthogonal,
+        TNLean.MPS.AreaLaw.Matrix.PosSemidef.norm_iterate_toEuclideanLin_le_one_div_twentyFour_pow_of_orthogonal,
+        TNLean.MPS.AreaLaw.Matrix.PosSemidef.inv_eigenvalue_scaled_action,
+        TNLean.MPS.AreaLaw.Matrix.PosSemidef.inv_eigenvalue_scaled_power,
+        TNLean.MPS.AreaLaw.Matrix.PosSemidef.exists_phase_normalized_inv_eigenvalue_scaled_power,
+        TNLean.MPS.AreaLaw.Matrix.PosSemidef.exists_basisVector_phase_normalized_scaled_power,
+        TNLean.MPS.AreaLaw.norm_sub_inner_smul_le_of_norm_eq_one,
+        TNLean.MPS.AreaLaw.Matrix.PosSemidef.exists_basisVector_scaled_power_sq_distance_le,
+        TNLean.MPS.AreaLaw.scaledPower_error_le_of_ceil_iterationCount,
+        TNLean.MPS.AreaLaw.lvvPower_iterationCount_lt,
+        TNLean.MPS.AreaLaw.lvvPower_totalIterationCount_lt,
+        TNLean.MPS.AreaLaw.Matrix.PosSemidef.exists_basisVector_scaled_power_distance_le,
+        TNLean.MPS.AreaLaw.Matrix.PosSemidef.norm_eigenresidual_le_two_mul_distance,
+        TNLean.MPS.AreaLaw.Matrix.PosSemidef.exists_basisVector_scaled_power_of_residual_certificate,
+        TNLean.MPS.AreaLaw.gluedVector_smul,
+        TNLean.MPS.AreaLaw.gluedVector_phase_invariants,
+        TNLean.MPS.AreaLaw.maxEigenvalue_lower_bound_of_gluing_with_objective_slack,
+        TNLean.MPS.AreaLaw.maxEigenvalue_lower_bound_chain_with_objective_slack,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.nearby_glued_vector_bounds,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.nearby_glued_vector_viable_bounds,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.leading_bounds_of_approximate_boundary_solution,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.exists_leading_vector_of_approximate_compressed_boundary_solution,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.nearby_glued_vector_viable_of_density_and_vector_precision,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.nearby_glued_vector_viable_of_phase_distance,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.nearby_glued_vector_viable_of_density_and_vector_residual,
+        TNLean.MPS.AreaLaw.density_and_vector_precision_of_separate_bounds,
+        TNLean.MPS.AreaLaw.density_and_rationalization_overlap_budget,
+        TNLean.MPS.AreaLaw.canonical_search_rationalization_overlap_budget,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.exists_rationalViableMPSData_of_compressed_boundary_solution_with_slack,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.exists_rationalCoordinateData_of_compressed_boundary_solution_with_slack,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.exists_rationalViableMPSData_of_approx_sdp_error_budget_with_trace_slack,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.exists_rationalCoordinateData_of_approx_sdp_error_budget_with_trace_slack,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.exists_rationalViableMPSData_of_rational_search_result,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.exists_rationalCoordinateData_of_rational_search_result,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.exists_rationalViableMPSData_of_canonical_rational_search,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.exists_rationalCoordinateData_of_canonical_rational_search,
+        TNLean.MPS.AreaLaw.exists_rationalSpanViableMPSData_of_leadingCoordinates,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.exists_viable_vector_of_approximate_density_and_eigenresidual,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.exists_rationalViableMPSData_of_approximate_density}
+    \leanok
+    In the leading-vector lemma, suppose that the left-energy objective of
+    the density matrix exceeds that of the comparison state by at most
+    $\xi$.  Then the energy and overlap conclusions remain valid after
+    replacing the original energy error $e$ by $e+\xi$.  Thus, if the
+    boundary error is $\tau$ and the operator across and to the right of the
+    cut is $K$, the total error is
+    \[
+        e+\xi+\lVert K\rVert\tau.
+    \]
+    The statement holds both in three-part cut coordinates and on the
+    original chain.  Moreover, the bounds hold for every unit eigenvector
+    of the density matrix whose eigenvalue is larger than one half, so they
+    are independent of the choice made in the spectral computation.
+    More quantitatively, if the density has energy at most $E_0+e$, its
+    maximal eigenvalue is at least $1-e/\Delta$: the gap forces its
+    ground-state population to be at least this large, and no diagonal
+    matrix element can exceed the maximal eigenvalue.
+    In particular, an energy excess at most $\Delta/24$ gives the uniform
+    bound $\mu_{\max}\ge 23/24$.
+    For the glued density the relevant excess is
+    $e+\xi+\lVert K\rVert\tau$, so its maximal eigenvalue is at least
+    $1-(e+\xi+\lVert K\rVert\tau)/\Delta$.  Under the compressed-density
+    precision used below, this again gives $\mu_{\max}\ge23/24$.
+    If a numerical unit vector is within Hilbert-space distance $\zeta$ of
+    such an exact unit witness, its energy increases by at most
+    $2\lVert H\rVert\zeta$ and its ground-state overlap decreases by at most
+    $\zeta$.  For a normalized range-one chain the energy loss is at most
+    $4L\zeta$.
+    The right-bond isometry and the change from cut coordinates back to the
+    physical chain preserve this vector distance exactly.  If the numerical
+    compressed vector is fixed by the left support projection, the resulting
+    physical vector remains in the retained left-supported space.
+    Consequently, reserving $4L\zeta$ in the exact energy bound and
+    $\zeta$ in the exact overlap bound gives the original numerical
+    conclusions $E_0+\Delta/12$ and $11/12$ for the computed vector.
+    In the viable-set application, let $\delta$ be the enlargement of the
+    boundary tolerance.  The original conclusions, with energy at most
+    $E_0+\Delta/12$ and overlap at least $11/12$, continue to hold whenever
+    \[
+        2\bigl(\xi+\lVert B\rVert\delta\bigr)
+        \le \frac{\Delta}{2028}.
+    \]
+    Before this last rounding, the theorem also retains the sharper bounds
+    with total error
+    \[
+      2\left(6\frac{\Delta}{169}+\xi+
+        \lVert B\rVert\left(2\frac{(\Delta/169)^2}{2L}+\delta\right)\right).
+    \]
+    Thus unused portions of the margin may be assigned to a subsequent
+    numerical eigenvector approximation.
+    In particular, let $Z$ be the isometric coordinates of the supported
+    density problem and let $H_L$ be its physical objective.  A positive
+    compressed matrix within trace distance $\epsilon$ of an exact feasible
+    solution can be normalized and expanded to such a density.  It gives the
+    sharper physical energy error
+    \[
+       14\frac{\Delta}{169}+24L\epsilon
+    \]
+    and the corresponding overlap deficit obtained by dividing this
+    quantity by $\Delta$.  In particular, it gives the
+    same viable-vector conclusions whenever
+    \[
+        24L\epsilon\le \frac{\Delta}{2028},
+        \qquad\text{equivalently}\qquad
+        \epsilon\le\frac{\Delta}{48672L}.
+    \]
+    More generally, if the numerical compressed unit vector lies within
+    distance $\zeta$ of the exact compressed witness, the same conclusions
+    hold under the single combined condition
+    \[
+        24L\epsilon+4L\zeta\le\frac{\Delta}{2028}.
+    \]
+    One explicit equal division of this margin is
+    \[
+        \epsilon\le\frac{\Delta}{97344L},
+        \qquad
+        \zeta\le\frac{\Delta}{16224L}.
+    \]
+    At this vector tolerance, an eigenpair residual at most
+    \(11\Delta/(389376L)\) produces an exact unit leading eigenvector within
+    distance \(\zeta\), differing from the reference eigenvector only by a
+    complex phase.
+    Gluing is complex-linear, and both the energy expectation and the
+    absolute ground-state overlap are invariant under this phase.  Hence the
+    numerical viable-vector theorem accepts the residual certificate directly:
+    under \(\mu\ge23/24\), a residual at most \(11\zeta/24\) gives the same
+    physical energy, overlap, normalization, and left-support conclusions.
+    Combining this with the compressed-density approximation, trace-norm
+    accuracy \(\Delta/(97344L)\) and residual accuracy
+    \(11\Delta/(389376L)\) form a complete numerical contract for the
+    leading-vector step entirely in the reduced coordinate space.  Isometric
+    expansion preserves normalization and residual exactly and places the
+    expanded vector in the retained support automatically.
+    For a power-method implementation it suffices to try the \(n\) standard
+    coordinate vectors: at least one has squared overlap at least \(1/n\) with
+    the unit dominant eigenvector.
+    The compressed density is a Euclidean contraction, and each of its real
+    eigenvalues is at most one.  More sharply, on the orthogonal complement
+    of a unit eigenvector of eigenvalue \(\mu>1/2\), its operator norm is at
+    most \(1-\mu\).  At the LVV threshold \(\mu\ge23/24\), \(t\) power
+    iterations therefore suppress the orthogonal component by the explicit
+    factor \(24^{-t}\).  After scaling by \(\mu^{-1}\), the leading vector is
+    fixed and the orthogonal contraction factor is at most \(1/23\).
+    Normalizing the resulting power vector gives, up to a complex phase, a
+    squared distance bounded by \(2\cdot23^{-2t}\) times the initial ratio of
+    orthogonal mass to leading mass.  One of the \(n\) coordinate starts
+    satisfies this estimate with squared leading overlap at least \(1/n\);
+    consequently its squared error is at most \(2n\,23^{-2t}\).
+    In particular, for any target distance \(\zeta>0\), the explicit count
+    \[
+        t=\left\lceil \frac{n}{\zeta^2}\right\rceil
+    \]
+    makes one normalized coordinate-start sequence lie within distance
+    \(\zeta\) of the dominant vector, up to phase.  This count is polynomial
+    in the compressed dimension and the inverse target accuracy.
+    Distance \(\zeta\) gives eigenpair residual at most \(2\zeta\), so the
+    same explicit power sequence discharges any downstream numerical
+    certificate formulated with that residual tolerance.  The end-to-end
+    compressed-density theorem exposes the exact normalized compressed
+    leading vector and its isometric expansion, in addition to the ambient
+    leading eigenpair.  It also performs the composition: with
+    \[
+       \eta=\frac{11\Delta}{778752L},\qquad
+       t=\left\lceil\frac{n}{\eta^2}\right\rceil,
+    \]
+    one of the \(n\) normalized coordinate-start power vectors expands to a
+    physical vector having unit norm, the required left support, energy at
+    most \(E_0+\Delta/12\), and ground-state overlap at least \(11/12\).
+    The iteration count satisfies the explicit polynomial estimate
+    \[
+       t<\frac{n(778752L)^2}{(11\Delta)^2}+1.
+    \]
+    Trying every coordinate start therefore uses fewer than
+    \[
+       n\left(\frac{n(778752L)^2}{(11\Delta)^2}+1\right)
+    \]
+    matrix--vector iterations.
+    If the retained left family has rational matrix product representations,
+    the exact compressed boundary solution also has a rational-output form.
+    Pull the dominant eigenvector back through the support isometry and
+    rationalize its physical left columns.  Whenever the sharp overlap
+    deficit above plus a reserve \(2\xi_{\mathrm{rat}}\) is at most \(1/12\),
+    this produces compact rational matrix product data for a
+    \((k,1/12)\)-viable family.
+    The compact output also carries the invariant needed for the next
+    iteration without expanding its linear combinations into direct-sum
+    tensors: every retained vector has the finite-span bond bound, and every
+    physical coefficient has one explicit rational height bound.  Tensoring
+    with a computational-basis vector preserves both bounds and viability.
+    The same conclusion follows directly from a fully approximate
+    semidefinite certificate, including an auxiliary slack in its boundary
+    trace threshold: repair the certificate to a trace-one positive matrix,
+    charge the explicit repair losses to the sharp overlap deficit, and then
+    apply the preceding rationalization.
+    In particular, a code returned by the finite rational certificate search
+    has this conclusion directly.  The entrywise approximation losses of the
+    coordinate isometry, objective, and boundary center are first transferred
+    to the exact physical data; the resulting repaired-certificate and sharp
+    rationalization budgets then produce the compact viable family.
+\end{lemma}
+\begin{proof}
+    \leanok
+    The gluing estimate adds at most $\lVert K\rVert\tau$ to the energy.
+    The imperfect minimization adds the further term $\xi$.  Applying the
+    spectral leading-vector estimate with their sum gives the asserted
+    energy and overlap bounds.  Reindexing by the three-part cut preserves
+    the norm, inner product, ground-state gap, and the two conclusions.  For
+    a nearby numerical unit vector, polarization and Cauchy--Schwarz give
+    the energy loss $2\lVert H\rVert\zeta$, while the triangle inequality
+    for its inner product with the unit ground state gives the overlap loss
+    $\zeta$.  The range-one norm bound $\lVert H\rVert\le2L$ gives the
+    stated specialization.  Both the right-bond map and the coordinate
+    change are isometries, so the compressed and physical distances agree.
+    Intertwining the compressed and physical support projections shows that
+    the perturbed physical vector retains the required left support.
+    Subtracting the two reserved losses then gives the stated LVV bounds.
+    For
+    the viable-set constants, the unused margin is exactly
+    $\Delta/12-14\Delta/169=\Delta/2028$; the displayed condition absorbs
+    both numerical errors into this margin.  Trace normalization of the
+    positive compressed approximation costs at most $2\epsilon$.  Isometric
+    expansion therefore contributes objective error
+    $2\lVert Z^*H_LZ\rVert\epsilon$ and boundary error $2\epsilon$.
+    Compression by an isometry does not increase operator norm, so
+    $\lVert Z^*H_LZ\rVert\le\lVert H_L\rVert$, giving the stated physical
+    precision condition independently of the chosen coordinates.  For a
+    normalized range-one chain, $\lVert H\rVert\le2L$ and
+    $\lVert B\rVert\le2L$.  Since $H_L=H-B$, one has
+    $\lVert H_L\rVert\le4L$.  Restriction to the cut and tensoring with an
+    identity do not increase this norm, so the left side is at most
+    $24L\epsilon$.
+    The rational-output statement uses the same dominant eigenvector.
+    Isometric pullback preserves its norm, and the sharp overlap estimate
+    leaves precisely the assumed rationalization reserve.  The rational
+    column approximation then enlarges the viability error by at most
+    \(2\xi_{\mathrm{rat}}\).
+    For an approximate certificate, positivity and trace normalization are
+    restored first.  The resulting objective and boundary losses are exactly
+    those appearing in the two stated error budgets, so no additional
+    approximation is hidden in the rational output.
+    Soundness of the finite rational search supplies precisely this
+    approximate certificate for a returned code.  The operator norm bounds
+    \(\lVert Z^*H_LZ\rVert\le4L\) and \(\lVert B\rVert\le2L\) convert the
+    search-level budgets to the exact spectral budgets used above.
+    More sharply, the canonical certificate thresholds consume only
+    \(\Delta/2704\) of the overlap numerator, rather than the coarser
+    \(\Delta/2028\) bound needed for ordinary viability.  Since
+    \[
+      \frac1{12}-\frac{14}{169}-\frac1{2704}=\frac1{8112},
+    \]
+    the canonical search can reserve \(2\xi_{\mathrm{rat}}=1/8112\), namely
+    \(\xi_{\mathrm{rat}}=1/16224\), for rationalizing its selected columns.
+    Consequently the canonical search has a direct rational-output form:
+    from rational matrix product representations of the retained finite
+    family it constructs the fixed-data codes, finds a certificate code,
+    repairs the decoded certificate, and returns compact rational
+    \((k,1/12)\)-viable matrix product data without exposing any intermediate
+    numerical budget to the caller.
+\end{proof}
+
+\begin{lemma}[Polynomial number of boundary minimizations]
+    \label{thm:lvv_boundary_program_count}
+    \lean{TNLean.MPS.AreaLaw.exists_boundaryNets_polynomial_total_cardinality,
+        TNLean.MPS.AreaLaw.exists_boundaryNets_sweep_polynomial_total_cardinality}
+    \leanok
+    Fix a cut, $q\ge1$, $L\ge1$, $c>0$, and a bond bound $D$.  Put
+    \begin{align*}
+        p & =2(qD)^2, & A&=\lceil2(qD)^2/c\rceil.
+    \end{align*}
+    For every $0\le m\le D$, there is a $c/(2L)$-net $N_m$ of the
+    trace-norm unit ball on the actual site-and-bond boundary space, and
+    these nets can be chosen so that
+    \begin{align*}
+        |N_m|&\le(2A+1)^pL^p,
+        &\sum_{m=0}^{D}|N_m|&\le(D+1)(2A+1)^pL^p.
+    \end{align*}
+    Hence the size-trimming construction poses at most the latter number
+    of boundary-constrained minimization problems at one cut.  Across all
+    positive cuts, the nets can be chosen simultaneously with
+    \begin{align*}
+      \sum_{i=1}^{L}\sum_{m=0}^{D}|N_{i,m}|
+      \le(D+1)(2A+1)^pL^{p+1}.
+    \end{align*}
+\end{lemma}
+\begin{proof}
+    \leanok
+    Choose the corrected trace-norm net separately for each actual bond
+    dimension.  The same polynomial bound applies to all $D+1$ choices;
+    summing these bounds proves the one-cut result.  Summing once more over
+    the $L$ positive cuts introduces one further factor of $L$.
 \end{proof}
 
 \begin{lemma}[Polynomial size of the size-trimming family]

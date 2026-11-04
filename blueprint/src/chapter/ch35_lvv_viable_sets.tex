@@ -90,6 +90,11 @@ whose range is the span of the columns of $M_i(\psi)$.
     \label{def:lvv_viable_mps}
     \lean{TNLean.MPS.AreaLaw.leftConfigOfFin,
         TNLean.MPS.AreaLaw.IsLeftOpenMPS,
+        TNLean.MPS.AreaLaw.LeftOpenMPSRepresentation,
+        TNLean.MPS.AreaLaw.isLeftOpenMPS_iff_nonempty_representation,
+        TNLean.MPS.AreaLaw.ViableMPSData,
+        TNLean.MPS.AreaLaw.ViableMPSData.isViableMPS,
+        TNLean.MPS.AreaLaw.isViableMPS_iff_nonempty_data,
         TNLean.MPS.AreaLaw.IsViableMPS}
     \leanok
     \uses{def:lvv_viable_set, def:chain_open_mps}
@@ -99,15 +104,22 @@ whose range is the span of the columns of $M_i(\psi)$.
     $\max(1,b)$~\cite[line 243]{Landau2015Polynomial}. Bond dimension $0$ is read
     as $1$; the source allows $b=0$ only for the initial set on no
     sites~\cite{gap:lvv13_bond_dimension_zero}.
+    The data-bearing form stores an explicit varying-bond tensor and scalar
+    cap for every member of $S$; forgetting these data gives the same viable-set
+    predicate.
 \end{definition}
 
 \begin{lemma}[Extending a viable set by one site]
     \label{thm:lvv_viable_extension}
-    \lean{TNLean.MPS.AreaLaw.IsOpenMPS.snoc,
+    \lean{OBCChainTensor.snoc,
+        OBCChainTensor.coeff_snoc,
+        TNLean.MPS.AreaLaw.OpenMPSRepresentation.snoc,
+        TNLean.MPS.AreaLaw.IsOpenMPS.snoc,
         TNLean.MPS.AreaLaw.restrictLeft,
         TNLean.MPS.AreaLaw.extendSite,
         TNLean.MPS.AreaLaw.lastLeftSite,
         TNLean.MPS.AreaLaw.extendSite_apply,
+        TNLean.MPS.AreaLaw.LeftOpenMPSRepresentation.extendSite,
         TNLean.MPS.AreaLaw.extend,
         TNLean.MPS.AreaLaw.extendSite_mem_extend,
         TNLean.MPS.AreaLaw.card_extend_le,
@@ -116,7 +128,9 @@ whose range is the span of the columns of $M_i(\psi)$.
         TNLean.MPS.AreaLaw.leftSupportSubmodule_le_extend,
         TNLean.MPS.AreaLaw.IsViable.extend,
         TNLean.MPS.AreaLaw.IsLeftOpenMPS.extendSite,
-        TNLean.MPS.AreaLaw.IsViableMPS.extend}
+        TNLean.MPS.AreaLaw.IsViableMPS.extend,
+        TNLean.MPS.AreaLaw.ViableMPSData.extend,
+        TNLean.MPS.AreaLaw.ViableMPSData.extend_isViableMPS}
     \leanok
     \uses{def:lvv_viable_mps}
     Let $1\le i\le L$, let $q$ be the local dimension, and let $S'$ be the set

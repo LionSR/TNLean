@@ -14,6 +14,7 @@ import TNLean.MPS.AreaLaw.ViableSet.BondTrimmingBound
 import TNLean.MPS.AreaLaw.ViableSet.BondTrimmingReference
 import TNLean.MPS.AreaLaw.ViableSet.BoundaryNet
 import TNLean.MPS.AreaLaw.ViableSet.BoundaryNetPolynomial
+import TNLean.MPS.AreaLaw.ViableSet.BoundaryTraceNormSDP
 import TNLean.MPS.AreaLaw.ViableSet.ChainPadding
 import TNLean.MPS.AreaLaw.ViableSet.ChainPaddingCoordinates
 import TNLean.MPS.AreaLaw.ViableSet.ChainPaddingGroundState
@@ -28,6 +29,8 @@ import TNLean.MPS.AreaLaw.ViableSet.Gluing
 import TNLean.MPS.AreaLaw.ViableSet.GluingBounds
 import TNLean.MPS.AreaLaw.ViableSet.GluingCoordinates
 import TNLean.MPS.AreaLaw.ViableSet.GluingSupport
+import TNLean.MPS.AreaLaw.ViableSet.LeadingPower
+import TNLean.MPS.AreaLaw.ViableSet.LeadingResidual
 import TNLean.MPS.AreaLaw.ViableSet.LeftColumns
 import TNLean.MPS.AreaLaw.ViableSet.LeftCoordinates
 import TNLean.MPS.AreaLaw.ViableSet.OperatorAction

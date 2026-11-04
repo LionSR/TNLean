@@ -45,6 +45,19 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Spectral tolerances from cone-order bounds — promoted (2026-11-04)
+
+- **Pattern:** Convert tolerances of size
+  `Δ / (129792 * L * nMax)` into the realized inequalities
+  `2 * n * ε ≤ Δ / (64896 * L)`, using `n ≤ nMax`, and similarly for the
+  auxiliary cone order.
+- **Helper:** `fullyApproxSDP_scaled_errors_of_order_bounds` in
+  `MPS/AreaLaw/ViableSet/BoundaryTraceNormSDP.lean`.
+- **Occurrences:** The general LVV margin theorem and the physical uniform-certificate
+  theorem in `SizeTrimming.lean`; the helper treats both cone orders simultaneously.
+- **Decision:** The scaling is a mathematical lemma.  It replaces repeated denominator
+  positivity and nonlinear-arithmetic arguments; no tactic is introduced.
+
 ### Nonempty bond from a trace-one matrix — promoted (2026-10-31)
 
 - **Pattern:** `have ha : a ≠ 0 := by intro ha; subst a; simp at htr` followed by
@@ -5106,6 +5119,34 @@ three-plaquette output measurement, and the routed reunion measurement.
   `isReordering_comp_iff`; apply `IsReordering.comp` as a term instead.
 
 ## Candidates
+
+### Left compressed Hamiltonian norm bound — candidate (2026-11-04)
+
+- **Pattern:** From `h.operator = HL + B`, `‖h.operator‖ ≤ 2L`, and `‖B‖ ≤ 2L`,
+  derive `‖HL‖ ≤ 4L`; then pass this bound through `leftCutOperator`, tensoring
+  with the identity, and isometric compression by `Z`.
+- **Seen:** Seven occurrences in
+  `MPS/AreaLaw/ViableSet/SizeTrimming.lean` (scanner output, 2026-11-04).
+- **Abstraction:** A future helper should return the three useful bounds on `HL`,
+  the cut operator tensored with the bond identity, and its compression.  Promotion
+  awaits an occurrence in a second file, as required by the rule of three.
+- **Notes:** This is mathematical norm bookkeeping, so a lemma is preferable to a
+  tactic.  The present repetitions remain local to one proof module.
+
+### Transporting three decoded Gram-factor bounds — candidate (2026-11-04)
+
+- **Pattern:** After identifying decoded rational matrices with the rounded
+  density and two auxiliary Gram factors, rewrite the three identities and
+  discharge their entrywise approximation bounds componentwise.
+- **Seen:** Three occurrences in
+  `MPS/AreaLaw/ViableSet/BoundaryTraceNormSDP.lean` near the explicit,
+  uniform, and accepted-certificate constructions (scanner output,
+  2026-11-04).
+- **Abstraction:** A mathematical helper packaging the three transported
+  entrywise bounds is preferable if the pattern appears in a second file.
+- **Notes:** All current occurrences are local to one module, so this remains
+  below the project promotion threshold.
+
 ### Supplied standard-form source-cut contraction — candidate (2026-10-29)
 
 - **Pattern:** Preserve the external physical coordinates by Kronecker deltas,
@@ -11506,3 +11547,15 @@ removed after the dependency audit exposed it.
 - **Decision:** These two sites remain below the rule of three. The entropy
   development also reuses `aklv_regionEntropy_le_short_side` by exposing its
   existing proof unchanged, rather than copying that dimension argument.
+
+### Six-matrix rounded-certificate transport — candidate (2026-11-04)
+
+- **Pattern:** after replacing each of the six rounded certificate matrices by
+  its defining equality, discharge the corresponding entrywise closeness
+  hypothesis.  The three primary and three Gram coordinates produce the same
+  eight-line proof fragment.
+- **Occurrences:** three simultaneous rounding theorems in
+  `MPS/AreaLaw/ViableSet/BoundaryTraceNormSDP.lean`.
+- **Candidate abstraction:** a small product-membership transport lemma should
+  package the six rewrites together.  Promote when the surrounding certificate
+  statements have stabilized; the present repetition is confined to one file.

@@ -55,8 +55,19 @@ Section~\ref{sec:lvv_successive_construction} does not need this bound.
 
 \begin{lemma}[Uniform polynomial sampling bounds]
     \label{thm:lvv_sampled_polynomial_bounds}
-    \lean{TNLean.MPS.AreaLaw.exists_sampledProjectorWordCount_polynomial,
+    \lean{TNLean.MPS.AreaLaw.sampledProjectorWordDegree,
+        TNLean.MPS.AreaLaw.exists_sampledProjectorWordCount_polynomial_explicit_degree,
+        TNLean.MPS.AreaLaw.exists_sampledProjectorWordCount_polynomial,
+        TNLean.MPS.AreaLaw.sampledProjectorLetterSlope,
+        TNLean.MPS.AreaLaw.exists_sampledProjectorLetterBound_logarithmic_explicit_slope,
         TNLean.MPS.AreaLaw.exists_sampledProjectorLetterBound_logarithmic,
+        TNLean.MPS.AreaLaw.sampledProjectorRankDegree,
+        TNLean.MPS.AreaLaw.sampledProjectorTotalDegree,
+        TNLean.MPS.AreaLaw.sampledProjectorEnergyDegreeSlope,
+        TNLean.MPS.AreaLaw.sampledProjectorEnergyDegreeIntercept,
+        TNLean.MPS.AreaLaw.sampledProjectorTotalDegree_le_affine,
+        TNLean.MPS.AreaLaw.sampledGroundStateDegree_le_affine,
+        TNLean.MPS.AreaLaw.exists_sampledProjector_uniform_polynomial_explicit_degree,
         TNLean.MPS.AreaLaw.exists_sampledProjector_uniform_polynomial}
     \leanok
     Fix $q\ge1$, $\Delta>0$, $0<c\le1$, a natural number $s$ and a real bound $B$.
@@ -64,7 +75,25 @@ Section~\ref{sec:lvv_successive_construction} does not need this bound.
     and $\varepsilon_0$, such that whenever $L\ge1$,
     $0\le\varepsilon_0\le L-1$ and $\varepsilon_0/\Delta\le B$, sampling
     at precision $c/L^s$ gives $\ell D\le CL^p$ and $D\le CL^p$.
-    The count $\ell$ has a polynomial bound and $\kappa$ a logarithmic bound.
+    More precisely, with $r=\lceil B\rceil$, the count $\ell$ has degree
+    \begin{align*}
+      p_{\rm word}&=2(sr+1)+(2s+1)=2sr+2s+3,\\
+      a_{\rm letter}&=\frac{2s}{\Delta}+2(p_{\rm word}+4),\\
+      p_{\rm rank}&=\left\lceil2a_{\rm letter}\log q\right\rceil,
+      \qquad p_{\rm total}=p_{\rm word}+p_{\rm rank}.
+    \end{align*}
+    The count satisfies $\ell\le C_1L^{p_{\rm word}}$, every letter occurs
+    at most $a_{\rm letter}\log L+b$ times, and both $\ell D$ and $D$ are
+    bounded by $C_2L^{p_{\rm total}}$.
+    Quantitatively,
+    \begin{align*}
+      p_{\rm slope}&=2s+\left\lceil8s\log q\right\rceil,\\
+      p_{\rm int}&=2s+3+
+        \left\lceil\left(\frac{4s}{\Delta}+8s+28\right)\log q\right\rceil,
+    \end{align*}
+    and $p_{\rm total}\le p_{\rm int}+p_{\rm slope}\lceil B\rceil$.
+    Consequently a final-MPS degree $2p_{\rm total}+p_0$ is at most
+    $(2p_{\rm int}+p_0)+2p_{\rm slope}\lceil B\rceil$.
 \end{lemma}
 \begin{proof}
     \leanok
@@ -88,7 +117,8 @@ Section~\ref{sec:lvv_successive_construction} does not need this bound.
 
 \begin{lemma}[A complete step with fixed polynomial bounds]
     \label{thm:lvv_sampled_successor}
-    \lean{TNLean.MPS.AreaLaw.exists_sampled_viable_successor_polynomial}
+    \lean{TNLean.MPS.AreaLaw.exists_sampled_viable_successor_polynomial_explicit_energy_degree,
+        TNLean.MPS.AreaLaw.exists_sampled_viable_successor_polynomial}
     \leanok
     \uses{def:lvv_successive_precision}
     Fix $q\ge2$, $\Delta>0$, $\eta>0$, an integer $a\ge1$, and an upper bound $B$ for
@@ -99,6 +129,9 @@ Section~\ref{sec:lvv_successive_construction} does not need this bound.
     $(i,CL^p,DL^r,\alpha/L^a)$-viable family by extension, size trimming,
     independent bond trimming and sampled error reduction.
     The bounds are independent of the size and bond bound of the input family.
+    More precisely, there are offsets $p_0,r_0$, independent of $B$, for
+    which one may take $p=p_{\rm total}+p_0$ and
+    $r=p_{\rm total}+r_0$.
 \end{lemma}
 \begin{proof}
     \leanok
@@ -115,16 +148,27 @@ Section~\ref{sec:lvv_successive_construction} does not need this bound.
 
 \begin{lemma}[Successive viable families]
     \label{thm:lvv_sampled_successive_families}
-    \lean{TNLean.MPS.AreaLaw.exists_sampled_successive_viable_sets_polynomial}
+    \lean{TNLean.MPS.AreaLaw.exists_sampled_successive_viable_sets_polynomial_explicit_energy_degree,
+        TNLean.MPS.AreaLaw.exists_sampled_successive_viable_sets_polynomial_total_cardinality,
+        TNLean.MPS.AreaLaw.exists_sampled_successive_viable_sets_polynomial}
     \leanok
     Under the hypotheses of Lemma~\ref{thm:lvv_sampled_successor}, there
     are families $S_i$ at all cuts $0\le i\le L$, beginning with the scalar
-    singleton, such that each is $(i,CL^p,DL^r,\alpha/L^a)$-viable.
+    singleton, such that each is $(i,CL^p,DL^r,\alpha/L^a)$-viable, with
+    $p=p_{\rm total}+p_0$ and $r=p_{\rm total}+r_0$ for offsets independent
+    of $B$.  The families may be chosen so that the total number of retained
+    candidate vectors throughout the sweep obeys
+    \begin{align*}
+      \sum_{i=0}^{L}|S_i|\le CL^{p+1}.
+    \end{align*}
+    This counts all retained candidates; it does not include the arithmetic
+    cost of the convex minimizations or spectral computations.
 \end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:lvv_sampled_successor, lem:lvv_initial_scalar_family}
     The scalar singleton is exactly viable. Apply
     Lemma~\ref{thm:lvv_sampled_successor} inductively at the successive
-    cuts. The same size and bond bounds apply at each step.
+    cuts. The same size and bond bounds apply at each step.  Summing the
+    $L+1$ cardinality bounds and using $L+1\le2L$ gives the total count.
 \end{proof}
