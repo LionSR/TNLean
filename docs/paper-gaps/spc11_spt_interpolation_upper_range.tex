@@ -488,12 +488,39 @@ are cohomologous.\footnote{Formal declaration:
 Here the endpoint tensors are one-site injective of positive bond dimension,
 with prescribed projective representations implementing their \emph{exact}
 on-site tensor covariance; the phase condition itself still permits endpoint
-character changes and physical inclusions. The endpoint covariance hypothesis
-carries no scalar character, so the biconditional does not cover arbitrary
-character-covariant endpoints, and it does not classify several-block
-tensors. Comparing this endpoint domain and exact-path definition with the
-full source-labelled classification is a separate question, and the
-corresponding blueprint nodes remain marked \path{notready}. The fixed-point
+character changes and physical inclusions.
+
+Endpoint covariance with a scalar character is not a further case
+(decision of 2026-11-04). The source allows such a character and removes it
+by the endpoint phase gauge. Appendix~B,
+\path{Papers/1010.3732/paper_v3.tex}, lines~2596--2599, writes the symmetry
+of an injective tensor as $U_g\mathcal P=\mathcal P(e^{i\phi_g}V_g\otimes\bar
+V_g)$, and lines~2618--2632 remove $e^{i\phi_g}$ by replacing $U_g$ with
+$e^{-i\phi_g}U_g$. This is the phase freedom $U_g^p\leftrightarrow
+e^{i\phi_g^p}U_g^p$ of the definition in Section~II.C.2, lines~440--453.
+Section~II.F then states the classification in that gauge: lines~836--842
+choose ``a standard form for $\mathcal P$ and a phase gauge for $U_g$'' with
+no character. The phase condition carries the same freedom. Multiplying the
+physical action of one endpoint by a unit-modulus character $\chi$ is absorbed
+into that endpoint's inclusion character, which changes by $\chi^{-k}$ after
+blocking $k$ sites.\footnote{Formal declaration:
+    \leanid{MPSTensor.IsSameExactMPSGappedPhase.of_smul_left}.}
+The biconditional therefore extends to endpoints whose prescribed virtual
+representations implement the on-site symmetry up to unit-modulus characters,
+with the same cohomology classes.\footnote{Formal declaration:
+    \leanid{MPSTensor.isSameExactMPSGappedPhase_iff_cohomologous_of_character}.}
+The trivial-character hypothesis of the exact-covariance theorem is thus the
+source's phase-gauge convention, not a restriction of the classification.
+
+The biconditional does not classify several-block tensors. The source treats
+that case separately, in its subsection on systems with symmetry breaking
+(lines~1076--1324), with a permutation action of the symmetry on the blocks;
+it is outside Section~II.F. One-site injectivity of the endpoints agrees with
+the source's standing assumption that every MPS is in standard form after
+blocking (lines~349--353 and~816--818). Comparing this endpoint domain and
+the exact-path definition with the full source-labelled classification
+remains a separate question, and the corresponding blueprint node remains
+marked \path{notready}. The fixed-point
 character restriction and the compact normal-form gap restriction are resolved
 in their own notes; those resolutions do not enlarge this classification
 statement. No conclusion is asserted about gapped Hamiltonian paths whose
