@@ -24,6 +24,14 @@ degree in `1 / η` is of order `log d / ε`. Recorded in `docs/paper-gaps/lvv13_
 a declared polynomial cost in the dimensions of its arguments, arithmetic is exact, and nothing
 is proved about how a query is answered; see `docs/paper-gaps/lvv13_cost_model.tex`.
 
+**Scope restriction (quantitative constants):** the size and bond budgets use the library
+constant-cut bond `constantCutBond` and the corrected net exponent, not the printed quantitative
+bounds; see `docs/paper-gaps/lvv13_constant_bond.tex`.
+
+**Local fix (trimming radius):** bond trimming uses the corrected quadratic radius
+`bondTrimmingRadius` recorded at
+<https://sirui-lu.com/QICLean/paper-gaps/lvv13_trimming_radius.pdf>.
+
 Source: LVV13, arXiv:1307.5143v1, `algo53.tex`, lines 213--216.
 -/
 
