@@ -14,7 +14,7 @@ order. The resulting high-projection coercivity controls an exponential moment
 on its own low-energy space. The scalar remainder then bounds the difference
 from the original Hamiltonian on that same space.
 
-**Scope restriction (one interval and scale at most four times the order):** The scale is
+**Local fix (corrected residual comparison):** The scale is
 positive and at most four times the positive order. The explicit reverse cutoff condition
 is retained with correction `(t / 2) * (1 / 2) ^ m`.
 This is a corrected auxiliary to ALVV, arXiv:1602.08828v2, `def:soft-trunc`

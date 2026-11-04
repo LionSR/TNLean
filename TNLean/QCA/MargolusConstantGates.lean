@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.QCA.MargolusCoherentCoordinates
 import TNLean.QCA.ConsecutivePairCoordinates
+import TNLean.Algebra.FinSumPermutation
 
 /-!
 # One fixed pair of actual Margolus gates
@@ -123,10 +124,7 @@ private theorem constantMargolusGateRule_eq
   unfold constantMargolusGateRule
   conv_lhs => rw [Matrix.matrix_eq_sum_single K]
   simp only [map_sum]
-  apply Finset.sum_congr rfl
-  intro i _
-  apply Finset.sum_congr rfl
-  intro j _
+  refine Finset.sum_congr₂ fun i _ j _ ↦ ?_
   rw [single_prod_eq_smul_kronecker, map_smul, map_smul, map_smul,
     coherentMargolus_alternating_kronecker hω hcov, hV, hV]
 

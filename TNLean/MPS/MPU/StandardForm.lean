@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.PhysicalBlocking
 import TNLean.MPS.MPU.SourceUV
+import TNLean.Algebra.FinSumPermutation
 
 /-!
 # Two-site source-gate equations
@@ -56,10 +57,7 @@ theorem mul_apply_eq_sum_of_sourceCut_factorizations
   apply Finset.sum_congr rfl
   intro l _
   rw [Finset.sum_comm]
-  apply Finset.sum_congr rfl
-  intro r _
-  apply Finset.sum_congr rfl
-  intro β _
+  refine Finset.sum_congr₂ fun r _ β _ ↦ ?_
   ring
 
 namespace SourceFactors

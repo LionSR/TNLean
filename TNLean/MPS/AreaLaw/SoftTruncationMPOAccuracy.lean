@@ -16,6 +16,10 @@ budget. Supporting a corrected ALVV, arXiv:1602.08828v2, `lem:exp-approx-eff`, l
 **Local fix (cutoff, normalization and parameters):** this is the corrected interaction-label
 construction at scale at least three times the order, not the printed physical-support estimate
 or a computational runtime result; see `docs/paper-gaps/alvv16_cluster_approximation.tex`.
+
+**Scope restriction (scale at least three times the order):** ALVV `lem:exp-approx-eff`, lines
+1262–1268, allows any scale with `t′ < (ln 2/2) t`; this module takes `t ≥ 3m`, a sub-case of
+that range. See `docs/paper-gaps/alvv16_cluster_approximation.tex`.
 -/
 
 open Matrix

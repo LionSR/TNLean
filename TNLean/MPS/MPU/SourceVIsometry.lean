@@ -144,10 +144,7 @@ theorem sourceYTensor_gram_eq_four_u_weighted
         (∑ l : Fin ℓ[U], star (S.Y₂ l (p.2, a.2)) *
           S.Y₂ l (q.2, b.2)) := by
       simp_rw [Finset.sum_mul_sum]
-      apply Finset.sum_congr rfl
-      intro r _
-      apply Finset.sum_congr rfl
-      intro l _
+      refine Finset.sum_congr₂ fun r _ l _ ↦ ?_
       ring
     _ = (∑ β : Fin D, ∑ β' : Fin D, ∑ j₁ : Fin d,
           star (U j₁ p.1 a.1 β) * ρ β β' * U j₁ q.1 b.1 β') *
