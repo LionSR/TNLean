@@ -90,41 +90,46 @@ All polynomial bounds have the quantitative scope specified in those constructio
     filters, indexed by themselves, or those of the sampled projector.
 \end{definition}
 
-\begin{lemma}[The complete step with its selections named]
-    \label{thm:lvv_complete_successive_step_factors}
-    \lean{TNLean.MPS.AreaLaw.exists_positive_chain_successive_step_factors}
+\begin{definition}[One step of the sweep]
+    \label{def:lvv_sweep_step}
+    \lean{TNLean.MPS.AreaLaw.lvvSweepStep,
+        TNLean.MPS.AreaLaw.card_lvvSweepStep_le,
+        TNLean.MPS.AreaLaw.isLeftOpenMPS_of_mem_lvvSweepStep}
     \leanok
     \uses{def:lvv_successive_budgets, def:lvv_successive_step,
-        def:lvv_size_trimming_selection,
-        thm:lvv_size_trimmed_family_bond_trim_set,
-        thm:huang_positive_chain_operator,
-        thm:huang_positive_chain_error_reduction_factors,
-        thm:lvv_viable_extension}
-    Let $L\ge1$ and $1\le i\le L$. Let
-    $H=\sum_{j=0}^{L-2}h_j$, where $h_j$ is supported on sites $j,j+1$ and
-    $0\le h_j\le I$. There is a finite set $F$ of Gaussian left filter
-    factors at the cut after $i$ sites, chosen from the interaction, the
-    gap and the cut before every family and every ground pair, with
-    $|F|\le E_LR_L$ and every member of operator-Schmidt rank at most $R_L$
-    at every internal left cut. For every finite family $S$ on the first
-    $i-1$ sites and every unit ground vector $\Gamma$ with projector gap
-    $\Delta$, $(i-1,c_\Delta/L)$-viability of $S$ implies
-    $(i,c_\Delta/L)$-viability of the step of
-    Definition~\ref{def:lvv_successive_step} applied, with the factors $F$
-    and the radius $m_L$, to the size-trimming selection of
-    $S\otimes\{|1\rangle,\ldots,|q\rangle\}$, a family of at most
-    $C_sL^p$ vectors in its span.
+        def:lvv_size_trimming_selection, def:huang_gaussian_filter_factors,
+        thm:huang_positive_chain_operator}
+    Let $L\ge1$ and $i+1\le L$. Let $H=\sum_{j=0}^{L-2}h_j$, where $h_j$ is
+    supported on sites $j,j+1$ and $0\le h_j\le I$. The step of the sweep
+    sends a family $S$ on the first $i$ sites to the step of
+    Definition~\ref{def:lvv_successive_step}, with the Gaussian filter factors
+    of Definition~\ref{def:huang_gaussian_filter_factors} at precision
+    $c_\Delta$ and the radius $m_L$, applied to the size-trimming selection
+    (Definition~\ref{def:lvv_size_trimming_selection}, for the exact
+    adjacent-pair embedding of $H$) of $S\otimes\{|1\rangle,\ldots,|q\rangle\}$.
+    Its output has at most $s_L$ members, each with effective MPS bond bound
+    $b_L$, and is a function of $S$, the interaction and the gap parameter.
+\end{definition}
+
+\begin{lemma}[One step of the sweep preserves viability]
+    \label{thm:lvv_complete_successive_step_factors}
+    \lean{TNLean.MPS.AreaLaw.isViable_lvvSweepStep}
+    \leanok
+    \uses{def:lvv_sweep_step, thm:lvv_size_trimmed_family_bond_trim_set,
+        thm:huang_positive_chain_error_reduction_factors, thm:lvv_viable_extension}
+    In the setting of Definition~\ref{def:lvv_sweep_step}, for every unit
+    ground vector $\Gamma$ with projector gap $\Delta$,
+    $(i,c_\Delta/L)$-viability of $S$ implies $(i+1,c_\Delta/L)$-viability
+    of the step of the sweep applied to $S$.
 \end{lemma}
 \begin{proof}
     \leanok
-    Choose the factors $F$ by
-    Lemma~\ref{thm:huang_positive_chain_error_reduction_factors}. Extend
-    each member of $S$ by the one-site basis; extension preserves
-    viability. By Lemma~\ref{thm:lvv_size_trimmed_family_bond_trim_set},
-    applied with the exact adjacent-pair embedding of $H$, the trimmed
-    size-trimming selection of the extended family is half-viable. The factors then restore viability precision
-    $c_\Delta/L$ on the family of factors applied to the trimmed family,
-    which is the step.
+    Extension preserves viability. By
+    Lemma~\ref{thm:lvv_size_trimmed_family_bond_trim_set}, applied with the
+    exact adjacent-pair embedding of $H$, the trimmed size-trimming selection
+    of the extended family is half-viable. The Gaussian filter factors then
+    restore viability precision $c_\Delta/L$ on the family of factors applied
+    to the trimmed family, which is the step.
 \end{proof}
 
 \begin{lemma}[A complete successive step]
@@ -157,55 +162,36 @@ All polynomial bounds have the quantitative scope specified in those constructio
     \label{thm:lvv_coherent_successive_sequence}
     \lean{TNLean.MPS.AreaLaw.exists_positive_chain_successive_viable_sets}
     \leanok
-    \uses{thm:lvv_complete_successive_step_factors, def:lvv_successive_step,
-        def:lvv_size_trimming_selection, lem:lvv_initial_scalar_family}
-    Under the physical hypotheses of the preceding theorem, there are
-    families $F_1,\ldots,F_L$ of Gaussian left filter factors, one at each
-    cut, chosen before every family and every ground pair, with
-    $|F_i|\le E_LR_L$ and every member of operator-Schmidt rank at most
-    $R_L$ at every internal left cut; and there is one sequence
-    $S_0,\ldots,S_L$, chosen before every ground pair, with $S_0$ the
-    scalar singleton, in which each $S_{i+1}$ is the step of
-    Definition~\ref{def:lvv_successive_step} applied, with the factors
-    $F_{i+1}$ and the radius $m_L$, to the size-trimming selection of
-    $S_i\otimes\{|1\rangle,\ldots,|q\rangle\}$: each family is a function
-    of the previous one. For each positive cut,
-    $|S_i|\le s_L$ and every member has effective MPS bond bound $b_L$. For
-    every unit ground vector $\Gamma$ with projector gap $\Delta$, all these
-    same families are $(i,c_\Delta/L)$-viable.
+    \uses{def:lvv_sweep, thm:lvv_sweep_spec}
+    Under the physical hypotheses of Definition~\ref{def:lvv_sweep_step},
+    there is one sequence $S_0,\ldots,S_L$, chosen before every ground pair,
+    with $S_0$ the scalar singleton, in which each $S_{i+1}$ is the step of
+    the sweep applied to $S_i$. For each positive cut, $|S_i|\le s_L$ and
+    every member has effective MPS bond bound $b_L$. For every unit ground
+    vector $\Gamma$ with projector gap $\Delta$, all these same families are
+    $(i,c_\Delta/L)$-viable. This is the existence form of
+    Definition~\ref{def:lvv_sweep} and Lemma~\ref{thm:lvv_sweep_spec}.
 \end{lemma}
 \begin{proof}
     \leanok
-    Choose the factors at every cut first. Carry a family together with
-    its cardinality, individual bond and all-ground viability assertions.
-    At zero take the scalar singleton, whose viable witness is $\Gamma$
-    itself. Define the successor as the step applied to the size-trimming
-    selection of the extension of the actual preceding family; its
-    viability assertion follows from that of its predecessor, and its
-    cardinality and bond bounds from Definition~\ref{def:lvv_successive_step}
-    and Lemma~\ref{thm:lvv_size_trimmed_family_polynomial}. Natural-number recursion
-    therefore gives a single successive run in which each family is the
-    step applied to the previous one. No ground pair enters any successor
-    choice.
+    Take the sweep.
 \end{proof}
 
 \begin{theorem}[Uniform polynomial successive families and final-span MPS]
     \label{thm:lvv_uniform_successive_approximation}
     \lean{TNLean.MPS.AreaLaw.exists_uniform_positive_chain_successive_approximation}
     \leanok
-    \uses{thm:lvv_successive_polynomial_budgets, thm:lvv_coherent_successive_sequence,
-        thm:lvv_left_span_bond}
+    \uses{thm:lvv_successive_polynomial_budgets, thm:lvv_sweep_spec,
+        def:huang_gaussian_filter_factors, thm:lvv_left_span_bond}
     Fix $q\ge2$ and $\Delta>0$. There exist natural numbers $P,d$, with $P\ge1$,
     chosen before $L$ and the interaction, such that the following holds.
     For every $L\ge1$ and every adjacent-pair positive-contraction interaction,
-    one can choose families of Gaussian left filter factors at every cut,
-    of cardinality and operator-Schmidt rank at most $P(L+1)^d$, and then
-    a single successive sequence $S_0,\ldots,S_L$ with scalar initial
-    family, each $S_{i+1}$ the step of Definition~\ref{def:lvv_successive_step}
-    applied with those factors and the radius $m_L$ to the size-trimming
-    selection of $S_i\otimes\{|1\rangle,\ldots,|q\rangle\}$, with
-    cardinalities and individual effective bond bounds at most $P(L+1)^d$,
-    before every ground pair.
+    the Gaussian filter factors of
+    Definition~\ref{def:huang_gaussian_filter_factors} at every cut have
+    cardinality and operator-Schmidt rank at most $P(L+1)^d$, and the sweep
+    $S_0,\ldots,S_L$ of Definition~\ref{def:lvv_sweep} has cardinalities and
+    individual effective bond bounds at most $P(L+1)^d$; both are functions
+    of the interaction, chosen before every ground pair.
 
     Suppose $\|\Gamma\|=1$, $H\Gamma=E_0\Gamma$ and
     $H-E_0I\ge\Delta(I-|\Gamma\rangle\langle\Gamma|)$. Then every $S_i$ is
@@ -219,9 +205,8 @@ All polynomial bounds have the quantitative scope specified in those constructio
 \end{theorem}
 \begin{proof}
     \leanok
-    Choose the polynomial budgets first and then the recursively constructed
-    sequence. Enlarge the explicit budgets, including the factor budgets of
-    one step, to this polynomial at each cut.
+    Choose the polynomial budgets first. Enlarge the explicit budgets of the
+    sweep and of the filter factors to this polynomial at each cut.
     At the final cut, the right configuration space is one-dimensional. Thus
     a normalized viable witness belongs to the span of the actual $S_L$ in
     full-left coordinates. Pull it back by the coordinate isometry, preserving

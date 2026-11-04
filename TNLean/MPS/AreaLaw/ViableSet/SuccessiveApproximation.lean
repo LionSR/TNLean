@@ -10,11 +10,10 @@ import TNLean.MPS.AreaLaw.ViableSet.FinalMPS
 # Uniform polynomial successive viable sets and final-span MPS approximation
 
 For fixed local dimension and positive gap, the natural polynomial coefficient and
-degree are chosen before the length and physical interaction. The filter factors and
-then the successive families are chosen from that interaction before any ground pair,
-each family being the named step applied to the size-trimming selection of the extension
-of the previous one. Every such ground pair has a normalized approximation in the span of
-the final actual family.
+degree are chosen before the length and physical interaction. The Gaussian filter factors
+and the sweep are functions of that interaction, chosen before any ground pair. Every
+such ground pair has a normalized approximation in the span of the final family of the
+sweep.
 
 **Local fix (trimming radius):** The independent trimmings use the quadratic radius
 recorded at <https://sirui-lu.com/QICLean/paper-gaps/lvv13_trimming_radius.pdf>.
@@ -33,53 +32,49 @@ open scoped InnerProductSpace ComplexOrder MatrixOrder
 
 namespace TNLean.MPS.AreaLaw
 
-/-- Natural polynomial budgets chosen before length bound every retained family, every
-filter-factor family and the normalized MPS extracted from the final span. The filter
-factors are selected before the families, the families before ground data, and each
-family is the named step applied to the size-trimming selection of the extension of the
-previous one. LVV13,
-`algo53.tex`, final induction, lines 652--678, with the documented quadratic trimming
-correction and Huang's Gaussian error reduction. -/
+/-- **Uniform polynomial budgets for the sweep and the final-span approximation.** Natural
+polynomial budgets chosen before length bound every family of the sweep, every family of
+Gaussian filter factors and the normalized MPS extracted from the final span. The sweep is
+a function of the interaction, chosen before ground data. LVV13, `algo53.tex`, final
+induction, lines 652--678, with the documented quadratic trimming correction and Huang's
+Gaussian error reduction. -/
 theorem exists_uniform_positive_chain_successive_approximation {q : ℕ} (hq : 2 ≤ q)
     {Delta : ℝ} (hDelta : 0 < Delta) :
     ∃ P d : ℕ, 1 ≤ P ∧ ∀ L : ℕ, 1 ≤ L →
       ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
         (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j)
           (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j) (h1 : ∀ j, h j ≤ 1),
-      ∃ F : (i : ℕ) → Finset (LeftBlockMatrix L q i),
-        (∀ i : ℕ, i ≤ L → (F i).card ≤ P * (L + 1) ^ d ∧
-          ∀ A ∈ F i, ∀ k, 0 < k → k < i → operatorSchmidtRank
+      (∀ i : ℕ, i ≤ L →
+        (gaussianFilterFactors (Nat.le_of_lt hq) h h0 (lvvSuccessiveError Delta) Delta i).card ≤
+          P * (L + 1) ^ d ∧
+        ∀ A ∈ gaussianFilterFactors (Nat.le_of_lt hq) h h0 (lvvSuccessiveError Delta) Delta i,
+          ∀ k, k < i → operatorSchmidtRank
             (Entropy.cutOperator (n := fun _ : Fin i ↦ q) (leftBlock i k)
               (A.submatrix leftConfigOfFin leftConfigOfFin)) ≤ P * (L + 1) ^ d) ∧
-        ∃ S : (i : ℕ) → Finset (LeftBlockVector L q i),
-          S 0 = {emptyLeftVector L q} ∧
-          (∀ i : ℕ, (hi : i + 1 ≤ L) →
-            S (i + 1) = successiveStep hi (bondTrimmingRadius L (lvvReferenceBond q Delta L))
-              (F (i + 1)) id (ChainHamiltonian.sizeTrimmingSelection
-                (ChainHamiltonian.ofNearestNeighborPositive h hs h0 h1) hq Delta
-                (AreaLaw.extend (i + 1) (S i)))) ∧
-          (∀ i : ℕ, i ≤ L → (S i).card ≤ P * (L + 1) ^ d ∧
-            (∀ v ∈ S i, IsLeftOpenMPS (P * (L + 1) ^ d) v) ∧
-            ∀ (E₀ : ℝ) (Γ : EuclideanSpace ℂ (Fin L → Fin q)),
-              IsGappedGroundState (∑ j, h j) E₀ Γ Delta →
-              IsViable Γ (lvvSuccessiveError Delta / L) (S i : Set (LeftBlockVector L q i))) ∧
-          ∀ (E₀ : ℝ) (Γ : EuclideanSpace ℂ (Fin L → Fin q)),
-            IsGappedGroundState (∑ j, h j) E₀ Γ Delta →
-            ∃ ψ : EuclideanSpace ℂ (Fin L → Fin q), ‖ψ‖ = 1 ∧
-              1 - lvvSuccessiveError Delta / L ≤ ‖⟪ψ, Γ⟫_ℂ‖ ∧
-              IsOpenMPS L q (P * (L + 1) ^ d) (fun x ↦ ψ x) ∧
-              fullLeftEquiv L q ψ ∈ Submodule.span ℂ (S L : Set (LeftBlockVector L q L)) := by
+      (∀ i : ℕ, i ≤ L → (lvvSweep hq h hs h0 h1 Delta i).card ≤ P * (L + 1) ^ d ∧
+        (∀ v ∈ lvvSweep hq h hs h0 h1 Delta i, IsLeftOpenMPS (P * (L + 1) ^ d) v) ∧
+        ∀ (E₀ : ℝ) (Γ : EuclideanSpace ℂ (Fin L → Fin q)),
+          IsGappedGroundState (∑ j, h j) E₀ Γ Delta →
+          IsViable Γ (lvvSuccessiveError Delta / L)
+            (lvvSweep hq h hs h0 h1 Delta i : Set (LeftBlockVector L q i))) ∧
+      ∀ (E₀ : ℝ) (Γ : EuclideanSpace ℂ (Fin L → Fin q)),
+        IsGappedGroundState (∑ j, h j) E₀ Γ Delta →
+        ∃ ψ : EuclideanSpace ℂ (Fin L → Fin q), ‖ψ‖ = 1 ∧
+          1 - lvvSuccessiveError Delta / L ≤ ‖⟪ψ, Γ⟫_ℂ‖ ∧
+          IsOpenMPS L q (P * (L + 1) ^ d) (fun x ↦ ψ x) ∧
+          fullLeftEquiv L q ψ ∈
+            Submodule.span ℂ (lvvSweep hq h hs h0 h1 Delta L : Set (LeftBlockVector L q L)) := by
   classical
   obtain ⟨P, d, hP, hbudgets⟩ := exists_lvvSuccessive_uniform_polynomial (q := q) (by omega) hDelta
   refine ⟨P, d, hP, ?_⟩
   intro L hL h hs h0 h1
-  obtain ⟨F, hF, S, hS0, hstep, hS⟩ :=
-    exists_positive_chain_successive_viable_sets hq h hs h0 h1 hDelta hL
   obtain ⟨hcardBudget, hbondBudget, hspanBudget, hfactorBudget, hrankBudget⟩ :=
     hbudgets L hL
-  refine ⟨F, fun i hi ↦ ⟨(hF i hi).1.trans hfactorBudget,
-    fun A hA k hk0 hki ↦ ((hF i hi).2 A hA k hk0 hki).trans hrankBudget⟩, S, hS0, hstep,
-    ?_, ?_⟩
+  have hS := lvvSweep_spec hq h hs h0 h1 hDelta
+  refine ⟨fun i hi ↦ ⟨(card_gaussianFilterFactors_le (Nat.le_of_lt hq) h hs h0 h1
+      (lvvSuccessiveError_pos hDelta) hDelta).trans hfactorBudget,
+    fun A hA k hki ↦ (operatorSchmidtRank_of_mem_gaussianFilterFactors (Nat.le_of_lt hq) h hs h0
+      h1 (lvvSuccessiveError_pos hDelta) hDelta hi hA k hki).trans hrankBudget⟩, ?_, ?_⟩
   · intro i hi
     obtain ⟨hcard, hMPS, hviable⟩ := hS i hi
     have hsize : (if i = 0 then 1 else lvvSuccessiveCardBound q Delta L) ≤
@@ -113,7 +108,7 @@ theorem exists_uniform_positive_chain_successive_approximation {q : ℕ} (hq : 2
     refine ⟨ψ, ?_, ?_, ?_, ?_⟩
     · simpa only [ψ, LinearIsometryEquiv.norm_map] using hvnorm
     · rwa [hinner]
-    · have hspan := isOpenMPS_leftChain_of_mem_span (S L) hMPS hvspan
+    · have hspan := isOpenMPS_leftChain_of_mem_span _ hMPS hvspan
       apply isOpenMPS_of_internal_cutMatrix_rank_le ψ
       intro k hk0 hkL
       exact (hspan.rank_cutMatrix_le hk0 hkL).trans
