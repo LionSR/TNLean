@@ -978,7 +978,7 @@ a function of the Hamiltonian, the gap parameter and the input set.
     all local tensor entries, and all local coefficient entries has
     height at most $H$. Put
     \[
-      P=2+nqD_a^2+nqD_b^2+mq^4.
+        P=2+nqD_a^2+nqD_b^2+mq^4.
     \]
     One positive denominator $M\le H^{2P}$ clears all these inputs
     simultaneously, including coefficient entries from different
@@ -1006,7 +1006,7 @@ a function of the Hamiltonian, the gap parameter and the input set.
     both caps, both tensor families, and every local coefficient
     entry have denominator $M$ and norms at most $C$. Write
     \[
-      Q=D_aD_bq^2C^3,\qquad R=C^3Q^n.
+        Q=D_aD_bq^2C^3,\qquad R=C^3Q^n.
     \]
     Every computed matrix-unit contribution, including its local
     coefficient, has denominator $M^{3n+3}$ and norm at most $R$.
@@ -1040,9 +1040,9 @@ a function of the Hamiltonian, the gap parameter and the input set.
     Lemma~\ref{lem:lvv_local_energy_common_input_denominator}, suppose
     $H\le2^h$. Put
     \begin{align*}
-      P&=2+nqD_a^2+nqD_b^2+mq^4,\\
-      E&=6hP(n+1)+mq^2+2q+3h+3
-          +(D_aD_b+2q+3h+3)n.
+        P & =2+nqD_a^2+nqD_b^2+mq^4, \\
+        E & =6hP(n+1)+mq^2+2q+3h+3
+        +(D_aD_b+2q+3h+3)n.
     \end{align*}
     Both rational coordinates of every actual accumulator after
     $a\le m$ local terms have height at most $2^E$. The same bound
@@ -1057,14 +1057,188 @@ a function of the Hamiltonian, the gap parameter and the input set.
     Lemma~\ref{lem:lvv_local_energy_partial_sum_bounds} with $C=2H$.
     For every $a\le m$, the resulting coordinate height is at most
     \[
-      H^{2P(3n+3)}\max\{1,mq^4(2H)^3Q^n\},\qquad
-      Q=D_aD_bq^2(2H)^3.
+        H^{2P(3n+3)}\max\{1,mq^4(2H)^3Q^n\},\qquad
+        Q=D_aD_bq^2(2H)^3.
     \]
     The denominator factor is at most $2^{6hP(n+1)}$.
     The inequalities $s\le2^s$ for natural $s$ give
     $mq^4(2H)^3\le2^{mq^2+2q+3h+3}$ and
     $Q\le2^{D_aD_b+2q+3h+3}$. Multiplying these estimates proves
     the stated bound, including the empty sum.
+\end{proof}
+
+\begin{definition}[Records of elementary rational operations]
+    \label{def:lvv_rational_operation_records}
+    \lean{TNLean.MPS.AreaLaw.RationalArithmeticTrace.Operation,
+        TNLean.MPS.AreaLaw.RationalArithmeticTrace.Operation.left,
+        TNLean.MPS.AreaLaw.RationalArithmeticTrace.Operation.right,
+        TNLean.MPS.AreaLaw.RationalArithmeticTrace.Operation.result,
+        TNLean.MPS.AreaLaw.RationalArithmeticTrace.Operation.height,
+        TNLean.MPS.AreaLaw.RationalArithmeticTrace.maxHeight,
+        TNLean.MPS.AreaLaw.RationalArithmeticTrace.Arithmetic,
+        TNLean.MPS.AreaLaw.RationalArithmeticTrace.erase}
+    \leanok
+    An elementary rational operation records its type, addition,
+    subtraction, or multiplication, and its two rational operands.
+    Its result is determined by those data. Its height is the maximum
+    of the reduced heights of both operands and the result. For a
+    finite operation list, let its height be the maximum of its
+    operation heights, with value zero for the empty list.
+    An arithmetic computation may retain this ordered list together
+    with its value. Forgetting the list and keeping its length gives
+    the associated value and arithmetic count.
+\end{definition}
+
+\begin{lemma}[Composition and primitive operation records]
+    \label{lem:lvv_rational_operation_records_correct}
+    \lean{TNLean.MPS.AreaLaw.RationalArithmeticTrace.Operation.height_le_iff,
+        TNLean.MPS.AreaLaw.RationalArithmeticTrace.maxHeight_le_iff,
+        TNLean.MPS.AreaLaw.RationalArithmeticTrace.run_bind,
+        TNLean.MPS.AreaLaw.RationalArithmeticTrace.run_pure,
+        TNLean.MPS.AreaLaw.RationalArithmeticTrace.run_erase,
+        TNLean.MPS.AreaLaw.RationalArithmeticTrace.erase_pure,
+        TNLean.MPS.AreaLaw.RationalArithmeticTrace.erase_bind,
+        TNLean.MPS.AreaLaw.RationalArithmeticTrace.rationalAdd,
+        TNLean.MPS.AreaLaw.RationalArithmeticTrace.rationalSub,
+        TNLean.MPS.AreaLaw.RationalArithmeticTrace.rationalMul,
+        TNLean.MPS.AreaLaw.RationalArithmeticTrace.erase_rationalAdd,
+        TNLean.MPS.AreaLaw.RationalArithmeticTrace.erase_rationalSub,
+        TNLean.MPS.AreaLaw.RationalArithmeticTrace.erase_rationalMul,
+        TNLean.MPS.AreaLaw.RationalArithmeticTrace.complexAdd,
+        TNLean.MPS.AreaLaw.RationalArithmeticTrace.complexMul,
+        TNLean.MPS.AreaLaw.RationalArithmeticTrace.complexConj,
+        TNLean.MPS.AreaLaw.RationalArithmeticTrace.run_complexAdd,
+        TNLean.MPS.AreaLaw.RationalArithmeticTrace.run_complexMul,
+        TNLean.MPS.AreaLaw.RationalArithmeticTrace.run_complexConj,
+        TNLean.MPS.AreaLaw.RationalArithmeticTrace.erase_complexAdd,
+        TNLean.MPS.AreaLaw.RationalArithmeticTrace.erase_complexMul,
+        TNLean.MPS.AreaLaw.RationalArithmeticTrace.erase_complexConj}
+    \leanok
+    Sequential composition concatenates the two operation lists.
+    Forgetting these records commutes with composition and with
+    returning an already computed value. The recorded elementary
+    operations therefore recover their usual values and counts.
+    For complex multiplication, write the input pairs as $(a,b)$
+    and $(c,d)$. The six records, in order, are
+    \[
+        ac,\quad bd,\quad ad,\quad bc,\quad ac-bd,\quad ad+bc,
+    \]
+    where each record retains its two actual operands. Complex
+    addition records its two coordinate additions, and conjugation
+    records the subtraction of the imaginary coordinate from zero.
+\end{lemma}
+\begin{proof}\leanok
+    List concatenation preserves order and adds lengths. The explicit
+    coordinate formulas for the three complex operations give the
+    stated operation lists and show that forgetting them gives
+    precisely the corresponding arithmetic-counted computation.
+\end{proof}
+
+\begin{lemma}[Heights of recorded complex operations]
+    \label{lem:lvv_recorded_complex_operation_heights}
+    \lean{TNLean.MPS.AreaLaw.RationalArithmeticTrace.complexMul_operation_heights,
+        TNLean.MPS.AreaLaw.RationalArithmeticTrace.complexMul_maxHeight_le,
+        TNLean.MPS.AreaLaw.RationalArithmeticTrace.complexAdd_operation_heights,
+        TNLean.MPS.AreaLaw.RationalArithmeticTrace.complexAdd_maxHeight_le,
+        TNLean.MPS.AreaLaw.RationalArithmeticTrace.complexConj_operation_heights,
+        TNLean.MPS.AreaLaw.RationalArithmeticTrace.complexConj_maxHeight_le}
+    \leanok
+    Suppose the complex input coordinates have height at most $S$.
+    Every operand and result appearing in the recorded multiplication
+    has height at most $2S^4$. The corresponding bound for addition
+    is $2S^2$, and for conjugation it is $S$. These are also bounds
+    on the maximum operation heights of the respective lists.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:lvv_rational_operation_records_correct}
+    The rational-coordinate hypothesis implies $S\ge1$. Products of
+    input coordinates have height at most $S^2$, and the final
+    subtraction and addition have height at most $2S^4$.
+    Inspect the six recorded operations, including the intermediate
+    products used by the final two operations. The two addition
+    records and the single conjugation record give the other bounds.
+\end{proof}
+
+\begin{definition}[Schoolbook charge of an operation list]
+    \label{def:lvv_recorded_arithmetic_schoolbook_charge}
+    \lean{TNLean.MPS.AreaLaw.RationalArithmeticTrace.Operation.bitLength,
+        TNLean.MPS.AreaLaw.RationalArithmeticTrace.schoolbookCharge}
+    \leanok
+    Let $b(e)$ be the maximum numerator or denominator bit length
+    of the two operands and result of an operation $e$. Its charge
+    in the schoolbook cost model is $8(b(e)+1)^2$. The charge of an
+    operation list is the sum of these individual charges. This is
+    a specified mathematical cost model.
+\end{definition}
+
+\begin{lemma}[Schoolbook charge from a recorded height bound]
+    \label{lem:lvv_recorded_arithmetic_schoolbook_charge_bound}
+    \lean{TNLean.MPS.AreaLaw.RationalArithmeticTrace.Operation.bitLength_le_iff,
+        TNLean.MPS.AreaLaw.RationalArithmeticTrace.Operation.bitLength_le_of_height_le,
+        TNLean.MPS.AreaLaw.RationalArithmeticTrace.operation_bitLength_le_of_mem,
+        TNLean.MPS.AreaLaw.RationalArithmeticTrace.schoolbookCharge_nil,
+        TNLean.MPS.AreaLaw.RationalArithmeticTrace.schoolbookCharge_append,
+        TNLean.MPS.AreaLaw.RationalArithmeticTrace.schoolbookCharge_le_of_maxHeight_le,
+        TNLean.MPS.AreaLaw.RationalArithmeticTrace.schoolbookCharge_le_of_maxHeight_le_two_pow}
+    \leanok
+    If an operation list of length $N$ has height at most $H$,
+    every operand and result has bit length at most
+    $\lfloor\log_2 H\rfloor+1$, with $\lfloor\log_2 0\rfloor$
+    interpreted as zero. Its schoolbook charge is at most
+    \[
+        8N(\lfloor\log_2 H\rfloor+2)^2.
+    \]
+    In particular, height at most $2^B$ gives charge at most
+    $8N(B+2)^2$. Charges add under concatenation.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{def:lvv_recorded_arithmetic_schoolbook_charge}
+    The operation-height maximum bounds each reduced rational
+    height. Monotonicity of the binary logarithm bounds the three
+    bit lengths. Apply monotonicity of the schoolbook charge and
+    sum over the $N$ operations.
+\end{proof}
+
+\begin{lemma}[Recorded sequential coefficient contraction]
+    \label{lem:lvv_recorded_coefficient_contraction}
+    \lean{TNLean.MPS.AreaLaw.RationalArithmeticTrace.erase_vectorOfFnM,
+        TNLean.MPS.AreaLaw.RationalArithmeticTrace.value_length_of_run_erase,
+        TNLean.MPS.AreaLaw.RationalContractionTrace.dot,
+        TNLean.MPS.AreaLaw.RationalContractionTrace.rowMul,
+        TNLean.MPS.AreaLaw.RationalContractionTrace.rowProduct,
+        TNLean.MPS.AreaLaw.RationalContractionTrace.contract,
+        TNLean.MPS.AreaLaw.RationalContractionTrace.coefficientOfRationalParameters,
+        TNLean.MPS.AreaLaw.RationalContractionTrace.erase_dot,
+        TNLean.MPS.AreaLaw.RationalContractionTrace.erase_rowMul,
+        TNLean.MPS.AreaLaw.RationalContractionTrace.erase_rowProduct,
+        TNLean.MPS.AreaLaw.RationalContractionTrace.erase_contract,
+        TNLean.MPS.AreaLaw.RationalContractionTrace.erase_coefficientOfRationalParameters,
+        TNLean.MPS.AreaLaw.RationalContractionTrace.dot_value_length,
+        TNLean.MPS.AreaLaw.RationalContractionTrace.rowMul_value_length,
+        TNLean.MPS.AreaLaw.RationalContractionTrace.rowProduct_value_length,
+        TNLean.MPS.AreaLaw.RationalContractionTrace.contract_value_length,
+        TNLean.MPS.AreaLaw.RationalContractionTrace.coefficientOfRationalParameters_value_length,
+        TNLean.MPS.AreaLaw.RationalContractionTrace.decode_coefficientOfRationalParameters}
+    \leanok
+    Sequential rational coefficient evaluation can retain every
+    elementary operation while storing each row before proceeding
+    to the next site. Forgetting the records gives the same
+    coefficient and arithmetic count as before. A scalar product
+    over $D$ coordinates records $8D$ operations; a row update
+    records $8D^2$; and $n$ successive updates followed by the
+    scalar cap record exactly $8nD^2+6$ operations. This includes
+    varying virtual dimensions padded to $D$ and the empty chain.
+    If the rational tensor data encode an open-chain tensor $A$,
+    the computed value for a physical configuration $\sigma$ is
+    the scalar cap times $A(\sigma)$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:lvv_rational_operation_records_correct}
+    Forgetting records commutes with finite vector evaluation and
+    sequential composition. Induction through the scalar products
+    and stored row updates identifies the recorded computation with
+    the existing counted contraction. Its value and list length
+    follow from that contraction's correctness and arithmetic count.
 \end{proof}
 
 \begin{definition}[Binary length of a rational coordinate]

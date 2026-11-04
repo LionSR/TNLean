@@ -26,10 +26,14 @@ import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.LocalOperatorExpansion
 import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.OrthonormalInput
 import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.PolynomialPrecision
 import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.RationalAccumulationBounds
+import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.RationalArithmeticTrace
+import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.RationalArithmeticTraceCost
+import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.RationalArithmeticTraceHeights
 import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.RationalCertificateTests
 import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.RationalCodeHeights
 import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.RationalContraction
 import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.RationalContractionCost
+import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.RationalContractionTrace
 import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.RationalCoordinates
 import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.RationalGramContraction
 import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.RationalGramContractionCost

@@ -1847,12 +1847,30 @@ and
 
 Completing the bit-cost proof still requires a uniform estimate for all
 operands and primitive results in the complete rational calculation.
-The present arithmetic counter records values and numbers of operations;
-it does not retain their operands. An evaluation that records the
-individual operations, with a proof that forgetting those records gives
-the current evaluator, would permit such an estimate to be stated for
-the actual calculation. The existing schoolbook charge is a mathematical
-cost model; it is not a proved runtime bound for integer multiplication,
+The arithmetic counter records values and numbers of operations. A
+separate computation now retains each elementary operation together
+with its two actual rational operands; its result is computed from
+those operands. Forgetting the records preserves sequential composition
+by \leanid{TNLean.MPS.AreaLaw.RationalArithmeticTrace.erase\_bind}.
+For the entire sequential coefficient evaluator,
+\leanid{TNLean.MPS.AreaLaw.RationalContractionTrace.coefficientOfRationalParameters\_value\_length}
+identifies the same rational output and an operation list of length
+\(8nD^2+6\), including the scalar cap and the empty chain.
+Every operand and result in a recorded complex multiplication of inputs
+of coordinate height at most \(S\) has height at most \(2S^4\), by
+\leanid{TNLean.MPS.AreaLaw.RationalArithmeticTrace.complexMul\_operation\_heights}.
+The corresponding bounds are \(2S^2\) for addition and \(S\) for
+conjugation.
+
+For an actual operation list of length \(N\), maximum operand-and-result
+height at most \(2^B\) gives total schoolbook charge at most
+\(8N(B+2)^2\), by
+\leanid{TNLean.MPS.AreaLaw.RationalArithmeticTrace.schoolbookCharge\_le\_of\_maxHeight\_le\_two\_pow}.
+The remaining composition must bound all operations in the full
+coefficient record from the stored-row and partial-sum estimates, and
+extend the same recorded evaluation to weighted overlaps and local
+energy sums. The existing schoolbook charge is a mathematical cost
+model; it is not a proved runtime bound for integer multiplication,
 division, greatest common divisors, or reduced-rational normalization.
 Those implementation bounds and the numerical routines that construct
 the retained bases and solve the semidefinite programs remain open.
