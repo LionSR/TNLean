@@ -932,8 +932,8 @@ For the log-depth preparation of matrix product states in arXiv:2307.01696:
 - `mswc24_sequential_factorization_positive_block_length.tex` records that the
   sequential factorization of the isometry of the blocked tensor, eqs. (13)--(15),
   is stated for block lengths `q ≥ 1`, that the empty block `q = 0` is injective
-  only for `D ≤ 1`, holds trivially at `D = 1` and fails at `D = 0`, and that the
-  restriction could be traded for the positive bond dimension the source assumes.
+  only for `D ≤ 1`, holds trivially at `D = 1` and fails at `D = 0`; since the
+  source blocks at least one site, `q ≥ 1` is adopted as the convention.
 - `mswc24_ghz_form_local_orthogonality.tex` records that the GHZ form of the
   fixed-point state of a basis of normal tensors, eq. (19), is stated for an
   arbitrary family of pairs, that the identity `|Ω'⟩ = W^{⊗M}|χ_M⟩` needs no
@@ -1023,8 +1023,8 @@ For the log-depth preparation of matrix product states in arXiv:2307.01696:
   `s 2^{k+1}` sites is prepared in depth `C (k + 1)`; trees on leaves of
   unequal widths remove the former restriction to chain lengths divisible by
   `s 2^{k+1}`, giving the bound `O(log log(N/ε))` for normal tensors and every
-  chain length; open: two-site gates between distant sites only at odd
-  separation, on disjoint stretches, which the trees do not need.
+  chain length (resolved); two-site gates between distant sites are covered
+  only at odd separation, on disjoint stretches, which the trees do not need.
 - `mswc24_inhomogeneous_scope.tex` records that the preparation of
   inhomogeneous short-range correlated states (paragraph "Inhomogeneous
   short-range correlated MPS") is formalized for a ring with bond dimensions
@@ -1073,11 +1073,12 @@ For the log-depth preparation of matrix product states in arXiv:2307.01696:
   seed condition for the non-normal chosen-vector conversion in #8469.
   It gives a mathematical (not Lean-checked) covariance obstruction to
   replacing that condition by equality of parent groundspaces. The informal
-  paper remark is not declared unconditionally false; its general phase
-  interpretation remains open.
-- `mswc24_same_phase_circuit_normal_case.tex` (scope restriction) records
-  that the claim that states in the same phase are related by a log-depth
-  circuit is formalized only between two normal tensors.
+  paper remark is read as conversion of whole ground spaces, which is
+  formalized; the chosen-vector condition is a further sufficient condition.
+- `mswc24_same_phase_circuit_normal_case.tex` (scope restriction, resolved)
+  records that the claim that states in the same phase are related by a
+  log-depth circuit is formalized between two normal tensors, and for
+  non-normal tensors as conversion of whole parent ground spaces.
 
 For the phase relation of arXiv:2103.13367:
 
