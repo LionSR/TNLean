@@ -825,7 +825,7 @@ in the middle region `J_M = [a + 2ℓ, b]`. If the middle bulk operator has oper
 at most `B` at this cut, then every polynomial of degree at most `k` in `∑ α, F α` has operator
 Schmidt rank at most `(B + 2) ^ (k + 1)` there.
 
-For `B ≥ 2` this is at most `B ^ (2k + 2)`, the printed `B̃ ^ O(k)`. The two boundary terms
+For `B ≥ 2` this is at most `B ^ (2k + 2)`, the printed bound `B ^ O(k)`. The two boundary terms
 cannot be absorbed when `B ≤ 1`; see
 https://sirui-lu.com/QICLean/paper-gaps/alvv16_chebyshev_near_ground_slope.pdf. -/
 theorem operatorSchmidtRank_aeval_two_window_middle_cut_le
