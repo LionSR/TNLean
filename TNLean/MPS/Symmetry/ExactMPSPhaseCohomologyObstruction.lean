@@ -27,12 +27,20 @@ lines 440–453: the phase relation is unchanged when an endpoint physical
 action is multiplied by a character, so the character can be removed before
 applying the exact-covariance theorem.
 
-**Scope restriction (one-site injective endpoints):** The concluding phase
-theorems use the same endpoint domain as the existing forward construction,
-one-site injective original endpoints. This restriction and the remaining
-source-classification comparison are recorded in
-`docs/paper-gaps/spc11_spt_interpolation_upper_range.tex`, in the section on
-the source-written physical converse and endpoint domain.
+One-site injective endpoints of positive bond dimension are the source's
+standing convention: every MPS is put in standard form after blocking
+(lines 349–356), and Section II.F classifies the symmetry of the blocked
+MPS (lines 813–818).
+
+**Scope restriction (continuous tensor realization):** The phase hypothesis
+of `IsSameExactMPSGappedPhase.cohomologousTo`, and the converse directions of
+`isSameExactMPSGappedPhase_iff_cohomologous` and
+`isSameExactMPSGappedPhase_iff_cohomologous_of_character`, include a
+continuous tensor realization of the ground lines along the path, which
+arXiv:1010.3732 derives from the gap (lines 938–941 and 961–991) rather than
+assumes. These theorems are therefore the source classification only for
+such paths; see
+`docs/paper-gaps/spc11_spt_classification_continuous_realization.tex`.
 -/
 
 open scoped Matrix BigOperators TNLean.Algebra.ScalarCohomology

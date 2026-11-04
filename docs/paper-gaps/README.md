@@ -82,6 +82,13 @@ For the SPT fixed points of arXiv:2011.12127, Section III.A:
   families, continuous positive interactions, and the source's blocked
   isometric deformation now cover the source path, using finite-range Knabe
   windows in place of Nachtergaele's estimate.
+- `spc11_spt_classification_continuous_realization.tex` (scope restriction,
+  open) compares the exact MPS phase condition and the injective endpoint
+  domain with the classification of arXiv:1010.3732, Section II.F. Every
+  clause matches the source except the continuous tensor realization of the
+  ground lines along the path, which the source derives from the gap and the
+  phase condition assumes; the endpoint domain is the source's standard-form
+  convention. The note gives the plan for the pointwise converse.
 - `spc11_isometric_symmetry_unitary_virtual.tex` (scope restriction, resolved)
   records that preservation of an on-site symmetry along the isometric
   deformation of arXiv:1010.3732 was first derived from exact symmetry of the
