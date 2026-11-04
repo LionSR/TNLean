@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Algebra.MatrixIsometryKronecker
+import TNLean.Algebra.FinSumPermutation
 
 /-!
 # Isometric changes of the two physical bond coordinates
@@ -56,10 +57,7 @@ theorem bondCoordinateMatrix_mulVec (Q : Matrix Out In ℂ) (X : Matrix In In �
     Matrix.map_apply, Matrix.mul_apply, Matrix.conjTranspose_apply,
     Fintype.sum_prod_type, Finset.sum_mul]
   rw [Finset.sum_comm]
-  apply Finset.sum_congr rfl
-  intro j _
-  apply Finset.sum_congr rfl
-  intro i _
+  refine Finset.sum_congr₂ fun j _ i _ ↦ ?_
   ring
 
 end TNLean.PEPS

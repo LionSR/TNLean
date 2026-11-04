@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Preparation.OBCCanonicalConfigurations
+import TNLean.Algebra.FinSumPermutation
 
 /-!
 # Gram recurrences under physical cut extension
@@ -45,10 +46,7 @@ theorem prefixGram_eq_sum_of_extendCutPrefix (hk : k < N)
       rw [Finset.sum_comm]
       symm
       rw [← (extendCutPrefixEquiv (d := d) hk).sum_comp, Fintype.sum_prod_type]
-      apply Finset.sum_congr rfl
-      intro u _
-      apply Finset.sum_congr rfl
-      intro i _
+      refine Finset.sum_congr₂ fun u _ i _ ↦ ?_
       exact congrArg₂ (fun a b ↦ star a * b) (hstep u i q) (hstep u i r)
 
 omit [Fintype ι] in
@@ -66,10 +64,7 @@ theorem suffixGram_eq_sum_of_extendCutSuffix (hk : k < N)
       ext q r
       simp only [Matrix.sum_apply, Matrix.mul_apply, Matrix.conjTranspose_apply]
       rw [← (extendCutSuffixEquiv (d := d) hk).sum_comp, Fintype.sum_prod_type]
-      apply Finset.sum_congr rfl
-      intro i _
-      apply Finset.sum_congr rfl
-      intro v _
+      refine Finset.sum_congr₂ fun i _ v _ ↦ ?_
       exact congrArg₂ (fun a b ↦ a * star b) (hstep i v q) (hstep i v r)
     _ = _ := by
       apply Finset.sum_congr rfl

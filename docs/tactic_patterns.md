@@ -2772,6 +2772,13 @@ three-plaquette output measurement, and the routed reunion measurement.
   commutation-first pattern still uses `Finset.sum_comm`; this lemma only
   replaces two adjacent congruence descents after any permutation.
 
+- **2026-11-04 sweep:** the scanner still found the literal four-line
+  descent `apply Finset.sum_congr rfl` / `intro i _` / `apply Finset.sum_congr
+  rfl` / `intro j _` at 93 sites in 65 files, counting each adjacent pair of a
+  three-binder descent once. Every one is now
+  `refine Finset.sum_congr₂ fun i _ j _ ↦ ?_`; a third binder keeps its single
+  descent. 62 files gained the import. Net Lean change: 190 lines
+  removed. Statements are unchanged.
 ### three-block configuration extensionality — promoted
 - **Pattern:** prove equality of vectors indexed by a concatenated three-block
   configuration by splitting an arbitrary configuration through the canonical
@@ -5106,6 +5113,74 @@ three-plaquette output measurement, and the routed reunion measurement.
   `isReordering_comp_iff`; apply `IsReordering.comp` as a term instead.
 
 ## Candidates
+### Entrywise proof that a matrix is diagonal — candidate (2026-11-04)
+
+- **Pattern:** `ext x y`, `by_cases hxy : x = y`, `· subst y`, then a diagonal
+  computation and an off-diagonal vanishing argument.
+- **Seen:** 18 sites in 11 files by the 2026-11-04 scan, as `x y` with `hxy`
+  (`Circuit/InitializedRegisterProjection.lean`, `Circuit/ProductBasisPenalty.lean`,
+  `Circuit/SelectedZeroRegisterReflection.lean`, `Circuit/SelectedZeroRegisterSupport.lean`,
+  `MPS/MPDO/CPSVExample412FourCycleEntropy.lean` four times,
+  `MPS/MPDO/PhysicalSupportProductTransport.lean`,
+  `MPS/MPU/Examples/ShiftSourceFactors.lean`) and as `σ τ` with `hστ`
+  (`MPS/MPDO/CPSVExample412Literal.lean` twice,
+  `MPS/MPDO/CaseIIAbsorptionCounterexample.lean`, `MPS/MPDO/FirstSite.lean`,
+  `MPS/MPDO/KatoDeformedRFPObstruction.lean`,
+  `MPS/MPDO/ThermodynamicLimitCounterexample.lean`,
+  `MPS/MPDO/TopologicalGibbsHamiltonian.lean` twice).
+- **Abstraction:** most goals have the form `M = Matrix.diagonal f` or compare
+  two matrices that are both diagonal. A lemma
+  `Matrix.eq_diagonal_of_apply (hd : ∀ x, M x x = f x)
+  (ho : ∀ x y, x ≠ y → M x y = 0) : M = diagonal f` would replace the three
+  lines and the two bullets by two named obligations. Mathlib has
+  `Matrix.diagonal_eq_diagonal_iff` for two diagonal matrices but no
+  entrywise characterization of equality with a diagonal matrix.
+- **Notes:** the diagonal and off-diagonal computations differ at every site,
+  so only the case split is shared. Promotion needs the lemma and a rewrite of
+  the 18 sites; it is below the weight of the sum-congruence sweep above.
+
+### Equality of indicator propositions through `propext` — candidate (2026-11-04)
+
+- **Pattern:** `congr 1`, `apply propext`, `constructor`, then two
+  implications proved by hand.
+- **Seen:** 8 sites in 6 files (`Circuit/Channel/PortMatching.lean`,
+  `MPS/AreaLaw/ViableSet/Basic.lean`, `PEPS/Approximation/RankOneBlocks.lean`,
+  `PEPS/EdgeMiddlePhysical/KernelDescent.lean` twice,
+  `PEPS/RegionBlock/KernelDescent.lean` twice,
+  `PEPS/RegularBoundaryLocalAlgebra.lean`).
+- **Abstraction:** the goals are `(if P then a else b) = (if Q then a else b)`
+  or a set-builder equality, where `P` and `Q` differ by a transported
+  coordinate. `if_congr`, `Set.ext` or `congr 1; exact propext ⟨_, _⟩` state the
+  same thing in one line; no new tactic is proposed.
+- **Notes:** the two implications carry the mathematical content and are not
+  shared between sites.
+
+### Identity bond cast of a trivial fusion datum — rejected (2026-11-04)
+
+- **Pattern:** `rw [GroupFamily.castMat_eq_finCongr]`,
+  `exact finCongr_toMatrix_eq_one _`, then
+  `rw [GroupFamily.FusionData.rightV, hc]`.
+- **Seen:** 8 sites in 2 files (`MPS/Examples/Z3Anomalous/Z3AnomalyClass.lean`
+  twice, `MPS/MPDO/CZXPermutedBlocks.lean` six times), each proving
+  `family.castMat e = 1` for an equation `e` between group elements whose bond
+  dimensions reduce to the same numeral.
+- **Reason:** a lemma `castMat e = 1` cannot be stated without the cast, since
+  the matrix has type `Matrix (Fin (bondDim b)) (Fin (bondDim a)) ℂ` and `1`
+  needs `a` and `b` to have definitionally equal bond dimensions. The two
+  rewrites are the minimal spelling of that definitional check.
+
+### Generic closing sequences — rejected (2026-11-04)
+
+- **Pattern:** `congr 1` / `push_cast` / `ring` (14 sites), `cases h` /
+  `cases h'` / `rfl` and `cases ha` / `cases hb` / `rfl` for cast lemmas
+  (19 sites in `Lattice/PartyCircuit/`), and `ext x` / `constructor` /
+  `· intro hx` for set extensionality (10 sites).
+- **Reason:** each is a sequence of standard tactics with no shared
+  mathematical content and no shorter spelling (`subst h h'; rfl` saves one
+  line per cast lemma and is left to the owners of those files). Recorded so
+  the scanner's top entries are not re-proposed; `apply Units.ext` /
+  `push_cast` / `field_simp` is already in the rejected section.
+
 ### Supplied standard-form source-cut contraction — candidate (2026-10-29)
 
 - **Pattern:** Preserve the external physical coordinates by Kronecker deltas,
