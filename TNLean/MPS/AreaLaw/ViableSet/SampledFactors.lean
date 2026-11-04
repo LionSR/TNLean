@@ -19,6 +19,11 @@ whenever every word has rank at most `D` at every cut, and the error-reduced fam
 `η < 1/2` of the ground projection. This is the sampled error-reduction step of Claim
 `c:errorreduction` with its output named.
 
+**Local fix (normalization):** `isViableMPS_errorReductionSet_sampledFactors` uses the
+corrected direct estimate against the ground projection, which gives `4 η`-viability, in
+place of the printed normalization step; see
+`docs/paper-gaps/lvv13_error_reduction_witness_norm.tex`.
+
 Source: LVV13, arXiv:1307.5143v1, `algo53.tex`, Definition `d:sagsp`, line 611, and the
 proof of Claim `c:errorreduction`, lines 584--592.
 -/
