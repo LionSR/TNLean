@@ -11,5 +11,6 @@ Authors: TNLean contributors
 import TNLean.MPS.AreaLaw.Algorithm.Cost
 import TNLean.MPS.AreaLaw.Algorithm.GroundStateProgram
 import TNLean.MPS.AreaLaw.Algorithm.Query
+import TNLean.MPS.AreaLaw.Algorithm.SampledCost
 import TNLean.MPS.AreaLaw.Algorithm.SampledProgram
 import TNLean.MPS.AreaLaw.Algorithm.SweepProgram

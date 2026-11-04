@@ -449,3 +449,36 @@ over the words, of the event on which every family is good.
     size and bond budgets are polynomial by the uniform bounds of the sampled
     projector in the documented scope.
 \end{proof}
+
+\begin{lemma}[Polynomial cost of the sampled computation on good words]
+    \label{thm:lvv_sampled_program_cost}
+    \lean{TNLean.MPS.AreaLaw.sampledStepCostBound,
+        TNLean.MPS.AreaLaw.sampledStepCostBound_mono,
+        TNLean.MPS.AreaLaw.cost_sampledSweepStepProgram_le,
+        TNLean.MPS.AreaLaw.sampledSizeBudget,
+        TNLean.MPS.AreaLaw.cost_sampledSweepProgram_le,
+        TNLean.MPS.AreaLaw.sampledGroundStateCostBound,
+        TNLean.MPS.AreaLaw.sampledGroundStateCostBound_mono,
+        TNLean.MPS.AreaLaw.cost_sampledGroundStateProgram_le,
+        TNLean.MPS.AreaLaw.isNatPolynomialBounded_sampledGroundStateCostBound,
+        TNLean.MPS.AreaLaw.exists_sampledGroundStateProgram_cost_polynomial}
+    \leanok
+    \uses{def:lvv_sampled_programs, thm:lvv_sampled_sweep_spec,
+        thm:lvv_program_cost, def:nat_polynomial_bounded, thm:lvv_sampled_polynomial_bounds}
+    In the setting of Theorem~\ref{thm:lvv_sampled_program_success}, with the
+    same budgets declared, there are $P\ge1$ and $d$, chosen before the chain,
+    such that on every good family of words the sampled ground-state computation
+    run with the honest oracle performs at most as many operations as its cost,
+    and its cost is at most $P\,(n+1)^d$. Together with the success probability
+    this is the probabilistic polynomial running time of Theorem~1, with the
+    exponent depending on the bound on the ratio of ground energy to gap.
+\end{lemma}
+\begin{proof}
+    \leanok
+    On good words every family of the sampled sweep has at most $\ell q^{2\kappa}
+        Cn^p$ members, so each step costs at most a budget in the number of words,
+    the rank budget, the bond budget and this size, polynomial in the chain
+    length once the number of words and the rank bound are replaced by their
+    polynomial bounds in the documented scope. Sum over the cuts and add the
+    final convex program.
+\end{proof}
