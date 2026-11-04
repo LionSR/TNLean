@@ -360,11 +360,11 @@
     ]
    },
    "title": "The cost model of the running time",
-   "summary": "The algorithm is a computation over linear-algebra operations, each charged a declared polynomial cost in the dimensions of its arguments, and run with the honest oracle it computes the sweep; its total cost is at most <i>P</i>(<i>n</i> + 2<i>R</i><sup>2</sup> + 1)<sup><i>d</i></sup>. The costs, the honest answering of every operation and exact arithmetic are declared, not derived, as in the source.",
+   "summary": "The algorithm is a computation over linear-algebra operations, each charged a declared polynomial cost in the dimensions of its arguments; run with any valid oracle (a solver returning optimal solutions of the convex programs, nets of the required radius and cut decompositions of the filters) it computes a viable sweep, outputs a matrix product state with the required overlap, and costs at most <i>P</i>(<i>n</i> + 2<i>R</i><sup>2</sup> + 1)<sup><i>d</i></sup>. The costs and exact arithmetic are declared, not derived, as in the source.",
    "context": "Theorem 1 (lines 213–219 of the source) counts each linear-algebra step, the matrix elements in an orthonormal basis of the span, the convex programs, the singular value decompositions and the leading eigenvectors, as one polynomial-time computation on data of polynomial dimension, and does not analyse it further.",
    "claims": "The algorithm runs in time <i>n</i><sup><i>c</i>(<i>d</i>, ε)</sup> poly(<i>n</i>/η) and outputs a matrix product state with overlap at least 1 − η with the ground state.",
    "impact": "The running time is a statement about declared costs and the honest oracle; the exponent 2<sup><i>O</i>(log<sup>3</sup> <i>d</i>/ε)</sup> is not reproduced, since the library's constant-cut bond differs from the source's.",
-   "plan": "The declaration of costs is the content of the source's claim. The honest-oracle restriction can be lifted by proving the viability of the sweep for every optimal solution of the convex programs, not only the chosen one."
+   "plan": "The declaration of costs is the content of the source's claim. The honest-oracle restriction is lifted on the Gaussian route; the sampled route is stated for the honest oracle and admits the same generalization through the sampled factors of any cut decomposition."
   }
  ]
 }
