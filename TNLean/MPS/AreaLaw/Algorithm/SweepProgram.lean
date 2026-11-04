@@ -153,9 +153,10 @@ theorem eval_sizeTrimmingProgram (L k b : ℕ) (h : ChainHamiltonian L q 1 1)
       h.sizeTrimmingSelection hq Δ S := by
   classical
   let : NeZero q := ⟨by omega⟩
-  simp only [sizeTrimmingProgram, ChainHamiltonian.sizeTrimmingSelection, eval_unionOver,
-    List.toFinset_finRange, FreeM.eval_liftBind, honestOracle_boundaryNet,
-    Finset.toList_toFinset, boundaryMinimizerFamily, leftColumns_eq_biUnion]
+  simp only [sizeTrimmingProgram, ChainHamiltonian.sizeTrimmingSelection,
+    ChainHamiltonian.sizeTrimmingSelectionWith, eval_unionOver, List.toFinset_finRange,
+    FreeM.eval_liftBind, honestOracle_boundaryNet, Finset.toList_toFinset, boundaryFamily,
+    leftColumns_eq_biUnion]
   refine Finset.biUnion_congr rfl fun m _ ↦ ?_
   ext v
   simp only [Finset.mem_biUnion, mem_feasibleBoundaryPoints]

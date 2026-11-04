@@ -78,6 +78,32 @@ a function of the Hamiltonian, the gap parameter and the input set.
     $T\subseteq\operatorname{Span}(S)$ and $|T|\le m|F|\le m|N|$.
 \end{proof}
 
+\begin{definition}[Solutions of the convex program and admissible solvers]
+    \label{def:lvv_boundary_program_solution}
+    \lean{TNLean.MPS.AreaLaw.IsBoundaryProgramSolution,
+        TNLean.MPS.AreaLaw.isBoundaryProgramSolution_boundaryMinimizer,
+        TNLean.MPS.AreaLaw.IsAdmissibleLeadingVector,
+        TNLean.MPS.AreaLaw.isAdmissibleLeadingVector_boundaryLeadingVector,
+        TNLean.MPS.AreaLaw.boundaryFamily,
+        TNLean.MPS.AreaLaw.card_boundaryFamily_le,
+        TNLean.MPS.AreaLaw.boundaryFamily_subset_span}
+    \leanok
+    \uses{def:lvv_finite_boundary_selection}
+    In the setting of Definition~\ref{def:lvv_finite_boundary_selection}, a
+    \emph{solution} of the convex program at a boundary point $X$ is a triple
+    $(\sigma,u,\mu)$ with $\sigma\in\mathcal F_X$ of least energy among
+    $\mathcal F_X$, $u$ a unit vector with $\sigma u=\mu u$, $\mu>0$ and $Qu=u$,
+    and every real eigenvalue of $\sigma$ with a nonzero eigenvector at most
+    $\mu$; the chosen $(\sigma_X,u_X,\mu_X)$ is one. An assignment $X\mapsto
+        u'_X$ of vectors to boundary points is \emph{admissible} when at every
+    feasible point it is the vector of some solution. The family of an
+    assignment is the set of left columns, in the gluing coordinates, of its
+    vectors at the feasible points of $N$; it has at most $m|N|$ members, and for
+    an admissible assignment it lies in $\operatorname{Span}(S)$. The family of
+    minimizing boundary states is the family of the chosen assignment.
+\end{definition}
+
+
 \begin{definition}[The size-trimming selection]
     \label{def:lvv_size_trimming_selection}
     \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.sizeTrimmingSelection}
@@ -212,3 +238,40 @@ a function of the Hamiltonian, the gap parameter and the input set.
         |T| & \le(D+1)DK\le(D+1)D(2A+1)^pL^p=CL^p.\notag
     \end{align}
 \end{proof}
+
+\begin{lemma}[Size trimming with any admissible nets and solver]
+    \label{thm:lvv_size_trimming_selection_with}
+    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.sizeTrimmingSelectionWith,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.IsAdmissibleNet,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.IsAdmissibleSolver,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.sizeTrimmingSelectionWith_subset_span,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.card_sizeTrimmingSelectionWith_le,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.card_sizeTrimmingSelectionWith_le_polynomial,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.isViable_sizeTrimmingSelectionWith}
+    \leanok
+    \uses{def:lvv_size_trimming_selection, def:lvv_boundary_program_solution,
+        thm:lvv_uniform_leading_bounds, thm:chain_boundary_net_polynomial_bound}
+    In the setting of Definition~\ref{def:lvv_size_trimming_selection}, let a
+    finite set $N_m$ of boundary matrices be given for every bond dimension
+    $m\le D$, and an assignment of vectors to boundary points for every $m$.
+    The size-trimming selection of these data is the union over $m\le D$ of the
+    families of the assignments at the feasible points of $N_m$; the selection
+    of Definition~\ref{def:lvv_size_trimming_selection} is the case of the
+    chosen nets and the chosen assignments. The nets are admissible when each
+    $N_m$ covers the boundary densities within $c_\Delta/(2n)$; the solver is
+    admissible when each assignment is admissible for the left part of $H$ at
+    that tolerance. For an admissible solver the selection lies in
+    $\operatorname{Span}(S)$; when every $N_m$ has at most $K$ points the
+    selection has at most $(D+1)DK$ members, and at most $Cn^{p}$ members for the
+    standard point bound; and for admissible nets and solver the conclusion of
+    Lemma~\ref{thm:lvv_size_trimmed_family} holds verbatim, so size trimming is
+    correct for every solver of the convex program returning optimal solutions,
+    not only for the chosen one.
+\end{lemma}
+\begin{proof}\leanok
+    The proof of Lemma~\ref{thm:lvv_size_trimmed_family} uses of the chosen
+    data only that the net covers the boundary contraction of the witness and
+    that the chosen triple is a solution, which the uniform leading bounds of
+    Lemma~\ref{thm:lvv_uniform_leading_bounds} accept for every solution.
+\end{proof}
+
