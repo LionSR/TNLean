@@ -414,6 +414,37 @@ oracle of this kind.
     Theorem~\ref{thm:lvv_valid_oracle_correct}.
 \end{proof}
 
+\subsection{Theorem 1 in the form of the source}
+\label{sec:lvv_theorem_one_form}
+
+\begin{theorem}[Theorem 1: polynomial time in the chain length and the accuracy]
+    \label{thm:lvv_theorem_one_accuracy}
+    \lean{TNLean.MPS.AreaLaw.lvvAccuracyParameter,
+        TNLean.MPS.AreaLaw.one_le_lvvAccuracyParameter,
+        TNLean.MPS.AreaLaw.four_mul_div_lvvAccuracyParameter_le,
+        TNLean.MPS.AreaLaw.padded_length_lvvAccuracyParameter_le,
+        TNLean.MPS.AreaLaw.exists_theorem_one_of_valid}
+    \leanok
+    \uses{thm:lvv_valid_oracle_correct, thm:lvv_valid_oracle_cost}
+    Fix $q\ge2$ and $\Delta>0$. There are $P\ge1$ and $d$, chosen before the
+    chain, such that for every chain of $n\ge1$ sites, every accuracy
+    $0<\eta$ with $\Delta\eta\le1$, every valid oracle and every ground pair of
+    gap $\Delta$, the ground-state computation at the accuracy parameter
+    $R=\max\{1,\lceil\sqrt{4n/(\Delta\eta)}\rceil\}$ outputs a unit open-boundary
+    matrix product state with overlap at least $1-\eta$ with the ground state,
+    and its cost is at most $P\,(17n/(\Delta\eta)+5n)^d$: a polynomial in $n$
+    and $1/\eta$ whose coefficient and degree depend on $q$ and $\Delta$ alone,
+    the form $n^{c}\,\mathrm{poly}(n/\eta)$ of Theorem~1 of
+    \cite{Landau2015Polynomial}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    With this $R$ one has $R^2\ge4n/(\Delta\eta)$, so $4n/(R^2\Delta)\le\eta$
+    and Theorem~\ref{thm:lvv_valid_oracle_correct} gives the overlap; and
+    $R\le\sqrt{4n/(\Delta\eta)}+1$ gives $n+2R^2+1\le17n/(\Delta\eta)+5n$, so
+    Lemma~\ref{thm:lvv_valid_oracle_cost} gives the cost.
+\end{proof}
+
 \subsection{The sampled route and its success probability}
 \label{sec:lvv_sampled_program}
 
