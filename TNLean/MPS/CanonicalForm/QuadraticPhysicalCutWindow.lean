@@ -41,6 +41,45 @@ noncomputable def quadraticPhysicalCutWindow (ψ : (Fin N → Fin d) → ℂ)
     Fin m → Fin d → Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ :=
   fun j i ↦ LinearMap.toMatrix (C j.succ) (C j.castSucc) (cutSlice ψ (L + j.val) i)
 
+/-- Actual physical cut bases determine invertible change-of-basis matrices
+`P k` at every cut of the window, endpoints included, in which the window
+matrices are the doubled tensor: `P_j H_j^i P_{j+1}⁻¹ = A_i ⊗ 1`. These are
+the matrices of the endpoint-invertibility argument recorded in
+`docs/paper-gaps/pgvwc07_quadratic_reconstruction_phase.tex`.
+Source: PGVWC07, MPSarchive.tex lines 1080--1086 and 1139--1152. -/
+theorem exists_physicalCutWindow_invertible_gauges {A : MPSTensor d D}
+    (hcut : ∀ j : Fin (m + 1), L + j.val ≤ N)
+    (hleft : ∀ j : Fin (m + 1), Kraus.IsNBlkInjective A (L + j.val))
+    (hright : ∀ j : Fin (m + 1), Kraus.IsNBlkInjective A (N - (L + j.val)))
+    (C : (j : Fin (m + 1)) → Module.Basis (Fin D × Fin D) ℂ
+      (cutColumnSpace (mpv A (N := N)) (L + j.val))) :
+    ∃ P P' : Fin (m + 1) → Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ,
+      (∀ k, P k * P' k = 1) ∧
+      ∀ (j : Fin m) (i : Fin d),
+        P j.castSucc * quadraticPhysicalCutWindow (mpv A) C j i * P' j.succ =
+          A i ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ) := by
+  classical
+  let Q (j : Fin (m + 1)) := physicalPeriodicCutBasis (hcut j) (hleft j) (hright j)
+  let P (k : Fin (m + 1)) := LinearMap.toMatrix (C k) (Q k) LinearMap.id
+  let P' (k : Fin (m + 1)) := LinearMap.toMatrix (Q k) (C k) LinearMap.id
+  have hinverse (k : Fin (m + 1)) : P k * P' k = 1 := by
+    change LinearMap.toMatrix (C k) (Q k) LinearMap.id *
+      LinearMap.toMatrix (Q k) (C k) LinearMap.id = 1
+    rw [← LinearMap.toMatrix_comp (Q k) (C k) (Q k)]
+    simp only [LinearMap.id_comp, LinearMap.toMatrix_id]
+  have hlocal (j : Fin m) (i : Fin d) :
+      P j.castSucc * quadraticPhysicalCutWindow (mpv A) C j i * P' j.succ =
+        A i ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ) := by
+    change (LinearMap.toMatrix (C j.castSucc) (Q j.castSucc) LinearMap.id *
+      LinearMap.toMatrix (C j.succ) (C j.castSucc) (cutSlice (mpv A) (L + j.val) i)) *
+      LinearMap.toMatrix (Q j.succ) (C j.succ) LinearMap.id = _
+    rw [← LinearMap.toMatrix_comp (C j.succ) (C j.castSucc) (Q j.castSucc),
+      ← LinearMap.toMatrix_comp (Q j.succ) (C j.succ) (Q j.castSucc)]
+    simp only [LinearMap.id_comp, LinearMap.comp_id]
+    exact toMatrix_cutSlice_physicalPeriodicCutBasis (hcut j.succ)
+      (hleft j.castSucc) (hright j.castSucc) (hleft j.succ) (hright j.succ) i
+  exact ⟨P, P', hinverse, hlocal⟩
+
 /-- Actual physical cut bases determine both comparison gauges before
 any tensor normalization is imposed. Their equations follow from changes
 of basis and the original physical slicing maps.
@@ -55,28 +94,9 @@ theorem exists_physicalCutWindow_gauges {A : MPSTensor d D}
       (∀ (j : Fin m) (i : Fin d), Y j * quadraticPhysicalCutWindow (mpv A) C j i * Z j =
         A i ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ)) ∧
       ∀ (j : Fin m) (hj : j.val + 1 < m), Y ⟨j.val + 1, hj⟩ * Z j = 1 := by
-  classical
-  let Q (j : Fin (m + 1)) := physicalPeriodicCutBasis (hcut j) (hleft j) (hright j)
-  let Y (j : Fin m) := LinearMap.toMatrix (C j.castSucc) (Q j.castSucc) LinearMap.id
-  let Z (j : Fin m) := LinearMap.toMatrix (Q j.succ) (C j.succ) LinearMap.id
-  have hlocal (j : Fin m) (i : Fin d) :
-      Y j * quadraticPhysicalCutWindow (mpv A) C j i * Z j =
-        A i ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ) := by
-    change (LinearMap.toMatrix (C j.castSucc) (Q j.castSucc) LinearMap.id *
-      LinearMap.toMatrix (C j.succ) (C j.castSucc) (cutSlice (mpv A) (L + j.val) i)) *
-      LinearMap.toMatrix (Q j.succ) (C j.succ) LinearMap.id = _
-    rw [← LinearMap.toMatrix_comp (C j.succ) (C j.castSucc) (Q j.castSucc),
-      ← LinearMap.toMatrix_comp (Q j.succ) (C j.succ) (Q j.castSucc)]
-    simp only [LinearMap.id_comp, LinearMap.comp_id]
-    exact toMatrix_cutSlice_physicalPeriodicCutBasis (hcut j.succ)
-      (hleft j.castSucc) (hright j.castSucc) (hleft j.succ) (hright j.succ) i
-  have hinverse (j : Fin m) (hj : j.val + 1 < m) :
-      Y ⟨j.val + 1, hj⟩ * Z j = 1 := by
-    change LinearMap.toMatrix (C j.succ) (Q j.succ) LinearMap.id *
-      LinearMap.toMatrix (Q j.succ) (C j.succ) LinearMap.id = 1
-    rw [← LinearMap.toMatrix_comp (Q j.succ) (C j.succ) (Q j.succ)]
-    simp only [LinearMap.id_comp, LinearMap.toMatrix_id]
-  exact ⟨Y, Z, hlocal, hinverse⟩
+  obtain ⟨P, P', hinverse, hlocal⟩ :=
+    exists_physicalCutWindow_invertible_gauges hcut hleft hright C
+  exact ⟨fun j ↦ P j.castSucc, fun j ↦ P' j.succ, hlocal, fun j _ ↦ hinverse j.succ⟩
 
 /-- Every actual interior physical cut-basis window of a canonical C1
 tensor has a solution of system (S). The gauges are constructed by changes
