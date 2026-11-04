@@ -647,8 +647,9 @@ Uniqueness of the ground state is not needed; with a unique ground state `Γ` th
 is the source's `span {Γ}`. Frustration freeness is not a hypothesis, but the target is
 `ker H`: when the least eigenvalue of `H` is positive, `ker H = ⊥` and the conclusion says
 nothing about the ground states. The statement is a result about the ground space only for
-chains of zero ground energy, which are exactly the frustration-free ones. The terms are not assumed to be
-projectors: each is replaced by its range projection, as at line 1457. The formula uses
+chains of zero ground energy, which are exactly the frustration-free ones. The terms are not
+assumed to be projectors: each is replaced by its range projection, as at line 1457. The formula
+uses
 `d = max (q, 2)` so that it is meaningful for every local dimension; for `q ≥ 2` it is `q`.
 The running-time clause is not formalized.
 
