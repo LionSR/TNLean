@@ -22,6 +22,11 @@ an arbitrary oracle the enumerated net or the family of filter factors could be 
 A bound over all oracles, as in the upper bounds of CSLib, would require the program to
 truncate every answer to its declared size, which the algorithm does not do.
 
+**Scope restriction (cost model):** the bounds are on the declared oracle cost
+`FreeM.cost o queryCost`, not on a proved running time of an implementation: each query is
+charged a declared polynomial cost in the dimensions of its arguments, arithmetic is exact, and
+nothing is proved about how a query is answered; see `docs/paper-gaps/lvv13_cost_model.tex`.
+
 Source: LVV13, arXiv:1307.5143v1, `algo53.tex`, lines 213--219 (Theorem 1) and 652--668
 (the polynomial number of steps); the cost model is recorded in
 `docs/paper-gaps/lvv13_cost_model.tex`.

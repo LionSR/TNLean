@@ -23,6 +23,11 @@ corrected net exponent `2 (q D')²`; see `docs/paper-gaps/lvv13_constant_bond.te
 
 **Local fix (trimming radius):** the bond-trimming budget uses the corrected quadratic
 radius recorded at <https://sirui-lu.com/QICLean/paper-gaps/lvv13_trimming_radius.pdf>.
+
+**Scope restriction (cost model):** the bounds are on the declared oracle cost
+`FreeM.cost o queryCost`, not on a proved running time of an implementation: each query is
+charged a declared polynomial cost in the dimensions of its arguments, arithmetic is exact, and
+nothing is proved about how a query is answered; see `docs/paper-gaps/lvv13_cost_model.tex`.
 -/
 
 open Matrix Cslib
