@@ -57,7 +57,8 @@ extension of the input family, where `A` are the left factors of the cut decompo
 a sampled projector within `δ / 4` of the ground projection. The output has polynomial
 size and bond bounds independent of the input size and bond, with all constants preceding
 the length and the ground energy. LVV13, `algo53.tex`, the four steps, lines 379–592. -/
-theorem exists_sampled_viable_successor_polynomial_explicit_energy_degree {q : ℕ} (hq : 2 ≤ q) (a : ℕ) (ha : 1 ≤ a)
+theorem exists_sampled_viable_successor_polynomial_explicit_energy_degree
+    {q : ℕ} (hq : 2 ≤ q) (a : ℕ) (ha : 1 ≤ a)
     {Δ B η : ℝ} (hΔ : 0 < Δ) (hη : 0 < η) :
     ∃ C p₀ D r₀ : ℕ, 1 ≤ C ∧ 1 ≤ D ∧ ∀ (L : ℕ), 1 ≤ L →
       ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
@@ -75,7 +76,8 @@ theorem exists_sampled_viable_successor_polynomial_explicit_energy_degree {q : �
         Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L i)
           (sampledProjector h E₀ I) = ∑ j, A j ⊗ₖ B' j ∧
         IsViableMPS Γ (C * L ^ (sampledProjectorTotalDegree q a Δ B + p₀))
-          (D * L ^ (sampledProjectorTotalDegree q a Δ B + r₀)) (lvvViabilityPrecision Δ η / (L : ℝ) ^ a)
+          (D * L ^ (sampledProjectorTotalDegree q a Δ B + r₀))
+          (lvvViabilityPrecision Δ η / (L : ℝ) ^ a)
           (successiveStep hiL (bondTrimmingRadius L (lvvReferenceBond q Δ L)) Finset.univ A
             (ChainHamiltonian.sizeTrimmingSelection (ChainHamiltonian.ofBonds h hs h0 h1) hq Δ
               (AreaLaw.extend i S))) := by
@@ -196,7 +198,8 @@ of the previous family, with `A` the left factors of the cut decomposition of a 
 projector within `δ / 4` of the ground projection. Every family has fixed polynomial size
 and bond bounds. LVV13, `algo53.tex`, induction, lines 652–678, in the documented
 quantitative scope. -/
-theorem exists_sampled_successive_viable_sets_polynomial_explicit_energy_degree {q : ℕ} (hq : 2 ≤ q) (a : ℕ) (ha : 1 ≤ a)
+theorem exists_sampled_successive_viable_sets_polynomial_explicit_energy_degree
+    {q : ℕ} (hq : 2 ≤ q) (a : ℕ) (ha : 1 ≤ a)
     {Δ B η : ℝ} (hΔ : 0 < Δ) (hη : 0 < η) :
     ∃ C p₀ D r₀ : ℕ, 1 ≤ C ∧ 1 ≤ D ∧ ∀ (L : ℕ), 1 ≤ L →
       ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
@@ -389,7 +392,7 @@ theorem exists_sampled_groundState_openMPS_polynomial_explicit_energy_degree
   let r := t + r₀
   refine ⟨C * D, p₀ + r₀, by simpa only [one_mul] using Nat.mul_le_mul hC hD, ?_⟩
   intro L hL h hs h0 h1 E₀ Γ hgs hEB
-  obtain ⟨S, _, hS⟩ := hsets L hL h hs h0 h1 E₀ Γ hgs hEB
+  obtain ⟨S, _, _, hS⟩ := hsets L hL h hs h0 h1 E₀ Γ hgs hEB
   obtain ⟨ψ, hψ, hoverlap, hMPS⟩ := (hS L le_rfl).exists_openMPS
   refine ⟨ψ, hψ, ?_, ?_⟩
   · have hprec : lvvViabilityPrecision Δ η ≤ η :=
