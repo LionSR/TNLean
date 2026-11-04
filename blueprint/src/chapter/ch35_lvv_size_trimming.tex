@@ -898,6 +898,52 @@ a function of the Hamiltonian, the gap parameter and the input set.
     $Q\le2^{D_aD_b+2q+3h+3}$, which yields the stated bound.
 \end{proof}
 
+\begin{lemma}[Common denominator of partial sums]
+    \label{lem:lvv_rational_accumulation_bounds}
+    \lean{TNLean.MPS.AreaLaw.RationalGramContractionCost.run_sumFin_value,
+        TNLean.MPS.AreaLaw.RationalGramContractionCost.sumFin_bounds,
+        TNLean.MPS.AreaLaw.RationalGramContractionCost.sumFin_prefix_bounds}
+    \leanok
+    Let $L,B$ be natural numbers with $L>0$. Suppose the values of
+    $N$ computed Gaussian rationals have common denominator $L$ and
+    norms at most $B$. The sequential sum returns their sum, regardless
+    of the arithmetic counts of the individual terms. Its actual
+    accumulator after $a\le N$ terms has denominator $L$, norm at most
+    $aB$, and both coordinate heights at most $L\max\{1,aB\}$.
+    This includes the zero-length sum.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:lvv_common_rational_denominator}
+    Induction identifies the computed value with the finite sum of the
+    computed summands. Sums preserve a common denominator, and the
+    triangle inequality gives the norm bound. Apply the
+    common-denominator coordinate-height estimate.
+\end{proof}
+
+\begin{lemma}[Bounds for the capped weighted overlap]
+    \label{lem:lvv_capped_weighted_overlap_bounds}
+    \lean{TNLean.MPS.AreaLaw.OBCChainTensor.weightedOverlapOfRationalParameters_bounds}
+    \leanok
+    Let $M,C$ be natural numbers with $M>0$. Suppose both scalar caps,
+    both tensor families, and all physical weights have common
+    denominator $M$ and norms at most $C$. For two length-$n$ chains
+    with virtual bounds $D_a,D_b$, put
+    \[
+      Q=D_aD_bq^2C^3,\qquad R=C^2Q^n.
+    \]
+    The actual rational weighted overlap, including both scalar caps,
+    has denominator $M^{3n+2}$, norm at most $R$, and both coordinate
+    heights at most $M^{3n+2}\max\{1,R\}$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:lvv_weighted_transfer_intermediate_bounds}
+    The final stored row has denominator $M^{3n}$ and entry norm
+    at most $Q^n$. Multiplication by the conjugate first cap and the
+    second cap adds two denominator powers and a factor $C^2$ to the
+    norm bound. The coordinate-height estimate follows from these
+    denominator and norm bounds.
+\end{proof}
+
 \begin{definition}[Binary length of a rational coordinate]
     \label{def:lvv_rational_coordinate_storage}
     \lean{TNLean.MPS.AreaLaw.rationalCoordinateBitCount}

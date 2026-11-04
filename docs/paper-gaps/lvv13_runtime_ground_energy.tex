@@ -1803,7 +1803,19 @@ coordinate at \(t\le n\) has reduced numerator and denominator bounded by
   2^{(6hP+D_aD_b+2q+3h+3)t}.
 \]
 Thus polynomial input bit bounds and bond dimensions give polynomial bit
-bounds for every such stored row. Completing the bit-cost proof still
+bounds for every such stored row. The cap-inclusive result
+\leanid{TNLean.MPS.AreaLaw.OBCChainTensor.weightedOverlapOfRationalParameters\_bounds}
+has denominator \(M^{3n+2}\), norm at most \(C^2Q^n\), and coordinate
+height at most \(M^{3n+2}\max\{1,C^2Q^n\}\), where
+\(Q=D_aD_bq^2C^3\) and every input entry has norm at most \(C\).
+Moreover,
+\leanid{TNLean.MPS.AreaLaw.RationalGramContractionCost.sumFin\_prefix\_bounds}
+bounds every actual prefix of the finite-sum evaluator: summands with
+common denominator \(L>0\) and norms at most \(B\) give denominator
+\(L\), norm at most \(aB\), and coordinate heights at most
+\(L\max\{1,aB\}\) after \(a\) terms. This estimate does not require
+equal arithmetic counts for the summands.
+Completing the bit-cost proof still
 requires one bound covering the remaining scalar intermediate values,
 integer arithmetic and rational reduction, and the numerical routines
 that construct the retained bases and solve the semidefinite programs.
