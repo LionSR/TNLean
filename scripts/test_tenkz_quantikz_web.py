@@ -53,7 +53,10 @@ CIRCUIT_CLASS = "tenkz-pic-circuit"
 # standalone's varwidth box is the article line width (345pt); a wider
 # picture loses its right edge in the web SVG.
 MAX_WIDTH_PT = 340.0
-SVG_SIZE_RE = re.compile(r'<svg\b[^>]*\bwidth="([\d.]+)pt"[^>]*\bheight="([\d.]+)pt"')
+# dvisvgm (the CI route) quotes attributes with ', pdftocairo with ".
+SVG_SIZE_RE = re.compile(
+    r"""<svg\b[^>]*\bwidth=["']([\d.]+)pt["'][^>]*\bheight=["']([\d.]+)pt["']"""
+)
 
 
 def normalize(source: str) -> str:
