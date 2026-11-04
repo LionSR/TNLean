@@ -575,18 +575,19 @@ For the non-periodic MPS Fundamental Theorem background:
 - `rmp_nonperiodic_bnt_comparison_inputs.tex` compares the current
   canonical-form/BNT/after-blocking proof boundary against the local paper
   sources.
-- `pgvwc07_direct_sum_input.tex` explains the older MPS representation
-  paper's direct-sum input behind block-injective canonical form.
+- `pgvwc07_direct_sum_input.tex` (local correction, resolved) explains the
+  older MPS representation paper's direct-sum input behind block-injective
+  canonical form, and records the convention that its pairwise different
+  block states are pairwise nonproportional, equivalently gauge-phase
+  inequivalent blocks.
 - `pgvwc07_ti_canonical_form_positive_blocks.tex` records the convention
   that every listed block of the translation-invariant canonical form has
   positive bond dimension, used once when condition C1 forces a single block.
 - [`pgvwc07_open_parent_domain.tex`](pgvwc07_open_parent_domain.tex)
-  (scope restriction, open) records the explicit length-at-least-two and
-  common-physical-alphabet domain of the actual varying-bond open-parent
-  kernel theorem. The candidate proves canonical normalization and the
-  actual ground-state line, with no local-section or kernel supplier.
-  The unrestricted printed Theorem 9 is not certified by that restricted
-  entry; hosted proof validation also remains pending.
+  (local correction, resolved) records that the length bound `N ≥ 2` of the
+  varying-bond open-parent uniqueness theorem is the source's setup of a
+  chain with an adjacent interaction term; with it, the formal result is
+  Theorem 9 for arbitrary physical and bond dimensions.
 - `pgvwc07_ti_uniqueness_scope.tex` records that the block-separation lemmas
   do not formalize the uniqueness theorem for the translation-invariant
   canonical form, states the corrected root-of-unity conclusion, and records
