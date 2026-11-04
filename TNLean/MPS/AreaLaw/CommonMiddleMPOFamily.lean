@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.SelectedMiddleMPOFamily
 import TNLean.MPS.AreaLaw.IntervalMPOTransfer
+import TNLean.MPS.AreaLaw.TraceIntervalTransfer
 import TNLean.MPS.AreaLaw.RegionalMiddleFactors
 import TNLean.MPS.AreaLaw.PhysicalIntervalTransport
 import TNLean.MPS.AreaLaw.RetainedCoreFamilies
@@ -254,6 +255,11 @@ private noncomputable def actualCommonFixedMiddleMPOFamilyStatement
         (max 1 ((B ^ (deg r.1).val) ^ 2)) (fun w ↦ W r
           (fun v ↦ ((finProdFinEquiv (m := q) (n := q)).symm (w (eJ.symm v))).1)
           (fun v ↦ ((finProdFinEquiv (m := q) (n := q)).symm (w (eJ.symm v))).2))) ∧
+      (∀ r : I,
+        ∃ Cr : Matrix (Fin (B ^ (deg r.1).val)) (Fin (B ^ (deg r.1).val)) ℂ,
+        ∃ Ar : Fin ((b + ell + 1) - (a + ell)) → MPOTensor q (B ^ (deg r.1).val),
+          (W r).submatrix (fun σ z ↦ σ (eJ.symm z))
+            (fun σ z ↦ σ (eJ.symm z)) = MPOTensor.traceChainOperator Ar Cr) ∧
       ∀ (PL PR : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ),
         Entropy.IsSupportedOn PL (interval L 0 (a + 1)) →
         Entropy.IsSupportedOn PR (interval L (b + 2 * ell) L) →
@@ -322,7 +328,7 @@ private theorem exists_common_fixed_middle_twoMarkerCoefficient_mpo_family
     (selected_middle_fixed_interval_bounds hab hb p s).2.2.2.1
   let oldBound := Fintype.card (TwoMarkerMiddleIndex k i j (q * q) (q * q)) *
     (k + 1) * RetDim ^ 2
-  obtain ⟨n, deg, V, hcount, hV, hdecomp⟩ :=
+  obtain ⟨n, deg, V, hcount, hV, htrace, hdecomp⟩ :=
     exists_common_physical_twoMarkerCoefficient_mpo_family
       WL WR hleft hright hab hb p s Acore C0 z k i j
   let β := fun _ : Fin L ↦ Fin q
@@ -358,11 +364,25 @@ private theorem exists_common_fixed_middle_twoMarkerCoefficient_mpo_family
     exact hV r
   obtain ⟨hcard, hW, hglobal⟩ := selected_middle_fixed_mpo_family
     hab hb p s hq Vphys (fun r ↦ (B ^ (deg r).val) ^ 2) hVphys
+  have hTracePhys (r : Fin n) :
+      ∃ Cr : Matrix (Fin (B ^ (deg r).val)) (Fin (B ^ (deg r).val)) ℂ,
+      ∃ Ar : Fin Nnat → MPOTensor q (B ^ (deg r).val),
+        (Vphys r).submatrix (fun σ z ↦ σ (eE.symm z))
+          (fun σ z ↦ σ (eE.symm z)) = MPOTensor.traceChainOperator Ar Cr := by
+    obtain ⟨Cr, Ar, hAr⟩ := htrace r
+    refine ⟨Cr, Ar, ?_⟩
+    ext σ τ
+    exact (hread r σ τ).trans (congrFun (congrFun hAr σ) τ)
+  have hbounds := selected_middle_fixed_interval_bounds hab hb p s
+  obtain ⟨_hTraceCard, hTraceW, _hTraceGlobal⟩ :=
+    changingRegionalMiddleFamily_trace_and_global_decomposition hq
+      hbounds.1 hbounds.2.1 hbounds.2.2.1 hbounds.2.2.2.1 hbounds.2.2.2.2.le
+      Vphys (fun r ↦ B ^ (deg r).val) hTracePhys
   have hcard' : Fintype.card I ≤ n * q ^ (4 * ell) := by
     simpa only [Fintype.card_fin] using hcard
   have hcountNew : Fintype.card I ≤ oldBound * q ^ (4 * ell) :=
     hcard'.trans (Nat.mul_le_mul_right (q ^ (4 * ell)) hcount)
-  refine ⟨n, deg, V, hcountNew, hW, ?_⟩
+  refine ⟨n, deg, V, hcountNew, hW, hTraceW, ?_⟩
   intro PL PR hPL hPR F Dphys cPoly
   obtain ⟨B_out, hB_out⟩ := hdecomp PL PR hPL hPR cPoly
   let X := ∑ r : Fin (k + 1),
@@ -505,6 +525,11 @@ theorem exists_common_fixed_middle_grid_mpo_family
         ((max 1 B) ^ (2 * k)) (fun w ↦ Wall r
           (fun v ↦ ((finProdFinEquiv (m := q) (n := q)).symm (w (eJ.symm v))).1)
           (fun v ↦ ((finProdFinEquiv (m := q) (n := q)).symm (w (eJ.symm v))).2))) ∧
+      (∀ r : Iall, ∃ D : ℕ, D ≤ (max 1 B) ^ k ∧
+        ∃ Cr : Matrix (Fin D) (Fin D) ℂ,
+        ∃ Ar : Fin ((b + ell + 1) - (a + ell)) → MPOTensor q D,
+          (Wall r).submatrix (fun σ z ↦ σ (eJ.symm z))
+            (fun σ z ↦ σ (eJ.symm z)) = MPOTensor.traceChainOperator Ar Cr) ∧
       ∀ (PL PR : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ),
         Entropy.IsSupportedOn PL (interval L 0 (a + 1)) →
         Entropy.IsSupportedOn PR (interval L (b + 2 * ell) L) →
@@ -547,7 +572,7 @@ theorem exists_common_fixed_middle_grid_mpo_family
     (k + 1) * RetDim ^ 2
   have hfamily (u : ζ) := exists_common_fixed_middle_twoMarkerCoefficient_mpo_family
     WL WR hleft hright hab hb p s hq Acore C0 (z u) k i j
-  choose n deg V hcard hW hdecomp using hfamily
+  choose n deg V hcard hW hTrace hdecomp using hfamily
   let β := fun _ : Fin L ↦ Fin q
   let Vphys := fun (u : ζ) r ↦ (V u r).submatrix
     (fun σ : E → Fin q ↦ σ ∘ eE) (fun σ : E → Fin q ↦ σ ∘ eE)
@@ -574,7 +599,17 @@ theorem exists_common_fixed_middle_grid_mpo_family
           (fun v ↦ ((finProdFinEquiv (m := q) (n := q)).symm (w (eJ.symm v))).2)) := by
     exact (hW r.1 r.2).uniform_middle_degree_bound
       (Nat.le_of_lt_succ (deg r.1 r.2.1).isLt)
-  refine ⟨n, deg, V, hcountAll, hWall, ?_⟩
+  have hTraceAll (r : Iall) : ∃ D : ℕ, D ≤ (max 1 B) ^ k ∧
+      ∃ Cr : Matrix (Fin D) (Fin D) ℂ,
+      ∃ Ar : Fin ((b + ell + 1) - (a + ell)) → MPOTensor q D,
+        (Wall r).submatrix (fun σ z ↦ σ (eJ.symm z))
+          (fun σ z ↦ σ (eJ.symm z)) = MPOTensor.traceChainOperator Ar Cr := by
+    obtain ⟨Cr, Ar, hAr⟩ := hTrace r.1 r.2
+    refine ⟨B ^ (deg r.1 r.2.1).val, ?_, Cr, Ar, hAr⟩
+    have hpos : 0 < max 1 B := lt_of_lt_of_le Nat.zero_lt_one (le_max_left 1 B)
+    exact (Nat.pow_le_pow_left (le_max_right 1 B) _).trans
+      (Nat.pow_le_pow_right hpos (Nat.le_of_lt_succ (deg r.1 r.2.1).isLt))
+  refine ⟨n, deg, V, hcountAll, hWall, hTraceAll, ?_⟩
   intro PL PR hPL hPR F Dphys c
   choose M hM using fun u : ζ ↦ hdecomp u PL PR hPL hPR (c u)
   refine ⟨(fun r : Iall ↦ M r.1 r.2), ?_⟩

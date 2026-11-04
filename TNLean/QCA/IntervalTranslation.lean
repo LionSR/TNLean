@@ -64,7 +64,7 @@ theorem algebraicLocalTranslation_intervalCoordinates (d N : ℕ) (t b : ℤ)
     funext i
     exact False.elim ((Finset.mem_sdiff.mp i.2).2
       ((translateRegion_finiteChainRegion b t N).ge (Finset.mem_sdiff.mp i.2).1))
-  rw [if_pos hcomp, mul_one, localTranslation_apply,
+  rw [ite_eq_left hcomp, mul_one, localTranslation_apply,
     translated_interval_config, translated_interval_config]
   rfl
 

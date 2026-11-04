@@ -163,7 +163,12 @@ theorem isIrreducibleTensor_blockTensor_of_tp_primitive_irr [NeZero D]
       -- Evaluate at σ': (Φ N)^n σ' → 0.
       have heval : Filter.Tendsto (fun T : V →L[ℂ] V => T σ')
           (nhds (0 : V →L[ℂ] V)) (nhds (0 : V)) := by
-        have heval0 := (ContinuousLinearMap.apply ℂ V σ').continuous.tendsto
+        -- Evaluation at `σ'` as a continuous map; `ContinuousLinearMap.apply` would need
+        -- an `IsNormableSpace` instance for `V`.
+        have heval0 := (LinearMap.toContinuousLinearMap
+            ({ toFun := fun T => T σ'
+               map_add' := fun _ _ => rfl
+               map_smul' := fun _ _ => rfl } : (V →L[ℂ] V) →ₗ[ℂ] V)).continuous.tendsto
           (0 : V →L[ℂ] V)
         change Filter.Tendsto (fun T : V →L[ℂ] V => T σ')
           (nhds (0 : V →L[ℂ] V))

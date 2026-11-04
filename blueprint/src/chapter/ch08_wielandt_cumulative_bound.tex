@@ -103,6 +103,57 @@ eventual exact-word spanning, and spectral strong irreducibility.
     If the set is empty, its value is defined to be zero.
 \end{definition}
 
+\begin{definition}[Classical stochastic embedding and index]
+    \label{def:stochastic_wielandt_embedding}
+    \lean{Kraus.stochasticFamily, Matrix.positivePowerIndex}
+    \leanok
+    For an entrywise nonnegative real $D\times D$ matrix $a$, let
+    $K^{ij}=\sqrt{a_{ij}}\ketbra{i}{j}$ and let
+    $p(a)=\min\{n\ge1:(a^n)_{ij}>0\text{ for every }i,j\}$,
+    with value zero for the empty set. These are the classical embedding
+    and index in \cite[Proposition~2]{Sanz2010Quantum}.
+\end{definition}
+
+\begin{lemma}[Equality of the stochastic indices]
+    \label{thm:stochastic_wielandt_indices}
+    \lean{MPSTensor.iIndex_stochasticFamily,
+        MPSTensor.qIndex_stochasticFamily}
+    \leanok
+    \uses{def:stochastic_wielandt_embedding, def:wielandt_i_index,
+        def:wielandt_q_index}
+    For every entrywise nonnegative real $D\times D$ matrix $a$ with
+    $D>0$, the matrix-unit family satisfies $q(\E_K)=p(a)=\iota(K)$.
+\end{lemma}
+
+\begin{proof}\leanok
+    The three sets of admissible positive lengths coincide:
+    the normalized Choi matrix of $\E_K^n$ is diagonal with entries
+    $(a^n)_{ij}/D$, so full word span is equivalent to strict positivity
+    of $a^n$. Full vector spreading is equivalent to the same condition,
+    as seen by applying the channel to the coordinate rank-one states.
+    Taking the minima gives the equalities.
+\end{proof}
+
+\begin{lemma}[Primitive stochastic embedding]
+    \label{thm:primitive_stochastic_embedding}
+    \lean{MPSTensor.isPrimitivePaper_stochasticFamily,
+        MPSTensor.stochasticFamily_primitive_and_indices}
+    \leanok
+    \uses{def:stochastic_wielandt_embedding, def:paper_primitive,
+        def:wielandt_i_index, def:wielandt_q_index}
+    Let $a$ be a primitive column-stochastic $D\times D$ matrix with
+    $D>0$. Then its matrix-unit quantum embedding is primitive and
+    $q(\E_K)=p(a)=\iota(K)$, as in
+    \cite[Proposition~2]{Sanz2010Quantum}.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:stochastic_wielandt_indices}
+    A strictly positive positive-length power of $a$ gives full vector
+    spreading at that length. The index equalities hold by
+    Lemma~\ref{thm:stochastic_wielandt_indices}.
+\end{proof}
+
 \begin{definition}[Strengthened strong irreducibility]
     \label{def:strongly_irreducible_paper}
     \lean{MPSTensor.IsStronglyIrreduciblePaper}
@@ -209,6 +260,82 @@ matrices, and let $\E_K$ be its Kraus map.
     Lemma~\ref{thm:wielandt_proposition_three}.
 \end{remark}
 
+\subsection{Different indices for the three-Pauli channel}
+
+\begin{definition}[Three-Pauli channel]
+    \label{def:wielandt_three_pauli_channel}
+    \lean{MPSTensor.threePauliTensor}
+    \leanok
+    The three-Pauli channel is the qubit channel with Kraus matrices
+    $A_x=\sigma_x/\sqrt3$, $A_y=\sigma_y/\sqrt3$ and
+    $A_z=\sigma_z/\sqrt3$, where
+    \begin{align}
+        \sigma_x & =\begin{pmatrix}0&1\\1&0\end{pmatrix},                  &
+        \sigma_y & =\begin{pmatrix}0&-\mathrm i\\\mathrm i&0\end{pmatrix}, &
+        \sigma_z & =\begin{pmatrix}1&0\\0&-1\end{pmatrix}.
+    \end{align}
+    This is the example following Proposition~2 of~\cite{Sanz2010Quantum}.
+\end{definition}
+
+\begin{lemma}[The three-Pauli channel is trace preserving]
+    \label{lem:wielandt_three_pauli_trace_preserving}
+    \lean{MPSTensor.threePauliTensor_isTP}
+    \leanok
+    \uses{def:wielandt_three_pauli_channel}
+    The Kraus matrices of the three-Pauli channel satisfy
+    $\sum_{k=x,y,z}A_k^\dagger A_k=\Id$.
+\end{lemma}
+\begin{proof}\leanok
+    Each Pauli matrix is Hermitian and squares to the identity, so
+    $A_k^\dagger A_k=\Id/3$ for $k=x,y,z$.
+\end{proof}
+
+\begin{lemma}[One-step spreading and two-step matrix spanning]
+    \label{lem:wielandt_three_pauli_spans}
+    \lean{MPSTensor.threePauliTensor_vectorSpreadSpan_one,
+        MPSTensor.threePauliTensor_wordSpan_one_ne_top,
+        MPSTensor.threePauliTensor_wordSpan_two}
+    \leanok
+    \uses{def:wielandt_three_pauli_channel, def:word_span, def:mps_vector_spread_span}
+    For every $0\ne\varphi\in\mathbb C^2$, one has
+    $H_1(A,\varphi)=\mathbb C^2$. Nevertheless $S_1(A)\ne M_2(\mathbb C)$,
+    whereas $S_2(A)=M_2(\mathbb C)$.
+\end{lemma}
+\begin{proof}\leanok
+    Write $\varphi=(a,b)$. The combinations
+    $(\sigma_x+\mathrm i\sigma_y)\varphi=(2b,0)$ and
+    $(\sigma_x-\mathrm i\sigma_y)\varphi=(0,2a)$, together with
+    $\sigma_z\varphi=(a,-b)$, span both coordinate axes since $a$ and $b$
+    do not both vanish. The common nonzero scalar $1/\sqrt3$ does not
+    change this span. Every one-letter matrix has trace zero, so their span
+    excludes the identity. The two-letter products satisfy
+    \begin{align}
+        \sigma_x^2=\sigma_y^2=\sigma_z^2=\Id,\quad
+        \sigma_x\sigma_y=\mathrm i\sigma_z,\quad
+        \sigma_y\sigma_z=\mathrm i\sigma_x,\quad
+        \sigma_z\sigma_x=\mathrm i\sigma_y,
+        \notag
+    \end{align}
+    so $\Id,\sigma_x,\sigma_y,\sigma_z\in S_2(A)$, and these four matrices
+    span $M_2(\mathbb C)$.
+\end{proof}
+
+\begin{lemma}[Strict inequality between the two channel indices]
+    \label{thm:wielandt_three_pauli_indices}
+    \lean{MPSTensor.threePauliTensor_qIndex, MPSTensor.threePauliTensor_iIndex,
+        MPSTensor.threePauliTensor_qIndex_lt_iIndex}
+    \leanok
+    \uses{lem:wielandt_three_pauli_spans, def:wielandt_q_index, def:wielandt_i_index}
+    The three-Pauli channel satisfies $q(\mathcal E_A)=1<2=\iota(A)$.
+    Thus the comparison of Proposition~1 in~\cite{Sanz2010Quantum} can be strict.
+\end{lemma}
+\begin{proof}\leanok
+    The least positive spreading length is one by
+    Lemma~\ref{lem:wielandt_three_pauli_spans}. The least positive
+    full-matrix-span length is two, since the length-one span is proper
+    and the length-two span is full.
+\end{proof}
+
 \begin{lemma}[Eventual full Kraus rank gives paper primitivity]
     \label{thm:paper_primitive_of_full_kraus_rank}
     \lean{MPSTensor.isPrimitivePaper_of_hasEventuallyFullKrausRank}
@@ -287,6 +414,45 @@ matrices, and let $\E_K$ be its Kraus map.
     large $m$.
 \end{proof}
 
+\begin{lemma}[The simple peripheral eigenspace criterion]
+    \label{thm:wielandt_literal_peripheral_criterion}
+    \lean{MPSTensor.isStronglyIrreduciblePaper_of_simple_peripheral_fixedPoint,
+        MPSTensor.primitivePaper_iff_exists_simple_peripheral_fixedPoint,
+        MPSTensor.hasEventuallyFullKrausRank_iff_exists_simple_peripheral_fixedPoint}
+    \leanok
+    \uses{def:paper_primitive, def:eventually_full_kraus_rank,
+        def:strongly_irreducible_paper, thm:wielandt_proposition_three,
+        thm:wolf_6_8_kraus_span, thm:strongly_irreducible_of_paper_primitive,
+        thm:primitive_from_strongly_irred}
+    Let $D>0$ and suppose $\sum_i(A^i)^\dagger A^i=\Id$.
+    The following conditions are equivalent:
+    \begin{enumerate}
+        \item $\E_A$ is primitive.
+        \item The exact-length word spaces eventually equal $\MN{D}$.
+        \item There is $\rho>0$ such that $\E_A(\rho)=\rho$, the fixed
+              eigenspace is $\mathbb C\rho$, and $1$ is the only peripheral
+              eigenvalue.
+    \end{enumerate}
+    In the third condition, irreducibility is a conclusion rather than
+    an additional hypothesis. This is \cite[Proposition~3]{Sanz2010Quantum}.
+\end{lemma}
+\begin{proof}\leanok
+    For a primitive channel, the positive-definite fixed point and the
+    complementary spectral gap give the third condition. Conversely, assume
+    the third condition and let $P\neq0,\Id$ be an orthogonal projection with
+    $\E_A(P\MN{D}P)\subseteq P\MN{D}P$. The restriction of $\E_A$ to this
+    corner is positive and trace preserving, so it fixes a density matrix
+    $\sigma=P\sigma P$. Simplicity of the fixed eigenspace gives
+    $\sigma=c\rho$ with $c\neq0$, hence
+    \begin{align}
+        (\Id-P)\rho(\Id-P) & =c^{-1}(\Id-P)\sigma(\Id-P)=0,
+        \notag
+    \end{align}
+    contradicting $\rho>0$. Thus $\E_A$ is irreducible, and together with
+    peripheral primitivity this gives eventual full Kraus rank and hence
+    primitivity.
+\end{proof}
+
 \begin{lemma}[Normalized normal tensors are strongly irreducible]
     \label{thm:normalized_normal_strongly_irreducible}
     \lean{MPSTensor.isStronglyIrreduciblePaper_of_hasEventuallyFullKrausRank,
@@ -308,6 +474,27 @@ matrices, and let $\E_K$ be its Kraus map.
     Lemma~\ref{thm:paper_primitive_of_full_kraus_rank} then gives paper
     primitivity, and Lemma~\ref{thm:strongly_irreducible_of_paper_primitive}
     gives strong irreducibility.
+\end{proof}
+
+\begin{lemma}[Comparison of the two channel indices]
+    \label{thm:q_index_le_i_index_channel}
+    \lean{MPSTensor.qIndex_le_iIndex_of_tracePreserving}
+    \leanok
+    \uses{def:wielandt_i_index, def:wielandt_q_index, thm:wolf_6_8_kraus_span}
+    Let $A_1,\ldots,A_d\in\MN{D}$, where $D>0$, satisfy
+    $\sum_i A_i^\dagger A_i=\Id$. With both indices set to zero when
+    their defining sets are empty, one has $q(\E_A)\le\iota(A)$.
+    This is \cite[Proposition~1]{Sanz2010Quantum}.
+\end{lemma}
+
+\begin{proof}\leanok
+    If $\iota(A)$ is a positive integer with $S_{\iota(A)}(A)=\MN{D}$, then
+    $H_{\iota(A)}(A,\varphi)=\C^D$ for every $\varphi\neq0$, so $\iota(A)$
+    lies in the defining set for $q(\E_A)$ and $q(\E_A)\le\iota(A)$.
+    Otherwise, Lemma~\ref{thm:wolf_6_8_kraus_span} excludes
+    primitivity, so
+    $\{q\ge1:H_q(A,\varphi)=\C^D\text{ for every }\varphi\neq0\}=\emptyset$
+    and $q(\E_A)=0\le\iota(A)$.
 \end{proof}
 
 \begin{lemma}[Primitive-channel specialization of the index bound]
@@ -923,3 +1110,132 @@ case are proved in Section~\ref{sec:app_wielandt_blocking_support}.
     on the injectivity length. For the Fundamental Theorem of MPS, the
     qualitative assertion that $S_N(A)=\MN{D}$ for some finite $N$ suffices.
 \end{remark}
+
+\subsection{The cyclic lower-bound example}
+
+\begin{definition}[Cyclic shift and jump family]
+    \label{def:cyclic_wielandt_family}
+    \lean{MPSTensor.CyclicWielandt.shift, MPSTensor.CyclicWielandt.jump,
+        MPSTensor.CyclicWielandt.tensor,
+        MPSTensor.CyclicWielandt.tensor_zero, MPSTensor.CyclicWielandt.tensor_one}
+    \leanok
+    For $D\ge2$, let $S=\sum_{i=0}^{D-1}\ketbra{i+1}{i}$, with indices
+    modulo $D$, and $R=\ketbra{1}{D-1}$. The family $A=\{S,R\}$ is the
+    cyclic example following the main theorem in~\cite{Sanz2010Quantum}.
+\end{definition}
+
+\begin{lemma}[Cyclic matrix identities]
+    \label{thm:cyclic_wielandt_identities}
+    \lean{MPSTensor.CyclicWielandt.shift_mul_apply,
+        MPSTensor.CyclicWielandt.shift_pow_apply,
+        MPSTensor.CyclicWielandt.shift_pow_dim,
+        MPSTensor.CyclicWielandt.shift_pow_mul_dim,
+        MPSTensor.CyclicWielandt.shift_pow_mod,
+        MPSTensor.CyclicWielandt.shift_isUnit,
+        MPSTensor.CyclicWielandt.shift_pow_mul_single,
+        MPSTensor.CyclicWielandt.single_mul_shift_pow,
+        MPSTensor.CyclicWielandt.sandwich_eq_single,
+        MPSTensor.CyclicWielandt.return_coordinate_iff,
+        MPSTensor.CyclicWielandt.one_add_last,
+        MPSTensor.CyclicWielandt.jump_shift_pow_jump,
+        MPSTensor.CyclicWielandt.jump_return}
+    \leanok
+    \uses{def:cyclic_wielandt_family}
+    The shift satisfies $S^D=I$ and is invertible. For $0\le k<D$,
+    $RS^kR=R$ if $k=D-2$ and $RS^kR=0$ otherwise. For all $k,l\ge0$,
+    $S^kRS^l=\ketbra{1+k}{D-1-l}$, with coordinates modulo $D$.
+\end{lemma}
+
+\begin{proof}\leanok
+    The entries of $S^n$ are $\delta_{i,j+n}$. Multiplication by a
+    matrix unit then gives the two sandwich identities.
+\end{proof}
+
+\begin{lemma}[Exact cyclic word normal form]
+    \label{thm:cyclic_wielandt_word_normal_form}
+    \lean{MPSTensor.CyclicWielandt.evalWord_normalForm}
+    \leanok
+    \uses{def:cyclic_wielandt_family}
+    Every word of length $L$ evaluates to zero, to $S^L$, or to
+    $S^kRS^l$ for some $0\le k,l<D$ and $n,m\ge0$ satisfying
+    $L=1+k+l+n(D-1)+mD$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:cyclic_wielandt_identities}
+    Induct by prepending a letter. Prepending $S$ increments $k$,
+    carrying a full turn into $m$. Prepending $R$ to a shifted jump
+    survives precisely when $k=D-2$, resets $k$ to zero, and increases
+    $n$ by one. Prepending $R$ to a pure shift reduces its exponent
+    modulo $D$.
+\end{proof}
+
+\begin{lemma}[Full span at the cyclic length]
+    \label{thm:cyclic_wielandt_full_span}
+    \lean{MPSTensor.CyclicWielandt.jump_mem_wordSpan,
+        MPSTensor.CyclicWielandt.sandwich_mem_wordSpan,
+        MPSTensor.CyclicWielandt.exists_full_length_padding,
+        MPSTensor.CyclicWielandt.wordSpan_full_length}
+    \leanok
+    \uses{def:cyclic_wielandt_family, def:word_span}
+    At $N=D(D-1)$, the cyclic family satisfies $S_N(A)=\MN{D}$.
+    The omitted diagonal-unit step in the source proof is supplied as
+    recorded in~\cite{gap:spwc10_cyclic_missing_diagonal}.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:cyclic_wielandt_identities}
+    Return blocks give $R\in S_{1+n(D-1)}(A)$ and full turns give
+    $I\in S_{mD}(A)$. For $s=k+l\le D-2$, choose $n=s+1$ and
+    $m=D-s-2$. For $D-1\le s\le2D-3$, choose $n=s+1-D$ and
+    $m=2D-s-3$. Thus every matrix unit except $\ketbra{0}{0}$ belongs
+    to $S_N(A)$. Since $S^N=I$, subtraction of the other diagonal units
+    gives $\ketbra{0}{0}\in S_N(A)$.
+\end{proof}
+
+\begin{lemma}[The predecessor entry obstruction]
+    \label{thm:cyclic_wielandt_predecessor}
+    \lean{MPSTensor.CyclicWielandt.evalWord_pred_entries_eq,
+        MPSTensor.CyclicWielandt.wordSpan_pred_entries_eq,
+        MPSTensor.CyclicWielandt.wordSpan_pred_ne_top}
+    \leanok
+    \uses{def:cyclic_wielandt_family, def:word_span}
+    Every $X\in S_{D(D-1)-1}(A)$ satisfies $X_{D-1,0}=X_{0,1}$.
+    Consequently $S_{D(D-1)-1}(A)\ne\MN{D}$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:cyclic_wielandt_word_normal_form,
+        thm:cyclic_wielandt_identities}
+    A shifted-jump word having a nonzero entry at either position
+    requires $k+l=2D-3$. Its length constraint would give
+    $D(D-1)=(n+m+2)(D-1)+m+1$, which forces $m+1<D-1$ and
+    $n+m+2<D$ and is therefore impossible. Such words vanish at both
+    positions; pure shifts have equal entries there. The equality
+    persists under linear combinations, whereas $\ketbra{D-1}{0}$
+    violates it.
+\end{proof}
+
+\begin{lemma}[Exact index of the cyclic example]
+    \label{thm:cyclic_wielandt_index}
+    \lean{MPSTensor.CyclicWielandt.isNormal,
+        MPSTensor.CyclicWielandt.isPrimitivePaper,
+        MPSTensor.CyclicWielandt.iIndex_eq,
+        MPSTensor.CyclicWielandt.classical_bound_lt_iIndex}
+    \leanok
+    \uses{def:cyclic_wielandt_family, def:wielandt_i_index,
+        def:paper_primitive, def:normal}
+    The cyclic family is normal and primitive, and
+    $\iota(A)=D(D-1)$. For $D>2$, this exceeds the classical
+    Wielandt exponent $D^2-2D+2$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:cyclic_wielandt_full_span,
+        thm:cyclic_wielandt_predecessor, thm:cyclic_wielandt_identities,
+        thm:normal_irreducible_tensor}
+    Full span holds at $D(D-1)$ and fails at its predecessor. Since
+    $S$ is invertible, fullness at any earlier length would persist
+    to the predecessor length, a contradiction. The index difference
+    from the classical exponent is $D-2$.
+\end{proof}

@@ -194,6 +194,16 @@ theorem isOpenMPS_iff_internal_cutMatrix_rank_le {L q D : ℕ}
   exact ⟨fun h k hk0 hkL ↦ h.rank_cutMatrix_le hk0 hkL,
     isOpenMPS_of_internal_cutMatrix_rank_le ψ⟩
 
+/-- Enlarging the allowed bond dimension preserves an open-boundary matrix
+product representation. This follows from the internal-cut characterization
+in SWVC07, arXiv:0705.0292v2, lines 234–264, including empty chains and
+zero bond bounds. -/
+theorem IsOpenMPS.mono {L q D D' : ℕ} {psi : (Fin L → Fin q) → ℂ}
+    (hpsi : IsOpenMPS L q D psi) (hD : D ≤ D') : IsOpenMPS L q D' psi := by
+  apply (isOpenMPS_iff_internal_cutMatrix_rank_le (WithLp.toLp 2 psi)).mpr
+  intro k hk0 hkL
+  exact (hpsi.rank_cutMatrix_le (ψ := WithLp.toLp 2 psi) hk0 hkL).trans hD
+
 /-- **Appending a site.** If `w` is an open-boundary matrix product state of bond dimension at
 most `b` on `n` sites and `0 < b`, then `x ↦ w (x₀, …, x_{n-1}) f (x_n)` is one on `n + 1`
 sites: the new internal bond carries rank at most one (arXiv:1307.5143v1, algo53.tex,

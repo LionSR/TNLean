@@ -1,0 +1,330 @@
+\section{Product ancillary sites and retained prefixes}
+
+The length parameter in the successive construction can be increased while
+preserving the local dimension and a fixed positive lower gap. The following
+identities describe the added on-site penalties and the extraction of the
+original prefix from a viable witness.
+
+\begin{definition}[Linear placement of an operator]
+    \label{def:lvv_placement_linear_map}
+    \lean{QuantumCircuit.embedOpLinearMap}
+    \leanok
+    \uses{lem:qc_placed_operators}
+    For a map $e$ between finite sets of sites, let $\Phi_e(X)$ be the
+    operator $X$ placed by $e$, with the matrix entries of
+    Lemma~\ref{lem:qc_placed_operators}. The map $\Phi_e$ is complex-linear.
+\end{definition}
+
+\begin{lemma}[Order under placement of sites]
+    \label{thm:lvv_placement_order}
+    \lean{QuantumCircuit.embedOp_sub,QuantumCircuit.embedOp_posSemidef,
+        QuantumCircuit.embedOp_le,QuantumCircuit.siteOp_posSemidef,
+        QuantumCircuit.siteOp_le}
+    \leanok
+    \uses{def:lvv_placement_linear_map}
+    Placement respects subtraction. For injective $e$, it preserves positive
+    semidefiniteness and operator inequalities. In particular, placing an
+    on-site positive contraction at any site gives a positive contraction.
+\end{lemma}
+\begin{proof}
+    \leanok
+    For $X\ge0$, write $X=(\sqrt X)^\dagger\sqrt X$.
+    Placement preserves products and adjoints, hence
+    $\Phi_e(X)=\Phi_e(\sqrt X)^\dagger\Phi_e(\sqrt X)\ge0$.
+    Apply this to the positive difference in an operator inequality.
+    Single-site placement is an injective placement followed by a relabelling
+    of its single local coordinate.
+\end{proof}
+
+\begin{definition}[Penalties for a product basis vector]
+    \label{def:lvv_product_basis_penalty}
+    \lean{QuantumCircuit.siteBasisPenalty,QuantumCircuit.productBasisPenalty}
+    \leanok
+    On a finite set of $q$-dimensional sites, fix a basis configuration $b$.
+    Let $P_v$ be the on-site matrix diagonal in the standard basis, with
+    diagonal value zero at $b_v$ and one at every other basis level. Define
+    $A_b=\sum_v(P_v)_v$, with each penalty placed on its actual site.
+\end{definition}
+
+\begin{lemma}[The actual product-basis penalty]
+    \label{thm:lvv_product_basis_penalty}
+    \lean{QuantumCircuit.siteBasisPenalty_posSemidef,
+        QuantumCircuit.siteBasisPenalty_le_one,
+        QuantumCircuit.productBasisPenalty_eq_diagonal,
+        QuantumCircuit.productBasisPenalty_gap,
+        QuantumCircuit.productBasisPenalty_mulVec}
+    \leanok
+    \uses{def:lvv_product_basis_penalty}
+    Each $P_v$ is a positive contraction. In the full configuration basis,
+    $A_b$ is diagonal with entry $\#\{v:x_v\ne b_v\}$ at configuration $x$.
+    Consequently
+    \begin{align*}
+        A_b|b\rangle & =0, & A_b & \ge I-|b\rangle\langle b|.
+    \end{align*}
+    These assertions also hold for the empty set of sites.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Placing a diagonal on-site operator gives the corresponding function of
+    the full configuration's coordinate. Summing gives the displayed count.
+    The count is zero at $b$ and at least one at every different configuration.
+\end{proof}
+
+\begin{definition}[The padded nearest-neighbour interaction]
+    \label{def:lvv_padded_interaction}
+    \lean{TNLean.MPS.AreaLaw.paddedInteraction,TNLean.MPS.AreaLaw.paddingBondEquiv}
+    \leanok
+    Let $1\le L\le N$, fix a basis level $z$, and let $h_j$ be interactions
+    on the first $L$ sites. For $0\le j<N-1$, define
+    \begin{align*}
+        \widehat h_j=
+        \begin{cases}
+            \Phi(h_j),                     & j<L-1,    \\
+            (I-|z\rangle\langle z|)_{j+1}, & j\ge L-1,
+        \end{cases}
+    \end{align*}
+    where $\Phi$ places the original sites in the initial segment.
+    The bond labels split bijectively into the original bond labels and the
+    appended sites; the latter correspondence is $j\mapsto j+1$.
+\end{definition}
+
+\begin{lemma}[Interval supports under prefix placement]
+    \label{thm:lvv_prefix_support}
+    \lean{TNLean.MPS.AreaLaw.isSupportedOn_embedOp_prefix}
+    \leanok
+    \uses{lem:qc_placed_operators}
+    Placing an operator from the first $L$ sites into the first $L$ sites of
+    a longer chain preserves each interval support $[a,b)$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    The placement sends the algebra on a set of original sites into the
+    algebra on its image. The image of the original interval is contained
+    in the same interval of the longer chain.
+\end{proof}
+
+\begin{lemma}[Support, order and sum of the padded interaction]
+    \label{thm:lvv_padded_interaction_sum}
+    \lean{TNLean.MPS.AreaLaw.paddedInteraction_supported,
+        TNLean.MPS.AreaLaw.paddedInteraction_nonneg_le_one,
+        TNLean.MPS.AreaLaw.sum_paddedInteraction}
+    \leanok
+    \uses{def:lvv_padded_interaction,thm:lvv_prefix_support,
+        thm:lvv_placement_order,thm:lvv_product_basis_penalty}
+    If $0\le h_j\le I$ is supported on $\{j,j+1\}$, then each
+    $0\le\widehat h_j\le I$ is supported on $\{j,j+1\}$ and
+    \begin{align*}
+        \sum_{j=0}^{N-2}\widehat h_j
+        =\Phi\left(\sum_{j=0}^{L-2}h_j\right)
+        +\sum_{v=L}^{N-1}(I-|z\rangle\langle z|)_v.
+    \end{align*}
+    The interaction is specified before choosing a ground vector or energy.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Original terms retain support and order under prefix placement.
+    Each later penalty acts only on the right endpoint of its assigned bond.
+    The bond-label bijection separates the two sums, and linearity of
+    placement combines the original terms.
+\end{proof}
+
+\begin{lemma}[Norms of prefix columns]
+    \label{thm:lvv_prefix_column_norm}
+    \lean{TNLean.MPS.AreaLaw.sum_norm_cutColumn_sq,
+        TNLean.MPS.AreaLaw.norm_cutColumn_le}
+    \leanok
+    Write a chain vector as a coefficient matrix $M$ across a prefix cut,
+    and let $w_b$ be its column at right configuration $b$. Then
+    \begin{align*}
+        \sum_b\|w_b\|^2=\|\psi\|^2,\qquad \|w_b\|\le\|\psi\|.
+    \end{align*}
+\end{lemma}
+\begin{proof}
+    \leanok
+    The configuration equivalence reindexes the squared norm as the double
+    sum of squared coefficient moduli. Every summand is nonnegative.
+\end{proof}
+
+\begin{definition}[Extension by a fixed right basis configuration]
+    \label{def:lvv_right_basis_extension}
+    \lean{TNLean.MPS.AreaLaw.rightBasisExtension}
+    \leanok
+    For a left vector $v$ and right basis configuration $b$, let
+    $E_bv=v\otimes|b\rangle$. In prefix coordinates its only nonzero
+    column is the column $v$ at $b$.
+\end{definition}
+
+\begin{lemma}[Coordinates and pairing of a basis extension]
+    \label{thm:lvv_right_basis_extension}
+    \lean{TNLean.MPS.AreaLaw.cutColumn_rightBasisExtension,
+        TNLean.MPS.AreaLaw.inner_rightBasisExtension,
+        TNLean.MPS.AreaLaw.norm_rightBasisExtension}
+    \leanok
+    \uses{def:lvv_right_basis_extension,thm:lvv_prefix_column_norm}
+    The column of $E_bv$ at $b'$ is $v$ if $b'=b$ and zero otherwise.
+    Moreover $\|E_bv\|=\|v\|$ and
+    $\langle\psi,E_bv\rangle=\langle w_b,v\rangle$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Evaluate the extension on the glued left and right configuration.
+    The inner-product sum has only the prescribed right column, and the
+    column norm identity gives preservation of the norm.
+\end{proof}
+
+\begin{lemma}[A unit vector in the retained prefix span]
+    \label{thm:lvv_retained_prefix_extraction}
+    \lean{TNLean.MPS.AreaLaw.IsViable.exists_prefix_of_rightBasisExtension}
+    \leanok
+    \uses{thm:lvv_right_basis_extension,thm:lvv_prefix_column_norm}
+    Let $\delta<1$ and suppose $S$ is $\delta$-viable for $E_bv$.
+    Then there is a unit vector $w\in\operatorname{span}S$ with
+    $|\langle w,v\rangle|\ge1-\delta$.
+    No normalization hypothesis on $v$ is required for this implication.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Choose the actual unit viable witness $\psi$ and its column $w_b$.
+    The support condition gives $w_b\in\operatorname{span}S$; the pairing
+    identity gives $|\langle w_b,v\rangle|\ge1-\delta>0$.
+    Thus $w_b\ne0$ and $\|w_b\|\le1$.
+    The vector $w=w_b/\|w_b\|$ remains in the same span and has at least
+    the original overlap.
+\end{proof}
+
+\begin{lemma}[Tensor coordinates of the padded terms]
+    \label{thm:lvv_padding_tensor_coordinates}
+    \lean{TNLean.MPS.AreaLaw.restrict_prefix_cutEquiv_symm,
+        TNLean.MPS.AreaLaw.cutOperator_embedOp_prefix,
+        TNLean.MPS.AreaLaw.cutOperator_appended_penalty}
+    \leanok
+    \uses{thm:lvv_padded_interaction_sum,thm:lvv_product_basis_penalty}
+    Across the cut after the original $L$ sites, the embedded original
+    Hamiltonian is $H\otimes I$, after numbering its left sites in their
+    original order. The sum of the appended-site penalties is $I\otimes A_b$,
+    where $b$ is the constant configuration with basis level $z$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Each operator is supported on its stated factor. Its matrix slice at
+    a fixed complementary configuration identifies that factor: restriction
+    of a glued configuration gives the original left configuration, and
+    the right diagonal entries count the sites differing from $b$.
+\end{proof}
+
+\begin{definition}[The padded ground vector]
+    \label{def:lvv_padded_ground_vector}
+    \lean{TNLean.MPS.AreaLaw.paddedGroundVector}
+    \leanok
+    \uses{def:lvv_right_basis_extension}
+    For an original chain vector $\Gamma$, define
+    $\widehat\Gamma=\Gamma\otimes|z\rangle^{\otimes(N-L)}$,
+    using the prefix-coordinate identification.
+\end{definition}
+
+\begin{lemma}[A projector gap for the actual padded chain]
+    \label{thm:lvv_padding_ground_gap}
+    \lean{TNLean.MPS.AreaLaw.norm_paddedGroundVector,
+        TNLean.MPS.AreaLaw.isGappedGroundState_paddedInteraction}
+    \leanok
+    \uses{def:lvv_padded_ground_vector,thm:lvv_padding_tensor_coordinates,
+        thm:lvv_product_basis_penalty,thm:lvv_right_basis_extension}
+    Suppose $\Gamma$ is a unit vector, $H\Gamma=E\Gamma$, and
+    $H-EI\ge\Delta(I-|\Gamma\rangle\langle\Gamma|)$ for $\Delta>0$.
+    Set $g=\min\{\Delta,1\}$.
+    The actual padded interaction has unit ground vector
+    $\widehat\Gamma$ at energy $E$, with
+    \begin{align*}
+        \widehat H-EI\ge g(I-|\widehat\Gamma\rangle
+        \langle\widehat\Gamma|).
+    \end{align*}
+    This is a lower bound for the projector gap.
+\end{lemma}
+\begin{proof}
+    \leanok
+    In the coordinates of Lemma~\ref{thm:lvv_padding_tensor_coordinates},
+    $\widehat H=H\otimes I+I\otimes A_b$ and
+    $\widehat\Gamma=\Gamma\otimes|b\rangle$.
+    Both factors have projector gap at least $g$.
+    Write $P=|\Gamma\rangle\langle\Gamma|$ and
+    $Q=|b\rangle\langle b|$. The defect is the sum of the positive matrices
+    \begin{align*}
+         & (H-EI-g(I-P))\otimes I
+        +I\otimes(A_b-g(I-Q))\notag         \\
+         & \hspace{4em}+g(I-P)\otimes(I-Q).
+    \end{align*}
+    The eigen-equation follows by applying the two factors separately.
+    The coordinate identifications preserve positivity and normalization.
+\end{proof}
+
+\begin{lemma}[A phase-aligned prefix MPS]
+    \label{thm:lvv_padding_prefix_mps}
+    \lean{TNLean.MPS.AreaLaw.IsViable.exists_prefix_mps_of_paddedGroundVector}
+    \leanok
+    \uses{thm:lvv_retained_prefix_extraction,thm:lvv_left_span_bond,
+        def:lvv_padded_ground_vector}
+    Let $\Gamma$ be a unit original-chain vector and $\delta<1$.
+    Suppose a finite prefix family $S$ is $\delta$-viable for
+    $\widehat\Gamma$, and every member has effective MPS bond bound
+    $\max\{1,b\}$. There is a unit $w\in\operatorname{span}S$ whose
+    original-coordinate vector $\psi$ satisfies
+    \begin{align*}
+        \|\psi-\Gamma\|^2\le2\delta,
+        \qquad D(\psi)\le |S|\max\{1,b\}.
+    \end{align*}
+\end{lemma}
+\begin{proof}
+    \leanok
+    Apply Lemma~\ref{thm:lvv_retained_prefix_extraction} to the fixed
+    ancillary configuration. Rotate the resulting unit vector by a phase
+    minimizing its distance from the original target. This rotation preserves
+    its span membership. The squared distance is
+    $2-2|\langle\psi,\Gamma\rangle|\le2\delta$.
+    The finite-span MPS bound gives the asserted bond dimension.
+\end{proof}
+
+\begin{theorem}[Uniform polynomial arbitrary accuracy from the successive construction]
+    \label{thm:lvv_successive_arbitrary_accuracy}
+    \lean{TNLean.MPS.AreaLaw.lvvSuccessiveError_min_lt_one,
+        TNLean.MPS.AreaLaw.exists_uniform_positive_chain_successive_accuracy}
+    \leanok
+    \uses{thm:lvv_uniform_successive_approximation,
+        thm:lvv_padded_interaction_sum,thm:lvv_padding_ground_gap,
+        thm:lvv_padding_prefix_mps}
+    Fix $q\ge2$ and $\Delta>0$, and put
+    $g=\min\{\Delta,1\}$ and $c=(g/169)^2<1$.
+    There are natural numbers $P,d$, with $P\ge1$, depending only on
+    $q,\Delta$, such that the following holds.
+    Let $L,R\ge1$ be natural numbers, and let the $L$-site interactions
+    $0\le h_j\le I$ be supported on $\{j,j+1\}$.
+    Set $N=L+2R^2$ and form the actual padded interaction of
+    Definition~\ref{def:lvv_padded_interaction}.
+    Its successive construction chooses one family $S_i$ at every stage
+    before any original ground energy or vector, with $S_0=\{1\}$,
+    cardinality at most $P(N+1)^d$, and effective member bond bound
+    $P(N+1)^d$.
+    For every unit $\Delta$-gapped original ground vector $\Gamma$,
+    each $S_i$ is $c/N$-viable for $\widehat\Gamma$.
+    Moreover its actual retained stage-$L$ span contains a unit vector $w$
+    whose original-coordinate vector $\psi$ satisfies
+    \begin{align*}
+        \|\psi-\Gamma\|^2\le R^{-2},
+        \qquad D(\psi)\le P(N+1)^d.
+    \end{align*}
+    This is a product-ancilla consequence of the proved successive
+    construction. It asserts no computational running time or sharper
+    printed quantitative bounds.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Apply Theorem~\ref{thm:lvv_uniform_successive_approximation} once at
+    the fixed gap $g$. If its uniform polynomial budget is $P_0(N+1)^{d_0}$,
+    take $P=P_0^2$ and $d=2d_0$.
+    The actual padded chain satisfies its interaction hypotheses, and
+    Lemma~\ref{thm:lvv_padding_ground_gap} supplies the required
+    ground vector and gap. Use the stage-$L$ family of this same run.
+    Lemma~\ref{thm:lvv_padding_prefix_mps} gives squared error at most
+    $2c/N\le R^{-2}$ and bond at most
+    $[P_0(N+1)^{d_0}]^2=P(N+1)^d$.
+    The coefficient and degree were chosen before both $L$ and $R$.
+\end{proof}

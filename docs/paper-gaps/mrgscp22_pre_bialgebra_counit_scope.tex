@@ -1,0 +1,162 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+
+\input{./command}
+
+\title{Pre-Bialgebras of Matrix Product Operator Algebras: Existence of the Counit of the Fusion Coproduct}
+\author{}
+\date{2026-11-03}
+
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+\section{The source definition}
+
+Ref.~\cite{Molnar2022MPOAlgebrasI} defines a coalgebra as a triple
+$(\mathcal C,\Delta,\epsilon)$, where $\mathcal C$ is a finite-dimensional
+complex vector space, $\Delta\colon\mathcal C\to\mathcal C\otimes\mathcal C$
+is coassociative,
+\begin{align}
+    (\Delta\otimes\Id)\circ\Delta
+        &=(\Id\otimes\Delta)\circ\Delta,
+    \label{eq:mrgscp22_coassoc}
+\end{align}
+and $\epsilon\in\mathcal C^*$ is a counit,
+\begin{align}
+    (\epsilon\otimes\Id)\circ\Delta
+        &=(\Id\otimes\epsilon)\circ\Delta
+         =\Id
+    \label{eq:mrgscp22_counit}
+\end{align}
+(Definition~3.1).  A pre-bialgebra is an algebra $\mathcal A$ that is also
+a coalgebra such that the coproduct is multiplicative,
+\begin{align}
+    \Delta(xy)
+        &=\Delta(x)\Delta(y)
+        \qquad (x,y\in\mathcal A)
+    \label{eq:mrgscp22_mult}
+\end{align}
+(Definition~4.1).\footnote{Source coordinates in \path{mpo.tex} from
+    \href{https://arxiv.org/abs/2204.05940}{arXiv:2204.05940}:
+    lines~866--875 for Definition~3.1 and lines~1409--1414 for
+    Definition~4.1.}
+No relation between the counit and the unit or the product is imposed:
+the section introduces pre-bialgebras as ``bialgebras without any property
+imposed on the unit and counit'', and $\Delta(1)\neq1\otimes1$ is allowed,
+in which case the image of $\Delta(1)$ in a tensor product of two
+representations is a projector rather than the identity.\footnote{Lines~1407, 1421 and~1708
+    (equation \texttt{eq:delta\_epsilon}).}
+The counit of~(\ref{eq:mrgscp22_counit}) is nevertheless part of the
+definition, and it is used: the unit of the dual pre-bialgebra
+$\mathcal A^*$ is the counit of $\mathcal A$ (line~1419), and the tensor
+product of two representations of $\mathcal A^*$ is the restriction to the
+range of $\Delta(\epsilon)$ (line~1640).
+
+\section{What is formalized}
+
+The formal pre-bialgebra structure on an algebra $\mathcal A$ over a
+commutative semiring is the source's: a coalgebra structure, with a
+coproduct $\Delta$ satisfying~(\ref{eq:mrgscp22_coassoc}) and a counit
+$\epsilon$ satisfying~(\ref{eq:mrgscp22_counit}), whose coproduct is
+multiplicative~(\ref{eq:mrgscp22_mult}).  Neither $\Delta(1)=1\otimes1$ nor
+any compatibility of $\epsilon$ with the unit or the product is required.
+The source works over $\C$ in finite dimension; the formal structure allows
+any commutative semiring and any module.
+
+The fusion coproduct of a complete zipper fusion family is defined on the
+boundary algebra $\mathcal B=\bigoplus_cM_{D_c}(\C)$ from the fusion
+tensors.  It is multiplicative and coassociative, $\Delta(1)$ is the support
+projector of the fusion tensors, and on the elements
+$T^{ik}=(T_c^{ik})_c$ formed by one letter of every block it is
+\begin{align}
+    \Delta(T^{ik})
+        &=\sum_jT^{ij}\otimes T^{jk}.
+    \label{eq:mrgscp22_letter}
+\end{align}
+These elements span $\mathcal B$.  Consequently, if
+$\epsilon\colon\mathcal B\to\C$ is a linear functional with
+\begin{align}
+    \epsilon(T^{ik})
+        &=\delta_{ik},
+    \label{eq:mrgscp22_counit_letters}
+\end{align}
+then~(\ref{eq:mrgscp22_letter}) gives
+$(\epsilon\otimes\Id)\Delta(T^{ik})=T^{ik}=(\Id\otimes\epsilon)\Delta(T^{ik})$,
+so $\epsilon$ satisfies~(\ref{eq:mrgscp22_counit}) and
+$(\mathcal B,\Delta,\epsilon)$ is a pre-bialgebra in the sense of
+Definition~4.1.  Such a functional is unique, since the elements $T^{ik}$
+span.  It exists when one block $c_0$ is the identity operator,
+$T_{c_0}^{ik}=\delta_{ik}\Id$: the normalized trace
+$X\mapsto D_{c_0}^{-1}\tr X_{c_0}$ then
+satisfies~(\ref{eq:mrgscp22_counit_letters}).\footnote{Formal declarations:
+    \leanid{PreBialgebra} in \doclink{TNLean/Algebra/PreBialgebra};
+    \leanid{MPOTensor.CompleteZipperFusionFamily.rTensor_counit_comp_comul},
+    \leanid{MPOTensor.CompleteZipperFusionFamily.lTensor_counit_comp_comul},
+    \leanid{MPOTensor.CompleteZipperFusionFamily.counit_unique},
+    \leanid{MPOTensor.CompleteZipperFusionFamily.identityBlockCounit_letter}
+    and \leanid{MPOTensor.CompleteZipperFusionFamily.toPreBialgebra} in
+    \doclink{TNLean/MPS/MPDO/CompleteZipperFusionCoassoc}.  The blueprint
+    entries are \path{def:mpoalg_pre_bialgebra} and
+    \path{thm:mpoalg_fusion_coproduct_coassoc} in
+    \path{blueprint/src/chapter/ch30_mpo_algebras.tex}.}
+
+The functional~(\ref{eq:mrgscp22_counit_letters}) is the source's counit.
+In the source the boundary algebra is the dual algebra $\mathcal A^*$ of a
+pre-bialgebra $\mathcal A$, through the direct sum $\psi$ of the irreducible
+representations of $\mathcal A^*$, and $T^{ik}=\psi(\phi_{ik})$ is the image
+of the matrix coefficient $\phi_{ik}\colon x\mapsto\phi(x)_{ik}$ of the
+injective physical representation $\phi$ of $\mathcal A$.  The counit of
+$\mathcal A^*$ is $f\mapsto f(1)$ (lines~880 and~1419), and $\phi$ is a
+representation of the unital algebra $\mathcal A$, so $\phi(1)=\Id$
+(line~1421).  Hence the counit of $\mathcal B$ is
+$\psi(f)\mapsto f(1)$, and $\psi(\phi_{ik})\mapsto\phi(1)_{ik}=\delta_{ik}$.
+
+\section{What is missing}
+
+A complete zipper fusion family records the blocks, the fusion tensors and
+their left inverses of Ref.~\cite{Bultinck2017Anyons}, not the unital
+algebra $\mathcal A$ or the unitality of $\phi$, and its fields do not force
+a functional with~(\ref{eq:mrgscp22_counit_letters}) to exist.  Writing a
+functional on $\mathcal B$ as $X\mapsto\sum_c\tr(Y_cX_c)$, such a functional
+exists exactly when the identity operator on one site is a one-site operator
+of the family,
+\begin{align}
+    \sum_c\tr\bigl(Y_cT_c^{ik}\bigr)
+        &=\delta_{ik}
+    \qquad\text{for some }Y\in\mathcal B.
+    \label{eq:mrgscp22_unit_condition}
+\end{align}
+This can fail, and then $\Delta$ may have no counit at all.  Take one block
+of bond dimension one, physical dimension two, letters
+$T^{ik}=\delta_{i1}\delta_{k2}$, no fusion channel ($N^c_{ab}=0$, so the
+fusion tensors are empty), and the left inverse that reads off the entry
+$(i,k)=(1,2)$.  Every field holds: the block is injective since its only
+nonzero letter spans $M_1(\C)$, and both zipper identities and the
+reconstruction identity reduce to $\sum_jT^{ij}T^{jk}=0$.  The coproduct is
+$\Delta=0$ on $\mathcal B=\C$, so the left side of~(\ref{eq:mrgscp22_counit})
+vanishes for every $\epsilon$.
+
+The formal pre-bialgebra structure on $\mathcal B$ therefore takes a
+functional satisfying~(\ref{eq:mrgscp22_counit_letters}) as an argument.
+With it, the statement is the source's statement that $\mathcal A^*$ is a
+pre-bialgebra (line~1640), read on the boundary algebra.
+
+\section{Elimination plan}
+
+The condition~(\ref{eq:mrgscp22_unit_condition}) holds whenever the family
+arises from the source's data, that is, from the irreducible representations
+of the dual of a pre-bialgebra together with a unital injective physical
+representation.  Formalizing that construction, from a pre-bialgebra to a
+complete zipper fusion family, supplies the functional and removes the
+argument.  Adding~(\ref{eq:mrgscp22_unit_condition}) as a field of the family
+instead would add a hypothesis to the results stated for the family of
+Ref.~\cite{Bultinck2017Anyons}, which does not assert it.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}

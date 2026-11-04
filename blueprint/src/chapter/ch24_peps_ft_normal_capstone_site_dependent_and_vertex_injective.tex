@@ -66,11 +66,39 @@ standing regime of at least three sites, whereas Lemma~\ref{thm:peps_cycle_two_s
     $\{A_{(s)}^z:|z|=m+1\}$.
 \end{proof}
 
+\begin{lemma}[Cancellation against a spanning matrix family]
+    \label{lem:chain_spanning_matrix_cancellation}
+    \lean{MPSChainTensor.eq_of_span_mul_left,
+        MPSChainTensor.eq_of_mul_span_right}
+    \leanok
+    Let $I$ be an arbitrary index set, and let
+    $W_i\in\MN{D}$, $i\in I$, span $\MN{D}$ over $\C$.
+    For $X,Y\in\MN{D}$, either of the identities
+    \begin{align}
+        W_iX=W_iY\quad(\forall i\in I),
+        \qquad\text{or}\qquad
+        XW_i=YW_i\quad(\forall i\in I)
+        \label{eq:chain_spanning_matrix_cancellation}
+    \end{align}
+    implies $X=Y$. This is the uniqueness argument for virtual insertions
+    in \cite[Lemma~5]{Molnar2018NormalPEPS}; no finiteness condition on
+    $I$ is needed.
+\end{lemma}
+\begin{proof}\leanok
+    For the first identity, the linear maps $\rho_X(W)=WX$ and $\rho_Y(W)=WY$
+    on $\MN{D}$ agree on every $W_i$. Since the $W_i$ span $\MN{D}$,
+    $\rho_X=\rho_Y$, and
+    \begin{align}
+        X=\rho_X(\Id)=\rho_Y(\Id)=Y.
+    \end{align}
+    For the second identity, apply the same argument to
+    $\lambda_X(W)=XW$ and $\lambda_Y(W)=YW$.
+\end{proof}
+
 \begin{lemma}[Bond-operator extraction from overlapping windows,
         site-dependent form]%
     \label{lem:chain_overlapWindow_exists_bondOperator}
     \lean{MPSChainTensor.overlapWindow_exists_bondOperator}
-    \lean{MPSChainTensor.eq_of_span_mul_left}
     \leanok
     \uses{def:chain_arc_window_injective}
     Let $0<L$, $2L+1\le n$, let $A=(A_0,\ldots,A_{n-1})$ with $A_s\in\MN{D}^d$
@@ -97,15 +125,16 @@ standing regime of at least three sites, whereas Lemma~\ref{thm:peps_cycle_two_s
     (with constant specialization Lemma~\ref{lem:overlapWindow_exists_bondOperator}).
 \end{lemma}
 \begin{proof}\leanok
-    \uses{lem:isWindowInjective_arc_span, def:chain_arc_window_injective}
+    \uses{lem:isWindowInjective_arc_span, def:chain_arc_window_injective,
+        lem:chain_spanning_matrix_cancellation}
     Since $n-L-1\ge L$, Lemma~\ref{lem:isWindowInjective_arc_span} and trace
     nondegeneracy strip the complementary arc to give
     $C_j(u_1\cdots u_L)A_{r+j+L}^{u_{L+1}}=A_{r+j}^{u_1}C_{j+1}(u_2\cdots u_{L+1})$
     for $0\le j<L$. Chaining $j=0,\ldots,L-1$ yields
     $C_0(a)A_{(r+L)}^b=A_{(r)}^aC_L(b)$ for all $|a|=|b|=L$. Choosing $\alpha_b$
     with $\sum_b\alpha_bA_{(r+L)}^b=\Id$ and setting $X:=\sum_b\alpha_bC_L(b)$
-    gives $A_{(r)}^a X=C_0(a)$ and $X A_{(r+L)}^b=C_L(b)$; spanning of
-    $\{A_{(r)}^a\}$ makes $X$ unique.
+    gives $A_{(r)}^a X=C_0(a)$ and $X A_{(r+L)}^b=C_L(b)$;
+    Lemma~\ref{lem:chain_spanning_matrix_cancellation} makes $X$ unique.
 \end{proof}
 
 \begin{lemma}[Arc transfer between same-state chains]%

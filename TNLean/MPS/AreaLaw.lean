@@ -9,6 +9,8 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.MPS.AreaLaw
 
 import TNLean.MPS.AreaLaw.AKLV
+import TNLean.MPS.AreaLaw.ALVV
+import TNLean.MPS.AreaLaw.ActualClippedPolynomialFamily
 import TNLean.MPS.AreaLaw.AreaLaw
 import TNLean.MPS.AreaLaw.BandDissolution
 import TNLean.MPS.AreaLaw.BandInformation
@@ -27,6 +29,7 @@ import TNLean.MPS.AreaLaw.CopyProduct
 import TNLean.MPS.AreaLaw.CopyRegionEntropy
 import TNLean.MPS.AreaLaw.Counting
 import TNLean.MPS.AreaLaw.CutMatrixGrowth
+import TNLean.MPS.AreaLaw.DGEntropyParameters
 import TNLean.MPS.AreaLaw.DomainGraphGeometry
 import TNLean.MPS.AreaLaw.DomainInformationReset
 import TNLean.MPS.AreaLaw.DomainInteractionBudget
@@ -40,10 +43,13 @@ import TNLean.MPS.AreaLaw.DomainSupportedGaussianIntegral
 import TNLean.MPS.AreaLaw.DoubledHamiltonian
 import TNLean.MPS.AreaLaw.EntropyInequalities
 import TNLean.MPS.AreaLaw.EntropyScaling
+import TNLean.MPS.AreaLaw.FiveRegionHamiltonian
+import TNLean.MPS.AreaLaw.FiveRegionTruncationResidual
 import TNLean.MPS.AreaLaw.FixedConfigurationExtension
 import TNLean.MPS.AreaLaw.GluingHamiltonian
 import TNLean.MPS.AreaLaw.Hamiltonian
 import TNLean.MPS.AreaLaw.Hastings
+import TNLean.MPS.AreaLaw.Huang
 import TNLean.MPS.AreaLaw.InformationReset
 import TNLean.MPS.AreaLaw.InteractionBudget
 import TNLean.MPS.AreaLaw.IntervalMPOTransfer
@@ -64,7 +70,12 @@ import TNLean.MPS.AreaLaw.OpenMPSRank
 import TNLean.MPS.AreaLaw.OpenMPSSpan
 import TNLean.MPS.AreaLaw.OverlapEnergy
 import TNLean.MPS.AreaLaw.PartialSwap
+import TNLean.MPS.AreaLaw.PhysicalChebyshevViability
+import TNLean.MPS.AreaLaw.PhysicalDGEntropy
+import TNLean.MPS.AreaLaw.PhysicalDGViability
 import TNLean.MPS.AreaLaw.PhysicalIntervalTransport
+import TNLean.MPS.AreaLaw.PhysicalPeriodicPolynomialFamily
+import TNLean.MPS.AreaLaw.PhysicalPolynomialTensorFamily
 import TNLean.MPS.AreaLaw.PolynomialFilterParameters
 import TNLean.MPS.AreaLaw.ProductCutIteration
 import TNLean.MPS.AreaLaw.ProductReplacement
@@ -92,21 +103,32 @@ import TNLean.MPS.AreaLaw.ProtocolUniformPreparation
 import TNLean.MPS.AreaLaw.RangeOneCut
 import TNLean.MPS.AreaLaw.RangeOneSupport
 import TNLean.MPS.AreaLaw.RegionalMiddleFactors
+import TNLean.MPS.AreaLaw.RegionalTruncationResidual
 import TNLean.MPS.AreaLaw.RelativeGeneratorLocalization
 import TNLean.MPS.AreaLaw.RenyiEntropy
 import TNLean.MPS.AreaLaw.ResetSupportSeparation
 import TNLean.MPS.AreaLaw.RetainedCoreFamilies
+import TNLean.MPS.AreaLaw.RetainedCoreTracePresentation
 import TNLean.MPS.AreaLaw.SelectedCoefficientDecomposition
 import TNLean.MPS.AreaLaw.SelectedMiddleData
 import TNLean.MPS.AreaLaw.SelectedMiddleMPOFamily
 import TNLean.MPS.AreaLaw.SequentialTruncation
 import TNLean.MPS.AreaLaw.SharpChainCompression
 import TNLean.MPS.AreaLaw.SharpPhysicalCompression
+import TNLean.MPS.AreaLaw.ShortRegionViableFamily
+import TNLean.MPS.AreaLaw.SnakeGridApproximation
+import TNLean.MPS.AreaLaw.SnakeGridAreaLaw
+import TNLean.MPS.AreaLaw.SnakeGridGeometry
+import TNLean.MPS.AreaLaw.SnakeGridParameters
+import TNLean.MPS.AreaLaw.StripApproximation
+import TNLean.MPS.AreaLaw.StripBufferDiscount
+import TNLean.MPS.AreaLaw.StripGeometry
 import TNLean.MPS.AreaLaw.SupportedCutRank
 import TNLean.MPS.AreaLaw.SupportedGaussianIntegral
 import TNLean.MPS.AreaLaw.SwappedDoubledHamiltonian
 import TNLean.MPS.AreaLaw.ThreeRegionSupport
 import TNLean.MPS.AreaLaw.TraceCoreSlices
+import TNLean.MPS.AreaLaw.TraceIntervalTransfer
 import TNLean.MPS.AreaLaw.TwoCutEdgeSupports
 import TNLean.MPS.AreaLaw.TwoCutOperatorForms
 import TNLean.MPS.AreaLaw.TwoWindowFamilyCardinality

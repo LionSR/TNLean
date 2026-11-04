@@ -39,27 +39,25 @@
       "theorems": [
         "thm:qpf",
         "thm:qpf_irreducible",
-        "thm:left_canonical_gauge"
-      ],
-      "corollaries": [],
-      "notes": {
-        "thm:qpf": "Quantum Perron--Frobenius theorem named in the chapter title",
-        "thm:qpf_irreducible": "Irreducible version: unique strictly positive fixed point, as stated in the opening paragraph",
-        "thm:left_canonical_gauge": "Existence of the left-canonical gauge, the canonical gauge the opening says these fixed points determine"
-      }
-    },
-    "ch:spectral": {
-      "theorems": [
+        "thm:left_canonical_gauge",
         "thm:modulus_one_gauge",
         "thm:overlap_decay",
         "thm:primitive_overlap"
       ],
       "corollaries": [],
       "notes": {
+        "thm:qpf": "Quantum Perron--Frobenius theorem named in the chapter title",
+        "thm:qpf_irreducible": "Irreducible version: unique strictly positive fixed point, as stated in the opening paragraph",
+        "thm:left_canonical_gauge": "Existence of the left-canonical gauge, the canonical gauge the opening says these fixed points determine",
         "thm:modulus_one_gauge": "Named in the opening: spectral radius one forces gauge-phase equivalence",
         "thm:overlap_decay": "Named in the opening: overlap-decay theorem",
         "thm:primitive_overlap": "Named in the opening: primitive self-overlap convergence; cited from six other chapters"
       }
+    },
+    "ch:spectral": {
+      "theorems": [],
+      "corollaries": [],
+      "notes": {}
     },
     "ch:wielandt": {
       "theorems": [
@@ -123,15 +121,12 @@
         "thm:periodic_ft_equal_case_trace_preserving",
         "thm:periodic_ft_proportional",
         "thm:irreducible_form_physical_symmetry",
-        "thm:thm_4_1_p_refinement"
+        "thm:thm_4_1_p_refinement_forward_unit_weights"
       ],
       "corollaries": [
         "thm:periodic_ft_supplied_periods",
         "thm:periodic_equalcase_unit_weights",
-        "cor:symmetry_periodic_assembly",
         "thm:periodic_ft_proportional_supplied_periods",
-        "cor:cor_4_1_physical_symmetry_zgauge",
-        "thm:zgauge_equiv_periodicFT_irreducible_form",
         "cor:z_gauge_blockTensor_same_mpv"
       ],
       "notes": {
@@ -139,14 +134,16 @@
         "thm:periodic_ft_equal_case_trace_preserving": "Source theorem: De las Cuevas et al. Theorem 3.8, equal case with trace-preserving blocks",
         "thm:periodic_ft_proportional": "Proportional periodic Fundamental Theorem (De las Cuevas et al., Theorem 3.4)",
         "thm:irreducible_form_physical_symmetry": "Lifting of physical symmetries in irreducible form II to virtual gauges, named in the opening",
-        "thm:thm_4_1_p_refinement": "p-refinability iff p-divisibility of the transfer map (Theorem 4.1), named in the opening"
+        "thm:thm_4_1_p_refinement_forward_unit_weights": "Corrected forward Theorem 4.1 for explicit periodic blocks with unit-modulus weights; the reverse root-selection problem remains separate"
       }
     },
     "ch:algebraic_ft": {
       "theorems": [
         "thm:ft_canonical_form_same_structure",
         "thm:pgvwc07_ti_uniqueness_printed",
-        "thm:fundamentalTheorem_injective_chain"
+        "thm:fundamentalTheorem_injective_chain",
+        "thm:obc_schmidt_canonical",
+        "thm:obc_rectangular_canonical_freedom"
       ],
       "corollaries": [
         "thm:fundamentalTheorem_injective_chain_gaugePhase",
@@ -157,52 +154,76 @@
       "notes": {
         "thm:ft_canonical_form_same_structure": "Fundamental Theorem for block-diagonal canonical forms with the same block structure",
         "thm:pgvwc07_ti_uniqueness_printed": "Source theorem: Perez-Garcia et al. Theorem 7, uniqueness of the canonical form",
-        "thm:fundamentalTheorem_injective_chain": "Fundamental Theorem for injective chains, the chain theorem of the opening paragraph"
+        "thm:fundamentalTheorem_injective_chain": "Fundamental Theorem for injective chains, the chain theorem of the opening paragraph",
+        "thm:obc_schmidt_canonical": "Exact normalized-state OBC existence with both Schmidt canonical equations and faithful diagonal cut densities",
+        "thm:obc_rectangular_canonical_freedom": "Source OBC representation freedom by derived rectangular local maps to the actual simultaneous canonical form"
       }
     },
     "ch:parent_hamiltonian": {
       "theorems": [
-        "thm:half_chain_source_limit",
+        "thm:primitive_fnw_projector_defect_geometric",
+        "thm:ground_space_iff"
+      ],
+      "corollaries": [],
+      "notes": {
+        "thm:primitive_fnw_projector_defect_geometric": "Geometric projector estimate of Fannes, Nachtergaele and Werner for primitive tensors, used for the spectral gaps of later chapters",
+        "thm:ground_space_iff": "Intersection property of the local ground spaces of an injective tensor, the basis of the uniqueness proofs in the next chapter"
+      }
+    },
+    "ch:parent_hamiltonian_unique_ground_states": {
+      "theorems": [
         "thm:parent_hamiltonian_unique_gs",
         "thm:unique_gs_injective",
         "thm:unique_gs_normal"
       ],
       "corollaries": [],
       "notes": {
-        "thm:half_chain_source_limit": "Source theorem: Perez-Garcia et al. Theorem 6, half-chain interpretation",
         "thm:parent_hamiltonian_unique_gs": "Source theorem: Perez-Garcia et al. Theorem 10, uniqueness throughout the interaction range",
         "thm:unique_gs_injective": "Unique ground state for injective tensors, stated in the opening",
         "thm:unique_gs_normal": "Unique ground state for normal tensors at range L_0+1, stated in the opening"
       }
     },
+    "ch:parent_hamiltonian_half_chain_uncle": {
+      "theorems": [
+        "thm:half_chain_source_limit",
+        "thm:uncle_periodic_ground_space",
+        "thm:uncle_generic_finite_volume_gaplessness",
+        "thm:half_chain_general_c2_source"
+      ],
+      "corollaries": [],
+      "notes": {
+        "thm:half_chain_source_limit": "Source theorem: Perez-Garcia et al. Theorem 6, half-chain interpretation",
+        "thm:uncle_periodic_ground_space": "Full actual finite uncle-Hamiltonian ground-space theorem, Fernández-González et al. Theorem thm:gs-subspace-uncle",
+        "thm:uncle_generic_finite_volume_gaplessness": "Generic finite-volume uncle gaplessness via actual two-wall trials and the full actual ground-space projection; the infinite-volume claim remains separate",
+        "thm:half_chain_general_c2_source": "PGVWC07 Theorem 6: half-chain spectrum of the actual general weighted canonical tensor under normalized generic C2"
+      }
+    },
     "ch:parent_hamiltonian_commuting_and_gap": {
       "theorems": [
         "thm:rfp_multiplicity_one_bnt_iff_nncph_ground_spaces",
-        "thm:tripartite_parent_iff_decorrelated",
-        "thm:compact_parent_gap",
-        "thm:primitive_parent_hamiltonian_finite_range_knabe_gap"
+        "thm:tripartite_parent_iff_decorrelated"
       ],
-      "corollaries": [
-        "cor:commutator_gap_rank_one_limit"
-      ],
+      "corollaries": [],
       "notes": {
         "thm:rfp_multiplicity_one_bnt_iff_nncph_ground_spaces": "Fixed points iff commuting parent ground spaces (CPSV16 Theorem 3.10), first topic of the opening",
-        "thm:tripartite_parent_iff_decorrelated": "Commuting parent Hamiltonian iff decorrelation (CPSV16 Proposition D.3), second topic of the opening",
-        "thm:compact_parent_gap": "Uniform parent gap on compact parameter sets (Schuch et al., Appendix A)",
-        "thm:primitive_parent_hamiltonian_finite_range_knabe_gap": "Uniform finite-range spectral gap for primitive parent Hamiltonians, third topic of the opening"
+        "thm:tripartite_parent_iff_decorrelated": "Commuting parent Hamiltonian iff decorrelation (CPSV16 Proposition D.3), second topic of the opening"
       }
     },
     "ch:parent_hamiltonian_block_ground_spaces": {
       "theorems": [
         "thm:ph_primitive_blocks_sharp_open_kernel",
-        "thm:block_diagonal_chain_space_global_cut"
+        "thm:block_diagonal_chain_space_global_cut",
+        "thm:canonical_arbitrary_interaction_degeneracy",
+        "thm:eventual_mps_prime_length_dichotomy"
       ],
       "corollaries": [
         "cor:block_diagonal_kernel_global_cut"
       ],
       "notes": {
         "thm:ph_primitive_blocks_sharp_open_kernel": "Source theorem: the printed open-chain threshold of Perez-Garcia et al. Theorem 12",
-        "thm:block_diagonal_chain_space_global_cut": "Periodic ground space of a block-injective tensor is the span of the block vectors (Perez-Garcia et al., Theorem 12)"
+        "thm:block_diagonal_chain_space_global_cut": "Periodic ground space of a block-injective tensor is the span of the block vectors (Perez-Garcia et al., Theorem 12)",
+        "thm:canonical_arbitrary_interaction_degeneracy": "Arbitrary positive local interactions annihilate every separated canonical block and have at least as many ground states as blocks",
+        "thm:eventual_mps_prime_length_dichotomy": "Quantified asymptotic SPWC10 ground-state dichotomy with a fixed tensor or an explicit prime-length fifth-degree obstruction"
       }
     },
     "ch:correlations": {
@@ -218,8 +239,6 @@
     },
     "ch:symmetry": {
       "theorems": [
-        "thm:spt_classification",
-        "thm:has_string_order_of_symmetric_injective",
         "thm:pgwsvc08_physical_string_order",
         "thm:virtual_rep_injective"
       ],
@@ -227,10 +246,35 @@
         "cor:virtual_rep_cocycle"
       ],
       "notes": {
-        "thm:spt_classification": "Classification of SPT phases along symmetric parent-Hamiltonian paths by the cocycle class",
-        "thm:has_string_order_of_symmetric_injective": "Virtual-boundary nondecay for injective symmetric tensors, named in the chapter title",
         "thm:pgwsvc08_physical_string_order": "Physical string-order criterion of Perez-Garcia et al. 2008, named in the chapter title",
         "thm:virtual_rep_injective": "On-site symmetries of injective tensors induce projective virtual representations, the first result of the opening"
+      }
+    },
+    "ch:symmetry_spt": {
+      "theorems": [
+        "thm:spt_classification",
+        "thm:has_string_order_of_symmetric_injective"
+      ],
+      "corollaries": [],
+      "notes": {
+        "thm:spt_classification": "Classification of SPT phases along symmetric parent-Hamiltonian paths by the cocycle class",
+        "thm:has_string_order_of_symmetric_injective": "Virtual-boundary nondecay (string order) for injective symmetric tensors"
+      }
+    },
+    "ch:symmetry_spt_virtual_paths": {
+      "theorems": [],
+      "corollaries": [],
+      "notes": {}
+    },
+    "ch:symmetry_spt_compact_limits": {
+      "theorems": [
+        "thm:spt_exact_ground_physical_class",
+        "thm:spt_exact_phase_injective_classification"
+      ],
+      "corollaries": [],
+      "notes": {
+        "thm:spt_exact_ground_physical_class": "Physical-gap converse across changes of minimal MPS bond dimension, derived without a supplied transfer bound",
+        "thm:spt_exact_phase_injective_classification": "Phase/cohomology equivalence for one-site injective endpoints with prescribed exact virtual covariance, combining physical forward and converse directions"
       }
     },
     "ch:examples": {
@@ -278,48 +322,39 @@
     },
     "ch:mpdo_rfp": {
       "theorems": [
-        "thm:rfp-saturates-area-law",
         "thm:rfp_via_ts_physical_trace_idempotent",
-        "thm:prfp_physical_trace_idempotent",
-        "thm:mpdo_theorem49_iv_to_v_counterexample"
+        "thm:prfp_physical_trace_idempotent"
       ],
       "corollaries": [
-        "cor:mpo_diagonal_classical_mutual_information",
-        "thm:rfp_constant_entropy",
-        "cor:mpdo_horizontal_rfp_implies_sal",
-        "cor:mpdo_horizontal_rfp_implies_zcl_and_sal",
         "thm:mpdo_zcl_periodic_correlation_positive_gaps_independent",
         "thm:rfp_via_ts_source_zcl",
-        "cor:mpdo_bnt_orthogonal_sector_sum_sal",
-        "cor:mpdo_bnt_sector_sal_gsnnch",
-        "cor:peps_local_boundary_tensor_is_mpdo",
-        "cor:mpdo_simple_zcl_weight_copy_independent",
-        "cor:mpdo_simple_scale_invariant_zcl_weight_copy_independent",
-        "cor:mpdo_bnt_three_site_outer_inverse_collapse",
-        "cor:mpdo_sector_eta_cycle_positive_rescaling",
-        "cor:mpdo_normal_fixed_product_tensor_of_is_sal",
-        "cor:mpdo_sal_positive_cyclic_sector_products",
-        "cor:mpdo_doubled_overlap_trace_sq",
-        "cor:mpdo_doubled_overlap_frobenius",
-        "cor:mpdo_sal_zcl_local_sector_structure",
-        "cor:mpdo_common_weight_bnt_layer_supports"
+        "cor:peps_local_boundary_tensor_is_mpdo"
       ],
       "notes": {
-        "thm:rfp-saturates-area-law": "A renormalization fixed point saturates the area law (CPSV16 Proposition 3.14)",
         "thm:rfp_via_ts_physical_trace_idempotent": "Renormalization fixed points have idempotent physical-trace transfer (CPSV16 Theorem 4.9)",
-        "thm:prfp_physical_trace_idempotent": "Source theorem: CPSV16 Theorem 4.4 for purification fixed points",
-        "thm:mpdo_theorem49_iv_to_v_counterexample": "Counterexample to the printed implication (iv)=>(v) of CPSV16 Theorem 4.9"
+        "thm:prfp_physical_trace_idempotent": "Source theorem: CPSV16 Theorem 4.4 for purification fixed points"
       }
     },
     "ch:mpdo_rfp_algebraic": {
+      "theorems": [],
+      "corollaries": [
+        "cor:mpdo_bnt_label_theorem_data_blocked_coeff_eq_positive_blocked_chi_trace_pow",
+        "cor:mpdo_bnt_label_theorem_witness_blocked_coeff_eq_positive_blocked_chi_trace_pow"
+      ],
+      "notes": {}
+    },
+    "ch:mpdo_rfp_algebraic_coefficients": {
+      "theorems": [],
+      "corollaries": [],
+      "notes": {}
+    },
+    "ch:mpdo_rfp_algebraic_fusion": {
       "theorems": [
         "thm:cpsv_theorem414_printed_status",
         "thm:mpdo_cpsv_bnt_rfp_equivalence",
         "thm:mpdo_literal_cpsv_physical_coordinate_gibbs_at_least_two"
       ],
       "corollaries": [
-        "cor:mpdo_bnt_label_theorem_data_blocked_coeff_eq_positive_blocked_chi_trace_pow",
-        "cor:mpdo_bnt_label_theorem_witness_blocked_coeff_eq_positive_blocked_chi_trace_pow",
         "cor:mpdo_topological_density_factor_commutator"
       ],
       "notes": {
@@ -330,7 +365,15 @@
     },
     "ch:mpu": {
       "theorems": [
-        "thm:mpu_bounded_simple_blocking",
+        "thm:mpu_bounded_simple_blocking"
+      ],
+      "corollaries": [],
+      "notes": {
+        "thm:mpu_bounded_simple_blocking": "Simplicity after blocking D^2 sites (Sahinoglu et al. Theorem 2; Cirac et al. Proposition III.3)"
+      }
+    },
+    "ch:mpu_fundamental_theorem": {
+      "theorems": [
         "ThmFund1",
         "FundamentalMPU",
         "IndexTh"
@@ -338,25 +381,48 @@
       "corollaries": [
         "thm:mpu_admissible_index",
         "coruvSF",
-        "cor:mpu_admissible_continuous_standard_form",
-        "cor:all-equivalent-under-conjugation",
-        "cor:mpu_admissible_all_conjugation_equivalent",
-        "cor:sigma-equivalence-necessary",
-        "cor:mpu_admissible_sigma_equivalence_necessary",
-        "cor:qca_support_algebra_commutant"
+        "cor:mpu_admissible_continuous_standard_form"
       ],
       "notes": {
-        "thm:mpu_bounded_simple_blocking": "Simplicity after blocking D^2 sites (Sahinoglu et al. Theorem 2; Cirac et al. Proposition III.3)",
         "ThmFund1": "Simple-tensor equivalence theorem (Cirac et al. 2017, Theorem III.8)",
         "FundamentalMPU": "Source theorem: the Fundamental Theorem of MPU as printed in Cirac et al. 2017",
         "IndexTh": "Index theorem for matrix product unitaries (Cirac et al. 2017, Theorem IV.6)"
+      }
+    },
+    "ch:mpu_symmetries": {
+      "theorems": [
+        "conjphs",
+        "prop:conjsym-strict-equiv",
+        "prop:sigma1-and-sigma2-equal"
+      ],
+      "corollaries": [
+        "cor:all-equivalent-under-conjugation",
+        "cor:mpu_admissible_all_conjugation_equivalent",
+        "cor:sigma-equivalence-necessary",
+        "cor:mpu_admissible_sigma_equivalence_necessary"
+      ],
+      "notes": {
+        "conjphs": "Classification under conjugation when one source rank is odd (Cirac et al. 2017, Section V)",
+        "prop:conjsym-strict-equiv": "Classification under conjugation when both source ranks are even (Cirac et al. 2017, Section V)",
+        "prop:sigma1-and-sigma2-equal": "Blocking parity of the time-reversal sign, the invariant of equivalent time-reversal-invariant MPUs"
+      }
+    },
+    "ch:mpu_symmetry_examples": {
+      "theorems": [
+        "thm:mpu_actual_log_index_comparison"
+      ],
+      "corollaries": [],
+      "notes": {
+        "thm:mpu_actual_log_index_comparison": "Actual public MPU index versus positive rational index of its derived nearest-neighbour blocked QCA"
       }
     },
     "ch:asymmetric_ft": {
       "theorems": [
         "thm:asym_multiblock",
         "thm:asym_mpo_product",
-        "thm:asym_splitting"
+        "thm:asym_splitting",
+        "thm:asym_uniq_all",
+        "thm:asym_uniq_all_reductions"
       ],
       "corollaries": [
         "prop:asym_split_intertwiners",
@@ -376,36 +442,37 @@
       "notes": {
         "thm:asym_multiblock": "Multi-block asymmetric compression theorem named in the chapter title; cited 77 times from five chapters",
         "thm:asym_mpo_product": "Reduction of a product of matrix product operators; cited from two other chapters",
-        "thm:asym_splitting": "Splitting criterion, the second named result of the chapter"
+        "thm:asym_splitting": "Splitting criterion, the second named result of the chapter",
+        "thm:asym_uniq_all": "The set of all compressions of a tensor onto a family, one triangular-gauge orbit per labelled invariant flag",
+        "thm:asym_uniq_all_reductions": "The set of all reductions: existence from a labelled invariant flag and a unique torsor element for each"
       }
     },
     "ch:mpu_gauging": {
-      "theorems": [
-        "thm:mpug_anomaly_three_cocycle",
-        "thm:mpug_anomaly_obstruction",
-        "thm:mpug_h3_group_cohomology"
-      ],
-      "corollaries": [
-        "cor:mpug_anomaly_class",
-        "cor:mpug_domain_wall_string_exchange_printed",
-        "cor:mpug_normalized_source_decomposition_gauges"
-      ],
-      "notes": {
-        "thm:mpug_anomaly_three_cocycle": "The anomaly three-cocycle of a finite-group MPU representation",
-        "thm:mpug_anomaly_obstruction": "An anomaly obstructs invariant normal states",
-        "thm:mpug_h3_group_cohomology": "Fusion-gauge classes are degree-three cohomology classes"
-      }
+      "theorems": [],
+      "corollaries": [],
+      "notes": {}
     },
     "ch:asymmetric_examples": {
+      "theorems": [],
+      "corollaries": [],
+      "notes": {}
+    },
+    "ch:asymmetric_examples_non_invertible": {
+      "theorems": [],
+      "corollaries": [
+        "cor:asymex_ising_fermion_partial_isometry",
+        "cor:asymex_ising_sigma_fusion_unscaled",
+        "cor:asymex_kw_exchange",
+        "cor:asymex_kw_square"
+      ],
+      "notes": {}
+    },
+    "ch:asymmetric_examples_group_symmetries": {
       "theorems": [
         "thm:asymex_klein_printed_anomaly_class"
       ],
       "corollaries": [
         "cor:asymex_czx_decorated_no_invariant",
-        "cor:asymex_ising_fermion_partial_isometry",
-        "cor:asymex_ising_sigma_fusion_unscaled",
-        "cor:asymex_kw_exchange",
-        "cor:asymex_kw_square",
         "cor:asymex_z3anomalous_domain_wall"
       ],
       "notes": {
@@ -414,7 +481,6 @@
     },
     "ch:mpo_symmetry_basics": {
       "theorems": [
-        "thm:mpo_arbitrary_endpoint_attachment_gap",
         "thm:mposym_closed_fusion_onsite",
         "thm:mpo_symmetric_nimrep"
       ],
@@ -424,7 +490,6 @@
         "thm:mpo_symmetry_group_periodic_action"
       ],
       "notes": {
-        "thm:mpo_arbitrary_endpoint_attachment_gap": "Exact periodic ground states and uniform gap of the canonical parents",
         "thm:mposym_closed_fusion_onsite": "Closed fusion forces an on-site representation, the cohomological obstruction of the opening",
         "thm:mpo_symmetric_nimrep": "Action coefficients form a nonnegative integer representation, the integrality result of the opening"
       }
@@ -446,15 +511,11 @@
     },
     "ch:local_quantum_circuits": {
       "theorems": [
-        "thm:qc_bounded_unitary_two_site_gates",
-        "thm:qc_ghz_measurement",
-        "thm:qc_long_range_layer"
+        "thm:qc_bounded_unitary_two_site_gates"
       ],
       "corollaries": [],
       "notes": {
-        "thm:qc_bounded_unitary_two_site_gates": "Every unitary on a bounded number of sites is a bounded product of two-site gates, stated in the opening",
-        "thm:qc_ghz_measurement": "GHZ-type states in constant depth with measurements, stated in the opening",
-        "thm:qc_long_range_layer": "Distant gates in constant depth with measurements, stated in the opening"
+        "thm:qc_bounded_unitary_two_site_gates": "Every unitary on a bounded number of sites is a bounded product of two-site gates, stated in the opening"
       }
     },
     "ch:seqanc": {
@@ -472,18 +533,15 @@
     },
     "ch:log_depth_preparation": {
       "theorems": [
-        "thm:ldp_all_ti_measurement_source",
         "thm:ldp_depth_upper_bound",
         "thm:ldp_depth_lower_bound"
       ],
       "corollaries": [
-        "cor:ldp_inhomogeneous_injective",
         "cor:ldp_normal_states_circuit",
         "thm:ldp_depth_lower_bound_constant",
         "cor:ldp_depth_theta_log"
       ],
       "notes": {
-        "thm:ldp_all_ti_measurement_source": "All translation-invariant MPS with measurements (Malz et al., long-range paragraph)",
         "thm:ldp_depth_upper_bound": "Preparation in depth O(log(N/eps)) (Malz et al., eq. (1)), stated in the opening",
         "thm:ldp_depth_lower_bound": "No preparation in depth o(log N) (Malz et al., Theorem 1), stated in the opening"
       }
@@ -492,13 +550,17 @@
       "theorems": [
         "thm:factorial_commutator_conjugation",
         "thm:chain_local_imaginary_time",
-        "thm:aklv_robustness"
+        "thm:aklv_original_chain_robustness",
+        "thm:aklv_robustness",
+        "thm:aklv_inverse_gap_robustness"
       ],
       "corollaries": [],
       "notes": {
         "thm:factorial_commutator_conjugation": "Kept as converted by hand in #10267",
         "thm:chain_local_imaginary_time": "Kept as converted by hand in #10267",
-        "thm:aklv_robustness": "Source Theorem 6.1: normalized ground-vector and spectral-gap robustness under two-sided energy truncation"
+        "thm:aklv_original_chain_robustness": "Source Theorem 6.1 from the original chain, deriving the regional normalization and six-bond energy bound",
+        "thm:aklv_robustness": "AKLV Theorem 6.1: ground-vector and spectral-gap robustness of the normalized chain under exterior clipping",
+        "thm:aklv_inverse_gap_robustness": "Refinement of AKLV Theorem 6.1 at the inverse-gap cutoff 32768/g, used by the downstream area-law arguments"
       }
     },
     "ch:one_dimensional_open_mps": {
@@ -516,7 +578,9 @@
       "theorems": [
         "thm:chain_area_law",
         "thm:domain_area_law",
-        "thm:chain_mps_approximation"
+        "thm:chain_mps_approximation",
+        "thm:strip_area_law",
+        "thm:strip_mps_approximation"
       ],
       "corollaries": [
         "thm:chain_area_log_cube",
@@ -527,12 +591,15 @@
         "thm:chain_window_mps_error",
         "thm:chain_polynomial_mps_accuracy",
         "thm:chain_polynomial_mps_printed_bound",
-        "thm:chain_polynomial_mps_accuracy_bound"
+        "thm:chain_polynomial_mps_accuracy_bound",
+        "cor:snake_grid_mps"
       ],
       "notes": {
         "thm:chain_area_law": "Chain case of Theorem A, named in the main-results paragraph",
         "thm:domain_area_law": "Theorem A, named in the chapter's main-results paragraph",
-        "thm:chain_mps_approximation": "Theorem B, named in the main-results paragraph"
+        "thm:chain_mps_approximation": "Theorem B, named in the main-results paragraph",
+        "thm:strip_area_law": "The bounded-width strip extension with a quadratic width and linear inverse-gap entropy bound",
+        "thm:strip_mps_approximation": "Normalized physical-site snake approximation with explicit width and length dependence"
       }
     },
     "ch:one_dimensional_protocol": {
@@ -544,6 +611,17 @@
         "thm:chain_protocol_mps_approximation": "Theorem B by the sequential protocol, named in the chapter title"
       }
     },
+    "ch:hastings_factorization": {
+      "theorems": [
+        "lem:hastings_lemma1",
+        "thm:hastings_source_factorization"
+      ],
+      "corollaries": [],
+      "notes": {
+        "lem:hastings_lemma1": "Approximate factorization of the ground-state projector (Hastings 2007, Lemma 1)",
+        "thm:hastings_source_factorization": "Positive factorization at the source decay length, the form used by the area law"
+      }
+    },
     "ch:hastings_window": {
       "theorems": [
         "thm:hastings_area_law_source",
@@ -553,6 +631,47 @@
       "notes": {
         "thm:hastings_area_law_source": "Hastings' printed entropy bound at an admissible interaction-proportional Lieb–Robinson pair",
         "thm:hastings_mps_source": "Matrix product state approximation at the same admissible source length"
+      }
+    },
+    "ch:hastings_local_terms": {
+      "theorems": [
+        "thm:hastings05_metric_facld",
+        "thm:hastings05_metric_filter_sum",
+        "thm:hastings_supercell_truncated_small"
+      ],
+      "corollaries": [],
+      "notes": {
+        "thm:hastings05_metric_facld": "Ground states are nearly eigenvectors of the localized filtered terms (Hastings 2006, eq. facld)",
+        "thm:hastings05_metric_filter_sum": "The localized filtered terms sum to the Hamiltonian up to an exponentially small error",
+        "thm:hastings_supercell_truncated_small": "Compressions of the filtered terms nearly commute for translation-invariant systems (Hastings 2006)"
+      }
+    },
+    "ch:hastings_hierarchy": {
+      "theorems": [
+        "thm:hastings05_hierarchy_levels",
+        "thm:hastings05_final_state_count_hierarchy",
+        "thm:hastings05_hchy_every_state"
+      ],
+      "corollaries": [],
+      "notes": {
+        "thm:hastings05_hierarchy_levels": "Loss of the ground state over all levels of the hierarchy (Hastings 2006)",
+        "thm:hastings05_final_state_count_hierarchy": "At most twice the ground-space dimension of final states (Hastings 2006)",
+        "thm:hastings05_hchy_every_state": "Every final state has nearly the ground-state energy (Hastings 2006, eq. hchy)"
+      }
+    },
+    "ch:hastings_cluster_expansion": {
+      "theorems": [
+        "thm:hastings_thermal_trace_norm",
+        "thm:hastings_thermal_all_temperatures",
+        "thm:hastings_temperature_error_percolation"
+      ],
+      "corollaries": [
+        "cor:hastings_temperature_error_add_two"
+      ],
+      "notes": {
+        "thm:hastings_thermal_trace_norm": "Trace-norm bound for the truncated cluster expansion at high temperature (Hastings 2006)",
+        "thm:hastings_thermal_all_temperatures": "Matrix product form of the truncated thermal operator at every temperature (Hastings 2006, eq. mplt)",
+        "thm:hastings_temperature_error_percolation": "Error of the truncated thermal operator at every temperature (Hastings 2006)"
       }
     },
     "ch:entropy_scaling": {
@@ -579,37 +698,36 @@
         "thm:alvv_collective_trim": "Trimming a viable subspace on the chain (Arad et al.), the step the opening names"
       }
     },
+    "ch:gapped_chain_construction": {
+      "theorems": [
+        "thm:lvv_uniform_successive_approximation",
+        "thm:lvv_successive_arbitrary_accuracy",
+        "thm:lvv_sampled_ground_state"
+      ],
+      "corollaries": [],
+      "notes": {
+        "thm:lvv_uniform_successive_approximation": "Uniform polynomial successive viable families and final approximation from their retained span",
+        "thm:lvv_successive_arbitrary_accuracy": "Arbitrary accuracy with polynomial size and bond bounds via product-state extension",
+        "thm:lvv_sampled_ground_state": "Polynomial final bond from sampled successive families with bounded ground-energy-to-gap ratio"
+      }
+    },
+    "ch:gapped_chain_polynomial_filters": {
+      "theorems": [
+        "thm:alvv_ff_chain_replacement",
+        "thm:alvv_ff_corrected_rank"
+      ],
+      "corollaries": [],
+      "notes": {
+        "thm:alvv_ff_chain_replacement": "ALVV Theorem 5.14 with the corrected rank bound: regional replacement of a frustration-free chain",
+        "thm:alvv_ff_corrected_rank": "Corrected regional rank bound d^2+3, replacing the false unrestricted claim of ALVV Theorem 5.14(2)"
+      }
+    },
     "ch:peps_ft": {
       "theorems": [
-        "thm:fundamentalTheorem_normalPEPS",
-        "thm:fundamentalTheorem_normalSquarePEPS",
         "thm:fundamentalTheorem_PEPS"
       ],
-      "corollaries": [
-        "cor:fundamentalTheorem_normalMPS_cycle",
-        "cor:fundamentalTheorem_normalMPS_cycle_gauge_unique",
-        "cor:fundamentalTheorem_normalMPS",
-        "cor:fundamentalTheorem_normalMPS_gauge_unique",
-        "cor:fundamentalTheorem_normalMPS_translationInvariant",
-        "cor:fundamentalTheorem_normalMPS_translationInvariant_gauge_unique",
-        "cor:fundamentalTheorem_normalMPS_translationInvariant_of_overlap",
-        "cor:fundamentalTheorem_normalMPS_of_overlap",
-        "thm:fundamentalTheorem_normalPEPS_connected",
-        "cor:fundamentalTheorem_normalMPSChain_of_overlap",
-        "cor:fundamentalTheorem_injectiveMPSChain_of_sameState",
-        "cor:peps_cycle_shift_bond_uniform",
-        "cor:exists_gauge_to_first_of_cyclicShiftInvariantState",
-        "cor:exists_constant_injectiveMPS_of_cyclicShiftInvariantState_per_bond_pos",
-        "cor:peps_state_translation_bond_uniform",
-        "thm:fundamentalTheorem_normalPEPS_of_vertexInjective",
-        "thm:fundamentalTheorem_normalSquarePEPS_unconditional",
-        "thm:fundamentalTheorem_normalTorusPEPS",
-        "thm:fundamentalTheorem_normalTorusPEPS_unconditional",
-        "cor:peps_lambda_pow_card_torus_eq_one_of_twoBlockProportional"
-      ],
+      "corollaries": [],
       "notes": {
-        "thm:fundamentalTheorem_normalPEPS": "Fundamental Theorem for normal PEPS (Molnar et al., Section 4)",
-        "thm:fundamentalTheorem_normalSquarePEPS": "Fundamental Theorem for normal square-lattice PEPS (Molnar et al., Theorem 3)",
         "thm:fundamentalTheorem_PEPS": "Fundamental Theorem for injective PEPS named in the chapter title"
       }
     },
@@ -624,19 +742,11 @@
     },
     "ch:peps_quantum_double": {
       "theorems": [
-        "thm:peps_mps_g_injective_ground_space_structure",
-        "thm:peps_connected_untwisted_cut_entropy"
+        "thm:peps_mps_g_injective_ground_space_structure"
       ],
-      "corollaries": [
-        "cor:peps_quantum_double_dual_string_deformation",
-        "cor:peps_g_injective_strip_boundary",
-        "cor:peps_g_injective_strip_parent_boundary",
-        "cor:peps_regular_boundary_local_matrix_unit",
-        "cor:peps_torus_plaquette_class_orthogonality"
-      ],
+      "corollaries": [],
       "notes": {
-        "thm:peps_mps_g_injective_ground_space_structure": "Structure of the ground space of a G-injective tensor",
-        "thm:peps_connected_untwisted_cut_entropy": "Entropy of a connected untwisted cut, the reduced-density result of the opening"
+        "thm:peps_mps_g_injective_ground_space_structure": "Structure of the ground space of a G-injective tensor"
       }
     },
     "ch:peps_regions": {
@@ -684,26 +794,13 @@
     },
     "ch:peps_angular_patches": {
       "theorems": [
-        "thm:openai_uniform_area_law",
-        "thm:openai_square_area_law",
-        "thm:openai_polynomial_peps",
-        "thm:area_law_two_family_decomposition",
         "thm:peps_adaptive_patch_constraint"
       ],
       "corollaries": [
-        "cor:peps_angular_reset_width_fits_explicit",
-        "cor:peps_angular_reset_width_fits",
-        "cor:area_law_bootstrap_energy_expression",
-        "thm:polynomial_peps_explicit_constants",
-        "cor:rectangles",
         "cor:peps_regularized_patch_exp_bounds",
         "cor:peps_regularized_patch_log_minimum_continuous"
       ],
       "notes": {
-        "thm:openai_uniform_area_law": "Uniform finite-domain area law (area-law manuscript, Theorem 1.1)",
-        "thm:openai_square_area_law": "Entropy area law on the square grid (area-law manuscript, Corollary 1.2 and Proposition 2.1)",
-        "thm:openai_polynomial_peps": "Polynomial PEPS approximation (PEPS manuscript, Theorem 1.1)",
-        "thm:area_law_two_family_decomposition": "Two families with separated birth templates, the geometric input of the area law (area-law manuscript, Section 11)",
         "thm:peps_adaptive_patch_constraint": "The adaptive patch constraint, the second analytic input"
       }
     },
@@ -719,25 +816,17 @@
       }
     },
     "ch:peps_area_law_geometry": {
-      "theorems": [
-        "thm:area_law_two_family_explicit_constant"
-      ],
+      "theorems": [],
       "corollaries": [],
-      "notes": {
-        "thm:area_law_two_family_explicit_constant": "Two-family partition with controlled cut clearance, the outcome named in the opening"
-      }
+      "notes": {}
     },
     "ch:peps_area_law_amplification_and_shells": {
       "theorems": [
-        "thm:area_law_amplification",
-        "thm:area_law_two_family_entropy"
+        "thm:area_law_amplification"
       ],
-      "corollaries": [
-        "cor:peps_small_cell_information"
-      ],
+      "corollaries": [],
       "notes": {
-        "thm:area_law_amplification": "Collar amplification (area-law manuscript, Proposition 10.2)",
-        "thm:area_law_two_family_entropy": "Two-family entropy bound (area-law manuscript, Lemma 11.1), first topic of the opening"
+        "thm:area_law_amplification": "Collar amplification (area-law manuscript, Proposition 10.2)"
       }
     },
     "ch:peps_area_law_constraints": {
@@ -745,9 +834,7 @@
         "thm:al_positive_replacement",
         "thm:al_lattice_positive_replacement"
       ],
-      "corollaries": [
-        "cor:al_scan_front_prefix_family"
-      ],
+      "corollaries": [],
       "notes": {
         "thm:al_positive_replacement": "Positive replacement of the Hamiltonian by quasi-local constraints (area-law manuscript, Proposition 4.3)",
         "thm:al_lattice_positive_replacement": "Positive replacement on an induced lattice domain; cited from two other chapters"
@@ -755,30 +842,29 @@
     },
     "ch:peps_area_law": {
       "theorems": [
-        "thm:area_law_conditional_two_families"
+        "thm:area_law_conditional_two_families",
+        "thm:area_law_two_family_entropy"
       ],
       "corollaries": [
         "thm:area_law_closed_constant",
         "thm:square_area_law_range_constant",
-        "thm:polynomial_peps_range_explicit_constants"
+        "thm:polynomial_peps_range_explicit_constants",
+        "cor:peps_small_cell_information"
       ],
       "notes": {
-        "thm:area_law_conditional_two_families": "Uniform area law from the two-family decomposition (area-law manuscript, Theorem 1.1, Section 11)"
+        "thm:area_law_conditional_two_families": "Uniform area law from the two-family decomposition (area-law manuscript, Theorem 1.1, Section 11)",
+        "thm:area_law_two_family_entropy": "Two-family entropy bound (area-law manuscript, Lemma 11.1), first topic of the opening"
       }
     },
     "ch:peps_approximation": {
       "theorems": [
-        "thm:peps_protocol_from_angular_and_patch_bounds",
-        "thm:peps_ground_state_approximation_conditional",
         "thm:peps_angular_information_from_gap"
       ],
       "corollaries": [
-        "cor:peps_group_tensor_network",
-        "cor:peps_ket_column_square_main"
+        "cor:peps_angular_reset_width_fits_explicit",
+        "cor:peps_angular_reset_width_fits"
       ],
       "notes": {
-        "thm:peps_protocol_from_angular_and_patch_bounds": "The dyadic distribution protocol from the angular and patch bounds",
-        "thm:peps_ground_state_approximation_conditional": "Large-size PEPS approximation from compressed dyadic operator networks, the chapter's approximation step",
         "thm:peps_angular_information_from_gap": "Information under angular separation, the first analytic input"
       }
     },
@@ -838,22 +924,29 @@
     },
     "ch:mpu_qca": {
       "theorems": [
-        "thm:quasi_local_interval_observable",
         "thm:mpu_actual_qca"
       ],
-      "corollaries": [],
+      "corollaries": [
+        "cor:qca_support_algebra_commutant"
+      ],
       "notes": {
-        "thm:quasi_local_interval_observable": "Quasi-local interval observables, the structure used across chapters",
         "thm:mpu_actual_qca": "Actual QCA induced by a bare MPU, with its source original-site finite-chain formula"
       }
     },
     "ch:mpo_boundaries": {
       "theorems": [
-        "thm:glm_boundary_reverse"
+        "thm:glm_boundary_reverse",
+        "thm:glm_mixed_gauge_joint",
+        "thm:glm_single_block_obstruction"
       ],
-      "corollaries": [],
+      "corollaries": [
+        "cor:glm_group_specialization",
+        "cor:glm_group_single_block_trivial"
+      ],
       "notes": {
-        "thm:glm_boundary_reverse": "Exact reconstruction of an operator from a boundary map, named in the opening"
+        "thm:glm_boundary_reverse": "Exact reconstruction of an operator from a boundary map, named in the opening",
+        "thm:glm_mixed_gauge_joint": "The L- and F-symbols are determined by the blocks up to the source's gauge equivalence",
+        "thm:glm_single_block_obstruction": "A single injective block without multiplicity forces trivial F-symbols (Garre-Rubio et al., Section 3.2), named in the opening"
       }
     },
     "ch:peps_anyons": {
@@ -869,7 +962,9 @@
       "theorems": [
         "lem:qc_channel_light_cone"
       ],
-      "corollaries": [],
+      "corollaries": [
+        "cor:qc_unblocked_then_blocked_conversion"
+      ],
       "notes": {
         "lem:qc_channel_light_cone": "Light cone of a local channel circuit, named in the opening"
       }
@@ -887,7 +982,9 @@
       "theorems": [
         "thm:ldp_chain_depth"
       ],
-      "corollaries": [],
+      "corollaries": [
+        "cor:ldp_inhomogeneous_injective"
+      ],
       "notes": {
         "thm:ldp_chain_depth": "Preparation of site-dependent tensors, the chapter title"
       }
@@ -914,7 +1011,9 @@
       "theorems": [
         "thm:al_scanner_actual_scan"
       ],
-      "corollaries": [],
+      "corollaries": [
+        "cor:al_scan_front_prefix_family"
+      ],
       "notes": {
         "thm:al_scanner_actual_scan": "The scanner estimate for the collar scan"
       }
@@ -923,7 +1022,9 @@
       "theorems": [
         "thm:arealaw-physical-box-fixed-exponent"
       ],
-      "corollaries": [],
+      "corollaries": [
+        "cor:area_law_bootstrap_energy_expression"
+      ],
       "notes": {
         "thm:arealaw-physical-box-fixed-exponent": "The safe-box bound at the fixed exponent, the chapter goal"
       }
@@ -941,7 +1042,9 @@
       "theorems": [
         "thm:peps_pair_effects_party"
       ],
-      "corollaries": [],
+      "corollaries": [
+        "cor:peps_group_tensor_network"
+      ],
       "notes": {
         "thm:peps_pair_effects_party": "Elimination of pair effects on parties, Lemma 5.1 of the source"
       }
@@ -953,6 +1056,417 @@
       "corollaries": [],
       "notes": {
         "thm:peps_separate_arity_compression": "Uniform compression, Theorem 5.2 of the source"
+      }
+    },
+    "ch:party_circuit_sampling_sources": {
+      "theorems": [],
+      "corollaries": [],
+      "notes": {}
+    },
+    "ch:aklv_polynomial_filters": {
+      "theorems": [
+        "thm:aklv_polynomial_rank",
+        "thm:aklv_physical_chebyshev_filter"
+      ],
+      "corollaries": [],
+      "notes": {
+        "thm:aklv_polynomial_rank": "AKLV Lemma 4.2 with explicit universal constants",
+        "thm:aklv_physical_chebyshev_filter": "The constructed filter has both spectral suppression and the polynomial rank bound"
+      }
+    },
+    "ch:parent_hamiltonian_long_range_gaps": {
+      "theorems": [
+        "thm:compact_parent_gap"
+      ],
+      "corollaries": [
+        "cor:commutator_gap_rank_one_limit"
+      ],
+      "notes": {
+        "thm:compact_parent_gap": "Uniform parent gap on compact parameter sets (Schuch et al., Appendix A)"
+      }
+    },
+    "ch:parent_hamiltonian_long_range_gaps_primitive_sectors": {
+      "theorems": [
+        "thm:primitive_multiblock_quasi_local_ground_state_classification",
+        "thm:eventual_kernel_pure_ground_state_gap"
+      ],
+      "corollaries": [
+        "thm:primitive_multiblock_pure_ground_state_classification"
+      ],
+      "notes": {
+        "thm:primitive_multiblock_quasi_local_ground_state_classification": "Zero-energy states are the convex combinations of the primitive block states (Nachtergaele 1996, Theorems 1.1--1.2)",
+        "thm:eventual_kernel_pure_ground_state_gap": "Uniform finite-chain gap and infinite-volume gap in every pure ground state (Nachtergaele 1996, Theorem 1.2)"
+      }
+    },
+    "ch:parent_hamiltonian_long_range_gaps_periodic": {
+      "theorems": [
+        "thm:periodic_parent_finite_quasi_local_gap",
+        "thm:periodic_family_constructed_finite_quasi_local_gap",
+        "thm:stationary_generators_finite_quasi_local_gap"
+      ],
+      "corollaries": [],
+      "notes": {
+        "thm:periodic_parent_finite_quasi_local_gap": "One positive parent interaction of a periodic tensor with finite-volume and infinite-volume gaps",
+        "thm:periodic_family_constructed_finite_quasi_local_gap": "The same two gaps for a finite family of periodic tensors",
+        "thm:stationary_generators_finite_quasi_local_gap": "The same two gaps for the infinite-chain state of a tensor with a stationary density matrix"
+      }
+    },
+    "ch:parent_hamiltonian_martingale": {
+      "theorems": [
+        "thm:primitive_parent_hamiltonian_finite_range_knabe_gap"
+      ],
+      "corollaries": [],
+      "notes": {
+        "thm:primitive_parent_hamiltonian_finite_range_knabe_gap": "Uniform finite-range spectral gap for primitive parent Hamiltonians, third topic of the opening"
+      }
+    },
+    "ch:mpdo_rfp_area_law": {
+      "theorems": [
+        "thm:rfp-saturates-area-law"
+      ],
+      "corollaries": [
+        "cor:mpo_diagonal_classical_mutual_information",
+        "thm:rfp_constant_entropy",
+        "cor:mpdo_horizontal_rfp_implies_sal",
+        "cor:mpdo_horizontal_rfp_implies_zcl_and_sal"
+      ],
+      "notes": {
+        "thm:rfp-saturates-area-law": "A renormalization fixed point saturates the area law (CPSV16 Proposition 3.14)"
+      }
+    },
+    "ch:mpdo_rfp_gibbs": {
+      "theorems": [
+        "thm:mpdo_canonical_bnt_proportional_sectors_zcl_sal",
+        "thm:mpdo_simple_weight_copy_independent",
+        "thm:mpdo_exists_sector_factorization"
+      ],
+      "corollaries": [
+        "cor:mpdo_bnt_orthogonal_sector_sum_sal",
+        "cor:mpdo_bnt_sector_sal_gsnnch",
+        "cor:mpdo_simple_zcl_weight_copy_independent",
+        "cor:mpdo_simple_scale_invariant_zcl_weight_copy_independent",
+        "cor:mpdo_bnt_three_site_outer_inverse_collapse"
+      ],
+      "notes": {
+        "thm:mpdo_canonical_bnt_proportional_sectors_zcl_sal": "Commuting sector sums with zero correlation length saturate the area law (CPSV16 Proposition C.14)",
+        "thm:mpdo_simple_weight_copy_independent": "Weights of the simple canonical form do not depend on the copy index; its corollaries follow in this chapter",
+        "thm:mpdo_exists_sector_factorization": "Sector factorization of the three-site reduced state through the Markov decomposition (CPSV16 Lemma C.4)"
+      }
+    },
+    "ch:mpdo_rfp_gibbs_blocking": {
+      "theorems": [
+        "thm:mpdo_closed_chain_physical_blocking",
+        "thm:mpdo_transported_vertical_sector_composites_identity",
+        "thm:mpdo_vertical_product_positive_fusion_decomposition"
+      ],
+      "corollaries": [],
+      "notes": {
+        "thm:mpdo_closed_chain_physical_blocking": "Blocking commutes with closed chains, so blocking an MPDO gives an MPDO (CPSV16 Appendix C.4)",
+        "thm:mpdo_transported_vertical_sector_composites_identity": "Refinement and coarse-graining on the vertical sectors are mutually inverse (CPSV16 Appendix C.4)",
+        "thm:mpdo_vertical_product_positive_fusion_decomposition": "Positive fusion decomposition of products of vertical sectors of a renormalization fixed point"
+      }
+    },
+    "ch:mpdo_rfp_gibbs_neighboring": {
+      "theorems": [
+        "cor:mpdo_eta_local_structure_of_is_sal",
+        "thm:mpdo_casei_all_sector_rank_one_coefficients_of_is_sal"
+      ],
+      "corollaries": [
+        "cor:mpdo_sector_eta_cycle_positive_rescaling",
+        "cor:mpdo_normal_fixed_product_tensor_of_is_sal",
+        "cor:mpdo_sal_positive_cyclic_sector_products",
+        "cor:mpdo_doubled_overlap_trace_sq",
+        "cor:mpdo_doubled_overlap_frobenius"
+      ],
+      "notes": {
+        "cor:mpdo_eta_local_structure_of_is_sal": "An injective tensor saturating the area law has commuting neighboring bonds (CPSV16 Proposition C.8)",
+        "thm:mpdo_casei_all_sector_rank_one_coefficients_of_is_sal": "The trace matrix of the neighboring operators has rank one (CPSV16 Lemma C.5)"
+      }
+    },
+    "ch:mpdo_rfp_gibbs_local_structure": {
+      "theorems": [
+        "thm:mpdo_theorem49_iv_to_v_counterexample"
+      ],
+      "corollaries": [
+        "cor:mpdo_sal_zcl_local_sector_structure",
+        "cor:mpdo_common_weight_bnt_layer_supports"
+      ],
+      "notes": {
+        "thm:mpdo_theorem49_iv_to_v_counterexample": "Counterexample to the printed implication (iv)=>(v) of CPSV16 Theorem 4.9"
+      }
+    },
+    "ch:mpu_cocycles": {
+      "theorems": [
+        "thm:mpug_anomaly_three_cocycle",
+        "thm:mpug_h3_group_cohomology"
+      ],
+      "corollaries": [
+        "cor:mpug_anomaly_class"
+      ],
+      "notes": {
+        "thm:mpug_anomaly_three_cocycle": "The anomaly three-cocycle of a finite-group MPU representation",
+        "thm:mpug_h3_group_cohomology": "Fusion-gauge classes are degree-three cohomology classes"
+      }
+    },
+    "ch:mpu_cocycles_permuted_blocks": {
+      "theorems": [
+        "thm:mpug_anomaly_obstruction"
+      ],
+      "corollaries": [
+        "cor:mpug_domain_wall_string_exchange_printed"
+      ],
+      "notes": {
+        "thm:mpug_anomaly_obstruction": "An anomaly obstructs invariant normal states"
+      }
+    },
+    "ch:mpu_cocycles_gauss_law": {
+      "theorems": [],
+      "corollaries": [
+        "cor:mpug_normalized_source_decomposition_gauges"
+      ],
+      "notes": {}
+    },
+    "ch:mpu_cocycles_l_symbol_classification": {
+      "theorems": [],
+      "corollaries": [],
+      "notes": {}
+    },
+    "ch:mpo_interpolation": {
+      "theorems": [
+        "thm:mpo_arbitrary_endpoint_attachment_gap"
+      ],
+      "corollaries": [],
+      "notes": {
+        "thm:mpo_arbitrary_endpoint_attachment_gap": "Exact periodic ground states and uniform gap of the canonical parents"
+      }
+    },
+    "ch:circuits_measurements": {
+      "theorems": [
+        "thm:qc_ghz_measurement",
+        "thm:qc_long_range_layer"
+      ],
+      "corollaries": [],
+      "notes": {
+        "thm:qc_ghz_measurement": "GHZ-type states in constant depth with measurements, stated in the opening",
+        "thm:qc_long_range_layer": "Distant gates in constant depth with measurements, stated in the opening"
+      }
+    },
+    "ch:log_depth_non_normal": {
+      "theorems": [
+        "thm:ldp_all_ti_measurement_source"
+      ],
+      "corollaries": [],
+      "notes": {
+        "thm:ldp_all_ti_measurement_source": "All translation-invariant MPS with measurements (Malz et al., long-range paragraph)"
+      }
+    },
+    "ch:finite_site_reset": {
+      "theorems": [
+        "thm:peps_reset_regional_filter_explicit",
+        "thm:area_law_product_ground_state"
+      ],
+      "corollaries": [
+        "thm:peps_reset_regional_filter"
+      ],
+      "notes": {
+        "thm:peps_reset_regional_filter_explicit": "The two-sided Gaussian filter of the information reset (OpenAI 2026)",
+        "thm:area_law_product_ground_state": "Gapped ground vectors of a sum of factor Hamiltonians are product vectors (OpenAI 2026 area law, Lemma 2.2)"
+      }
+    },
+    "ch:peps_ft_normal_square": {
+      "theorems": [
+        "thm:fundamentalTheorem_normalSquarePEPS"
+      ],
+      "corollaries": [
+        "thm:fundamentalTheorem_normalSquarePEPS_unconditional"
+      ],
+      "notes": {
+        "thm:fundamentalTheorem_normalSquarePEPS": "Fundamental Theorem for normal square-lattice PEPS (Molnar et al., Theorem 3)"
+      }
+    },
+    "ch:peps_ft_normal_torus": {
+      "theorems": [],
+      "corollaries": [
+        "thm:fundamentalTheorem_normalTorusPEPS",
+        "thm:fundamentalTheorem_normalTorusPEPS_unconditional",
+        "cor:peps_lambda_pow_card_torus_eq_one_of_twoBlockProportional"
+      ],
+      "notes": {}
+    },
+    "ch:peps_ft_normal": {
+      "theorems": [
+        "thm:fundamentalTheorem_normalPEPS"
+      ],
+      "corollaries": [
+        "cor:fundamentalTheorem_normalMPS_cycle",
+        "cor:fundamentalTheorem_normalMPS_cycle_gauge_unique",
+        "cor:fundamentalTheorem_normalMPS",
+        "cor:fundamentalTheorem_normalMPS_gauge_unique",
+        "cor:fundamentalTheorem_normalMPS_translationInvariant",
+        "cor:fundamentalTheorem_normalMPS_translationInvariant_gauge_unique",
+        "cor:fundamentalTheorem_normalMPS_translationInvariant_of_overlap",
+        "cor:fundamentalTheorem_normalMPS_of_overlap",
+        "thm:fundamentalTheorem_normalPEPS_connected",
+        "cor:fundamentalTheorem_normalMPSChain_of_overlap",
+        "cor:fundamentalTheorem_injectiveMPSChain_of_sameState",
+        "cor:peps_cycle_shift_bond_uniform",
+        "cor:exists_gauge_to_first_of_cyclicShiftInvariantState",
+        "cor:exists_constant_injectiveMPS_of_cyclicShiftInvariantState_per_bond_pos",
+        "cor:peps_state_translation_bond_uniform",
+        "thm:fundamentalTheorem_normalPEPS_of_vertexInjective"
+      ],
+      "notes": {
+        "thm:fundamentalTheorem_normalPEPS": "Fundamental Theorem for normal PEPS (Molnar et al., Section 4)"
+      }
+    },
+    "ch:peps_g_injective_regions": {
+      "theorems": [
+        "thm:peps_connected_untwisted_cut_entropy"
+      ],
+      "corollaries": [],
+      "notes": {
+        "thm:peps_connected_untwisted_cut_entropy": "Entropy of a connected untwisted cut, the reduced-density result of the opening"
+      }
+    },
+    "ch:peps_torus_closures": {
+      "theorems": [],
+      "corollaries": [
+        "cor:peps_quantum_double_dual_string_deformation"
+      ],
+      "notes": {}
+    },
+    "ch:peps_g_injective_ranges": {
+      "theorems": [],
+      "corollaries": [
+        "cor:peps_g_injective_strip_boundary",
+        "cor:peps_g_injective_strip_parent_boundary",
+        "cor:peps_regular_boundary_local_matrix_unit",
+        "cor:peps_torus_plaquette_class_orthogonality"
+      ],
+      "notes": {}
+    },
+    "ch:peps_anyons_bond_states": {
+      "theorems": [
+        "thm:peps_torus_multiplicity_one_semiregular_equivalence",
+        "thm:peps_graph_minimal_semiregular_equivalence"
+      ],
+      "corollaries": [],
+      "notes": {
+        "thm:peps_torus_multiplicity_one_semiregular_equivalence": "On the torus the multiplicity-one semi-regular state is related to the regular state by physical isometries",
+        "thm:peps_graph_minimal_semiregular_equivalence": "The same equivalence on every finite simple graph"
+      }
+    },
+    "ch:peps_anyons_fluxes": {
+      "theorems": [
+        "thm:peps_regular_cycle_global_flux_creation",
+        "thm:peps_torus_translated_global_flux_move",
+        "thm:peps_dual_flux_deformation"
+      ],
+      "corollaries": [],
+      "notes": {
+        "thm:peps_regular_cycle_global_flux_creation": "Coherent creation of a flux by a physical unitary (Schuch et al. 2010, Theorem 6.17)",
+        "thm:peps_torus_translated_global_flux_move": "A flux moves between neighbouring plaquettes by a physical operation (Schuch et al. 2010, Theorem 6.16)",
+        "thm:peps_dual_flux_deformation": "Deforming a flux string across invariant tensors leaves the state unchanged (Schuch et al. 2010, Lemma 6.14)"
+      }
+    },
+    "ch:two_dimensional_main_results": {
+      "theorems": [
+        "thm:openai_uniform_area_law",
+        "thm:openai_square_area_law",
+        "thm:openai_polynomial_peps",
+        "thm:area_law_two_family_decomposition"
+      ],
+      "corollaries": [
+        "thm:polynomial_peps_explicit_constants",
+        "cor:rectangles"
+      ],
+      "notes": {
+        "thm:openai_uniform_area_law": "Uniform finite-domain area law (area-law manuscript, Theorem 1.1)",
+        "thm:openai_square_area_law": "Entropy area law on the square grid (area-law manuscript, Corollary 1.2 and Proposition 2.1)",
+        "thm:openai_polynomial_peps": "Polynomial PEPS approximation (PEPS manuscript, Theorem 1.1)",
+        "thm:area_law_two_family_decomposition": "Two families with separated birth templates, the geometric input of the area law (area-law manuscript, Section 11)"
+      }
+    },
+    "ch:peps_area_law_repair": {
+      "theorems": [
+        "thm:area_law_two_family_explicit_constant"
+      ],
+      "corollaries": [],
+      "notes": {
+        "thm:area_law_two_family_explicit_constant": "Two-family partition with controlled cut clearance, the outcome named in the opening"
+      }
+    },
+    "ch:peps_frames": {
+      "theorems": [
+        "thm:peps_frame_small_rewrite",
+        "thm:peps_frame_birth",
+        "thm:peps_frame_exchange"
+      ],
+      "corollaries": [
+        "thm:peps_frame_birth_bounded",
+        "thm:peps_frame_exchange_bounded"
+      ],
+      "notes": {
+        "thm:peps_frame_small_rewrite": "Small-patch rewrites of an encoded frame (OpenAI 2026, Lemma 6.3)",
+        "thm:peps_frame_birth": "Homogeneous birth and death of a party (OpenAI 2026, Lemma 6.5)",
+        "thm:peps_frame_exchange": "Exchange of regions between two sheets (OpenAI 2026, Lemma 6.6)"
+      }
+    },
+    "ch:peps_frames_dyadic_geometry": {
+      "theorems": [
+        "thm:peps_dyadic_angular_separation_sampled",
+        "thm:peps_dyadic_protocol_schedule_counts",
+        "thm:peps_dyadic_protocol_lifetime"
+      ],
+      "corollaries": [],
+      "notes": {
+        "thm:peps_dyadic_angular_separation_sampled": "Angular separation of the sampled guides (OpenAI 2026, Lemma 7.2)",
+        "thm:peps_dyadic_protocol_schedule_counts": "Counts of the changes in the protocol schedule (OpenAI 2026, Proposition 7.1, item 2)",
+        "thm:peps_dyadic_protocol_lifetime": "Bounded lifetime participation of every party (OpenAI 2026, Proposition 7.1, item 2)"
+      }
+    },
+    "ch:peps_frames_protocol": {
+      "theorems": [
+        "thm:peps_protocol_from_angular_and_patch_bounds"
+      ],
+      "corollaries": [],
+      "notes": {
+        "thm:peps_protocol_from_angular_and_patch_bounds": "The dyadic distribution protocol from the angular and patch bounds"
+      }
+    },
+    "ch:peps_dyadic_protocol": {
+      "theorems": [
+        "thm:peps_ground_state_approximation_conditional"
+      ],
+      "corollaries": [
+        "cor:peps_ket_column_square_main"
+      ],
+      "notes": {
+        "thm:peps_ground_state_approximation_conditional": "Large-size PEPS approximation from compressed dyadic operator networks, the chapter's approximation step"
+      }
+    },
+    "ch:spin_chain_observables": {
+      "theorems": [
+        "thm:quasi_local_interval_observable"
+      ],
+      "corollaries": [],
+      "notes": {
+        "thm:quasi_local_interval_observable": "Quasi-local interval observables, the structure used across chapters"
+      }
+    },
+    "ch:aklv_entropy_approximation": {
+      "theorems": [
+        "thm:aklv_physical_sequence_entropy",
+        "thm:aklv_sharp_sequential_mps",
+        "thm:aklv_frustration_free_entropy",
+        "thm:physical_dg_interval_entropy_bound"
+      ],
+      "corollaries": [],
+      "notes": {
+        "thm:aklv_physical_sequence_entropy": "Uniform physical entropy bound obtained from the coherent AKLV sequence",
+        "thm:aklv_sharp_sequential_mps": "Accuracy-dependent physical matrix product approximation with the fourth-root rank bound",
+        "thm:aklv_frustration_free_entropy": "Uniform entropy of the original frustration-free ground vector from a projector gap lower bound",
+        "thm:physical_dg_interval_entropy_bound": "Interval entropy bound for a degenerate gapped ground space, the interval version of ALVV Theorem 4.9"
       }
     }
   }

@@ -1,0 +1,442 @@
+\section{Frustration-free regional replacement}
+
+The regional construction of \cite[Definition~5.10]{Arad2016RigorousRG}
+preserves the full common kernel. Its gap comparison uses squared norms
+and the converse for every unit vector. The rank assertion for arbitrary
+interior regions requires correction; an eight-qubit example has rank
+seven instead of the stated bound six, as shown in
+\cite{gap:alvv16_ff_rank}.
+
+\begin{definition}[Regional parity projections and replacement]
+    \label{def:alvv_ff_regional_replacement}
+    \lean{TNLean.MPS.AreaLaw.ALVV.restrictedTerm,
+        TNLean.MPS.AreaLaw.ALVV.regionalProjection,
+        TNLean.MPS.AreaLaw.ALVV.regionalReplacement}
+    \leanok
+    Let $h_0,\ldots,h_{m-1}$ be orthogonal projections on a real or
+    complex Hilbert space. Extend the family by zero when necessary.
+    For a finite set $S$ of indices, put $h_i^S=h_i$ for $i\in S$ and
+    $h_i^S=0$ otherwise, and define
+    \begin{align}
+        P_S          & =(I-h_{m-1}^S)\cdots(I-h_0^S),                    &
+        \widetilde H & =\sum_{i<m,\ i\notin E\cup O}h_i+(I-P_E)+(I-P_O).
+        \label{eq:alvv_ff_regional_replacement}
+    \end{align}
+    Here the projections commute within $E$ and within $O$.
+    In a nearest-neighbor chain, $E,O$ are the even and odd bonds
+    contained in the chosen region.
+\end{definition}
+
+\begin{lemma}[Projections of the common kernels]
+    \label{lem:alvv_ff_common_kernel_layers}
+    \lean{TNLean.MPS.AreaLaw.ALVV.complementProd_apply_eq_self_iff,
+        TNLean.MPS.AreaLaw.ALVV.isStarProjection_restrictedTerm,
+        TNLean.MPS.AreaLaw.ALVV.commute_restrictedTerm,
+        TNLean.MPS.AreaLaw.ALVV.isStarProjection_regionalProjection,
+        TNLean.MPS.AreaLaw.ALVV.sub_regionalProjection_apply_eq_zero_iff}
+    \leanok
+    \uses{def:alvv_ff_regional_replacement}
+    For a commuting selected family, $P_S$ is an orthogonal projection
+    and $(I-P_S)x=0$ if and only if $h_ix=0$ for every $i<m$ in $S$.
+    Masking preserves projection and commutation identities.
+    The complementary product of any commuting family fixes exactly
+    its common kernel.
+\end{lemma}
+\begin{proof}\leanok
+    Products of commuting orthogonal projections are orthogonal
+    projections. If every selected term annihilates $x$, each factor
+    fixes $x$. Conversely, the detectability estimate for an individual
+    term has an empty sum of noncommuting terms, so $h_iP_Sx=0$ for
+    each selected $i<m$. Apply this identity to a fixed vector of $P_S$.
+\end{proof}
+
+\begin{lemma}[Preservation of the full ground space]
+    \label{thm:alvv_ff_regional_kernel}
+    \lean{TNLean.MPS.AreaLaw.ALVV.regionalReplacement_apply_eq_zero_iff,
+        TNLean.MPS.AreaLaw.ALVV.ker_regionalReplacement,
+        TNLean.MPS.AreaLaw.ALVV.regionalReplacement_frustrationFree,
+        TNLean.MPS.AreaLaw.ALVV.isPositive_regionalReplacement}
+    \leanok
+    \uses{def:alvv_ff_regional_replacement}
+    The operator $\widetilde H$ in
+    (\ref{eq:alvv_ff_regional_replacement}) is positive and satisfies
+    \begin{align}
+        \ker\widetilde H & =\bigcap_{i<m}\ker h_i
+        =\ker\left(\sum_{i<m}h_i\right).
+        \label{eq:alvv_ff_regional_kernel}
+    \end{align}
+    Every vector in this kernel is annihilated by each retained exterior
+    term and by each regional term $I-P_E,I-P_O$.
+    Thus any nonzero original frustration-free ground space is
+    preserved, including its degeneracy.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:alvv_ff_common_kernel_layers}
+    A sum of positive operators annihilates a vector exactly when each
+    summand does. Apply this to the exterior sum and the two layer
+    complements. The layer characterization supplies precisely the
+    missing regional kernel conditions. Positivity follows by addition.
+\end{proof}
+
+\begin{lemma}[Splitting a commuting layer]
+    \label{lem:alvv_ff_layer_split}
+    \lean{TNLean.MPS.AreaLaw.ALVV.regionalProjection_mul_complement}
+    \leanok
+    \uses{def:alvv_ff_regional_replacement}
+    If the full family commutes, then $P_SP_{S^c}=P_{\{0,\ldots,m-1\}}$,
+    where the complement is taken among $0,\ldots,m-1$.
+\end{lemma}
+\begin{proof}\leanok
+    Induct on the product length. Commute the exterior factor through
+    the regional prefix. At each index exactly one of the two masked
+    factors is nonidentity, so their product is $I-h_i$.
+\end{proof}
+
+\begin{definition}[Collapsed and ordered parity families]
+    \label{def:alvv_ff_collapsed_layers}
+    \lean{TNLean.MPS.AreaLaw.ALVV.collapsedLayer,
+        TNLean.MPS.AreaLaw.ALVV.parityOrderedTerm}
+    \leanok
+    \uses{def:alvv_ff_regional_replacement}
+    Let $e_i,o_i$ be two families, each commuting within itself.
+    For a finite regional set $S$, the collapsed even family consists
+    of the masked exterior terms $e_i^{S^c}$ for $i<m$, followed by
+    $I-P_S^e$ at index $m$, and zero terms afterwards. Define the odd
+    family in the same way, using a regional set $T$.
+    The ordered original family is
+    $a_i=o_i$ for $i<m$ and $a_i=e_{i-m}$ for $i\ge m$.
+\end{definition}
+
+\begin{lemma}[Equality of the detectability products]
+    \label{lem:alvv_ff_detectability_identity}
+    \lean{TNLean.MPS.AreaLaw.ALVV.isStarProjection_collapsedLayer,
+        TNLean.MPS.AreaLaw.ALVV.commute_collapsedLayer,
+        TNLean.MPS.AreaLaw.ALVV.complementProd_collapsedLayer,
+        TNLean.MPS.AreaLaw.ALVV.sum_collapsedLayer,
+        TNLean.MPS.AreaLaw.ALVV.isStarProjection_parityOrderedTerm,
+        TNLean.MPS.AreaLaw.ALVV.complementProd_parityOrderedTerm,
+        TNLean.MPS.AreaLaw.ALVV.sum_parityOrderedTerm}
+    \leanok
+    \uses{def:alvv_ff_collapsed_layers}
+    Each collapsed parity family consists of commuting orthogonal
+    projections. Its sum is the retained parity sum plus its regional
+    complement. Its complementary product equals that of the original
+    parity family. Consequently both ordered two-layer products equal
+    $D=P^eP^o$, and the ordered original sum equals
+    $H=\sum_{i<m}e_i+\sum_{i<m}o_i$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:alvv_ff_layer_split}
+    The last complementary factor of a collapsed layer is its regional
+    projection, and the prefix is the exterior product. Apply the layer
+    splitting identity. The sum identity separates the last term.
+    For the ordered family, induction first identifies the odd prefix
+    and then appends the even factors.
+\end{proof}
+
+\begin{lemma}[Converse after regional collapse]
+    \label{lem:alvv_ff_collapsed_converse}
+    \lean{TNLean.MPS.AreaLaw.ALVV.collapsedLayer_converse}
+    \leanok
+    \uses{def:alvv_ff_collapsed_layers}
+    Let $\widetilde H$ be the sum of the two collapsed parity families.
+    Every unit vector $x$ satisfies
+    $1-3\langle x,\widetilde Hx\rangle\le\|Dx\|^2$,
+    with real parts understood over a complex Hilbert space.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:alvv_ff_detectability_identity}
+    Apply the constant-three converse for two commuting projection
+    families from \cite{QICLean2026Blueprint} to the collapsed families,
+    then substitute their sum and complementary-product identities.
+\end{proof}
+
+\begin{lemma}[Orthogonal-complement preservation]
+    \label{lem:alvv_ff_orthogonal_preservation}
+    \lean{TNLean.MPS.AreaLaw.ALVV.complementProd_mem_orthogonal}
+    \leanok
+    The complementary product of finitely many orthogonal projections
+    preserves the orthogonal complement of their common kernel.
+\end{lemma}
+\begin{proof}\leanok
+    If $h_iz=0$, self-adjointness gives
+    $\langle z,h_iy\rangle=\langle h_iz,y\rangle=0$.
+    Thus each factor $I-h_i$ preserves the orthogonal complement.
+    Induct on the number of factors.
+\end{proof}
+
+\begin{lemma}[Gap comparison for two collapsed parity families]
+    \label{thm:alvv_ff_collapsed_gap}
+    \lean{TNLean.MPS.AreaLaw.ALVV.collapsedLayer_gap}
+    \leanok
+    \uses{def:alvv_ff_collapsed_layers}
+    Suppose every projection among the first $2m$ members of the
+    ordered original family fails to commute with at most $g$ others.
+    Put $K=\bigcap_{i<2m}\ker a_i$ and suppose
+    $\gamma\|y\|^2\le\operatorname{Re}\langle y,Hy\rangle$
+    for every $y\in K^\perp$, with $\gamma>0$.
+    Every unit vector $x\in K^\perp$ then satisfies
+    \begin{align}
+        \operatorname{Re}\langle x,\widetilde Hx\rangle
+         & \ge\frac{\gamma}{3(\gamma+g^2)}.
+        \label{eq:alvv_ff_collapsed_gap}
+    \end{align}
+    This is the analytic comparison in
+    \cite[Theorem~5.14(3)]{Arad2016RigorousRG}; the hypotheses explicitly
+    retain the original parity families and their commutation degree.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:alvv_ff_detectability_identity,
+        lem:alvv_ff_collapsed_converse,lem:alvv_ff_orthogonal_preservation}
+    Detectability gives
+    $\operatorname{Re}\langle Dx,HDx\rangle\le g^2(1-\|Dx\|^2)$.
+    Orthogonal-complement preservation and the original gap imply
+    $(\gamma+g^2)\|Dx\|^2\le g^2$.
+    Combine this with the collapsed converse and divide by
+    $3(\gamma+g^2)>0$.
+\end{proof}
+
+\begin{lemma}[A linear lower bound in the normalized regime]
+    \label{cor:alvv_ff_gap_ratio}
+    \lean{TNLean.MPS.AreaLaw.ALVV.gap_ratio_le}
+    \leanok
+    For $0<\gamma\le1$,
+    $\gamma/15\le\gamma/[3(\gamma+2^2)]$.
+\end{lemma}
+\begin{proof}\leanok
+    The denominator on the right is at most fifteen; multiply by the
+    two positive denominators.
+\end{proof}
+
+\begin{definition}[Matrix coordinates and bond endpoints]
+    \label{def:alvv_ff_matrix_replacement}
+    \lean{TNLean.MPS.AreaLaw.ALVV.bondTermExtension,
+        TNLean.MPS.AreaLaw.ALVV.bondTermExtension_supported,
+        TNLean.MPS.AreaLaw.ALVV.regionalProjectionMatrix,
+        TNLean.MPS.AreaLaw.ALVV.toEuclideanCLM_regionalProjectionMatrix,
+        TNLean.MPS.AreaLaw.ALVV.regionalReplacementMatrix,
+        TNLean.MPS.AreaLaw.ALVV.toEuclideanCLM_regionalReplacementMatrix,
+        TNLean.MPS.AreaLaw.ALVV.evenBonds,
+        TNLean.MPS.AreaLaw.ALVV.oddBonds}
+    \leanok
+    Number the chain sites $0,\ldots,L-1$ and extend the finite list
+    of original bond terms by zero. Let $h_i$ be supported on
+    $\lbrack i,i+2)$. For a site region $\lbrack a,b+1)$ select exactly the bond indices
+    $\lbrack a,b)$, separating their even and odd members into $E,O$.
+    The matrix parity products are defined recursively by $P_S(0)=I$ and
+    $P_S(m+1)=(I-h_m^S)P_S(m)$. The replacement matrix is the exterior
+    sum plus $(I-P_E(m))+(I-P_O(m))$.
+    Under the canonical identification of matrices with operators on the
+    Euclidean chain space, these are exactly
+    (\ref{eq:alvv_ff_regional_replacement}).
+    This endpoint convention follows the explicit regional sum in
+    \cite[Definition~5.10]{Arad2016RigorousRG}; the final qudit index is
+    excluded from its bond-index set, as detailed in
+    \cite{gap:alvv16_ff_rank}.
+\end{definition}
+
+\begin{lemma}[Support and rank of the parity products]
+    \label{lem:alvv_ff_matrix_product_rank}
+    \lean{TNLean.MPS.AreaLaw.ALVV.regionalProjectionMatrix_supported,
+        TNLean.MPS.AreaLaw.ALVV.rank_regionalProjectionMatrix_le_one,
+        TNLean.MPS.AreaLaw.ALVV.rank_regionalProjectionMatrix_le_sq}
+    \leanok
+    \uses{def:alvv_ff_matrix_replacement}
+    Suppose $d\ge1$ and each $h_i$ is supported on $\lbrack i,i+2)$.
+    A parity product is supported on any set containing every selected
+    bond support. Its operator Schmidt rank at each cut is at most $d^2$.
+    If no selected bond crosses that cut, its rank is at most one.
+    Projection, positivity and commutation assumptions are unnecessary
+    for these rank statements.
+\end{lemma}
+\begin{proof}\leanok
+    Induct on the product length. A factor $I-h_i$ remains supported on
+    its bond. Across the cut after the first $k$ sites, only the bond
+    $i+1=k$ can cross. Every other factor has a one-term tensor
+    decomposition. The crossing factor has a decomposition of length
+    at most $d^2$ by expansion in matrix units on its single left site.
+    Products of these decompositions give the asserted bounds.
+\end{proof}
+
+\begin{theorem}[Corrected rank bound for interval replacement]
+    \label{thm:alvv_ff_corrected_rank}
+    \lean{TNLean.MPS.AreaLaw.ALVV.rank_regionalReplacementMatrix_le_sq_add_three}
+    \leanok
+    \uses{def:alvv_ff_matrix_replacement}
+    For arbitrary $a,b,m,k$ and $d\ge1$, the regional replacement
+    of the first $m$ nearest-neighbor terms satisfies
+    \begin{align}
+        \operatorname{OSR}_{\lbrack0,k)\mid\lbrack0,k)^c}(\widetilde H)
+         & \le d^2+3.
+        \label{eq:alvv_ff_corrected_rank}
+    \end{align}
+    Only the stated local supports are required.
+    This corrects the unrestricted rank claim of
+    \cite[Theorem~5.14(2)]{Arad2016RigorousRG}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{lem:alvv_ff_matrix_product_rank}
+    At a cut inside the selected bond interval, the exterior sum is
+    $H_L\otimes I+I\otimes H_R$. Absorb one identity into each side.
+    These two one-sided summands contribute rank at most two.
+    Exactly one regional parity product can contain the crossing bond;
+    the two products together contribute at most $d^2+1$.
+    Thus their difference has rank at most $d^2+3$.
+
+    At a cut outside the region, both regional products lie on the same
+    side and can be absorbed, together with $2I$, into that side's
+    exterior sum. The other one-sided sum contributes at most one,
+    and the at most one exterior crossing term contributes at most
+    $d^2$. This gives the sharper bound $d^2+2$ in this case.
+\end{proof}
+
+\begin{lemma}[Rank bound for a prefix or suffix]
+    \label{thm:alvv_ff_boundary_rank}
+    \lean{TNLean.MPS.AreaLaw.ALVV.rank_regionalReplacementMatrix_le_sq_add_two_of_boundary}
+    \leanok
+    \uses{def:alvv_ff_matrix_replacement}
+    Under the same local-support hypotheses, if $a=0$ or $m\le b$,
+    then every cut satisfies
+    $\operatorname{OSR}(\widetilde H)\le d^2+2$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:alvv_ff_matrix_product_rank}
+    At an interior cut, a prefix has no retained exterior term to the
+    left, and a suffix has none to the right. The remaining exterior
+    sum, together with $2I$, has rank at most one. Add the two parity
+    products, whose combined contribution is at most $d^2+1$.
+    At an exterior cut, absorb both regional products into their common
+    side exactly as in the proof of
+    Theorem~\ref{thm:alvv_ff_corrected_rank}.
+\end{proof}
+
+\begin{definition}[The chain operators]
+    \label{def:alvv_ff_chain_operators}
+    \lean{TNLean.MPS.AreaLaw.ALVV.colorTerm,
+        TNLean.MPS.AreaLaw.ALVV.chainTerm,
+        TNLean.MPS.AreaLaw.ALVV.chainOperator,
+        TNLean.MPS.AreaLaw.ALVV.chainReplacement,
+        TNLean.MPS.AreaLaw.ALVV.toEuclideanCLM_chainReplacementMatrix,
+        TNLean.MPS.AreaLaw.ALVV.chainOperator_eq_toEuclideanCLM_sum}
+    \leanok
+    \uses{def:alvv_ff_regional_replacement,def:alvv_ff_matrix_replacement}
+    Let $h_i$, $0\le i<m$, be matrices on the chain Hilbert space,
+    extended by zero beyond $m$. Write $H=\sum_{i<m}h_i$.
+    For $c\in\{0,1\}$ let $h_i^{(c)}=h_i$ when $i\equiv c\pmod2$
+    and $h_i^{(c)}=0$ otherwise. The operator replacement
+    $\widetilde H$ is the matrix replacement under the canonical
+    star-algebra identification of matrices with continuous operators.
+    Thus $H$ is exactly the supplied finite bond sum and
+    $\widetilde H$ is exactly its regional replacement, retaining all
+    exterior bonds.
+\end{definition}
+
+\begin{lemma}[Locality supplies commutation degree two]
+    \label{lem:alvv_ff_chain_degree}
+    \lean{TNLean.MPS.AreaLaw.ALVV.chainTerm_commute_of_not_adjacent,
+        TNLean.MPS.AreaLaw.ALVV.commutationDegree_parityOrderedTerm_le_two}
+    \leanok
+    \uses{def:alvv_ff_chain_operators}
+    If $h_i$ is supported on $\lbrack i,i+2)$, then $h_i$ and $h_j$ commute
+    unless their bond indices are adjacent. The ordered odd-then-even
+    family of length $2m$ consequently has commutation degree at most two.
+\end{lemma}
+\begin{proof}\leanok
+    Distinct nonadjacent bonds have disjoint supports, so their
+    matrices commute. Each active member of the ordered family has a
+    unique original bond index $p$; its position is $m+p$ for even $p$
+    and $p$ for odd $p$. Any noncommuting active member must have
+    original index $p-1$ or $p+1$. Hence the filtered set of
+    noncommuting positions is contained in a set of cardinality at most
+    two. Zero factors commute with every factor.
+\end{proof}
+
+\begin{lemma}[Kernel, constraints and gap for the chain]
+    \label{lem:alvv_ff_chain_comparison}
+    \lean{TNLean.MPS.AreaLaw.ALVV.ker_chainReplacement,
+        TNLean.MPS.AreaLaw.ALVV.chainReplacement_frustrationFree,
+        TNLean.MPS.AreaLaw.ALVV.chainReplacement_gap,
+        TNLean.MPS.AreaLaw.ALVV.chainReplacement_gap_linear}
+    \leanok
+    \uses{def:alvv_ff_chain_operators}
+    Suppose $d\ge1$ and the supplied local terms are orthogonal
+    projections supported on their nearest-neighbor bonds.
+    Then $\ker\widetilde H=\ker H$, and each vector in this kernel
+    is annihilated separately by both regional layer complements and
+    by every retained exterior term.
+    If $\gamma>0$ and
+    $\gamma\|y\|^2\le\operatorname{Re}\langle y,Hy\rangle$ for all
+    $y\perp\ker H$, every unit $x\perp\ker H$ satisfies
+    \begin{align}
+        \operatorname{Re}\langle x,\widetilde Hx\rangle
+         & \ge\frac{\gamma}{3(\gamma+4)}.
+        \label{eq:alvv_ff_chain_gap}
+    \end{align}
+    For $0<\gamma\le1$, this lower bound is at least $\gamma/15$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:alvv_ff_regional_kernel,lem:alvv_ff_chain_degree,
+        thm:alvv_ff_collapsed_gap,cor:alvv_ff_gap_ratio}
+    Locality gives commutation within each parity, so apply full
+    kernel preservation. Positivity of the original terms identifies
+    the original kernel with the common kernel of the ordered family.
+    Write $P^{(c)}_S$ for the product of
+    (\ref{eq:alvv_ff_regional_replacement}) formed from the family
+    $h^{(c)}$. The two parity sums equal $H$, and masking each parity by
+    the regional bond set gives the two regional products:
+    \begin{align}
+        \sum_{i<m}h_i^{(0)}+\sum_{i<m}h_i^{(1)} & =H,   &
+        P^{(0)}_E                               & =P_E, &
+        P^{(1)}_O                               & =P_O.
+        \label{eq:alvv_ff_chain_parity_sums}
+    \end{align}
+    The two exterior parity sums add to the retained exterior sum, so
+    the collapsed families reassemble the replacement:
+    \begin{align}
+        \sum_{i<m}\bigl(h^{(0)}\bigr)_i^{E^c}+(I-P_E)
+        +\sum_{i<m}\bigl(h^{(1)}\bigr)_i^{O^c}+(I-P_O)
+         & =\widetilde H.
+        \label{eq:alvv_ff_chain_collapsed_sum}
+    \end{align}
+    Apply the collapsed-family gap comparison with the derived degree
+    two, and substitute (\ref{eq:alvv_ff_chain_parity_sums}) and
+    (\ref{eq:alvv_ff_chain_collapsed_sum}). The scalar estimate gives
+    the normalized lower bound.
+\end{proof}
+
+\begin{theorem}[Regional replacement of a frustration-free chain]
+    \label{thm:alvv_ff_chain_replacement}
+    \lean{TNLean.MPS.AreaLaw.ALVV.frustrationFree_regionalReplacement_chain}
+    \leanok
+    \uses{def:alvv_ff_chain_operators}
+    Let $d\ge1$, let the finite local terms be orthogonal
+    projections supported on $\lbrack i,i+2)$, and let $\Omega$ be a unit
+    vector with $H\Omega=0$.
+    Suppose $\gamma>0$ is a quadratic-form gap above the full kernel
+    of $H$. For every site region $\lbrack a,b+1)$, replace precisely its
+    bonds $\lbrack a,b)$ by the two regional parity complements, retaining
+    every exterior term. Then both regional terms are orthogonal
+    projections, $\widetilde H$ is positive and frustration free on
+    $\Omega$, and $\ker\widetilde H=\ker H$.
+    Its operator Schmidt rank at every cut is at most $d^2+3$,
+    improved to $d^2+2$ when $a=0$ or $m\le b$.
+    Every unit vector orthogonal to the full replacement kernel has
+    energy at least $\gamma/[3(\gamma+4)]$.
+    In particular, a unique original ground state remains unique.
+    This is the chain theorem of
+    \cite[Theorem~5.14]{Arad2016RigorousRG} with the rank correction
+    documented in \cite{gap:alvv16_ff_rank}; the unrestricted printed
+    $d^2+2$ assertion is not claimed.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{lem:alvv_ff_common_kernel_layers,thm:alvv_ff_regional_kernel,
+        lem:alvv_ff_chain_comparison,thm:alvv_ff_corrected_rank,
+        thm:alvv_ff_boundary_rank}
+    Use the derived same-parity commutations to obtain the two regional
+    projections and positivity. Full kernel equality places the
+    original unit ground vector in the replacement kernel and
+    identifies the two orthogonal complements. The chain
+    comparison gives every termwise constraint and the explicit gap.
+    The matrix-to-operator identity identifies these same operators
+    with those in the proved interval and boundary rank bounds.
+\end{proof}

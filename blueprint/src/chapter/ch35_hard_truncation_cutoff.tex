@@ -1,0 +1,57 @@
+\section{A flat sector after hard truncation}
+
+\begin{example}[A truncated low-energy error with no uniform bound]
+    \label{ex:hard_truncation_flat_sector}
+    \lean{TNLean.MPS.AreaLaw.HardTruncationCutoff.Config,
+        TNLean.MPS.AreaLaw.HardTruncationCutoff.bondTerm,
+        TNLean.MPS.AreaLaw.HardTruncationCutoff.regionalHamiltonian,
+        TNLean.MPS.AreaLaw.HardTruncationCutoff.hamiltonian,
+        TNLean.MPS.AreaLaw.HardTruncationCutoff.truncatedHamiltonian,
+        TNLean.MPS.AreaLaw.HardTruncationCutoff.truncatedLowProjection,
+        TNLean.MPS.AreaLaw.HardTruncationCutoff.hamiltonian_eq_region_add_boundary,
+        TNLean.MPS.AreaLaw.HardTruncationCutoff.regionalHamiltonian_eq_internal_bond_sum,
+        TNLean.MPS.AreaLaw.HardTruncationCutoff.bondTerm_positive_contraction,
+        TNLean.MPS.AreaLaw.HardTruncationCutoff.bondTerm_supported,
+        TNLean.MPS.AreaLaw.HardTruncationCutoff.actual_ground_energies,
+        TNLean.MPS.AreaLaw.HardTruncationCutoff.high_vector_in_truncated_low_space,
+        TNLean.MPS.AreaLaw.HardTruncationCutoff.truncated_low_discrepancy_lower_bound,
+        TNLean.MPS.AreaLaw.HardTruncationCutoff.exists_truncated_low_discrepancy_gt}
+    \notready
+    \uses{def:chain_model}
+    Let $K\ge2$ and consider qubits on sites $0,\ldots,K+1$.
+    Write $P_b(i)$ for the projection onto label $b$ at site $i$.
+    For $1\le i<K$, set $h_i=P_1(i)$. The remaining bonds are
+    \begin{align}
+        h_0 & =\bigl(I-P_1(0)/4\bigr)P_0(1),\notag        \\
+        h_K & =\tfrac12\bigl(P_1(K)+P_1(K+1)\bigr).\notag
+    \end{align}
+    Every $h_i$ is a positive contraction supported on its bond $\{i,i+1\}$.
+    For the contiguous region $J=\{1,\ldots,K+1\}$, put
+    $A=\sum_{i=1}^K h_i$, $H=A+h_0$ and
+    $\widetilde H=\min(A,\tfrac32I)+h_0$.
+    The ground energy of $A$ is zero, and both $H$ and $\widetilde H$ have
+    ground energy $3/4$.
+    With $P=\mathbf1_{(-\infty,7/4]}(\widetilde H)$,
+    \begin{align}
+        \|(H-\widetilde H)P\|\ge K-\tfrac32.\notag
+    \end{align}
+    Thus the truncated-side restricted error at $t=3/2$ and $\eta=1$
+    has no bound independent of the region length.
+    In particular, $t>\eta$ alone does not suffice for the unrestricted
+    truncated-side assertion of \cite[Proposition~4.4(1)]{Arad2016RigorousRG}.
+\end{example}
+\begin{proof}\notready
+    All terms are diagonal in the computational basis. The vector
+    $|1,0,\ldots,0\rangle$ attains the stated ground energies.
+    If the label at site $1$ is zero, the boundary energy is at least $3/4$;
+    otherwise the first internal term contributes one, before or after clipping.
+    On $\psi=|1,\ldots,1\rangle$ one has
+    \begin{align}
+        A\psi            & =K\psi,        &
+        H\psi            & =K\psi,        &
+        \widetilde H\psi & =\tfrac32\psi, &
+        P\psi            & =\psi.\notag
+    \end{align}
+    Since $\|\psi\|=1$, the discrepancy norm is at least $K-3/2$.
+    Choose $K$ larger than any prescribed error bound plus two.
+\end{proof}

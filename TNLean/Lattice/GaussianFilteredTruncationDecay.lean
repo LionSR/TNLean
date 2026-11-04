@@ -27,11 +27,13 @@ Lieb–Robinson function is bounded by `T` times its value at `T`, and the const
 rather than the source's `g` and `c₁`. Documented in
 `docs/paper-gaps/hastings05_truncated_dynamics.tex`.
 
-**Scope restriction (shell growth):** the source states eq. `facld` only to order of magnitude,
-with the size `N(l_proj)` of the shell implicitly subexponential on a finite-dimensional
-lattice. Here the polynomial growth `N l ≤ K_g (l + 1)^k` of the number of omitted terms meeting
-the projection region is an explicit hypothesis. Documented in
-`docs/paper-gaps/hastings05_truncated_dynamics.tex`.
+**Scope restriction (shell growth):** polynomial growth `N l ≤ K_g (l + 1)^k` of the
+omitted shell is an explicit additional hypothesis. Source lines 169–190 impose no
+polynomial or subexponential growth condition. The general metric version
+of eq. `facld` is proved separately in `GaussianFilteredMetricTruncation`, using a
+weighted omitted-term estimate. The present theorems retain their shell-growth hypothesis.
+See `docs/paper-gaps/hastings05_geometric_growth_scope.tex` for the general metric proof
+and `docs/paper-gaps/hastings05_truncated_dynamics.tex` for the shell estimate.
 
 **Local fix (nonnegative interaction bound):** both theorems assume `0 ≤ J`. The source's `J`
 bounds the norms of the terms, so it is nonnegative; the hypothesis matters only when there

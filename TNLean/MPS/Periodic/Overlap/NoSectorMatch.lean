@@ -56,7 +56,7 @@ spectrum (see `IsCyclicSectorDecomp`).
 The orbit-lift / corner-irreducibility input is supplied unconditionally by
 `SelfOverlap.primitive_and_irreducible_sectorBlocks_of_cyclicDecomp`. -/
 lemma sectorBlocked_isNormal_of_isPeriodic
-    [NeZero D] (A : MPSTensor d D) {m : ℕ} [NeZero m]
+    (A : MPSTensor d D) {m : ℕ} [NeZero m]
     (hP : IsPeriodic m A)
     {dim : Fin m → ℕ}
     (blocks :
@@ -121,13 +121,14 @@ private theorem gaugePhaseEquiv_blockTensor
 its period; the limit is the period itself. This restates
 `periodicSelfOverlap_tendsto` for the blocked tensor. -/
 private theorem blockTensor_selfOverlap_tendsto_of_isPeriodic
-    [NeZero D] (A : MPSTensor d D) {m : ℕ} [NeZero m]
+    (A : MPSTensor d D) {m : ℕ} [NeZero m]
     (hP : IsPeriodic m A) :
     Tendsto
       (fun N => mpvOverlap (d := blockPhysDim d m)
         (blockTensor (d := d) (D := D) A m)
         (blockTensor (d := d) (D := D) A m) N)
       atTop (nhds (m : ℂ)) := by
+  have : NeZero D := ⟨hP.bondDim_ne_zero⟩
   have hSelf : Tendsto (fun N => mpvOverlap A A (m * N)) atTop (nhds (m : ℂ)) :=
     periodicSelfOverlap_tendsto A hP
   refine hSelf.congr' ?_
@@ -142,7 +143,7 @@ The proof uses the nonzero blocked self-overlap limits from Appendix A,
 lines 908-914 of arXiv:1708.00029, to show that the gauge factor has unit
 modulus. -/
 private theorem gaugePhase_blockTensor_overlap_not_tendsto_zero_of_periodic
-    [NeZero D] (A B : MPSTensor d D) {m : ℕ} [NeZero m]
+    (A B : MPSTensor d D) {m : ℕ} [NeZero m]
     (hA : IsPeriodic m A) (hB : IsPeriodic m B)
     (hGPE_block :
       GaugePhaseEquiv (blockTensor (d := d) (D := D) A m)
@@ -206,7 +207,7 @@ blocked overlap, using the two block decompositions, as a finite double sum of
 sector overlaps. Global gauge-phase equivalence keeps the total blocked overlap
 from tending to zero, so not every mixed sector overlap can tend to zero. -/
 private lemma exists_nondecaying_sectorOverlap_of_blockedGaugePhaseEquiv_cyclicDecomp
-    [NeZero D] (A B : MPSTensor d D)
+    (A B : MPSTensor d D)
     {m : ℕ} [NeZero m]
     (hA : IsPeriodic m A) (hB : IsPeriodic m B)
     {dimA dimB : Fin m → ℕ}
@@ -274,7 +275,7 @@ After transporting global gauge-phase equivalence to the blocked tensors, the
 block-sum overlap gives a non-decaying pair of sectors. Irreducibility then
 forces equal dimensions and gauge-phase equivalence for that pair. -/
 private lemma exists_sector_match_of_blockedGaugePhaseEquiv_cyclicDecomp
-    [NeZero D] (A B : MPSTensor d D)
+    (A B : MPSTensor d D)
     {m : ℕ} [NeZero m]
     (hA : IsPeriodic m A) (hB : IsPeriodic m B)
     {dimA dimB : Fin m → ℕ}
@@ -343,7 +344,7 @@ nondegeneracy assumptions ensure that the returned `A` sector has nonzero
 virtual dimension and that the corresponding `B` sector has positive bond
 dimension. Both assumptions come from the periodic sector decomposition. -/
 lemma exists_sector_match_of_gaugePhaseEquiv
-    [NeZero D] (A B : MPSTensor d D)
+    (A B : MPSTensor d D)
     {m : ℕ} [NeZero m]
     (hA : IsPeriodic m A) (hB : IsPeriodic m B)
     {dimA dimB : Fin m → ℕ}
@@ -383,7 +384,7 @@ lemma exists_sector_match_of_gaugePhaseEquiv
 /-- If no nonzero compressed sector pair matches, then the original periodic
 tensors cannot be globally gauge-phase equivalent. -/
 lemma not_gaugePhaseEquiv_of_no_sector_match
-    [NeZero D] (A B : MPSTensor d D)
+    (A B : MPSTensor d D)
     {m : ℕ} [NeZero m]
     (hA : IsPeriodic m A) (hB : IsPeriodic m B)
     {dimA dimB : Fin m → ℕ}
@@ -445,7 +446,7 @@ This is the "first case" of the same-period argument in Appendix A:
 block by `m`, decompose into normal sectors, and observe that all
 cross-sector overlaps decay by the normal-tensor overlap dichotomy. -/
 theorem periodicOverlap_tendsto_zero_of_no_sector_match
-    [NeZero D] (A B : MPSTensor d D)
+    (A B : MPSTensor d D)
     {m : ℕ} [NeZero m]
     (hA : IsPeriodic m A) (hB : IsPeriodic m B)
     {dimA dimB : Fin m → ℕ}
@@ -477,6 +478,7 @@ theorem periodicOverlap_tendsto_zero_of_no_sector_match
           (blocksA u))
         (blocksB v)) :
     Tendsto (fun N => mpvOverlap A B N) atTop (nhds 0) := by
+  have : NeZero D := ⟨hA.bondDim_ne_zero⟩
   have h_notGPE : ¬ GaugePhaseEquiv A B :=
     not_gaugePhaseEquiv_of_no_sector_match A B hA hB blocksA blocksB
       hA_blocks_lc hB_blocks_lc hA_mpv hB_mpv hA_cyclic hB_cyclic

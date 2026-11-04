@@ -1,0 +1,133 @@
+\section{The AKLV polynomial rank estimate}
+
+Retain the supported interaction family and Hamiltonian $G$ of
+Definition~\ref{def:aklv_window_alphabet}. All polynomial coefficients are complex.
+The commuting-gap count uses the correction in
+\cite{gap:aklv13_interpolation_and_word_count}.
+
+\begin{lemma}[Regrouping a consecutive subwindow]
+    \label{thm:aklv_subwindow_regrouping}
+    \lean{TNLean.MPS.AreaLaw.exists_aklv_subwindow_regrouping}
+    \leanok
+    \uses{def:aklv_window_alphabet}
+    Let $b,m\ge0$ satisfy $b+m\le s$, and put $H'_j=H_{b+j}$ for $0\le j<m$.
+    There are operators $H'_L,H'_R$ supported on ${\lbrack 0,a+b+1)}$ and ${\lbrack a+b+m,L)}$,
+    respectively, such that each $H'_j$ is supported on
+    $\{a+b+j,a+b+j+1\}$ and
+    \begin{align}
+        G=H'_L+\sum_{j=0}^{m-1}H'_j+H'_R.
+        \label{eq:aklv_regrouped_hamiltonian}
+    \end{align}
+    This is the shorter-window regrouping in
+    \cite[Lemma~4.2]{Arad2013AreaLaw}.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{def:aklv_window_alphabet}
+    Take $H'_L=H_L+\sum_{j<b}H_j$ and
+    $H'_R=H_R+\sum_{b+m\le j<s}H_j$.
+    Each omitted interaction lies in the corresponding enlarged exterior support.
+    Finite sums preserve support. Partition the original middle labels into
+    $j<b$, $b\le j<b+m$, and $b+m\le j$; reindexing the middle part gives
+    (\ref{eq:aklv_regrouped_hamiltonian}).
+\end{proof}
+
+\begin{lemma}[A nonempty shorter window at the same cut]
+    \label{thm:aklv_effective_window}
+    \lean{TNLean.MPS.AreaLaw.exists_aklv_centered_short_window,
+        TNLean.MPS.AreaLaw.exists_aklv_effective_window}
+    \leanok
+    If $s\ge1$ and $\ell\ge0$, there are integers $m,b\ge0$ such that
+    \begin{align*}
+        1\le m\le\ell+1,\qquad b+m\le s,\qquad
+        b+\lfloor m/2\rfloor=\lfloor s/2\rfloor,
+    \end{align*}
+    and
+    \begin{align*}
+        3m+6\lfloor\ell/m\rfloor+5
+        \le16\bigl(\lfloor\ell/s\rfloor+\lfloor\sqrt\ell\rfloor+1\bigr).
+    \end{align*}
+    For $\ell\ge1$ one may take $m=\min\{s,2\lfloor\sqrt\ell\rfloor\}$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    If $\ell=0$, take $m=1$ and $b=\lfloor s/2\rfloor$.
+    Otherwise put $n=\lfloor\sqrt\ell\rfloor\ge1$.
+    If $s\le2n$, take $m=s$ and $b=0$.
+    If $2n<s$, take $m=2n$ and $b=\lfloor s/2\rfloor-n$.
+    These choices give the same central cut, including odd $s$.
+    The inequalities $n^2\le\ell\le n^2+2n$ imply
+    $m\le\ell+1$ and, in the shorter-window case,
+    $\lfloor\ell/(2n)\rfloor\le n+1$. Substitution gives the stated exponent.
+\end{proof}
+
+\begin{lemma}[A uniform polynomial estimate in a bounded window]
+    \label{thm:aklv_width_polynomial_rank}
+    \lean{TNLean.MPS.AreaLaw.operatorSchmidtRank_aklv_polynomial_of_width_le}
+    \leanok
+    \uses{def:aklv_window_alphabet}
+    Suppose $q\ge1$, $1\le s\le\ell+1$, and $a+s+1\le L$.
+    Every complex polynomial $P$ of degree at most $\ell$ satisfies
+    \begin{align*}
+        \operatorname{OSR}_{a+\lfloor s/2\rfloor}(P(G))
+        \le\bigl(q(\ell+1)\bigr)^{3s+6\lfloor\ell/s\rfloor+5}.
+    \end{align*}
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{thm:aklv_power_rank_sum}
+    Write $B=q(\ell+1)$. For every $0\le r\le\ell$, the binomial and power
+    inequalities give
+    \begin{align*}
+        \binom{r-k+s}{s}                 & \le B^s,       &
+        \binom{r+k+1}{2k+1}              & \le B^{4k+2},  &
+        q^{2k+2|u+1-\lfloor s/2\rfloor|} & \le B^{2k+2s}.
+    \end{align*}
+    There are at most $B^2$ pieces and $k\le\lfloor\ell/s\rfloor$.
+    Lemma~\ref{thm:aklv_power_rank_sum} therefore bounds every $G^r$ by
+    $B^{3s+6\lfloor\ell/s\rfloor+4}$. Expand
+    $P(G)=\sum_{r=0}^{\ell}p_rG^r$.
+    Scalar multiplication does not increase rank; summing the at most
+    $\ell+1\le B$ powers gives the assertion.
+\end{proof}
+
+\begin{theorem}[An explicit AKLV polynomial rank bound]
+    \label{thm:aklv_polynomial_rank}
+    \lean{TNLean.MPS.AreaLaw.operatorSchmidtRank_aklv_polynomial_le,
+        TNLean.MPS.AreaLaw.operatorSchmidtRank_aklv_polynomial_le_max,
+        TNLean.MPS.AreaLaw.operatorSchmidtRank_aklv_polynomial_le_source_base}
+    \leanok
+    \uses{def:aklv_window_alphabet}
+    Suppose $q\ge1$, $s\ge1$, and $a+s+1\le L$.
+    For every $\ell\ge0$ and every complex polynomial $P$ of degree at most $\ell$,
+    \begin{align*}
+        \operatorname{OSR}_{a+\lfloor s/2\rfloor}(P(G))
+        \le \bigl(q(\ell+1)\bigr)^{
+                16(\lfloor\ell/s\rfloor+\lfloor\sqrt\ell\rfloor+1)}.
+    \end{align*}
+    For $\ell\ge1$, the exponent may be replaced by
+    $48\max\{\lfloor\ell/s\rfloor,\lfloor\sqrt\ell\rfloor\}$.
+    For every $\ell\ge1$, the source base gives the explicit bound
+    \begin{align*}
+        \operatorname{OSR}_{a+\lfloor s/2\rfloor}(P(G))
+        \le(q\ell)^{96\max\{\lfloor\ell/s\rfloor,\lfloor\sqrt\ell\rfloor\}}.
+    \end{align*}
+    The constants are universal. This gives the polynomial rank estimate in
+    \cite[Lemma~4.2]{Arad2013AreaLaw}; no positivity or spectral assumption is needed.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:aklv_effective_window,thm:aklv_subwindow_regrouping,
+        thm:aklv_width_polynomial_rank}
+    Choose the shorter window from Lemma~\ref{thm:aklv_effective_window} and
+    construct its actual exterior operators by
+    Lemma~\ref{thm:aklv_subwindow_regrouping}. Both the Hamiltonian and the
+    central cut are unchanged. Apply
+    Lemma~\ref{thm:aklv_width_polynomial_rank} to that window and use its
+    exponent bound. This proves the first inequality, including zero degree.
+    For positive degree, each of the three summands in the exponent is at
+    most $\max\{\lfloor\ell/s\rfloor,\lfloor\sqrt\ell\rfloor\}$.
+    If $q\ell\ge2$, use $q(\ell+1)\le2q\ell\le(q\ell)^2$ to obtain the
+    last inequality. The remaining positive-degree case is $q=\ell=1$;
+    the Hilbert space is then one-dimensional, so every operator has rank at most one.
+\end{proof}

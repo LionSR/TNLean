@@ -14,7 +14,9 @@ supercell whose translations leave every ground state unchanged. The first
 results below assume such a subgroup of translations; it is then constructed
 from the momenta, its translations are shown to carry a site far away, and the
 three steps combine into the source's conclusion
-\cite{gap:hastings05_translation_supercell}.
+\cite{gap:hastings05_translation_supercell}. Section~\ref{sec:hastings_finite_translation_orbit}
+proves the general case without a bound on momentum denominators, by translating
+an arbitrary local observable directly.
 
 Throughout, $G$ acts on the finite set of sites, $H$ is Hermitian and
 invariant, $P$ is the orthogonal projection onto the eigenspace of $H$ for an
@@ -338,7 +340,7 @@ the residue of the site.
     Lemma~\ref{thm:hastings_supercell_commutator_small} plus
     $2\varepsilon_i\lVert h_j\rVert+2\lVert h_i\rVert\varepsilon_j$. The errors of
     eq.~\texttt{apb} do not decrease with $n$; the exponential smallness in $n$
-    for the $M_i$ is Lemma~\ref{thm:hastings_supercell_truncated_small}.
+    for the $M_i$ is Theorem~\ref{thm:hastings_supercell_truncated_small}.
 \end{lemma}
 \begin{proof}\leanok
     Write $A=P\tilde H_iP$, $A'=PM_iP$, $B=P\tilde H_jP$ and $B'=PM_jP$. Then
@@ -348,7 +350,7 @@ the residue of the site.
     $2\varepsilon_i\lVert h_j\rVert$ and $2\lVert h_i\rVert\varepsilon_j$.
 \end{proof}
 
-\begin{lemma}[The source's truncated terms]
+\begin{theorem}[The source's truncated terms]
     \label{thm:hastings_supercell_truncated_small}
     \lean{TNLean.Lattice.truncatedTerm,
         TNLean.Lattice.truncatedTerm_smul,
@@ -365,7 +367,7 @@ the residue of the site.
     $l$. Taking $l=\lfloor n/2\rfloor-N-2R'$ makes it exponentially small in $n$,
     which is the conclusion of \cite[lines 1603--1641]{Hastings2006Solving} for
     the source's $M_i$.
-\end{lemma}
+\end{theorem}
 \begin{proof}\leanok
     \uses{thm:hastings_site_invariant_sum,thm:hastings_supercell_compression,
         thm:hastings_supercell_of_momenta,thm:hastings_supercell_far,

@@ -351,6 +351,14 @@ theorem compressedWindowProjection_mul {Q : Matrix ι ι ℂ} (hQ : IsStarProjec
   rw [compressedWindowProjection, mul_assoc,
     (commute_windowProjection_compress hQ M c x).eq, ← mul_assoc, hQ.isIdempotentElem.eq]
 
+/-- Nesting of operator ranges passes to retained vectors.
+Hastings, arXiv:cond-mat/0508554v3, lines 673–685. -/
+theorem toEuclideanLin_eq_of_mul_eq {P Q : Matrix ι ι ℂ} (hPQ : P * Q = Q)
+    {φ : EuclideanSpace ℂ ι} (hφ : toEuclideanLin Q φ = φ) :
+    toEuclideanLin P φ = φ := by
+  conv_lhs => rw [← hφ]
+  rw [← toEuclideanLin_mul_apply, hPQ, hφ]
+
 /-- On the preceding subspace the restricted projection agrees with the ambient spectral
 window. Hastings, arXiv:cond-mat/0508554v3, `proj3new.tex`, lines 673–685. -/
 theorem toEuclideanLin_compressedWindowProjection_of_mem {Q : Matrix ι ι ℂ}

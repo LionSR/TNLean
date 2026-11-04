@@ -158,9 +158,7 @@ theorem projected_energy_le_clipped_energy_add_tail
   have henergy := ContinuousLinearMap.re_inner_left_le_energy_add_cross
     (ι K) hpos (ι P x) (ι Q x)
   rw [hsplit, hcross] at henergy
-  have hnormA : ‖A‖ ≤ 2 := by
-    apply (CStarAlgebra.norm_le_iff_le_algebraMap A (by norm_num) hA.nonneg).mpr
-    simpa [Algebra.algebraMap_eq_smul_one, ← Complex.coe_smul] using hAcap
+  have hnormA : ‖A‖ ≤ 2 := hA.norm_le_of_le_smul_one (by norm_num) (by simpa using hAcap)
   have hnormP : ‖ι P x‖ ≤ 1 := by
     simpa only [hx] using ContinuousLinearMap.IsStarProjection.norm_apply_le hP x
   have hbound : ‖⟪ι P x, ι A (ι Q x)⟫_ℂ‖ ≤ 2 * ‖ι Q x‖ := by

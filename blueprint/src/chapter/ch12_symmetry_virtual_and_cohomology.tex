@@ -696,3 +696,45 @@ establishes non-triviality of the class.
     $\beta_\omega(g,h)\neq 1$ for one commuting pair forces $\omega$ to be
     non-cohomologous to the trivial cocycle.
 \end{proof}
+
+\begin{lemma}[The commutator phase of a cocycle is a bicharacter]
+    \label{thm:comm_phase_bicharacter}
+    \lean{TNLean.Algebra.ScalarCocycle.commPhase_swap,
+        TNLean.Algebra.ScalarCocycle.apply_one_right,
+        TNLean.Algebra.ScalarCocycle.apply_one_left,
+        TNLean.Algebra.ScalarCocycle.commPhase_one_right,
+        TNLean.Algebra.ScalarCocycle.commPhase_mul_right,
+        TNLean.Algebra.ScalarCocycle.commPhase_mul_left,
+        TNLean.Algebra.ScalarCocycle.commPhase_pow_left}
+    \leanok
+    \uses{def:comm_phase, def:is_cocycle}
+    For every $2$-cochain, $\beta_\omega(h,g)=\beta_\omega(g,h)^{-1}$. If
+    $\omega$ is a $2$-cocycle, then $\omega(g,e)=\omega(e,g)=\omega(e,e)$, so
+    $\beta_\omega(g,e)=1$, and for $g$ commuting with $h$ and $k$,
+    \begin{align}
+        \beta_\omega(g,hk) & =\beta_\omega(g,h)\,\beta_\omega(g,k).
+        \label{eq:symmetry_comm_phase_bicharacter}
+    \end{align}
+    The same holds in the first argument, and
+    $\beta_\omega(g^n,h)=\beta_\omega(g,h)^n$ when $gh=hg$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:comm_phase, def:is_cocycle}
+    The cocycle equation at $(g,e,e)$ and $(e,e,g)$ gives the values at the
+    identity. For (\ref{eq:symmetry_comm_phase_bicharacter}), the cocycle
+    equation at $(g,h,k)$, $(h,g,k)$ and $(h,k,g)$ reads
+    \begin{align}
+        \omega(g,h)\omega(gh,k) & =\omega(g,hk)\omega(h,k),
+        \notag                                              \\
+        \omega(h,g)\omega(gh,k) & =\omega(h,gk)\omega(g,k),
+        \notag                                              \\
+        \omega(h,k)\omega(hk,g) & =\omega(h,gk)\omega(k,g),
+        \notag
+    \end{align}
+    using $hg=gh$ and $kg=gk$. Dividing the first by the third and
+    substituting the second for $\omega(h,gk)$ gives
+    $\omega(g,hk)/\omega(hk,g)
+        =\omega(g,h)\omega(g,k)/(\omega(h,g)\omega(k,g))$. Antisymmetry gives
+    the first argument, and induction on $n$ gives the powers.
+\end{proof}

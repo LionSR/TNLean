@@ -12,7 +12,7 @@
 %%   TNLean/MPS/Symmetry/MPOSymmetry/Associator.lean.
 %% =========================================================
 
-\chapter{Matrix Product Operator Algebras}%
+\chapter{Matrix product operator algebras}%
 \label{ch:mpo_algebras}
 
 A matrix product operator algebra is a finite family of matrix product
@@ -901,8 +901,9 @@ with the corresponding composite embeddings.
         W_{ab}^{c\mu}$ with $W_{ab}^{c\mu}V_{ab}^{d\nu}=\delta_{cd}\delta_{\mu\nu}\Id$,
     so the letters $V$ and $W$ are swapped. Lemma~\ref{thm:mpoalg_fusion_coproduct}
     reads this identity backwards: the fusion tensors of a complete zipper
-    fusion family define the coproduct. No part of the correspondence
-    concerning units, counits, or antipodes is stated here.
+    fusion family define the coproduct, and
+    Lemma~\ref{lem:mpoalg_fusion_coproduct_counit} identifies its counit. No
+    part of the correspondence concerning units or antipodes is stated here.
     % Source anchor: arXiv:2204.05940, mpo.tex line 1655
     %   (eq:splitting_algebraic) and 1725--1892 (basis change, F-symbols,
     %   pentagon).
@@ -946,7 +947,7 @@ with the corresponding composite embeddings.
     the dual algebra, (\ref{eq:mpoalg_fusion_coproduct_letter}) is the
     coproduct of the matrix coefficients of the physical representation, and
     multiplicativity is the pre-bialgebra axiom.
-    % Source anchor: arXiv:2204.05940, mpo.tex lines 1409--1419
+    % Source anchor: arXiv:2204.05940, mpo.tex lines 1409--1414
     %   (pre-bialgebra), 1655 (eq:splitting_algebraic), 1708
     %   (eq:delta_epsilon), 1182 (injectivity), 2003--2006
     %   (eq:MPO_tensor_product).
@@ -964,40 +965,137 @@ with the corresponding composite embeddings.
     $\Delta(X)\Delta(Y)=\sum_{c,\mu}X^c_{ab,\mu}X_cY_cX^{c+}_{ab,\mu}$.
 \end{proof}
 
-\begin{lemma}[Coassociativity of the fusion coproduct]%
-    \label{thm:mpoalg_fusion_coproduct_coassoc}
-    \lean{MPOTensor.CompleteZipperFusionFamily.coproductLeft,
-        MPOTensor.CompleteZipperFusionFamily.coproductRight,
-        MPOTensor.CompleteZipperFusionFamily.coproduct_coassoc}
+\begin{definition}[Pre-bialgebra]
+    \label{def:mpoalg_pre_bialgebra}
+    \lean{PreBialgebra, Bialgebra.toPreBialgebra}
     \leanok
-    \uses{thm:mpoalg_fusion_coproduct}
-    The coproduct (\ref{eq:mpoalg_fusion_coproduct}) is coassociative,
-    $(\Delta\otimes\Id)\circ\Delta=(\Id\otimes\Delta)\circ\Delta$, where on the
-    triple bond space
+    A pre-bialgebra over a commutative semiring $R$ is an algebra
+    $\mathcal A$ over $R$ with linear maps
+    $\Delta\colon\mathcal A\to\mathcal A\otimes\mathcal A$ and
+    $\epsilon\colon\mathcal A\to R$ such that $\Delta$ is multiplicative and
+    coassociative and $\epsilon$ is a counit:
     \begin{align}
-        (\Delta\otimes\Id)(Y)_{abc}
-         & =\sum_{e,\mu}(X^e_{ab,\mu}\otimes\Id)\,Y_{ec}\,
-        (X^{e+}_{ab,\mu}\otimes\Id), \notag                         \\
-        (\Id\otimes\Delta)(Y)_{abc}
-         & =\sum_{f,\lambda}(\Id\otimes X^f_{bc,\lambda})\,Y_{af}\,
-        (\Id\otimes X^{f+}_{bc,\lambda}). \notag
+        \Delta(xy)                    & =\Delta(x)\Delta(y),            &
+        (\Delta\otimes\Id)\circ\Delta & =(\Id\otimes\Delta)\circ\Delta,
+        \label{eq:mpoalg_pre_bialgebra}                                   \\
+        (\epsilon\otimes\Id)\circ\Delta
+                                      & =\Id,                           &
+        (\Id\otimes\epsilon)\circ\Delta
+                                      & =\Id,
+        \label{eq:mpoalg_pre_bialgebra_counit}
     \end{align}
-    This is the coassociativity axiom of a coalgebra
-    \cite[Section~3]{Molnar2022MPOAlgebrasI}. The source assumes it and
-    derives the associativity of fusion trees and the $F$-symbols; here it is
-    proved from the fusion tensors.
-    % Source anchor: arXiv:2204.05940, mpo.tex lines 866--875 (coalgebra),
-    %   1732--1787 (eq:associative), 2003--2006 (eq:MPO_tensor_product).
+    after the standard identifications of the two triple tensor products and
+    of $R\otimes\mathcal A$ and $\mathcal A\otimes R$ with $\mathcal A$.
+    Neither $\Delta(\Id)=\Id\otimes\Id$ nor any relation between $\epsilon$
+    and the unit or the product is required. Every bialgebra is a
+    pre-bialgebra.
+
+    This is \cite[Definition~4.1]{Molnar2022MPOAlgebrasI}: an algebra that is
+    also a coalgebra \cite[Definition~3.1]{Molnar2022MPOAlgebrasI} with
+    multiplicative coproduct. The source works with finite-dimensional
+    complex vector spaces.
+    % Source anchor: arXiv:2204.05940, mpo.tex lines 866--875
+    %   (Definition 3.1), 1407 and 1409--1414 (Definition 4.1).
+\end{definition}
+
+\begin{lemma}[The fusion coproduct is coassociative]%
+    \label{thm:mpoalg_fusion_coproduct_coassoc}
+    \lean{MPOTensor.CompleteZipperFusionFamily.tensorPairEquiv,
+        MPOTensor.CompleteZipperFusionFamily.comul,
+        MPOTensor.CompleteZipperFusionFamily.comul_letter,
+        MPOTensor.CompleteZipperFusionFamily.comul_coassoc}
+    \leanok
+    \uses{thm:mpoalg_fusion_coproduct, def:mpoalg_pre_bialgebra}
+    Write $\mathcal B=\bigoplus_c\MN{D_c}$. Distributing the tensor product
+    over the two direct sums and identifying $\MN{D_a}\otimes\MN{D_b}$ with
+    $\MN{D_aD_b}$ by the Kronecker product gives an algebra isomorphism
+    $\mathcal B\otimes\mathcal B\cong\bigoplus_{a,b}\MN{D_a}\otimes\MN{D_b}$.
+    Read through it, the coproduct (\ref{eq:mpoalg_fusion_coproduct}) is a
+    multiplicative linear map $\Delta\colon\mathcal B\to\mathcal B\otimes\mathcal B$
+    with
+    \begin{align}
+        \Delta\big((B_c^{ik})_c\big)
+         & =\sum_j(B_c^{ij})_c\otimes(B_c^{jk})_c,
+        \notag
+    \end{align}
+    and it is coassociative,
+    $(\Delta\otimes\Id)\circ\Delta=(\Id\otimes\Delta)\circ\Delta$ after
+    the standard identification of the two triple tensor products. Thus
+    $\Delta$ satisfies (\ref{eq:mpoalg_pre_bialgebra}), while $\Delta(\Id)$
+    is the support projector of Lemma~\ref{thm:mpoalg_fusion_coproduct} and
+    need not be the unit. The source assumes
+    coassociativity and derives the associativity of fusion trees and the
+    $F$-symbols; here it is proved from the fusion tensors.
+    % Source anchor: arXiv:2204.05940, mpo.tex lines 866--875
+    %   (Definition 3.1), 1409--1414 (Definition 4.1), 1732--1787
+    %   (eq:associative), 2003--2006 (eq:MPO_tensor_product).
 \end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:mpoalg_fusion_coproduct}
-    Both sides are linear in the argument, and by
+    Under the isomorphism, an elementary tensor $X\otimes Y$ has blocks
+    $X_a\otimes Y_b$, so the letter formula is
+    (\ref{eq:mpoalg_fusion_coproduct_letter}). Multiplicativity is that of
+    Lemma~\ref{thm:mpoalg_fusion_coproduct}, transported along an algebra
+    isomorphism. Both iterated coproducts are linear, and by
     Lemma~\ref{thm:mpoalg_fusion_coproduct} the elements $(B_c^{il})_c$
-    span the space of tuples $(Z_c)_c$ on which $\Delta$ acts. By (\ref{eq:mpoalg_fusion_coproduct_letter}) applied twice, both
-    sides send $(B_c^{il})_c$ to
-    $\sum_{j,k}B_a^{ij}\otimes B_b^{jk}\otimes B_c^{kl}$.
+    span $\mathcal B$. By the letter formula applied twice, both send
+    $(B_c^{il})_c$ to
+    $\sum_{j,k}(B_c^{ij})_c\otimes(B_c^{jk})_c\otimes(B_c^{kl})_c$.
+\end{proof}
+
+\begin{lemma}[Counit of the fusion coproduct]%
+    \label{lem:mpoalg_fusion_coproduct_counit}
+    \lean{MPOTensor.CompleteZipperFusionFamily.rTensor_counit_comp_comul,
+        MPOTensor.CompleteZipperFusionFamily.lTensor_counit_comp_comul,
+        MPOTensor.CompleteZipperFusionFamily.counit_unique,
+        MPOTensor.CompleteZipperFusionFamily.identityBlockCounit,
+        MPOTensor.CompleteZipperFusionFamily.identityBlockCounit_letter,
+        MPOTensor.CompleteZipperFusionFamily.toPreBialgebra}
+    \leanok
+    \uses{thm:mpoalg_fusion_coproduct_coassoc, def:mpoalg_pre_bialgebra}
+    In the setting of Lemma~\ref{thm:mpoalg_fusion_coproduct_coassoc}, let
+    $\epsilon\colon\mathcal B\to\C$ be a linear functional with
+    \begin{align}
+        \epsilon\big((B_c^{ik})_c\big)
+         & =\delta_{ik}.
+        \label{eq:mpoalg_fusion_counit}
+    \end{align}
+    Then $\epsilon$ satisfies (\ref{eq:mpoalg_pre_bialgebra_counit}) for
+    the fusion coproduct, so $(\mathcal B,\Delta,\epsilon)$ is a
+    pre-bialgebra in the sense of Definition~\ref{def:mpoalg_pre_bialgebra}.
+    There is at most one functional with (\ref{eq:mpoalg_fusion_counit}). If
+    one block is the identity operator, $B_{c_0}^{ik}=\delta_{ik}\Id$, then
+    $X\mapsto D_{c_0}^{-1}\tr X_{c_0}$ is such a functional.
+
+    In \cite[Section~4]{Molnar2022MPOAlgebrasI} the boundary algebra is the
+    dual algebra $\mathcal A^*$, whose counit is evaluation at the unit of
+    $\mathcal A$, and $(B_c^{ik})_c$ is the image of the matrix coefficient
+    $x\mapsto\phi(x)_{ik}$ of the physical representation $\phi$. Since
+    $\phi(\Id)=\Id$, the source's counit is the functional
+    (\ref{eq:mpoalg_fusion_counit}). The fusion data alone do not force such
+    a functional to exist: one block of bond dimension one whose letters form
+    a nonzero matrix $(B^{ik})_{ik}$ of square zero, with no fusion channel,
+    has $\Delta=0$, which admits no counit. The pre-bialgebra is therefore stated
+    for a given functional with (\ref{eq:mpoalg_fusion_counit})
+    \cite{gap:mrgscp22_pre_bialgebra_counit_scope}.
+    % Source anchor: arXiv:2204.05940, mpo.tex lines 866--875
+    %   (Definition 3.1), 880 and 1419 (counit of the dual algebra), 1421
+    %   (representations are unital), 1640 (the dual is a pre-bialgebra).
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpoalg_fusion_coproduct, thm:mpoalg_fusion_coproduct_coassoc}
+    Both sides of each identity in (\ref{eq:mpoalg_pre_bialgebra_counit})
+    are linear, and the elements $(B_c^{ik})_c$ span $\mathcal B$ by
+    Lemma~\ref{thm:mpoalg_fusion_coproduct}. By the letter formula and
+    (\ref{eq:mpoalg_fusion_counit}),
+    $(\epsilon\otimes\Id)\Delta\big((B_c^{ik})_c\big)
+        =\sum_j\delta_{ij}(B_c^{jk})_c=(B_c^{ik})_c$, and similarly on the
+    other side. Spanning also gives uniqueness. For an identity block,
+    $D_{c_0}^{-1}\tr(\delta_{ik}\Id)=\delta_{ik}$.
 \end{proof}
 
 \begin{remark}[Kramers--Wannier duality is an intertwiner]%

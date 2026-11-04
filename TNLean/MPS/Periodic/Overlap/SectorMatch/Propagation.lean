@@ -79,7 +79,7 @@ The corner equivalences identify a positive-dimensional matrix algebra with the 
 therefore `P (u + 1) = 0`; the cyclic relation `E†(P (u + 1)) = P u` then gives a
 contradiction. -/
 private lemma sectorDim_ne_zero_succ_of_cyclicSectorDecomp
-    [NeZero D] (A : MPSTensor d D)
+    (A : MPSTensor d D)
     {m : ℕ} [NeZero m]
     {dim : Fin m → ℕ}
     (blocks : (k : Fin m) → MPSTensor (blockPhysDim d m) (dim k))
@@ -145,7 +145,6 @@ so that the match transports along these transitions. This is a formalization of
 the same step via the `IsCyclicSectorDecomp` relation 𝓔_A^{*}(P_{k+1}) = P_k; see
 docs/paper-gaps/dccsp17_periodic_overlap_route_alignment.tex. -/
 private lemma sectorGaugePhaseEquiv_succ_of_cyclicTransport
-    [NeZero D]
     (A B : MPSTensor d D)
     {m : ℕ} [NeZero m]
     (hA : IsPeriodic m A) (hB : IsPeriodic m B)
@@ -271,7 +270,6 @@ equivalence between sector pair (u, v) to one between (u + 1, v + 1). The
 conclusion also propagates nondegeneracy so the step can be iterated around the
 cycle. -/
 private lemma sectorMatch_succ_of_cyclicSectorDecomp
-    [NeZero D]
     (A B : MPSTensor d D)
     {m : ℕ} [NeZero m]
     (hA : IsPeriodic m A) (hB : IsPeriodic m B)
@@ -360,7 +358,6 @@ unit-modulus cross overlap that certifies the match can reappear at the shifted
 sector pair.  They also supply the left-canonical normalization that keeps the
 propagated phases unit-modulus. -/
 lemma sectorMatch_propagation
-    [NeZero D]
     (A B : MPSTensor d D)
     {m : ℕ} [NeZero m]
     (hA : IsPeriodic m A) (hB : IsPeriodic m B)

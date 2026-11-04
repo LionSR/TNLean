@@ -26,9 +26,12 @@ canonical dependent index; the next enumerates that same family, and the
 last gives its polynomial-evaluation form.
 
 The number of terms is bounded by the square of an explicit counting
-parameter. The open-boundary bond bound of each middle operator is the
-separate general square-derived bound in increasing physical order.
-No source-sharp bond, spectral or running-time conclusion is asserted.
+parameter. The open-boundary bond bound of each middle operator remains the
+general square-derived bound in increasing physical order. Each same operator
+also has an actual site-dependent trace presentation with virtual dimension
+at most `(max 1 B)^k`, chosen before the exterior operators and polynomial.
+These are different presentations of the same family. No source-general
+boundary convention, spectral or running-time conclusion is asserted.
 
 **Local fix (interpolation):** The recovery step uses spanning interpolation
 without independence of the coefficient operators. The source distinction
@@ -111,6 +114,11 @@ private noncomputable def actualCrossingFrequencyGridMPOFamilyStatement
         ((max 1 B) ^ (2 * k)) (fun w ↦ Wall r
           (fun v ↦ ((finProdFinEquiv (m := q) (n := q)).symm (w (eJ.symm v))).1)
           (fun v ↦ ((finProdFinEquiv (m := q) (n := q)).symm (w (eJ.symm v))).2))) ∧
+      (∀ r : Iall, ∃ Dr : ℕ, Dr ≤ (max 1 B) ^ k ∧
+        ∃ Cr : Matrix (Fin Dr) (Fin Dr) ℂ,
+        ∃ Ar : Fin ((b + ell + 1) - (a + ell)) → MPOTensor q Dr,
+          (Wall r).submatrix (fun σ z ↦ σ (eJ.symm z))
+            (fun σ z ↦ σ (eJ.symm z)) = MPOTensor.traceChainOperator Ar Cr) ∧
       ∀ (PL PR : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ),
         Entropy.IsSupportedOn PL (interval L 0 (a + 1)) →
         Entropy.IsSupportedOn PR (interval L (b + 2 * ell) L) →
@@ -180,7 +188,7 @@ private theorem exists_crossing_frequency_grid_mpo_family
     exists_common_fixed_middle_grid_mpo_family
       WL WR hleft hright hab hb v.1 v.2.1 hqpos Acore C0 (z v) k
         v.2.2.1.val v.2.2.2.val
-  choose n _deg V hcard hW hdecomp using hfamily
+  choose n _deg V hcard hW hTrace hdecomp using hfamily
   let β := fun _ : Fin L ↦ Fin q
   let Vphys := fun (v : crossingFrequencyIndex ell k) (u : ζ) r ↦
     (V v u r).submatrix (fun σ : E v → Fin q ↦ σ ∘ eE v)
@@ -228,7 +236,13 @@ private theorem exists_crossing_frequency_grid_mpo_family
           (fun v ↦ ((finProdFinEquiv (m := q) (n := q)).symm (w (eJ.symm v))).1)
           (fun v ↦ ((finProdFinEquiv (m := q) (n := q)).symm (w (eJ.symm v))).2)) :=
     hW r.1 r.2
-  refine ⟨n, V, hcountAll, hWall, ?_⟩
+  have hTraceAll (r : Iall) : ∃ Dr : ℕ, Dr ≤ (max 1 B) ^ k ∧
+      ∃ Cr : Matrix (Fin Dr) (Fin Dr) ℂ,
+      ∃ Ar : Fin ((b + ell + 1) - (a + ell)) → MPOTensor q Dr,
+        (Wall r).submatrix (fun σ z ↦ σ (eJ.symm z))
+          (fun σ z ↦ σ (eJ.symm z)) = MPOTensor.traceChainOperator Ar Cr :=
+    hTrace r.1 r.2
+  refine ⟨n, V, hcountAll, hWall, hTraceAll, ?_⟩
   intro PL PR hPL hPR F Dphys c
   choose M hM using fun v : crossingFrequencyIndex ell k ↦
     hdecomp v PL PR hPL hPR (c v)
@@ -310,6 +324,11 @@ theorem exists_common_physical_polynomial_mpo_family
         ((max 1 B) ^ (2 * k)) (fun w ↦ Wall r
           (fun v ↦ ((finProdFinEquiv (m := q) (n := q)).symm (w (eJ.symm v))).1)
           (fun v ↦ ((finProdFinEquiv (m := q) (n := q)).symm (w (eJ.symm v))).2))) ∧
+      (∀ r : Iall, ∃ Dr : ℕ, Dr ≤ (max 1 B) ^ k ∧
+        ∃ Cr : Matrix (Fin Dr) (Fin Dr) ℂ,
+        ∃ Ar : Fin ((b + ell + 1) - (a + ell)) → MPOTensor q Dr,
+          (Wall r).submatrix (fun σ z ↦ σ (eJ.symm z))
+            (fun σ z ↦ σ (eJ.symm z)) = MPOTensor.traceChainOperator Ar Cr) ∧
       ∀ (PL PR : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ),
         Entropy.IsSupportedOn PL (interval L 0 (a + 1)) →
         Entropy.IsSupportedOn PR (interval L (b + 2 * ell) L) →
@@ -346,7 +365,7 @@ theorem exists_common_physical_polynomial_mpo_family
   obtain ⟨z, gamma, hrecovery⟩ :=
     exists_global_two_window_polynomial_recovery
       (R := Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) ell k hell
-  obtain ⟨n, V, hcount, hW, hdecomp⟩ :=
+  obtain ⟨n, V, hcount, hW, hTrace, hdecomp⟩ :=
     exists_crossing_frequency_grid_mpo_family
       WL WR hleft hright hab hb hell hq hk Acore C0 z
   let β := fun _ : Fin L ↦ Fin q
@@ -370,7 +389,7 @@ theorem exists_common_physical_polynomial_mpo_family
     exact Nat.pow_le_pow_right (Nat.succ_pos k) (by omega)
   have hcountSquare : Fintype.card Iall ≤ D ^ 2 :=
     crossing_grid_cardinality_le_square hq hk hell hZ hcount
-  refine ⟨n, V, hcountSquare, hW, ?_⟩
+  refine ⟨n, V, hcountSquare, hW, hTrace, ?_⟩
   intro PL PR hPL hPR F c
   obtain ⟨M, hM⟩ := hdecomp PL PR hPL hPR
     (fun v t r ↦ c r * gamma v t)
@@ -413,6 +432,11 @@ theorem exists_common_physical_polynomial_mpo_family_fin
         ((max 1 B) ^ (2 * k)) (fun w ↦ W r
           (fun v ↦ ((finProdFinEquiv (m := q) (n := q)).symm (w (eJ.symm v))).1)
           (fun v ↦ ((finProdFinEquiv (m := q) (n := q)).symm (w (eJ.symm v))).2))) ∧
+      (∀ r : Fin N, ∃ Dr : ℕ, Dr ≤ (max 1 B) ^ k ∧
+        ∃ Cr : Matrix (Fin Dr) (Fin Dr) ℂ,
+        ∃ Ar : Fin ((b + ell + 1) - (a + ell)) → MPOTensor q Dr,
+          (W r).submatrix (fun σ z ↦ σ (eJ.symm z))
+            (fun σ z ↦ σ (eJ.symm z)) = MPOTensor.traceChainOperator Ar Cr) ∧
       ∀ (PL PR : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ),
         Entropy.IsSupportedOn PL (interval L 0 (a + 1)) →
         Entropy.IsSupportedOn PR (interval L (b + 2 * ell) L) →
@@ -436,7 +460,7 @@ theorem exists_common_physical_polynomial_mpo_family_fin
     (selected_middle_fixed_interval_bounds hab hb v.1 v.2.1).1
     (selected_middle_fixed_interval_bounds hab hb v.1 v.2.1).2.1
   let J := interval L (a + ell) (b + ell + 1)
-  obtain ⟨n, V, hcount, hW, hdecomp⟩ :=
+  obtain ⟨n, V, hcount, hW, hTrace, hdecomp⟩ :=
     exists_common_physical_polynomial_mpo_family
       WL WR hleft hright hab hb hell hq hk Acore C0
   let β := fun _ : Fin L ↦ Fin q
@@ -455,9 +479,11 @@ theorem exists_common_physical_polynomial_mpo_family_fin
   let Iall := Σ v : crossingFrequencyIndex ell k, Igrid v
   let Wall := fun r : Iall ↦ Wgrid r.1 r.2
   let e := Fintype.equivFin Iall
-  refine ⟨Fintype.card Iall, fun r ↦ Wall (e.symm r), hcount, ?_, ?_⟩
+  refine ⟨Fintype.card Iall, fun r ↦ Wall (e.symm r), hcount, ?_, ?_, ?_⟩
   · intro r
     exact hW (e.symm r)
+  · intro r
+    exact hTrace (e.symm r)
   · intro PL PR hPL hPR F c
     obtain ⟨M, hM⟩ := hdecomp PL PR hPL hPR c
     refine ⟨fun r ↦ M (e.symm r), hM.trans ?_⟩
@@ -500,6 +526,11 @@ theorem exists_common_physical_aeval_mpo_family_fin
         ((max 1 B) ^ (2 * k)) (fun w ↦ W r
           (fun v ↦ ((finProdFinEquiv (m := q) (n := q)).symm (w (eJ.symm v))).1)
           (fun v ↦ ((finProdFinEquiv (m := q) (n := q)).symm (w (eJ.symm v))).2))) ∧
+      (∀ r : Fin N, ∃ Dr : ℕ, Dr ≤ (max 1 B) ^ k ∧
+        ∃ Cr : Matrix (Fin Dr) (Fin Dr) ℂ,
+        ∃ Ar : Fin ((b + ell + 1) - (a + ell)) → MPOTensor q Dr,
+          (W r).submatrix (fun σ z ↦ σ (eJ.symm z))
+            (fun σ z ↦ σ (eJ.symm z)) = MPOTensor.traceChainOperator Ar Cr) ∧
       ∀ (PL PR : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ),
         Entropy.IsSupportedOn PL (interval L 0 (a + 1)) →
         Entropy.IsSupportedOn PR (interval L (b + 2 * ell) L) →
@@ -515,10 +546,10 @@ theorem exists_common_physical_aeval_mpo_family_fin
                 ((FiniteProduct.splitEquiv (fun _ : Fin L ↦ Fin q) J).trans
                   (Equiv.prodComm _ _)) := by
   classical
-  obtain ⟨N, W, hN, hW, hdecomp⟩ :=
+  obtain ⟨N, W, hN, hW, hTrace, hdecomp⟩ :=
     exists_common_physical_polynomial_mpo_family_fin
       WL WR hleft hright hab hb hell hq hk Acore C0
-  refine ⟨N, W, hN, hW, ?_⟩
+  refine ⟨N, W, hN, hW, hTrace, ?_⟩
   intro PL PR hPL hPR F P hP
   obtain ⟨M, hM⟩ := hdecomp PL PR hPL hPR (fun r ↦ P.coeff r.val)
   refine ⟨M, ?_⟩

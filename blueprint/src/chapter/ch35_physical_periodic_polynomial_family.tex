@@ -1,0 +1,53 @@
+\section{Periodic trace presentations of the common middle family}
+
+\begin{lemma}[A common polynomial family with periodic trace presentations]
+    \label{thm:physical_aeval_periodic_middle_family}
+    \lean{TNLean.MPS.AreaLaw.exists_common_physical_aeval_periodic_family_fin}
+    \leanok
+    \uses{thm:physical_aeval_fin_middle_family,thm:trace_chain_closing_absorption}
+    Retain the hypotheses (\ref{eq:physical_polynomial_family_hypotheses}),
+    the supplied window operators, core tensors and closing matrix of
+    (\ref{eq:physical_polynomial_supplied_core}), and the notation
+    (\ref{eq:physical_polynomial_two_bounds}). Write $\beta=\max(1,B)$.
+    One may choose $N\le D^2$ and matrices $W_0,\ldots,W_{N-1}$ on
+    $\mathcal C(J)$ with all the properties of
+    Lemma~\ref{thm:physical_aeval_fin_middle_family} and the following
+    additional property. For each $r$, there are a nonnegative integer
+    $\chi_r\le\beta^k$ and site-dependent matrices
+    $T_{r,v}(x,y)\in\C^{\chi_r\times\chi_r}$ such that
+    \begin{align}
+        W_r(\sigma,\tau)
+         & =\operatorname{tr}\left(
+        \prod_{v=0}^{|J|-1}T_{r,v}(\sigma_{j_v},\tau_{j_v})\right).
+        \label{eq:physical_periodic_middle_trace}
+    \end{align}
+    Here $j_0<\cdots<j_{|J|-1}$ enumerate $J$, and
+    $\sigma,\tau\in\mathcal C(J)$.
+    In particular, the same matrices $W_r$ retain their open-boundary bond
+    bound $\mathcal B$ and their presentations
+    (\ref{eq:physical_polynomial_trace_presentation}) with a closing matrix.
+    The number, matrices and both trace presentations are chosen before
+    every supported exterior pair $P_L,P_R$ and every polynomial
+    $P\in\C[X]$ of natural degree at most $k$.
+    For each such pair and polynomial there are exterior matrices $M_r$ with
+    \begin{align}
+        P(H) & =\left(\sum_{r=0}^{N-1}M_r\otimes W_r\right)^{\mathrm{phys}},
+        \label{eq:physical_periodic_middle_decomposition}
+    \end{align}
+    where $H$ is given by (\ref{eq:physical_polynomial_hamiltonian}).
+    The zero polynomial and zero supplied virtual dimension are allowed.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:physical_aeval_fin_middle_family,thm:trace_chain_closing_absorption}
+    Choose the common family and, for each member, its closing matrix and
+    tensors from (\ref{eq:physical_polynomial_trace_presentation}).
+    The geometric assumptions imply $|J|=(b+\ell+1)-(a+\ell)\ge1$.
+    Absorb each closing matrix into the first tensor by
+    Lemma~\ref{thm:trace_chain_closing_absorption}. The virtual dimension
+    $\chi_r$ and physical matrix $W_r$ are unchanged. Thus the count, the
+    open-boundary estimate and (\ref{eq:physical_periodic_middle_decomposition})
+    hold for the same family.
+\end{proof}
+
+These explicit trace presentations give supporting algebra for
+\cite[Proposition~5.7]{Arad2016RigorousRG}.

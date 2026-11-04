@@ -732,3 +732,157 @@ start, and is discarded only after the circuit has finished.
     \uses{thm:qc_bounded_physical_port_io, thm:qc_physical_port_unitary_dilation}
     Apply Lemma~\ref{thm:qc_physical_port_unitary_dilation} to the protocol $\Gamma_{\mathrm{port}}$ of Lemma~\ref{thm:qc_bounded_physical_port_io} and compose~(\ref{eq:qc_physical_port_dilation}) with $J_{\mathrm{port}}$; the source's QCcc block/control and pure-output system--ancilla conditions remain separate (see~\cite{gap:psc21_physical_port_simulation_scope}).
 \end{proof}
+
+
+\begin{lemma}[Pure output and environment decoupling]
+    \label{thm:qc_physical_port_pure_output}
+    \uses{thm:qc_physical_port_unitary_dilation}
+    \lean{QuantumCircuit.IsPhysicalPortProtocol.exists_appended_unitary_dilation_pure_output}
+    \leanok
+    Suppose a physical-port channel $\Phi$ of intersite depth at most $T$
+    satisfies $\Phi(\ketbra{\psi}{\psi})=\ketbra{\phi}{\phi}$, where
+    $\langle\phi,\phi\rangle=1$. Its same-depth unitary realization can
+    be chosen with the existing product-zero environment initializer so that
+    \[
+        U(\psi\otimes\ket{0^A})=\phi\otimes\eta,
+        \qquad \langle\eta,\eta\rangle=1.
+    \]
+    The unitary retains the same physical ports and the full channel
+    identity of Lemma~\ref{thm:qc_physical_port_unitary_dilation}.
+    The environment vector $\eta$ need not factor over spatial sites or
+    equal its initial zero state.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:qc_physical_port_unitary_dilation}
+    Take $U$ from Lemma~\ref{thm:qc_physical_port_unitary_dilation} and let
+    $C_{s,e}=\bigl(U(\psi\otimes\ket{0^A})\bigr)_{s,e}$ be the coefficient
+    matrix of the joint output. Its first marginal is
+    \begin{align}
+        CC^\dagger      & =\tr_A\bigl(U(\ketbra{\psi}{\psi}\otimes Z_A)U^\dagger\bigr)
+        =\Phi(\ketbra{\psi}{\psi})=\ketbra{\phi}{\phi}=:P,\notag                       \\
+        (I-P)CC^\dagger & =(I-P)P=P-P^2=0.\notag
+    \end{align}
+    Since $MM^\dagger=0$ implies $M=0$, applied to $M=(I-P)C$, we get
+    $C=PC$. Set $\eta=\phi^\dagger C$. Then $C_{s,e}=\phi_s\eta_e$, and
+    $\langle\eta,\eta\rangle=\tr CC^\dagger=\tr P=\langle\phi,\phi\rangle=1$.
+    No factorization assumption is used.
+\end{proof}
+
+
+\begin{lemma}[Environment measurement branches of a pure output]
+    \label{cor:qc_physical_port_pure_output_branches}
+    \uses{thm:qc_physical_port_pure_output}
+    \lean{QuantumCircuit.IsPhysicalPortProtocol.exists_environmentKraus_pure_output}
+    \leanok
+    Under the hypotheses of Lemma~\ref{thm:qc_physical_port_pure_output}, measuring the final environment in its standard product basis gives branch operators $K_e$ satisfying
+    \[
+        \Phi(X)=\sum_e K_e X K_e^\dagger,\qquad K_e\psi=\eta_e\phi,\qquad \sum_e|\eta_e|^2=1.
+    \]
+    Thus every outcome of nonzero probability leaves the same pure system state. The circuit has the same physical ports and intersite depth as in that theorem. This does not impose a fixed number of source QCcc blocks or their internal control restrictions.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:qc_physical_port_pure_output}
+    Let $K_e=(I_W\otimes\bra{e})U(I_W\otimes\ket{0^A})$ be the block of the
+    compiled unitary in the initialized environment column. Then
+    $\sum_e K_eXK_e^\dagger=\tr_A\bigl(U(X\otimes Z_A)U^\dagger\bigr)=\Phi(X)$,
+    and by Lemma~\ref{thm:qc_physical_port_pure_output}
+    \[
+        K_e\psi=(I_W\otimes\bra{e})\,U(\psi\otimes\ket{0^A})
+        =(I_W\otimes\bra{e})(\phi\otimes\eta)=\eta_e\phi.
+    \]
+\end{proof}
+
+
+
+\begin{lemma}[Bounded pure-state conversion on the original ports]
+    \label{lem:qc_bounded_port_pure_output}
+    \lean{QuantumCircuit.IsDimensionBoundedLocalChannelProtocol.exists_physicalPort_pure_output}
+    \leanok
+    \discussion{8640}
+    \uses{def:qc_dimension_bounded_protocol, thm:qc_physical_port_codes,
+        thm:qc_bounded_physical_port_io, thm:qc_physical_port_pure_output}
+    Fix $d\ge2$ and an intermediate dimension bound $B$. Let $N\ge2$,
+    let $\Psi$ be a $B$-dimension-bounded native protocol of depth $T$,
+    and suppose
+    $\Psi(\ketbra{\psi}{\psi})=\ketbra{\phi}{\phi}$ with
+    $\langle\phi,\phi\rangle=1$ and physical input and output dimension $d$.
+    Set $k=\lceil\log_d B\rceil$. Let $V_{\rm port}$ store each original
+    physical qudit on its port and set its data and scratch digits to zero,
+    so $J_{\rm port}(X)=V_{\rm port}XV_{\rm port}^\dagger$.
+    There are fresh local environment wires, a physical-port unitary $U$,
+    and a unit environment vector $\eta$ such that
+    \begin{align}
+        U(V_{\rm port}\psi\otimes\ket{0^A})
+         & =V_{\rm port}\phi\otimes\eta,
+         & \operatorname{depth}_{\rm intersite}(U) & \le2kT,
+        \label{eq:qc_bounded_port_pure_vector}               \\
+        \mathcal D_A\circ\operatorname{Ad}_U\circ\mathcal I_A\circ J_{\rm port}
+         & =J_{\rm port}\circ\Psi.
+        \label{eq:qc_bounded_port_pure_channel}
+    \end{align}
+    Thus the designated data and scratch memory is zero in the
+    final vector. The environment $\eta$ need not reset or factor over
+    sites. For a uniform family bound, $B$ and $d$ are fixed independently
+    of $N$. No adaptive protocol-block or control condition is asserted.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:qc_register_code_completion, thm:qc_bounded_physical_port_io,
+        thm:qc_physical_port_pure_output}
+    The explicit port code is an isometry, so $V_{\rm port}\phi$ is
+    normalized. The channel identity of
+    Lemma~\ref{thm:qc_bounded_physical_port_io} gives
+    $\Gamma J_{\rm port}(\ketbra{\psi}{\psi})
+        =J_{\rm port}(\ketbra{\phi}{\phi})$.
+    Apply Lemma~\ref{thm:qc_physical_port_pure_output} to this compiled
+    channel and these two encoded vectors. It derives $\eta$ with
+    $U(V_{\rm port}\psi\otimes\ket{0^A})=V_{\rm port}\phi\otimes\eta$
+    in~(\ref{eq:qc_bounded_port_pure_vector}), without changing the
+    unitary's physical depth. Compose its full channel
+    identity with $J_{\rm port}$ to obtain
+    (\ref{eq:qc_bounded_port_pure_channel}).
+\end{proof}
+
+
+\begin{lemma}[Approximate pure-state conversion on the original ports]
+    \label{lem:qc_bounded_port_approximate_output}
+    \lean{QuantumCircuit.IsDimensionBoundedLocalChannelProtocol.exists_physicalPort_approximate_output}
+    \notready
+    \discussion{8640}
+    \uses{def:qc_dimension_bounded_protocol, thm:qc_physical_port_codes,
+        def:qc_approx_local_channel_conversion}
+    Fix $d\ge2$ and an intermediate dimension bound $B$. Let $N\ge2$ and
+    let $\Psi$ be a $B$-dimension-bounded native channel of depth $T$ with
+    physical input and output dimension $d$. For unit vectors $\psi,\phi$,
+    suppose
+    $\|\Psi(\ketbra{\psi}{\psi})-\ketbra{\phi}{\phi}\|_1\le\varepsilon$.
+    Set $k=\lceil\log_d B\rceil$, and let $V_{\rm port}$ be the explicit
+    original-port isometry with zero designated memory. There is a unitary
+    $U$ and a unit environment vector $\eta$ such that
+    \begin{align}
+        \|U(V_{\rm port}\psi\otimes\ket{0_A})
+        -V_{\rm port}\phi\otimes\eta\|_2        & \le\sqrt{2\varepsilon},
+        \label{eq:qc_bounded_port_approximate_vector}                     \\
+        \operatorname{depth}_{\rm intersite}(U) & \le2kT.
+    \end{align}
+    The same unitary satisfies the full logical channel identity
+    (\ref{eq:qc_bounded_port_pure_channel}). The estimate uses the Euclidean
+    vector norm and the full trace norm. It imposes no strict upper bound on
+    $\varepsilon$ and does not reset the additional environment or provide
+    an adaptive source protocol-block decomposition. A uniform family fixes
+    $B$ before the chain length.
+\end{lemma}
+\begin{proof}
+    \notready
+    \uses{thm:qc_bounded_physical_port_io, thm:qc_physical_port_unitary_dilation}
+    Construct the actual port channel and its unitary dilation. The full
+    dilation identity identifies the marginal of its actual output, while
+    trace preservation and normalization of $\psi$ give a unit joint vector.
+    Conjugation by $V_{\rm port}$ preserves the trace-norm error. Project
+    the actual joint coefficient matrix onto the unit vector
+    $V_{\rm port}\phi$. Its environment row has squared norm at least
+    $1-\varepsilon$; normalizing that row gives product-vector distance at
+    most $\sqrt{2\varepsilon}$. If the row is zero, then
+    $\varepsilon\ge1$ and a unit coordinate environment vector suffices.
+    This changes neither the unitary nor its physical depth.
+\end{proof}

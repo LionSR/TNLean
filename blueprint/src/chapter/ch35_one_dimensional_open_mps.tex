@@ -167,7 +167,8 @@ this bound with the area law to prove Theorem~B.
     \lean{
         TNLean.MPS.AreaLaw.rank_cutMatrix_le_bondDim,
         TNLean.MPS.AreaLaw.IsOpenMPS.rank_cutMatrix_le,
-        TNLean.MPS.AreaLaw.isOpenMPS_iff_internal_cutMatrix_rank_le
+        TNLean.MPS.AreaLaw.isOpenMPS_iff_internal_cutMatrix_rank_le,
+        TNLean.MPS.AreaLaw.IsOpenMPS.mono
     }
     \leanok
     Let $\psi$ be a vector on $L$ sites of local dimension $q$.
@@ -179,6 +180,8 @@ this bound with the area law to prove Theorem~B.
     $\operatorname{rank}M_k\le D$ at every internal cut $0<k<L$.
     No normalization is required. The endpoint ranks are at most one;
     when $L\le1$ there are no internal rank conditions, even for $D=0$.
+    Consequently, increasing the allowed bond dimension preserves the
+    existence of an open-boundary matrix product representation.
     This is the single-cut rank observation used in the truncation-error
     lower bound of~\cite{Schuch2008EntropyScaling}; see also the sequential
     truncation proposition in~\cite[Part IIa]{TNLean2026OneDimensional}.

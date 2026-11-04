@@ -5,7 +5,7 @@ handles the case where each block's transfer map is trace-preserving; the
 reduction to this normalization via blockwise similarity (\cite[eq.~\emph{unital},
     line~316]{DeLasCuevas2017Irreducible}) is carried out in the proof.
 
-\begin{theorem}[Periodic Fundamental Theorem]
+\begin{theorem}[Fundamental Theorem for periodic tensors]
     \label{thm:periodic_ft}
     \lean{MPSTensor.fundamentalTheorem_periodic_equalCase_derivedPeriods}
     \leanok
@@ -62,7 +62,7 @@ reduction to this normalization via blockwise similarity (\cite[eq.~\emph{unital
     The matrix-product-vector identities are taken at positive lengths, following the convention that the empty word is not a physical chain; this extends to length zero since the empty-word coefficient equals the bond dimension. The scalars $\xi_j$ are made explicit rather than absorbed into $S_{\pi(j)}$ as in \cite[lines~667--671]{DeLasCuevas2017Irreducible}, allowing the statement to speak directly about the given multiplicity matrices.
 \end{remark}
 
-\begin{corollary}[Periodic Fundamental Theorem with given periods]%
+\begin{corollary}[Fundamental Theorem for periodic tensors with given periods]%
     \label{thm:periodic_ft_supplied_periods}
     \lean{MPSTensor.fundamentalTheorem_periodic_equalCase_irreducibleForm}
     \leanok

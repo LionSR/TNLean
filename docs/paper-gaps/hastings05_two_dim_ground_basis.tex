@@ -14,7 +14,7 @@
 \title{A Basis of a Degenerate Ground Space in Hastings' Local Solution
   of Gapped Hamiltonians}
 \author{}
-\date{2026-10-24}
+\date{2026-10-28}
 
 \begin{document}
 \maketitle
@@ -56,17 +56,43 @@ bounds the first term.
 
 \section{Status}
 
-Every dimension $n$ is treated, by the source's iteration over further
-compressions with any number of levels (the last three sections), ending when
-every pair of basis vectors is separated, as the source's iteration ends. The
-basis is taken as given, as the source chooses it, and the $j$ maximizing
-$\delta\lambda_j$ is not chosen, since the bounds hold for every $j$. The sum of
-eq.~\texttt{oibu} is bounded independently of the size of the system, for the
-iteration with any number of levels. Two differences from the source remain,
-both local corrections: the cross terms of the iteration, which the sketch omits,
-are kept; and the constant in eq.~\texttt{oibu} is explicit but does not have the
-printed form $O(J^2/(c_1l\Delta E\,\delta\lambda_j))$, which is not established
-here.
+Under a polynomial sphere-growth bound with constants independent of system
+size, and for every fixed finite ground-space dimension, an orthonormal basis is
+constructed for which the sum of the off-diagonal parts of the source's
+\emph{truncated} operators $M_i$ is bounded uniformly in the number of sites and
+terms. The recursion selects at most $n-1$ original indices, retains the
+compression cross terms, and stops on scalar subspaces of arbitrary dimension.
+Neither a supplied basis nor a separating-label hypothesis is assumed, and no
+compressed spectral denominator or finite-dimensional conditioning constant
+occurs in the final bound.
+
+The Hamiltonian generator parameters and the support parameters of the localized
+observables are kept separate. The source's second Gaussian filter is taken
+under the original Hamiltonian; no gap for a truncated Hamiltonian is assumed.
+The direct observable bound is uniform when the ground-space dimension and
+the original local, geometric and localization parameters are fixed. For a
+localization radius depending on the system size, a separate proved perturbation
+bound uses the original-term basis and the total error of eq.~\texttt{apb};
+uniformity then requires a uniform bound on that total error.
+
+This proves the qualitative uniform assertion under the additional growth
+hypothesis. Source lines 169--190 assume only finite-range local bounds and a
+metric, which do not imply polynomial growth. The unrestricted metric-lattice
+assertion is false, as proved mathematically by
+\href{https://sirui-lu.com/TNLean/paper-gaps/hastings05_tree_basis_counterexample.pdf}
+{a uniformly gapped tree counterexample}. The counterexample family and
+its gap proof have not been formalized in Lean. The additional geometric
+hypothesis is therefore a correction of the unrestricted source assertion,
+not a condition known to follow from the source. Its role is explained in
+\href{https://sirui-lu.com/TNLean/paper-gaps/hastings05_geometric_growth_scope.pdf}
+{the note on geometric growth}. The finite-dimensional basis construction is
+complete, and its physical summation is proved under polynomial sphere growth.
+The printed quantitative
+dependence $O(J^2/(c_1l\Delta E\,\delta\lambda_j))$ is replaced by the explicit
+constants below. The source's spectral-denominator estimate remains valid in
+its stated eigenbasis, but the uniform construction eliminates that denominator
+by combining spectral-spread and commutator estimates. The cross terms and the
+geometric shell factors account for the correction to the printed sketch.
 
 \section{A compression with simple spectrum}
 
@@ -134,9 +160,12 @@ $\alpha_0=K/\delta_0$, $\beta_0=K_B/\delta_0$ and
   \beta_{\ell+1}=\max\Bigl(\beta_\ell,\frac{K_B+2n\alpha_\ell\beta_\ell}{\delta_{\ell+1}}\Bigr).
   \label{eq:hastings05_two_dim_ground_basis_levels}
 \end{align}
-The source's iteration ends once every off-diagonal element is bounded
-(lines~1707--1708), that is, once every pair of basis vectors is separated at
-some level; after $L$ such levels, $o(i)\le(n-1)\beta_{L-1}$.\footnote{\leanid{TNLean.Lattice.abs_sub_mul_norm_inner_le},
+If the given labels separate every pair of distinct basis vectors after $L$
+levels, then $o(i)\le(n-1)\beta_{L-1}$. This is an additional condition on the
+recorded iteration, not an automatic consequence of the source's stopping
+criterion (lines~1707--1708). A terminal subspace may have dimension greater than
+one when all remaining compressions are scalar there. Its off-diagonal elements
+already vanish, so no separation is needed.\footnote{\leanid{TNLean.Lattice.abs_sub_mul_norm_inner_le},
     \leanid{TNLean.Lattice.norm_inner_le_of_mem_labelClass},
     \leanid{TNLean.Lattice.norm_inner_le_levelBoundB},
     \leanid{TNLean.Lattice.norm_offDiagonalPartFamily_le_levelBoundB},
@@ -153,6 +182,316 @@ the compression of $M_k$ to a class with that of $B$ differs from $[M_k,B]$ by
 the cross terms of~\eqref{eq:hastings05_two_dim_ground_basis_iteration}, which
 the sketch omits and which are kept here.
 
+
+\section{A uniform construction when the ground space has dimension two}
+
+The spectral denominator can be removed from the qualitative two-dimensional
+assertion without assuming a uniform lower bound on a compressed spectral gap.
+Set $w_i=\|h_i\|$ and $D_i=w_i^{-1}A_i$, using $D_i=0$ when $w_i=0$.
+The latter convention is consistent because $\|A_i\|\le w_i$.
+Choose $j$ maximizing the spectral spread $\rho$ of $D_j$, and diagonalize $D_j$.
+If $\rho=0$, every $D_i$ is scalar and all off-diagonal parts vanish.
+Otherwise every off-diagonal entry $z_i=|\langle v_a,A_iv_b\rangle|$, $a\ne b$,
+satisfies
+\begin{align}
+ z_i\le w_i\rho,
+ \qquad \rho z_i\le \|[D_j,A_i]\|.
+ \label{eq:hastings05_basis_normalized_bounds}
+\end{align}
+The first estimate follows because a Hermitian operator in dimension two differs
+from one of its eigenvalues times the identity by a rank-one operator whose norm
+is its spectral spread. The second is the eigenbasis commutator identity.
+
+If $\|[A_j,A_i]\|\le C_*w_jw_i e^{-\gamma d(a_j,a_i)}$, normalization and
+(\ref{eq:hastings05_basis_normalized_bounds}) give
+\begin{align}
+ z_i^2\le w_i\rho z_i\le C_*w_i^2e^{-\gamma d(a_j,a_i)},
+ \qquad z_i\le\sqrt{C_*}\,w_i e^{-\gamma d(a_j,a_i)/2}.
+ \label{eq:hastings05_basis_half_decay}
+\end{align}
+At infinite graph distance the right side is interpreted as zero. In dimension
+two the norm of the off-diagonal part is at most the largest off-diagonal entry.
+Thus, with $C_*=Ce^{\gamma(2R+1)}$ from
+(\ref{eq:hastings05_two_dim_ground_basis_blecm_exp}), the norm budget and graph
+sphere bound yield an actual orthonormal ground-space basis satisfying
+\begin{align}
+ \sum_i o(i)\le\sqrt{C_*}\,|b_0|K_g S_{\gamma/2,k}.
+ \label{eq:hastings05_basis_uniform_two}
+\end{align}
+This constant is uniform in the number of sites and terms and contains no
+compressed spectral denominator. The construction maximizes the normalized
+spread rather than the unnormalized spread used in the source. The source's
+explicit $1/\delta\lambda_j$ estimate remains valid in its own chosen basis.
+The printed dependence on $c_1,l,\Delta E$ is not identified with the corrected
+constant in (\ref{eq:hastings05_basis_uniform_two}).
+
+\section{A uniform spectral split}
+
+A binary spectral refinement removes inverse spectral denominators from its
+one-step estimate. Let $D_i$ be finitely many Hermitian operators on an
+$m$-dimensional Hilbert space, $m\ge2$, and suppose
+\begin{align}
+ \|[D_i,D_j]\|\le C f(i,j),\qquad C\ge0,\qquad f(i,j)=f(j,i)\ge0.
+ \label{eq:hastings05_basis_split_commutators}
+\end{align}
+No bound on $\|D_i\|$ is needed. Either all the $D_i$ are scalar, or choose a
+term $D_j$ of largest spectral spread $\rho>0$. Its ordered eigenvalues have
+an adjacent gap at least $\rho/(m-1)$. Let $P$ project onto the eigenvectors
+above this gap and put $Q=1-P$. Both projections have nonzero range.
+
+Every $D_i$ differs from its least eigenvalue times the identity by norm at
+most its spread, which is at most $\rho$. Hence $\|PD_iQ\|\le\rho$.
+Across the selected gap the commutator identity gives each matrix coefficient
+of $PD_iQ$ a bound $(m-1)C f(i,j)/\rho$. Expanding in rank-one operators
+there are at most $m^2$ coefficients, so
+\begin{align}
+ \rho\|PD_iQ\|\le m^3 C f(i,j),\qquad
+ \|PD_iQ\|\le\sqrt{m^3 C}\sqrt{f(i,j)}.
+ \label{eq:hastings05_basis_split_cross}
+\end{align}
+The reverse block has the same norm by Hermitian adjunction. These
+projections and estimates are constructed, without an assumed separating
+basis or a supplied projection.\footnote{Declarations
+\leanid{TNLean.Lattice.exists_selfAdjoint_spectral_split} and
+\leanid{TNLean.Lattice.exists_family_spectral_split}, in
+\doclink{TNLean/Lattice/LowEnergyBasisSpectralSplit}.}
+
+If $0\le f\le1$ and $f(i,j)f(j,k)\le f(i,k)$, the exact identity
+\begin{align}
+ [PD_iP,PD_kP]
+ &=P[D_i,D_k]P-PD_iQD_kP+PD_kQD_iP
+ \label{eq:hastings05_basis_split_compression}
+\end{align}
+gives
+\begin{align}
+ \|[PD_iP,PD_kP]\|
+ &\le C(1+2m^3)\sqrt{f(i,k)}.
+ \label{eq:hastings05_basis_split_child}
+\end{align}
+For $f(i,k)=e^{-\gamma d(i,k)}$ the new rate is $\gamma/2$.
+The kernel formulation also permits zero kernels between disconnected
+components; no finite-distance convention is imposed. Both cross terms in
+(\ref{eq:hastings05_basis_split_compression}) are retained.\footnote{Declaration
+\leanid{TNLean.Lattice.norm_commutator_compression_le_kernel}, in
+\doclink{TNLean/Lattice/LowEnergyBasisSpectralSplit}.}
+This is the uniform inductive step. The complete recursive basis and its
+summed bound are separate from this one-step assertion.
+
+\section{Uniform recursion in every finite dimension}
+
+The binary split also gives an actual basis with uniform bounds in every fixed
+finite dimension. Let $k_0(i,j)=e^{-\gamma d(a_i,a_j)}$, with value zero at
+infinite distance, and define $k_{t+1}=\sqrt{k_t}$. The graph triangle inequality
+implies $k_t(i,j)k_t(j,l)\le k_t(i,l)$, including disconnected components;
+moreover $0\le k_t\le1$ and $k_t\le k_{t+1}$.
+Thus $k_t(i,j)=e^{-\gamma d(a_i,a_j)/2^t}$ at finite distance.
+
+Normalize the original compressions once, setting $D_i=\|h_i\|^{-1}A_i$ and
+$D_i=0$ for a zero term. The original commutator estimate becomes
+$\|[D_i,D_j]\|\le C_*k_0(i,j)$, where
+$C_*=Ce^{\gamma(2R+1)}$ and $C$ is evaluated at $|K_g|$.
+For total ground-space dimension $N=n$, put
+\begin{align}
+ M_N=1+2N^3,\qquad C_t=C_*M_N^t,\qquad
+ D_N(C_*)=\sqrt{N^3C_*M_N^N}.
+ \label{eq:hastings05_basis_recursive_coeff}
+\end{align}
+At a node of depth $t$ and dimension $m$, maintain $t+m\le N$ and the
+commutator bound $C_tk_t$. If the compressed family is scalar, choose any
+orthonormal basis of that subspace and stop; its dimension need not be one.
+Otherwise the proved binary spectral split gives a proper subspace $K$ and an
+original anchor $j$ such that both cross-block norms are at most
+$\sqrt{m^3C_t}\,k_{t+1}(i,j)$. Retaining both compression cross terms gives,
+on either child subspace, the commutator coefficient
+$C_t+2m^3C_t\le C_{t+1}$ with kernel $k_{t+1}$.
+
+The two child dimensions $p,q$ are positive, satisfy $p+q=m$, and strictly
+decrease. Apply induction and combine the two orthonormal bases. Concatenating
+the child anchor lists and the new anchor gives at most
+$(p-1)+(q-1)+1=m-1$ entries. At every node,
+$\sqrt{m^3C_t}\le D_N(C_*)$ and $k_{t+1}\le k_N$.
+The constructed orthonormal basis and a list $s$ of at most $n-1$ original
+anchors therefore satisfy, for $a\ne b$,
+\begin{align}
+ |\langle v_a,A_iv_b\rangle|
+ \le D_n(C_*)\,\|h_i\|\sum_{j\in s}e^{-\lambda d(a_i,a_j)},
+ \qquad \lambda=\gamma/2^n.
+ \label{eq:hastings05_basis_recursive_entries}
+\end{align}
+The list counts repeated choices at different nodes. Its length bound is
+independent of the number of sites and terms.
+
+Using the norm budget and summing graph spheres at rate $\lambda$ gives
+\begin{align}
+ \sum_i o(i)\le(n-1)^2D_n(C_*)\,|b_0|\,|K_g|S_{\gamma/2^n,k}.
+ \label{eq:hastings05_basis_recursive_sum}
+\end{align}
+One factor $n-1$ bounds an off-diagonal operator by its largest entry, and the
+other bounds the number of selected anchors. Every factor on the right is
+controlled by the fixed ground-space dimension and the original local and
+geometric parameters. No uniform conditioning of a finite-dimensional quotient,
+no lower bound on a compressed spectral gap, and no separation hypothesis is
+used. For the original terms and their first Gaussian filters, the separate
+two-dimensional estimate (\ref{eq:hastings05_basis_uniform_two}) retains the
+sharper rate $\gamma/2$.
+
+\section{The actual truncated operators}
+
+The operators in the source's eq.~\texttt{oibu} are not the first filters of
+$h_i$ under the original Hamiltonian. They are
+\begin{align}
+ M_i=\operatorname{Filter}_{r,\Delta E}(H_{s_i},h_i),
+ \qquad H_{s_i}=\sum_{j\in s_i}h_j,
+ \label{eq:hastings05_basis_truncated_terms}
+\end{align}
+with the truncated Hamiltonians of eq.~\texttt{mid}. Filtering under $H_{s_i}$
+preserves Hermiticity and the norm bound $\|M_i\|\le\|h_i\|$, and the defining
+localization data give supports $Y_i$ with $X_i\subseteq Y_i$ and with every
+term of $H_{s_i}$ supported in $Y_i$.
+
+Let $v_{\rm obs}$ bound $|Y_i|$ and let $R_{\rm obs}$ bound the diameters of
+$Y_i$. Write $R,v_R,b_0$ for the original Hamiltonian generator parameters.
+Applying the second Gaussian filter to $M_i$ under the original Hamiltonian,
+as in source lines 1548--1564, gives
+\begin{align}
+ \|[PM_jP,PM_iP]\|
+ \le C_{\rm obs}\|M_j\|\|M_i\|e^{-\gamma d(a_j,a_i)},
+ \qquad \gamma=\min\left(\frac14,\frac{\Delta E}{8v}\right),
+ \label{eq:hastings05_basis_observable_decay}
+\end{align}
+with value zero at infinite distance. Here $v=2v_R|b_0|e^{2R}+1$ is still the
+\emph{original generator} velocity, while
+\begin{align}
+ C_{\rm obs}
+ =\left[2(2+4|b_0|e^{2R})v_{\rm obs}^2|K_g|C_k+6\right]
+ e^{\gamma(2R_{\rm obs}+1)},
+ \qquad C_k=\frac{2^k k!e^{1/2}}{1-e^{-1/2}}.
+ \label{eq:hastings05_basis_observable_constant}
+\end{align}
+Thus the support cardinality of the observables affects the prefactor and their
+diameter affects the conversion from support separation to anchor distance;
+neither replaces the generator parameters in the velocity.
+
+Normalize $PM_iP$ by $\|h_i\|$, using zero for a zero original term. The norm
+bound on $M_i$ and (\ref{eq:hastings05_basis_observable_decay}) give the same
+unweighted commutator hypothesis as in the recursive construction, with
+$C_*=C_{\rm obs}$. The original norm budget still bounds the weights at the
+original anchors. Consequently an actual orthonormal ground-space basis satisfies
+\begin{align}
+ \sum_i o(M_i)\le(n-1)^2D_n(C_{\rm obs})\,|b_0|\,|K_g|S_{\gamma/2^n,k}.
+ \label{eq:hastings05_basis_actual_truncated_sum}
+\end{align}
+This conclusion has no cumulative approximation term $N\varepsilon$ and does
+not identify the compression of $M_i$ with that of $h_i$. Uniformity here refers
+to fixed localization support parameters, as displayed in
+(\ref{eq:hastings05_basis_observable_constant}). If the localization radius is
+allowed to grow with the system size, its displayed dependence must also be
+tracked; a separate perturbative comparison with the first filters can then use
+the total truncation error of eq.~\texttt{apb}.
+
+\section{A localization radius depending on the system size}
+
+The fixed-radius bound (\ref{eq:hastings05_basis_actual_truncated_sum}) is not a
+uniform estimate along an arbitrary choice of growing localization regions,
+because $C_{\rm obs}$ contains their diameter and cardinality. A different basis
+choice avoids this dependence when the total approximation error is controlled.
+
+For an orthonormal family $v$ of length $n$, taking the off-diagonal part is
+linear and satisfies
+\begin{align}
+ \|\operatorname{off}_v(A)\|&\le(n-1)\|A\|,\nonumber\\
+ \|\operatorname{off}_v(A)\|
+ &\le\|\operatorname{off}_v(B)\|+(n-1)\|A-B\|.
+ \label{eq:hastings05_basis_perturbation}
+\end{align}
+Ground-space compression is contractive on differences. Choose the basis
+constructed from the original compressions $Ph_iP$, and denote its uniform
+summed bound by $B_{\rm orig}$, with the original generator support parameters
+in every constant. The same basis works for every first filter parameter
+$r\ge0$ and every truncation family $s_i$. Put
+\begin{align}
+ \mathcal E(r,s)=\sum_i\|
+ \operatorname{Filter}_{r,\Delta E}(H,h_i)-
+ \operatorname{Filter}_{r,\Delta E}(H_{s_i},h_i)\|.
+ \label{eq:hastings05_basis_total_truncation_error}
+\end{align}
+Since $P\operatorname{Filter}_{r,\Delta E}(H,h_i)P=Ph_iP$, summing
+(\ref{eq:hastings05_basis_perturbation}) gives
+\begin{align}
+ \sum_i o(M_i)\le B_{\rm orig}+(n-1)\mathcal E(r,s).
+ \label{eq:hastings05_basis_coupled_radius}
+\end{align}
+No localization radius occurs in $B_{\rm orig}$. Thus a coupled choice
+$r=r(N)$ and $s=s(N)$ with a uniform bound $\mathcal E(r(N),s(N))\le\varepsilon$
+gives the uniform bound $B_{\rm orig}+(n-1)\varepsilon$.
+The required bound on $\mathcal E$ must be proved from the truncation estimate
+\texttt{apb}; growth of the radius by itself does not imply it. This comparison
+keeps the error explicitly and makes no fixed-radius uniformity claim along
+an unverified size-dependent choice.
+
+\section{An auxiliary finite-dimensional conditioning estimate}
+
+Write $A_i=(Ph_iP)|_{\operatorname{ran}P}$ and let $V$ be their real linear
+span. Every element of $V$ is Hermitian, so $\dim_{\mathbb R}V\le n^2$.
+Choose $m=\dim_{\mathbb R}V$ original terms $A_{j_1},\dots,A_{j_m}$ spanning
+$V$. Define
+\begin{align}
+ T:V&\longrightarrow\prod_{r=1}^m\operatorname{End}(\operatorname{ran}P),
+ &T(B)&=([A_{j_r},B])_{r=1}^m,
+ &Z&=\ker T.
+ \label{eq:hastings05_basis_commutator_map}
+\end{align}
+The product has the maximum operator norm and $V$ has the operator norm.
+Since the selected operators span $V$, every member of $Z$ commutes with every
+member of $V$. In particular the Hermitian operators in $Z$ commute pairwise.
+Choose a common orthonormal eigenbasis $v_1,\dots,v_n$ of $Z$. Joint
+eigenspaces may have arbitrary multiplicity: no separation of their basis
+vectors is assumed or needed.
+
+Equip $V/Z$ with its quotient norm, and set
+\begin{align}
+ \kappa(T)=\|\overline T^{-1}\|,
+ \qquad \overline T:V/Z\longrightarrow\operatorname{ran}T.
+ \label{eq:hastings05_basis_conditioning}
+\end{align}
+The inverse is a linear map between finite-dimensional normed spaces, so its
+norm is finite. The convention gives $\kappa(T)=0$ when $V=Z$.
+For $a\ne b$, the functional $S_{ab}(B)=\langle v_a,Bv_b\rangle$ has norm at
+most one and vanishes on $Z$. It therefore descends to a contraction on $V/Z$,
+and
+\begin{align}
+ |\langle v_a,Bv_b\rangle|
+ &\le \|B+Z\|\le\kappa(T)\max_r\|[A_{j_r},B]\|
+ \le\kappa(T)\sum_r\|[A_{j_r},B]\|.
+ \label{eq:hastings05_basis_constructed_entries}
+\end{align}
+Consequently the constructed basis satisfies
+\begin{align}
+ \sum_i o(i)\le(n-1)\kappa(T)\sum_{r=1}^m\sum_i\|[A_{j_r},A_i]\|.
+ \label{eq:hastings05_basis_constructed_sum}
+\end{align}
+The compressed filtered terms have the same ground-space matrix elements, so
+this also bounds their off-diagonal parts.
+
+The role of $\kappa(T)$ can be compared precisely with the spectral denominators
+in the source argument. A separating refinement gives a bound on the
+\emph{off-diagonal map} through the commutator map, with coefficient
+$\beta_{L-1}(1)$ in (\ref{eq:hastings05_two_dim_ground_basis_levels}).
+The inverse norm in (\ref{eq:hastings05_basis_conditioning}) instead bounds the
+\emph{distance to the centre}, and hence every contraction vanishing there.
+These are different norm estimates; no equality, nor a bound of $\kappa(T)$ by a
+single spectral denominator, is asserted. The two-dimensional estimate
+(\ref{eq:hastings05_two_dim_ground_basis_oi}) retains its sharper explicit
+factor $1/\delta\lambda_j$.
+
+This auxiliary estimate is not the proof of the uniform bound above. The
+existence of a finite $\kappa(T)$ for each system does not make it uniform
+along a sequence of systems. To obtain a uniform bound from
+(\ref{eq:hastings05_basis_constructed_sum}), one must bound this conditioning
+uniformly, just as an estimate using the source's spectral denominators must
+bound those denominators away from zero. No such additional hypothesis is
+inserted into the finite-dimensional construction; its conclusion displays the
+actual constant.
 
 \section{The summed bound, eq.~\texttt{oibu}}
 
@@ -185,8 +524,8 @@ $K=2J^2$ for terms of norm at most $J$, gives
     \frac{k!\,(2/\gamma)^ke^{\gamma/2}}{1-e^{-\gamma/2}}\,\lVert h_{j_\ell}\rVert,
   \label{eq:hastings05_two_dim_ground_basis_oibu_levels}
 \end{align}
-again independently of the number of sites, for a ground space of any
-dimension.\footnote{\leanid{TNLean.Lattice.norm_groundCompression_commutator_le_exp},
+with no factor counting the number of sites, provided the displayed spectral
+constants and the number of levels are kept fixed.\footnote{\leanid{TNLean.Lattice.norm_groundCompression_commutator_le_exp},
     \leanid{TNLean.Lattice.sum_norm_groundCompression_commutator_le},
     \leanid{TNLean.Lattice.sum_norm_offDiagonalPartFamily_le_oibu} and
     \leanid{TNLean.Lattice.sum_norm_offDiagonalPartFamily_le_oibu_levels} in
@@ -194,8 +533,9 @@ dimension.\footnote{\leanid{TNLean.Lattice.norm_groundCompression_commutator_le_
     \leanid{TNLean.Lattice.levelBoundB_eq_mul} and
     \leanid{TNLean.Lattice.sum_norm_offDiagonalPartFamily_le_levelBoundB} in
     \doclink{TNLean/Lattice/LowEnergyBasisIteration}.}
-The size independence of the source's eq.~\texttt{oibu} is thus proved. Its
-printed dependence $O(J^2/(c_1l\Delta E\,\delta\lambda_j))$ is not established:
+This gives size independence when the spectral denominators and the number of
+selected levels are uniformly controlled. Their uniformity is not established by
+the conditional iteration theorem. The printed dependence $O(J^2/(c_1l\Delta E\,\delta\lambda_j))$ is not established:
 the constant here contains neither $c_1$ nor $l$, and since
 $k!\,(2/\gamma)^k/(1-e^{-\gamma/2})$ grows like $\gamma^{-(k+1)}$ with
 $\gamma=\Delta E/(8v)$ for small gaps, it scales like $(v/\Delta E)^{k+1}$.
@@ -211,6 +551,18 @@ prove~\eqref{eq:hastings05_two_dim_ground_basis_oi} and its sum, and
 \leanid{TNLean.Lattice.norm_apply_sub_inner_smul_le_add_offDiagonalPart}
 proves~\eqref{eq:hastings05_two_dim_ground_basis_low}, all in
 \doclink{TNLean/Lattice/LowEnergyBasis}.
+
+The actual recursive construction is
+\leanid{TNLean.Lattice.exists_orthonormalBasis_uniform_kernel} in
+\doclink{TNLean/Lattice/LowEnergyBasisRecursive}. The source's actual localized
+operators are treated by
+\leanid{TNLean.Lattice.exists_groundSpaceBasis_sum_norm_offDiagonalPartFamily_truncated_le}
+in \doclink{TNLean/Lattice/LowEnergyBasisTruncatedUniform}, using the independent
+observable-family decay estimate of \doclink{TNLean/Lattice/LowEnergyObservableDecay}.
+Finally,
+\leanid{TNLean.Lattice.exists_groundSpaceBasis_sum_norm_offDiagonalPartFamily_truncated_perturbation_le}
+in \doclink{TNLean/Lattice/LowEnergyBasisPerturbation} proves
+(\ref{eq:hastings05_basis_coupled_radius}) for one basis and every $r,s$.
 
 \bibliographystyle{plain}
 \bibliography{references}

@@ -247,6 +247,7 @@ needs `\lean{}` / `\leanok` tags.
 | `rfp-mpdo`           | Renormalization fixed points and MPDO theory                          |
 | `mpu`                | Matrix Product Unitaries: structure, index, symmetries, and QCA       |
 | `algebraic-FT`       | Algebraic approach to Fundamental Theorem                             |
+| `area-law`           | Entropy area laws, truncation, and MPS/PEPS approximation             |
 | `wolf-ch1`           | Wolf Lecture Notes -- Chapter 1: Deconstructing Quantum               |
 | `wolf-ch2`           | Wolf Lecture Notes -- Chapter 2: Representations                      |
 | `wolf-ch5`           | Wolf Lecture Notes -- Chapter 5: Schwarz Inequalities                 |
@@ -260,6 +261,36 @@ needs `\lean{}` / `\leanok` tags.
 | `tracking`       | Tracking issue for a formalization area         |
 | `blueprint-sync` | Blueprint out of sync with Lean code            |
 | `automation`     | Automated documentation/sync PR                 |
+
+### Triage status and priority labels
+
+These labels describe the remaining work. They do not authorize merging or
+trigger proof-writing automation. A tracker can have several statuses when
+its children have different obligations. Use native sub-issues for the
+hierarchy; a closed child alone does not complete the parent theorem.
+
+| Label | Meaning |
+|-------|---------|
+| `status: needs-proof` | A mathematical proof or construction remains missing. |
+| `status: scope-decision` | A source interpretation, correction, or scope choice remains. |
+| `status: needs-work` | Repository maintenance, interface, or documentation work remains. |
+| `status: validation-pending` | An implementation is written; acceptance or integration remains. |
+| `status: blocked` | An unmerged prerequisite, acceptance of a required dependency revision, or an external release remains. |
+| `status: ci-failing` | An applicable check on the current PR head has a completed failure. |
+| `status: needs-ci` | Applicable current-head checks are missing, pending, or incomplete. |
+| `status: conflicts` | A read-only merge against the actual current base branch has conflicts. |
+| `status: review-changes` | Current unresolved review findings or requested changes remain. |
+| `status: needs-review` | Applicable current-head CI passes; review and acceptance remain. |
+| `priority: next` | A bounded repair, review, or prerequisite selected for the next work queue. |
+
+For PRs, refresh labels when the head or base branch moves. Check the actual
+base branch tip: the API's recorded base commit can lag behind it. Pending or
+unknown GitHub mergeability is not evidence of a conflict. Green CI and
+`status: needs-review` are not claims of mathematical completeness or merge
+readiness. Review findings can coexist with missing or failing CI.
+
+Operational `auto-fix-*` labels are separate PR controls; do not apply them to
+issues as ordinary triage labels. See [CI automation](ci-automation.md).
 
 ### Standard GitHub labels
 

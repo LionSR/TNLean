@@ -26,9 +26,11 @@ smallest difference `levelGap` between distinct labels in one class is positive,
 matrix element is bounded at the first level separating its two vectors. By induction on the
 level, with all commutators of the compressions at most `K` and those with `B` at most `K_B`, the
 elements of `B` are bounded at every level by `levelBoundB`, which is linear in `K_B`; when the
-iteration separates every pair after `L` levels, as the source's iteration ends once every
-off-diagonal element is bounded, this bounds the off-diagonal part of `B`. With two levels, the
-bound is written out (`norm_inner_le_of_two_levels`).
+given labels separate every pair after `L` levels, this bounds the off-diagonal part of `B`.
+This separation is a hypothesis of these estimates. Scalar compressions on a multidimensional
+terminal class need not separate its basis vectors. An unconditional basis construction, using
+the centre of the real compression span, is given in `LowEnergyBasisConstruction.lean`.
+With two levels, the bound is written out (`norm_inner_le_of_two_levels`).
 
 ## Main statements
 
@@ -165,10 +167,6 @@ theorem levelGap_le {r : ℕ → Fin n → ℝ} {ℓ : ℕ} {a b : Fin n} (hb : 
   split_ifs with h
   · exact Finset.inf'_le (fun p => |r ℓ p.1 - r ℓ p.2|) hp
   · exact absurd ⟨_, hp⟩ h
-
-theorem mem_labelClass_symm {r : ℕ → Fin n → ℝ} {ℓ : ℕ} {a c : Fin n}
-    (h : c ∈ labelClass r ℓ a) : a ∈ labelClass r ℓ c :=
-  mem_labelClass.mpr fun m hm => (mem_labelClass.mp h m hm).symm
 
 theorem labelClass_eq_of_mem {r : ℕ → Fin n → ℝ} {ℓ : ℕ} {a b : Fin n}
     (hb : b ∈ labelClass r ℓ a) : labelClass r ℓ b = labelClass r ℓ a := by
@@ -469,7 +467,7 @@ theorem norm_inner_le_levelBoundB {K KB : ℝ} (hK : 0 ≤ K) (hKB : 0 ≤ KB)
         (le_max_right _ _)
 
 /-- **The off-diagonal part after `L` levels.** If every pair of distinct indices is separated at
-some level below `L` (the source's iteration ends after `L` steps), then under the bounds of
+some level below `L`, then under the bounds of
 `norm_inner_le_levelBoundB` the off-diagonal part of `B` has norm at most
 `(n - 1) levelBoundB n r K K_B (L - 1)`. With `B = P M_i P` this bounds `o(i)`, Hastings,
 arXiv:cond-mat/0508554v3, `proj3new.tex`, lines 1695–1705. -/

@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.Lattice.PartyCircuit.SourcePreparation
 import QICLean.Analysis.SourceContraction
 import Mathlib.Logic.Equiv.Prod
+import TNLean.Algebra.FinSumPermutation
 
 /-! # Finite contraction of source columns
 
@@ -56,10 +57,7 @@ theorem sourceContraction_columns_eq_mul (R : SourceInventory P)
   rw [Fintype.sum_prod_type]
   simp only [Matrix.mul_apply, productSourceMatrix, Finset.sum_mul]
   rw [Finset.sum_comm]
-  apply Finset.sum_congr rfl
-  intro a _
-  apply Finset.sum_congr rfl
-  intro b _
+  refine Finset.sum_congr₂ fun a _ b _ ↦ ?_
   simp only [Matrix.conjTranspose_apply, starRingEnd_apply]
   exact mul_right_comm _ _ _
 

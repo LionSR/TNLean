@@ -1,0 +1,136 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\input{command}
+\providecommand{\gapnote}[2]{\par\noindent\textbf{Verdict:} #1 (#2).\par}
+\title{Coordinate Slices in Hastings' Higher-Dimensional Hierarchy}
+\author{}
+\date{October 28, 2026}
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{resolved}
+
+\section{The source and the coordinate setting}
+
+Hastings, \emph{Solving gapped Hamiltonians locally}
+\cite{Hastings2006Solving}, arXiv:cond-mat/0508554v3, source
+\path{proj3new.tex}, lines 745--756, gives two possible extensions of the
+hierarchical construction to higher dimensions: group sites according to
+one coordinate, or combine $2^D$ sites at a time. It asserts that a
+projection length polynomial in $\log N$ still suffices. The first option
+is now constructed on full finite rectangular boxes in every dimension.
+
+The more general construction uses a finite nonempty site set $V$, a
+coordinate $z:V\to\mathbb N$, a radius $\ell\ge1$, and physical operators
+$M_i$ supported on $\{v:|z(v)-z(i)|\le\ell\}$. Metric-ball locality gives
+this coordinate support whenever the coordinate map does not increase
+distances. On a rectangular box with the coordinate maximum metric, that
+property follows from coordinate projection and is proved directly.
+Metrics dominating the coordinate maximum metric also satisfy it.
+
+\section{The pair operators are constructed}
+
+Put $b(v)=\lfloor z(v)/(2\ell)\rfloor$ and
+$b_i=\lfloor\max\{0,z(i)-\ell\}/(2\ell)\rfloor$. Every supporting site
+of $M_i$ belongs to slice $b_i$ or $b_i+1$. For $B\ge1$ coarse slices,
+assign the term to edge $b_i+1$ when $b_i+1<B$, and to edge zero
+otherwise. Let $A_j$ be the sum of terms assigned to $j$. Then
+\[
+ \sum_{j<B}A_j=\sum_iM_i,
+\]
+and each internal $A_j$ is supported on slices $j-1,j$. If
+$z(v)<2\ell B$ for every site, edge zero is supported on the last and
+first slices. The latter support statement and coverage of all physical
+sites are both proved, rather than inferred from the names of the
+blocks.\footnote{Declarations:
+\leanid{TNLean.MPS.AreaLaw.LocalSolution.coordinateSliceOperator},
+\leanid{TNLean.MPS.AreaLaw.LocalSolution.sum_coordinateSliceOperator},
+\leanid{TNLean.MPS.AreaLaw.LocalSolution.coordinateSliceOperator_mem_supportedOperators},
+\leanid{TNLean.MPS.AreaLaw.LocalSolution.coordinateSliceOperator_mem_supportedOperators_of_metric}, and
+\leanid{TNLean.MPS.AreaLaw.LocalSolution.coordinateSliceOperator_closing_mem_supportedOperators}.}
+
+Write $n=|V|$. For a unit reference state $\psi$, suppose the Hermitian
+local terms satisfy
+\[
+ \|M_i\|\le J,\qquad
+ \|(M_i-\langle\psi,M_i\psi\rangle)\psi\|\le Je^{-r}.
+\]
+This is the local residual input of equation (low), lines 633--639, with
+a common coefficient for the norm and residual estimates. Fixed local
+constants are included in that coefficient. Summation over a fibre gives
+\[
+ \|A_j-\langle\psi,A_j\psi\rangle\|\le2nJ,
+ \qquad
+ \|(A_j-\langle\psi,A_j\psi\rangle)\psi\|\le nJe^{-r}.
+\]
+Thus no residual or support estimate for unspecified pair operators is
+an assumption of this construction.\footnote{Declarations:
+\leanid{TNLean.MPS.AreaLaw.LocalSolution.residual_edgePartition_le},
+\leanid{TNLean.MPS.AreaLaw.LocalSolution.centeredNorm_edgePartition_le_two_mul},
+\leanid{TNLean.MPS.AreaLaw.LocalSolution.residual_coordinateSliceOperator_le}, and
+\leanid{TNLean.MPS.AreaLaw.LocalSolution.centeredNorm_coordinateSliceOperator_le_two_mul}.}
+
+\section{The retained state and the physical gap}
+
+Set $K=J_{\rm eff}=2nJ$, let
+$h=\max\{2,\lceil\log_2 B\rceil\}$, and extend the finite edge family by
+zero up to $2^h$ edges. The corrected hierarchy and its closing window
+are determined by these actual operators. With
+\[
+ r\ge512h^2\bigl(1+\max\{0,\log(2nJ/\Delta)\}\bigr),
+\]
+they retain a unit vector $\phi$ with
+\[
+ \|\phi-\psi\|\le2(3^{h+1}-1)e^{-r/8}.
+\]
+The vector is retained at every node of the binary tree, and the finite
+slice family covers all physical sites. The deficiency correction and
+the extra closing window are as in the notes
+\href{hastings05_hierarchical_projection.pdf}{on hierarchical projection}
+and \href{hastings05_hierarchical_energy.pdf}{on hierarchical energy}.
+
+If the physical Hamiltonian $H$ has ground projection $P_0$, ground
+energy $E_0$, and gap $\Delta>0$, if $\psi$ is its ground state, and if
+$\|H-\sum_iM_i\|\le nJe^{-r}$, then every orthonormal family in the
+constructed final space has at most $2\operatorname{rank}P_0$ members.
+The gap is that of $H$ itself.\footnote{Declarations:
+\leanid{TNLean.MPS.AreaLaw.LocalSolution.coordinateSliceProjection},
+\leanid{TNLean.MPS.AreaLaw.LocalSolution.exists_unit_mem_coordinateSliceProjection}, and
+\leanid{TNLean.MPS.AreaLaw.LocalSolution.card_le_two_mul_re_trace_of_coordinateSliceProjection},
+in \doclink{TNLean/MPS/AreaLaw/LocalSolution/CoordinateSliceApproximation}.}
+
+\section{A polynomial logarithmic length on full boxes}
+
+For $V=\prod_{k=1}^D\{0,\ldots,L_k-1\}$, with $D\ge1$ and all
+$L_k\ge1$, choose any axis $a$ and take $B=L_a$. Varying that coordinate
+while fixing the others at zero injects its side into $V$, so $B\le n$.
+The coordinate extent and the metric-to-strip implication are immediate
+from the box coordinates and are proved formally. The sufficient
+projection length is therefore at most
+\[
+ 512(\lceil\log_2n\rceil+2)^3
+ \bigl(1+\max\{0,\log(2J/\Delta)\}\bigr).
+\]
+This proves the asserted polynomial logarithmic dependence for the
+coordinate-slice option on full rectangular boxes in arbitrary dimension.
+No bond-dimension formula is asserted by the source passage or supplied
+by this estimate.\footnote{Declarations:
+\leanid{TNLean.MPS.AreaLaw.LocalSolution.coordinateSide_le_card_box},
+\leanid{TNLean.MPS.AreaLaw.LocalSolution.coordinateBox_slice_extent},
+\leanid{TNLean.MPS.AreaLaw.LocalSolution.coordinateBox_ball_subset_strip}, and
+\leanid{TNLean.MPS.AreaLaw.LocalSolution.hierarchyProjectionLength_coordinateBox_le},
+\leanid{TNLean.MPS.AreaLaw.LocalSolution.exists_unit_mem_coordinateSliceProjection_of_box}, and
+\leanid{TNLean.MPS.AreaLaw.LocalSolution.card_le_two_mul_re_trace_of_coordinateSliceProjection_of_box},
+in \doclink{TNLean/MPS/AreaLaw/LocalSolution/CoordinateSliceBox}.}
+
+The scope is explicit: the full-box corollary does not assert a bound on
+the coordinate extent of arbitrary sparse embeddings, nor identify the
+coordinate metric with the intrinsic distance on every lattice. The
+abstract construction remains valid whenever its stated coordinate
+support, coverage, and coarse-count bounds are established. The other
+source option, grouping $2^D$ sites at each stage, is not used.
+
+\bibliographystyle{unsrt}
+\bibliography{references}
+\end{document}
