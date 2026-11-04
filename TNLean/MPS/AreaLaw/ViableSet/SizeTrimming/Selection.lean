@@ -73,14 +73,12 @@ theorem ChainHamiltonian.norm_le_one_of_mem_sizeTrimmingSelection {L q k : ℕ}
     (S : Finset (LeftBlockVector L q k)) {v : LeftBlockVector L q k}
     (hv : v ∈ h.sizeTrimmingSelection hq Δ S) : ‖v‖ ≤ 1 := by
   classical
+  let : NeZero q := ⟨by omega⟩
   simp only [ChainHamiltonian.sizeTrimmingSelection, Finset.mem_biUnion,
     Finset.mem_univ, true_and] at hv
   obtain ⟨m, hm⟩ := hv
-  obtain ⟨⟨X, a⟩, hXa, rfl⟩ := Finset.mem_image.mp hm
-  have hX := (mem_feasibleBoundaryPoints.mp (Finset.mem_product.mp hXa).1).2
-  have hunit := (boundaryMinimizer_spec _ _ _ _ hX).2.2.2.2.2.1
-  exact (norm_euclidean_prod_slice_le _ a).trans_eq
-    (((gluingLeftCoordinates L q k m.val).norm_map _).trans hunit)
+  exact norm_le_one_of_mem_boundaryMinimizerFamily
+    (S : Set (LeftBlockVector L q k)) (leftCutOperator k (h.cutLeftPart k)) _ _ _ hm
 
 /-- The selection has at most `(D + 1) D K` members, with `K` the net bound.
 LVV13, `algo53.tex`, Claim `c:2`, lines 520–527. -/

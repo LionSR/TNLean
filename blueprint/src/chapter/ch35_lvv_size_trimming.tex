@@ -78,7 +78,8 @@ a function of the Hamiltonian, the gap parameter and the input set.
     \label{thm:lvv_tensor_dyadic_precision}
     \lean{TNLean.MPS.AreaLaw.clog_natCeil_div_le_of_dyadic_bounds,
         TNLean.MPS.AreaLaw.tensor_contraction_constant_le_two_pow,
-        TNLean.MPS.AreaLaw.tensor_dyadic_precision_le_of_dimension_bounds}
+        TNLean.MPS.AreaLaw.tensor_dyadic_precision_le_of_dimension_bounds,
+        TNLean.MPS.AreaLaw.tensor_dyadic_precision_le_of_polynomial_bond}
     \leanok
     Suppose $q\le2^a$, $D\le2^c$, and $2^{-r}\le\epsilon$, where
     $a,c,k,r$ are natural numbers. For
@@ -87,12 +88,70 @@ a function of the Hamiltonian, the gap parameter and the input set.
       \left\lceil\log_2\max\{1,\lceil K/\epsilon\rceil\}\right\rceil
       \le ak+c(k+1)+(k+1)+k+r.
     \]
+    If $D\le CL^p$ and $k\le L$, this is bounded uniformly over cuts by
+    \[
+      aL+\bigl(\ell_2(C)+p\ell_2(L)\bigr)(L+1)+2L+1+r,
+      \qquad \ell_2(x)=\lceil\log_2\max\{1,x\}\rceil.
+    \]
 \end{lemma}
 \begin{proof}\leanok
     The dimension bounds and $k+1\le2^{k+1}$ give
     $K\le2^{ak+c(k+1)+(k+1)+k}$. Dividing by $\epsilon\ge2^{-r}$
     adds at most $r$ to this exponent. Taking the natural ceiling and
     then the ceiling binary logarithm preserves the bound.
+    Finally $C\le2^{\ell_2(C)}$ and $L\le2^{\ell_2(L)}$ bound the
+    polynomial bond dimension by the required power of two.
+\end{proof}
+
+\begin{lemma}[Rounding an orthonormal retained family]
+    \label{thm:lvv_orthonormal_family_rounding}
+    \lean{TNLean.MPS.AreaLaw.norm_sub_sum_inner_smul_le_of_mem_orthonormal_span,
+        TNLean.MPS.AreaLaw.exists_close_supported_vector_of_orthonormal_rounding,
+        TNLean.MPS.AreaLaw.IsViable.round_orthonormal}
+    \leanok
+    Let $e_1,\ldots,e_r$ be an orthonormal family of left-block vectors.
+    If $\|e_j-w_j\|\le\theta$ for every $j$ and $\theta\ge0$, every chain
+    vector $\phi$ supported on their left span has a vector $\psi$ supported
+    on the span of the $w_j$ such that
+    \[
+      \|\phi-\psi\|\le r\theta\|\phi\|.
+    \]
+    Consequently, if the original family is $\delta$-viable for a unit
+    target and $r\theta<1$, the rounded family is
+    $(\delta+2r\theta)$-viable.
+\end{lemma}
+\begin{proof}\leanok
+    Expand every right column in the orthonormal left family and replace
+    each $e_j$ by $w_j$, keeping its coefficient. The triangle inequality
+    and Cauchy--Schwarz bound the error of each column by $r\theta$
+    times its norm. Summing squared column norms gives the asserted
+    chain-vector bound, independently of the right-block dimension.
+    Normalize the replacement to obtain the viability bound.
+\end{proof}
+
+\begin{lemma}[Rational approximation of a finite retained subspace]
+    \label{thm:lvv_rational_orthonormal_family}
+    \lean{TNLean.MPS.AreaLaw.exists_rational_leftFamily_approximation_of_orthonormalization}
+    \leanok
+    \uses{thm:lvv_orthonormal_family_rounding,thm:lvv_dyadic_open_mps_approximation}
+    Let $V$ be a finite family of matrix product states on $1\le k\le L$
+    sites, all with bond bound $b$, and let $0<\epsilon<1$. Put
+    $b'=|V|\max\{1,b\}$ and $\theta=\epsilon/(2(|V|+1))$.
+    There is a Gaussian-rational matrix product family $T$, with
+    $|T|\le|V|$ and bond bound $b'$, chosen before every target and every
+    viability error. Its common tensor-parameter height is bounded by
+    the dyadic approximation at mesh $\theta$ with bond bound $b'$.
+    For every unit target $\Gamma$ and every $\delta$,
+    $\delta$-viability of $V$ implies $(\delta+\epsilon)$-viability of $T$.
+\end{lemma}
+\begin{proof}\leanok
+    Choose an orthonormal basis of $\operatorname{Span}(V)$. It has at
+    most $|V|$ members, and the finite-span estimate bounds each bond
+    dimension by $b'$. Approximate its unit vectors at mesh $\theta$.
+    Lemma~\ref{thm:lvv_orthonormal_family_rounding} gives the conclusion
+    since $2r\theta\le\epsilon$. This construction uses the retained
+    subspace alone and imposes no condition on the original family's
+    norms or linear dependence.
 \end{proof}
 
 \begin{definition}[The family of minimizing boundary states]
@@ -140,6 +199,7 @@ a function of the Hamiltonian, the gap parameter and the input set.
     \label{thm:lvv_finite_boundary_selection}
     \lean{TNLean.MPS.AreaLaw.boundaryMinimizer_spec,
         TNLean.MPS.AreaLaw.card_boundaryMinimizerFamily_le,
+        TNLean.MPS.AreaLaw.norm_le_one_of_mem_boundaryMinimizerFamily,
         TNLean.MPS.AreaLaw.boundaryMinimizerFamily_subset_span}
     \leanok
     \uses{def:lvv_finite_boundary_selection}
@@ -153,6 +213,7 @@ a function of the Hamiltonian, the gap parameter and the input set.
         |T| & \le m|N|,\notag                        \\
         T   & \subseteq\operatorname{Span}(S).\notag
     \end{align}
+    Each member of $T$ has norm at most one.
 \end{lemma}
 \begin{proof}\leanok
     \uses{thm:chain_gluing_left_projection,thm:lvv_finite_left_columns}

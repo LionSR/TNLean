@@ -53,6 +53,42 @@ Section~\ref{sec:lvv_successive_construction} does not need this bound.
     of Lemma~\ref{thm:lvv_mps_error_reduction}.
 \end{proof}
 
+\begin{lemma}[Rational output of sampled error reduction]
+    \label{thm:lvv_rational_sampled_error_reduction}
+    \lean{TNLean.MPS.AreaLaw.exists_rational_sampled_errorReduction}
+    \leanok
+    \uses{thm:lvv_sampled_error_reduction,thm:lvv_rational_orthonormal_family}
+    Under the assumptions of Lemma~\ref{thm:lvv_sampled_error_reduction},
+    use sampling precision $\eta=\delta/16$ and the corresponding
+    $m,\ell,D$. There is a sample within $\delta/8$ of the ground
+    projection, with the same simultaneous cut decompositions and internal
+    rank bounds as before. At every positive cut $i\le L$, each
+    $(i,s,b,1/2)$-viable input family has a rational replacement $T$ of
+    the exact error-reduced family $V$, with
+    \[
+      |T|\le |V|\le\ell Ds,\qquad
+      D(T)\le(\ell Ds)\max\{1,D\max\{1,b\}\}.
+    \]
+    The family $T$ is $\delta$-viable. More precisely, put
+    \[
+      b'=|V|\max\{1,D\max\{1,b\}\},\quad
+      \theta=\frac{\delta}{4(|V|+1)},\quad
+      K=q^i\max\{1,b'\}^{i+1}(i+1)2^i,\quad
+      t=\left\lceil\log_2\max\{1,\lceil K/\theta\rceil\}\right\rceil.
+    \]
+    Every member of $T$ has Gaussian-rational tensor parameters of
+    common height at most $2^{2t+5}$.
+\end{lemma}
+\begin{proof}\leanok
+    Apply sampled error reduction at target $\delta/2$, retaining the
+    sample and every cut decomposition. The exact output $V$ is
+    $\delta/2$-viable and has bond bound $D\max\{1,b\}$.
+    Apply Lemma~\ref{thm:lvv_rational_orthonormal_family} with
+    permitted loss $\delta/2$. Its cardinality and finite-span bond bounds
+    give the displayed estimates, and the two viability losses add to
+    $\delta$.
+\end{proof}
+
 \begin{lemma}[Uniform polynomial sampling bounds]
     \label{thm:lvv_sampled_polynomial_bounds}
     \lean{TNLean.MPS.AreaLaw.sampledProjectorWordDegree,

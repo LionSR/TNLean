@@ -59,4 +59,24 @@ theorem tensor_dyadic_precision_le_of_dimension_bounds
   clog_natCeil_div_le_of_dyadic_bounds
     (tensor_contraction_constant_le_two_pow hq hD) hε
 
+/-- A polynomial bond bound gives a precision estimate uniform over all cuts
+of a chain. Its only length dependence is through the displayed natural
+polynomial and the binary logarithm of the length. -/
+theorem tensor_dyadic_precision_le_of_polynomial_bond
+    {q D a C p k L r : ℕ} {ε : ℝ}
+    (hq : q ≤ 2 ^ a) (hD : D ≤ C * L ^ p) (hk : k ≤ L)
+    (hε : (2 ^ r : ℝ)⁻¹ ≤ ε) :
+    Nat.clog 2 ⌈(q ^ k : ℝ) * (D : ℝ) ^ (k + 1) * (k + 1) * 2 ^ k / ε⌉₊ ≤
+      a * L + (Nat.clog 2 C + Nat.clog 2 L * p) * (L + 1) +
+        (L + 1) + L + r := by
+  have hdim : D ≤ 2 ^ (Nat.clog 2 C + Nat.clog 2 L * p) := by
+    calc
+      D ≤ C * L ^ p := hD
+      _ ≤ 2 ^ Nat.clog 2 C * (2 ^ Nat.clog 2 L) ^ p :=
+        Nat.mul_le_mul (Nat.le_pow_clog (by norm_num) C)
+          (Nat.pow_le_pow_left (Nat.le_pow_clog (by norm_num) L) p)
+      _ = 2 ^ (Nat.clog 2 C + Nat.clog 2 L * p) := by rw [pow_add, pow_mul]
+  exact (tensor_dyadic_precision_le_of_dimension_bounds hq hdim hε).trans
+    (by gcongr)
+
 end TNLean.MPS.AreaLaw

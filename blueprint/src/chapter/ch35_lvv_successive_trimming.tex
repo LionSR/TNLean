@@ -373,6 +373,7 @@ chain length, in place of the printed linear one~\cite{gap:lvv13_trimming_radius
 \begin{lemma}[Rational size and bond trimming before the ground vector]
     \label{thm:lvv_rational_size_bond_trimming}
     \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.exists_rational_size_bond_trimmed_family}
+    \leanok
     \uses{thm:lvv_size_trimmed_family_bond_trim_set,
         thm:lvv_dyadic_open_mps_approximation,
         thm:lvv_subnormalized_column_rounding}
@@ -394,7 +395,7 @@ chain length, in place of the printed linear one~\cite{gap:lvv13_trimming_radius
     For every eligible ground pair, $(i,c/L)$-viability of the input
     implies $(i,1/2)$-viability of $T$.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     Every selected column has norm at most one, and independent Schmidt
     trimming contracts its norm. Apply the simultaneous dyadic
     approximation to this fixed trimmed family. The environment dimension

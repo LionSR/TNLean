@@ -1629,6 +1629,33 @@ Thus the exponential path count does not force exponentially many
 parameter bits. The remaining running-time work is to propagate the
 rational height and arithmetic operation bounds through sampled error
 reduction and the successive construction.
+
+For the mathematical rational-output step after error reduction, arbitrary
+linear dependence of the retained family need not impose a conditioning
+assumption. The theorem
+\leanid{TNLean.MPS.AreaLaw.exists\_rational\_leftFamily\_approximation\_of\_orthonormalization}
+first chooses an orthonormal basis of its span. If the original family has
+cardinality \(s\) and bond bound \(b\), this basis has at most \(s\)
+members and bond bound \(s\max\{1,b\}\). Rounding each basis vector
+at mesh \(\epsilon/(2(s+1))\) gives a rational replacement with common
+explicit height and viability loss at most \(\epsilon\), uniformly over
+all unit targets. The error estimate is independent of the right-block
+dimension. This establishes the uniform approximation statement; an
+arithmetic construction of the basis and its tensor representation, with
+the required operation bounds, remains part of the running-time proof.
+
+The resulting rational-output statement for sampled error reduction is
+\leanid{TNLean.MPS.AreaLaw.exists\_rational\_sampled\_errorReduction}.
+It retains the sampled words, the cut decompositions, and their internal
+rank bounds. Sampling at target \(\delta/2\) gives an exact retained family
+\(V\) of that viability error; rationalizing its span with further loss
+\(\delta/2\) gives a rational family of error \(\delta\). Its cardinality
+is at most \(|V|\le\ell Ds\), its bond is at most
+\((\ell Ds)\max\{1,D\max\{1,b\}\}\), and it carries an explicit common
+parameter-height bound. Thus rational output is available for one
+application of error reduction. The uniform height bounds throughout the
+successive construction and the arithmetic cost of realizing these
+choices remain to be proved.
 The theorem
 \leanid{TNLean.MPS.AreaLaw.rank\_boundarySupportedMatrix\_le}
 also proves directly that every matrix satisfying the support constraint,

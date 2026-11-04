@@ -35,11 +35,14 @@ import TNLean.MPS.AreaLaw.ViableSet.LeadingResidual
 import TNLean.MPS.AreaLaw.ViableSet.LeftColumns
 import TNLean.MPS.AreaLaw.ViableSet.LeftCoordinates
 import TNLean.MPS.AreaLaw.ViableSet.OperatorAction
+import TNLean.MPS.AreaLaw.ViableSet.OrthonormalRounding
 import TNLean.MPS.AreaLaw.ViableSet.PowerProjector
 import TNLean.MPS.AreaLaw.ViableSet.PrefixColumn
 import TNLean.MPS.AreaLaw.ViableSet.PrefixExtraction
 import TNLean.MPS.AreaLaw.ViableSet.PrefixMPS
 import TNLean.MPS.AreaLaw.ViableSet.RationalBondTrimming
+import TNLean.MPS.AreaLaw.ViableSet.RationalOrthonormalFamily
+import TNLean.MPS.AreaLaw.ViableSet.RationalSampledErrorReduction
 import TNLean.MPS.AreaLaw.ViableSet.SampledCutDecomposition
 import TNLean.MPS.AreaLaw.ViableSet.SampledErrorReduction
 import TNLean.MPS.AreaLaw.ViableSet.SampledProjector

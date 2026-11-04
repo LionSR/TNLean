@@ -833,4 +833,21 @@ theorem boundaryMinimizerFamily_subset_span (S : Set (LeftBlockVector L q k))
     (gluingLeftCoordinates_spanProjection_eq_iff S _).mp
       (boundaryMinimizer_spec S HL m η (mem_feasibleBoundaryPoints.mp hX).2).2.2.2.2.2.2.2.2.1
 
+/-- Every column selected from a unit leading vector has norm at most one.
+Source: LVV13, `algo53.tex`, column extraction, lines 477–478. -/
+theorem norm_le_one_of_mem_boundaryMinimizerFamily
+    (S : Set (LeftBlockVector L q k))
+    (HL : Matrix (CutLeft L q k × CutSite L q k) (CutLeft L q k × CutSite L q k) ℂ)
+    (m : ℕ) (η : ℝ)
+    (N : Finset (Matrix (CutSite L q k × Fin m) (CutSite L q k × Fin m) ℂ))
+    {v : LeftBlockVector L q k} (hv : v ∈ boundaryMinimizerFamily S HL m η N) :
+    ‖v‖ ≤ 1 := by
+  classical
+  obtain ⟨⟨X, a⟩, hXa, rfl⟩ := Finset.mem_image.mp hv
+  have hX := (mem_feasibleBoundaryPoints.mp (Finset.mem_product.mp hXa).1).2
+  have hunit := (boundaryMinimizer_spec S HL m η hX).2.2.2.2.2.1
+  exact (norm_euclidean_prod_slice_le
+    (gluingLeftCoordinates L q k m (boundaryLeadingVector S HL m η X)) a).trans_eq
+      (((gluingLeftCoordinates L q k m).norm_map _).trans hunit)
+
 end TNLean.MPS.AreaLaw

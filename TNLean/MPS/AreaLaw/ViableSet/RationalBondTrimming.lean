@@ -108,7 +108,7 @@ theorem ChainHamiltonian.exists_rational_size_bond_trimmed_family
   have hmesh : θ ≤ 37 / (1152 * (Real.sqrt r + 1)) := by
     have hsqrt : Real.sqrt (r : ℝ) ≤ Real.sqrt (D : ℝ) :=
       Real.sqrt_le_sqrt (by exact_mod_cast hrD)
-    exact div_le_div_of_nonneg_left (by norm_num) (by positivity) (by dsimp only [θ]; linarith)
+    exact div_le_div_of_nonneg_left (by norm_num) (by positivity) (by linarith only [hsqrt])
   exact isViable_half_of_approximating_trimmed_leftFamily hgs.1 hθ.le hmesh
     B T hcover W hW u'
     (fun a ↦ leftColumnwiseSchmidtTrim_column_mem hi m U u hcols a) hnorm' hoverlap'
