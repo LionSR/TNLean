@@ -36,6 +36,27 @@ open scoped InnerProductSpace ComplexOrder Kronecker MatrixOrder Matrix.Norms.L2
 
 namespace TNLean.MPS.AreaLaw
 
+/-- The left objective in a range-one Hamiltonian splitting has norm at most \(4L\),
+as does its restriction to the left cut tensored with the bond identity.
+This supplies the objective bound used in the finite-precision form of LVV13,
+`algo53.tex`, equation `eq:conv`, lines 472–476. -/
+theorem ChainHamiltonian.leftObjective_norm_bounds {L q k m : ℕ} [NeZero q]
+    (h : ChainHamiltonian L q 1 1)
+    (HL B : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
+    (hsplit : h.operator = HL + B)
+    (hHL : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) HL (leftBlock L k))
+    (hBn : ‖B‖ ≤ 2 * L) :
+    ‖HL‖ ≤ 4 * L ∧
+      ‖leftCutOperator k HL ⊗ₖ (1 : Matrix (Fin m) (Fin m) ℂ)‖ ≤ 4 * L := by
+  have hop : ‖h.operator‖ ≤ 2 * L := by
+    simpa only [mul_one] using h.norm_operator_le_of_range_one
+  have hHLn : ‖HL‖ ≤ 4 * L := by
+    have heq : HL = h.operator - B := by rw [hsplit]; abel
+    rw [heq]
+    exact (norm_sub_le _ _).trans (by linarith only [hop, hBn])
+  exact ⟨hHLn, (l2_opNorm_kronecker_one_le (leftCutOperator k HL)).trans
+    ((norm_leftCutOperator_eq hHL).le.trans hHLn)⟩
+
 /-- The canonical density-mesh radius which uses exactly the unused LVV numerical margin. -/
 noncomputable def lvvFiniteDensityMesh (L : ℕ) (Δ : ℝ) : ℝ := Δ / (48672 * L)
 
@@ -397,15 +418,8 @@ theorem ChainHamiltonian.exists_finite_density_search_viable_vector
       Z hZ K X hXHermitian hδ
       hτ₀ hτ₀trace (by simpa only [η] using hτ₀boundary)
         (by simpa only [K, E, Hleft] using hτ₀energy)
-  have hop : ‖h.operator‖ ≤ 2 * L := by
-    simpa only [mul_one] using h.norm_operator_le_of_range_one
-  have hHLn : ‖HL‖ ≤ 4 * L := by
-    have heq : HL = h.operator - B := by rw [hsplit]; abel
-    rw [heq]
-    exact (norm_sub_le _ _).trans (by linarith only [hop, hBn])
   have hHleft : ‖Hleft‖ ≤ 4 * L :=
-    (l2_opNorm_kronecker_one_le (leftCutOperator k HL)).trans
-      ((norm_leftCutOperator_eq hHL).le.trans hHLn)
+    (h.leftObjective_norm_bounds HL B hsplit hHL hBn).2
   have hKn : ‖K‖ ≤ 4 * L :=
     (l2_opNorm_isometricCompression_le Z hZ Hleft).trans hHleft
   have hcombined : 2 * (‖K‖ * (2 * δ) + ‖B‖ * (2 * δ)) ≤ 24 * L * δ := by

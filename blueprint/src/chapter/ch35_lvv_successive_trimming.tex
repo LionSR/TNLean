@@ -369,3 +369,37 @@ chain length, in place of the printed linear one~\cite{gap:lvv13_trimming_radius
     polynomial cardinality bound of the selection and gives the stated bond
     bound.
 \end{proof}
+
+\begin{lemma}[Rational size and bond trimming before the ground vector]
+    \label{thm:lvv_rational_size_bond_trimming}
+    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.exists_rational_size_bond_trimmed_family}
+    \uses{thm:lvv_size_trimmed_family_bond_trim_set,
+        thm:lvv_dyadic_open_mps_approximation,
+        thm:lvv_subnormalized_column_rounding}
+    In the setting of Lemma~\ref{thm:lvv_size_trimmed_family_bond_trim_set},
+    suppose $1\le i\le L$. Let $D$ be the constant cut bound used in size
+    trimming, and let $m=(48L)^2r(L)$ be the corrected trimming radius.
+    Put
+    \[
+      \theta=\frac{37}{1152(\sqrt D+1)},\qquad
+      K=q^i\max\{1,m\}^{i+1}(i+1)2^i,\qquad
+      t=\left\lceil\log_2\max\{1,\lceil K/\theta\rceil\}\right\rceil.
+    \]
+    There is a finite family $T$, chosen before every ground-state energy
+    and ground vector, with no more members than the size-trimming
+    selection. Every member has bond dimension at most $\max\{1,m\}$ and Gaussian-rational
+    tensor parameters of common height at most $2^{2t+5}$.
+    The family $T$ approximates every independently trimmed member of the
+    selection within distance $\theta$.
+    For every eligible ground pair, $(i,c/L)$-viability of the input
+    implies $(i,1/2)$-viability of $T$.
+\end{lemma}
+\begin{proof}
+    Every selected column has norm at most one, and independent Schmidt
+    trimming contracts its norm. Apply the simultaneous dyadic
+    approximation to this fixed trimmed family. The environment dimension
+    of each ground-state witness is at most $D$, so its required rounding
+    mesh is at least $\theta$. The trimmed witness reserve and
+    Lemma~\ref{thm:lvv_subnormalized_column_rounding} then give
+    $1/2$-viability for the same rational family.
+\end{proof}

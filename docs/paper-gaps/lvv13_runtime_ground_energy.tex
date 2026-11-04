@@ -1611,10 +1611,24 @@ shows that a family approximating the raw trimmed columns at mesh
 \]
 retains the \(1/2\)-viability needed for error reduction.
 The proof uses the lower norm bound to control normalization, and requires
-no rationality of Schmidt projections. The remaining running-time work is
-to assemble these uniform approximations with the selected families and
-propagate their heights and operation counts through sampled error
-reduction.
+no rationality of Schmidt projections. The composition is stated by
+\leanid{TNLean.MPS.AreaLaw.ChainHamiltonian.exists\_rational\_size\_bond\_trimmed\_family}:
+the selected family is independently trimmed and uniformly approximated
+before every ground pair, with unchanged cardinality and bond bound,
+one explicit parameter height, and \(1/2\)-viability for every eligible
+ground pair.
+
+The parameter precision also has an elementary binary bound. If
+\(q\le2^a\), \(D\le2^c\), and \(\epsilon\ge2^{-r}\), then
+\leanid{TNLean.MPS.AreaLaw.tensor\_dyadic\_precision\_le\_of\_dimension\_bounds}
+bounds the dyadic exponent by
+\[
+  ak+c(k+1)+(k+1)+k+r.
+\]
+Thus the exponential path count does not force exponentially many
+parameter bits. The remaining running-time work is to propagate the
+rational height and arithmetic operation bounds through sampled error
+reduction and the successive construction.
 The theorem
 \leanid{TNLean.MPS.AreaLaw.rank\_boundarySupportedMatrix\_le}
 also proves directly that every matrix satisfying the support constraint,

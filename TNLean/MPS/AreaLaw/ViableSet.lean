@@ -39,6 +39,7 @@ import TNLean.MPS.AreaLaw.ViableSet.PowerProjector
 import TNLean.MPS.AreaLaw.ViableSet.PrefixColumn
 import TNLean.MPS.AreaLaw.ViableSet.PrefixExtraction
 import TNLean.MPS.AreaLaw.ViableSet.PrefixMPS
+import TNLean.MPS.AreaLaw.ViableSet.RationalBondTrimming
 import TNLean.MPS.AreaLaw.ViableSet.SampledCutDecomposition
 import TNLean.MPS.AreaLaw.ViableSet.SampledErrorReduction
 import TNLean.MPS.AreaLaw.ViableSet.SampledProjector

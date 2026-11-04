@@ -10,6 +10,7 @@ import TNLean.MPS.AreaLaw.ViableSet.BoundaryTraceNormSDP
 import TNLean.MPS.AreaLaw.ViableSet.LeadingPower
 import TNLean.MPS.AreaLaw.ViableSet.Span
 import TNLean.MPS.AreaLaw.ViableSet.ViableLeadingBounds
+import TNLean.MPS.AreaLaw.ViableSet.SizeTrimming.CompressedSolutions
 
 /-!
 # Precision bounds for compressed leading vectors
@@ -135,15 +136,8 @@ theorem ChainHamiltonian.exists_leading_vector_of_approximate_compressed_boundar
   have hnum : 2 * (2 * ‖K‖ * ε + ‖B‖ * (2 * ε)) ≤ 24 * L * ε := by
     have hKn : ‖K‖ ≤ ‖Hleft‖ := l2_opNorm_isometricCompression_le Z hZ Hleft
     have hε0 : 0 ≤ ε := (rectangularTraceNorm_nonneg _).trans hclose
-    have hop : ‖h.operator‖ ≤ 2 * L := by
-      simpa only [mul_one] using h.norm_operator_le_of_range_one
-    have hHLn : ‖HL‖ ≤ 4 * L := by
-      have heq : HL = h.operator - B := by rw [hsplit]; abel
-      rw [heq]
-      exact (norm_sub_le _ _).trans (by linarith only [hop, hBn])
     have hHleft : ‖Hleft‖ ≤ 4 * L :=
-      (l2_opNorm_kronecker_one_le (leftCutOperator k HL)).trans
-        ((norm_leftCutOperator_eq hHL).le.trans hHLn)
+      (h.leftObjective_norm_bounds HL B hsplit hHL hBn).2
     have hsum : ‖Hleft‖ + ‖B‖ ≤ 6 * L := by linarith only [hHleft, hBn]
     calc
       2 * (2 * ‖K‖ * ε + ‖B‖ * (2 * ε)) = 4 * (‖K‖ + ‖B‖) * ε := by ring

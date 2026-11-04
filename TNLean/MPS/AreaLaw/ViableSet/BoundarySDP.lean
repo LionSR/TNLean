@@ -13,6 +13,7 @@ import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.Basic
 import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.CanonicalSearch
 import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.CertificateRounding
 import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.CertificateSearch
+import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.DyadicPrecision
 import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.ErrorBudgets
 import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.GramMeshes
 import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.InputEncoding

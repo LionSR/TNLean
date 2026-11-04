@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.InputEncoding
+import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.RationalMatrixMeshes
 
 /-!
 # Rational coordinates for the retained support
@@ -166,26 +166,6 @@ theorem exists_boundarySupportCoordinateRadius
   rw [← hc j a]
   exact hclose j a
 
-/-- Fixing one coordinate in a Euclidean vector on a finite product cannot increase its
-norm. -/
-theorem norm_euclidean_prod_slice_le
-    {α β : Type*} [Fintype α] [Fintype β]
-    (u : EuclideanSpace ℂ (α × β)) (b : β) :
-    ‖(WithLp.toLp 2 (fun a ↦ u (a, b)) : EuclideanSpace ℂ α)‖ ≤ ‖u‖ := by
-  have hsingle := Finset.single_le_sum
-    (fun b _ ↦ sq_nonneg
-      ‖(WithLp.toLp 2 (fun a ↦ u (a, b)) : EuclideanSpace ℂ α)‖)
-    (Finset.mem_univ b)
-  have hsum :
-      ∑ b : β, ‖(WithLp.toLp 2 (fun a ↦ u (a, b)) : EuclideanSpace ℂ α)‖ ^ 2 =
-        ‖u‖ ^ 2 := by
-    simp only [EuclideanSpace.norm_sq_eq]
-    change (∑ b, ∑ a, ‖u (a, b)‖ ^ 2) = ∑ p, ‖u p‖ ^ 2
-    rw [Fintype.sum_prod_type]
-    exact Finset.sum_comm
-  rw [hsum] at hsingle
-  exact (pow_le_pow_iff_left₀ (norm_nonneg _) (norm_nonneg _)
-    (by norm_num : 2 ≠ 0)).mp hsingle
 
 /-- Decode support coefficients into the ambient matrix whose bond slices are the
 corresponding linear combinations of retained left vectors. -/

@@ -74,6 +74,27 @@ a function of the Hamiltonian, the gap parameter and the input set.
     mesh bounds the total overlap loss by $1/12$.
 \end{proof}
 
+\begin{lemma}[Bit bound for the tensor precision]
+    \label{thm:lvv_tensor_dyadic_precision}
+    \lean{TNLean.MPS.AreaLaw.clog_natCeil_div_le_of_dyadic_bounds,
+        TNLean.MPS.AreaLaw.tensor_contraction_constant_le_two_pow,
+        TNLean.MPS.AreaLaw.tensor_dyadic_precision_le_of_dimension_bounds}
+    \leanok
+    Suppose $q\le2^a$, $D\le2^c$, and $2^{-r}\le\epsilon$, where
+    $a,c,k,r$ are natural numbers. For
+    $K=q^kD^{k+1}(k+1)2^k$, the precision exponent satisfies
+    \[
+      \left\lceil\log_2\max\{1,\lceil K/\epsilon\rceil\}\right\rceil
+      \le ak+c(k+1)+(k+1)+k+r.
+    \]
+\end{lemma}
+\begin{proof}\leanok
+    The dimension bounds and $k+1\le2^{k+1}$ give
+    $K\le2^{ak+c(k+1)+(k+1)+k}$. Dividing by $\epsilon\ge2^{-r}$
+    adds at most $r$ to this exponent. Taking the natural ceiling and
+    then the ceiling binary logarithm preserves the bound.
+\end{proof}
+
 \begin{definition}[The family of minimizing boundary states]
     \label{def:lvv_finite_boundary_selection}
     \lean{TNLean.MPS.AreaLaw.feasibleBoundaryDensities,
@@ -309,6 +330,7 @@ a function of the Hamiltonian, the gap parameter and the input set.
         TNLean.MPS.AreaLaw.exists_boundarySupportedVectorDensityCompression,
         TNLean.MPS.AreaLaw.isometricDensityExpansion_trace_and_energy,
         TNLean.MPS.AreaLaw.l2_opNorm_isometricCompression_le,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.leftObjective_norm_bounds,
         TNLean.MPS.AreaLaw.isometricDensityExpansion_eigenvector_coordinates,
         TNLean.MPS.AreaLaw.isometricDensityExpansion_eigenresidual_norm,
         TNLean.MPS.AreaLaw.exists_boundarySupportedDensity_eigenvector_coordinates,

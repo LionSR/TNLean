@@ -13,6 +13,7 @@ import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.InputEncoding
 import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.SupportCoordinates
 import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.TensorParameters
 import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.RationalTensorApproximation
+import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.DyadicPrecision
 import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.RationalViableFamilies
 import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.SpanEncodings
 import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.ViabilityStability

@@ -105,15 +105,8 @@ theorem ChainHamiltonian.exists_viable_vector_of_all_spectral_approx_sdp_certifi
   have hboundaryError0 : 0 ≤ boundaryError := by
     dsimp only [boundaryError]
     positivity
-  have hop : ‖h.operator‖ ≤ 2 * L := by
-    simpa only [mul_one] using h.norm_operator_le_of_range_one
-  have hHLn : ‖HL‖ ≤ 4 * L := by
-    have heq : HL = h.operator - B := by rw [hsplit]; abel
-    rw [heq]
-    exact (norm_sub_le _ _).trans (by linarith only [hop, hBn])
   have hHleft : ‖Hleft‖ ≤ 4 * L :=
-    (l2_opNorm_kronecker_one_le (leftCutOperator k HL)).trans
-      ((norm_leftCutOperator_eq hHL).le.trans hHLn)
+    (h.leftObjective_norm_bounds HL B hsplit hHL hBn).2
   have hKn : ‖K‖ ≤ 4 * L :=
     (l2_opNorm_isometricCompression_le Z hZ Hleft).trans hHleft
   have harith := fullyApproxSDP_errors_fit_lvv_margin hL
@@ -190,15 +183,8 @@ theorem ChainHamiltonian.exists_viable_vector_of_approx_sdp_error_budget
     have hδ0 : 0 ≤ δ := (rectangularTraceNorm_nonneg _).trans hcert.hresidual
     exact add_nonneg
       (add_nonneg (mul_nonneg (by positivity) hcert.hεb) hδ0) hrepair0
-  have hop : ‖h.operator‖ ≤ 2 * L := by
-    simpa only [mul_one] using h.norm_operator_le_of_range_one
-  have hHLn : ‖HL‖ ≤ 4 * L := by
-    have heq : HL = h.operator - B := by rw [hsplit]; abel
-    rw [heq]
-    exact (norm_sub_le _ _).trans (by linarith only [hop, hBn])
   have hHleft : ‖Hleft‖ ≤ 4 * L :=
-    (l2_opNorm_kronecker_one_le (leftCutOperator k HL)).trans
-      ((norm_leftCutOperator_eq hHL).le.trans hHLn)
+    (h.leftObjective_norm_bounds HL B hsplit hHL hBn).2
   have hKn : ‖K‖ ≤ 4 * L :=
     (l2_opNorm_isometricCompression_le Z hZ Hleft).trans hHleft
   have hnum : 2 * ((eK + ‖K‖ * repair) + ‖B‖ * boundaryError) ≤
@@ -277,15 +263,8 @@ theorem ChainHamiltonian.exists_viable_vector_of_approx_sdp_error_budget_with_tr
     exact add_nonneg
       (add_nonneg (add_nonneg heη (mul_nonneg (by positivity) hcert.hεb)) hδ0)
       hrepair0
-  have hop : ‖h.operator‖ ≤ 2 * L := by
-    simpa only [mul_one] using h.norm_operator_le_of_range_one
-  have hHLn : ‖HL‖ ≤ 4 * L := by
-    have heq : HL = h.operator - B := by rw [hsplit]; abel
-    rw [heq]
-    exact (norm_sub_le _ _).trans (by linarith only [hop, hBn])
   have hHleft : ‖Hleft‖ ≤ 4 * L :=
-    (l2_opNorm_kronecker_one_le (leftCutOperator k HL)).trans
-      ((norm_leftCutOperator_eq hHL).le.trans hHLn)
+    (h.leftObjective_norm_bounds HL B hsplit hHL hBn).2
   have hKn : ‖K‖ ≤ 4 * L :=
     (l2_opNorm_isometricCompression_le Z hZ Hleft).trans hHleft
   have hnum : 2 * ((eK + ‖K‖ * repair) + ‖B‖ * boundaryError) ≤

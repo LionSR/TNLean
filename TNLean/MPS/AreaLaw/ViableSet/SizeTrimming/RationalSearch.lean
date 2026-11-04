@@ -244,15 +244,8 @@ theorem ChainHamiltonian.exists_rationalViableMPSData_of_rational_search_result
         (add_nonneg heη (mul_nonneg (by positivity) hcert.hεb))
         ((rectangularTraceNorm_nonneg _).trans hcert.hresidual))
       hrepair0
-  have hop : ‖h.operator‖ ≤ 2 * L := by
-    simpa only [mul_one] using h.norm_operator_le_of_range_one
-  have hHLn : ‖HL‖ ≤ 4 * L := by
-    have heq : HL = h.operator - B := by rw [hsplit]; abel
-    rw [heq]
-    exact (norm_sub_le _ _).trans (by linarith only [hop, hBn])
   have hHleft : ‖Hleft‖ ≤ 4 * L :=
-    (l2_opNorm_kronecker_one_le (leftCutOperator k HL)).trans
-      ((norm_leftCutOperator_eq hHL).le.trans hHLn)
+    (h.leftObjective_norm_bounds HL B hsplit hHL hBn).2
   have hKn : ‖K‖ ≤ 4 * L :=
     (l2_opNorm_isometricCompression_le Z hZ Hleft).trans hHleft
   have hleadingExact :
@@ -421,15 +414,8 @@ theorem ChainHamiltonian.exists_rationalCoordinateData_of_rational_search_result
         (add_nonneg heη (mul_nonneg (by positivity) hcert.hεb))
         ((rectangularTraceNorm_nonneg _).trans hcert.hresidual))
       hrepair0
-  have hop : ‖h.operator‖ ≤ 2 * L := by
-    simpa only [mul_one] using h.norm_operator_le_of_range_one
-  have hHLn : ‖HL‖ ≤ 4 * L := by
-    have heq : HL = h.operator - B := by rw [hsplit]; abel
-    rw [heq]
-    exact (norm_sub_le _ _).trans (by linarith only [hop, hBn])
   have hHleft : ‖Hleft‖ ≤ 4 * L :=
-    (l2_opNorm_kronecker_one_le (leftCutOperator k HL)).trans
-      ((norm_leftCutOperator_eq hHL).le.trans hHLn)
+    (h.leftObjective_norm_bounds HL B hsplit hHL hBn).2
   have hKn : ‖K‖ ≤ 4 * L :=
     (l2_opNorm_isometricCompression_le Z hZ Hleft).trans hHleft
   have hleadingExact :

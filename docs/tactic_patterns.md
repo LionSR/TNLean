@@ -45,6 +45,21 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Left compressed Hamiltonian norm bound — promoted (2026-11-04)
+
+- **Pattern:** From `h.operator = HL + B`, `‖h.operator‖ ≤ 2L`, and `‖B‖ ≤ 2L`,
+  derive `‖HL‖ ≤ 4L` and pass the bound through restriction to the left cut,
+  tensoring with the bond identity, and isometric compression.
+- **Helper:** `ChainHamiltonian.leftObjective_norm_bounds` in
+  `MPS/AreaLaw/ViableSet/SizeTrimming/CompressedSolutions.lean` returns the
+  full-chain and cut-and-bond objective bounds. Existing
+  `l2_opNorm_isometricCompression_le` gives the compressed bound.
+- **Occurrences:** Seven repeated arguments in the split modules
+  `SizeTrimming/CompressedSolutions.lean`, `ApproximateCertificates.lean`,
+  `RationalSearch.lean`, and `LeadingVectorPrecision.lean` now use the helper.
+- **Decision:** The common content is a norm estimate, so a mathematical lemma
+  removes the duplication without introducing a tactic.
+
 ### Spectral tolerances from cone-order bounds — promoted (2026-11-04)
 
 - **Pattern:** Convert tolerances of size
@@ -52,7 +67,7 @@ abstracted — record why, so it is not re-proposed).
   `2 * n * ε ≤ Δ / (64896 * L)`, using `n ≤ nMax`, and similarly for the
   auxiliary cone order.
 - **Helper:** `fullyApproxSDP_scaled_errors_of_order_bounds` in
-  `MPS/AreaLaw/ViableSet/BoundaryTraceNormSDP.lean`.
+  `MPS/AreaLaw/ViableSet/BoundarySDP/ErrorBudgets.lean`.
 - **Occurrences:** The general LVV margin theorem and the physical uniform-certificate
   theorem in `SizeTrimming.lean`; the helper treats both cone orders simultaneously.
 - **Decision:** The scaling is a mathematical lemma.  It replaces repeated denominator
@@ -5127,26 +5142,13 @@ three-plaquette output measurement, and the routed reunion measurement.
 
 ## Candidates
 
-### Left compressed Hamiltonian norm bound — candidate (2026-11-04)
-
-- **Pattern:** From `h.operator = HL + B`, `‖h.operator‖ ≤ 2L`, and `‖B‖ ≤ 2L`,
-  derive `‖HL‖ ≤ 4L`; then pass this bound through `leftCutOperator`, tensoring
-  with the identity, and isometric compression by `Z`.
-- **Seen:** Seven occurrences in
-  `MPS/AreaLaw/ViableSet/SizeTrimming.lean` (scanner output, 2026-11-04).
-- **Abstraction:** A future helper should return the three useful bounds on `HL`,
-  the cut operator tensored with the bond identity, and its compression.  Promotion
-  awaits an occurrence in a second file, as required by the rule of three.
-- **Notes:** This is mathematical norm bookkeeping, so a lemma is preferable to a
-  tactic.  The present repetitions remain local to one proof module.
-
 ### Transporting three decoded Gram-factor bounds — candidate (2026-11-04)
 
 - **Pattern:** After identifying decoded rational matrices with the rounded
   density and two auxiliary Gram factors, rewrite the three identities and
   discharge their entrywise approximation bounds componentwise.
 - **Seen:** Three occurrences in
-  `MPS/AreaLaw/ViableSet/BoundaryTraceNormSDP.lean` near the explicit,
+  `MPS/AreaLaw/ViableSet/BoundarySDP/ApproximateCertificates.lean` near the explicit,
   uniform, and accepted-certificate constructions (scanner output,
   2026-11-04).
 - **Abstraction:** A mathematical helper packaging the three transported
