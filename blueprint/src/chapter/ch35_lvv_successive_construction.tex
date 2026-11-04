@@ -158,6 +158,44 @@ All polynomial bounds have the quantitative scope specified in those constructio
     Definition~\ref{def:lvv_successive_step}.
 \end{proof}
 
+\begin{definition}[The sweep]
+    \label{def:lvv_sweep}
+    \lean{TNLean.MPS.AreaLaw.lvvSweep,
+        TNLean.MPS.AreaLaw.lvvSweep_zero,
+        TNLean.MPS.AreaLaw.lvvSweep_succ}
+    \leanok
+    \uses{def:lvv_sweep_step}
+    In the setting of Definition~\ref{def:lvv_sweep_step}, the sweep is the
+    sequence of families $S_0,S_1,\ldots$ defined by recursion on the cut:
+    $S_0$ is the scalar singleton on the empty cut, and for $i+1\le L$ the
+    family $S_{i+1}$ is the step of the sweep applied to $S_i$. Beyond the
+    chain the families are empty. The sweep is a function of the interaction
+    and the gap parameter alone, chosen before any ground energy or ground
+    vector.
+\end{definition}
+
+\begin{lemma}[The sweep produces viable families of polynomial size]
+    \label{thm:lvv_sweep_spec}
+    \lean{TNLean.MPS.AreaLaw.lvvSweep_spec}
+    \leanok
+    \uses{def:lvv_sweep, thm:lvv_complete_successive_step_factors,
+        lem:lvv_initial_scalar_family}
+    Let $\Delta>0$ and $0\le i\le L$. The family $S_i$ of the sweep has at most
+    $s_L$ members, and every member has effective MPS bond bound $b_L$; at the
+    empty cut the family is the scalar singleton, with one member of bond one.
+    For every unit ground vector $\Gamma$ with projector gap $\Delta$, the
+    family $S_i$ is $(i,c_\Delta/L)$-viable.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Induct on the cut. At the empty cut the scalar singleton has one member,
+    whose only internal cut has rank one, and $\Gamma$ itself witnesses its
+    viability. At a positive cut, the family is the step of the sweep applied
+    to the previous family, whose cardinality and bond bounds are those of the
+    step; viability follows from that of the previous family by
+    Lemma~\ref{thm:lvv_complete_successive_step_factors}.
+\end{proof}
+
 \begin{lemma}[One recursively chosen viable sequence]
     \label{thm:lvv_coherent_successive_sequence}
     \lean{TNLean.MPS.AreaLaw.exists_positive_chain_successive_viable_sets}
