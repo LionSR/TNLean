@@ -1735,7 +1735,7 @@ an explicit local correction.
 ## ALVV: the operator-norm cluster approximation
 
 [`alvv16_cluster_approximation.tex`](alvv16_cluster_approximation.tex)
-(false source, open) records two nondegenerate counterexamples to Theorem
+(false source, resolved) records two nondegenerate counterexamples to Theorem
 `thm:cluster-approx` of Arad, Landau, Vazirani and Vidick,
 arXiv:1602.08828v2 (source lines 1270–1291 and 1924–1968). On two qubits a
 positive rank-one local projection disproves the printed physical-site cutoff
@@ -1744,10 +1744,24 @@ when the cutoff counts interaction labels. The complementary exponential need
 not have norm at most one under the source's explicit allowance of negative
 local terms. A corrected theorem must specify both the cutoff and the energy
 dependence. The printed theorem is not formalized; the existing normalized
-Hastings estimates are unaffected. The analytic approximation used by
-`lem:exp-approx-eff` remains to be corrected, separately from the exact matrix
-product operator construction. Tracked in [#9854](https://github.com/LionSR/TNLean/issues/9854)
+Hastings estimates are unaffected. The note proves a corrected estimate with
+the cutoff on interaction labels and a normalization by a lower energy bound;
+the soft-truncation matrix product operator of `lem:exp-approx-eff` is
+formalized through it, at scale three times the order. Tracked in [#9854](https://github.com/LionSR/TNLean/issues/9854)
 and [#9847](https://github.com/LionSR/TNLean/issues/9847).
+
+## ALVV: the first energy estimate of soft truncation
+
+[`alvv16_soft_truncation_energy_estimate.tex`](alvv16_soft_truncation_energy_estimate.tex)
+(false source, resolved) records a nondegenerate three-qubit family on which
+the first estimate of Lemma `lem:exp-approx` of Arad, Landau, Vazirani and
+Vidick, arXiv:1602.08828v2 (source lines 1193–1255), fails at every fixed
+truncation scale. The proof replaces a moment of the regional operator by a
+power of the shifted Hamiltonian, which operator order does not justify. The
+note proves a corrected comparison for one interval from an exponential moment
+of the regional operator, with scale at most four times the order. The gap
+prescription and the simultaneous replacement on several regions remain open.
+Tracked in [#9847](https://github.com/LionSR/TNLean/issues/9847).
 
 ## Hastings' high-temperature matrix product form, arXiv:cond-mat/0508554
 
