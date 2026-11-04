@@ -14,6 +14,7 @@ import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.CanonicalSearch
 import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.CertificateRounding
 import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.CertificateSearch
 import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.CommonDenominator
+import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.ContractionHeights
 import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.DyadicPrecision
 import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.ErrorBudgets
 import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.GramMeshes
@@ -21,6 +22,9 @@ import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.InputEncoding
 import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.OrthonormalInput
 import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.PolynomialPrecision
 import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.RationalCertificateTests
+import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.RationalCodeHeights
+import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.RationalContraction
+import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.RationalContractionCost
 import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.RationalCoordinates
 import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.RationalMatrixCodes
 import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.RationalMatrixHeights

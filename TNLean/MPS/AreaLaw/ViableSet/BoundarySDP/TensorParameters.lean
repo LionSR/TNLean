@@ -16,6 +16,9 @@ open Matrix
 open scoped Kronecker ComplexOrder InnerProductSpace MatrixOrder Matrix.Norms.L2Operator
 
 namespace TNLean.MPS.AreaLaw
+
+variable {L q : ℕ}
+
 /-! ### Finite parameter spaces for rational MPS approximation -/
 
 namespace OBCChainTensor

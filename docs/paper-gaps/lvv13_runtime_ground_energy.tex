@@ -1694,6 +1694,48 @@ bounds the reduced coordinate heights by
 \(R\). These are arithmetic size estimates; they do not count the
 operations needed to compute a contraction.
 
+For one fixed physical configuration, the denominator estimate can omit the
+physical dimension entirely. Only the matrix selected at each site enters
+that coefficient. Put \(D=\max\{1,b\}\). There are at most
+\(1+kD^2\) selected complex parameters, including the scalar, and
+\leanid{TNLean.MPS.AreaLaw.RationalLeftOpenMPSRepresentationOfHeight.coordinate\_height\_common\_denominator}
+gives the physical-coordinate height
+\[
+  \mathcal H(H,b,k)=H^{2(1+kD^2)(k+1)}(2HD)^{k+1}.
+\]
+This expression now replaces the former path-count-exponential definition
+of \leanid{TNLean.MPS.AreaLaw.RationalLeftOpenMPSRepresentationOfHeight.coordinateHeightBound}.
+Thus the rational viable-family invariant, finite-span representations,
+and rational output families use this improved bound directly.
+If \(H\le2^h\) and \(D\le B\),
+\leanid{TNLean.MPS.AreaLaw.contractionHeight\_le\_two\_pow}
+proves
+\[
+  \mathcal H(H,b,k)
+    \le2^{(2h(1+kB^2)+1+h+B)(k+1)}.
+\]
+In particular, the logarithmic coordinate height is polynomial when the
+length, bond bound, and local parameter bit bound are polynomial.
+
+An explicit rational evaluation of a single coefficient is supplied by
+\leanid{TNLean.MPS.AreaLaw.OBCChainTensor.coefficientOfRationalParameters}.
+It pads the selected rectangular site matrices with zeros and propagates
+the left boundary row through them in order. Each intermediate row is
+stored in full before the next multiplication. The returned boundary
+coordinate, multiplied by the scalar cap, is the original MPS coefficient,
+also at length zero. The counted version satisfies
+\leanid{TNLean.MPS.AreaLaw.RationalContractionCost.run\_coefficientOfRationalParameters}:
+the returned rational value agrees with this evaluator, and its accumulated
+count is exactly \(8kD^2+6\). The elementary operations counted are rational
+addition, subtraction and multiplication; complex multiplication uses six
+such operations and complex addition uses two.
+The theorem
+\leanid{TNLean.MPS.AreaLaw.RationalLeftOpenMPSRepresentationOfHeight.coefficientCode\_height}
+also bounds the actual reduced output fractions by \(\mathcal H(H,b,k)\).
+These results do not yet bound all intermediate operand lengths or the
+cost of rational reduction. They also do not replace the separate
+contractions needed for inner products and local energy matrices.
+
 The coordinate storage is counted by
 \leanid{TNLean.MPS.AreaLaw.RationalLeftOpenMPSRepresentationOfHeight.exists\_coordinates\_storage\_le\_polynomial}.
 For a representation on \(k\le L\) sites, with bond budget at most

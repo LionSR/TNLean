@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.RationalTensorApproximation
+import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.ContractionHeights
 
 /-!
 # Rational viable families and one-site extension
@@ -16,6 +16,9 @@ open Matrix
 open scoped Kronecker ComplexOrder InnerProductSpace MatrixOrder Matrix.Norms.L2Operator
 
 namespace TNLean.MPS.AreaLaw
+
+variable {L q : ℕ}
+
 /-- A viable family carrying rational open-chain tensor data for every retained vector. -/
 structure RationalViableMPSData
     (Γ : EuclideanSpace ℂ (Fin L → Fin q)) (s b : ℕ) (δ : ℝ)

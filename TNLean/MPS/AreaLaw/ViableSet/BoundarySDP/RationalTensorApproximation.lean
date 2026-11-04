@@ -16,6 +16,9 @@ open Matrix
 open scoped Kronecker ComplexOrder InnerProductSpace MatrixOrder Matrix.Norms.L2Operator
 
 namespace TNLean.MPS.AreaLaw
+
+variable {L q : ℕ}
+
 /-- Explicit left-open MPS data whose scalar and every local tensor entry have rational
 real and imaginary parts.  This is the arithmetic information about retained vectors
 that is not contained in `IsLeftOpenMPS`. -/
@@ -387,70 +390,15 @@ theorem exists_rational_leftFamily_approximation_of_norm_le_one
     exact ⟨w ⟨v, hv⟩, Finset.mem_image.mpr ⟨⟨v, hv⟩, Finset.mem_univ _, rfl⟩,
       hclose ⟨v, hv⟩⟩
 
-/-- Contracting a height-bounded rational open chain gives an explicit height bound.
-The outer exponent is the number of dependent virtual paths, while `productHeight`
-accounts for the product of the `n` local tensor entries along each path. -/
-theorem OBCChainTensor.coeff_height {D n H : ℕ} (A : OBCChainTensor q D n)
-    (hA : ∀ p i a c,
-      HasRationalComplexCoordinatesOfHeight H (A.tensor p i a c))
-    (σ : Fin n → Fin q) :
-    HasRationalComplexCoordinatesOfHeight
-      ((2 * HasRationalComplexCoordinatesOfHeight.productHeight H n) ^
-        Fintype.card ((p : Fin (n + 1)) → Fin (A.bondDim p)))
-      (A.coeff σ) := by
-  rw [OBCChainTensor.coeff]
-  apply HasRationalComplexCoordinatesOfHeight.finset_sum
-  intro α _hα
-  simpa using HasRationalComplexCoordinatesOfHeight.finset_prod
-    (s := Finset.univ) (fun p _hp ↦ hA p (σ p) (α p.castSucc) (α p.succ))
-
 namespace RationalLeftOpenMPSRepresentationOfHeight
 
 /-- Uniform physical-coordinate height bound obtained from a local height `H`, a bond
-budget `b`, and a chain length `k`. -/
+bound `b`, and a chain length `k`. Clearing the parameters selected by a physical
+configuration bounds the binary exponent by a polynomial in these dimensions and
+the local binary height. -/
 def coordinateHeightBound (H b k : ℕ) : ℕ :=
-  let HP := HasRationalComplexCoordinatesOfHeight.productHeight H k
-  let HC := (2 * HP) ^ ((max 1 (max 1 b)) ^ (k + 1))
-  2 * (H * HC) * (H * HC)
-
-/-- Every physical coefficient represented by height-bounded rational open-chain data
-has an explicit coordinate-height bound. -/
-theorem coordinate_height {H b k : ℕ} {v : LeftBlockVector L q k}
-    (R : RationalLeftOpenMPSRepresentationOfHeight H b v) (hk : k ≤ L)
-    (x : Entropy.RegionConfig (fun _ : Fin L ↦ q) (leftBlock L k)) :
-    let HC :=
-      (2 * HasRationalComplexCoordinatesOfHeight.productHeight H k) ^
-        Fintype.card ((p : Fin (k + 1)) → Fin (R.data.tensor.bondDim p))
-    HasRationalComplexCoordinatesOfHeight (2 * (H * HC) * (H * HC)) (v x) := by
-  dsimp only
-  let y := (leftConfigOfFinEquiv (q := q) hk).symm x
-  have hxy : leftConfigOfFin y = x := (leftConfigOfFinEquiv hk).apply_symm_apply x
-  rw [← hxy, R.data.coeff_eq]
-  exact R.scalar_height.mul
-    (OBCChainTensor.coeff_height R.data.tensor R.tensor_height y)
-
-/-- The preceding coefficient bound depends only on the advertised local height, bond
-budget, and chain length, rather than on the varying internal bond dimensions. -/
-theorem coordinate_height_le {H b k : ℕ} (hH : 0 < H)
-    {v : LeftBlockVector L q k}
-    (R : RationalLeftOpenMPSRepresentationOfHeight H b v) (hk : k ≤ L)
-    (x : Entropy.RegionConfig (fun _ : Fin L ↦ q) (leftBlock L k)) :
-    HasRationalComplexCoordinatesOfHeight (coordinateHeightBound H b k) (v x) := by
-  let HP := HasRationalComplexCoordinatesOfHeight.productHeight H k
-  let HC := (2 * HP) ^
-    Fintype.card ((p : Fin (k + 1)) → Fin (R.data.tensor.bondDim p))
-  have hx : HasRationalComplexCoordinatesOfHeight (2 * (H * HC) * (H * HC)) (v x) :=
-    R.coordinate_height hk x
-  apply hx.mono
-  dsimp only [coordinateHeightBound, HC, HP]
-  have hbase : 0 < 2 * HasRationalComplexCoordinatesOfHeight.productHeight H k := by
-    exact Nat.mul_pos (by omega)
-      (HasRationalComplexCoordinatesOfHeight.productHeight_pos hH k)
-  have hpow := Nat.pow_le_pow_right hbase
-    (OBCChainTensor.virtualPath_card_le R.data.tensor)
-  have hterm := Nat.mul_le_mul_left H hpow
-  simpa only [Nat.mul_assoc] using
-    Nat.mul_le_mul_left 2 (Nat.mul_le_mul hterm hterm)
+  let D := max 1 b
+  H ^ (2 * (1 + k * D ^ 2) * (k + 1)) * (2 * H * D) ^ (k + 1)
 
 /-- Height-one rational tensor data for the scalar basis vector at the empty cut. -/
 noncomputable def emptyLeftVector (L q : ℕ) :

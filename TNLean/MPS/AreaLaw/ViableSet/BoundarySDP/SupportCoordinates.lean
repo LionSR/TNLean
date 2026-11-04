@@ -16,6 +16,9 @@ open Matrix
 open scoped Kronecker ComplexOrder InnerProductSpace MatrixOrder Matrix.Norms.L2Operator
 
 namespace TNLean.MPS.AreaLaw
+
+variable {L q k : ℕ}
+
 /-- A bounded finite array of support coefficients admits an entrywise
 Gaussian-rational approximation with the same explicit height bound as a rectangular
 matrix.  This supplies rational structured coordinates without expanding the ambient

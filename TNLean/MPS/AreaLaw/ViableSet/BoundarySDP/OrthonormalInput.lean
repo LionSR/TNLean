@@ -17,6 +17,9 @@ open Matrix
 open scoped Kronecker ComplexOrder InnerProductSpace MatrixOrder Matrix.Norms.L2Operator
 
 namespace TNLean.MPS.AreaLaw
+
+variable {L q k : ℕ}
+
 /-- A support isometry over a finite MPS family may be transported to an orthonormal
 family spanning the same subspace.  The replacement has no larger cardinality and each
 of its vectors has the finite-span bond budget `|S| max(1,b)`. -/

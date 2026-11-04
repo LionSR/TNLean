@@ -16,6 +16,9 @@ open Matrix
 open scoped Kronecker ComplexOrder InnerProductSpace MatrixOrder Matrix.Norms.L2Operator
 
 namespace TNLean.MPS.AreaLaw
+
+variable {L q k : ℕ}
+
 /-- Exact rational input representation required by the finite arithmetic certificate
 tester.  This structure deliberately separates the numerical input assumption from the
 classical construction of the coordinate isometry in the LVV existence argument. -/

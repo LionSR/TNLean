@@ -17,6 +17,9 @@ open Matrix
 open scoped Kronecker ComplexOrder InnerProductSpace MatrixOrder Matrix.Norms.L2Operator
 
 namespace TNLean.MPS.AreaLaw
+
+variable {L q k : ℕ}
+
 /-- Rational structured coefficients decode to a rational ambient matrix when every
 retained vector carries rational open-chain tensor data. -/
 theorem boundarySupportMatrixOfCoordinates_hasRationalEntries

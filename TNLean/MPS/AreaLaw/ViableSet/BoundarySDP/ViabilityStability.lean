@@ -16,6 +16,9 @@ open Matrix
 open scoped Kronecker ComplexOrder InnerProductSpace MatrixOrder Matrix.Norms.L2Operator
 
 namespace TNLean.MPS.AreaLaw
+
+variable {L q k m : ℕ}
+
 /-- Viability is stable under replacing a unit witness by a nearby supported vector.
 After normalizing the replacement, the overlap loss is at most twice the vector error.
 This elementary estimate is the bridge from exact LVV columns to their rational

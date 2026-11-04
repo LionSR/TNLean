@@ -254,6 +254,222 @@ a function of the Hamiltonian, the gap parameter and the input set.
     scalar and all stored local entries simultaneously.
 \end{proof}
 
+\begin{definition}[Physical-coordinate height of a rational tensor]
+    \label{def:lvv_contracted_height_bound}
+    \lean{TNLean.MPS.AreaLaw.RationalLeftOpenMPSRepresentationOfHeight.coordinateHeightBound}
+    \leanok
+    For a local parameter height $H$, bond bound $b$, and length $k$, put
+    $D=\max\{1,b\}$ and define
+    \[
+      \mathcal H(H,b,k)
+        =H^{2(1+kD^2)(k+1)}(2HD)^{k+1}.
+    \]
+\end{definition}
+
+\begin{lemma}[Polynomial binary growth of contracted coordinates]
+    \label{lem:lvv_contracted_coordinate_height}
+    \lean{TNLean.MPS.AreaLaw.HasRationalComplexCoordinatesOfHeight.norm_le_two_mul,
+        TNLean.MPS.AreaLaw.OBCChainTensor.norm_coeff_le_of_entry_norm_le,
+        TNLean.MPS.AreaLaw.OBCChainTensor.norm_scalar_mul_coeff_le_of_height,
+        TNLean.MPS.AreaLaw.RationalLeftOpenMPSRepresentationOfHeight.coordinate_height_common_denominator,
+        TNLean.MPS.AreaLaw.RationalLeftOpenMPSRepresentationOfHeight.coordinate_height_le,
+        TNLean.MPS.AreaLaw.contractionHeight_le_two_pow,
+        TNLean.MPS.AreaLaw.RationalLeftOpenMPSRepresentationOfHeight.coordinate_height_le_two_pow}
+    \leanok
+    Every physical coordinate of a scalar-capped rational MPS of length
+    $k$, parameter height $H$, and bond bound $b$ has coordinate height
+    at most $\mathcal H(H,b,k)$. This estimate does not depend on the
+    physical dimension. If $H\le2^h$ and $\max\{1,b\}\le B$, then
+    \[
+      \mathcal H(H,b,k)
+        \le2^{\bigl(2h(1+kB^2)+1+h+B\bigr)(k+1)}.
+    \]
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:lvv_common_rational_denominator,lem:lvv_open_chain_common_denominator}
+    Fix a physical configuration. Only the selected matrix at each site
+    contributes to its coefficient. These matrices and the scalar have
+    at most $P=1+kD^2$ complex entries. Clear their denominators with
+    $M\le H^{2P}$. The contracted coefficient has denominator $M^{k+1}$.
+    Each local entry and the scalar have norm at most $2H$, while there
+    are at most $D^{k+1}$ virtual paths. Hence the coefficient norm is
+    at most $(2HD)^{k+1}$. The denominator and norm estimates give
+    $\mathcal H(H,b,k)$.
+    Finally $B\le2^B$ and $H\le2^h$ imply the displayed binary bound.
+\end{proof}
+
+\begin{definition}[Sequential rational row contraction]
+    \label{def:lvv_rational_row_contraction}
+    \lean{TNLean.MPS.AreaLaw.RationalRectMatrixCode.rowMul,
+        TNLean.MPS.AreaLaw.RationalRectMatrixCode.rowProduct,
+        TNLean.MPS.AreaLaw.RationalRectMatrixCode.rowProduct_nil,
+        TNLean.MPS.AreaLaw.RationalRectMatrixCode.rowProduct_cons}
+    \leanok
+    Represent a Gaussian rational by its rational real and imaginary
+    coordinates. For a row $u$ of length $d$ and a $d\times d'$ matrix
+    $A$, define the rational row product by
+    \begin{align*}
+      (uA)_c&=\sum_{a=0}^{d-1}u_aA_{ac}.
+    \end{align*}
+    For a list of square $D\times D$ matrices $A_0,\ldots,A_{n-1}$,
+    define the successive rows by $u^{(0)}=u$ and
+    $u^{(p+1)}=u^{(p)}A_p$. Compute and retain every coordinate of
+    $u^{(p+1)}$ before proceeding to the next matrix. The resulting
+    row is $u^{(n)}$; an empty list leaves the initial row fixed.
+\end{definition}
+
+\begin{lemma}[Correctness of sequential rational contraction]
+    \label{lem:lvv_rational_contraction_correct}
+    \lean{TNLean.MPS.AreaLaw.RationalRectMatrixCode.decode_rowMul,
+        TNLean.MPS.AreaLaw.RationalRectMatrixCode.decode_rowProduct,
+        TNLean.MPS.AreaLaw.OBCChainTensor.zeroPadRationalParameters,
+        TNLean.MPS.AreaLaw.OBCChainTensor.decode_zeroPadRationalParameters,
+        TNLean.MPS.AreaLaw.OBCChainTensor.coefficientOfRationalParameters,
+        TNLean.MPS.AreaLaw.OBCChainTensor.decode_coefficientOfRationalParameters,
+        TNLean.MPS.AreaLaw.RationalLeftOpenMPSRepresentation.decode_coefficientOfRationalParameters}
+    \leanok
+    \uses{def:lvv_rational_row_contraction}
+    Interpreting the rational coordinates as complex numbers commutes
+    with row multiplication. For the successive rows of
+    Definition~\ref{def:lvv_rational_row_contraction}, this gives
+    $u^{(n)}=uA_0\cdots A_{n-1}$ as a complex row.
+
+    Consider an open-chain tensor representation with $n$ sites,
+    scalar cap $c$, local matrices $A_p^{\sigma_p}$, and virtual
+    dimensions $b_0,\ldots,b_n\le D$, where $b_0=b_n=1$.
+    Suppose explicit rational coordinate pairs represent $c$ and every
+    local tensor entry. Pad each selected matrix with zeros to a
+    $D\times D$ matrix $\widetilde A_p^{\sigma_p}$. Starting from
+    $u^{(0)}_a=\mathbf1_{a=0}$, perform the rational row contractions
+    and return $cu^{(n)}_0$. Its complex value is the represented
+    physical coefficient
+    \begin{align*}
+      cu^{(n)}_0
+        &=c\bigl(\widetilde A_0^{\sigma_0}\cdots
+          \widetilde A_{n-1}^{\sigma_{n-1}}\bigr)_{00}
+          =c\,A(\sigma).
+    \end{align*}
+    Here $A(\sigma)$ is the open-chain contraction with its
+    one-dimensional boundary indices.
+    This identity includes $n=0$: the initial zero-coordinate basis
+    row is unchanged, and the returned coefficient is $c$.
+\end{lemma}
+\begin{proof}\leanok
+    Rational complex multiplication and finite addition agree with
+    their complex counterparts. Induction along the list of matrices,
+    using $(uA)B=u(AB)$, proves the row-product identity.
+    Entrywise zero-padding also commutes with interpreting the rational
+    coordinates as complex numbers. Apply the open-chain identity
+    $A(\sigma)=(\widetilde A_0^{\sigma_0}\cdots
+    \widetilde A_{n-1}^{\sigma_{n-1}})_{00}$ and multiply by the scalar
+    cap. At length zero the ordered matrix product is the identity,
+    whose $(0,0)$ entry is one.
+\end{proof}
+
+\begin{definition}[Arithmetic count of rational contraction]
+    \label{def:lvv_rational_contraction_count}
+    \lean{TNLean.MPS.AreaLaw.RationalContractionCost.Arithmetic,
+        TNLean.MPS.AreaLaw.RationalContractionCost.rationalAdd,
+        TNLean.MPS.AreaLaw.RationalContractionCost.rationalSub,
+        TNLean.MPS.AreaLaw.RationalContractionCost.rationalMul,
+        TNLean.MPS.AreaLaw.RationalContractionCost.complexAdd,
+        TNLean.MPS.AreaLaw.RationalContractionCost.complexMul,
+        TNLean.MPS.AreaLaw.RationalContractionCost.run_bind,
+        TNLean.MPS.AreaLaw.RationalContractionCost.run_pure,
+        TNLean.MPS.AreaLaw.RationalContractionCost.dot,
+        TNLean.MPS.AreaLaw.RationalContractionCost.rowMul,
+        TNLean.MPS.AreaLaw.RationalContractionCost.rowProduct,
+        TNLean.MPS.AreaLaw.RationalContractionCost.contract,
+        TNLean.MPS.AreaLaw.RationalContractionCost.coefficientOfRationalParameters}
+    \leanok
+    \uses{def:lvv_rational_row_contraction}
+    A counted rational evaluation returns its value together with a
+    natural number recording the arithmetic operations performed.
+    Charge one unit for each rational addition, subtraction, or
+    multiplication. Returning an already computed value has count zero,
+    and successive evaluations add their counts.
+
+    For Gaussian rationals $x=x_1+ix_2$ and $y=y_1+iy_2$, compute
+    addition by the two rational additions in
+    $(x_1+y_1)+i(x_2+y_2)$. Compute multiplication by the four rational
+    products, one subtraction, and one addition in
+    $(x_1y_1-x_2y_2)+i(x_1y_2+x_2y_1)$.
+    Compute each scalar product by starting at zero and successively
+    adding these computed complex products.
+    In the row contraction of Definition~\ref{def:lvv_rational_row_contraction},
+    evaluate and retain all coordinates of each new row before proceeding
+    to the next matrix. After the last row, multiply the selected
+    coordinate by the scalar cap.
+    Only these rational arithmetic operations are charged; their
+    bit-operation cost also depends on the lengths of the numerators
+    and denominators.
+\end{definition}
+
+\begin{lemma}[Arithmetic count of one physical coefficient]
+    \label{lem:lvv_rational_contraction_arithmetic_count}
+    \lean{TNLean.MPS.AreaLaw.RationalContractionCost.run_complexAdd,
+        TNLean.MPS.AreaLaw.RationalContractionCost.run_complexMul,
+        TNLean.MPS.AreaLaw.RationalContractionCost.run_dot,
+        TNLean.MPS.AreaLaw.RationalContractionCost.run_vectorOfFnM,
+        TNLean.MPS.AreaLaw.RationalContractionCost.run_rowMul,
+        TNLean.MPS.AreaLaw.RationalContractionCost.run_rowProduct,
+        TNLean.MPS.AreaLaw.RationalContractionCost.run_contract,
+        TNLean.MPS.AreaLaw.RationalContractionCost.run_coefficientOfRationalParameters}
+    \leanok
+    \uses{def:lvv_rational_contraction_count}
+    The counted evaluations return the same rational values as the
+    sequential contractions. Their accumulated arithmetic counts are
+    exactly $2$ for complex addition, $6$ for complex multiplication,
+    $8D$ for a scalar product of length $D$, and $8D^2$ for a row
+    multiplied by a square matrix of order $D$.
+    Thus propagation through $n$ such matrices has count $8nD^2$.
+    For an open chain of $n$ sites with virtual dimensions at most $D$,
+    including the scalar cap gives the physical coefficient together
+    with the exact accumulated count
+    \begin{align*}
+      8nD^2+6.
+    \end{align*}
+    This formula includes $n=0$, when only the final scalar
+    multiplication is performed.
+\end{lemma}
+\begin{proof}\leanok
+    Each term of the scalar product performs six rational operations
+    for multiplication and two for addition to the accumulated value.
+    Induction on the number of terms gives $8D$ and the ordinary scalar
+    product as its value. Evaluating $D$ output coordinates adds these
+    counts to $8D^2$ and retains the resulting row.
+    Induction along the list of matrices therefore gives the ordinary
+    sequential row product and count $8nD^2$. The final multiplication
+    by the scalar cap adds six operations. Selecting the zero-coordinate
+    boundary entry gives the asserted open-chain coefficient evaluation.
+\end{proof}
+
+\begin{lemma}[Heights of computed rational coordinates]
+    \label{lem:lvv_computed_rational_coordinate_height}
+    \lean{TNLean.MPS.AreaLaw.RationalComplexCode.decode_injective,
+        TNLean.MPS.AreaLaw.RationalComplexCode.decode_height_iff,
+        TNLean.MPS.AreaLaw.RationalComplexCode.bitCount_le_of_decode_height,
+        TNLean.MPS.AreaLaw.RationalLeftOpenMPSRepresentationOfHeight.coefficientCode_height,
+        TNLean.MPS.AreaLaw.RationalLeftOpenMPSRepresentationOfHeight.coefficientCode_bitCount}
+    \leanok
+    \uses{lem:lvv_contracted_coordinate_height,lem:lvv_rational_contraction_correct,
+        def:lvv_rational_coordinate_storage}
+    Rational real and imaginary coordinates are uniquely determined by
+    their complex value. Consequently the actual fractions returned by
+    sequential contraction of height-$H$, bond-$b$ tensor data on $k$
+    sites have heights at most $\mathcal H(H,b,k)$. Their combined signed
+    binary length is at most
+    $6(\lfloor\log_2\mathcal H(H,b,k)\rfloor+1)$.
+\end{lemma}
+\begin{proof}\leanok
+    Equality of complex values gives equality of real and imaginary
+    coordinates. Injectivity of the rational-to-real inclusion then
+    identifies the stored reduced fractions with the coordinates in the
+    height certificate. Apply Lemma~\ref{lem:lvv_contracted_coordinate_height}
+    and correctness of the sequential evaluator. Each signed fraction
+    has length at most twice the height's binary length, plus one sign bit.
+\end{proof}
+
 \begin{definition}[Binary length of a rational coordinate]
     \label{def:lvv_rational_coordinate_storage}
     \lean{TNLean.MPS.AreaLaw.rationalCoordinateBitCount}
@@ -1035,11 +1251,7 @@ a function of the Hamiltonian, the gap parameter and the input set.
         TNLean.MPS.AreaLaw.HasRationalComplexCoordinatesOfHeight.productHeight,
         TNLean.MPS.AreaLaw.HasRationalComplexCoordinatesOfHeight.productHeight_pos,
         TNLean.MPS.AreaLaw.HasRationalComplexCoordinatesOfHeight.finset_prod,
-        TNLean.MPS.AreaLaw.OBCChainTensor.coeff_height,
         TNLean.MPS.AreaLaw.OBCChainTensor.virtualPath_card_le,
-        TNLean.MPS.AreaLaw.RationalLeftOpenMPSRepresentationOfHeight.coordinateHeightBound,
-        TNLean.MPS.AreaLaw.RationalLeftOpenMPSRepresentationOfHeight.coordinate_height,
-        TNLean.MPS.AreaLaw.RationalLeftOpenMPSRepresentationOfHeight.coordinate_height_le,
         TNLean.MPS.AreaLaw.RationalLeftOpenMPSRepresentationOfHeight.emptyLeftVector,
         TNLean.MPS.AreaLaw.RationalLeftOpenMPSRepresentationOfHeight.tensor_snoc_height,
         TNLean.MPS.AreaLaw.RationalLeftOpenMPSRepresentationOfHeight.extendSite,

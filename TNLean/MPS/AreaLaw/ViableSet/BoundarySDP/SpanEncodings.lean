@@ -17,6 +17,9 @@ open Matrix
 open scoped Kronecker ComplexOrder InnerProductSpace MatrixOrder Matrix.Norms.L2Operator
 
 namespace TNLean.MPS.AreaLaw
+
+variable {L q k i : ℕ}
+
 /-- A compact rational description of one finite output family in the span of a retained
 MPS family.  It stores the linear-combination coefficients rather than expanding the
 vectors into exponentially many physical coordinates.
