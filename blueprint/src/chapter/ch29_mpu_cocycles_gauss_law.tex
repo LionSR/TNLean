@@ -1,0 +1,1450 @@
+\section{Source decompositions and Gauss operators}
+
+\subsection{Normalization of the first source factor}
+
+\begin{lemma}[The unsimplified first-cut contraction]
+    \label{thm:mpug_raw_first_cut_contraction}
+    \lean{MPOTensor.sourceCutM₁_adjointSimpleContraction_raw}
+    \leanok
+    \uses{def:mpu_source_matrix_one, def:mpu_source_weight,
+        def:mpug_adjoint_simple_contraction}
+    For an arbitrary tensor $A$ of physical dimension $d$ and bond
+    dimension $D$, and an arbitrary $D\times D$ matrix $\rho$, put
+    $M=M_1(A)$ and $W=I_d\otimes\rho$. Then
+    \begin{align}
+        M_1(s(A,\rho)) & =MM^\dagger W^{\mathsf T}M.
+        \label{eq:mpug_raw_first_cut_contraction}
+    \end{align}
+    No positivity, canonical-form, or simplicity hypothesis is needed.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{def:mpu_source_matrix_one, def:mpu_source_weight,
+        def:mpug_adjoint_simple_contraction}
+    In the first-cut coordinates, multiplication and the physical
+    Kronecker delta in $W^{\mathsf T}$ give
+    \begin{align}
+        (MM^\dagger W^{\mathsf T}M)_{(i,b),(a,j)}
+         & =\sum_{p,q=0}^{d-1}\sum_{x,r,t=0}^{D-1}
+        A^{i,p}_{xb}\,\overline{A^{q,p}_{xr}}\,
+        A^{q,j}_{at}\,\rho_{tr}                    \\
+         & =s(A,\rho)^{i,j}_{ab}.
+    \end{align}
+    The transpose preserves the boundary entry $\rho_{tr}$ in the
+    defining contraction.
+\end{proof}
+
+\begin{lemma}[The first cut of the adjoint-simple contraction]
+    \label{thm:mpug_first_cut_adjoint_contraction}
+    \lean{MPOTensor.IsMPUCanonicalFormII.sourceCutM₁_adjointSimpleContraction}
+    \leanok
+    \discussion{7317}
+    \uses{def:mpu_canonical_form_ii, def:mpu_weighted_source_factors,
+        def:mpu_source_matrix_one, def:mpug_adjoint_simple_contraction}
+    Let $\mathcal U$ be an MPU in canonical form II with recorded fixed
+    matrix $\rho$, and let $X_1,Y_1$ be its chosen source factors for this
+    same $\rho$. Construct $s$ from $\mathcal U,\rho$ as in
+    Definition~\ref{def:mpug_adjoint_simple_contraction}. With the first
+    cut convention $(M_1(A))_{(i,b),(a,j)}=A^{i,j}_{ab}$,
+    \begin{align}
+        M_1(s) & =X_1(Y_1Y_1^\dagger)Y_1.
+        \label{eq:mpug_first_cut_adjoint_contraction}
+    \end{align}
+    In the source-factor expansion of
+    \cite[lines~1326--1374]{FrancoRubio2025MPUGauging}, this factorization
+    requires no simplicity assumption.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_raw_first_cut_contraction,
+        thm:mpu_source_factorizations, thm:mpu_source_factor_normalizations,
+        def:mpu_weighted_source_factors, def:mpu_source_weight}
+    With $W=I_d\otimes\rho$, diagonality gives $W^{\mathsf T}=W$.
+    The cut factorization and weighted isometry then yield
+    \begin{align}
+        M_1(s)
+         & = (X_1Y_1)(X_1Y_1)^\dagger W(X_1Y_1)       \\
+         & =X_1(Y_1Y_1^\dagger)(X_1^\dagger W X_1)Y_1 \\
+         & =X_1(Y_1Y_1^\dagger)Y_1.
+    \end{align}
+\end{proof}
+
+\begin{lemma}[The first source Gram matrix is scalar]
+    \label{thm:mpug_source_y_one_scalar_gram}
+    \lean{MPOTensor.IsMPUCanonicalFormII.sourceY₁_mul_conjTranspose_eq_smul}
+    \leanok
+    \uses{def:mpu_canonical_form_ii, def:mpu_simple,
+        def:mpdo_physical_adjoint, def:mpu_weighted_source_factors}
+    Let $\mathcal U$ be an MPU in canonical form II, and suppose that
+    both $\mathcal U$ and $\mathcal U^\dagger$ are simple. Construct the
+    source factors from $\mathcal U$ and its recorded fixed matrix
+    $\rho$. If $d_r$ is the first source-cut rank, then, as in the scalar
+    Gram identity of \cite[lines~1375--1397]{FrancoRubio2025MPUGauging},
+    there is a scalar $\delta\in\C$ such that
+    \begin{align}
+        Y_1Y_1^\dagger & =\delta I_{d_r}.
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_adjoint_simple_scalar,
+        thm:mpug_first_cut_adjoint_contraction,
+        thm:mpu_source_factor_normalizations,
+        thm:mpu_source_factor_right_inverses,
+        thm:mpu_source_factorizations}
+    By Lemma~\ref{thm:mpug_adjoint_simple_scalar}, $s=\delta\mathcal U$.
+    Applying the first cut and
+    Lemma~\ref{thm:mpug_first_cut_adjoint_contraction} gives
+    \begin{align}
+        X_1(Y_1Y_1^\dagger)Y_1 & =\delta X_1Y_1.
+    \end{align}
+    Multiplying on the left by $X_1^\dagger(I_d\otimes\rho)$ and on the
+    right by $Z_1$ cancels the two outer factors via
+    $X_1^\dagger(I_d\otimes\rho)X_1=I_{d_r}$ and $Y_1Z_1=I_{d_r}$.
+\end{proof}
+
+\begin{lemma}[Trace of the first source Gram matrix]
+    \label{thm:mpug_source_y_one_gram_trace}
+    \lean{MPOTensor.IsMPUCanonicalFormII.trace_sourceY₁_mul_conjTranspose}
+    \leanok
+    \uses{def:mpu_canonical_form_ii, def:mpu_simple,
+        def:mpu_weighted_source_factors}
+    Let $\mathcal U$ be a simple MPU in canonical form II, with physical
+    dimension $d$, bond dimension $D$, first source-cut rank $d_r$, and
+    recorded fixed matrix $\rho$. As in the physical-trace calculation of
+    \cite[line~1398]{FrancoRubio2025MPUGauging}, which does not require
+    simplicity of $\mathcal U^\dagger$, its chosen first source factor
+    satisfies
+    \begin{align}
+        \operatorname{tr}(Y_1Y_1^\dagger) & =d.
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_source_y_physical_contractions}
+    Cyclic invariance gives
+    $\operatorname{tr}(Y_1Y_1^\dagger)=\operatorname{tr}(Y_1^\dagger Y_1)$.
+    Grouping the latter sum by its physical index gives
+    \begin{align}
+        \operatorname{tr}(Y_1^\dagger Y_1)
+         & =\sum_{p=0}^{d-1}\sum_{r=0}^{d_r-1}\sum_{\alpha=0}^{D-1}
+        \overline{(Y_1)_{r,(\alpha,p)}}(Y_1)_{r,(\alpha,p)}
+        =\sum_{p=0}^{d-1}1=d
+    \end{align}
+    by Lemma~\ref{thm:mpug_source_y_physical_contractions}.
+\end{proof}
+
+\begin{lemma}[Normalization of the first source Gram matrix]
+    \label{thm:mpug_source_y_one_normalization}
+    \lean{MPOTensor.IsMPUCanonicalFormII.sourceY₁_mul_conjTranspose}
+    \leanok
+    \discussion{7317}
+    \uses{def:mpu_canonical_form_ii, def:mpu_simple,
+        def:mpdo_physical_adjoint, def:mpu_weighted_source_factors}
+    Let $\mathcal U$ be an MPU in canonical form II of physical dimension
+    $d$, and suppose that both $\mathcal U$ and $\mathcal U^\dagger$ are
+    simple. Let $Y_1$ be the first source factor constructed from
+    $\mathcal U$ and its recorded fixed matrix $\rho$, and let $d_r$ be
+    the first source-cut rank. Then, as in the source-factor normalization
+    proposition of \cite[lines~1064--1119]{FrancoRubio2025MPUGauging},
+    \begin{align}
+        Y_1Y_1^\dagger & =\frac{d}{d_r}I_{d_r}.
+    \end{align}
+    % Source: first identity of eq:MPUnice3. The other three constants
+    % and the full prop:MPUsplus are not established by this entry.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_source_y_one_scalar_gram,
+        thm:mpug_source_y_one_gram_trace}
+    Writing $Y_1Y_1^\dagger=\delta I_{d_r}$ by
+    Lemma~\ref{thm:mpug_source_y_one_scalar_gram} and taking traces via
+    Lemma~\ref{thm:mpug_source_y_one_gram_trace} gives $\delta d_r=d$.
+    Since canonical form II gives $d>0$ and hence $d_r\ne0$, dividing as in
+    \cite[line~1398]{FrancoRubio2025MPUGauging} yields $\delta=d/d_r$.
+\end{proof}
+
+\subsection{Normalization of the weighted second source factor}
+
+\begin{lemma}[The first cut of the reflected contraction]
+    \label{thm:mpug_adjoint_cut_second_gram}
+    \lean{MPOTensor.IsMPUCanonicalFormII.sourceCutM₁_adjointSimpleContraction_physicalAdjoint}
+    \leanok
+    \discussion{7317}
+    \uses{def:mpu_canonical_form_ii, def:mpu_weighted_source_factors,
+        def:mpu_source_matrix_one, def:mpug_adjoint_simple_contraction,
+        def:mpdo_physical_adjoint, def:mpu_source_weight}
+    Let $\mathcal U$ be an MPU in canonical form II with recorded fixed
+    matrix $\rho$, and let $X_2,Y_2$ be its chosen second source factors.
+    Set $W=I_d\otimes\rho$ and let $s_\dagger$ be the contraction of
+    Definition~\ref{def:mpug_adjoint_simple_contraction}, applied to
+    $\mathcal U^\dagger$ and this same $\rho$. Then, in the reflected
+    factorization for $Y_2(I_d\otimes\rho)Y_2^\dagger$ in the normalization
+    proposition of \cite[lines~1064--1119 and 1398]{FrancoRubio2025MPUGauging},
+    \begin{align}
+        M_1(s_\dagger) & =Y_2^\dagger(Y_2WY_2^\dagger)X_2^\dagger,
+    \end{align}
+    without any simplicity hypothesis.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_raw_first_cut_contraction,
+        thm:mpu_physical_adjoint_source_cuts,
+        thm:mpu_source_factorizations, thm:mpu_source_factor_normalizations,
+        def:mpu_weighted_source_factors, def:mpu_source_weight}
+    Lemma~\ref{thm:mpug_raw_first_cut_contraction} gives
+    \begin{align}
+        M_1(s(A,\rho)) & =M_1(A)M_1(A)^\dagger W^{\mathsf T}M_1(A).
+    \end{align}
+    The transpose records the boundary coefficient $\rho_{tr}$. Here
+    $\rho$ is diagonal, so $W^{\mathsf T}=W$. Substituting
+    $M_1(\mathcal U^\dagger)=M_2(\mathcal U)^\dagger=Y_2^\dagger X_2^\dagger$
+    and canceling $X_2^\dagger X_2=I$ gives the factorization. All factors
+    are those of $\mathcal U$, not newly chosen factors of its adjoint.
+\end{proof}
+
+\begin{lemma}[The weighted second source Gram matrix is scalar]
+    \label{thm:mpug_source_y_two_scalar_gram}
+    \lean{MPOTensor.IsMPUCanonicalFormII.sourceY₂_weighted_mul_conjTranspose_eq_smul}
+    \leanok
+    \uses{def:mpu_canonical_form_ii, def:mpu_simple,
+        def:mpdo_physical_adjoint, def:mpu_weighted_source_factors,
+        def:mpu_source_weight}
+    Let $\mathcal U$ be an MPU in canonical form II with recorded fixed
+    matrix $\rho$, and assume that both $\mathcal U$ and
+    $\mathcal U^\dagger$ are simple. Let $Y_2$ be its chosen second
+    source factor and $d_l$ its second source-cut rank. There is a scalar
+    $\varepsilon\in\C$ such that
+    \begin{align}
+        Y_2(I_d\otimes\rho)Y_2^\dagger & =\varepsilon I_{d_l}.
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:mpug_adjoint_canonical_boundaries,
+        thm:mpug_adjoint_simple_scalar, thm:mpu_physical_adjoint_identities,
+        thm:mpug_adjoint_cut_second_gram,
+        thm:mpu_physical_adjoint_source_cuts,
+        thm:mpu_source_factorizations, thm:mpu_source_factor_normalizations,
+        thm:mpu_source_factor_right_inverses}
+    Passing canonical form II to $\mathcal U^\dagger$ with the same
+    $\rho$, Lemma~\ref{thm:mpug_adjoint_simple_scalar} gives
+    $s_\dagger=\varepsilon\mathcal U^\dagger$, since physical adjunction
+    is involutive and both required simplicity hypotheses hold.
+    Taking the first cut and applying
+    Lemma~\ref{thm:mpug_adjoint_cut_second_gram} gives
+    \begin{align}
+        Y_2^\dagger(Y_2(I_d\otimes\rho)Y_2^\dagger)X_2^\dagger
+         & =\varepsilon Y_2^\dagger X_2^\dagger.
+    \end{align}
+    Multiplying on the left by $Z_2^\dagger$ and on the right by $X_2$
+    cancels the outer factors via $Z_2^\dagger Y_2^\dagger=I$ and
+    $X_2^\dagger X_2=I$. The scalar comes from the adjoint contraction; it
+    has not been identified with the scalar for the original tensor.
+\end{proof}
+
+\begin{lemma}[Trace of the weighted second source Gram matrix]
+    \label{thm:mpug_source_y_two_gram_trace}
+    \lean{MPOTensor.IsMPUCanonicalFormII.trace_sourceY₂_weighted_mul_conjTranspose}
+    \leanok
+    \uses{def:mpu_canonical_form_ii, def:mpu_simple,
+        def:mpu_weighted_source_factors, def:mpu_source_weight}
+    Let $\mathcal U$ be a simple MPU in canonical form II of physical
+    dimension $d$, with recorded fixed matrix $\rho$ and chosen second
+    source factor $Y_2$. Then, as in the physical-trace calculation for
+    $Y_2$ in \cite[line~1398]{FrancoRubio2025MPUGauging}, which does not
+    require simplicity of $\mathcal U^\dagger$,
+    \begin{align}
+        \operatorname{tr}\bigl(Y_2(I_d\otimes\rho)Y_2^\dagger\bigr) & =d.
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_source_y_physical_contractions, def:mpu_source_weight}
+    Cyclic invariance and expanding $I_d\otimes\rho$ give
+    \begin{align}
+        \operatorname{tr}\bigl(Y_2(I_d\otimes\rho)Y_2^\dagger\bigr)
+         & =\sum_{p=0}^{d-1}\sum_{x,y=0}^{D-1}\sum_{l=0}^{d_l-1}
+        \overline{(Y_2)_{l,(p,y)}}(Y_2)_{l,(p,x)}\rho_{xy}
+        =\sum_{p=0}^{d-1}1=d
+    \end{align}
+    by Lemma~\ref{thm:mpug_source_y_physical_contractions} at $q=p$.
+\end{proof}
+
+\begin{lemma}[Normalization of the weighted second source Gram matrix]
+    \label{thm:mpug_source_y_two_normalization}
+    \lean{MPOTensor.IsMPUCanonicalFormII.sourceY₂_weighted_mul_conjTranspose}
+    \leanok
+    \discussion{7317}
+    \uses{def:mpu_canonical_form_ii, def:mpu_simple,
+        def:mpdo_physical_adjoint, def:mpu_weighted_source_factors,
+        def:mpu_source_weight}
+    Let $\mathcal U$ be an MPU in canonical form II of physical dimension
+    $d$, and suppose that both $\mathcal U$ and $\mathcal U^\dagger$ are
+    simple. Let $Y_2$ be the second source factor constructed from
+    $\mathcal U$ and its recorded fixed matrix $\rho$, and let $d_l$ be
+    the second source-cut rank. Then, as in the source-factor normalization
+    proposition of \cite[lines~1064--1119]{FrancoRubio2025MPUGauging},
+    \begin{align}
+        Y_2(I_d\otimes\rho)Y_2^\dagger & =\frac{d}{d_l}I_{d_l}.
+    \end{align}
+    % Source: second identity of eq:MPUnice3. Neither physical X
+    % normalization nor the full prop:MPUsplus follows from this entry alone.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_source_y_two_scalar_gram,
+        thm:mpug_source_y_two_gram_trace}
+    Writing the Gram matrix as $\varepsilon I_{d_l}$ by
+    Lemma~\ref{thm:mpug_source_y_two_scalar_gram}, its trace is $d$ by
+    Lemma~\ref{thm:mpug_source_y_two_gram_trace}, so $\varepsilon d_l=d$.
+    As $d>0$, the rank $d_l$ is nonzero, and the trace argument of
+    \cite[line~1398]{FrancoRubio2025MPUGauging} gives $\varepsilon=d/d_l$.
+\end{proof}
+
+\subsection{Physical normalizations of the two source X factors}
+
+\begin{lemma}[The canonical one-letter output contraction]
+    \label{thm:mpug_one_letter_output_contraction}
+    \lean{MPOTensor.IsMPUCanonicalFormII.oneLetter_output_contraction}
+    \leanok
+    \discussion{7317}
+    \uses{def:mpu_canonical_form_ii, def:mpu_simple,
+        def:mpdo_physical_adjoint}
+    Let $\mathcal U$ be an MPU in canonical form II of physical dimension
+    $d$ and bond dimension $D$, with recorded fixed matrix $\rho$.
+    Suppose that $\mathcal U^\dagger$ is simple. For $0\leq i,j<d$,
+    \begin{align}
+        \sum_{x,\alpha,\beta=0}^{D-1}\sum_{p=0}^{d-1}
+        \mathcal U^{i,p}_{x\alpha}
+        \overline{\mathcal U^{j,p}_{x\beta}}\rho_{\beta\alpha}
+         & =\delta_{i,j}.
+    \end{align}
+    In the reflected one-letter contraction used for the physical
+    source-factor normalizations in
+    \cite[lines~1120--1162 and 1398]{FrancoRubio2025MPUGauging}, the open
+    indices are the physical output indices and simplicity of $\mathcal U$
+    is not required.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:mpug_adjoint_canonical_boundaries,
+        thm:mpug_one_letter_physical_contraction, def:mpdo_physical_adjoint}
+    Applying Lemma~\ref{thm:mpug_one_letter_physical_contraction} to
+    $\mathcal U^\dagger$ with its canonical presentation carrying the
+    same $\rho$, where
+    $(\mathcal U^\dagger)^{p,i}_{x\alpha}=\overline{\mathcal U^{i,p}_{x\alpha}}$,
+    and taking double conjugates gives the displayed sum.
+\end{proof}
+
+\begin{lemma}[Physical normalization of the first source X factor]
+    \label{thm:mpug_source_x_one_physical_normalization}
+    \lean{MPOTensor.IsMPUCanonicalFormII.sourceX₁_physical_contraction}
+    \leanok
+    \discussion{7317}
+    \uses{def:mpu_canonical_form_ii, def:mpu_simple,
+        def:mpdo_physical_adjoint, def:mpu_weighted_source_factors}
+    Let $\mathcal U$ be an MPU in canonical form II of physical dimension
+    $d$ and bond dimension $D$. Assume that both $\mathcal U$ and
+    $\mathcal U^\dagger$ are simple. Let $X_1$ be the first source factor
+    constructed from $\mathcal U$ and its recorded fixed matrix $\rho$,
+    and let $d_r$ be the first source-cut rank. For $0\leq i,j<d$,
+    \begin{align}
+        \sum_{r=0}^{d_r-1}\sum_{\alpha,\beta=0}^{D-1}
+        (X_1)_{(i,\alpha),r}\rho_{\beta\alpha}
+        \overline{(X_1)_{(j,\beta),r}}
+         & =\frac{d_r}{d}\delta_{i,j}.
+    \end{align}
+    In this first physical source-factor normalization of
+    \cite[lines~1120--1162]{FrancoRubio2025MPUGauging}, the matrix $\rho$
+    acts on the virtual legs and the identity acts on the physical space.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_source_y_one_normalization,
+        thm:mpug_source_y_one_gram_trace, thm:mpug_one_letter_output_contraction,
+        thm:mpu_source_factorizations, def:mpu_source_matrix_one}
+    Factoring $M_1(\mathcal U)=X_1Y_1$ and applying
+    Lemma~\ref{thm:mpug_source_y_one_normalization} yields
+    \begin{align}
+        M_1(\mathcal U)M_1(\mathcal U)^\dagger
+         & =\frac{d}{d_r}X_1X_1^\dagger.
+    \end{align}
+    Multiplying the $((i,\alpha),(j,\beta))$ entry by
+    $\rho_{\beta\alpha}$ and summing over $\alpha,\beta$ makes the left-hand
+    side $\delta_{i,j}$ by Lemma~\ref{thm:mpug_one_letter_output_contraction}.
+    The trace identity in Lemma~\ref{thm:mpug_source_y_one_gram_trace}
+    gives $d_r\ne0$, and canonical form II gives $d>0$. Multiplication by
+    $d_r/d$ gives the required physical contraction.
+\end{proof}
+
+\begin{lemma}[Physical normalization of the second source X factor]
+    \label{thm:mpug_source_x_two_physical_normalization}
+    \lean{MPOTensor.IsMPUCanonicalFormII.sourceX₂_physical_contraction}
+    \leanok
+    \discussion{7317}
+    \uses{def:mpu_canonical_form_ii, def:mpu_simple,
+        def:mpdo_physical_adjoint, def:mpu_weighted_source_factors}
+    Let $\mathcal U$ be an MPU in canonical form II of physical dimension
+    $d$ and bond dimension $D$. Assume that both $\mathcal U$ and
+    $\mathcal U^\dagger$ are simple. Let $X_2$ be its chosen second source
+    factor and let $d_l$ be the second source-cut rank. For $0\leq i,j<d$,
+    the second physical source-factor normalization in
+    \cite[lines~1120--1162]{FrancoRubio2025MPUGauging} holds:
+    \begin{align}
+        \sum_{l=0}^{d_l-1}\sum_{x=0}^{D-1}
+        (X_2)_{(x,i),l}\overline{(X_2)_{(x,j),l}}
+         & =\frac{d_l}{d}\delta_{i,j}.
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_source_y_two_normalization,
+        thm:mpug_source_y_two_gram_trace, thm:mpug_one_letter_output_contraction,
+        thm:mpu_source_factorizations, def:mpu_source_matrix_two,
+        def:mpu_source_weight}
+    With $W=I_d\otimes\rho$, the factorization $M_2(\mathcal U)=X_2Y_2$
+    and Lemma~\ref{thm:mpug_source_y_two_normalization} give
+    \begin{align}
+        M_2(\mathcal U)WM_2(\mathcal U)^\dagger
+         & =\frac{d}{d_l}X_2X_2^\dagger.
+    \end{align}
+    Summing the $((x,i),(x,j))$ entry over $x$ and expanding the left-hand
+    side with $\rho_{\alpha\beta}=\rho_{\beta\alpha}$ gives
+    $\delta_{i,j}$ by Lemma~\ref{thm:mpug_one_letter_output_contraction}.
+    The trace identity in Lemma~\ref{thm:mpug_source_y_two_gram_trace}
+    gives $d_l\ne0$ with $d>0$, so multiplying by $d_l/d$ yields the result.
+\end{proof}
+
+Lemmas~\ref{thm:mpug_source_y_one_normalization},
+\ref{thm:mpug_source_y_two_normalization},
+\ref{thm:mpug_source_x_one_physical_normalization}, and
+\ref{thm:mpug_source_x_two_physical_normalization} establish all four
+identities of the source-factor normalization proposition in
+\cite[lines~1064--1162]{FrancoRubio2025MPUGauging} for the compact source
+factors under canonical form~II and simplicity of $\mathcal U$ and
+$\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
+% This establishes prop:MPUsplus for the constructed source factors.
+% It does not identify arbitrary separately supplied factors or modify
+% the scope of the earlier raw proportionality theorem.
+
+\begin{lemma}[Comparison of factorizations from one-sided inverses]
+    \label{thm:mpug_factorization_comparison}
+    \lean{Matrix.factorization_comparison_of_one_sided_inverses}
+    \leanok
+    Let $A,B,\widetilde B,C$ be finite index sets, possibly empty, and let
+    $\mathbb S$ be a semiring. Suppose that
+    \begin{align}
+        X            & \in\operatorname{Mat}_{A\times B}(\mathbb S),           \\
+        Y            & \in\operatorname{Mat}_{B\times C}(\mathbb S),           \\
+        \widetilde X & \in\operatorname{Mat}_{A\times\widetilde B}(\mathbb S), \\
+        \widetilde Y & \in\operatorname{Mat}_{\widetilde B\times C}(\mathbb S)
+    \end{align}
+    satisfy $XY=\widetilde X\widetilde Y$. If
+    $L\in\operatorname{Mat}_{\widetilde B\times A}(\mathbb S)$ and
+    $R\in\operatorname{Mat}_{C\times B}(\mathbb S)$ satisfy
+    $L\widetilde X=I_{\widetilde B}$ and $YR=I_B$, then the rectangular
+    comparison matrix $K=LX\in\operatorname{Mat}_{\widetilde B\times B}(\mathbb S)$
+    obeys
+    \begin{align}
+        K            & =\widetilde YR, \\
+        X            & =\widetilde XK, \\
+        \widetilde Y & =KY.
+    \end{align}
+    In these one-sided-inverse identities from the proof of
+    \cite[lines~1052--1066]{FrancoRubio2025MPUGauging}, the intermediate
+    index sets $B$ and $\widetilde B$ are independent, and no equality of
+    their cardinalities is assumed or concluded.
+\end{lemma}
+\begin{proof}\leanok
+    Associativity and the two inverse identities give
+    \begin{align}
+        LX & =(LX)(YR)=L(XY)R
+        =L(\widetilde X\widetilde Y)R=\widetilde YR.
+    \end{align}
+    Multiplying $XY=\widetilde X\widetilde Y$ on the right by $R$ gives
+    $X=\widetilde XK$. Multiplying it on the left by $L$ gives
+    $\widetilde Y=KY$.
+\end{proof}
+
+\begin{lemma}[Reciprocal unitary gauges from a Kronecker comparison]
+    \label{thm:mpug_reciprocal_unitary_gauges}
+    \lean{Matrix.exists_reciprocal_unitary_gauges_of_comparison}
+    \leanok
+    For $i=1,2$, suppose that two compatible matrix factorizations are related
+    by square comparison matrices $K_i$ through
+    \begin{align}
+        X_i & =\widetilde X_iK_i, & \widetilde Y_i & =K_iY_i.
+        \label{eq:mpug_comparison_matrices}
+    \end{align}
+    If $K_1\otimes K_2$ is unitary, then there are a positive real number
+    $\delta$ and unitary matrices $W_1,W_2$ such that
+    \begin{align}
+        \widetilde X_1 & =\delta^{-1}X_1W_1,          &
+        \widetilde Y_1 & =\delta W_1^\dagger Y_1,       \\
+        \widetilde X_2 & =\delta X_2W_2,              &
+        \widetilde Y_2 & =\delta^{-1}W_2^\dagger Y_2.
+        \label{eq:mpug_reciprocal_unitary_gauges}
+    \end{align}
+    Thus the positive scalar factors in the orientation of
+    \cite[Lemma at lines~1052--1066]{FrancoRubio2025MPUGauging} are
+    $\delta_1=\delta^{-1}$ and $\delta_2=\delta$, and hence
+    $\delta_1\delta_2=1$.
+    % Source anchor: arXiv:2502.20257, Lemma lem:deco, lines 1052--1066.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_unitary_kronecker_factors}
+    Applying Lemma~\ref{thm:mpug_unitary_kronecker_factors} to
+    $K_1\otimes K_2$ gives $\delta>0$ and unitary matrices $U_1,U_2$ with
+    $K_1=\delta U_1$ and $K_2=\delta^{-1}U_2$. Setting
+    $W_i=U_i^\dagger$ and substituting into
+    (\ref{eq:mpug_comparison_matrices}) gives
+    (\ref{eq:mpug_reciprocal_unitary_gauges}), while positivity of $\delta$
+    gives $\delta^{-1}\delta=1$.
+\end{proof}
+
+\subsection{Uniqueness of the source decompositions}
+
+\begin{lemma}[Transformation of the source contraction]
+    \label{thm:mpug_source_contraction_transport}
+    \lean{MPOTensor.sourceU_contraction_transport}
+    \leanok
+    \discussion{7315}
+    \uses{def:mpu_source_matrix_one, def:mpu_source_matrix_two}
+    Let $U$ have physical dimension $d$ and bond dimension $D$, and write
+    $r=\operatorname{rank}M_1(U)$ and $\ell=\operatorname{rank}M_2(U)$.
+    Let $Y_1,\widetilde Y_1\in\operatorname{Mat}_{r\times(D\times d)}(\C)$
+    and $Y_2,\widetilde Y_2\in\operatorname{Mat}_{\ell\times(d\times D)}(\C)$.
+    For square matrices $K_1\in\operatorname{Mat}_r(\C)$ and
+    $K_2\in\operatorname{Mat}_\ell(\C)$, suppose that
+    $\widetilde Y_i=K_iY_i$ for $i=1,2$. Define
+    $u,\widetilde u\colon\C^d\otimes\C^d\to\C^\ell\otimes\C^r$ by
+    \begin{align}
+        u_{(l,r'),(p,q)}
+         & =\sum_{\beta=0}^{D-1}(Y_2)_{l,(p,\beta)}(Y_1)_{r',(\beta,q)}, \\
+        \widetilde u_{(l,r'),(p,q)}
+         & =\sum_{\beta=0}^{D-1}(\widetilde Y_2)_{l,(p,\beta)}
+        (\widetilde Y_1)_{r',(\beta,q)}.
+        \label{eq:mpug_raw_source_contractions}
+    \end{align}
+    Here $0\leq l<\ell$, $0\leq r'<r$, and $0\leq p,q<d$.
+    Then $\widetilde u=(K_2\otimes K_1)u$.
+\end{lemma}
+
+\begin{proof}\leanok
+    Substituting $\widetilde Y_i=K_iY_i$ into
+    (\ref{eq:mpug_raw_source_contractions}) and interchanging the three finite
+    sums isolates the coefficient of $u_{(l',r''),(p,q)}$ as
+    $(K_2)_{l,l'}(K_1)_{r',r''}$, the corresponding entry of $K_2\otimes K_1$.
+\end{proof}
+
+\begin{lemma}[Reciprocal unitary gauges for the source decompositions]
+    \label{thm:mpug_source_decomposition_gauges}
+    \lean{MPOTensor.exists_reciprocal_unitary_source_gauges}
+    \leanok
+    \discussion{7315}
+    \uses{def:mpu_source_matrix_one, def:mpu_source_matrix_two}
+    Let $U$ have physical dimension $d$ and bond dimension $D$, with
+    $r=\operatorname{rank}M_1(U)$ and $\ell=\operatorname{rank}M_2(U)$.
+    Suppose that
+    \begin{align}
+        X_1,\widetilde X_1 & \in\operatorname{Mat}_{(d\times D)\times r}(\C),   &
+        Y_1,\widetilde Y_1 & \in\operatorname{Mat}_{r\times(D\times d)}(\C),      \\
+        X_2,\widetilde X_2 & \in\operatorname{Mat}_{(D\times d)\times\ell}(\C), &
+        Y_2,\widetilde Y_2 & \in\operatorname{Mat}_{\ell\times(d\times D)}(\C)
+    \end{align}
+    satisfy $X_iY_i=\widetilde X_i\widetilde Y_i=M_i(U)$ for $i=1,2$.
+    Suppose there are matrices $L_i,R_i$ with
+    $L_i\widetilde X_i=I$ and $Y_iR_i=I$.
+    Assume that the maps $u,\widetilde u\colon\C^d\otimes\C^d\to
+        \C^\ell\otimes\C^r$ with coordinates
+    \begin{align}
+        u_{(l,r'),(p,q)}
+         & =\sum_{\beta=0}^{D-1}(Y_2)_{l,(p,\beta)}(Y_1)_{r',(\beta,q)}, \\
+        \widetilde u_{(l,r'),(p,q)}
+         & =\sum_{\beta=0}^{D-1}(\widetilde Y_2)_{l,(p,\beta)}
+        (\widetilde Y_1)_{r',(\beta,q)}
+    \end{align}
+    are unitary. The indices range over $0\leq l<\ell$, $0\leq r'<r$,
+    and $0\leq p,q<d$. Then there exist $\delta>0$ and unitaries
+    $W_1\in\operatorname{Mat}_r(\C)$, $W_2\in\operatorname{Mat}_\ell(\C)$ such that
+    \begin{align}
+        \widetilde X_1 & =\delta^{-1}X_1W_1,          &
+        \widetilde Y_1 & =\delta W_1^\dagger Y_1,       \\
+        \widetilde X_2 & =\delta X_2W_2,              &
+        \widetilde Y_2 & =\delta^{-1}W_2^\dagger Y_2.
+        \label{eq:mpug_source_decomposition_gauges}
+    \end{align}
+    Thus $\delta_1=\delta^{-1}$ and $\delta_2=\delta$ satisfy
+    $\delta_1\delta_2=1$, establishing the decomposition lemma of
+    \cite[lines~1052--1066]{FrancoRubio2025MPUGauging} from the cut factorizations,
+    one-sided inverses, and unitarity of $u,\widetilde u$ alone, without requiring
+    unitarity of the second contraction $v$.
+    % Source lem:deco, issue #7315. No clause (c), weighted normalization,
+    % canonical-form-II, density, or physical-adjoint hypothesis is used.
+    % This result does not assert completion of the separate #7313 assembly.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_factorization_comparison,
+        thm:mpug_source_contraction_transport, thm:mpug_reciprocal_unitary_gauges}
+    If $d=0$, every factor equality has an empty physical row or column
+    index. Thus $\delta=1$ and identity gauges satisfy all four
+    equalities, and $\delta^{-1}\delta=1$.
+    Suppose now that $d>0$. Since $u$ is an isometry,
+    $\ell r\geq d^2>0$; hence both
+    source ranks are positive. Lemma~\ref{thm:mpug_factorization_comparison}
+    gives $K_i=L_iX_i=\widetilde Y_iR_i$ with
+    $X_i=\widetilde X_iK_i$ and $\widetilde Y_i=K_iY_i$.
+    Lemma~\ref{thm:mpug_source_contraction_transport} yields
+    $\widetilde u=(K_2\otimes K_1)u$. Therefore
+    $K_2\otimes K_1=\widetilde u u^\dagger$ is unitary.
+    Interchanging the two tensor factors makes $K_1\otimes K_2$ unitary, and
+    Lemma~\ref{thm:mpug_reciprocal_unitary_gauges} then gives
+    (\ref{eq:mpug_source_decomposition_gauges}). In particular, if
+    $K_1=\delta V_1$ and $K_2=\delta^{-1}V_2$ with $V_i$ unitary,
+    the required orientation is $W_i=V_i^\dagger$.
+\end{proof}
+
+\begin{corollary}[Unitary gauges for normalized source decompositions]
+    \label{cor:mpug_normalized_source_decomposition_gauges}
+    \lean{MPOTensor.exists_unitary_source_gauges_of_isometric_second_factors}
+    \leanok
+    \uses{thm:mpug_source_decomposition_gauges}
+    Under the hypotheses of Lemma~\ref{thm:mpug_source_decomposition_gauges},
+    suppose in addition that
+    \begin{align}
+        X_2^\dagger X_2 & =I_\ell,
+                        & \widetilde X_2^\dagger\widetilde X_2 & =I_\ell.
+    \end{align}
+    In this isometrically normalized specialization of
+    \cite[lines~1052--1066]{FrancoRubio2025MPUGauging}, the additional
+    isometry hypotheses remove the scalar freedom: there exist unitaries
+    $W_1\in\operatorname{Mat}_r(\C)$ and
+    $W_2\in\operatorname{Mat}_\ell(\C)$ such that, for $i=1,2$,
+    \begin{align}
+        \widetilde X_i & =X_iW_i,
+                       & \widetilde Y_i & =W_i^\dagger Y_i.
+    \end{align}
+\end{corollary}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_source_decomposition_gauges}
+    If $d=0$, all four equalities have an empty physical index and hold
+    with identity gauges. If $d>0$, unitarity of $u$ gives $r\ell=d^2>0$,
+    so $\ell>0$. Lemma~\ref{thm:mpug_source_decomposition_gauges} gives
+    $\widetilde X_2=\delta X_2W_2$ with $\delta>0$. The two isometry
+    identities and unitarity of $W_2$ imply
+    $I_\ell=\delta^2I_\ell$. Since $\ell>0$, a diagonal entry gives
+    $\delta^2=1$, hence $\delta=1$. Substitution into the four comparison
+    identities proves the claim.
+\end{proof}
+
+\begin{definition}[Unitary factorization comparison]
+    \label{def:mpug_unitary_factorization_comparison}
+    \lean{Matrix.unitaryFactorizationComparison,
+        Matrix.unitaryFactorizationComparison_coe}
+    \leanok
+    Let $I$ be a set and let $R_{a,b}$ be a family of unitary matrices of a
+    fixed size, indexed by $(a,b)\in I^2$. Following the orientation in the
+    corollary after Proposition~3
+    of~\cite[lines~2782--2821]{FrancoRubio2025MPUGauging}, the unitary
+    comparison from $(a,b)$ to the reference pair $(c,d)$ is
+    \begin{align}
+        \lambda_{a,b}^{c,d}
+         & =(R_{c,d})^{-1}R_{a,b}
+        =R_{c,d}^\dagger R_{a,b}.
+        \label{eq:mpug_unitary_factorization_comparison}
+    \end{align}
+    % Source anchor: arXiv:2502.20257, Corollary after Proposition 3,
+    % lines 2782--2821, especially the defining formula at line 2820.
+    In that corollary, $I=G$ and comparisons are used when $ab=cd$; this
+    equality selects the factorizations and is not needed in the unitary
+    calculation.
+\end{definition}
+
+\begin{lemma}[Identity, inverse, composition, and right-reference laws]
+    \label{thm:mpug_unitary_factorization_comparison_laws}
+    \lean{Matrix.unitaryFactorizationComparison_self,
+        Matrix.unitaryFactorizationComparison_inv,
+        Matrix.unitaryFactorizationComparison_trans,
+        Matrix.unitaryFactorizationComparison_of_reference_eq_one,
+        Matrix.unitaryFactorizationComparison_right_reference}
+    \leanok
+    \uses{def:mpug_unitary_factorization_comparison}
+    For all indices $a,b,c,d,f,g\in I$,
+    \begin{align}
+        \lambda_{a,b}^{a,b} & =\mathbf 1.
+    \end{align}
+    Reversing the comparison gives
+    \begin{align}
+        \left(\lambda_{a,b}^{c,d}\right)^{-1}
+         & =\lambda_{c,d}^{a,b}.
+    \end{align}
+    Comparisons compose as
+    \begin{align}
+        \lambda_{a,b}^{f,g}
+         & =\lambda_{c,d}^{f,g}\lambda_{a,b}^{c,d}.
+        \label{eq:mpug_unitary_factorization_comparison_laws}
+    \end{align}
+    If $R_{c,d}=\mathbf 1$, then
+    $\lambda_{a,b}^{c,d}=R_{a,b}$. In particular, if $I=G$ is a group, the
+    normalization $R_{e,x}=\mathbf 1$ gives the right-reference specialization
+    $\lambda^R_{g,h}=\lambda_{g,h}^{e,gh}$ in the cited corollary,
+    \begin{align}
+        R_{g,h} & =\lambda_{g,h}^{e,gh}.
+        \label{eq:mpug_unitary_factorization_right_reference}
+    \end{align}
+    % Source anchor: arXiv:2502.20257, Corollary after Proposition 3,
+    % line 2817 (right reference and composition).
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:mpug_unitary_factorization_comparison}
+    The identity, inverse, and right-reference formulas follow from
+    $R_{a,b}^{-1}R_{a,b}=\mathbf 1$, inversion of a product, and
+    $\mathbf 1^{-1}R_{a,b}=R_{a,b}$. For composition, inserting the identity at
+    the intermediate pair gives
+    \begin{align}
+        (R_{f,g})^{-1}R_{a,b}
+         & =(R_{f,g})^{-1}R_{c,d}(R_{c,d})^{-1}R_{a,b}.
+    \end{align}
+\end{proof}
+
+\subsection{Gauss operators and Gauss projectors}
+
+\begin{definition}[Gauss action on the gauge legs]
+    \label{def:mpug_gauss_leg_action}
+    \lean{TNLean.Algebra.gaussLegAction,
+        TNLean.Algebra.gaussLegAction_apply}
+    \leanok
+    \discussion{7503}
+    Let $G$ be a group. Following the two gauge-leg labels in the local Gauss
+    operator of \cite[lines~3380--3387]{FrancoRubio2025MPUGauging}, for
+    $g\in G$ define the permutation $T_g\colon G^2\to G^2$ by
+    \begin{align}
+        T_g(a,b) & =\left(ag^{-1},gb\right).
+        \label{eq:mpug_gauss_leg_action}
+    \end{align}
+\end{definition}
+
+\begin{lemma}[Composition of the Gauss leg action]
+    \label{thm:mpug_gauss_leg_action_mul}
+    \lean{TNLean.Algebra.gaussLegAction_one,
+        TNLean.Algebra.gaussLegAction_mul}
+    \leanok
+    \discussion{7503}
+    \uses{def:mpug_gauss_leg_action}
+    For all $g,h\in G$,
+    \begin{align}
+        T_e          & =\id,    \\
+        T_g\circ T_h & =T_{gh}.
+        \label{eq:mpug_gauss_leg_action_mul}
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:mpug_gauss_leg_action}
+    The two coordinates give
+    \begin{align}
+        T_g(T_h(a,b))
+         & =\left(ah^{-1}g^{-1},ghb\right)
+        =\left(a(gh)^{-1},(gh)b\right).
+    \end{align}
+\end{proof}
+
+\begin{definition}[Local Gauss operator]
+    \label{def:mpug_gauss_operator}
+    \lean{TNLean.Algebra.gaussOperator,
+        TNLean.Algebra.gaussOperator_apply_target,
+        TNLean.Algebra.gaussOperator_apply_of_ne}
+    \leanok
+    \discussion{7503}
+    \uses{def:mpug_unitary_factorization_comparison,
+        def:mpug_gauss_leg_action}
+    Let $G$ be finite, let $R_{a,b}\in\mathrm U(n)$ for $a,b\in G$, and take
+    the basis $\ket{i,a,b}$ of $\C^n\otimes\C[G]^{\otimes2}$. As in
+    \cite[lines~3380--3387]{FrancoRubio2025MPUGauging}, define the local Gauss
+    operator
+    \begin{align}
+        \mathcal G_g
+         & =\sum_{a,b\in G}
+        \lambda_{a,b}^{ag^{-1},gb}
+        \otimes\ket{ag^{-1},gb}\!\bra{a,b}.
+        \label{eq:mpug_gauss_operator}
+    \end{align}
+    Equivalently, the block from $(a,b)$ to $T_g(a,b)$ is
+    $(R_{T_g(a,b)})^{-1}R_{a,b}$ and every other block in that column
+    vanishes.
+\end{definition}
+
+\begin{lemma}[Gauss operators form a unitary representation]
+    \label{thm:mpug_gauss_representation}
+    \lean{TNLean.Algebra.gaussOperator_one,
+        TNLean.Algebra.gaussOperator_mul,
+        TNLean.Algebra.star_gaussOperator,
+        TNLean.Algebra.gaussOperator_mem_unitaryGroup,
+        TNLean.Algebra.gaussRepresentation,
+        TNLean.Algebra.gaussRepresentation_coe}
+    \leanok
+    \discussion{7503}
+    \uses{def:mpug_gauss_operator}
+    The local Gauss operators satisfy
+    \begin{align}
+        \mathcal G_e & =\id.
+    \end{align}
+    Their product law is
+    \begin{align}
+        \mathcal G_g\mathcal G_h & =\mathcal G_{gh}.
+        \label{eq:mpug_gauss_representation}
+    \end{align}
+    Finally,
+    \begin{align}
+        \mathcal G_g^\dagger & =\mathcal G_{g^{-1}}.
+    \end{align}
+    Hence $g\mapsto\mathcal G_g$ is a unitary representation, establishing the
+    representation part of the local Gauss-law proposition in
+    \cite[lines~3380--3387]{FrancoRubio2025MPUGauging}; invariance of the
+    gauged tensor is a separate assertion and is not included here.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_unitary_factorization_comparison_laws,
+        thm:mpug_gauss_leg_action_mul,
+        def:mpug_gauss_operator}
+    In a column labelled by $(a,b)$, multiplication has only the intermediate
+    gauge label $T_h(a,b)$. The surviving matter block is
+    \begin{align}
+        \lambda_{T_h(a,b)}^{T_g(T_h(a,b))}
+        \lambda_{a,b}^{T_h(a,b)}
+         & =\lambda_{a,b}^{T_{gh}(a,b)},
+    \end{align}
+    by the comparison composition law and
+    $T_gT_h=T_{gh}$. At $e$, every surviving comparison is the identity.
+    Reversing a comparison gives
+    $(\lambda_{a,b}^{c,d})^\dagger=\lambda_{c,d}^{a,b}$, so taking the adjoint
+    gives $\mathcal G_g^\dagger=\mathcal G_{g^{-1}}$. The product with this
+    adjoint is $\mathcal G_e=\id$, which proves unitarity.
+\end{proof}
+
+\begin{definition}[Unplaced local Gauss projector kernel]
+    \label{def:mpug_gauss_projector}
+    \lean{TNLean.Algebra.gaussProjector,
+        TNLean.Algebra.gaussProjector_eq_average}
+    \leanok
+    \discussion{7578}
+    \uses{def:mpug_finite_group_unitary_average,
+        thm:mpug_gauss_representation}
+    Let $G$ be finite and let $\mathcal G_g$ act on
+    $\mathcal H=\C^n\otimes\C[G]^{\otimes2}$. Define the unplaced local
+    projector kernel
+    \begin{align}
+        P_G(R) & =\frac{1}{|G|}\sum_{g\in G}\mathcal G_g.
+        \label{eq:mpug_gauss_projector}
+    \end{align}
+    This is the local average introduced in
+    \cite[lines~3494--3499]{FrancoRubio2025MPUGauging}, before a position on
+    the chain is chosen. This definition neither places the kernel on
+    $(j,j+1)$ nor asserts invariance of the gauged matrix product state.
+\end{definition}
+
+\begin{lemma}[The local Gauss average is a projection]
+    \label{thm:mpug_gauss_projector_projection}
+    \lean{TNLean.Algebra.isStarProjection_gaussProjector}
+    \leanok
+    \discussion{7578}
+    \uses{def:mpug_gauss_projector}
+    The kernel in~(\ref{eq:mpug_gauss_projector}) satisfies
+    \begin{align}
+        P_G(R)^2       & =P_G(R), \\
+        P_G(R)^\dagger & =P_G(R).
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_finite_group_unitary_average_projection,
+        thm:mpug_gauss_representation}
+    Identifying the matrix average with the averaging operator of the unitary
+    representation $g\mapsto\mathcal G_g$ makes this operator idempotent by
+    the invariant-space averaging theorem. For self-adjointness,
+    $\mathcal G_g^\dagger=\mathcal G_{g^{-1}}$ and reindexing the finite sum by
+    the bijection $g\mapsto g^{-1}$ yield $P_G(R)^\dagger=P_G(R)$.
+\end{proof}
+
+\begin{definition}[Gauss projector on a periodic chain]
+    \label{def:mpug_placed_gauss_projector}
+    \lean{MPOTensor.gaussLocalCoordinateEquiv,
+        MPOTensor.gaussLocalCoordinateEquiv_apply_zero,
+        MPOTensor.gaussLocalCoordinateEquiv_apply_one,
+        MPOTensor.gaussWindowProjector,
+        MPOTensor.placedGaussProjector}
+    \leanok
+    \discussion{7605}
+    \uses{def:mpug_gauss_projector}
+    Let the matter degree of freedom at one site have dimension $d$.  The
+    local kernel has row and column coordinates
+    \begin{align}
+        \bigl((i_0,i_1),(a,b)\bigr)
+         & \in (\{0,\ldots,d-1\}^{\{0,1\}})\times G^2.
+    \end{align}
+    Identifying these with two site coordinates by the bijection
+    \begin{align}
+        \kappa\bigl((i_0,i_1),(a,b)\bigr)
+         & =\bigl((i_0,a),(i_1,b)\bigr),
+    \end{align}
+    followed at each site by a fixed enumeration of
+    $\{0,\ldots,d-1\}\times G$, let $\widetilde P_G(R)$ denote the matrix
+    obtained from $P_G(R)$ by this simultaneous row and column relabelling.
+    Following the position-dependent projector $P_j$
+    in~\cite[lines~3494--3499]{FrancoRubio2025MPUGauging}, define its placement
+    on a periodic chain of length $N\geq2$ by
+    \begin{align}
+        P_j(R) & =\operatorname{Embed}_{j,j+1}\bigl(\widetilde P_G(R)\bigr),
+        \label{eq:mpug_placed_gauss_projector}
+    \end{align}
+    where the second site is $j+1$ modulo $N$.
+    % Source anchor: arXiv:2502.20257, eq:gauge_projs.
+\end{definition}
+
+\begin{lemma}[The placed Gauss projector is a projection]
+    \label{thm:mpug_placed_gauss_projector_projection}
+    \lean{MPOTensor.isStarProjection_gaussWindowProjector,
+        MPOTensor.isStarProjection_placedGaussProjector}
+    \leanok
+    \discussion{7605}
+    \uses{def:mpug_placed_gauss_projector}
+    For every $N\geq2$ and every position $j$, the operator
+    in~(\ref{eq:mpug_placed_gauss_projector}) satisfies
+    \begin{align}
+        P_j(R)^2       & =P_j(R), \\
+        P_j(R)^\dagger & =P_j(R).
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_gauss_projector_projection,
+        thm:mpdo_cyclic_local_embedding_reindex}
+    Let $U_\kappa$ be the permutation unitary determined by the coordinate
+    bijection in Definition~\ref{def:mpug_placed_gauss_projector}, with the
+    orientation
+    \begin{align}
+        U_\kappa\ket{((i_0,i_1),(a,b))}
+         & =\ket{\kappa((i_0,i_1),(a,b))}.
+        \notag
+    \end{align}
+    Simultaneous row and column reindexing is therefore the conjugation
+    \begin{align}
+        \widetilde P_G(R)
+         & =U_\kappa P_G(R)U_\kappa^{-1}.
+        \label{eq:mpug_gauss_reindex_conjugation}
+    \end{align}
+    Since $U_\kappa^{-1}=U_\kappa^\dagger$, Lemma~\ref{thm:mpug_gauss_projector_projection}
+    and~(\ref{eq:mpug_gauss_reindex_conjugation}) give
+    \begin{align}
+        \widetilde P_G(R)^2
+         & =U_\kappa P_G(R)^2U_\kappa^{-1}
+        =\widetilde P_G(R),
+        \label{eq:mpug_gauss_reindexed_idempotent} \\
+        \widetilde P_G(R)^\dagger
+         & =U_\kappa P_G(R)^\dagger U_\kappa^{-1}
+        =\widetilde P_G(R).
+        \label{eq:mpug_gauss_reindexed_adjoint}
+    \end{align}
+    Let $V_j$ be the permutation unitary that sends a chain configuration to
+    its restriction to the cyclic window $(j,j+1)$ followed by its restriction
+    to the complement. By Lemma~\ref{thm:mpdo_cyclic_local_embedding_reindex},
+    \begin{align}
+        V_jP_j(R)V_j^{-1}
+         & =\widetilde P_G(R)\otimes\Id_{\mathrm{comp}}.
+        \label{eq:mpug_gauss_window_tensor_identity}
+    \end{align}
+    Using $V_j^{-1}=V_j^\dagger$ and
+    (\ref{eq:mpug_gauss_reindexed_idempotent})--(\ref{eq:mpug_gauss_reindexed_adjoint})
+    in~(\ref{eq:mpug_gauss_window_tensor_identity}), we obtain
+    \begin{align}
+        V_jP_j(R)^2V_j^{-1}
+         & =\bigl(\widetilde P_G(R)\otimes\Id_{\mathrm{comp}}\bigr)^2
+        =\widetilde P_G(R)^2\otimes\Id_{\mathrm{comp}}
+        =V_jP_j(R)V_j^{-1},                                                 \\
+        V_jP_j(R)^\dagger V_j^{-1}
+         & =\bigl(\widetilde P_G(R)\otimes\Id_{\mathrm{comp}}\bigr)^\dagger
+        =\widetilde P_G(R)^\dagger\otimes\Id_{\mathrm{comp}}
+        =V_jP_j(R)V_j^{-1}.
+    \end{align}
+    Conjugating by $V_j^{-1}$ gives $P_j(R)^2=P_j(R)$ and
+    $P_j(R)^\dagger=P_j(R)$.
+\end{proof}
+
+\begin{definition}[Common fixed subspace]
+    \label{def:mpug_common_fixed_subspace}
+    \lean{LinearMap.commonFixedSubmodule}
+    \leanok
+    Let $\mathcal H$ be a complex vector space and let $(P_j)_{j\in J}$ be any
+    family of endomorphisms of $\mathcal H$. Define
+    their common fixed subspace by
+    \begin{align}
+        \mathcal V(P)
+         & =\bigcap_{j\in J}\ker(P_j-\Id_{\mathcal H}).
+    \end{align}
+    No commutativity of the operators is required. For the averaged Gauss
+    projectors, this is the common $+1$ eigenspace called the gauge-invariant
+    subspace in
+    \cite[lines~4327--4335 and line~5198]{FrancoRubio2025MPUGauging}.
+    Here $P_j$ is an averaged projector, not an individual Gauss operator
+    $\mathcal G_g$.
+    % Source anchors: arXiv:2502.20257, lines 4327--4335 and line 5198.
+\end{definition}
+
+\begin{lemma}[Membership in the common fixed subspace]
+    \label{thm:mpug_mem_common_fixed_subspace}
+    \lean{LinearMap.mem_commonFixedSubmodule_iff}
+    \leanok
+    \uses{def:mpug_common_fixed_subspace}
+    A vector $\psi\in\mathcal H$ belongs to $\mathcal V(P)$ if and only if
+    $P_j\psi=\psi$ for every $j\in J$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:mpug_common_fixed_subspace}
+    Membership in an indexed intersection is equivalent to membership in
+    every factor, and membership in $\ker(P_j-\Id_{\mathcal H})$ is equivalent
+    to $P_j\psi=\psi$.
+\end{proof}
+
+\begin{lemma}[Nonzero-vector lower bound]
+    \label{thm:mpug_common_fixed_subspace_finrank}
+    \lean{LinearMap.one_le_finrank_commonFixedSubmodule}
+    \leanok
+    \uses{def:mpug_common_fixed_subspace}
+    If $\mathcal H$ is finite-dimensional, $\psi\in\mathcal V(P)$, and
+    $\psi\neq0$, then $1\leq\dim_{\C}\mathcal V(P)$.
+\end{lemma}
+
+\begin{proof}\leanok
+    The common fixed subspace is nonzero because it contains $\psi$, so its
+    dimension is at least one.
+\end{proof}
+
+\subsection{Defect completions and gauge-invariant subspaces}
+
+\begin{definition}[Prescribed defect maps]
+    \label{def:mpug_defect_maps}
+    \lean{TNLean.Algebra.DefectMaps}
+    \leanok
+    \discussion{7569}
+    Let $\mathcal H_{\mathrm m}$ be the matter space of two sites. Prescribed
+    defect maps assign to every ordered pair $(a,b)\in G^2$ a defect subspace
+    \begin{align}
+        \mathcal K_{a,b} & \subseteq\mathcal H_{\mathrm m}
+    \end{align}
+    together with a map $D_{a,b}$ of $\mathcal H_{\mathrm m}$ whose
+    restriction to that subspace is an isometry: for every
+    $\ket{\xi}\in\mathcal K_{a,b}$,
+    \begin{align}
+        D_{a,b}^\dagger D_{a,b}\ket{\xi}
+         & =\ket{\xi}.
+        \label{eq:mpug_defect_isometry}
+    \end{align}
+    When the fusion scalars are not block independent, the state-level
+    construction of~\cite[lines~4215--4326]{FrancoRubio2025MPUGauging}
+    prescribes the modified fusion operators only on such subspaces.
+    % Source anchor: arXiv:2502.20257, lemma:modif and the sentence closing
+    % its proof.
+\end{definition}
+
+\begin{definition}[Full unitary completion class]
+    \label{def:mpug_completion_class}
+    \lean{TNLean.Algebra.DefectMaps.IsCompletion,
+        TNLean.Algebra.DefectMaps.completionClass,
+        TNLean.Algebra.DefectMaps.mem_completionClass_iff}
+    \leanok
+    \discussion{7569}
+    \uses{def:mpug_defect_maps}
+    The full completion class of prescribed defect maps
+    $D=(D_{a,b})_{a,b\in G}$ is
+    \begin{align}
+        \mathfrak C(D)
+         & =\left\{R=(U_{a,b})_{a,b\in G}:
+        U_{a,b}\in\mathrm U(\mathcal H_{\mathrm m}),\
+        U_{a,b}|_{\mathcal K_{a,b}}=D_{a,b}|_{\mathcal K_{a,b}}\right\}.
+        \label{eq:mpug_completion_class}
+    \end{align}
+    As noted in~\cite[lines~4215--4326]{FrancoRubio2025MPUGauging}, when
+    $\mathcal K_{a,b}$ is a proper subspace of the matter space, the unitary
+    extension of $D_{a,b}$ is non-unique.
+\end{definition}
+
+\begin{lemma}[Existence of full unitary completions]
+    \label{thm:mpug_completion_class_nonempty}
+    \lean{TNLean.Algebra.DefectMaps.completionClass_nonempty,
+        TNLean.Algebra.DefectMaps.exists_completion}
+    \leanok
+    \discussion{7702}
+    \uses{def:mpug_defect_maps, def:mpug_completion_class}
+    Let $\mathcal H_{\mathrm m}$ be finite-dimensional. Every family of
+    prescribed defect maps satisfying (\ref{eq:mpug_defect_isometry}) admits a
+    simultaneous unitary extension:
+    \begin{align}
+        \mathfrak C(D) & \neq\varnothing.
+        \label{eq:mpug_completion_class_nonempty}
+    \end{align}
+    Equivalently, there is a family
+    $R=(U_{a,b})_{(a,b)\in G^2}$ of unitary operators such that, for every
+    $a,b\in G$ and every $\ket{\xi}\in\mathcal K_{a,b}$,
+    \begin{align}
+        U_{a,b}\ket{\xi}
+         & =D_{a,b}\ket{\xi}.
+        \label{eq:mpug_completion_exists}
+    \end{align}
+    This is the finite-dimensional extension step implicit in the freedom of
+    the modified fusion operators at
+    \cite[lines~4215--4326]{FrancoRubio2025MPUGauging}, where the subspaces
+    $\mathcal K_{a,b}$ and their prescribed isometries enter as hypotheses.
+    % Source anchor: arXiv:2502.20257, lemma:modif and its proof,
+    % lines 4215--4326. The theorem does not assert that the defect data arise
+    % from locally orthogonal MPS blocks or action tensors; their construction
+    % remains in issues #7349, #7350, and #7569.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:mpug_defect_maps, def:mpug_completion_class}
+    For each pair $(a,b)$, the restriction of $D_{a,b}$ to
+    $\mathcal K_{a,b}$ is a linear isometry and therefore extends to a unitary
+    operator on the whole finite-dimensional matter space. Choosing one such
+    extension for every pair gives a family $R$ satisfying
+    (\ref{eq:mpug_completion_exists}), hence a member of $\mathfrak C(D)$.
+\end{proof}
+
+\begin{lemma}[Comparison identity for a completion]
+    \label{thm:mpug_completion_transport}
+    \lean{TNLean.Algebra.DefectMaps.IsCompletion.mulVec_eq_prescribed,
+        TNLean.Algebra.DefectMaps.IsCompletion.mulVec_eq_mulVec,
+        TNLean.Algebra.DefectMaps.IsCompletion.unitaryFactorizationComparison_mulVec,
+        TNLean.Algebra.DefectMaps.IsCompletion.unitaryFactorizationComparison_gaussLegAction_mulVec}
+    \leanok
+    \discussion{7569}
+    \uses{def:mpug_completion_class,
+        def:mpug_unitary_factorization_comparison,
+        def:mpug_gauss_leg_action}
+    Let $R=(U_{a,b})\in\mathfrak C(D)$, let
+    $\ket{\xi}\in\mathcal K_{a,b}$ and $\ket{\eta}\in\mathcal K_{c,d}$, and
+    assume the exact covariance
+    \begin{align}
+        D_{a,b}\ket{\xi} & =D_{c,d}\ket{\eta}.
+        \label{eq:mpug_prescribed_covariance}
+    \end{align}
+    Then, as required for the modified Gauss laws
+    of~\cite[lines~4325--4335]{FrancoRubio2025MPUGauging} when $(c,d)=T_g(a,b)$,
+    \begin{align}
+        U_{a,b}\ket{\xi}             & =D_{a,b}\ket{\xi},
+        \label{eq:mpug_completion_agrees}                  \\
+        U_{a,b}\ket{\xi}             & =U_{c,d}\ket{\eta},
+        \label{eq:mpug_completion_covariance}              \\
+        \lambda_{a,b}^{c,d}\ket{\xi} & =\ket{\eta}.
+        \label{eq:mpug_completion_transport}
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:mpug_completion_class,
+        thm:mpug_unitary_factorization_comparison_laws}
+    Identity~(\ref{eq:mpug_completion_agrees}) is the defining property of a
+    completion on the defect subspace. Applying it at $(a,b)$ and at $(c,d)$
+    and inserting~(\ref{eq:mpug_prescribed_covariance})
+    gives~(\ref{eq:mpug_completion_covariance}), an equality of vectors in the
+    whole matter space. Multiplying that equality by $U_{c,d}^\dagger$ and
+    using $U_{c,d}^\dagger U_{c,d}=\Id$ gives
+    \begin{align}
+        \lambda_{a,b}^{c,d}\ket{\xi}
+         & =U_{c,d}^\dagger U_{a,b}\ket{\xi}
+        =U_{c,d}^\dagger U_{c,d}\ket{\eta}
+        =\ket{\eta}.
+    \end{align}
+    The adjoint is applied only after the equality in the whole matter space
+    is available; no step asserts that $U_{c,d}^\dagger$ restricts to
+    $D_{c,d}^\dagger$ on a defect subspace.
+\end{proof}
+
+\begin{definition}[Label action at one window]
+    \label{def:mpug_chain_label_action}
+    \lean{MPOTensor.chainLabelAction,
+        MPOTensor.extractWindow_chainLabelAction_zero,
+        MPOTensor.extractWindow_chainLabelAction_one}
+    \leanok
+    \discussion{7569}
+    \uses{def:mpug_gauss_leg_action}
+    Let $\alpha=(a_1,\ldots,a_N)$ be a configuration of gauge labels on a
+    periodic chain of length $N\geq2$. For a window $(j,j+1)$ and $g\in G$,
+    the configuration $T_{j,g}\alpha$ carries the labels
+    \begin{align}
+        \left(a_jg^{-1},ga_{j+1}\right)
+    \end{align}
+    on that window and agrees with $\alpha$ at every other site.
+\end{definition}
+
+\begin{lemma}[Composition of the label action]
+    \label{thm:mpug_chain_label_action_mul}
+    \lean{MPOTensor.chainLabelAction_one,
+        MPOTensor.chainLabelAction_chainLabelAction,
+        MPOTensor.chainLabelActionEquiv,
+        MPOTensor.chainLabelActionEquiv_apply}
+    \leanok
+    \discussion{7569}
+    \uses{def:mpug_chain_label_action}
+    For all $g,h\in G$,
+    \begin{align}
+        T_{j,e}        & =\id,      \\
+        T_{j,g}T_{j,h} & =T_{j,gh}.
+        \label{eq:mpug_chain_label_action_mul}
+    \end{align}
+    In particular $T_{j,g}$ is a bijection of gauge-label configurations with
+    inverse $T_{j,g^{-1}}$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:mpug_chain_label_action}
+    Outside the window both sides leave $\alpha$ unchanged. On the window,
+    replacing the labels twice keeps only the second replacement, and the two
+    labels are
+    \begin{align}
+        \left(a_jh^{-1}g^{-1},gha_{j+1}\right)
+         & =\left(a_j(gh)^{-1},(gh)a_{j+1}\right).
+    \end{align}
+    At $g=e$ the labels are unchanged, so $T_{j,e}=\id$, and the composition
+    law with $h=g^{-1}$ gives the inverse.
+\end{proof}
+
+\begin{definition}[Placed Gauss operator of a completion]
+    \label{def:mpug_placed_gauss_operator}
+    \lean{MPOTensor.gaussWindowOperator,
+        MPOTensor.gaussWindowOperator_apply,
+        MPOTensor.placedGaussOperator}
+    \leanok
+    \discussion{7569}
+    \uses{def:mpug_gauss_operator,
+        def:mpug_placed_gauss_projector,
+        def:mpug_completion_class}
+    Let $R\in\mathfrak C(D)$ and let a chain site carry one matter index and
+    one gauge label. Relabelling the row and column coordinates of
+    $\mathcal G_g$ by the bijection $\kappa$ of
+    Definition~\ref{def:mpug_placed_gauss_projector} and embedding the result
+    on the periodic window $(j,j+1)$ defines
+    \begin{align}
+        \widetilde{\mathcal G}^{j,j+1}_g(R)
+         & =\operatorname{Embed}_{j,j+1}\bigl(\widetilde{\mathcal G}_g(R)\bigr),
+        \label{eq:mpug_placed_gauss_operator}
+    \end{align}
+    the modified Gauss law
+    of~\cite[lines~4325--4335]{FrancoRubio2025MPUGauging}, whose block from
+    $(a,b)$ to $T_g(a,b)$ is $U_{T_g(a,b)}^\dagger U_{a,b}$.
+\end{definition}
+
+\begin{lemma}[The placed projector is the average of the placed Gauss operators]
+    \label{thm:mpug_placed_gauss_projector_average}
+    \lean{MPOTensor.placedGaussProjector_eq_average}
+    \leanok
+    \discussion{7569}
+    \uses{def:mpug_placed_gauss_operator}
+    For every window $(j,j+1)$,
+    \begin{align}
+        \widetilde P_j(R)
+         & =\frac{1}{|G|}\sum_{g\in G}\widetilde{\mathcal G}^{j,j+1}_g(R).
+        \label{eq:mpug_placed_gauss_projector_average}
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:mpug_gauss_projector, def:mpug_placed_gauss_operator}
+    Comparing matrix entries, the relabelling is entrywise and the embedding
+    multiplies each entry by the indicator that the two chain configurations
+    agree outside the window. Both operations commute with the normalized sum
+    over $G$ defining the local projector kernel
+    in~(\ref{eq:mpug_gauss_projector}).
+\end{proof}
+
+\begin{definition}[Gauged vector of matter defect states]
+    \label{def:mpug_gauged_vector}
+    \lean{MPOTensor.gaugedMatter,
+        MPOTensor.gaugedLabel,
+        MPOTensor.gaugedVector,
+        MPOTensor.gaugedVector_apply}
+    \leanok
+    \discussion{7569}
+    Every chain configuration splits into its matter part and its gauge-label
+    part. Given matter defect states $\ket{\Psi_\alpha}$ indexed by the
+    gauge-label configurations $\alpha$ of a chain of length $N$, the gauged
+    vector of \cite[lines~4325--4335]{FrancoRubio2025MPUGauging} is
+    \begin{align}
+        \ket{\Psi_{\mathrm{gauged}}}
+         & =\sum_\alpha\ket{\Psi_\alpha}\otimes\ket{\alpha},
+        \label{eq:mpug_gauged_vector}
+    \end{align}
+    whose component at a chain configuration is the component of
+    $\ket{\Psi_\alpha}$ at its matter part, $\alpha$ being its gauge-label
+    part.
+\end{definition}
+
+\begin{definition}[Local defect support and exact defect covariance]
+    \label{def:mpug_defect_state_hypotheses}
+    \lean{MPOTensor.HasDefectSupport,
+        MPOTensor.HasPrescribedDefectCovariance}
+    \leanok
+    \discussion{7569}
+    \uses{def:mpug_defect_maps, def:mpug_chain_label_action,
+        def:mpug_gauged_vector}
+    The matter defect states have local defect support when, for every
+    $\alpha$ and every window $(j,j+1)$ whose adjacent labels are
+    $(a_j,a_{j+1})$, the matter support of $\ket{\Psi_\alpha}$ lies in
+    \begin{align}
+        \mathcal K_{a_j,a_{j+1}}\otimes\mathcal H_{\mathrm{rest}}.
+    \end{align}
+    They satisfy exact defect covariance when
+    \begin{align}
+        \left(D_{a_j,a_{j+1}}\otimes\id_{\mathrm{rest}}\right)
+        \ket{\Psi_\alpha}
+         & =\left(D_{T_g(a_j,a_{j+1})}\otimes\id_{\mathrm{rest}}\right)
+        \ket{\Psi_{T_{j,g}\alpha}}
+        \label{eq:mpug_exact_defect_covariance}
+    \end{align}
+    for every $\alpha$, every window $(j,j+1)$, and every $g\in G$.
+\end{definition}
+
+\begin{lemma}[Universal invariant vector]
+    \label{thm:mpug_universal_invariant_vector}
+    \lean{MPOTensor.embedLocalOperator_mulVec_replaceWindow,
+        MPOTensor.placedGaussOperator_mulVec_gaugedVector,
+        MPOTensor.placedGaussProjector_mulVec_gaugedVector}
+    \leanok
+    \discussion{7569}
+    \uses{def:mpug_placed_gauss_operator,
+        def:mpug_placed_gauss_projector,
+        def:mpug_completion_class,
+        def:mpug_gauged_vector,
+        def:mpug_defect_state_hypotheses}
+    Assume local defect support and exact defect
+    covariance~(\ref{eq:mpug_exact_defect_covariance}), which as recorded
+    in~\cite{gap:fbc25_state_level_gauging_covariance} enter here as hypotheses
+    rather than consequences of locally orthogonal MPS blocks. For every
+    $R\in\mathfrak C(D)$, every window $(j,j+1)$, and every $g\in G$,
+    \begin{align}
+        \widetilde{\mathcal G}^{j,j+1}_g(R)\ket{\Psi_{\mathrm{gauged}}}
+         & =\ket{\Psi_{\mathrm{gauged}}},
+        \label{eq:mpug_universal_invariant_vector} \\
+        \widetilde P_j(R)\ket{\Psi_{\mathrm{gauged}}}
+         & =\ket{\Psi_{\mathrm{gauged}}}.
+        \label{eq:mpug_universal_invariant_proj}
+    \end{align}
+\end{lemma}
+
+\begin{center}
+    % Formula: \widetilde{\mathcal G}^{j,j+1}_g(R)\ket{\Psi_{\mathrm{gauged}}}
+    % =\ket{\Psi_{\mathrm{gauged}}}, equation
+    % (\ref{eq:mpug_universal_invariant_vector}); source: arXiv:2502.20257,
+    % lines 4325--4335.
+    % Ink-to-index map: the wide lower box is the gauged vector, one leg per
+    % chain site carrying the matter index and the gauge label of that site;
+    % sites 1, j, j+1, N are drawn.  The upper box is the placed Gauss
+    % operator acting on the window (j,j+1) and as the identity elsewhere.
+    % Contraction set: the two window legs between the operator and the
+    % vector; the output legs remain open.
+    % Boundary signature: (virtual-west=0 | virtual-east=0 |
+    % physical-up=4 | physical-down=0) on both sides.
+    \tenkzkernel
+    \begin{tenkz}[rows={op,ket}, cols=4, bonds=none]
+        \tn[at=(1,2), name=G, skin=box, wide=2, ports={90@1:physical:$j$, 90@2:physical:$j{+}1$, 270@1:physical, 270@2:physical}]{\widetilde{\mathcal G}^{j,j+1}_g(R)}
+        \tn[at=(2,1), name=P, skin=box, wide=4, ports={90@1:physical:$1$, 90@2:physical, 90@3:physical, 90@4:physical:$N$}]{\Psi_{\mathrm{gauged}}}
+        \tn[at=(1,1), void=sealed]{}
+        \tn[at=(1,4), void=sealed]{}
+        \tnwire{G.270@1}{P.90@2}
+        \tnwire{G.270@2}{P.90@3}
+    \end{tenkz}
+    \quad $=$ \quad
+    \begin{tenkz}[rows={ket}, cols=4, bonds=none]
+        \tn[at=(1,1), name=P, skin=box, wide=4, ports={90@1:physical:$1$, 90@2:physical:$j$, 90@3:physical:$j{+}1$, 90@4:physical:$N$}]{\Psi_{\mathrm{gauged}}}
+    \end{tenkz}
+\end{center}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_completion_transport,
+        thm:mpug_chain_label_action_mul,
+        thm:mpug_placed_gauss_projector_average,
+        def:mpug_gauss_operator}
+    Fix an output chain configuration and let $\alpha$ be its gauge-label part,
+    with $(a,b)=(a_j,a_{j+1})$ the two labels adjacent to the window. Among the
+    columns contributing to this fixed output row of
+    $\widetilde{\mathcal G}^{j,j+1}_g(R)$, only the gauge labels
+    $T_{j,g^{-1}}\alpha$ survive. Thus, with
+    $\beta=T_{j,g^{-1}}\alpha$, the component of
+    $\widetilde{\mathcal G}^{j,j+1}_g(R)\ket{\Psi_{\mathrm{gauged}}}$ equals
+    the component of
+    \begin{align}
+        \left(U_{a,b}^\dagger U_{ag,g^{-1}b}
+        \otimes\id_{\mathrm{rest}}\right)\ket{\Psi_\beta},
+    \end{align}
+    since the labels of $\beta$ adjacent to the window are $(ag,g^{-1}b)$ and
+    $T_g(ag,g^{-1}b)=(a,b)$, whence $T_{j,g}\beta=\alpha$ by the composition
+    law~(\ref{eq:mpug_chain_label_action_mul}). Local defect support puts the
+    matter slices of $\ket{\Psi_\beta}$ and $\ket{\Psi_\alpha}$ over that
+    window in $\mathcal K_{ag,g^{-1}b}$ and $\mathcal K_{a,b}$, and exact
+    covariance~(\ref{eq:mpug_exact_defect_covariance}) relates them, so the
+    comparison identity~(\ref{eq:mpug_completion_transport}) turns that vector
+    into $\ket{\Psi_\alpha}$. Identifying the label configuration $\beta$ with
+    $\alpha$ through the bijection $T_{j,g}$ is the reindexing of the sum
+    over gauge-label configurations in~(\ref{eq:mpug_gauged_vector}). Averaging~(\ref{eq:mpug_universal_invariant_vector})
+    over $g$ via~(\ref{eq:mpug_placed_gauss_projector_average}) yields~(\ref{eq:mpug_universal_invariant_proj}).
+\end{proof}
+
+\begin{definition}[Gauge-invariant subspace of a completion]
+    \label{def:mpug_gauge_invariant_subspace}
+    \lean{MPOTensor.gaugeInvariantSubspace}
+    \leanok
+    \discussion{7569}
+    \uses{def:mpug_common_fixed_subspace,
+        def:mpug_completion_class,
+        def:mpug_placed_gauss_projector}
+    For $R\in\mathfrak C(D)$ and a chain of length $N\geq2$, the
+    gauge-invariant subspace is the common fixed subspace
+    \begin{align}
+        \mathcal V_N(R)
+         & =\left\{\ket{\phi}:
+        \widetilde P_j(R)\ket{\phi}=\ket{\phi}
+        \text{ for every }j\right\}.
+        \label{eq:mpug_gauge_invariant_subspace}
+    \end{align}
+    As noted in~\cite[lines~4325--4335]{FrancoRubio2025MPUGauging}, the
+    modified projectors on neighbouring windows need not commute.
+\end{definition}
+
+\begin{lemma}[The gauged vector spans at least one dimension]
+    \label{thm:mpug_gauge_invariant_subspace_finrank}
+    \lean{MPOTensor.gaugedVector_mem_gaugeInvariantSubspace,
+        MPOTensor.one_le_finrank_gaugeInvariantSubspace}
+    \leanok
+    \discussion{7569}
+    \uses{def:mpug_gauge_invariant_subspace,
+        def:mpug_completion_class,
+        def:mpug_gauged_vector,
+        def:mpug_defect_state_hypotheses}
+    Under local defect support and exact defect
+    covariance~(\ref{eq:mpug_exact_defect_covariance}),
+    \begin{align}
+        \ket{\Psi_{\mathrm{gauged}}} & \in\mathcal V_N(R)
+    \end{align}
+    for every $R\in\mathfrak C(D)$. If $\ket{\Psi_{\mathrm{gauged}}}\neq0$, then
+    \begin{align}
+        \dim_{\C}\mathcal V_N(R) & \geq1.
+    \end{align}
+    Whereas \cite[line~5198]{FrancoRubio2025MPUGauging} asks how
+    $\dim_{\C}\mathcal V_N(R)$ grows with $N$, neither the minimum nor the
+    maximum of $\dim_{\C}\mathcal V_N(R)$ over $\mathfrak C(D)$ is asserted
+    here.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_universal_invariant_vector,
+        thm:mpug_mem_common_fixed_subspace,
+        thm:mpug_common_fixed_subspace_finrank}
+    Membership is the projector identity in
+    Lemma~\ref{thm:mpug_universal_invariant_vector} at every window. A
+    nonzero member of a subspace forces its dimension to be at least one.
+\end{proof}

@@ -79,12 +79,31 @@ retain every earlier operator-Schmidt rank bound of the original operator.
     decomposition in both directions.
 \end{proof}
 
+\begin{definition}[The chosen left factors at a cut]
+    \label{def:lvv_cut_left_factors}
+    \lean{TNLean.MPS.AreaLaw.cutDecompositionFunctional,
+        TNLean.MPS.AreaLaw.cutLeftFactor,
+        TNLean.MPS.AreaLaw.cutRightFactor,
+        TNLean.MPS.AreaLaw.cutOperator_eq_sum_cutLeftFactor_kronecker,
+        TNLean.MPS.AreaLaw.operatorSchmidtRank_cutLeftFactor_le}
+    \leanok
+    \uses{thm:lvv_right_contraction_decomposition, thm:lvv_right_contraction_rank,
+        thm:lvv_left_operator_rank_coordinates}
+    Let $K$ be an operator on an $L$-site chain and $i\le L$. Fix once a
+    shortest right-contraction decomposition of $K$ across the cut after $i$
+    sites: linear functionals $\varphi_j$ on the right operator-block span,
+    the left factors $A_j$, the right contractions of $K$ along $\varphi_j$,
+    and right factors $B_j$ with $K=\sum_jA_j\otimes B_j$, $j$ ranging over
+    the operator-Schmidt rank of $K$ at that cut. If $K$ has operator-Schmidt
+    rank at most $R$ at every cut, every $A_j$, read on the $i$-site left
+    chain, has operator-Schmidt rank at most $R$ at every internal cut.
+\end{definition}
+
 \begin{lemma}[One global operator supplies suitable left factors]
     \label{thm:lvv_cut_decomposition}
     \lean{TNLean.MPS.AreaLaw.exists_cutDecomposition_of_operatorSchmidtRank_le}
     \leanok
-    \uses{thm:lvv_right_contraction_decomposition, thm:lvv_right_contraction_rank,
-        thm:lvv_left_operator_rank_coordinates}
+    \uses{def:lvv_cut_left_factors}
     Let $K$ be one operator on an $L$-site chain with local dimension $q$,
     and suppose that its operator-Schmidt rank is at most $R$ at every cut,
     including the two endpoints. For each $i\le L$, there exist $N\le R$
@@ -97,7 +116,7 @@ retain every earlier operator-Schmidt rank bound of the original operator.
 \end{lemma}
 \begin{proof}
     \leanok
-    Choose the shortest right-contraction decomposition at $i$. For each
+    Take the chosen factors of Definition~\ref{def:lvv_cut_left_factors}. For each
     $k<i$, contraction of the sites right of $i$ does not increase the rank
     across $k$. The same chosen factors therefore satisfy all the earlier
     bounds simultaneously. The coordinate identification gives the left-chain
