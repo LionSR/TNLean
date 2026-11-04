@@ -331,6 +331,11 @@
       ],
       "notes": {}
     },
+    "ch:mpdo_rfp_algebraic_coefficients": {
+      "theorems": [],
+      "corollaries": [],
+      "notes": {}
+    },
     "ch:mpdo_rfp_algebraic_fusion": {
       "theorems": [
         "thm:cpsv_theorem414_printed_status",
