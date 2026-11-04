@@ -14,6 +14,11 @@ budgets as for the honest oracle: the nets of a valid oracle have the standard p
 its filter factors have the standard count, and its sweep families have the cardinality
 budget of the sweep. This is the running-time statement of Theorem 1 quantified over all
 solvers of the convex programs, in the cost model of the query type.
+
+**Scope restriction (cost model):** the bounds are on the declared oracle cost
+`FreeM.cost o queryCost`, not on a proved running time of an implementation: each query is
+charged a declared polynomial cost in the dimensions of its arguments, arithmetic is exact, and
+nothing is proved about how a query is answered; see `docs/paper-gaps/lvv13_cost_model.tex`.
 -/
 
 open Matrix Cslib
