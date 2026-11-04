@@ -16,10 +16,10 @@
     suppose $I S_0$ is $\delta$-close to $G$ for some $\delta<1$.
     For any real threshold $\xi$, take the zeroth filter-and-trim iterate:
     \begin{align}
-      K_{\mathrm{raw}}&=I_{\mathcal H}-\|H\|^{-1}H,&
-      S^{(0)}&=S_0,\\
-      W&=I S^{(0)},&
-      R&=\operatorname{Ritz}_r(P_W H|_W).
+        K_{\mathrm{raw}} & =I_{\mathcal H}-\|H\|^{-1}H,      &
+        S^{(0)}          & =S_0,                               \\
+        W                & =I S^{(0)},                       &
+        R                & =\operatorname{Ritz}_r(P_W H|_W).
     \end{align}
     Here $P_W$ is the orthogonal projection onto $W$.
     Then $G$ is the whole chain Hilbert space, $S_0$ is the whole
@@ -72,15 +72,15 @@ the final extraction in \cite{Arad2016RigorousRG}.
     For every $\eta>0$, there are $n,b\in\mathbb N$ and $\xi>0$, chosen
     before every $M\in\mathbb N$ and initial subspace $S_0$, such that
     \begin{align}
-      b\le C\bigl[(L+1)(r+1)(1+\eta^{-1})\bigr]^k.
+        b\le C\bigl[(L+1)(r+1)(1+\eta^{-1})\bigr]^k.
     \end{align}
     Let $I$ identify the full-interval configuration space with the chain
     space. Define $K=I_{\mathcal H}-\|H\|^{-1}H$ and, for the actual
     collective trim $\mathcal T_\xi$ at the internal cuts, define
     \begin{align}
-      S^{(0)}&=S_0,&
-      S^{(j+1)}&=\mathcal T_\xi\bigl(I^{-1}K I S^{(j)}\bigr),\\
-      W&=I S^{(n)},& R&=\operatorname{Ritz}_r(P_W H|_W).
+        S^{(0)}   & =S_0,                                         &
+        S^{(j+1)} & =\mathcal T_\xi\bigl(I^{-1}K I S^{(j)}\bigr),                                         \\
+        W         & =I S^{(n)},                                   & R & =\operatorname{Ritz}_r(P_W H|_W).
     \end{align}
     Here $P_W H|_W$ is the orthogonal compression to $W$.
     Whenever $\dim S_0\le M$ and $I S_0$ is $3/200$-close to $G$,
@@ -99,10 +99,10 @@ the final extraction in \cite{Arad2016RigorousRG}.
     $\gamma\le A\le L+1$. The constructed reference has bond
     $b_{\mathrm{ref}}=r^2B\ge1$, and the chosen parameters are
     \begin{align}
-      N_{\mathrm{ref}}&=\left\lceil\frac{100D^{12}}{c\rho}\right\rceil,&
-      \xi&=\frac{1}{1000b_{\mathrm{ref}}N_{\mathrm{ref}}\sqrt{L+1}},\\
-      n&=\left\lceil\frac4c\log\frac1\rho\right\rceil+1,&
-      b&=10^6(b_{\mathrm{ref}}N_{\mathrm{ref}})^2(L+1).
+        N_{\mathrm{ref}} & =\left\lceil\frac{100D^{12}}{c\rho}\right\rceil,           &
+        \xi              & =\frac{1}{1000b_{\mathrm{ref}}N_{\mathrm{ref}}\sqrt{L+1}},   \\
+        n                & =\left\lceil\frac4c\log\frac1\rho\right\rceil+1,           &
+        b                & =10^6(b_{\mathrm{ref}}N_{\mathrm{ref}})^2(L+1).
     \end{align}
     The uniform scalar refinement estimate, evaluated at the numerical
     comparison values $B_{\mathrm{tree}}=1$, $s=1$ and coefficient zero
