@@ -103,6 +103,205 @@ a function of the Hamiltonian, the gap parameter and the input set.
     polynomial bond dimension by the required power of two.
 \end{proof}
 
+\begin{lemma}[Uniform quadratic bound for the tensor precision]
+    \label{lem:lvv_uniform_tensor_precision}
+    \lean{TNLean.MPS.AreaLaw.inv_two_pow_le_polynomial_family_rounding_mesh,
+        TNLean.MPS.AreaLaw.tensor_precision_expression_le_quadratic,
+        TNLean.MPS.AreaLaw.dyadic_height_le_quadratic_of_precision_le,
+        TNLean.MPS.AreaLaw.exists_tensor_dyadic_precision_quadratic_bound}
+    \leanok
+    Fix natural numbers $q,C,p,D,s,a$ and a real number $\alpha>0$.
+    There is a natural number $E$, depending only on these parameters,
+    such that the following holds simultaneously for every chain length
+    $L\ge1$, cut $k\le L$, cardinality $v\le CL^p$, and bond budget
+    $B\le DL^s$. Define
+    \begin{align}
+      \theta&=\frac{\alpha}{2L^a(v+1)},\notag\\
+      K&=q^k\max\{1,B\}^{k+1}(k+1)2^k,\notag\\
+      t&=\ell_2\bigl(\lceil K/\theta\rceil\bigr).\notag
+    \end{align}
+    Then both the precision exponent and the common rational
+    tensor-parameter height satisfy
+    \begin{align}
+      t&\le E(L+1)^2,\notag\\
+      2^{2t+5}&\le2^{(2E+5)(L+1)^2}.\notag
+    \end{align}
+    One possible constant is
+    \begin{align}
+      r_0&=\ell_2\bigl(\lceil2(C+1)/\alpha\rceil\bigr),\notag\\
+      E&=\ell_2(q)+\ell_2(D+1)+s+2+r_0+a+p.\notag
+    \end{align}
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:lvv_tensor_dyadic_precision}
+    Since $L\ge1$ and $v\le CL^p$, one has
+    $v+1\le(C+1)L^p$. The choice of $r_0$ gives
+    $2(C+1)\le\alpha2^{r_0}$, and $L\le2^L$ therefore yields
+    $2^{-r_0-(a+p)L}\le\theta$.
+    Also $\max\{1,B\}\le(D+1)L^s$.
+    Lemma~\ref{thm:lvv_tensor_dyadic_precision} now bounds $t$ by
+    \begin{align}
+      \ell_2(q)L+
+      \bigl(\ell_2(D+1)+s\ell_2(L)\bigr)(L+1)
+      +2L+1+r_0+(a+p)L.\notag
+    \end{align}
+    Using $\ell_2(L)\le L$, each summand is bounded by its constant
+    coefficient times $(L+1)^2$. Their sum is at most $E(L+1)^2$.
+    Finally $2t+5\le(2E+5)(L+1)^2$, giving the stated height bound.
+\end{proof}
+
+\begin{lemma}[Enlarging the bounds on rational tensor data]
+    \label{lem:lvv_rational_representation_monotone}
+    \lean{TNLean.MPS.AreaLaw.RationalLeftOpenMPSRepresentation.mono_bond,
+        TNLean.MPS.AreaLaw.RationalLeftOpenMPSRepresentationOfHeight.mono_height,
+        TNLean.MPS.AreaLaw.RationalLeftOpenMPSRepresentationOfHeight.mono_bond,
+        TNLean.MPS.AreaLaw.RationalLeftOpenMPSRepresentationOfHeight.mono}
+    \leanok
+    Consider an open-chain representation of a vector by a scalar and
+    local tensors with Gaussian-rational entries. Its bond budget $b$
+    bounds every internal virtual dimension by $\max\{1,b\}$.
+    A common coordinate-height bound $H$ means that the reduced numerator
+    and positive denominator of every real and imaginary coordinate have
+    absolute value at most $H$.
+    If $b\le b'$ and $H\le H'$, the same representation has bond budget
+    $b'$ and coordinate-height bound $H'$. Enlarging either bound leaves
+    all virtual spaces, tensor entries, and the represented vector fixed.
+    Without a specified height bound, the bond budget may likewise be
+    enlarged while retaining rationality.
+\end{lemma}
+\begin{proof}\leanok
+    Each internal dimension is at most $\max\{1,b\}\le\max\{1,b'\}$,
+    and every coordinate height at most $H$ is at most $H'$.
+    These inequalities apply to the original scalar and tensors directly.
+\end{proof}
+
+\begin{lemma}[Sequences with prescribed successive relations]
+    \label{lem:dependent_sequence_choice}
+    \lean{Nat.exists_dependent_sequence}
+    \leanok
+    Let $(X_i)_{i\ge0}$ be a family of sets, and let
+    $R_i\subseteq X_i\times X_{i+1}$ be a relation for each $i$.
+    Suppose every $x\in X_i$ has a successor $y\in X_{i+1}$ with
+    $(x,y)\in R_i$. For every prescribed $x_0\in X_0$, there is a sequence
+    $(x_i)_{i\ge0}$ beginning at $x_0$ such that
+    $(x_i,x_{i+1})\in R_i$ at every index.
+\end{lemma}
+\begin{proof}\leanok
+    Choose for each $i$ a map $g_i:X_i\to X_{i+1}$ satisfying
+    $(x,g_i(x))\in R_i$ for every $x\in X_i$.
+    Recursively define $x_{i+1}=g_i(x_i)$ from the prescribed initial value.
+\end{proof}
+
+\begin{definition}[A common Gaussian-integer denominator]
+    \label{def:lvv_gaussian_integer_denominator}
+    \lean{TNLean.MPS.AreaLaw.HasGaussianIntegerDenominator}
+    \leanok
+    A positive integer $M$ is a denominator for a complex number $z$ if
+    $Mz\in\mathbb Z[i]$.
+\end{definition}
+
+\begin{lemma}[Clearing finitely many rational coordinates]
+    \label{lem:lvv_common_rational_denominator}
+    \lean{TNLean.MPS.AreaLaw.HasGaussianIntegerDenominator.finset_sum,
+        TNLean.MPS.AreaLaw.HasGaussianIntegerDenominator.mul,
+        TNLean.MPS.AreaLaw.HasGaussianIntegerDenominator.finset_prod,
+        TNLean.MPS.AreaLaw.exists_intCast_eq_natCast_mul_of_den_dvd,
+        TNLean.MPS.AreaLaw.exists_common_gaussianInteger_denominator,
+        TNLean.MPS.AreaLaw.rationalHeight_int_div_nat_le,
+        TNLean.MPS.AreaLaw.HasGaussianIntegerDenominator.height_of_norm_le,
+        TNLean.MPS.AreaLaw.HasGaussianIntegerDenominator.height_of_norm_le_real}
+    \leanok
+    A family of $P$ Gaussian-rational numbers of coordinate height at most
+    $H$ has a common positive denominator $M\le H^{2P}$.
+    A finite sum preserves a common denominator. A product of $n$ factors
+    with denominator $M$ has denominator $M^n$.
+    If $M$ is a denominator for $z$ and $\|z\|\le R$, the reduced
+    coordinate heights of $z$ are at most
+    $M\max\{1,\lceil R\rceil\}$.
+\end{lemma}
+\begin{proof}\leanok
+    Multiply the reduced positive denominators of all real and imaginary
+    coordinates. Each divides the resulting product, which is at most
+    $H^{2P}$. The Gaussian integers are closed under addition and
+    multiplication, proving the sum and product assertions.
+    For the height assertion, write $Mz=a+ib$ with integers $a,b$.
+    Then $|a|,|b|\le M\lceil R\rceil$, and reducing $a/M$ and $b/M$
+    can only decrease their numerator magnitudes and denominators.
+\end{proof}
+
+\begin{lemma}[Common denominators in open-chain contractions]
+    \label{lem:lvv_open_chain_common_denominator}
+    \lean{TNLean.MPS.AreaLaw.OBCChainTensor.coeff_gaussianInteger_denominator,
+        TNLean.MPS.AreaLaw.OBCChainTensor.scalar_mul_coeff_gaussianInteger_denominator,
+        TNLean.MPS.AreaLaw.OBCChainTensor.exists_common_parameter_denominator,
+        TNLean.MPS.AreaLaw.RationalLeftOpenMPSRepresentationOfHeight.exists_common_coordinate_denominator}
+    \leanok
+    Suppose an open chain has $k$ local tensors, and a positive integer
+    $M$ is a denominator for every local entry. Every physical coefficient
+    then has denominator $M^k$. A scalar cap with denominator $M$ changes
+    this to $M^{k+1}$.
+    In particular, if the scalar and the $P-1$ stored local entries have
+    coordinate height at most $H$, one may choose a single
+    $M\le H^{2P}$ such that all physical coefficients of the represented
+    vector have denominator $M^{k+1}$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:lvv_common_rational_denominator}
+    Each virtual path contributes a product of $k$ local entries, hence
+    has denominator $M^k$. Summing these products preserves that
+    denominator. Multiplication by the scalar cap adds one factor of
+    $M$. Apply Lemma~\ref{lem:lvv_common_rational_denominator} to the
+    scalar and all stored local entries simultaneously.
+\end{proof}
+
+\begin{definition}[Binary length of a rational coordinate]
+    \label{def:lvv_rational_coordinate_storage}
+    \lean{TNLean.MPS.AreaLaw.rationalCoordinateBitCount}
+    \leanok
+    For a reduced fraction $x=a/d$, where $a\in\mathbb Z$ and $d>0$,
+    let
+    \[
+      s(x)=1+(\lfloor\log_2|a|\rfloor+1)
+              +(\lfloor\log_2 d\rfloor+1),
+    \]
+    with one digit allotted to a zero numerator. The first bit stores
+    its sign; the remaining bits store the numerator magnitude and
+    positive denominator separately.
+\end{definition}
+
+\begin{lemma}[Storage of rational tensor parameters]
+    \label{lem:lvv_rational_tensor_storage}
+    \lean{TNLean.MPS.AreaLaw.OBCChainTensor.card_parameterIndex_le,
+        TNLean.MPS.AreaLaw.rationalCoordinateBitCount_le,
+        TNLean.MPS.AreaLaw.RationalLeftOpenMPSRepresentationOfHeight.exists_coordinates_storage_le,
+        TNLean.MPS.AreaLaw.RationalLeftOpenMPSRepresentationOfHeight.exists_coordinates_storage_le_polynomial}
+    \leanok
+    An open chain of $k$ sites, local dimension $q$, and virtual dimensions
+    at most $D$ has at most $kqD^2$ local entries. Suppose a scalar-capped
+    representation has bond budget $b$ and all parameter coordinates
+    have height at most $H$. There are reduced rational coordinates for
+    its scalar and every actual local entry whose total binary length is
+    at most
+    \[
+      6\bigl(1+kq\max\{1,b\}^2\bigr)(\lfloor\log_2 H\rfloor+1).
+    \]
+    In particular, if $k\le L$, $b\le DL^r$, and
+    $H=2^{E(L+1)^2}$, this length is at most
+    \[
+      6\bigl(1+Lq\max\{1,DL^r\}^2\bigr)\bigl(1+E(L+1)^2\bigr).
+    \]
+    This counts the rational coordinates on the specified virtual spaces.
+\end{lemma}
+\begin{proof}\leanok
+    At each site there are at most $qD^2$ entries. A rational coordinate
+    of height $H$ has binary length at most
+    $2(\lfloor\log_2H\rfloor+1)+1$. Thus the real and imaginary
+    coordinates of one complex entry require at most
+    $6(\lfloor\log_2H\rfloor+1)$ bits. Sum this bound over the scalar
+    and local entries. Substitute the bounds for $k,b,H$ to obtain the
+    final estimate.
+\end{proof}
+
 \begin{lemma}[Rounding an orthonormal retained family]
     \label{thm:lvv_orthonormal_family_rounding}
     \lean{TNLean.MPS.AreaLaw.norm_sub_sum_inner_smul_le_of_mem_orthonormal_span,

@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.AKLV.ChangingTargetStep
+import TNLean.Algebra.DependentSequence
 
 /-!
 # One coherent changing-target AKLV sequence
@@ -123,12 +124,12 @@ theorem exists_aklv_physical_changing_target_sequence :
       rw [(aklvSequenceRankBound_zero_succ q g s i).2]
       exact hyrank.trans (Nat.mul_le_mul_left _ x.property.2.2)
     exact ⟨⟨y, hyunit, hyΩ, hrank⟩, hrelation⟩
-  let advance (i : ℕ) (x : State i) : State (i + 1) := Classical.choose (hstep i x)
-  let run : (i : ℕ) → State i := Nat.rec initial (fun i x ↦ advance i x)
+  obtain ⟨run, hrun0, hrunStep⟩ := Nat.exists_dependent_sequence
+    (fun i (x : State i) (y : State (i + 1)) ↦
+      IsAKLVSequenceStep a s h e g Ω i x.val y.val) initial hstep
   refine ⟨hq, hg1, hs, hlogD, e, E0, (fun i ↦ (run i).val),
     hregional, hEeq, hE0, hE6, (fun i ↦ (run i).property), ?_, ?_⟩
-  · exact hinitRelation
-  · intro i
-    exact Classical.choose_spec (hstep i (run i))
+  · simpa only [hrun0] using hinitRelation
+  · exact hrunStep
 
 end TNLean.MPS.AreaLaw

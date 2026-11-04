@@ -11488,17 +11488,22 @@ removed after the dependency audit exposed it.
   the additional hand-written squared-difference nonnegativity argument is
   removed from the initialization proof. No new generic theorem is needed.
 
-### Coherent dependent sequences of normalized images — candidate (2026-10-29)
+### Coherent dependent sequences of normalized images — promoted (2026-11-04)
 
 - **Pattern:** A successor theorem returns a normalized image of its actual
   input together with invariants whose bounds depend on the sequence index.
-- **Reuse:** In `AKLV/ChangingTargets.lean`, `State i` is the subtype carrying
-  the unit, error and product-rank invariant. The existence of a successor
-  is proved for each actual state, and `Nat.rec` iterates its chosen value.
-  The choice specification records the polynomial-image relation on each edge.
-- **Scope:** This is the first such moving-target sequence in this argument.
-  The existing LVV recursion retains its own mathematical invariant; no
-  generic recursion framework or tactic is introduced.
+- **Seen:** `AKLV/ChangingTargets.lean`,
+  `ViableSet/SampledSuccessiveConstruction.lean`, and
+  `ViableSet/RationalSampledSuccessiveConstruction.lean`.
+- **Abstraction:** `Nat.exists_dependent_sequence` in
+  `TNLean/Algebra/DependentSequence.lean` chooses a sequence in indexed types,
+  starting at a prescribed initial value and satisfying every supplied
+  successor relation.
+- **Refactored occurrences:** All three final recurrence constructions use
+  this theorem. Their indexed subtype invariants and actual transition
+  relations remain in their respective mathematical proofs.
+- **Decision:** A theorem expresses the common dependent-choice argument;
+  no new tactic is needed.
 
 ### Reciprocal square-root factors in selected polynomial degrees — candidate (2026-10-29)
 

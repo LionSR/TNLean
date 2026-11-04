@@ -727,9 +727,10 @@ fully executable level,
 \leanid{TNLean.MPS.AreaLaw.ChainHamiltonian.exists\_rationalCoordinateData\_of\_canonical\_rational\_search}
 propagates this invariant through certificate repair, finite rational search,
 and canonical size trimming, returning error $1/12$ with an explicit updated
-coordinate height and finite-span bond bound.  Thus the remaining issue is
-polynomial control of those explicit height and conditioning-radius recurrences,
-not closure of the successive representation invariant.
+coordinate height and finite-span bond bound. For this executable search
+formulation, polynomial control of the height and conditioning-radius
+recurrences remains to be proved. The uniform rational approximation below
+establishes a separate existence result for the successive families.
 The one-step flattened-coordinate recurrence is now explicit.  By
 \leanid{TNLean.MPS.AreaLaw.RationalSpanFamilyEncodingOfHeight.linearCombinationCoordinateHeight\_le\_two\_pow},
 coefficient height at most $2^p$ and input-coordinate height at most $2^v$
@@ -743,10 +744,11 @@ attaches this bound directly to the viable output family.  This calculation
 also rules out a naive completion of the running-time proof: repeatedly
 flattening the physical coordinates multiplies the preceding bit exponent by
 $|S|$ at every cut, which is not a polynomial bound over $L$ iterations even
-when $|S|$ is polynomial.  The polynomial-time formalization must therefore
-retain the nested span encoding as a directed acyclic computation and charge
-its stored coefficient arrays, rather than flattening every physical
-amplitude after each trimming step.
+when $|S|$ is polynomial. One possible approach to the running-time proof
+retains the nested span encoding as a directed acyclic computation and charges
+its stored coefficient arrays. The uniform rational approximation below
+instead bounds compact tensor data at every stage; its computational cost
+remains to be established.
 The fixed-cut data structure
 \leanid{TNLean.MPS.AreaLaw.RationalSpanEncodingDAGOfHeight} now records this
 representation explicitly.  It stores a sequence of finite families and one
@@ -777,27 +779,27 @@ the next search: its cardinality is bounded by the terminal index order, its
 vectors have the finite-span bond bound, and its queried physical coordinates
 have the explicit rational height obtained from the indexed coefficients.
 Hence the indexed/finite-family interface is now closed in both directions.
-The remaining integration problem is the rationalized bond- and
-error-reduction steps of the successive construction.
+For the executable search formulation, integration with rationalized bond
+trimming and error reduction remains an operation-count problem.
 For bond trimming, the first density input is now formalized:
 \leanid{TNLean.MPS.AreaLaw.exists\_rationalComplex\_close} proves that every
 complex scalar has a Gaussian-rational approximation at any positive norm
-tolerance.  The remaining step is to apply this simultaneously to the finite
-scalar and local-tensor parameter space of an open-boundary MPS.  That space is
+tolerance. Apply this simultaneously to the finite
+scalar and local-tensor parameter space of an open-boundary MPS. That space is
 now represented by
 \leanid{TNLean.MPS.AreaLaw.OBCChainTensor.Parameters}; rebuilding from parameters
 preserves the virtual dimensions exactly, recovers the original tensor at its
 canonical parameter point, and
 \leanid{TNLean.MPS.AreaLaw.OBCChainTensor.continuous\_scalar\_mul\_coeff\_ofParameters}
-proves continuity of every contracted physical coefficient.  The remaining
+proves continuity of every contracted physical coefficient. The
 map
 \leanid{TNLean.MPS.AreaLaw.OBCChainTensor.vectorOfParameters} combines these
 finitely many coefficients into the Euclidean left-block vector, and
 \leanid{TNLean.MPS.AreaLaw.OBCChainTensor.continuous\_vectorOfParameters}
 proves that the resulting vector-valued contraction is continuous.  At the
-canonical parameter point it recovers the represented vector exactly.  The
-remaining topological step is simultaneous Gaussian-rational density in this
-finite parameter space.
+canonical parameter point it recovers the represented vector exactly.
+Simultaneous Gaussian-rational density in this finite parameter space gives
+the qualitative approximation theorem stated below.
 The combined theorem
 \leanid{TNLean.MPS.AreaLaw.exists\_boundarySupportCoordinateCoefficients\_with\_bitSizeBound}
 packages the actual coefficient representation of every support-isometry
@@ -1551,17 +1553,16 @@ The qualitative approximation step is now formalized by
 \leanid{TNLean.MPS.AreaLaw.IsLeftOpenMPS.exists\_rational\_approximation}.
 It uses the finite parameter space of a fixed open-boundary representation,
 the density of Gaussian-rational parameter points, and continuity of tensor
-contraction to preserve the original bond bound.  What remains for the running
-time theorem is quantitative: choose an explicit mesh whose coordinate height
-is polynomially bounded and charge its contraction error against the stated
-viability reserve.
+contraction to preserve the original bond bound. The quantitative refinements
+below choose an explicit mesh with polynomially bounded binary precision and
+charge its contraction error against the stated viability reserve.
 The parameter-side mesh is now explicit:
 \leanid{TNLean.MPS.AreaLaw.OBCChainTensor.exists\_dyadic\_parameters\_approximation}
 simultaneously rounds the scalar cap and every local tensor entry at mesh
 $2^{-t}$, with common coordinate height at most $2^{2u+2t+5}$ when their
-norms are bounded by $2^u$.  It remains to combine this with a bounded
-canonical open-chain representation and an explicit perturbation estimate for
-the tensor contraction.
+norms are bounded by $2^u$. The bounded canonical open-chain representation
+and contraction perturbation estimate below turn this mesh into a vector
+approximation with an explicit error bound.
 The first contraction estimate is also formalized:
 \leanid{TNLean.MPS.AreaLaw.OBCChainTensor.norm\_coeff\_ofParameters\_sub\_le\_one}
 bounds the error in each physical coefficient by the number of virtual paths
@@ -1626,9 +1627,9 @@ bounds the dyadic exponent by
   ak+c(k+1)+(k+1)+k+r.
 \]
 Thus the exponential path count does not force exponentially many
-parameter bits. The remaining running-time work is to propagate the
-rational height and arithmetic operation bounds through sampled error
-reduction and the successive construction.
+parameter bits. The rational height bounds now propagate through sampled
+error reduction and the full successive construction. The remaining
+running-time work concerns the arithmetic cost of constructing these data.
 
 For the mathematical rational-output step after error reduction, arbitrary
 linear dependence of the retained family need not impose a conditioning
@@ -1652,10 +1653,61 @@ rank bounds. Sampling at target \(\delta/2\) gives an exact retained family
 \(\delta/2\) gives a rational family of error \(\delta\). Its cardinality
 is at most \(|V|\le\ell Ds\), its bond is at most
 \((\ell Ds)\max\{1,D\max\{1,b\}\}\), and it carries an explicit common
-parameter-height bound. Thus rational output is available for one
-application of error reduction. The uniform height bounds throughout the
-successive construction and the arithmetic cost of realizing these
-choices remain to be proved.
+parameter-height bound.
+
+The uniform successor theorem
+\leanid{TNLean.MPS.AreaLaw.exists\_rational\_sampled\_viable\_successor\_polynomial}
+and the induction theorem
+\leanid{TNLean.MPS.AreaLaw.exists\_rational\_sampled\_successive\_viable\_sets\_polynomial}
+give rational retained families throughout the sweep. Fix \(q\ge2\),
+\(\Delta>0\), \(\eta>0\), a natural number \(a\ge1\), and an upper
+bound \(B\) for \(\varepsilon_0/\Delta\). There are natural constants
+\(C,D\ge1\) and \(p,r,E\), chosen before the length and Hamiltonian,
+such that every stage has cardinality at most \(CL^p\), bond bound
+\(DL^r\), and Gaussian-rational scalar cap and local entries of height
+at most \(2^{E(L+1)^2}\). The families begin with the scalar singleton
+and have viability error
+\(\min\{1,\eta,(\Delta/169)^2\}/L^a\) at every cut.
+Each successor retains the sampled decomposition and the exact family
+obtained by extension, size selection, independent Schmidt trimming and
+the sampled left factors. Rationalization transfers viability from that
+exact family for every normalized target, with loss at most half the
+stage error. The proofs require no rationality assumption on the local
+Hamiltonians. Polynomial arithmetic bounds for the semidefinite programs,
+the orthonormal bases, the tensor constructions and the realization of
+these choices remain to be proved; the rational induction does not itself
+establish a running-time theorem.
+
+The denominators in a tensor contraction can also be controlled without
+multiplying a denominator for each virtual path.
+\leanid{TNLean.MPS.AreaLaw.OBCChainTensor.exists\_common\_parameter\_denominator}
+shows that scalar and local-entry coordinates of height at most \(H\),
+with \(P\) complex parameters in total, have a common positive
+denominator \(M\le H^{2P}\). The theorem
+\leanid{TNLean.MPS.AreaLaw.RationalLeftOpenMPSRepresentationOfHeight.exists\_common\_coordinate\_denominator}
+then gives the same denominator \(M^{k+1}\) for all physical coefficients
+on \(k\) sites. Every virtual path has that denominator, and their sum
+retains it. Finally,
+\leanid{TNLean.MPS.AreaLaw.HasGaussianIntegerDenominator.height\_of\_norm\_le\_real}
+bounds the reduced coordinate heights by
+\(M^{k+1}\max\{1,\lceil R\rceil\}\) when a coefficient has norm at most
+\(R\). These are arithmetic size estimates; they do not count the
+operations needed to compute a contraction.
+
+The coordinate storage is counted by
+\leanid{TNLean.MPS.AreaLaw.RationalLeftOpenMPSRepresentationOfHeight.exists\_coordinates\_storage\_le\_polynomial}.
+For a representation on \(k\le L\) sites, with bond budget at most
+\(DL^r\) and parameter height \(2^{E(L+1)^2}\), explicit reduced
+rational real and imaginary coordinates for the scalar and every actual
+local entry have total binary length at most
+\[
+  6\bigl(1+Lq\max\{1,DL^r\}^2\bigr)\bigl(1+E(L+1)^2\bigr).
+\]
+This includes the numerator sign, numerator magnitude and positive
+denominator for each coordinate. Combining it with the uniform rational
+induction gives polynomial coordinate storage for every retained tensor
+family. It does not bound the cost of producing that family.
+
 The theorem
 \leanid{TNLean.MPS.AreaLaw.rank\_boundarySupportedMatrix\_le}
 also proves directly that every matrix satisfying the support constraint,

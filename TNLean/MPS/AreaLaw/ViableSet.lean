@@ -43,6 +43,7 @@ import TNLean.MPS.AreaLaw.ViableSet.PrefixMPS
 import TNLean.MPS.AreaLaw.ViableSet.RationalBondTrimming
 import TNLean.MPS.AreaLaw.ViableSet.RationalOrthonormalFamily
 import TNLean.MPS.AreaLaw.ViableSet.RationalSampledErrorReduction
+import TNLean.MPS.AreaLaw.ViableSet.RationalSampledSuccessiveConstruction
 import TNLean.MPS.AreaLaw.ViableSet.SampledCutDecomposition
 import TNLean.MPS.AreaLaw.ViableSet.SampledErrorReduction
 import TNLean.MPS.AreaLaw.ViableSet.SampledProjector

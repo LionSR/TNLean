@@ -8,6 +8,7 @@ import TNLean.MPS.AreaLaw.ViableSet.SampledProjectorPolynomial
 import TNLean.MPS.AreaLaw.ViableSet.SuccessiveStep
 import TNLean.MPS.AreaLaw.ViableSet.BondTrimmingBound
 import TNLean.MPS.AreaLaw.ViableSet.FinalMPS
+import TNLean.Algebra.DependentSequence
 
 /-!
 # The sampled viable-set induction with fixed polynomial bounds
@@ -267,13 +268,15 @@ theorem exists_sampled_successive_viable_sets_polynomial_explicit_energy_degree
         hstep L hL h hs h0 h1 E₀ Γ hgs hEB (i + 1) (by omega) hi S hviable
       exact ⟨_, fun _ ↦ hT, fun _ ↦ ⟨ℓ, n, N, I, A, B', hproj, hdec, rfl⟩⟩
     · exact ⟨∅, fun hi' ↦ absurd hi' hi, fun hi' ↦ absurd hi' hi⟩
-  choose! T hT hStep using hadvance
   let State := fun i : ℕ ↦ {S : Finset (LeftBlockVector L q i) // i ≤ L → P i S}
   let initial : State 0 := ⟨{emptyLeftVector L q}, fun _ ↦ hbase⟩
-  let advance : (i : ℕ) → State i → State (i + 1) := fun i previous ↦
-    ⟨T i previous.val, hT i previous.val previous.property⟩
-  let run : (i : ℕ) → State i := Nat.rec initial advance
-  exact ⟨fun i ↦ (run i).val, rfl, fun i hi ↦ hStep i (run i).val (run i).property hi,
+  have htransition (i : ℕ) (previous : State i) :
+      ∃ next : State (i + 1), Step i previous.val next.val := by
+    obtain ⟨T, hT, hStep⟩ := hadvance i previous.val previous.property
+    exact ⟨⟨T, hT⟩, hStep⟩
+  obtain ⟨run, hrun0, hrunStep⟩ := Nat.exists_dependent_sequence
+    (fun i (S : State i) (T : State (i + 1)) ↦ Step i S.val T.val) initial htransition
+  exact ⟨fun i ↦ (run i).val, congrArg Subtype.val hrun0, fun i hi ↦ hrunStep i hi,
     fun i hi ↦ (run i).property hi⟩
 
 /-- The total number of candidate vectors retained during the whole sampled
