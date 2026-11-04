@@ -25,6 +25,14 @@ scope = "leanprover-community"
 rev = "v4.36.0-rc1"
 
 [[require]]
+name = "cslib"
+git = "https://github.com/leanprover/cslib.git"
+# The last CSLib commit on Lean v4.36.0-rc1, the parent of its v4.36.0-rc2 bump; move it
+# with the next toolchain bump. Only the query framework under
+# `Cslib/Algorithms/Lean/Query/` is imported.
+rev = "acab13b776722f5efa897c780d6fa1a3069d709e"
+
+[[require]]
 name = "qiclean"
 git = "https://github.com/LionSR/QICLean.git"
 # Draft-only candidate; replace with the validated immutable semver release tag before merge.
