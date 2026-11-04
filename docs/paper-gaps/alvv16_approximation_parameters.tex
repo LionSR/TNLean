@@ -10,7 +10,7 @@
 \date{November 3, 2026}
 \begin{document}
 \maketitle
-\gapnote{local-correction}{wip}
+\gapnote{scope-restriction}{open}
 
 \section{The quantitative conclusion}
 
@@ -44,7 +44,6 @@ $P=\Id\otimes\ketbra{1}{1}\otimes\Id$ and take both nearest-neighbour
 terms to equal $P$. The first is supported on sites $1,2$ and the second
 on sites $2,3$. Each term is a positive contraction, while
 $H=2P$ has spectrum $\{0,2\}$, ground-space dimension four and gap two.
-This corrects the normalization comparison in tracker~\ghissue{9809}.
 ALVV states the local normalization at source lines 267 and 806; no
 global assumption $\gamma\le1$ is stated there or in Assumption (DG).
 
@@ -83,6 +82,11 @@ The obstruction concerns the prescription; it does not disprove
 (\ref{eq:alvv_approximation_rank}).
 
 \section{A choice retaining the two scales}
+
+The corrected prescription of this section is formalized, so the failure of
+the printed choice is resolved. What remains open is the comparison with the
+printed bound for gaps larger than one, where the formal bound uses
+$g=\min\{\gamma,1\}$.
 
 Normalize the gap to $0<g\le1$. For a target scale $0<\tau\le1$, put
 $u=1+\log(1/g)+\log(1/\tau)$. There is a universal constant $C\ge21$
@@ -199,7 +203,9 @@ Writing $D_{\rm ref}=r^2B$, take
   M=D^6s^3,\qquad
   \xi=(1000D_{\rm ref}\sqrt{n+1})^{-1}.
 \]
-The corrected fixed-input failure bound is at most $\beta<1$, uniformly
+The corrected fixed-input failure bound
+(\url{https://sirui-lu.com/QICLean/paper-gaps/alvv16_random_sampling_net_count.pdf})
+is at most $\beta<1$, uniformly
 for parent dimensions at most $D^{12}s^6$. Choosing successful unitaries
 therefore gives actual recursively selected spaces, all $3/200$-viable
 for the original ground space. Each has at most $M$ recorded generators,
