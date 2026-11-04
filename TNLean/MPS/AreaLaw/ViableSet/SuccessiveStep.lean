@@ -42,10 +42,11 @@ variable {L q i : ℕ} {ι : Type*}
 `T₀` has been made: independently trim every member of `T₀` through its internal bonds at
 the radius `m`, then apply every left factor `A j`, `j ∈ J`, of the error-reduction
 operator. The output is the family `{A j (trim_m u) : j ∈ J, u ∈ T₀}`. In the algorithm
-`T₀` is the family of leading vectors of the convex programs over the net of boundary
-contractions, drawn from the span of the extension `S ⊗ {|1⟩, …, |q⟩}` of the previous
-family; the factors are those of the Gaussian filters, indexed by themselves, or those of
-the sampled projector. LVV13, `algo53.tex`, algorithm steps 2--4, lines 379--592. -/
+`T₀` is the size-trimming selection: the left columns, read on the first `i` sites, of
+the leading vectors of the convex programs over the net of boundary contractions, drawn
+from the span of the extension `S ⊗ {|1⟩, …, |q⟩}` of the previous family; the factors are
+those of the Gaussian filters, indexed by themselves, or those of the sampled projector.
+LVV13, `algo53.tex`, algorithm steps 2--4, lines 379--592. -/
 noncomputable def successiveStep (hi : i ≤ L) (m : ℕ) (J : Finset ι)
     (A : ι → LeftBlockMatrix L q i) (T₀ : Finset (LeftBlockVector L q i)) :
     Finset (LeftBlockVector L q i) :=
