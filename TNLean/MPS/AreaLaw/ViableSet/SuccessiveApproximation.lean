@@ -12,8 +12,9 @@ import TNLean.MPS.AreaLaw.ViableSet.FinalMPS
 For fixed local dimension and positive gap, the natural polynomial coefficient and
 degree are chosen before the length and physical interaction. The filter factors and
 then the successive families are chosen from that interaction before any ground pair,
-each family being the named step applied to the previous one. Every such ground pair
-has a normalized approximation in the span of the final actual family.
+each family being the named step applied to the size-trimming selection of the extension
+of the previous one. Every such ground pair has a normalized approximation in the span of
+the final actual family.
 
 **Local fix (trimming radius):** The independent trimmings use the quadratic radius
 recorded at <https://sirui-lu.com/QICLean/paper-gaps/lvv13_trimming_radius.pdf>.
@@ -33,31 +34,30 @@ open scoped InnerProductSpace ComplexOrder MatrixOrder
 namespace TNLean.MPS.AreaLaw
 
 /-- Natural polynomial budgets chosen before length bound every retained family, every
-filter-factor family, every size-trimming selection and the normalized MPS extracted from
-the final span. The filter factors are selected before the families, the families before
-ground data, and each family is the named step applied to the previous one. LVV13,
+filter-factor family and the normalized MPS extracted from the final span. The filter
+factors are selected before the families, the families before ground data, and each
+family is the named step applied to the size-trimming selection of the extension of the
+previous one. LVV13,
 `algo53.tex`, final induction, lines 652--678, with the documented quadratic trimming
 correction and Huang's Gaussian error reduction. -/
 theorem exists_uniform_positive_chain_successive_approximation {q : ℕ} (hq : 2 ≤ q)
     {Delta : ℝ} (hDelta : 0 < Delta) :
     ∃ P d : ℕ, 1 ≤ P ∧ ∀ L : ℕ, 1 ≤ L →
       ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-        (_hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j)
-          (interval L j.val (j.val + 2))) (_h0 : ∀ j, 0 ≤ h j) (_h1 : ∀ j, h j ≤ 1),
+        (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j)
+          (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j) (h1 : ∀ j, h j ≤ 1),
       ∃ F : (i : ℕ) → Finset (LeftBlockMatrix L q i),
         (∀ i : ℕ, i ≤ L → (F i).card ≤ P * (L + 1) ^ d ∧
           ∀ A ∈ F i, ∀ k, 0 < k → k < i → operatorSchmidtRank
             (Entropy.cutOperator (n := fun _ : Fin i ↦ q) (leftBlock i k)
               (A.submatrix leftConfigOfFin leftConfigOfFin)) ≤ P * (L + 1) ^ d) ∧
-        ∃ (S : (i : ℕ) → Finset (LeftBlockVector L q i))
-          (T₀ : (i : ℕ) → Finset (LeftBlockVector L q i)),
+        ∃ S : (i : ℕ) → Finset (LeftBlockVector L q i),
           S 0 = {emptyLeftVector L q} ∧
           (∀ i : ℕ, (hi : i + 1 ≤ L) →
-            (T₀ (i + 1)).card ≤ P * (L + 1) ^ d ∧
-            (T₀ (i + 1) : Set (LeftBlockVector L q (i + 1))) ⊆ Submodule.span ℂ
-              (AreaLaw.extend (i + 1) (S i) : Set (LeftBlockVector L q (i + 1))) ∧
             S (i + 1) = successiveStep hi (bondTrimmingRadius L (lvvReferenceBond q Delta L))
-              (F (i + 1)) id (T₀ (i + 1))) ∧
+              (F (i + 1)) id (ChainHamiltonian.sizeTrimmingSelection
+                (ChainHamiltonian.ofNearestNeighborPositive h hs h0 h1) hq Delta
+                (AreaLaw.extend (i + 1) (S i)))) ∧
           (∀ i : ℕ, i ≤ L → (S i).card ≤ P * (L + 1) ^ d ∧
             (∀ v ∈ S i, IsLeftOpenMPS (P * (L + 1) ^ d) v) ∧
             ∀ (E₀ : ℝ) (Γ : EuclideanSpace ℂ (Fin L → Fin q)),
@@ -73,13 +73,12 @@ theorem exists_uniform_positive_chain_successive_approximation {q : ℕ} (hq : 2
   obtain ⟨P, d, hP, hbudgets⟩ := exists_lvvSuccessive_uniform_polynomial (q := q) (by omega) hDelta
   refine ⟨P, d, hP, ?_⟩
   intro L hL h hs h0 h1
-  obtain ⟨F, hF, S, T₀, hS0, hstep, hS⟩ :=
+  obtain ⟨F, hF, S, hS0, hstep, hS⟩ :=
     exists_positive_chain_successive_viable_sets hq h hs h0 h1 hDelta hL
-  obtain ⟨hcardBudget, hbondBudget, hspanBudget, hsizeBudget, hfactorBudget, hrankBudget⟩ :=
+  obtain ⟨hcardBudget, hbondBudget, hspanBudget, hfactorBudget, hrankBudget⟩ :=
     hbudgets L hL
   refine ⟨F, fun i hi ↦ ⟨(hF i hi).1.trans hfactorBudget,
-    fun A hA k hk0 hki ↦ ((hF i hi).2 A hA k hk0 hki).trans hrankBudget⟩, S, T₀, hS0,
-    fun i hi ↦ ⟨(hstep i hi).1.trans hsizeBudget, (hstep i hi).2.1, (hstep i hi).2.2⟩,
+    fun A hA k hk0 hki ↦ ((hF i hi).2 A hA k hk0 hki).trans hrankBudget⟩, S, hS0, hstep,
     ?_, ?_⟩
   · intro i hi
     obtain ⟨hcard, hMPS, hviable⟩ := hS i hi
