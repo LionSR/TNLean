@@ -29,6 +29,12 @@ sampled route hold for `ε₀ / Δ ≤ B`, as recorded in
 `docs/paper-gaps/lvv13_runtime_ground_energy.tex`; the cost model is recorded in
 `docs/paper-gaps/lvv13_cost_model.tex`.
 
+**Local fix (trimming and normalization):** `sampledSweepStep` trims bonds with the quadratic
+radius `bondTrimmingRadius` documented at
+<https://sirui-lu.com/QICLean/paper-gaps/lvv13_trimming_radius.pdf>, and
+`isViableMPS_sampledSweepStep` uses the corrected error-reduction estimate recorded in
+`docs/paper-gaps/lvv13_error_reduction_witness_norm.tex`.
+
 Source: LVV13, arXiv:1307.5143v1, `algo53.tex`, lines 213--216 (Theorem 1), 611
 (`d:sagsp`), 626--649 (`c:agsp`), 652--678 (the induction and the success probability).
 -/
