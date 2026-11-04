@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import Cslib.Algorithms.Lean.Query.Bounds
+import TNLean.MPS.AreaLaw.ViableSet.SampledFactors
 import TNLean.MPS.AreaLaw.ViableSet.SuccessiveStep
 
 /-!
@@ -133,6 +134,13 @@ inductive LinearAlgebraQuery (q : ℕ) : Type → Type
   | gaussianFilterFactors (L i : ℕ) (hq : 1 ≤ q)
       (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (h0 : ∀ j, 0 ≤ h j)
       (c Delta : ℝ) : LinearAlgebraQuery q (Finset (LeftBlockMatrix L q i))
+  /-- The left factors, at the cut after `i` sites, of the sampled projector of the words
+  `I`, `ℓ` words of length `m` whose factors have rank at most `D`, for the chain with
+  terms `h` at ground energy `E₀`. Definition `d:sagsp`, line 611; algorithm step 4,
+  lines 572--592. -/
+  | sampledFactors (L i : ℕ) (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
+      (E₀ : ℝ) (ℓ m D : ℕ) (I : Fin ℓ → Fin m → Fin L) :
+      LinearAlgebraQuery q (Finset (LeftBlockMatrix L q i))
   /-- The application of a left factor `A` of operator-Schmidt rank at most `r` to a
   vector `s` of bond dimension at most `b`. Algorithm step 4, line 572. -/
   | applyFactor (L i r b : ℕ) (A : LeftBlockMatrix L q i) (s : LeftBlockVector L q i) :
@@ -150,8 +158,8 @@ open Classical in
 /-- **The honest oracle** answers every query with the exact object used by the definitions
 of the sweep: the extension `extendSite`, the chosen net `rectangularTraceNormNet`,
 feasibility of the convex program, the chosen leading vector `boundaryLeadingVector`, the
-trimming `leftSchmidtTrim`, the Gaussian filter factors `gaussianFilterFactors`, the matrix
-action, and the chosen `energyMinimizer`. -/
+trimming `leftSchmidtTrim`, the Gaussian filter factors `gaussianFilterFactors`, the sampled factors
+`sampledFactors`, the matrix action, and the chosen `energyMinimizer`. -/
 noncomputable def LinearAlgebraQuery.honestOracle : {ι : Type} → LinearAlgebraQuery q ι → ι
   | _, .extendSite _ i _ k v => AreaLaw.extendSite i k v
   | _, .boundaryNet L k m η => rectangularTraceNormNet (CutSite L q k × Fin m) η
@@ -162,6 +170,7 @@ noncomputable def LinearAlgebraQuery.honestOracle : {ι : Type} → LinearAlgebr
   | _, .schmidtTrim _ _ hi _ m u => leftSchmidtTrim hi m u
   | _, .gaussianFilterFactors _ i hq h h0 c Delta =>
       AreaLaw.gaussianFilterFactors hq h h0 c Delta i
+  | _, .sampledFactors _ i h E₀ _ _ _ I => AreaLaw.sampledFactors h E₀ I i
   | _, .applyFactor _ _ _ _ A s => toEuclideanLin A s
   | _, .energyMinimizer _ _ H S => AreaLaw.energyMinimizer H S
 
@@ -204,6 +213,13 @@ theorem LinearAlgebraQuery.honestOracle_gaussianFilterFactors (L i : ℕ) (hq : 
     (c Delta : ℝ) :
     honestOracle (LinearAlgebraQuery.gaussianFilterFactors L i hq h h0 c Delta) =
       AreaLaw.gaussianFilterFactors hq h h0 c Delta i := rfl
+
+@[simp]
+theorem LinearAlgebraQuery.honestOracle_sampledFactors (L i : ℕ)
+    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (E₀ : ℝ) (ℓ m D : ℕ)
+    (I : Fin ℓ → Fin m → Fin L) :
+    honestOracle (LinearAlgebraQuery.sampledFactors L i h E₀ ℓ m D I) =
+      AreaLaw.sampledFactors h E₀ I i := rfl
 
 @[simp]
 theorem LinearAlgebraQuery.honestOracle_applyFactor (L i r b : ℕ) (A : LeftBlockMatrix L q i)
@@ -263,6 +279,7 @@ noncomputable def LinearAlgebraQuery.queryCost : {ι : Type} → LinearAlgebraQu
   | _, .schmidtTrim L _ _ b _ _ => schmidtTrimCost L q b
   | _, .gaussianFilterFactors L _ _ _ _ c Delta =>
       filterFactorsCost L q (huangEnergyCount c Delta L) (huangFilterRankBound q c Delta L)
+  | _, .sampledFactors L _ _ _ ℓ _ D _ => filterFactorsCost L q ℓ D
   | _, .applyFactor L _ r b _ _ => applyFactorCost L q r b
   | _, .energyMinimizer L b _ S => energyMinimizerCost L q b S.card
 
@@ -303,6 +320,13 @@ theorem LinearAlgebraQuery.queryCost_gaussianFilterFactors (L i : ℕ) (hq : 1 �
     queryCost (LinearAlgebraQuery.gaussianFilterFactors L i hq h h0 c Delta) =
       filterFactorsCost L q (huangEnergyCount c Delta L) (huangFilterRankBound q c Delta L) :=
   rfl
+
+@[simp]
+theorem LinearAlgebraQuery.queryCost_sampledFactors (L i : ℕ)
+    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (E₀ : ℝ) (ℓ m D : ℕ)
+    (I : Fin ℓ → Fin m → Fin L) :
+    queryCost (LinearAlgebraQuery.sampledFactors L i h E₀ ℓ m D I) =
+      filterFactorsCost L q ℓ D := rfl
 
 @[simp]
 theorem LinearAlgebraQuery.queryCost_applyFactor (L i r b : ℕ) (A : LeftBlockMatrix L q i)

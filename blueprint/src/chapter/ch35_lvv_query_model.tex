@@ -290,3 +290,162 @@ declared costs of the operations performed along the way.
     polynomially bounded. Every operation costs at least one unit, so the
     number of operations is at most the cost.
 \end{proof}
+
+\subsection{The sampled route and its success probability}
+\label{sec:lvv_sampled_program}
+
+As printed, the algorithm reduces the error with the sampled approximate
+ground-state projector of Definition~\ref{def:lvv_sampled_projector}, whose
+words are drawn uniformly at random, with the ground energy as an input. The
+computation on this route is deterministic in the words, one family of words
+per cut being an input; the success probability of Theorem~1 is the probability,
+over the words, of the event on which every family is good.
+
+\begin{definition}[The left factors of the sampled projector]
+    \label{def:lvv_sampled_factors}
+    \lean{TNLean.MPS.AreaLaw.sampledScale,
+        TNLean.MPS.AreaLaw.sampledProjector_eq_sum_smul,
+        TNLean.MPS.AreaLaw.sampledLeftFactor,
+        TNLean.MPS.AreaLaw.sampledFactors,
+        TNLean.MPS.AreaLaw.cutOperator_sampledProjector_eq_sum,
+        TNLean.MPS.AreaLaw.card_sampledFactors_le,
+        TNLean.MPS.AreaLaw.operatorSchmidtRank_of_mem_sampledFactors,
+        TNLean.MPS.AreaLaw.errorReductionSet_sampledFactors}
+    \leanok
+    \uses{def:lvv_sampled_projector, def:lvv_cut_left_factors}
+    The sampled projector $K=C^m\ell^{-1}\sum_t P_{I_t}$ is the sum over the
+    words of $C^m\ell^{-1}P_{I_t}$. Its left factors at a cut are the chosen
+    left factors of Definition~\ref{def:lvv_cut_left_factors} of every word,
+    scaled by $C^m/\ell$; in cut coordinates $K$ is the sum over the words and
+    their factors of the scaled left factor tensored with the right factor.
+    When every word has operator-Schmidt rank at most $D$ at every cut, there
+    are at most $\ell D$ factors, each of rank at most $D$ at every internal
+    cut, and the error-reduced family of the factors is that of the indexed
+    scaled factors.
+\end{definition}
+
+\begin{lemma}[The sampled error-reduction step with its output named]
+    \label{thm:lvv_sampled_factors_viable}
+    \lean{TNLean.MPS.AreaLaw.isViableMPS_errorReductionSet_sampledFactors}
+    \leanok
+    \uses{def:lvv_sampled_factors, thm:lvv_mps_error_reduction}
+    Let $S$ be half-viable with at most $s$ members of bond dimension at most
+    $b$, let every word have rank at most $D$ at every cut, and let the sampled
+    projector be within $\eta<1/2$ of the ground projection. Then the family
+    $\{Au: A \text{ a sampled factor},\ u\in S\}$ has at most $\ell Ds$ members
+    of bond dimension at most $D\max\{1,b\}$ and is $4\eta$-viable.
+\end{lemma}
+\begin{proof}
+    \leanok
+    The deterministic error-reduction step applied to the decomposition of $K$
+    into the scaled factors, whose index set has cardinality at most $\ell D$.
+\end{proof}
+
+\begin{definition}[Good words and the sampled sweep]
+    \label{def:lvv_sampled_sweep}
+    \lean{TNLean.MPS.AreaLaw.IsViable.mono,
+        TNLean.MPS.AreaLaw.sampledPower,
+        TNLean.MPS.AreaLaw.sampledWordCount,
+        TNLean.MPS.AreaLaw.sampledLetterBound,
+        TNLean.MPS.AreaLaw.sampledRankBound,
+        TNLean.MPS.AreaLaw.GoodWords,
+        TNLean.MPS.AreaLaw.sampledSweepStep,
+        TNLean.MPS.AreaLaw.sampledSweep,
+        TNLean.MPS.AreaLaw.sampledSweep_succ}
+    \leanok
+    \uses{def:lvv_sampled_factors, def:lvv_successive_step,
+        def:lvv_size_trimming_selection}
+    At viability precision $\delta$ the power is $m=\lceil((n-\varepsilon_0)/\Delta)
+        \log(8/\delta)\rceil$, the number of words $\ell$ and the letter bound
+    $\kappa$ are those of Lemma~\ref{thm:lvv_sampled_projector}
+    at precision $\delta/8$, and the rank bound is $D=q^{2\kappa}$. A family of
+    words is \emph{good} when its sampled projector is within $\delta/8$ of the
+    power projector and every letter occurs at most $\kappa$ times in every
+    word. One step of the sampled sweep is the step of
+    Definition~\ref{def:lvv_successive_step} with the sampled factors of the
+    given words applied to the size-trimming selection of the extension; the
+    sampled sweep applies it at every cut with the words assigned to that cut,
+    starting from the scalar singleton.
+\end{definition}
+
+\begin{lemma}[The sampled sweep on good words]
+    \label{thm:lvv_sampled_sweep_spec}
+    \lean{TNLean.MPS.AreaLaw.measureReal_goodWords_ge,
+        TNLean.MPS.AreaLaw.isViableMPS_sampledSweepStep,
+        TNLean.MPS.AreaLaw.sampledSweep_spec}
+    \leanok
+    \uses{def:lvv_sampled_sweep, thm:lvv_sampled_factors_viable,
+        thm:lvv_size_trimmed_family_bond_trim_set, thm:lvv_sampled_projector}
+    The words are good with probability at least $1-1/(2n^3)$. For a ground
+    pair with gap $\Delta$ and a precision $0<\delta\le\min\{1,c_\Delta/n\}$, one
+    step on good words takes a $\delta$-viable family to a $\delta$-viable family
+    with at most $\ell q^{2\kappa}C n^{p}$ members of bond dimension at most
+    $q^{2\kappa}\max\{1,m_n\}$, and the sampled sweep on good words is
+    $\delta$-viable at every cut with these bounds at every positive cut.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Extension keeps $\delta$-viability, which is $c_\Delta/n$-viability; the
+    trimmed size-trimming selection is half-viable with polynomial size; on good
+    words the sampled projector is within $\delta/4$ of the ground projection,
+    so the sampled error-reduction step restores $\delta$-viability. Induct on
+    the cut.
+\end{proof}
+
+\begin{definition}[The sampled computations]
+    \label{def:lvv_sampled_programs}
+    \lean{TNLean.MPS.AreaLaw.sampledSweepStepProgram,
+        TNLean.MPS.AreaLaw.eval_sampledSweepStepProgram,
+        TNLean.MPS.AreaLaw.sampledSweepProgram,
+        TNLean.MPS.AreaLaw.eval_sampledSweepProgram,
+        TNLean.MPS.AreaLaw.sampledGroundStateProgram,
+        TNLean.MPS.AreaLaw.eval_sampledGroundStateProgram,
+        TNLean.MPS.AreaLaw.stepWordsMeasure}
+    \leanok
+    \uses{def:lvv_step_programs, def:lvv_sampled_sweep, def:lvv_energy_minimizer}
+    The sampled step and sweep as computations, with the sampled factors of the
+    words of the cut obtained by one operation, and the sampled ground-state
+    computation, which sweeps the chain and returns the unit vector of least
+    energy in the span of the final family; run with the honest oracle they
+    compute the sampled sweep and the chosen energy minimizer. The words are
+    distributed by the product over the cuts of the law of $\ell$ independent
+    uniform words.
+\end{definition}
+
+\begin{theorem}[Theorem 1 on the sampled route, with its success probability]
+    \label{thm:lvv_sampled_program_success}
+    \lean{TNLean.MPS.AreaLaw.sampledGroundStateProgram_spec,
+        TNLean.MPS.AreaLaw.measureReal_forall_goodWords_ge,
+        TNLean.MPS.AreaLaw.measureReal_sampledGroundStateProgram_success,
+        TNLean.MPS.AreaLaw.sampledPrecisionConstant,
+        TNLean.MPS.AreaLaw.sampledPrecisionConstant_pos,
+        TNLean.MPS.AreaLaw.sampledPrecisionConstant_le_one,
+        TNLean.MPS.AreaLaw.sampledPrecisionConstant_le_sq,
+        TNLean.MPS.AreaLaw.exists_sampled_budgets_polynomial,
+        TNLean.MPS.AreaLaw.exists_sampledGroundStateProgram_success_polynomial}
+    \leanok
+    \uses{def:lvv_sampled_programs, thm:lvv_sampled_sweep_spec,
+        thm:chain_range_one_overlap_energy, thm:lvv_left_span_bond,
+        thm:lvv_sampled_polynomial_bounds}
+    Fix $q\ge2$, $\Delta>0$, a bound $B$ on the ratio of ground energy to gap and
+    an accuracy $\eta>0$. There are $C\ge1$ and $p$, chosen before the chain,
+    such that for every chain of $n\ge1$ sites with a ground pair
+    $(\varepsilon_0,\Gamma)$ of gap $\Delta$ and $\varepsilon_0/\Delta\le B$,
+    with probability at least $1-1/(2n^2)$ over the sampled words, the sampled
+    ground-state computation run with the honest oracle outputs a unit
+    open-boundary matrix product state of bond dimension at most $Cn^{p}$ with
+    overlap at least $1-\eta$ with $\Gamma$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    On good words the final family is $\delta$-viable, so its span contains a
+    unit vector of overlap at least $1-\delta$ with $\Gamma$, whose energy exceeds
+    the ground energy by at most $8n\delta$; the least energy of the span is no
+    larger, and the gap lemma gives overlap at least $1-8n\delta/\Delta$ for the
+    minimizer, which is $1-\eta$ at the precision $\delta=\min\{\alpha,
+        \eta\Delta/8\}/n$. The event that every family of words is good has
+    probability at least $1-n\cdot1/(2n^3)$ by the union bound over the cuts,
+    since every coordinate of the product law is the law of one family. The
+    size and bond budgets are polynomial by the uniform bounds of the sampled
+    projector in the documented scope.
+\end{proof}
