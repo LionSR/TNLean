@@ -78,6 +78,42 @@ $N$, and the local labels are $\mathbb Z_d=\{0,\dots,d-1\}$ with $d\ge1$.
     induction over $k$.
 \end{proof}
 
+\begin{center}
+    % Construction: T_3 on the ring of N = 8 sites, the levels 2, 1, 0
+    % applied in this order; level i applies u_{i,p} to the endpoints
+    % p 2^{i+1} and p 2^{i+1} + 2^{i+1} - 1 of each block of length
+    % 2^{i+1}.  The input is a product vector with |0> on
+    % J_3 = I_2 u I_4 u I_8 = {1, ..., 6}.
+    % Source: MSWC24 (arXiv:2307.01696), eq. eq:RG_circuit and paragraph
+    % "Tree-RG circuit with measurements".
+    % Ink-to-symbol map: wires are the sites 0, ..., 7 from top to bottom,
+    % numbered on the right.  Two boxes with the same label joined by a
+    % vertical line are one two-site gate on their two sites, which the
+    % lemma applies by teleportation.  The dashed frames are the levels i.
+    \begin{quantikz}[row sep={0.72cm,between origins}, column sep=0.4cm]
+        \lstick{$\ket{\pi_0}$} & \gate{u_{2,0}}\wire[d][7]{q}
+        \gategroup[8,steps=1,style={dashed,rounded corners,inner xsep=1pt},
+            label style={label position=below,anchor=north,yshift=-0.2cm}]{$i=2$}
+        & \gate{u_{1,0}}\wire[d][3]{q}
+        \gategroup[8,steps=1,style={dashed,rounded corners,inner xsep=1pt},
+            label style={label position=below,anchor=north,yshift=-0.2cm}]{$i=1$}
+        & \gate[2]{u_{0,0}}
+        \gategroup[8,steps=1,style={dashed,rounded corners,inner xsep=1pt},
+            label style={label position=below,anchor=north,yshift=-0.2cm}]{$i=0$}
+        & \rstick{$0$} \\
+        \lstick{$\ket{0}$} & & & & \rstick{$1$} \\
+        \lstick{$\ket{0}$} & & & \gate[2]{u_{0,1}}
+        & \rstick{$2$} \\
+        \lstick{$\ket{0}$} & & \gate{u_{1,0}} & & \rstick{$3$} \\
+        \lstick{$\ket{0}$} & & \gate{u_{1,1}}\wire[d][3]{q}
+        & \gate[2]{u_{0,2}} & \rstick{$4$} \\
+        \lstick{$\ket{0}$} & & & & \rstick{$5$} \\
+        \lstick{$\ket{0}$} & & & \gate[2]{u_{0,3}}
+        & \rstick{$6$} \\
+        \lstick{$\ket{\pi_7}$} & \gate{u_{2,0}} & \gate{u_{1,1}} & & \rstick{$7$}
+    \end{quantikz}
+\end{center}
+
 \begin{remark}[The tree circuit of matrix product states]
     \label{rem:ldp_tree_measurements_mps}
     \uses{thm:ldp_tree_measurements, thm:ldp_loglog_depth,

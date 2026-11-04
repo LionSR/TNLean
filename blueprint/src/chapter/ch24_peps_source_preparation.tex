@@ -91,6 +91,37 @@
     Induct on $F$, commuting later source preparations past earlier operations $A:\mathcal H\to\mathcal H'$ via $P_{S,\mathcal H'}\circ A=(\operatorname{id}_{\mathcal H_S}\otimes A)\circ P_{S,\mathcal H}$ and using Lemma~\ref{thm:peps_register_exchange} to move untouched spectator registers past newly prepared source registers.
 \end{proof}
 
+\begin{center}
+    % Construction: the factorization F = B o P_{S,H_in} of the lemma above,
+    % drawn for three parties p, q, r and the source list S = (s_1, s_2),
+    % with s_1 on (p,q) and s_2 on (q,r).  P_{S,H_in} prepares
+    % eta_1 (x) eta_2 beside the input; B is source-free, drawn here with one
+    % local map per party.
+    % Source: OpenAI2026PolynomialPEPS, proof of Theorem 5.2,
+    % 04-compression.tex, lines 233--251.
+    % Ink-to-symbol map: H_{in,p} is the input register owned by p, and so
+    % on.  An angle marked eta_j is the unit vector eta_j in U_j (x) V_j,
+    % its upper wire U_j owned by the first party of s_j and its lower wire
+    % V_j by the second.  L_p, L_q, L_r are local maps of the parties whose
+    % registers they meet.  The wires are grouped by owner; the register
+    % permutations that restore the order H_S (x) H_in are part of B.
+    \begin{quantikz}[row sep={0.72cm,between origins}, column sep=0.4cm]
+        \lstick{$\mathcal H_{{\rm in},p}$} & &
+        \gategroup[7,steps=2,style={dashed,rounded corners,inner xsep=6pt},
+            label style={label position=below,anchor=north,yshift=-0.2cm}]{$P_{S,\mathcal H_{\rm in}}$}
+        & & \gate[2]{L_p}
+        \gategroup[7,steps=1,style={dashed,rounded corners,inner xsep=2pt},
+            label style={label position=below,anchor=north,yshift=-0.2cm}]{$B$}
+        & \rstick[7]{$\mathcal H_{\rm out}$} \\
+        \setwiretype{n} & & \makeebit{$\eta_1$} & \setwiretype{q} & & \\
+        \setwiretype{n} & & & \setwiretype{q} & \gate[3]{L_q} & \\
+        \lstick{$\mathcal H_{{\rm in},q}$} & & & & & \\
+        \setwiretype{n} & & \makeebit{$\eta_2$} & \setwiretype{q} & & \\
+        \setwiretype{n} & & & \setwiretype{q} & \gate[2]{L_r} & \\
+        \lstick{$\mathcal H_{{\rm in},r}$} & & & & &
+    \end{quantikz}
+\end{center}
+
 \begin{lemma}[Parties of the remaining operations]
     \label{thm:peps_source_word_parties}
     \lean{TNLean.Lattice.PartyCircuit.Word.parties_localPart}
