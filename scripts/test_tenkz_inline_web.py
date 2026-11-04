@@ -177,5 +177,49 @@ def check_inline_layout() -> None:
     )
 
 
+CIRCUIT_BODY = r"""[row sep=0.3cm]
+  \lstick{$|0\rangle$} & \gate{H} & \ctrl{1} & \qw \\
+  \lstick{$|0\rangle$} & \qw & \targ{} & \qw
+"""
+
+CIRCUIT_SOURCE = (
+    "\\documentclass{article}\n\\begin{document}\n"
+    "\\begin{quantikz}" + CIRCUIT_BODY + "\\end{quantikz}\n"
+    "\\end{document}\n"
+)
+
+
+def check_quantikz_capture() -> None:
+    """A quantikz body reaches the renderer verbatim and is tagged a circuit."""
+    captured: list[str] = []
+
+    def _record(source: str, output: Path) -> tuple[Path, bool]:
+        captured.append(source)
+        return _svg_box(source, output)
+
+    with tempfile.TemporaryDirectory(prefix="tenkz-quantikz-") as directory:
+        root = Path(directory)
+        tex = TeX()
+        document = tex.ownerDocument
+        addConfig(document.config)
+        document.userdata["working-dir"] = str(ROOT / "blueprint/src")
+        document.config["general"]["extra-templates"] = [
+            str(ROOT / "blueprint/src/plastex_templates")
+        ]
+        document.config["files"]["filename"] = "index.html"
+        document.config["files"]["directory"] = str(root)
+        document.config["files"]["split-level"] = -100
+        document.context.importMacros({"quantikz": tenkz_pic.quantikz})
+        tex.input(CIRCUIT_SOURCE)
+        with contextlib.chdir(root), patch.object(tenkz_pic, "render_unit", _record):
+            Renderer().render(tex.parse())
+        html = (root / "index.html").read_text(encoding="utf-8")
+    expected = "\\begin{quantikz}" + CIRCUIT_BODY + "\\end{quantikz}"
+    assert captured == [expected], captured
+    assert 'class="tenkz-pic tenkz-pic-circuit"' in html, html
+    print("quantikz capture: verbatim source and circuit image class pass.")
+
+
 if __name__ == "__main__":
+    check_quantikz_capture()
     check_inline_layout()
