@@ -210,9 +210,9 @@
     Suppose the physical filter parameters satisfy $m\ge\max\{q,50\}$,
     $\ell\ge1$, $t\ge21$, the inequalities
     \[
-      288e^{11/8}e^{-(t-g)/8}\le {g\over10^6m},\qquad
-      \bigl(2e^{-2\ell^2\sqrt{(4g/5)/R}}\bigr)^2\le\Delta
-      \quad(0<R\le3t+4\ell),
+        288e^{11/8}e^{-(t-g)/8}\le {g\over10^6m},\qquad
+        \bigl(2e^{-2\ell^2\sqrt{(4g/5)/R}}\bigr)^2\le\Delta
+        \quad(0<R\le3t+4\ell),
     \]
     and $D^{12}\Delta\le10^{-5}$, where
     $D=(m\ell^2)^{22\ell}$.
@@ -227,10 +227,10 @@
     There is a measurable event of Haar unitaries whose failure measure
     is at most
     \[
-      \eta=\begin{cases}
-        0,&Q\le s,\\
-        \bigl(1+2/\sqrt{3s/(32Q)}\bigr)^{2r_G}Qe^{-s/16},&s<Q.
-      \end{cases}
+        \eta=\begin{cases}
+            0,                                                & Q\le s, \\
+            \bigl(1+2/\sqrt{3s/(32Q)}\bigr)^{2r_G}Qe^{-s/16}, & s<Q.
+        \end{cases}
     \]
     For every unitary in this event, sample $\min\{s,Q\}$ basis vectors,
     apply all actual length-$a$ operator words, and collectively trim
@@ -444,9 +444,9 @@
     positive leaf width $w$. Fix an arbitrary property $P_{p,r}$ of
     interval spaces. For $J=(p,r)$ and $k=p+\lfloor(r-p)/2\rfloor$, define
     \begin{align}
-       E_J=\{\omega:\;&P_{p,k}(S_\omega(p,k)),\quad
-                        P_{k,r}(S_\omega(k,r)),\nonumber\\
-                     &\neg P_{p,r}(S_\omega(p,r))\}.
+        E_J=\{\omega:\; & P_{p,k}(S_\omega(p,k)),\quad
+        P_{k,r}(S_\omega(k,r)),\nonumber                 \\
+                        & \neg P_{p,r}(S_\omega(p,r))\}.
     \end{align}
     Thus both actual children satisfy the property, while the same actual
     parent fails it. No probability measure is involved in this definition.
@@ -460,8 +460,8 @@
     Suppose $P_{p,r}(\mathcal H_{[p,r)})$ holds for every valid short
     interval. For every valid root $p\le r\le L$,
     \begin{align}
-       \{\omega:\neg P_{p,r}(S_\omega(p,r))\}
-       \subseteq\bigcup_{J\in\mathcal I_w(p,r)}E_J.
+        \{\omega:\neg P_{p,r}(S_\omega(p,r))\}
+        \subseteq\bigcup_{J\in\mathcal I_w(p,r)}E_J.
     \end{align}
     In particular every failed root has a guarded failed descendant in
     the actual root merge list. There is no hypothesis on long-node success,
@@ -587,7 +587,7 @@ probabilities remains a separate argument.
     where $\beta\in[0,\infty]$. Then
     \begin{align}
         \mu\left(\bigcup_{J\in\mathcal I_w(p,r)}E_J\right)
-            \le \max\{r-p-1,0\}\beta.
+        \le \max\{r-p-1,0\}\beta.
     \end{align}
     If the full local space satisfies the property at every valid short
     leaf, then the same outer-measure bound holds for
@@ -623,9 +623,9 @@ finite product of samples; the same estimate applies.
     simultaneous success at the root and all its listed internal nodes
     satisfies
     \begin{align}
-       \bigl\{\omega:\neg\bigl(&P_{p,r}(S_\omega(p,r))\ \land\nonumber\\
-         &\forall J\in\mathcal I_w(p,r),\ P_J(S_\omega(J))\bigr)\bigr\}
-       \subseteq\bigcup_{J\in\mathcal I_w(p,r)}E_J.
+        \bigl\{\omega:\neg\bigl( & P_{p,r}(S_\omega(p,r))\ \land\nonumber                        \\
+                                 & \forall J\in\mathcal I_w(p,r),\ P_J(S_\omega(J))\bigr)\bigr\}
+        \subseteq\bigcup_{J\in\mathcal I_w(p,r)}E_J.
     \end{align}
     The covering family is the same actual root merge list as before.
     Only the short-leaf property is assumed; no probability or
@@ -636,8 +636,8 @@ finite product of samples; the same estimate applies.
         def:guarded_interval_failure}
     Fix $\omega$. Strengthen the property on each interval by setting
     \begin{align}
-       Q_{a,b}(S)&=P_{a,b}(S)\ \land
-       \bigl(\forall K\in\mathcal I_w(a,b),\ P_K(S_\omega(K))\bigr).
+        Q_{a,b}(S) & =P_{a,b}(S)\ \land
+        \bigl(\forall K\in\mathcal I_w(a,b),\ P_K(S_\omega(K))\bigr).
     \end{align}
     A short interval has empty merge list, so the assumed leaf property
     also holds for $Q$. Joint failure is precisely failure of $Q$ at
@@ -661,8 +661,8 @@ finite product of samples; the same estimate applies.
     at the root or one of its actual listed internal intervals is at most
     $\max\{r-p-1,0\}\beta$:
     \begin{align*}
-        \mu^*\bigl\{\omega:\neg\bigl(&P_{p,r}(S_\omega(p,r))\ \land\\
-          &\forall J\in\mathcal I_w(p,r),\ P_J(S_\omega(J))\bigr)\bigr\}
+        \mu^*\bigl\{\omega:\neg\bigl( & P_{p,r}(S_\omega(p,r))\ \land                                 \\
+                                      & \forall J\in\mathcal I_w(p,r),\ P_J(S_\omega(J))\bigr)\bigr\}
         \le\max\{r-p-1,0\}\beta.
     \end{align*}
     No union over other overlapping intervals is taken.
@@ -692,8 +692,8 @@ finite product of samples; the same estimate applies.
     Under the independent product probability law $\mu=\bigotimes_J\mu_J$,
     the same root and its actual internal merge list satisfy
     \begin{align}
-        \mu^*\bigl\{\omega:\neg\bigl(&S_\omega(p,r)\text{ is $\delta$-viable}\ \land\nonumber\\
-        &\forall J\in\mathcal I_w(p,r),\ S_\omega(J)
+        \mu^*\bigl\{\omega:\neg\bigl( & S_\omega(p,r)\text{ is $\delta$-viable}\ \land\nonumber \\
+                                      & \forall J\in\mathcal I_w(p,r),\ S_\omega(J)
         \text{ is $\delta$-viable}\bigr)\bigr\}
         \le\max\{r-p-1,0\}\beta.
     \end{align}
@@ -800,8 +800,8 @@ finite product of samples; the same estimate applies.
     with the whole complement retained. For every $p\le r\le L$,
     \begin{align}
         \mu\left\{U:\neg\left(
-          V_U(p,r)\ \land
-          \bigl(\forall J\in\mathcal I_w(p,r),\ V_U(J)\bigr)
+        V_U(p,r)\ \land
+        \bigl(\forall J\in\mathcal I_w(p,r),\ V_U(J)\bigr)
         \right)\right\}
         \le\max\{r-p-1,0\}\beta.
     \end{align}
@@ -863,8 +863,8 @@ finite product of samples; the same estimate applies.
     before choosing the child spaces and the sampling size. Let $r_G\ge1$,
     $D\ge2$, $0<\beta<1$, and choose
     \[
-      A=1+\log r_G+\log D+\log(1/\beta),\quad
-      s=\lceil4096r_GA\rceil,\quad M=D^6s^3.
+        A=1+\log r_G+\log D+\log(1/\beta),\quad
+        s=\lceil4096r_GA\rceil,\quad M=D^6s^3.
     \]
     Assume $q^w\le M$ and $0<\xi\le1$.
     Suppose that, for every pair of $3/200$-viable child spaces of
@@ -903,8 +903,8 @@ finite product of samples; the same estimate applies.
     and child space.
     For $0<\beta<1$, take
     \[
-      A=1+\log r_G+\log D+\log(1/\beta),\qquad
-      s=\lceil4096r_GA\rceil,\qquad M=D^6s^3.
+        A=1+\log r_G+\log D+\log(1/\beta),\qquad
+        s=\lceil4096r_GA\rceil,\qquad M=D^6s^3.
     \]
     Then $s\le4097r_GA$. There is one parent operation whose values on
     all admissible children are the literal sampled-word image and final
@@ -915,7 +915,7 @@ finite product of samples; the same estimate applies.
     Each such space has at most $M$ recorded spanning vectors, with
     internal-cut Schmidt ranks at most
     \[
-      10^6D_{\rm ref}^2(L+1)M.
+        10^6D_{\rm ref}^2(L+1)M.
     \]
     The whole exterior is retained in the viability statements.
 
@@ -947,13 +947,13 @@ finite product of samples; the same estimate applies.
     chain and Hamiltonian, with the following property. Under the physical
     hypotheses of the preceding theorem put
     \[
-      g=\min\{\gamma,1\},\quad m=\max\{q,50\},\quad
-      v=1+\log m+\log(1/g),\quad
-      \ell=\lceil Cv^2/g\rceil,\quad D=(m\ell^2)^{22\ell}.
+        g=\min\{\gamma,1\},\quad m=\max\{q,50\},\quad
+        v=1+\log m+\log(1/g),\quad
+        \ell=\lceil Cv^2/g\rceil,\quad D=(m\ell^2)^{22\ell}.
     \]
     Then $\ell\ge21$ and
     \[
-      \log D\le {22(C+1)(6+2\log(C+1))\over g}\,v^3.
+        \log D\le {22(C+1)(6+2\log(C+1))\over g}\,v^3.
     \]
     The common reference and the actual parent families of the preceding
     theorem can be constructed with these parameters, before every
@@ -1016,7 +1016,7 @@ finite product of samples; the same estimate applies.
     constructed root space on $[0,L)$, read on native chain configurations,
     is an open-boundary matrix product state of bond at most
     \[
-      10^6D_{\rm ref}^2(L+1)M^2.
+        10^6D_{\rm ref}^2(L+1)M^2.
     \]
     This is the bound for the entire root space. The bound for each
     recorded generator is $10^6D_{\rm ref}^2(L+1)M$.
@@ -1068,10 +1068,10 @@ finite product of samples; the same estimate applies.
     can be chosen before every unit $\Gamma\in G$ so that
     $S_{\rm nat}$ is $3/200$-close to $G$, and
     \begin{align}
-        \phi&=\frac{P\Gamma}{\|P\Gamma\|}\in S_{\rm nat}, &
-        \|\phi\|&=1,\notag\\
-        |\langle\phi,\Gamma\rangle|^2&\ge\frac{197}{200}, &
-        \|\phi-\Gamma\|^2&\le\frac3{100}.
+        \phi                          & =\frac{P\Gamma}{\|P\Gamma\|}\in S_{\rm nat}, &
+        \|\phi\|                      & =1,\notag                                      \\
+        |\langle\phi,\Gamma\rangle|^2 & \ge\frac{197}{200},                          &
+        \|\phi-\Gamma\|^2             & \le\frac3{100}.
     \end{align}
     Moreover $\langle\phi,\Gamma\rangle=\|P\Gamma\|$ is a nonnegative
     real number, and $\phi$ has native MPS bond at most
@@ -1104,72 +1104,72 @@ variational trial-space comparison are recorded in
 recursive root remains a separate step.
 
 \begin{lemma}[A weighted reference bound for the actual interval trim]
-\label{lem:alvv-interval-reference-weighted}
-\lean{TNLean.MPS.AreaLaw.schmidtRank_cutEnvVector_interval_reference_le,
-    TNLean.MPS.AreaLaw.isCloseTo_prodExt_intervalTrimSubspace_of_reference_weighted}
-\leanok
-Let $G$ and $U$ be subspaces of the full-chain Hilbert space that are mutually
-$\varepsilon$-close. Suppose every vector of $U$ has an open-boundary matrix
-product representation of bond dimension at most $D\geq 1$. Let $S$ be a
-$\delta$-viable subspace on an interval $[p,r)$, and let $S'$ be its actual
-collective trim at threshold $\xi>0$. For every $\theta>0$, the subspace $S'$
-is viable for the same global target with error at most
-\[
- (1+\theta)\bigl((1+\theta)\delta+(1+\theta^{-1})\varepsilon
-       +2\xi\sqrt{\max\{r-p-1,0\}D^2}\bigr)
-       +(1+\theta^{-1})\varepsilon.
-\]
-The whole exterior of the interval is retained; the reference rank is $D^2$.
+    \label{lem:alvv-interval-reference-weighted}
+    \lean{TNLean.MPS.AreaLaw.schmidtRank_cutEnvVector_interval_reference_le,
+        TNLean.MPS.AreaLaw.isCloseTo_prodExt_intervalTrimSubspace_of_reference_weighted}
+    \leanok
+    Let $G$ and $U$ be subspaces of the full-chain Hilbert space that are mutually
+    $\varepsilon$-close. Suppose every vector of $U$ has an open-boundary matrix
+    product representation of bond dimension at most $D\geq 1$. Let $S$ be a
+    $\delta$-viable subspace on an interval $[p,r)$, and let $S'$ be its actual
+    collective trim at threshold $\xi>0$. For every $\theta>0$, the subspace $S'$
+    is viable for the same global target with error at most
+    \[
+        (1+\theta)\bigl((1+\theta)\delta+(1+\theta^{-1})\varepsilon
+        +2\xi\sqrt{\max\{r-p-1,0\}D^2}\bigr)
+        +(1+\theta^{-1})\varepsilon.
+    \]
+    The whole exterior of the interval is retained; the reference rank is $D^2$.
 \end{lemma}
 \begin{proof}\leanok
-\uses{thm:interval_trimming_reference}
-Use the interval/exterior coefficient isometry. A whole-chain matrix product
-vector has Schmidt rank at most $D^2$ across each internal interval cut
-with the exterior retained. Apply the weighted reference estimate for the
-actual collective trimming projections.
+    \uses{thm:interval_trimming_reference}
+    Use the interval/exterior coefficient isometry. A whole-chain matrix product
+    vector has Schmidt rank at most $D^2$ across each internal interval cut
+    with the exterior retained. Apply the weighted reference estimate for the
+    actual collective trimming projections.
 \end{proof}
 
 \begin{lemma}[One actual filter and trim at the native root]
-\label{lem:alvv-native-root-filter-trim}
-\lean{TNLean.MPS.AreaLaw.fullIntervalFilter,
-    TNLean.MPS.AreaLaw.fullIntervalFilter_apply,
-    TNLean.MPS.AreaLaw.fullIntervalFilterTrimStep,
-    TNLean.MPS.AreaLaw.finrank_fullIntervalFilterTrimStep_le,
-    TNLean.MPS.AreaLaw.isIntervalSpanWithRankBound_fullIntervalFilterTrimStep,
-    TNLean.MPS.AreaLaw.isCloseTo_nativeFullIntervalSpace_filterTrimStep}
-\leanok
-Let $S$ be a subspace on the full interval and suppose its native image is
-$\delta$-close to a target $G$, where $0\leq\delta\leq\tfrac12$.
-Let $K$ preserve $G$ and $G^\perp$, satisfy $\|Kx\|\geq\|x\|$ on $G$, and
-satisfy $\|Kx\|^2\leq(1-c)\|x\|^2$ on $G^\perp$, where $0<c\leq1$.
-Suppose a fixed reference subspace is mutually $\varepsilon$-close to $G$
-and every vector of the reference is a matrix product vector of bond at most
-$D\geq1$. Assume
-\[
- \varepsilon\leq\frac{c^2\eta}{1024},\qquad
- \xi\sqrt{\max\{L-1,0\}D^2}\leq\frac{c\eta}{48},\qquad \xi>0.
-\]
-Conjugate $K$ to the full-interval coordinates, apply it to $S$, choose the
-standard orthonormal basis of this actual image, and collectively trim that
-basis at threshold $\xi$. The native image of the resulting actual space
-is close to the same $G$ with error at most
-\[
- (1-c/4)\delta+c\eta/8.
-\]
-Its dimension does not exceed $\dim S$. It has at most $\dim S$ recorded
-spanning vectors, each with internal Schmidt rank at most $\dim S/\xi^2$.
-This statement is an auxiliary with explicit normalized-filter premises;
-it does not supply the physical filter or the complete algorithm.
+    \label{lem:alvv-native-root-filter-trim}
+    \lean{TNLean.MPS.AreaLaw.fullIntervalFilter,
+        TNLean.MPS.AreaLaw.fullIntervalFilter_apply,
+        TNLean.MPS.AreaLaw.fullIntervalFilterTrimStep,
+        TNLean.MPS.AreaLaw.finrank_fullIntervalFilterTrimStep_le,
+        TNLean.MPS.AreaLaw.isIntervalSpanWithRankBound_fullIntervalFilterTrimStep,
+        TNLean.MPS.AreaLaw.isCloseTo_nativeFullIntervalSpace_filterTrimStep}
+    \leanok
+    Let $S$ be a subspace on the full interval and suppose its native image is
+    $\delta$-close to a target $G$, where $0\leq\delta\leq\tfrac12$.
+    Let $K$ preserve $G$ and $G^\perp$, satisfy $\|Kx\|\geq\|x\|$ on $G$, and
+    satisfy $\|Kx\|^2\leq(1-c)\|x\|^2$ on $G^\perp$, where $0<c\leq1$.
+    Suppose a fixed reference subspace is mutually $\varepsilon$-close to $G$
+    and every vector of the reference is a matrix product vector of bond at most
+    $D\geq1$. Assume
+    \[
+        \varepsilon\leq\frac{c^2\eta}{1024},\qquad
+        \xi\sqrt{\max\{L-1,0\}D^2}\leq\frac{c\eta}{48},\qquad \xi>0.
+    \]
+    Conjugate $K$ to the full-interval coordinates, apply it to $S$, choose the
+    standard orthonormal basis of this actual image, and collectively trim that
+    basis at threshold $\xi$. The native image of the resulting actual space
+    is close to the same $G$ with error at most
+    \[
+        (1-c/4)\delta+c\eta/8.
+    \]
+    Its dimension does not exceed $\dim S$. It has at most $\dim S$ recorded
+    spanning vectors, each with internal Schmidt rank at most $\dim S/\xi^2$.
+    This statement is an auxiliary with explicit normalized-filter premises;
+    it does not supply the physical filter or the complete algorithm.
 \end{lemma}
 \begin{proof}\leanok
-\uses{lem:full_interval_viability,lem:alvv-interval-reference-weighted}
-The full-interval coordinate isometry identifies the literal image with
-$K(S)$ and leaves the full global target fixed up to this same isometry.
-Apply sharp normalized error reduction followed by the weighted-reference
-collective trimming estimate with $\theta=c/16$. The stated budgets give
-the displayed stable recurrence. Linear images and the span of the actual
-trimmed basis do not increase dimension; the collective trimming theorem
-gives the recorded-vector rank bound.
+    \uses{lem:full_interval_viability,lem:alvv-interval-reference-weighted}
+    The full-interval coordinate isometry identifies the literal image with
+    $K(S)$ and leaves the full global target fixed up to this same isometry.
+    Apply sharp normalized error reduction followed by the weighted-reference
+    collective trimming estimate with $\theta=c/16$. The stated budgets give
+    the displayed stable recurrence. Linear images and the span of the actual
+    trimmed basis do not increase dimension; the collective trimming theorem
+    gives the recorded-vector rank bound.
 \end{proof}
 
 
@@ -1347,18 +1347,18 @@ gives the recorded-vector rank bound.
     $A=\|H\|-\mu$ and $c=\gamma/A$. Fix integers
     $D_{\rm tree},D_{\rm filter}\ge1$ and $\eta>0$, and define
     \begin{align}
-        \rho&=\frac{\eta\gamma}{2A+\eta\gamma},&
-        n&=\left\lceil\frac4c\log\frac1\rho\right\rceil+1,&
-        \varepsilon_{\rm ref}&=\frac{c^2\rho}{32768}.
+        \rho                  & =\frac{\eta\gamma}{2A+\eta\gamma},               &
+        n                     & =\left\lceil\frac4c\log\frac1\rho\right\rceil+1, &
+        \varepsilon_{\rm ref} & =\frac{c^2\rho}{32768}.
         \label{eq:physical_dg_refinement_accuracy}
     \end{align}
     Choose $B\ge1$ with the reference bound
     (\ref{eq:physical_reference_bond}) at accuracy
     $\varepsilon_{\rm ref}$, and set
     \begin{align}
-        b&=r^2B,&D_*&=\max(D_{\rm tree},b),&
-        N_*&=\left\lceil\frac{100D_{\rm filter}^{12}}{c\rho}\right\rceil,&
-        \xi&=\frac1{1000D_*N_*\sqrt{L+1}}.
+        b   & =r^2B,                                                        & D_* & =\max(D_{\rm tree},b), &
+        N_* & =\left\lceil\frac{100D_{\rm filter}^{12}}{c\rho}\right\rceil, &
+        \xi & =\frac1{1000D_*N_*\sqrt{L+1}}.
         \label{eq:physical_dg_refinement_threshold}
     \end{align}
     The reference space $U$, of dimension $r$, and this threshold can be
@@ -1366,8 +1366,8 @@ gives the recorded-vector rank bound.
     $\varepsilon_{\rm ref}$-close, and every vector of $U$ has bond
     dimension at most $b$. Moreover
     \begin{align}
-        0<\xi&\le\frac1{1000D_{\rm tree}\sqrt{L+1}},&
-        \sqrt{Lrb}\,\xi&<\frac{\eta}{10^4D_{\rm filter}^{12}}.
+        0<\xi           & \le\frac1{1000D_{\rm tree}\sqrt{L+1}}, &
+        \sqrt{Lrb}\,\xi & <\frac{\eta}{10^4D_{\rm filter}^{12}}.
         \label{eq:physical_dg_refinement_threshold_bounds}
     \end{align}
     Let the native initial candidate $S_0$ be $3/200$-close to $G$, with
