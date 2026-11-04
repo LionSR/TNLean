@@ -16,6 +16,13 @@ depending on the ground-energy ratio as in the published form of Theorem 1; see
 `docs/paper-gaps/lvv13_runtime_ground_energy.tex` and `docs/paper-gaps/lvv13_cost_model.tex`.
 Combined with the success probability, this is the "probabilistic polynomial time" of
 LVV13, `algo53.tex`, line 657.
+
+**Scope restriction (constant-cut bond):** the step budget `sampledStepCostBound` uses the
+library bound `constantCutBond q 1 1 Δ c` in place of the quantitative AKLV bond, and the
+corrected net exponent `2 (q D')²`; see `docs/paper-gaps/lvv13_constant_bond.tex`.
+
+**Local fix (trimming radius):** the bond-trimming budget uses the corrected quadratic
+radius recorded at <https://sirui-lu.com/QICLean/paper-gaps/lvv13_trimming_radius.pdf>.
 -/
 
 open Matrix Cslib
