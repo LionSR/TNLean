@@ -16,9 +16,9 @@ It supports the separate energy-estimation image in
     with $u-l,r-v\le2\ell$, and integers
     $\ell\ge21$, $D\ge2$, $s\ge1$, $50\ell^2\le D$. Put
     \begin{align}
-       a&=\frac{3}{32D^{12}s^5},&
-       \tau&=\frac{a^2}{2^{20}},&
-       \Delta&=\frac{1}{200000D^{12}}.
+        a      & =\frac{3}{32D^{12}s^5},  &
+        \tau   & =\frac{a^2}{2^{20}},     &
+        \Delta & =\frac{1}{200000D^{12}}.
     \end{align}
     Let $T$ be a specified full-chain space of dimension $\dim G$,
     with $G$ $\tau$-close to $T$. Let $F_1,\ldots,F_N$ be a specified
@@ -33,9 +33,9 @@ It supports the separate energy-estimation image in
     Their actual attained minima $e_P,e_M$ are chosen before $p$ and the
     child spaces. For $e_M-10\le p\le e_M$, define
     \begin{align}
-       R&=P-M+pI+h_{12,768}(M-pI),&
-       \rho&=32e^{-42}+\frac1{64}<\frac1{16}.
-       \label{eq:soft_word_raw_operator}
+        R    & =P-M+pI+h_{12,768}(M-pI),         &
+        \rho & =32e^{-42}+\frac1{64}<\frac1{16}.
+        \label{eq:soft_word_raw_operator}
     \end{align}
     Define $K_{\rm raw}$ by restricting $R$ to one fixed complementary
     configuration. It is Hermitian and $R=K_{\rm raw}\otimes I$.
@@ -50,9 +50,9 @@ It supports the separate energy-estimation image in
     constructed orthonormal eigenbasis, with eigenvalues in decreasing
     order. Its last eigenvalue $\lambda_V$ satisfies
     \begin{align}
-       e_{\rm s}\le\lambda_V\le e_{\rm s}+3,\\
-       e_P-3-\rho\le\lambda_V-3\le e_P.
-       \label{eq:soft_word_raw_energy}
+        e_{\rm s}\le\lambda_V\le e_{\rm s}+3, \\
+        e_P-3-\rho\le\lambda_V-3\le e_P.
+        \label{eq:soft_word_raw_energy}
     \end{align}
     The definition of the estimate $p_V=\lambda_V-3$ does not use the
     unknown scalar $e_{\rm s}$.
@@ -125,19 +125,19 @@ is asserted; see \cite{gap:alvv16_soft_regional_energy_centering}.
     for the original ground space. The actual collar minima $c_L,c_R$
     can be chosen before the child estimates. If
     \[
-       e_{[l,k)}-\frac{49}{16}\le p_1\le e_{[l,k)},\qquad
-       e_{[k,r)}-\frac{49}{16}\le p_2\le e_{[k,r)},
+        e_{[l,k)}-\frac{49}{16}\le p_1\le e_{[l,k)},\qquad
+        e_{[k,r)}-\frac{49}{16}\le p_2\le e_{[k,r)},
     \]
     where each regional minimum is attained, put
     \[
-       p_M=p_1+p_2-c_L-c_R-2.
+        p_M=p_1+p_2-c_L-c_R-2.
     \]
     Then $e_M-10\le p_M\le e_M$. Form the same raw soft operator
     and its actual compression on the same one-word child image as
     in~(\ref{eq:soft_word_raw_operator}). Its least compressed eigenvalue
     $\lambda$ determines
     \[
-       p=\lambda-3,\qquad e_P-\frac{49}{16}\le p\le e_P.
+        p=\lambda-3,\qquad e_P-\frac{49}{16}\le p\le e_P.
     \]
     An actual complete orthonormal eigenbasis of the compression, with
     eigenvalues in decreasing order, is constructed as part of this assertion.
@@ -146,9 +146,9 @@ is asserted; see \cite{gap:alvv16_soft_regional_energy_centering}.
     \uses{lem:soft_same_word_compressed_energy,lem:regional_central_energy_estimate,thm:actual_adjacent_interval_merge}
     The single connecting bond gives
     $e_{[l,k)}+e_{[k,r)}\le e_P\le
-    e_{[l,k)}+e_{[k,r)}+1$. Consequently
+        e_{[l,k)}+e_{[k,r)}+1$. Consequently
     \[
-       e_P-\frac{57}{8}\le p_1+p_2\le e_P.
+        e_P-\frac{57}{8}\le p_1+p_2\le e_P.
     \]
     Since $57/8\le8$, subtracting the two actual collar minima and two
     gives the stated middle center. Apply the same-family compression
@@ -202,7 +202,7 @@ running-time conclusion, remain.
     and the retained-space tree. A realized node update consists of attained
     collar minima $c_L,c_R$, a valid middle center
     \begin{align}
-       p_M=p_1+p_2-c_L-c_R-2\in[e_M-10,e_M],
+        p_M=p_1+p_2-c_L-c_R-2\in[e_M-10,e_M],
     \end{align}
     and the actual raw-compression update $p=\lambda_V-3$ using the
     specified word family and actual child spaces.
@@ -210,7 +210,7 @@ running-time conclusion, remain.
     A balanced regional energy assignment is one function $(l,r)\mapsto p_{l,r}$
     with the following properties. For every valid interval,
     \begin{align}
-       e_{[l,r)}-\frac{49}{16}\le p_{l,r}\le e_{[l,r)}.
+        e_{[l,r)}-\frac{49}{16}\le p_{l,r}\le e_{[l,r)}.
     \end{align}
     If $r-l\le4\ell$, then $p_{l,r}=e_{[l,r)}$ and this minimum is
     attained by a normalized eigenvector with positive spectral shift.
@@ -233,7 +233,7 @@ running-time conclusion, remain.
 \end{lemma}
 \begin{proof}\leanok
     \uses{def:soft_word_energy_update,def:balanced_regional_energy_assignment,
-      thm:regional_energy_node_relation_assignment,thm:actual_adjacent_interval_merge}
+        thm:regional_energy_node_relation_assignment,thm:actual_adjacent_interval_merge}
     Recurse on the interval length. At a short leaf, choose an actual
     attained minimum of its original regional Hamiltonian. At a long node,
     first compute the two shorter child estimates. Their certified errors
@@ -312,7 +312,7 @@ energy-power count, or prove a running-time bound.
 
     There is one scalar function $E$ with
     \begin{align}
-       e_J-\frac{49}{16}\le E(J)\le e_J
+        e_J-\frac{49}{16}\le E(J)\le e_J
     \end{align}
     at the root and each of its listed internal intervals. At an
     actual short root or a short child of a listed interval, $E$
