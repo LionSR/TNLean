@@ -21,6 +21,11 @@ programs, in the cost model of the query type (`docs/paper-gaps/lvv13_cost_model
 documented scope of the ground-energy ratio
 (`docs/paper-gaps/lvv13_runtime_ground_energy.tex`).
 
+**Scope restriction (cost model):** the bounds are on the declared oracle cost
+`FreeM.cost o queryCost`, not on a proved running time of an implementation: each query is
+charged a declared polynomial cost in the dimensions of its arguments, arithmetic is exact, and
+nothing is proved about how a query is answered; see `docs/paper-gaps/lvv13_cost_model.tex`.
+
 Source: LVV13, arXiv:1307.5143v1, `algo53.tex`, lines 213--219 and 652--678.
 -/
 
