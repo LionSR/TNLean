@@ -1921,13 +1921,61 @@ argument below.
     phase condition if and only if the prescribed factor systems determine
     the same cohomology class. This is the injective, exact-symmetry scope
     of the construction in \cite[Section~II.F.2]{Schuch2011Phases}.
-    The comparison with arbitrary scalar-character original endpoints
-    remains separate \cite{gap:spc11_spt_interpolation_upper_range}.
+    Endpoints whose symmetry carries a scalar character are treated in
+    Corollary~\ref{cor:spt_exact_phase_injective_character_classification}
+    \cite{gap:spc11_spt_interpolation_upper_range}.
 \end{theorem}
 \begin{proof}\leanok
     The forward construction for cohomologous virtual actions gives the
     physical phase condition. The converse is
     Lemma~\ref{cor:spt_exact_phase_cohomology_obstruction}.
+\end{proof}
+
+\begin{lemma}[Endpoint character changes preserve the exact MPS gapped phase]
+    \label{lem:spt_exact_phase_endpoint_character_change}
+    \lean{MPSTensor.IsSameExactMPSGappedPhase.of_smul_left}
+    \leanok
+    \uses{def:spt_exact_mps_gapped_phase}
+    Let $\chi$ be a unit-modulus character of $G$. If $A_0,A_1$ satisfy the
+    independent exact MPS gapped phase condition for the physical actions
+    $U^0,U^1$, they satisfy it for $\chi(g)U^0_g$ and $U^1_g$.
+\end{lemma}
+\begin{proof}\leanok
+    The phase condition allows a unit-modulus character at each endpoint
+    inclusion. After blocking $k$ sites, the $k$-fold tensor power of
+    $\chi(g)U^0_g$ is $\chi(g)^kU^{0\otimes k}_g$. Multiplying the first
+    endpoint character by $\chi^{-k}$ therefore keeps the same blocking,
+    inclusions, interaction path and exact MPS realization.
+\end{proof}
+
+\begin{corollary}[Classification for injective endpoints with a symmetry character]
+    \label{cor:spt_exact_phase_injective_character_classification}
+    \lean{MPSTensor.isSameExactMPSGappedPhase_iff_cohomologous_of_character}
+    \leanok
+    \uses{thm:spt_exact_phase_injective_classification,
+        lem:spt_exact_phase_endpoint_character_change}
+    Let $A_0,A_1$ be one-site injective tensors of positive bond dimensions,
+    let $\chi_0,\chi_1$ be unit-modulus characters of $G$, and let
+    $V^0,V^1$ be virtual projective representations with
+    \begin{align}
+        \sum_j\bigl(U^p_g\bigr)_{ij}A_p^j
+         & =\chi_p(g)\,V^p_{g^{-1}}A_p^i\bigl(V^p_{g^{-1}}\bigr)^{-1},
+        \qquad p=0,1,
+        \notag
+    \end{align}
+    for all $g$ and $i$, the tensor form of the symmetry relation with a
+    character in \cite[Appendix~B]{Schuch2011Phases}. They satisfy the independent
+    exact MPS gapped phase condition for $U^0,U^1$ if and only if the factor
+    systems of $V^0$ and $V^1$ determine the same cohomology class.
+\end{corollary}
+\begin{proof}\leanok
+    Following \cite[Section~II.C.2 and Appendix~B]{Schuch2011Phases},
+    replace $U^p_g$ by the phase gauge $\chi_p(g)^{-1}U^p_g$. The virtual
+    covariance then holds without a character, and
+    Lemma~\ref{lem:spt_exact_phase_endpoint_character_change}, applied at
+    both endpoints, shows that the phase condition is the same for the two
+    gauges. Theorem~\ref{thm:spt_exact_phase_injective_classification}
+    concludes.
 \end{proof}
 
 \begin{lemma}[The virtual class of an exact ground-state path under a transfer bound]
