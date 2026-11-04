@@ -296,37 +296,34 @@ chain length, in place of the printed linear one~\cite{gap:lvv13_trimming_radius
     Since $48L\ge1$, increasing the exponent preserves the inequality.
 \end{proof}
 
-\begin{lemma}[Size trimming followed by named bond trimming]
+\begin{lemma}[Size trimming followed by bond trimming]
     \label{thm:lvv_size_trimmed_family_bond_trim_set}
-    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.exists_size_trimmed_family_bondTrimSet_polynomial}
+    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.isViable_bondTrimSet_sizeTrimmingSelection}
     \leanok
-    \uses{def:chain_model,def:lvv_viable_mps,def:lvv_bond_trimmed_family}
+    \uses{def:chain_model,def:lvv_viable_mps,def:lvv_bond_trimmed_family,
+        def:lvv_size_trimming_selection}
     Let $L\ge1$, $q\ge2$, $i\le L$, and $\Delta>0$. Fix a range-one chain
     Hamiltonian with positive semidefinite terms of norm at most one,
-    and a finite left family $S$ whose members have bond dimension at
-    most $\max\{1,b\}$. Use $c,D,p,A,C$ from
-    Lemma~\ref{thm:lvv_size_trimmed_family_polynomial}, and put
+    and a finite left family $S$. Use $c$ from
+    Definition~\ref{def:lvv_size_trimming_selection}, and put
     $m=(48L)^2r(L)$, with $r(L)$ from
-    Lemma~\ref{lem:lvv_bond_trimming_reference}. There is a finite left
-    family $T_0$, chosen before every ground-state energy $E_0$ and ground
-    vector $\Gamma$, with $|T_0|\le CL^p$ and $T_0$ contained in the span
-    of $S$, such that $(i,c/L)$-viability of $S$ for a normalized ground
-    vector of energy $E_0$ and gap at least $\Delta$ implies
-    $(i,1/2)$-viability of the trimmed family $\mathcal T_m(T_0)$ of
-    Definition~\ref{def:lvv_bond_trimmed_family}, whose members are the
-    independent trimmings of the members of $T_0$.
+    Lemma~\ref{lem:lvv_bond_trimming_reference}. Let $T_0$ be the
+    size-trimming selection of $S$. For every normalized ground vector
+    $\Gamma$ of energy $E_0$ and gap at least $\Delta$, $(i,c/L)$-viability
+    of $S$ implies $(i,1/2)$-viability of the trimmed family
+    $\mathcal T_m(T_0)$ of Definition~\ref{def:lvv_bond_trimmed_family},
+    whose members are the independent trimmings of the members of $T_0$. The
+    trimmed family is a function of $H$, $\Delta$ and $S$, fixed before every
+    ground pair.
     This is~\cite[Claim~2.10, source lines 549--559]{Landau2015Polynomial}
-    for the size-trimming family of
-    Lemma~\ref{thm:lvv_size_trimmed_family_polynomial}, with the bond
+    for the size-trimming selection, with the bond
     $m=(48L)^2r(L)$ in place of the printed $48L\,r(L)$.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:lvv_size_trimmed_family_polynomial,
+    \uses{thm:lvv_size_trimmed_family,
         lem:lvv_bond_trimming_reference,lem:lvv_bond_trimmed_family_viable}
-    Choose the size-trimming family $T_0$ before $E_0,\Gamma$, retaining its
-    orthonormal right-column witness and its inclusion in the span of $S$.
-    For each admissible ground pair, the size step
+    For each admissible ground pair, Lemma~\ref{thm:lvv_size_trimmed_family}
     supplies a unit $u$, an isometry $W$, all columns of $u$ in $T_0$, and
     overlap at least $11/12$ for $(I\otimes W)u$.
     The reference theorem supplies $v$ of cut rank at most $r(L)$ and
@@ -338,8 +335,10 @@ chain length, in place of the printed linear one~\cite{gap:lvv13_trimming_radius
     \label{thm:lvv_size_bond_trimmed_family}
     \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.exists_size_bond_trimmed_family_polynomial}
     \leanok
-    \uses{thm:lvv_size_trimmed_family_bond_trim_set}
+    \uses{thm:lvv_size_trimmed_family_bond_trim_set,
+        thm:lvv_size_trimmed_family_polynomial}
     In the setting of Lemma~\ref{thm:lvv_size_trimmed_family_bond_trim_set},
+    with $C$ and $p$ from Lemma~\ref{thm:lvv_size_trimmed_family_polynomial},
     there is a finite left family $T$, chosen before every ground-state
     energy $E_0$ and ground vector $\Gamma$, with $|T|\le CL^p$ and every
     member of bond dimension at most $\max\{1,m\}$, such that
@@ -352,7 +351,8 @@ chain length, in place of the printed linear one~\cite{gap:lvv13_trimming_radius
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{lem:lvv_bond_trimming_radius_polynomial}
+    \uses{def:lvv_bond_trimmed_family,thm:lvv_size_trimmed_family_polynomial}
     Take $T=\mathcal T_m(T_0)$. Independent trimming preserves the
-    cardinality bound and gives the stated bond bound.
+    polynomial cardinality bound of the selection and gives the stated bond
+    bound.
 \end{proof}
