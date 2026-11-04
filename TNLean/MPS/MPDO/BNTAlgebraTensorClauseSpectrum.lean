@@ -50,6 +50,8 @@ namespace MPOTensor
 
 namespace BNTAlgebraTensorClause
 
+variable {d D : ℕ}
+
 /-- A source-derived two-site vertical canonical decomposition together with the
 sector relabelling and multiplicity-spectrum equality of Appendix C.4.
 

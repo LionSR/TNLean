@@ -302,6 +302,8 @@ theorem hasIdempotentCoefficientForm_of_blockedRepresentations
 
 namespace HasBNTFusionTensorClause
 
+variable {d D : ℕ}
+
 /-- Two vertical decompositions related by a unitary sector equivalence and a
 positive active-sector fusion decomposition determine the BNT fusion tensor
 clause.
