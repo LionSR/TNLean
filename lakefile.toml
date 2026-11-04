@@ -35,7 +35,6 @@ rev = "acab13b776722f5efa897c780d6fa1a3069d709e"
 [[require]]
 name = "qiclean"
 git = "https://github.com/LionSR/QICLean.git"
-# Draft-only candidate; replace with the validated immutable semver release tag before merge.
 rev = "c457682404aa548b4acd16ac27be5d3835e68892"
 
 [[lean_lib]]
