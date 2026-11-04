@@ -11597,6 +11597,19 @@ removed after the dependency audit exposed it.
   `PhysicalDGSampledNode.lean` use `Or.imp_right` and monotonicity of addition.
   These existing lemmas suffice; no new tactic is introduced.
 
+### Buffered low-energy comparisons — existing lemmas reused (2026-11-03)
+
+- **Seen:** `PhysicalLowEnergyCloseness.lean` and `PhysicalLowEnergyFamily.lean`
+  bound the spectral-window count from the same physical residual.
+- **Reuse:** Both apply QICLean's `Real.spectral_window_budget_bound` and
+  `Matrix.IsHermitian.toEuclideanCLM_eigenvectorBasis`. The enlarged regional
+  family uses the existing `collar_card_le_square_at_square_degree`, also
+  used by the gapped construction.
+- **Decision:** These shared estimates already have mathematical lemmas.
+  No new tactic or repeated scalar window-count proof is introduced. The
+  two original-window comparisons use `Submodule.IsCloseTo.trans` and keep
+  their separate additive errors. The repository pattern scan was run.
+
 ### Weighted soft remainders and finite operator sums — promoted (2026-11-02)
 
 - **Pattern:** Apply a scalar remainder through an exponential of the same

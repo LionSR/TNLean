@@ -717,12 +717,16 @@
       "theorems": [
         "thm:alvv_ff_chain_replacement",
         "thm:alvv_ff_corrected_rank",
+        "thm:physical_low_energy_interval_family",
         "thm:physical_soft_windows_and_mpo"
       ],
-      "corollaries": [],
+      "corollaries": [
+        "cor:physical_original_low_energy_interval_family"
+      ],
       "notes": {
         "thm:alvv_ff_chain_replacement": "ALVV Theorem 5.14 with the corrected rank bound: regional replacement of a frustration-free chain",
         "thm:alvv_ff_corrected_rank": "Corrected regional rank bound d^2+3, replacing the false unrestricted claim of ALVV Theorem 5.14(2)",
+        "thm:physical_low_energy_interval_family": "A physical low-energy improving family with an explicit count on every prescribed interval, without a gap assumption",
         "thm:physical_soft_windows_and_mpo": "One physical soft truncation has both low-energy spectral comparisons and constructed operator tensors at prescribed norm accuracy"
       }
     },

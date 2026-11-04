@@ -35,7 +35,8 @@ rev = "acab13b776722f5efa897c780d6fa1a3069d709e"
 [[require]]
 name = "qiclean"
 git = "https://github.com/LionSR/QICLean.git"
-rev = "c457682404aa548b4acd16ac27be5d3835e68892"
+# Includes QICLean #1020, the nested-cutoff viability estimates.
+rev = "8af1f77d468fed30b84644f923b8ae319a2bc432"
 
 [[lean_lib]]
 name = "TNLean"

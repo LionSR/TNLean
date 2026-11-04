@@ -1,0 +1,58 @@
+\section{Uniform low-energy parameters at the source buffer scale}
+
+\begin{lemma}[A uniform bound for the physical truncation threshold]
+    \label{lem:low_energy_threshold_bound}
+    \lean{Real.low_energy_threshold_le}
+    \leanok
+    Fix $\eta_{\mathrm{LD}}>0$, and let $0\le\eta_1\le\eta_{\mathrm{LD}}$
+    and $w>0$. Set $g=\min\{w,1\}$, $C_*=288e^{11/8}$, and
+    \begin{align}
+        T & =21+\eta_{\mathrm{LD}}+
+        8\log\bigl(400C_*(6+\eta_{\mathrm{LD}})\bigr),\notag \\
+        t & =21+\eta_1+8\log\left(
+        \frac{C_*}{\min\{1,w^2/[400(6+\eta_1)]\}}\right).
+        \label{eq:ld_uniform_threshold}
+    \end{align}
+    Then $t\le T+16\log(1/g)$.
+\end{lemma}
+\begin{proof}\leanok
+    The positive number $z_0=g^2/[400(6+\eta_{\mathrm{LD}})]$ is at most
+    both $1$ and $w^2/[400(6+\eta_1)]$. Bound the denominator in
+    (\ref{eq:ld_uniform_threshold}) below by $z_0$ and expand the logarithm.
+\end{proof}
+
+\begin{lemma}[A strict finite count-contraction tradeoff]
+    \label{lem:low_energy_scalar_parameters}
+    \lean{Real.exists_low_energy_scalar_parameters}
+    \leanok
+    For each fixed $\eta_{\mathrm{LD}}>0$ there is a constant $A\ge21$
+    with the following property. Let $q\ge2$, $w>0$,
+    $3w<\eta_1\le\eta_{\mathrm{LD}}$, and $0\le E_0\le4$.
+    Let $t$ be given by (\ref{eq:ld_uniform_threshold}), with
+    $19+\eta_1\le t$. Put
+    \begin{align}
+        g      & =\min\{w,1\},                              & u & =1+\log q+\log(1/g),\notag \\
+        \ell   & =\left\lceil Au^2/g\right\rceil,           &
+        D      & =(q\ell^2)^{20\ell},\notag                                                  \\
+        R_0    & =3t+4\ell-(E_0+\eta_1-2w),                 &
+        \Delta & =\left(2e^{-2\ell^2\sqrt{w/R_0}}\right)^2.
+        \label{eq:ld_finite_parameters}
+    \end{align}
+    Then $\ell\ge21$, $R_0>0$, $\Delta>0$, and
+    \begin{align}
+        \log D       & \le
+        \frac{22(A+1)[6+2\log(A+1)]}{g}\,u^3,\notag \\
+        D^{12}\Delta & <10^{-5}.
+        \label{eq:ld_strict_tradeoff}
+    \end{align}
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:low_energy_threshold_bound}
+    Set $C_H=(3T+52)/2$ and use the joint scalar parameter estimate.
+    The selected scale satisfies $\ell\ge\log(1/g)$, hence
+    $R_0\le3t+4\ell\le2C_H\ell$. Moreover $w\ge g\ge4g/5$, so the
+    physical contraction is no larger than the scalar estimate's
+    contraction. Its allowed count is $(q\ell^2)^{22\ell}$, which is
+    strictly larger than $D$. Multiplication by the positive contraction
+    therefore makes its non-strict numerical tradeoff strict for $D$.
+\end{proof}
