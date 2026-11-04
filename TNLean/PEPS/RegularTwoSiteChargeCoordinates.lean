@@ -88,10 +88,7 @@ theorem regularTwoSiteChargeColumn_apply (i : ι) (j : κ) (χ : G → ℂ) (p :
   simp only [regularTwoSiteChargeColumn, regularLegProjector_apply,
     Finset.mul_sum, Finset.sum_mul]
   rw [Fintype.sum_reverse_three]
-  apply Finset.sum_congr rfl
-  intro x _
-  apply Finset.sum_congr rfl
-  intro y _
+  refine Finset.sum_congr₂ fun x _ y _ ↦ ?_
   simp only [hs, ht, ite_and]
   have hrow (k : G) : α.1 i = x * k ↔ k = x⁻¹ * α.1 i := by
     constructor

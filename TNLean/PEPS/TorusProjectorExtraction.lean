@@ -8,6 +8,7 @@ import TNLean.PEPS.RegularTorusCompatibility
 import TNLean.Algebra.CharacterProjectorTwirl
 import Mathlib.Data.Matrix.Basis
 import Mathlib.LinearAlgebra.Finsupp.LinearCombination
+import TNLean.Algebra.FinSumPermutation
 
 /-!
 # Extraction of the two closure operators from a torus projector state
@@ -57,10 +58,7 @@ theorem matrixLinearFunctional_eq_sum (f : Matrix V V ℂ →ₗ[ℂ] ℂ)
     f M = f (∑ i, ∑ j, M i j • Matrix.single i j 1) := congrArg f h
     _ = _ := by
       simp only [map_sum, map_smul, smul_eq_mul]
-      apply Finset.sum_congr rfl
-      intro i _
-      apply Finset.sum_congr rfl
-      intro j _
+      refine Finset.sum_congr₂ fun i _ j _ ↦ ?_
       exact mul_comm _ _
 
 /-- The physical output contraction factors into one functional per oriented

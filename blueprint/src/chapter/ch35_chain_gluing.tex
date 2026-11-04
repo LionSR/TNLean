@@ -111,6 +111,26 @@ volume~\cite[``Gluing'', ``The leading eigenvector of a near-optimal left state'
     three-way coordinates.
 \end{proof}
 
+\begin{definition}[The chosen trace-norm net]
+    \label{def:chain_boundary_trace_norm_net}
+    \lean{TNLean.MPS.AreaLaw.rectangularTraceNormNet,
+        TNLean.MPS.AreaLaw.card_rectangularTraceNormNet_le,
+        TNLean.MPS.AreaLaw.exists_mem_rectangularTraceNormNet,
+        TNLean.MPS.AreaLaw.card_boundary_rectangularTraceNormNet_le}
+    \leanok
+    \uses{def:chain_gluing_left_coordinates}
+    For a finite index set $K$ of size $c$ and a radius $\eta>0$, fix once a
+    finite set $\mathcal N_\eta\subseteq\mathbb C^{K\times K}$ with
+    $|\mathcal N_\eta|\le(2\lceil c^2/\eta\rceil+1)^{2c^2}$ such that every
+    matrix $Y$ with $\|Y\|_1\le1$ admits an $X\in\mathcal N_\eta$ with
+    $\|Y-X\|_1\le\eta$, as supplied by the trace-norm net theorem of the
+    companion volume~\cite[``A trace-norm net'']{QICLean2026Blueprint}; for
+    $\eta\le0$ take the empty set. On the boundary space
+    $K=\mathcal C_{B\setminus A}\times\{0,\ldots,m-1\}$ of a bond of
+    dimension $m\le D$, with $q\ge1$, the chosen net has at most
+    $(2\lceil(qD)^2/\eta\rceil+1)^{2(qD)^2}$ points.
+\end{definition}
+
 \begin{lemma}[A trace-norm net on a chain boundary]
     \label{thm:chain_boundary_trace_norm_net}
     \lean{TNLean.MPS.AreaLaw.exists_finset_boundary_rectangularTraceNorm_net}
@@ -129,12 +149,13 @@ volume~\cite[``Gluing'', ``The leading eigenvector of a near-optimal left state'
     $X\in\mathcal N$ with $\|Y-X\|_1\le\eta$.
     This is the boundary-space specialization of
     \cite[Lemma~2.4, source lines 451--460]{Landau2015Polynomial}, with the
-    corrected grid and quadratic exponent recorded in~\cite{gap:lvv13_trace_norm_net}.
+    corrected grid and quadratic exponent recorded in~\cite{gap:lvv13_trace_norm_net};
+    the chosen net of Definition~\ref{def:chain_boundary_trace_norm_net} is one such set.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:chain_gluing_site_dimension}
-    Lemma~\ref{thm:chain_gluing_site_dimension} gives
+    \uses{thm:chain_gluing_site_dimension,def:chain_boundary_trace_norm_net}
+    Take the chosen net. Lemma~\ref{thm:chain_gluing_site_dimension} gives
     $c=|K|=|\mathcal C_{B\setminus A}|m\le qD$.
     Apply the trace-norm net theorem of the companion
     volume~\cite[``A trace-norm net'']{QICLean2026Blueprint} to matrices of size $c$.

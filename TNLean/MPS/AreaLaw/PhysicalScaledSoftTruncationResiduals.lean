@@ -14,7 +14,7 @@ the corresponding centered original ground energies then agree as well.
 Thus both estimates apply to one literal soft Hamiltonian, with its own
 actual eigenbasis and ground energy.
 
-**Scope restriction (one interval and independent bounded scale):** The positive scale
+**Local fix (corrected residual comparison):** The positive scale
 is at most four times the positive order. This is a
 corrected auxiliary to ALVV, arXiv:1602.08828v2, `def:soft-trunc` and
 `lem:exp-approx`, lines 1178–1255. The reverse estimate retains its explicit

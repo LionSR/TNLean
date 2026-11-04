@@ -1,0 +1,35 @@
+<!--
+  Campaign-specific introduction for the board of Arad, Kitaev, Landau and
+  Vazirani, arXiv:1301.1162v1: the general area law (Theorem 6.2) and the
+  sub-polynomial matrix product state approximation (Section 7). The generic
+  board fills every `.thm[data-target]` card's <dl class="tdl"> with the status
+  of its target issue.
+-->
+<section>
+  <header>
+    <h2>The two results</h2>
+    <p>A chain of <i>n</i> sites carries a quantum system of dimension <i>d</i> at each site. The Hamiltonian <i>H</i> = ∑<sub><i>i</i></sub> <i>H<sub>i</sub></i> is a sum of nearest-neighbour terms with 0 ≤ <i>H<sub>i</sub></i> ≤ 1, and its ground state Γ is unique, with ground energy ε<sub>0</sub> and gap ε ≤ 1 to the next eigenvalue. Hastings proved that the entanglement entropy of Γ across any cut is bounded independently of <i>n</i>, by e<sup><i>O</i>(log <i>d</i>/ε)</sup>. Arad, Kitaev, Landau and Vazirani improve the bound exponentially and show that Γ is close to a matrix product state whose bond dimension grows more slowly than any power of <i>n</i>.</p>
+  </header>
+  <div class="thms">
+    <article class="thm" data-target="9839">
+      <div class="eyebrow">Arad, Kitaev, Landau and Vazirani 2013 · Theorems 4.3 and 6.2</div>
+      <h3>An area law of order log³ <i>d</i>/ε</h3>
+      <p class="stmt">For every cut of the chain, the entanglement entropy of Γ across the cut satisfies</p>
+      <div class="formula"><math display="block"><mi>S</mi><mo>≤</mo><mi>O</mi><mrow><mo>(</mo><mfrac><mrow><msup><mi>log</mi><mn>3</mn></msup><mi>d</mi></mrow><mi>ε</mi></mfrac><mo>)</mo></mrow></math></div>
+      <p class="defs">Theorem 4.3 states this for frustration-free chains, whose terms all annihilate Γ, and Theorem 6.2 for all chains. In Lean both are proved with the bound <i>C</i>(1 + log <i>d</i> + log(1/ε))<sup>3</sup>/ε at every cut, for one universal constant <i>C</i>; for frustrated chains ε is the distance from ε<sub>0</sub> to the next eigenvalue. The printed form, without the logarithm of 1/ε, is not yet derived; the introduction of the paper writes it with a tilde, which hides logarithmic factors.</p>
+      <p class="why">The dependence on the gap is exponentially better than Hastings' and may be optimal up to logarithmic factors. The proof needs neither the Lieb–Robinson bound nor the detectability lemma: a Chebyshev polynomial of a truncated Hamiltonian does the work of both.</p>
+      <dl class="tdl"></dl>
+      <button class="pillbtn trace" type="button">Trace its prerequisites on the map</button>
+    </article>
+    <article class="thm" data-target="9840">
+      <div class="eyebrow">Arad, Kitaev, Landau and Vazirani 2013 · Sections 5 and 7</div>
+      <h3>Matrix product states of sub-polynomial bond dimension</h3>
+      <p class="stmt">For accuracy 1/poly(<i>n</i>), Γ is approximated by a matrix product state of bond dimension</p>
+      <div class="formula"><math display="block"><mi>B</mi><mo>=</mo><msup><mi>e</mi><mrow><mover><mi>O</mi><mo>~</mo></mover><mo stretchy="false">(</mo><msup><mi>log</mi><mrow><mn>3</mn><mo>/</mo><mn>4</mn></mrow></msup><mi>n</mi><mo>/</mo><msup><mi>ε</mi><mrow><mn>1</mn><mo>/</mo><mn>4</mn></mrow></msup><mo stretchy="false">)</mo></mrow></msup></math></div>
+      <p class="defs">For frustration-free chains the paper prints the smaller <i>B</i> = exp(<i>O</i>(ε<sup>−1/3</sup> log<sup>2/3</sup> <i>n</i>)). The general bound is proved in Lean, at every accuracy δ, with log <i>B</i> ≤ <i>C</i>[<i>u</i><sup>3</sup>/ε + (<i>z</i><sup>3</sup>/ε)<sup>1/4</sup>(<i>u</i> + log(<i>z</i> + 1))], where <i>u</i> = 1 + log <i>d</i> + log(1/ε) and <i>z</i> = log(2048(<i>n</i> + 1)/δ<sup>2</sup>). The frustration-free bound is open. The paper also deduces that approximating the ground energy of such chains is not NP-hard unless 3-SAT has sub-exponential algorithms; complexity statements are outside the formalization.</p>
+      <p class="why">A bond dimension smaller than any power of <i>n</i> means that the ground state can be found by a search over matrix product states in sub-exponential time, before a polynomial-time algorithm was known.</p>
+      <dl class="tdl"></dl>
+      <button class="pillbtn trace" type="button">Trace its prerequisites on the map</button>
+    </article>
+  </div>
+</section>

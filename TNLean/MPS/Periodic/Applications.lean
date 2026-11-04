@@ -10,6 +10,7 @@ import QICLean.Kraus.Transfer
 import TNLean.MPS.Core.PhysicalRotation
 import TNLean.MPS.FundamentalTheorem.Basic
 import TNLean.MPS.Periodic.Defs
+import TNLean.Algebra.FinSumPermutation
 
 /-!
 Copyright (c) 2026 TNLean contributors. All rights reserved.
@@ -83,10 +84,7 @@ theorem mixedMapLM_rotatePhysical {D₁ D₂ : ℕ}
         u i j • A j * X * starRingEnd ℂ (u i k) • (B k)ᴴ) =
       ∑ k : Fin d, ∑ i : Fin d,
         (u i j * starRingEnd ℂ (u i k)) • (A j * X * (B k)ᴴ) := by
-    apply Finset.sum_congr rfl
-    intro k _
-    apply Finset.sum_congr rfl
-    intro i _
+    refine Finset.sum_congr₂ fun k _ i _ ↦ ?_
     ext a b
     simp only [Matrix.smul_mul, Matrix.mul_smul, Matrix.smul_apply, smul_eq_mul]
     ring
