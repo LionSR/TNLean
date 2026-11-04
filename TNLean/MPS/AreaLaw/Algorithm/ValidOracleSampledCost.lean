@@ -26,6 +26,14 @@ documented scope of the ground-energy ratio
 charged a declared polynomial cost in the dimensions of its arguments, arithmetic is exact, and
 nothing is proved about how a query is answered; see `docs/paper-gaps/lvv13_cost_model.tex`.
 
+**Scope restriction (quantitative constants):** the step budgets use the library constant-cut
+bond `constantCutBond`, the corrected net exponent and the size-trimming budget built from them,
+not the printed quantitative bounds; see `docs/paper-gaps/lvv13_constant_bond.tex`.
+
+**Local fix (trimming radius):** the bond-trimming budget uses the corrected quadratic radius
+`bondTrimmingRadius` recorded at
+<https://sirui-lu.com/QICLean/paper-gaps/lvv13_trimming_radius.pdf>.
+
 Source: LVV13, arXiv:1307.5143v1, `algo53.tex`, lines 213--219 and 652--678.
 -/
 
