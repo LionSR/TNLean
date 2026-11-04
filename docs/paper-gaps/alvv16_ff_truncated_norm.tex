@@ -68,9 +68,12 @@ the theorem statement, which is unaffected.
 
 \paragraph{Formalized statement.}
 \leanid{TNLean.MPS.AreaLaw.ALVV.exists_frustrationFree_improving_family}
-proves the existence part of Theorem~5.15 with these bounds. It needs neither
-uniqueness of the ground state nor frustration freeness, and it does not assume
-that the terms are projections: each term is replaced by its range projection,
+proves the existence part of Theorem~5.15 with these bounds. It does not need
+uniqueness of the ground state. It does not assume frustration freeness either,
+but its target is the kernel of the Hamiltonian, which is zero when the least
+eigenvalue is positive; the conclusion is a statement about the ground space
+only for chains of zero ground energy, that is, frustration-free chains. It does
+not assume that the terms are projections: each term is replaced by its range projection,
 as at line 1457 of the source. The improvement is stated for viability error
 $\delta<1$, the boundary convention already used for Theorem~4.7. The running
 time is not formalized.
