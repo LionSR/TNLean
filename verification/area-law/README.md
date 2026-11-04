@@ -19,6 +19,8 @@ and entropy with those used by that theorem. It does not import `Challenge`.
 The definitions are repeated in the solution so that the two files elaborate
 independently; Comparator checks that these definitions agree. The proof hole
 in `Challenge.lean` is intentional; the solution has none.
+The Lake library lists both files as explicit module targets, with no shared
+root imports, so library-wide declaration checks keep their environments separate.
 
 `comparator.json` requests equality of the theorem statements, including all
 definitions they use, and allows only `propext`, `Quot.sound`, and
