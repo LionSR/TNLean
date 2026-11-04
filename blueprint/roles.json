@@ -1181,19 +1181,38 @@
     "ch:mpu_cocycles": {
       "theorems": [
         "thm:mpug_anomaly_three_cocycle",
-        "thm:mpug_anomaly_obstruction",
         "thm:mpug_h3_group_cohomology"
       ],
       "corollaries": [
-        "cor:mpug_anomaly_class",
-        "cor:mpug_domain_wall_string_exchange_printed",
-        "cor:mpug_normalized_source_decomposition_gauges"
+        "cor:mpug_anomaly_class"
       ],
       "notes": {
         "thm:mpug_anomaly_three_cocycle": "The anomaly three-cocycle of a finite-group MPU representation",
-        "thm:mpug_anomaly_obstruction": "An anomaly obstructs invariant normal states",
         "thm:mpug_h3_group_cohomology": "Fusion-gauge classes are degree-three cohomology classes"
       }
+    },
+    "ch:mpu_cocycles_permuted_blocks": {
+      "theorems": [
+        "thm:mpug_anomaly_obstruction"
+      ],
+      "corollaries": [
+        "cor:mpug_domain_wall_string_exchange_printed"
+      ],
+      "notes": {
+        "thm:mpug_anomaly_obstruction": "An anomaly obstructs invariant normal states"
+      }
+    },
+    "ch:mpu_cocycles_gauss_law": {
+      "theorems": [],
+      "corollaries": [
+        "cor:mpug_normalized_source_decomposition_gauges"
+      ],
+      "notes": {}
+    },
+    "ch:mpu_cocycles_l_symbol_classification": {
+      "theorems": [],
+      "corollaries": [],
+      "notes": {}
     },
     "ch:mpo_interpolation": {
       "theorems": [

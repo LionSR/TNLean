@@ -1,0 +1,2468 @@
+\section{Restriction, time reversal, and block independence}
+
+\subsection{Restriction to subgroups}
+
+\begin{definition}[Restriction of a group of matrix product operators]
+    \label{def:mpug_family_restriction}
+    \lean{MPOTensor.GroupFamily.comap,
+        MPOTensor.GroupFamily.FusionData.comap}
+    \leanok
+    \uses{def:mpug_anomaly_three_cochain}
+    For a group homomorphism $f\colon H\to G$ and a family
+    $\{O_g\}_{g\in G}$ as in Definition~\ref{def:mpug_anomaly_three_cochain},
+    the restricted family is $\{O_{f(a)}\}_{a\in H}$. A choice of fusion
+    tensors $(F^<_{g,h},F^>_{g,h})$ of the family restricts to the fusion
+    tensors $(F^<_{f(a),f(b)},F^>_{f(a),f(b)})$ of the restricted family,
+    where the bond space of $O_{f(a)f(b)}$ is identified with that of
+    $O_{f(ab)}$ through the equality $f(a)f(b)=f(ab)$.
+\end{definition}
+
+\begin{lemma}[Anomaly three-cochains of restrictions]
+    \label{thm:mpug_family_restriction_omega}
+    \lean{MPOTensor.GroupFamily.IsNormalRepresentation.comap,
+        MPOTensor.GroupFamily.castMat_comap,
+        MPOTensor.GroupFamily.ext_of_heq,
+        MPOTensor.GroupFamily.FusionData.comap_leftV,
+        MPOTensor.GroupFamily.FusionData.comap_rightV,
+        MPOTensor.GroupFamily.FusionData.omega_comap,
+        MPOTensor.GroupFamily.FusionData.cyclicInvariant_omega_map,
+        MPOTensor.GroupFamily.FusionData.cyclicInvariant_omega_map_of_comap_eq}
+    \leanok
+    \uses{def:mpug_family_restriction, def:mpug_cochain_restriction,
+        def:mpug_cyclic_invariant}
+    The restriction of a family satisfying the hypotheses of
+    Definition~\ref{def:mpug_anomaly_three_cochain} along $f\colon H\to G$
+    satisfies them for $H$, and the anomaly three-cochain of the restricted
+    fusion tensors is $f^*\omega$. Consequently, if $a\in H$ and $a^n=e$,
+    then for every choice of fusion tensors of the restricted family, with
+    anomaly three-cochain $\omega_H$,
+    \begin{align}
+        I_{f(a),n}(\omega) & =I_{a,n}(\omega_H).
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:mpug_family_restriction, thm:mpug_anomaly_three_cochain_spec,
+        thm:mpug_anomaly_three_cocycle_gauge, thm:mpug_cyclic_invariant_gauge}
+    The operator law of the restricted family is that of the family at the
+    elements $f(a)$, $f(b)$ and $f(ab)=f(a)f(b)$. The two fusion trees of the
+    restricted fusion tensors at $(a,b,c)$ are those of the family at
+    $(f(a),f(b),f(c))$, followed by one identification of the bond space of
+    $O_{f(a)f(b)f(c)}$ with that of $O_{f(abc)}$. Left multiplication by this
+    permutation matrix preserves the dressed identity, so
+    Lemma~\ref{thm:mpug_anomaly_three_cochain_spec} gives
+    $\omega_H(a,b,c)=\omega(f(a),f(b),f(c))$ for the restricted fusion
+    tensors. For any other choice of fusion tensors of the restricted family,
+    Lemma~\ref{thm:mpug_anomaly_three_cocycle_gauge} makes the two
+    three-cochains cohomologous, and
+    Lemma~\ref{thm:mpug_cyclic_invariant_gauge} makes their cyclic
+    invariants at $a$ equal. Finally $I_{a,n}(f^*\omega)=I_{f(a),n}(\omega)$
+    because $f(a^k)=f(a)^k$.
+\end{proof}
+
+\begin{lemma}[Values of the anomaly three-cochain from finitely many identities]%
+    \label{thm:mpug_omega_integer_certificate}
+    \lean{MPSTensor.isDressedProportional_complexOfInt,
+        MPSTensor.isDressedProportional_complexOfInt_of_mem,
+        MPOTensor.GroupFamily.FusionData.omega_eq_one_of_leftV_eq_rightV,
+        MPOTensor.GroupFamily.ofBondOne,
+        MPOTensor.GroupFamily.FusionData.ofBondOne,
+        MPOTensor.GroupFamily.FusionData.omega_ofBondOne}
+    \leanok
+    \uses{def:mpug_anomaly_three_cochain}
+    Let $T$ be a tensor with integer letters, $A$ a family of integer
+    matrices, $L$ and $R$ integer matrices, and $z\in\{1,-1\}$. Suppose
+    that $LT^aT^b=A^aLT^b$ for all letters $a,b$ and that $LT^a=zRT^a$ for
+    every letter $a$. Then $LT^{\mathbf w}=zRT^{\mathbf w}$ for every nonempty
+    word $\mathbf w$. It suffices to check these identities on a list of pairs
+    $(T^a,A^a)$ that contains the pair of every letter. In particular, for the
+    anomaly three-cochain of Definition~\ref{def:mpug_anomaly_three_cochain}:
+    if the two fusion trees of a triple coincide, then $\omega$ is one at
+    that triple; and a family of bond-one tensors whose stacked products
+    $O_gO_h$ equal $O_{gh}$ has, with all fusion tensors equal to one, the
+    constant three-cochain one.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:mpug_anomaly_three_cochain, thm:mpug_anomaly_three_cochain_spec}
+    Since $z^2=1$, the identity $LT^a=zRT^a$ gives $RT^a=zLT^a$, and hence
+    $RT^aT^b=zA^aLT^b=A^aRT^b$. Induction on the word gives the dressed
+    identity, and the entrywise image in $\C$ preserves all products. When
+    the two fusion trees coincide, the scalar $1$ satisfies the dressed
+    identity, so Lemma~\ref{thm:mpug_anomaly_three_cochain_spec} gives
+    $\omega=1$. For bond dimension one, both fusion trees are products of
+    one-by-one identity matrices and identifications of one-dimensional
+    spaces, so they coincide.
+\end{proof}
+
+\subsection{Time reversal}
+
+\begin{definition}[Unimodular square root and modulus of a phase]
+    \label{def:mpug_phase_root}
+    \lean{TNLean.Algebra.phaseRoot,
+        TNLean.Algebra.modulusUnit}
+    \leanok
+    For $u\in\C^\times$, let $s_u=e^{i\arg(u)/2}$ be the unimodular square root
+    of the phase of $u$, with $|u|$ viewed as an element of $\C^\times$.
+\end{definition}
+
+\begin{lemma}[Unimodular square roots of phases]
+    \label{thm:mpug_phase_root}
+    \lean{TNLean.Algebra.star_phaseRoot,
+        TNLean.Algebra.phaseRoot_mul_phaseRoot_mul_modulusUnit,
+        TNLean.Algebra.star_eq_self_of_star_eq_ofReal_mul}
+    \leanok
+    \uses{def:mpug_phase_root}
+    For $u\in\C^\times$, $\overline{s_u}=s_u^{-1}$ and $u=s_u^2\,|u|$. If
+    $w\in\C^\times$ and $\overline w=p\,w$ for a positive real number $p$,
+    then $p=1$ and $w$ is real.
+\end{lemma}
+
+\begin{proof}\leanok
+    The first two claims are $\overline{e^{i\theta}}=e^{-i\theta}$ and the
+    polar form $u=|u|e^{i\arg u}$. For the third, taking absolute values in
+    $\overline w=p\,w$ gives $p=1$.
+\end{proof}
+
+\begin{lemma}[Time reversal makes the anomaly real]
+    \label{thm:mpug_time_reversal_real_anomaly}
+    \lean{TNLean.Algebra.ScalarThreeCochain.coboundary_mul,
+        TNLean.Algebra.ScalarThreeCochain.star_fusionGauge,
+        TNLean.Algebra.ScalarThreeCochain.coboundary_modulusUnit_pos,
+        TNLean.Algebra.ScalarThreeCochain.star_fusionGauge_phaseRoot,
+        TNLean.Algebra.ScalarThreeCochain.exists_cohomologousTo_star_eq_self}
+    \leanok
+    \uses{def:mpug_fusion_gauge, def:mpug_cohomologous_to,
+        def:mpug_phase_root}
+    Let $\omega$ be a scalar $3$-cochain and $\beta$ a scalar $2$-cochain with
+    $\beta\mathbin{\triangleright}\omega=\overline\omega$. Then
+    $s\mathbin{\triangleright}\omega$ is real-valued, where
+    $s(g,h)=s_{\beta(g,h)}$ is the unimodular square root of the phase of
+    $\beta(g,h)$ from Definition~\ref{def:mpug_phase_root}. Consequently, a
+    scalar $3$-cochain cohomologous to its complex conjugate is cohomologous
+    to a real-valued one. This is the conclusion
+    of~\cite[Section~4.3]{GarreRubio2023MPOSym} that, when time reversal
+    commutes with a group matrix product operator symmetry, the three-cocycle
+    can be gauge transformed to a real number; no finiteness of $G$ is
+    needed.
+    % Source anchor: arXiv:2203.12563, lines 873--891.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:mpug_fusion_gauge, thm:mpug_phase_root}
+    The coboundary is multiplicative in $\beta$ and commutes with complex
+    conjugation. Writing $\beta=s^2N$ with $N(g,h)=|\beta(g,h)|$ and using
+    $\overline s=s^{-1}$ gives
+    \begin{align}
+        \overline{s\mathbin{\triangleright}\omega}
+         & =s^{-1}\mathbin{\triangleright}\overline\omega
+        =s^{-1}\mathbin{\triangleright}(s^2N\mathbin{\triangleright}\omega)
+        =N\mathbin{\triangleright}(s\mathbin{\triangleright}\omega).
+    \end{align}
+    The values of $dN$ are positive real numbers, so
+    Lemma~\ref{thm:mpug_phase_root} gives $dN=1$ and
+    $\overline{s\mathbin{\triangleright}\omega}
+        =s\mathbin{\triangleright}\omega$. If
+    $\omega=\beta\mathbin{\triangleright}\overline\omega$, conjugating gives
+    $\overline\beta\mathbin{\triangleright}\omega=\overline\omega$, and the
+    first part applies.
+\end{proof}
+
+\begin{lemma}[Time reversal makes the anomaly and the L-symbols jointly real]
+    \label{thm:mpug_time_reversal_real_l_symbols}
+    \lean{TNLean.Algebra.LSymbol.star_gauge,
+        TNLean.Algebra.LSymbol.gauge_modulusUnit_pos,
+        TNLean.Algebra.LSymbol.star_gauge_phaseRoot,
+        TNLean.Algebra.LSymbol.exists_gauge_star_eq_self}
+    \leanok
+    \uses{def:mpug_fusion_gauge, def:mpug_l_gauge, def:mpug_phase_root}
+    Let $\omega$ be a scalar $3$-cochain, $L$ an $L$-symbol, $\beta$ a
+    scalar $2$-cochain and $\gamma$ an action-tensor scalar gauge with
+    $\beta\mathbin{\triangleright}\omega=\overline\omega$ and
+    $(\beta,\gamma)\mathbin{\triangleright}L=\overline L$. Let $s$ and $t$ be
+    the unimodular square roots of the phases of $\beta$ and $\gamma$. Then
+    $s\mathbin{\triangleright}\omega$ and
+    $(s,t)\mathbin{\triangleright}L$ are both real-valued. This result is not stated
+    in~\cite[Section~4.3]{GarreRubio2023MPOSym}.
+    The source derives $\beta\mathbin{\triangleright}\omega=\overline\omega$
+    and, with the fusion-tensor phase omitted,
+    $(1,\gamma)\mathbin{\triangleright}L=\overline L$; the hypothesis here,
+    with the same $\beta$ in both relations, is the gauge-consistent pair
+    and is assumed rather than derived from time reversal.
+    % Source anchor: arXiv:2203.12563, lines 873--891 and 935--957.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:mpug_l_gauge, thm:mpug_l_gauge_composition,
+        thm:mpug_time_reversal_real_anomaly, thm:mpug_phase_root}
+    The claim for $\omega$ is Lemma~\ref{thm:mpug_time_reversal_real_anomaly}.
+    For $L$, writing $\beta=s^2N$ and $\gamma=t^2M$ with
+    $N_{g,h}=|\beta_{g,h}|$ and $M^x_g=|\gamma^x_g|$ gives, as in that proof,
+    $\overline{(s,t)\mathbin{\triangleright}L}
+        =(N,M)\mathbin{\triangleright}((s,t)\mathbin{\triangleright}L)$, whose
+    prefactor
+    $M^x_{gh}N_{g,h}/(M^{h x}_gM^x_h)$ is a positive real number, hence
+    equal to one by Lemma~\ref{thm:mpug_phase_root}.
+\end{proof}
+
+\begin{lemma}[The L-symbol relation imposed by time reversal]
+    \label{thm:mpug_time_reversal_l_symbol_relation}
+    \lean{TNLean.Algebra.LSymbol.star_apply_eq_gauge_one_apply,
+        TNLean.Algebra.LSymbol.phase_sq_eq_of_gauge_eq_star}
+    \leanok
+    \uses{def:mpug_l_gauge}
+    Let $T\neq0$ and $P$ be vectors in a complex vector space and let
+    $L^x_{g,h}$ and $\gamma$ be as in Definition~\ref{def:mpug_l_gauge}.
+    If $P=\overline{L^x_{g,h}}\,T$ and
+    $\gamma^x_h\gamma^{h x}_gP=L^x_{g,h}\gamma^x_{gh}T$, then
+    \begin{align}
+        \frac{\overline{L^x_{g,h}}}{L^x_{g,h}}
+         & =\frac{\gamma^x_{gh}}{\gamma^x_h\gamma^{h x}_g}.
+        \label{eq:mpug_time_reversal_l_symbol}
+    \end{align}
+    More generally, if $(\beta,\gamma)\mathbin{\triangleright}L=\overline L$,
+    then for all $x$, $g$ and $h$,
+    \begin{align}
+        \left(\frac{L^x_{g,h}}{|L^x_{g,h}|}\right)^2
+         & =\frac{\gamma^{h x}_g\gamma^x_h}{\gamma^x_{gh}\beta_{g,h}}.
+    \end{align}
+    In~\cite[Section~4.3]{GarreRubio2023MPOSym}, $T$ and $P$ are the
+    complex conjugates of the two composite reductions compared by the
+    $L$-symbol, the first hypothesis is the conjugate of the defining
+    relation of $L$, and the second is the display derived from time
+    reversal. The source prints the consequence as
+    $|L^x_{g,h}|^2=\gamma^x_{gh}/(\gamma^x_h\gamma^{h x}_g)$; that form fails
+    for an on-site $\mathbb Z_2\times\mathbb Z_2$ symmetry, and
+    (\ref{eq:mpug_time_reversal_l_symbol}) is the local correction recorded
+    in~\cite{gap:glm23_time_reversal_l_symbol}. The second display is the
+    corrected sense in which the $L$-symbols squared are gauge
+    transformations: the square of the phase of $L$ is, while its modulus is
+    unconstrained.
+    % Source anchor: arXiv:2203.12563, lines 935--957 (TRSF1group at
+    %   line 954).
+    % Local fix: docs/paper-gaps/glm23_time_reversal_l_symbol.tex.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:mpug_l_gauge}
+    Substituting the first hypothesis into the second gives
+    $\gamma^x_h\gamma^{h x}_g\overline{L^x_{g,h}}\,T
+        =L^x_{g,h}\gamma^x_{gh}T$, and $T\neq0$ gives
+    (\ref{eq:mpug_time_reversal_l_symbol}). For the second claim,
+    $\overline L=cL$ with
+    $c=\gamma^x_{gh}\beta_{g,h}/(\gamma^{h x}_g\gamma^x_h)$, so
+    $|L|^2=\overline LL=cL^2$ and $(L/|L|)^2=c^{-1}$.
+\end{proof}
+
+\begin{definition}[The time-reversed tensor]
+    \label{def:mpug_time_reversed_tensor}
+    \lean{MPOTensor.timeReversal}
+    \leanok
+    Let $v$ be a $d\times d$ matrix and $T$ a matrix product operator tensor.
+    The time-reversed tensor $\mathcal T T$ has letters
+    $(\mathcal T T)^{ij}=\sum_{k,l}v_{ik}\,\overline{T^{kl}}\,\overline{v_{jl}}$,
+    where the bar is entrywise complex conjugation of the virtual matrices.
+    For the antiunitary time reversal $\mathcal T=v^{\otimes N}K$ of
+    \cite[Section~4.3]{GarreRubio2023MPOSym}, with $K$ complex conjugation,
+    it generates $\mathcal T O\mathcal T^{-1}$.
+    % Source anchor: arXiv:2203.12563, line 867.
+\end{definition}
+
+\begin{lemma}[Operators and products of time-reversed tensors]
+    \label{lem:mpug_time_reversed_tensor_properties}
+    \lean{MPOTensor.mpo_map_starRingEnd, MPOTensor.mpo_timeReversal,
+        MPOTensor.toMPSTensor_timeReversal, MPOTensor.mulTensor_timeReversal}
+    \leanok
+    \uses{def:mpug_time_reversed_tensor, def:mpdo_operator_product}
+    For every $N$, the periodic operator of $\mathcal T T$ is
+    $O_N(\mathcal T T)=v^{\otimes N}\,\overline{O_N(T)}\,(v^{\otimes N})^\dagger$.
+    On the doubled physical index, each letter of $\mathcal T T$ is the
+    combination $\sum_{k,l}v_{ik}\overline{v_{jl}}\,\overline{T^{kl}}$ of the
+    conjugated letters of $T$. If $v^\dagger v=1$, then time reversal
+    commutes with stacking: the time-reversed tensor of the stacked product
+    of two tensors is the stacked product of their time-reversed tensors.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The periodic operator is the trace of a product of letters, and complex
+    conjugation commutes with products and traces. The physical factors
+    $v$ and $\overline v$ act on the ket and bra legs and produce
+    $v^{\otimes N}$ and $(\overline v^{\otimes N})^T=(v^{\otimes N})^\dagger$.
+    For stacking, the contracted middle leg carries
+    $\sum_k\overline{v_{kb}}v_{kc}=(v^\dagger v)_{bc}=\delta_{bc}$.
+\end{proof}
+
+\begin{lemma}[Reductions under recombination, conjugation and gauges]
+    \label{lem:mpug_reduction_recombination}
+    \lean{MPSTensor.IsReduction.recombine, MPSTensor.IsReduction.map_starRingEnd,
+        MPSTensor.IsReduction.target_gauge,
+        MPSTensor.IsDressedProportional.recombine,
+        MPSTensor.IsDressedProportional.map_starRingEnd,
+        MPSTensor.IsReduction.timeReversal,
+        MPSTensor.IsDressedProportional.timeReversal}
+    \leanok
+    \uses{def:mps_rectangular_reduction, thm:mpug_dressed_proportionality,
+        lem:mpug_time_reversed_tensor_properties}
+    Let $(V,W)$ reduce $B$ onto $A$. Replacing the letters of both tensors by
+    the same combinations $\sum_ac_{ia}B^a$ and $\sum_ac_{ia}A^a$ gives a
+    reduction with the same $V,W$; conjugating the tensors and both
+    boundaries gives a reduction; and if $A'^iQ=QA^i$ with $PQ=1$, a
+    reduction $(V,W)$ of $B$ onto $A'$ gives the reduction $(PV,WQ)$ onto $A$.
+    If $XB^{\mathbf w}=z\,YB^{\mathbf w}$ for long words, the same holds for
+    recombined letters, and conjugation gives
+    $\overline X\,\overline B^{\mathbf w}=\overline z\,\overline Y\,\overline B^{\mathbf w}$.
+    In particular, reductions and dressed proportionalities of tensors pass
+    to their time-reversed tensors with conjugated boundaries and scalars.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    A word in the recombined letters is the combination, with the same
+    coefficients for both tensors, of words of the same length in the
+    original letters; induction on the word with an arbitrary prefix gives
+    both recombination claims. Conjugation commutes with products. For the
+    gauge, $A'^{\mathbf w}Q=QA^{\mathbf w}$ gives
+    $PVB^{\mathbf w}WQ=PA'^{\mathbf w}Q=A^{\mathbf w}$.
+\end{proof}
+
+\begin{lemma}[Fusion tensors along exact bond gauges]
+    \label{lem:mpug_fusion_tensor_gauge_transport}
+    \lean{MPOTensor.bondKron, MPOTensor.bondKron_eq_idKron_mul_kronId,
+        MPOTensor.bondKron_mul_bondKron, MPOTensor.bondKron_one, MPOTensor.bondKron_mul_kronId,
+        MPOTensor.bondKron_mul_idKron, MPOTensor.bondKron_bondKron_mul_assocInv,
+        MPOTensor.mulTensor_mul_bondKron_of_intertwine,
+        MPOTensor.GroupFamily.withTensor, MPOTensor.GroupFamily.castMat_mul_eq,
+        MPOTensor.GroupFamily.BondGauge, MPOTensor.GroupFamily.BondGauge.mul_P,
+        MPOTensor.GroupFamily.FusionData.gaugeTransport,
+        MPOTensor.GroupFamily.FusionData.gaugeTransport_leftV,
+        MPOTensor.GroupFamily.FusionData.gaugeTransport_rightV,
+        MPOTensor.GroupFamily.FusionData.isAssociator_gaugeTransport}
+    \leanok
+    \uses{def:mpug_anomaly_three_cochain, lem:mpug_reduction_recombination,
+        thm:mpug_reduction_dagger}
+    Let $g\mapsto T_g$ be tensors with the bond dimensions of a group family
+    $g\mapsto O_g$, and let $P_g,Q_g$ be mutually inverse matrices with
+    $T_g^{il}Q_g=Q_gO_g^{il}$. If $(V_{g,h},W_{g,h})$ are fusion tensors of
+    the family $T$, then
+    \begin{align}
+        V'_{g,h} & =P_{gh}V_{g,h}(Q_g\otimes Q_h), &
+        W'_{g,h} & =(P_g\otimes P_h)W_{g,h}Q_{gh}
+        \notag
+    \end{align}
+    are fusion tensors of the family $O$, and the two fusion trees of the
+    triple product compare by the same scalar for both choices.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The gauges $P_g\otimes P_h$ intertwine the stacked letters, so
+    Lemma~\ref{lem:mpug_reduction_recombination} gives the reductions. The
+    tensor products of the gauges commute with identity strands and with the
+    bond associator, which gives
+    $V'^L=P_{ghk}V^L(Q_g\otimes Q_h\otimes Q_k)$ and the same for the second
+    tree. The gauge $Q_g\otimes Q_h\otimes Q_k$ intertwines the letters of
+    the two triple products, so the dressed proportionality of the trees
+    is transported unchanged.
+\end{proof}
+
+\begin{lemma}[Conjugated fusion tensors of the time-reversed family]
+    \label{lem:mpug_conjugated_fusion_tensors}
+    \lean{MPOTensor.kronId_map_starRingEnd, MPOTensor.idKron_map_starRingEnd,
+        MPOTensor.mulTensorAssocInvMatrix_map_starRingEnd,
+        MPOTensor.GroupFamily.castMat_map_starRingEnd,
+        MPOTensor.GroupFamily.FusionData.timeReversal,
+        MPOTensor.GroupFamily.FusionData.timeReversal_leftV,
+        MPOTensor.GroupFamily.FusionData.timeReversal_rightV,
+        MPOTensor.GroupFamily.FusionData.isAssociator_timeReversal}
+    \leanok
+    \uses{def:mpug_anomaly_three_cochain,
+        lem:mpug_time_reversed_tensor_properties,
+        lem:mpug_reduction_recombination}
+    Let $v^\dagger v=1$ and let $(V_{g,h},W_{g,h})$ be fusion tensors of a
+    group family $O$. Then $(\overline{V_{g,h}},\overline{W_{g,h}})$ are
+    fusion tensors of the time-reversed family $g\mapsto\mathcal TO_g$, and
+    if the fusion trees of $O$ compare by $z$, those of the conjugated
+    fusion tensors compare by $\overline z$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Time reversal commutes with stacking, by
+    Lemma~\ref{lem:mpug_time_reversed_tensor_properties}, so the stacked
+    and triple products of the time-reversed family are the time-reversed
+    tensors of those of $O$. The identity strands, bond identifications and
+    the bond associator are real, so the fusion trees of the conjugated
+    tensors are the conjugates of the original trees, and
+    Lemma~\ref{lem:mpug_reduction_recombination} applies.
+\end{proof}
+
+\begin{lemma}[The gauges of a time-reversal symmetry]
+    \label{lem:mpug_time_reversal_bond_gauge}
+    \lean{MPOTensor.GroupFamily.CommutesWithTimeReversal,
+        MPOTensor.GroupFamily.nonempty_bondGauge_timeReversal}
+    \leanok
+    \uses{def:mpug_anomaly_three_cochain, cor:asym_single_block,
+        lem:mpug_time_reversed_tensor_properties}
+    Let $g\mapsto O_g$ be a group of matrix product operators with normal
+    tensors, let $v$ be unitary, and suppose that
+    $v^{\otimes N}\overline{O_g}=O_gv^{\otimes N}$ for every $g$ and every
+    $N\geq1$, that is, $\mathcal TO_g=O_g\mathcal T$. Then for every $g$
+    there are mutually inverse matrices $P_g,Q_g$ with
+    $(\mathcal TT_g)^{il}Q_g=Q_gT_g^{il}$, where $T_g$ is the tensor of
+    $O_g$. These are the matrices $q_g$ of
+    \cite[Section~4.3]{GarreRubio2023MPOSym}.
+    % Source anchor: arXiv:2203.12563, lines 869--870.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    By Lemma~\ref{lem:mpug_time_reversed_tensor_properties} and
+    unitarity, $\mathcal TT_g$ and $T_g$ generate the same periodic
+    operators. Corollary~\ref{cor:asym_single_block} gives a reduction
+    $(P_g,Q_g)$ of $\mathcal TT_g$ onto the normal tensor $T_g$. The bond
+    dimensions agree, so $P_gQ_g=1$ forces $Q_gP_g=1$, and the one-letter
+    words give $(\mathcal TT_g)^{il}=Q_gT_g^{il}P_g$.
+\end{proof}
+
+\begin{lemma}[Time reversal makes the anomaly of a group of operators real]
+    \label{lem:mpug_time_reversal_tensor_real_anomaly}
+    \lean{MPOTensor.GroupFamily.FusionData.omega_cohomologousTo_star_of_timeReversal,
+        MPOTensor.GroupFamily.FusionData.exists_real_cohomologousTo_omega_of_timeReversal}
+    \leanok
+    \uses{lem:mpug_time_reversal_bond_gauge,
+        lem:mpug_conjugated_fusion_tensors,
+        lem:mpug_fusion_tensor_gauge_transport,
+        thm:mpug_anomaly_three_cocycle_gauge,
+        thm:mpug_time_reversal_real_anomaly}
+    Under the hypotheses of Lemma~\ref{lem:mpug_time_reversal_bond_gauge},
+    the anomaly three-cochain $\omega$ of any choice of fusion tensors is
+    cohomologous to its complex conjugate, and hence to a real-valued
+    three-cochain. This is the conclusion
+    of~\cite[Section~4.3]{GarreRubio2023MPOSym} that
+    $\omega=\overline\omega\,\beta_{g,h}\beta_{gh,k}/(\beta_{h,k}\beta_{g,hk})$
+    and that $\omega$ can be gauge transformed to a real number.
+    % Source anchor: arXiv:2203.12563, lines 869--891.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Conjugate the fusion tensors, by
+    Lemma~\ref{lem:mpug_conjugated_fusion_tensors}, and transport them
+    along the gauges of Lemma~\ref{lem:mpug_time_reversal_bond_gauge}, by
+    Lemma~\ref{lem:mpug_fusion_tensor_gauge_transport}. This gives fusion
+    tensors of the original family whose trees compare by
+    $\overline{\omega}$, so their anomaly three-cochain is $\overline\omega$.
+    By Lemma~\ref{thm:mpug_anomaly_three_cocycle_gauge}, the two choices of
+    fusion tensors have cohomologous three-cochains; the scalars $\beta_{g,h}$
+    of the source are their relative scalars. The second claim is
+    Lemma~\ref{thm:mpug_time_reversal_real_anomaly}.
+\end{proof}
+
+\subsection{Pullback and extension of degree-two classes}
+
+\begin{definition}[Pullback of scalar cohomology]
+    \label{def:mpug_h2_pullback}
+    \lean{TNLean.Algebra.ScalarCocycle.comap,
+        TNLean.Algebra.ScalarCocycle.comap_apply,
+        TNLean.Algebra.ScalarCocycle.mapCocycles₂_cocyclesOfIsMulCocycle₂,
+        TNLean.Algebra.ScalarCocycle.map_H2π}
+    \leanok
+    \uses{def:h2_cx}
+    Let $f:K\to G$ be a group homomorphism. For a scalar $2$-cochain
+    $\omega:G\times G\to\C^\times$, define
+    $(f^*\omega)(a,b)=\omega(f(a),f(b))$.
+    The restriction map
+    $f^*:H^2(G,\C^\times)\to H^2(K,\C^\times)$ induced by $f$, with the
+    identity of $\C^\times$ as coefficient map, satisfies
+    $f^*[\omega]=[f^*\omega]$ for every $2$-cocycle $\omega$.
+\end{definition}
+
+\begin{lemma}[Pullback preserves cocycles and cohomology]
+    \label{thm:mpug_h2_pullback_preserves}
+    \lean{TNLean.Algebra.ScalarCocycle.isMulCocycle₂_comap,
+        TNLean.Algebra.isMulCoboundary₂_div_comap}
+    \leanok
+    \uses{def:mpug_h2_pullback, def:cohomologous_to, def:is_cocycle}
+    Let $f:K\to G$ be a group homomorphism. If $\omega$ is a scalar
+    $2$-cocycle on $G$, then $f^*\omega$ is a scalar $2$-cocycle on $K$.
+    If $\omega_1$ and $\omega_2$ are cohomologous scalar $2$-cochains on $G$,
+    then $f^*\omega_1$ and $f^*\omega_2$ are cohomologous on $K$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:mpug_h2_pullback, def:cohomologous_to, def:is_cocycle}
+    For $a,b,c\in K$, substituting $f(a),f(b),f(c)$ into the cocycle equation
+    for $\omega$ and using $f(ab)=f(a)f(b)$ and $f(bc)=f(b)f(c)$ shows that
+    $f^*\omega$ is a $2$-cocycle.
+    If $\omega_1(g,h)=\varphi(g)\varphi(h)\varphi(gh)^{-1}\omega_2(g,h)$,
+    then with $\eta=\varphi\circ f$, substituting $g=f(a)$ and $h=f(b)$ gives
+    $(f^*\omega_1)(a,b)=\eta(a)\eta(b)\eta(ab)^{-1}(f^*\omega_2)(a,b)$,
+    so $\eta$ gives the required cohomology relation.
+\end{proof}
+
+\begin{lemma}[Restriction is the inhomogeneous restriction map]
+    \label{lem:mpug_restriction_inhomogeneous}
+    \lean{TNLean.Algebra.scalarRepresentationRes,
+        TNLean.Algebra.ScalarCocycle.toInhomogeneousCochain_comap,
+        TNLean.Algebra.ScalarThreeCochain.toInhomogeneousCochain_comap}
+    \leanok
+    \uses{def:mpug_h2_pullback, def:mpug_cochain_restriction,
+        def:mpug_h3_group_cohomology}
+    Let $f:K\to G$ be a group homomorphism. Under the identification of scalar
+    $2$- and $3$-cochains with inhomogeneous cochains valued in the trivial
+    representation $\C^\times_{\mathrm{triv}}$, the pullback $f^*$ in degrees
+    two and three is the restriction map of inhomogeneous cochains along $f$,
+    $x\mapsto x\circ(f\times\cdots\times f)$, whose coefficient map is the
+    identity of $\C^\times$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:mpug_h2_pullback, def:mpug_cochain_restriction,
+        def:mpug_h3_group_cohomology}
+    Both sides send a cochain $x$ to $(g_1,\dots,g_n)\mapsto x(f(g_1),\dots,f(g_n))$.
+\end{proof}
+
+% Partial support for #7361 (child #7754), not the full prop:BI_psi criterion.
+% No U(1) restriction naturality or tensor-level block-independence claim.
+\begin{lemma}[Exact extension of a subgroup cocycle]
+    \label{thm:mpug_h2_exact_extension}
+    \lean{TNLean.Algebra.ScalarCocycle.H2π_mem_range_map_subtype_iff,
+        TNLean.Algebra.ScalarCocycle.isMulCocycle₂_coboundary_mul}
+    \leanok
+    \uses{def:mpug_h2_pullback, def:is_cocycle}
+    Let $H\le G$ be any subgroup, let $\iota:H\hookrightarrow G$ be its
+    inclusion, and let $\psi:H\times H\to\C^\times$ be a $2$-cocycle.
+    Then $[\psi]$ belongs to the image of $\iota^*$ if and only if there is
+    a $2$-cocycle $\Psi:G\times G\to\C^\times$ with
+    $\Psi(a,b)=\psi(a,b)$ for every $a,b\in H$.
+    No normalization of either cocycle is required.
+    This is the representative adjustment implicit in the extension
+    condition of \cite[lines~7042--7064]{FrancoRubio2025MPUGauging},
+    here stated with $\C^\times$ coefficients.
+    % Source: Papers/2502.20257/main.tex:7042--7064.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:mpug_h2_pullback, def:cohomologous_to, def:is_cocycle}
+    If $[\psi]=\iota^*[\omega]$, there is a cochain
+    $\varphi:H\to\C^\times$ such that
+    $\psi(a,b)=\varphi(a)\varphi(b)\varphi(ab)^{-1}\omega(a,b)$.
+    Extending $\varphi$ to a function $\Phi:G\to\C^\times$ that takes value $1$
+    outside $H$, define
+    $\Psi(g,h)=\Phi(g)\Phi(h)\Phi(gh)^{-1}\omega(g,h)$.
+    In the cocycle equation for $\Psi$, cancellation leaves the common
+    factor $\Phi(g)\Phi(h)\Phi(k)\Phi(ghk)^{-1}$ multiplied by the two sides
+    of the cocycle equation for $\omega$. Hence $\Psi$ is a cocycle, and
+    $\Phi|_H=\varphi$ gives $\Psi|_{H\times H}=\psi$ exactly.
+    Conversely, any exact extension $\Psi$ satisfies
+    $\iota^*[\Psi]=[\psi]$.
+\end{proof}
+
+\begin{lemma}[Circle and nonzero-complex coefficients in degree two]
+    \label{thm:mpug_circle_complex_units_h2}
+    \lean{TNLean.Algebra.Complex.div_toUnits_unitsPhase,
+        TNLean.Algebra.ScalarCocycle.circlePhase_isMulCocycle₂,
+        TNLean.Algebra.ScalarCocycle.circlePhaseInclusion_isMulCocycle₂,
+        TNLean.Algebra.ScalarCocycle.H2π_circlePhaseInclusion,
+        TNLean.Algebra.ScalarCocycle.circlePhaseMathlibCocycle,
+        TNLean.Algebra.ScalarCocycle.H2π_map_circlePhaseMathlibCocycle,
+        TNLean.Algebra.circleToComplexUnits_map_injective,
+        TNLean.Algebra.circleToComplexUnits_map_surjective,
+        TNLean.Algebra.circleToComplexUnits_map_bijective}
+    \leanok
+    \uses{thm:mpug_h2_group_cohomology_comparison,
+        thm:mpug_positive_generalized_cocycle}
+    Let $G$ be finite, with $U(1)$ and $\C^\times$ carrying the trivial
+    $G$-actions.  Inclusion of the unit circle induces an equivalence
+    \begin{align}
+        H^2(G,U(1))
+         & \simeq H^2(G,\C^\times).
+        \label{eq:mpug_circle_complex_units_h2}
+    \end{align}
+    More concretely, for a $\C^\times$-valued cocycle $\omega$, define its
+    pointwise phase and radial residual by
+    \begin{align}
+        u(g,h)
+         & =\frac{\omega(g,h)}{|\omega(g,h)|}\in U(1),
+         &
+        r(g,h)
+         & =\frac{\omega(g,h)}{u(g,h)}=|\omega(g,h)|.
+        \label{eq:mpug_circle_phase_residual}
+    \end{align}
+    Then $u$ is a cocycle, $r$ is a positive coboundary, and hence $\omega$
+    is cohomologous to the inclusion of $u$.  The inclusion map is injective
+    for every group because pointwise phase is its left inverse; finiteness is
+    used only to prove surjectivity.
+
+    As recorded in \cite{gap:fbc25_circle_complex_units_cohomology}, this
+    algebraic group-cohomology statement for a finite discrete group replaces
+    the comparison of sheaf cohomology with topological coefficient groups
+    invoked in the footnote at
+    \cite[line~1931]{FrancoRubio2025MPUGauging}.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_positive_generalized_cocycle}
+    The phase map $q(z)=z/|z|$ is multiplicative and satisfies
+    $q(u)=u$ for $u\in U(1)$, so it preserves the cocycle equation and
+    retracts inclusion.  The polar identity in
+    (\ref{eq:mpug_circle_phase_residual}) identifies the residual $r$ with a
+    positive cocycle.  Applying
+    Lemma~\ref{thm:mpug_positive_generalized_cocycle} to the one-point block
+    space writes $r=d\chi$.  Therefore $\omega\sim u$, which proves
+    surjectivity of coefficient inclusion on degree-two classes.  Its left
+    inverse induced by $q$ proves injectivity.
+\end{proof}
+
+\subsection{Cocycle-twisted regular matrices}
+
+\begin{definition}[Cocycle-twisted regular matrices]
+    \label{def:mpug_twisted_regular_matrices}
+    \lean{TNLean.Algebra.ScalarCocycle.phase,
+        TNLean.Algebra.ScalarCocycle.twistedLeftRegular,
+        TNLean.Algebra.ScalarCocycle.twistedRightRegular}
+    \leanok
+    \uses{def:scalar_cocycle, thm:mpug_circle_complex_units_h2}
+    Let $G$ be a group and let $\omega$ be a $\C^\times$-valued scalar
+    cochain.  Write
+    \begin{align}
+        \phi(g,h) & =\frac{\omega(g,h)}{|\omega(g,h)|}\in U(1).
+    \end{align}
+    On the standard basis of $\C^G$, define
+    \begin{align}
+        L_g^\phi
+         & =\sum_{h\in G}\phi(g,h)^{-1}|gh\rangle\langle h|,
+         &
+        R_g^\phi
+         & =\sum_{h\in G}\phi(h,g^{-1})^{-1}|hg^{-1}\rangle\langle h|.
+        \label{eq:mpug_twisted_regular_matrices}
+    \end{align}
+    Whereas \cite[lines~412--418]{FrancoRubio2025MPUGauging} starts from a
+    $U(1)$-valued cocycle $\Omega$, taking $\Omega=\phi$ reproduces its leg and
+    inverse conventions.
+\end{definition}
+
+\begin{lemma}[Cocycle equation for the circle phase]
+    \label{lem:mpug_circle_phase_cocycle}
+    \lean{TNLean.Algebra.ScalarCocycle.phase_isCocycle}
+    \leanok
+    \uses{def:is_cocycle, thm:mpug_circle_complex_units_h2}
+    If $\omega$ is a cocycle, then its circle phase satisfies
+    \begin{align}
+        \phi(g,h)\phi(gh,k)
+         & =\phi(g,hk)\phi(h,k)
+    \end{align}
+    for all $g,h,k\in G$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_circle_complex_units_h2}
+    The pointwise phase map $z\mapsto z/|z|$ is multiplicative, so it preserves
+    the cocycle equation.
+\end{proof}
+
+\begin{lemma}[Action of the twisted regular matrices]
+    \label{thm:mpug_twisted_regular_action}
+    \lean{TNLean.Algebra.ScalarCocycle.twistedLeftRegular_mulVec_apply,
+        TNLean.Algebra.ScalarCocycle.twistedRightRegular_mulVec_apply}
+    \leanok
+    \uses{def:mpug_twisted_regular_matrices}
+    If $G$ is finite, then for $v\in\C^G$ and $g,h\in G$,
+    \begin{align}
+        (L_g^\phi v)(gh)
+         & =\phi(g,h)^{-1}v(h),
+         &
+        (R_g^\phi v)(hg^{-1})
+         & =\phi(h,g^{-1})^{-1}v(h).
+    \end{align}
+    % Source anchor: arXiv:2502.20257, lines 412--418.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:mpug_twisted_regular_matrices}
+    In each matrix-vector product, exactly one summand is nonzero: the column
+    indexed by $h$.
+\end{proof}
+
+\begin{lemma}[Multiplication laws for twisted regular matrices]
+    \label{thm:mpug_twisted_regular_multiplication}
+    \lean{TNLean.Algebra.ScalarCocycle.twistedLeftRegular_mul,
+        TNLean.Algebra.ScalarCocycle.twistedRightRegular_mul}
+    \leanok
+    \uses{def:mpug_twisted_regular_matrices,
+        lem:mpug_circle_phase_cocycle}
+    If $G$ is finite and $\omega$ is a cocycle, then
+    \begin{align}
+        L_g^\phi L_h^\phi
+         & =\phi(g,h)^{-1}L_{gh}^\phi,           \\
+        R_g^\phi R_h^\phi
+         & =\phi(h^{-1},g^{-1})^{-1}R_{gh}^\phi.
+        \label{eq:mpug_twisted_regular_multiplication}
+    \end{align}
+    % Source anchor: arXiv:2502.20257, lines 406--418; the laws follow from
+    % the displayed twisted regular matrices and the cocycle equation.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:mpug_circle_phase_cocycle}
+    Expanding the matrix products entrywise reduces the two scalar identities
+    to the cocycle equation at $(g,h,k)$ and $(k,h^{-1},g^{-1})$, respectively.
+\end{proof}
+
+\begin{lemma}[Commutation of twisted left and right actions]
+    \label{thm:mpug_twisted_regular_commutation}
+    \lean{TNLean.Algebra.ScalarCocycle.twistedLeftRegular_commute}
+    \leanok
+    \uses{def:mpug_twisted_regular_matrices}
+    If $G$ is finite and $\omega$ is a cocycle, then
+    \begin{align}
+        L_g^\phi R_h^\phi
+         & =R_h^\phi L_g^\phi.
+        \label{eq:mpug_twisted_regular_commutation}
+    \end{align}
+    % Source anchor: arXiv:2502.20257, lines 406--418 and 457; the latter
+    % explicitly attributes commuting local symmetries to commutativity of the
+    % left and right group actions.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:mpug_circle_phase_cocycle}
+    Expanding both matrix products entrywise and applying the cocycle equation
+    at $(g,k,h^{-1})$ yields the equality.
+\end{proof}
+
+\begin{lemma}[Unitarity of twisted regular matrices]
+    \label{thm:mpug_twisted_regular_unitary}
+    \lean{TNLean.Algebra.ScalarCocycle.twistedLeftRegular_mem_unitaryGroup,
+        TNLean.Algebra.ScalarCocycle.twistedRightRegular_mem_unitaryGroup}
+    \leanok
+    \uses{def:mpug_twisted_regular_matrices}
+    If $G$ is finite, the matrices $L_g^\phi$ and $R_g^\phi$ are unitary for
+    every $g\in G$.
+    % Source anchor: arXiv:2502.20257, lines 406--418, where these matrices
+    % form the two gauge legs of the local unitary representation.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:mpug_twisted_regular_matrices}
+    Each matrix is a permutation matrix whose nonzero entries have modulus
+    one.  Distinct columns therefore have disjoint support, while every column
+    has squared norm one.
+\end{proof}
+
+\begin{lemma}[Onsite Gauss coefficient identity]
+    \label{thm:mpug_onsite_gauss_phase}
+    \lean{TNLean.Algebra.ScalarCocycle.onsiteGauss_phase_div}
+    \leanok
+    \uses{def:mpug_twisted_regular_matrices,
+        lem:mpug_circle_phase_cocycle}
+    Suppose that $\omega$ is a cocycle and impose the additional normalization
+    \begin{align}
+        \phi(t^{-1},t) & =1
+    \end{align}
+    for every $t\in G$.  Then
+    \begin{align}
+        \frac{\phi(ag^{-1},gb)}{\phi(a,b)}
+         & =\frac{1}{\phi(a,g^{-1})\phi(g,b)}.
+        \label{eq:mpug_onsite_gauss_phase}
+    \end{align}
+    The scalar convention $S_{t^{-1}}=S_t^{-1}$ appears in
+    \cite[line~238]{FrancoRubio2025MPUGauging}, and the coefficient rewrite is
+    at lines 3763--3766. The displayed normalization remains an explicit
+    assumption here; it is not a consequence of cocyclicity.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:mpug_circle_phase_cocycle}
+    Applying the cocycle equation first at $(a,g^{-1},gb)$ and then at
+    $(g^{-1},g,b)$, together with $\phi(e,b)=1$ from the normalization at
+    $t=e$, yields the identity.
+\end{proof}
+
+\subsection{Block independence}
+
+\begin{definition}[Block scalar and block independence]
+    \label{def:mpug_block_independence_factor}
+    \lean{TNLean.Algebra.LSymbol.ell,
+        TNLean.Algebra.LSymbol.IsBlockIndependentEll}
+    \leanok
+    \uses{def:mpug_l_symbols}
+    For an $L$-symbol, define
+    \begin{align}
+        \ell^x_{a,b;r}
+         & =\frac{L^x_{ar,r^{-1}b}}{L^x_{a,b}}.
+        \label{eq:mpug_block_scalar}
+    \end{align}
+    The scalar $\ell$ is block-independent when
+    \begin{align}
+        \ell^x_{a,b;r}
+         & =\ell^y_{a,b;r}
+        \label{eq:mpug_block_independence}
+    \end{align}
+    for all $a,b,r\in G$ and $x,y\in\mathsf X$.
+    % Source anchor: arXiv:2502.20257, app:block_indep, lines 6965--6974.
+\end{definition}
+
+\begin{definition}[Four scalar gauge formulations]
+    \label{def:mpug_block_independence_gauge_forms}
+    \lean{TNLean.Algebra.LSymbol.IsBlockConstant,
+        TNLean.Algebra.LSymbol.IsTrivialEll,
+        TNLean.Algebra.LSymbol.IsTrivial,
+        TNLean.Algebra.LSymbol.HasTrivialGauge,
+        TNLean.Algebra.LSymbol.HasBlockConstantGauge,
+        TNLean.Algebra.LSymbol.HasTrivialEllGauge,
+        TNLean.Algebra.LSymbol.IsBlockIndependent}
+    \leanok
+    \uses{def:mpug_l_gauge, def:mpug_block_independence_factor}
+    Writing $L'=(\beta,\gamma)\mathbin{\triangleright}L$ for a joint scalar
+    gauge of an $L$-symbol, the four scalar $L$-symbol properties used in the
+    proof of the source proposition are, respectively, the existence of $\beta$
+    and $\gamma$ such that
+    \begin{align}
+        (L')^x_{g,h}       & =1
+                           &                     & \text{for all $x,g,h$},
+        \label{eq:mpug_block_form_trivial}                                     \\
+        (L')^x_{a,b}       & =(L')^y_{a,b}
+                           &                     & \text{for all $x,y,a,b$},
+        \label{eq:mpug_block_form_constant}                                    \\
+        \ell[L']^x_{a,b;r} & =1
+                           &                     & \text{for all $x,a,b,r$},
+        \label{eq:mpug_block_form_trivial_ell}                                 \\
+        \ell[L']^x_{a,b;r} & =\ell[L']^y_{a,b;r}
+                           &                     & \text{for all $x,y,a,b,r$}.
+        \label{eq:mpug_block_form_independent_ell}
+    \end{align}
+    % Source anchor: arXiv:2502.20257, prop:technical01, lines 6975--6989.
+\end{definition}
+
+\begin{lemma}[Corrected block factorization]
+    \label{thm:mpug_block_factorization}
+    \lean{TNLean.Algebra.LSymbol.IsCompatible.apply_right_one,
+        TNLean.Algebra.LSymbol.blockFactor,
+        TNLean.Algebra.LSymbol.factorization_of_isBlockIndependentEll}
+    \leanok
+    \uses{def:mpug_l_symbols, def:mpug_block_independence_factor}
+    Suppose that $L$ is compatible with $\omega$ and that $\ell$ is
+    block-independent. Fix $x_0\in\mathsf X$ and set
+    \begin{align}
+        A(g,h)
+         & =\bigl(\omega(gh,e,e)\ell^{x_0}_{g,h;h}\bigr)^{-1}.
+        \label{eq:mpug_block_factor}
+    \end{align}
+    Then, with the reciprocal factor recorded in
+    \cite{gap:fbc25_block_independence_reciprocal_errors}, for every
+    $x\in\mathsf X$ and $g,h\in G$,
+    \begin{align}
+        L^x_{g,h}
+         & =A(g,h)L^x_{e,e}.
+        \label{eq:mpug_corrected_block_factorization}
+    \end{align}
+    % Local correction:
+    % docs/paper-gaps/fbc25_block_independence_reciprocal_errors.tex.
+    % Source anchor: arXiv:2502.20257, eq:Lfact, lines 6994--7002.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:mpug_block_independence_factor}
+    Definition~\ref{def:mpug_block_independence_factor} gives
+    \begin{align}
+        L^x_{g,h}
+         & =\frac{L^x_{gh,e}}{\ell^x_{g,h;h}}.
+        \label{eq:mpug_block_factorization_first}
+    \end{align}
+    Block independence replaces $x$ by $x_0$ in the denominator.
+    Compatibility at $(gh,e,e)$ gives
+    $L^x_{gh,e}=L^x_{e,e}/\omega(gh,e,e)$, which proves
+    (\ref{eq:mpug_corrected_block_factorization}).
+\end{proof}
+
+\begin{lemma}[Relative block character]
+    \label{thm:mpug_relative_block_character}
+    \lean{TNLean.Algebra.LSymbol.IsCompatible.apply_left_one,
+        TNLean.Algebra.LSymbol.relativeCharacter,
+        TNLean.Algebra.LSymbol.relativeCharacter_mul_base,
+        TNLean.Algebra.LSymbol.relativeCharacter_mul}
+    \leanok
+    \uses{thm:mpug_block_factorization}
+    Under the hypotheses of Lemma~\ref{thm:mpug_block_factorization}, define
+    \begin{align}
+        \rho(g)
+         & =\bigl(\ell^{x_0}_{e,g;g}\omega(g,e,e)
+        \omega(e,e,g)\bigr)^{-1}.
+        \label{eq:mpug_relative_block_character}
+    \end{align}
+    As recorded in \cite{gap:fbc25_block_independence_reciprocal_errors}, the
+    reciprocal factor $(\ell^{x_0}_{e,g;g})^{-1}$ corrects the corresponding
+    printed factor. Then
+    \begin{align}
+        L^{g x}_{e,e}
+         & =\rho(g)L^x_{e,e},
+        \label{eq:mpug_relative_block_transport} \\
+        \rho(gh)
+         & =\rho(g)\rho(h).
+        \label{eq:mpug_relative_block_multiplicative}
+    \end{align}
+    Thus $\rho\colon G\to\C^\times$ is a one-dimensional character. No
+    transitivity or finiteness assumption on the action is required.
+    % Local correction:
+    % docs/paper-gaps/fbc25_block_independence_reciprocal_errors.tex.
+    % Source anchor: arXiv:2502.20257, eq:defrho, lines 7003--7018.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_block_factorization}
+    Compatibility at $(e,e,g)$ gives
+    $L^x_{e,g}=\omega(e,e,g)L^{g x}_{e,e}$, and comparing this with
+    (\ref{eq:mpug_corrected_block_factorization}) at $(e,g)$ yields
+    (\ref{eq:mpug_relative_block_transport}). Applying that identity first
+    to $h$ and then to $g$, and comparing with its application to $gh$, proves
+    (\ref{eq:mpug_relative_block_multiplicative}) by cancellation.
+\end{proof}
+
+\begin{lemma}[Explicit inverse gauge]
+    \label{thm:mpug_block_independence_inverse_gauge}
+    \lean{TNLean.Algebra.LSymbol.factorFusionGauge,
+        TNLean.Algebra.LSymbol.factorActionGauge,
+        TNLean.Algebra.LSymbol.gauge_one_eq_of_isBlockIndependentEll,
+        TNLean.Algebra.LSymbol.gauge_inv_eq_one_of_isBlockIndependentEll,
+        TNLean.Algebra.LSymbol.hasTrivialGauge_of_isBlockIndependentEll}
+    \leanok
+    \uses{def:mpug_l_gauge, thm:mpug_l_gauge_composition,
+        thm:mpug_block_factorization, thm:mpug_relative_block_character}
+    With $A$ and $\rho$ as above, define the forward gauges by
+    \begin{align}
+        \beta^+_{g,h}
+         & =\frac{A(g,h)}{\rho(h)},
+        \label{eq:mpug_forward_fusion_gauge} \\
+        \gamma^{+,x}_g
+         & =\bigl(L^{g x}_{e,e}\bigr)^{-1}.
+        \label{eq:mpug_forward_action_gauge}
+    \end{align}
+    Their joint gauge multiplier equals $L$:
+    \begin{align}
+        (\beta^+,\gamma^+)\mathbin{\triangleright}1
+         & =L.
+        \label{eq:mpug_forward_gauge_multiplier}
+    \end{align}
+    Consequently the pointwise inverse gauges trivialize $L$:
+    \begin{align}
+        ((\beta^+)^{-1},(\gamma^+)^{-1})
+        \mathbin{\triangleright}L
+         & =1.
+        \label{eq:mpug_inverse_gauge_trivialization}
+    \end{align}
+    As recorded in \cite{gap:fbc25_block_independence_reciprocal_errors}, the
+    distinction between the forward multiplier and its pointwise inverse
+    corrects the orientation of the displayed source calculation.
+    If $\mathsf X$ is nonempty, a choice of $x_0$ therefore gives a
+    trivializing joint scalar gauge for every compatible block-independent
+    $L$-symbol.
+    % Local correction:
+    % docs/paper-gaps/fbc25_block_independence_reciprocal_errors.tex.
+    % Source anchor: arXiv:2502.20257, eq:Lgauge and lines 7019--7027.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_l_gauge_composition, thm:mpug_block_factorization,
+        thm:mpug_relative_block_character}
+    Substituting (\ref{eq:mpug_forward_fusion_gauge}) and
+    (\ref{eq:mpug_forward_action_gauge}) into
+    (\ref{eq:mpug_l_gauge}), equation
+    (\ref{eq:mpug_relative_block_transport}) reduces the multiplier to
+    $A(g,h)L^x_{e,e}$, which equals $L^x_{g,h}$ by
+    (\ref{eq:mpug_corrected_block_factorization}). Joint gauges compose by
+    pointwise multiplication, so the inverse gauges give
+    (\ref{eq:mpug_inverse_gauge_trivialization}).
+\end{proof}
+
+\begin{lemma}[Trivial and block-constant gauges]
+    \label{thm:mpug_trivial_iff_block_constant}
+    \lean{TNLean.Algebra.LSymbol.IsTrivial.isBlockConstant,
+        TNLean.Algebra.LSymbol.IsBlockConstant.isBlockIndependentEll,
+        TNLean.Algebra.LSymbol.HasTrivialGauge.hasBlockConstantGauge,
+        TNLean.Algebra.LSymbol.HasBlockConstantGauge.isBlockIndependent,
+        TNLean.Algebra.LSymbol.hasTrivialGauge_iff_hasBlockConstantGauge}
+    \leanok
+    \uses{def:mpug_block_independence_gauge_forms,
+        thm:mpug_l_gauge_composition, thm:mpug_l_gauge_preservation,
+        thm:mpug_block_independence_inverse_gauge}
+    Let $L$ be an $L$-symbol compatible with a scalar $3$-cochain,
+    and suppose that $\mathsf X$ is nonempty. A joint scalar gauge trivializes
+    $L$ if and only if a joint scalar gauge makes $L^x_{g,h}$ independent of
+    $x$.
+    % Source anchor: arXiv:2502.20257, prop:technical01, items 1 and 2.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_l_gauge_composition, thm:mpug_l_gauge_preservation,
+        thm:mpug_block_independence_inverse_gauge}
+    A trivial $L$-symbol is block-constant. Conversely, a block-constant
+    representative has block-independent $\ell$, so applying
+    Lemma~\ref{thm:mpug_block_independence_inverse_gauge} to that
+    representative and composing the two joint gauges trivializes $L$.
+\end{proof}
+
+\begin{lemma}[Trivial gauges and trivial block scalars]
+    \label{thm:mpug_trivial_iff_trivial_ell}
+    \lean{TNLean.Algebra.LSymbol.IsTrivial.isTrivialEll,
+        TNLean.Algebra.LSymbol.IsTrivialEll.isBlockIndependentEll,
+        TNLean.Algebra.LSymbol.HasTrivialGauge.hasTrivialEllGauge,
+        TNLean.Algebra.LSymbol.HasTrivialEllGauge.isBlockIndependent,
+        TNLean.Algebra.LSymbol.hasTrivialGauge_iff_hasTrivialEllGauge}
+    \leanok
+    \uses{def:mpug_block_independence_gauge_forms,
+        thm:mpug_l_gauge_composition, thm:mpug_l_gauge_preservation,
+        thm:mpug_block_independence_inverse_gauge}
+    Let $L$ be an $L$-symbol compatible with a scalar $3$-cochain,
+    and suppose that $\mathsf X$ is nonempty. A joint scalar gauge trivializes
+    $L$ if and only if a joint scalar gauge makes every
+    $\ell^x_{a,b;r}$ equal to $1$.
+    % Source anchor: arXiv:2502.20257, prop:technical01, items 1 and 3.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_l_gauge_composition, thm:mpug_l_gauge_preservation,
+        thm:mpug_block_independence_inverse_gauge}
+    A trivial $L$-symbol has $\ell=1$. Conversely, the identity $\ell=1$
+    implies block independence, so applying
+    Lemma~\ref{thm:mpug_block_independence_inverse_gauge} and composing the
+    gauges trivializes $L$.
+\end{proof}
+
+\begin{lemma}[Scalar gauge triviality and block independence]
+    \label{thm:mpug_trivial_iff_block_independent}
+    \lean{TNLean.Algebra.LSymbol.IsBlockIndependent.hasTrivialGauge,
+        TNLean.Algebra.LSymbol.hasTrivialGauge_iff_isBlockIndependent}
+    \leanok
+    \uses{def:mpug_block_independence_gauge_forms,
+        thm:mpug_l_gauge_composition, thm:mpug_l_gauge_preservation,
+        thm:mpug_block_independence_inverse_gauge}
+    Let $L$ be an $L$-symbol compatible with a scalar $3$-cochain,
+    and suppose that $\mathsf X$ is nonempty. A joint scalar gauge trivializes
+    $L$ if and only if a joint scalar gauge makes $\ell^x_{a,b;r}$ independent
+    of $x$.
+    % Source anchor: arXiv:2502.20257, prop:technical01, items 1 and 4.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_l_gauge_composition, thm:mpug_l_gauge_preservation,
+        thm:mpug_block_independence_inverse_gauge}
+    Gauge triviality implies block constancy and hence block independence.
+    For the converse, apply
+    Lemma~\ref{thm:mpug_block_independence_inverse_gauge} to the
+    block-independent representative and compose its trivializing gauge with
+    the original gauge.
+\end{proof}
+
+\begin{lemma}[Four scalar gauge formulations of block independence]
+    \label{thm:mpug_block_independence_four_forms}
+    \lean{TNLean.Algebra.LSymbol.hasTrivialGauge_tfae}
+    \leanok
+    \uses{def:mpug_block_independence_gauge_forms,
+        thm:mpug_trivial_iff_block_constant,
+        thm:mpug_trivial_iff_trivial_ell,
+        thm:mpug_trivial_iff_block_independent}
+    Let $L$ be an $L$-symbol compatible with a scalar $3$-cochain,
+    and suppose that $\mathsf X$ is nonempty. The four scalar gauge
+    properties (\ref{eq:mpug_block_form_trivial}),
+    (\ref{eq:mpug_block_form_constant}),
+    (\ref{eq:mpug_block_form_trivial_ell}), and
+    (\ref{eq:mpug_block_form_independent_ell}) of $L$ are equivalent. This is
+    the scalar core of the block-independence proposition of
+    \cite{FrancoRubio2025MPUGauging}, whose fourth condition is stated for an
+    MPS--MPU pair.
+    % Source anchor: arXiv:2502.20257, prop:technical01, lines 6975--6989.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_trivial_iff_block_constant,
+        thm:mpug_trivial_iff_trivial_ell,
+        thm:mpug_trivial_iff_block_independent}
+    Lemmas~\ref{thm:mpug_trivial_iff_block_constant},
+    \ref{thm:mpug_trivial_iff_trivial_ell}, and
+    \ref{thm:mpug_trivial_iff_block_independent} identify each of the last
+    three properties with the first.
+\end{proof}
+
+For a compatible scalar $L$-symbol,
+Lemma~\ref{thm:mpug_block_independence_four_forms} establishes the
+algebraic equivalence among its four scalar gauge properties; the corresponding
+tensor-level bridge to an underlying MPS--MPU pair is not asserted here.
+% Scope boundary: the tensor-facing bridge for arXiv:2502.20257,
+% prop:technical01 is not contained in the scalar L-symbol declarations.
+
+\subsection{\texorpdfstring{$L$}{L}-symbols from stabilizer cocycles}
+
+\begin{lemma}[Stabilizer transition elements]
+    \label{thm:mpug_stabilizer_transition}
+    \lean{TNLean.Algebra.StabilizerRepresentatives.transitionElement_mul,
+        TNLean.Algebra.StabilizerRepresentatives,
+        TNLean.Algebra.StabilizerRepresentatives.ofPretransitive,
+        TNLean.Algebra.StabilizerRepresentatives.transitionElement,
+        TNLean.Algebra.StabilizerRepresentatives.coe_transitionElement,
+        TNLean.Algebra.StabilizerRepresentatives.transitionElement_stabilizer}
+    \leanok
+    Suppose that $G$ acts transitively on $\mathsf X$, and fix
+    $x_0\in\mathsf X$. There are representatives $k_x\in G$ satisfying
+    $k_xx_0=x$ and $k_{x_0}=e$. With
+    $H=\operatorname{Stab}_G(x_0)$, define
+    \begin{align}
+        t_k(g,x)
+         & =k_{g x}^{-1}gk_x.
+        \label{eq:mpug_stabilizer_transition}
+    \end{align}
+    Then $t_k(g,x)\in H$ and
+    \begin{align}
+        t_k(g_1g_2,x)
+         & =t_k(g_1,g_2x)t_k(g_2,x).
+        \label{eq:mpug_stabilizer_transition_product}
+    \end{align}
+    Consequently, the source factors are
+    \begin{align}
+        h_2
+         & =t_k(g_2,x)=k_{g_2x}^{-1}g_2k_x,
+        \label{eq:mpug_stabilizer_h2}                  \\
+        h_1
+         & =t_k(g_1,g_2x)=k_{g_1g_2x}^{-1}g_1k_{g_2x}.
+        \label{eq:mpug_stabilizer_h1}
+    \end{align}
+    As recorded in \cite{gap:fbc25_stabilizer_transition_index_typo}, the last
+    representative in $h_1$ corrects the printed $k_{g_1x}$. No finiteness or
+    normality assumption is required.
+    % Local correction:
+    % docs/paper-gaps/fbc25_stabilizer_transition_index_typo.tex.
+    % Source anchor: arXiv:2502.20257, lemma:h1h2 and eq:h1h2,
+    % lines 7028--7042.
+\end{lemma}
+
+\begin{proof}\leanok
+    Transitivity gives one element carrying $x_0$ to each $x$, with the
+    identity chosen at $x=x_0$. Acting with (\ref{eq:mpug_stabilizer_transition})
+    on $x_0$ gives
+    $k_{gx}^{-1}g(k_xx_0)=k_{gx}^{-1}(gx)=x_0$.
+    For (\ref{eq:mpug_stabilizer_transition_product}), substituting
+    (\ref{eq:mpug_stabilizer_transition}) and cancelling
+    $k_{g_2x}k_{g_2x}^{-1}$ yields the product formula. The two formulas for
+    $h_1$ and $h_2$ are the corresponding specializations.
+\end{proof}
+
+\begin{lemma}[L-symbol induced by a stabilizer cocycle]
+    \label{thm:mpug_stabilizer_cocycle_l_symbol}
+    \lean{TNLean.Algebra.StabilizerRepresentatives.inducedLSymbol_isCompatible,
+        TNLean.Algebra.StabilizerRepresentatives.inducedLSymbol,
+        TNLean.Algebra.StabilizerRepresentatives.inducedLSymbol_base,
+        TNLean.Algebra.StabilizerRepresentatives.inducedActionGauge,
+        TNLean.Algebra.StabilizerRepresentatives.inducedLSymbol_eq_gauge,
+        TNLean.Algebra.StabilizerRepresentatives.isMulCoboundary₂_div_iff_exists_actionGauge_inducedLSymbol_eq}
+    \leanok
+    \uses{def:mpug_l_symbols, def:mpug_l_gauge, def:is_cocycle,
+        def:cohomologous_to, thm:mpug_stabilizer_transition}
+    Let $H=\operatorname{Stab}_G(x_0)$ and let
+    $\psi\colon H\times H\to\C^\times$ be a scalar $2$-cocycle. Define the
+    $\omega=1$ scalar specialization of \cite[Eq.~(20)]{GarreRubio2023MPOSym}
+    by
+    \begin{align}
+        L^x_{g,h}
+         & =\psi\bigl(t_k(g,hx),t_k(h,x)\bigr).
+        \label{eq:mpug_induced_stabilizer_l_symbol}
+    \end{align}
+    The $L$-symbol (\ref{eq:mpug_induced_stabilizer_l_symbol}) satisfies
+    (\ref{eq:mpug_l_compatibility}) with $\omega=1$, and its base-point
+    restriction recovers $\psi$:
+    \begin{align}
+        L^{x_0}_{a,b} & =\psi(a,b)
+        \label{eq:mpug_induced_stabilizer_base}
+    \end{align}
+    for all $a,b\in H$.
+
+    More precisely, two stabilizer cocycles are cohomologous exactly when
+    their induced $L$-symbols differ by an action-tensor gauge and the trivial
+    fusion-tensor gauge:
+    \begin{align}
+        \psi_1\sim\psi_2
+         & \quad\Longleftrightarrow\quad
+        \exists\gamma,\quad
+        L[\psi_1]=(1,\gamma)\mathbin{\triangleright}L[\psi_2].
+        \label{eq:mpug_induced_cohomology_iff}
+    \end{align}
+    If the cohomology relation is given by
+    $\varphi\colon H\to\C^\times$, with
+    \begin{align}
+        \psi_1(a,b)
+         & =\varphi(a)\varphi(b)\varphi(ab)^{-1}\psi_2(a,b),
+        \label{eq:mpug_stabilizer_cocycle_gauge}
+    \end{align}
+    then the forward action-tensor gauge is
+    \begin{align}
+        \gamma_{g,x} & =\varphi\bigl(t_k(g,x)\bigr)^{-1}.
+        \label{eq:mpug_induced_action_gauge}
+    \end{align}
+    Thus the induced action-gauge class depends only on the cohomology class
+    of $\psi$.
+
+    This establishes the scalar part of the $L$-symbol reduction in
+    \cite[lines~7028--7042]{FrancoRubio2025MPUGauging}; the
+    representation-theoretic claim for a tensor-derived $L$-symbol is not
+    asserted here.
+    % Source anchor: arXiv:2203.12563, Eq. (20).
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:mpug_l_gauge, thm:mpug_stabilizer_transition}
+    With
+    $a=t_k(g,hkx)$, $b=t_k(h,kx)$, and $c=t_k(k,x)$,
+    the product law (\ref{eq:mpug_stabilizer_transition_product}) gives
+    $t_k(gh,kx)=ab$ and $t_k(hk,x)=bc$. Compatibility is therefore
+    \begin{align}
+        \psi(a,b)\psi(ab,c)
+         & =\psi(a,bc)\psi(b,c),
+    \end{align}
+    which is the cocycle equation. If $p,q\in H$, then
+    $t_k(p,x_0)=p$ and $t_k(q,x_0)=q$ because $k_{x_0}=e$, proving
+    (\ref{eq:mpug_induced_stabilizer_base}). For the forward gauge
+    calculation, setting $a=t_k(g,hx)$ and $b=t_k(h,x)$ gives
+    $t_k(gh,x)=ab$. Substituting (\ref{eq:mpug_induced_action_gauge}) into
+    (\ref{eq:mpug_l_gauge}) gives the multiplier
+    \begin{align}
+        \frac{\gamma_{gh,x}}{\gamma_{g,hx}\gamma_{h,x}}
+         & =\varphi(ab)^{-1}
+        \bigl(\varphi(a)^{-1}\varphi(b)^{-1}\bigr)^{-1}
+        =\varphi(a)\varphi(b)\varphi(ab)^{-1}.
+    \end{align}
+    Formula (\ref{eq:mpug_stabilizer_cocycle_gauge}) now identifies the two
+    induced $L$-symbols. Conversely, if
+    $L[\psi_1]=(1,\gamma)\mathbin{\triangleright}L[\psi_2]$ and
+    $\varphi(a)=\gamma_{a,x_0}^{-1}$ for $a\in H$, evaluating the gauge
+    equality at $x_0$ and $a,b\in H$ gives
+    \begin{align}
+        \psi_1(a,b)
+         & =\frac{\gamma_{ab,x_0}}
+        {\gamma_{a,x_0}\gamma_{b,x_0}}\psi_2(a,b)
+        =\varphi(a)\varphi(b)\varphi(ab)^{-1}\psi_2(a,b).
+    \end{align}
+    Hence $\psi_1\sim\psi_2$, which proves the reverse implication in
+    (\ref{eq:mpug_induced_cohomology_iff}).
+\end{proof}
+
+\begin{lemma}[Explicit gauge from a stabilizer cocycle extension]
+    \label{thm:mpug_stabilizer_extension_gauge}
+    \lean{TNLean.Algebra.StabilizerRepresentatives.extensionActionGauge,
+        TNLean.Algebra.StabilizerRepresentatives.inducedLSymbol_eq_extensionActionGauge,
+        TNLean.Algebra.StabilizerRepresentatives.inducedLSymbol_hasTrivialGauge_of_extension}
+    \leanok
+    \uses{thm:mpug_stabilizer_cocycle_l_symbol, def:mpug_l_gauge,
+        def:mpug_block_independence_gauge_forms}
+    Let $G$ act on $\mathsf X$, with basepoint $x_0$, stabilizer
+    $H=\operatorname{Stab}_G(x_0)$, and representatives $k_x$ satisfying
+    $k_xx_0=x$ and $k_{x_0}=e$.
+    Let $\psi\colon H\times H\to\C^\times$ and let
+    $\Psi\colon G\times G\to\C^\times$ be a two-cocycle whose restriction
+    to $H\times H$ is $\psi$. Define
+    \begin{align}
+        \gamma_g^x
+         & =\frac{\Psi(k_{gx}^{-1},gk_x)\Psi(g,k_x)}
+        {\Psi(e,e)\Psi(k_x,k_x^{-1})}.
+        \label{eq:mpug_extension_gamma}
+    \end{align}
+    With $h_1=t_k(g_1,g_2x)$ and $h_2=t_k(g_2,x)$, the induced symbols satisfy
+    \begin{align}
+        L^x_{g_1,g_2}=\psi(h_1,h_2)
+         & =\Psi(g_1,g_2)\frac{\gamma_{g_1g_2}^x}
+        {\gamma_{g_1}^{g_2x}\gamma_{g_2}^x}.
+        \label{eq:mpug_extension_identity}
+    \end{align}
+    Consequently the inverse fusion and action gauges
+    $(\Psi^{-1},\gamma^{-1})$ make $L$ identically one.
+    This is the scalar representative calculation in the forward proof of
+    the block-independence extension proposition of
+    \cite{FrancoRubio2025MPUGauging};
+    here extension means the equality $\Psi|_{H\times H}=\psi$ of chosen
+    cocycle representatives, rather than only equality of their classes.
+    See \cite{gap:fbc25_mpu_action_stabilizer_source_audit} for the
+    relationship between cocycle representatives, cohomology classes, and
+    tensor data.
+\end{lemma}
+
+\begin{proof}\leanok
+    With $a=k_{g_1g_2x}$, $b=k_{g_2x}$, $c=k_x$, $u=g_1$, and $v=g_2$,
+    the cocycle equation gives $\Psi(z,e)=\Psi(e,z)=\Psi(e,e)$ and
+    $\Psi(b^{-1},b)=\Psi(b,b^{-1})$. Applying it successively to the triples
+    \begin{align}
+         & (a^{-1}ub,b^{-1},vc),\quad (a^{-1}ub,b^{-1},b),\quad
+        (a^{-1},u,vc),\quad (a^{-1},u,b),\quad (u,v,c)
+    \end{align}
+    and solving these equalities for the corresponding factors of
+    $\Psi(a^{-1}ub,b^{-1}vc)$ yields
+    (\ref{eq:mpug_extension_identity}) with
+    (\ref{eq:mpug_extension_gamma}) after cancellation. The restriction
+    hypothesis identifies its left side with $\psi(h_1,h_2)$. Substitution into
+    (\ref{eq:mpug_l_gauge}) cancels the multiplier under the inverse gauges.
+\end{proof}
+
+\begin{lemma}[Exact extension from trivializing scalar gauges]
+    \label{lem:mpug_trivializing_extension}
+    \lean{TNLean.Algebra.LSymbol.isMulCocycle₂_of_isTrivial_gauge,
+        TNLean.Algebra.LSymbol.basepointExtension,
+        TNLean.Algebra.LSymbol.basepointExtension_isMulCocycle₂,
+        TNLean.Algebra.StabilizerRepresentatives.basepointExtension_restrict,
+        TNLean.Algebra.StabilizerRepresentatives.exists_extension_of_inducedLSymbol_hasTrivialGauge}
+    \leanok
+    \uses{thm:mpug_stabilizer_cocycle_l_symbol, def:mpug_l_gauge}
+    Let $G$ act on $\mathsf X$ with basepoint $x_0$, stabilizer
+    $H=\operatorname{Stab}_G(x_0)$, and representatives $k_x$ satisfying
+    $k_xx_0=x$ and $k_{x_0}=e$. Let $\psi:H\times H\to\C^\times$ be a
+    two-cocycle and $L[\psi]$ its induced scalar $L$-symbol.
+    Suppose scalar cochains $\beta:G\times G\to\C^\times$ and
+    $\gamma:G\times\mathsf X\to\C^\times$ satisfy
+    $(\beta,\gamma)\mathbin{\triangleright}L[\psi]=1$.
+    Then $\beta$ is a two-cocycle and
+    \begin{align}
+        \Psi(g,h)
+         & =\beta(g,h)^{-1}
+        \frac{\gamma_{g,x_0}\gamma_{h,x_0}}{\gamma_{gh,x_0}}
+        \label{eq:mpug_trivializing_extension}
+    \end{align}
+    is a two-cocycle with $\Psi|_{H\times H}=\psi$ exactly.
+    Neither cocycles nor gauges need be normalized.
+    This is the converse scalar calculation in
+    \cite[lines~7057--7064]{FrancoRubio2025MPUGauging}, with gauges that
+    trivialize $L[\psi]$, the inverses of the source's forward gauges.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_stabilizer_cocycle_l_symbol, def:mpug_l_gauge,
+        thm:mpug_h2_exact_extension}
+    Compatibility of $L[\psi]$ with $\omega=1$ transports under
+    $(\beta,\gamma)$ to compatibility of the constant symbol $1$ with
+    $d\beta$. Thus $d\beta=1$, which is the two-cocycle equation for
+    $\beta$. Setting $\varphi(g)=\gamma_{g,x_0}$, formula
+    (\ref{eq:mpug_trivializing_extension}) is
+    $\Psi=d\varphi\,\beta^{-1}$, hence is a two-cocycle.
+    For $a,b\in H$, the equality $bx_0=x_0$ and the chosen
+    $k_{x_0}=e$ identify $L[\psi]^{x_0}_{a,b}$ with $\psi(a,b)$.
+    Evaluating the trivializing-gauge identity there gives
+    $\Psi(a,b)=\psi(a,b)$.
+\end{proof}
+
+\begin{lemma}[Block independence extends the stabilizer cocycle]
+    \label{lem:mpug_bi_basepoint_extension}
+    \lean{TNLean.Algebra.LSymbol.basepointExtension_apply_of_isTrivial_gauge,
+        TNLean.Algebra.LSymbol.exists_extension_of_isBlockIndependent}
+    \leanok
+    \uses{lem:mpug_trivializing_extension, thm:mpug_block_independence_four_forms,
+        def:mpug_block_independence_gauge_forms}
+    Let $G$ act on $\mathsf X$ with basepoint $x_0$ and stabilizer
+    $H=\operatorname{Stab}_G(x_0)$, and let $L$ be any $L$-symbol compatible
+    with $\omega=1$. If $L$ is block independent after a joint scalar gauge,
+    then there is a two-cocycle $\Psi:G\times G\to\C^\times$ with
+    $\Psi(a,b)=L^{x_0}_{a,b}$ for all $a,b\in H$. This is the converse
+    direction of \cite[lines~7057--7064]{FrancoRubio2025MPUGauging} for an
+    arbitrary compatible $L$-symbol, not only for one induced by
+    representatives.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:mpug_trivializing_extension, thm:mpug_block_independence_four_forms}
+    By Lemma~\ref{thm:mpug_block_independence_four_forms}, some joint scalar
+    gauge $(\beta,\gamma)$ trivializes $L$. The cochain
+    (\ref{eq:mpug_trivializing_extension}) is a two-cocycle by
+    Lemma~\ref{lem:mpug_trivializing_extension}. For $b\in H$ the trivializing
+    identity at $(x_0,a,b)$ uses only $bx_0=x_0$, and it gives
+    $\Psi(a,b)=L^{x_0}_{a,b}$.
+\end{proof}
+
+% Scalar criterion; the circle-coefficient and tensor forms follow below.
+\begin{lemma}[Scalar block independence and restriction of the stabilizer class]
+    \label{lem:mpug_scalar_bi_restriction}
+    \lean{TNLean.Algebra.StabilizerRepresentatives.inducedLSymbol_isBlockIndependent_iff_exists_extension,
+        TNLean.Algebra.StabilizerRepresentatives.inducedLSymbol_isBlockIndependent_iff_H2π_mem_range_map_subtype}
+    \leanok
+    \uses{lem:mpug_trivializing_extension, thm:mpug_stabilizer_extension_gauge,
+        thm:mpug_h2_exact_extension, thm:mpug_block_independence_four_forms}
+    Let $G$ act on $\mathsf X$ with basepoint $x_0$, stabilizer
+    $H=\operatorname{Stab}_G(x_0)$, and representatives $k_x$ satisfying
+    $k_xx_0=x$ and $k_{x_0}=e$. For a two-cocycle
+    $\psi:H\times H\to\C^\times$, the following are equivalent:
+    \begin{enumerate}
+        \item The induced scalar $L$-symbol $L[\psi]$ is block independent
+              after a joint scalar gauge.
+        \item There is a two-cocycle $\Psi:G\times G\to\C^\times$ with
+              $\Psi|_{H\times H}=\psi$ exactly.
+        \item The class $[\psi]$ belongs to the image of the restriction map
+              $H^2(G,\C^\times)\to H^2(H,\C^\times)$ for trivial coefficients.
+    \end{enumerate}
+    No normality or finiteness assumption is imposed on $H$ or $G$.
+    This states the scalar consequence of
+    \cite[lines~7042--7064]{FrancoRubio2025MPUGauging} for the induced symbols.
+    The distinction between classes, representatives, and tensor data is
+    explained in \cite{gap:fbc25_mpu_action_stabilizer_source_audit}.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_block_independence_four_forms,
+        lem:mpug_trivializing_extension, thm:mpug_stabilizer_extension_gauge,
+        thm:mpug_h2_exact_extension}
+    By Lemma~\ref{thm:mpug_block_independence_four_forms}, scalar block
+    independence is equivalent to the existence of a trivializing scalar
+    gauge. Lemma~\ref{lem:mpug_trivializing_extension} constructs an exact
+    extension from such a gauge, and
+    Lemma~\ref{thm:mpug_stabilizer_extension_gauge} constructs a trivializing
+    gauge from an exact extension. Finally,
+    Lemma~\ref{thm:mpug_h2_exact_extension} identifies exact extension of
+    $\psi$ with membership of $[\psi]$ in the image of restriction.
+\end{proof}
+
+\begin{lemma}[Reconstruction of stabilizer L-symbols]
+    \label{thm:mpug_stabilizer_reconstruction}
+    \lean{TNLean.Algebra.StabilizerRepresentatives.reconstructedLSymbol,
+        TNLean.Algebra.StabilizerRepresentatives.reconstructedLSymbol_isCompatible,
+        TNLean.Algebra.StabilizerRepresentatives.reconstructedLSymbol_one_isCompatible,
+        TNLean.Algebra.StabilizerRepresentatives.reconstructedLSymbol_eq_mul,
+        TNLean.Algebra.StabilizerRepresentatives.reconstructedLSymbol_base,
+        TNLean.Algebra.StabilizerRepresentatives.gauge_reconstructedLSymbol_isCompatible,
+        TNLean.Algebra.ScalarThreeCochain.exists_fusionGauge_eq_one_of_isTrivialGaugeClass_comap,
+        TNLean.Algebra.LSymbol.IsCompatible.mul}
+    \leanok
+    \uses{def:mpug_l_symbols, def:mpug_l_gauge, def:mpug_three_cocycle,
+        def:mpug_fusion_gauge, def:mpug_trivial_gauge_class, def:is_cocycle,
+        thm:mpug_stabilizer_transition}
+    Let $G$ act on $\mathsf X$ with basepoint $x_0$, stabilizer
+    $H=\operatorname{Stab}_G(x_0)$, and representatives $k_x$ as in
+    Lemma~\ref{thm:mpug_stabilizer_transition}. Let $\omega$ be a scalar
+    $3$-cocycle on $G$ with $\omega(a,b,c)=1$ for all $a,b,c\in H$, and let
+    $\psi$ be a scalar $2$-cocycle on $H$. With $h_2=t_k(g_2,x)$ and
+    $h_1=t_k(g_1,g_2x)$, define
+    \begin{align}
+        L^x_{g_1,g_2}
+         & =\frac{\omega(g_1g_2k_x,h_2^{-1},h_1^{-1})\,\psi(h_1,h_2)}
+        {\omega(g_1,g_2k_x,h_2^{-1})\,\omega(g_1,g_2,k_x)}.
+        \label{eq:mpug_stabilizer_reconstruction}
+    \end{align}
+    Then the $L$-symbol (\ref{eq:mpug_stabilizer_reconstruction}) of
+    \cite[Eq.~(20)]{GarreRubio2023MPOSym} satisfies
+    (\ref{eq:mpug_l_compatibility}), with
+    $L^{x_0}_{a,b}=\psi(a,b)$ for $a,b\in H$.
+
+    If only $\omega|_H$ is a coboundary, some fusion gauge $\beta$ on $G$
+    makes $\beta\mathbin{\triangleright}\omega$ equal to one on
+    $H\times H\times H$, and applying the inverse gauge
+    $(\beta^{-1},1)$ to (\ref{eq:mpug_stabilizer_reconstruction}) built from
+    $\beta\mathbin{\triangleright}\omega$ gives an $L$-symbol compatible with
+    $\omega$. The hypothesis that $\omega$ is one on the stabilizer fixes the
+    fusion gauge in which the source's formula holds; as recorded in
+    \cite{gap:glm23_eq20_fusion_gauge}, for a general
+    $\omega$ with $\omega|_H=d\beta$ the printed formula can fail.
+    No normalization of $\omega$ is required.
+    % Local fix: docs/paper-gaps/glm23_eq20_fusion_gauge.tex.
+    % Source anchor: arXiv:2203.12563, REsubmission.tex lines 740--761.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_stabilizer_transition, thm:mpug_stabilizer_cocycle_l_symbol}
+    The formula factors as its value at $\psi=1$ times the induced
+    $L$-symbol (\ref{eq:mpug_induced_stabilizer_l_symbol}), and pointwise
+    products of compatible $L$-symbols are compatible with the product of
+    the $3$-cochains. By Lemma~\ref{thm:mpug_stabilizer_cocycle_l_symbol}
+    it suffices to treat $\psi=1$. For fixed $x$ and $g,h,k$, with $p=k_x$,
+    $a=t_k(k,x)$, $b=t_k(h,kx)$, and $c=t_k(g,hkx)$, we have $k_{kx}=kpa^{-1}$
+    and, by (\ref{eq:mpug_stabilizer_transition_product}),
+    $t_k(hk,x)=ba$ and $t_k(gh,kx)=cb$. The compatibility equation then
+    follows from the $3$-cocycle equation at the four quadruples
+    \begin{align}
+         & (g,h,k,p),\quad (g,h,kp,a^{-1}),\quad (g,hkp,a^{-1},b^{-1}),\quad
+        (ghkp,a^{-1},b^{-1},c^{-1}),
+    \end{align}
+    together with $\omega(a^{-1},b^{-1},c^{-1})=1$. At $x_0$ and $a,b\in H$
+    every argument of $\omega$ in (\ref{eq:mpug_stabilizer_reconstruction})
+    lies in $H$, which gives $L^{x_0}_{a,b}=\psi(a,b)$. If
+    $\omega|_H=d\beta_0$, extending $\beta_0^{-1}$ by one outside
+    $H\times H$ produces a coboundary that cancels $\omega$ on
+    $H\times H\times H$. Finally, $(\beta^{-1},1)$ changes
+    $\beta\mathbin{\triangleright}\omega$ back to $\omega$.
+\end{proof}
+
+\begin{lemma}[Classification and torsor of stabilizer L-symbols]
+    \label{thm:mpug_stabilizer_torsor}
+    \lean{TNLean.Algebra.StabilizerRepresentatives.exists_actionGauge_eq_inducedLSymbol,
+        TNLean.Algebra.StabilizerRepresentatives.exists_actionGauge_eq_reconstructedLSymbol,
+        TNLean.Algebra.StabilizerRepresentatives.exists_actionGauge_gauge_eq_reconstructedLSymbol,
+        TNLean.Algebra.StabilizerRepresentatives.isCompatible_iff_exists_actionGauge_mul_inducedLSymbol,
+        TNLean.Algebra.StabilizerRepresentatives.actionGaugeEquiv_mul_inducedLSymbol_iff,
+        TNLean.Algebra.StabilizerRepresentatives.solutionSetoid,
+        TNLean.Algebra.StabilizerRepresentatives.h2EquivSolutionClasses,
+        TNLean.Algebra.StabilizerRepresentatives.h2EquivSolutionClasses_H2π,
+        TNLean.Algebra.StabilizerRepresentatives.h2EquivSolutionClasses_apply,
+        TNLean.Algebra.StabilizerRepresentatives.solutionAddAction,
+        TNLean.Algebra.StabilizerRepresentatives.existsUnique_vadd_eq,
+        TNLean.Algebra.LSymbol.ActionGaugeEquiv,
+        TNLean.Algebra.LSymbol.actionGaugeEquiv_equivalence,
+        TNLean.Algebra.LSymbol.IsCompatible.inv,
+        TNLean.Algebra.LSymbol.IsCompatible.mul_inv_one,
+        TNLean.Algebra.LSymbol.IsCompatible.gauge_one,
+        TNLean.Algebra.LSymbol.IsCompatible.isCocycle_restrict,
+        TNLean.Algebra.LSymbol.gauge_one_mul}
+    \leanok
+    \uses{thm:mpug_stabilizer_reconstruction, def:mpug_l_gauge,
+        thm:mpug_h2_group_cohomology_comparison, def:cohomologous_to}
+    Keep the setting of Lemma~\ref{thm:mpug_stabilizer_reconstruction},
+    and call two $L$-symbols action-gauge equivalent when they differ by
+    $(1,\gamma)\mathbin{\triangleright}$ for some action-tensor gauge
+    $\gamma$.
+    \begin{enumerate}
+        \item If $R$ is compatible with the trivial $3$-cochain, then
+              $R=(1,\gamma)\mathbin{\triangleright}L[\psi]$ for the induced
+              $L$-symbol (\ref{eq:mpug_induced_stabilizer_l_symbol}) of the
+              $2$-cocycle $\psi(a,b)=R^{x_0}_{a,b}$, with
+              $\gamma^x_g=R^{x_0}_{k_{gx},t_k(g,x)}/R^{x_0}_{g,k_x}$.
+        \item If $\omega$ is a $3$-cocycle equal to one on
+              $H\times H\times H$, every $L$-symbol compatible with $\omega$
+              is action-gauge equivalent to
+              (\ref{eq:mpug_stabilizer_reconstruction}) for some $2$-cocycle
+              $\psi$ on $H$. For a general fusion gauge $\beta$ making
+              $\beta\mathbin{\triangleright}\omega$ trivial on $H$, the
+              same holds for $(\beta,1)\mathbin{\triangleright}L$ and the
+              formula built from $\beta\mathbin{\triangleright}\omega$.
+        \item Let $L_0$ be compatible with an arbitrary scalar $3$-cochain
+              $\omega$. An $L$-symbol $L$ is compatible with $\omega$ if and
+              only if $L$ is action-gauge equivalent to $L_0L[\psi]$ for
+              some $2$-cocycle $\psi$ on $H$, and $L_0L[\psi_1]$ and
+              $L_0L[\psi_2]$ are action-gauge equivalent if and only if
+              $\psi_1\sim\psi_2$. Hence sending the class of $\psi$ to the
+              class of $L_0L[\psi]$ is a bijection from $H^2(H,\C^\times)$
+              onto the action-gauge classes of $L$-symbols compatible with
+              $\omega$.
+        \item Sending the class of $\psi$ and the class of $L$ to the
+              class of $L\,L[\psi]$ is a well-defined action of the group
+              cohomology $H^2(H,\C^\times)$, for the trivial action of $H$
+              on $\C^\times$, on these classes, and for any two classes
+              exactly one cohomology class carries the first to the second.
+    \end{enumerate}
+    The last two items are the torsor statement of \cite{GarreRubio2023MPOSym}
+    for fixed $(G,\omega,H)$, with the fusion gauge held fixed as in the
+    source. In all four items $G$, and hence $H$, is a small group: its
+    underlying set lies in a fixed set-theoretic universe containing $\Z$,
+    in which the group cohomology $H^2(H,\C^\times)$ is formed. In the last
+    two items the set $\mathsf X$ lies in the same universe.
+    % Source anchor: arXiv:2203.12563, REsubmission.tex lines 749--761.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_stabilizer_reconstruction,
+        thm:mpug_stabilizer_cocycle_l_symbol}
+    For the first item, compatibility at $x_0$ with arguments
+    $(g,h,k_x)$ expresses $R^x_{g,h}$ through basepoint values. Rewriting
+    $hk_x=k_{hx}t_k(h,x)$ and $gk_{hx}=k_{ghx}t_k(g,hx)$ and using
+    compatibility at $x_0$ with arguments $(g,k_{hx},t_k(h,x))$ and
+    $(k_{ghx},t_k(g,hx),t_k(h,x))$ combines the three equations into
+    $R^x_{g,h}=\gamma^x_{gh}(\gamma^{hx}_g\gamma^x_h)^{-1}
+        \psi(t_k(g,hx),t_k(h,x))$. Compatibility at $x_0$ with arguments in
+    $H$ is the cocycle equation for $\psi$.
+
+    For the third item, if $L$ and $L_0$ are compatible with $\omega$,
+    then $LL_0^{-1}$ is compatible with the trivial $3$-cochain, and the first
+    item applies; conversely $L_0L[\psi]$ is compatible with $\omega$, and an
+    action gauge with trivial fusion part preserves compatibility and
+    commutes with multiplication by $L_0$. Cancelling $L_0$ reduces the
+    freeness statement to (\ref{eq:mpug_induced_cohomology_iff}). The second
+    item is the third with $L_0$ the formula at $\psi=1$, which is
+    compatible by Lemma~\ref{thm:mpug_stabilizer_reconstruction}.
+    For the last item, cocycles modulo cohomology form the second group
+    cohomology of $H$ with coefficients in $\C^\times$, and
+    \begin{align}
+        [\psi_1]+[\psi_2] & =[\psi_1\psi_2],
+        \notag                                     \\
+        L[\psi_1\psi_2]   & =L[\psi_1]\,L[\psi_2].
+        \notag
+    \end{align}
+    Cohomologous cocycles give induced $L$-symbols related by an action
+    gauge, so the rule is well defined, and by the two identities acting by
+    $[\psi_1]+[\psi_2]$ is acting by $[\psi_2]$ and then by $[\psi_1]$. With
+    base point $L$ the action is the bijection of the third item.
+\end{proof}
+
+\begin{lemma}[Scalar block independence with circle coefficients]
+    \label{lem:mpug_scalar_bi_restriction_circle}
+    \lean{TNLean.Algebra.circleRepresentationRes,
+        TNLean.Algebra.circleToComplexUnits_map_comp_map_res,
+        TNLean.Algebra.circleToComplexUnits_map_res_apply,
+        TNLean.Algebra.mem_range_map_circleRepresentationRes_iff,
+        TNLean.Algebra.LSymbol.isBlockIndependent_gauge_iff,
+        TNLean.Algebra.StabilizerRepresentatives.inducedLSymbol_isBlockIndependent_iff_circle}
+    \leanok
+    \uses{lem:mpug_scalar_bi_restriction, thm:mpug_circle_complex_units_h2}
+    Restriction along a group homomorphism $f\colon S\to G$ commutes with
+    the maps $H^2(-,U(1))\to H^2(-,\C^\times)$ induced by inclusion of the
+    unit circle. If $G$ is finite, a class $c\in H^2(S,U(1))$ is the
+    restriction of a class of $G$ exactly when its image in
+    $H^2(S,\C^\times)$ is. Block independence of an $L$-symbol after
+    a joint scalar gauge is unchanged by any further joint scalar gauge.
+
+    Consequently, in the setting of Lemma~\ref{lem:mpug_scalar_bi_restriction}
+    with $G$ finite, the induced $L$-symbol $L[\psi]$ is block independent
+    after a joint scalar gauge if and only if the class in $H^2(H,U(1))$ of
+    the pointwise phase $\psi/|\psi|$ lies in the image of the restriction map
+    $H^2(G,U(1))\to H^2(H,U(1))$. For a cocycle of modulus one this phase is
+    $\psi$ itself. This is the coefficient group of
+    \cite[lines~7042--7064]{FrancoRubio2025MPUGauging}; the comparison of
+    coefficients is the algebraic one of
+    Lemma~\ref{thm:mpug_circle_complex_units_h2}.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:mpug_scalar_bi_restriction, thm:mpug_circle_complex_units_h2,
+        thm:mpug_l_gauge_composition}
+    Both composites of restriction and inclusion are induced by the same
+    homomorphism $S\to G$ and the same coefficient map
+    $U(1)\to\C^\times$, so they agree. If $c=\operatorname{res}(a)$, then
+    the image of $c$ is the restriction of the image of $a$. Conversely, if
+    the image of $c$ is $\operatorname{res}(b)$, surjectivity of inclusion
+    for the finite group $G$ writes $b$ as the image of some $a$; then $c$
+    and $\operatorname{res}(a)$ have the same image, and inclusion is
+    injective for every group. Gauge invariance follows from
+    (\ref{eq:mpug_l_gauge_composition}) applied with the inverse gauge. By
+    Lemma~\ref{thm:mpug_circle_complex_units_h2} the class of the phase of
+    $\psi$ maps to $[\psi]$, and Lemma~\ref{lem:mpug_scalar_bi_restriction}
+    finishes the proof.
+\end{proof}
+
+\begin{lemma}[Stabilizer form of the L-symbols of permuted blocks]
+    \label{lem:mpug_permuted_block_stabilizer_form}
+    \lean{MPOTensor.GroupFamily.BlockActionData.exists_rescale_lSymbol_eq_inducedLSymbol,
+        MPOTensor.GroupFamily.BlockActionData.exists_rescale_lSymbol_eq_inducedLSymbol_of_finite}
+    \leanok
+    \uses{lem:mpug_permuted_block_l_gauge,
+        thm:mpug_permuted_block_l_compatibility, cor:mpug_anomaly_class,
+        thm:mpug_stabilizer_torsor, thm:mpug_stabilizer_cocycle_l_symbol,
+        thm:mpug_stabilizer_transition, thm:mpug_circle_complex_units_h2}
+    In the setting of Lemma~\ref{lem:mpug_permuted_block_l_gauge}, choose
+    $x_0\in\mathsf X$, let $H$ be its stabilizer, and choose $k_x\in G$ with
+    $k_xx_0=x$ and $k_{x_0}=e$. If the anomaly class vanishes, some rescaling
+    of the fusion and action tensors gives $\omega=1$ and
+    \begin{align}
+        L^x_{g_1,g_2}
+         & =\psi(h_1,h_2),
+         &
+        h_1
+         & =k_{g_1g_2x}^{-1}g_1k_{g_2x},
+         &
+        h_2
+         & =k_{g_2x}^{-1}g_2k_x,
+        \notag
+    \end{align}
+    for a two-cocycle $\psi\colon H\times H\to\C^\times$. If $G$ is finite,
+    $\psi$ can be chosen with values of modulus one.
+
+    This is \cite[lines~7028--7042]{FrancoRubio2025MPUGauging}, with the
+    corrected last representative in $h_1$ of
+    \cite{gap:fbc25_stabilizer_transition_index_typo}; $\psi$ is a cocycle
+    representative, not a cohomology class.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:mpug_permuted_block_l_gauge,
+        thm:mpug_permuted_block_l_compatibility, cor:mpug_anomaly_class,
+        thm:mpug_stabilizer_torsor, thm:mpug_stabilizer_cocycle_l_symbol,
+        thm:mpug_circle_complex_units_h2}
+    By Corollary~\ref{cor:mpug_anomaly_class} there is $\beta$ with
+    $\beta\mathbin{\triangleright}\omega=1$, and by
+    Lemma~\ref{lem:mpug_permuted_block_l_gauge} rescaling the fusion tensors
+    by $\beta$ makes $\omega=1$ and changes $L$ to
+    $(\beta,1)\mathbin{\triangleright}L$, which is compatible with the
+    trivial three-cochain by
+    Lemma~\ref{thm:mpug_permuted_block_l_compatibility}. The first item of
+    Lemma~\ref{thm:mpug_stabilizer_torsor} writes it as
+    $(1,\gamma)\mathbin{\triangleright}L[\psi]$, so rescaling the action
+    tensors by $\gamma^{-1}$ gives $L[\psi]$. For finite $G$, $\psi$ is
+    cohomologous to its pointwise phase by
+    Lemma~\ref{thm:mpug_circle_complex_units_h2}, and by
+    Lemma~\ref{thm:mpug_stabilizer_cocycle_l_symbol} the coboundary is an
+    action gauge, which is absorbed into the rescaling of the action tensors.
+\end{proof}
+
+\begin{lemma}[Block independence and extension of the stabilizer class]
+    \label{lem:mpug_permuted_block_bi_extension}
+    \lean{MPOTensor.GroupFamily.BlockActionData.isBlockIndependent_lSymbol_iff,
+        MPOTensor.GroupFamily.BlockActionData.isBlockIndependent_lSymbol_iff_circle}
+    \leanok
+    \uses{lem:mpug_permuted_block_stabilizer_form,
+        lem:mpug_permuted_block_l_gauge, lem:mpug_scalar_bi_restriction,
+        lem:mpug_scalar_bi_restriction_circle}
+    In the setting of Lemma~\ref{lem:mpug_permuted_block_stabilizer_form},
+    take any rescaling of the tensors for which $L^x_{g_1,g_2}=\psi(h_1,h_2)$
+    with a two-cocycle $\psi$ on $H$. The $L$-symbols are block independent
+    after a joint scalar gauge if and only if $[\psi]\in H^2(H,\C^\times)$
+    lies in the image of the restriction map from $H^2(G,\C^\times)$. If $G$
+    is finite, this holds if and only if the class in $H^2(H,U(1))$ of the
+    phase of $\psi$ lies in the image of the restriction map from
+    $H^2(G,U(1))$.
+
+    This is \cite[lines~7042--7064]{FrancoRubio2025MPUGauging} for the
+    $L$-symbols of actual tensors, stated for the class of $\psi$; the
+    representative form, an exact extension of $\psi$ to a cocycle on $G$, is
+    Lemma~\ref{lem:mpug_scalar_bi_restriction}. The subgroup $H$ need not be
+    normal.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:mpug_permuted_block_l_gauge, lem:mpug_scalar_bi_restriction,
+        lem:mpug_scalar_bi_restriction_circle}
+    By Lemma~\ref{lem:mpug_permuted_block_l_gauge} the rescaled $L$-symbols
+    are a joint scalar gauge of the original ones, and block independence is
+    gauge invariant by Lemma~\ref{lem:mpug_scalar_bi_restriction_circle}.
+    The two criteria for $L[\psi]$ are
+    Lemmas~\ref{lem:mpug_scalar_bi_restriction}
+    and~\ref{lem:mpug_scalar_bi_restriction_circle}.
+\end{proof}
+
+\subsection{Generalized cocycles of block-dependent cochains}
+
+\begin{definition}[Generalized coboundary and cocycle]
+    \label{def:mpug_generalized_cocycle}
+    \lean{TNLean.Algebra.GeneralizedThreeCochain,
+        TNLean.Algebra.GeneralizedFourCochain,
+        TNLean.Algebra.ActionTensorGauge.coboundary,
+        TNLean.Algebra.LSymbol.coboundary,
+        TNLean.Algebra.GeneralizedThreeCochain.coboundary,
+        TNLean.Algebra.LSymbol.IsGeneralizedCocycle}
+    \leanok
+    \uses{def:mpug_l_symbols, def:mpug_l_gauge}
+    Let $\chi\colon G\times\mathsf X\to\C^\times$ be block-dependent. Its
+    generalized coboundary is
+    \begin{align}
+        (d\chi)^x_{g,h}
+         & =\frac{\chi^{h x}_g\chi^x_h}{\chi^x_{gh}}.
+        \label{eq:mpug_generalized_coboundary}
+    \end{align}
+    For a block-dependent scalar $2$-cochain
+    $f\colon\mathsf X\times G^2\to\C^\times$, set
+    \begin{align}
+        (df)^x_{g,h,k}
+         & =\frac{f^x_{g,hk}f^x_{h,k}}
+        {f^{k x}_{g,h}f^x_{gh,k}}.
+        \label{eq:mpug_generalized_two_coboundary}
+    \end{align}
+    As recorded in \cite{gap:fbc25_two_cochain_coboundary_index_typo}, the
+    final group index in the denominator is $k$, correcting the printed
+    formula. For a block-dependent scalar $3$-cochain
+    $\omega\colon\mathsf X\times G^3\to\C^\times$, the corresponding next
+    coboundary is
+    \begin{align}
+        (d\omega)^x_{g,h,k,l}
+         & =\frac{\omega^{l x}_{g,h,k}\omega^x_{g,hk,l}
+            \omega^x_{h,k,l}}
+        {\omega^x_{gh,k,l}\omega^x_{g,h,kl}}.
+        \label{eq:mpug_generalized_three_coboundary}
+    \end{align}
+    A function $\Omega\colon\mathsf X\times G^2\to\C^\times$ is a
+    generalized $2$-cocycle when
+    \begin{align}
+        \Omega^x_{g,hk}\Omega^x_{h,k}
+         & =\Omega^{k x}_{g,h}\Omega^x_{gh,k}.
+        \label{eq:mpug_generalized_cocycle}
+    \end{align}
+    The differential identities $d\Omega=1$ and $d(df)=1$ follow the group
+    cohomology conventions of
+    \cite[lines~5914--5922]{FrancoRubio2025MPUGauging}, with the
+    three-to-four-cochain coboundary given explicitly by
+    (\ref{eq:mpug_generalized_three_coboundary}).
+    No transitivity or finiteness assumption is imposed on $\mathsf X$.
+
+    % Local fix: docs/paper-gaps/fbc25_two_cochain_coboundary_index_typo.tex.
+    % Source anchor: arXiv:2502.20257, lines 5914--5922 and lemma:G_cocycle.
+\end{definition}
+
+\begin{lemma}[Generalized coboundaries square to one]
+    \label{thm:mpug_generalized_coboundary_squared}
+    \lean{TNLean.Algebra.ActionTensorGauge.isGeneralizedCocycle_coboundary,
+        TNLean.Algebra.GeneralizedThreeCochain.coboundary_coboundary}
+    \leanok
+    \uses{def:mpug_generalized_cocycle}
+    The generalized coboundary of every block-dependent scalar $1$-cochain
+    is a generalized $2$-cocycle. With the index correction of
+    \cite{gap:fbc25_two_cochain_coboundary_index_typo}, every block-dependent
+    scalar $2$-cochain $f$ satisfies the identity of
+    \cite[line~5922]{FrancoRubio2025MPUGauging},
+    \begin{align}
+        d(df) & =1.
+        \label{eq:mpug_generalized_coboundary_squared}
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:mpug_generalized_cocycle}
+    Substituting the coboundary formulas, the action law
+    $k(lx)=(kl)x$ and associativity identify the shifted block labels and
+    group products. Every value of the original cochain then occurs once in
+    the numerator and once in the denominator, so all factors cancel.
+\end{proof}
+
+\begin{definition}[Positive block-dependent cochains]
+    \label{def:mpug_positive_generalized_cochains}
+    \lean{TNLean.Algebra.PositiveUnits.embedding,
+        TNLean.Algebra.PositiveUnits.IsPositive,
+        TNLean.Algebra.ActionTensorGauge.IsPositiveValued,
+        TNLean.Algebra.LSymbol.IsPositiveValued}
+    \leanok
+    \uses{def:mpug_l_symbols, def:mpug_l_gauge}
+    Let $\iota\colon\mathbb R_{>0}\to\C^\times$ be the natural
+    multiplicative embedding. A block-dependent scalar $1$-cochain $\chi$ is
+    positive when
+    \begin{align}
+        \chi^x_g & \in\iota(\mathbb R_{>0})
+        \label{eq:mpug_positive_one_cochain}
+    \end{align}
+    for every $x\in\mathsf X$ and $g\in G$. A block-dependent scalar
+    $2$-cochain $\Omega$ is positive when
+    \begin{align}
+        \Omega^x_{g,h} & \in\iota(\mathbb R_{>0})
+        \label{eq:mpug_positive_two_cochain}
+    \end{align}
+    for every $x\in\mathsf X$ and $g,h\in G$. Thus positivity means
+    membership in the embedded subgroup of strictly positive real numbers,
+    not positivity of the real part.
+\end{definition}
+
+\begin{definition}[Hat operation on block-dependent cochains]
+    \label{def:mpug_generalized_hat}
+    \lean{TNLean.Algebra.ActionTensorGauge.hat,
+        TNLean.Algebra.LSymbol.hat}
+    \leanok
+    \uses{def:mpug_l_symbols, def:mpug_l_gauge}
+    Following the one-index and two-index cases of the hat operation in
+    \cite[line~5912]{FrancoRubio2025MPUGauging}, for block-dependent scalar
+    cochains define
+    \begin{align}
+        \widehat\chi^{\,x}_g
+         & =\chi^{\,g x}_{g^{-1}},
+        \label{eq:mpug_generalized_hat_one}
+    \end{align}
+    and
+    \begin{align}
+        \widehat\Omega^{\,x}_{g,h}
+         & =\Omega^{\,(gh)x}_{h^{-1},g^{-1}}.
+        \label{eq:mpug_generalized_hat_two}
+    \end{align}
+\end{definition}
+
+\begin{lemma}[Hat involution and generalized coboundaries]
+    \label{thm:mpug_generalized_hat_coboundary}
+    \lean{TNLean.Algebra.ActionTensorGauge.hat_hat,
+        TNLean.Algebra.LSymbol.hat_hat,
+        TNLean.Algebra.LSymbol.hat_coboundary}
+    \leanok
+    \uses{def:mpug_generalized_cocycle, def:mpug_generalized_hat}
+    The block-dependent hat operation is an involution:
+    \begin{align}
+        \widehat{\widehat\chi} & =\chi,
+        \label{eq:mpug_generalized_hat_hat_one}
+    \end{align}
+    and
+    \begin{align}
+        \widehat{\widehat\Omega} & =\Omega.
+        \label{eq:mpug_generalized_hat_hat_two}
+    \end{align}
+    It commutes with the generalized coboundary:
+    \begin{align}
+        \widehat{d\chi} & =d\widehat\chi.
+        \label{eq:mpug_generalized_hat_coboundary}
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:mpug_generalized_cocycle, def:mpug_generalized_hat}
+    Applying (\ref{eq:mpug_generalized_hat_one}) twice and cancelling each
+    group element with its inverse gives
+    (\ref{eq:mpug_generalized_hat_hat_one}), and applying
+    (\ref{eq:mpug_generalized_hat_two}) twice gives
+    (\ref{eq:mpug_generalized_hat_hat_two}). For
+    (\ref{eq:mpug_generalized_hat_coboundary}), the action law
+    $g(h x)=(gh)x$ and $g^{-1}\bigl((gh)x\bigr)=h x$ give
+    \begin{align}
+        (d\widehat\chi)^x_{g,h}
+         & =\frac{\widehat\chi^{\,h x}_g\widehat\chi^{\,x}_h}
+        {\widehat\chi^{\,x}_{gh}}
+        =\frac{\chi^{(gh)x}_{g^{-1}}\chi^{h x}_{h^{-1}}}
+        {\chi^{(gh)x}_{(gh)^{-1}}}
+        =(d\chi)^{(gh)x}_{h^{-1},g^{-1}}
+        =\widehat{d\chi}^{\,x}_{g,h}.
+    \end{align}
+    The two sides therefore carry the same three values of $\chi$, reordered
+    in $\C^\times$.
+\end{proof}
+
+\begin{definition}[Regular-action matrices]
+    \label{def:mpug_generalized_regular_matrices}
+    \lean{TNLean.Algebra.LSymbol.regularMatrix}
+    \leanok
+    \uses{def:mpug_l_symbols}
+    Let $\Omega\colon\mathsf X\times G^2\to\C^\times$ be an $L$-symbol.
+    As in \cite[Lemma~\texttt{lemma:G\_cocycle}]{FrancoRubio2025MPUGauging},
+    define the regular-action matrix $X^x_g$ on the group algebra $\C G$ by
+    \begin{align}
+        X^x_g\ket{k}
+         & =\Omega^{k^{-1}x}_{g,k}\ket{gk}.
+        \label{eq:mpug_generalized_regular_matrix}
+    \end{align}
+    % Source anchor: arXiv:2502.20257, lines 5938--5942.
+\end{definition}
+
+\begin{lemma}[Generalized projective multiplication law]
+    \label{thm:mpug_generalized_regular_multiplication}
+    \lean{TNLean.Algebra.LSymbol.regularMatrix_mul}
+    \leanok
+    \uses{def:mpug_generalized_cocycle,
+        def:mpug_generalized_regular_matrices}
+    Let $G$ be finite. If $\Omega$
+    satisfies~(\ref{eq:mpug_generalized_cocycle}), then
+    \begin{align}
+        X^{h x}_gX^x_h
+         & =\Omega^x_{g,h}X^x_{gh}.
+        \label{eq:mpug_generalized_regular_multiplication}
+    \end{align}
+    % Source anchor: arXiv:2502.20257, lemma:G_cocycle, lines 5931--5943,
+    %   which states this multiplication law "for G being a finite group".
+    %   The blueprint statement previously omitted that hypothesis, which the
+    %   formal statement carries.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:mpug_generalized_cocycle,
+        def:mpug_generalized_regular_matrices}
+    Applying the left side to $\ket{k}$ yields the coefficient
+    \begin{align}
+        \Omega^{(hk)^{-1}h x}_{g,hk}\Omega^{k^{-1}x}_{h,k}
+         & =\Omega^{k^{-1}x}_{g,hk}\Omega^{k^{-1}x}_{h,k} \\
+         & =\Omega^x_{g,h}\Omega^{k^{-1}x}_{gh,k},
+    \end{align}
+    where the last equality is
+    (\ref{eq:mpug_generalized_cocycle}) at the block $k^{-1}x$.
+    Formula~(\ref{eq:mpug_generalized_regular_matrix}) now gives
+    (\ref{eq:mpug_generalized_regular_multiplication}).
+\end{proof}
+
+\begin{lemma}[Finite-group power trivialization]
+    \label{thm:mpug_generalized_cocycle_power}
+    \lean{TNLean.Algebra.LSymbol.regularMatrix_eq_permutation_mul_diagonal,
+        TNLean.Algebra.LSymbol.regularDeterminant_ne_zero,
+        TNLean.Algebra.LSymbol.determinantCochain,
+        TNLean.Algebra.LSymbol.pow_card_eq_coboundary_apply,
+        TNLean.Algebra.LSymbol.pow_card_eq_coboundary}
+    \leanok
+    \uses{def:mpug_generalized_cocycle,
+        def:mpug_generalized_regular_matrices}
+    Let $G$ be finite and let $\Omega$ be a generalized $2$-cocycle. Then
+    $\Omega^{|G|}$ is a generalized coboundary. More precisely, with
+    \begin{align}
+        \chi^x_g
+         & =\det X^x_g,
+        \label{eq:mpug_generalized_determinant_cochain}
+    \end{align}
+    one has
+    \begin{align}
+        \left(\Omega^x_{g,h}\right)^{|G|}
+         & =\frac{\det X^{h x}_g\det X^x_h}{\det X^x_{gh}}
+        =(d\chi)^x_{g,h}.
+        \label{eq:mpug_generalized_power_coboundary}
+    \end{align}
+    This establishes
+    \cite[Lemma~\texttt{lemma:G\_cocycle}]{FrancoRubio2025MPUGauging}; as
+    recorded in \cite{gap:fbc25_generalized_cocycle_determinant_typo}, the
+    second numerator determinant in
+    (\ref{eq:mpug_generalized_power_coboundary}) carries the index $h$,
+    correcting the printed formula.
+
+    % Local fix: docs/paper-gaps/fbc25_generalized_cocycle_determinant_typo.tex.
+    % Source anchor: arXiv:2502.20257, lemma:G_cocycle, lines 5931--5948.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:mpug_generalized_regular_matrices,
+        thm:mpug_generalized_regular_multiplication}
+    Let $P_g$ be the regular-action permutation matrix defined by
+    $P_g\ket{k}=\ket{gk}$, and set
+    $D^x_g=\operatorname{diag}(\Omega^{k^{-1}x}_{g,k})_{k\in G}$.
+    Then
+    \begin{align}
+        X^x_g
+         & =P_gD^x_g.
+    \end{align}
+    Since $\det P_g\in\{1,-1\}$ and every diagonal entry of $D^x_g$
+    is nonzero, $\det X^x_g\ne0$. Thus
+    (\ref{eq:mpug_generalized_determinant_cochain}) takes values in
+    $\C^\times$. Taking determinants in
+    (\ref{eq:mpug_generalized_regular_multiplication}), using
+    multiplicativity of the determinant on the left and
+    $\det(cX)=c^{|G|}\det X$ for the $|G|\times|G|$ matrix $X^x_{gh}$ on the
+    right, gives
+    \begin{align}
+        \det X^{h x}_g\det X^x_h
+         & =\left(\Omega^x_{g,h}\right)^{|G|}\det X^x_{gh}.
+        \label{eq:mpug_generalized_determinant_product}
+    \end{align}
+    Dividing (\ref{eq:mpug_generalized_determinant_product}) by
+    $\det X^x_{gh}$ gives
+    (\ref{eq:mpug_generalized_power_coboundary}).
+\end{proof}
+
+\begin{lemma}[Positive generalized cocycles are coboundaries]
+    \label{thm:mpug_positive_generalized_cocycle}
+    \lean{TNLean.Algebra.PositiveUnits.positiveRpow,
+        TNLean.Algebra.PositiveUnits.positiveRpow_inv_natCast_pow,
+        TNLean.Algebra.ActionTensorGauge.positiveRpow,
+        TNLean.Algebra.LSymbol.positivePrimitive,
+        TNLean.Algebra.LSymbol.isPositiveValued_positivePrimitive,
+        TNLean.Algebra.LSymbol.exists_positive_coboundary}
+    \leanok
+    \uses{def:mpug_generalized_cocycle,
+        def:mpug_positive_generalized_cochains,
+        thm:mpug_generalized_cocycle_power}
+    Let $G$ be finite and let $G$ act on a set $\mathsf X$. If $\Omega$ is a
+    positive generalized $2$-cocycle, then there is a positive
+    block-dependent scalar $1$-cochain $\chi_0$ such that
+    \begin{align}
+        \Omega^x_{g,h}
+         & =(d\chi_0)^x_{g,h}
+        =\frac{\chi^{\,h x}_{0,g}\chi^x_{0,h}}
+        {\chi^x_{0,gh}}
+        \label{eq:mpug_positive_coboundary}
+    \end{align}
+    for all $x\in\mathsf X$ and $g,h\in G$.
+    This establishes the first assertion of
+    \cite[Corollary at lines~5950--5960]{FrancoRubio2025MPUGauging}; as
+    recorded in \cite{gap:fbc25_positive_generalized_cocycle_block_index},
+    whereas the source writes $\chi_g$,
+    Lemma~\ref{thm:mpug_generalized_cocycle_power} constructs $\chi^x_g$
+    through (\ref{eq:mpug_generalized_determinant_cochain}) and the block label
+    $x$ is therefore retained.
+    % Local correction:
+    % docs/paper-gaps/fbc25_positive_generalized_cocycle_block_index.tex.
+    % Source anchor: arXiv:2502.20257, cor:positive_trivial, lines 5950--5956.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:mpug_positive_generalized_cochains,
+        thm:mpug_generalized_cocycle_power}
+    With $\delta^x_g=\det X^x_g$ denoting the determinant cochain from
+    Lemma~\ref{thm:mpug_generalized_cocycle_power}, set
+    \begin{align}
+        \chi^x_{0,g}
+         & =\lvert\delta^x_g\rvert^{1/\lvert G\rvert}.
+        \label{eq:mpug_positive_determinant_root}
+    \end{align}
+    As recorded in
+    \cite{gap:fbc25_positive_generalized_cocycle_determinant_sign}, because
+    the regular-action permutation can contribute a sign to $\delta^x_g$, its
+    norm is taken before the positive $\lvert G\rvert$-th root.
+    Since $\Omega$ is positive and the complex norm is multiplicative, taking
+    norms in (\ref{eq:mpug_generalized_power_coboundary}) gives
+    \begin{align}
+        \Omega^{\lvert G\rvert} & =d\lvert\delta\rvert.
+        \label{eq:mpug_positive_norm_power}
+    \end{align}
+    Positive real powers are multiplicative, so
+    (\ref{eq:mpug_positive_determinant_root}) and
+    (\ref{eq:mpug_positive_norm_power}) give
+    \begin{align}
+        (d\chi_0)^{\lvert G\rvert}
+         & =d\lvert\delta\rvert=\Omega^{\lvert G\rvert},
+        \label{eq:mpug_positive_root_power}
+    \end{align}
+    and the $\lvert G\rvert$-th power is injective on $\mathbb R_{>0}$. Hence
+    $d\chi_0=\Omega$.
+    % Consolidated clarification:
+    % docs/paper-gaps/fbc25_positive_generalized_cocycle_determinant_sign.tex.
+\end{proof}
+
+\begin{lemma}[Hat-compatible positive primitive]
+    \label{thm:mpug_positive_generalized_cocycle_hat}
+    \lean{TNLean.Algebra.ActionTensorGauge.coboundary_div,
+        TNLean.Algebra.ActionTensorGauge.coboundary_positiveRpow,
+        TNLean.Algebra.LSymbol.exists_positive_coboundary_hat_mul_eq_one}
+    \leanok
+    \uses{def:mpug_generalized_hat,
+        def:mpug_positive_generalized_cochains,
+        thm:mpug_generalized_hat_coboundary,
+        thm:mpug_positive_generalized_cocycle}
+    Under the hypotheses of
+    Lemma~\ref{thm:mpug_positive_generalized_cocycle}, suppose additionally
+    that
+    \begin{align}
+        \Omega^x_{g,h}\widehat\Omega^{\,x}_{g,h}
+         & =1
+        \label{eq:mpug_positive_hat_hypothesis}
+    \end{align}
+    for every $x\in\mathsf X$ and $g,h\in G$. Then, as in the second assertion
+    of \cite[Corollary at lines~5950--5960]{FrancoRubio2025MPUGauging}, the
+    positive cochain can be chosen so that
+    \begin{align}
+        \Omega & =d\chi,
+        \label{eq:mpug_positive_hat_coboundary}
+    \end{align}
+    and
+    \begin{align}
+        \chi^x_g\widehat\chi^{\,x}_g
+         & =1.
+        \label{eq:mpug_positive_hat_witness_identity}
+    \end{align}
+    % Source anchor: arXiv:2502.20257, cor:positive_trivial, lines 5955--5960.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_generalized_hat_coboundary,
+        thm:mpug_positive_generalized_cocycle}
+    Let $\chi_0$ satisfy $d\chi_0=\Omega$ as in
+    Lemma~\ref{thm:mpug_positive_generalized_cocycle}. Define
+    \begin{align}
+        \chi^x_g
+         & =\sqrt{\frac{\chi^x_{0,g}}
+            {\widehat\chi^{\,x}_{0,g}}}
+        =\sqrt{\frac{\chi^x_{0,g}}
+            {\chi^{\,g x}_{0,g^{-1}}}}.
+        \label{eq:mpug_positive_hat_witness}
+    \end{align}
+    All values are positive, so the positive square roots are unambiguous.
+    Using (\ref{eq:mpug_generalized_hat_coboundary}) and the hypothesis
+    (\ref{eq:mpug_positive_hat_hypothesis}) gives
+    \begin{align}
+        d\chi
+         & =\sqrt{d\chi_0/d\widehat\chi_0}
+        =\sqrt{\Omega/\widehat\Omega}
+        =\sqrt{\Omega^2}
+        =\Omega.
+    \end{align}
+    The same substitution in
+    (\ref{eq:mpug_positive_hat_witness}) gives
+    \begin{align}
+        \widehat\chi
+         & =\sqrt{\widehat\chi_0/\chi_0}
+        =\chi^{-1},
+    \end{align}
+    which proves
+    (\ref{eq:mpug_positive_hat_witness_identity}).
+\end{proof}
+
+\subsection{Inversion cochains and the group of order two}
+
+\begin{definition}[Inversion cochains]
+    \label{def:mpug_inversion_cochains}
+    \lean{TNLean.Algebra.ScalarOneCochain,
+        TNLean.Algebra.ScalarOneCochain.coboundary,
+        TNLean.Algebra.ScalarCocycle.hat,
+        TNLean.Algebra.ScalarThreeCochain.hat,
+        TNLean.Algebra.ScalarThreeCochain.Xi,
+        TNLean.Algebra.ScalarThreeCochain.sigma}
+    \leanok
+    \uses{def:mpug_scalar_cochains}
+    These conventions and inversion cochains follow
+    \cite[lines~5910--5916 and 5967--5973]{FrancoRubio2025MPUGauging}.
+    For scalar cochains with one, two, and three arguments, set
+    \begin{align}
+        (d\sigma)(g,h) & =\frac{\sigma(g)\sigma(h)}{\sigma(gh)}.
+        \label{eq:mpug_one_coboundary}
+    \end{align}
+    The hat reverses the arguments and replaces each group element by its
+    inverse:
+    \begin{align}
+        \widehat\beta(g,h) & =\beta(h^{-1},g^{-1}).
+        \label{eq:mpug_two_hat}
+    \end{align}
+    \begin{align}
+        \widehat\omega(g,h,k) & =\omega(k^{-1},h^{-1},g^{-1}).
+        \label{eq:mpug_three_hat}
+    \end{align}
+    Define the inversion cochains by
+    \begin{align}
+        \Xi(g,h) & =
+        \frac{\omega(h^{-1},g^{-1},g)}
+        {\omega(h^{-1}g^{-1},g,h)}.
+        \label{eq:mpug_intro_Xi}
+    \end{align}
+    \begin{align}
+        \sigma(g) & =\omega(g,g^{-1},g).
+        \label{eq:mpug_intro_sigma}
+    \end{align}
+    % Source anchors: arXiv:2502.20257, lines 5910--5916 and eq:introXi.
+\end{definition}
+
+\begin{lemma}[The hat operation is an involution]
+    \label{thm:mpug_scalar_hat_involution}
+    \lean{TNLean.Algebra.ScalarCocycle.hat_hat,
+        TNLean.Algebra.ScalarThreeCochain.hat_hat}
+    \leanok
+    \uses{def:mpug_inversion_cochains}
+    Let $G$ be an arbitrary group. Every scalar $2$-cochain $\beta$ and every
+    scalar $3$-cochain $\omega$ satisfy
+    \begin{align}
+        \widehat{\widehat\beta} & =\beta,
+        \label{eq:mpug_two_hat_hat}
+    \end{align}
+    \begin{align}
+        \widehat{\widehat\omega} & =\omega.
+        \label{eq:mpug_three_hat_hat}
+    \end{align}
+    % Source anchor: arXiv:2502.20257, line 5912, where the hat operation is
+    %   introduced as an involution for cochains of any arity.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:mpug_inversion_cochains}
+    Reversing the arguments of (\ref{eq:mpug_two_hat}) and inverting each of
+    them twice restores the original arguments, and likewise for
+    (\ref{eq:mpug_three_hat}).
+\end{proof}
+
+\begin{lemma}[Two inversion-cochain formulas]
+    \label{thm:mpug_inversion_cochain_formulas}
+    \lean{TNLean.Algebra.ScalarThreeCochain.Xi_eq_second_formula,
+        TNLean.Algebra.ScalarThreeCochain.sigma_inv}
+    \leanok
+    \uses{def:mpug_scalar_cochains, def:mpug_three_cocycle,
+        def:mpug_inversion_cochains}
+    These formulas are part of the cocycle calculation in
+    \cite[lines~5967--5979]{FrancoRubio2025MPUGauging}.
+    Let $G$ be an arbitrary group and let $\omega$ be a normalized scalar
+    $3$-cocycle. Then
+    \begin{align}
+        \Xi(g,h) & =
+        \frac{\omega(h^{-1},g^{-1},g)}
+        {\omega(h^{-1}g^{-1},g,h)}
+        =
+        \frac{\omega(h^{-1},g^{-1},gh)}
+        {\omega(g^{-1},g,h)}.
+        \label{eq:mpug_Xi_two_formulas}
+    \end{align}
+    The inversion one-cochain satisfies
+    \begin{align}
+        \sigma(g^{-1}) & =\sigma(g)^{-1}.
+        \label{eq:mpug_sigma_inverse}
+    \end{align}
+    % Source anchor: arXiv:2502.20257, eq:introXi and lemma:omegaXi.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:mpug_scalar_cochains, def:mpug_three_cocycle,
+        def:mpug_inversion_cochains}
+    Applying (\ref{eq:mpug_three_cocycle}) to $(h^{-1},g^{-1},g,h)$ and using
+    (\ref{eq:mpug_three_normalized}) gives the second quotient in
+    (\ref{eq:mpug_Xi_two_formulas}). Applying
+    (\ref{eq:mpug_three_cocycle}) to
+    $(g,g^{-1},g,g^{-1})$ gives
+    $1=\sigma(g)\sigma(g^{-1})$, hence
+    (\ref{eq:mpug_sigma_inverse}).
+\end{proof}
+
+\begin{lemma}[Inversion identities for a normalized three-cocycle]
+    \label{thm:mpug_omega_Xi}
+    \lean{TNLean.Algebra.ScalarThreeCochain.hat_eq_mul_coboundary_Xi,
+        TNLean.Algebra.ScalarThreeCochain.Xi_eq_hat_mul_coboundary_sigma}
+    \leanok
+    \uses{def:mpug_scalar_cochains, def:mpug_three_cocycle,
+        def:mpug_fusion_gauge, def:mpug_inversion_cochains}
+    These inversion identities and their cocycle substitutions are given in
+    \cite[lines~5967--5979]{FrancoRubio2025MPUGauging}.
+    Let $\omega$ be a normalized scalar $3$-cocycle. Then
+    \begin{align}
+        \widehat\omega & =\omega\,d\Xi.
+        \label{eq:mpug_hat_omega}
+    \end{align}
+    The inversion two-cochain also satisfies
+    \begin{align}
+        \Xi & =\widehat\Xi\,d\sigma.
+        \label{eq:mpug_Xi_hat_sigma}
+    \end{align}
+    % Source anchor: arXiv:2502.20257, lemma:omegaXi, lines 5967--5979.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:mpug_three_cocycle, def:mpug_fusion_gauge,
+        def:mpug_inversion_cochains, thm:mpug_inversion_cochain_formulas}
+    For (\ref{eq:mpug_hat_omega}), multiplying the cocycle identities at
+    \begin{align}
+         & (k^{-1},h^{-1},g^{-1},g),\quad
+        (k^{-1},h^{-1}g^{-1},g,h),\quad
+        (k^{-1}h^{-1}g^{-1},g,h,k),
+    \end{align}
+    and cancelling the normalized factors gives the equality. For
+    (\ref{eq:mpug_Xi_hat_sigma}), substituting the second expression in
+    (\ref{eq:mpug_Xi_two_formulas}) for $\widehat\Xi$ and combining the
+    identities at
+    \begin{align}
+         & (h^{-1}g^{-1},g,h,h^{-1}g^{-1}),\quad
+        (h^{-1},h,h^{-1},g^{-1}),\quad
+        (h^{-1},g^{-1},g,g^{-1}),\quad
+        (g,g^{-1},g,g^{-1})
+    \end{align}
+    gives (\ref{eq:mpug_sigma_inverse}) in the three required places at $g$,
+    $h$, and $gh$.
+\end{proof}
+
+Let $\Z_2=\{e,s\}$ with $s^2=e$.
+
+\begin{lemma}[Normalized $L$-symbol ratio]
+    \label{thm:mpug_sigma_l_ratio}
+    \lean{TNLean.Algebra.LSymbol.sigma_eq_div}
+    \leanok
+    \uses{def:mpug_l_symbols, def:mpug_l_normalized,
+        def:mpug_inversion_cochains}
+    Let $G$ act on a set $\mathsf X$. Suppose that a normalized $L$-symbol
+    $L$ is compatible with a scalar $3$-cochain $\omega$. Then, as in
+    \cite[lines~5327--5329]{FrancoRubio2025MPUGauging}, for every
+    $x\in\mathsf X$ and $g\in G$,
+    \begin{align}
+        \sigma(g)
+         & =\frac{L^x_{g^{-1},g}}{L^{g x}_{g,g^{-1}}}.
+        \label{eq:mpug_sigma_l_ratio}
+    \end{align}
+    % Source anchor: arXiv:2502.20257, lines 5327--5329.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:mpug_l_symbols, def:mpug_l_normalized,
+        def:mpug_inversion_cochains}
+    Applying the compatibility relation
+    (\ref{eq:mpug_l_compatibility}) to $(g,g^{-1},g)$, the two factors with an
+    identity argument are $1$ by normalization, leaving
+    (\ref{eq:mpug_sigma_l_ratio}).
+\end{proof}
+
+\begin{lemma}[Trivial scalar gauge class for $\Z_2$]
+    \label{thm:mpug_z2_trivial_scalar_class}
+    \lean{TNLean.Algebra.ScalarThreeCochain.isTrivialGaugeClass_iff_sigma_generator_eq_one}
+    \leanok
+    \uses{def:mpug_scalar_cochains, def:mpug_fusion_gauge,
+        def:mpug_trivial_gauge_class, def:mpug_inversion_cochains}
+    Let $\omega$ be a normalized scalar $3$-cochain on $\Z_2$. Its gauge
+    class is trivial if and only if
+    \begin{align}
+        \sigma(s) & =1.
+        \label{eq:mpug_z2_trivial_sigma}
+    \end{align}
+    This strengthens the scalar step in
+    \cite[lines~5339--5341]{FrancoRubio2025MPUGauging}: only normalization,
+    rather than the cocycle identity, is needed for this equivalence.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:mpug_fusion_gauge,
+        thm:mpug_gauge_preserves_normalization,
+        thm:mpug_cohomologous_to_equivalence}
+    Suppose first that $\omega=d\beta$ for an arbitrary scalar $2$-cochain
+    $\beta$. Although $\beta$ need not be normalized, the normalization of
+    $d\beta$ implies that there is a constant $c\in\C^\times$ such that
+    $\beta(e,h)=\beta(h,e)=c$ for every $h\in\Z_2$. Since $s^2=e$,
+    \begin{align}
+        (d\beta)(s,s,s)
+         & =\frac{\beta(s,e)\beta(s,s)}
+        {\beta(s,s)\beta(e,s)}=\frac{c}{c}=1.
+        \label{eq:mpug_z2_coboundary_generator}
+    \end{align}
+    Thus every scalar $2$-cochain whose coboundary is normalized contributes
+    the factor $1$ at $(s,s,s)$. In particular, an arbitrary gauge between
+    normalized scalar $3$-cochains cannot change this value, and
+    $\sigma(s)=1$. Conversely, normalization determines every
+    value of $\omega$ except $\omega(s,s,s)=\sigma(s)$. Hence
+    (\ref{eq:mpug_z2_trivial_sigma}) makes $\omega$ the constant cochain $1$.
+\end{proof}
+
+\begin{lemma}[Sign dichotomy for the $\Z_2$ inversion scalar]
+    \label{thm:mpug_z2_sigma_sign}
+    \lean{TNLean.Algebra.ScalarThreeCochain.sigma_generator_eq_one_or_eq_neg_one}
+    \leanok
+    \uses{def:mpug_three_cocycle, def:mpug_inversion_cochains}
+    Let $\omega$ be a normalized scalar $3$-cocycle on $\Z_2$. Then
+    \begin{align}
+        \sigma(s) & \in\{1,-1\}.
+        \label{eq:mpug_z2_sigma_sign}
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_inversion_cochain_formulas}
+    Since $s^{-1}=s$, formula (\ref{eq:mpug_sigma_inverse}) gives
+    $\sigma(s)=\sigma(s)^{-1}$. Hence $\sigma(s)^2=1$, whose two solutions in
+    $\C^\times$ are $1$ and $-1$.
+\end{proof}
+
+For an element $g$ whose square is the identity, the source condition
+$\xi_g(x)\xi_{g^{-1}}(g\mathbin{\cdot}x)=-1$ reduces to
+$\xi_g(x)\xi_g(g\mathbin{\cdot}x)=-1$ because $g^{-1}=g$.
+
+\begin{definition}[Anomalous sign for an involution]
+    \label{def:mpug_anomalous_involution_sign}
+    \lean{TNLean.Algebra.IsComplexUnitSign,
+        TNLean.Algebra.HasAnomalousInvolutionSign}
+    \leanok
+    Let $f\colon\mathsf X\to\mathsf X$. An anomalous sign for $f$ is a
+    function $\xi\colon\mathsf X\to\C^\times$ such that
+    \begin{align}
+        \xi(x) & \in\{1,-1\},
+        \label{eq:mpug_anomalous_sign_range}
+    \end{align}
+    and
+    \begin{align}
+        \xi(x)\xi(f(x)) & =-1
+        \label{eq:mpug_anomalous_sign_pairing}
+    \end{align}
+    for every $x\in\mathsf X$.
+    % Source anchor: arXiv:2502.20257, prop:def_tens_anomalous,
+    % eq:defects_Z2b, lines 2979--2981.
+\end{definition}
+
+\begin{lemma}[Anomalous signs and fixed points]
+    \label{thm:mpug_anomalous_involution_sign_iff}
+    \lean{TNLean.Algebra.hasAnomalousInvolutionSign_of_fixedPointFree,
+        TNLean.Algebra.not_hasAnomalousInvolutionSign_of_fixedPoint,
+        TNLean.Algebra.hasAnomalousInvolutionSign_iff_fixedPointFree,
+        TNLean.Algebra.involutive_smul_of_mul_self_eq_one,
+        TNLean.Algebra.hasAnomalousInvolutionSign_smul_iff}
+    \leanok
+    \uses{def:mpug_anomalous_involution_sign}
+    Let $f\colon\mathsf X\to\mathsf X$ be an involution. An anomalous sign
+    exists if and only if $f$ has no fixed point. In particular, if a group
+    acts on $\mathsf X$ from the left and $g^2=e$, the sign condition for
+    anomalous defect tensors in
+    \cite[lines~2979--2981]{FrancoRubio2025MPUGauging} holds for the action
+    $x\mapsto g\mathbin{\cdot}x$ if and only if
+    $g\mathbin{\cdot}x\neq x$ for every $x\in\mathsf X$.
+    % Source anchor: arXiv:2502.20257, prop:def_tens_anomalous,
+    % eq:defects_Z2b, lines 2979--2981.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:mpug_anomalous_involution_sign}
+    Choosing a well-order on $\mathsf X$ and assigning $1$ to the smaller
+    element and $-1$ to the larger in each two-element orbit $\{x,f(x)\}$,
+    involutivity exchanges the two elements so that their signs multiply to
+    $-1$. Conversely, at a fixed point the product is the square of either
+    $1$ or $-1$, hence equals $1$ rather than $-1$. For the action statement,
+    $g\mathbin{\cdot}(g\mathbin{\cdot}x)=(g^2)\mathbin{\cdot}x=x$.
+\end{proof}
+
+\begin{lemma}[Nontrivial scalar gauge class for $\Z_2$]
+    \label{thm:mpug_z2_nontrivial_scalar_class}
+    \lean{TNLean.Algebra.ScalarThreeCochain.not_isTrivialGaugeClass_iff_sigma_generator_eq_neg_one}
+    \leanok
+    \uses{def:mpug_three_cocycle, def:mpug_trivial_gauge_class,
+        def:mpug_inversion_cochains}
+    For a normalized scalar $3$-cocycle $\omega$ on $\Z_2$, the scalar
+    cohomology classification used in the proof at
+    \cite[lines~5339--5341]{FrancoRubio2025MPUGauging} states that its gauge
+    class is nontrivial if and only if
+    \begin{align}
+        \sigma(s) & =-1.
+        \label{eq:mpug_z2_nontrivial_sigma}
+    \end{align}
+    % Source anchor: arXiv:2502.20257, lines 5339--5341.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_z2_trivial_scalar_class, thm:mpug_z2_sigma_sign}
+    By Lemma~\ref{thm:mpug_z2_trivial_scalar_class}, a nontrivial class has
+    $\sigma(s)\neq1$. The dichotomy
+    (\ref{eq:mpug_z2_sigma_sign}) then forces $\sigma(s)=-1$, and the converse
+    follows from the same two statements.
+\end{proof}
+
+This completes the classification of the normalized scalar $3$-cocycle by
+$\sigma(s)$ in the setting of \cite[lines~5207--5338]{FrancoRubio2025MPUGauging}.
