@@ -938,7 +938,7 @@ finite product of samples; the same estimate applies.
 \end{proof}
 
 
-\begin{lemma}[Automatic parameters for the physical witness tree]
+\begin{theorem}[Automatic parameters for the physical witness tree]
     \label{thm:physical_dg_interval_tree_parameters}
     \lean{TNLean.MPS.AreaLaw.exists_physical_dg_interval_tree}
     \leanok
@@ -967,7 +967,7 @@ finite product of samples; the same estimate applies.
     printed adaptive algorithm remain those of the preceding theorem and
     \cite{gap:alvv16_approximation_parameters}. The recorded-generator
     rank bound is not assigned unchanged to their entire span.
-\end{lemma}
+\end{theorem}
 \begin{proof}\leanok
     Apply the uniform scalar theorem with $m=\max\{q,50\}$.
     Set $t=\ell$ and $\Delta=10^{-5}D^{-12}$. Its uniform tradeoff for
@@ -1282,7 +1282,7 @@ gives the recorded-vector rank bound.
         TNLean.MPS.AreaLaw.exists_physical_dg_interval_tree_of_le_radius}
     \leanok
     Retain the physical hypotheses, universal constants and automatic
-    scalar parameters of Lemma~\ref{thm:physical_dg_interval_tree_parameters}.
+    scalar parameters of Theorem~\ref{thm:physical_dg_interval_tree_parameters}.
     The one reference bound $D_{\rm tree}=r^2B$ determines
     \[
         \xi_{\rm tree}=\frac1{1000D_{\rm tree}\sqrt{L+1}}.
@@ -1405,7 +1405,7 @@ gives the recorded-vector rank bound.
     \lean{TNLean.MPS.AreaLaw.exists_physical_dg_tree_ritz_approximation}
     \leanok
     Retain the physical hypotheses and universal numerical constants of
-    Lemma~\ref{thm:physical_dg_interval_tree_parameters}. The actual
+    Theorem~\ref{thm:physical_dg_interval_tree_parameters}. The actual
     parent improving families can be chosen before every requested
     accuracy $\eta>0$, common threshold, sampling size and child space.
     Use $D_{\rm tree}$ and $D_{\rm filter}$ from that construction and
