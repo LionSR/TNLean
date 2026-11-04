@@ -66,15 +66,15 @@ Section~\ref{sec:lvv_successive_construction} does not need this bound.
     $(i,s,b,1/2)$-viable input family has a rational replacement $T$ of
     the exact error-reduced family $V$, with
     \[
-      |T|\le |V|\le\ell Ds,\qquad
-      D(T)\le(\ell Ds)\max\{1,D\max\{1,b\}\}.
+        |T|\le |V|\le\ell Ds,\qquad
+        D(T)\le(\ell Ds)\max\{1,D\max\{1,b\}\}.
     \]
     The family $T$ is $\delta$-viable. More precisely, put
     \[
-      b'=|V|\max\{1,D\max\{1,b\}\},\quad
-      \theta=\frac{\delta}{4(|V|+1)},\quad
-      K=q^i\max\{1,b'\}^{i+1}(i+1)2^i,\quad
-      t=\left\lceil\log_2\max\{1,\lceil K/\theta\rceil\}\right\rceil.
+        b'=|V|\max\{1,D\max\{1,b\}\},\quad
+        \theta=\frac{\delta}{4(|V|+1)},\quad
+        K=q^i\max\{1,b'\}^{i+1}(i+1)2^i,\quad
+        t=\left\lceil\log_2\max\{1,\lceil K/\theta\rceil\}\right\rceil.
     \]
     Every member of $T$ has Gaussian-rational tensor parameters of
     common height at most $2^{2t+5}$.
@@ -113,18 +113,18 @@ Section~\ref{sec:lvv_successive_construction} does not need this bound.
     at precision $c/L^s$ gives $\ell D\le CL^p$ and $D\le CL^p$.
     More precisely, with $r=\lceil B\rceil$, the count $\ell$ has degree
     \begin{align*}
-      p_{\rm word}&=2(sr+1)+(2s+1)=2sr+2s+3,\\
-      a_{\rm letter}&=\frac{2s}{\Delta}+2(p_{\rm word}+4),\\
-      p_{\rm rank}&=\left\lceil2a_{\rm letter}\log q\right\rceil,
-      \qquad p_{\rm total}=p_{\rm word}+p_{\rm rank}.
+        p_{\rm word}   & =2(sr+1)+(2s+1)=2sr+2s+3,                      \\
+        a_{\rm letter} & =\frac{2s}{\Delta}+2(p_{\rm word}+4),          \\
+        p_{\rm rank}   & =\left\lceil2a_{\rm letter}\log q\right\rceil,
+        \qquad p_{\rm total}=p_{\rm word}+p_{\rm rank}.
     \end{align*}
     The count satisfies $\ell\le C_1L^{p_{\rm word}}$, every letter occurs
     at most $a_{\rm letter}\log L+b$ times, and both $\ell D$ and $D$ are
     bounded by $C_2L^{p_{\rm total}}$.
     Quantitatively,
     \begin{align*}
-      p_{\rm slope}&=2s+\left\lceil8s\log q\right\rceil,\\
-      p_{\rm int}&=2s+3+
+        p_{\rm slope} & =2s+\left\lceil8s\log q\right\rceil, \\
+        p_{\rm int}   & =2s+3+
         \left\lceil\left(\frac{4s}{\Delta}+8s+28\right)\log q\right\rceil,
     \end{align*}
     and $p_{\rm total}\le p_{\rm int}+p_{\rm slope}\lceil B\rceil$.
@@ -203,7 +203,7 @@ Section~\ref{sec:lvv_successive_construction} does not need this bound.
     of $B$.  The families may be chosen so that the total number of retained
     candidate vectors throughout the sweep obeys
     \begin{align*}
-      \sum_{i=0}^{L}|S_i|\le CL^{p+1}.
+        \sum_{i=0}^{L}|S_i|\le CL^{p+1}.
     \end{align*}
     This counts all retained candidates; it does not include the arithmetic
     cost of the convex minimizations or spectral computations.
@@ -248,11 +248,11 @@ Section~\ref{sec:lvv_successive_construction} does not need this bound.
     $b_L=(48L)^2r_{\rm ref}(L)$, where $r_{\rm ref}$ is the reference
     bond bound of Lemma~\ref{lem:lvv_bond_trimming_reference}, and put
     \begin{align*}
-      V&=\{A_j\operatorname{trim}_{b_L}(v):0\le j<N,\ v\in U\}.
+        V & =\{A_j\operatorname{trim}_{b_L}(v):0\le j<N,\ v\in U\}.
     \end{align*}
     There is a finite family $T$ of left-block vectors such that
     \begin{align*}
-      |T|&\le |V|, & |T|&\le CL^p, & D(T)&\le DL^r.
+        |T| & \le |V|, & |T| & \le CL^p, & D(T) & \le DL^r.
     \end{align*}
     Every member of $T$ has open-chain tensor data whose scalar cap and
     local entries are Gaussian-rational of common height at most
@@ -296,7 +296,7 @@ Section~\ref{sec:lvv_successive_construction} does not need this bound.
     $H$ so that there are finite families $S_i$ at every cut
     $0\le i\le L$ with $S_0$ the scalar singleton and
     \begin{align*}
-      |S_i|&\le CL^p, & D(S_i)&\le DL^r.
+        |S_i| & \le CL^p, & D(S_i) & \le DL^r.
     \end{align*}
     Each $S_i$ is $(i,\alpha/L^a)$-viable for $\Gamma$. Every retained
     vector has Gaussian-rational scalar cap and local tensor entries

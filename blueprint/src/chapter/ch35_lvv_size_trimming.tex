@@ -23,8 +23,8 @@ a function of the Hamiltonian, the gap parameter and the input set.
     state on $k$ sites with local dimension $q$ and bond bound $b$. Put
     $D=\max\{1,b\}$, and suppose $\|v\|\le1$. For every $\epsilon>0$, define
     \[
-      K=q^k D^{k+1}(k+1)2^k,\qquad
-      t=\left\lceil\log_2\max\{1,\lceil K/\epsilon\rceil\}\right\rceil.
+        K=q^k D^{k+1}(k+1)2^k,\qquad
+        t=\left\lceil\log_2\max\{1,\lceil K/\epsilon\rceil\}\right\rceil.
     \]
     There is a vector $w$ with the same bond bound and Gaussian-rational
     tensor parameters of common coordinate height at most $2^{2t+5}$ such
@@ -40,7 +40,7 @@ a function of the Hamiltonian, the gap parameter and the input set.
     $\delta=2^{-t}$. The contraction estimate gives error at most
     $q^kD^{k+1}((1+\delta)^{k+1}-1)$. Since $0\le\delta\le1$,
     \[
-      (1+\delta)^{k+1}-1\le\delta(k+1)2^k.
+        (1+\delta)^{k+1}-1\le\delta(k+1)2^k.
     \]
     The choice of $t$ gives $K2^{-t}\le\epsilon$, as required.
 \end{proof}
@@ -57,13 +57,13 @@ a function of the Hamiltonian, the gap parameter and the input set.
     with $\Gamma$. If a family $T$ approximates each member of $S$ within
     distance $\theta\ge0$, then $T$ is viable with error at most
     \[
-      \delta+\frac{2\sqrt m\,\theta}{c},
-      \qquad \text{provided }\frac{\sqrt m\,\theta}{c}<1.
+        \delta+\frac{2\sqrt m\,\theta}{c},
+        \qquad \text{provided }\frac{\sqrt m\,\theta}{c}<1.
     \]
     In particular, the trimmed witness bounds $c=37/48$ and
     $1-\delta=7/12$ give error at most $1/2$ whenever
     \[
-      \theta\le \frac{37}{1152(\sqrt m+1)}.
+        \theta\le \frac{37}{1152(\sqrt m+1)}.
     \]
 \end{lemma}
 \begin{proof}\leanok
@@ -85,13 +85,13 @@ a function of the Hamiltonian, the gap parameter and the input set.
     $a,c,k,r$ are natural numbers. For
     $K=q^kD^{k+1}(k+1)2^k$, the precision exponent satisfies
     \[
-      \left\lceil\log_2\max\{1,\lceil K/\epsilon\rceil\}\right\rceil
-      \le ak+c(k+1)+(k+1)+k+r.
+        \left\lceil\log_2\max\{1,\lceil K/\epsilon\rceil\}\right\rceil
+        \le ak+c(k+1)+(k+1)+k+r.
     \]
     If $D\le CL^p$ and $k\le L$, this is bounded uniformly over cuts by
     \[
-      aL+\bigl(\ell_2(C)+p\ell_2(L)\bigr)(L+1)+2L+1+r,
-      \qquad \ell_2(x)=\lceil\log_2\max\{1,x\}\rceil.
+        aL+\bigl(\ell_2(C)+p\ell_2(L)\bigr)(L+1)+2L+1+r,
+        \qquad \ell_2(x)=\lceil\log_2\max\{1,x\}\rceil.
     \]
 \end{lemma}
 \begin{proof}\leanok
@@ -116,20 +116,20 @@ a function of the Hamiltonian, the gap parameter and the input set.
     $L\ge1$, cut $k\le L$, cardinality $v\le CL^p$, and bond budget
     $B\le DL^s$. Define
     \begin{align}
-      \theta&=\frac{\alpha}{2L^a(v+1)},\notag\\
-      K&=q^k\max\{1,B\}^{k+1}(k+1)2^k,\notag\\
-      t&=\ell_2\bigl(\lceil K/\theta\rceil\bigr).\notag
+        \theta & =\frac{\alpha}{2L^a(v+1)},\notag                \\
+        K      & =q^k\max\{1,B\}^{k+1}(k+1)2^k,\notag            \\
+        t      & =\ell_2\bigl(\lceil K/\theta\rceil\bigr).\notag
     \end{align}
     Then both the precision exponent and the common rational
     tensor-parameter height satisfy
     \begin{align}
-      t&\le E(L+1)^2,\notag\\
-      2^{2t+5}&\le2^{(2E+5)(L+1)^2}.\notag
+        t        & \le E(L+1)^2,\notag         \\
+        2^{2t+5} & \le2^{(2E+5)(L+1)^2}.\notag
     \end{align}
     One possible constant is
     \begin{align}
-      r_0&=\ell_2\bigl(\lceil2(C+1)/\alpha\rceil\bigr),\notag\\
-      E&=\ell_2(q)+\ell_2(D+1)+s+2+r_0+a+p.\notag
+        r_0 & =\ell_2\bigl(\lceil2(C+1)/\alpha\rceil\bigr),\notag \\
+        E   & =\ell_2(q)+\ell_2(D+1)+s+2+r_0+a+p.\notag
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
@@ -141,9 +141,9 @@ a function of the Hamiltonian, the gap parameter and the input set.
     Also $\max\{1,B\}\le(D+1)L^s$.
     Lemma~\ref{thm:lvv_tensor_dyadic_precision} now bounds $t$ by
     \begin{align}
-      \ell_2(q)L+
-      \bigl(\ell_2(D+1)+s\ell_2(L)\bigr)(L+1)
-      +2L+1+r_0+(a+p)L.\notag
+        \ell_2(q)L+
+        \bigl(\ell_2(D+1)+s\ell_2(L)\bigr)(L+1)
+        +2L+1+r_0+(a+p)L.\notag
     \end{align}
     Using $\ell_2(L)\le L$, each summand is bounded by its constant
     coefficient times $(L+1)^2$. Their sum is at most $E(L+1)^2$.
@@ -261,7 +261,7 @@ a function of the Hamiltonian, the gap parameter and the input set.
     For a local parameter height $H$, bond bound $b$, and length $k$, put
     $D=\max\{1,b\}$ and define
     \[
-      \mathcal H(H,b,k)
+        \mathcal H(H,b,k)
         =H^{2(1+kD^2)(k+1)}(2HD)^{k+1}.
     \]
 \end{definition}
@@ -281,7 +281,7 @@ a function of the Hamiltonian, the gap parameter and the input set.
     at most $\mathcal H(H,b,k)$. This estimate does not depend on the
     physical dimension. If $H\le2^h$ and $\max\{1,b\}\le B$, then
     \[
-      \mathcal H(H,b,k)
+        \mathcal H(H,b,k)
         \le2^{\bigl(2h(1+kB^2)+1+h+B\bigr)(k+1)}.
     \]
 \end{lemma}
@@ -309,7 +309,7 @@ a function of the Hamiltonian, the gap parameter and the input set.
     coordinates. For a row $u$ of length $d$ and a $d\times d'$ matrix
     $A$, define the rational row product by
     \begin{align*}
-      (uA)_c&=\sum_{a=0}^{d-1}u_aA_{ac}.
+        (uA)_c & =\sum_{a=0}^{d-1}u_aA_{ac}.
     \end{align*}
     For a list of square $D\times D$ matrices $A_0,\ldots,A_{n-1}$,
     define the successive rows by $u^{(0)}=u$ and
@@ -344,10 +344,10 @@ a function of the Hamiltonian, the gap parameter and the input set.
     and return $cu^{(n)}_0$. Its complex value is the represented
     physical coefficient
     \begin{align*}
-      cu^{(n)}_0
-        &=c\bigl(\widetilde A_0^{\sigma_0}\cdots
-          \widetilde A_{n-1}^{\sigma_{n-1}}\bigr)_{00}
-          =c\,A(\sigma).
+        cu^{(n)}_0
+         & =c\bigl(\widetilde A_0^{\sigma_0}\cdots
+        \widetilde A_{n-1}^{\sigma_{n-1}}\bigr)_{00}
+        =c\,A(\sigma).
     \end{align*}
     Here $A(\sigma)$ is the open-chain contraction with its
     one-dimensional boundary indices.
@@ -361,7 +361,7 @@ a function of the Hamiltonian, the gap parameter and the input set.
     Entrywise zero-padding also commutes with interpreting the rational
     coordinates as complex numbers. Apply the open-chain identity
     $A(\sigma)=(\widetilde A_0^{\sigma_0}\cdots
-    \widetilde A_{n-1}^{\sigma_{n-1}})_{00}$ and multiply by the scalar
+        \widetilde A_{n-1}^{\sigma_{n-1}})_{00}$ and multiply by the scalar
     cap. At length zero the ordered matrix product is the identity,
     whose $(0,0)$ entry is one.
 \end{proof}
@@ -427,7 +427,7 @@ a function of the Hamiltonian, the gap parameter and the input set.
     including the scalar cap gives the physical coefficient together
     with the exact accumulated count
     \begin{align*}
-      8nD^2+6.
+        8nD^2+6.
     \end{align*}
     This formula includes $n=0$, when only the final scalar
     multiplication is performed.
@@ -481,9 +481,9 @@ a function of the Hamiltonian, the gap parameter and the input set.
     families, and let $W_p\in\mathbb C^{q\times q}$ be a physical
     operator at site $p$. Their weighted mixed transfer matrix is
     \begin{align*}
-      E_p&=\sum_{s,t=0}^{q-1}(W_p)_{st}
-        \bigl(\overline{A_p^s}\otimes B_p^t\bigr),\\
-      (E_p)_{(a,b),(c,d)}&=\sum_{s,t=0}^{q-1}
+        E_p                 & =\sum_{s,t=0}^{q-1}(W_p)_{st}
+        \bigl(\overline{A_p^s}\otimes B_p^t\bigr),          \\
+        (E_p)_{(a,b),(c,d)} & =\sum_{s,t=0}^{q-1}
         \overline{(A_p^s)_{ac}}(W_p)_{st}(B_p^t)_{bd}.
     \end{align*}
     Here the bar denotes entrywise complex conjugation, and the paired
@@ -501,13 +501,13 @@ a function of the Hamiltonian, the gap parameter and the input set.
     \leanok
     \uses{def:lvv_weighted_mixed_transfer}
     For $n$ sites, write $A(\sigma)=A_0^{\sigma_0}\cdots
-    A_{n-1}^{\sigma_{n-1}}$ and similarly for $B(\tau)$.
+        A_{n-1}^{\sigma_{n-1}}$ and similarly for $B(\tau)$.
     Then
     \begin{align*}
-      E_0\cdots E_{n-1}
-        &=\sum_{\sigma,\tau\in\{0,\ldots,q-1\}^n}
-          \left(\prod_{p=0}^{n-1}(W_p)_{\sigma_p\tau_p}\right)
-          \bigl(\overline{A(\sigma)}\otimes B(\tau)\bigr).
+        E_0\cdots E_{n-1}
+         & =\sum_{\sigma,\tau\in\{0,\ldots,q-1\}^n}
+        \left(\prod_{p=0}^{n-1}(W_p)_{\sigma_p\tau_p}\right)
+        \bigl(\overline{A(\sigma)}\otimes B(\tau)\bigr).
     \end{align*}
     In particular, every boundary entry is obtained by taking the
     corresponding entries of $A(\sigma)$ and $B(\tau)$ in this sum.
@@ -550,12 +550,12 @@ a function of the Hamiltonian, the gap parameter and the input set.
     Let $\mathcal W=\bigotimes_{p=0}^{n-1}W_p$ be the finite Kronecker
     product. The resulting Gaussian rational has complex value
     \begin{align*}
-      F&=\overline{c_a}c_b
+        F & =\overline{c_a}c_b
         \sum_{\sigma,\tau}
-          \overline{a(\sigma)}
-          \left(\prod_{p=0}^{n-1}(W_p)_{\sigma_p\tau_p}\right)b(\tau)\\
-       &=\overline{c_a}c_b\,
-         \overline a\mathbin{\cdot}\bigl(\mathcal W b\bigr).
+        \overline{a(\sigma)}
+        \left(\prod_{p=0}^{n-1}(W_p)_{\sigma_p\tau_p}\right)b(\tau) \\
+          & =\overline{c_a}c_b\,
+        \overline a\mathbin{\cdot}\bigl(\mathcal W b\bigr).
     \end{align*}
     The finite Kronecker product here has entries
     $\mathcal W_{\sigma\tau}=\prod_p(W_p)_{\sigma_p\tau_p}$.
@@ -624,7 +624,7 @@ a function of the Hamiltonian, the gap parameter and the input set.
     count $15q^2M^2$. Including row propagation through $n$ sites and both
     scalar caps gives the exact accumulated rational arithmetic count
     \begin{align*}
-      n(15q^2+8)(D_aD_b)^2+13.
+        n(15q^2+8)(D_aD_b)^2+13.
     \end{align*}
     Identity physical weights give the Gram evaluation with the same
     count. At length zero the count is thirteen.
@@ -661,16 +661,16 @@ a function of the Hamiltonian, the gap parameter and the input set.
     $\sigma_0[a,c]$ for its modification with labels $a$ at $p$ and
     $c$ at $r$. With $E_{ab}=|a\rangle\langle b|$, define
     \begin{align*}
-      K_{(a,c),(b,d)}&=X_{\sigma_0[a,c],\sigma_0[b,d]},\\
-      F_j^{abcd}&=\begin{cases}
-        E_{ab},&j=p,\\
-        E_{cd},&j=r,\\
-        I,&j\notin\{p,r\}.
-      \end{cases}
+        K_{(a,c),(b,d)} & =X_{\sigma_0[a,c],\sigma_0[b,d]}, \\
+        F_j^{abcd}      & =\begin{cases}
+                               E_{ab}, & j=p,            \\
+                               E_{cd}, & j=r,            \\
+                               I,      & j\notin\{p,r\}.
+                           \end{cases}
     \end{align*}
     Then $X$ is the sum of $q^4$ product operators
     \begin{align*}
-      X=\sum_{a,b,c,d=0}^{q-1}
+        X=\sum_{a,b,c,d=0}^{q-1}
         K_{(a,c),(b,d)}\bigotimes_j F_j^{abcd}.
     \end{align*}
     The factors $F_j^{abcd}$ have rational entries equal to zero or one,
@@ -708,7 +708,7 @@ a function of the Hamiltonian, the gap parameter and the input set.
     $\langle u,X_iv\rangle$.
     Adding these $m$ computed values gives
     \begin{align*}
-      \sum_{i=1}^m\langle u,X_iv\rangle
+        \sum_{i=1}^m\langle u,X_iv\rangle
         =\left\langle u,\left(\sum_{i=1}^m X_i\right)v\right\rangle.
     \end{align*}
     In particular, for a normalized $u=v$ and a local Hamiltonian
@@ -755,8 +755,8 @@ a function of the Hamiltonian, the gap parameter and the input set.
     The counted evaluations return the actual rational local matrix
     elements with exact accumulated counts
     \begin{align*}
-      q^4(C+8)&\quad\text{for one two-site term},\\
-      m\bigl(q^4(C+8)+2\bigr)&\quad\text{for a sum of $m$ local terms}.
+        q^4(C+8)                & \quad\text{for one two-site term},        \\
+        m\bigl(q^4(C+8)+2\bigr) & \quad\text{for a sum of $m$ local terms}.
     \end{align*}
     The empty sum has value and count zero.
     These counts concern rational arithmetic; the bit-operation charge
@@ -874,8 +874,8 @@ a function of the Hamiltonian, the gap parameter and the input set.
     tensor entries, and one-site physical weights have height at most $H$.
     Put
     \[
-      P=2+nqD_a^2+nqD_b^2+nq^2,\qquad
-      Q=D_aD_bq^2(2H)^3.
+        P=2+nqD_a^2+nqD_b^2+nq^2,\qquad
+        Q=D_aD_bq^2(2H)^3.
     \]
     There is a common input denominator $M\le H^{2P}$, including both
     scalar caps. At every prefix $t\le n$, each entry of the actual
@@ -883,7 +883,7 @@ a function of the Hamiltonian, the gap parameter and the input set.
     $Q^t$, and coordinate height at most $H^{6Pt}\max\{1,Q^t\}$.
     If $H\le2^h$, these stored coordinate heights are at most
     \[
-      2^{(6hP+D_aD_b+2q+3h+3)t}.
+        2^{(6hP+D_aD_b+2q+3h+3)t}.
     \]
 \end{lemma}
 \begin{proof}\leanok
@@ -929,7 +929,7 @@ a function of the Hamiltonian, the gap parameter and the input set.
     denominator $M$ and norms at most $C$. For two length-$n$ chains
     with virtual bounds $D_a,D_b$, put
     \[
-      Q=D_aD_bq^2C^3,\qquad R=C^2Q^n.
+        Q=D_aD_bq^2C^3,\qquad R=C^2Q^n.
     \]
     The actual rational weighted overlap, including both scalar caps,
     has denominator $M^{3n+2}$, norm at most $R$, and both coordinate
@@ -951,8 +951,8 @@ a function of the Hamiltonian, the gap parameter and the input set.
     For a reduced fraction $x=a/d$, where $a\in\mathbb Z$ and $d>0$,
     let
     \[
-      s(x)=1+(\lfloor\log_2|a|\rfloor+1)
-              +(\lfloor\log_2 d\rfloor+1),
+        s(x)=1+(\lfloor\log_2|a|\rfloor+1)
+        +(\lfloor\log_2 d\rfloor+1),
     \]
     with one digit allotted to a zero numerator. The first bit stores
     its sign; the remaining bits store the numerator magnitude and
@@ -973,12 +973,12 @@ a function of the Hamiltonian, the gap parameter and the input set.
     its scalar and every actual local entry whose total binary length is
     at most
     \[
-      6\bigl(1+kq\max\{1,b\}^2\bigr)(\lfloor\log_2 H\rfloor+1).
+        6\bigl(1+kq\max\{1,b\}^2\bigr)(\lfloor\log_2 H\rfloor+1).
     \]
     In particular, if $k\le L$, $b\le DL^r$, and
     $H=2^{E(L+1)^2}$, this length is at most
     \[
-      6\bigl(1+Lq\max\{1,DL^r\}^2\bigr)\bigl(1+E(L+1)^2\bigr).
+        6\bigl(1+Lq\max\{1,DL^r\}^2\bigr)\bigl(1+E(L+1)^2\bigr).
     \]
     This counts the rational coordinates on the specified virtual spaces.
 \end{lemma}
@@ -1003,7 +1003,7 @@ a function of the Hamiltonian, the gap parameter and the input set.
     vector $\phi$ supported on their left span has a vector $\psi$ supported
     on the span of the $w_j$ such that
     \[
-      \|\phi-\psi\|\le r\theta\|\phi\|.
+        \|\phi-\psi\|\le r\theta\|\phi\|.
     \]
     Consequently, if the original family is $\delta$-viable for a unit
     target and $r\theta<1$, the rounded family is
@@ -1923,7 +1923,7 @@ a function of the Hamiltonian, the gap parameter and the input set.
     most $|S|m$.  Every matrix satisfying the support constraint, and hence
     every feasible density matrix, also has rank at most $|S|m$.
     Moreover, there are $n\le |S|m$ and an isometry $Z:\mathbb C^n\to
-    \mathcal H$ whose range projection is precisely this support projection.
+        \mathcal H$ whose range projection is precisely this support projection.
     After joining the two left regions, every bond slice of every column of
     $Z$ is a linear combination of $S$.  Hence its structured coefficient
     array has $nm|S|\le (|S|m)^2$ complex entries, independently of the
@@ -1946,8 +1946,8 @@ a function of the Hamiltonian, the gap parameter and the input set.
     unchanged after this substitution. If the net center $X$ is Hermitian,
     this constraint has the explicit semidefinite representation
     \begin{align*}
-       P&\ge0, & N&\ge0, & \mathcal B_Z(\tau)-X&=P-N,
-       & \operatorname{tr}P+\operatorname{tr}N&\le\eta.
+        P & \ge0,                                 & N        & \ge0, & \mathcal B_Z(\tau)-X & =P-N,
+          & \operatorname{tr}P+\operatorname{tr}N & \le\eta.
     \end{align*}
     Together with $\tau\ge0$, $\operatorname{tr}\tau=1$, and the linear
     objective inequality
@@ -2085,7 +2085,7 @@ a function of the Hamiltonian, the gap parameter and the input set.
     precise error accepted by the approximate Gram certificate above.  For a
     prescribed positive Gram error $\zeta$, the canonical choice
     \[
-       \delta=\frac{\zeta}{d(2\sqrt C+1)+\zeta}
+        \delta=\frac{\zeta}{d(2\sqrt C+1)+\zeta}
     \]
     makes this error at most $\zeta$.  Hence every unified feasible certificate
     has representatives in three finite factor grids, with explicit
@@ -2123,8 +2123,8 @@ a function of the Hamiltonian, the gap parameter and the input set.
     single certificate in the product of the six concrete grids, with
     spectral tolerances
     \[
-      \epsilon+(n+1)(\theta_A+\zeta_A),\qquad
-      \epsilon_b+(r+1)(\theta_b+\zeta_b).
+        \epsilon+(n+1)(\theta_A+\zeta_A),\qquad
+        \epsilon_b+(r+1)(\theta_b+\zeta_b).
     \]
     Hence every unified certificate is covered by the explicit finite product
     after precisely these displayed tolerance enlargements.
@@ -2134,7 +2134,7 @@ a function of the Hamiltonian, the gap parameter and the input set.
     modulus at most $C$, then every entry of the compressed boundary marginal
     changes by at most
     \[
-      |A|n^2\theta_Z C(2M+\theta_Z).
+        |A|n^2\theta_Z C(2M+\theta_Z).
     \]
     The same quantity may therefore be added to the entrywise boundary-residual
     tolerance.  This estimate does not require the approximating map to remain
@@ -2142,7 +2142,7 @@ a function of the Hamiltonian, the gap parameter and the input set.
     Every rectangular isometry has entries of modulus at most one.  Consequently,
     for any positive allowance $\omega$, the mesh
     \[
-      \delta_Z=\min\left\{1,
+        \delta_Z=\min\left\{1,
         \frac{\omega}{3(|A|n^2+1)}\right\}
     \]
     produces a Gaussian-rational coordinate map of explicit grid height and
@@ -2175,15 +2175,15 @@ a function of the Hamiltonian, the gap parameter and the input set.
     $\kappa,2n\epsilon,2r\epsilon_b,\delta$ to be at most
     $\Delta/(129792L)$, and require
     \[
-      n^2C\theta_K\le \frac{\Delta}{16224},\qquad
-      r^2\theta_X\le \frac{\Delta}{64896L},\qquad
-      \omega\le \frac{\Delta}{64896L}.
+        n^2C\theta_K\le \frac{\Delta}{16224},\qquad
+        r^2\theta_X\le \frac{\Delta}{64896L},\qquad
+        \omega\le \frac{\Delta}{64896L}.
     \]
     Then the complete repaired energy loss is at most $\Delta/2028$.
     Positive canonical entry meshes satisfying the middle two requirements are
     \[
-      \theta_K=\frac{\Delta}{16224(n^2C+1)},\qquad
-      \theta_X=\frac{\Delta}{64896L(r^2+1)}.
+        \theta_K=\frac{\Delta}{16224(n^2C+1)},\qquad
+        \theta_X=\frac{\Delta}{64896L(r^2+1)}.
     \]
     The added units in the denominators make these choices valid without
     separate nonvanishing assumptions on $n^2C$ or $r^2$.
@@ -2197,7 +2197,7 @@ a function of the Hamiltonian, the gap parameter and the input set.
     More canonically, given one positive allowance $\omega$, use the common
     density and factor mesh
     \[
-      \theta_d=\frac{\omega}{2(d+1)^2}
+        \theta_d=\frac{\omega}{2(d+1)^2}
     \]
     in matrix order $d$ (with $d=n$ for the density variables and $d=r$ for
     the boundary variables).  The resulting finite product contains a
@@ -2352,8 +2352,8 @@ a function of the Hamiltonian, the gap parameter and the input set.
     Using the a priori order bounds $n\le |S|m$ and $r\le qm$, the same
     physical conclusion follows from the uniform choices
     \begin{align*}
-      \epsilon&\le \frac{\Delta}{129792L|S|m}, &
-      \epsilon_b&\le \frac{\Delta}{129792Lqm}.
+        \epsilon   & \le \frac{\Delta}{129792L|S|m}, &
+        \epsilon_b & \le \frac{\Delta}{129792Lqm}.
     \end{align*}
     These tolerances are fixed before the coordinate isometry and the
     realized cone orders are chosen.
@@ -2560,7 +2560,7 @@ a function of the Hamiltonian, the gap parameter and the input set.
     Before this last rounding, the theorem also retains the sharper bounds
     with total error
     \[
-      2\left(6\frac{\Delta}{169}+\xi+
+        2\left(6\frac{\Delta}{169}+\xi+
         \lVert B\rVert\left(2\frac{(\Delta/169)^2}{2L}+\delta\right)\right).
     \]
     Thus unused portions of the margin may be assigned to a subsequent
@@ -2571,7 +2571,7 @@ a function of the Hamiltonian, the gap parameter and the input set.
     solution can be normalized and expanded to such a density.  It gives the
     sharper physical energy error
     \[
-       14\frac{\Delta}{169}+24L\epsilon
+        14\frac{\Delta}{169}+24L\epsilon
     \]
     and the corresponding overlap deficit obtained by dividing this
     quantity by $\Delta$.  In particular, it gives the
@@ -2637,19 +2637,19 @@ a function of the Hamiltonian, the gap parameter and the input set.
     leading vector and its isometric expansion, in addition to the ambient
     leading eigenpair.  It also performs the composition: with
     \[
-       \eta=\frac{11\Delta}{778752L},\qquad
-       t=\left\lceil\frac{n}{\eta^2}\right\rceil,
+        \eta=\frac{11\Delta}{778752L},\qquad
+        t=\left\lceil\frac{n}{\eta^2}\right\rceil,
     \]
     one of the \(n\) normalized coordinate-start power vectors expands to a
     physical vector having unit norm, the required left support, energy at
     most \(E_0+\Delta/12\), and ground-state overlap at least \(11/12\).
     The iteration count satisfies the explicit polynomial estimate
     \[
-       t<\frac{n(778752L)^2}{(11\Delta)^2}+1.
+        t<\frac{n(778752L)^2}{(11\Delta)^2}+1.
     \]
     Trying every coordinate start therefore uses fewer than
     \[
-       n\left(\frac{n(778752L)^2}{(11\Delta)^2}+1\right)
+        n\left(\frac{n(778752L)^2}{(11\Delta)^2}+1\right)
     \]
     matrix--vector iterations.
     If the retained left family has rational matrix product representations,
@@ -2723,7 +2723,7 @@ a function of the Hamiltonian, the gap parameter and the input set.
     \(\Delta/2704\) of the overlap numerator, rather than the coarser
     \(\Delta/2028\) bound needed for ordinary viability.  Since
     \[
-      \frac1{12}-\frac{14}{169}-\frac1{2704}=\frac1{8112},
+        \frac1{12}-\frac{14}{169}-\frac1{2704}=\frac1{8112},
     \]
     the canonical search can reserve \(2\xi_{\mathrm{rat}}=1/8112\), namely
     \(\xi_{\mathrm{rat}}=1/16224\), for rationalizing its selected columns.
@@ -2742,21 +2742,21 @@ a function of the Hamiltonian, the gap parameter and the input set.
     \leanok
     Fix a cut, $q\ge1$, $L\ge1$, $c>0$, and a bond bound $D$.  Put
     \begin{align*}
-        p & =2(qD)^2, & A&=\lceil2(qD)^2/c\rceil.
+        p & =2(qD)^2, & A & =\lceil2(qD)^2/c\rceil.
     \end{align*}
     For every $0\le m\le D$, there is a $c/(2L)$-net $N_m$ of the
     trace-norm unit ball on the actual site-and-bond boundary space, and
     these nets can be chosen so that
     \begin{align*}
-        |N_m|&\le(2A+1)^pL^p,
-        &\sum_{m=0}^{D}|N_m|&\le(D+1)(2A+1)^pL^p.
+        |N_m| & \le(2A+1)^pL^p,
+              & \sum_{m=0}^{D}|N_m| & \le(D+1)(2A+1)^pL^p.
     \end{align*}
     Hence the size-trimming construction poses at most the latter number
     of boundary-constrained minimization problems at one cut.  Across all
     positive cuts, the nets can be chosen simultaneously with
     \begin{align*}
-      \sum_{i=1}^{L}\sum_{m=0}^{D}|N_{i,m}|
-      \le(D+1)(2A+1)^pL^{p+1}.
+        \sum_{i=1}^{L}\sum_{m=0}^{D}|N_{i,m}|
+        \le(D+1)(2A+1)^pL^{p+1}.
     \end{align*}
 \end{lemma}
 \begin{proof}

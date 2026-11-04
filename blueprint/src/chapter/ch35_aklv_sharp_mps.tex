@@ -100,12 +100,12 @@
     Then
     \begin{align*}
         \log B & \le10001\log D_0+
-        400000m(1+\log q+\log(z+1)),\notag    \\
+        400000m(1+\log q+\log(z+1)),\notag                 \\
         \log B & \le C(A)\left[\frac{u^3}{g}+
             \left(\frac{z^3}{g}\right)^{1/4}
-            (u+\log(z+1))\right],\notag\\
+        (u+\log(z+1))\right],\notag                        \\
         \log B & \le C(A)\left[\frac{u^3}{g}+
-            \left(\frac{2}{g}\right)^{1/4}(u+4)z\right],\notag\\
+        \left(\frac{2}{g}\right)^{1/4}(u+4)z\right],\notag \\
         \log B & \le 11C(A)\frac{u^3}{g}z.
     \end{align*}
 \end{lemma}
@@ -137,12 +137,12 @@
     $s_0=\lceil Av^2/g\rceil$.  The rank budget selected with this smaller
     initial width satisfies
     \begin{align*}
-        \log D_0 &\le \frac{C_0(A)}{g}(v^3+v^2w),\notag\\
-        \log B &\le C(A)\left[
-          \frac{v^3+v^2w}{g}
-          +\left(\frac{z^3}{g}\right)^{1/4}
-            (v+\log(z+1))\right],\notag\\
-        \log B &\le 11C(A)\frac{v^3+v^2w}{g}z.
+        \log D_0 & \le \frac{C_0(A)}{g}(v^3+v^2w),\notag \\
+        \log B   & \le C(A)\left[
+            \frac{v^3+v^2w}{g}
+            +\left(\frac{z^3}{g}\right)^{1/4}
+        (v+\log(z+1))\right],\notag                      \\
+        \log B   & \le 11C(A)\frac{v^3+v^2w}{g}z.
     \end{align*}
     These are numerical rank estimates.  They do not assert that the AGSP
     shrinking--rank inequality holds at the smaller width $s_0$.
@@ -164,12 +164,12 @@
     Fix $0<g_0\le1$.  If $g_0\le g\le1$ and $q\ge2$, then
 
     \begin{align*}
-      \frac{(1+\log q+\log(1/g))^3}{g}
-      \le C(g_0)\frac{\log^3q}{g},
+        \frac{(1+\log q+\log(1/g))^3}{g}
+        \le C(g_0)\frac{\log^3q}{g},
     \end{align*}
     where
     \begin{align*}
-      C(g_0)=\left(1+\frac1{\log2}\right)^3
+        C(g_0)=\left(1+\frac1{\log2}\right)^3
         \left(1+\log(1/g_0)\right)^3.
     \end{align*}
 \end{lemma}
@@ -187,7 +187,7 @@
     \leanok
     For every $K\ge0$, there is $0<g\le1$ such that
     \begin{align*}
-      K\log^3 2<\bigl(1+\log2+\log(1/g)\bigr)^3.
+        K\log^3 2<\bigl(1+\log2+\log(1/g)\bigr)^3.
     \end{align*}
     Hence the $\log(1/g)$ term in the proved coefficient cannot be absorbed
     into a universal multiple of $\log^3q$, even at $q=2$.
@@ -227,7 +227,7 @@
     comparison. The failed-window case retains the ground vector itself.
     For unit vectors,
     $1-\operatorname{Re}\langle y,\Omega\rangle
-      =\|y-\Omega\|^2/2$, and the modulus of the overlap is at least its
+        =\|y-\Omega\|^2/2$, and the modulus of the overlap is at least its
     real part.
 \end{proof}
 
@@ -242,14 +242,14 @@
     the chain, such that for every $0<\rho\le1$ and every cut there is a
     normalized vector $y$ satisfying
     \begin{align*}
-      \lVert y-\Omega\rVert^2&\le\rho, &
-      |\langle y,\Omega\rangle|&\ge1-\rho/2,
+        \lVert y-\Omega\rVert^2   & \le\rho,     &
+        |\langle y,\Omega\rangle| & \ge1-\rho/2,
     \end{align*}
     and whose Schmidt rank at that cut is at most $D$, where
     \begin{align*}
-      \log D\le 11C C_0(g_0)\frac{\log^3q}{g}\,z(\rho),
-      \qquad
-      C_0(g_0)=\left(1+\frac1{\log2}\right)^3
+        \log D\le 11C C_0(g_0)\frac{\log^3q}{g}\,z(\rho),
+        \qquad
+        C_0(g_0)=\left(1+\frac1{\log2}\right)^3
         \left(1+\log(1/g_0)\right)^3.
     \end{align*}
     Here $D$ is the same explicit AKLV rank budget as in
@@ -341,7 +341,7 @@
     satisfying $\lVert\Phi-\Omega\rVert\le\epsilon$.  Its explicit bond
     dimension $D$ obeys
     \begin{align*}
-      \log D\le 11C C_0(g_0)\frac{\log^3q}{g}
+        \log D\le 11C C_0(g_0)\frac{\log^3q}{g}
         \log\frac{2048(L+1)}{\epsilon^2}.
     \end{align*}
 \end{lemma}
