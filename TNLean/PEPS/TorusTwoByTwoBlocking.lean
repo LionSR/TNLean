@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.KitaevPeriodicTiling
+import TNLean.Algebra.FinSumPermutation
 
 /-!
 # Geometric two-by-two blocking with arbitrary virtual and physical alphabets
@@ -157,10 +158,7 @@ theorem torusBondNetwork_eq_twoByTwoBlocked [Fintype X] [DecidableEq X]
   rw [torusBondNetwork_eq_twoByTwoTiledSum, ← twoByTwoTiledBondEquiv.sum_comp,
     torusBondNetwork_one]
   simp only [Fintype.sum_prod_type]
-  apply Finset.sum_congr rfl
-  intro hb _
-  apply Finset.sum_congr rfl
-  intro vb _
+  refine Finset.sum_congr₂ fun hb _ vb _ ↦ ?_
   simp_rw [← twoByTwoSiteLegs_periodic ((hb, vb), _)]
   simp only [twoByTwoTensor, twoByTwoPhysicalEquiv, Equiv.coe_fn_mk]
   rw [Fintype.prod_sum]

@@ -2488,6 +2488,28 @@ in `MPS/Preparation/` uses it.
   the polynomial; it is not a statement about a single chain length, and it is
   not the half-trace-norm convention.
 
+### `TNLean.MPS.AreaLaw.IsIntervalSpanWithRankBound`
+
+- **Declaration:**
+  `TNLean.MPS.AreaLaw.IsIntervalSpanWithRankBound (L q p r count : ℕ) (xi : ℝ) (S : Submodule ℂ (EuclideanSpace ℂ (interval L p r → Fin q))) : Prop`.
+- **Defined in:** `TNLean/MPS/AreaLaw/IntervalGenerators.lean`.
+- **Meaning:** there are `n ≤ count` vectors `u i` on the interval `[p, r]`
+  whose span is exactly `S`, and every internal cut `j < r - p - 1` of every
+  `u i` has Schmidt rank `R` with `xi² R ≤ count`.
+- **Source:** Arad–Landau–Vazirani–Vidick, arXiv:1602.08828v2, collective
+  trimming, lines 646–697 (the count and per-vector rank bounds retained by
+  `lem:trimming`), used in the degenerate-ground-space construction,
+  lines 1777–1817.
+- **Sanctioned bridges:**
+  `IsIntervalSpanWithRankBound.finrank_le` (the recorded count bounds
+  `finrank S`); `isIntervalSpanWithRankBound_intervalTrimSubspace` (the
+  collective trim of an orthonormal basis of size `n ≤ count` satisfies the
+  predicate).
+- **Caveat:** the cutwise rank bound is a property of an existentially chosen
+  spanning family, not of every vector in `S`. A linear combination of the
+  generators can have Schmidt rank up to the sum of their ranks, so no uniform
+  rank bound on the whole span follows.
+
 ## Worked examples
 
 ### `MPSTensor.IsPeriodicWState`

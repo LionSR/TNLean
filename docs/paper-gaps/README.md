@@ -1744,7 +1744,7 @@ the generated soft target and the recursive energy invariant remain separate.
 ## ALVV: the operator-norm cluster approximation
 
 [`alvv16_cluster_approximation.tex`](alvv16_cluster_approximation.tex)
-(false source, open) records two nondegenerate counterexamples to Theorem
+(false source, resolved) records two nondegenerate counterexamples to Theorem
 `thm:cluster-approx` of Arad, Landau, Vazirani and Vidick,
 arXiv:1602.08828v2 (source lines 1270–1291 and 1924–1968). On two qubits a
 positive rank-one local projection disproves the printed physical-site cutoff
@@ -1753,10 +1753,24 @@ when the cutoff counts interaction labels. The complementary exponential need
 not have norm at most one under the source's explicit allowance of negative
 local terms. A corrected theorem must specify both the cutoff and the energy
 dependence. The printed theorem is not formalized; the existing normalized
-Hastings estimates are unaffected. The analytic approximation used by
-`lem:exp-approx-eff` remains to be corrected, separately from the exact matrix
-product operator construction. Tracked in [#9854](https://github.com/LionSR/TNLean/issues/9854)
+Hastings estimates are unaffected. The note proves a corrected estimate with
+the cutoff on interaction labels and a normalization by a lower energy bound;
+the soft-truncation matrix product operator of `lem:exp-approx-eff` is
+formalized through it, at scale three times the order. Tracked in [#9854](https://github.com/LionSR/TNLean/issues/9854)
 and [#9847](https://github.com/LionSR/TNLean/issues/9847).
+
+## ALVV: the first energy estimate of soft truncation
+
+[`alvv16_soft_truncation_energy_estimate.tex`](alvv16_soft_truncation_energy_estimate.tex)
+(false source, resolved) records a nondegenerate three-qubit family on which
+the first estimate of Lemma `lem:exp-approx` of Arad, Landau, Vazirani and
+Vidick, arXiv:1602.08828v2 (source lines 1193–1255), fails at every fixed
+truncation scale. The proof replaces a moment of the regional operator by a
+power of the shifted Hamiltonian, which operator order does not justify. The
+note proves a corrected comparison for one interval from an exponential moment
+of the regional operator, with scale at most four times the order. The gap
+prescription and the simultaneous replacement on several regions remain open.
+Tracked in [#9847](https://github.com/LionSR/TNLean/issues/9847).
 
 ## Hastings' high-temperature matrix product form, arXiv:cond-mat/0508554
 
@@ -1858,6 +1872,14 @@ and [#9847](https://github.com/LionSR/TNLean/issues/9847).
   `E₀ + 6√δ` and bond dimension `B_{min(δ, 1/12)}`. The energy bound after
   trimming a general low-energy vector is corrected in the QICLean note
   `lvv13_trimming_energy`.
+- [`lvv13_mpsapprox_log_factor.tex`](lvv13_mpsapprox_log_factor.tex)
+  (local correction, resolved) records that Lemma `l:mpsapprox`
+  (arXiv:1307.5143v1, lines 325–328) quotes the bond dimension
+  `exp(C (ln n)^{3/4} ε^{-1/4})` of Arad, Kitaev, Landau and Vazirani without
+  the tilde of their `e^{Õ(log^{3/4} n/ε^{1/4})}` (arXiv:1301.1162v1, lines 176
+  and 1503–1517). The formalized bound is that of the cited work, with the
+  hidden factor written out as `log log n`; the algorithm uses only a
+  polynomial bound.
 - [`lvv13_power_expansion_padding.tex`](lvv13_power_expansion_padding.tex)
   (local correction, resolved) records that the expansion `eq:a-exp`
   (arXiv:1307.5143v1, lines 606–609) of the power projector sums over words in
@@ -1870,7 +1892,9 @@ and [#9847](https://github.com/LionSR/TNLean/issues/9847).
   a chain of qubits with `ε₀ = (n - 1)/2` and gap `1/4` is an example. The
   corollary is formalized with the number of sampled words explicit in `C^m`,
   and `C^m ≤ n (1/η)^{ε₀/ε}` at the logarithmic power, which is polynomial
-  when `ε₀/ε` is bounded.
+  when `ε₀/ε` is bounded. The viable-set induction holds under that bound with
+  the sampled projector, and without it with Huang's Gaussian filter
+  (arXiv:1406.6355v6, §5.4) as the error-reduction operator.
 - [`lvv13_error_reduction_witness_norm.tex`](lvv13_error_reduction_witness_norm.tex)
   (local correction, resolved) records that the step from `A v` to `K v` in the
   proof of Claim `c:errorreduction` (arXiv:1307.5143v1, line 589) needs a lower
