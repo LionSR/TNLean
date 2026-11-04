@@ -702,7 +702,9 @@
       "theorems": [
         "thm:lvv_uniform_successive_approximation",
         "thm:lvv_successive_arbitrary_accuracy",
-        "thm:lvv_sampled_ground_state"
+        "thm:lvv_sampled_ground_state",
+        "thm:physical_dg_interval_tree_parameters",
+        "thm:physical_dg_normalized_mps_approximation"
       ],
       "corollaries": [],
       "notes": {
