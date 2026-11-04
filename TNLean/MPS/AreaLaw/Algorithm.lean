@@ -16,3 +16,4 @@ import TNLean.MPS.AreaLaw.Algorithm.SampledProgram
 import TNLean.MPS.AreaLaw.Algorithm.SweepProgram
 import TNLean.MPS.AreaLaw.Algorithm.ValidOracle
 import TNLean.MPS.AreaLaw.Algorithm.ValidOracleCost
+import TNLean.MPS.AreaLaw.Algorithm.ValidOracleSampled

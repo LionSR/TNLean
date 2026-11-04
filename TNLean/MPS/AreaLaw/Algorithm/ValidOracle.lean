@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.Algorithm.GroundStateProgram
+import TNLean.MPS.AreaLaw.ViableSet.SampledFactors
 
 /-!
 # Valid oracles
@@ -49,6 +50,25 @@ theorem netPointBound_mono {m m' : ℕ} (hm : m ≤ m') {η : ℝ} (hη : 0 ≤ 
     exact pow_le_pow_left₀ (Nat.cast_nonneg _) (by exact_mod_cast hbase) 2
   exact (Nat.pow_le_pow_left (by omega) _).trans
     (Nat.pow_le_pow_right (by omega) (Nat.mul_le_mul_left 2 (Nat.pow_le_pow_left hbase 2)))
+
+/-- The sampled factors contain the left factors of the decomposition of the sampled
+projector into its scaled chosen word decompositions. -/
+theorem isAdmissibleSampledFactors_sampledFactors {L : ℕ}
+    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (E₀ : ℝ) {ℓ m : ℕ}
+    (I : Fin ℓ → Fin m → Fin L) (i : ℕ) :
+    ∃ (ι : Type) (J : Finset ι) (A : ι → LeftBlockMatrix L q i) (B : ι → RightBlockMatrix L q i),
+      Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L i) (sampledProjector h E₀ I) =
+          ∑ t ∈ J, A t ⊗ₖ B t ∧
+        ∀ t ∈ J, A t ∈ AreaLaw.sampledFactors h E₀ I i := by
+  classical
+  refine ⟨(t : Fin ℓ) × Fin (operatorSchmidtRank (Entropy.cutOperator (n := fun _ : Fin L ↦ q)
+    (leftBlock L i) (bondComplementWord h (I t)))), Finset.univ,
+    fun p ↦ sampledLeftFactor h E₀ I i p.1 p.2,
+    fun p ↦ cutRightFactor (bondComplementWord h (I p.1)) p.2,
+    cutOperator_sampledProjector_eq_sum h E₀ I i, fun p _ ↦ ?_⟩
+  simp only [AreaLaw.sampledFactors, Finset.mem_biUnion, Finset.mem_univ, true_and,
+    Finset.mem_image]
+  exact ⟨p.1, p.2, rfl⟩
 
 /-- **A valid oracle** answers the deterministic queries exactly, enumerates nets that cover
 the boundary densities with the standard point bound, reports feasibility truthfully,
@@ -96,6 +116,18 @@ structure LinearAlgebraQuery.IsValidOracle (o : {ι : Type} → LinearAlgebraQue
     ∀ A ∈ o (LinearAlgebraQuery.gaussianFilterFactors L i hq h h0 c Delta), ∀ k, k < i →
       operatorSchmidtRank (Entropy.cutOperator (n := fun _ : Fin i ↦ q) (leftBlock i k)
         (A.submatrix leftConfigOfFin leftConfigOfFin)) ≤ huangFilterRankBound q c Delta L
+  sampledFactors : ∀ (L i : ℕ) (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
+    (E₀ : ℝ) (ℓ m D : ℕ) (I : Fin ℓ → Fin m → Fin L),
+    (∀ t k, operatorSchmidtRank (Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L k)
+      (bondComplementWord h (I t))) ≤ D) →
+    (∃ (ι : Type) (J : Finset ι) (A : ι → LeftBlockMatrix L q i) (B : ι → RightBlockMatrix L q i),
+      Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L i) (sampledProjector h E₀ I) =
+          ∑ t ∈ J, A t ⊗ₖ B t ∧
+        ∀ t ∈ J, A t ∈ o (LinearAlgebraQuery.sampledFactors L i h E₀ ℓ m D I)) ∧
+    (o (LinearAlgebraQuery.sampledFactors L i h E₀ ℓ m D I)).card ≤ ℓ * D ∧
+    (i ≤ L → ∀ A ∈ o (LinearAlgebraQuery.sampledFactors L i h E₀ ℓ m D I), ∀ k, k < i →
+      operatorSchmidtRank (Entropy.cutOperator (n := fun _ : Fin i ↦ q) (leftBlock i k)
+        (A.submatrix leftConfigOfFin leftConfigOfFin)) ≤ D)
   applyFactor : ∀ (L i r b : ℕ) (A : LeftBlockMatrix L q i) (s : LeftBlockVector L q i),
     o (LinearAlgebraQuery.applyFactor L i r b A s) = toEuclideanLin A s
   energyMinimizer : ∀ (L b : ℕ) (H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
@@ -124,6 +156,10 @@ theorem LinearAlgebraQuery.isValidOracle_honestOracle :
     card_gaussianFilterFactors_le hq h hs h0 h1 hc hDelta
   gaussianFilterFactors_rank _ _ hq h hs h0 h1 _ _ hc hDelta hi _ hA k hki :=
     operatorSchmidtRank_of_mem_gaussianFilterFactors hq h hs h0 h1 hc hDelta hi hA k hki
+  sampledFactors _ i h E₀ _ _ _ I hrank :=
+    ⟨isAdmissibleSampledFactors_sampledFactors h E₀ I i,
+      card_sampledFactors_le h E₀ I i fun t ↦ hrank t i,
+      fun hi _ hA k hki ↦ operatorSchmidtRank_of_mem_sampledFactors hi h E₀ I hrank hA k hki⟩
   applyFactor _ _ _ _ _ _ := rfl
   energyMinimizer _ _ H S hU := energyMinimizer_spec H S hU
 

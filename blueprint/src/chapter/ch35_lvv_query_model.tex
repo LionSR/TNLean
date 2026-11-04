@@ -307,6 +307,7 @@ oracle of this kind.
         TNLean.MPS.AreaLaw.isAdmissibleFilterFactors_gaussianFilterFactors,
         TNLean.MPS.AreaLaw.netPointBound,
         TNLean.MPS.AreaLaw.netPointBound_mono,
+        TNLean.MPS.AreaLaw.isAdmissibleSampledFactors_sampledFactors,
         TNLean.MPS.AreaLaw.LinearAlgebraQuery.IsValidOracle,
         TNLean.MPS.AreaLaw.LinearAlgebraQuery.isValidOracle_honestOracle,
         TNLean.MPS.AreaLaw.oracleNets,
@@ -324,9 +325,11 @@ oracle of this kind.
     bound, reports feasibility truthfully, returns at every feasible point the
     vector of some solution of the convex program in the sense of
     Definition~\ref{def:lvv_boundary_program_solution}, returns admissible
-    filter factors with the standard count and rank bounds, and returns for the
-    final convex program a unit vector of least energy in the span. The honest
-    oracle is valid. The nets and the leading-vector assignment of an oracle at
+    filter factors with the standard count and rank bounds, returns for the
+    sampled projector of any words a family of left factors containing a cut
+    decomposition of it with the standard count and rank bounds, and returns
+    for the final convex program a unit vector of least energy in the span. The
+    honest oracle is valid. The nets and the leading-vector assignment of an oracle at
     a cut are its answers to the corresponding operations.
 \end{definition}
 
@@ -601,4 +604,31 @@ over the words, of the event on which every family is good.
     length once the number of words and the rank bound are replaced by their
     polynomial bounds in the documented scope. Sum over the cuts and add the
     final convex program.
+\end{proof}
+
+\begin{lemma}[The sampled route under every valid oracle]
+    \label{thm:lvv_valid_oracle_sampled}
+    \lean{TNLean.MPS.AreaLaw.isViableMPS_errorReductionSet_of_admissible_sampled,
+        TNLean.MPS.AreaLaw.eval_sampledSweepStepProgram_of_valid,
+        TNLean.MPS.AreaLaw.sampledSweepStepProgram_spec_of_valid,
+        TNLean.MPS.AreaLaw.sampledSweepProgram_spec_of_valid,
+        TNLean.MPS.AreaLaw.sampledGroundStateProgram_spec_of_valid,
+        TNLean.MPS.AreaLaw.measureReal_sampledGroundStateProgram_success_of_valid}
+    \leanok
+    \uses{def:lvv_valid_oracle, thm:lvv_valid_oracle_correct,
+        thm:lvv_sampled_program_success, thm:lvv_sampled_factors_viable}
+    Under every valid oracle, on good words the sampled sweep computation is
+    $\delta$-viable at every cut with the size and bond bounds of
+    Lemma~\ref{thm:lvv_sampled_sweep_spec}, the sampled ground-state
+    computation outputs a unit matrix product state with overlap at least
+    $1-8n\delta/\Delta$, and the success probability of
+    Theorem~\ref{thm:lvv_sampled_program_success} holds verbatim.
+\end{lemma}
+\begin{proof}
+    \leanok
+    The sampled error-reduction step holds for any family of factors
+    containing a cut decomposition of the sampled projector with the standard
+    count and rank bounds, which validity provides; the rest is the proof of
+    Theorem~\ref{thm:lvv_sampled_program_success} with the oracle's answers in
+    place of the chosen ones.
 \end{proof}
