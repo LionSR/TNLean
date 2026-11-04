@@ -9,6 +9,7 @@ import TNLean.MPS.MPDO.BNTAssociativity
 import TNLean.MPS.MPDO.BNTFusionTensorClause
 import TNLean.MPS.MPDO.BNTMultiplicityNormalization
 import TNLean.MPS.MPDO.RFPPositiveFusionDecomposition
+import TNLean.Algebra.FinSumPermutation
 
 /-!
 # The BNT fusion clause from the MPDO renormalization fixed-point condition
@@ -276,15 +277,9 @@ theorem hasIdempotentCoefficientForm_of_blockedRepresentations
       rw [hCoeff L hL γ]
       simp only [BNTProductMultiplicityIndex, Fintype.sum_sigma,
         Fintype.sum_prod_type, DiagonalChiFamily.tracePowerCoeff, mul_pow]
-      apply Finset.sum_congr rfl
-      intro α _
-      apply Finset.sum_congr rfl
-      intro β _
+      refine Finset.sum_congr₂ fun α _ β _ ↦ ?_
       rw [mul_assoc, Fintype.sum_mul_sum, Fintype.sum_mul_sum]
-      apply Finset.sum_congr rfl
-      intro q _
-      apply Finset.sum_congr rfl
-      intro r _
+      refine Finset.sum_congr₂ fun q _ r _ ↦ ?_
       simpa only [mul_comm, mul_left_comm, mul_assoc] using
         (Fintype.sum_mul_mul_eq_mul_sum_mul (D₁.weight α q ^ L)
           (fun _ => D₁.weight β r ^ L)

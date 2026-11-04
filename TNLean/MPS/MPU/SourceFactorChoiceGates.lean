@@ -8,6 +8,7 @@ import TNLean.MPS.MPU.SourceFactorChoice
 import TNLean.MPS.MPU.TwoSiteStandardForm
 import TNLean.MPS.MPU.FundamentalTheoremGatesNecessity
 import TNLean.MPS.MPU.FundamentalTheoremGatesBlocked
+import TNLean.Algebra.FinSumPermutation
 
 /-!
 # The gate statements for every choice of compact decompositions
@@ -384,10 +385,7 @@ theorem trace_mul_eq_sourceV_mul_sourceU_swap {ρ : Matrix (Fin D) (Fin D) ℂ}
       exact Finset.sum_comm
     _ = ∑ l, ∑ α, ∑ β, ∑ r, f α β l r := Finset.sum_comm
     _ = ∑ l, ∑ α, ∑ r, ∑ β, f α β l r := by
-      apply Finset.sum_congr rfl
-      intro l _
-      apply Finset.sum_congr rfl
-      intro α _
+      refine Finset.sum_congr₂ fun l _ α _ ↦ ?_
       exact Finset.sum_comm
     _ = ∑ l, ∑ r, ∑ α, ∑ β, f α β l r := by
       apply Finset.sum_congr rfl
