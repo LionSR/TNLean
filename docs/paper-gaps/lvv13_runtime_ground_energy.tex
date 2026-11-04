@@ -1580,10 +1580,21 @@ puts the open chain in a representation with scalar cap and all local entries
 of norm at most one.  Combining it with the dyadic mesh and the vector
 perturbation estimate gives
 \leanid{TNLean.MPS.AreaLaw.IsLeftOpenMPS.exists\_dyadic\_rational\_approximation\_of\_norm\_eq\_one},
-with common parameter height (2^{2t+5}) and a fully explicit vector error.
-The remaining running-time step is to choose (t) from the available
-viability reserve and propagate this rationalization through bond trimming
-and sampled error reduction.
+with common parameter height \(2^{2t+5}\) and a fully explicit vector error.
+The precision can now be chosen from any prescribed positive vector error.
+For a chain of length \(k\), put \(D=\max\{1,b\}\) and
+\[
+  K=q^kD^{k+1}(k+1)2^k,\qquad
+  t=\left\lceil\log_2\max\{1,\lceil K/\epsilon\rceil\}\right\rceil.
+\]
+The theorem
+\leanid{TNLean.MPS.AreaLaw.IsLeftOpenMPS.exists\_dyadic\_rational\_approximation\_at\_error}
+then gives error at most \(\epsilon\) and parameter height at most
+\(2^{2t+5}\). Thus the dyadic exponent has logarithmic dependence on
+\(K/\epsilon\), despite the exponential path-count factor in \(K\).
+The remaining running-time step is to propagate this rationalization
+through bond trimming and sampled error reduction with their viability
+reserves and operation counts.
 The theorem
 \leanid{TNLean.MPS.AreaLaw.rank\_boundarySupportedMatrix\_le}
 also proves directly that every matrix satisfying the support constraint,

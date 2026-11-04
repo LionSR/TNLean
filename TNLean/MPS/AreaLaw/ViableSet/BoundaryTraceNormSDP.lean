@@ -18,6 +18,7 @@ import Mathlib.Basic.Complex.BigOperators
 import Mathlib.LinearAlgebra.Matrix.Gershgorin
 import Mathlib.Data.NNRat.Floor
 import Mathlib.NumberTheory.Height.NumberField
+import Mathlib.Data.Nat.Log
 
 /-!
 # Semidefinite representation of a Hermitian boundary trace-norm constraint
@@ -7185,6 +7186,64 @@ theorem IsLeftOpenMPS.exists_dyadic_rational_approximation_of_norm_eq_one
       _ = ‖OBCChainTensor.vectorOfParameters (L := L) R'.tensor hk P -
             OBCChainTensor.vectorOfParameters (L := L) R'.tensor hk P₀‖ := norm_sub_rev _ _
       _ ≤ _ := hfinal
+
+/-- On the unit interval, the power error is at most the mesh size times the
+degree and a fixed power of two. -/
+theorem one_add_pow_sub_one_le_mul_two_pow {δ : ℝ} (hδ : 0 ≤ δ) (hδone : δ ≤ 1)
+    (r : ℕ) :
+    (1 + δ) ^ r - 1 ≤ δ * r * 2 ^ (r - 1) := by
+  have h := abs_pow_sub_pow_le (a := (1 + δ)) (b := (1 : ℝ)) (n := r)
+  have hmax : max |1 + δ| |(1 : ℝ)| ≤ 2 := by
+    rw [abs_of_nonneg (by linarith : 0 ≤ 1 + δ), abs_of_nonneg zero_le_one]
+    exact max_le (by linarith) (by norm_num)
+  calc
+    (1 + δ) ^ r - 1 ≤ |(1 + δ) ^ r - 1| := le_abs_self _
+    _ ≤ δ * r * max |1 + δ| |(1 : ℝ)| ^ (r - 1) := by
+      simpa only [one_pow, add_sub_cancel_left, abs_of_nonneg hδ] using h
+    _ ≤ δ * r * 2 ^ (r - 1) := by gcongr
+
+/-- The ceiling binary logarithm chooses a dyadic mesh meeting a prescribed
+positive error after multiplication by a fixed contraction bound. -/
+theorem mul_inv_two_pow_clog_natCeil_le {K ε : ℝ} (hε : 0 < ε) :
+    K * (2 ^ Nat.clog 2 ⌈K / ε⌉₊ : ℝ)⁻¹ ≤ ε := by
+  have hceil : K / ε ≤ (⌈K / ε⌉₊ : ℝ) := Nat.le_ceil _
+  have hpow : (⌈K / ε⌉₊ : ℝ) ≤ (2 : ℝ) ^ Nat.clog 2 ⌈K / ε⌉₊ := by
+    exact_mod_cast Nat.le_pow_clog (by norm_num : 1 < 2) ⌈K / ε⌉₊
+  apply (mul_inv_le_iff₀ (by positivity : 0 < (2 : ℝ) ^ Nat.clog 2 ⌈K / ε⌉₊)).mpr
+  have h := (div_le_iff₀ hε).mp (hceil.trans hpow)
+  nlinarith
+
+/-- A normalized positive-length left-open MPS can be rounded to any positive
+vector error with an explicit dyadic precision. The precision exponent is the
+ceiling binary logarithm of the contraction bound divided by the target error. -/
+theorem IsLeftOpenMPS.exists_dyadic_rational_approximation_at_error
+    {b n : ℕ} {v : LeftBlockVector L q (n + 1)}
+    (hv : IsLeftOpenMPS b v) (hk : n + 1 ≤ L) (hvnorm : ‖v‖ = 1)
+    {ε : ℝ} (hε : 0 < ε) :
+    let K : ℝ := (q ^ (n + 1) : ℝ) * (max 1 (max 1 b) : ℝ) ^ (n + 2) *
+      (n + 2) * 2 ^ (n + 1)
+    let t := Nat.clog 2 ⌈K / ε⌉₊
+    ∃ w : LeftBlockVector L q (n + 1),
+      Nonempty (RationalLeftOpenMPSRepresentationOfHeight (2 ^ (2 * t + 5)) b w) ∧
+      ‖v - w‖ ≤ ε := by
+  dsimp only
+  let K : ℝ := (q ^ (n + 1) : ℝ) * (max 1 (max 1 b) : ℝ) ^ (n + 2) *
+    (n + 2) * 2 ^ (n + 1)
+  let t := Nat.clog 2 ⌈K / ε⌉₊
+  obtain ⟨w, hw, herr⟩ := hv.exists_dyadic_rational_approximation_of_norm_eq_one hk hvnorm t
+  refine ⟨w, hw, herr.trans ?_⟩
+  have hδ : 0 ≤ (2 ^ t : ℝ)⁻¹ := by positivity
+  have hδone : (2 ^ t : ℝ)⁻¹ ≤ 1 := by
+    exact inv_le_one_of_one_le₀ (one_le_pow₀ (by norm_num))
+  have hpower := one_add_pow_sub_one_le_mul_two_pow hδ hδone (n + 2)
+  calc
+    (q ^ (n + 1) : ℝ) * (max 1 (max 1 b) : ℝ) ^ (n + 2) *
+        ((1 + (2 ^ t : ℝ)⁻¹) ^ (n + 2) - 1) ≤
+        (q ^ (n + 1) : ℝ) * (max 1 (max 1 b) : ℝ) ^ (n + 2) *
+          ((2 ^ t : ℝ)⁻¹ * (n + 2) * 2 ^ (n + 1)) := by
+            exact mul_le_mul_of_nonneg_left (by simpa using hpower) (by positivity)
+    _ = K * (2 ^ t : ℝ)⁻¹ := by dsimp [K]; ring
+    _ ≤ ε := mul_inv_two_pow_clog_natCeil_le hε
 
 /-- Contracting a height-bounded rational open chain gives an explicit height bound.
 The outer exponent is the number of dependent virtual paths, while `productHeight`
