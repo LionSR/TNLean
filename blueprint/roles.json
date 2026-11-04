@@ -271,7 +271,9 @@
         "thm:spt_exact_ground_physical_class",
         "thm:spt_exact_phase_injective_classification"
       ],
-      "corollaries": [],
+      "corollaries": [
+        "cor:spt_exact_phase_injective_character_classification"
+      ],
       "notes": {
         "thm:spt_exact_ground_physical_class": "Physical-gap converse across changes of minimal MPS bond dimension, derived without a supplied transfer bound",
         "thm:spt_exact_phase_injective_classification": "Phase/cohomology equivalence for one-site injective endpoints with prescribed exact virtual covariance, combining physical forward and converse directions"
