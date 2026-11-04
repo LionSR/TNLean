@@ -22,10 +22,10 @@ operator approximation accuracy.
     $U=2(\eta+D+3C+2)$. Let $h,w>0$, $t,T\geq U$ and
     $T\geq\eta+3C+12$, and define
     \begin{align}
-        \rho_H&=|S|\left(8Ce^{-(T-\eta-3C-12)/8}
-             +\frac{t}{m}\left(\frac Tt\right)^m\right),\\
-        \rho_G&=|S|\left(8Ce^{-(T-U)/8}
-             +\frac{t}{m}\left(\frac Tt\right)^m\right),\qquad
+        \rho_H & =|S|\left(8Ce^{-(T-\eta-3C-12)/8}
+        +\frac{t}{m}\left(\frac Tt\right)^m\right), \\
+        \rho_G & =|S|\left(8Ce^{-(T-U)/8}
+        +\frac{t}{m}\left(\frac Tt\right)^m\right),\qquad
         k=\left\lceil\frac{\eta+h}{2h}\right\rceil.
     \end{align}
     Then $0\leq E-\mu\leq\rho_G$. The original space
@@ -39,12 +39,12 @@ operator approximation accuracy.
 
     For every $\xi>0$ and $t\geq3m$, define
     \begin{align}
-        s&=|S|,\qquad \delta=\frac{\xi}{\max\{1,s\}},\qquad
-        W=t2^{m+1},\qquad b=2(e^{1/3}-1),\\
-        r&=\max\left\{1,
-          \left\lceil\frac{\log\max\{1,N^2\}
-            -\log\log(1+\delta/W)}{-\log b}\right\rceil\right\},\\
-        D_0&=1+Nq^2,\qquad
+        s   & =|S|,\qquad \delta=\frac{\xi}{\max\{1,s\}},\qquad
+        W=t2^{m+1},\qquad b=2(e^{1/3}-1),                       \\
+        r   & =\max\left\{1,
+        \left\lceil\frac{\log\max\{1,N^2\}
+        -\log\log(1+\delta/W)}{-\log b}\right\rceil\right\},    \\
+        D_0 & =1+Nq^2,\qquad
         \chi=D_0+2s\bigl(D_0+(m+1)r^2q^r\bigr).
     \end{align}
     There is an actual site-dependent MPO $M$ of bond $\chi$, with
@@ -74,7 +74,7 @@ operator approximation accuracy.
     decomposition and cancellation of common energy shifts give
     \begin{align}
         G=\sum_i h_i-\Bigl(\sum_j e_j\Bigr)I
-          +\sum_{j\in S}(F_j-A_j).
+        +\sum_{j\in S}(F_j-A_j).
     \end{align}
     The lower bounds $p_j\leq e_j$ and $A_j-e_jI\geq0$ give
     $p_jI\leq A_j$. Positivity and $h_i\leq I$ give Hermiticity and
@@ -108,7 +108,7 @@ recorded in \cite{gap:alvv16_cluster_approximation}.
     and $m\ge1$. Put $F_j=p_jI+h_{m,t}(A_j-p_jI)$ and
     \begin{align}
         G=(F_0-e_0I)+(A_1-e_1I)+(F_2-e_2I)
-          +(A_3-e_3I)+(F_4-e_4I)+Y.
+        +(A_3-e_3I)+(F_4-e_4I)+Y.
     \end{align}
     Then the same estimated-center Hamiltonian satisfies
     \begin{align}

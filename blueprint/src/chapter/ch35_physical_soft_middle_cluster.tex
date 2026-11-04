@@ -16,9 +16,9 @@ with the corrected estimates of
     satisfy $t,T\ge156+2g$, $T\ge g/40+24$, and
     \begin{align}
         3\left(32e^{-(T-g/40-24)/8}+\frac{t}{m}(T/t)^m\right)
-          &\le\tau g/10^6,\notag\\
+         & \le\tau g/10^6,\notag \\
         3\left(32e^{-(T-156-2g)/8}+\frac{t}{m}(T/t)^m\right)
-          &\le\tau g/10^6.
+         & \le\tau g/10^6.
         \label{eq:physical_soft_middle_parameters}
     \end{align}
 
@@ -32,21 +32,21 @@ with the corrected estimates of
 
     Put $S=\{0,2,4\}$. For any centers $e_j-10\le p_j\le e_j$ on $S$, define
     \begin{align}
-        F_j&=p_jI+h_{m,t}(A_j-p_jI),\notag\\
-        G&=\sum_{j=0}^4
-          \bigl(\mathbf1_{j\in S}F_j+\mathbf1_{j\notin S}A_j-e_jI\bigr)+Y,\notag\\
-        M&=3t(1+\log m)+4\ell+34,\qquad
+        F_j & =p_jI+h_{m,t}(A_j-p_jI),\notag                                   \\
+        G   & =\sum_{j=0}^4
+        \bigl(\mathbf1_{j\in S}F_j+\mathbf1_{j\notin S}A_j-e_jI\bigr)+Y,\notag \\
+        M   & =3t(1+\log m)+4\ell+34,\qquad
         \xi=\min\left\{1,\frac{\tau g^2}{20000(M+g+8)}\right\}.
         \label{eq:physical_soft_middle_precision}
     \end{align}
     Then $G$ is Hermitian, $\|G\|\le M$, $0<\xi\le1$, and $p_2I\le A_2$.
     Set
     \begin{align}
-        c_*&=2(e^{1/3}-1),\qquad W=t2^{m+1},\notag\\
-        r_*&=\max\left\{1,
-          \left\lceil\frac{\log\max\{1,N^2\}-\log\log(1+\xi/W)}
-          {-\log c_*}\right\rceil\right\},\notag\\
-        B&=2\bigl(1+Nq^2+(m+1)r_*^2q^{r_*}\bigr).
+        c_* & =2(e^{1/3}-1),\qquad W=t2^{m+1},\notag  \\
+        r_* & =\max\left\{1,
+        \left\lceil\frac{\log\max\{1,N^2\}-\log\log(1+\xi/W)}
+        {-\log c_*}\right\rceil\right\},\notag        \\
+        B   & =2\bigl(1+Nq^2+(m+1)r_*^2q^{r_*}\bigr).
         \label{eq:physical_soft_middle_bond}
     \end{align}
     There are native operator tensors on $[a+2\ell,b+1)$ with bond $B$
@@ -55,10 +55,10 @@ with the corrected estimates of
     placement on the full chain and $(F_2)_{\rm nat}$ for the principal
     slice with zero exterior configuration. They satisfy
     \begin{align}
-        F_2&=\iota\bigl((F_2)_{\rm nat}\bigr),\qquad
+        F_2        & =\iota\bigl((F_2)_{\rm nat}\bigr),\qquad
         \|(F_2)_{\rm nat}-Z\|\le\xi,\qquad
-        \|F_2-Z_{\rm phys}\|\le\xi,\notag\\
-        \widehat G&=G-F_2+Z_{\rm phys},\qquad
+        \|F_2-Z_{\rm phys}\|\le\xi,\notag                     \\
+        \widehat G & =G-F_2+Z_{\rm phys},\qquad
         \|G-\widehat G\|\le\xi,\qquad
         \|\widehat G\|\le M+\xi.
         \label{eq:physical_soft_middle_error}
@@ -71,9 +71,9 @@ with the corrected estimates of
     $E+\sum_j e_j=\mu_0$. If $G_0$ is the full ground space of $H_0$, then
     \begin{align}
         \widehat T
-          &=\mathbf1_{(-\infty,E+g/4]}(\widehat G)\mathcal H
-           =\mathbf1_{(-\infty,E+3g/4]}(\widehat G)\mathcal H,\notag\\
-        \dim\widehat T&=\dim G_0.
+                       & =\mathbf1_{(-\infty,E+g/4]}(\widehat G)\mathcal H
+        =\mathbf1_{(-\infty,E+3g/4]}(\widehat G)\mathcal H,\notag          \\
+        \dim\widehat T & =\dim G_0.
         \label{eq:physical_soft_middle_cluster}
     \end{align}
     Each of $\widehat T,G_0$ is $3\tau/200$-close to the other.

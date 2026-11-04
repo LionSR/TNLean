@@ -27,15 +27,15 @@ approximating matrix. The two stages have distinct errors; see
     $T_0'\ge g/40+3C+12$ and $U_R\le t,T_1'$.
     Define
     \begin{align}
-        \rho_O&=|S|\left(8C e^{-(T_0'-g/40-3C-12)/8}
-                    +\frac{t}{m}(T_0'/t)^m\right),\\
-        \rho_R&=|S|\left(8C e^{-(T_1'-U_R)/8}
-                    +\frac{t}{m}(T_1'/t)^m\right).
+        \rho_O & =|S|\left(8C e^{-(T_0'-g/40-3C-12)/8}
+        +\frac{t}{m}(T_0'/t)^m\right),                 \\
+        \rho_R & =|S|\left(8C e^{-(T_1'-U_R)/8}
+        +\frac{t}{m}(T_1'/t)^m\right).
     \end{align}
     If both are at most $\tau g/10^6$, then
     \begin{align}
-        T_s=E_G(E+g/20)&=E_G(E+19g/20),
-        &\dim T_s&=\dim T_0,
+        T_s=E_G(E+g/20) & =E_G(E+19g/20),
+                        & \dim T_s        & =\dim T_0,
     \end{align}
     and $T_s,T_0$ are mutually $\tau/200$-close. Here
     $E_A(c)$ denotes the closed spectral space of $A$ below $c$.
@@ -44,16 +44,16 @@ approximating matrix. The two stages have distinct errors; see
     For any Hermitian $\widehat G$ with $\|G-\widehat G\|\le\xi$,
     $\xi>0$, put $V=\|G\|+\xi$ and
     \begin{align}
-        n_-&=\left\lceil\frac{E+g/20-\min\{E+g/20-1,-V\}}{2\xi}\right\rceil,\\
-        n_+&=\left\lceil\frac{E+3g/4-\min\{E+3g/4-1,-V\}}{2\xi}\right\rceil,\\
-        \delta_-&=\frac{n_-(2\xi)^2}{(g/5+\xi)^2},
-        &\delta_+&=\frac{n_+(2\xi)^2}{(g/5+\xi)^2}.
+        n_-      & =\left\lceil\frac{E+g/20-\min\{E+g/20-1,-V\}}{2\xi}\right\rceil,                                     \\
+        n_+      & =\left\lceil\frac{E+3g/4-\min\{E+3g/4-1,-V\}}{2\xi}\right\rceil,                                     \\
+        \delta_- & =\frac{n_-(2\xi)^2}{(g/5+\xi)^2},
+                 & \delta_+                                                         & =\frac{n_+(2\xi)^2}{(g/5+\xi)^2}.
     \end{align}
     If $\delta_-,\delta_+<1$, then
     \begin{align}
         \widehat T=E_{\widehat G}(E+g/4)
-          &=E_{\widehat G}(E+3g/4),
-        &\dim\widehat T&=\dim T_0.
+         & =E_{\widehat G}(E+3g/4),
+         & \dim\widehat T           & =\dim T_0.
     \end{align}
     The space $\widehat T$ is $2(\delta_-+\tau/200)$-close to $T_0$,
     while $T_0$ is $2(\delta_++\tau/200)$-close to $\widehat T$.
