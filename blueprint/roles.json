@@ -717,8 +717,6 @@
       "theorems": [
         "thm:alvv_ff_chain_replacement",
         "thm:alvv_ff_corrected_rank",
-        "thm:physical_dg_interval_tree_parameters",
-        "thm:physical_dg_normalized_mps_approximation",
         "thm:physical_low_energy_interval_family",
         "thm:physical_soft_windows_and_mpo"
       ],
