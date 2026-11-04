@@ -40,7 +40,7 @@
     ]
    },
    "title": "Ground energy in the exponent of the running time",
-   "summary": "Theorem 1 gives an exponent independent of the ground energy, but the normalization of the sampled projector is polynomial in <i>n</i> only when ε<sub>0</sub>/ε is bounded. The viable-set induction is proved with the sampled projector under such a bound, and without it with Huang's Gaussian filter in place of the sampled projector; the running time is not formalized.",
+   "summary": "Theorem 1 gives an exponent independent of the ground energy, but the normalization of the sampled projector is polynomial in <i>n</i> only when ε<sub>0</sub>/ε is bounded. The viable-set induction is proved with the sampled projector under such a bound, and without it with Huang's Gaussian filter in place of the sampled projector; on the Gaussian route the running time is stated in the cost model of the note on the cost model.",
    "context": "The algorithm uses the operator <i>A</i> = ((1 − <i>H</i>/<i>n</i>)/(1 − ε<sub>0</sub>/<i>n</i>))<sup><i>m</i></sup> with <i>m</i> of order (<i>n</i>/ε) log <i>n</i>, and samples it by an average of words in the factors 1 − <i>H<sub>i</sub></i> multiplied by <i>C</i><sup><i>m</i></sup>, <i>C</i> = (1 − ε<sub>0</sub>/<i>n</i>)<sup>−1</sup>. The size of <i>C</i><sup><i>m</i></sup> controls the variance in the matrix Bernstein bound, and hence the number of sampled words.",
    "claims": "Theorem 1 of arXiv:1307.5143v1 (lines 213–216 of the source) runs in time <i>n</i><sup><i>c</i>(<i>d</i>, ε)</sup> poly(<i>n</i>/η) with <i>c</i>(<i>d</i>, ε) = 2<sup><i>O</i>(log<sup>3</sup> <i>d</i>/ε)</sup>, with no dependence on the ground energy ε<sub>0</sub>. The proof of the sampling estimate (line 644) uses <i>C</i><sup>2<i>m</i></sup> = <i>n</i><sup><i>O</i>(1/ε)</sup>.",
    "found": "<i>C</i><sup><i>m</i></sup> = (1 − ε<sub>0</sub>/<i>n</i>)<sup>−<i>m</i></sup> is about e<sup>ε<sub>0</sub><i>m</i>/<i>n</i></sup> = <i>n</i><sup><i>O</i>(ε<sub>0</sub>/ε)</sup>. The hypotheses 0 ≤ <i>H<sub>i</sub></i> ≤ 1 allow ε<sub>0</sub> of order <i>n</i>, and then this factor, and with it the exponent of the running time, grows with <i>n</i>. Rescaling the sampled operator, which the source allows, does not change the relative accuracy that the number of samples must reach. The corrected exponent is 2<sup><i>O</i>(log<sup>3</sup> <i>d</i>/ε) + <i>O</i>(ε<sub>0</sub>/ε)</sup>.",
@@ -343,6 +343,26 @@
    "found": "The cited work, arXiv:1301.1162v1, states <i>B</i> = e<sup><i>Õ</i>(log<sup>3/4</sup> <i>n</i>/ε<sup>1/4</sup>)</sup> (lines 176 and 1503–1517), where the tilde hides factors logarithmic in the exponent. Its derivation balances two terms and leaves a factor of order log log <i>n</i>.",
    "impact": "None for the algorithm, which uses only a polynomial bond dimension. The lemma is formalized in the form its source proves.",
    "plan": "Resolved: a matrix product state with log <i>D</i> = <i>O</i>((log <i>n</i>)<sup>3/4</sup> log log <i>n</i>) for fixed local dimension and gap, at accuracy 1/poly(<i>n</i>), is proved."
+  },
+  {
+   "id": "docs/paper-gaps/lvv13_cost_model.tex",
+   "kind": "narrower",
+   "status": "open",
+   "paper": "lvv",
+   "result": "Theorem 1, the cost model of the running time",
+   "issue": 10536,
+   "stage": "alg:6",
+   "prs": {
+    "TNLean": [
+     10559
+    ]
+   },
+   "title": "The cost model of the running time",
+   "summary": "The algorithm is a computation over linear-algebra operations, each charged a declared polynomial cost in the dimensions of its arguments, and run with the honest oracle it computes the sweep; its total cost is at most <i>P</i>(<i>n</i> + 2<i>R</i><sup>2</sup> + 1)<sup><i>d</i></sup>. The costs, the honest answering of every operation and exact arithmetic are declared, not derived, as in the source.",
+   "context": "Theorem 1 (lines 213–219 of the source) counts each linear-algebra step, the matrix elements in an orthonormal basis of the span, the convex programs, the singular value decompositions and the leading eigenvectors, as one polynomial-time computation on data of polynomial dimension, and does not analyse it further.",
+   "claims": "The algorithm runs in time <i>n</i><sup><i>c</i>(<i>d</i>, ε)</sup> poly(<i>n</i>/η) and outputs a matrix product state with overlap at least 1 − η with the ground state.",
+   "impact": "The running time is a statement about declared costs and the honest oracle; the exponent 2<sup><i>O</i>(log<sup>3</sup> <i>d</i>/ε)</sup> is not reproduced, since the library's constant-cut bond differs from the source's.",
+   "plan": "The declaration of costs is the content of the source's claim. The honest-oracle restriction can be lifted by proving the viability of the sweep for every optimal solution of the convex programs, not only the chosen one."
   }
  ]
 }

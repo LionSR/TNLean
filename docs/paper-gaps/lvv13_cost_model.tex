@@ -1,0 +1,104 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+% Fallbacks keep this note compilable when a different command.tex is found first.
+\providecommand{\leanid}[1]{\textsf{\detokenize{#1}}}
+\providecommand{\gapnote}[2]{\par\noindent\textbf{Verdict:} #1 (#2).\par}
+
+\title{The Cost Model of the Running Time in Landau, Vazirani and Vidick}
+\author{}
+\date{2026-11-04}
+
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+\section{The source statement}
+
+Theorem~1 of Landau, Vazirani and Vidick~\cite{Landau2015Polynomial}
+(arXiv:1307.5143v1, \path{algo53.tex}, lines~213--216) asserts that an
+algorithm finds a matrix product state within overlap $1-\eta$ of the ground
+state ``in time $n^{c(d,\varepsilon)}\,\mathrm{poly}(n/\eta)$''. The paper
+does not analyse the linear algebra. Each step is counted as one
+polynomial-time computation on data of polynomial dimension: the matrix
+elements of the terms of the Hamiltonian in an orthonormal basis of the span
+of a family of matrix product states, the solution of a convex program in
+polynomially many variables, singular value decompositions, and the leading
+eigenvector of a density matrix (lines~219 and 484--487: ``The remaining
+steps rely on the singular value decomposition which can be performed
+efficiently as well.'').
+
+\section{What is formalized}
+
+The algorithm is written as a program over a type of
+queries,\footnote{\leanid{TNLean.MPS.AreaLaw.LinearAlgebraQuery} in
+    \doclink{TNLean/MPS/AreaLaw/Algorithm/Query}.} one query for each of
+the operations above: one-site extension, enumeration of the net of boundary
+contractions, feasibility of the size-trimming convex program and the leading
+eigenvector of its solution, Schmidt trimming, the left factors of the
+Gaussian filters and their application, and the final convex program. The
+honest oracle answers every query with the exact mathematical object that the
+definitions of the sweep use, so that the program, run with the honest oracle,
+computes the sweep itself and inherits its viability, cardinality and bond
+bounds. The cost of a query is declared as one unit plus a polynomial in the
+dimensions of its arguments: the chain length, the local dimension, the bond
+dimension of the vectors involved, the cardinality of the family, the bond of
+the boundary contraction and the rank of the operator. The total declared cost
+of the program on a chain of $n$ sites at accuracy parameter $R$ is at most
+$P\,(n+2R^2+1)^{d}$ with $P$ and $d$ depending only on the local dimension and
+the gap parameter,\footnote{\leanid{TNLean.MPS.AreaLaw.exists_groundStateProgram_cost_polynomial}
+    in \doclink{TNLean/MPS/AreaLaw/Algorithm/Cost}.} and the number of
+queries is at most the cost.
+
+\section{The restriction}
+
+Three things are declared rather than derived.
+
+\begin{enumerate}
+\item \emph{The costs.} A query is charged the cost of the textbook
+    algorithm for it on data of the stated dimensions, in exact arithmetic.
+    Nothing is proved about how a query is answered. The paper makes the same
+    declaration in prose.
+\item \emph{The oracle.} The cost bound is stated for the honest oracle. The
+    cardinalities of the intermediate families, and with them the number of
+    queries, are guaranteed only when every query is answered correctly;
+    against an arbitrary oracle the enumerated net or the family of filter
+    factors could be anything. A bound over all oracles would require the
+    program to truncate every answer to its declared size, which the
+    algorithm does not do. The chosen minimizers and leading eigenvectors of
+    the honest oracle are the ones fixed by the definitions of the sweep; a
+    solver returning a different optimal solution computes a different
+    family, whose viability is not asserted here.
+\item \emph{Arithmetic.} Bit complexity and floating-point error are outside
+    the model, as they are outside the paper.
+\end{enumerate}
+
+The accuracy $\eta$ enters through the padding of the chain by $2R^2$ sites
+with a penalty on the padding, in place of the paper's final error-reduction
+step at precision $c_\varepsilon/(n\,p(n))$ (lines~669--671): the sweep on the
+padded chain at its fixed precision gives a vector of the final span within
+distance $1/R$ of the ground state, and the energy-overlap lemma turns the
+least energy of the final convex program into overlap at least
+$1-4n/(R^2\varepsilon)$. The exponent $c(d,\varepsilon)=2^{O(\log^3 d/\varepsilon)}$
+of the source is not reproduced: the library's constant-cut bond is the one
+recorded in the note on the constant bond dimension, and the degree $d$ above
+is the degree of the uniform polynomial budgets of the sweep.
+
+\section{Elimination plan}
+
+The declaration of costs is the content of the source's running-time claim
+and is not expected to be eliminated. The honest-oracle restriction can be
+lifted by proving the viability of the sweep for every optimal solution of the
+convex programs, not only the chosen one, which would make the output of the
+program correct for every solver returning optimal solutions.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}

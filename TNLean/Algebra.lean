@@ -141,6 +141,7 @@ import TNLean.Algebra.MonomialGaussOperator
 import TNLean.Algebra.MonomialMatrix
 import TNLean.Algebra.MultilinearSelectedSum
 import TNLean.Algebra.NatInterval
+import TNLean.Algebra.NatPolynomialBound
 import TNLean.Algebra.NatSquarePlusOne
 import TNLean.Algebra.NewtonIdempotentConvergence
 import TNLean.Algebra.NonnegativeMatrixSpectralRadius
