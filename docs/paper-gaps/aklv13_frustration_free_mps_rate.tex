@@ -34,8 +34,8 @@ matrix product state of bond dimension
 The argument (lines~862--870) starts from a state of constant overlap with
 $\Gamma$ and entanglement rank $\exp(O(\log^3d/\varepsilon))$, and applies an
 approximate ground-state projector with shrinking factor
-$\Delta=1/\mathrm{poly}(n)$. It takes $\ell=s^2$ and states that Lemma
-\path{l:agsp} gives $\Delta=e^{-c\varepsilon^{-1/2}s^{3/2}}$ and rank
+$\Delta=1/\mathrm{poly}(n)$. It takes $\ell=s^2$ and states that Lemma~4.2
+of Ref.~\cite{Arad2013AreaLaw} gives $\Delta=e^{-c\varepsilon^{-1/2}s^{3/2}}$ and rank
 $D=\exp(s\log d)$; then $s=O(\varepsilon^{-1/3}\log^{2/3}n)$.
 
 \section{The exponent of the gap at line 867}
@@ -45,7 +45,7 @@ a misprint. The Chebyshev polynomial of degree $\ell$ of the clipped
 Hamiltonian, whose norm is at most $s+2t$ with $t=O(1/\varepsilon)$, gives
 $\Delta=\exp(-\ell\sqrt{\varepsilon}/\sqrt{s+2t})$ (line~831). For $\ell=s^2$
 this is $\exp(-c\,\varepsilon^{1/2}s^{3/2})$ with $c=\sqrt{s}/\sqrt{s+2t}$, as
-in the proof of Theorem \path{t:ent} (line~835). The choice of $s$ at
+in the proof of Theorem~4.3 of Ref.~\cite{Arad2013AreaLaw} (line~835). The choice of $s$ at
 line~868 makes $\varepsilon^{1/2}s^{3/2}=\log n$, which is the balance
 needed for $\Delta=1/\mathrm{poly}(n)$.
 
@@ -58,9 +58,9 @@ $\log B$ that is independent of $n$.
 
 \section{The rank of the second projector}
 
-Lemma \path{l:agsp} (line~590) bounds the entanglement rank of a polynomial
+Lemma~4.2 of Ref.~\cite{Arad2013AreaLaw} (line~590) bounds the entanglement rank of a polynomial
 of degree $\ell$ by $(d\ell)^{O(\max(\ell/s,\sqrt{\ell}))}$. At $\ell=s^2$ this
-is $\exp(O(s(\log d+\log s)))$, and the proof of Theorem \path{t:ent} keeps
+is $\exp(O(s(\log d+\log s)))$, and the proof of Theorem~4.3 keeps
 the same factor $\log(s^2+s)$ (lines~840--841). The count is sharp for the
 method: the binomial coefficient $\binom{s^2+s}{s}$ in the proof is at least
 $s^s$. Line~868 writes $D=\exp(s\log d)$ and drops $\log s$. With
@@ -121,7 +121,7 @@ $g$ the bound (\ref{eq:aklv13_ffmps_formal}) reads
 This is (\ref{eq:aklv13_ffmps_source}) with the factor $\log s$ written out.
 It is smaller than the general bound $(\log n)^{3/4}$ of the same paper. The
 printed bound (\ref{eq:aklv13_ffmps_printed}), without the factor
-$\log\log n$, is not formalized and is not implied by Lemma \path{l:agsp}.
+$\log\log n$, is not formalized and is not implied by Lemma~4.2 of Ref.~\cite{Arad2013AreaLaw}.
 The gap enters (\ref{eq:aklv13_ffmps_formal}) also through $\log(1/g)$ in
 $u$ and through the term $u^3/g$, which are independent of $n$; the inverse-gap
 logarithms are retained as in the entropy theorem,
@@ -131,7 +131,7 @@ logarithms are retained as in the entropy theorem,
 
 A local correction, resolved: the exponent at line~867 is read as $+1/2$, and
 the bond dimension of Section~5 is formalized with the factor $\log\ell$ of
-Lemma \path{l:agsp}, under the source's hypotheses.
+Lemma~4.2 of Ref.~\cite{Arad2013AreaLaw}, under the source's hypotheses.
 
 \bibliographystyle{plain}
 \bibliography{references}

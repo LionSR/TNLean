@@ -72,12 +72,13 @@ estimate, which is retained here \cite{gap:aklv13_frustration_free_mps_rate}.
     \label{lem:aklv_ff_increment_bounds}
     \lean{TNLean.MPS.AreaLaw.aklvFrustrationFreeIncrement_bounds}
     \leanok
-    \uses{def:aklv_ff_accuracy_parameters,thm:aklv_accuracy_parameter_bounds}
+    \uses{def:aklv_ff_accuracy_parameters}
     For $0<g\le1$ and $0<\rho\le1$ one has
     $r\ge1$, $r^3=z^2/g$, $6r\le m\le7r$ and $r\le z/g$.
 \end{lemma}
 \begin{proof}
     \leanok
+    \uses{thm:aklv_accuracy_parameter_bounds}
     Since $z\ge1$ and $g\le1$, $z^2/g\ge1$, so its cube root is at least one.
     The ceiling gives $6r\le m<6r+1\le7r$. Finally
     $r^3=z^2/g\le z^3/g^3$.
@@ -87,7 +88,6 @@ estimate, which is retained here \cite{gap:aklv13_frustration_free_mps_rate}.
     \label{lem:aklv_ff_accuracy_shrink}
     \lean{TNLean.MPS.AreaLaw.aklvFrustrationFree_shrink_le}
     \leanok
-    \uses{thm:aklv_accuracy_parameter_bounds}
     Let $0<g$, $0<\rho\le1$, $t=1024/g$ and $z=\log(128/\rho)$. If an
     integer $s$ satisfies $s\ge1/g$ and $gs^3\ge1728z^2$, then
     \begin{align*}
@@ -98,6 +98,7 @@ estimate, which is retained here \cite{gap:aklv13_frustration_free_mps_rate}.
 \end{lemma}
 \begin{proof}
     \leanok
+    \uses{thm:aklv_accuracy_parameter_bounds}
     Since $s\ge1/g$, $2t+s\le2049s$. Hence the square of the exponent is at
     least $4s^3g/4098\ge z^2$. The exponential is therefore at most
     $e^{-z}=\rho/128$.
@@ -107,8 +108,7 @@ estimate, which is retained here \cite{gap:aklv13_frustration_free_mps_rate}.
     \label{lem:aklv_ff_rank_log}
     \lean{TNLean.MPS.AreaLaw.aklvFrustrationFreeRankBound_log_le}
     \leanok
-    \uses{def:aklv_ff_accuracy_parameters,lem:aklv_ff_increment_bounds,
-        thm:aklv_quadratic_degree_log_rank}
+    \uses{def:aklv_ff_accuracy_parameters}
     Let $q\ge2$, $0<g\le1$, $0<\rho\le1$, $s_0\ge1$, $R,W\ge0$, and put
     $u=1+\log q+\log(1/g)$ and $D_0=(q(s_0^2+1))^{32(2s_0+1)}$. If
     $\log D_0\le Ru^3/g$ and $s_0\le Wu^2/g$, then
@@ -119,6 +119,7 @@ estimate, which is retained here \cite{gap:aklv13_frustration_free_mps_rate}.
 \end{lemma}
 \begin{proof}
     \leanok
+    \uses{lem:aklv_ff_increment_bounds,thm:aklv_quadratic_degree_log_rank}
     Put $D_1=(q(s^2+1))^{32(2s+1)}$, the rank formula at degree $s^2$.
     If $m\le s_0$, then $s\le3s_0$, so $s^2\le66s_0^2$ and
     $\log D_1\le10000\log D_0$.
@@ -133,7 +134,6 @@ estimate, which is retained here \cite{gap:aklv13_frustration_free_mps_rate}.
     \label{lem:aklv_ff_dimension_gap}
     \lean{TNLean.MPS.AreaLaw.aklv_frustrationFree_dimension_and_gap_bounds}
     \leanok
-    \uses{thm:chain_positive_nearest_neighbor_gap_upper}
     Let $0\le h_j\le I$ be nearest-neighbour terms of an $L$-site chain, and
     $\Omega$ a unit vector with $H\Omega=0$ and
     $H\ge g(I-|\Omega\rangle\langle\Omega|)$, where $H=\sum_jh_j$ and $g>0$.
@@ -141,6 +141,7 @@ estimate, which is retained here \cite{gap:aklv13_frustration_free_mps_rate}.
 \end{lemma}
 \begin{proof}
     \leanok
+    \uses{thm:chain_positive_nearest_neighbor_gap_upper}
     The two distinct eigenvalues $0$ and $g$ force $q\ge2$ and $L\ge1$.
     The endpoint trial vector then gives $g\le1$.
 \end{proof}
@@ -149,9 +150,6 @@ estimate, which is retained here \cite{gap:aklv13_frustration_free_mps_rate}.
     \label{lem:aklv_ff_two_filter_approximant}
     \lean{TNLean.MPS.AreaLaw.exists_aklv_frustrationFree_two_filter_approximant}
     \leanok
-    \uses{lem:aklv_frustration_free_filter,
-        lem:aklv_ff_product_filtered_output,
-        lem:aklv_normalized_cut_schmidt_rank}
     Let $q\ge1$, $0<g\le1$, $t=1024/g$, and let $\Omega$ be a unit vector with
     $H\Omega=0$ and $H\ge g(I-|\Omega\rangle\langle\Omega|)$ for a sum $H$ of
     nearest-neighbour terms $0\le h_j\le I$ on an $L$-site chain. Let
@@ -168,6 +166,9 @@ estimate, which is retained here \cite{gap:aklv13_frustration_free_mps_rate}.
 \end{lemma}
 \begin{proof}
     \leanok
+    \uses{lem:aklv_frustration_free_filter,
+        lem:aklv_ff_product_filtered_output,
+        lem:aklv_normalized_cut_schmidt_rank}
     The window of width $s_0$ with left end $a+m$ has the same centre $k$.
     Its filter of degree $s_0^2$ fixes $\Omega$, and
     Lemma~\ref{lem:aklv_ff_product_filtered_output} gives a vector $x$ of rank
@@ -183,10 +184,6 @@ estimate, which is retained here \cite{gap:aklv13_frustration_free_mps_rate}.
     \label{lem:aklv_ff_per_cut}
     \lean{TNLean.MPS.AreaLaw.exists_aklv_frustrationFree_per_cut_approximation}
     \leanok
-    \uses{lem:aklv_frustration_free_scalar_parameters,
-        lem:aklv_ff_two_filter_approximant,
-        lem:aklv_ff_accuracy_shrink,lem:aklv_ff_rank_log,
-        thm:aklv_exact_boundary_rank}
     There is a universal $C>0$ with the following property. Let $q\ge2$, let
     $0\le h_j\le I$ be nearest-neighbour terms on an $L$-site chain, and let
     $\Omega$ be a unit vector with $H\Omega=0$ and
@@ -202,6 +199,10 @@ estimate, which is retained here \cite{gap:aklv13_frustration_free_mps_rate}.
 \end{lemma}
 \begin{proof}
     \leanok
+    \uses{lem:aklv_frustration_free_scalar_parameters,
+        lem:aklv_ff_two_filter_approximant,
+        lem:aklv_ff_accuracy_shrink,lem:aklv_ff_rank_log,
+        thm:aklv_exact_boundary_rank}
     Take $s_0$, $t=1024/g$ and $D_0$ from the frustration-free scalar
     parameters, so $s_0\ge21$, $s_0\ge1/g$, $s_0\le Wu^2/g$,
     $\log D_0\le Ru^3/g$ and $D_0\delta_0\le10^{-5}$. Let $D=B$.
@@ -219,9 +220,7 @@ estimate, which is retained here \cite{gap:aklv13_frustration_free_mps_rate}.
     \label{thm:aklv_frustration_free_mps}
     \lean{TNLean.MPS.AreaLaw.exists_aklv_frustrationFree_sequential_mps_approximation}
     \leanok
-    \uses{lem:aklv_ff_per_cut,lem:aklv_ff_dimension_gap,
-        thm:aklv_cut_approximation_tail,
-        def:aklv_sequential_spectral_approximant,thm:aklv_sharp_sequential_mps}
+    \uses{def:aklv_sequential_spectral_approximant}
     There is a universal $C>0$ with the following property. Let $0\le h_j\le I$
     be nearest-neighbour terms on an $L$-site chain of local dimension $q$,
     and let $\Omega$ be a unit vector with $H\Omega=0$ and
@@ -246,6 +245,8 @@ estimate, which is retained here \cite{gap:aklv13_frustration_free_mps_rate}.
 \end{theorem}
 \begin{proof}
     \leanok
+    \uses{lem:aklv_ff_per_cut,lem:aklv_ff_dimension_gap,
+        thm:aklv_cut_approximation_tail,thm:aklv_sharp_sequential_mps}
     The actual gap gives $q\ge2$ and $g\le1$ by
     Lemma~\ref{lem:aklv_ff_dimension_gap}. Apply
     Lemma~\ref{lem:aklv_ff_per_cut} with $\rho=\epsilon^2/(16(L+1))$, so that

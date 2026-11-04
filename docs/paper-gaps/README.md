@@ -1900,7 +1900,7 @@ For Arad, Kitaev, Landau and Vazirani, arXiv:1301.1162v1, Section 5:
   (local correction, resolved) records that the exponent of the gap at line 867
   is `+1/2`, as at line 835, and that the printed frustration-free bond
   dimension `exp(O(ε^{-1/3} log^{2/3} n))` (lines 851–870) drops the factor
-  `log ℓ` of Lemma `l:agsp` (line 590) together with the starting rank
+  `log ℓ` of Lemma 4.2 (line 590) together with the starting rank
   `exp(O(log³ d/ε))`. The formalized bound is
   `log D ≤ C[u³/g + (z²/g)^{1/3}(u + log(z + 1))]` with
   `u = 1 + log q + log(1/g)` and `z = log(2048(L+1)/ε²)`, under the source's
