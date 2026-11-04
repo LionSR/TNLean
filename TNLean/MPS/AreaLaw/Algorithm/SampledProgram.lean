@@ -35,6 +35,11 @@ radius `bondTrimmingRadius` documented at
 `isViableMPS_sampledSweepStep` uses the corrected error-reduction estimate recorded in
 `docs/paper-gaps/lvv13_error_reduction_witness_norm.tex`.
 
+**Scope restriction (quantitative constants):** the size and final bond budgets use
+`lvvSizeTrimmingCoefficient` and `lvvSizeTrimmingDegree`, built from the library constant-cut
+bond and corrected net exponent recorded in `docs/paper-gaps/lvv13_constant_bond.tex`, not the
+printed quantitative bounds.
+
 Source: LVV13, arXiv:1307.5143v1, `algo53.tex`, lines 213--216 (Theorem 1), 611
 (`d:sagsp`), 626--649 (`c:agsp`), 652--678 (the induction and the success probability).
 -/
