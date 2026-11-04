@@ -15,8 +15,8 @@ two residuals, with their common regional minima, control the displacement
 of the actual ground energies and both enlarged spectral windows. Neither
 a residual estimate nor a spectral comparison is supplied as a hypothesis.
 
-**Scope restriction (one interval and scale three times the order):** This is a
-corrected auxiliary to ALVV, arXiv:1602.08828v2, `def:soft-trunc` and
+**Local fix (corrected residual comparison):** The scale is three times the order.
+This is a corrected auxiliary to ALVV, arXiv:1602.08828v2, `def:soft-trunc` and
 `lem:exp-approx`, lines 1178–1255. The bandwidth and enlargement are positive;
 the source's printed first uniform energy estimate and its gap prescription
 are not asserted. See

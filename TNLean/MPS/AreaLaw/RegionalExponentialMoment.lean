@@ -23,10 +23,9 @@ regional operator in the exponential and does not compare higher powers of
 noncommuting ordered operators. The full soft-truncation spectral comparison
 is separate.
 
-**Local fix (regional moments):** The first uniform energy estimate in the
-source is false. The present result controls the actual regional exponential
-on the original spectral space; it does not assert that printed estimate.
-See `docs/paper-gaps/alvv16_soft_truncation_energy_estimate.tex`.
+This auxiliary bound controls the regional exponential on the original spectral space, in
+place of the first uniform energy estimate of ALVV `lem:exp-approx`, which is false as printed
+(`docs/paper-gaps/alvv16_soft_truncation_energy_estimate.tex`).
 -/
 
 open Matrix
