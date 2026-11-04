@@ -76,8 +76,9 @@ $D^4+1$ vectors in the $D^4$-dimensional space identified by
 (\ref{eq:pgvwc07_intertwiner_chain_off_by_one_ambient_dimension}), so it is
 linearly dependent.
 
-Every $W_k$ is invertible and hence nonzero. In particular, $W_0\neq0$.
-Choose the first dependent vector. There is then an index
+Every $W_k$ is invertible and hence nonzero. In particular, $W_0\neq0$; the
+argument below uses only that every $W_k$ is nonzero. Choose the first
+dependent vector. There is then an index
 \begin{align}
     1
      & \leq n\leq D^4
@@ -106,7 +107,10 @@ cuts. The two endpoint gauges are fields of the system, but no inversion
 equation constrains them, so the structure alone gives no endpoint
 intertwiners.
 
-The existing theorem
+The dependence step itself, for any family of nonzero matrices at the
+$D^4+1$ cuts satisfying
+(\ref{eq:pgvwc07_intertwiner_chain_off_by_one_complete_chain_relations}), is
+\leanid{MPSTensor.exists_intertwiner_of_kronecker_chain}. The theorem
 \leanid{MPSTensor.exists_intertwiner_of_fixedLength_mpv_eq}
 constructs every endpoint and internal cut from condition C1 and actual
 fixed-length equality, when $N\ge2L_0+D^4$. This is the complete cut family
@@ -117,12 +121,16 @@ same-state reconstruction converse
 \leanid{MPSTensor.QuadraticReconstructionSolution.exists_unitary_phase_of_same_state}
 uses the same complete family.
 
-For an arbitrary solution of the system over the canonical window, the
-endpoint gauges are forced to be invertible by the internal equations once
-condition C1 holds at a length of at most $D^4-2$, which the quantum Wielandt
-inequality guarantees for $D\geq2$. The internal equations then supply all
-$D^4+1$ cut intertwiners. That argument, and its formalization status, are
-recorded in
+For an arbitrary solution of the system over the canonical window, the left
+endpoint gauge is forced to be invertible by the internal equations once the
+words of some length $1\leq\ell\leq D^4-2$ span the matrix algebra, which the
+quantum Wielandt inequality guarantees for $D\geq2$; for $D=1$ the gauge is a
+nonzero scalar. The internal equations then supply nonzero matrices at all
+$D^4+1$ cuts, with all $D^4$ adjacent relations. This complete family is
+\leanid{MPSTensor.exists_intertwiner_of_gauged}, used by the reconstruction
+converse
+\leanid{MPSTensor.QuadraticReconstructionSolution.exists_unitary_phase}. The
+argument is recorded in
 \path{docs/paper-gaps/pgvwc07_quadratic_reconstruction_phase.tex}.
 
 \section{Verdict}
@@ -137,10 +145,9 @@ available, linear dependence and the subsequent chain-combination argument
 follow.
 
 The correction is resolved: every formalized use of the dependence step, in
-the corrected uniqueness theorem and in the same-state reconstruction
-converse, builds the complete cut family. The remaining application, to an
-arbitrary solution of the reconstruction system, is tracked by the phase note
-cited above, whose status stays open until it is formalized.
+the corrected uniqueness theorem, in the same-state reconstruction converse,
+and in the reconstruction converse for an arbitrary solution of the system,
+builds the complete cut family.
 
 \bibliographystyle{alpha}
 \bibliography{references}
