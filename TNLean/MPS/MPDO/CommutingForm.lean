@@ -7,6 +7,7 @@ import TNLean.MPS.MPDO.ZCL
 import QICLean.Algebra.OrthogonalProjection
 import TNLean.MPS.ParentHamiltonian.Defs
 import TNLean.MPS.ParentHamiltonian.CyclicWindow
+import TNLean.Algebra.FinSumPermutation
 
 /-!
 # Commuting-form and GSNNCH data for simple MPDOs
@@ -361,10 +362,7 @@ theorem embedLocalOperator_commute_of_not_cyclicWindowsOverlap
     (d := d) hLN (fun h ↦ hij ((MPSTensor.cyclicWindowsOverlap_comm N L j i).mp h))]
   simp_rw [Finset.mul_sum]
   rw [Finset.sum_comm]
-  apply Finset.sum_congr rfl
-  intro β _
-  apply Finset.sum_congr rfl
-  intro α _
+  refine Finset.sum_congr₂ fun β _ α _ ↦ ?_
   rw [replaceWindow_commute_of_not_cyclicWindowsOverlap (d := d) hLN hij]
   ring
 

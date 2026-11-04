@@ -3,9 +3,9 @@
 \IfFileExists{lmodern.sty}{\usepackage{lmodern}}{}
 \usepackage{amsthm,mathtools}
 \usepackage{enumitem}
-\usepackage{booktabs,array}
+\usepackage{booktabs}
 \usepackage{xcolor}
-\usepackage{tenkz}
+\usepackage{tikz-tensor-networks}
 \usetikzlibrary{quantikz2}
 \usetikzlibrary{arrows.meta,calc,patterns,positioning,decorations.pathreplacing}
 \usepackage{graphicx,adjustbox}
@@ -250,15 +250,16 @@ Theorem~\ref{thm:A}, on finite subsets of the integers. The counting
 constants $N_R$, $\ell_R$, $\cB_R$ and the shell width $R$ are those printed
 here. The printed polynomial energy constant $C_E$, four-entry shell count
 in \eqref{eq:CE}, discount in \eqref{eq:discount}, and interval constant
-in \eqref{eq:final} are formalized directly. A separate refinement of
-Remark~\ref{rem:sharper} replaces $C_E$ by the logarithmic bound
-$32\,\e\,J\,\cB_R$ and retains the corresponding four-entry shell count;
-its discount constant is $1+64\,\e\,\vartheta\,\cB_R$.
-For each choice of energy constant, the proof uses
+in \eqref{eq:final} are formalized directly: the proof uses
 $E=C_E/m\le\Delta/4$, the fourth width entry bounds the marginal error
 by one, and the prefix loss is at most $2C_E/\Delta$.
-The history of the earlier estimates and the distinction between the
-polynomial and logarithmic constants are recorded in
+The logarithmic estimate of Remark~\ref{rem:sharper} is formalized in a
+different form. The shell count has three entries, the fourth dropped and
+the energy entry the smaller of the quadratic and logarithmic thresholds;
+the discount runs at the energy threshold $\Delta/2$, with constant
+$4096\,\e\,\vartheta\,\cB_R/m+m\log2$. The four-entry form with the remark's
+constant $C_E'$ in place of $C_E$ is not formalized.
+Both sets of constants are recorded in
 \nolinkurl{docs/paper-gaps/tnlean_one_dimensional_discount_constants.tex}.
 Theorem~\ref{thm:A} is formalized for every finite $\Lam\subset\Z$; the
 component reduction of Section~\ref{sec:setting} is carried out through the
