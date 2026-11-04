@@ -9802,7 +9802,7 @@ there is no need for a new tactic.
 
 ### Cardinality of a finite union with a uniform bound — reused Mathlib (2026-10-26)
 
-- **Seen:** `MPS/AreaLaw/ViableSet/SizeTrimming.lean`, `exists_size_trimmed_family`.
+- **Seen:** `MPS/AreaLaw/ViableSet/SizeTrimming.lean`, `card_sizeTrimmingSelection_le`.
 - **Pattern:** A finite family of sets has at most the number of indices times a uniform
   cardinality bound; here the indices are all actual bond dimensions `m : Fin (D + 1)`.
 - **Reuse:** `Finset.card_biUnion_le_card_mul` gives the union bound directly after
