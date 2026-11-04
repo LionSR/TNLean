@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Symmetry.PhysicalStringSelectionRule
+import TNLean.Algebra.FinSumPermutation
 
 /-!
 # Scalar phases in physical string order
@@ -146,10 +147,7 @@ theorem physicalStringOrderParam_tendsto_zero_of_spectralRadius_lt_one
   conv_rhs => rw [physicalStringOrderParam, twistedTransferMap_apply]
   simp only [Matrix.mul_sum, Matrix.trace_sum, Matrix.mul_smul,
     Matrix.trace_smul, smul_eq_mul]
-  apply Finset.sum_congr rfl
-  intro n _
-  apply Finset.sum_congr rfl
-  intro m _
+  refine Finset.sum_congr₂ fun n _ m _ ↦ ?_
   rw [stringOrderBoundaryParam, Matrix.one_mul]
   congr 1
   simpa only [Matrix.mul_assoc] using

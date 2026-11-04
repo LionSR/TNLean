@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.PhysicalSectorCoordinateTransport
 import TNLean.MPS.MPDO.PhysicalSectorSupportRecurrence
+import TNLean.Algebra.FinSumPermutation
 
 /-!
 # Spanning by physical-sector virtual matrices
@@ -54,14 +55,8 @@ theorem changePhysicalBasis_inverse_apply_eq_sum
   simp_rw [Finset.mul_sum, Finset.sum_mul]
   simp_rw [Finset.mul_sum, Finset.sum_mul]
   rw [Finset.sum_comm]
-  apply Finset.sum_congr rfl
-  intro x _
-  apply Finset.sum_congr rfl
-  intro y _
-  apply Finset.sum_congr rfl
-  intro q _
-  apply Finset.sum_congr rfl
-  intro p _
+  refine Finset.sum_congr₂ fun x _ y _ ↦ ?_
+  refine Finset.sum_congr₂ fun q _ p _ ↦ ?_
   ring
 
 variable {K : MPOTensor d D}
