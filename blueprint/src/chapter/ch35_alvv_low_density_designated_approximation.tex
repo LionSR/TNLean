@@ -28,14 +28,14 @@ budget inversely proportional to the chain length.
     eigenvectors of its original prefix marginal $\rho_k$.
     If
     \[
-       \sum_{k=1}^{L-1}\bigl(1-S_{D_k}(\rho_k)\bigr)\le\delta/8,
+        \sum_{k=1}^{L-1}\bigl(1-S_{D_k}(\rho_k)\bigr)\le\delta/8,
     \]
     then the reverse-prefix projection product $\Phi_0$ is nonzero.
     Its normalization $\Phi=\Phi_0/\|\Phi_0\|$ satisfies
     \[
-      \operatorname{SR}_k(\Phi)\le D_k\quad(0<k<L),\qquad
-      |\langle\Phi,\psi\rangle|>1-\delta,\qquad
-      \|\Phi-\psi\|^2\le\delta/2.
+        \operatorname{SR}_k(\Phi)\le D_k\quad(0<k<L),\qquad
+        |\langle\Phi,\psi\rangle|>1-\delta,\qquad
+        \|\Phi-\psi\|^2\le\delta/2.
     \]
 \end{lemma}
 \begin{proof}\leanok
@@ -85,29 +85,29 @@ budget inversely proportional to the chain length.
     property. Let $q>0$, let $H$ be the actual sum of supported
     positive-contraction nearest-neighbour terms, and put
     \[
-       \lambda_0=\min\sigma(H),\quad
-       G(c)=\mathbf1_{(-\infty,\lambda_0+c]}(H)\mathcal H,\quad
-       r_\eta=\dim G(\eta).
+        \lambda_0=\min\sigma(H),\quad
+        G(c)=\mathbf1_{(-\infty,\lambda_0+c]}(H)\mathcal H,\quad
+        r_\eta=\dim G(\eta).
     \]
     For $v>0$ and $0<\delta\le1$, set
     \begin{align*}
-       g&=\min\{\min(v,\eta/2)/6,1\},&
-       u&=1+\log q+\log(1/g),\\
-       a&=16+\log(1/g)+\log(128/\delta),&
-       b&=16+\log(1/g)+\log(128(L+1)/\delta),\\
-       F(x)&=\left(u^3/g+g^{-1/4}x^{3/4}u\right)(1+\log x).
+        g    & =\min\{\min(v,\eta/2)/6,1\},                    &
+        u    & =1+\log q+\log(1/g),                              \\
+        a    & =16+\log(1/g)+\log(128/\delta),                 &
+        b    & =16+\log(1/g)+\log(128(L+1)/\delta),              \\
+        F(x) & =\left(u^3/g+g^{-1/4}x^{3/4}u\right)(1+\log x).
     \end{align*}
     There are integers $1\le B_s\le B_g$, selected before the
     designated cut and vector, such that
     \[
-       \log B_s\le K_\eta F(a),\qquad
-       \log B_g\le K_\eta F(b).
+        \log B_s\le K_\eta F(a),\qquad
+        \log B_g\le K_\eta F(b).
     \]
     For every designated cut $k_0$ and every unit
     $\psi\in G(\eta-v)$, there is one unit vector $\Phi$ with
     \[
-       \operatorname{SR}_{k_0}(\Phi)\le r_\eta B_s,\qquad
-       \Phi\text{ is an open-boundary MPS of bond dimension at most }r_\eta B_g,
+        \operatorname{SR}_{k_0}(\Phi)\le r_\eta B_s,\qquad
+        \Phi\text{ is an open-boundary MPS of bond dimension at most }r_\eta B_g,
     \]
     $|\langle\Phi,\psi\rangle|>1-\delta$ and
     $\|\Phi-\psi\|^2\le\delta/2$.
@@ -116,7 +116,7 @@ budget inversely proportional to the chain length.
 \end{theorem}
 \begin{proof}\leanok
     \uses{lem:ld_sharp_strict_cut_positive_dimension,
-      lem:designated_sequential_mass,lem:regional_overlap_to_missing_mass}
+        lem:designated_sequential_mass,lem:regional_overlap_to_missing_mass}
     Let $K$ be the existing sharp fixed-cut coefficient. Round
     $e^{KF(a)}$ and $e^{KF(b)}$ upward once, before the cut and vector
     are specified. Since $a\le b$ and $F$ is increasing on $[1,\infty)$,

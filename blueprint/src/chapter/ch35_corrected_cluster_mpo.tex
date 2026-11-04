@@ -12,9 +12,9 @@ false; its counterexamples are recorded in~\cite{gap:alvv16_cluster_approximatio
 For a finite set $U$ of required interaction labels, let
 \begin{align}
     R_U^H(\beta)
-    &=\sum_{D\subseteq U}(-1)^{|D|}
-      e^{-\beta(H-H_D)},
-    &H_D&=\sum_{i\in D}H_i.
+     & =\sum_{D\subseteq U}(-1)^{|D|}
+    e^{-\beta(H-H_D)},
+     & H_D                            & =\sum_{i\in D}H_i.
     \label{eq:mandatory_cluster_part}
 \end{align}
 This is the cluster part~(\ref{eq:hastings_cluster_part}) with the forbidden
@@ -57,7 +57,7 @@ obstructions are recorded in~\cite{gap:alvv16_cluster_approximation}.
     real $\beta$, the operators $E_A$ of
     Definition~\ref{def:hastings_cluster_operator} satisfy
     \begin{align}
-        R_U^H(\beta)=\sum_{\substack{A\subseteq K\\U\subseteq A}}E_A.
+        R_U^H(\beta)=\sum_{\substack{A\subseteq K \\U\subseteq A}}E_A.
         \label{eq:mandatory_cluster_part_support_sum}
     \end{align}
 \end{lemma}
@@ -142,10 +142,10 @@ interactions is imposed.
     and put $H=\sum_iH_i$. Let $\mathcal W$ be a finite family of subsets
     of $K$. For every real $\beta$,
     \begin{align}
-        \sum_{\substack{A\subseteq K\\
-              \exists I\in\mathcal W:\ I\subseteq A}}E_A
-        &=\sum_{\varnothing\ne F\subseteq\mathcal W}
-          (-1)^{|F|+1}R_{\bigcup F}^H(\beta).
+        \sum_{\substack{A\subseteq K                   \\
+                \exists I\in\mathcal W:\ I\subseteq A}}E_A
+         & =\sum_{\varnothing\ne F\subseteq\mathcal W}
+        (-1)^{|F|+1}R_{\bigcup F}^H(\beta).
         \label{eq:cluster_window_inclusion_exclusion}
     \end{align}
     If the retained supports of a truncated expansion are exactly those
@@ -154,8 +154,8 @@ interactions is imposed.
     If each member $I$ of $\mathcal W$ has a distinct selected label
     belonging to $I$, then the grouped coefficient
     \begin{align}
-        c_U=\sum_{\substack{\varnothing\ne F\subseteq\mathcal W\\
-                           \bigcup F=U}}(-1)^{|F|+1}
+        c_U=\sum_{\substack{\varnothing\ne F\subseteq\mathcal W \\
+                \bigcup F=U}}(-1)^{|F|+1}
         ,\qquad |c_U|\leq2^{|U|}.
         \label{eq:cluster_window_coefficient}
     \end{align}
@@ -194,11 +194,11 @@ interactions is imposed.
     and each belongs to $\mathcal I_r$. Thus
     \begin{align}
         \sum_{U\in\mathcal U_r}b^{|U|}
-        &\leq\sum_{\varnothing\ne F\subseteq\mathcal I_r}
-                   \prod_{C\in F}b^{|C|}
-         =\prod_{C\in\mathcal I_r}(1+b^{|C|})-1
-         \leq\exp\Bigl(\sum_{C\in\mathcal I_r}b^{|C|}\Bigr)-1
-         \leq\exp(N^2b^r)-1.
+         & \leq\sum_{\varnothing\ne F\subseteq\mathcal I_r}
+        \prod_{C\in F}b^{|C|}
+        =\prod_{C\in\mathcal I_r}(1+b^{|C|})-1
+        \leq\exp\Bigl(\sum_{C\in\mathcal I_r}b^{|C|}\Bigr)-1
+        \leq\exp(N^2b^r)-1.
         \label{eq:cluster_label_weight_product}
     \end{align}
     The last inequality uses $|C|\geq r$ and
@@ -235,9 +235,9 @@ interactions is imposed.
     coefficient bound. Hence
     \begin{align}
         e^{\beta\lambda}\|e^{-\beta H}-M_r\|
-        &\leq\sum_{U\in\mathcal U_r}|c_U|(e^\beta-1)^{|U|}
-         \leq\sum_{U\in\mathcal U_r}b^{|U|}
-         \leq\exp(N^2b^r)-1.
+         & \leq\sum_{U\in\mathcal U_r}|c_U|(e^\beta-1)^{|U|}
+        \leq\sum_{U\in\mathcal U_r}b^{|U|}
+        \leq\exp(N^2b^r)-1.
         \label{eq:normalized_cluster_label_tail_proof}
     \end{align}
     This changes both the normalization and the cutoff of the printed
@@ -252,8 +252,8 @@ Let $K$ be a finite interaction-label set with graph $G$, let $H_i$ be
 complex square matrices, and let $E_A$ be their exact-label operators.
 For a fixed criterion of large components, write
 \begin{align}
-    F(B)=\sum_{\substack{A\subseteq B\\
-                    A\text{ has no large component}}}E_A.
+    F(B)=\sum_{\substack{A\subseteq B \\
+            A\text{ has no large component}}}E_A.
     \label{eq:retained_allowed_labels}
 \end{align}
 Every operator in (\ref{eq:retained_allowed_labels}) is a finite sum of
@@ -315,9 +315,9 @@ the existing exact-label coefficients.
     and fix $p\in K$. Let $\partial C$ be the graph boundary of $C$.
     Then
     \begin{align}
-        \sum_{\substack{A\subseteq K\\A\text{ has no large component}\\p\in A}}E_A
-        =\sum_{\substack{C\subseteq K\\p\in C,\ C\text{ connected}\\C\text{ not large}}}
-            E_C F\bigl(K\setminus(C\cup\partial C)\bigr).
+        \sum_{\substack{A\subseteq K  \\A\text{ has no large component}\\p\in A}}E_A
+        =\sum_{\substack{C\subseteq K \\p\in C,\ C\text{ connected}\\C\text{ not large}}}
+        E_C F\bigl(K\setminus(C\cup\partial C)\bigr).
         \label{eq:retained_crossing_component_sum}
     \end{align}
 \end{lemma}
@@ -343,8 +343,8 @@ the existing exact-label coefficients.
     Give $K=\{0,\ldots,N-1\}$ its path adjacency. For a nonempty
     connected $C$, put
     \begin{align}
-        L(C)&=\{j\in K:j+1<c\text{ for every }c\in C\},
-        &R(C)&=\{j\in K:c+1<j\text{ for every }c\in C\}.
+        L(C) & =\{j\in K:j+1<c\text{ for every }c\in C\},
+             & R(C)                                       & =\{j\in K:c+1<j\text{ for every }c\in C\}.
         \label{eq:cluster_path_exterior_sides}
     \end{align}
     The exterior $K\setminus(C\cup\partial C)$ equals $L(C)\cup R(C)$,
@@ -379,8 +379,8 @@ the existing exact-label coefficients.
     $\beta$, their actual selected expansion satisfies
     \begin{align}
         M_r=F(L_p)F(R_p)+
-          \sum_{\substack{C\text{ an interval of labels}\\p\in C,\ |C|<r}}
-            E_C\bigl(F(L(C))F(R(C))\bigr).
+        \sum_{\substack{C\text{ an interval of labels} \\p\in C,\ |C|<r}}
+        E_C\bigl(F(L(C))F(R(C))\bigr).
         \label{eq:physical_cluster_crossing_decomposition}
     \end{align}
     All factors are the finite sums in
@@ -531,7 +531,7 @@ established next.
     \begin{align}
         T_{\sigma,\tau}
         =\operatorname{tr}\bigl(A_0^{\sigma_0,\tau_0}\cdots
-             A_{L-1}^{\sigma_{L-1},\tau_{L-1}}\bigr).\notag
+        A_{L-1}^{\sigma_{L-1},\tau_{L-1}}\bigr).\notag
     \end{align}
 \end{lemma}
 \begin{proof}\leanok

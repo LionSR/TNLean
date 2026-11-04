@@ -19,9 +19,9 @@ $\mathcal H_J\otimes\mathcal H_{J^c}$.
     Fix $\eta>0$. One constant $C\ge\max\{100,19+\eta\}$ works
     before the physical data. Given $m\ge q$, $w>0$ and $i\ge0$, put
     \begin{align*}
-      m_i&=m2^i,&g&=\min\{w,1\},&
-      u_i&=1+\log m_i+\log(1/g),\\
-      \ell_i&=\lceil Cu_i^2/g\rceil,&D_i&=(m_i\ell_i^2)^{22\ell_i}.
+        m_i    & =m2^i,                  & g   & =\min\{w,1\},              &
+        u_i    & =1+\log m_i+\log(1/g),                                       \\
+        \ell_i & =\lceil Cu_i^2/g\rceil, & D_i & =(m_i\ell_i^2)^{22\ell_i}.
     \end{align*}
     Then $\ell_i\ge21$ and the cubic logarithmic bound on $D_i$ holds.
     On every prescribed interval $J$, there are exactly $D_i^2$ operators
@@ -55,19 +55,19 @@ $\mathcal H_J\otimes\mathcal H_{J^c}$.
     $m=q\lceil e^{100}\rceil$ and $u=1+\log m+\log(1/g)$.
     Every unit vector $\psi\in G(\eta-v)$ satisfies
     \begin{align}
-      S(\psi_J)&\le\log\dim G(\eta)
-       +\frac{K_b}{b/2}
-          \bigl(1+\log q+\log(1+1/(b/2))\bigr)^3\notag\\
-       &\quad+\frac{14872(C_f+1)(6+2\log(C_f+1))}{g}\,u^3
-           +54\log2.
-      \label{eq:ld_entropy_capped}
+        S(\psi_J) & \le\log\dim G(\eta)
+        +\frac{K_b}{b/2}
+        \bigl(1+\log q+\log(1+1/(b/2))\bigr)^3\notag                  \\
+                  & \quad+\frac{14872(C_f+1)(6+2\log(C_f+1))}{g}\,u^3
+        +54\log2.
+        \label{eq:ld_entropy_capped}
     \end{align}
     Empty intervals, short intervals and intervals meeting either chain
     endpoint are included. No spectral gap is assumed.
 \end{lemma}
 \begin{proof}\leanok
     \uses{lem:ld_original_dyadic_refinement,
-      cor:physical_low_density_log_dimension,thm:dg_logarithmic_rank_tail_entropy}
+        cor:physical_low_density_log_dimension,thm:dg_logarithmic_rank_tail_entropy}
     Choose one $3/200$-viable space $W_0$ for $G(\eta-b/2)$ by the
     logarithmic dimension estimate. For every accuracy index $i$, apply
     Lemma~\ref{lem:ld_original_dyadic_refinement} at $w=b/6$ and
@@ -96,10 +96,10 @@ $\mathcal H_J\otimes\mathcal H_{J^c}$.
     nearest-neighbour interactions, interval $J$ and deficit $v>0$,
     such that every unit vector $\psi\in G(\eta-v)$ satisfies
     \begin{align}
-      S(\psi_J)\le\log\dim G(\eta)+
+        S(\psi_J)\le\log\dim G(\eta)+
         \frac{K_\eta}{v}
         \bigl(1+\log q+\log(1+1/v)\bigr)^3.
-      \label{eq:ld_original_entropy}
+        \label{eq:ld_original_entropy}
     \end{align}
     The coefficient on $\log\dim G(\eta)$ is exactly one.
     Every interval, including empty intervals and intervals meeting
