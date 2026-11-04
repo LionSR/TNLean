@@ -12,12 +12,12 @@ import TNLean.MPS.AreaLaw.Huang.ViableFilter
 
 Extend the input by one physical site, take the size-trimming selection of the extension,
 trim each selected vector independently through its internal bonds, and apply the finite
-family of Gaussian left filter factors. The step is the named family
-`successiveStep hi m F id T₀ = {A (trim_m u) : A ∈ F, u ∈ T₀}` applied to the selection
-`T₀ = sizeTrimmingSelection (S ⊗ {|1⟩, …, |q⟩})`: the filter factors `F` are chosen before
-the input family, and the output is a function of the input family. Both the size and the
-individual bond bounds of the output are reset to length-dependent budgets that do not
-depend on the preceding family size.
+family of Gaussian left filter factors. The generic step is the named family
+`successiveStep hi m F id T₀ = {A (trim_m u) : A ∈ F, u ∈ T₀}`; the step of the sweep,
+`lvvSweepStep`, applies it with the Gaussian filter factors `gaussianFilterFactors` to the
+selection `sizeTrimmingSelection (S ⊗ {|1⟩, …, |q⟩})`, so that the output is a function
+of the input family. Both the size and the individual bond bounds of the output are reset
+to length-dependent budgets that do not depend on the preceding family size.
 
 **Local fix (trimming radius):** The independent trimmings use the quadratic radius
 recorded at <https://sirui-lu.com/QICLean/paper-gaps/lvv13_trimming_radius.pdf>.
@@ -74,84 +74,108 @@ theorem isLeftOpenMPS_of_mem_successiveStep (hi : i ≤ L) {m D : ℕ} {J : Fins
   isLeftOpenMPS_of_mem_errorReductionSet hi hA
     (fun _ hu ↦ isLeftOpenMPS_of_mem_bondTrimSet hi m T₀ hu) hv
 
-/-- **The complete step with its selections named.** The Gaussian left filter factors `F`
-at the cut after `i` sites are chosen from the chain, the gap and the cut, before every
-input family and every ground pair, with explicit cardinality and rank budgets. For every
-input family `S` at the cut after `i - 1` sites, the step applied to the size-trimming
-selection of the extension `S ⊗ {|1⟩, …, |q⟩}` is `c_Δ / L`-viable for every ground pair
-for which `S` is. LVV13, `algo53.tex`, algorithm steps 1--4, lines 379--592, using Huang,
-Section 5.4, Lemmas 18--19 for the error-reduction operator. -/
-theorem exists_positive_chain_successive_step_factors (hq : 2 ≤ q)
+/-- **One step of the sweep as a function of the previous family.** Extend the family at
+the cut after `i` sites by one site, take the size-trimming selection of the extension,
+trim each selected vector independently at the corrected radius, and apply every Gaussian
+filter factor at the cut after `i + 1` sites. LVV13, `algo53.tex`, algorithm steps 1--4,
+lines 379--592, with Huang, Section 5.4, Lemmas 18--19 for the error-reduction operator. -/
+noncomputable def lvvSweepStep (hq : 2 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j)
       (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j) (h1 : ∀ j, h j ≤ 1)
-    {Delta : ℝ} (hDelta : 0 < Delta) (hL : 1 ≤ L) (hi0 : 0 < i) (hiL : i ≤ L) :
-    let m := bondTrimmingRadius L (lvvReferenceBond q Delta L)
-    ∃ F : Finset (LeftBlockMatrix L q i),
-      F.card ≤ huangEnergyCount (lvvSuccessiveError Delta) Delta L *
-        huangFilterRankBound q (lvvSuccessiveError Delta) Delta L ∧
-      (∀ A ∈ F, ∀ k, 0 < k → k < i → operatorSchmidtRank
-        (Entropy.cutOperator (n := fun _ : Fin i ↦ q) (leftBlock i k)
-          (A.submatrix leftConfigOfFin leftConfigOfFin)) ≤
-            huangFilterRankBound q (lvvSuccessiveError Delta) Delta L) ∧
-      ∀ (S : Finset (LeftBlockVector L q (i - 1))) (E₀ : ℝ)
-        (Γ : EuclideanSpace ℂ (Fin L → Fin q)),
-        IsGappedGroundState (∑ j, h j) E₀ Γ Delta →
-        IsViable Γ (lvvSuccessiveError Delta / L) (S : Set (LeftBlockVector L q (i - 1))) →
-        IsViable Γ (lvvSuccessiveError Delta / L)
-          (successiveStep hiL m F id
-            ((ChainHamiltonian.ofNearestNeighborPositive h hs h0 h1).sizeTrimmingSelection hq
-              Delta (AreaLaw.extend i S)) : Set (LeftBlockVector L q i)) := by
+    (Delta : ℝ) (hi : i + 1 ≤ L) (S : Finset (LeftBlockVector L q i)) :
+    Finset (LeftBlockVector L q (i + 1)) :=
+  successiveStep hi (bondTrimmingRadius L (lvvReferenceBond q Delta L))
+    (gaussianFilterFactors (Nat.le_of_lt hq) h h0 (lvvSuccessiveError Delta) Delta (i + 1)) id
+    ((ChainHamiltonian.ofNearestNeighborPositive h hs h0 h1).sizeTrimmingSelection hq Delta
+      (AreaLaw.extend (i + 1) S))
+
+/-- The output of one step of the sweep has at most `s_L` members.
+LVV13, `algo53.tex`, Claims `c:2` and `c:errorreduction`, lines 520--592. -/
+theorem card_lvvSweepStep_le (hq : 2 ≤ q)
+    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
+    (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j)
+      (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j) (h1 : ∀ j, h j ≤ 1)
+    {Delta : ℝ} (hDelta : 0 < Delta) (hi : i + 1 ≤ L) (S : Finset (LeftBlockVector L q i)) :
+    (lvvSweepStep hq h hs h0 h1 Delta hi S).card ≤ lvvSuccessiveCardBound q Delta L := by
+  calc
+    _ ≤ (gaussianFilterFactors (Nat.le_of_lt hq) h h0 (lvvSuccessiveError Delta) Delta
+          (i + 1)).card *
+        ((ChainHamiltonian.ofNearestNeighborPositive h hs h0 h1).sizeTrimmingSelection hq Delta
+          (AreaLaw.extend (i + 1) S)).card := card_successiveStep_le hi _ _ id _
+    _ ≤ (huangEnergyCount (lvvSuccessiveError Delta) Delta L *
+          huangFilterRankBound q (lvvSuccessiveError Delta) Delta L) *
+        (lvvSizeTrimmingCoefficient q Delta * L ^ lvvSizeTrimmingDegree q Delta) :=
+      Nat.mul_le_mul
+        (card_gaussianFilterFactors_le (Nat.le_of_lt hq) h hs h0 h1
+          (lvvSuccessiveError_pos hDelta) hDelta)
+        (ChainHamiltonian.card_sizeTrimmingSelection_le_polynomial
+          (ChainHamiltonian.ofNearestNeighborPositive h hs h0 h1) (by omega) hq hDelta _)
+    _ = lvvSuccessiveCardBound q Delta L := by
+      dsimp only [lvvSuccessiveCardBound]
+      ring
+
+/-- Every member of the output of one step of the sweep is a matrix product state of bond
+dimension at most `b_L`. LVV13, `algo53.tex`, Claims `c:trim` and `c:errorreduction`,
+lines 549--592. -/
+theorem isLeftOpenMPS_of_mem_lvvSweepStep (hq : 2 ≤ q)
+    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
+    (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j)
+      (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j) (h1 : ∀ j, h j ≤ 1)
+    {Delta : ℝ} (hDelta : 0 < Delta) (hi : i + 1 ≤ L) (S : Finset (LeftBlockVector L q i))
+    {v : LeftBlockVector L q (i + 1)} (hv : v ∈ lvvSweepStep hq h hs h0 h1 Delta hi S) :
+    IsLeftOpenMPS (lvvSuccessiveBondBound q Delta L) v :=
+  isLeftOpenMPS_of_mem_successiveStep hi
+    (fun _ hA k _ hki ↦ operatorSchmidtRank_of_mem_gaussianFilterFactors (Nat.le_of_lt hq) h hs
+      h0 h1 (lvvSuccessiveError_pos hDelta) hDelta hi hA k hki) _ hv
+
+/-- **One step of the sweep preserves viability.** For every ground pair with the
+prescribed gap, `c_Δ / L`-viability of the family at the cut after `i` sites implies
+`c_Δ / L`-viability of the step at the cut after `i + 1` sites. LVV13, `algo53.tex`,
+algorithm steps 1--4, lines 379--592, using Huang, Section 5.4, Lemmas 18--19 for the
+error-reduction operator. -/
+theorem isViable_lvvSweepStep (hq : 2 ≤ q)
+    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
+    (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j)
+      (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j) (h1 : ∀ j, h j ≤ 1)
+    {Delta : ℝ} (hDelta : 0 < Delta) (hi : i + 1 ≤ L) (S : Finset (LeftBlockVector L q i))
+    (E₀ : ℝ) (Γ : EuclideanSpace ℂ (Fin L → Fin q))
+    (hgs : IsGappedGroundState (∑ j, h j) E₀ Γ Delta)
+    (hviable : IsViable Γ (lvvSuccessiveError Delta / L) (S : Set (LeftBlockVector L q i))) :
+    IsViable Γ (lvvSuccessiveError Delta / L)
+      (lvvSweepStep hq h hs h0 h1 Delta hi S : Set (LeftBlockVector L q (i + 1))) := by
   classical
-  intro m
-  obtain ⟨F, hFcard, hFrank, hFgood⟩ := exists_positive_chain_error_reduction_factors
-    (by omega) h hs h0 h1 (lvvSuccessiveError_pos hDelta) hDelta hL hiL
-  refine ⟨F, hFcard, hFrank, ?_⟩
-  intro S E₀ Γ hgs hviable
   let chain := ChainHamiltonian.ofNearestNeighborPositive h hs h0 h1
   have hpos (X) : (chain.term X).PosSemidef :=
     (ChainHamiltonian.ofNearestNeighborPositive_term_nonneg h hs h0 h1 X).posSemidef
   have hgsChain : IsGappedGroundState chain.operator E₀ Γ Delta := by
     simpa only [chain, ChainHamiltonian.ofNearestNeighborPositive_operator] using hgs
   obtain ⟨hΓ, hEig, hgap⟩ := isGappedGroundState_iff.mp hgs
-  exact hFgood E₀ Γ hΓ hEig hgap _
-    (chain.isViable_bondTrimSet_sizeTrimmingSelection hpos (by omega) hq hiL hDelta
-      (AreaLaw.extend i S) E₀ Γ hgsChain (hviable.extend hi0 hiL))
+  exact isViable_errorReductionSet_gaussianFilterFactors (Nat.le_of_lt hq) h hs h0 h1
+    (lvvSuccessiveError_pos hDelta) hDelta (by omega) E₀ Γ hΓ hEig hgap _
+    (chain.isViable_bondTrimSet_sizeTrimmingSelection hpos (by omega) hq hi hDelta
+      (AreaLaw.extend (i + 1) S) E₀ Γ hgsChain (hviable.extend (by omega) hi))
 
 /-- The actual extension, size trimming, independent bond trimming and Gaussian error
-reduction at one cut: the existence form of
-`exists_positive_chain_successive_step_factors`, with the output left unnamed. The family
-is selected before every ground pair, with explicit size and bond budgets. LVV13,
-`algo53.tex`, algorithm steps 1--4, lines 379--592, using Huang, Section 5.4,
-Lemmas 18--19 for the error-reduction operator. -/
+reduction at one cut: the existence form of the step `lvvSweepStep`, with the output
+left unnamed. The family is selected before every ground pair, with explicit size and
+bond budgets. LVV13, `algo53.tex`, algorithm steps 1--4, lines 379--592, using Huang,
+Section 5.4, Lemmas 18--19 for the error-reduction operator. -/
 theorem exists_positive_chain_successive_step (hq : 2 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j)
       (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j) (h1 : ∀ j, h j ≤ 1)
-    {Delta : ℝ} (hDelta : 0 < Delta) (hL : 1 ≤ L) (hi0 : 0 < i) (hiL : i ≤ L)
-    (S : Finset (LeftBlockVector L q (i - 1))) :
-    ∃ T : Finset (LeftBlockVector L q i),
+    {Delta : ℝ} (hDelta : 0 < Delta) (hi : i + 1 ≤ L)
+    (S : Finset (LeftBlockVector L q i)) :
+    ∃ T : Finset (LeftBlockVector L q (i + 1)),
       T.card ≤ lvvSuccessiveCardBound q Delta L ∧
       (∀ v ∈ T, IsLeftOpenMPS (lvvSuccessiveBondBound q Delta L) v) ∧
       ∀ (E₀ : ℝ) (Γ : EuclideanSpace ℂ (Fin L → Fin q)),
         IsGappedGroundState (∑ j, h j) E₀ Γ Delta →
-        IsViable Γ (lvvSuccessiveError Delta / L)
-          (S : Set (LeftBlockVector L q (i - 1))) →
-        IsViable Γ (lvvSuccessiveError Delta / L) (T : Set (LeftBlockVector L q i)) := by
-  obtain ⟨F, hFcard, hFrank, hstep⟩ :=
-    exists_positive_chain_successive_step_factors hq h hs h0 h1 hDelta hL hi0 hiL
-  refine ⟨successiveStep hiL _ F id _, ?_,
-    fun v hv ↦ isLeftOpenMPS_of_mem_successiveStep hiL hFrank _ hv, hstep S⟩
-  calc
-    _ ≤ F.card * ((ChainHamiltonian.ofNearestNeighborPositive h hs h0 h1).sizeTrimmingSelection
-          hq Delta (AreaLaw.extend i S)).card := card_successiveStep_le hiL _ F id _
-    _ ≤ (huangEnergyCount (lvvSuccessiveError Delta) Delta L *
-          huangFilterRankBound q (lvvSuccessiveError Delta) Delta L) *
-        (lvvSizeTrimmingCoefficient q Delta * L ^ lvvSizeTrimmingDegree q Delta) :=
-      Nat.mul_le_mul hFcard (ChainHamiltonian.card_sizeTrimmingSelection_le_polynomial
-        (ChainHamiltonian.ofNearestNeighborPositive h hs h0 h1) (by omega) hq hDelta _)
-    _ = lvvSuccessiveCardBound q Delta L := by
-      dsimp only [lvvSuccessiveCardBound]
-      ring
+        IsViable Γ (lvvSuccessiveError Delta / L) (S : Set (LeftBlockVector L q i)) →
+        IsViable Γ (lvvSuccessiveError Delta / L) (T : Set (LeftBlockVector L q (i + 1))) :=
+  ⟨lvvSweepStep hq h hs h0 h1 Delta hi S, card_lvvSweepStep_le hq h hs h0 h1 hDelta hi S,
+    fun _ hv ↦ isLeftOpenMPS_of_mem_lvvSweepStep hq h hs h0 h1 hDelta hi S hv,
+    fun E₀ Γ hgs hviable ↦ isViable_lvvSweepStep hq h hs h0 h1 hDelta hi S E₀ Γ hgs hviable⟩
 
 end TNLean.MPS.AreaLaw

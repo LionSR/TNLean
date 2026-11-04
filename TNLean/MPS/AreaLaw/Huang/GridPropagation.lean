@@ -57,21 +57,37 @@ private theorem rank_two_grid_layers_le (hq : 1 ≤ q) (hwidth : 2 * r + 2 ≤ w
     (fun j _ ↦ chainCutBuffer_width_le (chainGridCut w j.val) r)
   simpa only [List.map_ofFn, Function.comp_def] using h
 
-/-- The original physical interaction determines one two-layer propagator approximation
-with simultaneous cut-rank bounds. Neither a partition, supported propagator nor
-Lieb--Robinson error is supplied as a hypothesis. Osborne,
+/-- **The two-layer grid propagator.** The product of the block evolutions of the retained
+Hamiltonian, followed by the product of the chosen projected propagators of the omitted
+boundary terms on their buffers. Osborne, arXiv:quant-ph/0508031v2, Figure 2 and
+equations (2)--(13); Huang, arXiv:1406.6355v6, Section 5.4, Lemma 19. -/
+noncomputable def chainGridPropagator (hq : 1 ≤ q) (hw : 0 < w) (r : ℕ)
+    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
+    (hHerm : ∀ i, (h i).IsHermitian) (t : ℝ) : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ :=
+  haveI : NeZero q := ⟨by omega⟩
+  (List.ofFn fun j ↦ hermitianUnitaryPath (chainGridBlockHamiltonian hw h j) (-t)).prod *
+    (List.ofFn fun j ↦ disjointProjectedPropagator q
+      (fun k : Fin ((L - 1) / w) ↦ chainCutBuffer L (chainGridCut w k.val) r)
+      (A := chainGridRetainedHamiltonian hw h)
+      (Matrix.isHermitian_sum _ fun j _ ↦ isHermitian_chainGridBlockHamiltonian hw h hHerm j)
+      (chainGridBoundaryTerm hw h) (fun k ↦ (hHerm (chainGridBoundaryEdge hw k)).neg) j t).prod
+
+/-- The grid propagator approximates the chain evolution with the Lieb--Robinson error of
+the omitted boundary terms, and has simultaneous cut-rank bounds. Neither a partition,
+supported propagator nor Lieb--Robinson error is supplied as a hypothesis. Osborne,
 arXiv:quant-ph/0508031v2, equations (2)--(13); Huang, Section 5.4, Lemma 19. -/
-theorem exists_chainGrid_propagator_approximation (hq : 1 ≤ q) (hwidth : 2 * r + 2 ≤ w)
+theorem chainGridPropagator_spec (hq : 1 ≤ q) (hwidth : 2 * r + 2 ≤ w)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i)
       (interval L i.val (i.val + 2))) (hHerm : ∀ i, (h i).IsHermitian)
-    (hnorm : ∀ i, ‖h i‖ ≤ 1) :
-    ∃ K : ℝ → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ, ∀ t : ℝ,
-      ‖hermitianUnitaryPath (∑ i, h i) (-t) - K t‖ ≤
+    (hnorm : ∀ i, ‖h i‖ ≤ 1) (t : ℝ) :
+    ‖hermitianUnitaryPath (∑ i, h i) (-t) -
+        chainGridPropagator (w := w) hq (by omega) r h hHerm t‖ ≤
         (((L - 1) / w : ℕ) : ℝ) * chainGridLRPrefactor *
           Real.exp (chainGridLRVelocity * |t| - (r : ℝ) / 2) * |t| ∧
       ∀ cut : ℕ, operatorSchmidtRank
-        (Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L cut) (K t)) ≤
+        (Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L cut)
+          (chainGridPropagator (w := w) hq (by omega) r h hHerm t)) ≤
           q ^ (2 * (w + (2 * r + 2))) := by
   classical
   let : NeZero q := ⟨by omega⟩
@@ -85,13 +101,13 @@ theorem exists_chainGrid_propagator_approximation (hq : 1 ≤ q) (hwidth : 2 * r
   have hbuffers : Pairwise fun j k ↦ Disjoint (buffers j : Set (Fin L)) (buffers k : Set (Fin L)) :=
     fun j k hjk ↦ Finset.disjoint_coe.mpr (pairwise_disjoint_chainGridBuffer L hwidth
       (show j.val ≠ k.val from fun heq ↦ hjk (Fin.ext heq)))
-  obtain ⟨U, _hU0, _hUd, _hUunit, hUsupport, hcompare⟩ :=
-    exists_disjoint_projected_propagator_approximation q buffers hbuffers hA B hB
-  let K := fun t : ℝ ↦
-    (List.ofFn fun j ↦ hermitianUnitaryPath (chainGridBlockHamiltonian hw h j) (-t)).prod *
-      (List.ofFn fun j ↦ U j t).prod
-  refine ⟨K, ?_⟩
-  intro t
+  obtain ⟨_hU0, _hUd, _hUunit, hUsupport, hcompare⟩ :=
+    disjointProjectedPropagator_spec q buffers hbuffers hA B hB
+  let U := disjointProjectedPropagator q buffers hA B hB
+  have hK : chainGridPropagator (w := w) hq (by omega) r h hHerm t =
+      (List.ofFn fun j ↦ hermitianUnitaryPath (chainGridBlockHamiltonian hw h j) (-t)).prod *
+        (List.ofFn fun j ↦ U j t).prod := rfl
+  rw [hK]
   constructor
   · have herror (k : Fin ((L - 1) / w)) (s : ℝ) (hs' : s ∈ Set.uIcc 0 t) :
         ‖heisenbergEvolution A s (B k) -
@@ -117,5 +133,23 @@ theorem exists_chainGrid_propagator_approximation (hq : 1 ≤ q) (hwidth : 2 * r
   · exact rank_two_grid_layers_le hq hwidth _ _
       (fun j ↦ chainGridBlockEvolution_mem_supported hw h hs j (-t))
       (fun j ↦ hUsupport j t)
+
+/-- The original physical interaction determines one two-layer propagator approximation
+with simultaneous cut-rank bounds: the existence form of `chainGridPropagator_spec`.
+Osborne, arXiv:quant-ph/0508031v2, equations (2)--(13); Huang, Section 5.4, Lemma 19. -/
+theorem exists_chainGrid_propagator_approximation (hq : 1 ≤ q) (hwidth : 2 * r + 2 ≤ w)
+    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
+    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i)
+      (interval L i.val (i.val + 2))) (hHerm : ∀ i, (h i).IsHermitian)
+    (hnorm : ∀ i, ‖h i‖ ≤ 1) :
+    ∃ K : ℝ → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ, ∀ t : ℝ,
+      ‖hermitianUnitaryPath (∑ i, h i) (-t) - K t‖ ≤
+        (((L - 1) / w : ℕ) : ℝ) * chainGridLRPrefactor *
+          Real.exp (chainGridLRVelocity * |t| - (r : ℝ) / 2) * |t| ∧
+      ∀ cut : ℕ, operatorSchmidtRank
+        (Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L cut) (K t)) ≤
+          q ^ (2 * (w + (2 * r + 2))) :=
+  ⟨chainGridPropagator (w := w) hq (by omega) r h hHerm,
+    chainGridPropagator_spec hq hwidth h hs hHerm hnorm⟩
 
 end TNLean.MPS.AreaLaw
