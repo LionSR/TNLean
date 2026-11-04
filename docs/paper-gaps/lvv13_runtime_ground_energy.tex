@@ -1566,9 +1566,24 @@ The first contraction estimate is also formalized:
 \leanid{TNLean.MPS.AreaLaw.OBCChainTensor.norm\_coeff\_ofParameters\_sub\_le\_one}
 bounds the error in each physical coefficient by the number of virtual paths
 times $(1+\delta)^k-1$, assuming unit-bounded reference entries and entrywise
-error at most $\delta$.  The remaining step is to sum this coefficient bound
-in the Euclidean norm and instantiate it with the bounded canonical
-representation.
+error at most $\delta$.  Its vector form
+\leanid{TNLean.MPS.AreaLaw.OBCChainTensor.norm\_vectorOfParameters\_sub\_le\_one}
+also accounts for the scalar cap and sums over physical configurations, giving
+the explicit norm bound
+\[
+ q^k N_{\mathrm{path}}\bigl((1+\delta)^{k+1}-1\bigr).
+\]
+For normalized states of positive length, that instantiation is now explicit.
+The theorem
+\leanid{TNLean.MPS.AreaLaw.LeftOpenMPSRepresentation.exists\_unitBounded\_of\_norm\_eq\_one}
+puts the open chain in a representation with scalar cap and all local entries
+of norm at most one.  Combining it with the dyadic mesh and the vector
+perturbation estimate gives
+\leanid{TNLean.MPS.AreaLaw.IsLeftOpenMPS.exists\_dyadic\_rational\_approximation\_of\_norm\_eq\_one},
+with common parameter height (2^{2t+5}) and a fully explicit vector error.
+The remaining running-time step is to choose (t) from the available
+viability reserve and propagate this rationalization through bond trimming
+and sampled error reduction.
 The theorem
 \leanid{TNLean.MPS.AreaLaw.rank\_boundarySupportedMatrix\_le}
 also proves directly that every matrix satisfying the support constraint,

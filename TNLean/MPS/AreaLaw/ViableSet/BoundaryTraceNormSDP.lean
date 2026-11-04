@@ -8,6 +8,7 @@ import TNLean.MPS.AreaLaw.ViableSet.BoundaryNet
 import TNLean.MPS.AreaLaw.ViableSet.Span
 import TNLean.MPS.AreaLaw.ViableSet.LeftCoordinates
 import TNLean.MPS.AreaLaw.ViableSet.Endpoints
+import TNLean.MPS.Preparation.IsometricChain
 import TNLean.Algebra.FinsetNormSumCauchySchwarz
 import QICLean.Analysis.TraceNormContractivity
 import QICLean.Analysis.TraceNormNet
@@ -2496,27 +2497,44 @@ theorem norm_finset_prod_sub_prod_le_one
               ring
 
 /-- A uniform coordinate bound gives the coarse `ℓ² ≤ ℓ¹` estimate for a
-finite complex Euclidean space. -/
-theorem norm_euclidean_le_card_mul_of_apply_le
-    {ι : Type*} [Fintype ι] (x : EuclideanSpace ℂ ι) {C : ℝ}
-    (hx : ∀ i, ‖x i‖ ≤ C) :
-    ‖x‖ ≤ Fintype.card ι * C := by
-  classical
-  have hsum : x = ∑ i, PiLp.single 2 i (x i) := by
-    ext j
-    simp
-  rw [hsum]
-  calc
-    ‖∑ i, PiLp.single 2 i (x i)‖ ≤ ∑ i, ‖PiLp.single 2 i (x i)‖ :=
-      norm_sum_le Finset.univ
-        (fun i : ι ↦ (PiLp.single 2 i (x i) : EuclideanSpace ℂ ι))
-    _ = ∑ i, ‖x i‖ := by
-      apply Finset.sum_congr rfl
-      intro i _hi
-      rw [PiLp.norm_single (p := 2) (β := fun _ : ι ↦ ℂ)]
-    _ ≤ ∑ _i : ι, C := Finset.sum_le_sum fun i _hi ↦ hx i
-    _ = Fintype.card ι * C := by
-      simp only [Finset.sum_const, Finset.card_univ, nsmul_eq_mul]
+finite `PiLp 2` space. -/
+theorem PiLp.norm_le_card_mul_of_forall_norm_le
+    {ι : Type*} [Fintype ι] {β : ι → Type*}
+    [∀ i, SeminormedAddCommGroup (β i)]
+    (x : PiLp 2 β) {C : ℝ} (hC : 0 ≤ C) (hx : ∀ i, ‖x i‖ ≤ C) :
+    ‖x‖ ≤ (Fintype.card ι : ℝ) * C := by
+  have hsq := PiLp.norm_sq_eq_of_L2 β x
+  have hsum : ∑ i : ι, ‖x i‖ ^ 2 ≤ ∑ _i : ι, C ^ 2 := by
+    apply Finset.sum_le_sum
+    intro i _hi
+    exact (sq_le_sq₀ (norm_nonneg _) hC).2 (hx i)
+  have hcard : (∑ _i : ι, C ^ 2) = (Fintype.card ι : ℝ) * C ^ 2 := by
+    simp only [Finset.sum_const, Finset.card_univ, nsmul_eq_mul]
+  have hcard0 : 0 ≤ (Fintype.card ι : ℝ) := by positivity
+  have hnorm0 : 0 ≤ ‖x‖ := norm_nonneg _
+  rw [hcard] at hsum
+  cases isEmpty_or_nonempty ι with
+  | inl hι =>
+      have hcardzero : Fintype.card ι = 0 := Fintype.card_eq_zero
+      rw [hcardzero]
+      simp only [Nat.cast_zero, zero_mul]
+      have hxzero : ‖x‖ ^ 2 = 0 := by simpa using hsq
+      nlinarith
+  | inr hι =>
+      have hcard1 : (1 : ℝ) ≤ Fintype.card ι := by
+        exact_mod_cast Fintype.card_pos
+      have hcard_sq : (Fintype.card ι : ℝ) ≤ (Fintype.card ι : ℝ) ^ 2 := by
+        nlinarith
+      have hmul : (Fintype.card ι : ℝ) * C ^ 2 ≤
+          (Fintype.card ι : ℝ) ^ 2 * C ^ 2 :=
+        mul_le_mul_of_nonneg_right hcard_sq (sq_nonneg C)
+      have hsquares : ‖x‖ ^ 2 ≤ ((Fintype.card ι : ℝ) * C) ^ 2 := by
+        calc
+          ‖x‖ ^ 2 = ∑ i, ‖x i‖ ^ 2 := hsq
+          _ ≤ (Fintype.card ι : ℝ) * C ^ 2 := hsum
+          _ ≤ (Fintype.card ι : ℝ) ^ 2 * C ^ 2 := hmul
+          _ = ((Fintype.card ι : ℝ) * C) ^ 2 := by ring
+      exact (sq_le_sq₀ hnorm0 (mul_nonneg hcard0 hC)).1 hsquares
 
 /-- Every entry of a rectangular isometry has modulus at most one. -/
 theorem norm_apply_le_one_of_conjTranspose_mul_self_eq_one
@@ -2535,6 +2553,23 @@ theorem norm_apply_le_one_of_conjTranspose_mul_self_eq_one
       (Finset.mem_univ i)
   rw [hsum] at hentry
   nlinarith [norm_nonneg (Z i j)]
+
+/-- Every entry of a family of rectangular matrices whose stacked columns are
+orthonormal has modulus at most one. -/
+theorem norm_apply_le_one_of_sum_conjTranspose_mul_eq_one
+    {d m n : Type*} [Fintype d] [Fintype m] [DecidableEq n]
+    (A : d → Matrix m n ℂ) (hA : ∑ i, (A i)ᴴ * A i = 1)
+    (i : d) (a : m) (c : n) :
+    ‖A i a c‖ ≤ 1 := by
+  let Z : Matrix (d × m) n ℂ := fun ia c ↦ A ia.1 ia.2 c
+  have hZ : Zᴴ * Z = 1 := by
+    ext c c'
+    have hentry := congrArg (fun M : Matrix n n ℂ ↦ M c c') hA
+    simp only [Matrix.sum_apply, Matrix.mul_apply, Matrix.conjTranspose_apply,
+      Matrix.one_apply] at hentry ⊢
+    rw [Fintype.sum_prod_type]
+    exact hentry
+  exact norm_apply_le_one_of_conjTranspose_mul_self_eq_one Z hZ (i, a) c
 
 /-- A rectangular isometry admits a Gaussian-rational entrywise approximation at
 every positive tolerance, with an explicit coordinate-height bound.  The approximating
@@ -6669,7 +6704,7 @@ theorem norm_coeff_ofParameters_sub_le_one {D n : ℕ}
 are `δ`-close, then every perturbed contraction is bounded by the number of
 virtual paths times `(1 + δ)^n`. -/
 theorem norm_coeff_ofParameters_le_one_add {D n : ℕ}
-    (A : OBCChainTensor q D n) (P Q : Parameters A) {δ : ℝ} (hδ : 0 ≤ δ)
+    (A : OBCChainTensor q D n) (P Q : Parameters A) {δ : ℝ}
     (hQ : ∀ e, ‖Q e‖ ≤ 1) (hclose : ∀ e, ‖P e - Q e‖ ≤ δ)
     (σ : Fin n → Fin q) :
     ‖(ofParameters A P).coeff σ‖ ≤
@@ -6717,7 +6752,7 @@ theorem norm_scalar_mul_coeff_ofParameters_sub_le_one {D n : ℕ}
     ‖P.1 * (ofParameters A P.2).coeff σ - Q.1 * (ofParameters A Q.2).coeff σ‖ ≤
       Fintype.card ((p : Fin (n + 1)) → Fin (A.bondDim p)) *
         ((1 + δ) ^ (n + 1) - 1) := by
-  have hcoeffP := norm_coeff_ofParameters_le_one_add A P.2 Q.2 hδ hQ hclose σ
+  have hcoeffP := norm_coeff_ofParameters_le_one_add A P.2 Q.2 hQ hclose σ
   have hcoeffdiff := norm_coeff_ofParameters_sub_le_one A P.2 Q.2 hδ hQ hclose σ
   have hpow : 0 ≤ (1 + δ) ^ n - 1 := by
     have : 1 ≤ (1 + δ) ^ n := one_le_pow₀ (by linarith)
@@ -6778,8 +6813,13 @@ theorem norm_vectorOfParameters_sub_le_one {D n : ℕ}
         ((1 + δ) ^ (n + 1) - 1) := by
   let C : ℝ := Fintype.card ((p : Fin (n + 1)) → Fin (A.bondDim p)) *
     ((1 + δ) ^ (n + 1) - 1)
-  have hbound := norm_euclidean_le_card_mul_of_apply_le
+  have hpow : 0 ≤ (1 + δ) ^ (n + 1) - 1 := by
+    have : 1 ≤ (1 + δ) ^ (n + 1) := one_le_pow₀ (by linarith)
+    linarith
+  have hC : 0 ≤ C := mul_nonneg (by positivity) hpow
+  have hbound := PiLp.norm_le_card_mul_of_forall_norm_le
     (vectorOfParameters (L := L) A hn P - vectorOfParameters (L := L) A hn Q)
+    hC
     (fun x ↦ by
       change ‖P.1 * (ofParameters A P.2).coeff ((leftConfigOfFinEquiv hn).symm x) -
         Q.1 * (ofParameters A Q.2).coeff ((leftConfigOfFinEquiv hn).symm x)‖ ≤ C
@@ -6836,6 +6876,57 @@ theorem LeftOpenMPSRepresentation.vectorOfParameters_eq {b k : ℕ}
   calc
     R.scalar * R.tensor.coeff y = v (leftConfigOfFin y) := (R.coeff_eq y).symm
     _ = v x := congrArg v ((leftConfigOfFinEquiv hk).apply_symm_apply x)
+
+/-- A normalized positive-length left-open MPS has an equivalent representation
+with scalar cap one and every local tensor entry of norm at most one, without
+increasing any virtual bond dimension. -/
+theorem LeftOpenMPSRepresentation.exists_unitBounded_of_norm_eq_one
+    {b n : ℕ} {v : LeftBlockVector L q (n + 1)}
+    (R : LeftOpenMPSRepresentation b v) (hk : n + 1 ≤ L) (hv : ‖v‖ = 1) :
+    ∃ R' : LeftOpenMPSRepresentation b v,
+      R'.scalar = 1 ∧ ∀ p i a c, ‖R'.tensor.tensor p i a c‖ ≤ 1 := by
+  let B := R.tensor.smulSite (0 : Fin (n + 1)) R.scalar
+  have hBcoeff : B.coeff = fun x ↦ v (leftConfigOfFin x) := by
+    funext x
+    change (R.tensor.smulSite (0 : Fin (n + 1)) R.scalar).coeff x = _
+    rw [congrFun (OBCChainTensor.coeff_smulSite
+      R.tensor (0 : Fin (n + 1)) R.scalar) x]
+    change R.scalar * R.tensor.coeff x = v (leftConfigOfFin x)
+    exact (R.coeff_eq x).symm
+  have hBnorm : star B.coeff ⬝ᵥ B.coeff = 1 := by
+    let w : EuclideanSpace ℂ (Fin (n + 1) → Fin q) := WithLp.toLp 2 B.coeff
+    have hw : ‖w‖ = 1 := by
+      have hiso := (LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
+        (leftConfigOfFinEquiv hk).symm).norm_map v
+      have hw_eq : w =
+          LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
+            (leftConfigOfFinEquiv hk).symm v := by
+        ext x
+        change B.coeff x = v (leftConfigOfFin x)
+        exact congrFun hBcoeff x
+      rw [hw_eq, hiso, hv]
+    calc
+      star B.coeff ⬝ᵥ B.coeff = B.coeff ⬝ᵥ star B.coeff := dotProduct_comm _ _
+      _ = inner ℂ w w := by
+        simpa only [w, WithLp.ofLp_toLp] using
+          (EuclideanSpace.inner_eq_star_dotProduct w w).symm
+      _ = (‖w‖ : ℂ) ^ 2 := inner_self_eq_norm_sq_to_K w
+      _ = 1 := by rw [hw]; norm_num
+  obtain ⟨B', hcoeff, hbond, hiso⟩ := B.exists_isometric_coeff_eq_of_norm hBnorm
+  let R' : LeftOpenMPSRepresentation b v :=
+    { tensor := B'
+      scalar := 1
+      internal_bondDim_le := fun k hk0 hkn ↦
+        (hbond k).trans (R.internal_bondDim_le k hk0 hkn)
+      coeff_eq := fun x ↦ by
+        rw [one_mul]
+        calc
+          v (leftConfigOfFin x) = B.coeff x := (congrFun hBcoeff x).symm
+          _ = B'.coeff x := (congrFun hcoeff x).symm }
+  refine ⟨R', rfl, ?_⟩
+  intro p i a c
+  exact norm_apply_le_one_of_sum_conjTranspose_mul_eq_one
+    (fun i ↦ B'.tensor p i) (hiso p) i a c
 
 /-- Explicit left-open MPS data whose scalar and every local tensor entry have rational
 real and imaginary parts.  This is the arithmetic information about retained vectors
@@ -6989,6 +7080,17 @@ theorem IsLeftOpenMPS.exists_rational_approximation {b k : ℕ}
   rw [← R.vectorOfParameters_eq hk]
   exact le_of_lt hclose
 
+/-- The number of dependent virtual paths of an open chain of length `n` and bond
+budget `D` is at most `D^(n+1)`. -/
+theorem OBCChainTensor.virtualPath_card_le {D n : ℕ} (A : OBCChainTensor q D n) :
+    Fintype.card ((p : Fin (n + 1)) → Fin (A.bondDim p)) ≤ D ^ (n + 1) := by
+  rw [Fintype.card_pi]
+  simp only [Fintype.card_fin]
+  calc
+    ∏ p : Fin (n + 1), A.bondDim p ≤ ∏ _p : Fin (n + 1), D := by
+      exact Finset.prod_le_prod fun p _hp ↦ A.bondDim_le p
+    _ = D ^ (n + 1) := by simp
+
 /-- Rational open-chain tensor data with one common coordinate-height bound. -/
 structure RationalLeftOpenMPSRepresentationOfHeight (H b : ℕ) {k : ℕ}
     (v : LeftBlockVector L q k) where
@@ -6996,6 +7098,93 @@ structure RationalLeftOpenMPSRepresentationOfHeight (H b : ℕ) {k : ℕ}
   scalar_height : HasRationalComplexCoordinatesOfHeight H data.scalar
   tensor_height : ∀ p i a c,
     HasRationalComplexCoordinatesOfHeight H (data.tensor.tensor p i a c)
+
+namespace RationalLeftOpenMPSRepresentationOfHeight
+
+/-- Height-bounded scalar and local-entry parameters on fixed virtual spaces give a
+height-bounded rational left-open MPS representation. -/
+noncomputable def ofParameters {H b k : ℕ} {v : LeftBlockVector L q k}
+    (R : LeftOpenMPSRepresentation b v) (hk : k ≤ L)
+    (P : ℂ × OBCChainTensor.Parameters R.tensor)
+    (hscalar : HasRationalComplexCoordinatesOfHeight H P.1)
+    (htensor : ∀ e, HasRationalComplexCoordinatesOfHeight H (P.2 e)) :
+    RationalLeftOpenMPSRepresentationOfHeight H b
+      (OBCChainTensor.vectorOfParameters (L := L) R.tensor hk P) where
+  data := RationalLeftOpenMPSRepresentation.ofParameters R hk P hscalar.forget
+    (fun e ↦ (htensor e).forget)
+  scalar_height := hscalar
+  tensor_height := by
+    intro p i a c
+    exact htensor ⟨p, i, a, c⟩
+
+end RationalLeftOpenMPSRepresentationOfHeight
+
+/-- A normalized positive-length left-open MPS admits a dyadic rational
+approximation of the same bond bound, with explicit common parameter height and
+an explicit full-vector error bound. -/
+theorem IsLeftOpenMPS.exists_dyadic_rational_approximation_of_norm_eq_one
+    {b n : ℕ} {v : LeftBlockVector L q (n + 1)}
+    (hv : IsLeftOpenMPS b v) (hk : n + 1 ≤ L) (hvnorm : ‖v‖ = 1) (t : ℕ) :
+    ∃ w : LeftBlockVector L q (n + 1),
+      Nonempty (RationalLeftOpenMPSRepresentationOfHeight
+        (2 ^ (2 * t + 5)) b w) ∧
+      ‖v - w‖ ≤ (q ^ (n + 1) : ℝ) *
+        (max 1 (max 1 b) : ℝ) ^ (n + 2) *
+          ((1 + (2 ^ t : ℝ)⁻¹) ^ (n + 2) - 1) := by
+  obtain ⟨R⟩ := (isLeftOpenMPS_iff_nonempty_representation b v).mp hv
+  obtain ⟨R', hR'scalar, hR'tensor⟩ :=
+    R.exists_unitBounded_of_norm_eq_one hk hvnorm
+  let P₀ : ℂ × OBCChainTensor.Parameters R'.tensor :=
+    (R'.scalar, OBCChainTensor.parameters R'.tensor)
+  have hP₀scalar : ‖P₀.1‖ ≤ (1 : ℝ) := by simp [P₀, hR'scalar]
+  have hP₀tensor : ∀ e, ‖P₀.2 e‖ ≤ (1 : ℝ) := by
+    intro e
+    exact hR'tensor e.1 e.2.1 e.2.2.1 e.2.2.2
+  obtain ⟨P, hPscalar, hPtensor, hPscalarClose, hPtensorClose⟩ :=
+    OBCChainTensor.exists_dyadic_parameters_approximation R'.tensor
+      (u := 0) (t := t) zero_le_one (by norm_num) P₀ hP₀scalar hP₀tensor
+  let w := OBCChainTensor.vectorOfParameters (L := L) R'.tensor hk P
+  have hscalarClose : ‖P.1 - P₀.1‖ ≤ (2 ^ t : ℝ)⁻¹ := by
+    simpa only [norm_sub_rev] using hPscalarClose
+  have htensorClose : ∀ e, ‖P.2 e - P₀.2 e‖ ≤ (2 ^ t : ℝ)⁻¹ := by
+    intro e
+    simpa only [norm_sub_rev] using hPtensorClose e
+  have hδ : 0 ≤ (2 ^ t : ℝ)⁻¹ := by positivity
+  have herr := OBCChainTensor.norm_vectorOfParameters_sub_le_one R'.tensor hk P P₀
+    hδ hP₀scalar hP₀tensor hscalarClose htensorClose
+  have hfactor : 0 ≤ (q ^ (n + 1) : ℝ) *
+      ((1 + (2 ^ t : ℝ)⁻¹) ^ (n + 2) - 1) := by
+    have hone : 1 ≤ (1 + (2 ^ t : ℝ)⁻¹) ^ (n + 2) :=
+      one_le_pow₀ (by linarith)
+    exact mul_nonneg (by positivity) (sub_nonneg.mpr hone)
+  refine ⟨w, ⟨?_⟩, ?_⟩
+  · simpa [w] using
+      RationalLeftOpenMPSRepresentationOfHeight.ofParameters R' hk P hPscalar hPtensor
+  · have hpath := OBCChainTensor.virtualPath_card_le R'.tensor
+    have hscaled := mul_le_mul_of_nonneg_left (show
+      (Fintype.card ((p : Fin (n + 1 + 1)) → Fin (R'.tensor.bondDim p)) : ℝ) ≤
+        (max 1 (max 1 b) : ℝ) ^ (n + 2) by exact_mod_cast hpath) hfactor
+    have hfinal := herr.trans (by
+      calc
+        (q ^ (n + 1) : ℝ) *
+            Fintype.card ((p : Fin (n + 1 + 1)) → Fin (R'.tensor.bondDim p)) *
+              ((1 + (2 ^ t : ℝ)⁻¹) ^ (n + 2) - 1) =
+            ((q ^ (n + 1) : ℝ) *
+              ((1 + (2 ^ t : ℝ)⁻¹) ^ (n + 2) - 1)) *
+                Fintype.card ((p : Fin (n + 1 + 1)) → Fin (R'.tensor.bondDim p)) := by ring
+        _ ≤ ((q ^ (n + 1) : ℝ) *
+              ((1 + (2 ^ t : ℝ)⁻¹) ^ (n + 2) - 1)) *
+                (max 1 (max 1 b) : ℝ) ^ (n + 2) := hscaled
+        _ = (q ^ (n + 1) : ℝ) * (max 1 (max 1 b) : ℝ) ^ (n + 2) *
+              ((1 + (2 ^ t : ℝ)⁻¹) ^ (n + 2) - 1) := by ring)
+    calc
+      ‖v - w‖ =
+          ‖OBCChainTensor.vectorOfParameters (L := L) R'.tensor hk P₀ -
+            OBCChainTensor.vectorOfParameters (L := L) R'.tensor hk P‖ := by
+              rw [R'.vectorOfParameters_eq hk]
+      _ = ‖OBCChainTensor.vectorOfParameters (L := L) R'.tensor hk P -
+            OBCChainTensor.vectorOfParameters (L := L) R'.tensor hk P₀‖ := norm_sub_rev _ _
+      _ ≤ _ := hfinal
 
 /-- Contracting a height-bounded rational open chain gives an explicit height bound.
 The outer exponent is the number of dependent virtual paths, while `productHeight`
@@ -7013,17 +7202,6 @@ theorem OBCChainTensor.coeff_height {D n H : ℕ} (A : OBCChainTensor q D n)
   intro α _hα
   simpa using HasRationalComplexCoordinatesOfHeight.finset_prod
     (s := Finset.univ) (fun p _hp ↦ hA p (σ p) (α p.castSucc) (α p.succ))
-
-/-- The number of dependent virtual paths of an open chain of length `n` and bond
-budget `D` is at most `D^(n+1)`. -/
-theorem OBCChainTensor.virtualPath_card_le {D n : ℕ} (A : OBCChainTensor q D n) :
-    Fintype.card ((p : Fin (n + 1)) → Fin (A.bondDim p)) ≤ D ^ (n + 1) := by
-  rw [Fintype.card_pi]
-  simp only [Fintype.card_fin]
-  calc
-    ∏ p : Fin (n + 1), A.bondDim p ≤ ∏ _p : Fin (n + 1), D := by
-      exact Finset.prod_le_prod fun p _hp ↦ A.bondDim_le p
-    _ = D ^ (n + 1) := by simp
 
 namespace RationalLeftOpenMPSRepresentationOfHeight
 
