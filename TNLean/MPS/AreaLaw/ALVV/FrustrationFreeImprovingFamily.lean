@@ -39,9 +39,10 @@ configuration matrix units. The running-time clause is not formalized.
 
 **Local fix (norm of the replaced chain and bond dimension):** The proof at line 1599 states
 that the replaced chain has norm `O(1)`; its untruncated windows give norm up to `4ℓ + 6`, which
-is the bound used here, with the printed choice `ℓ = Θ̃(γ⁻¹ log² d)`. The proof at line 1606
-states bond dimension `O(d^k)`; the argument gives `(d² + 4)^{k+1}`, which still has the
-theorem's form `2^{Õ(γ⁻² log⁵ d)}`. See `docs/paper-gaps/alvv16_ff_truncated_norm.tex`.
+is the bound used here, with the printed choice of `ℓ`, of order `γ⁻¹ log² d` up to logarithmic
+factors. The proof at line 1606 states bond dimension `O(d^k)`; the argument gives
+`(d² + 4)^{k+1}`, which still has the theorem's form `2^{Õ(γ⁻² log⁵ d)}`. See
+`docs/paper-gaps/alvv16_ff_truncated_norm.tex`.
 
 **Local fix (viability boundary):** As for Theorem `t:ais`, the improvement is stated for
 viability error `δ < 1`, where `Δ / (1 - δ)²` is defined; see
