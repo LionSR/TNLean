@@ -15,6 +15,18 @@ has the same overlap guarantee; hence the success probability of Theorem 1 holds
 solver returning optimal solutions of the convex programs and cut decompositions of the
 sampled projector. The honest oracle is one such solver.
 
+**Local fix (trimming radius):** bond trimming uses the corrected quadratic radius
+`bondTrimmingRadius` recorded at
+<https://sirui-lu.com/QICLean/paper-gaps/lvv13_trimming_radius.pdf>.
+
+**Local fix (error-reduction normalization):** the error-reduction step uses the corrected
+direct estimate against the ground projection recorded in
+`docs/paper-gaps/lvv13_error_reduction_witness_norm.tex`.
+
+**Scope restriction (quantitative constants):** the size and bond budgets use the library
+constant-cut bond `constantCutBond` and the corrected net exponent, not the printed quantitative
+bounds; see `docs/paper-gaps/lvv13_constant_bond.tex`.
+
 Source: LVV13, arXiv:1307.5143v1, `algo53.tex`, lines 213--216 and 652--678.
 -/
 
